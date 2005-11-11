@@ -24,7 +24,10 @@
 #include <qstring.h>
 #include <koFilter.h>
 
-class KSpreadSheet;
+namespace KSpread
+{
+class Sheet;
+}
 
 class CSVExport : public KoFilter 
 {
@@ -37,7 +40,7 @@ class CSVExport : public KoFilter
   virtual KoFilter::ConversionStatus convert( const QCString & from, const QCString & to );
   
  private:
-  void exportCell( KSpreadSheet const * const sheet, int col, int row, 
+   void exportCell( KSpread::Sheet const * const sheet, int col, int row,
                    QString & separators, QString & line, QChar const & csvDelimiter, QChar const & textQuote );
  private:
   QString m_eol; ///< End of line (LF, CR or CRLF)  

@@ -24,8 +24,9 @@
 #include <kdialogbase.h>
 #include "kspread_sheet.h"
 
+namespace KSpread
+{
 class SheetPropertiesBase;
-
 
 class SheetPropertiesDialog : public KDialogBase
 {
@@ -39,9 +40,9 @@ public:
 
     virtual void slotDefault();
     
-    KSpreadSheet::LayoutDirection layoutDirection() const;
+    Sheet::LayoutDirection layoutDirection() const;
     
-    void setLayoutDirection( KSpreadSheet::LayoutDirection dir );
+    void setLayoutDirection( Sheet::LayoutDirection dir );
 
     bool autoCalc() const;
 
@@ -82,5 +83,7 @@ public:
 private:
     SheetPropertiesBase* d;
 };
+
+} // namespace
 
 #endif /* SHEET_PROPERTIES_DIALOG */

@@ -17,12 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef __kspread_style__
 #define __kspread_style__
-
-class QDomDocument;
-class QDomElement;
 
 #include <qbrush.h>
 #include <qcolor.h>
@@ -33,10 +29,15 @@ class QDomElement;
 
 #include "kspread_format.h"
 
-class KSpreadCustomStyle;
+class QDomDocument;
+class QDomElement;
 class KoGenStyles;
 
-class KSpreadStyle
+namespace KSpread
+{
+class CustomStyle;
+
+class Style
 {
  public:
   typedef enum E1 { BUILTIN, CUSTOM, AUTO, TENTATIVE } StyleType;
@@ -95,10 +96,10 @@ class KSpreadStyle
       SFontFamily      = 0x40000000
     };
 
-  KSpreadStyle();
-  KSpreadStyle( KSpreadStyle * style );
+  Style();
+  Style( Style * style );
 
-  virtual ~KSpreadStyle();
+  virtual ~Style();
 
     static FormatType formatType( const QString &_format );
 
@@ -152,13 +153,13 @@ class KSpreadStyle
   QString const & postfix()         const;
   QString const & fontFamily()      const;
 
-  KSpreadFormat::Align       alignX()      const;
-  KSpreadFormat::AlignY      alignY()      const;
-  KSpreadFormat::FloatFormat floatFormat() const;
-  KSpreadFormat::FloatColor  floatColor()  const;
+  Format::Align       alignX()      const;
+  Format::AlignY      alignY()      const;
+  Format::FloatFormat floatFormat() const;
+  Format::FloatColor  floatColor()  const;
   FormatType  formatType()  const;
 
-  KSpreadFormat::Currency const & currency() const;
+  Format::Currency const & currency() const;
 
   QFont  font()        const;
   uint   fontFlags()   const;
@@ -167,41 +168,41 @@ class KSpreadStyle
   int    rotateAngle() const;
   double indent()      const;
 
-  KSpreadStyle * setAlignX( KSpreadFormat::Align  alignX );
-  KSpreadStyle * setAlignY( KSpreadFormat::AlignY alignY );
-  KSpreadStyle * setFont( QFont const & f );
-  KSpreadStyle * setFontFamily( QString const & fam );
-  KSpreadStyle * setFontFlags( uint flags );
-  KSpreadStyle * setFontSize( int size );
-  KSpreadStyle * setPen( QPen const & pen );
-  KSpreadStyle * setBgColor( QColor const & color );
-  KSpreadStyle * setRightBorderPen( QPen const & pen );
-  KSpreadStyle * setBottomBorderPen( QPen const & pen );
-  KSpreadStyle * setLeftBorderPen( QPen const & pen );
-  KSpreadStyle * setTopBorderPen( QPen const & pen );
-  KSpreadStyle * setFallDiagonalPen( QPen const & pen );
-  KSpreadStyle * setGoUpDiagonalPen( QPen const & pen );
-  KSpreadStyle * setRotateAngle( int angle );
-  KSpreadStyle * setIndent( double indent );
-  KSpreadStyle * setBackGroundBrush( QBrush const & brush );
-  KSpreadStyle * setFloatFormat( KSpreadFormat::FloatFormat format );
-  KSpreadStyle * setFloatColor( KSpreadFormat::FloatColor color );
-  KSpreadStyle * setFormatType( FormatType format );
-  KSpreadStyle * setStrFormat( QString const & strFormat );
-  KSpreadStyle * setPrecision( int precision );
-  KSpreadStyle * setPrefix( QString const & prefix );
-  KSpreadStyle * setPostfix( QString const & postfix );
-  KSpreadStyle * setCurrency( KSpreadFormat::Currency const & currency );
-  KSpreadStyle * setProperty( Properties p );
-  KSpreadStyle * clearProperty( Properties p );
+  Style * setAlignX( Format::Align  alignX );
+  Style * setAlignY( Format::AlignY alignY );
+  Style * setFont( QFont const & f );
+  Style * setFontFamily( QString const & fam );
+  Style * setFontFlags( uint flags );
+  Style * setFontSize( int size );
+  Style * setPen( QPen const & pen );
+  Style * setBgColor( QColor const & color );
+  Style * setRightBorderPen( QPen const & pen );
+  Style * setBottomBorderPen( QPen const & pen );
+  Style * setLeftBorderPen( QPen const & pen );
+  Style * setTopBorderPen( QPen const & pen );
+  Style * setFallDiagonalPen( QPen const & pen );
+  Style * setGoUpDiagonalPen( QPen const & pen );
+  Style * setRotateAngle( int angle );
+  Style * setIndent( double indent );
+  Style * setBackGroundBrush( QBrush const & brush );
+  Style * setFloatFormat( Format::FloatFormat format );
+  Style * setFloatColor( Format::FloatColor color );
+  Style * setFormatType( FormatType format );
+  Style * setStrFormat( QString const & strFormat );
+  Style * setPrecision( int precision );
+  Style * setPrefix( QString const & prefix );
+  Style * setPostfix( QString const & postfix );
+  Style * setCurrency( Format::Currency const & currency );
+  Style * setProperty( Properties p );
+  Style * clearProperty( Properties p );
 
-  KSpreadCustomStyle * parent() const;
+  CustomStyle * parent() const;
   QString const & parentName() const { return m_parentName; }
-  void setParent( KSpreadCustomStyle * parent );
+  void setParent( CustomStyle * parent );
 
  protected:
 
-  KSpreadCustomStyle * m_parent;
+  CustomStyle * m_parent;
   QString        m_parentName;
   StyleType      m_type;
   uint           m_usageCount;
@@ -210,17 +211,17 @@ class KSpreadStyle
   /**
    * Alignment of the text
    */
-  KSpreadFormat::Align m_alignX;
+  Format::Align m_alignX;
   /**
    * Aligment of the text at top middle or bottom
    */
-  KSpreadFormat::AlignY m_alignY;
+  Format::AlignY m_alignY;
 
-  KSpreadFormat::FloatFormat m_floatFormat;
+  Format::FloatFormat m_floatFormat;
   /**
    * The color format of a floating point value
    */
-  KSpreadFormat::FloatColor m_floatColor;
+  Format::FloatColor m_floatColor;
 
   FormatType m_formatType;
 
@@ -302,7 +303,7 @@ class KSpreadStyle
    * Currency information:
    * about which currency from which country
    */
-  KSpreadFormat::Currency m_currency;
+  Format::Currency m_currency;
 
   /**
    * Stores information like: DonPrint, DontShowFormula, Protected...
@@ -317,12 +318,12 @@ class KSpreadStyle
   bool featureSet( FlagsSet f ) const { return ( !m_parent || ( m_featuresSet & (uint) f ) ); }
 };
 
-class KSpreadCustomStyle : public KSpreadStyle
+class CustomStyle : public Style
 {
  public:
-  KSpreadCustomStyle( KSpreadStyle * parent, QString const & name );
-  KSpreadCustomStyle( QString const & name, KSpreadCustomStyle * parent );
-  ~KSpreadCustomStyle();
+  CustomStyle( Style * parent, QString const & name );
+  CustomStyle( QString const & name, CustomStyle * parent );
+  ~CustomStyle();
 
   QString const & name()       const { return m_name;       }
 
@@ -338,8 +339,8 @@ class KSpreadCustomStyle : public KSpreadStyle
   void refreshParentName();
   bool definesAll() const;
 
-  void changeAlignX( KSpreadFormat::Align  alignX );
-  void changeAlignY( KSpreadFormat::AlignY alignY );
+  void changeAlignX( Format::Align  alignX );
+  void changeAlignY( Format::AlignY alignY );
   void changeFont( QFont const & f );
   void changeFontFamily( QString const & fam );
   void changeFontSize( int size );
@@ -356,24 +357,26 @@ class KSpreadCustomStyle : public KSpreadStyle
   void changeRotateAngle( int angle );
   void changeIndent( double indent );
   void changeBackGroundBrush( QBrush const & brush );
-  void changeFloatFormat( KSpreadFormat::FloatFormat format );
-  void changeFloatColor( KSpreadFormat::FloatColor color );
+  void changeFloatFormat( Format::FloatFormat format );
+  void changeFloatColor( Format::FloatColor color );
   void changeFormatType( FormatType format );
   void changeStrFormat( QString const & strFormat );
   void changePrecision( int precision );
   void changePrefix( QString const & prefix );
   void changePostfix( QString const & postfix );
-  void changeCurrency( KSpreadFormat::Currency const & currency );
+  void changeCurrency( Format::Currency const & currency );
 
   void addProperty( Properties p );
   void removeProperty( Properties p );
 
  private:
-  friend class KSpreadStyleManager;
+  friend class StyleManager;
 
   QString              m_name;
 
-  KSpreadCustomStyle();
+  CustomStyle();
 };
+
+} // namespace KSpread
 
 #endif

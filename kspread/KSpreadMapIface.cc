@@ -32,24 +32,26 @@
 
 #include "KSpreadMapIface.h"
 
-KSpreadMapIface::KSpreadMapIface( KSpreadMap* map )
+using namespace KSpread;
+
+MapIface::MapIface( Map* map )
     : DCOPObject( map )
 {
     m_map = map;
 }
 
-DCOPRef KSpreadMapIface::sheet( const QString& name )
+DCOPRef MapIface::sheet( const QString& name )
 {
-    KSpreadSheet* t = m_map->findSheet( name );
+    Sheet* t = m_map->findSheet( name );
     if ( !t )
         return DCOPRef();
 
     return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
 
-DCOPRef KSpreadMapIface::sheetByIndex( int index )
+DCOPRef MapIface::sheetByIndex( int index )
 {
-    KSpreadSheet* t = m_map->sheetList().at( index );
+    Sheet* t = m_map->sheetList().at( index );
     if ( !t )
     {
         kdDebug(36001) << "+++++ No table found at index " << index << endl;
@@ -61,47 +63,47 @@ DCOPRef KSpreadMapIface::sheetByIndex( int index )
     return DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
 }
 
-int KSpreadMapIface::sheetCount() const
+int MapIface::sheetCount() const
 {
     return m_map->count();
 }
 
-QStringList KSpreadMapIface::sheetNames() const
+QStringList MapIface::sheetNames() const
 {
     QStringList names;
 
-    QPtrList<KSpreadSheet>& lst = m_map->sheetList();
-    QPtrListIterator<KSpreadSheet> it( lst );
+    QPtrList<Sheet>& lst = m_map->sheetList();
+    QPtrListIterator<Sheet> it( lst );
     for( ; it.current(); ++it )
         names.append( it.current()->name() );
 
     return names;
 }
 
-QValueList<DCOPRef> KSpreadMapIface::sheets()
+QValueList<DCOPRef> MapIface::sheets()
 {
     QValueList<DCOPRef> t;
 
-    QPtrList<KSpreadSheet>& lst = m_map->sheetList();
-    QPtrListIterator<KSpreadSheet> it( lst );
+    QPtrList<Sheet>& lst = m_map->sheetList();
+    QPtrListIterator<Sheet> it( lst );
     for( ; it.current(); ++it )
         t.append( DCOPRef( kapp->dcopClient()->appId(), it.current()->dcopObject()->objId() ) );
 
     return t;
 }
 
-DCOPRef KSpreadMapIface::insertSheet( const QString& name )
+DCOPRef MapIface::insertSheet( const QString& name )
 {
     if ( m_map->findSheet( name ) )
         return sheet( name );
 
-    KSpreadSheet* t = m_map->addNewSheet ();
+    Sheet* t = m_map->addNewSheet ();
     t->setSheetName( name );
 
     return sheet( name );
 }
 
-bool KSpreadMapIface::processDynamic(const QCString &fun, const QByteArray &/*data*/,
+bool MapIface::processDynamic(const QCString &fun, const QByteArray &/*data*/,
                                      QCString& replyType, QByteArray &replyData)
 {
     // Does the name follow the pattern "foobar()" ?
@@ -112,7 +114,7 @@ bool KSpreadMapIface::processDynamic(const QCString &fun, const QByteArray &/*da
     if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
         return false;
 
-    KSpreadSheet* t = m_map->findSheet( fun.left( len - 2 ).data() );
+    Sheet* t = m_map->findSheet( fun.left( len - 2 ).data() );
     if ( !t )
         return false;
 

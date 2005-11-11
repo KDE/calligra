@@ -52,11 +52,11 @@ using namespace KSpread;
 
 /********************************************
  *
- * KSpreadCellEditor
+ * CellEditor
  *
  ********************************************/
 
-KSpreadCellEditor::KSpreadCellEditor( Cell* _cell, KSpreadCanvas* _parent, const char* _name )
+CellEditor::CellEditor( Cell* _cell, Canvas* _parent, const char* _name )
   : QWidget( _parent, _name )
 {
   m_pCell = _cell;
@@ -64,7 +64,7 @@ KSpreadCellEditor::KSpreadCellEditor( Cell* _cell, KSpreadCanvas* _parent, const
   setFocusPolicy( QWidget::StrongFocus );
 }
 
-KSpreadCellEditor::~KSpreadCellEditor()
+CellEditor::~CellEditor()
 {
 }
 
@@ -75,7 +75,7 @@ KSpreadCellEditor::~KSpreadCellEditor()
  *
  ********************************************/
 
-KSpreadTextEditorHighlighter::KSpreadTextEditorHighlighter(QTextEdit* textEdit,KSpreadSheet* sheet)
+TextEditorHighlighter::TextEditorHighlighter(QTextEdit* textEdit, Sheet* sheet)
   : QSyntaxHighlighter(textEdit) , _sheet(sheet), _refsChanged(true)
 {
   _colors.push_back(Qt::red);
@@ -88,7 +88,7 @@ KSpreadTextEditorHighlighter::KSpreadTextEditorHighlighter(QTextEdit* textEdit,K
   _colors.push_back(Qt::darkYellow);
 }
 
-bool KSpreadTextEditorHighlighter::referencesChanged()
+bool TextEditorHighlighter::referencesChanged()
 {
   bool result=_refsChanged;
   _refsChanged=false;
@@ -96,7 +96,7 @@ bool KSpreadTextEditorHighlighter::referencesChanged()
 }
 
 /*
-Cell* KSpreadTextEditorHighlighter::cellRefAt(int position, QColor& outCellColor)
+Cell* TextEditorHighlighter::cellRefAt(int position, QColor& outCellColor)
 {
   outCellColor=Qt::black; //outCellColor is black if there is no cell ref at the specified position
 
@@ -170,7 +170,7 @@ Cell* KSpreadTextEditorHighlighter::cellRefAt(int position, QColor& outCellColor
   return 0;
 }*/
 
-void KSpreadTextEditorHighlighter::getReferences(std::vector<HighlightRange>* cellRefs)
+void TextEditorHighlighter::getReferences(std::vector<HighlightRange>* cellRefs)
 {
   if (!cellRefs)
     return;
@@ -183,7 +183,7 @@ void KSpreadTextEditorHighlighter::getReferences(std::vector<HighlightRange>* ce
     if (_refs[i].find(':') == -1)
     {
 
-      KSpreadPoint* pt=new KSpreadPoint(_refs[i],_sheet->workbook(),_sheet);
+      Point* pt=new Point(_refs[i],_sheet->workbook(),_sheet);
 
       hc.setFirstCell(pt);
       hc.setLastCell(0);
@@ -193,11 +193,11 @@ void KSpreadTextEditorHighlighter::getReferences(std::vector<HighlightRange>* ce
     else
     {
 
-      KSpreadRange rg(_refs[i],_sheet->workbook(),_sheet);
+      Range rg(_refs[i],_sheet->workbook(),_sheet);
 
       //kdDebug() << "Range from ref " << _refs[i] << endl;
-      hc.setFirstCell(new KSpreadPoint());//rg.sheet->nonDefaultCell(rg.startCol(),rg.startRow(),false,0);
-      hc.setLastCell(new KSpreadPoint());//rg.sheet->nonDefaultCell(rg.endCol(),rg.endRow(),false,0);
+      hc.setFirstCell(new Point());//rg.sheet->nonDefaultCell(rg.startCol(),rg.startRow(),false,0);
+      hc.setLastCell(new Point());//rg.sheet->nonDefaultCell(rg.endCol(),rg.endRow(),false,0);
 
       rg.getStartPoint(hc.firstCell());
       rg.getEndPoint(hc.lastCell());
@@ -210,7 +210,7 @@ void KSpreadTextEditorHighlighter::getReferences(std::vector<HighlightRange>* ce
   }
 }
 
-int KSpreadTextEditorHighlighter::highlightParagraph(const QString& text, int /* endStateOfLastPara */)
+int TextEditorHighlighter::highlightParagraph(const QString& text, int /* endStateOfLastPara */)
 {
   _refs.clear();
   _refsChanged=true;
@@ -252,14 +252,14 @@ int KSpreadTextEditorHighlighter::highlightParagraph(const QString& text, int /*
 
         if (cellRef.find(':' ) != -1)
         {
-          KSpreadRange rg(cellRef,_sheet->workbook(),_sheet);
+          Range rg(cellRef,_sheet->workbook(),_sheet);
           //Check that the syntax of the range is valid and that
           //the range is not an invalid rectangle.
           cellRefValid=(rg.isValid());
         }
         else
         {
-          KSpreadPoint pt(cellRef,_sheet->workbook(),_sheet);
+          Point pt(cellRef,_sheet->workbook(),_sheet);
           cellRefValid=pt.isValid();
         }
 
@@ -303,12 +303,12 @@ int KSpreadTextEditorHighlighter::highlightParagraph(const QString& text, int /*
 class FunctionCompletion::Private
 {
 public:
-  KSpreadTextEditor* editor;
+  TextEditor* editor;
   QVBox *completionPopup;
   KListBox *completionListBox;
 };
 
-FunctionCompletion::FunctionCompletion( KSpreadTextEditor* editor ): 
+FunctionCompletion::FunctionCompletion( TextEditor* editor ): 
 QObject( editor )
 {
   d = new Private;
@@ -409,12 +409,12 @@ void FunctionCompletion::showCompletion( const QStringList &choices )
 
 /********************************************
  *
- * KSpreadTextEditor
+ * TextEditor
  *
  ********************************************/
 
-KSpreadTextEditor::KSpreadTextEditor( Cell* _cell, KSpreadCanvas* _parent, const char* _name )
-  : KSpreadCellEditor( _cell, _parent, _name ),
+TextEditor::TextEditor( Cell* _cell, Canvas* _parent, const char* _name )
+  : CellEditor( _cell, _parent, _name ),
     m_sizeUpdate(false),
     m_length(0),
     m_fontLength(0)
@@ -431,7 +431,7 @@ KSpreadTextEditor::KSpreadTextEditor( Cell* _cell, KSpreadCanvas* _parent, const
   m_pEdit->setLineWidth(0);
   m_pEdit->installEventFilter( this );
 
-  m_highlighter=new KSpreadTextEditorHighlighter(m_pEdit,cell()->sheet());
+  m_highlighter=new TextEditorHighlighter(m_pEdit,cell()->sheet());
 
   functionCompletion = new FunctionCompletion( this );
   functionCompletionTimer = new QTimer( this );
@@ -478,7 +478,7 @@ KSpreadTextEditor::KSpreadTextEditor( Cell* _cell, KSpreadCanvas* _parent, const
   }
 }
 
-KSpreadTextEditor::~KSpreadTextEditor()
+TextEditor::~TextEditor()
 {
   delete m_highlighter;
   delete functionCompletion;
@@ -486,19 +486,19 @@ KSpreadTextEditor::~KSpreadTextEditor()
   canvas()->endChoose();
 }
 
-QPoint KSpreadTextEditor::globalCursorPosition() const
+QPoint TextEditor::globalCursorPosition() const
 {
   return globalCursorPos;
 }
 
 
-void KSpreadTextEditor::checkFunctionAutoComplete()
+void TextEditor::checkFunctionAutoComplete()
 {  
   functionCompletionTimer->stop();
   functionCompletionTimer->start( 500, true );
 }
 
-void KSpreadTextEditor::triggerFunctionAutoComplete()
+void TextEditor::triggerFunctionAutoComplete()
 {  
   // tokenize the expression (don't worry, this is very fast)
   int para = 0, curPos = 0;
@@ -537,7 +537,7 @@ void KSpreadTextEditor::triggerFunctionAutoComplete()
   functionCompletion->showCompletion( choices );
 }
 
-void KSpreadTextEditor::functionAutoComplete( const QString& item )
+void TextEditor::functionAutoComplete( const QString& item )
 {
   if( item.isEmpty() ) return;
 
@@ -559,7 +559,7 @@ void KSpreadTextEditor::functionAutoComplete( const QString& item )
   m_pEdit->blockSignals( false );
 }
 
-void KSpreadTextEditor::slotCursorPositionChanged(int /* para */,int /* pos */)
+void TextEditor::slotCursorPositionChanged(int /* para */,int /* pos */)
 {
 //  m_highlighter->cellRefAt(pos);
 
@@ -576,7 +576,7 @@ void KSpreadTextEditor::slotCursorPositionChanged(int /* para */,int /* pos */)
   }
 }
 
-void KSpreadTextEditor::slotTextCursorChanged(  QTextCursor* cursor )
+void TextEditor::slotTextCursorChanged(  QTextCursor* cursor )
 {
   QTextStringChar *chr = cursor->paragraph()->at( cursor->index() );
   int h = cursor->paragraph()->lineHeightOfChar( cursor->index() );
@@ -589,25 +589,25 @@ void KSpreadTextEditor::slotTextCursorChanged(  QTextCursor* cursor )
 
 }
 
-void KSpreadTextEditor::cut()
+void TextEditor::cut()
 {
     if(m_pEdit)
         m_pEdit->cut();
 }
 
-void KSpreadTextEditor::paste()
+void TextEditor::paste()
 {
     if( m_pEdit)
         m_pEdit->paste();
 }
 
-void KSpreadTextEditor::copy()
+void TextEditor::copy()
 {
     if( m_pEdit)
         m_pEdit->copy();
 }
 
-void KSpreadTextEditor::setEditorFont(QFont const & font, bool updateSize)
+void TextEditor::setEditorFont(QFont const & font, bool updateSize)
 {
   if (!m_pEdit)
     return;
@@ -635,12 +635,12 @@ void KSpreadTextEditor::setEditorFont(QFont const & font, bool updateSize)
   }
 }
 
-void KSpreadTextEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completion)
+void TextEditor::slotCompletionModeChanged(KGlobalSettings::Completion _completion)
 {
   canvas()->view()->doc()->setCompletionMode( _completion );
 }
 
-void KSpreadTextEditor::slotTextChanged( /*const QString& t*/ )
+void TextEditor::slotTextChanged( /*const QString& t*/ )
 {
    //FIXME - text() may return richtext?
   QString t=text();
@@ -721,7 +721,7 @@ void KSpreadTextEditor::slotTextChanged( /*const QString& t*/ )
   // canvas()->view()->editWidget()->setCursorPosition( m_pEdit->cursorPosition() );
 }
 
-bool KSpreadTextEditor::checkChoose()
+bool TextEditor::checkChoose()
 {
     if ( m_blockCheck )
         return false;
@@ -752,12 +752,12 @@ bool KSpreadTextEditor::checkChoose()
     return true;
 }
 
-void KSpreadTextEditor::resizeEvent( QResizeEvent* )
+void TextEditor::resizeEvent( QResizeEvent* )
 {
     m_pEdit->setGeometry( 0, 0, width(), height() );
 }
 
-void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
+void TextEditor::handleKeyPressEvent( QKeyEvent * _ev )
 {
   if (_ev->key() == Qt::Key_F4)
   {
@@ -776,7 +776,7 @@ void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
     int n = -1;
 
     // this is ugly, and sort of hack
-    // FIXME rewrite to use the real KSpreadTokenizer
+    // FIXME rewrite to use the real Tokenizer
     unsigned i;
     for( i = 0; i < 10; i++ )
     {
@@ -816,18 +816,18 @@ void KSpreadTextEditor::handleKeyPressEvent( QKeyEvent * _ev )
   QApplication::sendEvent( m_pEdit, _ev );
 }
 
-void KSpreadTextEditor::handleIMEvent( QIMEvent * _ev )
+void TextEditor::handleIMEvent( QIMEvent * _ev )
 {
     // send the IM event to the KLineEdit
     QApplication::sendEvent( m_pEdit, _ev );
 }
 
-QString KSpreadTextEditor::text() const
+QString TextEditor::text() const
 {
     return m_pEdit->text();
 }
 
-void KSpreadTextEditor::setText(QString text)
+void TextEditor::setText(QString text)
 {
     if (m_pEdit != 0)
   {
@@ -846,7 +846,7 @@ void KSpreadTextEditor::setText(QString text)
     }
 }
 
-int KSpreadTextEditor::cursorPosition() const
+int TextEditor::cursorPosition() const
 {
   int para,cur;
   m_pEdit->getCursorPosition(&para,&cur);
@@ -854,25 +854,25 @@ int KSpreadTextEditor::cursorPosition() const
    // return m_pEdit->cursorPosition();
 }
 
-void KSpreadTextEditor::setCursorPosition( int pos )
+void TextEditor::setCursorPosition( int pos )
 {
     m_pEdit->setCursorPosition(0,pos);
     canvas()->view()->editWidget()->setCursorPosition( pos );
     checkChoose();
 }
 
-void KSpreadTextEditor::insertFormulaChar(int /*c*/)
+void TextEditor::insertFormulaChar(int /*c*/)
 {
 }
 
-bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
+bool TextEditor::eventFilter( QObject* o, QEvent* e )
 {
     // Only interested in KTextEdit
     if ( o != m_pEdit )
         return false;
     if ( e->type() == QEvent::FocusOut )
     {
-        canvas()->setLastEditorWithFocus( KSpreadCanvas::CellEditor );
+        canvas()->setLastEditorWithFocus( Canvas::CellEditor );
         return false;
     }
 
@@ -899,7 +899,7 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
                 return true;
             }
         }
-        // End choosing. May be restarted by KSpreadTextEditor::slotTextChanged
+        // End choosing. May be restarted by TextEditor::slotTextChanged
         if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
         {
             //kdDebug(36001) << "eventFilter End Choose" << endl;
@@ -919,11 +919,11 @@ bool KSpreadTextEditor::eventFilter( QObject* o, QEvent* e )
     return false;
 }
 
-KSpreadComboboxLocationEditWidget::KSpreadComboboxLocationEditWidget( QWidget * _parent,
-                                                      KSpreadView * _view )
-    : KComboBox( _parent, "KSpreadComboboxLocationEditWidget" )
+ComboboxLocationEditWidget::ComboboxLocationEditWidget( QWidget * _parent,
+                                                      View * _view )
+    : KComboBox( _parent, "ComboboxLocationEditWidget" )
 {
-    m_locationWidget = new KSpreadLocationEditWidget( _parent, _view );
+    m_locationWidget = new LocationEditWidget( _parent, _view );
     setLineEdit( m_locationWidget );
     insertItem( "" );
 
@@ -935,13 +935,13 @@ KSpreadComboboxLocationEditWidget::KSpreadComboboxLocationEditWidget( QWidget * 
 }
 
 
-void KSpreadComboboxLocationEditWidget::slotAddAreaName( const QString &_name)
+void ComboboxLocationEditWidget::slotAddAreaName( const QString &_name)
 {
     insertItem( _name );
     m_locationWidget->addCompletionItem( _name );
 }
 
-void KSpreadComboboxLocationEditWidget::slotRemoveAreaName( const QString &_name )
+void ComboboxLocationEditWidget::slotRemoveAreaName( const QString &_name )
 {
     for ( int i = 0; i<count(); i++ )
     {
@@ -954,18 +954,18 @@ void KSpreadComboboxLocationEditWidget::slotRemoveAreaName( const QString &_name
     m_locationWidget->removeCompletionItem( _name );
 }
 
-KSpreadLocationEditWidget::KSpreadLocationEditWidget( QWidget * _parent,
-                                                      KSpreadView * _view )
-    : KLineEdit( _parent, "KSpreadLocationEditWidget" ),
+LocationEditWidget::LocationEditWidget( QWidget * _parent,
+                                                      View * _view )
+    : KLineEdit( _parent, "LocationEditWidget" ),
       m_pView(_view)
 {
     setCompletionObject( &completionList,true );
     setCompletionMode(KGlobalSettings::CompletionAuto  );
 }
 
-void KSpreadLocationEditWidget::addCompletionItem( const QString &_item )
+void LocationEditWidget::addCompletionItem( const QString &_item )
 {
-    kdDebug()<<"  KSpreadLocationEditWidget::addCompletionItem add :"<<_item<<endl;
+    kdDebug()<<"  LocationEditWidget::addCompletionItem add :"<<_item<<endl;
     if ( completionList.items().contains( _item) == 0 )
     {
         completionList.addItem( _item );
@@ -974,17 +974,17 @@ void KSpreadLocationEditWidget::addCompletionItem( const QString &_item )
     }
 }
 
-void KSpreadLocationEditWidget::removeCompletionItem( const QString &_item )
+void LocationEditWidget::removeCompletionItem( const QString &_item )
 {
     completionList.removeItem( _item );
 }
 
-void KSpreadLocationEditWidget::slotActivateItem()
+void LocationEditWidget::slotActivateItem()
 {
     activateItem();
 }
 
-bool KSpreadLocationEditWidget::activateItem()
+bool LocationEditWidget::activateItem()
 {
     QString ltext = text();
     QString tmp = ltext.lower();
@@ -997,7 +997,7 @@ bool KSpreadLocationEditWidget::activateItem()
             QString tmp = (*it).sheet_name;
             tmp += "!";
             tmp += util_rangeName((*it).rect);
-            m_pView->canvasWidget()->gotoLocation( KSpreadRange(tmp, m_pView->doc()->map()));
+            m_pView->canvasWidget()->gotoLocation( Range(tmp, m_pView->doc()->map()));
             return true;
         }
     }
@@ -1012,11 +1012,11 @@ bool KSpreadLocationEditWidget::activateItem()
 
     // Selection entered in location widget
     if ( ltext.contains( ':' ) )
-        m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp, m_pView->doc()->map() ) );
+        m_pView->canvasWidget()->gotoLocation( Range( tmp, m_pView->doc()->map() ) );
     // Location entered in location widget
     else
     {
-        KSpreadPoint point( tmp, m_pView->doc()->map());
+        Point point( tmp, m_pView->doc()->map());
         bool validName = true;
         for (unsigned int i = 0; i < ltext.length(); ++i)
         {
@@ -1029,7 +1029,7 @@ bool KSpreadLocationEditWidget::activateItem()
         if ( !point.isValid() && validName)
         {
             QRect rect( m_pView->selection() );
-            KSpreadSheet * t = m_pView->activeSheet();
+            Sheet * t = m_pView->activeSheet();
             // set area name on current selection/cell
 
             m_pView->doc()->addAreaName(rect, ltext.lower(),
@@ -1046,7 +1046,7 @@ bool KSpreadLocationEditWidget::activateItem()
 }
 
 
-void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
+void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 {
     // Do not handle special keys and accelerators. This is
     // done by QLineEdit.
@@ -1095,15 +1095,15 @@ void KSpreadLocationEditWidget::keyPressEvent( QKeyEvent * _ev )
 
 /****************************************************************
  *
- * KSpreadEditWidget
+ * EditWidget
  * The line-editor that appears above the sheet and allows to
  * edit the cells content.
  *
  ****************************************************************/
 
-KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
+EditWidget::EditWidget( QWidget *_parent, Canvas *_canvas,
                                       QButton *cancelButton, QButton *okButton )
-  : QLineEdit( _parent, "KSpreadEditWidget" )
+  : QLineEdit( _parent, "EditWidget" )
 {
   m_pCanvas = _canvas;
   Q_ASSERT(m_pCanvas != NULL);
@@ -1126,7 +1126,7 @@ KSpreadEditWidget::KSpreadEditWidget( QWidget *_parent, KSpreadCanvas *_canvas,
   setEditMode( false ); // disable buttons
 }
 
-void KSpreadEditWidget::showEditWidget(bool _show)
+void EditWidget::showEditWidget(bool _show)
 {
     if (_show)
   {
@@ -1142,20 +1142,20 @@ void KSpreadEditWidget::showEditWidget(bool _show)
   }
 }
 
-void KSpreadEditWidget::slotAbortEdit()
+void EditWidget::slotAbortEdit()
 {
     m_pCanvas->deleteEditor( false /*discard changes*/ );
     // will take care of the buttons
 }
 
-void KSpreadEditWidget::slotDoneEdit()
+void EditWidget::slotDoneEdit()
 {
   m_pCanvas->deleteEditor( true /*keep changes*/, isArray);
   isArray = false;
   // will take care of the buttons
 }
 
-void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
+void EditWidget::keyPressEvent ( QKeyEvent* _ev )
 {
     // Dont handle special keys and accelerators, except Enter ones
     if (( ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
@@ -1175,9 +1175,9 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
   if ( !m_pCanvas->editor() )
   {
     // Start editing the current cell
-    m_pCanvas->createEditor( KSpreadCanvas::CellEditor,false );
+    m_pCanvas->createEditor( Canvas::CellEditor,false );
   }
-  KSpreadTextEditor * cellEditor = (KSpreadTextEditor*) m_pCanvas->editor();
+  TextEditor * cellEditor = (TextEditor*) m_pCanvas->editor();
 
   switch ( _ev->key() )
   {
@@ -1214,22 +1214,22 @@ void KSpreadEditWidget::keyPressEvent ( QKeyEvent* _ev )
   }
 }
 
-void KSpreadEditWidget::setEditMode( bool mode )
+void EditWidget::setEditMode( bool mode )
 {
   m_pCancelButton->setEnabled(mode);
   m_pOkButton->setEnabled(mode);
 }
 
-void KSpreadEditWidget::focusOutEvent( QFocusEvent* ev )
+void EditWidget::focusOutEvent( QFocusEvent* ev )
 {
   //kdDebug(36001) << "EditWidget lost focus" << endl;
   // See comment about setLastEditorWithFocus
-  m_pCanvas->setLastEditorWithFocus( KSpreadCanvas::EditWidget );
+  m_pCanvas->setLastEditorWithFocus( Canvas::EditWidget );
 
   QLineEdit::focusOutEvent( ev );
 }
 
-void KSpreadEditWidget::setText( const QString& t )
+void EditWidget::setText( const QString& t )
 {
   if ( t == text() ) // Why this? (David)
     return;

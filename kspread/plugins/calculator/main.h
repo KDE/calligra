@@ -26,10 +26,16 @@
 
 #include <klibloader.h>
 #include <kparts/plugin.h>
+
 #include <koffice_export.h>
-class KSpreadView;
+
 class QtCalculator;
 class KInstance;
+
+namespace KSpread
+{
+class View;
+}
 
 class CalcFactory : public KLibFactory
 {
@@ -51,10 +57,10 @@ class KSPREAD_EXPORT Calculator : public KParts::Plugin
 {
     Q_OBJECT
 public:
-    Calculator( KSpreadView* parent, const char* name = 0 );
+    Calculator( View* parent, const char* name = 0 );
     ~Calculator();
 
-    KSpreadView* view() { return m_view; }
+    View* view() { return m_view; }
 
 protected slots:
     void showCalculator();
@@ -64,7 +70,7 @@ protected:
 
 private:
     QtCalculator* m_calc;
-    KSpreadView* m_view;
+    View* m_view;
 };
 
 #endif

@@ -23,16 +23,18 @@
 #include <qrect.h>
 #include "kspread_util.h"
 
-class KSpreadSheet;
-class KSpreadView;
+namespace KSpread
+{
+class Sheet;
+class View;
 
-class KSPREAD_EXPORT KSpreadSelection
+class KSPREAD_EXPORT Selection
 {
 public:
 
-  KSpreadSelection(KSpreadView* view);
+  Selection(View* view);
 
-  virtual ~KSpreadSelection();
+  virtual ~Selection();
 
   /**
    * Unselects all selected columns/rows/cells and redraws these cells.
@@ -65,9 +67,9 @@ public:
   QRect selectionHandleArea() const;
 
   void setSelection( const QPoint &marker, const QPoint &anchor,
-                     KSpreadSheet* sheet );
+                     Sheet* sheet );
 
-  void setMarker( const QPoint &point, KSpreadSheet* sheet );
+  void setMarker( const QPoint &point, Sheet* sheet );
 
   /**
    * @return the 'anchor' point of the selection -- i.e. the fixed corner
@@ -101,16 +103,16 @@ public:
     { m_chooseAnchor = chooseAnchor; }
   void setChooseMarker( const QPoint &chooseMarker )
     { m_chooseMarker = chooseMarker; }
-  void setChooseCursor( KSpreadSheet* sheet, const QPoint &chooseCursor )
+  void setChooseCursor( Sheet* sheet, const QPoint &chooseCursor )
     { m_chooseSheet = sheet; m_chooseCursor = chooseCursor; }
-  void setChooseSheet(KSpreadSheet* sheet) { m_chooseSheet = sheet; }
+  void setChooseSheet(Sheet* sheet) { m_chooseSheet = sheet; }
 
   QRect getChooseRect()const;
   QPoint getChooseCursor()const { return m_chooseCursor; }
   QPoint getChooseMarker()const { return m_chooseMarker; }
   QPoint getChooseAnchor()const { return m_chooseAnchor; }
 
-  KSpreadSheet* getChooseSheet()const { return m_chooseSheet; }
+  Sheet* getChooseSheet()const { return m_chooseSheet; }
 
 
 private: /* private data for the above functions on selections */
@@ -130,8 +132,8 @@ private: /* private data for the above functions on selections */
   QPoint m_chooseAnchor;
   QPoint m_chooseCursor;
 
-  KSpreadSheet* m_chooseSheet;
-  KSpreadView* m_pView;
+  Sheet* m_chooseSheet;
+  View* m_pView;
 
 private:
   /* helper functions */
@@ -139,5 +141,6 @@ private:
 
 };
 
+} // namespace KSpread
 
 #endif

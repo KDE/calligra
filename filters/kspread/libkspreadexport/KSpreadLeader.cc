@@ -20,34 +20,35 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 #include "KSpreadLeader.h"
 
+using namespace KSpread;
 
-KSpreadLeader::KSpreadLeader(KoFilterChain *filterChain) {
+Leader::Leader(KoFilterChain *filterChain) {
 	m_worker = NULL;
 	m_filterChain = filterChain;
 }
 
 
-KSpreadLeader::KSpreadLeader(KoFilterChain *filterChain, KSpreadBaseWorker *newWorker) {
+Leader::Leader(KoFilterChain *filterChain, KSpreadBaseWorker *newWorker) {
 	m_worker = newWorker;
 	m_filterChain = filterChain;
 }
 
 
-KSpreadLeader::~KSpreadLeader() {
+Leader::~Leader() {
 }
 
 
-KSpreadBaseWorker *KSpreadLeader::getWorker() const {
+KSpreadBaseWorker *Leader::getWorker() const {
 	return m_worker;
 }
 
 
-void KSpreadLeader::setWorker(KSpreadBaseWorker *newWorker) {
+void Leader::setWorker(KSpreadBaseWorker *newWorker) {
 	m_worker = newWorker;
 }
 
 
-KoFilter::ConversionStatus KSpreadLeader::convert() {
+KoFilter::ConversionStatus Leader::convert() {
 	KoFilter::ConversionStatus status;
 
 	// Validate the filter chain and the worker
@@ -121,7 +122,7 @@ KoFilter::ConversionStatus KSpreadLeader::convert() {
 }
 
 
-KoFilter::ConversionStatus KSpreadLeader::doInfo(KoDocumentInfo *info) {
+KoFilter::ConversionStatus Leader::doInfo(KoDocumentInfo *info) {
 	KoFilter::ConversionStatus status;
 
 #if 0 // this was never used, it's been removed now
@@ -163,7 +164,7 @@ KoFilter::ConversionStatus KSpreadLeader::doInfo(KoDocumentInfo *info) {
 }
 
 
-KoFilter::ConversionStatus KSpreadLeader::doSpreadBook(KSpreadDoc *document) {
+KoFilter::ConversionStatus Leader::doSpreadBook(KSpreadDoc *document) {
 	KSpreadFilterProperty docSpreadBookProperty;
 	docSpreadBookProperty["spreadsheetcount"] = QString::number(document->map()->count());
 	docSpreadBookProperty["decimalsymbol"] = document->locale()->decimalSymbol();
@@ -215,7 +216,7 @@ KoFilter::ConversionStatus KSpreadLeader::doSpreadBook(KSpreadDoc *document) {
 }
 
 
-KoFilter::ConversionStatus KSpreadLeader::doSpreadSheet(KSpreadSheet *spreadSheet) {
+KoFilter::ConversionStatus Leader::doSpreadSheet(KSpreadSheet *spreadSheet) {
 	KSpreadFilterProperty docSpreadSheetProperty;
 	docSpreadSheetProperty["name"] = spreadSheet->tableName();
 	docSpreadSheetProperty["sizemaxx"] = QString::number(spreadSheet->sizeMaxX());
@@ -256,7 +257,7 @@ KoFilter::ConversionStatus KSpreadLeader::doSpreadSheet(KSpreadSheet *spreadShee
 }
 
 
-KoFilter::ConversionStatus KSpreadLeader::doSpreadCell(Cell*spreadCell, int column, int row) {
+KoFilter::ConversionStatus Leader::doSpreadCell(Cell*spreadCell, int column, int row) {
 	KSpreadFilterProperty docSpreadCellProperty;
 	docSpreadCellProperty["column"] = QString::number(column);
 	docSpreadCellProperty["row"] = QString::number(row);
@@ -330,7 +331,7 @@ KoFilter::ConversionStatus KSpreadLeader::doSpreadCell(Cell*spreadCell, int colu
 }
 
 
-void KSpreadLeader::updateMaxCells(KSpreadSheet *spreadSheet) {
+void Leader::updateMaxCells(KSpreadSheet *spreadSheet) {
 	m_maxCellColumn = 0;
 	m_maxCellRow = 0;
 

@@ -26,10 +26,6 @@
 #ifndef __kspread_autofill_h__
 #define __kspread_autofill_h__
 
-class AutoFillDeltaSequence;
-class AutoFillSequenceItem;
-class AutoFillSequence;
-
 #include <qdatetime.h>
 #include <qmemarray.h>
 #include <qstring.h>
@@ -38,8 +34,10 @@ class AutoFillSequence;
 
 namespace KSpread
 {
-  class Cell;
-}
+class AutoFillDeltaSequence;
+class AutoFillSequenceItem;
+class AutoFillSequence;
+class Cell;
 
 class AutoFillSequenceItem
 {
@@ -81,7 +79,7 @@ protected:
 class AutoFillSequence
 {
 public:
-    AutoFillSequence( KSpread::Cell *_obj );
+    AutoFillSequence( Cell *_obj );
 
     int count()const { return sequence.count(); }
 
@@ -90,7 +88,7 @@ public:
 
     bool matches( AutoFillSequence* _seq, AutoFillDeltaSequence *_delta );
 
-    void fillCell( KSpread::Cell *src, KSpread::Cell *dest, AutoFillDeltaSequence *delta, int _block, bool down = true );
+    void fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *delta, int _block, bool down = true );
 
 protected:
     QPtrList<AutoFillSequenceItem> sequence;
@@ -114,5 +112,7 @@ protected:
     bool m_ok;
     QMemArray<double>* m_sequence;
 };
+
+} // namespace KSpread
 
 #endif

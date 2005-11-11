@@ -17,7 +17,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
-/* Philipp
+#ifndef kspread_cluster_h
+#define kspread_cluster_h
+
+#include "kspread_value.h"
+
+#define KSPREAD_CLUSTER_LEVEL1 128
+#define KSPREAD_CLUSTER_LEVEL2 256
+#define KSPREAD_CLUSTER_MAX (128*256)
+
+class QPoint;
+
+namespace KSpread
+{
+class Cell;
+class ColumnFormat;
+class RowFormat;
+
+/** Philipp
 This class defines a pointer map to all cells, which makes access to them more performant
 and additionally limits memory consumption.
 
@@ -52,33 +69,13 @@ are equal in both matrizes, but normally it will be the regular case, that you h
 a lot of rows than columns. Maybe something like LEVEL1=128/256 and LEVEL2=256/128 (x/y), still keeping
 2^15 values/cells in each direction (benefit: you won't loose memory in empty columns).
 */
-
-#ifndef kspread_cluster_h
-#define kspread_cluster_h
-
-class ColumnFormat;
-class RowFormat;
-
-#include "kspread_value.h"
-
-namespace KSpread
-{
-  class Cell;
-}
-
-class QPoint;
-
-#define KSPREAD_CLUSTER_LEVEL1 128
-#define KSPREAD_CLUSTER_LEVEL2 256
-#define KSPREAD_CLUSTER_MAX (128*256)
-
-class KSpreadCluster
+class Cluster
 {
 public:
-    KSpreadCluster();
-    ~KSpreadCluster();
+    Cluster();
+    ~Cluster();
 
-    KSpread::Cell* lookup( int x, int y ) const;
+    Cell* lookup( int x, int y ) const;
 
     /**
      * Removes all cells from the sheet and frees memory that
@@ -90,7 +87,7 @@ public:
      * Inserts a cell at the requested position. If there is already
      * a cell, then @ref #remove is called on it.
      */
-    void insert( KSpread::Cell* cell, int x, int y );
+    void insert( Cell* cell, int x, int y );
     /**
      * Removes the cell at the given position, if there is any.
      */
@@ -99,7 +96,7 @@ public:
     void setAutoDelete( bool );
     bool autoDelete() const;
 
-    KSpread::Cell* firstCell() const;
+    Cell* firstCell() const;
 
     bool shiftRow( const QPoint& marker );
     /**
@@ -145,11 +142,11 @@ public:
     void clearColumn( int col );
     void clearRow( int row );
 
-  /** Retrieve a range of values stored in a KSpreadValue.
+  /** Retrieve a range of values stored in a Value.
   The range is two-leveled with similar structure and reasoning as the
   storage of cells themselves.
   */
-  KSpreadValue valueRange (int col1, int row1, int col2, int row2) const;
+  Value valueRange (int col1, int row1, int col2, int row2) const;
 
   /**
    * Retrieve the first used cell in a given column.  Can be used in conjunction
@@ -160,7 +157,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpread::Cell* getFirstCellColumn(int col) const;
+  Cell* getFirstCellColumn(int col) const;
 
   /**
    * Retrieve the last used cell in a given column.  Can be used in conjunction
@@ -171,7 +168,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpread::Cell* getLastCellColumn(int col) const;
+  Cell* getLastCellColumn(int col) const;
 
   /**
    * Retrieve the first used cell in a given row.  Can be used in conjunction
@@ -182,7 +179,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpread::Cell* getFirstCellRow(int row) const;
+  Cell* getFirstCellRow(int row) const;
 
   /**
    * Retrieve the last used cell in a given row.  Can be used in conjunction
@@ -193,7 +190,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpread::Cell* getLastCellRow(int row) const;
+  Cell* getLastCellRow(int row) const;
 
   /**
    * Retrieves the next used cell above the given col/row pair.  The given
@@ -204,7 +201,7 @@ public:
    *
    * @return Returns the next used cell above this one, or NULL if there are none
    */
-  KSpread::Cell* getNextCellUp(int col, int row) const;
+  Cell* getNextCellUp(int col, int row) const;
 
   /**
    * Retrieves the next used cell below the given col/row pair.  The given
@@ -215,7 +212,7 @@ public:
    *
    * @return Returns the next used cell below this one, or NULL if there are none
    */
-  KSpread::Cell* getNextCellDown(int col, int row) const;
+  Cell* getNextCellDown(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the right of the given col/row pair.
@@ -227,7 +224,7 @@ public:
    * @return Returns the next used cell to the right of this one, or NULL if
    * there are none
    */
-  KSpread::Cell* getNextCellRight(int col, int row) const;
+  Cell* getNextCellRight(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the left of the given col/row pair.
@@ -239,7 +236,7 @@ public:
    * @return Returns the next used cell to the left of this one, or NULL if
    * there are none
    */
-  KSpread::Cell* getNextCellLeft(int col, int row) const;
+  Cell* getNextCellLeft(int col, int row) const;
 
 private:
     /**
@@ -253,19 +250,19 @@ private:
     void unshiftRow( const QPoint& marker, bool& work );
 
     /** helper method used by valueRange */
-    KSpreadValue makeArray (int col1, int row1, int col2, int row2) const;
+    Value makeArray (int col1, int row1, int col2, int row2) const;
     
-    KSpread::Cell*** m_cluster;
-    KSpread::Cell* m_first;
+    Cell*** m_cluster;
+    Cell* m_first;
     bool m_autoDelete;
     int m_biggestX, m_biggestY;
 };
 
-class KSpreadColumnCluster
+class ColumnCluster
 {
 public:
-    KSpreadColumnCluster();
-    ~KSpreadColumnCluster();
+    ColumnCluster();
+    ~ColumnCluster();
 
     const ColumnFormat* lookup( int col ) const;
     ColumnFormat* lookup( int col );
@@ -289,11 +286,11 @@ private:
     bool m_autoDelete;
 };
 
-class KSpreadRowCluster
+class RowCluster
 {
 public:
-    KSpreadRowCluster();
-    ~KSpreadRowCluster();
+    RowCluster();
+    ~RowCluster();
 
     const RowFormat* lookup( int col ) const;
     RowFormat* lookup( int col );
@@ -316,5 +313,7 @@ private:
     RowFormat* m_first;
     bool m_autoDelete;
 };
+
+} // namespace KSpread;
 
 #endif

@@ -41,7 +41,7 @@ Tomas
 
 enum { Unkown, TimeDate, Number, Scientific, Fraction } Type;
 
-namespace KSpreadNumFormat_Local
+namespace NumFormat_Local
 {
   QString g_Monday;
   QString g_Tuesday;
@@ -229,7 +229,8 @@ namespace KSpreadNumFormat_Local
   FormatStore    g_formatStore;
 }
 
-using namespace KSpreadNumFormat_Local;
+using namespace NumFormat_Local;
+using namespace KSpread;
 
 void resetGlobals()
 {
@@ -301,7 +302,7 @@ void initGlobals( KLocale const * const locale )
   g_init = true;
 }
 
-void convertDateTime( KSpreadValue const & value )
+void convertDateTime( Value const & value )
 {
   QDateTime dt( value.asDateTime() );
   QDate d( dt.date() );
@@ -918,7 +919,7 @@ int doPreScan( QString & format, QString const & formatBack, KLocale const * con
   return type;
 }
 
-void createNumber( QString & result, KSpreadValue const & value, 
+void createNumber( QString & result, Value const & value, 
                    QString const & /*format*/, bool & setRed,
                    NumberFormat const * const data )
 {
@@ -1005,7 +1006,7 @@ void createNumber( QString & result, KSpreadValue const & value,
   result.append( data->postfix );
 }
 
-void createFraction( QString & result, KSpreadValue const & value, 
+void createFraction( QString & result, Value const & value, 
                      QString const & /*format*/,  bool & setRed,
                      FractionFormat const * const data )
 {
@@ -1156,7 +1157,7 @@ void createFraction( QString & result, KSpreadValue const & value,
   result = left;
 }
 
-void createScientific( QString & result, KSpreadValue const & value, 
+void createScientific( QString & result, Value const & value, 
                        QString const & /*format*/, bool & setRed,
                        ScientificFormat const * const data )
 {
@@ -1226,7 +1227,7 @@ void createScientific( QString & result, KSpreadValue const & value,
   result.append( data->postfix );
 }
 
-void appendAMPM( QString & result, KSpreadValue const & value )
+void appendAMPM( QString & result, Value const & value )
 {
   if ( !g_convertionInfo.dt )
     convertDateTime( value );
@@ -1238,7 +1239,7 @@ void appendAMPM( QString & result, KSpreadValue const & value )
     result.append( i18n("AM") );
 }
 
-void appendHour( QString & result, KSpreadValue const & value, 
+void appendHour( QString & result, Value const & value, 
                  int digits, bool elapsed, bool ampm )
 {
   if ( !g_convertionInfo.dt )
@@ -1264,7 +1265,7 @@ void appendHour( QString & result, KSpreadValue const & value,
   result += QString::number( hour );
 }
 
-void appendMinutes( QString & result, KSpreadValue const & value, 
+void appendMinutes( QString & result, Value const & value, 
                     int digits, bool elapsed )
 {
   if ( !g_convertionInfo.dt )
@@ -1283,7 +1284,7 @@ void appendMinutes( QString & result, KSpreadValue const & value,
   result += QString::number( minute );
 }
 
-void appendSecond( QString & result, KSpreadValue const & value, 
+void appendSecond( QString & result, Value const & value, 
                    int digits, bool elapsed )
 {
   if ( !g_convertionInfo.dt )
@@ -1302,7 +1303,7 @@ void appendSecond( QString & result, KSpreadValue const & value,
   result += QString::number( second );
 }
 
-void appendYear( QString & result, KSpreadValue const & value, 
+void appendYear( QString & result, Value const & value, 
                  int digits )
 {
   if ( !g_convertionInfo.dt )
@@ -1315,7 +1316,7 @@ void appendYear( QString & result, KSpreadValue const & value,
     result += QString::number( year );
 }
 
-void appendMonth( QString & result, KSpreadValue const & value, 
+void appendMonth( QString & result, Value const & value, 
                   int digits )
 {
   if ( !g_convertionInfo.dt )
@@ -1387,7 +1388,7 @@ void appendMonth( QString & result, KSpreadValue const & value,
     }
 }
 
-void appendDays( QString & result, KSpreadValue const & value, 
+void appendDays( QString & result, Value const & value, 
                  int digits )
 {
   if ( !g_convertionInfo.dt )
@@ -1441,7 +1442,7 @@ void appendDays( QString & result, KSpreadValue const & value,
     }
 }
 
-void createDateTime( QString & result, KSpreadValue const & value, 
+void createDateTime( QString & result, Value const & value, 
                      QString const & /*format*/, 
                      DateTimeFormat const * const data )
 {
@@ -1569,7 +1570,7 @@ void createDateTime( QString & result, KSpreadValue const & value,
   result += data->postfix;
 }
 
-QString formatNumber( KSpreadValue const & value, QString format, bool & setRed,
+QString formatNumber( Value const & value, QString format, bool & setRed,
                       KLocale const * const locale, bool insert )
 {
   // need delocalized strings: dcSymbol: '.', thSymbol = ','

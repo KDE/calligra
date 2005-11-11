@@ -28,18 +28,18 @@
 using namespace KSpread;
 
 // prototypes (sorted alphabetically)
-KSpreadValue func_and (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_false (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_if (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_nand (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_nor (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_not (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_or (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_true (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_xor (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_and (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_false (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_if (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_nand (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_nor (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_not (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_or (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_true (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_xor (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all logic functions
-void KSpreadRegisterLogicFunctions()
+void RegisterLogicFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -74,82 +74,82 @@ void KSpreadRegisterLogicFunctions()
 }
 
 // Function: FALSE
-KSpreadValue func_false (valVector, ValueCalc *, FuncExtra *)
+Value func_false (valVector, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue (false);
+  return Value (false);
 }
 
 // Function: TRUE
-KSpreadValue func_true (valVector, ValueCalc *, FuncExtra *)
+Value func_true (valVector, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue (true);
+  return Value (true);
 }
 
 // helper for most logical functions
-bool asBool (KSpreadValue val, ValueCalc *calc)
+bool asBool (Value val, ValueCalc *calc)
 {
   return calc->conv()->asBoolean (val).asBoolean ();
 }
 
 // Function: NOT
-KSpreadValue func_not (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_not (valVector args, ValueCalc *calc, FuncExtra *)
 {
   bool val = asBool (args[0], calc) ? false : true;
-  return KSpreadValue (val);
+  return Value (val);
 }
 
 // Function: OR
-KSpreadValue func_or (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_or (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int cnt = args.count();
   for (int i = 0; i < cnt; ++i)
     if (asBool (args[i], calc))
       // if any value is true, return true
-      return KSpreadValue (true);
+      return Value (true);
   // nothing is true -> return false
-  return KSpreadValue (false);
+  return Value (false);
 }
 
 // Function: NOR
-KSpreadValue func_nor (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_nor (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // OR in reverse
   int cnt = args.count();
   for (int i = 0; i < cnt; ++i)
     if (asBool (args[i], calc))
       // if any value is true, return false
-      return KSpreadValue (false);
+      return Value (false);
   // nothing is true -> return true
-  return KSpreadValue (true);
+  return Value (true);
 }
 
 // Function: AND
-KSpreadValue func_and (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_and (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int cnt = args.count();
   for (int i = 0; i < cnt; ++i)
     if (!asBool (args[i], calc))
       // if any value is false, return false
-      return KSpreadValue (false);
+      return Value (false);
   // nothing is false -> return true
-  return KSpreadValue (true);
+  return Value (true);
 }
 
 // Function: NAND
-KSpreadValue func_nand (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_nand (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // AND in reverse
   int cnt = args.count();
   for (int i = 0; i < cnt; ++i)
     if (!asBool (args[i], calc))
       // if any value is false, return true
-      return KSpreadValue (true);
+      return Value (true);
   // nothing is false -> return false
-  return KSpreadValue (false);
+  return Value (false);
 }
 
 // Function: XOR
-KSpreadValue func_xor (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_xor (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // exclusive OR - exactly one value must be true
   int cnt = args.count();
@@ -157,11 +157,11 @@ KSpreadValue func_xor (valVector args, ValueCalc *calc, FuncExtra *)
   for (int i = 0; i < cnt; ++i)
     if (asBool (args[i], calc))
       count++;
-  return KSpreadValue (count == 1);
+  return Value (count == 1);
 }
 
 // Function: IF
-KSpreadValue func_if (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_if (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (asBool (args[0], calc))
     return args[1];

@@ -17,15 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #ifndef __kspread_style_manager__
 #define __kspread_style_manager__
 
 #include <qmap.h>
+
 #include <koffice_export.h>
-class KSpreadCustomStyle;
-class KSpreadStyleDlg;
-class KSpreadView;
 
 class QDomElement;
 class QDomDocument;
@@ -34,11 +31,18 @@ class QStringList;
 class KoGenStyles;
 class KoOasisStyles;
 
-class KSPREAD_EXPORT KSpreadStyleManager
+namespace KSpread
+{
+class CustomStyle;
+class Sheet;
+class StyleDlg;
+class View;
+
+class KSPREAD_EXPORT StyleManager
 {
  public:
-  KSpreadStyleManager();
-  ~KSpreadStyleManager();
+  StyleManager();
+  ~StyleManager();
 
   QDomElement save( QDomDocument & doc );
   bool loadXML( QDomElement const & styles );
@@ -46,26 +50,28 @@ class KSPREAD_EXPORT KSpreadStyleManager
     void saveOasis( KoGenStyles &mainStyles );
     void loadOasisStyleTemplate(  KoOasisStyles& oasisStyles );
 
-  KSpreadCustomStyle * defaultStyle() const { return m_defaultStyle; }
-  KSpreadCustomStyle * style( QString const & name ) const;
+  CustomStyle * defaultStyle() const { return m_defaultStyle; }
+  CustomStyle * style( QString const & name ) const;
 
   bool checkCircle( QString const & name, QString const & parent );
-  bool validateStyleName( QString const & name, KSpreadCustomStyle * style );
+  bool validateStyleName( QString const & name, CustomStyle * style );
   void changeName( QString const & oldName, QString const & newName );
 
-  void takeStyle( KSpreadCustomStyle * style );
+  void takeStyle( CustomStyle * style );
   void createBuiltinStyles();
 
   QStringList styleNames() const;
   int count() const { return m_styles.count(); }
 
  private:
-  friend class KSpreadStyleDlg;
-  friend class KSpreadView;
-  class Styles : public QMap<QString, KSpreadCustomStyle *> {};
+  friend class StyleDlg;
+  friend class View;
+  class Styles : public QMap<QString, CustomStyle *> {};
 
-  KSpreadCustomStyle * m_defaultStyle;
+  CustomStyle * m_defaultStyle;
   Styles               m_styles; // builtin and custom made styles
 };
+
+} // namespace KSpread
 
 #endif

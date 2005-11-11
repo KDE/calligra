@@ -22,31 +22,34 @@
 #ifndef __kspread_format_h__
 #define __kspread_format_h__
 
-class KSpreadSheet;
-class KSpreadCanvas;
+#include <qbrush.h>
+#include <qcolor.h>
+#include <qfont.h>
+#include <qpen.h>
+
+#include <koffice_export.h>
+
+#include "kspread_global.h"
 
 class QDomElement;
 class QDomDocument;
 class DCOPObject;
 class KoOasisStyles;
 class KoGenStyles;
-
-#include <qbrush.h>
-#include <qpen.h>
-#include <qcolor.h>
-#include <qfont.h>
-
-#include "kspread_global.h"
-#include <koffice_export.h>
 class KLocale;
-class KSpreadCurrency;
-class KSpreadStyle;
 class KoStyleStack;
 class KoGenStyle;
 
+namespace KSpread
+{
+class Canvas;
+class Currency;
+class Sheet;
+class Style;
+
 /**
  */
-class KSPREAD_EXPORT KSpreadFormat
+class KSPREAD_EXPORT Format
 {
 public:
     enum Align { Left = 1, Center = 2, Right = 3, Undefined = 4 };
@@ -93,10 +96,10 @@ public:
     /**
      * don't pass in 0 for _style: only if you copy another format on this directly after...
      */
-    KSpreadFormat( KSpreadSheet * _sheet, KSpreadStyle * _style );
-    virtual ~KSpreadFormat();
+    Format( Sheet * _sheet, Style * _style );
+    virtual ~Format();
 
-    void copy( const KSpreadFormat & _l );
+    void copy( const Format & _l );
 
     void defaultStyleFormat();
 
@@ -160,7 +163,7 @@ public:
     static double globalColWidth();
 
 
-    virtual void setKSpreadStyle( KSpreadStyle * style );
+    virtual void setStyle( Style * style );
 
     /**
      * sets the format of the content, e.g. #.##0.00, dd/mmm/yyyy,...
@@ -355,9 +358,9 @@ public:
     virtual bool isHideFormula( int col, int row) const;
     virtual bool isProtected( int col, int row ) const;
 
-    KSpreadStyle * kspreadStyle() const { return m_pStyle; }
-    KSpreadSheet* sheet() { return m_pSheet; }
-    const KSpreadSheet* sheet() const { return m_pSheet; }
+    Style * kspreadStyle() const { return m_pStyle; }
+    Sheet* sheet() { return m_pSheet; }
+    const Sheet* sheet() const { return m_pSheet; }
 
     virtual bool hasProperty( Properties p, bool withoutParent = false ) const;
 
@@ -382,19 +385,19 @@ protected:
     /**
      * Default implementation returns 0.
      */
-    virtual KSpreadFormat* fallbackFormat( int col, int row );
+    virtual Format* fallbackFormat( int col, int row );
     /**
      * Default implementation returns 0.
      */
-    virtual const KSpreadFormat* fallbackFormat( int col, int row ) const;
+    virtual const Format* fallbackFormat( int col, int row ) const;
 
     /**
      * Default implementation returns true.
      */
     virtual bool isDefault() const;
 
-    KSpreadSheet * m_pSheet;
-    KSpreadStyle * m_pStyle;
+    Sheet * m_pSheet;
+    Style * m_pStyle;
 
     uint m_mask;
 
@@ -428,10 +431,10 @@ private:
 
 /**
  */
-class KSPREAD_EXPORT RowFormat : public KSpreadFormat
+class KSPREAD_EXPORT RowFormat : public Format
 {
 public:
-    RowFormat( KSpreadSheet * _sheet, int _row );
+    RowFormat( Sheet * _sheet, int _row );
     ~RowFormat();
 
     virtual DCOPObject* dcopObject();
@@ -445,14 +448,14 @@ public:
      *
      * @return the height in zoomed pixels as integer value.
      */
-    int height( const KSpreadCanvas *_canvas = 0L ) const;
+    int height( const Canvas *_canvas = 0L ) const;
     /**
      * @param _canvas is needed to get information about the zooming factor.
      *
      * @return the height in zoomed pixels as double value.
      * Use this function, if you want to work with height without having rounding problems.
      */
-    double dblHeight( const KSpreadCanvas *_canvas = 0L ) const;
+    double dblHeight( const Canvas *_canvas = 0L ) const;
     /**
      * @return the height in millimeters.
      */
@@ -463,7 +466,7 @@ public:
      * @param _h is calculated in display pixels as integer value. The function cares for zooming.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setHeight( int _h, const KSpreadCanvas *_canvas = 0L );
+    void setHeight( int _h, const Canvas *_canvas = 0L );
     /**
      * Sets the height to _h zoomed pixels.
      *
@@ -471,7 +474,7 @@ public:
      * Use this function when setting the height, to not get rounding problems.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setDblHeight( double _h, const KSpreadCanvas *_canvas = 0L );
+    void setDblHeight( double _h, const Canvas *_canvas = 0L );
     /**
      * Sets the height.
      *
@@ -532,11 +535,11 @@ protected:
     /**
      * @reimp
      */
-    KSpreadFormat* fallbackFormat( int col, int row );
+    Format* fallbackFormat( int col, int row );
     /**
      * @reimp
      */
-    const KSpreadFormat* fallbackFormat( int col, int row ) const;
+    const Format* fallbackFormat( int col, int row ) const;
 
     /**
      * Width of the cell in unzoomed points.
@@ -567,10 +570,10 @@ protected:
 
 /**
  */
-class KSPREAD_EXPORT ColumnFormat : public KSpreadFormat
+class KSPREAD_EXPORT ColumnFormat : public Format
 {
 public:
-    ColumnFormat( KSpreadSheet *_sheet, int _column );
+    ColumnFormat( Sheet *_sheet, int _column );
     ~ColumnFormat();
 
     virtual QDomElement save( QDomDocument&, int xshift = 0, bool copy = false ) const;
@@ -582,7 +585,7 @@ public:
      *
      * @return the width in zoomed pixels as integer.
      */
-    int width( const KSpreadCanvas *_canvas = 0L ) const;
+    int width( const Canvas *_canvas = 0L ) const;
     /**
      * @param _canvas is needed to get information about the zooming factor.
      *
@@ -590,7 +593,7 @@ public:
      * Use this function, if you want to use the width and later restore it back,
      * so you don't get rounding problems
      */
-    double dblWidth( const KSpreadCanvas *_canvas = 0L ) const;
+    double dblWidth( const Canvas *_canvas = 0L ) const;
     /**
      * @return the width in millimeters.
      */
@@ -602,7 +605,7 @@ public:
      *           zooming.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setWidth( int _w, const KSpreadCanvas *_canvas = 0L );
+    void setWidth( int _w, const Canvas *_canvas = 0L );
     /**
      * Sets the width to _w zoomed pixels as double value.
      * Use this function to set the width without getting rounding problems.
@@ -611,7 +614,7 @@ public:
      *           zooming.
      * @param _canvas is needed to get information about the zooming factor.
      */
-    void setDblWidth( double _w, const KSpreadCanvas *_canvas = 0L );
+    void setDblWidth( double _w, const Canvas *_canvas = 0L );
     /**
      * Sets the width.
      *
@@ -670,11 +673,11 @@ protected:
     /**
      * @reimp
      */
-    KSpreadFormat* fallbackFormat( int col, int row );
+    Format* fallbackFormat( int col, int row );
     /**
      * @reimp
      */
-    const KSpreadFormat* fallbackFormat( int col, int row ) const;
+    const Format* fallbackFormat( int col, int row ) const;
 
     /**
      * Width of the cells in unzoomed pixels.
@@ -705,22 +708,22 @@ protected:
     DCOPObject*m_dcop;
 };
 
-class KSPREAD_EXPORT KSpreadCurrency
+class KSPREAD_EXPORT Currency
 {
  public:
 
   enum currencyFormat { Gnumeric, OpenCalc, ApplixSpread,
                         GobeProductiveSpread, HancomSheet };
 
-  KSpreadCurrency();
-  ~KSpreadCurrency();
+  Currency();
+  ~Currency();
 
-  KSpreadCurrency(int index);
+  Currency(int index);
 
   /**
    * If code doesn't fit to index the index gets ignored
    */
-  KSpreadCurrency(int index, QString const & code);
+  Currency(int index, QString const & code);
 
   /**
    * code: e.g. EUR, USD,..
@@ -728,10 +731,10 @@ class KSPREAD_EXPORT KSpreadCurrency
    * currencyFormat: in Gnumeric the code is: [$EUR]
    *                 saves some work in the filter...
    */
-  KSpreadCurrency(QString const & code, currencyFormat format);
-  KSpreadCurrency & operator=(int type);
-  KSpreadCurrency & operator=(char const * code);
-  bool operator==(KSpreadCurrency const & cur) const;
+  Currency(QString const & code, currencyFormat format);
+  Currency & operator=(int type);
+  Currency & operator=(char const * code);
+  bool operator==(Currency const & cur) const;
   bool operator==(int type) const;
   operator int() const;
 
@@ -754,5 +757,7 @@ class KSPREAD_EXPORT KSpreadCurrency
   int     m_type;
   QString m_code;
 };
+
+} // namespace KSpread
 
 #endif

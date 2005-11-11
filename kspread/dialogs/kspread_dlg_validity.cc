@@ -43,7 +43,7 @@
 
 using namespace KSpread;
 
-KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , const QRect &_marker )
+DlgValidity::DlgValidity(View* parent,const char* name , const QRect &_marker )
   :KDialogBase(KDialogBase::Tabbed, i18n("Validity"),User2|User1|Cancel, User1, parent, name,true,false,KStdGuiItem::ok(),i18n("Clear &All"))
 
 {
@@ -221,7 +221,7 @@ KSpreadDlgValidity::KSpreadDlgValidity(KSpreadView* parent,const char* name , co
   init();
 }
 
-void KSpreadDlgValidity::displayOrNotListOfValidity( bool _displayList)
+void DlgValidity::displayOrNotListOfValidity( bool _displayList)
 {
     if ( _displayList )
     {
@@ -243,7 +243,7 @@ void KSpreadDlgValidity::displayOrNotListOfValidity( bool _displayList)
     }
 }
 
-void KSpreadDlgValidity::changeIndexType(int _index)
+void DlgValidity::changeIndexType(int _index)
 {
     bool activate = ( _index!=0 );
     message->setEnabled(activate);
@@ -371,7 +371,7 @@ void KSpreadDlgValidity::changeIndexType(int _index)
         resize( sizeHint() );
 }
 
-void KSpreadDlgValidity::changeIndexCond(int _index)
+void DlgValidity::changeIndexCond(int _index)
 {
   switch(_index)
   {
@@ -423,10 +423,10 @@ void KSpreadDlgValidity::changeIndexCond(int _index)
   }
 }
 
-void KSpreadDlgValidity::init()
+void DlgValidity::init()
 {
   Cell *c = m_pView->activeSheet()->cellAt( marker.left(), marker.top() );
-  KSpreadValidity * tmpValidity=c->getValidity(0);
+  Validity * tmpValidity=c->getValidity(0);
   if(tmpValidity!=0)
   {
     message->setText(tmpValidity->message);
@@ -540,7 +540,7 @@ void KSpreadDlgValidity::init()
   changeIndexCond(choose->currentItem()) ;
 }
 
-void KSpreadDlgValidity::clearAllPressed()
+void DlgValidity::clearAllPressed()
 {
   val_min->setText("");
   val_max->setText("");
@@ -559,7 +559,7 @@ void KSpreadDlgValidity::clearAllPressed()
   displayHelp->setChecked( false );
 }
 
-void KSpreadDlgValidity::OkPressed()
+void DlgValidity::OkPressed()
 {
   if( chooseType->currentItem()==1)
   {

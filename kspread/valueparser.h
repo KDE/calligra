@@ -26,16 +26,15 @@
 #include "kspread_global.h"
 
 class KLocale;
-class KSpreadValue;
 
 namespace KSpread
 {
 class Cell;
-
+class Value;
 
 /**
 The ValueParser parses a text input from the user, generating
-KSpreadValue in the desired format.
+Value in the desired format.
 */
 
 class ValueParser {
@@ -46,25 +45,25 @@ class ValueParser {
   KLocale* locale();
   
   /** try to parse the text in a given cell and set value accordingly */
-  void parse (const QString& str, KSpread::Cell *cell);
+  void parse (const QString& str, Cell *cell);
 
   /** try to parse given text, don't set any cell attributes though */
-  KSpreadValue parse (const QString &str);
+  Value parse (const QString &str);
   
-  KSpreadValue tryParseBool (const QString& str, bool *ok = 0);
-  KSpreadValue tryParseNumber (const QString& str, bool *ok = 0);
-  KSpreadValue tryParseDate (const QString& str, bool *ok = 0);
-  KSpreadValue tryParseTime (const QString& str, bool *ok = 0);
+  Value tryParseBool (const QString& str, bool *ok = 0);
+  Value tryParseNumber (const QString& str, bool *ok = 0);
+  Value tryParseDate (const QString& str, bool *ok = 0);
+  Value tryParseTime (const QString& str, bool *ok = 0);
  protected:
  
   KLocale* parserLocale;
 
   // Try to parse the text as a bool/number/date/time/etc.
   // Helpers for parse.
-  bool tryParseBool (const QString& str, KSpread::Cell *cell);
-  bool tryParseNumber (const QString& str, KSpread::Cell *cell);
-  bool tryParseDate (const QString& str, KSpread::Cell *cell);
-  bool tryParseTime (const QString& str, KSpread::Cell *cell);
+  bool tryParseBool (const QString& str, Cell *cell);
+  bool tryParseNumber (const QString& str, Cell *cell);
+  bool tryParseDate (const QString& str, Cell *cell);
+  bool tryParseTime (const QString& str, Cell *cell);
   
   /** converts a string to a date/time value */
   QDateTime readTime (const QString & intstr, bool withSeconds, bool *ok,

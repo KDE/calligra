@@ -24,13 +24,15 @@
 
 #include "KSpreadLayoutIface.h"
 
+namespace KSpread
+{
 class ColumnFormat;
 
-class KSpreadColumnIface : virtual public KSpreadLayoutIface
+class ColumnIface : virtual public LayoutIface
 {
     K_DCOP
 public:
-    KSpreadColumnIface(ColumnFormat *_lay);
+    ColumnIface(ColumnFormat *_lay);
     virtual void update();
 k_dcop:
     virtual int column();
@@ -42,5 +44,7 @@ k_dcop:
 private:
     ColumnFormat *m_colLayout;
 };
+
+} // namespace KSpread
 
 #endif

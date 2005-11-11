@@ -24,11 +24,9 @@
 
 #include "kspread_util.h"
 
-class KSpreadSheet;
-
-// KSpread namespace
-namespace KSpread {
-
+namespace KSpread
+{
+class Sheet;
 
 struct DependencyList;
 
@@ -37,8 +35,8 @@ one range of cells. */
 
 struct RangeDependency {
   int cellrow, cellcolumn;
-  KSpreadSheet *cellsheet;
-  KSpreadRange range;
+  Sheet *cellsheet;
+  Range range;
 };
 
 
@@ -51,7 +49,7 @@ TODO: describe how it works and why there are two types of dependencies
 class DependencyManager {
  public:
   /** constructor */
-   DependencyManager (KSpreadSheet *s);
+   DependencyManager (Sheet *s);
   /** destructor */
   ~DependencyManager ();
  
@@ -59,9 +57,9 @@ class DependencyManager {
   void reset ();
   
   /** handle the fact that cell's contents have changed */
-  void cellChanged (const KSpreadPoint &cell);
+  void cellChanged (const Point &cell);
   /** handle the fact that a range has been changed */
-  void rangeChanged (const KSpreadRange &range);
+  void rangeChanged (const Range &range);
   /** handle the fact that a range list has been changed */
   void rangeListChanged (const RangeList &rangeList);
 
@@ -69,9 +67,9 @@ class DependencyManager {
   void areaModified (const QString &name);
 
   /** get dependencies of a cell */
-  RangeList getDependencies (const KSpreadPoint &cell);
+  RangeList getDependencies (const Point &cell);
   /** get cells depending on this cell, either through normal or range dependency */
-  QValueList<KSpreadPoint> getDependants (const KSpreadPoint &cell);
+  QValueList<Point> getDependants (const Point &cell);
 protected:
   
   /** local d-pointer */

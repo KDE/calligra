@@ -38,15 +38,17 @@ class QComboBox;
 class QCheckBox;
 class QListBox;
 
-class KSpreadView;
-class KSpreadSheet;
+namespace KSpread
+{
+class Sheet;
+class View;
 
-class KSpreadConsolidate : public KDialogBase
+class ConsolidateDialog : public KDialogBase
 {
   Q_OBJECT
 public:
-  KSpreadConsolidate( KSpreadView* parent, const char* name );
-  ~KSpreadConsolidate();
+  ConsolidateDialog( View* parent, const char* name );
+  ~ConsolidateDialog();
   QStringList refs();
 
 public slots:
@@ -55,13 +57,13 @@ public slots:
   void slotAdd();
   void slotRemove();
 
-  void slotSelectionChanged( KSpreadSheet* _sheet, const QRect& _selection );
+  void slotSelectionChanged( Sheet* _sheet, const QRect& _selection );
   void slotReturnPressed();
 
 protected:
   virtual void closeEvent ( QCloseEvent * );
 
-  KSpreadView* m_pView;
+  View* m_pView;
   QLineEdit* m_pRef;
   QListBox* m_pRefs;
   QComboBox* m_pFunction;
@@ -71,9 +73,11 @@ protected:
   QCheckBox* m_pCol;
   QCheckBox* m_pCopy;
 
-  QString evaluate( const QString& formula, KSpreadSheet* sheet );
+  QString evaluate( const QString& formula, Sheet* sheet );
 
   enum { Sum = 0, Average, Count, Max, Min, Product, StdDev, Var };
 };
+
+} // namespace KSpread
 
 #endif

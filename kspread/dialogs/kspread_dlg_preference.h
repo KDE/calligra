@@ -29,8 +29,6 @@
 
 #include <kdialogbase.h>
 
-class KSpreadView;
-class KSpreadSheet;
 class KConfig;
 class KIntNumInput;
 class KDoubleNumInput;
@@ -39,20 +37,24 @@ class QCheckBox;
 class QComboBox;
 class QPushButton;
 class KColorButton;
-//class KoSpellConfigWidget;
+
+namespace KSpread
+{
+class Sheet;
+class View;
 
 class parameterLocale :  public QObject
 {
  Q_OBJECT
 public:
-   parameterLocale( KSpreadView* _view,QVBox *box, char *name = 0);
+   parameterLocale( View* _view,QVBox *box, char *name = 0);
  void apply();
 public slots:
    void updateDefaultSystemConfig();
  protected:
    QLabel *m_shortDate,*m_time,*m_money,*m_date,*m_language,*m_number;
    QPushButton *m_updateButton;
-   KSpreadView* m_pView;
+   View* m_pView;
    bool m_bUpdateLocale;
 };
 
@@ -60,11 +62,11 @@ class configure : public QObject
 {
   Q_OBJECT
 public:
-  configure( KSpreadView* _view,QVBox *box, char *name = 0 );
+  configure( View* _view,QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 protected:
-  KSpreadView* m_pView;
+  View* m_pView;
   KIntNumInput  *nbPage;
   KIntNumInput* nbRecentFile;
   KIntNumInput* autoSaveDelay;
@@ -88,7 +90,7 @@ class miscParameters : public QObject
 {
   Q_OBJECT
 public:
-  miscParameters( KSpreadView* _view, QVBox *box, char *name = 0 );
+  miscParameters( View* _view, QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 
@@ -98,7 +100,7 @@ public slots:
   void slotTextComboChanged(const QString &);
 
 protected:
-  KSpreadView* m_pView;
+  View* m_pView;
   KDoubleNumInput  *valIndent;
   KConfig* config;
   QComboBox *typeCompletion;
@@ -113,11 +115,11 @@ class colorParameters : public QObject
 {
   Q_OBJECT
 public:
-  colorParameters( KSpreadView* _view, QVBox *box, char *name = 0 );
+  colorParameters( View* _view, QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 protected:
-  KSpreadView* m_pView;
+  View* m_pView;
   KColorButton* gridColor;
   KColorButton* pageBorderColor;
   KConfig* config;
@@ -127,12 +129,12 @@ class configureLayoutPage : public QObject
 {
   Q_OBJECT
 public:
-  configureLayoutPage( KSpreadView* _view,QVBox *box, char *name = 0 );
+  configureLayoutPage( View* _view,QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
   void initCombo();
 protected:
-  KSpreadView* m_pView;
+  View* m_pView;
   QComboBox *defaultOrientationPage;
   QComboBox *defaultSizePage;
   QComboBox *defaultUnit;
@@ -148,30 +150,30 @@ class configureSpellPage : public QObject
 {
   Q_OBJECT
 public:
-  configureSpellPage( KSpreadView* _view, QVBox *box, char *name = 0 );
+  configureSpellPage( View* _view, QVBox *box, char *name = 0 );
   void apply();
   void slotDefault();
 protected:
-  KSpreadView * m_pView;
+  View * m_pView;
   KConfig * config;
     KSpellConfig *m_spellConfigWidget;
     QCheckBox *dontCheckUpperWord;
     QCheckBox *dontCheckTitleCase;
 } ;
 
-class KSpreadpreference : public KDialogBase
+class PreferenceDialog : public KDialogBase
 {
   Q_OBJECT
 public:
   enum { KS_PREFERENCES = 1, KS_LOCALE = 2, KS_INTERFACE = 4,
          KS_MISC = 8, KS_COLOR = 16, KS_LAYOUT = 32, KS_SPELLING = 64 };
-  KSpreadpreference( KSpreadView* parent, const char* name);
+  PreferenceDialog( View* parent, const char* name);
 public slots:
   void slotApply();
   void slotDefault();
   void openPage(int flags);
 private :
-  KSpreadView* m_pView;
+  View* m_pView;
   configure * _configure;
   miscParameters *_miscParameter;
   colorParameters *_colorParameter;
@@ -180,6 +182,6 @@ private :
   parameterLocale *_localePage;
 };
 
-
+} // namespace KSpread
 
 #endif

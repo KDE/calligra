@@ -26,20 +26,23 @@
 #include <kdialogbase.h>
 #include <qwidget.h>
 
+#include "kspread_condition.h"
+
 class QComboBox;
 class KLineEdit;
 
-class KSpreadStyle;
-class KSpreadView;
-#include "kspread_condition.h"
+namespace KSpread
+{
+class Style;
+class View;
 
-class KSpreadConditionalWidget : public QWidget
+class ConditionalWidget : public QWidget
 {
   Q_OBJECT
 
  public:
-  KSpreadConditionalWidget( QWidget * parent = 0, const char * name = 0, WFlags fl = 0 );
-  ~KSpreadConditionalWidget();
+  ConditionalWidget( QWidget * parent = 0, const char * name = 0, WFlags fl = 0 );
+  ~ConditionalWidget();
 
   QComboBox * m_condition_1;
   QComboBox * m_style_1;
@@ -63,11 +66,11 @@ class KSpreadConditionalWidget : public QWidget
 };
 
 
-class KSpreadConditionalDlg : public KDialogBase
+class ConditionalDialog : public KDialogBase
 {
   Q_OBJECT
  public:
-  KSpreadConditionalDlg( KSpreadView * parent, const char * name,
+  ConditionalDialog( View * parent, const char * name,
                          const QRect & marker );
 
   void init();
@@ -76,23 +79,25 @@ class KSpreadConditionalDlg : public KDialogBase
   void slotOk();
 
  protected:
-  KSpreadView *              m_view;
-  KSpreadConditionalWidget * m_dlg;
+  View *              m_view;
+  ConditionalWidget * m_dlg;
   QRect                      m_marker;
-  KSpreadConditional         m_result;
+  ::Conditional         m_result;
 
  private:
-  void init( KSpreadConditional const & tmp, int numCondition );
-  Conditional typeOfCondition( QComboBox const * const cb ) const;
+   void init( KSpread::Conditional const & tmp, int numCondition );
+   ::Conditional typeOfCondition( QComboBox const * const cb ) const;
 
   bool checkInputData( KLineEdit const * const edit1,
                        KLineEdit const * const edit2 );
   bool checkInputData();
-  bool getCondition( KSpreadConditional & newCondition, const QComboBox * cb,
+  bool getCondition( KSpread::Conditional & newCondition, const QComboBox * cb,
                      const KLineEdit * edit1, const KLineEdit * edit2,
-                     const QComboBox * sb, KSpreadStyle * style );
+                     const QComboBox * sb, Style * style );
 
 };
+
+} // namespace KSpread
 
 #endif
 

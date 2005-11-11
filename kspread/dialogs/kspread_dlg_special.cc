@@ -20,19 +20,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qlayout.h>
+#include <qbuttongroup.h>
+#include <qradiobutton.h>
 
-#include "kspread_dlg_special.h"
+#include <klocale.h>
+
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 
-#include <qlayout.h>
-#include <klocale.h>
-#include <qbuttongroup.h>
-#include <qradiobutton.h>
+#include "kspread_dlg_special.h"
 
-KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
+using namespace KSpread;
+
+SpecialDialog::SpecialDialog( View* parent, const char* name )
 	: KDialogBase( parent, name, TRUE,i18n("Special Paste"),Ok|Cancel  )
 {
     m_pView = parent;
@@ -75,7 +78,7 @@ KSpreadspecial::KSpreadspecial( KSpreadView* parent, const char* name )
     connect( rb10, SIGNAL( toggled( bool ) ), this, SLOT( slotToggled( bool ) ) );
 }
 
-void KSpreadspecial::slotOk()
+void SpecialDialog::slotOk()
 {
     PasteMode sp = Normal;
     Operation op = OverWrite;
@@ -94,7 +97,7 @@ void KSpreadspecial::slotOk()
     else if( rb2->isChecked() )
 	sp = Text;
     else if( rb3->isChecked() )
-	sp = Format;
+      sp = ::Format;
     else if( rb4->isChecked() )
 	sp = NoBorder;
     else if( rb10->isChecked() )
@@ -119,7 +122,7 @@ void KSpreadspecial::slotOk()
     accept();
 }
 
-void KSpreadspecial::slotToggled( bool b )
+void SpecialDialog::slotToggled( bool b )
 {
     rb5->setEnabled( !b );
     rb6->setEnabled( !b );

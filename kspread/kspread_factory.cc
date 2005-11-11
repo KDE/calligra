@@ -17,32 +17,36 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kspread_doc.h"
+#include <kdebug.h>
+#include <kstandarddirs.h>
+
 #include "kspread_aboutdata.h"
+#include "kspread_doc.h"
 #include "KSpreadAppIface.h"
 
-#include <kstandarddirs.h>
-#include <kdebug.h>
+#include "kspread_factory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkspread, KSpreadFactory )
+using namespace KSpread;
 
-KInstance* KSpreadFactory::s_global = 0;
-DCOPObject* KSpreadFactory::s_dcopObject = 0;
-KAboutData* KSpreadFactory::s_aboutData = 0;
+K_EXPORT_COMPONENT_FACTORY( libkspread, Factory )
 
-KSpreadFactory::KSpreadFactory( QObject* parent, const char* name )
+KInstance* Factory::s_global = 0;
+DCOPObject* Factory::s_dcopObject = 0;
+KAboutData* Factory::s_aboutData = 0;
+
+Factory::Factory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
-  //kdDebug(36001) << "KSpreadFactory::KSpreadFactory()" << endl;
+  //kdDebug(36001) << "Factory::Factory()" << endl;
   // Create our instance, so that it becomes KGlobal::instance if the
   // main app is KSpread.
   (void)global();
   (void)dcopObject();
 }
 
-KSpreadFactory::~KSpreadFactory()
+Factory::~Factory()
 {
-  //kdDebug(36001) << "KSpreadFactory::~KSpreadFactory()" << endl;
+  //kdDebug(36001) << "Factory::~Factory()" << endl;
   delete s_aboutData;
   s_aboutData=0;
   delete s_global;
@@ -51,11 +55,11 @@ KSpreadFactory::~KSpreadFactory()
   s_dcopObject = 0L;
 }
 
-KParts::Part* KSpreadFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
+KParts::Part* Factory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, const char* classname, const QStringList & )
 {
   bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-  KSpreadDoc *doc = new KSpreadDoc( parentWidget, widgetName, parent, name, !bWantKoDocument );
+  Doc *doc = new Doc( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
   if ( !bWantKoDocument )
     doc->setReadWrite( false );
@@ -63,14 +67,14 @@ KParts::Part* KSpreadFactory::createPartObject( QWidget *parentWidget, const cha
   return doc;
 }
 
-KAboutData* KSpreadFactory::aboutData()
+KAboutData* Factory::aboutData()
 {
   if( !s_aboutData )
-      s_aboutData = newKSpreadAboutData();
+      s_aboutData = newAboutData();
   return s_aboutData;
 }
 
-KInstance* KSpreadFactory::global()
+KInstance* Factory::global()
 {
     if ( !s_global )
     {
@@ -89,10 +93,10 @@ KInstance* KSpreadFactory::global()
     return s_global;
 }
 
-DCOPObject* KSpreadFactory::dcopObject()
+DCOPObject* Factory::dcopObject()
 {
     if ( !s_dcopObject )
-        s_dcopObject = new KSpreadAppIface;
+        s_dcopObject = new AppIface;
     return s_dcopObject;
 }
 

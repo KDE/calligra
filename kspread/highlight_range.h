@@ -17,22 +17,22 @@
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
 */
+
 #ifndef KSPREAD_HIGHLIGHT_RANGE_H
 #define KSPREAD_HIGHLIGHT_RANGE_H
 
-//Qt
 #include <qcolor.h>
 
-
-//KSpread
 #include "kspread_util.h"
 
+namespace KSpread
+{
 /**
  * Holds information about a range of cells to be highlighted (ie. a coloured border is to be
  * drawn around them).  This is used to highlight areas on the sheet which are referenced in
  * a formula that is being edited.
  *
- * The drawing of highlighted ranges is performed by the @ref KSpreadCanvas class.
+ * The drawing of highlighted ranges is performed by the @ref Canvas class.
  */
 class HighlightRange
 {
@@ -51,21 +51,21 @@ class HighlightRange
         /**
         * Returns the range which should be highlighted.
         *
-        * @param rg A KSpreadRange object which receives the range to be highlighted.
+        * @param rg A Range object which receives the range to be highlighted.
         */
-        void getRange(KSpreadRange& rg);
+        void getRange(Range& rg);
 
         /**
         * Sets the first cell in the range
         */
-        void setFirstCell(KSpreadPoint* fc) {_firstCell=fc;}
-        KSpreadPoint* firstCell() {return _firstCell;}
+        void setFirstCell(Point* fc) {_firstCell=fc;}
+        Point* firstCell() {return _firstCell;}
 
         /**
         * Sets the last cell in the range.
         */
-        void setLastCell(KSpreadPoint* lc) {_lastCell=lc;}
-        KSpreadPoint* lastCell() {return _lastCell;}
+        void setLastCell(Point* lc) {_lastCell=lc;}
+        Point* lastCell() {return _lastCell;}
 
         /**
         * Sets the colour which should be used to highlight the range.
@@ -74,9 +74,11 @@ class HighlightRange
         QColor color() {return _color;}
 
     protected:
-        KSpreadPoint* _firstCell; //First cell in range, will either be in same row or same col as last cell
-        KSpreadPoint* _lastCell; //Last cell in range, will either be in same row or same col as first cell, Will be 0 for single-cells
+        Point* _firstCell; //First cell in range, will either be in same row or same col as last cell
+        Point* _lastCell; //Last cell in range, will either be in same row or same col as first cell, Will be 0 for single-cells
         QColor   _color; //Colour to highlight this range with
 };
+
+} // namespace KSpread
 
 #endif

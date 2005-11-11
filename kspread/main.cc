@@ -33,7 +33,7 @@ static const KCmdLineOptions options[]=
 extern "C" KSPREAD_EXPORT int kdemain( int argc, char **argv )
 {
 
-    KCmdLineArgs::init( argc, argv, newKSpreadAboutData() );
+    KCmdLineArgs::init( argc, argv, newAboutData() );
     KCmdLineArgs::addCmdLineOptions( options );
 
     KoApplication app;

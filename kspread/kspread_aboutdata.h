@@ -29,7 +29,7 @@ static const char* description=I18N_NOOP("KOffice Spreadsheet Application");
 // Always the same as the KOffice version
 static const char* version=KOFFICE_VERSION_STRING;
 
-KAboutData * newKSpreadAboutData()
+KAboutData * newAboutData()
 {
     KAboutData * aboutData = new KAboutData( "kspread", I18N_NOOP("KSpread"),
                                              version, description, KAboutData::License_LGPL,

@@ -65,8 +65,8 @@ void ValueParser::parse (const QString& str, Cell *cell)
   if (ok)
   {
     cell->setPrecision(2);
-    KSpreadValue val (money);
-    val.setFormat (KSpreadValue::fmt_Money);
+    Value val (money);
+    val.setFormat (Value::fmt_Money);
     cell->setValue (val);
     return;
   }
@@ -78,12 +78,12 @@ void ValueParser::parse (const QString& str, Cell *cell)
     return;
 
   // Nothing particular found, then this is simply a string
-  cell->setValue (KSpreadValue (str));
+  cell->setValue (Value (str));
 }
 
-KSpreadValue ValueParser::parse (const QString &str)
+Value ValueParser::parse (const QString &str)
 {
-  KSpreadValue val;
+  Value val;
   
   // If the text is empty, we don't have a value
   // If the user stated explicitly that he wanted text
@@ -114,7 +114,7 @@ KSpreadValue ValueParser::parse (const QString &str)
   if (ok)
   {
     val.setValue (money);
-    val.setFormat (KSpreadValue::fmt_Money);
+    val.setFormat (Value::fmt_Money);
     return val;
   }
 
@@ -134,7 +134,7 @@ KSpreadValue ValueParser::parse (const QString &str)
 bool ValueParser::tryParseBool (const QString& str, Cell *cell)
 {
   bool ok;
-  KSpreadValue val = tryParseBool (str, &ok);
+  Value val = tryParseBool (str, &ok);
   if (ok)
     cell->setValue (val);
   return ok;
@@ -143,7 +143,7 @@ bool ValueParser::tryParseBool (const QString& str, Cell *cell)
 bool ValueParser::tryParseNumber (const QString& str, Cell *cell)
 {
   bool ok;
-  KSpreadValue val = tryParseNumber (str, &ok);
+  Value val = tryParseNumber (str, &ok);
   if (ok)
     cell->setValue (val);
   return ok;
@@ -152,7 +152,7 @@ bool ValueParser::tryParseNumber (const QString& str, Cell *cell)
 bool ValueParser::tryParseDate (const QString& str, Cell *cell)
 {
   bool ok;
-  KSpreadValue value = tryParseDate (str, &ok);
+  Value value = tryParseDate (str, &ok);
   if (ok)
     cell->setValue (value);
   return ok;
@@ -161,16 +161,16 @@ bool ValueParser::tryParseDate (const QString& str, Cell *cell)
 bool ValueParser::tryParseTime (const QString& str, Cell *cell)
 {
   bool ok;
-  KSpreadValue value = tryParseTime (str, &ok);
+  Value value = tryParseTime (str, &ok);
   if (ok)
     cell->setValue (value);
   return ok;
 }
 
 
-KSpreadValue ValueParser::tryParseBool (const QString& str, bool *ok)
+Value ValueParser::tryParseBool (const QString& str, bool *ok)
 {
-  KSpreadValue val;
+  Value val;
   if (ok) *ok = false;
   if ((str.lower() == "true") ||
       (str.lower() == parserLocale->translate("True").lower()))
@@ -188,9 +188,9 @@ KSpreadValue ValueParser::tryParseBool (const QString& str, bool *ok)
   return val;
 }
 
-KSpreadValue ValueParser::tryParseNumber (const QString& str, bool *ok)
+Value ValueParser::tryParseNumber (const QString& str, bool *ok)
 {
-  KSpreadValue value;
+  Value value;
 
   bool percent = false;
   QString str2;
@@ -216,7 +216,7 @@ KSpreadValue ValueParser::tryParseNumber (const QString& str, bool *ok)
       kdDebug(36001) << "ValueParser::tryParseNumber '" << str <<
           "' successfully parsed as percentage: " << val << "%" << endl;
       value.setValue (val / 100.0);
-      value.setFormat (KSpreadValue::fmt_Percent);
+      value.setFormat (Value::fmt_Percent);
       fmtType = Percentage_format;
     }
     else
@@ -240,7 +240,7 @@ KSpreadValue ValueParser::tryParseNumber (const QString& str, bool *ok)
   return value;
 }
 
-KSpreadValue ValueParser::tryParseDate (const QString& str, bool *ok)
+Value ValueParser::tryParseDate (const QString& str, bool *ok)
 {
   bool valid = false;
   QDate tmpDate = parserLocale->readDate (str, &valid);
@@ -312,17 +312,17 @@ KSpreadValue ValueParser::tryParseDate (const QString& str, bool *ok)
   if (ok)
     *ok = valid;
     
-  return KSpreadValue (tmpDate);
+  return Value (tmpDate);
 }
 
-KSpreadValue ValueParser::tryParseTime (const QString& str, bool *ok)
+Value ValueParser::tryParseTime (const QString& str, bool *ok)
 {
   if (ok)
     *ok = false;
 
   bool valid    = false;
   bool duration = false;
-  KSpreadValue val;
+  Value val;
 
   QDateTime tmpTime = readTime (str, true, &valid, duration);
   if (!tmpTime.isValid())

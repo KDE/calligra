@@ -24,14 +24,16 @@
 
 #include "KSpreadLayoutIface.h"
 
-class KSpreadFormat;
+namespace KSpread
+{
+class Format;
 class RowFormat;
 
-class KSpreadRowIface : virtual public KSpreadLayoutIface
+class RowIface : virtual public LayoutIface
 {
     K_DCOP
 public:
-    KSpreadRowIface(RowFormat *_lay);
+    RowIface(RowFormat *_lay);
     virtual void update();
 k_dcop:
     virtual int row();
@@ -43,5 +45,7 @@ k_dcop:
 private:
     RowFormat *m_rowLayout;
 };
+
+} // namespace KSpread
 
 #endif

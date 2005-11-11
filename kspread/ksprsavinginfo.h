@@ -20,7 +20,9 @@
 #ifndef KSPRSAVINGINFO_H
 #define KSPRSAVINGINFO_H
 
-class KSpreadSheet;
+namespace KSpread
+{
+class Sheet;
 
 /// Temporary information used only during saving
 class KSPRSavingInfo
@@ -30,7 +32,7 @@ public:
     ~KSPRSavingInfo() {}
     struct sheetDef {
         QString sheetName;
-        KSpreadSheet *sheetIndex;
+        Sheet *sheetIndex;
     };
 
     typedef QMap<QString, sheetDef> StylePageMap;
@@ -52,6 +54,8 @@ public:
 private:
     StylePageMap m_masterPageStyle;
 };
+
+} // namespace KSpread
 
 #endif /* KPRSAVINGINFO_H */
 

@@ -33,35 +33,35 @@ KLocale* ValueConverter::locale()
   return parser->locale();
 }
 
-KSpreadValue ValueConverter::asBoolean (const KSpreadValue &value) const
+Value ValueConverter::asBoolean (const Value &value) const
 {
-  KSpreadValue val;
+  Value val;
   bool ok;  
   switch (value.type()) {
-    case KSpreadValue::Empty:
+    case Value::Empty:
       val.setValue (false);
     break;
-    case KSpreadValue::Boolean:
+    case Value::Boolean:
       val = value;
     break;
-    case KSpreadValue::Integer:
+    case Value::Integer:
       val.setValue (value.asInteger() ? true : false); 
     break;
-    case KSpreadValue::Float:
+    case Value::Float:
       val.setValue ((value.asFloat() == 0.0) ? false : true);
     break;
-    case KSpreadValue::String:
+    case Value::String:
       val = parser->tryParseBool (value.asString(), &ok);
       if (!ok)
         val.setValue (false);
     break;
-    case KSpreadValue::Array:
+    case Value::Array:
       val = asBoolean (value.element (0, 0));
     break;
-    case KSpreadValue::CellRange:
+    case Value::CellRange:
       /* NOTHING */
     break;
-    case KSpreadValue::Error:
+    case Value::Error:
       val.setValue (false);
     break;
   };
@@ -69,37 +69,37 @@ KSpreadValue ValueConverter::asBoolean (const KSpreadValue &value) const
   return val;
 }
 
-KSpreadValue ValueConverter::asInteger (const KSpreadValue &value) const
+Value ValueConverter::asInteger (const Value &value) const
 {
-  KSpreadValue val;
+  Value val;
   bool ok;
   
   switch (value.type()) {
-    case KSpreadValue::Empty:
+    case Value::Empty:
       val.setValue (0);
     break;
-    case KSpreadValue::Boolean:
+    case Value::Boolean:
       val.setValue (value.asBoolean() ? 1 : 0);
     break;
-    case KSpreadValue::Integer:
+    case Value::Integer:
       val = value;
     break;
-    case KSpreadValue::Float:
+    case Value::Float:
       val.setValue (value.asInteger());
     break;
-    case KSpreadValue::String:
+    case Value::String:
       val.setValue ((int) parser->tryParseNumber
           (value.asString(), &ok).asFloat());
       if (!ok)
         val.setValue (0);
     break;
-    case KSpreadValue::Array:
+    case Value::Array:
       val = asInteger (value.element (0, 0));
     break;
-    case KSpreadValue::CellRange:
+    case Value::CellRange:
       /* NOTHING */
     break;
-    case KSpreadValue::Error:
+    case Value::Error:
       val.setValue (0);
     break;
   };
@@ -107,36 +107,36 @@ KSpreadValue ValueConverter::asInteger (const KSpreadValue &value) const
   return val;
 }
 
-KSpreadValue ValueConverter::asFloat (const KSpreadValue &value) const
+Value ValueConverter::asFloat (const Value &value) const
 {
-  KSpreadValue val;
+  Value val;
   bool ok;
   
   switch (value.type()) {
-    case KSpreadValue::Empty:
+    case Value::Empty:
       val.setValue (0.0);
     break;
-    case KSpreadValue::Boolean:
+    case Value::Boolean:
       val.setValue (value.asBoolean() ? 1.0 : 0.0);
     break;
-    case KSpreadValue::Integer:
+    case Value::Integer:
       val.setValue (value.asFloat ());
     break;
-    case KSpreadValue::Float:
+    case Value::Float:
       val = value;
     break;
-    case KSpreadValue::String:
+    case Value::String:
       val = parser->tryParseNumber (value.asString(), &ok);
       if (!ok)
         val.setValue (0.0);
     break;
-    case KSpreadValue::Array:
+    case Value::Array:
       val = asFloat (value.element (0, 0));
     break;
-    case KSpreadValue::CellRange:
+    case Value::CellRange:
       /* NOTHING */
     break;
-    case KSpreadValue::Error:
+    case Value::Error:
       val.setValue (0.0);
     break;
   };
@@ -144,53 +144,53 @@ KSpreadValue ValueConverter::asFloat (const KSpreadValue &value) const
   return val;
 }
 
-KSpreadValue ValueConverter::asNumeric (const KSpreadValue &value) const
+Value ValueConverter::asNumeric (const Value &value) const
 {
   // as of now, we simply go to float; later on, further datatypes
   // may be possible as a result of this
   return asFloat (value);
 }
 
-KSpreadValue ValueConverter::asString (const KSpreadValue &value) const
+Value ValueConverter::asString (const Value &value) const
 {
   // This is a simpler version of ValueFormatter... We cannot use that one,
   // as we sometimes want to generate the string differently ...
 
-  KSpreadValue val;
+  Value val;
   QString s;
-  KSpreadValue::Format fmt;
+  Value::Format fmt;
   QChar decimal_point;
   int pos;
   switch (value.type()) {
-    case KSpreadValue::Empty:
+    case Value::Empty:
       val = QString::null;
     break;
-    case KSpreadValue::Boolean:
+    case Value::Boolean:
       val.setValue (value.asBoolean() ? parser->locale()->translate ("True") :
           parser->locale()->translate ("False"));
     break;
-    case KSpreadValue::Integer:
+    case Value::Integer:
     {
       fmt = value.format();
-      if (fmt == KSpreadValue::fmt_Percent)
+      if (fmt == Value::fmt_Percent)
         val = QString::number (value.asInteger() * 100) + " %";
-      else if (fmt == KSpreadValue::fmt_DateTime)
+      else if (fmt == Value::fmt_DateTime)
         val = parser->locale()->formatDateTime (value.asDateTime());
-      else if (fmt == KSpreadValue::fmt_Date)
+      else if (fmt == Value::fmt_Date)
         val = parser->locale()->formatDate (value.asDate());
-      else if (fmt == KSpreadValue::fmt_Time)
+      else if (fmt == Value::fmt_Time)
         val = parser->locale()->formatTime (value.asTime());
       else
         val = QString::number (value.asInteger());
     }
     break;
-    case KSpreadValue::Float:
+    case Value::Float:
       fmt = value.format();
-      if (fmt == KSpreadValue::fmt_DateTime)
+      if (fmt == Value::fmt_DateTime)
         val = parser->locale()->formatDateTime (value.asDateTime());
-      else if (fmt == KSpreadValue::fmt_Date)
+      else if (fmt == Value::fmt_Date)
         val = parser->locale()->formatDate (value.asDate(), true);
-      else if (fmt == KSpreadValue::fmt_Time)
+      else if (fmt == Value::fmt_Time)
         val = parser->locale()->formatTime (value.asTime());
       else
       {
@@ -199,21 +199,21 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value) const
         decimal_point = parser->locale()->decimalSymbol()[0];
         if (decimal_point && ((pos = s.find ('.')) != -1))
           s = s.replace (pos, 1, decimal_point);
-        if (fmt == KSpreadValue::fmt_Percent)
+        if (fmt == Value::fmt_Percent)
           s += " %";
         val.setValue (s);
       }
     break;
-    case KSpreadValue::String:
+    case Value::String:
       val = value;
     break;
-    case KSpreadValue::Array:
+    case Value::Array:
       val = asString (value.element (0, 0));
     break;
-    case KSpreadValue::CellRange:
+    case Value::CellRange:
       /* NOTHING */
     break;
-    case KSpreadValue::Error:
+    case Value::Error:
       val.setValue (value.errorMessage ());
     break;
   };
@@ -221,41 +221,41 @@ KSpreadValue ValueConverter::asString (const KSpreadValue &value) const
   return val;
 }
 
-KSpreadValue ValueConverter::asDateTime (const KSpreadValue &value) const
+Value ValueConverter::asDateTime (const Value &value) const
 {
-  KSpreadValue val;
+  Value val;
   bool ok;
   
   switch (value.type()) {
-    case KSpreadValue::Empty:
+    case Value::Empty:
       val.setValue (QDateTime::currentDateTime());
     break;
-    case KSpreadValue::Boolean:
+    case Value::Boolean:
       //ignore the bool value... any better idea? ;)
       val.setValue (QDateTime::currentDateTime());
     break;
-    case KSpreadValue::Integer:
+    case Value::Integer:
       val.setValue (value.asFloat());
-      val.setFormat (KSpreadValue::fmt_DateTime);
+      val.setFormat (Value::fmt_DateTime);
     break;
-    case KSpreadValue::Float:
+    case Value::Float:
       val.setValue (value.asFloat());
-      val.setFormat (KSpreadValue::fmt_DateTime);
+      val.setFormat (Value::fmt_DateTime);
     break;
-    case KSpreadValue::String:
+    case Value::String:
       //no DateTime parser, so we parse as Date, hoping for the best ...
       val = parser->tryParseDate (value.asString(), &ok);
       if (!ok)
         val.setValue (QDateTime::currentDateTime());
-      val.setFormat (KSpreadValue::fmt_DateTime);
+      val.setFormat (Value::fmt_DateTime);
     break;
-    case KSpreadValue::Array:
+    case Value::Array:
       val = asDateTime (value.element (0, 0));
     break;
-    case KSpreadValue::CellRange:
+    case Value::CellRange:
       /* NOTHING */
     break;
-    case KSpreadValue::Error:
+    case Value::Error:
       val.setValue (QDateTime::currentDateTime());
     break;
   };
@@ -263,39 +263,39 @@ KSpreadValue ValueConverter::asDateTime (const KSpreadValue &value) const
   return val;
 }
 
-KSpreadValue ValueConverter::asDate (const KSpreadValue &value) const
+Value ValueConverter::asDate (const Value &value) const
 {
-  KSpreadValue val;
+  Value val;
   bool ok;
   
   switch (value.type()) {
-    case KSpreadValue::Empty:
+    case Value::Empty:
       val.setValue (QDate::currentDate());
     break;
-    case KSpreadValue::Boolean:
+    case Value::Boolean:
       //ignore the bool value... any better idea? ;)
       val.setValue (QDate::currentDate());
     break;
-    case KSpreadValue::Integer:
+    case Value::Integer:
       val.setValue (value.asFloat());
-      val.setFormat (KSpreadValue::fmt_Date);
+      val.setFormat (Value::fmt_Date);
     break;
-    case KSpreadValue::Float:
+    case Value::Float:
       val.setValue (value.asFloat());
-      val.setFormat (KSpreadValue::fmt_Date);
+      val.setFormat (Value::fmt_Date);
     break;
-    case KSpreadValue::String:
+    case Value::String:
       val = parser->tryParseDate (value.asString(), &ok);
       if (!ok)
         val.setValue (QDate::currentDate());
     break;
-    case KSpreadValue::Array:
+    case Value::Array:
       val = asDate (value.element (0, 0));
     break;
-    case KSpreadValue::CellRange:
+    case Value::CellRange:
       /* NOTHING */
     break;
-    case KSpreadValue::Error:
+    case Value::Error:
       val.setValue (QDate::currentDate());
     break;
   };
@@ -303,39 +303,39 @@ KSpreadValue ValueConverter::asDate (const KSpreadValue &value) const
   return val;
 }
 
-KSpreadValue ValueConverter::asTime (const KSpreadValue &value) const
+Value ValueConverter::asTime (const Value &value) const
 {
-  KSpreadValue val;
+  Value val;
   bool ok;
   
   switch (value.type()) {
-    case KSpreadValue::Empty:
+    case Value::Empty:
       val.setValue (QTime::currentTime());
     break;
-    case KSpreadValue::Boolean:
+    case Value::Boolean:
       //ignore the bool value... any better idea? ;)
       val.setValue (QTime::currentTime());
     break;
-    case KSpreadValue::Integer:
+    case Value::Integer:
       val.setValue (value.asFloat());
-      val.setFormat (KSpreadValue::fmt_Time);
+      val.setFormat (Value::fmt_Time);
     break;
-    case KSpreadValue::Float:
+    case Value::Float:
       val.setValue (value.asFloat());
-      val.setFormat (KSpreadValue::fmt_Time);
+      val.setFormat (Value::fmt_Time);
     break;
-    case KSpreadValue::String:
+    case Value::String:
       val = parser->tryParseTime (value.asString(), &ok);
       if (!ok)
         val.setValue (QTime::currentTime());
     break;
-    case KSpreadValue::Array:
+    case Value::Array:
       val = asTime (value.element (0, 0));
     break;
-    case KSpreadValue::CellRange:
+    case Value::CellRange:
       /* NOTHING */
     break;
-    case KSpreadValue::Error:
+    case Value::Error:
       val.setValue (QTime::currentTime());
     break;
   };

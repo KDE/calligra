@@ -26,14 +26,13 @@
 
 #include <koffice_export.h>
 
-class KSpreadStyle;
-class KSpreadSheet;
-class KSpreadRange;
-
-namespace KSpread {
-
+namespace KSpread
+{
 class StyleClusterQuad;
 class StyleClusterTester;
+class Style;
+class Sheet;
+class Range;
 
 // class StyleManipulator;
 
@@ -78,7 +77,7 @@ class KSPREAD_EXPORT StyleCluster : public QObject
 
   protected:
     StyleClusterQuad* m_topQuad;
-    KSpreadSheet* m_sheet;
+    Sheet* m_sheet;
     //To be written
     //friend class StyleManipulator;
     friend class StyleClusterTester;
@@ -106,14 +105,14 @@ class KSPREAD_EXPORT StyleCluster : public QObject
                      int y, int & y_offset, 
                      int & quad_size);
   public:
-    StyleCluster(KSpreadSheet* sheet);
+    StyleCluster(Sheet* sheet);
 
     ~StyleCluster();
 
     /**
      * Example usage: A cell should be changed to bold.
      * First, the current style is looked up with lookup(),
-     * then a new KSpreadStyle is created based on the
+     * then a new Style is created based on the
      * returned style and set to bold. Then the style
      * should be checked against existing styles (use existing
      * one and delete your created one).
@@ -124,14 +123,14 @@ class KSPREAD_EXPORT StyleCluster : public QObject
      * @param style The style to set it to.  Must be non-null.  To 'remove'
      *              a style, set the style to the sheet default style or something.
      */
-    void setStyle( int x, int y, KSpreadStyle * style);
+    void setStyle( int x, int y, Style * style);
 
     /**
      * Practically same usage as above, but use a range to apply the style.
      * 
-     * @see setStyle( int x, int y, KSpreadStyle * style)
+     * @see setStyle( int x, int y, Style * style)
      */
-    void setStyle( const KSpreadRange & range, KSpreadStyle * style);
+    void setStyle( const Range & range, Style * style);
 
     /**
      * If you intend to modify this returned style, create
@@ -144,7 +143,7 @@ class KSPREAD_EXPORT StyleCluster : public QObject
      *         you have any column style and row style overrides this.
      * @see insert
      */
-    const KSpreadStyle& lookup(int x, int y);
+    const Style& lookup(int x, int y);
 
 };
 

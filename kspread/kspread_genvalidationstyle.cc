@@ -22,18 +22,19 @@
 #include "kspread_cell.h"
 #include <koxmlwriter.h>
 
+using namespace KSpread;
 
-KSpreadGenValidationStyles::KSpreadGenValidationStyles()
+GenValidationStyles::GenValidationStyles()
 {
 
 }
 
-KSpreadGenValidationStyles::~KSpreadGenValidationStyles()
+GenValidationStyles::~GenValidationStyles()
 {
 
 }
 
-QString KSpreadGenValidationStyles::lookup( const KSpreadGenValidationStyle& style )
+QString GenValidationStyles::lookup( const GenValidationStyle& style )
 {
     StyleMap::iterator it = m_styles.find( style );
     if ( it == m_styles.end() ) {
@@ -46,7 +47,7 @@ QString KSpreadGenValidationStyles::lookup( const KSpreadGenValidationStyle& sty
     return it.data();
 }
 
-QString KSpreadGenValidationStyles::makeUniqueName( const QString& base ) const
+QString GenValidationStyles::makeUniqueName( const QString& base ) const
 {
     int num = 1;
     QString name;
@@ -57,7 +58,7 @@ QString KSpreadGenValidationStyles::makeUniqueName( const QString& base ) const
     return name;
 }
 
-void KSpreadGenValidationStyles::writeStyle( KoXmlWriter& writer )
+void GenValidationStyles::writeStyle( KoXmlWriter& writer )
 {
     if ( m_styles.count()>0 )
     {
@@ -101,7 +102,7 @@ void KSpreadGenValidationStyles::writeStyle( KoXmlWriter& writer )
     }
 }
 
-void KSpreadGenValidationStyle::initVal( KSpreadValidity *_val )
+void GenValidationStyle::initVal( Validity *_val )
 {
     if ( _val )
     {
@@ -130,7 +131,7 @@ void KSpreadGenValidationStyle::initVal( KSpreadValidity *_val )
     }
 }
 
-QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _val )
+QString GenValidationStyle::createValidationCondition( Validity* _val )
 {
     QString result;
     switch( _val->m_allow )
@@ -162,7 +163,7 @@ QString KSpreadGenValidationStyle::createValidationCondition( KSpreadValidity* _
     return result;
 }
 
-QString KSpreadGenValidationStyle::createListValidationCondition( KSpreadValidity* _val )
+QString GenValidationStyle::createListValidationCondition( Validity* _val )
 {
     QString result = "oooc:cell-content-is-in-list(";
     result = _val->listValidity.join( ";" );
@@ -170,7 +171,7 @@ QString KSpreadGenValidationStyle::createListValidationCondition( KSpreadValidit
     return result;
 }
 
-QString KSpreadGenValidationStyle::createNumberValidationCondition( KSpreadValidity* _val )
+QString GenValidationStyle::createNumberValidationCondition( Validity* _val )
 {
     QString result;
     if ( _val->m_allow == Allow_Number )
@@ -231,7 +232,7 @@ QString KSpreadGenValidationStyle::createNumberValidationCondition( KSpreadValid
 }
 
 
-QString KSpreadGenValidationStyle::createTimeValidationCondition( KSpreadValidity* _val )
+QString GenValidationStyle::createTimeValidationCondition( Validity* _val )
 {
     QString result( "oooc:cell-content-is-time() and " );
     switch( _val->m_cond )
@@ -287,7 +288,7 @@ QString KSpreadGenValidationStyle::createTimeValidationCondition( KSpreadValidit
     return result;
 }
 
-QString KSpreadGenValidationStyle::createDateValidationCondition( KSpreadValidity* _val )
+QString GenValidationStyle::createDateValidationCondition( Validity* _val )
 {
     QString result( "oooc:cell-content-is-date() and " );
     switch( _val->m_cond )
@@ -343,7 +344,7 @@ QString KSpreadGenValidationStyle::createDateValidationCondition( KSpreadValidit
     return result;
 }
 
-QString KSpreadGenValidationStyle::createTextValidationCondition( KSpreadValidity* _val )
+QString GenValidationStyle::createTextValidationCondition( Validity* _val )
 {
     QString result;
     switch( _val->m_cond )

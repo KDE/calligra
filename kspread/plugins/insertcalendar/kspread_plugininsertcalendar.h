@@ -33,11 +33,9 @@
 
 class KAboutData;
 
-//@todo as soon as KSpread gets the KSpread namespce move this below...
-class KSpreadView;
-
 namespace KSpread
 {
+class View;
 
 class InsertCalendarDialog;
 
@@ -64,7 +62,7 @@ class KSPREAD_EXPORT PluginInsertCalendar : public KParts::Plugin
      *
      * It is set in the constructor.
      */
-    KSpreadView* m_kspreadView;
+    View* m_kspreadView;
 
     /**
      * This is the dialog used to select the start/end dates

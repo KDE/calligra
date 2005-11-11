@@ -95,12 +95,12 @@ class Formula::Private
 public:
   Formula *formula;
   Cell *cell;
-  KSpreadSheet *sheet;
+  Sheet *sheet;
   bool dirty;
   bool valid;
   QString expression;
   QValueVector<Opcode> codes;
-  QValueVector<KSpreadValue> constants;
+  QValueVector<Value> constants;
 };
 
 class TokenStack : public QValueVector<Token>
@@ -197,13 +197,13 @@ static int opPrecedence( Token::Op op )
 }
 
 // helper function
-static KSpreadValue tokenAsValue( const Token& token )
+static Value tokenAsValue( const Token& token )
 {
-  KSpreadValue value;
-  if( token.isBoolean() ) value = KSpreadValue( token.asBoolean() );
-  else if( token.isInteger() ) value = KSpreadValue( token.asInteger() );
-  else if( token.isFloat() ) value = KSpreadValue( token.asFloat() );
-  else if( token.isString() ) value = KSpreadValue( token.asString() );
+  Value value;
+  if( token.isBoolean() ) value = Value( token.asBoolean() );
+  else if( token.isInteger() ) value = Value( token.asInteger() );
+  else if( token.isFloat() ) value = Value( token.asFloat() );
+  else if( token.isString() ) value = Value( token.asString() );
   return value;
 }
 
@@ -372,7 +372,7 @@ static bool isIdentifier( QChar ch )
 
 // Constructor
 
-Formula::Formula (KSpreadSheet *sheet, Cell *cell)
+Formula::Formula (Sheet *sheet, Cell *cell)
 {
   d = new Private;
   d->cell = cell;
@@ -400,7 +400,7 @@ Cell* Formula::cell()
   return d->cell;
 }  
 
-KSpreadSheet* Formula::sheet()
+Sheet* Formula::sheet()
 {
   return d->sheet;
 }  
@@ -867,7 +867,7 @@ void Formula::compile( const Tokens& tokens ) const
     ( tokenType == Token::Identifier ) )
     {
       syntaxStack.push( token );
-      d->constants.append( KSpreadValue( token.text() ) );
+      d->constants.append( Value( token.text() ) );
       if (tokenType == Token::Cell)
         d->codes.append( Opcode( Opcode::Cell, d->constants.count()-1 ) );
       else if (tokenType == Token::Range)
@@ -899,7 +899,7 @@ void Formula::compile( const Tokens& tokens ) const
     if( syntaxStack.itemCount() >= 1 )
     if( !syntaxStack.top().isOperator() )
     {
-      d->constants.append( KSpreadValue( 0.01 ) );
+      d->constants.append( Value( 0.01 ) );
       d->codes.append( Opcode( Opcode::Load, d->constants.count()-1 ) );
       d->codes.append( Opcode( Opcode::Mul ) );
     }
@@ -1143,20 +1143,20 @@ void Formula::compile( const Tokens& tokens ) const
 
 struct stackEntry {
   void reset () { row1 = col1 = row2 = col2 = -1; };
-  KSpreadValue val;
+  Value val;
   int row1, col1, row2, col2;
 };
 
-KSpreadValue Formula::eval() const
+Value Formula::eval() const
 {
   QValueStack<stackEntry> stack;
   stackEntry entry;
   unsigned index;
-  KSpreadValue val1, val2;
+  Value val1, val2;
   QString c;
-  QValueVector<KSpreadValue> args;
+  QValueVector<Value> args;
 
-  KSpreadSheet *sheet = 0;
+  Sheet *sheet = 0;
   ValueParser* parser = 0;
   ValueConverter* converter = 0;
   ValueCalc* calc = 0;
@@ -1191,11 +1191,11 @@ KSpreadValue Formula::eval() const
   }
   
   if( !d->valid )
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   for( unsigned pc = 0; pc < d->codes.count(); pc++ )
   {
-    KSpreadValue ret;   // for the function caller
+    Value ret;   // for the function caller
     Opcode& opcode = d->codes[pc];
     index = opcode.index;
     switch( opcode.type )
@@ -1215,7 +1215,7 @@ KSpreadValue Formula::eval() const
       case Opcode::Neg:
         entry.reset();
         entry.val = stack.pop().val;
-        if( entry.val.isError() ) return KSpreadValue::errorVALUE();
+        if( entry.val.isError() ) return Value::errorVALUE();
         entry.val = calc->mul (entry.val, -1);
         stack.push (entry);
         break;
@@ -1256,7 +1256,7 @@ KSpreadValue Formula::eval() const
       case Opcode::Div:
         val2 = stack.pop().val;
         val1 = stack.pop().val;
-        if( val1.isZero() ) return KSpreadValue::errorDIV0();
+        if( val1.isZero() ) return Value::errorDIV0();
         val2 = calc->div( val1, val2 );
         if( val2.isError() ) return val2;
         entry.reset();
@@ -1277,9 +1277,9 @@ KSpreadValue Formula::eval() const
       // string concatenation
       case Opcode::Concat:
         val1 = converter->asString (stack.pop().val);
-        if( val1.isError() ) return KSpreadValue::errorVALUE();
+        if( val1.isError() ) return Value::errorVALUE();
         val2 = converter->asString (stack.pop().val);
-        if( val2.isError() ) return KSpreadValue::errorVALUE();
+        if( val2.isError() ) return Value::errorVALUE();
         val1.setValue( val2.asString().append( val1.asString() ) );
         entry.reset();
         entry.val = val1;
@@ -1289,7 +1289,7 @@ KSpreadValue Formula::eval() const
       // logical not
       case Opcode::Not:
         val1 = converter->asBoolean (stack.pop().val);
-        if( val1.isError() ) return KSpreadValue::errorVALUE();
+        if( val1.isError() ) return Value::errorVALUE();
         val1.setValue( !val1.asBoolean() );
         entry.reset();
         entry.val = val1;
@@ -1299,15 +1299,15 @@ KSpreadValue Formula::eval() const
       // comparison
       case Opcode::Equal:
         val1 = stack.pop().val;
-        if( val1.isError() ) return KSpreadValue::errorVALUE();
+        if( val1.isError() ) return Value::errorVALUE();
         val2 = stack.pop().val;
-        if( val2.isError() ) return KSpreadValue::errorVALUE();
+        if( val2.isError() ) return Value::errorVALUE();
         if( !val1.allowComparison( val2 ) )
-          return KSpreadValue::errorVALUE();
+          return Value::errorVALUE();
         if( val2.compare( val1 ) == 0 )
-          val1 = KSpreadValue (true);
+          val1 = Value (true);
         else
-          val1 = KSpreadValue (false);
+          val1 = Value (false);
         entry.reset();
         entry.val = val1;
         stack.push (entry);
@@ -1316,15 +1316,15 @@ KSpreadValue Formula::eval() const
       // less than
       case Opcode::Less:
         val1 = stack.pop().val;
-        if( val1.isError() ) return KSpreadValue::errorVALUE();
+        if( val1.isError() ) return Value::errorVALUE();
         val2 = stack.pop().val;
-        if( val2.isError() ) return KSpreadValue::errorVALUE();
+        if( val2.isError() ) return Value::errorVALUE();
         if( !val1.allowComparison( val2 ) )
-          return KSpreadValue::errorVALUE();
+          return Value::errorVALUE();
         if( val2.compare( val1 ) < 0 )
-          val1 = KSpreadValue (true);
+          val1 = Value (true);
         else
-          val1 = KSpreadValue (false);
+          val1 = Value (false);
         entry.reset();
         entry.val = val1;
         stack.push (entry);
@@ -1333,15 +1333,15 @@ KSpreadValue Formula::eval() const
       // greater than
       case Opcode::Greater:
         val1 = stack.pop().val;
-        if( val1.isError() ) return KSpreadValue::errorVALUE();
+        if( val1.isError() ) return Value::errorVALUE();
         val2 = stack.pop().val;
-        if( val2.isError() ) return KSpreadValue::errorVALUE();
+        if( val2.isError() ) return Value::errorVALUE();
         if( !val1.allowComparison( val2 ) )
-          return KSpreadValue::errorVALUE();
+          return Value::errorVALUE();
         if( val2.compare( val1 ) > 0 )
-          val1 = KSpreadValue (true);
+          val1 = Value (true);
         else
-          val1 = KSpreadValue (false);
+          val1 = Value (false);
         entry.reset();
         entry.val = val1;
         stack.push (entry);
@@ -1350,11 +1350,11 @@ KSpreadValue Formula::eval() const
 
       case Opcode::Cell:
         c = d->constants[index].asString();
-        val1 = KSpreadValue::empty();
+        val1 = Value::empty();
         entry.reset();
         if (sheet)
         {
-          KSpreadPoint cell (c, sheet->workbook(), sheet);
+          Point cell (c, sheet->workbook(), sheet);
           if (cell.isValid())
           {
             val1 = cell.sheet->value (cell.column(), cell.row());
@@ -1369,11 +1369,11 @@ KSpreadValue Formula::eval() const
       
       case Opcode::Range:
         c = d->constants[index].asString();
-        val1 = KSpreadValue::empty();
+        val1 = Value::empty();
         entry.reset();
         if (sheet)
         {
-          KSpreadRange range (c, sheet->workbook(), sheet);
+          Range range (c, sheet->workbook(), sheet);
           if (range.isValid())
           {
             val1 = range.sheet->valueRange (range.startCol(), range.startRow(),
@@ -1401,7 +1401,7 @@ KSpreadValue Formula::eval() const
         if( stack.count() < index )
           // (Tomas) umm, how could that be ? I mean, the index value
           //  is computed from the stack *confused*
-          return KSpreadValue::errorVALUE(); // not enough arguments
+          return Value::errorVALUE(); // not enough arguments
         
         args.clear();
         fe.ranges.clear ();
@@ -1423,10 +1423,10 @@ KSpreadValue Formula::eval() const
         // function name as string value
         val1 = converter->asString (stack.pop().val);
         if( val1.isError() )
-          return KSpreadValue::errorVALUE();
+          return Value::errorVALUE();
         function = FunctionRepository::self()->function ( val1.asString() );
         if( !function )
-          return KSpreadValue::errorVALUE(); // no such function
+          return Value::errorVALUE(); // no such function
         
         ret = function->exec (args, calc, &fe);
         if (ret.isError ())
@@ -1450,7 +1450,7 @@ KSpreadValue Formula::eval() const
   
   // more than one value in stack ? unsuccesful execution...
   if( stack.count() != 1 )
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   return stack.pop().val;
 
@@ -1470,7 +1470,7 @@ QString Formula::dump() const
 
   result = QString("Expression: [%1]\n").arg( d->expression );
 #if 0  
-  KSpreadValue value = eval();
+  Value value = eval();
   result.append( QString("Result: %1\n").arg(
       converter->asString(value).asString() ) );
 #endif
@@ -1479,7 +1479,7 @@ QString Formula::dump() const
   for( unsigned c = 0; c < d->constants.count(); c++ )
   {
     QString vtext;
-    KSpreadValue val = d->constants[c];
+    Value val = d->constants[c];
     if( val.isString() ) vtext = QString("[%1]").arg( val.asString() );
     else if( val.isNumber() ) vtext = QString("%1").arg( val.asFloat() );
     else if( val.isBoolean() ) vtext = QString("%1").arg( val.asBoolean() ? "True":"False");

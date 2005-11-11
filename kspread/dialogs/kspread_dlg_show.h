@@ -27,23 +27,28 @@
 
 #include <kdialogbase.h>
 
-class KSpreadView;
 class QListBox;
 
-class KSpreadshow: public KDialogBase
+namespace KSpread
+{
+class View;
+
+class ShowDialog: public KDialogBase
 {
   Q_OBJECT
 public:
-  KSpreadshow( KSpreadView* parent, const char* name );
+  ShowDialog( View* parent, const char* name );
 
 
 public slots:
   void slotOk();
   void slotDoubleClicked(QListBoxItem *);
 protected:
-  KSpreadView* m_pView;
+  View* m_pView;
 
   QListBox * list;
 };
+
+} // namespace KSpread
 
 #endif

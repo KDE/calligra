@@ -31,7 +31,7 @@ class Inspector : public KDialogBase
 Q_OBJECT
 
 public:
-  Inspector( KSpread::Cell* cell );
+  Inspector( Cell* cell );
   ~Inspector();
   
 private:

@@ -28,11 +28,11 @@ class QSpinBox;
 
 class KoDocumentChild;
 
-class KOFFICEUI_EXPORT KSpreadToolBox : public QFrame
+class KOFFICEUI_EXPORT ToolBox : public QFrame
 {
     Q_OBJECT
 public:
-    KSpreadToolBox( QWidget* parent = 0, const char* name = 0 );
+    ToolBox( QWidget* parent = 0, const char* name = 0 );
 
 public slots:
     void setEnabled( bool enable );
@@ -47,11 +47,11 @@ private:
     QVBoxLayout* m_layout;
     QPoint m_mousePos;
     QPoint m_startPos;
-    class KSpreadToolBoxPrivate;
-    KSpreadToolBoxPrivate *d;
+    class Private;
+    Private *d;
 };
 
-class KOFFICEUI_EXPORT KoTransformToolBox : public KSpreadToolBox
+class KOFFICEUI_EXPORT KoTransformToolBox : public ToolBox
 {
     Q_OBJECT
 public:

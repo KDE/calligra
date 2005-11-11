@@ -19,30 +19,31 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kspread_dlg_subtotal.h"
+#include <qcheckbox.h>
+#include <qcombobox.h>
+#include <qlistview.h>
+#include <qmemarray.h>
+
+#include <kdebug.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+
 #include "kspreadsubtotal.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 #include "kspread_doc.h"
 #include "kspread_util.h"
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-
-#include <qcheckbox.h>
-#include <qcombobox.h>
-#include <qlistview.h>
-#include <qmemarray.h>
+#include "kspread_dlg_subtotal.h"
 
 using namespace KSpread;
 
-KSpreadSubtotalDlg::KSpreadSubtotalDlg( KSpreadView * parent, QRect const & selection, const char * name )
+SubtotalDialog::SubtotalDialog( View * parent, QRect const & selection, const char * name )
   : KDialogBase(parent, name, true, i18n( "Subtotals" ), Ok | Cancel | User1, Ok, true, KGuiItem(i18n( "Remove All" )) ),
     m_pView( parent ),
     m_pSheet( m_pView->activeSheet() ),
     m_selection( selection ),
-    m_dialog( new KSpreadSubtotal( this ) )
+    m_dialog( new Subtotal( this ) )
 {
   setButtonBoxOrientation( Vertical );
   setMainWidget( m_dialog );
@@ -51,11 +52,11 @@ KSpreadSubtotalDlg::KSpreadSubtotalDlg( KSpreadView * parent, QRect const & sele
   fillFunctionBox();
 }
 
-KSpreadSubtotalDlg::~KSpreadSubtotalDlg()
+SubtotalDialog::~SubtotalDialog()
 {
 }
 
-void KSpreadSubtotalDlg::slotOk()
+void SubtotalDialog::slotOk()
 {
   int numOfCols = m_selection.width();
   QMemArray<int> columns( numOfCols );
@@ -170,12 +171,12 @@ void KSpreadSubtotalDlg::slotOk()
   accept();
 }
 
-void KSpreadSubtotalDlg::slotCancel()
+void SubtotalDialog::slotCancel()
 {
   reject();
 }
 
-void KSpreadSubtotalDlg::slotUser1()
+void SubtotalDialog::slotUser1()
 {
   m_pView->doc()->emitBeginOperation( false );
   removeSubtotalLines();
@@ -183,7 +184,7 @@ void KSpreadSubtotalDlg::slotUser1()
   accept();
 }
 
-void KSpreadSubtotalDlg::removeSubtotalLines()
+void SubtotalDialog::removeSubtotalLines()
 {
   kdDebug() << "Removing subtotal lines" << endl;
 
@@ -224,7 +225,7 @@ void KSpreadSubtotalDlg::removeSubtotalLines()
   kdDebug() << "Done removing subtotals" << endl;
 }
 
-void KSpreadSubtotalDlg::fillColumnBoxes()
+void SubtotalDialog::fillColumnBoxes()
 {
   int r = m_selection.right();
   int row = m_selection.top();
@@ -255,7 +256,7 @@ void KSpreadSubtotalDlg::fillColumnBoxes()
   }
 }
 
-void KSpreadSubtotalDlg::fillFunctionBox()
+void SubtotalDialog::fillFunctionBox()
 {
     QStringList lst;
     lst << i18n( "Average" );
@@ -272,7 +273,7 @@ void KSpreadSubtotalDlg::fillFunctionBox()
     m_dialog->m_functionBox->insertStringList(lst);
 }
 
-bool KSpreadSubtotalDlg::addSubtotal( int mainCol, int column, int row, int topRow,
+bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
                                       bool addRow, QString const & text )
 {
   kdDebug() << "Adding subtotal: " << mainCol << ", " << column << ", Rows: " << row << ", " << topRow

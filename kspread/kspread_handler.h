@@ -7,27 +7,29 @@
 
 #include <koQueryTrader.h>
 
-class KSpreadView;
-
 class QWidget;
+
+namespace KSpread
+{
+class View;
 
 /**
  * This event handler is used to insert a new part. The event handler
  * takes care of selecting the rectangle at which the new
  * part will appear.
  */
-class KSpreadInsertHandler : public EventHandler
+class InsertHandler : public EventHandler
 {
     Q_OBJECT
 public:
-    KSpreadInsertHandler( KSpreadView* view, QWidget* widget, const KoDocumentEntry& entry, bool ischart = false );
-    ~KSpreadInsertHandler();
+    InsertHandler( View* view, QWidget* widget, const KoDocumentEntry& entry, bool ischart = false );
+    ~InsertHandler();
 
 protected:
     bool eventFilter( QObject*, QEvent* );
 
 private:
-    KSpreadView* m_view;
+    View* m_view;
     QPoint m_geometryStart;
     QPoint m_geometryEnd;
     bool m_started;
@@ -35,5 +37,7 @@ private:
     KoDocumentEntry m_entry;
     bool m_isChart;
 };
-			
+
+} // namespace KSpread
+
 #endif

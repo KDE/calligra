@@ -35,13 +35,15 @@ class QPushButton;
 class QListBox;
 class QListBoxItem;
 
-class KSpreadView;
+namespace KSpread
+{
+class View;
 
-class KSpreadreference: public QDialog
+class reference: public QDialog
 {
   Q_OBJECT
 public:
-  KSpreadreference( KSpreadView* parent, const char* name );
+  reference( View* parent, const char* name );
 
 
 public slots:
@@ -52,7 +54,7 @@ public slots:
   void slotEdit();
   void slotHighlighted(QListBoxItem *);
 protected:
-  KSpreadView * m_pView;
+  View * m_pView;
 
   QListBox    * m_list;
   QPushButton * m_pOk;
@@ -65,24 +67,26 @@ private:
   void displayAreaValues(QString const & areaName);
 };
 
-class KSpreadEditAreaName : public KDialogBase
+class EditAreaName : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KSpreadEditAreaName( KSpreadView * parent, const char * name,
+    EditAreaName( View * parent, const char * name,
                          QString const & areaname );
-    ~KSpreadEditAreaName();
+    ~EditAreaName();
 
 public slots:
   virtual void slotOk();
 
 private:
-    KSpreadView * m_pView;
+    View * m_pView;
 
     QLineEdit   * m_area;
     QComboBox   * m_sheets;
     QLabel      * m_areaName;
 };
+
+} // namespace KSpread
 
 #endif

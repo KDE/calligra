@@ -27,13 +27,16 @@
 #include <dcopobject.h>
 #include <dcopref.h>
 
-class KSpreadMap;
 
-class KSpreadMapIface : virtual public DCOPObject
+namespace KSpread
+{
+class Map;
+
+class MapIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    KSpreadMapIface( KSpreadMap* );
+    MapIface( Map* );
 
     virtual bool processDynamic(const QCString &fun, const QByteArray &data,
 				QCString& replyType, QByteArray &replyData);
@@ -47,7 +50,9 @@ k_dcop:
     virtual DCOPRef insertSheet( const QString& name );
 
 private:
-    KSpreadMap* m_map;
+    Map* m_map;
 };
+
+} // namespace KSpread
 
 #endif

@@ -39,24 +39,24 @@
 using namespace KSpread;
 
 // prototypes (sorted alphabetically)
-KSpreadValue func_filename (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_info (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_isblank (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_isdate (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_iseven (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_islogical (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_isnottext (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_isnum (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_isodd (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_isref (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_istext (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_istime (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_n (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_type (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_version (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_filename (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_info (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_isblank (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_isdate (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_iseven (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_islogical (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_isnottext (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_isnum (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_isodd (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_isref (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_istext (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_istime (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_n (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_type (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_version (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all information functions
-void KSpreadRegisterInformationFunctions()
+void RegisterInformationFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -99,18 +99,18 @@ void KSpreadRegisterInformationFunctions()
 }
 
 // Function: INFO
-KSpreadValue func_info (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_info (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString type = calc->conv()->asString (args[0]).asString().lower();
 
   if (type == "directory")
-    return KSpreadValue (QDir::currentDirPath());
+    return Value (QDir::currentDirPath());
 
   if (type == "release")
-    return KSpreadValue (QString (VERSION));
+    return Value (QString (VERSION));
 
   if ( type == "numfile" )
-    return KSpreadValue ((int) KSpreadDoc::documents().count());
+    return Value ((int) Doc::documents().count());
 
   if (type == "recalc")
   {
@@ -121,28 +121,28 @@ KSpreadValue func_info (valVector args, ValueCalc *calc, FuncExtra *)
       else
         result = i18n ("Automatic");
     }
-    return KSpreadValue (result);
+    return Value (result);
   }
 
   if (type == "memavail")
     // not supported
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   if (type == "memused")
     // not supported
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   if (type == "origin")
     // not supported
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   if (type == "system") {
     struct utsname name;
     if (uname (&name) >= 0)
-      return KSpreadValue (QString (name.sysname));
+      return Value (QString (name.sysname));
   }
 
   if (type == "totmem")
     // not supported
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   if (type == "osversion")
   {
@@ -151,106 +151,106 @@ KSpreadValue func_info (valVector args, ValueCalc *calc, FuncExtra *)
     {
        QString os = QString("%1 %2 (%3)").arg( name.sysname ).
          arg( name.release ).arg( name.machine );
-       return KSpreadValue (os);
+       return Value (os);
     }
   }
 
-  return KSpreadValue::errorVALUE();
+  return Value::errorVALUE();
 }
 
 // Function: ISBLANK
-KSpreadValue func_isblank (valVector args, ValueCalc *, FuncExtra *)
+Value func_isblank (valVector args, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue (args[0].isEmpty());
+  return Value (args[0].isEmpty());
 }
 
 // Function: ISLOGICAL
-KSpreadValue func_islogical (valVector args, ValueCalc *, FuncExtra *)
+Value func_islogical (valVector args, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue (args[0].isBoolean());
+  return Value (args[0].isBoolean());
 }
 
 // Function: ISTEXT
-KSpreadValue func_istext (valVector args, ValueCalc *, FuncExtra *)
+Value func_istext (valVector args, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue (args[0].isString());
+  return Value (args[0].isString());
 }
 
 // Function: ISREF
-KSpreadValue func_isref (valVector, ValueCalc */*calc*/, FuncExtra *e)
+Value func_isref (valVector, ValueCalc */*calc*/, FuncExtra *e)
 {
   // no reference ?
   if ((e == 0) || (e->ranges[0].col1 == -1) || (e->ranges[0].row1 == -1))
-    return KSpreadValue (false);
+    return Value (false);
   // if we are here, it is a reference (cell/range)
-  return KSpreadValue (true);
+  return Value (true);
 }
 
 // Function: ISNOTTEXT
-KSpreadValue func_isnottext (valVector args, ValueCalc *, FuncExtra *)
+Value func_isnottext (valVector args, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue (args[0].isString() ? false : true);
+  return Value (args[0].isString() ? false : true);
 }
 
 // Function: ISNUM
-KSpreadValue func_isnum (valVector args, ValueCalc *, FuncExtra *)
+Value func_isnum (valVector args, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue (args[0].isNumber());
+  return Value (args[0].isNumber());
 }
 
 // Function: ISTIME
-KSpreadValue func_istime (valVector args, ValueCalc *, FuncExtra *)
+Value func_istime (valVector args, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue ((args[0].format() == KSpreadValue::fmt_Time)
-      || (args[0].format() == KSpreadValue::fmt_DateTime));
+  return Value ((args[0].format() == Value::fmt_Time)
+      || (args[0].format() == Value::fmt_DateTime));
 }
 
 // Function: ISDATE
-KSpreadValue func_isdate (valVector args, ValueCalc *, FuncExtra *)
+Value func_isdate (valVector args, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue ((args[0].format() == KSpreadValue::fmt_Date)
-      || (args[0].format() == KSpreadValue::fmt_DateTime));
+  return Value ((args[0].format() == Value::fmt_Date)
+      || (args[0].format() == Value::fmt_DateTime));
 }
 
 // Function: ISODD
-KSpreadValue func_isodd (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_isodd (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return KSpreadValue (calc->isEven(args[0]) ? false : true);
+  return Value (calc->isEven(args[0]) ? false : true);
 }
 
 // Function: ISEVEN
-KSpreadValue func_iseven (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_iseven (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return KSpreadValue (calc->isEven(args[0]));
+  return Value (calc->isEven(args[0]));
 }
 
 // Function: TYPE
-KSpreadValue func_type (valVector args, ValueCalc *, FuncExtra *)
+Value func_type (valVector args, ValueCalc *, FuncExtra *)
 {
   // Returns 1 for numbers, 2 for text, 4 for boolean, 16 for error,
   // 64 for arrays
   if (args[0].isArray())
-    return KSpreadValue (64);
+    return Value (64);
   if (args[0].isNumber())
-    return KSpreadValue (1);
+    return Value (1);
   if (args[0].isString())
-    return KSpreadValue (2);
+    return Value (2);
   if (args[0].isBoolean())
-    return KSpreadValue (4);
+    return Value (4);
   if (args[0].isError())
-    return KSpreadValue (16);
+    return Value (16);
   
   // something else ?
-  return KSpreadValue (0);
+  return Value (0);
 }
 
-KSpreadValue func_filename (valVector, ValueCalc *calc, FuncExtra *)
+Value func_filename (valVector, ValueCalc *calc, FuncExtra *)
 {
-  return KSpreadValue (calc->doc()->url().prettyURL());
+  return Value (calc->doc()->url().prettyURL());
 }
 
 // Function: N
-KSpreadValue func_n (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_n (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->conv()->asFloat (args[0]);
 }

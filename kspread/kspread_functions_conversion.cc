@@ -28,22 +28,22 @@
 using namespace KSpread;
 
 // prototypes
-KSpreadValue func_arabic (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_carx (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_cary (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_decsex (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_polr (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_pola (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_roman (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_sexdec (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_AsciiToChar (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_CharToAscii (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_inttobool (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_booltoint (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_ToString (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_arabic (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_carx (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_cary (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_decsex (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_polr (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_pola (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_roman (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sexdec (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_AsciiToChar (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_CharToAscii (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_inttobool (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_booltoint (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_ToString (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all conversion functions
-void KSpreadRegisterConversionFunctions()
+void RegisterConversionFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -88,44 +88,44 @@ void KSpreadRegisterConversionFunctions()
 }
 
 // Function: POLR
-KSpreadValue func_polr (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_polr (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // sqrt (a^2 + b^2)
-  KSpreadValue a = args[0];
-  KSpreadValue b = args[1];
-  KSpreadValue res = calc->sqrt (calc->add (calc->sqr (a), calc->sqr (b)));
+  Value a = args[0];
+  Value b = args[1];
+  Value res = calc->sqrt (calc->add (calc->sqr (a), calc->sqr (b)));
   return res;
 }
 
 // Function: POLA
-KSpreadValue func_pola (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_pola (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // acos (a / polr(a,b))
-  KSpreadValue polr = func_polr (args, calc, 0);
+  Value polr = func_polr (args, calc, 0);
   if (calc->isZero (polr))
-    return KSpreadValue::errorDIV0();
-  KSpreadValue res = calc->acos (calc->div (args[0], polr));
+    return Value::errorDIV0();
+  Value res = calc->acos (calc->div (args[0], polr));
   return res;
 }
 
 // Function: CARX
-KSpreadValue func_carx (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_carx (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // a * cos(b)
-  KSpreadValue res = calc->mul (args[0], calc->cos (args[1]));
+  Value res = calc->mul (args[0], calc->cos (args[1]));
   return res;
 }
 
 // Function: CARY
-KSpreadValue func_cary (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_cary (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // a * sin(b)
-  KSpreadValue res = calc->mul (args[0], calc->sin (args[1]));
+  Value res = calc->mul (args[0], calc->sin (args[1]));
   return res;
 }
 
 // Function: DECSEX
-KSpreadValue func_decsex (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_decsex (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // original function was very compicated, but I see no reason for that,
   // when it can be done as simply as this ...
@@ -134,29 +134,29 @@ KSpreadValue func_decsex (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: SEXDEC
-KSpreadValue func_sexdec (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_sexdec (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (args.count() == 1)
   {
     // convert given value to number
-    KSpreadValue time = calc->conv()->asTime (args[0]);
+    Value time = calc->conv()->asTime (args[0]);
     return calc->mul (calc->conv()->asFloat (time), 24);
   }
   
   // convert h/m/s to number of hours
-  KSpreadValue h = args[0];
-  KSpreadValue m = args[1];
+  Value h = args[0];
+  Value m = args[1];
 
-  KSpreadValue res = calc->add (h, calc->div (m, 60));
+  Value res = calc->add (h, calc->div (m, 60));
   if (args.count() == 3) {
-    KSpreadValue s = args[2];
+    Value s = args[2];
     res = calc->add (res, calc->div (s, 3600));
   }
   return res;
 }
 
 // Function: ROMAN
-KSpreadValue func_roman (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_roman (valVector args, ValueCalc *calc, FuncExtra *)
 {
   const QCString RNUnits[] = {"", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX"};
   const QCString RNTens[] = {"", "X", "XX", "XXX", "XL", "L", "LX", "LXX", "LXXX", "XC"};
@@ -166,13 +166,13 @@ KSpreadValue func_roman (valVector args, ValueCalc *calc, FuncExtra *)
   // precision loss is not a problem here, as we only use the 0-3999 range
   long value = calc->conv()->asInteger (args[0]).asInteger ();
   if ((value < 0) || (value > 3999))
-    return KSpreadValue::errorNA();
+    return Value::errorNA();
   QString result;
   result = QString::fromLatin1 (RNThousands[(value / 1000)] +
                                 RNHundreds[(value / 100) % 10] +
                                 RNTens[(value / 10 ) % 10] +
                                 RNUnits[(value) % 10]);
-  return KSpreadValue (result);
+  return Value (result);
 }
 
 // convert single roman character to decimal
@@ -193,16 +193,16 @@ int func_arabic_helper (QChar c)
 }
 
 // Function: ARABIC
-KSpreadValue func_arabic (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_arabic (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString roman = calc->conv()->asString (args[0]).asString();
-  if( roman.isEmpty() ) return KSpreadValue::errorVALUE();
+  if( roman.isEmpty() ) return Value::errorVALUE();
 
   int val = 0, lastd = 0, d = 0;
 
   for (unsigned i = 0; i < roman.length(); i++) {
     d = func_arabic_helper( roman[i] );
-    if( d < 0 ) return KSpreadValue::errorVALUE();
+    if( d < 0 ) return Value::errorVALUE();
 
     if( lastd < d ) val -= lastd;
       else val += lastd;
@@ -211,11 +211,11 @@ KSpreadValue func_arabic (valVector args, ValueCalc *calc, FuncExtra *)
   if( lastd < d ) val -= lastd;
     else val += lastd;
 
-  return KSpreadValue (val);
+  return Value (val);
 }
 
 // helper for AsciiToChar
-void func_a2c_helper (ValueCalc *calc, QString &s, KSpreadValue val)
+void func_a2c_helper (ValueCalc *calc, QString &s, Value val)
 {
   if (val.isArray()) {
     for (unsigned int row = 0; row < val.rows(); ++row)
@@ -230,37 +230,37 @@ void func_a2c_helper (ValueCalc *calc, QString &s, KSpreadValue val)
 }
 
 // Function: AsciiToChar
-KSpreadValue func_AsciiToChar (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_AsciiToChar (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString str;
   for (unsigned int i = 0; i < args.count(); i++)
     func_a2c_helper (calc, str, args[i]);
-  return KSpreadValue (str);
+  return Value (str);
 }
 
 // Function: CharToAscii
-KSpreadValue func_CharToAscii (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_CharToAscii (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString val = calc->conv()->asString (args[0]).asString ();
   if (val.length() == 1)
-    return KSpreadValue (QString (val[0]));
-  return KSpreadValue::errorVALUE();
+    return Value (QString (val[0]));
+  return Value::errorVALUE();
 }
 
 // Function: inttobool
-KSpreadValue func_inttobool (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_inttobool (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->conv()->asBoolean (args[0]);
 }
 
 // Function: booltoint
-KSpreadValue func_booltoint (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_booltoint (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->conv()->asInteger (args[0]);
 }
 
 // Function: BoolToString, NumberToString, String
-KSpreadValue func_ToString (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_ToString (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->conv()->asString (args[0]);
 }

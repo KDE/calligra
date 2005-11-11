@@ -54,7 +54,7 @@
 
 using namespace KSpread;
 
-KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & marker,
+GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
                                         const char * name, bool, WFlags fl )
   : KDialog( parent, name, false, fl ),
     m_pView( parent ),
@@ -68,13 +68,13 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   setWFlags( Qt::WDestructiveClose );
 
   if ( !name )
-    setName( "KSpreadGoalSeekDlg" );
+    setName( "GoalSeekDialog" );
 
   resize( 458, 153 );
   setCaption( i18n( "Goal Seek" ) );
   setSizeGripEnabled( true );
 
-  KSpreadGoalSeekDlgLayout = new QGridLayout( this, 1, 1, 11, 6, "KSpreadGoalSeekDlgLayout");
+  GoalSeekDialogLayout = new QGridLayout( this, 1, 1, 11, 6, "GoalSeekDialogLayout");
 
   m_startFrame = new QFrame( this, "m_startFrame" );
   m_startFrame->setFrameShape( QFrame::StyledPanel );
@@ -104,7 +104,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   TextLabel3->setText( i18n( "Set cell:" ) );
 
   m_startFrameLayout->addWidget( TextLabel3, 0, 0 );
-  KSpreadGoalSeekDlgLayout->addWidget( m_startFrame, 0, 0 );
+  GoalSeekDialogLayout->addWidget( m_startFrame, 0, 0 );
 
   QVBoxLayout * Layout5 = new QVBoxLayout( 0, 0, 6, "Layout5");
 
@@ -122,7 +122,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   QSpacerItem* spacer = new QSpacerItem( 20, 20, QSizePolicy::Minimum, QSizePolicy::Expanding );
   Layout5->addItem( spacer );
 
-  KSpreadGoalSeekDlgLayout->addMultiCellLayout( Layout5, 0, 1, 1, 1 );
+  GoalSeekDialogLayout->addMultiCellLayout( Layout5, 0, 1, 1, 1 );
 
   m_resultFrame = new QFrame( this, "m_resultFrame" );
   m_resultFrame->setFrameShape( QFrame::StyledPanel );
@@ -156,7 +156,7 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
 
   m_resultFrameLayout->addMultiCellWidget( m_resultText, 0, 0, 0, 1 );
 
-  //  KSpreadGoalSeekDlgLayout->addWidget( m_resultFrame, 1, 0 );
+  //  GoalSeekDialogLayout->addWidget( m_resultFrame, 1, 0 );
 
   m_resultFrame->hide();
 
@@ -171,8 +171,8 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   connect( m_buttonOk, SIGNAL( clicked() ), this, SLOT( buttonOkClicked() ) );
   connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( buttonCancelClicked() ) );
 
-  connect( m_pView, SIGNAL( sig_chooseSelectionChanged( KSpreadSheet*, const QRect& ) ),
-           this, SLOT( slotSelectionChanged( KSpreadSheet *, const QRect & ) ) );
+  connect( m_pView, SIGNAL( sig_chooseSelectionChanged( Sheet*, const QRect& ) ),
+           this, SLOT( slotSelectionChanged( Sheet *, const QRect & ) ) );
 
   // tab order
   setTabOrder( m_targetEdit,      m_targetValueEdit );
@@ -181,9 +181,9 @@ KSpreadGoalSeekDlg::KSpreadGoalSeekDlg( KSpreadView * parent,  QPoint const & ma
   setTabOrder( m_buttonOk,        m_buttonCancel );
 }
 
-KSpreadGoalSeekDlg::~KSpreadGoalSeekDlg()
+GoalSeekDialog::~GoalSeekDialog()
 {
-  kdDebug() << "~KSpreadGoalSeekDlg" << endl;
+  kdDebug() << "~GoalSeekDialog" << endl;
 
   if ( !m_restored )
   {
@@ -195,7 +195,7 @@ KSpreadGoalSeekDlg::~KSpreadGoalSeekDlg()
   }
 }
 
-bool KSpreadGoalSeekDlg::eventFilter( QObject* obj, QEvent* ev )
+bool GoalSeekDialog::eventFilter( QObject* obj, QEvent* ev )
 {
   if ( obj == m_targetValueEdit && ev->type() == QEvent::FocusIn )
     m_focus = m_targetValueEdit;
@@ -212,12 +212,12 @@ bool KSpreadGoalSeekDlg::eventFilter( QObject* obj, QEvent* ev )
   return FALSE;
 }
 
-void KSpreadGoalSeekDlg::closeEvent ( QCloseEvent * e )
+void GoalSeekDialog::closeEvent ( QCloseEvent * e )
 {
   e->accept();
 }
 
-void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadSheet * _sheet, const QRect & _selection )
+void GoalSeekDialog::slotSelectionChanged( Sheet * _sheet, const QRect & _selection )
 {
   if ( !m_focus )
     return;
@@ -242,15 +242,15 @@ void KSpreadGoalSeekDlg::slotSelectionChanged( KSpreadSheet * _sheet, const QRec
   }
 }
 
-void KSpreadGoalSeekDlg::buttonOkClicked()
+void GoalSeekDialog::buttonOkClicked()
 {
-  KSpreadDoc * pDoc = m_pView->doc();
+  Doc * pDoc = m_pView->doc();
   pDoc->emitBeginOperation( false );
   if (m_maxIter > 0)
   {
-    KSpreadSheet * sheet = m_pView->activeSheet();
+    Sheet * sheet = m_pView->activeSheet();
 
-    KSpreadPoint source( m_sourceEdit->text(), sheet->workbook(), sheet );
+    Point source( m_sourceEdit->text(), sheet->workbook(), sheet );
     if (!source.isValid())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );
@@ -261,7 +261,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
       return;
     }
 
-    KSpreadPoint target( m_targetEdit->text(), sheet->workbook(), sheet );
+    Point target( m_targetEdit->text(), sheet->workbook(), sheet );
     if (!target.isValid())
     {
       KMessageBox::error( this, i18n("Cell reference is invalid.") );
@@ -310,7 +310,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
     m_buttonOk->setText( i18n("&OK") );
     m_buttonOk->setEnabled(false);
     m_buttonCancel->setEnabled(false);
-    KSpreadGoalSeekDlgLayout->addWidget( m_resultFrame, 0, 0 );
+    GoalSeekDialogLayout->addWidget( m_resultFrame, 0, 0 );
     m_startFrame->hide();
     m_resultFrame->show();
     if ( m_startFrame->width() > 350 )
@@ -327,8 +327,8 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
   {
     if ( !pDoc->undoLocked() )
     {
-      KSpreadUndoSetText * undo
-        = new KSpreadUndoSetText( pDoc, m_pView->activeSheet(), QString::number(m_oldSource),
+      UndoSetText * undo
+        = new UndoSetText( pDoc, m_pView->activeSheet(), QString::number(m_oldSource),
                                   m_sourceCell->column(), m_sourceCell->row(),
                                   m_sourceCell->formatType() );
 
@@ -343,7 +343,7 @@ void KSpreadGoalSeekDlg::buttonOkClicked()
   accept();
 }
 
-void KSpreadGoalSeekDlg::buttonCancelClicked()
+void GoalSeekDialog::buttonCancelClicked()
 {
   if ( !m_restored )
   {
@@ -359,11 +359,11 @@ void KSpreadGoalSeekDlg::buttonCancelClicked()
   reject();
 }
 
-void KSpreadGoalSeekDlg::chooseCleanup()
+void GoalSeekDialog::chooseCleanup()
 {
   m_pView->canvasWidget()->endChoose();
 
-  KSpreadSheet * sheet = 0;
+  Sheet * sheet = 0;
 
   // Switch back to the old sheet
   if ( m_pView->activeSheet()->sheetName() !=  m_sheetName )
@@ -380,7 +380,7 @@ void KSpreadGoalSeekDlg::chooseCleanup()
 }
 
 
-void KSpreadGoalSeekDlg::startCalc(double _start, double _goal)
+void GoalSeekDialog::startCalc(double _start, double _goal)
 {
   m_resultText->setText( i18n( "Starting..." ) );
   m_newValueDesc->setText( i18n( "Iteration:" ) );

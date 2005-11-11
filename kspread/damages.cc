@@ -29,7 +29,7 @@ namespace KSpread
 class SheetDamage::Private
 {
 public:
-  KSpreadSheet* sheet;
+  KSpread::Sheet* sheet;
   int action;
 };
 
@@ -55,12 +55,12 @@ CellDamage::~CellDamage()
   delete d;
 }
 
-Cell* CellDamage::cell()
+KSpread::Cell* CellDamage::cell()
 {
   return d->cell;
 }
 
-SheetDamage::SheetDamage( KSpreadSheet* sheet, int action )
+SheetDamage::SheetDamage( KSpread::Sheet* sheet, int action )
 {
   d = new Private;
   d->sheet = sheet;
@@ -72,7 +72,7 @@ SheetDamage::~SheetDamage()
   delete d;
 }
 
-KSpreadSheet* SheetDamage::sheet() const
+KSpread::Sheet* SheetDamage::sheet() const
 {
   return d->sheet;
 }

@@ -20,27 +20,29 @@
 
 #include "highlight_range.h"
 
+using namespace KSpread;
+
 HighlightRange::HighlightRange(const HighlightRange& rhs)
 {
-    rhs._firstCell ? _firstCell=new KSpreadPoint(*(rhs._firstCell )) : _firstCell=0;
-    rhs._lastCell  ? _lastCell=new KSpreadPoint(*(rhs._lastCell )) : _lastCell=0;
+    rhs._firstCell ? _firstCell=new Point(*(rhs._firstCell )) : _firstCell=0;
+    rhs._lastCell  ? _lastCell=new Point(*(rhs._lastCell )) : _lastCell=0;
     _color=QColor(rhs._color);
 }
 
-void HighlightRange::getRange(KSpreadRange& rg)
+void HighlightRange::getRange(Range& rg)
 {
     if (!_firstCell)
     {
-        rg=KSpreadRange();
+        rg=Range();
         return;
     }
 
     if (_lastCell)
     {
-        rg=KSpreadRange(*_firstCell,*_lastCell); 	
+        rg=Range(*_firstCell,*_lastCell); 	
     }
     else
     {
-        rg=KSpreadRange(*_firstCell,*_firstCell);
+        rg=Range(*_firstCell,*_firstCell);
     }
 }

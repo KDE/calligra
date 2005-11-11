@@ -30,10 +30,6 @@
 #include <qpoint.h>
 #include <qrect.h>
 
-class KSpreadPoint;
-class KSpreadSheet;
-class KSpreadView;
-
 class QFrame;
 class QGridLayout;
 class QHBoxLayout;
@@ -44,17 +40,19 @@ class QVBoxLayout;
 
 namespace KSpread
 {
-  class Cell;
-}
+class Cell;
+class Point;
+class Sheet;
+class View;
 
-class KSpreadGoalSeekDlg : public KDialog
+class GoalSeekDialog : public KDialog
 {
   Q_OBJECT
 
  public:
-  KSpreadGoalSeekDlg( KSpreadView * parent, QPoint const & marker, const char * name = 0,
+   GoalSeekDialog( View * parent, QPoint const & marker, const char * name = 0,
                       bool modal = FALSE, WFlags fl = 0 );
-  ~KSpreadGoalSeekDlg();
+   ~GoalSeekDialog();
 
   /**
    * Find out which widget got focus.
@@ -64,19 +62,19 @@ class KSpreadGoalSeekDlg : public KDialog
  public slots:
   void buttonOkClicked();
   void buttonCancelClicked();
-  void slotSelectionChanged( KSpreadSheet * _sheet, const QRect & _selection );
+  void slotSelectionChanged( Sheet * _sheet, const QRect & _selection );
 
  protected:
   virtual void closeEvent ( QCloseEvent * );
 
-  QGridLayout * KSpreadGoalSeekDlgLayout;
+  QGridLayout * GoalSeekDialogLayout;
   QGridLayout * m_startFrameLayout;
   QGridLayout * m_resultFrameLayout;
 
  private:
-  KSpreadView * m_pView;
-  KSpread::Cell * m_sourceCell;
-  KSpread::Cell * m_targetCell;
+  View * m_pView;
+  Cell * m_sourceCell;
+  Cell * m_targetCell;
   double        m_result;
   int           m_maxIter;
   bool          m_restored;
@@ -112,5 +110,7 @@ class KSpreadGoalSeekDlg : public KDialog
   void startCalc(double _start, double _goal);
   void chooseCleanup();
 };
+
+} // namespace KSpread
 
 #endif

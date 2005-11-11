@@ -24,7 +24,11 @@
 #include <kdialogbase.h>
 
 class ExportDialogUI;
-class KSpreadMap;
+
+namespace KSpread
+{
+class Map;
+}
 
 class CSVExportDialog : public KDialogBase
 {
@@ -40,7 +44,7 @@ class CSVExportDialog : public KDialogBase
   QString getSheetDelimiter() const;  
   bool    exportSelectionOnly() const;
 
-  void  fillSheet( KSpreadMap * map );
+  void  fillSheet( KSpread::Map * map );
   QString getEndOfLine(void) const;
   QTextCodec* getCodec(void) const;
 

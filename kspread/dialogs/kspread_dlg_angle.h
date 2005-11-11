@@ -26,22 +26,27 @@
 
 #include <kdialogbase.h>
 
-class KSpreadView;
 class KIntNumInput;
 
-class KSpreadAngle : public KDialogBase
+namespace KSpread
+{
+class View;
+
+class AngleDialog : public KDialogBase
 {
   Q_OBJECT
 public:
-  KSpreadAngle( KSpreadView* parent,const char* name,const QPoint &_marker);
+  AngleDialog( View* parent,const char* name,const QPoint &_marker);
 
 public slots:
   void slotOk();
   void slotDefault();
 protected:
-  KSpreadView* m_pView;
+  View* m_pView;
   QPoint  marker;
   KIntNumInput *m_pAngle;
 };
+
+} // namespace KSpread
 
 #endif

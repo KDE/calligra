@@ -31,6 +31,8 @@
 
 #include <stdio.h>
 
+using namespace KSpread;
+
 /***************************************************
  *
  * Factory
@@ -54,13 +56,13 @@ CalcFactory::~CalcFactory()
 
 QObject* CalcFactory::createObject( QObject* parent, const char* name, const char* /*classname*/, const QStringList & )
 {
-    if ( !parent->inherits("KSpreadView") )
+    if ( !parent->inherits("KSpread::View") )
     {
-        kdError() << "CalcFactory: KSpreadView expected. Parent is " << parent->className() << endl;
+        kdError() << "CalcFactory: KSpread::View expected. Parent is " << parent->className() << endl;
         return 0;
     }
 
-    QObject *obj = new Calculator( (KSpreadView*)parent, name );
+    QObject *obj = new Calculator( (View*)parent, name );
     return obj;
 }
 
@@ -75,7 +77,7 @@ KInstance* CalcFactory::global()
  *
  ***************************************************/
 
-Calculator::Calculator( KSpreadView* parent, const char* name )
+Calculator::Calculator( View* parent, const char* name )
     : KParts::Plugin( parent, name )
 {
     m_calc = 0;
@@ -97,7 +99,7 @@ void Calculator::showCalculator()
         return;
     }
 
-     m_calc = new QtCalculator( this, (KSpreadView*)parent() );
+     m_calc = new QtCalculator( this, (View*)parent() );
      m_calc->setFixedSize( 9 + 100 + 9 + 233 + 9, 239);
      m_calc->show();
      m_calc->raise();
@@ -112,15 +114,15 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
     if ( !m_calc )
         return FALSE;
 
-    if ( KSpreadSelectionChanged::test( ev ) )
+    if ( SelectionChanged::test( ev ) )
     {
-        KSpreadSelectionChanged* event = (KSpreadSelectionChanged*)ev;
+        SelectionChanged* event = (SelectionChanged*)ev;
 
         // Selection cleared ?
         if ( event->rect().left() == 0 )
             return FALSE;
 
-        KSpreadSheet* sheet = m_view->doc()->map()->findSheet( event->sheet() );
+        Sheet* sheet = m_view->doc()->map()->findSheet( event->sheet() );
         if ( !sheet )
             return FALSE;
 
@@ -128,7 +130,7 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
         if ( event->rect().left() == event->rect().right() &&
              event->rect().top() == event->rect().bottom() )
         {
-            KSpread::Cell* cell = sheet->cellAt( event->rect().left(), event->rect().top(), false );
+            Cell* cell = sheet->cellAt( event->rect().left(), event->rect().top(), false );
             if ( !cell )
                 return FALSE;
 
@@ -176,11 +178,11 @@ void QtCalculator::useData()
     for( int x = sheet_range.left(); x <= sheet_range.right(); x++ )
         for( int y = sheet_range.top(); y <= sheet_range.bottom(); y++ )
         {
-            KSpreadView* view = corba->view();
-            KSpreadSheet* sheet = view->doc()->map()->findSheet( sheet_name );
+            View* view = corba->view();
+            Sheet* sheet = view->doc()->map()->findSheet( sheet_name );
             if ( !sheet )
                 return;
-            KSpread::Cell* cell = sheet->cellAt( x, y, false );
+            Cell* cell = sheet->cellAt( x, y, false );
             if ( !cell )
                 return;
 

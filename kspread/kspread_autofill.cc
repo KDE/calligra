@@ -40,6 +40,8 @@
 #include "kspread_undo.h"
 #include "kspread_value.h"
 
+#include "kspread_autofill.h"
+
 using namespace KSpread;
 
 QStringList *AutoFillSequenceItem::month = 0L;
@@ -198,7 +200,7 @@ AutoFillSequenceItem::AutoFillSequenceItem( const QString &_str )
     if( other==0L)
       {
 	//	other=new QStringList();
-	KConfig *config = KSpreadFactory::global()->config();
+	KConfig *config = Factory::global()->config();
 	config->setGroup( "Parameters" );
 	other=new QStringList(config->readListEntry("Other list"));
       }
@@ -536,7 +538,7 @@ bool AutoFillSequence::matches( AutoFillSequence* _seq, AutoFillDeltaSequence *_
     return false;
 }
 
-void AutoFillSequence::fillCell( Cell *src, KSpread::Cell *dest, AutoFillDeltaSequence *delta, int _block, bool down )
+void AutoFillSequence::fillCell( Cell *src, Cell *dest, AutoFillDeltaSequence *delta, int _block, bool down )
 {
     QString erg = "";
 
@@ -568,11 +570,11 @@ void AutoFillSequence::fillCell( Cell *src, KSpread::Cell *dest, AutoFillDeltaSe
 
 /**********************************************************************************
  *
- * KSpreadSheet
+ * Sheet
  *
  **********************************************************************************/
 
-void KSpreadSheet::autofill( QRect &src, QRect &dest )
+void Sheet::autofill( QRect &src, QRect &dest )
 {
     if (src == dest)
     {
@@ -583,7 +585,7 @@ void KSpreadSheet::autofill( QRect &src, QRect &dest )
 
     if ( !doc()->undoLocked() )
     {
-      KSpreadUndoAutofill *undo = new KSpreadUndoAutofill( doc(), this, dest );
+      UndoAutofill *undo = new UndoAutofill( doc(), this, dest );
       doc()->addCommand( undo );
     }
 
@@ -688,7 +690,7 @@ void KSpreadSheet::autofill( QRect &src, QRect &dest )
 }
 
 
-void KSpreadSheet::fillSequence( QPtrList<Cell>& _srcList,
+void Sheet::fillSequence( QPtrList<Cell>& _srcList,
 				 QPtrList<Cell>& _destList,
                                  QPtrList<AutoFillSequence>& _seqList,
                                  bool down)
@@ -703,7 +705,7 @@ void KSpreadSheet::fillSequence( QPtrList<Cell>& _srcList,
 
 }
 
-double getDiff(Cell * cell1, KSpread::Cell * cell2, AutoFillSequenceItem::Type type)
+double getDiff(Cell * cell1, Cell * cell2, AutoFillSequenceItem::Type type)
 {
   // note: date and time difference can be calculated as
   // the difference of the serial number
@@ -715,7 +717,7 @@ double getDiff(Cell * cell1, KSpread::Cell * cell2, AutoFillSequenceItem::Type t
     return 0.0;
 }
 
-bool KSpreadSheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
+bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
                                             QPtrList<Cell>& _destList,
                                             QPtrList<AutoFillSequence>& _seqList,
                                             bool down)
@@ -1015,7 +1017,7 @@ bool KSpreadSheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
   return ok;
 }
 
-void KSpreadSheet::FillSequenceWithCopy(QPtrList<Cell>& _srcList,
+void Sheet::FillSequenceWithCopy(QPtrList<Cell>& _srcList,
                                         QPtrList<Cell>& _destList,
                                         bool down)
 {

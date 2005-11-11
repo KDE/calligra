@@ -28,35 +28,6 @@
 #ifndef KSPREAD_DOC
 #define KSPREAD_DOC
 
-class KoOasisSettings;
-class KCommand;
-
-class KSpreadDoc;
-class KSpreadView;
-class KSpreadMap;
-class KSpreadSheet;
-class KSpreadStyleManager;
-class KSpreadUndoAction;
-class KSPLoadingInfo;
-
-class KoStore;
-class KoCommandHistory;
-class KoXmlWriter;
-
-class View;
-
-class DCOPObject;
-
-class QDomDocument;
-
-class KSpellConfig;
-
-#include <koDocument.h>
-#include <kozoomhandler.h>
-#include <koGenStyles.h>
-#include <koUnit.h>
-
-#include <kcompletion.h>
 #include <qmap.h>
 #include <qobject.h>
 #include <qpainter.h>
@@ -64,24 +35,27 @@ class KSpellConfig;
 #include <qstring.h>
 #include <qvaluelist.h>
 
+#include <kcompletion.h>
+
+#include <koDocument.h>
+#include <koGenStyles.h>
+#include <koUnit.h>
+#include <kozoomhandler.h>
+
 #include "kspread_global.h"
 
+class KCommand;
+
+class KoCommandHistory;
+class KoOasisSettings;
+class KoStore;
+class KoXmlWriter;
+
+class DCOPObject;
+class QDomDocument;
+class KSpellConfig;
+
 #define MIME_TYPE "application/x-kspread"
-
-struct Reference
-{
-    QString sheet_name;
-    QString ref_name;
-    QRect rect;
-};
-
-class KSpreadPlugin
-{
- public:
-  KSpreadPlugin() {}
-  virtual ~KSpreadPlugin() {}
-  virtual QDomElement saveXML( QDomDocument & doc ) const = 0;
-};
 
 namespace KSpread
 {
@@ -90,15 +64,35 @@ class ValueParser;
 class ValueConverter;
 class ValueFormatter;
 class ValueCalc;
-}
+class Sheet;
+class Doc;
+class View;
+class Map;
+class StyleManager;
+class UndoAction;
+class KSPLoadingInfo;
 
+struct Reference
+{
+    QString sheet_name;
+    QString ref_name;
+    QRect rect;
+};
+
+class Plugin
+{
+ public:
+  Plugin() {}
+  virtual ~Plugin() {}
+  virtual QDomElement saveXML( QDomDocument & doc ) const = 0;
+};
 
 class DocPrivate;
 
 /**
  * This class holds the data that makes up a spreadsheet.
  */
-class KSPREAD_EXPORT KSpreadDoc : public KoDocument, public KoZoomHandler
+class KSPREAD_EXPORT Doc : public KoDocument, public KoZoomHandler
 {
   Q_OBJECT
   Q_PROPERTY( bool getShowRowHeader READ getShowRowHeader )
@@ -122,13 +116,13 @@ public:
   /**
    * Creates a new document.
    */
-  KSpreadDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0,
+  Doc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* parent = 0,
   const char* name = 0, bool singleViewMode = false );
 
   /**
    * Destroys the document.
    */
-  ~KSpreadDoc();
+  ~Doc();
 
   enum { STYLE_PAGE = 20, STYLE_COLUMN, STYLE_ROW, STYLE_CELL,  STYLE_PAGEMASTER, STYLE_USERSTYLE, STYLE_DEFAULTSTYLE,  STYLE_NUMERIC_NUMBER};
 
@@ -136,7 +130,7 @@ public:
   /**
    * Returns list of all documents.
    */
-  static QValueList<KSpreadDoc*> documents();
+  static QValueList<Doc*> documents();
 
   /**
    * Returns the MIME type of KSpread document.
@@ -144,12 +138,12 @@ public:
   virtual QCString mimeType() const { return MIME_TYPE; }
 
   KLocale *locale () const;
-  KSpreadMap *map () const;
-  KSpreadStyleManager *styleManager () const;
-  KSpread::ValueParser *parser () const;
-  KSpread::ValueFormatter *formatter () const;
-  KSpread::ValueConverter *converter () const;
-  KSpread::ValueCalc *calc () const;
+  Map *map () const;
+  StyleManager *styleManager () const;
+  ValueParser *parser () const;
+  ValueFormatter *formatter () const;
+  ValueConverter *converter () const;
+  ValueCalc *calc () const;
 
   /**
    * Adds a command to the command history. The command itself
@@ -159,10 +153,10 @@ public:
 
   /*
    * Adds an undo object. This is the same as addCommand, except
-   * that it accepts KSpreadUndo instance. Once every undo object
+   * that it accepts Undo instance. Once every undo object
    * is converted to KCommand, this function will be obsoleted.
    */
-  void addCommand( KSpreadUndoAction* command );
+  void addCommand( UndoAction* command );
 
   /**
    * Undoes the last operation.
@@ -191,7 +185,7 @@ public:
 
   /**
    * Returns the command history for the document. This is used
-   * in KSpreadView for updating the actions (i.e through
+   * in View for updating the actions (i.e through
    * signal KoCommandHistory::commandExecuted)
    */
   KoCommandHistory* commandHistory();
@@ -461,11 +455,11 @@ public:
   virtual void paintContent( QPainter & painter, const QRect & rect, bool transparent = false,
                              double zoomX = 1.0, double zoomY = 1.0 );
   void paintContent( QPainter & painter, const QRect & rect, bool transparent,
-                     KSpreadSheet * sheet, bool drawCursor = true );
+                     Sheet * sheet, bool drawCursor = true );
 
   bool docData( QString const & xmlTag, QDomElement & data );
-  void deregisterPlugin( KSpreadPlugin * plugin );
-  void registerPlugin( KSpreadPlugin * plugin );
+  void deregisterPlugin( Plugin * plugin );
+  void registerPlugin( Plugin * plugin );
 
   /**
    * Primary entry point for painting.  Use this function to paint groups of cells
@@ -489,9 +483,9 @@ public:
    *                   marker
    */
   void paintCellRegions(QPainter& painter, const QRect &viewRect,
-                        KSpreadView* view,
+                        View* view,
                         QValueList<QRect> cellRegions,
-                        const KSpreadSheet* sheet, bool drawCursor);
+                        const Sheet* sheet, bool drawCursor);
 
   virtual DCOPObject* dcopObject();
 
@@ -519,7 +513,7 @@ public:
    * - No painting will be done to the screen
    * - No cell calculation will be done (maybe there are exceptions, such
    *   as the goalseek operation needs to calculate values)
-   * During an operation, calls to KSpreadSheet::setRegionPaintDirty mark
+   * During an operation, calls to Sheet::setRegionPaintDirty mark
    * regions as needing repainted.  Once the emitEndOperation function is
    * called, those regions will be painted all at once, values being calculated
    * as necessary.
@@ -554,8 +548,8 @@ public:
 
   void updateBorderButton();
 
-  void insertSheet( KSpreadSheet * sheet );
-  void takeSheet( KSpreadSheet * sheet );
+  void insertSheet( Sheet * sheet );
+  void takeSheet( Sheet * sheet );
 
   // The user-chosen global unit
 
@@ -587,13 +581,13 @@ public:
     void addIgnoreWordAllList( const QStringList & _lst);
     QStringList spellListIgnoreAll() const ;
 
-    void setDisplaySheet(KSpreadSheet *_Sheet );
-    KSpreadSheet * displaySheet() const;
+    void setDisplaySheet(Sheet *_Sheet );
+    Sheet * displaySheet() const;
     KSPLoadingInfo * loadingInfo() const;
   void increaseNumOperation();
   void decreaseNumOperation();
 
-  void addDamage( KSpread::Damage* damage );
+  void addDamage( Damage* damage );
 
 /* Function specific when we load config from file */
   void loadConfigFromFile();
@@ -625,7 +619,7 @@ signals:
   void sig_addAreaName( const QString & );
   void sig_removeAreaName( const QString & );
 
-  void damagesFlushed( const QValueList<KSpread::Damage*>& damages );
+  void damagesFlushed( const QValueList<Damage*>& damages );
 
 protected slots:
   void commandExecuted();
@@ -654,8 +648,8 @@ private:
   DocPrivate* d;
 
   // don't allow copy or assignment
-  KSpreadDoc( const KSpreadDoc& );
-  KSpreadDoc& operator=( const KSpreadDoc& );
+  Doc( const Doc& );
+  Doc& operator=( const Doc& );
 
   /* helper functions for painting */
 
@@ -666,13 +660,13 @@ private:
   void paintUpdates();
 
   void PaintRegion(QPainter& painter, const KoRect &viewRegion,
-                   KSpreadView* view, const QRect &paintRegion,
-                   const KSpreadSheet* sheet);
+                   View* view, const QRect &paintRegion,
+                   const Sheet* sheet);
   void PaintChooseRect(QPainter& painter, const KoRect &viewRect,
-                       KSpreadView* view, const KSpreadSheet* sheet,
+                       View* view, const Sheet* sheet,
                        const QRect &chooseRect);
   void PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
-                         KSpreadView* view, const KSpreadSheet* sheet,
+                         View* view, const Sheet* sheet,
                          const QRect &selection);
 
   /**
@@ -690,8 +684,8 @@ private:
    *                   Again, these are in the order left, top, right, bottom.
    *                   This should be preallocated with a size of at least 4.
    */
-  void retrieveMarkerInfo( const QRect &marker, const KSpreadSheet* sheet,
-                           KSpreadView* view, const KoRect &viewRect,
+  void retrieveMarkerInfo( const QRect &marker, const Sheet* sheet,
+                           View* view, const KoRect &viewRect,
                            double positions[], bool paintSides[] );
   void loadPaper( QDomElement const & paper );
 
@@ -700,5 +694,7 @@ private:
     void loadOasisIgnoreList( const KoOasisSettings& settings );
     KSPLoadingInfo *m_loadingInfo;
 };
+
+} // namespace KSpread
 
 #endif /* KSPREAD_DOC */

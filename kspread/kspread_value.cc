@@ -17,8 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kspread_value.h"
-
 #include <float.h>
 #include <math.h>
 #include <limits.h>
@@ -26,13 +24,17 @@
 #include <qstring.h>
 #include <qtextstream.h>
 
+#include "kspread_value.h"
+
+using namespace KSpread;
+
 // helper struct for array implementation
 // this struct holds one piece of an array of size CHUNK_COLS x CHUNK_ROWS
 // or less
 struct arrayChunk {
   arrayChunk (int c, int r) {
     cols = c; rows = r;
-    ptr = new KSpreadValue* [c*r];
+    ptr = new Value* [c*r];
     for (int i = 0; i < c*r; ++i) ptr[i] = 0;
   }
   
@@ -52,17 +54,17 @@ struct arrayChunk {
   arrayChunk& operator= ( const arrayChunk& ac )
   {
     cols = ac.cols; rows = ac.rows;
-    ptr = new KSpreadValue* [cols*rows];
+    ptr = new Value* [cols*rows];
     unsigned count = cols * rows;
     for( unsigned i = 0; i < count; i++ )
       if( ac.ptr[i] )
-        ptr[i] = new KSpreadValue( *ac.ptr[i] );
+        ptr[i] = new Value( *ac.ptr[i] );
       else
         ptr[i] = 0;
     return *this;
   }
   
-  KSpreadValue **ptr;
+  Value **ptr;
   unsigned cols, rows;
 };
 
@@ -134,7 +136,7 @@ public:
       chunks[i] = 0;
   }
   
-  KSpreadValue* at( unsigned c, unsigned r )
+  Value* at( unsigned c, unsigned r )
   {
     if( !chunks ) return 0;
     if( c >= columns ) return 0;
@@ -149,7 +151,7 @@ public:
     return chunk->ptr[rpos * chunk->cols + cpos];
   };
   
-  void set( unsigned c, unsigned r, KSpreadValue* v )
+  void set( unsigned c, unsigned r, Value* v )
   {
     if (!chunks) return;
     if( c >= columns ) return;
@@ -172,13 +174,13 @@ public:
 };
 
 
-// helper class for KSpreadValue
-class KSpreadValueData
+// helper class for Value
+class KSpread::ValueData
 {
   public:
 
-    KSpreadValue::Type type:4;
-    KSpreadValue::Format format:4;
+    Value::Type type:4;
+    Value::Format format:4;
 
     // reference count, at least one when object exists
     unsigned int count:24;
@@ -193,19 +195,19 @@ class KSpreadValueData
     };
     
     // create empty data
-    KSpreadValueData(): type( KSpreadValue::Empty ),
-      format (KSpreadValue::fmt_None), count( 1 ), ps( 0 ) { };
+    ValueData(): type( Value::Empty ),
+      format (Value::fmt_None), count( 1 ), ps( 0 ) { };
 
     // destroys data
-    ~KSpreadValueData(){ if( this == s_null ) s_null = 0;
-       if( type == KSpreadValue::Array ) delete pa;
-       if( type == KSpreadValue::String ) delete ps;
-       if( type == KSpreadValue::Error ) delete ps;
+    ~ValueData(){ if( this == s_null ) s_null = 0;
+       if( type == Value::Array ) delete pa;
+       if( type == Value::String ) delete ps;
+       if( type == Value::Error ) delete ps;
      }
 
     // static empty data to be shared
-    static KSpreadValueData* null()
-      { if( !s_null) s_null = new KSpreadValueData; else s_null->ref(); return s_null; }
+    static ValueData* null()
+      { if( !s_null) s_null = new ValueData; else s_null->ref(); return s_null; }
       
     // increase reference count
     void ref() { count++; }
@@ -222,145 +224,145 @@ class KSpreadValueData
     
   private:
 
-    static KSpreadValueData* s_null;
+    static ValueData* s_null;
 };
 
-void KSpreadValueData::setFormatByType ()
+void ValueData::setFormatByType ()
 {
   switch (type) {
-    case KSpreadValue::Empty:
-      format = KSpreadValue::fmt_None;
+    case Value::Empty:
+      format = Value::fmt_None;
     break;
-    case KSpreadValue::Boolean:
-      format = KSpreadValue::fmt_Boolean;
+    case Value::Boolean:
+      format = Value::fmt_Boolean;
     break;
-    case KSpreadValue::Integer:
-      format = KSpreadValue::fmt_Number;
+    case Value::Integer:
+      format = Value::fmt_Number;
     break;
-    case KSpreadValue::Float:
-      format = KSpreadValue::fmt_Number;
+    case Value::Float:
+      format = Value::fmt_Number;
     break;
-    case KSpreadValue::String:
-      format = KSpreadValue::fmt_String;
+    case Value::String:
+      format = Value::fmt_String;
     break;
-    case KSpreadValue::Array:
-      format = KSpreadValue::fmt_None;
+    case Value::Array:
+      format = Value::fmt_None;
     break;
-    case KSpreadValue::CellRange:
-      format = KSpreadValue::fmt_None;
+    case Value::CellRange:
+      format = Value::fmt_None;
     break;
-    case KSpreadValue::Error:
-      format = KSpreadValue::fmt_String;
+    case Value::Error:
+      format = Value::fmt_String;
     break;
   };
 }
 
 // to be shared between all empty value
-KSpreadValueData* KSpreadValueData::s_null = 0;
+ValueData* ValueData::s_null = 0;
 
 // static things
-KSpreadValue ks_value_empty;
-KSpreadValue ks_error_div0;
-KSpreadValue ks_error_na;
-KSpreadValue ks_error_name;
-KSpreadValue ks_error_null;
-KSpreadValue ks_error_num;
-KSpreadValue ks_error_ref;
-KSpreadValue ks_error_value;
+Value ks_value_empty;
+Value ks_error_div0;
+Value ks_error_na;
+Value ks_error_name;
+Value ks_error_null;
+Value ks_error_num;
+Value ks_error_ref;
+Value ks_error_value;
 
 // create an empty value
-KSpreadValue::KSpreadValue()
+Value::Value()
 {
-  d = KSpreadValueData::null();
+  d = ValueData::null();
 }
 
 // destructor
-KSpreadValue::~KSpreadValue()
+Value::~Value()
 {
   d->unref();
 }
 
 // create value of certain type
-KSpreadValue::KSpreadValue( KSpreadValue::Type _type )
+Value::Value( Value::Type _type )
 {
-  d = new KSpreadValueData;
+  d = new ValueData;
   d->type = _type;
   d->setFormatByType ();
 }
 
 // copy constructor
-KSpreadValue::KSpreadValue( const KSpreadValue& _value )
+Value::Value( const Value& _value )
 {
-  d = KSpreadValueData::null();
+  d = ValueData::null();
   assign( _value );
 }
 
 // assignment operator
-KSpreadValue& KSpreadValue::operator=( const KSpreadValue& _value )
+Value& Value::operator=( const Value& _value )
 {
   return assign( _value );
 }
 
 // create a boolean value
-KSpreadValue::KSpreadValue( bool b )
+Value::Value( bool b )
 {
-  d = KSpreadValueData::null();
+  d = ValueData::null();
   setValue( b );
 }
 
 // create an integer value
-KSpreadValue::KSpreadValue( long i )
+Value::Value( long i )
 {
-  d = KSpreadValueData::null();
+  d = ValueData::null();
   setValue ( i );
 }
 
 // create an integer value
-KSpreadValue::KSpreadValue( int i )
+Value::Value( int i )
 {
-  d = KSpreadValueData::null();
+  d = ValueData::null();
   setValue ( i );
 }
 
 // create a floating-point value
-KSpreadValue::KSpreadValue( double f )
+Value::Value( double f )
 {
-  d = KSpreadValueData::null();
+  d = ValueData::null();
   setValue( f );
 }
 
 // create a string value
-KSpreadValue::KSpreadValue( const QString& s )
+Value::Value( const QString& s )
 {
-  d = KSpreadValueData::null();
+  d = ValueData::null();
   setValue( s );
 }
 
 // create a floating-point value from date/time
-KSpreadValue::KSpreadValue( const QDateTime& dt )
+Value::Value( const QDateTime& dt )
 {
-  d = KSpreadValueData::null();
+  d = ValueData::null();
   setValue( dt );
 }
 
 // create a floating-point value from time
-KSpreadValue::KSpreadValue( const QTime& dt )
+Value::Value( const QTime& dt )
 {
-  d = KSpreadValueData::null();
+  d = ValueData::null();
   setValue( dt );
 }
 
 // create a floating-point value from date
-KSpreadValue::KSpreadValue( const QDate& dt )
+Value::Value( const QDate& dt )
 {
-  d = KSpreadValueData::null();
+  d = ValueData::null();
   setValue( dt );
 }
 
 // create an array value
-KSpreadValue::KSpreadValue( unsigned columns, unsigned rows )
+Value::Value( unsigned columns, unsigned rows )
 {
-  d = new KSpreadValueData;
+  d = new ValueData;
   d->type = Array;
   d->format = fmt_None;
   d->pa = new ValueArray;
@@ -369,7 +371,7 @@ KSpreadValue::KSpreadValue( unsigned columns, unsigned rows )
 
 // assign value from other
 // shallow copy: only copy the data pointer
-KSpreadValue& KSpreadValue::assign( const KSpreadValue& _value )
+Value& Value::assign( const Value& _value )
 {
   d->unref();
   d = _value.d;
@@ -378,13 +380,13 @@ KSpreadValue& KSpreadValue::assign( const KSpreadValue& _value )
 }
 
 // return type of the value
-KSpreadValue::Type KSpreadValue::type() const
+Value::Type Value::type() const
 {
   return d ? d->type : Empty;
 }
 
 // set the value to boolean
-void KSpreadValue::setValue( bool b )
+void Value::setValue( bool b )
 {
   detach();
   d->type = Boolean;
@@ -393,18 +395,18 @@ void KSpreadValue::setValue( bool b )
 }
 
 // get the value as boolean
-bool KSpreadValue::asBoolean() const
+bool Value::asBoolean() const
 {
   bool result = false;
 
-  if( type() == KSpreadValue::Boolean )
+  if( type() == Value::Boolean )
     result = d->b;
 
   return result;
 }
 
 // set the value to integer
-void KSpreadValue::setValue( long i )
+void Value::setValue( long i )
 {
   detach();
   d->type = Integer;
@@ -413,7 +415,7 @@ void KSpreadValue::setValue( long i )
 }
 
 // set the value to integer
-void KSpreadValue::setValue( int i )
+void Value::setValue( int i )
 {
   detach();
   d->type = Integer;
@@ -422,26 +424,26 @@ void KSpreadValue::setValue( int i )
 }
 
 // get the value as integer
-long KSpreadValue::asInteger() const
+long Value::asInteger() const
 {
   long result = 0;
 
-  if( type() == KSpreadValue::Integer )
+  if( type() == Value::Integer )
     result = d->i;
 
-  if( type() == KSpreadValue::Float )
+  if( type() == Value::Float )
     result = static_cast<int>(d->f);
 
   return result;
 }
 
-void KSpreadValue::setValue( const KSpreadValue& v )
+void Value::setValue( const Value& v )
 {
   assign( v );
 }
 
 // set the value as floating-point
-void KSpreadValue::setValue( double f )
+void Value::setValue( double f )
 {
   detach();
   d->type = Float;
@@ -450,21 +452,21 @@ void KSpreadValue::setValue( double f )
 }
 
 // get the value as floating-point
-double KSpreadValue::asFloat() const
+double Value::asFloat() const
 {
   double result = 0.0;
 
-  if( type() == KSpreadValue::Float )
+  if( type() == Value::Float )
     result = d->f;
 
-  if( type() == KSpreadValue::Integer )
+  if( type() == Value::Integer )
     result = static_cast<double>(d->i);
 
   return result;
 }
 
 // set the value as string
-void KSpreadValue::setValue( const QString& s )
+void Value::setValue( const QString& s )
 {
   detach();
   d->type = String;
@@ -473,11 +475,11 @@ void KSpreadValue::setValue( const QString& s )
 }
 
 // get the value as string
-QString KSpreadValue::asString() const
+QString Value::asString() const
 {
   QString result;
 
-  if( type() == KSpreadValue::String )
+  if( type() == Value::String )
   if( d->ps )
     result = QString( *d->ps );
 
@@ -485,7 +487,7 @@ QString KSpreadValue::asString() const
 }
 
 // set error message
-void KSpreadValue::setError( const QString& msg )
+void Value::setError( const QString& msg )
 {
   detach();
   d->type = Error;
@@ -493,11 +495,11 @@ void KSpreadValue::setError( const QString& msg )
 }
 
 // get error message
-QString KSpreadValue::errorMessage() const
+QString Value::errorMessage() const
 {
   QString result;
 
-  if( type() == KSpreadValue::Error )
+  if( type() == Value::Error )
   if( d->ps )
     result = QString( *d->ps );
 
@@ -507,7 +509,7 @@ QString KSpreadValue::errorMessage() const
 // set the value as date/time
 // NOTE: date/time is stored as serial number
 // Day 61 means 1st of March, 1900
-void KSpreadValue::setValue( const QDateTime& dt )
+void Value::setValue( const QDateTime& dt )
 {
   // reference is 31 Dec, 1899 midnight
   QDate refDate( 1899, 12, 31 );
@@ -520,7 +522,7 @@ void KSpreadValue::setValue( const QDateTime& dt )
   d->format = fmt_DateTime;
 }
 
-void KSpreadValue::setValue( const QTime& time )
+void Value::setValue( const QTime& time )
 {
   // reference time is midnight
   QTime refTime( 0, 0 );
@@ -530,7 +532,7 @@ void KSpreadValue::setValue( const QTime& time )
   d->format = fmt_Time;
 }
 
-void KSpreadValue::setValue( const QDate& date )
+void Value::setValue( const QDate& date )
 {
   // reference date is 31 Dec, 1899
   QDate refDate = QDate( 1899, 12, 31 );
@@ -541,13 +543,13 @@ void KSpreadValue::setValue( const QDate& date )
 }
 
 // get the value as date/time
-QDateTime KSpreadValue::asDateTime() const
+QDateTime Value::asDateTime() const
 {
   return QDateTime( asDate(), asTime() );
 }
 
 // get the value as date
-QDate KSpreadValue::asDate() const
+QDate Value::asDate() const
 {
   QDate dt( 1899, 12, 30 );
 
@@ -558,7 +560,7 @@ QDate KSpreadValue::asDate() const
 }
 
 // get the value as time
-QTime KSpreadValue::asTime() const
+QTime Value::asTime() const
 {
   QTime dt;
   
@@ -568,42 +570,42 @@ QTime KSpreadValue::asTime() const
   return dt;
 }
 
-KSpreadValue::Format KSpreadValue::format() const
+Value::Format Value::format() const
 {
   return d ? d->format : fmt_None;
 }
 
-void KSpreadValue::setFormat (KSpreadValue::Format fmt)
+void Value::setFormat (Value::Format fmt)
 {
   d->format = fmt;
 }
 
 // TODO: element and setElement need flattening support !!!
 // It is necessary for range functions to work correctly !!!
-KSpreadValue KSpreadValue::element( unsigned column, unsigned row ) const
+Value Value::element( unsigned column, unsigned row ) const
 {
   if( d->type != Array ) return *this;
   if( !d->pa ) return *this;
-  KSpreadValue* v = d->pa->at( column, row );
-  return v ? KSpreadValue( *v ) : empty();
+  Value* v = d->pa->at( column, row );
+  return v ? Value( *v ) : empty();
 }
 
-void KSpreadValue::setElement( unsigned column, unsigned row, const KSpreadValue& v )
+void Value::setElement( unsigned column, unsigned row, const Value& v )
 {
   if( d->type != Array ) return;
   if( !d->pa ) return;
   detach();
-  d->pa->set( column, row, new KSpreadValue( v ) );
+  d->pa->set( column, row, new Value( v ) );
 }
 
-unsigned KSpreadValue::columns() const
+unsigned Value::columns() const
 {
   if( d->type != Array ) return 0;
   if( !d->pa ) return 0;
   return d->pa->columns;
 }
 
-unsigned KSpreadValue::rows() const
+unsigned Value::rows() const
 {
   if( d->type != Array ) return 0;
   if( !d->pa ) return 0;
@@ -611,13 +613,13 @@ unsigned KSpreadValue::rows() const
 }
 
 // reference to empty value
-const KSpreadValue& KSpreadValue::empty()
+const Value& Value::empty()
 {
   return ks_value_empty;
 }
 
 // reference to #DIV/0! error
-const KSpreadValue& KSpreadValue::errorDIV0()
+const Value& Value::errorDIV0()
 {
   if( !ks_error_div0.isError() )
     ks_error_div0.setError( "#DIV/0!" );
@@ -625,7 +627,7 @@ const KSpreadValue& KSpreadValue::errorDIV0()
 }
 
 // reference to #N/A error
-const KSpreadValue& KSpreadValue::errorNA()
+const Value& Value::errorNA()
 {
   if( !ks_error_na.isError() )
     ks_error_na.setError( "#N/A" );
@@ -633,7 +635,7 @@ const KSpreadValue& KSpreadValue::errorNA()
 }
 
 // reference to #NAME? error
-const KSpreadValue& KSpreadValue::errorNAME()
+const Value& Value::errorNAME()
 {
   if( !ks_error_name.isError() )
     ks_error_name.setError( "#NAME?" );
@@ -641,7 +643,7 @@ const KSpreadValue& KSpreadValue::errorNAME()
 }
 
 // reference to #NUM! error
-const KSpreadValue& KSpreadValue::errorNUM()
+const Value& Value::errorNUM()
 {
   if( !ks_error_num.isError() )
     ks_error_num.setError( "#NUM!" );
@@ -649,7 +651,7 @@ const KSpreadValue& KSpreadValue::errorNUM()
 }
 
 // reference to #NULL! error
-const KSpreadValue& KSpreadValue::errorNULL()
+const Value& Value::errorNULL()
 {
   if( !ks_error_null.isError() )
     ks_error_null.setError( "#NULL!" );
@@ -657,7 +659,7 @@ const KSpreadValue& KSpreadValue::errorNULL()
 }
 
 // reference to #REF! error
-const KSpreadValue& KSpreadValue::errorREF()
+const Value& Value::errorREF()
 {
   if( !ks_error_ref.isError() )
     ks_error_ref.setError( "#REF!" );
@@ -665,20 +667,20 @@ const KSpreadValue& KSpreadValue::errorREF()
 }
 
 // reference to #VALUE! error
-const KSpreadValue& KSpreadValue::errorVALUE()
+const Value& Value::errorVALUE()
 {
   if( !ks_error_value.isError() )
     ks_error_value.setError( "#VALUE!" );
   return ks_error_value;
 }
 
-// detach, create deep copy of KSpreadValueData
-void KSpreadValue::detach()
+// detach, create deep copy of ValueData
+void Value::detach()
 {
   if( d->isNull() || ( d->count > 1 ) )
   {
-    KSpreadValueData* n;
-    n = new KSpreadValueData;
+    ValueData* n;
+    n = new ValueData;
 
     n->type = d->type;
     switch( n->type )
@@ -698,7 +700,7 @@ void KSpreadValue::detach()
   }
 }
 
-int KSpreadValue::compare( double v1, double v2 )
+int Value::compare( double v1, double v2 )
 {
   double v3 = v1 - v2;
   if( v3 > DBL_EPSILON ) return 1;
@@ -706,21 +708,21 @@ int KSpreadValue::compare( double v1, double v2 )
   return 0;
 }
 
-bool KSpreadValue::isZero( double v )
+bool Value::isZero( double v )
 {
   return fabs( v ) < DBL_EPSILON;
 }
 
-bool KSpreadValue::isZero() const
+bool Value::isZero() const
 {
   if( !isNumber() ) return false;
   return isZero( asFloat() );
 }
 
-bool KSpreadValue::allowComparison( const KSpreadValue& v ) const
+bool Value::allowComparison( const Value& v ) const
 {
-  KSpreadValue::Type t1 = d->type;
-  KSpreadValue::Type t2 = v.type();
+  Value::Type t1 = d->type;
+  Value::Type t2 = v.type();
   
   if( ( t1 == Empty ) && ( t2 == Empty ) ) return true;
   if( ( t1 == Empty ) && ( t2 == String ) ) return true;
@@ -750,10 +752,10 @@ bool KSpreadValue::allowComparison( const KSpreadValue& v ) const
 }
 
 // compare values. looks strange in order to be compatible with Excel
-int KSpreadValue::compare( const KSpreadValue& v ) const 
+int Value::compare( const Value& v ) const 
 {
-  KSpreadValue::Type t1 = d->type;
-  KSpreadValue::Type t2 = v.type();
+  Value::Type t1 = d->type;
+  Value::Type t2 = v.type();
   
   // errors always less than everything else
   if( ( t1 == Error ) && ( t2 != Error ) )
@@ -856,59 +858,59 @@ int KSpreadValue::compare( const KSpreadValue& v ) const
   return 0;
 }
 
-bool KSpreadValue::equal( const KSpreadValue& v ) const
+bool Value::equal( const Value& v ) const
 {
   return compare( v ) == 0;
 }
 
-bool KSpreadValue::less( const KSpreadValue& v ) const
+bool Value::less( const Value& v ) const
 {
   return compare( v ) < 0;
 }
 
-bool KSpreadValue::greater( const KSpreadValue& v ) const
+bool Value::greater( const Value& v ) const
 {
   return compare( v ) > 0;
 }
 
-QTextStream& operator<<( QTextStream& ts, KSpreadValue::Type type ) 
+QTextStream& operator<<( QTextStream& ts, Value::Type type ) 
 {
   switch( type )
   {
-    case KSpreadValue::Empty:   ts << "Empty"; break;
-    case KSpreadValue::Boolean: ts << "Boolean"; break;
-    case KSpreadValue::Integer: ts << "Integer"; break;
-    case KSpreadValue::Float:   ts << "Float"; break;
-    case KSpreadValue::String:  ts << "String"; break;
-    case KSpreadValue::Array:   ts << "Array"; break;
-    case KSpreadValue::Error:   ts << "Error"; break;
+    case Value::Empty:   ts << "Empty"; break;
+    case Value::Boolean: ts << "Boolean"; break;
+    case Value::Integer: ts << "Integer"; break;
+    case Value::Float:   ts << "Float"; break;
+    case Value::String:  ts << "String"; break;
+    case Value::Array:   ts << "Array"; break;
+    case Value::Error:   ts << "Error"; break;
     default: ts << "Unknown!"; break;
   };
   return ts;
 }
 
-QTextStream& operator<<( QTextStream& ts, KSpreadValue value ) 
+QTextStream& operator<<( QTextStream& ts, Value value ) 
 {
   ts << value.type();
   switch( value.type() )
   {
-    case KSpreadValue::Empty:   break;
+    case Value::Empty:   break;
     
-    case KSpreadValue::Boolean: 
+    case Value::Boolean: 
       ts << ": "; 
       if (value.asBoolean()) ts << "TRUE"; 
       else ts << "FALSE"; break;
       
-    case KSpreadValue::Integer: 
+    case Value::Integer: 
       ts << ": " << value.asInteger(); break;
       
-    case KSpreadValue::Float:   
+    case Value::Float:   
       ts << ": " << value.asFloat(); break;
       
-    case KSpreadValue::String:  
+    case Value::String:  
       ts << ": " << value.asString(); break;
       
-    case KSpreadValue::Error: 
+    case Value::Error: 
       ts << "(" << value.errorMessage() << ")"; break;
     
     default: break;

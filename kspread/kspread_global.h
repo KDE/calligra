@@ -8,6 +8,27 @@
 #include <qdatetime.h>
 #include <kdebug.h>
 
+
+#define KSBarIcon( x ) BarIcon( x, Factory::global() )
+#define colWidth 60.0
+#define heightOfRow 20.0
+
+/* Definition of maximal supported rows - please check kspread_util (columnName) and kspread_cluster also */
+#define KS_rowMax 0x7FFF
+/* Definition of maximal supported columns - please check kspread_util (columnName) and kspread_cluster also */
+#define KS_colMax 0x7FFF
+
+/* Currently used by StyleCluster for the Quad tree - question is, if we can make the spreadsheet this big in general?
+   We need this value to be the smallest number which is a power of 2 and more than both KS_rowMax and KS_colMax*/
+#define KS_Max_Quad 0x8000
+
+/* Definition of maximal supported columns/rows, which can be merged */
+#define KS_spanMax 0xFFF
+
+
+namespace KSpread
+{
+
 class ElapsedTime
 {
  public:
@@ -42,34 +63,23 @@ class ElapsedTime
   QString m_name;
 };
 
-
-#define KSBarIcon( x ) BarIcon( x, KSpreadFactory::global() )
-#define colWidth 60.0
-#define heightOfRow 20.0
-
-/* Definition of maximal supported rows - please check kspread_util (columnName) and kspread_cluster also */
-#define KS_rowMax 0x7FFF
-/* Definition of maximal supported columns - please check kspread_util (columnName) and kspread_cluster also */
-#define KS_colMax 0x7FFF
-
-/* Currently used by StyleCluster for the Quad tree - question is, if we can make the spreadsheet this big in general?
-   We need this value to be the smallest number which is a power of 2 and more than both KS_rowMax and KS_colMax*/
-#define KS_Max_Quad 0x8000
-
-/* Definition of maximal supported columns/rows, which can be merged */
-#define KS_spanMax 0xFFF
+} // namespace KSpread
 
 enum PasteMode { Normal, Text, Format, NoBorder, Comment, Result, NormalAndTranspose, TextAndTranspoase,
 		 FormatAndTranspose, NoBorderAndTranspose };
+
+namespace KSpread
+{
 enum Operation { OverWrite, Add, Mul, Sub, Div };
+} // namespace KSpread
 enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different, DifferentTo};
-enum Action { Stop, Warning, Information};
+enum Action { Stop, Warning, Information };
+namespace KSpread
+{
 enum Allow { Allow_All, Allow_Number, Allow_Text,Allow_Time,Allow_Date,Allow_Integer,Allow_TextLength, Allow_List};
 enum Series { Column,Row,Linear,Geometric };
-namespace KSpread
-{  // necessary due to QDock* enums (Werner)
-  enum MoveTo { Bottom, Left, Top, Right, BottomFirst };
-}
+// necessary due to QDock* enums (Werner)
+enum MoveTo { Bottom, Left, Top, Right, BottomFirst };
 enum MethodOfCalc { SumOfNumber, Min, Max, Average, Count, NoneCalc, CountA };
 
 enum FormatType {
@@ -92,5 +102,7 @@ enum FormatType {
     date_format25=224,date_format26=225,
     Custom_format = 300
 };
+
+} // namespace KSpread
 
 #endif

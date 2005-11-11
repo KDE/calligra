@@ -72,19 +72,19 @@
 
 using namespace KSpread;
 
-class CanvasPrivate
+class KSpread::CanvasPrivate
 {
   public:
 
-    KSpreadComboboxLocationEditWidget *posWidget;
-    KSpreadEditWidget *editWidget;
-    KSpreadCellEditor *cellEditor;
+    ComboboxLocationEditWidget *posWidget;
+    KSpread::EditWidget *editWidget;
+    KSpread::CellEditor *cellEditor;
 
     bool choose_visible;
     int  length_namecell;
     int  length_text;
 
-    KSpreadView *view;
+    View *view;
     QTimer* scrollTimer;
 
     // Non visible range left from current screen
@@ -102,7 +102,7 @@ class CanvasPrivate
     QPen defaultGridPen;
 
     // see setLastEditorWithFocus, lastEditorWithFocus
-    KSpreadCanvas::EditorType focusEditorType;
+    Canvas::EditorType focusEditorType;
 
     QLabel *validationInfo;
 
@@ -110,7 +110,7 @@ class CanvasPrivate
     bool chooseCell;
 
     // if a choose selection is started (@ref #startChoose) the current
-    KSpreadSheet* chooseStartSheet;
+    Sheet* chooseStartSheet;
 
     // True when the mouse button is pressed
     bool mousePressed;
@@ -121,7 +121,7 @@ class CanvasPrivate
     // methods are called 'Mark' and 'ResizeCell' or 'AutoFill' depending
     // on the mouse button used. By default this variable holds
     // the value 'NoAction'.
-    KSpreadCanvas::MouseActions mouseAction;
+    Canvas::MouseActions mouseAction;
 
     // If we use the lower right corner of the marker to start autofilling, then this
     // rectangle conatins all cells that were already marker when the user started
@@ -155,11 +155,11 @@ class CanvasPrivate
 
 /****************************************************************
  *
- * KSpreadCanvas
+ * Canvas
  *
  ****************************************************************/
 
-KSpreadCanvas::KSpreadCanvas (KSpreadView *_view)
+Canvas::Canvas (View *_view)
   : QWidget( _view, "", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase )
 {
   d = new CanvasPrivate;
@@ -207,12 +207,12 @@ KSpreadCanvas::KSpreadCanvas (KSpreadView *_view)
   d->choose_visible = false;
   setFocus();
   installEventFilter( this );
-  (void)new KSpreadToolTip( this );
+  (void)new ToolTip( this );
   setAcceptDrops( true );
   setInputMethodEnabled( true ); // ensure using the InputMethod
 }
 
-KSpreadCanvas::~KSpreadCanvas()
+Canvas::~Canvas()
 {
   delete d->scrollTimer;
   delete d->validationInfo;
@@ -220,42 +220,42 @@ KSpreadCanvas::~KSpreadCanvas()
   delete d;
 }
 
-KSpreadView* KSpreadCanvas::view()
+KSpread::View* Canvas::view()
 {
   return d->view;
 }
 
-KSpreadDoc* KSpreadCanvas::doc()
+Doc* Canvas::doc()
 {
   return d->view->doc();
 }
 
-void KSpreadCanvas::setEditWidget( KSpreadEditWidget * ew )
+void Canvas::setEditWidget( KSpread::EditWidget * ew )
 {
   d->editWidget = ew;
 }
 
-KSpreadEditWidget* KSpreadCanvas::editWidget() const
+KSpread::EditWidget* Canvas::editWidget() const
 {
   return d->editWidget;
 }
 
-KSpreadCellEditor* KSpreadCanvas::editor() const
+CellEditor* Canvas::editor() const
 {
   return d->cellEditor;
 }
 
-double KSpreadCanvas::xOffset() const
+double Canvas::xOffset() const
 {
   return d->xOffset;
 }
 
-double KSpreadCanvas::yOffset() const
+double Canvas::yOffset() const
 {
   return d->yOffset;
 }
 
-void KSpreadCanvas::setXOffset( double _xOffset )
+void Canvas::setXOffset( double _xOffset )
 {
   d->xOffset = _xOffset;
   kdDebug(36001) << "setXOffset(): XOffset before scrollToCell: "
@@ -265,7 +265,7 @@ void KSpreadCanvas::setXOffset( double _xOffset )
 		 << d->xOffset << endl;
 }
 
-void KSpreadCanvas::setYOffset( double _yOffset )
+void Canvas::setYOffset( double _yOffset )
 {
   d->yOffset = _yOffset;
   kdDebug(36001) << "setyOffset(): YOffset before scrollToCell: "
@@ -275,23 +275,23 @@ void KSpreadCanvas::setYOffset( double _yOffset )
 		 << d->yOffset << endl;
 }
 
-const QPen& KSpreadCanvas::defaultGridPen() const
+const QPen& Canvas::defaultGridPen() const
 {
   return d->defaultGridPen;
 }
 
-void KSpreadCanvas::setLastEditorWithFocus( KSpreadCanvas::EditorType type )
+void Canvas::setLastEditorWithFocus( Canvas::EditorType type )
 {
   d->focusEditorType = type;
 }
 
-KSpreadCanvas::EditorType KSpreadCanvas::lastEditorWithFocus() const
+Canvas::EditorType Canvas::lastEditorWithFocus() const
 {
   return d->focusEditorType;
 }
 
 
-bool KSpreadCanvas::eventFilter( QObject *o, QEvent *e )
+bool Canvas::eventFilter( QObject *o, QEvent *e )
 {
   /* this canvas event filter acts on events sent to the line edit as well
      as events to this filter itself.
@@ -324,52 +324,52 @@ bool KSpreadCanvas::eventFilter( QObject *o, QEvent *e )
   return false;
 }
 
-bool KSpreadCanvas::focusNextPrevChild( bool )
+bool Canvas::focusNextPrevChild( bool )
 {
     return true; // Don't allow to go out of the canvas widget by pressing "Tab"
 }
 
-int KSpreadCanvas::chooseTextLen() const
+int Canvas::chooseTextLen() const
 {
   return d->length_namecell;
 }
 
-KSpreadSelection* KSpreadCanvas::selectionInfo() const
+Selection* Canvas::selectionInfo() const
 {
   return d->view->selectionInfo();
 }
 
-QRect KSpreadCanvas::selection() const
+QRect Canvas::selection() const
 {
   return d->view->selectionInfo()->selection();
 }
 
-QPoint KSpreadCanvas::marker() const
+QPoint Canvas::marker() const
 {
     return d->view->selectionInfo()->marker();
 }
 
-int KSpreadCanvas::markerColumn() const
+int Canvas::markerColumn() const
 {
     return d->view->selectionInfo()->marker().x();
 }
 
-int KSpreadCanvas::markerRow() const
+int Canvas::markerRow() const
 {
     return d->view->selectionInfo()->marker().y();
 }
 
-double KSpreadCanvas::zoom() const
+double Canvas::zoom() const
 {
   return d->view->zoom();
 }
 
-bool KSpreadCanvas::chooseMode() const
+bool Canvas::chooseMode() const
 {
   return d->chooseCell;
 }
 
-void KSpreadCanvas::startChoose()
+void Canvas::startChoose()
 {
   if ( d->chooseCell )
     return;
@@ -381,7 +381,7 @@ void KSpreadCanvas::startChoose()
   d->chooseStartSheet = activeSheet();
 }
 
-void KSpreadCanvas::startChoose( const QRect& rect )
+void Canvas::startChoose( const QRect& rect )
 {
   if (d->chooseCell)
     return;
@@ -393,7 +393,7 @@ void KSpreadCanvas::startChoose( const QRect& rect )
   d->chooseStartSheet = activeSheet();
 }
 
-void KSpreadCanvas::endChoose()
+void Canvas::endChoose()
 {
   if ( !d->chooseCell )
     return;
@@ -403,51 +403,51 @@ void KSpreadCanvas::endChoose()
   d->length_namecell = 0;
   d->chooseCell = false;
 
-  KSpreadSheet *sheet=d->view->doc()->map()->findSheet(d->chooseStartSheet->sheetName());
+  Sheet *sheet=d->view->doc()->map()->findSheet(d->chooseStartSheet->sheetName());
   if (sheet)
     d->view->setActiveSheet(sheet);
 
   d->chooseStartSheet = 0;
 }
 
-KSpreadHBorder* KSpreadCanvas::hBorderWidget() const
+HBorder* Canvas::hBorderWidget() const
 {
   return d->view->hBorderWidget();
 }
 
-KSpreadVBorder* KSpreadCanvas::vBorderWidget() const
+VBorder* Canvas::vBorderWidget() const
 {
   return d->view->vBorderWidget();
 }
 
-QScrollBar* KSpreadCanvas::horzScrollBar() const
+QScrollBar* Canvas::horzScrollBar() const
 {
   return d->view->horzScrollBar();
 }
 
-QScrollBar* KSpreadCanvas::vertScrollBar() const
+QScrollBar* Canvas::vertScrollBar() const
 {
   return d->view->vertScrollBar();
 }
 
-KSpreadSheet* KSpreadCanvas::findSheet( const QString& _name ) const
+Sheet* Canvas::findSheet( const QString& _name ) const
 {
   return d->view->doc()->map()->findSheet( _name );
 }
 
-KSpreadSheet* KSpreadCanvas::activeSheet() const
+Sheet* Canvas::activeSheet() const
 {
   return d->view->activeSheet();
 }
 
-bool KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
+bool Canvas::gotoLocation( const Range & _range )
 {
   if ( !_range.isValid() )
   {
     KMessageBox::error( this, i18n( "Invalid cell reference" ) );
     return false;
   }
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
   if ( _range.isSheetKnown() )
     sheet = _range.sheet;
   if ( !sheet )
@@ -462,7 +462,7 @@ bool KSpreadCanvas::gotoLocation( const KSpreadRange & _range )
 }
 
 
-bool KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
+bool Canvas::gotoLocation( const Point& _cell )
 {
   if ( !_cell.isValid() )
   {
@@ -470,7 +470,7 @@ bool KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
     return false;
   }
 
-  KSpreadSheet* sheet = activeSheet();
+  Sheet* sheet = activeSheet();
   if ( _cell.isSheetKnown() )
     sheet = _cell.sheet;
   if ( !sheet )
@@ -483,7 +483,7 @@ bool KSpreadCanvas::gotoLocation( const KSpreadPoint& _cell )
   return true;
 }
 
-void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* sheet,
+void Canvas::gotoLocation( QPoint const & location, Sheet* sheet,
                                   bool extendSelection)
 {
     //  kdDebug() << "GotoLocation: " << location.x() << ", " << location.x() << endl;
@@ -624,9 +624,9 @@ void KSpreadCanvas::gotoLocation( QPoint const & location, KSpreadSheet* sheet,
 }
 
 
-void KSpreadCanvas::scrollToCell(QPoint location)
+void Canvas::scrollToCell(QPoint location)
 {
-  KSpreadSheet* sheet = activeSheet();
+  Sheet* sheet = activeSheet();
   if (sheet == NULL)
     return;
 
@@ -650,7 +650,7 @@ void KSpreadCanvas::scrollToCell(QPoint location)
   // xpos is the position of the cell in the current window in unzoomed
   // document coordinates.
   double xpos;
-  if ( sheet->layoutDirection()==KSpreadSheet::LeftToRight )
+  if ( sheet->layoutDirection()==Sheet::LeftToRight )
     xpos = sheet->dblColumnPos( location.x() ) - xOffset();
   else
     xpos = unzoomedWidth - sheet->dblColumnPos( location.x() ) + xOffset();
@@ -660,10 +660,10 @@ void KSpreadCanvas::scrollToCell(QPoint location)
 
   double minY = 40.0;
   double maxY = unzoomedHeight - 40.0;
-  kdDebug(36001) << "KSpreadCanvas::gotoLocation : height=" << height() << endl;
-  kdDebug(36001) << "KSpreadCanvas::gotoLocation : width=" << width() << endl;
+  kdDebug(36001) << "Canvas::gotoLocation : height=" << height() << endl;
+  kdDebug(36001) << "Canvas::gotoLocation : width=" << width() << endl;
 
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft ) {
+  if ( sheet->layoutDirection()==Sheet::RightToLeft ) {
     // Right to left sheet.
 
     double minX = unzoomedWidth - 100.0; // less than that, we scroll
@@ -734,9 +734,9 @@ void KSpreadCanvas::scrollToCell(QPoint location)
   }
 }
 
-void KSpreadCanvas::slotScrollHorz( int _value )
+void Canvas::slotScrollHorz( int _value )
 {
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
 
   if ( sheet == 0L )
     return;
@@ -744,7 +744,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   kdDebug(36001) << "slotScrollHorz: value = " << _value << endl;
   //kdDebug(36001) << kdBacktrace() << endl;
 
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
     _value = horzScrollBar()->maxValue() - _value;
 
   double unzoomedValue = d->view->doc()->unzoomItX( _value );
@@ -754,7 +754,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
 
   if ( unzoomedValue < 0.0 ) {
     kdDebug (36001)
-      << "KSpreadCanvas::slotScrollHorz: value out of range (unzoomedValue: "
+      << "Canvas::slotScrollHorz: value out of range (unzoomedValue: "
       << unzoomedValue << ")" << endl;
     unzoomedValue = 0.0;
   }
@@ -792,7 +792,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   kdDebug(36001) << "slotScrollHorz(): XOffset after setting: "
 		 << d->xOffset << endl;
 
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
     dx = -dx;
 
   scroll( dx, 0 );
@@ -804,7 +804,7 @@ void KSpreadCanvas::slotScrollHorz( int _value )
   d->view->doc()->emitEndOperation( sheet->visibleRect( this ) );
 }
 
-void KSpreadCanvas::slotScrollVert( int _value )
+void Canvas::slotScrollVert( int _value )
 {
   if ( activeSheet() == 0L )
     return;
@@ -815,7 +815,7 @@ void KSpreadCanvas::slotScrollVert( int _value )
   if ( unzoomedValue < 0 )
   {
     unzoomedValue = 0;
-    kdDebug (36001) << "KSpreadCanvas::slotScrollVert: value out of range (unzoomedValue: " <<
+    kdDebug (36001) << "Canvas::slotScrollVert: value out of range (unzoomedValue: " <<
                        unzoomedValue << ")" << endl;
   }
 
@@ -856,7 +856,7 @@ void KSpreadCanvas::slotScrollVert( int _value )
   d->view->doc()->emitEndOperation( activeSheet()->visibleRect( this ) );
 }
 
-void KSpreadCanvas::slotMaxColumn( int _max_column )
+void Canvas::slotMaxColumn( int _max_column )
 {
   int oldValue = horzScrollBar()->maxValue() - horzScrollBar()->value();
   double xpos = activeSheet()->dblColumnPos( QMIN( KS_colMax, _max_column + 10 ) ) - xOffset();
@@ -869,11 +869,11 @@ void KSpreadCanvas::slotMaxColumn( int _max_column )
 
   horzScrollBar()->setRange( 0, d->view->doc()->zoomItX( xpos + xOffset() ) );
 
-  if ( activeSheet()->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
     horzScrollBar()->setValue( horzScrollBar()->maxValue() - oldValue );
 }
 
-void KSpreadCanvas::slotMaxRow( int _max_row )
+void Canvas::slotMaxRow( int _max_row )
 {
   double ypos = activeSheet()->dblRowPos( QMIN( KS_rowMax, _max_row + 10 ) ) - yOffset();
   double unzoomHeight = d->view->doc()->unzoomItY( height() );
@@ -886,7 +886,7 @@ void KSpreadCanvas::slotMaxRow( int _max_row )
   vertScrollBar()->setRange( 0, d->view->doc()->zoomItY( ypos + yOffset() ) );
 }
 
-bool KSpreadCanvas::getHighlightedRangesAt(const int col, const int row, std::vector<HighlightRange*>& ranges)
+bool Canvas::getHighlightedRangesAt(const int col, const int row, std::vector<HighlightRange*>& ranges)
 {
 	if (!d->highlightedRanges)
 		return false;
@@ -897,9 +897,9 @@ bool KSpreadCanvas::getHighlightedRangesAt(const int col, const int row, std::ve
 
 	for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
 	{
-		KSpreadRange rg;
+		Range rg;
 		iter->getRange(rg);
-		KSpreadPoint pt;
+		Point pt;
 		pt.setRow(row);
 		pt.setColumn(col);
 		pt.sheet=activeSheet();
@@ -914,7 +914,7 @@ bool KSpreadCanvas::getHighlightedRangesAt(const int col, const int row, std::ve
 	return result;
 }
 
-void KSpreadCanvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
+void Canvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
 {
 	if (!range) return;
 	if (!d->cellEditor) return;
@@ -926,7 +926,7 @@ void KSpreadCanvas::resizeHighlightedRange(HighlightRange* range, const QRect& n
 		return;
 
 
-	KSpreadRange rg;
+	Range rg;
 	range->getRange(rg);
 
 	if (rg.range == normArea) //Don't update if no change to area
@@ -1012,7 +1012,7 @@ void KSpreadCanvas::resizeHighlightedRange(HighlightRange* range, const QRect& n
 	d->editWidget->setText(formulaText);
 }
 
-void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
+void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 {
   // Dont allow modifications if document is readonly. Selecting is no modification
   if ( (!d->view->koDocument()->isReadWrite()) && (d->mouseAction!=Mark))
@@ -1037,13 +1037,13 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   }
 
   // Working on this sheet ?
-  KSpreadSheet *sheet = activeSheet();
+  Sheet *sheet = activeSheet();
   if ( !sheet )
     return;
 
   double dwidth = d->view->doc()->unzoomItX( width() );
   double ev_PosX;
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
     ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   else
     ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
@@ -1060,7 +1060,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
   if (d->sizingHighlightRange)
   {
-	  KSpreadRange rg;
+	  Range rg;
 	  d->sizingHighlightRange->getRange(rg);
 	  QRect newRange;
 	  newRange.setCoords(rg.range.left(),rg.range.top(),col,row);
@@ -1122,7 +1122,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   {
     Cell *cell = sheet->visibleCellAt( col, row );
     QString anchor;
-    if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
       anchor = cell->testAnchor( d->view->doc()->zoomItX( cell->dblWidth() - ev_PosX +
                                xpos ), d->view->doc()->zoomItY( ev_PosY - ypos ) );
     else
@@ -1144,7 +1144,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
 
     if ( !sheet->isProtected() )
     {
-      if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+      if ( sheet->layoutDirection()==Sheet::RightToLeft )
         setCursor( sizeBDiagCursor );
       else
         setCursor( sizeFDiagCursor );
@@ -1169,7 +1169,7 @@ void KSpreadCanvas::mouseMoveEvent( QMouseEvent * _ev )
   gotoLocation( QPoint( col, row ), sheet, true );
 }
 
-void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
+void Canvas::mouseReleaseEvent( QMouseEvent* _ev )
 {
   if ( d->scrollTimer->isActive() )
     d->scrollTimer->stop();
@@ -1183,11 +1183,11 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   }
 
 
-  KSpreadSheet *sheet = activeSheet();
+  Sheet *sheet = activeSheet();
   if ( !sheet )
     return;
 
-  KSpreadSelection* selectionInfo = d->view->selectionInfo();
+  Selection* selectionInfo = d->view->selectionInfo();
   QRect s( selection() );
 
   if ( selectionInfo->singleCellSelection() )
@@ -1209,7 +1209,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
     Cell *cell = sheet->nonDefaultCell( x, y );
     if ( !d->view->doc()->undoLocked() )
     {
-        KSpreadUndoMergedCell *undo = new KSpreadUndoMergedCell( d->view->doc(),
+        UndoMergedCell *undo = new UndoMergedCell( d->view->doc(),
                         sheet, x, y, cell->extraXCells(), cell->extraYCells() );
         d->view->doc()->addCommand( undo );
     }
@@ -1238,7 +1238,7 @@ void KSpreadCanvas::mouseReleaseEvent( QMouseEvent* _ev )
   d->dragStart.setX( -1 );
 }
 
-void KSpreadCanvas::processClickSelectionHandle( QMouseEvent *event )
+void Canvas::processClickSelectionHandle( QMouseEvent *event )
 {
   // Auto fill ? That is done using the left mouse button.
   if ( event->button() == LeftButton )
@@ -1257,9 +1257,9 @@ void KSpreadCanvas::processClickSelectionHandle( QMouseEvent *event )
 }
 
 
-void KSpreadCanvas::extendCurrentSelection( QPoint cell )
+void Canvas::extendCurrentSelection( QPoint cell )
 {
-  KSpreadSheet* sheet = activeSheet();
+  Sheet* sheet = activeSheet();
   QPoint chooseAnchor = selectionInfo()->getChooseAnchor();
 //  Cell* destinationCell = sheet->cellAt(cell);
 
@@ -1285,7 +1285,7 @@ void KSpreadCanvas::extendCurrentSelection( QPoint cell )
   }
 }
 
-void KSpreadCanvas::processLeftClickAnchor()
+void Canvas::processLeftClickAnchor()
 {
     bool isRefLink = localReferenceAnchor( d->anchor );
     bool isLocalLink = (d->anchor.find("file:") == 0);
@@ -1316,11 +1316,11 @@ void KSpreadCanvas::processLeftClickAnchor()
     }
     else
     {
-        gotoLocation( KSpreadPoint( d->anchor, d->view->doc()->map() ) );
+        gotoLocation( Point( d->anchor, d->view->doc()->map() ) );
     }
 }
 
-HighlightRange* KSpreadCanvas::highlightRangeSizeGripAt(double x, double y)
+HighlightRange* Canvas::highlightRangeSizeGripAt(double x, double y)
 {
 	if (!d->highlightedRanges)
 		return 0;
@@ -1341,7 +1341,7 @@ HighlightRange* KSpreadCanvas::highlightRangeSizeGripAt(double x, double y)
 			HighlightRange* highlight=*iter;
 
 	  	//Is the mouse over the size grip at the bottom-right hand corner of the range?
-			KSpreadRange rg;
+			Range rg;
 			highlight->getRange(rg);
 
 			KoRect visibleRect;
@@ -1360,7 +1360,7 @@ HighlightRange* KSpreadCanvas::highlightRangeSizeGripAt(double x, double y)
 
 	return 0;
 }
-void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
+void Canvas::mousePressEvent( QMouseEvent * _ev )
 {
   if ( _ev->button() == LeftButton )
     d->mousePressed = true;
@@ -1373,14 +1373,14 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 
   //Get info about where the event occurred - this is duplicated in ::mouseMoveEvent, needs to be separated into one function
-  KSpreadSheet *sheet = activeSheet();
+  Sheet *sheet = activeSheet();
 
   if ( !sheet )
 	  return;
 
   double dwidth = 0.0;
   double ev_PosX;
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
 	  dwidth = d->view->doc()->unzoomItX( width() );
 	  ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
@@ -1464,7 +1464,7 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   //you cannot move marker when col > KS_colMax or row > KS_rowMax
   if ( col > KS_colMax || row > KS_rowMax)
   {
-    kdDebug(36001) << "KSpreadCanvas::mousePressEvent: col or row is out of range: col: " << col << " row: " << row << endl;
+    kdDebug(36001) << "Canvas::mousePressEvent: col or row is out of range: col: " << col << " row: " << row << endl;
     return;
   }
 
@@ -1529,14 +1529,14 @@ void KSpreadCanvas::mousePressEvent( QMouseEvent * _ev )
   }
 }
 
-void KSpreadCanvas::startTheDrag()
+void Canvas::startTheDrag()
 {
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
   if ( !sheet )
     return;
 
   // right area for start dragging
-  KSpreadTextDrag * d = new KSpreadTextDrag( this );
+  TextDrag * d = new TextDrag( this );
   setCursor( KCursor::handCursor() );
 
   QRect rct( selectionInfo()->selection() );
@@ -1557,18 +1557,18 @@ void KSpreadCanvas::startTheDrag()
   setCursor( KCursor::arrowCursor() );
 }
 
-void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
+void Canvas::chooseMouseMoveEvent( QMouseEvent * _ev )
 {
   if ( !d->mousePressed )
     return;
 
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
   if ( !sheet )
     return;
 
   double tmp;
   double ev_PosX;
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     double dwidth = d->view->doc()->unzoomItX( width() );
     ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() );
@@ -1596,22 +1596,22 @@ void KSpreadCanvas::chooseMouseMoveEvent( QMouseEvent * _ev )
   gotoLocation( QPoint( col, row ), sheet, ( d->mouseAction != NoAction ) );
 }
 
-void KSpreadCanvas::chooseMouseReleaseEvent( QMouseEvent* )
+void Canvas::chooseMouseReleaseEvent( QMouseEvent* )
 {
     // gets done in mouseReleaseEvent
     //  d->mousePressed = false;
   d->mouseAction = NoAction;
 }
 
-void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
+void Canvas::chooseMousePressEvent( QMouseEvent * _ev )
 {
-  KSpreadSheet *sheet = activeSheet();
+  Sheet *sheet = activeSheet();
   if ( !sheet )
     return;
 
 
   double ev_PosX;
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     double dwidth = d->view->doc()->unzoomItX( width() );
     ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() );
@@ -1642,13 +1642,13 @@ void KSpreadCanvas::chooseMousePressEvent( QMouseEvent * _ev )
   return;
 }
 
-void KSpreadCanvas::mouseDoubleClickEvent( QMouseEvent*  )
+void Canvas::mouseDoubleClickEvent( QMouseEvent*  )
 {
   if ( d->view->koDocument()->isReadWrite() && activeSheet() )
     createEditor();
 }
 
-void KSpreadCanvas::wheelEvent( QWheelEvent* _ev )
+void Canvas::wheelEvent( QWheelEvent* _ev )
 {
   if ( _ev->orientation() == Qt::Vertical )
   {
@@ -1661,20 +1661,20 @@ void KSpreadCanvas::wheelEvent( QWheelEvent* _ev )
   }
 }
 
-void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
+void Canvas::paintEvent( QPaintEvent* _ev )
 {
   if ( d->view->doc()->isLoading() )
     return;
 
-  KSpreadSheet* sheet = activeSheet();
+  Sheet* sheet = activeSheet();
   if ( !sheet )
     return;
 
-  // ElapsedTime et( "KSpreadCanvas::paintEvent" );
+  // ElapsedTime et( "Canvas::paintEvent" );
 
   double dwidth = d->view->doc()->unzoomItX( width() );
   KoRect rect = d->view->doc()->unzoomRect( _ev->rect() & QWidget::rect() );
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
     rect.moveBy( -xOffset(), yOffset() );
   else
     rect.moveBy( xOffset(), yOffset() );
@@ -1687,7 +1687,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   int right_col;
   //Philipp: I don't know why we need the +1, but otherwise we don't get it correctly
   //Testcase: Move a dialog slowly up left. Sometimes the top/left most points are not painted
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     right_col = sheet->leftColumn( dwidth - tl.x(), tmp );
     left_col  = sheet->rightColumn( dwidth - br.x() + 1.0 );
@@ -1707,7 +1707,7 @@ void KSpreadCanvas::paintEvent( QPaintEvent* _ev )
   d->view->doc()->emitEndOperation( vr );
 }
 
-void KSpreadCanvas::focusInEvent( QFocusEvent* )
+void Canvas::focusInEvent( QFocusEvent* )
 {
   if ( !d->cellEditor )
     return;
@@ -1728,23 +1728,23 @@ void KSpreadCanvas::focusInEvent( QFocusEvent* )
   d->cellEditor->setFocus();
 }
 
-void KSpreadCanvas::focusOutEvent( QFocusEvent* )
+void Canvas::focusOutEvent( QFocusEvent* )
 {
     if ( d->scrollTimer->isActive() )
         d->scrollTimer->stop();
     d->mousePressed = false;
 }
 
-void KSpreadCanvas::dragMoveEvent( QDragMoveEvent * _ev )
+void Canvas::dragMoveEvent( QDragMoveEvent * _ev )
 {
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
   if ( !sheet )
   {
     _ev->ignore();
     return;
   }
 
-  _ev->accept( KSpreadTextDrag::canDecode( _ev ) );
+  _ev->accept( TextDrag::canDecode( _ev ) );
 
   double dwidth = d->view->doc()->unzoomItX( width() );
   double xpos = sheet->dblColumnPos( selectionInfo()->selection().left() );
@@ -1755,7 +1755,7 @@ void KSpreadCanvas::dragMoveEvent( QDragMoveEvent * _ev )
   QRect r1 ((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
 
   double ev_PosX;
-  if (sheet->layoutDirection()==KSpreadSheet::RightToLeft)
+  if (sheet->layoutDirection()==Sheet::RightToLeft)
     ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   else
     ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
@@ -1766,16 +1766,16 @@ void KSpreadCanvas::dragMoveEvent( QDragMoveEvent * _ev )
     _ev->ignore( r1 );
 }
 
-void KSpreadCanvas::dragLeaveEvent( QDragLeaveEvent * )
+void Canvas::dragLeaveEvent( QDragLeaveEvent * )
 {
   if ( d->scrollTimer->isActive() )
     d->scrollTimer->stop();
 }
 
-void KSpreadCanvas::dropEvent( QDropEvent * _ev )
+void Canvas::dropEvent( QDropEvent * _ev )
 {
   d->dragging = false;
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
   if ( !sheet || sheet->isProtected() )
   {
     _ev->ignore();
@@ -1791,7 +1791,7 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
   QRect r1 ((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
 
   double ev_PosX;
-  if (sheet->layoutDirection()==KSpreadSheet::RightToLeft)
+  if (sheet->layoutDirection()==Sheet::RightToLeft)
     ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   else
     ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
@@ -1810,7 +1810,7 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
   int col = sheet->leftColumn( ev_PosX, tmp );
   int row = sheet->topRow( ev_PosY, tmp );
 
-  if ( !KSpreadTextDrag::canDecode( _ev ) )
+  if ( !TextDrag::canDecode( _ev ) )
   {
     _ev->ignore();
     return;
@@ -1820,14 +1820,14 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
 
   bool makeUndo = true;
 
-  if ( _ev->provides( KSpreadTextDrag::selectionMimeType() ) )
+  if ( _ev->provides( TextDrag::selectionMimeType() ) )
   {
-    if ( KSpreadTextDrag::target() == _ev->source() )
+    if ( TextDrag::target() == _ev->source() )
     {
       if ( !d->view->doc()->undoLocked() )
       {
-        KSpreadUndoDragDrop * undo
-          = new KSpreadUndoDragDrop( d->view->doc(), sheet, selectionInfo()->selection(),
+        UndoDragDrop * undo
+          = new UndoDragDrop( d->view->doc(), sheet, selectionInfo()->selection(),
                                      QRect( col, row, selectionInfo()->selection().width(),
                                             selectionInfo()->selection().height() ) );
         d->view->doc()->addCommand( undo );
@@ -1837,7 +1837,7 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
     }
 
 
-    b = _ev->encodedData( KSpreadTextDrag::selectionMimeType() );
+    b = _ev->encodedData( TextDrag::selectionMimeType() );
     sheet->paste( b, QRect( col, row, 1, 1 ), makeUndo );
 
     if ( _ev->source() == this )
@@ -1852,7 +1852,7 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
       _ev->ignore();
       return;
     }
-    //    if ( KSpreadTextDrag::target() == _ev->source() )
+    //    if ( TextDrag::target() == _ev->source() )
     //      sheet->deleteSelection( selectionInfo() );
 
     sheet->pasteTextPlain( text, QRect( col, row, 1, 1 ) );
@@ -1864,7 +1864,7 @@ void KSpreadCanvas::dropEvent( QDropEvent * _ev )
   }
 }
 
-void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
+void Canvas::resizeEvent( QResizeEvent* _ev )
 {
     double ev_Width = d->view->doc()->unzoomItX( _ev->size().width() );
     double ev_Height = d->view->doc()->unzoomItY( _ev->size().height() );
@@ -1872,12 +1872,12 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
     // workaround to allow horizontal resizing and zoom changing when sheet
     // direction and interface direction don't match (e.g. an RTL sheet on an
     // LTR interface)
-    if ( activeSheet() && activeSheet()->layoutDirection()==KSpreadSheet::RightToLeft && !QApplication::reverseLayout() )
+    if ( activeSheet() && activeSheet()->layoutDirection()==Sheet::RightToLeft && !QApplication::reverseLayout() )
     {
         int dx = _ev->size().width() - _ev->oldSize().width();
         scroll(dx, 0);
     }
-    else if ( activeSheet() && activeSheet()->layoutDirection()==KSpreadSheet::LeftToRight && QApplication::reverseLayout() )
+    else if ( activeSheet() && activeSheet()->layoutDirection()==Sheet::LeftToRight && QApplication::reverseLayout() )
     {
         int dx = _ev->size().width() - _ev->oldSize().width();
         scroll(-dx, 0);
@@ -1892,7 +1892,7 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
                d->view->doc()->zoomItX( activeSheet()->sizeMaxX() ) )
         {
             horzScrollBar()->setRange( 0, d->view->doc()->zoomItX( activeSheet()->sizeMaxX() - ev_Width ) );
-            if ( activeSheet()->layoutDirection()==KSpreadSheet::RightToLeft )
+            if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
                 horzScrollBar()->setValue( horzScrollBar()->maxValue() - oldValue );
         }
     }
@@ -1905,7 +1905,7 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
              int( d->view->doc()->zoomItX( activeSheet()->sizeMaxX() ) - ev_Width ) )
         {
             horzScrollBar()->setRange( 0, d->view->doc()->zoomItX( activeSheet()->sizeMaxX() - ev_Width ) );
-            if ( activeSheet()->layoutDirection()==KSpreadSheet::RightToLeft )
+            if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
                 horzScrollBar()->setValue( horzScrollBar()->maxValue() - oldValue );
         }
     }
@@ -1930,7 +1930,7 @@ void KSpreadCanvas::resizeEvent( QResizeEvent* _ev )
     }
 }
 
-QPoint KSpreadCanvas::cursorPos ()
+QPoint Canvas::cursorPos ()
 {
   QPoint cursor;
   if (d->chooseCell)
@@ -1946,7 +1946,7 @@ QPoint KSpreadCanvas::cursorPos ()
   return cursor;
 }
 
-QRect KSpreadCanvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
+QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 {
   QPoint destination;
   QPoint cursor = cursorPos ();
@@ -2034,7 +2034,7 @@ QRect KSpreadCanvas::moveDirection( KSpread::MoveTo direction, bool extendSelect
   return QRect( cursor, destination );
 }
 
-void KSpreadCanvas::processEnterKey(QKeyEvent* event)
+void Canvas::processEnterKey(QKeyEvent* event)
 {
   // array is true, if ctrl+alt are pressed
   bool array = (event->state() & Qt::AltButton) &&
@@ -2081,7 +2081,7 @@ void KSpreadCanvas::processEnterKey(QKeyEvent* event)
   d->view->doc()->emitEndOperation( r );
 }
 
-void KSpreadCanvas::processArrowKey( QKeyEvent *event)
+void Canvas::processArrowKey( QKeyEvent *event)
 {
   /* NOTE:  hitting the tab key also calls this function.  Don't forget
      to account for it
@@ -2105,13 +2105,13 @@ void KSpreadCanvas::processArrowKey( QKeyEvent *event)
     direction = KSpread::Top;
     break;
   case Key_Left:
-    if (activeSheet()->layoutDirection()==KSpreadSheet::RightToLeft)
+    if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
       direction = KSpread::Right;
     else
       direction = KSpread::Left;
     break;
   case Key_Right:
-    if (activeSheet()->layoutDirection()==KSpreadSheet::RightToLeft)
+    if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
       direction = KSpread::Left;
     else
       direction = KSpread::Right;
@@ -2133,7 +2133,7 @@ void KSpreadCanvas::processArrowKey( QKeyEvent *event)
   d->view->doc()->emitEndOperation( r );
 }
 
-void KSpreadCanvas::processEscapeKey(QKeyEvent * event)
+void Canvas::processEscapeKey(QKeyEvent * event)
 {
   if ( d->cellEditor )
     deleteEditor( false );
@@ -2144,17 +2144,17 @@ void KSpreadCanvas::processEscapeKey(QKeyEvent * event)
   d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
 }
 
-bool KSpreadCanvas::processHomeKey(QKeyEvent* event)
+bool Canvas::processHomeKey(QKeyEvent* event)
 {
   bool makingSelection = event->state() & ShiftButton;
-  KSpreadSheet* sheet = activeSheet();
+  Sheet* sheet = activeSheet();
 
   if ( d->cellEditor )
   // We are in edit mode -> go beginning of line
   {
     // (David) Do this for text editor only, not formula editor...
     // Don't know how to avoid this hack (member var for editor type ?)
-    if ( d->cellEditor->inherits("KSpreadTextEditor") )
+    if ( d->cellEditor->inherits("KSpread::TextEditor") )
       QApplication::sendEvent( d->editWidget, event );
     // What to do for a formula editor ?
 
@@ -2206,10 +2206,10 @@ bool KSpreadCanvas::processHomeKey(QKeyEvent* event)
   return true;
 }
 
-bool KSpreadCanvas::processEndKey( QKeyEvent *event )
+bool Canvas::processEndKey( QKeyEvent *event )
 {
   bool makingSelection = event->state() & ShiftButton;
-  KSpreadSheet* sheet = activeSheet();
+  Sheet* sheet = activeSheet();
   Cell* cell = NULL;
   QPoint marker = d->chooseCell ?
     selectionInfo()->getChooseMarker() : selectionInfo()->marker();
@@ -2221,7 +2221,7 @@ bool KSpreadCanvas::processEndKey( QKeyEvent *event )
   {
     // (David) Do this for text editor only, not formula editor...
     // Don't know how to avoid this hack (member var for editor type ?)
-    if ( d->cellEditor->inherits("KSpreadTextEditor") )
+    if ( d->cellEditor->inherits("KSpread::TextEditor") )
       QApplication::sendEvent( d->editWidget, event );
     // TODO: What to do for a formula editor ?
     d->view->doc()->emitEndOperation( QRect( marker, marker ) );
@@ -2251,7 +2251,7 @@ bool KSpreadCanvas::processEndKey( QKeyEvent *event )
   return true;
 }
 
-bool KSpreadCanvas::processPriorKey(QKeyEvent *event)
+bool Canvas::processPriorKey(QKeyEvent *event)
 {
   bool makingSelection = event->state() & ShiftButton;
   if (!d->chooseCell)
@@ -2274,7 +2274,7 @@ bool KSpreadCanvas::processPriorKey(QKeyEvent *event)
   return true;
 }
 
-bool KSpreadCanvas::processNextKey(QKeyEvent *event)
+bool Canvas::processNextKey(QKeyEvent *event)
 {
   bool makingSelection = event->state() & ShiftButton;
 
@@ -2298,7 +2298,7 @@ bool KSpreadCanvas::processNextKey(QKeyEvent *event)
   return true;
 }
 
-void KSpreadCanvas::processDeleteKey(QKeyEvent* /* event */)
+void Canvas::processDeleteKey(QKeyEvent* /* event */)
 {
   activeSheet()->clearTextSelection( selectionInfo() );
   d->view->editWidget()->setText( "" );
@@ -2309,7 +2309,7 @@ void KSpreadCanvas::processDeleteKey(QKeyEvent* /* event */)
   return;
 }
 
-void KSpreadCanvas::processF2Key(QKeyEvent* /* event */)
+void Canvas::processF2Key(QKeyEvent* /* event */)
 {
   d->view->editWidget()->setFocus();
   if ( d->cellEditor )
@@ -2323,7 +2323,7 @@ void KSpreadCanvas::processF2Key(QKeyEvent* /* event */)
   return;
 }
 
-void KSpreadCanvas::processF4Key(QKeyEvent* event)
+void Canvas::processF4Key(QKeyEvent* event)
 {
   /* passes F4 to the editor (if any), which will process it
    */
@@ -2339,7 +2339,7 @@ void KSpreadCanvas::processF4Key(QKeyEvent* event)
   return;
 }
 
-void KSpreadCanvas::processOtherKey(QKeyEvent *event)
+void Canvas::processOtherKey(QKeyEvent *event)
 {
   // No null character ...
   if ( event->text().isEmpty() || !d->view->koDocument()->isReadWrite()
@@ -2366,11 +2366,11 @@ void KSpreadCanvas::processOtherKey(QKeyEvent *event)
   return;
 }
 
-bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
+bool Canvas::processControlArrowKey( QKeyEvent *event )
 {
   bool makingSelection = event->state() & ShiftButton;
 
-  KSpreadSheet* sheet = activeSheet();
+  Sheet* sheet = activeSheet();
   Cell* cell = NULL;
   Cell* lastCell;
   QPoint destination;
@@ -2481,7 +2481,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
   //Ctrl+Key_Left
   case Key_Left:
 
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     cell = sheet->cellAt( marker.x(), marker.y() );
     if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != KS_colMax))
@@ -2575,7 +2575,7 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
   //Ctrl+Key_Right
   case Key_Right:
 
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     cell = sheet->cellAt( marker.x(), marker.y() );
     if ( (cell != NULL) && (!cell->isEmpty()) && (marker.x() != 1))
@@ -2679,9 +2679,9 @@ bool KSpreadCanvas::processControlArrowKey( QKeyEvent *event )
 }
 
 
-void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
+void Canvas::keyPressEvent ( QKeyEvent * _ev )
 {
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
 
   if ( !sheet || formatKeyPress( _ev ))
     return;
@@ -2782,7 +2782,7 @@ void KSpreadCanvas::keyPressEvent ( QKeyEvent * _ev )
   return;
 }
 
-void KSpreadCanvas::processIMEvent( QIMEvent * event )
+void Canvas::processIMEvent( QIMEvent * event )
 {
   d->view->doc()->emitBeginOperation( false );
   if ( !d->cellEditor && !d->chooseCell )
@@ -2807,7 +2807,7 @@ void KSpreadCanvas::processIMEvent( QIMEvent * event )
   d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
 }
 
-bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
+bool Canvas::formatKeyPress( QKeyEvent * _ev )
 {
   if (!(_ev->state() & ControlButton ))
     return false;
@@ -2819,7 +2819,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
     return false;
 
   Cell  * cell = 0L;
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
   QRect rect = selection();
 
   d->view->doc()->emitBeginOperation(false);
@@ -2830,7 +2830,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
   if ( !d->view->doc()->undoLocked() )
   {
     QString dummy;
-    KSpreadUndoCellFormat * undo = new KSpreadUndoCellFormat( d->view->doc(), sheet, rect, dummy );
+    UndoCellFormat * undo = new UndoCellFormat( d->view->doc(), sheet, rect, dummy );
     d->view->doc()->addCommand( undo );
   }
 
@@ -2994,7 +2994,7 @@ bool KSpreadCanvas::formatKeyPress( QKeyEvent * _ev )
   return true;
 }
 
-bool KSpreadCanvas::formatCellByKey (Cell *cell, int key, const QRect &rect)
+bool Canvas::formatCellByKey (Cell *cell, int key, const QRect &rect)
 {
   QPen pen;
   switch (key)
@@ -3053,7 +3053,7 @@ bool KSpreadCanvas::formatCellByKey (Cell *cell, int key, const QRect &rect)
   return true;
 }
 
-void KSpreadCanvas::doAutoScroll()
+void Canvas::doAutoScroll()
 {
     if ( !d->mousePressed )
     {
@@ -3102,7 +3102,7 @@ void KSpreadCanvas::doAutoScroll()
     d->scrollTimer->start( 50 );
 }
 
-double KSpreadCanvas::autoScrollAccelerationX( int offset )
+double Canvas::autoScrollAccelerationX( int offset )
 {
     switch( static_cast<int>( offset / 20 ) )
     {
@@ -3114,7 +3114,7 @@ double KSpreadCanvas::autoScrollAccelerationX( int offset )
     }
 }
 
-double KSpreadCanvas::autoScrollAccelerationY( int offset )
+double Canvas::autoScrollAccelerationY( int offset )
 {
     switch( static_cast<int>( offset / 20 ) )
     {
@@ -3126,7 +3126,7 @@ double KSpreadCanvas::autoScrollAccelerationY( int offset )
     }
 }
 
-void KSpreadCanvas::deleteEditor (bool saveChanges, bool array)
+void Canvas::deleteEditor (bool saveChanges, bool array)
 {
   if ( !d->cellEditor )
     return;
@@ -3134,7 +3134,7 @@ void KSpreadCanvas::deleteEditor (bool saveChanges, bool array)
   // but only if we are using it (text editor)
   // A bit of a hack - perhaps we should store the editor mode ?
   bool textEditor = true;
-  if ( d->cellEditor->inherits("KSpreadTextEditor") )
+  if ( d->cellEditor->inherits("KSpread::TextEditor") )
       d->editWidget->setEditMode( false );
   else
       textEditor = false;
@@ -3171,7 +3171,7 @@ void KSpreadCanvas::deleteEditor (bool saveChanges, bool array)
   setFocus();
 }
 
-void KSpreadCanvas::createEditor()
+void Canvas::createEditor()
 {
   Cell * cell = activeSheet()->nonDefaultCell( markerColumn(), markerRow(), false );
 
@@ -3181,9 +3181,9 @@ void KSpreadCanvas::createEditor()
       d->cellEditor->setText( cell->text() );
 }
 
-bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
+bool Canvas::createEditor( EditorType ed, bool addFocus )
 {
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
   if ( !d->cellEditor )
   {
     Cell * cell = sheet->nonDefaultCell( marker().x(), marker().y(), false );
@@ -3195,7 +3195,7 @@ bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
     {
       d->editWidget->setEditMode( true );
 
-      d->cellEditor = new KSpreadTextEditor( cell, this );
+      d->cellEditor = new TextEditor( cell, this );
     }
 
     double w, h;
@@ -3216,17 +3216,17 @@ bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
 
     double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
 
-    KSpreadSheet::LayoutDirection sheetDir = sheet->layoutDirection();
+    Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
     bool rtlText = cell->strOutText().isRightToLeft();
 
     // if sheet and cell direction don't match, then the editor's location
     // needs to be shifted backwards so that it's right above the cell's text
-    if ( w > 0 && ( ( sheetDir == KSpreadSheet::RightToLeft && !rtlText ) ||
-                    ( sheetDir == KSpreadSheet::LeftToRight && rtlText  ) ) )
+    if ( w > 0 && ( ( sheetDir == Sheet::RightToLeft && !rtlText ) ||
+                    ( sheetDir == Sheet::LeftToRight && rtlText  ) ) )
       xpos -= w - min_w;
 
     // paint editor above correct cell if sheet direction is RTL
-    if ( sheetDir == KSpreadSheet::RightToLeft )
+    if ( sheetDir == Sheet::RightToLeft )
     {
       double dwidth = d->view->doc()->unzoomItX( width() );
       double w2 = QMAX( w, min_w );
@@ -3281,7 +3281,7 @@ bool KSpreadCanvas::createEditor( EditorType ed, bool addFocus )
   return true;
 }
 
-void KSpreadCanvas::closeEditor()
+void Canvas::closeEditor()
 {
   if ( d->chooseCell )
     return;
@@ -3293,12 +3293,12 @@ void KSpreadCanvas::closeEditor()
 }
 
 
-void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor)
+void Canvas::updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor)
 {
   if( !d->chooseCell )
     return;
 
-  KSpreadSheet* sheet = activeSheet();
+  Sheet* sheet = activeSheet();
 
   if ( ! sheet )
       return;
@@ -3321,7 +3321,7 @@ void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newA
 
   /* keep the choose cursor updated.  If you don't know what the 'cursor' is
      supposed to represent, check the comments of the regular selection cursor
-     in kspread_selection.h (KSpreadSelection::m_cursorPosition).  It's the
+     in kspread_selection.h (Selection::m_cursorPosition).  It's the
      same thing here except for the choose selection.
   */
   if ( !newChooseRect.contains(chooseCursor) )
@@ -3375,9 +3375,9 @@ void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newA
     QString res = text.left( d->cellEditor->cursorPosition() - old ) + name_cell + text.right( text.length() - d->cellEditor->cursorPosition() );
     int pos = d->cellEditor->cursorPosition() - old;
 
-    ((KSpreadTextEditor*)d->cellEditor)->blockCheckChoose( true );
+    ((TextEditor*)d->cellEditor)->blockCheckChoose( true );
     d->cellEditor->setText( res );
-    ((KSpreadTextEditor*)d->cellEditor)->blockCheckChoose( false );
+    ((TextEditor*)d->cellEditor)->blockCheckChoose( false );
     d->cellEditor->setCursorPosition( pos + d->length_namecell );
     d->editWidget->setText( res );
     //kdDebug(36001) << "old=" << old << " len=" << d->length_namecell << " pos=" << pos << endl;
@@ -3385,7 +3385,7 @@ void KSpreadCanvas::updateChooseRect(const QPoint &newMarker, const QPoint &newA
 }
 
 
-void KSpreadCanvas::setSelectionChangePaintDirty(KSpreadSheet* sheet,
+void Canvas::setSelectionChangePaintDirty(Sheet* sheet,
                                                  QRect area1, QRect area2)
 {
   QValueList<QRect> cellRegions;
@@ -3487,7 +3487,7 @@ void KSpreadCanvas::setSelectionChangePaintDirty(KSpreadSheet* sheet,
   }
 }
 
-void KSpreadCanvas::ExtendRectBorder(QRect& area)
+void Canvas::ExtendRectBorder(QRect& area)
 {
   ColumnFormat *cl;
   RowFormat *rl;
@@ -3545,7 +3545,7 @@ void KSpreadCanvas::ExtendRectBorder(QRect& area)
 }
 
 
-void KSpreadCanvas::updatePosWidget()
+void Canvas::updatePosWidget()
 {
     QString buffer;
     // No selection, or only one cell merged selected
@@ -3593,7 +3593,7 @@ void KSpreadCanvas::updatePosWidget()
 
 
 
-void KSpreadCanvas::adjustArea(bool makeUndo)
+void Canvas::adjustArea(bool makeUndo)
 {
   QRect s( selection() );
   if (activeSheet()->areaIsEmpty(s))
@@ -3603,7 +3603,7 @@ void KSpreadCanvas::adjustArea(bool makeUndo)
   {
         if ( !d->view->doc()->undoLocked() )
         {
-                KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( d->view->doc(),activeSheet() , s );
+                UndoResizeColRow *undo = new UndoResizeColRow( d->view->doc(),activeSheet() , s );
                 d->view->doc()->addCommand( undo );
         }
   }
@@ -3638,7 +3638,7 @@ void KSpreadCanvas::adjustArea(bool makeUndo)
   }
 }
 
-void KSpreadCanvas::equalizeRow()
+void Canvas::equalizeRow()
 {
   QRect s( selection() );
   RowFormat *rl = d->view->activeSheet()->rowFormat(s.top());
@@ -3647,7 +3647,7 @@ void KSpreadCanvas::equalizeRow()
       return;
   for(int i=s.top()+1;i<=s.bottom();i++)
   {
-      KSpreadSheet *sheet = activeSheet();
+      Sheet *sheet = activeSheet();
       if ( !sheet )
           return;
       size=QMAX(d->view->activeSheet()->rowFormat(i)->height(this),size);
@@ -3655,7 +3655,7 @@ void KSpreadCanvas::equalizeRow()
   d->view->vBorderWidget()->equalizeRow(size);
 }
 
-void KSpreadCanvas::equalizeColumn()
+void Canvas::equalizeColumn()
 {
   QRect s( selection() );
   ColumnFormat *cl = d->view->activeSheet()->columnFormat(s.left());
@@ -3670,7 +3670,7 @@ void KSpreadCanvas::equalizeColumn()
   d->view->hBorderWidget()->equalizeColumn(size);
 }
 
-QRect KSpreadCanvas::visibleCells()
+QRect Canvas::visibleCells()
 {
   KoRect unzoomedRect = d->view->doc()->unzoomRect( QRect( 0, 0, width(), height() ) );
   unzoomedRect.moveBy( xOffset(), yOffset() );
@@ -3692,7 +3692,7 @@ QRect KSpreadCanvas::visibleCells()
 //
 //---------------------------------------------
 
-void KSpreadCanvas::paintUpdates()
+void Canvas::paintUpdates()
 {
   if (activeSheet() == NULL)
     return;
@@ -3732,7 +3732,7 @@ void KSpreadCanvas::paintUpdates()
 
   int right  = range.right();
   int bottom = range.bottom();
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
 
 #if 0
   kdDebug(36001)
@@ -3877,7 +3877,7 @@ void KSpreadCanvas::paintUpdates()
 
 
 
-void KSpreadCanvas::clipoutChildren( QPainter& painter, QWMatrix& matrix )
+void Canvas::clipoutChildren( QPainter& painter, QWMatrix& matrix )
 {
   QRegion rgn = painter.clipRegion();
   if ( rgn.isEmpty() )
@@ -3886,9 +3886,9 @@ void KSpreadCanvas::clipoutChildren( QPainter& painter, QWMatrix& matrix )
   QPtrListIterator<KoDocumentChild> itChild( d->view->doc()->children() );
   for( ; itChild.current(); ++itChild )
   {
-//    if ( ((KSpreadChild*)it.current())->sheet() == sheet &&
+//    if ( ((Child*)it.current())->sheet() == sheet &&
 //         !d->view->hasDocumentInWindow( it.current()->document() ) )
-    if ( ( ( KSpreadChild*)itChild.current() )->sheet() == activeSheet() )
+    if ( ( ( Child*)itChild.current() )->sheet() == activeSheet() )
     {
       rgn -= itChild.current()->region( matrix );
     }
@@ -3896,14 +3896,14 @@ void KSpreadCanvas::clipoutChildren( QPainter& painter, QWMatrix& matrix )
   painter.setClipRegion( rgn );
 }
 
-void KSpreadCanvas::paintChildren( QPainter& painter, QWMatrix& matrix )
+void Canvas::paintChildren( QPainter& painter, QWMatrix& matrix )
 {
   painter.setWorldMatrix( matrix );
   QPtrListIterator<KoDocumentChild> itChild( d->view->doc()->children() );
   itChild.toFirst();
   for( ; itChild.current(); ++itChild )
   {
-    if ( ( ( KSpreadChild*)itChild.current() )->sheet() == activeSheet() &&
+    if ( ( ( Child*)itChild.current() )->sheet() == activeSheet() &&
          ( d->view && !d->view->hasDocumentInWindow( itChild.current()->document() ) ) )
     {
       // #### todo: paint only if child is visible inside rect
@@ -3916,7 +3916,7 @@ void KSpreadCanvas::paintChildren( QPainter& painter, QWMatrix& matrix )
 }
 
 
-void KSpreadCanvas::paintChooseRect(QPainter& painter, const KoRect &viewRect)
+void Canvas::paintChooseRect(QPainter& painter, const KoRect &viewRect)
 {
 
   double positions[4];
@@ -3974,7 +3974,7 @@ void KSpreadCanvas::paintChooseRect(QPainter& painter, const KoRect &viewRect)
 }
 
 
-void KSpreadCanvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*/)
+void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*/)
 {
 	if (!d->highlightedRanges)
 		return;
@@ -4056,7 +4056,7 @@ void KSpreadCanvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*vi
 	}
 }
 
-void KSpreadCanvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
+void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
 {
 
   if( d->chooseCell )
@@ -4100,7 +4100,7 @@ void KSpreadCanvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
     painter.drawLine( d->view->doc()->zoomItX( left ) - l,      d->view->doc()->zoomItY( top ),
                       d->view->doc()->zoomItX( right ) + 2 * l, d->view->doc()->zoomItY( top ) );
   }
-  if ( activeSheet()->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
   {
     if ( paintRight )
     {
@@ -4164,11 +4164,11 @@ void KSpreadCanvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
   }
 }
 
-void KSpreadCanvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect)
+void Canvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect)
 {
-	KSpreadSheet* sheet=activeSheet();
+	Sheet* sheet=activeSheet();
 
-	if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+	if ( sheet->layoutDirection()==Sheet::RightToLeft )
 	{
 		rect.setLeft(sheet->dblColumnPos( sheetArea.right()+1 ) );
 		rect.setRight(sheet->dblColumnPos( sheetArea.left() ));
@@ -4184,10 +4184,10 @@ void KSpreadCanvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect)
 
 }
 
-void KSpreadCanvas::sheetAreaToVisibleRect( const QRect& sheetArea,
+void Canvas::sheetAreaToVisibleRect( const QRect& sheetArea,
 					    KoRect& visibleRect )
 {
-	KSpreadSheet* sheet=activeSheet();
+	Sheet* sheet=activeSheet();
 
 	if (!sheet)
 		return;
@@ -4196,7 +4196,7 @@ void KSpreadCanvas::sheetAreaToVisibleRect( const QRect& sheetArea,
 	double xpos;
 	double x;
 
-	if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+	if ( sheet->layoutDirection()==Sheet::RightToLeft )
 	{
 		xpos = dwidth - sheet->dblColumnPos( sheetArea.right() ) + xOffset();
 		x    = dwidth - sheet->dblColumnPos( sheetArea.left() ) + xOffset();
@@ -4219,7 +4219,7 @@ void KSpreadCanvas::sheetAreaToVisibleRect( const QRect& sheetArea,
 	double h = ( y - ypos ) + th;
 
 	/* left, top, right, bottom */
-	if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+	if ( sheet->layoutDirection()==Sheet::RightToLeft )
 	{
 		visibleRect.setLeft(xpos - tw );
 		visibleRect.setRight(xpos - tw + w );
@@ -4233,13 +4233,13 @@ void KSpreadCanvas::sheetAreaToVisibleRect( const QRect& sheetArea,
 	visibleRect.setBottom(ypos + h);
 }
 
-void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
+void Canvas::retrieveMarkerInfo( const QRect &marker,
                                         const KoRect &viewRect,
                                         double positions[],
                                         bool paintSides[] )
 {
 
-	KSpreadSheet* sheet=activeSheet();
+	Sheet* sheet=activeSheet();
 
 	if (!sheet) return;
 
@@ -4247,7 +4247,7 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
 	sheetAreaToVisibleRect(marker,visibleRect);
 
 
- /* KSpreadSheet * sheet = activeSheet();
+ /* Sheet * sheet = activeSheet();
   if ( !sheet )
     return;
 
@@ -4255,7 +4255,7 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
 
   double xpos;
   double x;
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     xpos = dWidth - sheet->dblColumnPos( marker.right() ) + xOffset();
     x    = dWidth - sheet->dblColumnPos( marker.left() ) + xOffset();
@@ -4277,7 +4277,7 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
   double h = ( y - ypos ) + th;
 
 	//left, top, right, bottom
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     positions[0] = xpos - tw;
     positions[2] = xpos - tw + w;
@@ -4301,7 +4301,7 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
                 (bottom >= viewRect.top()) && (top <= viewRect.bottom());
   paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom())
                && (right >= viewRect.left()) && (left <= viewRect.right());
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
     paintSides[2] = (viewRect.left() <= right ) &&
                     (right - 1 <= viewRect.right()) &&
                     (bottom >= viewRect.top()) && (top <= viewRect.bottom());
@@ -4321,11 +4321,11 @@ void KSpreadCanvas::retrieveMarkerInfo( const QRect &marker,
 
 /****************************************************************
  *
- * KSpreadVBorder
+ * VBorder
  *
  ****************************************************************/
 
-KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view)
+VBorder::VBorder( QWidget *_parent, Canvas *_canvas, View *_view)
     : QWidget( _parent, "", /*WNorthWestGravity*/WStaticContents | WResizeNoErase | WRepaintNoErase )
 {
   m_pView = _view;
@@ -4344,18 +4344,18 @@ KSpreadVBorder::KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSprea
 }
 
 
-KSpreadVBorder::~KSpreadVBorder()
+VBorder::~VBorder()
 {
     delete m_scrollTimer;
 }
 
-QSize KSpreadVBorder::sizeHint() const
+QSize VBorder::sizeHint() const
 {
   return QSize( 40, 10 );
 }
 
 
-void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
+void VBorder::mousePressEvent( QMouseEvent * _ev )
 {
   if ( !m_pView->koDocument()->isReadWrite() )
     return;
@@ -4363,7 +4363,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   if ( _ev->button() == LeftButton )
     m_bMousePressed = true;
 
-  const KSpreadSheet *sheet = m_pCanvas->activeSheet();
+  const Sheet *sheet = m_pCanvas->activeSheet();
   assert( sheet );
 
   double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
@@ -4445,7 +4445,7 @@ void KSpreadVBorder::mousePressEvent( QMouseEvent * _ev )
   }
 }
 
-void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
+void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
     if ( m_scrollTimer->isActive() )
         m_scrollTimer->stop();
@@ -4455,7 +4455,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
     if ( !m_pView->koDocument()->isReadWrite() )
         return;
 
-    KSpreadSheet *sheet = m_pCanvas->activeSheet();
+    Sheet *sheet = m_pCanvas->activeSheet();
     assert( sheet );
 
     double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
@@ -4497,13 +4497,13 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
             //just resize
             if ( height != 0.0 )
             {
-                KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
+                UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
                 m_pCanvas->d->view->doc()->addCommand( undo );
             }
             else
             {
                 //hide row
-                KSpreadUndoHideRow *undo = new KSpreadUndoHideRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(),
+                UndoHideRow *undo = new UndoHideRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(),
                                                                    rect.top(), ( rect.bottom() - rect.top() ) );
                 m_pCanvas->d->view->doc()->addCommand( undo );
             }
@@ -4561,7 +4561,7 @@ void KSpreadVBorder::mouseReleaseEvent( QMouseEvent * _ev )
     m_bResize = false;
 }
 
-void KSpreadVBorder::adjustRow( int _row, bool makeUndo )
+void VBorder::adjustRow( int _row, bool makeUndo )
 {
     double adjust = -1.0;
     int select;
@@ -4578,7 +4578,7 @@ void KSpreadVBorder::adjustRow( int _row, bool makeUndo )
 
     if ( adjust != -1.0 )
     {
-        KSpreadSheet * sheet = m_pCanvas->activeSheet();
+        Sheet * sheet = m_pCanvas->activeSheet();
         assert( sheet );
         if ( _row == -1 )
         {
@@ -4592,7 +4592,7 @@ void KSpreadVBorder::adjustRow( int _row, bool makeUndo )
         {
             QRect rect;
             rect.setCoords( 1, select, KS_colMax, select);
-            KSpreadUndoResizeColRow * undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(),
+            UndoResizeColRow * undo = new UndoResizeColRow( m_pCanvas->d->view->doc(),
                                                                           m_pCanvas->activeSheet(), rect );
             m_pCanvas->d->view->doc()->addCommand( undo );
         }
@@ -4601,15 +4601,15 @@ void KSpreadVBorder::adjustRow( int _row, bool makeUndo )
     }
 }
 
-void KSpreadVBorder::equalizeRow( double resize )
+void VBorder::equalizeRow( double resize )
 {
-  KSpreadSheet *sheet = m_pCanvas->activeSheet();
+  Sheet *sheet = m_pCanvas->activeSheet();
   Q_ASSERT( sheet );
 
   QRect selection( m_pView->selection() );
   if ( !m_pCanvas->d->view->doc()->undoLocked() )
   {
-     KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
+     UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
      m_pCanvas->d->view->doc()->addCommand( undo );
   }
   RowFormat *rl;
@@ -4621,9 +4621,9 @@ void KSpreadVBorder::equalizeRow( double resize )
   }
 }
 
-void KSpreadVBorder::resizeRow( double resize, int nb, bool makeUndo )
+void VBorder::resizeRow( double resize, int nb, bool makeUndo )
 {
-  KSpreadSheet *sheet = m_pCanvas->activeSheet();
+  Sheet *sheet = m_pCanvas->activeSheet();
   Q_ASSERT( sheet );
 
   if ( nb == -1 ) // I don't know, where this is the case
@@ -4632,7 +4632,7 @@ void KSpreadVBorder::resizeRow( double resize, int nb, bool makeUndo )
     {
         QRect rect;
         rect.setCoords( 1, m_iSelectionAnchor, KS_colMax, m_iSelectionAnchor );
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
+        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
         m_pCanvas->d->view->doc()->addCommand( undo );
     }
     RowFormat *rl = sheet->nonDefaultRowFormat( m_iSelectionAnchor );
@@ -4647,7 +4647,7 @@ void KSpreadVBorder::resizeRow( double resize, int nb, bool makeUndo )
       {
         QRect rect;
         rect.setCoords( 1, m_pCanvas->markerRow(), KS_colMax, m_pCanvas->markerRow() );
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
+        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
         m_pCanvas->d->view->doc()->addCommand( undo );
       }
       RowFormat *rl = sheet->nonDefaultRowFormat( m_pCanvas->markerRow() );
@@ -4657,7 +4657,7 @@ void KSpreadVBorder::resizeRow( double resize, int nb, bool makeUndo )
     {
       if ( makeUndo && !m_pCanvas->d->view->doc()->undoLocked() )
       {
-          KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
+          UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
           m_pCanvas->d->view->doc()->addCommand( undo );
       }
       RowFormat *rl;
@@ -4671,9 +4671,9 @@ void KSpreadVBorder::resizeRow( double resize, int nb, bool makeUndo )
 }
 
 
-void KSpreadVBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
+void VBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
 {
-  KSpreadSheet *sheet = m_pCanvas->activeSheet();
+  Sheet *sheet = m_pCanvas->activeSheet();
   assert( sheet );
 
   if ( !m_pView->koDocument()->isReadWrite() || sheet->isProtected() )
@@ -4683,12 +4683,12 @@ void KSpreadVBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
 }
 
 
-void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
+void VBorder::mouseMoveEvent( QMouseEvent * _ev )
 {
   if ( !m_pView->koDocument()->isReadWrite() )
     return;
 
-  KSpreadSheet *sheet = m_pCanvas->activeSheet();
+  Sheet *sheet = m_pCanvas->activeSheet();
   assert( sheet );
 
   double ev_PosY = m_pCanvas->d->view->doc()->unzoomItY( _ev->pos().y() ) + m_pCanvas->yOffset();
@@ -4757,7 +4757,7 @@ void KSpreadVBorder::mouseMoveEvent( QMouseEvent * _ev )
   }
 }
 
-void KSpreadVBorder::doAutoScroll()
+void VBorder::doAutoScroll()
 {
     if ( !m_bMousePressed )
     {
@@ -4778,16 +4778,16 @@ void KSpreadVBorder::doAutoScroll()
     m_scrollTimer->start( 50 );
 }
 
-void KSpreadVBorder::wheelEvent( QWheelEvent* _ev )
+void VBorder::wheelEvent( QWheelEvent* _ev )
 {
   if ( m_pCanvas->vertScrollBar() )
     QApplication::sendEvent( m_pCanvas->vertScrollBar(), _ev );
 }
 
 
-void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
+void VBorder::paintSizeIndicator( int mouseY, bool firstTime )
 {
-    KSpreadSheet *sheet = m_pCanvas->activeSheet();
+    Sheet *sheet = m_pCanvas->activeSheet();
     assert( sheet );
 
     QPainter painter;
@@ -4825,7 +4825,7 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
     {
           m_lSize = new QLabel( m_pCanvas );
 
-          if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+          if ( sheet->layoutDirection()==Sheet::RightToLeft )
             m_lSize->setGeometry( m_pCanvas->width() - len - 5,
                                                   y + 3, len + 2, hei + 2 );
           else
@@ -4838,7 +4838,7 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
     }
     else
     {
-          if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+          if ( sheet->layoutDirection()==Sheet::RightToLeft )
             m_lSize->setGeometry( m_pCanvas->width() - len - 5,
                                                   y + 3, len + 2, hei + 2 );
           else
@@ -4848,9 +4848,9 @@ void KSpreadVBorder::paintSizeIndicator( int mouseY, bool firstTime )
     }
 }
 
-void KSpreadVBorder::updateRows( int from, int to )
+void VBorder::updateRows( int from, int to )
 {
-    KSpreadSheet *sheet = m_pCanvas->activeSheet();
+    Sheet *sheet = m_pCanvas->activeSheet();
     if ( !sheet )
         return;
 
@@ -4859,9 +4859,9 @@ void KSpreadVBorder::updateRows( int from, int to )
     update( 0, y0, width(), y1-y0 );
 }
 
-void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
+void VBorder::paintEvent( QPaintEvent* _ev )
 {
-  KSpreadSheet *sheet = m_pCanvas->activeSheet();
+  Sheet *sheet = m_pCanvas->activeSheet();
   if ( !sheet )
     return;
 
@@ -4955,7 +4955,7 @@ void KSpreadVBorder::paintEvent( QPaintEvent* _ev )
 }
 
 
-void KSpreadVBorder::focusOutEvent( QFocusEvent* )
+void VBorder::focusOutEvent( QFocusEvent* )
 {
     if ( m_scrollTimer->isActive() )
         m_scrollTimer->stop();
@@ -4965,11 +4965,11 @@ void KSpreadVBorder::focusOutEvent( QFocusEvent* )
 
 /****************************************************************
  *
- * KSpreadHBorder
+ * HBorder
  *
  ****************************************************************/
 
-KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpreadView *_view )
+HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
     : QWidget( _parent, "", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase )
 {
   m_pView = _view;
@@ -4987,17 +4987,17 @@ KSpreadHBorder::KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas,KSpread
 }
 
 
-KSpreadHBorder::~KSpreadHBorder()
+HBorder::~HBorder()
 {
     delete m_scrollTimer;
 }
 
-QSize KSpreadHBorder::sizeHint() const
+QSize HBorder::sizeHint() const
 {
   return QSize( 40, 10 );
 }
 
-void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
+void HBorder::mousePressEvent( QMouseEvent * _ev )
 {
   if (!m_pView->koDocument()->isReadWrite())
     return;
@@ -5005,7 +5005,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   if ( _ev->button() == LeftButton )
     m_bMousePressed = true;
 
-  const KSpreadSheet *sheet = m_pCanvas->activeSheet();
+  const Sheet *sheet = m_pCanvas->activeSheet();
   assert( sheet );
 
   // We were editing a cell -> save value and get out of editing mode
@@ -5018,7 +5018,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
 
   double ev_PosX;
   double dWidth = m_pCanvas->d->view->doc()->unzoomItX( width() );
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
     ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
   else
     ev_PosX = m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
@@ -5029,7 +5029,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   double x;
 
   const double unzoomedPixel = m_pCanvas->d->view->doc()->unzoomItX( 1 );
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     int tmpCol = sheet->leftColumn( m_pCanvas->xOffset(), x );
 
@@ -5098,7 +5098,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   {
     // Determine the column to resize
     double tmp;
-    if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
       m_iResizedColumn = sheet->leftColumn( ev_PosX - 1, tmp );
       // kdDebug() << "RColumn: " << m_iResizedColumn << ", PosX: " << ev_PosX << endl;
@@ -5148,7 +5148,7 @@ void KSpreadHBorder::mousePressEvent( QMouseEvent * _ev )
   }
 }
 
-void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
+void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
 {
     if ( m_scrollTimer->isActive() )
         m_scrollTimer->stop();
@@ -5158,7 +5158,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
     if ( !m_pView->koDocument()->isReadWrite() )
       return;
 
-    KSpreadSheet * sheet = m_pCanvas->activeSheet();
+    Sheet * sheet = m_pCanvas->activeSheet();
     assert( sheet );
 
     if ( m_bResize )
@@ -5190,7 +5190,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
         double width = 0.0;
         double x;
 
-        if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+        if ( sheet->layoutDirection()==Sheet::RightToLeft )
           ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
         else
           ev_PosX = m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
@@ -5209,12 +5209,12 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
             //just resize
             if ( width != 0.0 )
             {
-                KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
+                UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
                 m_pCanvas->d->view->doc()->addCommand( undo );
             }
             else
             {//hide column
-                KSpreadUndoHideColumn *undo = new KSpreadUndoHideColumn( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect.left(), (rect.right()-rect.left()));
+                UndoHideColumn *undo = new UndoHideColumn( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect.left(), (rect.right()-rect.left()));
                 m_pCanvas->d->view->doc()->addCommand( undo );
             }
           }
@@ -5271,7 +5271,7 @@ void KSpreadHBorder::mouseReleaseEvent( QMouseEvent * _ev )
     m_bResize = false;
 }
 
-void KSpreadHBorder::adjustColumn( int _col, bool makeUndo )
+void HBorder::adjustColumn( int _col, bool makeUndo )
 {
   double adjust = -1.0;
   int select;
@@ -5289,7 +5289,7 @@ void KSpreadHBorder::adjustColumn( int _col, bool makeUndo )
 
   if ( adjust != -1.0 )
   {
-    KSpreadSheet * sheet = m_pCanvas->activeSheet();
+    Sheet * sheet = m_pCanvas->activeSheet();
     assert( sheet );
 
     if ( _col == -1 )
@@ -5303,7 +5303,7 @@ void KSpreadHBorder::adjustColumn( int _col, bool makeUndo )
     {
         QRect rect;
         rect.setCoords( select, 1, select, KS_rowMax );
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(),
+        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(),
                                                                      m_pCanvas->activeSheet(), rect );
         m_pCanvas->d->view->doc()->addCommand( undo );
     }
@@ -5313,15 +5313,15 @@ void KSpreadHBorder::adjustColumn( int _col, bool makeUndo )
   }
 }
 
-void KSpreadHBorder::equalizeColumn( double resize )
+void HBorder::equalizeColumn( double resize )
 {
-  KSpreadSheet *sheet = m_pCanvas->activeSheet();
+  Sheet *sheet = m_pCanvas->activeSheet();
   Q_ASSERT( sheet );
 
   QRect selection( m_pView->selection() );
   if ( !m_pCanvas->d->view->doc()->undoLocked() )
   {
-      KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
+      UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
       m_pCanvas->d->view->doc()->addCommand( undo );
   }
   ColumnFormat *cl;
@@ -5334,9 +5334,9 @@ void KSpreadHBorder::equalizeColumn( double resize )
 
 }
 
-void KSpreadHBorder::resizeColumn( double resize, int nb, bool makeUndo )
+void HBorder::resizeColumn( double resize, int nb, bool makeUndo )
 {
-  KSpreadSheet *sheet = m_pCanvas->activeSheet();
+  Sheet *sheet = m_pCanvas->activeSheet();
   Q_ASSERT( sheet );
 
   if ( nb == -1 )
@@ -5345,7 +5345,7 @@ void KSpreadHBorder::resizeColumn( double resize, int nb, bool makeUndo )
     {
         QRect rect;
         rect.setCoords( m_iSelectionAnchor, 1, m_iSelectionAnchor, KS_rowMax );
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
+        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
         m_pCanvas->d->view->doc()->addCommand( undo );
     }
     ColumnFormat *cl = sheet->nonDefaultColumnFormat( m_iSelectionAnchor );
@@ -5360,7 +5360,7 @@ void KSpreadHBorder::resizeColumn( double resize, int nb, bool makeUndo )
       {
         QRect rect;
         rect.setCoords( m_iSelectionAnchor, 1, m_iSelectionAnchor, KS_rowMax );
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
+        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
         m_pCanvas->d->view->doc()->addCommand( undo );
       }
 
@@ -5371,7 +5371,7 @@ void KSpreadHBorder::resizeColumn( double resize, int nb, bool makeUndo )
     {
       if ( makeUndo && !m_pCanvas->d->view->doc()->undoLocked() )
       {
-        KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
+        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
         m_pCanvas->d->view->doc()->addCommand( undo );
       }
       ColumnFormat *cl;
@@ -5384,9 +5384,9 @@ void KSpreadHBorder::resizeColumn( double resize, int nb, bool makeUndo )
   }
 }
 
-void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
+void HBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
 {
-  KSpreadSheet *sheet = m_pCanvas->activeSheet();
+  Sheet *sheet = m_pCanvas->activeSheet();
   assert( sheet );
 
   if ( !m_pView->koDocument()->isReadWrite() || sheet->isProtected() )
@@ -5395,17 +5395,17 @@ void KSpreadHBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
   adjustColumn();
 }
 
-void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
+void HBorder::mouseMoveEvent( QMouseEvent * _ev )
 {
   if ( !m_pView->koDocument()->isReadWrite() )
     return;
 
-  KSpreadSheet *sheet = m_pCanvas->activeSheet();
+  Sheet *sheet = m_pCanvas->activeSheet();
   assert( sheet );
 
   double dWidth = m_pCanvas->d->view->doc()->unzoomItX( width() );
   double ev_PosX;
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
     ev_PosX = dWidth - m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
   else
     ev_PosX = m_pCanvas->d->view->doc()->unzoomItX( _ev->pos().x() ) + m_pCanvas->xOffset();
@@ -5434,7 +5434,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
                                             m_pView->activeSheet() );
 
-    if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
       if ( _ev->pos().x() < width() - m_pCanvas->width() )
       {
@@ -5470,7 +5470,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
     const double unzoomedPixel = m_pCanvas->d->view->doc()->unzoomItX( 1 );
     double x;
 
-    if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
       int tmpCol = sheet->leftColumn( m_pCanvas->xOffset(), x );
 
@@ -5516,7 +5516,7 @@ void KSpreadHBorder::mouseMoveEvent( QMouseEvent * _ev )
   }
 }
 
-void KSpreadHBorder::doAutoScroll()
+void HBorder::doAutoScroll()
 {
     if ( !m_bMousePressed )
     {
@@ -5537,32 +5537,32 @@ void KSpreadHBorder::doAutoScroll()
     m_scrollTimer->start( 50 );
 }
 
-void KSpreadHBorder::wheelEvent( QWheelEvent* _ev )
+void HBorder::wheelEvent( QWheelEvent* _ev )
 {
   if ( m_pCanvas->horzScrollBar() )
     QApplication::sendEvent( m_pCanvas->horzScrollBar(), _ev );
 }
 
-void KSpreadHBorder::resizeEvent( QResizeEvent* _ev )
+void HBorder::resizeEvent( QResizeEvent* _ev )
 {
   // workaround to allow horizontal resizing and zoom changing when sheet
   // direction and interface direction don't match (e.g. an RTL sheet on an
   // LTR interface)
-  if ( m_pCanvas->activeSheet() && m_pCanvas->activeSheet()->layoutDirection()==KSpreadSheet::RightToLeft && !QApplication::reverseLayout() )
+  if ( m_pCanvas->activeSheet() && m_pCanvas->activeSheet()->layoutDirection()==Sheet::RightToLeft && !QApplication::reverseLayout() )
   {
     int dx = _ev->size().width() - _ev->oldSize().width();
     scroll(dx, 0);
   }
-  else if ( m_pCanvas->activeSheet() && m_pCanvas->activeSheet()->layoutDirection()==KSpreadSheet::LeftToRight && QApplication::reverseLayout() )
+  else if ( m_pCanvas->activeSheet() && m_pCanvas->activeSheet()->layoutDirection()==Sheet::LeftToRight && QApplication::reverseLayout() )
   {
     int dx = _ev->size().width() - _ev->oldSize().width();
     scroll(-dx, 0);
   }
 }
 
-void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
+void HBorder::paintSizeIndicator( int mouseX, bool firstTime )
 {
-    KSpreadSheet *sheet = m_pCanvas->activeSheet();
+    Sheet *sheet = m_pCanvas->activeSheet();
     assert( sheet );
 
     QPainter painter;
@@ -5572,7 +5572,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     if ( !firstTime )
       painter.drawLine( m_iResizePos, 0, m_iResizePos, m_pCanvas->height() );
 
-    if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
       m_iResizePos = mouseX + m_pCanvas->width() - width();
     else
       m_iResizePos = mouseX;
@@ -5580,7 +5580,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     // Dont make the column have a width < 2 pixels.
     int x = m_pCanvas->d->view->doc()->zoomItX( sheet->dblColumnPos( m_iResizedColumn ) - m_pCanvas->xOffset() );
 
-    if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
       x = m_pCanvas->width() - x;
 
@@ -5600,7 +5600,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     QString tmpSize;
     if ( m_iResizePos != x )
         tmpSize = i18n("Width: %1 %2")
-                  .arg( KGlobal::locale()->formatNumber( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItX( (sheet->layoutDirection()==KSpreadSheet::RightToLeft) ? x - m_iResizePos : m_iResizePos - x ),
+                  .arg( KGlobal::locale()->formatNumber( KoUnit::toUserValue( m_pCanvas->doc()->unzoomItX( (sheet->layoutDirection()==Sheet::RightToLeft) ? x - m_iResizePos : m_iResizePos - x ),
                                                                            m_pView->doc()->unit() )))
                   .arg( m_pView->doc()->unitName() );
     else
@@ -5615,7 +5615,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     {
         m_lSize = new QLabel( m_pCanvas );
 
-        if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+        if ( sheet->layoutDirection()==Sheet::RightToLeft )
           m_lSize->setGeometry( x - len - 5, 3, len + 2, hei + 2 );
         else
           m_lSize->setGeometry( x + 3, 3, len + 2, hei + 2 );
@@ -5627,7 +5627,7 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     }
     else
     {
-        if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+        if ( sheet->layoutDirection()==Sheet::RightToLeft )
           m_lSize->setGeometry( x - len - 5, 3, len + 2, hei + 2 );
         else
           m_lSize->setGeometry( x + 3, 3, len + 2, hei + 2 );
@@ -5636,9 +5636,9 @@ void KSpreadHBorder::paintSizeIndicator( int mouseX, bool firstTime )
     }
 }
 
-void KSpreadHBorder::updateColumns( int from, int to )
+void HBorder::updateColumns( int from, int to )
 {
-    KSpreadSheet *sheet = m_pCanvas->activeSheet();
+    Sheet *sheet = m_pCanvas->activeSheet();
     if ( !sheet )
         return;
 
@@ -5647,9 +5647,9 @@ void KSpreadHBorder::updateColumns( int from, int to )
     update( x0, 0, x1-x0, height() );
 }
 
-void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
+void HBorder::paintEvent( QPaintEvent* _ev )
 {
-  KSpreadSheet * sheet = m_pCanvas->activeSheet();
+  Sheet * sheet = m_pCanvas->activeSheet();
   if ( !sheet )
     return;
 
@@ -5670,7 +5670,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   double xPos;
   int x;
 
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     //Get the left column and the current x-position
     x = sheet->leftColumn( int( m_pCanvas->d->view->doc()->unzoomItX( width() ) - m_pCanvas->d->view->doc()->unzoomItX( _ev->rect().x() ) + m_pCanvas->xOffset() ), xPos );
@@ -5685,7 +5685,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
     xPos = xPos - m_pCanvas->xOffset();
   }
 
-  int height = m_pCanvas->d->view->doc()->zoomItY( KSpreadFormat::globalRowHeight() + 2 );
+  int height = m_pCanvas->d->view->doc()->zoomItY( Format::globalRowHeight() + 2 );
 
   QFont normalFont = painter.font();
   if ( m_pCanvas->d->view->doc()->zoom() < 100 )
@@ -5706,7 +5706,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
   //several cells selected but not just a cell merged
   bool area = ( m_pView->selection().left()!=0 && extraCell != m_pView->selection() );
 
-  if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     if ( x > KS_colMax )
       x = KS_colMax;
@@ -5848,7 +5848,7 @@ void KSpreadHBorder::paintEvent( QPaintEvent* _ev )
 }
 
 
-void KSpreadHBorder::focusOutEvent( QFocusEvent* )
+void HBorder::focusOutEvent( QFocusEvent* )
 {
     if ( m_scrollTimer->isActive() )
         m_scrollTimer->stop();
@@ -5857,18 +5857,18 @@ void KSpreadHBorder::focusOutEvent( QFocusEvent* )
 
 /****************************************************************
  *
- * KSpreadToolTip
+ * ToolTip
  *
  ****************************************************************/
 
-KSpreadToolTip::KSpreadToolTip( KSpreadCanvas* canvas )
+ToolTip::ToolTip( Canvas* canvas )
     : QToolTip( canvas ), m_canvas( canvas )
 {
 }
 
-void KSpreadToolTip::maybeTip( const QPoint& p )
+void ToolTip::maybeTip( const QPoint& p )
 {
-    KSpreadSheet *sheet = m_canvas->activeSheet();
+    Sheet *sheet = m_canvas->activeSheet();
     if ( !sheet )
         return;
 
@@ -5876,7 +5876,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     double ypos, xpos;
     double dwidth = m_canvas->doc()->unzoomItX( m_canvas->width() );
     int col;
-    if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
       col = sheet->leftColumn( (dwidth - m_canvas->doc()->unzoomItX( p.x() ) +
                                               m_canvas->xOffset()), xpos );
     else
@@ -5951,7 +5951,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     }
 
     // Get the cell dimensions
-    if ( sheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
       KoRect unzoomedMarker( dwidth - u - xpos + m_canvas->xOffset(),
                              ypos - m_canvas->yOffset(),
@@ -5979,7 +5979,7 @@ void KSpreadToolTip::maybeTip( const QPoint& p )
     }
 }
 
-void KSpreadCanvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
+void Canvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 {
 	//Clear existing highlighted ranges
 
@@ -5991,7 +5991,7 @@ void KSpreadCanvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 		{
 			if (iter->lastCell())
 			{
-				KSpreadRange rg(*(iter->firstCell()),*(iter->lastCell()));
+				Range rg(*(iter->firstCell()),*(iter->lastCell()));
 
 
 				rg.sheet->setRegionPaintDirty(rg.range);
@@ -6023,7 +6023,7 @@ void KSpreadCanvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 			if (iter->lastCell)
 			{
 
-				KSpreadRange rg(*(iter->firstCell),*(iter->lastCell));
+				Range rg(*(iter->firstCell),*(iter->lastCell));
 				/*QRect range=rg.range;
 				range.setWidth(range.width()+1);
 				range.setHeight(range.height()+1);*/

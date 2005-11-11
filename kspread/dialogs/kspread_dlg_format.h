@@ -37,15 +37,18 @@ class QComboBox;
 class QLabel;
 class QDomDocument;
 
-class KSpreadView;
-class KSpreadFormat;
+namespace KSpread
+{
+class Format;
+class Sheet;
+class View;
 
-class KSpreadFormatDlg : public KDialogBase
+class FormatDialog : public KDialogBase
 {
     Q_OBJECT
 public:
-    KSpreadFormatDlg( KSpreadView* view, const char* name = 0 );
-    ~KSpreadFormatDlg();
+  FormatDialog( View* view, const char* name = 0 );
+  ~FormatDialog();
 
 private slots:
     void slotActivated( int index );
@@ -56,7 +59,7 @@ private:
 
     QComboBox* m_combo;
     QLabel* m_label;
-    KSpreadView* m_view;
+    View* m_view;
 
     struct Entry
     {
@@ -67,7 +70,9 @@ private:
     };
     QValueList<Entry> m_entries;
 
-    KSpreadFormat* m_cells[ 16 ];
+    Format* m_cells[ 16 ];
 };
+
+} // namespace KSpread
 
 #endif

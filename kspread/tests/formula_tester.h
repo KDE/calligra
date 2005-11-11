@@ -46,7 +46,7 @@ public:
   virtual QString name();
   virtual void run();
 private:
-  void checkEval( const char *file, int line, const char* msg, const QString&, const KSpreadValue& );
+  void checkEval( const char *file, int line, const char* msg, const QString&, const Value& );
 };
 
 } // namespace KSpread

@@ -30,12 +30,6 @@
 #include <kcombobox.h>
 #include <klineedit.h>
 
-class HighlightRange;
-class KSpreadSheet;
-class KSpreadCanvas;
-class KSpreadView;
-class KSpreadTextEditor;
-class KSpreadLocationEditWidget;
 class KTextEdit;
 class QFont;
 class QButton;
@@ -43,17 +37,22 @@ class QTextCursor;
 
 namespace KSpread
 {
-  class Cell;
-}
+class Cell;
+class HighlightRange;
+class Sheet;
+class Canvas;
+class View;
+class TextEditor;
+class LocationEditWidget;
 
-class KSpreadCellEditor : public QWidget
+class CellEditor : public QWidget
 {
     Q_OBJECT
 public:
-    KSpreadCellEditor( KSpread::Cell*, KSpreadCanvas* _parent = 0, const char* _name = 0 );
-    ~KSpreadCellEditor();
+    CellEditor( Cell*, Canvas* _parent = 0, const char* _name = 0 );
+    ~CellEditor();
 
-    KSpread::Cell* cell()const { return m_pCell; }
+    Cell* cell()const { return m_pCell; }
 
     virtual void handleKeyPressEvent( QKeyEvent* _ev ) = 0;
     virtual void handleIMEvent( QIMEvent * _ev ) = 0;
@@ -67,30 +66,30 @@ public:
     virtual void cut(){};
     virtual void paste(){};
     virtual void copy(){};
-    KSpreadCanvas* canvas()const { return m_pCanvas; }
+    Canvas* canvas()const { return m_pCanvas; }
 
 private:
-    KSpread::Cell* m_pCell;
-    KSpreadCanvas* m_pCanvas;
+    Cell* m_pCell;
+    Canvas* m_pCanvas;
 };
 
 /**
-	Colours cell references in formulas.  Installed by KSpreadTextEditor instances in
+	Colours cell references in formulas.  Installed by TextEditor instances in
 	the constructor.
  */
-class KSpreadTextEditorHighlighter : public QSyntaxHighlighter
+class TextEditorHighlighter : public QSyntaxHighlighter
 {
 	//Q_OBJECT
 
 	public:
 	/**
-	 *	Constructs a KSpreadTextEditorHighlighter to colour-code cell references in a QTextEdit.
+	 *	Constructs a TextEditorHighlighter to colour-code cell references in a QTextEdit.
 	 *
 	 *	@param textEdit The QTextEdit widget which the highlighter should operate on
-	 *	@param sheet The active KSpreadSheet object
+	 *	@param sheet The active Sheet object
 	 */
-		KSpreadTextEditorHighlighter(QTextEdit* textEdit,KSpreadSheet* sheet);
-		virtual ~KSpreadTextEditorHighlighter(){}
+		TextEditorHighlighter(QTextEdit* textEdit,Sheet* sheet);
+		virtual ~TextEditorHighlighter(){}
 
 	/**
 		 *	Called automatically by KTextEditor to highlight text when modified.
@@ -103,9 +102,9 @@ class KSpreadTextEditorHighlighter : public QSyntaxHighlighter
 		 *	reference.
 		 *	@param outCellColor Set to the colour of the cell reference in the QTextEdit widget which the highlighter is installed on.
 
-		KSpread::Cell* cellRefAt(int pos, QColor& outCellColor);
+		Cell* cellRefAt(int pos, QColor& outCellColor);
 	//Returns the cell reference at a given position in the text
-		KSpread::Cell* cellRefAt(int pos) {QColor clr;return cellRefAt(pos,clr);}  */
+		Cell* cellRefAt(int pos) {QColor clr;return cellRefAt(pos,clr);}  */
 
 	/**
 		 *	Gets information about the references found in the formula (cell,colour)
@@ -119,8 +118,8 @@ class KSpreadTextEditorHighlighter : public QSyntaxHighlighter
 	/**	Set spread sheet used for cell reference checking
 		 *	This should be called if the active spreadsheet is changed after the highlighter is constructed.
 	 */
-		void setSheet(KSpreadSheet* sheet) {_sheet=sheet;}
-		KSpreadSheet* sheet() {return _sheet;}
+		void setSheet(Sheet* sheet) {_sheet=sheet;}
+		Sheet* sheet() {return _sheet;}
 
 	/**
 		 *	Returns true if the cell references in the formula have changed since the last call
@@ -140,7 +139,7 @@ class KSpreadTextEditorHighlighter : public QSyntaxHighlighter
 		std::vector<QColor> _colors;
 
 	//Source for cell reference checking
-		KSpreadSheet* _sheet;
+		Sheet* _sheet;
 
 	//Have cell references changed since last call to referencesChanged()?
 		bool _refsChanged;
@@ -153,7 +152,7 @@ class FunctionCompletion : public QObject
     Q_OBJECT
   
 public:
-    FunctionCompletion( KSpreadTextEditor* editor );
+    FunctionCompletion( TextEditor* editor );
     ~FunctionCompletion();
     
     bool eventFilter( QObject *o, QEvent *e );
@@ -171,12 +170,12 @@ private:
 };
 
 
-class KSpreadTextEditor : public KSpreadCellEditor
+class TextEditor : public CellEditor
 {
     Q_OBJECT
 public:
-    KSpreadTextEditor( KSpread::Cell*, KSpreadCanvas* _parent = 0, const char* _name = 0 );
-    ~KSpreadTextEditor();
+    TextEditor( Cell*, Canvas* _parent = 0, const char* _name = 0 );
+    ~TextEditor();
 
     virtual void handleKeyPressEvent( QKeyEvent* _ev );
     virtual void handleIMEvent( QIMEvent * _ev );
@@ -210,7 +209,7 @@ protected:
     void resizeEvent( QResizeEvent* );
     /**
      * Steals some key events from the QLineEdit and sends
-     * it to the @ref KSpreadCancvas ( its parent ) instead.
+     * it to the @ref Cancvas ( its parent ) instead.
      */
     bool eventFilter( QObject* o, QEvent* e );
 
@@ -230,7 +229,7 @@ private:
     uint m_length;
     int  m_fontLength;
 
-    KSpreadTextEditorHighlighter* m_highlighter;
+    TextEditorHighlighter* m_highlighter;
 
     FunctionCompletion* functionCompletion;
     QTimer* functionCompletionTimer;
@@ -238,17 +237,17 @@ private:
 };
 
 
-class KSpreadComboboxLocationEditWidget : public KComboBox
+class ComboboxLocationEditWidget : public KComboBox
 {
     Q_OBJECT
 public:
-    KSpreadComboboxLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
+    ComboboxLocationEditWidget( QWidget *_parent, View * _canvas );
 
 public slots:
     void slotAddAreaName( const QString & );
     void slotRemoveAreaName( const QString & );
 private:
-    KSpreadLocationEditWidget *m_locationWidget;
+    LocationEditWidget *m_locationWidget;
 };
 
 
@@ -256,12 +255,12 @@ private:
  * A widget that allows the user to enter an arbitrary
  * cell location to goto or cell selection to highlight
  */
-class KSpreadLocationEditWidget : public KLineEdit
+class LocationEditWidget : public KLineEdit
 {
     Q_OBJECT
 public:
-    KSpreadLocationEditWidget( QWidget *_parent, KSpreadView * _canvas );
-    KSpreadView * view() const { return m_pView;}
+    LocationEditWidget( QWidget *_parent, View * _canvas );
+    View * view() const { return m_pView;}
 
     void addCompletionItem( const QString &_item );
     void removeCompletionItem( const QString &_item );
@@ -272,7 +271,7 @@ private slots:
 protected:
     virtual void keyPressEvent( QKeyEvent * _ev );
 private:
-    KSpreadView * m_pView;
+    View * m_pView;
     KCompletion completionList;
     bool activateItem();
 signals:
@@ -283,11 +282,11 @@ signals:
  * The widget that appears above the sheet and allows to
  * edit the cells content.
  */
-class KSpreadEditWidget : public QLineEdit
+class EditWidget : public QLineEdit
 {
     Q_OBJECT
 public:
-    KSpreadEditWidget( QWidget *parent, KSpreadCanvas *canvas,
+    EditWidget( QWidget *parent, Canvas *canvas,
                        QButton *cancelButton, QButton *okButton);
 
     virtual void setText( const QString& t );
@@ -307,9 +306,10 @@ protected:
 private:
     QButton* m_pCancelButton;
     QButton* m_pOkButton;
-    KSpreadCanvas* m_pCanvas;
+    Canvas* m_pCanvas;
     bool isArray;
 };
 
+} // namespace KSpread
 
 #endif

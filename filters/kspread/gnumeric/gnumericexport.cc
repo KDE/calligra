@@ -41,26 +41,10 @@
 #include <kspread_sheetprint.h>
 #include <koDocumentInfo.h>
 
+using namespace KSpread;
 
 typedef KGenericFactory<GNUMERICExport, KoFilter> GNUMERICExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libgnumericexport, GNUMERICExportFactory( "kofficefilters" ) )
-
-class Cell
-{
- public:
-    int row, col;
-    QString text;
-    bool operator < ( const Cell & c ) const
-    {
-        return row < c.row || ( row == c.row && col < c.col );
-    }
-    bool operator == ( const Cell & c ) const
-    {
-        return row == c.row && col == c.col;
-    }
-};
-
-
 
 GNUMERICExport::GNUMERICExport(KoFilter *, const char *, const QStringList&) :
 KoFilter()
@@ -70,11 +54,10 @@ KoFilter()
     isLinkItalic = false;
 }
 
-
-/*
+/**
  * This function will check if a cell has any type of border.
  */
-bool GNUMERICExport::hasBorder(KSpread::Cell *cell, int currentcolumn, int currentrow)
+bool GNUMERICExport::hasBorder(Cell *cell, int currentcolumn, int currentrow)
 {
     if ( ( (cell->leftBorderWidth(currentcolumn, currentrow) != 0) &&
            (cell->leftBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) ) ||
@@ -98,7 +81,7 @@ const QString GNUMERICExport::ColorToString(int red, int green, int blue)
     return QString::number(red,16)+":"+QString::number(green,16)+":"+QString::number(blue,16);
 }
 
-QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,KSpread::Cell * cell, int currentcolumn, int currentrow)
+QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell, int currentcolumn, int currentrow)
 {
     QDomElement border_style;
     QDomElement border;
@@ -237,12 +220,12 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,KSpread::Ce
     return border_style;
 }
 
-QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpread::Cell * cell )
+QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell )
 {
     //<gmr:Validation Style="1" Type="1" Operator="7" AllowBlank="true" UseDropdown="false" Title="ghhg" Message="ghghhhjfhfghjfghj&#10;fg&#10;hjgf&#10;hj">
     //        <gmr:Expression0>45</gmr:Expression0>
     //      </gmr:Validation>
-    KSpreadValidity *kspread_validity = cell->getValidity();
+    Validity *kspread_validity = cell->getValidity();
     QDomElement val = gnumeric_doc.createElement( "gmr:Validation" );
     val.setAttribute( "Title", kspread_validity->title );
     val.setAttribute( "Message", kspread_validity->message );
@@ -495,7 +478,7 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, KSpread::Cel
     return val;
 }
 
-QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,KSpread::Cell * cell, int currentcolumn, int currentrow)
+QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,Cell * cell, int currentcolumn, int currentrow)
 {
     QDomElement font_style;
     kdDebug()<<" currentcolumn :"<<currentcolumn<<" currentrow :"<<currentrow<<endl;
@@ -555,7 +538,7 @@ QDomElement GNUMERICExport::GetLinkStyle(QDomDocument gnumeric_doc)
     return link_style;
 }
 
-QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpread::Cell * cell, int currentcolumn, int currentrow)
+QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, int currentcolumn, int currentrow)
 {
     QColorGroup defaultColorGroup = QApplication::palette().active();
 
@@ -643,32 +626,32 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpread::Cell
 
 	cell_style.setAttribute("Fore",QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16) );
 
-    if (cell->align(currentcolumn,currentrow) ==  KSpreadFormat::Undefined)
+ if (cell->align(currentcolumn,currentrow) ==  KSpread::Format::Undefined)
     {
         cell_style.setAttribute("HAlign","1");
     }
-	else if (cell->align(currentcolumn,currentrow) ==  KSpreadFormat::Left)
+    else if (cell->align(currentcolumn,currentrow) ==  KSpread::Format::Left)
 	{
         cell_style.setAttribute("HAlign","2");
     }
-	else if (cell->align(currentcolumn,currentrow) ==  KSpreadFormat::Right)
+    else if (cell->align(currentcolumn,currentrow) ==  KSpread::Format::Right)
 	{
         cell_style.setAttribute("HAlign","4");
 	}
-	else if (cell->align(currentcolumn,currentrow) ==  KSpreadFormat::Center)
+ else if (cell->align(currentcolumn,currentrow) ==  KSpread::Format::Center)
 	{
         cell_style.setAttribute("HAlign","8");
     }
 
-	if (cell->alignY(currentcolumn,currentrow) ==  KSpreadFormat::Top)
+    if (cell->alignY(currentcolumn,currentrow) ==  KSpread::Format::Top)
 	{
 	    cell_style.setAttribute("VAlign","1");
 	}
-	else if (cell->alignY(currentcolumn,currentrow) ==  KSpreadFormat::Bottom)
+ else if (cell->alignY(currentcolumn,currentrow) ==  KSpread::Format::Bottom)
 	{
         cell_style.setAttribute("VAlign","2");
     }
-    else if (cell->alignY(currentcolumn,currentrow) ==  KSpreadFormat::Middle)
+    else if (cell->alignY(currentcolumn,currentrow) ==  KSpread::Format::Middle)
     {
         cell_style.setAttribute("VAlign","4");
 	}
@@ -716,8 +699,8 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,KSpread::Cell
 
 	QString stringFormat;
 
-    KSpreadFormat::Currency c;
-    KSpreadCurrency currency;
+ KSpread::Format::Currency c;
+    Currency currency;
 
 	switch( cell->getFormatType(currentcolumn, currentrow))
 	{
@@ -959,15 +942,15 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     QDomDocument gnumeric_doc=QDomDocument();
 
-    KSpreadSheet* table;
+    Sheet* table;
     KoDocument* document = m_chain->inputDocument();
 
     if (!document)
         return KoFilter::StupidError;
 
-    if (strcmp(document->className(), "KSpreadDoc") != 0)  // it's safer that way :)
+    if (strcmp(document->className(), "Doc") != 0)  // it's safer that way :)
     {
-        kdWarning(30521) << "document isn't a KSpreadDoc but a " << document->className() << endl;
+      kdWarning(30521) << "document isn't a KSpread::Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
     }
     if (to != "application/x-gnumeric" || from != "application/x-kspread")
@@ -976,7 +959,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         return KoFilter::NotImplemented;
     }
 
-    KSpreadDoc* ksdoc = (KSpreadDoc*)document;
+    Doc* ksdoc = (Doc*)document;
 
     if (ksdoc->mimeType() != "application/x-kspread")
     {
@@ -1092,8 +1075,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 
     QString str;
 
-    KSpreadView * view = static_cast<KSpreadView*>( ksdoc->views().getFirst());
-    KSpreadCanvas * canvas=0L;
+    View * view = static_cast<View*>( ksdoc->views().getFirst());
+    Canvas * canvas=0L;
     QString activeTableName;
     if (view)
     {
@@ -1196,7 +1179,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
         if ( _tmpRepeatColumnStart!=0 )
         {
             repeatColumns = gnumeric_doc.createElement( "gmr:repeat_left" );
-            QString value = KSpread::Cell::columnName( _tmpRepeatColumnStart )+"1:"+KSpread::Cell::columnName(_tmpRepeatColumnEnd )+"65536";
+            QString value = Cell::columnName( _tmpRepeatColumnStart )+"1:"+Cell::columnName(_tmpRepeatColumnEnd )+"65536";
             repeatColumns.setAttribute( "value", value );
             tmp.appendChild( repeatColumns );
         }
@@ -1252,8 +1235,8 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
           sheet.appendChild(selections);
         */
         // Ah ah ah - the document is const, but the map and table aren't. Safety: 0.
-        // Either we get hold of KSpreadSheet::m_dctCells and apply the old method below
-        // (for sorting) or, cleaner and already sorted, we use KSpreadSheet's API
+        // Either we get hold of Sheet::m_dctCells and apply the old method below
+        // (for sorting) or, cleaner and already sorted, we use Sheet's API
         // (slower probably, though)
         int iMaxColumn = table->maxColumn();
         int iMaxRow = table->maxRow();
@@ -1342,7 +1325,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
             for (int currentcolumn = 1; currentcolumn <= iMaxColumn; currentcolumn++)
             {
                 QDomElement cell_contents;
-                KSpread::Cell * cell = table->cellAt( currentcolumn, currentrow, false );
+                Cell * cell = table->cellAt( currentcolumn, currentrow, false );
 
                 QString text, style;
                 QDomDocument domLink;
@@ -1378,11 +1361,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
 #if 0
                     switch (cell->content())
                     {
-                    case KSpread::Cell::Text:
+                    case Cell::Text:
                         text = cell->text();
                         isLink = false;
                         break;
-                    case KSpread::Cell::RichText:
+                    case Cell::RichText:
                         // hyperlinks
                         // Extract the cell text
                         isLink = true;
@@ -1413,11 +1396,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                         linkText = text;
 
                         break;
-                    case KSpread::Cell::VisualFormula:
+                    case Cell::VisualFormula:
                         isLink = false;
                         text = cell->text(); // untested
                         break;
-                    case KSpread::Cell::Formula:
+                    case Cell::Formula:
                         isLink = false;
                         QString tmp = cell->text();
                         if ( tmp =="==" )
@@ -1458,7 +1441,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                         //<gmr:CellComment Author="" Text="cvbcvbxcvb&#10;cb&#10;xc&#10;vbxcv&#10;" ObjectBound="A1" ObjectOffset="0 0 0 0" ObjectAnchorType="17 16 17 16" Direction="17"/>
                         cellComment = gnumeric_doc.createElement("gmr:CellComment");
                         cellComment.setAttribute( "Text", cell->comment( currentcolumn, currentrow ) );
-                        QString sCell=QString( "%1%2" ).arg( KSpread::Cell::columnName(currentcolumn ) ).arg( currentrow );
+                        QString sCell=QString( "%1%2" ).arg( Cell::columnName(currentcolumn ) ).arg( currentrow );
 
                         cellComment.setAttribute("ObjectBound", sCell );
                         objects.appendChild(cellComment);
@@ -1548,11 +1531,11 @@ QString GNUMERICExport::convertRefToRange( const QString & table, const QRect & 
   QString s;
   s += table;
   s += "!$";
-  s += KSpread::Cell::columnName( topLeft.x() );
+  s += Cell::columnName( topLeft.x() );
   s += '$';
   s += QString::number( topLeft.y() );
   s += ":$";
-  s += KSpread::Cell::columnName( bottomRight.x() );
+  s += Cell::columnName( bottomRight.x() );
   s += '$';
   s += QString::number( bottomRight.y() );
 
@@ -1567,7 +1550,7 @@ QString GNUMERICExport::convertRefToBase( const QString & table, const QRect & r
   QString s;
   s = table;
   s += "!$";
-  s += KSpread::Cell::columnName( bottomRight.x() );
+  s += Cell::columnName( bottomRight.x() );
   s += '$';
   s += QString::number( bottomRight.y() );
 

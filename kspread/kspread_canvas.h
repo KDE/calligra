@@ -32,31 +32,22 @@
 #ifndef KSPREAD_CANVAS
 #define KSPREAD_CANVAS
 
+#include <vector>
+
 #include <qlineedit.h>
 #include <qtooltip.h>
 #include <qpen.h>
 
-#include "kspread_util.h"
-#include <vector>
-
 #include <koffice_export.h>
 
-class KSpreadEditWidget;
-class KSpreadCanvas;
-class KSpreadHBorder;
-class KSpreadVBorder;
-class KSpreadSheet;
-class KSpreadDoc;
-class KSpreadPoint;
-class KSpreadRange;
-class KSpreadView;
-class KSpreadSelection;
-class KSpreadCellEditor;
+#include "kspread_util.h"
+
+#define YBORDER_WIDTH 50
+#define XBORDER_HEIGHT 20
+
 class QWidget;
 class QTimer;
 class QButton;
-class KSpreadLocationEditWidget;
-class KSpreadComboboxLocationEditWidget;
 class QPainter;
 class QLabel;
 class QScrollBar;
@@ -64,11 +55,20 @@ class KoRect;
 
 namespace KSpread
 {
-  class Cell;
-}
-
-#define YBORDER_WIDTH 50
-#define XBORDER_HEIGHT 20
+class Cell;
+class EditWidget;
+class Canvas;
+class HBorder;
+class VBorder;
+class Sheet;
+class Doc;
+class Point;
+class Range;
+class View;
+class Selection;
+class CellEditor;
+class LocationEditWidget;
+class ComboboxLocationEditWidget;
 
 class CanvasPrivate;
 class HighlightRange;
@@ -81,11 +81,11 @@ class HighlightRange;
  * That means that this class knows what to do when a key is pressed
  * or if the mouse button was clicked.
  */
-class KSPREAD_EXPORT KSpreadCanvas : public QWidget
+class KSPREAD_EXPORT Canvas : public QWidget
 {
-    friend class KSpreadHBorder;
-    friend class KSpreadVBorder;
-    friend class KSpreadView;
+    friend class HBorder;
+    friend class VBorder;
+    friend class View;
 
     Q_OBJECT
 public:
@@ -96,20 +96,20 @@ public:
     enum MouseActions { NoAction = 0, Mark = 1, ResizeCell = 2, AutoFill = 3 };
     enum EditorType { CellEditor, FormulaEditor, EditWidget };
 
-    KSpreadCanvas (KSpreadView *_view);
-    ~KSpreadCanvas( );
+    Canvas (View *_view);
+    ~Canvas( );
     
-    KSpreadView* view();
-    KSpreadDoc* doc();
+    View* view();
+    Doc* doc();
 
     /**
-     * Called from @ref KSpreadView to complete the construction. Has to
+     * Called from @ref View to complete the construction. Has to
      * be called before any other method on this object may be invoced.
      */
     void init();
 
-    KSpreadEditWidget* editWidget() const;
-    KSpreadCellEditor* editor() const;
+    KSpread::EditWidget* editWidget() const;
+    KSpread::CellEditor* editor() const;
 
 
   /**
@@ -120,7 +120,7 @@ public:
      */
     int chooseTextLen() const;
 
-    KSpreadSelection* selectionInfo() const;
+    Selection* selectionInfo() const;
     QRect selection() const;
     QPoint marker() const;
     int markerColumn() const;
@@ -154,21 +154,21 @@ public:
      */
     QRect visibleCells();
 
-    KSpreadSheet* activeSheet() const;
-    KSpreadSheet* findSheet( const QString& _name ) const;
+    Sheet* activeSheet() const;
+    Sheet* findSheet( const QString& _name ) const;
 
     /**
      * A convenience function.
      */
-    bool gotoLocation( const KSpreadRange & _range );
+    bool gotoLocation( const Range & _range );
     /**
      * A convenience function.
      */
-    bool gotoLocation( const KSpreadPoint& _cell );
+    bool gotoLocation( const Point& _cell );
 
     /**
      * Move the cursor to the specified cell. This may include switching
-     * the sheet. In addition @ref #KSpreadView::updateEditWidget is called.
+     * the sheet. In addition @ref #View::updateEditWidget is called.
      *
      * @param location the cell to move to
      *
@@ -182,13 +182,13 @@ public:
      *                        selected, and the selection anchor will be reset
      *                        to this cell.
      */
-    void gotoLocation( QPoint const & location, KSpreadSheet* sheet = NULL,
+    void gotoLocation( QPoint const & location, Sheet* sheet = NULL,
                        bool extendSelection = false);
 
     /**
      * convenience function
      */
-    void gotoLocation( int col, int row, KSpreadSheet* sheet = NULL,
+    void gotoLocation( int col, int row, Sheet* sheet = NULL,
                        bool extendSelection = false)
     {gotoLocation(QPoint(col, row), sheet, extendSelection);}
 
@@ -223,10 +223,10 @@ public:
     void deleteEditor (bool saveChanges, bool array = false);
 
     /**
-     * Called from @ref KSpreadEditWidget and KSpreadCellEditor
+     * Called from @ref EditWidget and CellEditor
      * if they loose the focus because the user started a "choose selection".
      * This is done because the editor wants to get its focus back afterwards.
-     * But somehow KSpreadCanvas must know whether the EditWidget or the CellEditor
+     * But somehow Canvas must know whether the EditWidget or the CellEditor
      * lost the focus when the user clicked on the canvas.
      */
     void setLastEditorWithFocus( EditorType type );
@@ -258,7 +258,7 @@ public:
 
     // Created by the view since it's layout is managed there,
     // but is in fact a sibling of the canvas, which needs to know about it.
-    void setEditWidget( KSpreadEditWidget * ew );
+    void setEditWidget( KSpread::EditWidget * ew );
 
     virtual bool focusNextPrevChild( bool );
 
@@ -339,7 +339,7 @@ protected:
     /**
      * Checks to see if there is a size grip for a highlight range at a given position. 
      * Note that both X and Y coordinates are UNZOOMED.  To translate from a zoomed coordinate (eg. position of a mouse event) to
-     * an unzoomed coordinate, use KSpreadDoc::unzoomItX and KSpreadDoc::unzoomItY.  The document object
+     * an unzoomed coordinate, use Doc::unzoomItX and Doc::unzoomItY.  The document object
      * can be accessed via view()->doc()
      * @param x Unzoomed x coordinate to check
      * @param y Unzoomed y coordinate to check
@@ -358,8 +358,8 @@ private:
 
     virtual bool eventFilter( QObject *o, QEvent *e );
 
-    KSpreadHBorder* hBorderWidget() const;
-    KSpreadVBorder* vBorderWidget() const;
+    HBorder* hBorderWidget() const;
+    VBorder* vBorderWidget() const;
     QScrollBar* horzScrollBar() const;
     QScrollBar* vertScrollBar() const;
 
@@ -432,7 +432,7 @@ private:
   * This is used for drawing the thick border around the current selection or highlights around cell range
   * references.
   * The results do not take into account the current zoom factor of the sheet,
-  * use KSpreadDoc::zoomRect on @p visibleRect after calling this function to get a new rectangle taking
+  * use Doc::zoomRect on @p visibleRect after calling this function to get a new rectangle taking
   * the zoom level into account.
   * @param sheetArea The range of cells on the current sheet
   * @param visibleRect This is set to the visible region occupied by the given range of cells
@@ -461,7 +461,7 @@ private:
   bool formatKeyPress( QKeyEvent * _ev );
   
   /** helper method for formatKeyPress */
-  bool formatCellByKey (KSpread::Cell *cell, int key, const QRect &rect);
+  bool formatCellByKey (Cell *cell, int key, const QRect &rect);
   
   void processClickSelectionHandle(QMouseEvent *event);
   void processLeftClickAnchor();
@@ -507,7 +507,7 @@ private:
    * cells really should look different with the new selection rather than repainting
    * the entire area
    */
-  void setSelectionChangePaintDirty(KSpreadSheet* sheet,
+  void setSelectionChangePaintDirty(Sheet* sheet,
                                     QRect area1, QRect area2);
 
 private:
@@ -517,12 +517,12 @@ private:
 
 /**
  */
-class KSpreadHBorder : public QWidget
+class HBorder : public QWidget
 {
     Q_OBJECT
 public:
-    KSpreadHBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view  );
-    ~KSpreadHBorder();
+    HBorder( QWidget *_parent, Canvas *_canvas, View *_view  );
+    ~HBorder();
 
     int markerColumn() const { return  m_iSelectionAnchor; }
     void resizeColumn( double resize, int nb = -1, bool makeUndo = true );
@@ -548,8 +548,8 @@ protected:
     void paintSizeIndicator( int mouseX, bool firstTime );
 
 private:
-    KSpreadCanvas *m_pCanvas;
-    KSpreadView *m_pView;
+    Canvas *m_pCanvas;
+    View *m_pView;
     QTimer * m_scrollTimer;
 
     /**
@@ -602,12 +602,12 @@ private:
 
 /**
  */
-class KSpreadVBorder : public QWidget
+class VBorder : public QWidget
 {
     Q_OBJECT
 public:
-    KSpreadVBorder( QWidget *_parent, KSpreadCanvas *_canvas, KSpreadView *_view );
-    ~KSpreadVBorder();
+    VBorder( QWidget *_parent, Canvas *_canvas, View *_view );
+    ~VBorder();
 
     int markerRow() const { return  m_iSelectionAnchor; }
     void resizeRow( double resize, int nb = -1, bool makeUndo = true );
@@ -631,8 +631,8 @@ protected:
     void paintSizeIndicator( int mouseY, bool firstTime );
 
 private:
-    KSpreadCanvas *m_pCanvas;
-    KSpreadView *m_pView;
+    Canvas *m_pCanvas;
+    View *m_pView;
     QTimer * m_scrollTimer;
 
     bool m_bSelection;
@@ -651,13 +651,13 @@ private:
     bool m_bMousePressed;
 };
 
-/*
+/**
  * Tooltip, which displays the comment and cell content, when it's too short
  */
-class KSpreadToolTip : public QToolTip
+class ToolTip : public QToolTip
 {
 public:
-    KSpreadToolTip( KSpreadCanvas* canvas );
+    ToolTip( Canvas* canvas );
 
 protected:
     /**
@@ -666,7 +666,9 @@ protected:
     void maybeTip( const QPoint& p );
 
 private:
-    KSpreadCanvas* m_canvas;
+    Canvas* m_canvas;
 };
+
+} // namespace KSpread
 
 #endif // KSPREAD_CANVAS

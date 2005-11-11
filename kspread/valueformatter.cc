@@ -45,7 +45,7 @@ QString ValueFormatter::formatText (Cell *cell, FormatType fmtType)
 
   QString str;
   
-  KSpreadFormat::FloatFormat floatFormat =
+  Format::FloatFormat floatFormat =
       cell->floatFormat (cell->column(), cell->row());
   int precision = cell->precision (cell->column(), cell->row());
   QString prefix = cell->prefix (cell->column(), cell->row());
@@ -55,8 +55,8 @@ QString ValueFormatter::formatText (Cell *cell, FormatType fmtType)
       floatFormat, prefix, postfix);
 }
 
-QString ValueFormatter::formatText (const KSpreadValue &value,
-    FormatType fmtType, int precision, KSpreadFormat::FloatFormat floatFormat,
+QString ValueFormatter::formatText (const Value &value,
+    FormatType fmtType, int precision, Format::FloatFormat floatFormat,
     const QString &prefix, const QString &postfix)
 {
   //if we have an array, use its first element
@@ -125,12 +125,12 @@ QString ValueFormatter::formatText (const KSpreadValue &value,
   return str;
 }
 
-FormatType ValueFormatter::determineFormatting (const KSpreadValue &value,
+FormatType ValueFormatter::determineFormatting (const Value &value,
     FormatType fmtType)
 {
   //if the cell value is a string, then we want to display it as-is,
   //no matter what, same if the cell is empty
-  if (value.isString () || (value.format() == KSpreadValue::fmt_None))
+  if (value.isString () || (value.format() == Value::fmt_None))
     return Text_format;
   //same if we're supposed to display string, no matter what we actually got
   if (fmtType == Text_format)
@@ -140,36 +140,36 @@ FormatType ValueFormatter::determineFormatting (const KSpreadValue &value,
   if (fmtType == Generic_format)
   {
     //here we decide based on value's format...
-    KSpreadValue::Format fmt = value.format();
+    Value::Format fmt = value.format();
     switch (fmt) {
-      case KSpreadValue::fmt_None:
+      case Value::fmt_None:
         fmtType = Text_format;
       break;
-      case KSpreadValue::fmt_Boolean:
+      case Value::fmt_Boolean:
         fmtType = Text_format;
       break;
-      case KSpreadValue::fmt_Number:
+      case Value::fmt_Number:
         if (value.asFloat() > 1e+10)
           fmtType = Scientific_format;
         else
           fmtType = Number_format;
       break;
-      case KSpreadValue::fmt_Percent:
+      case Value::fmt_Percent:
         fmtType = Percentage_format;
       break;
-      case KSpreadValue::fmt_Money:
+      case Value::fmt_Money:
         fmtType = Money_format;
       break;
-      case KSpreadValue::fmt_DateTime:
+      case Value::fmt_DateTime:
         fmtType = TextDate_format;
       break;
-      case KSpreadValue::fmt_Date:
+      case Value::fmt_Date:
         fmtType = ShortDate_format;
       break;
-      case KSpreadValue::fmt_Time:
+      case Value::fmt_Time:
         fmtType = Time_format;
       break;
-      case KSpreadValue::fmt_String:
+      case Value::fmt_String:
         //this should never happen
         fmtType = Text_format;
       break;

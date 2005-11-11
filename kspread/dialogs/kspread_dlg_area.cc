@@ -21,22 +21,22 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qlineedit.h>
 
+#include <kmessagebox.h>
 
-#include "kspread_dlg_area.h"
 #include "kspread_view.h"
 #include "kspread_sheet.h"
 #include "kspread_doc.h"
 #include "kspread_locale.h"
 
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qlineedit.h>
-#include <kmessagebox.h>
+#include "kspread_dlg_area.h"
 
 using namespace KSpread;
 
-KSpreadarea::KSpreadarea( KSpreadView * parent, const char * name, const QPoint & _marker )
+AreaDialog::AreaDialog( View * parent, const char * name, const QPoint & _marker )
   : KDialogBase( parent, name, TRUE, i18n("Area Name"), Ok | Cancel )
 {
   m_pView  = parent;
@@ -60,12 +60,12 @@ KSpreadarea::KSpreadarea( KSpreadView * parent, const char * name, const QPoint 
 
 }
 
-void KSpreadarea::slotAreaNamechanged( const QString & text)
+void AreaDialog::slotAreaNamechanged( const QString & text)
 {
   enableButtonOK(!text.isEmpty());
 }
 
-void KSpreadarea::slotOk()
+void AreaDialog::slotOk()
 {
   QString tmp(m_areaName->text());
   if( !tmp.isEmpty() )

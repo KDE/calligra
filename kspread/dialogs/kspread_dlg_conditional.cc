@@ -47,7 +47,7 @@
 
 using namespace KSpread;
 
-KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char* name, WFlags fl )
+ConditionalWidget::ConditionalWidget( QWidget* parent, const char* name, WFlags fl )
     : QWidget( parent, name, fl )
 {
   QGridLayout * Form1Layout = new QGridLayout( this, 1, 1, 11, 6, "Form1Layout");
@@ -194,11 +194,11 @@ KSpreadConditionalWidget::KSpreadConditionalWidget( QWidget* parent, const char*
   connect( m_condition_3, SIGNAL( highlighted( const QString & ) ), this, SLOT( slotTextChanged3( const QString & ) ) );
 }
 
-KSpreadConditionalWidget::~KSpreadConditionalWidget()
+ConditionalWidget::~ConditionalWidget()
 {
 }
 
-void KSpreadConditionalWidget::slotTextChanged1( const QString & text )
+void ConditionalWidget::slotTextChanged1( const QString & text )
 {
   if ( text == i18n( "<none>" ) )
   {
@@ -223,7 +223,7 @@ void KSpreadConditionalWidget::slotTextChanged1( const QString & text )
   }
 }
 
-void KSpreadConditionalWidget::slotTextChanged2( const QString & text )
+void ConditionalWidget::slotTextChanged2( const QString & text )
 {
   if ( text == i18n( "<none>" ) )
   {
@@ -248,7 +248,7 @@ void KSpreadConditionalWidget::slotTextChanged2( const QString & text )
   }
 }
 
-void KSpreadConditionalWidget::slotTextChanged3( const QString & text )
+void ConditionalWidget::slotTextChanged3( const QString & text )
 {
   if ( text == i18n( "<none>" ) )
   {
@@ -275,14 +275,12 @@ void KSpreadConditionalWidget::slotTextChanged3( const QString & text )
 /**
  * Dialog
  */
-
-
-KSpreadConditionalDlg::KSpreadConditionalDlg( KSpreadView * parent, const char * name,
+ConditionalDialog::ConditionalDialog( View * parent, const char * name,
                                               const QRect & marker )
   : KDialogBase( parent, name, true, "", KDialogBase::Ok | KDialogBase::Cancel,
                  KDialogBase::Ok, false ),
     m_view( parent ),
-    m_dlg( new KSpreadConditionalWidget( this ) ),
+    m_dlg( new ConditionalWidget( this ) ),
     m_marker( marker )
 {
   QStringList list( m_view->doc()->styleManager()->styleNames() );
@@ -298,15 +296,15 @@ KSpreadConditionalDlg::KSpreadConditionalDlg( KSpreadView * parent, const char *
   init();
 }
 
-void KSpreadConditionalDlg::init()
+void ConditionalDialog::init()
 {
-  QValueList<KSpreadConditional> conditionList;
-  QValueList<KSpreadConditional> otherList;
+  QValueList<KSpread::Conditional> conditionList;
+  QValueList<KSpread::Conditional> otherList;
   bool found;
   int numCondition;
 
-  QValueList<KSpreadConditional>::iterator it1;
-  QValueList<KSpreadConditional>::iterator it2;
+  QValueList<KSpread::Conditional>::iterator it1;
+  QValueList<KSpread::Conditional>::iterator it2;
 
   Cell * obj = m_view->activeSheet()->cellAt( m_marker.left(),
                                                      m_marker.top() );
@@ -413,7 +411,7 @@ void KSpreadConditionalDlg::init()
   }
 }
 
-void KSpreadConditionalDlg::init( KSpreadConditional const & tmp, int numCondition )
+void ConditionalDialog::init( KSpread::Conditional const & tmp, int numCondition )
 {
   kdDebug() << "Adding " << numCondition << endl;
   QComboBox * cb  = 0;
@@ -516,9 +514,9 @@ void KSpreadConditionalDlg::init( KSpreadConditional const & tmp, int numConditi
   }
 }
 
-Conditional KSpreadConditionalDlg::typeOfCondition( QComboBox const * const cb ) const
+::Conditional ConditionalDialog::typeOfCondition( QComboBox const * const cb ) const
 {
-  Conditional result = None;
+  ::Conditional result = None;
   switch( cb->currentItem() )
   {
    case 0 :
@@ -556,7 +554,7 @@ Conditional KSpreadConditionalDlg::typeOfCondition( QComboBox const * const cb )
   return result;
 }
 
-bool KSpreadConditionalDlg::checkInputData( KLineEdit const * const edit1,
+bool ConditionalDialog::checkInputData( KLineEdit const * const edit1,
                                             KLineEdit const * const edit2 )
 {
   bool b1 = false;
@@ -580,7 +578,7 @@ bool KSpreadConditionalDlg::checkInputData( KLineEdit const * const edit1,
   return true;
 }
 
-bool KSpreadConditionalDlg::checkInputData()
+bool ConditionalDialog::checkInputData()
 {
   if ( m_dlg->m_firstValue_1->isEnabled() && !checkInputData( m_dlg->m_firstValue_1, m_dlg->m_secondValue_1 ) )
     return false;
@@ -592,9 +590,9 @@ bool KSpreadConditionalDlg::checkInputData()
   return true;
 }
 
-bool KSpreadConditionalDlg::getCondition( KSpreadConditional & newCondition, const QComboBox * cb,
+bool ConditionalDialog::getCondition( KSpread::Conditional & newCondition, const QComboBox * cb,
                                           const KLineEdit * edit1, const KLineEdit * edit2,
-                                          const QComboBox * sb, KSpreadStyle * style )
+                                          const QComboBox * sb, Style * style )
 {
   if ( !cb->isEnabled() )
     return false;
@@ -638,7 +636,7 @@ bool KSpreadConditionalDlg::getCondition( KSpreadConditional & newCondition, con
   return true;
 }
 
-void KSpreadConditionalDlg::slotOk()
+void ConditionalDialog::slotOk()
 {
   kdDebug() << "slotOk" << endl;
 
@@ -648,11 +646,11 @@ void KSpreadConditionalDlg::slotOk()
   kdDebug() << "Input data is valid" << endl;
 
   m_view->doc()->emitBeginOperation( false );
-  KSpreadStyleManager * manager = m_view->doc()->styleManager();
+  StyleManager * manager = m_view->doc()->styleManager();
 
-  QValueList<KSpreadConditional> newList;
+  QValueList<KSpread::Conditional> newList;
 
-  KSpreadConditional newCondition;
+  KSpread::Conditional newCondition;
 
   if ( getCondition( newCondition, m_dlg->m_condition_1, m_dlg->m_firstValue_1,
                      m_dlg->m_secondValue_1, m_dlg->m_style_1, manager->style( m_dlg->m_style_1->currentText() ) ) )

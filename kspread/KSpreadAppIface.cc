@@ -31,34 +31,36 @@
 #include <dcopclient.h>
 #include <kapplication.h>
 
-KSpreadAppIface::KSpreadAppIface()
+using namespace KSpread;
+
+AppIface::AppIface()
     : DCOPObject( "Application" )
 {
 }
 
-DCOPRef KSpreadAppIface::createDoc()
+DCOPRef AppIface::createDoc()
 {
-    KSpreadDoc* doc = new KSpreadDoc();
+    Doc* doc = new Doc();
     doc->initDoc(KoDocument::InitDocFileNew);
 
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );
 }
 
-DCOPRef KSpreadAppIface::createDoc( const QString& name )
+DCOPRef AppIface::createDoc( const QString& name )
 {
     // ######### Torben: Check for duplicate names here
-    KSpreadDoc* doc = new KSpreadDoc( 0, name.latin1() );
+    Doc* doc = new Doc( 0, name.latin1() );
     doc->initDoc( KoDocument::InitDocEmpty, 0 );
 
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );
 }
 
-QMap<QString,DCOPRef> KSpreadAppIface::documents()
+QMap<QString,DCOPRef> AppIface::documents()
 {
     QMap<QString,DCOPRef> map;
 
-    QValueList<KSpreadDoc*> lst = KSpreadDoc::documents();
-    QValueListIterator<KSpreadDoc*> it = lst.begin();
+    QValueList<Doc*> lst = Doc::documents();
+    QValueListIterator<Doc*> it = lst.begin();
     for( ; it != lst.end(); ++it )
     {
 	map[ QString( (*it)->name() ) ] =
@@ -68,10 +70,10 @@ QMap<QString,DCOPRef> KSpreadAppIface::documents()
     return map;
 }
 
-DCOPRef KSpreadAppIface::document( const QString& name )
+DCOPRef AppIface::document( const QString& name )
 {
-    QValueList<KSpreadDoc*> lst = KSpreadDoc::documents();
-    QValueListIterator<KSpreadDoc*> it = lst.begin();
+    QValueList<Doc*> lst = Doc::documents();
+    QValueListIterator<Doc*> it = lst.begin();
     for( ; it != lst.end(); ++it )
 	if ( name == (*it)->name() )
 	    return DCOPRef( kapp->dcopClient()->appId(), (*it)->dcopObject()->objId() );

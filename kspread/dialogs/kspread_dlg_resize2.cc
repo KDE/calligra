@@ -24,25 +24,28 @@
 */
 
 #include <float.h>
+
+#include <qlabel.h>
 #include <qlayout.h>
 
 #include <knuminput.h>
 
 #include <koUnit.h>
-#include <koUnitWidgets.h>//for KoUnitDoubleSpinBox
+#include <koUnitWidgets.h>
 
-#include "kspread_dlg_resize2.h"
-#include <kspread_global.h>
 #include <kspread_canvas.h>
-#include <kspread_sheet.h>
 #include <kspread_doc.h>
+#include <kspread_global.h>
 #include <kspread_locale.h>
+#include <kspread_sheet.h>
 #include <kspread_undo.h>
 #include <kspread_view.h>
-#include <koUnitWidgets.h>
-#include <qlabel.h>
 
-KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
+#include "kspread_dlg_resize2.h"
+
+using namespace KSpread;
+
+ResizeRow::ResizeRow( View* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n("Resize Row"), Ok|Cancel|Default )
 {
     m_pView = parent;
@@ -81,7 +84,7 @@ KSpreadResizeRow::KSpreadResizeRow( KSpreadView* parent, const char* name )
     rowHeight = m_pHeight->value();
 }
 
-void KSpreadResizeRow::slotOk()
+void ResizeRow::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     double height = m_pHeight->value();
@@ -93,7 +96,7 @@ void KSpreadResizeRow::slotOk()
 
         if ( !m_pView->doc()->undoLocked() )
         {
-            KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeSheet(), selection );
+            UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), m_pView->activeSheet(), selection );
             m_pView->doc()->addCommand( undo );
         }
 
@@ -105,12 +108,12 @@ void KSpreadResizeRow::slotOk()
     accept();
 }
 
-void KSpreadResizeRow::slotDefault()
+void ResizeRow::slotDefault()
 {
     m_pHeight->setValue( POINT_TO_MM( heightOfRow ) );
 }
 
-KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name )
+ResizeColumn::ResizeColumn( View* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n("Resize Column"), Ok|Cancel|Default )
 {
     m_pView = parent;
@@ -149,7 +152,7 @@ KSpreadResizeColumn::KSpreadResizeColumn( KSpreadView* parent, const char* name 
     columnWidth = m_pWidth->value();
 }
 
-void KSpreadResizeColumn::slotOk()
+void ResizeColumn::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     double width = m_pWidth->value();
@@ -161,7 +164,7 @@ void KSpreadResizeColumn::slotOk()
 
         if ( !m_pView->doc()->undoLocked() )
         {
-            KSpreadUndoResizeColRow *undo = new KSpreadUndoResizeColRow( m_pView->doc(), m_pView->activeSheet(), selection );
+            UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), m_pView->activeSheet(), selection );
             m_pView->doc()->addCommand( undo );
         }
 
@@ -174,7 +177,7 @@ void KSpreadResizeColumn::slotOk()
     accept();
 }
 
-void KSpreadResizeColumn::slotDefault()
+void ResizeColumn::slotDefault()
 {
     m_pWidth->setValue( POINT_TO_MM(colWidth ) );
 }

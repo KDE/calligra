@@ -24,30 +24,31 @@
 #include <qrect.h>
 #include <qdatetime.h>
 
+#include <koffice_export.h>
+
 #include "kspread_global.h"
 #include "kspread_value.h"
-#include <koffice_export.h>
-class KSpreadMap;
-class KSpreadSheet;
-class KLocale;
 
 class QFont;
 class QPen;
 class QDomElement;
 class QDomDocument;
 
+class KLocale;
+
 namespace KSpread
 {
 class Cell;
-}
+class Map;
+class Sheet;
 
-struct KSPREAD_EXPORT KSpreadPoint
+struct KSPREAD_EXPORT Point
 {
 public:
-  KSpreadPoint() { pos.setX( -1 ); sheet = 0; columnFixed = false; rowFixed = false; }
-  KSpreadPoint( const QString& );
-  KSpreadPoint( const QString&, KSpreadMap*, KSpreadSheet* default_sheet = 0 );
-  KSpreadPoint( const KSpreadPoint& c ) {
+  Point() { pos.setX( -1 ); sheet = 0; columnFixed = false; rowFixed = false; }
+  Point( const QString& );
+  Point( const QString&, Map*, Sheet* default_sheet = 0 );
+  Point( const Point& c ) {
     pos = c.pos;
     sheet = c.sheet; sheetName = c.sheetName;
     columnFixed = c.columnFixed;
@@ -57,10 +58,10 @@ public:
   bool isValid() const { return ( pos.x() >= 0 && ( sheet != 0 || sheetName.isEmpty() ) ); }
   bool isSheetKnown() const { return ( !sheetName.isEmpty() && sheet != 0 ); }
 
-  KSpread::Cell* cell() const;
+  Cell* cell() const;
 
-  bool operator== (const KSpreadPoint &cell) const;
-  bool operator< (const KSpreadPoint &cell) const;
+  bool operator== (const Point &cell) const;
+  bool operator< (const Point &cell) const;
 
   int row () const { return pos.y(); };
   int column () const { return pos.x(); };
@@ -75,11 +76,11 @@ public:
   bool rowFixed() const { return m_rowFixed; }
   QPoint pos() const { return m_pos; }
   QString sheetName() const { return m_sheetName; }
-  KSpreadSheet* sheet() const { return m_sheet; }
+  Sheet* sheet() const { return m_sheet; }
 
 private:
   */
-  KSpreadSheet* sheet;
+  Sheet* sheet;
   QString sheetName;
   QPoint pos;
   bool columnFixed;
@@ -89,17 +90,17 @@ private:
   void init( const QString& );
 };
 
-struct KSPREAD_EXPORT KSpreadRange
+struct KSPREAD_EXPORT Range
 {
-  KSpreadRange();
-  KSpreadRange( const QString& );
-  KSpreadRange( const QString&, KSpreadMap*, KSpreadSheet* default_sheet = 0 );
-  KSpreadRange( const KSpreadRange& r ) {
+  Range();
+  Range( const QString& );
+  Range( const QString&, Map*, Sheet* default_sheet = 0 );
+  Range( const Range& r ) {
     sheet = r.sheet;
     sheetName = r.sheetName;
     range = r.range;
   }
-  KSpreadRange( const KSpreadPoint& ul, const KSpreadPoint& lr )
+  Range( const Point& ul, const Point& lr )
   {
     range = QRect( ul.pos, lr.pos );
     if ( ul.sheetName != lr.sheetName )
@@ -118,10 +119,10 @@ struct KSPREAD_EXPORT KSpreadRange
   bool isValid() const;
   bool isSheetKnown() const { return ( !sheetName.isEmpty() && sheet != 0 ); }
 
-  /** Fills a KSpreadPoint with info (row,column,sheet) about the first point in the range */
-  void getStartPoint(KSpreadPoint* pt);
-  /** Fills a KSpreadPoint with info (row,column,sheet) about the last point the range */
-  void getEndPoint(KSpreadPoint* pt);
+  /** Fills a Point with info (row,column,sheet) about the first point in the range */
+  void getStartPoint(Point* pt);
+  /** Fills a Point with info (row,column,sheet) about the last point the range */
+  void getEndPoint(Point* pt);
 
   int startRow () const { return range.top(); };
   int startCol () const { return range.left(); };
@@ -133,15 +134,15 @@ struct KSPREAD_EXPORT KSpreadRange
   { range=QRect(newStartCol,newStartRow,newEndCol-newStartCol,newEndRow-newStartRow); }
 
   /** does this range contain the given cell? */
-  bool contains (const KSpreadPoint &cell) const;
+  bool contains (const Point &cell) const;
   /** do these two ranges have at least one common cell? */
-  bool intersects (const KSpreadRange &r) const;
+  bool intersects (const Range &r) const;
 
   /** returns a string representation of this range, ie.
      " SheetName! [StartCell] : [EndCell] " */
   QString toString();
 
-  KSpreadSheet* sheet;
+  Sheet* sheet;
   QString sheetName;
   QString namedArea;
   QRect range;
@@ -159,41 +160,41 @@ TODO: use this as selection
 TODO: anything I forgot ;)
 */
 struct RangeList {
-  QValueList<KSpreadPoint> cells;
-  QValueList<KSpreadRange> ranges;
+  QValueList<Point> cells;
+  QValueList<Range> ranges;
 };
 
 
 /**
- * KSpreadRangeIterator
+ * RangeIterator
  *
  * Class to simplify the process of iterating through each cell in a
  * range that has already been allocated
  */
-class KSpreadRangeIterator
+class RangeIterator
 {
 public:
   /**
    * Contstruct the iterator with the rectangular cell area and which
    * sheet the area is on
    */
-  KSpreadRangeIterator(QRect _range, KSpreadSheet* _sheet);
-  ~KSpreadRangeIterator();
+  RangeIterator(QRect _range, Sheet* _sheet);
+  ~RangeIterator();
 
   /**
    * @return the first allocated cell in the area
    */
-  KSpread::Cell* first();
+  Cell* first();
 
   /**
    * @return the next allocated cell in the area after the previous one
    * retrieved, or NULL if it was the last one.
    */
-  KSpread::Cell* next();
+  Cell* next();
 private:
 
   QRect range;
-  KSpreadSheet* sheet;
+  Sheet* sheet;
   QPoint current;
 };
 
@@ -205,7 +206,7 @@ bool formatIsFraction (FormatType fmt);
 
 
 KSPREAD_EXPORT QString util_rangeName( const QRect &_area );
-KSPREAD_EXPORT QString util_rangeName( KSpreadSheet *_sheet, const QRect &_area );
+KSPREAD_EXPORT QString util_rangeName( Sheet *_sheet, const QRect &_area );
 QString util_rangeColumnName( const QRect &_area);
 QString util_rangeRowName( const QRect &_area);
 
@@ -244,5 +245,6 @@ QPen convertOasisStringToPen( const QString &str );
 //Return true when it's a reference to cell from sheet.
 KSPREAD_EXPORT bool localReferenceAnchor( const QString &_ref );
 
+} // namespace KSpread
 
 #endif

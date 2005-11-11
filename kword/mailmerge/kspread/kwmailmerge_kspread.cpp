@@ -98,7 +98,7 @@ bool KWMailMergeKSpread::showConfigDialog( QWidget *parent, int )
 
 void KWMailMergeKSpread::initDocument()
 {
-  _document = new KSpreadDoc();
+  _document = new Doc();
 
   connect( _document, SIGNAL( completed() ), SLOT( initSpreadSheets() ) );
 
@@ -111,7 +111,7 @@ void KWMailMergeKSpread::initSpreadSheets()
   _columnMap.clear();
   sampleRecord.clear();
 
-  QPtrListIterator<KSpreadSheet> it( _document->map()->sheetList() );
+  QPtrListIterator<Sheet> it( _document->map()->sheetList() );
   int counter = 0;
   for ( it.toFirst(); it.current(), counter < _spreadSheetNumber; ++it ) {
     _sheet = it.current();

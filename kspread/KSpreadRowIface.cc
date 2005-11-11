@@ -24,38 +24,40 @@
 #include "kspread_format.h"
 #include <qbrush.h>
 
-KSpreadRowIface::KSpreadRowIface(RowFormat *_lay)
-    :KSpreadLayoutIface(_lay)
+using namespace KSpread;
+
+RowIface::RowIface(RowFormat *_lay)
+    :LayoutIface(_lay)
 {
     m_rowLayout=_lay;
 }
 
-void KSpreadRowIface::update()
+void RowIface::update()
 {
     //todo
 }
 
-int KSpreadRowIface::row()
+int RowIface::row()
 {
     return m_rowLayout->row();
 }
 
-void KSpreadRowIface::setHide(bool _hide)
+void RowIface::setHide(bool _hide)
 {
     m_rowLayout->setHide(_hide);
 }
 
-bool KSpreadRowIface::isHide()const
+bool RowIface::isHide()const
 {
     return m_rowLayout->isHide();
 }
 
-void KSpreadRowIface::setHeight( int _h )
+void RowIface::setHeight( int _h )
 {
     m_rowLayout->setHeight(_h);
 }
 
-int KSpreadRowIface::height()
+int RowIface::height()
 {
     return m_rowLayout->height();
 }

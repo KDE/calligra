@@ -37,20 +37,22 @@ class QPushButton;
 class QRadioButton;
 class QTable;
 
-class KSpreadView;
+
+namespace KSpread
+{
+class View;
 
 /**
  * Provides dialog for managing CSV (comma separated value) data.
  *
- * Currently KSpreadCSVDialog is used for converting text into columns,
+ * Currently CSVDialog is used for converting text into columns,
  * inserting text file and pasting text from clipboard, where conversion
  * from CSV (comma separated value) data is is all required. 
  * The different purposed mentioned above is determined
  * using mode, which can be Column, File, or Clipboard respectively.
  *
 */
-
-class KSpreadCSVDialog : public KDialogBase
+class CSVDialog : public KDialogBase
 {
   Q_OBJECT
 
@@ -59,9 +61,9 @@ class KSpreadCSVDialog : public KDialogBase
   enum Mode { Clipboard, File, Column };
   enum Header { TEXT, NUMBER, DATE, CURRENCY };
 
-  KSpreadCSVDialog( KSpreadView * parent, const char * name, QRect const & rect, Mode mode);
+  CSVDialog( View * parent, const char * name, QRect const & rect, Mode mode);
 
-  ~KSpreadCSVDialog();
+  ~CSVDialog();
 
   bool cancelled();
 
@@ -70,7 +72,7 @@ class KSpreadCSVDialog : public KDialogBase
 
 
  private:
-  KSpreadView* m_pView;
+  View* m_pView;
 
   QGridLayout* MyDialogLayout;
   QHBoxLayout* Layout1;
@@ -122,5 +124,7 @@ class KSpreadCSVDialog : public KDialogBase
   void textChanged ( const QString & );
   void ignoreDuplicatesChanged(int);
 };
+
+} // namespace KSpread
 
 #endif // CVSDIALOG_H

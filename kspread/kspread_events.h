@@ -10,11 +10,11 @@
 #include <kparts/event.h>
 #include <koffice_export.h>
 
-class KSPREAD_EXPORT KSpreadSelectionChanged : public KParts::Event
+class KSPREAD_EXPORT SelectionChanged : public KParts::Event
 {
 public:
-    KSpreadSelectionChanged( const QRect&, const QString& sheet );
-    ~KSpreadSelectionChanged();
+    SelectionChanged( const QRect&, const QString& sheet );
+    ~SelectionChanged();
 
     QRect rect() const { return m_rect; }
     QString sheet() const { return m_sheet; }

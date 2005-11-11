@@ -31,15 +31,17 @@
 
 #include <qstring.h>
 
-class KSpreadSheet;
-class KSpreadCellProxy;
+namespace KSpread
+{
+class Sheet;
+class CellProxy;
 
-class KSpreadSheetIface : virtual public DCOPObject
+class SheetIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    KSpreadSheetIface( KSpreadSheet* );
-    ~KSpreadSheetIface();
+    SheetIface( Sheet* );
+    ~SheetIface();
 
     bool processDynamic( const QCString& fun, const QByteArray& data,
 			 QCString& replyType, QByteArray &replyData );
@@ -99,9 +101,11 @@ k_dcop:
     void setFooterRight(const QString & text);
     bool isProtected() const;
 private:
-    KSpreadSheet* m_sheet;
-    KSpreadCellProxy* m_proxy;
+    Sheet* m_sheet;
+    CellProxy* m_proxy;
     QCString ident;
 };
+
+} // namespace KSpread
 
 #endif

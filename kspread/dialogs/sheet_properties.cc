@@ -17,9 +17,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "sheet_properties.h"
-#include "sheet_properties_base.h"
-
 #include <qvbox.h>
 #include <qcheckbox.h>
 
@@ -28,6 +25,11 @@
 #include <klocale.h>
 
 #include "kspread_sheet.h"
+#include "sheet_properties_base.h"
+
+#include "sheet_properties.h"
+
+using namespace KSpread;
 
 SheetPropertiesDialog::SheetPropertiesDialog( QWidget* parent ):
   KDialogBase( parent, "sheetPropertiesDialog", true, 
@@ -48,7 +50,7 @@ SheetPropertiesDialog::~SheetPropertiesDialog()
 
 void SheetPropertiesDialog::slotDefault()
 {
-  setLayoutDirection( KSpreadSheet::LeftToRight );
+  setLayoutDirection( Sheet::LeftToRight );
   setAutoCalc( true );
   setShowGrid( true );
   setShowFormula( false );
@@ -59,26 +61,26 @@ void SheetPropertiesDialog::slotDefault()
   setCapitalizeFirstLetter( false );
 }
 
-KSpreadSheet::LayoutDirection SheetPropertiesDialog::layoutDirection() const
+Sheet::LayoutDirection SheetPropertiesDialog::layoutDirection() const
 {
   if( d->directionComboBox->currentText() == i18n( "Left to Right" ) )
-    return KSpreadSheet::LeftToRight;
+    return Sheet::LeftToRight;
   
   if( d->directionComboBox->currentText() == i18n( "Right to Left" ) )
-    return KSpreadSheet::RightToLeft;
+    return Sheet::RightToLeft;
   
   // fallback
-  return KSpreadSheet::LeftToRight;
+  return Sheet::LeftToRight;
 }
 
-void SheetPropertiesDialog::setLayoutDirection( KSpreadSheet::LayoutDirection dir )
+void SheetPropertiesDialog::setLayoutDirection( Sheet::LayoutDirection dir )
 {
   switch( dir )
   {
-    case KSpreadSheet::LeftToRight:
+    case Sheet::LeftToRight:
       d->directionComboBox->setCurrentText( i18n( "Left to Right" ) );
       break;
-    case KSpreadSheet::RightToLeft:
+    case Sheet::RightToLeft:
       d->directionComboBox->setCurrentText( i18n( "Right to Left" ) );
       break;
     default: break;

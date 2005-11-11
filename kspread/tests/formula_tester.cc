@@ -174,7 +174,7 @@ QString FormulaEvalTester::name()
 }
 
 void FormulaEvalTester::checkEval( const char *file, int line, const char* msg, 
-  const QString& formula, const KSpreadValue& expected )
+  const QString& formula, const Value& expected )
 {
   testCount++;
   
@@ -182,7 +182,7 @@ void FormulaEvalTester::checkEval( const char *file, int line, const char* msg,
   QString expr = formula;
   expr.prepend( '=' );
   f.setExpression( expr );
-  KSpreadValue result = f.eval();
+  Value result = f.eval();
 
   if( !result.equal( expected ) )
   {
@@ -202,52 +202,52 @@ void FormulaEvalTester::run()
   errorList.clear();
   
   // simple constants
-  CHECK_EVAL( "0", KSpreadValue(0) );
-  CHECK_EVAL( "1", KSpreadValue(1) );
-  CHECK_EVAL( "-1", KSpreadValue(-1) );
-  CHECK_EVAL( "3.14e7", KSpreadValue(3.14e7) );
-  CHECK_EVAL( "3.14e-7", KSpreadValue(3.14e-7) );
+  CHECK_EVAL( "0", Value(0) );
+  CHECK_EVAL( "1", Value(1) );
+  CHECK_EVAL( "-1", Value(-1) );
+  CHECK_EVAL( "3.14e7", Value(3.14e7) );
+  CHECK_EVAL( "3.14e-7", Value(3.14e-7) );
   
   
   // simple binary operation  
-  CHECK_EVAL( "0+0", KSpreadValue(0) );
-  CHECK_EVAL( "1+1", KSpreadValue(2) );
+  CHECK_EVAL( "0+0", Value(0) );
+  CHECK_EVAL( "1+1", Value(2) );
   
   // unary minus
-  CHECK_EVAL( "-1", KSpreadValue(-1) );
-  CHECK_EVAL( "--1", KSpreadValue(1) );
-  CHECK_EVAL( "---1", KSpreadValue(-1) );
-  CHECK_EVAL( "----1", KSpreadValue(1) );
-  CHECK_EVAL( "-----1", KSpreadValue(-1) );
-  CHECK_EVAL( "5-1", KSpreadValue(4) );
-  CHECK_EVAL( "5--1", KSpreadValue(6) );
-  CHECK_EVAL( "5---1", KSpreadValue(4) );
-  CHECK_EVAL( "5----1", KSpreadValue(6) );
-  CHECK_EVAL( "5-----1", KSpreadValue(4) );
+  CHECK_EVAL( "-1", Value(-1) );
+  CHECK_EVAL( "--1", Value(1) );
+  CHECK_EVAL( "---1", Value(-1) );
+  CHECK_EVAL( "----1", Value(1) );
+  CHECK_EVAL( "-----1", Value(-1) );
+  CHECK_EVAL( "5-1", Value(4) );
+  CHECK_EVAL( "5--1", Value(6) );
+  CHECK_EVAL( "5---1", Value(4) );
+  CHECK_EVAL( "5----1", Value(6) );
+  CHECK_EVAL( "5-----1", Value(4) );
   
   // no parentheses, checking operator precendences
-  CHECK_EVAL( "14+3*77", KSpreadValue(245) );
-  CHECK_EVAL( "14-3*77", KSpreadValue(-217) );
-  CHECK_EVAL( "26*4+81", KSpreadValue(185) );
-  CHECK_EVAL( "26*4-81", KSpreadValue(23) );
-  CHECK_EVAL( "30-45/3", KSpreadValue(15) );
-  CHECK_EVAL( "45+45/3", KSpreadValue(60) );
-  CHECK_EVAL( "4+3*2-1", KSpreadValue(9) );
+  CHECK_EVAL( "14+3*77", Value(245) );
+  CHECK_EVAL( "14-3*77", Value(-217) );
+  CHECK_EVAL( "26*4+81", Value(185) );
+  CHECK_EVAL( "26*4-81", Value(23) );
+  CHECK_EVAL( "30-45/3", Value(15) );
+  CHECK_EVAL( "45+45/3", Value(60) );
+  CHECK_EVAL( "4+3*2-1", Value(9) );
   
   // power operator is right associative
-  CHECK_EVAL( "2^3", KSpreadValue(8) );
-  CHECK_EVAL( "2^3^2", KSpreadValue(512) );
+  CHECK_EVAL( "2^3", Value(8) );
+  CHECK_EVAL( "2^3^2", Value(512) );
   
   // lead to division by zero
-  CHECK_EVAL( "0/0", KSpreadValue::errorDIV0() );
-  CHECK_EVAL( "1/0", KSpreadValue::errorDIV0() );
-  CHECK_EVAL( "-4/0", KSpreadValue::errorDIV0() );
-  CHECK_EVAL( "(2*3)/(6-2*3)", KSpreadValue::errorDIV0() );
-  CHECK_EVAL( "1e3+7/0", KSpreadValue::errorDIV0() );
-  CHECK_EVAL( "2^(99/0)", KSpreadValue::errorDIV0() );
+  CHECK_EVAL( "0/0", Value::errorDIV0() );
+  CHECK_EVAL( "1/0", Value::errorDIV0() );
+  CHECK_EVAL( "-4/0", Value::errorDIV0() );
+  CHECK_EVAL( "(2*3)/(6-2*3)", Value::errorDIV0() );
+  CHECK_EVAL( "1e3+7/0", Value::errorDIV0() );
+  CHECK_EVAL( "2^(99/0)", Value::errorDIV0() );
  
   //the built-in sine function
-  CHECK_EVAL ("SIN(0)", KSpreadValue(0));
-  CHECK_EVAL ("2+sin(\"2\"-\"2\")", KSpreadValue(2));
-  CHECK_EVAL ("\"1\"+sin(\"0\")", KSpreadValue(1));
+  CHECK_EVAL ("SIN(0)", Value(0));
+  CHECK_EVAL ("2+sin(\"2\"-\"2\")", Value(2));
+  CHECK_EVAL ("\"1\"+sin(\"0\")", Value(1));
 }

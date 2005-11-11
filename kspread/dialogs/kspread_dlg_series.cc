@@ -47,7 +47,7 @@
 
 using namespace KSpread;
 
-KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const QPoint &_marker)
+SeriesDlg::SeriesDlg( View* parent, const char* name,const QPoint &_marker)
   : KDialogBase( parent, name,TRUE,i18n("Series"),Ok|Cancel )
 {
   m_pView = parent;
@@ -107,14 +107,14 @@ KSpreadSeriesDlg::KSpreadSeriesDlg( KSpreadView* parent, const char* name,const 
 }
 
 
-void KSpreadSeriesDlg::slotOk()
+void SeriesDlg::slotOk()
 {
 
   Series mode=Column;  //same as Vertical
   Series type=Linear;  // same as Horizontal
   QString tmp;
   double dstep, dend, dstart;
-  KSpreadSheet * m_pSheet;
+  Sheet * m_pSheet;
   m_pSheet = m_pView->activeSheet();
 
   if(column->isChecked())

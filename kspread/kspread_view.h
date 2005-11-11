@@ -39,31 +39,29 @@ class QScrollBar;
 class KoDocumentEntry;
 class KoTabBar;
 
-class KSpreadCanvas;
-class KSpreadChild;
-class KSpreadDoc;
-class KSpreadEditWidget;
-class KSpreadHBorder;
-class KSpreadLocationEditWidget;
-class KSpreadSelection;
-class KSpreadSheet;
-class KSpreadVBorder;
-class KSpreadView;
-class KSpreadComboboxLocationEditWidget;
-class ViewPrivate;
-
 namespace KSpread
 {
 class Cell;
 class Damage;
-}
+class Sheet;
+class Canvas;
+class Child;
+class Doc;
+class EditWidget;
+class HBorder;
+class LocationEditWidget;
+class Selection;
+class VBorder;
+class View;
+class ViewPrivate;
+class ComboboxLocationEditWidget;
 
-/** @class KSpreadView
+/** @class View
  *
- * @brief The KSpreadView class displays a KSpread document.
+ * @brief The View class displays a KSpread document.
  *
  *
- * KSpreadView is used to display a spreadsheet document and provide
+ * View is used to display a spreadsheet document and provide
  * the interface for the user to perform editing and data analysis.
  *
  * A view consists of several parts:
@@ -76,30 +74,30 @@ class Damage;
  *  \li tab bar to select active worksheet
  *
  */
-class KSPREAD_EXPORT KSpreadView : public KoView
+class KSPREAD_EXPORT View : public KoView
 {
-    friend class KSpreadCanvas;
+    friend class Canvas;
 
     Q_OBJECT
 public:
 
     /** Creates a new view */
-    KSpreadView( QWidget *_parent, const char *_name,
-        KSpreadDoc *doc );
+    View( QWidget *_parent, const char *_name,
+        Doc *doc );
 
     /** Destroys the view */
-    ~KSpreadView();
+    ~View();
 
-    KSpreadDoc* doc();
+    Doc* doc();
 
     /** Returns the canvas of the view */
-    KSpreadCanvas* canvasWidget() const;
+    Canvas* canvasWidget() const;
 
     /** Returns the column header */
-    KSpreadHBorder* hBorderWidget() const;
+    HBorder* hBorderWidget() const;
 
     /** Returns the row header */
-    KSpreadVBorder* vBorderWidget() const;
+    VBorder* vBorderWidget() const;
 
     /** Returns the horizontal scrollbar */
     QScrollBar* horzScrollBar() const;
@@ -108,23 +106,23 @@ public:
     QScrollBar* vertScrollBar() const;
 
     /** Returns the editor widget */
-    KSpreadEditWidget* editWidget() const;
+    KSpread::EditWidget* editWidget() const;
 
     /** Returns the location widget */
-    KSpreadComboboxLocationEditWidget* posWidget() const;
+    ComboboxLocationEditWidget* posWidget() const;
 
     /** Returns the tab bar */
     KoTabBar* tabBar() const;
 
     void setZoom( int zoom, bool updateViews ); // change the zoom value
 
-    void addSheet( KSpreadSheet *_t );
-    //void removesheet( KSpreadSheet *_t );
+    void addSheet( Sheet *_t );
+    //void removesheet( Sheet *_t );
     void removeAllSheets();
-    void setActiveSheet( KSpreadSheet *_t,bool updatesheet=true );
+    void setActiveSheet( Sheet *_t,bool updatesheet=true );
 
-    const KSpreadSheet* activeSheet() const;
-    KSpreadSheet* activeSheet();
+    const Sheet* activeSheet() const;
+    Sheet* activeSheet();
 
     void openPopupMenu( const QPoint &_global );
     void popupRowMenu(const QPoint & _point ) ;
@@ -133,7 +131,7 @@ public:
     // void showFormulaToolBar( bool show );
 
     /**
-     * Used by @ref KSpreadEditWidget. Sets the text of the active cell(s).
+     * Used by @ref EditWidget. Sets the text of the active cell(s).
      */
     void setText( const QString& _text, bool array = false );
 
@@ -143,7 +141,7 @@ public:
     void enableInsertRow( bool _b );
 
     /**
-     * Called by @ref KSpreadInsertHandler
+     * Called by @ref InsertHandler
      *
      * @param _geometry is the zoomed geometry of the new child.
      * @param _entry is the entry to insert.
@@ -152,7 +150,7 @@ public:
      */
     void insertChart( const QRect& _geometry, KoDocumentEntry& _entry );
     /**
-     * Called by @ref KSpreadInsertHandler
+     * Called by @ref InsertHandler
      *
      * @param _geometry is the geometry of the new child.
      * @param _entry is the entry to insert.
@@ -165,7 +163,7 @@ public:
     virtual void setupPrinter( KPrinter &printer );
 
     /**
-     * Fills the @ref KSpreadEditWidget with the current cells
+     * Fills the @ref EditWidget with the current cells
      * content. This function is usually called after the
      * cursor moved.
      */
@@ -212,11 +210,11 @@ public:
 
     void updateBorderButton();
 
-    void removeSheet( KSpreadSheet *_t );
-    void insertSheet( KSpreadSheet* sheet );
+    void removeSheet( Sheet *_t );
+    void insertSheet( Sheet* sheet );
     QColor borderColor() const;
 
-    KSpreadSelection* selectionInfo() const;
+    Selection* selectionInfo() const;
     QRect selection(bool extend = true) const;
     QPoint marker() const;
 
@@ -228,13 +226,13 @@ public:
     void paintUpdates();
 
     /**
-     * Resets the internal handle pointer, called from KSpreadInsertHandler destructor
+     * Resets the internal handle pointer, called from InsertHandler destructor
      */
     void resetInsertHandle();
 
     bool showSheet(const QString& sheetName);
 
-    QPoint markerFromSheet( KSpreadSheet *_sheet ) const;
+    QPoint markerFromSheet( Sheet *_sheet ) const;
     /*
      * Save current sheet selection. Call when we change sheet, or save in oasis format
      */
@@ -470,12 +468,12 @@ public slots:
      */
     void popupTabBarMenu( const QPoint& );
 
-    void handleDamages( const QValueList<KSpread::Damage*>& damages );
+    void handleDamages( const QValueList<Damage*>& damages );
 
     void runInternalTests();
     void runInspector();
 
-    void initialiseMarkerFromSheet( KSpreadSheet *_sheet, const QPoint &point );
+    void initialiseMarkerFromSheet( Sheet *_sheet, const QPoint &point );
 
 protected slots:
     /**
@@ -539,19 +537,19 @@ protected slots:
 public slots:
     // Document signals
     void slotRefreshView();
-    void slotUpdateView( KSpreadSheet *_sheet );
-    void slotUpdateView( KSpreadSheet *_sheet, const QRect& );
-    void slotUpdateHBorder( KSpreadSheet *_sheet );
-    void slotUpdateVBorder( KSpreadSheet *_sheet );
-    void slotChangeSelection( KSpreadSheet *_sheet, const QRect &oldSelection,
+    void slotUpdateView( Sheet *_sheet );
+    void slotUpdateView( Sheet *_sheet, const QRect& );
+    void slotUpdateHBorder( Sheet *_sheet );
+    void slotUpdateVBorder( Sheet *_sheet );
+    void slotChangeSelection( Sheet *_sheet, const QRect &oldSelection,
                               const QPoint &_oldMarker );
-    void slotAddSheet( KSpreadSheet *_sheet );
-    void slotRemoveChild( KSpreadChild *_child );
-    void slotUpdateChildGeometry( KSpreadChild *_child );
-    void slotSheetRenamed( KSpreadSheet* sheet, const QString& old_name );
-    void slotSheetHidden( KSpreadSheet*_sheet );
-    void slotSheetShown( KSpreadSheet*_sheet );
-    void slotSheetRemoved( KSpreadSheet*_sheet );
+    void slotAddSheet( Sheet *_sheet );
+    void slotRemoveChild( Child *_child );
+    void slotUpdateChildGeometry( Child *_child );
+    void slotSheetRenamed( Sheet* sheet, const QString& old_name );
+    void slotSheetHidden( Sheet*_sheet );
+    void slotSheetShown( Sheet*_sheet );
+    void slotSheetRemoved( Sheet*_sheet );
     void refreshLocale();
     void extraSpelling();
 
@@ -576,8 +574,8 @@ public slots:
     virtual int bottomBorder() const;
 
 signals:
-    void sig_selectionChanged( KSpreadSheet* _sheet, const QRect& _selection );
-    void sig_chooseSelectionChanged(KSpreadSheet *sheet, const QRect& _selection);
+    void sig_selectionChanged( Sheet* _sheet, const QRect& _selection );
+    void sig_chooseSelectionChanged(Sheet *sheet, const QRect& _selection);
 
 protected:
 
@@ -598,15 +596,15 @@ protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
     void initFindReplace();
-    KSpread::Cell* findNextCell();
+    Cell* findNextCell();
 
 private:
 
     ViewPrivate* d;
 
     // don't allow copy or assignment
-    KSpreadView( const KSpreadView& );
-    KSpreadView& operator=( const KSpreadView& );
+    View( const View& );
+    View& operator=( const View& );
 
     void initView();
 
@@ -614,7 +612,9 @@ private:
     void spellCleanup();
 
     void endOperation( QRect const & rect );
-    KSpread::Cell* nextFindValidCell( int col, int row );
+    Cell* nextFindValidCell( int col, int row );
 };
+
+} // namespace KSpread
 
 #endif // KSPREAD_VIEW

@@ -33,26 +33,26 @@
 using namespace KSpread;
 
 //helper functions for the formatting
-bool formatIsDate (FormatType fmt)
+bool KSpread::formatIsDate (FormatType fmt)
 {
   return ((fmt == ShortDate_format) || (fmt == TextDate_format) ||
       (((int) fmt >= 200) && ((int) fmt < 300)));
 }
 
-bool formatIsTime (FormatType fmt)
+bool KSpread::formatIsTime (FormatType fmt)
 {
   return (((int) fmt >= 50) && ((int) fmt < 70));
 }
 
-bool formatIsFraction (FormatType fmt)
+bool KSpread::formatIsFraction (FormatType fmt)
 {
   return (((int) fmt >= 70) && ((int) fmt < 80));
 }
 
 
-//used in KSpreadPoint::init, Cell::encodeFormula and
+//used in Point::init, Cell::encodeFormula and
 //  dialogs/kspread_dlg_paperlayout.cc
-int util_decodeColumnLabelText( const QString &_col )
+int KSpread::util_decodeColumnLabelText( const QString &_col )
 {
     int col = 0;
     int offset='a'-'A';
@@ -71,7 +71,7 @@ int util_decodeColumnLabelText( const QString &_col )
 }
 
 //used in dialogs/kspread_dlg_paperlayout.cc
-QString util_rangeColumnName( const QRect &_area)
+QString KSpread::util_rangeColumnName( const QRect &_area)
 {
     return QString("%1:%2")
         .arg( Cell::columnName( _area.left()))
@@ -79,25 +79,25 @@ QString util_rangeColumnName( const QRect &_area)
 }
 
 //used in dialogs/kspread_dlg_paperlayout.cc
-QString util_rangeRowName( const QRect &_area)
+QString KSpread::util_rangeRowName( const QRect &_area)
 {
     return QString("%1:%2")
         .arg( _area.top())
         .arg(_area.bottom());
 }
 
-QString util_rangeName(const QRect &_area)
+QString KSpread::util_rangeName(const QRect &_area)
 {
     return Cell::name( _area.left(), _area.top() ) + ":" +
   Cell::name( _area.right(), _area.bottom() );
 }
 
-QString util_rangeName(KSpreadSheet * _sheet, const QRect &_area)
+QString KSpread::util_rangeName(Sheet * _sheet, const QRect &_area)
 {
     return _sheet->sheetName() + "!" + util_rangeName(_area);
 }
 
-QDomElement util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc )
+QDomElement KSpread::util_createElement( const QString & tagName, const QFont & font, QDomDocument & doc )
 {
   QDomElement e( doc.createElement( tagName ) );
 
@@ -117,7 +117,7 @@ QDomElement util_createElement( const QString & tagName, const QFont & font, QDo
   return e;
 }
 
-QDomElement util_createElement( const QString & tagname, const QPen & pen, QDomDocument & doc )
+QDomElement KSpread::util_createElement( const QString & tagname, const QPen & pen, QDomDocument & doc )
 {
   QDomElement e( doc.createElement( tagname ) );
   e.setAttribute( "color", pen.color().name() );
@@ -126,7 +126,7 @@ QDomElement util_createElement( const QString & tagname, const QPen & pen, QDomD
   return e;
 }
 
-QFont util_toFont( QDomElement & element )
+QFont KSpread::util_toFont( QDomElement & element )
 {
   QFont f;
   f.setFamily( element.attribute( "family" ) );
@@ -164,7 +164,7 @@ QFont util_toFont( QDomElement & element )
   return f;
 }
 
-QPen util_toPen( QDomElement & element )
+QPen KSpread::util_toPen( QDomElement & element )
 {
   bool ok;
   QPen p;
@@ -182,22 +182,22 @@ QPen util_toPen( QDomElement & element )
   return p;
 }
 
-KSpreadPoint::KSpreadPoint(const QString & _str)
+Point::Point(const QString & _str)
 {
     sheet = 0;
     init(_str);
 }
 
-void KSpreadPoint::init(const QString & _str)
+void Point::init(const QString & _str)
 {
 
-//    kdDebug(36001) <<"KSpreadPoint::init ("<<_str<<")"<<endl;
+//    kdDebug(36001) <<"Point::init ("<<_str<<")"<<endl;
     pos.setX(-1);
 
     uint len = _str.length();
     if ( !len )
     {
-  kdDebug(36001) << "KSpreadPoint::init: len = 0" << endl;
+  kdDebug(36001) << "Point::init: len = 0" << endl;
   return;
     }
 
@@ -224,14 +224,14 @@ void KSpreadPoint::init(const QString & _str)
     // Malformed ?
     if ( p == len )
     {
-  kdDebug(36001) << "KSpreadPoint::init: no point after '$' (str: '" << str.mid( p ) << "'" << endl;
+  kdDebug(36001) << "Point::init: no point after '$' (str: '" << str.mid( p ) << "'" << endl;
   return;
     }
     if ( str[p] < 'A' || str[p] > 'Z' )
     {
   if ( str[p] < 'a' || str[p] > 'z' )
   {
-      kdDebug(36001) << "KSpreadPoint::init: wrong first character in point (str: '" << str.mid( p ) << "'" << endl;
+      kdDebug(36001) << "Point::init: wrong first character in point (str: '" << str.mid( p ) << "'" << endl;
       return;
   }
     }
@@ -245,7 +245,7 @@ void KSpreadPoint::init(const QString & _str)
   x = util_decodeColumnLabelText( str.mid( p, result - p ) ); // x is defined now
     else  // If there isn't any, then this is not a point -> return
     {
-  kdDebug(36001) << "KSpreadPoint::init: no number in string (str: '" << str.mid( p, result ) << "'" << endl;
+  kdDebug(36001) << "Point::init: no number in string (str: '" << str.mid( p, result ) << "'" << endl;
   return;
     }
     p = result;
@@ -253,14 +253,14 @@ void KSpreadPoint::init(const QString & _str)
     //limit is KS_colMax
     if ( x > KS_colMax )
     {
-  kdDebug(36001) << "KSpreadPoint::init: column value too high (col: " << x << ")" << endl;
+  kdDebug(36001) << "Point::init: column value too high (col: " << x << ")" << endl;
   return;
     }
 
     // Malformed ?
     if (p == len)
     {
-  kdDebug(36001) << "KSpreadPoint::init: p==len after cols" << endl;
+  kdDebug(36001) << "Point::init: p==len after cols" << endl;
   return;
     }
 
@@ -271,7 +271,7 @@ void KSpreadPoint::init(const QString & _str)
   // Malformed ?
   if ( p == len )
   {
-      kdDebug(36001) << "KSpreadPoint::init: p==len after $ of row" << endl;
+      kdDebug(36001) << "Point::init: p==len after $ of row" << endl;
       return;
   }
     }
@@ -283,7 +283,7 @@ void KSpreadPoint::init(const QString & _str)
     {
   if ( !isdigit( QChar(str[p++]) ) )
   {
-      kdDebug(36001) << "KSpreadPoint::init: no number" << endl;
+      kdDebug(36001) << "Point::init: no number" << endl;
       return;
   }
     }
@@ -292,24 +292,24 @@ void KSpreadPoint::init(const QString & _str)
     int y = str.mid( p2, p-p2 ).toInt( &ok );
     if ( !ok )
     {
-  kdDebug(36001) << "KSpreadPoint::init: Invalid number (str: '" << str.mid( p2, p-p2 ) << "'" << endl;
+  kdDebug(36001) << "Point::init: Invalid number (str: '" << str.mid( p2, p-p2 ) << "'" << endl;
   return;
     }
     if ( y > KS_rowMax )
     {
-  kdDebug(36001) << "KSpreadPoint::init: row value too high (row: " << y << ")" << endl;
+  kdDebug(36001) << "Point::init: row value too high (row: " << y << ")" << endl;
   return;
     }
     if ( y <= 0 )
     {
-  kdDebug(36001) << "KSpreadPoint::init: y <= 0" << endl;
+  kdDebug(36001) << "Point::init: y <= 0" << endl;
   return;
     }
     pos = QPoint( x, y );
 }
 
-KSpreadPoint::KSpreadPoint( const QString & _str, KSpreadMap * _map,
-                            KSpreadSheet * _sheet )
+Point::Point( const QString & _str, Map * _map,
+                            Sheet * _sheet )
 {
     uint p = 0;
     int p2 = _str.find( '!' );
@@ -331,7 +331,7 @@ KSpreadPoint::KSpreadPoint( const QString & _str, KSpreadMap * _map,
         //If the loop didn't return a sheet, better keep a string for isValid
         if ( sheetName.isEmpty() )
         {
-            kdDebug(36001) << "KSpreadPoint: tableName is unknown" << endl;
+            kdDebug(36001) << "Point: tableName is unknown" << endl;
             sheetName = "unknown";
         }
     }
@@ -349,25 +349,25 @@ KSpreadPoint::KSpreadPoint( const QString & _str, KSpreadMap * _map,
     init( _str.mid( p ) );
 }
 
-Cell *KSpreadPoint::cell() const
+Cell *Point::cell() const
 {
     return sheet->cellAt(pos);
 }
 
-bool KSpreadPoint::operator== (const KSpreadPoint &cell) const
+bool Point::operator== (const Point &cell) const
 {
   //sheet info ignored
   return (pos == cell.pos);
 }
 
-bool KSpreadPoint::operator< (const KSpreadPoint &cell) const
+bool Point::operator< (const Point &cell) const
 {
   //sheet info ignored
   return (pos.y() < cell.pos.y()) ? true :
       ((pos.y() == cell.pos.y()) && (pos.x() < cell.pos.x()));
 }
 
-KSpreadRange::KSpreadRange()
+Range::Range()
 {
     sheet = 0;
   range.setLeft( -1 );
@@ -377,7 +377,7 @@ KSpreadRange::KSpreadRange()
   topFixed=false;
   bottomFixed=false;
 }
-KSpreadRange::KSpreadRange(const QString & _str)
+Range::Range(const QString & _str)
 {
     range.setLeft(-1);
     sheet = 0;
@@ -386,8 +386,8 @@ KSpreadRange::KSpreadRange(const QString & _str)
     if (p == -1)
   return;
 
-    KSpreadPoint ul(_str.left(p));
-    KSpreadPoint lr(_str.mid(p + 1));
+    Point ul(_str.left(p));
+    Point lr(_str.mid(p + 1));
     range = QRect(ul.pos, lr.pos);
     sheetName = ul.sheetName;
 
@@ -397,8 +397,8 @@ KSpreadRange::KSpreadRange(const QString & _str)
     bottomFixed = lr.rowFixed;
 }
 
-KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
-         KSpreadSheet * _sheet)
+Range::Range(const QString & _str, Map * _map,
+         Sheet * _sheet)
 {
   range.setLeft(-1);
   sheet = 0;
@@ -454,8 +454,8 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
     if (p3 == -1)
   return;
 
-    KSpreadPoint ul(_str.mid(p, p3 - p));
-    KSpreadPoint lr(_str.mid(p3 + 1));
+    Point ul(_str.mid(p, p3 - p));
+    Point lr(_str.mid(p3 + 1));
     range = QRect(ul.pos, lr.pos);
 
     leftFixed = ul.columnFixed;
@@ -464,7 +464,7 @@ KSpreadRange::KSpreadRange(const QString & _str, KSpreadMap * _map,
     bottomFixed = lr.rowFixed;
 }
 
-QString KSpreadRange::toString()
+QString Range::toString()
 {
   QString result;
 
@@ -509,7 +509,7 @@ QString KSpreadRange::toString()
   return result;
 }
 
-void KSpreadRange::getStartPoint(KSpreadPoint* pt)
+void Range::getStartPoint(Point* pt)
 {
   if (!isValid()) return;
 
@@ -521,7 +521,7 @@ void KSpreadRange::getStartPoint(KSpreadPoint* pt)
   pt->sheetName=sheetName;
 }
 
-void KSpreadRange::getEndPoint(KSpreadPoint* pt)
+void Range::getEndPoint(Point* pt)
 {
   if (!isValid()) return;
 
@@ -533,17 +533,17 @@ void KSpreadRange::getEndPoint(KSpreadPoint* pt)
   pt->sheetName=sheetName;
 }
 
-bool KSpreadRange::contains (const KSpreadPoint &cell) const
+bool Range::contains (const Point &cell) const
 {
   return range.contains (cell.pos);
 }
 
-bool KSpreadRange::intersects (const KSpreadRange &r) const
+bool Range::intersects (const Range &r) const
 {
   return range.intersects (r.range);
 }
 
-bool KSpreadRange::isValid() const
+bool Range::isValid() const
 {
   return  ( range.left() >= 0 ) &&
     ( range.right() >= 0 ) &&
@@ -551,30 +551,30 @@ bool KSpreadRange::isValid() const
     ( range.isValid() ) ;
 }
 
-bool util_isAllSelected(const QRect &selection)
+bool KSpread::util_isAllSelected(const QRect &selection)
 {
   return ( selection.top() == 1 && selection.bottom() == KS_rowMax
      && selection.left() == 1 && selection.right() == KS_colMax);
 }
 
-bool util_isColumnSelected(const QRect &selection)
+bool KSpread::util_isColumnSelected(const QRect &selection)
 {
   return ( (selection.top() == 1) && (selection.bottom() == KS_rowMax) );
 }
 
-bool util_isRowSelected(const QRect &selection)
+bool KSpread::util_isRowSelected(const QRect &selection)
 {
   return ( (selection.left() == 1) && (selection.right() == KS_colMax) );
 }
 
-bool util_isRowOrColumnSelected(const QRect &selection)
+bool KSpread::util_isRowOrColumnSelected(const QRect &selection)
 {
     return ( (selection.left() == 1) && (selection.right() == KS_colMax)
              || (selection.top() == 1) && (selection.bottom() == KS_rowMax) );
 }
 
-//used in KSpreadView::slotRename
-bool util_validateSheetName(const QString &name)
+//used in View::slotRename
+bool KSpread::util_validateSheetName(const QString &name)
 {
   if (name[0] == ' ')
   {
@@ -593,18 +593,18 @@ bool util_validateSheetName(const QString &name)
 }
 
 
-KSpreadRangeIterator::KSpreadRangeIterator(QRect _range, KSpreadSheet* _sheet)
+RangeIterator::RangeIterator(QRect _range, Sheet* _sheet)
 {
   range = _range;
   sheet = _sheet;
   current = QPoint(0,0);
 }
 
-KSpreadRangeIterator::~KSpreadRangeIterator()
+RangeIterator::~RangeIterator()
 {
 }
 
-Cell* KSpreadRangeIterator::first()
+Cell* RangeIterator::first()
 {
   current.setY(range.top());
 
@@ -614,7 +614,7 @@ Cell* KSpreadRangeIterator::first()
   return next();
 }
 
-Cell* KSpreadRangeIterator::next()
+Cell* RangeIterator::next()
 {
   if (current.x() == 0 && current.y() == 0)
   {
@@ -643,7 +643,7 @@ Cell* KSpreadRangeIterator::next()
 }
 
 //not used anywhere
-int util_penCompare( QPen const & pen1, QPen const & pen2 )
+int KSpread::util_penCompare( QPen const & pen1, QPen const & pen2 )
 {
   if ( pen1.style() == Qt::NoPen && pen2.style() == Qt::NoPen )
     return 0;
@@ -676,7 +676,7 @@ int util_penCompare( QPen const & pen1, QPen const & pen2 )
 }
 
 
-QString convertRefToBase( const QString & sheet, const QRect & rect )
+QString KSpread::convertRefToBase( const QString & sheet, const QRect & rect )
 {
   QPoint bottomRight( rect.bottomRight() );
 
@@ -690,7 +690,7 @@ QString convertRefToBase( const QString & sheet, const QRect & rect )
   return s;
 }
 
-QString convertRefToRange( const QString & sheet, const QRect & rect )
+QString KSpread::convertRefToRange( const QString & sheet, const QRect & rect )
 {
   QPoint topLeft( rect.topLeft() );
   QPoint bottomRight( rect.bottomRight() );
@@ -713,7 +713,7 @@ QString convertRefToRange( const QString & sheet, const QRect & rect )
 }
 
 //used in Cell::convertFormulaToOasisFormat
-void insertBracket( QString & s )
+void KSpread::insertBracket( QString & s )
 {
   QChar c;
   int i = (int) s.length() - 1;
@@ -734,13 +734,13 @@ void insertBracket( QString & s )
 }
 
  // e.g.: Sheet4.A1:Sheet4.E28
- //used in KSpreadSheet::saveOasis
-QString convertRangeToRef( const QString & sheetName, const QRect & _area )
+ //used in Sheet::saveOasis
+QString KSpread::convertRangeToRef( const QString & sheetName, const QRect & _area )
 {
-    return sheetName + "." + Cell::name( _area.left(), _area.top() ) + ":" + sheetName + "."+ KSpread::Cell::name( _area.right(), _area.bottom() );
+    return sheetName + "." + Cell::name( _area.left(), _area.top() ) + ":" + sheetName + "."+ Cell::name( _area.right(), _area.bottom() );
 }
 
-QString convertOasisPenToString( const QPen & pen )
+QString KSpread::convertOasisPenToString( const QPen & pen )
 {
     kdDebug()<<"convertOasisPenToString( const QPen & pen ) :"<<pen<<endl;
     QString s = QString( "%1pt " ).arg( pen.width() );
@@ -773,7 +773,7 @@ QString convertOasisPenToString( const QPen & pen )
     return s;
 }
 
-QPen convertOasisStringToPen( const QString &border )
+QPen KSpread::convertOasisStringToPen( const QString &border )
 {
     QPen pen;
     //string like "0.088cm solid #800000"
@@ -814,7 +814,7 @@ QPen convertOasisStringToPen( const QString &border )
 }
 
 //Return true when it's a reference to cell from sheet.
-bool localReferenceAnchor( const QString &_ref )
+bool KSpread::localReferenceAnchor( const QString &_ref )
 {
     bool isLocalRef = (_ref.find("http://") != 0 &&
                        _ref.find("mailto:") != 0 &&

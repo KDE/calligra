@@ -31,8 +31,6 @@
 #include <kdialogbase.h>
 #include <qstringlist.h>
 
-class KSpreadView;
-
 class QCheckBox;
 class QComboBox;
 class QLabel;
@@ -42,14 +40,19 @@ class QRadioButton;
 class QTabWidget;
 class QWidget;
 
-class KSpreadSortDlg : public KDialogBase
+namespace KSpread
+{
+class Sheet;
+class View;
+
+class SortDlg : public KDialogBase
 {
   Q_OBJECT
 
  public:
-  KSpreadSortDlg( KSpreadView * parent, const char * name = 0,
+  SortDlg( View * parent, const char * name = 0,
                   bool modal = false );
-  ~KSpreadSortDlg();
+  ~SortDlg();
 
  private slots:
   void sortKey2textChanged( int );
@@ -61,7 +64,7 @@ class KSpreadSortDlg : public KDialogBase
  private:
   void init();
 
-  KSpreadView  * m_pView;
+  View  * m_pView;
 
   QStringList    m_listColumn;
   QStringList    m_listRow;
@@ -90,8 +93,8 @@ class KSpreadSortDlg : public KDialogBase
 
   QComboBox    * m_outputSheet;
   QLineEdit    * m_outputCell;
-
-
 };
+
+} // namespace KSpread
 
 #endif

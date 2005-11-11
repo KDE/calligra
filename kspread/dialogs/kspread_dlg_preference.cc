@@ -30,7 +30,16 @@
 #include <qcombobox.h>
 #include <qvgroupbox.h>
 
-#include "kspread_dlg_preference.h"
+#include <kconfig.h>
+#include <kstatusbar.h>
+#include <knuminput.h>
+#include <kspell.h>
+#include <kmessagebox.h>
+#include <kdeversion.h>
+#include <kcolorbutton.h>
+
+#include <kotabbar.h>
+
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_doc.h"
@@ -39,16 +48,11 @@
 #include "kspread_locale.h"
 #include "kspread_editors.h"
 
-#include <kconfig.h>
-#include <kstatusbar.h>
-#include <knuminput.h>
-#include <kspell.h>
-#include <kmessagebox.h>
-#include <kdeversion.h>
-#include <kcolorbutton.h>
-#include <kotabbar.h>
+#include "kspread_dlg_preference.h"
 
-KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
+using namespace KSpread;
+
+PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
   : KDialogBase(KDialogBase::IconList,i18n("Configure KSpread") ,
 		KDialogBase::Ok | KDialogBase::Cancel| KDialogBase::Default,
 		KDialogBase::Ok)
@@ -79,7 +83,7 @@ KSpreadpreference::KSpreadpreference( KSpreadView* parent, const char* /*name*/)
 
 }
 
-void KSpreadpreference::openPage(int flags)
+void PreferenceDialog::openPage(int flags)
 {
     if(flags & KS_LOCALE)
         showPage( 0 );
@@ -95,7 +99,7 @@ void KSpreadpreference::openPage(int flags)
         showPage( 5 );
 }
 
-void KSpreadpreference::slotApply()
+void PreferenceDialog::slotApply()
 {
   m_pView->doc()->emitBeginOperation( false );
   _configure->apply();
@@ -108,7 +112,7 @@ void KSpreadpreference::slotApply()
   m_pView->slotUpdateView( m_pView->activeSheet() );
 }
 
-void KSpreadpreference::slotDefault()
+void PreferenceDialog::slotDefault()
 {
     switch(activePageIndex())
     {
@@ -133,7 +137,7 @@ void KSpreadpreference::slotDefault()
 }
 
 
-parameterLocale::parameterLocale( KSpreadView* _view, QVBox *box , char *name )
+parameterLocale::parameterLocale( View* _view, QVBox *box , char *name )
  :QObject ( box->parent(),name)
 {
     m_pView = _view;
@@ -172,7 +176,7 @@ void parameterLocale::apply()
 void parameterLocale::updateDefaultSystemConfig()
 {
     m_bUpdateLocale=true;
-    static_cast<KSpreadLocale*>(m_pView->doc()->locale())->defaultSystemConfig( );
+    static_cast<Locale*>(m_pView->doc()->locale())->defaultSystemConfig( );
     KLocale* locale=m_pView->doc()->locale();
     m_money->setText( i18n("Money: %1").arg( locale->formatMoney(12.55) ));
     m_time->setText( i18n("Time: %1").arg( locale->formatTime(QTime(15,10,53)) ));
@@ -182,7 +186,7 @@ void parameterLocale::updateDefaultSystemConfig()
     m_language->setText( i18n("Language: %1").arg( locale->language() ));
 }
 
-configure::configure( KSpreadView* _view, QVBox *box , char *name )
+configure::configure( View* _view, QVBox *box , char *name )
  :QObject ( box->parent(),name)
  {
   m_pView = _view;
@@ -198,7 +202,7 @@ configure::configure( KSpreadView* _view, QVBox *box , char *name )
 
   QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Settings"), box, "GroupBox" );
 
-  config = KSpreadFactory::global()->config();
+  config = Factory::global()->config();
   int _page=1;
 
   oldRecent=10;
@@ -279,7 +283,7 @@ void configure::apply()
     m_pView->doc()->emitBeginOperation( false );
     config->setGroup( "Parameters" );
     config->writeEntry( "NbPage", nbPage->value());
-    KSpreadDoc *doc =m_pView->doc();
+    Doc *doc =m_pView->doc();
     bool active=true;
     active=showHScrollBar->isChecked();
     if( m_pView->horzScrollBar()->isVisible()!=active)
@@ -376,7 +380,7 @@ void configure::apply()
 }
 
 
-miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
+miscParameters::miscParameters( View* _view,QVBox *box, char *name )
  :QObject ( box->parent(),name)
  {
   m_pView = _view;
@@ -384,7 +388,7 @@ miscParameters::miscParameters( KSpreadView* _view,QVBox *box, char *name )
 
   QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
 
-  config = KSpreadFactory::global()->config();
+  config = Factory::global()->config();
   double _indent = 10.0;
   bool m_bMsgError=false;
   bool m_bCommentIndicator=true;
@@ -666,11 +670,11 @@ void miscParameters::apply()
 
 
 
-colorParameters::colorParameters( KSpreadView* _view,QVBox *box , char *name )
+colorParameters::colorParameters( View* _view,QVBox *box , char *name )
  :QObject ( box->parent(),name)
 {
   m_pView = _view;
-  config = KSpreadFactory::global()->config();
+  config = Factory::global()->config();
 
   QColor _gridColor(Qt::lightGray);
 
@@ -734,7 +738,7 @@ void colorParameters::slotDefault()
 
 
 
-configureLayoutPage::configureLayoutPage( KSpreadView* _view,QVBox *box , char *name )
+configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
  :QObject ( box->parent(),name)
 {
   m_pView = _view;
@@ -747,7 +751,7 @@ configureLayoutPage::configureLayoutPage( KSpreadView* _view,QVBox *box , char *
   grid1->addRowSpacing( 0, KDialog::marginHint()  );
   grid1->setRowStretch( 7, 10 );
 
-  config = KSpreadFactory::global()->config();
+  config = Factory::global()->config();
 
   QLabel *label=new QLabel(i18n("Default page &size:"), tmpQGroupBox);
 
@@ -877,12 +881,12 @@ void configureLayoutPage::apply()
   m_pView->slotUpdateView( m_pView->activeSheet() );
 }
 
-configureSpellPage::configureSpellPage( KSpreadView* _view,QVBox *box , char *name )
+configureSpellPage::configureSpellPage( View* _view,QVBox *box , char *name )
  :QObject ( box->parent(),name)
 {
   m_pView = _view;
 
-  config = KSpreadFactory::global()->config();
+  config = Factory::global()->config();
 
 
   m_spellConfigWidget = new KSpellConfig( box, "spell_check",m_pView->doc()->getKSpellConfig()/*, false*/);
@@ -916,7 +920,7 @@ void configureSpellPage::apply()
   config->writeEntry ("KSpell_Encoding", (int)  _spellConfig->encoding());
   config->writeEntry ("KSpell_Client",  _spellConfig->client());
 //  m_spellConfigWidget->saveDictionary();
-  KSpreadDoc* doc = m_pView->doc();
+  Doc* doc = m_pView->doc();
   doc->setKSpellConfig(*_spellConfig);
 
     bool state=dontCheckUpperWord->isChecked();

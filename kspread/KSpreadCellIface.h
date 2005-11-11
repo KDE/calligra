@@ -32,16 +32,19 @@
 
 #include <dcopobject.h>
 
-class KSpreadSheet;
 class QPoint;
 
-class KSpreadCellIface : virtual public DCOPObject
+namespace KSpread
+{
+class Sheet;
+
+class CellIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    KSpreadCellIface();
+    CellIface();
 
-    void setCell( KSpreadSheet* sheet, const QPoint& point );
+    void setCell( Sheet* sheet, const QPoint& point );
 k_dcop:
 
     virtual bool isDefault() const;
@@ -164,7 +167,9 @@ k_dcop:
 
 private:
     QPoint m_point;
-    KSpreadSheet* m_sheet;
+    Sheet* m_sheet;
 };
+
+} // namespace KSpread
 
 #endif

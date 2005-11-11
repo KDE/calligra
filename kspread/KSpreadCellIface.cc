@@ -33,46 +33,46 @@
 
 using namespace KSpread;
 
-KSpreadCellIface::KSpreadCellIface()
+CellIface::CellIface()
   : m_point( 0, 0 ), m_sheet( 0 )
 {
 }
 
-void KSpreadCellIface::setCell( KSpreadSheet* sheet, const QPoint& point )
+void CellIface::setCell( Sheet* sheet, const QPoint& point )
 {
     m_sheet = sheet;
     m_point = point;
 }
 
-bool KSpreadCellIface::isDefault() const
+bool CellIface::isDefault() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->isDefault();
 }
 
-bool KSpreadCellIface::isEmpty() const
+bool CellIface::isEmpty() const
 {
 	if (!m_sheet) return true;
 	Cell *cell=m_sheet->cellAt(m_point);
 	return cell->isEmpty();
 }
 
-QString KSpreadCellIface::text() const
+QString CellIface::text() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->value().asString();
 }
 
-void KSpreadCellIface::setText( const QString& text )
+void CellIface::setText( const QString& text )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setCellText( text );
 }
 
-QString KSpreadCellIface::visibleContentAsString() const
+QString CellIface::visibleContentAsString() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -87,14 +87,14 @@ QString KSpreadCellIface::visibleContentAsString() const
     return ret;
 }
 
-QString KSpreadCellIface::comment() const
+QString CellIface::comment() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->comment(m_point.x(), m_point.y());
 }
 
-void KSpreadCellIface::setComment( const QString& comment )
+void CellIface::setComment( const QString& comment )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -102,28 +102,28 @@ void KSpreadCellIface::setComment( const QString& comment )
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-void KSpreadCellIface::setValue( int value )
+void CellIface::setValue( int value )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setValue( (double)value );
 }
 
-void KSpreadCellIface::setValue( double value )
+void CellIface::setValue( double value )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setValue( value );
 }
 
-double KSpreadCellIface::value() const
+double CellIface::value() const
 {
     if( !m_sheet ) return 0.0;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->value().asFloat();
 }
 
-void KSpreadCellIface::setBgColor(const QString& _c)
+void CellIface::setBgColor(const QString& _c)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -132,7 +132,7 @@ void KSpreadCellIface::setBgColor(const QString& _c)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-void KSpreadCellIface::setBgColor(int r,int g,int b)
+void CellIface::setBgColor(int r,int g,int b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -141,21 +141,21 @@ void KSpreadCellIface::setBgColor(int r,int g,int b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-QString KSpreadCellIface::bgColor() const
+QString CellIface::bgColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->bgColor( m_point.x(), m_point.y() ).name();
 }
 
-QString KSpreadCellIface::textColor() const
+QString CellIface::textColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->textColor( m_point.x(), m_point.y() ).name();
 }
 
-void KSpreadCellIface::setTextColor(int r,int g,int b)
+void CellIface::setTextColor(int r,int g,int b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -164,7 +164,7 @@ void KSpreadCellIface::setTextColor(int r,int g,int b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-void KSpreadCellIface::setTextColor(const QString& _c)
+void CellIface::setTextColor(const QString& _c)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -173,7 +173,7 @@ void KSpreadCellIface::setTextColor(const QString& _c)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-void KSpreadCellIface::setAngle(int angle)
+void CellIface::setAngle(int angle)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -181,14 +181,14 @@ void KSpreadCellIface::setAngle(int angle)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-int  KSpreadCellIface::angle() const
+int  CellIface::angle() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->getAngle(m_point.x(), m_point.y());
 }
 
-void KSpreadCellIface::setVerticalText(bool _vertical)
+void CellIface::setVerticalText(bool _vertical)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -196,7 +196,7 @@ void KSpreadCellIface::setVerticalText(bool _vertical)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-bool KSpreadCellIface::verticalText() const
+bool CellIface::verticalText() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -204,7 +204,7 @@ bool KSpreadCellIface::verticalText() const
 }
 
 
-void KSpreadCellIface::setMultiRow(bool _multi)
+void CellIface::setMultiRow(bool _multi)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -212,14 +212,14 @@ void KSpreadCellIface::setMultiRow(bool _multi)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-bool KSpreadCellIface::multiRow() const
+bool CellIface::multiRow() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->multiRow( m_point.x(), m_point.y() );
 }
 
-void KSpreadCellIface::setAlign( const QString& _Align )
+void CellIface::setAlign( const QString& _Align )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -236,7 +236,7 @@ void KSpreadCellIface::setAlign( const QString& _Align )
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-QString KSpreadCellIface::align() const
+QString CellIface::align() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -259,7 +259,7 @@ QString KSpreadCellIface::align() const
     return alignString;
 }
 
-void KSpreadCellIface::setAlignY( const QString& _AlignY )
+void CellIface::setAlignY( const QString& _AlignY )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -276,7 +276,7 @@ void KSpreadCellIface::setAlignY( const QString& _AlignY )
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-QString KSpreadCellIface::alignY() const
+QString CellIface::alignY() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -299,7 +299,7 @@ QString KSpreadCellIface::alignY() const
     return alignString;
 }
 
-void KSpreadCellIface::setPostfix(const QString &_postfix)
+void CellIface::setPostfix(const QString &_postfix)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -307,14 +307,14 @@ void KSpreadCellIface::setPostfix(const QString &_postfix)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-QString KSpreadCellIface::prefix() const
+QString CellIface::prefix() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->prefix( m_point.x(), m_point.y() );
 }
 
-void KSpreadCellIface::setPrefix(const QString &_prefix)
+void CellIface::setPrefix(const QString &_prefix)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -322,14 +322,14 @@ void KSpreadCellIface::setPrefix(const QString &_prefix)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-QString KSpreadCellIface::postfix() const
+QString CellIface::postfix() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->postfix( m_point.x(), m_point.y() );
 }
 
-void KSpreadCellIface::setFormatType(const QString &_formatType)
+void CellIface::setFormatType(const QString &_formatType)
 {
     if( !m_sheet ) return;
 
@@ -380,7 +380,7 @@ void KSpreadCellIface::setFormatType(const QString &_formatType)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-QString KSpreadCellIface::getFormatType() const
+QString CellIface::getFormatType() const
 {
     if( !m_sheet ) return QString::null;
 
@@ -484,7 +484,7 @@ QString KSpreadCellIface::getFormatType() const
     return stringFormat;
 }
 
-void KSpreadCellIface::setPrecision(int _p)
+void CellIface::setPrecision(int _p)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -492,14 +492,14 @@ void KSpreadCellIface::setPrecision(int _p)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-int KSpreadCellIface::precision() const
+int CellIface::precision() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->precision( m_point.x(), m_point.y() );
 }
 
-void KSpreadCellIface::setTextFontBold(bool _b)
+void CellIface::setTextFontBold(bool _b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -507,14 +507,14 @@ void KSpreadCellIface::setTextFontBold(bool _b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-bool KSpreadCellIface::textFontBold() const
+bool CellIface::textFontBold() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontBold( m_point.x(), m_point.y() );
 }
 
-void KSpreadCellIface::setTextFontItalic(bool _b)
+void CellIface::setTextFontItalic(bool _b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -522,7 +522,7 @@ void KSpreadCellIface::setTextFontItalic(bool _b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-bool KSpreadCellIface::textFontItalic() const
+bool CellIface::textFontItalic() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -530,7 +530,7 @@ bool KSpreadCellIface::textFontItalic() const
 }
 
 
-void KSpreadCellIface::setTextFontUnderline(bool _b)
+void CellIface::setTextFontUnderline(bool _b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -538,14 +538,14 @@ void KSpreadCellIface::setTextFontUnderline(bool _b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-bool KSpreadCellIface::textFontUnderline() const
+bool CellIface::textFontUnderline() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontUnderline( m_point.x(), m_point.y() );
 }
 
-void KSpreadCellIface::setTextFontStrike(bool _b)
+void CellIface::setTextFontStrike(bool _b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -553,14 +553,14 @@ void KSpreadCellIface::setTextFontStrike(bool _b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-bool KSpreadCellIface::textFontStrike() const
+bool CellIface::textFontStrike() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontStrike( m_point.x(), m_point.y() );
 }
 
-void KSpreadCellIface::setTextFontSize( int _size )
+void CellIface::setTextFontSize( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -568,14 +568,14 @@ void KSpreadCellIface::setTextFontSize( int _size )
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-int KSpreadCellIface::textFontSize() const
+int CellIface::textFontSize() const
 {
     if( !m_sheet ) return 10;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->textFontSize( m_point.x(), m_point.y() );
 }
 
-void KSpreadCellIface::setTextFontFamily( const QString& _font )
+void CellIface::setTextFontFamily( const QString& _font )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -583,7 +583,7 @@ void KSpreadCellIface::setTextFontFamily( const QString& _font )
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-QString KSpreadCellIface::textFontFamily() const
+QString CellIface::textFontFamily() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -591,7 +591,7 @@ QString KSpreadCellIface::textFontFamily() const
 }
 
 //border left
-void KSpreadCellIface::setLeftBorderStyle( const QString& _style )
+void CellIface::setLeftBorderStyle( const QString& _style )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -611,7 +611,7 @@ void KSpreadCellIface::setLeftBorderStyle( const QString& _style )
 
 }
 
-void KSpreadCellIface::setLeftBorderColor(const QString& _c)
+void CellIface::setLeftBorderColor(const QString& _c)
 {
     if( !m_sheet ) return;
     QColor c(_c);
@@ -621,7 +621,7 @@ void KSpreadCellIface::setLeftBorderColor(const QString& _c)
 
 }
 
-void KSpreadCellIface::setLeftBorderColor(int r,int g,int b)
+void CellIface::setLeftBorderColor(int r,int g,int b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -630,7 +630,7 @@ void KSpreadCellIface::setLeftBorderColor(int r,int g,int b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-void KSpreadCellIface::setLeftBorderWidth( int _size )
+void CellIface::setLeftBorderWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -639,21 +639,21 @@ void KSpreadCellIface::setLeftBorderWidth( int _size )
 }
 
 
-int  KSpreadCellIface::leftBorderWidth() const
+int  CellIface::leftBorderWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->leftBorderWidth(m_point.x(), m_point.y());
 }
 
-QString KSpreadCellIface::leftBorderColor() const
+QString CellIface::leftBorderColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->leftBorderColor( m_point.x(), m_point.y() ).name();
 }
 
-QString KSpreadCellIface::leftBorderStyle() const
+QString CellIface::leftBorderStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
@@ -675,7 +675,7 @@ QString KSpreadCellIface::leftBorderStyle() const
 }
 
 //border right
-void KSpreadCellIface::setRightBorderStyle( const QString& _style )
+void CellIface::setRightBorderStyle( const QString& _style )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -695,7 +695,7 @@ void KSpreadCellIface::setRightBorderStyle( const QString& _style )
 
 }
 
-void KSpreadCellIface::setRightBorderColor(const QString& _c)
+void CellIface::setRightBorderColor(const QString& _c)
 {
     if( !m_sheet ) return;
     QColor c(_c);
@@ -704,7 +704,7 @@ void KSpreadCellIface::setRightBorderColor(const QString& _c)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
-void KSpreadCellIface::setRightBorderColor(int r,int g,int b)
+void CellIface::setRightBorderColor(int r,int g,int b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -713,7 +713,7 @@ void KSpreadCellIface::setRightBorderColor(int r,int g,int b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-void KSpreadCellIface::setRightBorderWidth( int _size )
+void CellIface::setRightBorderWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -722,21 +722,21 @@ void KSpreadCellIface::setRightBorderWidth( int _size )
 
 }
 
-int  KSpreadCellIface::rightBorderWidth() const
+int  CellIface::rightBorderWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->rightBorderWidth(m_point.x(), m_point.y());
 }
 
-QString KSpreadCellIface::rightBorderColor() const
+QString CellIface::rightBorderColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->rightBorderColor( m_point.x(), m_point.y() ).name();
 }
 
-QString KSpreadCellIface::rightBorderStyle() const
+QString CellIface::rightBorderStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
@@ -758,7 +758,7 @@ QString KSpreadCellIface::rightBorderStyle() const
 }
 
 //border top
-void KSpreadCellIface::setTopBorderStyle( const QString& _style )
+void CellIface::setTopBorderStyle( const QString& _style )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -778,7 +778,7 @@ void KSpreadCellIface::setTopBorderStyle( const QString& _style )
 
 }
 
-void KSpreadCellIface::setTopBorderColor(const QString& _c)
+void CellIface::setTopBorderColor(const QString& _c)
 {
     if( !m_sheet ) return;
     QColor c(_c);
@@ -787,7 +787,7 @@ void KSpreadCellIface::setTopBorderColor(const QString& _c)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
-void KSpreadCellIface::setTopBorderColor(int r,int g,int b)
+void CellIface::setTopBorderColor(int r,int g,int b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -796,7 +796,7 @@ void KSpreadCellIface::setTopBorderColor(int r,int g,int b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-void KSpreadCellIface::setTopBorderWidth( int _size )
+void CellIface::setTopBorderWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -804,21 +804,21 @@ void KSpreadCellIface::setTopBorderWidth( int _size )
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-int  KSpreadCellIface::topBorderWidth() const
+int  CellIface::topBorderWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->topBorderWidth(m_point.x(), m_point.y());
 }
 
-QString KSpreadCellIface::topBorderColor() const
+QString CellIface::topBorderColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->topBorderColor( m_point.x(), m_point.y() ).name();
 }
 
-QString KSpreadCellIface::topBorderStyle() const
+QString CellIface::topBorderStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
@@ -840,7 +840,7 @@ QString KSpreadCellIface::topBorderStyle() const
 }
 
 //border bottom
-void KSpreadCellIface::setBottomBorderStyle( const QString& _style )
+void CellIface::setBottomBorderStyle( const QString& _style )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -860,7 +860,7 @@ void KSpreadCellIface::setBottomBorderStyle( const QString& _style )
 
 }
 
-void KSpreadCellIface::setBottomBorderColor(const QString& _c)
+void CellIface::setBottomBorderColor(const QString& _c)
 {
     if( !m_sheet ) return;
     QColor c(_c);
@@ -869,7 +869,7 @@ void KSpreadCellIface::setBottomBorderColor(const QString& _c)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
-void KSpreadCellIface::setBottomBorderColor(int r,int g,int b)
+void CellIface::setBottomBorderColor(int r,int g,int b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -878,7 +878,7 @@ void KSpreadCellIface::setBottomBorderColor(int r,int g,int b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-void KSpreadCellIface::setBottomBorderWidth( int _size )
+void CellIface::setBottomBorderWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -886,21 +886,21 @@ void KSpreadCellIface::setBottomBorderWidth( int _size )
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-int  KSpreadCellIface::bottomBorderWidth() const
+int  CellIface::bottomBorderWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->bottomBorderWidth(m_point.x(), m_point.y());
 }
 
-QString KSpreadCellIface::bottomBorderColor() const
+QString CellIface::bottomBorderColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->bottomBorderColor( m_point.x(), m_point.y() ).name();
 }
 
-QString KSpreadCellIface::bottomBorderStyle() const
+QString CellIface::bottomBorderStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
@@ -922,7 +922,7 @@ QString KSpreadCellIface::bottomBorderStyle() const
 }
 
 //fall back diagonal
-void KSpreadCellIface::setFallDiagonalStyle( const QString& _style )
+void CellIface::setFallDiagonalStyle( const QString& _style )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -942,7 +942,7 @@ void KSpreadCellIface::setFallDiagonalStyle( const QString& _style )
 
 }
 
-void KSpreadCellIface::setFallDiagonalColor(const QString& _c)
+void CellIface::setFallDiagonalColor(const QString& _c)
 {
     if( !m_sheet ) return;
     QColor c(_c);
@@ -951,7 +951,7 @@ void KSpreadCellIface::setFallDiagonalColor(const QString& _c)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
-void KSpreadCellIface::setFallDiagonalColor(int r,int g,int b)
+void CellIface::setFallDiagonalColor(int r,int g,int b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -960,7 +960,7 @@ void KSpreadCellIface::setFallDiagonalColor(int r,int g,int b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-void KSpreadCellIface::setFallDiagonalWidth( int _size )
+void CellIface::setFallDiagonalWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -968,21 +968,21 @@ void KSpreadCellIface::setFallDiagonalWidth( int _size )
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-int  KSpreadCellIface::fallDiagonalWidth() const
+int  CellIface::fallDiagonalWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->fallDiagonalWidth(m_point.x(), m_point.y());
 }
 
-QString KSpreadCellIface::fallDiagonalColor() const
+QString CellIface::fallDiagonalColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->fallDiagonalColor( m_point.x(), m_point.y() ).name();
 }
 
-QString KSpreadCellIface::fallDiagonalStyle() const
+QString CellIface::fallDiagonalStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
@@ -1005,7 +1005,7 @@ QString KSpreadCellIface::fallDiagonalStyle() const
 
 
 //GoUpDiagonal
-void KSpreadCellIface::setGoUpDiagonalStyle( const QString& _style )
+void CellIface::setGoUpDiagonalStyle( const QString& _style )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1025,7 +1025,7 @@ void KSpreadCellIface::setGoUpDiagonalStyle( const QString& _style )
 
 }
 
-void KSpreadCellIface::setGoUpDiagonalColor(const QString& _c)
+void CellIface::setGoUpDiagonalColor(const QString& _c)
 {
     if( !m_sheet ) return;
     QColor c(_c);
@@ -1034,7 +1034,7 @@ void KSpreadCellIface::setGoUpDiagonalColor(const QString& _c)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
-void KSpreadCellIface::setGoUpDiagonalColor(int r,int g,int b)
+void CellIface::setGoUpDiagonalColor(int r,int g,int b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1043,7 +1043,7 @@ void KSpreadCellIface::setGoUpDiagonalColor(int r,int g,int b)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-void KSpreadCellIface::setGoUpDiagonalWidth( int _size )
+void CellIface::setGoUpDiagonalWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1051,21 +1051,21 @@ void KSpreadCellIface::setGoUpDiagonalWidth( int _size )
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-int  KSpreadCellIface::goUpDiagonalWidth() const
+int  CellIface::goUpDiagonalWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->goUpDiagonalWidth(m_point.x(), m_point.y());
 }
 
-QString KSpreadCellIface::goUpDiagonalColor() const
+QString CellIface::goUpDiagonalColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
     return cell->goUpDiagonalColor( m_point.x(), m_point.y() ).name();
 }
 
-QString KSpreadCellIface::goUpDiagonalStyle() const
+QString CellIface::goUpDiagonalStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
@@ -1086,7 +1086,7 @@ QString KSpreadCellIface::goUpDiagonalStyle() const
     return tmp;
 }
 
-void KSpreadCellIface::setIndent(double indent)
+void CellIface::setIndent(double indent)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1097,28 +1097,28 @@ void KSpreadCellIface::setIndent(double indent)
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
-double KSpreadCellIface::getIndent() const
+double CellIface::getIndent() const
 {
     if( !m_sheet ) return 0.0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->getIndent( m_point.x(), m_point.y() );
 }
 
-void KSpreadCellIface::setDontPrintText ( bool _print)
+void CellIface::setDontPrintText ( bool _print)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     cell->setDontPrintText ( _print);
 }
 
-bool KSpreadCellIface::getDontprintText() const
+bool CellIface::getDontprintText() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     return cell->getDontprintText(m_point.x(), m_point.y());
 }
 
-bool KSpreadCellIface::hasValidation() const
+bool CellIface::hasValidation() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1128,7 +1128,7 @@ bool KSpreadCellIface::hasValidation() const
         return false;
 }
 
-QString KSpreadCellIface::validationTitle() const
+QString CellIface::validationTitle() const
 {
     if( !m_sheet ) return "";
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1140,7 +1140,7 @@ QString KSpreadCellIface::validationTitle() const
         return "";
 }
 
-QString KSpreadCellIface::validationMessage() const
+QString CellIface::validationMessage() const
 {
     if( !m_sheet ) return "";
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1152,7 +1152,7 @@ QString KSpreadCellIface::validationMessage() const
         return "";
 }
 
-QStringList KSpreadCellIface::listValidation() const
+QStringList CellIface::listValidation() const
 {
     if( !m_sheet ) return QStringList();
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1165,7 +1165,7 @@ QStringList KSpreadCellIface::listValidation() const
 }
 
 
-QString KSpreadCellIface::validationTitleInfo() const
+QString CellIface::validationTitleInfo() const
 {
     if( !m_sheet ) return "";
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1177,7 +1177,7 @@ QString KSpreadCellIface::validationTitleInfo() const
         return "";
 }
 
-QString KSpreadCellIface::validationMessageInfo() const
+QString CellIface::validationMessageInfo() const
 {
     if( !m_sheet ) return "";
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1190,7 +1190,7 @@ QString KSpreadCellIface::validationMessageInfo() const
 }
 
 
-bool KSpreadCellIface::displayValidationInformation() const
+bool CellIface::displayValidationInformation() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1202,7 +1202,7 @@ bool KSpreadCellIface::displayValidationInformation() const
         return false;
 }
 
-bool KSpreadCellIface::displayValidationMessage() const
+bool CellIface::displayValidationMessage() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1214,7 +1214,7 @@ bool KSpreadCellIface::displayValidationMessage() const
         return false;
 }
 
-bool KSpreadCellIface::validationAllowEmptyCell() const
+bool CellIface::validationAllowEmptyCell() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
@@ -1226,7 +1226,7 @@ bool KSpreadCellIface::validationAllowEmptyCell() const
         return false;
 }
 
-void KSpreadCellIface::removeValidity()
+void CellIface::removeValidity()
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );

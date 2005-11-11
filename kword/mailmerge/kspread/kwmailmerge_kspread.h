@@ -94,8 +94,8 @@ class KWMailMergeKSpread: public KWMailMergeDataSource
 
     QString cellText( const KSpread::Cell* ) const;
 
-    KSpreadDoc *_document;
-    KSpreadSheet* _sheet;
+    KSpread::Doc *_document;
+    KSpread::Sheet* _sheet;
     KURL _url;
     int _spreadSheetNumber;
 

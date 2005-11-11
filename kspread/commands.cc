@@ -33,7 +33,7 @@ using namespace KSpread;
 
 // ----- UndoWrapperCommand -----
 
-UndoWrapperCommand::UndoWrapperCommand( KSpreadUndoAction* ua )
+UndoWrapperCommand::UndoWrapperCommand( UndoAction* ua )
 {
   undoAction = ua;
 }
@@ -81,14 +81,14 @@ QString MergeCellCommand::name() const
 
 void MergeCellCommand::execute()
 {
-  KSpreadSheet* sheet = cell->sheet();
+  Sheet* sheet = cell->sheet();
   if( !sheet ) return;
   sheet->changeMergedCell( cell->column(), cell->row(), colSpan, rowSpan);
 }
 
 void MergeCellCommand::unexecute()
 {
-  KSpreadSheet* sheet = cell->sheet();
+  Sheet* sheet = cell->sheet();
   if( !sheet ) return;
   sheet->changeMergedCell( cell->column(), cell->row(), oldColSpan, oldRowSpan);
 }
@@ -109,21 +109,21 @@ QString DissociateCellCommand::name() const
 
 void DissociateCellCommand::execute()
 {
-  KSpreadSheet* sheet = cell->sheet();
+  Sheet* sheet = cell->sheet();
   if( !sheet ) return;
   sheet->changeMergedCell( cell->column(), cell->row(), 0, 0 );
 }
 
 void DissociateCellCommand::unexecute()
 {
-  KSpreadSheet* sheet = cell->sheet();
+  Sheet* sheet = cell->sheet();
   if( !sheet ) return;
   sheet->changeMergedCell( cell->column(), cell->row(), oldColSpan, oldRowSpan);
 }
 
 // ----- RenameSheetCommand -----
 
-RenameSheetCommand::RenameSheetCommand( KSpreadSheet* s, const QString &name )
+RenameSheetCommand::RenameSheetCommand( Sheet* s, const QString &name )
 {
   sheet = s;
   if( s ) oldName = s->sheetName();
@@ -149,7 +149,7 @@ void RenameSheetCommand::unexecute()
 
 // ----- HideSheetCommand -----
 
-HideSheetCommand::HideSheetCommand( KSpreadSheet* sheet )
+HideSheetCommand::HideSheetCommand( Sheet* sheet )
 {
   doc = sheet->doc();
   sheetName = sheet->sheetName();
@@ -157,7 +157,7 @@ HideSheetCommand::HideSheetCommand( KSpreadSheet* sheet )
 
 void HideSheetCommand::execute()
 {
-  KSpreadSheet* sheet = doc->map()->findSheet( sheetName );
+  Sheet* sheet = doc->map()->findSheet( sheetName );
   if( !sheet ) return;
 
   sheet->hideSheet( true );
@@ -165,7 +165,7 @@ void HideSheetCommand::execute()
 
 void HideSheetCommand::unexecute()
 {
-  KSpreadSheet* sheet = doc->map()->findSheet( sheetName );
+  Sheet* sheet = doc->map()->findSheet( sheetName );
   if( !sheet ) return;
 
   sheet->hideSheet( false );
@@ -180,7 +180,7 @@ QString HideSheetCommand::name() const
 
 // ----- ShowSheetCommand -----
 
-ShowSheetCommand::ShowSheetCommand( KSpreadSheet* sheet )
+ShowSheetCommand::ShowSheetCommand( Sheet* sheet )
 {
   doc = sheet->doc();
   sheetName = sheet->sheetName();
@@ -188,7 +188,7 @@ ShowSheetCommand::ShowSheetCommand( KSpreadSheet* sheet )
 
 void ShowSheetCommand::execute()
 {
-  KSpreadSheet* sheet = doc->map()->findSheet( sheetName );
+  Sheet* sheet = doc->map()->findSheet( sheetName );
   if( !sheet ) return;
 
   sheet->hideSheet( false );
@@ -196,7 +196,7 @@ void ShowSheetCommand::execute()
 
 void ShowSheetCommand::unexecute()
 {
-  KSpreadSheet* sheet = doc->map()->findSheet( sheetName );
+  Sheet* sheet = doc->map()->findSheet( sheetName );
   if( !sheet ) return;
 
   sheet->hideSheet( true );
@@ -212,7 +212,7 @@ QString ShowSheetCommand::name() const
 
 // ----- AddSheetCommand -----
 
-AddSheetCommand::AddSheetCommand( KSpreadSheet* s )
+AddSheetCommand::AddSheetCommand( Sheet* s )
 {
     sheet = s;
     doc = sheet->doc();
@@ -239,7 +239,7 @@ QString AddSheetCommand::name() const
 
 // ----- RemoveSheetCommand -----
 
-RemoveSheetCommand::RemoveSheetCommand( KSpreadSheet* s )
+RemoveSheetCommand::RemoveSheetCommand( Sheet* s )
 {
     sheet = s;
     doc = sheet->doc();
@@ -264,7 +264,7 @@ QString RemoveSheetCommand::name() const
 
 // ----- SheetPropertiesCommand -----
 
-SheetPropertiesCommand::SheetPropertiesCommand( KSpreadDoc* d, KSpreadSheet* s )
+SheetPropertiesCommand::SheetPropertiesCommand( Doc* d, Sheet* s )
 {
     sheet = s;
     doc = d;
@@ -285,7 +285,7 @@ QString SheetPropertiesCommand::name() const
     return i18n("Change Sheet Properties");
 }
 
-void SheetPropertiesCommand::setLayoutDirection( KSpreadSheet::LayoutDirection dir )
+void SheetPropertiesCommand::setLayoutDirection( Sheet::LayoutDirection dir )
 {
     newDirection = dir;
 }
@@ -368,7 +368,7 @@ void SheetPropertiesCommand::unexecute()
 
 // ----- InsertColumnCommand -----
 
-InsertColumnCommand::InsertColumnCommand( KSpreadSheet* s , unsigned int _column, unsigned int _nbCol )
+InsertColumnCommand::InsertColumnCommand( Sheet* s , unsigned int _column, unsigned int _nbCol )
 {
   doc = s->doc();
   sheetName = s->sheetName();
@@ -378,14 +378,14 @@ InsertColumnCommand::InsertColumnCommand( KSpreadSheet* s , unsigned int _column
 
 void InsertColumnCommand::execute()
 {
-    KSpreadSheet* sheet = doc->map()->findSheet( sheetName );
+    Sheet* sheet = doc->map()->findSheet( sheetName );
     if( !sheet ) return;
     sheet->insertColumn( insertPosColumn,nbColumnInserted);
 }
 
 void InsertColumnCommand::unexecute()
 {
-    KSpreadSheet* sheet = doc->map()->findSheet( sheetName );
+    Sheet* sheet = doc->map()->findSheet( sheetName );
     if( !sheet ) return;
     sheet->removeColumn( insertPosColumn,nbColumnInserted );
 }
@@ -399,7 +399,7 @@ QString InsertColumnCommand::name() const
 // ----- DefinePrintRangeCommand -----
 
 
-DefinePrintRangeCommand::DefinePrintRangeCommand( KSpreadSheet *s )
+DefinePrintRangeCommand::DefinePrintRangeCommand( Sheet *s )
 {
   doc = s->doc();
   sheetName = s->sheetName();
@@ -408,7 +408,7 @@ DefinePrintRangeCommand::DefinePrintRangeCommand( KSpreadSheet *s )
 
 void DefinePrintRangeCommand::execute()
 {
-    KSpreadSheet* sheet = doc->map()->findSheet( sheetName );
+    Sheet* sheet = doc->map()->findSheet( sheetName );
     if( !sheet ) return;
     sheet->print()->setPrintRange( printRangeRedo );
 
@@ -416,7 +416,7 @@ void DefinePrintRangeCommand::execute()
 
 void DefinePrintRangeCommand::unexecute()
 {
-    KSpreadSheet* sheet = doc->map()->findSheet( sheetName );
+    Sheet* sheet = doc->map()->findSheet( sheetName );
     if( !sheet ) return;
     printRangeRedo = sheet->print()->printRange();
     sheet->print()->setPrintRange( printRange );
@@ -430,7 +430,7 @@ QString DefinePrintRangeCommand::name() const
 // ----- PaperLayoutCommand -----
 
 
-PaperLayoutCommand::PaperLayoutCommand( KSpreadSheet *s )
+PaperLayoutCommand::PaperLayoutCommand( Sheet *s )
 {
   doc = s->doc();
   sheetName = s->sheetName();
@@ -450,9 +450,9 @@ PaperLayoutCommand::PaperLayoutCommand( KSpreadSheet *s )
 
 void PaperLayoutCommand::execute()
 {
-    KSpreadSheet* sheet = doc->map()->findSheet( sheetName );
+    Sheet* sheet = doc->map()->findSheet( sheetName );
     if( !sheet ) return;
-    KSpreadSheetPrint* print = sheet->print();
+    SheetPrint* print = sheet->print();
 
     print->setPaperLayout( plRedo.ptLeft,  plRedo.ptTop,
                            plRedo.ptRight, plRedo.ptBottom,
@@ -479,9 +479,9 @@ void PaperLayoutCommand::execute()
 
 void PaperLayoutCommand::unexecute()
 {
-    KSpreadSheet* sheet = doc->map()->findSheet( sheetName );
+    Sheet* sheet = doc->map()->findSheet( sheetName );
     if( !sheet ) return;
-    KSpreadSheetPrint* print = sheet->print();
+    SheetPrint* print = sheet->print();
     plRedo = print->paperLayout();
     print->setPaperLayout( pl.ptLeft,  pl.ptTop,
                            pl.ptRight, pl.ptBottom,
@@ -536,7 +536,7 @@ LinkCommand::LinkCommand( Cell* c, const QString& text, const QString& link )
   newText = text;
   newLink = link;
 
-  KSpreadSheet* s = cell->sheet();
+  Sheet* s = cell->sheet();
   if( s ) doc = s->doc();
 }
 

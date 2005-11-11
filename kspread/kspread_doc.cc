@@ -86,21 +86,21 @@ static const int CURRENT_SYNTAX_VERSION = 1;
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.2";
 
-class DocPrivate
+class KSpread::DocPrivate
 {
 public:
 
-  KSpreadMap *map;
+  Map *map;
   KLocale *locale;
-  KSpreadStyleManager *styleManager;
+  StyleManager *styleManager;
   ValueParser *parser;
   ValueFormatter *formatter;
   ValueConverter *converter;
   ValueCalc *calc;
 
-  KSpreadSheet *activeSheet;
+  Sheet *activeSheet;
     KSPLoadingInfo *m_loadingInfo;
-  static QValueList<KSpreadDoc*> s_docs;
+  static QValueList<Doc*> s_docs;
   static int s_docId;
 
   DCOPObject* dcop;
@@ -119,7 +119,7 @@ public:
 
   QColor pageBorderColor;
 
-  QPtrList<KSpreadPlugin> plugins;
+  QPtrList<Plugin> plugins;
 
   QValueList<Reference> refs;
   KCompletion listCompletion;
@@ -154,11 +154,11 @@ public:
 
 /*****************************************************************************
  *
- * KSpreadDoc
+ * Doc
  *
  *****************************************************************************/
 
-QValueList<KSpreadDoc*> DocPrivate::s_docs;
+QValueList<Doc*> DocPrivate::s_docs;
 int DocPrivate::s_docId = 0;
 
 #define deleteLoadingInfo() { \
@@ -166,15 +166,15 @@ int DocPrivate::s_docId = 0;
         d->m_loadingInfo = 0L; \
 }
 
-KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
+Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
   d = new DocPrivate;
   d->m_loadingInfo = 0L;
 
-  d->map = new KSpreadMap( this, "Map" );
-  d->locale = new KSpreadLocale;
-  d->styleManager = new KSpreadStyleManager();
+  d->map = new Map( this, "Map" );
+  d->locale = new Locale;
+  d->styleManager = new StyleManager();
 
   d->parser = new KSpread::ValueParser( d->locale );
   d->converter = new KSpread::ValueConverter ( d->parser );
@@ -188,8 +188,8 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->configLoadFromFile = false;
 
   QFont f( KoGlobal::defaultFont() );
-  KSpreadFormat::setGlobalRowHeight( f.pointSizeFloat() + 3 );
-  KSpreadFormat::setGlobalColWidth( ( f.pointSizeFloat() + 3 ) * 5 );
+  Format::setGlobalRowHeight( f.pointSizeFloat() + 3 );
+  Format::setGlobalColWidth( ( f.pointSizeFloat() + 3 ) * 5 );
 
   d->plugins.setAutoDelete( false );
 
@@ -197,7 +197,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
 
   documents().append( this );
 
-  setInstance( KSpreadFactory::global(), false );
+  setInstance( Factory::global(), false );
   setTemplateType( "kspread_template" );
 
   d->dcop = 0;
@@ -243,7 +243,7 @@ KSpreadDoc::KSpreadDoc( QWidget *parentWidget, const char *widgetName, QObject* 
   d->dontCheckTitleCase = false;
 }
 
-KSpreadDoc::~KSpreadDoc()
+Doc::~Doc()
 {
   //don't save config when kword is embedded into konqueror
   if(isReadWrite())
@@ -269,12 +269,12 @@ KSpreadDoc::~KSpreadDoc()
   delete d;
 }
 
-QValueList<KSpreadDoc*> KSpreadDoc::documents()
+QValueList<Doc*> Doc::documents()
 {
   return DocPrivate::s_docs;
 }
 
-bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
+bool Doc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
   //  ElapsedTime et( "      initDoc        " );
 
@@ -282,7 +282,7 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     if (flags==KoDocument::InitDocEmpty)
     {
-        KConfig *config = KSpreadFactory::global()->config();
+        KConfig *config = Factory::global()->config();
         int _page=1;
         if( config->hasGroup("Parameters" ))
         {
@@ -308,7 +308,7 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     else
             dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
-    ret = KoTemplateChooseDia::choose( KSpreadFactory::global(), f,
+    ret = KoTemplateChooseDia::choose( Factory::global(), f,
                                        dlgtype, "kspread_template", parentWidget );
 
     if ( ret == KoTemplateChooseDia::File )
@@ -327,7 +327,7 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     if ( ret == KoTemplateChooseDia::Empty )
     {
-	KConfig *config = KSpreadFactory::global()->config();
+	KConfig *config = Factory::global()->config();
 	int _page=1;
 	if( config->hasGroup("Parameters" ))
 	{
@@ -362,7 +362,7 @@ bool KSpreadDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     return false;
 }
 
-void KSpreadDoc::openTemplate (const QString& file)
+void Doc::openTemplate (const QString& file)
 {
     d->m_loadingInfo = new KSPLoadingInfo;
     d->m_loadingInfo->setLoadTemplate( true );
@@ -371,55 +371,55 @@ void KSpreadDoc::openTemplate (const QString& file)
     initConfig();
 }
 
-KLocale *KSpreadDoc::locale () const
+KLocale *Doc::locale () const
 {
   return d->locale;
 }
 
-KSpreadMap *KSpreadDoc::map () const
+Map *Doc::map () const
 {
   return d->map;
 }
 
-KSpreadStyleManager *KSpreadDoc::styleManager () const
+StyleManager *Doc::styleManager () const
 {
   return d->styleManager;
 }
 
-KSpread::ValueParser *KSpreadDoc::parser () const
+KSpread::ValueParser *Doc::parser () const
 {
   return d->parser;
 }
 
-KSpread::ValueFormatter *KSpreadDoc::formatter () const
+KSpread::ValueFormatter *Doc::formatter () const
 {
   return d->formatter;
 }
 
-KSpread::ValueConverter *KSpreadDoc::converter () const
+KSpread::ValueConverter *Doc::converter () const
 {
   return d->converter;
 }
 
-KSpread::ValueCalc *KSpreadDoc::calc () const
+KSpread::ValueCalc *Doc::calc () const
 {
   return d->calc;
 }
 
-void KSpreadDoc::saveConfig()
+void Doc::saveConfig()
 {
     if ( isEmbedded() ||!isReadWrite())
         return;
-    KConfig *config = KSpreadFactory::global()->config();
+    KConfig *config = Factory::global()->config();
     config->setGroup( "Parameters" );
     config->writeEntry( "Zoom", m_zoom );
 
 }
 
-void KSpreadDoc::initConfig()
+void Doc::initConfig()
 {
     KSpellConfig ksconfig;
-    KConfig *config = KSpreadFactory::global()->config();
+    KConfig *config = Factory::global()->config();
     if( config->hasGroup("KSpell kspread" ) )
     {
         config->setGroup( "KSpell kspread" );
@@ -450,54 +450,54 @@ void KSpreadDoc::initConfig()
     setZoomAndResolution( m_zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 }
 
-int KSpreadDoc::syntaxVersion() const
+int Doc::syntaxVersion() const
 {
   return d->syntaxVersion;
 }
 
-bool KSpreadDoc::isLoading() const
+bool Doc::isLoading() const
 {
   return d->isLoading;
 }
 
-QColor KSpreadDoc::pageBorderColor() const
+QColor Doc::pageBorderColor() const
 {
   return d->pageBorderColor;
 }
 
-void KSpreadDoc::changePageBorderColor( const QColor  & _color)
+void Doc::changePageBorderColor( const QColor  & _color)
 {
   d->pageBorderColor = _color;
 }
 
-const QValueList<Reference>  &KSpreadDoc::listArea()
+const QValueList<Reference>  &Doc::listArea()
 {
   return d->refs;
 }
 
-KCompletion& KSpreadDoc::completion()
+KCompletion& Doc::completion()
 {
   return d->listCompletion;
 }
 
-KoView* KSpreadDoc::createViewInstance( QWidget* parent, const char* name )
+KoView* Doc::createViewInstance( QWidget* parent, const char* name )
 {
     if ( name == 0 )
         name = "View";
-    return new KSpreadView( parent, name, this );
+    return new View( parent, name, this );
 }
 
-bool KSpreadDoc::saveChildren( KoStore* _store )
+bool Doc::saveChildren( KoStore* _store )
 {
   return map()->saveChildren( _store );
 }
 
-int KSpreadDoc::supportedSpecialFormats() const
+int Doc::supportedSpecialFormats() const
 {
     return SaveAsKOffice1dot1 | KoDocument::supportedSpecialFormats();
 }
 
-QDomDocument KSpreadDoc::saveXML()
+QDomDocument Doc::saveXML()
 {
     //Terminate current cell edition, if any
     QPtrListIterator<KoView> it( views() );
@@ -507,7 +507,7 @@ QDomDocument KSpreadDoc::saveXML()
     if (!isAutosaving())
     {
         for (; it.current(); ++it )
-            static_cast<KSpreadView *>( it.current() )->deleteEditor( true );
+            static_cast<View *>( it.current() )->deleteEditor( true );
     }
 
     QDomDocument doc = createDomDocument( "spreadsheet", CURRENT_DTD_VERSION );
@@ -524,7 +524,7 @@ QDomDocument KSpreadDoc::saveXML()
        for the whole map as the map paper layout. */
     if ( specialOutputFlag() == KoDocument::SaveAsKOffice1dot1 /* so it's KSpread < 1.2 */)
     {
-        KSpreadSheetPrint* printObject = map()->firstSheet()->print();
+        SheetPrint* printObject = map()->firstSheet()->print();
 
         QDomElement paper = doc.createElement( "paper" );
         paper.setAttribute( "format", printObject->paperFormatString() );
@@ -578,7 +578,7 @@ QDomDocument KSpreadDoc::saveXML()
         }
     }
 
-    QDomElement dlocale = ((KSpreadLocale *)locale())->save( doc );
+    QDomElement dlocale = ((Locale *)locale())->save( doc );
     spread.appendChild( dlocale );
 
     if (d->refs.count() != 0 )
@@ -609,11 +609,11 @@ QDomDocument KSpreadDoc::saveXML()
     }
 
     QDomElement defaults = doc.createElement( "defaults" );
-    defaults.setAttribute( "row-height", KSpreadFormat::globalRowHeight() );
-    defaults.setAttribute( "col-width", KSpreadFormat::globalColWidth() );
+    defaults.setAttribute( "row-height", Format::globalRowHeight() );
+    defaults.setAttribute( "col-width", Format::globalColWidth() );
     spread.appendChild( defaults );
 
-    KSpreadPlugin * plugin = d->plugins.first();
+    Plugin * plugin = d->plugins.first();
     for ( ; plugin != 0; plugin = d->plugins.next() )
     {
       QDomElement data( plugin->saveXML( doc ) );
@@ -631,12 +631,12 @@ QDomDocument KSpreadDoc::saveXML()
     return doc;
 }
 
-bool KSpreadDoc::loadChildren( KoStore* _store )
+bool Doc::loadChildren( KoStore* _store )
 {
     return map()->loadChildren( _store );
 }
 
-bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
+bool Doc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
 
     //Terminate current cell edition, if any
@@ -647,7 +647,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if (!isAutosaving())
     {
         for (; it2.current(); ++it2 )
-            static_cast<KSpreadView *>( it2.current() )->deleteEditor( true );
+            static_cast<View *>( it2.current() )->deleteEditor( true );
     }
     if ( !store->open( "content.xml" ) )
         return false;
@@ -806,7 +806,7 @@ bool KSpreadDoc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     return true;
 }
 
-void KSpreadDoc::loadOasisSettings( const QDomDocument&settingsDoc )
+void Doc::loadOasisSettings( const QDomDocument&settingsDoc )
 {
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
@@ -818,7 +818,7 @@ void KSpreadDoc::loadOasisSettings( const QDomDocument&settingsDoc )
     loadOasisIgnoreList( settings );
 }
 
-void KSpreadDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
+void Doc::saveOasisSettings( KoXmlWriter &settingsWriter )
 {
     settingsWriter.startElement("config:config-item-map-indexed");
     settingsWriter.addAttribute("config:name", "Views");
@@ -829,7 +829,7 @@ void KSpreadDoc::saveOasisSettings( KoXmlWriter &settingsWriter )
 }
 
 
-void KSpreadDoc::loadOasisIgnoreList( const KoOasisSettings& settings )
+void Doc::loadOasisIgnoreList( const KoOasisSettings& settings )
 {
     KoOasisSettings::Items configurationSettings = settings.itemSet( "configuration-settings" );
     if ( !configurationSettings.isNull() )
@@ -841,7 +841,7 @@ void KSpreadDoc::loadOasisIgnoreList( const KoOasisSettings& settings )
 }
 
 
-void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
+void Doc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles ) const
 {
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
@@ -853,13 +853,13 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
     }
 
-    styles = mainStyles.styles( KSpreadDoc::STYLE_USERSTYLE );
+    styles = mainStyles.styles( Doc::STYLE_USERSTYLE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:table-cell-properties" );
     }
 
-    styles = mainStyles.styles( KSpreadDoc::STYLE_DEFAULTSTYLE );
+    styles = mainStyles.styles( Doc::STYLE_DEFAULTSTYLE );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:default-style", (*it).name, "style:table-cell-properties" );
@@ -889,7 +889,7 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     //code from kword
     stylesWriter->startElement( "office:master-styles" );
 
-    styles = mainStyles.styles( KSpreadDoc::STYLE_PAGEMASTER );
+    styles = mainStyles.styles( Doc::STYLE_PAGEMASTER );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:master-page", (*it).name, "" );
@@ -903,7 +903,7 @@ void KSpreadDoc::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     delete stylesWriter;;
 }
 
-bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )
+bool Doc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* )
 {
     if ( !d->m_loadingInfo )
         d->m_loadingInfo = new KSPLoadingInfo;
@@ -971,7 +971,7 @@ bool KSpreadDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     return true;
 }
 
-bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
+bool Doc::loadXML( QIODevice *, const QDomDocument& doc )
 {
   QTime dt;
   dt.start();
@@ -989,7 +989,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     return false;
   }
 
-  d->syntaxVersion = KSpreadDoc::getAttribute( spread, "syntaxVersion", 0 );
+  d->syntaxVersion = Doc::getAttribute( spread, "syntaxVersion", 0 );
   if ( d->syntaxVersion > CURRENT_SYNTAX_VERSION )
   {
       int ret = KMessageBox::warningContinueCancel(
@@ -1006,7 +1006,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   // <locale>
   QDomElement loc = spread.namedItem( "locale" ).toElement();
   if ( !loc.isNull() )
-      ((KSpreadLocale *) locale())->load( loc );
+      ((Locale *) locale())->load( loc );
 
   emit sigProgress( 5 );
 
@@ -1017,14 +1017,14 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
     double d = defaults.attribute( "row-height" ).toDouble( &ok );
     if ( !ok )
       return false;
-    KSpreadFormat::setGlobalRowHeight( d );
+    Format::setGlobalRowHeight( d );
 
     d = defaults.attribute( "col-width" ).toDouble( &ok );
 
     if ( !ok )
       return false;
 
-    KSpreadFormat::setGlobalColWidth( d );
+    Format::setGlobalColWidth( d );
   }
 
   d->refs.clear();
@@ -1117,7 +1117,7 @@ bool KSpreadDoc::loadXML( QIODevice *, const QDomDocument& doc )
   return true;
 }
 
-void KSpreadDoc::loadPaper( QDomElement const & paper )
+void Doc::loadPaper( QDomElement const & paper )
 {
   // <paper>
   QString format = paper.attribute( "format" );
@@ -1133,7 +1133,7 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
     float bottom = borders.attribute( "bottom" ).toFloat();
 
     //apply to all sheet
-    QPtrListIterator<KSpreadSheet> it ( map()->sheetList() );
+    QPtrListIterator<Sheet> it ( map()->sheetList() );
     for( ; it.current(); ++it )
     {
       it.current()->print()->setPaperLayout( left, top, right, bottom,
@@ -1179,7 +1179,7 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
   fcenter = fcenter.replace( "<table>", "<sheet>" );
   fright  = fright.replace(  "<table>", "<sheet>" );
 
-  QPtrListIterator<KSpreadSheet> it ( map()->sheetList() );
+  QPtrListIterator<Sheet> it ( map()->sheetList() );
   for( ; it.current(); ++it )
   {
     it.current()->print()->setHeadFootLine( hleft, hcenter, hright,
@@ -1187,7 +1187,7 @@ void KSpreadDoc::loadPaper( QDomElement const & paper )
   }
 }
 
-bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
+bool Doc::completeLoading( KoStore* /* _store */ )
 {
   kdDebug(36001) << "------------------------ COMPLETING --------------------" << endl;
 
@@ -1197,7 +1197,7 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 
   QPtrListIterator<KoView> it( views() );
   for (; it.current(); ++it )
-    ((KSpreadView*)it.current())->initialPosition();
+    ((View*)it.current())->initialPosition();
 
   kdDebug(36001) << "------------------------ COMPLETION DONE --------------------" << endl;
 
@@ -1206,17 +1206,17 @@ bool KSpreadDoc::completeLoading( KoStore* /* _store */ )
 }
 
 
-void KSpreadDoc::registerPlugin( KSpreadPlugin * plugin )
+void Doc::registerPlugin( Plugin * plugin )
 {
   d->plugins.append( plugin );
 }
 
-void KSpreadDoc::deregisterPlugin( KSpreadPlugin * plugin )
+void Doc::deregisterPlugin( Plugin * plugin )
 {
   d->plugins.remove( plugin );
 }
 
-bool KSpreadDoc::docData( QString const & xmlTag, QDomElement & data )
+bool Doc::docData( QString const & xmlTag, QDomElement & data )
 {
   SavedDocParts::iterator iter = m_savedDocParts.find( xmlTag );
   if ( iter == m_savedDocParts.end() )
@@ -1228,147 +1228,147 @@ bool KSpreadDoc::docData( QString const & xmlTag, QDomElement & data )
   return true;
 }
 
-void KSpreadDoc::setShowVerticalScrollBar(bool _show)
+void Doc::setShowVerticalScrollBar(bool _show)
 {
   d->verticalScrollBar=_show;
 }
 
-bool KSpreadDoc::showVerticalScrollBar()const
+bool Doc::showVerticalScrollBar()const
 {
   return  d->verticalScrollBar;
 }
 
-void KSpreadDoc::setShowHorizontalScrollBar(bool _show)
+void Doc::setShowHorizontalScrollBar(bool _show)
 {
   d->horizontalScrollBar=_show;
 }
 
-bool KSpreadDoc::showHorizontalScrollBar()const
+bool Doc::showHorizontalScrollBar()const
 {
   return  d->horizontalScrollBar;
 }
 
-KGlobalSettings::Completion KSpreadDoc::completionMode( ) const
+KGlobalSettings::Completion Doc::completionMode( ) const
 {
   return d->completionMode;
 }
 
-void KSpreadDoc::setShowColumnHeader(bool _show)
+void Doc::setShowColumnHeader(bool _show)
 {
   d->columnHeader=_show;
 }
 
-bool KSpreadDoc::showColumnHeader() const
+bool Doc::showColumnHeader() const
 {
   return  d->columnHeader;
 }
 
-void KSpreadDoc::setShowRowHeader(bool _show)
+void Doc::setShowRowHeader(bool _show)
 {
   d->rowHeader=_show;
 }
 
-bool KSpreadDoc::showRowHeader() const
+bool Doc::showRowHeader() const
 {
   return  d->rowHeader;
 }
 
-void KSpreadDoc::setGridColor( const QColor& color )
+void Doc::setGridColor( const QColor& color )
 {
   d->gridColor = color;
 }
 
-QColor KSpreadDoc::gridColor() const
+QColor Doc::gridColor() const
 {
   return d->gridColor;
 }
 
-void KSpreadDoc::setCompletionMode( KGlobalSettings::Completion complMode)
+void Doc::setCompletionMode( KGlobalSettings::Completion complMode)
 {
   d->completionMode= complMode;
 }
 
-double KSpreadDoc::indentValue() const
+double Doc::indentValue() const
 {
   return d->indentValue;
 }
 
-void KSpreadDoc::setIndentValue( double val )
+void Doc::setIndentValue( double val )
 {
   d->indentValue = val;
 }
 
-void KSpreadDoc::setShowStatusBar(bool _statusBar)
+void Doc::setShowStatusBar(bool _statusBar)
 {
   d->showStatusBar=_statusBar;
 }
 
-bool KSpreadDoc::showStatusBar() const
+bool Doc::showStatusBar() const
 {
   return  d->showStatusBar;
 }
 
-void KSpreadDoc::setShowTabBar(bool _tabbar)
+void Doc::setShowTabBar(bool _tabbar)
 {
   d->showTabBar=_tabbar;
 }
 
-bool KSpreadDoc::showTabBar()const
+bool Doc::showTabBar()const
 {
   return  d->showTabBar;
 }
 
-void KSpreadDoc::setShowCommentIndicator(bool _indic)
+void Doc::setShowCommentIndicator(bool _indic)
 {
   d->showCommentIndicator=_indic;
 }
 
-bool KSpreadDoc::showCommentIndicator() const
+bool Doc::showCommentIndicator() const
 {
   return  d->showCommentIndicator;
 }
 
-void KSpreadDoc::setShowFormulaBar(bool _formulaBar)
+void Doc::setShowFormulaBar(bool _formulaBar)
 {
   d->showFormulaBar=_formulaBar;
 }
 
-bool KSpreadDoc::showFormulaBar() const
+bool Doc::showFormulaBar() const
 {
   return  d->showFormulaBar;
 }
 
-void KSpreadDoc::setShowMessageError(bool _show)
+void Doc::setShowMessageError(bool _show)
 {
   d->showError=_show;
 }
 
-bool KSpreadDoc::showMessageError() const
+bool Doc::showMessageError() const
 {
   return  d->showError;
 }
 
-KSpread::MoveTo KSpreadDoc::getMoveToValue() const
+KSpread::MoveTo Doc::getMoveToValue() const
 {
   return d->moveTo;
 }
 
-void KSpreadDoc::setMoveToValue(KSpread::MoveTo _moveTo)
+void Doc::setMoveToValue(KSpread::MoveTo _moveTo)
 {
   d->moveTo = _moveTo;
 }
 
-void KSpreadDoc::setTypeOfCalc( MethodOfCalc _calc)
+void Doc::setTypeOfCalc( MethodOfCalc _calc)
 {
   d->calcMethod=_calc;
 }
 
-MethodOfCalc KSpreadDoc::getTypeOfCalc() const
+MethodOfCalc Doc::getTypeOfCalc() const
 {
   return d->calcMethod;
 }
 
-void KSpreadDoc::setKSpellConfig(KSpellConfig _kspell)
+void Doc::setKSpellConfig(KSpellConfig _kspell)
 {
   if (d->spellConfig == 0 )
     d->spellConfig = new KSpellConfig();
@@ -1381,62 +1381,62 @@ void KSpreadDoc::setKSpellConfig(KSpellConfig _kspell)
   d->spellConfig->setClient(_kspell.client());
 }
 
-KSpellConfig * KSpreadDoc::getKSpellConfig()const
+KSpellConfig * Doc::getKSpellConfig()const
 {
   return d->spellConfig;
 }
 
-bool KSpreadDoc::dontCheckUpperWord() const
+bool Doc::dontCheckUpperWord() const
 {
   return d->dontCheckUpperWord;
 }
 
-void KSpreadDoc::setDontCheckUpperWord( bool b )
+void Doc::setDontCheckUpperWord( bool b )
 {
   d->dontCheckUpperWord = b;
 }
 
-bool KSpreadDoc::dontCheckTitleCase() const
+bool Doc::dontCheckTitleCase() const
 {
   return  d->dontCheckTitleCase;
 }
 
-void KSpreadDoc::setDontCheckTitleCase( bool b )
+void Doc::setDontCheckTitleCase( bool b )
 {
   d->dontCheckTitleCase = b;
 }
 
-QString KSpreadDoc::unitName() const
+QString Doc::unitName() const
 {
   return KoUnit::unitName( unit() );
 }
 
-void KSpreadDoc::increaseNumOperation()
+void Doc::increaseNumOperation()
 {
   ++d->numOperations;
 }
 
-void KSpreadDoc::decreaseNumOperation()
+void Doc::decreaseNumOperation()
 {
   --d->numOperations;
 }
 
-void KSpreadDoc::addIgnoreWordAllList( const QStringList & _lst)
+void Doc::addIgnoreWordAllList( const QStringList & _lst)
 {
   d->spellListIgnoreAll = _lst;
 }
 
-QStringList KSpreadDoc::spellListIgnoreAll() const
+QStringList Doc::spellListIgnoreAll() const
 {
   return d->spellListIgnoreAll;
 }
 
-void KSpreadDoc::setZoomAndResolution( int zoom, int dpiX, int dpiY )
+void Doc::setZoomAndResolution( int zoom, int dpiX, int dpiY )
 {
     KoZoomHandler::setZoomAndResolution( zoom, dpiX, dpiY );
 }
 
-void KSpreadDoc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
+void Doc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 {
 /*    layout();
     updateAllFrames();*/
@@ -1446,84 +1446,84 @@ void KSpreadDoc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
     }
 }
 
-void KSpreadDoc::addCommand( KCommand* command )
+void Doc::addCommand( KCommand* command )
 {
     d->commandHistory->addCommand( command, false );
 }
 
-void KSpreadDoc::addCommand( KSpreadUndoAction* undo )
+void Doc::addCommand( UndoAction* undo )
 {
     UndoWrapperCommand* command = new UndoWrapperCommand( undo );
     addCommand( command );
 }
 
-void KSpreadDoc::undo()
+void Doc::undo()
 {
   d->commandHistory->undo();
 }
 
-void KSpreadDoc::redo()
+void Doc::redo()
 {
   d->commandHistory->redo();
 }
 
-void KSpreadDoc::commandExecuted()
+void Doc::commandExecuted()
 {
   setModified( true );
 }
 
-void KSpreadDoc::documentRestored()
+void Doc::documentRestored()
 {
   setModified( false );
 }
 
-void KSpreadDoc::undoLock()
+void Doc::undoLock()
 {
   d->undoLocked = true;
 }
 
-void KSpreadDoc::undoUnlock()
+void Doc::undoUnlock()
 {
   d->undoLocked = false;
 }
 
-bool KSpreadDoc::undoLocked() const
+bool Doc::undoLocked() const
 {
   return d->undoLocked;
 }
 
-KoCommandHistory* KSpreadDoc::commandHistory()
+KoCommandHistory* Doc::commandHistory()
 {
   return d->commandHistory;
 }
 
-void KSpreadDoc::enableUndo( bool _b )
+void Doc::enableUndo( bool _b )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-      static_cast<KSpreadView *>( it.current() )->enableUndo( _b );
+      static_cast<View *>( it.current() )->enableUndo( _b );
 }
 
-void KSpreadDoc::enableRedo( bool _b )
+void Doc::enableRedo( bool _b )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-      static_cast<KSpreadView *>( it.current() )->enableRedo( _b );
+      static_cast<View *>( it.current() )->enableRedo( _b );
 }
 
-void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
+void Doc::paintContent( QPainter& painter, const QRect& rect,
                                bool transparent, double zoomX, double /*zoomY*/ )
 {
     kdDebug(36001) << "paintContent() called on " << rect << endl;
 
-  //  ElapsedTime et( "KSpreadDoc::paintContent1" );
-    //kdDebug(36001) << "KSpreadDoc::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
+  //  ElapsedTime et( "Doc::paintContent1" );
+    //kdDebug(36001) << "Doc::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
 
     // save current zoom
     int oldZoom = m_zoom;
 
     // choose sheet: the first or the active
-    KSpreadSheet* sheet = 0L;
+    Sheet* sheet = 0L;
     if ( !d->activeSheet )
         sheet = map()->firstSheet();
     else
@@ -1556,11 +1556,11 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect,
     setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 }
 
-void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, KSpreadSheet* sheet, bool drawCursor )
+void Doc::paintContent( QPainter& painter, const QRect& rect, bool /*transparent*/, Sheet* sheet, bool drawCursor )
 {
     if ( isLoading() )
         return;
-    //    ElapsedTime et( "KSpreadDoc::paintContent2" );
+    //    ElapsedTime et( "Doc::paintContent2" );
 
     // if ( !transparent )
     // painter.eraseRect( rect );
@@ -1585,17 +1585,17 @@ void KSpreadDoc::paintContent( QPainter& painter, const QRect& rect, bool /*tran
     paintCellRegions(painter, rect, NULL, cellAreaList, sheet, drawCursor);
 }
 
-void KSpreadDoc::paintUpdates()
+void Doc::paintUpdates()
 {
-  //  ElapsedTime et( "KSpreadDoc::paintUpdates" );
+  //  ElapsedTime et( "Doc::paintUpdates" );
 
   QPtrListIterator<KoView> it( views() );
-  KSpreadView  * view  = NULL;
-  KSpreadSheet * sheet = NULL;
+  View  * view  = NULL;
+  Sheet * sheet = NULL;
 
   for (; it.current(); ++it )
   {
-    view = static_cast<KSpreadView *>( it.current() );
+    view = static_cast<View *>( it.current() );
     view->paintUpdates();
   }
 
@@ -1606,10 +1606,10 @@ void KSpreadDoc::paintUpdates()
   }
 }
 
-void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
-                                  KSpreadView* view,
+void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
+                                  View* view,
                                   QValueList<QRect> cellRegions,
-                                  const KSpreadSheet* sheet, bool drawCursor)
+                                  const Sheet* sheet, bool drawCursor)
 {
   //
   // Clip away children
@@ -1635,9 +1635,9 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
   QPtrListIterator<KoDocumentChild> it( children() );
   for( ; it.current(); ++it )
   {
-    // if ( ((KSpreadChild*)it.current())->sheet() == sheet &&
+    // if ( ((Child*)it.current())->sheet() == sheet &&
     //    !m_pView->hasDocumentInWindow( it.current()->document() ) )
-    if ( ((KSpreadChild*)it.current())->sheet() == sheet)
+    if ( ((Child*)it.current())->sheet() == sheet)
       rgn -= it.current()->region( matrix );
   }
   painter.setClipRegion( rgn );
@@ -1673,9 +1673,9 @@ void KSpreadDoc::paintCellRegions(QPainter& painter, const QRect &viewRect,
 }
 
 
-void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
-                             KSpreadView* view, const QRect &paintRegion,
-                             const KSpreadSheet* sheet)
+void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
+                             View* view, const QRect &paintRegion,
+                             const Sheet* sheet)
 {
   /* paint region has cell coordinates (col,row) while viewRegion has world
      coordinates.  paintRegion is the cells to update and viewRegion is the
@@ -1813,7 +1813,7 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
                        cellRef, paintBordersRight, paintBordersBottom, paintBordersLeft,
       paintBordersTop, rightPen, bottomPen, leftPen, topPen, false ); */
 
-/*      Cell::BorderSides highlightBorder=KSpread::Cell::Border_None;
+/*      Cell::BorderSides highlightBorder=Cell::Border_None;
       QPen highlightPen;*/
 
       cell->paintCell(viewRegion,painter,view,dblCurrentCellPos,cellRef,paintBorder,
@@ -1827,8 +1827,8 @@ void KSpreadDoc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
 }
 
 // not used anywhere
-void KSpreadDoc::PaintChooseRect(QPainter& painter, const KoRect &viewRect,
-                                 KSpreadView* view, const KSpreadSheet* sheet,
+void Doc::PaintChooseRect(QPainter& painter, const KoRect &viewRect,
+                                 View* view, const Sheet* sheet,
 				 const QRect &chooseRect)
 {
   double positions[4];
@@ -1884,8 +1884,8 @@ void KSpreadDoc::PaintChooseRect(QPainter& painter, const KoRect &viewRect,
 }
 
 // not used anywhere
-void KSpreadDoc::PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
-                                   KSpreadView* view, const KSpreadSheet* sheet,
+void Doc::PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
+                                   View* view, const Sheet* sheet,
                                    const QRect &marker)
 {
   double positions[4];
@@ -1952,9 +1952,9 @@ void KSpreadDoc::PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
 }
 
 
-void KSpreadDoc::retrieveMarkerInfo( const QRect &marker,
-                                     const KSpreadSheet* sheet,
-                                     KSpreadView* view,
+void Doc::retrieveMarkerInfo( const QRect &marker,
+                                     const Sheet* sheet,
+                                     View* view,
                                      const KoRect &viewRect,
                                      double positions[],
                                      bool paintSides[] )
@@ -2005,15 +2005,15 @@ void KSpreadDoc::retrieveMarkerInfo( const QRect &marker,
 }
 
 
-DCOPObject* KSpreadDoc::dcopObject()
+DCOPObject* Doc::dcopObject()
 {
     if ( !d->dcop )
-        d->dcop = new KSpreadDocIface( this );
+        d->dcop = new DocIface( this );
 
     return d->dcop;
 }
 
-void KSpreadDoc::addAreaName(const QRect &_rect,const QString & name,const QString & sheetName)
+void Doc::addAreaName(const QRect &_rect,const QString & name,const QString & sheetName)
 {
   setModified( true );
   Reference tmp;
@@ -2024,7 +2024,7 @@ void KSpreadDoc::addAreaName(const QRect &_rect,const QString & name,const QStri
   emit sig_addAreaName( name );
 }
 
-void KSpreadDoc::removeArea( const QString & name)
+void Doc::removeArea( const QString & name)
 {
     QValueList<Reference>::Iterator it2;
     for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
@@ -2038,7 +2038,7 @@ void KSpreadDoc::removeArea( const QString & name)
     }
 }
 
-void KSpreadDoc::changeAreaSheetName(const QString & oldName,const QString & sheetName)
+void Doc::changeAreaSheetName(const QString & oldName,const QString & sheetName)
 {
   QValueList<Reference>::Iterator it2;
   for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
@@ -2048,7 +2048,7 @@ void KSpreadDoc::changeAreaSheetName(const QString & oldName,const QString & she
         }
 }
 
-QRect KSpreadDoc::getRectArea(const QString  &_sheetName)
+QRect Doc::getRectArea(const QString  &_sheetName)
 {
   QValueList<Reference>::Iterator it2;
   for ( it2 = d->refs.begin(); it2 != d->refs.end(); ++it2 )
@@ -2061,7 +2061,7 @@ QRect KSpreadDoc::getRectArea(const QString  &_sheetName)
   return QRect(-1,-1,-1,-1);
 }
 
-QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
+QDomElement Doc::saveAreaName( QDomDocument& doc )
 {
    QDomElement element = doc.createElement( "areaname" );
    QValueList<Reference>::Iterator it2;
@@ -2087,10 +2087,10 @@ QDomElement KSpreadDoc::saveAreaName( QDomDocument& doc )
    return element;
 }
 
-void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
+void Doc::loadOasisCellValidation( const QDomElement&body )
 {
     QDomNode validation = KoDom::namedItemNS( body, KoXmlNS::table, "content-validations" );
-    kdDebug()<<"void KSpreadDoc::loadOasisCellValidation( const QDomElement&body ) \n";
+    kdDebug()<<"void Doc::loadOasisCellValidation( const QDomElement&body ) \n";
     kdDebug()<<"validation.isNull ? "<<validation.isNull()<<endl;
     if ( !validation.isNull() )
     {
@@ -2113,7 +2113,7 @@ void KSpreadDoc::loadOasisCellValidation( const QDomElement&body )
     }
 }
 
-void KSpreadDoc::saveOasisAreaName( KoXmlWriter & xmlWriter )
+void Doc::saveOasisAreaName( KoXmlWriter & xmlWriter )
 {
     if ( listArea().count()>0 )
     {
@@ -2133,9 +2133,9 @@ void KSpreadDoc::saveOasisAreaName( KoXmlWriter & xmlWriter )
     }
 }
 
-void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
+void Doc::loadOasisAreaName( const QDomElement& body )
 {
-    kdDebug()<<"void KSpreadDoc::loadOasisAreaName( const QDomElement& body ) \n";
+    kdDebug()<<"void Doc::loadOasisAreaName( const QDomElement& body ) \n";
     QDomNode namedAreas = KoDom::namedItemNS( body, KoXmlNS::table, "named-expressions" );
     if ( !namedAreas.isNull() )
     {
@@ -2158,11 +2158,11 @@ void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
             d->m_loadingInfo->addWordInAreaList( name );
             kdDebug() << "Reading in named area, name: " << name << ", area: " << areaPoint << endl;
 
-            QString range( KSpreadSheet::translateOpenCalcPoint( areaPoint ) );
+            QString range( Sheet::translateOpenCalcPoint( areaPoint ) );
 
             if ( range.find( ':' ) == -1 )
             {
-                KSpreadPoint p( range );
+                Point p( range );
 
                 int n = range.find( '!' );
                 if ( n > 0 )
@@ -2171,7 +2171,7 @@ void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
                 kdDebug() << "=> Area: " << range << endl;
             }
 
-            KSpreadRange p( range );
+            Range p( range );
 
             addAreaName( p.range, name, p.sheetName );
             kdDebug() << "Area range: " << p.sheetName << endl;
@@ -2181,7 +2181,7 @@ void KSpreadDoc::loadOasisAreaName( const QDomElement& body )
     }
 }
 
-void KSpreadDoc::loadAreaName( const QDomElement& element )
+void Doc::loadAreaName( const QDomElement& element )
 {
   QDomElement tmp=element.firstChild().toElement();
   for( ; !tmp.isNull(); tmp=tmp.nextSibling().toElement()  )
@@ -2224,24 +2224,24 @@ void KSpreadDoc::loadAreaName( const QDomElement& element )
   }
 }
 
-void KSpreadDoc::addStringCompletion(const QString &stringCompletion)
+void Doc::addStringCompletion(const QString &stringCompletion)
 {
   if ( d->listCompletion.items().contains(stringCompletion) == 0 )
     d->listCompletion.addItem( stringCompletion );
 }
 
-void KSpreadDoc::refreshInterface()
+void Doc::refreshInterface()
 {
   emit sig_refreshView();
 }
 
-void KSpreadDoc::refreshLocale()
+void Doc::refreshLocale()
 {
     emit sig_refreshLocale();
 }
 
 
-void KSpreadDoc::emitBeginOperation(bool waitCursor)
+void Doc::emitBeginOperation(bool waitCursor)
 {
     if (waitCursor)
     {
@@ -2258,16 +2258,16 @@ void KSpreadDoc::emitBeginOperation(bool waitCursor)
     d->numOperations++;
 }
 
-void KSpreadDoc::emitBeginOperation(void)
+void Doc::emitBeginOperation(void)
 {
   emitBeginOperation(true);
 }
 
 
-void KSpreadDoc::emitEndOperation()
+void Doc::emitEndOperation()
 {
-  //  ElapsedTime et( "*KSpreadDoc::emitEndOperation*" );
-   KSpreadSheet *t = NULL;
+  //  ElapsedTime et( "*Doc::emitEndOperation*" );
+   Sheet *t = NULL;
    CellBinding* b = NULL;
    d->numOperations--;
 
@@ -2300,9 +2300,9 @@ void KSpreadDoc::emitEndOperation()
    }
 }
 
-void KSpreadDoc::emitEndOperation( QRect const & rect )
+void Doc::emitEndOperation( QRect const & rect )
 {
-  // ElapsedTime et( "*KSpreadDoc::emitEndOperation - 2 -*" );
+  // ElapsedTime et( "*Doc::emitEndOperation - 2 -*" );
   CellBinding  * b = 0;
   d->numOperations--;
 
@@ -2340,67 +2340,67 @@ void KSpreadDoc::emitEndOperation( QRect const & rect )
   }
 }
 
-bool KSpreadDoc::delayCalculation() const
+bool Doc::delayCalculation() const
 {
    return d->delayCalculation;
 }
 
-void KSpreadDoc::updateBorderButton()
+void Doc::updateBorderButton()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-      static_cast<KSpreadView *>( it.current() )->updateBorderButton();
+      static_cast<View *>( it.current() )->updateBorderButton();
 }
 
-void KSpreadDoc::insertSheet( KSpreadSheet * sheet )
+void Doc::insertSheet( Sheet * sheet )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((KSpreadView*)it.current())->insertSheet( sheet );
+	((View*)it.current())->insertSheet( sheet );
 }
 
-void KSpreadDoc::takeSheet( KSpreadSheet * sheet )
+void Doc::takeSheet( Sheet * sheet )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((KSpreadView*)it.current())->removeSheet( sheet );
+	((View*)it.current())->removeSheet( sheet );
 }
 
-void KSpreadDoc::addIgnoreWordAll( const QString & word)
+void Doc::addIgnoreWordAll( const QString & word)
 {
     if( d->spellListIgnoreAll.findIndex( word )==-1)
         d->spellListIgnoreAll.append( word );
 }
 
-void KSpreadDoc::clearIgnoreWordAll( )
+void Doc::clearIgnoreWordAll( )
 {
     d->spellListIgnoreAll.clear();
 }
 
-void KSpreadDoc::setDisplaySheet(KSpreadSheet *_sheet )
+void Doc::setDisplaySheet(Sheet *_sheet )
 {
     d->activeSheet = _sheet;
 }
 
-KSPLoadingInfo * KSpreadDoc::loadingInfo() const
+KSPLoadingInfo * Doc::loadingInfo() const
 {
     return d->m_loadingInfo;
 }
 
-KSpreadSheet * KSpreadDoc::displaySheet() const
+Sheet * Doc::displaySheet() const
 {
     return d->activeSheet;
 }
 
-void KSpreadDoc::addView( KoView *_view )
+void Doc::addView( KoView *_view )
 {
     KoDocument::addView( _view );
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((KSpreadView*)it.current())->closeEditor();
+	((View*)it.current())->closeEditor();
 }
 
-void KSpreadDoc::addDamage( Damage* damage )
+void Doc::addDamage( Damage* damage )
 {
     d->damages.append( damage );
 
@@ -2408,7 +2408,7 @@ void KSpreadDoc::addDamage( Damage* damage )
         QTimer::singleShot( 0, this, SLOT( flushDamages() ) );
 }
 
-void KSpreadDoc::flushDamages()
+void Doc::flushDamages()
 {
     emit damagesFlushed( d->damages );
     QValueList<Damage*>::Iterator it;
@@ -2417,12 +2417,12 @@ void KSpreadDoc::flushDamages()
     d->damages.clear();
 }
 
-void KSpreadDoc::loadConfigFromFile()
+void Doc::loadConfigFromFile()
 {
     d->configLoadFromFile = true;
 }
 
-bool KSpreadDoc::configLoadFromFile() const
+bool Doc::configLoadFromFile() const
 {
     return d->configLoadFromFile;
 }

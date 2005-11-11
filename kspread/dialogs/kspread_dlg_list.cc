@@ -19,7 +19,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qlineedit.h>
@@ -32,14 +31,15 @@
 #include <kdebug.h>
 #include <kmessagebox.h>
 
-#include <kspread_autofill.h>
-#include <kspread_factory.h>
+#include "kspread_autofill.h"
+#include "kspread_factory.h"
+#include "kspread_locale.h"
 
 #include "kspread_dlg_list.h"
 
-#include <kspread_locale.h>
+using namespace KSpread;
 
-KSpreadList::KSpreadList( QWidget* parent, const char* name )
+ListDialog::ListDialog( QWidget* parent, const char* name )
 	: KDialogBase( parent, name, true, i18n("Custom Lists"), Ok|Cancel )
 {
   QWidget* page = new QWidget( this );
@@ -96,7 +96,7 @@ KSpreadList::KSpreadList( QWidget* parent, const char* name )
 }
 
 
-void KSpreadList::slotTextClicked(QListBoxItem*)
+void ListDialog::slotTextClicked(QListBoxItem*)
 {
     //we can't remove the two first item
     bool state=list->currentItem()>1;
@@ -105,7 +105,7 @@ void KSpreadList::slotTextClicked(QListBoxItem*)
 
 }
 
-void KSpreadList::init()
+void ListDialog::init()
 {
     QString month;
     month+=i18n("January")+", ";
@@ -156,7 +156,7 @@ void KSpreadList::init()
     sday+=i18n("Sun");
     lst.append(sday);
 
-    config = KSpreadFactory::global()->config();
+    config = Factory::global()->config();
     config->setGroup( "Parameters" );
     QStringList other=config->readListEntry("Other list");
     QString tmp;
@@ -174,7 +174,7 @@ void KSpreadList::init()
     list->insertStringList(lst);
 }
 
-void KSpreadList::slotDoubleClicked(QListBoxItem *)
+void ListDialog::slotDoubleClicked(QListBoxItem *)
 {
     //we can't modify the two first item
     if(list->currentItem()<2)
@@ -192,7 +192,7 @@ void KSpreadList::slotDoubleClicked(QListBoxItem *)
     m_pModify->setEnabled(true);
 }
 
-void KSpreadList::slotAdd()
+void ListDialog::slotAdd()
 {
   m_pAdd->setEnabled(false);
   list->setEnabled(true);
@@ -217,7 +217,7 @@ void KSpreadList::slotAdd()
   m_bChanged=true;
 }
 
-void KSpreadList::slotNew()
+void ListDialog::slotNew()
 {
   m_pAdd->setEnabled(true);
   list->setEnabled(false);
@@ -226,7 +226,7 @@ void KSpreadList::slotNew()
   entryList->setFocus();
 }
 
-void KSpreadList::slotRemove()
+void ListDialog::slotRemove()
 {
   if(list->currentItem()==-1)
     return;
@@ -244,7 +244,7 @@ void KSpreadList::slotRemove()
   m_bChanged=true;
 }
 
-void KSpreadList::slotOk()
+void ListDialog::slotOk()
 {
     if(!entryList->text().isEmpty())
     {
@@ -280,7 +280,7 @@ void KSpreadList::slotOk()
     accept();
 }
 
-void KSpreadList::slotModify()
+void ListDialog::slotModify()
 {
     //you can modify list but not the two first list
   if(list->currentItem ()>1 && !entryList->text().isEmpty())
@@ -309,7 +309,7 @@ void KSpreadList::slotModify()
 
 }
 
-void KSpreadList::slotCopy()
+void ListDialog::slotCopy()
 {
   if(list->currentItem()!=-1)
     {

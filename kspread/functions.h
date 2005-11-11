@@ -26,13 +26,14 @@
 #include <qvaluevector.h>
 
 class QDomElement;
-class KSpreadSheet;
-class KSpreadValue;
-
-typedef QValueVector<KSpreadValue> valVector;
 
 namespace KSpread
 {
+class Sheet;
+class Value;
+class ValueCalc;
+
+typedef QValueVector<Value> valVector;
 
 struct rangeInfo {
   int col1, col2, row1, row2;
@@ -40,13 +41,11 @@ struct rangeInfo {
 struct FuncExtra {
   // here we'll add all the extras a function may need
   QValueVector<rangeInfo> ranges;
-  KSpreadSheet *sheet;
+  Sheet *sheet;
   int myrow, mycol;
 };
 
-class ValueCalc;
-
-typedef KSpreadValue (*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
+typedef Value (*FunctionPtr)(valVector, ValueCalc *, FuncExtra *);
 
 class Function
 {
@@ -70,7 +69,7 @@ public:
   QString localizedName() const;
   QString helpText() const;
   void setHelpText( const QString& text );
-  KSpreadValue exec (valVector args, ValueCalc *calc, FuncExtra *extra = 0);
+  Value exec (valVector args, ValueCalc *calc, FuncExtra *extra = 0);
   
 private:
   class Private;

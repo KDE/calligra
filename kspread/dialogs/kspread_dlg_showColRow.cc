@@ -33,7 +33,7 @@
 
 using namespace KSpread;
 
-KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,ShowColRow _type )
+ShowColRow::ShowColRow( View* parent, const char* name, Type _type )
 	: KDialogBase( parent, name,TRUE,"",Ok|Cancel )
 {
   m_pView = parent;
@@ -112,12 +112,12 @@ KSpreadShowColRow::KSpreadShowColRow( KSpreadView* parent, const char* name,Show
   setFocus();
 }
 
-void KSpreadShowColRow::slotDoubleClicked(QListBoxItem *)
+void ShowColRow::slotDoubleClicked(QListBoxItem *)
 {
     slotOk();
 }
 
-void KSpreadShowColRow::slotOk()
+void ShowColRow::slotOk()
 {
   m_pView->doc()->emitBeginOperation( false );
 

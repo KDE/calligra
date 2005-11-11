@@ -24,22 +24,25 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-#include "kspread_dlg_insert.h"
-#include "kspread_view.h"
-#include "kspread_doc.h"
-#include "kspread_sheet.h"
-
-#include <qlayout.h>
-#include <kbuttonbox.h>
-#include <klocale.h>
 #include <qbuttongroup.h>
-#include <kdebug.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+#include <qlayout.h>
+
+#include <kbuttonbox.h>
+#include <kdebug.h>
+#include <klocale.h>
 #include <kmessagebox.h>
 
-KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QRect &_rect,Mode _mode)
+#include "kspread_doc.h"
+#include "kspread_sheet.h"
+#include "kspread_view.h"
+
+#include "kspread_dlg_insert.h"
+
+using namespace KSpread;
+
+InsertDialog::InsertDialog( View* parent, const char* name,const QRect &_rect,Mode _mode)
 	: KDialogBase( parent, name, TRUE,"",Ok|Cancel )
 {
   m_pView = parent;
@@ -72,7 +75,7 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QRect 
     setCaption( i18n("Remove Cells") );
   }
   else
-    kdDebug(36001) << "Error in kspread_dlg_insert" << endl;
+    kdDebug(36001) << "Error in kspread_dlg_InsertDialog" << endl;
 
   rb1->setChecked(true);
 
@@ -80,7 +83,7 @@ KSpreadinsert::KSpreadinsert( KSpreadView* parent, const char* name,const QRect 
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 }
 
-void KSpreadinsert::slotOk()
+void InsertDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )
@@ -133,7 +136,7 @@ void KSpreadinsert::slotOk()
     }
     else
     {
-	kdDebug(36001) << "Error in kspread_dlg_insert" << endl;
+	kdDebug(36001) << "Error in kspread_dlg_InsertDialog" << endl;
     }
 
     m_pView->updateEditWidget();
@@ -141,6 +144,5 @@ void KSpreadinsert::slotOk()
     m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }
-
 
 #include "kspread_dlg_insert.moc"

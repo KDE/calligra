@@ -27,7 +27,7 @@
 
 using namespace KSpread;
 
-KSpreadSelection::KSpreadSelection(KSpreadView* view)
+Selection::Selection(View* view)
 {
   m_marker = QPoint(1,1);
   m_cursorPosition = QPoint(1,1);
@@ -41,7 +41,7 @@ KSpreadSelection::KSpreadSelection(KSpreadView* view)
   m_pView = view;
 }
 
-KSpreadSelection::~KSpreadSelection()
+Selection::~Selection()
 {
 }
 
@@ -49,7 +49,7 @@ KSpreadSelection::~KSpreadSelection()
  * Functions dealing with the current selection
  */
 /*
-void KSpreadSelection::unselect()
+void Selection::unselect()
 {
     // No selection? Then do nothing.
     if ( singleCellSelection() )
@@ -67,12 +67,12 @@ void KSpreadSelection::unselect()
 }
 */
 
-QPoint KSpreadSelection::marker() const
+QPoint Selection::marker() const
 {
   return m_marker;
 }
 
-QRect KSpreadSelection::selection(bool extend) const
+QRect Selection::selection(bool extend) const
 {
   int left, top, right, bottom;
   left = QMIN(m_anchor.x(), m_marker.x());
@@ -86,7 +86,7 @@ QRect KSpreadSelection::selection(bool extend) const
   return selection;
 }
 
-bool KSpreadSelection::singleCellSelection() const
+bool Selection::singleCellSelection() const
 {
   const Cell* cell =
     m_pView->activeSheet()->cellAt(m_marker.x(), m_marker.y());
@@ -97,7 +97,7 @@ bool KSpreadSelection::singleCellSelection() const
           (currentSelection.height() - 1 == cell->extraYCells()));
 }
 
-QRect KSpreadSelection::selectionHandleArea() const
+QRect Selection::selectionHandleArea() const
 {
   int column, row;
 
@@ -130,9 +130,9 @@ QRect KSpreadSelection::selectionHandleArea() const
   return handle;
 }
 
-void KSpreadSelection::setSelection( const QPoint &newMarker,
+void Selection::setSelection( const QPoint &newMarker,
                                      const QPoint &newAnchor,
-                                     KSpreadSheet *sheet )
+                                     Sheet *sheet )
 {
   QRect oldSelection = selection();
   QPoint oldMarker = m_marker;
@@ -171,8 +171,8 @@ void KSpreadSelection::setSelection( const QPoint &newMarker,
   m_pView->slotChangeSelection( sheet, oldSelection, oldMarker );
 }
 
-void KSpreadSelection::setMarker( const QPoint &point,
-                                  KSpreadSheet* sheet )
+void Selection::setMarker( const QPoint &point,
+                                  Sheet* sheet )
 {
   QPoint topLeft(point);
   const Cell* cell = sheet->cellAt(topLeft);
@@ -187,7 +187,7 @@ void KSpreadSelection::setMarker( const QPoint &point,
   setSelection( topLeft, botRight, sheet );
 }
 
-QPoint KSpreadSelection::selectionAnchor()const
+QPoint Selection::selectionAnchor()const
 {
   return m_anchor;
   /* the anchor is in the opposite corner of the selection rect from the marker */
@@ -204,7 +204,7 @@ QPoint KSpreadSelection::selectionAnchor()const
   QPoint anchor(atLeft ? m_rctSelection.right() : m_rctSelection.left(),
                 atTop ? m_rctSelection.bottom() : m_rctSelection.top());
 
-  KSpreadSheet* sheet = m_pView->activeSheet();
+  Sheet* sheet = m_pView->activeSheet();
   Cell* cell = sheet->cellAt(anchor);
 
   if (cell->isObscured())
@@ -221,7 +221,7 @@ QPoint KSpreadSelection::selectionAnchor()const
 */
 }
 
-bool KSpreadSelection::setCursorPosition( const QPoint &position )
+bool Selection::setCursorPosition( const QPoint &position )
 {
   const Cell* cell = m_pView->activeSheet()->cellAt(m_marker);
 
@@ -236,12 +236,12 @@ bool KSpreadSelection::setCursorPosition( const QPoint &position )
   return false;
 }
 
-QPoint KSpreadSelection::cursorPosition()const
+QPoint Selection::cursorPosition()const
 {
   return m_cursorPosition;
 }
 
-QRect KSpreadSelection::getChooseRect()const
+QRect Selection::getChooseRect()const
 {
   QRect chooseRect;
 
@@ -255,7 +255,7 @@ QRect KSpreadSelection::getChooseRect()const
 
 
 
-QRect KSpreadSelection::extendToMergedAreas(QRect area) const
+QRect Selection::extendToMergedAreas(QRect area) const
 {
   const Cell *cell = m_pView->activeSheet()->
 			    cellAt(area.left(), area.top());

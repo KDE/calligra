@@ -106,23 +106,23 @@ void StyleClusterTester::run()
   testCount = 0;
   errorList.clear();
   
-  KSpreadDoc* doc = new KSpreadDoc();
-  KSpreadMap* workbook = doc->map();
-  KSpreadSheet* sheet = workbook->addNewSheet();
+  Doc* doc = new Doc();
+  Map* workbook = doc->map();
+  Sheet* sheet = workbook->addNewSheet();
   
-  KSpreadStyle* defaultStyle = doc->styleManager()->defaultStyle();
+  Style* defaultStyle = doc->styleManager()->defaultStyle();
 
   StyleCluster stylecluster(sheet);
-  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*defaultStyle));
-  CHECK_STYLE(stylecluster.lookup(1000,2000), static_cast< const KSpreadStyle& > (*defaultStyle));
-  KSpreadStyle *style1 = new KSpreadStyle();
+  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const Style& > (*defaultStyle));
+  CHECK_STYLE(stylecluster.lookup(1000,2000), static_cast< const Style& > (*defaultStyle));
+  Style *style1 = new Style();
   style1->addRef();
   stylecluster.setStyle(1000,2000, style1);
   CHECK_STYLE(stylecluster.lookup(1000,2000), *style1); 
-  CHECK_STYLE(stylecluster.lookup(1001,2000), static_cast< const KSpreadStyle& > (*defaultStyle));
-  CHECK_STYLE(stylecluster.lookup(1001,2001), static_cast< const KSpreadStyle& > (*defaultStyle));
-  CHECK_STYLE(stylecluster.lookup(1000,2001), static_cast< const KSpreadStyle& > (*defaultStyle));
-  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*defaultStyle));
+  CHECK_STYLE(stylecluster.lookup(1001,2000), static_cast< const Style& > (*defaultStyle));
+  CHECK_STYLE(stylecluster.lookup(1001,2001), static_cast< const Style& > (*defaultStyle));
+  CHECK_STYLE(stylecluster.lookup(1000,2001), static_cast< const Style& > (*defaultStyle));
+  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const Style& > (*defaultStyle));
   
   void *quad1 = stylecluster.lookupNode(0,0); 
   CHECK_QUAD(stylecluster.lookupNode(0,0), quad1);
@@ -146,10 +146,10 @@ void StyleClusterTester::run()
   CHECK_STYLE(stylecluster.lookup(0,1), *style1);
   CHECK_STYLE(stylecluster.lookup(1,0), *style1);
   CHECK_STYLE(stylecluster.lookup(1,1), *style1);
-  CHECK_STYLE(stylecluster.lookup(0,2), static_cast< const KSpreadStyle& > (*defaultStyle));
+  CHECK_STYLE(stylecluster.lookup(0,2), static_cast< const Style& > (*defaultStyle));
 
   stylecluster.setStyle(0,0, sheet->doc()->styleManager()->defaultStyle());
-  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*defaultStyle));
+  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const Style& > (*defaultStyle));
   CHECK_STYLE(stylecluster.lookup(0,1), stylecluster.lookup(1,0));
   CHECK_STYLE(stylecluster.lookup(0,1), stylecluster.lookup(1,1));
   CHECK_STYLE(stylecluster.lookup(0,1), *style1);
@@ -160,8 +160,8 @@ void StyleClusterTester::run()
   
 //Quad tree should be totally empty now
   
-  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const KSpreadStyle& > (*defaultStyle));
-  CHECK_STYLE(stylecluster.lookup(1,1), static_cast< const KSpreadStyle& > (*defaultStyle));
+  CHECK_STYLE(stylecluster.lookup(0,0), static_cast< const Style& > (*defaultStyle));
+  CHECK_STYLE(stylecluster.lookup(1,1), static_cast< const Style& > (*defaultStyle));
   
   CHECK_QUAD(stylecluster.lookupNode(0,0), stylecluster.lookupNode(1,0));
   CHECK_QUAD(stylecluster.lookupNode(1,1), stylecluster.lookupNode(1005,20320));

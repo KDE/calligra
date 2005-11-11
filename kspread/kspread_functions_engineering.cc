@@ -36,47 +36,47 @@
 using namespace KSpread;
 
 // prototypes (sort alphabetically)
-KSpreadValue func_base (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_besseli (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_besselj (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_besselk (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_bessely (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_bin2dec (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_bin2oct (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_bin2hex (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_complex (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_complex_imag (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_complex_real (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_convert (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dec2hex (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dec2oct (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dec2bin (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_delta (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_erf (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_erfc (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_gestep (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_hex2dec (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_hex2bin (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_hex2oct (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_imabs (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_imargument (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_imconjugate (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_imcos (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_imdiv (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_imexp (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_imln (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_impower (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_improduct (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_imsin (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_imsub (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_imsum (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_oct2dec (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_base (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_besseli (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_besselj (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_besselk (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bessely (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bin2dec (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bin2oct (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_bin2hex (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_complex (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_complex_imag (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_complex_real (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_convert (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dec2hex (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dec2oct (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dec2bin (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_delta (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_erf (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_erfc (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_gestep (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_hex2dec (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_hex2bin (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_hex2oct (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imabs (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imargument (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imconjugate (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imcos (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imdiv (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imexp (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imln (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_impower (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_improduct (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imsin (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imsub (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_imsum (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_oct2dec (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all engineering functions
-void KSpreadRegisterEngineeringFunctions()
+void RegisterEngineeringFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -180,7 +180,7 @@ void KSpreadRegisterEngineeringFunctions()
 }
 
 // Function: BASE
-KSpreadValue func_base (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_base (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int base = 10;
   int prec = 0;
@@ -190,112 +190,112 @@ KSpreadValue func_base (valVector args, ValueCalc *calc, FuncExtra *)
     prec = calc->conv()->asInteger (args[2]).asInteger();
     
   if ((base < 2) || (base > 36))
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   if (prec < 0) prec = 2;
 
   return calc->base (args[0], base, prec);
 }
 
 // Function: BESSELI
-KSpreadValue func_besseli (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_besseli (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue x = args[0];
-  KSpreadValue y = args[1];
+  Value x = args[0];
+  Value y = args[1];
   return calc->besseli (y, x);
 }
 
 // Function: BESSELJ
-KSpreadValue func_besselj (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_besselj (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue x = args[0];
-  KSpreadValue y = args[1];
+  Value x = args[0];
+  Value y = args[1];
   return calc->besselj (y, x);
 }
 
 // Function: BESSELK
-KSpreadValue func_besselk (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_besselk (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue x = args[0];
-  KSpreadValue y = args[1];
+  Value x = args[0];
+  Value y = args[1];
   return calc->besselk (y, x);
 }
 
 // Function: BESSELY
-KSpreadValue func_bessely (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_bessely (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue x = args[0];
-  KSpreadValue y = args[1];
+  Value x = args[0];
+  Value y = args[1];
   return calc->besseln (y, x);
 }
 
 // Function: DEC2HEX
-KSpreadValue func_dec2hex (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dec2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->base (args[0], 16);
 }
 
 // Function: DEC2OCT
-KSpreadValue func_dec2oct (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dec2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->base (args[0], 8);
 }
 
 // Function: DEC2BIN
-KSpreadValue func_dec2bin (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dec2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->base (args[0], 2);
 }
 
 // Function: BIN2DEC
-KSpreadValue func_bin2dec (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_bin2dec (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->fromBase (args[0], 2);
 }
 
 // Function: BIN2OCT
-KSpreadValue func_bin2oct (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_bin2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->base (calc->fromBase (args[0], 2), 8);
 }
 
 // Function: BIN2HEX
-KSpreadValue func_bin2hex (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_bin2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->base (calc->fromBase (args[0], 2), 16);
 }
 
 // Function: OCT2DEC
-KSpreadValue func_oct2dec (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_oct2dec (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->fromBase (args[0], 8);
 }
 
 // Function: OCT2BIN
-KSpreadValue func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_oct2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->base (calc->fromBase (args[0], 8), 2);
 }
 
 // Function: OCT2HEX
-KSpreadValue func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_oct2hex (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->base (calc->fromBase (args[0], 8), 16);
 }
 
 // Function: HEX2DEC
-KSpreadValue func_hex2dec (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_hex2dec (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->fromBase (args[0], 16);
 }
 
 // Function: HEX2BIN
-KSpreadValue func_hex2bin (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_hex2bin (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->base (calc->fromBase (args[0], 16), 2);
 }
 
 // Function: HEX2OCT
-KSpreadValue func_hex2oct (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_hex2oct (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->base (calc->fromBase (args[0], 16), 8);
 }
@@ -682,7 +682,7 @@ static bool kspread_convert_speed( const QString& fromUnit,
 
 
 // Function: CONVERT
-KSpreadValue func_convert (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_convert (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // This function won't support arbitrary precision.
 
@@ -703,9 +703,9 @@ KSpreadValue func_convert (valVector args, ValueCalc *calc, FuncExtra *)
                   if( !kspread_convert_volume( fromUnit, toUnit, value, result ) )
                     if( !kspread_convert_area( fromUnit, toUnit, value, result ) )
                       if( !kspread_convert_speed( fromUnit, toUnit, value, result ) )
-                        return KSpreadValue::errorNA();
+                        return Value::errorNA();
 
-  return KSpreadValue (result);
+  return Value (result);
 }
 
 
@@ -733,7 +733,7 @@ static QString func_create_complex( double real,double imag )
 }
 
 // Function: COMPLEX
-KSpreadValue func_complex (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_complex (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (calc->isZero (args[1]))
     return args[0];
@@ -743,8 +743,8 @@ KSpreadValue func_complex (valVector args, ValueCalc *calc, FuncExtra *)
   bool ok;
   double result = KGlobal::locale()->readNumber(tmp, &ok);
   if (ok)
-    return KSpreadValue (result);
-  return KSpreadValue (tmp);
+    return Value (result);
+  return Value (tmp);
 }
 
 
@@ -842,14 +842,14 @@ return 0;
 }
 
 // Function: IMAGINARY
-KSpreadValue func_complex_imag (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_complex_imag (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp = calc->conv()->asString (args[0]).asString ();
   bool good;
   double result=imag_complexe(tmp, good);
   if (good)
-    return KSpreadValue (result);
-  return KSpreadValue::errorVALUE();
+    return Value (result);
+  return Value::errorVALUE();
 }
 
 
@@ -896,17 +896,17 @@ return 0;
 }
 
 // Function: IMREAL
-KSpreadValue func_complex_real (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_complex_real (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp = calc->conv()->asString (args[0]).asString ();
   bool good;
   double result=real_complexe(tmp, good);
   if (good)
-    return KSpreadValue (result);
-  return KSpreadValue::errorVALUE();
+    return Value (result);
+  return Value::errorVALUE();
 }
 
-void ImHelper (ValueCalc *c, KSpreadValue res, KSpreadValue val,
+void ImHelper (ValueCalc *c, Value res, Value val,
     double &imag, double &real, double &imag1, double &real1)
 {
   bool ok;
@@ -922,28 +922,28 @@ void ImHelper (ValueCalc *c, KSpreadValue res, KSpreadValue val,
   }
 }
 
-void awImSum (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+void awImSum (ValueCalc *c, Value &res, Value val, Value)
 {
   double imag,real,imag1,real1;
   ImHelper (c, res, val, imag, real, imag1, real1);
   res=func_create_complex(real+real1,imag+imag1);
 }
 
-void awImSub (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+void awImSub (ValueCalc *c, Value &res, Value val, Value)
 {
   double imag,real,imag1,real1;
   ImHelper (c, res, val, imag, real, imag1, real1);
   res=func_create_complex(real-real1,imag-imag1);
 }
 
-void awImMul (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+void awImMul (ValueCalc *c, Value &res, Value val, Value)
 {
   double imag,real,imag1,real1;
   ImHelper (c, res, val, imag, real, imag1, real1);
   res=func_create_complex(real*real1+(imag*imag1)*-1,real*imag1+real1*imag);
 }
 
-void awImDiv (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
+void awImDiv (ValueCalc *c, Value &res, Value val, Value)
 {
   double imag,real,imag1,real1;
   ImHelper (c, res, val, imag, real, imag1, real1);
@@ -952,127 +952,127 @@ void awImDiv (ValueCalc *c, KSpreadValue &res, KSpreadValue val, KSpreadValue)
 }
 
 // Function: IMSUM
-KSpreadValue func_imsum (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_imsum (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue result;
+  Value result;
   calc->arrayWalk (args, result, awImSum, 0);
   
   bool ok;
   QString res = calc->conv()->asString (result).asString();
   double val=KGlobal::locale()->readNumber(res, &ok);
   if (ok)
-    return KSpreadValue (val);
-  return KSpreadValue (result);
+    return Value (val);
+  return Value (result);
 }
 
 // Function: IMSUB
-KSpreadValue func_imsub (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_imsub (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue result;
+  Value result;
   calc->arrayWalk (args, result, awImSub, 0);
   
   bool ok;
   QString res = calc->conv()->asString (result).asString();
   double val=KGlobal::locale()->readNumber(res, &ok);
   if (ok)
-    return KSpreadValue (val);
-  return KSpreadValue (result);
+    return Value (val);
+  return Value (result);
 }
 
 // Function: IMPRODUCT
-KSpreadValue func_improduct (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_improduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue result;
+  Value result;
   calc->arrayWalk (args, result, awImMul, 0);
   
   bool ok;
   QString res = calc->conv()->asString (result).asString();
   double val=KGlobal::locale()->readNumber(res, &ok);
   if (ok)
-    return KSpreadValue (val);
-  return KSpreadValue (result);
+    return Value (val);
+  return Value (result);
 }
 
 // Function: IMDIV
-KSpreadValue func_imdiv (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_imdiv (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue result;
+  Value result;
   calc->arrayWalk (args, result, awImDiv, 0);
   
   bool ok;
   QString res = calc->conv()->asString (result).asString();
   double val=KGlobal::locale()->readNumber(res, &ok);
   if (ok)
-    return KSpreadValue (val);
-  return KSpreadValue (result);
+    return Value (val);
+  return Value (result);
 }
 
 // Function: IMCONJUGATE
-KSpreadValue func_imconjugate (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_imconjugate (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if (!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   tmp=func_create_complex(real,-imag);
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-    return KSpreadValue (result);
+    return Value (result);
   
-  return KSpreadValue (tmp);
+  return Value (tmp);
 }
 
 // Function: IMARGUMENT
-KSpreadValue func_imargument (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_imargument (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if (!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if (!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   if(imag==0)
-    return KSpreadValue::errorDIV0();
+    return Value::errorDIV0();
   double arg=atan2(imag,real);
 
-  return KSpreadValue (arg);
+  return Value (arg);
 }
 
 // Function: IMABS
-KSpreadValue func_imabs (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_imabs (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double arg=sqrt(pow(imag,2)+pow(real,2));
 
-  return KSpreadValue (arg);
+  return Value (arg);
 }
 
 // Function: IMCOS
-KSpreadValue func_imcos (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_imcos (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag_res=sin(real)*sinh(imag);
   double real_res=cos(real)*cosh(imag);
 
@@ -1081,22 +1081,22 @@ KSpreadValue func_imcos (valVector args, ValueCalc *calc, FuncExtra *)
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-    return KSpreadValue (result);
+    return Value (result);
   
-  return KSpreadValue (tmp);
+  return Value (tmp);
 }
 
 // Function: IMSIN
-KSpreadValue func_imsin (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_imsin (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag_res=cos(real)*sinh(imag);
   double real_res=sin(real)*cosh(imag);
 
@@ -1105,22 +1105,22 @@ KSpreadValue func_imsin (valVector args, ValueCalc *calc, FuncExtra *)
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-    return KSpreadValue (result);
+    return Value (result);
   
-  return KSpreadValue (tmp);
+  return Value (tmp);
 }
 
 // Function: IMLN
-KSpreadValue func_imln (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_imln (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   double arg=sqrt(pow(imag,2)+pow(real,2));
   double real_res=log(arg);
@@ -1129,22 +1129,22 @@ KSpreadValue func_imln (valVector args, ValueCalc *calc, FuncExtra *)
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-    return KSpreadValue (result);
+    return Value (result);
   
-  return KSpreadValue (tmp);
+  return Value (tmp);
 }
 
 // Function: IMEXP
-KSpreadValue func_imexp (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_imexp (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag_res=exp(real)*sin(imag);
   double real_res=exp(real)*cos(imag);
 
@@ -1153,22 +1153,22 @@ KSpreadValue func_imexp (valVector args, ValueCalc *calc, FuncExtra *)
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-    return KSpreadValue (result);
+    return Value (result);
   
-  return KSpreadValue (tmp);
+  return Value (tmp);
 }
 
 // Function: IMSQRT
-KSpreadValue func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp = calc->conv()->asString (args[0]).asString();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double arg=sqrt(sqrt(pow(imag,2)+pow(real,2)));
   double angle=atan(imag/real);
 
@@ -1179,23 +1179,23 @@ KSpreadValue func_imsqrt (valVector args, ValueCalc *calc, FuncExtra *)
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-    return KSpreadValue (result);
+    return Value (result);
   
-  return KSpreadValue (tmp);
+  return Value (tmp);
 }
 
 // Function: IMPOWER
-KSpreadValue func_impower (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_impower (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QString tmp = calc->conv()->asString (args[0]).asString();
   double val2 = calc->conv()->asFloat (args[1]).asFloat();
   bool ok;
   double real=real_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   double imag=imag_complexe(tmp,ok);
   if(!ok)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   double arg=::pow(sqrt(pow(imag,2)+pow(real,2)),val2);
   double angle=atan(imag/real);
@@ -1207,24 +1207,24 @@ KSpreadValue func_impower (valVector args, ValueCalc *calc, FuncExtra *)
 
   double result=KGlobal::locale()->readNumber(tmp, &ok);
   if(ok)
-    return KSpreadValue (result);
+    return Value (result);
   
-  return KSpreadValue (tmp);
+  return Value (tmp);
 }
 
 // Function: DELTA
-KSpreadValue func_delta (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_delta (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue val1 = args[0];
-  KSpreadValue val2 = 0.0;
+  Value val1 = args[0];
+  Value val2 = 0.0;
   if (args.count() == 2)
     val2 = args[1];
   
-  return KSpreadValue (calc->approxEqual (val1, val2) ? 1 : 0);
+  return Value (calc->approxEqual (val1, val2) ? 1 : 0);
 }
 
 // Function: ERF
-KSpreadValue func_erf (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_erf (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (args.count() == 2)
     return calc->sub (calc->erf (args[1]), calc->erf (args[0]));
@@ -1232,7 +1232,7 @@ KSpreadValue func_erf (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: ERFC
-KSpreadValue func_erfc (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_erfc (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (args.count() == 2)
     return calc->sub (calc->erfc (args[1]), calc->erfc (args[0]));
@@ -1240,10 +1240,10 @@ KSpreadValue func_erfc (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: GESTEP
-KSpreadValue func_gestep (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_gestep (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue x = args[0];
-  KSpreadValue y = 0.0;
+  Value x = args[0];
+  Value y = 0.0;
   if (args.count() == 2)
     y = args[1];
   
@@ -1251,6 +1251,6 @@ KSpreadValue func_gestep (valVector args, ValueCalc *calc, FuncExtra *)
   if (calc->greater (x, y) || calc->approxEqual (x, y))
     result = 1;
 
-  return KSpreadValue (result);
+  return Value (result);
 }
 

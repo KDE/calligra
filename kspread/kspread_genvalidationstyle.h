@@ -26,17 +26,20 @@
 #include <qmap.h>
 
 class KoXmlWriter;
-class KSpreadValidity;
-class KSpreadGenValidationStyle;
 
-class KSpreadGenValidationStyles
+namespace KSpread
+{
+class Validity;
+class GenValidationStyle;
+
+class GenValidationStyles
 {
 public:
-    KSpreadGenValidationStyles();
-    ~KSpreadGenValidationStyles();
-    QString lookup( const KSpreadGenValidationStyle& style );
+    GenValidationStyles();
+    ~GenValidationStyles();
+    QString lookup( const GenValidationStyle& style );
 
-    typedef QMap<KSpreadGenValidationStyle, QString> StyleMap;
+    typedef QMap<GenValidationStyle, QString> StyleMap;
     void writeStyle( KoXmlWriter& writer );
 
 private:
@@ -50,13 +53,13 @@ private:
 
 };
 
-class KSpreadGenValidationStyle
+class GenValidationStyle
 {
 public:
-    explicit KSpreadGenValidationStyle(KSpreadValidity *_val=0) { initVal( _val ); }
+    explicit GenValidationStyle(Validity *_val=0) { initVal( _val ); }
 
 
-    bool operator<( const KSpreadGenValidationStyle &other ) const {
+    bool operator<( const GenValidationStyle &other ) const {
         if ( allowEmptyCell != other.allowEmptyCell ) return ( allowEmptyCell < other.allowEmptyCell );
         if ( condition != other.condition ) return ( condition < other.condition );
         if ( titleInfo != other.titleInfo ) return ( titleInfo < other.titleInfo );
@@ -70,14 +73,14 @@ public:
         return false;
     }
 private:
-    QString createValidationCondition( KSpreadValidity* _val );
-    QString createTextValidationCondition( KSpreadValidity* _val );
-    QString createTimeValidationCondition( KSpreadValidity* _val );
-    QString createDateValidationCondition( KSpreadValidity* _val );
-    QString createNumberValidationCondition( KSpreadValidity* _val );
-    QString createListValidationCondition( KSpreadValidity* _val );
+    QString createValidationCondition( Validity* _val );
+    QString createTextValidationCondition( Validity* _val );
+    QString createTimeValidationCondition( Validity* _val );
+    QString createDateValidationCondition( Validity* _val );
+    QString createNumberValidationCondition( Validity* _val );
+    QString createListValidationCondition( Validity* _val );
 
-    void initVal( KSpreadValidity *_val );
+    void initVal( Validity *_val );
 
     QString allowEmptyCell;
     QString condition;
@@ -88,8 +91,9 @@ private:
     QString displayMessage;
     QString message;
     QString title;
-    friend class KSpreadGenValidationStyles;
+    friend class GenValidationStyles;
 };
 
+} // namespace KSpread
 
 #endif

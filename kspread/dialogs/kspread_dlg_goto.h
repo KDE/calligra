@@ -27,15 +27,18 @@
 
 #include <kdialogbase.h>
 
-class KSpreadView;
-class KSpreadSheet;
 class KLineEdit;
 
-class KSpreadGotoDlg : public KDialogBase
+namespace KSpread
+{
+class Sheet;
+class View;
+
+class GotoDialog : public KDialogBase
 {
   Q_OBJECT
 public:
-  KSpreadGotoDlg( KSpreadView* parent, const char* name);
+  GotoDialog( View* parent, const char* name);
 
 public slots:
   void slotOk();
@@ -43,8 +46,10 @@ public slots:
 
 
 protected:
-  KSpreadView* m_pView;
+  View* m_pView;
   KLineEdit* m_nameCell;
 };
+
+} //
 
 #endif

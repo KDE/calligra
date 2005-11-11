@@ -38,77 +38,77 @@ namespace KSpread {
 /** d-pointer of DependencyManager */
 class DependencyList {
  public:
-  DependencyList (KSpreadSheet *s);
+  DependencyList (Sheet *s);
   ~DependencyList () { reset (); };
   /** clear internal structures */
   void reset ();
 
   /** handle the fact that a cell has been changed */
-  void cellChanged (const KSpreadPoint &cell);
+  void cellChanged (const Point &cell);
 
   /** generate list of dependencies of a cell */
-  void generateDependencies (const KSpreadPoint &cell);
+  void generateDependencies (const Point &cell);
   /** generate list of dependencies of a range */
-  void generateDependencies (const KSpreadRange &range);
+  void generateDependencies (const Range &range);
   /** generate list of dependencies of a range list */
   void generateDependencies (const RangeList &rangeList);
 
   /** update cells dependending on a given cell */
-  void processDependencies (const KSpreadPoint &cell);
+  void processDependencies (const Point &cell);
   /** update cells dependending on a cell in a given range */
-  void processDependencies (const KSpreadRange &range);
+  void processDependencies (const Range &range);
   /** update cells dependending on a given range-list */
   void processDependencies (const RangeList &rangeList);
 
   /** get dependencies of a cell */
-  RangeList getDependencies (const KSpreadPoint &cell);
+  RangeList getDependencies (const Point &cell);
   /** get cells depending on this cell, either through normal or range dependency */
-  QValueList<KSpreadPoint> getDependants (const KSpreadPoint &cell);
+  QValueList<Point> getDependants (const Point &cell);
 
   void areaModified (const QString &name);
   protected:
   /** update structures: cell 1 depends on cell 2 */
-  void addDependency (const KSpreadPoint &cell1, const KSpreadPoint &cell2);
+  void addDependency (const Point &cell1, const Point &cell2);
   /** update structures: cell depends on a range */
   void addRangeDependency (const RangeDependency &rd);
   /** remove all dependencies of a cell */
-  void removeDependencies (const KSpreadPoint &cell);
+  void removeDependencies (const Point &cell);
   
   /** update all cells depending on a range containing this cell */
-  void processRangeDependencies (const KSpreadPoint &cell);
+  void processRangeDependencies (const Point &cell);
 
   /** update all cells depending on a range intersecting with this range */
-  void processRangeDependencies (const KSpreadRange &range);
+  void processRangeDependencies (const Range &range);
   
   /** update one cell due to changed dependencies */
-  void updateCell (const KSpreadPoint &cell) const;
+  void updateCell (const Point &cell) const;
 
   /** return a leading cell for a given cell (used to store range
   dependencies effectively) */
-  KSpreadPoint leadingCell (const KSpreadPoint &cell) const;
+  Point leadingCell (const Point &cell) const;
   /** list of leading cells of all cell chunks that this range belongs to */
-  QValueList<KSpreadPoint> leadingCells (const KSpreadRange &range) const;
+  QValueList<Point> leadingCells (const Range &range) const;
   /** retrieve a list of cells that a given cell depends on */
-  RangeList computeDependencies (const KSpreadPoint &cell) const;
+  RangeList computeDependencies (const Point &cell) const;
   
-  /** KSpreadSheet whose dependencies are managed by this instance */
-  KSpreadSheet *sheet;
+  /** Sheet whose dependencies are managed by this instance */
+  Sheet *sheet;
   
   /** dependencies of each cell */
-  QMap<KSpreadPoint, RangeList> dependencies;
+  QMap<Point, RangeList> dependencies;
   /** list of cells (but NOT ranges) that depend on a cell */
-  QMap<KSpreadPoint, QValueList<KSpreadPoint> > cellDeps;
+  QMap<Point, QValueList<Point> > cellDeps;
   /** all range dependencies splitted into cell-chunks (TODO: describe) */
-  QMap<KSpreadPoint, QValueList<RangeDependency> > rangeDeps;
+  QMap<Point, QValueList<RangeDependency> > rangeDeps;
   /** list of cells referencing a given named area */
-  QMap<QString, QMap<KSpreadPoint, bool> > areaDeps;
+  QMap<QString, QMap<Point, bool> > areaDeps;
 };
 
 }
 
 using namespace KSpread;
 
-DependencyManager::DependencyManager (KSpreadSheet *s)
+DependencyManager::DependencyManager (Sheet *s)
 {
   deps = new DependencyList (s);
 }
@@ -124,7 +124,7 @@ void DependencyManager::reset ()
   deps->reset();
 }
 
-void DependencyManager::cellChanged (const KSpreadPoint &cell)
+void DependencyManager::cellChanged (const Point &cell)
 {
   deps->cellChanged (cell);
   Cell *c = cell.cell();
@@ -144,7 +144,7 @@ void DependencyManager::cellChanged (const KSpreadPoint &cell)
   deps->processDependencies (cell);
 }
 
-void DependencyManager::rangeChanged (const KSpreadRange &range)
+void DependencyManager::rangeChanged (const Range &range)
 {
   deps->generateDependencies (range);
   deps->processDependencies (range);
@@ -161,17 +161,17 @@ void DependencyManager::areaModified (const QString &name)
   deps->areaModified (name);
 }
 
-RangeList DependencyManager::getDependencies (const KSpreadPoint &cell)
+RangeList DependencyManager::getDependencies (const Point &cell)
 {
   return deps->getDependencies (cell);
 }
 
-QValueList<KSpreadPoint> DependencyManager::getDependants (const KSpreadPoint &cell)
+QValueList<Point> DependencyManager::getDependants (const Point &cell)
 {
   return deps->getDependants (cell);
 }
 
-DependencyList::DependencyList (KSpreadSheet *s)
+DependencyList::DependencyList (Sheet *s)
     : sheet (s)
 {
 }
@@ -183,7 +183,7 @@ void DependencyList::reset ()
   rangeDeps.clear();
 }
 
-void DependencyList::cellChanged (const KSpreadPoint &cell)
+void DependencyList::cellChanged (const Point &cell)
 {
   Cell *c = cell.cell();
 
@@ -202,7 +202,7 @@ void DependencyList::cellChanged (const KSpreadPoint &cell)
   processDependencies (cell);
 }
 
-RangeList DependencyList::getDependencies (const KSpreadPoint &cell)
+RangeList DependencyList::getDependencies (const Point &cell)
 {
   RangeList rl;
   //look if the cell has any dependencies
@@ -213,16 +213,16 @@ RangeList DependencyList::getDependencies (const KSpreadPoint &cell)
   return dependencies[cell];
 }
 
-QValueList<KSpreadPoint> DependencyList::getDependants (const KSpreadPoint &cell)
+QValueList<Point> DependencyList::getDependants (const Point &cell)
 {
-  QValueList<KSpreadPoint> list;
+  QValueList<Point> list;
   
   //cell dependencies go first
   if (cellDeps.contains (cell))
     list = cellDeps[cell];
   
   //next, append range dependencies
-  KSpreadPoint leading = leadingCell (cell);
+  Point leading = leadingCell (cell);
   QValueList<RangeDependency>::iterator it;
   if (!rangeDeps.count (leading))
     return list;  //no range dependencies in this cell chunk -> nothing more to do
@@ -234,7 +234,7 @@ QValueList<KSpreadPoint> DependencyList::getDependants (const KSpreadPoint &cell
     //add the depending cell to the list
     if ((*it).range.contains (cell))
     {
-      KSpreadPoint c;
+      Point c;
       c.setRow ((*it).cellrow);
       c.setColumn ((*it).cellcolumn);
       c.sheet = (*it).cellsheet;
@@ -254,16 +254,16 @@ void DependencyList::areaModified (const QString &name)
   if (!areaDeps.contains (name))
     return;
   
-  QMap<KSpreadPoint, bool>::iterator it;
+  QMap<Point, bool>::iterator it;
   for (it = areaDeps[name].begin(); it != areaDeps[name].end(); ++it)
     cellChanged (it.key());
 }
 
-void DependencyList::addDependency (const KSpreadPoint &cell1,
-    const KSpreadPoint &cell2)
+void DependencyList::addDependency (const Point &cell1,
+    const Point &cell2)
 {
   //cell2 can be in another sheet (inter-sheet dependency)
-  KSpreadSheet *sh = cell2.sheet;
+  Sheet *sh = cell2.sheet;
   if (!sh)
     sh = sheet;
 
@@ -274,18 +274,18 @@ void DependencyList::addDependency (const KSpreadPoint &cell1,
 void DependencyList::addRangeDependency (const RangeDependency &rd)
 {
   //target range can be in another sheet (inter-sheet dependency)
-  KSpreadSheet *sh = rd.range.sheet;
+  Sheet *sh = rd.range.sheet;
   if (!sh)
     sh = sheet;
   
-  KSpreadPoint cell;
+  Point cell;
   cell.sheet = rd.cellsheet;
   cell.setRow (rd.cellrow);
   cell.setColumn (rd.cellcolumn);
   dependencies[cell].ranges.push_back (rd.range);
   
-  QValueList<KSpreadPoint> leadings = leadingCells (rd.range);
-  QValueList<KSpreadPoint>::iterator it;
+  QValueList<Point> leadings = leadingCells (rd.range);
+  QValueList<Point>::iterator it;
   for (it = leadings.begin(); it != leadings.end(); ++it)
     sh->dependencies()->deps->rangeDeps[*it].push_back (rd);
 
@@ -294,19 +294,19 @@ void DependencyList::addRangeDependency (const RangeDependency &rd)
     areaDeps[rd.range.namedArea][cell] = true;
 }
 
-void DependencyList::removeDependencies (const KSpreadPoint &cell)
+void DependencyList::removeDependencies (const Point &cell)
 {
   //look if the cell has any dependencies
   if (!dependencies.contains (cell))
     return;  //it doesn't - nothing more to do
 
   //first we remove cell-dependencies
-  QValueList<KSpreadPoint> cells = dependencies[cell].cells;
-  QValueList<KSpreadPoint>::iterator it1;
+  QValueList<Point> cells = dependencies[cell].cells;
+  QValueList<Point>::iterator it1;
   for (it1 = cells.begin(); it1 != cells.end(); ++it1)
   {
     //get sheet-pointer - needed to handle inter-sheet dependencies correctly
-    KSpreadSheet *sh = (*it1).sheet;
+    Sheet *sh = (*it1).sheet;
     if (!sh)
       sh = sheet;
     
@@ -314,21 +314,21 @@ void DependencyList::removeDependencies (const KSpreadPoint &cell)
       continue;  //this should never happen
     
     //we no longer depend on this cell
-    QValueList<KSpreadPoint>::iterator cit;
+    QValueList<Point>::iterator cit;
     cit = sh->dependencies()->deps->cellDeps[*it1].find (cell);
     if (cit != sh->dependencies()->deps->cellDeps[*it1].end())
       sh->dependencies()->deps->cellDeps[*it1].erase (cit);
   }
   
   //then range-dependencies are removed
-  QValueList<KSpreadRange> ranges = dependencies[cell].ranges;
-  QValueList<KSpreadRange>::iterator it2;
-  QValueList<KSpreadPoint> leads;
+  QValueList<Range> ranges = dependencies[cell].ranges;
+  QValueList<Range>::iterator it2;
+  QValueList<Point> leads;
   for (it2 = ranges.begin(); it2 != ranges.end(); ++it2)
   {
     //we construct a list of cell-chunks containing a range and merge it
     //with lists generated from all previous ranges (duplicates are removed)
-    QValueList<KSpreadPoint> leadings = leadingCells (*it2);
+    QValueList<Point> leadings = leadingCells (*it2);
     for (it1 = leadings.begin(); it1 != leadings.end(); ++it1)
       if (!leads.contains (*it1))
         leads.push_back (*it1);
@@ -336,7 +336,7 @@ void DependencyList::removeDependencies (const KSpreadPoint &cell)
   for (it1 = leads.begin(); it1 != leads.end(); ++it1)
   {
     //get sheet-pointer - needed to handle inter-sheet dependencies correctly
-    KSpreadSheet *sh = (*it1).sheet;
+    Sheet *sh = (*it1).sheet;
     if (!sh)
       sh = sheet;
 
@@ -358,7 +358,7 @@ void DependencyList::removeDependencies (const KSpreadPoint &cell)
   }
   
   // remove information about named area dependencies
-  QMap<QString, QMap<KSpreadPoint, bool> >::iterator itr;
+  QMap<QString, QMap<Point, bool> >::iterator itr;
   for (itr = areaDeps.begin(); itr != areaDeps.end(); ++itr) {
     if (itr.data().contains (cell))
       itr.data().remove (cell);
@@ -370,7 +370,7 @@ void DependencyList::removeDependencies (const KSpreadPoint &cell)
   dependencies.erase (cell);
 }
 
-void DependencyList::generateDependencies (const KSpreadPoint &cell)
+void DependencyList::generateDependencies (const Point &cell)
 {
   //get rid of old dependencies first
   removeDependencies (cell);
@@ -387,8 +387,8 @@ void DependencyList::generateDependencies (const KSpreadPoint &cell)
   
   //now that we have the new dependencies, we put them into our data structures
   //and we're done
-  QValueList<KSpreadPoint>::iterator it1;
-  QValueList<KSpreadRange>::iterator it2;
+  QValueList<Point>::iterator it1;
+  QValueList<Range>::iterator it2;
   
   for (it1 = rl.cells.begin(); it1 != rl.cells.end(); ++it1)
     addDependency (cell, *it1);
@@ -404,12 +404,12 @@ void DependencyList::generateDependencies (const KSpreadPoint &cell)
   }
 }
 
-void DependencyList::generateDependencies (const KSpreadRange &range)
+void DependencyList::generateDependencies (const Range &range)
 {
   for (int row = range.startRow(); row <= range.endRow(); row++)
     for (int col = range.startCol(); col <= range.endCol(); col++)
     {
-      KSpreadPoint c;
+      Point c;
       c.setRow (row);
       c.setColumn (col);
       c.sheet = sheet;
@@ -419,8 +419,8 @@ void DependencyList::generateDependencies (const KSpreadRange &range)
 
 void DependencyList::generateDependencies (const RangeList &rangeList)
 {
-  QValueList<KSpreadPoint>::const_iterator it1;
-  QValueList<KSpreadRange>::const_iterator it2;
+  QValueList<Point>::const_iterator it1;
+  QValueList<Range>::const_iterator it2;
   
   for (it1 = rangeList.cells.begin(); it1 != rangeList.cells.end(); ++it1)
     generateDependencies (*it1);
@@ -428,12 +428,12 @@ void DependencyList::generateDependencies (const RangeList &rangeList)
     generateDependencies (*it2);
 }
 
-void DependencyList::processDependencies (const KSpreadPoint &cell)
+void DependencyList::processDependencies (const Point &cell)
 {
   if (cellDeps.contains (cell))
   {
-    QValueList<KSpreadPoint> d = cellDeps[cell];
-    QValueList<KSpreadPoint>::iterator it;
+    QValueList<Point> d = cellDeps[cell];
+    QValueList<Point>::iterator it;
     for (it = d.begin(); it != d.end(); ++it)
       updateCell (*it);
   }
@@ -441,9 +441,9 @@ void DependencyList::processDependencies (const KSpreadPoint &cell)
   processRangeDependencies (cell);
 }
 
-void DependencyList::processRangeDependencies (const KSpreadPoint &cell)
+void DependencyList::processRangeDependencies (const Point &cell)
 {
-  KSpreadPoint leading = leadingCell (cell);
+  Point leading = leadingCell (cell);
   QValueList<RangeDependency>::iterator it;
   if (!rangeDeps.count (leading))
     return;  //no range dependencies in this cell chunk
@@ -455,7 +455,7 @@ void DependencyList::processRangeDependencies (const KSpreadPoint &cell)
     //recalc the depending cell
     if ((*it).range.contains (cell))
     {
-      KSpreadPoint c;
+      Point c;
       c.setRow ((*it).cellrow);
       c.setColumn ((*it).cellcolumn);
       c.sheet = (*it).cellsheet;
@@ -464,21 +464,21 @@ void DependencyList::processRangeDependencies (const KSpreadPoint &cell)
   }
 }
 
-void DependencyList::processDependencies (const KSpreadRange &range)
+void DependencyList::processDependencies (const Range &range)
 {
   //each cell's dependencies need to be updated - that cannot be helped - having a range
   //only helps with range dependencies
   for (int row = range.startRow(); row <= range.endRow(); row++)
     for (int col = range.startCol(); col <= range.endCol(); col++)
     {
-      KSpreadPoint c;
+      Point c;
       c.setRow (row);
       c.setColumn (col);
       c.sheet = sheet;
       if (cellDeps.contains (c))
       {
-        QValueList<KSpreadPoint> d = cellDeps[c];
-        QValueList<KSpreadPoint>::iterator it;
+        QValueList<Point> d = cellDeps[c];
+        QValueList<Point>::iterator it;
         for (it = d.begin(); it != d.end(); ++it)
           updateCell (*it);
       }
@@ -487,15 +487,15 @@ void DependencyList::processDependencies (const KSpreadRange &range)
   processRangeDependencies (range);
 }
 
-void DependencyList::processRangeDependencies (const KSpreadRange &range)
+void DependencyList::processRangeDependencies (const Range &range)
 {
   //TODO: some optimization, so that we don't recompute cells depending of huge
   //ranges more than once (now we recompute them once per cell-chunk used by their dependency)
   //This will probably happen as a part of splitting this into dep manager
   //and recalc manager
   
-  QValueList<KSpreadPoint> leadings = leadingCells (range);
-  QValueList<KSpreadPoint>::iterator it;
+  QValueList<Point> leadings = leadingCells (range);
+  QValueList<Point>::iterator it;
   for (it = leadings.begin(); it != leadings.end(); ++it)
   {
     if (!rangeDeps.count (*it))
@@ -507,7 +507,7 @@ void DependencyList::processRangeDependencies (const KSpreadRange &range)
       //recalc the depending cell
       if ((*it2).range.intersects (range))
       {
-        KSpreadPoint c;
+        Point c;
         c.setRow ((*it2).range.startRow());
         c.setColumn ((*it2).range.startCol());
         c.sheet = sheet;
@@ -519,8 +519,8 @@ void DependencyList::processRangeDependencies (const KSpreadRange &range)
 
 void DependencyList::processDependencies (const RangeList &rangeList)
 {
-  QValueList<KSpreadPoint>::const_iterator it1;
-  QValueList<KSpreadRange>::const_iterator it2;
+  QValueList<Point>::const_iterator it1;
+  QValueList<Range>::const_iterator it2;
   
   for (it1 = rangeList.cells.begin(); it1 != rangeList.cells.end(); ++it1)
     processDependencies (*it1);
@@ -528,7 +528,7 @@ void DependencyList::processDependencies (const RangeList &rangeList)
     processDependencies (*it2);
 }
 
-void DependencyList::updateCell (const KSpreadPoint &cell) const
+void DependencyList::updateCell (const Point &cell) const
 {
   Cell *c = cell.cell();
   //prevent infinite recursion (circular dependencies)
@@ -536,7 +536,7 @@ void DependencyList::updateCell (const KSpreadPoint &cell) const
   {
     kdError(36001) << "ERROR: Circle" << endl;
     c->setFlag(Cell::Flag_CircularCalculation);
-    KSpreadValue v;
+    Value v;
     v.setError ( "####" );
     c->setValue (v);
     //clear the computing-dependencies flag
@@ -556,19 +556,19 @@ void DependencyList::updateCell (const KSpreadPoint &cell) const
   c->clearFlag (Cell::Flag_Progress);
 }
 
-KSpreadPoint DependencyList::leadingCell (const KSpreadPoint &cell) const
+Point DependencyList::leadingCell (const Point &cell) const
 {
-  KSpreadPoint c;
+  Point c;
   c.setRow (cell.row() - cell.row() % CELLCHUNK_ROWS + 1);
   c.setColumn (cell.column() - cell.column() % CELLCHUNK_COLS + 1);
   c.sheet = cell.sheet;
   return c;
 }
 
-QValueList<KSpreadPoint> DependencyList::leadingCells (const KSpreadRange &range) const
+QValueList<Point> DependencyList::leadingCells (const Range &range) const
 {
-  QValueList<KSpreadPoint> cells;
-  KSpreadPoint cell1, cell2, cell;
+  QValueList<Point> cells;
+  Point cell1, cell2, cell;
   
   cell1.setRow (range.startRow());
   cell1.setColumn (range.startCol());
@@ -591,7 +591,7 @@ QValueList<KSpreadPoint> DependencyList::leadingCells (const KSpreadRange &range
   return cells;
 }
 
-RangeList DependencyList::computeDependencies (const KSpreadPoint &cell) const
+RangeList DependencyList::computeDependencies (const Point &cell) const
 {
   Cell *c = cell.cell();
   if (!c->isFormula())
@@ -613,14 +613,14 @@ RangeList DependencyList::computeDependencies (const KSpreadPoint &cell) const
     if (tokenType == Token::Cell)
     {
       QString text = token.text();
-      KSpreadPoint cell (text, sheet->workbook(), sheet);
+      Point cell (text, sheet->workbook(), sheet);
       if (cell.isValid())
         rl.cells.push_back (cell);
     }
     else if (tokenType == Token::Range)
     {
       QString text = token.text();
-      KSpreadRange range (text, sheet->workbook(), sheet);
+      Range range (text, sheet->workbook(), sheet);
       if (range.isValid())
         rl.ranges.push_back (range);
     }

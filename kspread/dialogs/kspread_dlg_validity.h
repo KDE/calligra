@@ -24,10 +24,10 @@
 #ifndef __kspread_dlg_validity__
 #define __kspread_dlg_validity__
 
-#include "kspread_cell.h"
 #include <kdialogbase.h>
-class KSpreadView;
-class KSpreadSheet;
+
+#include "kspread_cell.h"
+
 class QLabel;
 class QLineEdit;
 class QTextEdit;
@@ -35,11 +35,16 @@ class QComboBox;
 class QPushButton;
 class QCheckBox;
 
-class KSpreadDlgValidity : public KDialogBase
+namespace KSpread
+{
+class Sheet;
+class View;
+
+class DlgValidity : public KDialogBase
 {
   Q_OBJECT
 public:
-KSpreadDlgValidity(KSpreadView* parent, const char* name ,const QRect &_marker );
+DlgValidity(View* parent, const char* name ,const QRect &_marker );
 void init();
 
 public slots:
@@ -50,7 +55,7 @@ public slots:
 protected:
     void displayOrNotListOfValidity( bool _displayList);
 
-  KSpreadView* m_pView;
+  View* m_pView;
   QRect  marker;
   QLineEdit *val_max;
   QLineEdit *val_min;
@@ -61,7 +66,7 @@ protected:
   QComboBox *chooseType;
   QLineEdit * title;
   QTextEdit *message;
-  KSpreadValidity result;
+  Validity result;
   QCheckBox *displayMessage;
   QCheckBox *allowEmptyCell;
     QCheckBox *displayHelp;
@@ -71,6 +76,6 @@ protected:
     QLabel *validityLabelList;
 };
 
-
+} // namespace KSpread
 
 #endif

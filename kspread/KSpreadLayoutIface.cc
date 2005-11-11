@@ -24,90 +24,92 @@
 #include <qbrush.h>
 #include "kspread_format.h"
 
-KSpreadLayoutIface::KSpreadLayoutIface(KSpreadFormat *_layout)
+using namespace KSpread;
+
+LayoutIface::LayoutIface(Format *_layout)
 {
     layout=_layout;
 }
 
-void KSpreadLayoutIface::setBgColor(const QString& _c)
+void LayoutIface::setBgColor(const QString& _c)
 {
     QColor c(_c);
     layout->setBgColor(c);
 }
 
-void KSpreadLayoutIface::setBgColor(int r,int g,int b)
+void LayoutIface::setBgColor(int r,int g,int b)
 {
     QColor c(r,g,b);
     layout->setBgColor(c);
 }
 
 
-void KSpreadLayoutIface::setTextColor(int r,int g,int b)
+void LayoutIface::setTextColor(int r,int g,int b)
 {
     QColor c(r,g,b);
     layout->setTextColor(c);
 }
 
-void KSpreadLayoutIface::setTextColor(const QString& _c)
+void LayoutIface::setTextColor(const QString& _c)
 {
     QColor c(_c);
     layout->setTextColor(c);
 }
 
-void KSpreadLayoutIface::setAngle(int angle)
+void LayoutIface::setAngle(int angle)
 {
     layout->setAngle(angle);
 }
 
-void KSpreadLayoutIface::setVerticalText(bool _vertical)
+void LayoutIface::setVerticalText(bool _vertical)
 {
     layout->setVerticalText(_vertical);
 }
 
-void KSpreadLayoutIface::setMultiRow(bool _multi)
+void LayoutIface::setMultiRow(bool _multi)
 {
     layout->setMultiRow( _multi );
 }
 
-void KSpreadLayoutIface::setAlign( const QString& _Align )
+void LayoutIface::setAlign( const QString& _Align )
 {
-    KSpreadFormat::Align Align;
+    Format::Align Align;
     if(_Align=="Left")
-        Align=KSpreadFormat::Left;
+        Align=Format::Left;
     else if(_Align=="Right")
-        Align=KSpreadFormat::Right;
+        Align=Format::Right;
     else if(_Align=="Center")
-        Align=KSpreadFormat::Center;
+        Align=Format::Center;
     else
-        Align=KSpreadFormat::Undefined;
+        Align=Format::Undefined;
     layout->setAlign( Align);
 }
 
-void KSpreadLayoutIface::setAlignY( const QString& _AlignY )
+void LayoutIface::setAlignY( const QString& _AlignY )
 {
-    KSpreadFormat::AlignY AlignY;
+    Format::AlignY AlignY;
     if(_AlignY=="Top")
-        AlignY=KSpreadFormat::Top;
+        AlignY=Format::Top;
     else if(_AlignY=="Middle")
-        AlignY=KSpreadFormat::Middle;
+        AlignY=Format::Middle;
     else if(_AlignY=="Bottom")
-        AlignY=KSpreadFormat::Bottom;
+        AlignY=Format::Bottom;
     else
-        AlignY=KSpreadFormat::Middle;
+        AlignY=Format::Middle;
     layout->setAlignY( AlignY);
 }
 
-void KSpreadLayoutIface::setPostfix(const QString &_postfix)
+void LayoutIface::setPostfix(const QString &_postfix)
 {
     layout->setPostfix( _postfix );
 }
 
-void KSpreadLayoutIface::setPrefix(const QString &_prefix)
+void LayoutIface::setPrefix(const QString &_prefix)
 {
     layout->setPrefix( _prefix );
 }
 
-void KSpreadLayoutIface::setFormatType(const QString &_formatType)
+void LayoutIface::setFormatType(const QString &_formatType)
 {
     FormatType format;
     layout->setPrecision(2);
@@ -153,44 +155,44 @@ void KSpreadLayoutIface::setFormatType(const QString &_formatType)
 }
 
 
-void KSpreadLayoutIface::setPrecision(int _p)
+void LayoutIface::setPrecision(int _p)
 {
     layout->setPrecision( _p );
 }
 
-void KSpreadLayoutIface::setTextFontBold(bool _b)
+void LayoutIface::setTextFontBold(bool _b)
 {
     layout->setTextFontBold( _b );
 }
 
-void KSpreadLayoutIface::setTextFontItalic(bool _b)
+void LayoutIface::setTextFontItalic(bool _b)
 {
     layout->setTextFontItalic( _b );
 }
 
-void KSpreadLayoutIface::setTextFontUnderline(bool _b)
+void LayoutIface::setTextFontUnderline(bool _b)
 {
     layout->setTextFontUnderline( _b );
 }
 
-void KSpreadLayoutIface::setTextFontStrike(bool _b)
+void LayoutIface::setTextFontStrike(bool _b)
 {
     layout->setTextFontStrike( _b );
 }
 
-void KSpreadLayoutIface::setTextFontSize( int _size )
+void LayoutIface::setTextFontSize( int _size )
 {
     layout->setTextFontSize( _size );
 }
 
-void KSpreadLayoutIface::setTextFontFamily( const QString& _font )
+void LayoutIface::setTextFontFamily( const QString& _font )
 {
     layout->setTextFontFamily( _font );
 }
 
 
 //border left
-void KSpreadLayoutIface::setLeftBorderStyle( const QString& _style )
+void LayoutIface::setLeftBorderStyle( const QString& _style )
 {
     if(_style=="DotLine")
         layout->setLeftBorderStyle(Qt::DotLine);
@@ -206,26 +208,26 @@ void KSpreadLayoutIface::setLeftBorderStyle( const QString& _style )
         layout->setLeftBorderStyle(Qt::SolidLine);
 }
 
-void KSpreadLayoutIface::setLeftBorderColor(const QString& _c)
+void LayoutIface::setLeftBorderColor(const QString& _c)
 {
     QColor c(_c);
     layout->setLeftBorderColor(c );
 }
 
-void KSpreadLayoutIface::setLeftBorderColor(int r,int g,int b)
+void LayoutIface::setLeftBorderColor(int r,int g,int b)
 {
     QColor c(r,g,b);
     layout->setLeftBorderColor(c );
 }
 
-void KSpreadLayoutIface::setLeftBorderWidth( int _size )
+void LayoutIface::setLeftBorderWidth( int _size )
 {
     layout->setLeftBorderWidth( _size );
 }
 
 
 //border right
-void KSpreadLayoutIface::setRightBorderStyle( const QString& _style )
+void LayoutIface::setRightBorderStyle( const QString& _style )
 {
     if(_style=="DotLine")
         layout->setRightBorderStyle(Qt::DotLine);
@@ -241,26 +243,26 @@ void KSpreadLayoutIface::setRightBorderStyle( const QString& _style )
         layout->setRightBorderStyle(Qt::SolidLine);
 }
 
-void KSpreadLayoutIface::setRightBorderColor(const QString& _c)
+void LayoutIface::setRightBorderColor(const QString& _c)
 {
     QColor c(_c);
     layout->setRightBorderColor(c );
 }
 
-void KSpreadLayoutIface::setRightBorderColor(int r,int g,int b)
+void LayoutIface::setRightBorderColor(int r,int g,int b)
 {
     QColor c(r,g,b);
     layout->setRightBorderColor(c );
 }
 
-void KSpreadLayoutIface::setRightBorderWidth( int _size )
+void LayoutIface::setRightBorderWidth( int _size )
 {
     layout->setRightBorderWidth( _size );
 }
 
 
 //border top
-void KSpreadLayoutIface::setTopBorderStyle( const QString& _style )
+void LayoutIface::setTopBorderStyle( const QString& _style )
 {
     if(_style=="DotLine")
         layout->setTopBorderStyle(Qt::DotLine);
@@ -276,26 +278,26 @@ void KSpreadLayoutIface::setTopBorderStyle( const QString& _style )
         layout->setTopBorderStyle(Qt::SolidLine);
 }
 
-void KSpreadLayoutIface::setTopBorderColor(const QString& _c)
+void LayoutIface::setTopBorderColor(const QString& _c)
 {
     QColor c(_c);
     layout->setTopBorderColor(c );
 }
 
-void KSpreadLayoutIface::setTopBorderColor(int r,int g,int b)
+void LayoutIface::setTopBorderColor(int r,int g,int b)
 {
     QColor c(r,g,b);
     layout->setTopBorderColor(c );
 }
 
-void KSpreadLayoutIface::setTopBorderWidth( int _size )
+void LayoutIface::setTopBorderWidth( int _size )
 {
     layout->setTopBorderWidth( _size );
 }
 
 
 //border bottom
-void KSpreadLayoutIface::setBottomBorderStyle( const QString& _style )
+void LayoutIface::setBottomBorderStyle( const QString& _style )
 {
     if(_style=="DotLine")
         layout->setBottomBorderStyle(Qt::DotLine);
@@ -311,25 +313,25 @@ void KSpreadLayoutIface::setBottomBorderStyle( const QString& _style )
         layout->setBottomBorderStyle(Qt::SolidLine);
 }
 
-void KSpreadLayoutIface::setBottomBorderColor(const QString& _c)
+void LayoutIface::setBottomBorderColor(const QString& _c)
 {
     QColor c(_c);
     layout->setBottomBorderColor(c );
 }
-void KSpreadLayoutIface::setBottomBorderColor(int r,int g,int b)
+void LayoutIface::setBottomBorderColor(int r,int g,int b)
 {
     QColor c(r,g,b);
     layout->setBottomBorderColor(c );
 }
 
-void KSpreadLayoutIface::setBottomBorderWidth( int _size )
+void LayoutIface::setBottomBorderWidth( int _size )
 {
     layout->setBottomBorderWidth( _size );
 }
 
 
 //fall back diagonal
-void KSpreadLayoutIface::setFallDiagonalStyle( const QString& _style )
+void LayoutIface::setFallDiagonalStyle( const QString& _style )
 {
     if(_style=="DotLine")
         layout->setFallDiagonalStyle(Qt::DotLine);
@@ -345,18 +347,18 @@ void KSpreadLayoutIface::setFallDiagonalStyle( const QString& _style )
         layout->setFallDiagonalStyle(Qt::SolidLine);
 }
 
-void KSpreadLayoutIface::setFallDiagonalColor(const QString& _c)
+void LayoutIface::setFallDiagonalColor(const QString& _c)
 {
     QColor c(_c);
     layout->setFallDiagonalColor(c );
 }
-void KSpreadLayoutIface::setFallDiagonalColor(int r,int g,int b)
+void LayoutIface::setFallDiagonalColor(int r,int g,int b)
 {
     QColor c(r,g,b);
     layout->setFallDiagonalColor(c );
 }
 
-void KSpreadLayoutIface::setFallDiagonalWidth( int _size )
+void LayoutIface::setFallDiagonalWidth( int _size )
 {
     layout->setFallDiagonalWidth( _size );
 }
@@ -364,7 +366,7 @@ void KSpreadLayoutIface::setFallDiagonalWidth( int _size )
 
 
 //GoUpDiagonal
-void KSpreadLayoutIface::setGoUpDiagonalStyle( const QString& _style )
+void LayoutIface::setGoUpDiagonalStyle( const QString& _style )
 {
     if(_style=="DotLine")
         layout->setGoUpDiagonalStyle(Qt::DotLine);
@@ -380,24 +382,24 @@ void KSpreadLayoutIface::setGoUpDiagonalStyle( const QString& _style )
         layout->setGoUpDiagonalStyle(Qt::SolidLine);
 }
 
-void KSpreadLayoutIface::setGoUpDiagonalColor(const QString& _c)
+void LayoutIface::setGoUpDiagonalColor(const QString& _c)
 {
     QColor c(_c);
     layout->setGoUpDiagonalColor(c );
 }
-void KSpreadLayoutIface::setGoUpDiagonalColor(int r,int g,int b)
+void LayoutIface::setGoUpDiagonalColor(int r,int g,int b)
 {
     QColor c(r,g,b);
     layout->setGoUpDiagonalColor(c );
 }
 
-void KSpreadLayoutIface::setGoUpDiagonalWidth( int _size )
+void LayoutIface::setGoUpDiagonalWidth( int _size )
 {
     layout->setGoUpDiagonalWidth( _size );
 }
 
 
-void KSpreadLayoutIface::setIndent( double indent )
+void LayoutIface::setIndent( double indent )
 {
     if( indent >= 0.0 )
         layout->setIndent( indent );
@@ -406,7 +408,7 @@ void KSpreadLayoutIface::setIndent( double indent )
 }
 
 
-void KSpreadLayoutIface::setDontPrintText ( bool _print)
+void LayoutIface::setDontPrintText ( bool _print)
 {
     layout->setDontPrintText ( _print);
 }

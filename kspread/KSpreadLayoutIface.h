@@ -25,13 +25,15 @@
 
 #include <dcopobject.h>
 
-class KSpreadFormat;
+namespace KSpread
+{
+class Format;
 
-class KSpreadLayoutIface : virtual public DCOPObject
+class LayoutIface : virtual public DCOPObject
 {
     K_DCOP
 public:
-    KSpreadLayoutIface(KSpreadFormat *_layout);
+    LayoutIface(Format *_layout);
     virtual void update(){;}
 k_dcop:
 
@@ -93,7 +95,9 @@ k_dcop:
     //don't print text
     virtual void setDontPrintText ( bool _b);
 private:
-    KSpreadFormat *layout;
+    Format *layout;
 };
+
+} //namespace KSpread
 
 #endif

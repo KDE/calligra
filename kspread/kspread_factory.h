@@ -25,12 +25,12 @@
 class KAboutData;
 class DCOPObject;
 
-class KSpreadFactory : public KoFactory
+class Factory : public KoFactory
 {
     Q_OBJECT
 public:
-    KSpreadFactory( QObject* parent = 0, const char* name = 0 );
-    ~KSpreadFactory();
+    Factory( QObject* parent = 0, const char* name = 0 );
+    ~Factory();
 
     virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
 

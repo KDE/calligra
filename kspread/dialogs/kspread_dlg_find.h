@@ -29,11 +29,11 @@ class QCheckBox;
 class QPushButton;
 class QComboBox;
 
-class KSpreadFindOption : public QObject
+class FindOption : public QObject
 {
   Q_OBJECT
  public:
-    KSpreadFindOption( QWidget *parent);
+    FindOption( QWidget *parent);
     bool searchInAllSheet() const;
 
     enum searchTypeValue { Value, Note};
@@ -56,37 +56,37 @@ private:
     QComboBox *m_searchDirection;
 };
 
-class KSpreadFindDlg : public KFindDialog
+class FindDlg : public KFindDialog
 {
   Q_OBJECT
 
  public:
-    KSpreadFindDlg( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList(), bool hasSelection = false );
-    ~KSpreadFindDlg();
+    FindDlg( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList(), bool hasSelection = false );
+    ~FindDlg();
     bool searchInAllSheet() const;
-    KSpreadFindOption::searchTypeValue searchType() const { return m_findOptions->searchType(); }
-    KSpreadFindOption::searchDirectionValue searchDirection() const { return m_findOptions->searchDirection(); }
+    FindOption::searchTypeValue searchType() const { return m_findOptions->searchType(); }
+    FindOption::searchDirectionValue searchDirection() const { return m_findOptions->searchDirection(); }
 
  private slots:
     void slotAjustSize();
  private:
-    KSpreadFindOption *m_findOptions;
+    FindOption *m_findOptions;
 };
 
-class KSpreadSearchDlg : public KReplaceDialog
+class SearchDlg : public KReplaceDialog
 {
   Q_OBJECT
 
  public:
-    KSpreadSearchDlg( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList(), const QStringList &replaceStrings = QStringList(), bool hasSelection = false );
-    ~KSpreadSearchDlg();
+    SearchDlg( QWidget *parent = 0, const char *name = 0, long options = 0, const QStringList &findStrings = QStringList(), const QStringList &replaceStrings = QStringList(), bool hasSelection = false );
+    ~SearchDlg();
     bool searchInAllSheet() const;
-    KSpreadFindOption::searchTypeValue searchType() const { return m_findOptions->searchType(); }
+    FindOption::searchTypeValue searchType() const { return m_findOptions->searchType(); }
 
  private slots:
     void slotAjustSize();
  private:
-    KSpreadFindOption *m_findOptions;
+    FindOption *m_findOptions;
 };
 
 

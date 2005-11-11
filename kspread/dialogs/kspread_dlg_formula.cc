@@ -53,7 +53,7 @@
 
 using namespace KSpread;
 
-KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName)
+FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& formulaName)
     : KDialogBase( parent, name,false,i18n("Function"), Ok|Cancel )
 {
   setWFlags( Qt::WDestructiveClose );
@@ -68,7 +68,7 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     // Make sure that there is a cell editor running.
     if ( !m_pView->canvasWidget()->editor() )
     {
-        m_pView->canvasWidget()->createEditor( KSpreadCanvas::CellEditor );
+        m_pView->canvasWidget()->createEditor( Canvas::CellEditor );
         if(cell->text().isEmpty())
           m_pView->canvasWidget()->editor()->setText( "=" );
         else
@@ -192,8 +192,8 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
     connect( fiveElement,SIGNAL(textChanged ( const QString & )),
 	     this,SLOT(slotChangeText(const QString &)));
 
-    connect( m_pView, SIGNAL( sig_chooseSelectionChanged( KSpreadSheet*, const QRect& ) ),
-             this, SLOT( slotSelectionChanged( KSpreadSheet*, const QRect& ) ) );
+    connect( m_pView, SIGNAL( sig_chooseSelectionChanged( Sheet*, const QRect& ) ),
+             this, SLOT( slotSelectionChanged( Sheet*, const QRect& ) ) );
 
     connect( m_browser, SIGNAL( linkClicked( const QString& ) ),
              this, SLOT( slotShowFunction( const QString& ) ) );
@@ -246,13 +246,12 @@ KSpreadDlgFormula::KSpreadDlgFormula( KSpreadView* parent, const char* name,cons
 	     this, SLOT( slotPressReturn() ) );
 }
 
-KSpreadDlgFormula::~KSpreadDlgFormula()
+FormulaDialog::~FormulaDialog()
 {
-    kdDebug(36001)<<"KSpreadDlgFormula::~KSpreadDlgFormula() \n";
+    kdDebug(36001)<<"FormulaDialog::~FormulaDialog() \n";
 }
 
-
-void KSpreadDlgFormula::slotPressReturn()
+void FormulaDialog::slotPressReturn()
 {
     //laurent 2001-07-07 desactivate this code
     //because kspread crash.
@@ -263,14 +262,14 @@ void KSpreadDlgFormula::slotPressReturn()
     */
 }
 
-void KSpreadDlgFormula::slotSearchText(const QString &_text)
+void FormulaDialog::slotSearchText(const QString &_text)
 {
     QString result = listFunct.makeCompletion( _text.upper() );
     if( !result.isNull() )
         functions->setCurrentItem( functions->index( functions->findItem( result ) ) );
 }
 
-bool KSpreadDlgFormula::eventFilter( QObject* obj, QEvent* ev )
+bool FormulaDialog::eventFilter( QObject* obj, QEvent* ev )
 {
     if ( obj == firstElement && ev->type() == QEvent::FocusIn )
         m_focus = firstElement;
@@ -291,7 +290,7 @@ bool KSpreadDlgFormula::eventFilter( QObject* obj, QEvent* ev )
     return FALSE;
 }
 
-void KSpreadDlgFormula::slotOk()
+void FormulaDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
 
@@ -299,7 +298,7 @@ void KSpreadDlgFormula::slotOk()
     // Switch back to the old sheet
     if( m_pView->activeSheet()->sheetName() !=  m_sheetName )
     {
-        KSpreadSheet *sheet=m_pView->doc()->map()->findSheet(m_sheetName);
+        Sheet *sheet=m_pView->doc()->map()->findSheet(m_sheetName);
         if( sheet)
 	    m_pView->setActiveSheet(sheet);
     }
@@ -327,7 +326,7 @@ void KSpreadDlgFormula::slotOk()
     //  delete this;
 }
 
-void KSpreadDlgFormula::slotClose()
+void FormulaDialog::slotClose()
 {
     m_pView->doc()->emitBeginOperation( false );
 
@@ -336,7 +335,7 @@ void KSpreadDlgFormula::slotClose()
     // Switch back to the old sheet
     if(m_pView->activeSheet()->sheetName() !=  m_sheetName )
     {
-        KSpreadSheet *sheet=m_pView->doc()->map()->findSheet(m_sheetName);
+        Sheet *sheet=m_pView->doc()->map()->findSheet(m_sheetName);
         if( !sheet )
 	    return;
 	m_pView->setActiveSheet(sheet);
@@ -363,7 +362,7 @@ void KSpreadDlgFormula::slotClose()
     //delete this;
 }
 
-void KSpreadDlgFormula::slotSelectButton()
+void FormulaDialog::slotSelectButton()
 {
     if( functions->currentItem() != -1 )
     {
@@ -371,7 +370,7 @@ void KSpreadDlgFormula::slotSelectButton()
     }
 }
 
-void KSpreadDlgFormula::slotChangeText( const QString& )
+void FormulaDialog::slotChangeText( const QString& )
 {
     // Test the lock
     if( !refresh_result )
@@ -387,7 +386,7 @@ void KSpreadDlgFormula::slotChangeText( const QString& )
     result->setText( tmp );
 }
 
-QString KSpreadDlgFormula::createFormula()
+QString FormulaDialog::createFormula()
 {
     QString tmp( "" );
 
@@ -440,7 +439,7 @@ QString KSpreadDlgFormula::createFormula()
     return(tmp);
 }
 
-QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
+QString FormulaDialog::createParameter( const QString& _text, int param )
 {
     if ( _text.isEmpty() )
 	return QString( "" );
@@ -488,8 +487,8 @@ QString KSpreadDlgFormula::createParameter( const QString& _text, int param )
 	    }
 	    else
 	    {
-		KSpreadPoint p = KSpreadPoint( _text, m_pView->doc()->map() );
-		KSpreadRange r = KSpreadRange( _text, m_pView->doc()->map() );
+		Point p = Point( _text, m_pView->doc()->map() );
+		Range r = Range( _text, m_pView->doc()->map() );
 
 		if( !p.isValid() && !r.isValid() )
 		{
@@ -556,7 +555,7 @@ static void showEntry( QLineEdit* edit, QLabel* label,
 
 }
 
-void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
+void FormulaDialog::slotDoubleClicked( QListBoxItem* item )
 {
     if ( !item )
 	return;
@@ -669,7 +668,7 @@ void KSpreadDlgFormula::slotDoubleClicked( QListBoxItem* item )
     slotChangeText( "" );
 }
 
-void KSpreadDlgFormula::slotSelected( const QString& function )
+void FormulaDialog::slotSelected( const QString& function )
 {
     FunctionDescription* desc =
         FunctionRepository::self()->functionInfo (function);
@@ -702,7 +701,7 @@ void KSpreadDlgFormula::slotSelected( const QString& function )
 }
 
 // from hyperlink in the "Related Function"
-void KSpreadDlgFormula::slotShowFunction( const QString& function )
+void FormulaDialog::slotShowFunction( const QString& function )
 {
     FunctionDescription* desc =
        FunctionRepository::self()->functionInfo( function );
@@ -721,7 +720,7 @@ void KSpreadDlgFormula::slotShowFunction( const QString& function )
     slotSelected( function );
 }
 
-void KSpreadDlgFormula::slotSelectionChanged( KSpreadSheet* _sheet, const QRect& _selection )
+void FormulaDialog::slotSelectionChanged( Sheet* _sheet, const QRect& _selection )
 {
     if ( !m_focus )
         return;
@@ -745,7 +744,7 @@ void KSpreadDlgFormula::slotSelectionChanged( KSpreadSheet* _sheet, const QRect&
     }
 }
 
-void KSpreadDlgFormula::slotActivated( const QString& category )
+void FormulaDialog::slotActivated( const QString& category )
 {
     QStringList lst;
     if ( category == i18n("All") )
@@ -769,7 +768,7 @@ void KSpreadDlgFormula::slotActivated( const QString& category )
     slotSelected( functions->text(0) );
 }
 
-void KSpreadDlgFormula::closeEvent ( QCloseEvent * e )
+void FormulaDialog::closeEvent ( QCloseEvent * e )
 {
   e->accept();
 }

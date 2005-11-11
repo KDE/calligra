@@ -2,13 +2,13 @@
 
 #include <qdom.h>
 
-KSpreadLocale::KSpreadLocale()
+Locale::Locale()
 	: KLocale("kspread")
 {
 	insertCatalogue("koffice");
 }
 
-void KSpreadLocale::load( const QDomElement& element )
+void Locale::load( const QDomElement& element )
 {
     if ( element.hasAttribute( "weekStartsMonday" ) )
     {
@@ -56,7 +56,7 @@ void KSpreadLocale::load( const QDomElement& element )
 	setDateFormatShort( element.attribute( "dateFormatShort" ) );
 }
 
-QDomElement KSpreadLocale::save( QDomDocument& doc ) const
+QDomElement Locale::save( QDomDocument& doc ) const
 {
     QDomElement element = doc.createElement( "locale" );
 
@@ -80,7 +80,7 @@ QDomElement KSpreadLocale::save( QDomDocument& doc ) const
     return element;
 }
 
-void KSpreadLocale::defaultSystemConfig( )
+void Locale::defaultSystemConfig( )
 {
     KLocale locale("kspread");
     setWeekStartDay( locale.weekStartDay() );

@@ -32,44 +32,44 @@
 using namespace KSpread;
 
 // prototypes, sorted
-KSpreadValue func_currentDate (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_currentDateTime (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_currentTime (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_date (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_datevalue (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_day (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dayname (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dayOfYear (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_days (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_days360 (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_daysInMonth (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_daysInYear  (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_edate (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_eomonth (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_hour (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_hours (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_isLeapYear  (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_minute (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_minutes (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_month (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_monthname (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_months (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_second (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_seconds (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_time (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_timevalue (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_today (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_weekday (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_weeks (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_weeksInYear (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_year (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_years (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_currentDate (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_currentDateTime (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_currentTime (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_date (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_datevalue (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_day (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dayname (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dayOfYear (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_days (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_days360 (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_daysInMonth (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_daysInYear  (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_edate (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_eomonth (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_hour (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_hours (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_isLeapYear  (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_minute (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_minutes (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_month (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_monthname (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_months (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_second (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_seconds (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_time (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_timevalue (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_today (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_weeksInYear (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_year (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_years (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all date/time functions
 // sadly, many of these functions aren't Excel compatible
-void KSpreadRegisterDateTimeFunctions()
+void RegisterDateTimeFunctions()
 {
   // missing: Excel:    WORKDAY, NETWORKDAYS, WEEKNUM, DATEDIF
   //          Gnumeric: UNIX2DATE, DATE2UNIX
@@ -173,7 +173,7 @@ void KSpreadRegisterDateTimeFunctions()
 }
 
 // Function: EDATE
-KSpreadValue func_edate (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_edate (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date = calc->conv()->asDate (args[0]).asDate();
   int months = calc->conv()->asInteger (args[1]).asInteger();
@@ -181,28 +181,28 @@ KSpreadValue func_edate (valVector args, ValueCalc *calc, FuncExtra *)
   date = calc->conv()->locale()->calendar()->addMonths (date, months);
 
   if (!date.isValid())
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
-  return KSpreadValue (date);
+  return Value (date);
 }
 
 // Function: EOMONTH
-KSpreadValue func_eomonth (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_eomonth (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // add months to date using EDATE
-  KSpreadValue modDate = func_edate (args, calc, 0);
+  Value modDate = func_edate (args, calc, 0);
   if (modDate.isError()) return modDate;
   
   // modDate is currently in Date format
   QDate date = modDate.asDate();
   date.setYMD (date.year(), date.month(), date.daysInMonth());
 
-  return KSpreadValue (date);
+  return Value (date);
 }
 
 // Function: DAYS360
 // algorithm adapted from gnumeric
-KSpreadValue func_days360 (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_days360 (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date1 = calc->conv()->asDate (args[0]).asDate();
   QDate date2 = calc->conv()->asDate (args[1]).asDate();
@@ -258,65 +258,65 @@ KSpreadValue func_days360 (valVector args, ValueCalc *calc, FuncExtra *)
   int result = ( ( year2 - year1 ) * 12 + ( month2 - month1 ) ) * 30
     + ( day2 - day1 );
 
-  return KSpreadValue (result);
+  return Value (result);
 }
 
 // Function: YEAR
-KSpreadValue func_year (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_year (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date = calc->conv()->asDate (args[0]).asDate();
-  return KSpreadValue (date.year ());
+  return Value (date.year ());
 }
 
 // Function: MONTH
-KSpreadValue func_month (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_month (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date = calc->conv()->asDate (args[0]).asDate();
-  return KSpreadValue (date.month ());
+  return Value (date.month ());
 }
 
 // Function: DAY
-KSpreadValue func_day (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_day (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date = calc->conv()->asDate (args[0]).asDate();
-  return KSpreadValue (date.day ());
+  return Value (date.day ());
 }
 
 // Function: HOUR
-KSpreadValue func_hour (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_hour (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QTime time;
   if (args.count() == 1)
     time = calc->conv()->asTime (args[0]).asTime();
   else
     time = QTime::currentTime ();
-  return KSpreadValue (time.hour ());
+  return Value (time.hour ());
 }
 
 // Function: MINUTE
-KSpreadValue func_minute (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_minute (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QTime time;
   if (args.count() == 1)
     time = calc->conv()->asTime (args[0]).asTime();
   else
     time = QTime::currentTime ();
-  return KSpreadValue (time.minute ());
+  return Value (time.minute ());
 }
 
 // Function: SECOND
-KSpreadValue func_second (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_second (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QTime time;
   if (args.count() == 1)
     time = calc->conv()->asTime (args[0]).asTime();
   else
     time = QTime::currentTime ();
-  return KSpreadValue (time.second ());
+  return Value (time.second ());
 }
 
 // Function: weekday
-KSpreadValue func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date = calc->conv()->asDate (args[0]).asDate();
   int method = 1;
@@ -324,7 +324,7 @@ KSpreadValue func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
     method = calc->conv()->asInteger (args[1]).asInteger();
   
   if ( method < 1 || method > 3 )
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   int result = date.dayOfWeek();
 
@@ -336,30 +336,30 @@ KSpreadValue func_weekday (valVector args, ValueCalc *calc, FuncExtra *)
     result = result % 7;
   }
 
-  return KSpreadValue (result);
+  return Value (result);
 }
 
 // Function: datevalue
 // same result would be obtained by applying number format on a date value
-KSpreadValue func_datevalue (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_datevalue (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->conv()->asFloat (calc->conv()->asDate (args[0]));
 }
 
 // Function: timevalue
 // same result would be obtained by applying number format on a time value
-KSpreadValue func_timevalue (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_timevalue (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->conv()->asFloat (calc->conv()->asTime (args[0]));
 }
 
 // Function: years
-KSpreadValue func_years (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_years (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date1 = calc->conv()->asDate (args[0]).asDate();
   QDate date2 = calc->conv()->asDate (args[1]).asDate();
   if (!date1.isValid() || !date2.isValid())
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   int type = calc->conv()->asInteger (args[2]).asInteger();
   if (type == 0)
@@ -372,28 +372,28 @@ KSpreadValue func_years (valVector args, ValueCalc *calc, FuncExtra *)
     else if ( (date2.month() == date1.month()) && (date2.day() < date1.day()) )
       --years;
 
-    return KSpreadValue (years);
+    return Value (years);
   }
     
   // type is non-zero now
   // the number of full years in between, starting on 1/1/XXXX
   if ( date1.year() == date2.year() )
-    return KSpreadValue (0);
+    return Value (0);
 
   if ( (date1.month() != 1) || (date1.day() != 1) )
     date1.setYMD(date1.year() + 1, 1, 1);
   date2.setYMD(date2.year(), 1, 1);
 
-  return KSpreadValue (date2.year() - date1.year());
+  return Value (date2.year() - date1.year());
 }
 
 // Function: months
-KSpreadValue func_months (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_months (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date1 = calc->conv()->asDate (args[0]).asDate();
   QDate date2 = calc->conv()->asDate (args[1]).asDate();
   if (!date1.isValid() || !date2.isValid())
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   int type = calc->conv()->asInteger (args[2]).asInteger();
   if (type == 0)
@@ -405,7 +405,7 @@ KSpreadValue func_months (valVector args, ValueCalc *calc, FuncExtra *)
       if (date2.day() != date2.daysInMonth())
         --months;
 
-    return KSpreadValue (months);
+    return Value (months);
   }
   
   // type is now non-zero
@@ -419,22 +419,22 @@ KSpreadValue func_months (valVector args, ValueCalc *calc, FuncExtra *)
   int months = (date2.year() - date1.year()) * 12;
   months += date2.month() - date1.month();
 
-  return KSpreadValue (months);
+  return Value (months);
 }
 
 // Function: weeks
-KSpreadValue func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date1 = calc->conv()->asDate (args[0]).asDate();
   QDate date2 = calc->conv()->asDate (args[1]).asDate();
   if (!date1.isValid() || !date2.isValid())
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   int type = calc->conv()->asInteger (args[2]).asInteger();
   int days = date1.daysTo (date2);
   if (type == 0)
     // just the number of full weeks between
-    return KSpreadValue ((int) (days / 7));
+    return Value ((int) (days / 7));
     
   // the number of full weeks between starting on mondays
   int weekStartDay = calc->conv()->locale()->weekStartDay();
@@ -445,22 +445,22 @@ KSpreadValue func_weeks (valVector args, ValueCalc *calc, FuncExtra *)
   days -= (7 + (weekStartDay % 7) - dow1);
   days -= ((dow2 - weekStartDay) % 7);
 
-  return KSpreadValue ((int) (days / 7));
+  return Value ((int) (days / 7));
 }
 
 // Function: days
-KSpreadValue func_days (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_days (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date1 = calc->conv()->asDate (args[0]).asDate();
   QDate date2 = calc->conv()->asDate (args[1]).asDate();
   if (!date1.isValid() || !date2.isValid())
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
-  return KSpreadValue (date1.daysTo (date2));
+  return Value (date1.daysTo (date2));
 }
 
 // Function: date
-KSpreadValue func_date (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_date (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
   int m = calc->conv()->asInteger (args[1]).asInteger();
@@ -468,35 +468,35 @@ KSpreadValue func_date (valVector args, ValueCalc *calc, FuncExtra *)
   
   QDate _date;
   if( _date.setYMD (y, m, d))
-    return KSpreadValue (_date);
-  return KSpreadValue::errorVALUE();
+    return Value (_date);
+  return Value::errorVALUE();
 }
 
 // Function: day
-KSpreadValue func_dayname (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dayname (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int number = calc->conv()->asInteger (args[0]).asInteger();
 
   QString weekName = calc->conv()->locale()->calendar()->weekDayName (number);
   if (weekName.isNull())
-    return KSpreadValue::errorVALUE();
-  return KSpreadValue (weekName);
+    return Value::errorVALUE();
+  return Value (weekName);
 }
 
 // Function: monthname
-KSpreadValue func_monthname (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_monthname (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int number = calc->conv()->asInteger (args[0]).asInteger();
 
   QString monthName = calc->conv()->locale()->calendar()->monthName (number,
       QDate::currentDate().year());
   if (monthName.isNull())
-    return KSpreadValue::errorVALUE();
-  return KSpreadValue (monthName);
+    return Value::errorVALUE();
+  return Value (monthName);
 }
 
 // Function: time
-KSpreadValue func_time (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_time (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int h = calc->conv()->asInteger (args[0]).asInteger();
   int m = calc->conv()->asInteger (args[1]).asInteger();
@@ -522,68 +522,68 @@ KSpreadValue func_time (valVector args, ValueCalc *calc, FuncExtra *)
   if (h < 0)
     h += 24;
 
-  return KSpreadValue (QTime (h, m, s));
+  return Value (QTime (h, m, s));
 }
 
 // Function: currentDate
-KSpreadValue func_currentDate (valVector, ValueCalc *, FuncExtra *)
+Value func_currentDate (valVector, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue (QDate::currentDate ());
+  return Value (QDate::currentDate ());
 }
 
 // Function: currentTime
-KSpreadValue func_currentTime (valVector, ValueCalc *, FuncExtra *)
+Value func_currentTime (valVector, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue (QTime::currentTime ());
+  return Value (QTime::currentTime ());
 }
 
 // Function: currentDateTime
-KSpreadValue func_currentDateTime (valVector, ValueCalc *, FuncExtra *)
+Value func_currentDateTime (valVector, ValueCalc *, FuncExtra *)
 {
-  return KSpreadValue (QDateTime::currentDateTime ());
+  return Value (QDateTime::currentDateTime ());
 }
 
 // Function: dayOfYear
-KSpreadValue func_dayOfYear (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dayOfYear (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue date = func_date (args, calc, 0);
+  Value date = func_date (args, calc, 0);
   if (date.isError()) return date;
-  return KSpreadValue (date.asDate().dayOfYear());
+  return Value (date.asDate().dayOfYear());
 }
 
 // Function: daysInMonth
-KSpreadValue func_daysInMonth (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_daysInMonth (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
   int m = calc->conv()->asInteger (args[1]).asInteger();
   QDate date (y, m, 1);
-  return KSpreadValue (date.daysInMonth());
+  return Value (date.daysInMonth());
 }
 
 // Function: isLeapYear
-KSpreadValue func_isLeapYear  (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_isLeapYear  (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
-  return KSpreadValue (QDate::leapYear (y));
+  return Value (QDate::leapYear (y));
 }
 
 // Function: daysInYear
-KSpreadValue func_daysInYear  (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_daysInYear  (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
-  return KSpreadValue (QDate::leapYear (y) ? 366 : 365);
+  return Value (QDate::leapYear (y) ? 366 : 365);
 }
 
 // Function: weeksInYear
-KSpreadValue func_weeksInYear (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_weeksInYear (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int y = calc->conv()->asInteger (args[0]).asInteger();
   QDate date (y, 12, 31);  // last day of the year
-  return KSpreadValue (date.weekNumber ());
+  return Value (date.weekNumber ());
 }
 
 // Function: easterSunday
-KSpreadValue func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *)
 {
   int nDay, nMonth;
   int nYear = calc->conv()->asInteger (args[0]).asInteger();
@@ -606,15 +606,15 @@ KSpreadValue func_easterSunday (valVector args, ValueCalc *calc, FuncExtra *)
   nDay = O % 31 + 1;
   nMonth = int(O / 31);
 
-  return KSpreadValue (QDate (nYear, nMonth, nDay));
+  return Value (QDate (nYear, nMonth, nDay));
 }
 
 // Function: isoWeekNum
-KSpreadValue func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_isoWeekNum (valVector args, ValueCalc *calc, FuncExtra *)
 {
   QDate date = calc->conv()->asDate (args[0]).asDate();
   if (!date.isValid())
-      return KSpreadValue::errorVALUE();
+      return Value::errorVALUE();
 
-  return KSpreadValue (date.weekNumber());
+  return Value (date.weekNumber());
 }

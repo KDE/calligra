@@ -32,12 +32,15 @@ class QPushButton;
 
 class KConfig;
 
-class KSpreadList: public KDialogBase
+namespace KSpread
+{
+
+class ListDialog: public KDialogBase
 {
   Q_OBJECT
 
 public:
-  KSpreadList( QWidget* parent, const char* name );
+  ListDialog( QWidget* parent, const char* name );
   void init();
 
 public slots:
@@ -62,5 +65,7 @@ protected:
   QPushButton* m_pCopy;
   bool m_bChanged;
 };
+
+} // namespace KSpread
 
 #endif

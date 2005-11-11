@@ -22,28 +22,28 @@
 #ifndef __kspread_condition_h__
 #define __kspread_condition_h__
 
-#include "kspread_global.h"
-
-#include <qvaluelist.h>
 #include <qdom.h>
+#include <qvaluelist.h>
+
 #include <koffice_export.h>
-class KSpreadStyle;
-class KoGenStyle;
+
+#include "kspread_global.h"
 
 class QColor;
 class QFont;
 class QString;
+class KoGenStyle;
 
 namespace KSpread
 {
-  class Cell;
-}
+class Cell;
+class Style;
 
 /**
  * Structure to indicate the condition we're testing on a cell and the special
  * font and color that will be applied if it's true
  */
-class KSPREAD_EXPORT KSpreadConditional
+class KSPREAD_EXPORT Conditional
 {
 public:
   double         val1;
@@ -53,20 +53,20 @@ public:
   QColor  *      colorcond;
   QFont   *      fontcond;
   QString *      styleName;
-  KSpreadStyle * style;
-  Conditional    cond;
+  Style * style;
+  ::Conditional    cond;
 
-  KSpreadConditional();
-  ~KSpreadConditional();
-  KSpreadConditional( const KSpreadConditional& );
-  KSpreadConditional& operator=( const KSpreadConditional& );
+  Conditional();
+  ~Conditional();
+  Conditional( const Conditional& );
+  Conditional& operator=( const Conditional& );
 };
 
 
 /**
  * Manages a set of conditions for a cell
  */
-class KSpreadConditions
+class Conditions
 {
  public:
 
@@ -74,8 +74,8 @@ class KSpreadConditions
    * Constructor.  There is no default constructor - you must use this one
    * with the owner cell as a parameter
    */
-  KSpreadConditions( const KSpread::Cell * ownerCell );
-  virtual ~KSpreadConditions();
+  Conditions( const Cell * ownerCell );
+  virtual ~Conditions();
 
   /**
    * Use this function to see what conditions actually apply currently
@@ -87,17 +87,17 @@ class KSpreadConditions
    *
    * @return true if one of the conditions is true, false if not.
    */
-  bool currentCondition( KSpreadConditional & condition );
+  bool currentCondition( KSpread::Conditional & condition );
 
   /**
    * Retrieve the current list of conditions we're checking
    */
-  QValueList<KSpreadConditional> conditionList() const;
+  QValueList<Conditional> conditionList() const;
 
   /**
    * Replace the current list of conditions with this new one
    */
-  void setConditionList( const QValueList<KSpreadConditional> & list );
+  void setConditionList( const QValueList<Conditional> & list );
 
   /**
    * Saves the conditions to a DOM tree structure.
@@ -119,23 +119,24 @@ class KSpreadConditions
   /**
    * returns the style that matches first (or NULL if no condition matches)
    */
-  KSpreadStyle * matchedStyle() const { return m_matchedStyle; }
+  Style * matchedStyle() const { return m_matchedStyle; }
 
   void checkMatches();
 
  private:
-  KSpreadConditions() {}
+  Conditions() {}
 
-    QString saveOasisConditionValue(KSpreadConditional &cond);
-    void loadOasisConditionValue( const QString &styleCondition, KSpreadConditional &newCondition );
-    void loadOasisValidationValue( const QStringList &listVal, KSpreadConditional &newCondition );
-    void loadOasisCondition( QString &valExpression, KSpreadConditional &newCondition );
+    QString saveOasisConditionValue(Conditional &cond);
+    void loadOasisConditionValue( const QString &styleCondition, Conditional &newCondition );
+    void loadOasisValidationValue( const QStringList &listVal, Conditional &newCondition );
+    void loadOasisCondition( QString &valExpression, Conditional &newCondition );
 
 
-  const KSpread::Cell * m_cell;
-  QValueList<KSpreadConditional> m_condList;
-  KSpreadStyle * m_matchedStyle;
+  const Cell * m_cell;
+  QValueList<Conditional> m_condList;
+  Style * m_matchedStyle;
 };
 
+} // namespace KSpread
 
 #endif /*defined __kspread_condition_h__  */

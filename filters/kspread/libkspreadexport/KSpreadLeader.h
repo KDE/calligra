@@ -28,6 +28,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #include <koDocumentInfo.h>
 #include <kspread_map.h>
 
+namespace KSpread
+{
 
 /**
 * This class is a leader which will call the callbacks
@@ -41,7 +43,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 * @see KSpreadBaseWorker
 * @see KoFilter
 */
-class KSpreadLeader
+class Leader
 {
 public:
 	/**
@@ -50,7 +52,7 @@ public:
 	*
 	* @param the filter chain of the filter using the lib.
 	*/
-	KSpreadLeader(KoFilterChain *filterChain);
+	Leader(KoFilterChain *filterChain);
 
 	/**
 	* This constructor set up the Worker at initialization.
@@ -59,13 +61,13 @@ public:
 	* @param the filter chain of the filter using the lib.
 	* @param implementation of a class derived from KSpreadWorker.
 	*/
-	KSpreadLeader(KoFilterChain *filterChain, KSpreadBaseWorker *newWorker);
+	Leader(KoFilterChain *filterChain, KSpreadBaseWorker *newWorker);
 
 	/**
 	* Default destructor.
 	* It does nothing.
 	*/
-	virtual ~KSpreadLeader();
+	virtual ~Leader();
 
 private:
 	KSpreadBaseWorker *m_worker;
@@ -76,9 +78,9 @@ private:
 
 protected:
 	KSpreadBaseWorker *getWorker() const;
-	KoFilter::ConversionStatus doSpreadCell(KSpread::Cell*spreadCell, int column, int row);
-	KoFilter::ConversionStatus doSpreadSheet(KSpreadSheet *spreadSheet);
-	KoFilter::ConversionStatus doSpreadBook(KSpreadDoc *document);
+	KoFilter::ConversionStatus doSpreadCell(Cell *spreadCell, int column, int row);
+	KoFilter::ConversionStatus doSpreadSheet(Sheet *spreadSheet);
+	KoFilter::ConversionStatus doSpreadBook(Doc *document);
 	KoFilter::ConversionStatus doInfo(KoDocumentInfo *info);
 
 public:
@@ -97,5 +99,7 @@ public:
 	*/
 	KoFilter::ConversionStatus convert();
 };
+
+} // namespace KSpread
 
 #endif /* KSPREAD_LEADER_H */

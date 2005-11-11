@@ -22,22 +22,23 @@
 
 #include <kdebug.h>
 
-#include "kspread_cluster.h"
 #include "kspread_cell.h"
+
+#include "kspread_cluster.h"
 
 using namespace KSpread;
 
 /****************************************************
  *
- * KSpreadCluster
+ * Cluster
  *
  ****************************************************/
 
 /* Generate a matrix LEVEL1 with the size LEVEL1*LEVEL1 */
-KSpreadCluster::KSpreadCluster()
+Cluster::Cluster()
     : m_first( 0 ), m_autoDelete( false ), m_biggestX(0), m_biggestY(0)
 {
-    m_cluster = (Cell***)malloc( KSPREAD_CLUSTER_LEVEL1 * KSPREAD_CLUSTER_LEVEL1 * sizeof( KSpread::Cell** ) );
+    m_cluster = (Cell***)malloc( KSPREAD_CLUSTER_LEVEL1 * KSPREAD_CLUSTER_LEVEL1 * sizeof( Cell** ) );
 
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
 	for( int y = 0; y < KSPREAD_CLUSTER_LEVEL1; ++y )
@@ -45,7 +46,7 @@ KSpreadCluster::KSpreadCluster()
 }
 
 /* Delete the matrix LEVEL1 and all existing LEVEL2 matrizes */
-KSpreadCluster::~KSpreadCluster()
+Cluster::~Cluster()
 {
 // Can't we use clear(), to remove double code - Philipp?
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
@@ -73,7 +74,7 @@ KSpreadCluster::~KSpreadCluster()
     free( m_cluster );
 }
 
-void KSpreadCluster::clear()
+void Cluster::clear()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
 	for( int y = 0; y < KSPREAD_CLUSTER_LEVEL1; ++y )
@@ -101,11 +102,11 @@ void KSpreadCluster::clear()
     m_biggestX = m_biggestY = 0;
 }
 
-Cell* KSpreadCluster::lookup( int x, int y ) const
+Cell* Cluster::lookup( int x, int y ) const
 {
     if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::lookup: invalid column or row value (col: "
+	kdDebug(36001) << "Cluster::lookup: invalid column or row value (col: "
 		       << x << "  | row: " << y << ")" << endl;
 	return 0;
     }
@@ -122,11 +123,11 @@ Cell* KSpreadCluster::lookup( int x, int y ) const
 }
 
 /* Paste a cell in LEVEL2 (it's more paste than insert) */
-void KSpreadCluster::insert( Cell* cell, int x, int y )
+void Cluster::insert( Cell* cell, int x, int y )
 {
     if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::insert: invalid column or row value (col: "
+	kdDebug(36001) << "Cluster::insert: invalid column or row value (col: "
 		       << x << "  | row: " << y << ")" << endl;
 	return;
     }
@@ -139,7 +140,7 @@ void KSpreadCluster::insert( Cell* cell, int x, int y )
     Cell** cl = m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ];
     if ( !cl )
     {
-	cl = (Cell**)malloc(  KSPREAD_CLUSTER_LEVEL2 * KSPREAD_CLUSTER_LEVEL2 * sizeof( KSpread::Cell*  ) );
+	cl = (Cell**)malloc(  KSPREAD_CLUSTER_LEVEL2 * KSPREAD_CLUSTER_LEVEL2 * sizeof( Cell*  ) );
 	m_cluster[ cy * KSPREAD_CLUSTER_LEVEL1 + cx ] = cl;
 
 	for( int a = 0; a < KSPREAD_CLUSTER_LEVEL2; ++a )
@@ -164,11 +165,11 @@ void KSpreadCluster::insert( Cell* cell, int x, int y )
 }
 
 /* Removes the cell of a matrix, the matrix itself keeps unchanged */
-void KSpreadCluster::remove( int x, int y )
+void Cluster::remove( int x, int y )
 {
     if ( x >= KSPREAD_CLUSTER_MAX || x < 0 || y >= KSPREAD_CLUSTER_MAX || y < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::remove: invalid column or row value (col: "
+	kdDebug(36001) << "Cluster::remove: invalid column or row value (col: "
 		       << x << "  | row: " << y << ")" << endl;
 	return;
     }
@@ -211,53 +212,53 @@ void KSpreadCluster::remove( int x, int y )
     }
 }
 
-bool KSpreadCluster::shiftRow( const QPoint& marker )
+bool Cluster::shiftRow( const QPoint& marker )
 {
     bool dummy;
     return shiftRow( marker, dummy );
 }
 
-bool KSpreadCluster::shiftColumn( const QPoint& marker )
+bool Cluster::shiftColumn( const QPoint& marker )
 {
     bool dummy;
     return shiftColumn( marker, dummy );
 }
 
-void KSpreadCluster::unshiftColumn( const QPoint& marker )
+void Cluster::unshiftColumn( const QPoint& marker )
 {
     bool dummy;
     unshiftColumn( marker, dummy );
 }
 
-void KSpreadCluster::unshiftRow( const QPoint& marker )
+void Cluster::unshiftRow( const QPoint& marker )
 {
     bool dummy;
     unshiftRow( marker, dummy );
 }
 
-void KSpreadCluster::setAutoDelete( bool b )
+void Cluster::setAutoDelete( bool b )
 {
     m_autoDelete = b;
 }
 
-bool KSpreadCluster::autoDelete() const
+bool Cluster::autoDelete() const
 {
     return m_autoDelete;
 }
 
-Cell* KSpreadCluster::firstCell() const
+Cell* Cluster::firstCell() const
 {
     return m_first;
 }
 
-bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
+bool Cluster::shiftRow( const QPoint& marker, bool& work )
 {
     work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::shiftRow: invalid column or row value (col: "
+	kdDebug(36001) << "Cluster::shiftRow: invalid column or row value (col: "
 		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return false;
     }
@@ -307,14 +308,14 @@ bool KSpreadCluster::shiftRow( const QPoint& marker, bool& work )
     return true;
 }
 
-bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
+bool Cluster::shiftColumn( const QPoint& marker, bool& work )
 {
     work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::shiftColumn: invalid column or row value (col: "
+	kdDebug(36001) << "Cluster::shiftColumn: invalid column or row value (col: "
 		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return false;
     }
@@ -365,11 +366,11 @@ bool KSpreadCluster::shiftColumn( const QPoint& marker, bool& work )
     return true;
 }
 
-bool KSpreadCluster::insertColumn( int col )
+bool Cluster::insertColumn( int col )
 {
     if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::insertColumn: invalid column value (col: "
+	kdDebug(36001) << "Cluster::insertColumn: invalid column value (col: "
 		       << col << ")" << endl;
 	return false;
     }
@@ -395,11 +396,11 @@ bool KSpreadCluster::insertColumn( int col )
     return true;
 }
 
-bool KSpreadCluster::insertRow( int row )
+bool Cluster::insertRow( int row )
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::insertRow: invalid row value (row: "
+	kdDebug(36001) << "Cluster::insertRow: invalid row value (row: "
 		       << row << ")" << endl;
 	return false;
     }
@@ -425,14 +426,14 @@ bool KSpreadCluster::insertRow( int row )
     return true;
 }
 
-void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
+void Cluster::unshiftColumn( const QPoint& marker, bool& work )
 {
     work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::unshiftColumn: invalid column or row value (col: "
+	kdDebug(36001) << "Cluster::unshiftColumn: invalid column or row value (col: "
 		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return;
     }
@@ -473,14 +474,14 @@ void KSpreadCluster::unshiftColumn( const QPoint& marker, bool& work )
     setAutoDelete( a );
 }
 
-void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
+void Cluster::unshiftRow( const QPoint& marker, bool& work )
 {
     work = false;
 
     if ( marker.x() >= KSPREAD_CLUSTER_MAX || marker.x() < 0 ||
 	 marker.y() >= KSPREAD_CLUSTER_MAX || marker.y() < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::unshiftRow: invalid column or row value (col: "
+	kdDebug(36001) << "Cluster::unshiftRow: invalid column or row value (col: "
 		       << marker.x() << "  | row: " << marker.y() << ")" << endl;
 	return;
     }
@@ -521,11 +522,11 @@ void KSpreadCluster::unshiftRow( const QPoint& marker, bool& work )
     setAutoDelete( a );
 }
 
-void KSpreadCluster::removeColumn( int col )
+void Cluster::removeColumn( int col )
 {
     if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::removeColumn: invalid column value (col: "
+	kdDebug(36001) << "Cluster::removeColumn: invalid column value (col: "
 		       << col << ")" << endl;
 	return;
     }
@@ -550,11 +551,11 @@ void KSpreadCluster::removeColumn( int col )
     }
 }
 
-void KSpreadCluster::removeRow( int row )
+void Cluster::removeRow( int row )
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
-	kdDebug(36001) << "KSpreadCluster::removeRow: invalid row value (row: "
+	kdDebug(36001) << "Cluster::removeRow: invalid row value (row: "
 		       << row << ")" << endl;
 	return;
     }
@@ -579,11 +580,11 @@ void KSpreadCluster::removeRow( int row )
     }
 }
 
-void KSpreadCluster::clearColumn( int col )
+void Cluster::clearColumn( int col )
 {
   if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
   {
-    kdDebug(36001) << "KSpreadCluster::clearColumn: invalid column value (col: "
+    kdDebug(36001) << "Cluster::clearColumn: invalid column value (col: "
     << col << ")" << endl;
     return;
   }
@@ -604,11 +605,11 @@ void KSpreadCluster::clearColumn( int col )
   }
 }
 
-void KSpreadCluster::clearRow( int row )
+void Cluster::clearRow( int row )
 {
   if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
   {
-    kdDebug(36001) << "KSpreadCluster::clearRow: invalid row value (row: "
+    kdDebug(36001) << "Cluster::clearRow: invalid row value (row: "
         << row << ")" << endl;
     return;
   }
@@ -629,10 +630,10 @@ void KSpreadCluster::clearRow( int row )
   }
 }
 
-KSpreadValue KSpreadCluster::valueRange (int col1, int row1,
+Value Cluster::valueRange (int col1, int row1,
     int col2, int row2) const
 {
-  KSpreadValue empty;
+  Value empty;
   
   //swap first/second values if needed
   if (col1 > col2)
@@ -653,28 +654,28 @@ KSpreadValue KSpreadCluster::valueRange (int col1, int row1,
   {
     int cols = col2 - col1 + 1;
     int rows = row2 - row1 + 1;
-    KSpreadValue array (cols, rows);
+    Value array (cols, rows);
     return array;
   }
 
   return makeArray (col1, row1, col2, row2);
 }
 
-KSpreadValue KSpreadCluster::makeArray (int col1, int row1,
+Value Cluster::makeArray (int col1, int row1,
     int col2, int row2) const
 {
   // this generates an array of values
   // TODO: make this thing faster by skipping empty regions
   int cols = col2 - col1 + 1;
   int rows = row2 - row1 + 1;
-  KSpreadValue array (cols, rows);
+  Value array (cols, rows);
   for (int row = row1; row <= row2; ++row)
     for (int col = col1; col <= col2; ++col)
     {
       Cell *cell = lookup (col, row);
       if (cell)
       {
-        KSpreadValue val = cell->value();
+        Value val = cell->value();
         array.setElement (col-col1, row-row1, val); 
       }
     }
@@ -683,7 +684,7 @@ KSpreadValue KSpreadCluster::makeArray (int col1, int row1,
   return array;
 }
 
-Cell* KSpreadCluster::getFirstCellColumn(int col) const
+Cell* Cluster::getFirstCellColumn(int col) const
 {
   Cell* cell = lookup(col, 1);
 
@@ -694,7 +695,7 @@ Cell* KSpreadCluster::getFirstCellColumn(int col) const
   return cell;
 }
 
-Cell* KSpreadCluster::getLastCellColumn(int col) const
+Cell* Cluster::getLastCellColumn(int col) const
 {
   Cell* cell = lookup(col, KS_rowMax);
 
@@ -705,7 +706,7 @@ Cell* KSpreadCluster::getLastCellColumn(int col) const
   return cell;
 }
 
-Cell* KSpreadCluster::getFirstCellRow(int row) const
+Cell* Cluster::getFirstCellRow(int row) const
 {
   Cell* cell = lookup(1, row);
 
@@ -716,7 +717,7 @@ Cell* KSpreadCluster::getFirstCellRow(int row) const
   return cell;
 }
 
-Cell* KSpreadCluster::getLastCellRow(int row) const
+Cell* Cluster::getLastCellRow(int row) const
 {
   Cell* cell = lookup(KS_colMax, row);
 
@@ -727,7 +728,7 @@ Cell* KSpreadCluster::getLastCellRow(int row) const
   return cell;
 }
 
-Cell* KSpreadCluster::getNextCellUp(int col, int row) const
+Cell* Cluster::getNextCellUp(int col, int row) const
 {
   int cx = col / KSPREAD_CLUSTER_LEVEL2;
   int cy = (row - 1) / KSPREAD_CLUSTER_LEVEL2;
@@ -756,7 +757,7 @@ Cell* KSpreadCluster::getNextCellUp(int col, int row) const
   return NULL;
 }
 
-Cell* KSpreadCluster::getNextCellDown(int col, int row) const
+Cell* Cluster::getNextCellDown(int col, int row) const
 {
   int cx = col / KSPREAD_CLUSTER_LEVEL2;
   int cy = (row + 1) / KSPREAD_CLUSTER_LEVEL2;
@@ -785,7 +786,7 @@ Cell* KSpreadCluster::getNextCellDown(int col, int row) const
   return NULL;
 }
 
-Cell* KSpreadCluster::getNextCellLeft(int col, int row) const
+Cell* Cluster::getNextCellLeft(int col, int row) const
 {
   int cx = (col - 1) / KSPREAD_CLUSTER_LEVEL2;
   int cy = row / KSPREAD_CLUSTER_LEVEL2;
@@ -814,7 +815,7 @@ Cell* KSpreadCluster::getNextCellLeft(int col, int row) const
   return NULL;
 }
 
-Cell* KSpreadCluster::getNextCellRight(int col, int row) const
+Cell* Cluster::getNextCellRight(int col, int row) const
 {
   int cx = (col + 1) / KSPREAD_CLUSTER_LEVEL2;
   int cy = row / KSPREAD_CLUSTER_LEVEL2;
@@ -845,11 +846,11 @@ Cell* KSpreadCluster::getNextCellRight(int col, int row) const
 
 /****************************************************
  *
- * KSpreadColumnCluster
+ * ColumnCluster
  *
  ****************************************************/
 
-KSpreadColumnCluster::KSpreadColumnCluster()
+ColumnCluster::ColumnCluster()
     : m_first( 0 ), m_autoDelete( false )
 {
     m_cluster = (ColumnFormat***)malloc( KSPREAD_CLUSTER_LEVEL1 * sizeof( ColumnFormat** ) );
@@ -858,7 +859,7 @@ KSpreadColumnCluster::KSpreadColumnCluster()
 	m_cluster[ x ] = 0;
 }
 
-KSpreadColumnCluster::~KSpreadColumnCluster()
+ColumnCluster::~ColumnCluster()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
     {
@@ -885,11 +886,11 @@ KSpreadColumnCluster::~KSpreadColumnCluster()
     free( m_cluster );
 }
 
-ColumnFormat* KSpreadColumnCluster::lookup( int col )
+ColumnFormat* ColumnCluster::lookup( int col )
 {
     if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
     {
-	kdDebug(36001) << "KSpreadColumnCluster::lookup: invalid column value (col: "
+	kdDebug(36001) << "ColumnCluster::lookup: invalid column value (col: "
 		       << col << ")" << endl;
 	return 0;
     }
@@ -904,11 +905,11 @@ ColumnFormat* KSpreadColumnCluster::lookup( int col )
     return cl[ dx ];
 }
 
-const ColumnFormat* KSpreadColumnCluster::lookup( int col ) const
+const ColumnFormat* ColumnCluster::lookup( int col ) const
 {
     if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
     {
-	kdDebug(36001) << "KSpreadColumnCluster::lookup: invalid column value (col: "
+	kdDebug(36001) << "ColumnCluster::lookup: invalid column value (col: "
 		       << col << ")" << endl;
 	return 0;
     }
@@ -923,7 +924,7 @@ const ColumnFormat* KSpreadColumnCluster::lookup( int col ) const
     return cl[ dx ];
 }
 
-void KSpreadColumnCluster::clear()
+void ColumnCluster::clear()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
     {
@@ -949,11 +950,11 @@ void KSpreadColumnCluster::clear()
     m_first = 0;
 }
 
-void KSpreadColumnCluster::insertElement( ColumnFormat* lay, int col )
+void ColumnCluster::insertElement( ColumnFormat* lay, int col )
 {
     if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
     {
-	kdDebug(36001) << "KSpreadColumnCluster::insertElement: invalid column value (col: "
+	kdDebug(36001) << "ColumnCluster::insertElement: invalid column value (col: "
 		       << col << ")" << endl;
 	return;
     }
@@ -984,11 +985,11 @@ void KSpreadColumnCluster::insertElement( ColumnFormat* lay, int col )
     m_first = lay;
 }
 
-void KSpreadColumnCluster::removeElement( int col )
+void ColumnCluster::removeElement( int col )
 {
     if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
     {
-	kdDebug(36001) << "KSpreadColumnCluster::removeElement: invalid column value (col: "
+	kdDebug(36001) << "ColumnCluster::removeElement: invalid column value (col: "
 		       << col << ")" << endl;
 	return;
     }
@@ -1025,11 +1026,11 @@ void KSpreadColumnCluster::removeElement( int col )
     }
 }
 
-bool KSpreadColumnCluster::insertColumn( int col )
+bool ColumnCluster::insertColumn( int col )
 {
     if ( col >= KSPREAD_CLUSTER_MAX || col < 0 )
     {
-	kdDebug(36001) << "KSpreadColumnCluster::insertColumn: invalid column value (col: "
+	kdDebug(36001) << "ColumnCluster::insertColumn: invalid column value (col: "
 		       << col << ")" << endl;
 	return false;
     }
@@ -1075,11 +1076,11 @@ bool KSpreadColumnCluster::insertColumn( int col )
     return true;
 }
 
-bool KSpreadColumnCluster::removeColumn( int column )
+bool ColumnCluster::removeColumn( int column )
 {
     if ( column >= KSPREAD_CLUSTER_MAX || column < 0 )
     {
-	kdDebug(36001) << "KSpreadColumnCluster::removeColumn: invalid column value (col: "
+	kdDebug(36001) << "ColumnCluster::removeColumn: invalid column value (col: "
 		       << column << ")" << endl;
 	return false;
     }
@@ -1119,23 +1120,23 @@ bool KSpreadColumnCluster::removeColumn( int column )
     return true;
 }
 
-void KSpreadColumnCluster::setAutoDelete( bool a )
+void ColumnCluster::setAutoDelete( bool a )
 {
     m_autoDelete = a;
 }
 
-bool KSpreadColumnCluster::autoDelete() const
+bool ColumnCluster::autoDelete() const
 {
     return m_autoDelete;
 }
 
 /****************************************************
  *
- * KSpreadRowCluster
+ * RowCluster
  *
  ****************************************************/
 
-KSpreadRowCluster::KSpreadRowCluster()
+RowCluster::RowCluster()
     : m_first( 0 ), m_autoDelete( false )
 {
     m_cluster = (RowFormat***)malloc( KSPREAD_CLUSTER_LEVEL1 * sizeof( RowFormat** ) );
@@ -1144,7 +1145,7 @@ KSpreadRowCluster::KSpreadRowCluster()
 	    m_cluster[ x ] = 0;
 }
 
-KSpreadRowCluster::~KSpreadRowCluster()
+RowCluster::~RowCluster()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
     {
@@ -1170,11 +1171,11 @@ KSpreadRowCluster::~KSpreadRowCluster()
     free( m_cluster );
 }
 
-const RowFormat* KSpreadRowCluster::lookup( int row ) const
+const RowFormat* RowCluster::lookup( int row ) const
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
-	kdDebug(36001) << "KSpreadRowCluster::lookup: invalid row value (row: "
+	kdDebug(36001) << "RowCluster::lookup: invalid row value (row: "
 		       << row << ")" << endl;
 	return 0;
     }
@@ -1189,11 +1190,11 @@ const RowFormat* KSpreadRowCluster::lookup( int row ) const
     return cl[ dx ];
 }
 
-RowFormat* KSpreadRowCluster::lookup( int row )
+RowFormat* RowCluster::lookup( int row )
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
-	kdDebug(36001) << "KSpreadRowCluster::lookup: invalid row value (row: "
+	kdDebug(36001) << "RowCluster::lookup: invalid row value (row: "
 		       << row << ")" << endl;
 	return 0;
     }
@@ -1208,7 +1209,7 @@ RowFormat* KSpreadRowCluster::lookup( int row )
     return cl[ dx ];
 }
 
-void KSpreadRowCluster::clear()
+void RowCluster::clear()
 {
     for( int x = 0; x < KSPREAD_CLUSTER_LEVEL1; ++x )
     {
@@ -1234,11 +1235,11 @@ void KSpreadRowCluster::clear()
     m_first = 0;
 }
 
-void KSpreadRowCluster::insertElement( RowFormat* lay, int row )
+void RowCluster::insertElement( RowFormat* lay, int row )
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
-	kdDebug(36001) << "KSpreadRowCluster::insertElement: invalid row value (row: "
+	kdDebug(36001) << "RowCluster::insertElement: invalid row value (row: "
 		       << row << ")" << endl;
 	return;
     }
@@ -1269,11 +1270,11 @@ void KSpreadRowCluster::insertElement( RowFormat* lay, int row )
     m_first = lay;
 }
 
-void KSpreadRowCluster::removeElement( int row )
+void RowCluster::removeElement( int row )
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
-	kdDebug(36001) << "KSpreadRowCluster::removeElement: invalid row value (row: "
+	kdDebug(36001) << "RowCluster::removeElement: invalid row value (row: "
 		       << row << ")" << endl;
 	return;
     }
@@ -1310,11 +1311,11 @@ void KSpreadRowCluster::removeElement( int row )
     }
 }
 
-bool KSpreadRowCluster::insertRow( int row )
+bool RowCluster::insertRow( int row )
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
-	kdDebug(36001) << "KSpreadRowCluster::insertRow: invalid row value (row: "
+	kdDebug(36001) << "RowCluster::insertRow: invalid row value (row: "
 		       << row << ")" << endl;
 	return false;
     }
@@ -1360,11 +1361,11 @@ bool KSpreadRowCluster::insertRow( int row )
     return true;
 }
 
-bool KSpreadRowCluster::removeRow( int row )
+bool RowCluster::removeRow( int row )
 {
     if ( row >= KSPREAD_CLUSTER_MAX || row < 0 )
     {
-	kdDebug(36001) << "KSpreadRowCluster::removeRow: invalid row value (row: "
+	kdDebug(36001) << "RowCluster::removeRow: invalid row value (row: "
 		       << row << ")" << endl;
 	return false;
     }
@@ -1404,12 +1405,12 @@ bool KSpreadRowCluster::removeRow( int row )
     return true;
 }
 
-void KSpreadRowCluster::setAutoDelete( bool a )
+void RowCluster::setAutoDelete( bool a )
 {
     m_autoDelete = a;
 }
 
-bool KSpreadRowCluster::autoDelete() const
+bool RowCluster::autoDelete() const
 {
     return m_autoDelete;
 }

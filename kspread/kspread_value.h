@@ -26,7 +26,9 @@
 
 #include <koffice_export.h>
 
-class KSpreadValueData;
+namespace KSpread
+{
+class ValueData;
 
 /**
  * Provides a wrapper for cell value.
@@ -34,10 +36,9 @@ class KSpreadValueData;
  * Each cell in a worksheet must hold a value, either as enterred by user
  * or as a result of formula evaluation. Default cell holds empty value.
  *
- * KSpreadValue uses implicit data sharing to reduce memory usage.
+ * Value uses implicit data sharing to reduce memory usage.
  */
-
-class KSPREAD_EXPORT KSpreadValue
+class KSPREAD_EXPORT Value
 {
 
   public:
@@ -67,22 +68,22 @@ class KSPREAD_EXPORT KSpreadValue
     /**
      * Creates an empty value, i.e holds nothing.
      */
-    KSpreadValue();
+    Value();
 
     /** 
      * Creates a value of certain type.
      */
-    KSpreadValue( Type _type );
+    Value( Type _type );
 
     /** 
      * Destroys the value.
      */
-    virtual ~KSpreadValue();
+    virtual ~Value();
 
     /** 
      * Creates a copy from another value.
      */
-    KSpreadValue( const KSpreadValue& _value );
+    Value( const Value& _value );
 
     /** 
      * Assigns from another value.
@@ -90,37 +91,37 @@ class KSPREAD_EXPORT KSpreadValue
      * Because the data is implicitly shared, such assignment is very fast and
      * doesn't consume additional memory.
      */
-    KSpreadValue& operator= ( const KSpreadValue& _value );
+    Value& operator= ( const Value& _value );
 
     /** 
      * Assigns from another value. Same as above.
      */
-    KSpreadValue& assign( const KSpreadValue& _value );
+    Value& assign( const Value& _value );
 
     /**
      * Creates a boolean value.
      */
-    KSpreadValue( bool b );
+    Value( bool b );
 
     /**
      * Creates an integer value.
      */
-    KSpreadValue( long i );
+    Value( long i );
 
     /**
      * Creates an integer value.
      */
-    KSpreadValue( int i );
+    Value( int i );
 
     /**
      * Create a floating-point value.
      */
-    KSpreadValue( double f );
+    Value( double f );
 
     /** 
      * Create a string value.
      */
-    KSpreadValue( const QString& s );
+    Value( const QString& s );
 
     /**
      * Create a floating-point value from date/time.
@@ -128,24 +129,24 @@ class KSPREAD_EXPORT KSpreadValue
      * Internally date/time is represented as serial-number, i.e number of
      * elapsed day since reference date. Day 61 is defined as March 1, 1900.
      */
-    KSpreadValue( const QDateTime& dt );
+    Value( const QDateTime& dt );
 
     /**
      * Create a floating-point value from time.
      * See also note above.
      */
-    KSpreadValue( const QTime& time );
+    Value( const QTime& time );
 
     /**
      * Create a floating-point value from date.
      * See also note above.
      */
-    KSpreadValue( const QDate& date );
+    Value( const QDate& date );
 
     /**
      * Create an array of values.
      */
-    KSpreadValue( unsigned columns, unsigned rows );
+    Value( unsigned columns, unsigned rows );
 
     /**
      * Returns the type of the value.
@@ -199,7 +200,7 @@ class KSPREAD_EXPORT KSpreadValue
     /**
      * Sets this value to another value.
      */
-    void setValue( const KSpreadValue& v );
+    void setValue( const Value& v );
 
     /**
      * Sets this value to boolean value.
@@ -295,12 +296,12 @@ class KSPREAD_EXPORT KSpreadValue
     /**
      * Return an element in the array value. Do not call if isArray() is false.
      */
-    KSpreadValue element( unsigned column, unsigned row ) const;
+    Value element( unsigned column, unsigned row ) const;
     
     /**
      * Sets an element in the array value. Do not use if isArray() is false.
      */
-    void setElement( unsigned column, unsigned row, const KSpreadValue& value );
+    void setElement( unsigned column, unsigned row, const Value& value );
     
     /**
      * If this value is an array, return the number of columns.
@@ -331,21 +332,21 @@ class KSPREAD_EXPORT KSpreadValue
     /**
      * Returns constant reference to empty value.
      */
-    static const KSpreadValue& empty();
+    static const Value& empty();
 
     /**
      * Returns constant reference to #DIV/0! error.
      *
      * This is used to indicate that a formula divides by 0 (zero).
      */
-    static const KSpreadValue& errorDIV0();
+    static const Value& errorDIV0();
 
     /**
      * Returns constant reference to #N/A error.
      *
      * This is to indicate that  a value is not available to a function.
      */
-    static const KSpreadValue& errorNA();
+    static const Value& errorNA();
 
     /**
      * Returns constant reference to #NAME? error.
@@ -354,28 +355,28 @@ class KSPREAD_EXPORT KSpreadValue
      * recognized, possibly a misspelled name or name that 
      * does not exist.
      */
-    static const KSpreadValue& errorNAME();
+    static const Value& errorNAME();
 
     /**
      * Returns constant reference to #NUM! error.
      *
      * This is to indicate a problem with a number in a formula.
      */
-    static const KSpreadValue& errorNUM();
+    static const Value& errorNUM();
 
     /**
      * Returns constant reference to #NULL! error.
      *
      * This is to indicate that two area do not intersect.
      */
-    static const KSpreadValue& errorNULL();
+    static const Value& errorNULL();
 
     /**
      * Returns constant reference to #REF! error.
      *
      * This is used to indicate an invalid cell reference.
      */
-    static const KSpreadValue& errorREF();
+    static const Value& errorREF();
 
     /**
      * Returns constant reference to #VALUE! error.
@@ -383,34 +384,34 @@ class KSPREAD_EXPORT KSpreadValue
      * This is to indicate that wrong type of argument or operand
      * is used, usually within a function call, e.g SIN("some text").
      */
-    static const KSpreadValue& errorVALUE();
+    static const Value& errorVALUE();
 
     /**
      * Returns true if it is OK to compare this value with v.
      * If this function returns false, then return value of compare is undefined.
      */
-    bool allowComparison( const KSpreadValue& v ) const;
+    bool allowComparison( const Value& v ) const;
     
     /**
      * Returns -1, 0, 1, depends whether this value is less than, equal to, or
      * greater than v.
      */
-    int compare( const KSpreadValue& v ) const;
+    int compare( const Value& v ) const;
     
     /**
      * Returns true if this value is equal to v.
      */
-    bool equal( const KSpreadValue& v ) const;
+    bool equal( const Value& v ) const;
 
     /**
      * Returns true if this value is less than v.
      */
-    bool less( const KSpreadValue& v ) const;
+    bool less( const Value& v ) const;
 
     /**
      * Returns true if this value is greater than v.
      */
-    bool greater( const KSpreadValue& v ) const;
+    bool greater( const Value& v ) const;
     
     static int compare( double v1, double v2 );
     
@@ -420,11 +421,12 @@ class KSPREAD_EXPORT KSpreadValue
       
   protected:
 
-    KSpreadValueData* d; // can't never be 0
+    ValueData* d; // can't never be 0
 };
 
-QTextStream& operator<<( QTextStream& ts, KSpreadValue::Type type );
-QTextStream& operator<<( QTextStream& ts, KSpreadValue value );
+} // namespace KSpread
 
+QTextStream& operator<<( QTextStream& ts, KSpread::Value::Type type );
+QTextStream& operator<<( QTextStream& ts, KSpread::Value value );
 
 #endif // KSPREAD_VALUE_H

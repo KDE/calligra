@@ -26,29 +26,32 @@
 #include <kdialogbase.h>
 #include <koPageLayoutDia.h>
 
-class KSpreadSheet;
 class QCheckBox;
 class QComboBox;
 class QRadioButton;
 class QLineEdit;
-class KSpreadView;
 
-class KSpreadPaperLayout: public KoPageLayoutDia
+namespace KSpread
+{
+class Sheet;
+class View;
+
+class PaperLayout: public KoPageLayoutDia
 {
   Q_OBJECT
 public:
-  KSpreadPaperLayout( QWidget* parent, const char* name,
+  PaperLayout( QWidget* parent, const char* name,
                       const KoPageLayout& layout,
                       const KoHeadFoot& headfoot,
                       int tabs, KoUnit::Unit unit,
-                      KSpreadSheet * sheet, KSpreadView *view);
+                      Sheet * sheet, View *view);
 
   bool eventFilter( QObject* obj, QEvent* ev );
 
 protected slots:
   virtual void slotOk();
   virtual void slotCancel();
-  void slotSelectionChanged( KSpreadSheet* _sheet, const QRect& _selection );
+  void slotSelectionChanged( Sheet* _sheet, const QRect& _selection );
 
 protected:
   void initTab();
@@ -65,8 +68,8 @@ private:
   void initRanges( QWidget * tab, QVBoxLayout * vbox );
   void initScaleOptions( QWidget * tab, QVBoxLayout * vbox );
 
-  KSpreadSheet * m_pSheet;
-  KSpreadView  * m_pView;
+  Sheet * m_pSheet;
+  View  * m_pView;
 
   QCheckBox * pApplyToAll;
   QCheckBox * pPrintGrid;
@@ -82,5 +85,7 @@ private:
   QRadioButton * m_rScalingZoom;
   QRadioButton * m_rScalingLimitPages;
 };
+
+} // namespace KSpread
 
 #endif

@@ -20,7 +20,9 @@
 #ifndef KSPLOADINGINFO_H
 #define KSPLOADINGINFO_H
 
-class KSpreadSheet;
+namespace KSpread
+{
+class Sheet;
 
 /// Temporary information used only during loading
 class KSPLoadingInfo
@@ -35,7 +37,7 @@ public:
 
     //Use when we load ods file.
     //Necessary to initialise kspread_view selection
-    void addMarkerSelection( KSpreadSheet *sheet, const QPoint & _point ) { m_markerSelection.insert( sheet, _point );}
+    void addMarkerSelection( Sheet *sheet, const QPoint & _point ) { m_markerSelection.insert( sheet, _point );}
 
     void setLoadTemplate( bool _b ) {
         m_loadTemplate = _b;
@@ -47,9 +49,11 @@ public:
 private:
     QStringList m_areaNamed;
     QMap<QString,QDomElement> m_validationList;
-    QMap<KSpreadSheet*, QPoint> m_markerSelection;
+    QMap<Sheet*, QPoint> m_markerSelection;
     bool m_loadTemplate;
 };
+
+} // namespace KSpread
 
 #endif /* KPRLOADINGINFO_H */
 

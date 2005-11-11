@@ -28,16 +28,19 @@
 
 #include <kdialogbase.h>
 
-class KSpreadView;
 class KDoubleNumInput;
 class KoUnitDoubleSpinBox;
 
-class KSpreadResizeRow: public KDialogBase
+namespace KSpread
+{
+class View;
+
+class ResizeRow: public KDialogBase
 {
   Q_OBJECT
 
 public:
-  KSpreadResizeRow( KSpreadView* parent, const char* name = 0 );
+  ResizeRow( View* parent, const char* name = 0 );
   double rowHeight;
 
 protected slots:
@@ -45,16 +48,16 @@ protected slots:
   virtual void slotDefault();
 
 protected:
-  KSpreadView* m_pView;
+  View* m_pView;
   KoUnitDoubleSpinBox *m_pHeight;
 };
 
-class KSpreadResizeColumn: public KDialogBase
+class ResizeColumn: public KDialogBase
 {
   Q_OBJECT
 
 public:
-  KSpreadResizeColumn( KSpreadView* parent, const char* name = 0 );
+  ResizeColumn( View* parent, const char* name = 0 );
   double columnWidth;
 
 protected slots:
@@ -62,8 +65,10 @@ protected slots:
   virtual void slotDefault();
 
 protected:
-  KSpreadView* m_pView;
+  View* m_pView;
   KoUnitDoubleSpinBox *m_pWidth;
 };
+
+} // namespace KSpread
 
 #endif

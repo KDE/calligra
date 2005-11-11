@@ -59,7 +59,7 @@ namespace KSpread {
 class StyleClusterQuad
 {
   private:
-    KSpreadStyle* m_style;
+    Style* m_style;
   public:
   
     /**
@@ -90,8 +90,8 @@ class StyleClusterQuad
     StyleClusterQuad* m_bottomLeft;
     StyleClusterQuad* m_bottomRight;
 
-    KSpreadStyle* getStyle() { return m_style; }
-    inline void setStyle(KSpreadStyle * style);
+    Style* getStyle() { return m_style; }
+    inline void setStyle(Style * style);
     /**
      * Create a new StyleClusterQuad for one of it's null children
      */
@@ -111,7 +111,7 @@ void StyleClusterQuad::makeChild(StyleClusterQuad **child) {
     setStyle(0); //nothing is using this anymore
   }
 }
-void StyleClusterQuad::setStyle(KSpreadStyle * style) {
+void StyleClusterQuad::setStyle(Style * style) {
   if(m_style && m_style->release()) {
     delete m_style;
   }
@@ -164,12 +164,12 @@ int StyleClusterQuad::numNullChildren() {
 //end of StyleClusterQuad
 //start of StyleCluster
 
-StyleCluster::StyleCluster(KSpreadSheet* sheet)
+StyleCluster::StyleCluster(Sheet* sheet)
 : m_sheet(sheet)
 {
   Q_ASSERT(sheet); if(!sheet) return;
   // create quad tree
-  // don't use KSpreadFormat, it seems to be deprecated anyway...
+  // don't use Format, it seems to be deprecated anyway...
   m_topQuad = new StyleClusterQuad();
   m_topQuad->setStyle(sheet->doc()->styleManager()->defaultStyle());
 }
@@ -185,12 +185,12 @@ StyleCluster::~StyleCluster()
   }
 }
 
-void StyleCluster::setStyle( const KSpreadRange & range, KSpreadStyle * style)
+void StyleCluster::setStyle( const Range & range, Style * style)
 {
-  QValueStack< KSpreadRange > ranges;
+  QValueStack< Range > ranges;
   ranges.push(range);
   
-  KSpreadRange current_range;
+  Range current_range;
   
   while(!ranges.isEmpty()) {
     current_range = ranges.pop();
@@ -228,7 +228,7 @@ void StyleCluster::setStyle( const KSpreadRange & range, KSpreadStyle * style)
 // are the same, the instance wouldn't exist and the parent would point to null.
 // If a Quad has a Simple, then it must also have a null.  If temporarily it doesn't, then the 
 // Simple must be deleted, and made a null and the Quad given that style.
-void StyleCluster::setStyle( int x, int y, KSpreadStyle * style)
+void StyleCluster::setStyle( int x, int y, Style * style)
 {
   Q_ASSERT(m_topQuad);
   
@@ -361,7 +361,7 @@ void StyleCluster::simplify(  QValueStack<StyleClusterQuad**> &path ) {
   }
 }
 
-const KSpreadStyle& StyleCluster::lookup(int x, int y) {
+const Style& StyleCluster::lookup(int x, int y) {
   return *(lookupNode(x,y)->getStyle());
 }
 

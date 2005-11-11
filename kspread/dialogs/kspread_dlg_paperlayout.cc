@@ -45,25 +45,25 @@
 
 using namespace KSpread;
 
-KSpreadPaperLayout::KSpreadPaperLayout( QWidget * parent, const char * name,
+PaperLayout::PaperLayout( QWidget * parent, const char * name,
                                         const KoPageLayout & layout,
                                         const KoHeadFoot & headfoot,
                                         int tabs, KoUnit::Unit unit,
-                                        KSpreadSheet * sheet, KSpreadView * view)
+                                        Sheet * sheet, View * view)
   : KoPageLayoutDia( parent, name, layout, headfoot, tabs, unit, false /*no modal*/),
     m_pSheet( sheet ),
     m_pView( view )
 {
     initTab();
-    connect( view, SIGNAL( sig_selectionChanged( KSpreadSheet *, const QRect & ) ),
-             this, SLOT( slotSelectionChanged( KSpreadSheet *, const QRect & ) ) );
+    connect( view, SIGNAL( sig_selectionChanged( Sheet *, const QRect & ) ),
+             this, SLOT( slotSelectionChanged( Sheet *, const QRect & ) ) );
     qApp->installEventFilter( this );
     m_focus= 0L;
 }
 
-void KSpreadPaperLayout::initTab()
+void PaperLayout::initTab()
 {
-    KSpreadSheetPrint* print = m_pSheet->print();
+    SheetPrint* print = m_pSheet->print();
 
     QWidget *tab = addPage(i18n( "Options" ));
     QVBoxLayout *vbox = new QVBoxLayout( tab, KDialog::marginHint(), KDialog::spacingHint() );
@@ -84,9 +84,9 @@ void KSpreadPaperLayout::initTab()
     vbox->addStretch( 1 );
 }
 
-void KSpreadPaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
+void PaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
 {
-    KSpreadSheetPrint* print = m_pSheet->print();
+    SheetPrint* print = m_pSheet->print();
 
     QHGroupBox *group = new QHGroupBox( i18n("General Options"), tab );
     vbox->addWidget( group );
@@ -101,9 +101,9 @@ void KSpreadPaperLayout::initGeneralOptions( QWidget * tab, QVBoxLayout * vbox )
     pPrintFormulaIndicator->setChecked( print->printFormulaIndicator() );
 }
 
-void KSpreadPaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
+void PaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
 {
-    KSpreadSheetPrint* print = m_pSheet->print();
+    SheetPrint* print = m_pSheet->print();
 
     QGroupBox *rangeGroup = new QGroupBox( i18n("Ranges"), tab );
     rangeGroup->setColumnLayout( 0, Qt::Vertical );
@@ -153,9 +153,9 @@ void KSpreadPaperLayout::initRanges( QWidget * tab, QVBoxLayout * vbox )
     grid->addRowSpacing( 2, eRepeatCols->height() );
 }
 
-void KSpreadPaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
+void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
 {
-    KSpreadSheetPrint* print = m_pSheet->print();
+    SheetPrint* print = m_pSheet->print();
 
     QButtonGroup *zoomGroup = new QButtonGroup( i18n("Scale Printout"), tab );
     zoomGroup->setColumnLayout( 0, Qt::Vertical );
@@ -257,21 +257,21 @@ void KSpreadPaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     connect( m_cLimitPagesY, SIGNAL( activated( int ) ), this, SLOT( slotChoosePageLimit( int ) ) );
 }
 
-void KSpreadPaperLayout::slotChooseZoom( int /*index*/ )
+void PaperLayout::slotChooseZoom( int /*index*/ )
 {
     m_rScalingZoom->setChecked( true );
 }
 
-void KSpreadPaperLayout::slotChoosePageLimit( int /*index*/ )
+void PaperLayout::slotChoosePageLimit( int /*index*/ )
 {
     m_rScalingLimitPages->setChecked( true );
 }
 
-void KSpreadPaperLayout::slotOk()
+void PaperLayout::slotOk()
 {
     if ( !m_pSheet->doc()->undoLocked() )
     {
-        KSpreadUndoAction* undo = new KSpreadUndoPaperLayout( m_pSheet->doc(), m_pSheet );
+        UndoAction* undo = new UndoPaperLayout( m_pSheet->doc(), m_pSheet );
         m_pSheet->doc()->addCommand( undo );
     }
 
@@ -281,8 +281,8 @@ void KSpreadPaperLayout::slotOk()
     topChanged();
     bottomChanged();
 
-    KSpreadMap   * map   = 0;
-    KSpreadSheet * sheet = 0;
+    Map   * map   = 0;
+    Sheet * sheet = 0;
 
     if ( pApplyToAll->isChecked() )
       map = m_pSheet->doc()->map();
@@ -295,7 +295,7 @@ void KSpreadPaperLayout::slotOk()
     m_pView->doc()->emitBeginOperation( false );
     while ( sheet )
     {
-      KSpreadSheetPrint *print = sheet->print();
+      SheetPrint *print = sheet->print();
 
       KoPageLayout pl = layout();
       KoHeadFoot hf = headFoot();
@@ -316,10 +316,10 @@ void KSpreadPaperLayout::slotOk()
         int first = tmpPrintRange.find(":");
         if ( ( first != -1 ) && ( (int)tmpPrintRange.length() > first ) )
         {
-            KSpreadPoint point1 ( tmpPrintRange.left( first ) );
+            Point point1 ( tmpPrintRange.left( first ) );
             if ( point1.isValid() )
             {
-                KSpreadPoint point2 ( tmpPrintRange.mid( first+1 ) );
+                Point point2 ( tmpPrintRange.mid( first+1 ) );
                 if ( point2.isValid() )
                 {
                     error = false;
@@ -434,12 +434,12 @@ void KSpreadPaperLayout::slotOk()
     accept();
 }
 
-void KSpreadPaperLayout::closeEvent ( QCloseEvent * )
+void PaperLayout::closeEvent ( QCloseEvent * )
 {
     delete this;
 }
 
-void KSpreadPaperLayout::slotSelectionChanged( KSpreadSheet* /*_sheet*/, const QRect& _selection )
+void PaperLayout::slotSelectionChanged( Sheet* /*_sheet*/, const QRect& _selection )
 {
   if ( _selection.left() == 0 || _selection.top() == 0 ||
        _selection.right() == 0 || _selection.bottom() == 0 )
@@ -460,12 +460,12 @@ void KSpreadPaperLayout::slotSelectionChanged( KSpreadSheet* /*_sheet*/, const Q
   }
 }
 
-void KSpreadPaperLayout::slotCancel()
+void PaperLayout::slotCancel()
 {
   reject();
 }
 
-bool KSpreadPaperLayout::eventFilter( QObject* obj, QEvent* ev )
+bool PaperLayout::eventFilter( QObject* obj, QEvent* ev )
 {
     if ( obj == ePrintRange && ev->type() == QEvent::FocusIn )
         m_focus = ePrintRange;

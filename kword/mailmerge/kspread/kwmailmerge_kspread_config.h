@@ -50,7 +50,7 @@ class KWMailMergeKSpreadConfig: public KDialogBase
     void initGUI();
 
     KWMailMergeKSpread *_object;
-    KSpreadDoc *_document;
+    KSpread::Doc *_document;
 
     KURLRequester *_urlRequester;
     KComboBox *_pageNumber;

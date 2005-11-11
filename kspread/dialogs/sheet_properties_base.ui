@@ -1,5 +1,5 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>SheetPropertiesBase</class>
+<class>KSpread::SheetPropertiesBase</class>
 <comment>This file is part of the KDE project
 Copyright (C) 2004 Ariya Hidayat &lt;ariya@kde.org&gt;
 

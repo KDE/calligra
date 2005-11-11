@@ -64,7 +64,7 @@ CSVExport::CSVExport( KoFilter *, const char *, const QStringList & )
 }
 
 
-void CSVExport::exportCell( KSpreadSheet const * const sheet, int col, int row, QString & separators,
+void CSVExport::exportCell( Sheet const * const sheet, int col, int row, QString & separators,
                             QString & line, QChar const & csvDelimiter, QChar const & textQuote )
 {
   KSpread::Cell const * const cell = sheet->cellAt( col, row );
@@ -121,9 +121,9 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   if ( !document )
     return KoFilter::StupidError;
 
-  if ( strcmp( document->className(), "KSpreadDoc" ) != 0 )  // it's safer that way :)
+  if ( strcmp( document->className(), "Doc" ) != 0 )  // it's safer that way :)
   {
-    kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
+    kdWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
     return KoFilter::NotImplemented;
   }
   if ( ( to != "text/x-csv" && to != "text/plain" ) || from != "application/x-kspread" )
@@ -132,7 +132,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
     return KoFilter::NotImplemented;
   }
 
-  KSpreadDoc const * const ksdoc = static_cast<const KSpreadDoc *>(document);
+  Doc const * const ksdoc = static_cast<const Doc *>(document);
 
   if ( ksdoc->mimeType() != "application/x-kspread" )
   {
@@ -194,7 +194,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   if ( expDialog && expDialog->exportSelectionOnly() )
   {
     kdDebug(30501) << "Export as selection mode" << endl;
-    KSpreadView const * const view = static_cast<KSpreadView*>(ksdoc->views().getFirst());
+    View const * const view = static_cast<View*>(ksdoc->views().getFirst());
 
     if ( !view ) // no view if embedded document
     {
@@ -202,7 +202,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
       return KoFilter::StupidError;
     }
 
-    KSpreadSheet const * const sheet = view->activeSheet();
+    Sheet const * const sheet = view->activeSheet();
 
     QRect selection = view->selection();
     int right       = selection.right();
@@ -233,10 +233,10 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   else
   {
     kdDebug(30501) << "Export as full mode" << endl;
-    QPtrListIterator<KSpreadSheet> it( ksdoc->map()->sheetList() );
+    QPtrListIterator<Sheet> it( ksdoc->map()->sheetList() );
     for( ; it.current(); ++it )
     {
-      KSpreadSheet const * const sheet = it.current();
+      Sheet const * const sheet = it.current();
 
       if (expDialog && !expDialog->exportSheet( sheet->sheetName() ) )
       {
@@ -266,8 +266,8 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
 
       first = false;
 
-      // Either we get hold of KSpreadSheet::m_dctCells and apply the old method below (for sorting)
-      // or, cleaner and already sorted, we use KSpreadSheet's API (slower probably, though)
+      // Either we get hold of Sheet::m_dctCells and apply the old method below (for sorting)
+      // or, cleaner and already sorted, we use Sheet's API (slower probably, though)
       int iMaxColumn = sheet->maxColumn();
       int iMaxRow    = sheet->maxRow();
       kdDebug(30501) << "Max row x column: " << iMaxRow << " x " << iMaxColumn << endl;

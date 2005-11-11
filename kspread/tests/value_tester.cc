@@ -79,41 +79,41 @@ void ValueTester::run()
   testCount = 0;
   errorList.clear();
 
-  KSpreadValue* v1;
-  KSpreadValue* v2;
+  Value* v1;
+  Value* v2;
   
   // empty value
-  v1 = new KSpreadValue();
-  CHECK( v1->type(), KSpreadValue::Empty );
+  v1 = new Value();
+  CHECK( v1->type(), Value::Empty );
   delete v1;
 
   // boolean value (true)
-  v1 = new KSpreadValue( true );
-  CHECK( v1->type(), KSpreadValue::Boolean );
+  v1 = new Value( true );
+  CHECK( v1->type(), Value::Boolean );
   CHECK( v1->asBoolean(), true );
   v1->setValue( 1 ); // dummy
   v1->setValue( true );
-  CHECK( v1->type(), KSpreadValue::Boolean );
+  CHECK( v1->type(), Value::Boolean );
   CHECK( v1->asBoolean(), true );
   delete v1;
   
   // boolean value (false)
-  v1 = new KSpreadValue( false );
-  CHECK( v1->type(), KSpreadValue::Boolean );
+  v1 = new Value( false );
+  CHECK( v1->type(), Value::Boolean );
   CHECK( v1->asBoolean(), false );
   v1->setValue( 4 ); // dummy
   v1->setValue( false );
-  CHECK( v1->type(), KSpreadValue::Boolean );
+  CHECK( v1->type(), Value::Boolean );
   CHECK( v1->asBoolean(), false );
   delete v1;
 
   // integer value
-  v1 = new KSpreadValue( 1977 );
-  CHECK( v1->type(), KSpreadValue::Integer );
+  v1 = new Value( 1977 );
+  CHECK( v1->type(), Value::Integer );
   CHECK( v1->asInteger(), (long)1977 );
   v1->setValue( false ); // dummy
   v1->setValue( 14 );
-  CHECK( v1->type(), KSpreadValue::Integer );
+  CHECK( v1->type(), Value::Integer );
   CHECK( v1->isInteger(), true );
   CHECK( v1->isFloat(), false );
   CHECK( v1->isString(), false );
@@ -122,12 +122,12 @@ void ValueTester::run()
   delete v1;
   
   // floating-point value
-  v1 = new KSpreadValue( M_PI );
-  CHECK( v1->type(), KSpreadValue::Float );
+  v1 = new Value( M_PI );
+  CHECK( v1->type(), Value::Float );
   CHECK( v1->asFloat(), M_PI );
   v1->setValue( false ); // dummy
   v1->setValue( 14.03 );
-  CHECK( v1->type(), KSpreadValue::Float );
+  CHECK( v1->type(), Value::Float );
   CHECK( v1->isInteger(), false );
   CHECK( v1->isFloat(), true );
   CHECK( v1->isString(), false );
@@ -136,12 +136,12 @@ void ValueTester::run()
   delete v1;
   
   // string value
-  v1 = new KSpreadValue( QString("Ailinon" ) );
-  CHECK( v1->type(), KSpreadValue::String );
+  v1 = new Value( QString("Ailinon" ) );
+  CHECK( v1->type(), Value::String );
   CHECK( v1->asString(), QString("Ailinon" ) );
   v1->setValue( 7 ); // dummy
   v1->setValue( QString("spreadsheet" ) );
-  CHECK( v1->type(), KSpreadValue::String );
+  CHECK( v1->type(), Value::String );
   CHECK( v1->isInteger(), false );
   CHECK( v1->isFloat(), false );
   CHECK( v1->isString(), true );
@@ -152,7 +152,7 @@ void ValueTester::run()
   // check all (valid) dates from 1900 to 2050
   // note: bail on first error immediately
   QDate refDate( 1899, 12, 31 );
-  v1 = new KSpreadValue();
+  v1 = new Value();
   bool date_error = 0;
   for( unsigned y = 1900; !date_error && y < 2050; y++ )
   for( unsigned m = 1; !date_error && m <= 12; m++ )
@@ -167,9 +167,9 @@ void ValueTester::run()
   } 
   
   // time value
-  v1 = new KSpreadValue();
+  v1 = new Value();
   v1->setValue( QTime( 0, 0, 0 ) );
-  CHECK( v1->type(), KSpreadValue::Float );
+  CHECK( v1->type(), Value::Float );
   int time_error = 0; // used to  save time, bail on first error
   for( unsigned h = 0; !time_error && h < 24; h++ )
   for( unsigned m = 0; !time_error && m < 60; m++ )
@@ -187,9 +187,9 @@ void ValueTester::run()
   delete v1;
 
   // time value (msec)
-  v1 = new KSpreadValue();
+  v1 = new Value();
   v1->setValue( QTime( 0, 0, 0 ) );
-  CHECK( v1->type(), KSpreadValue::Float );
+  CHECK( v1->type(), Value::Float );
   int msec_error = 0; // used to  save time, bail on first error
   for( unsigned ms= 0;ms < 1000;ms++ )
   {
@@ -213,47 +213,47 @@ void ValueTester::run()
   // TODO pow
   
   // array
-  v1 = new KSpreadValue( 10, 3 ); // 10 columns, 3 rows
-  CHECK( v1->type(), KSpreadValue::Array );
+  v1 = new Value( 10, 3 ); // 10 columns, 3 rows
+  CHECK( v1->type(), Value::Array );
   CHECK( v1->columns(), (unsigned)10 );
   CHECK( v1->rows(), (unsigned)3 );
   delete v1;
   
   // check empty value in array
-  v1 = new KSpreadValue( 1, 1 );
-  CHECK( v1->type(), KSpreadValue::Array );
-  v2 = new KSpreadValue( v1->element( 0, 0 ) );
-  CHECK( v2->type(), KSpreadValue::Empty );
+  v1 = new Value( 1, 1 );
+  CHECK( v1->type(), Value::Array );
+  v2 = new Value( v1->element( 0, 0 ) );
+  CHECK( v2->type(), Value::Empty );
   delete v1;
   
   // fill simple 1x1 array
-  v1 = new KSpreadValue( 1, 1 );
-  CHECK( v1->type(), KSpreadValue::Array );
-  v2 = new KSpreadValue( 14.3 );
+  v1 = new Value( 1, 1 );
+  CHECK( v1->type(), Value::Array );
+  v2 = new Value( 14.3 );
   v1->setElement( 0, 0, *v2 );
   delete v2;
-  v2 = new KSpreadValue( v1->element( 0, 0 ) );
-  CHECK( v2->type(), KSpreadValue::Float );
+  v2 = new Value( v1->element( 0, 0 ) );
+  CHECK( v2->type(), Value::Float );
   CHECK( v2->asFloat(), 14.3 );
   delete v2;
   delete v1;
   
   // stress test, array of 1000x1000
-  v1 = new KSpreadValue( 1000, 1000 );
-  CHECK( v1->type(), KSpreadValue::Array );
+  v1 = new Value( 1000, 1000 );
+  CHECK( v1->type(), Value::Array );
   for( unsigned c=0; c<1000; c++ )
   for( unsigned r=0; r<1000; r++ )
   {
     int index = 1000*r + c;
-    v1->setElement( c, r, KSpreadValue( index ) );
+    v1->setElement( c, r, Value( index ) );
   }
   int array_error = 0;
   for( unsigned c=0; !array_error && c<1000; c++ )
   for( unsigned r=0; !array_error && r<1000; r++ )
   {
     int index = 1000*r + c;
-    v2 = new KSpreadValue( v1->element( c, r ) );
-    if( v2->type() != KSpreadValue::Integer ) array_error++;
+    v2 = new Value( v1->element( c, r ) );
+    if( v2->type() != Value::Integer ) array_error++;
     if( v2->asInteger() != index ) array_error++;
     delete v2;
   }
@@ -261,45 +261,45 @@ void ValueTester::run()
   delete v1;
   
   // assignment of array value
-  v1 = new KSpreadValue( 1, 1 );
-  CHECK( v1->type(), KSpreadValue::Array );
-  v1->setElement( 0, 0, KSpreadValue( 14.3) );
-  v2 = new KSpreadValue( *v1 ); // v2 is now also an array
+  v1 = new Value( 1, 1 );
+  CHECK( v1->type(), Value::Array );
+  v1->setElement( 0, 0, Value( 14.3) );
+  v2 = new Value( *v1 ); // v2 is now also an array
   delete v1;
-  v1 = new KSpreadValue( v2->element( 0, 0 ) );
-  CHECK( v1->type(), KSpreadValue::Float );
+  v1 = new Value( v2->element( 0, 0 ) );
+  CHECK( v1->type(), Value::Float );
   CHECK( v1->asFloat(), 14.3 );
   delete v1;
   delete v2;
     
   // copy value
-  v1 = new KSpreadValue();
+  v1 = new Value();
   v1->setValue( 14.3 );
-  v2 = new KSpreadValue( *v1 );
-  CHECK( v1->type(), KSpreadValue::Float );
-  CHECK( v2->type(), KSpreadValue::Float );
+  v2 = new Value( *v1 );
+  CHECK( v1->type(), Value::Float );
+  CHECK( v2->type(), Value::Float );
   CHECK( v1->asFloat(), 14.3 );
   CHECK( v2->asFloat(), 14.3 );
   delete v1;
   delete v2;
   
   // value assignment
-  v1 = new KSpreadValue( 14.3 );
-  v2 = new KSpreadValue( true );
+  v1 = new Value( 14.3 );
+  v2 = new Value( true );
   v2->assign( *v1 );
-  CHECK( v1->type(), KSpreadValue::Float );
-  CHECK( v2->type(), KSpreadValue::Float );
+  CHECK( v1->type(), Value::Float );
+  CHECK( v2->type(), Value::Float );
   CHECK( v1->asFloat(), 14.3 );
   CHECK( v2->asFloat(), 14.3 );
   delete v1;
   delete v2;
   
   // verify detachment
-  v1 = new KSpreadValue( 14.3 );
-  v2 = new KSpreadValue( *v1 );
+  v1 = new Value( 14.3 );
+  v2 = new Value( *v1 );
   v2->detach(); // v1 and v2 don't share data anymore
-  CHECK( v1->type(), KSpreadValue::Float );
-  CHECK( v2->type(), KSpreadValue::Float );
+  CHECK( v1->type(), Value::Float );
+  CHECK( v2->type(), Value::Float );
   CHECK( v1->asFloat(), 14.3 );
   CHECK( v2->asFloat(), 14.3 );
   delete v1;

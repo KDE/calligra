@@ -22,41 +22,6 @@
 #ifndef KSPREAD_SHEET
 #define KSPREAD_SHEET
 
-class KSpreadSheet;
-class KSpreadSheetPrint;
-
-class ColumnFormat;
-class RowFormat;
-class KSpreadStyle;
-class KSpreadView;
-class KSpreadPoint;
-class KSpreadMap;
-class KSpreadCanvas;
-class KSpreadDoc;
-class KSpreadSelection;
-class KSpreadUndoInsertRemoveAction;
-class KoDocumentEntry;
-class KoStyleStack;
-class KoGenStyles;
-class KSpreadGenValidationStyles;
-class QWidget;
-class QPainter;
-class QDomElement;
-
-namespace KSpread
-{
-class Cell;
-class DependencyManager;
-}
-
-class DCOPObject;
-class KPrinter;
-class KoOasisSettings;
-
-#include <koDocument.h>
-#include <koDocumentChild.h>
-#include <koOasisSettings.h> // for KoOasisSettings::NamedMap
-
 #include <qpen.h>
 #include <qptrlist.h>
 #include <qintdict.h>
@@ -64,13 +29,49 @@ class KoOasisSettings;
 #include <qrect.h>
 #include <qwidget.h>
 #include <qdragobject.h>
+
 #include <koOasisStyles.h>
 #include <koxmlwriter.h>
+#include <koDocument.h>
+#include <koDocumentChild.h>
+#include <koOasisSettings.h> // for KoOasisSettings::NamedMap
 
 #include "kspread_autofill.h"
-#include "kspread_format.h"
 #include "kspread_cell.h"
+#include "kspread_format.h"
 #include "kspread_global.h"
+
+class QWidget;
+class QPainter;
+class QDomElement;
+class DCOPObject;
+class KPrinter;
+class KoDocumentEntry;
+class KoStyleStack;
+class KoGenStyles;
+class KoOasisSettings;
+
+namespace KoChart
+{
+class Part;
+}
+
+namespace KSpread
+{
+class Cell;
+class DependencyManager;
+class GenValidationStyles;
+class Sheet;
+class SheetPrint;
+class Style;
+class View;
+class Point;
+class Map;
+class Canvas;
+class Doc;
+class Selection;
+class UndoInsertRemoveAction;
+class ChartChild;
 
 /********************************************************************
  *
@@ -85,7 +86,7 @@ class CellBinding : public QObject
 {
     Q_OBJECT
 public:
-    CellBinding( KSpreadSheet *_sheet, const QRect& _area );
+    CellBinding( Sheet *_sheet, const QRect& _area );
     virtual ~CellBinding();
 
     bool contains( int _x, int _y );
@@ -95,45 +96,45 @@ public:
      *
      * @param _obj may by 0L. In this case all cells may have changed.
      */
-    virtual void cellChanged( KSpread::Cell *_obj );
+    virtual void cellChanged( Cell *_obj );
 
     virtual void setIgnoreChanges( bool _ignore ) { m_bIgnoreChanges = _ignore; }
 
     virtual QRect& dataArea() { return m_rctDataArea; }
     virtual void setDataArea( const QRect _rect ) { m_rctDataArea = _rect; }
 
-    KSpreadSheet* sheet()const { return m_pSheet; }
+    Sheet* sheet()const { return m_pSheet; }
 
 signals:
-    void changed( KSpread::Cell *_obj );
+    void changed( Cell *_obj );
 
 protected:
     QRect m_rctDataArea;
-    KSpreadSheet *m_pSheet;
+    Sheet *m_pSheet;
     bool m_bIgnoreChanges;
 };
 
 /********************************************************************
  *
- * KSpreadChild
+ * Child
  *
  ********************************************************************/
 
 /**
  * Holds an embedded object.
  */
-class KSpreadChild : public KoDocumentChild
+class Child : public KoDocumentChild
 {
 public:
-  KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_sheet, KoDocument* doc, const QRect& geometry );
-  KSpreadChild( KSpreadDoc *parent, KSpreadSheet *_sheet );
-  ~KSpreadChild();
+  Child( Doc *parent, Sheet *_sheet, KoDocument* doc, const QRect& geometry );
+  Child( Doc *parent, Sheet *_sheet );
+  ~Child();
 
-  KSpreadDoc* parent()const { return (KSpreadDoc*)parent(); }
-  KSpreadSheet* sheet()const { return m_pSheet; }
+  Doc* parent()const { return (Doc*)parent(); }
+  Sheet* sheet()const { return m_pSheet; }
 
 protected:
-  KSpreadSheet *m_pSheet;
+  Sheet *m_pSheet;
 };
 
 /********************************************************************
@@ -142,29 +143,26 @@ protected:
  *
  ********************************************************************/
 
-class ChartChild;
-namespace KoChart { class Part; }
-
 class ChartBinding : public CellBinding
 {
     Q_OBJECT
 public:
 
-    ChartBinding( KSpreadSheet *_sheet, const QRect& _area, ChartChild *_child );
+    ChartBinding( Sheet *_sheet, const QRect& _area, ChartChild *_child );
     virtual ~ChartBinding();
 
-    virtual void cellChanged( KSpread::Cell *_obj );
+    virtual void cellChanged( Cell *_obj );
 
 private:
     ChartChild* m_child;
 };
 
-class ChartChild : public KSpreadChild
+class ChartChild : public Child
 {
     Q_OBJECT
 public:
-    ChartChild( KSpreadDoc *_spread, KSpreadSheet *_sheet, KoDocument* doc, const QRect& _rect );
-    ChartChild( KSpreadDoc *_spread, KSpreadSheet *_sheet );
+    ChartChild( Doc *_spread, Sheet *_sheet, KoDocument* doc, const QRect& _rect );
+    ChartChild( Doc *_spread, Sheet *_sheet );
     ~ChartChild();
 
     void setDataArea( const QRect& _data );
@@ -192,7 +190,7 @@ private:
 
 /********************************************************************
  *
- * KSpreadTextDrag
+ * TextDrag
  *
  ********************************************************************/
 
@@ -200,13 +198,13 @@ private:
  * @short This is a class for handling clipboard data
  */
 
-class KSpreadTextDrag : public QTextDrag
+class TextDrag : public QTextDrag
 {
     Q_OBJECT
 
 public:
-    KSpreadTextDrag( QWidget * dragSource = 0L, const char * name = 0L );
-    virtual ~KSpreadTextDrag();
+    TextDrag( QWidget * dragSource = 0L, const char * name = 0L );
+    virtual ~TextDrag();
 
     void setPlain( QString const & _plain ) { setText( _plain ); }
     void setKSpread( QByteArray const & _kspread ) { m_kspread = _kspread; }
@@ -231,12 +229,11 @@ protected:
 
 class SheetPrivate;
 
-
 /**
  */
-class KSPREAD_EXPORT KSpreadSheet : public QObject
+class KSPREAD_EXPORT Sheet : public QObject
 {
-    friend class KSpread::Cell;
+    friend class Cell;
 
     Q_OBJECT
 
@@ -253,9 +250,8 @@ public:
 
     enum LayoutDirection { LeftToRight, RightToLeft };
 
-    KSpreadSheet ( KSpreadMap* map, const QString &sheetName,
-        const char *_name=0L );
-    ~KSpreadSheet();
+    Sheet ( Map* map, const QString &sheetName, const char *_name=0L );
+    ~Sheet();
 
     virtual bool isEmpty( unsigned long int x, unsigned long int y ) const;
 
@@ -285,13 +281,13 @@ public:
      *         that this name is already used.
      *
      * @see #changeCellTabName
-     * @see KSpreadTabBar::renameTab
+     * @see TabBar::renameTab
      * @see #sheetName
      */
     bool setSheetName( const QString& name, bool init = false, bool makeUndo=true );
 
-    KSpreadMap* workbook();
-    KSpreadDoc* doc();
+    Map* workbook();
+    Doc* doc();
 
     /**
      * Saves the sheet and all it's children in XML format
@@ -304,7 +300,7 @@ public:
 
     virtual bool loadOasis( const QDomElement& sheet, const KoOasisStyles& oasisStyles );
 
-    virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, KSpreadGenValidationStyles &valStyle );
+    virtual bool saveOasis( KoXmlWriter & xmlWriter, KoGenStyles &mainStyles, GenValidationStyles &valStyle );
     void saveOasisHeaderFooter( KoXmlWriter &xmlWriter ) const;
 
     void loadOasisSettings( const KoOasisSettings::NamedMap &settings );
@@ -366,26 +362,26 @@ public:
 
     /**
      * @return the first cell of this sheet. Next cells can
-     * be retrieved by calling @ref KSpread::Cell::nextCell.
+     * be retrieved by calling @ref Cell::nextCell.
      */
-    KSpread::Cell* firstCell() const;
+    Cell* firstCell() const;
 
     RowFormat* firstRow() const;
 
     ColumnFormat* firstCol() const;
 
-    KSpread::Cell* cellAt( int _column, int _row ) const;
+    Cell* cellAt( int _column, int _row ) const;
     /**
      * @param _scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
      *                          @ref #m_bScrollbarUpdates.
      */
-    KSpread::Cell* cellAt( int _column, int _row, bool _scrollbar_update = false );
+    Cell* cellAt( int _column, int _row, bool _scrollbar_update = false );
     /**
      * A convenience function.
      */
-    KSpread::Cell* cellAt( const QPoint& _point, bool _scrollbar_update = false )
+    Cell* cellAt( const QPoint& _point, bool _scrollbar_update = false )
       { return cellAt( _point.x(), _point.y(), _scrollbar_update ); }
     /**
      * @returns the pointer to the cell that is visible at a certain position. That means If the cell
@@ -396,36 +392,36 @@ public:
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
      *                          @ref #m_bScrollbarUpdates.
      */
-    KSpread::Cell* visibleCellAt( int _column, int _row, bool _scrollbar_update = false );
+    Cell* visibleCellAt( int _column, int _row, bool _scrollbar_update = false );
     /**
-     * If no special KSpread::Cell exists for this position then a new one is created.
+     * If no special Cell exists for this position then a new one is created.
      *
      * @param _scrollbar_update will change the scrollbar if set to true disregarding
      *                          whether _column/_row are bigger than
      *                          m_iMaxRow/m_iMaxColumn. May be overruled by
      *                          @ref #m_bScrollbarUpdates.
      *
-     * @return a non default KSpread::Cell for the position.
+     * @return a non default Cell for the position.
      */
-    KSpread::Cell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false, KSpreadStyle * _style = 0 );
-    KSpread::Cell* nonDefaultCell( QPoint const & cellRef, bool scroll = false )
+    Cell* nonDefaultCell( int _column, int _row, bool _scrollbar_update = false, Style * _style = 0 );
+    Cell* nonDefaultCell( QPoint const & cellRef, bool scroll = false )
       { return nonDefaultCell( cellRef.x(), cellRef.y(), scroll ); }
 
-    KSpread::Cell* defaultCell() const;
+    Cell* defaultCell() const;
 
-    KSpreadFormat* defaultFormat();
-    const KSpreadFormat* defaultFormat() const;
+    Format* defaultFormat();
+    const Format* defaultFormat() const;
 
     /** retrieve a value */
-    KSpreadValue value (int col, int row) const;
+    Value value (int col, int row) const;
     /** retrieve a range of values */
-    KSpreadValue valueRange (int col1, int row1, int col2, int row2) const;
+    Value valueRange (int col1, int row1, int col2, int row2) const;
 
-    QRect visibleRect( KSpreadCanvas const * const _canvas ) const;
-    int topRow( double _ypos, double &_top, const KSpreadCanvas *_canvas = 0L ) const;
-    int bottomRow( double _ypos, const KSpreadCanvas *_canvas = 0L ) const;
-    int leftColumn( double _xpos, double &_left, const KSpreadCanvas *_canvas = 0L ) const;
-    int rightColumn( double _xpos, const KSpreadCanvas *_canvas = 0L ) const;
+    QRect visibleRect( Canvas const * const _canvas ) const;
+    int topRow( double _ypos, double &_top, const Canvas *_canvas = 0L ) const;
+    int bottomRow( double _ypos, const Canvas *_canvas = 0L ) const;
+    int leftColumn( double _xpos, double &_left, const Canvas *_canvas = 0L ) const;
+    int rightColumn( double _xpos, const Canvas *_canvas = 0L ) const;
 
     /**
      * @return the left corner of the column as int.
@@ -434,7 +430,7 @@ public:
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                left corner of the sheet.
      */
-    int columnPos( int _col, const KSpreadCanvas *_canvas = 0L ) const;
+    int columnPos( int _col, const Canvas *_canvas = 0L ) const;
     /**
      * @return the left corner of the column as double.
      * Use this method, when you later calculate other positions depending on this one
@@ -444,7 +440,7 @@ public:
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                left corner of the sheet.
      */
-    double dblColumnPos( int _col, const KSpreadCanvas *_canvas = 0L ) const;
+    double dblColumnPos( int _col, const Canvas *_canvas = 0L ) const;
     /**
      * @return the top corner of the row as int.
      *
@@ -452,7 +448,7 @@ public:
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                top corner of the sheet.
      */
-    int rowPos( int _row, const KSpreadCanvas *_canvas = 0L ) const;
+    int rowPos( int _row, const Canvas *_canvas = 0L ) const;
     /**
      * @return the top corner of the row as double.
      * Use this method, when you later calculate other positions depending on this one
@@ -462,7 +458,7 @@ public:
      *                coordinates. Otherwise the point (0|0) is in the upper
      *                top corner of the sheet.
      */
-    double dblRowPos( int _row, const KSpreadCanvas *_canvas = 0L ) const;
+    double dblRowPos( int _row, const Canvas *_canvas = 0L ) const;
 
     /**
      * @return the maximum size of the column range
@@ -486,11 +482,11 @@ public:
     void adjustSizeMaxY ( double _y );
 
     /**
-     * Sets the @ref KSpread::Cell::layoutDirtyFlag in all cells.
+     * Sets the @ref Cell::layoutDirtyFlag in all cells.
      */
     void setLayoutDirtyFlag();
     /**
-     * Sets the @ref KSpread::Cell::calcDirtyFlag in all cells.
+     * Sets the @ref Cell::calcDirtyFlag in all cells.
      * That means that the cells are marked dirty and will recalculate
      * if requested. This function does only MARK, it does NOT actually calculate.
      * Use @ref #recalc to recaculate dirty values.
@@ -512,7 +508,7 @@ public:
 
     /** handles the fact that a cell has been changed - updates
     things that need to be updated */
-    void valueChanged (KSpread::Cell *cell);
+    void valueChanged (Cell *cell);
 
     /**
     * Attempts to guess the title (or 'header') of a column, within a given area of the sheet
@@ -543,48 +539,48 @@ public:
         const QString &_text);
 
 
-    void setSelectionFont( KSpreadSelection* selectionInfo,
+    void setSelectionFont( Selection* selectionInfo,
                            const char *_font = 0L, int _size = -1,
                            signed char _bold = -1, signed char _italic = -1,
                            signed char _underline = -1,
                            signed char _strike = -1 );
 
-    void setSelectionMoneyFormat( KSpreadSelection* selectionInfo, bool b );
-    void setSelectionAlign( KSpreadSelection* selectionInfo,
-                            KSpreadFormat::Align _align );
-    void setSelectionAlignY( KSpreadSelection* selectionInfo,
-                             KSpreadFormat::AlignY _alignY );
-    void setSelectionPrecision( KSpreadSelection* selectionInfo, int _delta );
-    void setSelectionPercent( KSpreadSelection* selectionInfo, bool b );
-    void setSelectionMultiRow( KSpreadSelection* selectionInfo, bool enable );
-    void setSelectionStyle( KSpreadSelection* selectionInfo, KSpreadStyle * style );
+    void setSelectionMoneyFormat( Selection* selectionInfo, bool b );
+    void setSelectionAlign( Selection* selectionInfo,
+                            Format::Align _align );
+    void setSelectionAlignY( Selection* selectionInfo,
+                             Format::AlignY _alignY );
+    void setSelectionPrecision( Selection* selectionInfo, int _delta );
+    void setSelectionPercent( Selection* selectionInfo, bool b );
+    void setSelectionMultiRow( Selection* selectionInfo, bool enable );
+    void setSelectionStyle( Selection* selectionInfo, Style * style );
 
     /**
     * setSelectionSize increase or decrease font size
     */
-    void setSelectionSize( KSpreadSelection* selectionInfo, int _size );
+    void setSelectionSize( Selection* selectionInfo, int _size );
 
     /**
      *change string to upper case if _type equals 1
      * or change string to lower if _type equals -1
      */
-    void setSelectionUpperLower( KSpreadSelection* selectionInfo, int _type );
+    void setSelectionUpperLower( Selection* selectionInfo, int _type );
 
-    void setSelectionfirstLetterUpper( KSpreadSelection* selectionInfo);
+    void setSelectionfirstLetterUpper( Selection* selectionInfo);
 
-    void setSelectionVerticalText( KSpreadSelection* selectionInfo, bool _b);
+    void setSelectionVerticalText( Selection* selectionInfo, bool _b);
 
-    void setSelectionComment( KSpreadSelection* selectionInfo,
+    void setSelectionComment( Selection* selectionInfo,
                               const QString &_comment);
-    void setSelectionRemoveComment(KSpreadSelection* selectionInfo);
+    void setSelectionRemoveComment(Selection* selectionInfo);
 
-    void setSelectionAngle(KSpreadSelection* selectionInfo, int _value );
+    void setSelectionAngle(Selection* selectionInfo, int _value );
 
-    void setSelectionTextColor( KSpreadSelection* selectionInfo,
+    void setSelectionTextColor( Selection* selectionInfo,
                                 const QColor &tbColor );
-    void setSelectionbgColor( KSpreadSelection* selectionInfo,
+    void setSelectionbgColor( Selection* selectionInfo,
                               const QColor &bg_Color );
-    void setSelectionBorderColor( KSpreadSelection* selectionInfo,
+    void setSelectionBorderColor( Selection* selectionInfo,
                                   const QColor &bd_Color );
 
     /**
@@ -593,36 +589,36 @@ public:
      *                be deleted.
      *
      */
-    void deleteSelection( KSpreadSelection* selectionInfo, bool undo = true );
+    void deleteSelection( Selection* selectionInfo, bool undo = true );
 
     /**
      * @param _marker is used if there is no selection currently.
      *                In this case the cell on which the marker is will
      *                be copied.
      */
-    void copySelection( KSpreadSelection* selectionInfo );
+    void copySelection( Selection* selectionInfo );
     /**
      * @param _marker is used if there is no selection currently.
      *                In this case the cell on which the marker is will
      *                be cut.
      */
-    void cutSelection( KSpreadSelection* selectionInfo );
+    void cutSelection( Selection* selectionInfo );
     /**
      * @param _marker is used if there is no selection currently.
      *                In this case the cell on which the marker is will
      *                be cleared.
      */
-    void clearTextSelection( KSpreadSelection* selectionInfo );
+    void clearTextSelection( Selection* selectionInfo );
 
-    void clearValiditySelection(KSpreadSelection* selectionInfo );
+    void clearValiditySelection(Selection* selectionInfo );
 
-    void clearConditionalSelection(KSpreadSelection* selectionInfo );
+    void clearConditionalSelection(Selection* selectionInfo );
 
-    void fillSelection( KSpreadSelection * selectionInfo, int direction );
+    void fillSelection( Selection * selectionInfo, int direction );
 
-    void setWordSpelling(KSpreadSelection* selectionInfo,const QString _listWord );
+    void setWordSpelling(Selection* selectionInfo,const QString _listWord );
 
-    QString getWordSpelling(KSpreadSelection* selectionInfo );
+    QString getWordSpelling(Selection* selectionInfo );
 
     /**
      * A convenience function which retrieves the data to be pasted
@@ -634,7 +630,7 @@ public:
     void paste( const QByteArray & data, const QRect & pasteArea,
                 bool makeUndo = false, PasteMode= Normal, Operation = OverWrite,
                 bool insert = false, int insertTo = 0, bool pasteFC = false );
-    void defaultSelection( KSpreadSelection* selectionInfo );
+    void defaultSelection( Selection* selectionInfo );
 
     /**
      * A function which allows to paste a text plain from the clipboard
@@ -645,12 +641,12 @@ public:
     void sortByRow( const QRect &area, int key1, int key2, int key3,
                     SortingOrder order1, SortingOrder order2, SortingOrder order3,
                     QStringList const * firstKey, bool copyFormat, bool headerRow,
-                    KSpreadPoint const & outputPoint, bool respectCase );
+                    Point const & outputPoint, bool respectCase );
     void sortByColumn( const QRect &area, int ref_column, SortingOrder );
     void sortByColumn( const QRect &area, int key1, int key2, int key3,
                        SortingOrder order1, SortingOrder order2, SortingOrder order3,
                        QStringList const * firstKey, bool copyFormat, bool headerRow,
-                       KSpreadPoint const & outputPoint, bool respectCase );
+                       Point const & outputPoint, bool respectCase );
     void swapCells( int x1, int y1, int x2, int y2, bool cpFormat );
 
     /**
@@ -711,24 +707,24 @@ public:
     void emitHideColumn();
     void showColumn( int col, int NbCol=0, QValueList<int>list=QValueList<int>() );
 
-    int adjustColumn( KSpreadSelection* selectionInfo, int _col = -1 );
-    int adjustRow( KSpreadSelection* selectionInfo, int _row = -1 );
+    int adjustColumn( Selection* selectionInfo, int _col = -1 );
+    int adjustRow( Selection* selectionInfo, int _row = -1 );
 
     /**
      * Install borders
      */
-    void borderLeft( KSpreadSelection* selectionInfo, const QColor &_color );
-    void borderTop( KSpreadSelection* selectionInfo, const QColor &_color );
-    void borderOutline( KSpreadSelection* selectionInfo, const QColor &_color );
-    void borderAll( KSpreadSelection* selectionInfo, const QColor &_color );
-    void borderRemove( KSpreadSelection* selectionInfo );
-    void borderBottom( KSpreadSelection* selectionInfo, const QColor &_color );
-    void borderRight( KSpreadSelection* selectionInfo, const QColor &_color );
+    void borderLeft( Selection* selectionInfo, const QColor &_color );
+    void borderTop( Selection* selectionInfo, const QColor &_color );
+    void borderOutline( Selection* selectionInfo, const QColor &_color );
+    void borderAll( Selection* selectionInfo, const QColor &_color );
+    void borderRemove( Selection* selectionInfo );
+    void borderBottom( Selection* selectionInfo, const QColor &_color );
+    void borderRight( Selection* selectionInfo, const QColor &_color );
 
-    void setConditional( KSpreadSelection* selectionInfo,
-       QValueList<KSpreadConditional> const & newConditions );
+    void setConditional( Selection* selectionInfo,
+       QValueList<Conditional> const & newConditions );
 
-    void setValidity( KSpreadSelection* selectionInfo,KSpreadValidity tmp );
+    void setValidity( Selection* selectionInfo, KSpread::Validity tmp );
 
     /**
      * Returns, if the grid shall be shown on the screen
@@ -778,8 +774,8 @@ public:
     void dissociateCell( const QPoint &cellRef );
     void changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY);
 
-    void increaseIndent( KSpreadSelection* selectionInfo );
-    void decreaseIndent( KSpreadSelection* selectionInfo );
+    void increaseIndent( Selection* selectionInfo );
+    void decreaseIndent( Selection* selectionInfo );
 
     bool areaIsEmpty(const QRect &area, TestType _type = Text) ;
 
@@ -806,7 +802,7 @@ public:
      */
     void changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
                             ChangeRef ref, QString tabname, int NbCol = 1,
-                            KSpreadUndoInsertRemoveAction * undo = 0 );
+                            UndoInsertRemoveAction * undo = 0 );
 
 
     void refreshRemoveAreaName(const QString &_areaName);
@@ -878,29 +874,29 @@ public:
      * The cells we are interested in are in the rectangle '_range'.
      * The cells are stored row after row in '_list'.
      */
-    bool getCellRectangle( const QRect &_range, QPtrList<KSpread::Cell> &_list );
+    bool getCellRectangle( const QRect &_range, QPtrList<Cell> &_list );
 
     /**
      * A convenience function that finds a sheet by its name.
      */
-    KSpreadSheet *findSheet( const QString & _name );
+    Sheet *findSheet( const QString & _name );
 
     /**
      * Inserts the @p _cell into the sheet.
      * All cells depending on this cell will be actualized.
      * The border range will be actualized, when the cell is out of current range.
      */
-    void insertCell( KSpread::Cell *_cell );
+    void insertCell( Cell *_cell );
     /**
      * Used by Undo.
      *
-     * @see KSpreadUndoDeleteColumn
+     * @see UndoDeleteColumn
      */
     void insertColumnFormat( ColumnFormat *_l );
     /**
      * Used by Undo.
      *
-     * @see KSpreadUndoDeleteRow
+     * @see UndoDeleteRow
      */
     void insertRowFormat( RowFormat *_l );
 
@@ -953,12 +949,12 @@ public:
      * Return true if there are text value in cell
      * so you can create list selection
      */
-    bool testListChoose(KSpreadSelection* selectionInfo);
+    bool testListChoose(Selection* selectionInfo);
 
     /**
      * returns the text to be copied to the clipboard
      */
-    QString copyAsText(KSpreadSelection* selection);
+    QString copyAsText(Selection* selection);
 
     /**
      * Assume that the retangle 'src' was already selected. Then the user clicked on the
@@ -976,7 +972,7 @@ public:
      *
      * @ref #insertChild
      */
-    void deleteChild( KSpreadChild *_child );
+    void deleteChild( Child *_child );
     /**
      * @ref #deleteChild
      */
@@ -985,7 +981,7 @@ public:
      * A convenience function around @ref #insertChild.
      */
     void insertChart( const QRect& _geometry, KoDocumentEntry&, const QRect& _data );
-    void changeChildGeometry( KSpreadChild *_child, const QRect& _geometry );
+    void changeChildGeometry( Child *_child, const QRect& _geometry );
 
     const QColorGroup& colorGroup() { return widget()->colorGroup(); }
 
@@ -1026,7 +1022,7 @@ public:
 
     virtual DCOPObject* dcopObject();
 
-    static KSpreadSheet* find( int _id );
+    static Sheet* find( int _id );
 
 #ifndef NDEBUG
     void printDebug();
@@ -1035,9 +1031,9 @@ public:
     /**
      * Calculates the cell if necessary, makes its layout if necessary,
      * and force redraw.
-     * Then it sets the cell's @ref KSpread::Cell::m_bDisplayDirtyFlag to false.
+     * Then it sets the cell's @ref Cell::m_bDisplayDirtyFlag to false.
      */
-    void updateCell( KSpread::Cell* _cell, int _col, int _row );
+    void updateCell( Cell* _cell, int _col, int _row );
 
     /**
      * Like updateCell except it works on a range of cells.  Use this function
@@ -1070,7 +1066,7 @@ public:
     void emit_updateColumn( ColumnFormat *_format, int _column );
 
     /**
-     * Needed for @ref KSpread::Cell::leftBorderPen and friends, since we can not
+     * Needed for @ref Cell::leftBorderPen and friends, since we can not
      * have a static pen object.
      *
      * The returned pen has pen style NoPen set.
@@ -1108,7 +1104,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpread::Cell* getFirstCellColumn(int col) const;
+  Cell* getFirstCellColumn(int col) const;
 
   /**
    * Retrieve the last used cell in a given column.  Can be used in conjunction
@@ -1119,7 +1115,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this column
    */
-  KSpread::Cell* getLastCellColumn(int col) const;
+  Cell* getLastCellColumn(int col) const;
 
   /**
    * Retrieve the first used cell in a given row.  Can be used in conjunction
@@ -1130,7 +1126,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpread::Cell* getFirstCellRow(int row) const;
+  Cell* getFirstCellRow(int row) const;
 
   /**
    * Retrieve the last used cell in a given row.  Can be used in conjunction
@@ -1141,7 +1137,7 @@ public:
    * @return Returns a pointer to the cell, or NULL if there are no used cells
    *         in this row
    */
-  KSpread::Cell* getLastCellRow(int row) const;
+  Cell* getLastCellRow(int row) const;
 
   /**
    * Retrieves the next used cell above the given col/row pair.  The given
@@ -1152,7 +1148,7 @@ public:
    *
    * @return Returns the next used cell above this one, or NULL if there are none
    */
-  KSpread::Cell* getNextCellUp(int col, int row) const;
+  Cell* getNextCellUp(int col, int row) const;
 
   /**
    * Retrieves the next used cell below the given col/row pair.  The given
@@ -1163,7 +1159,7 @@ public:
    *
    * @return Returns the next used cell below this one, or NULL if there are none
    */
-  KSpread::Cell* getNextCellDown(int col, int row) const;
+  Cell* getNextCellDown(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the right of the given col/row pair.
@@ -1175,7 +1171,7 @@ public:
    * @return Returns the next used cell to the right of this one, or NULL if
    * there are none
    */
-  KSpread::Cell* getNextCellLeft(int col, int row) const;
+  Cell* getNextCellLeft(int col, int row) const;
 
   /**
    * Retrieves the next used cell to the left of the given col/row pair.
@@ -1187,38 +1183,38 @@ public:
    * @return Returns the next used cell to the left of this one, or NULL if
    * there are none
    */
-  KSpread::Cell* getNextCellRight(int col, int row) const;
+  Cell* getNextCellRight(int col, int row) const;
 
-  KSpreadSheetPrint * print() const;
+  SheetPrint * print() const;
 
   /** returns a pointer to the dependency manager */
   KSpread::DependencyManager *dependencies ();
 
 signals:
     void sig_refreshView();
-    void sig_updateView( KSpreadSheet *_sheet );
-    void sig_updateView( KSpreadSheet *_sheet, const QRect& );
-    void sig_updateHBorder( KSpreadSheet *_sheet );
-    void sig_updateVBorder( KSpreadSheet *_sheet );
-    void sig_updateChildGeometry( KSpreadChild *_child );
-    void sig_removeChild( KSpreadChild *_child );
+    void sig_updateView( Sheet *_sheet );
+    void sig_updateView( Sheet *_sheet, const QRect& );
+    void sig_updateHBorder( Sheet *_sheet );
+    void sig_updateVBorder( Sheet *_sheet );
+    void sig_updateChildGeometry( Child *_child );
+    void sig_removeChild( Child *_child );
     void sig_maxColumn( int _max_column );
     void sig_maxRow( int _max_row );
     /**
      * @see #setSheetName
      */
-    void sig_nameChanged( KSpreadSheet* sheet, const QString& old_name );
+    void sig_nameChanged( Sheet* sheet, const QString& old_name );
     /**
      * Emitted if a certain area of some sheet has to be redrawn.
      * That is for example the case when a new child is inserted.
      */
     void sig_polygonInvalidated( const QPointArray& );
 
-    void sig_SheetHidden( KSpreadSheet* sheet);
-    void sig_SheetShown( KSpreadSheet* sheet);
-    void sig_SheetRemoved( KSpreadSheet* sheet);
-    void sig_SheetActivated( KSpreadSheet* );
-    void sig_RefreshView( KSpreadSheet* );
+    void sig_SheetHidden( Sheet* sheet);
+    void sig_SheetShown( Sheet* sheet);
+    void sig_SheetRemoved( Sheet* sheet);
+    void sig_SheetActivated( Sheet* );
+    void sig_RefreshView( Sheet* );
 
 protected slots:
   /** react on modification (add/remove) of a named area */
@@ -1238,8 +1234,8 @@ protected:
     void loadOasisMasterLayoutPage( KoStyleStack &styleStack );
 
     QString saveOasisSheetStyleName( KoGenStyles &mainStyles );
-    void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows, KSpreadGenValidationStyles &valStyle );
-    void saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, KSpreadGenValidationStyles &valStyle );
+    void saveOasisColRowCell( KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int maxCols, int maxRows, GenValidationStyles &valStyle );
+    void saveOasisCells(  KoXmlWriter& xmlWriter, KoGenStyles &mainStyles, int row, int maxCols, GenValidationStyles &valStyle );
     void convertPart( const QString & part, KoXmlWriter & writer ) const;
     void addText( const QString & text, KoXmlWriter & writer ) const;
 
@@ -1250,15 +1246,15 @@ protected:
     QString getPart( const QDomNode & part );
     void replaceMacro( QString & text, const QString & old, const QString & newS );
 
-    void insertChild( KSpreadChild *_child );
+    void insertChild( Child *_child );
 
     /**
      * @see #autofill
      */
-    void fillSequence( QPtrList<KSpread::Cell>& _srcList, QPtrList<KSpread::Cell>& _destList, QPtrList<AutoFillSequence>& _seqList, bool down = true );
+    void fillSequence( QPtrList<Cell>& _srcList, QPtrList<Cell>& _destList, QPtrList<AutoFillSequence>& _seqList, bool down = true );
 
     static int s_id;
-    static QIntDict<KSpreadSheet>* s_mapSheets;
+    static QIntDict<Sheet>* s_mapSheets;
 
 public:
     // see kspread_sheet.cc for an explanation of this
@@ -1271,7 +1267,7 @@ public:
   CellWorker( bool cid=true, bool es=true, bool tb=true ) : create_if_default( cid ), emit_signal( es ), type_B( tb ) { }
   virtual ~CellWorker() { }
 
-  virtual class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r ) =0;
+  virtual class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) =0;
 
   // these are only needed for type A
   virtual bool testCondition( RowFormat* ) { return false; }
@@ -1288,12 +1284,12 @@ public:
     struct CellWorkerTypeA : public CellWorker {
   CellWorkerTypeA( ) : CellWorker( true, true, false ) { }
   virtual QString getUndoTitle( ) =0;
-  class KSpreadUndoAction* createUndoAction( KSpreadDoc* doc, KSpreadSheet* sheet, QRect& r );
+  class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r );
     };
     static QString translateOpenCalcPoint( const QString & str );
 protected:
     typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
-    SelectionType workOnCells( KSpreadSelection* selectionInfo,
+    SelectionType workOnCells( Selection* selectionInfo,
                                CellWorker& worker );
 
 private:
@@ -1314,11 +1310,10 @@ private:
     SheetPrivate* d;
 
     // don't allow copy or assignment
-    KSpreadSheet( const KSpreadSheet& );
-    KSpreadSheet& operator=( const KSpreadSheet& );
+    Sheet( const Sheet& );
+    Sheet& operator=( const Sheet& );
 };
 
-// for compatibility only, remove in the future
-typedef KSpreadSheet KSpreadSheet;
+} // namespace KSpread
 
 #endif  // KSPREAD_SHEET

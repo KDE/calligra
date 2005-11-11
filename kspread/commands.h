@@ -26,15 +26,13 @@
 
 #include <kcommand.h>
 
-#include "kspread_sheet.h" // for KSpreadSheet::LayoutDirection
-
-class KSpreadDoc;
-class KSpreadUndoAction;
+#include "kspread_sheet.h" // for Sheet::LayoutDirection
 
 namespace KSpread
 {
-  class Cell;
-}
+class Cell;
+class Doc;
+class UndoAction;
 
 /** \page commands Commands
 
@@ -46,8 +44,8 @@ action. You need to reimplement the execute() and unexecute() methods
 of KCommand.
 
 Each command is created from the user interface, and then added
-to the command history (see KSpreadDoc::commandHistory) using
-KSpreadDoc::addCommand method. Because the command is not immediately
+to the command history (see Doc::commandHistory) using
+Doc::addCommand method. Because the command is not immediately
 executed, you also need to call the execute() method of that command.
 This is an example of typical use of command:
 
@@ -71,27 +69,27 @@ Alphabetical list of commands:
 \li RenameSheetCommand
 
 
-\sa KSpreadDoc::addCommand
+\sa Doc::addCommand
 \sa KoCommandHistory
 
 */
 
 /**
  * Class UndoWrapperCommand is used to help migration from custom
- * KSpreadUndoAction to KCommand-based system.
- * See KSpreadDoc::addCommand for more information.
+ * UndoAction to KCommand-based system.
+ * See Doc::addCommand for more information.
  */
 class UndoWrapperCommand : public KCommand
 {
 public:
-  UndoWrapperCommand( KSpreadUndoAction* undoAction );
+  UndoWrapperCommand( UndoAction* undoAction );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  KSpreadUndoAction* undoAction;
+  UndoAction* undoAction;
 };
 
 
@@ -102,14 +100,14 @@ protected:
 class MergeCellCommand : public KCommand
 {
 public:
-  MergeCellCommand( KSpread::Cell* cell, int colSpan, int rowSpan );
+  MergeCellCommand( Cell* cell, int colSpan, int rowSpan );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  KSpread::Cell* cell;
+  Cell* cell;
   int colSpan;
   int rowSpan;
   int oldColSpan;
@@ -124,14 +122,14 @@ protected:
 class DissociateCellCommand : public KCommand
 {
 public:
-  DissociateCellCommand( KSpread::Cell* cell );
+  DissociateCellCommand( Cell* cell );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  KSpread::Cell* cell;
+  Cell* cell;
   int oldColSpan;
   int oldRowSpan;
 };
@@ -140,20 +138,20 @@ protected:
 /**
  * Class RenameSheetCommand implements a command for renaming a sheet.
  *
- * \sa KSpreadSheet::setSheetName
+ * \sa Sheet::setSheetName
  */
 
 class RenameSheetCommand : public KCommand
 {
 public:
-  RenameSheetCommand( KSpreadSheet* sheet, const QString &name );
+  RenameSheetCommand( Sheet* sheet, const QString &name );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  KSpreadSheet* sheet;
+  Sheet* sheet;
   QString oldName;
   QString newName;
 };
@@ -161,28 +159,28 @@ protected:
 class HideSheetCommand : public KCommand
 {
 public:
-  HideSheetCommand( KSpreadSheet* sheet );
+  HideSheetCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  KSpreadDoc* doc;
+  Doc* doc;
   QString sheetName;
 };
 
 class ShowSheetCommand : public KCommand
 {
 public:
-  ShowSheetCommand( KSpreadSheet* sheet );
+  ShowSheetCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  KSpreadDoc* doc;
+  Doc* doc;
   QString sheetName;
 };
 
@@ -190,30 +188,30 @@ protected:
 class AddSheetCommand : public KCommand
 {
 public:
-  AddSheetCommand( KSpreadSheet* sheet );
+  AddSheetCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-    KSpreadSheet* sheet;
-    KSpreadDoc* doc;
+    Sheet* sheet;
+    Doc* doc;
 };
 
 
 class RemoveSheetCommand : public KCommand
 {
 public:
-  RemoveSheetCommand( KSpreadSheet* sheet );
+  RemoveSheetCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-    KSpreadSheet* sheet;
-    KSpreadDoc* doc;
+    Sheet* sheet;
+    Doc* doc;
 };
 
 
@@ -224,8 +222,8 @@ protected:
 class SheetPropertiesCommand : public KCommand
 {
 public:
-  SheetPropertiesCommand( KSpreadDoc* doc, KSpreadSheet* sheet );
-  void setLayoutDirection( KSpreadSheet::LayoutDirection direction );
+  SheetPropertiesCommand( Doc* doc, Sheet* sheet );
+  void setLayoutDirection( Sheet::LayoutDirection direction );
   void setAutoCalc( bool b );
   void setShowGrid( bool b );
   void setShowPageBorders( bool b );
@@ -241,9 +239,9 @@ public:
   virtual QString name() const;
 
 protected:
-  KSpreadSheet* sheet;
-  KSpreadDoc* doc;
-  KSpreadSheet::LayoutDirection oldDirection, newDirection;
+  Sheet* sheet;
+  Doc* doc;
+  Sheet::LayoutDirection oldDirection, newDirection;
   bool oldAutoCalc, newAutoCalc;
   bool oldShowGrid, newShowGrid;
   bool oldShowPageBorders, newShowPageBorders;
@@ -259,14 +257,14 @@ protected:
 class InsertColumnCommand : public KCommand
 {
 public:
-  InsertColumnCommand( KSpreadSheet* s , unsigned int _column, unsigned int _nbCol );
+  InsertColumnCommand( Sheet* s , unsigned int _column, unsigned int _nbCol );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-    KSpreadDoc* doc;
+    Doc* doc;
     QString sheetName;
     unsigned int insertPosColumn;
     unsigned int nbColumnInserted;
@@ -277,14 +275,14 @@ protected:
 class DefinePrintRangeCommand : public KCommand
 {
 public:
-  DefinePrintRangeCommand( KSpreadSheet* sheet );
+  DefinePrintRangeCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-    KSpreadDoc* doc;
+    Doc* doc;
     QString sheetName;
     QRect printRangeRedo, printRange;
 };
@@ -293,14 +291,14 @@ protected:
 class PaperLayoutCommand : public KCommand
 {
 public:
-  PaperLayoutCommand( KSpreadSheet* sheet );
+  PaperLayoutCommand( Sheet* sheet );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-    KSpreadDoc* doc;
+    Doc* doc;
     QString sheetName;
     KoPageLayout pl;
     KoPageLayout plRedo;
@@ -332,20 +330,21 @@ protected:
 class LinkCommand : public KCommand
 {
 public:
-  LinkCommand( KSpread::Cell* cell, const QString& text, const QString& link );
+  LinkCommand( Cell* cell, const QString& text, const QString& link );
 
   virtual void execute();
   virtual void unexecute();
   virtual QString name() const;
 
 protected:
-  KSpread::Cell* cell;
-  KSpreadDoc* doc;
+  Cell* cell;
+  Doc* doc;
   QString oldText;
   QString oldLink;
   QString newText;
   QString newLink;
 };
 
+} // namespace KSpread
 
 #endif /* KSPREAD_COMMANDS */

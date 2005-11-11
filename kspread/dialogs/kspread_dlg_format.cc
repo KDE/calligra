@@ -46,7 +46,7 @@
 
 using namespace KSpread;
 
-KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
+FormatDialog::FormatDialog( View* view, const char* name )
     : KDialogBase( view, name, TRUE,i18n("Sheet Style"),Ok|Cancel )
 {
     for( int i = 0; i < 16; ++i )
@@ -66,7 +66,7 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     vbox->addWidget( m_label );
 
 
-    QStringList lst = KSpreadFactory::global()->dirs()->findAllResources( "sheet-styles", "*.ksts", TRUE );
+    QStringList lst = Factory::global()->dirs()->findAllResources( "sheet-styles", "*.ksts", TRUE );
 
     QStringList::Iterator it = lst.begin();
     for( ; it != lst.end(); ++it )
@@ -91,17 +91,17 @@ KSpreadFormatDlg::KSpreadFormatDlg( KSpreadView* view, const char* name )
     connect( m_combo, SIGNAL( activated( int ) ), this, SLOT( slotActivated( int ) ) );
 }
 
-KSpreadFormatDlg::~KSpreadFormatDlg()
+FormatDialog::~FormatDialog()
 {
     for( int i = 0; i < 16; ++i )
 	delete m_cells[ i ];
 }
 
-void KSpreadFormatDlg::slotActivated( int index )
+void FormatDialog::slotActivated( int index )
 { 
 	enableButtonOK(true);
 	
-    QString img = KSpreadFactory::global()->dirs()->findResource( "sheet-styles", m_entries[ index ].image );
+    QString img = Factory::global()->dirs()->findResource( "sheet-styles", m_entries[ index ].image );
     if ( img.isEmpty() )
     {
 	QString str( i18n( "Could not find image %1." ) );
@@ -128,12 +128,12 @@ void KSpreadFormatDlg::slotActivated( int index )
     m_label->setPixmap( pix );
 }
 
-void KSpreadFormatDlg::slotOk()
+void FormatDialog::slotOk()
 {
   
     m_view->doc()->emitBeginOperation( false );
 
-    QString xml = KSpreadFactory::global()->dirs()->findResource( "sheet-styles", m_entries[ m_combo->currentItem() ].xml );
+    QString xml = Factory::global()->dirs()->findResource( "sheet-styles", m_entries[ m_combo->currentItem() ].xml );
     if ( xml.isEmpty() )
     {
 	QString str( i18n( "Could not find sheet-style XML file '%1'." ) );
@@ -161,7 +161,7 @@ void KSpreadFormatDlg::slotOk()
     if ( !m_view->doc()->undoLocked() )
     {
         QString title=i18n("Change Format");
-        KSpreadUndoCellFormat *undo = new KSpreadUndoCellFormat( m_view->doc(), m_view->activeSheet(), r ,title);
+        UndoCellFormat *undo = new UndoCellFormat( m_view->doc(), m_view->activeSheet(), r ,title);
         m_view->doc()->addCommand( undo );
     }
     //
@@ -182,7 +182,7 @@ void KSpreadFormatDlg::slotOk()
         {
         cell->copy( *m_cells[ pos ] );
 
-	KSpreadFormat* c;
+	Format* c;
 	if ( x == r.right() )
 	    c = m_cells[2];
 	else
@@ -214,7 +214,7 @@ void KSpreadFormatDlg::slotOk()
         {
         cell->copy( *m_cells[ pos ] );
 
-	KSpreadFormat* c;
+	Format* c;
 	if ( y == r.bottom() )
 	    c = m_cells[8];
 	else
@@ -243,7 +243,7 @@ void KSpreadFormatDlg::slotOk()
             {
             cell->copy( *m_cells[ pos ] );
 
-	    KSpreadFormat* c;
+	    Format* c;
 	    if ( x == r.left() + 1 )
 		c = m_cells[ 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 ];
 	    else
@@ -317,7 +317,7 @@ void KSpreadFormatDlg::slotOk()
     accept();
 }
 
-bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
+bool FormatDialog::parseXML( const QDomDocument& doc )
 {
     for( int i = 0; i < 16; ++i )
     {
@@ -330,8 +330,8 @@ bool KSpreadFormatDlg::parseXML( const QDomDocument& doc )
     {
 	if ( e.tagName() == "cell" )
         {
-	    KSpreadSheet* sheet = m_view->activeSheet();
-	    KSpreadFormat* cell = new KSpreadFormat( sheet, sheet->doc()->styleManager()->defaultStyle() );
+	    Sheet* sheet = m_view->activeSheet();
+	    Format* cell = new Format( sheet, sheet->doc()->styleManager()->defaultStyle() );
 
 	    if ( !cell->load( e.namedItem("format").toElement(), Normal ) )
 		return false;

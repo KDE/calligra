@@ -106,8 +106,8 @@ class CellStyle
   bool        hideFormula;
   bool        notProtected;
 
-  KSpreadFormat::Align  alignX;
-  KSpreadFormat::AlignY alignY;
+  KSpread::Format::Align  alignX;
+  KSpread::Format::AlignY alignY;
 };
 
 class ColumnStyle : public Style

@@ -38,14 +38,16 @@
 
 #include "kspread_condition.h"
 
-KSpreadConditional::KSpreadConditional():
+using namespace KSpread;
+
+KSpread::Conditional::Conditional():
   val1( 0.0 ), val2( 0.0 ), strVal1( 0 ), strVal2( 0 ),
   colorcond( 0 ), fontcond( 0 ), styleName( 0 ),
   style( 0 ), cond( None )
 {
 }
 
-KSpreadConditional::~KSpreadConditional()
+KSpread::Conditional::~Conditional()
 {
   delete strVal1;
   delete strVal2;
@@ -54,12 +56,12 @@ KSpreadConditional::~KSpreadConditional()
   delete styleName;
 }
 
-KSpreadConditional::KSpreadConditional( const KSpreadConditional& c )
+KSpread::Conditional::Conditional( const KSpread::Conditional& c )
 {
   operator=( c );
 }
 
-KSpreadConditional& KSpreadConditional::operator=( const KSpreadConditional& d )
+KSpread::Conditional& KSpread::Conditional::operator=( const KSpread::Conditional& d )
 {
   strVal1 = d.strVal1 ? new QString( *d.strVal1 ) : 0;
   strVal2 = d.strVal2 ? new QString( *d.strVal2 ) : 0;
@@ -74,20 +76,20 @@ KSpreadConditional& KSpreadConditional::operator=( const KSpreadConditional& d )
   return *this;
 }
 
-KSpreadConditions::KSpreadConditions( const KSpread::Cell * ownerCell )
+Conditions::Conditions( const Cell * ownerCell )
   : m_cell( ownerCell ), m_matchedStyle( 0 )
 {
   Q_ASSERT( ownerCell != NULL );
 }
 
-KSpreadConditions::~KSpreadConditions()
+Conditions::~Conditions()
 {
   m_condList.clear();
 }
 
-void KSpreadConditions::checkMatches()
+void Conditions::checkMatches()
 {
-  KSpreadConditional condition;
+  Conditional condition;
 
   if ( currentCondition( condition ) )
     m_matchedStyle = condition.style;
@@ -95,11 +97,11 @@ void KSpreadConditions::checkMatches()
     m_matchedStyle = 0;
 }
 
-bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
+bool Conditions::currentCondition( KSpread::Conditional & condition )
 {
   /* for now, the first condition that is true is the one that will be used */
 
-  QValueList<KSpreadConditional>::const_iterator it;
+  QValueList<KSpread::Conditional>::const_iterator it;
   double value   = m_cell->value().asFloat();
   QString strVal = m_cell->text();
 
@@ -232,33 +234,33 @@ bool KSpreadConditions::currentCondition( KSpreadConditional & condition )
   return false;
 }
 
-QValueList<KSpreadConditional> KSpreadConditions::conditionList() const
+QValueList<KSpread::Conditional> Conditions::conditionList() const
 {
   return m_condList;
 }
 
-void KSpreadConditions::setConditionList( const QValueList<KSpreadConditional> & list )
+void Conditions::setConditionList( const QValueList<KSpread::Conditional> & list )
 {
   m_condList.clear();
 
-  QValueList<KSpreadConditional>::const_iterator it;
+  QValueList<Conditional>::const_iterator it;
   for ( it = list.begin(); it != list.end(); ++it )
   {
-    KSpreadConditional d = *it;
-    m_condList.append( KSpreadConditional( d ) );
+    Conditional d = *it;
+    m_condList.append( Conditional( d ) );
   }
 }
 
-void KSpreadConditions::saveOasisConditions( KoGenStyle &currentCellStyle )
+void Conditions::saveOasisConditions( KoGenStyle &currentCellStyle )
 {
     //todo fix me with kspread old format!!!
     if ( m_condList.isEmpty() )
         return;
-    QValueList<KSpreadConditional>::const_iterator it;
+    QValueList<KSpread::Conditional>::const_iterator it;
     int i = 0;
     for ( it = m_condList.begin(); it != m_condList.end(); ++it, ++i )
     {
-        KSpreadConditional condition = *it;
+        Conditional condition = *it;
         //<style:map style:condition="cell-content()=45" style:apply-style-name="Default" style:base-cell-address="Sheet1.E10"/>
         QMap<QString, QString> map;
         map.insert( "style:condition", saveOasisConditionValue( condition ) );
@@ -268,7 +270,7 @@ void KSpreadConditions::saveOasisConditions( KoGenStyle &currentCellStyle )
     }
 }
 
-QString KSpreadConditions::saveOasisConditionValue( KSpreadConditional &condition)
+QString Conditions::saveOasisConditionValue( KSpread::Conditional &condition)
 {
     //we can also compare text value.
     //todo adapt it.
@@ -358,17 +360,17 @@ QString KSpreadConditions::saveOasisConditionValue( KSpreadConditional &conditio
 }
 
 
-QDomElement KSpreadConditions::saveConditions( QDomDocument & doc ) const
+QDomElement Conditions::saveConditions( QDomDocument & doc ) const
 {
   QDomElement conditions = doc.createElement("condition");
-  QValueList<KSpreadConditional>::const_iterator it;
+  QValueList<Conditional>::const_iterator it;
   QDomElement child;
   int num = 0;
   QString name;
 
   for ( it = m_condList.begin(); it != m_condList.end(); ++it )
   {
-    KSpreadConditional condition = *it;
+    Conditional condition = *it;
 
     /* the name of the element will be "condition<n>"
      * This is unimportant now but in older versions three conditions were
@@ -418,11 +420,11 @@ QDomElement KSpreadConditions::saveConditions( QDomDocument & doc ) const
   }
 }
 
-void KSpreadConditions::loadOasisConditions( const QDomElement & element )
+void Conditions::loadOasisConditions( const QDomElement & element )
 {
-    kdDebug()<<"void KSpreadConditions::loadOasisConditions( const QDomElement & element )\n";
+    kdDebug()<<"void Conditions::loadOasisConditions( const QDomElement & element )\n";
     QDomElement elementItem( element );
-    KSpreadStyleManager * manager = m_cell->sheet()->doc()->styleManager();
+    StyleManager * manager = m_cell->sheet()->doc()->styleManager();
 
     while ( !elementItem.isNull() )
     {
@@ -431,7 +433,7 @@ void KSpreadConditions::loadOasisConditions( const QDomElement & element )
         {
             bool ok = true;
             kdDebug()<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( KoXmlNS::style, "condition", QString::null )<<endl;
-            KSpreadConditional newCondition;
+            Conditional newCondition;
             loadOasisConditionValue( elementItem.attributeNS( KoXmlNS::style, "condition", QString::null ), newCondition );
             if ( elementItem.hasAttributeNS( KoXmlNS::style, "apply-style-name" ) )
             {
@@ -453,7 +455,7 @@ void KSpreadConditions::loadOasisConditions( const QDomElement & element )
     }
 }
 
-void KSpreadConditions::loadOasisConditionValue( const QString &styleCondition, KSpreadConditional &newCondition )
+void Conditions::loadOasisConditionValue( const QString &styleCondition, Conditional &newCondition )
 {
     QString val( styleCondition );
     if ( val.contains( "cell-content()" ) )
@@ -483,7 +485,7 @@ void KSpreadConditions::loadOasisConditionValue( const QString &styleCondition, 
 }
 
 
-void KSpreadConditions::loadOasisCondition( QString &valExpression, KSpreadConditional &newCondition )
+void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCondition )
 {
     QString value;
     if (valExpression.find( "<=" )==0 )
@@ -535,7 +537,7 @@ void KSpreadConditions::loadOasisCondition( QString &valExpression, KSpreadCondi
 }
 
 
-void KSpreadConditions::loadOasisValidationValue( const QStringList &listVal, KSpreadConditional &newCondition )
+void Conditions::loadOasisValidationValue( const QStringList &listVal, Conditional &newCondition )
 {
     bool ok = false;
     kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
@@ -564,12 +566,12 @@ void KSpreadConditions::loadOasisValidationValue( const QStringList &listVal, KS
 }
 
 
-void KSpreadConditions::loadConditions( const QDomElement & element )
+void Conditions::loadConditions( const QDomElement & element )
 {
   QDomNodeList nodeList = element.childNodes();
-  KSpreadConditional newCondition;
+  Conditional newCondition;
   bool ok;
-  KSpreadStyleManager * manager = m_cell->sheet()->doc()->styleManager();
+  StyleManager * manager = m_cell->sheet()->doc()->styleManager();
 
   for ( int i = 0; i < (int)(nodeList.length()); ++i )
   {
@@ -584,7 +586,7 @@ void KSpreadConditions::loadConditions( const QDomElement & element )
     ok = conditionElement.hasAttribute( "cond" );
 
     if ( ok )
-      newCondition.cond = (Conditional) conditionElement.attribute( "cond" ).toInt( &ok );
+      newCondition.cond = (::Conditional) conditionElement.attribute( "cond" ).toInt( &ok );
     else continue;
 
     if ( conditionElement.hasAttribute( "val1" ) )

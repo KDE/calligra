@@ -51,7 +51,7 @@
 
 using namespace KSpread;
 
-KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
+reference::reference( View* parent, const char* name )
   : QDialog( parent, name,TRUE )
 {
   m_pView = parent;
@@ -80,7 +80,7 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
 
   QString text;
   QStringList sheetName;
-  QPtrListIterator<KSpreadSheet> it2 ( m_pView->doc()->map()->sheetList() );
+  QPtrListIterator<Sheet> it2 ( m_pView->doc()->map()->sheetList() );
   for( ; it2.current(); ++it2 )
   {
       sheetName.append( it2.current()->sheetName());
@@ -115,7 +115,7 @@ KSpreadreference::KSpreadreference( KSpreadView* parent, const char* name )
   resize( 250, 200 );
 }
 
-void KSpreadreference::displayAreaValues(QString const & areaName)
+void reference::displayAreaValues(QString const & areaName)
 {
   QString tmpName;
   QValueList<Reference>::Iterator it;
@@ -138,18 +138,18 @@ void KSpreadreference::displayAreaValues(QString const & areaName)
   m_rangeName->setText(tmpName);
 }
 
-void KSpreadreference::slotHighlighted(QListBoxItem * )
+void reference::slotHighlighted(QListBoxItem * )
 {
   QString tmp = m_list->text(m_list->currentItem());
   displayAreaValues(tmp);
 }
 
-void KSpreadreference::slotDoubleClicked(QListBoxItem *)
+void reference::slotDoubleClicked(QListBoxItem *)
 {
   slotOk();
 }
 
-void KSpreadreference::slotRemove()
+void reference::slotRemove()
 {
   if (m_list->currentItem() == -1)
     return;
@@ -180,7 +180,7 @@ void KSpreadreference::slotRemove()
 
     m_list->removeItem(m_list->currentItem());
 
-    KSpreadSheet *tbl;
+    Sheet *tbl;
 
     for ( tbl = m_pView->doc()->map()->firstSheet(); tbl != 0L; tbl = m_pView->doc()->map()->nextSheet() )
     {
@@ -198,12 +198,12 @@ void KSpreadreference::slotRemove()
   }
 }
 
-void KSpreadreference::slotEdit()
+void reference::slotEdit()
 {
   QString name(m_list->text(m_list->currentItem()));
   if ( name.isEmpty() )
     return;
-  KSpreadEditAreaName editDlg( m_pView, "EditArea", name );
+  EditAreaName editDlg( m_pView, "EditArea", name );
   editDlg.exec();
 
   m_rangeName->setText(i18n("Area: %1").arg(""));
@@ -212,7 +212,7 @@ void KSpreadreference::slotEdit()
     displayAreaValues( tmp );
 }
 
-void KSpreadreference::slotOk()
+void reference::slotOk()
 {
   m_pView->doc()->emitBeginOperation( false );
 
@@ -225,13 +225,13 @@ void KSpreadreference::slotOk()
 
     if (m_pView->activeSheet()->sheetName() != area[ index ].sheet_name)
     {
-      KSpreadSheet *sheet = m_pView->doc()->map()->findSheet(area[ index ].sheet_name);
+      Sheet *sheet = m_pView->doc()->map()->findSheet(area[ index ].sheet_name);
       if (sheet)
         m_pView->setActiveSheet(sheet);
     }
 
     m_pView->canvasWidget()->
-	gotoLocation(KSpreadPoint(Cell::fullName(m_pView->activeSheet(),
+	gotoLocation(Point(Cell::fullName(m_pView->activeSheet(),
         area[ index ].rect.left(), area[ index ].rect.top() ),
 				  m_pView->doc()->map() ) );
     m_pView->selectionInfo()->setSelection(area[ index ].rect.topLeft(),
@@ -243,14 +243,14 @@ void KSpreadreference::slotOk()
   accept();
 }
 
-void KSpreadreference::slotCancel()
+void reference::slotCancel()
 {
   reject();
 }
 
 
 
-KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
+EditAreaName::EditAreaName( View * parent,
                                           const char * name,
                                           QString const & areaname )
     : KDialogBase( parent, name ,true,i18n( "Edit Area" ) , Ok|Cancel )
@@ -265,48 +265,48 @@ KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
   QWidget * page = new QWidget( this );
   setMainWidget(page);
 
-  QGridLayout * KSpreadEditAreaNameLayout
-    = new QGridLayout( page, 1, 1, 11, 6, "KSpreadEditAreaNameLayout");
+  QGridLayout * EditAreaNameLayout
+    = new QGridLayout( page, 1, 1, 11, 6, "EditAreaNameLayout");
 
   QHBoxLayout * Layout1 = new QHBoxLayout( 0, 0, 6, "Layout1");
   QSpacerItem * spacer = new QSpacerItem( 0, 0, QSizePolicy::Expanding,
                                           QSizePolicy::Minimum );
   Layout1->addItem( spacer );
 
-  KSpreadEditAreaNameLayout->addMultiCellLayout( Layout1, 3, 3, 0, 1 );
+  EditAreaNameLayout->addMultiCellLayout( Layout1, 3, 3, 0, 1 );
 
   QLabel * TextLabel4 = new QLabel( page, "TextLabel4" );
   TextLabel4->setText( i18n( "Cells:" ) );
 
-  KSpreadEditAreaNameLayout->addWidget( TextLabel4, 2, 0 );
+  EditAreaNameLayout->addWidget( TextLabel4, 2, 0 );
 
   m_area = new QLineEdit( page, "m_area" );
 
-  KSpreadEditAreaNameLayout->addWidget( m_area, 2, 1 );
+  EditAreaNameLayout->addWidget( m_area, 2, 1 );
 
   QLabel * TextLabel1 = new QLabel( page, "TextLabel1" );
   TextLabel1->setText( i18n( "Sheet:" ) );
 
-  KSpreadEditAreaNameLayout->addWidget( TextLabel1, 1, 0 );
+  EditAreaNameLayout->addWidget( TextLabel1, 1, 0 );
 
   m_sheets = new QComboBox( FALSE, page, "m_sheets" );
 
-  KSpreadEditAreaNameLayout->addWidget( m_sheets, 1, 1 );
+  EditAreaNameLayout->addWidget( m_sheets, 1, 1 );
 
   QLabel * TextLabel2 = new QLabel( page, "TextLabel2" );
   TextLabel2->setText( i18n( "Area name:" ) );
 
-  KSpreadEditAreaNameLayout->addWidget( TextLabel2, 0, 0 );
+  EditAreaNameLayout->addWidget( TextLabel2, 0, 0 );
 
   m_areaName = new QLabel( page, "m_areaName" );
   m_areaName->setText( areaname );
 
-  KSpreadEditAreaNameLayout->addWidget( m_areaName, 0, 1 );
+  EditAreaNameLayout->addWidget( m_areaName, 0, 1 );
 
-  QPtrList<KSpreadSheet> sheetList = m_pView->doc()->map()->sheetList();
+  QPtrList<Sheet> sheetList = m_pView->doc()->map()->sheetList();
   for (unsigned int c = 0; c < sheetList.count(); ++c)
   {
-    KSpreadSheet * t = sheetList.at(c);
+    Sheet * t = sheetList.at(c);
     if (!t)
       continue;
     m_sheets->insertItem( t->sheetName() );
@@ -333,23 +333,23 @@ KSpreadEditAreaName::KSpreadEditAreaName( KSpreadView * parent,
 
 }
 
-KSpreadEditAreaName::~KSpreadEditAreaName()
+EditAreaName::~EditAreaName()
 {
 }
 
-void KSpreadEditAreaName::slotOk()
+void EditAreaName::slotOk()
 {
-  KSpreadRange range( m_area->text() );
+  Range range( m_area->text() );
 
   if ( !range.isValid() )
   {
-    KSpreadPoint point( m_area->text() );
+    Point point( m_area->text() );
     if ( !point.isValid() )
       return;
 
     m_area->setText( m_area->text() + ":" + m_area->text() );
 
-    range = KSpreadRange( m_area->text() );
+    range = Range( m_area->text() );
   }
 
   m_pView->doc()->emitBeginOperation( false );
@@ -357,7 +357,7 @@ void KSpreadEditAreaName::slotOk()
   m_pView->doc()->removeArea( m_areaName->text() );
   m_pView->doc()->addAreaName(range.range, m_areaName->text(), m_sheets->currentText() );
 
-  KSpreadSheet *sheet;
+  Sheet *sheet;
 
   for ( sheet = m_pView->doc()->map()->firstSheet(); sheet != 0L;
         sheet = m_pView->doc()->map()->nextSheet() )

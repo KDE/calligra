@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>,
-   2003 Philipp Müller <philipp.mueller@gmx.de>
+   2003 Philipp Mller <philipp.mueller@gmx.de>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,23 +21,27 @@
 #ifndef __kspread_sheetprint_h__
 #define __kspread_sheetprint_h__
 
-class KSpreadDoc;
-class KSpreadSelection;
-class KSpreadPrintNewPageEntry;
+#include <qobject.h>
+
+#include <koffice_export.h>
+#include <koUnit.h>
+
 class KoGenStyles;
 
-#include <qobject.h>
-#include <koUnit.h>
-#include <koffice_export.h>
+namespace KSpread
+{
+class Doc;
+class Selection;
+class PrintNewPageEntry;
 
-class KSPREAD_EXPORT KSpreadSheetPrint : public QObject
+class KSPREAD_EXPORT SheetPrint : public QObject
 {
     Q_OBJECT
 
 public:
 
-    KSpreadSheetPrint( KSpreadSheet *sheet );
-    ~KSpreadSheetPrint();
+    SheetPrint( Sheet *sheet );
+    ~SheetPrint();
 
     QString saveOasisSheetStyleLayout( KoGenStyles &mainStyles );
 
@@ -147,7 +151,7 @@ public:
     KoPageLayout paperLayout() const;
 
      /**
-     * Changes the paper layout and repaints the currently displayed KSpreadSheet.
+     * Changes the paper layout and repaints the currently displayed Sheet.
      */
     void setPaperLayout( float _leftBorder, float _topBorder, float _rightBorder, float _bottomBoder,
                          KoFormat _paper, KoOrientation orientation );
@@ -352,7 +356,7 @@ public:
     /**
      * Define the print range with the current selection
      */
-    void definePrintRange(KSpreadSelection* selectionInfo);
+    void definePrintRange(Selection* selectionInfo);
     /**
      * Reset the print range to the standard definition (whole sheet)
      */
@@ -393,12 +397,12 @@ public:
     bool pageNeedsPrinting( QRect& page_range );
 
 signals:
-    void sig_updateView( KSpreadSheet *_sheet );
+    void sig_updateView( Sheet *_sheet );
 
 private:
 
-    KSpreadSheet * m_pSheet;
-    KSpreadDoc * m_pDoc;
+    Sheet * m_pSheet;
+    Doc * m_pDoc;
 
     /**
      * Prints the page specified by 'page_range'.
@@ -438,19 +442,19 @@ private:
     /**
      * Returns the iterator for the column in the newPage list for columns
      */
-    QValueList<KSpreadPrintNewPageEntry>::iterator findNewPageColumn( int col );
+    QValueList<PrintNewPageEntry>::iterator findNewPageColumn( int col );
 
     /**
      * Returns the iterator for the row in the newPage list for rows
      */
-    QValueList<KSpreadPrintNewPageEntry>::iterator findNewPageRow( int row );
+    QValueList<PrintNewPageEntry>::iterator findNewPageRow( int row );
 
     /**
      * Replaces macros like <name>, <file>, <date> etc. in the string and
      * returns the modified one.
      *
      * @param _page is the page number for which the heading is produced.
-     * @param _KSpreadSheet is the name of the KSpreadSheet for which we generate the headings.
+     * @param _Sheet is the name of the Sheet for which we generate the headings.
      */
     QString completeHeading( const QString &_data, int _page, const QString &_sheet ) const ;
 
@@ -583,12 +587,12 @@ private:
     /**
      * Stores the new page columns
      */
-     QValueList<KSpreadPrintNewPageEntry> m_lnewPageListX;
+     QValueList<PrintNewPageEntry> m_lnewPageListX;
 
     /**
      * Stores the new page columns
      */
-     QValueList<KSpreadPrintNewPageEntry> m_lnewPageListY;
+     QValueList<PrintNewPageEntry> m_lnewPageListY;
 
     /**
      * Stores internally the maximum column that was checked already
@@ -617,14 +621,14 @@ private:
 };
 
 
-class KSpreadPrintNewPageEntry
+class PrintNewPageEntry
 {
 public:
-    KSpreadPrintNewPageEntry() :
+    PrintNewPageEntry() :
         m_iStartItem( 0 ), m_iEndItem( 0 ), m_dSize( 0 ),
         m_dOffset( 0 ){}
 
-    KSpreadPrintNewPageEntry( int startItem, int endItem = 0, double size = 0,
+    PrintNewPageEntry( int startItem, int endItem = 0, double size = 0,
                               double offset = 0 ) :
         m_iStartItem( startItem ), m_iEndItem( endItem ), m_dSize( size ),
         m_dOffset( offset ) {}
@@ -641,7 +645,7 @@ public:
     double offset() const { return m_dOffset; }
     void setOffset( double offset ) { m_dOffset = offset; }
 
-    bool operator==( KSpreadPrintNewPageEntry const & entry ) const;
+    bool operator==( PrintNewPageEntry const & entry ) const;
 
 
 private:
@@ -650,6 +654,8 @@ private:
     double m_dSize;
     double m_dOffset;
 };
+
+} // namespace KSpread
 
 #endif
 

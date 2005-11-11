@@ -87,12 +87,12 @@ using namespace KSpread;
  * A pointer to the decimal separator
  */
 
-namespace KSpreadCell_LNS
+namespace Cell_LNS
 {
   QChar decimal_point = '\0';
 }
 
-using namespace KSpreadCell_LNS;
+using namespace Cell_LNS;
 
 
 // Some variables are placed in CellExtra because normally they're not required
@@ -136,8 +136,8 @@ public:
   QValueList<Cell*> obscuringCells;
 
   // If non-NULL, contains a pointer to a condition or a validity test.
-  KSpreadConditions  *conditions;
-  KSpreadValidity    *validity;
+  Conditions  *conditions;
+  Validity    *validity;
 
   // Store the number of line when you multirow is used (default is 0)
   int nbLines;
@@ -165,7 +165,7 @@ public:
   int  column;
 
   // Value of the cell, either typed by user or as result of formula
-  KSpreadValue value;
+  Value value;
 
   // Holds the user's input.
   //
@@ -227,7 +227,7 @@ Cell::Private::Private()
   // Some basic data.
   row     = 0;
   column  = 0;
-  value   = KSpreadValue::empty();
+  value   = Value::empty();
   formula = 0;
 
   // Formatting
@@ -280,8 +280,8 @@ CellExtra* Cell::Private::extra()
  *****************************************************************************/
 
 
-Cell::Cell( KSpreadSheet * _sheet, int _column, int _row )
-  : KSpreadFormat (_sheet, _sheet->doc()->styleManager()->defaultStyle())
+Cell::Cell( Sheet * _sheet, int _column, int _row )
+  : Format (_sheet, _sheet->doc()->styleManager()->defaultStyle())
 {
   d = new Cell::Private;
   d->row = _row;
@@ -290,9 +290,9 @@ Cell::Cell( KSpreadSheet * _sheet, int _column, int _row )
 }
 
 
-Cell::Cell( KSpreadSheet * _sheet,
-    KSpreadStyle * _style,  int _column, int _row )
-  : KSpreadFormat( _sheet, _style )
+Cell::Cell( Sheet * _sheet,
+    Style * _style,  int _column, int _row )
+  : Format( _sheet, _style )
 {
   d = new Cell::Private;
   d->row = _row;
@@ -301,7 +301,7 @@ Cell::Cell( KSpreadSheet * _sheet,
 }
 
 // Return the sheet that this cell belongs to.
-KSpreadSheet * Cell::sheet() const
+Sheet * Cell::sheet() const
 {
   return m_pSheet;
 }
@@ -373,7 +373,7 @@ QString Cell::fullName() const
 
 // Return the full name of any cell given a sheet and (col, row).
 //
-QString Cell::fullName( const KSpreadSheet* s, int col, int row )
+QString Cell::fullName( const Sheet* s, int col, int row )
 {
   return s->sheetName() + "!" + name( col, row );
 }
@@ -450,7 +450,7 @@ Formula *Cell::formula () const
 
 // Return the value of this cell.
 //
-const KSpreadValue Cell::value() const
+const Value Cell::value() const
 {
   return d->value;
 }
@@ -462,9 +462,9 @@ const KSpreadValue Cell::value() const
 // In addition to this, it calculates the outstring and sets the dirty
 // flags so that a redraw is forced.
 //
-void Cell::setValue( const KSpreadValue& v )
+void Cell::setValue( const Value& v )
 {
-  if (v.type() != KSpreadValue::Error)
+  if (v.type() != Value::Error)
     clearAllErrors();
 
   d->value = v;
@@ -476,7 +476,7 @@ void Cell::setValue( const KSpreadValue& v )
   setOutputText();
 
   // Set the displayed text, if we hold an error value.
-  if (d->value.type() == KSpreadValue::Error)
+  if (d->value.type() == Value::Error)
     d->strOutText = d->value.errorMessage ();
 
   // Value of the cell has changed - trigger necessary actions
@@ -488,34 +488,34 @@ void Cell::setValue( const KSpreadValue& v )
 // FIXME: Continue commenting and cleaning here (ingwa)
 
 
-Cell* KSpread::Cell::previousCell() const
+Cell* Cell::previousCell() const
 {
     return d->previousCell;
 }
 
-Cell* KSpread::Cell::nextCell() const
+Cell* Cell::nextCell() const
 {
     return d->nextCell;
 }
 
-void Cell::setPreviousCell( KSpread::Cell* c )
+void Cell::setPreviousCell( Cell* c )
 {
     d->previousCell = c;
 }
 
-void Cell::setNextCell( KSpread::Cell* c )
+void Cell::setNextCell( Cell* c )
 {
     d->nextCell = c;
 }
 
-KSpreadValidity* Cell::getValidity( int newStruct  )
+Validity* Cell::getValidity( int newStruct  )
 {
     if ( (!newStruct) && (!d->hasExtra()))
       //we don't have validity struct and we don't want one
       return 0;
 
     if( ( d->extra()->validity == 0 ) && ( newStruct == -1 ) )
-        d->extra()->validity = new KSpreadValidity;
+        d->extra()->validity = new Validity;
     return  d->extra()->validity;
 }
 
@@ -529,7 +529,7 @@ void Cell::removeValidity()
 }
 
 
-void Cell::copyFormat( KSpread::Cell * _cell )
+void Cell::copyFormat( Cell * _cell )
 {
     copyFormat( _cell->column(), _cell->row() );
 }
@@ -566,9 +566,9 @@ void Cell::copyFormat( int _column, int _row )
     setFormatType( cell->getFormatType(_column, _row) );
     Currency c;
     if ( cell->currencyInfo( c ) )
-      KSpreadFormat::setCurrency( c );
+      Format::setCurrency( c );
 
-    QValueList<KSpreadConditional> conditionList = cell->conditionList();
+    QValueList<Conditional> conditionList = cell->conditionList();
     if (d->hasExtra())
       delete d->extra()->conditions;
     if ( cell->d->hasExtra() && cell->d->extra()->conditions )
@@ -580,14 +580,14 @@ void Cell::copyFormat( int _column, int _row )
     setComment( cell->comment( _column, _row ) );
 }
 
-void Cell::copyAll( KSpread::Cell *cell )
+void Cell::copyAll( Cell *cell )
 {
     Q_ASSERT( !isDefault() ); // trouble ahead...
     copyFormat( cell );
     copyContent( cell );
 }
 
-void Cell::copyContent( KSpread::Cell* cell )
+void Cell::copyContent( Cell* cell )
 {
     Q_ASSERT( !isDefault() ); // trouble ahead...
 
@@ -626,12 +626,12 @@ void Cell::formatChanged()
   setFlag( Flag_TextFormatDirty );
 }
 
-KSpreadFormat * Cell::fallbackFormat( int, int row )
+KSpread::Format * Cell::fallbackFormat( int, int row )
 {
   return sheet()->rowFormat( row );
 }
 
-const KSpreadFormat * Cell::fallbackFormat( int, int row ) const
+const KSpread::Format * Cell::fallbackFormat( int, int row ) const
 {
   return sheet()->rowFormat( row );
 }
@@ -835,7 +835,7 @@ bool Cell::isObscuringForced() const
 // cell is prepended and if just expanding, then it is appended.  This
 // means that we should be able to just look at the first one.
 
-Cell *KSpread::Cell::ultimateObscuringCell() const
+Cell *Cell::ultimateObscuringCell() const
 {
   if (!d->hasExtra())
     return (Cell *) this;
@@ -868,7 +868,7 @@ Cell *KSpread::Cell::ultimateObscuringCell() const
 }
 
 
-QValueList<Cell*> KSpread::Cell::obscuringCells() const
+QValueList<Cell*> Cell::obscuringCells() const
 {
   if (!d->hasExtra())
   {
@@ -885,7 +885,7 @@ void Cell::clearObscuringCells()
   d->extra()->obscuringCells.clear();
 }
 
-void Cell::obscure( KSpread::Cell *cell, bool isForcing )
+void Cell::obscure( Cell *cell, bool isForcing )
 {
   if (d->hasExtra())
   {
@@ -904,7 +904,7 @@ void Cell::obscure( KSpread::Cell *cell, bool isForcing )
   m_pSheet->setRegionPaintDirty( cellRect() );
 }
 
-void Cell::unobscure( KSpread::Cell * cell )
+void Cell::unobscure( Cell * cell )
 {
   if (d->hasExtra())
     d->extra()->obscuringCells.remove( cell );
@@ -912,7 +912,7 @@ void Cell::unobscure( KSpread::Cell * cell )
   m_pSheet->setRegionPaintDirty( cellRect() );
 }
 
-void Cell::clicked( KSpreadCanvas* )
+void Cell::clicked( Canvas* )
 {
     return;
 }
@@ -1578,29 +1578,29 @@ void Cell::offsetAlign( int _col, int _row )
        && d->extra()->conditions
        && d->extra()->conditions->matchedStyle() )
   {
-    KSpreadStyle  *style = d->extra()->conditions->matchedStyle();
+    Style  *style = d->extra()->conditions->matchedStyle();
 
-    if ( style->hasFeature( KSpreadStyle::SAlignX, true ) )
+    if ( style->hasFeature( Style::SAlignX, true ) )
       a = style->alignX();
     else
       a = align( _col, _row );
 
-    if ( style->hasFeature( KSpreadStyle::SVerticalText, true ) )
-      tmpVerticalText = style->hasProperty( KSpreadStyle::PVerticalText );
+    if ( style->hasFeature( Style::SVerticalText, true ) )
+      tmpVerticalText = style->hasProperty( Style::PVerticalText );
     else
       tmpVerticalText = verticalText( _col, _row );
 
-    if ( style->hasFeature( KSpreadStyle::SMultiRow, true ) )
-      tmpMultiRow = style->hasProperty( KSpreadStyle::PMultiRow );
+    if ( style->hasFeature( Style::SMultiRow, true ) )
+      tmpMultiRow = style->hasProperty( Style::PMultiRow );
     else
       tmpMultiRow = multiRow( _col, _row );
 
-    if ( style->hasFeature( KSpreadStyle::SAlignY, true ) )
+    if ( style->hasFeature( Style::SAlignY, true ) )
       ay = style->alignY();
     else
       ay = alignY( _col, _row );
 
-    if ( style->hasFeature( KSpreadStyle::SAngle, true ) )
+    if ( style->hasFeature( Style::SAngle, true ) )
       tmpAngle = style->rotateAngle();
     else
       tmpAngle = getAngle( _col, _row );
@@ -1779,27 +1779,27 @@ void Cell::textSize( QPainter &_paint )
        && d->extra()->conditions
        && d->extra()->conditions->matchedStyle() )
   {
-    KSpreadStyle  *style = d->extra()->conditions->matchedStyle();
+    Style  *style = d->extra()->conditions->matchedStyle();
 
-    if ( style->hasFeature( KSpreadStyle::SAngle, true ) )
+    if ( style->hasFeature( Style::SAngle, true ) )
       tmpAngle = style->rotateAngle();
     else
       tmpAngle = getAngle( _col, _row );
 
-    if ( style->hasFeature( KSpreadStyle::SVerticalText, true ) )
-      tmpVerticalText = style->hasProperty( KSpreadStyle::PVerticalText );
+    if ( style->hasFeature( Style::SVerticalText, true ) )
+      tmpVerticalText = style->hasProperty( Style::PVerticalText );
     else
       tmpVerticalText = verticalText( _col, _row );
 
-    if ( style->hasFeature( KSpreadStyle::SAlignY, true ) )
+    if ( style->hasFeature( Style::SAlignY, true ) )
       ay = style->alignY();
     else
       ay = alignY( _col, _row );
 
-    if ( style->hasFeature( KSpreadStyle::SFontFlag, true ) )
+    if ( style->hasFeature( Style::SFontFlag, true ) )
       fontUnderlined = ( style->fontFlags()
        // FIXME: Should be & (uint)...?
-       && (uint) KSpreadStyle::FUnderline );
+       && (uint) Style::FUnderline );
     else
       fontUnderlined = textFontUnderline( _col, _row );
   }
@@ -1868,24 +1868,24 @@ void Cell::applyZoomedFont( QPainter &painter, int _col, int _row )
        && d->extra()->conditions
        && d->extra()->conditions->matchedStyle() ) {
 
-    KSpreadStyle * s = d->extra()->conditions->matchedStyle();
+    Style * s = d->extra()->conditions->matchedStyle();
 
     // Other size?
-    if ( s->hasFeature( KSpreadStyle::SFontSize, true ) )
+    if ( s->hasFeature( Style::SFontSize, true ) )
       tmpFont.setPointSizeFloat( s->fontSize() );
 
     // Other attributes?
-    if ( s->hasFeature( KSpreadStyle::SFontFlag, true ) ) {
+    if ( s->hasFeature( Style::SFontFlag, true ) ) {
       uint flags = s->fontFlags();
 
-      tmpFont.setBold(      flags & (uint) KSpreadStyle::FBold );
-      tmpFont.setUnderline( flags & (uint) KSpreadStyle::FUnderline );
-      tmpFont.setItalic(    flags & (uint) KSpreadStyle::FItalic );
-      tmpFont.setStrikeOut( flags & (uint) KSpreadStyle::FStrike );
+      tmpFont.setBold(      flags & (uint) Style::FBold );
+      tmpFont.setUnderline( flags & (uint) Style::FUnderline );
+      tmpFont.setItalic(    flags & (uint) Style::FItalic );
+      tmpFont.setStrikeOut( flags & (uint) Style::FStrike );
     }
 
     // Other family?
-    if ( s->hasFeature( KSpreadStyle::SFontFamily, true ) )
+    if ( s->hasFeature( Style::SFontFamily, true ) )
       tmpFont.setFamily( s->fontFamily() );
   }
 #if 0
@@ -1914,7 +1914,7 @@ void Cell::applyZoomedFont( QPainter &painter, int _col, int _row )
 }
 
 
-//used in KSpreadSheet::adjustColumnHelper and KSpreadSheet::adjustRow
+//used in Sheet::adjustColumnHelper and Sheet::adjustRow
 void Cell::calculateTextParameters( QPainter &_painter,
              int _col, int _row )
 {
@@ -1951,7 +1951,7 @@ bool Cell::makeFormula()
       KMessageBox::error( (QWidget*)0L, tmp);
     }
     setFlag(Flag_ParseError);
-    KSpreadValue v;
+    Value v;
     v.setError ( "####" );
     setValue (v);
     return false;
@@ -2004,7 +2004,7 @@ bool Cell::calc(bool delay)
   setFlag(Flag_TextFormatDirty);
   clearFlag(Flag_CalcDirty);
 
-  KSpreadValue result = d->formula->eval ();
+  Value result = d->formula->eval ();
   setValue (result);
   if (result.isNumber())
     checkNumberFormat(); // auto-chooses number or scientific
@@ -2030,7 +2030,7 @@ bool Cell::calc(bool delay)
 //
 
 void Cell::paintCell( const KoRect   &rect, QPainter & painter,
-                             KSpreadView    *view,
+                             View    *view,
            const KoPoint  &coordinate,
                              const QPoint   &cellRef,
           /* bool paintBorderRight, bool paintBorderBottom,
@@ -2080,7 +2080,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   Q_ASSERT(isDefault()
      || (((cellRef.x() == d->column) && (cellRef.y() == d->row))));
 
-  KSpreadSheet::LayoutDirection sheetDir =  m_pSheet->layoutDirection();
+  Sheet::LayoutDirection sheetDir =  m_pSheet->layoutDirection();
 
   double left = coordinate.x();
 
@@ -2104,7 +2104,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   // sheet's direction is RTL. We do this only if paintingObscured is 0,
   // otherwise the cell's painting location will flip back and forth in
   // consecutive calls to paintCell when painting obscured cells.
-  if ( sheetDir == KSpreadSheet::RightToLeft && paintingObscured == 0
+  if ( sheetDir == Sheet::RightToLeft && paintingObscured == 0
        && view && view->canvasWidget() )
   {
     double  dwidth = view->doc()->unzoomItX(view->canvasWidget()->width());
@@ -2117,7 +2117,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   if (d->hasExtra()) {
     if (d->extra()->mergedXCells > 0 || d->extra()->mergedYCells > 0) {
       // merged cell extends to the left if sheet is RTL
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
       {
         left -= d->extra()->extraWidth - width;
       }
@@ -2192,7 +2192,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   QColor backgroundColor;
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SBackgroundColor, true ) )
+       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SBackgroundColor, true ) )
     backgroundColor = d->extra()->conditions->matchedStyle()->bgColor();
   else
     backgroundColor = bgColor( cellRef.x(), cellRef.y() );
@@ -2293,7 +2293,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   //    cells, then paint the obscuring cell(s).  Otherwise don't do
   //    anything so that we don't cause an infinite loop.
   if ( isObscured() && paintingObscured == 0 &&
-       !( sheetDir == KSpreadSheet::RightToLeft && painter.device()->isExtDev() ) )
+       !( sheetDir == Sheet::RightToLeft && painter.device()->isExtDev() ) )
   {
 
     //kdDebug(36001) << "painting cells that obscure " << name() << endl;
@@ -2466,7 +2466,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 // Paint all the cells that this cell obscures (helper function to paintCell).
 //
 void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
-                                     KSpreadView* view,
+                                     View* view,
                                      const KoRect &cellRect,
                                      const QPoint &cellRef,
                                      bool paintBorderRight,
@@ -2614,7 +2614,7 @@ void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
   if ( d->hasExtra()
        && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SBackgroundBrush, true ) )
+       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SBackgroundBrush, true ) )
     bb = d->extra()->conditions->matchedStyle()->backGroundBrush();
   else
     bb = backGroundBrush( cellRef.x(), cellRef.y() );
@@ -2637,9 +2637,9 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                                        QPen const & rightPen, QPen const & bottomPen,
                                        QPen const & leftPen, QPen const & topPen )
 {
-  KSpreadDoc* doc = sheet()->doc();
+  Doc* doc = sheet()->doc();
 
-  KSpreadSheet::LayoutDirection sheetDir =  m_pSheet->layoutDirection();
+  Sheet::LayoutDirection sheetDir =  m_pSheet->layoutDirection();
 
   // Each cell is responsible for drawing it's top and left portions
   // of the "default" grid. --Or not drawing it if it shouldn't be
@@ -2670,7 +2670,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
       paintTop  = paintTop && ( cell->row() == cellRef.y() );
       paintBottom = false;
 
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
       {
         paintRight = paintRight && ( cell->column() == cellRef.x() );
         paintLeft = false;
@@ -2705,7 +2705,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.right() ) ),
                           doc->zoomItY( QMAX( rect.top(),    cellRect.y() + dt ) ),
                           doc->zoomItX( QMIN( rect.right(),  cellRect.right() ) ),
@@ -2717,7 +2717,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                           doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() - db ) ) );
     }
     else {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( doc->zoomItX( cellRect.right() ),
                           doc->zoomItY( cellRect.y() + dt ),
                           doc->zoomItX( cellRect.right() ),
@@ -2753,7 +2753,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() )     {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( doc->zoomItX( QMAX( rect.left(),   cellRect.x() ) ),
                           doc->zoomItY( QMAX( rect.top(),    cellRect.y() + dt ) ),
                           doc->zoomItX( QMIN( rect.right(),  cellRect.x() ) ),
@@ -2765,7 +2765,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
                           doc->zoomItY( QMIN( rect.bottom(), cellRect.bottom() - db ) ) );
     }
     else {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( doc->zoomItX( cellRect.x() ),
                           doc->zoomItY( cellRect.y() + dt ),
                           doc->zoomItX( cellRect.x() ),
@@ -2857,7 +2857,7 @@ void Cell::paintCommentIndicator( QPainter& painter,
                                          const QPoint &/*cellRef*/,
                                          QColor &backgroundColor )
 {
-  KSpreadDoc * doc = sheet()->doc();
+  Doc * doc = sheet()->doc();
 
   // Point the little corner if there is a comment attached
   // to this cell.
@@ -2878,7 +2878,7 @@ void Cell::paintCommentIndicator( QPainter& painter,
 
     // Get the triangle.
     QPointArray  point( 3 );
-    if ( m_pSheet->layoutDirection()==KSpreadSheet::RightToLeft ) {
+    if ( m_pSheet->layoutDirection()==Sheet::RightToLeft ) {
       point.setPoint( 0, doc->zoomItX( cellRect.x() + 6.0 ),
                          doc->zoomItY( cellRect.y() ) );
       point.setPoint( 1, doc->zoomItX( cellRect.x() ),
@@ -2915,7 +2915,7 @@ void Cell::paintFormulaIndicator( QPainter& painter,
       cellRect.width()  > 10.0 &&
       cellRect.height() > 10.0 )
   {
-    KSpreadDoc* doc = sheet()->doc();
+    Doc* doc = sheet()->doc();
 
     QColor penColor = Qt::blue;
     // If background has high blue part, switch to red.
@@ -2928,7 +2928,7 @@ void Cell::paintFormulaIndicator( QPainter& painter,
 
     // Get the triangle...
     QPointArray point( 3 );
-    if ( m_pSheet->layoutDirection()==KSpreadSheet::RightToLeft ) {
+    if ( m_pSheet->layoutDirection()==Sheet::RightToLeft ) {
       point.setPoint( 0, doc->zoomItX( cellRect.right() - 6.0 ),
                          doc->zoomItY( cellRect.bottom() ) );
       point.setPoint( 1, doc->zoomItX( cellRect.right() ),
@@ -2966,7 +2966,7 @@ void Cell::paintMoreTextIndicator( QPainter& painter,
       cellRect.height() > 4.0  &&
       cellRect.width()  > 4.0 )
   {
-    KSpreadDoc* doc = sheet()->doc();
+    Doc* doc = sheet()->doc();
 
     QColor penColor = Qt::red;
     // If background has high red part, switch to blue.
@@ -3010,7 +3010,7 @@ void Cell::paintText( QPainter& painter,
                              const KoRect &cellRect,
                              const QPoint &cellRef )
 {
-  KSpreadDoc    *doc = sheet()->doc();
+  Doc    *doc = sheet()->doc();
 
   ColumnFormat  *colFormat         = m_pSheet->columnFormat( cellRef.x() );
 
@@ -3127,13 +3127,13 @@ void Cell::paintText( QPainter& painter,
   if (  a == Cell::Left && !isEmpty() ) {
     // FIXME: The following condition should be remade into a call to
     //        a new convenience function:
-    //   if ( hasConditionStyleFeature( KSpreadStyle::SIndent, true )...
+    //   if ( hasConditionStyleFeature( Style::SIndent, true )...
     //        This should be done throughout the entire file.
     //
     if ( d->hasExtra()
    && d->extra()->conditions
          && d->extra()->conditions->matchedStyle()
-         && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SIndent, true ) )
+         && d->extra()->conditions->matchedStyle()->hasFeature( Style::SIndent, true ) )
       indent = d->extra()->conditions->matchedStyle()->indent();
     else
       indent = getIndent( column(), row() );
@@ -3159,20 +3159,20 @@ void Cell::paintText( QPainter& painter,
        && d->extra()->conditions
        && d->extra()->conditions->matchedStyle() )
   {
-    KSpreadStyle  *matchedStyle = d->extra()->conditions->matchedStyle();
+    Style  *matchedStyle = d->extra()->conditions->matchedStyle();
 
-    if ( matchedStyle->hasFeature( KSpreadStyle::SAngle, true ) )
+    if ( matchedStyle->hasFeature( Style::SAngle, true ) )
       tmpAngle = d->extra()->conditions->matchedStyle()->rotateAngle();
     else
       tmpAngle = getAngle( cellRef.x(), cellRef.y() );
 
-    if ( matchedStyle->hasFeature( KSpreadStyle::SVerticalText, true ) )
-      tmpVerticalText = matchedStyle->hasProperty( KSpreadStyle::PVerticalText );
+    if ( matchedStyle->hasFeature( Style::SVerticalText, true ) )
+      tmpVerticalText = matchedStyle->hasProperty( Style::PVerticalText );
     else
       tmpVerticalText = verticalText( cellRef.x(), cellRef.y() );
 
-    if ( matchedStyle->hasFeature( KSpreadStyle::SMultiRow, true ) )
-      tmpMultiRow = matchedStyle->hasProperty( KSpreadStyle::PMultiRow );
+    if ( matchedStyle->hasFeature( Style::SMultiRow, true ) )
+      tmpMultiRow = matchedStyle->hasProperty( Style::PMultiRow );
     else
       tmpMultiRow = multiRow( cellRef.x(), cellRef.y() );
   }
@@ -3307,11 +3307,11 @@ void Cell::paintPageBorders( QPainter& painter,
   if ( ! m_pSheet->isShowPageBorders() )
     return;
 
-  KSpreadSheetPrint* print = m_pSheet->print();
+  SheetPrint* print = m_pSheet->print();
 
-  KSpreadSheet::LayoutDirection sheetDir =  m_pSheet->layoutDirection();
+  Sheet::LayoutDirection sheetDir =  m_pSheet->layoutDirection();
 
-  KSpreadDoc* doc = sheet()->doc();
+  Doc* doc = sheet()->doc();
   int zcellRect_left = doc->zoomItX (cellRect.left());
   int zcellRect_right = doc->zoomItX (cellRect.right());
   int zcellRect_top = doc->zoomItY (cellRect.top());
@@ -3329,7 +3329,7 @@ void Cell::paintPageBorders( QPainter& painter,
     {
       painter.setPen( sheet()->doc()->pageBorderColor() );
 
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( zcellRect_right, zcellRect_top,
                           zcellRect_right, zcellRect_bottom );
       else
@@ -3350,7 +3350,7 @@ void Cell::paintPageBorders( QPainter& painter,
             && ( cellRef.y() <= print->printRange().bottom() ) ) {
         painter.setPen( sheet()->doc()->pageBorderColor() );
 
-        if ( sheetDir == KSpreadSheet::RightToLeft )
+        if ( sheetDir == Sheet::RightToLeft )
           painter.drawLine( zcellRect_left, zcellRect_top,
                             zcellRect_left, zcellRect_bottom );
         else
@@ -3381,9 +3381,9 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                                     QPen & _rightPen, QPen & _bottomPen,
                                     QPen & _leftPen,  QPen & _topPen )
 {
-  KSpreadDoc * doc = sheet()->doc();
+  Doc * doc = sheet()->doc();
 
-  KSpreadSheet::LayoutDirection sheetDir =  m_pSheet->layoutDirection();
+  Sheet::LayoutDirection sheetDir =  m_pSheet->layoutDirection();
 
   // compute zoomed rectangles
   // I don't use KoRect, because that ends up producing lots of warnings
@@ -3468,7 +3468,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
   //            and those can be arbitrarily clipped.  WE HAVE TO
   //            REVISE THIS WHOLE BORDER PAINTING SECTION!
   //
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( QMIN( zrect_right,  zcellRect_right ),
                           QMAX( zrect_top,    zcellRect_top - top ),
                           QMIN( zrect_right,  zcellRect_right ),
@@ -3480,7 +3480,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                           QMIN( zrect_bottom, zcellRect_bottom + bottom ) );
     }
     else {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( zcellRect_right,
                           zcellRect_top - top,
                           zcellRect_right,
@@ -3505,7 +3505,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( QMAX( zrect_left, zcellRect_left ),
                           QMAX( zrect_top, zcellRect_top - top ),
                           QMAX( zrect_left, zcellRect_left ),
@@ -3523,7 +3523,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
       }
     }
     else {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( zcellRect_left,
                           zcellRect_top - top,
                           zcellRect_left,
@@ -3639,7 +3639,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     // If we are on paper printout, we limit the length of the lines.
     // On paper, we always have full cells, on screen not.
     if ( painter.device()->isExtDev() ) {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( QMAX( zrect_left, zcellRect_right ),
                           QMAX( zrect_top, zcellRect_top ),
                           QMIN( zrect_right, zcellRect_right ),
@@ -3651,7 +3651,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                           QMIN( zrect_bottom, zcellRect_top + bottom ) );
     }
     else {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( zcellRect_right, zcellRect_top,
                           zcellRect_right, zcellRect_top + bottom );
       else
@@ -3689,7 +3689,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
     //If we are on paper printout, we limit the length of the lines
     //On paper, we always have full cells, on screen not
     if ( painter.device()->isExtDev() ) {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( QMAX( zrect_left, zcellRect_left ),
                           QMAX( zrect_top, zcellRect_top ),
                           QMIN( zrect_right, zcellRect_left ),
@@ -3701,7 +3701,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                           QMIN( zrect_bottom, zcellRect_top + bottom ) );
     }
     else {
-      if ( sheetDir == KSpreadSheet::RightToLeft )
+      if ( sheetDir == Sheet::RightToLeft )
         painter.drawLine( zcellRect_left, zcellRect_top,
                           zcellRect_left, zcellRect_top + bottom );
       else
@@ -3742,7 +3742,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
       // If we are on paper printout, we limit the length of the lines.
       // On paper, we always have full cells, on screen not.
       if ( painter.device()->isExtDev() ) {
-        if ( sheetDir == KSpreadSheet::RightToLeft )
+        if ( sheetDir == Sheet::RightToLeft )
           painter.drawLine( QMAX( zrect_left, zcellRect_right ),
                             QMAX( zrect_top, zcellRect_bottom - bottom ),
                             QMIN( zrect_right, zcellRect_right ),
@@ -3754,7 +3754,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                             QMIN( zrect_bottom, zcellRect_bottom ) );
       }
       else {
-        if ( sheetDir == KSpreadSheet::RightToLeft )
+        if ( sheetDir == Sheet::RightToLeft )
           painter.drawLine( zcellRect_right, zcellRect_bottom - bottom,
                             zcellRect_right, zcellRect_bottom );
         else
@@ -3794,7 +3794,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
       // If we are on paper printout, we limit the length of the lines.
       // On paper, we always have full cells, on screen not.
       if ( painter.device()->isExtDev() )      {
-        if ( sheetDir == KSpreadSheet::RightToLeft )
+        if ( sheetDir == Sheet::RightToLeft )
           painter.drawLine( QMAX( zrect_left, zcellRect_left ),
                             QMAX( zrect_top, zcellRect_bottom - bottom ),
                             QMIN( zrect_right, zcellRect_left ),
@@ -3806,7 +3806,7 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
                             QMIN( zrect_bottom, zcellRect_bottom ) );
       }
       else {
-        if ( sheetDir == KSpreadSheet::RightToLeft )
+        if ( sheetDir == Sheet::RightToLeft )
           painter.drawLine( zcellRect_left, zcellRect_bottom - bottom,
                             zcellRect_left, zcellRect_bottom );
         else
@@ -3827,7 +3827,7 @@ void Cell::paintCellDiagonalLines( QPainter& painter,
   if ( isObscuringForced() )
     return;
 
-  KSpreadDoc* doc = sheet()->doc();
+  Doc* doc = sheet()->doc();
 
   if ( effFallDiagonalPen( cellRef.x(), cellRef.y() ).style() != Qt::NoPen ) {
     painter.setPen( effFallDiagonalPen( cellRef.x(), cellRef.y() ) );
@@ -3859,9 +3859,9 @@ int Cell::defineAlignX()
     //numbers should be right-aligned by default, as well as BiDi text
     if ((formatType() == Text_format) || value().isString())
       a = (d->strOutText.isRightToLeft()) ?
-                               Cell::Right : KSpread::Cell::Left;
+                               Cell::Right : Cell::Left;
     else {
-      KSpreadValue val = value();
+      Value val = value();
       while (val.isArray()) val = val.element (0, 0);
       if (val.isBoolean() || val.isNumber())
         a = Cell::Right;
@@ -3876,7 +3876,7 @@ int Cell::effAlignX()
 {
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SAlignX, true ) )
+       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SAlignX, true ) )
     return d->extra()->conditions->matchedStyle()->alignX();
 
   return defineAlignX();
@@ -3919,7 +3919,7 @@ QString Cell::textDisplaying( QPainter &_painter )
     // Start out with the whole text, cut one character at a time, and
     // when the text finally fits, return it.
     for ( int i = d->strOutText.length(); i != 0; i-- ) {
-      if ( a == Cell::Left || a == KSpread::Cell::Undefined )
+      if ( a == Cell::Left || a == Cell::Undefined )
   tmp = d->strOutText.left(i);
       else if ( a == Cell::Right)
   tmp = d->strOutText.right(i);
@@ -4004,7 +4004,7 @@ QString Cell::textDisplaying( QPainter &_painter )
 }
 
 
-double Cell::dblWidth( int _col, const KSpreadCanvas *_canvas ) const
+double Cell::dblWidth( int _col, const Canvas *_canvas ) const
 {
   if ( _col < 0 )
     _col = d->column;
@@ -4025,12 +4025,12 @@ double Cell::dblWidth( int _col, const KSpreadCanvas *_canvas ) const
   return cl->dblWidth();
 }
 
-int Cell::width( int _col, const KSpreadCanvas *_canvas ) const
+int Cell::width( int _col, const Canvas *_canvas ) const
 {
   return int( dblWidth( _col, _canvas ) );
 }
 
-double Cell::dblHeight( int _row, const KSpreadCanvas *_canvas ) const
+double Cell::dblHeight( int _row, const Canvas *_canvas ) const
 {
   if ( _row < 0 )
     _row = d->row;
@@ -4051,7 +4051,7 @@ double Cell::dblHeight( int _row, const KSpreadCanvas *_canvas ) const
   return rl->dblHeight();
 }
 
-int Cell::height( int _row, const KSpreadCanvas *_canvas ) const
+int Cell::height( int _row, const Canvas *_canvas ) const
 {
   return int( dblHeight( _row, _canvas ) );
 }
@@ -4059,7 +4059,7 @@ int Cell::height( int _row, const KSpreadCanvas *_canvas ) const
 ///////////////////////////////////////////
 //
 // Misc Properties.
-// Reimplementation of KSpreadFormat methods.
+// Reimplementation of Format methods.
 //
 ///////////////////////////////////////////
 
@@ -4071,7 +4071,7 @@ const QBrush& Cell::backGroundBrush( int _col, int _row ) const
     return cell->backGroundBrush( cell->column(), cell->row() );
   }
 
-  return KSpreadFormat::backGroundBrush( _col, _row );
+  return Format::backGroundBrush( _col, _row );
 }
 
 const QColor& Cell::bgColor( int _col, int _row ) const
@@ -4082,13 +4082,13 @@ const QColor& Cell::bgColor( int _col, int _row ) const
     return cell->bgColor( cell->column(), cell->row() );
   }
 
-  return KSpreadFormat::bgColor( _col, _row );
+  return Format::bgColor( _col, _row );
 }
 
 ///////////////////////////////////////////
 //
 // Borders.
-// Reimplementation of KSpreadFormat methods.
+// Reimplementation of Format methods.
 //
 ///////////////////////////////////////////
 
@@ -4102,7 +4102,7 @@ void Cell::setLeftBorderPen( const QPen& p )
         cell->clearProperty( PRightBorder );
   }
 
-  KSpreadFormat::setLeftBorderPen( p );
+  Format::setLeftBorderPen( p );
 }
 
 void Cell::setTopBorderPen( const QPen& p )
@@ -4114,7 +4114,7 @@ void Cell::setTopBorderPen( const QPen& p )
          && m_pSheet->cellAt( column(), row() ) == this )
         cell->clearProperty( PBottomBorder );
   }
-  KSpreadFormat::setTopBorderPen( p );
+  Format::setTopBorderPen( p );
 }
 
 void Cell::setRightBorderPen( const QPen& p )
@@ -4127,7 +4127,7 @@ void Cell::setRightBorderPen( const QPen& p )
          && m_pSheet->cellAt( column(), row() ) == this )
         cell->clearProperty( PLeftBorder );
 
-    KSpreadFormat::setRightBorderPen( p );
+    Format::setRightBorderPen( p );
 }
 
 void Cell::setBottomBorderPen( const QPen& p )
@@ -4140,7 +4140,7 @@ void Cell::setBottomBorderPen( const QPen& p )
          && m_pSheet->cellAt( column(), row() ) == this )
         cell->clearProperty( PTopBorder );
 
-    KSpreadFormat::setBottomBorderPen( p );
+    Format::setBottomBorderPen( p );
 }
 
 const QPen& Cell::rightBorderPen( int _col, int _row ) const
@@ -4152,7 +4152,7 @@ const QPen& Cell::rightBorderPen( int _col, int _row ) const
             return cell->leftBorderPen( _col + 1, _row );
     }
 
-    return KSpreadFormat::rightBorderPen( _col, _row );
+    return Format::rightBorderPen( _col, _row );
 }
 
 const QPen& Cell::leftBorderPen( int _col, int _row ) const
@@ -4164,7 +4164,7 @@ const QPen& Cell::leftBorderPen( int _col, int _row ) const
             return cell->rightBorderPen( _col - 1, _row );
     }
 
-    return KSpreadFormat::leftBorderPen( _col, _row );
+    return Format::leftBorderPen( _col, _row );
 }
 
 const QPen& Cell::bottomBorderPen( int _col, int _row ) const
@@ -4176,7 +4176,7 @@ const QPen& Cell::bottomBorderPen( int _col, int _row ) const
             return cell->topBorderPen( _col, _row + 1 );
     }
 
-    return KSpreadFormat::bottomBorderPen( _col, _row );
+    return Format::bottomBorderPen( _col, _row );
 }
 
 const QPen& Cell::topBorderPen( int _col, int _row ) const
@@ -4188,14 +4188,14 @@ const QPen& Cell::topBorderPen( int _col, int _row ) const
             return cell->bottomBorderPen( _col, _row - 1 );
     }
 
-    return KSpreadFormat::topBorderPen( _col, _row );
+    return Format::topBorderPen( _col, _row );
 }
 
 const QColor & Cell::effTextColor( int col, int row ) const
 {
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::STextPen, true ) )
+       && d->extra()->conditions->matchedStyle()->hasFeature( Style::STextPen, true ) )
     return d->extra()->conditions->matchedStyle()->pen().color();
 
   return textColor( col, row );
@@ -4211,10 +4211,10 @@ const QPen& Cell::effLeftBorderPen( int col, int row ) const
 
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SLeftBorder, true ) )
+       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SLeftBorder, true ) )
     return d->extra()->conditions->matchedStyle()->leftBorderPen();
 
-  return KSpreadFormat::leftBorderPen( col, row );
+  return Format::leftBorderPen( col, row );
 }
 
 const QPen& Cell::effTopBorderPen( int col, int row ) const
@@ -4227,10 +4227,10 @@ const QPen& Cell::effTopBorderPen( int col, int row ) const
 
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::STopBorder, true ) )
+       && d->extra()->conditions->matchedStyle()->hasFeature( Style::STopBorder, true ) )
     return d->extra()->conditions->matchedStyle()->topBorderPen();
 
-  return KSpreadFormat::topBorderPen( col, row );
+  return Format::topBorderPen( col, row );
 }
 
 const QPen& Cell::effRightBorderPen( int col, int row ) const
@@ -4243,10 +4243,10 @@ const QPen& Cell::effRightBorderPen( int col, int row ) const
 
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SRightBorder, true ) )
+       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SRightBorder, true ) )
     return d->extra()->conditions->matchedStyle()->rightBorderPen();
 
-  return KSpreadFormat::rightBorderPen( col, row );
+  return Format::rightBorderPen( col, row );
 }
 
 const QPen& Cell::effBottomBorderPen( int col, int row ) const
@@ -4259,30 +4259,30 @@ const QPen& Cell::effBottomBorderPen( int col, int row ) const
 
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SBottomBorder, true ) )
+       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SBottomBorder, true ) )
     return d->extra()->conditions->matchedStyle()->bottomBorderPen();
 
-  return KSpreadFormat::bottomBorderPen( col, row );
+  return Format::bottomBorderPen( col, row );
 }
 
 const QPen & Cell::effGoUpDiagonalPen( int col, int row ) const
 {
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SGoUpDiagonal, true ) )
+       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SGoUpDiagonal, true ) )
     return d->extra()->conditions->matchedStyle()->goUpDiagonalPen();
 
-  return KSpreadFormat::goUpDiagonalPen( col, row );
+  return Format::goUpDiagonalPen( col, row );
 }
 
 const QPen & Cell::effFallDiagonalPen( int col, int row ) const
 {
   if ( d->hasExtra() && d->extra()->conditions
        && d->extra()->conditions->matchedStyle()
-       && d->extra()->conditions->matchedStyle()->hasFeature( KSpreadStyle::SFallDiagonal, true ) )
+       && d->extra()->conditions->matchedStyle()->hasFeature( Style::SFallDiagonal, true ) )
     return d->extra()->conditions->matchedStyle()->fallDiagonalPen();
 
-  return KSpreadFormat::fallDiagonalPen( col, row );
+  return Format::fallDiagonalPen( col, row );
 }
 
 uint Cell::effBottomBorderValue( int col, int row ) const
@@ -4297,7 +4297,7 @@ uint Cell::effBottomBorderValue( int col, int row ) const
       && d->extra()->conditions->matchedStyle() )
     return d->extra()->conditions->matchedStyle()->bottomPenValue();
 
-  return KSpreadFormat::bottomBorderValue( col, row );
+  return Format::bottomBorderValue( col, row );
 }
 
 uint Cell::effRightBorderValue( int col, int row ) const
@@ -4312,7 +4312,7 @@ uint Cell::effRightBorderValue( int col, int row ) const
       && d->extra()->conditions->matchedStyle() )
     return d->extra()->conditions->matchedStyle()->rightPenValue();
 
-  return KSpreadFormat::rightBorderValue( col, row );
+  return Format::rightBorderValue( col, row );
 }
 
 uint Cell::effLeftBorderValue( int col, int row ) const
@@ -4327,7 +4327,7 @@ uint Cell::effLeftBorderValue( int col, int row ) const
       && d->extra()->conditions->matchedStyle() )
     return d->extra()->conditions->matchedStyle()->leftPenValue();
 
-  return KSpreadFormat::leftBorderValue( col, row );
+  return Format::leftBorderValue( col, row );
 }
 
 uint Cell::effTopBorderValue( int col, int row ) const
@@ -4342,10 +4342,10 @@ uint Cell::effTopBorderValue( int col, int row ) const
       && d->extra()->conditions->matchedStyle() )
     return d->extra()->conditions->matchedStyle()->topPenValue();
 
-  return KSpreadFormat::topBorderValue( col, row );
+  return Format::topBorderValue( col, row );
 }
 
-// setCurrency - reimplemented from KSpreadFormat, adding locale support
+// setCurrency - reimplemented from Format, adding locale support
 void Cell::setCurrency( int type, QString const & symbol )
 {
   Currency c;
@@ -4440,10 +4440,10 @@ void Cell::decPrecision()
 }
 
 //set numerical value
-//used in KSpreadSheet::setSeries (nowhere else yet)
+//used in Sheet::setSeries (nowhere else yet)
 void Cell::setNumber( double number )
 {
-  setValue( KSpreadValue( number ) );
+  setValue( Value( number ) );
 
   d->strText.setNum( number );
   checkNumberFormat();
@@ -4458,7 +4458,7 @@ void Cell::setCellText( const QString& _text, bool asText )
   // empty string ?
   if (ctext.length() == 0) {
     d->strOutText = d->strText = "";
-    setValue (KSpreadValue::empty());
+    setValue (Value::empty());
     return;
   }
 
@@ -4466,7 +4466,7 @@ void Cell::setCellText( const QString& _text, bool asText )
   if (asText) {
     d->strOutText = ctext;
     d->strText    = ctext;
-    setValue (KSpreadValue (ctext));
+    setValue (Value (ctext));
 
     return;
   }
@@ -4805,7 +4805,7 @@ bool Cell::isDate() const
   FormatType ft = formatType();
 
   return (formatIsTime (ft) || ((ft == Generic_format) &&
-      (value().format() == KSpreadValue::fmt_Date)));
+      (value().format() == Value::fmt_Date)));
 }
 
 bool Cell::isTime() const
@@ -4813,7 +4813,7 @@ bool Cell::isTime() const
   FormatType ft = formatType();
 
   return (formatIsTime (ft) || ((ft == Generic_format) &&
-      (value().format() == KSpreadValue::fmt_Time)));
+      (value().format() == Value::fmt_Time)));
 }
 
 void Cell::setCalcDirtyFlag()
@@ -4888,7 +4888,7 @@ void Cell::convertToPercent ()
     return;
 
   setValue (getDouble ());
-  d->value.setFormat (KSpreadValue::fmt_Percent);
+  d->value.setFormat (Value::fmt_Percent);
 }
 
 void Cell::convertToMoney ()
@@ -4897,7 +4897,7 @@ void Cell::convertToMoney ()
     return;
 
   setValue (getDouble ());
-  d->value.setFormat (KSpreadValue::fmt_Money);
+  d->value.setFormat (Value::fmt_Money);
   setPrecision (locale()->fracDigits());
 }
 
@@ -4940,7 +4940,7 @@ void Cell::checkTextInput()
   // Goal of this method: determine the value of the cell
   clearAllErrors();
 
-  d->value = KSpreadValue::empty();
+  d->value = Value::empty();
 
   // Get the text from that cell
   QString str = d->strText;
@@ -4957,7 +4957,7 @@ void Cell::checkTextInput()
       (!d->strText.isEmpty()))
   {
     QString str = value().asString();
-    setValue( KSpreadValue( str[0].upper() + str.right( str.length()-1 ) ) );
+    setValue( Value( str[0].upper() + str.right( str.length()-1 ) ) );
   }
 }
 
@@ -4987,7 +4987,7 @@ QDomElement Cell::save( QDomDocument& doc,
     //
     // Save the formatting information
     //
-    QDomElement format = KSpreadFormat::save( doc, d->column, d->row, force, copy );
+    QDomElement format = Format::save( doc, d->column, d->row, force, copy );
     if ( format.hasChildNodes() || format.attributes().length() ) // don't save empty tags
         cell.appendChild( format );
 
@@ -5196,14 +5196,14 @@ void Cell::saveOasisAnnotation( KoXmlWriter &xmlwriter )
 
 QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyles, bool force, bool copy)
 {
-    QString formatCellStyle = KSpreadFormat::saveOasisCellStyle( currentCellStyle, mainStyles, column(), row(), force, copy );
+    QString formatCellStyle = Format::saveOasisCellStyle( currentCellStyle, mainStyles, column(), row(), force, copy );
     if ( d->hasExtra() && d->extra()->conditions )
         d->extra()->conditions->saveOasisConditions( currentCellStyle );
     return formatCellStyle;
 }
 
 
-bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, int column, int maxCols, int &repeated, KSpreadGenValidationStyles &valStyle )
+bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, int column, int maxCols, int &repeated, GenValidationStyles &valStyle )
 {
     if ( !isObscuringForced() )
         xmlwriter.startElement( "table:table-cell" );
@@ -5212,33 +5212,33 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, 
 #if 0
     //add font style
     QFont font;
-    KSpreadValue const value( cell->value() );
+    Value const value( cell->value() );
     if ( !cell->isDefault() )
     {
       font = cell->textFont( i, row );
       m_styles.addFont( font );
 
-      if ( cell->hasProperty( KSpreadFormat::PComment ) )
+      if ( cell->hasProperty( Format::PComment ) )
         hasComment = true;
     }
 #endif
-    KoGenStyle currentCellStyle( KSpreadDoc::STYLE_CELL,"table-cell" );
+    KoGenStyle currentCellStyle( Doc::STYLE_CELL,"table-cell" );
     QString cellNumericStyle = saveOasisCellStyle( currentCellStyle,mainStyles );
     xmlwriter.addAttribute( "table:style-name", mainStyles.lookup( currentCellStyle, "ce" ) );
     if ( !cellNumericStyle.isEmpty() )
         xmlwriter.addAttribute( "style:data-style-name", cellNumericStyle );
 
     // group empty cells with the same style
-    if ( isEmpty() && !hasProperty( KSpreadFormat::PComment ) && !isObscuringForced() && !isForceExtraCells() )
+    if ( isEmpty() && !hasProperty( Format::PComment ) && !isObscuringForced() && !isForceExtraCells() )
     {
       int j = column + 1;
       while ( j <= maxCols )
       {
         Cell *nextCell = m_pSheet->cellAt( j, row );
-        KoGenStyle nextCellStyle( KSpreadDoc::STYLE_CELL,"table-cell" );
+        KoGenStyle nextCellStyle( Doc::STYLE_CELL,"table-cell" );
         nextCell->saveOasisCellStyle( nextCellStyle,mainStyles );
 
-        if ( nextCell->isEmpty() && !nextCell->hasProperty( KSpreadFormat::PComment )
+        if ( nextCell->isEmpty() && !nextCell->hasProperty( Format::PComment )
              && ( nextCellStyle==currentCellStyle ) && !isObscuringForced() && !isForceExtraCells() )
           ++repeated;
         else
@@ -5255,7 +5255,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, 
 
     if (d->hasExtra() && d->extra()->validity)
     {
-        KSpreadGenValidationStyle styleVal(d->extra()->validity);
+        GenValidationStyle styleVal(d->extra()->validity);
         xmlwriter.addAttribute( "table:validation-name", valStyle.lookup( styleVal ) );
     }
     if ( isFormula() )
@@ -5308,28 +5308,28 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
 {
   switch (value().format())
   {
-    case KSpreadValue::fmt_None: break;  //NOTHING HERE
-    case KSpreadValue::fmt_Boolean:
+    case Value::fmt_None: break;  //NOTHING HERE
+    case Value::fmt_Boolean:
     {
       xmlWriter.addAttribute( "office:value-type", "boolean" );
       xmlWriter.addAttribute( "office:boolean-value", ( value().asBoolean() ?
           "true" : "false" ) );
       break;
     }
-    case KSpreadValue::fmt_Number:
+    case Value::fmt_Number:
     {
       xmlWriter.addAttribute( "office:value-type", "float" );
       xmlWriter.addAttribute( "office:value", QString::number( value().asFloat() ) );
       break;
     }
-    case KSpreadValue::fmt_Percent:
+    case Value::fmt_Percent:
     {
       xmlWriter.addAttribute( "office:value-type", "percentage" );
       xmlWriter.addAttribute( "office:value",
           QString::number( value().asFloat() ) );
       break;
     }
-    case KSpreadValue::fmt_Money:
+    case Value::fmt_Money:
     {
       xmlWriter.addAttribute( "office:value-type", "currency" );
       // TODO: add code of currency
@@ -5339,22 +5339,22 @@ void Cell::saveOasisValue (KoXmlWriter &xmlWriter)
           QString::number( value().asFloat() ) );
       break;
     }
-    case KSpreadValue::fmt_DateTime: break;  //NOTHING HERE
-    case KSpreadValue::fmt_Date:
+    case Value::fmt_DateTime: break;  //NOTHING HERE
+    case Value::fmt_Date:
     {
       xmlWriter.addAttribute( "office:value-type", "date" );
       xmlWriter.addAttribute( "office:date-value",
           value().asDate().toString( Qt::ISODate ) );
       break;
     }
-    case KSpreadValue::fmt_Time:
+    case Value::fmt_Time:
     {
       xmlWriter.addAttribute( "office:value-type", "time" );
       xmlWriter.addAttribute( "office:time-value",
           value().asTime().toString( "PThhHmmMssS" ) );
       break;
     }
-    case KSpreadValue::fmt_String:
+    case Value::fmt_String:
     {
       xmlWriter.addAttribute( "office:value-type", "string" );
       xmlWriter.addAttribute( "office:string-value", value().asString() );
@@ -5465,7 +5465,7 @@ void Cell::loadOasisConditional( QDomElement * style )
             {
                 if (d->hasExtra())
                     delete d->extra()->conditions;
-                d->extra()->conditions = new KSpreadConditions( this );
+                d->extra()->conditions = new Conditions( this );
                 d->extra()->conditions->loadOasisConditions( e );
                 d->extra()->conditions->checkMatches();
                 break;
@@ -5656,7 +5656,7 @@ bool Cell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyl
 
             if ( ok )
             {
-                // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
+                // Value kval( timeToNum( hours, minutes, seconds ) );
                 // cell->setValue( kval );
                 setValue( QTime( hours % 24, minutes, seconds ) );
                 setFormatType (Time_format);
@@ -5725,7 +5725,7 @@ bool Cell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyl
         //kdDebug()<< " oasisStyles.dataFormats()[...] suffix :"<< oasisStyles.dataFormats()[str].suffix<<endl;
         setPrefix( oasisStyles.dataFormats()[str].prefix );
         setPostfix( oasisStyles.dataFormats()[str].suffix );
-        setFormatType( KSpreadStyle::formatType( oasisStyles.dataFormats()[str].formatStr ) );
+        setFormatType( Style::formatType( oasisStyles.dataFormats()[str].formatStr ) );
     }
     return true;
 }
@@ -5735,7 +5735,7 @@ void Cell::loadOasisValidation( const QString& validationName )
     QDomElement element = sheet()->doc()->loadingInfo()->validation( validationName);
     if (d->hasExtra())
       delete d->extra()->validity;
-    d->extra()->validity = new KSpreadValidity;
+    d->extra()->validity = new Validity;
     if ( element.hasAttributeNS( KoXmlNS::table, "condition" ) )
     {
         QString valExpression = element.attributeNS( KoXmlNS::table, "condition", QString::null );
@@ -6047,11 +6047,11 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     //
     QDomElement f = cell.namedItem( "format" ).toElement();
     if ( !f.isNull()
-         && ( (pm == Normal) || (pm == Format) || (pm == NoBorder) ) )
+          && ( (pm == Normal) || (pm == ::Format) || (pm == NoBorder) ) )
     {
         // send pm parameter. Didn't load Borders if pm==NoBorder
 
-        if ( !KSpreadFormat::load( f, pm, paste ) )
+        if ( !Format::load( f, pm, paste ) )
             return false;
 
         if ( f.hasAttribute( "colspan" ) )
@@ -6106,7 +6106,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     {
       if (d->hasExtra())
         delete d->extra()->conditions;
-      d->extra()->conditions = new KSpreadConditions( this );
+      d->extra()->conditions = new Conditions( this );
       d->extra()->conditions->loadConditions( conditionsElement );
       d->extra()->conditions->checkMatches();
     }
@@ -6117,16 +6117,16 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
         QDomElement param = validity.namedItem( "param" ).toElement();
         if(!param.isNull())
         {
-          d->extra()->validity = new KSpreadValidity;
+          d->extra()->validity = new Validity;
           if ( param.hasAttribute( "cond" ) )
           {
-            d->extra()->validity->m_cond = (Conditional) param.attribute("cond").toInt( &ok );
+            d->extra()->validity->m_cond = (::Conditional) param.attribute("cond").toInt( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "action" ) )
           {
-            d->extra()->validity->m_action = (Action) param.attribute("action").toInt( &ok );
+            d->extra()->validity->m_action = (::Action) param.attribute("action").toInt( &ok );
             if ( !ok )
               return false;
           }
@@ -6431,7 +6431,7 @@ bool Cell::loadCellData(const QDomElement & text, Operation op )
 
     if ( newStyleLoading )
     {
-      d->value = KSpreadValue::empty();
+      d->value = Value::empty();
       clearAllErrors();
 
       // boolean ?
@@ -6449,7 +6449,7 @@ bool Cell::loadCellData(const QDomElement & text, Operation op )
       else if( dataType == "Num" )
       {
         bool ok = false;
-        setValue ( KSpreadValue( t.toDouble(&ok) ) ); // We save in non-localized format
+        setValue ( Value( t.toDouble(&ok) ) ); // We save in non-localized format
         if ( !ok )
   {
           kdWarning(36001) << "Couldn't parse '" << t << "' as number." << endl;
@@ -6553,7 +6553,7 @@ QTime Cell::toTime(const QDomElement &element)
     pos1 = t.find(':',pos+1);
     minutes = t.mid(pos+1,((pos1-1)-pos)).toInt();
     second = t.right(t.length()-pos1-1).toInt();
-    setValue( KSpreadValue( QTime(hours,minutes,second)) );
+    setValue( Value( QTime(hours,minutes,second)) );
     return value().asTime();
 }
 
@@ -6570,7 +6570,7 @@ QDate Cell::toDate(const QDomElement &element)
     pos1 = t.find('/',pos+1);
     month = t.mid(pos+1,((pos1-1)-pos)).toInt();
     day = t.right(t.length()-pos1-1).toInt();
-    setValue( KSpreadValue( QDate(year,month,day) ) );
+    setValue( Value( QDate(year,month,day) ) );
     return value().asDate();
 }
 
@@ -6681,7 +6681,7 @@ QString Cell::testAnchor( int x, int y ) const
   if( link().isEmpty() )
     return QString::null;
 
-  KSpreadDoc* doc = m_pSheet->doc();
+  Doc* doc = m_pSheet->doc();
   int x1 = doc->zoomItX( d->textX );
   int y1 = doc->zoomItX( d->textY - d->textHeight );
   int x2 = doc->zoomItX( d->textX + d->textWidth );
@@ -6732,7 +6732,7 @@ Cell::~Cell()
             cell->unobscure(this);
     }
 
-    d->value = KSpreadValue::empty();
+    d->value = Value::empty();
 
     if (!isDefault())
       valueChanged ();  //our value has been changed (is now null), but only if we aren't default
@@ -6740,7 +6740,7 @@ Cell::~Cell()
     delete d;
 }
 
-bool Cell::operator > ( const KSpread::Cell & cell ) const
+bool Cell::operator > ( const Cell & cell ) const
 {
   if ( value().isNumber() ) // ### what about bools ?
   {
@@ -6771,14 +6771,14 @@ bool Cell::operator > ( const KSpread::Cell & cell ) const
   }
   else
   {
-      if ( KSpreadMap::respectCase )
+      if ( Map::respectCase )
           return value().asString().compare(cell.value().asString()) > 0;
       else
           return ( value().asString() ).lower().compare(cell.value().asString().lower()) > 0;
   }
 }
 
-bool Cell::operator < ( const KSpread::Cell & cell ) const
+bool Cell::operator < ( const Cell & cell ) const
 {
   if ( value().isNumber() )
   {
@@ -6809,7 +6809,7 @@ bool Cell::operator < ( const KSpread::Cell & cell ) const
   }
   else
   {
-      if ( KSpreadMap::respectCase )
+      if ( Map::respectCase )
           return value().asString().compare(cell.value().asString()) < 0;
       else
           return ( value().asString() ).lower().compare(cell.value().asString().lower()) < 0;
@@ -6822,22 +6822,22 @@ QRect Cell::cellRect()
   return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
 }
 
-QValueList<KSpreadConditional> Cell::conditionList() const
+QValueList<KSpread::Conditional> Cell::conditionList() const
 {
   if ( !d->hasExtra() || !d->extra()->conditions )
   {
-    QValueList<KSpreadConditional> emptyList;
+    QValueList<KSpread::Conditional> emptyList;
     return emptyList;
   }
 
   return d->extra()->conditions->conditionList();
 }
 
-void Cell::setConditionList( const QValueList<KSpreadConditional> & newList )
+void Cell::setConditionList( const QValueList<Conditional> & newList )
 {
   if (d->hasExtra())
     delete d->extra()->conditions;
-  d->extra()->conditions = new KSpreadConditions( this );
+  d->extra()->conditions = new Conditions( this );
   d->extra()->conditions->setConditionList( newList );
   d->extra()->conditions->checkMatches();
 }
@@ -7001,7 +7001,7 @@ void Cell::convertFormula( QString & text, const QString & f ) const
       }
 
       isPar = false;
-      parameter +=  KSpreadSheet::translateOpenCalcPoint( par );
+      parameter +=  Sheet::translateOpenCalcPoint( par );
       par = "";
     }
     else if ( isPar )

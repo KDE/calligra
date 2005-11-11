@@ -134,27 +134,29 @@
 // KSpread DCOP
 #include "KSpreadViewIface.h"
 
-using namespace KSpread;
+#include "kspread_view.h"
 
+namespace KSpread
+{
 class ViewActions;
 
 class ViewPrivate
 {
 public:
-    KSpreadView* view;
-    KSpreadDoc* doc;
+    View* view;
+    Doc* doc;
     DCOPObject* dcop;
 
     // the active sheet, may be 0
     // this is the sheet which has the input focus
-    KSpreadSheet* activeSheet;
+    Sheet* activeSheet;
 
     // GUI elements
     QWidget *frame;
     QFrame *toolWidget;
-    KSpreadCanvas *canvas;
-    KSpreadVBorder *vBorderWidget;
-    KSpreadHBorder *hBorderWidget;
+    Canvas *canvas;
+    VBorder *vBorderWidget;
+    HBorder *hBorderWidget;
     QScrollBar *horzScrollBar;
     QScrollBar *vertScrollBar;
     KoTabBar *tabBar;
@@ -162,11 +164,11 @@ public:
 
     // formulabar, consists of:
     QHBoxLayout* formulaBarLayout;
-    KSpreadComboboxLocationEditWidget *posWidget;
+    ComboboxLocationEditWidget *posWidget;
     QButton* formulaButton;
     QButton *okButton;
     QButton *cancelButton;
-    KSpreadEditWidget *editWidget;
+    KSpread::EditWidget *editWidget;
     QGridLayout* viewLayout;
     QHBoxLayout* tabScrollBarLayout;
 
@@ -183,17 +185,17 @@ public:
     bool loading;
 
     // selection/marker
-    KSpreadSelection* selectionInfo;
-    QMap<KSpreadSheet*, QPoint> savedAnchors;
-    QMap<KSpreadSheet*, QPoint> savedMarkers;
+    Selection* selectionInfo;
+    QMap<Sheet*, QPoint> savedAnchors;
+    QMap<Sheet*, QPoint> savedMarkers;
 
     // Find and Replace context. We remember the options and
     // the strings used previously.
     long findOptions;
     QStringList findStrings;
     QStringList replaceStrings;
-    KSpreadFindOption::searchTypeValue typeValue;
-    KSpreadFindOption::searchDirectionValue directionValue;
+    FindOption::searchTypeValue typeValue;
+    FindOption::searchDirectionValue directionValue;
     // Current "find" operation
     KFind* find;
     KReplace* replace;
@@ -202,7 +204,7 @@ public:
     QPoint findPos;
     QPoint findEnd;
 
-    KSpreadInsertHandler* insertHandler;
+    InsertHandler* insertHandler;
 
     // Insert special character dialog
     KoCharSelectDia* specialCharDlg;
@@ -222,16 +224,16 @@ public:
     QPopupMenu* popupListChoose;  // for list of choose
 
     // the child for which the popup menu has been opened.
-    KSpreadChild* popupChildObject;
+    Child* popupChildObject;
 
     // spell-check context
     struct
     {
       KSpell *   kspell;
-      KSpreadSheet *  firstSpellSheet;
-      KSpreadSheet *  currentSpellSheet;
+      Sheet *  firstSpellSheet;
+      Sheet *  currentSpellSheet;
       Cell  *  currentCell;
-      KSpreadMacroUndoAction *macroCmdSpellCheck;
+      MacroUndoAction *macroCmdSpellCheck;
       unsigned int    spellCurrCellX;
       unsigned int    spellCurrCellY;
       unsigned int    spellStartCellX;
@@ -244,8 +246,8 @@ public:
 
     struct
     {
-        KSpreadSheet * currentSheet;
-        KSpreadSheet * firstSheet;
+        Sheet * currentSheet;
+        Sheet * firstSheet;
     } searchInSheets;
 
     // the tools
@@ -258,7 +260,7 @@ public:
 
     void initActions();
     void adjustActions( bool mode );
-    void adjustActions( KSpreadSheet* sheet, Cell* cell );
+    void adjustActions( Sheet* sheet, Cell* cell );
     void adjustWorkbookActions( bool mode );
     void updateButton( Cell *cell, int column, int row);
     QButton* newIconButton( const char *_file, bool _kbutton = false, QWidget *_parent = 0L );
@@ -418,7 +420,7 @@ public:
     KToggleAction* showTabBar;
     KToggleAction* showFormulaBar;
     KToggleAction* showCommentIndicator;
-    KAction* preference;
+    KAction* PreferenceDialog;
 
     // running calculation
     KToggleAction* calcNone;
@@ -1053,9 +1055,9 @@ void ViewPrivate::initActions()
       view, SLOT( showCommentIndicator( bool ) ) );
   actions->showCommentIndicator->setToolTip(i18n("Show indicator for cells with comments."));
 
-  actions->preference = new KAction( i18n("Configure KSpread..."),"configure",
-      0, view, SLOT( preference() ), ac, "preference" );
-  actions->preference->setToolTip(i18n("Set various KSpread options."));
+  actions->PreferenceDialog = new KAction( i18n("Configure KSpread..."),"configure",
+      0, view, SLOT( PreferenceDialog() ), ac, "PreferenceDialog" );
+  actions->PreferenceDialog->setToolTip(i18n("Set various KSpread options."));
 
   // -- running calculation actions --
 
@@ -1246,7 +1248,7 @@ void ViewPrivate::adjustActions( bool mode )
     view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
 }
 
-void ViewPrivate::adjustActions( KSpreadSheet* sheet, Cell* cell )
+void ViewPrivate::adjustActions( Sheet* sheet, Cell* cell )
 {
   QRect selection = selectionInfo->selection();
   if ( sheet->isProtected() && !cell->isDefault() && cell->notProtected( cell->column(), cell->row() ) )
@@ -1314,13 +1316,13 @@ void ViewPrivate::updateButton( Cell *cell, int column, int row)
     actions->underline->setChecked( cell->textFontUnderline( column, row ) );
     actions->strikeOut->setChecked( cell->textFontStrike( column, row ) );
 
-    actions->alignLeft->setChecked( cell->align( column, row ) == KSpreadFormat::Left );
-    actions->alignCenter->setChecked( cell->align( column, row ) == KSpreadFormat::Center );
-    actions->alignRight->setChecked( cell->align( column, row ) == KSpreadFormat::Right );
+    actions->alignLeft->setChecked( cell->align( column, row ) == Format::Left );
+    actions->alignCenter->setChecked( cell->align( column, row ) == Format::Center );
+    actions->alignRight->setChecked( cell->align( column, row ) == Format::Right );
 
-    actions->alignTop->setChecked( cell->alignY( column, row ) == KSpreadFormat::Top );
-    actions->alignMiddle->setChecked( cell->alignY( column, row ) == KSpreadFormat::Middle );
-    actions->alignBottom->setChecked( cell->alignY( column, row ) == KSpreadFormat::Bottom );
+    actions->alignTop->setChecked( cell->alignY( column, row ) == Format::Top );
+    actions->alignMiddle->setChecked( cell->alignY( column, row ) == Format::Middle );
+    actions->alignBottom->setChecked( cell->alignY( column, row ) == Format::Bottom );
 
     actions->verticalText->setChecked( cell->verticalText( column,row ) );
 
@@ -1341,8 +1343,6 @@ void ViewPrivate::updateButton( Cell *cell, int column, int row)
       adjustActions( activeSheet, cell );
 }
 
-
-
 QButton* ViewPrivate::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
 {
   if ( _parent == 0L )
@@ -1358,18 +1358,23 @@ QButton* ViewPrivate::newIconButton( const char *_file, bool _kbutton, QWidget *
   return pb;
 }
 
+} // namespace KSpread
+
+
+using namespace KSpread;
+
 /*****************************************************************************
  *
- * KSpreadView
+ * View
  *
  *****************************************************************************/
 
-KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
-    KSpreadDoc *_doc )
+View::View( QWidget *_parent, const char *_name,
+    Doc *_doc )
   : KoView( _doc, _parent, _name )
 {
-    ElapsedTime et( "KSpreadView constructor" );
-    kdDebug(36001) << "sizeof(Cell)=" << sizeof(KSpread::Cell) <<endl;
+    ElapsedTime et( "View constructor" );
+    kdDebug(36001) << "sizeof(Cell)=" << sizeof(Cell) <<endl;
 
     d = new ViewPrivate;
     d->view = this;
@@ -1382,13 +1387,13 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
     d->toolbarLock = false;
     d->loading = false;
 
-    d->selectionInfo = new KSpreadSelection( this );
+    d->selectionInfo = new Selection( this );
 
     d->findOptions = 0;
     d->findLeftColumn = 0;
     d->findRightColumn = 0;
-    d->typeValue = KSpreadFindOption::Value;
-    d->directionValue = KSpreadFindOption::Row;
+    d->typeValue = FindOption::Value;
+    d->directionValue = FindOption::Row;
     d->find = 0;
     d->replace = 0;
 
@@ -1418,7 +1423,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
     d->insertHandler = 0L;
     d->specialCharDlg = 0;
 
-    setInstance( KSpreadFactory::global() );
+    setInstance( Factory::global() );
     if ( doc()->isReadWrite() )
       setXMLFile( "kspread.rc" );
     else
@@ -1451,7 +1456,7 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
     connect( this, SIGNAL( childActivated( KoDocumentChild* ) ),
              this, SLOT( slotChildUnselected( KoDocumentChild* ) ) );
 
-    QObject::connect( doc()->map(), SIGNAL( sig_addSheet( KSpreadSheet* ) ), SLOT( slotAddSheet( KSpreadSheet* ) ) );
+    QObject::connect( doc()->map(), SIGNAL( sig_addSheet( Sheet* ) ), SLOT( slotAddSheet( Sheet* ) ) );
 
     QObject::connect( doc(), SIGNAL( sig_refreshView(  ) ), this, SLOT( slotRefreshView() ) );
 
@@ -1483,9 +1488,9 @@ KSpreadView::KSpreadView( QWidget *_parent, const char *_name,
         initialPosition();
 }
 
-KSpreadView::~KSpreadView()
+View::~View()
 {
-    //  ElapsedTime el( "~KSpreadView" );
+    //  ElapsedTime el( "~View" );
     if ( doc()->isReadWrite() ) // make sure we're not embedded in Konq
         deleteEditor( true );
     if ( !d->transformToolBox.isNull() )
@@ -1501,7 +1506,7 @@ KSpreadView::~KSpreadView()
 
     d->canvas->endChoose();
     d->activeSheet = 0; // set the active sheet to 0L so that when during destruction
-    // of embedded child documents possible repaints in KSpreadSheet are not
+    // of embedded child documents possible repaints in Sheet are not
     // performed. The repains can happen if you delete an embedded document,
     // which leads to an regionInvalidated() signal emission in KoView, which calls
     // repaint, etc.etc. :-) (Simon)
@@ -1521,7 +1526,7 @@ KSpreadView::~KSpreadView()
     delete d;
 }
 
-KSpreadDoc* KSpreadView::doc()
+Doc* View::doc()
 {
   return d->doc;
 }
@@ -1536,7 +1541,7 @@ KSpreadDoc* KSpreadView::doc()
      * widgets might depend on it.
      */
 
-void KSpreadView::initView()
+void View::initView()
 {
     d->viewLayout = new QGridLayout( this, 3, 4 );
 
@@ -1555,7 +1560,7 @@ void KSpreadView::initView()
     d->formulaBarLayout->setMargin( 4 );
     d->formulaBarLayout->addSpacing( 2 );
 
-    d->posWidget = new KSpreadComboboxLocationEditWidget( d->toolWidget, this );
+    d->posWidget = new ComboboxLocationEditWidget( d->toolWidget, this );
     d->posWidget->setMinimumWidth( 100 );
     d->formulaBarLayout->addWidget( d->posWidget );
     d->formulaBarLayout->addSpacing( 6 );
@@ -1572,19 +1577,19 @@ void KSpreadView::initView()
     d->formulaBarLayout->addSpacing( 6 );
 
     // The widget on which we display the sheet
-    d->canvas = new KSpreadCanvas( this );
+    d->canvas = new Canvas( this );
 
     // The line-editor that appears above the sheet and allows to
     // edit the cells content. It knows about the two buttons.
-    d->editWidget = new KSpreadEditWidget( d->toolWidget, d->canvas, d->cancelButton, d->okButton );
+    d->editWidget = new EditWidget( d->toolWidget, d->canvas, d->cancelButton, d->okButton );
     d->editWidget->setFocusPolicy( QWidget::StrongFocus );
     d->formulaBarLayout->addWidget( d->editWidget, 2 );
     d->formulaBarLayout->addSpacing( 2 );
 
     d->canvas->setEditWidget( d->editWidget );
 
-    d->hBorderWidget = new KSpreadHBorder( this, d->canvas,this );
-    d->vBorderWidget = new KSpreadVBorder( this, d->canvas ,this );
+    d->hBorderWidget = new HBorder( this, d->canvas,this );
+    d->vBorderWidget = new VBorder( this, d->canvas ,this );
 
     d->canvas->setFocusPolicy( QWidget::StrongFocus );
     QWidget::setFocusPolicy( QWidget::StrongFocus );
@@ -1634,84 +1639,84 @@ void KSpreadView::initView()
 
 }
 
-KSpreadCanvas* KSpreadView::canvasWidget() const
+Canvas* View::canvasWidget() const
 {
     return d->canvas;
 }
 
-KSpreadHBorder* KSpreadView::hBorderWidget()const
+HBorder* View::hBorderWidget()const
 {
     return d->hBorderWidget;
 }
 
-KSpreadVBorder* KSpreadView::vBorderWidget()const
+VBorder* View::vBorderWidget()const
 {
     return d->vBorderWidget;
 }
 
-QScrollBar* KSpreadView::horzScrollBar()const
+QScrollBar* View::horzScrollBar()const
 {
     return d->horzScrollBar;
 }
 
-QScrollBar* KSpreadView::vertScrollBar()const
+QScrollBar* View::vertScrollBar()const
 {
     return d->vertScrollBar;
 }
 
-KSpreadEditWidget* KSpreadView::editWidget()const
+EditWidget* View::editWidget()const
 {
     return d->editWidget;
 }
 
-KSpreadComboboxLocationEditWidget* KSpreadView::posWidget()const
+ComboboxLocationEditWidget* View::posWidget()const
 {
     return d->posWidget;
 }
 
-KoTabBar* KSpreadView::tabBar() const
+KoTabBar* View::tabBar() const
 {
     return d->tabBar;
 }
 
-bool KSpreadView::isLoading() const
+bool View::isLoading() const
 {
     return d->loading;
 }
 
-KSpreadSelection* KSpreadView::selectionInfo() const
+Selection* View::selectionInfo() const
 {
     return d->selectionInfo;
 }
 
-QRect KSpreadView::selection(bool extend) const
+QRect View::selection(bool extend) const
 {
     return selectionInfo()->selection(extend);
 }
 
-QPoint KSpreadView::marker() const
+QPoint View::marker() const
 {
     return selectionInfo()->marker();
 }
 
-void KSpreadView::resetInsertHandle()
+void View::resetInsertHandle()
 {
     d->insertHandler = 0L;
 }
 
-const KSpreadSheet* KSpreadView::activeSheet() const
+const Sheet* View::activeSheet() const
 {
     return d->activeSheet;
 }
 
-KSpreadSheet* KSpreadView::activeSheet()
+Sheet* View::activeSheet()
 {
     return d->activeSheet;
 }
 
-void KSpreadView::initConfig()
+void View::initConfig()
 {
-    KConfig *config = KSpreadFactory::global()->config();
+    KConfig *config = Factory::global()->config();
     if ( config->hasGroup("Parameters" ))
     {
         config->setGroup( "Parameters" );
@@ -1774,13 +1779,13 @@ if ( config->hasGroup("KSpread Page Layout" ) )
  resultOfCalc();
 }
 
-void KSpreadView::changeNbOfRecentFiles(int _nb)
+void View::changeNbOfRecentFiles(int _nb)
 {
     if (shell())
         shell()->setMaxRecentItems( _nb );
 }
 
-void KSpreadView::initCalcMenu()
+void View::initCalcMenu()
 {
     switch( doc()->getTypeOfCalc())
     {
@@ -1813,9 +1818,9 @@ void KSpreadView::initCalcMenu()
 }
 
 
-void KSpreadView::recalcWorkBook()
+void View::recalcWorkBook()
 {
-  KSpreadSheet * tbl;
+  Sheet * tbl;
   doc()->emitBeginOperation( true );
   for ( tbl = doc()->map()->firstSheet();
         tbl != 0L;
@@ -1830,10 +1835,10 @@ void KSpreadView::recalcWorkBook()
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::refreshLocale()
+void View::refreshLocale()
 {
   doc()->emitBeginOperation(true);
-  KSpreadSheet *tbl;
+  Sheet *tbl;
   for ( tbl = doc()->map()->firstSheet();
         tbl != 0L;
         tbl = doc()->map()->nextSheet() )
@@ -1843,7 +1848,7 @@ void KSpreadView::refreshLocale()
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::recalcWorkSheet()
+void View::recalcWorkSheet()
 {
   if ( d->activeSheet != 0 )
   {
@@ -1857,7 +1862,7 @@ void KSpreadView::recalcWorkSheet()
 }
 
 
-void KSpreadView::extraSpelling()
+void View::extraSpelling()
 {
   if ( d->spell.kspell )
     return; // Already in progress
@@ -1899,7 +1904,7 @@ void KSpreadView::extraSpelling()
 }
 
 
-void KSpreadView::startKSpell()
+void View::startKSpell()
 {
     if ( doc()->getKSpellConfig() )
     {
@@ -1937,20 +1942,20 @@ void KSpreadView::startKSpell()
 
 }
 
-void KSpreadView::spellCheckerReplaceAll( const QString &orig, const QString & replacement)
+void View::spellCheckerReplaceAll( const QString &orig, const QString & replacement)
 {
     d->spell.replaceAll.append( orig);
     d->spell.replaceAll.append( replacement);
 }
 
 
-void KSpreadView::spellCheckerIgnoreAll( const QString & word)
+void View::spellCheckerIgnoreAll( const QString & word)
 {
     doc()->addIgnoreWordAll( word );
 }
 
 
-void KSpreadView::spellCheckerReady()
+void View::spellCheckerReady()
 {
   if (d->canvas)
     d->canvas->setCursor( WaitCursor );
@@ -2032,7 +2037,7 @@ void KSpreadView::spellCheckerReady()
 }
 
 
-void KSpreadView::spellCleanup()
+void View::spellCleanup()
 {
   if ( d->canvas )
     d->canvas->setCursor( ArrowCursor );
@@ -2054,14 +2059,14 @@ void KSpreadView::spellCleanup()
 }
 
 
-bool KSpreadView::spellSwitchToOtherSheet()
+bool View::spellSwitchToOtherSheet()
 {
   // there is no other sheet
   if ( doc()->map()->count() == 1 )
     return false;
 
   // for optimization
-  QPtrList<KSpreadSheet> sheetList = doc()->map()->sheetList();
+  QPtrList<Sheet> sheetList = doc()->map()->sheetList();
 
   unsigned int curIndex = sheetList.findRef(d->spell.currentSpellSheet);
   ++curIndex;
@@ -2103,7 +2108,7 @@ bool KSpreadView::spellSwitchToOtherSheet()
 }
 
 
-void KSpreadView::spellCheckerMisspelling( const QString &,
+void View::spellCheckerMisspelling( const QString &,
                                            const QStringList &,
                                            unsigned int )
 {
@@ -2118,7 +2123,7 @@ void KSpreadView::spellCheckerMisspelling( const QString &,
 }
 
 
-void KSpreadView::spellCheckerCorrected( const QString & old, const QString & corr,
+void View::spellCheckerCorrected( const QString & old, const QString & corr,
                                          unsigned int pos )
 {
   Cell * cell;
@@ -2142,7 +2147,7 @@ void KSpreadView::spellCheckerCorrected( const QString & old, const QString & co
   doc()->emitBeginOperation(false);
   QString content( cell->text() );
 
-  KSpreadUndoSetText* undo = new KSpreadUndoSetText( doc(), d->activeSheet,
+  UndoSetText* undo = new UndoSetText( doc(), d->activeSheet,
                                                      content,
                                                      d->spell.spellCurrCellX,
                                                      d->spell.spellCurrCellY,
@@ -2152,12 +2157,12 @@ void KSpreadView::spellCheckerCorrected( const QString & old, const QString & co
   d->editWidget->setText( content );
 
   if ( !d->spell.macroCmdSpellCheck )
-      d->spell.macroCmdSpellCheck = new KSpreadMacroUndoAction( doc(), i18n("Correct Misspelled Word") );
+      d->spell.macroCmdSpellCheck = new MacroUndoAction( doc(), i18n("Correct Misspelled Word") );
   d->spell.macroCmdSpellCheck->addCommand( undo );
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::spellCheckerDone( const QString & )
+void View::spellCheckerDone( const QString & )
 {
     int result = d->spell.kspell->dlgResult();
 
@@ -2197,7 +2202,7 @@ void KSpreadView::spellCheckerDone( const QString & )
     d->spell.macroCmdSpellCheck=0L;
 }
 
-void KSpreadView::spellCheckerFinished()
+void View::spellCheckerFinished()
 {
   if (d->canvas)
     d->canvas->setCursor( ArrowCursor );
@@ -2230,22 +2235,22 @@ void KSpreadView::spellCheckerFinished()
 
   if (kspellNotConfigured)
   {
-    KSpreadpreference configDlg( this, 0 );
-    configDlg.openPage( KSpreadpreference::KS_SPELLING);
+    PreferenceDialog configDlg( this, 0 );
+    configDlg.openPage( PreferenceDialog::KS_SPELLING);
     configDlg.exec();
   }
 }
 
-void KSpreadView::initialPosition()
+void View::initialPosition()
 {
-    kdDebug() << "KSpreadView::initialPosition" << endl;
+    kdDebug() << "View::initialPosition" << endl;
 
     // Loading completed, pick initial worksheet
-    QPtrListIterator<KSpreadSheet> it( doc()->map()->sheetList() );
+    QPtrListIterator<Sheet> it( doc()->map()->sheetList() );
     for( ; it.current(); ++it )
       addSheet( it.current() );
 
-    KSpreadSheet * tbl = 0L;
+    Sheet * tbl = 0L;
     if ( doc()->isEmbedded() )
     {
         tbl = doc()->displaySheet();
@@ -2321,7 +2326,7 @@ void KSpreadView::initialPosition()
 }
 
 
-void KSpreadView::updateEditWidgetOnPress()
+void View::updateEditWidgetOnPress()
 {
     int column = d->canvas->markerColumn();
     int row    = d->canvas->markerRow();
@@ -2343,7 +2348,7 @@ void KSpreadView::updateEditWidgetOnPress()
     d->adjustActions( d->activeSheet, cell );
 }
 
-void KSpreadView::updateEditWidget()
+void View::updateEditWidget()
 {
     int column = d->canvas->markerColumn();
     int row    = d->canvas->markerRow();
@@ -2390,11 +2395,11 @@ void KSpreadView::updateEditWidget()
     d->adjustActions( d->activeSheet, cell );
 }
 
-void KSpreadView::activateFormulaEditor()
+void View::activateFormulaEditor()
 {
 }
 
-void KSpreadView::updateReadWrite( bool readwrite )
+void View::updateReadWrite( bool readwrite )
 {
     // d->cancelButton->setEnabled( readwrite );
     // d->okButton->setEnabled( readwrite );
@@ -2428,7 +2433,7 @@ void KSpreadView::updateReadWrite( bool readwrite )
   //doc()->KXMLGUIClient::action( "newView" )->setEnabled( true ); // obsolete (Werner)
 }
 
-void KSpreadView::createTemplate()
+void View::createTemplate()
 {
   int width = 60;
   int height = 60;
@@ -2439,21 +2444,21 @@ void KSpreadView::createTemplate()
 
   doc()->saveNativeFormat( tempFile.name() );
 
-  KoTemplateCreateDia::createTemplate( "kspread_template", KSpreadFactory::global(),
+  KoTemplateCreateDia::createTemplate( "kspread_template", Factory::global(),
                                            tempFile.name(), pix, this );
 
-  KSpreadFactory::global()->dirs()->addResourceType("kspread_template",
+  Factory::global()->dirs()->addResourceType("kspread_template",
                                                        KStandardDirs::kde_default( "data" ) +
                                                        "kspread/templates/");
 }
 
-void KSpreadView::sheetFormat()
+void View::sheetFormat()
 {
-    KSpreadFormatDlg dlg( this );
+    FormatDialog dlg( this );
     dlg.exec();
 }
 
-void KSpreadView::autoSum()
+void View::autoSum()
 {
     // ######## Torben: Make sure that this can not be called
     // when canvas has a running editor
@@ -2463,7 +2468,7 @@ void KSpreadView::autoSum()
   //Get the selected range and remove the current cell from it (as that is
   //where the result of the autosum will be stored - perhaps change
   //this behaviour??)
-  KSpreadRange rg;
+  Range rg;
   //rg.sheet=activeSheet();
   QRect sel=selection(false);
 
@@ -2495,7 +2500,7 @@ void KSpreadView::autoSum()
 
   rg.range=sel;
 
-    d->canvas->createEditor( KSpreadCanvas::CellEditor );
+    d->canvas->createEditor( Canvas::CellEditor );
 
   if ( (rg.range.isValid() ) && (!rg.range.isEmpty()) )
   {
@@ -2510,14 +2515,14 @@ void KSpreadView::autoSum()
 }
 
 /*
-void KSpreadView::oszilloscope()
+void View::oszilloscope()
 {
-    QDialog* dlg = new KSpreadOsziDlg( this );
+    QDialog* dlg = new OsziDlg( this );
     dlg->show();
 }
 */
 
-void KSpreadView::changeTextColor()
+void View::changeTextColor()
 {
   if ( d->activeSheet != 0L )
   {
@@ -2527,7 +2532,7 @@ void KSpreadView::changeTextColor()
   }
 }
 
-void KSpreadView::setSelectionTextColor(const QColor &txtColor)
+void View::setSelectionTextColor(const QColor &txtColor)
 {
   if (d->activeSheet != 0L)
   {
@@ -2537,7 +2542,7 @@ void KSpreadView::setSelectionTextColor(const QColor &txtColor)
   }
 }
 
-void KSpreadView::changeBackgroundColor()
+void View::changeBackgroundColor()
 {
   if ( d->activeSheet != 0L )
   {
@@ -2547,7 +2552,7 @@ void KSpreadView::changeBackgroundColor()
   }
 }
 
-void KSpreadView::setSelectionBackgroundColor(const QColor &bgColor)
+void View::setSelectionBackgroundColor(const QColor &bgColor)
 {
   if (d->activeSheet != 0L)
   {
@@ -2557,7 +2562,7 @@ void KSpreadView::setSelectionBackgroundColor(const QColor &bgColor)
   }
 }
 
-void KSpreadView::changeBorderColor()
+void View::changeBorderColor()
 {
   if ( d->activeSheet != 0L )
   {
@@ -2567,7 +2572,7 @@ void KSpreadView::changeBorderColor()
   }
 }
 
-void KSpreadView::setSelectionBorderColor(const QColor &bdColor)
+void View::setSelectionBorderColor(const QColor &bdColor)
 {
   if (d->activeSheet != 0L)
   {
@@ -2577,36 +2582,36 @@ void KSpreadView::setSelectionBorderColor(const QColor &bdColor)
   }
 }
 
-void KSpreadView::helpUsing()
+void View::helpUsing()
 {
   kapp->invokeHelp( );
 }
 
-void KSpreadView::enableUndo( bool _b )
+void View::enableUndo( bool _b )
 {
   KAction* action = actionCollection()->action( "office_undo" );
   if( action ) action->setEnabled( _b );
 }
 
-void KSpreadView::enableRedo( bool _b )
+void View::enableRedo( bool _b )
 {
   KAction* action = actionCollection()->action( "office_redo" );
   if( action ) action->setEnabled( _b );
 }
 
-void KSpreadView::enableInsertColumn( bool _b )
+void View::enableInsertColumn( bool _b )
 {
   if ( d->activeSheet && !d->activeSheet->isProtected() )
     d->actions->insertColumn->setEnabled( _b );
 }
 
-void KSpreadView::enableInsertRow( bool _b )
+void View::enableInsertRow( bool _b )
 {
   if ( d->activeSheet && !d->activeSheet->isProtected() )
     d->actions->insertRow->setEnabled( _b );
 }
 
-void KSpreadView::deleteColumn()
+void View::deleteColumn()
 {
   if ( !d->activeSheet )
     return;
@@ -2627,7 +2632,7 @@ void KSpreadView::deleteColumn()
   doc()->emitEndOperation( vr );
 }
 
-void KSpreadView::deleteRow()
+void View::deleteRow()
 {
   if ( !d->activeSheet )
     return;
@@ -2646,7 +2651,7 @@ void KSpreadView::deleteRow()
   doc()->emitEndOperation( vr );
 }
 
-void KSpreadView::insertColumn()
+void View::insertColumn()
 {
   if ( !d->activeSheet )
     return;
@@ -2663,7 +2668,7 @@ void KSpreadView::insertColumn()
   doc()->emitEndOperation( vr );
 }
 
-void KSpreadView::hideColumn()
+void View::hideColumn()
 {
   if ( !d->activeSheet )
     return;
@@ -2676,16 +2681,16 @@ void KSpreadView::hideColumn()
   doc()->emitEndOperation( vr );
 }
 
-void KSpreadView::showColumn()
+void View::showColumn()
 {
   if ( !d->activeSheet )
     return;
 
-  KSpreadShowColRow dlg( this, "showCol", KSpreadShowColRow::Column );
+  ShowColRow dlg( this, "showCol", ShowColRow::Column );
   dlg.exec();
 }
 
-void KSpreadView::showSelColumns()
+void View::showSelColumns()
 {
   if ( !d->activeSheet )
     return;
@@ -2721,7 +2726,7 @@ void KSpreadView::showSelColumns()
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::insertRow()
+void View::insertRow()
 {
   if ( !d->activeSheet )
     return;
@@ -2736,7 +2741,7 @@ void KSpreadView::insertRow()
   doc()->emitEndOperation( vr );
 }
 
-void KSpreadView::hideRow()
+void View::hideRow()
 {
   if ( !d->activeSheet )
     return;
@@ -2752,16 +2757,16 @@ void KSpreadView::hideRow()
   doc()->emitEndOperation( vr );
 }
 
-void KSpreadView::showRow()
+void View::showRow()
 {
   if ( !d->activeSheet )
     return;
 
-  KSpreadShowColRow dlg( this, "showRow", KSpreadShowColRow::Row );
+  ShowColRow dlg( this, "showRow", ShowColRow::Row );
   dlg.exec();
 }
 
-void KSpreadView::showSelRows()
+void View::showSelRows()
 {
   if ( !d->activeSheet )
     return;
@@ -2797,7 +2802,7 @@ void KSpreadView::showSelRows()
   endOperation( rect );
 }
 
-void KSpreadView::endOperation( QRect const & rect )
+void View::endOperation( QRect const & rect )
 {
   QRect vr( d->activeSheet->visibleRect( d->canvas ) );
   if ( rect.left() > vr.left() )
@@ -2812,7 +2817,7 @@ void KSpreadView::endOperation( QRect const & rect )
   doc()->emitEndOperation( vr );
 }
 
-void KSpreadView::fontSelected( const QString & _font )
+void View::fontSelected( const QString & _font )
 {
   if ( d->toolbarLock )
     return;
@@ -2834,17 +2839,17 @@ void KSpreadView::fontSelected( const QString & _font )
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::decreaseFontSize()
+void View::decreaseFontSize()
 {
   setSelectionFontSize( -1 );
 }
 
-void KSpreadView::increaseFontSize()
+void View::increaseFontSize()
 {
   setSelectionFontSize( 1 );
 }
 
-void KSpreadView::setSelectionFontSize( int size )
+void View::setSelectionFontSize( int size )
 {
   if ( d->activeSheet != NULL )
   {
@@ -2854,7 +2859,7 @@ void KSpreadView::setSelectionFontSize( int size )
   }
 }
 
-void KSpreadView::lower()
+void View::lower()
 {
   if ( !d->activeSheet  )
     return;
@@ -2867,7 +2872,7 @@ void KSpreadView::lower()
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::upper()
+void View::upper()
 {
   if ( !d->activeSheet  )
     return;
@@ -2880,7 +2885,7 @@ void KSpreadView::upper()
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::firstLetterUpper()
+void View::firstLetterUpper()
 {
   if ( !d->activeSheet  )
     return;
@@ -2890,7 +2895,7 @@ void KSpreadView::firstLetterUpper()
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::verticalText(bool b)
+void View::verticalText(bool b)
 {
   if ( !d->activeSheet  )
     return;
@@ -2909,7 +2914,7 @@ void KSpreadView::verticalText(bool b)
   doc()->emitEndOperation( QRect( d->selectionInfo->marker(), d->selectionInfo->marker() ) );
 }
 
-void KSpreadView::insertSpecialChar()
+void View::insertSpecialChar()
 {
   QString f( d->actions->selectFont->font() );
   QChar c = ' ';
@@ -2925,7 +2930,7 @@ void KSpreadView::insertSpecialChar()
   d->specialCharDlg->show();
 }
 
-void KSpreadView::slotSpecialCharDlgClosed()
+void View::slotSpecialCharDlgClosed()
 {
   if ( d->specialCharDlg )
   {
@@ -2938,7 +2943,7 @@ void KSpreadView::slotSpecialCharDlgClosed()
   }
 }
 
-void KSpreadView::slotSpecialChar( QChar c, const QString & _font )
+void View::slotSpecialChar( QChar c, const QString & _font )
 {
   if ( d->activeSheet )
   {
@@ -2948,18 +2953,18 @@ void KSpreadView::slotSpecialChar( QChar c, const QString & _font )
     {
       cell->setTextFontFamily( _font );
     }
-    KSpreadEditWidget * edit = d->canvas->editWidget();
+    EditWidget * edit = d->canvas->editWidget();
     QKeyEvent ev( QEvent::KeyPress, 0, 0, 0, QString( c ) );
     QApplication::sendEvent( edit, &ev );
   }
 }
 
-void KSpreadView::insertMathExpr()
+void View::insertMathExpr()
 {
   if ( d->activeSheet == 0L )
     return;
 
-  KSpreadDlgFormula * dlg = new KSpreadDlgFormula( this, "Function" );
+  FormulaDialog * dlg = new FormulaDialog( this, "Function" );
   dlg->show();
 
   /* TODO - because I search on 'TODO's :-) */
@@ -2967,7 +2972,7 @@ void KSpreadView::insertMathExpr()
   // Torben thinks that not.
 }
 
-void KSpreadView::formulaSelection( const QString &_math )
+void View::formulaSelection( const QString &_math )
 {
   if ( d->activeSheet == 0 )
     return;
@@ -2978,11 +2983,11 @@ void KSpreadView::formulaSelection( const QString &_math )
     return;
   }
 
-  KSpreadDlgFormula *dlg = new KSpreadDlgFormula( this, "Formula Editor", _math );
+  FormulaDialog *dlg = new FormulaDialog( this, "Formula Editor", _math );
   dlg->exec();
 }
 
-void KSpreadView::fontSizeSelected( int _size )
+void View::fontSizeSelected( int _size )
 {
   if ( d->toolbarLock )
     return;
@@ -3006,7 +3011,7 @@ void KSpreadView::fontSizeSelected( int _size )
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::bold( bool b )
+void View::bold( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -3028,7 +3033,7 @@ void KSpreadView::bold( bool b )
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::underline( bool b )
+void View::underline( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -3050,7 +3055,7 @@ void KSpreadView::underline( bool b )
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::strikeOut( bool b )
+void View::strikeOut( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -3073,7 +3078,7 @@ void KSpreadView::strikeOut( bool b )
 }
 
 
-void KSpreadView::italic( bool b )
+void View::italic( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -3095,7 +3100,7 @@ void KSpreadView::italic( bool b )
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::sortInc()
+void View::sortInc()
 {
   QRect r( d->selectionInfo->selection() );
   if ( d->selectionInfo->singleCellSelection() )
@@ -3108,15 +3113,15 @@ void KSpreadView::sortInc()
 
   // Entire row(s) selected ? Or just one row ?
   if ( util_isRowSelected( selection() ) || r.top() == r.bottom() )
-    activeSheet()->sortByRow( selection(), r.top(), KSpreadSheet::Increase );
+    activeSheet()->sortByRow( selection(), r.top(), Sheet::Increase );
   else
-    activeSheet()->sortByColumn( selection(), r.left(), KSpreadSheet::Increase );
+    activeSheet()->sortByColumn( selection(), r.left(), Sheet::Increase );
   updateEditWidget();
 
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::sortDec()
+void View::sortDec()
 {
   QRect r( d->selectionInfo->selection() );
   if ( d->selectionInfo->singleCellSelection() )
@@ -3129,16 +3134,16 @@ void KSpreadView::sortDec()
 
     // Entire row(s) selected ? Or just one row ?
   if ( util_isRowSelected( selection() ) || r.top() == r.bottom() )
-    activeSheet()->sortByRow( selection(), r.top(), KSpreadSheet::Decrease );
+    activeSheet()->sortByRow( selection(), r.top(), Sheet::Decrease );
   else
-    activeSheet()->sortByColumn( selection(), r.left(), KSpreadSheet::Decrease );
+    activeSheet()->sortByColumn( selection(), r.left(), Sheet::Decrease );
   updateEditWidget();
 
   endOperation( d->selectionInfo->selection() );
 }
 
 
-void KSpreadView::borderBottom()
+void View::borderBottom()
 {
   if ( d->activeSheet != 0L )
   {
@@ -3150,7 +3155,7 @@ void KSpreadView::borderBottom()
   }
 }
 
-void KSpreadView::setSelectionBottomBorderColor( const QColor & color )
+void View::setSelectionBottomBorderColor( const QColor & color )
 {
   if ( d->activeSheet != 0L )
   {
@@ -3160,12 +3165,12 @@ void KSpreadView::setSelectionBottomBorderColor( const QColor & color )
   }
 }
 
-void KSpreadView::borderRight()
+void View::borderRight()
 {
   if ( d->activeSheet != 0L )
   {
     doc()->emitBeginOperation( false );
-    if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
       d->activeSheet->borderLeft( d->selectionInfo, d->actions->borderColor->color() );
     else
       d->activeSheet->borderRight( d->selectionInfo, d->actions->borderColor->color() );
@@ -3173,12 +3178,12 @@ void KSpreadView::borderRight()
   }
 }
 
-void KSpreadView::setSelectionRightBorderColor( const QColor & color )
+void View::setSelectionRightBorderColor( const QColor & color )
 {
   if ( d->activeSheet != 0L )
   {
     doc()->emitBeginOperation( false );
-    if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
       d->activeSheet->borderLeft( selectionInfo(), color );
     else
       d->activeSheet->borderRight( selectionInfo(), color );
@@ -3186,12 +3191,12 @@ void KSpreadView::setSelectionRightBorderColor( const QColor & color )
   }
 }
 
-void KSpreadView::borderLeft()
+void View::borderLeft()
 {
   if ( d->activeSheet != 0L )
   {
     doc()->emitBeginOperation( false );
-    if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
       d->activeSheet->borderRight( d->selectionInfo, d->actions->borderColor->color() );
     else
       d->activeSheet->borderLeft( d->selectionInfo, d->actions->borderColor->color() );
@@ -3199,12 +3204,12 @@ void KSpreadView::borderLeft()
   }
 }
 
-void KSpreadView::setSelectionLeftBorderColor( const QColor & color )
+void View::setSelectionLeftBorderColor( const QColor & color )
 {
   if ( d->activeSheet != 0L )
   {
     doc()->emitBeginOperation( false );
-    if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+    if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
       d->activeSheet->borderRight( selectionInfo(), color );
     else
       d->activeSheet->borderLeft( selectionInfo(), color );
@@ -3212,7 +3217,7 @@ void KSpreadView::setSelectionLeftBorderColor( const QColor & color )
   }
 }
 
-void KSpreadView::borderTop()
+void View::borderTop()
 {
   if ( d->activeSheet != 0L )
   {
@@ -3222,7 +3227,7 @@ void KSpreadView::borderTop()
   }
 }
 
-void KSpreadView::setSelectionTopBorderColor( const QColor & color )
+void View::setSelectionTopBorderColor( const QColor & color )
 {
   if ( d->activeSheet != 0L )
   {
@@ -3232,7 +3237,7 @@ void KSpreadView::setSelectionTopBorderColor( const QColor & color )
   }
 }
 
-void KSpreadView::borderOutline()
+void View::borderOutline()
 {
   if ( d->activeSheet != 0L )
   {
@@ -3242,7 +3247,7 @@ void KSpreadView::borderOutline()
   }
 }
 
-void KSpreadView::setSelectionOutlineBorderColor( const QColor & color )
+void View::setSelectionOutlineBorderColor( const QColor & color )
 {
   if ( d->activeSheet != 0L )
   {
@@ -3252,7 +3257,7 @@ void KSpreadView::setSelectionOutlineBorderColor( const QColor & color )
   }
 }
 
-void KSpreadView::borderAll()
+void View::borderAll()
 {
   if ( d->activeSheet != 0L )
   {
@@ -3262,7 +3267,7 @@ void KSpreadView::borderAll()
   }
 }
 
-void KSpreadView::setSelectionAllBorderColor( const QColor & color )
+void View::setSelectionAllBorderColor( const QColor & color )
 {
   if ( d->activeSheet != 0L )
   {
@@ -3272,7 +3277,7 @@ void KSpreadView::setSelectionAllBorderColor( const QColor & color )
   }
 }
 
-void KSpreadView::borderRemove()
+void View::borderRemove()
 {
   if ( d->activeSheet != 0L )
   {
@@ -3282,7 +3287,7 @@ void KSpreadView::borderRemove()
   }
 }
 
-void KSpreadView::addSheet( KSpreadSheet * _t )
+void View::addSheet( Sheet * _t )
 {
   doc()->emitBeginOperation( false );
 
@@ -3290,27 +3295,27 @@ void KSpreadView::addSheet( KSpreadSheet * _t )
 
   // Connect some signals
   QObject::connect( _t, SIGNAL( sig_refreshView() ), SLOT( slotRefreshView() ) );
-  QObject::connect( _t, SIGNAL( sig_updateView( KSpreadSheet* ) ), SLOT( slotUpdateView( KSpreadSheet* ) ) );
-  QObject::connect( _t->print(), SIGNAL( sig_updateView( KSpreadSheet* ) ), SLOT( slotUpdateView( KSpreadSheet* ) ) );
-  QObject::connect( _t, SIGNAL( sig_updateView( KSpreadSheet *, const QRect& ) ),
-                    SLOT( slotUpdateView( KSpreadSheet*, const QRect& ) ) );
-  QObject::connect( _t, SIGNAL( sig_updateHBorder( KSpreadSheet * ) ),
-                    SLOT( slotUpdateHBorder( KSpreadSheet * ) ) );
-  QObject::connect( _t, SIGNAL( sig_updateVBorder( KSpreadSheet * ) ),
-                    SLOT( slotUpdateVBorder( KSpreadSheet * ) ) );
-  QObject::connect( _t, SIGNAL( sig_nameChanged( KSpreadSheet*, const QString& ) ),
-                    this, SLOT( slotSheetRenamed( KSpreadSheet*, const QString& ) ) );
-  QObject::connect( _t, SIGNAL( sig_SheetHidden( KSpreadSheet* ) ),
-                    this, SLOT( slotSheetHidden( KSpreadSheet* ) ) );
-  QObject::connect( _t, SIGNAL( sig_SheetShown( KSpreadSheet* ) ),
-                    this, SLOT( slotSheetShown( KSpreadSheet* ) ) );
-  QObject::connect( _t, SIGNAL( sig_SheetRemoved( KSpreadSheet* ) ),
-                    this, SLOT( slotSheetRemoved( KSpreadSheet* ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateView( Sheet* ) ), SLOT( slotUpdateView( Sheet* ) ) );
+  QObject::connect( _t->print(), SIGNAL( sig_updateView( Sheet* ) ), SLOT( slotUpdateView( Sheet* ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateView( Sheet *, const QRect& ) ),
+                    SLOT( slotUpdateView( Sheet*, const QRect& ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateHBorder( Sheet * ) ),
+                    SLOT( slotUpdateHBorder( Sheet * ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateVBorder( Sheet * ) ),
+                    SLOT( slotUpdateVBorder( Sheet * ) ) );
+  QObject::connect( _t, SIGNAL( sig_nameChanged( Sheet*, const QString& ) ),
+                    this, SLOT( slotSheetRenamed( Sheet*, const QString& ) ) );
+  QObject::connect( _t, SIGNAL( sig_SheetHidden( Sheet* ) ),
+                    this, SLOT( slotSheetHidden( Sheet* ) ) );
+  QObject::connect( _t, SIGNAL( sig_SheetShown( Sheet* ) ),
+                    this, SLOT( slotSheetShown( Sheet* ) ) );
+  QObject::connect( _t, SIGNAL( sig_SheetRemoved( Sheet* ) ),
+                    this, SLOT( slotSheetRemoved( Sheet* ) ) );
   // ########### Why do these signals not send a pointer to the sheet?
   // This will lead to bugs.
-  QObject::connect( _t, SIGNAL( sig_updateChildGeometry( KSpreadChild* ) ),
-                    SLOT( slotUpdateChildGeometry( KSpreadChild* ) ) );
-  QObject::connect( _t, SIGNAL( sig_removeChild( KSpreadChild* ) ), SLOT( slotRemoveChild( KSpreadChild* ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateChildGeometry( Child* ) ),
+                    SLOT( slotUpdateChildGeometry( Child* ) ) );
+  QObject::connect( _t, SIGNAL( sig_removeChild( Child* ) ), SLOT( slotRemoveChild( Child* ) ) );
   QObject::connect( _t, SIGNAL( sig_maxColumn( int ) ), d->canvas, SLOT( slotMaxColumn( int ) ) );
   QObject::connect( _t, SIGNAL( sig_maxRow( int ) ), d->canvas, SLOT( slotMaxRow( int ) ) );
 
@@ -3325,7 +3330,7 @@ void KSpreadView::addSheet( KSpreadSheet * _t )
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::slotSheetRemoved( KSpreadSheet *_t )
+void View::slotSheetRemoved( Sheet *_t )
 {
   doc()->emitBeginOperation( false );
 
@@ -3346,7 +3351,7 @@ void KSpreadView::slotSheetRemoved( KSpreadSheet *_t )
       doc()->removeArea( (*it).ref_name );
       //now area name is used in formula
       //so you must recalc sheets when remove areaname
-      KSpreadSheet * tbl;
+      Sheet * tbl;
 
       for ( tbl = doc()->map()->firstSheet(); tbl != 0L; tbl = doc()->map()->nextSheet() )
       {
@@ -3358,7 +3363,7 @@ void KSpreadView::slotSheetRemoved( KSpreadSheet *_t )
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::removeAllSheets()
+void View::removeAllSheets()
 {
   doc()->emitBeginOperation(false);
   d->tabBar->clear();
@@ -3368,7 +3373,7 @@ void KSpreadView::removeAllSheets()
   doc()->emitEndOperation();
 }
 
-void KSpreadView::setActiveSheet( KSpreadSheet * _t, bool updateSheet )
+void View::setActiveSheet( Sheet * _t, bool updateSheet )
 {
   if ( _t == d->activeSheet )
     return;
@@ -3377,7 +3382,7 @@ void KSpreadView::setActiveSheet( KSpreadSheet * _t, bool updateSheet )
 
   saveCurrentSheetSelection();
 
-  KSpreadSheet * oldSheet = d->activeSheet;
+  Sheet * oldSheet = d->activeSheet;
 
   d->activeSheet = _t;
 
@@ -3387,7 +3392,7 @@ void KSpreadView::setActiveSheet( KSpreadSheet * _t, bool updateSheet )
     return;
   }
 
-  if ( oldSheet && oldSheet->layoutDirection()==KSpreadSheet::RightToLeft != d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( oldSheet && oldSheet->layoutDirection()==Sheet::RightToLeft != d->activeSheet->layoutDirection()==Sheet::RightToLeft )
     refreshView();
 
   doc()->setDisplaySheet( d->activeSheet );
@@ -3408,8 +3413,8 @@ void KSpreadView::setActiveSheet( KSpreadSheet * _t, bool updateSheet )
   d->adjustWorkbookActions( !doc()->map()->isProtected() );
 
   /* see if there was a previous selection on this other sheet */
-  QMapIterator<KSpreadSheet*, QPoint> it = d->savedAnchors.find(d->activeSheet);
-  QMapIterator<KSpreadSheet*, QPoint> it2 = d->savedMarkers.find(d->activeSheet);
+  QMapIterator<Sheet*, QPoint> it = d->savedAnchors.find(d->activeSheet);
+  QMapIterator<Sheet*, QPoint> it2 = d->savedMarkers.find(d->activeSheet);
 
   QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1,1) : *it;
   QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1,1) : *it2;
@@ -3426,21 +3431,21 @@ void KSpreadView::setActiveSheet( KSpreadSheet * _t, bool updateSheet )
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::slotSheetRenamed( KSpreadSheet* sheet, const QString& old_name )
+void View::slotSheetRenamed( Sheet* sheet, const QString& old_name )
 {
   doc()->emitBeginOperation( false );
   d->tabBar->renameTab( old_name, sheet->sheetName() );
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::slotSheetHidden( KSpreadSheet* )
+void View::slotSheetHidden( Sheet* )
 {
   doc()->emitBeginOperation(false);
   updateShowSheetMenu();
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::slotSheetShown( KSpreadSheet* )
+void View::slotSheetShown( Sheet* )
 {
   doc()->emitBeginOperation(false);
   d->tabBar->setTabs( doc()->map()->visibleSheets() );
@@ -3448,12 +3453,12 @@ void KSpreadView::slotSheetShown( KSpreadSheet* )
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::changeSheet( const QString& _name )
+void View::changeSheet( const QString& _name )
 {
     if ( activeSheet()->sheetName() == _name )
         return;
 
-    KSpreadSheet *t = doc()->map()->findSheet( _name );
+    Sheet *t = doc()->map()->findSheet( _name );
     if ( !t )
     {
         kdDebug(36001) << "Unknown sheet " << _name << endl;
@@ -3476,7 +3481,7 @@ void KSpreadView::changeSheet( const QString& _name )
     doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::moveSheet( unsigned sheet, unsigned target )
+void View::moveSheet( unsigned sheet, unsigned target )
 {
     QStringList vs = doc()->map()->visibleSheets();
 
@@ -3488,7 +3493,7 @@ void KSpreadView::moveSheet( unsigned sheet, unsigned target )
     d->tabBar->moveTab( sheet, target );
 }
 
-void KSpreadView::sheetProperties()
+void View::sheetProperties()
 {
     // sanity check, shouldn't happen
     if( doc()->map()->isProtected() ) return;
@@ -3540,7 +3545,7 @@ void KSpreadView::sheetProperties()
     }
 }
 
-void KSpreadView::insertSheet()
+void View::insertSheet()
 {
   if ( doc()->map()->isProtected() )
   {
@@ -3550,7 +3555,7 @@ void KSpreadView::insertSheet()
 
   doc()->emitBeginOperation( false );
   d->canvas->closeEditor();
-  KSpreadSheet * t = doc()->map()->createSheet();
+  Sheet * t = doc()->map()->createSheet();
   KCommand* command = new AddSheetCommand( t );
   doc()->addCommand( command );
   updateEditWidget();
@@ -3565,7 +3570,7 @@ void KSpreadView::insertSheet()
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::hideSheet()
+void View::hideSheet()
 {
   if ( !d->activeSheet )
     return;
@@ -3593,16 +3598,16 @@ void KSpreadView::hideSheet()
   d->tabBar->setActiveTab( sn );
 }
 
-void KSpreadView::showSheet()
+void View::showSheet()
 {
   if ( !d->activeSheet )
     return;
 
-  KSpreadshow dlg( this, "Sheet show");
+  ShowDialog dlg( this, "Sheet show");
   dlg.exec();
 }
 
-void KSpreadView::copySelection()
+void View::copySelection()
 {
   if ( !d->activeSheet )
     return;
@@ -3616,7 +3621,7 @@ void KSpreadView::copySelection()
     d->canvas->editor()->copy();
 }
 
-void KSpreadView::copyAsText()
+void View::copyAsText()
 {
   if ( !d->activeSheet )
     return;
@@ -3624,7 +3629,7 @@ void KSpreadView::copyAsText()
 }
 
 
-void KSpreadView::cutSelection()
+void View::cutSelection()
 {
   if ( !d->activeSheet )
     return;
@@ -3643,7 +3648,7 @@ void KSpreadView::cutSelection()
   endOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::paste()
+void View::paste()
 {
   if ( !d->activeSheet )
     return;
@@ -3667,12 +3672,12 @@ void KSpreadView::paste()
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::specialPaste()
+void View::specialPaste()
 {
   if ( !d->activeSheet )
     return;
 
-  KSpreadspecial dlg( this, "Special Paste" );
+  SpecialDialog dlg( this, "Special Paste" );
   if ( dlg.exec() )
   {
     if ( d->activeSheet->getAutoCalc() )
@@ -3686,7 +3691,7 @@ void KSpreadView::specialPaste()
   }
 }
 
-void KSpreadView::removeComment()
+void View::removeComment()
 {
   if ( !d->activeSheet )
         return;
@@ -3698,12 +3703,12 @@ void KSpreadView::removeComment()
 }
 
 
-void KSpreadView::changeAngle()
+void View::changeAngle()
 {
   if ( !d->activeSheet )
     return;
 
-  KSpreadAngle dlg( this, "Angle" ,
+  AngleDialog dlg( this, "Angle" ,
                     QPoint( d->canvas->markerColumn(), d->canvas->markerRow() ));
   if ( dlg.exec() )
   {
@@ -3717,7 +3722,7 @@ void KSpreadView::changeAngle()
   }
 }
 
-void KSpreadView::setSelectionAngle( int angle )
+void View::setSelectionAngle( int angle )
 {
   doc()->emitBeginOperation( false );
 
@@ -3735,7 +3740,7 @@ void KSpreadView::setSelectionAngle( int angle )
   endOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::mergeCell()
+void View::mergeCell()
 {
   // sanity check
   if( !d->activeSheet )
@@ -3760,7 +3765,7 @@ void KSpreadView::mergeCell()
   command->execute();
 }
 
-void KSpreadView::dissociateCell()
+void View::dissociateCell()
 {
   // sanity check
   if( !d->activeSheet )
@@ -3778,7 +3783,7 @@ void KSpreadView::dissociateCell()
 }
 
 
-void KSpreadView::increaseIndent()
+void View::increaseIndent()
 {
   if ( !d->activeSheet )
     return;
@@ -3789,7 +3794,7 @@ void KSpreadView::increaseIndent()
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::decreaseIndent()
+void View::decreaseIndent()
 {
   if ( !d->activeSheet )
     return;
@@ -3807,22 +3812,22 @@ void KSpreadView::decreaseIndent()
   endOperation( d->selectionInfo->selection() );
 }
 
-void KSpreadView::goalSeek()
+void View::goalSeek()
 {
   if ( d->canvas->editor() )
   {
     d->canvas->deleteEditor( true ); // save changes
   }
 
-  KSpreadGoalSeekDlg * dlg
-    = new KSpreadGoalSeekDlg( this, QPoint( d->canvas->markerColumn(),
+  GoalSeekDialog * dlg
+    = new GoalSeekDialog( this, QPoint( d->canvas->markerColumn(),
                                             d->canvas->markerRow() ),
-                              "KSpreadGoalSeekDlg" );
+                              "GoalSeekDialog" );
   dlg->show();
   /* dialog autodeletes itself */
 }
 
-void KSpreadView::subtotals()
+void View::subtotals()
 {
   QRect selection( d->selectionInfo->selection() );
   if ( ( selection.width() < 2 )
@@ -3832,7 +3837,7 @@ void KSpreadView::subtotals()
     return;
   }
 
-  KSpreadSubtotalDlg dlg(this, selection, "KSpreadSubtotalDlg" );
+  SubtotalDialog dlg(this, selection, "SubtotalDialog" );
   if ( dlg.exec() )
   {
     doc()->emitBeginOperation( false );
@@ -3843,17 +3848,17 @@ void KSpreadView::subtotals()
   }
 }
 
-void KSpreadView::multipleOperations()
+void View::multipleOperations()
 {
   if ( d->canvas->editor() )
   {
     d->canvas->deleteEditor( true ); // save changes
   }
-  //  KSpreadMultipleOpDlg * dlg = new KSpreadMultipleOpDlg( this, "KSpreadMultipleOpDlg" );
+  //  MultipleOpDlg * dlg = new MultipleOpDlg( this, "MultipleOpDlg" );
   //  dlg->show();
 }
 
-void KSpreadView::textToColumns()
+void View::textToColumns()
 {
   d->canvas->closeEditor();
 
@@ -3870,34 +3875,34 @@ void KSpreadView::textToColumns()
     return;
   }*/
 
-  KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", area, KSpreadCSVDialog::Column );
+  CSVDialog dialog( this, "CSVDialog", area, CSVDialog::Column );
   if( !dialog.cancelled() )
     dialog.exec();
 }
 
-void KSpreadView::consolidate()
+void View::consolidate()
 {
   d->canvas->closeEditor();
-  KSpreadConsolidate * dlg = new KSpreadConsolidate( this, "Consolidate" );
+  ConsolidateDialog * dlg = new ConsolidateDialog( this, "ConsolidateDialog" );
   dlg->show();
   // dlg destroys itself
 }
 
-void KSpreadView::sortList()
+void View::sortList()
 {
-  KSpreadList dlg( this, "List selection" );
+  ListDialog dlg( this, "List selection" );
   dlg.exec();
 }
 
-void KSpreadView::gotoCell()
+void View::gotoCell()
 {
-  KSpreadGotoDlg dlg( this, "GotoCell" );
+  GotoDialog dlg( this, "GotoCell" );
   dlg.exec();
 }
 
-void KSpreadView::find()
+void View::find()
 {
-    KSpreadFindDlg dlg( this, "Find", d->findOptions, d->findStrings );
+    FindDlg dlg( this, "Find", d->findOptions, d->findStrings );
     dlg.setHasSelection( !d->selectionInfo->singleCellSelection() );
     dlg.setHasCursor( true );
     if ( KFindDialog::Accepted != dlg.exec() )
@@ -3924,7 +3929,7 @@ void KSpreadView::find()
 
 // Initialize a find or replace operation, using d->find or d->replace,
 // and d->findOptions.
-void KSpreadView::initFindReplace()
+void View::initFindReplace()
 {
     KFind* findObj = d->find ? d->find : d->replace;
     Q_ASSERT( findObj );
@@ -3934,7 +3939,7 @@ void KSpreadView::initFindReplace()
             this, SLOT( findNext() ) );
 
     bool bck = d->findOptions & KFindDialog::FindBackwards;
-    KSpreadSheet* currentSheet = d->searchInSheets.currentSheet;
+    Sheet* currentSheet = d->searchInSheets.currentSheet;
 
     QRect region = ( d->findOptions & KFindDialog::SelectedText )
                    ? d->selectionInfo->selection()
@@ -3957,7 +3962,7 @@ void KSpreadView::initFindReplace()
     //kdDebug() << k_funcinfo << "leftcol=" << d->findLeftColumn << " rightcol=" << d->findRightColumn << endl;
 }
 
-void KSpreadView::findNext()
+void View::findNext()
 {
     KFind* findObj = d->find ? d->find : d->replace;
     if ( !findObj )  {
@@ -3971,7 +3976,7 @@ void KSpreadView::findNext()
     {
         if ( findObj->needData() )
         {
-            if ( d->typeValue == KSpreadFindOption::Note )
+            if ( d->typeValue == FindOption::Note )
                 findObj->setData( cell->comment( cell->column(), cell->row() ) );
             else
                 findObj->setData( cell->text() );
@@ -3987,7 +3992,7 @@ void KSpreadView::findNext()
 
         if ( res == KFind::NoMatch )  {
             // Go to next cell, skipping unwanted cells
-            if ( d->directionValue == KSpreadFindOption::Row )
+            if ( d->directionValue == FindOption::Row )
             {
                 if ( forw )
                     ++d->findPos.rx();
@@ -4023,22 +4028,22 @@ void KSpreadView::findNext()
     }
 }
 
-Cell* KSpreadView::nextFindValidCell( int col, int row )
+Cell* View::nextFindValidCell( int col, int row )
 {
     Cell *cell = d->searchInSheets.currentSheet->cellAt( col, row );
     if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
         cell = 0L;
-    if ( d->typeValue == KSpreadFindOption::Note && cell && cell->comment(col, row).isEmpty())
+    if ( d->typeValue == FindOption::Note && cell && cell->comment(col, row).isEmpty())
         cell = 0L;
     return cell;
 }
 
-Cell* KSpreadView::findNextCell()
+Cell* View::findNextCell()
 {
     // getFirstCellRow / getNextCellRight would be faster at doing that,
     // but it doesn't seem to be easy to combine it with 'start a column d->find.x()'...
 
-    KSpreadSheet* sheet = d->searchInSheets.currentSheet;
+    Sheet* sheet = d->searchInSheets.currentSheet;
     Cell* cell = 0L;
     bool forw = ! ( d->findOptions & KFindDialog::FindBackwards );
     int col = d->findPos.x();
@@ -4046,7 +4051,7 @@ Cell* KSpreadView::findNextCell()
     int maxRow = sheet->maxRow();
     //kdDebug() << "findNextCell starting at " << col << "," << row << "   forw=" << forw << endl;
 
-    if ( d->directionValue == KSpreadFindOption::Row )
+    if ( d->directionValue == FindOption::Row )
     {
         while ( !cell && row != d->findEnd.y() && (forw ? row < maxRow : row >= 0) )
         {
@@ -4099,7 +4104,7 @@ Cell* KSpreadView::findNextCell()
     return cell;
 }
 
-void KSpreadView::findPrevious()
+void View::findPrevious()
 {
     KFind* findObj = d->find ? d->find : d->replace;
     if ( !findObj )  {
@@ -4119,9 +4124,9 @@ void KSpreadView::findPrevious()
     d->findOptions = opt; // restore initial options
 }
 
-void KSpreadView::replace()
+void View::replace()
 {
-    KSpreadSearchDlg dlg( this, "Replace", d->findOptions, d->findStrings, d->replaceStrings );
+    SearchDlg dlg( this, "Replace", d->findOptions, d->findStrings, d->replaceStrings );
     dlg.setHasSelection( !d->selectionInfo->singleCellSelection() );
     dlg.setHasCursor( true );
     if ( KReplaceDialog::Accepted != dlg.exec() )
@@ -4145,7 +4150,7 @@ void KSpreadView::replace()
     {
         QRect region( d->findPos, d->findEnd );
         //TODO create undo/redo for comment
-        KSpreadUndoChangeAreaTextCell *undo = new KSpreadUndoChangeAreaTextCell( doc(), d->searchInSheets.currentSheet, region );
+        UndoChangeAreaTextCell *undo = new UndoChangeAreaTextCell( doc(), d->searchInSheets.currentSheet, region );
         doc()->addCommand( undo );
     }
 
@@ -4163,7 +4168,7 @@ void KSpreadView::replace()
 #endif
 }
 
-void KSpreadView::slotHighlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/ )
+void View::slotHighlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/ )
 {
     d->canvas->gotoLocation( d->findPos, d->searchInSheets.currentSheet );
     KDialogBase *baseDialog=0L;
@@ -4177,21 +4182,21 @@ void KSpreadView::slotHighlight( const QString &/*text*/, int /*matchingIndex*/,
     KDialog::avoidArea( baseDialog, QRect( d->findPos, d->findEnd ));
 }
 
-void KSpreadView::slotReplace( const QString &newText, int, int, int )
+void View::slotReplace( const QString &newText, int, int, int )
 {
     // Which cell was this again?
     Cell *cell = d->searchInSheets.currentSheet->cellAt( d->findPos );
 
     // ...now I remember, update it!
     cell->setDisplayDirtyFlag();
-    if ( d->typeValue == KSpreadFindOption::Value )
+    if ( d->typeValue == FindOption::Value )
         cell->setCellText( newText );
-    else if ( d->typeValue == KSpreadFindOption::Note )
+    else if ( d->typeValue == FindOption::Note )
         cell->setComment( newText );
     cell->clearDisplayDirtyFlag();
 }
 
-void KSpreadView::conditional()
+void View::conditional()
 {
   QRect rect( d->selectionInfo->selection() );
 
@@ -4201,12 +4206,12 @@ void KSpreadView::conditional()
   }
   else
   {
-    KSpreadConditionalDlg dlg( this, "KSpreadConditionalDlg", rect);
+    ConditionalDialog dlg( this, "ConditionalDialog", rect);
     dlg.exec();
   }
 }
 
-void KSpreadView::validity()
+void View::validity()
 {
   QRect rect( d->selectionInfo->selection() );
 
@@ -4216,20 +4221,20 @@ void KSpreadView::validity()
   }
   else
   {
-    KSpreadDlgValidity dlg( this,"validity",rect);
+    DlgValidity dlg( this,"validity",rect);
     dlg.exec();
   }
 }
 
 
-void KSpreadView::insertSeries()
+void View::insertSeries()
 {
     d->canvas->closeEditor();
-    KSpreadSeriesDlg dlg( this, "Series", QPoint( d->canvas->markerColumn(), d->canvas->markerRow() ) );
+    SeriesDlg dlg( this, "Series", QPoint( d->canvas->markerColumn(), d->canvas->markerRow() ) );
     dlg.exec();
 }
 
-void KSpreadView::sort()
+void View::sort()
 {
     if ( d->selectionInfo->singleCellSelection() )
     {
@@ -4237,11 +4242,11 @@ void KSpreadView::sort()
         return;
     }
 
-    KSpreadSortDlg dlg( this, "Sort" );
+    SortDlg dlg( this, "Sort" );
     dlg.exec();
 }
 
-void KSpreadView::removeHyperlink()
+void View::removeHyperlink()
 {
     QPoint marker( selectionInfo()->marker() );
     Cell * cell = d->activeSheet->cellAt( marker );
@@ -4256,7 +4261,7 @@ void KSpreadView::removeHyperlink()
   editWidget()->setText( cell->text() );
 }
 
-void KSpreadView::insertHyperlink()
+void View::insertHyperlink()
 {
     d->canvas->closeEditor();
 
@@ -4290,7 +4295,7 @@ void KSpreadView::insertHyperlink()
     delete dlg;
 }
 
-void KSpreadView::insertFromDatabase()
+void View::insertFromDatabase()
 {
 #ifndef QT_NO_SQL
     d->canvas->closeEditor();
@@ -4306,33 +4311,33 @@ void KSpreadView::insertFromDatabase()
     return;
     }
 
-    KSpreadDatabaseDlg dlg(this, rect, "KSpreadDatabaseDlg");
+    DatabaseDialog dlg(this, rect, "DatabaseDialog");
     dlg.exec();
 #endif
 }
 
-void KSpreadView::insertFromTextfile()
+void View::insertFromTextfile()
 {
     d->canvas->closeEditor();
     //KMessageBox::information( this, "Not implemented yet, work in progress...");
 
-    KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", selection(), KSpreadCSVDialog::File );
+    CSVDialog dialog( this, "CSVDialog", selection(), CSVDialog::File );
     if( !dialog.cancelled() )
       dialog.exec();
 }
 
-void KSpreadView::insertFromClipboard()
+void View::insertFromClipboard()
 {
     d->canvas->closeEditor();
 
-    KSpreadCSVDialog dialog( this, "KSpreadCSVDialog", d->selectionInfo->selection(), KSpreadCSVDialog::Clipboard );
+    CSVDialog dialog( this, "CSVDialog", d->selectionInfo->selection(), CSVDialog::Clipboard );
     if( !dialog.cancelled() )
       dialog.exec();
 }
 
-void KSpreadView::setupPrinter( KPrinter &prt )
+void View::setupPrinter( KPrinter &prt )
 {
-    KSpreadSheetPrint* print = d->activeSheet->print();
+    SheetPrint* print = d->activeSheet->print();
 
     //apply page layout parameters
     KoFormat pageFormat = print->paperFormat();
@@ -4347,9 +4352,9 @@ void KSpreadView::setupPrinter( KPrinter &prt )
     prt.setFullPage( true );
 }
 
-void KSpreadView::print( KPrinter &prt )
+void View::print( KPrinter &prt )
 {
-    KSpreadSheetPrint* print = d->activeSheet->print();
+    SheetPrint* print = d->activeSheet->print();
 
     if ( d->canvas->editor() )
     {
@@ -4413,7 +4418,7 @@ void KSpreadView::print( KPrinter &prt )
     painter.end();
 }
 
-void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
+void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
 {
     if ( !d->activeSheet )
       return;
@@ -4444,7 +4449,7 @@ void KSpreadView::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
     }
 }
 
-void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
+void View::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
 {
   if ( !d->activeSheet )
     return;
@@ -4460,16 +4465,16 @@ void KSpreadView::insertChild( const QRect& _geometry, KoDocumentEntry& _e )
   d->activeSheet->insertChild( unzoomedGeometry, _e );
 }
 
-void KSpreadView::slotDeleteChild(KoChild* child)
+void View::slotDeleteChild(KoChild* child)
 {
-  KSpreadChild* spreadChild=static_cast<KSpreadChild*>(child);
+  Child* spreadChild=static_cast<Child*>(child);
 
   doc()->emitBeginOperation(false);
   spreadChild->sheet()->deleteChild(spreadChild);
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas )); 
 }
 
-void KSpreadView::slotRemoveChild( KSpreadChild *_child )
+void View::slotRemoveChild( Child *_child )
 {
   if ( _child->sheet() != d->activeSheet )
     return;
@@ -4481,7 +4486,7 @@ void KSpreadView::slotRemoveChild( KSpreadChild *_child )
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
+void View::slotUpdateChildGeometry( Child */*_child*/ )
 {
     // ##############
     // TODO
@@ -4490,8 +4495,8 @@ void KSpreadView::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
     return;
 
   // Find frame for child
-  KSpreadChildFrame *f = 0L;
-  QPtrListIterator<KSpreadChildFrame> it( m_lstFrames );
+  ChildFrame *f = 0L;
+  QPtrListIterator<ChildFrame> it( m_lstFrames );
   for ( ; it.current() && !f; ++it )
     if ( it.current()->child() == _child )
       f = it.current();
@@ -4507,7 +4512,7 @@ void KSpreadView::slotUpdateChildGeometry( KSpreadChild */*_child*/ )
     */
 }
 
-void KSpreadView::toggleProtectDoc( bool mode )
+void View::toggleProtectDoc( bool mode )
 {
    if ( !doc() || !doc()->map() )
      return;
@@ -4555,7 +4560,7 @@ void KSpreadView::toggleProtectDoc( bool mode )
    d->adjustWorkbookActions( !mode );
 }
 
-void KSpreadView::toggleProtectSheet( bool mode )
+void View::toggleProtectSheet( bool mode )
 {
    if ( !d->activeSheet )
        return;
@@ -4609,7 +4614,7 @@ void KSpreadView::toggleProtectSheet( bool mode )
    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::togglePageBorders( bool mode )
+void View::togglePageBorders( bool mode )
 {
   if ( !d->activeSheet )
     return;
@@ -4619,7 +4624,7 @@ void KSpreadView::togglePageBorders( bool mode )
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::viewZoom( const QString & s )
+void View::viewZoom( const QString & s )
 {
   int oldZoom = doc()->zoom();
 
@@ -4644,7 +4649,7 @@ void KSpreadView::viewZoom( const QString & s )
   }
 }
 
-void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
+void View::setZoom( int zoom, bool /*updateViews*/ )
 {
   kdDebug() << "---------SetZoom: " << zoom << endl;
 
@@ -4663,25 +4668,25 @@ void KSpreadView::setZoom( int zoom, bool /*updateViews*/ )
   doc()->emitEndOperation();
 }
 
-void KSpreadView::showStatusBar( bool b )
+void View::showStatusBar( bool b )
 {
   doc()->setShowStatusBar( b );
   refreshView();
 }
 
-void KSpreadView::showTabBar( bool b )
+void View::showTabBar( bool b )
 {
   doc()->setShowTabBar( b );
   refreshView();
 }
 
-void KSpreadView::showFormulaBar( bool b )
+void View::showFormulaBar( bool b )
 {
   doc()->setShowFormulaBar( b );
   refreshView();
 }
 
-void KSpreadView::showCommentIndicator( bool b )
+void View::showCommentIndicator( bool b )
 {
   doc()->setShowCommentIndicator( b );
 
@@ -4692,12 +4697,12 @@ void KSpreadView::showCommentIndicator( bool b )
   refreshView();
 }
 
-void KSpreadView::preference()
+void View::preference()
 {
   if ( !d->activeSheet )
     return;
 
-  KSpreadpreference dlg( this, "Preference" );
+  PreferenceDialog dlg( this, "Preference" );
   if ( dlg.exec() )
   {
     doc()->emitBeginOperation( false );
@@ -4706,19 +4711,19 @@ void KSpreadView::preference()
   }
 }
 
-void KSpreadView::addModifyComment()
+void View::addModifyComment()
 {
   if ( !d->activeSheet )
     return;
 
-  KSpreadComment dlg( this, "comment",
-                      QPoint( d->canvas->markerColumn(),
-                              d->canvas->markerRow() ) );
+  CommentDialog dlg( this, "comment",
+                     QPoint( d->canvas->markerColumn(),
+                             d->canvas->markerRow() ) );
   if ( dlg.exec() )
     updateEditWidget();
 }
 
-void KSpreadView::setSelectionComment( QString comment )
+void View::setSelectionComment( QString comment )
 {
   if ( d->activeSheet != NULL )
   {
@@ -4731,7 +4736,7 @@ void KSpreadView::setSelectionComment( QString comment )
   }
 }
 
-void KSpreadView::editCell()
+void View::editCell()
 {
   if ( d->canvas->editor() )
     return;
@@ -4739,8 +4744,8 @@ void KSpreadView::editCell()
   d->canvas->createEditor();
 }
 
-bool KSpreadView::showSheet(const QString& sheetName) {
-  KSpreadSheet *t=doc()->map()->findSheet(sheetName);
+bool View::showSheet(const QString& sheetName) {
+  Sheet *t=doc()->map()->findSheet(sheetName);
   if ( !t )
   {
     kdDebug(36001) << "Unknown sheet " <<sheetName<<  endl;
@@ -4752,9 +4757,9 @@ bool KSpreadView::showSheet(const QString& sheetName) {
   return true;
 }
 
-void KSpreadView::nextSheet()
+void View::nextSheet()
 {
-  KSpreadSheet * t = doc()->map()->nextSheet( activeSheet() );
+  Sheet * t = doc()->map()->nextSheet( activeSheet() );
   if ( !t )
   {
     kdDebug(36001) << "Unknown sheet " <<  endl;
@@ -4766,9 +4771,9 @@ void KSpreadView::nextSheet()
   d->tabBar->ensureVisible( t->sheetName() );
 }
 
-void KSpreadView::previousSheet()
+void View::previousSheet()
 {
-  KSpreadSheet * t = doc()->map()->previousSheet( activeSheet() );
+  Sheet * t = doc()->map()->previousSheet( activeSheet() );
   if ( !t )
   {
     kdDebug(36001) << "Unknown sheet "  << endl;
@@ -4780,9 +4785,9 @@ void KSpreadView::previousSheet()
   d->tabBar->ensureVisible( t->sheetName() );
 }
 
-void KSpreadView::firstSheet()
+void View::firstSheet()
 {
-  KSpreadSheet *t = doc()->map()->firstSheet();
+  Sheet *t = doc()->map()->firstSheet();
   if ( !t )
   {
     kdDebug(36001) << "Unknown sheet " <<  endl;
@@ -4794,9 +4799,9 @@ void KSpreadView::firstSheet()
   d->tabBar->ensureVisible( t->sheetName() );
 }
 
-void KSpreadView::lastSheet()
+void View::lastSheet()
 {
-  KSpreadSheet *t = doc()->map()->lastSheet( );
+  Sheet *t = doc()->map()->lastSheet( );
   if ( !t )
   {
     kdDebug(36001) << "Unknown sheet " <<  endl;
@@ -4808,7 +4813,7 @@ void KSpreadView::lastSheet()
   d->tabBar->ensureVisible( t->sheetName() );
 }
 
-void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
+void View::keyPressEvent ( QKeyEvent* _ev )
 {
   // Dont eat accelerators
   if ( _ev->state() & ( Qt::AltButton | Qt::ControlButton ) )
@@ -4833,7 +4838,7 @@ void KSpreadView::keyPressEvent ( QKeyEvent* _ev )
     QApplication::sendEvent( d->canvas, _ev );
 }
 
-KoDocument * KSpreadView::hitTest( const QPoint &pos )
+KoDocument * View::hitTest( const QPoint &pos )
 {
     // Code copied from KoView::hitTest
     KoViewChild *viewChild;
@@ -4872,7 +4877,7 @@ KoDocument * KSpreadView::hitTest( const QPoint &pos )
     for (; it.current(); ++it )
     {
         // Is the child document on the visible sheet ?
-        if ( ((KSpreadChild*)it.current())->sheet() == d->activeSheet )
+        if ( ((Child*)it.current())->sheet() == d->activeSheet )
         {
             KoDocument *doc = it.current()->hitTest( pos, m );
             if ( doc )
@@ -4883,31 +4888,31 @@ KoDocument * KSpreadView::hitTest( const QPoint &pos )
     return doc();
 }
 
-int KSpreadView::leftBorder() const
+int View::leftBorder() const
 {
   return int( d->canvas->doc()->zoomItX( YBORDER_WIDTH ) );
 }
 
-int KSpreadView::rightBorder() const
+int View::rightBorder() const
 {
   return d->vertScrollBar->width();
 }
 
-int KSpreadView::topBorder() const
+int View::topBorder() const
 {
-  return d->toolWidget->height() + int( d->canvas->doc()->zoomItX( KSpreadFormat::globalRowHeight() + 2 ) );
+  return d->toolWidget->height() + int( d->canvas->doc()->zoomItX( Format::globalRowHeight() + 2 ) );
 }
 
-int KSpreadView::bottomBorder() const
+int View::bottomBorder() const
 {
   return d->horzScrollBar->height();
 }
 
-void KSpreadView::refreshView()
+void View::refreshView()
 {
   kdDebug() << "refreshing view" << endl;
 
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
   if ( !sheet )
     return;
 
@@ -4936,16 +4941,16 @@ void KSpreadView::refreshView()
   d->canvas->updatePosWidget();
 
   d->hBorderWidget->setSizePolicy( QSizePolicy::Expanding, QSizePolicy::Minimum );
-  d->hBorderWidget->setMinimumHeight( doc()->zoomItY( KSpreadFormat::globalRowHeight() + 2 ) );
+  d->hBorderWidget->setMinimumHeight( doc()->zoomItY( Format::globalRowHeight() + 2 ) );
   d->vBorderWidget->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding );
   d->vBorderWidget->setMinimumWidth( doc()->zoomItX( YBORDER_WIDTH ) );
 
-  KSpreadSheet::LayoutDirection sheetDir = sheet->layoutDirection();
+  Sheet::LayoutDirection sheetDir = sheet->layoutDirection();
   bool interfaceIsRTL = QApplication::reverseLayout();
 
-  kdDebug()<<" sheetDir == KSpreadSheet::LeftToRight :"<<( sheetDir == KSpreadSheet::LeftToRight )<<endl;
-  if ((sheetDir == KSpreadSheet::LeftToRight && !interfaceIsRTL) ||
-      (sheetDir == KSpreadSheet::RightToLeft && interfaceIsRTL))
+  kdDebug()<<" sheetDir == Sheet::LeftToRight :"<<( sheetDir == Sheet::LeftToRight )<<endl;
+  if ((sheetDir == Sheet::LeftToRight && !interfaceIsRTL) ||
+      (sheetDir == Sheet::RightToLeft && interfaceIsRTL))
   {
     d->formulaBarLayout->setDirection( QBoxLayout::LeftToRight );
     d->viewLayout->setOrigin( QGridLayout::TopLeft );
@@ -4962,19 +4967,19 @@ void KSpreadView::refreshView()
 
 }
 
-void KSpreadView::resizeEvent( QResizeEvent * )
+void View::resizeEvent( QResizeEvent * )
 {
   refreshView();
 }
 
-void KSpreadView::popupChildMenu( KoChild* child, const QPoint& global_pos )
+void View::popupChildMenu( KoChild* child, const QPoint& global_pos )
 {
     if ( !child )
   return;
 
     delete d->popupChild;
 
-    d->popupChildObject = static_cast<KSpreadChild*>(child);
+    d->popupChildObject = static_cast<Child*>(child);
 
     d->popupChild = new QPopupMenu( this );
 
@@ -4983,7 +4988,7 @@ void KSpreadView::popupChildMenu( KoChild* child, const QPoint& global_pos )
     d->popupChild->popup( global_pos );
 }
 
-void KSpreadView::slotPopupDeleteChild()
+void View::slotPopupDeleteChild()
 {
     if ( !d->popupChildObject || !d->popupChildObject->sheet() )
   return;
@@ -5003,7 +5008,7 @@ void KSpreadView::slotPopupDeleteChild()
     doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::popupColumnMenu( const QPoint & _point )
+void View::popupColumnMenu( const QPoint & _point )
 {
   assert( d->activeSheet );
 
@@ -5078,7 +5083,7 @@ void KSpreadView::popupColumnMenu( const QPoint & _point )
     d->popupColumn->popup( _point );
 }
 
-void KSpreadView::slotPopupAdjustColumn()
+void View::slotPopupAdjustColumn()
 {
     if ( !d->activeSheet )
        return;
@@ -5088,7 +5093,7 @@ void KSpreadView::slotPopupAdjustColumn()
     doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::popupRowMenu( const QPoint & _point )
+void View::popupRowMenu( const QPoint & _point )
 {
     assert( d->activeSheet );
 
@@ -5161,7 +5166,7 @@ void KSpreadView::popupRowMenu( const QPoint & _point )
     d->popupRow->popup( _point );
 }
 
-void KSpreadView::slotPopupAdjustRow()
+void View::slotPopupAdjustRow()
 {
     if ( !d->activeSheet )
        return;
@@ -5172,7 +5177,7 @@ void KSpreadView::slotPopupAdjustRow()
 }
 
 
-void KSpreadView::slotListChoosePopupMenu( )
+void View::slotListChoosePopupMenu( )
 {
   if ( !koDocument()->isReadWrite() )
     return;
@@ -5237,7 +5242,7 @@ void KSpreadView::slotListChoosePopupMenu( )
     h = cell->extraHeight();
   ty += h;
 
-  if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
   {
     tx = canvasWidget()->width() - tx;
   }
@@ -5245,7 +5250,7 @@ void KSpreadView::slotListChoosePopupMenu( )
   QPoint p( (int)tx, (int)ty );
   QPoint p2 = d->canvas->mapToGlobal( p );
 
-  if ( d->activeSheet->layoutDirection()==KSpreadSheet::RightToLeft )
+  if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
   {
     p2.setX( p2.x() - d->popupListChoose->sizeHint().width() + 1 );
   }
@@ -5256,7 +5261,7 @@ void KSpreadView::slotListChoosePopupMenu( )
 }
 
 
-void KSpreadView::slotItemSelected( int id )
+void View::slotItemSelected( int id )
 {
   QString tmp = d->popupListChoose->text( id );
   int x = d->canvas->markerColumn();
@@ -5270,7 +5275,7 @@ void KSpreadView::slotItemSelected( int id )
 
   if ( !doc()->undoLocked() )
   {
-    KSpreadUndoSetText* undo = new KSpreadUndoSetText( doc(), d->activeSheet, cell->text(),
+    UndoSetText* undo = new UndoSetText( doc(), d->activeSheet, cell->text(),
                                                        x, y, cell->formatType() );
     doc()->addCommand( undo );
   }
@@ -5281,7 +5286,7 @@ void KSpreadView::slotItemSelected( int id )
   doc()->emitEndOperation( QRect( x, y, 1, 1 ) );
 }
 
-void KSpreadView::openPopupMenu( const QPoint & _point )
+void View::openPopupMenu( const QPoint & _point )
 {
     assert( d->activeSheet );
     delete d->popupMenu;
@@ -5379,7 +5384,7 @@ void KSpreadView::openPopupMenu( const QPoint & _point )
     d->popupMenu->popup( _point );
 }
 
-void KSpreadView::slotActivateTool( int _id )
+void View::slotActivateTool( int _id )
 {
   Q_ASSERT( d->activeSheet );
 
@@ -5411,7 +5416,7 @@ void KSpreadView::slotActivateTool( int _id )
   }
 }
 
-void KSpreadView::deleteSelection()
+void View::deleteSelection()
 {
     Q_ASSERT( d->activeSheet );
 
@@ -5422,7 +5427,7 @@ void KSpreadView::deleteSelection()
     endOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::adjust()
+void View::adjust()
 {
     if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
     {
@@ -5436,7 +5441,7 @@ void KSpreadView::adjust()
     }
 }
 
-void KSpreadView::clearTextSelection()
+void View::clearTextSelection()
 {
     Q_ASSERT( d->activeSheet );
     doc()->emitBeginOperation( false );
@@ -5446,7 +5451,7 @@ void KSpreadView::clearTextSelection()
     doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::clearCommentSelection()
+void View::clearCommentSelection()
 {
     Q_ASSERT( d->activeSheet );
     doc()->emitBeginOperation( false );
@@ -5456,7 +5461,7 @@ void KSpreadView::clearCommentSelection()
     doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::clearValiditySelection()
+void View::clearValiditySelection()
 {
     Q_ASSERT( d->activeSheet );
     doc()->emitBeginOperation( false );
@@ -5466,7 +5471,7 @@ void KSpreadView::clearValiditySelection()
     doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::clearConditionalSelection()
+void View::clearConditionalSelection()
 {
     Q_ASSERT( d->activeSheet );
     doc()->emitBeginOperation( false );
@@ -5476,39 +5481,39 @@ void KSpreadView::clearConditionalSelection()
     doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::fillRight()
+void View::fillRight()
 {
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
-  d->activeSheet->fillSelection( selectionInfo(), KSpreadSheet::Right );
+  d->activeSheet->fillSelection( selectionInfo(), Sheet::Right );
   doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::fillLeft()
+void View::fillLeft()
 {
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
-  d->activeSheet->fillSelection( selectionInfo(), KSpreadSheet::Left );
+  d->activeSheet->fillSelection( selectionInfo(), Sheet::Left );
   doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::fillUp()
+void View::fillUp()
 {
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
-  d->activeSheet->fillSelection( selectionInfo(), KSpreadSheet::Up );
+  d->activeSheet->fillSelection( selectionInfo(), Sheet::Up );
   doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::fillDown()
+void View::fillDown()
 {
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
-  d->activeSheet->fillSelection( selectionInfo(), KSpreadSheet::Down );
+  d->activeSheet->fillSelection( selectionInfo(), Sheet::Down );
   doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::defaultSelection()
+void View::defaultSelection()
 {
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
@@ -5518,21 +5523,21 @@ void KSpreadView::defaultSelection()
   doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::slotInsert()
+void View::slotInsert()
 {
   QRect r( selection() );
-  KSpreadinsert dlg( this, "Insert", r, KSpreadinsert::Insert );
+  InsertDialog dlg( this, "InsertDialog", r, InsertDialog::Insert );
   dlg.exec();
 }
 
-void KSpreadView::slotRemove()
+void View::slotRemove()
 {
   QRect r( d->selectionInfo->selection() );
-  KSpreadinsert dlg( this, "Remove", r, KSpreadinsert::Remove );
+  InsertDialog dlg( this, "Remove", r, InsertDialog::Remove );
   dlg.exec();
 }
 
-void KSpreadView::slotInsertCellCopy()
+void View::slotInsertCellCopy()
 {
   if ( !d->activeSheet )
     return;
@@ -5545,7 +5550,7 @@ void KSpreadView::slotInsertCellCopy()
   }
   else
   {
-    KSpreadpasteinsert dlg( this, "Remove", selection() );
+    PasteInsertDialog dlg( this, "Remove", selection() );
     dlg.exec();
   }
 
@@ -5558,41 +5563,41 @@ void KSpreadView::slotInsertCellCopy()
   updateEditWidget();
 }
 
-void KSpreadView::setAreaName()
+void View::setAreaName()
 {
-  KSpreadarea dlg( this, "Area Name",QPoint(d->canvas->markerColumn(), d->canvas->markerRow()) );
+  AreaDialog dlg( this, "Area Name",QPoint(d->canvas->markerColumn(), d->canvas->markerRow()) );
   dlg.exec();
 }
 
-void KSpreadView::showAreaName()
+void View::showAreaName()
 {
-  KSpreadreference dlg( this, "Show Area" );
+  reference dlg( this, "Show Area" );
   dlg.exec();
 }
 
-void KSpreadView::resizeRow()
+void View::resizeRow()
 {
   if ( util_isColumnSelected(selection()) )
     KMessageBox::error( this, i18n("Area is too large."));
   else
   {
-    KSpreadResizeRow dlg( this );
+    ResizeRow dlg( this );
     dlg.exec();
   }
 }
 
-void KSpreadView::resizeColumn()
+void View::resizeColumn()
 {
   if ( util_isRowSelected( selection() ) )
     KMessageBox::error( this, i18n( "Area is too large." ) );
   else
   {
-    KSpreadResizeColumn dlg( this );
+    ResizeColumn dlg( this );
     dlg.exec();
   }
 }
 
-void KSpreadView::equalizeRow()
+void View::equalizeRow()
 {
   if ( util_isColumnSelected( selection() ) )
     KMessageBox::error( this, i18n( "Area is too large." ) );
@@ -5604,7 +5609,7 @@ void KSpreadView::equalizeRow()
   }
 }
 
-void KSpreadView::equalizeColumn()
+void View::equalizeColumn()
 {
   if ( util_isRowSelected( selection() ) )
     KMessageBox::error( this, i18n( "Area is too large." ) );
@@ -5617,23 +5622,23 @@ void KSpreadView::equalizeColumn()
 }
 
 
-void KSpreadView::layoutDlg()
+void View::layoutDlg()
 {
   QRect selection( d->selectionInfo->selection() );
 
   if ( d->selectionInfo->singleCellSelection() )
   {
-    CellFormatDlg dlg( this, d->activeSheet, selection.left(), selection.top(),
+    CellFormatDialog dlg( this, d->activeSheet, selection.left(), selection.top(),
                        selection.left(), selection.top() );
   }
   else
-    CellFormatDlg dlg( this, d->activeSheet, selection.left(), selection.top(),
+    CellFormatDialog dlg( this, d->activeSheet, selection.left(), selection.top(),
                        selection.right(), selection.bottom() );
 }
 
-void KSpreadView::styleDialog()
+void View::styleDialog()
 {
-  KSpreadStyleDlg dlg( this, doc()->styleManager() );
+  StyleDlg dlg( this, doc()->styleManager() );
   dlg.exec();
 
   d->actions->selectStyle->setItems( doc()->styleManager()->styleNames() );
@@ -5646,13 +5651,13 @@ void KSpreadView::styleDialog()
     d->canvas->repaint();
 }
 
-void KSpreadView::paperLayoutDlg()
+void View::paperLayoutDlg()
 {
   if ( d->canvas->editor() )
   {
     d->canvas->deleteEditor( true ); // save changes
   }
-  KSpreadSheetPrint* print = d->activeSheet->print();
+  SheetPrint* print = d->activeSheet->print();
 
   KoPageLayout pl;
   pl.format = print->paperFormat();
@@ -5675,25 +5680,25 @@ void KSpreadView::paperLayoutDlg()
 
   KoUnit::Unit unit = doc()->unit();
 
-  KSpreadPaperLayout * dlg
-    = new KSpreadPaperLayout( this, "PageLayout", pl, hf,
+  PaperLayout * dlg
+    = new PaperLayout( this, "PageLayout", pl, hf,
                               FORMAT_AND_BORDERS | HEADER_AND_FOOTER,
                               unit, d->activeSheet, this );
   dlg->show();
   // dlg destroys itself
 }
 
-void KSpreadView::definePrintRange()
+void View::definePrintRange()
 {
   d->activeSheet->print()->definePrintRange( selectionInfo() );
 }
 
-void KSpreadView::resetPrintRange()
+void View::resetPrintRange()
 {
   d->activeSheet->print()->resetPrintRange();
 }
 
-void KSpreadView::wrapText( bool b )
+void View::wrapText( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -5706,7 +5711,7 @@ void KSpreadView::wrapText( bool b )
   }
 }
 
-void KSpreadView::alignLeft( bool b )
+void View::alignLeft( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -5716,15 +5721,15 @@ void KSpreadView::alignLeft( bool b )
     doc()->emitBeginOperation( false );
     if ( !b )
       d->activeSheet->setSelectionAlign( selectionInfo(),
-                                   KSpreadFormat::Undefined );
+                                   Format::Undefined );
     else
       d->activeSheet->setSelectionAlign( selectionInfo(),
-                                   KSpreadFormat::Left );
+                                   Format::Left );
     endOperation( selectionInfo()->selection() );
   }
 }
 
-void KSpreadView::alignRight( bool b )
+void View::alignRight( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -5733,15 +5738,15 @@ void KSpreadView::alignRight( bool b )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
-      d->activeSheet->setSelectionAlign( selectionInfo(), KSpreadFormat::Undefined );
+      d->activeSheet->setSelectionAlign( selectionInfo(), Format::Undefined );
     else
-      d->activeSheet->setSelectionAlign( selectionInfo(), KSpreadFormat::Right );
+      d->activeSheet->setSelectionAlign( selectionInfo(), Format::Right );
 
     endOperation( selectionInfo()->selection() );
   }
 }
 
-void KSpreadView::alignCenter( bool b )
+void View::alignCenter( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -5750,15 +5755,15 @@ void KSpreadView::alignCenter( bool b )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
-      d->activeSheet->setSelectionAlign( selectionInfo(), KSpreadFormat::Undefined );
+      d->activeSheet->setSelectionAlign( selectionInfo(), Format::Undefined );
     else
-      d->activeSheet->setSelectionAlign( selectionInfo(), KSpreadFormat::Center );
+      d->activeSheet->setSelectionAlign( selectionInfo(), Format::Center );
 
     endOperation( selectionInfo()->selection() );
   }
 }
 
-void KSpreadView::alignTop( bool b )
+void View::alignTop( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -5767,15 +5772,15 @@ void KSpreadView::alignTop( bool b )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
-      d->activeSheet->setSelectionAlignY( selectionInfo(), KSpreadFormat::UndefinedY );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::UndefinedY );
     else
-      d->activeSheet->setSelectionAlignY( selectionInfo(), KSpreadFormat::Top );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Top );
 
     endOperation( selectionInfo()->selection() );
   }
 }
 
-void KSpreadView::alignBottom( bool b )
+void View::alignBottom( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -5784,15 +5789,15 @@ void KSpreadView::alignBottom( bool b )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
-      d->activeSheet->setSelectionAlignY( selectionInfo(), KSpreadFormat::UndefinedY );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::UndefinedY );
     else
-      d->activeSheet->setSelectionAlignY( selectionInfo(), KSpreadFormat::Bottom );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Bottom );
 
     endOperation( selectionInfo()->selection() );
   }
 }
 
-void KSpreadView::alignMiddle( bool b )
+void View::alignMiddle( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -5801,15 +5806,15 @@ void KSpreadView::alignMiddle( bool b )
   {
     doc()->emitBeginOperation( false );
     if ( !b )
-      d->activeSheet->setSelectionAlignY( selectionInfo(), KSpreadFormat::UndefinedY );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::UndefinedY );
     else
-      d->activeSheet->setSelectionAlignY( selectionInfo(), KSpreadFormat::Middle );
+      d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Middle );
 
     endOperation( selectionInfo()->selection() );
   }
 }
 
-void KSpreadView::moneyFormat(bool b)
+void View::moneyFormat(bool b)
 {
   if ( d->toolbarLock )
     return;
@@ -5821,7 +5826,7 @@ void KSpreadView::moneyFormat(bool b)
   endOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::createStyleFromCell()
+void View::createStyleFromCell()
 {
   if ( !d->activeSheet )
     return;
@@ -5858,20 +5863,20 @@ void KSpreadView::createStyleFromCell()
     break;
   }
 
-  KSpreadCustomStyle * style = new KSpreadCustomStyle( cell->kspreadStyle(), styleName );
+  CustomStyle * style = new CustomStyle( cell->kspreadStyle(), styleName );
 
   doc()->styleManager()->m_styles[ styleName ] = style;
-  cell->setKSpreadStyle( style );
+  cell->setStyle( style );
   QStringList lst( d->actions->selectStyle->items() );
   lst.push_back( styleName );
   d->actions->selectStyle->setItems( lst );
 }
 
-void KSpreadView::styleSelected( const QString & style )
+void View::styleSelected( const QString & style )
 {
   if (d->activeSheet )
   {
-    KSpreadStyle * s = doc()->styleManager()->style( style );
+    Style * s = doc()->styleManager()->style( style );
 
     if ( s )
     {
@@ -5882,17 +5887,17 @@ void KSpreadView::styleSelected( const QString & style )
   }
 }
 
-void KSpreadView::precisionPlus()
+void View::precisionPlus()
 {
   setSelectionPrecision( 1 );
 }
 
-void KSpreadView::precisionMinus()
+void View::precisionMinus()
 {
   setSelectionPrecision( -1 );
 }
 
-void KSpreadView::setSelectionPrecision( int delta )
+void View::setSelectionPrecision( int delta )
 {
   if ( d->activeSheet != NULL )
   {
@@ -5902,7 +5907,7 @@ void KSpreadView::setSelectionPrecision( int delta )
   }
 }
 
-void KSpreadView::percent( bool b )
+void View::percent( bool b )
 {
   if ( d->toolbarLock )
     return;
@@ -5915,7 +5920,7 @@ void KSpreadView::percent( bool b )
   endOperation( selectionInfo()->selection() );
 }
 
-void KSpreadView::insertObject()
+void View::insertObject()
 {
   doc()->emitBeginOperation( false );
   KoDocumentEntry e =  d->actions->insertPart->documentEntry();//KoPartSelectDia::selectPart( d->canvas );
@@ -5928,11 +5933,11 @@ void KSpreadView::insertObject()
   //Don't start handles more than once
   delete d->insertHandler;
 
-  d->insertHandler = new KSpreadInsertHandler( this, d->canvas, e );
+  d->insertHandler = new InsertHandler( this, d->canvas, e );
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::insertChart()
+void View::insertChart()
 {
   if ( util_isColumnSelected(selection()) || util_isRowSelected(selection()) )
   {
@@ -5951,14 +5956,14 @@ void KSpreadView::insertChart()
 
   doc()->emitBeginOperation( false );
 
-  d->insertHandler = new KSpreadInsertHandler( this, d->canvas, vec[0], true );
+  d->insertHandler = new InsertHandler( this, d->canvas, vec[0], true );
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
 
 /*
   // TODO Use KoView setScaling/xScaling/yScaling instead
-void KSpreadView::zoomMinus()
+void View::zoomMinus()
 {
   if ( m_fZoom <= 0.25 )
     return;
@@ -5973,7 +5978,7 @@ void KSpreadView::zoomMinus()
   d->hBorderWidget->repaint();
 }
 
-void KSpreadView::zoomPlus()
+void View::zoomPlus()
 {
   if ( m_fZoom >= 3 )
     return;
@@ -5989,7 +5994,7 @@ void KSpreadView::zoomPlus()
 }
 */
 
-void KSpreadView::removeSheet()
+void View::removeSheet()
 {
   if ( doc()->map()->count() <= 1 || ( doc()->map()->visibleSheets().count() <= 1 ) )
   {
@@ -6009,14 +6014,14 @@ void KSpreadView::removeSheet()
       d->canvas->deleteEditor( false );
     }
     doc()->setModified( true );
-    KSpreadSheet * tbl = activeSheet();
+    Sheet * tbl = activeSheet();
     KCommand* command = new RemoveSheetCommand( tbl );
     doc()->addCommand( command );
     command->execute();
 
 
 #if 0
-    KSpreadUndoRemoveSheet * undo = new KSpreadUndoRemoveSheet( doc(), tbl );
+    UndoRemoveSheet * undo = new UndoRemoveSheet( doc(), tbl );
     doc()->addCommand( undo );
     tbl->doc()->map()->takeSheet( tbl );
     doc()->takeSheet( tbl );
@@ -6026,10 +6031,10 @@ void KSpreadView::removeSheet()
 }
 
 
-void KSpreadView::slotRename()
+void View::slotRename()
 {
 
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
 
   if( sheet->isProtected() )
   {
@@ -6094,7 +6099,7 @@ void KSpreadView::slotRename()
   }
 }
 
-void KSpreadView::setText (const QString & _text, bool array)
+void View::setText (const QString & _text, bool array)
 {
   if ( d->activeSheet == 0L )
     return;
@@ -6133,12 +6138,12 @@ void KSpreadView::setText (const QString & _text, bool array)
 //
 //------------------------------------------------
 
-void KSpreadView::slotAddSheet( KSpreadSheet *_sheet )
+void View::slotAddSheet( Sheet *_sheet )
 {
   addSheet( _sheet );
 }
 
-void KSpreadView::slotRefreshView()
+void View::slotRefreshView()
 {
   refreshView();
   d->canvas->repaint();
@@ -6146,7 +6151,7 @@ void KSpreadView::slotRefreshView()
   d->hBorderWidget->repaint();
 }
 
-void KSpreadView::slotUpdateView( KSpreadSheet *_sheet )
+void View::slotUpdateView( Sheet *_sheet )
 {
   // Do we display this sheet ?
   if ( _sheet != d->activeSheet )
@@ -6160,9 +6165,9 @@ void KSpreadView::slotUpdateView( KSpreadSheet *_sheet )
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::slotUpdateView( KSpreadSheet * _sheet, const QRect & _rect )
+void View::slotUpdateView( Sheet * _sheet, const QRect & _rect )
 {
-  // qDebug("void KSpreadView::slotUpdateView( KSpreadSheet *_sheet, const QRect& %i %i|%i %i )\n",_rect.left(),_rect.top(),_rect.right(),_rect.bottom());
+  // qDebug("void View::slotUpdateView( Sheet *_sheet, const QRect& %i %i|%i %i )\n",_rect.left(),_rect.top(),_rect.right(),_rect.bottom());
 
   // Do we display this sheet ?
   if ( _sheet != d->activeSheet )
@@ -6173,9 +6178,9 @@ void KSpreadView::slotUpdateView( KSpreadSheet * _sheet, const QRect & _rect )
   endOperation( _rect );
 }
 
-void KSpreadView::slotUpdateHBorder( KSpreadSheet * _sheet )
+void View::slotUpdateHBorder( Sheet * _sheet )
 {
-  // kdDebug(36001)<<"void KSpreadView::slotUpdateHBorder( KSpreadSheet *_sheet )\n";
+  // kdDebug(36001)<<"void View::slotUpdateHBorder( Sheet *_sheet )\n";
 
   // Do we display this sheet ?
   if ( _sheet != d->activeSheet )
@@ -6186,9 +6191,9 @@ void KSpreadView::slotUpdateHBorder( KSpreadSheet * _sheet )
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::slotUpdateVBorder( KSpreadSheet *_sheet )
+void View::slotUpdateVBorder( Sheet *_sheet )
 {
-  // kdDebug("void KSpreadView::slotUpdateVBorder( KSpreadSheet *_sheet )\n";
+  // kdDebug("void View::slotUpdateVBorder( Sheet *_sheet )\n";
 
   // Do we display this sheet ?
   if ( _sheet != d->activeSheet )
@@ -6199,7 +6204,7 @@ void KSpreadView::slotUpdateVBorder( KSpreadSheet *_sheet )
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::slotChangeSelection( KSpreadSheet *_sheet,
+void View::slotChangeSelection( Sheet *_sheet,
                                        const QRect &oldSelection,
                                        const QPoint& /* oldMarker*/ )
 {
@@ -6242,7 +6247,7 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_sheet,
   resultOfCalc();
   // Send some event around. This is read for example
   // by the calculator plugin.
-  KSpreadSelectionChanged ev( newSelection, activeSheet()->name() );
+  SelectionChanged ev( newSelection, activeSheet()->name() );
   QApplication::sendEvent( this, &ev );
 
   // Do we display this sheet ?
@@ -6259,17 +6264,17 @@ void KSpreadView::slotChangeSelection( KSpreadSheet *_sheet,
   doc()->emitEndOperation( newSelection );
 }
 
-void KSpreadView::resultOfCalc()
+void View::resultOfCalc()
 {
-  KSpreadSheet * sheet = activeSheet();
+  Sheet * sheet = activeSheet();
   ValueCalc* calc = d->doc->calc();
-  KSpreadValue val;
+  Value val;
   QRect tmpRect(d->selectionInfo->selection());
   MethodOfCalc tmpMethod = doc()->getTypeOfCalc() ;
   if ( tmpMethod != NoneCalc )
   {
 
-    KSpreadValue range = sheet->valueRange (tmpRect.left(), tmpRect.top(),
+    Value range = sheet->valueRange (tmpRect.left(), tmpRect.top(),
         tmpRect.right(), tmpRect.bottom());
     switch (tmpMethod)
     {
@@ -6286,10 +6291,10 @@ void KSpreadView::resultOfCalc()
         val = calc->max (range);
       break;
       case CountA:
-        val = KSpreadValue (calc->count (range));
+        val = Value (calc->count (range));
         break;
       case Count:
-        val = KSpreadValue (calc->count (range, false));
+        val = Value (calc->count (range, false));
       case NoneCalc:
       break;
       default:
@@ -6331,7 +6336,7 @@ void KSpreadView::resultOfCalc()
   //doc()->emitEndOperation();
 }
 
-void KSpreadView::statusBarClicked(int _id)
+void View::statusBarClicked(int _id)
 {
   if ( !koDocument()->isReadWrite() || !factory() )
     return;
@@ -6342,7 +6347,7 @@ void KSpreadView::statusBarClicked(int _id)
   }
 }
 
-void KSpreadView::menuCalc( bool )
+void View::menuCalc( bool )
 {
   doc()->emitBeginOperation(false);
   if ( d->actions->calcMin->isChecked() )
@@ -6378,7 +6383,7 @@ void KSpreadView::menuCalc( bool )
 }
 
 
-QWMatrix KSpreadView::matrix() const
+QWMatrix View::matrix() const
 {
   QWMatrix m;
   m.scale( d->doc->zoomedResolutionX(),
@@ -6387,7 +6392,7 @@ QWMatrix KSpreadView::matrix() const
   return m;
 }
 
-void KSpreadView::transformPart()
+void View::transformPart()
 {
     Q_ASSERT( selectedChild() );
 
@@ -6405,7 +6410,7 @@ void KSpreadView::transformPart()
     }
 }
 
-void KSpreadView::slotChildSelected( KoDocumentChild* ch )
+void View::slotChildSelected( KoDocumentChild* ch )
 {
   if ( d->activeSheet && !d->activeSheet->isProtected() )
   {
@@ -6424,7 +6429,7 @@ void KSpreadView::slotChildSelected( KoDocumentChild* ch )
   paintUpdates();
 }
 
-void KSpreadView::slotChildUnselected( KoDocumentChild* )
+void View::slotChildUnselected( KoDocumentChild* )
 {
   if ( d->activeSheet && !d->activeSheet->isProtected() )
   {
@@ -6444,38 +6449,38 @@ void KSpreadView::slotChildUnselected( KoDocumentChild* )
 }
 
 
-void KSpreadView::deleteEditor( bool saveChanges )
+void View::deleteEditor( bool saveChanges )
 {
     doc()->emitBeginOperation( false );
     d->canvas->deleteEditor( saveChanges );
     doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
-DCOPObject * KSpreadView::dcopObject()
+DCOPObject * View::dcopObject()
 {
   if ( !d->dcop )
-    d->dcop = new KSpreadViewIface( this );
+    d->dcop = new ViewIface( this );
 
   return d->dcop;
 }
 
-QWidget * KSpreadView::canvas()
+QWidget * View::canvas()
 {
   return canvasWidget();
 }
 
-int KSpreadView::canvasXOffset() const
+int View::canvasXOffset() const
 {
   return int( canvasWidget()->xOffset() );
 }
 
-int KSpreadView::canvasYOffset() const
+int View::canvasYOffset() const
 {
   return int( canvasWidget()->yOffset() );
 }
 
 
-void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
+void View::guiActivateEvent( KParts::GUIActivateEvent *ev )
 {
   if ( d->activeSheet )
   {
@@ -6498,7 +6503,7 @@ void KSpreadView::guiActivateEvent( KParts::GUIActivateEvent *ev )
   KoView::guiActivateEvent( ev );
 }
 
-void KSpreadView::popupTabBarMenu( const QPoint & _point )
+void View::popupTabBarMenu( const QPoint & _point )
 {
   if ( !koDocument()->isReadWrite() || !factory() )
     return;
@@ -6529,7 +6534,7 @@ void KSpreadView::popupTabBarMenu( const QPoint & _point )
   }
 }
 
-void KSpreadView::updateBorderButton()
+void View::updateBorderButton()
 {
   //  doc()->emitBeginOperation( false );
   if ( d->activeSheet )
@@ -6537,7 +6542,7 @@ void KSpreadView::updateBorderButton()
   //  doc()->emitEndOperation();
 }
 
-void KSpreadView::removeSheet( KSpreadSheet *_t )
+void View::removeSheet( Sheet *_t )
 {
   doc()->emitBeginOperation(false);
   QString m_tablName=_t->sheetName();
@@ -6550,7 +6555,7 @@ void KSpreadView::removeSheet( KSpreadSheet *_t )
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::insertSheet( KSpreadSheet* sheet )
+void View::insertSheet( Sheet* sheet )
 {
   doc()->emitBeginOperation( false );
   QString tabName = sheet->sheetName();
@@ -6565,12 +6570,12 @@ void KSpreadView::insertSheet( KSpreadSheet* sheet )
   doc()->emitEndOperation( sheet->visibleRect( d->canvas ) );
 }
 
-QColor KSpreadView::borderColor() const
+QColor View::borderColor() const
 {
   return d->actions->borderColor->color();
 }
 
-void KSpreadView::updateShowSheetMenu()
+void View::updateShowSheetMenu()
 {
   doc()->emitBeginOperation( false );
   if ( d->activeSheet->isProtected() )
@@ -6580,7 +6585,7 @@ void KSpreadView::updateShowSheetMenu()
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void KSpreadView::closeEditor()
+void View::closeEditor()
 {
   if ( d->activeSheet ) { // #45822
     doc()->emitBeginOperation( false );
@@ -6590,7 +6595,7 @@ void KSpreadView::closeEditor()
 }
 
 
-void KSpreadView::paintUpdates()
+void View::paintUpdates()
 {
   /* don't do any begin/end operation here -- this is what is called at an
      endOperation
@@ -6598,25 +6603,25 @@ void KSpreadView::paintUpdates()
   d->canvas->paintUpdates();
 }
 
-void KSpreadView::commandExecuted()
+void View::commandExecuted()
 {
   updateEditWidget();
   resultOfCalc();
 }
 
-void KSpreadView::initialiseMarkerFromSheet( KSpreadSheet *_sheet, const QPoint &point )
+void View::initialiseMarkerFromSheet( Sheet *_sheet, const QPoint &point )
 {
     d->savedMarkers.replace( _sheet, point);
 }
 
-QPoint KSpreadView::markerFromSheet( KSpreadSheet *_sheet ) const
+QPoint View::markerFromSheet( Sheet *_sheet ) const
 {
-    QMapIterator<KSpreadSheet*, QPoint> it2 = d->savedMarkers.find(_sheet);
+    QMapIterator<Sheet*, QPoint> it2 = d->savedMarkers.find(_sheet);
     QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1,1) : *it2;
     return newMarker;
 }
 
-void KSpreadView::saveCurrentSheetSelection()
+void View::saveCurrentSheetSelection()
 {
     /* save the current selection on this sheet */
     if (d->activeSheet != NULL)
@@ -6628,7 +6633,7 @@ void KSpreadView::saveCurrentSheetSelection()
     }
 }
 
-void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
+void View::handleDamages( const QValueList<Damage*>& damages )
 {
     QValueList<Damage*>::ConstIterator it;
     for( it = damages.begin(); it != damages.end(); ++it )
@@ -6640,7 +6645,7 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
         {
             CellDamage* cd = static_cast<CellDamage*>( damage );
             Cell* damagedCell = cd->cell();
-            KSpreadSheet* damagedSheet = damagedCell->sheet();
+            Sheet* damagedSheet = damagedCell->sheet();
             QRect drect( damagedCell->column(), damagedCell->row(), 1, 1 );
             damagedSheet->setRegionPaintDirty( drect );
             paintUpdates();
@@ -6649,7 +6654,7 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
         if( damage->type() == Damage::Sheet )
         {
             SheetDamage* sd = static_cast<SheetDamage*>( damage );
-            KSpreadSheet* damagedSheet = sd->sheet();
+            Sheet* damagedSheet = sd->sheet();
 
             if( sd->action() == SheetDamage::PropertiesChanged )
             {
@@ -6670,7 +6675,7 @@ void KSpreadView::handleDamages( const QValueList<Damage*>& damages )
     }
 }
 
-void KSpreadView::runInternalTests()
+void View::runInternalTests()
 {
     // run various tests, only for developers
     KSpread::TestRunner* runner = new KSpread::TestRunner();
@@ -6678,7 +6683,7 @@ void KSpreadView::runInternalTests()
     delete runner;
 }
 
-void KSpreadView::runInspector()
+void View::runInspector()
 {
     // useful to inspect objects
     if(!d->activeSheet) return;

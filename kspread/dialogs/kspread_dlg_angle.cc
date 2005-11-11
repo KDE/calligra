@@ -21,12 +21,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kspread_dlg_angle.h"
-#include <kspread_cell.h>
-#include <kspread_view.h>
-#include <kspread_doc.h>
-#include <kspread_sheet.h>
-
 #include <qlayout.h>
 #include <qpushbutton.h>
 
@@ -35,9 +29,16 @@
 #include <klocale.h>
 #include <knuminput.h>
 
+#include <kspread_cell.h>
+#include <kspread_doc.h>
+#include <kspread_sheet.h>
+#include <kspread_view.h>
+
+#include "kspread_dlg_angle.h"
+
 using namespace KSpread;
 
-KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &_marker)
+AngleDialog::AngleDialog(View* parent, const char* name, const QPoint &_marker)
 	: KDialogBase( parent, name,TRUE,i18n("Change Angle" ), Ok|Cancel|Default )
 {
   m_pView=parent;
@@ -66,7 +67,7 @@ KSpreadAngle::KSpreadAngle( KSpreadView* parent, const char* name,const QPoint &
   m_pAngle->setValue( angle );
 }
 
-void KSpreadAngle::slotOk()
+void AngleDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     m_pView->activeSheet()->setSelectionAngle(m_pView->selectionInfo(), -m_pAngle->value());
@@ -76,7 +77,7 @@ void KSpreadAngle::slotOk()
     accept();
 }
 
-void KSpreadAngle::slotDefault()
+void AngleDialog::slotDefault()
 {
     m_pAngle->setValue( 0 );
 }

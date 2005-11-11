@@ -28,25 +28,28 @@
 
 #include <kdialogbase.h>
 
-class KSpreadView;
-class KSpreadSheet;
 class QRadioButton;
 class QCheckBox;
 class KDoubleNumInput;
 
-class KSpreadSeriesDlg : public KDialogBase
+namespace KSpread
+{
+class Sheet;
+class View;
+
+class SeriesDlg : public KDialogBase
 {
     Q_OBJECT
 public:
 
-    KSpreadSeriesDlg(KSpreadView* parent, const char* name,const QPoint &_marker);
+    SeriesDlg(View* parent, const char* name,const QPoint &_marker);
 
-    KSpreadSheet* sheet;
+    Sheet* sheet;
 
 public slots:
     void slotOk();
 protected:
-    KSpreadView* m_pView;
+    View* m_pView;
     KDoubleNumInput *start;
     KDoubleNumInput *end;
     KDoubleNumInput *step;
@@ -57,5 +60,7 @@ protected:
     QRadioButton* geometric;
     QPoint  marker;
 };
+
+} // namespace KSpread
 
 #endif

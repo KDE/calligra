@@ -3,11 +3,16 @@
 
 #include <qpro/formula.h>
 
-class KSpreadFormula : public QpFormula
+namespace KSpread
+{
+
+class Formula : public QpFormula
 {
 public:
-   KSpreadFormula(QpRecFormulaCell& pCell, QpTableNames& pTable);
-   ~KSpreadFormula();
+   Formula(QpRecFormulaCell& pCell, QpTableNames& pTable);
+   ~Formula();
 };
+
+}
 
 #endif // QPROFORMULA_H

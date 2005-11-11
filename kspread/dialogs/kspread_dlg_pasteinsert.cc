@@ -35,7 +35,9 @@
 #include <qradiobutton.h>
 #include <qcheckbox.h>
 
-KSpreadpasteinsert::KSpreadpasteinsert( KSpreadView* parent, const char* name,const QRect &_rect)
+using namespace KSpread;
+
+PasteInsertDialog::PasteInsertDialog( View* parent, const char* name,const QRect &_rect)
 	: KDialogBase( parent, name, TRUE,i18n("Paste Inserting Cells"),Ok|Cancel )
 {
   m_pView = parent;
@@ -56,7 +58,7 @@ KSpreadpasteinsert::KSpreadpasteinsert( KSpreadView* parent, const char* name,co
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 }
 
-void KSpreadpasteinsert::slotOk()
+void PasteInsertDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )

@@ -36,118 +36,120 @@
 #include <qcolor.h>
 #include <kdebug.h>
 
-KSpreadDocIface::KSpreadDocIface( KSpreadDoc* _doc )
+using namespace KSpread;
+
+DocIface::DocIface( Doc* _doc )
     : KoDocumentIface( _doc )
 {
     doc=_doc;
 }
 
-DCOPRef KSpreadDocIface::map()
+DCOPRef DocIface::map()
 {
     return DCOPRef( kapp->dcopClient()->appId(),
                     doc->map()->dcopObject()->objId() );
 }
 
-void KSpreadDocIface::changeDefaultGridPenColor( const QColor &_col)
+void DocIface::changeDefaultGridPenColor( const QColor &_col)
 {
     doc->setGridColor(_col);
 }
 
-QColor KSpreadDocIface::pageBorderColor() const
+QColor DocIface::pageBorderColor() const
 {
     return doc->pageBorderColor();
 }
 
 
-bool KSpreadDocIface::showCommentIndicator()const
+bool DocIface::showCommentIndicator()const
 {
     return doc->getShowCommentIndicator();
 }
 
-bool KSpreadDocIface::showFormulaBar()const
+bool DocIface::showFormulaBar()const
 {
     return doc->getShowFormulaBar();
 }
 
-bool KSpreadDocIface::showStatusBar()const
+bool DocIface::showStatusBar()const
 {
     return doc->getShowStatusBar();
 }
 
-bool KSpreadDocIface::showTabBar()const
+bool DocIface::showTabBar()const
 {
     return doc->getShowTabBar();
 }
 
-void KSpreadDocIface::setShowVerticalScrollBar(bool _show)
+void DocIface::setShowVerticalScrollBar(bool _show)
 {
     doc->setShowVerticalScrollBar(_show);
     doc->refreshInterface();
 }
 
-void KSpreadDocIface::setShowHorizontalScrollBar(bool _show)
+void DocIface::setShowHorizontalScrollBar(bool _show)
 {
     doc->setShowHorizontalScrollBar(_show);
     doc->refreshInterface();
 }
 
-void KSpreadDocIface::setShowColHeader(bool _show)
+void DocIface::setShowColHeader(bool _show)
 {
     doc->setShowColHeader(_show);
     doc->refreshInterface();
 }
 
-void KSpreadDocIface::setShowRowHeader(bool _show)
+void DocIface::setShowRowHeader(bool _show)
 {
     doc->setShowRowHeader(_show);
     doc->refreshInterface();
 }
 
-void KSpreadDocIface::setShowTabBar(bool _show)
+void DocIface::setShowTabBar(bool _show)
 {
     doc->setShowTabBar(_show);
     doc->refreshInterface();
 }
 
-void KSpreadDocIface::setShowCommentIndicator(bool _show)
+void DocIface::setShowCommentIndicator(bool _show)
 {
     doc->setShowCommentIndicator(_show);
     doc->refreshInterface();
 }
 
-void KSpreadDocIface::changePageBorderColor( const QColor & _color)
+void DocIface::changePageBorderColor( const QColor & _color)
 {
     doc->changePageBorderColor( _color);
     doc->refreshInterface();
 }
 
-void KSpreadDocIface::addIgnoreWordAll( const QString &word)
+void DocIface::addIgnoreWordAll( const QString &word)
 {
     doc->addIgnoreWordAll( word );
 }
 
-void KSpreadDocIface::clearIgnoreWordAll( )
+void DocIface::clearIgnoreWordAll( )
 {
     doc->clearIgnoreWordAll();
 }
 
-QStringList KSpreadDocIface::spellListIgnoreAll() const
+QStringList DocIface::spellListIgnoreAll() const
 {
     return doc->spellListIgnoreAll();
 }
 
-void KSpreadDocIface::addStringCompletion(const QString & stringCompletion)
+void DocIface::addStringCompletion(const QString & stringCompletion)
 {
     doc->addStringCompletion( stringCompletion );
 }
 
-int KSpreadDocIface::zoom() const
+int DocIface::zoom() const
 {
     return doc->zoom();
 }
 
 
-QString KSpreadDocIface::moveToValue()const
+QString DocIface::moveToValue()const
 {
     switch(doc->getMoveToValue())
     {
@@ -170,7 +172,7 @@ QString KSpreadDocIface::moveToValue()const
     return QString::null;
 }
 
-void KSpreadDocIface::setMoveToValue(const QString & move)
+void DocIface::setMoveToValue(const QString & move)
 {
     if ( move.lower()=="bottom" )
         doc->setMoveToValue(KSpread::Bottom);
@@ -184,7 +186,7 @@ void KSpreadDocIface::setMoveToValue(const QString & move)
         doc->setMoveToValue(KSpread::BottomFirst);
 }
 
-void KSpreadDocIface::setTypeOfCalc( const QString & calc )
+void DocIface::setTypeOfCalc( const QString & calc )
 {
     if ( calc.lower()=="sum")
         doc->setTypeOfCalc(SumOfNumber );
@@ -203,7 +205,7 @@ void KSpreadDocIface::setTypeOfCalc( const QString & calc )
     doc->refreshInterface();
 }
 
-QString KSpreadDocIface::typeOfCalc() const
+QString DocIface::typeOfCalc() const
 {
     switch( doc->getTypeOfCalc() )
     {

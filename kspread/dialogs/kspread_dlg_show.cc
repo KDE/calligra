@@ -22,20 +22,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-
-#include "kspread_dlg_show.h"
-#include "kspread_view.h"
-#include "kspread_doc.h"
-#include "kspread_map.h"
-#include "commands.h"
 #include <qlayout.h>
 #include <klocale.h>
 #include <qlistbox.h>
 #include <qlabel.h>
+
 #include <kcommand.h>
 
-KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
+#include "kspread_view.h"
+#include "kspread_doc.h"
+#include "kspread_map.h"
+#include "commands.h"
+
+#include "kspread_dlg_show.h"
+
+using namespace KSpread;
+
+ShowDialog::ShowDialog( View* parent, const char* name )
 	: KDialogBase( parent, name,TRUE,i18n("Show Sheet"),Ok|Cancel )
 {
   m_pView = parent;
@@ -66,14 +69,14 @@ KSpreadshow::KSpreadshow( KSpreadView* parent, const char* name )
   setFocus();
 }
 
-void KSpreadshow::slotDoubleClicked(QListBoxItem *)
+void ShowDialog::slotDoubleClicked(QListBoxItem *)
 {
     slotOk();
 }
 
 
 
-void KSpreadshow::slotOk()
+void ShowDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
 
@@ -92,7 +95,7 @@ void KSpreadshow::slotOk()
     if ( listSheet.count()==0 )
         return;
 
-    KSpreadSheet *sheet;
+    Sheet *sheet;
     KMacroCommand *macroUndo=new KMacroCommand( i18n("Show Sheet") );
     for ( QStringList::Iterator it = listSheet.begin(); it != listSheet.end(); ++it )
     {

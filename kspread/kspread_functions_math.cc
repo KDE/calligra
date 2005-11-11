@@ -40,72 +40,72 @@ using namespace KSpread;
 // RANDBINOM and RANDNEGBINOM won't support arbitrary precision
 
 // prototypes
-KSpreadValue func_abs (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_ceil (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_ceiling (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_count (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_counta (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_countblank (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_countif (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_cur (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_div (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_eps (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_even (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_exp (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_fact (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_factdouble (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_fib (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_floor (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_gcd (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_int (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_inv (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_kproduct (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_lcm (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_ln (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_log2 (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_log10 (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_logn (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_max (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_maxa (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_mdeterm (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_min (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_mina (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_mmult (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_mod (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_mround (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_mult (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_multinomial (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_odd (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_pow (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_quotient (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_product (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_rand (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_randbetween (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_randbernoulli (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_randbinom (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_randexp (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_randnegbinom (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_randnorm (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_randpoisson (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_rootn (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_round (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_rounddown (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_roundup (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_sign (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_sqrt (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_sqrtpi (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_sum (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_suma (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_sumif (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_sumsq (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_trunc (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_abs (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_ceil (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_ceiling (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_count (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_counta (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_countblank (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_countif (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_cur (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_div (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_eps (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_even (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_exp (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_fact (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_factdouble (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_fib (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_floor (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_gcd (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_int (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_inv (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_kproduct (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_lcm (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_ln (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_log2 (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_log10 (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_logn (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_max (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_maxa (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_mdeterm (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_min (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_mina (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_mmult (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_mod (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_mround (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_mult (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_multinomial (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_odd (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_pow (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_quotient (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_product (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_rand (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_randbetween (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_randbernoulli (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_randbinom (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_randexp (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_randnegbinom (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_randnorm (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_randpoisson (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_rootn (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_round (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_rounddown (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_roundup (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sign (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sqrt (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sqrtpi (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sum (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_suma (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sumif (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_sumsq (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_trunc (valVector args, ValueCalc *calc, FuncExtra *);
 
 
-// KSpreadValue func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *);
+// Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all math functions
-void KSpreadRegisterMathFunctions()
+void RegisterMathFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -311,66 +311,66 @@ void KSpreadRegisterMathFunctions()
 }
 
 // Function: SQRT
-KSpreadValue func_sqrt (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_sqrt (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->sqrt (args[0]);
 }
 
 // Function: SQRTPI
-KSpreadValue func_sqrtpi (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_sqrtpi (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // sqrt (val * PI)
   return calc->sqrt (calc->mul (args[0], calc->pi()));
 }
 
 // Function: ROOTN
-KSpreadValue func_rootn (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_rootn (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->pow (args[0], calc->div (1, args[1]));
 }
 
 // Function: CUR
-KSpreadValue func_cur (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_cur (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->pow (args[0], 1.0/3.0);
 }
 
 // Function: ABS
-KSpreadValue func_abs (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_abs (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->abs (args[0]);
 }
 
 // Function: exp
-KSpreadValue func_exp (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_exp (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->exp (args[0]);
 }
 
 // Function: ceil
-KSpreadValue func_ceil (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_ceil (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->roundUp (args[0], 0);
 }
 
 // Function: ceiling
-KSpreadValue func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue number = args[0];
-  KSpreadValue res;
+  Value number = args[0];
+  Value res;
   if (args.count() == 2)
     res = args[1];
   else
     res = calc->gequal (number, 0.0) ? 1.0 : -1.0;
   
   if (calc->isZero(res))
-    return KSpreadValue::errorDIV0();
+    return Value::errorDIV0();
 
-  KSpreadValue d = calc->div (number, res);
+  Value d = calc->div (number, res);
   if (calc->greater (0, d))
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
-  KSpreadValue rud = calc->roundDown (d);
+  Value rud = calc->roundDown (d);
   if (calc->approxEqual (rud, d))
     d = calc->mul (rud, res);
   else
@@ -380,52 +380,52 @@ KSpreadValue func_ceiling (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: floor
-KSpreadValue func_floor (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_floor (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->roundDown (args[0], 0);
 }
 
 // Function: ln
-KSpreadValue func_ln (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_ln (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->ln (args[0]);
 }
 
 // Function: LOGn
-KSpreadValue func_logn (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_logn (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->log (args[0], args[1]);
 }
 
 // Function: LOG2
-KSpreadValue func_log2 (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_log2 (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->log (args[0], 2.0);
 }
 
 // Function: LOG10
-KSpreadValue func_log10 (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_log10 (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->log (args[0]);
 }
 
 // Function: sum
-KSpreadValue func_sum (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_sum (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->sum (args, false);
 }
 
 // Function: suma
-KSpreadValue func_suma (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_suma (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->sum (args, true);
 }
 
-KSpreadValue func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue checkRange = args[0];
+  Value checkRange = args[0];
   QString condition = calc->conv()->asString (args[1]).asString();
-  KSpreadValue sumRange = checkRange;
+  Value sumRange = checkRange;
   if (args.count() == 3)
     sumRange = args[2];
 
@@ -436,21 +436,21 @@ KSpreadValue func_sumif (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: product
-KSpreadValue func_product (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_product (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->product (args[0], 0.0);
 }
 
 // Function: kproduct
-KSpreadValue func_kproduct (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_kproduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->product (args[0], 1.0);
 }
 
 // Function: DIV
-KSpreadValue func_div (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_div (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue val = args[0];
+  Value val = args[0];
   for (unsigned int i = 1; i < args.count(); ++i)
   {
     val = calc->div (val, args[i]);
@@ -461,69 +461,69 @@ KSpreadValue func_div (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: SUMSQ
-KSpreadValue func_sumsq (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_sumsq (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue res;
+  Value res;
   calc->arrayWalk (args, res, calc->awFunc ("sumsq"), 0);
   return res;
 }
 
 // Function: MAX
-KSpreadValue func_max (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_max (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue m = calc->max (args, false);
-  return m.isEmpty() ? KSpreadValue(0.0) : m;
+  Value m = calc->max (args, false);
+  return m.isEmpty() ? Value(0.0) : m;
 }
 
 // Function: MAXA
-KSpreadValue func_maxa (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_maxa (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue m = calc->max (args);
-  return m.isEmpty() ? KSpreadValue(0.0) : m;
+  Value m = calc->max (args);
+  return m.isEmpty() ? Value(0.0) : m;
 }
 
 // Function: MIN
-KSpreadValue func_min (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_min (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue m = calc->min (args, false);
-  return m.isEmpty() ? KSpreadValue(0.0) : m;
+  Value m = calc->min (args, false);
+  return m.isEmpty() ? Value(0.0) : m;
 }
 
 // Function: MINA
-KSpreadValue func_mina (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_mina (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue m = calc->min (args);
-  return m.isEmpty() ? KSpreadValue(0.0) : m;
+  Value m = calc->min (args);
+  return m.isEmpty() ? Value(0.0) : m;
 }
 
 // Function: INT
-KSpreadValue func_int (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_int (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->conv()->asInteger (args[0]);
 }
 
 // Function: QUOTIENT
-KSpreadValue func_quotient (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_quotient (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (calc->isZero (args[1]))
-    return KSpreadValue::errorDIV0();
+    return Value::errorDIV0();
   return calc->conv()->asInteger (calc->div (args[0], args[1]));
 }
 
 
 // Function: eps
-KSpreadValue func_eps (valVector, ValueCalc *calc, FuncExtra *)
+Value func_eps (valVector, ValueCalc *calc, FuncExtra *)
 {
   return calc->eps ();
 }
 
-KSpreadValue func_randexp (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_randexp (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // -1 * d * log (random)
   return calc->mul (calc->mul (args[0], -1), calc->random());
 }
 
-KSpreadValue func_randbinom (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_randbinom (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // this function will not support arbitrary precision
   
@@ -531,10 +531,10 @@ KSpreadValue func_randbinom (valVector args, ValueCalc *calc, FuncExtra *)
   int    tr = calc->conv()->asInteger (args[1]).asInteger();
 
   if ( d < 0 || d > 1 )
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   if ( tr < 0 )
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   // taken from gnumeric
   double x = pow(1 - d, tr);
@@ -549,10 +549,10 @@ KSpreadValue func_randbinom (valVector args, ValueCalc *calc, FuncExtra *)
     t += x;
   }
 
-  return KSpreadValue (i);
+  return Value (i);
 }
 
-KSpreadValue func_randnegbinom (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_randnegbinom (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // this function will not support arbitrary precision
   
@@ -560,10 +560,10 @@ KSpreadValue func_randnegbinom (valVector args, ValueCalc *calc, FuncExtra *)
   int    f = calc->conv()->asInteger (args[1]).asInteger();
 
   if ( d < 0 || d > 1 )
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   if ( f < 0 )
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
 
   // taken from Gnumeric
@@ -579,24 +579,24 @@ KSpreadValue func_randnegbinom (valVector args, ValueCalc *calc, FuncExtra *)
     t += x;
   }
 
-  return KSpreadValue (i);
+  return Value (i);
 }
 
-KSpreadValue func_randbernoulli (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_randbernoulli (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue rnd = calc->random ();
-  return KSpreadValue (calc->greater (rnd, args[0]) ? 1.0 : 0.0);
+  Value rnd = calc->random ();
+  return Value (calc->greater (rnd, args[0]) ? 1.0 : 0.0);
 }
 
-KSpreadValue func_randnorm (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_randnorm (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue mu = args[0];
-  KSpreadValue sigma = args[1];
+  Value mu = args[0];
+  Value sigma = args[1];
 
   //using polar form of the Box-Muller transformation
   //refer to http://www.taygeta.com/random/gaussian.html for more info
 
-  KSpreadValue x1, x2, w;
+  Value x1, x2, w;
   do {
     // x1,x2 = 2 * random() - 1
     x1 = calc->random (2.0);
@@ -608,21 +608,21 @@ KSpreadValue func_randnorm (valVector args, ValueCalc *calc, FuncExtra *)
 
   //sqrt ((-2.0 * log (w)) / w) :
   w = calc->sqrt (calc->div (calc->mul (-2.0, calc->ln (w)), w));
-  KSpreadValue res = calc->mul (x1, w);
+  Value res = calc->mul (x1, w);
 
   res = calc->add (calc->mul (res, sigma), mu);  // res*sigma + mu
   return res;
 }
 
-KSpreadValue func_randpoisson (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_randpoisson (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (calc->lower (args[0], 0))
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   // taken from Gnumeric...
-  KSpreadValue x = calc->exp (calc->mul (-1, args[0]));   // e^(-A)
-  KSpreadValue r = calc->random ();
-  KSpreadValue t = x;
+  Value x = calc->exp (calc->mul (-1, args[0]));   // e^(-A)
+  Value r = calc->random ();
+  Value t = x;
   int i = 0;
 
   while (calc->greater (r, t)) {   // r > t
@@ -631,20 +631,20 @@ KSpreadValue func_randpoisson (valVector args, ValueCalc *calc, FuncExtra *)
     i++;
   }
 
-  return KSpreadValue (i);
+  return Value (i);
 }
 
 // Function: rand
-KSpreadValue func_rand (valVector, ValueCalc *calc, FuncExtra *)
+Value func_rand (valVector, ValueCalc *calc, FuncExtra *)
 {
   return calc->random ();
 }
 
 // Function: RANDBETWEEN
-KSpreadValue func_randbetween (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_randbetween (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue v1 = args[0];
-  KSpreadValue v2 = args[1];
+  Value v1 = args[0];
+  Value v2 = args[1];
   if (calc->greater (v2, v1)) {
     v1 = args[1];
     v2 = args[0];
@@ -653,34 +653,34 @@ KSpreadValue func_randbetween (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: POW
-KSpreadValue func_pow (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_pow (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->pow (args[0], args[1]);
 }
 
 // Function: MOD
-KSpreadValue func_mod (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_mod (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->mod (args[0], args[1]);
 }
 
 // Function: fact
-KSpreadValue func_fact (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_fact (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->fact (args[0]);
 }
 
 // Function: FACTDOUBLE
-KSpreadValue func_factdouble (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_factdouble (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->factDouble (args[0]);
 }
 
 // Function: MULTINOMIAL
-KSpreadValue func_multinomial (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_multinomial (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // (a+b+c)! / a!b!c!  (any number of params possible)
-  KSpreadValue num = 0, den = 1;
+  Value num = 0, den = 1;
   for (unsigned int i = 0; i < args.count(); ++i) {
     num = calc->add (num, args[i]);
     den = calc->mul (den, calc->fact (args[i]));
@@ -690,26 +690,26 @@ KSpreadValue func_multinomial (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: sign
-KSpreadValue func_sign (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_sign (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  return KSpreadValue (calc->sign (args[0]));
+  return Value (calc->sign (args[0]));
 }
 
 // Function: INV
-KSpreadValue func_inv (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_inv (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->mul (args[0], -1);
 }
 
-KSpreadValue func_mround (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_mround (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue d = args[0];
-  KSpreadValue m = args[1];
+  Value d = args[0];
+  Value m = args[1];
 
   // signs must be the same
   if ((calc->greater (d, 0) && calc->lower (m, 0))
       || (calc->lower (d, 0) && calc->greater (m, 0)))
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   int sign = 1;
 
@@ -721,10 +721,10 @@ KSpreadValue func_mround (valVector args, ValueCalc *calc, FuncExtra *)
   }
 
   // from gnumeric:
-  KSpreadValue mod = calc->mod (d, m);
-  KSpreadValue div = calc->sub (d, mod);
+  Value mod = calc->mod (d, m);
+  Value div = calc->sub (d, mod);
 
-  KSpreadValue result = div;
+  Value result = div;
   if (calc->greater (mod, calc->div (m, 2)))  // mod > m/2
     result = calc->add (result, m);     // result += m
   result = calc->mul (result, sign);    // add the sign
@@ -733,7 +733,7 @@ KSpreadValue func_mround (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: ROUNDDOWN
-KSpreadValue func_rounddown (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_rounddown (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (args.count() == 2)
     return calc->roundDown (args[0], args[1]);
@@ -741,7 +741,7 @@ KSpreadValue func_rounddown (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: ROUNDUP
-KSpreadValue func_roundup (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_roundup (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (args.count() == 2)
     return calc->roundUp (args[0], args[1]);
@@ -749,7 +749,7 @@ KSpreadValue func_roundup (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: ROUND
-KSpreadValue func_round (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_round (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (args.count() == 2)
     return calc->round (args[0], args[1]);
@@ -757,18 +757,18 @@ KSpreadValue func_round (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: EVEN
-KSpreadValue func_even (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_even (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->isEven (args[0]);
 }
 
 // Function: ODD
-KSpreadValue func_odd (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_odd (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return (!calc->isEven (args[0]));
 }
 
-KSpreadValue func_trunc (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_trunc (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (args.count() == 1)
     return calc->roundDown (args[0]);
@@ -776,19 +776,19 @@ KSpreadValue func_trunc (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: COUNT
-KSpreadValue func_count (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_count (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->count (args, false);
 }
 
 // Function: COUNTA
-KSpreadValue func_counta (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_counta (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return calc->count (args);
 }
 
 // Function: COUNTBLANK
-KSpreadValue func_countblank (valVector args, ValueCalc *, FuncExtra *)
+Value func_countblank (valVector args, ValueCalc *, FuncExtra *)
 {
   int cnt = 0;
   for (unsigned int i = 0; i < args.count(); ++i)
@@ -802,13 +802,13 @@ KSpreadValue func_countblank (valVector args, ValueCalc *, FuncExtra *)
     } else
       if (args[i].isEmpty())
         cnt++;
-  return KSpreadValue (cnt);
+  return Value (cnt);
 }
 
 // Function: COUNTIF
-KSpreadValue func_countif (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_countif (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue range = args[0];
+  Value range = args[0];
   QString condition = calc->conv()->asString (args[1]).asString();
 
   Condition cond;
@@ -818,7 +818,7 @@ KSpreadValue func_countif (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: FIB
-KSpreadValue func_fib (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_fib (valVector args, ValueCalc *calc, FuncExtra *)
 {
 /*
 Lucas' formula for the nth Fibonacci number F(n) is given by
@@ -828,26 +828,26 @@ Lucas' formula for the nth Fibonacci number F(n) is given by
                          sqrt(5)
 
 */
-  KSpreadValue n = args[0];
-  KSpreadValue s = calc->sqrt (5.0);
+  Value n = args[0];
+  Value s = calc->sqrt (5.0);
   // u1 = ((1+sqrt(5))/2)^n
-  KSpreadValue u1 = calc->pow (calc->div (calc->add (1, s), 2), n);
+  Value u1 = calc->pow (calc->div (calc->add (1, s), 2), n);
   // u2 = ((1-sqrt(5))/2)^n
-  KSpreadValue u2 = calc->pow (calc->div (calc->sub (1, s), 2), n);
+  Value u2 = calc->pow (calc->div (calc->sub (1, s), 2), n);
   
-  KSpreadValue result = calc->div (calc->sub (u1, u2), s);
+  Value result = calc->div (calc->sub (u1, u2), s);
   return result;
 }
 
-static KSpreadValue func_gcd_helper(const KSpreadValue &val, ValueCalc *calc)
+static Value func_gcd_helper(const Value &val, ValueCalc *calc)
 {
-  KSpreadValue res = 0;
+  Value res = 0;
   if (!val.isArray ())
     return val;
   for (unsigned int row = 0; row < val.rows(); ++row)
     for (unsigned int col = 0; col < val.columns(); ++col)
     {
-      KSpreadValue v = val.element (col, row);
+      Value v = val.element (col, row);
       if (v.isArray ())
         v = func_gcd_helper (v, calc);
       res = calc->gcd (res, v);
@@ -856,9 +856,9 @@ static KSpreadValue func_gcd_helper(const KSpreadValue &val, ValueCalc *calc)
 }
 
 // Function: GCD
-KSpreadValue func_gcd (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_gcd (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue result = 0;
+  Value result = 0;
   for (unsigned int i = 0; i < args.count(); ++i)
     if (args[i].isArray())
       result = calc->gcd (result, func_gcd_helper (args[i], calc));
@@ -867,15 +867,15 @@ KSpreadValue func_gcd (valVector args, ValueCalc *calc, FuncExtra *)
   return result;
 }
 
-static KSpreadValue func_lcm_helper(const KSpreadValue &val, ValueCalc *calc)
+static Value func_lcm_helper(const Value &val, ValueCalc *calc)
 {
-  KSpreadValue res = 0;
+  Value res = 0;
   if (!val.isArray ())
     return val;
   for (unsigned int row = 0; row < val.rows(); ++row)
     for (unsigned int col = 0; col < val.columns(); ++col)
     {
-      KSpreadValue v = val.element (col, row);
+      Value v = val.element (col, row);
       if (v.isArray ())
         v = func_lcm_helper (v, calc);
       res = calc->lcm (res, v);
@@ -884,9 +884,9 @@ static KSpreadValue func_lcm_helper(const KSpreadValue &val, ValueCalc *calc)
 }
 
 // Function: lcm
-KSpreadValue func_lcm (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_lcm (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue result = 0;
+  Value result = 0;
   for (unsigned int i = 0; i < args.count(); ++i)
     if (args[i].isArray())
       result = calc->lcm (result, func_lcm_helper (args[i], calc));
@@ -895,7 +895,7 @@ KSpreadValue func_lcm (valVector args, ValueCalc *calc, FuncExtra *)
   return result;
 }
 
-KSpreadValue determinant (ValueCalc *calc, KSpreadValue matrix)
+Value determinant (ValueCalc *calc, Value matrix)
 {
   // this is a --- SLOOOW --- recursive function
   // using this for something bigger than 10x10 or so = suicide :P
@@ -903,7 +903,7 @@ KSpreadValue determinant (ValueCalc *calc, KSpreadValue matrix)
   // as a note, gnumeric uses LUP decomposition to compute this
   
   // take first row, generate smaller matrices, recursion, multiply
-  KSpreadValue res = 0.0;
+  Value res = 0.0;
   int n = matrix.columns();
   if (n == 1) return matrix.element (0, 0);
   if (n == 2) return calc->sub (
@@ -912,7 +912,7 @@ KSpreadValue determinant (ValueCalc *calc, KSpreadValue matrix)
   
   // n >= 3
   for (int i = 0; i < n; ++i) {
-    KSpreadValue smaller (n-1, n-1);
+    Value smaller (n-1, n-1);
     int col = 0;
     for (int c = 0; c < n; ++c)
       if (c != i) {
@@ -921,7 +921,7 @@ KSpreadValue determinant (ValueCalc *calc, KSpreadValue matrix)
           smaller.setElement (col, r-1, matrix.element (c, r));
         col++;
       }
-    KSpreadValue minor = determinant (calc, smaller);
+    Value minor = determinant (calc, smaller);
     if (i % 2 == 1) minor = calc->mul (minor, -1);
     res = calc->add (res, calc->mul (minor, matrix.element (i, 0)));
   }
@@ -929,36 +929,36 @@ KSpreadValue determinant (ValueCalc *calc, KSpreadValue matrix)
 }
 
 // Function: mdeterm
-KSpreadValue func_mdeterm (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_mdeterm (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue m = args[0];
+  Value m = args[0];
   unsigned r = m.rows ();
   unsigned c = m.columns ();
   if (r != c)   // must be a square matrix
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   
   return determinant (calc, args[0]);
 }
 
 // Function: mmult
-KSpreadValue func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue m1 = args[0];
-  KSpreadValue m2 = args[1];
+  Value m1 = args[0];
+  Value m2 = args[1];
   unsigned r1 = m1.rows ();
   unsigned c1 = m1.columns ();
   unsigned r2 = m2.rows ();
   unsigned c2 = m2.columns ();
   if (c1 != r2)  // row/column counts must match
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   
   // create the resulting matrix
-  KSpreadValue res (c2, r1);
+  Value res (c2, r1);
   
   // perform the multiplication - O(n^3) algorithm
   for (uint row = 0; row < r1; ++row)
     for (uint col = 0; col < c2; ++col) {
-      KSpreadValue val = 0.0;
+      Value val = 0.0;
       for (uint pos = 0; pos < c1; ++pos)
         val = calc->add (val,
             calc->mul (m1.element (pos, row), m2.element (col, pos)));
@@ -968,13 +968,13 @@ KSpreadValue func_mmult (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: SUBTOTAL
-// This function requires access to the KSpreadSheet and so on, because
+// This function requires access to the Sheet and so on, because
 // it needs to check whether cells contain the SUBTOTAL formula or not ...
 // Cells containing a SUBTOTAL formula must be ignored.
-KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
+Value func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
 {
   int function = calc->conv()->asInteger (args[0]).asInteger();
-  KSpreadValue range = args[1];
+  Value range = args[1];
   int r1 = -1, c1 = -1, r2 = -1, c2 = -1;
   if (e) {
     r1 = e->ranges[1].row1;
@@ -985,7 +985,7 @@ KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
   
   // if we have a range, run through it, and put an empty value to the place
   // of all occurences of the SUBTOTAL function
-  KSpreadValue empty;
+  Value empty;
   if ((r1 > 0) && (c1 > 0) && (r2 > 0) && (c2 > 0)) {
     for (int r = r1; r <= r2; ++r)
       for (int c = c1; c <= c2; ++c) {
@@ -999,7 +999,7 @@ KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
   }
 
   // Good. Now we can execute the necessary function on the range.
-  KSpreadValue res;
+  Value res;
   Function *f;
   valVector a;
   switch (function) {
@@ -1032,20 +1032,20 @@ KSpreadValue func_subtotal (valVector args, ValueCalc *calc, FuncExtra *e)
     break;
    case 10: // Var
     f = FunctionRepository::self()->function ("VAR");
-    if (!f) return KSpreadValue::errorVALUE();
+    if (!f) return Value::errorVALUE();
     a.reserve (1);
     a[0] = range;
     res = f->exec (a, calc, 0);
     break;
    case 11: // VarP
     f = FunctionRepository::self()->function ("VARP");
-    if (!f) return KSpreadValue::errorVALUE();
+    if (!f) return Value::errorVALUE();
     a.reserve (1);
     a[0] = range;
     res = f->exec (a, calc, 0);
     break;
    default:
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   }
   return res;
 }
@@ -1057,15 +1057,15 @@ To anyone who would enable this code: it still uses koscript calls - you need
 to convert it to the new style prior to uncommenting.
 
 // Function: MULTIPLEOPERATIONS
-KSpreadValue func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
 {
   if (gCell)
   {
-    context.setValue( new KSValue( ((KSpreadInterpreter *) context.interpreter() )->cell()->value().asFloat() ) );
+    context.setValue( new KSValue( ((Interpreter *) context.interpreter() )->cell()->value().asFloat() ) );
     return true;
   }
 
-  gCell = ((KSpreadInterpreter *) context.interpreter() )->cell();
+  gCell = ((Interpreter *) context.interpreter() )->cell();
 
   QValueList<KSValue::Ptr>& args = context.value()->listValue();
   QValueList<KSValue::Ptr>& extra = context.extraData()->listValue();
@@ -1087,18 +1087,18 @@ KSpreadValue func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
     }
   }
 
-  //  ((KSpreadInterpreter *) context.interpreter() )->document()->emitBeginOperation();
+  //  ((Interpreter *) context.interpreter() )->document()->emitBeginOperation();
 
   double oldCol = args[1]->doubleValue();
   double oldRow = args[3]->doubleValue();
   kdDebug() << "Old values: Col: " << oldCol << ", Row: " << oldRow << endl;
 
   Cell * cell;
-  KSpreadSheet * sheet = ((KSpreadInterpreter *) context.interpreter() )->sheet();
+  Sheet * sheet = ((Interpreter *) context.interpreter() )->sheet();
 
-  KSpreadPoint point( extra[1]->stringValue() );
-  KSpreadPoint point2( extra[3]->stringValue() );
-  KSpreadPoint point3( extra[0]->stringValue() );
+  Point point( extra[1]->stringValue() );
+  Point point2( extra[3]->stringValue() );
+  Point point3( extra[0]->stringValue() );
 
   if ( ( args[1]->doubleValue() != args[2]->doubleValue() )
        || ( args[3]->doubleValue() != args[4]->doubleValue() ) )
@@ -1131,7 +1131,7 @@ KSpreadValue func_multipleOP (valVector args, ValueCalc *calc, FuncExtra *)
 
   cell1->calc( false );
 
-  // ((KSpreadInterpreter *) context.interpreter() )->document()->emitEndOperation();
+  // ((Interpreter *) context.interpreter() )->document()->emitEndOperation();
 
   context.setValue( new KSValue( (double) d ) );
 

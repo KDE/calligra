@@ -62,7 +62,7 @@ using namespace KSpread;
  *                 Database wizard                      *
  ********************************************************/
 
-KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect, const char * name, bool modal, WFlags fl )
+DatabaseDialog::DatabaseDialog( View * parent, QRect const & rect, const char * name, bool modal, WFlags fl )
   : KWizard( (QWidget *) parent, name, modal, fl ),
     m_currentPage( eDatabase ),
     m_pView( parent ),
@@ -70,7 +70,7 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
     m_dbConnection( 0L )
 {
   if ( !name )
-    setName( "KSpreadDatabaseDlg" );
+    setName( "DatabaseDialog" );
 
   setCaption( i18n( "Insert Data From Database" ) );
 
@@ -437,14 +437,14 @@ KSpreadDatabaseDlg::KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect
   setNextEnabled(m_result, false);
 }
 
-KSpreadDatabaseDlg::~KSpreadDatabaseDlg()
+DatabaseDialog::~DatabaseDialog()
 {
   // no need to delete child widgets, Qt does it all for us
   if ( m_dbConnection )
     m_dbConnection->close();
 }
 
-void KSpreadDatabaseDlg::switchPage( int id )
+void DatabaseDialog::switchPage( int id )
 {
   if ( id > eResult )
     --m_currentPage;
@@ -478,7 +478,7 @@ void KSpreadDatabaseDlg::switchPage( int id )
   }
 }
 
-void KSpreadDatabaseDlg::next()
+void DatabaseDialog::next()
 {
   switch ( m_currentPage )
   {
@@ -515,23 +515,23 @@ void KSpreadDatabaseDlg::next()
   switchPage( m_currentPage );
 }
 
-void KSpreadDatabaseDlg::back()
+void DatabaseDialog::back()
 {
   --m_currentPage;
 
   switchPage( m_currentPage );
 }
 
-void KSpreadDatabaseDlg::accept()
+void DatabaseDialog::accept()
 {
-  KSpreadSheet * sheet = m_pView->activeSheet();
+  Sheet * sheet = m_pView->activeSheet();
   int top;
   int left;
   int width  = -1;
   int height = -1;
   if ( m_startingRegion->isChecked() )
   {
-    KSpreadRange range( m_region->text() );
+    Range range( m_region->text() );
     if ( range.isSheetKnown() )
     {
       KMessageBox::error( this, i18n("You cannot specify a table here.") );
@@ -556,7 +556,7 @@ void KSpreadDatabaseDlg::accept()
   }
   else
   {
-    KSpreadPoint point( m_cell->text() );
+    Point point( m_cell->text() );
     if ( point.isSheetKnown() )
     {
       KMessageBox::error( this, i18n("You cannot specify a table here.") );
@@ -647,7 +647,7 @@ void KSpreadDatabaseDlg::accept()
   if ( !m_pView->doc()->undoLocked() )
   {
     QRect r(left, top, count, height);
-    KSpreadUndoInsertData * undo = new KSpreadUndoInsertData( m_pView->doc(), sheet, r );
+    UndoInsertData * undo = new UndoInsertData( m_pView->doc(), sheet, r );
     m_pView->doc()->addCommand( undo );
   }
 
@@ -689,7 +689,7 @@ void KSpreadDatabaseDlg::accept()
   KWizard::accept();
 }
 
-bool KSpreadDatabaseDlg::databaseDoNext()
+bool DatabaseDialog::databaseDoNext()
 {
   m_dbConnection = QSqlDatabase::addDatabase( m_driver->currentText() );
 
@@ -775,7 +775,7 @@ bool KSpreadDatabaseDlg::databaseDoNext()
   return true;
 }
 
-bool KSpreadDatabaseDlg::sheetsDoNext()
+bool DatabaseDialog::sheetsDoNext()
 {
   m_databaseStatus->setText( i18n("Retrieving meta data of tables...") );
   QStringList sheets;
@@ -821,7 +821,7 @@ bool KSpreadDatabaseDlg::sheetsDoNext()
   return true;
 }
 
-bool KSpreadDatabaseDlg::columnsDoNext()
+bool DatabaseDialog::columnsDoNext()
 {
   QStringList columns;
   for (QListViewItem * item = m_columnView->firstChild(); item; item = item->nextSibling())
@@ -857,7 +857,7 @@ bool KSpreadDatabaseDlg::columnsDoNext()
 }
 
 
-QString KSpreadDatabaseDlg::getWhereCondition(QString const & column,
+QString DatabaseDialog::getWhereCondition(QString const & column,
                                               QString const & value,
                                               int op)
 {
@@ -940,7 +940,7 @@ QString KSpreadDatabaseDlg::getWhereCondition(QString const & column,
   return wherePart;
 }
 
-QString KSpreadDatabaseDlg::exchangeWildcards(QString const & value)
+QString DatabaseDialog::exchangeWildcards(QString const & value)
 {
   QString str(value);
   int p = str.find('*');
@@ -959,7 +959,7 @@ QString KSpreadDatabaseDlg::exchangeWildcards(QString const & value)
   return str;
 }
 
-bool KSpreadDatabaseDlg::optionsDoNext()
+bool DatabaseDialog::optionsDoNext()
 {
   if ( m_operator_1->currentItem() == 4 )
   {
@@ -1101,36 +1101,36 @@ bool KSpreadDatabaseDlg::optionsDoNext()
   return true;
 }
 
-void KSpreadDatabaseDlg::orBox_clicked()
+void DatabaseDialog::orBox_clicked()
 {
   m_andBox->setChecked( false );
   m_orBox->setChecked( true );
 }
 
-void KSpreadDatabaseDlg::andBox_clicked()
+void DatabaseDialog::andBox_clicked()
 {
   m_andBox->setChecked( true );
   m_orBox->setChecked( false );
 }
 
-void KSpreadDatabaseDlg::startingCell_clicked()
+void DatabaseDialog::startingCell_clicked()
 {
   m_startingCell->setChecked( true );
   m_startingRegion->setChecked( false );
 }
 
-void KSpreadDatabaseDlg::startingRegion_clicked()
+void DatabaseDialog::startingRegion_clicked()
 {
   m_startingCell->setChecked( false );
   m_startingRegion->setChecked( true );
 }
 
-void KSpreadDatabaseDlg::connectButton_clicked()
+void DatabaseDialog::connectButton_clicked()
 {
-  qWarning( "KSpreadDatabaseDlg::connectButton_clicked(): Not implemented yet!" );
+  qWarning( "DatabaseDialog::connectButton_clicked(): Not implemented yet!" );
 }
 
-void KSpreadDatabaseDlg::databaseNameChanged(const QString & s)
+void DatabaseDialog::databaseNameChanged(const QString & s)
 {
   if ( !m_driver->currentText().isEmpty() && !s.isEmpty()
        && !m_host->text().isEmpty() )
@@ -1139,7 +1139,7 @@ void KSpreadDatabaseDlg::databaseNameChanged(const QString & s)
     setNextEnabled(m_database, false);
 }
 
-void KSpreadDatabaseDlg::databaseHostChanged(const QString & s)
+void DatabaseDialog::databaseHostChanged(const QString & s)
 {
   if ( !m_driver->currentText().isEmpty() && !s.isEmpty()
        && !m_databaseName->text().isEmpty() )
@@ -1148,7 +1148,7 @@ void KSpreadDatabaseDlg::databaseHostChanged(const QString & s)
     setNextEnabled(m_database, false);
 }
 
-void KSpreadDatabaseDlg::databaseDriverChanged(int index)
+void DatabaseDialog::databaseDriverChanged(int index)
 {
   if ( index > 0 && !m_host->text().isEmpty()
        && !m_databaseName->text().isEmpty() )
@@ -1157,12 +1157,12 @@ void KSpreadDatabaseDlg::databaseDriverChanged(int index)
     setNextEnabled(m_database, false);
 }
 
-void KSpreadDatabaseDlg::popupSheetViewMenu( QListViewItem *, const QPoint &, int )
+void DatabaseDialog::popupSheetViewMenu( QListViewItem *, const QPoint &, int )
 {
   // TODO: popup menu with "Select All", "Inverse selection", "remove selection"
 }
 
-void KSpreadDatabaseDlg::sheetViewClicked( QListViewItem * )
+void DatabaseDialog::sheetViewClicked( QListViewItem * )
 {
 //   if ( item )
 //   {

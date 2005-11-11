@@ -6,10 +6,10 @@
 class QDomElement;
 class QDomDocument;
 
-class KSpreadLocale : public KLocale
+class Locale : public KLocale
 {
 public:
-    KSpreadLocale();
+    Locale();
     
     void load( const QDomElement& element );
     QDomElement save( QDomDocument& doc ) const;

@@ -53,8 +53,6 @@ class QDate;
 class QTime;
 class QLabel;
 class QWidget;
-class CellFormatDlg;
-class KSpreadSheet;
 class KLineEdit;
 class QFrame;
 class QListBox;
@@ -64,8 +62,12 @@ class QComboBox;
 class KComboBox;
 class KoUnitDoubleSpinBox;
 
-class KSpreadCustomStyle;
-class KSpreadStyleManager;
+namespace KSpread
+{
+class Sheet;
+class CustomStyle;
+class StyleManager;
+class CellFormatDialog;
 
 enum BorderType
 {
@@ -87,11 +89,12 @@ enum BorderShortcutType
   BorderShortcutType_Outline,
   BorderShortcutType_END
 };
-class KSpreadPatternSelect : public QFrame
+
+class PatternSelect : public QFrame
 {
     Q_OBJECT
 public:
-    KSpreadPatternSelect( QWidget *parent, const char *_name );
+    PatternSelect( QWidget *parent, const char *_name );
 
     void setPenStyle( PenStyle _pat ) { penStyle = _pat; repaint(); }
     PenStyle getPenStyle() { return penStyle; }
@@ -107,7 +110,7 @@ public:
     bool isDefined() { return !undefined; }
 
 signals:
-    void clicked( KSpreadPatternSelect *_this );
+    void clicked( PatternSelect *_this );
 
 public slots:
     void slotUnselect();
@@ -130,17 +133,17 @@ class GeneralTab : public QWidget
   Q_OBJECT
 
  public:
-  GeneralTab( QWidget * parent, CellFormatDlg * _dlg );
+  GeneralTab( QWidget * parent, CellFormatDialog * _dlg );
   ~GeneralTab();
 
-  bool apply( KSpreadCustomStyle * style );
+  bool apply( CustomStyle * style );
 
  protected slots:
   void slotNewParent( const QString & parentName );
   void slotNameChanged();
 
  private:
-  CellFormatDlg * m_dlg;
+  CellFormatDialog * m_dlg;
   KComboBox     * m_parentBox;
   KLineEdit     * m_nameEdit;
 
@@ -157,13 +160,13 @@ class CellFormatPageFont : public QWidget
 {
     Q_OBJECT
 public:
-    CellFormatPageFont( QWidget* parent, CellFormatDlg *_dlg );
+    CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg );
 
-    void apply( KSpreadCustomStyle * style );
-    void apply( KSpread::Cell *_cell );
+    void apply( CustomStyle * style );
+    void apply( Cell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
-    void applyFormat( KSpreadFormat *_obj );
+    void applyFormat( Format *_obj );
 
 signals:
     /**
@@ -216,7 +219,7 @@ private:
     QFont         selFont;
     QCheckBox* strike;
     QCheckBox* underline;
-    CellFormatDlg *dlg;
+    CellFormatDialog *dlg;
     QColor textColor;
     bool bTextColorUndefined;
     KColorButton *textColorButton;
@@ -229,13 +232,13 @@ class CellFormatPageMisc : public QWidget
 {
     Q_OBJECT
 public:
-    CellFormatPageMisc( QWidget *parent, CellFormatDlg *_dlg );
+    CellFormatPageMisc( QWidget *parent, CellFormatDialog *_dlg );
 
-    void apply( KSpreadCustomStyle * style );
-    void apply( KSpread::Cell *_cell );
+    void apply( CustomStyle * style );
+    void apply( Cell *_cell );
     void applyColumn();
     void applyRow();
-    void applyFormat( KSpread::Cell *_obj );
+    void applyFormat( Cell *_obj );
     bool getDontPrintTextValue(){return dontPrintText->isChecked();}
 
 public slots:
@@ -249,11 +252,11 @@ protected:
 
     QLineEdit* actionText;
     QCheckBox *dontPrintText;
-    CellFormatDlg *dlg;
+    CellFormatDialog *dlg;
 };
 
 /**
- * KSpreadFormat of numbers.
+ * Format of numbers.
  * This widget is part of the format dialog.
  * It allows the user to cinfigure the way numbers are formatted.
  */
@@ -261,13 +264,13 @@ class CellFormatPageFloat : public QWidget
 {
     Q_OBJECT
 public:
-    CellFormatPageFloat( QWidget *parent, CellFormatDlg *_dlg );
+    CellFormatPageFloat( QWidget *parent, CellFormatDialog *_dlg );
 
-    void apply( KSpreadCustomStyle * style );
-    void apply( KSpread::Cell *_cell );
+    void apply( CustomStyle * style );
+    void apply( Cell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
-    void applyFormat( KSpreadFormat *_obj );
+    void applyFormat( Format *_obj );
 
 public slots:
     void slotChangeState();
@@ -297,26 +300,24 @@ protected:
     QListBox *listFormat;
     QLineEdit* customFormatEdit;
     QLabel *exampleLabel;
-    CellFormatDlg *dlg;
+    CellFormatDialog *dlg;
     FormatType cellFormatType, newFormatType;
     //test if value changed
     bool m_bFormatTypeChanged;
     bool m_bFormatColorChanged;
 };
 
-
-
 class CellFormatPagePosition : public QWidget
 {
     Q_OBJECT
 public:
-    CellFormatPagePosition( QWidget *parent, CellFormatDlg *_dlg );
+    CellFormatPagePosition( QWidget *parent, CellFormatDialog *_dlg );
 
-    void apply( KSpreadCustomStyle * style );
-    void apply( KSpread::Cell *_cell );
+    void apply( CustomStyle * style );
+    void apply( Cell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
-    void applyFormat( KSpreadFormat *_obj );
+    void applyFormat( Format *_obj );
 
     double getSizeHeight() const;
     double getSizeWidth() const;
@@ -341,7 +342,7 @@ protected:
     QCheckBox *vertical;
     KoUnitDoubleSpinBox *width;
     KoUnitDoubleSpinBox *height;
-    CellFormatDlg *dlg;
+    CellFormatDialog *dlg;
     QCheckBox *defaultWidth;
     QCheckBox *defaultHeight;
     QCheckBox *mergeCell;
@@ -352,11 +353,11 @@ protected:
 
 
 
-class KSpreadBorder : public QFrame
+class Border : public QFrame
 {
     Q_OBJECT
 public:
-    KSpreadBorder( QWidget *parent,const char *_name,bool _oneCol,bool _oneRow  );
+    Border( QWidget *parent,const char *_name,bool _oneCol,bool _oneRow  );
 signals:
     void redraw();
     void choosearea(QMouseEvent * _ev);
@@ -367,11 +368,11 @@ protected:
     bool oneRow;
 };
 
-class KSpreadBorderButton : public QPushButton
+class BorderButton : public QPushButton
 {
     Q_OBJECT
 public:
-    KSpreadBorderButton( QWidget *parent, const char *_name );
+    BorderButton( QWidget *parent, const char *_name );
     void setPenStyle( PenStyle _pat ) { penStyle = _pat;}
     PenStyle getPenStyle() { return penStyle; }
     void setColor( const QColor &_col ) { penColor = _col; }
@@ -383,7 +384,7 @@ public:
     void setUndefined();
     void unselect();
  signals:
-    void clicked(KSpreadBorderButton *);
+    void clicked(BorderButton *);
  protected:
     virtual void mousePressEvent( QMouseEvent *_ev );
     PenStyle penStyle;
@@ -397,19 +398,19 @@ class CellFormatPageBorder : public QWidget
 {
   Q_OBJECT
 public:
-    CellFormatPageBorder( QWidget *parent, CellFormatDlg *_dlg );
+    CellFormatPageBorder( QWidget *parent, CellFormatDialog *_dlg );
 
     void applyOutline();
-    void invertState(KSpreadBorderButton *_button);
+    void invertState(BorderButton *_button);
     QPixmap paintFormatPixmap(PenStyle _style);
 
 public slots:
-    void changeState(KSpreadBorderButton *_this);
-    void preselect( KSpreadBorderButton *_this);
+    void changeState(BorderButton *_this);
+    void preselect( BorderButton *_this);
     void draw();
     void slotSetColorButton( const QColor &_color );
-    void slotUnselect2( KSpreadPatternSelect *_select );
-    void loadIcon( QString pix,KSpreadBorderButton *_button);
+    void slotUnselect2( PatternSelect *_select );
+    void loadIcon( QString pix,BorderButton *_button);
     void slotPressEvent(QMouseEvent *_ev);
     void slotChangeStyle(int );
     void slotChangeStyle(const QString & );
@@ -417,23 +418,23 @@ public slots:
 
 protected:
 
-  KSpreadSheet* sheet;
-  KSpreadBorderButton* borderButtons[BorderType_END];
-  KSpreadBorderButton* shortcutButtons[BorderShortcutType_END];
+  Sheet* sheet;
+  BorderButton* borderButtons[BorderType_END];
+  BorderButton* shortcutButtons[BorderShortcutType_END];
 #define NUM_BORDER_PATTERNS 10
 
   /* the patterns to choose from */
-  KSpreadPatternSelect* pattern[NUM_BORDER_PATTERNS];
+  PatternSelect* pattern[NUM_BORDER_PATTERNS];
 
   /* the pattern box that is the 'preview' of what is selected above. */
-  KSpreadPatternSelect* preview;
+  PatternSelect* preview;
   QComboBox* size;
   QComboBox* style;
   KColorButton* color;
   QCheckBox* customize;
   QColor currentColor;
-  KSpreadBorder *area;
-  CellFormatDlg *dlg;
+  Border *area;
+  CellFormatDialog *dlg;
 private:
 
   /*some helper functions to space some tasks apart */
@@ -450,11 +451,11 @@ private:
   void applyDiagonalOutline();
 };
 
-class KSpreadBrushSelect : public QFrame
+class BrushSelect : public QFrame
 {
     Q_OBJECT
 public:
-    KSpreadBrushSelect( QWidget *parent, const char *_name );
+    BrushSelect( QWidget *parent, const char *_name );
 
     void setBrushStyle( BrushStyle _pat ) { brushStyle = _pat; repaint(); }
     BrushStyle getBrushStyle() const { return brushStyle; }
@@ -463,7 +464,7 @@ public:
     void setPattern( const QColor &_color, BrushStyle _style );
 
 signals:
-    void clicked( KSpreadBrushSelect *_this );
+    void clicked( BrushSelect *_this );
 
 public slots:
     void slotUnselect();
@@ -483,38 +484,38 @@ class CellFormatPagePattern : public QWidget
 {
     Q_OBJECT
 public:
-    CellFormatPagePattern( QWidget *parent, CellFormatDlg *_dlg );
+    CellFormatPagePattern( QWidget *parent, CellFormatDialog *_dlg );
 
-    void apply( KSpreadCustomStyle * style );
-    void apply( KSpread::Cell *_cell );
+    void apply( CustomStyle * style );
+    void apply( Cell *_cell );
     void apply( ColumnFormat *_col );
     void apply( RowFormat *_row );
-    void applyFormat( KSpreadFormat *_obj );
+    void applyFormat( Format *_obj );
 
     void init();
 public slots:
-    void slotUnselect2( KSpreadBrushSelect *_select );
+    void slotUnselect2( BrushSelect *_select );
     void slotSetColorButton( const QColor &_color );
     void slotSetBackgroundColor( const QColor &_color );
     void slotNotAnyColor( );
 protected:
-    KSpreadBrushSelect *selectedBrush;
-    KSpreadBrushSelect *brush1;
-    KSpreadBrushSelect *brush2;
-    KSpreadBrushSelect *brush3;
-    KSpreadBrushSelect *brush4;
-    KSpreadBrushSelect *brush5;
-    KSpreadBrushSelect *brush6;
-    KSpreadBrushSelect *brush7;
-    KSpreadBrushSelect *brush8;
-    KSpreadBrushSelect *brush9;
-    KSpreadBrushSelect *brush10;
-    KSpreadBrushSelect *brush11;
-    KSpreadBrushSelect *brush12;
-    KSpreadBrushSelect *brush13;
-    KSpreadBrushSelect *brush14;
-    KSpreadBrushSelect *brush15;
-    KSpreadBrushSelect *current;
+    BrushSelect *selectedBrush;
+    BrushSelect *brush1;
+    BrushSelect *brush2;
+    BrushSelect *brush3;
+    BrushSelect *brush4;
+    BrushSelect *brush5;
+    BrushSelect *brush6;
+    BrushSelect *brush7;
+    BrushSelect *brush8;
+    BrushSelect *brush9;
+    BrushSelect *brush10;
+    BrushSelect *brush11;
+    BrushSelect *brush12;
+    BrushSelect *brush13;
+    BrushSelect *brush14;
+    BrushSelect *brush15;
+    BrushSelect *current;
     KColorButton* color;
     QPushButton* notAnyColor;
     QColor currentColor;
@@ -523,7 +524,7 @@ protected:
     bool bBgColorUndefined;
     KColorButton *bgColorButton;
     bool b_notAnyColor;
-    CellFormatDlg *dlg;
+    CellFormatDialog *dlg;
 };
 
 class CellFormatPageProtection : public QWidget
@@ -531,14 +532,14 @@ class CellFormatPageProtection : public QWidget
   Q_OBJECT
 
  public:
-  CellFormatPageProtection( QWidget * parent, CellFormatDlg * _dlg );
+  CellFormatPageProtection( QWidget * parent, CellFormatDialog * _dlg );
   ~CellFormatPageProtection();
 
-  void apply( KSpreadCustomStyle * style );
-  void apply( KSpread::Cell  * _cell );
+  void apply( CustomStyle * style );
+  void apply( Cell  * _cell );
   void apply( ColumnFormat * _col );
   void apply( RowFormat    * _row );
-  void applyFormat( KSpreadFormat * _obj );
+  void applyFormat( Format * _obj );
 
  protected:
   QCheckBox *     m_bIsProtected;
@@ -546,7 +547,7 @@ class CellFormatPageProtection : public QWidget
   QCheckBox *     m_bHideAll;
   QCheckBox *     m_bDontPrint;
 
-  CellFormatDlg * m_dlg;
+  CellFormatDialog * m_dlg;
   bool            m_isProtected;
   bool            m_hideFormula;
   bool            m_hideAll;
@@ -555,39 +556,39 @@ class CellFormatPageProtection : public QWidget
 
 /**
  */
-class CellFormatDlg : public QObject
+class CellFormatDialog : public QObject
 {
     Q_OBJECT
 public:
     /**
      * Create a format dlg for the rectangular area in '_sheet'.
      */
-    CellFormatDlg( KSpreadView * _view, KSpreadSheet * _sheet, int _left, int _top, int _right, int _bottom );
-    CellFormatDlg( KSpreadView * _view, KSpreadCustomStyle * _style, KSpreadStyleManager * _manager,
-                   KSpreadDoc * doc );
+    CellFormatDialog( View * _view, Sheet * _sheet, int _left, int _top, int _right, int _bottom );
+    CellFormatDialog( View * _view, CustomStyle * _style, StyleManager * _manager,
+                   Doc * doc );
 
-    ~CellFormatDlg();
+    ~CellFormatDialog();
 
     void init();
     void initGUI();
     void initMembers();
 
-    void initParameters(KSpreadFormat *_obj,int column,int row);
-    void checkBorderRight(KSpreadFormat *obj,int x,int y);
-    void checkBorderLeft(KSpreadFormat *obj,int x,int y);
-    void checkBorderTop(KSpreadFormat *obj,int x,int y);
-    void checkBorderBottom(KSpreadFormat *obj,int x,int y);
-    void checkBorderVertical(KSpreadFormat *obj,int x,int y);
-    void checkBorderHorizontal(KSpreadFormat *obj,int x,int y);
+    void initParameters(Format *_obj,int column,int row);
+    void checkBorderRight(Format *obj,int x,int y);
+    void checkBorderLeft(Format *obj,int x,int y);
+    void checkBorderTop(Format *obj,int x,int y);
+    void checkBorderBottom(Format *obj,int x,int y);
+    void checkBorderVertical(Format *obj,int x,int y);
+    void checkBorderHorizontal(Format *obj,int x,int y);
     /**
      * Run the dialogs event loop and return when closed.
      */
     int exec();
 
-    KSpreadDoc * getDoc() const { return m_doc; }
-    KSpreadSheet * getSheet() const { return m_sheet; }
-    KSpreadCustomStyle * getStyle() const { return m_style; }
-    KSpreadStyleManager * getStyleManager() const { return m_styleManager; }
+    Doc * getDoc() const { return m_doc; }
+    Sheet * getSheet() const { return m_sheet; }
+    CustomStyle * getStyle() const { return m_style; }
+    StyleManager * getStyleManager() const { return m_styleManager; }
 
     bool isSingleCell() { return ( left == right && top == bottom ); }
     bool checkCircle( QString const & name, QString const & parent );
@@ -616,10 +617,10 @@ public:
     QString prefix;
     QString postfix;
     int precision;
-    KSpread::Cell::FloatFormat floatFormat;
+    Cell::FloatFormat floatFormat;
     bool bFloatFormat;
-    KSpread::Cell::FloatColor floatColor;
-    KSpread::Cell::Currency   cCurrency;
+    Cell::FloatColor floatColor;
+    Cell::Currency   cCurrency;
     bool bFloatColor;
     bool bCurrency;
     QColor textColor;
@@ -640,8 +641,8 @@ public:
     QColor bgColor;
     bool bBgColor;
     QString actionText;
-    KSpread::Cell::Align alignX;
-    KSpread::Cell::AlignY alignY;
+    Cell::Align alignX;
+    Cell::AlignY alignY;
     QString styleName;
     QString styleParent;
 
@@ -672,7 +673,7 @@ public:
     FormatType formatType;
     bool bFormatType;
 
-    KSpreadValue value;
+    Value value;
 
     bool isMerged;
     bool oneCell;
@@ -708,13 +709,15 @@ protected:
     CellFormatPageProtection *protectPage;
     QTabDialog *tab;
 
-    KSpreadDoc   * m_doc;
-    KSpreadSheet * m_sheet;
-    KSpreadView  * m_pView;
-    KSpreadCustomStyle * m_style;
-    KSpreadStyleManager * m_styleManager;
+    Doc   * m_doc;
+    Sheet * m_sheet;
+    View  * m_pView;
+    CustomStyle * m_style;
+    StyleManager * m_styleManager;
 
     void applyStyle();
 };
+
+} // namespace KSpread
 
 #endif

@@ -56,7 +56,7 @@
 
 using namespace KSpread;
 
-KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
+ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
 	: KDialogBase( parent, name, false, i18n("Consolidate"), Ok|Cancel )
 {
   m_pView = parent;
@@ -117,13 +117,13 @@ KSpreadConsolidate::KSpreadConsolidate( KSpreadView* parent, const char* name )
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pRef, SIGNAL( returnPressed() ), this, SLOT( slotReturnPressed() ) );
 
-  connect( m_pView, SIGNAL( sig_selectionChanged( KSpreadSheet*, const QRect& ) ),
-	   this, SLOT( slotSelectionChanged( KSpreadSheet*, const QRect& ) ) );
+  connect( m_pView, SIGNAL( sig_selectionChanged( Sheet*, const QRect& ) ),
+	   this, SLOT( slotSelectionChanged( Sheet*, const QRect& ) ) );
 }
 
-KSpreadConsolidate::~KSpreadConsolidate()
+ConsolidateDialog::~ConsolidateDialog()
 {
-    kdDebug(36001)<<"KSpreadConsolidate::~KSpreadConsolidate()\n";
+    kdDebug(36001)<<"Consolidate::~Consolidate()\n";
 }
 
 enum Description { D_ROW, D_COL, D_NONE, D_BOTH };
@@ -138,13 +138,13 @@ struct st_cell
   int y;
 };
 
-void KSpreadConsolidate::slotOk()
+void ConsolidateDialog::slotOk()
 {
   m_pView->doc()->emitBeginOperation( false );
 
-  KSpreadMap *map = m_pView->doc()->map();
+  Map *map = m_pView->doc()->map();
 
-  KSpreadSheet* sheet = m_pView->activeSheet();
+  Sheet* sheet = m_pView->activeSheet();
   int dx = m_pView->selectionInfo()->selection().left();
   int dy = m_pView->selectionInfo()->selection().top();
 
@@ -164,11 +164,11 @@ void KSpreadConsolidate::slotOk()
   }
 
   QStringList r = refs();
-  QValueList<KSpreadRange> ranges;
+  QValueList<Range> ranges;
   QStringList::Iterator s = r.begin();
   for( ; s != r.end(); ++s )
   {
-    KSpreadRange r( *s, map );
+    Range r( *s, map );
     // TODO: Check for valid
     Q_ASSERT( r.isValid() );
 
@@ -192,7 +192,7 @@ void KSpreadConsolidate::slotOk()
 
   // Check whether all ranges have same size
   Q_ASSERT( ranges.count() > 0 );
-  QValueList<KSpreadRange>::Iterator it = ranges.begin();
+  QValueList<Range>::Iterator it = ranges.begin();
   int w = (*it).range.right() - (*it).range.left() + 1;
   int h = (*it).range.bottom() - (*it).range.top() + 1;
   if ( w <= ( ( desc == D_BOTH || desc == D_COL ) ? 1 : 0 ) ||
@@ -242,7 +242,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet;
       Q_ASSERT( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
@@ -264,7 +264,7 @@ void KSpreadConsolidate::slotOk()
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
-	  KSpreadSheet *t = (*it).sheet;
+	  Sheet *t = (*it).sheet;
 	  assert( t );
 	  Cell *c = t->cellAt( x + (*it).range.left(), y + (*it).range.top() );
           if(!c->isDefault())
@@ -289,7 +289,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet;
       assert( t );
       kdDebug(36001) << "FROM " << (*it).range.left() << " to " << (*it).range.right() << endl;
       for( int x = (*it).range.left(); x <= (*it).range.right() ; ++x )
@@ -311,7 +311,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet;
       assert( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
@@ -340,7 +340,7 @@ void KSpreadConsolidate::slotOk()
         {
 	  for( int i = (*it).range.left(); i <= (*it).range.right(); ++i )
 	  {
-	    KSpreadSheet *t = (*it).sheet;
+	    Sheet *t = (*it).sheet;
 	    assert( t );
 	    Cell *c = t->cellAt( i, (*it).range.top() );
 	    if ( c )
@@ -371,7 +371,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet;
       assert( t );
       for( int y = (*it).range.top(); y <= (*it).range.bottom() ; ++y )
       {
@@ -392,7 +392,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet;
       assert( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
@@ -421,7 +421,7 @@ void KSpreadConsolidate::slotOk()
         {
 	  for( int i = (*it).range.top(); i <= (*it).range.bottom(); i++ )
 	  {
-	    KSpreadSheet *t = (*it).sheet;
+	    Sheet *t = (*it).sheet;
 	    assert( t );
 	    Cell *c = t->cellAt( (*it).range.left(), i );
 	    if ( c )
@@ -453,7 +453,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet;
       assert( t );
       for( int y = (*it).range.top() + 1; y <= (*it).range.bottom() ; ++y )
       {
@@ -473,7 +473,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet;
       assert( t );
       for( int x = (*it).range.left() + 1; x <= (*it).range.right() ; ++x )
       {
@@ -494,7 +494,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet;
       assert( t );
       QRect r;
       r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
@@ -512,7 +512,7 @@ void KSpreadConsolidate::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      KSpreadSheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet;
       assert( t );
       for( int x = (*it).range.left() + 1; x <= (*it).range.right() ; ++x )
       {
@@ -591,18 +591,18 @@ void KSpreadConsolidate::slotOk()
   delete this;
 }
 
-void KSpreadConsolidate::slotCancel()
+void ConsolidateDialog::slotCancel()
 {
   reject();
   delete this;
 }
 
-void KSpreadConsolidate::slotAdd()
+void ConsolidateDialog::slotAdd()
 {
   slotReturnPressed();
 }
 
-void KSpreadConsolidate::slotRemove()
+void ConsolidateDialog::slotRemove()
 {
   int i = m_pRefs->currentItem();
   if ( i < 0 )
@@ -614,7 +614,7 @@ void KSpreadConsolidate::slotRemove()
     actionButton( Ok )->setEnabled( false );
 }
 
-QStringList KSpreadConsolidate::refs()
+QStringList ConsolidateDialog::refs()
 {
   QStringList list;
   int c = m_pRefs->count();
@@ -625,7 +625,7 @@ QStringList KSpreadConsolidate::refs()
   return list;
 }
 
-void KSpreadConsolidate::slotSelectionChanged( KSpreadSheet* _sheet, const QRect& _selection )
+void ConsolidateDialog::slotSelectionChanged( Sheet* _sheet, const QRect& _selection )
 {
   if ( _selection.left() == 0 || _selection.top() == 0 ||
        _selection.right() == 0 || _selection.bottom() == 0 )
@@ -639,11 +639,11 @@ void KSpreadConsolidate::slotSelectionChanged( KSpreadSheet* _sheet, const QRect
   m_pRef->setSelection( 0, area.length() );
 }
 
-void KSpreadConsolidate::slotReturnPressed()
+void ConsolidateDialog::slotReturnPressed()
 {
   QString txt = m_pRef->text();
 
-  KSpreadRange r( txt, m_pView->doc()->map() );
+  Range r( txt, m_pView->doc()->map() );
   if ( !r.isValid() )
   {
     KMessageBox::error( this, i18n("The range\n%1\n is malformed").arg( txt ));
@@ -657,12 +657,12 @@ void KSpreadConsolidate::slotReturnPressed()
   }
 }
 
-void KSpreadConsolidate::closeEvent ( QCloseEvent * )
+void ConsolidateDialog::closeEvent ( QCloseEvent * )
 {
     delete this;
 }
 
-QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadSheet* sheet )
+QString ConsolidateDialog::evaluate( const QString& formula, Sheet* sheet )
 {
   QString result = "###";
   Formula *f = new Formula (sheet);
@@ -672,7 +672,7 @@ QString KSpreadConsolidate::evaluate( const QString& formula, KSpreadSheet* shee
     return result;
   }
 
-  KSpreadValue res = f->eval ();
+  Value res = f->eval ();
   delete f;
   result = sheet->doc()->converter()->asString (res).asString ();
   return result;

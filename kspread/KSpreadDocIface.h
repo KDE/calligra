@@ -32,13 +32,15 @@
 
 #include <KoDocumentIface.h>
 
-class KSpreadDoc;
+namespace KSpread
+{
+class Doc;
 
-class KSpreadDocIface : virtual public KoDocumentIface
+class DocIface : virtual public KoDocumentIface
 {
     K_DCOP
 public:
-    KSpreadDocIface( KSpreadDoc* );
+    DocIface( Doc* );
 
 k_dcop:
     virtual DCOPRef map();
@@ -74,7 +76,9 @@ k_dcop:
     QString typeOfCalc() const;
 
 private:
-    KSpreadDoc* doc;
+    Doc* doc;
 };
+
+} // namespace KSpread
 
 #endif

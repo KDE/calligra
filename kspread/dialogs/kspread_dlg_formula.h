@@ -28,33 +28,31 @@
 #define __kspread_dlg_formula__
 
 #include <qframe.h>
-#include <kdialogbase.h>
 
 #include <kcompletion.h>
+#include <kdialogbase.h>
 
-class QTextBrowser;
-class QTabWidget;
-
-class KSpreadView;
-class KSpreadSheet;
-class QLineEdit;
-class QLabel;
-class QListBox;
 class QComboBox;
+class QLabel;
+class QLineEdit;
+class QListBox;
 class QPushButton;
+class QTabWidget;
+class QTextBrowser;
 class KLineEdit;
 
 namespace KSpread
 {
-  class FunctionDescription;
-}
+class FunctionDescription;
+class Sheet;
+class View;
 
-class KSpreadDlgFormula : public KDialogBase
+class FormulaDialog : public KDialogBase
 {
     Q_OBJECT
 public:
-    KSpreadDlgFormula( KSpreadView* parent, const char* name,const QString& formulaName=0);
-    ~KSpreadDlgFormula();
+  FormulaDialog( View* parent, const char* name,const QString& formulaName=0);
+  ~FormulaDialog();
 private:
     /**
      * Turns the @p text into a parameter that koscript can understand. The type
@@ -102,10 +100,10 @@ private slots:
      */
     void slotChangeText(const QString& text );
     /**
-     * Connected to @ref KSpreadView to get notified if the selection in the
+     * Connected to @ref View to get notified if the selection in the
      * sheet changes.
      */
-    void slotSelectionChanged( KSpreadSheet* _sheet, const QRect& _selection );
+    void slotSelectionChanged( Sheet* _sheet, const QRect& _selection );
     /**
      * Called if the button @ref #selectFunction was clicked. That
      * insertes a new function call to the result.
@@ -128,7 +126,7 @@ public:
 protected:
        virtual void closeEvent ( QCloseEvent * );
 private:
-    KSpreadView* m_pView;
+    View* m_pView;
 
     QTabWidget* m_tabwidget;
     QTextBrowser* m_browser;
@@ -175,5 +173,7 @@ private:
 
     KSpread::FunctionDescription* m_desc;
 };
+
+} // namespace KSpread
 
 #endif

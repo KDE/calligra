@@ -24,17 +24,15 @@
 
 #include <qdatetime.h>
 
-class KSpreadValue;
-
 namespace KSpread
 {
 class Cell;
-
+class Value;
 class ValueConverter;
 
 /**
 The ValueFormatter class generates a textual representation of
-data stored in a KSpreadValue, with a given formatting.
+data stored in a Value, with a given formatting.
 */
 
 class ValueFormatter {
@@ -43,12 +41,12 @@ class ValueFormatter {
   ValueFormatter (ValueConverter *converter);
 
   /** create a text representation of data in this cell */
-  QString formatText (KSpread::Cell *cell, FormatType fmtType);
+  QString formatText (Cell *cell, FormatType fmtType);
 
-  /** create a text representation of data in this KSpreadValue */
-  QString formatText (const KSpreadValue &value,
+  /** create a text representation of data in this Value */
+  QString formatText (const Value &value,
       FormatType fmtType, int precision = -1,
-      KSpreadFormat::FloatFormat floatFormat = KSpreadFormat::OnlyNegSigned,
+      Format::FloatFormat floatFormat = Format::OnlyNegSigned,
       const QString &prefix = QString::null,
       const QString &postfix = QString::null);
 
@@ -64,7 +62,7 @@ class ValueFormatter {
  
   /** determine the formatting type that should be used to format this value
   in a cell with a given format type */
-  FormatType determineFormatting (const KSpreadValue &value,
+  FormatType determineFormatting (const Value &value,
       FormatType fmtType);
 
   /** create a number format */
@@ -74,7 +72,7 @@ class ValueFormatter {
   /** create a fraction format */
   QString fractionFormat (double value, FormatType fmtType);
   
-  QString errorFormat (KSpread::Cell *cell);
+  QString errorFormat (Cell *cell);
 
   /** Remove trailing zeros and the decimal point if necessary
   unless the number has no decimal point */

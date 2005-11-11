@@ -20,16 +20,16 @@
 #ifndef KSPREAD_VALUECALC
 #define KSPREAD_VALUECALC
 
-#include "kspread_value.h"
+#include <map>
 
 #include <qvaluelist.h>
 #include <qvaluevector.h>
-#include <map>
 
-class KSpreadDoc;
+#include "kspread_value.h"
 
-namespace KSpread {
-
+namespace KSpread
+{
+class Doc;
 class ValueCalc;
 class ValueConverter;
 
@@ -48,8 +48,8 @@ struct Condition
 
 typedef QValueList<Condition> ConditionList;
 
-typedef void (*arrayWalkFunc) (ValueCalc *, KSpreadValue &result,
-    KSpreadValue val, KSpreadValue param);
+typedef void (*arrayWalkFunc) (ValueCalc *, Value &result,
+    Value val, Value param);
 
 /**
 The ValueCalc class is used to perform all sorts of calculations.
@@ -73,174 +73,174 @@ class ValueCalc {
   ValueConverter *conv () { return converter; };
   
   // some functions need access to the document
-  void setDoc (KSpreadDoc *d) { _doc = d; };
-  KSpreadDoc *doc () { return _doc; };
+  void setDoc (Doc *d) { _doc = d; };
+  Doc *doc () { return _doc; };
 
   /** basic arithmetic operations */
-  KSpreadValue add (const KSpreadValue &a, const KSpreadValue &b);
-  KSpreadValue sub (const KSpreadValue &a, const KSpreadValue &b);
-  KSpreadValue mul (const KSpreadValue &a, const KSpreadValue &b);
-  KSpreadValue div (const KSpreadValue &a, const KSpreadValue &b);
-  KSpreadValue mod (const KSpreadValue &a, const KSpreadValue &b);
-  KSpreadValue pow (const KSpreadValue &a, const KSpreadValue &b);
-  KSpreadValue sqr (const KSpreadValue &a);
-  KSpreadValue sqrt (const KSpreadValue &a);
-  KSpreadValue add (const KSpreadValue &a, double b);
-  KSpreadValue sub (const KSpreadValue &a, double b);
-  KSpreadValue mul (const KSpreadValue &a, double b);
-  KSpreadValue div (const KSpreadValue &a, double b);
-  KSpreadValue pow (const KSpreadValue &a, double b);
-  KSpreadValue abs (const KSpreadValue &a);
+  Value add (const Value &a, const Value &b);
+  Value sub (const Value &a, const Value &b);
+  Value mul (const Value &a, const Value &b);
+  Value div (const Value &a, const Value &b);
+  Value mod (const Value &a, const Value &b);
+  Value pow (const Value &a, const Value &b);
+  Value sqr (const Value &a);
+  Value sqrt (const Value &a);
+  Value add (const Value &a, double b);
+  Value sub (const Value &a, double b);
+  Value mul (const Value &a, double b);
+  Value div (const Value &a, double b);
+  Value pow (const Value &a, double b);
+  Value abs (const Value &a);
 
   /** comparison and related */
-  bool isZero (const KSpreadValue &a);
-  bool isEven (const KSpreadValue &a);
+  bool isZero (const Value &a);
+  bool isEven (const Value &a);
   /** numerical comparison */
-  bool equal (const KSpreadValue &a, const KSpreadValue &b);
+  bool equal (const Value &a, const Value &b);
   /** numerical comparison with a little epsilon tolerance */
-  bool approxEqual (const KSpreadValue &a, const KSpreadValue &b);
+  bool approxEqual (const Value &a, const Value &b);
   /** numerical comparison */
-  bool greater (const KSpreadValue &a, const KSpreadValue &b);
+  bool greater (const Value &a, const Value &b);
   /** numerical comparison - greater or equal */
-  bool gequal (const KSpreadValue &a, const KSpreadValue &b);
+  bool gequal (const Value &a, const Value &b);
   /** numerical comparison */
-  bool lower (const KSpreadValue &a, const KSpreadValue &b);
+  bool lower (const Value &a, const Value &b);
   /** string comparison */
-  bool strEqual (const KSpreadValue &a, const KSpreadValue &b);
-  int sign (const KSpreadValue &a);
+  bool strEqual (const Value &a, const Value &b);
+  int sign (const Value &a);
 
   /** rounding */
-  KSpreadValue roundDown (const KSpreadValue &a, const KSpreadValue &digits);
-  KSpreadValue roundUp (const KSpreadValue &a, const KSpreadValue &digits);
-  KSpreadValue round (const KSpreadValue &a, const KSpreadValue &digits);
-  KSpreadValue roundDown (const KSpreadValue &a, int digits = 0);
-  KSpreadValue roundUp (const KSpreadValue &a, int digits = 0);
-  KSpreadValue round (const KSpreadValue &a, int digits = 0);
+  Value roundDown (const Value &a, const Value &digits);
+  Value roundUp (const Value &a, const Value &digits);
+  Value round (const Value &a, const Value &digits);
+  Value roundDown (const Value &a, int digits = 0);
+  Value roundUp (const Value &a, int digits = 0);
+  Value round (const Value &a, int digits = 0);
   
   /** logarithms and exponentials */
-  KSpreadValue log (const KSpreadValue &number, const KSpreadValue &base);
-  KSpreadValue log (const KSpreadValue &number, double base = 10);
-  KSpreadValue ln (const KSpreadValue &number);
-  KSpreadValue exp (const KSpreadValue &number);
+  Value log (const Value &number, const Value &base);
+  Value log (const Value &number, double base = 10);
+  Value ln (const Value &number);
+  Value exp (const Value &number);
 
   /** constants */
-  KSpreadValue pi ();
-  KSpreadValue eps ();
+  Value pi ();
+  Value eps ();
  
   /** random number from <0.0, range) */
-  KSpreadValue random (double range = 1.0);
-  KSpreadValue random (KSpreadValue range);
+  Value random (double range = 1.0);
+  Value random (Value range);
   
   /** some computational functions */
-  KSpreadValue fact (const KSpreadValue &which);
-  KSpreadValue fact (const KSpreadValue &which, const KSpreadValue &end);
-  KSpreadValue fact (int which, int end = 0);
+  Value fact (const Value &which);
+  Value fact (const Value &which, const Value &end);
+  Value fact (int which, int end = 0);
   /** double factorial (every other number multiplied) */
-  KSpreadValue factDouble (int which);
-  KSpreadValue factDouble (KSpreadValue which);
+  Value factDouble (int which);
+  Value factDouble (Value which);
 
   /** combinations */
-  KSpreadValue combin (int n, int k);
-  KSpreadValue combin (KSpreadValue n, KSpreadValue k);
+  Value combin (int n, int k);
+  Value combin (Value n, Value k);
   
   /** greatest common divisor */
-  KSpreadValue gcd (const KSpreadValue &a, const KSpreadValue &b);
+  Value gcd (const Value &a, const Value &b);
   /** lowest common multiplicator */
-  KSpreadValue lcm (const KSpreadValue &a, const KSpreadValue &b);
+  Value lcm (const Value &a, const Value &b);
 
   /** base conversion 10 -> base */
-  KSpreadValue base (const KSpreadValue &val, int base = 16, int prec = 0);
+  Value base (const Value &val, int base = 16, int prec = 0);
   /** base conversion base -> 10 */
-  KSpreadValue fromBase (const KSpreadValue &val, int base = 16);
+  Value fromBase (const Value &val, int base = 16);
 
   /** goniometric functions */
-  KSpreadValue sin (const KSpreadValue &number);
-  KSpreadValue cos (const KSpreadValue &number);
-  KSpreadValue tg (const KSpreadValue &number);
-  KSpreadValue cotg (const KSpreadValue &number);
-  KSpreadValue asin (const KSpreadValue &number);
-  KSpreadValue acos (const KSpreadValue &number);
-  KSpreadValue atg (const KSpreadValue &number);
-  KSpreadValue atan2 (const KSpreadValue &y, const KSpreadValue &x);
+  Value sin (const Value &number);
+  Value cos (const Value &number);
+  Value tg (const Value &number);
+  Value cotg (const Value &number);
+  Value asin (const Value &number);
+  Value acos (const Value &number);
+  Value atg (const Value &number);
+  Value atan2 (const Value &y, const Value &x);
 
   /** hyperbolic functions */
-  KSpreadValue sinh (const KSpreadValue &number);
-  KSpreadValue cosh (const KSpreadValue &number);
-  KSpreadValue tgh (const KSpreadValue &number);
-  KSpreadValue asinh (const KSpreadValue &number);
-  KSpreadValue acosh (const KSpreadValue &number);
-  KSpreadValue atgh (const KSpreadValue &number);
+  Value sinh (const Value &number);
+  Value cosh (const Value &number);
+  Value tgh (const Value &number);
+  Value asinh (const Value &number);
+  Value acosh (const Value &number);
+  Value atgh (const Value &number);
 
   /** some statistical stuff
     TODO: we may want to move these over to a separate class or something,
     as the functions are mostly big */
-  KSpreadValue phi (KSpreadValue x);
-  KSpreadValue gauss (KSpreadValue xx);
-  KSpreadValue gaussinv (KSpreadValue xx);
-  KSpreadValue GetGamma (KSpreadValue _x);
-  KSpreadValue GetLogGamma (KSpreadValue _x);
-  KSpreadValue GetGammaDist (KSpreadValue _x, KSpreadValue _alpha,
-    KSpreadValue _beta);
-  KSpreadValue GetBeta (KSpreadValue _x, KSpreadValue _alpha,
-    KSpreadValue _beta);
+  Value phi (Value x);
+  Value gauss (Value xx);
+  Value gaussinv (Value xx);
+  Value GetGamma (Value _x);
+  Value GetLogGamma (Value _x);
+  Value GetGammaDist (Value _x, Value _alpha,
+    Value _beta);
+  Value GetBeta (Value _x, Value _alpha,
+    Value _beta);
 
   /** bessel functions - may also end up being separated from here */
-  KSpreadValue besseli (KSpreadValue v, KSpreadValue x);
-  KSpreadValue besselj (KSpreadValue v, KSpreadValue x);
-  KSpreadValue besselk (KSpreadValue v, KSpreadValue x);
-  KSpreadValue besseln (KSpreadValue v, KSpreadValue x);
+  Value besseli (Value v, Value x);
+  Value besselj (Value v, Value x);
+  Value besselk (Value v, Value x);
+  Value besseln (Value v, Value x);
   
   /** error functions (see: man erf) */
-  KSpreadValue erf (KSpreadValue x);
-  KSpreadValue erfc (KSpreadValue x);
+  Value erf (Value x);
+  Value erfc (Value x);
   
   /** array/range walking */
-  void arrayWalk (const KSpreadValue &range, KSpreadValue &res,
-      arrayWalkFunc func, KSpreadValue param);
+  void arrayWalk (const Value &range, Value &res,
+      arrayWalkFunc func, Value param);
   /** Walk the array in function-like style.
   This method is here to avoid duplication in function handlers. */
-  void arrayWalk (QValueVector<KSpreadValue> &range, KSpreadValue &res,
-      arrayWalkFunc func, KSpreadValue param);
-  void twoArrayWalk (const KSpreadValue &a1, const KSpreadValue &a2,
-      KSpreadValue &res, arrayWalkFunc func);
-  void twoArrayWalk (QValueVector<KSpreadValue> &a1,
-      QValueVector<KSpreadValue> &a2, KSpreadValue &res, arrayWalkFunc func);
+  void arrayWalk (QValueVector<Value> &range, Value &res,
+      arrayWalkFunc func, Value param);
+  void twoArrayWalk (const Value &a1, const Value &a2,
+      Value &res, arrayWalkFunc func);
+  void twoArrayWalk (QValueVector<Value> &a1,
+      QValueVector<Value> &a2, Value &res, arrayWalkFunc func);
   arrayWalkFunc awFunc (const QString &name);
   void registerAwFunc (const QString &name, arrayWalkFunc func);
 
   /** basic range functions */
   // if full is true, A-version is used (means string/bool values included)
-  KSpreadValue sum (const KSpreadValue &range, bool full = true);
-  KSpreadValue sumsq (const KSpreadValue &range, bool full = true);
-  KSpreadValue sumIf (const KSpreadValue &range,
-      const KSpreadValue &checkRange, const Condition &cond);
-  int count (const KSpreadValue &range, bool full = true);
-  int countIf (const KSpreadValue &range, const Condition &cond);
-  KSpreadValue avg (const KSpreadValue &range, bool full = true);
-  KSpreadValue max (const KSpreadValue &range, bool full = true);
-  KSpreadValue min (const KSpreadValue &range, bool full = true);
-  KSpreadValue product (const KSpreadValue &range, KSpreadValue init,
+  Value sum (const Value &range, bool full = true);
+  Value sumsq (const Value &range, bool full = true);
+  Value sumIf (const Value &range,
+      const Value &checkRange, const Condition &cond);
+  int count (const Value &range, bool full = true);
+  int countIf (const Value &range, const Condition &cond);
+  Value avg (const Value &range, bool full = true);
+  Value max (const Value &range, bool full = true);
+  Value min (const Value &range, bool full = true);
+  Value product (const Value &range, Value init,
       bool full = true);
-  KSpreadValue stddev (const KSpreadValue &range, bool full = true);
-  KSpreadValue stddev (const KSpreadValue &range, KSpreadValue avg,
+  Value stddev (const Value &range, bool full = true);
+  Value stddev (const Value &range, Value avg,
       bool full = true);
-  KSpreadValue stddevP (const KSpreadValue &range, bool full = true);
-  KSpreadValue stddevP (const KSpreadValue &range, KSpreadValue avg,
+  Value stddevP (const Value &range, bool full = true);
+  Value stddevP (const Value &range, Value avg,
       bool full = true);
   
   /** range functions using value lists */
-  KSpreadValue sum (QValueVector<KSpreadValue> range, bool full = true);
-  int count (QValueVector<KSpreadValue> range, bool full = true);
-  KSpreadValue avg (QValueVector<KSpreadValue> range, bool full = true);
-  KSpreadValue max (QValueVector<KSpreadValue> range, bool full = true);
-  KSpreadValue min (QValueVector<KSpreadValue> range, bool full = true);
-  KSpreadValue product (QValueVector<KSpreadValue> range, KSpreadValue init,
+  Value sum (QValueVector<Value> range, bool full = true);
+  int count (QValueVector<Value> range, bool full = true);
+  Value avg (QValueVector<Value> range, bool full = true);
+  Value max (QValueVector<Value> range, bool full = true);
+  Value min (QValueVector<Value> range, bool full = true);
+  Value product (QValueVector<Value> range, Value init,
       bool full = true);
-  KSpreadValue stddev (QValueVector<KSpreadValue> range, bool full = true);
-  KSpreadValue stddev (QValueVector<KSpreadValue> range, KSpreadValue avg,
+  Value stddev (QValueVector<Value> range, bool full = true);
+  Value stddev (QValueVector<Value> range, Value avg,
       bool full = true);
-  KSpreadValue stddevP (QValueVector<KSpreadValue> range, bool full = true);
-  KSpreadValue stddevP (QValueVector<KSpreadValue> range, KSpreadValue avg,
+  Value stddevP (QValueVector<Value> range, bool full = true);
+  Value stddevP (QValueVector<Value> range, Value avg,
       bool full = true);
 
   /**
@@ -253,14 +253,14 @@ class ValueCalc {
     Returns true if value d matches the condition cond, built with getCond().
     Otherwise, it returns false.
   */
-  bool matches (const Condition &cond, KSpreadValue d);
+  bool matches (const Condition &cond, Value d);
 
  protected:
   ValueConverter* converter;
   /** return result formatting, based on these two values */
-  KSpreadValue::Format format (KSpreadValue::Format a, KSpreadValue::Format b);
+  Value::Format format (Value::Format a, Value::Format b);
   
-  KSpreadDoc *_doc;
+  Doc *_doc;
   
   /** registered array-walk functions */
   std::map<QString, arrayWalkFunc> awFuncs;

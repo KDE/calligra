@@ -22,23 +22,23 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-#include "kspread_dlg_goto.h"
-#include "kspread_canvas.h"
-#include "kspread_doc.h"
-#include "kspread_util.h"
-#include "kspread_view.h"
-#include "kspread_locale.h"
+#include <qlabel.h>
+#include <qlayout.h>
 
 #include <klineedit.h>
 
-#include <qlabel.h>
+#include "kspread_canvas.h"
+#include "kspread_doc.h"
+#include "kspread_locale.h"
+#include "kspread_util.h"
+#include "kspread_view.h"
 
-#include <qlayout.h>
+#include "kspread_dlg_goto.h"
 
+using namespace KSpread;
 
-KSpreadGotoDlg::KSpreadGotoDlg( KSpreadView* parent, const char* name )
-	: KDialogBase( parent, name, TRUE,i18n("Goto Cell"),Ok|Cancel )
+GotoDialog::GotoDialog( View* parent, const char* name )
+	: KDialogBase( parent, name, TRUE, i18n("Goto Cell"), Ok|Cancel )
 {
   m_pView = parent;
   QWidget *page = new QWidget( this );
@@ -59,12 +59,12 @@ KSpreadGotoDlg::KSpreadGotoDlg( KSpreadView* parent, const char* name )
            this, SLOT(textChanged ( const QString & )));
 }
 
-void KSpreadGotoDlg::textChanged ( const QString &_text )
+void GotoDialog::textChanged ( const QString &_text )
 {
     enableButtonOK(!_text.isEmpty());
 }
 
-void KSpreadGotoDlg::slotOk()
+void GotoDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
 
@@ -72,9 +72,9 @@ void KSpreadGotoDlg::slotOk()
     tmp_upper=m_nameCell->text().upper();
     bool result = true;
     if ( tmp_upper.contains( ':' ) ) //Selection entered in location widget
-        result = m_pView->canvasWidget()->gotoLocation( KSpreadRange( tmp_upper, m_pView->doc()->map() ) );
+        result = m_pView->canvasWidget()->gotoLocation( Range( tmp_upper, m_pView->doc()->map() ) );
     else //Location entered in location widget
-        result = m_pView->canvasWidget()->gotoLocation( KSpreadPoint( tmp_upper, m_pView->doc()->map() ) );
+        result = m_pView->canvasWidget()->gotoLocation( Point( tmp_upper, m_pView->doc()->map() ) );
 
     m_pView->slotUpdateView( m_pView->activeSheet() );
 

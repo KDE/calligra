@@ -1,5 +1,5 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
-<class>KSpreadSubtotal</class>
+<class>KSpread::Subtotal</class>
 <comment>This file is part of the KDE project
 Copyright (C) 2002 Norbert Andres &lt;nandres@web.de&gt;
 

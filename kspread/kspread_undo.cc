@@ -35,11 +35,11 @@ using namespace KSpread;
 
 /****************************************************************************
  *
- * KSpreadUndo
+ * Undo
  *
  ***************************************************************************/
 
-KSpreadUndo::KSpreadUndo( KSpreadDoc *_doc )
+Undo::Undo( Doc *_doc )
 {
     m_pDoc = _doc;
 
@@ -47,12 +47,12 @@ KSpreadUndo::KSpreadUndo( KSpreadDoc *_doc )
     m_stckRedo.setAutoDelete( false );
 }
 
-KSpreadUndo::~KSpreadUndo()
+Undo::~Undo()
 {
     clear();
 }
 
-void KSpreadUndo::appendUndo( KSpreadUndoAction *_action )
+void Undo::appendUndo( UndoAction *_action )
 {
     if ( isLocked() )
 	return;
@@ -71,7 +71,7 @@ void KSpreadUndo::appendUndo( KSpreadUndoAction *_action )
     }
 }
 
-void KSpreadUndo::clear()
+void Undo::clear()
 {
     if ( isLocked() )
 	return;
@@ -86,7 +86,7 @@ void KSpreadUndo::clear()
     m_stckRedo.setAutoDelete( false );
 }
 
-void KSpreadUndo::undo()
+void Undo::undo()
 {
     if ( m_stckUndo.isEmpty() )
         return;
@@ -99,7 +99,7 @@ void KSpreadUndo::undo()
         m_pDoc->setShowMessageError( false );
     }
 
-    KSpreadUndoAction *a = m_stckUndo.pop();
+    UndoAction *a = m_stckUndo.pop();
     a->undo();
     m_stckRedo.push( a );
 
@@ -111,11 +111,11 @@ void KSpreadUndo::undo()
     }
 }
 
-void KSpreadUndo::redo()
+void Undo::redo()
 {
     if ( m_stckRedo.isEmpty() )
 	return;
-    KSpreadUndoAction *a = m_stckRedo.pop();
+    UndoAction *a = m_stckRedo.pop();
     a->redo();
     m_stckUndo.push( a );
 
@@ -126,22 +126,22 @@ void KSpreadUndo::redo()
     }
 }
 
-void KSpreadUndo::lock()
+void Undo::lock()
 {
   m_pDoc->undoLock();
 }
 
-void KSpreadUndo::unlock()
+void Undo::unlock()
 {
   m_pDoc->undoUnlock();
 }
 
-bool KSpreadUndo::isLocked() const
+bool Undo::isLocked() const
 {
   return m_pDoc->undoLocked();
 }
 
-QString KSpreadUndo::getRedoName()
+QString Undo::getRedoName()
 {
     if ( m_stckRedo.isEmpty() )
 	return QString("");
@@ -149,7 +149,7 @@ QString KSpreadUndo::getRedoName()
 
 }
 
-QString KSpreadUndo::getUndoName()
+QString Undo::getUndoName()
 {
     if ( m_stckUndo.isEmpty() )
 	return QString("");
@@ -158,56 +158,56 @@ QString KSpreadUndo::getUndoName()
 
 /****************************************************************************
  *
- * KSpreadMacroUndoAction
+ * MacroUndoAction
  *
  ***************************************************************************/
-KSpreadMacroUndoAction::KSpreadMacroUndoAction( KSpreadDoc *_doc, const QString& _name ):
- KSpreadUndoAction( _doc )
+MacroUndoAction::MacroUndoAction( Doc *_doc, const QString& _name ):
+ UndoAction( _doc )
 {
     name=_name;
 }
 
-KSpreadMacroUndoAction::~KSpreadMacroUndoAction()
+MacroUndoAction::~MacroUndoAction()
 {
     m_commands.setAutoDelete( true );
 }
 
-void KSpreadMacroUndoAction::addCommand(KSpreadUndoAction *command)
+void MacroUndoAction::addCommand(UndoAction *command)
 {
     m_commands.append(command);
 }
 
-void KSpreadMacroUndoAction::undo()
+void MacroUndoAction::undo()
 {
-    QPtrListIterator<KSpreadUndoAction> it(m_commands);
+    QPtrListIterator<UndoAction> it(m_commands);
     for ( ; it.current() ; ++it )
         it.current()->undo();
 }
 
-void KSpreadMacroUndoAction::redo()
+void MacroUndoAction::redo()
 {
-    QPtrListIterator<KSpreadUndoAction> it(m_commands);
+    QPtrListIterator<UndoAction> it(m_commands);
     for ( ; it.current() ; ++it )
         it.current()->redo();
 }
 
 /****************************************************************************
  *
- * KSpreadUndoInsertRemoveAction
+ * UndoInsertRemoveAction
  *
  ***************************************************************************/
 
-KSpreadUndoInsertRemoveAction::KSpreadUndoInsertRemoveAction( KSpreadDoc * _doc ) :
-    KSpreadUndoAction( _doc )
+UndoInsertRemoveAction::UndoInsertRemoveAction( Doc * _doc ) :
+    UndoAction( _doc )
 {
 }
 
-KSpreadUndoInsertRemoveAction::~KSpreadUndoInsertRemoveAction()
+UndoInsertRemoveAction::~UndoInsertRemoveAction()
 {
 
 }
 
-void KSpreadUndoInsertRemoveAction::saveFormulaReference( KSpreadSheet *_sheet,
+void UndoInsertRemoveAction::saveFormulaReference( Sheet *_sheet,
                                              int col, int row, QString & formula )
 {
     if ( _sheet == 0 )
@@ -217,12 +217,12 @@ void KSpreadUndoInsertRemoveAction::saveFormulaReference( KSpreadSheet *_sheet,
     m_lstFormulaCells.append( FormulaOfCell( sheetName, col, row, formula ) );
 }
 
-void KSpreadUndoInsertRemoveAction::undoFormulaReference()
+void UndoInsertRemoveAction::undoFormulaReference()
 {
     QValueList<FormulaOfCell>::iterator it;
     for ( it = m_lstFormulaCells.begin(); it != m_lstFormulaCells.end(); ++it )
     {
-        KSpreadSheet* sheet = doc()->map()->findSheet( (*it).sheetName() );
+        Sheet* sheet = doc()->map()->findSheet( (*it).sheetName() );
         if ( sheet )
         {
             Cell * cell = sheet->cellAt( (*it).col(), (*it).row() );
@@ -236,12 +236,12 @@ void KSpreadUndoInsertRemoveAction::undoFormulaReference()
 
 /****************************************************************************
  *
- * KSpreadUndoRemoveColumn
+ * UndoRemoveColumn
  *
  ***************************************************************************/
 
-KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadSheet *_sheet, int _column,int _nbCol ) :
-    KSpreadUndoInsertRemoveAction( _doc )
+UndoRemoveColumn::UndoRemoveColumn( Doc *_doc, Sheet *_sheet, int _column,int _nbCol ) :
+    UndoInsertRemoveAction( _doc )
 {
     name=i18n("Remove Columns");
     m_sheetName = _sheet->sheetName();
@@ -269,13 +269,13 @@ KSpreadUndoRemoveColumn::KSpreadUndoRemoveColumn( KSpreadDoc *_doc, KSpreadSheet
     *( m_data.data() + len - 1 ) = tmp;
 }
 
-KSpreadUndoRemoveColumn::~KSpreadUndoRemoveColumn()
+UndoRemoveColumn::~UndoRemoveColumn()
 {
 }
 
-void KSpreadUndoRemoveColumn::undo()
+void UndoRemoveColumn::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -295,11 +295,11 @@ void KSpreadUndoRemoveColumn::undo()
     undoFormulaReference();
 }
 
-void KSpreadUndoRemoveColumn::redo()
+void UndoRemoveColumn::redo()
 {
     doc()->undoLock();
 
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -310,12 +310,12 @@ void KSpreadUndoRemoveColumn::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoInsertColumn
+ * UndoInsertColumn
  *
  ***************************************************************************/
 
-KSpreadUndoInsertColumn::KSpreadUndoInsertColumn( KSpreadDoc *_doc, KSpreadSheet *_sheet, int _column, int _nbCol ) :
-    KSpreadUndoInsertRemoveAction( _doc )
+UndoInsertColumn::UndoInsertColumn( Doc *_doc, Sheet *_sheet, int _column, int _nbCol ) :
+    UndoInsertRemoveAction( _doc )
 {
     name=i18n("Insert Columns");
     m_sheetName = _sheet->sheetName();
@@ -323,13 +323,13 @@ KSpreadUndoInsertColumn::KSpreadUndoInsertColumn( KSpreadDoc *_doc, KSpreadSheet
     m_iNbCol=_nbCol;
 }
 
-KSpreadUndoInsertColumn::~KSpreadUndoInsertColumn()
+UndoInsertColumn::~UndoInsertColumn()
 {
 }
 
-void KSpreadUndoInsertColumn::undo()
+void UndoInsertColumn::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -340,9 +340,9 @@ void KSpreadUndoInsertColumn::undo()
     undoFormulaReference();
 }
 
-void KSpreadUndoInsertColumn::redo()
+void UndoInsertColumn::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -353,12 +353,12 @@ void KSpreadUndoInsertColumn::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoRemoveRow
+ * UndoRemoveRow
  *
  ***************************************************************************/
 
-KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadSheet *_sheet, int _row,int _nbRow) :
-    KSpreadUndoInsertRemoveAction( _doc )
+UndoRemoveRow::UndoRemoveRow( Doc *_doc, Sheet *_sheet, int _row,int _nbRow) :
+    UndoInsertRemoveAction( _doc )
 {
     name=i18n("Remove Rows");
 
@@ -394,13 +394,13 @@ KSpreadUndoRemoveRow::KSpreadUndoRemoveRow( KSpreadDoc *_doc, KSpreadSheet *_she
     // (int)m_data[ m_data.size() - 2 ], (int)m_data[ m_data.size() - 1 ] );
 }
 
-KSpreadUndoRemoveRow::~KSpreadUndoRemoveRow()
+UndoRemoveRow::~UndoRemoveRow()
 {
 }
 
-void KSpreadUndoRemoveRow::undo()
+void UndoRemoveRow::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -421,11 +421,11 @@ void KSpreadUndoRemoveRow::undo()
     undoFormulaReference();
 }
 
-void KSpreadUndoRemoveRow::redo()
+void UndoRemoveRow::redo()
 {
     doc()->undoLock();
 
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -436,12 +436,12 @@ void KSpreadUndoRemoveRow::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoInsertRow
+ * UndoInsertRow
  *
  ***************************************************************************/
 
-KSpreadUndoInsertRow::KSpreadUndoInsertRow( KSpreadDoc *_doc, KSpreadSheet *_sheet, int _row,int _nbRow ) :
-    KSpreadUndoInsertRemoveAction( _doc )
+UndoInsertRow::UndoInsertRow( Doc *_doc, Sheet *_sheet, int _row,int _nbRow ) :
+    UndoInsertRemoveAction( _doc )
 {
     name=i18n("Insert Rows");
     m_sheetName = _sheet->sheetName();
@@ -449,13 +449,13 @@ KSpreadUndoInsertRow::KSpreadUndoInsertRow( KSpreadDoc *_doc, KSpreadSheet *_she
     m_iNbRow=_nbRow;
 }
 
-KSpreadUndoInsertRow::~KSpreadUndoInsertRow()
+UndoInsertRow::~UndoInsertRow()
 {
 }
 
-void KSpreadUndoInsertRow::undo()
+void UndoInsertRow::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -466,9 +466,9 @@ void KSpreadUndoInsertRow::undo()
     undoFormulaReference();
 }
 
-void KSpreadUndoInsertRow::redo()
+void UndoInsertRow::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -480,12 +480,12 @@ void KSpreadUndoInsertRow::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoHideRow
+ * UndoHideRow
  *
  ***************************************************************************/
 
-KSpreadUndoHideRow::KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadSheet *_sheet, int _row, int _nbRow , QValueList<int>_listRow) :
-    KSpreadUndoAction( _doc )
+UndoHideRow::UndoHideRow( Doc *_doc, Sheet *_sheet, int _row, int _nbRow , QValueList<int>_listRow) :
+    UndoAction( _doc )
 {
     name=i18n("Hide Rows");
     m_sheetName = _sheet->sheetName();
@@ -497,11 +497,11 @@ KSpreadUndoHideRow::KSpreadUndoHideRow( KSpreadDoc *_doc, KSpreadSheet *_sheet, 
       listRow=QValueList<int>(_listRow);
 }
 
-KSpreadUndoHideRow::~KSpreadUndoHideRow()
+UndoHideRow::~UndoHideRow()
 {
 }
 
-void KSpreadUndoHideRow::createList( QValueList<int>&list,KSpreadSheet *tab )
+void UndoHideRow::createList( QValueList<int>&list,Sheet *tab )
 {
 RowFormat *rl;
 for(int i=m_iRow;i<=(m_iRow+m_iNbRow);i++)
@@ -512,9 +512,9 @@ for(int i=m_iRow;i<=(m_iRow+m_iNbRow);i++)
         }
 }
 
-void KSpreadUndoHideRow::undo()
+void UndoHideRow::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -523,9 +523,9 @@ void KSpreadUndoHideRow::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoHideRow::redo()
+void UndoHideRow::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -536,12 +536,12 @@ void KSpreadUndoHideRow::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoHideColumn
+ * UndoHideColumn
  *
  ***************************************************************************/
 
-KSpreadUndoHideColumn::KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadSheet *_sheet, int _column, int _nbCol, QValueList<int>_listCol ) :
-    KSpreadUndoAction( _doc )
+UndoHideColumn::UndoHideColumn( Doc *_doc, Sheet *_sheet, int _column, int _nbCol, QValueList<int>_listCol ) :
+    UndoAction( _doc )
 {
     name=i18n("Hide Columns");
 
@@ -554,11 +554,11 @@ KSpreadUndoHideColumn::KSpreadUndoHideColumn( KSpreadDoc *_doc, KSpreadSheet *_s
       listCol=QValueList<int>(_listCol);
 }
 
-KSpreadUndoHideColumn::~KSpreadUndoHideColumn()
+UndoHideColumn::~UndoHideColumn()
 {
 }
 
-void KSpreadUndoHideColumn::createList( QValueList<int>&list,KSpreadSheet *tab )
+void UndoHideColumn::createList( QValueList<int>&list,Sheet *tab )
 {
 ColumnFormat *cl;
 for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
@@ -569,9 +569,9 @@ for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
   }
 }
 
-void KSpreadUndoHideColumn::undo()
+void UndoHideColumn::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -580,9 +580,9 @@ void KSpreadUndoHideColumn::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoHideColumn::redo()
+void UndoHideColumn::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -593,12 +593,12 @@ void KSpreadUndoHideColumn::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoShowRow
+ * UndoShowRow
  *
  ***************************************************************************/
 
-KSpreadUndoShowRow::KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadSheet *_sheet, int _row, int _nbRow, QValueList<int>_listRow ) :
-    KSpreadUndoAction( _doc )
+UndoShowRow::UndoShowRow( Doc *_doc, Sheet *_sheet, int _row, int _nbRow, QValueList<int>_listRow ) :
+    UndoAction( _doc )
 {
     name=i18n("Show Rows");
 
@@ -611,11 +611,11 @@ KSpreadUndoShowRow::KSpreadUndoShowRow( KSpreadDoc *_doc, KSpreadSheet *_sheet, 
       listRow=QValueList<int>(_listRow);
 }
 
-KSpreadUndoShowRow::~KSpreadUndoShowRow()
+UndoShowRow::~UndoShowRow()
 {
 }
 
-void KSpreadUndoShowRow::createList( QValueList<int>&list,KSpreadSheet *tab )
+void UndoShowRow::createList( QValueList<int>&list,Sheet *tab )
 {
 RowFormat *rl;
 for(int i=m_iRow;i<=(m_iRow+m_iNbRow);i++)
@@ -626,9 +626,9 @@ for(int i=m_iRow;i<=(m_iRow+m_iNbRow);i++)
         }
 }
 
-void KSpreadUndoShowRow::undo()
+void UndoShowRow::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -637,9 +637,9 @@ void KSpreadUndoShowRow::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoShowRow::redo()
+void UndoShowRow::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -650,12 +650,12 @@ void KSpreadUndoShowRow::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoShowColumn
+ * UndoShowColumn
  *
  ***************************************************************************/
 
-KSpreadUndoShowColumn::KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadSheet *_sheet, int _column, int _nbCol,QValueList<int>_listCol ) :
-    KSpreadUndoAction( _doc )
+UndoShowColumn::UndoShowColumn( Doc *_doc, Sheet *_sheet, int _column, int _nbCol,QValueList<int>_listCol ) :
+    UndoAction( _doc )
 {
     name=i18n("Show Columns");
 
@@ -668,11 +668,11 @@ KSpreadUndoShowColumn::KSpreadUndoShowColumn( KSpreadDoc *_doc, KSpreadSheet *_s
       listCol=QValueList<int>(_listCol);
 }
 
-KSpreadUndoShowColumn::~KSpreadUndoShowColumn()
+UndoShowColumn::~UndoShowColumn()
 {
 }
 
-void KSpreadUndoShowColumn::createList( QValueList<int>&list,KSpreadSheet *tab )
+void UndoShowColumn::createList( QValueList<int>&list,Sheet *tab )
 {
 ColumnFormat *cl;
 for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
@@ -684,9 +684,9 @@ for(int i=m_iColumn;i<=(m_iColumn+m_iNbCol);i++)
 
 }
 
-void KSpreadUndoShowColumn::undo()
+void UndoShowColumn::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -695,9 +695,9 @@ void KSpreadUndoShowColumn::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoShowColumn::redo()
+void UndoShowColumn::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -709,12 +709,12 @@ void KSpreadUndoShowColumn::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoPaperLayout
+ * UndoPaperLayout
  *
  ***************************************************************************/
 
-KSpreadUndoPaperLayout::KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadSheet *_sheet )
-    : KSpreadUndoAction( _doc )
+UndoPaperLayout::UndoPaperLayout( Doc *_doc, Sheet *_sheet )
+    : UndoAction( _doc )
 {
     name=i18n("Set Page Layout");
     m_sheetName = _sheet->sheetName();
@@ -733,16 +733,16 @@ KSpreadUndoPaperLayout::KSpreadUndoPaperLayout( KSpreadDoc *_doc, KSpreadSheet *
     m_iPageLimitY = _sheet->print()->pageLimitY();
 }
 
-KSpreadUndoPaperLayout::~KSpreadUndoPaperLayout()
+UndoPaperLayout::~UndoPaperLayout()
 {
 }
 
-void KSpreadUndoPaperLayout::undo()
+void UndoPaperLayout::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
         return;
-    KSpreadSheetPrint* print = sheet->print();
+    SheetPrint* print = sheet->print();
 
     doc()->undoLock();
 
@@ -788,12 +788,12 @@ void KSpreadUndoPaperLayout::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoPaperLayout::redo()
+void UndoPaperLayout::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
         return;
-    KSpreadSheetPrint* print = sheet->print();
+    SheetPrint* print = sheet->print();
 
     doc()->undoLock();
     print->setPaperLayout( m_plRedo.ptLeft,  m_plRedo.ptTop,
@@ -826,12 +826,12 @@ void KSpreadUndoPaperLayout::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoSetText
+ * UndoSetText
  *
  ***************************************************************************/
 
-KSpreadUndoSetText::KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadSheet *_sheet, const QString& _text, int _column, int _row,FormatType _formatType ) :
-    KSpreadUndoAction( _doc )
+UndoSetText::UndoSetText( Doc *_doc, Sheet *_sheet, const QString& _text, int _column, int _row,FormatType _formatType ) :
+    UndoAction( _doc )
 {
     name=i18n("Change Text");
 
@@ -842,13 +842,13 @@ KSpreadUndoSetText::KSpreadUndoSetText( KSpreadDoc *_doc, KSpreadSheet *_sheet, 
     m_eFormatType=_formatType;
 }
 
-KSpreadUndoSetText::~KSpreadUndoSetText()
+UndoSetText::~UndoSetText()
 {
 }
 
-void KSpreadUndoSetText::undo()
+void UndoSetText::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -867,9 +867,9 @@ void KSpreadUndoSetText::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoSetText::redo()
+void UndoSetText::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -889,15 +889,15 @@ void KSpreadUndoSetText::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoCellFormat
+ * UndoCellFormat
  *
  ***************************************************************************/
 
-KSpreadUndoCellFormat::KSpreadUndoCellFormat( KSpreadDoc * _doc,
-                                              KSpreadSheet * _sheet,
+UndoCellFormat::UndoCellFormat( Doc * _doc,
+                                              Sheet * _sheet,
                                               const QRect & _selection,
                                               const QString & _name ) :
-  KSpreadUndoAction( _doc )
+  UndoAction( _doc )
 {
   if ( _name.isEmpty())
     name = i18n("Change Format");
@@ -909,10 +909,10 @@ KSpreadUndoCellFormat::KSpreadUndoCellFormat( KSpreadDoc * _doc,
   copyFormat( m_lstFormats, m_lstColFormats, m_lstRowFormats, _sheet );
 }
 
-void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
+void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
                                        QValueList<layoutColumn> & listCol,
                                        QValueList<layoutRow> & listRow,
-                                       KSpreadSheet * sheet )
+                                       Sheet * sheet )
 {
     QValueList<layoutCell>::Iterator it2;
   for ( it2 = list.begin(); it2 != list.end(); ++it2 )
@@ -957,7 +957,7 @@ void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
         layoutCell tmplayout;
         tmplayout.col = c;
         tmplayout.row = cell->row();
-        tmplayout.l = new KSpreadFormat( sheet, 0 );
+        tmplayout.l = new Format( sheet, 0 );
         tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )) );
         list.append(tmplayout);
 
@@ -975,7 +975,7 @@ void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
         layoutCell tmplayout;
         tmplayout.col = c->column();
         tmplayout.row = c->row();
-        tmplayout.l = new KSpreadFormat( sheet, 0 );
+        tmplayout.l = new Format( sheet, 0 );
         tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )) );
         list.append(tmplayout);
       }
@@ -1003,7 +1003,7 @@ void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
         layoutCell tmplayout;
         tmplayout.col = cell->column();
         tmplayout.row = row;
-        tmplayout.l = new KSpreadFormat( sheet, 0 );
+        tmplayout.l = new Format( sheet, 0 );
         tmplayout.l->copy( *(sheet->cellAt( cell->column(), row )) );
         list.append(tmplayout);
 
@@ -1021,7 +1021,7 @@ void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
         layoutCell tmplayout;
         tmplayout.col = c->column();
         tmplayout.row = c->row();
-        tmplayout.l = new KSpreadFormat( sheet, 0 );
+        tmplayout.l = new Format( sheet, 0 );
         tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )) );
         list.append(tmplayout);
       }
@@ -1039,7 +1039,7 @@ void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
           layoutCell tmplayout;
           tmplayout.col = x;
           tmplayout.row = y;
-          tmplayout.l = new KSpreadFormat( sheet, 0 );
+          tmplayout.l = new Format( sheet, 0 );
           tmplayout.l->copy( *(sheet->cellAt( x, y )) );
           list.append(tmplayout);
         }
@@ -1047,7 +1047,7 @@ void KSpreadUndoCellFormat::copyFormat(QValueList<layoutCell> & list,
   }
 }
 
-KSpreadUndoCellFormat::~KSpreadUndoCellFormat()
+UndoCellFormat::~UndoCellFormat()
 {
     QValueList<layoutCell>::Iterator it2;
     for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
@@ -1091,9 +1091,9 @@ KSpreadUndoCellFormat::~KSpreadUndoCellFormat()
 
 }
 
-void KSpreadUndoCellFormat::undo()
+void UndoCellFormat::undo()
 {
-  KSpreadSheet * sheet = doc()->map()->findSheet( m_sheetName );
+  Sheet * sheet = doc()->map()->findSheet( m_sheetName );
   if ( !sheet )
     return;
 
@@ -1135,9 +1135,9 @@ void KSpreadUndoCellFormat::undo()
   doc()->undoUnlock();
 }
 
-void KSpreadUndoCellFormat::redo()
+void UndoCellFormat::redo()
 {
-  KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+  Sheet* sheet = doc()->map()->findSheet( m_sheetName );
   if ( !sheet )
     return;
 
@@ -1180,33 +1180,33 @@ void KSpreadUndoCellFormat::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoChangeAngle
+ * UndoChangeAngle
  *
  ***************************************************************************/
 
-KSpreadUndoChangeAngle::KSpreadUndoChangeAngle( KSpreadDoc * _doc,
-                                              KSpreadSheet * _sheet,
+UndoChangeAngle::UndoChangeAngle( Doc * _doc,
+                                              Sheet * _sheet,
                                               const QRect & _selection ) :
-  KSpreadUndoAction( _doc )
+  UndoAction( _doc )
 {
   name = i18n("Change Angle");
-  m_layoutUndo = new KSpreadUndoCellFormat( _doc, _sheet, _selection, QString::null );
-  m_resizeUndo = new KSpreadUndoResizeColRow( _doc, _sheet, _selection );
+  m_layoutUndo = new UndoCellFormat( _doc, _sheet, _selection, QString::null );
+  m_resizeUndo = new UndoResizeColRow( _doc, _sheet, _selection );
 }
 
-KSpreadUndoChangeAngle::~KSpreadUndoChangeAngle()
+UndoChangeAngle::~UndoChangeAngle()
 {
   delete m_resizeUndo;
   delete m_layoutUndo;
 }
 
-void KSpreadUndoChangeAngle::undo()
+void UndoChangeAngle::undo()
 {
   m_layoutUndo->undo();
   m_resizeUndo->undo();
 }
 
-void KSpreadUndoChangeAngle::redo()
+void UndoChangeAngle::redo()
 {
   m_layoutUndo->redo();
   m_resizeUndo->redo();
@@ -1214,12 +1214,12 @@ void KSpreadUndoChangeAngle::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoSort
+ * UndoSort
  *
  ***************************************************************************/
 
-KSpreadUndoSort::KSpreadUndoSort( KSpreadDoc * _doc, KSpreadSheet * _sheet, const QRect & _selection ) :
-    KSpreadUndoAction( _doc )
+UndoSort::UndoSort( Doc * _doc, Sheet * _sheet, const QRect & _selection ) :
+    UndoAction( _doc )
 {
   name        = i18n("Sort");
 
@@ -1228,8 +1228,8 @@ KSpreadUndoSort::KSpreadUndoSort( KSpreadDoc * _doc, KSpreadSheet * _sheet, cons
   copyAll( m_lstFormats, m_lstColFormats, m_lstRowFormats, _sheet );
 }
 
-void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol,
-                              QValueList<layoutRow> & listRow, KSpreadSheet * sheet )
+void UndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColumn> & listCol,
+                              QValueList<layoutRow> & listRow, Sheet * sheet )
 {
   QValueList<layoutTextCell>::Iterator it2;
   for ( it2 = list.begin(); it2 != list.end(); ++it2 )
@@ -1257,7 +1257,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
           layoutTextCell tmplayout;
           tmplayout.col = col;
           tmplayout.row = c->row();
-          tmplayout.l = new KSpreadFormat( sheet, 0 );
+          tmplayout.l = new Format( sheet, 0 );
           tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )) );
           tmplayout.text = c->text();
           list.append(tmplayout);
@@ -1286,7 +1286,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
           layoutTextCell tmplayout;
           tmplayout.col = c->column();
           tmplayout.row = row;
-          tmplayout.l   = new KSpreadFormat( sheet, 0 );
+          tmplayout.l   = new Format( sheet, 0 );
           tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )) );
           tmplayout.text = c->text();
           list.append(tmplayout);
@@ -1309,7 +1309,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
           layoutTextCell tmplayout;
           tmplayout.col = x;
           tmplayout.row = y;
-          tmplayout.l   = new KSpreadFormat( sheet, 0 );
+          tmplayout.l   = new Format( sheet, 0 );
           tmplayout.l->copy( *(sheet->cellAt( x, y )) );
           tmplayout.text = cell->text();
           list.append(tmplayout);
@@ -1318,7 +1318,7 @@ void KSpreadUndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layo
   }
 }
 
-KSpreadUndoSort::~KSpreadUndoSort()
+UndoSort::~UndoSort()
 {
     QValueList<layoutTextCell>::Iterator it2;
     for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
@@ -1361,9 +1361,9 @@ KSpreadUndoSort::~KSpreadUndoSort()
 
 }
 
-void KSpreadUndoSort::undo()
+void UndoSort::undo()
 {
-  KSpreadSheet * sheet = doc()->map()->findSheet( m_sheetName );
+  Sheet * sheet = doc()->map()->findSheet( m_sheetName );
   if ( !sheet )
     return;
 
@@ -1416,9 +1416,9 @@ void KSpreadUndoSort::undo()
   doc()->undoUnlock();
 }
 
-void KSpreadUndoSort::redo()
+void UndoSort::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -1469,12 +1469,12 @@ void KSpreadUndoSort::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoDelete
+ * UndoDelete
  *
  ***************************************************************************/
 
-KSpreadUndoDelete::KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadSheet* sheet, const QRect & _selection)
-    : KSpreadUndoAction( _doc )
+UndoDelete::UndoDelete( Doc *_doc, Sheet* sheet, const QRect & _selection)
+    : UndoAction( _doc )
 {
     name=i18n("Delete");
     m_sheetName = sheet->sheetName();
@@ -1483,11 +1483,11 @@ KSpreadUndoDelete::KSpreadUndoDelete( KSpreadDoc *_doc, KSpreadSheet* sheet, con
 
 }
 
-KSpreadUndoDelete::~KSpreadUndoDelete()
+UndoDelete::~UndoDelete()
 {
 }
 
-void KSpreadUndoDelete::createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadSheet* sheet )
+void UndoDelete::createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, Sheet* sheet )
 {
     listRow.clear();
     listCol.clear();
@@ -1544,9 +1544,9 @@ void KSpreadUndoDelete::createListCell( QCString &listCell,QValueList<columnSize
 }
 
 
-void KSpreadUndoDelete::undo()
+void UndoDelete::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
     createListCell( m_dataRedo, m_lstRedoColumn,m_lstRedoRow,sheet );
@@ -1582,10 +1582,10 @@ void KSpreadUndoDelete::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoDelete::redo()
+void UndoDelete::redo()
 {
 
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -1624,13 +1624,13 @@ void KSpreadUndoDelete::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoDragDrop
+ * UndoDragDrop
  *
  ***************************************************************************/
 
-KSpreadUndoDragDrop::KSpreadUndoDragDrop( KSpreadDoc * _doc, KSpreadSheet * _sheet, const QRect & _source,
+UndoDragDrop::UndoDragDrop( Doc * _doc, Sheet * _sheet, const QRect & _source,
                                           const QRect & _target )
-  : KSpreadUndoAction( _doc ),
+  : UndoAction( _doc ),
     m_selectionSource( _source ),
     m_selectionTarget( _target )
 {
@@ -1643,11 +1643,11 @@ KSpreadUndoDragDrop::KSpreadUndoDragDrop( KSpreadDoc * _doc, KSpreadSheet * _she
       saveCellRect( m_dataSource, _sheet, _source );
 }
 
-KSpreadUndoDragDrop::~KSpreadUndoDragDrop()
+UndoDragDrop::~UndoDragDrop()
 {
 }
 
-void KSpreadUndoDragDrop::saveCellRect( QCString & cells, KSpreadSheet * sheet,
+void UndoDragDrop::saveCellRect( QCString & cells, Sheet * sheet,
                                         QRect const & rect )
 {
     QDomDocument doc = sheet->saveCellRect( rect );
@@ -1663,9 +1663,9 @@ void KSpreadUndoDragDrop::saveCellRect( QCString & cells, KSpreadSheet * sheet,
     *( cells.data() + len - 1 ) = tmp;
 }
 
-void KSpreadUndoDragDrop::undo()
+void UndoDragDrop::undo()
 {
-    KSpreadSheet * sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet * sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -1693,9 +1693,9 @@ void KSpreadUndoDragDrop::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoDragDrop::redo()
+void UndoDragDrop::redo()
 {
-    KSpreadSheet * sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet * sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -1719,13 +1719,13 @@ void KSpreadUndoDragDrop::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoResizeColRow
+ * UndoResizeColRow
  *
  ***************************************************************************/
 
 
-KSpreadUndoResizeColRow::KSpreadUndoResizeColRow( KSpreadDoc *_doc, KSpreadSheet *_sheet, const QRect &_selection ) :
-    KSpreadUndoAction( _doc )
+UndoResizeColRow::UndoResizeColRow( Doc *_doc, Sheet *_sheet, const QRect &_selection ) :
+    UndoAction( _doc )
 {
   name=i18n("Resize");
   m_rctRect = _selection;
@@ -1734,7 +1734,7 @@ KSpreadUndoResizeColRow::KSpreadUndoResizeColRow( KSpreadDoc *_doc, KSpreadSheet
   createList( m_lstColumn,m_lstRow, _sheet );
 }
 
-void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadSheet* sheet )
+void UndoResizeColRow::createList( QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, Sheet* sheet )
 {
     listCol.clear();
     listRow.clear();
@@ -1795,13 +1795,13 @@ void KSpreadUndoResizeColRow::createList( QValueList<columnSize> &listCol,QValue
     }
 }
 
-KSpreadUndoResizeColRow::~KSpreadUndoResizeColRow()
+UndoResizeColRow::~UndoResizeColRow()
 {
 }
 
-void KSpreadUndoResizeColRow::undo()
+void UndoResizeColRow::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -1846,9 +1846,9 @@ void KSpreadUndoResizeColRow::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoResizeColRow::redo()
+void UndoResizeColRow::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -1892,13 +1892,13 @@ void KSpreadUndoResizeColRow::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoChangeAreaTextCell
+ * UndoChangeAreaTextCell
  *
  ***************************************************************************/
 
 
-KSpreadUndoChangeAreaTextCell::KSpreadUndoChangeAreaTextCell( KSpreadDoc *_doc, KSpreadSheet *_sheet, const QRect &_selection ) :
-    KSpreadUndoAction( _doc )
+UndoChangeAreaTextCell::UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const QRect &_selection ) :
+    UndoAction( _doc )
 {
   name=i18n("Change Text");
 
@@ -1908,7 +1908,7 @@ KSpreadUndoChangeAreaTextCell::KSpreadUndoChangeAreaTextCell( KSpreadDoc *_doc, 
   createList( m_lstTextCell, _sheet );
 }
 
-void KSpreadUndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, KSpreadSheet* sheet )
+void UndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, Sheet* sheet )
 {
     int bottom = m_rctRect.bottom();
     int right  = m_rctRect.right();
@@ -1978,13 +1978,13 @@ void KSpreadUndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, KS
     }
 }
 
-KSpreadUndoChangeAreaTextCell::~KSpreadUndoChangeAreaTextCell()
+UndoChangeAreaTextCell::~UndoChangeAreaTextCell()
 {
 }
 
-void KSpreadUndoChangeAreaTextCell::undo()
+void UndoChangeAreaTextCell::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2033,9 +2033,9 @@ void KSpreadUndoChangeAreaTextCell::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoChangeAreaTextCell::redo()
+void UndoChangeAreaTextCell::redo()
 {
-    KSpreadSheet * sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet * sheet = doc()->map()->findSheet( m_sheetName );
 
     if ( !sheet )
 	return;
@@ -2085,13 +2085,13 @@ void KSpreadUndoChangeAreaTextCell::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoMergedCell
+ * UndoMergedCell
  *
  ***************************************************************************/
 
 
-KSpreadUndoMergedCell::KSpreadUndoMergedCell( KSpreadDoc *_doc, KSpreadSheet *_sheet, int _column, int _row , int _extraX,int _extraY) :
-    KSpreadUndoAction( _doc )
+UndoMergedCell::UndoMergedCell( Doc *_doc, Sheet *_sheet, int _column, int _row , int _extraX,int _extraY) :
+    UndoAction( _doc )
 {
   name=i18n("Merge Cells");
 
@@ -2103,13 +2103,13 @@ KSpreadUndoMergedCell::KSpreadUndoMergedCell( KSpreadDoc *_doc, KSpreadSheet *_s
 
 }
 
-KSpreadUndoMergedCell::~KSpreadUndoMergedCell()
+UndoMergedCell::~UndoMergedCell()
 {
 }
 
-void KSpreadUndoMergedCell::undo()
+void UndoMergedCell::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2124,9 +2124,9 @@ void KSpreadUndoMergedCell::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoMergedCell::redo()
+void UndoMergedCell::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2139,12 +2139,12 @@ void KSpreadUndoMergedCell::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoAutofill
+ * UndoAutofill
  *
  ***************************************************************************/
 
-KSpreadUndoAutofill::KSpreadUndoAutofill( KSpreadDoc *_doc, KSpreadSheet* sheet, const QRect & _selection)
-    : KSpreadUndoAction( _doc )
+UndoAutofill::UndoAutofill( Doc *_doc, Sheet* sheet, const QRect & _selection)
+    : UndoAction( _doc )
 {
     name=i18n("Autofill");
 
@@ -2154,11 +2154,11 @@ KSpreadUndoAutofill::KSpreadUndoAutofill( KSpreadDoc *_doc, KSpreadSheet* sheet,
 
 }
 
-KSpreadUndoAutofill::~KSpreadUndoAutofill()
+UndoAutofill::~UndoAutofill()
 {
 }
 
-void KSpreadUndoAutofill::createListCell( QCString &list, KSpreadSheet* sheet )
+void UndoAutofill::createListCell( QCString &list, Sheet* sheet )
 {
     QDomDocument doc = sheet->saveCellRect( m_selection );
     // Save to buffer
@@ -2177,9 +2177,9 @@ void KSpreadUndoAutofill::createListCell( QCString &list, KSpreadSheet* sheet )
     *( list.data() + len - 1 ) = tmp;
 }
 
-void KSpreadUndoAutofill::undo()
+void UndoAutofill::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2197,11 +2197,11 @@ void KSpreadUndoAutofill::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoAutofill::redo()
+void UndoAutofill::redo()
 {
     doc()->undoLock();
 
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2218,12 +2218,12 @@ void KSpreadUndoAutofill::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoInsertCellRow
+ * UndoInsertCellRow
  *
  ***************************************************************************/
 
-KSpreadUndoInsertCellRow::KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadSheet *_sheet, const QRect &_rect ) :
-    KSpreadUndoInsertRemoveAction( _doc )
+UndoInsertCellRow::UndoInsertCellRow( Doc *_doc, Sheet *_sheet, const QRect &_rect ) :
+    UndoInsertRemoveAction( _doc )
 {
     name=i18n("Insert Cell");
 
@@ -2231,13 +2231,13 @@ KSpreadUndoInsertCellRow::KSpreadUndoInsertCellRow( KSpreadDoc *_doc, KSpreadShe
     m_rect=_rect;
 }
 
-KSpreadUndoInsertCellRow::~KSpreadUndoInsertCellRow()
+UndoInsertCellRow::~UndoInsertCellRow()
 {
 }
 
-void KSpreadUndoInsertCellRow::undo()
+void UndoInsertCellRow::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2248,9 +2248,9 @@ void KSpreadUndoInsertCellRow::undo()
     undoFormulaReference();
 }
 
-void KSpreadUndoInsertCellRow::redo()
+void UndoInsertCellRow::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2261,13 +2261,13 @@ void KSpreadUndoInsertCellRow::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoInsertCellCol
+ * UndoInsertCellCol
  *
  ***************************************************************************/
 
 
-KSpreadUndoInsertCellCol::KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadSheet *_sheet, const QRect &_rect ) :
-    KSpreadUndoInsertRemoveAction( _doc )
+UndoInsertCellCol::UndoInsertCellCol( Doc *_doc, Sheet *_sheet, const QRect &_rect ) :
+    UndoInsertRemoveAction( _doc )
 {
     name=i18n("Insert Cell");
 
@@ -2275,13 +2275,13 @@ KSpreadUndoInsertCellCol::KSpreadUndoInsertCellCol( KSpreadDoc *_doc, KSpreadShe
     m_rect=_rect;
 }
 
-KSpreadUndoInsertCellCol::~KSpreadUndoInsertCellCol()
+UndoInsertCellCol::~UndoInsertCellCol()
 {
 }
 
-void KSpreadUndoInsertCellCol::undo()
+void UndoInsertCellCol::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2292,9 +2292,9 @@ void KSpreadUndoInsertCellCol::undo()
     undoFormulaReference();
 }
 
-void KSpreadUndoInsertCellCol::redo()
+void UndoInsertCellCol::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2305,12 +2305,12 @@ void KSpreadUndoInsertCellCol::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoRemoveCellRow
+ * UndoRemoveCellRow
  *
  ***************************************************************************/
 
-KSpreadUndoRemoveCellRow::KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadSheet *_sheet, const QRect &rect ) :
-    KSpreadUndoInsertRemoveAction( _doc )
+UndoRemoveCellRow::UndoRemoveCellRow( Doc *_doc, Sheet *_sheet, const QRect &rect ) :
+    UndoInsertRemoveAction( _doc )
 {
     name=i18n("Remove Cell");
 
@@ -2333,13 +2333,13 @@ KSpreadUndoRemoveCellRow::KSpreadUndoRemoveCellRow( KSpreadDoc *_doc, KSpreadShe
     *( m_data.data() + len - 1 ) = tmp;
 }
 
-KSpreadUndoRemoveCellRow::~KSpreadUndoRemoveCellRow()
+UndoRemoveCellRow::~UndoRemoveCellRow()
 {
 }
 
-void KSpreadUndoRemoveCellRow::undo()
+void UndoRemoveCellRow::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2351,9 +2351,9 @@ void KSpreadUndoRemoveCellRow::undo()
     undoFormulaReference();
 }
 
-void KSpreadUndoRemoveCellRow::redo()
+void UndoRemoveCellRow::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2364,12 +2364,12 @@ void KSpreadUndoRemoveCellRow::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoRemoveCellCol
+ * UndoRemoveCellCol
  *
  ***************************************************************************/
 
-KSpreadUndoRemoveCellCol::KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadSheet *_sheet, const QRect &_rect ) :
-    KSpreadUndoInsertRemoveAction( _doc )
+UndoRemoveCellCol::UndoRemoveCellCol( Doc *_doc, Sheet *_sheet, const QRect &_rect ) :
+    UndoInsertRemoveAction( _doc )
 {
     name=i18n("Remove Cell");
 
@@ -2392,13 +2392,13 @@ KSpreadUndoRemoveCellCol::KSpreadUndoRemoveCellCol( KSpreadDoc *_doc, KSpreadShe
     *( m_data.data() + len - 1 ) = tmp;
 }
 
-KSpreadUndoRemoveCellCol::~KSpreadUndoRemoveCellCol()
+UndoRemoveCellCol::~UndoRemoveCellCol()
 {
 }
 
-void KSpreadUndoRemoveCellCol::undo()
+void UndoRemoveCellCol::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2410,9 +2410,9 @@ void KSpreadUndoRemoveCellCol::undo()
     undoFormulaReference();
 }
 
-void KSpreadUndoRemoveCellCol::redo()
+void UndoRemoveCellCol::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2423,12 +2423,12 @@ void KSpreadUndoRemoveCellCol::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoConditional
+ * UndoConditional
  *
  ***************************************************************************/
 
-KSpreadUndoConditional::KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadSheet* sheet, QRect const & _selection)
-    : KSpreadUndoAction( _doc )
+UndoConditional::UndoConditional( Doc *_doc, Sheet* sheet, QRect const & _selection)
+    : UndoAction( _doc )
 {
     name=i18n("Conditional Cell Attribute");
 
@@ -2438,11 +2438,11 @@ KSpreadUndoConditional::KSpreadUndoConditional( KSpreadDoc *_doc, KSpreadSheet* 
 
 }
 
-KSpreadUndoConditional::~KSpreadUndoConditional()
+UndoConditional::~UndoConditional()
 {
 }
 
-void KSpreadUndoConditional::createListCell( QCString &list, KSpreadSheet* sheet )
+void UndoConditional::createListCell( QCString &list, Sheet* sheet )
 {
     QDomDocument doc = sheet->saveCellRect( m_selection );
     // Save to buffer
@@ -2461,9 +2461,9 @@ void KSpreadUndoConditional::createListCell( QCString &list, KSpreadSheet* sheet
     *( list.data() + len - 1 ) = tmp;
 }
 
-void KSpreadUndoConditional::undo()
+void UndoConditional::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2476,11 +2476,11 @@ void KSpreadUndoConditional::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoConditional::redo()
+void UndoConditional::redo()
 {
     doc()->undoLock();
 
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2494,12 +2494,12 @@ void KSpreadUndoConditional::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoCellPaste
+ * UndoCellPaste
  *
  ***************************************************************************/
 
-KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadSheet* sheet, int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection,bool insert,int _insertTo )
-    : KSpreadUndoAction( _doc )
+UndoCellPaste::UndoCellPaste( Doc *_doc, Sheet* sheet, int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection,bool insert,int _insertTo )
+    : UndoAction( _doc )
 {
     if(!insert)
         name=i18n("Paste");
@@ -2519,11 +2519,11 @@ KSpreadUndoCellPaste::KSpreadUndoCellPaste( KSpreadDoc *_doc, KSpreadSheet* shee
 
 }
 
-KSpreadUndoCellPaste::~KSpreadUndoCellPaste()
+UndoCellPaste::~UndoCellPaste()
 {
 }
 
-void KSpreadUndoCellPaste::createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, KSpreadSheet* sheet )
+void UndoCellPaste::createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, Sheet* sheet )
 {
     listCol.clear();
     listRow.clear();
@@ -2620,9 +2620,9 @@ void KSpreadUndoCellPaste::createListCell( QCString &listCell,QValueList<columnS
     }
 }
 
-void KSpreadUndoCellPaste::undo()
+void UndoCellPaste::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2696,9 +2696,9 @@ void KSpreadUndoCellPaste::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoCellPaste::redo()
+void UndoCellPaste::redo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2768,12 +2768,12 @@ void KSpreadUndoCellPaste::redo()
 
 /****************************************************************************
  *
- * KSpreadUndoStyleCell
+ * UndoStyleCell
  *
  ***************************************************************************/
 
-KSpreadUndoStyleCell::KSpreadUndoStyleCell( KSpreadDoc *_doc, KSpreadSheet* sheet, const QRect & _selection)
-    : KSpreadUndoAction( _doc )
+UndoStyleCell::UndoStyleCell( Doc *_doc, Sheet* sheet, const QRect & _selection)
+    : UndoAction( _doc )
 {
     name=i18n("Style of Cell");
 
@@ -2783,11 +2783,11 @@ KSpreadUndoStyleCell::KSpreadUndoStyleCell( KSpreadDoc *_doc, KSpreadSheet* shee
 
 }
 
-KSpreadUndoStyleCell::~KSpreadUndoStyleCell()
+UndoStyleCell::~UndoStyleCell()
 {
 }
 
-void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpreadSheet* sheet )
+void UndoStyleCell::createListCell( QValueList<styleCell> &listCell, Sheet* sheet )
 {
   int bottom = m_selection.bottom();
   int right  = m_selection.right();
@@ -2844,9 +2844,9 @@ void KSpreadUndoStyleCell::createListCell( QValueList<styleCell> &listCell, KSpr
   }
 }
 
-void KSpreadUndoStyleCell::undo()
+void UndoStyleCell::undo()
 {
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2866,11 +2866,11 @@ void KSpreadUndoStyleCell::undo()
     doc()->undoUnlock();
 }
 
-void KSpreadUndoStyleCell::redo()
+void UndoStyleCell::redo()
 {
     doc()->undoLock();
 
-    KSpreadSheet* sheet = doc()->map()->findSheet( m_sheetName );
+    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
 
@@ -2888,8 +2888,8 @@ void KSpreadUndoStyleCell::redo()
     doc()->undoUnlock();
 }
 
-KSpreadUndoInsertData::KSpreadUndoInsertData( KSpreadDoc * _doc, KSpreadSheet * _sheet, QRect & _selection )
-    : KSpreadUndoChangeAreaTextCell( _doc, _sheet, _selection )
+UndoInsertData::UndoInsertData( Doc * _doc, Sheet * _sheet, QRect & _selection )
+    : UndoChangeAreaTextCell( _doc, _sheet, _selection )
 {
     name = i18n("Insert Data From Database");
 }

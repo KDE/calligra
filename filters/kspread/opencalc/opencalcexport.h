@@ -26,14 +26,16 @@
 #include <koFilter.h>
 #include <qptrlist.h>
 
-class KLocale;
-
-class KoStore;
-class KSpreadDoc;
-class KSpreadSheet;
-
 class QDomDocument;
 class QDomElement;
+class KLocale;
+class KoStore;
+
+namespace KSpread
+{
+class Doc;
+class Sheet;
+}
 
 class OpenCalcExport : public KoFilter
 {
@@ -50,30 +52,30 @@ class OpenCalcExport : public KoFilter
   enum files { metaXML = 0x01, contentXML = 0x02, stylesXML = 0x04, settingsXML = 0x08 };
   OpenCalcStyles m_styles;
 
-  bool writeFile( const KSpreadDoc * ksdoc );
+  bool writeFile( const KSpread::Doc * ksdoc );
 
-  bool exportDocInfo( KoStore * store, const KSpreadDoc * ksdoc );
-  bool exportStyles ( KoStore * store, const KSpreadDoc * ksdoc );
-  bool exportContent( KoStore * store, const KSpreadDoc * ksdoc );
-    bool exportSettings( KoStore * store, const KSpreadDoc * ksdoc );
+  bool exportDocInfo( KoStore * store, const KSpread::Doc * ksdoc );
+  bool exportStyles ( KoStore * store, const KSpread::Doc * ksdoc );
+  bool exportContent( KoStore * store, const KSpread::Doc * ksdoc );
+  bool exportSettings( KoStore * store, const KSpread::Doc * ksdoc );
 
-  bool exportBody( QDomDocument & doc, QDomElement & content, const KSpreadDoc * ksdoc );
+  bool exportBody( QDomDocument & doc, QDomElement & content, const KSpread::Doc * ksdoc );
   void exportSheet( QDomDocument & doc, QDomElement & tabElem,
-                    const KSpreadSheet * sheet, int maxCols, int maxRows );
+                    const KSpread::Sheet * sheet, int maxCols, int maxRows );
   void exportCells( QDomDocument & doc, QDomElement & rowElem,
-                    const KSpreadSheet * sheet, int row, int maxCols );
+                    const KSpread::Sheet * sheet, int row, int maxCols );
   void exportDefaultCellStyle( QDomDocument & doc, QDomElement & officeStyles );
   void exportPageAutoStyles( QDomDocument & doc, QDomElement & autoStyles,
-                             const KSpreadDoc * ksdoc );
+                             const KSpread::Doc * ksdoc );
   void exportMasterStyles( QDomDocument & doc, QDomElement & masterStyles,
-                           const KSpreadDoc *ksdoc );
+                           const KSpread::Doc *ksdoc );
 
   bool writeMetaFile( KoStore * store, uint filesWritten );
 
-  void maxRowCols( const KSpreadSheet * sheet,
+  void maxRowCols( const KSpread::Sheet * sheet,
                    int & maxCols, int & maxRows );
   void convertPart( QString const & part, QDomDocument & doc,
-                    QDomElement & parent, const KSpreadDoc * ksdoc );
+                    QDomElement & parent, const KSpread::Doc * ksdoc );
   void addText( QString const & text, QDomDocument & doc,
                 QDomElement & parent );
 

@@ -31,15 +31,17 @@
 
 #include <KoViewIface.h>
 
-class KSpreadView;
-class KSpreadCellProxy;
+namespace KSpread
+{
+class View;
+class CellProxy;
 
-class KSpreadViewIface : public KoViewIface
+class ViewIface : public KoViewIface
 {
     K_DCOP
 public:
-    KSpreadViewIface( KSpreadView* );
-    ~KSpreadViewIface();
+    ViewIface( View* );
+    ~ViewIface();
 
 k_dcop:
     virtual DCOPRef doc() const;
@@ -136,8 +138,10 @@ k_dcop:
 
 
 private:
-    KSpreadView* m_view;
-    KSpreadCellProxy* m_proxy;
+    View* m_view;
+    CellProxy* m_proxy;
 };
+
+} // namespace KSpread
 
 #endif

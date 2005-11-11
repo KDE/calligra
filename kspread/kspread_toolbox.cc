@@ -26,7 +26,7 @@
 #include <qspinbox.h>
 #include <qobjectlist.h>
 
-KSpreadToolBox::KSpreadToolBox( QWidget* parent, const char* name )
+ToolBox::ToolBox( QWidget* parent, const char* name )
     : QFrame( parent, name, WType_TopLevel | WStyle_Tool )
 {
     KWin::setType( winId(), NET::Tool );
@@ -38,7 +38,7 @@ KSpreadToolBox::KSpreadToolBox( QWidget* parent, const char* name )
     // m_layout->addSpacing( 12 );
 }
 
-void KSpreadToolBox::setEnabled( bool enable )
+void ToolBox::setEnabled( bool enable )
 {
     if ( enable )
     {
@@ -76,7 +76,7 @@ void KSpreadToolBox::setEnabled( bool enable )
 }
 
 /*
-void KSpreadToolBox::paintEvent( QPaintEvent* ev )
+void ToolBox::paintEvent( QPaintEvent* ev )
 {
     QPainter painter;
     painter.begin( this );
@@ -89,20 +89,20 @@ void KSpreadToolBox::paintEvent( QPaintEvent* ev )
 }
 */
 
-void KSpreadToolBox::childEvent( QChildEvent* ev )
+void ToolBox::childEvent( QChildEvent* ev )
 {
     if ( ev->inserted() && ev->child()->isWidgetType() )
 	m_layout->addWidget( (QWidget*)ev->child() );
     resize( sizeHint() );
 }
 
-void KSpreadToolBox::mousePressEvent( QMouseEvent* ev )
+void ToolBox::mousePressEvent( QMouseEvent* ev )
 {
     m_startPos = geometry().topLeft();
     m_mousePos = ev->globalPos();
 }
 
-void KSpreadToolBox::mouseMoveEvent( QMouseEvent* ev )
+void ToolBox::mouseMoveEvent( QMouseEvent* ev )
 {
     setGeometry( m_startPos.x() - m_mousePos.x() + ev->globalPos().x(),
 		 m_startPos.y() - m_mousePos.y() + ev->globalPos().y(),
@@ -112,7 +112,7 @@ void KSpreadToolBox::mouseMoveEvent( QMouseEvent* ev )
 // ---------------------------------------------
 
 KoTransformToolBox::KoTransformToolBox( KoDocumentChild* ch, QWidget* parent, const char* name )
-    : KSpreadToolBox( parent, name )
+    : ToolBox( parent, name )
 {
     m_child = 0;
 

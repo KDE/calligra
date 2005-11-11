@@ -28,23 +28,25 @@
 #include <qpoint.h>
 #include <qrect.h>
 
-class KSpreadView;
-class KSpreadSheet;
-class KSpreadSubtotal;
-
 class QLineEdit;
 
-class KSpreadSubtotalDlg : public KDialogBase
+namespace KSpread
+{
+class Sheet;
+class Subtotal;
+class View;
+
+class SubtotalDialog : public KDialogBase
 { 
   Q_OBJECT
 
  public:
-  KSpreadSubtotalDlg( KSpreadView * parent, QRect const & selection, 
+  SubtotalDialog( View * parent, QRect const & selection, 
                       const char * name );
-  ~KSpreadSubtotalDlg();
+  ~SubtotalDialog();
 
   QRect const & selection() const { return m_selection; }
-  KSpreadSheet * sheet() const { return m_pSheet; }
+  Sheet * sheet() const { return m_pSheet; }
 
  private slots:
   void slotOk();
@@ -52,10 +54,10 @@ class KSpreadSubtotalDlg : public KDialogBase
   void slotUser1();
 
  private:
-  KSpreadView  *    m_pView;
-  KSpreadSheet *    m_pSheet;
+  View  *    m_pView;
+  Sheet *    m_pSheet;
   QRect             m_selection;
-  KSpreadSubtotal * m_dialog;
+  Subtotal * m_dialog;
 
   void fillColumnBoxes();
   void fillFunctionBox();
@@ -63,6 +65,8 @@ class KSpreadSubtotalDlg : public KDialogBase
   bool addSubtotal( int mainCol, int column, int row, int topRow, 
                     bool addRow, QString const & text );
 };
+
+} // namespace KSpread
 
 #endif
 

@@ -26,7 +26,11 @@
 
 class ExportDialog;
 class KoDocument;
-class KSpreadSheet;
+
+namespace KSpread
+{
+class Sheet;
+}
 
 class HTMLExport : public KoFilter {
     Q_OBJECT
@@ -37,7 +41,7 @@ public:
     virtual KoFilter::ConversionStatus convert( const QCString& from, const QCString& to );
   private:
     /** Writes the top of the page in HTML to @par str */
-    void openPage( KSpreadSheet *sheet,KoDocument *document, QString &str);
+    void openPage( KSpread::Sheet *sheet,KoDocument *document, QString &str);
 
     /** Closes a page in HTML */
     void closePage( QString &);
@@ -45,7 +49,7 @@ public:
     /**
       Converts @par sheet to HTML and writes to @par str.
      */
-    void convertSheet( KSpreadSheet *sheet, QString &str, int, int);
+    void convertSheet( KSpread::Sheet *sheet, QString &str, int, int);
 
     /** Writes a bar and a link to the top to @par str. */
     void createSheetSeparator( QString & );
@@ -63,7 +67,7 @@ public:
       Detects which rows and columsn of the given @par sheet are used and
       writes the number of them to @par row and @par column.
      */
-    void detectFilledCells( KSpreadSheet *sheet, int &rows, int &colums );
+    void detectFilledCells( KSpread::Sheet *sheet, int &rows, int &colums );
   private:
     ExportDialog *m_dialog;
 
@@ -72,5 +76,6 @@ public:
     typedef QMap<QString,int> Columns;
     Columns m_columnmap;
 };
+
 #endif
 

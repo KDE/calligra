@@ -26,25 +26,30 @@
 
 #include <kdialogbase.h>
 
-class KSpreadView;
-class KSpreadSheet;
 class QPushButton;
 class QMultiLineEdit;
 
-class KSpreadComment : public KDialogBase
+namespace KSpread
+{
+class Sheet;
+class View;
+
+class CommentDialog : public KDialogBase
 {
   Q_OBJECT
 public:
-  KSpreadComment( KSpreadView* parent, const char* name,const QPoint &_marker );
+  CommentDialog( View* parent, const char* name,const QPoint &_marker );
 
 public slots:
   void slotOk();
   void slotTextChanged();
 protected:
 
-  KSpreadView* m_pView;
+  View* m_pView;
   QMultiLineEdit *multiLine; 
   QPoint  marker;
 };
+
+} // namespace KSpread
 
 #endif

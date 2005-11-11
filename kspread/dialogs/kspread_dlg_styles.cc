@@ -18,6 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qheader.h>
+#include <qlayout.h>
+#include <qmap.h>
+
 #include <kcombobox.h>
 #include <kdebug.h>
 #include <klistview.h>
@@ -26,15 +30,14 @@
 #include "kspread_canvas.h"
 #include "kspread_cell.h"
 #include "kspread_dlg_layout.h"
-#include "kspread_dlg_styles.h"
 #include "kspread_sheet.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
 #include "kspread_view.h"
 
-#include <qheader.h>
-#include <qlayout.h>
-#include <qmap.h>
+#include "kspread_dlg_styles.h"
+
+using namespace KSpread;
 
 StyleWidget::StyleWidget( QWidget * parent, const char * name, WFlags fl )
   : QWidget( parent, name, fl )
@@ -65,7 +68,7 @@ StyleWidget::~StyleWidget()
 
 
 
-KSpreadStyleDlg::KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * manager,
+StyleDlg::StyleDlg( View * parent, StyleManager * manager,
                                   const char * name )
   : KDialogBase( parent, name, true, "",
                  KDialogBase::Ok | KDialogBase::User1 | KDialogBase::User2 | KDialogBase::User3 | KDialogBase::Close,
@@ -90,20 +93,20 @@ KSpreadStyleDlg::KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * ma
   connect( m_dlg, SIGNAL( modifyStyle() ), this, SLOT( slotUser2()));
 }
 
-KSpreadStyleDlg::~KSpreadStyleDlg()
+StyleDlg::~StyleDlg()
 {
 }
 
-void KSpreadStyleDlg::fillComboBox()
+void StyleDlg::fillComboBox()
 {
-  class Map : public QMap<KSpreadCustomStyle *, KListViewItem *> {};
+  class Map : public QMap<CustomStyle *, KListViewItem *> {};
   Map entries;
 
   entries.clear();
   entries[m_styleManager->defaultStyle()] = new KListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
 
-  KSpreadStyleManager::Styles::const_iterator iter = m_styleManager->m_styles.begin();
-  KSpreadStyleManager::Styles::const_iterator end  = m_styleManager->m_styles.end();
+  StyleManager::Styles::const_iterator iter = m_styleManager->m_styles.begin();
+  StyleManager::Styles::const_iterator end  = m_styleManager->m_styles.end();
   uint count = m_styleManager->m_styles.count() + 1;
 
   while ( entries.count() != count )
@@ -127,7 +130,7 @@ void KSpreadStyleDlg::fillComboBox()
   entries.clear();
 }
 
-void KSpreadStyleDlg::slotDisplayMode( int mode )
+void StyleDlg::slotDisplayMode( int mode )
 {
   m_dlg->m_styleList->clear();
 
@@ -143,12 +146,12 @@ void KSpreadStyleDlg::slotDisplayMode( int mode )
   if ( mode != 2 )
     new KListViewItem( m_dlg->m_styleList, i18n( "Default" ) );
 
-  KSpreadStyleManager::Styles::iterator iter = m_styleManager->m_styles.begin();
-  KSpreadStyleManager::Styles::iterator end  = m_styleManager->m_styles.end();
+  StyleManager::Styles::iterator iter = m_styleManager->m_styles.begin();
+  StyleManager::Styles::iterator end  = m_styleManager->m_styles.end();
 
   while ( iter != end )
   {
-    KSpreadCustomStyle * styleData = iter.data();
+    CustomStyle * styleData = iter.data();
     if ( !styleData || styleData->name().isEmpty() )
     {
       ++iter;
@@ -157,7 +160,7 @@ void KSpreadStyleDlg::slotDisplayMode( int mode )
 
     if ( mode == 2 )
     {
-      if ( styleData->type() == KSpreadStyle::CUSTOM )
+      if ( styleData->type() == Style::CUSTOM )
         new KListViewItem( m_dlg->m_styleList, styleData->name() );
     }
     else if ( mode == 1 )
@@ -172,7 +175,7 @@ void KSpreadStyleDlg::slotDisplayMode( int mode )
   }
 }
 
-void KSpreadStyleDlg::slotOk()
+void StyleDlg::slotOk()
 {
   KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
 
@@ -182,7 +185,7 @@ void KSpreadStyleDlg::slotOk()
     return;
   }
 
-  KSpreadCustomStyle * s = 0;
+  CustomStyle * s = 0;
 
   QString name( item->text( 0 ) );
   if ( name == i18n( "Default" ) )
@@ -198,7 +201,7 @@ void KSpreadStyleDlg::slotOk()
 
   if ( m_view )
   {
-    KSpreadSheet * sheet = m_view->activeSheet();
+    Sheet * sheet = m_view->activeSheet();
 
     if ( sheet )
     {
@@ -211,9 +214,9 @@ void KSpreadStyleDlg::slotOk()
   accept();
 }
 
-void KSpreadStyleDlg::slotUser1()
+void StyleDlg::slotUser1()
 {
-  KSpreadCustomStyle * s = 0;
+  CustomStyle * s = 0;
 
   KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
 
@@ -236,12 +239,12 @@ void KSpreadStyleDlg::slotUser1()
     newName = i18n( "style%1" ).arg( m_styleManager->count() + i );
   }
 
-  KSpreadCustomStyle * style = new KSpreadCustomStyle( newName, s );
-  style->setType( KSpreadStyle::TENTATIVE );
+  CustomStyle * style = new CustomStyle( newName, s );
+  style->setType( Style::TENTATIVE );
 
-  CellFormatDlg dlg( m_view, style, m_styleManager, m_view->doc() );
+  CellFormatDialog dlg( m_view, style, m_styleManager, m_view->doc() );
 
-  if ( style->type() == KSpreadStyle::TENTATIVE )
+  if ( style->type() == Style::TENTATIVE )
   {
     delete style;
     return;
@@ -252,14 +255,14 @@ void KSpreadStyleDlg::slotUser1()
   slotDisplayMode( m_dlg->m_displayBox->currentItem() );
 }
 
-void KSpreadStyleDlg::slotUser2()
+void StyleDlg::slotUser2()
 {
   KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
 
   if ( !item )
     return;
 
-  KSpreadCustomStyle * s = 0;
+  CustomStyle * s = 0;
 
   QString name( item->text( 0 ) );
   if ( name == i18n( "Default" ) )
@@ -270,18 +273,18 @@ void KSpreadStyleDlg::slotUser2()
   if ( !s )
     return;
 
-  CellFormatDlg dlg( m_view, s, m_styleManager, m_view->doc() );
+  CellFormatDialog dlg( m_view, s, m_styleManager, m_view->doc() );
   slotDisplayMode( m_dlg->m_displayBox->currentItem() );
 }
 
-void KSpreadStyleDlg::slotUser3()
+void StyleDlg::slotUser3()
 {
   KListViewItem * item = (KListViewItem *) m_dlg->m_styleList->currentItem();
 
   if ( !item )
     return;
 
-  KSpreadCustomStyle * s = 0;
+  CustomStyle * s = 0;
 
   QString name( item->text( 0 ) );
   if ( name == i18n( "Default" ) )
@@ -292,28 +295,28 @@ void KSpreadStyleDlg::slotUser3()
   if ( !s )
     return;
 
-  if ( s->type() != KSpreadStyle::CUSTOM )
+  if ( s->type() != Style::CUSTOM )
     return;
 
-  s->setType( KSpreadStyle::AUTO );
+  s->setType( Style::AUTO );
   m_styleManager->takeStyle( s );
 
   slotDisplayMode( m_dlg->m_displayBox->currentItem() );
 }
 
-void KSpreadStyleDlg::slotSelectionChanged( QListViewItem * item )
+void StyleDlg::slotSelectionChanged( QListViewItem * item )
 {
   if ( !item )
     return;
 
-  KSpreadCustomStyle * style = m_styleManager->style( item->text( 0 ) );
+  CustomStyle * style = m_styleManager->style( item->text( 0 ) );
   if ( !style )
   {
     enableButton( KDialogBase::User3, false );
     return;
   }
 
-  if ( style->type() == KSpreadStyle::BUILTIN )
+  if ( style->type() == Style::BUILTIN )
     enableButton( KDialogBase::User3, false );
   else
     enableButton( KDialogBase::User3, true );

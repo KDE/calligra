@@ -26,25 +26,30 @@
 
 #include <kdialogbase.h>
 
-class KSpreadView;
 class QPushButton;
 class QLineEdit;
 class QLabel;
 
-class KSpreadarea : public KDialogBase
+namespace KSpread
+{
+class View;
+
+class AreaDialog : public KDialogBase
 {
   Q_OBJECT
 public:
-  KSpreadarea( KSpreadView * parent, const char * name, const QPoint & _marker );
+  AreaDialog( View * parent, const char * name, const QPoint & _marker );
 
 public slots:
   void slotOk();
   void slotAreaNamechanged( const QString & text);
 
 protected:
-  KSpreadView * m_pView;
+  View * m_pView;
   QLineEdit   * m_areaName;
   QPoint        m_marker;
 };
+
+} // namespace KSpread
 
 #endif

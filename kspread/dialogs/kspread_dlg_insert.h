@@ -29,24 +29,28 @@
 
 #include <kdialogbase.h>
 
-class KSpreadView;
-class KSpreadSheet;
 class QCheckBox;
 class QRadioButton;
+class QRect;
 
-class KSpreadinsert : public KDialogBase
+namespace KSpread
+{
+class Sheet;
+class View;
+
+class InsertDialog : public KDialogBase
 {
     Q_OBJECT
 public:
-    enum Mode { Insert,Remove};
+    enum Mode { Insert, Remove };
 
-    KSpreadinsert( KSpreadView* parent, const char* name, const QRect &_rect, Mode _mode );
+    InsertDialog( View* parent, const char* name, const QRect &_rect, Mode _mode );
 
 public slots:
     void slotOk();
 
 private:
-  KSpreadView* m_pView;
+  View* m_pView;
 
   QRadioButton *rb1;
   QRadioButton *rb2;
@@ -55,5 +59,7 @@ private:
   QRect  rect;
   Mode insRem;
 };
+
+} // namespace KSpread
 
 #endif

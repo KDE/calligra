@@ -26,25 +26,30 @@
 
 #include <kdialogbase.h>
 
-class KSpreadView;
-class KSpreadSheet;
 class QRadioButton;
 
-class KSpreadspecial : public KDialogBase
+namespace KSpread
+{
+class Sheet;
+class View;
+
+class SpecialDialog : public KDialogBase
 {
     Q_OBJECT
 public:
-    KSpreadspecial( KSpreadView* parent, const char* name );
+    SpecialDialog( View* parent, const char* name );
 
 public slots:
     void slotOk();
     void slotToggled( bool );
 
 private:
-    KSpreadView* m_pView;
+    View* m_pView;
     QRadioButton *rb1, *rb2, *rb3, *rb4, *rb5;
     QRadioButton *rb6, *rb7, *rb8;
     QRadioButton *rb9, *rb10, *rb11;
 };
+
+} // namespace KSpread
 
 #endif

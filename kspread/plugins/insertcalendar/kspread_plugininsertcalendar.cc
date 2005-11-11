@@ -56,13 +56,13 @@ PluginInsertCalendar::PluginInsertCalendar( QObject *parent, const char *name, c
     this->m_kspreadView = NULL;
     if (parent)
     {
-      if (parent->inherits("KSpreadView"))
+      if (parent->inherits("KSpread::View"))
       {
-        this->m_kspreadView = (KSpreadView*)parent;
+        this->m_kspreadView = (View*)parent;
       }
       else
       {
-        kdWarning() << "Parent does not inherit KSpreadView!!!" << endl;
+        kdWarning() << "Parent does not inherit View!!!" << endl;
       }
     }
     else
@@ -122,7 +122,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
   //@todo implement
   kdDebug() << "slotInsert... still to be implemented" << endl;
 
-  KSpreadDoc* document = m_kspreadView->doc();
+  Doc* document = m_kspreadView->doc();
 
   if (!document)
   {
@@ -154,13 +154,13 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
       return;
   }
 
-  KSpreadSelection* selection_info = m_kspreadView->selectionInfo();
+  Selection* selection_info = m_kspreadView->selectionInfo();
 
   Q_ASSERT(selection_info);
 
   QPoint selection = selection_info->selection().topLeft();
   
-  KSpreadSheet* sheet = m_kspreadView->activeSheet();
+  Sheet* sheet = m_kspreadView->activeSheet();
   
   Q_ASSERT(sheet);
   

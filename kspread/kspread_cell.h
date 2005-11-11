@@ -34,9 +34,11 @@
 #ifndef KSPREAD_CELL
 #define KSPREAD_CELL
 
-class KSpreadSheet;
-class KSpreadCanvas;
-class KSpreadView;
+#include <qpainter.h>
+#include <qptrlist.h>
+#include <qdatetime.h>
+
+#include "kspread_format.h"
 
 class KLocale;
 class QDomElement;
@@ -45,28 +47,28 @@ class KoXmlWriter;
 class KoGenStyles;
 class KoGenStyle;
 class KSParseNode;
-class KSpreadGenValidationStyles;
-class KSpreadConditional;
-class KSpreadValue;
 class KoRect;
 class KoPoint;
 class KoOasisStyles;
 
-#include <qpainter.h>
-#include <qptrlist.h>
-#include <qdatetime.h>
-
-#include "kspread_format.h"
-
-struct KSpreadValidity
+namespace KSpread
 {
-    KSpreadValidity()
+class Canvas;
+class GenValidationStyles;
+class Sheet;
+class Value;
+class View;
+class ConditionalDialog;
+
+struct Validity
+{
+    Validity()
   {
       valMin = 0.0;
       valMax = 0.0;
       m_cond = None;
-      m_action = Stop;
-      m_allow = Allow_All;
+      m_action = ::Stop;
+      m_allow = KSpread::Allow_All;
       displayMessage = true;
       allowEmptyCell = false;
             displayValidationInformation = false;
@@ -77,9 +79,9 @@ struct KSpreadValidity
     QString messageInfo;
     double valMin;
     double valMax;
-    Conditional m_cond;
-    Action m_action;
-    Allow m_allow;
+    ::Conditional m_cond;
+    ::Action m_action;
+    KSpread::Allow m_allow;
     QTime  timeMin;
     QTime  timeMax;
     QDate  dateMin;
@@ -89,9 +91,6 @@ struct KSpreadValidity
     bool displayValidationInformation;
     QStringList listValidity;
 };
-
-namespace KSpread
-{
 
 class Formula;
   
@@ -105,14 +104,14 @@ class Formula;
  * default cell. @ref #isDefault tells wether a cell is the default one
  * or not.
  */
-class KSPREAD_EXPORT Cell : public KSpreadFormat
+class KSPREAD_EXPORT Cell : public Format
 {
   friend class SelectPrivate;
-  friend class KSpreadConditions;
+  friend class Conditions;
 public:
 
-  Cell (KSpreadSheet *_sheet, int _column, int _row);
-  Cell (KSpreadSheet *_sheet, KSpreadStyle * _style, int _column, int _row);
+  Cell (Sheet *_sheet, int _column, int _row);
+  Cell (Sheet *_sheet, Style * _style, int _column, int _row);
 
     /**
      * @see #sheetDies
@@ -122,7 +121,7 @@ public:
     /**
      * Returns the worksheet which owns this cell.
      */
-    KSpreadSheet* sheet() const;
+    Sheet* sheet() const;
 
     /**
      * Returns true if this is a default cell (with row and column equal to zero).
@@ -172,7 +171,7 @@ public:
      * Given the sheet and cell position, this static function returns the full name
      * of the cell, i.e. with the name of the sheet.
      */
-    static QString fullName( const KSpreadSheet *s, int col, int row );
+    static QString fullName( const Sheet *s, int col, int row );
 
     /**
      * Given the column number, this static function returns the corresponding
@@ -202,12 +201,12 @@ public:
      * Returns the value that this cell holds. It could be from the user
      * (i.e. when s/he enters a value) or a result of formula.
      */
-    const KSpreadValue value() const;
+    const Value value() const;
 
     /**
      * Sets the value for this cell.
      */
-    void setValue( const KSpreadValue& value );
+    void setValue( const Value& value );
 
     Cell* previousCell() const;
     Cell* nextCell() const;
@@ -221,7 +220,7 @@ public:
     void move( int column, int row );
 
     /**
-     * The @ref KSpreadSheet calls this method if the sheet becomes deleted.
+     * The @ref Sheet calls this method if the sheet becomes deleted.
      * At the time this method is called other cells may already be deleted or
      * in some inconsistent state.
      *
@@ -249,7 +248,7 @@ public:
      */
     QDomElement save( QDomDocument& doc, int _x_offset = 0, int _y_offset = 0, bool force = false, bool copy = false, bool era = false );
 
-    virtual bool saveOasis( KoXmlWriter& xmlwriter , KoGenStyles &mainStyles, int row, int column, int maxCol, int &repeated, KSpreadGenValidationStyles &valStyle );
+    virtual bool saveOasis( KoXmlWriter& xmlwriter , KoGenStyles &mainStyles, int row, int column, int maxCol, int &repeated, GenValidationStyles &valStyle );
 
     void saveOasisValue (KoXmlWriter &xmlWriter);
 
@@ -316,7 +315,7 @@ public:
      * @param drawCursor whether to draw the cursor and selection or not
      */
     void paintCell( const KoRect & rect, QPainter & painter,
-                    KSpreadView * view, const KoPoint & coordinate,
+                    View * view, const KoPoint & coordinate,
                     const QPoint & cellRef,
         int paintBorder,
         
@@ -335,7 +334,7 @@ public:
      *
      * @return the width of this cell as int
      */
-    int width( int _col = -1, const KSpreadCanvas *_canvas = 0L ) const;
+    int width( int _col = -1, const Canvas *_canvas = 0L ) const;
 
     /**
      * @param _row the row this cell is assumed to be in.
@@ -343,7 +342,7 @@ public:
      *
      * @return the height of this cell as int
      */
-    int height( int _row = -1, const KSpreadCanvas *_canvas = 0L ) const;
+    int height( int _row = -1, const Canvas *_canvas = 0L ) const;
 
     /**
      * @param _canvas the canvas this cell is assumed to be in.
@@ -352,7 +351,7 @@ public:
      *
      * @return the width of this cell as double
      */
-    double dblWidth( int _col = -1, const KSpreadCanvas *_canvas = 0L ) const;
+    double dblWidth( int _col = -1, const Canvas *_canvas = 0L ) const;
 
     /**
      * @param _row the row this cell is assumed to be in.
@@ -360,7 +359,7 @@ public:
      *
      * @return the height of this cell as double
      */
-    double dblHeight( int _row = -1, const KSpreadCanvas *_canvas = 0L ) const;
+    double dblHeight( int _row = -1, const Canvas *_canvas = 0L ) const;
 
     /**
      * @return a QRect for this cell (i.e., a 1x1 rect).  @see zoomedCellRect
@@ -372,7 +371,7 @@ public:
      *         That si the case if it has any content, border, backgroundcolor,
      *         or background brush.
      *
-     * @see KSpreadSheet::print
+     * @see Sheet::print
      */
     bool needsPrinting() const;
 
@@ -508,7 +507,7 @@ public:
 
     /**
      * Return the format of this cell.
-     * Convenience method for KSpreadFormat::getFormatType
+     * Convenience method for Format::getFormatType
      * Note that this is "how the user would like the data to be displayed if possible".
      * If he selects a date format, and the cell contains a string, we won't apply that format.
      */
@@ -551,7 +550,7 @@ public:
      *
      * @todo What m_strAction?
      */
-    void clicked( KSpreadCanvas *_canvas );
+    void clicked( Canvas *_canvas );
 
     /**
      * Starts calculating.
@@ -579,7 +578,7 @@ public:
      * @param isDepending true if the cell is now depending on this one, false if it is not any longer
      *                    depending on it.
      */
-    void NotifyDepending( int col, int row, KSpreadSheet* sheet, bool isDepending );
+    void NotifyDepending( int col, int row, Sheet* sheet, bool isDepending );
 
     /**
      * Causes the format to be recalculated when the cell is drawn next time.
@@ -728,14 +727,14 @@ public:
     /**
      * Gets a copy of the list of current conditions
      */
-    QValueList<KSpreadConditional> conditionList() const;
+    QValueList<Conditional> conditionList() const;
 
     /**
      * Replace the old set of conditions with a new one
      */
-    void setConditionList(const QValueList<KSpreadConditional> &newList);
+    void setConditionList(const QValueList<Conditional> &newList);
 
-    KSpreadValidity * getValidity( int newStruct = -1 );
+    Validity * getValidity( int newStruct = -1 );
 
     void removeValidity();
 
@@ -769,7 +768,7 @@ public:
 
     /* descriptions of the flags are just below */
     enum CellFlags{
-    /* this uses the same flags variable as KSpreadFormat.  The least significant
+    /* this uses the same flags variable as Format.  The least significant
        16 bits are reserved for the base class, and the most significant 16
        have been left for this subclass to use. */
       Flag_LayoutDirty           = 0x00010000,
@@ -824,7 +823,7 @@ public:
    * DisplayDirty - TODO - is this unused now??
    * If this flag is set, then it is known that this cell has to be updated
    * on the display. This means that somewhere in the calling stack there is a
-   * function which will call @ref KSpreadSheet::updateCell once it retains
+   * function which will call @ref Sheet::updateCell once it retains
    * the control. If a function changes the contents/layout of this cell and this
    * flag is not set, then the function must set it at once. After the changes
    * are done the function must call <tt>m_pSheet->updateCell(...).
@@ -856,11 +855,11 @@ protected:
     /**
      * @reimp
      */
-    KSpreadFormat* fallbackFormat( int col, int row );
+    Format* fallbackFormat( int col, int row );
     /**
      * @reimp
      */
-    const KSpreadFormat* fallbackFormat( int col, int row ) const;
+    const Format* fallbackFormat( int col, int row ) const;
 
     /**
      * Applies the font to use to @p painter
@@ -954,7 +953,7 @@ private:
                           const QPoint &cellRef, bool selected,
                           QColor &backgroundColor );
     void paintObscuredCells( const KoRect& rect, QPainter& painter,
-                             KSpreadView* view, const KoRect &cellRect,
+                             View* view, const KoRect &cellRect,
                              const QPoint &cellRef,
                              bool paintBorderRight, bool paintBorderBottom,
                              bool paintBorderLeft, bool paintBorderTop,

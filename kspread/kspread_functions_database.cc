@@ -34,22 +34,22 @@ flattening support.
 using namespace KSpread;
 
 // prototypes
-KSpreadValue func_daverage (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dcount (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dcounta (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dget (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dmax (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dmin (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dproduct (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dstdev (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dstdevp (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dsum (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dvar (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_dvarp (valVector args, ValueCalc *calc, FuncExtra *);
-KSpreadValue func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_daverage (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dcount (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dcounta (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dget (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dmax (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dmin (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dproduct (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dstdev (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dstdevp (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dsum (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dvar (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_dvarp (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *);
 
 // registers all database functions
-void KSpreadRegisterDatabaseFunctions()
+void RegisterDatabaseFunctions()
 {
   FunctionRepository* repo = FunctionRepository::self();
   Function *f;
@@ -108,8 +108,8 @@ void KSpreadRegisterDatabaseFunctions()
   repo->add (f);
 }
 
-int getFieldIndex (ValueCalc *calc, KSpreadValue fieldName,
-    KSpreadValue database)
+int getFieldIndex (ValueCalc *calc, Value fieldName,
+    Value database)
 {
   if (fieldName.isNumber())
     return fieldName.asInteger() - 1;
@@ -131,21 +131,21 @@ int getFieldIndex (ValueCalc *calc, KSpreadValue fieldName,
 
 class Conditions {
  public:
-  Conditions (ValueCalc *vc, KSpreadValue database, KSpreadValue conds);
+  Conditions (ValueCalc *vc, Value database, Value conds);
   ~Conditions ();
   /** Does a specified row of the database match the given criteria?
   The row with column names is ignored - hence 0 specifies first data row. */
   bool matches (unsigned row);
  private:
-  void parse (KSpreadValue conds);
+  void parse (Value conds);
   ValueCalc *calc;
   Condition **cond;
   int rows, cols;
-  KSpreadValue db;
+  Value db;
 };
 
-Conditions::Conditions (ValueCalc *vc, KSpreadValue database,
-    KSpreadValue conds) : calc(vc), cond(0), rows(0), cols(0), db(database)
+Conditions::Conditions (ValueCalc *vc, Value database,
+    Value conds) : calc(vc), cond(0), rows(0), cols(0), db(database)
 {
   parse (conds);
 }
@@ -157,7 +157,7 @@ Conditions::~Conditions () {
   delete[] cond;
 }
 
-void Conditions::parse (KSpreadValue conds)
+void Conditions::parse (Value conds)
 {
   // initialize the array
   rows = conds.rows() - 1;
@@ -218,21 +218,21 @@ bool Conditions::matches (unsigned row)
 // *******************************************
 
 // Function: DSUM
-KSpreadValue func_dsum (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dsum (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue database = args[0];
-  KSpreadValue conditions = args[2];
+  Value database = args[0];
+  Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
   if (fieldIndex <= 0)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   Conditions conds (calc, database, conditions);
   
   int rows = database.rows() - 1;  // first row contains column names
-  KSpreadValue res;
+  Value res;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r + 1);
+      Value val = database.element (fieldIndex, r + 1);
       // include this value in the result
       if (!val.isEmpty ())
         res = calc->add (res, val);
@@ -242,22 +242,22 @@ KSpreadValue func_dsum (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: DAVERAGE
-KSpreadValue func_daverage (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_daverage (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue database = args[0];
-  KSpreadValue conditions = args[2];
+  Value database = args[0];
+  Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
   if (fieldIndex <= 0)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   Conditions conds (calc, database, conditions);
   
   int rows = database.rows() - 1;  // first row contains column names
-  KSpreadValue res;
+  Value res;
   int count = 0;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r);
       // include this value in the result
       if (!val.isEmpty ()) {
         res = calc->add (res, val);
@@ -269,13 +269,13 @@ KSpreadValue func_daverage (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: DCOUNT
-KSpreadValue func_dcount (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dcount (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue database = args[0];
-  KSpreadValue conditions = args[2];
+  Value database = args[0];
+  Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
   if (fieldIndex <= 0)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   Conditions conds (calc, database, conditions);
   
@@ -283,23 +283,23 @@ KSpreadValue func_dcount (valVector args, ValueCalc *calc, FuncExtra *)
   int count = 0;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r);
       // include this value in the result
       if ((!val.isEmpty()) && (!val.isBoolean()) && (!val.isString()))
         count++;
     }
 
-  return KSpreadValue (count);
+  return Value (count);
 }
 
 // Function: DCOUNTA
-KSpreadValue func_dcounta (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dcounta (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue database = args[0];
-  KSpreadValue conditions = args[2];
+  Value database = args[0];
+  Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
   if (fieldIndex <= 0)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   Conditions conds (calc, database, conditions);
   
@@ -307,54 +307,54 @@ KSpreadValue func_dcounta (valVector args, ValueCalc *calc, FuncExtra *)
   int count = 0;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r);
       // include this value in the result
       if (!val.isEmpty())
         count++;
     }
 
-  return KSpreadValue (count);
+  return Value (count);
 }
 
 // Function: DGET
-KSpreadValue func_dget (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dget (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue database = args[0];
-  KSpreadValue conditions = args[2];
+  Value database = args[0];
+  Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
   if (fieldIndex <= 0)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   Conditions conds (calc, database, conditions);
   
   int rows = database.rows() - 1;  // first row contains column names
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r);
       return val;
     }
 
   // no match
-  return KSpreadValue::errorVALUE();
+  return Value::errorVALUE();
 }
 
 // Function: DMAX
-KSpreadValue func_dmax (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dmax (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue database = args[0];
-  KSpreadValue conditions = args[2];
+  Value database = args[0];
+  Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
   if (fieldIndex <= 0)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   Conditions conds (calc, database, conditions);
   
   int rows = database.rows() - 1;  // first row contains column names
-  KSpreadValue res;
+  Value res;
   bool got = false;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r);
       // include this value in the result
       if (!val.isEmpty ()) {
         if (!got) {
@@ -371,22 +371,22 @@ KSpreadValue func_dmax (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: DMIN
-KSpreadValue func_dmin (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dmin (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue database = args[0];
-  KSpreadValue conditions = args[2];
+  Value database = args[0];
+  Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
   if (fieldIndex <= 0)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   Conditions conds (calc, database, conditions);
   
   int rows = database.rows() - 1;  // first row contains column names
-  KSpreadValue res;
+  Value res;
   bool got = false;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r);
       // include this value in the result
       if (!val.isEmpty ()) {
         if (!got) {
@@ -403,22 +403,22 @@ KSpreadValue func_dmin (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: DPRODUCT
-KSpreadValue func_dproduct (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dproduct (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue database = args[0];
-  KSpreadValue conditions = args[2];
+  Value database = args[0];
+  Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
   if (fieldIndex <= 0)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   Conditions conds (calc, database, conditions);
   
   int rows = database.rows() - 1;  // first row contains column names
-  KSpreadValue res = 1.0;
+  Value res = 1.0;
   bool got = false;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r);
       // include this value in the result
       if (!val.isEmpty ()) {
         got = true;
@@ -427,53 +427,53 @@ KSpreadValue func_dproduct (valVector args, ValueCalc *calc, FuncExtra *)
     }
   if (got)
     return res;
-  return KSpreadValue::errorVALUE ();
+  return Value::errorVALUE ();
 }
 
 // Function: DSTDEV
-KSpreadValue func_dstdev (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dstdev (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // sqrt (dvar)
   return calc->sqrt (func_dvar (args, calc, 0));
 }
 
 // Function: DSTDEVP
-KSpreadValue func_dstdevp (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dstdevp (valVector args, ValueCalc *calc, FuncExtra *)
 {
   // sqrt (dvarp)
   return calc->sqrt (func_dvarp (args, calc, 0));
 }
 
 // Function: DVAR
-KSpreadValue func_dvar (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dvar (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue database = args[0];
-  KSpreadValue conditions = args[2];
+  Value database = args[0];
+  Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
   if (fieldIndex <= 0)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   Conditions conds (calc, database, conditions);
   
   int rows = database.rows() - 1;  // first row contains column names
-  KSpreadValue avg;
+  Value avg;
   int count = 0;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r);
       // include this value in the result
       if (!val.isEmpty ()) {
         avg = calc->add (avg, val);
         count++;
       }
     }
-  if (count < 2) return KSpreadValue::errorDIV0();
+  if (count < 2) return Value::errorDIV0();
   avg = calc->div (avg, count);
   
-  KSpreadValue res;
+  Value res;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r);
       // include this value in the result
       if (!val.isEmpty ())
         res = calc->add (res, calc->sqr (calc->sub (val, avg)));
@@ -484,35 +484,35 @@ KSpreadValue func_dvar (valVector args, ValueCalc *calc, FuncExtra *)
 }
 
 // Function: DVARP
-KSpreadValue func_dvarp (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_dvarp (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue database = args[0];
-  KSpreadValue conditions = args[2];
+  Value database = args[0];
+  Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
   if (fieldIndex <= 0)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   Conditions conds (calc, database, conditions);
   
   int rows = database.rows() - 1;  // first row contains column names
-  KSpreadValue avg;
+  Value avg;
   int count = 0;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r);
       // include this value in the result
       if (!val.isEmpty ()) {
         avg = calc->add (avg, val);
         count++;
       }
     }
-  if (count == 0) return KSpreadValue::errorDIV0();
+  if (count == 0) return Value::errorDIV0();
   avg = calc->div (avg, count);
   
-  KSpreadValue res;
+  Value res;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
-      KSpreadValue val = database.element (fieldIndex, r);
+      Value val = database.element (fieldIndex, r);
       // include this value in the result
       if (!val.isEmpty ())
         res = calc->add (res, calc->sqr (calc->sub (val, avg)));
@@ -524,12 +524,12 @@ KSpreadValue func_dvarp (valVector args, ValueCalc *calc, FuncExtra *)
 
 // Function: GETPIVOTDATA
 // FIXME implement more things with this, see Excel !
-KSpreadValue func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *)
+Value func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *)
 {
-  KSpreadValue database = args[0];
+  Value database = args[0];
   int fieldIndex = getFieldIndex (calc, args[1], database);
   if (fieldIndex <= 0)
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
   // the row at the bottom
   int row = database.rows() - 1;
   

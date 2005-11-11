@@ -29,7 +29,7 @@ namespace KSpread {
 class ValueParser;
 
 /**
-The ValueConverter class can convert KSpreadValue between various different
+The ValueConverter class can convert Value between various different
 formats.
 */
 
@@ -38,15 +38,15 @@ class ValueConverter {
   /** constructor */
   ValueConverter (ValueParser *parser);
  
-  KSpreadValue asBoolean (const KSpreadValue &value) const;
-  KSpreadValue asInteger (const KSpreadValue &value) const;
-  KSpreadValue asFloat (const KSpreadValue &value) const;
+  Value asBoolean (const Value &value) const;
+  Value asInteger (const Value &value) const;
+  Value asFloat (const Value &value) const;
   /** convert to a numeric value - not necessarily float */
-  KSpreadValue asNumeric (const KSpreadValue &value) const;
-  KSpreadValue asString (const KSpreadValue &value) const;
-  KSpreadValue asDateTime (const KSpreadValue &value) const;
-  KSpreadValue asDate (const KSpreadValue &value) const;
-  KSpreadValue asTime (const KSpreadValue &value) const;
+  Value asNumeric (const Value &value) const;
+  Value asString (const Value &value) const;
+  Value asDateTime (const Value &value) const;
+  Value asDate (const Value &value) const;
+  Value asTime (const Value &value) const;
   
   KLocale* locale();
   

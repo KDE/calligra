@@ -44,43 +44,43 @@ using namespace KSpread;
 
 /*********************************************
  *
- * KSpreadCellProxy
+ * CellProxy
  *
  *********************************************/
 
-class KSpreadCellProxy : public DCOPObjectProxy
+class KSpread::CellProxy : public DCOPObjectProxy
 {
 public:
-    KSpreadCellProxy( KSpreadSheet* sheet, const QCString& prefix );
-    ~KSpreadCellProxy();
+    CellProxy( Sheet* sheet, const QCString& prefix );
+    ~CellProxy();
 
     virtual bool process( const QCString& obj, const QCString& fun, const QByteArray& data,
                           QCString& replyType, QByteArray &replyData );
 
 private:
     QCString m_prefix;
-    KSpreadCellIface* m_cell;
-    KSpreadSheet* m_sheet;
+    CellIface* m_cell;
+    Sheet* m_sheet;
 };
 
-KSpreadCellProxy::KSpreadCellProxy( KSpreadSheet* sheet, const QCString& prefix )
+KSpread::CellProxy::CellProxy( Sheet* sheet, const QCString& prefix )
     : DCOPObjectProxy( kapp->dcopClient() ), m_prefix( prefix )
 {
-    m_cell = new KSpreadCellIface;
+    m_cell = new CellIface;
     m_sheet = sheet;
 }
 
-KSpreadCellProxy::~KSpreadCellProxy()
+KSpread::CellProxy::~CellProxy()
 {
     delete m_cell;
 }
 
-bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const QByteArray& data,
+bool KSpread::CellProxy::process( const QCString& obj, const QCString& fun, const QByteArray& data,
                                         QCString& replyType, QByteArray &replyData )
 {
 
-	kdDebug()<<"KSpreadCellProxy::process: requested object:"<<obj<<endl;
-	kdDebug()<<"KSpreadCellProxy::process: prefix:"<<m_prefix<<endl;
+	kdDebug()<<"CellProxy::process: requested object:"<<obj<<endl;
+	kdDebug()<<"CellProxy::process: prefix:"<<m_prefix<<endl;
     if ( strncmp( m_prefix.data(), obj.data(), m_prefix.length() ) != 0 )
         return false;
 
@@ -95,11 +95,11 @@ bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const 
     QString cellID=QString::fromUtf8(obj.data() + m_prefix.length());
     cellID=m_sheet->sheetName()+"!"+cellID;
 
-    kdDebug()<<"KSpreadCellProxy::process: cellID="<<cellID<<endl;
+    kdDebug()<<"CellProxy::process: cellID="<<cellID<<endl;
 
-    KSpreadPoint p( cellID); //obj.data() + m_prefix.length() );
+    Point p( cellID); //obj.data() + m_prefix.length() );
     if ( p.pos.x()<0 ) {
-	kdDebug(36001)<<"CellProyxy::process: resulting KSpreadPoint is not valid"<<endl;
+	kdDebug(36001)<<"CellProyxy::process: resulting Point is not valid"<<endl;
         return false;
     }
 
@@ -111,11 +111,11 @@ bool KSpreadCellProxy::process( const QCString& obj, const QCString& fun, const 
 
 /************************************************
  *
- * KSpreadSheetIface
+ * SheetIface
  *
  ************************************************/
 
-KSpreadSheetIface::KSpreadSheetIface( KSpreadSheet* t )
+SheetIface::SheetIface( Sheet* t )
     : DCOPObject()
 {
     m_proxy=0;
@@ -125,7 +125,7 @@ KSpreadSheetIface::KSpreadSheetIface( KSpreadSheet* t )
 
 }
 
-void KSpreadSheetIface::sheetNameHasChanged() {
+void SheetIface::sheetNameHasChanged() {
   ident.resize(1);
   QObject *currentObj = m_sheet;
     while (currentObj != 0L) {
@@ -142,19 +142,19 @@ void KSpreadSheetIface::sheetNameHasChanged() {
            delete m_proxy;
            QCString str = objId();
            str += "/";
-	   kdDebug(36001)<<"KSpreadSheetIface::tableNameHasChanged(): new DCOP-ID:"<<objId()<<endl;
-           m_proxy = new KSpreadCellProxy( m_sheet, str );
+	   kdDebug(36001)<<"SheetIface::tableNameHasChanged(): new DCOP-ID:"<<objId()<<endl;
+           m_proxy = new CellProxy( m_sheet, str );
    }
 
 }
 
 
-KSpreadSheetIface::~KSpreadSheetIface()
+SheetIface::~SheetIface()
 {
     delete m_proxy;
 }
 
-DCOPRef KSpreadSheetIface::cell( int x, int y )
+DCOPRef SheetIface::cell( int x, int y )
 {
     // if someone calls us with either x or y 0 he _most_ most likely doesn't
     // know that the cell counting starts with 1 (Simon)
@@ -170,7 +170,7 @@ DCOPRef KSpreadSheetIface::cell( int x, int y )
     return DCOPRef( kapp->dcopClient()->appId(), str );
 }
 
-DCOPRef KSpreadSheetIface::cell( const QString& name )
+DCOPRef SheetIface::cell( const QString& name )
 {
     QCString str = objId();
     str += "/";
@@ -179,7 +179,7 @@ DCOPRef KSpreadSheetIface::cell( const QString& name )
     return DCOPRef( kapp->dcopClient()->appId(), str );
 }
 
-DCOPRef KSpreadSheetIface::column( int _col )
+DCOPRef SheetIface::column( int _col )
 {
     //First col number = 1
     if(_col <1)
@@ -189,7 +189,7 @@ DCOPRef KSpreadSheetIface::column( int _col )
 
 }
 
-DCOPRef KSpreadSheetIface::row( int _row )
+DCOPRef SheetIface::row( int _row )
 {
     //First row number = 1
     if(_row <1)
@@ -199,35 +199,35 @@ DCOPRef KSpreadSheetIface::row( int _row )
 }
 
 
-QString KSpreadSheetIface::name() const
+QString SheetIface::name() const
 {
     return m_sheet->sheetName();
 }
 
 
-int KSpreadSheetIface::maxColumn() const
+int SheetIface::maxColumn() const
 {
     return m_sheet->maxColumn();
 
 }
 
-bool KSpreadSheetIface::areaHasNoContent(QRect area) const
+bool SheetIface::areaHasNoContent(QRect area) const
 {
-	kdDebug(36001) << "KSpreadSheetIface::areaHasNoContent("<<area<<");"<<endl;
+	kdDebug(36001) << "SheetIface::areaHasNoContent("<<area<<");"<<endl;
 	return m_sheet->areaIsEmpty(area);
 }
 
-bool KSpreadSheetIface::areaHasNoComments(QRect area) const
+bool SheetIface::areaHasNoComments(QRect area) const
 {
-	return m_sheet->areaIsEmpty(area,KSpreadSheet::Comment);
+	return m_sheet->areaIsEmpty(area,Sheet::Comment);
 }
 
-int KSpreadSheetIface::maxRow() const
+int SheetIface::maxRow() const
 {
     return m_sheet->maxRow();
 }
 
-bool KSpreadSheetIface::processDynamic( const QCString& fun, const QByteArray&/*data*/,
+bool SheetIface::processDynamic( const QCString& fun, const QByteArray&/*data*/,
                                         QCString& replyType, QByteArray &replyData )
 {
     kdDebug(36001) << "Calling '" << fun.data() << "'" << endl;
@@ -240,7 +240,7 @@ bool KSpreadSheetIface::processDynamic( const QCString& fun, const QByteArray&/*
         return false;
 
     // Is the function name a valid cell like "B5" ?
-    KSpreadPoint p( fun.left( len - 2 ).data() );
+    Point p( fun.left( len - 2 ).data() );
     if ( !p.isValid() )
         return false;
 
@@ -252,182 +252,182 @@ bool KSpreadSheetIface::processDynamic( const QCString& fun, const QByteArray&/*
     return true;
 }
 
-bool KSpreadSheetIface::setSheetName( const QString & name)
+bool SheetIface::setSheetName( const QString & name)
 {
     return m_sheet->setSheetName( name);
 }
 
-bool KSpreadSheetIface::insertColumn( int col,int nbCol )
+bool SheetIface::insertColumn( int col,int nbCol )
 {
     return m_sheet->insertColumn(col,nbCol);
 }
 
-bool KSpreadSheetIface::insertRow( int row,int nbRow)
+bool SheetIface::insertRow( int row,int nbRow)
 {
     return m_sheet->insertRow(row,nbRow);
 }
 
-void KSpreadSheetIface::removeColumn( int col,int nbCol )
+void SheetIface::removeColumn( int col,int nbCol )
 {
     m_sheet->removeColumn( col,nbCol );
 }
 
-void KSpreadSheetIface::removeRow( int row,int nbRow )
+void SheetIface::removeRow( int row,int nbRow )
 {
     m_sheet->removeRow( row,nbRow );
 }
 
 
-bool KSpreadSheetIface::isHidden()const
+bool SheetIface::isHidden()const
 {
     return m_sheet->isHidden();
 }
 
 
-bool KSpreadSheetIface::showGrid() const
+bool SheetIface::showGrid() const
 {
     return m_sheet->getShowGrid();
 }
 
-bool KSpreadSheetIface::showFormula() const
+bool SheetIface::showFormula() const
 {
     return m_sheet->getShowFormula();
 }
 
-bool KSpreadSheetIface::lcMode() const
+bool SheetIface::lcMode() const
 {
     return m_sheet->getLcMode();
 }
 
-bool KSpreadSheetIface::autoCalc() const
+bool SheetIface::autoCalc() const
 {
     return m_sheet->getAutoCalc();
 }
 
-bool KSpreadSheetIface::showColumnNumber() const
+bool SheetIface::showColumnNumber() const
 {
     return m_sheet->getShowColumnNumber();
 }
 
-bool KSpreadSheetIface::hideZero() const
+bool SheetIface::hideZero() const
 {
     return m_sheet->getHideZero();
 }
 
-bool KSpreadSheetIface::firstLetterUpper() const
+bool SheetIface::firstLetterUpper() const
 {
     return m_sheet->getFirstLetterUpper();
 }
 
-void KSpreadSheetIface::setShowPageBorders( bool b )
+void SheetIface::setShowPageBorders( bool b )
 {
     m_sheet->setShowPageBorders( b );
     m_sheet->doc()->updateBorderButton();
 }
 
-float KSpreadSheetIface::paperHeight()const
+float SheetIface::paperHeight()const
 {
     return m_sheet->print()->paperHeight();
 }
 
-float KSpreadSheetIface::paperWidth()const
+float SheetIface::paperWidth()const
 {
     return m_sheet->print()->paperWidth();
 }
 
-float KSpreadSheetIface::leftBorder()const
+float SheetIface::leftBorder()const
 {
     return m_sheet->print()->leftBorder();
 }
 
-float KSpreadSheetIface::rightBorder()const
+float SheetIface::rightBorder()const
 {
     return m_sheet->print()->rightBorder();
 }
 
-float KSpreadSheetIface::topBorder()const
+float SheetIface::topBorder()const
 {
     return m_sheet->print()->topBorder();
 }
 
-float KSpreadSheetIface::bottomBorder()const
+float SheetIface::bottomBorder()const
 {
     return m_sheet->print()->bottomBorder();
 }
 
-QString KSpreadSheetIface::paperFormatString() const
+QString SheetIface::paperFormatString() const
 {
     return m_sheet->print()->paperFormatString();
 }
 
-QString KSpreadSheetIface::headLeft()const
+QString SheetIface::headLeft()const
 {
     return m_sheet->print()->headLeft();
 }
 
-QString KSpreadSheetIface::headMid()const
+QString SheetIface::headMid()const
 {
     return m_sheet->print()->headMid();
 }
 
-QString KSpreadSheetIface::headRight()const
+QString SheetIface::headRight()const
 {
     return m_sheet->print()->headRight();
 }
 
-QString KSpreadSheetIface::footLeft()const
+QString SheetIface::footLeft()const
 {
     return m_sheet->print()->footLeft();
 }
 
-QString KSpreadSheetIface::footMid()const
+QString SheetIface::footMid()const
 {
     return m_sheet->print()->footMid();
 }
 
-QString KSpreadSheetIface::footRight()const
+QString SheetIface::footRight()const
 {
     return m_sheet->print()->footRight();
 }
 
-void KSpreadSheetIface::setHeaderLeft(const QString & text)
+void SheetIface::setHeaderLeft(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( text,       headMid(), headRight(),
                                        footLeft(), footMid(), footRight() );
 }
 
-void KSpreadSheetIface::setHeaderMiddle(const QString & text)
+void SheetIface::setHeaderMiddle(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( headLeft(), text,      headRight(),
                                        footLeft(), footMid(), footRight() );
 
 }
 
-void KSpreadSheetIface::setHeaderRight(const QString & text)
+void SheetIface::setHeaderRight(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( headLeft(), headMid(), text,
                                        footLeft(), footMid(), footRight() );
 }
 
-void KSpreadSheetIface::setFooterLeft(const QString & text)
+void SheetIface::setFooterLeft(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
                                        text,       footMid(), footRight() );
 }
 
-void KSpreadSheetIface::setFooterMiddle(const QString & text)
+void SheetIface::setFooterMiddle(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
                                        footLeft(), text,      footRight() );
 }
 
-void KSpreadSheetIface::setFooterRight(const QString & text)
+void SheetIface::setFooterRight(const QString & text)
 {
     m_sheet->print()->setHeadFootLine( headLeft(), headMid(), headRight(),
                                        footLeft(), footMid(), text );
 }
 
-bool KSpreadSheetIface::isProtected() const
+bool SheetIface::isProtected() const
 {
     return m_sheet->isProtected();
 }

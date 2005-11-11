@@ -44,6 +44,8 @@
 #include <kmessagebox.h>
 #include <kcharsets.h>
 
+using namespace KSpread;
+
 CSVExportDialog::CSVExportDialog( QWidget * parent )
   : KDialogBase( parent, 0, true, QString::null, Ok | Cancel, No, true ),
     m_dialog( new ExportDialogUI( this ) ),
@@ -85,12 +87,12 @@ CSVExportDialog::~CSVExportDialog()
   kapp->setOverrideCursor(Qt::waitCursor);
 }
 
-void CSVExportDialog::fillSheet( KSpreadMap * map )
+void CSVExportDialog::fillSheet( Map * map )
 {
   m_dialog->m_sheetList->clear();
   QCheckListItem * item;
 
-  QPtrListIterator<KSpreadSheet> it( map->sheetList() );
+  QPtrListIterator<Sheet> it( map->sheetList() );
   for( ; it.current(); ++it )
   {
     item = new QCheckListItem( m_dialog->m_sheetList,

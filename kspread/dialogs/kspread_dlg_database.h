@@ -27,8 +27,6 @@
 
 #include <kwizard.h>
 
-class KSpreadView;
-
 class QCheckBox;
 class QComboBox;
 class QFrame;
@@ -45,16 +43,19 @@ class QWidget;
 
 class KListView;
 class KPushButton;
+namespace KSpread
+{
+class View;
 
-class KSpreadDatabaseDlg : public KWizard
+class DatabaseDialog : public KWizard
 {
   Q_OBJECT
 
  public:
   enum PageId { eDatabase = 0, eSheets = 1, eColumns = 2, eOptions = 3, eResult = 4 };
 
-  KSpreadDatabaseDlg( KSpreadView * parent, QRect const & rect, const char * name = 0, bool modal = FALSE, WFlags fl = 0 );
-  virtual ~KSpreadDatabaseDlg();
+  DatabaseDialog( View * parent, QRect const & rect, const char * name = 0, bool modal = FALSE, WFlags fl = 0 );
+  virtual ~DatabaseDialog();
 
  private slots:
   void orBox_clicked();
@@ -81,7 +82,7 @@ class KSpreadDatabaseDlg : public KWizard
 
  private:
   int            m_currentPage;
-  KSpreadView  * m_pView;
+  View  * m_pView;
   QRect          m_targetRect;
   QSqlDatabase * m_dbConnection;
 
@@ -136,5 +137,7 @@ class KSpreadDatabaseDlg : public KWizard
   QString exchangeWildcards(QString const & value);
   QString getWhereCondition( QString const &, QString const &, int );
 };
+
+} // namespace KSpread
 
 #endif

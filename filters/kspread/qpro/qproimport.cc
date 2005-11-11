@@ -37,6 +37,8 @@
 #include <qpro/record_factory.h>
 #include <qfile.h>
 
+using namespace KSpread;
+
 typedef KGenericFactory<QpImport, KoFilter> QPROImportFactory;
 K_EXPORT_COMPONENT_FACTORY( libqproimport, QPROImportFactory( "kofficefilters" ) )
 
@@ -57,7 +59,7 @@ QpTableList::~QpTableList()
 
 
 void
-QpTableList::table(unsigned pIdx, KSpreadSheet* pTable)
+QpTableList::table(unsigned pIdx, Sheet* pTable)
 {
    if(pIdx < cNameCnt)
    {
@@ -65,7 +67,7 @@ QpTableList::table(unsigned pIdx, KSpreadSheet* pTable)
    }
 }
 
-KSpreadSheet*
+Sheet*
 QpTableList::table(unsigned pIdx)
 {
    return (pIdx < cNameCnt ? cTable[pIdx] : 0);
@@ -104,9 +106,9 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
 
     kdDebug(30523) << "here we go... " << document->className() << endl;
 
-    if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
+    if(strcmp(document->className(), "Doc")!=0)  // it's safer that way :)
     {
-        kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
+        kdWarning(30501) << "document isn't a Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
     }
     if(from!="application/x-quattropro" || to!="application/x-kspread")
@@ -118,7 +120,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
     kdDebug(30523) << "...still here..." << endl;
 
     // No need for a dynamic cast here, since we use Qt's moc magic
-    KSpreadDoc *ksdoc=(KSpreadDoc*)document;
+    Doc *ksdoc=(Doc*)document;
 
     if(ksdoc->mimeType()!="application/x-kspread")
     {
@@ -134,7 +136,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
         return KoFilter::FileNotFound;
     }
 
-    KSpreadSheet *table=0;
+    Sheet *table=0;
 
     QString field;
     int value=0;
@@ -187,7 +189,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
       case QpFormulaCell:
          lRecFormula = (QpRecFormulaCell*)lRec;
          {
-            KSpreadFormula lAnswer(*lRecFormula, lTableNames);
+           Formula lAnswer(*lRecFormula, lTableNames);
 
             char*     lFormula = lAnswer.formula();
 
@@ -204,7 +206,7 @@ KoFilter::ConversionStatus QpImport::convert( const QCString& from, const QCStri
                // we're about to reference a table that hasn't been created yet.
                // setText gets upset about this, so create a blank table
 
-               KSpreadSheet* lNewTable=ksdoc->map()->addNewSheet();
+               Sheet* lNewTable=ksdoc->map()->addNewSheet();
 
                // set up a default name for the table
                lNewTable->setSheetName( lTableNames.name(lIdx)

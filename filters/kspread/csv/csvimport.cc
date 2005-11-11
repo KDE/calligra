@@ -67,9 +67,9 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
 
     kdDebug(30501) << "here we go... " << document->className() << endl;
 
-    if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
+    if(strcmp(document->className(), "Doc")!=0)  // it's safer that way :)
     {
-        kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
+      kdWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
     }
     if(from!="text/x-csv" && from!="text/plain" || to!="application/x-kspread")
@@ -81,7 +81,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     kdDebug(30501) << "...still here..." << endl;
 
     // No need for a dynamic cast here, since we use Qt's moc magic
-    KSpreadDoc *ksdoc=(KSpreadDoc*)document;
+    Doc *ksdoc=(Doc*)document;
 
     if(ksdoc->mimeType()!="application/x-kspread")
     {
@@ -112,7 +112,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     ElapsedTime t( "Filling data into document" );
 
     Cell*cell;
-    KSpreadSheet *sheet=ksdoc->map()->addNewSheet();
+    Sheet *sheet=ksdoc->map()->addNewSheet();
 
     int numRows = dialog->getRows();
     int numCols = dialog->getCols();
@@ -135,7 +135,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
     Cell* c = sheet->nonDefaultCell( 1, 1 );
     QFontMetrics fm( c->textFont( 1, 1 ) );
 
-    KSpreadStyle * s = ksdoc->styleManager()->defaultStyle();
+    Style * s = ksdoc->styleManager()->defaultStyle();
 
     for ( int row = 0; row < numRows; ++row )
     {
@@ -153,7 +153,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
             switch (dialog->getHeader(col))
             {
              case CSVDialog::TEXT:
-               //see KSpreadCSVDialog::accept(), Tomas introduced the Generic format between KOffice 1.3 and 1.4
+               //see CSVDialog::accept(), Tomas introduced the Generic format between KOffice 1.3 and 1.4
                //the Insert->External Data-> ... dialog uses the generic format for everything (see mentioned method)
                //I will use this approach only for the TEXT format in the CSV import filter... (raphael)
                //### FIXME: long term solution is to allow to select Generic format ("autodetect") in the dialog and make it the default

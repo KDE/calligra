@@ -21,22 +21,24 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qmultilineedit.h>
+#include <qpushbutton.h>
+#include <qlayout.h>
 
-#include "kspread_dlg_comment.h"
+#include <klocale.h>
+#include <kbuttonbox.h>
+
 #include "kspread_canvas.h"
 #include "kspread_doc.h"
 #include "kspread_selection.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"
-#include <klocale.h>
-#include <qlayout.h>
-#include <kbuttonbox.h>
-#include <qmultilineedit.h>
-#include <qpushbutton.h>
+
+#include "kspread_dlg_comment.h"
 
 using namespace KSpread;
 
-KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoint &_marker)
+CommentDialog::CommentDialog( View* parent, const char* name,const QPoint &_marker)
 	: KDialogBase( parent, name,TRUE,i18n("Cell Comment"),Ok|Cancel )
 {
     m_pView = parent;
@@ -63,12 +65,12 @@ KSpreadComment::KSpreadComment( KSpreadView* parent, const char* name,const QPoi
     resize( 400, height() );
 }
 
-void KSpreadComment::slotTextChanged()
+void CommentDialog::slotTextChanged()
 {
     enableButtonOK( !multiLine->text().isEmpty());
 }
 
-void KSpreadComment::slotOk()
+void CommentDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     m_pView->activeSheet()->setSelectionComment( m_pView->selectionInfo(),

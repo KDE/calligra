@@ -25,24 +25,29 @@
 
 #include <kdialogbase.h>
 
-class KSpreadView;
-class KSpreadSheet;
 class QCheckBox;
 class QRadioButton;
 
-class KSpreadpasteinsert : public KDialogBase
+namespace KSpread
+{
+class Sheet;
+class View;
+
+class PasteInsertDialog : public KDialogBase
 {
     Q_OBJECT
 public:
-    KSpreadpasteinsert( KSpreadView* parent, const char* name, const QRect &_rect );
+    PasteInsertDialog( View* parent, const char* name, const QRect &_rect );
 
 public slots:
     void slotOk();
 private:
-  KSpreadView* m_pView;
+  View* m_pView;
   QRadioButton *rb1;
   QRadioButton *rb2;
   QRect  rect;
 };
+
+} // namespace KSpread
 
 #endif

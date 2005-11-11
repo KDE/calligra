@@ -37,7 +37,7 @@ class Inspector::Private
 {
 public:
   Cell* cell;
-  KSpreadSheet* sheet;
+  Sheet* sheet;
   
   QListView *cellView;
   QListView *sheetView;
@@ -65,13 +65,13 @@ static QString longAsHexstring( long l )
     return QString("%1").arg(l, 8, 16);
 }
 
-static QString dirAsString( KSpreadSheet::LayoutDirection dir )
+static QString dirAsString( Sheet::LayoutDirection dir )
 {
   QString str;
   switch( dir )
   {
-    case KSpreadSheet::LeftToRight: str = "Left to Right"; break;
-    case KSpreadSheet::RightToLeft: str = "Right to Left"; break;
+    case Sheet::LeftToRight: str = "Left to Right"; break;
+    case Sheet::RightToLeft: str = "Right to Left"; break;
     default: str = "Unknown"; break;
   }
   return str;
@@ -117,20 +117,20 @@ void Inspector::Private::handleSheet()
 
 void Inspector::Private::handleDep()
 {  
-  KSpreadPoint cellPoint;
+  Point cellPoint;
   cellPoint.sheet = sheet;
   cellPoint.setRow( cell->row() );
   cellPoint.setColumn( cell->column() );
   
   DependencyManager* manager = sheet->dependencies();
-  QValueList<KSpreadPoint> deps = manager->getDependants( cellPoint );
+  QValueList<Point> deps = manager->getDependants( cellPoint );
   
   depView->clear();
   for( unsigned i = 0; i < deps.count(); i++ )
   {
     QString k1, k2;
     
-    KSpreadPoint point = deps[i];
+    Point point = deps[i];
     int row = point.row();
     int column = point.column();
     k1 = Cell::fullName( point.sheet, column, row );

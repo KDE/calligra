@@ -109,11 +109,11 @@ void Function::setNeedsExtra (bool extra) {
   d->ne = extra;
 }
 
-KSpreadValue Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
+Value Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
 {
   // check number of parameters
   if (!paramCountOkay (args.count()))
-    return KSpreadValue::errorVALUE();
+    return Value::errorVALUE();
 
   // do we need to perform array expansion ?
   bool mustExpandArray = false;
@@ -123,7 +123,7 @@ KSpreadValue Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
         mustExpandArray = true;
     }
 
-  if( !d->ptr ) return KSpreadValue::errorVALUE();
+  if( !d->ptr ) return Value::errorVALUE();
   
   // perform the actual array expansion if need be
   
@@ -132,13 +132,13 @@ KSpreadValue Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
     int rows = 0;
     int cols = 0;
     for (unsigned int i = 0; i < args.count(); ++i) {
-      int x = (args[i].type() == KSpreadValue::Array) ? args[i].rows() : 1;
+      int x = (args[i].type() == Value::Array) ? args[i].rows() : 1;
       if (x > rows) rows = x;
-      x = (args[i].type() == KSpreadValue::Array) ? args[i].columns() : 1;
+      x = (args[i].type() == Value::Array) ? args[i].columns() : 1;
       if (x > cols) cols = x;
     }
     // allocate the resulting array
-    KSpreadValue res (cols, rows);
+    Value res (cols, rows);
     // perform the actual computation for each element of the array
     for (int row = 0; row < rows; ++row)
       for (int col = 0; col < cols; ++col) {
@@ -163,18 +163,18 @@ KSpreadValue Function::exec (valVector args, ValueCalc *calc, FuncExtra *extra)
 
 
 // these are defined in kspread_function_*.cc
-void KSpreadRegisterConversionFunctions();
-void KSpreadRegisterDatabaseFunctions();
-void KSpreadRegisterDateTimeFunctions();
-void KSpreadRegisterEngineeringFunctions();
-void KSpreadRegisterFinancialFunctions();
-void KSpreadRegisterInformationFunctions();
-void KSpreadRegisterLogicFunctions();
-void KSpreadRegisterMathFunctions();
-void KSpreadRegisterReferenceFunctions();
-void KSpreadRegisterStatisticalFunctions();
-void KSpreadRegisterTextFunctions();
-void KSpreadRegisterTrigFunctions();
+void RegisterConversionFunctions();
+void RegisterDatabaseFunctions();
+void RegisterDateTimeFunctions();
+void RegisterEngineeringFunctions();
+void RegisterFinancialFunctions();
+void RegisterInformationFunctions();
+void RegisterLogicFunctions();
+void RegisterMathFunctions();
+void RegisterReferenceFunctions();
+void RegisterStatisticalFunctions();
+void RegisterTextFunctions();
+void RegisterTrigFunctions();
 
 
 static KStaticDeleter<FunctionRepository> fr_sd;
@@ -191,23 +191,23 @@ FunctionRepository* FunctionRepository::self()
     kdDebug() << "Registering functions" << endl;
     
     // register all existing functions
-    KSpreadRegisterConversionFunctions();
-    KSpreadRegisterDatabaseFunctions();
-    KSpreadRegisterDateTimeFunctions();
-    KSpreadRegisterEngineeringFunctions();
-    KSpreadRegisterFinancialFunctions();
-    KSpreadRegisterInformationFunctions();
-    KSpreadRegisterLogicFunctions();
-    KSpreadRegisterMathFunctions();
-    KSpreadRegisterReferenceFunctions();
-    KSpreadRegisterStatisticalFunctions();
-    KSpreadRegisterTextFunctions();
-    KSpreadRegisterTrigFunctions();
+    RegisterConversionFunctions();
+    RegisterDatabaseFunctions();
+    RegisterDateTimeFunctions();
+    RegisterEngineeringFunctions();
+    RegisterFinancialFunctions();
+    RegisterInformationFunctions();
+    RegisterLogicFunctions();
+    RegisterMathFunctions();
+    RegisterReferenceFunctions();
+    RegisterStatisticalFunctions();
+    RegisterTextFunctions();
+    RegisterTrigFunctions();
   
     kdDebug() << "Functions registered, loading descriptions" << endl;
   
     // find all XML description files
-    QStringList files = KSpreadFactory::global()->dirs()->findAllResources
+    QStringList files = Factory::global()->dirs()->findAllResources
         ("extensions", "*.xml", TRUE);
     
     // load desc/help from XML file

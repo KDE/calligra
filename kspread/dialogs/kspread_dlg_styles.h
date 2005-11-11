@@ -27,10 +27,12 @@
 class KComboBox;
 class KListView;
 
-class KSpreadStyleManager;
-class KSpreadView;
-
 class QListViewItem;
+
+namespace KSpread
+{
+class StyleManager;
+class View;
 
 class StyleWidget : public QWidget
 {
@@ -46,13 +48,13 @@ signals:
     void modifyStyle();
 };
 
-class KSpreadStyleDlg : public KDialogBase
+class StyleDlg : public KDialogBase
 {
   Q_OBJECT
  public:
-  KSpreadStyleDlg( KSpreadView * parent, KSpreadStyleManager * manager,
-                   const char * name = "KSpreadStyleDlg" );
-  ~KSpreadStyleDlg();
+  StyleDlg( View * parent, StyleManager * manager,
+                   const char * name = "StyleDlg" );
+  ~StyleDlg();
 
  protected slots:
   void slotOk();
@@ -63,11 +65,13 @@ class KSpreadStyleDlg : public KDialogBase
   void slotSelectionChanged( QListViewItem * );
 
  private:
-  KSpreadView         * m_view;
-  KSpreadStyleManager * m_styleManager;
+  View         * m_view;
+  StyleManager * m_styleManager;
   StyleWidget         * m_dlg;
 
   void fillComboBox();
 };
+
+} // namespace KSpread
 
 #endif

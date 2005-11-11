@@ -32,6 +32,7 @@
 #include "kwmailmerge_kspread.h"
 #include "kwmailmerge_kspread_config.h"
 
+using namespace KSpread;
 
 KWMailMergeKSpreadConfig::KWMailMergeKSpreadConfig( QWidget *parent, KWMailMergeKSpread *object )
   : KDialogBase( Plain, i18n( "Mail Merge - Editor" ),
@@ -73,7 +74,7 @@ void KWMailMergeKSpreadConfig::loadDocument()
   _pageNumber->setEnabled( false );
 
   if ( !_urlRequester->url().isEmpty() ) {
-    _document = new KSpreadDoc();
+    _document = new Doc();
     connect( _document, SIGNAL( completed() ), SLOT( documentLoaded() ) );
 
     _document->openURL( _urlRequester->url() );
@@ -84,7 +85,7 @@ void KWMailMergeKSpreadConfig::documentLoaded()
 {
   _pageNumber->clear();
 
-  QPtrListIterator<KSpreadSheet> it( _document->map()->sheetList() );
+  QPtrListIterator<Sheet> it( _document->map()->sheetList() );
   int counter = 1;
   for ( it.toFirst(); it.current(); ++it ) {
     _pageNumber->insertItem( QString::number( counter ) );

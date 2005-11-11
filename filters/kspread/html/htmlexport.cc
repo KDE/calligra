@@ -36,22 +36,10 @@
 #include <kspread_doc.h>
 #include <kspread_util.h>
 
+using namespace KSpread;
+
 typedef KGenericFactory<HTMLExport, KoFilter> HTMLExportFactory;
 K_EXPORT_COMPONENT_FACTORY( libkspreadhtmlexport, HTMLExportFactory( "kofficefilters" ) )
-
-class Cell {
- public:
-    int row, col;
-    QString text;
-    bool operator < ( const Cell & c ) const
-    {
-        return row < c.row || ( row == c.row && col < c.col );
-    }
-    bool operator == ( const Cell & c ) const
-    {
-        return row == c.row && col == c.col;
-    }
-};
 
 const QString html_table_tag = "table";
 const QString html_table_options = QString(" border=\"%1\" cellspacing=\"%2\"");
@@ -101,13 +89,13 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
     if ( !document )
       return KoFilter::StupidError;
 
-    if(strcmp(document->className(), "KSpreadDoc")!=0)  // it's safer that way :)
+    if(strcmp(document->className(), "Doc")!=0)  // it's safer that way :)
     {
-      kdWarning(30501) << "document isn't a KSpreadDoc but a " << document->className() << endl;
+      kdWarning(30501) << "document isn't a Doc but a " << document->className() << endl;
       return KoFilter::NotImplemented;
     }
 
-    const KSpreadDoc * ksdoc=static_cast<const KSpreadDoc *>(document);
+    const Doc * ksdoc=static_cast<const Doc *>(document);
 
     if( ksdoc->mimeType() != "application/x-kspread" )
     {
@@ -115,7 +103,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
       return KoFilter::NotImplemented;
     }
 
-    KSpreadSheet *sheet = ksdoc->map()->firstSheet();
+    Sheet *sheet = ksdoc->map()->firstSheet();
     QString filenameBase = m_chain->outputFile();
     filenameBase = filenameBase.left( filenameBase.findRev( '.' ) );
 
@@ -182,7 +170,7 @@ KoFilter::ConversionStatus HTMLExport::convert( const QCString& from, const QCSt
     return KoFilter::OK;
 }
 
-void HTMLExport::openPage( KSpreadSheet *sheet, KoDocument *document, QString &str )
+void HTMLExport::openPage( Sheet *sheet, KoDocument *document, QString &str )
 {
   QString title;
   KoDocumentInfo *info = document->documentInfo();
@@ -227,7 +215,7 @@ void HTMLExport::closePage( QString &str )
   str += "</html>\n\n";
 }
 
-void HTMLExport::convertSheet( KSpreadSheet *sheet, QString &str, int iMaxUsedRow, int iMaxUsedColumn )
+void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int iMaxUsedColumn )
 {
     QString emptyLines;
 
@@ -266,7 +254,7 @@ void HTMLExport::convertSheet( KSpreadSheet *sheet, QString &str, int iMaxUsedRo
 
         for ( int currentcolumn = 1 ; currentcolumn <= iMaxUsedColumn ; currentcolumn++ )
         {
-            KSpread::Cell * cell = sheet->cellAt( currentcolumn, currentrow, false );
+            Cell * cell = sheet->cellAt( currentcolumn, currentrow, false );
             colspan_cells=cell->extraXCells();
             if (cell->needsPrinting())
                 nonempty_cells++;
@@ -292,14 +280,14 @@ void HTMLExport::convertSheet( KSpreadSheet *sheet, QString &str, int iMaxUsedRo
                 text=cell->strOutText();
 #if 0
             switch( cell->content() ) {
-            case KSpread::Cell::Text:
+            case Cell::Text:
                 text = cell->text();
                 break;
-            case KSpread::Cell::RichText:
-            case KSpread::Cell::VisualFormula:
+            case Cell::RichText:
+            case Cell::VisualFormula:
                 text = cell->text(); // untested
                 break;
-            case KSpread::Cell::Formula:
+            case Cell::Formula:
                 cell->calc( TRUE ); // Incredible, cells are not calculated if the document was just opened
                 text = cell->valueString();
                 break;
@@ -313,32 +301,32 @@ void HTMLExport::convertSheet( KSpreadSheet *sheet, QString &str, int iMaxUsedRo
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
                 line += " bgcolor=\"" + bgcolor.name() + "\"";
 
-            switch((KSpread::Cell::Align)cell->defineAlignX())
+            switch((Cell::Align)cell->defineAlignX())
             {
-            case KSpread::Cell::Left:
+            case Cell::Left:
                 line+=" align=\"" + html_left +"\"";
                 break;
-            case KSpread::Cell::Right:
+            case Cell::Right:
                 line+=" align=\"" + html_right +"\"";
                 break;
-            case KSpread::Cell::Center:
+            case Cell::Center:
                 line+=" align=\"" + html_center +"\"";
                 break;
-            case KSpread::Cell::Undefined:
+            case Cell::Undefined:
                 break;
             }
-            switch((KSpread::Cell::AlignY)cell-> alignY(currentrow, currentcolumn))
+            switch((Cell::AlignY)cell-> alignY(currentrow, currentcolumn))
             {
-            case KSpread::Cell::Top:
+            case Cell::Top:
                 line+=" valign=\"" + html_top +"\"";
                 break;
-            case KSpread::Cell::Middle:
+            case Cell::Middle:
                 line+=" valign=\"" + html_middle +"\"";
                 break;
-            case KSpread::Cell::Bottom:
+            case Cell::Bottom:
                 line+=" valign=\"" + html_bottom +"\"";
                 break;
-            case KSpread::Cell::UndefinedY:
+            case Cell::UndefinedY:
                 break;
             }
             line+=" width=\""+QString::number(cell->width())+"\"";
@@ -455,7 +443,7 @@ QString HTMLExport::fileName( const QString &base, const QString &sheetName, boo
      return fileName;
 }
 
-void HTMLExport::detectFilledCells( KSpreadSheet *sheet, int &rows, int &columns )
+void HTMLExport::detectFilledCells( Sheet *sheet, int &rows, int &columns )
 {
   int iMaxColumn = sheet->maxColumn();
   int iMaxRow = sheet->maxRow();
@@ -464,7 +452,7 @@ void HTMLExport::detectFilledCells( KSpreadSheet *sheet, int &rows, int &columns
 
   for ( int currentrow = 1 ; currentrow <= iMaxRow ; ++currentrow)
   {
-    KSpread::Cell * cell = 0L;
+    Cell * cell = 0L;
     int iUsedColumn=0;
     for ( int currentcolumn = 1 ; currentcolumn <= iMaxColumn ; currentcolumn++ )
     {

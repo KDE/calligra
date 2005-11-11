@@ -27,10 +27,9 @@
 
 namespace KSpread
 {
-  class Cell;
+class Cell;
+class Sheet;
 }
-
-class KSpreadSheet;
 
 class GNUMERICFilter : public KoFilter
 {
@@ -53,10 +52,10 @@ enum borderStyle { Left, Right, Top, Bottom, Diagonal, Revdiagonal};
   };
 
   void dateInit();
-  QString convertVars( QString const & str, KSpreadSheet * table ) const;
-  void ParsePrintInfo( QDomNode const & printInfo, KSpreadSheet * table );
+  QString convertVars( QString const & str, KSpread::Sheet * table ) const;
+  void ParsePrintInfo( QDomNode const & printInfo, KSpread::Sheet * table );
   void ParseFormat(QString const & formatString, KSpread::Cell* kspread_cell);
-  void setStyleInfo(QDomNode * sheet, KSpreadSheet * table);
+  void setStyleInfo(QDomNode * sheet, KSpread::Sheet * table);
   bool setType( KSpread::Cell* kspread_cell, QString const & formatString, QString & cell_content );
   void convertFormula( QString & formula ) const;
     void importBorder( QDomElement  border, borderStyle _style,  KSpread::Cell*cell);

@@ -19,43 +19,47 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KSpreadLayoutIface.h"
-#include "KSpreadColumnIface.h"
-#include "kspread_format.h"
 #include <qbrush.h>
 
-KSpreadColumnIface::KSpreadColumnIface(ColumnFormat *_lay)
-    :KSpreadLayoutIface(_lay)
+#include "kspread_format.h"
+#include "KSpreadLayoutIface.h"
+
+#include "KSpreadColumnIface.h"
+
+using namespace KSpread;
+
+ColumnIface::ColumnIface(ColumnFormat *_lay)
+    :LayoutIface(_lay)
 {
     m_colLayout=_lay;
 }
 
-void KSpreadColumnIface::update()
+void ColumnIface::update()
 {
     //todo
 }
 
-int KSpreadColumnIface::column()
+int ColumnIface::column()
 {
     return m_colLayout->column();
 }
 
-void KSpreadColumnIface::setHide(bool _hide)
+void ColumnIface::setHide(bool _hide)
 {
     m_colLayout->setHide(_hide);
 }
 
-bool KSpreadColumnIface::isHide()const
+bool ColumnIface::isHide()const
 {
     return m_colLayout->isHide();
 }
 
-int KSpreadColumnIface::width() const
+int ColumnIface::width() const
 {
     return m_colLayout->width();
 }
 
-void KSpreadColumnIface::setWidth( int _w )
+void ColumnIface::setWidth( int _w )
 {
     m_colLayout->setWidth(_w);
 }

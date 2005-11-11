@@ -53,13 +53,13 @@
 
 using namespace KSpread;
 
-KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
+SortDlg::SortDlg( View * parent,  const char * name,
                                 bool modal )
     : KDialogBase( parent, name, modal,"Sort",Ok|Cancel ),
     m_pView( parent )
 {
   if ( !name )
-    setName( "KSpreadSortDlg" );
+    setName( "SortDlg" );
 
   resize( 528, 316 );
   setCaption( i18n( "Sorting" ) );
@@ -243,12 +243,12 @@ KSpreadSortDlg::KSpreadSortDlg( KSpreadView * parent,  const char * name,
   init();
 }
 
-KSpreadSortDlg::~KSpreadSortDlg()
+SortDlg::~SortDlg()
 {
   // no need to delete child widgets, Qt does it all for us
 }
 
-void KSpreadSortDlg::init()
+void SortDlg::init()
 {
     QStringList lst;
     lst<<i18n("January");
@@ -272,7 +272,7 @@ void KSpreadSortDlg::init()
     lst<<i18n("Saturday");
     lst<<i18n("Sunday");
 
-  KConfig * config = KSpreadFactory::global()->config();
+  KConfig * config = Factory::global()->config();
   config->setGroup( "Parameters" );
   QStringList other = config->readListEntry("Other list");
   QString tmp;
@@ -289,10 +289,10 @@ void KSpreadSortDlg::init()
   }
   m_customList->insertStringList(lst);
 
-  QPtrList<KSpreadSheet> sheetList = m_pView->doc()->map()->sheetList();
+  QPtrList<Sheet> sheetList = m_pView->doc()->map()->sheetList();
   for (unsigned int c = 0; c < sheetList.count(); ++c)
   {
-    KSpreadSheet * t = sheetList.at(c);
+    Sheet * t = sheetList.at(c);
     if (!t)
       continue;
     m_outputSheet->insertItem( t->sheetName() );
@@ -393,7 +393,7 @@ void KSpreadSortDlg::init()
     slotOrientationChanged(0);
 }
 
-void KSpreadSortDlg::slotOrientationChanged(int id)
+void SortDlg::slotOrientationChanged(int id)
 {
   switch( id )
   {
@@ -444,11 +444,11 @@ void KSpreadSortDlg::slotOrientationChanged(int id)
   }
 }
 
-void KSpreadSortDlg::slotOk()
+void SortDlg::slotOk()
 {
   m_pView->doc()->emitBeginOperation( false );
 
-  KSpreadSheet * sheet = m_pView->doc()->map()->findSheet( m_outputSheet->currentText() );
+  Sheet * sheet = m_pView->doc()->map()->findSheet( m_outputSheet->currentText() );
   if ( !sheet )
   {
     KMessageBox::error( this, i18n("The destination sheet does not exist.") );
@@ -458,7 +458,7 @@ void KSpreadSortDlg::slotOk()
     return;
   }
 
-  KSpreadPoint outputPoint( m_outputCell->text() );
+  Point outputPoint( m_outputCell->text() );
   if ( !outputPoint.isValid() || outputPoint.isSheetKnown() )
   {
     KMessageBox::error( this, i18n("The destination cell does not exist.") );
@@ -491,16 +491,16 @@ void KSpreadSortDlg::slotOk()
   int key2 = 0;
   int key3 = 0;
   QStringList * firstKey = 0L;
-  KSpreadSheet::SortingOrder order1;
-  KSpreadSheet::SortingOrder order2;
-  KSpreadSheet::SortingOrder order3;
+  Sheet::SortingOrder order1;
+  Sheet::SortingOrder order2;
+  Sheet::SortingOrder order3;
 
-  order1 = ( m_sortOrder1->currentItem() == 0 ? KSpreadSheet::Increase
-             : KSpreadSheet::Decrease );
-  order2 = ( m_sortOrder2->currentItem() == 0 ? KSpreadSheet::Increase
-             : KSpreadSheet::Decrease );
-  order3 = ( m_sortOrder3->currentItem() == 0 ? KSpreadSheet::Increase
-             : KSpreadSheet::Decrease );
+  order1 = ( m_sortOrder1->currentItem() == 0 ? Sheet::Increase
+             : Sheet::Decrease );
+  order2 = ( m_sortOrder2->currentItem() == 0 ? Sheet::Increase
+             : Sheet::Decrease );
+  order3 = ( m_sortOrder3->currentItem() == 0 ? Sheet::Increase
+             : Sheet::Decrease );
 
   if ( m_sortRow->isChecked() )
   {
@@ -587,13 +587,13 @@ void KSpreadSortDlg::slotOk()
   accept();
 }
 
-void KSpreadSortDlg::sortKey2textChanged( int i )
+void SortDlg::sortKey2textChanged( int i )
 {
   m_sortKey3->setEnabled( ( i!=0 ) );
   m_sortOrder3->setEnabled( ( i!=0 ) );
 }
 
-void KSpreadSortDlg::useCustomListsStateChanged( int state )
+void SortDlg::useCustomListsStateChanged( int state )
 {
   if (state == 0)
     m_customList->setEnabled(false);
@@ -601,7 +601,7 @@ void KSpreadSortDlg::useCustomListsStateChanged( int state )
     m_customList->setEnabled(true);
 }
 
-void KSpreadSortDlg::firstRowHeaderChanged( int state )
+void SortDlg::firstRowHeaderChanged( int state )
 {
   if (m_sortColumn->isChecked())
     return;

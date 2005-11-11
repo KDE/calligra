@@ -39,16 +39,17 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 
-#include "kspread_dlg_csv.h"
 #include <kspread_cell.h>
 #include <kspread_doc.h>
 #include <kspread_sheet.h>
 #include <kspread_undo.h>
 #include <kspread_view.h>
 
+#include "kspread_dlg_csv.h"
+
 using namespace KSpread;
 
-KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRect const & rect, Mode mode)
+CSVDialog::CSVDialog( View * parent, const char * name, QRect const & rect, Mode mode)
   : KDialogBase( parent, name, true, QString::null, Ok|Cancel ),
     m_pView( parent ),
     m_cancelled( false ),
@@ -60,7 +61,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     m_mode( mode )
 {
   if ( !name )
-    setName( "KSpreadCSVDialog" );
+    setName( "CSV" );
 
   setSizeGripEnabled( TRUE );
 
@@ -232,7 +233,7 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
     setCaption( i18n( "Text to Columns" ) );
     m_data = "";
     Cell  * cell;
-    KSpreadSheet * sheet = m_pView->activeSheet();
+    Sheet * sheet = m_pView->activeSheet();
     int col = m_targetRect.left();
     for (int i = m_targetRect.top(); i <= m_targetRect.bottom(); ++i)
     {
@@ -270,17 +271,17 @@ KSpreadCSVDialog::KSpreadCSVDialog( KSpreadView * parent, const char * name, QRe
           this, SLOT(ignoreDuplicatesChanged(int)));
 }
 
-KSpreadCSVDialog::~KSpreadCSVDialog()
+CSVDialog::~CSVDialog()
 {
   // no need to delete child widgets, Qt does it all for us
 }
 
-bool KSpreadCSVDialog::cancelled()
+bool CSVDialog::cancelled()
 {
   return m_cancelled;
 }
 
-void KSpreadCSVDialog::fillSheet()
+void CSVDialog::fillSheet()
 {
   int row, column;
   bool lastCharDelimiter = false;
@@ -469,14 +470,14 @@ void KSpreadCSVDialog::fillSheet()
   }
 }
 
-void KSpreadCSVDialog::fillComboBox()
+void CSVDialog::fillComboBox()
 {
   m_comboLine->clear();
   for (int row = 0; row < m_sheet->numRows(); ++row)
     m_comboLine->insertItem(QString::number(row + 1), row);
 }
 
-void KSpreadCSVDialog::setText(int row, int col, const QString& text)
+void CSVDialog::setText(int row, int col, const QString& text)
 {
   if (row < 1) // skipped by the user
     return;
@@ -495,7 +496,7 @@ void KSpreadCSVDialog::setText(int row, int col, const QString& text)
 /*
  * Called after the first fillSheet() when number of rows are unknown.
  */
-void KSpreadCSVDialog::adjustRows(int iRows)
+void CSVDialog::adjustRows(int iRows)
 {
   if (m_adjustRows)
   {
@@ -504,7 +505,7 @@ void KSpreadCSVDialog::adjustRows(int iRows)
   }
 }
 
-void KSpreadCSVDialog::returnPressed()
+void CSVDialog::returnPressed()
 {
   if (m_delimiterBox->id(m_delimiterBox->selected()) != 4)
     return;
@@ -513,13 +514,13 @@ void KSpreadCSVDialog::returnPressed()
   fillSheet();
 }
 
-void KSpreadCSVDialog::textChanged ( const QString & )
+void CSVDialog::textChanged ( const QString & )
 {
   m_radioOther->setChecked ( true );
   delimiterClicked(4); // other
 }
 
-void KSpreadCSVDialog::formatClicked(int id)
+void CSVDialog::formatClicked(int id)
 {
   QString header;
 
@@ -542,7 +543,7 @@ void KSpreadCSVDialog::formatClicked(int id)
   m_sheet->horizontalHeader()->setLabel(m_sheet->currentColumn(), header);
 }
 
-void KSpreadCSVDialog::delimiterClicked(int id)
+void CSVDialog::delimiterClicked(int id)
 {
   switch (id)
   {
@@ -566,7 +567,7 @@ void KSpreadCSVDialog::delimiterClicked(int id)
   fillSheet();
 }
 
-void KSpreadCSVDialog::textquoteSelected(const QString& mark)
+void CSVDialog::textquoteSelected(const QString& mark)
 {
   if (mark == i18n("none"))
     m_textquote = 0;
@@ -576,13 +577,13 @@ void KSpreadCSVDialog::textquoteSelected(const QString& mark)
   fillSheet();
 }
 
-void KSpreadCSVDialog::lineSelected(const QString& line)
+void CSVDialog::lineSelected(const QString& line)
 {
   m_startline = line.toInt() - 1;
   fillSheet();
 }
 
-void KSpreadCSVDialog::currentCellChanged(int, int col)
+void CSVDialog::currentCellChanged(int, int col)
 {
   int id;
   QString header = m_sheet->horizontalHeader()->label(col);
@@ -599,9 +600,9 @@ void KSpreadCSVDialog::currentCellChanged(int, int col)
   m_formatBox->setButton(id);
 }
 
-void KSpreadCSVDialog::accept()
+void CSVDialog::accept()
 {
-  KSpreadSheet * sheet  = m_pView->activeSheet();
+  Sheet * sheet  = m_pView->activeSheet();
   QString csv_delimiter = QString::null;
   Cell  * cell;
 
@@ -625,18 +626,18 @@ void KSpreadCSVDialog::accept()
 
   if ( numRows == 1 && numCols == 1)
   {
-    KSpreadDoc * doc = m_pView->doc();
+    Doc * doc = m_pView->doc();
     cell = sheet->nonDefaultCell( m_targetRect.left(), m_targetRect.top() );
     if ( !doc->undoLocked() )
     {
-      KSpreadUndoSetText * undo = new KSpreadUndoSetText( doc, sheet , cell->text(), m_targetRect.left(),
+      UndoSetText * undo = new UndoSetText( doc, sheet , cell->text(), m_targetRect.left(),
                                                           m_targetRect.top(), cell->formatType() );
       doc->addCommand( undo );
     }
   }
   else
   {
-      KSpreadUndoChangeAreaTextCell * undo = new KSpreadUndoChangeAreaTextCell( m_pView->doc(), sheet , m_targetRect );
+      UndoChangeAreaTextCell * undo = new UndoChangeAreaTextCell( m_pView->doc(), sheet , m_targetRect );
       m_pView->doc()->addCommand( undo );
   }
 
@@ -707,7 +708,7 @@ void KSpreadCSVDialog::accept()
   QDialog::accept();
 }
 
-int KSpreadCSVDialog::getHeader(int col)
+int CSVDialog::getHeader(int col)
 {
   QString header = m_sheet->horizontalHeader()->label(col);
 
@@ -721,12 +722,12 @@ int KSpreadCSVDialog::getHeader(int col)
     return DATE;
 }
 
-QString KSpreadCSVDialog::getText(int row, int col)
+QString CSVDialog::getText(int row, int col)
 {
   return m_sheet->text(row, col);
 }
 
-void KSpreadCSVDialog::ignoreDuplicatesChanged(int)
+void CSVDialog::ignoreDuplicatesChanged(int)
 {
   fillSheet();
 }

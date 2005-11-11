@@ -1,10 +1,18 @@
-#include "kspread_handler.h"
-#include "kspread_view.h"
+//
+// TODO: insert copyright header
+//
 
 #include <qpainter.h>
+
+#include "kspread_view.h"
+
+#include "kspread_handler.h"
+
 #define KS_MIN_RECTSIZE 3
 
-KSpreadInsertHandler::KSpreadInsertHandler( KSpreadView* view, QWidget* widget, const KoDocumentEntry& entry, bool ischart )
+using namespace KSpread;
+
+InsertHandler::InsertHandler( View* view, QWidget* widget, const KoDocumentEntry& entry, bool ischart )
     : EventHandler( widget ), m_entry( entry )
 {
     m_isChart = ischart;
@@ -15,13 +23,13 @@ KSpreadInsertHandler::KSpreadInsertHandler( KSpreadView* view, QWidget* widget, 
     widget->setCursor( crossCursor );
 }
 
-KSpreadInsertHandler::~KSpreadInsertHandler()
+InsertHandler::~InsertHandler()
 {
     ((QWidget*)target())->setCursor( arrowCursor );
     m_view->resetInsertHandle();
 }
 
-bool KSpreadInsertHandler::eventFilter( QObject*, QEvent* ev )
+bool InsertHandler::eventFilter( QObject*, QEvent* ev )
 {
     if ( ev->type() == QEvent::MouseButtonPress )
     {

@@ -27,11 +27,11 @@
 #include <qmap.h>
 #include <qstring.h>
 
-class KSpreadAppIface : public DCOPObject
+class AppIface : public DCOPObject
 {
     K_DCOP
 public:
-    KSpreadAppIface();
+    AppIface();
 
 k_dcop:
     virtual DCOPRef createDoc();
