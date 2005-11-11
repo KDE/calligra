@@ -29,6 +29,7 @@
 #include "scriptcontainer.h"
 
 #include <qobject.h>
+#include <qfile.h>
 #include <kdebug.h>
 #include <kstaticdeleter.h>
 #include <klibloader.h>
@@ -85,17 +86,20 @@ Manager::Manager()
     , d( new ManagerPrivate() )
 {
 #ifdef KROSS_PYTHON_LIBRARY
-    InterpreterInfo::Option::Map pythonoptions;
-    pythonoptions.replace("restricted",
-        new InterpreterInfo::Option("Restricted", "Restricted Python interpreter", QVariant(false))
-    );
-    d->interpreterinfos.replace("python",
-        new InterpreterInfo("python",
-            KROSS_PYTHON_LIBRARY, // library
-            QStringList() << "text/x-python" << "application/x-python", // mimetypes
-            pythonoptions // options
-        )
-    );
+    QString pythonlib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_PYTHON_LIBRARY) );
+    if(! pythonlib.isEmpty()) { // If the Kross Python plugin exists we offer it as supported scripting language.
+        InterpreterInfo::Option::Map pythonoptions;
+        pythonoptions.replace("restricted",
+            new InterpreterInfo::Option("Restricted", "Restricted Python interpreter", QVariant(false))
+        );
+        d->interpreterinfos.replace("python",
+            new InterpreterInfo("python",
+                pythonlib, // library
+                QStringList() << "text/x-python" << "application/x-python", // mimetypes
+                pythonoptions // options
+            )
+        );
+    }
 #endif
 }
 
