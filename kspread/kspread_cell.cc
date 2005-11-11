@@ -386,7 +386,7 @@ QString Cell::columnName() const
   return columnName( d->column );
 }
 
-KLocale* Cell::locale()
+KLocale* Cell::locale() const
 {
   return m_pSheet->doc()->locale();
 }
@@ -6974,6 +6974,7 @@ void Cell::convertFormula( QString & text, const QString & f ) const
     formula = "=MULTIPLEOPERATIONS";
 #endif
   QString par;
+  const QString decimalSymbol = locale()->decimalSymbol();
   bool isPar   = false;
   bool inQuote = false;
 
@@ -7019,8 +7020,9 @@ void Cell::convertFormula( QString & text, const QString & f ) const
       if ( !inQuote )
         parameter += ")";
     }
-    else if ( f[p] == '.' && f[p+1].isNumber() ) // Convert '.' to ',' in floating point numbers
-      parameter += ',';
+    else if ( f[p] == '.' && f[p+1].isNumber() && decimalSymbol != ".")
+      // Convert '.' to locale decimal symbol in floating point numbers
+      parameter += decimalSymbol;
     else
       parameter += f[p];
 

@@ -183,7 +183,7 @@ public:
     /**
      * Returns the locale setting of this cell.
      */
-    KLocale* locale();
+    KLocale* locale() const;
     /**
      * Returns true if this cell holds a formula.
      */
