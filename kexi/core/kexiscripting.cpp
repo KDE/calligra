@@ -217,6 +217,35 @@ void KexiScriptContainer::addStdErr(const QString& s)
  */
 
 /// \internal
+class KexiScriptExtension : public KAction
+{
+	private:
+		QString m_interpretername;
+		QString m_file;
+	public:
+		KexiScriptExtension(const QString& interpretername, const QString& file, KActionCollection* actioncollection)
+			: KAction(
+				KURL(file).fileName(), // text
+				"script", // icon
+				0, // shortcut
+				actioncollection // the parent actioncollection
+			)
+			, m_interpretername(interpretername)
+			, m_file(file)
+
+		{
+			//setGroup("ScriptExtension");
+			setWhatsThis(file);
+		}
+
+		virtual ~KexiScriptExtension() {}
+
+		const QString& getInterpreterName() { return m_interpretername; }
+		const QString& getFile() { return m_file; }
+
+};
+
+/// \internal
 class KexiScriptManagerPrivate
 {
 	public:
@@ -279,7 +308,7 @@ const QStringList KexiScriptManager::getInterpreters()
 #endif
 }
 
-bool KexiScriptManager::executeFile(const QString& file, QString& error)
+bool KexiScriptManager::executeFile(const QString& interpretername, const QString& file, QString& error)
 {
 	QFile f(file);
 	if(! f.open(IO_ReadOnly)) {
@@ -290,7 +319,7 @@ bool KexiScriptManager::executeFile(const QString& file, QString& error)
 	f.close();
 
 	KexiScriptContainer* sc = new KexiScriptContainer(this, file);
-	sc->setInterpreterName("python");
+	sc->setInterpreterName(interpretername);
 	sc->setCode(code);
 	bool ok = sc->execute();
 	if(! ok)
@@ -313,16 +342,8 @@ KActionCollection* KexiScriptManager::getExtensions()
 				QString("kross/%1/%2").arg( (*infoit)->getInterpretername() ).arg( (*infoit)->getWildcard() )
 			);
 			for(QStringList::Iterator fileit = files.begin(); fileit != files.end(); ++fileit) {
-				KAction* action = new KAction(
-					KURL(*fileit).fileName(), // text
-					"script", // icon
-					0, // shortcut
-					this, // receiver
-					SLOT( executeExtension() ), // slot
-					d->actioncollection // parent action-collection
-				);
-				//action->setGroup("ScriptExtension");
-				action->setWhatsThis(*fileit);
+				KexiScriptExtension* extension = new KexiScriptExtension((*infoit)->getInterpretername(), *fileit, d->actioncollection);
+				connect(extension, SIGNAL(activated()), this, SLOT(executeExtension()));
 			}
 		}
 	}
@@ -343,11 +364,10 @@ void KexiScriptManager::plugExtensions(QWidget* widget)
 
 void KexiScriptManager::executeExtension()
 {
-	KAction* action = (KAction*) QObject::sender();
-	if(action) {
-		QString file = action->whatsThis(); // we use the whatsThis for the full file URL
+	KexiScriptExtension* extension = (KexiScriptExtension*) QObject::sender();
+	if(extension) {
 		QString err;
-		if(! executeFile(file, err)) {
+		if(! executeFile(extension->getInterpreterName(), extension->getFile(), err)) {
 			KMessageBox::error(d->mainwindow, err);
 		}
 	}

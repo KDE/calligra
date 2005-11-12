@@ -216,12 +216,13 @@ class KEXICORE_EXPORT KexiScriptManager : public QObject
         /**
          * Try to execute a scriptingfile.
          * 
+         * \param interpretername The name of the used interpreter.
          * \param file The full filename of the scriptfile to execute.
          * \param error If execution fails this string contains the
          *        errormessage.
          * \return true on success else false.
          */
-        bool executeFile(const QString& file, QString& error);
+        bool executeFile(const QString& interpretername, const QString& file, QString& error);
 
         /**
          * \return a collection of KAction's. Each KAction points to
