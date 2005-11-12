@@ -469,7 +469,9 @@ VText::traceText()
 		return;
 	}
 
-	// Choose unicode charmap
+	bool foundCharmap = false;
+
+	// Try to choose unicode charmap
 	for( int charmap = 0; charmap < fontFace->num_charmaps; charmap++ )
 	{
 		if( fontFace->charmaps[charmap]->encoding == ft_encoding_unicode )
@@ -477,14 +479,34 @@ VText::traceText()
 			FT_Error error = FT_Set_Charmap( fontFace, fontFace->charmaps[charmap] );
 			if( error )
 			{
-				kdDebug(38000) << "traceText(), unable to select unicode charmap. Aborting!" << endl;
-				FT_Done_Face( fontFace );
-				return;
+				kdDebug(38000) << "traceText(), unable to select unicode charmap." << endl;
+				continue;
 			}
+			foundCharmap = true;
 		}
 	}
 
-	FT_Set_Char_Size( fontFace, FT_FROMFLOAT( m_font.pointSize() ), FT_FROMFLOAT( m_font.pointSize() ), 0, 0 );
+	// Choose first charmap if no unicode charmap was found
+	if( ! foundCharmap )
+	{
+		error = FT_Set_Charmap( fontFace, fontFace->charmaps[0] );
+		if( error )
+		{
+			kdDebug(38000) << "traceText(), unable to select charmap. Aborting!" << endl;
+			FT_Done_Face( fontFace );
+			FT_Done_FreeType( library );
+			return;
+		}
+	}
+
+	error = FT_Set_Char_Size( fontFace, FT_FROMFLOAT( m_font.pointSize() ), FT_FROMFLOAT( m_font.pointSize() ), 0, 0 );
+	if( error )
+	{
+		kdDebug(38000) << "traceText(), unable to set font size. Aborting!" << endl;
+		FT_Done_Face( fontFace );
+		FT_Done_FreeType( library );
+		return;
+	}
 
 		// storing glyphs.
 	float l = 0;
@@ -495,28 +517,48 @@ VText::traceText()
 		// get the glyph index for the current character
 		QChar character = m_text.at( i );
 		glyphIndex = FT_Get_Char_Index( fontFace, character.unicode() );
+		if( ! glyphIndex ) 
+		{
+			kdDebug(38000) << "traceText(), unable get index of char : " << character << endl;
+			continue;
+		}
 		//kdDebug(38000) << "glyphIndex : " << glyphIndex << endl;
 		FT_Error error = FT_Load_Glyph( fontFace, glyphIndex, FT_LOAD_NO_HINTING | FT_LOAD_NO_BITMAP );
 		if( error )
 		{
-			kdDebug(38000) << "Houston, we have a problem : " << error << endl;
+			kdDebug(38000) << "traceText(), unable to load glyph : " << error << endl;
 			continue;
 		}
 
 		// decompose to vpaths
 		FT_OutlineGlyph g;
-		FT_Get_Glyph( fontFace->glyph, reinterpret_cast<FT_Glyph *>( &g ) );
+		error = FT_Get_Glyph( fontFace->glyph, reinterpret_cast<FT_Glyph *>( &g ) );
+		if( error )
+		{
+			kdDebug(38000) << "traceText(), unable to get glyph: " << error << endl;
+			continue;
+		}
+
 		VPath *composite = new VPath( this );
-		//VFill *fill = composite->fill();
-		//fill->setFillRule( VFill::evenOdd );
-		//composite->setFill( *fill );
-		FT_Outline_Decompose(&g->outline, &OutlineMethods, composite );
-		//composite->close();
+		error = FT_Outline_Check( &g->outline );
+		if( error ) 
+		{
+			kdDebug(38000) << "traceText(), outline is broken : " << error << endl;
+			continue;
+		}
+
+		error = FT_Outline_Decompose(&g->outline, &OutlineMethods, composite );
+		if( error )
+		{
+			kdDebug(38000) << "traceText(), unable to decompose outline : " << error << endl;
+			continue;
+		}
 
 		m_glyphs.append( composite );
 		glyphXAdvance.append( FT_TOFLOAT( fontFace->glyph->advance.x ) );
 		glyphYAdvance.append( FT_TOFLOAT( fontFace->glyph->advance.y ) );
 		l += FT_TOFLOAT( fontFace->glyph->advance.x );
+		FT_Done_Glyph( reinterpret_cast<FT_Glyph>( g ) );
 	}
 
 	 // Placing the stored glyphs.
@@ -552,7 +594,8 @@ VText::traceText()
 	for( unsigned int i = 0; i < m_text.length(); i++ )
 	{
 		VPath* composite = m_glyphs.at( i );
-
+		if( ! composite ) 
+			continue;
 		// Step 1: place (0, 0) to the rotation center of the glyph.
 		dx = *glyphXAdvance.at( i ) / 2;
 		x += dx;
@@ -628,43 +671,60 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 	FcPatternAddString( pattern, FC_FAMILY, reinterpret_cast<const FcChar8 *>( family.latin1() ) );
 
 	// Disable hinting
-	FcPatternAddBool( pattern, FC_HINTING, false );
+	FcPatternAddBool( pattern, FC_HINTING, FcFalse );
+	// Enforce scalability
+	FcPatternAddBool( pattern, FC_SCALABLE, FcTrue );
 
 	// Perform the default font pattern modification operations.
 	FcDefaultSubstitute( pattern );
 	FcConfigSubstitute( FcConfigGetCurrent(), pattern, FcMatchPattern );
 
-	// Match the pattern!
 	FcResult result;
-	FcPattern *match = FcFontMatch( 0, pattern, &result );
+
+	// we dont want to use bitmap fonts, so get a list of fonts sorted by closeness to pattern
+	// and use the best matching scalable font
+	FcFontSet *fset = FcFontSort( 0, pattern, FcFalse, 0L, &result );
 
 	// Destroy pattern
 	FcPatternDestroy( pattern );
 
-	// Get index & filename
-	FcChar8 *temp;
-
-	if(match)
+	if( fset )
 	{
-		FcPattern *pattern = FcPatternDuplicate( match );
-
-		// Get index & filename
-		if(	FcPatternGetString(pattern, FC_FILE, 0, &temp) != FcResultMatch ||
-		   	FcPatternGetInteger(pattern, FC_INDEX, 0, &id) != FcResultMatch )
+		FcBool scalable;
+		FcChar8 *temp;
+	
+		// iterate over font list and take best scaleable font
+		for( int i = 0; i < fset->nfont; ++i )
 		{
-			kdDebug(38000) << "VText::buildRequest(), could not load font file for requested font \"" << family.latin1() << "\"" << endl;
-			return QString::null;
+			pattern = fset->fonts[i];
+			if( FcResultMatch != FcPatternGetBool( pattern, FC_SCALABLE, 0, &scalable ) )
+				continue;
+			if( scalable == FcTrue )
+			{
+				// Get index & filename
+				if(	FcPatternGetString(pattern, FC_FILE, 0, &temp) != FcResultMatch ||
+					FcPatternGetInteger(pattern, FC_INDEX, 0, &id) != FcResultMatch )
+				{
+					kdDebug(38000) << "VText::buildRequest(), could not load font file for requested font \"" << family.latin1() << "\"" << endl;
+					return QString::null;
+				}
+		
+				fileName = QFile::decodeName(reinterpret_cast<const char *>( temp ));
+				
+				// get family name of matched font
+				QString newFamily;
+
+				if( FcResultMatch == FcPatternGetString( pattern, FC_FAMILY, 0, &temp ) )
+					m_font.setFamily( reinterpret_cast<const char *>( temp ) );
+
+				break;
+			}
 		}
-
-		fileName = QFile::decodeName(reinterpret_cast<const char *>( temp ));
-
-		// Kill pattern
-		FcPatternDestroy( pattern );
+		
+		FcFontSetDestroy( fset );
 	}
 
-	// Kill pattern
-	FcPatternDestroy( match );
-
+	
 	return fileName;
 }
 
