@@ -150,8 +150,8 @@ revision history. (see installation appendix comment) -->
     <listitem>
       <para>
         <ulink
-           url="http://www.kexi-project.org/wiki/wikiview/index.php?Support"
-           >http://www.kexi-project.org/wiki/wikiview/index.php?Support</ulink>
+           url="http://www.kexi-project.org/support.html"
+           >http://www.kexi-project.org/support.html</ulink>
       </para>
     </listitem>
   </itemizedlist>
@@ -184,7 +184,7 @@ revision history. (see installation appendix comment) -->
     own needs and preferences.
   </para>
 
-  <sect1>
+  <sect1 id="configuring-window-layout">
     <title>
       Window Layout
     </title>
@@ -210,7 +210,7 @@ revision history. (see installation appendix comment) -->
       menu.  Note that changing the MDI mode requires Kexi to be
       restarted before the new mode takes effect.
     </para>
-    <sect2>
+    <sect2 id="window-layout-ideal">
       <title>
 	IDEAl mode
       </title>
@@ -224,7 +224,7 @@ revision history. (see installation appendix comment) -->
 	relevant tab.
       </para>
     </sect2>
-    <sect2>
+    <sect2 id="window-layout-childframe">
       <title>
 	Childframe mode
       </title>
@@ -258,7 +258,6 @@ revision history. (see installation appendix comment) -->
     </sect2>
   </sect1>
 </chapter>
-
 
 <chapter id="credits">
 
@@ -323,6 +322,101 @@ revision history. (see installation appendix comment) -->
 &underLGPL;               <!-- GPL License -->
 
 </chapter>
+
+<appendix id="comparing">
+  <title>
+    Comparing &kexi; to other database applications
+  </title>
+  <para>
+    Although different database applications tend to provide similar
+    functionality, they often use different terminology.  For your
+    convenience, this appendix shows how the terminology used in
+    &kexi; corresponds to that used by other database applications.
+    Thus, this chapter may be useful when migrating databases to from
+    one application to another.
+  </para>
+  <sect1 id="comparing-data-types">
+    <title>
+      Data types
+    </title>
+      <para>
+	The table below shows how the data types in &kexi; correspond
+	to data types in other database applications.
+      </para>
+      <para>
+	Some of the data types listed here are
+	<firstterm>sub-types</firstterm> of other types.  For example,
+	the <firstterm>Long text</firstterm> type is a sub-type of the
+	<firstterm>Text</firstterm> type.  To use a sub-type in
+	&kexi;, you should select the corresponding basic type (in
+	this case, Text) in the table designer, and then select the
+	sub-type using the <guilabel>Subtype</guilabel> setting in the
+	<guilabel>Properties Editor</guilabel>.
+      </para>
+      <table>
+      <title>
+	Comparison of data types used in Kexi and other database
+	applications
+      </title>
+      <tgroup cols="4">
+	<thead>
+	  <row>
+	    <entry>Kexi</entry>
+	    <entry>MS Access</entry>
+	    <entry>dBase/FoxPro</entry>
+	    <entry>Paradox</entry>
+	  </row>
+	</thead>
+	<tbody>
+	  <row>
+	    <entry>Text (Text)</entry>
+	    <entry>Text</entry>
+	    <entry>Character</entry>
+	    <entry>Alphanumeric</entry>
+	  </row>
+	  <row>
+	    <entry>Long text (Long text)</entry>
+	    <entry>Memo</entry>
+	    <entry>Memo</entry>
+	    <entry>Memo</entry>
+	  </row>
+	  <row>
+	    <entry>Date/Time (Date/Time)</entry>
+	    <entry>Date, Time</entry>
+	    <entry>Date</entry>
+	    <entry>DateTime</entry>
+	  </row>
+<!-- Not visible in Kexi GUI yet.
+	  <row>
+	    <entry>Object (Object)</entry>
+	    <entry>OLE Object</entry>
+	    <entry>General</entry>
+	    <entry>OLE, Graphical Binary</entry>
+	  </row>
+-->
+	  <row>
+	    <entry>Integer Number (Integer Number)</entry>
+	    <entry>Number (Integer)</entry>
+	    <entry>Numeric</entry>
+	    <entry>Integer</entry>
+	  </row>
+	  <row>
+	    <entry>Big Integer Number (Big Integer Number)</entry>
+	    <entry>Long Integer</entry>
+	    <entry>Numeric</entry>
+	    <entry>Long Integer</entry>
+	  </row>
+	  <row>
+	    <entry>Floating Point Number (Floating Point Number)</entry>
+	    <entry>Single/Double precision number</entry>
+	    <entry>Float</entry>
+	    <entry>Number</entry>
+	  </row>
+	</tbody>
+      </tgroup>
+    </table>
+  </sect1>
+</appendix>
 
 &documentation.index;
 </book>
