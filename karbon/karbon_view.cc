@@ -165,20 +165,6 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 
 	m_canvas->show();
 
-	if( m_showRulerAction->isChecked() )
-	{
-		m_horizRuler->show();
-		m_vertRuler->show();
-	}
-	else
-	{
-		m_horizRuler->hide();
-		m_vertRuler->hide();
-	}
-
-	m_horizRuler->installEventFilter(m_canvas);
-	m_vertRuler->installEventFilter(m_canvas);
-
 	// set up factory
 	m_painterFactory = new VPainterFactory;
 	m_painterFactory->setPainter( canvasWidget()->pixmap(), width(), height() );
@@ -193,6 +179,20 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		createDocumentTabDock();
 		createLayersTabDock();
 		createHistoryTabDock();
+
+		if( m_showRulerAction->isChecked() )
+		{
+			m_horizRuler->show();
+			m_vertRuler->show();
+		}
+		else
+		{
+			m_horizRuler->hide();
+			m_vertRuler->hide();
+		}
+	
+		m_horizRuler->installEventFilter(m_canvas);
+		m_vertRuler->installEventFilter(m_canvas);
 	}
 
 	zoomChanged();
@@ -310,7 +310,7 @@ KarbonView::resizeEvent( QResizeEvent* /*event*/ )
     int hSpace = 20;
     int vSpace = 20;
 
-	if( m_showRulerAction->isChecked())
+	if( shell() && m_showRulerAction->isChecked())
 	{
 		updateRuler();
 		m_canvas->setGeometry( hSpace, vSpace, width() - hSpace, height() - vSpace );
@@ -825,7 +825,7 @@ KarbonView::zoomChanged( const KoPoint &p )
 	m_canvas->viewport()->setUpdatesEnabled( true );
 
 
-	if( m_showRulerAction->isChecked() )
+	if( shell() && m_showRulerAction->isChecked() )
 	{
 		updateRuler();
 	}
@@ -1089,7 +1089,7 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 
 	KoPoint xy;
 	xy.setX((mx + canvasWidget()->contentsX() - canvasWidget()->pageOffsetX())/zoom());
-	xy.setY((my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY())/zoom());
+	xy.setY(m_part->document().height() - (my + canvasWidget()->contentsY() - canvasWidget()->pageOffsetY())/zoom());
 
 	xy.setX(KoUnit::toUserValue(xy.x(), part()->unit()));
 	xy.setY(KoUnit::toUserValue(xy.y(), part()->unit()));
@@ -1137,7 +1137,7 @@ KarbonView::showRuler()
     int hSpace = 20;
     int vSpace = 20;
 
-	if( m_showRulerAction->isChecked() )
+	if( shell() && m_showRulerAction->isChecked() )
 	{
 		m_horizRuler->show();
 		m_vertRuler->show();
@@ -1270,7 +1270,7 @@ KarbonView::canvasContentsMoving( int x, int y )
 
 	if( m_canvas->horizontalScrollBar()->isVisible() )
 	{
-		if( m_showRulerAction->isChecked() )
+		if( shell() && m_showRulerAction->isChecked() )
 		{
 			if( (1 + hSpace + m_canvas->pageOffsetX() - x) >= hSpace)
 			{
@@ -1287,7 +1287,7 @@ KarbonView::canvasContentsMoving( int x, int y )
 
 	if( m_canvas->verticalScrollBar()->isVisible() )
 	{
-		if( m_showRulerAction->isChecked() )
+		if( shell() && m_showRulerAction->isChecked() )
 		{
 			if( (1 + vSpace + m_canvas->pageOffsetY() - y) >= vSpace)
 			{
