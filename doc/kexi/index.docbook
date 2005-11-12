@@ -184,7 +184,7 @@ revision history. (see installation appendix comment) -->
     own needs and preferences.
   </para>
 
-  <section>
+  <sect1>
     <title>
       Window Layout
     </title>
@@ -210,10 +210,11 @@ revision history. (see installation appendix comment) -->
       menu.  Note that changing the MDI mode requires Kexi to be
       restarted before the new mode takes effect.
     </para>
-    <section>
+    <sect2>
       <title>
-	IDEAl mode.
+	IDEAl mode
       </title>
+<!-- TODO: Screenshot of IDEAl mode -->
       <para>
 	IDEAl mode is the default MDI mode, and may be familiar from
 	other &kde; applications.  In this mode, a single child window
@@ -222,18 +223,19 @@ revision history. (see installation appendix comment) -->
 	other child windows to be viewed by simply clicking on the
 	relevant tab.
       </para>
-    </section>
-    <section>
+    </sect2>
+    <sect2>
       <title>
-	Childframe mode.
+	Childframe mode
       </title>
+<!-- TODO: Screenshot of Childframe mode -->
       <para>
 	In Childframe mode, child windows are displayed in the
 	main &kexi; window, but need not be maximized within it.
 	In order to use Childframe mode, you need to select
 	<action>
-	  <guimenu>Window</guimenu>
-	  <guisubmenu>MDI mode</guisubmenu>
+	  <guimenu>Window</guimenu>,
+	  <guisubmenu>MDI mode</guisubmenu>,
 	  <guimenuitem>Childframe Mode</guimenuitem>
 	</action> from the menu.
       </para>
@@ -253,8 +255,8 @@ revision history. (see installation appendix comment) -->
 	left-most button detaches the child window, allowing it to be
 	moved out of the main window.
       </para>
-    </section>
-  </section>
+    </sect2>
+  </sect1>
 </chapter>
 
 
