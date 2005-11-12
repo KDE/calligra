@@ -219,9 +219,6 @@ void KexiScriptContainer::addStdErr(const QString& s)
 /// \internal
 class KexiScriptExtension : public KAction
 {
-	private:
-		QString m_interpretername;
-		QString m_file;
 	public:
 		KexiScriptExtension(const QString& interpretername, const QString& file, KActionCollection* actioncollection)
 			: KAction(
@@ -243,6 +240,9 @@ class KexiScriptExtension : public KAction
 		const QString& getInterpreterName() { return m_interpretername; }
 		const QString& getFile() { return m_file; }
 
+	private:
+		QString m_interpretername;
+		QString m_file;
 };
 
 /// \internal
