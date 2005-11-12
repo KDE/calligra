@@ -315,7 +315,7 @@ KActionCollection* KexiScriptManager::getExtensions()
 			for(QStringList::Iterator fileit = files.begin(); fileit != files.end(); ++fileit) {
 				KAction* action = new KAction(
 					KURL(*fileit).fileName(), // text
-					"exec", // icon
+					"script", // icon
 					0, // shortcut
 					this, // receiver
 					SLOT( executeExtension() ), // slot
