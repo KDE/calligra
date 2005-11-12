@@ -1,6 +1,5 @@
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
-  <!ENTITY kappname "&kmyapplication;">
   <!ENTITY package "koffice">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
@@ -12,32 +11,35 @@
 <book lang="&language;">
 
 <bookinfo>
-<title>The &kexi; Handbook</title>
+<title>
+    The &kexi; Handbook
+</title>
 
 <authorgroup>
-<author>
-<personname>
-<firstname>Martin</firstname>
-<othername>A.</othername>
-<surname>Ellis</surname>
-</personname>
-<email>martin.ellis@kdemail.net</email>
-</author>
-<author>
-<personname>
-<firstname>Jarosław</firstname>
-<surname>Staniek</surname>
-</personname>
-<email>js@iidea.pl</email>
-</author>
+  <author>
+    <personname>
+      <firstname>Martin</firstname>
+      <othername>A.</othername>
+      <surname>Ellis</surname>
+    </personname>
+    <email>martin.ellis@kdemail.net</email>
+  </author>
+  <author>
+    <personname>
+      <firstname>Jarosław</firstname>
+      <surname>Staniek</surname>
+    </personname>
+    <email>js@iidea.pl</email>
+  </author>
 </authorgroup>
 
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 
 <copyright>
-<year>2005</year>
-<holder>Jarosław Staniek</holder>
-<holder>Martin Ellis</holder>
+  <year>2004</year>
+  <year>2005</year>
+  <holder>Jarosław Staniek</holder>
+  <holder>Martin Ellis</holder>
 </copyright>
 
 <!-- Translators: put here the copyright notice of the translation -->
@@ -58,17 +60,17 @@ Do NOT change these in the translation. -->
 <!-- Abstract about this handbook -->
 
 <abstract>
-<para>
-&kexi; is database management application.  It is part of the KOffice suite.
-</para>
+  <para>
+    &kexi; is database management application.  It is part of the KOffice suite.
+  </para>
 </abstract>
 
 <!-- Keywords -->
 <keywordset>
-<keyword>KDE</keyword>
-<keyword>KOffice</keyword>
-<keyword>Kexi</keyword>
-<keyword>database</keyword>
+  <keyword>KDE</keyword>
+  <keyword>KOffice</keyword>
+  <keyword>Kexi</keyword>
+  <keyword>database</keyword>
 </keywordset>
 
 </bookinfo>
@@ -91,99 +93,226 @@ problems. Basically a long version of the abstract.  Don't include a
 revision history. (see installation appendix comment) -->
 
 <para>
-&kexi; is a database management application.
-It can be used for creating databases, inserting data, performing queries, and processing data. Forms can be created to provide a custom interface to your data. All database objects - tables, queries and forms - are stored in the database, making it easy to share data and design.
+  &kexi; is a database management application.  It can be used for
+  creating databases, inserting data, performing queries, and processing
+  data. Forms can be created to provide a custom interface to your
+  data. All database objects - tables, queries and forms - are stored in
+  the database, making it easy to share data and design.
 </para>
 
 <para>
-&kexi; is part of the &koffice; productivity suite for for the K Desktop
-Environment.
-</para>
-
-<para>In addition to storing &kexi; your databases in files, &kexi; can also store your data on a <firstterm>database server</firstterm>.  Using a database server allows you to share your database with other people, and also allows more than one person to use the database at one time.  The following database servers are supported by &kexi;:
-<itemizedlist>
-<listitem>
-  <para>
-    MySQL (See <ulink url="http://www.mysql.com/">http://www.mysql.com/</ulink>)
-  </para>
-</listitem>
-<listitem>
-  <para>
-    PostgreSQL (See <ulink url="http://www.postgresql.org/">http://www.postgresql.org/</ulink>)
-  </para>
-</listitem>
-</itemizedlist>
+  &kexi; is part of the &koffice; productivity suite for for the K Desktop
+  Environment.
 </para>
 
 <para>
-More information about &kexi; can be found a the &kexi; page on the &koffice; website at <ulink url="http://www.koffice.org/kexi/">http://www.koffice.org/kexi/</ulink>, and on the website for &kexi; itself at <ulink url="http://www.kexi-project.org/about.html">http://www.kexi-project.org/about.html</ulink>.
+  In addition to storing &kexi; your databases in files, &kexi; can also
+  store your data on a <firstterm>database server</firstterm>.  Using
+  a database server allows you to share your database with other
+  people, and also allows more than one person to use the database at
+  one time.  The following database servers are supported by &kexi;:
+  <itemizedlist>
+    <listitem>
+      <para>
+	MySQL (See <ulink url="http://www.mysql.com/"
+			  >http://www.mysql.com/</ulink>)
+      </para>
+    </listitem>
+    <listitem>
+      <para>
+	PostgreSQL (See <ulink url="http://www.postgresql.org/"
+			       >http://www.postgresql.org/</ulink>)
+      </para>
+    </listitem>
+  </itemizedlist>
 </para>
 
 <para>
-If you have any questions about &kexi;, there are two mailing lists you can use.  The <ulink url="mailto:kexi@kde.org">Kexi user mailing list</ulink> can be used to ask questions about using &kexi; or about the &kexi; project.  The <ulink url="mailto:kexi-devel@kde.org">Kexi development mailing list</ulink> can be used to ask questions about the development of &kexi;.  Further information about how to subscribe to these lists; together with a few other ways of making contact with &kexi; developers, can be found at:
-<itemizedlist><listitem><para>
- <ulink url="http://www.kexi-project.org/wiki/wikiview/index.php?Support"
-        >http://www.kexi-project.org/wiki/wikiview/index.php?Support</ulink>
-</para></listitem></itemizedlist>
+  More information about &kexi; can be found a the &kexi; page on the
+  &koffice; website
+  at <ulink
+	url="http://www.koffice.org/kexi/">http://www.koffice.org/kexi/</ulink>,
+  and on the website for &kexi; itself
+  at <ulink url="http://www.kexi-project.org/about.html"
+	    >http://www.kexi-project.org/about.html</ulink>.
 </para>
 
+<para>
+  If you have any questions about &kexi;, there are two mailing lists
+  you can use.  The <ulink url="mailto:kexi@kde.org">Kexi user mailing
+    list</ulink> can be used to ask questions about using &kexi; or about
+  the &kexi; project.  The <ulink url="mailto:kexi-devel@kde.org">Kexi
+    development mailing list</ulink> can be used to ask questions about
+  the development of &kexi;.  Further information about how to subscribe
+  to these lists; together with a few other ways of making contact with
+  &kexi; developers, can be found at:
+  <itemizedlist>
+    <listitem>
+      <para>
+        <ulink
+           url="http://www.kexi-project.org/wiki/wikiview/index.php?Support"
+           >http://www.kexi-project.org/wiki/wikiview/index.php?Support</ulink>
+      </para>
+    </listitem>
+  </itemizedlist>
+</para>
 </chapter>
+
+<!--
+      <para>
+	The <guilabel>Project Navigator</guilabel> and
+	<guilabel>Properties Editor</guilabel> are shown in panes on
+	each side of the child window.  These can be resized or hidden
+	as required.  A pane can be hidden by clicking the small cross
+	at the top of the pane (just below the toolbar).
+      </para>
+      <para>
+	New child windows can be created by clicking (or
+	double-clicking, depending upon your global &kde; settings) on
+	the names of database objects listed in the <guilabel>Project
+	Navigator</guilabel>.
+      </para>
+-->
+
+<chapter id="configuration">
+  <title>
+    Configuring Kexi
+  </title>
+
+  <para>
+    This chapter describes how you can configure &kexi; to suit your
+    own needs and preferences.
+  </para>
+
+  <section>
+    <title>
+      Window Layout
+    </title>
+    <para>
+      &kexi; provides a <firstterm>Mutiple Document
+      Interface</firstterm> (MDI).  This means that you can have
+      several database objects (such as tables, queries, forms and
+      scripts) open at the same time and in the same &kexi; main
+      window.  Each database object is shown in a <firstterm>child
+      window</firstterm> within the main window.
+    </para>
+    <para>
+      There is a choice of two MDI modes available, allowing a choice
+      of how child windows are managed and displayed.  The two modes
+      are:
+      <itemizedlist>
+	<listitem><para>IDEAl mode; and</para></listitem>
+	<listitem><para>Childframe mode.</para></listitem>
+      </itemizedlist>
+      These modes are described in the following two sections.  You
+      can change the MDI mode from the <guisubmenu>MDI
+      mode</guisubmenu> sub-menu under the <guimenu>Window</guimenu>
+      menu.  Note that changing the MDI mode requires Kexi to be
+      restarted before the new mode takes effect.
+    </para>
+    <section>
+      <title>
+	IDEAl mode.
+      </title>
+      <para>
+	IDEAl mode is the default MDI mode, and may be familiar from
+	other &kde; applications.  In this mode, a single child window
+	is shown maximized within in the &kexi; main window at once.
+	A tab bar, containing one tab for each child window, allows
+	other child windows to be viewed by simply clicking on the
+	relevant tab.
+      </para>
+    </section>
+    <section>
+      <title>
+	Childframe mode.
+      </title>
+      <para>
+	In Childframe mode, child windows are displayed in the
+	main &kexi; window, but need not be maximized within it.
+	In order to use Childframe mode, you need to select
+	<action>
+	  <guimenu>Window</guimenu>
+	  <guisubmenu>MDI mode</guisubmenu>
+	  <guimenuitem>Childframe Mode</guimenuitem>
+	</action> from the menu.
+      </para>
+      <para>
+	Each child window has a title bar with buttons for maximizing,
+	minimizing and closing it.  They can also be moved and resized
+	within the main window in the normal way (for example, they
+	can be moved by clicking and dragging the title bar).
+      </para>
+      <para>
+        The buttons behave as follows:  the right-most button closes
+	the child window.  The button on its left maximizes the child
+	window - note this causes the buttons to move to the top right
+	of the main window, above the <guilabel>Properties
+	editor</guilabel> if it is open.  The next button to the left
+	toggles the child window between minimized and restored.  The
+	left-most button detaches the child window, allowing it to be
+	moved out of the main window.
+      </para>
+    </section>
+  </section>
+</chapter>
+
 
 <chapter id="credits">
 
 <!-- Include credits for the programmers, documentation writers, and
-contributors here. The license for your software should then be included below
-the credits with a reference to the appropriate license file included in the KDE
-distribution. -->
+     contributors here. The license for your software should then be
+     included below the credits with a reference to the appropriate
+     license file included in the KDE distribution. -->
 
 <title>Credits and License</title>
 
 <para>
-&kexi; Copyright 2002-2005 The &kexi; Team:
-<itemizedlist>
-<title>&kexi; Developers:</title>
-<listitem>
-  <para>Jaroslaw Staniek / OpenOffice Polska <email>js@iidea.pl</email></para>
-</listitem>
-<listitem>
-  <para>Lucijan Busch <email>lucijan@kde.org</email></para>
-</listitem>
-<listitem>
-  <para>Cedric Pasteur <email>cedric.pasteur@free.fr</email></para>
-</listitem>
-<listitem>
-  <para>Adam Pigg <email>adam@piggz.fsnet.co.uk</email></para>
-</listitem>
-<listitem>
-  <para>Martin Ellis <email>martin.ellis@kdemail.net</email></para>
-</listitem>
-<listitem>
-  <para>Sebastian Sauer <email>mail@dipe.org</email></para>
-</listitem>
-<listitem>
-  <para>Christian Nitschkowski <email>segfault_ii@web.de</email></para>
-</listitem>
-<listitem>
-  <para>Peter Simonsson <email>psn@linux.se</email></para>
-</listitem>
-<listitem>
-  <para>Joseph Wenninger <email>jowenn@kde.org</email></para>
-</listitem>
-<listitem>
-  <para>Seth Kurzenberg <email>seth@cql.com</email></para>
-</listitem>
-<listitem>
-  <para>Laurent Montel <email>montel@kde.org</email></para>
-</listitem>
-<listitem>
-  <para>Till Busch <email>till@bux.at</email></para>
-</listitem>
-</itemizedlist>
-
+  &kexi; Copyright 2002-2005 The &kexi; Team:
+  <itemizedlist>
+    <title>&kexi; Developers:</title>
+    <listitem>
+      <para>Jaroslaw Staniek / OpenOffice Polska <email>js@iidea.pl</email></para>
+    </listitem>
+    <listitem>
+      <para>Lucijan Busch <email>lucijan@kde.org</email></para>
+    </listitem>
+    <listitem>
+      <para>Cedric Pasteur <email>cedric.pasteur@free.fr</email></para>
+    </listitem>
+    <listitem>
+      <para>Adam Pigg <email>adam@piggz.fsnet.co.uk</email></para>
+    </listitem>
+    <listitem>
+      <para>Martin Ellis <email>martin.ellis@kdemail.net</email></para>
+    </listitem>
+    <listitem>
+      <para>Sebastian Sauer <email>mail@dipe.org</email></para>
+    </listitem>
+    <listitem>
+      <para>Christian Nitschkowski <email>segfault_ii@web.de</email></para>
+    </listitem>
+    <listitem>
+      <para>Peter Simonsson <email>psn@linux.se</email></para>
+    </listitem>
+    <listitem>
+      <para>Joseph Wenninger <email>jowenn@kde.org</email></para>
+    </listitem>
+    <listitem>
+      <para>Seth Kurzenberg <email>seth@cql.com</email></para>
+    </listitem>
+    <listitem>
+      <para>Laurent Montel <email>montel@kde.org</email></para>
+    </listitem>
+    <listitem>
+      <para>Till Busch <email>till@bux.at</email></para>
+    </listitem>
+  </itemizedlist>
 </para>
 
 <para>
-Documentation Copyright &copy; 2005 Martin A. Ellis <email>martin.ellis@kdemail.net</email>
+  Documentation Copyright &copy; 2004-2005
+  Martin A. Ellis <email>martin.ellis@kdemail.net</email>
 </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
