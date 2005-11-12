@@ -47,8 +47,6 @@ private:
     QVBoxLayout* m_layout;
     QPoint m_mousePos;
     QPoint m_startPos;
-    class Private;
-    Private *d;
 };
 
 class KOFFICEUI_EXPORT KoTransformToolBox : public ToolBox
@@ -88,8 +86,8 @@ private:
     QSpinBox* m_shearX;
     QSpinBox* m_shearY;
     KoDocumentChild* m_child;
-    class KoTransformToolBoxPrivate;
-    KoTransformToolBoxPrivate *d;
+    class Private;
+    Private *d;
 };
 
 #endif

@@ -607,7 +607,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       font = cell->textFont( i, row );
       m_styles.addFont( font );
 
-      if ( cell->hasProperty( KSpread::Format::PComment ) )
+      if ( cell->hasProperty( Format::PComment ) )
         hasComment = true;
     }
 
@@ -627,7 +627,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
         CellStyle c1;
         CellStyle::loadData( c1, cell1 ); // TODO: number style
 
-        if ( cell1->isEmpty() && !cell->hasProperty( KSpread::Format::PComment )
+        if ( cell1->isEmpty() && !cell->hasProperty( Format::PComment )
              && CellStyle::isEqual( &c, c1 ) && !cell->isObscuringForced() && !cell->isForceExtraCells() )
           ++repeated;
         else
@@ -831,7 +831,7 @@ void OpenCalcExport::exportDefaultCellStyle( QDomDocument & doc, QDomElement & o
   KoDocument * document = m_chain->inputDocument();
   Doc * ksdoc    = static_cast<Doc *>(document);
 
-  KSpread::Format * format = new KSpread::Format( 0, ksdoc->styleManager()->defaultStyle() );
+  Format * format = new Format( 0, ksdoc->styleManager()->defaultStyle() );
   const KLocale *locale = ksdoc->locale();
   QString language;
   QString country;

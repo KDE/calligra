@@ -86,7 +86,7 @@ static const int CURRENT_SYNTAX_VERSION = 1;
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.2";
 
-class KSpread::DocPrivate
+class Doc::Private
 {
 public:
 
@@ -158,8 +158,8 @@ public:
  *
  *****************************************************************************/
 
-QValueList<Doc*> DocPrivate::s_docs;
-int DocPrivate::s_docId = 0;
+QValueList<Doc*> Doc::Private::s_docs;
+int Doc::Private::s_docId = 0;
 
 #define deleteLoadingInfo() { \
         delete d->m_loadingInfo; \
@@ -169,18 +169,18 @@ int DocPrivate::s_docId = 0;
 Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const char* name, bool singleViewMode )
   : KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
-  d = new DocPrivate;
+  d = new Private;
   d->m_loadingInfo = 0L;
 
   d->map = new Map( this, "Map" );
   d->locale = new Locale;
   d->styleManager = new StyleManager();
 
-  d->parser = new KSpread::ValueParser( d->locale );
-  d->converter = new KSpread::ValueConverter ( d->parser );
-  d->calc = new KSpread::ValueCalc( d->converter );
+  d->parser = new ValueParser( d->locale );
+  d->converter = new ValueConverter ( d->parser );
+  d->calc = new ValueCalc( d->converter );
   d->calc->setDoc (this);
-  d->formatter = new KSpread::ValueFormatter( d->converter );
+  d->formatter = new ValueFormatter( d->converter );
 
   d->activeSheet = 0;
 
@@ -236,7 +236,7 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
   d->showCommentIndicator = true;
   d->showError = false;
   d->calcMethod = SumOfNumber;
-  d->moveTo = KSpread::Bottom;
+  d->moveTo = Bottom;
   d->completionMode = KGlobalSettings::CompletionAuto;
   d->spellConfig = 0;
   d->dontCheckUpperWord = false;
@@ -271,7 +271,7 @@ Doc::~Doc()
 
 QValueList<Doc*> Doc::documents()
 {
-  return DocPrivate::s_docs;
+  return Private::s_docs;
 }
 
 bool Doc::initDoc(InitDocFlags flags, QWidget* parentWidget)
@@ -386,22 +386,22 @@ StyleManager *Doc::styleManager () const
   return d->styleManager;
 }
 
-KSpread::ValueParser *Doc::parser () const
+ValueParser *Doc::parser () const
 {
   return d->parser;
 }
 
-KSpread::ValueFormatter *Doc::formatter () const
+ValueFormatter *Doc::formatter () const
 {
   return d->formatter;
 }
 
-KSpread::ValueConverter *Doc::converter () const
+ValueConverter *Doc::converter () const
 {
   return d->converter;
 }
 
-KSpread::ValueCalc *Doc::calc () const
+ValueCalc *Doc::calc () const
 {
   return d->calc;
 }

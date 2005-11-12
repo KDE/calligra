@@ -140,7 +140,7 @@ namespace KSpread
 {
 class ViewActions;
 
-class ViewPrivate
+class View::Private
 {
 public:
     View* view;
@@ -433,7 +433,7 @@ public:
 };
 
 
-void ViewPrivate::initActions()
+void View::Private::initActions()
 {
   actions = new ViewActions;
 
@@ -1111,7 +1111,7 @@ void ViewPrivate::initActions()
       Qt::CTRL+ Qt::SHIFT + Qt::Key_I, view, SLOT( runInspector() ), ac, "inspector" );
 }
 
-void ViewPrivate::adjustActions( bool mode )
+void View::Private::adjustActions( bool mode )
 {
   actions->replace->setEnabled( mode );
   actions->insertSeries->setEnabled( mode );
@@ -1248,7 +1248,7 @@ void ViewPrivate::adjustActions( bool mode )
     view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
 }
 
-void ViewPrivate::adjustActions( Sheet* sheet, Cell* cell )
+void View::Private::adjustActions( Sheet* sheet, Cell* cell )
 {
   QRect selection = selectionInfo->selection();
   if ( sheet->isProtected() && !cell->isDefault() && cell->notProtected( cell->column(), cell->row() ) )
@@ -1271,7 +1271,7 @@ void ViewPrivate::adjustActions( Sheet* sheet, Cell* cell )
   }
 }
 
-void ViewPrivate::adjustWorkbookActions( bool mode )
+void View::Private::adjustWorkbookActions( bool mode )
 {
   actions->hideSheet->setEnabled( mode );
   actions->showSheet->setEnabled( mode );
@@ -1293,7 +1293,7 @@ void ViewPrivate::adjustWorkbookActions( bool mode )
 }
 
 // TODO this should be merged with adjustActions
-void ViewPrivate::updateButton( Cell *cell, int column, int row)
+void View::Private::updateButton( Cell *cell, int column, int row)
 {
     toolbarLock = true;
 
@@ -1343,7 +1343,7 @@ void ViewPrivate::updateButton( Cell *cell, int column, int row)
       adjustActions( activeSheet, cell );
 }
 
-QButton* ViewPrivate::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
+QButton* View::Private::newIconButton( const char *_file, bool _kbutton, QWidget *_parent )
 {
   if ( _parent == 0L )
     _parent = view;
@@ -1376,7 +1376,7 @@ View::View( QWidget *_parent, const char *_name,
     ElapsedTime et( "View constructor" );
     kdDebug(36001) << "sizeof(Cell)=" << sizeof(Cell) <<endl;
 
-    d = new ViewPrivate;
+    d = new Private;
     d->view = this;
     d->doc = _doc;
 
@@ -1728,7 +1728,7 @@ void View::initConfig()
         doc()->setShowRowHeader(config->readBoolEntry("Row Header",true));
         if ( !doc()->configLoadFromFile() )
             doc()->setCompletionMode((KGlobalSettings::Completion)config->readNumEntry("Completion Mode",(int)(KGlobalSettings::CompletionAuto)));
-        doc()->setMoveToValue((KSpread::MoveTo)config->readNumEntry("Move",(int)(KSpread::Bottom)));
+        doc()->setMoveToValue((KSpread::MoveTo)config->readNumEntry("Move",(int)(Bottom)));
         doc()->setIndentValue( config->readDoubleNumEntry( "Indent", 10.0 ) );
         doc()->setTypeOfCalc((MethodOfCalc)config->readNumEntry("Method of Calc",(int)(SumOfNumber)));
         if ( !doc()->configLoadFromFile() )
@@ -3662,7 +3662,7 @@ void View::paste()
   if ( !d->canvas->editor() )
   {
       //kdDebug(36001) << "Pasting. Rect= " << selection(false) << " bytes" << endl;
-    d->activeSheet->paste( selection(false), true, Normal, OverWrite, false, 0, true );
+    d->activeSheet->paste( selection(false), true, Paste::Normal, Paste::OverWrite, false, 0, true );
     resultOfCalc();
     updateEditWidget();
   }
@@ -5371,7 +5371,7 @@ void View::openPopupMenu( const QPoint & _point )
           it = lst.begin();
           for (; it != lst.end(); ++it )
           {
-            ViewPrivate::ToolEntry *t = new ViewPrivate::ToolEntry;
+            Private::ToolEntry *t = new Private::ToolEntry;
             t->command = *it;
             t->info = *entry;
             d->toolList.append( t );
@@ -5393,7 +5393,7 @@ void View::slotActivateTool( int _id )
   if ( _id < d->popupMenuFirstToolId )
     return;
 
-  ViewPrivate::ToolEntry* entry = d->toolList.at( _id - d->popupMenuFirstToolId );
+  Private::ToolEntry* entry = d->toolList.at( _id - d->popupMenuFirstToolId );
 
   KDataTool* tool = entry->info.createTool();
   if ( !tool )
@@ -5546,7 +5546,7 @@ void View::slotInsertCellCopy()
   if ( !d->activeSheet->testAreaPasteInsert() )
   {
     doc()->emitBeginOperation( false );
-    d->activeSheet->paste( selection(), true, Normal, OverWrite, true );
+    d->activeSheet->paste( selection(), true, Paste::Normal, Paste::OverWrite, true );
     doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
   else

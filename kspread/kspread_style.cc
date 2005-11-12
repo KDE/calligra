@@ -51,10 +51,10 @@ Style::Style()
     m_type( AUTO ),
     m_usageCount( 0 ),
     m_featuresSet( 0 ),
-    m_alignX( KSpread::Format::Undefined ),
-    m_alignY( KSpread::Format::Middle ),
-    m_floatFormat( KSpread::Format::OnlyNegSigned ),
-    m_floatColor( KSpread::Format::AllBlack ),
+    m_alignX( Format::Undefined ),
+    m_alignY( Format::Middle ),
+    m_floatFormat( Format::OnlyNegSigned ),
+    m_floatColor( Format::AllBlack ),
     m_formatType( Generic_format ),
     m_fontFlags( 0 ),
     m_bgColor( Qt::white ),
@@ -246,13 +246,13 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
         str = styleStack.attributeNS( KoXmlNS::fo, "text-align" );
         kdDebug()<<"str :"<<str<<endl;
         if ( str == "center" )
-            m_alignX = KSpread::Format::Center;
+            m_alignX = Format::Center;
         else if ( str == "end" )
-            m_alignX = KSpread::Format::Right;
+            m_alignX = Format::Right;
         else if ( str == "start" )
-            m_alignX = KSpread::Format::Left;
+            m_alignX = Format::Left;
         else
-            m_alignX = KSpread::Format::Undefined;
+            m_alignX = Format::Undefined;
         m_featuresSet |= SAlignX;
     }
 
@@ -261,11 +261,11 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
     {
         str = styleStack.attributeNS( KoXmlNS::style, "vertical-align" );
         if ( str == "bottom" )
-            m_alignY = KSpread::Format::Bottom;
+            m_alignY = Format::Bottom;
         else if ( str =="top" )
-            m_alignY = KSpread::Format::Top;
+            m_alignY = Format::Top;
         else if ( str =="middle" )//FIXME !!!
-            m_alignY = KSpread::Format::Middle;
+            m_alignY = Format::Middle;
         m_featuresSet |= SAlignY;
     }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) )
@@ -434,7 +434,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
 
     if ( format.hasAttribute( "float" ) )
     {
-        KSpread::Format::FloatFormat a = (KSpread::Format::FloatFormat)format.attribute( "float" ).toInt( &ok );
+        Format::FloatFormat a = (Format::FloatFormat)format.attribute( "float" ).toInt( &ok );
         if ( !ok )
             return false;
         if ( (unsigned int) a >= 1 || (unsigned int) a <= 3 )
@@ -446,7 +446,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
 
     if ( format.hasAttribute( "floatcolor" ) )
     {
-        KSpread::Format::FloatColor a = (KSpread::Format::FloatColor) format.attribute( "floatcolor" ).toInt( &ok );
+        Format::FloatColor a = (Format::FloatColor) format.attribute( "floatcolor" ).toInt( &ok );
         if ( !ok ) return false;
         if ( (unsigned int) a >= 1 || (unsigned int) a <= 2 )
         {
@@ -460,7 +460,7 @@ void Style::loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & elem
         m_strFormat = format.attribute( "custom" );
         m_featuresSet |= SCustomFormat;
     }
-    if ( m_formatType == KSpread::Format::Money )
+    if ( m_formatType == Format::Money )
     {
         if ( format.hasAttribute( "type" ) )
         {
@@ -992,27 +992,27 @@ QString Style::saveOasisStyleNumericFraction( KoGenStyles &mainStyles, FormatTyp
 
 QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
 {
-    if ( featureSet( SAlignX ) && alignX() != KSpread::Format::Undefined )
+    if ( featureSet( SAlignX ) && alignX() != Format::Undefined )
     {
         QString value ="start";
         switch( alignX() )
         {
-        case KSpread::Format::Center:
+        case Format::Center:
             value = "center";
             break;
-        case KSpread::Format::Right:
+        case Format::Right:
             value = "end";
             break;
-        case KSpread::Format::Left:
+        case Format::Left:
             value = "start";
             break;
         }
         style.addProperty( "fo:text-align", value, KoGenStyle::ParagraphType );
     }
 
-    if ( featureSet( SAlignY ) && alignY() != KSpread::Format::Middle )
+    if ( featureSet( SAlignY ) && alignY() != Format::Middle )
     {
-        style.addProperty( "style:vertical-align", ( alignY() == KSpread::Format::Bottom ? "bottom" : "top" ) );
+        style.addProperty( "style:vertical-align", ( alignY() == Format::Bottom ? "bottom" : "top" ) );
     }
     if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
         style.addProperty( "fo:background-color", m_bgColor.name() );
@@ -1035,7 +1035,7 @@ QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     if ( featureSet( SCustomFormat ) && !strFormat().isEmpty() )
         format.setAttribute( "custom", m_strFormat );
 
-    if ( featureSet( SFormatType ) && formatType() == KSpread::Format::Money )
+    if ( featureSet( SFormatType ) && formatType() == Format::Money )
     {
         format.setAttribute( "type", (int) m_currency.type );
         format.setAttribute( "symbol", m_currency.symbol );
@@ -1050,7 +1050,7 @@ QString Style::saveOasisStyle( KoGenStyle &style, KoGenStyles &mainStyles )
     {
         style.addPropertyPt("fo:margin-left", m_indent, KoGenStyle::ParagraphType );
         //FIXME
-        //if ( a == KSpread::Format::Undefined )
+        //if ( a == Format::Undefined )
         //currentCellStyle.addProperty("fo:text-align", "start" );
     }
     if ( featureSet( SDontPrintText ) && hasProperty( PDontPrintText ) )
@@ -1182,10 +1182,10 @@ QString Style::saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &
 
 void Style::saveXML( QDomDocument & doc, QDomElement & format ) const
 {
-  if ( featureSet( SAlignX ) && alignX() != KSpread::Format::Undefined )
+  if ( featureSet( SAlignX ) && alignX() != Format::Undefined )
     format.setAttribute( "alignX", (int) m_alignX );
 
-  if ( featureSet( SAlignY ) && alignY() != KSpread::Format::Middle )
+  if ( featureSet( SAlignY ) && alignY() != Format::Middle )
     format.setAttribute( "alignY", (int) m_alignY );
 
   if ( featureSet( SBackgroundColor ) && m_bgColor != QColor() && m_bgColor.isValid() )
@@ -1316,7 +1316,7 @@ bool Style::loadXML( QDomElement & format )
 
   if ( format.hasAttribute( "alignX" ) )
   {
-    KSpread::Format::Align a = (KSpread::Format::Align) format.attribute( "alignX" ).toInt( &ok );
+    Format::Align a = (Format::Align) format.attribute( "alignX" ).toInt( &ok );
     if ( !ok )
       return false;
     if ( (unsigned int) a >= 1 || (unsigned int) a <= 4 )
@@ -1327,7 +1327,7 @@ bool Style::loadXML( QDomElement & format )
   }
   if ( format.hasAttribute( "alignY" ) )
   {
-    KSpread::Format::AlignY a = (KSpread::Format::AlignY) format.attribute( "alignY" ).toInt( &ok );
+    Format::AlignY a = (Format::AlignY) format.attribute( "alignY" ).toInt( &ok );
     if ( !ok )
       return false;
     if ( (unsigned int) a >= 1 || (unsigned int) a < 4 )
@@ -1371,7 +1371,7 @@ bool Style::loadXML( QDomElement & format )
 
   if ( format.hasAttribute( "float" ) )
   {
-    KSpread::Format::FloatFormat a = (KSpread::Format::FloatFormat)format.attribute( "float" ).toInt( &ok );
+    Format::FloatFormat a = (Format::FloatFormat)format.attribute( "float" ).toInt( &ok );
     if ( !ok )
       return false;
     if ( (unsigned int) a >= 1 || (unsigned int) a <= 3 )
@@ -1383,7 +1383,7 @@ bool Style::loadXML( QDomElement & format )
 
   if ( format.hasAttribute( "floatcolor" ) )
   {
-    KSpread::Format::FloatColor a = (KSpread::Format::FloatColor) format.attribute( "floatcolor" ).toInt( &ok );
+    Format::FloatColor a = (Format::FloatColor) format.attribute( "floatcolor" ).toInt( &ok );
     if ( !ok ) return false;
     if ( (unsigned int) a >= 1 || (unsigned int) a <= 2 )
     {
@@ -1784,22 +1784,22 @@ QBrush const & Style::backGroundBrush() const
   return ( !m_parent || featureSet( SBackgroundBrush ) ? m_backGroundBrush : m_parent->backGroundBrush() );
 }
 
-KSpread::Format::Align Style::alignX() const
+Format::Align Style::alignX() const
 {
   return ( !m_parent || featureSet( SAlignX ) ? m_alignX : m_parent->alignX() );
 }
 
-KSpread::Format::AlignY Style::alignY() const
+Format::AlignY Style::alignY() const
 {
   return ( !m_parent || featureSet( SAlignY ) ? m_alignY : m_parent->alignY() );
 }
 
-KSpread::Format::FloatFormat Style::floatFormat() const
+Format::FloatFormat Style::floatFormat() const
 {
   return ( !m_parent || featureSet( SFloatFormat ) ? m_floatFormat : m_parent->floatFormat() );
 }
 
-KSpread::Format::FloatColor Style::floatColor() const
+Format::FloatColor Style::floatColor() const
 {
   return ( !m_parent || featureSet( SFloatColor ) ? m_floatColor : m_parent->floatColor() );
 }
@@ -1809,7 +1809,7 @@ FormatType Style::formatType() const
   return ( !m_parent || featureSet( SFormatType ) ? m_formatType : m_parent->formatType() );
 }
 
-KSpread::Format::Currency const & Style::currency() const
+Format::Currency const & Style::currency() const
 {
   return ( !m_parent || featureSet( SFormatType ) ? m_currency : m_parent->currency() );
 }
@@ -1831,7 +1831,7 @@ QString const & Style::postfix() const
 
 
 
-Style * Style::setAlignX( KSpread::Format::Align alignX )
+Style * Style::setAlignX( Format::Align alignX )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
@@ -1846,7 +1846,7 @@ Style * Style::setAlignX( KSpread::Format::Align alignX )
   return this;
 }
 
-Style * Style::setAlignY( KSpread::Format::AlignY alignY )
+Style * Style::setAlignY( Format::AlignY alignY )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
@@ -2224,7 +2224,7 @@ Style * Style::setBackGroundBrush( QBrush const & brush )
   return this;
 }
 
-Style * Style::setFloatFormat( KSpread::Format::FloatFormat format )
+Style * Style::setFloatFormat( Format::FloatFormat format )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
@@ -2239,7 +2239,7 @@ Style * Style::setFloatFormat( KSpread::Format::FloatFormat format )
   return this;
 }
 
-Style * Style::setFloatColor( KSpread::Format::FloatColor color )
+Style * Style::setFloatColor( Format::FloatColor color )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
@@ -2314,7 +2314,7 @@ Style * Style::setPostfix( QString const & postfix )
   return this;
 }
 
-Style * Style::setCurrency( KSpread::Format::Currency const & currency )
+Style * Style::setCurrency( Format::Currency const & currency )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
@@ -2697,13 +2697,13 @@ bool CustomStyle::definesAll() const
   return true;
 }
 
-void CustomStyle::changeAlignX( KSpread::Format::Align alignX )
+void CustomStyle::changeAlignX( Format::Align alignX )
 {
   m_alignX = alignX;
   m_featuresSet |= SAlignX;
 }
 
-void CustomStyle::changeAlignY( KSpread::Format::AlignY alignY )
+void CustomStyle::changeAlignY( Format::AlignY alignY )
 {
   m_alignY = alignY;
   m_featuresSet |= SAlignY;
@@ -2868,13 +2868,13 @@ void CustomStyle::changeBackGroundBrush( QBrush const & brush )
   m_featuresSet |= SBackgroundBrush;
 }
 
-void CustomStyle::changeFloatFormat( KSpread::Format::FloatFormat format )
+void CustomStyle::changeFloatFormat( Format::FloatFormat format )
 {
   m_floatFormat = format;
   m_featuresSet |= SFloatFormat;
 }
 
-void CustomStyle::changeFloatColor( KSpread::Format::FloatColor color )
+void CustomStyle::changeFloatColor( Format::FloatColor color )
 {
   m_floatColor = color;
   m_featuresSet |= SFloatColor;
@@ -2910,7 +2910,7 @@ void CustomStyle::changePostfix( QString const & postfix )
   m_featuresSet |= SPostfix;
 }
 
-void CustomStyle::changeCurrency( KSpread::Format::Currency const & currency )
+void CustomStyle::changeCurrency( Format::Currency const & currency )
 {
   m_currency = currency;
 }

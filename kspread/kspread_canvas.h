@@ -71,7 +71,6 @@ class CellEditor;
 class LocationEditWidget;
 class ComboboxLocationEditWidget;
 class HighlightRange;
-class CanvasPrivate;
 
 
 /**
@@ -504,7 +503,8 @@ private:
                                     QRect area1, QRect area2);
 
 private:
-  CanvasPrivate* d;
+  class Private;
+  Private* d;
 
 };
 

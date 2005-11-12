@@ -46,6 +46,9 @@ class Style;
 class KSPREAD_EXPORT Conditional
 {
 public:
+  enum Type { None, Equal, Superior, Inferior, SuperiorEqual,
+              InferiorEqual, Between, Different, DifferentTo };
+
   double         val1;
   double         val2;
   QString *      strVal1;
@@ -53,8 +56,8 @@ public:
   QColor  *      colorcond;
   QFont   *      fontcond;
   QString *      styleName;
-  Style * style;
-  ::Conditional    cond;
+  Style *        style;
+  Type           cond;
 
   Conditional();
   ~Conditional();
@@ -87,7 +90,7 @@ class Conditions
    *
    * @return true if one of the conditions is true, false if not.
    */
-  bool currentCondition( KSpread::Conditional & condition );
+  bool currentCondition( Conditional & condition );
 
   /**
    * Retrieve the current list of conditions we're checking

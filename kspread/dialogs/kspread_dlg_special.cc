@@ -80,8 +80,8 @@ SpecialDialog::SpecialDialog( View* parent, const char* name )
 
 void SpecialDialog::slotOk()
 {
-    PasteMode sp = Normal;
-    Operation op = OverWrite;
+  Paste::Mode sp = Paste::Normal;
+  Paste::Operation op = Paste::OverWrite;
 
     /* if( rb1->isChecked() )
 	sp = cb->isChecked() ? NormalAndTranspose : Normal;
@@ -93,28 +93,28 @@ void SpecialDialog::slotOk()
     sp = cb->isChecked() ? NoBorderAndTranspose : NoBorder; */
 
     if( rb1->isChecked() )
-	sp = Normal;
+      sp = Paste::Normal;
     else if( rb2->isChecked() )
-	sp = Text;
+      sp = Paste::Text;
     else if( rb3->isChecked() )
-      sp = ::Format;
+      sp = Paste::Format;
     else if( rb4->isChecked() )
-	sp = NoBorder;
+      sp = Paste::NoBorder;
     else if( rb10->isChecked() )
-	sp = Comment;
+      sp = Paste::Comment;
     else if( rb11->isChecked() )
-	sp = Result;
+      sp = Paste::Result;
 
     if( rb5->isChecked() )
-	op = OverWrite;
+      op = Paste::OverWrite;
     if( rb6->isChecked() )
-	op = Add;
+      op = Paste::Add;
     if( rb7->isChecked() )
-	op = Sub;
+      op = Paste::Sub;
     if( rb8->isChecked() )
-	op = Mul;
+      op = Paste::Mul;
     if( rb9->isChecked() )
-	op = Div;
+      op = Paste::Div;
 
     m_pView->doc()->emitBeginOperation( false );
     m_pView->activeSheet()->paste( m_pView->selection(), true, sp, op );

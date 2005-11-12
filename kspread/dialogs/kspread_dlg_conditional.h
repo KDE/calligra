@@ -81,17 +81,17 @@ class ConditionalDialog : public KDialogBase
  protected:
   View *              m_view;
   ConditionalWidget * m_dlg;
-  QRect                      m_marker;
-  ::Conditional         m_result;
+  QRect               m_marker;
+  Conditional::Type   m_result;
 
  private:
-   void init( KSpread::Conditional const & tmp, int numCondition );
-   ::Conditional typeOfCondition( QComboBox const * const cb ) const;
+   void init( Conditional const & tmp, int numCondition );
+   Conditional::Type typeOfCondition( QComboBox const * const cb ) const;
 
   bool checkInputData( KLineEdit const * const edit1,
                        KLineEdit const * const edit2 );
   bool checkInputData();
-  bool getCondition( KSpread::Conditional & newCondition, const QComboBox * cb,
+  bool getCondition( Conditional & newCondition, const QComboBox * cb,
                      const KLineEdit * edit1, const KLineEdit * edit2,
                      const QComboBox * sb, Style * style );
 

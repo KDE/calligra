@@ -53,7 +53,6 @@ class LocationEditWidget;
 class Selection;
 class VBorder;
 class View;
-class ViewPrivate;
 class ComboboxLocationEditWidget;
 
 /** @class View
@@ -599,8 +598,8 @@ protected:
     Cell* findNextCell();
 
 private:
-
-    ViewPrivate* d;
+    class Private;
+    Private* d;
 
     // don't allow copy or assignment
     View( const View& );

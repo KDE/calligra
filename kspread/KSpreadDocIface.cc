@@ -153,19 +153,19 @@ QString DocIface::moveToValue()const
 {
     switch(doc->getMoveToValue())
     {
-    case KSpread::Bottom:
+    case Bottom:
         return QString("bottom");
         break;
-    case KSpread::Left:
+    case Left:
         return QString("left");
         break;
-    case KSpread::Top:
+    case Top:
         return QString("top");
         break;
-    case KSpread::Right:
+    case Right:
         return QString("right");
         break;
-    case KSpread::BottomFirst:
+    case BottomFirst:
         return QString("bottomFirst");
         break;
     }
@@ -175,15 +175,15 @@ QString DocIface::moveToValue()const
 void DocIface::setMoveToValue(const QString & move)
 {
     if ( move.lower()=="bottom" )
-        doc->setMoveToValue(KSpread::Bottom);
+        doc->setMoveToValue(Bottom);
     else if ( move.lower()=="top" )
-        doc->setMoveToValue(KSpread::Top);
+        doc->setMoveToValue(Top);
     else if ( move.lower()=="left" )
-        doc->setMoveToValue(KSpread::Left);
+        doc->setMoveToValue(Left);
     else if ( move.lower()=="right" )
-        doc->setMoveToValue(KSpread::Right);
+        doc->setMoveToValue(Right);
     else if ( move.lower()=="bottomfirst" )
-        doc->setMoveToValue(KSpread::BottomFirst);
+        doc->setMoveToValue(BottomFirst);
 }
 
 void DocIface::setTypeOfCalc( const QString & calc )

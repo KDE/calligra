@@ -225,7 +225,7 @@ const char * TextDrag::selectionMimeType()
  *
  *****************************************************************************/
 
-class KSpread::SheetPrivate
+class Sheet::Private
 {
 public:
 
@@ -325,7 +325,7 @@ Sheet::Sheet (Map* map,
 {
   if ( s_mapSheets == 0L )
     s_mapSheets = new QIntDict<Sheet>;
-  d = new SheetPrivate;
+  d = new Private;
 
   d->workbook = map;
 
@@ -542,12 +542,12 @@ Cell* Sheet::defaultCell() const
     return d->defaultCell;
 }
 
-KSpread::Format* Sheet::defaultFormat()
+Format* Sheet::defaultFormat()
 {
     return d->defaultFormat;
 }
 
-const KSpread::Format* Sheet::defaultFormat() const
+const Format* Sheet::defaultFormat() const
 {
     return d->defaultFormat;
 }
@@ -4785,8 +4785,8 @@ void Sheet::setSelectionMultiRow( Selection* selectionInfo,
 struct SetSelectionAlignWorker
   : public Sheet::CellWorkerTypeA
 {
-  KSpread::Format::Align _align;
-  SetSelectionAlignWorker( KSpread::Format::Align align ) : _align( align ) {}
+  Format::Align _align;
+  SetSelectionAlignWorker( Format::Align align ) : _align( align ) {}
     QString getUndoTitle() { return i18n("Change Horizontal Alignment"); }
     bool testCondition( RowFormat* rw ) {
   return ( rw->hasProperty( Cell::PAlign ) );
@@ -4865,7 +4865,7 @@ QString Sheet::guessRowTitle(QRect& area, int row)
 }
 
 void Sheet::setSelectionAlign( Selection* selectionInfo,
-                                      KSpread::Format::Align _align )
+                                      Format::Align _align )
 {
     SetSelectionAlignWorker w( _align );
     workOnCells( selectionInfo, w );
@@ -4873,8 +4873,8 @@ void Sheet::setSelectionAlign( Selection* selectionInfo,
 
 
 struct SetSelectionAlignYWorker : public Sheet::CellWorkerTypeA {
-    KSpread::Format::AlignY _alignY;
-    SetSelectionAlignYWorker( KSpread::Format::AlignY alignY )
+    Format::AlignY _alignY;
+    SetSelectionAlignYWorker( Format::AlignY alignY )
       : _alignY( alignY )
     {
       kdDebug() << "AlignY: " << _alignY << endl;
@@ -4909,7 +4909,7 @@ struct SetSelectionAlignYWorker : public Sheet::CellWorkerTypeA {
 
 
 void Sheet::setSelectionAlignY( Selection* selectionInfo,
-                                KSpread::Format::AlignY _alignY )
+                                Format::AlignY _alignY )
 {
   kdDebug() << "setSelectionAlignY: " << _alignY << endl;
     SetSelectionAlignYWorker w( _alignY );
@@ -5371,7 +5371,7 @@ struct ClearConditionalSelectionWorker : public Sheet::CellWorker
   }
   void doWork( Cell* cell, bool, int, int )
   {
-    QValueList<KSpread::Conditional> emptyList;
+    QValueList<Conditional> emptyList;
     cell->setConditionList(emptyList);
   }
 };
@@ -5506,8 +5506,8 @@ void Sheet::defaultSelection( Selection* selectionInfo )
 
 struct SetConditionalWorker : public Sheet::CellWorker
 {
-  QValueList<KSpread::Conditional> conditionList;
-  SetConditionalWorker( QValueList<KSpread::Conditional> _tmp ) :
+  QValueList<Conditional> conditionList;
+  SetConditionalWorker( QValueList<Conditional> _tmp ) :
     Sheet::CellWorker( ), conditionList( _tmp ) { }
 
   class UndoAction* createUndoAction( Doc* doc,
@@ -5575,7 +5575,7 @@ struct SetValidityWorker : public Sheet::CellWorker {
     void doWork( Cell* cell, bool, int, int ) {
   if ( !cell->isObscured() ) {
       cell->setDisplayDirtyFlag();
-      if ( tmp.m_allow==Allow_All )
+      if ( tmp.m_restriction==Restriction::None )
     cell->removeValidity();
       else
       {
@@ -5586,7 +5586,7 @@ struct SetValidityWorker : public Sheet::CellWorker {
     tmpValidity->valMax=tmp.valMax;
     tmpValidity->m_cond=tmp.m_cond;
     tmpValidity->m_action=tmp.m_action;
-    tmpValidity->m_allow=tmp.m_allow;
+    tmpValidity->m_restriction=tmp.m_restriction;
     tmpValidity->timeMin=tmp.timeMin;
     tmpValidity->timeMax=tmp.timeMax;
     tmpValidity->dateMin=tmp.dateMin;
@@ -5685,13 +5685,13 @@ static QString cellAsText( Cell* cell, unsigned int max )
   if( !cell->isDefault() )
   {
     int l = max - cell->strOutText().length();
-    if (cell->defineAlignX() == KSpread::Format::Right )
+    if (cell->defineAlignX() == Format::Right )
     {
         for ( int i = 0; i < l; ++i )
           result += " ";
         result += cell->strOutText();
     }
-    else if (cell->defineAlignX() == KSpread::Format::Left )
+    else if (cell->defineAlignX() == Format::Left )
       {
           result += " ";
           result += cell->strOutText();
@@ -5822,7 +5822,7 @@ void Sheet::cutSelection( Selection* selectionInfo )
 }
 
 void Sheet::paste( const QRect &pasteArea, bool makeUndo,
-                          PasteMode sp, Operation op, bool insert, int insertTo, bool pasteFC )
+                   Paste::Mode sp, Paste::Operation op, bool insert, int insertTo, bool pasteFC )
 {
     QMimeSource * mime = QApplication::clipboard()->data();
     if ( !mime )
@@ -5933,7 +5933,7 @@ void Sheet::pasteTextPlain( QString &_text, QRect pasteArea)
 }
 
 void Sheet::paste( const QByteArray & b, const QRect & pasteArea, bool makeUndo,
-                          PasteMode sp, Operation op, bool insert, int insertTo, bool pasteFC )
+                   Paste::Mode sp, Paste::Operation op, bool insert, int insertTo, bool pasteFC )
 {
     kdDebug(36001) << "Parsing " << b.size() << " bytes" << endl;
 
@@ -5954,7 +5954,7 @@ void Sheet::paste( const QByteArray & b, const QRect & pasteArea, bool makeUndo,
 
 bool Sheet::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
                                   int _xshift, int _yshift, bool makeUndo,
-                                  PasteMode sp, Operation op, bool insert,
+                                  Paste::Mode sp, Paste::Operation op, bool insert,
                                   int insertTo, bool pasteFC )
 {
     QDomElement e = doc.documentElement();

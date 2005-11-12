@@ -72,7 +72,7 @@
 
 using namespace KSpread;
 
-class KSpread::CanvasPrivate
+class Canvas::Private
 {
   public:
 
@@ -162,7 +162,7 @@ class KSpread::CanvasPrivate
 Canvas::Canvas (View *_view)
   : QWidget( _view, "", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase )
 {
-  d = new CanvasPrivate;
+  d = new Private;
 
 
   d->length_namecell = 0;
@@ -1988,7 +1988,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
        NEVER use cell->column() or cell->row() -- it might be a default cell
     */
   {
-    case KSpread::Bottom:
+    case Bottom:
       offset = cell->mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
       rl = activeSheet()->rowFormat( cursor.y() + offset );
       while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHide())
@@ -1999,7 +1999,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 
       destination = QPoint(cursor.x(), QMIN(cursor.y() + offset, KS_rowMax));
       break;
-    case KSpread::Top:
+    case Top:
       offset = (cellCorner.y() - cursor.y()) - 1;
       rl = activeSheet()->rowFormat( cursor.y() + offset );
       while ( ((cursor.y() + offset) >= 1) && rl->isHide())
@@ -2009,7 +2009,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
       }
       destination = QPoint(cursor.x(), QMAX(cursor.y() + offset, 1));
       break;
-    case KSpread::Left:
+    case Left:
       offset = (cellCorner.x() - cursor.x()) - 1;
       cl = activeSheet()->columnFormat( cursor.x() + offset );
       while ( ((cursor.x() + offset) >= 1) && cl->isHide())
@@ -2019,7 +2019,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
       }
       destination = QPoint(QMAX(cursor.x() + offset, 1), cursor.y());
       break;
-    case KSpread::Right:
+    case Right:
       offset = cell->mergedXCells() - (cursor.x() - cellCorner.x()) + 1;
       cl = activeSheet()->columnFormat( cursor.x() + offset );
       while ( ((cursor.x() + offset) <= KS_colMax) && cl->isHide())
@@ -2029,7 +2029,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
       }
       destination = QPoint(QMIN(cursor.x() + offset, KS_colMax), cursor.y());
       break;
-    case KSpread::BottomFirst:
+    case BottomFirst:
       offset = cell->mergedYCells() - (cursor.y() - cellCorner.y()) + 1;
       rl = activeSheet()->rowFormat( cursor.y() + offset );
       while ( ((cursor.y() + offset) <= KS_rowMax) && rl->isHide())
@@ -2070,20 +2070,20 @@ void Canvas::processEnterKey(QKeyEvent* event)
   {
     switch( direction )
     {
-     case KSpread::Bottom:
-      direction = KSpread::Top;
+     case Bottom:
+      direction = Top;
       break;
-     case KSpread::Top:
-      direction = KSpread::Bottom;
+     case Top:
+      direction = Bottom;
       break;
-     case KSpread::Left:
-      direction = KSpread::Right;
+     case Left:
+      direction = Right;
       break;
-     case KSpread::Right:
-      direction = KSpread::Left;
+     case Right:
+      direction = Left;
       break;
-     case KSpread::BottomFirst:
-      direction = KSpread::BottomFirst;
+     case BottomFirst:
+      direction = BottomFirst;
       break;
     }
   }
@@ -2107,35 +2107,35 @@ void Canvas::processArrowKey( QKeyEvent *event)
     deleteEditor( true );
   }
 
-  KSpread::MoveTo direction = KSpread::Bottom;
+  KSpread::MoveTo direction = Bottom;
   bool makingSelection = event->state() & ShiftButton;
 
   switch (event->key())
   {
   case Key_Down:
-    direction = KSpread::Bottom;
+    direction = Bottom;
     break;
   case Key_Up:
-    direction = KSpread::Top;
+    direction = Top;
     break;
   case Key_Left:
     if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
-      direction = KSpread::Right;
+      direction = Right;
     else
-      direction = KSpread::Left;
+      direction = Left;
     break;
   case Key_Right:
     if (activeSheet()->layoutDirection()==Sheet::RightToLeft)
-      direction = KSpread::Left;
+      direction = Left;
     else
-      direction = KSpread::Right;
+      direction = Right;
     break;
   case Key_Tab:
-      direction = KSpread::Right;
+      direction = Right;
       break;
   case Key_Backtab:
       //Shift+Tab moves to the left
-      direction = KSpread::Left;
+      direction = Left;
       makingSelection = false;
       break;
   default:

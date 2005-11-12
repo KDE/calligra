@@ -38,7 +38,9 @@
 #include <krecentdocument.h>
 #include <kurlrequester.h>
 
-class LinkDialogPrivate
+using namespace KSpread;
+
+class LinkDialog::Private
 {
 public:
     QString text;
@@ -61,7 +63,7 @@ LinkDialog::LinkDialog( QWidget*, const char* )
                   KDialogBase::Ok | KDialogBase::Cancel,
                   KDialogBase::Ok )
 {
-    d = new LinkDialogPrivate;
+    d = new Private;
     
     // link for web or ftp
     d->internetPage = addPage( i18n( "Internet" ), QString::null, 

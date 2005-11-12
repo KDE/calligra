@@ -38,6 +38,7 @@
 #include <qptrlist.h>
 #include <qdatetime.h>
 
+#include "kspread_condition.h"
 #include "kspread_format.h"
 
 class KLocale;
@@ -62,26 +63,27 @@ class ConditionalDialog;
 
 struct Validity
 {
-    Validity()
+  Validity()
   {
       valMin = 0.0;
       valMax = 0.0;
-      m_cond = None;
-      m_action = ::Stop;
-      m_allow = KSpread::Allow_All;
+      m_cond = Conditional::None;
+      m_action = Action::Stop;
+      m_restriction = Restriction::None;
       displayMessage = true;
       allowEmptyCell = false;
-            displayValidationInformation = false;
+      displayValidationInformation = false;
   };
+
     QString message;
     QString title;
     QString titleInfo;
     QString messageInfo;
     double valMin;
     double valMax;
-    ::Conditional m_cond;
-    ::Action m_action;
-    KSpread::Allow m_allow;
+    Conditional::Type m_cond;
+    Action::Type m_action;
+    Restriction::Type m_restriction;
     QTime  timeMin;
     QTime  timeMax;
     QDate  dateMin;
@@ -254,8 +256,8 @@ public:
 
     QString saveOasisCellStyle( KoGenStyle &currentCellStyle,KoGenStyles &mainStyles, bool force = false, bool copy = false );
 
-    bool load( const QDomElement& cell, int _xshift, int _yshift, PasteMode pm = Normal,
-         Operation op = OverWrite, bool paste = false );
+    bool load( const QDomElement& cell, int _xshift, int _yshift, Paste::Mode pm = Paste::Normal,
+               Paste::Operation op = Paste::OverWrite, bool paste = false );
 
     bool loadOasis( const QDomElement & element, const KoOasisStyles &oasisStyles );
     void loadOasisValidation( const QString& validationName );
@@ -695,7 +697,7 @@ public:
      *
      * @return the merged text.
      */
-    QString pasteOperation( const QString &new_text, const QString &old_text, Operation op );
+    QString pasteOperation( const QString &new_text, const QString &old_text, Paste::Operation op );
 
     /**
      * @return true if the cell contains a formula that could not
@@ -975,7 +977,7 @@ private:
 
 
   /* helper functions to the load/save routines */
-  bool loadCellData(const QDomElement &text, Operation op);
+  bool loadCellData(const QDomElement &text, Paste::Operation op);
   bool saveCellResult( QDomDocument& doc, QDomElement& result,
                        QString str );
   void update();

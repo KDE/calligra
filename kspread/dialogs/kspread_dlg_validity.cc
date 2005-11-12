@@ -432,45 +432,45 @@ void DlgValidity::init()
     message->setText(tmpValidity->message);
     title->setText(tmpValidity->title);
     QString tmp;
-    switch( tmpValidity->m_allow)
+    switch( tmpValidity->m_restriction)
     {
-     case Allow_All:
+     case Restriction::None:
       chooseType->setCurrentItem(0);
       break;
-     case Allow_Number:
+     case Restriction::Number:
       chooseType->setCurrentItem(1);
       if(tmpValidity->m_cond >=5 )
         val_max->setText(tmp.setNum(tmpValidity->valMax));
       val_min->setText(tmp.setNum(tmpValidity->valMin));
       break;
-     case Allow_Integer:
+     case Restriction::Integer:
       chooseType->setCurrentItem(2);
       if(tmpValidity->m_cond >=5 )
         val_max->setText(tmp.setNum(tmpValidity->valMax));
       val_min->setText(tmp.setNum(tmpValidity->valMin));
       break;
-     case Allow_TextLength:
+     case Restriction::TextLength:
       chooseType->setCurrentItem(6);
       if(tmpValidity->m_cond >=5 )
         val_max->setText(tmp.setNum(tmpValidity->valMax));
       val_min->setText(tmp.setNum(tmpValidity->valMin));
       break;
-     case Allow_Text:
+     case Restriction::Text:
       chooseType->setCurrentItem(3);
       break;
-     case Allow_Date:
+     case Restriction::Date:
       chooseType->setCurrentItem(4);
       val_min->setText(m_pView->doc()->locale()->formatDate(tmpValidity->dateMin,true));
       if(tmpValidity->m_cond >=5 )
         val_max->setText(m_pView->doc()->locale()->formatDate(tmpValidity->dateMax,true));
       break;
-     case Allow_Time:
+     case Restriction::Time:
       chooseType->setCurrentItem(5);
       val_min->setText(m_pView->doc()->locale()->formatTime(tmpValidity->timeMin,true));
       if(tmpValidity->m_cond >=5 )
         val_max->setText(m_pView->doc()->locale()->formatTime(tmpValidity->timeMax,true));
       break;
-     case Allow_List:
+     case Restriction::List:
      {
          chooseType->setCurrentItem(7);
          QStringList lst =tmpValidity->listValidity;
@@ -487,43 +487,43 @@ void DlgValidity::init()
     }
     switch (tmpValidity->m_action)
     {
-     case Stop:
+      case Action::Stop:
       chooseAction->setCurrentItem(0);
       break;
-     case Warning:
+      case Action::Warning:
       chooseAction->setCurrentItem(1);
       break;
-     case Information:
+      case Action::Information:
       chooseAction->setCurrentItem(2);
       break;
      default :
       chooseAction->setCurrentItem(0);
       break;
     }
-    switch ( tmpValidity->m_cond)
+    switch ( tmpValidity->m_cond )
     {
-     case Equal:
+      case Conditional::Equal:
       choose->setCurrentItem(0);
       break;
-     case Superior:
+      case Conditional::Superior:
       choose->setCurrentItem(1);
       break;
-     case Inferior:
+      case Conditional::Inferior:
       choose->setCurrentItem(2);
       break;
-     case SuperiorEqual:
+      case Conditional::SuperiorEqual:
       choose->setCurrentItem(3);
       break;
-     case InferiorEqual:
+      case Conditional::InferiorEqual:
       choose->setCurrentItem(4);
       break;
-     case Between:
+      case Conditional::Between:
       choose->setCurrentItem(5);
       break;
-     case Different:
+      case Conditional::Different:
       choose->setCurrentItem(6);
       break;
-     case DifferentTo:
+      case Conditional::DifferentTo:
       choose->setCurrentItem(7);
       break;
      default :
@@ -634,9 +634,9 @@ void DlgValidity::OkPressed()
 
   if( chooseType->currentItem()==0)
   {//no validity
-    result.m_allow=Allow_All;
-    result.m_action=Stop;
-    result.m_cond=Equal;
+    result.m_restriction=Restriction::None;
+    result.m_action=Action::Stop;
+    result.m_cond=Conditional::Equal;
     result.message=message->text();
     result.title=title->text();
     result.valMin=0;
@@ -651,28 +651,28 @@ void DlgValidity::OkPressed()
     switch( chooseType->currentItem())
     {
      case 0:
-      result.m_allow=Allow_All;
+      result.m_restriction=Restriction::None;
       break;
      case 1:
-      result.m_allow=Allow_Number;
+      result.m_restriction=Restriction::Number;
       break;
      case 2:
-      result.m_allow=Allow_Integer;
+      result.m_restriction=Restriction::Integer;
       break;
      case 3:
-      result.m_allow=Allow_Text;
+      result.m_restriction=Restriction::Text;
       break;
      case 4:
-      result.m_allow=Allow_Date;
+      result.m_restriction=Restriction::Date;
       break;
      case 5:
-      result.m_allow=Allow_Time;
+      result.m_restriction=Restriction::Time;
       break;
      case 6:
-      result.m_allow=Allow_TextLength;
+      result.m_restriction=Restriction::TextLength;
       break;
      case 7:
-      result.m_allow=Allow_List;
+      result.m_restriction=Restriction::List;
       break;
 
      default :
@@ -681,13 +681,13 @@ void DlgValidity::OkPressed()
     switch (chooseAction->currentItem())
     {
      case 0:
-      result.m_action=Stop;
+       result.m_action=Action::Stop;
       break;
      case 1:
-      result.m_action=Warning;
+       result.m_action=Action::Warning;
       break;
      case 2:
-      result.m_action=Information;
+       result.m_action=Action::Information;
       break;
      default :
       break;
@@ -695,28 +695,28 @@ void DlgValidity::OkPressed()
     switch ( choose->currentItem())
     {
      case 0:
-      result.m_cond=Equal;
+       result.m_cond=Conditional::Equal;
       break;
      case 1:
-      result.m_cond=Superior;
+       result.m_cond=Conditional::Superior;
       break;
      case 2:
-      result.m_cond=Inferior;
+       result.m_cond=Conditional::Inferior;
       break;
      case 3:
-      result.m_cond=SuperiorEqual;
+       result.m_cond=Conditional::SuperiorEqual;
       break;
      case 4:
-      result.m_cond=InferiorEqual;
+       result.m_cond=Conditional::InferiorEqual;
       break;
      case 5:
-      result.m_cond=Between;
+       result.m_cond=Conditional::Between;
       break;
      case 6:
-      result.m_cond=Different;
+       result.m_cond=Conditional::Different;
       break;
      case 7:
-      result.m_cond=DifferentTo;
+       result.m_cond=Conditional::DifferentTo;
       break;
      default :
       break;

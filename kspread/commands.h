@@ -28,6 +28,9 @@
 
 #include "kspread_sheet.h" // for Sheet::LayoutDirection
 
+/**
+ * The KSpread namespace.
+ */
 namespace KSpread
 {
 class Cell;

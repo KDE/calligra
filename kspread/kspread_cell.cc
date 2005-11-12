@@ -283,7 +283,7 @@ CellExtra* Cell::Private::extra()
 Cell::Cell( Sheet * _sheet, int _column, int _row )
   : Format (_sheet, _sheet->doc()->styleManager()->defaultStyle())
 {
-  d = new Cell::Private;
+  d = new Private;
   d->row = _row;
   d->column = _column;
   clearAllErrors();
@@ -294,7 +294,7 @@ Cell::Cell( Sheet * _sheet,
     Style * _style,  int _column, int _row )
   : Format( _sheet, _style )
 {
-  d = new Cell::Private;
+  d = new Private;
   d->row = _row;
   d->column = _column;
   clearAllErrors();
@@ -626,12 +626,12 @@ void Cell::formatChanged()
   setFlag( Flag_TextFormatDirty );
 }
 
-KSpread::Format * Cell::fallbackFormat( int, int row )
+Format * Cell::fallbackFormat( int, int row )
 {
   return sheet()->rowFormat( row );
 }
 
-const KSpread::Format * Cell::fallbackFormat( int, int row ) const
+const Format * Cell::fallbackFormat( int, int row ) const
 {
   return sheet()->rowFormat( row );
 }
@@ -4554,46 +4554,46 @@ void Cell::update()
 bool Cell::testValidity() const
 {
     bool valid = false;
-    if( d->hasExtra() && d->extra()->validity && d->extra()->validity->m_allow != Allow_All )
+    if( d->hasExtra() && d->extra()->validity && d->extra()->validity->m_restriction != Restriction::None )
     {
         //fixme
         if ( d->extra()->validity->allowEmptyCell && d->strText.isEmpty() )
             return true;
 
         if( value().isNumber() &&
-            (d->extra()->validity->m_allow == Allow_Number ||
-             (d->extra()->validity->m_allow == Allow_Integer &&
+            (d->extra()->validity->m_restriction == Restriction::Number ||
+             (d->extra()->validity->m_restriction == Restriction::Integer &&
               value().asFloat() == ceil(value().asFloat()))))
         {
             switch( d->extra()->validity->m_cond)
             {
-            case Equal:
+              case Conditional::Equal:
                 valid = ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
                           && value().asFloat() - d->extra()->validity->valMin >
                           (0.0 - DBL_EPSILON));
                 break;
-            case DifferentTo:
+              case Conditional::DifferentTo:
                 valid = !(  ( value().asFloat() - d->extra()->validity->valMin < DBL_EPSILON
                               && value().asFloat() - d->extra()->validity->valMin >
                               (0.0 - DBL_EPSILON)) );
                 break;
-            case Superior:
+              case Conditional::Superior:
                 valid = ( value().asFloat() > d->extra()->validity->valMin);
                 break;
-            case Inferior:
+              case Conditional::Inferior:
                 valid = ( value().asFloat()  <d->extra()->validity->valMin);
                 break;
-            case SuperiorEqual:
+              case Conditional::SuperiorEqual:
                 valid = ( value().asFloat() >= d->extra()->validity->valMin);
                 break;
-            case InferiorEqual:
+              case Conditional::InferiorEqual:
                 valid = (value().asFloat() <= d->extra()->validity->valMin);
                 break;
-            case Between:
+              case Conditional::Between:
                 valid = ( value().asFloat() >= d->extra()->validity->valMin &&
                           value().asFloat() <= d->extra()->validity->valMax);
                 break;
-            case Different:
+              case Conditional::Different:
                 valid = (value().asFloat() < d->extra()->validity->valMin ||
                          value().asFloat() > d->extra()->validity->valMax);
                 break;
@@ -4601,52 +4601,52 @@ bool Cell::testValidity() const
                 break;
             }
         }
-        else if(d->extra()->validity->m_allow==Allow_Text)
+        else if(d->extra()->validity->m_restriction==Restriction::Text)
         {
             valid = value().isString();
         }
-        else if ( d->extra()->validity->m_allow == Allow_List )
+        else if ( d->extra()->validity->m_restriction == Restriction::List )
         {
             //test int value
             if ( value().isString() && d->extra()->validity->listValidity.contains( value().asString() ) )
                 valid = true;
         }
-        else if(d->extra()->validity->m_allow==Allow_TextLength)
+        else if(d->extra()->validity->m_restriction==Restriction::TextLength)
         {
             if( value().isString() )
             {
                 int len = d->strOutText.length();
                 switch( d->extra()->validity->m_cond)
                 {
-                case Equal:
+                  case Conditional::Equal:
                     if (len == d->extra()->validity->valMin)
                         valid = true;
                     break;
-                case DifferentTo:
+                  case Conditional::DifferentTo:
                     if (len != d->extra()->validity->valMin)
                         valid = true;
                     break;
-                case Superior:
+                  case Conditional::Superior:
                     if(len > d->extra()->validity->valMin)
                         valid = true;
                     break;
-                case Inferior:
+                  case Conditional::Inferior:
                     if(len < d->extra()->validity->valMin)
                         valid = true;
                     break;
-                case SuperiorEqual:
+                  case Conditional::SuperiorEqual:
                     if(len >= d->extra()->validity->valMin)
                         valid = true;
                     break;
-                case InferiorEqual:
+                  case Conditional::InferiorEqual:
                     if(len <= d->extra()->validity->valMin)
                         valid = true;
                     break;
-                case Between:
+                  case Conditional::Between:
                     if(len >= d->extra()->validity->valMin && len <= d->extra()->validity->valMax)
                         valid = true;
                     break;
-                case Different:
+                  case Conditional::Different:
                     if(len <d->extra()->validity->valMin || len >d->extra()->validity->valMax)
                         valid = true;
                     break;
@@ -4655,33 +4655,33 @@ bool Cell::testValidity() const
                 }
             }
         }
-        else if(d->extra()->validity->m_allow == Allow_Time && isTime())
+        else if(d->extra()->validity->m_restriction == Restriction::Time && isTime())
         {
             switch( d->extra()->validity->m_cond)
             {
-            case Equal:
+              case Conditional::Equal:
                 valid = (value().asTime() == d->extra()->validity->timeMin);
                 break;
-            case DifferentTo:
+              case Conditional::DifferentTo:
                 valid = (value().asTime() != d->extra()->validity->timeMin);
                 break;
-            case Superior:
+              case Conditional::Superior:
                 valid = (value().asTime() > d->extra()->validity->timeMin);
                 break;
-            case Inferior:
+              case Conditional::Inferior:
                 valid = (value().asTime() < d->extra()->validity->timeMin);
                 break;
-            case SuperiorEqual:
+              case Conditional::SuperiorEqual:
                 valid = (value().asTime() >= d->extra()->validity->timeMin);
                 break;
-            case InferiorEqual:
+              case Conditional::InferiorEqual:
                 valid = (value().asTime() <= d->extra()->validity->timeMin);
                 break;
-            case Between:
+              case Conditional::Between:
                 valid = (value().asTime() >= d->extra()->validity->timeMin &&
                          value().asTime() <= d->extra()->validity->timeMax);
                 break;
-            case Different:
+              case Conditional::Different:
                 valid = (value().asTime() < d->extra()->validity->timeMin ||
                          value().asTime() > d->extra()->validity->timeMax);
                 break;
@@ -4690,33 +4690,33 @@ bool Cell::testValidity() const
 
             }
         }
-        else if(d->extra()->validity->m_allow == Allow_Date && isDate())
+        else if(d->extra()->validity->m_restriction == Restriction::Date && isDate())
         {
             switch( d->extra()->validity->m_cond)
             {
-            case Equal:
+              case Conditional::Equal:
                 valid = (value().asDate() == d->extra()->validity->dateMin);
                 break;
-            case DifferentTo:
+              case Conditional::DifferentTo:
                 valid = (value().asDate() != d->extra()->validity->dateMin);
                 break;
-            case Superior:
+              case Conditional::Superior:
                 valid = (value().asDate() > d->extra()->validity->dateMin);
                 break;
-            case Inferior:
+              case Conditional::Inferior:
                 valid = (value().asDate() < d->extra()->validity->dateMin);
                 break;
-            case SuperiorEqual:
+              case Conditional::SuperiorEqual:
                 valid = (value().asDate() >= d->extra()->validity->dateMin);
                 break;
-            case InferiorEqual:
+              case Conditional::InferiorEqual:
                 valid = (value().asDate() <= d->extra()->validity->dateMin);
                 break;
-            case Between:
+              case Conditional::Between:
                 valid = (value().asDate() >= d->extra()->validity->dateMin &&
                          value().asDate() <= d->extra()->validity->dateMax);
                 break;
-            case Different:
+              case Conditional::Different:
                 valid = (value().asDate() < d->extra()->validity->dateMin ||
                          value().asDate() > d->extra()->validity->dateMax);
                 break;
@@ -4735,15 +4735,15 @@ bool Cell::testValidity() const
     {
         switch (d->extra()->validity->m_action )
         {
-        case Stop:
+          case Action::Stop:
             KMessageBox::error((QWidget*)0L, d->extra()->validity->message,
                                d->extra()->validity->title);
             break;
-        case Warning:
+          case Action::Warning:
             KMessageBox::warningYesNo((QWidget*)0L, d->extra()->validity->message,
                                       d->extra()->validity->title);
             break;
-        case Information:
+          case Action::Information:
             KMessageBox::information((QWidget*)0L, d->extra()->validity->message,
                                      d->extra()->validity->title);
             break;
@@ -4751,7 +4751,7 @@ bool Cell::testValidity() const
     }
     if (!d->hasExtra())
         return true;  //okay if there's no validity
-    return (valid || d->extra()->validity == NULL || d->extra()->validity->m_action != Stop);
+    return (valid || d->extra()->validity == NULL || d->extra()->validity->m_action != Action::Stop);
 }
 
 FormatType Cell::formatType() const
@@ -5014,7 +5014,7 @@ QDomElement Cell::save( QDomDocument& doc,
         QDomElement param=doc.createElement("param");
         param.setAttribute("cond",(int)d->extra()->validity->m_cond);
         param.setAttribute("action",(int)d->extra()->validity->m_action);
-        param.setAttribute("allow",(int)d->extra()->validity->m_allow);
+        param.setAttribute("allow",(int)d->extra()->validity->m_restriction);
         param.setAttribute("valmin",d->extra()->validity->valMin);
         param.setAttribute("valmax",d->extra()->validity->valMax);
         param.setAttribute("displaymessage",d->extra()->validity->displayMessage);
@@ -5758,19 +5758,19 @@ void Cell::loadOasisValidation( const QString& validationName )
             //"cell-content-text-length()>45"
             valExpression = valExpression.remove("oooc:cell-content-text-length()" );
             kdDebug()<<" valExpression = :"<<valExpression<<endl;
-            d->extra()->validity->m_allow = Allow_TextLength;
+            d->extra()->validity->m_restriction = Restriction::TextLength;
 
             loadOasisValidationCondition( valExpression );
         }
         else if ( valExpression.contains( "cell-content-is-text()" ) )
         {
-            d->extra()->validity->m_allow = Allow_Text;
+            d->extra()->validity->m_restriction = Restriction::Text;
         }
         //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value) | cell-content-is-in-list( StringList )
         else if ( valExpression.contains( "cell-content-text-length-is-between" ) )
         {
-            d->extra()->validity->m_allow = Allow_TextLength;
-            d->extra()->validity->m_cond = Between;
+            d->extra()->validity->m_restriction = Restriction::TextLength;
+            d->extra()->validity->m_cond = Conditional::Between;
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-between(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
@@ -5779,8 +5779,8 @@ void Cell::loadOasisValidation( const QString& validationName )
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
         {
-            d->extra()->validity->m_allow = Allow_TextLength;
-            d->extra()->validity->m_cond = Different;
+            d->extra()->validity->m_restriction = Restriction::TextLength;
+            d->extra()->validity->m_cond = Conditional::Different;
             valExpression = valExpression.remove( "oooc:cell-content-text-length-is-not-between(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
@@ -5790,7 +5790,7 @@ void Cell::loadOasisValidation( const QString& validationName )
         }
         else if ( valExpression.contains( "cell-content-is-in-list(" ) )
         {
-            d->extra()->validity->m_allow = Allow_List;
+            d->extra()->validity->m_restriction = Restriction::List;
             valExpression = valExpression.remove( "oooc:cell-content-is-in-list(" );
             kdDebug()<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
@@ -5802,22 +5802,22 @@ void Cell::loadOasisValidation( const QString& validationName )
         {
             if (valExpression.contains( "cell-content-is-whole-number()" ) )
             {
-                d->extra()->validity->m_allow =  Allow_Number;
+                d->extra()->validity->m_restriction =  Restriction::Number;
                 valExpression = valExpression.remove( "oooc:cell-content-is-whole-number() and " );
             }
             else if (valExpression.contains( "cell-content-is-decimal-number()" ) )
             {
-                d->extra()->validity->m_allow = Allow_Integer;
+                d->extra()->validity->m_restriction = Restriction::Integer;
                 valExpression = valExpression.remove( "oooc:cell-content-is-decimal-number() and " );
             }
             else if (valExpression.contains( "cell-content-is-date()" ) )
             {
-                d->extra()->validity->m_allow = Allow_Date;
+                d->extra()->validity->m_restriction = Restriction::Date;
                 valExpression = valExpression.remove( "oooc:cell-content-is-date() and " );
             }
             else if (valExpression.contains( "cell-content-is-time()" ) )
             {
-                d->extra()->validity->m_allow = Allow_Time;
+                d->extra()->validity->m_restriction = Restriction::Time;
                 valExpression = valExpression.remove( "oooc:cell-content-is-time() and " );
             }
             kdDebug()<<"valExpression :"<<valExpression<<endl;
@@ -5835,7 +5835,7 @@ void Cell::loadOasisValidation( const QString& validationName )
                 valExpression = valExpression.remove( ")" );
                 QStringList listVal = QStringList::split( "," , valExpression );
                 loadOasisValidationValue( listVal );
-                d->extra()->validity->m_cond = Between;
+                d->extra()->validity->m_cond = Conditional::Between;
             }
             if ( valExpression.contains( "cell-content-is-not-between(" ) )
             {
@@ -5843,7 +5843,7 @@ void Cell::loadOasisValidation( const QString& validationName )
                 valExpression = valExpression.remove( ")" );
                 QStringList listVal = QStringList::split( ",", valExpression );
                 loadOasisValidationValue( listVal );
-                d->extra()->validity->m_cond = Different;
+                d->extra()->validity->m_cond = Conditional::Different;
             }
         }
     }
@@ -5887,11 +5887,11 @@ void Cell::loadOasisValidation( const QString& validationName )
         {
             QString str = error.attributeNS( KoXmlNS::table, "message-type", QString::null );
             if ( str == "warning" )
-                d->extra()->validity->m_action = Warning;
+              d->extra()->validity->m_action = Action::Warning;
             else if ( str == "information" )
-                d->extra()->validity->m_action = Information;
+              d->extra()->validity->m_action = Action::Information;
             else if ( str == "stop" )
-                d->extra()->validity->m_action = Stop;
+              d->extra()->validity->m_action = Action::Stop;
             else
                 kdDebug()<<"validation : message type unknown  :"<<str<<endl;
         }
@@ -5913,12 +5913,12 @@ void Cell::loadOasisValidationValue( const QStringList &listVal )
     bool ok = false;
     kdDebug()<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
 
-    if ( d->extra()->validity->m_allow == Allow_Date )
+    if ( d->extra()->validity->m_restriction == Restriction::Date )
     {
         d->extra()->validity->dateMin = QDate::fromString( listVal[0] );
         d->extra()->validity->dateMax = QDate::fromString( listVal[1] );
     }
-    else if ( d->extra()->validity->m_allow == Allow_Time )
+    else if ( d->extra()->validity->m_restriction == Restriction::Time )
     {
         d->extra()->validity->timeMin = QTime::fromString( listVal[0] );
         d->extra()->validity->timeMax = QTime::fromString( listVal[1] );
@@ -5959,41 +5959,41 @@ void Cell::loadOasisValidationCondition( QString &valExpression )
     if (valExpression.find( "<=" )==0 )
     {
         value = valExpression.remove( 0,2 );
-        d->extra()->validity->m_cond = InferiorEqual;
+        d->extra()->validity->m_cond = Conditional::InferiorEqual;
     }
     else if (valExpression.find( ">=" )==0 )
     {
         value = valExpression.remove( 0,2 );
-        d->extra()->validity->m_cond = SuperiorEqual;
+        d->extra()->validity->m_cond = Conditional::SuperiorEqual;
     }
     else if (valExpression.find( "!=" )==0 )
     {
         //add Differentto attribute
         value = valExpression.remove( 0,2 );
-        d->extra()->validity->m_cond = DifferentTo;
+        d->extra()->validity->m_cond = Conditional::DifferentTo;
     }
     else if ( valExpression.find( "<" )==0 )
     {
         value = valExpression.remove( 0,1 );
-        d->extra()->validity->m_cond = Inferior;
+        d->extra()->validity->m_cond = Conditional::Inferior;
     }
     else if(valExpression.find( ">" )==0 )
     {
         value = valExpression.remove( 0,1 );
-        d->extra()->validity->m_cond = Superior;
+        d->extra()->validity->m_cond = Conditional::Superior;
     }
     else if (valExpression.find( "=" )==0 )
     {
         value = valExpression.remove( 0,1 );
-        d->extra()->validity->m_cond = Equal;
+        d->extra()->validity->m_cond = Conditional::Equal;
     }
     else
         kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
-    if ( d->extra()->validity->m_allow == Allow_Date )
+    if ( d->extra()->validity->m_restriction == Restriction::Date )
     {
         d->extra()->validity->dateMin = QDate::fromString( value );
     }
-    else if (d->extra()->validity->m_allow == Allow_Date )
+    else if (d->extra()->validity->m_restriction == Restriction::Date )
     {
         d->extra()->validity->timeMin = QTime::fromString( value );
     }
@@ -6017,7 +6017,7 @@ void Cell::loadOasisValidationCondition( QString &valExpression )
 
 
 bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
-                        PasteMode pm, Operation op, bool paste )
+                 Paste::Mode pm, Paste::Operation op, bool paste )
 {
     bool ok;
 
@@ -6047,7 +6047,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     //
     QDomElement f = cell.namedItem( "format" ).toElement();
     if ( !f.isNull()
-          && ( (pm == Normal) || (pm == ::Format) || (pm == NoBorder) ) )
+          && ( (pm == Paste::Normal) || (pm == Paste::Format) || (pm == Paste::NoBorder) ) )
     {
         // send pm parameter. Didn't load Borders if pm==NoBorder
 
@@ -6120,19 +6120,19 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
           d->extra()->validity = new Validity;
           if ( param.hasAttribute( "cond" ) )
           {
-            d->extra()->validity->m_cond = (::Conditional) param.attribute("cond").toInt( &ok );
+            d->extra()->validity->m_cond = (Conditional::Type) param.attribute("cond").toInt( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "action" ) )
           {
-            d->extra()->validity->m_action = (::Action) param.attribute("action").toInt( &ok );
+            d->extra()->validity->m_action = (Action::Type) param.attribute("action").toInt( &ok );
             if ( !ok )
               return false;
           }
           if ( param.hasAttribute( "allow" ) )
           {
-            d->extra()->validity->m_allow = (Allow) param.attribute("allow").toInt( &ok );
+            d->extra()->validity->m_restriction = (Restriction::Type) param.attribute("allow").toInt( &ok );
             if ( !ok )
               return false;
           }
@@ -6212,7 +6212,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     // Load the comment
     //
     QDomElement comment = cell.namedItem( "comment" ).toElement();
-    if ( !comment.isNull() && ( pm == ::Normal || pm == ::Comment || pm == ::NoBorder ))
+    if ( !comment.isNull() && ( pm == Paste::Normal || pm == Paste::Comment || pm == Paste::NoBorder ))
     {
         QString t = comment.text();
         //t = t.stripWhiteSpace();
@@ -6225,7 +6225,8 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     //
     QDomElement text = cell.namedItem( "text" ).toElement();
 
-    if ( !text.isNull() && ( pm == ::Normal || pm == ::Text || pm == ::NoBorder || pm == ::Result ) )
+    if ( !text.isNull() &&
+          ( pm == Paste::Normal || pm == Paste::Text || pm == Paste::NoBorder || pm == Paste::Result ) )
     {
       /* older versions mistakenly put the datatype attribute on the cell
          instead of the text.  Just move it over in case we're parsing
@@ -6235,7 +6236,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
 
       QDomElement result = cell.namedItem( "result" ).toElement();
       QString txt = text.text();
-      if ((pm == ::Result) && (txt[0] == '='))
+      if ((pm == Paste::Result) && (txt[0] == '='))
           // paste text of the element, if we want to paste result
           // and the source cell contains a formula
           d->strText = result.text();
@@ -6334,7 +6335,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     return true;
 }
 
-bool Cell::loadCellData(const QDomElement & text, Operation op )
+bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
 {
   //TODO: use converter()->asString() to generate strText
 
@@ -6574,9 +6575,9 @@ QDate Cell::toDate(const QDomElement &element)
     return value().asDate();
 }
 
-QString Cell::pasteOperation( const QString &new_text, const QString &old_text, Operation op )
+QString Cell::pasteOperation( const QString &new_text, const QString &old_text, Paste::Operation op )
 {
-    if ( op == OverWrite )
+  if ( op == Paste::OverWrite )
         return new_text;
 
     QString tmp_op;
@@ -6592,8 +6593,8 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
         tmp = new_text;
     }
 
-    if ( old_text.isEmpty() && ( op == Add || op == Mul
-                                 || op == Sub || op == Div ) )
+    if ( old_text.isEmpty() &&
+         ( op == Paste::Add || op == Paste::Mul || op == Paste::Sub || op == Paste::Div ) )
     {
       old = "=0";
     }
@@ -6620,16 +6621,16 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
     {
         switch( op )
         {
-        case  Add:
+          case  Paste::Add:
             tmp_op = QString::number(old.toDouble()+tmp.toDouble());
             break;
-        case Mul :
+          case Paste::Mul :
             tmp_op = QString::number(old.toDouble()*tmp.toDouble());
             break;
-        case Sub:
+          case Paste::Sub:
             tmp_op = QString::number(old.toDouble()-tmp.toDouble());
             break;
-        case Div:
+          case Paste::Div:
             tmp_op = QString::number(old.toDouble()/tmp.toDouble());
             break;
         default:
@@ -6646,16 +6647,16 @@ QString Cell::pasteOperation( const QString &new_text, const QString &old_text, 
     {
         switch( op )
         {
-        case  Add:
+          case Paste::Add :
             tmp_op="=("+old+")+"+"("+tmp+")";
             break;
-        case Mul :
+          case Paste::Mul :
             tmp_op="=("+old+")*"+"("+tmp+")";
             break;
-        case Sub:
+          case Paste::Sub:
             tmp_op="=("+old+")-"+"("+tmp+")";
             break;
-        case Div:
+          case Paste::Div:
             tmp_op="=("+old+")/"+"("+tmp+")";
             break;
         default :
@@ -6822,11 +6823,11 @@ QRect Cell::cellRect()
   return QRect(QPoint(d->column, d->row), QPoint(d->column, d->row));
 }
 
-QValueList<KSpread::Conditional> Cell::conditionList() const
+QValueList<Conditional> Cell::conditionList() const
 {
   if ( !d->hasExtra() || !d->extra()->conditions )
   {
-    QValueList<KSpread::Conditional> emptyList;
+    QValueList<Conditional> emptyList;
     return emptyList;
   }
 

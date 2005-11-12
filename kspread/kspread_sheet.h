@@ -227,8 +227,6 @@ protected:
  *
  ********************************************************************/
 
-class SheetPrivate;
-
 /**
  */
 class KSPREAD_EXPORT Sheet : public QObject
@@ -624,11 +622,11 @@ public:
      * A convenience function which retrieves the data to be pasted
      * from the clipboard.
      */
-    void paste( const QRect & pasteArea, bool makeUndo = true, PasteMode = Normal,
-                Operation = OverWrite, bool insert = false, int insertTo = 0,
+    void paste( const QRect & pasteArea, bool makeUndo = true, Paste::Mode = Paste::Normal,
+                Paste::Operation = Paste::OverWrite, bool insert = false, int insertTo = 0,
                 bool pasteFC = false );
     void paste( const QByteArray & data, const QRect & pasteArea,
-                bool makeUndo = false, PasteMode= Normal, Operation = OverWrite,
+                bool makeUndo = false, Paste::Mode= Paste::Normal, Paste::Operation = Paste::OverWrite,
                 bool insert = false, int insertTo = 0, bool pasteFC = false );
     void defaultSelection( Selection* selectionInfo );
 
@@ -917,7 +915,7 @@ public:
      */
     bool loadSelection( const QDomDocument& doc, const QRect &pasteArea,
                         int _xshift, int _yshift, bool makeUndo,
-                        PasteMode = Normal, Operation = OverWrite,
+                        Paste::Mode = Paste::Normal, Paste::Operation = Paste::OverWrite,
                         bool insert = false, int insertTo = 0, bool paste = false );
 
     void loadSelectionUndo( const QDomDocument & doc, const QRect &loadArea,
@@ -1307,7 +1305,8 @@ private:
     int  adjustColumnHelper( KSpread::Cell * c, int _col, int _row );
     void checkContentDirection( QString const & name );
 
-    SheetPrivate* d;
+    class Private;
+    Private* d;
 
     // don't allow copy or assignment
     Sheet( const Sheet& );

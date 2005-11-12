@@ -1485,7 +1485,7 @@ void CellFormatPageFloat::slotChangeState()
             QDateTime tmpTime (QDate (1, 1, 1900), QTime (10, 35, 25));
 
 
-            KSpread::ValueFormatter *fmt = dlg->getDoc()->formatter();
+            ValueFormatter *fmt = dlg->getDoc()->formatter();
             list+= fmt->timeFormat(tmpTime, Time_format1);
             list+= fmt->timeFormat(tmpTime, Time_format2);
             list+= fmt->timeFormat(tmpTime, Time_format3);
@@ -1546,7 +1546,7 @@ void CellFormatPageFloat::init()
     list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), true);
     list+=i18n("System: ")+dlg->locale()->formatDate (QDate::currentDate(), false);
 
-    KSpread::ValueFormatter *fmt = dlg->getDoc()->formatter();
+    ValueFormatter *fmt = dlg->getDoc()->formatter();
 
     /*18-Feb-00*/
     list+=fmt->dateFormat( tmpDate, date_format1);
@@ -1757,7 +1757,7 @@ void CellFormatPageFloat::makeformat()
   QString tmp;
 
   updateFormatType();
-  KSpread::ValueFormatter *fmt = dlg->getDoc()->formatter();
+  ValueFormatter *fmt = dlg->getDoc()->formatter();
   tmp = fmt->formatText (dlg->value, newFormatType,
       precision->value());
   if (tmp.length() > 50)

@@ -168,7 +168,7 @@ bool OpenCalcImport::readRowFormat( QDomElement & rowNode, QDomElement * rowStyl
 
   double height = -1.0;
   bool insertPageBreak = false;
-  KSpread::Format layout( table, table->doc()->styleManager()->defaultStyle() );
+  Format layout( table, table->doc()->styleManager()->defaultStyle() );
 
   while( !node.isNull() )
   {
@@ -487,7 +487,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
         psName = e.attributeNS( ooNS::style, "parent-style-name", QString::null );
 
       kdDebug(30518) << "Default style: " << psName << endl;
-      KSpread::Format * layout = m_defaultStyles[psName];
+      Format * layout = m_defaultStyles[psName];
 
       if ( layout )
         cell->copy( *layout );
@@ -555,7 +555,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
 
       QString psName( "Default" );
       kdDebug(30518) << "Default style: " << psName << endl;
-      KSpread::Format * layout = m_defaultStyles[psName];
+      Format * layout = m_defaultStyles[psName];
 
       if ( layout )
         cell->copy( *layout );
@@ -778,7 +778,7 @@ void OpenCalcImport::loadOasisCondition(Cell*cell,const QDomElement &property )
     QDomElement elementItem( property );
     StyleManager * manager = cell->sheet()->doc()->styleManager();
 
-    QValueList<KSpread::Conditional> cond;
+    QValueList<Conditional> cond;
     while ( !elementItem.isNull() )
     {
         kdDebug(30518)<<"elementItem.tagName() :"<<elementItem.tagName()<<endl;
@@ -787,7 +787,7 @@ void OpenCalcImport::loadOasisCondition(Cell*cell,const QDomElement &property )
         {
             bool ok = true;
             kdDebug(30518)<<"elementItem.attribute(style:condition ) :"<<elementItem.attributeNS( ooNS::style, "condition", QString::null )<<endl;
-            KSpread::Conditional newCondition;
+            Conditional newCondition;
             loadOasisConditionValue( elementItem.attributeNS( ooNS::style, "condition", QString::null ), newCondition );
             if ( elementItem.hasAttributeNS( ooNS::style, "apply-style-name" ) )
             {
@@ -811,7 +811,7 @@ void OpenCalcImport::loadOasisCondition(Cell*cell,const QDomElement &property )
         cell->setConditionList( cond );
 }
 
-void OpenCalcImport::loadOasisConditionValue( const QString &styleCondition, KSpread::Conditional &newCondition )
+void OpenCalcImport::loadOasisConditionValue( const QString &styleCondition, Conditional &newCondition )
 {
     QString val( styleCondition );
     if ( val.contains( "cell-content()" ) )
@@ -827,7 +827,7 @@ void OpenCalcImport::loadOasisConditionValue( const QString &styleCondition, KSp
         val = val.remove( ")" );
         QStringList listVal = QStringList::split( "," , val );
         loadOasisValidationValue( listVal, newCondition );
-        newCondition.cond = Between;
+        newCondition.cond = Conditional::Between;
     }
     if ( val.contains( "cell-content-is-not-between(" ) )
     {
@@ -835,45 +835,45 @@ void OpenCalcImport::loadOasisConditionValue( const QString &styleCondition, KSp
         val = val.remove( ")" );
         QStringList listVal = QStringList::split( ",", val );
         loadOasisValidationValue( listVal,newCondition );
-        newCondition.cond = Different;
+        newCondition.cond = Conditional::Different;
     }
 
 }
 
 
-void OpenCalcImport::loadOasisCondition( QString &valExpression, KSpread::Conditional &newCondition )
+void OpenCalcImport::loadOasisCondition( QString &valExpression, Conditional &newCondition )
 {
     QString value;
     if (valExpression.find( "<=" )==0 )
     {
         value = valExpression.remove( 0,2 );
-        newCondition.cond = InferiorEqual;
+        newCondition.cond = Conditional::InferiorEqual;
     }
     else if (valExpression.find( ">=" )==0 )
     {
         value = valExpression.remove( 0,2 );
-        newCondition.cond = SuperiorEqual;
+        newCondition.cond = Conditional::SuperiorEqual;
     }
     else if (valExpression.find( "!=" )==0 )
     {
         //add Differentto attribute
         value = valExpression.remove( 0,2 );
-        newCondition.cond = DifferentTo;
+        newCondition.cond = Conditional::DifferentTo;
     }
     else if ( valExpression.find( "<" )==0 )
     {
         value = valExpression.remove( 0,1 );
-        newCondition.cond = Inferior;
+        newCondition.cond = Conditional::Inferior;
     }
     else if(valExpression.find( ">" )==0 )
     {
         value = valExpression.remove( 0,1 );
-        newCondition.cond = Superior;
+        newCondition.cond = Conditional::Superior;
     }
     else if (valExpression.find( "=" )==0 )
     {
         value = valExpression.remove( 0,1 );
-        newCondition.cond = Equal;
+        newCondition.cond = Conditional::Equal;
     }
     else
         kdDebug(30518)<<" I don't know how to parse it :"<<valExpression<<endl;
@@ -893,7 +893,7 @@ void OpenCalcImport::loadOasisCondition( QString &valExpression, KSpread::Condit
 }
 
 
-void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, KSpread::Conditional &newCondition )
+void OpenCalcImport::loadOasisValidationValue( const QStringList &listVal, Conditional &newCondition )
 {
     bool ok = false;
     kdDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
@@ -1026,7 +1026,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
     double width   = colWidth;
     bool collapsed = ( e.attributeNS( ooNS::table, "visibility", QString::null ) == "collapse" );
     bool insertPageBreak = false;
-    KSpread::Format styleLayout( table, table->doc()->styleManager()->defaultStyle() );
+    Format styleLayout( table, table->doc()->styleManager()->defaultStyle() );
 
     kdDebug(30518) << "Check table:number-columns-repeated" << endl;
     if ( e.hasAttributeNS( ooNS::table, "number-columns-repeated" ) )
@@ -1044,7 +1044,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
     {
       QString n( e.attributeNS( ooNS::table, "default-cell-style-name", QString::null ) );
       kdDebug(30518) << "Has attribute default-cell-style-name: " << n << endl;
-      KSpread::Format * defaultStyle = m_defaultStyles[ n ];
+      Format * defaultStyle = m_defaultStyles[ n ];
       if ( !defaultStyle )
       {
         QString name = e.attributeNS( ooNS::table, "default-cell-style-name", QString::null );
@@ -1054,7 +1054,7 @@ bool OpenCalcImport::readColLayouts( QDomElement & content, Sheet * table )
 
         if ( st && !st->isNull() )
         {
-          KSpread::Format * layout = new KSpread::Format( 0, m_doc->styleManager()->defaultStyle() );
+          Format * layout = new Format( 0, m_doc->styleManager()->defaultStyle() );
 
           readInStyle( layout, *st );
 
@@ -1450,8 +1450,8 @@ bool OpenCalcImport::parseBody( int numOfTables )
   int step = (int) ( 80 / numOfTables );
   int progress = 15;
 
-  KSpread::Format::setGlobalColWidth( MM_TO_POINT( 22.7 ) );
-  KSpread::Format::setGlobalRowHeight( MM_TO_POINT( 4.3 ) );
+  Format::setGlobalColWidth( MM_TO_POINT( 22.7 ) );
+  Format::setGlobalRowHeight( MM_TO_POINT( 4.3 ) );
   kdDebug(30518) << "Global Height: " << MM_TO_POINT( 4.3 ) << ", Global width: " << MM_TO_POINT( 22.7) << endl;
 
   while ( !sheet.isNull() )
@@ -1477,7 +1477,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
       continue;
     }
 
-    KSpread::Format * defaultStyle = m_defaultStyles[ "Default" ];
+    Format * defaultStyle = m_defaultStyles[ "Default" ];
     if ( defaultStyle )
     {
       Cell* defaultCell = table->defaultCell();
@@ -1968,7 +1968,7 @@ QString * OpenCalcImport::loadFormat( QDomElement * element,
   return format;
 }
 
-void OpenCalcImport::loadFontStyle( KSpread::Format * layout, QDomElement const * font ) const
+void OpenCalcImport::loadFontStyle( Format * layout, QDomElement const * font ) const
 {
   if ( !font || !layout )
     return;
@@ -2002,7 +2002,7 @@ void OpenCalcImport::loadFontStyle( KSpread::Format * layout, QDomElement const 
   // text-underline-color
 }
 
-void OpenCalcImport::loadBorder( KSpread::Format * layout, QString const & borderDef, bPos pos ) const
+void OpenCalcImport::loadBorder( Format * layout, QString const & borderDef, bPos pos ) const
 {
   if ( borderDef == "none" )
     return;
@@ -2061,7 +2061,7 @@ void OpenCalcImport::loadBorder( KSpread::Format * layout, QString const & borde
   // TODO Diagonals not supported by oocalc
 }
 
-void OpenCalcImport::loadStyleProperties( KSpread::Format * layout, QDomElement const & property ) const
+void OpenCalcImport::loadStyleProperties( Format * layout, QDomElement const & property ) const
 {
   kdDebug(30518) << "*** Loading style properties *****" << endl;
 
@@ -2107,13 +2107,13 @@ void OpenCalcImport::loadStyleProperties( KSpread::Format * layout, QDomElement 
   {
     QString s = property.attributeNS( ooNS::fo, "text-align", QString::null );
     if ( s == "center" )
-      layout->setAlign( KSpread::Format::Center );
+      layout->setAlign( Format::Center );
     else if ( s == "end" )
-      layout->setAlign( KSpread::Format::Right );
+      layout->setAlign( Format::Right );
     else if ( s == "start" )
-      layout->setAlign( KSpread::Format::Left );
+      layout->setAlign( Format::Left );
     else if ( s == "justify" ) // TODO in KSpread!
-      layout->setAlign( KSpread::Format::Center );
+      layout->setAlign( Format::Center );
   }
   if (  property.hasAttributeNS( ooNS::fo, "margin-left" ) )
   {
@@ -2171,14 +2171,14 @@ void OpenCalcImport::loadStyleProperties( KSpread::Format * layout, QDomElement 
   {
     QString s = property.attributeNS( ooNS::fo, "vertical-align", QString::null );
     if ( s == "middle" )
-      layout->setAlignY( KSpread::Format::Middle );
+      layout->setAlignY( Format::Middle );
     else if ( s == "bottom" )
-      layout->setAlignY( KSpread::Format::Bottom );
+      layout->setAlignY( Format::Bottom );
     else
-      layout->setAlignY( KSpread::Format::Top );
+      layout->setAlignY( Format::Top );
   }
   else
-      layout->setAlignY( KSpread::Format::Bottom );
+      layout->setAlignY( Format::Bottom );
 
   if ( property.hasAttributeNS( ooNS::fo, "wrap-option" ) )
   {
@@ -2222,14 +2222,14 @@ void OpenCalcImport::loadStyleProperties( KSpread::Format * layout, QDomElement 
   }
 }
 
-void OpenCalcImport::readInStyle( KSpread::Format * layout, QDomElement const & style )
+void OpenCalcImport::readInStyle( Format * layout, QDomElement const & style )
 {
   kdDebug(30518) << "** Reading Style: " << style.tagName() << "; " << style.attributeNS( ooNS::style, "name", QString::null) << endl;
   if ( style.localName() == "style" && style.namespaceURI()==ooNS::style)
   {
     if ( style.hasAttributeNS( ooNS::style, "parent-style-name" ) )
     {
-      KSpread::Format * cp
+      Format * cp
         = m_defaultStyles.find( style.attributeNS( ooNS::style, "parent-style-name", QString::null ) );
       kdDebug(30518) << "Copying layout from " << style.attributeNS( ooNS::style, "parent-style-name", QString::null ) << endl;
 
@@ -2239,7 +2239,7 @@ void OpenCalcImport::readInStyle( KSpread::Format * layout, QDomElement const & 
     else if ( style.hasAttributeNS( ooNS::style, "family") )
     {
       QString name = style.attribute( "style-family" ) + "default";
-      KSpread::Format * cp = m_defaultStyles.find( name );
+      Format * cp = m_defaultStyles.find( name );
 
       kdDebug(30518) << "Copying layout from " << name << ", " << !cp << endl;
 
@@ -2364,7 +2364,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
 
     if ( !e.isNull() )
     {
-      KSpread::Format * layout = new KSpread::Format( 0, m_doc->styleManager()->defaultStyle() );
+      Format * layout = new Format( 0, m_doc->styleManager()->defaultStyle() );
 
       readInStyle( layout, e );
       kdDebug(30518) << "Default style " << e.attributeNS( ooNS::style, "family", QString::null ) << "default" << " loaded " << endl;
@@ -2390,7 +2390,7 @@ bool OpenCalcImport::createStyleMap( QDomDocument const & styles )
       continue;
     }
 
-    KSpread::Format * layout = new KSpread::Format( 0, m_doc->styleManager()->defaultStyle() );
+    Format * layout = new Format( 0, m_doc->styleManager()->defaultStyle() );
     readInStyle( layout, defs );
     kdDebug(30518) << "Default style " << defs.attributeNS( ooNS::style, "name", QString::null ) << " loaded " << endl;
 
@@ -2451,15 +2451,15 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
             //"cell-content-text-length()>45"
             valExpression = valExpression.remove("cell-content-text-length()" );
             kdDebug(30518)<<" valExpression = :"<<valExpression<<endl;
-            val->m_allow = Allow_TextLength;
+            val->m_restriction = Restriction::TextLength;
 
             loadOasisValidationCondition( val, valExpression );
         }
         //cell-content-text-length-is-between(Value, Value) | cell-content-text-length-is-not-between(Value, Value)
         else if ( valExpression.contains( "cell-content-text-length-is-between" ) )
         {
-            val->m_allow = Allow_TextLength;
-            val->m_cond = Between;
+            val->m_restriction = Restriction::TextLength;
+            val->m_cond = Conditional::Between;
             valExpression = valExpression.remove( "cell-content-text-length-is-between(" );
             kdDebug(30518)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
@@ -2468,8 +2468,8 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
         }
         else if ( valExpression.contains( "cell-content-text-length-is-not-between" ) )
         {
-            val->m_allow = Allow_TextLength;
-            val->m_cond = Different;
+            val->m_restriction = Restriction::TextLength;
+            val->m_cond = Conditional::Different;
             valExpression = valExpression.remove( "cell-content-text-length-is-not-between(" );
             kdDebug(30518)<<" valExpression :"<<valExpression<<endl;
             valExpression = valExpression.remove( ")" );
@@ -2483,22 +2483,22 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
         {
             if (valExpression.contains( "cell-content-is-whole-number()" ) )
             {
-                val->m_allow =  Allow_Number;
+                val->m_restriction =  Restriction::Number;
                 valExpression = valExpression.remove( "cell-content-is-whole-number() and " );
             }
             else if (valExpression.contains( "cell-content-is-decimal-number()" ) )
             {
-                val->m_allow = Allow_Integer;
+                val->m_restriction = Restriction::Integer;
                 valExpression = valExpression.remove( "cell-content-is-decimal-number() and " );
             }
             else if (valExpression.contains( "cell-content-is-date()" ) )
             {
-                val->m_allow = Allow_Date;
+                val->m_restriction = Restriction::Date;
                 valExpression = valExpression.remove( "cell-content-is-date() and " );
             }
             else if (valExpression.contains( "cell-content-is-time()" ) )
             {
-                val->m_allow = Allow_Time;
+                val->m_restriction = Restriction::Time;
                 valExpression = valExpression.remove( "cell-content-is-time() and " );
             }
             kdDebug(30518)<<"valExpression :"<<valExpression<<endl;
@@ -2517,7 +2517,7 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
                 QStringList listVal = QStringList::split( "," , valExpression );
                 loadOasisValidationValue( val, listVal );
 
-                val->m_cond = Between;
+                val->m_cond = Conditional::Between;
             }
             if ( valExpression.contains( "cell-content-is-not-between(" ) )
             {
@@ -2525,7 +2525,7 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
                 valExpression = valExpression.remove( ")" );
                 QStringList listVal = QStringList::split( ",", valExpression );
                 loadOasisValidationValue( val, listVal );
-                val->m_cond = Different;
+                val->m_cond = Conditional::Different;
             }
         }
     }
@@ -2560,11 +2560,11 @@ void OpenCalcImport::loadOasisValidation( Validity* val, const QString& validati
         {
             QString str = error.attributeNS( ooNS::table, "message-type", QString::null );
             if ( str == "warning" )
-                val->m_action = Warning;
+              val->m_action = Action::Warning;
             else if ( str == "information" )
-                val->m_action = Information;
+              val->m_action = Action::Information;
             else if ( str == "stop" )
-                val->m_action = Stop;
+              val->m_action = Action::Stop;
             else
                 kdDebug(30518)<<"validation : message type unknown  :"<<str<<endl;
         }
@@ -2585,12 +2585,12 @@ void OpenCalcImport::loadOasisValidationValue( Validity* val, const QStringList 
     bool ok = false;
     kdDebug(30518)<<" listVal[0] :"<<listVal[0]<<" listVal[1] :"<<listVal[1]<<endl;
 
-    if ( val->m_allow == Allow_Date )
+    if ( val->m_restriction == Restriction::Date )
     {
         val->dateMin = QDate::fromString( listVal[0] );
         val->dateMax = QDate::fromString( listVal[1] );
     }
-    else if ( val->m_allow == Allow_Time )
+    else if ( val->m_restriction == Restriction::Time )
     {
         val->timeMin = QTime::fromString( listVal[0] );
         val->timeMax = QTime::fromString( listVal[1] );
@@ -2632,42 +2632,42 @@ void OpenCalcImport::loadOasisValidationCondition( Validity* val,QString &valExp
     if (valExpression.contains( "<=" ) )
     {
         value = valExpression.remove( "<=" );
-        val->m_cond = InferiorEqual;
+        val->m_cond = Conditional::InferiorEqual;
     }
     else if (valExpression.contains( ">=" ) )
     {
         value = valExpression.remove( ">=" );
-        val->m_cond = SuperiorEqual;
+        val->m_cond = Conditional::SuperiorEqual;
     }
     else if (valExpression.contains( "!=" ) )
     {
         //add Differentto attribute
         value = valExpression.remove( "!=" );
-        val->m_cond = DifferentTo;
+        val->m_cond = Conditional::DifferentTo;
     }
     else if ( valExpression.contains( "<" ) )
     {
         value = valExpression.remove( "<" );
-        val->m_cond = Inferior;
+        val->m_cond = Conditional::Inferior;
     }
     else if(valExpression.contains( ">" ) )
     {
         value = valExpression.remove( ">" );
-        val->m_cond = Superior;
+        val->m_cond = Conditional::Superior;
     }
     else if (valExpression.contains( "=" ) )
     {
         value = valExpression.remove( "=" );
-        val->m_cond = Equal;
+        val->m_cond = Conditional::Equal;
     }
     else
         kdDebug(30518)<<" I don't know how to parse it :"<<valExpression<<endl;
     kdDebug(30518)<<" value :"<<value<<endl;
-    if ( val->m_allow == Allow_Date )
+    if ( val->m_restriction == Restriction::Date )
     {
         val->dateMin = QDate::fromString( value );
     }
-    else if ( val->m_allow == Allow_Date )
+    else if ( val->m_restriction == Restriction::Date )
     {
         val->timeMin = QTime::fromString( value );
     }

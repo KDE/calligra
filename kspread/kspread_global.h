@@ -63,20 +63,73 @@ class ElapsedTime
   QString m_name;
 };
 
-} // namespace KSpread
-
-enum PasteMode { Normal, Text, Format, NoBorder, Comment, Result, NormalAndTranspose, TextAndTranspoase,
-		 FormatAndTranspose, NoBorderAndTranspose };
-
-namespace KSpread
+/**
+ * This namespace collects enumerations related to
+ * pasting operations.
+ */
+namespace Paste
 {
-enum Operation { OverWrite, Add, Mul, Sub, Div };
-} // namespace KSpread
-enum Conditional { None, Equal,Superior,Inferior,SuperiorEqual,InferiorEqual,Between,Different, DifferentTo};
-enum Action { Stop, Warning, Information };
-namespace KSpread
+  /**
+   * The pasted content
+   */
+  enum Mode
+  {
+    Normal /** Everything */,
+    Text /** Text only */,
+    Format /** Format only */,
+    NoBorder /** not the borders */,
+    Comment /** Comment only */,
+    Result /** Result only, no formula */,
+    NormalAndTranspose /** */,
+    TextAndTranspose /** */,
+    FormatAndTranspose /** */,
+    NoBorderAndTranspose /** */
+  };
+  /**
+   * The current cell value treatment.
+   */
+  enum Operation
+  {
+    OverWrite /** Overwrite */,
+    Add /** Add */,
+    Mul /** Multiply */,
+    Sub /** Substract */,
+    Div /** Divide */
+  };
+} // namespace Paste
+
+/**
+ * This namespace collects enumerations related to
+ * cell content restrictions.
+ */
+namespace Restriction
 {
-enum Allow { Allow_All, Allow_Number, Allow_Text,Allow_Time,Allow_Date,Allow_Integer,Allow_TextLength, Allow_List};
+  /**
+   * The type of the restriction
+   */
+  enum Type
+  {
+    None /** No restriction */,
+    Number /** Restrict to numbers */,
+    Text /** Restrict to texts */,
+    Time /** Restrict to times */,
+    Date /** Restrict to dates */,
+    Integer /** Restrict to integers  */,
+    TextLength /** Restrict text length */,
+    List /** Restrict to lists */
+  };
+} // namespace Restriction
+
+namespace Action
+{
+  enum Type
+  {
+    Stop,
+    Warning,
+    Information
+  };
+}
+
 enum Series { Column,Row,Linear,Geometric };
 // necessary due to QDock* enums (Werner)
 enum MoveTo { Bottom, Left, Top, Right, BottomFirst };

@@ -27,7 +27,8 @@
 
 #include <kdialogbase.h>
 
-class LinkDialogPrivate;
+namespace KSpread
+{
 
 class LinkDialog : public KDialogBase
 {
@@ -47,7 +48,10 @@ protected slots:
     void slotOk();    
 
 private:
-    LinkDialogPrivate* d;
+    class Private;
+    Private* d;
 };
+
+} // namepsace KSpread
 
 #endif /* LINK_DIALOG */

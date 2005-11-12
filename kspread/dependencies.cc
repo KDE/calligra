@@ -104,7 +104,7 @@ class DependencyList {
   QMap<QString, QMap<Point, bool> > areaDeps;
 };
 
-}
+} // namespace KSpread
 
 using namespace KSpread;
 

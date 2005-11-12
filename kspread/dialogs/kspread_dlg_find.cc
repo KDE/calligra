@@ -26,6 +26,8 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 
+using namespace KSpread;
+
 FindOption::FindOption( QWidget *parent)
 {
     QVBoxLayout *layout = new QVBoxLayout(parent);

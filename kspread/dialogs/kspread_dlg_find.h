@@ -29,6 +29,9 @@ class QCheckBox;
 class QPushButton;
 class QComboBox;
 
+namespace KSpread
+{
+
 class FindOption : public QObject
 {
   Q_OBJECT
@@ -89,5 +92,6 @@ class SearchDlg : public KReplaceDialog
     FindOption *m_findOptions;
 };
 
+} // namespace KSpread
 
 #endif

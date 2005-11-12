@@ -34,7 +34,6 @@
 namespace KSpread
 {
 class Undo;
-class Action;
 class Sheet;
 class Format;
 class Doc;

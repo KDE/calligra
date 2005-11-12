@@ -238,13 +238,13 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
     {
         switch( kspread_validity->m_action )
         {
-        case Stop:
+          case Action::Stop:
             val.setAttribute("Style", "1" );
             break;
-        case Warning:
+          case Action::Warning:
             val.setAttribute("Style", "2" );
             break;
-        case Information:
+          case Action::Information:
             val.setAttribute("Style", "3" );
             break;
         }
@@ -252,61 +252,61 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
 
     switch( kspread_validity->m_cond )
     {
-    case None:
+      case Conditional::None:
         //Nothing
         break;
-    case Equal:
+      case Conditional::Equal:
         val.setAttribute("Operator", "2" );
         break;
-    case Superior:
+      case Conditional::Superior:
         val.setAttribute("Operator", "4" );
         break;
-    case Inferior:
+      case Conditional::Inferior:
         val.setAttribute("Operator", "5" );
         break;
-    case SuperiorEqual:
+      case Conditional::SuperiorEqual:
         val.setAttribute("Operator", "6" );
         break;
-    case InferiorEqual:
+      case Conditional::InferiorEqual:
         val.setAttribute("Operator", "7" );
         break;
-    case Between:
+      case Conditional::Between:
         val.setAttribute("Operator", "0" );
         break;
-    case Different:
+      case Conditional::Different:
         val.setAttribute("Operator", "3" );
         break;
-    case DifferentTo:
+      case Conditional::DifferentTo:
         val.setAttribute("Operator", "1" );
         break;
     }
-    switch( kspread_validity->m_allow )
+    switch( kspread_validity->m_restriction )
     {
-    case Allow_All:
+    case Restriction::None:
         val.setAttribute("Type", "0" );
         break;
-    case Allow_Number:
+    case Restriction::Number:
     {
         val.setAttribute("Type", "2" );
         switch( kspread_validity->m_cond )
         {
-        case None:
+          case Conditional::None:
             //Nothing
             break;
-        case Equal:
-        case Superior:
-        case Inferior:
-        case SuperiorEqual:
-        case InferiorEqual:
-        case Different:
+          case Conditional::Equal:
+          case Conditional::Superior:
+          case Conditional::Inferior:
+          case Conditional::SuperiorEqual:
+          case Conditional::InferiorEqual:
+          case Conditional::Different:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
             tmp.appendChild( gnumeric_doc.createTextNode( QString::number( kspread_validity->valMin ) ) );
             val.appendChild( tmp );
         }
         break;
-        case Between:
-        case DifferentTo:
+          case Conditional::Between:
+          case Conditional::DifferentTo:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
             tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
@@ -320,31 +320,31 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
 
         break;
     }
-    case Allow_Text:
+    case Restriction::Text:
         //Not supported into gnumeric
         //val.setAttribute("Type", "1" );
         break;
-    case Allow_Time:
+    case Restriction::Time:
         val.setAttribute("Type", "5" );
         switch( kspread_validity->m_cond )
         {
-        case None:
+          case Conditional::None:
             //Nothing
             break;
-        case Equal:
-        case Superior:
-        case Inferior:
-        case SuperiorEqual:
-        case InferiorEqual:
-        case Different:
+          case Conditional::Equal:
+          case Conditional::Superior:
+          case Conditional::Inferior:
+          case Conditional::SuperiorEqual:
+          case Conditional::InferiorEqual:
+          case Conditional::Different:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
             tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->timeMin.toString() ) );
             val.appendChild( tmp );
         }
         break;
-        case Between:
-        case DifferentTo:
+          case Conditional::Between:
+          case Conditional::DifferentTo:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
             tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->timeMin.toString() ) );
@@ -357,27 +357,27 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
         }
 
         break;
-    case Allow_Date:
+    case Restriction::Date:
         val.setAttribute("Type", "4" );
         switch( kspread_validity->m_cond )
         {
-        case None:
+          case Conditional::None:
             //Nothing
             break;
-        case Equal:
-        case Superior:
-        case Inferior:
-        case SuperiorEqual:
-        case InferiorEqual:
-        case Different:
+          case Conditional::Equal:
+          case Conditional::Superior:
+          case Conditional::Inferior:
+          case Conditional::SuperiorEqual:
+          case Conditional::InferiorEqual:
+          case Conditional::Different:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
             tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->dateMin.toString() ) );
             val.appendChild( tmp );
         }
         break;
-        case Between:
-        case DifferentTo:
+          case Conditional::Between:
+          case Conditional::DifferentTo:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
             tmp.appendChild( gnumeric_doc.createTextNode( kspread_validity->dateMin.toString() ) );
@@ -390,27 +390,27 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
         }
 
         break;
-    case Allow_Integer:
+    case Restriction::Integer:
         val.setAttribute("Type", "1" );
         switch( kspread_validity->m_cond )
         {
-        case None:
+          case Conditional::None:
             //Nothing
             break;
-        case Equal:
-        case Superior:
-        case Inferior:
-        case SuperiorEqual:
-        case InferiorEqual:
-        case Different:
+          case Conditional::Equal:
+          case Conditional::Superior:
+          case Conditional::Inferior:
+          case Conditional::SuperiorEqual:
+          case Conditional::InferiorEqual:
+          case Conditional::Different:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
             tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
             val.appendChild( tmp );
         }
         break;
-        case Between:
-        case DifferentTo:
+          case Conditional::Between:
+          case Conditional::DifferentTo:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
             tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
@@ -422,27 +422,27 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
         break;
         }
         break;
-    case Allow_TextLength:
+    case Restriction::TextLength:
         val.setAttribute("Type", "6" );
         switch( kspread_validity->m_cond )
         {
-        case None:
+          case Conditional::None:
             //Nothing
             break;
-        case Equal:
-        case Superior:
-        case Inferior:
-        case SuperiorEqual:
-        case InferiorEqual:
-        case Different:
+          case Conditional::Equal:
+          case Conditional::Superior:
+          case Conditional::Inferior:
+          case Conditional::SuperiorEqual:
+          case Conditional::InferiorEqual:
+          case Conditional::Different:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
             tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
             val.appendChild( tmp );
         }
         break;
-        case Between:
-        case DifferentTo:
+          case Conditional::Between:
+          case Conditional::DifferentTo:
         {
             QDomElement tmp = gnumeric_doc.createElement( "gmr:Expression0" );
             tmp.appendChild( gnumeric_doc.createTextNode( QString::number(kspread_validity->valMin ) ) );
@@ -454,22 +454,22 @@ QDomElement GNUMERICExport::GetValidity( QDomDocument gnumeric_doc, Cell * cell 
         break;
         }
         break;
-    case Allow_List:
+    case Restriction::List:
         val.setAttribute("Type", "3" );
         switch( kspread_validity->m_cond )
         {
-        case None:
+          case Conditional::None:
             //Nothing
             break;
-        case Equal:
-        case Superior:
-        case Inferior:
-        case SuperiorEqual:
-        case InferiorEqual:
-        case Different:
+          case Conditional::Equal:
+          case Conditional::Superior:
+          case Conditional::Inferior:
+          case Conditional::SuperiorEqual:
+          case Conditional::InferiorEqual:
+          case Conditional::Different:
             break;
-        case Between:
-        case DifferentTo:
+          case Conditional::Between:
+          case Conditional::DifferentTo:
             break;
         }
         break;
@@ -626,32 +626,32 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 
 	cell_style.setAttribute("Fore",QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16) );
 
- if (cell->align(currentcolumn,currentrow) ==  KSpread::Format::Undefined)
+ if (cell->align(currentcolumn,currentrow) ==  Format::Undefined)
     {
         cell_style.setAttribute("HAlign","1");
     }
-    else if (cell->align(currentcolumn,currentrow) ==  KSpread::Format::Left)
+    else if (cell->align(currentcolumn,currentrow) ==  Format::Left)
 	{
         cell_style.setAttribute("HAlign","2");
     }
-    else if (cell->align(currentcolumn,currentrow) ==  KSpread::Format::Right)
+    else if (cell->align(currentcolumn,currentrow) ==  Format::Right)
 	{
         cell_style.setAttribute("HAlign","4");
 	}
- else if (cell->align(currentcolumn,currentrow) ==  KSpread::Format::Center)
+ else if (cell->align(currentcolumn,currentrow) ==  Format::Center)
 	{
         cell_style.setAttribute("HAlign","8");
     }
 
-    if (cell->alignY(currentcolumn,currentrow) ==  KSpread::Format::Top)
+    if (cell->alignY(currentcolumn,currentrow) ==  Format::Top)
 	{
 	    cell_style.setAttribute("VAlign","1");
 	}
- else if (cell->alignY(currentcolumn,currentrow) ==  KSpread::Format::Bottom)
+ else if (cell->alignY(currentcolumn,currentrow) ==  Format::Bottom)
 	{
         cell_style.setAttribute("VAlign","2");
     }
-    else if (cell->alignY(currentcolumn,currentrow) ==  KSpread::Format::Middle)
+    else if (cell->alignY(currentcolumn,currentrow) ==  Format::Middle)
     {
         cell_style.setAttribute("VAlign","4");
 	}
@@ -699,7 +699,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 
 	QString stringFormat;
 
- KSpread::Format::Currency c;
+ Format::Currency c;
     Currency currency;
 
 	switch( cell->getFormatType(currentcolumn, currentrow))

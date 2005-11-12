@@ -298,13 +298,13 @@ ConditionalDialog::ConditionalDialog( View * parent, const char * name,
 
 void ConditionalDialog::init()
 {
-  QValueList<KSpread::Conditional> conditionList;
-  QValueList<KSpread::Conditional> otherList;
+  QValueList<Conditional> conditionList;
+  QValueList<Conditional> otherList;
   bool found;
   int numCondition;
 
-  QValueList<KSpread::Conditional>::iterator it1;
-  QValueList<KSpread::Conditional>::iterator it2;
+  QValueList<Conditional>::iterator it1;
+  QValueList<Conditional>::iterator it2;
 
   Cell * obj = m_view->activeSheet()->cellAt( m_marker.left(),
                                                      m_marker.top() );
@@ -411,7 +411,7 @@ void ConditionalDialog::init()
   }
 }
 
-void ConditionalDialog::init( KSpread::Conditional const & tmp, int numCondition )
+void ConditionalDialog::init( Conditional const & tmp, int numCondition )
 {
   kdDebug() << "Adding " << numCondition << endl;
   QComboBox * cb  = 0;
@@ -450,30 +450,30 @@ void ConditionalDialog::init( KSpread::Conditional const & tmp, int numCondition
 
   switch( tmp.cond )
   {
-   case None :
+    case Conditional::None :
     break;
 
-   case Equal :
+    case Conditional::Equal :
     cb->setCurrentItem( 1 );
     break;
 
-   case Superior :
+    case Conditional::Superior :
     cb->setCurrentItem( 2 );
     break;
 
-   case Inferior :
+    case Conditional::Inferior :
     cb->setCurrentItem( 3 );
     break;
 
-   case SuperiorEqual :
+    case Conditional::SuperiorEqual :
     cb->setCurrentItem( 4 );
     break;
 
-   case InferiorEqual :
+    case Conditional::InferiorEqual :
     cb->setCurrentItem( 5 );
     break;
 
-   case Between :
+    case Conditional::Between :
     cb->setCurrentItem(6);
 
     if ( tmp.strVal2 )
@@ -485,7 +485,7 @@ void ConditionalDialog::init( KSpread::Conditional const & tmp, int numCondition
     }
     break;
 
-   case Different :
+    case Conditional::Different :
     cb->setCurrentItem(7);
     if ( tmp.strVal2 )
       kl2->setText( *tmp.strVal2 );
@@ -495,12 +495,12 @@ void ConditionalDialog::init( KSpread::Conditional const & tmp, int numCondition
       kl2->setText( value );
     }
     break;
-   case DifferentTo :
+    case Conditional::DifferentTo :
     cb->setCurrentItem(8);
     break;
   }
 
-  if ( tmp.cond != None )
+  if ( tmp.cond != Conditional::None )
   {
     kl1->setEnabled( true );
 
@@ -514,37 +514,37 @@ void ConditionalDialog::init( KSpread::Conditional const & tmp, int numCondition
   }
 }
 
-::Conditional ConditionalDialog::typeOfCondition( QComboBox const * const cb ) const
+Conditional::Type ConditionalDialog::typeOfCondition( QComboBox const * const cb ) const
 {
-  ::Conditional result = None;
+  Conditional::Type result = Conditional::None;
   switch( cb->currentItem() )
   {
    case 0 :
-    result = None;
+     result = Conditional::None;
     break;
    case 1 :
-    result = Equal;
+     result = Conditional::Equal;
     break;
    case 2 :
-    result = Superior;
+     result = Conditional::Superior;
     break;
    case 3 :
-    result = Inferior;
+     result = Conditional::Inferior;
     break;
    case 4 :
-    result = SuperiorEqual;
+     result = Conditional::SuperiorEqual;
     break;
    case 5 :
-    result = InferiorEqual;
+     result = Conditional::InferiorEqual;
     break;
    case 6 :
-    result = Between;
+     result = Conditional::Between;
     break;
    case 7 :
-    result = Different;
+     result = Conditional::Different;
     break;
    case 8 :
-    result = DifferentTo;
+     result = Conditional::DifferentTo;
     break;
    default:
     kdDebug(36001) << "Error in list" << endl;
@@ -590,7 +590,7 @@ bool ConditionalDialog::checkInputData()
   return true;
 }
 
-bool ConditionalDialog::getCondition( KSpread::Conditional & newCondition, const QComboBox * cb,
+bool ConditionalDialog::getCondition( Conditional & newCondition, const QComboBox * cb,
                                           const KLineEdit * edit1, const KLineEdit * edit2,
                                           const QComboBox * sb, Style * style )
 {
@@ -598,7 +598,7 @@ bool ConditionalDialog::getCondition( KSpread::Conditional & newCondition, const
     return false;
 
   newCondition.cond = typeOfCondition( cb );
-  if ( newCondition.cond == None )
+  if ( newCondition.cond == Conditional::None )
     return false;
 
   bool ok = false;
@@ -648,9 +648,9 @@ void ConditionalDialog::slotOk()
   m_view->doc()->emitBeginOperation( false );
   StyleManager * manager = m_view->doc()->styleManager();
 
-  QValueList<KSpread::Conditional> newList;
+  QValueList<Conditional> newList;
 
-  KSpread::Conditional newCondition;
+  Conditional newCondition;
 
   if ( getCondition( newCondition, m_dlg->m_condition_1, m_dlg->m_firstValue_1,
                      m_dlg->m_secondValue_1, m_dlg->m_style_1, manager->style( m_dlg->m_style_1->currentText() ) ) )

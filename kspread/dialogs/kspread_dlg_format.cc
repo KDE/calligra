@@ -333,7 +333,7 @@ bool FormatDialog::parseXML( const QDomDocument& doc )
 	    Sheet* sheet = m_view->activeSheet();
 	    Format* cell = new Format( sheet, sheet->doc()->styleManager()->defaultStyle() );
 
-	    if ( !cell->load( e.namedItem("format").toElement(), Normal ) )
+     if ( !cell->load( e.namedItem("format").toElement(), Paste::Normal ) )
 		return false;
 
 	    int row = e.attribute("row").toInt();

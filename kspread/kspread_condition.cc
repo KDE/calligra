@@ -40,14 +40,14 @@
 
 using namespace KSpread;
 
-KSpread::Conditional::Conditional():
+Conditional::Conditional():
   val1( 0.0 ), val2( 0.0 ), strVal1( 0 ), strVal2( 0 ),
   colorcond( 0 ), fontcond( 0 ), styleName( 0 ),
   style( 0 ), cond( None )
 {
 }
 
-KSpread::Conditional::~Conditional()
+Conditional::~Conditional()
 {
   delete strVal1;
   delete strVal2;
@@ -56,12 +56,12 @@ KSpread::Conditional::~Conditional()
   delete styleName;
 }
 
-KSpread::Conditional::Conditional( const KSpread::Conditional& c )
+Conditional::Conditional( const Conditional& c )
 {
   operator=( c );
 }
 
-KSpread::Conditional& KSpread::Conditional::operator=( const KSpread::Conditional& d )
+Conditional& Conditional::operator=( const Conditional& d )
 {
   strVal1 = d.strVal1 ? new QString( *d.strVal1 ) : 0;
   strVal2 = d.strVal2 ? new QString( *d.strVal2 ) : 0;
@@ -97,11 +97,11 @@ void Conditions::checkMatches()
     m_matchedStyle = 0;
 }
 
-bool Conditions::currentCondition( KSpread::Conditional & condition )
+bool Conditions::currentCondition( Conditional & condition )
 {
   /* for now, the first condition that is true is the one that will be used */
 
-  QValueList<KSpread::Conditional>::const_iterator it;
+  QValueList<Conditional>::const_iterator it;
   double value   = m_cell->value().asFloat();
   QString strVal = m_cell->text();
 
@@ -121,7 +121,7 @@ bool Conditions::currentCondition( KSpread::Conditional & condition )
 
     switch ( condition.cond )
     {
-     case Equal:
+      case Conditional::Equal:
       if ( condition.strVal1 )
       {
         if ( strVal == *condition.strVal1 )
@@ -135,7 +135,7 @@ bool Conditions::currentCondition( KSpread::Conditional & condition )
       }
       break;
 
-     case Superior:
+      case Conditional::Superior:
       if ( condition.strVal1 )
       {
         if ( strVal > *condition.strVal1 )
@@ -148,7 +148,7 @@ bool Conditions::currentCondition( KSpread::Conditional & condition )
       }
       break;
 
-     case Inferior:
+      case Conditional::Inferior:
       if ( condition.strVal1 )
       {
         if ( strVal < *condition.strVal1 )
@@ -161,7 +161,7 @@ bool Conditions::currentCondition( KSpread::Conditional & condition )
       }
       break;
 
-     case SuperiorEqual :
+      case Conditional::SuperiorEqual :
       if ( condition.strVal1 )
       {
         if ( strVal >= *condition.strVal1 )
@@ -174,7 +174,7 @@ bool Conditions::currentCondition( KSpread::Conditional & condition )
       }
       break;
 
-     case InferiorEqual :
+      case Conditional::InferiorEqual :
       if ( condition.strVal1 )
       {
         if ( strVal <= *condition.strVal1 )
@@ -187,7 +187,7 @@ bool Conditions::currentCondition( KSpread::Conditional & condition )
       }
       break;
 
-     case Between :
+      case Conditional::Between :
       if ( condition.strVal1 && condition.strVal2 )
       {
         if ( strVal > *condition.strVal1 && strVal < *condition.strVal2 )
@@ -201,7 +201,7 @@ bool Conditions::currentCondition( KSpread::Conditional & condition )
       }
       break;
 
-     case Different :
+      case Conditional::Different :
       if ( condition.strVal1 && condition.strVal2 )
       {
         if ( strVal < *condition.strVal1 || strVal > *condition.strVal2 )
@@ -214,7 +214,7 @@ bool Conditions::currentCondition( KSpread::Conditional & condition )
         return true;
       }
       break;
-     case DifferentTo :
+      case Conditional::DifferentTo :
       if ( condition.strVal1 )
       {
         if ( strVal != *condition.strVal1 )
@@ -234,12 +234,12 @@ bool Conditions::currentCondition( KSpread::Conditional & condition )
   return false;
 }
 
-QValueList<KSpread::Conditional> Conditions::conditionList() const
+QValueList<Conditional> Conditions::conditionList() const
 {
   return m_condList;
 }
 
-void Conditions::setConditionList( const QValueList<KSpread::Conditional> & list )
+void Conditions::setConditionList( const QValueList<Conditional> & list )
 {
   m_condList.clear();
 
@@ -256,7 +256,7 @@ void Conditions::saveOasisConditions( KoGenStyle &currentCellStyle )
     //todo fix me with kspread old format!!!
     if ( m_condList.isEmpty() )
         return;
-    QValueList<KSpread::Conditional>::const_iterator it;
+    QValueList<Conditional>::const_iterator it;
     int i = 0;
     for ( it = m_condList.begin(); it != m_condList.end(); ++it, ++i )
     {
@@ -270,51 +270,51 @@ void Conditions::saveOasisConditions( KoGenStyle &currentCellStyle )
     }
 }
 
-QString Conditions::saveOasisConditionValue( KSpread::Conditional &condition)
+QString Conditions::saveOasisConditionValue( Conditional &condition)
 {
     //we can also compare text value.
     //todo adapt it.
     QString value;
     switch( condition.cond )
     {
-    case None:
+      case Conditional::None:
         break;
-    case Equal:
+      case Conditional::Equal:
         value="cell-content()=";
         if ( condition.strVal1 )
             value+=*condition.strVal1;
         else
             value+=QString::number( condition.val1 );
         break;
-    case Superior:
+      case Conditional::Superior:
         value="cell-content()>";
         if ( condition.strVal1 )
             value+=*condition.strVal1;
         else
             value+=QString::number( condition.val1 );
         break;
-    case Inferior:
+      case Conditional::Inferior:
         value="cell-content()<";
         if ( condition.strVal1 )
             value+=*condition.strVal1;
         else
             value+=QString::number( condition.val1 );
         break;
-    case SuperiorEqual:
+      case Conditional::SuperiorEqual:
         value="cell-content()>=";
         if ( condition.strVal1 )
             value+=*condition.strVal1;
         else
             value+=QString::number( condition.val1 );
         break;
-    case InferiorEqual:
+      case Conditional::InferiorEqual:
         value="cell-content()<=";
         if ( condition.strVal1 )
             value+=*condition.strVal1;
         else
             value+=QString::number( condition.val1 );
         break;
-    case Between:
+      case Conditional::Between:
         value="cell-content-is-between(";
         if ( condition.strVal1 )
         {
@@ -331,14 +331,14 @@ QString Conditions::saveOasisConditionValue( KSpread::Conditional &condition)
         }
         value+=")";
         break;
-    case DifferentTo:
+      case Conditional::DifferentTo:
         value="cell-content()!="; //FIXME not good here !
         if ( condition.strVal1 )
             value+=*condition.strVal1;
         else
             value+=QString::number( condition.val1 );
         break;
-    case Different:
+      case Conditional::Different:
         value="cell-content-is-not-between(";
         if ( condition.strVal1 )
         {
@@ -471,7 +471,7 @@ void Conditions::loadOasisConditionValue( const QString &styleCondition, Conditi
         val = val.remove( ")" );
         QStringList listVal = QStringList::split( "," , val );
         loadOasisValidationValue( listVal, newCondition );
-        newCondition.cond = Between;
+        newCondition.cond = Conditional::Between;
     }
     if ( val.contains( "cell-content-is-not-between(" ) )
     {
@@ -479,7 +479,7 @@ void Conditions::loadOasisConditionValue( const QString &styleCondition, Conditi
         val = val.remove( ")" );
         QStringList listVal = QStringList::split( ",", val );
         loadOasisValidationValue( listVal,newCondition );
-        newCondition.cond = Different;
+        newCondition.cond = Conditional::Different;
     }
 
 }
@@ -491,33 +491,33 @@ void Conditions::loadOasisCondition( QString &valExpression, Conditional &newCon
     if (valExpression.find( "<=" )==0 )
     {
         value = valExpression.remove( 0,2 );
-        newCondition.cond = InferiorEqual;
+        newCondition.cond = Conditional::InferiorEqual;
     }
     else if (valExpression.find( ">=" )==0 )
     {
         value = valExpression.remove( 0,2 );
-        newCondition.cond = SuperiorEqual;
+        newCondition.cond = Conditional::SuperiorEqual;
     }
     else if (valExpression.find( "!=" )==0 )
     {
         //add Differentto attribute
         value = valExpression.remove( 0,2 );
-        newCondition.cond = DifferentTo;
+        newCondition.cond = Conditional::DifferentTo;
     }
     else if ( valExpression.find( "<" )==0 )
     {
         value = valExpression.remove( 0,1 );
-        newCondition.cond = Inferior;
+        newCondition.cond = Conditional::Inferior;
     }
     else if(valExpression.find( ">" )==0 )
     {
         value = valExpression.remove( 0,1 );
-        newCondition.cond = Superior;
+        newCondition.cond = Conditional::Superior;
     }
     else if (valExpression.find( "=" )==0 )
     {
         value = valExpression.remove( 0,1 );
-        newCondition.cond = Equal;
+        newCondition.cond = Conditional::Equal;
     }
     else
         kdDebug()<<" I don't know how to parse it :"<<valExpression<<endl;
@@ -586,7 +586,7 @@ void Conditions::loadConditions( const QDomElement & element )
     ok = conditionElement.hasAttribute( "cond" );
 
     if ( ok )
-      newCondition.cond = (::Conditional) conditionElement.attribute( "cond" ).toInt( &ok );
+      newCondition.cond = (Conditional::Type) conditionElement.attribute( "cond" ).toInt( &ok );
     else continue;
 
     if ( conditionElement.hasAttribute( "val1" ) )

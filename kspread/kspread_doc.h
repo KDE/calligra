@@ -87,8 +87,6 @@ class Plugin
   virtual QDomElement saveXML( QDomDocument & doc ) const = 0;
 };
 
-class DocPrivate;
-
 /**
  * This class holds the data that makes up a spreadsheet.
  */
@@ -644,8 +642,8 @@ protected:
   SavedDocParts m_savedDocParts;
 
 private:
-
-  DocPrivate* d;
+  class Private;
+  Private* d;
 
   // don't allow copy or assignment
   Doc( const Doc& );

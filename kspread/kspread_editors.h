@@ -139,7 +139,7 @@ class FormulaEditorHighlighter : public QSyntaxHighlighter
 
 /**
 * Provides autocompletition facilities in formula editors.
-* When the user types in the first few characters of a function name in a @ref KSpreadTextEditor which has a @ref FunctionCompletion
+* When the user types in the first few characters of a function name in a @ref TextEditor which has a @ref FunctionCompletion
 * object installed on it, the @ref FunctionCompletion object creates and displays a list of possible names which the user can select from.
 * If the user selects a function name from the list, the @ref selectedCompletion signal is emitted
 */
@@ -169,6 +169,9 @@ public:
     void showCompletion( const QStringList &choices );
     
 signals:
+    /**
+    * Emitted, if the user selects a function name from the list.
+    */
     void selectedCompletion( const QString& item );
     
 private:

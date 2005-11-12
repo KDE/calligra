@@ -227,7 +227,7 @@ class KSpread::ValueData
     static ValueData* s_null;
 };
 
-void ValueData::setFormatByType ()
+void KSpread::ValueData::setFormatByType ()
 {
   switch (type) {
     case Value::Empty:

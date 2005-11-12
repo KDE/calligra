@@ -109,8 +109,8 @@ public:
     //
     ////////////////////////////////
 
-    bool load( const QDomElement & f, PasteMode pm, bool paste = false );
-    bool loadFormat( const QDomElement & f, PasteMode pm = Normal, bool paste = false );
+    bool load( const QDomElement & f, Paste::Mode pm, bool paste = false );
+    bool loadFormat( const QDomElement & f, Paste::Mode pm = Paste::Normal, bool paste = false );
     QDomElement save( QDomDocument& doc,int _col, int _row,bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
@@ -440,7 +440,7 @@ public:
     virtual DCOPObject* dcopObject();
 
     virtual QDomElement save( QDomDocument&, int yshift = 0, bool copy = false ) const;
-    virtual bool load( const QDomElement& row, int yshift = 0, PasteMode sp = Normal, bool paste = false );
+    virtual bool load( const QDomElement& row, int yshift = 0, Paste::Mode sp = Paste::Normal, bool paste = false );
     virtual bool loadOasis( const QDomElement& row, QDomElement * rowStyle );
 
     /**
@@ -577,7 +577,7 @@ public:
     ~ColumnFormat();
 
     virtual QDomElement save( QDomDocument&, int xshift = 0, bool copy = false ) const;
-    virtual bool load( const QDomElement& row, int xshift = 0,PasteMode sp = Normal, bool paste = false );
+    virtual bool load( const QDomElement& row, int xshift = 0,Paste::Mode sp = Paste::Normal, bool paste = false );
     virtual DCOPObject* dcopObject();
 
     /**
