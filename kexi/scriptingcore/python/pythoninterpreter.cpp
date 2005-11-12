@@ -118,7 +118,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
         path = Py_GetPath();
 
     // Determinate additional module-paths we like to add.
-    QStringList dirs = KGlobal::dirs()->findDirs("appdata", "scripts/kross");
+    QStringList dirs = KGlobal::dirs()->findDirs("data", "kross/python");
     for(QStringList::Iterator it = dirs.begin(); it != dirs.end(); ++it)
         path.append(PYPATHDELIMITER + *it);
 

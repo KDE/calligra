@@ -1,6 +1,6 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-scriptsdir = $(kde_datadir)/kexi/scripts
-scripts_SCRIPTS = ExportHTML.py ProjectDocumentator.py
+modulesdir = $(kde_datadir)/kross/python
+modules_SCRIPTS = gui.py
 
-SUBDIRS = kross
+SUBDIRS = RestrictedPython

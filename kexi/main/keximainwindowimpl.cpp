@@ -3734,7 +3734,7 @@ void KexiMainWindowImpl::slotToolsScriptsAboutToShow()
 #ifdef KEXI_SCRIPTS_SUPPORT
 	KPopupMenu *popup = d->action_tools_scripts->popupMenu();
 	popup->clear();
-	QStringList files = KGlobal::dirs()->findAllResources("appdata", "scripts/*.py");
+	QStringList files = KGlobal::dirs()->findAllResources("appdata", "kross/python/*.py");
 	int idx = 0;
 	for(QStringList::Iterator it = files.begin(); it != files.end(); ++it, idx++)
 		popup->setWhatsThis(popup->insertItem(KURL(*it).fileName(), idx), *it);
