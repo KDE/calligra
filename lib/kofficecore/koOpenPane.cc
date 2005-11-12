@@ -100,9 +100,9 @@ void KoOpenPane::showOpenFileDialog()
       KoFilterManager::Import,
       KoDocument::readExtraNativeMimeTypes());
 
-  QString filename = KFileDialog::getOpenFileName(":OpenDialog", mimeFilter.join(" "), this);
+  KURL url = KFileDialog::getOpenURL(":OpenDialog", mimeFilter.join(" "), this);
 
-  emit openExistingFile(filename);
+  emit openExistingFile(url.path());
 }
 
 void KoOpenPane::addCustomDocumentPane(const QString& title, const QString& icon, QWidget* widget)
