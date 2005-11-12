@@ -8,6 +8,8 @@ So feel free to change it and add comments. The types are very straightforward,
 so I think no further comments are needed yet.  -- Wilco --
 */
 
+namespace KSpread
+{
 
 typedef Column unsigned long int;
 typedef Row unsigned long int;
@@ -40,3 +42,4 @@ private:
     Coordinate m_crdEnd;
 };
 
+} // namespace KSpread

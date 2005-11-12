@@ -23,6 +23,9 @@
 
 class QDate;
 
+namespace KSpread
+{
+
 /*	0: US 30 / 360
  *	1: real days
  *	2: real days / 360
@@ -38,5 +41,7 @@ int daysPerYear( QDate const & date, int basis );
  *	4: European 30 / 360
  */
 int daysBetweenDates( QDate const & date1, QDate const & date2, int basis );
+
+} //namespace KSpread
 
 #endif

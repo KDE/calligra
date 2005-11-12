@@ -23,6 +23,7 @@
 #include <dcopclient.h>
 #include "kspread_aboutdata.h"
 
+using namespace KSpread;
 
 static const KCmdLineOptions options[]=
 {

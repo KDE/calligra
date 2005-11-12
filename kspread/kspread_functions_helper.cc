@@ -63,7 +63,7 @@ void subMonths( QDate & date, int months )
 
 */
 
-int daysPerYear(QDate const & date, int basis)
+int KSpread::daysPerYear(QDate const & date, int basis)
 {
   switch( basis )
   {
@@ -86,7 +86,7 @@ int daysPerYear(QDate const & date, int basis)
   return -1;
 }
 
-int daysBetweenDates(QDate const & date1, QDate const & date2, int basis)
+int KSpread::daysBetweenDates(QDate const & date1, QDate const & date2, int basis)
 {
   int day1, day2, month1, month2, year1, year2;
   bool isLeapYear = false;

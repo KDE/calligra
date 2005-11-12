@@ -10,6 +10,9 @@
 #include <kparts/event.h>
 #include <koffice_export.h>
 
+namespace KSpread
+{
+
 class KSPREAD_EXPORT SelectionChanged : public KParts::Event
 {
 public:
@@ -26,5 +29,7 @@ private:
     QRect m_rect;
     QString m_sheet;
 };
+
+} // namespace KSpread
 
 #endif

@@ -6,6 +6,9 @@
 class QDomElement;
 class QDomDocument;
 
+namespace KSpread
+{
+
 class Locale : public KLocale
 {
 public:
@@ -15,5 +18,7 @@ public:
     QDomElement save( QDomDocument& doc ) const;
     void defaultSystemConfig();
 };
+
+} //namespace KSpread
 
 #endif

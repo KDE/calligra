@@ -27,6 +27,9 @@
 #include <qmap.h>
 #include <qstring.h>
 
+namespace KSpread
+{
+
 class AppIface : public DCOPObject
 {
     K_DCOP
@@ -39,5 +42,7 @@ k_dcop:
     virtual QMap<QString,DCOPRef> documents();
     virtual DCOPRef document( const QString& name );
 };
+
+} // namespace KSpread
 
 #endif

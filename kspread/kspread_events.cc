@@ -2,6 +2,8 @@
 
 // ----------------------------------------------------
 
+using namespace KSpread;
+
 const char *SelectionChanged::s_strSelectionChanged = "KSpread/View/SelectionChanged";
 
 SelectionChanged::SelectionChanged( const QRect& rect, const QString& sheet )

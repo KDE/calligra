@@ -26,6 +26,8 @@
 #include <qspinbox.h>
 #include <qobjectlist.h>
 
+using namespace KSpread;
+
 ToolBox::ToolBox( QWidget* parent, const char* name )
     : QFrame( parent, name, WType_TopLevel | WStyle_Tool )
 {

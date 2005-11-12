@@ -28,6 +28,9 @@ class QSpinBox;
 
 class KoDocumentChild;
 
+namespace KSpread
+{
+
 class KOFFICEUI_EXPORT ToolBox : public QFrame
 {
     Q_OBJECT
@@ -89,5 +92,7 @@ private:
     class Private;
     Private *d;
 };
+
+} // namespace KSpread
 
 #endif

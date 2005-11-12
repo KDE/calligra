@@ -2,6 +2,8 @@
 
 #include <qdom.h>
 
+using namespace KSpread;
+
 Locale::Locale()
 	: KLocale("kspread")
 {

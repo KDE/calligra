@@ -25,6 +25,9 @@
 class KAboutData;
 class DCOPObject;
 
+namespace KSpread
+{
+
 class Factory : public KoFactory
 {
     Q_OBJECT
@@ -46,5 +49,7 @@ private:
     static DCOPObject* s_dcopObject;
     static KAboutData* s_aboutData;
 };
+
+} // namespace KSpread
 
 #endif
