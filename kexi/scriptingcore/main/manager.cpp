@@ -95,6 +95,7 @@ Manager::Manager()
         d->interpreterinfos.replace("python",
             new InterpreterInfo("python",
                 pythonlib, // library
+                "*.py", // file filter-wildcard
                 QStringList() << "text/x-python" << "application/x-python", // mimetypes
                 pythonoptions // options
             )

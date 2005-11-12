@@ -35,9 +35,10 @@ using namespace Kross::Api;
  * InterpreterInfo
  */
 
-InterpreterInfo::InterpreterInfo(const QString& interpretername, const QString& library, QStringList mimetypes, Option::Map options)
+InterpreterInfo::InterpreterInfo(const QString& interpretername, const QString& library, const QString& wildcard, QStringList mimetypes, Option::Map options)
     : m_interpretername(interpretername)
     , m_library(library)
+    , m_wildcard(wildcard)
     , m_mimetypes(mimetypes)
     , m_options(options)
     , m_interpreter(0)
@@ -56,6 +57,11 @@ InterpreterInfo::~InterpreterInfo()
 const QString& InterpreterInfo::getInterpretername()
 {
     return m_interpretername;
+}
+
+const QString& InterpreterInfo::getWildcard()
+{
+    return m_wildcard;
 }
 
 const QStringList InterpreterInfo::getMimeTypes()

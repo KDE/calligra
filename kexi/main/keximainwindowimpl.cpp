@@ -761,8 +761,6 @@ void KexiMainWindowImpl::initActions()
 
 #ifdef KEXI_SCRIPTS_SUPPORT
 	d->action_tools_scripts = new KActionMenu(i18n("Scripts"), actionCollection(), "tools_scripts");
-	connect(d->action_tools_scripts->popupMenu(),SIGNAL(activated(int)),
-		this, SLOT(slotToolsScriptsActivated(int)));
 	connect(d->action_tools_scripts->popupMenu(), SIGNAL(aboutToShow()),
 		this, SLOT(slotToolsScriptsAboutToShow()));
 #else
@@ -3732,24 +3730,7 @@ void KexiMainWindowImpl::slotToolsProjectImportDataTable()
 void KexiMainWindowImpl::slotToolsScriptsAboutToShow()
 {
 #ifdef KEXI_SCRIPTS_SUPPORT
-	KPopupMenu *popup = d->action_tools_scripts->popupMenu();
-	popup->clear();
-	QStringList files = KGlobal::dirs()->findAllResources("appdata", "kross/python/*.py");
-	int idx = 0;
-	for(QStringList::Iterator it = files.begin(); it != files.end(); ++it, idx++)
-		popup->setWhatsThis(popup->insertItem(KURL(*it).fileName(), idx), *it);
-#endif
-}
-
-void KexiMainWindowImpl::slotToolsScriptsActivated(int id)
-{
-	if(id < 0) return;
-#ifdef KEXI_SCRIPTS_SUPPORT
-	KPopupMenu *popup = d->action_tools_scripts->popupMenu();
-	QString file = popup->whatsThis(id); // we use the whatsThis for the full file URL
-	QString err;
-	if(! KexiScriptManager::self(this)->executeFile(file, err))
-		KMessageBox::error(this, err);
+	KexiScriptManager::self(this)->plugExtensions( d->action_tools_scripts->popupMenu() );
 #endif
 }
 

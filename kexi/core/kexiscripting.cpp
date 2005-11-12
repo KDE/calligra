@@ -22,6 +22,8 @@
 #include <qcursor.h>
 #include <qstylesheet.h>
 #include <qfile.h>
+#include <kstandarddirs.h>
+#include <kmessagebox.h>
 #include <kdebug.h>
 
 #include "keximainwindow.h"
@@ -222,6 +224,8 @@ class KexiScriptManagerPrivate
 		KexiMainWindow* mainwindow;
 		/// Map of \a KexiScriptContainer children this \a KexiScriptManager
 		QMap<QString, KexiScriptContainer*> scriptcontainers;
+		/// An collection of actions. Each action points to a scriptextension.
+		KActionCollection* actioncollection;
 };
 
 KexiScriptManager* KexiScriptManager::self(KexiMainWindow* mainwin)
@@ -237,7 +241,7 @@ KexiScriptManager::KexiScriptManager(KexiMainWindow* mainwindow)
 	, d(new KexiScriptManagerPrivate())
 {
 	d->mainwindow = mainwindow;
-
+	d->actioncollection = 0;
 #ifdef KEXI_KROSS_SUPPORT
 	// Publish the KexiMainWindow singelton instance. At least the KexiApp 
 	// scripting-plugin depends on this instance and loading the plugin will 
@@ -293,6 +297,60 @@ bool KexiScriptManager::executeFile(const QString& file, QString& error)
 		error = sc->getLastError();
 	delete sc;
 	return ok;
+}
+
+KActionCollection* KexiScriptManager::getExtensions()
+{
+#ifdef KEXI_KROSS_SUPPORT
+	if(! d->actioncollection) {
+		d->actioncollection = new KActionCollection( d->mainwindow, this );
+
+		QMap<QString, Kross::Api::InterpreterInfo*> infos = Kross::Api::Manager::scriptManager()->getInterpreterInfos();
+		QMap<QString, Kross::Api::InterpreterInfo*>::Iterator infoit = infos.begin();
+		for(; infoit != infos.end(); ++infoit) {
+			QStringList files = KGlobal::dirs()->findAllResources(
+				"appdata",
+				QString("kross/%1/%2").arg( (*infoit)->getInterpretername() ).arg( (*infoit)->getWildcard() )
+			);
+			for(QStringList::Iterator fileit = files.begin(); fileit != files.end(); ++fileit) {
+				KAction* action = new KAction(
+					KURL(*fileit).fileName(), // text
+					"exec", // icon
+					0, // shortcut
+					this, // receiver
+					SLOT( executeExtension() ), // slot
+					d->actioncollection // parent action-collection
+				);
+				//action->setGroup("ScriptExtension");
+				action->setWhatsThis(*fileit);
+			}
+		}
+	}
+#endif
+	return d->actioncollection;
+}
+
+void KexiScriptManager::plugExtensions(QWidget* widget)
+{
+	KActionCollection* actioncollection = getExtensions();
+	if(actioncollection) {
+		KActionPtrList list = actioncollection->actions();
+		for(KActionPtrList::Iterator it = list.begin(); it != list.end(); ++it)
+			if(! (*it)->isPlugged(widget))
+				(*it)->plug(widget);
+	}
+}
+
+void KexiScriptManager::executeExtension()
+{
+	KAction* action = (KAction*) QObject::sender();
+	if(action) {
+		QString file = action->whatsThis(); // we use the whatsThis for the full file URL
+		QString err;
+		if(! executeFile(file, err)) {
+			KMessageBox::error(d->mainwindow, err);
+		}
+	}
 }
 
 #include "kexiscripting.moc"

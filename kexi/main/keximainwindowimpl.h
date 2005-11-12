@@ -317,7 +317,6 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotToolsProjectMigration();
 		void slotToolsProjectImportDataTable();
 		void slotToolsScriptsAboutToShow();
-		void slotToolsScriptsActivated(int);
 		void slotQuit();
 		/// TMP: Display a dialog to download db examples from internet
 		void  slotGetNewStuff();

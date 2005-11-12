@@ -80,7 +80,7 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              */
-            InterpreterInfo(const QString& interpretername, const QString& library, QStringList mimetypes, Option::Map options);
+            InterpreterInfo(const QString& interpretername, const QString& library, const QString& wildcard, QStringList mimetypes, Option::Map options);
 
             /**
              * Destructor.
@@ -88,12 +88,17 @@ namespace Kross { namespace Api {
             ~InterpreterInfo();
 
             /**
-             * Return the name of the interpreter.
-             *
-             * \return Name of the interpreter, for
-             *         example "python" or "kjs".
+             * \return the name of the interpreter. For example "python" or "kjs".
              */
             const QString& getInterpretername();
+
+            /**
+             * \return the file-wildcard used to determinate by this interpreter 
+             * used scriptingfiles. Those filter will be used e.g. with
+             * KGlobal::dirs()->findAllResources() as filtermask. For example
+             * python just defines it as "*py".
+             */
+            const QString& getWildcard();
 
             /**
              * List of mimetypes this interpreter supports.
@@ -136,6 +141,8 @@ namespace Kross { namespace Api {
             QString m_interpretername;
             /// The name of the library to load for the interpreter.
             QString m_library;
+            /// The file wildcard used to determinate extensions.
+            QString m_wildcard;
             /// List of mimetypes this interpreter supports.
             QStringList m_mimetypes;
             /// A \a Option::Map with options.

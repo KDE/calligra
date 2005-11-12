@@ -23,6 +23,7 @@
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qvariant.h>
+#include <kactioncollection.h>
 
 // Forward declarations.
 class KexiScriptContainerPrivate;
@@ -168,6 +169,7 @@ class KEXICORE_EXPORT KexiScriptContainer : public QObject
  */
 class KEXICORE_EXPORT KexiScriptManager : public QObject
 {
+        Q_OBJECT
     protected:
 
         /**
@@ -220,6 +222,20 @@ class KEXICORE_EXPORT KexiScriptManager : public QObject
          * \return true on success else false.
          */
         bool executeFile(const QString& file, QString& error);
+
+        /**
+         * \return a collection of KAction's. Each KAction points to
+         * a scripting extension provided to the application.
+         */
+        KActionCollection* getExtensions();
+
+        /**
+         * Plug all extensions to the QWidget \p widget .
+         */
+        void plugExtensions(QWidget* widget);
+
+    private slots:
+        void executeExtension();
 
     private:
         /// Private d-pointer class.
