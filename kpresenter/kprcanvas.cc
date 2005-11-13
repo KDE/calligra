@@ -605,7 +605,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     if(!m_view->koDocument()->isReadWrite())
         return;
 
-    if ( editMode && toolEditMode == TEM_MOUSE && m_gl.mousePressEvent( e ) )
+    if ( editMode && m_view->kPresenterDoc()->showGuideLines() && toolEditMode == TEM_MOUSE && m_gl.mousePressEvent( e ) )
         return;
 
     m_moveStartPosMouse = objectRect( false ).topLeft();
@@ -1155,7 +1155,7 @@ KoRect KPrCanvas::getAlignBoundingRect() const
 
 void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 {
-    if ( editMode && toolEditMode == TEM_MOUSE && m_gl.mouseReleaseEvent( e ) )
+    if ( editMode && m_view->kPresenterDoc()->showGuideLines() && toolEditMode == TEM_MOUSE && m_gl.mouseReleaseEvent( e ) )
         return;
 
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
@@ -1402,7 +1402,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 
 void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 {
-    if ( editMode && toolEditMode == TEM_MOUSE && m_gl.mouseMoveEvent( e ) )
+    if ( editMode && m_view->kPresenterDoc()->showGuideLines() && toolEditMode == TEM_MOUSE && m_gl.mouseMoveEvent( e ) )
         return;
 
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
@@ -1830,7 +1830,7 @@ void KPrCanvas::wheelEvent( QWheelEvent *e )
 
 void KPrCanvas::keyPressEvent( QKeyEvent *e )
 {
-    if ( editMode && m_gl.keyPressEvent( e ) )
+    if ( editMode && m_view->kPresenterDoc()->showGuideLines() && m_gl.keyPressEvent( e ) )
         return;
     if ( !editMode ) {
         switch ( e->key() ) {
