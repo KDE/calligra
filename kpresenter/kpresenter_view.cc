@@ -4149,10 +4149,11 @@ void KPresenterView::openPopupMenuMenuPage( const QPoint & _point )
     }
     if ( actionList.count()>0)
         plugActionList( "picture_action", actionList );
-    m_mousePos = _point;
+    m_mousePos = m_canvas->mapFromGlobal( _point );
     QPopupMenu* menu = dynamic_cast<QPopupMenu*>(factory()->container("menupage_popup",this));
     if ( menu )
         menu->exec(_point);
+    m_mousePos = QPoint( 0, 0 );
     unplugActionList( "picture_action" );
     delete separator;
 }
@@ -5672,7 +5673,7 @@ void KPresenterView::addGuideLine()
 {
     KoRect rect( m_canvas->activePage()->getPageRect() );
 
-    KoPoint pos( zoomHandler()->unzoomPoint( m_canvas->mapFromGlobal( m_mousePos ) + QPoint( m_canvas->diffx(), m_canvas->diffy() ) ) );
+    KoPoint pos( zoomHandler()->unzoomPoint( m_mousePos + QPoint( m_canvas->diffx(), m_canvas->diffy() ) ) );
     KoGuideLineDia dia( 0, pos, rect, m_pKPresenterDoc->unit() );
     if ( dia.exec() == QDialog::Accepted )
     {
