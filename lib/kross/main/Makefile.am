@@ -1,4 +1,4 @@
-include $(top_srcdir)/kexi/Makefile.global
+include $(top_srcdir)/lib/kross/Makefile.global
 
 lib_LTLIBRARIES = libkrossmain.la
 
@@ -12,8 +12,8 @@ libkrossmain_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 libkrossmain_la_LIBADD = \
     $(LIB_QT) \
     $(LIB_KDECORE) \
-    ../api/libkrossapi.la
+    $(LIB_KROSS_API)
 
-libkrossmain_la_METASOURCES = AUTO
+METASOURCES = AUTO
 SUBDIRS = .
-INCLUDES = -I$(top_srcdir)/kexi $(all_includes)
+INCLUDES = $(KROSS_INCLUDES) $(all_includes)

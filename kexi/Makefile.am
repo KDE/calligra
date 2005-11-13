@@ -8,11 +8,10 @@ kexi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO)
 kexi_la_LIBADD = ./core/libkexicore.la ./main/libkeximain.la
 
 if compile_kross_plugin
-  SCRIPTING_CORE=scriptingcore
   SCRIPTING_PLUGINS=scriptingplugins
 endif
 
-SUBDIRS= 3rdparty kexiutils kexidb $(SCRIPTING_CORE) core widget formeditor \
+SUBDIRS= 3rdparty kexiutils kexidb core widget formeditor \
 data pics main migration $(SCRIPTING_PLUGINS) plugins . tests
 
 #(will be reenabled after main/startup move)
@@ -62,7 +61,7 @@ messages: rc.cpp
 #	(cd data && $(PREPARETIPS) > ../tips.cpp)
 	EXCLUDE="-path ./formeditor -o -path ./doc \
 	-o -path ./plugins/importwizard -o -path ./tests \
-	-o -path ./scriptingcore -o -path ./scriptingplugins -o -path ./plugins/scripting"; \
+	-o -path ./scriptingplugins -o -path ./plugins/scripting"; \
 	LIST="data/*.rc `find . \( \( $$EXCLUDE \) -prune -o -name \*.ui \) -type f | grep -v -e '/\.'`"; \
 	if test -n "$$LIST"; then \
 	 $(EXTRACTRC) $$LIST >> rc.cpp; \

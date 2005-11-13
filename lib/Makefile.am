@@ -2,11 +2,15 @@ if compile_lib_KOPAINTER
 KOPAINTERDIR = kopainter
 endif
 
+if compile_kross
+KROSSDIR = kross
+endif
+
 if compile_kexionly
-SUBDIRS = koproperty 
+SUBDIRS = koproperty $(KROSSDIR)
 else
 SUBDIRS = store kwmf kofficecore kofficeui koscript kotext \
-          $(KOPAINTERDIR) kformula koproperty kopalette
+          $(KOPAINTERDIR) kformula koproperty kopalette $(KROSSDIR)
 endif
 
 messages:

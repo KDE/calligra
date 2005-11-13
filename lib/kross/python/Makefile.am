@@ -1,6 +1,4 @@
-include $(top_srcdir)/kexi/Makefile.global
-
-INCLUDES = -I$(top_srcdir)/kexi $(PYTHONINC) $(all_includes)
+include $(top_srcdir)/lib/kross/Makefile.global
 
 kde_module_LTLIBRARIES = krosspython.la
 
@@ -21,5 +19,6 @@ krosspython_la_LIBADD = \
     ../api/libkrossapi.la \
     ../main/libkrossmain.la
 
+INCLUDES = $(KROSS_INCLUDES) $(PYTHONINC) $(all_includes)
 METASOURCES = AUTO
 SUBDIRS = CXX scripts .

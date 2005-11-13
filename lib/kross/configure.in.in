@@ -1,3 +1,9 @@
+AC_ARG_ENABLE(scripting,
+    AC_HELP_STRING([--enable-scripting],
+                   [build scripting library (KROSS) (EXPERIMENTAL) [default=no]]),
+    compile_kross=$enableval, compile_kross=no)
+AM_CONDITIONAL(compile_kross, test "x$compile_kross" != "xno")
+
 # Check if python is installed.
 #KDE_CHECK_PYTHON(2.3)
 KDE_CHECK_PYTHON

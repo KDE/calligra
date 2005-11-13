@@ -29,10 +29,10 @@
 #include "keximainwindow.h"
 
 #ifdef KEXI_KROSS_SUPPORT
-# include <scriptingcore/main/manager.h>
-# include <scriptingcore/main/scriptcontainer.h>
-# include <scriptingcore/api/interpreter.h>
-# include <scriptingcore/api/exception.h>
+# include <kross/main/manager.h>
+# include <kross/main/scriptcontainer.h>
+# include <kross/api/interpreter.h>
+# include <kross/api/exception.h>
 #endif
 
 /****************************************************************

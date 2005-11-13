@@ -1,6 +1,4 @@
-include $(top_srcdir)/kexi/Makefile.global
-
-INCLUDES = -I$(top_srcdir)/kexi $(PYTHONINC) $(all_includes)
+include $(top_srcdir)/lib/kross/Makefile.global
 
 noinst_LTLIBRARIES = libkrosspythoncxx.la
 
@@ -12,8 +10,8 @@ libkrosspythoncxx_la_SOURCES = \
 
 libkrosspythoncxx_la_LDFLAGS = $(LIBPYTHON) $(all_libraries) -Wnounresolved
 
-libkrosspythoncxx_la_METASOURCES = AUTO
-
+METASOURCES = AUTO
+INCLUDES = $(KROSS_INCLUDES) $(PYTHONINC) $(all_includes)
 SUBDIRS = .
 
 clean:

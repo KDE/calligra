@@ -52,7 +52,7 @@ namespace Kross { namespace Api {
      * interpreter like python. While \a Script spends a more
      * flexible container.
      */
-    class KROSS_MAIN_EXPORT Manager : public MainModule
+    class KDE_EXPORT Manager : public MainModule
     {
         protected:
 
