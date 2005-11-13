@@ -34,9 +34,11 @@
 #include <kpushbutton.h>
 #include <kconfig.h>
 #include <kurl.h>
-#include <kactivelabel.h>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
+#include <kapplication.h>
+#include <ktextbrowser.h>
+#include <kactivelabel.h>
 
 #include "koTemplates.h"
 
@@ -154,15 +156,23 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
       listText += "<br>" + t->description();
     }
 
-    KoRichTextListItem* item = new KoRichTextListItem(m_documentList, listText, t->file());
+    KoRichTextListItem* item = new KoRichTextListItem(m_documentList, listText, t->name(), t->file());
     item->setPixmap(0, t->loadPicture(instance));
   }
 
+  connect(m_documentList, SIGNAL(selectionChanged(QListViewItem*)),
+          this, SLOT(selectionChanged(QListViewItem*)));
   connect(m_documentList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
           this, SLOT(openTemplate(QListViewItem*)));
   connect(m_openButton, SIGNAL(clicked()), this, SLOT(openTemplate()));
 
   m_documentList->setSelected(m_documentList->firstChild(), true);
+}
+
+void KoTemplatesPane::selectionChanged(QListViewItem* item)
+{
+  m_titleLabel->setText(item->text(1));
+  m_previewLabel->setPixmap(*(item->pixmap(0)));
 }
 
 void KoTemplatesPane::openTemplate()
@@ -174,7 +184,7 @@ void KoTemplatesPane::openTemplate()
 void KoTemplatesPane::openTemplate(QListViewItem* item)
 {
   if(item) {
-    emit openTemplate(item->text(1));
+    emit openTemplate(item->text(2));
   }
 }
 
@@ -236,12 +246,13 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
       if(!url.isLocalFile() || QFile::exists(url.path())) {
         KFileItem* fileItem = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
         d->m_fileList.append(fileItem);
-        KoRichTextListItem* item = new KoRichTextListItem(m_documentList, "<b>" + name + "</b><br>" + url.path(), url.path());
+        KoRichTextListItem* item = new KoRichTextListItem(m_documentList, "<b>" + name + "</b><br>" + url.path(), name, url.path());
         //center all icons in 64x64 area
         QImage icon = fileItem->pixmap(64).convertToImage();
         icon.setAlphaBuffer(true);
         icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
         item->setPixmap(0, QPixmap(icon));
+        item->setPixmap(2, fileItem->pixmap(128));
       }
     }
 
@@ -250,13 +261,15 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
 
   instance->config()->setGroup( oldGroup );
 
+  connect(m_documentList, SIGNAL(selectionChanged(QListViewItem*)),
+          this, SLOT(selectionChanged(QListViewItem*)));
   connect(m_documentList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
           this, SLOT(openFile(QListViewItem*)));
   connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 
   m_documentList->setSelected(m_documentList->firstChild(), true);
 
-  d->m_previewJob = KIO::filePreview(d->m_fileList, 64, 64);
+  d->m_previewJob = KIO::filePreview(d->m_fileList, 200, 200);
 
   connect(d->m_previewJob, SIGNAL(result(KIO::Job*)), this, SLOT(previewResult(KIO::Job*)));
   connect(d->m_previewJob, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
@@ -268,6 +281,12 @@ KoRecentDocumentsPane::~KoRecentDocumentsPane()
   delete d;
 }
 
+void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
+{
+  m_titleLabel->setText(item->text(1));
+  m_previewLabel->setPixmap(*(item->pixmap(2)));
+}
+
 void KoRecentDocumentsPane::openFile()
 {
   QListViewItem* item = m_documentList->selectedItem();
@@ -277,7 +296,7 @@ void KoRecentDocumentsPane::openFile()
 void KoRecentDocumentsPane::openFile(QListViewItem* item)
 {
   if(item)
-    emit openFile(item->text(1));
+    emit openFile(item->text(2));
 }
 
 void KoRecentDocumentsPane::previewResult(KIO::Job* job)
@@ -291,11 +310,18 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixm
   QListViewItemIterator it(m_documentList);
 
   while(it.current()) {
-    if(it.current()->text(1) == fileItem->url().path()) {
+    if(it.current()->text(2) == fileItem->url().path()) {
+      it.current()->setPixmap(2, preview);
       QImage icon = preview.convertToImage();
+      icon = icon.smoothScale(64, 64, QImage::ScaleMin);
       icon.setAlphaBuffer(true);
       icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
       it.current()->setPixmap(0, QPixmap(icon));
+
+      if(it.current()->isSelected()) {
+        m_previewLabel->setPixmap(preview);
+      }
+
       break;
     }
 

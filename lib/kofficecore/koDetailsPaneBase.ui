@@ -9,8 +9,264 @@
             <x>0</x>
             <y>0</y>
             <width>528</width>
-            <height>495</height>
+            <height>549</height>
         </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>300</width>
+            <height>300</height>
+        </size>
+    </property>
+    <property name="palette">
+        <palette>
+            <active>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>221</red>
+                    <green>223</green>
+                    <blue>228</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>238</red>
+                    <green>239</green>
+                    <blue>241</blue>
+                </color>
+                <color>
+                    <red>110</red>
+                    <green>111</green>
+                    <blue>114</blue>
+                </color>
+                <color>
+                    <red>147</red>
+                    <green>149</green>
+                    <blue>152</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>239</red>
+                    <green>239</green>
+                    <blue>239</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+            </active>
+            <disabled>
+                <color>
+                    <red>128</red>
+                    <green>128</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>221</red>
+                    <green>223</green>
+                    <blue>228</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>254</red>
+                    <green>254</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>110</red>
+                    <green>111</green>
+                    <blue>114</blue>
+                </color>
+                <color>
+                    <red>147</red>
+                    <green>149</green>
+                    <blue>152</blue>
+                </color>
+                <color>
+                    <red>128</red>
+                    <green>128</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>128</red>
+                    <green>128</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>239</red>
+                    <green>239</green>
+                    <blue>239</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>238</blue>
+                </color>
+                <color>
+                    <red>82</red>
+                    <green>24</green>
+                    <blue>139</blue>
+                </color>
+            </disabled>
+            <inactive>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>221</red>
+                    <green>223</green>
+                    <blue>228</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>254</red>
+                    <green>254</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>110</red>
+                    <green>111</green>
+                    <blue>114</blue>
+                </color>
+                <color>
+                    <red>147</red>
+                    <green>149</green>
+                    <blue>152</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>239</red>
+                    <green>239</green>
+                    <blue>239</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>0</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>128</blue>
+                </color>
+                <color>
+                    <red>255</red>
+                    <green>255</green>
+                    <blue>255</blue>
+                </color>
+                <color>
+                    <red>0</red>
+                    <green>0</green>
+                    <blue>238</blue>
+                </color>
+                <color>
+                    <red>82</red>
+                    <green>24</green>
+                    <blue>139</blue>
+                </color>
+            </inactive>
+        </palette>
     </property>
     <property name="caption">
         <string>DetailsPaneBase</string>
@@ -22,7 +278,7 @@
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="KListView" row="0" column="0" rowspan="1" colspan="3">
+        <widget class="KListView" row="0" column="0" rowspan="7" colspan="1">
             <column>
                 <property name="text">
                     <string></string>
@@ -52,23 +308,54 @@
                 <bool>false</bool>
             </property>
         </widget>
-        <widget class="KPushButton" row="1" column="2">
+        <widget class="Line" row="4" column="1" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>line1</cstring>
+            </property>
+            <property name="frameShape">
+                <enum>HLine</enum>
+            </property>
+            <property name="frameShadow">
+                <enum>Sunken</enum>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="3" column="2" rowspan="1" colspan="3">
+            <property name="name">
+                <cstring>m_alwaysUseCheckbox</cstring>
+            </property>
+            <property name="text">
+                <string>Always use this template</string>
+            </property>
+        </widget>
+        <spacer row="2" column="4" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>spacer8_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Minimum</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>60</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="KPushButton" row="2" column="3">
             <property name="name">
                 <cstring>m_openButton</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>4</hsizetype>
-                    <vsizetype>1</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
             </property>
             <property name="text">
                 <string></string>
             </property>
         </widget>
-        <spacer row="1" column="1">
+        <spacer row="2" column="1" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>spacer8</cstring>
             </property>
@@ -80,27 +367,108 @@
             </property>
             <property name="sizeHint">
                 <size>
-                    <width>101</width>
+                    <width>60</width>
                     <height>20</height>
                 </size>
             </property>
         </spacer>
-        <widget class="QCheckBox" row="1" column="0">
+        <spacer row="3" column="1">
             <property name="name">
-                <cstring>m_alwaysUseCheckbox</cstring>
+                <cstring>spacer3_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="3" column="5">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="1" column="1" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>m_titleLabel</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>1</hsizetype>
-                    <vsizetype>0</vsizetype>
+                    <hsizetype>5</hsizetype>
+                    <vsizetype>4</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
+            <property name="font">
+                <font>
+                    <bold>1</bold>
+                </font>
+            </property>
             <property name="text">
-                <string>Always use this template</string>
+                <string></string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
             </property>
         </widget>
+        <widget class="QLabel" row="0" column="1" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>m_previewLabel</cstring>
+            </property>
+            <property name="minimumSize">
+                <size>
+                    <width>200</width>
+                    <height>200</height>
+                </size>
+            </property>
+            <property name="text">
+                <string></string>
+            </property>
+            <property name="alignment">
+                <set>AlignCenter</set>
+            </property>
+        </widget>
+        <widget class="KActiveLabel" row="5" column="1" rowspan="1" colspan="5">
+            <property name="name">
+                <cstring>kActiveLabel1</cstring>
+            </property>
+        </widget>
+        <spacer row="6" column="3">
+            <property name="name">
+                <cstring>spacer7</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>21</height>
+                </size>
+            </property>
+        </spacer>
     </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
@@ -108,5 +476,6 @@
 <includehints>
     <includehint>klistview.h</includehint>
     <includehint>kpushbutton.h</includehint>
+    <includehint>kactivelabel.h</includehint>
 </includehints>
 </UI>

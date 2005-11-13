@@ -88,6 +88,7 @@ class KoTemplatesPane : public KoDetailsPaneBase
     void openTemplate(const QString&);
 
   protected slots:
+    void selectionChanged(QListViewItem* item);
     void openTemplate();
     void openTemplate(QListViewItem* item);
 };
@@ -104,6 +105,7 @@ class KoRecentDocumentsPane : public KoDetailsPaneBase
     void openFile(const QString&);
 
   protected slots:
+    void selectionChanged(QListViewItem* item);
     void openFile();
     void openFile(QListViewItem* item);
 
