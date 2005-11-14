@@ -360,7 +360,7 @@ ContainerFactory::ContainerFactory(QObject *parent, const char *, const QStringL
 	wFrame->setName(i18n("Frame"));
 	wFrame->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "frame"));
-	wFrame->setDescription(i18n("A very simple container"));
+	wFrame->setDescription(i18n("A simple frame container"));
 	addClass(wFrame);
 
 	KFormDesigner::WidgetInfo *wWidgetStack = new KFormDesigner::WidgetInfo(this);

@@ -374,6 +374,7 @@ Container::eventFilter(QObject *s, QEvent *e)
 			break;
 		}
 
+		//case QEvent::AccelOverride:
 		case QEvent::KeyPress:
 		{
 			QKeyEvent *kev = static_cast<QKeyEvent*>(e);
@@ -1064,8 +1065,11 @@ Container::drawCopiedWidgetRect(QMouseEvent *mev)
 void
 Container::moveSelectedWidgetsBy(int realdx, int realdy, QMouseEvent *mev)
 {
-	int gridX = m_form->gridSize();
-	int gridY = m_form->gridSize();
+	if (m_form->selectedWidget() == m_form->widget())
+		return; //do not move top-level widget
+
+	const int gridX = m_form->gridSize();
+	const int gridY = m_form->gridSize();
 	int dx=realdx, dy=realdy;
 
 	for(QWidget *w = m_form->selectedWidgets()->first(); w; w = m_form->selectedWidgets()->next())

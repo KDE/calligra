@@ -20,6 +20,7 @@
 #define KEXIDATASOURCEPAGE_H
 
 #include <qwidget.h>
+#include <kexidb/field.h>
 
 class KCommand;
 class KexiObjectInfoLabel;
@@ -68,7 +69,8 @@ class KEXIFORMUTILS_EXPORT KexiDataSourcePage : public QWidget
 		/*! Signal emitted when current widget's data source (field/expression)
 		 has been changed. It's connected to the Form Manager. 
 		 \a caption for this field is also provided (e.g. AutoField form widget use it) */
-		void dataSourceFieldOrExpressionChanged(const QString& string, const QString& caption);
+		void dataSourceFieldOrExpressionChanged(const QString& string, const QString& caption,
+			KexiDB::Field::Type type);
 
 		/*! Signal emitted when 'insert fields' button has been clicked */
 		void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,

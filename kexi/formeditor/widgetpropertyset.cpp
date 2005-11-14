@@ -574,11 +574,12 @@ WidgetPropertySet::saveEnabledProperty(bool value)
 {
 //	for(QWidget *w = d->widgets.first(); w; w = d->widgets.next()) {
 	foreach(QGuardedWidgetList::ConstIterator, it, d->widgets) {
-		ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup((*it)->name());
+		ObjectTreeItem *tree = KFormDesigner::FormManager::self()->activeForm()->objectTree()
+			->lookup((*it)->name());
 		if(tree->isEnabled() == value)
 			continue;
 
-		QPalette p = (*it)->palette();
+		QPalette p( (*it)->palette() );
 		if (!d->origActiveColors)
 			d->origActiveColors = new QColorGroup( p.active() );
 		if (value) {

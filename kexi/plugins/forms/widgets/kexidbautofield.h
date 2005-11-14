@@ -39,14 +39,15 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 {
 	Q_OBJECT
 //'caption' is uncovered now	Q_PROPERTY(QString labelCaption READ caption WRITE setCaption DESIGNABLE true)
+	Q_OVERRIDE(QString caption READ caption WRITE setCaption DESIGNABLE true)
 	Q_PROPERTY(bool autoCaption READ hasAutoCaption WRITE setAutoCaption DESIGNABLE true)
 	Q_PROPERTY(QString dataSource READ dataSource WRITE setDataSource DESIGNABLE true)
 	Q_PROPERTY(QCString dataSourceMimeType READ dataSourceMimeType WRITE setDataSourceMimeType DESIGNABLE true)
 	Q_PROPERTY(LabelPosition labelPosition READ labelPosition WRITE setLabelPosition DESIGNABLE true)
 	Q_PROPERTY(WidgetType widgetType READ widgetType WRITE setWidgetType DESIGNABLE true)
 	/*internal, for design time only*/
-	Q_PROPERTY(int fieldTypeInternal READ fieldTypeInternal WRITE setFieldTypeInternal DESIGNABLE true)
-	Q_PROPERTY(QString fieldCaptionInternal READ fieldCaptionInternal WRITE setFieldCaptionInternal DESIGNABLE true)
+	Q_PROPERTY(int fieldTypeInternal READ fieldTypeInternal WRITE setFieldTypeInternal DESIGNABLE true STORED false)
+	Q_PROPERTY(QString fieldCaptionInternal READ fieldCaptionInternal WRITE setFieldCaptionInternal DESIGNABLE true STORED false)
 	Q_ENUMS( WidgetType LabelPosition )
 
 	public:
@@ -77,7 +78,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		//! Reimpelmented to also install \a listenter for internal editor
 		virtual void installListener(KexiDataItemChangesListener* listener);
 
-		WidgetType widgetType() const { return m_widgetType; }
+		WidgetType widgetType() const { return m_widgetType_property; }
 		void setWidgetType(WidgetType type);
 
 		LabelPosition labelPosition() const { return m_lblPosition; }
@@ -97,13 +98,13 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 
 		static WidgetType widgetTypeForFieldType(KexiDB::Field::Type type);
 
-		/*! On design time we're unable to pass a reference to KexiDB::Field object
-		 so we're just providing field type. Only used for widget type set to Auto.
+		/*! On design time it is not possible to pass a reference to KexiDB::Field object
+		 so we're just providing field type. Only used when widget type is Auto.
 		 @internal */
 		void setFieldTypeInternal(int kexiDBFieldType);
 
-		/*! On design time we're unable to pass a reference to KexiDB::Field object
-		 so we're just providing field caption. Only used for widget type set to Auto.
+		/*! On design time it is not possible to pass a reference to KexiDB::Field object
+		 so we're just providing field caption. Only used when widget type is Auto.
 		 @internal */
 		void setFieldCaptionInternal(const QString& text);
 
@@ -121,13 +122,16 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 		void init(const QString &text, WidgetType type, LabelPosition pos);
 		void createEditor();
 		void changeText(const QString &text, bool beautify = true);
+//		virtual void paintEvent( QPaintEvent* pe );
+		void updateInformationAboutUnboundField();
 
 	protected slots:
 		void slotValueChanged();
 
 	private:
-		WidgetType m_widgetType;
-		WidgetType  m_widgetType_property;
+		WidgetType m_widgetType; //!< internal: equal to m_widgetType_property ir equal to result 
+		                         //!< of widgetTypeForFieldType() if widgetTypeForFieldType is Auto
+		WidgetType  m_widgetType_property; //!< provides widget type or Auto
 		LabelPosition  m_lblPosition;
 		QBoxLayout  *m_layout;
 		QLabel  *m_label;

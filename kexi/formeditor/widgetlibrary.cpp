@@ -548,8 +548,7 @@ WidgetLibrary::isPropertyVisible(const QCString &classname, QWidget *w,
 	if (!d->showAdvancedProperties && d->advancedProperties[ property ]) {
 		//this is advanced property, should we hide it?
 		if (wi->factory()->internalProperty(classname, "forceShowAdvancedProperty:"+property).isEmpty()
-			&& wi->inheritedClass() 
-			&& wi->inheritedClass()->factory()->internalProperty(classname, "forceShowAdvancedProperty:"+property).isEmpty())
+			&& (!wi->inheritedClass() || wi->inheritedClass()->factory()->internalProperty(classname, "forceShowAdvancedProperty:"+property).isEmpty()))
 		{
 			return false; //hide it
 		}

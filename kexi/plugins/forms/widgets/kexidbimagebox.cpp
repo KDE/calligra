@@ -121,7 +121,7 @@ KexiDBImageBox::KexiDBImageBox( bool designMode, QWidget *parent, const char *na
 	m_copyAction->plug(m_popup);
 	m_pasteAction = KStdAction::paste(this, SLOT(paste()), &m_actionCollection);
 	m_pasteAction->plug(m_popup);
-	m_deleteAction = new KAction(i18n("&Clear"), SmallIconSet("editdelete"), Qt::Key_Delete,
+	m_deleteAction = new KAction(i18n("&Clear"), SmallIconSet("editdelete"), 0,
 		this, SLOT(clear()), &m_actionCollection, "delete");
 	m_deleteAction->plug(m_popup);
 #ifdef KEXI_NO_UNFINISHED 

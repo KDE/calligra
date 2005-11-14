@@ -32,7 +32,8 @@
 
 class QPainter;
 class QTimer;
-class KexiDBLabelPrivate;
+class KexiDBInternalLabel;
+
 /**
  An extended, data-aware, read-only text label.
  It's text may have a drop-shadow.
@@ -46,6 +47,8 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidg
 		Q_PROPERTY( bool shadowEnabled READ shadowEnabled WRITE setShadowEnabled DESIGNABLE true )
 		Q_OVERRIDE( QPixmap pixmap DESIGNABLE false )
 		Q_OVERRIDE( bool scaledContents DESIGNABLE false )
+//		Q_OVERRIDE( QColor paletteForegroundColor READ paletteForegroundColor WRITE setPaletteForegroundColor DESIGNABLE true )
+		Q_PROPERTY( QColor frameColor READ frameColor WRITE setFrameColor DESIGNABLE true )
 
 	public:
 		KexiDBLabel( QWidget *parent, const char *name = 0, WFlags f = 0 );
@@ -57,7 +60,7 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidg
 
 		virtual QVariant value();
 
-		inline bool shadowEnabled() const { return p_shadowEnabled; }
+		bool shadowEnabled() const;
 
 		virtual void setInvalidState( const QString& displayText );
 
@@ -81,6 +84,10 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidg
 		//! used to catch setIndent(), etc.
 		virtual bool setProperty ( const char * name, const QVariant & value );
 
+		virtual const QColor& frameColor() const;
+
+//		const QColor & paletteForegroundColor() const;
+
 	public slots:
 		//! Sets the datasource to \a ds
 		inline void setDataSource( const QString &ds ) { KexiFormDataItemInterface::setDataSource( ds ); }
@@ -93,10 +100,17 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidg
 		 KexiDBLabel acts just like a normal QLabel when shadow is disabled. */
 		void setShadowEnabled( bool state );
 
+		virtual void setPalette( const QPalette &pal );
+
+		virtual void setFrameColor(const QColor& color);
+
+//		void setPaletteForegroundColor( const QColor& color );
+
 	protected slots:
 		void updatePixmap();
 
 	protected:
+		void init();
 		virtual void setColumnInfo(KexiDB::QueryColumnInfo* cinfo);
 		virtual void paintEvent( QPaintEvent* );
 		virtual void resizeEvent( QResizeEvent* e );
@@ -108,19 +122,18 @@ class KEXIFORMUTILS_EXPORT KexiDBLabel : public QLabel, protected KexiDBTextWidg
 		virtual void styleChange( QStyle& style );
 		virtual void enabledChange( bool enabled );
 
-		virtual void paletteChange( const QPalette& pal );
+		virtual void paletteChange( const QPalette& oldPal );
 		virtual void frameChanged();
 		virtual void showEvent( QShowEvent* e );
 
+		//! Reimplemented to paint using real frame color instead of froeground. 
+		//! Also allows to paint more types of frame.
+		virtual void drawFrame( QPainter * );
+
 		void updatePixmapLater();
 
-		KPixmap p_shadowPixmap;
-		QPoint p_shadowPosition;
-		KexiDBLabelPrivate* p_privateLabel;
-		QTimer* p_timer;
-		bool p_pixmapDirty : 1;
-		bool p_shadowEnabled : 1;
-		bool p_resizeEvent : 1;
+		class Private;
+		Private *d;
 };
 
 #endif

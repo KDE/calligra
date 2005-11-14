@@ -106,7 +106,7 @@ QString KexiUtils::fileDialogFilterStrings(const QStringList& mimeStrings, bool 
 	return ret;
 }
 
-QColor KexiUtils::blendColors(const QColor& c1, const QColor& c2, int factor1, int factor2)
+QColor KexiUtils::blendedColors(const QColor& c1, const QColor& c2, int factor1, int factor2)
 {
 	return QColor(
 		int( (c1.red()*factor1+c2.red()*factor2)/(factor1+factor2) ),
@@ -124,6 +124,21 @@ QColor KexiUtils::contrastColor(const QColor& c)
 	else if (g>20)
 		return c.light(300);
 	return Qt::gray;
+}
+
+QColor KexiUtils::bleachedColor(const QColor& c, int factor)
+{
+	int h, s, v;
+	c.getHsv( &h, &s, &v );
+	QColor c2;
+	if (factor < 100)
+		factor = 100;
+	if (s>=250 && v>=250) //for colors like cyan or red, make the result more white
+		s = QMAX(0, s - factor - 50);
+	else if (s<=5 && s<=5)
+		v += factor-50;
+	c2.setHsv(h, s, QMIN(255,v + factor-100));
+	return c2;
 }
 
 #include "utils_p.moc"

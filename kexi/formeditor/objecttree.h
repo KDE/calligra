@@ -135,8 +135,9 @@ class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 
 		/*! \return the ObjectTreeItem named \a name, or 0 if doesn't exist. */
 		ObjectTreeItem* lookup(const QString &name);
+
 		/*! \return a dict containing all ObjectTreeItem in this ObjectTree. If you want to iterate on
-		this dict, iterate on a copy. */
+		this dict, use ObjectTreeDictIterator. */
 		ObjectTreeDict* dict() { return &m_treeDict; }
 
 		void addItem(ObjectTreeItem *parent, ObjectTreeItem *c);

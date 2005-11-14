@@ -41,7 +41,7 @@ void KexiDBTextWidgetInterface::paintEvent( QFrame *w, bool textIsEmpty, int ali
 	{
 		QPainter p(w);
 		if (w->hasFocus()) {
-			p.setPen(KexiUtils::blendColors(m_autonumberDisplayParameters->textColor, w->palette().active().base(), 1, 3));
+			p.setPen(KexiUtils::blendedColors(m_autonumberDisplayParameters->textColor, w->palette().active().base(), 1, 3));
 		}
 		const int m = w->lineWidth()+w->midLineWidth();
 		KexiDisplayUtils::drawAutonumberSign(*m_autonumberDisplayParameters, &p,

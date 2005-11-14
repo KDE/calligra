@@ -9,6 +9,7 @@ libkexiformutilswidgets_la_SOURCES = \
   kexidblabel.cpp \
   kexidbimagebox.cpp \
   kexipushbutton.cpp \
+  kexiframe.cpp \
   kexidbdoublespinbox.cpp \
   kexidbintspinbox.cpp \
   kexidbdatetimeedit.cpp \

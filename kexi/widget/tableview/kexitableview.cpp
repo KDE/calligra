@@ -76,7 +76,7 @@ KexiTableView::Appearance::Appearance(QWidget *widget)
 		textColor = p.active().text();
 		borderColor = QColor(200,200,200);
 		emptyAreaColor = p.active().color(QColorGroup::Base);
-		rowHighlightingColor = KexiUtils::blendColors(alternateBackgroundColor, baseColor);
+		rowHighlightingColor = KexiUtils::blendedColors(alternateBackgroundColor, baseColor);
 //      QColor(
 //			(alternateBackgroundColor.red()+baseColor.red())/2,
 //    	(alternateBackgroundColor.green()+baseColor.green())/2,

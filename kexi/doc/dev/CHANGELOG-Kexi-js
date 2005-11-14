@@ -12,6 +12,25 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-11-09..14
+Forms
+- AutoField widget: improved behaviour in design time 
+  (setting caption/type/label position)
+- frameColor property added for widgets like text label or frame: 
+  behaves well also for "raised" frame shapes
+- new widget KexiFrame, will provide more features; backward compatible 
+  with QFrame
+- do not allow to move top-level widget's position using arrow keys
+Property Editor
+- fix entering text into string-type editors with 'autoSync' flag
+
+2005-11-07
+Startup
+- When opening connection (most often using .kexic file), connection dialog is shown
+  so user can adjust connetion parameters, (optionally save them) and finally perform
+  the connection to see available databases. If connection failed, connection dialog 
+  is popping up again.
+
 2005-11-02..04
 2005-10-31
 Project Migration
@@ -2925,7 +2944,8 @@ KexiActionProxy:
   - global default KexiSharedActionHost added for convenience
   - KexiActionProxy now uses KexiSharedActionHost as it's host instead of explicity pointed KexiMainWindow
   - on destruction, KexiSharedAction object is taken out of its KexiSharedActionHost 
-  - int KexiMainWindow::generatePrivateDocID() added, so we can use this when we want to get unique doc id e.g. for KexiDialogBase.
+  - int KexiMainWindow::generatePrivateDocID() added, so we can use this when we want to get unique doc id 
+e.g. for KexiDialogBase.
   - generatePrivateDocID() is used in Relations dialog
 
 - KexiMainWindow: fixed bug in virtual function
@@ -2986,7 +3006,8 @@ KexiActionProxy:
 2004-01-02
 - table view:
 	-in key event - we give up with executing actions that are shared with main window, because
-	these actions are executed at main window's level. These actions are declared using plugSharedAction().
+	these actions are executed at main window's level. These actions are declared using 
+plugSharedAction().
 	-row deleting works
 	-rows number is updated in tv navigator after row deletion
 - actions: MSA-like "Delete Record" substituted by "Delete Row"
@@ -3016,7 +3037,8 @@ TODO: show posible errors (as well as for INSERTs and UPDATEs)!!!
    aren't processed by table view (in keyPressEvent())
 
 2003-12-22
-- KexiTableView most keyboard events are now only accesible without key modifiers (eg. CTRL+Key_Up now doesn't work)
+- KexiTableView most keyboard events are now only accesible without key modifiers (eg. CTRL+Key_Up now 
+doesn't work)
 
 2003-12-21
 - KexiActionProxy introduced
@@ -3725,7 +3747,8 @@ TODO: Cursor::value(int i) should use schema information to convert types of val
 			using connection's system kexi__* tables
 	-	Connection::deleteCursor()
 	-	Driver::sqlTypeName(int id_t) - returns sql type name for given driver
-	-	static QString Driver::defaultSQLTypeName(int id_t) - returns sql type name for given driver
+	-	static QString Driver::defaultSQLTypeName(int id_t) - returns sql type name for given 
+driver
 			(usable when we do not have Driver instance yet)
 	-	Table::debug()
 TODO: add default value storage
@@ -3760,7 +3783,8 @@ uses these from KexiDataTableView.
 - KexiRelationDialog:
 	- now uses KXMLGUIClient to better utilize its actions
 	- right-click context menus fully works
-	- 'hide selected table', 'open selected table' actions added (unimpl.), kexirelationsview.rc added.
+	- 'hide selected table', 'open selected table' actions added (unimpl.), kexirelationsview.rc 
+added.
 - Main Kexi menu bar little more standarized: 'Edit' menu added, 'View' menu moved just after Edit menu.
 TODO: implement selected table hiding
 TODO: implement selected table opening

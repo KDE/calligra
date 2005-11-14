@@ -312,6 +312,28 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
   Maybe convert widget text (if available) using string2Identifier()?
   Maybe ask user to enter meaningfull name (+"do not ask this question again" checkbox)?
   See also http://charlespetzold.com/etc/DoesVisualStudioRotTheMind.html
+- For newer widget types, add information for compatible widgets that 
+  can be used instead of them. For best flexibility save this information in a form XML. 
+  Example use: We have Kexi version N and N+1. In N+1 there's KexiFrame widget introduced that
+  extends QFrame with more features. Kexi N has no KexiFrame implemented but only QFrame.
+  When KexiFrame witget type has been encountered in the form's XML string, 
+  Kexi N it is able to insert QFrame instead of KexiFrame (unsupported properties will be just ignored).
+  The result of substitution may be not accurate, so thing twice before adding such information
+  for a given widget type.
+- add "buttonStyle" property for pushbutton widget with following values:
+-- Button - the deafult
+-- Hiperlink - clickable hiperlink will be displayed instead of button itself
+-- Image - an clickable image will be displayed instead of button itself
+   For this value, aditional properties will make sense: 
+--- image, mouseOverImage, mouseDownImage
+-- Thus, we'll have more consistent solution than MSA, which allows to 
+   mess the form by setting hiperlinks directly also in Image box and Label widgets
+- add "icon" property for pushbutton
+- For "OnCLick" property:
+-- allow to set hiperlink (and anchor) as value (i.e. so called "target location")
+  (see MSA's hiperlinkaddress, hiperlinksubaddress properties)
+- frame widget:
+-- add such fancy frame: http://www.themaninblue.com/writing/perspective/2004/08/05/
 
 ==== Property Editor TODO: =========
 - text does not fit well inside combobox editor
@@ -363,6 +385,7 @@ HINT: removing Qt::WStaticContents from KexiTableView ctor fixed repaint problem
 - add sorting projects information using KexiProjectData::lastOpened
 - also add this info as "Database>Open Recent" menu subentry
 - display errors when plugin library could not be instantiated due to a broken lib
+- Project Navigator: display multiline item names is needed
 
 TODO: add SharedAction::setVisible() and use QMenuData::setItemVisible() where needed
 
@@ -586,6 +609,13 @@ reuse KWallet http://events.kde.org/info/kastle/presentations/kwallet-kastle-200
 - (1.0) add "skip empty columns" and "skip empty rows" option
 - add option for adding explicit primary key column with autonumber
 
+=== Interesting features ===
+- Add random names/surnames generator: http://www.ruf.rice.edu/~pound/
+  Good for generating good-looking random data for a given table.
+-- Autodetect 'name' columns or ask user to describe what he wants. 
+   Comply with data validation rules.
+-- use famous 'Lorem ipsum dolor sit amet...' test text for longtext types
+
 
 === QUICK TODO ===
 
@@ -698,5 +728,23 @@ Migration (Import Project Wizard) TODO:
 
 MDB Migration:
 - add checks for "no space left on device" error (otherwise Kexi will crash)
-- fix date/time and currency convertion
+- fix date/time and currency converting
 - use MSysRelationdhips table to read MSA db relationships (easy, it's not encoded)
+
+
+OOPL 2006 PRO TODO:
+     -obs³uga baz danych MySQL i PostgreSQL, w tym:
+DONE -import ww. Baz do plikowego projektu Kexi
+     -eksport baz plikowych do serwerów
+     -proste raporty (autoraporty, bez projektowania)
+     -drukowanie raportów
+DONE -import z csv (edytowany znak rozdzielenia kolumn) i ze schowka
+     -eksport do csv (edytowany znak rozdzielenia kolumn) i do schowka
+     -obs³uga comboboksów w formularzach i tabelach
+IN-PR-trzymanie obrazków w bazie
+
+
+AUTOFIELD:
+- display "Unbounded Auto Field" text when no data source is set (in design time, like for image box)
+- update m_label for font/palette change
+

@@ -43,10 +43,14 @@ class KEXIFORMUTILS_EXPORT KexiFormManager : public KFormDesigner::FormManager
 		//! Receives signal from KexiDataSourcePage about changed form's data source
 		void setFormDataSource(const QCString& mime, const QCString& name);
 
-		/*! Receives signal from KexiDataSourcePage about changed widget's data source
-		 Also sets caption related to the source (because we couldn't pass objects 
-		 like KexiDB::QueryColumnInfo */
-		void setDataSourceFieldOrExpression(const QString& string, const QString& caption);
+		/*! Receives signal from KexiDataSourcePage about changed widget's data source.
+		 This is because we couldn't pass objects like KexiDB::QueryColumnInfo.
+
+		 Also sets following things in KexiDBAutoField:
+		 - caption related to the data source
+		 - data type related to the data source */
+		void setDataSourceFieldOrExpression(const QString& string, const QString& caption, 
+			KexiDB::Field::Type type);
 
 		/*! Receives signal from KexiDataSourcePage and inserts autofields onto the current form. */
 		void insertAutoFields(const QString& sourceMimeType, const QString& sourceName,

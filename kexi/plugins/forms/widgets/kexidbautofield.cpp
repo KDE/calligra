@@ -23,6 +23,8 @@
 
 #include <qlabel.h>
 #include <qlayout.h>
+#include <qpainter.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 
@@ -41,6 +43,7 @@
 
 #include <kexidb/queryschema.h>
 #include <formeditor/utils.h>
+#include <kexiutils/utils.h>
 
 #define KexiDBAutoField_SPACING 10 //10 pixel for spacing between a label and an editor widget
 
@@ -78,8 +81,8 @@ KexiDBAutoField::init(const QString &text, WidgetType type, LabelPosition pos)
 	//m_label->setFixedWidth( fm.width("This is a test string length") );
 	m_autoCaption = true;
 	m_focusPolicyChanged = false;
-	m_widgetType_property = Auto;
 	m_widgetType = Auto;
+	m_widgetType_property = (type==Auto ? Text : type); //to force "differ" to be true in setWidgetType()
 	setWidgetType(type);
 	setLabelPosition(pos);
 }
@@ -90,9 +93,12 @@ KexiDBAutoField::setWidgetType(WidgetType type)
 	const bool differ = (type != m_widgetType_property);
 	m_widgetType_property = type;
 	if(differ) {
-		if(type == Auto) // try to guess type from data source type
-			m_widgetType = widgetTypeForFieldType(
-				columnInfo() ? columnInfo()->field->type() : KexiDB::Field::Text);
+		if(type == Auto) {// try to guess type from data source type
+			if (columnInfo())
+				m_widgetType = KexiDBAutoField::widgetTypeForFieldType(columnInfo()->field->type());
+			else
+				m_widgetType = Auto;
+		}
 		else
 			m_widgetType = m_widgetType_property;
 		createEditor();
@@ -145,7 +151,8 @@ KexiDBAutoField::createEditor()
 			break;
 		default:
 			m_editor = 0;
-			m_label->setText( m_dataSource.isEmpty() ? "<datasource>" : m_dataSource );
+			changeText(m_caption);
+			//m_label->setText( m_dataSource.isEmpty() ? "<datasource>" : m_dataSource );
 			break;
 	}
 
@@ -179,32 +186,47 @@ KexiDBAutoField::setLabelPosition(LabelPosition position)
 	if(m_editor)
 		m_editor->show();
 	//! \todo support right-to-left layout where positions are inverted
-	switch(position) {
-		case Top: case Left:
-			if(position == Top)
-				m_layout = (QBoxLayout*) new QVBoxLayout(this);
-			else
-				m_layout = (QBoxLayout*) new QHBoxLayout(this);
-			if(m_widgetType == Boolean)
-				m_label->hide();
-			else
-				m_label->show();
-			m_layout->addWidget(m_label);
-			m_layout->addSpacing(KexiDBAutoField_SPACING);
-			m_layout->addWidget(m_editor);
-			break;
-
-		default:
+	if (position==Top || position==Left) {
+		int align = m_label->alignment();
+		if(position == Top) {
+			m_layout = (QBoxLayout*) new QVBoxLayout(this);
+			align |= AlignVertical_Mask;
+			align ^= AlignVertical_Mask;
+			align |= AlignTop;
+		}
+		else {
 			m_layout = (QBoxLayout*) new QHBoxLayout(this);
+			align |= AlignVertical_Mask;
+			align ^= AlignVertical_Mask;
+			align |= AlignVCenter;
+		}
+		m_label->setAlignment(align);
+		if(m_widgetType == Boolean)
 			m_label->hide();
-			m_layout->addWidget(m_editor);
+		else
+			m_label->show();
+		m_layout->addWidget(m_label);
+		m_layout->addSpacing(KexiDBAutoField_SPACING);
+		m_layout->addWidget(m_editor);
+//		if(m_editor)
+	//		m_editor->setSizePolicy(...);
 	}
+	else {
+		m_layout = (QBoxLayout*) new QHBoxLayout(this);
+		m_label->hide();
+		m_layout->addWidget(m_editor);
+	}
+	//a hack to force layout to be refreshed (any better idea for this?)
+	resize(size()+QSize(1,0));
+	resize(size()-QSize(1,0));
 }
 
 void
 KexiDBAutoField::setInvalidState( const QString &text )
 {
 	// Widget with an invalid dataSource is just a QLabel
+	if (m_designMode)
+		return;
 	m_widgetType = Auto;
 	createEditor();
 	setFocusPolicy(QWidget::NoFocus);
@@ -328,6 +350,7 @@ KexiDBAutoField::setFieldTypeInternal(int kexiDBFieldType)
 		m_widgetType = type;
 		createEditor();
 	}
+	setFieldCaptionInternal(m_fieldCaptionInternal);
 }
 
 void
@@ -345,19 +368,28 @@ void
 KexiDBAutoField::setColumnInfo(KexiDB::QueryColumnInfo* cinfo)
 {
 	KexiFormDataItemInterface::setColumnInfo(cinfo);
-	// first, update label's text
-	if(cinfo && m_autoCaption)
-		changeText(cinfo->captionOrAliasOrName());
 
 	// change widget type depending on field type
-	WidgetType type;
 	if(m_widgetType_property == Auto) {
-		type = KexiDBAutoField::widgetTypeForFieldType(cinfo ? cinfo->field->type() : KexiDB::Field::Text);
-		if(m_widgetType != type) {
-			m_widgetType = type;
+		WidgetType newWidgetType = Auto;
+		KexiDB::Field::Type fieldType;
+		if (cinfo)
+			fieldType = cinfo->field->type();
+		else if (dataSource().isEmpty())
+			fieldType = KexiDB::Field::InvalidType;
+		else
+			fieldType = KexiDB::Field::Text;
+
+		if (fieldType != KexiDB::Field::InvalidType) {
+			newWidgetType = KexiDBAutoField::widgetTypeForFieldType( fieldType );
+		}
+		if(m_widgetType != newWidgetType || newWidgetType==Auto) {
+			m_widgetType = newWidgetType;
 			createEditor();
 		}
 	}
+	// update label's text
+	changeText((cinfo && m_autoCaption) ? cinfo->captionOrAliasOrName() : QString::null);
 
 	KexiFormDataItemInterface *iface = dynamic_cast<KexiFormDataItemInterface*>(m_editor);
 	if(iface)
@@ -390,6 +422,8 @@ KexiDBAutoField::widgetTypeForFieldType(KexiDB::Field::Type type)
 			return MultiLineText;
 		case KexiDB::Field::Enum:
 			return Enum;
+		case KexiDB::Field::InvalidType:
+			return Auto;
 		case KexiDB::Field::BLOB:
 		default:
 			break;
@@ -401,22 +435,42 @@ void
 KexiDBAutoField::changeText(const QString &text, bool beautify)
 {
 	QString realText;
-	if (beautify) {
-/*! @todo look at appendColonToAutoLabels setting [bool]
-    @todo look at makeFirstCharacterUpperCaseInAutoLabels setting [bool]
-    (see doc/dev/settings.txt) */
-		if (!text.isEmpty()) {
-			realText = text[0].upper();
-			realText += (text.mid(1) + ": ");
-		}
+	bool unbound = false;
+	if (m_autoCaption && (m_widgetType==Auto || dataSource().isEmpty())) {
+		realText = QString::fromLatin1(name())+" "+i18n(" (unbound)");
+		unbound = true;
 	}
-	else
-		realText = text;
+	else {
+		if (beautify) {
+	/*! @todo look at appendColonToAutoLabels setting [bool]
+		@todo look at makeFirstCharacterUpperCaseInAutoLabels setting [bool]
+		(see doc/dev/settings.txt) */
+			if (!text.isEmpty()) {
+				realText = text[0].upper();
+				realText += (text.mid(1) + ": ");
+			}
+		}
+		else
+			realText = text;
+	}
 
-	if(m_widgetType == Boolean)
+	QWidget* widgetToAlterForegroundColor;
+	if(m_widgetType == Boolean) {
 		static_cast<QCheckBox*>(m_editor)->setText(realText);
-	else
+		widgetToAlterForegroundColor = m_editor;
+	}
+	else {
 		m_label->setText(realText);
+		widgetToAlterForegroundColor = m_label;
+	}
+
+/*	if (unbound)
+		widgetToAlterForegroundColor->setPaletteForegroundColor( 
+			KexiUtils::blendedColors(
+				widgetToAlterForegroundColor->paletteForegroundColor(), 
+				widgetToAlterForegroundColor->paletteBackgroundColor(), 2, 1));
+	else
+		widgetToAlterForegroundColor->setPaletteForegroundColor( paletteForegroundColor() );*/
 }
 
 void
@@ -438,7 +492,7 @@ KexiDBAutoField::setAutoCaption(bool autoCaption)
 {
 	m_autoCaption = autoCaption;
 	if(m_autoCaption) {
-		m_caption = QString::null;
+		//m_caption = QString::null;
 		if(columnInfo()) {
 			changeText(columnInfo()->captionOrAliasOrName());
 		}
@@ -456,6 +510,9 @@ KexiDBAutoField::setAutoCaption(bool autoCaption)
 void
 KexiDBAutoField::setDataSource( const QString &ds ) {
 	KexiFormDataItemInterface::setDataSource(ds);
+	if (ds.isEmpty()) {
+		setColumnInfo(0);
+	}
 }
 
 QSize
@@ -485,5 +542,34 @@ KexiDBAutoField::setFocusPolicy( FocusPolicy policy )
 	if (m_editor)
 		m_editor->setFocusPolicy(policy);
 }
+
+void
+KexiDBAutoField::updateInformationAboutUnboundField()
+{
+	if (   (m_autoCaption && (dataSource().isEmpty() || dataSourceMimeType().isEmpty()))
+		|| (!m_autoCaption && m_caption.isEmpty()) )
+	{
+		m_label->setText( QString::fromLatin1(name())+" "+i18n(" (unbound)") );
+	}
+//	else
+//		m_label->setText( QString::fromLatin1(name())+" "+i18n(" (unbound)") );
+}
+
+/*void
+KexiDBAutoField::paintEvent( QPaintEvent* pe )
+{
+	QWidget::paintEvent( pe );
+
+	if (   (m_autoCaption && (dataSource().isEmpty() || dataSourceMimeType().isEmpty()))
+		|| (!m_autoCaption && m_caption.isEmpty()) )
+	{
+		QPainter p(this);
+		p.setPen( m_label->paletteForegroundColor() );
+		p.setClipRect(pe->rect());
+		p.setFont(m_label->font());
+		p.drawText(rect(), Qt::AlignLeft | Qt::WordBreak, 
+			QString::fromLatin1(name())+" "+i18n(" (unbound)"));
+	}
+}*/
 
 #include "kexidbautofield.moc"

@@ -112,12 +112,18 @@ namespace KexiUtils
 
 	/*! \return a color being a result of blending \a c1 with \a c2 with \a factor1 
 	 and \a factor1 factors: (c1*factor1+c2*factor2)/(factor1+factor2). */
-	KEXIUTILS_EXPORT QColor blendColors(const QColor& c1, const QColor& c2, int factor1 = 1, int factor2 = 1);
+	KEXIUTILS_EXPORT QColor blendedColors(const QColor& c1, const QColor& c2, int factor1 = 1, int factor2 = 1);
 
 	/*! \return a contrast color for a color \a c: 
 	 If \a c is light color, darker color created using c.dark(200) is returned; 
 	 otherwise lighter color created using c.light(200) is returned. */
 	KEXIUTILS_EXPORT QColor contrastColor(const QColor& c);
+
+	/*! \return a lighter color for a color \a c and a factor \a factor.
+	 For colors like Qt::red or Qt::green where hue and saturation are near to 255,
+	 hue is decreased so the result will be more bleached. 
+	 For black color the result is dark gray rather than black. */
+	KEXIUTILS_EXPORT QColor bleachedColor(const QColor& c, int factor);
 }
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here

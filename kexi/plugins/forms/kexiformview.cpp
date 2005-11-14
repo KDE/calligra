@@ -277,7 +277,6 @@ KexiFormView::initForm()
 void
 KexiFormView::loadForm()
 {
-
 //@todo also load m_resizeMode !
 
 	kexipluginsdbg << "KexiDBForm::loadForm() Loading the form with id : " << parentDialog()->id() << endl;
@@ -295,6 +294,37 @@ KexiFormView::loadForm()
 
 	//"autoTabStops" property is loaded -set it within the form tree as well
 	form()->setAutoTabStops( m_dbform->autoTabStops() );
+
+//! @todo move this to a separate method and call when form's data source is changed
+	//update autofields: 
+	//-inherit captions
+	//-inherit data types
+	//(this data has not been stored in the form)
+	QString dataSourceString( m_dbform->dataSource() );
+	QCString dataSourceMimeTypeString( m_dbform->dataSourceMimeType() );
+	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
+	KexiDB::TableOrQuerySchema tableOrQuery(
+		conn, dataSourceString.latin1(), dataSourceMimeTypeString=="kexi/table");
+	if (tableOrQuery.table() || tableOrQuery.query()) {
+		for (KFormDesigner::ObjectTreeDictIterator it(*form()->objectTree()->dict());
+			it.current(); ++it)
+		{
+			KexiDBAutoField *afWidget = dynamic_cast<KexiDBAutoField*>( it.current()->widget() );
+			if (afWidget) {
+				KexiDB::QueryColumnInfo *colInfo = tableOrQuery.columnInfo( afWidget->dataSource() );
+				if (colInfo) {
+					afWidget->setColumnInfo(colInfo);
+						//setFieldTypeInternal((int)colInfo->field->type());
+						//afWidget->setFieldCaptionInternal(colInfo->captionOrAliasOrName());
+				}
+			}
+		}
+	}
+	else {
+		kexipluginswarn << "KexiFormView::slotHandleDropEvent(): no such table/query \""
+			<< dataSourceString << "\"" << endl;
+		return;
+	}
 }
 
 void
@@ -931,7 +961,7 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 	KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
 	KexiDB::TableOrQuerySchema tableOrQuery(conn, sourceName.latin1(), sourceMimeType=="kexi/table");
 	if (!tableOrQuery.table() && !tableOrQuery.query()) {
-		kdWarning() << "KexiFormView::slotHandleDropEvent(): no such table/query \""
+		kexipluginswarn << "KexiFormView::slotHandleDropEvent(): no such table/query \""
 			<< sourceName << "\"" << endl;
 		return;
 	}
@@ -960,7 +990,7 @@ KexiFormView::insertAutoFields(const QString& sourceMimeType, const QString& sou
 	foreach( QStringList::ConstIterator, it, fields ) {
 		KexiDB::QueryColumnInfo* column = tableOrQuery.columnInfo(*it);
 		if (!column) {
-			kdWarning() << "KexiFormView::slotHandleDropEvent(): no such field \""
+			kexipluginswarn << "KexiFormView::slotHandleDropEvent(): no such field \""
 				<< *it << "\" in table/query \"" << sourceName << "\"" << endl;
 			continue;
 		}

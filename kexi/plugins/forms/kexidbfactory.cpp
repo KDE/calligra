@@ -54,6 +54,7 @@
 #include "widgets/kexidbdoublespinbox.h"
 #include "widgets/kexidbimagebox.h"
 #include "widgets/kexidbintspinbox.h"
+#include "widgets/kexiframe.h"
 #include "widgets/kexidblabel.h"
 #include "widgets/kexidblineedit.h"
 #include "widgets/kexidbtextedit.h"
@@ -86,6 +87,7 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	KexiDataAwareWidgetInfo *wSubForm = new KexiDataAwareWidgetInfo(this);
 	wSubForm->setPixmap("subform");
 	wSubForm->setClassName("KexiDBSubForm");
+	wSubForm->addAlternateClassName("KexiSubForm", true/*override*/); //older
 	wSubForm->setName(i18n("Sub Form"));
 	wSubForm->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "subForm"));
@@ -119,6 +121,17 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	wi->setNamePrefix(
 		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "textEditor"));
 	wi->setDescription(i18n("A multiline text editor"));
+	addClass(wi);
+
+	wi = new KFormDesigner::WidgetInfo(
+		this, "containers", "QFrame" /*we're inheriting to get i18n'd strings already translated there*/);
+	wi->setPixmap("frame");
+	wi->setClassName("KexiFrame");
+	wi->addAlternateClassName("QFrame", true/*override*/);
+	wi->setName(i18n("Frame"));
+	wi->setNamePrefix(
+		i18n("Widget name. This string will be used to name widgets of this class. It must _not_ contain white spaces and non latin1 characters.", "frame"));
+	wi->setDescription(i18n("A simple frame widget"));
 	addClass(wi);
 
 	wi = new KexiDataAwareWidgetInfo(
@@ -290,6 +303,9 @@ KexiDBFactory::KexiDBFactory(QObject *parent, const char *name, const QStringLis
 	//hideClass("KIntSpinBox");
 	hideClass("KComboBox");
 #endif
+
+	//used in labels, frames...
+	m_propDesc["frameColor"] = i18n("Frame Color");
 }
 
 KexiDBFactory::~KexiDBFactory()
@@ -318,6 +334,8 @@ KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 		w = new KexiDBTextEdit(p, n);
 		w->setCursor(QCursor(Qt::ArrowCursor));
 	}
+	else if(c == "QFrame" || c == "KexiFrame")
+		w = new KexiFrame(p, n);
 	else if(c == "KexiDBLabel")
 		w = new KexiDBLabel(text, p, n);
 #ifndef KEXI_NO_IMAGEBOX_WIDGET
@@ -572,10 +590,15 @@ KexiDBFactory::isPropertyVisibleInternal(const QCString& classname, QWidget *w,
 bool
 KexiDBFactory::changeText(const QString &text)
 {
-	QCString n = WidgetFactory::widget()->className();
+	KFormDesigner::Form *form = m_container ? m_container->form() : 0;
+	if (!form)
+		return false;
+	if (!form->selectedWidget())
+		return false;
+	QCString n( form->selectedWidget()->className() );
 //	QWidget *w = WidgetFactory::widget();
 	if(n == "KexiDBAutoField") {
-		changeProperty("caption", text, m_container->form());
+		changeProperty("caption", text, form);
 		return true;
 	}
 	//! \todo check field's geometry

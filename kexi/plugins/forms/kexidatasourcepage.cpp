@@ -301,8 +301,17 @@ void KexiDataSourcePage::slotDataSourceSelected()
 
 void KexiDataSourcePage::slotFieldSelected()
 {
+	KexiDB::Field::Type dataType = KexiDB::Field::InvalidType;
+//! @todo this should also work for expressions
+	KexiDB::Field *field = m_fieldListView->schema()->field( m_sourceFieldCombo->fieldOrExpression() );
+	if (field)
+		dataType = field->type();
+	
 	emit dataSourceFieldOrExpressionChanged(
-		m_sourceFieldCombo->fieldOrExpression(), m_sourceFieldCombo->fieldOrExpressionCaption());
+		m_sourceFieldCombo->fieldOrExpression(), 
+		m_sourceFieldCombo->fieldOrExpressionCaption(), 
+		dataType
+	);
 }
 
 void KexiDataSourcePage::setDataSource(const QCString& mimeType, const QCString& name)

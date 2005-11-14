@@ -19,6 +19,7 @@
 
 #include "kexiformmanager.h"
 #include "widgets/kexidbform.h"
+#include "widgets/kexidbautofield.h"
 #include "kexiformscrollview.h"
 #include "kexiformview.h"
 #include "kexidatasourcepage.h"
@@ -152,7 +153,8 @@ void KexiFormManager::setFormDataSource(const QCString& mime, const QCString& na
  	}*/
 }
 
-void KexiFormManager::setDataSourceFieldOrExpression(const QString& string, const QString& caption)
+void KexiFormManager::setDataSourceFieldOrExpression(const QString& string, const QString& caption, 
+	KexiDB::Field::Type type)
 {
 	if (!activeForm())
 		return;
@@ -166,8 +168,16 @@ void KexiFormManager::setDataSourceFieldOrExpression(const QString& string, cons
 
 	(*set)["dataSource"].setValue(string);
 
-	if (set->contains("fieldCaptionInternal"))
-		(*set)["fieldCaptionInternal"].setValue(caption);
+	if (set->contains("autoCaption") && (*set)["autoCaption"].value().toBool()) {
+		if (set->contains("fieldCaptionInternal"))
+			(*set)["fieldCaptionInternal"].setValue(caption);
+	}
+	if (type!=KexiDB::Field::InvalidType 
+		&& set->contains("widgetType") && (*set)["widgetType"].value().toString()=="Auto")
+	{
+		if (set->contains("fieldTypeInternal"))
+			(*set)["fieldTypeInternal"].setValue(type);
+	}
 
 /*	QString oldDataSource( dataWidget->dataSource() );
 	if (string!=oldDataSource) {

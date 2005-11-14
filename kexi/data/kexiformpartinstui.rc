@@ -44,7 +44,7 @@
    <Action name="library_widget_Spacer"/>
    <Action name="library_widget_Line"/>
    <Separator/>
-   <Action name="library_widget_QFrame"/>
+   <Action name="library_widget_KexiFrame"/>
    <Action name="library_widget_QGroupBox"/>
    <Action name="library_widget_KFDTabWidget"/>
    <Action name="library_widget_KexiDBSubForm"/>
