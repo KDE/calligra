@@ -218,6 +218,19 @@ private:
   ExLinkContainer & operator=( const ExLinkContainer & );   
 };
 
+class RunArrayContainer: public Container
+{
+public:
+  static const unsigned int id;
+  RunArrayContainer();
+  const char* name(){ return "RunArrayContainer"; }
+
+private:
+  // no copy or assign
+  RunArrayContainer( const RunArrayContainer& );
+  RunArrayContainer& operator=( const RunArrayContainer& );   
+};
+
 class ExOleObjStgContainer: public Container
 {
 public:
@@ -915,6 +928,18 @@ public:
   FontEntityAtom();
   ~FontEntityAtom();
   
+  UString ustring() const;
+  void setUString( const UString& ustr );
+  int charset() const; 
+  void setCharset( int charset ) ; 
+  int clipPrecision() const; 
+  void setClipPrecision( int clipPrecision);
+  int quality() const; 
+  void setQuality( int quality );
+  int pitchAndFamily() const;
+  void setPitchAndFamily( int pitchAndFamily ); 
+
+  void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "FontEntityAtom"; }
   void dump( std::ostream& out ) const; 
   
@@ -1191,10 +1216,56 @@ public:
   static const unsigned int id;
   StyleTextPropAtom ();
   ~StyleTextPropAtom (); 
-    
+  
+  // paragraph properties 
+  int charCount() const;
+  void setCharCount( int charCount );
+  int depth() const;
+  void setDepth( int depth);
+  int mask() const; 
+  void setMask ( int mask );
+  int bulletFlag() const;
+  void setBulletFlag( int bulletFlag );
+  int bulletOn() const;
+  void setBulletOn( int bulletOn );
+  int bulletHardFont() const;
+  void setBulletHardFont( int bulletHardFont );
+  int bulletHardColor() const;
+  void setBulletHardColor( int bulletHardColor );
+  int bulletChar() const;
+  void setBulletChar( int bulletChar );
+  int bulletFont() const;
+  void setBulletFont( int bulletFont );
+  int bulletHeight() const; 
+  void setBulletHeight (int bulletHeight );
+  int bulletColor() const;
+  void setBulletColor( int bulletColor ) ;
+  int adjust() const;
+  void setAdjust( int adjust ) ;
+  int lineFeed() const; 
+  void setLineFeed ( int lineFeed );
+  int upperDist() const; 
+  void setUpperDist( int upperDist );
+  int lowerDist() const; 
+  void setLowerDist( int lowerDist);
+  int asianLB1() const; 
+  void setAsianLB1 ( int asianLB1 );
+  int asianLB2() const; 
+  void setAsianLB2 ( int asianLB2 );
+  int asianLB3() const; 
+  void setAsianLB3 ( int asianLB3 );
+  int biDi() const;
+  void setBiDi( int biDi );
+// character properties
+  int charMask() const; 
+  void setCharMask ( int charMask );
+  void setData( unsigned size, const unsigned char* data );  
   const char* name(){ return "StyleTextPropAtom   "; }
   void dump( std::ostream& out ) const; 
-  
+  int charCount2() const;
+  void setCharCount2( int charCount2 );
+  int charFlags() const;
+  void setCharFlags( int charFlags );
 private:  
   // no copy or assign
   StyleTextPropAtom   ( const StyleTextPropAtom   & );
@@ -1203,6 +1274,7 @@ private:
   class Private;
   Private *d;  
 };
+
 
 class SlideAtom: public Record
 {
@@ -1229,7 +1301,7 @@ public:
   void dump( std::ostream& out ) const; 
   
 private:
-  // no copy or assignhandleTextHeaderAtom
+  // no copy or assign 
   SlideAtom( const SlideAtom& );
   SlideAtom& operator=( const SlideAtom& );   
   
@@ -1316,6 +1388,20 @@ public:
   TxCFStyleAtom ();
   ~TxCFStyleAtom (); 
     
+  int flags1() const; 
+  void setFlags1( int flags1 ); 
+  int flags2() const;
+  void setFlags2( int flags2 ); 
+  int flags3() const;
+  void setFlags3( int flags3 ); 
+  int n1() const;
+  void setN1( int n1 ); 
+  int fontHeight() const;
+  void setFontHeight( int fontHeight ); 
+  int fontColor() const; 
+  void setFontColor( int fontColor ); 
+
+  void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "TxCFStyleAtom   "; }
   void dump( std::ostream& out ) const; 
   
@@ -1420,8 +1506,11 @@ public:
   TextSpecInfoAtom  ();
   ~TextSpecInfoAtom  ();
   
-  int txSpecInfo() const;
-  void setTxSpecInfo( int txSpecInfo );
+  int charCount() const;
+  void setCharCount( int txSpecInfo );
+  int flags() const;
+  void setFlags( int flags );
+
   
   void setData( unsigned size, const unsigned char* data );
   const char* name(){ return "TextSpecInfoAtom  "; }
