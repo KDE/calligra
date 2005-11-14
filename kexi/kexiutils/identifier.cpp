@@ -43,31 +43,50 @@ QString KexiUtils::string2FileName(const QString &s)
 }
 
 // These are in pairs - first the non-latin character in UTF-8,
-// the second is the latin character to appear in identifiers.
+// the second is the latin character(s) to appear in identifiers.
 static const char* string2Identifier_conv[] = {
+/* 1. Polish character */
 	"Ą", "A",  "Ć", "C",  "Ę", "E",
 	"Ł", "L",  "Ń", "N",  "Ó", "O",
 	"Ś", "S",  "Ź", "Z",  "Ż", "Z",
 	"ą", "a",  "ć", "c",  "ę", "e",
 	"ł", "l",  "ń", "n",  "ó", "o",
 	"ś", "s",  "ź", "z",  "ż", "z",
+
+/* 2. The mappings of the german "umlauts" to their 2-letter equivalents:
+  (Michael Drüing) */
+	"Ä", "Ae",
+	"Ö", "Oe",
+	"Ü", "Ue",
+/** @todo the above three only appear at the beginning of a word. if the word is in
+ all caps - like in a caption - then the 2-letter equivalents should also be
+ in all caps */
+	"ä", "ae",
+	"ö", "oe",
+	"ü", "ue",
+	"ß", "ss",
+/* Note that ß->ss is AFAIK not always correct transliteration, for example
+ "Maße" and "Masse" is different, the first meaning "measurements" (as
+ plural of "Maß" meaning "measurement"), the second meaning "(physical)
+ mass". They're also pronounced dirrefently, the first one is longer, the
+ second one short. */
 	0
 };
 
-inline char char2Identifier(const QChar& c)
+inline QString char2Identifier(const QChar& c)
 {
 	if ((c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9') || c=='_')
-		return c;
+		return QString(QChar(c));
 	else {
 		//fix for non-latin1 chars
 		for (const char **p = string2Identifier_conv; *p; p+=2) {
 			if (QString(c)==QString::fromUtf8(*p)) {
 				p++;
-				return (*p)[0];
+				return QString::fromLatin1(*p);
 			}
 		}
 	}
-	return '_';
+	return QString(QChar('_'));
 }
 
 QString KexiUtils::string2Identifier(const QString &s)
