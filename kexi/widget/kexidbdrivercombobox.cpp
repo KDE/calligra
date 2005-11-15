@@ -30,7 +30,8 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(const KexiDB::Driver::InfoMap& driver
 	foreach(KexiDB::Driver::InfoMap::ConstIterator, it, driversInfo) {
 		if (!includeFileBasedDrivers && it.data().fileBased)
 			continue;
-		insertItem( SmallIcon("kservices"), it.data().caption );
+		//! @todo change this if better icon is available
+		insertItem( SmallIcon("gear"), it.data().caption );
 		m_driversMap.insert(it.data().caption, it.data().name.lower());
 	}
 	listBox()->sort();
