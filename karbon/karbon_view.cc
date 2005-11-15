@@ -379,7 +379,7 @@ KarbonView::print( KPrinter &printer )
 	// print the doc using QPainter at zoom level 1
 	// TODO : better use eps export?
 	// TODO : use real page layout stuff
-	KoRect rect( 0, 0, width(), height() );
+	KoRect rect( 0, 0, part()->document().width(), part()->document().height());
 	p.setPen(Qt::NoPen);
 	p.setBrush(Qt::white);
 	p.drawRect(rect);
