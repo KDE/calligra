@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="27">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KSpread" version="28">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Separator/>
@@ -152,7 +152,7 @@
   <Action name="showTabBar" />
   <Action name="showFormulaBar"/>
   <Separator group="settings_show"/>
-  <Action name="preference" group="settings_configure"/>
+  <Action name="PreferenceDialog" group="settings_configure"/>
  </Menu>
 </MenuBar>
 <Menu name="calc_popup">
