@@ -27,6 +27,7 @@ class KoTemplateGroup;
 class KInstance;
 class QListViewItem;
 class KoRecentDocumentsPanePrivate;
+class KoRichTextListItemPrivate;
 class KFileItem;
 class QPixmap;
 
@@ -72,10 +73,18 @@ class KoRichTextListItem : public KListViewItem
                   QString = QString::null, QString = QString::null,
                   QString = QString::null, QString = QString::null);
 
-//     virtual ~KoRichTextListItem();
+    virtual ~KoRichTextListItem();
 
     virtual void paintCell(QPainter *p, const QColorGroup& cg, int column, int width, int alignment);
     virtual void setup();
+
+    void setFileItem(KFileItem* item);
+    KFileItem* fileItem() const;
+
+  private:
+    void init();
+
+    KoRichTextListItemPrivate* d;
 };
 
 class KoTemplatesPane : public KoDetailsPaneBase

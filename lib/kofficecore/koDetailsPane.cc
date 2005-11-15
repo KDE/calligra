@@ -41,24 +41,44 @@
 
 #include "koTemplates.h"
 
+class KoRichTextListItemPrivate
+{
+  public:
+    KoRichTextListItemPrivate()
+      : m_fileItem(0)
+    {
+    }
+
+    ~KoRichTextListItemPrivate()
+    {
+      delete m_fileItem;
+    }
+
+    KFileItem* m_fileItem;
+};
+
 KoRichTextListItem::KoRichTextListItem(QListView *parent)
   : KListViewItem(parent)
 {
+  init();
 }
 
 KoRichTextListItem::KoRichTextListItem(QListViewItem *parent)
   : KListViewItem(parent)
 {
+  init();
 }
 
 KoRichTextListItem::KoRichTextListItem(QListView *parent, QListViewItem *after)
   : KListViewItem(parent, after)
 {
+  init();
 }
 
 KoRichTextListItem::KoRichTextListItem(QListViewItem *parent, QListViewItem *after)
   : KListViewItem(parent, after)
 {
+  init();
 }
 
 KoRichTextListItem::KoRichTextListItem(QListView *parent,
@@ -66,6 +86,7 @@ KoRichTextListItem::KoRichTextListItem(QListView *parent,
                              QString label5, QString label6, QString label7, QString label8)
   : KListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8)
 {
+  init();
 }
 
 KoRichTextListItem::KoRichTextListItem(QListViewItem *parent,
@@ -73,6 +94,7 @@ KoRichTextListItem::KoRichTextListItem(QListViewItem *parent,
                              QString label5, QString label6, QString label7, QString label8)
   : KListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8)
 {
+  init();
 }
 
 KoRichTextListItem::KoRichTextListItem(QListView *parent, QListViewItem *after,
@@ -80,6 +102,7 @@ KoRichTextListItem::KoRichTextListItem(QListView *parent, QListViewItem *after,
                              QString label5, QString label6, QString label7, QString label8)
   : KListViewItem(parent, after, label1, label2, label3, label4, label5, label6, label7, label8)
 {
+  init();
 }
 
 KoRichTextListItem::KoRichTextListItem(QListViewItem *parent, QListViewItem *after,
@@ -87,6 +110,17 @@ KoRichTextListItem::KoRichTextListItem(QListViewItem *parent, QListViewItem *aft
                              QString label5, QString label6, QString label7, QString label8)
   : KListViewItem(parent, after, label1, label2, label3, label4, label5, label6, label7, label8)
 {
+  init();
+}
+
+KoRichTextListItem::~KoRichTextListItem()
+{
+  delete d;
+}
+
+void KoRichTextListItem::init()
+{
+  d = new KoRichTextListItemPrivate;
 }
 
 void KoRichTextListItem::paintCell(QPainter *p, const QColorGroup& cg, int column, int width, int alignment)
@@ -148,6 +182,16 @@ void KoRichTextListItem::setup()
   setHeight(h);
 }
 
+void KoRichTextListItem::setFileItem(KFileItem* item)
+{
+  d->m_fileItem = item;
+}
+
+KFileItem* KoRichTextListItem::fileItem() const
+{
+  return d->m_fileItem;
+}
+
 
 KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplateGroup *group)
   : KoDetailsPaneBase(parent, "TemplatesPane")
@@ -205,7 +249,6 @@ class KoRecentDocumentsPanePrivate
     KoRecentDocumentsPanePrivate()
       : m_previewJob(0)
     {
-      m_fileList.setAutoDelete(true);
     }
 
     ~KoRecentDocumentsPanePrivate()
@@ -215,7 +258,6 @@ class KoRecentDocumentsPanePrivate
     }
 
     KIO::PreviewJob* m_previewJob;
-    KFileItemList m_fileList;
 };
 
 KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instance)
@@ -232,6 +274,8 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
 
   int i = 0;
   QString value;
+  KFileItemList fileList;
+  fileList.setAutoDelete(false);
 
   do {
     QString key = QString("File%1").arg(i);
@@ -255,9 +299,10 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
 
       if(!url.isLocalFile() || QFile::exists(url.path())) {
         KFileItem* fileItem = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
-        d->m_fileList.append(fileItem);
+        fileList.append(fileItem);
         QString listText = "<b>" + name + "</b><br>" + url.path();
         KoRichTextListItem* item = new KoRichTextListItem(m_documentList, listText, name, url.path());
+        item->setFileItem(fileItem);
         //center all icons in 64x64 area
         QImage icon = fileItem->pixmap(64).convertToImage();
         icon.setAlphaBuffer(true);
@@ -280,7 +325,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
 
   m_documentList->setSelected(m_documentList->firstChild(), true);
 
-  d->m_previewJob = KIO::filePreview(d->m_fileList, 200, 200);
+  d->m_previewJob = KIO::filePreview(fileList, 200, 200);
 
   connect(d->m_previewJob, SIGNAL(result(KIO::Job*)), this, SLOT(previewResult(KIO::Job*)));
   connect(d->m_previewJob, SIGNAL(gotPreview(const KFileItem*, const QPixmap&)),
@@ -296,6 +341,19 @@ void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
 {
   m_titleLabel->setText(item->text(1));
   m_previewLabel->setPixmap(*(item->pixmap(2)));
+
+  if(static_cast<KoRichTextListItem*>(item)->fileItem()) {
+    KFileItem* fileItem = static_cast<KoRichTextListItem*>(item)->fileItem();
+    QString details = "<table border=\"0\">";
+    details += "<tr><td><b>Modified:</b></td>";
+    details += "<td>" + fileItem->timeString(KIO::UDS_MODIFICATION_TIME) + "</td></tr>";
+    details += "<tr><td><b>Accessed:</b></td>";
+    details += "<td>" + fileItem->timeString(KIO::UDS_ACCESS_TIME) + "</td></tr>";
+    details += "</table>";
+    m_detailsLabel->setText(details);
+  } else {
+    m_detailsLabel->setText("");
+  }
 }
 
 void KoRecentDocumentsPane::openFile()
