@@ -890,23 +890,24 @@ bool TextEditor::eventFilter( QObject* o, QEvent* e )
         QKeyEvent* k = (QKeyEvent*)e;
         if ( !( k->state() & Qt::ShiftButton )|| canvas()->chooseFormulaArea())
         {
-    //If the user presses the return key to finish editing this cell, choose mode must be turned off first
-    //otherwise it will merely select a different cell
-    if (k->key() == Key_Return)
-    {
-      canvas()->endChoose();
-    }
+          //If the user presses the return key to finish editing this cell, choose mode must be turned off first
+          //otherwise it will merely select a different cell
+          if (k->key() == Key_Return || k->key() == Key_Enter)
+          {
+            canvas()->endChoose();
+          }
 
-    //NB - Added check for Key_Return when migrating text edit from KLineEdit to KTextEdit, since
-    //normal behaviour for KTextEdit is to swallow return key presses
-            if ( k->key() == Key_Up || k->key() == Key_Down ||
-                 k->key() == Key_Next || k->key() == Key_Prior ||
-                 k->key() == Key_Escape || k->key() == Key_Tab || k->key() == Key_Return)
-            {
-                // Send directly to canvas
-                QApplication::sendEvent( parent(), e );
-                return true;
-            }
+          //NB - Added check for Key_Return when migrating text edit from KLineEdit to KTextEdit, since
+          //normal behaviour for KTextEdit is to swallow return key presses
+          if ( k->key() == Key_Up || k->key() == Key_Down ||
+                k->key() == Key_Next || k->key() == Key_Prior ||
+                k->key() == Key_Escape || k->key() == Key_Tab ||
+                k->key() == Key_Return || k->key() == Key_Enter)
+          {
+              // Send directly to canvas
+              QApplication::sendEvent( parent(), e );
+              return true;
+          }
         }
         // End choosing. May be restarted by TextEditor::slotTextChanged
         if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
