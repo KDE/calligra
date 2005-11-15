@@ -262,6 +262,11 @@ void KChartPart::paintContent( QPainter& painter, const QRect& rect,
 	// Data is handled in columns.  We will have to transpose
 	// everything since KDChart wants its data in rows.
 
+// Note: While the current KD Chart 1.1.3 version is still expecting data
+//       to be in rows, the upcoming KD Chart 2.0 release will be using
+//       data in columns instead, to it will be matching KSpread's way.
+//       -khz, 2005-11-15
+
 	// FIXME: Rewrite so that we only copy data when necessary.
 	// On the other hand, the next version of KDChart is able to
 	// get data directly without storing it into a KDChartData
