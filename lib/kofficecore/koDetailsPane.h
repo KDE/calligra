@@ -74,7 +74,8 @@ class KoRichTextListItem : public KListViewItem
 
 //     virtual ~KoRichTextListItem();
 
-    void paintCell(QPainter *p, const QColorGroup& cg, int column, int width, int alignment);
+    virtual void paintCell(QPainter *p, const QColorGroup& cg, int column, int width, int alignment);
+    virtual void setup();
 };
 
 class KoTemplatesPane : public KoDetailsPaneBase

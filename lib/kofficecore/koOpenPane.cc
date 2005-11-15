@@ -66,7 +66,8 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   d->m_mainWidget->setShowIconsInTreeList(true);
 
   QVBox* page = d->m_mainWidget->addVBoxPage(i18n("Recent Documents"), i18n("Recent Documents"),
-                                             SmallIcon("fileopen", 48, KIcon::DefaultState, instance));
+                                             SmallIcon("fileopen", KIcon::SizeLarge,
+                                                 KIcon::DefaultState, instance));
   KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(page, instance);
   connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
 

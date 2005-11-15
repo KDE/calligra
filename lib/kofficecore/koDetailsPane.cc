@@ -36,9 +36,8 @@
 #include <kurl.h>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
-#include <kapplication.h>
-#include <ktextbrowser.h>
 #include <kactivelabel.h>
+#include <kdebug.h>
 
 #include "koTemplates.h"
 
@@ -138,6 +137,17 @@ void KoRichTextListItem::paintCell(QPainter *p, const QColorGroup& cg, int colum
 
   richText.draw(p, x, y, QRect(), _cg, &paper);
 }
+
+void KoRichTextListItem::setup()
+{
+  KListViewItem::setup();
+  QSimpleRichText richText(text(0), listView()->font());
+  richText.setWidth(listView()->width());
+  int h = richText.height() + (2 * listView()->itemMargin());
+  h = QMAX(height(), h);
+  setHeight(h);
+}
+
 
 KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplateGroup *group)
   : KoDetailsPaneBase(parent, "TemplatesPane")
@@ -246,7 +256,8 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
       if(!url.isLocalFile() || QFile::exists(url.path())) {
         KFileItem* fileItem = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
         d->m_fileList.append(fileItem);
-        KoRichTextListItem* item = new KoRichTextListItem(m_documentList, "<b>" + name + "</b><br>" + url.path(), name, url.path());
+        QString listText = "<b>" + name + "</b><br>" + url.path();
+        KoRichTextListItem* item = new KoRichTextListItem(m_documentList, listText, name, url.path());
         //center all icons in 64x64 area
         QImage icon = fileItem->pixmap(64).convertToImage();
         icon.setAlphaBuffer(true);
