@@ -913,9 +913,21 @@ by &kspread;.</action>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
 <guimenuitem>Protect Document</guimenuitem>
+<guimenuitem>Protect Sheet...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
-<action>Protect the whole document or a sheet with a password.</action>
+<action>Protect the sheet with a password. A dialog pops up prompting you for a password. Unchecking this option will prompt you for the password in order to unprotect the sheet.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Tools</guimenu>
+<guimenuitem>Protect Document</guimenuitem>
+<guimenuitem>Protect Doc...</guimenuitem>
+</menuchoice></term>
+<listitem><para>
+<action>Protect the whole document with a password. A dialog pops up prompting you for a password. Unchecking this option will prompt you for the password in order to unprotect the document.</action>
 </para></listitem>
 </varlistentry>
 
@@ -946,9 +958,9 @@ by &kspread;.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Tools</guimenu>
-<guimenuitem>Calculator</guimenuitem>
+<guimenuitem>Insert Calendar...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Open an instance of the desktop calculator &kcalc;.
+<listitem><para><action>Insert a calendar in your sheet. A dialog asks you for the start and end dates. The corresponding calendar is then inserted from the current cell.
 </action>
 </para></listitem>
 </varlistentry>
