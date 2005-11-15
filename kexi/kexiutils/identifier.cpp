@@ -19,6 +19,8 @@
 */
 
 #include "identifier.h"
+#include <kstaticdeleter.h>
+#include <qdict.h>
 
 using namespace KexiUtils;
 
@@ -44,47 +46,134 @@ QString KexiUtils::string2FileName(const QString &s)
 
 // These are in pairs - first the non-latin character in UTF-8,
 // the second is the latin character(s) to appear in identifiers.
-static const char* string2Identifier_conv[] = {
-/* 1. Polish character */
-	"Ą", "A",  "Ć", "C",  "Ę", "E",
-	"Ł", "L",  "Ń", "N",  "Ó", "O",
-	"Ś", "S",  "Ź", "Z",  "Ż", "Z",
-	"ą", "a",  "ć", "c",  "ę", "e",
-	"ł", "l",  "ń", "n",  "ó", "o",
-	"ś", "s",  "ź", "z",  "ż", "z",
+static const char* string2Identifier_table[] = {
+/* 1. Polish characters */
+"Ą", "A",  "Ć", "C",  "Ę", "E",
+"Ł", "L",  "Ń", "N",  "Ó", "O",
+"Ś", "S",  "Ź", "Z",  "Ż", "Z",
+"ą", "a",  "ć", "c",  "ę", "e",
+"ł", "l",  "ń", "n",  "ó", "o",
+"ś", "s",  "ź", "z",  "ż", "z",
 
 /* 2. The mappings of the german "umlauts" to their 2-letter equivalents:
-  (Michael Drüing) */
-	"Ä", "Ae",
-	"Ö", "Oe",
-	"Ü", "Ue",
-/** @todo the above three only appear at the beginning of a word. if the word is in
- all caps - like in a caption - then the 2-letter equivalents should also be
- in all caps */
-	"ä", "ae",
-	"ö", "oe",
-	"ü", "ue",
-	"ß", "ss",
-/* Note that ß->ss is AFAIK not always correct transliteration, for example
+  (Michael Drüing <michael at drueing.de>)
+
+ Note that ß->ss is AFAIK not always correct transliteration, for example
  "Maße" and "Masse" is different, the first meaning "measurements" (as
  plural of "Maß" meaning "measurement"), the second meaning "(physical)
  mass". They're also pronounced dirrefently, the first one is longer, the
  second one short. */
-	0
+/** @todo the above three only appear at the beginning of a word. if the word is in
+ all caps - like in a caption - then the 2-letter equivalents should also be
+ in all caps */
+"Ä", "Ae",
+"Ö", "Oe",
+"Ü", "Ue",
+"ä", "ae",
+"ö", "oe",
+"ü", "ue",
+"ß", "ss",
+ 
+/* 3. The part of Serbian Cyrillic which is shared with other Cyrillics but 
+ that doesn't mean I am sure that eg. Russians or Bulgarians would do the 
+ same. (Chusslove Illich <caslav.ilic at gmx.net>) */
+"а", "a",
+"б", "b",
+"в", "v",
+"г", "g",
+"д", "d",
+"е", "e",
+"ж", "z",
+"з", "z",
+"и", "i",
+"к", "k",
+"л", "l",
+"м", "m",
+"н", "n",
+"о", "o",
+"п", "p",
+"р", "r",
+"с", "s",
+"т", "t",
+"у", "u",
+"ф", "f",
+"х", "h",
+"ц", "c",
+"ч", "c",
+"ш", "s",
+"А", "A",
+"Б", "B",
+"В", "V",
+"Г", "G",
+"Д", "D",
+"Е", "E",
+"Ж", "Z",
+"З", "Z",
+"И", "I",
+"К", "K",
+"Л", "L",
+"М", "M",
+"Н", "N",
+"О", "O",
+"П", "P",
+"Р", "R",
+"С", "S",
+"Т", "T",
+"У", "U",
+"Ф", "F",
+"Х", "H",
+"Ц", "C",
+"Ч", "C",
+"Ш", "S",
+// 3.1. The Serbian-specific Cyrillic characters:
+"ђ", "dj",
+"ј", "j",
+"љ", "lj",
+"њ", "nj",
+"ћ", "c",
+"џ", "dz",
+"Ђ", "Dj",
+"Ј", "J",
+"Љ", "Lj",
+"Њ", "Nj",
+"Ћ", "C",
+"Џ", "Dz",
+// 3.2. The non-ASCII Serbian Latin characters:
+"đ", "dj",
+"ž", "z",
+"ć", "c",
+"č", "c",
+"š", "s",
+"Đ", "Dj",
+"Ž", "Z",
+"Ć", "C",
+"Č", "C",
+"Š", "S",
+// END.
+0
 };
+
+//! used for O(1) character transformations in char2Identifier()
+static KStaticDeleter< QDict<QCString> > string2Identifier_deleter;
+static QDict<QCString>* string2Identifier_dict = 0;
 
 inline QString char2Identifier(const QChar& c)
 {
 	if ((c>='a' && c<='z') || (c>='A' && c<='Z') || (c>='0' && c<='9') || c=='_')
-		return QString(QChar(c));
+		return QString(c);
 	else {
-		//fix for non-latin1 chars
-		for (const char **p = string2Identifier_conv; *p; p+=2) {
-			if (QString(c)==QString::fromUtf8(*p)) {
-				p++;
-				return QString::fromLatin1(*p);
+		if (!string2Identifier_dict) {
+			//build dictionary for later use
+			string2Identifier_deleter.setObject( string2Identifier_dict, new QDict<QCString>(1009) );
+			string2Identifier_dict->setAutoDelete(true);
+			for (const char **p = string2Identifier_table; *p; p+=2) {
+				string2Identifier_dict->replace( /* replace, not insert because there may be duplicates */
+					QString::fromUtf8(*p), new QCString(*(p+1)) );
 			}
 		}
+		const QCString *fixedChar = string2Identifier_dict->find(c);
+		if (fixedChar)
+			return *fixedChar;
 	}
 	return QString(QChar('_'));
 }
