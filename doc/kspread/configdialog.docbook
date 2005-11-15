@@ -18,7 +18,7 @@ Configure Kspread...</guimenuitem></menuchoice> opens a dialog box
 with several pages, selected with the icons at the left of the dialog box, 
 which allow you to change many aspects of &kspread;'s operation.</para>
 
-<sect1 id="configpref">
+<!-- OBSOLETE <sect1 id="configpref">
 <title><guilabel>Preferences</guilabel></title>
 <para>This page has a number of check boxes which control how items are 
 displayed, entered or calculated:
@@ -83,15 +83,15 @@ type in will automatically be converted to uppercase.
 
 </variablelist></para>
 
-</sect1>
+</sect1>-->
 
 <sect1 id="configlocale">
 <title><guilabel>Locale Parameters</guilabel></title>
 <para>This page of &kspread;'s configuration dialog box shows how items 
 such as numbers, date, time and money are displayed.</para>
 <para>If you have loaded a spreadsheet that was generated using a different 
-locale, then pressing the <guibutton>Update to Locale System</guibutton> 
-button on this page will update it to conform to your locale settings.</para>
+locale, then pressing the <guibutton>Update Locale Settings</guibutton> 
+button on this page will update it to conform to your locale settings as they are fixed in &kcontrolcenter;.</para>
 </sect1>
 
 <sect1 id="configinterface">
@@ -233,10 +233,10 @@ marked by a small red triangle at the top right corner.
 <sect1 id="configcolor">
 <title><guilabel>Color</guilabel></title>
 <para>This page of &kspread;'s configuration dialog box lets you choose the 
-color of the sheet grid. If you do not want the grid to appear at all uncheck 
+color of the sheet grid. <!--If you do not want the grid to appear at all uncheck 
 the <guilabel>Show grid</guilabel> box
 in the <link linkend="configpref"><guilabel>Preferences</guilabel></link> 
-configuration page.</para>
+configuration page.--></para>
 <para>This page also lets you select the color of the lines used to indicate 
 the printed page borders when the <guimenuitem>Show Page Borders</guimenuitem> 
 box in the <guimenu>View</guimenu> menu is checked.</para>
