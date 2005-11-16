@@ -102,7 +102,7 @@ button on this page will update it to conform to your locale settings as they ar
 
 <para><variablelist>
 <varlistentry>
-<term><guilabel>Number of pages open at the beginning:</guilabel></term>
+<term><guilabel>Number of sheets open at the beginning:</guilabel></term>
 <listitem><para>Controls how many worksheets will be created if the 
 option <guilabel>Start with an empty document</guilabel> is chosen when 
 &kspread; is started.
@@ -118,55 +118,61 @@ Open Recent</guimenuitem></menuchoice>.
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Auto save (min):</guilabel></term>
+<term><guilabel>Autosave Delay (minutes):</guilabel></term>
 <listitem><para>Here you can select the time between autosaves, or disable 
-this feature altogether by choosing <guilabel>No autosave</guilabel>
+this feature altogether by choosing <guilabel>Do not save automatically</guilabel>
 (drag the slider to the far left).
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show vertical scrollbar</guilabel></term>
+<term><guilabel>Create Backup Files</guilabel></term>
+<listitem><para>Check this box if you want some backup files created. This is checked per default.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show Vertical Scrollbar</guilabel></term>
 <listitem><para>Check or uncheck this box to show or hide the vertical 
-scrollbar.
+scrollbar in all sheets.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show horizontal scrollbar</guilabel></term>
+<term><guilabel>Show Horizontal Scrollbar</guilabel></term>
 <listitem><para>Check or uncheck this box to show or hide the horizontal 
-scrollbar.
+scrollbar in all sheets.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show column header</guilabel></term>
-<listitem><para>Check this box to show the column letters across the top of a 
+<term><guilabel>Show Column Header</guilabel></term>
+<listitem><para>Check this box to show the column letters across the top of each 
 worksheet.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show row header</guilabel></term>
+<term><guilabel>Show Row Header</guilabel></term>
 <listitem><para>Check this box to show the row numbers down the left side.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show tabs</guilabel></term>
+<term><guilabel>Show Tabs</guilabel></term>
 <listitem><para>This check box controls whether the sheet tabs are shown 
 at the bottom of the worksheet.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show formula toolbar</guilabel></term>
+<term><guilabel>Show Formula toolbar</guilabel></term>
 <listitem><para>Here is where you can choose to show or hide the Formula bar.
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show status bar</guilabel></term>
+<term><guilabel>Show Statusbar</guilabel></term>
 <listitem><para>Uncheck this box if you want to hide the status bar.
 </para></listitem>
 </varlistentry>
