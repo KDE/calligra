@@ -218,6 +218,8 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
           this, SLOT(selectionChanged(QListViewItem*)));
   connect(m_documentList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
           this, SLOT(openTemplate(QListViewItem*)));
+  connect(m_documentList, SIGNAL(returnPressed(QListViewItem*)),
+          this, SLOT(openTemplate(QListViewItem*)));
   connect(m_openButton, SIGNAL(clicked()), this, SLOT(openTemplate()));
 
   m_documentList->setSelected(m_documentList->firstChild(), true);
@@ -320,6 +322,8 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
   connect(m_documentList, SIGNAL(selectionChanged(QListViewItem*)),
           this, SLOT(selectionChanged(QListViewItem*)));
   connect(m_documentList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
+          this, SLOT(openFile(QListViewItem*)));
+  connect(m_documentList, SIGNAL(returnPressed(QListViewItem*)),
           this, SLOT(openFile(QListViewItem*)));
   connect(m_openButton, SIGNAL(clicked()), this, SLOT(openFile()));
 
