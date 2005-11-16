@@ -710,7 +710,7 @@ colorParameters::colorParameters( View* _view,QVBox *box , char *name )
   gridColor = new KColorButton( _gridColor,
                                 Qt::lightGray,
                                 tmpQGroupBox );
-
+  QWhatsThis::add(gridColor, i18n( "Click here to change the grid color ie the color of the borders of each cell." ) );
   label->setBuddy(gridColor);
 
   QColor _pbColor(Qt::red);
@@ -725,7 +725,7 @@ colorParameters::colorParameters( View* _view,QVBox *box , char *name )
   pageBorderColor = new KColorButton( _pbColor,
                                 Qt::red,
                                 tmpQGroupBox );
-
+  QWhatsThis::add(pageBorderColor, i18n( "When the View ->Show Page Borders menu item is checked, the page borders are displayed. Click here to choose another color for the borders than the default red." ) );
 
   label2->setBuddy(pageBorderColor);
 }
@@ -780,6 +780,7 @@ configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
   label->setBuddy(defaultSizePage);
   defaultSizePage->insertStringList( KoPageFormat::allFormats() );
   defaultSizePage->setCurrentItem(1);
+  QWhatsThis::add(defaultSizePage, i18n( "Choose the default page size for your worksheet among all the most common page sizes.\nNote that you can overwrite the page size for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultSizePage,1,0);
 
   label=new QLabel(i18n("Default page &orientation:"), tmpQGroupBox);
@@ -792,6 +793,7 @@ configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
   listType+=i18n( "Landscape" );
   defaultOrientationPage->insertStringList(listType);
   defaultOrientationPage->setCurrentItem(0);
+  QWhatsThis::add(defaultOrientationPage, i18n( "Choose the sheet orientation: portrait or lanscape.\nNote that you can overwrite the orientation for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultOrientationPage,3,0);
 
   label=new QLabel(tmpQGroupBox);
@@ -811,6 +813,7 @@ configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
 
   defaultUnit->insertStringList(listType);
   defaultUnit->setCurrentItem(0);
+  QWhatsThis::add(defaultUnit, i18n( "Choose the default unit that will be used in your sheet.\nNote that you can overwrite the unit for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultUnit,5,0);
   initCombo();
 
