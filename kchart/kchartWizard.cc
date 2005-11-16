@@ -6,6 +6,7 @@
 #include "kchartWizardSetupDataPage.h"
 #include "kchartWizardLabelsLegendPage.h"
 #include "kchartWizardSetupAxesPage.h"
+#include "kchartWizardSelectDataFormatPage.h"
 
 #include <qlineedit.h>
 #include <qwidget.h>
@@ -30,9 +31,11 @@ KChartWizard::KChartWizard ( KChartPart* _chart, QWidget *parent, const char* na
     kdDebug(35001) << "Creating KChartWizard" << endl;
 
     // First page: select the range
-    //     _selectdatapage = new KChartWizardSelectDataPage( this );
-    //     addPage( _selectdatapage, i18n( "Select Data" ) );
-
+    m_selectdataformatpage = new KChartWizardSelectDataFormatPage(this, m_chart);
+    addPage( m_selectdataformatpage, i18n("Select Data Format"));
+    setFinishEnabled(m_selectdataformatpage, true);
+    setHelpEnabled(m_selectdataformatpage, false);
+    
     // Second page: select the major chart type
     m_selectcharttypepage = new KChartWizardSelectChartTypePage( this, m_chart );
     addPage( m_selectcharttypepage, i18n( "Select Chart Type" ) );
@@ -68,7 +71,7 @@ KChartWizard::KChartWizard ( KChartPart* _chart, QWidget *parent, const char* na
     connect(this, SIGNAL(finished()), m_selectcharttypepage,    SLOT(apply()));
     connect(this, SIGNAL(finished()), m_axespage,               SLOT(apply()));
     connect(this ,SIGNAL(finished()), m_selectchartsubtypepage, SLOT(apply()));
-
+    connect(this ,SIGNAL(finished()), m_selectdataformatpage, SLOT(apply()));
     connect( m_selectcharttypepage, SIGNAL( chartChange( int ) ),
              this,                  SLOT( subType( int ) ) );
     adjustSize();
@@ -86,6 +89,7 @@ KChartWizard::~KChartWizard()
     //delete _setupdatapage;
     delete m_labelslegendpage;
     delete m_axespage;
+    delete m_selectdataformatpage;
 }
 
 void KChartWizard::subType(int _type)

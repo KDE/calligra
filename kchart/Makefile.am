@@ -23,6 +23,7 @@ libkchartcommon_la_SOURCES = kchart_part.cc \
 	kchartWizardSelectDataPage.cc \
 	kchartWizardSetupAxesPage.cc \
 	kchartWizardSetupDataPage.cc \
+        kchartWizardSelectDataFormatPage.cc \
 	kchartDataEditor.cc \
 	KChartViewIface.skel KChartViewIface.cc \
 	kchartLegendConfigPage.cc kchart_params.cc KChartParamsIface.skel \
@@ -73,6 +74,7 @@ noinst_HEADERS =  kchart_part.h \
 		kchartWizardSelectDataPage.h \
 		kchartWizardSetupAxesPage.h \
 		kchartWizardSetupDataPage.h \
+                kchartWizardSelectDataFormatPage.h \
 		kchartDataEditor.h \
 		kchart_aboutdata.h	\
 		kchartcolorarray.h KChartViewIface.h \

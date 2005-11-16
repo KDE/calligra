@@ -15,7 +15,7 @@ class KChartWizardSelectChartSubTypePage;
 class KChartWizardSelectDataPage;
 class KChartWizardSetupDataPage;
 class KChartWizardSelectChartTypePage;
-
+class KChartWizardSelectDataFormatPage;
 
 class KChartWizard : public KWizard
 {
@@ -56,6 +56,7 @@ private:
 
     //KChartWizardSelectDataPage          *_selectdatapage;
     KChartWizardSelectChartTypePage     *m_selectcharttypepage;
+    KChartWizardSelectDataFormatPage    *m_selectdataformatpage;
     KChartWizardSelectChartSubTypePage  *m_selectchartsubtypepage;
     //KChartWizardSetupDataPage           *_setupdatapage;
     KChartWizardLabelsLegendPage        *m_labelslegendpage;
