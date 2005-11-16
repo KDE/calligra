@@ -256,7 +256,12 @@ void DependencyList::areaModified (const QString &name)
   
   QMap<Point, bool>::iterator it;
   for (it = areaDeps[name].begin(); it != areaDeps[name].end(); ++it)
-    cellChanged (it.key());
+  {
+    Cell *c = it.key().cell();
+    // this forces the cell to regenerate everything - new range dependencies
+    // and so on
+    c->setValue (c->value ());
+  }
 }
 
 void DependencyList::addDependency (const Point &cell1,

@@ -415,6 +415,7 @@ Range::Range(const QString & _str, Map * _map,
       sheet = _map->findSheet((*it).sheet_name);
       gotNamed = true;
       namedArea = tmp;
+      kdDebug() << "namedArea set to " << namedArea << endl;
       break;
     }
   }

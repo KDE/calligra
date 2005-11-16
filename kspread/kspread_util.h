@@ -99,6 +99,7 @@ struct KSPREAD_EXPORT Range
     sheet = r.sheet;
     sheetName = r.sheetName;
     range = r.range;
+    namedArea = r.namedArea;
   }
   Range( const Point& ul, const Point& lr )
   {
