@@ -221,7 +221,7 @@ you have entered into a cell cannot be understood by &kspread;.
 <term><guilabel>Method of calc:</guilabel></term>
 <listitem><para>This drop down selection box can be used to choose the 
 calculation performed by the <link linkend="statusbarsum">Statusbar Summary
-</link> function..
+</link> function.
 </para></listitem>
 </varlistentry>
 
@@ -246,6 +246,24 @@ configuration page.--></para>
 <para>This page also lets you select the color of the lines used to indicate 
 the printed page borders when the <guimenuitem>Show Page Borders</guimenuitem> 
 box in the <guimenu>View</guimenu> menu is checked.</para>
+<para>Click on the current color to display the standard KDE Select Color dialog.</para>
+
+<para><variablelist>
+
+<varlistentry>
+<term><guilabel>Grid color:</guilabel></term>
+<listitem><para>Click here to change the grid color &ie; the color of the borders of each cell. 
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Page borders:</guilabel></term>
+<listitem><para>When the <menuchoice><guimenu>View</guimenu><guimenuitem>Show Page Borders</guimenuitem></menuchoice> menu item is checked, the page borders are displayed. Click here to choose another color for the borders than the default red. 
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+
 </sect1>
 
 <sect1 id="configpagelayout">
