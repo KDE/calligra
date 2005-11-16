@@ -225,7 +225,7 @@ public:
       <TR><TD>MarkedIterator             </TD><TD>x</TD><TD> </TD><TD>x</TD></TR>
       </TABLE>
 
-      The only iterator that can be used when their are null positions in the
+      The only iterator that can be used when there are null positions in the
       table is the checked iterator.
       Note that both the Checked and Marked Iterators traverse the table twice,
       once to clear the m_marked members in the cells (done in constructor) and
