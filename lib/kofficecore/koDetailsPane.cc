@@ -144,7 +144,7 @@ void KoRichTextListItem::paintCell(QPainter *p, const QColorGroup& cg, int colum
   QBrush paper;
 
   if(isSelected()) {
-    paper = cg.highlight();
+    paper = _cg.highlight();
     _cg.setColor(QColorGroup::Text, _cg.highlightedText());
   } else {
     paper = backgroundColor(column);
@@ -154,10 +154,9 @@ void KoRichTextListItem::paintCell(QPainter *p, const QColorGroup& cg, int colum
     paper.setPixmap(*pm);
   }
 
-  p->setBrush(paper);
-  p->setPen(Qt::NoPen);
-  p->drawRect(0, 0, width, height());
-  p->drawPixmap(0, 0, *pixmap(column));
+  p->fillRect(0, 0, width, height(), paper);
+  int py = (height() - pixmap(column)->height()) / 2;
+  p->drawPixmap(0, py, *pixmap(column));
   QSimpleRichText richText(text(column), listView()->font());
   richText.setWidth(width);
   int x = pixmap(column)->width() + listView()->itemMargin();
