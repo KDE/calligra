@@ -169,6 +169,8 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     m_table = new kchartDataTable(page);
     m_table->setSelectionMode(QTable::NoSelection);
 	m_table->setFocus();
+    m_table->setRowMovingEnabled(true);
+    m_table->setColumnMovingEnabled(true);
 
     // Create the Rows setting
     m_rowsLA = new QLabel( i18n("# Rows:" ), page );
@@ -206,10 +208,14 @@ kchartDataEditor::kchartDataEditor(QWidget* parent) :
     connect(m_colsSB, SIGNAL(valueChangedSpecial(int)), 
 	    this,     SLOT(setCols(int)));
 
+
+    /* -- Changed data editor to use top row and leftmost column for series names and labels
+          so this is no longer necessary
+
     connect(m_table->horizontalHeader(), SIGNAL(clicked(int)), 
 	    this,                        SLOT(column_clicked(int)) );
     connect(m_table->verticalHeader(),   SIGNAL(clicked(int)),
-	    this,                        SLOT(row_clicked(int)) );
+	    this,                        SLOT(row_clicked(int)) );*/
 
     connect(m_table, SIGNAL(valueChanged(int, int)),
 	    this,    SLOT(tableChanged(int, int)) );
@@ -288,6 +294,9 @@ void kchartDataEditor::setData( KoChart::Data* dat )
 	return;
     }
 
+    rowsCount += headerRows();
+    colsCount += headerCols();
+
     // Initiate widgets with the correct rows and columns.
     m_rowsSB->setValue(rowsCount);
     m_colsSB->setValue(colsCount);
@@ -295,9 +304,9 @@ void kchartDataEditor::setData( KoChart::Data* dat )
     m_table->setNumCols(colsCount);
 
     // Fill the data from the chart into the editor.
-    for (unsigned int row = 0; row < rowsCount; row++) {
-        for (unsigned int col = 0; col < colsCount; col++) {
-            KoChart::Value t = dat->cell(row, col);
+    for (unsigned int row = headerRows(); row < rowsCount; row++) {
+        for (unsigned int col = headerCols(); col < colsCount; col++) {
+            KoChart::Value t = dat->cell(row-headerRows(), col-headerCols());
 
             // Fill it in from the part.
             if (t.hasValue()) {
@@ -326,10 +335,15 @@ void kchartDataEditor::setData( KoChart::Data* dat )
 // Get the data from the data editor and put it back into the chart.
 //
 void kchartDataEditor::getData( KoChart::Data* dat )
-{
-    int  numRows = m_rowsSB->value();
-    int  numCols = m_colsSB->value();
-
+{	
+    //Number of rows used as headers
+    int labelRows = headerRows();
+    //Number of columns used as headers	
+    int labelCols = headerCols();
+    
+    int  numRows = m_table->numRows()-labelRows; //m_rowsSB->value() - labelRows;
+    int  numCols = m_table->numCols()-labelCols; //m_colsSB->value() - labelCols;
+	
     // Make sure that the data table for the chart is not smaller than
     // the data in the editor.
     if ( static_cast<int>( dat->rows() ) < numRows
@@ -340,20 +354,21 @@ void kchartDataEditor::getData( KoChart::Data* dat )
     dat->setUsedCols( numCols );
 
 	// Empty table
-	if ( numRows==1 && numCols==1 && m_table->horizontalHeader()->label(0).isEmpty()
+	/*if ( numRows==1 && numCols==1 && m_table->horizontalHeader()->label(0).isEmpty()
 			&& m_table->verticalHeader()->label(0).isEmpty()
 			&& m_table->text(0, 0).isEmpty() ) {
 		dat->expand(0,0);
 		return;
-	}
+	}*/
 
     // Get all the data.
-    for (int row = 0;row < numRows; row++) {
-        for (int col = 0;col < numCols; col++) {
+    for (int row = labelRows ; row < (numRows+labelRows); row++) {
+        for (int col = labelCols ; col < (numCols+labelCols); col++) {
             KoChart::Value t;
 
 	    // Get the text and convert to double.
 	    QString tmp = m_table->text(row, col);
+         
 	    bool    ok;
 	    double  val = tmp.toDouble(&ok);
 	    if (!ok)
@@ -361,7 +376,7 @@ void kchartDataEditor::getData( KoChart::Data* dat )
 
 	    // and do the actual setting.
 	    t = KoChart::Value( val );
-            dat->setCell(row,col,t);
+            dat->setCell(row-labelRows,col-labelCols,t);
         }
     }
 }
@@ -371,7 +386,7 @@ void kchartDataEditor::getData( KoChart::Data* dat )
 //
 void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 {
-    QHeader  *rowHeader = m_table->verticalHeader();
+    /*QHeader  *rowHeader = m_table->verticalHeader();
     int       row;
     int       numRows = m_rowsSB->value();
 
@@ -380,7 +395,22 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 		return;
     for (row = 0; row < numRows; row++) {
 	rowHeader->setLabel(row, rowLabels[row]);
+    }*/
+
+    for (int i=0;i<rowLabels.count();i++)
+    {
+        m_table->setText(i+headerRows(),0,rowLabels[i]);    
     }
+}
+
+int kchartDataEditor::headerRows()
+{
+    return 1;
+}
+
+int kchartDataEditor::headerCols()
+{
+    return 1;
 }
 
 
@@ -388,13 +418,19 @@ void kchartDataEditor::setRowLabels(const QStringList &rowLabels)
 //
 void kchartDataEditor::getRowLabels(QStringList &rowLabels)
 {
-    QHeader  *rowHeader = m_table->verticalHeader();
+   /* QHeader  *rowHeader = m_table->verticalHeader();
     int  numRows = m_rowsSB->value();
     int  row;
 
     rowLabels.clear();
     for (row = 0; row < numRows; row++) {
       rowLabels << rowHeader->label(row);
+    }*/
+    rowLabels.clear();
+
+    for (int i=headerRows();i < m_table->numRows();i++)
+    {
+        rowLabels << m_table->text(i,0);
     }
 }
 
@@ -403,7 +439,7 @@ void kchartDataEditor::getRowLabels(QStringList &rowLabels)
 //
 void kchartDataEditor::setColLabels(const QStringList &colLabels)
 {
-    QHeader  *colHeader = m_table->horizontalHeader();
+    /*QHeader  *colHeader = m_table->horizontalHeader();
     int       col;
 
     int  numCols = m_colsSB->value();
@@ -413,6 +449,11 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
 		return;
     for (col = 0; col < numCols; col++) {
 	colHeader->setLabel(col, colLabels[col]);
+    }*/
+
+    for (int i=0;i<colLabels.count();i++)
+    {
+        m_table->setText(0,i+headerCols(),colLabels[i]);
     }
 }
 
@@ -421,13 +462,20 @@ void kchartDataEditor::setColLabels(const QStringList &colLabels)
 //
 void kchartDataEditor::getColLabels(QStringList &colLabels)
 {
-    QHeader  *colHeader = m_table->horizontalHeader();
+   /* QHeader  *colHeader = m_table->horizontalHeader();
     int  numCols = m_colsSB->value();
     int  col;
 
     colLabels.clear();
     for (col = 0; col < numCols; col++) {
       colLabels << colHeader->label(col);
+    }*/
+    
+    colLabels.clear();
+
+    for (int i=headerCols();i<m_table->numCols();i++)
+    {
+        colLabels << m_table->text(0,i); 
     }
 }
 
@@ -601,9 +649,30 @@ void kchartDataEditor::row_clicked(int row)
 }
 
 
-void  kchartDataEditor::tableChanged(int /*row*/, int /*col*/)
+void  kchartDataEditor::tableChanged(int row, int col)
 {
+    if (row <= headerRows())
+        updateColHeaders();
+    if (col <= headerCols())
+        updateRowHeaders();
+
     m_modified = true;
+}
+
+void kchartDataEditor::updateRowHeaders()
+{
+    for (int i=headerRows();i<m_table->numRows();i++)
+    {
+        m_table->verticalHeader()->setLabel(i,m_table->text(i,0));
+    }
+}
+
+void kchartDataEditor::updateColHeaders()
+{
+    for (int i=headerCols();i<m_table->numCols();i++)
+    {
+        m_table->horizontalHeader()->setLabel(i,m_table->text(0,i));
+    }
 }
 
 

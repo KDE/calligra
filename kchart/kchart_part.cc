@@ -64,8 +64,13 @@ KChartPart::KChartPart( QWidget *parentWidget, const char *widgetName,
 	m_params->setBarChartSubType( KDChartParams::BarNormal );
 	//m_params->setThreeDBars( true );
 
-	// Handle data in rows per default.
-	m_auxiliary.m_dataDirection = KChartAuxiliary::DataRows;
+        //Changed this to use columns rather than rows by default because I believe that this 
+        //is the more common format for entering data (you can see this looking at the fact
+        //that most spreadsheet packages allow far more rows than columns)
+        //  -- Robert Knight
+        
+	// Handle data in columns by default
+	m_auxiliary.m_dataDirection = KChartAuxiliary::DataColumns;
     }
 
     (void)new WizardExt( this );

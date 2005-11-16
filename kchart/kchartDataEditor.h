@@ -95,6 +95,30 @@ public:
 
     bool modified() const { return m_modified; }
 
+protected:
+    /**
+    * Returns the number of rows used as headers (ie. containing labels for the X axis or a series name,
+    * depending on the orientation of the data)
+    */
+    int headerRows();
+    /**
+    * Returns the number of columns used as headers (ie. containing labels for the X axis or a series name, 
+    * depending on the orientation of the data)
+    */
+    int headerCols();
+
+    /**
+    * Updates the table widget's vertical header to match the row labels specified in the leftmost column of 
+    * each row
+    */
+    void updateRowHeaders();
+
+    /**
+    * Updates the table widget's horizontal header to match the column labels specified in the top row of each
+    * column
+    */
+    void updateColHeaders();
+
 private:
     void  addDocs();
 
