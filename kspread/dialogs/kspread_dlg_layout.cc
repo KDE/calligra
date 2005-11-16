@@ -2059,6 +2059,7 @@ CellFormatPageProtection::CellFormatPageProtection( QWidget* parent, CellFormatD
   QVBoxLayout * groupBox1Layout = new QVBoxLayout( groupBox1->layout() );
 
   m_bIsProtected = new QCheckBox( i18n( "&Protected" ), groupBox1, "m_bIsProtected" );
+  QWhatsThis::add(m_bIsProtected, i18n( "If checked, the cell content will be protected. This is the default behaviour. You need to protect the whole sheet using theTools->Protect document->Protect Sheet... menu for this to work. " ) );
   m_bIsProtected->setChecked( true );
   groupBox1Layout->addWidget( m_bIsProtected );
 
@@ -2075,6 +2076,7 @@ CellFormatPageProtection::CellFormatPageProtection( QWidget* parent, CellFormatD
   QVBoxLayout * groupBox2Layout = new QVBoxLayout( groupBox2->layout() );
 
   m_bDontPrint = new QCheckBox( i18n( "&Do not print text" ), groupBox2, "m_bDontPrint" );
+  QWhatsThis::add(m_bDontPrint, i18n( "If checked, the content of the cell will not be printed. If this is not checked (default), the cell content will be printed.\nNote that you can print it even if the cell is protected." ) );
   groupBox2Layout->addWidget( m_bDontPrint );
   Form1Layout->addWidget( groupBox2 );
   QSpacerItem * spacer_4 = new QSpacerItem( 20, 90, QSizePolicy::Minimum, QSizePolicy::Expanding );

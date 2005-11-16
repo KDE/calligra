@@ -888,7 +888,7 @@ void View::Private::initActions()
       Qt::SHIFT + Qt::Key_F9, view, SLOT( recalcWorkSheet() ), ac, "RecalcWorkSheet" );
   actions->recalcWorksheet->setToolTip(i18n("Recalculate the value of every cell in the current worksheet."));
 
-  actions->recalcWorkbook = new KAction( i18n("Recalculate Workbook"),
+  actions->recalcWorkbook = new KAction( i18n("Recalculate Document"),
       Qt::Key_F9, view, SLOT( recalcWorkBook() ), ac, "RecalcWorkBook" );
   actions->recalcWorkbook->setToolTip(i18n("Recalculate the value of every cell in all worksheets."));
 

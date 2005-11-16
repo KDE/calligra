@@ -1247,7 +1247,7 @@ QString SheetPrint::completeHeading( const QString &_data, int _page, const QStr
     QString organization;
     QString tmp;
     if ( !authorPage )
-        kdWarning() << "Author information not found in document Info !" << endl;
+        kdWarning() << "Author information not found in Document Info !" << endl;
     else
     {
         full_name = authorPage->fullName();
