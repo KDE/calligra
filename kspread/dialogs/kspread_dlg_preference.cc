@@ -29,6 +29,7 @@
 #include <qcheckbox.h>
 #include <qcombobox.h>
 #include <qvgroupbox.h>
+#include <qwhatsthis.h>
 
 #include <kconfig.h>
 #include <kstatusbar.h>
@@ -225,40 +226,51 @@ configure::configure( View* _view, QVBox *box , char *name )
         }
   nbPage=new KIntNumInput(_page, tmpQGroupBox , 10);
   nbPage->setRange(1, 10, 1);
-  nbPage->setLabel(i18n("Number of pages open at the &beginning:"));
+  nbPage->setLabel(i18n("Number of sheets open at the &beginning:"));
+  QWhatsThis::add(nbPage, i18n( "Controls how many worksheets will be created if the option Start with an empty document is chosen when KSpread is started." ) );
 
   nbRecentFile=new KIntNumInput(oldRecent, tmpQGroupBox , 10);
   nbRecentFile->setRange(1, 20, 1);
   nbRecentFile->setLabel(i18n("&Number of files to show in Recent Files list:"));
+  QWhatsThis::add(nbRecentFile, i18n( "Controls the maximum number of filenames that are shown when you select File-> Open Recent." ) );
 
   autoSaveDelay=new KIntNumInput(oldAutoSaveValue, tmpQGroupBox , 10);
   autoSaveDelay->setRange(0, 60, 1);
   autoSaveDelay->setLabel(i18n("Au&tosave Delay (minutes):"));
   autoSaveDelay->setSpecialValueText(i18n("Do not save automatically"));
   autoSaveDelay->setSuffix(i18n("min"));
+  QWhatsThis::add(autoSaveDelay, i18n( "Here you can select the time between autosaves, or disable this feature altogether by choosing Do not save automatically (drag the slider to the far left)." ) );
 
   m_createBackupFile = new QCheckBox( i18n("Create Backup Files"), tmpQGroupBox );
   m_createBackupFile->setChecked( m_oldBackupFile );
+  QWhatsThis::add(m_createBackupFile, i18n( "Check this box if you want some backup files created. This is checked per default." ) );
 
   showVScrollBar=new QCheckBox(i18n("Show &Vertical Scrollbar"),tmpQGroupBox);
   showVScrollBar->setChecked(vertical);
+  QWhatsThis::add(showVScrollBar, i18n( "Check or uncheck this box to show or hide the vertical scrollbar in all sheets." ) );
+
   showHScrollBar=new QCheckBox(i18n("Show &Horizontal Scrollbar"),tmpQGroupBox);
   showHScrollBar->setChecked(horizontal);
-
+  QWhatsThis::add(showHScrollBar, i18n( "Check or uncheck this box to show or hide the horizontal scrollbar in all sheets." ) );
 
   showColHeader=new QCheckBox(i18n("Show C&olumn Header"),tmpQGroupBox);
   showColHeader->setChecked(colHeader);
+  QWhatsThis::add(showColHeader, i18n( "Check this box to show the column letters across the top of each worksheet." ) );
   showRowHeader=new QCheckBox(i18n("Show &Row Header"),tmpQGroupBox);
   showRowHeader->setChecked(rowHeader);
-
+  QWhatsThis::add(showRowHeader, i18n( "Check this box to show the row numbers down the left side." ) );
+ 
   showTabBar =new QCheckBox(i18n("Show Ta&bs"),tmpQGroupBox);
   showTabBar->setChecked(tabbar);
+  QWhatsThis::add(showTabBar, i18n( "This check box controls whether the sheet tabs are shown at the bottom of the worksheet." ) );
 
   showFormulaBar =new QCheckBox(i18n("Sho&w Formula toolbar"),tmpQGroupBox);
   showFormulaBar->setChecked(formulaBar);
+  QWhatsThis::add(showFormulaBar, i18n( "Here is where you can choose to show or hide the Formula bar." ) );
 
   showStatusBar =new QCheckBox(i18n("Show Stat&usbar"),tmpQGroupBox);
   showStatusBar->setChecked(statusBar);
+  QWhatsThis::add(showStatusBar, i18n( "Uncheck this box if you want to hide the status bar." ) );
 }
 
 
