@@ -416,6 +416,7 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
 
   typeCompletion=new QComboBox(tmpQGroupBox);
   label->setBuddy(typeCompletion);
+  QWhatsThis::add(typeCompletion, i18n( "Lets you choose the (auto) text completion mode from a range of options in the drop down selection box." ) );
   QStringList listType;
   listType+=i18n("None");
   listType+=i18n("Manual");
@@ -434,6 +435,7 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
                        KoUnit::toUserValue( 10.0, _view->doc()->unit()) );
   valIndent->setRange( 0.0, 100.0, 10.0 );
   valIndent->setValue ( KoUnit::toUserValue( _indent, _view->doc()->unit() ) );
+  QWhatsThis::add(valIndent, i18n( "Lets you define the amount of indenting used by the Increase indent option in the Format  menu." ) );
   valIndent->setLabel(i18n("&Value of indent:"));
 
   label=new QLabel(i18n("&Press enter to move selection to:"), tmpQGroupBox);
@@ -447,8 +449,11 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   listType+=i18n("towards to", "Bottom, First Cell");
   typeOfMove->insertStringList(listType);
   typeOfMove->setCurrentItem(0);
+  QWhatsThis::add(typeOfMove, i18n( "When you have selected a cell then press the Enter key the selection will move one place to the left, right, up or down as determined by the setting in this drop down selection box." ) );
+
   msgError= new QCheckBox(i18n("&Show error message"),tmpQGroupBox);
   msgError->setChecked(m_bMsgError);
+  QWhatsThis::add(msgError, i18n( "If this box is checked a message box will pop up when what you have entered into a cell cannot be understood by KSpread." ) );
 
   label=new QLabel(i18n("&Method of calc:"), tmpQGroupBox);
 
@@ -464,9 +469,11 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   listTypeCalc+=i18n("None");
   typeCalc->insertStringList(listTypeCalc);
   typeCalc->setCurrentItem(0);
+  QWhatsThis::add(typeCalc, i18n( "This drop down selection box can be used to choose the calculation performed by the Statusbar Summary  function." ) );
+
   commentIndicator=new QCheckBox(i18n("Show comment &indicator"),tmpQGroupBox);
   commentIndicator->setChecked(m_bCommentIndicator);
-
+  QWhatsThis::add(commentIndicator, i18n( "If this box is checked cells containing comments will be marked by a small red triangle at the top right corner." ) );
   initComboBox();
 }
 
