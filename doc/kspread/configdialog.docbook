@@ -273,6 +273,29 @@ default page size, orientation and units used by the printer and by the
 <guilabel>Page Layout</guilabel> dialog box (obtained by selecting 
 <guimenuitem>Page Layout...</guimenuitem> from the <guimenu>Format
 </guimenu> menu.</para>
+
+<para><variablelist>
+
+<varlistentry>
+<term><guilabel>Default page size:</guilabel></term>
+<listitem><para>Choose the default page size for your worksheet among all the most common page sizes. Note that you can overwrite the page size for the current sheet using the <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice> dialog.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Default page orientation:</guilabel></term>
+<listitem><para>Choose the default sheet orientation: portrait or lanscape. Note that you can overwrite the orientation for the current sheet using the <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice> dialog.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Default page unit:</guilabel></term>
+<listitem><para>Choose the default unit that will be used in your all your sheets. Note that you can overwrite the unit for the current sheet using the <menuchoice><guimenu>Format</guimenu><guimenuitem>Page lLayout...</guimenuitem></menuchoice> dialog.
+</para></listitem>
+</varlistentry>
+
+</variablelist></para>
+
 </sect1>
 
 <sect1 id="configspelling">
