@@ -5,6 +5,6 @@ AC_SUBST(LIB_KEXI_KMDI_INCLUDES, '')
 
 AC_ARG_ENABLE(kexi-scripting,
     AC_HELP_STRING([--enable-kexi-scripting],
-                   [build Kexi scripting module (KROSS) (EXPERIMENTAL) [default=no]]),
+                   [build Kexi scripting module (based on KROSS, requires '--enable-scripting') (EXPERIMENTAL) [default=no]]),
     compile_kross_plugin=$enableval, compile_kross_plugin=no)
 AM_CONDITIONAL(compile_kross_plugin, test "x$compile_kross_plugin" != "xno")

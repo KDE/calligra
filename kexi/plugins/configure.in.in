@@ -6,7 +6,7 @@ AM_CONDITIONAL(compile_kexi_reports_plugin, test "x$compile_kexi_reports_plugin"
 
 AC_ARG_ENABLE(kexi-scripting-gui,
     AC_HELP_STRING([--enable-kexi-scripting-gui],
-                   [build Kexi scripting GUI plugin (EXPERIMENTAL) [default=no]]),
+                   [build Kexi scripting GUI plugin (requires '--enable-kexi-scripting') (EXPERIMENTAL) [default=no]]),
     compile_kexi_scripting_gui_plugin=$enableval, compile_kexi_scripting_gui_plugin=no)
 AM_CONDITIONAL(compile_kexi_scripting_gui_plugin, test "x$compile_kexi_scripting_gui_plugin" != "xno")
 
@@ -17,3 +17,4 @@ fi
 if test "$compile_kexi_scripting_gui_plugin" == "yes"; then
     AC_DEFINE(KEXI_SCRIPTS_SUPPORT, 1, [build Kexi scripting GUI plugin])
 fi
+
