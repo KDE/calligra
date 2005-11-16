@@ -254,7 +254,7 @@ by the <guilabel>Number of pages open at the beginning</guilabel> setting in
 the <guilabel>Interface</guilabel> page of &kspread;'s 
 <link linkend="configinterface">configuration</link> dialog box.</para>
 <para><menuchoice><guimenu>Insert</guimenu><guimenuitem>Sheet</guimenuitem>
-</menuchoice> will add another sheet to the workbook.</para>
+</menuchoice> will add another sheet to the document.</para>
 <para>If the <guilabel>Show tabs</guilabel> box in the <guilabel>Interface
 </guilabel> page of &kspread;'s configuration dialog box is checked a small 
 tab will be shown near the bottom left of &kspread;'s window for each sheet. 
@@ -269,7 +269,7 @@ the previous one.</para>
 <emphasis>Sheet2</emphasis>... You can give a sheet a different name by 
 <mousebutton>right</mousebutton> clicking on the tab and selecting 
 <guimenuitem>Rename Sheet...</guimenuitem>.</para>
-<para>To remove a sheet from the workbook use the <guimenuitem>Remove Sheet
+<para>To remove a sheet from the document use the <guimenuitem>Remove Sheet
 </guimenuitem> option in the <menuchoice><guimenu>Format</guimenu><guisubmenu>
 Sheet</guisubmenu></menuchoice> submenu or in the little 
 menu that pops up when you <mousebutton>right</mousebutton> click on the tab 
@@ -286,7 +286,7 @@ Sheet2. Note that sheet names are case sensitive.</para>
 
 <sect2 id="consolidate">
 <title>Consolidating Data</title>
-<para>You may have constructed a workbook containing several worksheets 
+<para>You may have constructed a document containing several worksheets 
 containing similar data but for, say, different months of the year, and wish 
 to have summary sheet containing the consolidated (&eg;, sum or average) values 
 of the corresponding data items in the other sheets.</para>
@@ -467,7 +467,7 @@ Use the scrollbars to position the two views to show the top left and
 bottom right cells of the wanted area, select the top left cell in one 
 view then hold the &Shift; key pressed while you select the 
 bottom right cell with the <mousebutton>left</mousebutton> mouse button.</para>
-<para>If there is more than one sheet in your workbook, you can show a 
+<para>If there is more than one sheet in your document, you can show a 
 different sheet in each of the split views.</para>
 <para>The relative sizes of the views can be changed by dragging the thick bar 
 separating the views.</para>

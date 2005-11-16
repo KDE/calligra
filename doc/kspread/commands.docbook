@@ -82,7 +82,7 @@ from a combo box of recently used files.</para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Import...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Import CSV data.</action>
+<listitem><para><action>Import other spreatsheet documents.</action>
 </para></listitem>
 </varlistentry>
 
@@ -91,9 +91,18 @@ from a combo box of recently used files.</para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Export...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Saves a document to any supported format.</action>
+<listitem><para><action>Save a document to any supported format.</action>
 The document does not become the exported file.
 </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Mail...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Send the file as an email attachment.</action></para>
+</listitem>
 </varlistentry>
 
 <varlistentry>
@@ -129,19 +138,10 @@ based on this document.
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Document information...</guimenuitem>
+<guimenuitem>Document information</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>View or enter information about the document and 
 author.</action></para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term><menuchoice>
-<guimenu>File</guimenu>
-<guimenuitem>Mail...</guimenuitem>
-</menuchoice></term>
-<listitem><para><action>Send the file as an email attachment.</action></para>
 </listitem>
 </varlistentry>
 
@@ -345,6 +345,15 @@ Attributes from selected cell(s).</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Edit</guimenu>
+<guimenuitem>Remove Link</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Remove the link while leave the displayed text.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Edit</guimenu>
 <guimenuitem>Conditional Cell Attributes...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Add or modify conditional cell attributes.</action>
@@ -476,7 +485,7 @@ is shown in the upper right corner of the cell.
 <guimenuitem>Zoom</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Increase or decrease the magnification used to display 
-the spreadsheet.
+the spreadsheet. Range from 33% to 500%.
 </action>
 </para></listitem>
 </varlistentry>
@@ -491,14 +500,14 @@ the spreadsheet.
 <para>
 <variablelist>
 
-<varlistentry>
+<!-- OBSOLETE <varlistentry>
 <term><menuchoice>
 <guimenu>Insert</guimenu>
 <guimenuitem>Sheet</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Add another worksheet.</action>
 </para></listitem>
-</varlistentry>
+</varlistentry>-->
 
 <varlistentry>
 <term><menuchoice>
@@ -554,7 +563,7 @@ See the section
 <guimenu>Insert</guimenu>
 <guimenuitem>Object...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Embed a KOffice document into the sheet.</action>
+<listitem><para><action>Embed another KOffice document into the sheet.</action>
 </para></listitem>
 </varlistentry>
 
@@ -614,18 +623,18 @@ details.
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Increase Indent</guimenuitem>
+<guimenuitem>Decrease Indent</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Move text in selected cell(s) to the right.</action>
+<listitem><para><action>Move text in selected cell(s) to the left.</action>
 </para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Decrease Indent</guimenuitem>
+<guimenuitem>Increase Indent</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Move text in selected cell(s) to the left.</action>
+<listitem><para><action>Move text in selected cell(s) to the right.</action>
 </para></listitem>
 </varlistentry>
 
@@ -684,6 +693,15 @@ properly.</action>
 </menuchoice></term>
 <listitem><para><action>Remove, hide, show worksheet or configure
 advanced sheet properties.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Format</guimenu>
+<guimenuitem>AutoFormat...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Autoformat the selected cells: a dialog let you choose betwen two proposed formats.</action>
 </para></listitem>
 </varlistentry>
 
@@ -759,7 +777,7 @@ To manage styles use <menuchoice>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Text to Columns</guimenuitem>
+<guimenuitem>Text to Columns...</guimenuitem>
 </menuchoice></term>
 <listitem><para>This option attempts to interpret text in the selected cell(s) 
 as <acronym>CSV</acronym> data, placing each 
@@ -866,7 +884,7 @@ database.</action>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Data</guimenu>
-<guimenuitem>Goal Seek</guimenuitem>
+<guimenuitem>Goal Seek...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Open the Goal Seek dialog box</action>. See
 <link linkend="goalseek">Goal Seeking</link> for details.
@@ -949,7 +967,7 @@ by &kspread;.</action>
 <keysym>F9</keysym>
 </shortcut>
 <guimenu>Tools</guimenu>
-<guimenuitem>Recalculate Workbook</guimenuitem>
+<guimenuitem>Recalculate Document</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Recalculate all sheets.</action>
 </para></listitem>
@@ -989,7 +1007,7 @@ instant calculations of the selected cells.
 <guimenuitem>Show/Hide Tab Bar</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Show or hide the Tab Bar.</action>
-All Sheets of the current Workbook can be accessed through the Tab Bar.
+All Sheets of the current Document can be accessed through the Tab Bar.
 </para></listitem>
 </varlistentry>
 

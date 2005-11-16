@@ -378,7 +378,7 @@ checked, &kspread; will recalculate the values of cells whenever anything that
 affects them is changed.</para>
 <para>You can instruct &kspread; to perform a recalculation at any time by 
 using the <guimenuitem>Recalculate Sheet</guimenuitem> or <guimenuitem>
-Recalculate Workbook</guimenuitem> options in the <guimenu>Tools</guimenu> 
+Recalculate Document</guimenuitem> options in the <guimenu>Tools</guimenu> 
 menu or their shortcuts <keycombo action="simul">&Shift;<keysym>F9</keysym>
 </keycombo> or <keysym>F9</keysym>.</para>
 </sect2>
@@ -497,36 +497,36 @@ Status bar and choosing an item from the pop up menu.</para>
 
 <sect1 id="saving">
 <title>Saving your Work</title>
-<para>&kspread; saves the complete workbook, which may include more than one 
+<para>&kspread; saves the complete document, which may include more than one 
 worksheet, as a single document file.</para>
-<para>If you have created a new workbook, or want to save an existing one 
+<para>If you have created a new document, or want to save an existing one 
 under a different name, use <menuchoice><guimenu>File</guimenu><guimenuitem>
 Save As...</guimenuitem></menuchoice>. This will bring up &kde;'s common 
 <guilabel>Save Document As</guilabel> dialog box. 
-Choose the folder where you want to save the workbook and enter a 
+Choose the folder where you want to save the document and enter a 
 suitable file name into the <guilabel>Location:</guilabel> text box. &kspread; 
 documents are normally automatically saved with a <filename>.ksp</filename> 
 extension, you do not need to add this to the filename but do make sure that 
 the <guilabel>Filter:</guilabel> selection is set to &kspread;.</para>
-<para>To save your workbook without changing its name, just use <menuchoice>
+<para>To save your document without changing its name, just use <menuchoice>
 <guimenu>File</guimenu><guimenuitem>Save</guimenuitem></menuchoice>.</para>
 
-<para>You can also save a &kspread; workbook in a foreign format: see 
+<para>You can also save a &kspread; document in a foreign format: see 
  the Import/Export section for more information 
 about doing this.</para>
-<para>When you save a modified version of an existing workbook
+<para>When you save a modified version of an existing document
 &kspread; will keep the previous version as a backup file, adding a
 <literal>~</literal> to the end of the filename.</para>
 <para>&kspread; can provide some protection against losing your work because 
 of a computer crash or because you have closed &kspread; without saving the 
-current workbook. It does this by automatically saving the latest version of 
+current document. It does this by automatically saving the latest version of 
 the document you are working on every few minutes using a modified file name. 
-The autosaved version is normally removed when you next save your workbook, 
+The autosaved version is normally removed when you next save your document, 
 so that it will only exist if it is more up to date than the version that was
 saved manually.
-When you open a workbook &kspread; checks to see if an autosaved
+When you open a document &kspread; checks to see if an autosaved
 version exists, and if it finds one it will offer to open that instead.</para>
-<para>Autosaved workbooks are saved with a file name of the form
+<para>Autosaved documents are saved with a file name of the form
 <filename>.yourfilename.autosave</filename> (note the leading period),
 so that <filename>spread1.ksp</filename> would be autosaved as
 <filename>.spread1.ksp.autosave</filename>. The autosave feature is
@@ -534,16 +534,16 @@ so that <filename>spread1.ksp</filename> would be autosaved as
 
 <sect2 id="templates">
 <title>Templates</title>
-<para>If you are going to be creating a lot of similar workbooks you can
+<para>If you are going to be creating a lot of similar documents you can
 save yourself time and trouble by first creating a template and then
 using that as the basis for the individual documents.</para>
-<para>To do this first create a workbook containing the common elements,
+<para>To do this first create a document containing the common elements,
 then save it as a template by choosing <menuchoice><guimenu>File</guimenu>
 <guimenuitem>Create Template From Document...</guimenuitem></menuchoice>.
 Doing this opens the <guilabel>Create Template</guilabel> dialog box.
 Enter a name for your new template into the <guilabel>Name:</guilabel> text
 box and press <guibutton>OK</guibutton>. The next time you start a new
-workbook by choosing <menuchoice><guimenu>File</guimenu><guimenuitem>New
+document by choosing <menuchoice><guimenu>File</guimenu><guimenuitem>New
 </guimenuitem></menuchoice> or when you next start &kspread; the <guilabel>
 Choose</guilabel> dialog box will give you the option of creating the
 new document from your template.</para>
