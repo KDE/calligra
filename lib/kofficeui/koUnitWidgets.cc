@@ -204,7 +204,7 @@ void KoUnitDoubleSpinBox::setMinMaxStep( double min, double max, double step )
 {
   setMinValue( min );
   setMaxValue( max );
-  setLineStep( step );
+  setLineStepPt( step );
 }
 
 // ----------------------------------------------------------------

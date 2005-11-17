@@ -30,7 +30,7 @@
 #include <knuminput.h>
 
 #include "marginui.h"
-
+#include <koUnitWidgets.h>//for KoUnitDoubleSpinBox
 
 KPMarginWidget::KPMarginWidget( QWidget *parent, const char *name, const KoUnit::Unit unit )
 : QWidget( parent, name )
@@ -46,12 +46,22 @@ KPMarginWidget::KPMarginWidget( QWidget *parent, const char *name, const KoUnit:
     QSpacerItem *spacer = new QSpacerItem( 20, 20, QSizePolicy::Expanding, QSizePolicy::Expanding );
     layout->addItem( spacer );
 
-    m_ui->margins->setTitle( i18n( "Margins (%1)" ).arg( KoUnit::unitName( m_unit ) ) );
+    m_ui->margins->setTitle( i18n( "Margins" ) );
 
-    m_ui->leftInput->setRange(  0, 9999, 0.5, false );
-    m_ui->rightInput->setRange(  0, 9999, 0.5, false );
-    m_ui->topInput->setRange(  0, 9999, 0.5, false );
-    m_ui->bottomInput->setRange(  0, 9999, 0.5, false );
+    double dStep = KoUnit::fromUserValue( 0.5, unit );
+    double dMax = KoUnit::fromUserValue( 9999, unit );
+    m_ui->leftInput->setUnit( unit );
+    m_ui->leftInput->setMinMaxStep( 0, dMax, dStep );
+
+    m_ui->rightInput->setUnit( unit );
+    m_ui->rightInput->setMinMaxStep( 0, dMax, dStep );
+
+    m_ui->topInput->setUnit( unit );
+    m_ui->topInput->setMinMaxStep( 0, dMax, dStep );
+
+    m_ui->bottomInput->setUnit( unit );
+    m_ui->bottomInput->setMinMaxStep( 0, dMax, dStep );
+
     connect( m_ui->leftInput, SIGNAL( valueChanged( double ) ),
              this, SLOT( slotValueChanged( double ) ) );
     connect( m_ui->rightInput, SIGNAL( valueChanged( double ) ),
@@ -70,34 +80,34 @@ KPMarginWidget::~KPMarginWidget()
 
 void KPMarginWidget::setValues( double left, double right, double top, double bottom )
 {
-    m_ui->leftInput->setValue( KoUnit::toUserValue( left, m_unit ) );
-    m_ui->rightInput->setValue( KoUnit::toUserValue( right, m_unit ) );
-    m_ui->topInput->setValue( KoUnit::toUserValue( top, m_unit ) );
-    m_ui->bottomInput->setValue( KoUnit::toUserValue( bottom, m_unit ) );
+    m_ui->leftInput->changeValue( left );
+    m_ui->rightInput->changeValue( right );
+    m_ui->topInput->changeValue( top );
+    m_ui->bottomInput->changeValue( bottom );
 }
 
 
 double KPMarginWidget::leftValue() const
 {
-    return KoUnit::fromUserValue( m_ui->leftInput->value(), m_unit );
+    return m_ui->leftInput->value();
 }
 
 
 double KPMarginWidget::rightValue() const
 {
-    return KoUnit::fromUserValue( m_ui->rightInput->value(), m_unit );
+    return m_ui->rightInput->value();
 }
 
 
 double KPMarginWidget::topValue() const
 {
-    return KoUnit::fromUserValue( m_ui->topInput->value(), m_unit );
+    return m_ui->topInput->value();
 }
 
 
 double KPMarginWidget::bottomValue() const
 {
-    return KoUnit::fromUserValue( m_ui->bottomInput->value(), m_unit );
+    return m_ui->bottomInput->value();
 }
 
 

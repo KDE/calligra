@@ -27,6 +27,7 @@
 
 #include <knuminput.h>
 #include <klocale.h>
+#include <koUnitWidgets.h>
 
 #include "generalpropertyui.h"
 
@@ -52,18 +53,26 @@ GeneralProperty::GeneralProperty( QWidget *parent, const char *name, GeneralValu
         m_ui->nameInput->setText( m_generalValue.m_name );
     }
 
-    m_ui->positionGroup->setTitle( i18n( "Position (%1)" ).arg( KoUnit::unitName( m_unit ) ) );
+    m_ui->positionGroup->setTitle( i18n( "Position" ) );
 
     connect( m_ui->protect, SIGNAL( toggled( bool ) ), this, SLOT( slotProtectToggled( bool ) ) );
     connect( m_ui->keepRatio, SIGNAL( toggled( bool ) ), this, SLOT( slotKeepRatioToggled( bool ) ) );
 
-    m_ui->xInput->setRange( 0, 9999, 0.5, false );
-    m_ui->yInput->setRange( 0, 9999, 0.5, false );
-    m_ui->widthInput->setRange( 0, 9999, 0.5, false );
-    connect( m_ui->widthInput, SIGNAL( valueChanged( double ) ), this, SLOT( slotWidthChanged( double ) ) );
-    m_ui->heightInput->setRange( 0, 9999, 0.5, false );
-    connect( m_ui->heightInput, SIGNAL( valueChanged( double ) ), this, SLOT( slotHeightChanged( double ) ) );
+    double dStep = KoUnit::fromUserValue( 0.5, m_unit );
+    double dMax = KoUnit::fromUserValue( 9999, m_unit );
+    m_ui->xInput->setUnit( m_unit );
+    m_ui->xInput->setMinMaxStep( 0, dMax, dStep );
 
+    m_ui->yInput->setUnit( m_unit );
+    m_ui->yInput->setMinMaxStep( 0, dMax, dStep );
+
+    m_ui->widthInput->setUnit( m_unit );
+    m_ui->widthInput->setMinMaxStep( 0, dMax, dStep );
+    connect( m_ui->widthInput, SIGNAL( valueChanged( double ) ), this, SLOT( slotWidthChanged( double ) ) );
+
+    m_ui->heightInput->setUnit( m_unit );
+    m_ui->heightInput->setMinMaxStep( 0, dMax, dStep );
+    connect( m_ui->heightInput, SIGNAL( valueChanged( double ) ), this, SLOT( slotHeightChanged( double ) ) );
     slotReset();
 }
 
@@ -141,10 +150,10 @@ void GeneralProperty::apply()
 
 KoRect GeneralProperty::getRect() const
 {
-    double x = QMAX( 0, KoUnit::fromUserValue( m_ui->xInput->value(), m_unit ) );
-    double y = QMAX( 0, KoUnit::fromUserValue( m_ui->yInput->value(), m_unit ) );
-    double w = QMAX( 0, KoUnit::fromUserValue( m_ui->widthInput->value(), m_unit ) );
-    double h = QMAX( 0, KoUnit::fromUserValue( m_ui->heightInput->value(), m_unit ) );
+    double x = QMAX( 0, m_ui->xInput->value() );
+    double y = QMAX( 0, m_ui->yInput->value() );
+    double w = QMAX( 0, m_ui->widthInput->value() );
+    double h = QMAX( 0, m_ui->heightInput->value() );
 
     KoRect rect( x, y, w, h );
     return rect;
@@ -153,10 +162,10 @@ KoRect GeneralProperty::getRect() const
 
 void GeneralProperty::setRect( KoRect &rect )
 {
-    m_ui->xInput->setValue( KoUnit::toUserValue( QMAX( 0.00, rect.left() ), m_unit ) );
-    m_ui->yInput->setValue( KoUnit::toUserValue( QMAX( 0.00, rect.top() ), m_unit ) );
-    m_ui->widthInput->setValue( KoUnit::toUserValue( QMAX( 0.00, rect.width() ), m_unit ) );
-    m_ui->heightInput->setValue( KoUnit::toUserValue( QMAX( 0.00, rect.height() ), m_unit ) );
+    m_ui->xInput->changeValue( QMAX( 0.00, rect.left() ) );
+    m_ui->yInput->changeValue( QMAX( 0.00, rect.top() ) );
+    m_ui->widthInput->changeValue( QMAX( 0.00, rect.width() ) );
+    m_ui->heightInput->changeValue( QMAX( 0.00, rect.height() ) );
 }
 
 
