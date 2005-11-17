@@ -912,8 +912,10 @@ configureSpellPage::configureSpellPage( View* _view,QVBox *box , char *name )
 
 
   m_spellConfigWidget = new KSpellConfig( box, "spell_check",m_pView->doc()->getKSpellConfig()/*, false*/);
-    dontCheckUpperWord = new QCheckBox( i18n("Do not check upper word"),box);
-    dontCheckTitleCase = new QCheckBox( i18n("Do not check title case"),box);
+  dontCheckUpperWord = new QCheckBox( i18n("Skip all uppercase words"),box);
+  QWhatsThis::add(dontCheckUpperWord, i18n( "If checked, the words written in uppercase letters are not spell checked. This might be useful if you have a lot of acronyms such as KDE for example." ) );
+  dontCheckTitleCase = new QCheckBox( i18n("Do not check title case"),box);
+  QWhatsThis::add(dontCheckTitleCase, i18n( "Check this box if you want the spellchecker to ignore the title case, for example My Own Speadsheet or My own spreadsheet. If this is unchecked, the spell checker will ask for a uppercase letter in the title nouns." ) );
 
   QWidget* spacer = new QWidget( box );
   spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
