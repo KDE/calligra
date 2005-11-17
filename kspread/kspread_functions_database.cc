@@ -115,7 +115,7 @@ int getFieldIndex (ValueCalc *calc, Value fieldName,
     return fieldName.asInteger() - 1;
   if (!fieldName.isString ())
     return -1;
-  
+
   QString fn = fieldName.asString();
   int cols = database.columns ();
   for (int i = 0; i < cols; ++i)
@@ -126,13 +126,13 @@ int getFieldIndex (ValueCalc *calc, Value fieldName,
 }
 
 // ***********************************************************
-// *** Conditions class - maintains an array of conditions ***
+// *** DBConditions class - maintains an array of conditions ***
 // ***********************************************************
 
-class Conditions {
+class DBConditions {
  public:
-  Conditions (ValueCalc *vc, Value database, Value conds);
-  ~Conditions ();
+  DBConditions (ValueCalc *vc, Value database, Value conds);
+  ~DBConditions ();
   /** Does a specified row of the database match the given criteria?
   The row with column names is ignored - hence 0 specifies first data row. */
   bool matches (unsigned row);
@@ -144,20 +144,20 @@ class Conditions {
   Value db;
 };
 
-Conditions::Conditions (ValueCalc *vc, Value database,
+DBConditions::DBConditions (ValueCalc *vc, Value database,
     Value conds) : calc(vc), cond(0), rows(0), cols(0), db(database)
 {
   parse (conds);
 }
 
-Conditions::~Conditions () {
+DBConditions::~DBConditions () {
   int count = rows*cols;
   for (int r = 0; r < count; ++r)
     delete cond[r];
   delete[] cond;
 }
 
-void Conditions::parse (Value conds)
+void DBConditions::parse (Value conds)
 {
   // initialize the array
   rows = conds.rows() - 1;
@@ -166,7 +166,7 @@ void Conditions::parse (Value conds)
   cond = new Condition* [count];
   for (int r = 0; r < count; ++r)
     cond[r] = 0;
-  
+
   // perform the parsing itself
   int cc = conds.columns ();
   for (int c = 0; c < cc; ++c)
@@ -174,7 +174,7 @@ void Conditions::parse (Value conds)
     // first row contains column names
     int col = getFieldIndex (calc, conds.element (c, 0), db);
     if (col <= 0) continue;  // failed - ignore the column
-    
+
     // fill in the conditions for a given column name
     for (int r = 0; r < rows; ++r) {
       QString cnd = calc->conv()->asString (conds.element (c, r+1)).asString();
@@ -187,7 +187,7 @@ void Conditions::parse (Value conds)
   }
 }
 
-bool Conditions::matches (unsigned row)
+bool DBConditions::matches (unsigned row)
 {
   if (row >= db.rows() - 1)
     return false;    // out of range
@@ -207,7 +207,7 @@ bool Conditions::matches (unsigned row)
     if (match)  // all conditions in this row matched
       return true;
   }
-  
+
   // no row matched
   return false;
 }
@@ -226,8 +226,8 @@ Value func_dsum (valVector args, ValueCalc *calc, FuncExtra *)
   if (fieldIndex <= 0)
     return Value::errorVALUE();
 
-  Conditions conds (calc, database, conditions);
-  
+  DBConditions conds (calc, database, conditions);
+
   int rows = database.rows() - 1;  // first row contains column names
   Value res;
   for (int r = 0; r < rows; ++r)
@@ -250,8 +250,8 @@ Value func_daverage (valVector args, ValueCalc *calc, FuncExtra *)
   if (fieldIndex <= 0)
     return Value::errorVALUE();
 
-  Conditions conds (calc, database, conditions);
-  
+  DBConditions conds (calc, database, conditions);
+
   int rows = database.rows() - 1;  // first row contains column names
   Value res;
   int count = 0;
@@ -277,8 +277,8 @@ Value func_dcount (valVector args, ValueCalc *calc, FuncExtra *)
   if (fieldIndex <= 0)
     return Value::errorVALUE();
 
-  Conditions conds (calc, database, conditions);
-  
+  DBConditions conds (calc, database, conditions);
+
   int rows = database.rows() - 1;  // first row contains column names
   int count = 0;
   for (int r = 0; r < rows; ++r)
@@ -301,8 +301,8 @@ Value func_dcounta (valVector args, ValueCalc *calc, FuncExtra *)
   if (fieldIndex <= 0)
     return Value::errorVALUE();
 
-  Conditions conds (calc, database, conditions);
-  
+  DBConditions conds (calc, database, conditions);
+
   int rows = database.rows() - 1;  // first row contains column names
   int count = 0;
   for (int r = 0; r < rows; ++r)
@@ -325,8 +325,8 @@ Value func_dget (valVector args, ValueCalc *calc, FuncExtra *)
   if (fieldIndex <= 0)
     return Value::errorVALUE();
 
-  Conditions conds (calc, database, conditions);
-  
+  DBConditions conds (calc, database, conditions);
+
   int rows = database.rows() - 1;  // first row contains column names
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
@@ -347,8 +347,8 @@ Value func_dmax (valVector args, ValueCalc *calc, FuncExtra *)
   if (fieldIndex <= 0)
     return Value::errorVALUE();
 
-  Conditions conds (calc, database, conditions);
-  
+  DBConditions conds (calc, database, conditions);
+
   int rows = database.rows() - 1;  // first row contains column names
   Value res;
   bool got = false;
@@ -379,8 +379,8 @@ Value func_dmin (valVector args, ValueCalc *calc, FuncExtra *)
   if (fieldIndex <= 0)
     return Value::errorVALUE();
 
-  Conditions conds (calc, database, conditions);
-  
+  DBConditions conds (calc, database, conditions);
+
   int rows = database.rows() - 1;  // first row contains column names
   Value res;
   bool got = false;
@@ -411,8 +411,8 @@ Value func_dproduct (valVector args, ValueCalc *calc, FuncExtra *)
   if (fieldIndex <= 0)
     return Value::errorVALUE();
 
-  Conditions conds (calc, database, conditions);
-  
+  DBConditions conds (calc, database, conditions);
+
   int rows = database.rows() - 1;  // first row contains column names
   Value res = 1.0;
   bool got = false;
@@ -453,8 +453,8 @@ Value func_dvar (valVector args, ValueCalc *calc, FuncExtra *)
   if (fieldIndex <= 0)
     return Value::errorVALUE();
 
-  Conditions conds (calc, database, conditions);
-  
+  DBConditions conds (calc, database, conditions);
+
   int rows = database.rows() - 1;  // first row contains column names
   Value avg;
   int count = 0;
@@ -469,7 +469,7 @@ Value func_dvar (valVector args, ValueCalc *calc, FuncExtra *)
     }
   if (count < 2) return Value::errorDIV0();
   avg = calc->div (avg, count);
-  
+
   Value res;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
@@ -492,8 +492,8 @@ Value func_dvarp (valVector args, ValueCalc *calc, FuncExtra *)
   if (fieldIndex <= 0)
     return Value::errorVALUE();
 
-  Conditions conds (calc, database, conditions);
-  
+  DBConditions conds (calc, database, conditions);
+
   int rows = database.rows() - 1;  // first row contains column names
   Value avg;
   int count = 0;
@@ -508,7 +508,7 @@ Value func_dvarp (valVector args, ValueCalc *calc, FuncExtra *)
     }
   if (count == 0) return Value::errorDIV0();
   avg = calc->div (avg, count);
-  
+
   Value res;
   for (int r = 0; r < rows; ++r)
     if (conds.matches (r)) {
@@ -532,6 +532,6 @@ Value func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *)
     return Value::errorVALUE();
   // the row at the bottom
   int row = database.rows() - 1;
-  
+
   return database.element (fieldIndex, row);
 }
