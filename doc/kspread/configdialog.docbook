@@ -239,10 +239,9 @@ marked by a small red triangle at the top right corner.
 <sect1 id="configcolor">
 <title><guilabel>Color</guilabel></title>
 <para>This page of &kspread;'s configuration dialog box lets you choose the 
-color of the sheet grid. <!--If you do not want the grid to appear at all uncheck 
-the <guilabel>Show grid</guilabel> box
-in the <link linkend="configpref"><guilabel>Preferences</guilabel></link> 
-configuration page.--></para>
+color of the sheet grid. If you do not want the grid to appear at all, uncheck the <guilabel>Show grid</guilabel> box in 
+the <menuchoice><guimenu>Format</guimenu><guimenuitem>Sheet</guimenuitem><guimenuitem>Sheet Properties</guimenuitem></menuchoice> dialog.</para>
+
 <para>This page also lets you select the color of the lines used to indicate 
 the printed page borders when the <guimenuitem>Show Page Borders</guimenuitem> 
 box in the <guimenu>View</guimenu> menu is checked.</para>
@@ -344,12 +343,18 @@ checking programs that may be present on your computer.
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Ignore uppercase words</guilabel></term>
+<term><guilabel>Skip all uppercase words</guilabel></term>
 <listitem><para>Check this box if you want the spellchecker to ignore 
 uppercase words, which are usually acronyms such as &kde;.
 </para></listitem>
 </varlistentry>
 
+<varlistentry>
+<term><guilabel>Do not check title case</guilabel></term>
+<listitem><para>Check this box if you want the spellchecker to ignore 
+the title case, for example My Own Speadsheet or My own spreadsheet. If this is unchecked, the spell checker will ask for a uppercase letter in the title nouns.
+</para></listitem>
+</varlistentry>
 
 </variablelist></para>
 </sect1>
