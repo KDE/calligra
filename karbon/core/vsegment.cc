@@ -726,7 +726,6 @@ VSegment::boundingBox() const
 	// Initialize with knot.
 	KoRect rect( knot(), knot() );
 
-
 	// Add p0, if it exists.
 	if( prev() )
 	{
@@ -743,6 +742,97 @@ VSegment::boundingBox() const
 			rect.setBottom( prev()->knot().y() );
 	}
 
+	if( degree() == 3 )
+	{
+		/* 
+		The basic idea for calculating the axis aligned bounding box (AABB) for bezier segments
+		was found in comp.graphics.algorithms:
+		
+		Both the x coordinate and the y coordinate are polynomial. Newton told 
+ 		us that at a maximum or minimum the derivative will be zero. Take all 
+ 		those points, and take the ends; their AABB will be that of the curve. 
+		
+		We have a helpful trick for the derivatives: use the curve defined by 
+ 		differences of successive control points. 
+		This is a quadratic Bezier curve:
+				
+				2
+		r(t) = Sum Bi,2(t) *Pi = B0,2(t) * P0 + B1,2(t) * P1 + B2,2(t) * P2
+			   i=0
+
+		r(t) = (1-t)^2 * P0 + 2t(1-t) * P1 + t^2 * P2
+
+		r(t) = (P2 - 2*P1 + P0) * t^2 + (2*P1 - 2*P0) * t + P0
+
+		Setting r(t) to zero and using the x and y coordinates of differences of
+		successive control points lets us find the paramters t, where the original 
+		bezier curve has a minimum or a maximum.
+		*/
+		double t[4];
+	
+		// calcualting the differnces between successive control points
+		KoPoint x0 = p(1)-p(0);
+		KoPoint x1 = p(2)-p(1);
+		KoPoint x2 = p(3)-p(2);
+
+		// calculating the coefficents
+		KoPoint a = x2 - 2.0*x1 + x0;
+		KoPoint b = 2.0*x1 - 2.0*x0;
+		KoPoint c = x0;
+
+		// calculating parameter t at minimum/maximum in x-direction
+		if( a.x() == 0.0 )
+		{
+			t[0] = - c.x() / b.x();
+			t[1] = -1.0;
+		}
+		else
+		{
+			double rx = b.x()*b.x() - 4.0*a.x()*c.x();
+			if( rx < 0.0 )
+				rx = 0.0;
+			t[0] = ( -b.x() + sqrt( rx ) ) / (2.0*a.x());
+			t[1] = ( -b.x() - sqrt( rx ) ) / (2.0*a.x());
+		}
+
+		// calculating parameter t at minimum/maximum in y-direction
+		if( a.y() == 0.0 )
+		{
+			t[2] = - c.y() / b.y();
+			t[3] = -1.0;
+		}
+		else
+		{
+			double ry = b.y()*b.y() - 4.0*a.y()*c.y();
+			if( ry < 0.0 )
+				ry = 0.0;
+			t[2] = ( -b.y() + sqrt( ry ) ) / (2.0*a.y());
+			t[3] = ( -b.y() - sqrt( ry ) ) / (2.0*a.y());
+		}
+
+		// calculate points at found minimum/maximum and update bounding box
+		for( int i = 0; i < 4; ++i ) 
+		{
+			if( t[i] >= 0.0 && t[i] <= 1.0 )
+			{
+				KoPoint p = pointAt( t[i] );
+	
+				if( p.x() < rect.left() )
+					rect.setLeft( p.x() );
+		
+				if( p.x() > rect.right() )
+					rect.setRight( p.x() );
+
+				if( p.y() < rect.top() )
+					rect.setTop( p.y() );
+		
+				if( p.y() > rect.bottom() )
+					rect.setBottom( p.y() );
+			}
+		}
+	
+		return rect;
+	}
 
 	for( unsigned short i = 0; i < degree() - 1; ++i )
 	{
