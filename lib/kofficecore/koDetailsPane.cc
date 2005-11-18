@@ -379,6 +379,10 @@ void KoRecentDocumentsPane::previewResult(KIO::Job* job)
 
 void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixmap& preview)
 {
+  if(preview.isNull()) {
+    return;
+  }
+
   QListViewItemIterator it(m_documentList);
 
   while(it.current()) {
