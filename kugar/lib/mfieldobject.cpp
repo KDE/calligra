@@ -76,7 +76,10 @@ void MFieldObject::setText( const QString txt )
 
     // Check for empty string
     if ( txt.isEmpty() && dataType == MFieldObject::Date )
+    {
+        text = QString::null;
         return ;
+    }
 
     // Set the data
     switch ( dataType )
