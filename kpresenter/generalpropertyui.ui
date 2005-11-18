@@ -190,10 +190,4 @@
     </image>
 </images>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>kounitdoublespinbox.h</includehint>
-    <includehint>kounitdoublespinbox.h</includehint>
-    <includehint>kounitdoublespinbox.h</includehint>
-    <includehint>kounitdoublespinbox.h</includehint>
-</includehints>
 </UI>
