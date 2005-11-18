@@ -42,7 +42,6 @@ servicesdir=$(kde_servicesdir)/kexi
 services_DATA=kexitablehandler.desktop kexiqueryhandler.desktop kexirelationhandler.desktop kexiformhandler.desktop \
 	kexireporthandler.desktop kexiscripthandler.desktop
 
-#dummy magic file for now
 magicdir = $(kde_confdir)/magic
 magic_DATA = kexi.magic 
 
