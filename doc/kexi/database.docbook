@@ -1,0 +1,46 @@
+<chapter id="database">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>Introduction to databases</title>
+
+<sect1 id="what-is-a-database">
+<title>What is a database?</title>
+<para>
+</para>
+</sect1>
+
+<sect1 id="database-and-spreadsheet">
+<title>Database and spreadsheet</title>
+<para>
+</para>
+</sect1>
+
+<sect1 id="database-design">
+<title>Database design</title>
+<para>
+</para>
+</sect1>
+
+<sect1 id="who-needs-a-database">
+<title>Who needs a database?</title>
+<para>
+</para>
+</sect1>
+
+<sect1 id="database-software">
+<title>Database creation software</title>
+<para>
+</para>
+</sect1>
+
+</chapter>

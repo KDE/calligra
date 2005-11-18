@@ -3,7 +3,8 @@
   <!ENTITY package "koffice">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
-
+  <!ENTITY database SYSTEM "database.docbook">
+  <!ENTITY menus SYSTEM "menus.docbook">
   <!-- Do not define any other entities; instead, use the entities
        from entities/general.entities and $LANG/user.entities. -->
 ]>
@@ -75,24 +76,48 @@ Do NOT change these in the translation. -->
 
 </bookinfo>
 
-<!-- The contents of the documentation begin here.  Label
-each chapter so with the id attribute. This is necessary for two reasons: it
-allows you to easily reference the chapter from other chapters of your
-document, and if there is no ID, the name of the generated HTML files will vary
-from time to time making it hard to manage for maintainers and for the CVS
-system. Any chapter labelled (OPTIONAL) may be left out at the author's
-discretion. Other chapters should not be left out in order to maintain a
-consistent documentation style across all KDE apps. -->
+&database;
 
 <chapter id="introduction">
-<title>Introduction</title>
+<title>Introduction to Kexi</title>
 
 <!-- The introduction chapter contains a brief introduction for the
 application that explains what it does and where to report
 problems. Basically a long version of the abstract.  Don't include a
 revision history. (see installation appendix comment) -->
-
-<para>
+<sect1 id="what-is-kexi">
+<title>What is Kexi?</title>
+<para>Briefly speaking, Kexi is the application for creating databases and for data management. It enables you: 
+<itemizedlist>
+<listitem>
+<para>to build databases from scratch using the existing templates or your own database design
+</para>
+</listitem>
+<listitem>
+<para>to develop databases and adjust them to your changing needs 
+</para>
+</listitem>
+<listitem>
+<para>to enter data conveniently using advanced data sheets and forms 
+</para>
+</listitem>
+<listitem>
+<para>to process data - to sort, filter, group and sum up and many other operations
+</para>
+</listitem>
+<listitem>
+<para>share your data with other users
+</para>
+</listitem>
+</itemizedlist> 
+</para>
+<!--<para> Kexi is a member of a PlusOfficePL family of products offered by OpenOffice Polska together with technical support. Kexi nalecy do rodziny program� PlusOfficePL, oferowanej wraz ze wsparciem technicznym przez firm�OpenOffice Polska. </para>-->
+ <para>The motto of Kexi application is "Database creation for everyone". Introduction of this product was motivated by the lack of software Rapid Application Development tools similiar to Microsoft Access, FoxPro, Oracle Forms or FileMaker, that would be available for all contemporary hardware and system platforms. Kexi was made to fill this gap. </para>
+ <para>Kexi is the first large &kde; application available for Microsoft Windows, which makes it easier for the user to transfer data between platforms, integrate and migrate for more cost-efficient systems like Linux. </para>
+ <para>Kexi is also one of the products of an international K Desktop Environment project, a graphic environment for Unix/Linux systems. The &kde; project involves many companies (including the largest ones such as Novell and IBM), organisations and independent authors.
+</para>
+</sect1>
+<!--<para>
   &kexi; is a database management application.  It can be used for
   creating databases, inserting data, performing queries, and processing
   data. Forms can be created to provide a custom interface to your
@@ -155,7 +180,7 @@ revision history. (see installation appendix comment) -->
       </para>
     </listitem>
   </itemizedlist>
-</para>
+</para>-->
 </chapter>
 
 <!--
@@ -258,6 +283,8 @@ revision history. (see installation appendix comment) -->
     </sect2>
   </sect1>
 </chapter>
+
+&menus;
 
 <chapter id="credits">
 

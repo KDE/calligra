@@ -1,0 +1,134 @@
+<chapter id="menus">
+<chapterinfo>
+<authorgroup>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
+<!-- TRANS:ROLES_OF_TRANSLATORS -->
+</authorgroup>
+</chapterinfo> 
+<title>Command Reference</title>
+
+<sect1 id="filemenu">
+<title>The File Menu</title>
+<para>
+<variablelist>
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>New</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Create a new document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>O</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Open...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open an existing document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Download Example Databases...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Open</action> the KNewStuff dialog which allows you to download example databases via the internet.</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>S</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Save</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Save the document.</action></para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>File</guimenu>
+<guimenuitem>Import...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Import other spreatsheet documents.</action>
+</para></listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>W</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Close Project</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Close the current document but leave &kexi; running.
+</action></para></listitem>
+</varlistentry>
+<varlistentry>
+
+<term><menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;<keycap>Q</keycap></keycombo>
+</shortcut>
+<guimenu>File</guimenu>
+<guimenuitem>Quit</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Quit</action> &kexi;.</para></listitem>
+</varlistentry>
+</variablelist>
+</para>
+
+</sect1>
+
+<sect1 id="settingsmenu">
+<title>The Settings Menu</title>
+<para><variablelist>
+
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Toolbars</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Show or hide the toolbars: File, Edit, Math,
+Navigation, Format and Color/Border.</action>
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure the keyboard shortcuts used by &kexi;.
+</action> See the section on configuring shortcuts  for more details.
+</para></listitem>
+</varlistentry>
+
+
+
+</variablelist></para>
+</sect1>
+
+<sect1 id="helpmenu">
+<title>The <guimenu>Help</guimenu> Menu</title>
+
+&help.menu.documentation;
+
+</sect1>
+</chapter>
