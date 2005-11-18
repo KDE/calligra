@@ -609,11 +609,19 @@ RangeList DependencyList::computeDependencies (const Point &cell) const
   if (c->hasError())
     return RangeList();
 
-  Tokens tokens = c->formula()->tokens();
+  Formula* f = c->formula();
+  Q_ASSERT(f);
+  if (f==NULL)
+  {
+    kdDebug() << "Cell at row " << cell.row() << ", col " << cell.column() << " marked as formula, but formula is NULL" << endl;
+    return RangeList();
+  }
+  
+  Tokens tokens = f->tokens();
 
   //return empty list if the tokens aren't valid
   if (!tokens.valid())
-    return RangeList();   
+    return RangeList();
   
   RangeList rl;
   for( unsigned i = 0; i < tokens.count(); i++ )
