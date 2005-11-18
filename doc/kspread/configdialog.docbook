@@ -352,7 +352,7 @@ uppercase words, which are usually acronyms such as &kde;.
 <varlistentry>
 <term><guilabel>Do not check title case</guilabel></term>
 <listitem><para>Check this box if you want the spellchecker to ignore 
-the title case, for example My Own Speadsheet or My own spreadsheet. If this is unchecked, the spell checker will ask for a uppercase letter in the title nouns.
+the title case, for example My Own Spreadsheet or My own spreadsheet. If this is unchecked, the spell checker will ask for a uppercase letter in the title nouns.
 </para></listitem>
 </varlistentry>
 
