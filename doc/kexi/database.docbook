@@ -1,5 +1,5 @@
-<chapter id="database">
-<chapterinfo>
+<appendix id="database">
+<!--<appendixinfo>
 <authorgroup>
 <author>
 <firstname>Anne-Marie</firstname>
@@ -7,10 +7,10 @@
 <affiliation>
 <address><email>annemarie.mahfouf@free.fr</email></address>
 </affiliation>
-</author>
+</author>-->
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
-</authorgroup>
-</chapterinfo> 
+<!--</authorgroup>
+</appendixinfo> -->
 <title>Introduction to databases</title>
 
 <sect1 id="what-is-a-database">
@@ -43,4 +43,4 @@
 </para>
 </sect1>
 
-</chapter>
+</appendix>
