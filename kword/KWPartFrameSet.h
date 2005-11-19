@@ -63,8 +63,6 @@ public:
     virtual void load( QDomElement &attributes, bool loadFrames = true );
     virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const;
 
-    virtual MouseMeaning getMouseMeaning( const QPoint &nPoint, int keyState );
-
 
     /**
      * Called by KWView when the object is being edited (activated).

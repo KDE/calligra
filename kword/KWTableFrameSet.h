@@ -41,6 +41,7 @@ class KWTableFrameSetEdit;
 class QPainter;
 class KWAnchor;
 class KWordFrameSetIface;
+class KWFrameViewManager;
 
 class RemovedRow;
 class RemovedColumn;
@@ -138,7 +139,8 @@ public:
         /** Overloaded to not clear any preview borders. */
         void drawContents( QPainter *painter, const QRect & crect,
                 const QColorGroup & cg, bool onlyChanged, bool resetChanged,
-                KWFrameSetEdit * edit, KWViewMode * viewMode );
+                KWFrameSetEdit * edit, KWViewMode * viewMode,
+                KWFrameViewManager *frameViewManager );
 
     };
     friend class Cell;
@@ -318,7 +320,8 @@ public:
     void drawBorders( QPainter& painter, const QRect &crect, KWViewMode *viewMode );
     virtual void drawContents( QPainter * painter, const QRect & crect,
                                const QColorGroup & cg, bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit *edit, KWViewMode *viewMode );
+                               KWFrameSetEdit *edit, KWViewMode *viewMode,
+                               KWFrameViewManager *frameViewManager );
     /// Dummy since we reimplement drawContents
     virtual void drawFrame(KWFrame *, QPainter *, const QRect &, const QRect&,
                            const QPoint&,
@@ -391,20 +394,9 @@ public:
      * temporary headers. */
     unsigned int getNumCells()const { return m_nr_cells; }
 
-    /** returns the fact if one cell (==frame) has been selected */
-    bool hasSelectedFrame();
-
-    /** select a row */
-    void selectRow(uint number);
-
-    /** select a column */
-    void selectCol(uint number);
 
     /** deselect all frames */
     void deselectAll();
-
-    /** refresh resize handle */
-    void refreshSelectedCell();
 
     /** move the whole of the table, this is mainly for anchored frames. */
     void moveBy( double dx, double dy );
@@ -488,8 +480,6 @@ public:
     /** returns true if we have a cell occupying that position */
     bool contains( double mx, double my );
 
-    MouseMeaning getMouseMeaning( const QPoint &nPoint, int keyState );
-
     /** override save so we save in table style.. */
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
 
@@ -528,7 +518,6 @@ public:
     virtual void setVisible( bool v );
     virtual bool canRemovePage( int num );
 
-    void showPopup( KWFrame *frame, KWFrameSetEdit *edit, KWView *view, const QPoint &point );
     /** Add a cell to this table, the cell should already have info like row, col and should
      * already have a frame.
      */

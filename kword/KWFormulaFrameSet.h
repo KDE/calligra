@@ -91,7 +91,6 @@ public:
 
     virtual void setAnchorFormat( KoTextFormat* format, int /*frameNum*/ );
 
-    void showPopup( KWFrame *, KWView *view, const QPoint &point );
 
     // TODO support for protecting the formula's contents
     virtual void setProtectContent ( bool ) {}

@@ -151,7 +151,6 @@ void KWPartFrameSet::slotChildChanged()
         //kdDebug(32001) << "KWPartFrameSet::slotChildChanged child's geometry " << getChild()->geometry()
         //               << " frame set to " << *frame << endl;
         m_doc->frameChanged( frame );
-        frame->updateResizeHandles();
         //there is just a frame
         if(m_cmdMoveChild)
             m_cmdMoveChild->listFrameMoved().newRect = frame->normalize();
@@ -190,24 +189,6 @@ void KWPartFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, b
 void KWPartFrameSet::load( QDomElement &attributes, bool loadFrames )
 {
     KWFrameSet::load( attributes, loadFrames );
-}
-
-MouseMeaning KWPartFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
-{
-    KWFrame * frameBorder = frameByBorder( nPoint );
-    if ( !frameBorder )
-    {
-        KoPoint docPoint = m_doc->unzoomPoint( nPoint );
-        KWFrame * frameUnder = frameAtPos( docPoint.x(), docPoint.y() );
-        bool controlPressed = keyState & ControlButton;
-        if ( frameUnder && frameUnder->isSelected() && !controlPressed )
-        {
-            // Clicking on a selected part frame, but not on its border -> either resize or "activate part"
-            KoPoint docPoint = m_doc->unzoomPoint( nPoint );
-            return frameUnder->getMouseMeaning( docPoint, MEANING_ACTIVATE_PART );
-        }
-    }
-    return KWFrameSet::getMouseMeaning( nPoint, keyState );
 }
 
 void KWPartFrameSet::startEditing()

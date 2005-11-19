@@ -30,6 +30,7 @@ class KWFrame;
 class KWFrameSet;
 class KWView;
 class KWViewMode;
+class KWFrameViewManager;
 
 class QDragEnterEvent;
 class QDragLeaveEvent;
@@ -73,7 +74,8 @@ public:
      */
     virtual void drawContents( QPainter *, const QRect &,
                                const QColorGroup &, bool onlyChanged, bool resetChanged,
-                               KWViewMode *viewMode );
+                               KWViewMode *viewMode,
+                               KWFrameViewManager *frameViewManager );
 
     // Events forwarded by the canvas (when being in "edit" mode)
     virtual void keyPressEvent( QKeyEvent * ) {}
@@ -97,13 +99,6 @@ public:
     virtual void selectAll() {}
     virtual void pasteData( QMimeSource* /*data*/, int /*provides*/ ) {}
 
-    /** Show a popup menu - called when right-clicking inside a frame of this frameset.
-     * The default implementation calls the frameset's showPopup.
-     * @param frame the frame which was clicked.
-     * @param view the view - we use it to get the popupmenu by name
-     * @param point the mouse position (at which to show the menu)
-     */
-    virtual void showPopup( KWFrame* frame, KWView* view, const QPoint & _point );
 
     /// Called if the cursor tries to leave the frameset at its beginning.
     /// Returns true if the frameset was inline, and we did exit into another frameset.

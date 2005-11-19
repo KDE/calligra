@@ -21,5 +21,5 @@ kunittest_FrameViewTester_la_LIBADD = -lkunittest ../libkwordpart.la
 kunittest_FrameViewTester_la_LDFLAGS = -module $(KDE_CHECK_PLUGIN) $(all_libraries)
 
 check-local: kunittest_KWPageManagerTester.la kunittest_FrameTester.la kunittest_FrameViewTester.la
-	kunittestmodrunner
+	kunittestmodrunner 2>&1 | perl $(srcdir)/checkFilter.pl
 

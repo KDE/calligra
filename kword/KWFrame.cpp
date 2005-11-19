@@ -26,7 +26,6 @@
 #include "KWTextFrameSet.h"
 #include "KWViewMode.h"
 #include "KWCanvas.h"
-#include "KWResizeHandle.h"
 
 #include <kooasiscontext.h>
 #include <koxmlns.h>
@@ -60,7 +59,6 @@ int ZOrderedFrameList::compareItems(QPtrCollection::Item a, QPtrCollection::Item
 
 KWFrame::KWFrame(KWFrame * frame)
 {
-    handles.setAutoDelete(true);
     m_selected = false;
     m_runAround = RA_NO;
     //kdDebug(32001) << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
@@ -97,19 +95,15 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_borderRight( QColor(), KoBorder::SOLID, 0 ),
       m_borderTop( QColor(), KoBorder::SOLID, 0 ),
       m_borderBottom( QColor(), KoBorder::SOLID, 0 ),
-      handles(),
       m_frameSet( fs )
 {
     //kdDebug(32001) << "KWFrame::KWFrame " << this << " left=" << left << " top=" << top << endl;
-    handles.setAutoDelete(true);
     m_frameStack = 0; // lazy initialisation.
 }
 
 KWFrame::~KWFrame()
 {
     //kdDebug(32001) << "KWFrame::~KWFrame " << this << endl;
-    if (m_selected)
-        removeResizeHandles();
     delete m_frameStack;
     m_frameStack = 0;
 }
@@ -137,48 +131,6 @@ int KWFrame::pageNumber() const
 int KWFrame::pageNumber( KWDocument* doc ) const
 {
     return doc->pageManager()->pageNumber(this);
-}
-
-MouseMeaning KWFrame::getMouseMeaning( const KoPoint & docPoint, MouseMeaning defaultMeaning )
-{
-    if ( !m_selected )
-        return defaultMeaning;
-
-    double hs = 6; // horizontal snap zone (in pt)
-    double vs = 6; // vertical snap zone (in pt)
-    if ( width() < 18 )
-        hs = width() / 3; // frame is not wide enough -> leave some room to click inside it
-    if ( height() < 18 )
-        vs = height() / 3; // same thing if frame is not high enough
-    // Maybe we should calculate the area a bit differently
-    // (on both sides of the line), and allow resizing without selecting.
-
-    double mx = docPoint.x();
-    double my = docPoint.y();
-
-    // Corners
-    if ( mx >= x() && my >= y() && mx <= x() + hs && my <= y() + vs )
-        return MEANING_TOPLEFT;
-    if ( mx >= x() && my >= y() + height() - vs && mx <= x() + hs && my <= y() + height() )
-        return MEANING_BOTTOMLEFT;
-    if ( mx >= x() + width() - hs && my >= y() && mx <= x() + width() && my <= y() + vs )
-        return MEANING_TOPRIGHT;
-    if ( mx >= x() + width() - hs && my >= y() + height() - vs && mx <= x() + width() && my <= y() + height() )
-        return MEANING_BOTTOMRIGHT;
-
-    // Middle of edges
-    if ( mx >= x() && my >= y() + height() / 2 - vs/2 && mx <= x() + hs && my <= y() + height() / 2 + vs/2 )
-        return MEANING_LEFT;
-    if ( mx >= x() + width() / 2 - hs/2 && my >= y() && mx <= x() + width() / 2 + hs/2 && my <= y() + vs )
-        return MEANING_TOP;
-    if ( mx >= x() + width() / 2 - hs/2 && my >= y() + height() - vs && mx <= x() + width() / 2 + hs/2 &&
-         my <= y() + height() )
-        return MEANING_BOTTOM;
-    if ( mx >= x() + width() - hs && my >= y() + height() / 2 - vs/2 && mx <= x() + width() &&
-         my <= y() + height() / 2 + vs/2 )
-        return MEANING_RIGHT;
-
-    return defaultMeaning;
 }
 
 KWFrame *KWFrame::getCopy() {
@@ -220,72 +172,13 @@ void KWFrame::copySettings(KWFrame *frm)
     setBottomBorder(frm->bottomBorder());
 }
 
-// Insert all resize handles
-void KWFrame::createResizeHandles() {
-    removeResizeHandles();
-    QValueList<KWView *> views = frameSet()->kWordDocument()->getAllViews();
-    for ( int i = views.count() - 1; i >= 0; --i )
-        createResizeHandlesForPage( views[i]->getGUI()->canvasWidget() );
-}
-
-// Insert 8 resize handles which will be drawn in param canvas
-void KWFrame::createResizeHandlesForPage(KWCanvas *canvas) {
-    removeResizeHandlesForPage(canvas);
-
-    for (unsigned int i=0; i < 8; i++) {
-        KWResizeHandle * h = new KWResizeHandle( canvas, (KWResizeHandle::Direction)i, this );
-        handles.append( h );
-    }
-}
-
-// remove all the resize handles which will be drawn in param canvas
-void KWFrame::removeResizeHandlesForPage(KWCanvas *canvas) {
-    for( unsigned int i=0; i < handles.count(); i++) {
-        if(handles.at ( i )->getCanvas() == canvas) {
-            handles.remove(i--);
-        }
-    }
-}
-
-// remove all resizeHandles
-void KWFrame::removeResizeHandles() {
-    //kdDebug(32001) << this << " KWFrame::removeResizeHandles " << handles.count() << " handles" << endl;
-    handles.clear();
-}
-
-// move the resizehandles to current location of frame
-void KWFrame::updateResizeHandles() {
-    for (unsigned int i=0; i< handles.count(); i++) {
-        handles.at(i)->updateGeometry();
-    }
-}
-
-void KWFrame::repaintResizeHandles() {
-    for (unsigned int i=0; i< handles.count(); i++) {
-        handles.at(i)->repaint();
-    }
-}
-
-void KWFrame::updateCursorType()
-{
-    for (unsigned int i=0; i< handles.count(); i++) {
-        handles.at(i)->applyCursorType();
-    }
-}
-
-
 void KWFrame::frameBordersChanged() {
     invalidateParentFrameset();
-    if (isSelected()) {
-        updateResizeHandles();
-    }
 }
 
 
 void KWFrame::updateRulerHandles(){
-    if(isSelected())
-        updateResizeHandles();
-    else
+    if(! isSelected())
     {
         KWDocument *doc = frameSet()->kWordDocument();
         if(doc)
@@ -299,10 +192,6 @@ void KWFrame::setSelected( bool selected )
     //kdDebug(32001) << this << " KWFrame::setSelected " << selected << endl;
     bool s = m_selected;
     m_selected = selected;
-    if ( m_selected )
-        createResizeHandles();
-    else if ( s )
-        removeResizeHandles();
 }
 
 QRect KWFrame::outerRect( KWViewMode* viewMode ) const

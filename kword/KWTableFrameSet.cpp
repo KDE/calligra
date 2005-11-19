@@ -895,12 +895,6 @@ double KWTableFrameSet::getPositionOfRow( unsigned int row, bool bottom ) {
     return m_rowPositions[row+adjustment+(bottom?1:0)];
 }
 
-bool KWTableFrameSet::hasSelectedFrame()
-{
-    unsigned int a=0,b=0;
-    return getFirstSelected(a,b);
-}
-
 void KWTableFrameSet::moveBy( double dx, double dy ) {
     bool redraw=false;
     kdDebug(32004) << "KWTableFrameSet(" << name() << ")::moveBy(" << dx<<","<<dy<<")\n";
@@ -928,37 +922,10 @@ void KWTableFrameSet::moveBy( double dx, double dy ) {
     }
 }
 
-void KWTableFrameSet::selectRow(uint row)
-{
-    Q_ASSERT(row < m_rows);
-
-    for ( uint i = 0; i < getCols(); i++ )
-        cell(row, i)->frame(0)->setSelected( true );
-}
-
-void KWTableFrameSet::selectCol(uint col)
-{
-    Q_ASSERT(col < m_colPositions.count()-1);
-
-    for ( uint i = 0; i < getRows(); i++ )
-        cell(i, col)->frame(0)->setSelected( true );
-}
-
 void KWTableFrameSet::deselectAll()
 {
     for (TableIter i(this) ; i; ++i )
         i->frame( 0 )->setSelected( false );
-}
-
-void KWTableFrameSet::refreshSelectedCell()
-{
-    unsigned int row,col;
-    if ( !isOneSelected( row, col ) )
-        return;
-
-    Cell *daCell=cell(row,col);
-    if(daCell)
-        daCell->frame( 0 )->updateResizeHandles();
 }
 
 void KWTableFrameSet::selectUntil( double x, double y) {
@@ -1000,15 +967,12 @@ void KWTableFrameSet::selectUntil( Cell *daCell)
         if(row >= fromRow && row <= toRow && col >= fromCol && col <= toCol)
         {
             cells->frame(0)->setSelected( true );
-            cells->frame(0)->createResizeHandles();
-            cells->frame(0)->updateResizeHandles();
         }
         else
         {
             if(cells->frame( 0 )->isSelected())
             {
                 cells->frame( 0 )->setSelected( false );
-                cells->frame(0)->removeResizeHandles();
             }
         }
     }
@@ -1507,7 +1471,6 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
     addCell(firstCell);
     position(firstCell);
     validate();
-    firstCell->frame(0)->updateResizeHandles();
 
     m_doc->updateAllFrames(); // TODO: only fs->updateFrames() & m_doc->updateFramesOnTopOrBelow(pageNum)
     m_doc->repaintAllViews();
@@ -1664,7 +1627,6 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
     addCell(daCell);
     validate();
     firstFrame->setSelected(true);
-    firstFrame->createResizeHandles();
 
     finalize();
 
@@ -1735,49 +1697,6 @@ bool KWTableFrameSet::contains( double mx, double my ) {
 
     return false;
 */
-}
-
-MouseMeaning KWTableFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
-{
-    MouseMeaning m = MEANING_MOUSE_SELECT;
-    KoPoint docPoint = m_doc->unzoomPoint( nPoint );
-    double mx = docPoint.x();
-    double my = docPoint.y();
-    // See if we're over a frame border
-    KWFrame * frame = frameByBorder( nPoint );
-    if ( frame )
-    {
-        double hs = 6; // horizontal snap zone (in pt)
-        double vs = 6; // vertical snap zone (in pt)
-        // (see KWFrame::getMouseMeaning)
-
-        if ( QABS( frame->x() - mx ) < hs/2
-             && my >= frame->y() && my <= frame->bottom() )
-            return MEANING_RESIZE_COLUMN;
-        if ( QABS( frame->right() - mx ) < hs/2
-             && my >= frame->y() && my <= frame->bottom() )
-            return MEANING_RESIZE_COLUMN;
-        if ( QABS( frame->y() - my ) < vs/2
-             && mx >= frame->x() && mx <= frame->right() )
-            return MEANING_RESIZE_ROW;
-        if ( QABS( frame->bottom() - my ) < vs/2
-             && mx >= frame->x() && mx <= frame->right() )
-            return MEANING_RESIZE_ROW;
-    }
-    frame = frameAtPos( docPoint.x(), docPoint.y() );
-    if ( frame == 0L )
-        return MEANING_NONE;
-
-    // Found a frame under the cursor
-    // Ctrl -> select
-    if ( keyState & ControlButton )
-        return m;
-    // Shift _and_ at least a frame is selected already
-    // (shift + no frame selected is used to select text)
-    if ( (keyState & ShiftButton) && (m_doc->getFirstSelectedFrame() != 0L) )
-        return m;
-
-    return MEANING_MOUSE_INSIDE_TEXT;
 }
 
 void KWTableFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
@@ -2067,7 +1986,8 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
 
 void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
                                     const QColorGroup & cg, bool onlyChanged, bool resetChanged,
-                                    KWFrameSetEdit * edit, KWViewMode * viewMode )
+                                    KWFrameSetEdit * edit, KWViewMode * viewMode,
+                                    KWFrameViewManager *fvm )
 {
     for (TableIter cells(this) ; cells ; ++cells)
     {
@@ -2076,11 +1996,11 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
             KWTableFrameSetEdit * tableEdit = static_cast<KWTableFrameSetEdit *>(edit);
             if ( tableEdit->currentCell() && ((Cell*) cells) == tableEdit->currentCell()->frameSet() )
             {
-                cells->drawContents( painter, crect, cg, onlyChanged, resetChanged, tableEdit->currentCell(), viewMode );
+                cells->drawContents( painter, crect, cg, onlyChanged, resetChanged, tableEdit->currentCell(), viewMode, fvm );
                 continue;
             }
         }
-        cells->drawContents( painter, crect, cg, onlyChanged, resetChanged, 0L, viewMode );
+        cells->drawContents( painter, crect, cg, onlyChanged, resetChanged, 0L, viewMode, fvm );
     }
     drawBorders( *painter, crect, viewMode );
     //kdDebug(32004) << "drawContents()" << endl;
@@ -2855,7 +2775,7 @@ void KWTableFrameSet::Cell::setZOrder()
 
 void KWTableFrameSet::Cell::drawContents( QPainter * painter, const QRect & crect,
         const QColorGroup & cg, bool onlyChanged, bool resetChanged,
-        KWFrameSetEdit * edit, KWViewMode * viewMode )
+        KWFrameSetEdit * edit, KWViewMode * viewMode, KWFrameViewManager *fvm )
 {
     bool printing = painter->device()->devType() == QInternal::Printer;
     bool drawPreviewLines = viewMode && viewMode->drawFrameBorders();
@@ -2867,7 +2787,7 @@ void KWTableFrameSet::Cell::drawContents( QPainter * painter, const QRect & crec
         innerFrameRect.addCoords(1, 1, -1, -1); // move and shrink
         cellRect = innerFrameRect.intersect(crect);
     }
-    KWTextFrameSet::drawContents(painter, cellRect, cg, onlyChanged, resetChanged, edit, viewMode);
+    KWTextFrameSet::drawContents(painter, cellRect, cg, onlyChanged, resetChanged, edit, viewMode, fvm);
 }
 
 KWTableFrameSetEdit::~KWTableFrameSetEdit()
@@ -3112,36 +3032,6 @@ void KWTableFrameSetEdit::dragMoveEvent( QDragMoveEvent * e, const QPoint &n, co
         kdDebug(32004)<<"after m_currentCell :"<<m_currentCell<<endl;
         if(m_currentCell)
             m_currentCell->dragMoveEvent( e, n, d );
-    }
-}
-
-void KWTableFrameSetEdit::showPopup( KWFrame *frame, KWView *view, const QPoint &point )
-{
-    if (m_currentCell)
-    {
-        KWTextFrameSetEdit *fse = dynamic_cast<KWTextFrameSetEdit *>(m_currentCell);
-        Q_ASSERT( fse ); // For now: m_currentCell always KWTextFrameSetEdit
-        if ( fse )
-        {
-            view->plugActionList( "tableactions", view->tableActions() );
-            fse->showPopup( frame, view, point );
-        }
-    }
-
-}
-
-void KWTableFrameSet::showPopup( KWFrame *theFrame, KWFrameSetEdit *edit, KWView *view, const QPoint &point )
-{
-    KWTextFrameSetEdit * textedit = dynamic_cast<KWTextFrameSetEdit *>(edit);
-    Q_ASSERT( textedit ); // is it correct that this is always set ?
-    if (textedit)
-        textedit->showPopup( theFrame, view, point );
-    else
-    {
-        QPopupMenu * popup = view->popupMenu("text_popup");
-        Q_ASSERT(popup);
-        if (popup)
-            popup->popup( point );
     }
 }
 

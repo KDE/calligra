@@ -27,7 +27,7 @@ libkwordprivate_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWForm
 		KWTableTemplate.cpp KWTableTemplateSelector.cpp KWTableDia.cpp \
 		KWInsertDia.cpp KWDeleteDia.cpp KWDocStruct.cpp \
 		KWInsertTOCCommand.cpp KWStyleManager.cpp KWFindReplace.cpp \
-		KWResizeHandle.cpp KWCommand.cpp \
+		KWCommand.cpp \
 		KWordMailMergeDatabaseIface.skel kwordmailmergedatabaseiface.cc KWMailMergeDataBase.cpp \
 		KWMailMergeLabelAction.cpp \
 		KWEditPersonnalExpression.cpp \
@@ -50,7 +50,7 @@ libkwordprivate_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWForm
 		KWSortDia.cpp KWInsertPageDia.cpp KWBookMark.cpp KWCollectFramesetsVisitor.cpp \
 		KWOasisLoader.cpp KWOasisSaver.cpp KWFrameList.cpp KWPage.cpp \
 		KWPageManager.cpp KWFrameSet.cpp KWFrameSetEdit.cpp KWPictureFrameSet.cpp \
-		KWFrameViewManager.cpp
+		KWFrameViewManager.cpp KWFrameView.cpp
 libkwordprivate_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
 libkwordprivate_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformulalib.la ./libkwmailmerge_interface.la 
 

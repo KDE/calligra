@@ -33,7 +33,7 @@ int KWPageManager::pageNumber(const KoRect &frame) const {
     QPtrListIterator<KWPage> pages(m_pageList);
     while(pages.current() && startOfpage < frame.top()) {
         startOfpage += pages.current()->height();
-        if(startOfpage > frame.top())
+        if(startOfpage >= frame.top())
             break;
         page++;
         ++pages;

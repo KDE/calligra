@@ -32,7 +32,6 @@ class KWDocument;
 class KWFrame;
 class KWFrameList;
 class KWFrameSet;
-class KWResizeHandle;
 class KWViewMode;
 
 class KoGenStyle;
@@ -95,8 +94,6 @@ public:
      */
     void setSelected( bool _selected );
     bool isSelected()const { return m_selected; }
-
-    MouseMeaning getMouseMeaning( const KoPoint& docPoint, MouseMeaning defaultMeaning );
 
     double runAroundLeft() const { return m_runAroundLeft; }
     double runAroundRight() const { return m_runAroundRight; }
@@ -202,15 +199,8 @@ public:
 
     /** Resize handles (in kwcanvas.h) are the dots that are drawn on selected
        frames, this creates and deletes them */
-    void createResizeHandles();
-    void createResizeHandlesForPage(KWCanvas *canvas);
-    void removeResizeHandlesForPage(KWCanvas *canvas);
-    void removeResizeHandles();
     void frameBordersChanged();
-    void updateResizeHandles();
-    void repaintResizeHandles();
     void updateRulerHandles();
-    void updateCursorType();
 
     QBrush backgroundColor() const { return m_backgroundColor; }
     void setBackgroundColor( const QBrush &_color );
@@ -311,7 +301,6 @@ private:
     QBrush m_backgroundColor;
     KoBorder m_borderLeft, m_borderRight, m_borderTop, m_borderBottom;
 
-    QPtrList<KWResizeHandle> handles;
     /** List of frames we have below and on top of us.
      * Frames on top we should never overwrite.  Frames below us needd for selection code &
      * transparancy */

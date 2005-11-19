@@ -674,7 +674,6 @@ void KWDocument::setPageLayout( const KoPageLayout& layout, const KoColumns& cl,
         // Invalidate document layout, for proper repaint
         this->layout();
         emit pageLayoutChanged( m_pageLayout );
-        updateResizeHandles();
         updateContentsSize();
     }
 }
@@ -3710,7 +3709,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool t
         KWFrameSet * frameset = fit.current();
         if ( frameset->isVisible( viewMode ) && !frameset->isFloating() )
             frameset->drawContents( &painter, rect, cg, false /*onlyChanged*/, true /*resetChanged*/,
-                                    0L, viewMode );
+                                    0L, viewMode, 0 );
     }
     delete viewMode;
 }
@@ -4134,247 +4133,6 @@ KWFrameSet * KWDocument::frameSetByName( const QString & name )
 
 //#define DEBUG_FRAMESELECT
 
-
-KWFrame * KWDocument::deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, bool *border) {
-#ifdef DEBUG_FRAMESELECT
-    kdDebug(32001) << "KWDocument::deepestInlineFrame parent=" << parent << " nPoint=" << nPoint << endl;
-#endif
-    KWFrameSet *hostFrameSet=parent->frameSet();
-    KoPoint docPoint( unzoomPoint( nPoint ) );
-    int page = pageManager()->pageNumber(docPoint);
-    QPtrList<KWFrame> frames = framesInPage(page);
-
-    for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
-        // only consider inline frames.
-        if (! f->frameSet()->isFloating())
-            continue;
-
-        // only use the frames that are embedded in the parent
-        if (hostFrameSet != f->frameSet()->anchorFrameset())
-            continue;
-
-        if(f->frameAtPos(nPoint, true)) {
-            if ( border ) *border = true;
-            return f;
-        }
-        if(f->frameAtPos(nPoint)) {
-            return deepestInlineFrame(f,nPoint,border);
-        }
-    }
-    if (border != 0) *border=false;
-    return parent;
-}
-
-KWFrame * KWDocument::frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool *border) {
-
-#ifdef DEBUG_FRAMESELECT
-    kdDebug(32001) << "KWDocument::frameBelowFrame frame=" << frame << " nPoint=" << nPoint << endl;
-#endif
-
-    KWFrameSet *fs = frame->frameSet();
-    KoPoint docPoint( unzoomPoint( nPoint ) );
-    if (fs->isFloating()) {
-        // now lets be smart here; we know that a frame that is floating is embedded
-        // inside its hostFrameSet frame. This basically means that the frame directly
-        // below is the hostFrameSet frame :)
-        // since we know nPoint is already in frame, we don't have to check for anchorFrame here.
-        KWFrameSet *hostFrameSet = fs->anchorFrameset();
-        KWFrame *f = hostFrameSet->frameByBorder(nPoint);
-        if (f) {
-            if (border) *border=true;
-            return f;
-        }
-        f = hostFrameSet->frameAtPos(docPoint.x(),docPoint.y());
-        if (f) {
-            if (border) *border=false;
-            return f;
-        }
-    }
-    else {
-        Q_ASSERT (frame->frameStack());
-        QValueList<KWFrame*> frames = frame->frameStack()->framesBelow();
-        for(int index = frames.count()-1; index >= 0; index--) {
-            KWFrame *f = *(frames.at(index));
-            if (f->frameAtPos(nPoint,true)) {
-                if(border) *border=true;
-                return f;
-            }
-            if (f->frameAtPos(nPoint)) {
-                return deepestInlineFrame(f,nPoint,border);
-            }
-        }
-    }
-    if (border != 0) *border=false;
-    return 0L;
-}
-
-KWFrame * KWDocument::topFrameUnderMouse( const QPoint& nPoint, bool* border) {
-#ifdef DEBUG_FRAMESELECT
-    kdDebug(32001) << "KWDocument::topFrameUnderMouse nPoint=" << nPoint << endl;
-#endif
-    KoPoint docPoint( unzoomPoint( nPoint ) );
-    int page = pageManager()->pageNumber(docPoint);
-    if(page == -1)
-        return 0;
-    QPtrList<KWFrame> frames = framesInPage(page);
-
-#ifdef DEBUG_FRAMESELECT
-    for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
-        kdDebug(32001) << "KWDocument::topFrameUnderMouse frame " << f << " (from " << f->frameSet()->name() << ") zOrder=" << f->zOrder() << endl;
-    }
-#endif
-
-    for (KWFrame *f = frames.last();f;f=frames.prev()) { // z-order
-        // only consider non-inline frames.
-        if (f->frameSet()->isFloating())
-            continue;
-
-        if(f->frameAtPos(nPoint, true)) {
-#ifdef DEBUG_FRAMESELECT
-            kdDebug(32001) << "KWDocument::topFrameUnderMouse found frame " << f << " by border" << endl;
-#endif
-            if ( border ) *border = true;
-            return f;
-        }
-        if(f->frameAtPos(nPoint)) {
-#ifdef DEBUG_FRAMESELECT
-            kdDebug(32001) << "KWDocument::topFrameUnderMouse found frame " << f << ", will dig into it." << endl;
-#endif
-            return deepestInlineFrame(f,nPoint,border);
-        }
-    }
-    if (border != 0) *border=false;
-    return 0;
-}
-
-
-KWFrame * KWDocument::frameUnderMouse( const QPoint& nPoint, bool* border, bool firstNonSelected )
-{
-    if ( !m_viewMode->hasFrames() )
-    {
-        KWViewModeText* vmt = dynamic_cast<KWViewModeText *>( m_viewMode );
-        return vmt ? vmt->textFrameSet()->frame(0) : 0L;
-    }
-#ifdef DEBUG_FRAMESELECT
-    kdDebug(32001) << "KWDocument::frameUnderMouse nPoint=" << nPoint << " firstNonSelected=" << firstNonSelected << endl;
-#endif
-    KWFrame *candidate = topFrameUnderMouse(nPoint, border);
-    if (!firstNonSelected)
-        return candidate;
-    KWFrame *goDeeper=candidate;
-    bool foundselected=false;
-    while (goDeeper) {
-        while (goDeeper && goDeeper->isSelected())
-        {
-            goDeeper=frameBelowFrame(nPoint, goDeeper, border);
-            foundselected=true;
-        }
-        if (foundselected) {
-            if (goDeeper)
-                return goDeeper;
-            else
-                return candidate;
-        } else
-            goDeeper=frameBelowFrame(nPoint, goDeeper, border);
-
-    }
-    return candidate;
-}
-
-MouseMeaning KWDocument::getMouseMeaning( const QPoint &nPoint, int keyState, KWFrame** pFrame )
-{
-    if ( pFrame )
-        *pFrame = 0L;
-    if (m_viewMode->hasFrames() &&
-        positionToSelectRowcolTable(nPoint) != TABLE_POSITION_NONE)
-        return MEANING_MOUSE_SELECT;
-
-    bool border=true;
-    KWFrame *frameundermouse = frameUnderMouse(nPoint, &border);
-    if (frameundermouse) {
-        KWFrameSet *frameSet = frameundermouse->frameSet();
-        if ( pFrame )
-            *pFrame = frameundermouse;
-        if ( m_viewMode->hasFrames() )
-            return frameSet->getMouseMeaning(nPoint, keyState);
-        else // text view mode
-            return MEANING_MOUSE_INSIDE_TEXT;
-    }
-    // Allow to select paragraphs by clicking on the left
-    // TODO - introduce real mouse-meaning value, to change the cursor.
-    // TODO: test if other word-processors allow doing it with text-boxes
-    // when clicking on the left of the text box means clicking inside another frame.
-    // Also note that one can currently select text in the very first parag by clicking
-    // above the frame; this would need a normal "inside text" cursor, not a left one.
-    if ( m_viewMode->hasFrames() )
-    {
-        return MEANING_MOUSE_INSIDE_TEXT;
-    }
-    return MEANING_NONE;
-}
-
-QCursor KWDocument::getMouseCursor( const QPoint &nPoint, int keyState )
-{
-    KWFrame* frame = 0L;
-    MouseMeaning meaning = getMouseMeaning( nPoint, keyState, &frame );
-    KWFrameSet* frameSet = frame ? frame->frameSet() : 0L;
-    switch ( meaning ) {
-    case MEANING_NONE:
-        return Qt::ibeamCursor; // default cursor in margins
-    case MEANING_MOUSE_INSIDE:
-        return QCursor(); // default cursor !?!?
-    case MEANING_MOUSE_INSIDE_TEXT:
-        return Qt::ibeamCursor;
-    case MEANING_MOUSE_OVER_LINK:
-        return Qt::PointingHandCursor;
-    case MEANING_MOUSE_OVER_FOOTNOTE:
-        return Qt::PointingHandCursor;
-    case MEANING_MOUSE_MOVE:
-        if ( frameSet && frameSet->isProtectSize() )
-            return Qt::forbiddenCursor;
-        else
-            return Qt::sizeAllCursor;
-    case MEANING_MOUSE_SELECT:
-        return KCursor::handCursor();
-    case MEANING_ACTIVATE_PART:
-        return KCursor::handCursor();
-    case MEANING_TOPLEFT:
-    case MEANING_BOTTOMRIGHT:
-        if ( frameSet->isProtectSize() || frameSet->isMainFrameset())
-            return Qt::forbiddenCursor;
-        return Qt::sizeFDiagCursor;
-    case MEANING_LEFT:
-    case MEANING_RIGHT:
-        if ( frameSet->isProtectSize() || frameSet->isMainFrameset())
-            return Qt::forbiddenCursor;
-        return Qt::sizeHorCursor;
-    case MEANING_BOTTOMLEFT:
-    case MEANING_TOPRIGHT:
-        if ( frameSet->isProtectSize() || frameSet->isMainFrameset())
-            return Qt::forbiddenCursor;
-        return Qt::sizeBDiagCursor;
-    case MEANING_TOP:
-    case MEANING_BOTTOM:
-        if ( frameSet->isProtectSize() || frameSet->isMainFrameset())
-            return Qt::forbiddenCursor;
-        return Qt::sizeVerCursor;
-    case MEANING_RESIZE_COLUMN:
-        // Bug in Qt up to Qt-3.1.1 : Qt::splitVCursor and Qt::splitHCursor are swapped!
-#if QT_VERSION <= 0x030101
-        return Qt::splitVCursor;
-#else
-        return Qt::splitHCursor;
-#endif
-    case MEANING_RESIZE_ROW:
-#if QT_VERSION <= 0x030101
-        return Qt::splitHCursor;
-#else
-        return Qt::splitVCursor;
-#endif
-    }
-    return QCursor(); // default cursor !?!?
-}
-
 QString KWDocument::generateFramesetName( const QString & templateName )
 {
     QString name;
@@ -4387,77 +4145,6 @@ QString KWDocument::generateFramesetName( const QString & templateName )
     } while ( exists );
     return name;
 }
-
-/** if we are close on the left or the top of a table,
- * the user can select rows/cols */
-KWDocument::TableToSelectPosition KWDocument::positionToSelectRowcolTable(const QPoint& nPoint, KWTableFrameSet **ppTable /*=0L*/) {
-
-    static const int DISTANCE_TABLE_SELECT_ROWCOL = 5;
-
-    KWFrame *frameundermouse, *frameclosetomouseright, *frameclosetomouseunder;
-
-    TableToSelectPosition result = TABLE_POSITION_NONE;
-
-    // now simply check the actual frame under the mouse
-    bool border=true;
-    frameundermouse = frameUnderMouse(nPoint, &border );
-
-    // now get a frame close to the mouse pointer
-    // slightly on the right (could it be that it is a table?)
-    QPoint pointTestTableSelect = nPoint;
-    pointTestTableSelect.rx() += DISTANCE_TABLE_SELECT_ROWCOL;
-    frameclosetomouseright = frameUnderMouse(pointTestTableSelect, &border);
-
-    pointTestTableSelect = nPoint;
-    pointTestTableSelect.ry() += DISTANCE_TABLE_SELECT_ROWCOL;
-    frameclosetomouseunder = frameUnderMouse(pointTestTableSelect, &border);
-
-    KWFrame *frameclosetomouse; // the frame that we are going to test to know whether it is a table
-
-    if ( frameclosetomouseright && frameclosetomouseright->frameSet()->groupmanager() ) {
-        // ok, we can test the right frame
-        frameclosetomouse = frameclosetomouseright;
-        result = TABLE_POSITION_RIGHT;
-    }
-    else {
-        // right frame is not good. maybe the one under?
-        frameclosetomouse = frameclosetomouseunder;
-        result = TABLE_POSITION_BOTTOM;
-    }
-
-    // is there a frame close to the cursor?
-    if (frameclosetomouse) {
-        if ( frameclosetomouse->frameSet()->groupmanager() && (!frameundermouse || !frameundermouse->frameSet()->groupmanager()) ) {
-            // there is a frame, it is a table, and the cursor is NOT on a table ATM
-            if (ppTable)
-                *ppTable =frameclosetomouse->frameSet()->groupmanager();
-            // place the cursor to say that we can select row/columns
-            return result;
-        }
-    }
-    return TABLE_POSITION_NONE;
-}
-
-
-// TODO pass viewmode for isVisible
-// TODO use QValueList
-QPtrList<KWFrame> KWDocument::getSelectedFrames() const {
-    QPtrList<KWFrame> frames;
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet *frameSet = fit.current();
-        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
-            continue;
-        QPtrListIterator<KWFrame> frameIt = frameSet->frameIterator();
-        for ( ; frameIt.current(); ++frameIt )
-            if ( frameIt.current()->isSelected() )
-                frames.append( frameIt.current() );
-    }
-
-    return frames;
-}
-
 
 void KWDocument::fixZOrders() {
     KWFrame *frameFixed = 0;
@@ -4545,24 +4232,6 @@ QPtrList<KWFrame> KWDocument::framesInPage( int pageNum, bool sorted ) const {
     }
     if (sorted) frames.sort();
     return frames;
-}
-
-
-KWFrame *KWDocument::getFirstSelectedFrame() const
-{
-    // ### This should be done much more efficiently (caching?). It's called all the time.
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet *frameSet = fit.current();
-        for ( unsigned int j = 0; j < frameSet->frameCount(); j++ ) {
-            if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
-                continue;
-            if ( frameSet->frame( j )->isSelected() )
-                return frameSet->frame( j );
-        }
-    }
-    return 0L;
 }
 
 void KWDocument::updateAllFrames( int flags )
@@ -4683,11 +4352,6 @@ void KWDocument::updateFooterButton()
         (*it)->updateHeaderFooterButton();
         (*it)->updateFooter();
     }
-}
-
-
-bool KWDocument::isOnlyOneFrameSelected() const {
-    return getSelectedFrames().count() == 1;
 }
 
 void KWDocument::setFramePadding( double l, double r, double t, double b )
@@ -4821,6 +4485,7 @@ void KWDocument::addFrameSet( KWFrameSet *f, bool finalize /*= true*/ )
     if ( finalize )
         f->finalize();
     setModified( true );
+    emit sigFrameSetAdded(f);
 }
 
 void KWDocument::removeFrameSet( KWFrameSet *f )
@@ -4828,6 +4493,7 @@ void KWDocument::removeFrameSet( KWFrameSet *f )
     emit sig_terminateEditing( f );
     m_lstFrameSet.take( m_lstFrameSet.find(f) );
     setModified( true );
+    emit sigFrameSetRemoved(f);
 }
 
 void KWDocument::addCommand( KCommand * cmd )
@@ -4950,50 +4616,6 @@ void KWDocument::slotRepaintChanged( KWFrameSet * frameset )
     }
 }
 
-void KWDocument::refreshFrameBorderButton()
-{
-
-    KWFrame *frame= getFirstSelectedFrame();
-    if (frame)
-    {
-        frame = KWFrameSet::settingsFrame(frame);
-        for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it ) {
-            (*it)->showFrameBorders( frame->leftBorder(), frame->rightBorder(), frame->topBorder(), frame->bottomBorder() );
-        }
-    }
-}
-
-void KWDocument::repaintResizeHandles()
-{
-   QPtrList<KWFrame> selectedFrames = getSelectedFrames();
-   KWFrame *frame=0L;
-   for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-   {
-       frame->repaintResizeHandles();
-   }
-}
-
-void KWDocument::updateResizeHandles( )
-{
-   QPtrList<KWFrame> selectedFrames = getSelectedFrames();
-   KWFrame *frame=0L;
-   for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-   {
-       frame->updateResizeHandles();
-   }
-   updateRulerFrameStartEnd();
-}
-
-void KWDocument::updateCursorType( )
-{
-   QPtrList<KWFrame> selectedFrames = getSelectedFrames();
-   KWFrame *frame=0L;
-   for(frame=selectedFrames.first(); frame != 0; frame=selectedFrames.next() )
-   {
-       frame->updateCursorType();
-   }
-}
-
 void KWDocument::deleteTable( KWTableFrameSet *table )
 {
     if ( !table )
@@ -5064,82 +4686,6 @@ void KWDocument::deleteFrame( KWFrame * frame )
         cmd->execute();
     }
     emit docStructureChanged(docItem);
-}
-
-void KWDocument::deleteSelectedFrames()
-{
-    QPtrList<KWFrame> frames=getSelectedFrames();
-    int nbCommand=0;
-    KWFrame *tmp=0;
-
-    int docItem=0;
-
-    KMacroCommand * macroCmd = new KMacroCommand( i18n("Delete Frames") );
-    for ( tmp=frames.first(); tmp != 0; tmp=frames.next() )
-    {
-        KWFrameSet *fs = tmp->frameSet();
-        if ( fs->isAFooter() || fs->isAHeader() )
-            continue;
-        //a table
-        if ( fs->groupmanager() )
-        {
-            KWTableFrameSet *table=fs->groupmanager();
-            Q_ASSERT(table);
-            docItem|=typeItemDocStructure(table->type());
-
-            if ( table->isFloating() )
-            {
-                emit sig_terminateEditing( table ); // to unselect its cells, especially
-                docItem|=typeItemDocStructure(fs->type());
-
-                KWAnchor * anchor = table->findAnchor( 0 );
-                KCommand * cmd=table->anchorFrameset()->deleteAnchoredFrame( anchor );
-                macroCmd->addCommand(cmd);
-                nbCommand++;
-            }
-            else
-            {
-                KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete Table"), table );
-                cmd->execute();
-                macroCmd->addCommand(cmd);
-                nbCommand++;
-            }
-        }
-        else
-        {// a simple frame
-            if ( fs->type() == FT_TEXT)
-            {
-                if ( processingType() == KWDocument::WP && frameSetNum( fs ) == 0 )
-                    continue;
-            }
-
-            docItem|=typeItemDocStructure(fs->type());
-
-            if ( fs->isFloating() )
-            {
-                tmp->setSelected( false );
-                KWAnchor * anchor = fs->findAnchor( 0 );
-                KCommand *cmd=fs->anchorFrameset()->deleteAnchoredFrame( anchor );
-                macroCmd->addCommand(cmd);
-                nbCommand++;
-            }
-            else
-            {
-                KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( i18n("Delete Frame"), tmp );
-                cmd->execute();
-                macroCmd->addCommand(cmd);
-                nbCommand++;
-            }
-        }
-    }
-    if( nbCommand )
-    {
-        addCommand(macroCmd);
-        emit refreshDocStructure(docItem);
-    }
-    else
-        delete macroCmd;
-
 }
 
 void KWDocument::reorganizeGUI()
@@ -5226,11 +4772,6 @@ void KWDocument::refreshMenuExpression()
 {
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
         (*it)->refreshMenuExpression();
-}
-
-void KWDocument::frameSelectedChanged()
-{
-    emit sig_frameSelectedChanged();
 }
 
 void KWDocument::updateZoomRuler()
@@ -5588,7 +5129,6 @@ void KWDocument::switchViewMode( KWViewMode * newViewMode )
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
         (*it)->switchModeView();
     emit newContentsSize();
-    updateResizeHandles();
 
     // Since the text layout depends on the view mode, we need to redo it
     // But after telling the canvas about the new viewmode, otherwise stuff like

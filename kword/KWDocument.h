@@ -83,7 +83,6 @@ class KoOasisSettings;
 #include "KWAnchorPos.h" // legacy loading stuff
 #include "KWView.h"
 class KWBookMark;
-#include "defs.h" // for MouseMeaning
 
 #include <koDocument.h>
 #include <kotextzoomhandler.h>
@@ -137,10 +136,6 @@ public:
     ~KWDocument();
 
     enum ProcessingType {WP = 0, DTP = 1};
-
-    /** when in position to select rows/cols from a table (slightly on the left/top of the table),
-        * where exactly is the table? if it's NONE, we are not in position to select rows/cols */
-    enum TableToSelectPosition {TABLE_POSITION_NONE = 0, TABLE_POSITION_RIGHT = 1, TABLE_POSITION_BOTTOM = 2};
 
     static const int CURRENT_SYNTAX_VERSION;
 
@@ -233,13 +228,6 @@ public:
     /// Return the frameset with a given name
     KWFrameSet * frameSetByName( const QString & name );
 
-    /** Returns the frame under the mouse. (or 0 if no frame is found)
-     * @param border is set to true if the mouse is on a border of the frame found.
-     * @param firstNonSelected when set to true, frameUnderMouse searches for the frame on
-     *        top that is not selected.
-     */
-    KWFrame * frameUnderMouse( const QPoint& nPoint, bool* border = 0L, bool firstNonSelected = false );
-
     /// Return the total number of framesets
     unsigned int numFrameSets() const
     { return m_lstFrameSet.count(); }
@@ -262,7 +250,6 @@ public:
     void deleteTable( KWTableFrameSet *groupManager );
     void deleteFrame( KWFrame * frame );
 
-    void deleteSelectedFrames();
     unsigned int paperHeight(int pageNum) const;
     unsigned int paperWidth(int pageNum) const;
     /// Top of the page number pgNum, in pixels (in the normal coord system)
@@ -399,12 +386,6 @@ public:
     bool tryRemovingPages();
 
     ProcessingType processingType()const { return m_processingType;  }
-
-    MouseMeaning getMouseMeaning( const QPoint &nPoint, int keyState, KWFrame** pFrame = 0L );
-    /// The cursor for the current 'mouse click meaning'
-    QCursor getMouseCursor( const QPoint& nPoint, int keyState );
-    QPtrList<KWFrame> getSelectedFrames() const;
-    KWFrame *getFirstSelectedFrame() const;
     int frameSetNum( KWFrameSet* fs ) { return m_lstFrameSet.findRef( fs ); }
 
     void lowerMainFrames( int pageNum );
@@ -480,7 +461,6 @@ public:
     KoHFType footerType() const { return m_pageHeaderFooter.footer; }
     const KoKWHeaderFooter& headerFooterInfo() const { return m_pageHeaderFooter; }
 
-    bool isOnlyOneFrameSelected() const;
     void setFramePadding( double l, double r, double t, double b );
     void setFrameCoords( double x, double y, double w, double h );
 
@@ -585,9 +565,6 @@ public:
     /** calls layout() on all framesets  */
     void layout();
 
-    /** call by undo/redo frame border => update all button border frame **/
-    void refreshFrameBorderButton();
-
     // This settings has to be here [instead of KWView] because we need to
     // format paragraphs slightly differently (to add room for the CR char)
     bool viewFormattingChars() const { return m_viewFormattingChars; }
@@ -652,19 +629,6 @@ public:
     KFormula::Document* formulaDocument();
 
     void reorganizeGUI();
-    /** necessary to update resize handle when you change layout
-     * make zoom, add header, add footer etc
-     */
-    void updateResizeHandles();
-
-    /** necessary to force repaint resizehandle otherwise
-     * when we change protect size attribute handle was not repainting
-     */
-    void repaintResizeHandles();
-
-    ///necessary when we undo/Redo change protect content.
-    void updateCursorType( );
-
     /// Tell all views to stop editing this frameset, if they were doing so
     void terminateEditing( KWFrameSet * frameSet )
         { emit sig_terminateEditing( frameSet ); }
@@ -679,8 +643,6 @@ public:
     void refreshMenuExpression();
 
     void refreshMenuCustomVariable();
-
-    void frameSelectedChanged();
 
     void updateZoomRuler();
 
@@ -732,8 +694,6 @@ public:
 
     double tabStopValue() const { return m_tabStop; }
     void setTabStopValue ( double tabStop );
-
-    TableToSelectPosition positionToSelectRowcolTable(const QPoint& nPoint, KWTableFrameSet **ppTable =0L);
 
     void changeBgSpellCheckingState( bool b );
 
@@ -834,7 +794,8 @@ signals:
 
     void sig_refreshMenuCustomVariable();
 
-    void sig_frameSelectedChanged();
+    void sigFrameSetAdded(KWFrameSet*);
+    void sigFrameSetRemoved(KWFrameSet*);
 
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );
@@ -890,18 +851,6 @@ protected:
 private:
     void clear();
     void endOfLoading();
-    //private helper functions for frameUnderMouse
-    /** return the top-most frame under mouse, using nPoint, always returns the first found. */
-    KWFrame *topFrameUnderMouse( const QPoint& nPoint, bool* border=0L);
-    /** Search the list of frames for a frame that is directly below the argument frame,
-      * and return that.*/
-    KWFrame *frameBelowFrame(const QPoint& nPoint, KWFrame *frame, bool *border=0L);
-    /** Search if the frame (parent) has any embedded frames we might have clicked on and
-        return that frame if so.  The algoritm will recursively search for the deepest
-        inline frame we clicked on.
-    */
-    KWFrame *deepestInlineFrame(KWFrame *parent, const QPoint& nPoint, bool *border);
-
 
     // Variables:
     QValueList<KWView *> m_lstViews;

@@ -20,8 +20,10 @@
 #include <qobject.h>
 #include <qptrlist.h>
 #include <qvaluelist.h>
+#include <qvaluevector.h>
 #include <defs.h>
 
+class KWDocument;
 class KWFrame;
 class KWFrameSet;
 class KWView;
@@ -49,11 +51,37 @@ class KWFrameViewManager : public QObject {
 
 public:
     KWFrameViewManager();
+    /**
+     * Constructor that takes the already existing frames and framesets from doc and
+     * adds them.
+     */
+    KWFrameViewManager(KWDocument *doc);
     virtual ~KWFrameViewManager();
+
+    enum selectionEnum { selected, unselected, nextUnselected, frameOnTop };
+    /**
+     * Returns a frame positioned at @p point with the highest z-ordering (i.e. on top).
+     * @param point the position of the frame
+     */
+    KWFrameView *view(const KoPoint &point, selectionEnum select, bool borderOnly = false) const;
+    KWFrameView *view(const KWFrame *frame) const;
+
+    QValueList<KWFrameView*> selectedFrames() const;
+    KWFrameView* selectedFrame() const;
+
+    // this should be changed to a real iterator when Qt4 is used.
+    const QValueList<KWFrameView*> frameViewsIterator() const { return m_frames; }
+
+    MouseMeaning mouseMeaning( const KoPoint &point, int keyState) const;
+    QCursor mouseCursor( const KoPoint &point, int keyState ) const;
+
+    void showPopup( const KoPoint &point, KWView *view, int keyState, const QPoint &popupPoint) const;
 
     // listeners; see the fireEvents method signature for more info.
     void addKWFramesListener(KWFramesListener *listener);
     void removeKWFramesListener(KWFramesListener *listener);
+
+    void selectFrames(KoPoint &point, int keyState);
 
 public slots:
     /// notify this slot if a FrameSet has been created and should become visible.
@@ -64,6 +92,12 @@ public slots:
     void slotFrameAdded(KWFrame *f);
     /// notify this slot if a Frame has been removed
     void slotFrameRemoved(KWFrame *f);
+    void slotFrameMoved(KWFrame *f, double previousYPosition);
+    void slotFrameResized(KWFrame *f);
+    void slotFrameSelectionChanged();
+
+signals:
+    void sigFrameSelectionChanged();
 
 protected slots:
     /**
@@ -86,7 +120,8 @@ protected:
 private:
     class FrameEvent {
         public:
-            enum actionEnum { FrameRemoved, FrameAdded, FrameSetRemoved, FrameSetAdded };
+            enum actionEnum { FrameRemoved, FrameAdded, FrameSetRemoved, FrameSetAdded, FrameMoved, FrameResized, FrameSelectionChanged };
+            FrameEvent (actionEnum action);
             FrameEvent (actionEnum action, KWFrame *frame);
             FrameEvent (actionEnum action, KWFrameSet *frameSet);
         private:
@@ -96,10 +131,18 @@ private:
         friend class KWFrameViewManager;
     };
 
+    /// make sure the caches for pages and frame-hit positions is uptodate.
+    void recalculateFrameCache();
+    KWFrameView *getViewFor(KWFrame *frame);
+
+    QValueVector<KWFrameView*> framesAt(const KoPoint &point, bool borderOnly = false) const;
+    static bool compareFrameViewZOrder(KWFrameView *f1, KWFrameView *f2);
+
 private:
+    QValueList<KWFrameView*> m_frames;
     QValueList<KWFramesListener*> m_framesListener;
     QValueList<FrameEvent*> m_frameEvents;
-    bool m_queueRequested;
+    bool m_queueRequested, m_blockEvents;
 };
 
 class KWFramesListener {
@@ -108,6 +151,8 @@ public:
     virtual void frameSetRemoved(KWFrameSet *fs) = 0;
     virtual void frameAdded(KWFrame *f) = 0;
     virtual void frameRemoved(KWFrame *f) = 0;
+    virtual void frameMoved(KWFrame *f) = 0;
+    virtual void frameResized(KWFrame *f) = 0;
 };
 
 #endif

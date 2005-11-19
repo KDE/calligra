@@ -33,6 +33,7 @@
 
 #include <koPageLayoutDia.h>
 #include <koView.h>
+#include <koPoint.h>
 #include <kshortcut.h>
 class DCOPObject;
 class KURL;
@@ -49,11 +50,14 @@ class KWPartFrameSet;
 class KoSearchContext;
 class KWStyleManager;
 class KWTableDia;
+class KWFrameViewManager;
 class KWView;
+class KWFrameView;
 class QResizeEvent;
 //class KSpell;
 class QScrollView;
 class QSplitter;
+
 class KAction;
 class KActionMenu;
 class KSelectAction;
@@ -107,10 +111,15 @@ public:
     void showFormat( const KoTextFormat &currentFormat );
     void showAlign( int align );
     void showCounter( KoParagCounter &c );
-    void showParagBorders( const KoBorder& _left, const KoBorder& _right,
-                          const KoBorder& _top, const KoBorder& _bottom );
-    void showFrameBorders( const KoBorder& _left, const KoBorder& _right,
-                          const KoBorder& _top, const KoBorder& _bottom );
+    /**
+     * Updates the checked state of the border buttons based on the parameters.
+     * @param left represents the left border being currently visible
+     * @param right represents the right border being currently visible
+     * @param top represents the top border being currently visible
+     * @param bottom represents the bottom border being currently visible
+     */
+    void updateBorderButtons( const KoBorder& left, const KoBorder& right,
+                          const KoBorder& top, const KoBorder& bottom );
 
     void showStyle( const QString & styleName );
     void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin, bool rtl );
@@ -165,9 +174,6 @@ public:
 
     virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
-    void openPopupMenuInsideFrame(KWFrame *, const QPoint &);
-    void openPopupMenuEditFrame(const QPoint &);
-    void openPopupMenuChangeAction( const QPoint & );
 
     void changeNbOfRecentFiles(int _nb);
 
@@ -224,6 +230,8 @@ public:
     int tableDeleteCol(const QValueList<uint>& cols, KWTableFrameSet *table = 0);
 
     void pasteData( QMimeSource* data );
+
+    KWFrameViewManager* frameViewManager() const;
 
 public slots:
     void fileStatistics();
@@ -534,7 +542,10 @@ protected:
 
     void spellCheckerRemoveHighlight();
 
-private:
+private:  // methods
+    void deleteSelectedFrames();
+
+private: // variables
     KWDocument *m_doc;
 
     // TODO use m_ notation
@@ -794,7 +805,6 @@ private:
 
 
     KWFrameSet *fsInline;
-
 };
 
 /******************************************************************/

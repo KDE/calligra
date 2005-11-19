@@ -222,6 +222,12 @@ public:
     virtual ~KWViewModeText() {}
 
     KWTextFrameSet *textFrameSet() const;
+    /**
+     * Return a text frameset that the user has either selected or is currently editing,
+     * returning the main text frameset otherwise.
+     * If the selected frame is not a text FS, and the user is not editing one in the
+     * first view plus the document has no main text frameset then this method will return 0
+     */
     static KWTextFrameSet *determineTextFrameSet( KWDocument* doc );
 
     virtual QPoint normalToView( const QPoint & nPoint );

@@ -27,7 +27,6 @@
 #include "KWTextFrameSet.h"
 #include "KWTableFrameSet.h"
 #include "KWAnchor.h"
-#include "KWResizeHandle.h"
 #include <kotextobject.h> // for customItemChar!
 #include <qpopupmenu.h>
 
@@ -306,14 +305,6 @@ void KWFormulaFrameSet::setAnchorFormat( KoTextFormat* format, int /*frameNum*/ 
     if ( !m_frames.isEmpty() ) {
         formula->setFontSizeDirect( format->pointSize() );
     }
-}
-
-void KWFormulaFrameSet::showPopup( KWFrame *, KWView *view, const QPoint &point )
-{
-    QPopupMenu * popup = view->popupMenu("Formula");
-    Q_ASSERT(popup);
-    if (popup)
-        popup->popup( point );
 }
 
 

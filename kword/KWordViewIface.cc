@@ -307,14 +307,14 @@ void KWordViewIface::setConfigTableTemplateName(const QString &_name)
     view->getGUI()->canvasWidget()->setTableTemplateName( _name );
 }
 
-bool KWordViewIface::selectAllFrames()
+void KWordViewIface::selectAllFrames()
 {
-    return view->getGUI()->canvasWidget()->selectAllFrames(true);
+    view->getGUI()->canvasWidget()->selectAllFrames(true);
 }
 
-bool KWordViewIface::unSelectAllFrames()
+void KWordViewIface::unSelectAllFrames()
 {
-    return view->getGUI()->canvasWidget()->selectAllFrames(false);
+    view->getGUI()->canvasWidget()->selectAllFrames(false);
 }
 
 

@@ -100,7 +100,7 @@ public:
     /** Contructor when the dialog is used on creation of m_frame */
     KWFrameDia( QWidget *parent, KWFrame *_frame,KWDocument *_doc,FrameSetType _ft);
     KWFrameDia( QWidget *parent, KWFrame *_frame);
-    KWFrameDia( QWidget *parent, QPtrList<KWFrame> m_allFrames);
+    KWFrameDia( QWidget *parent, QPtrList<KWFrame> allFrames);
     //KWFrameDia( QWidget *parent, KWCanvas *_canvas);
 
     //void setCanvas(KWCanvas *_canvas) {canvas =_canvas;}

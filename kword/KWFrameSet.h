@@ -36,6 +36,7 @@ class KWTextFrameSetEdit;
 class KWTextParag;
 class KWView;
 class KWordFrameSetIface;
+class KWFrameViewManager;
 
 class KoSavingContext;
 class KoTextDocument;
@@ -198,6 +199,7 @@ public:
      * @param edit If set, this frameset is being edited, so a cursor is needed.
      * @param viewMode For coordinate conversion, always set.
      * @param canvas For view settings. WARNING: canvas can be 0 (e.g. in embedded documents).
+     * @param frameViewManager the frameViewManager;
      *
      * The way this "onlyChanged/resetChanged" works is: when something changes,
      * all views are asked to redraw themselves with onlyChanged=true.
@@ -210,7 +212,8 @@ public:
      */
     virtual void drawContents( QPainter *painter, const QRect &crect,
                                const QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit *edit, KWViewMode *viewMode );
+                               KWFrameSetEdit *edit, KWViewMode *viewMode,
+                               KWFrameViewManager *frameViewManager );
 
     /**
      * This one is called by drawContents for each frame.
@@ -293,25 +296,6 @@ public:
 
     /** returns true if we have a frame occupying that position */
     virtual bool contains( double mx, double my );
-
-    /**
-     * Return "what it means" to have the mouse at position nPoint,
-     * (which kwdoc tests to be over one of our frames).
-     * The meaning is "what will happen when clicking".
-     */
-    virtual MouseMeaning getMouseMeaning( const QPoint &nPoint, int keyState );
-    /**
-     * Return the meaning of clicking inside the frame (when neither Ctrl nor Shift is pressed)
-     */
-    virtual MouseMeaning getMouseMeaningInsideFrame( const KoPoint& );
-
-    /** Show a popup menu - called when right-clicking inside a frame of this frameset.
-     * The default implementation shows "frame_popup".
-     * @param frame the frame which was clicked. Always one of ours.
-     * @param view the view - we use it to get the popupmenu by name
-     * @param point the mouse position (at which to show the menu)
-     */
-    virtual void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
     /// save to XML - when saving
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true ) = 0;
@@ -465,6 +449,9 @@ signals:
     /// so that all views repaint it. KWDocument connects to it,
     /// and KWCanvas connects to KWDocument.
     void repaintChanged( KWFrameSet * frameset );
+
+    void sigFrameAdded(KWFrame*);
+    void sigFrameRemoved(KWFrame*);
 
 protected:
 

@@ -95,9 +95,8 @@ k_dcop:
     QString configTableTemplateName() const;
     void setConfigTableTemplateName(const QString &_name);
 
-    //return false if there is no frame in document
-    bool selectAllFrames();
-    bool unSelectAllFrames();
+    void selectAllFrames();
+    void unSelectAllFrames();
 
     void editFootEndNote();
     void savePicture();

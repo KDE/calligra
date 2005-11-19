@@ -68,6 +68,8 @@
 #include "KWFrameList.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWFrameViewManager.h"
+#include "KWFrameView.h"
 
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
@@ -237,7 +239,7 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
     connect( m_doc, SIGNAL( sig_refreshMenuCustomVariable()),
              this, SLOT( refreshCustomMenu()));
 
-    connect( m_doc, SIGNAL(sig_frameSelectedChanged()),
+    connect( frameViewManager(), SIGNAL(sigFrameSelectionChanged()),
              this, SLOT( frameSelectedChanged()));
 
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
@@ -275,9 +277,6 @@ KWView::KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDoc
              actionAddPersonalExpression, SLOT(setEnabled(bool )));
     connect (m_gui->canvasWidget(), SIGNAL(selectionChanged(bool)),
              actionSortText, SLOT(setEnabled(bool )));
-
-    connect( m_gui->canvasWidget(), SIGNAL(frameSelectedChanged()),
-             this, SLOT(frameSelectedChanged()));
 
     connect( m_gui->canvasWidget(), SIGNAL(docStructChanged(int)),
              this, SLOT(docStructChanged(int)));
@@ -1290,7 +1289,7 @@ void KWView::setupActions()
                                     this, SLOT( goToDocument() ),
                                     actionCollection(), "goto_document" );
 
-    // For RMB inside a cell, see KWTableFrameSetEdit::showPopup
+    // For RMB inside a cell, see KWFrameView::showPopup
     // This isn't a dynamic list; it's only plugged/unplugged depending on the context.
     // If you change the contents of that list, check ~KWView.
     m_tableActionList.append( new KActionSeparator(actionCollection()) );
@@ -1544,9 +1543,9 @@ void KWView::updatePageInfo()
         {
             m_currentPage = edit->currentFrame()->pageNumber();
         } else {
-            KWFrame* f = m_doc->getFirstSelectedFrame();
-            if ( f )
-                m_currentPage = f->pageNumber();
+            KWFrameView *view = frameViewManager()->selectedFrame();
+            if(view)
+                m_currentPage = m_doc->pageManager()->pageNumber(view->frame());
         }
         /*kdDebug() << (void*)this << " KWView::updatePageInfo "
                   << " edit: " << edit << " " << ( edit?edit->frameSet()->name():QString::null)
@@ -1585,14 +1584,14 @@ void KWView::pageNumChanged()
 void KWView::updateFrameStatusBarItem()
 {
     KStatusBar * sb = statusBar();
-    int nbFrame=m_doc->getSelectedFrames().count();
+    int nbFrame=frameViewManager()->selectedFrames().count();
     if ( m_doc->showStatusBar() && sb && nbFrame > 0 )
     {
         if ( nbFrame == 1 )
         {
             KoUnit::Unit unit = m_doc->unit();
             QString unitName = m_doc->unitName();
-            KWFrame * frame = m_doc->getFirstSelectedFrame();
+            KWFrame * frame = frameViewManager()->selectedFrames()[0]->frame();
             m_sbFramesLabel->setText( ' ' + i18n( "Statusbar info", "%1: %2, %3 - %4, %5 (width: %6, height: %7)" )
                     .arg( frame->frameSet()->name() )
                     .arg( KoUnit::toUserStringValue( frame->left(), unit ) )
@@ -1874,7 +1873,7 @@ void KWView::showFormat( const KoTextFormat &currentFormat )
     //actionBackgroundColor->setEnabled(true);
     actionBackgroundColor->setCurrentColor( col.isValid() ? col : QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
 
-    if ( m_doc->getSelectedFrames().count() > 0)
+    if ( m_gui /* if not in constructor */ && frameViewManager()->selectedFrames().count() > 0)
         actionBackgroundColor->setText(i18n("Frame Background Color..."));
     else
         actionBackgroundColor->setText(i18n("Text Background Color..."));
@@ -1947,13 +1946,7 @@ void KWView::showCounter( KoParagCounter &c )
         act->setChecked( true );
 }
 
-void KWView::showFrameBorders( const KoBorder& _left, const KoBorder& _right,
-                               const KoBorder& _top, const KoBorder& _bottom )
-{
-    showParagBorders( _left, _right, _top, _bottom );
-}
-
-void KWView::showParagBorders( const KoBorder& left, const KoBorder& right,
+void KWView::updateBorderButtons( const KoBorder& left, const KoBorder& right,
                                const KoBorder& top, const KoBorder& bottom )
 {
     if ( m_border.left != left || m_border.right != right || m_border.top != top || m_border.bottom != bottom )
@@ -2408,7 +2401,6 @@ void KWView::editSelectAll()
 void KWView::editSelectAllFrames()
 {
     m_gui->canvasWidget()->selectAllFrames( true );
-    frameSelectedChanged();
 }
 
 void KWView::editSelectCurrentFrame()
@@ -2417,10 +2409,9 @@ void KWView::editSelectCurrentFrame()
     KWFrameSetEdit* edit = m_gui->canvasWidget()->currentFrameSetEdit();
     KWFrame* frame = edit->currentFrame();
     if (!frame) return;
-    if (!frame->isSelected()) {
-        frame->setSelected(true);
-        frameSelectedChanged();
-    }
+    KWFrameView *view = frameViewManager()->view(frame);
+    if (!view) return;
+    view->setSelected(true);
 }
 
 void KWView::editFind()
@@ -2483,25 +2474,31 @@ void KWView::editFindPrevious()
 void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
     KMacroCommand* macroCmd = 0L;
     // For each selected frame...
-    QPtrList<KWFrame> frames = m_doc->getSelectedFrames();
-    if(frames.count()==0) return;
+    QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
+    if(selectedFrames.count()==0) return;
 
-    int pageNum= frames.at(0)->pageNumber();
-    for (QPtrListIterator<KWFrame> fIt( frames ); fIt.current() ; ++fIt ) {
+    KWPage *page = m_doc->pageManager()->page(selectedFrames[0]->frame());
+    QPtrList<KWFrame> frames;
+    QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+    while(framesIterator != selectedFrames.end()) {
         // include all frames in case of table.
-        KWFrameSet *table = fIt.current()->frameSet()->groupmanager();
+        frames.append((*framesIterator)->frame());
+        KWFrameSet *table = (*framesIterator)->frame()->frameSet()->groupmanager();
         if(table) {
             for (QPtrListIterator<KWFrame> cellIt(table->frameIterator()  ); cellIt.current() ; ++cellIt ) {
-                if(frames.contains(cellIt.current() ) ==0 && cellIt.current()->pageNumber()==pageNum)
-                    frames.append(cellIt.current());
+                KWFrame *frame = cellIt.current();
+                if(page->rect().contains(*frame) && !frames.contains(frame))
+                    frames.append(frame);
             }
         }
+        ++framesIterator;
     }
 
     int lowestZOrder=10000;
     QString actionName;
-    for (QPtrListIterator<KWFrame> fIt( frames ); fIt.current() ; ++fIt ) {
-        KWFrame* frame = fIt.current();
+    framesIterator = selectedFrames.begin();
+    while(framesIterator != selectedFrames.end()) {
+        KWFrame* frame = (*framesIterator)->frame();
         int newZOrder=0;
         switch(moveType) {
             case RaiseFrame:
@@ -2542,6 +2539,7 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
                 macroCmd = new KMacroCommand( actionName );
             macroCmd->addCommand(cmd);
         }
+        ++framesIterator;
     }
 
     if ( macroCmd )
@@ -2555,7 +2553,7 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
     }
 
     if(lowestZOrder != 10000 && m_doc->processingType() == KWDocument::WP) {
-        m_doc->lowerMainFrames( pageNum, lowestZOrder );
+        m_doc->lowerMainFrames( page->pageNumber(), lowestZOrder );
     }
 }
 
@@ -2654,14 +2652,15 @@ void KWView::deleteFrame( bool _warning )
 {
     if ( !m_doc->isReadWrite() )
         return;
-    QPtrList<KWFrame> frames=m_doc->getSelectedFrames();
+
+    QValueList<KWFrameView*> frames = frameViewManager()->selectedFrames();
     if( frames.count() < 1) {
         kdWarning() << "KWView::deleteFrame: no frame selected" << endl;
         return;
     }
     if(frames.count()==1)
     {
-        KWFrame *theFrame = frames.at(0);
+        KWFrame *theFrame = frames[0]->frame();
         KWFrameSet *fs = theFrame->frameSet();
 
         Q_ASSERT( !fs->isAHeader() ); // the action is disabled for such cases
@@ -2683,7 +2682,6 @@ void KWView::deleteFrame( bool _warning )
             if (result != KMessageBox::Continue)
                 return;
             m_doc->deleteTable( fs->groupmanager() );
-            m_gui->canvasWidget()->emitFrameSelectedChanged();
             return;
         }
 
@@ -2711,7 +2709,6 @@ void KWView::deleteFrame( bool _warning )
                     return;
 
                 m_doc->deleteFrame( theFrame );
-                m_gui->canvasWidget()->emitFrameSelectedChanged();
                 return;
             }
 
@@ -2730,7 +2727,6 @@ void KWView::deleteFrame( bool _warning )
                 return;
         }
         m_doc->deleteFrame( theFrame );
-        m_gui->canvasWidget()->emitFrameSelectedChanged();
     }
     else
     {
@@ -2748,18 +2744,16 @@ void KWView::deleteFrame( bool _warning )
                 return;
         }
 
-        m_doc->deleteSelectedFrames();
-
-        m_gui->canvasWidget()->emitFrameSelectedChanged();
+        deleteSelectedFrames();
     }
 }
 
 void KWView::createLinkedFrame()
 {
-    QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
     if (selectedFrames.count() != 1)
         return; // action is disabled in such a case
-    KWFrame* frame = selectedFrames.getFirst();
+    KWFrame* frame = selectedFrames[0]->frame();
     KWFrame* newFrame = new KWFrame(0L, frame->x() + m_gui->getVertRuler()->minimumSizeHint().width(), frame->y() + m_gui->getHorzRuler()->minimumSizeHint().height(), frame->width(), frame->height() );
     newFrame->setZOrder( m_doc->maxZOrder( newFrame->pageNumber(m_doc) ) + 1 ); // make sure it's on top
     newFrame->setCopy(true);
@@ -3015,7 +3009,6 @@ void KWView::updateHeader()
 
         }
     }
-    m_doc->updateResizeHandles( );
 }
 
 
@@ -3063,7 +3056,6 @@ void KWView::updateFooter()
 
         }
     }
-    m_doc->updateResizeHandles( );
 
 }
 
@@ -3108,7 +3100,6 @@ void KWView::viewZoom( const QString &s )
     {
         setZoom( zoom, true );
 
-        m_doc->updateResizeHandles();
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit )
             edit->ensureCursorVisible();
@@ -3784,7 +3775,7 @@ void KWView::formatPage()
 
 void KWView::formatFrameSet()
 {
-    if ( m_doc->getFirstSelectedFrame() )
+    if ( frameViewManager()->selectedFrame() )
     {
         m_gui->canvasWidget()->editFrameProperties();
     }
@@ -3841,29 +3832,25 @@ void KWView::extraFrameStylist()
 
 void KWView::createFrameStyle()
 {
-    KWFrame* frame = 0L;
 
-    QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
-    if (selectedFrames.count()== 1)
-        frame = selectedFrames.first();
+    QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
+    if (selectedFrames.count() != 1)
+        return;
 
-    if (frame)
+    KWFrame* frame = selectedFrames[0]->frame();
+
+    QStringList list;
+    QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
+    for ( ; styleIt.current(); ++styleIt )
+        list.append( styleIt.current()->name() );
+    KoCreateStyleDia *dia = new KoCreateStyleDia( list , this, 0 );
+    if ( dia->exec() )
     {
-        QStringList list;
-        QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
-        for ( ; styleIt.current(); ++styleIt )
-        {
-            list.append( styleIt.current()->name() );
-        }
-        KoCreateStyleDia *dia = new KoCreateStyleDia( list , this, 0 );
-        if ( dia->exec() )
-        {
-            KWFrameStyle *style= new KWFrameStyle( dia->nameOfNewStyle(), frame );
-            m_doc->frameStyleCollection()->addFrameStyleTemplate( style );
-            m_doc->updateAllFrameStyleLists();
-        }
-        delete dia;
+        KWFrameStyle *style= new KWFrameStyle( dia->nameOfNewStyle(), frame );
+        m_doc->frameStyleCollection()->addFrameStyleTemplate( style );
+        m_doc->updateAllFrameStyleLists();
     }
+    delete dia;
 }
 
 void KWView::extraStylist()
@@ -4162,10 +4149,7 @@ void KWView::tableDeleteRow()
                                                     i18n("Delete Row"),
                                                     KGuiItem(i18n("&Delete"),"editdelete"));
         if (result == KMessageBox::Continue)
-        {
             m_doc->deleteTable( table );
-            m_gui->canvasWidget()->emitFrameSelectedChanged();
-        }
     }
     else
     {
@@ -4194,10 +4178,7 @@ void KWView::tableDeleteCol()
                                                     i18n("Delete Column"),
                                                     KGuiItem(i18n("&Delete"),"editdelete"));
         if (result == KMessageBox::Continue)
-        {
             m_doc->deleteTable( table );
-            m_gui->canvasWidget()->emitFrameSelectedChanged();
-        }
     }
     else
     {
@@ -4237,10 +4218,6 @@ void KWView::tableJoinCells()
     }
     m_doc->addCommand(cmd);
     m_doc->layout();
-    //KoRect r = m_doc->zoomRect( table->boundingRect() );
-    //m_gui->canvasWidget()->repaintScreen( r, TRUE );
-    m_gui->canvasWidget()->repaintAll();
-    m_gui->canvasWidget()->emitFrameSelectedChanged();
 }
 
 void KWView::tableSplitCells() {
@@ -4259,10 +4236,10 @@ void KWView::tableSplitCells(int cols, int rows)
 {
     //m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT_FRAME );
 
-    QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+    QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if ( !table && selectedFrames.count() > 0) {
-        table=selectedFrames.at(0)->frameSet()->groupmanager();
+        table=selectedFrames[0]->frame()->frameSet()->groupmanager();
     }
 
     if(selectedFrames.count() >1 || table == 0) {
@@ -4286,8 +4263,6 @@ void KWView::tableSplitCells(int cols, int rows)
     //m_gui->canvasWidget()->repaintScreen( r, TRUE );
     m_doc->updateAllFrames();
     m_doc->layout();
-    m_gui->canvasWidget()->repaintAll();
-    m_doc->frameSelectedChanged();
 }
 
 void KWView::tableUngroupTable()
@@ -4321,7 +4296,6 @@ void KWView::tableDelete()
     if (!table)
         return;
     m_doc->deleteTable( table );
-    m_gui->canvasWidget()->emitFrameSelectedChanged();
 }
 
 void KWView::tableStylist()
@@ -4371,15 +4345,15 @@ void KWView::textStyleSelected( KoParagStyle *_sty )
     }
     else
     { // it might be that a frame (or several frames) are selected
-        QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+        QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
         if (selectedFrames.count() <= 0)
             return; // nope, no frames are selected.
         // yes, indeed frames are selected.
-        QPtrListIterator<KWFrame> it( selectedFrames );
+
+        QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
         KMacroCommand *globalCmd = 0L;
-        for ( ; it.current() ; ++it )
-        {
-            KWFrame *curFrame = it.current();
+        while(framesIterator != selectedFrames.end()) {
+            KWFrame *curFrame = (*framesIterator)->frame();
             KWFrameSet *curFrameSet = curFrame->frameSet();
             if (curFrameSet->type() == FT_TEXT)
             {
@@ -4394,6 +4368,7 @@ void KWView::textStyleSelected( KoParagStyle *_sty )
                     globalCmd->addCommand( cmd );
                 }
             }
+            ++framesIterator;
         }
         if ( globalCmd )
             m_doc->addCommand( globalCmd );
@@ -4445,20 +4420,20 @@ void KWView::frameStyleSelected( KWFrameStyle *_sty )
     }
     else
     { // it might be that a frame (or several frames) are selected
-        QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+        QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
         if (selectedFrames.count() <= 0)
             return; // nope, no frames are selected.
         // yes, indeed frames are selected.
-        QPtrListIterator<KWFrame> it( selectedFrames );
 
         KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Framestyle to Frame") : i18n("Apply Framestyle to Frames"));
 
-        for ( ; it.current() ; ++it )
-        {
-            KWFrame *curFrame = it.current();
+        QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+        while(framesIterator != selectedFrames.end()) {
+            KWFrame *curFrame = (*framesIterator)->frame();
             KCommand *cmd = new KWFrameStyleCommand( i18n("Apply Framestyle"), curFrame, _sty );
             if (cmd)
                 globalCmd->addCommand( cmd );
+            ++framesIterator;
         }
         m_doc->addCommand( globalCmd );
         globalCmd->execute();
@@ -4517,20 +4492,22 @@ void KWView::tableStyleSelected( KWTableStyle *_sty )
     }
     else
     {
-        QPtrList <KWFrame> selectedFrames = m_doc->getSelectedFrames();
+        QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
         if (selectedFrames.count() <= 0)
             return; // nope, no frames are selected.
 
-        QPtrListIterator<KWFrame> it( selectedFrames );
-
         KMacroCommand *globalCmd = new KMacroCommand( selectedFrames.count() == 1 ? i18n("Apply Tablestyle to Frame") : i18n("Apply Tablestyle to Frames"));
 
-        for ( ; ( ( it.current() ) && ( it.current()->frameSet()->type() == FT_TEXT ) ); ++it )
-        {
-            KWFrame *curFrame = it.current();
-            KCommand *cmd = new KWTableStyleCommand( i18n("Apply Tablestyle to Frame"), curFrame, _sty );
-            if (cmd)
-                globalCmd->addCommand( cmd );
+        QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+        while(framesIterator != selectedFrames.end() ) {
+            KWFrame *curFrame = (*framesIterator)->frame();
+            if(dynamic_cast<KWTextFrameSet*>(curFrame->frameSet()))  {
+                KCommand *cmd = new KWTableStyleCommand( i18n("Apply Tablestyle to Frame"),
+                        curFrame, _sty );
+                if (cmd)
+                    globalCmd->addCommand( cmd );
+            }
+            ++framesIterator;
         }
         m_doc->addCommand( globalCmd );
         globalCmd->execute();
@@ -4646,15 +4623,13 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
     else
     {   // it might be that a frame (or several frames) are selected
         // in that case, list the text framesets behind them
-        QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
-        QPtrListIterator<KWFrame> it( selectedFrames );
-        for ( ; it.current() ; ++it )
-        {
-            if ( it.current()->frameSet()->type() == FT_TEXT ) {
-                KWTextFrameSet* fs = static_cast<KWTextFrameSet *>( it.current()->frameSet() );
-                if ( !lst.contains( fs )&& !fs->protectContent() )
-                    lst.append( fs );
-            }
+        QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
+        QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+        while(framesIterator != selectedFrames.end()) {
+            KWTextFrameSet* fs = dynamic_cast<KWTextFrameSet *>( (*framesIterator)->frame()->frameSet() );
+            if ( fs && !lst.contains( fs )&& !fs->protectContent() )
+                lst.append( fs );
+            ++framesIterator;
         }
     }
     return lst;
@@ -5374,7 +5349,7 @@ void KWView::slotPageLayoutChanged( const KoPageLayout& layout )
     // above method, or any other way of changing the page layout happens,
     // the rulers are updated in all views.
     m_gui->canvasWidget()->viewMode()->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), layout );
-    m_gui->canvasWidget()->repaintAll( true );
+    m_gui->canvasWidget()->repaintAll();
 }
 
 void KWView::newFirstIndent( double _firstIndent )
@@ -5445,98 +5420,6 @@ QPopupMenu * KWView::popupMenu( const QString& name )
     if ( factory() )
         return ((QPopupMenu*)factory()->container( name, this ));
     return 0L;
-}
-
-void KWView::openPopupMenuInsideFrame( KWFrame* frame, const QPoint & _point )
-{
-    KWFrameSetEdit *fse = m_gui->canvasWidget()->currentFrameSetEdit();
-    kdDebug() << (void*) fse << " in KWView::openPopupMenuInsideFrame" << endl;
-    unplugActionList( "tableactions" ); // will be plugged again by KWTableFrameSetEdit
-    if (fse)
-        fse->showPopup( frame, this, _point );
-    else
-        frame->frameSet()->showPopup( frame, this, _point );
-}
-
-void KWView::openPopupMenuChangeAction( const QPoint & _point )
-{
-    if(!koDocument()->isReadWrite() || !factory())
-        return;
-    QPopupMenu* popup = static_cast<QPopupMenu *>(factory()->container("action_popup",this));
-    if ( popup )
-        popup->popup(_point);
-}
-
-void KWView::openPopupMenuEditFrame( const QPoint & _point )
-{
-    if(!koDocument()->isReadWrite() || !factory())
-        return;
-    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    if(!table)
-    {
-        QPtrList<KAction> actionList;
-
-        int nbFrame=m_doc->getSelectedFrames().count();
-        KActionSeparator *separator=new KActionSeparator();
-        KActionSeparator *separator2=new KActionSeparator();
-        if(nbFrame ==1)
-        {
-            KWFrame *frame=m_doc->getFirstSelectedFrame();
-            KWFrameSet *frameSet=frame->frameSet();
-            // ## TODO design: move this to KWFrameSet and derived classes (virtual method)
-            if( frameSet->type()==FT_PICTURE )
-            {
-                actionList.append(separator);
-                if ( !frameSet->protectContent() )
-                    actionList.append(actionChangePicture);
-                actionList.append(actionSavePicture);
-            }
-#if 0 // KWORD_HORIZONTAL_LINE
-            else if ( frameSet->type() == FT_HORZLINE )
-            {
-                actionList.append(separator);
-                actionList.append(actionChangeHorizontalLine);
-                actionList.append(actionSavePicture);
-            }
-#endif
-            else if ( frameSet->type() == FT_PART )
-            {
-                KWPartFrameSet *part = static_cast<KWPartFrameSet *>(frameSet);
-                actionEmbeddedStoreInternal->setChecked(part->getChild()->document()->storeInternal());
-                actionEmbeddedStoreInternal->setEnabled(part->getChild()->document()->hasExternURL());
-                actionList.append(separator);
-                actionList.append(actionEmbeddedStoreInternal);
-            }
-            else if(frameSet->isHeaderOrFooter())
-            {
-                actionList.append(separator);
-                actionList.append(actionConfigureHeaderFooter);
-            }
-            else if (frameSet->isFootEndNote())
-            {
-                actionList.append(separator);
-                actionGoToFootEndNote->setText( frameSet->isFootNote() ?
-                    i18n( "Go to Footnote" ) : i18n( "Go to Endnote" ) );
-                actionList.append(actionGoToFootEndNote);
-            }
-            bool state = !frameSet->isHeaderOrFooter() && !frameSet->isFootEndNote();
-            state = state && (m_doc->processingType() == KWDocument::WP &&frameSet!=m_doc->frameSet( 0 ));
-            if(state)
-            {
-                actionList.append(separator2);
-                KWFrameSet * parentFs = frameSet->groupmanager() ? frameSet->groupmanager() : frameSet;
-                actionInlineFrame->setChecked(parentFs->isFloating());
-                actionList.append(actionInlineFrame);
-            }
-        }
-        plugActionList( "frameset_type_action", actionList );
-        ((QPopupMenu*)factory()->container("frame_popup",this))->exec(_point);
-        unplugActionList( "frameset_type_action" );
-        delete separator;
-        delete separator2;
-    }
-    else
-        ((QPopupMenu*)factory()->container("frame_popup_table",this))->popup(_point);
 }
 
 void KWView::startKSpell()
@@ -5819,11 +5702,10 @@ void KWView::slotUpdateRuler()
 void KWView::frameSelectedChanged()
 {
     bool rw = koDocument()->isReadWrite();
-    QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
-    int nbFrame = selectedFrames.count();
+    QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
 
-    actionFormatFrameSet->setEnabled( nbFrame>=1 );
-    if ( rw && nbFrame >= 1 )
+    actionFormatFrameSet->setEnabled( selectedFrames.count() >= 1 );
+    if ( rw && selectedFrames.count() >= 1 )
     {
         bool okForDelete = true;
         bool okForCopy = true;
@@ -5832,13 +5714,15 @@ void KWView::frameSelectedChanged()
         bool okForChangeInline = true;
         bool containsCellFrame = false;
         bool containsMainFrame = false;
-        QPtrListIterator<KWFrame> it( selectedFrames );
-        for ( ; it.current() && ( okForDelete || okForLowerRaise || okForChangeParagStyle || okForChangeInline) ; ++it )
-        {
+
+        QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+        while(framesIterator != selectedFrames.end() && (okForDelete || okForLowerRaise ||
+                    okForChangeParagStyle || okForChangeInline) ) {
             // Check we selected no footer nor header
-            bool isFootNote = it.current()->frameSet()->isFootEndNote();
-            bool headerFooterFootNote = it.current()->frameSet()->isHeaderOrFooter() || isFootNote;
-            bool isMainWPFrame = it.current()->frameSet()->isMainFrameset();
+            bool isFootNote = (*framesIterator)->frame()->frameSet()->isFootEndNote();
+            bool headerFooterFootNote = isFootNote ||
+                (*framesIterator)->frame()->frameSet()->isHeaderOrFooter();
+            bool isMainWPFrame = (*framesIterator)->frame()->frameSet()->isMainFrameset();
             okForChangeParagStyle &= !isFootNote;
             okForCopy &= !headerFooterFootNote;
 
@@ -5848,17 +5732,18 @@ void KWView::frameSelectedChanged()
             // Check we selected a frame we can lower raise.
             // The header, footer, main frameset, footnotes and inline frames can't be raised.
             // As soon as we find one who we can lower/raise open the option.
-            okForLowerRaise |= !(isMainWPFrame || headerFooterFootNote || it.current()->frameSet()->isFloating());
+            okForLowerRaise |= !(isMainWPFrame || headerFooterFootNote || (*framesIterator)->frame()->frameSet()->isFloating());
             okForChangeInline &= !(isMainWPFrame || headerFooterFootNote );
 
-            if ( it.current()->frameSet()->groupmanager() )
+            if ( (*framesIterator)->frame()->frameSet()->groupmanager() )
                 containsCellFrame = true;
             if ( isMainWPFrame )
                 containsMainFrame = true;
+            ++framesIterator;
         }
         actionEditDelFrame->setEnabled( okForDelete );
         actionEditCut->setEnabled( okForDelete && !containsCellFrame );
-        actionEditCopy->setEnabled( nbFrame >= 1 && okForCopy && !containsMainFrame && !containsCellFrame);
+        actionEditCopy->setEnabled( selectedFrames.count() >= 1 && okForCopy && !containsMainFrame && !containsCellFrame);
 
         actionLowerFrame->setEnabled( okForLowerRaise );
         actionRaiseFrame->setEnabled( okForLowerRaise );
@@ -5869,6 +5754,9 @@ void KWView::frameSelectedChanged()
         actionFormatStyle->setEnabled( okForChangeParagStyle);
         actionInlineFrame->setEnabled( okForChangeInline);
 
+        KWFrame *frame = selectedFrames[0]->frame();
+        updateBorderButtons(frame->leftBorder(), frame->rightBorder(), frame->topBorder(),
+                frame->bottomBorder());
     } else
     {   // readonly document, or no frame selected -> disable
         actionEditDelFrame->setEnabled( false );
@@ -5881,40 +5769,33 @@ void KWView::frameSelectedChanged()
 
     }
     bool frameDifferentOfPart=false;
-    if(nbFrame >= 1)
+    if(selectedFrames.count() >= 1)
     {
-        QPtrListIterator<KWFrame> it( selectedFrames );
-        for ( ; it.current(); ++it )
-        {
-            if ( it.current()->frameSet()->type()!=FT_PART && it.current()->frameSet()->type()!= FT_PICTURE)
-            {
+        QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+        while(framesIterator != selectedFrames.end()) {
+            if ( (*framesIterator)->frame()->frameSet()->type()!=FT_PART &&
+                    (*framesIterator)->frame()->frameSet()->type()!= FT_PICTURE) {
                 frameDifferentOfPart=true;
                 break;
             }
+            ++framesIterator;
         }
     }
 
-    actionBackgroundColor->setEnabled( (nbFrame >= 1) && frameDifferentOfPart);
+    actionBackgroundColor->setEnabled( (selectedFrames.count() >= 1) && frameDifferentOfPart);
     actionBackgroundColor->setText(i18n("Frame Background Color..."));
 
     if ( frameDifferentOfPart ) {
-        KWFrame *frame = m_doc->getFirstSelectedFrame();
-
-        if ( frame )
-        {
-            QColor frameCol=frame->backgroundColor().color();
-            //actionBackgroundColor->setText(i18n("Frame Background Color..."));
-            actionBackgroundColor->setCurrentColor( frameCol.isValid()? frame->backgroundColor().color() :  QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
-        }
+        KWFrame *frame = selectedFrames[0]->frame();
+        QColor frameCol=frame->backgroundColor().color();
+        //actionBackgroundColor->setText(i18n("Frame Background Color..."));
+        actionBackgroundColor->setCurrentColor( frameCol.isValid()? frame->backgroundColor().color() :  QApplication::palette().color( QPalette::Active, QColorGroup::Base ));
     }
 
-    actionCreateFrameStyle->setEnabled( nbFrame==1 );
-    actionCreateLinkedFrame->setEnabled( nbFrame==1 );
+    actionCreateFrameStyle->setEnabled( selectedFrames.count()==1 );
+    actionCreateLinkedFrame->setEnabled( selectedFrames.count()==1 );
 
-
-    updateTableActions( nbFrame );
-    m_doc->refreshFrameBorderButton();
-
+    updateTableActions( selectedFrames.count() );
     updatePageInfo(); // takes care of slotUpdateRuler()
     updateFrameStatusBarItem();
 
@@ -5935,16 +5816,15 @@ void KWView::frameSelectedChanged()
             align = Qt::AlignLeft; // ## seems hard to detect RTL here
         showAlign( align );
     }
+
+    m_gui->canvasWidget()->repaintAll(false);
 }
 
 
 void KWView::updateTableActions( int nbFramesSelected )
 {
     if ( nbFramesSelected == -1 ) // not calculated by caller
-    {
-        QPtrList<KWFrame> selectedFrames = m_doc->getSelectedFrames();
-        nbFramesSelected = selectedFrames.count();
-    }
+        nbFramesSelected = frameViewManager()->selectedFrames().count();
 
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     actionTableJoinCells->setEnabled( table && (nbFramesSelected>1));
@@ -6039,7 +5919,10 @@ void KWView::canvasAddChild( KoViewChild * /*child*/ )
 
 void KWView::changePicture()
 {
-    KWFrame * frame = m_doc->getFirstSelectedFrame();
+    KWFrameView *view = frameViewManager()->selectedFrame();
+    KWFrame *frame = view == 0 ? 0 : view->frame();
+    if( !frame )
+        return;
     KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
     if ( frameset->protectContent() )
         return;
@@ -6066,7 +5949,8 @@ void KWView::changePicture()
 
 void KWView::savePicture()
 {
-    KWFrame * frame = m_doc->getFirstSelectedFrame();
+    KWFrameView *view = frameViewManager()->selectedFrame();
+    KWFrame *frame = view == 0 ? 0 : view->frame();
     if ( frame )//test for dcop call
     {
         KWPictureFrameSet *frameset = static_cast<KWPictureFrameSet *>(frame->frameSet());
@@ -6173,7 +6057,10 @@ void KWView::configureHeaderFooter()
 
 void KWView::inlineFrame()
 {
-    KWFrame * frame = m_doc->getFirstSelectedFrame();
+    KWFrameView *view = frameViewManager()->selectedFrame();
+    KWFrame *frame = view == 0 ? 0 : view->frame();
+    if( !frame)
+        return;
     KWFrameSet * fs = frame->frameSet();
     KWFrameSet * parentFs = fs->groupmanager() ? fs->groupmanager() : fs;
 
@@ -6635,19 +6522,19 @@ void KWView::autoSpellCheck(bool b)
 
 void KWView::goToFootEndNote()
 {
-    KWFrame * frm = m_doc->getFirstSelectedFrame();
-    if ( frm )
+    KWFrameView *view = frameViewManager()->selectedFrame();
+    KWFrame *frame = view == 0 ? 0 : view->frame();
+    if( !frame)
+        return;
+    KWFootNoteFrameSet *footNoteFrameSet = dynamic_cast<KWFootNoteFrameSet *>(frame->frameSet());
+    if ( footNoteFrameSet )
     {
-        KWFootNoteFrameSet *footNoteFrameSet = dynamic_cast<KWFootNoteFrameSet *>(frm->frameSet());
-        if ( footNoteFrameSet )
-        {
-            KWFootNoteVariable* var=footNoteFrameSet->footNoteVariable();
-            KoTextParag *parag = var->paragraph();
-            int index = var->index();
-            KWTextDocument *textDoc = static_cast<KWTextDocument *>(var->textDocument());
-            KWTextFrameSet *frameSet =textDoc->textFrameSet();
-            m_gui->canvasWidget()->editTextFrameSet( frameSet, parag, index );
-        }
+        KWFootNoteVariable* var=footNoteFrameSet->footNoteVariable();
+        KoTextParag *parag = var->paragraph();
+        int index = var->index();
+        KWTextDocument *textDoc = static_cast<KWTextDocument *>(var->textDocument());
+        KWTextFrameSet *frameSet =textDoc->textFrameSet();
+        m_gui->canvasWidget()->editTextFrameSet( frameSet, parag, index );
     }
 }
 
@@ -7426,8 +7313,11 @@ void KWView::addWordToDictionary()
 
 void KWView::embeddedStoreInternal()
 {
-    kdDebug()<<k_funcinfo<<endl;
-    KWFrame * frame = m_doc->getFirstSelectedFrame();
+    kdDebug(31001)<<k_funcinfo<<endl;
+    KWFrameView *view = frameViewManager()->selectedFrame();
+    KWFrame *frame = view == 0 ? 0 : view->frame();
+    if( !frame)
+        return;
     KWPartFrameSet *part = static_cast<KWPartFrameSet *>(frame->frameSet());
     part->storeInternal();
 }
@@ -7518,6 +7408,72 @@ void KWView::slotUnitChanged( KoUnit::Unit unit )
     if ( m_sbUnitLabel )
         m_sbUnitLabel->setText( ' ' + KoUnit::unitDescription( unit ) + ' ' );
 }
+
+
+KWFrameViewManager* KWView::frameViewManager() const {
+    return getGUI()->canvasWidget()->frameViewManager();
+}
+void KWView::deleteSelectedFrames() {
+    QValueList<KWFrameView*> selectedFrames=frameViewManager()->selectedFrames();
+    int nbCommand=0;
+
+    int docItem=0; // bitmask for changed doc items.
+
+    KMacroCommand * macroCmd = new KMacroCommand( i18n("Delete Frames") );
+    QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+    for(;framesIterator != selectedFrames.end(); ++framesIterator) {
+        KWFrame *frame = (*framesIterator)->frame();
+        KWFrameSet *fs = frame->frameSet();
+        if ( fs->isAFooter() || fs->isAHeader() )
+            continue;
+        KWTableFrameSet *table=fs->groupmanager();
+        if ( table ) {
+            docItem|=m_doc->typeItemDocStructure(table->type());
+
+            if ( table->isFloating() ) {
+                docItem|=m_doc->typeItemDocStructure(fs->type());
+
+                KWAnchor * anchor = table->findAnchor( 0 );
+                KCommand * cmd=table->anchorFrameset()->deleteAnchoredFrame( anchor );
+                macroCmd->addCommand(cmd);
+                nbCommand++;
+            }
+            else {
+                KWDeleteTableCommand *cmd = new KWDeleteTableCommand( i18n("Delete Table"), table );
+                cmd->execute();
+                macroCmd->addCommand(cmd);
+                nbCommand++;
+            }
+        }
+        else {// a simple frame
+            if ( fs->isMainFrameset() )
+                continue;
+
+            docItem|=m_doc->typeItemDocStructure(fs->type());
+
+            if ( fs->isFloating() ) {
+                frame->setSelected( false );
+                KWAnchor * anchor = fs->findAnchor( 0 );
+                KCommand *cmd=fs->anchorFrameset()->deleteAnchoredFrame( anchor );
+                macroCmd->addCommand(cmd);
+                nbCommand++;
+            }
+            else {
+                KWDeleteFrameCommand *cmd = new KWDeleteFrameCommand( i18n("Delete Frame"), frame );
+                cmd->execute();
+                macroCmd->addCommand(cmd);
+                nbCommand++;
+            }
+        }
+    }
+    if( nbCommand ) {
+        m_doc->addCommand(macroCmd);
+        m_doc->refreshDocStructure(docItem);
+    }
+    else
+        delete macroCmd;
+}
+
 
 /******************************************************************/
 /* Class: KWLayoutWidget                                          */

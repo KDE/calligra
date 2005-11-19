@@ -30,6 +30,8 @@
 #include "KWFrameList.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWFrameViewManager.h"
+#include "KWFrameView.h"
 
 #include <kooasiscontext.h>
 #include <koxmlns.h>
@@ -76,11 +78,14 @@ void KWFrameSet::addFrame( KWFrame *frame, bool recalc )
         return;
 
     //kdDebug(32001) << k_funcinfo << name() << " adding frame" <<  frame << " recalc=" << recalc << endl;
-    KWFrameList::createFrameList(frame, m_doc);
+    if(m_doc)
+        KWFrameList::createFrameList(frame, m_doc);
     frame->setFrameSet(this);
     m_frames.append( frame );
     if(recalc)
         updateFrames();
+
+    emit sigFrameAdded(frame);
 }
 
 void KWFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
@@ -103,6 +108,7 @@ void KWFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
         frm->setFrameStack(0);
         delete stack;
     }
+    emit sigFrameRemoved(frm);
     if ( !remove )
     {
         if (frm->isSelected()) // get rid of the resize handles
@@ -284,7 +290,6 @@ void KWFrameSet::setFloating()
         // Create anchor. TODO: refcount the anchors!
         setAnchored( frameSet, parag, index );
         frameSet->layout();
-        m_frames.first()->updateResizeHandles();
         m_doc->frameChanged( m_frames.first() );
         return;
     }
@@ -293,11 +298,6 @@ void KWFrameSet::setFloating()
 void KWFrameSet::setProtectSize( bool b)
 {
     m_protectSize = b;
-    for(KWFrame *f=m_frames.first();f;f=m_frames.next())
-    {
-        if ( f->isSelected() )
-            f->repaintResizeHandles();
-    }
 }
 
 void KWFrameSet::setAnchored( KWTextFrameSet* textfs, int paragId, int index, bool placeHolderExists /* = false */, bool repaint )
@@ -452,9 +452,6 @@ void KWFrameSet::moveFloatingFrame( int frameNum, const KoPoint &position )
         updateFrames();
         if( frame->frameStack() )
             frame->frameStack()->updateAfterMove( oldPageNum );
-
-        if ( frame->isSelected() )
-            frame->updateResizeHandles();
     }
     invalidate();
 }
@@ -637,7 +634,8 @@ const QPtrList<KWFrame> & KWFrameSet::framesInPage( int pageNum ) const
 
 void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGroup &cg,
                                bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit *edit, KWViewMode *viewMode )
+                               KWFrameSetEdit *edit, KWViewMode *viewMode,
+                               KWFrameViewManager *frameViewManager )
 {
 #ifdef DEBUG_DRAW
     kdDebug(32001) << "\nKWFrameSet::drawContents " << this << " " << name()
@@ -663,6 +661,9 @@ void KWFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGro
                                  resetChanged && lastCopy,
                                  edit,
                                  viewMode, settingsFrame, true /*transparency & double-buffering*/ );
+            if(frameViewManager)
+                frameViewManager->view(frame)->paintFrameAtributes(p, crect, m_doc);
+
             if ( !lastRealFrame || !frame->isCopy() )
             {
                 lastRealFrame = frame;
@@ -744,7 +745,6 @@ void KWFrameSet::drawFrameAndBorders( KWFrame *frame,
 
             if( !groupmanager() ) // not for table cells
                 drawFrameBorder( painter, frame, settingsFrame, outerCRect, viewMode );
-
             painter->restore();
         }
     }
@@ -865,47 +865,6 @@ bool KWFrameSet::contains( double mx, double my )
             return true;
 
     return false;
-}
-
-MouseMeaning KWFrameSet::getMouseMeaning( const QPoint &nPoint, int keyState )
-{
-    if ( m_groupmanager ) // Cells forward the call to the table
-        return m_groupmanager->getMouseMeaning( nPoint, keyState );
-
-    bool canMove = isMoveable();
-    KoPoint docPoint = m_doc->unzoomPoint( nPoint );
-    MouseMeaning defaultCursor = canMove ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
-    // See if we're over a frame border
-    KWFrame * frame = frameByBorder( nPoint );
-    if ( frame )
-    {
-        return frame->getMouseMeaning( docPoint, defaultCursor );
-    }
-    // TODO there's a case where we're over a frame resize-handle
-    // but not over the frame border, we miss to see that here.
-    // Proper fix: hmm, why are resize handles widgets anyway?
-
-    frame = frameAtPos( docPoint.x(), docPoint.y() );
-    if ( frame == 0L ) {
-        return MEANING_NONE;
-    }
-
-    // Found a frame under the cursor
-    // Ctrl -> move or select
-    if ( keyState & ControlButton )
-        return defaultCursor;
-
-    // Shift _and_ at least a frame is selected already
-    // (shift + no frame selected is used to select text)
-    if ( (keyState & ShiftButton) && (m_doc->getFirstSelectedFrame() != 0L) )
-        return defaultCursor;
-
-    return getMouseMeaningInsideFrame( docPoint );
-}
-
-MouseMeaning KWFrameSet::getMouseMeaningInsideFrame( const KoPoint& )
-{
-    return isMoveable() ? MEANING_MOUSE_MOVE : MEANING_MOUSE_SELECT;
 }
 
 void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
@@ -1066,8 +1025,8 @@ bool KWFrameSet::isVisible( KWViewMode* viewMode ) const
     if ( isFloating() && !anchorFrameset()->isVisible( viewMode ) )
          return false;
 
-    KoHFType ht = m_doc->headerType();
-    KoHFType ft = m_doc->footerType();
+    KoHFType ht = m_doc != 0 ? m_doc->headerType(): HF_FIRST_DIFF;
+    KoHFType ft = m_doc != 0 ? m_doc->footerType(): HF_FIRST_DIFF;
     switch( m_info )
     {
     case FI_FIRST_HEADER:
@@ -1209,14 +1168,6 @@ bool KWFrameSet::canRemovePage( int num )
     return true;
 }
 
-void KWFrameSet::showPopup( KWFrame *, KWView *view, const QPoint &point )
-{
-    QPopupMenu * popup = view->popupMenu("frame_popup");
-    Q_ASSERT(popup);
-    if (popup)
-        popup->popup( point );
-}
-
 void KWFrameSet::setFrameBehavior( KWFrame::FrameBehavior fb ) {
     for(KWFrame *f=m_frames.first();f;f=m_frames.next())
         f->setFrameBehavior(fb);
@@ -1279,6 +1230,8 @@ void KWFrameSet::setName( const QString &name )
 }
 
 #ifndef NDEBUG
+#include "KWFrameViewManager.h"
+#include "KWFrameView.h"
 void KWFrameSet::printDebug()
 {
     static const char * typeFrameset[] = { "base", "txt", "picture", "part", "formula", "clipart",
@@ -1290,6 +1243,11 @@ void KWFrameSet::printDebug()
     static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
     static const char * runaround[] = { "No Runaround", "Bounding Rect", "Skip", "ERROR" };
     static const char * runaroundSide[] = { "Biggest", "Left", "Right", "ERROR" };
+
+    KWFrameViewManager *fvm = 0;
+    KWView *view = m_doc->getAllViews().first();
+    if(view)
+        fvm = view->frameViewManager();
 
     kdDebug() << " |  Visible: " << isVisible() << endl;
     kdDebug() << " |  Type: " << typeFrameset[ type() ] << endl;
@@ -1335,7 +1293,10 @@ void KWFrameSet::printDebug()
             kdDebug() << "     no frameStack set." << endl;
         kdDebug() << "     minFrameHeight "<< frame->minFrameHeight() << endl;
         QString page = pageManager() && pageManager()->pageCount() > 0 ? QString::number(frame->pageNumber()) : " [waiting for pages to be created]";
-        if(frame->isSelected())
+
+        KWFrameView *fv = 0;
+        if(fvm) fv = fvm->view(frame);
+        if(fv && fv->selected())
             kdDebug() << " *   Page "<< page << endl;
         else
             kdDebug() << "     Page "<< page << endl;

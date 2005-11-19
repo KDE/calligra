@@ -27,7 +27,7 @@ class KWDocument;
 
 /**
  * This class calculates and caches a list of frames that are on top or below the KWFrame
- *  an instance of this class is created for.
+ * instance this class is created for.
  */
 class KWFrameList {
 public:

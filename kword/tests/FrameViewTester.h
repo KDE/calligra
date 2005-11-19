@@ -22,4 +22,6 @@ class KWFrameViewTester : public KUnitTest::Tester {
         void allTests();
     private:
         void testListeners();
+        void testGetView();
+        void testMouseMeaning();
 };

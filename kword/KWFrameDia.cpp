@@ -2345,14 +2345,8 @@ bool KWFrameDia::applyChanges()
 
 void KWFrameDia::updateFrames()
 {
-    QPtrList<KWFrame> frames=m_doc->getSelectedFrames();
-
     m_doc->updateAllFrames();
     m_doc->layout();
-
-    for(KWFrame *f=frames.first();f;f=frames.next())
-        f->updateResizeHandles();
-
     m_doc->repaintAllViews();
 }
 

@@ -189,6 +189,8 @@ void KWFrameList::recalcAllFrames(KWDocument *doc) {
 }
 
 void KWFrameList::createFrameList(KWFrame *f, KWDocument *doc) {
+    Q_ASSERT(f);
+    Q_ASSERT(doc);
     if(f->frameStack())
         return;
     f->setFrameStack(new KWFrameList(doc, f));

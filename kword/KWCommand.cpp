@@ -435,18 +435,13 @@ void KWFrameBorderCommand::execute()
 
         if (!cell) {
             frame->frameBordersChanged();
-            if (frame->isSelected())
-                frame->updateResizeHandles();
             //fixme frameBorderChanged for table cells here too ?
         }
-        else
-            cell->groupmanager()->refreshSelectedCell();
     }
 
 
     if ( doc )
     {
-        doc->refreshFrameBorderButton();
         doc->repaintAllViews();
     }
 }
@@ -493,20 +488,14 @@ void KWFrameBorderCommand::unexecute()
         }
         if (!cell) {
             frame->frameBordersChanged();
-            if (frame->isSelected())
-                frame->updateResizeHandles();
             //fixme frameBorderChanged for table cells here too ?
         }
-        else
-            cell->groupmanager()->refreshSelectedCell();
-
     }
 
 
 
     if ( doc )
     {
-        doc->refreshFrameBorderButton();
         //update frames
         doc->repaintAllViews();
     }
@@ -597,12 +586,8 @@ void KWFrameStyleCommand::applyFrameStyle( KWFrameStyle * _sty )
     m_frame->setBottomBorder( _sty->bottomBorder() );
 
     m_frame->frameBordersChanged();
-    if (m_frame->isSelected())
-        m_frame->updateResizeHandles();
-
     if ( repaintViews )
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
-    m_frame->frameSet()->kWordDocument()->refreshFrameBorderButton();
 }
 
 
@@ -638,12 +623,8 @@ void KWTableStyleCommand::execute()
     }
 
     m_frame->frameBordersChanged();
-    if (m_frame->isSelected())
-        m_frame->updateResizeHandles();
-
     if ( repaintViews )
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
-    m_frame->frameSet()->kWordDocument()->refreshFrameBorderButton();
 
 }
 
@@ -655,12 +636,8 @@ void KWTableStyleCommand::unexecute()
         m_sc->unexecute();
 
     m_frame->frameBordersChanged();
-    if (m_frame->isSelected())
-        m_frame->updateResizeHandles();
-
     if ( repaintViews )
         m_frame->frameSet()->kWordDocument()->repaintAllViews();
-    m_frame->frameSet()->kWordDocument()->refreshFrameBorderButton();
 }
 
 KWTableTemplateCommand::KWTableTemplateCommand( const QString &name, KWTableFrameSet *_table, KWTableTemplate *_tt ) :
@@ -764,7 +741,6 @@ void KWFrameResizeCommand::execute()
            table->recalcCols();
            table->recalcRows();
         }
-        table->refreshSelectedCell();
         //repaintTableHeaders( table );
     }
     KWDocument * doc = frameSet->kWordDocument();
@@ -796,7 +772,6 @@ void KWFrameResizeCommand::unexecute()
            table->recalcCols();
            table->recalcRows();
         }
-        table->refreshSelectedCell();
         //repaintTableHeaders( table );
     }
     KWDocument * doc = frameSet->kWordDocument();
@@ -1027,7 +1002,6 @@ void KWFramePropertiesCommand::execute()
         doc->layout();
         doc->repaintAllViews();
         doc->updateRulerFrameStartEnd();
-        doc->updateResizeHandles();
     }
 }
 
@@ -1049,7 +1023,6 @@ void KWFramePropertiesCommand::unexecute()
         doc->layout();
         doc->repaintAllViews();
         doc->updateRulerFrameStartEnd();
-        doc->updateResizeHandles();
     }
 }
 
@@ -1077,8 +1050,6 @@ void KWFrameSetInlineCommand::setValue( bool value )
         // Make frame(set) non-floating
         m_pFrameSet->setFixed();
     }
-
-    m_pFrameSet->kWordDocument()->updateResizeHandles();
 
     m_pFrameSet->kWordDocument()->updateAllFrames();
     m_pFrameSet->kWordDocument()->repaintAllViews();
@@ -1308,7 +1279,6 @@ void KWInsertColumnCommand::execute()
     Q_ASSERT(m_pTable->boundingRect().right() <= m_maxRight);
     doc->updateAllFrames();
     doc->layout();
-    doc->updateResizeHandles( );
     doc->repaintAllViews();
 }
 
@@ -1317,7 +1287,6 @@ void KWInsertColumnCommand::unexecute()
     kdDebug(32001) << "KWInsertColumnCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
-    doc->frameSelectedChanged();
     m_pTable->deleteCol(m_colPos, *m_rc);
     // now undo the resize of the table if necessary:
     if (m_oldWidth) {
@@ -1326,7 +1295,6 @@ void KWInsertColumnCommand::unexecute()
     }
     doc->updateAllFrames();
     doc->layout();
-    doc->updateResizeHandles( );
     doc->repaintAllViews();
 }
 
@@ -1359,7 +1327,6 @@ void KWInsertRowCommand::execute()
     }
     doc->updateAllFrames();
     doc->layout();
-    doc->updateResizeHandles( );
     doc->repaintAllViews();
 }
 
@@ -1371,11 +1338,8 @@ void KWInsertRowCommand::unexecute()
     doc->terminateEditing(m_pTable);
     m_pTable->deleteRow( m_rowPos, *m_rr);
 
-    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
-    doc->updateResizeHandles( );
-    doc->repaintAllViews();
 }
 
 
@@ -1401,11 +1365,8 @@ void KWRemoveRowCommand::execute()
 
     m_pTable->deleteRow( m_rowPos, *m_rr);
 
-    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
-    doc->updateResizeHandles( );
-    doc->repaintAllViews();
 }
 
 void KWRemoveRowCommand::unexecute()
@@ -1415,7 +1376,6 @@ void KWRemoveRowCommand::unexecute()
     m_pTable->reInsertRow(*m_rr);
     doc->updateAllFrames();
     doc->layout();
-    doc->updateResizeHandles( );
     doc->repaintAllViews();
 }
 
@@ -1440,11 +1400,8 @@ void KWRemoveColumnCommand::execute()
     doc->terminateEditing(m_pTable);
 
     m_pTable->deleteCol( m_colPos, *m_rc);
-    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
-    doc->updateResizeHandles( );
-    doc->repaintAllViews();
 }
 
 void KWRemoveColumnCommand::unexecute()
@@ -1454,7 +1411,6 @@ void KWRemoveColumnCommand::unexecute()
     m_pTable->reInsertCol(*m_rc);
     doc->updateAllFrames();
     doc->layout();
-    doc->updateResizeHandles( );
     doc->repaintAllViews();
 }
 
@@ -1478,10 +1434,8 @@ void KWSplitCellCommand::execute()
     doc->terminateEditing(m_pTable);
     //kdDebug()<<"split Cell m_colBegin :"<<m_colBegin<<" m_colEnd :"<<m_colEnd<<" m_rowBegin :"<<m_rowBegin<<" m_colEnd :"<<m_colEnd<<endl;
     m_pTable->splitCell(m_rowEnd, m_colEnd,m_colBegin,m_rowBegin,m_ListFrameSet);
-    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
-    doc->repaintAllViews();
 }
 
 void KWSplitCellCommand::unexecute()
@@ -1517,10 +1471,8 @@ void KWSplitCellCommand::unexecute()
     m_pTable->joinCells(m_colBegin, m_rowBegin, m_colEnd+m_colBegin-1+cell->colSpan()-1,
         m_rowBegin+m_rowEnd-1+cell->rowSpan()-1);
 
-    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
-    doc->repaintAllViews();
 }
 
 
@@ -1548,10 +1500,8 @@ void KWJoinCellCommand::execute()
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
     m_pTable->joinCells(m_colBegin,m_rowBegin,m_colEnd,m_rowEnd);
-    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
-    doc->repaintAllViews();
 }
 
 void KWJoinCellCommand::unexecute()
@@ -1560,10 +1510,8 @@ void KWJoinCellCommand::unexecute()
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
     m_pTable->splitCell(m_rowEnd-m_rowBegin+1, m_colEnd-m_colBegin+1,m_colBegin,m_rowBegin,m_ListFrameSet,m_copyFrame);
-    doc->frameSelectedChanged();
     doc->updateAllFrames();
     doc->layout();
-    doc->repaintAllViews();
 }
 
 

@@ -40,15 +40,16 @@ class KWTextFrameSet;
 class KWTableFrameSet;
 class KWFrameMoveCommand;
 class KWViewMode;
+class KWFrameViewManager;
+class KWGUI;
+class KWStyle;
+class KWAnchor;
+class KWTableTemplate;
 class KoTextCursor;
 class KoTextParag;
 class KoTextFormat;
 class KoTextDocument;
 class QTimer;
-class KWGUI;
-class KWStyle;
-class KWAnchor;
-class KWTableTemplate;
 
 /**
  * Class: KWCanvas
@@ -66,6 +67,7 @@ public:
 
     KWDocument * kWordDocument() const { return m_doc; }
     KWGUI * gui() const { return m_gui; }
+    KWFrameViewManager* frameViewManager() { return m_frameViewManager; }
     KWFrameSetEdit *currentFrameSetEdit() const { return m_currentFrameSetEdit; }
 
     void switchViewMode( KWViewMode * newViewMode );
@@ -104,7 +106,7 @@ public:
     void pasteFrames();
 
     // Mouse press
-    void mpEditFrame( QMouseEvent *e, const QPoint& nPoint, MouseMeaning meaning );
+    void mpEditFrame( const QPoint& nPoint, MouseMeaning meaning, QMouseEvent *e = 0 );
     void mpCreate( const QPoint& normalPoint );
     void mpCreatePixmap( const QPoint& normalPoint );
     // Mouse move
@@ -184,8 +186,6 @@ public:
     //for KWTextFrameSetEdit
     void dragStarted() { m_mousePressed = false; }
 
-    void emitFrameSelectedChanged();
-
     void setXimPosition( int x, int y, int w, int h );
 
     void updateRulerOffsets( int cx = -1, int cy = -1 );
@@ -210,7 +210,7 @@ public:
     void setNumberingFootNoteType(KWFootNoteVariable::Numbering _type) { m_footEndNote.numberingType = _type; }
 
     void tableSelectCell(KWTableFrameSet *table, KWFrameSet *cell);
-    bool selectAllFrames( bool select );
+    void selectAllFrames( bool select );
 
     KCommand * createTextBox(const KoRect & rect );
 
@@ -306,6 +306,7 @@ private:
     void printRTDebug( int );
 #endif
 
+    KWFrameViewManager *m_frameViewManager;
     KWDocument *m_doc;
     KWFrameSetEdit *m_currentFrameSetEdit;
     KWGUI *m_gui;
@@ -340,6 +341,8 @@ private:
     bool m_temporaryStatusBarTextShown; // Indicates if the temporary is shown
     double m_previousTableSize; //previous column or row size before resizing it
     KoPoint m_lastCaretPos; // position of caret when editing stopped in document coordinates
+
+
 
     // Table creation support.
     // Having this as a member variable allows to remember and reuse the last settings

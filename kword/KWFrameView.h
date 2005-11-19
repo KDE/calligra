@@ -15,42 +15,96 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
+#ifndef kwframeview_h
+#define kwframeview_h
+
+#include "defs.h"
+class KWFrameView;
+class KWFrameViewManager;
+class KWFrame;
+class KWView;
+class KoZoomHandler;
+class KoPoint;
+class KActionSeparator;
+class KAction;
+class QPopupMenu;
+
+class FramePolicy {
+public:
+    FramePolicy(KWFrameView *view);
+    virtual MouseMeaning mouseMeaning( const KoPoint &point, int keyState ) = 0;
+    virtual QPopupMenu* createPopup( const KoPoint &point, KWView *view ) = 0;
+    virtual void setSelected(MouseMeaning) { };
+
+protected:
+    virtual MouseMeaning mouseMeaningOnBorder(const KoPoint &point, int keyState);
+    void addFloatingAction(KWView *view, QPtrList<KAction> &actionList);
+
+    KWFrameView *m_view;
+    KActionSeparator *m_separator;
+
+    friend class KWFrameView; // so it can call mouseMeaningOnBorder which assumes some stuff
+};
 
 class KWFrameView {
 public:
-    KWFrameView(KWFrame *frame);
+    KWFrameView(KWFrameViewManager *parent, KWFrame *frame);
+    virtual ~KWFrameView();
 
-    /// draw the frame background and borders and all the other things that are not actual content
-    void drawFrameBase( lotsaargs );
-    void drawPadding( foo bar );
-    MouseMeaning getMouseMeaning( const KoPoint &nPoint, int keyState );
-    QPopup createPopup( const KoPoint &point );
+    bool selected() const { return m_selected; }
+    void setSelected(bool selected, MouseMeaning selectPolicy = MEANING_MOUSE_SELECT);
 
-    bool isSelected();
-    void setSelected(bool selected);
+    KWFrame *frame() const { return m_frame; }
+
+    bool isBorderHit(const KoPoint &point) const;
+    bool contains(const KoPoint &point, bool withBorders = true) const;
+
+    MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
+
+    KWFrameViewManager *parent() { return m_manager; }
+
+    void showPopup( const KoPoint &point, KWView *view, const QPoint &popupPoint) const;
+    void paintFrameAtributes(QPainter *painter, const QRect &crect, KoZoomHandler *zh);
+
+private:
+    bool hit(const KoPoint &point, bool withBorders , bool borderOnly) const;
 
 private:
     KWFrame *m_frame;
     bool m_selected;
-    FramePolicy *policy;
+    FramePolicy *m_policy;
+    KWFrameViewManager *m_manager;
 };
 
-class FramePolicy {
-    MouseMeaning getMouseMeaning( const KoPoint &nPoint, int keyState ) = 0;
-    QPopup createPopup( const KoPoint &point ) = 0;
-}
-
 class TableFramePolicy : public FramePolicy {
-    MouseMeaning getMouseMeaning( const KoPoint &nPoint, int keyState );
-    QPopup createPopup( const KoPoint &point );
-}
+public:
+    TableFramePolicy(KWFrameView *view);
+    MouseMeaning mouseMeaning( const KoPoint &nPoint, int keyState );
+    QPopupMenu* createPopup( const KoPoint &point, KWView *view );
+    void setSelected(MouseMeaning selectPolicy);
+
+protected:
+    MouseMeaning mouseMeaningOnBorder( const KoPoint &point, int keyState);
+};
 
 class PartFramePolicy : public FramePolicy {
-    MouseMeaning getMouseMeaning( const KoPoint &nPoint, int keyState );
-    QPopup createPopup( const KoPoint &point );
-}
+public:
+    PartFramePolicy(KWFrameView *view);
+    MouseMeaning mouseMeaning( const KoPoint &nPoint, int keyState );
+    QPopupMenu* createPopup( const KoPoint &point, KWView *view );
+};
 
 class TextFramePolicy : public FramePolicy {
-    MouseMeaning getMouseMeaning( const KoPoint &nPoint, int keyState );
-    QPopup createPopup( const KoPoint &point );
-}
+public:
+    TextFramePolicy(KWFrameView *view);
+    MouseMeaning mouseMeaning( const KoPoint &nPoint, int keyState );
+    QPopupMenu* createPopup( const KoPoint &point, KWView *view );
+};
+
+class ImageFramePolicy : public FramePolicy {
+public:
+    ImageFramePolicy(KWFrameView *view);
+    MouseMeaning mouseMeaning( const KoPoint &nPoint, int keyState );
+    QPopupMenu* createPopup( const KoPoint &point, KWView *view );
+};
+#endif

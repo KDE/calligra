@@ -64,7 +64,6 @@
 #include <qdragobject.h>
 #include <qcursor.h>
 #include <qfile.h>
-#include <qpopupmenu.h>
 #include <qprogressdialog.h>
 #include <qregexp.h>
 
@@ -464,10 +463,11 @@ QPoint KWTextFrameSet::moveToPage( int currentPgNum, short int direction ) const
 
 void KWTextFrameSet::drawContents( QPainter *p, const QRect & crect, const QColorGroup &cg,
                                    bool onlyChanged, bool resetChanged,
-                                   KWFrameSetEdit *edit, KWViewMode *viewMode )
+                                   KWFrameSetEdit *edit, KWViewMode *viewMode,
+                                   KWFrameViewManager *fvm)
 {
     m_currentViewMode = viewMode;
-    KWFrameSet::drawContents( p, crect, cg, onlyChanged, resetChanged, edit, viewMode );
+    KWFrameSet::drawContents( p, crect, cg, onlyChanged, resetChanged, edit, viewMode, fvm );
 
     // Main textframeset: draw the footnote line if there are footnotes
     if ( isMainFrameset() && viewMode->hasFrames() )
@@ -1827,27 +1827,6 @@ void KWTextFrameSet::setInlineFramesVisible(bool visible)
     }
 }
 
-#if 0
-// Currently not used (since the WYSIWYG switch)
-void KWTextFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags )
-{
-    //textDocument()->doLayout( painter, textDocument()->width() );
-    textDocument()->setWithoutDoubleBuffer( painter != 0 );
-
-    textDocument()->formatCollection()->setPainter( painter );
-    KoTextParag *parag = textDocument()->firstParag();
-    while ( parag ) {
-        parag->invalidate( 0 );
-        parag->setPainter( painter, true );
-        if ( painter )
-            parag->format();
-        parag = parag->next();
-        if ( progress )
-            progress->setProgress( ++processedParags );
-    }
-}
-#endif
-
 void KWTextFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst, bool onlyReadWrite )
 {
     if (!textObject()->protectContent() || !onlyReadWrite)
@@ -2748,14 +2727,6 @@ void KWTextFrameSet::applyStyleChange( KoStyleChangeDefMap changed )
     m_textobj->applyStyleChange( changed );
 }
 
-void KWTextFrameSet::showPopup( KWFrame *, KWView *view, const QPoint &point )
-{
-    QPopupMenu * popup = view->popupMenu("text_popup");
-    Q_ASSERT(popup);
-    if (popup)
-        popup->popup( point );
-}
-
 // KoTextFormatInterface methods
 KoTextFormat *KWTextFrameSet::currentFormat() const
 {
@@ -2968,22 +2939,6 @@ KWFootNoteFrameSet * KWTextFrameSet::insertFootNote( NoteType noteType, KWFootNo
      fs->setFootNoteVariable( var );
 
      return fs;
-}
-
-MouseMeaning KWTextFrameSet::getMouseMeaningInsideFrame( const KoPoint& dPoint )
-{
-    if (m_doc->variableCollection()->variableSetting()->displayLink()
-        && m_doc->variableCollection()->variableSetting()->underlineLink()
-        && linkVariableUnderMouse( dPoint ) )
-      return MEANING_MOUSE_OVER_LINK;
-    KoVariable* var = variableUnderMouse(dPoint);
-    if ( var )
-    {
-        KWFootNoteVariable * footNoteVar = dynamic_cast<KWFootNoteVariable *>( var );
-        if ( footNoteVar )
-            return MEANING_MOUSE_OVER_FOOTNOTE;
-    }
-    return MEANING_MOUSE_INSIDE_TEXT;
 }
 
 KoVariable* KWTextFrameSet::variableUnderMouse( const KoPoint& dPoint )
@@ -3911,7 +3866,7 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
         m_paragLayout.rightBorder = parag->rightBorder();
         m_paragLayout.topBorder = parag->topBorder();
         m_paragLayout.bottomBorder = parag->bottomBorder();
-        m_canvas->gui()->getView()->showParagBorders( m_paragLayout.leftBorder, m_paragLayout.rightBorder, m_paragLayout.topBorder, m_paragLayout.bottomBorder );
+        m_canvas->gui()->getView()->updateBorderButtons( m_paragLayout.leftBorder, m_paragLayout.rightBorder, m_paragLayout.topBorder, m_paragLayout.bottomBorder );
     }
 
     if ( !parag->style() )
@@ -3955,94 +3910,6 @@ void KWTextFrameSetEdit::showFormat( KoTextFormat *format )
 {
     m_canvas->gui()->getView()->showFormat( *format );
 }
-
-
-void KWTextFrameSetEdit::showPopup( KWFrame * /*frame*/, KWView *view, const QPoint &point )
-{
-    QString word = wordUnderCursor( *cursor() );
-
-    // Remove previous stuff
-    view->unplugActionList( "datatools" );
-    view->unplugActionList( "variable_action" );
-    view->unplugActionList( "spell_result_action" );
-    view->unplugActionList( "datatools_link" );
-
-    // Those lists are stored in the KWView. Grab a ref to them.
-    QPtrList<KAction> &actionList = view->dataToolActionList();
-    QPtrList<KAction> &variableList = view->variableActionList();
-
-    actionList.clear();
-    variableList.clear();
-
-    bool singleWord= false;
-    KWDocument * doc = frameSet()->kWordDocument();
-    actionList = dataToolActionList(doc->instance(), word, singleWord);
-
-    KoVariable* var = variable();
-    doc->variableCollection()->setVariableSelected(var);
-    if ( var )
-    {
-        variableList = doc->variableCollection()->popupActionList();
-    }
-
-    if( variableList.count()>0)
-    {
-        view->plugActionList( "variable_action", variableList );
-        QPopupMenu * popup = view->popupMenu("variable_popup");
-        Q_ASSERT(popup);
-        if (popup)
-            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
-    }
-    else
-    {
-        kdDebug() << "showPopup: plugging actionlist with " << actionList.count() << " actions" << endl;
-        KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( var );
-        QPopupMenu * popup;
-        if ( !linkVar )
-        {
-            view->plugActionList( "datatools", actionList );
-            KoNoteVariable * noteVar = dynamic_cast<KoNoteVariable *>( var );
-            KoCustomVariable * customVar = dynamic_cast<KoCustomVariable *>( var );
-            KWFootNoteVariable * footNoteVar = dynamic_cast<KWFootNoteVariable *>( var );
-
-            if( noteVar )
-                popup = view->popupMenu("comment_popup");
-            else if( customVar )
-                popup = view->popupMenu("custom_var_popup");
-            else if ( footNoteVar )
-            {
-                view->changeFootNoteMenuItem( footNoteVar->noteType() == FootNote );
-                popup = view->popupMenu("footnote_popup");
-            }
-            else
-            {
-                if ( singleWord )
-                {
-                    QPtrList<KAction> actionCheckSpellList = view->listOfResultOfCheckWord( word );
-                    if ( !actionCheckSpellList.isEmpty() )
-                    {
-                        view->plugActionList( "spell_result_action", actionCheckSpellList );
-                        popup = view->popupMenu("text_popup_spell_with_result");
-                    }
-                    else
-                        popup = view->popupMenu("text_popup_spell");
-                }
-                else
-                    popup = view->popupMenu("text_popup");
-            }
-        }
-        else
-        {
-            view->plugActionList( "datatools_link", actionList );
-            popup = view->popupMenu("text_popup_link");
-        }
-        Q_ASSERT(popup);
-        if (popup)
-            popup->popup( point ); // using exec() here breaks the spellcheck tool (event loop pb)
-    }
-}
-
-
 
 QPoint KWTextFrameSet::cursorPos( KoTextCursor *cursor, KWCanvas* canvas, KWFrame* currentFrame )
 {

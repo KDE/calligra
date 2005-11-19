@@ -39,6 +39,7 @@ class KWViewMode;
 class KWTextDocument;
 class KWordFrameSetIface;
 class KWFrame;
+class KWFrameViewManager;
 
 class KoTextObject;
 class KoDataToolInfo;
@@ -177,7 +178,8 @@ public:
 
     virtual void drawContents( QPainter *p, const QRect &r,
                                const QColorGroup &cg, bool onlyChanged, bool resetChanged,
-                               KWFrameSetEdit* edit, KWViewMode *viewMode );
+                               KWFrameSetEdit* edit, KWViewMode *viewMode,
+                               KWFrameViewManager *frameViewManager );
 
     virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect& fcrect, const QRect& crect,
                             const QPoint& translationOffset,
@@ -190,9 +192,7 @@ public:
 
     void drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *currentFrame );
     QPoint cursorPos( KoTextCursor *cursor, KWCanvas* canvas, KWFrame* currentFrame );
-    virtual MouseMeaning getMouseMeaningInsideFrame( const KoPoint& );
 
-    void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
 
     KCommand* pasteOasis( KoTextCursor * cursor, const QByteArray & data, bool removeSelected );
     void insertTOC( KoTextCursor * cursor );
@@ -438,7 +438,6 @@ public:
     //const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
     double currentLeftMargin() const { return m_paragLayout.margins[QStyleSheetItem::MarginLeft]; }
 
-    void showPopup( KWFrame *frame, KWView *view, const QPoint &point );
     virtual void removeToolTipCompletion();
 
     //bool isLinkVariable(const KoPoint &, bool setUrl=false);
