@@ -24,6 +24,7 @@
 #include <qheader.h>
 #include <qwidgetstack.h>
 #include <qlabel.h>
+#include <qvaluelist.h>
 
 #include <klocale.h>
 #include <kfiledialog.h>
@@ -42,13 +43,11 @@ class KoOpenPanePrivate
 {
   public:
     KoOpenPanePrivate() :
-      m_instance(0),
-      m_mainWidget(0)
+      m_instance(0)
     {
     }
 
     KInstance* m_instance;
-    KJanusWidget* m_mainWidget;
 };
 
 KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& templateType)
@@ -74,6 +73,10 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   initTemplates(templateType);
 
   m_sectionList->setSelected(m_sectionList->firstChild(), true);
+
+  QValueList<int> sizes;
+  sizes << 20 << width() - 20;
+  m_splitter->setSizes(sizes);
 }
 
 KoOpenPane::~KoOpenPane()
@@ -84,8 +87,7 @@ KoOpenPane::~KoOpenPane()
 void KoOpenPane::showOpenFileDialog()
 {
   const QStringList mimeFilter = KoFilterManager::mimeFilter(KoDocument::readNativeFormatMimeType(),
-      KoFilterManager::Import,
-      KoDocument::readExtraNativeMimeTypes());
+      KoFilterManager::Import, KoDocument::readExtraNativeMimeTypes());
 
   KURL url = KFileDialog::getOpenURL(":OpenDialog", mimeFilter.join(" "), this);
 

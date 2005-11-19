@@ -21,7 +21,7 @@
         </property>
         <widget class="QSplitter">
             <property name="name">
-                <cstring>splitter3</cstring>
+                <cstring>m_splitter</cstring>
             </property>
             <property name="orientation">
                 <enum>Horizontal</enum>
@@ -70,7 +70,7 @@
                             <cstring>m_openExistingButton</cstring>
                         </property>
                         <property name="text">
-                            <string>Open Existing Document</string>
+                            <string></string>
                         </property>
                     </widget>
                 </vbox>
