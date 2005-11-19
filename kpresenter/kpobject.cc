@@ -248,7 +248,7 @@ KPObject::KPObject()
     resize = false;
     sticky = false;
     protect = false;
-    keepRatio = true;
+    keepRatio = false;
     dcop = 0;
 }
 
