@@ -12,9 +12,6 @@
             <height>690</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -42,9 +39,6 @@
             </property>
             <property name="text">
                 <string>&amp;Update Preview</string>
-            </property>
-            <property name="accel">
-                <string>Alt+U</string>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="0" rowspan="1" colspan="3">
@@ -134,9 +128,6 @@
                     <property name="text">
                         <string>&amp;Grayscale</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+G</string>
-                    </property>
                 </widget>
                 <widget class="QRadioButton" row="1" column="0">
                     <property name="name">
@@ -144,9 +135,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;RGB</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+R</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
@@ -239,9 +227,6 @@
                             </property>
                             <property name="text">
                                 <string>Clip Colors to Prevent &amp;Pink highlights</string>
-                            </property>
-                            <property name="accel">
-                                <string>Alt+P</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>
@@ -405,9 +390,6 @@
             </property>
             <property name="text">
                 <string>&amp;Interpolate RGB as Four Colors</string>
-            </property>
-            <property name="accel">
-                <string>Alt+I</string>
             </property>
         </widget>
     </grid>

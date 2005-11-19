@@ -56,9 +56,6 @@
                             <property name="text">
                                 <string>S&amp;ynchronize changes</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+Y</string>
-                            </property>
                         </widget>
                         <widget class="QLayoutWidget">
                             <property name="name">
