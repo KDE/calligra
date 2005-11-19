@@ -236,7 +236,7 @@ configure::configure( View* _view, QVBox *box , char *name )
 
   autoSaveDelay=new KIntNumInput(oldAutoSaveValue, tmpQGroupBox , 10);
   autoSaveDelay->setRange(0, 60, 1);
-  autoSaveDelay->setLabel(i18n("Au&tosave Delay (minutes):"));
+  autoSaveDelay->setLabel(i18n("Au&tosave delay (minutes):"));
   autoSaveDelay->setSpecialValueText(i18n("Do not save automatically"));
   autoSaveDelay->setSuffix(i18n("min"));
   QWhatsThis::add(autoSaveDelay, i18n( "Here you can select the time between autosaves, or disable this feature altogether by choosing Do not save automatically (drag the slider to the far left)." ) );
@@ -259,7 +259,7 @@ configure::configure( View* _view, QVBox *box , char *name )
   showRowHeader=new QCheckBox(i18n("Show &row header"),tmpQGroupBox);
   showRowHeader->setChecked(rowHeader);
   QWhatsThis::add(showRowHeader, i18n( "Check this box to show the row numbers down the left side." ) );
- 
+
   showTabBar =new QCheckBox(i18n("Show ta&bs"),tmpQGroupBox);
   showTabBar->setChecked(tabbar);
   QWhatsThis::add(showTabBar, i18n( "This check box controls whether the sheet tabs are shown at the bottom of the worksheet." ) );
