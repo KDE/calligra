@@ -101,7 +101,7 @@ class KWView : public KoView
     Q_OBJECT
 
 public:
-    KWView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument *_doc );
+    KWView( KWViewMode* viewMode, QWidget *parent, const char *name, KWDocument *doc );
     virtual ~KWView();
 
     virtual DCOPObject* dcopObject();
@@ -122,7 +122,7 @@ public:
                           const KoBorder& top, const KoBorder& bottom );
 
     void showStyle( const QString & styleName );
-    void showRulerIndent( double _leftMargin, double _firstLine, double _rightMargin, bool rtl );
+    void showRulerIndent( double leftMargin, double firstLine, double rightMargin, bool rtl );
     void showZoom( int zoom ); // show a zoom value in the combo
     void showZoom( const QString& zoom ); // show a zoom value in the combo
     void setZoom( int zoom, bool updateViews ); // change the zoom value
@@ -134,10 +134,6 @@ public:
      * Returns the KWord global KSpell2 Broker object.
      */
     KSpell2::Broker *broker() const;
-
-    // Currently unused
-    //bool viewTableGrid() const { return m_viewTableGrid; }
-    //void setViewTableGrid(bool _b) { m_viewTableGrid = _b;}
 
     void setNoteType(NoteType nt, bool change=true);
 
@@ -175,7 +171,7 @@ public:
     virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
 
-    void changeNbOfRecentFiles(int _nb);
+    void changeNbOfRecentFiles(int nb);
 
     void changeZoomMenu( int zoom=-1);
 
@@ -183,7 +179,7 @@ public:
 
     void updateGridButton();
 
-    void deleteFrame(bool _warning=true);
+    void deleteFrame(bool warning=true);
 
     QPopupMenu * popupMenu( const QString& name );
 
@@ -210,7 +206,7 @@ public:
     void updateHeader();
     void switchModeView();
     void changeFootNoteMenuItem( bool b);
-    void insertFile(const KURL& _url);
+    void insertFile(const KURL& url);
     void testAndCloseAllFrameSetProtectedContent();
     void updateBgSpellCheckingState();
     void updateRulerInProtectContentMode();
@@ -346,10 +342,10 @@ public slots:
     void configure();
     void configureCompletion();
 
-    void newPageLayout( const KoPageLayout &_layout );
-    void newLeftIndent( double _leftIndent);
-    void newFirstIndent( double _firstIndent);
-    void newRightIndent( double _rightIndent);
+    void newPageLayout( const KoPageLayout &layout );
+    void newLeftIndent( double leftIndent);
+    void newFirstIndent( double firstIndent);
+    void newRightIndent( double rightIndent);
 
     void clipboardDataChanged();
     void tabListChanged( const KoTabulatorList & tabList );
@@ -360,9 +356,9 @@ public slots:
 
     void slotSpecialChar(QChar , const QString &);
     void slotFrameSetEditChanged();
-    void showMouseMode( int /*KWCanvas::MouseMode*/ _mouseMode );
+    void showMouseMode( int /*KWCanvas::MouseMode*/ mouseMode );
     void frameSelectedChanged();
-    void docStructChanged(int _type);
+    void docStructChanged(int type);
     void documentModified( bool );
     void slotHRulerDoubleClicked();
     void slotHRulerDoubleClicked( double );
@@ -498,7 +494,7 @@ protected:
 
     void createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i , bool insertSepar, const QMap<QString, KShortcut>& personalShortCut );
 
-    void insertPicture( const KoPicture& picture, const bool makeInline, const bool _keepRatio );
+    void insertPicture( const KoPicture& picture, const bool makeInline, const bool keepRatio );
 
     void showParagraphDialog( int initialPage = -1, double initialTabPos = 0.0 );
 
@@ -534,9 +530,9 @@ protected:
     int lowerFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
     int bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
     int sendToBack(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
-    void textStyleSelected( KoParagStyle *_sty );
-    void frameStyleSelected( KWFrameStyle *_sty );
-    void tableStyleSelected( KWTableStyle *_sty );
+    void textStyleSelected( KoParagStyle *sty );
+    void frameStyleSelected( KWFrameStyle *sty );
+    void tableStyleSelected( KWTableStyle *sty );
     void changeFootEndNoteState();
     void refreshDeletePageAction();
 
@@ -549,57 +545,57 @@ private: // variables
     KWDocument *m_doc;
 
     // TODO use m_ notation
-    KAction *actionFileStatistics;
-    KAction *actionEditCut;
-    KAction *actionEditCopy;
-    KAction *actionEditPaste;
-    KAction *actionEditSelectAll;
-    KAction *actionEditSelectCurrentFrame;
-    KAction *actionEditDelFrame;
-    KAction *actionCreateLinkedFrame;
-    KAction *actionRaiseFrame;
-    KAction *actionLowerFrame;
-    KAction *actionSendBackward;
-    KAction *actionBringToFront;
+    KAction *m_actionFileStatistics;
+    KAction *m_actionEditCut;
+    KAction *m_actionEditCopy;
+    KAction *m_actionEditPaste;
+    KAction *m_actionEditSelectAll;
+    KAction *m_actionEditSelectCurrentFrame;
+    KAction *m_actionEditDelFrame;
+    KAction *m_actionCreateLinkedFrame;
+    KAction *m_actionRaiseFrame;
+    KAction *m_actionLowerFrame;
+    KAction *m_actionSendBackward;
+    KAction *m_actionBringToFront;
 
-    KAction *actionEditCustomVars;
-    KAction *actionEditCustomVarsEdit;
-    KAction *actionEditFind;
-    KAction *actionEditFindNext;
-    KAction *actionEditFindPrevious;
-    KAction *actionEditReplace;
-    KAction *actionApplyAutoFormat;
+    KAction *m_actionEditCustomVars;
+    KAction *m_actionEditCustomVarsEdit;
+    KAction *m_actionEditFind;
+    KAction *m_actionEditFindNext;
+    KAction *m_actionEditFindPrevious;
+    KAction *m_actionEditReplace;
+    KAction *m_actionApplyAutoFormat;
 
-    KToggleAction *actionViewTextMode;
-    KToggleAction *actionViewPageMode;
-    KToggleAction *actionViewPreviewMode;
+    KToggleAction *m_actionViewTextMode;
+    KToggleAction *m_actionViewPageMode;
+    KToggleAction *m_actionViewPreviewMode;
 
-    KToggleAction *actionViewFormattingChars;
-    KToggleAction *actionViewFrameBorders;
-    KToggleAction *actionViewHeader;
-    KToggleAction *actionViewFooter;
-    KToggleAction *actionViewFootNotes;
-    KToggleAction *actionViewEndNotes;
-    KToggleAction *actionShowDocStruct;
-    KToggleAction *actionShowRuler;
-    KToggleAction *actionViewShowGrid;
-    KToggleAction *actionViewSnapToGrid;
-    KToggleAction *actionAllowAutoFormat;
+    KToggleAction *m_actionViewFormattingChars;
+    KToggleAction *m_actionViewFrameBorders;
+    KToggleAction *m_actionViewHeader;
+    KToggleAction *m_actionViewFooter;
+    KToggleAction *m_actionViewFootNotes;
+    KToggleAction *m_actionViewEndNotes;
+    KToggleAction *m_actionShowDocStruct;
+    KToggleAction *m_actionShowRuler;
+    KToggleAction *m_actionViewShowGrid;
+    KToggleAction *m_actionViewSnapToGrid;
+    KToggleAction *m_actionAllowAutoFormat;
 
-    KToggleAction *actionAllowBgSpellCheck;
+    KToggleAction *m_actionAllowBgSpellCheck;
 
-    KSelectAction *actionViewZoom;
+    KSelectAction *m_actionViewZoom;
 
-    KAction *actionInsertFrameBreak;
-    KAction *actionInsertFootEndNote;
-    KAction *actionInsertContents;
-    KAction *actionInsertLink;
-    KAction *actionInsertComment;
-    KAction *actionEditComment;
-    KAction *actionRemoveComment;
-    KAction *actionCopyTextOfComment;
+    KAction *m_actionInsertFrameBreak;
+    KAction *m_actionInsertFootEndNote;
+    KAction *m_actionInsertContents;
+    KAction *m_actionInsertLink;
+    KAction *m_actionInsertComment;
+    KAction *m_actionEditComment;
+    KAction *m_actionRemoveComment;
+    KAction *m_actionCopyTextOfComment;
     //KAction *actionInsertPage;
-    KAction *actionDeletePage;
+    KAction *m_actionDeletePage;
 
     KActionMenu *actionInsertVariable;
     struct VariableDef {
@@ -607,65 +603,65 @@ private: // variables
         int subtype;
     };
     typedef QMap<KAction *, VariableDef> VariableDefMap;
-    KActionMenu *actionInsertExpression;
+    KActionMenu *m_actionInsertExpression;
 
-    KActionMenu *actionInsertCustom;
+    KActionMenu *m_actionInsertCustom;
 
     VariableDefMap m_variableDefMap;
-    KAction *actionInsertFormula;
-    KAction *actionInsertTable;
-    KAction *actionAutoFormat;
+    KAction *m_actionInsertFormula;
+    KAction *m_actionInsertTable;
+    KAction *m_actionAutoFormat;
 
-    KToggleAction *actionToolsCreateText;
-    KToggleAction *actionToolsCreatePix;
-    KoPartSelectAction *actionToolsCreatePart;
+    KToggleAction *m_actionToolsCreateText;
+    KToggleAction *m_actionToolsCreatePix;
+    KoPartSelectAction *m_actionToolsCreatePart;
 
-    KAction *actionFormatFont;
-    KAction *actionFormatDefault;
-    KAction *actionFormatFrameStylist;
-    KAction *actionFormatStylist;
-    KAction *actionFormatPage;
+    KAction *m_actionFormatFont;
+    KAction *m_actionFormatDefault;
+    KAction *m_actionFormatFrameStylist;
+    KAction *m_actionFormatStylist;
+    KAction *m_actionFormatPage;
 
-    KAction *actionFontSizeIncrease;
-    KAction *actionFontSizeDecrease;
+    KAction *m_actionFontSizeIncrease;
+    KAction *m_actionFontSizeDecrease;
 
-    KFontSizeAction *actionFormatFontSize;
-    KFontAction *actionFormatFontFamily;
-    KSelectAction *actionFormatStyle;
-    KActionMenu *actionFormatStyleMenu;
-    KToggleAction *actionFormatBold;
-    KToggleAction *actionFormatItalic;
-    KToggleAction *actionFormatUnderline;
-    KToggleAction *actionFormatStrikeOut;
-    TKSelectColorAction *actionFormatColor;
-    KToggleAction *actionFormatAlignLeft;
-    KToggleAction *actionFormatAlignCenter;
-    KToggleAction *actionFormatAlignRight;
-    KToggleAction *actionFormatAlignBlock;
-    KAction *actionFormatParag;
-    KAction *actionFormatFrameSet;
-    KAction *actionFormatIncreaseIndent;
-    KAction *actionFormatDecreaseIndent;
-    KActionMenu *actionFormatBullet;
-    KActionMenu *actionFormatNumber;
-    KToggleAction *actionFormatSuper;
-    KToggleAction *actionFormatSub;
+    KFontSizeAction *m_actionFormatFontSize;
+    KFontAction *m_actionFormatFontFamily;
+    KSelectAction *m_actionFormatStyle;
+    KActionMenu *m_actionFormatStyleMenu;
+    KToggleAction *m_actionFormatBold;
+    KToggleAction *m_actionFormatItalic;
+    KToggleAction *m_actionFormatUnderline;
+    KToggleAction *m_actionFormatStrikeOut;
+    TKSelectColorAction *m_actionFormatColor;
+    KToggleAction *m_actionFormatAlignLeft;
+    KToggleAction *m_actionFormatAlignCenter;
+    KToggleAction *m_actionFormatAlignRight;
+    KToggleAction *m_actionFormatAlignBlock;
+    KAction *m_actionFormatParag;
+    KAction *m_actionFormatFrameSet;
+    KAction *m_actionFormatIncreaseIndent;
+    KAction *m_actionFormatDecreaseIndent;
+    KActionMenu *m_actionFormatBullet;
+    KActionMenu *m_actionFormatNumber;
+    KToggleAction *m_actionFormatSuper;
+    KToggleAction *m_actionFormatSub;
     KAction* actionInsertSpecialChar;
 
     // Text and Frame borders.
-    KSelectAction *actionFrameStyle;
-    KActionMenu *actionFrameStyleMenu;
-    KSelectAction *actionTableStyle;
-    KActionMenu *actionTableStyleMenu;
-    KToggleAction *actionBorderLeft;
-    KToggleAction *actionBorderRight;
-    KToggleAction *actionBorderTop;
-    KToggleAction *actionBorderBottom;
-    KToggleAction *actionBorderOutline;
-    TKSelectColorAction *actionBorderColor;
-    KSelectAction *actionBorderWidth;
-    KSelectAction *actionBorderStyle;
-    TKSelectColorAction *actionBackgroundColor;
+    KSelectAction *m_actionFrameStyle;
+    KActionMenu *m_actionFrameStyleMenu;
+    KSelectAction *m_actionTableStyle;
+    KActionMenu *m_actionTableStyleMenu;
+    KToggleAction *m_actionBorderLeft;
+    KToggleAction *m_actionBorderRight;
+    KToggleAction *m_actionBorderTop;
+    KToggleAction *m_actionBorderBottom;
+    KToggleAction *m_actionBorderOutline;
+    TKSelectColorAction *m_actionBorderColor;
+    KSelectAction *m_actionBorderWidth;
+    KSelectAction *m_actionBorderStyle;
+    TKSelectColorAction *m_actionBackgroundColor;
     struct
     {
         KoBorder left;    ///< Values specific to left border.
@@ -674,77 +670,77 @@ private: // variables
         KoBorder bottom;  ///< bottom.
     } m_border;
 
-    KAction *actionTableDelRow;
-    KAction *actionTableDelCol;
-    KAction *actionTableInsertRow;
-    KAction *actionTableInsertCol;
-    KAction *actionTableResizeCol;
-    KAction *actionTableJoinCells;
-    KAction *actionTableSplitCells;
-    KAction *actionConvertTableToText;
-    KAction *actionSortText;
-    KAction *actionAddPersonalExpression;
-    KToggleAction *actionTableProtectCells;
+    KAction *m_actionTableDelRow;
+    KAction *m_actionTableDelCol;
+    KAction *m_actionTableInsertRow;
+    KAction *m_actionTableInsertCol;
+    KAction *m_actionTableResizeCol;
+    KAction *m_actionTableJoinCells;
+    KAction *m_actionTableSplitCells;
+    KAction *m_actionConvertTableToText;
+    KAction *m_actionSortText;
+    KAction *m_actionAddPersonalExpression;
+    KToggleAction *m_actionTableProtectCells;
 
-    KAction *actionTableUngroup;
-    KAction *actionTableDelete;
+    KAction *m_actionTableUngroup;
+    KAction *m_actionTableDelete;
 
-    KAction *actionTableStylist;
-    KAction *actionTablePropertiesMenu;
-    KAction *actionTableProperties;
+    KAction *m_actionTableStylist;
+    KAction *m_actionTablePropertiesMenu;
+    KAction *m_actionTableProperties;
 
-    KAction *actionExtraCreateTemplate;
+    KAction *m_actionExtraCreateTemplate;
 
-    KAction *actionChangeCase;
+    KAction *m_actionChangeCase;
 
-    KAction *actionEditPersonnalExpr;
+    KAction *m_actionEditPersonnalExpr;
 
-    KAction *actionConfigure;
+    KAction *m_actionConfigure;
 
-    KAction *actionConfigureCompletion;
-
-
-    KAction *actionChangePicture;
-
-    KAction *actionSavePicture;
-
-    KAction *actionConfigureHeaderFooter;
-    KToggleAction *actionInlineFrame;
-
-    KAction *actionOpenLink;
-    KAction *actionChangeLink;
-    KAction *actionCopyLink;
-    KAction *actionAddLinkToBookmak;
-    KAction *actionRemoveLink;
-
-    KAction *actionRefreshAllVariable;
-    KAction *actionCreateStyleFromSelection;
-
-    KAction *actionConfigureFootEndNote;
-
-    KAction *actionEditFootEndNote;
-
-    KAction *actionChangeFootNoteType;
-
-    KAction *actionGoToFootEndNote;
+    KAction *m_actionConfigureCompletion;
 
 
-    KAction *actionEditFrameSet;
-    KAction *actionDeleteFrameSet;
-    KAction *actionSelectedFrameSet;
-    KAction *actionInsertFile;
+    KAction *m_actionChangePicture;
 
-    KAction *actionAddBookmark;
-    KAction *actionSelectBookmark;
+    KAction *m_actionSavePicture;
 
-    KAction *actionImportStyle;
+    KAction *m_actionConfigureHeaderFooter;
+    KToggleAction *m_actionInlineFrame;
 
-    KAction *actionCreateFrameStyle;
+    KAction *m_actionOpenLink;
+    KAction *m_actionChangeLink;
+    KAction *m_actionCopyLink;
+    KAction *m_actionAddLinkToBookmak;
+    KAction *m_actionRemoveLink;
 
-    KAction *actionConvertToTextBox;
+    KAction *m_actionRefreshAllVariable;
+    KAction *m_actionCreateStyleFromSelection;
 
-    KAction *actionSpellIgnoreAll;
-    KAction *actionSpellCheck;
+    KAction *m_actionConfigureFootEndNote;
+
+    KAction *m_actionEditFootEndNote;
+
+    KAction *m_actionChangeFootNoteType;
+
+    KAction *m_actionGoToFootEndNote;
+
+
+    KAction *m_actionEditFrameSet;
+    KAction *m_actionDeleteFrameSet;
+    KAction *m_actionSelectedFrameSet;
+    KAction *m_actionInsertFile;
+
+    KAction *m_actionAddBookmark;
+    KAction *m_actionSelectBookmark;
+
+    KAction *m_actionImportStyle;
+
+    KAction *m_actionCreateFrameStyle;
+
+    KAction *m_actionConvertToTextBox;
+
+    KAction *m_actionSpellIgnoreAll;
+    KAction *m_actionSpellCheck;
 
 #if 0 // KWORD_HORIZONTAL_LINE
     // MOC_SKIP_BEGIN
@@ -752,15 +748,15 @@ private: // variables
     KAction *actionChangeHorizontalLine;
     // MOC_SKIP_END
 #endif
-    KAction *actionEditFrameSetProperties;
-    KToggleAction *actionEmbeddedStoreInternal;
+    KAction *m_actionEditFrameSetProperties;
+    KToggleAction *m_actionEmbeddedStoreInternal;
 
-    KAction *actionAddWordToPersonalDictionary;
+    KAction *m_actionAddWordToPersonalDictionary;
 
-    KToggleAction *actionInsertDirectCursor;
+    KToggleAction *m_actionInsertDirectCursor;
 
-    KAction *actionGoToDocumentStructure;
-    KAction *actionGoToDocument;
+    KAction *m_actionGoToDocumentStructure;
+    KAction *m_actionGoToDocument;
 
 
     KoCharSelectDia *m_specialCharDlg;
@@ -832,7 +828,7 @@ class KWGUI : public QWidget
     Q_OBJECT
 
 public:
-    KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *_view );
+    KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *view );
 
     void showGUI();
 
@@ -874,7 +870,7 @@ class KWStatisticsDialog : public KDialogBase
     Q_OBJECT
 
 public:
-    KWStatisticsDialog( QWidget *_parent, KWDocument *_doc );
+    KWStatisticsDialog( QWidget *parent, KWDocument *doc );
     bool wasCanceled()const { return m_canceled; }
 
 private:
