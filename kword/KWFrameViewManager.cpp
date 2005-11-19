@@ -222,8 +222,7 @@ QValueVector<KWFrameView*> KWFrameViewManager::framesAt(const KoPoint &point, bo
     // This is probably the slowest and worst way to do it, mark this for optimalisation!
     for(QValueListConstIterator<KWFrameView*> frames = m_frames.begin();
             frames != m_frames.end(); ++frames) {
-        KWFrameSet *fs = (*frames)->frame()->frameSet();
-        if(! fs->isVisible())
+        if(! (*frames)->frame()->frameSet()->isVisible())
             continue;
         if(borderOnly && (*frames)->isBorderHit(point) ||
                 !borderOnly && (*frames)->contains(point))
@@ -376,7 +375,8 @@ void KWFrameViewManager::showPopup( const KoPoint &point, KWView *view, int keyS
 }
 
 void KWFrameViewManager::selectFrames(KoPoint &point, int keyState) {
-    bool multiSelect = keyState & Qt::ControlButton;
+    MouseMeaning mm = mouseMeaning(point, keyState);
+    bool multiSelect = mm == MEANING_MOUSE_SELECT || keyState & Qt::ControlButton;
     KWFrameView *toBeSelected = view(point, multiSelect?nextUnselected:frameOnTop, !multiSelect);
     //kdDebug() << "KWFrameViewManager::selectFrames" << point << " got: " << toBeSelected << endl;
     if(toBeSelected == 0)
@@ -388,7 +388,7 @@ void KWFrameViewManager::selectFrames(KoPoint &point, int keyState) {
             (*frames)->setSelected(false);
         }
     }
-    toBeSelected->setSelected(true, toBeSelected->mouseMeaning(point, keyState));
+    toBeSelected->setSelected(true, mm);
     slotFrameSelectionChanged();
 }
 

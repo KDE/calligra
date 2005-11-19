@@ -1063,7 +1063,7 @@ bool KWFrameSet::isFootEndNote() const
 
 bool KWFrameSet::isMainFrameset() const
 {
-    return ( m_doc->processingType() == KWDocument::WP &&
+    return ( m_doc && m_doc->processingType() == KWDocument::WP &&
              m_doc->frameSet( 0 ) == this );
 }
 

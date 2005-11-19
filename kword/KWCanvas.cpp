@@ -433,9 +433,9 @@ void KWCanvas::mpCreatePixmap( const QPoint& normalPoint )
     {
         // Apply grid for the first corner only
         KoPoint docPoint = m_doc->unzoomPoint( normalPoint );
-        int pageNum = m_doc->pageManager()->pageNumber( docPoint );
         if ( m_doc->snapToGrid() )
             applyGrid( docPoint );
+        int pageNum = m_doc->pageManager()->pageNumber( docPoint );
         m_insRect.setRect( docPoint.x(), docPoint.y(), 0, 0 );
         m_deleteMovingRect = false;
 
@@ -1437,6 +1437,7 @@ void KWCanvas::mrCreatePixmap()
         picRect.setBottom(pageBottom);
     }
 
+    setMouseMode( MM_EDIT );
     if ( picRect.width() > 0 /*m_doc->gridX()*/ &&picRect.height() > 0 /*m_doc->gridY()*/ && !m_kopicture.isNull() )
     {
         KWFrameSet * fs = 0L;
@@ -1447,15 +1448,14 @@ void KWCanvas::mrCreatePixmap()
         picRect = picRect.normalize();
         KWFrame *frame = new KWFrame(fs, picRect.x(), picRect.y(), picRect.width(),
                                      picRect.height() );
-        frame->setZOrder( m_doc->maxZOrder( frame->pageNumber(m_doc) ) + 1 ); // make sure it's on top
-        //frame->setSelected(TRUE);
+        frame->setZOrder( m_doc->maxZOrder( page ) +1 ); // make sure it's on top
         fs->addFrame( frame, false );
         m_doc->addFrameSet( fs );
         KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Picture Frame"), frame );
         m_doc->addCommand(cmd);
         m_doc->frameChanged( frame );
+        frameViewManager()->view(frame)->setSelected(true);
     }
-    setMouseMode( MM_EDIT );
     emit docStructChanged(Pictures);
 }
 

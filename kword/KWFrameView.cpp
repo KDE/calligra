@@ -450,9 +450,7 @@ QPopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
 ImageFramePolicy::ImageFramePolicy(KWFrameView *view) : FramePolicy (view) {
 }
 MouseMeaning ImageFramePolicy::mouseMeaning( const KoPoint &point, int keyState ) {
-    if ( m_view->selected() && !(keyState & Qt::ControlButton) )
-        return MEANING_MOUSE_INSIDE;
-    return MEANING_NONE;
+    return m_view->selected() ? MEANING_MOUSE_MOVE: MEANING_MOUSE_SELECT;
 }
 QPopupMenu* ImageFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
     KWFrameSet *fs = m_view->frame()->frameSet();
