@@ -68,7 +68,7 @@ class KisPNGConverter : public KisProgressSubject {
     public slots:
         virtual void cancel();
     private:
-        KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri);
+        KisImageBuilder_Result decode(const KURL& uri);
         void progress(png_structp png_ptr, png_uint_32 row_number, int pass);
     private:
         png_uint_32 m_max_row;

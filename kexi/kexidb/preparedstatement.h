@@ -43,7 +43,7 @@ class KEXI_DB_EXPORT PreparedStatement : public KShared
 		PreparedStatement(StatementType type, ConnectionInternal& conn, TableSchema& tableSchema,
 			const QStringList& where = QStringList());
 		virtual ~PreparedStatement();
-		PreparedStatement& PreparedStatement::operator<< ( const QVariant& value );
+		PreparedStatement& operator<< ( const QVariant& value );
 		void clearArguments();
 		virtual bool execute() = 0;
 

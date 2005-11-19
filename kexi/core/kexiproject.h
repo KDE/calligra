@@ -78,7 +78,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 The connection should be created using the same connection data 
 		 as pdata->connectionData(). The connection will become owned by created KexiProject
 		 object, so do not destroy it. */
-		KexiProject::KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler, 
+		KexiProject(KexiProjectData *pdata, KexiDB::MessageHandler* handler, 
 			KexiDB::Connection* conn);
 
 //		KexiProject(KexiDB::ConnectionData *cdata);
