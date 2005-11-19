@@ -21,16 +21,17 @@
 
 #include <qvbox.h>
 #include <qlayout.h>
+#include <qheader.h>
+#include <qwidgetstack.h>
+#include <qlabel.h>
 
-#include <kjanuswidget.h>
 #include <klocale.h>
-#include <kdeversion.h>
 #include <kfiledialog.h>
 #include <kinstance.h>
 #include <kpushbutton.h>
 #include <kiconloader.h>
 #include <kdebug.h>
-#include <kdialog.h>
+#include <klistview.h>
 
 #include "koFilterManager.h"
 #include "koTemplates.h"
@@ -51,43 +52,28 @@ class KoOpenPanePrivate
 };
 
 KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& templateType)
-  : QWidget(parent, "OpenPane")
+  : KoOpenPaneBase(parent, "OpenPane")
 {
   d = new KoOpenPanePrivate;
   d->m_instance = instance;
 
-  QVBoxLayout* layout = new QVBoxLayout(this, KDialog::marginHint(), KDialog::spacingHint());
-  layout->setAutoAdd(true);
-  d->m_mainWidget = new KJanusWidget(this,"OpenPane", KJanusWidget::TreeList);
+  m_sectionList->header()->hide();
+  m_sectionList->setSorting(-1); // Disable sorting
+  connect(m_sectionList, SIGNAL(selectionChanged(QListViewItem*)),
+          this, SLOT(selectionChanged(QListViewItem*)));
 
   KGuiItem openExistingGItem(i18n("Open Existing Document"), "fileopen");
-  d->m_mainWidget->addButtonBelowList(openExistingGItem, this, SLOT(showOpenFileDialog()));
-  d->m_mainWidget->setRootIsDecorated(false);
-  d->m_mainWidget->setShowIconsInTreeList(true);
+  m_openExistingButton->setGuiItem(openExistingGItem);
+  connect(m_openExistingButton, SIGNAL(clicked()), this, SLOT(showOpenFileDialog()));
 
-  QVBox* page = d->m_mainWidget->addVBoxPage(i18n("Recent Documents"), i18n("Recent Documents"),
-                                             SmallIcon("fileopen", KIcon::SizeLarge,
-                                                 KIcon::DefaultState, instance));
-  KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(page, instance);
-  connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
+  initRecentDocs();
 
-  //kdDebug() << "Template type: " << templateType << endl;
+  QListViewItem* separator = new QListViewItem(m_sectionList, m_sectionList->lastItem(), "");
+  separator->setEnabled(false);
 
-  if(!templateType.isEmpty())
-  {
-    KoTemplateTree templateTree(templateType.local8Bit(), instance, true);
+  initTemplates(templateType);
 
-    for (KoTemplateGroup *group = templateTree.first(); group != 0L; group = templateTree.next()) {
-      if (group->isHidden()) {
-        continue;
-      }
-
-      page = d->m_mainWidget->addVBoxPage(group->name(), group->name(),
-                                          group->first()->loadPicture(instance));
-      KoTemplatesPane* pane = new KoTemplatesPane(page, instance, group);
-      connect(pane, SIGNAL(openTemplate(const QString&)), this, SIGNAL(openTemplate(const QString&)));
-    }
-  }
+  m_sectionList->setSelected(m_sectionList->firstChild(), true);
 }
 
 KoOpenPane::~KoOpenPane()
@@ -106,11 +92,57 @@ void KoOpenPane::showOpenFileDialog()
   emit openExistingFile(url.path());
 }
 
-void KoOpenPane::addCustomDocumentPane(const QString& title, const QString& icon, QWidget* widget)
+void KoOpenPane::initRecentDocs()
 {
-  QVBox* page = d->m_mainWidget->addVBoxPage(title, title, SmallIcon(icon,
-                                             48, KIcon::DefaultState, d->m_instance));
-  widget->reparent(page, QPoint(0, 0));
+  KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(this, d->m_instance);
+  connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
+  addPane(i18n("Recent Documents"), "fileopen", recentDocPane);
 }
+
+void KoOpenPane::initTemplates(const QString& templateType)
+{
+  if(!templateType.isEmpty())
+  {
+    KoTemplateTree templateTree(templateType.local8Bit(), d->m_instance, true);
+
+    for (KoTemplateGroup *group = templateTree.first(); group != 0L; group = templateTree.next()) {
+      if (group->isHidden()) {
+        continue;
+      }
+
+      KoTemplatesPane* pane = new KoTemplatesPane(this, d->m_instance, group);
+      connect(pane, SIGNAL(openTemplate(const QString&)), this, SIGNAL(openTemplate(const QString&)));
+      addPane(group->name(), group->first()->loadPicture(d->m_instance), pane);
+    }
+  }
+}
+
+void KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget)
+{
+  addPane(title, SmallIcon(icon, KIcon::SizeLarge, KIcon::DefaultState, d->m_instance), widget);
+}
+
+void KoOpenPane::addPane(const QString& title, const QPixmap& icon, QWidget* widget)
+{
+  if(!widget) {
+    return;
+  }
+
+  KListViewItem* listItem = new KListViewItem(m_sectionList, m_sectionList->lastItem(), title);
+
+  if(!icon.isNull()) {
+    listItem->setPixmap(0, icon);
+  }
+
+  int id = m_widgetStack->addWidget(widget);
+  listItem->setText(1, QString::number(id));
+}
+
+void KoOpenPane::selectionChanged(QListViewItem* item)
+{
+  m_headerLabel->setText(item->text(0));
+  m_widgetStack->raiseWidget(item->text(1).toInt());
+}
+
 
 #include "koOpenPane.moc"

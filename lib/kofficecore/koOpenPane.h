@@ -19,15 +19,16 @@
 #ifndef KOOPENPANE_H
 #define KOOPENPANE_H
 
-#include <qwidget.h>
+#include <koOpenPaneBase.h>
 
 class KoCustomDocumentCreator;
 class KConfig;
 class KoTemplateGroup;
 class KoOpenPanePrivate;
 class KInstance;
+class QPixmap;
 
-class KoOpenPane : public QWidget
+class KoOpenPane : public KoOpenPaneBase
 {
   Q_OBJECT
 
@@ -35,14 +36,21 @@ class KoOpenPane : public QWidget
     KoOpenPane(QWidget *parent, KInstance* instance, const QString& templateType = QString::null);
     virtual ~KoOpenPane();
 
-    void addCustomDocumentPane(const QString& title, const QString& icon, QWidget* widget);
+    void addPane(const QString& title, const QString& icon, QWidget* widget);
+    void addPane(const QString& title, const QPixmap& icon, QWidget* widget);
 
   protected slots:
     void showOpenFileDialog();
 
+    void selectionChanged(QListViewItem* item);
+
   signals:
     void openExistingFile(const QString&);
     void openTemplate(const QString&);
+
+  protected:
+    void initRecentDocs();
+    void initTemplates(const QString& templateType);
 
   private:
     KoOpenPanePrivate* d;
