@@ -12,12 +12,6 @@
             <height>549</height>
         </rect>
     </property>
-    <property name="minimumSize">
-        <size>
-            <width>300</width>
-            <height>300</height>
-        </size>
-    </property>
     <property name="caption">
         <string>DetailsPaneBase</string>
     </property>
@@ -76,14 +70,6 @@
                     <widget class="QLabel" row="1" column="0" rowspan="1" colspan="5">
                         <property name="name">
                             <cstring>m_titleLabel</cstring>
-                        </property>
-                        <property name="sizePolicy">
-                            <sizepolicy>
-                                <hsizetype>5</hsizetype>
-                                <vsizetype>4</vsizetype>
-                                <horstretch>0</horstretch>
-                                <verstretch>0</verstretch>
-                            </sizepolicy>
                         </property>
                         <property name="font">
                             <font>
