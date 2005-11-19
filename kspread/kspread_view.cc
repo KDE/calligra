@@ -1466,8 +1466,8 @@ View::View( QWidget *_parent, const char *_name,
 
     QObject::connect( doc(), SIGNAL( sig_removeAreaName( const QString & ) ), d->posWidget, SLOT( slotRemoveAreaName( const QString & ) ) );
 
-    QObject::connect( doc(), SIGNAL( damagesFlushed( const QValueList<KSpread::Damage*>& ) ),
-        this, SLOT( handleDamages( const QValueList<KSpread::Damage*>& ) ) );
+    QObject::connect( doc(), SIGNAL( damagesFlushed( const QValueList<Damage*>& ) ),
+        this, SLOT( handleDamages( const QValueList<Damage*>& ) ) );
 
     KoView::setZoom( doc()->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
     //when kspread is embedded into konqueror apply a zoom=100

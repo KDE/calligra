@@ -126,7 +126,7 @@ public:
 
   int numOperations;
 
-  QValueList<KSpread::Damage*> damages;
+  QValueList<Damage*> damages;
 
   // document properties
   int syntaxVersion;
