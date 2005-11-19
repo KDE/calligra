@@ -694,7 +694,7 @@ WidgetFactory::CreateWidgetOptions WidgetLibrary::showOrientationSelectionPopup(
 		textVertical = i18n("Insert Vertical Widget", "Insert Vertical");
 
 	KPopupMenu* popup = new KPopupMenu(parent, "orientationSelectionPopup");
-	popup->insertTitle(SmallIcon(wclass->pixmap()), i18n("Insert widget: %1").arg(wclass->name()));
+	popup->insertTitle(SmallIcon(wclass->pixmap()), i18n("Insert Widget: %1").arg(wclass->name()));
 	popup->insertItem(iconHorizontal, textHorizontal, 1);
 	popup->insertItem(iconVertical, textVertical, 2);
 	popup->insertSeparator();

@@ -38,7 +38,7 @@
                 <bool>false</bool>
             </property>
             <property name="text">
-                <string>Word by Word</string>
+                <string>Word by word</string>
             </property>
         </widget>
         <widget class="QLabel" row="0" column="0">
@@ -46,7 +46,7 @@
                 <cstring>textLabel1</cstring>
             </property>
             <property name="text">
-                <string>&amp;Underlining</string>
+                <string>&amp;Underlining:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>underlineStyleKComboBox</cstring>
@@ -57,7 +57,7 @@
                 <cstring>textLabel2</cstring>
             </property>
             <property name="text">
-                <string>&amp;Strikethrough</string>
+                <string>&amp;Strikethrough:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>strikethroughStyleKComboBox</cstring>
@@ -102,7 +102,7 @@
                 </sizepolicy>
             </property>
             <property name="title">
-                <string>Capitalisation</string>
+                <string>Capitalization</string>
             </property>
             <property name="exclusive">
                 <bool>true</bool>

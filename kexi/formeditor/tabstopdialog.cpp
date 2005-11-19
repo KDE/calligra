@@ -57,12 +57,12 @@ TabStopDialog::TabStopDialog(QWidget *parent)
 	QVBoxLayout *vbox = new QVBoxLayout();
 	l->addLayout(vbox, 0, 1);
 	m_btnUp = new KPushButton(SmallIconSet("1uparrow"), i18n("Move Up"), frame);
-	QToolTip::add( m_btnUp, i18n("Move Widget Up") );
+	QToolTip::add( m_btnUp, i18n("Move widget up") );
 	vbox->addWidget(m_btnUp);
 	connect(m_btnUp, SIGNAL(clicked()), this, SLOT(moveItemUp()));
 
 	m_btnDown = new KPushButton(SmallIconSet("1downarrow"), i18n("Move Down"), frame);
-	QToolTip::add( m_btnDown, i18n("Move Widget Down") );
+	QToolTip::add( m_btnDown, i18n("Move widget down") );
 	vbox->addWidget(m_btnDown);
 	connect(m_btnDown, SIGNAL(clicked()), this, SLOT(moveItemDown()));
 	vbox->addStretch();

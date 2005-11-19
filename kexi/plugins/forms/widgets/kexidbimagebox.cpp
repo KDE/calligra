@@ -395,7 +395,7 @@ void KexiDBImageBox::saveAs()
 #else
 	//! @todo add originalFileName! (requires access to KRecentDirs)
 	QString fileName = KFileDialog::getSaveFileName(
-		":lastVisitedImagePath", KImageIO::pattern(KImageIO::Writing), this, i18n("Save Image To File"));
+		":lastVisitedImagePath", KImageIO::pattern(KImageIO::Writing), this, i18n("Save Image to File"));
 #endif
 	if (fileName.isEmpty())
 		return;

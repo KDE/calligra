@@ -147,7 +147,7 @@
                         <cstring>localhostRBtn</cstring>
                     </property>
                     <property name="text">
-                        <string>Local Server</string>
+                        <string>Local server</string>
                     </property>
                     <property name="accel">
                         <string></string>
@@ -201,7 +201,7 @@
                         <cstring>remotehostRBtn</cstring>
                     </property>
                     <property name="text">
-                        <string>Remote Server</string>
+                        <string>Remote server</string>
                     </property>
                     <property name="buttonGroupId">
                         <number>1</number>

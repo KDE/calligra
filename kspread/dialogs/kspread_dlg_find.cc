@@ -39,11 +39,11 @@ FindOption::FindOption( QWidget *parent)
     m_findExtension = new QWidget( parent );
     layout->addWidget( m_findExtension );
     QVBoxLayout *layout1 = new QVBoxLayout( m_findExtension );
-    m_searchInAllSheet = new QCheckBox( i18n( "Search Entire Sheet" ),m_findExtension );
+    m_searchInAllSheet = new QCheckBox( i18n( "Search entire sheet" ),m_findExtension );
     layout1->addWidget( m_searchInAllSheet );
 
     QHBoxLayout *comboLayout = new QHBoxLayout( m_findExtension );
-    QLabel *label = new QLabel( i18n( "Search In:" ), m_findExtension );
+    QLabel *label = new QLabel( i18n( "Search in:" ), m_findExtension );
     comboLayout->addWidget( label );
 
     m_searchIn = new QComboBox( m_findExtension );
@@ -56,7 +56,7 @@ FindOption::FindOption( QWidget *parent)
     m_searchIn->insertStringList( lst );
 
     comboLayout = new QHBoxLayout( m_findExtension );
-    label = new QLabel( i18n( "Search Direction:" ), m_findExtension );
+    label = new QLabel( i18n( "Search direction:" ), m_findExtension );
     comboLayout->addWidget( label );
 
     m_searchDirection = new QComboBox( m_findExtension );

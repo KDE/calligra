@@ -122,7 +122,7 @@ void KexiDBConnectionWidget::setDataInternal(const KexiProjectData& data, bool c
 		nameLabel->hide();
 		nameCombo->hide();
 		btnLoadDBList->hide();
-		dbGroupBox->setTitle(i18n("Database connection"));
+		dbGroupBox->setTitle(i18n("Database Connection"));
 	}
 	else {
 		nameLabel->show();

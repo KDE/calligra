@@ -35,7 +35,7 @@
                         <cstring>textColorLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Text Color</string>
+                        <string>&amp;Text color:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>textKColorButton</cstring>
@@ -46,7 +46,7 @@
                         <cstring>backgroundColorLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Background Color</string>
+                        <string>&amp;Background color:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>backgroundKColorButton</cstring>
@@ -86,7 +86,7 @@
                         <cstring>shadowColorLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Shadow Color</string>
+                        <string>&amp;Shadow color:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>shadowKColorButton</cstring>
@@ -113,7 +113,7 @@
                         <cstring>shadowDistanceLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>Shadow &amp;Distance</string>
+                        <string>Shadow &amp; distance:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>shadowDistanceSpinBox</cstring>

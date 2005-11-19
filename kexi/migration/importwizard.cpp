@@ -119,7 +119,7 @@ ImportWizard::ImportWizard(QWidget *parent, QVariant* result)
     this->addPage(dstPage, i18n("Select Destination Database"));
     importTypePage = new QWidget(this);
     setupImportType();
-    this->addPage(importTypePage, i18n("Select Type Of Import"));
+    this->addPage(importTypePage, i18n("Select Type of Import"));
     finishPage = new QWidget(this);
     setupfinish();
     this->addPage(finishPage, i18n("Finished"));

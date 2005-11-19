@@ -140,7 +140,7 @@ KudesignerView::KudesignerView( KudesignerDoc* part, QWidget* parent, const char
     connect( m_view, SIGNAL( modificationPerformed() ), part, SLOT( setModified() ) );
     connect( m_view, SIGNAL( itemPlaced( int, int, int, int ) ), this, SLOT( placeItem( int, int, int, int ) ) );
 
-    gridLabel = new QLabel( i18n( " Grid Size: " ), shell() );
+    gridLabel = new QLabel( i18n( " Grid size: " ), shell() );
     gridBox = new QSpinBox( 1, 100, 1, shell() );
     gridBox->setValue( 10 );
     connect( gridBox, SIGNAL( valueChanged( int ) ), m_view, SLOT( setGridSize( int ) ) );

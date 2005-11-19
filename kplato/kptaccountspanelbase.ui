@@ -80,7 +80,7 @@
                 <cstring>subBtn</cstring>
             </property>
             <property name="text">
-                <string>New subaccount</string>
+                <string>New Subaccount</string>
             </property>
         </widget>
     </grid>

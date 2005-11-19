@@ -50,7 +50,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Code</string>
+                                <string>Code:</string>
                             </property>
                         </widget>
                         <widget class="QComboBox" row="1" column="0">
@@ -63,7 +63,7 @@
                                 <cstring>textLabel1_3_2</cstring>
                             </property>
                             <property name="text">
-                                <string>Separator</string>
+                                <string>Separator:</string>
                             </property>
                         </widget>
                         <widget class="QLineEdit" row="1" column="1">
@@ -83,7 +83,7 @@
                 <bool>true</bool>
             </property>
             <property name="title">
-                <string>Use levels</string>
+                <string>Use Levels</string>
             </property>
             <property name="checkable">
                 <bool>true</bool>
@@ -165,7 +165,7 @@
                                         <cstring>addBtn</cstring>
                                     </property>
                                     <property name="text">
-                                        <string>Add level</string>
+                                        <string>Add Level</string>
                                     </property>
                                 </widget>
                                 <widget class="QSpinBox">

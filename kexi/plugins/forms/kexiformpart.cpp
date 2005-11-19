@@ -178,9 +178,9 @@ void KexiFormPart::initInstanceActions()
 		QString::null, 0, "formpart_layout_vbox"));
 	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("In &Grid"),
 		QString::null, 0, "formpart_layout_grid"));
-	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Horizontally in a &Splitter"),
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Horizontally in &Splitter"),
 		QString::null, 0, "formpart_layout_hsplitter"));
-	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Verti&cally in a Splitter"),
+	menu->insert( createSharedAction(Kexi::DesignViewMode, i18n("Verti&cally in Splitter"),
 		QString::null, 0, "formpart_layout_vsplitter"));
 
 	createSharedAction(Kexi::DesignViewMode, i18n("&Break Layout"), QString::null, 0, "formpart_break_layout");
@@ -193,7 +193,7 @@ void KexiFormPart::initInstanceActions()
 	createSharedAction(Kexi::DesignViewMode, i18n("Send Widget to Back"), "lower", 0, "formpart_format_lower");
 
 #ifndef KEXI_NO_UNFINISHED
-	action = createSharedAction(Kexi::DesignViewMode, i18n("Other widgets"), "", 0, "other_widgets_menu", "KActionMenu");
+	action = createSharedAction(Kexi::DesignViewMode, i18n("Other Widgets"), "", 0, "other_widgets_menu", "KActionMenu");
 #endif
 
 	action = createSharedAction(Kexi::DesignViewMode, i18n("Align Widgets Position"), "aoleft", 0, "formpart_align_menu", "KActionMenu");

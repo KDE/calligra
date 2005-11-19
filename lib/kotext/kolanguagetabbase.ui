@@ -43,7 +43,7 @@
                         <cstring>languageLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>Language</string>
+                        <string>Language:</string>
                     </property>
                 </widget>
                 <widget class="KComboBox">

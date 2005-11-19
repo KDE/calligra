@@ -332,7 +332,7 @@ void KexiConnSelectorWidget::slotRemoteAddBtnClicked()
 	KexiDB::ConnectionData data;
 	KexiDBConnectionDialog dlg(data, QString::null,
 		KGuiItem(i18n("&Add"), "button_ok", i18n("Add database connection")) );
-	dlg.setCaption(i18n("Add a New Database Connection"));
+	dlg.setCaption(i18n("Add New Database Connection"));
 	if (QDialog::Accepted!=dlg.exec())
 		return;
 

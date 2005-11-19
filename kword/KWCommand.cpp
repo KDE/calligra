@@ -2024,7 +2024,7 @@ void KWRenameBookmarkCommand::unexecute()
 }
 
 KWResizeColumnCommand::KWResizeColumnCommand( KWTableFrameSet *table, int col, double oldSize, double newSize ):
-    KNamedCommand( i18n("Resize column") ),
+    KNamedCommand( i18n("Resize Column") ),
     m_table( table ),
     m_oldSize( oldSize ),
     m_newSize( newSize ),
@@ -2045,7 +2045,7 @@ void KWResizeColumnCommand::unexecute()
 }
 
 KWResizeRowCommand::KWResizeRowCommand( KWTableFrameSet *table, int row, double oldSize, double newSize ):
-    KNamedCommand( i18n("Resize row") ),
+    KNamedCommand( i18n("Resize Row") ),
     m_table( table ),
     m_oldSize( oldSize ),
     m_newSize( newSize ),

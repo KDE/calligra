@@ -70,20 +70,20 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     KToggleAction * m_toggleShowHidePalettes;
     
     if (m_allPalettesShown) {
-        m_toggleShowHidePalettes = new KToggleAction(i18n("Hide all Palette Windows"),
+        m_toggleShowHidePalettes = new KToggleAction(i18n("Hide All Palette Windows"),
                                     "CTRL+F9", this,
                                     SLOT(slotToggleAllPalettes()),
                                     this, "toggleAllPaletteWindows");
 
-        m_toggleShowHidePalettes->setCheckedState(i18n("Show all Palette Windows"));
+        m_toggleShowHidePalettes->setCheckedState(i18n("Show All Palette Windows"));
     }
     else {
-        m_toggleShowHidePalettes = new KToggleAction(i18n("Show all Palette Windows"),
+        m_toggleShowHidePalettes = new KToggleAction(i18n("Show All Palette Windows"),
                                     "f9", this,
                                     SLOT(slotToggleAllPalettes()),
                                     this, "toggleAllPaletteWindows");
 
-        m_toggleShowHidePalettes->setCheckedState(i18n("Hide all Palette Windows"));
+        m_toggleShowHidePalettes->setCheckedState(i18n("Hide All Palette Windows"));
     }
     m_viewActionMenu->insert(m_toggleShowHidePalettes);
     

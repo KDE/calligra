@@ -195,14 +195,14 @@ KCommand *KPTAccountsPanel::buildCommand(KPTPart *part) {
     for (;rit.current(); ++rit) {
         AccountItem *item = static_cast<AccountItem*>(rit.current());
         kdDebug()<<k_funcinfo<<"Removed item"<<endl;
-        if (!cmd) cmd = new KMacroCommand(i18n("Modify accounts"));
+        if (!cmd) cmd = new KMacroCommand(i18n("Modify Accounts"));
         cmd->addCommand(new KPTRemoveAccountCmd(part, part->getProject(), item->account));
     }
     m_removedItems.setAutoDelete(true);
     // Then add/modify
     KCommand *c = save(part, part->getProject());
     if (c) {
-        if (!cmd) cmd = new KMacroCommand(i18n("Modify accounts"));
+        if (!cmd) cmd = new KMacroCommand(i18n("Modify Accounts"));
         cmd->addCommand(c);
     }
     return cmd;

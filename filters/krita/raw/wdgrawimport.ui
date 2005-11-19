@@ -226,7 +226,7 @@
                                 <cstring>chkClip</cstring>
                             </property>
                             <property name="text">
-                                <string>Clip Colors to Prevent &amp;Pink highlights</string>
+                                <string>Clip colors to prevent &amp;pink highlights</string>
                             </property>
                             <property name="checked">
                                 <bool>true</bool>
@@ -285,7 +285,7 @@
                                 <cstring>radioAutomatic</cstring>
                             </property>
                             <property name="text">
-                                <string>Automatic Whitebalance</string>
+                                <string>Automatic white balance</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -296,7 +296,7 @@
                                 <cstring>radioCamera</cstring>
                             </property>
                             <property name="text">
-                                <string>Camera White Balance</string>
+                                <string>Camera white balance</string>
                             </property>
                             <property name="accel">
                                 <string></string>
@@ -389,7 +389,7 @@
                 <cstring>chkFourColorRGB</cstring>
             </property>
             <property name="text">
-                <string>&amp;Interpolate RGB as Four Colors</string>
+                <string>&amp;Interpolate RGB as four colors</string>
             </property>
         </widget>
     </grid>

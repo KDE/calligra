@@ -457,8 +457,8 @@ KarbonView::editPaste()
 	double copyOffset = part()->instance()->config()->readNumEntry( "CopyOffset", 10 );
 	part()->addCommand( new VInsertCmd( &part()->document(), 
 										objects.count() == 1
-											? i18n( "Paste object" )
-											: i18n( "Paste objects" ),
+											? i18n( "Paste Object" )
+											: i18n( "Paste Objects" ),
 										&objects, copyOffset ),
 						true );
 
@@ -637,8 +637,8 @@ KarbonView::selectionDuplicate()
 	double copyOffset = part()->instance()->config()->readNumEntry( "CopyOffset", 10 );
 	part()->addCommand( new VInsertCmd( &part()->document(), 
 										objects.count() == 1
-											? i18n( "Duplicate object" )
-											: i18n( "Duplicate objects" ),
+											? i18n( "Duplicate Object" )
+											: i18n( "Duplicate Objects" ),
 										&objects, copyOffset ),
 						true );
 

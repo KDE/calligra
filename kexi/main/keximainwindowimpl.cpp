@@ -981,7 +981,7 @@ void KexiMainWindowImpl::initActions()
 
 #ifndef KEXI_NO_FEEDBACK_AGENT
 #ifdef FEEDBACK_CLASS
-	new KAction(i18n("Give feedback..."), "messagebox_info", 0,
+	new KAction(i18n("Give Feedback..."), "messagebox_info", 0,
 		this, SLOT(slotStartFeedbackAgent()), actionCollection(), "help_start_feedback_agent");
 #endif
 #endif

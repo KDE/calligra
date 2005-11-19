@@ -13,7 +13,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>Options of your PNG</string>
+        <string>Options of Your PNG</string>
     </property>
     <grid>
         <property name="name">
@@ -164,7 +164,7 @@ Enabling interlacing will make the image be displayed by the browser even while 
                 <cstring>alpha</cstring>
             </property>
             <property name="text">
-                <string>Store Alpha Channel  (Transparency)</string>
+                <string>Store alpha channel (transparency)</string>
             </property>
             <property name="checked">
                 <bool>true</bool>

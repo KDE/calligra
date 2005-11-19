@@ -105,7 +105,7 @@
                 <cstring>angleLabel</cstring>
             </property>
             <property name="text">
-                <string>Start Position:</string>
+                <string>Start position:</string>
             </property>
             <property name="buddy" stdset="0">
                 <cstring>angleInput</cstring>

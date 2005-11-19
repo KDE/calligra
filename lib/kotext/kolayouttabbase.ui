@@ -151,7 +151,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="text">
-                                <string>Offset</string>
+                                <string>Offset:</string>
                             </property>
                         </widget>
                         <widget class="QLabel" row="2" column="0">
@@ -162,7 +162,7 @@
                                 <bool>false</bool>
                             </property>
                             <property name="text">
-                                <string>Relative Size</string>
+                                <string>Relative size:</string>
                             </property>
                         </widget>
                         <widget class="QSpinBox" row="1" column="1">

@@ -200,7 +200,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
     // ------ Tools
     actionDefineWBS = 
-        new KAction(i18n("Define WBS pattern..."), "tools_define_wbs", 0, this,
+        new KAction(i18n("Define WBS Pattern..."), "tools_define_wbs", 0, this,
         SLOT(slotDefineWBS()), actionCollection(), "tools_generate_wbs");
     actionGenerateWBS = 
         new KAction(i18n("Generate WBS Code"), "tools_generate_wbs", 0, this,

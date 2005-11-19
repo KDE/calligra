@@ -101,7 +101,7 @@ void
 SymbolCombo::selectChar()
 {
 #ifndef QT_ONLY
-	KDialogBase dialog(this->topLevelWidget(), "charselect_dialog", true, i18n("Select a char"),
+	KDialogBase dialog(this->topLevelWidget(), "charselect_dialog", true, i18n("Select Char"),
 	    KDialogBase::Ok|KDialogBase::Cancel, KDialogBase::Ok, false);
 
 	KCharSelect *select = new KCharSelect(&dialog, "select_char");

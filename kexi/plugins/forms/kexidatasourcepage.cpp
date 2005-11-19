@@ -60,7 +60,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 
 	//Widget's Data Source
 	QHBoxLayout *hlyr = new QHBoxLayout(vlyr);
-	m_widgetDSLabel = new QLabel(i18n("Table Field, Query Field or Expression", "Source Field or Expression:"), this);
+	m_widgetDSLabel = new QLabel(i18n("Table Field, Query Field or Expression", "Source field or expression:"), this);
 	m_widgetDSLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_widgetDSLabel->setMargin(2);
 	m_widgetDSLabel->setMinimumHeight(IconSize(KIcon::Small)+4);
@@ -89,7 +89,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 
 	//Form's Data Source
 	hlyr = new QHBoxLayout(vlyr);
-	QLabel *dsLabel = new QLabel(i18n("Form's Data Source:"), this);
+	QLabel *dsLabel = new QLabel(i18n("Form's data source:"), this);
 	dsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	dsLabel->setMargin(2);
 	dsLabel->setMinimumHeight(IconSize(KIcon::Small)+4);
@@ -146,7 +146,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	//Available Fields
 	vlyr->addSpacing(4);
 	hlyr = new QHBoxLayout(vlyr);
-	m_availableFieldsLabel = new QLabel(i18n("Available Fields:"), this);
+	m_availableFieldsLabel = new QLabel(i18n("Available fields:"), this);
 	m_availableFieldsLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_availableFieldsLabel->setMargin(2);
 	m_availableFieldsLabel->setMinimumHeight(IconSize(KIcon::Small));

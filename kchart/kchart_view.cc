@@ -149,7 +149,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                             this, SLOT( slotConfigDataFormat() ),
                             actionCollection(), "data_format" );
 
-    m_headerFooterConfig = new KAction( i18n( "&Header and Footer..." ), 0,
+    m_headerFooterConfig = new KAction( i18n( "&Header && Footer..." ), 0,
                             this, SLOT( slotConfigHeaderFooterChart() ),
                             actionCollection(), "headerfooter_subtype" );
 

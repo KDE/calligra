@@ -241,34 +241,34 @@ configure::configure( View* _view, QVBox *box , char *name )
   autoSaveDelay->setSuffix(i18n("min"));
   QWhatsThis::add(autoSaveDelay, i18n( "Here you can select the time between autosaves, or disable this feature altogether by choosing Do not save automatically (drag the slider to the far left)." ) );
 
-  m_createBackupFile = new QCheckBox( i18n("Create Backup Files"), tmpQGroupBox );
+  m_createBackupFile = new QCheckBox( i18n("Create backup files"), tmpQGroupBox );
   m_createBackupFile->setChecked( m_oldBackupFile );
   QWhatsThis::add(m_createBackupFile, i18n( "Check this box if you want some backup files created. This is checked per default." ) );
 
-  showVScrollBar=new QCheckBox(i18n("Show &Vertical Scrollbar"),tmpQGroupBox);
+  showVScrollBar=new QCheckBox(i18n("Show &vertical scrollbar"),tmpQGroupBox);
   showVScrollBar->setChecked(vertical);
   QWhatsThis::add(showVScrollBar, i18n( "Check or uncheck this box to show or hide the vertical scrollbar in all sheets." ) );
 
-  showHScrollBar=new QCheckBox(i18n("Show &Horizontal Scrollbar"),tmpQGroupBox);
+  showHScrollBar=new QCheckBox(i18n("Show &horizontal scrollbar"),tmpQGroupBox);
   showHScrollBar->setChecked(horizontal);
   QWhatsThis::add(showHScrollBar, i18n( "Check or uncheck this box to show or hide the horizontal scrollbar in all sheets." ) );
 
-  showColHeader=new QCheckBox(i18n("Show C&olumn Header"),tmpQGroupBox);
+  showColHeader=new QCheckBox(i18n("Show c&olumn header"),tmpQGroupBox);
   showColHeader->setChecked(colHeader);
   QWhatsThis::add(showColHeader, i18n( "Check this box to show the column letters across the top of each worksheet." ) );
-  showRowHeader=new QCheckBox(i18n("Show &Row Header"),tmpQGroupBox);
+  showRowHeader=new QCheckBox(i18n("Show &row header"),tmpQGroupBox);
   showRowHeader->setChecked(rowHeader);
   QWhatsThis::add(showRowHeader, i18n( "Check this box to show the row numbers down the left side." ) );
  
-  showTabBar =new QCheckBox(i18n("Show Ta&bs"),tmpQGroupBox);
+  showTabBar =new QCheckBox(i18n("Show ta&bs"),tmpQGroupBox);
   showTabBar->setChecked(tabbar);
   QWhatsThis::add(showTabBar, i18n( "This check box controls whether the sheet tabs are shown at the bottom of the worksheet." ) );
 
-  showFormulaBar =new QCheckBox(i18n("Sho&w Formula toolbar"),tmpQGroupBox);
+  showFormulaBar =new QCheckBox(i18n("Sho&w formula toolbar"),tmpQGroupBox);
   showFormulaBar->setChecked(formulaBar);
   QWhatsThis::add(showFormulaBar, i18n( "Here is where you can choose to show or hide the Formula bar." ) );
 
-  showStatusBar =new QCheckBox(i18n("Show Stat&usbar"),tmpQGroupBox);
+  showStatusBar =new QCheckBox(i18n("Show stat&us bar"),tmpQGroupBox);
   showStatusBar->setChecked(statusBar);
   QWhatsThis::add(showStatusBar, i18n( "Uncheck this box if you want to hide the status bar." ) );
 }

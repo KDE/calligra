@@ -27,7 +27,7 @@ namespace KPlato
 {
 
 KPTAccountsDialog::KPTAccountsDialog(KPTAccounts &acc, QWidget *p, const char *n)
-    : KDialogBase(Swallow, i18n("Edit accounts"), Ok|Cancel, Ok, p, n, true, true)
+    : KDialogBase(Swallow, i18n("Edit Accounts"), Ok|Cancel, Ok, p, n, true, true)
 {
     m_panel = new KPTAccountsPanel(acc, this);
     setMainWidget(m_panel);

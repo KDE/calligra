@@ -116,7 +116,7 @@ void KexiFormManager::setFormDataSource(const QCString& mime, const QCString& na
 		propValues.insert("dataSource", name);
 		propValues.insert("dataSourceMimeType", mime);
 		KFormDesigner::CommandGroup *group 
-			= new KFormDesigner::CommandGroup(i18n("Set form's data source to \"%1\"").arg(name), propertySet());
+			= new KFormDesigner::CommandGroup(i18n("Set Form's Data Source to \"%1\"").arg(name), propertySet());
 		propertySet()->createPropertyCommandsInDesignMode(formWidget, propValues, group, true /*addToActiveForm*/);
 	}
 

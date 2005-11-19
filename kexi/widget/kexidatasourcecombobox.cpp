@@ -103,7 +103,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj)
 	insertItem("");
 
 	//special item: define query
-	insertItem(i18n("Define query..."));
+	insertItem(i18n("Define Query..."));
 	KCompletion *comp = completionObject();
 
 	//tables
