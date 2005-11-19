@@ -663,7 +663,7 @@ bool SheetPrint::isOnNewPageX( int _column )
     //beyond the print range it's always false
     if ( _column < m_printRange.left() || _column > m_printRange.right() )
     {
-        return true;
+        return false;
     }
 
     //Now check if we find the column already in the list
@@ -772,7 +772,7 @@ bool SheetPrint::isOnNewPageY( int _row )
     //Are these the edges of the print range?
     if ( _row == m_printRange.top() || _row == m_printRange.bottom() + 1 )
     {
-        return false;
+        return true;
     }
 
      //beyond the print range it's always false
@@ -1329,8 +1329,11 @@ void SheetPrint::setPrintRange( const QRect &_printRange )
 
 void SheetPrint::setPageLimitX( int pages )
 {
-    if( m_iPageLimitX == pages )
-        return;
+  //We do want an update in any case because the sheet content
+  //could have changed, thus we need to recalculate although
+  //it's the same setting!
+//     if( m_iPageLimitX == pages )
+//         return;
 
     m_iPageLimitX = pages;
 
@@ -1342,8 +1345,11 @@ void SheetPrint::setPageLimitX( int pages )
 
 void SheetPrint::setPageLimitY( int pages )
 {
-    if( m_iPageLimitY == pages )
-        return;
+  //We do want an update in any case because the sheet content
+  //could have changed, thus we need to recalculate although
+  //it's the same setting!
+//     if( m_iPageLimitY == pages )
+//         return;
 
     m_iPageLimitY = pages;
 
@@ -1403,6 +1409,7 @@ void SheetPrint::calculateZoomForPageLimitY()
         m_dZoom -= 0.01;
         updatePrintRepeatRowsHeight();
         updateNewPageListY( 0 );
+        updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
         currentPages = pagesY( printRange );
     }
 

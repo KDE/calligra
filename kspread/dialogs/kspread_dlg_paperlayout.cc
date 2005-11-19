@@ -388,20 +388,73 @@ void PaperLayout::slotOk()
 
       if ( m_rScalingZoom->isChecked() )
       {
+        kdDebug() << "Zoom is selected" << endl;
         if( QString( "%1%" ).arg( qRound( print->zoom() * 100 ) ) != m_cZoom->currentText() )
         {
-          if( m_cZoom->currentText().toDouble() != 0.0 )
-            print->setZoom( 0.01 * m_cZoom->currentText().toDouble() );
+          kdDebug() << "new zoom is different than original: " << m_cZoom->currentText() << endl;
+          QString zoomtext = m_cZoom->currentText();
+          zoomtext.replace("%","");
+          bool convertok = false;
+          double zoomvalue = zoomtext.toDouble(&convertok);
+          if (!convertok)
+          {
+            kdWarning() << "Could not convert zoom text to double value!!!" << endl;
+          }
+          else if( zoomvalue != 0.0 )
+          {
+            //reset page limits
+            print->setPageLimitX(0);
+            print->setPageLimitY(0);
+            kdDebug() << "setting print zoom: " << zoomvalue*0.01 << endl;
+            print->setZoom( 0.01 * zoomvalue );
+            kdDebug() << "new print zoom: " << print->zoom() << endl;
+          }
+          else
+            kdDebug() << "did not set print zoom" << endl;
         }
+        else
+          kdDebug() << "new zoom is same as original: " << m_cZoom->currentText() << endl;
+      }
+      else if (m_rScalingLimitPages->isChecked())
+      {
+        kdDebug() << "Limit pages is selected" << endl;
+        kdDebug() << "Current zoom: " << print->zoom();
+        
+        //reset first, otherwise setting the first limit
+        //would still check against the second limit and
+        //possibly result in a smaller total zoom
+        print->setPageLimitX( 0 );
+        print->setPageLimitY( 0 );
+        
+        //start with at least 100%
+        
+        if (print->zoom() < 1.0)
+        {
+          kdDebug() << "resetting zoom to 1.0" << endl;
+          print->setZoom(1.0,false); //don't check page limits here
+          kdDebug() << "zoom is now: " << print->zoom() << endl;
+        }
+        
+        bool convertok = false;
+        
+        int limitX = m_cLimitPagesX->currentText().toInt(&convertok);
+        if (!convertok)  //THIS IS THE CASE WITH "No Limit"
+          limitX = 0;  //0 means no limit
+        
+        convertok=false;
+        int limitY = m_cLimitPagesY->currentText().toInt(&convertok);
+        if (!convertok)  //THIS IS THE CASE WITH "No Limit"
+          limitY=0;  //0 means no limit
+
+        kdDebug() << "zoom before setting limits: " << print->zoom() << endl;
+        kdDebug() << "limit x: " << limitX << "; limit y: " << limitY << endl;
+        print->setPageLimitX( limitX );
+        kdDebug() << "zoom after setting x limit: " << print->zoom() << endl;
+        print->setPageLimitY( limitY );
+        kdDebug() << "zoom after setting y limit: " << print->zoom() << endl;
       }
       else
-      {
-        if( print->pageLimitX() != m_cLimitPagesX->currentText().toInt() )
-          print->setPageLimitX( m_cLimitPagesX->currentText().toInt() );
-
-        if( print->pageLimitY() != m_cLimitPagesY->currentText().toInt() )
-          print->setPageLimitY( m_cLimitPagesY->currentText().toInt() );
-      }
+        kdWarning() << "ERROR: unknown zoom option selected" << endl;
 
       sheet->doc()->setModified( true );
 
