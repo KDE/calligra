@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KOffice Simplified Word Processing Component
+Name[cs]=Součást KOffice pro jednoduché zpracování textu
 Name[da]=KOffice simplificeret tekstbehandlingskomponent
 Name[es]=Componente de procesamiento de texto simplificado de KOffice
 Name[ja]=KOffice 簡易ワープロコンポーネント
@@ -17,6 +18,7 @@ MimeType=application/vnd.oasis.opendocument.text;application/vnd.oasis.opendocum
 ServiceTypes=KOfficePart,KParts/ReadOnlyPart,KParts/ReadWritePart
 GenericName=Text Documents
 GenericName[bg]=Текстови документи
+GenericName[cs]=Textové dokumenty
 GenericName[cy]=Dogfennau Testun
 GenericName[es]=Documentos de texto
 GenericName[fr]=Documents texte

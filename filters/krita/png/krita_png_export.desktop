@@ -1,6 +1,11 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Krita PNG Export Filter
+Name[es]=Filtro de exportación a PNG de Krita
+Name[ga]=Scagaire Easpórtála PNG Krita
+Name[pt]=Filtro de Exportação de PNG para o Krita
+Name[pt_BR]=Filtro de Exportação de PNG para o Krita
+Name[sv]=Krita PNG-exportfilter
 X-KDE-Export=image/png
 ServiceTypes=KOfficeFilter
 Type=Service
