@@ -1,0 +1,88 @@
+<!--
+  <!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" >
+-->
+
+<chapter id="configuration">
+  <title>
+    Configuring Kexi
+  </title>
+
+  <para>
+    This chapter describes how you can configure &kexi; to suit your
+    own needs and preferences.
+  </para>
+
+  <sect1 id="configuring-window-layout">
+    <title>
+      Window Layout
+    </title>
+    <para>
+      &kexi; provides a <firstterm>Mutiple Document
+      Interface</firstterm> (MDI).  This means that you can have
+      several database objects (such as tables, queries, forms and
+      scripts) open at the same time and in the same &kexi; main
+      window.  Each database object is shown in a <firstterm>child
+      window</firstterm> within the main window.
+    </para>
+    <para>
+      There is a choice of two MDI modes available, allowing a choice
+      of how child windows are managed and displayed.  The two modes
+      are:
+      <itemizedlist>
+	<listitem><para>IDEAl mode; and</para></listitem>
+	<listitem><para>Childframe mode.</para></listitem>
+      </itemizedlist>
+      These modes are described in the following two sections.  You
+      can change the MDI mode from the <guisubmenu>MDI
+      mode</guisubmenu> sub-menu under the <guimenu>Window</guimenu>
+      menu.  Note that changing the MDI mode requires Kexi to be
+      restarted before the new mode takes effect.
+    </para>
+    <sect2 id="window-layout-ideal">
+      <title>
+	IDEAl mode
+      </title>
+<!-- TODO: Screenshot of IDEAl mode -->
+      <para>
+	IDEAl mode is the default MDI mode, and may be familiar from
+	other &kde; applications.  In this mode, a single child window
+	is shown maximized within in the &kexi; main window at once.
+	A tab bar, containing one tab for each child window, allows
+	other child windows to be viewed by simply clicking on the
+	relevant tab.
+      </para>
+    </sect2>
+    <sect2 id="window-layout-childframe">
+      <title>
+	Childframe mode
+      </title>
+<!-- TODO: Screenshot of Childframe mode -->
+      <para>
+	In Childframe mode, child windows are displayed in the
+	main &kexi; window, but need not be maximized within it.
+	In order to use Childframe mode, you need to select
+	<action>
+	  <guimenu>Window</guimenu>,
+	  <guisubmenu>MDI mode</guisubmenu>,
+	  <guimenuitem>Childframe Mode</guimenuitem>
+	</action> from the menu.
+      </para>
+      <para>
+	Each child window has a title bar with buttons for maximizing,
+	minimizing and closing it.  They can also be moved and resized
+	within the main window in the normal way (for example, they
+	can be moved by clicking and dragging the title bar).
+      </para>
+      <para>
+        The buttons behave as follows:  the right-most button closes
+	the child window.  The button on its left maximizes the child
+	window - note this causes the buttons to move to the top right
+	of the main window, above the <guilabel>Properties
+	editor</guilabel> if it is open.  The next button to the left
+	toggles the child window between minimized and restored.  The
+	left-most button detaches the child window, allowing it to be
+	moved out of the main window.
+      </para>
+    </sect2>
+  </sect1>
+</chapter>

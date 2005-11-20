@@ -1,0 +1,107 @@
+<!--
+  <!DOCTYPE chapter PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" >
+
+ -->
+
+<chapter id="basics">
+  <title>
+    &kexi; Basics
+  </title>
+
+  <sect1 id="doc-vs-project">
+    <title>
+      Kexi Databases
+    </title>
+    <para>
+      Many applications such as OpenOffice or Microsoft Excel create
+      files which are called <firstterm>documents</firstterm>. &kexi;
+      creates files too, but we refer to them as <firstterm>&kexi;
+      database files</firstterm>, or simple <firstterm>database
+      files</firstterm> here.  &kexi; database files usually have the
+      extension <filename>.kexi</filename>.
+    </para>
+  
+<!-- TODO: Picture of Kexi database icon? -->
+
+    <para>
+      In addition to storing your databases in database files, &kexi;
+      can also use databases on <firstterm>database
+      servers</firstterm>, which is why we refer to them as
+      <emphasis>database files</emphasis>, and not simply as
+      <emphasis>databases</emphasis>.
+    </para>
+
+    <para>
+      The term <firstterm>&kexi; project</firstterm>, or simply
+      <firstterm>project</firstterm> is also used to refer to a &kexi;
+      database, regardless of whether it is stored in a file or on a
+      database server.
+    </para>
+  </sect1>
+
+  <sect1 id="new-database">
+    <title>
+      Creating a New Database File
+    </title>
+
+    <para>
+      <procedure>
+	<step>
+	  <para>
+	    Run &kexi;, or if it is already running, use
+	    <menuchoice>
+	      <guimenu>File</guimenu><guimenuitem>New</guimenuitem>
+	      <shortcut>
+		<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+	      </shortcut>
+	    </menuchoice>
+	  </para>
+	</step>
+	<step>
+	  <para>
+	    Click the <guibutton>OK</guibutton> to confirm the
+	    creation of the project.
+	  </para>
+	</step>
+	<step>
+	  <para>
+	    Enter a name for your project, and click <guibutton>Next</guibutton>.
+	  </para>
+	</step>
+	<step>
+	  <para>
+	    Use the file browser to choose a folder where you would
+	    like to save your database file.  You may change the file
+	    name in <guilabel>Location:</guilabel> box if you dislike
+	    the one that is suggested.
+	  </para>
+	</step>
+	<step>
+	  <para>
+	    Click <guibutton>Create</guibutton>.
+	  </para>
+	</step>
+      </procedure>
+    </para>
+  </sect1>
+
+  <sect1 id="main-window">
+    <title>
+      The &kexi; Main Window
+    </title>
+    <para>
+      The <guilabel>Project Navigator</guilabel> and
+      <guilabel>Properties Editor</guilabel> are shown in panes on
+      each side of the child window.  These can be resized or hidden
+      as required.  A pane can be hidden by clicking the small cross
+      at the top of the pane (just below the toolbar).
+    </para>
+    <para>
+      New child windows can be created by clicking (or
+      double-clicking, depending upon your global &kde; settings) on
+      the names of database objects listed in the <guilabel>Project
+      Navigator</guilabel>.
+    </para>
+  </sect1>
+
+</chapter>
