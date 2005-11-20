@@ -23,6 +23,7 @@
 #include "pythonsecurity.h"
 #include "../main/scriptcontainer.h"
 
+#include <kapplication.h>
 #include <kdebug.h>
 
 using namespace Kross::Python;
@@ -178,7 +179,7 @@ void PythonScript::finalize()
     d->m_classes.clear();
 }
 
-long PythonScript::getLineNo(Py::Exception& exception)
+long PythonScript::getLineNo(Py::Exception& /*exception*/)
 {
     PyObject *type, *value, *traceback;
     PyObject *lineobj = 0;
@@ -248,12 +249,36 @@ Kross::Api::Object::Ptr PythonScript::execute()
             throw Py::Exception(); // throw exception
         Py_XDECREF(pyrun); // free the reference.
 
+// Acquire interpreter lock*/
+PyGILState_STATE gilstate = PyGILState_Ensure();
+kdDebug()<<"PyGILState_Ensure GILSTATE: "<<gilstate<<endl;
+
+//PyThreadState* ts = PyEval_SaveThread();
+//PyEval_AcquireLock();
+//PyEval_RestoreThread( dynamic_cast<PythonInterpreter*>(m_interpreter)->getThreadState() );
+//PyThreadState_Swap( dynamic_cast<PythonInterpreter*>(m_interpreter)->getThreadState() );
+//Py_BEGIN_ALLOW_THREADS
+
         // Evaluate the already compiled code.
         PyObject* pyresult = PyEval_EvalCode(
             (PyCodeObject*)d->m_code->ptr(),
             mainmoduledict.ptr(),
             moduledict.ptr()
         );
+
+//Py_END_ALLOW_THREADS
+//PyEval_ReleaseThread(ts);
+//PyThreadState_Swap(NULL);
+//PyEval_ReleaseLock();
+//PyThreadState_Swap(ts);
+
+// Free interpreter lock
+kdDebug()<<"PyGILState_Release GILSTATE: "<<gilstate<<endl;
+PyGILState_Release(gilstate);
+
+//KApplication::kApplication()->processEvents ();
+//KApplication::kApplication()->wakeUpGuiThread ();
+//KApplication::kApplication()->unlock (TRUE);
 
         if(! pyresult)
             throw Py::Exception();
@@ -283,12 +308,17 @@ Kross::Api::Object::Ptr PythonScript::execute()
         return r;
     }
     catch(Py::Exception& e) {
-        Py::Object errobj = Py::value(e);
-        if(errobj.ptr() == Py_None) // at least string-exceptions have there errormessage in the type-object
-            errobj = Py::type(e);
-        QString err = errobj.as_string().c_str();
-        long lineno = getLineNo(e);
-        setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(err), lineno) );
+        try {
+            Py::Object errobj = Py::value(e);
+            if(errobj.ptr() == Py_None) // at least string-exceptions have there errormessage in the type-object
+                errobj = Py::type(e);
+            QString err = errobj.as_string().c_str();
+            long lineno = getLineNo(e);
+            setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(err), lineno) );
+        }
+        catch(Py::Exception& e) {
+            setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(Py::value(e).as_string().c_str())) );
+        }
     }
     catch(Kross::Api::Exception::Ptr e) {
         setException(e);

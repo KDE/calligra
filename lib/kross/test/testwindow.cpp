@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "testwindow.h"
+#include "testplugin.h"
 
 #include <qlabel.h>
 #include <qvbox.h>
@@ -34,7 +35,9 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     , m_interpretername(interpretername)
     , m_scriptcode(scriptcode)
 {
-    m_scriptcontainer = Kross::Api::Manager::scriptManager()->getScriptContainer("test");
+    Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
+    manager->addModule( new TestPluginModule("krosstestpluginmodule") );
+    m_scriptcontainer = manager->getScriptContainer("test");
 
     QVBox* mainbox = new QVBox(this);
 
@@ -70,7 +73,8 @@ void TestWindow::execute()
         kdDebug() << "EXCEPTION => " << m_scriptcontainer->getException()->toString() << endl;
     }
     else {
-        kdDebug() << "DONE => " << result->toString() << endl;
+        QString s = result ? result->toString() : QString::null;
+        kdDebug() << "DONE => " << s << endl;
     }
 }
 

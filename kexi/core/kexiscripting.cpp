@@ -73,8 +73,8 @@ KexiScriptContainer::KexiScriptContainer(KexiScriptManager* manager, const QStri
 
 	// Redirect stdout and stderr.
 	//FIXME remember previous stdout+stderr and restore them in the dtor?
-	d->scriptcontainer->addSlot("stdout", this, SLOT(addStdOut(const QString&)));
-	d->scriptcontainer->addSlot("stderr", this, SLOT(addStdErr(const QString&)));
+	//d->scriptcontainer->addSlot("stdout", this, SLOT(addStdOut(const QString&)));
+	//d->scriptcontainer->addSlot("stderr", this, SLOT(addStdErr(const QString&)));
 #else
 	d->name = name;
 #endif
@@ -200,7 +200,7 @@ bool KexiScriptContainer::execute()
 
 void KexiScriptContainer::addStdOut(const QString& s)
 {
-        QString t = QStyleSheet::escape(s);
+	QString t = QStyleSheet::escape(s);
 	d->output.append(t);
 	emit addOutput(t);
 }

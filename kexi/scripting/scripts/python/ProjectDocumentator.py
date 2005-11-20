@@ -102,21 +102,32 @@ class GuiApp:
 			raise "Import of the Kross GUI module failed."
 
 		self.dialog = gui.Dialog("Project Documentator")
-		self.dialog.addLabel(self.dialog.addFrame(self.dialog), "Export informations about the opened project.")
-		#self.dialog.addCheckbox(self.dialog.addFrame(self.dialog), "Projectdetails")
-		#self.dialog.addCheckbox(self.dialog.addFrame(self.dialog), "Tableschemas")
-		#self.dialog.addCheckbox(self.dialog.addFrame(self.dialog), "Queryschemas")
-		#self.dialog.addCheckbox(self.dialog.addFrame(self.dialog), "Tablestatistics")
-		#self.dialog.addCheckbox(self.dialog.addFrame(self.dialog), "Relationships")
 
+                self.dialog.addLabel(self.dialog, "Save informations about the project to a HTML-file.")
+		#self.dialog.addLabel(self.dialog.addFrame(self.dialog), "Export informations about the opened project.")
+		
 		self.file = self.dialog.addFileChooser(self.dialog,
-			"Save as:",
-			gui.getHome() + "/output.html",
+			"File:",
+			gui.getHome() + "/projectdoc.html",
 			(('HTML files', '*.html'),('All files', '*')))
+
+		self.printCheckBoxes = {}
+		for d in dir(self.dataprovider):
+			if d.startswith("print"):			
+				self.printCheckBoxes[d] = self.dialog.addCheckBox(self.dialog, d[5:], True)
+				
+				#value = getattr(self.dataprovider,d)()
+				#if value != None and len(value) > 0:
+				#	f.write("<h2>%s</h2>" % d[5:])
+				#	f.write( self.toHTML(value) )
+
+		#self.exportProjectdetails = 
+		#self.exportTableschemas = self.dialog.addCheckBox(self.dialog, "Tableschemas", True)
+		#self.exportQueryschemas = self.dialog.addCheckBox(self.dialog, "Queryschemas", True)
 
 		btnframe = self.dialog.addFrame(self.dialog)
 		self.dialog.addButton(btnframe, "Save", self.doSave)
-		self.dialog.addButton(btnframe, "Cancel", self.dialog.quitDialog)
+		self.dialog.addButton(btnframe, "Cancel", self.dialog.close)
 
 		self.dialog.show()
 
@@ -143,25 +154,37 @@ class GuiApp:
 		return result
 
 	def doSave(self):
-		file = self.file.get()
+		file = str( self.file.get() )
 		print "Try to save project documentation to file: %s" % file
 
 		f = open(file, "w")
 
-		f.write("<html><head><title>Projectinformations</title></head><body>")
-		f.write("<h1>Projectinformations</h1>")
+		f.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>")
+		f.write("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 4.01 Strict//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11-strict.dtd\">")
+		f.write("<html><head><title>Projectinformations</title>")
+		f.write("<style type=\"text/css\">")
+		f.write("  html { background-color:#fafafa; }")
+		f.write("  body { background-color:#ffffff; margin:1em; padding:1em; border:#99a 1px solid; color:#003; }")
+		f.write("</style>")
+		f.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />")
+		f.write("</head><body><h1>Projectinformations</h1>")
 
 		for d in dir(self.dataprovider):
 			if d.startswith("print"):
-				value = getattr(self.dataprovider,d)()
-				if value != None and len(value) > 0:
-					f.write("<h2>%s</h2>" % d[5:])
-					f.write( self.toHTML(value) )
+				print "GuiApp.doSave() CHECK %s" % d
+				a = self.printCheckBoxes[d]
+				if a and a.isChecked():
+					print "GuiApp.doSave() BEGIN %s" % d
+					value = getattr(self.dataprovider,d)()
+					if value != None and len(value) > 0:
+						f.write("<h2>%s</h2>" % d[5:])
+						f.write( self.toHTML(value) )
+					print "GuiApp.doSave() END %s" % d
 
 		f.close()
 
 		print "Successfully saved project documentation to file: %s" % file
-		self.dialog.quitDialog()
+		self.dialog.close()
 
 GuiApp( DataProvider() )
 

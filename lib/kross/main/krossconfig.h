@@ -94,7 +94,7 @@ namespace Kross {
     // during runtime. Comment out to disable compiling of the python
     // support or for developing refer to your not jet installed lib
     // like I did at the following line.
-    //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/trunk/koffice/kexi/scriptingcore/python/krosspython.la"
+    //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/trunk/koffice/lib/kross/python/krosspython.la"
     #define KROSS_PYTHON_LIBRARY "krosspython"
 
 }

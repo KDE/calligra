@@ -70,14 +70,6 @@ namespace Kross { namespace Python {
 
             /// The \a PythonSecurity python module to wrap the RestrictedPython functionality.
             PythonSecurity* security;
-
-            /**
-             * Python uses so called threads to separate
-             * executions. The PyThreadState holds the
-             * thread we use for this Python bridge.
-             */
-            PyThreadState* globalthreadstate;
-            PyThreadState* threadstate;
     };
 
 }}
@@ -206,11 +198,14 @@ void PythonInterpreter::initialize()
 {
     // Initialize python.
     Py_Initialize();
+
+    /* Not needed cause we use the >= Python 2.3 GIL-mechanism.
+    PyThreadState* d->globalthreadstate, d->threadstate;
     // First we have to initialize threading if python supports it.
     PyEval_InitThreads();
     // The main thread. We don't use it later.
     d->globalthreadstate = PyThreadState_Swap(NULL);
-    //d->globalthreadstate = PyEval_SaveThread();
+    d->globalthreadstate = PyEval_SaveThread();
     // We use an own sub-interpreter for each thread.
     d->threadstate = Py_NewInterpreter();
     // Note that this application has multiple threads.
@@ -218,10 +213,12 @@ void PythonInterpreter::initialize()
     PyThreadState_Swap(d->threadstate);
     // Work done, release the lock.
     PyEval_ReleaseLock();
+    */
 }
 
 void PythonInterpreter::finalize()
 {
+    /* Not needed cause we use the >= Python 2.3 GIL-mechanism.
     // Lock threads.
     PyEval_AcquireLock();
     // Free the used thread.
@@ -230,6 +227,8 @@ void PythonInterpreter::finalize()
     PyThreadState_Swap(d->globalthreadstate);
     // Work done, unlock.
     PyEval_ReleaseLock();
+    */
+
     // Finalize python.
     Py_Finalize();
 }

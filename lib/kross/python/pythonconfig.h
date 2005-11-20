@@ -70,9 +70,9 @@ namespace Kross { namespace Python {
     //#define KROSS_PYTHON_SCRIPT_DTOR_DEBUG
     //#define KROSS_PYTHON_SCRIPT_INIT_DEBUG
     //#define KROSS_PYTHON_SCRIPT_FINALIZE_DEBUG
-    //#define KROSS_PYTHON_SCRIPT_EXEC_DEBUG
-    //#define KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
-    //#define KROSS_PYTHON_SCRIPT_CLASSINSTANCE_DEBUG
+    #define KROSS_PYTHON_SCRIPT_EXEC_DEBUG
+    #define KROSS_PYTHON_SCRIPT_CALLFUNC_DEBUG
+    #define KROSS_PYTHON_SCRIPT_CLASSINSTANCE_DEBUG
 
     // Enable kdDebug()-debugging for Kross::Python::PythonModule
     //#define KROSS_PYTHON_MODULE_DEBUG

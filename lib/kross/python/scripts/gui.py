@@ -61,14 +61,18 @@ class TkDialog:
 			#TkDialog.Widget.__init__(self, dialog, parent)
 			import Tkinter
 			self.widget = Tkinter.Label(parent, text=caption)
-			self.widget.pack(side=Tkinter.LEFT)
+			self.widget.pack(side=Tkinter.TOP)
 
-	class Checkbox(Widget):
-		def __init__(self, dialog, parent, caption):
+	class CheckBox(Widget):
+		def __init__(self, dialog, parent, caption, checked = True):
 			#TkDialog.Widget.__init__(self, dialog, parent)
 			import Tkinter
-			self.widget = Tkinter.Checkbutton(parent, text=caption)
-			self.widget.pack(side=Tkinter.LEFT)
+			self.checkstate = Tkinter.IntVar()
+			self.checkstate.set(checked)
+			self.widget = Tkinter.Checkbutton(parent, text=caption, variable=self.checkstate)
+			self.widget.pack(side=Tkinter.TOP)
+		def isChecked(self):
+			return self.checkstate.get()
 
 	class List(Widget):
 		def __init__(self, dialog, parent, caption, items):
@@ -155,19 +159,146 @@ class TkDialog:
 
 	def show(self):
 		self.root.mainloop()
+		
+	def close(self):
+		self.root.destroy()
+
+class QtDialog:
+	""" This class is used to wrap pyQt/pyKDE into a more abstract interface."""
+
+	def __init__(self, title):
+		import qt
+		
+		class Dialog(qt.QDialog):
+			def __init__(self, parent = None, name = None, modal = 0, fl = 0):
+				qt.QDialog.__init__(self, parent, name, modal, fl)
+				qt.QDialog.accept = self.accept
+				self.layout = qt.QVBoxLayout(self)
+				self.layout.setSpacing(6)
+				self.layout.setMargin(11)
+				
+		class Label(qt.QLabel):
+			def __init__(self, dialog, parent, caption):
+				qt.QLabel.__init__(self, caption, parent)
+				
+		class Frame(qt.QHBox):
+			def __init__(self, dialog, parent):
+				qt.QHBox.__init__(self, parent)
+				self.widget = self
+				self.setSpacing(6)
+
+		class Button(qt.QPushButton):
+			#def __init__(self, *args):
+			def __init__(self, dialog, parent, caption, commandmethod):
+				#apply(qt.QPushButton.__init__, (self,) + args)
+				qt.QPushButton.__init__(self, parent)
+				self.commandmethod = commandmethod
+				self.setText(caption)
+				qt.QObject.connect(self, qt.SIGNAL("clicked()"), self.commandmethod)
+
+
+		class CheckBox(qt.QCheckBox):
+			def __init__(self, dialog, parent, caption, checked = True):
+				#TkDialog.Widget.__init__(self, dialog, parent)
+				qt.QCheckBox.__init__(self, parent)
+				self.setText(caption)
+				self.setChecked(checked)
+			#def isChecked(self):
+			#	return self.isChecked()
+
+		class FileChooser(qt.QHBox):
+			def __init__(self, dialog, parent, caption, initialfile = None, filetypes = None):
+				#apply(qt.QHBox.__init__, (self,) + args)
+				qt.QHBox.__init__(self, parent)
+				self.setMinimumWidth(400)
+
+				self.initialfile = initialfile
+				self.filetypes = filetypes
+				
+                                self.setSpacing(6)
+				label = qt.QLabel(caption, self)
+				self.edit = qt.QLineEdit(self)
+				self.edit.setText(self.initialfile)
+				self.setStretchFactor(self.edit, 1)
+				label.setBuddy(self.edit)
+				
+				browsebutton = Button(dialog, self, "...", self.browseButtonClicked)
+				#qt.QObject.connect(browsebutton, qt.SIGNAL("clicked()"), self.browseButtonClicked)
+
+			def get(self):
+				return self.edit.text()
+
+			def browseButtonClicked(self):
+				filtermask = ""
+				import types
+				if isinstance(self.filetypes, types.TupleType):
+					for ft in self.filetypes:
+						if len(ft) == 1:
+							filtermask += "%s\n" % (ft[0])
+						if len(ft) == 2:
+							filtermask += "%s (%s)\n" % (ft[0],ft[1])
+				if filtermask == "":
+					filtermask = "All files (*.*)"
+					
+				filename = None
+				try:
+					print "QtDialog.FileChooser.browseButtonClicked() kfile.KFileDialog"
+					# try to use the kfile module included in pykde
+					import kfile
+					filename = kfile.KFileDialog.getOpenFileName(self.initialfile, filtermask, self, "Save to file")
+				except:
+					print "QtDialog.FileChooser.browseButtonClicked() qt.QFileDialog"
+					# fallback to Qt filedialog
+					filename = qt.QFileDialog.getOpenFileName(self.initialfile, filtermask, self, "Save to file")
+				if filename != None and filename != "":
+					self.edit.setText(filename)
+
+		app = qt.qApp
+		self.dialog = Dialog(app.mainWidget(), "Dialog", 1)
+		self.dialog.setCaption(title)
+
+		self.widget = qt.QVBox(self.dialog)
+		self.widget.setSpacing(6)
+		self.dialog.layout.addWidget(self.widget)
+
+		self.Frame = Frame
+		self.Label = Label
+		self.Button = Button
+ 		self.CheckBox = CheckBox
+		self.FileChooser = FileChooser
+		
+	def show(self):
+		self.dialog.show()
+
+	def close(self):
+		print "QtDialog.close()"
+		self.dialog.close()
 
 class Dialog:
 	""" Central class that provides abstract GUI-access to the outer world. """
 
 	def __init__(self, title):
-		self.dialog = TkDialog(title)
-		self.widget = self.dialog.widget
+		self.dialog = None
 
-	def show(self):
+		try:
+			print "Trying to import PyQt..."
+			self.dialog = QtDialog(title)
+			print "PyQt is our toolkit!"
+		except:
+			try:
+				print "Failed to import PyQt. Trying to import TkInter..."
+				self.dialog = TkDialog(title)
+				print "Falling back to TkInter as our toolkit!"
+			except:
+				raise "Failed to import GUI-toolkit. Please install the PyQt or the Tkinter python module."
+
+                self.widget = self.dialog.widget
+
+        def show(self):
 		self.dialog.show()
 
-	def quitDialog(self):
-		self.dialog.root.destroy()
+	def close(self):
+		self.dialog.close()
 
 	def addFrame(self, parentwidget):
 		return self.dialog.Frame(self.dialog, parentwidget.widget)
@@ -175,17 +306,17 @@ class Dialog:
 	def addLabel(self, parentwidget, caption):
 		return self.dialog.Label(self.dialog, parentwidget.widget, caption)
 
-	def addCheckbox(self, parentwidget, caption):
-		return self.dialog.Checkbox(self.dialog, parentwidget.widget, caption)
+	def addCheckBox(self, parentwidget, caption, checked = True):
+		return self.dialog.CheckBox(self.dialog, parentwidget.widget, caption, checked)
 
 	def addButton(self, parentwidget, caption, commandmethod):
 		return self.dialog.Button(self.dialog, parentwidget.widget, caption, commandmethod)
 
-	def addEntry(self, parentwidget, caption):
-		return self.dialog.Entry(self.dialog, parentwidget.widget, caption)
+	#def addEntry(self, parentwidget, caption):
+	#	return self.dialog.Entry(self.dialog, parentwidget.widget, caption)
 
 	def addFileChooser(self, parentwidget, caption, initialfile = None, filetypes = None):
 		return self.dialog.FileChooser(self.dialog, parentwidget.widget, caption, initialfile, filetypes)
 
-	def addList(self, parentwidget, caption, items):
-		return self.dialog.List(self.dialog, parentwidget.widget, caption, items)
+	#def addList(self, parentwidget, caption, items):
+	#	return self.dialog.List(self.dialog, parentwidget.widget, caption, items)
