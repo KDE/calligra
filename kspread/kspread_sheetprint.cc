@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Torben Weis <weis@kde.org>,
    2003 Philipp Mller <philipp.mueller@gmx.de>
+   2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1361,6 +1362,7 @@ void SheetPrint::setPageLimitY( int pages )
 
 void SheetPrint::calculateZoomForPageLimitX()
 {
+    kdDebug() << "Calculating zoom for X limit" << endl;
     if( m_iPageLimitX == 0 )
         return;
 
@@ -1372,6 +1374,34 @@ void SheetPrint::calculateZoomForPageLimitX()
     QRect printRange = cellsPrintRange();
     updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
     int currentPages = pagesX( printRange );
+    
+    if (currentPages <= m_iPageLimitX)
+        return;
+    
+    //calculating a factor for scaling the zoom down makes it lots faster
+    double factor = (double)m_iPageLimitX/(double)currentPages +
+                    1-(double)currentPages/((double)currentPages+1); //add possible error;
+    kdDebug() << "Calculated factor for scaling m_dZoom: " << factor << endl;
+    m_dZoom = m_dZoom*factor;
+    
+    kdDebug() << "New exact zoom: " << m_dZoom << endl;
+    
+    if (m_dZoom < 0.01)
+        m_dZoom = 0.01;
+    if (m_dZoom > 1.0)
+        m_dZoom = 1.0;
+    
+    m_dZoom = (((int)(m_dZoom*100 + 0.5))/100.0);
+    
+    kdDebug() << "New rounded zoom: " << m_dZoom << endl;
+    
+    updatePrintRepeatColumnsWidth();
+    updateNewPageListX( 0 );
+    updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
+    currentPages = pagesX( printRange );
+    
+    kdDebug() << "Number of pages with this zoom: " << currentPages << endl;
+    
     while( ( currentPages > m_iPageLimitX ) && ( m_dZoom > 0.01 ) )
     {
         m_dZoom -= 0.01;
@@ -1379,6 +1409,7 @@ void SheetPrint::calculateZoomForPageLimitX()
         updateNewPageListX( 0 );
         updateNewPageX( m_pSheet->rightColumn( m_pSheet->dblColumnPos( printRange.right() ) + prinsheetWidthPts() ) );
         currentPages = pagesX( printRange );
+        kdDebug() << "Looping -0.01; current zoom: " << m_dZoom << endl;
     }
 
     if ( m_dZoom < origZoom )
@@ -1393,6 +1424,7 @@ void SheetPrint::calculateZoomForPageLimitX()
 
 void SheetPrint::calculateZoomForPageLimitY()
 {
+    kdDebug() << "Calculating zoom for Y limit" << endl;
     if( m_iPageLimitY == 0 )
         return;
 
@@ -1404,6 +1436,33 @@ void SheetPrint::calculateZoomForPageLimitY()
     QRect printRange = cellsPrintRange();
     updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
     int currentPages = pagesY( printRange );
+    
+    if (currentPages <= m_iPageLimitY)
+        return;
+    
+    double factor = (double)m_iPageLimitY/(double)currentPages +
+                    1-(double)currentPages/((double)currentPages+1); //add possible error
+    kdDebug() << "Calculated factor for scaling m_dZoom: " << factor << endl;
+    m_dZoom = m_dZoom*factor;
+    
+    kdDebug() << "New exact zoom: " << m_dZoom << endl;
+    
+    if (m_dZoom < 0.01)
+        m_dZoom = 0.01;
+    if (m_dZoom > 1.0)
+        m_dZoom = 1.0;
+    
+    m_dZoom = (((int)(m_dZoom*100 + 0.5))/100.0);
+    
+    kdDebug() << "New rounded zoom: " << m_dZoom << endl;
+    
+    updatePrintRepeatRowsHeight();
+    updateNewPageListY( 0 );
+    updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
+    currentPages = pagesY( printRange );
+    
+    kdDebug() << "Number of pages with this zoom: " << currentPages << endl;
+    
     while( ( currentPages > m_iPageLimitY ) && ( m_dZoom > 0.01 ) )
     {
         m_dZoom -= 0.01;
@@ -1411,6 +1470,7 @@ void SheetPrint::calculateZoomForPageLimitY()
         updateNewPageListY( 0 );
         updateNewPageY( m_pSheet->bottomRow( m_pSheet->dblRowPos( printRange.bottom() ) + prinsheetHeightPts() ) );
         currentPages = pagesY( printRange );
+        kdDebug() << "Looping -0.01; current zoom: " << m_dZoom << endl;
     }
 
     if ( m_dZoom < origZoom )

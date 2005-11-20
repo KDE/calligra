@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
+             (C) 2002-2003 Ariya Hidayat <ariya@kde.org>
              (C) 2002-2003 Norbert Andres <nandres@web.de>
              (C) 2002-2003 Philipp Mueller <philipp.mueller@gmx.de>
              (C) 2002 Laurent Montel <montel@kde.org>
@@ -208,10 +209,10 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     for( int i = 1; i <= 20; i += 1 )
     {
         lstX.append( QString( "%1" ).arg( i ) );
-        if( print->pageLimitX() > 20 )
-        {
-            lstX.append( QString( "%1" ).arg( print->pageLimitX() ) );
-        }
+    }
+    if( print->pageLimitX() > 20 )
+    {
+      lstX.append( QString( "%1" ).arg( print->pageLimitX() ) );
     }
     m_cLimitPagesX->insertStringList( lstX );
 
@@ -231,10 +232,10 @@ void PaperLayout::initScaleOptions( QWidget * tab, QVBoxLayout * vbox )
     for( int i = 1; i <= 20; i += 1 )
     {
         lstY.append( QString( "%1" ).arg( i ) );
-        if( print->pageLimitY() > 20 )
-        {
-            lstY.append( QString( "%1" ).arg( print->pageLimitY() ) );
-        }
+    }
+    if( print->pageLimitY() > 20 )
+    {
+      lstY.append( QString( "%1" ).arg( print->pageLimitY() ) );
     }
     m_cLimitPagesY->insertStringList( lstY );
 
@@ -391,7 +392,7 @@ void PaperLayout::slotOk()
         kdDebug() << "Zoom is selected" << endl;
         if( QString( "%1%" ).arg( qRound( print->zoom() * 100 ) ) != m_cZoom->currentText() )
         {
-          kdDebug() << "new zoom is different than original: " << m_cZoom->currentText() << endl;
+          kdDebug() << "New zoom is different than original: " << m_cZoom->currentText() << endl;
           QString zoomtext = m_cZoom->currentText();
           zoomtext.replace("%","");
           bool convertok = false;
@@ -405,12 +406,12 @@ void PaperLayout::slotOk()
             //reset page limits
             print->setPageLimitX(0);
             print->setPageLimitY(0);
-            kdDebug() << "setting print zoom: " << zoomvalue*0.01 << endl;
+            kdDebug() << "Setting print zoom: " << zoomvalue*0.01 << endl;
             print->setZoom( 0.01 * zoomvalue );
-            kdDebug() << "new print zoom: " << print->zoom() << endl;
+            kdDebug() << "New print zoom: " << print->zoom() << endl;
           }
           else
-            kdDebug() << "did not set print zoom" << endl;
+            kdDebug() << "Did not set print zoom" << endl;
         }
         else
           kdDebug() << "new zoom is same as original: " << m_cZoom->currentText() << endl;
@@ -418,7 +419,7 @@ void PaperLayout::slotOk()
       else if (m_rScalingLimitPages->isChecked())
       {
         kdDebug() << "Limit pages is selected" << endl;
-        kdDebug() << "Current zoom: " << print->zoom();
+        kdDebug() << "Current zoom: " << print->zoom() << endl;
         
         //reset first, otherwise setting the first limit
         //would still check against the second limit and
@@ -430,9 +431,9 @@ void PaperLayout::slotOk()
         
         if (print->zoom() < 1.0)
         {
-          kdDebug() << "resetting zoom to 1.0" << endl;
+          kdDebug() << "Resetting zoom to 1.0" << endl;
           print->setZoom(1.0,false); //don't check page limits here
-          kdDebug() << "zoom is now: " << print->zoom() << endl;
+          kdDebug() << "Zoom is now: " << print->zoom() << endl;
         }
         
         bool convertok = false;
@@ -446,12 +447,12 @@ void PaperLayout::slotOk()
         if (!convertok)  //THIS IS THE CASE WITH "No Limit"
           limitY=0;  //0 means no limit
 
-        kdDebug() << "zoom before setting limits: " << print->zoom() << endl;
-        kdDebug() << "limit x: " << limitX << "; limit y: " << limitY << endl;
+        kdDebug() << "Zoom before setting limits: " << print->zoom() << endl;
+        kdDebug() << "Chosen Limits: x: " << limitX << "; y: " << limitY << endl;
         print->setPageLimitX( limitX );
-        kdDebug() << "zoom after setting x limit: " << print->zoom() << endl;
+        kdDebug() << "Zoom after setting x limit: " << print->zoom() << endl;
         print->setPageLimitY( limitY );
-        kdDebug() << "zoom after setting y limit: " << print->zoom() << endl;
+        kdDebug() << "Zoom after setting y limit: " << print->zoom() << endl;
       }
       else
         kdWarning() << "ERROR: unknown zoom option selected" << endl;
