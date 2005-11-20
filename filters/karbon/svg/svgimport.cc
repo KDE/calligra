@@ -618,8 +618,7 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 	else if( command == "font-size" )
 	{
 		float pointSize = parseUnit( params );
-		pointSize *= gc->matrix.m22() > 0 ? gc->matrix.m22() : -1.0 * gc->matrix.m22();
-		gc->font.setPointSizeFloat( pointSize );
+		gc->font.setPointSizeFloat( pointSize * getScalingFromMatrix( gc->matrix ) );
 	}
 	else if( command == "text-decoration" )
 	{
@@ -701,7 +700,7 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		dynamic_cast<VPath *>( obj )->setFillRule( gc->fillRule );
 	// stroke scaling
 	double lineWidth = gc->stroke.lineWidth();
-	gc->stroke.setLineWidth( lineWidth * sqrt( pow( m_gc.current()->matrix.m11(), 2 ) + pow( m_gc.current()->matrix.m22(), 2 ) ) / sqrt( 2.0 ) );
+	gc->stroke.setLineWidth( lineWidth * getScalingFromMatrix( gc->matrix ) );
 	obj->setStroke( gc->stroke );
 	gc->stroke.setLineWidth( lineWidth );
 }
@@ -1085,6 +1084,13 @@ VObject* SvgImport::createObject( const QDomElement &b )
 	}
 	
 	return 0L;
+}
+
+double SvgImport::getScalingFromMatrix( QWMatrix &matrix )
+{
+	double xscale = matrix.m11() + matrix.m12();
+	double yscale = matrix.m22() + matrix.m21();
+	return sqrt( xscale*xscale + yscale*yscale ) / sqrt( 2.0 );
 }
 
 #include <svgimport.moc>

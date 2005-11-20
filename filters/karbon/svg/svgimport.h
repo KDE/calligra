@@ -82,6 +82,9 @@ protected:
 	// find gradient with given id in gradient map
 	GradientHelper* findGradient( const QString &id );
 
+	// Determine scaling factor from given matrix
+	double getScalingFromMatrix( QWMatrix &matrix );
+
 private:
 	VDocument						m_document;
 	QPtrStack<SvgGraphicsContext>	m_gc;
