@@ -3,8 +3,7 @@
   <!ENTITY package "koffice">
   <!ENTITY % addindex "IGNORE">
   <!ENTITY % English "INCLUDE">
-  <!ENTITY database SYSTEM "database.docbook">
-  <!ENTITY menus SYSTEM "menus.docbook">
+
   <!-- Do not define any other entities; instead, use the entities
        from entities/general.entities and $LANG/user.entities. -->
 ]>
@@ -76,284 +75,24 @@ Do NOT change these in the translation. -->
 
 </bookinfo>
 
+<!-- The contents of the documentation begin here.  Label
+each chapter so with the id attribute. This is necessary for two reasons: it
+allows you to easily reference the chapter from other chapters of your
+document, and if there is no ID, the name of the generated HTML files will vary
+from time to time making it hard to manage for maintainers and for the CVS
+system. Any chapter labelled (OPTIONAL) may be left out at the author's
+discretion. Other chapters should not be left out in order to maintain a
+consistent documentation style across all KDE apps. -->
+
 <chapter id="introduction">
-<title>Introduction to Kexi</title>
+<title>Introduction</title>
 
 <!-- The introduction chapter contains a brief introduction for the
 application that explains what it does and where to report
 problems. Basically a long version of the abstract.  Don't include a
 revision history. (see installation appendix comment) -->
-<sect1 id="what-is-kexi">
-<title>What is Kexi?</title>
-<para>Briefly speaking, Kexi is the application for creating databases and for data management. It enables you: 
-<itemizedlist>
-<listitem>
-<para>to build databases from scratch using the existing templates or your own database design
-</para>
-</listitem>
-<listitem>
-<para>to develop databases and adjust them to your changing needs 
-</para>
-</listitem>
-<listitem>
-<para>to enter data conveniently using advanced data sheets and forms 
-</para>
-</listitem>
-<listitem>
-<para>to process data - to sort, filter, group and sum up and many other operations
-</para>
-</listitem>
-<listitem>
-<para>share your data with other users
-</para>
-</listitem>
-</itemizedlist> 
-</para>
-<!--<para> Kexi is a member of a PlusOfficePL family of products offered by OpenOffice Polska together with technical support. Kexi nalecy do rodziny program� PlusOfficePL, oferowanej wraz ze wsparciem technicznym przez firm�OpenOffice Polska. </para>-->
- <para>The motto of Kexi application is "Database creation for everyone". Introduction of this product was motivated by the lack of software Rapid Application Development tools similiar to Microsoft Access, FoxPro, Oracle Forms or FileMaker, that would be available for all contemporary hardware and system platforms. Kexi was made to fill this gap. </para>
- <para>Kexi is the first large &kde; application available for Microsoft Windows, which makes it easier for the user to transfer data between platforms, integrate and migrate for more cost-efficient systems like Linux. </para>
- <para>Kexi is also one of the products of an international K Desktop Environment project, a graphic environment for Unix/Linux systems. The &kde; project involves many companies (including the largest ones such as Novell and IBM), organisations and independent authors.
-</para>
-</sect1>
 
-<sect1 id="kexi-features">
-<title>Kexi features</title>
-<para>Kexi has many features that distinguish it from the competition:
-<itemizedlist>
-<listitem>
-<para>It works under different operating systems: Linux, Windows, Macintosh.
-</para>
-</listitem>
-<listitem>
-<para>Data and design is highly portable between these platforms.
-</para>
-</listitem>
-<listitem>
-<para>Different database management systems supported: MySQL, PostgreSQL (others to come).
-</para>
-</listitem>
-<listitem>
-<para>Convenient configuration and adjusting of the application.
-</para>
-</listitem>
-<listitem>
-<para>Fully translated user interface, application is available in many language versions, without the need to install them separately.
-</para>
-</listitem>
-<listitem>
-<para>Currently about 30 languages are supported, with a target of 60.
-</para>
-</listitem>
-<listitem>
-<para>Perfect integration both in the popular KDE graphical enviroment for Linux and in Microsoft Windows.
-</para>
-</listitem>
-</itemizedlist> 
-</para>
-</sect1>
-
-<sect1 id="is-kexi-for-me">
-<title>Is Kexi for me?</title>
-<para>Kexi is designed to serve both beginners (when it comes to databases) as well as more advanced users who know a great deal about databases. If you belong to the latter group, you will probably want to skip the sections of this documentation you are familiar with. However you will surely benefit from reading <link linkend="kexi-and-others">Chapter 2.4</link> intended especially for experts.
-</para>
-<para>If you have only used spreadsheets for data processing so far, you should read <link linkend="database-and-spreadsheet">Chapter 1.2. Database and spreadsheet</link>. If you feel that while using spreadsheets some activities, like entering the data, are too tedious and time-consuming, and final result contains hard-to-find errors, then Kexi could be a good solution for you. Even if you use only a small part of functions provided by Kexi, your data stored in a form of database will probably be more legible and easier to comprehend for your coworkers.
-</para>
 <para>
-If you have previously used applications with a graphic user interface (which is highly probable), using Kexi should be easy since it is in many ways similar.
-</para>
-</sect1>
-
-<sect1 id="kexi-and-others">
-<title>Differences between Kexi and other applications</title>
-
-<sect2 id="terminologie">
-<title>Terminology used in Kexi and in other database applications</title>
-<para>English terms are bracketed.</para>
-<para>
-<table>
-<title>
-Terminology used in Kexi and in other database applications
-</title>
-      <tgroup cols="4">
-	<thead>
-	  <row>
-	    <entry>Kexi</entry>
-	    <entry>MS Access</entry>
-	    <entry>dBase/FoxPro</entry>
-	    <entry>Paradox</entry>
-	  </row>
-	</thead>
-	<tbody>
-	  <row>
-	    <entry>Database (<emphasis>Database</emphasis>)</entry>
-	    <entry>Database</entry>
-	    <entry>Catalog <emphasis>Catalog</emphasis></entry>
-	    <entry>Directory of Related files (<emphasis>Directory of Related files</emphasis>)</entry>
-	  </row>
-	  <row>
-	    <entry>Table (<emphasis>Table</emphasis>)</entry>
-	    <entry>Table</entry>
-	    <entry>Database file (<emphasis>Database file</emphasis>)</entry>
-	    <entry>Table</entry>
-	  </row>
-	  <row>
-	    <entry>Datasheet (<emphasis>Datasheet</emphasis>)</entry>
-	    <entry>Datasheet</entry>
-	    <entry><emphasis>BROWSE</emphasis> Command</entry>
-	    <entry><emphasis>View</emphasis> Command</entry>
-	  </row>
-	  <row>
-	    <entry>Table design (<emphasis>Table design</emphasis>)</entry>
-	    <entry>Table design</entry>
-	    <entry><emphasis>MODIFY STRUCTURE</emphasis> Command</entry>
-	    <entry><emphasis>Modify Restructure</emphasis> Command</entry>
-	  </row>
-	  <row>
-	    <entry>Primary key (<emphasis>Primary key</emphasis>)</entry>
-	    <entry>Primary key</entry>
-	    <entry>Unique Index</entry>
-	    <entry>Key field</entry>
-	  </row>
-	  <row>
-	    <entry>Index (<emphasis>Index</emphasis>)</entry>
-	    <entry>Index</entry>
-	    <entry><emphasis>Index</emphasis></entry>
-	    <entry><emphasis>Tools QuerySpeed</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>Validation rule</entry>
-	    <entry>Validation rule</entry>
-	    <entry><emphasis>PICTURE/VALID</emphasis> Clause</entry>
-	    <entry><emphasis>ValChecks</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>Query (<emphasis>Query</emphasis>)</entry>
-	    <entry>Query</entry>
-	    <entry><emphasis>Query, QBE, View</emphasis></entry>
-	    <entry><emphasis>Query</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>Form (<emphasis>Form</emphasis>)</entry>
-	    <entry>Form</entry>
-	    <entry>Screen</entry>
-	    <entry><emphasis>Forms</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>Subform (<emphasis>Subform</emphasis>)</entry>
-	    <entry>Subform</entry>
-	    <entry><emphasis>Multiple File Screen</emphasis></entry>
-	    <entry><emphasis>Multiple-record selection</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>"Open a form" Command (<emphasis>Open a form</emphasis>)</entry>
-	    <entry><emphasis>Open a form</emphasis> Command</entry>
-	    <entry><emphasis>SET FORMAT TO, EDIT</emphasis> Command</entry>
-	    <entry><emphasis>Image PickForm</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>Find command (<emphasis>Find command</emphasis>)</entry>
-	    <entry>Find command</entry>
-	    <entry><emphasis>LOCATE AND SEEK</emphasis> Command</entry>
-	    <entry><emphasis>Zoom</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>List box, combo box</entry>
-	    <entry>List box, combo box</entry>
-	    <entry>Pick list</entry>
-	    <entry>Lookup</entry>
-	  </row>
-	  <row>
-	    <entry>Macro (<emphasis>Macro</emphasis>)</entry>
-	    <entry>Macro</entry>
-	    <entry>-</entry>
-	    <entry>-</entry>
-	  </row>
-	  <row>
-	    <entry>Script (<emphasis>Script</emphasis>)</entry>
-	    <entry>Script</entry>
-	    <entry>Program file</entry>
-	    <entry>Script</entry>
-	  </row>
-	</tbody>
-      </tgroup>
-    </table>
-</para>
-<para>As you can see from the table above the terminology used in Kexi is close to the one used in MS Access application.
-</para>
-</sect2>
-
-<sect2 id="basic-data-types">
-<title>Basic data types used in Kexi and in other database applications</title>
-      <table>
-      <title>
-	Comparison of data types used in Kexi and other database
-	applications
-      </title>
-      <tgroup cols="4">
-	<thead>
-	  <row>
-	    <entry>Kexi</entry>
-	    <entry>MS Access</entry>
-	    <entry>dBase/FoxPro</entry>
-	    <entry>Paradox</entry>
-	  </row>
-	</thead>
-	<tbody>
-	  <row>
-	    <entry>Text (<emphasis>Text</emphasis>)</entry>
-	    <entry>Text</entry>
-	    <entry>Character</entry>
-	    <entry><emphasis>Alphanumeric</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>Long text (<emphasis>Long text</emphasis>)</entry>
-	    <entry>Memo</entry>
-	    <entry><emphasis>Memo</emphasis></entry>
-	    <entry><emphasis>Memo</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>Date/Time (<emphasis>Date/Time</emphasis>)</entry>
-	    <entry>Date, Time</entry>
-	    <entry><emphasis>Date</emphasis></entry>
-	    <entry><emphasis>DateTime</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>Object (Object)</entry>
-	    <entry>OLE Object</entry>
-	    <entry><emphasis>General</emphasis></entry>
-	    <entry><emphasis>OLE, Graphical Binary</emphasis></entry>
-	  </row>
-	 <row>
-	    <entry>Yes/No (<emphasis>Yes/No</emphasis>)</entry>
-	    <entry>Yes/No</entry>
-	    <entry>Logical</entry>
-	    <entry><emphasis>Logical</emphasis></entry>
-	  </row>
-	 <row>
-	    <entry>Integer Number (<emphasis>Integer Number</emphasis>)</entry>
-	    <entry>Number (Integer)</entry>
-	    <entry><emphasis>Numeric</emphasis></entry>
-	    <entry><emphasis>Integer</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>Big Integer Number (<emphasis>Big Integer Number</emphasis>)</entry>
-	    <entry>Long Integer</entry>
-	    <entry><emphasis>Numeric</emphasis></entry>
-	    <entry><emphasis>Long Integer</emphasis></entry>
-	  </row>
-	  <row>
-	    <entry>Floating-point number: Single/Double precision (<emphasis>Floating Point Number</emphasis>)</entry>
-	    <entry>Single/Double precision number  (<emphasis>Single/Double precision number</emphasis>)</entry>
-	    <entry><emphasis>Float</emphasis></entry>
-	    <entry><emphasis>Number</emphasis></entry>
-	  </row>
-	</tbody>
-      </tgroup>
-    </table>
-</sect2>
-
-</sect1>
-<!--<para>
   &kexi; is a database management application.  It can be used for
   creating databases, inserting data, performing queries, and processing
   data. Forms can be created to provide a custom interface to your
@@ -416,7 +155,7 @@ Terminology used in Kexi and in other database applications
       </para>
     </listitem>
   </itemizedlist>
-</para>-->
+</para>
 </chapter>
 
 <!--
@@ -436,9 +175,9 @@ Terminology used in Kexi and in other database applications
 -->
 
 <chapter id="configuration">
-<title>
-Configuring Kexi
-</title>
+  <title>
+    Configuring Kexi
+  </title>
 
   <para>
     This chapter describes how you can configure &kexi; to suit your
@@ -462,8 +201,8 @@ Configuring Kexi
       of how child windows are managed and displayed.  The two modes
       are:
       <itemizedlist>
-  <listitem><para>IDEAl mode; and</para></listitem>
-  <listitem><para>Childframe mode.</para></listitem>
+	<listitem><para>IDEAl mode; and</para></listitem>
+	<listitem><para>Childframe mode.</para></listitem>
       </itemizedlist>
       These modes are described in the following two sections.  You
       can change the MDI mode from the <guisubmenu>MDI
@@ -473,54 +212,52 @@ Configuring Kexi
     </para>
     <sect2 id="window-layout-ideal">
       <title>
-  IDEAl mode
+	IDEAl mode
       </title>
 <!-- TODO: Screenshot of IDEAl mode -->
       <para>
-  IDEAl mode is the default MDI mode, and may be familiar from
-  other &kde; applications.  In this mode, a single child window
-  is shown maximized within in the &kexi; main window at once.
-  A tab bar, containing one tab for each child window, allows
-  other child windows to be viewed by simply clicking on the
-  relevant tab.
+	IDEAl mode is the default MDI mode, and may be familiar from
+	other &kde; applications.  In this mode, a single child window
+	is shown maximized within in the &kexi; main window at once.
+	A tab bar, containing one tab for each child window, allows
+	other child windows to be viewed by simply clicking on the
+	relevant tab.
       </para>
     </sect2>
     <sect2 id="window-layout-childframe">
       <title>
-  Childframe mode
+	Childframe mode
       </title>
 <!-- TODO: Screenshot of Childframe mode -->
       <para>
-  In Childframe mode, child windows are displayed in the
-  main &kexi; window, but need not be maximized within it.
-  In order to use Childframe mode, you need to select
-  <action>
-    <guimenu>Window</guimenu>,
-    <guisubmenu>MDI mode</guisubmenu>,
-    <guimenuitem>Childframe Mode</guimenuitem>
-  </action> from the menu.
+	In Childframe mode, child windows are displayed in the
+	main &kexi; window, but need not be maximized within it.
+	In order to use Childframe mode, you need to select
+	<action>
+	  <guimenu>Window</guimenu>,
+	  <guisubmenu>MDI mode</guisubmenu>,
+	  <guimenuitem>Childframe Mode</guimenuitem>
+	</action> from the menu.
       </para>
-<para>
-Each child window has a title bar with buttons for maximizing,
-minimizing and closing it.  They can also be moved and resized
-within the main window in the normal way (for example, they
-can be moved by clicking and dragging the title bar).
-</para>
-<para>
- The buttons behave as follows:  the right-most button closes
-the child window.  The button on its left maximizes the child
-window - note this causes the buttons to move to the top right
-of the main window, above the <guilabel>Properties
-editor</guilabel> if it is open.  The next button to the left
-toggles the child window between minimized and restored.  The
-left-most button detaches the child window, allowing it to be
-moved out of the main window.
-</para>
-</sect2>
-</sect1>
+      <para>
+	Each child window has a title bar with buttons for maximizing,
+	minimizing and closing it.  They can also be moved and resized
+	within the main window in the normal way (for example, they
+	can be moved by clicking and dragging the title bar).
+      </para>
+      <para>
+        The buttons behave as follows:  the right-most button closes
+	the child window.  The button on its left maximizes the child
+	window - note this causes the buttons to move to the top right
+	of the main window, above the <guilabel>Properties
+	editor</guilabel> if it is open.  The next button to the left
+	toggles the child window between minimized and restored.  The
+	left-most button detaches the child window, allowing it to be
+	moved out of the main window.
+      </para>
+    </sect2>
+  </sect1>
 </chapter>
-
-&menus;
 
 <chapter id="credits">
 
@@ -586,9 +323,7 @@ moved out of the main window.
 
 </chapter>
 
-&database;
-
-<!--<appendix id="comparing">
+<appendix id="comparing">
   <title>
     Comparing &kexi; to other database applications
   </title>
@@ -618,9 +353,70 @@ moved out of the main window.
 	sub-type using the <guilabel>Subtype</guilabel> setting in the
 	<guilabel>Properties Editor</guilabel>.
       </para>
-
+      <table>
+      <title>
+	Comparison of data types used in Kexi and other database
+	applications
+      </title>
+      <tgroup cols="4">
+	<thead>
+	  <row>
+	    <entry>Kexi</entry>
+	    <entry>MS Access</entry>
+	    <entry>dBase/FoxPro</entry>
+	    <entry>Paradox</entry>
+	  </row>
+	</thead>
+	<tbody>
+	  <row>
+	    <entry>Text (Text)</entry>
+	    <entry>Text</entry>
+	    <entry>Character</entry>
+	    <entry>Alphanumeric</entry>
+	  </row>
+	  <row>
+	    <entry>Long text (Long text)</entry>
+	    <entry>Memo</entry>
+	    <entry>Memo</entry>
+	    <entry>Memo</entry>
+	  </row>
+	  <row>
+	    <entry>Date/Time (Date/Time)</entry>
+	    <entry>Date, Time</entry>
+	    <entry>Date</entry>
+	    <entry>DateTime</entry>
+	  </row>
+<!-- Not visible in Kexi GUI yet.
+	  <row>
+	    <entry>Object (Object)</entry>
+	    <entry>OLE Object</entry>
+	    <entry>General</entry>
+	    <entry>OLE, Graphical Binary</entry>
+	  </row>
+-->
+	  <row>
+	    <entry>Integer Number (Integer Number)</entry>
+	    <entry>Number (Integer)</entry>
+	    <entry>Numeric</entry>
+	    <entry>Integer</entry>
+	  </row>
+	  <row>
+	    <entry>Big Integer Number (Big Integer Number)</entry>
+	    <entry>Long Integer</entry>
+	    <entry>Numeric</entry>
+	    <entry>Long Integer</entry>
+	  </row>
+	  <row>
+	    <entry>Floating Point Number (Floating Point Number)</entry>
+	    <entry>Single/Double precision number</entry>
+	    <entry>Float</entry>
+	    <entry>Number</entry>
+	  </row>
+	</tbody>
+      </tgroup>
+    </table>
   </sect1>
-</appendix>-->
+</appendix>
 
 &documentation.index;
 </book>
