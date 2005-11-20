@@ -300,7 +300,7 @@ class Dialog:
 
 		try:
 			print "Trying to import PyQt..."
-			self.dialog = QtDialog222(title)
+			self.dialog = QtDialog(title)
 			print "PyQt is our toolkit!"
 		except:
 			try:
