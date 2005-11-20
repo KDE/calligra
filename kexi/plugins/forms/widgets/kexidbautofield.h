@@ -127,6 +127,7 @@ class KEXIFORMUTILS_EXPORT KexiDBAutoField :
 
 	protected slots:
 		void slotValueChanged();
+		virtual void paletteChange( const QPalette& oldPal );
 
 	private:
 		WidgetType m_widgetType; //!< internal: equal to m_widgetType_property ir equal to result 

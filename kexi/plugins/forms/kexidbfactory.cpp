@@ -327,15 +327,20 @@ KexiDBFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	else if(c == "KexiDBLineEdit")
 	{
 		w = new KexiDBLineEdit(p, n);
-		w->setCursor(QCursor(Qt::ArrowCursor));
+		if (designMode)
+			w->setCursor(QCursor(Qt::ArrowCursor));
 	}
 	else if(c == "KexiDBTextEdit")
 	{
 		w = new KexiDBTextEdit(p, n);
-		w->setCursor(QCursor(Qt::ArrowCursor));
+		if (designMode)
+			w->setCursor(QCursor(Qt::ArrowCursor));
 	}
 	else if(c == "QFrame" || c == "KexiFrame")
+	{
 		w = new KexiFrame(p, n);
+		new KFormDesigner::Container(container, w, container);
+	}
 	else if(c == "KexiDBLabel")
 		w = new KexiDBLabel(text, p, n);
 #ifndef KEXI_NO_IMAGEBOX_WIDGET

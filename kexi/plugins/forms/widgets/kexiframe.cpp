@@ -42,7 +42,11 @@ KexiFrame::KexiFrame( QWidget * parent, const char * name )
 	: QFrame(parent, name)
 	, d( new Private() )
 {
+	//defaults
 	d->frameColor = palette().active().foreground();
+//! @todo obtain these defaults from current template's style...
+	setLineWidth(2);
+	setFrameStyle(QFrame::StyledPanel|QFrame::Raised);
 }
 
 KexiFrame::~KexiFrame()

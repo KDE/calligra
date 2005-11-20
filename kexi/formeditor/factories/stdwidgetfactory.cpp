@@ -382,7 +382,8 @@ StdWidgetFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	KFormDesigner::Container *container, int options)
 {
 	QWidget *w=0;
-	QString text = container->form()->library()->textForWidgetName(n, c);
+	QString text( container->form()->library()->textForWidgetName(n, c) );
+	const bool designMode = options & KFormDesigner::WidgetFactory::DesignViewMode;
 
 	if(c == "QLabel")
 		w = new QLabel(text, p, n);
@@ -392,7 +393,8 @@ StdWidgetFactory::createWidget(const QCString &c, QWidget *p, const char *n,
 	else if(c == "KLineEdit")
 	{
 		w = new KLineEdit(p, n);
-		w->setCursor(QCursor(Qt::ArrowCursor));
+		if (designMode)
+			w->setCursor(QCursor(Qt::ArrowCursor));
 	}
 	else if(c == "KPushButton")
 		w = new KPushButton(/*i18n("Button")*/text, p, n);
