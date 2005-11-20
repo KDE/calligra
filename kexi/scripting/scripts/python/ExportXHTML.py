@@ -1,8 +1,8 @@
-""" 
-Export to HTML
+"""
+Export table or query data
 
 Description:
-This script exports a KexiDB table or query to a HTML file.
+This script exports a KexiDB table or query to different fileformats.
 
 Author:
 Sebastian Sauer <mail@dipe.org>
@@ -27,7 +27,7 @@ class Datasource:
 		self.queryschema = None
 
 	def getSources(self):
-		sources = [""]
+		sources = []
 		for table in self.connection.tableNames():
 			sources.append("Tables/%s" % table)
 		for query in self.connection.queryNames():
@@ -81,10 +81,27 @@ class HtmlExporter:
 	def __init__(self, datasource):
 		self.datasource = datasource
 
-	def write(self, output):
+	def write(self, output, style):
 		name = self.datasource.name()
-		output.write("<html><head><title>%s</title></head><body>" % name)
-		output.write("<h1>%s</h1>" % name)
+		
+		output.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>")
+		output.write("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 4.01 Strict//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11-strict.dtd\">")
+		output.write("<html><head><title>%s</title>" % name)
+		output.write("<style type=\"text/css\">")
+		if style == "Paper":
+			output.write("  html { background-color:#efefef; }")
+			output.write("  body { background-color:#fafafa; color:#303030; margin:1em; padding:1em; border:#606060 1px solid; }")
+		elif style == "Blues":
+			output.write("  html { background-color:#0000aa; }")
+			output.write("  body { background-color:#000066; color:#efefff; margin:1em; padding:1em; border:#00f 1px solid; }")
+			output.write("  h1 { color:#0000ff; }")
+			output.write("  th { color:#0000aa; }")
+		else:
+			output.write("  html { background-color:#ffffff; color:#000; }")
+			output.write("  body { margin:1em; }")
+		output.write("</style>")
+		output.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />")
+		output.write("</head><body><h1>%s</h1>" % name)
 
 		caption = self.datasource.caption()
 		if caption and caption != name:
@@ -119,83 +136,55 @@ class GuiApp:
 		self.datasource = datasource
 
 		try:
-			import Tkinter
+			import gui
 		except:
-			raise "Import of the python TKinter module failed."
+			raise "Import of the Kross GUI module failed."
 
-		self.root = Tkinter.Tk()
-		self.root.title("Export to HTML")
+		self.dialog = gui.Dialog("Export to XHTML-file")
+                self.dialog.addLabel(self.dialog, "Export a table- or query-datasource to a XHTML-file.")
 
-		frame = Tkinter.Frame(self.root)
-		frame.pack()
+		datasourceitems = self.datasource.getSources()
+                self.datasourcelist = self.dialog.addList(self.dialog, "Datasource:", datasourceitems)
 
-		queryframe = Tkinter.Frame(frame)
-		queryframe.pack()
-		Tkinter.Label(queryframe, text="Table or query to export:").pack(side=Tkinter.LEFT)
-		self.querycontent = Tkinter.StringVar()
-		self.query = apply(Tkinter.OptionMenu,
-						  (queryframe, self.querycontent) + tuple( self.datasource.getSources() ))
-		self.query.pack(side=Tkinter.LEFT)
+		styleitems = ["Plain", "Paper", "Blues"]
+                self.stylelist = self.dialog.addList(self.dialog, "Style:", styleitems)
 
-		fileframe = Tkinter.Frame(frame)
-		fileframe.pack()
-		Tkinter.Label(fileframe, text="Export to file:").pack(side=Tkinter.LEFT)
-		self.filecontent = Tkinter.StringVar()
-		file = Tkinter.Entry(fileframe, width=36, textvariable=self.filecontent)
-		self.filecontent.set(self.getHome() + "/output.html")
-		file.pack(side=Tkinter.LEFT)
-		Tkinter.Button(fileframe, text="...",
-					   command=self.doBrowse).pack(side=Tkinter.LEFT)
+		#queryframe = Tkinter.Frame(frame)
+		#queryframe.pack()
+		#Tkinter.Label(queryframe, text="Table or query to export:").pack(side=Tkinter.LEFT)
+		#self.querycontent = Tkinter.StringVar()
+		#self.query = apply(Tkinter.OptionMenu, (queryframe, self.querycontent) + tuple( self.datasource.getSources() ))
+		#self.query.pack(side=Tkinter.LEFT)
 
-		btnframe = Tkinter.Frame(frame)
-		btnframe.pack()
-		Tkinter.Button(btnframe, text="Export",
-					   command=self.doExport).pack(side=Tkinter.LEFT)
-		Tkinter.Button(btnframe, text="Cancel",
-					   command=self.root.destroy).pack(side=Tkinter.LEFT)
+		self.file = self.dialog.addFileChooser(self.dialog,
+			"File:",
+			gui.getHome() + "/export.xhtml",
+			(('XHTML files', '*.xhtml'),('All files', '*')))
 
-		self.root.mainloop()
+		btnframe = self.dialog.addFrame(self.dialog)
+		self.dialog.addButton(btnframe, "Export", self.doExport)
+		self.dialog.addButton(btnframe, "Cancel", self.dialog.close)
 
-	def getHome(self):
-		import os
-		try:
-			home = os.getenv("HOME")
-			if not home:
-				import pwd
-				user = os.getenv("USER") or os.getenv("LOGNAME")
-				if not user:
-					pwent = pwd.getpwuid(os.getuid())
-				else:
-					pwent = pwd.getpwnam(user)
-				home = pwent[6]
-			return home
-		except (KeyError, ImportError):
-			return os.curdir
-
-	def doBrowse(self):
-		import tkFileDialog
-		file = tkFileDialog.asksaveasfilename(initialdir=self.getHome(),
-			initialfile='output.html', defaultextension='.html',
-			filetypes=(('HTML files', '*.html'),('All files', '*')))
-		if file: self.filecontent.set( file )
+		self.dialog.show()
 
 	def doExport(self):
-		query = self.querycontent.get()
-		if not self.datasource.setSource(query):
-			import tkMessageBox
-			tkMessageBox.showerror("Error", "Please select a valid table or query.")
-			return
-
-		file = self.filecontent.get()
+		file = str( self.file.get() )
+		query = str( self.datasourcelist.get() )
 		print "Exporting '%s' to file '%s' ..." % (query,file)
+
+		if not self.datasource.setSource(query):
+			raise "Invalid datasource selected."
+			#return
+
+		style = str( self.stylelist.get() )
 
 		f = open(file, "w")
 		global HtmlExporter
 		exporter = HtmlExporter(self.datasource)
-		exporter.write(f)
+		exporter.write(f, style)
 		f.close()
 
 		print "Successfully exported '%s' to file %s" % (query,file)
-		self.root.destroy()
+		self.dialog.close()
 
 GuiApp( Datasource() )

@@ -87,6 +87,8 @@ class TkDialog:
 			self.items = Tkinter.StringVar()
 			itemlist = apply(Tkinter.OptionMenu, (listframe, self.items) + tuple( items ))
 			itemlist.pack(side=Tkinter.LEFT)
+		def get(self):
+			return self.items.get()
 
 	class Button(Widget):
 		def __init__(self, dialog, parent, caption, commandmethod):
@@ -206,6 +208,19 @@ class QtDialog:
 			#def isChecked(self):
 			#	return self.isChecked()
 
+		class List(qt.QHBox):
+			def __init__(self, dialog, parent, caption, items):
+				qt.QHBox.__init__(self, parent)
+				self.setSpacing(6)
+				label = qt.QLabel(caption, self)
+				self.combo = qt.QComboBox(self)
+				self.setStretchFactor(self.combo, 1)
+				label.setBuddy(self.combo)
+				for item in items:
+					self.combo.insertItem( str(item) )
+			def get(self):
+				return self.combo.currentText()
+
 		class FileChooser(qt.QHBox):
 			def __init__(self, dialog, parent, caption, initialfile = None, filetypes = None):
 				#apply(qt.QHBox.__init__, (self,) + args)
@@ -267,6 +282,7 @@ class QtDialog:
 		self.Label = Label
 		self.Button = Button
  		self.CheckBox = CheckBox
+ 		self.List = List
 		self.FileChooser = FileChooser
 		
 	def show(self):
@@ -284,7 +300,7 @@ class Dialog:
 
 		try:
 			print "Trying to import PyQt..."
-			self.dialog = QtDialog(title)
+			self.dialog = QtDialog222(title)
 			print "PyQt is our toolkit!"
 		except:
 			try:
@@ -320,5 +336,5 @@ class Dialog:
 	def addFileChooser(self, parentwidget, caption, initialfile = None, filetypes = None):
 		return self.dialog.FileChooser(self.dialog, parentwidget.widget, caption, initialfile, filetypes)
 
-	#def addList(self, parentwidget, caption, items):
-	#	return self.dialog.List(self.dialog, parentwidget.widget, caption, items)
+	def addList(self, parentwidget, caption, items):
+		return self.dialog.List(self.dialog, parentwidget.widget, caption, items)
