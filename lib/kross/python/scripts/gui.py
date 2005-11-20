@@ -236,9 +236,11 @@ class QtDialog:
 						if len(ft) == 1:
 							filtermask += "%s\n" % (ft[0])
 						if len(ft) == 2:
-							filtermask += "%s (%s)\n" % (ft[0],ft[1])
+							filtermask += "%s|%s (%s)\n" % (ft[1],ft[0],ft[1])
 				if filtermask == "":
 					filtermask = "All files (*.*)"
+				else:
+					filtermask = filtermask[:-1]
 					
 				filename = None
 				try:
