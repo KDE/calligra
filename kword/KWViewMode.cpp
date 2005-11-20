@@ -384,8 +384,8 @@ KWTextFrameSet * KWViewModeText::determineTextFrameSet( KWDocument* doc ) // sta
 {
     KWTextFrameSet* fs = 0L;
 
-    KWView *view = doc->getAllViews().first();
-    if(view) { // try the one that is selected
+    if(!doc->getAllViews().empty()) { // try the one that is selected
+        KWView *view = doc->getAllViews()[0];
         KWFrameView *fv = view->getGUI()->canvasWidget()->frameViewManager()->selectedFrame();
         KWFrame *f = fv == 0 ? 0 : fv->frame();
         if(f)
