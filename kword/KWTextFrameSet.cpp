@@ -1958,7 +1958,9 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                     table->recalcCols(cell->firstCol(), cell->firstRow());
                     table->recalcRows(cell->firstCol(), cell->firstRow());
 
-                    if ( table->anchorFrameset()->isAHeader() ) //we must recalculate the header frame size
+                    if (!  table->anchorFrameset() )
+                        ;// do nothing
+                    else if ( table->anchorFrameset() && table->anchorFrameset()->isAHeader() ) //we must recalculate the header frame size
                     {
                       theFrame = table->anchorFrameset()->frameIterator().getLast();
                       theFrame->setBottom(newPosition);
@@ -2104,7 +2106,9 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
                     table->recalcCols(cell->firstCol(), cell->firstRow());
                     table->recalcRows(cell->firstCol(), cell->firstRow());
 
-                    if ( table->anchorFrameset()->isAHeader()  )
+                    if (!  table->anchorFrameset() )
+                        ;// do nothing
+                    else if ( table->anchorFrameset() && table->anchorFrameset()->isAHeader()  )
                     {
                       theFrame = table->anchorFrameset()->frameIterator().getLast();
                       theFrame->setBottom(wantedPosition);
