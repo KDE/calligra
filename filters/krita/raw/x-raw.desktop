@@ -6,6 +6,7 @@ Icon=image
 Patterns=*.raw;*.RAW;*.dcr;*.DCR;*.dng;*.DNG;*.crw;*.CRW;*.nef;*.NEF
 Comment=Camera RAW image
 Comment[es]=Imagen RAW de cámara
+Comment[it]=Immagine in formato grezzo di macchina fotografica
 Comment[ja]=カメラ RAW画像
 Comment[pt]=Imagem RAW da Máquina
 Comment[pt_BR]=Imagem RAW da Máquina

@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Application
 Name=WriteUp
+Name[it]=Annota
 Name[sv]=Writeup
 Name[xx]=xxWriteUpxx
 Exec=writeup %u
@@ -10,6 +11,7 @@ GenericName[cs]=Jednoduché zpracování textu
 GenericName[da]=Simplificeret tekstbehandling
 GenericName[es]=Procesamiento de texto simplificado
 GenericName[ga]=Próiseáil Focal Simplí
+GenericName[it]=Elaborazione di testi semplificata
 GenericName[ja]=簡易ワープロ
 GenericName[pt]=Processamento de Texto Simplificado
 GenericName[pt_BR]=Processamento de Texto Simplificado
