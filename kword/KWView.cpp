@@ -70,6 +70,7 @@
 #include "KWPage.h"
 #include "KWFrameViewManager.h"
 #include "KWFrameView.h"
+#include "KWStatisticsDialog.h"
 
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
@@ -105,7 +106,6 @@
 #include <kimageio.h>
 #include <kinputdialog.h>
 #include <kio/netaccess.h>
-#include <klocale.h>
 #include <kmessagebox.h>
 #include <kparts/event.h>
 #include <kstandarddirs.h>
@@ -117,16 +117,12 @@
 #include <kdeversion.h>
 #include <kiconloader.h>
 
-#include <qcheckbox.h>
 #include <qclipboard.h>
 #include <qgroupbox.h>
-#include <qlabel.h>
 #include <qpaintdevicemetrics.h>
 #include <qprogressdialog.h>
 #include <qregexp.h>
-#include <qtabwidget.h>
 #include <qtimer.h>
-#include <qvbox.h>
 #include <qbuffer.h>
 
 #include <stdlib.h>
@@ -143,9 +139,9 @@ KWView::KWView( KWViewMode* viewMode, QWidget *parent, const char *name, KWDocum
     m_doc = doc;
     m_gui = 0;
 
-    dcop = 0;
+    m_dcop = 0;
     dcopObject(); // build it
-    fsInline=0L;
+    m_fsInline=0;
     m_spell.kospell = 0;
     m_spell.dlg = 0;
     m_broker = Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) );
@@ -327,18 +323,18 @@ KWView::~KWView()
     delete m_gui;
     delete m_sbPageLabel;
     delete m_sbFramesLabel;
-    delete fsInline;
-    delete dcop;
+    delete m_fsInline;
+    delete m_dcop;
     delete m_fontDlg;
     delete m_paragDlg;
 }
 
 DCOPObject* KWView::dcopObject()
 {
-    if ( !dcop )
-        dcop = new KWordViewIface( this );
+    if ( !m_dcop )
+        m_dcop = new KWordViewIface( this );
 
-    return dcop;
+    return m_dcop;
 }
 
 void KWView::slotChangeCutState(bool b)
@@ -586,12 +582,12 @@ void KWView::setupActions()
     changeZoomMenu( );
 
     // -------------- Insert menu
-    actionInsertSpecialChar = new KAction( i18n( "Sp&ecial Character..." ), "char",
+    m_actionInsertSpecialChar = new KAction( i18n( "Sp&ecial Character..." ), "char",
                         Qt::ALT + Qt::SHIFT + Qt::Key_C,
                         this, SLOT( insertSpecialChar() ),
                         actionCollection(), "insert_specialchar" );
-    actionInsertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
-    actionInsertSpecialChar->setWhatsThis( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
+    m_actionInsertSpecialChar->setToolTip( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
+    m_actionInsertSpecialChar->setWhatsThis( i18n( "Insert one or more symbols or letters not found on the keyboard." ) );
 
     m_actionInsertFrameBreak = new KAction( QString::null, Qt::CTRL + Qt::Key_Return,
                                           this, SLOT( insertFrameBreak() ),
@@ -3162,7 +3158,7 @@ void KWView::insertPicture( const KoPicture& picture, const bool makeInline, con
         KWPage *page = m_doc->pageManager()->page(m_currentPage);
         const double widthLimit = page->width() - page->leftMargin() - page->rightMargin() - 10;
         const double heightLimit = page->height() - page->topMargin() - page->bottomMargin() - 10;
-        fsInline = 0L;
+        m_fsInline = 0;
         KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
 
         frameset->insertPicture( picture );
@@ -3207,9 +3203,9 @@ void KWView::insertPicture( const KoPicture& picture, const bool makeInline, con
             height = kMin( height, heightLimit );
         }
 
-        fsInline = frameset;
-        KWFrame *frame = new KWFrame ( fsInline, 0, 0, width, height );
-        fsInline->addFrame( frame, false );
+        m_fsInline = frameset;
+        KWFrame *frame = new KWFrame ( m_fsInline, 0, 0, width, height );
+        m_fsInline->addFrame( frame, false );
         m_gui->canvasWidget()->inlinePictureStarted();
         showMouseMode( KWCanvas::MM_EDIT );
 
@@ -3236,22 +3232,22 @@ bool KWView::insertInlinePicture()
         if ( edit->textFrameSet()->textObject()->protectContent() )
             return false;
 
-        m_doc->addFrameSet( fsInline, false ); // done first since the frame number is stored in the undo/redo
+        m_doc->addFrameSet( m_fsInline, false ); // done first since the frame number is stored in the undo/redo
 #if 0
-        KWFrame *frame = new KWFrame( fsInline, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
-        fsInline->addFrame( frame, false );
+        KWFrame *frame = new KWFrame( m_fsInline, 0, 0, m_doc->unzoomItX( width ), m_doc->unzoomItY( height ) );
+        m_fsInline->addFrame( frame, false );
 #endif
-        edit->insertFloatingFrameSet( fsInline, i18n("Insert Picture Inline") );
-        fsInline->finalize(); // done last since it triggers a redraw
+        edit->insertFloatingFrameSet( m_fsInline, i18n("Insert Picture Inline") );
+        m_fsInline->finalize(); // done last since it triggers a redraw
         showMouseMode( KWCanvas::MM_EDIT );
         m_doc->refreshDocStructure(Pictures);
-        fsInline=0L;
+        m_fsInline=0;
         updateFrameStatusBarItem();
     }
     else
     {
-        delete fsInline;
-        fsInline=0L;
+        delete m_fsInline;
+        m_fsInline=0;
         updateFrameStatusBarItem();
     }
     return true;
@@ -5642,7 +5638,7 @@ void KWView::slotFrameSetEditChanged()
     m_actionFormatSuper->setEnabled(rw);
     m_actionFormatSub->setEnabled(rw);
     m_actionFormatParag->setEnabled(state);
-    actionInsertSpecialChar->setEnabled(state);
+    m_actionInsertSpecialChar->setEnabled(state);
     m_actionSpellCheck->setEnabled(state);
 
     m_actionChangeCase->setEnabled( (rw && !edit)|| (state && hasSelection) );
@@ -7482,13 +7478,13 @@ void KWView::deleteSelectedFrames() {
 KWLayoutWidget::KWLayoutWidget( QWidget *parent, KWGUI *g )
     : QWidget( parent )
 {
-    gui = g;
+    m_gui = g;
 }
 
 void KWLayoutWidget::resizeEvent( QResizeEvent *e )
 {
     QWidget::resizeEvent( e );
-    gui->reorganize();
+    m_gui->reorganize();
 }
 
 /******************************************************************/
@@ -7497,59 +7493,59 @@ void KWLayoutWidget::resizeEvent( QResizeEvent *e )
 KWGUI::KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *daView )
     : QWidget( parent, "" )
 {
-    view = daView;
+    m_view = daView;
 
-    r_horz = r_vert = 0;
-    KWDocument * doc = view->kWordDocument();
+    m_horRuler = m_vertRuler = 0;
+    KWDocument * doc = m_view->kWordDocument();
 
-    panner = new QSplitter( Qt::Horizontal, this );
-    docStruct = new KWDocStruct( panner, doc, this );
-    docStruct->setMinimumWidth( 0 );
-    left = new KWLayoutWidget( panner, this );
-    left->show();
-    canvas = new KWCanvas( viewMode, left, doc, this );
+    m_panner = new QSplitter( Qt::Horizontal, this );
+    m_docStruct = new KWDocStruct( m_panner, doc, this );
+    m_docStruct->setMinimumWidth( 0 );
+    m_left = new KWLayoutWidget( m_panner, this );
+    m_left->show();
+    m_canvas = new KWCanvas( viewMode, m_left, doc, this );
 
     QValueList<int> l;
     l << 10;
     l << 90;
-    panner->setSizes( l );
+    m_panner->setSizes( l );
 
     KoPageLayout layout = doc->pageLayout();
 
-    tabChooser = new KoTabChooser( left, KoTabChooser::TAB_ALL );
-    tabChooser->setReadWrite(doc->isReadWrite());
+    m_tabChooser = new KoTabChooser( m_left, KoTabChooser::TAB_ALL );
+    m_tabChooser->setReadWrite(doc->isReadWrite());
 
-    r_horz = new KoRuler( left, canvas->viewport(), Qt::Horizontal, layout,
-                          KoRuler::F_INDENTS | KoRuler::F_TABS, doc->unit(), tabChooser );
-    r_horz->setReadWrite(doc->isReadWrite());
-    r_vert = new KoRuler( left, canvas->viewport(), Qt::Vertical, layout, 0, doc->unit() );
-    connect( r_horz, SIGNAL( newPageLayout( const KoPageLayout & ) ), view, SLOT( newPageLayout( const KoPageLayout & ) ) );
-    r_vert->setReadWrite(doc->isReadWrite());
+    m_horRuler = new KoRuler( m_left, m_canvas->viewport(), Qt::Horizontal, layout,
+                          KoRuler::F_INDENTS | KoRuler::F_TABS, doc->unit(), m_tabChooser );
+    m_horRuler->setReadWrite(doc->isReadWrite());
+    m_vertRuler = new KoRuler( m_left, m_canvas->viewport(), Qt::Vertical, layout, 0, doc->unit() );
+    connect( m_horRuler, SIGNAL( newPageLayout( const KoPageLayout & ) ), m_view, SLOT( newPageLayout( const KoPageLayout & ) ) );
+    m_vertRuler->setReadWrite(doc->isReadWrite());
 
-    r_horz->setZoom( doc->zoomedResolutionX() );
-    r_vert->setZoom( doc->zoomedResolutionY() );
+    m_horRuler->setZoom( doc->zoomedResolutionX() );
+    m_vertRuler->setZoom( doc->zoomedResolutionY() );
 
-    r_horz->setGridSize(doc->gridX());
+    m_horRuler->setGridSize(doc->gridX());
 
-    connect( r_horz, SIGNAL( newLeftIndent( double ) ), view, SLOT( newLeftIndent( double ) ) );
-    connect( r_horz, SIGNAL( newFirstIndent( double ) ), view, SLOT( newFirstIndent( double ) ) );
-    connect( r_horz, SIGNAL( newRightIndent( double ) ), view, SLOT( newRightIndent( double ) ) );
+    connect( m_horRuler, SIGNAL( newLeftIndent( double ) ), m_view, SLOT( newLeftIndent( double ) ) );
+    connect( m_horRuler, SIGNAL( newFirstIndent( double ) ), m_view, SLOT( newFirstIndent( double ) ) );
+    connect( m_horRuler, SIGNAL( newRightIndent( double ) ), m_view, SLOT( newRightIndent( double ) ) );
 
-    connect( r_horz, SIGNAL( doubleClicked() ), view, SLOT( slotHRulerDoubleClicked() ) );
-    connect( r_horz, SIGNAL( doubleClicked(double) ), view, SLOT( slotHRulerDoubleClicked(double) ) );
-    connect( r_horz, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( unitChanged( KoUnit::Unit ) ) );
-    connect( r_vert, SIGNAL( newPageLayout( const KoPageLayout & ) ), view, SLOT( newPageLayout( const KoPageLayout & ) ) );
-    connect( r_vert, SIGNAL( doubleClicked() ), view, SLOT( formatPage() ) );
-    connect( r_vert, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( unitChanged( KoUnit::Unit ) ) );
+    connect( m_horRuler, SIGNAL( doubleClicked() ), m_view, SLOT( slotHRulerDoubleClicked() ) );
+    connect( m_horRuler, SIGNAL( doubleClicked(double) ), m_view, SLOT( slotHRulerDoubleClicked(double) ) );
+    connect( m_horRuler, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( unitChanged( KoUnit::Unit ) ) );
+    connect( m_vertRuler, SIGNAL( newPageLayout( const KoPageLayout & ) ), m_view, SLOT( newPageLayout( const KoPageLayout & ) ) );
+    connect( m_vertRuler, SIGNAL( doubleClicked() ), m_view, SLOT( formatPage() ) );
+    connect( m_vertRuler, SIGNAL( unitChanged( KoUnit::Unit ) ), this, SLOT( unitChanged( KoUnit::Unit ) ) );
 
-    r_horz->hide();
-    r_vert->hide();
+    m_horRuler->hide();
+    m_vertRuler->hide();
 
-    canvas->show();
+    m_canvas->show();
 
     reorganize();
 
-    connect( r_horz, SIGNAL( tabListChanged( const KoTabulatorList & ) ), view,
+    connect( m_horRuler, SIGNAL( tabListChanged( const KoTabulatorList & ) ), m_view,
              SLOT( tabListChanged( const KoTabulatorList & ) ) );
 
     setKeyCompression( TRUE );
@@ -7570,395 +7566,66 @@ void KWGUI::resizeEvent( QResizeEvent *e )
 
 void KWGUI::reorganize()
 {
-    int hSpace = r_vert->minimumSizeHint().width();
-    int vSpace = r_horz->minimumSizeHint().height();
-    if(view->kWordDocument()->showRuler())
+    int hSpace = m_vertRuler->minimumSizeHint().width();
+    int vSpace = m_horRuler->minimumSizeHint().height();
+    if(m_view->kWordDocument()->showRuler())
     {
-        r_vert->show();
-        r_horz->show();
-        tabChooser->show();
-        tabChooser->setGeometry( 0, 0, hSpace, vSpace );
+        m_vertRuler->show();
+        m_horRuler->show();
+        m_tabChooser->show();
+        m_tabChooser->setGeometry( 0, 0, hSpace, vSpace );
     }
     else
     {
-        r_vert->hide();
-        r_horz->hide();
-        tabChooser->hide();
+        m_vertRuler->hide();
+        m_horRuler->hide();
+        m_tabChooser->hide();
         hSpace = 0;
         vSpace = 0;
     }
 
-    if(view->kWordDocument()->showdocStruct()) {
-        if(docStruct->isHidden()) {
-            docStruct->show();
-            if(panner->sizes()[0] < 50) {
+    if(m_view->kWordDocument()->showdocStruct()) {
+        if(m_docStruct->isHidden()) {
+            m_docStruct->show();
+            if(m_panner->sizes()[0] < 50) {
                 QValueList<int> l;
                 l << 100;
                 l << width()-100;
-                panner->setSizes( l );
+                m_panner->setSizes( l );
             }
         }
     } else
-        docStruct->hide();
+        m_docStruct->hide();
 
-    if( view->statusBar())
+    if( m_view->statusBar())
     {
-        if(view->kWordDocument()->showStatusBar())
-            view->statusBar()->show();
+        if(m_view->kWordDocument()->showStatusBar())
+            m_view->statusBar()->show();
         else
-            view->statusBar()->hide();
+            m_view->statusBar()->hide();
     }
 
-    if ( view->kWordDocument()->showScrollBar())
+    if ( m_view->kWordDocument()->showScrollBar())
     {
-        canvas->setVScrollBarMode(QScrollView::Auto);
-        canvas->setHScrollBarMode(QScrollView::Auto);
+        m_canvas->setVScrollBarMode(QScrollView::Auto);
+        m_canvas->setHScrollBarMode(QScrollView::Auto);
     }
     else
     {
-        canvas->setVScrollBarMode(QScrollView::AlwaysOff);
-        canvas->setHScrollBarMode(QScrollView::AlwaysOff);
+        m_canvas->setVScrollBarMode(QScrollView::AlwaysOff);
+        m_canvas->setHScrollBarMode(QScrollView::AlwaysOff);
     }
 
-    panner->setGeometry( 0, 0, width(), height() );
-    canvas->setGeometry( hSpace, vSpace, left->width() - hSpace, left->height() - vSpace );
-    tabChooser->setGeometry( 0, 0, hSpace, vSpace );
-    r_horz->setGeometry( hSpace, 0, left->width() - hSpace, vSpace );
-    r_vert->setGeometry( 0, hSpace, vSpace, left->height() - vSpace );
+    m_panner->setGeometry( 0, 0, width(), height() );
+    m_canvas->setGeometry( hSpace, vSpace, m_left->width() - hSpace, m_left->height() - vSpace );
+    m_tabChooser->setGeometry( 0, 0, hSpace, vSpace );
+    m_horRuler->setGeometry( hSpace, 0, m_left->width() - hSpace, vSpace );
+    m_vertRuler->setGeometry( 0, hSpace, vSpace, m_left->height() - vSpace );
 }
 
 void KWGUI::unitChanged( KoUnit::Unit u )
 {
-    view->kWordDocument()->setUnit( u );
-}
-
-// Implementation of KWStatisticsDialog
-KWStatisticsDialog::KWStatisticsDialog( QWidget *parent, KWDocument *document )
-    : KDialogBase(parent, "statistics", true, i18n("Statistics"),KDialogBase::Ok, KDialogBase::Ok, false )
-{
-    QWidget *page = new QWidget( this );
-    setMainWidget(page);
-    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, KDialog::spacingHint() );
-
-    QTabWidget *tab = new QTabWidget( page );
-    QFrame *pageAll = 0;
-    QFrame *pageGeneral = 0;
-    QFrame *pageSelected = 0;
-    for (int i=0; i < 7; ++i) {
-        resultLabelAll[i] = 0;
-        resultLabelSelected[i] = 0;
-        if ( i < 6 )
-            resultGeneralLabel[i]=0;
-    }
-    m_doc = document;
-    m_parent = parent;
-    m_canceled = true;
-
-
-    // add Tab "General"
-    pageGeneral = new QFrame( this );
-    tab->addTab( pageGeneral,  i18n( "General" ) );
-
-    addBoxGeneral( pageGeneral, resultGeneralLabel );
-    calcGeneral( resultGeneralLabel );
-
-    // add Tab "All"
-    pageAll = new QFrame( this );
-    tab->addTab( pageAll,  i18n( "Text" ) );
-
-    addBox( pageAll, resultLabelAll, true );
-
-    m_canceled = true;
-    pageSelected = new QFrame( this );
-    tab->addTab( pageSelected,  i18n( "Selected Text" ) );
-    // let's see if there's selected text
-    bool b = docHasSelection();
-    tab->setTabEnabled(pageSelected, b);
-    if ( b ) {
-        addBox( pageSelected, resultLabelSelected,  false);
-        // assign results to 'selected' tab.
-        if ( !calcStats( resultLabelSelected, true,true ) )
-            return;
-        if ( !calcStats( resultLabelAll, false,false ) )
-            return;
-        showPage( 2 );
-    } else {
-        // assign results
-        if ( !calcStats( resultLabelAll, false, false ) )
-            return;
-        showPage( 1 );
-    }
-    topLayout->addWidget( tab );
-    m_canceled = false;
-
-}
-
-void KWStatisticsDialog::slotRefreshValue(bool state)
-{
-    m_canceled = true;
-    // let's see if there's selected text
-    bool b = docHasSelection();
-    if ( b )
-    {
-        if ( !calcStats( resultLabelSelected, true, true ) )
-            return;
-        if ( !calcStats( resultLabelAll, false, state ) )
-            return;
-    }
-    else
-    {
-        // assign results
-        if ( !calcStats( resultLabelAll, false, state ) )
-            return;
-    }
-    m_canceled = false;
-}
-
-
-void KWStatisticsDialog::calcGeneral( QLabel **resultLabel )
-{
-    KLocale *locale = KGlobal::locale();
-
-    resultLabel[0]->setText( locale->formatNumber( m_doc->pageCount(), 0) );
-    int table =0;
-    int picture = 0;
-    int part = 0;
-    int nbFrameset = 0;
-    int nbFormula = 0;
-    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
-    for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
-        KWFrameSet *frameSet = framesetIt.current();
-        if ( frameSet && frameSet->isVisible())
-        {
-            if ( frameSet->type() == FT_TABLE)
-                table++;
-            else if ( frameSet->type() == FT_PICTURE)
-                picture++;
-            else if ( frameSet->type() == FT_PART )
-                part++;
-            else if ( frameSet->type() == FT_FORMULA )
-                nbFormula++;
-            nbFrameset++;
-        }
-    }
-
-    resultLabel[1]->setText( locale->formatNumber( nbFrameset, 0 ) );
-    resultLabel[2]->setText( locale->formatNumber( picture, 0 ) );
-    resultLabel[3]->setText( locale->formatNumber( table, 0 ) );
-    resultLabel[4]->setText( locale->formatNumber( part, 0 ) );
-    resultLabel[5]->setText( locale->formatNumber( nbFormula, 0 ) );
-}
-
-bool KWStatisticsDialog::calcStats( QLabel **resultLabel, bool selection, bool useFootEndNote  )
-{
-    ulong charsWithSpace = 0L;
-    ulong charsWithoutSpace = 0L;
-    ulong words = 0L;
-    ulong sentences = 0L;
-    ulong lines = 0L;
-    ulong syllables = 0L;
-
-    // safety check result labels
-    for (int i=0; i < 7; ++i) {
-        if ( !resultLabel[i] ) {
-            kdDebug() << "Warning: KWStatisticsDiaolog::calcStats result table not initialized." << endl;
-            return false;
-        }
-    }
-
-    // count paragraphs for progress dialog:
-    ulong paragraphs = 0L;
-    QPtrListIterator<KWFrameSet> framesetIt( m_doc->framesetsIterator() );
-    for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
-        KWFrameSet *frameSet = framesetIt.current();
-        if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() )
-        {
-            if ( (useFootEndNote && frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE) || frameSet->frameSetInfo() == KWFrameSet::FI_BODY )
-            {
-                if ( selection && false )
-                    paragraphs += frameSet->paragraphsSelected();
-                else
-                    paragraphs += frameSet->paragraphs();
-            }
-
-        }
-    }
-    QProgressDialog progress( i18n( "Counting..." ), i18n( "Cancel" ), paragraphs, this, "count", true );
-    progress.setMinimumDuration( 1000 );
-    progress.setProgress( 0 );
-
-    // do the actual counting
-    for ( framesetIt.toFirst(); framesetIt.current(); ++framesetIt ) {
-        KWFrameSet *frameSet = framesetIt.current();
-        // Exclude headers and footers
-        if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() ) {
-            if ( (useFootEndNote && frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE) || frameSet->frameSetInfo() == KWFrameSet::FI_BODY )
-            {
-
-                if( ! frameSet->statistics( &progress, charsWithSpace, charsWithoutSpace,
-                                            words, sentences, syllables, lines, selection ) ) {
-                    // someone pressed "Cancel"
-                    return false;
-                }
-            }
-        }
-    }
-
-    // assign results
-    KLocale *locale = KGlobal::locale();
-    resultLabel[0]->setText( locale->formatNumber( charsWithSpace, 0) );
-    resultLabel[1]->setText( locale->formatNumber( charsWithoutSpace, 0 ) );
-    resultLabel[2]->setText( locale->formatNumber( syllables, 0 ) );
-    resultLabel[3]->setText( locale->formatNumber( words, 0 ) );
-    resultLabel[4]->setText( locale->formatNumber( sentences, 0 ) );
-    resultLabel[5]->setText( locale->formatNumber( lines, 0 ) );
-    // add flesch
-    double f = calcFlesch( sentences, words, syllables );
-    QString flesch = locale->formatNumber( f , 1 );
-    if( words < 200 ) {
-        // a kind of warning if too few words:
-        flesch = i18n("approximately %1").arg( flesch );
-    }
-    resultLabel[6]->setText( flesch );
-    return true;
-}
-
-double KWStatisticsDialog::calcFlesch( ulong sentences, ulong words, ulong syllables )
-{
-    // calculate Flesch reading ease score:
-    float flesch_score = 0;
-    if( words > 0 && sentences > 0 )
-        flesch_score = 206.835 - (1.015 * (words / sentences)) - (84.6 * syllables / words);
-    return flesch_score;
-}
-
-void KWStatisticsDialog::addBoxGeneral( QFrame *page, QLabel **resultLabel )
-{
-    // Layout Managers
-    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 7 );
-    QGroupBox *box = new QGroupBox( i18n( "Statistics" ), page );
-    QGridLayout *grid = new QGridLayout( box, 9, 3, KDialog::marginHint(), KDialog::spacingHint() );
-    grid->setRowStretch (9, 1);
-    // margins
-    int fHeight = box->fontMetrics().height();
-    grid->setMargin( fHeight );
-    grid->addColSpacing( 1, fHeight );
-    grid->addRowSpacing( 0, fHeight );
-
-    // insert labels
-    QLabel *label1 = new QLabel( i18n( "Number of pages:" ), box );
-    grid->addWidget( label1, 1, 0, 1 );
-    resultLabel[0] = new QLabel( "", box );
-    grid->addWidget( resultLabel[0], 1, 2, 2 );
-
-    QLabel *label2 = new QLabel( i18n( "Number of frames:" ), box );
-    grid->addWidget( label2, 2, 0, 1 );
-    resultLabel[1] = new QLabel( "", box );
-    grid->addWidget( resultLabel[1], 2, 2, 2 );
-
-    QLabel *label3 = new QLabel( i18n( "Number of pictures:" ), box );
-    grid->addWidget( label3, 3, 0, 1 );
-    resultLabel[2] = new QLabel( "", box );
-    grid->addWidget( resultLabel[2], 3, 2, 2 );
-
-
-    QLabel *label4 = new QLabel( i18n( "Number of tables:" ), box );
-    grid->addWidget( label4, 4, 0, 1 );
-    resultLabel[3] = new QLabel( "", box );
-    grid->addWidget( resultLabel[3], 4, 2, 2 );
-
-    QLabel *label5 = new QLabel( i18n( "Number of embedded objects:" ), box );
-    grid->addWidget( label5, 5, 0, 1 );
-    resultLabel[4] = new QLabel( "", box );
-    grid->addWidget( resultLabel[4], 5, 2, 2 );
-
-    QLabel *label6 = new QLabel( i18n( "Number of formula frameset:" ), box );
-    grid->addWidget( label6, 6, 0, 1 );
-    resultLabel[5] = new QLabel( "", box );
-    grid->addWidget( resultLabel[5], 6, 2, 2 );
-
-    topLayout->addWidget( box );
-}
-
-void KWStatisticsDialog::addBox( QFrame *page, QLabel **resultLabel, bool calcWithFootNoteCheckbox )
-{
-    // Layout Managers
-    QVBoxLayout *topLayout = new QVBoxLayout( page, 0, 7 );
-    if ( calcWithFootNoteCheckbox )
-    {
-        QWidget *w = new QWidget(page);
-        topLayout->addWidget( w );
-        QVBoxLayout *noteLayout = new QVBoxLayout( w, KDialog::marginHint(), 0 );
-        QCheckBox *calcWithFootNote = new QCheckBox( i18n("&Include text from foot- and endnotes"), w);
-        noteLayout->addWidget( calcWithFootNote );
-        connect( calcWithFootNote, SIGNAL(toggled ( bool )), this, SLOT( slotRefreshValue(bool)));
-    }
-
-
-    QGroupBox *box = new QGroupBox( i18n( "Statistics" ), page );
-    QGridLayout *grid = new QGridLayout( box, 9, 3, KDialog::marginHint(), KDialog::spacingHint() );
-    grid->setRowStretch (9, 1);
-
-    // margins
-    int fHeight = box->fontMetrics().height();
-    grid->setMargin( fHeight );
-    grid->addColSpacing( 1, fHeight );
-    grid->addRowSpacing( 0, fHeight );
-
-    //maximum size for result column (don't know how to do this better..)
-    QString init = i18n("approximately %1").arg( "00000000" );
-
-    // insert labels
-    QLabel *label1 = new QLabel( i18n( "Characters including spaces:" ), box );
-    grid->addWidget( label1, 1, 0, 1 );
-    resultLabel[0] = new QLabel( "", box );
-    grid->addWidget( resultLabel[0], 1, 2, 2 );
-
-    QLabel *label2 = new QLabel( i18n( "Characters without spaces:" ), box );
-    grid->addWidget( label2, 2, 0, 1 );
-    resultLabel[1] = new QLabel( "", box );
-    grid->addWidget( resultLabel[1], 2, 2, 2 );
-
-    QLabel *label3 = new QLabel( i18n( "Syllables:" ), box );
-    grid->addWidget( label3, 3, 0, 1 );
-    resultLabel[2] = new QLabel( "", box );
-    grid->addWidget( resultLabel[2], 3, 2, 2 );
-
-    QLabel *label4 = new QLabel( i18n( "Words:" ), box );
-    grid->addWidget( label4, 4, 0, 1 );
-    resultLabel[3] = new QLabel( "", box );
-    grid->addWidget( resultLabel[3], 4, 2, 2 );
-
-    QLabel *label5 = new QLabel( i18n( "Sentences:" ), box );
-    grid->addWidget( label5, 5, 0, 1 );
-    resultLabel[4] = new QLabel( "", box );
-    grid->addWidget( resultLabel[4], 5, 2, 2 );
-
-    QLabel *label6 = new QLabel( i18n( "Lines:" ), box );
-    grid->addWidget( label6, 6, 0, 1 );
-    resultLabel[5] = new QLabel( "", box );
-    grid->addWidget( resultLabel[5], 6, 2, 2 );
-
-
-    QLabel *label7 = new QLabel( i18n( "Flesch reading ease:" ), box );
-    grid->addWidget( label7, 7, 0, 1 );
-    resultLabel[6] = new QLabel( init, box );
-    grid->addWidget( resultLabel[6], 7, 2, 2 );
-
-    topLayout->addWidget( box );
-}
-
-bool KWStatisticsDialog::docHasSelection()const
-{
-    QPtrListIterator<KWFrameSet> fsIt( m_doc->framesetsIterator() );
-
-    for ( ; fsIt.current(); ++fsIt ) {
-        KWFrameSet *fs = fsIt.current();
-        if ( fs->paragraphsSelected() ) {
-            return true;
-        }
-    }
-    return false;
+    m_view->kWordDocument()->setUnit( u );
 }
 
 #include "KWView.moc"

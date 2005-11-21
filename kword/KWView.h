@@ -42,20 +42,13 @@ class KoPicture;
 class KWDocStruct;
 class KoRuler;
 class KWCanvas;
-class KWChild;
 class KWDocument;
 class KWGUI;
 class KWFrame;
-class KWPartFrameSet;
 class KoSearchContext;
-class KWStyleManager;
-class KWTableDia;
 class KWFrameViewManager;
 class KWView;
-class KWFrameView;
 class QResizeEvent;
-//class KSpell;
-class QScrollView;
 class QSplitter;
 
 class KAction;
@@ -69,13 +62,10 @@ class KoTextFormatInterface;
 class TKSelectColorAction;
 class KoPartSelectAction;
 class KoCharSelectDia;
-class KWTextFrameset;
 class KMacroCommand;
 class KWFrameSet;
-class KoFindReplace;
 class KWFindReplace;
 class KoTextFormat;
-class KoTextParag;
 class KoFontDia;
 class KoParagDia;
 class KWViewMode;
@@ -544,7 +534,6 @@ private:  // methods
 private: // variables
     KWDocument *m_doc;
 
-    // TODO use m_ notation
     KAction *m_actionFileStatistics;
     KAction *m_actionEditCut;
     KAction *m_actionEditCopy;
@@ -646,7 +635,7 @@ private: // variables
     KActionMenu *m_actionFormatNumber;
     KToggleAction *m_actionFormatSuper;
     KToggleAction *m_actionFormatSub;
-    KAction* actionInsertSpecialChar;
+    KAction* m_actionInsertSpecialChar;
 
     // Text and Frame borders.
     KSelectAction *m_actionFrameStyle;
@@ -765,7 +754,7 @@ private: // variables
 
     KWGUI *m_gui;
 
-    DCOPObject *dcop;
+    DCOPObject *m_dcop;
 
     KoSearchContext *m_searchEntry, *m_replaceEntry;
     KWFindReplace *m_findReplace;
@@ -800,7 +789,7 @@ private: // variables
     KSpell2::Broker::Ptr m_broker;
 
 
-    KWFrameSet *fsInline;
+    KWFrameSet *m_fsInline;
 };
 
 /******************************************************************/
@@ -817,7 +806,7 @@ public:
 
 protected:
     void resizeEvent( QResizeEvent *e );
-    KWGUI *gui;
+    KWGUI *m_gui;
 
 };
 
@@ -832,12 +821,12 @@ public:
 
     void showGUI();
 
-    KWView *getView()const { return view; }
-    KWCanvas *canvasWidget()const { return canvas; }
-    KoRuler *getVertRuler()const { return r_vert; }
-    KoRuler *getHorzRuler()const { return r_horz; }
-    KoTabChooser *getTabChooser()const { return tabChooser; }
-    KWDocStruct *getDocStruct()const { return docStruct; }
+    KWView *getView()const { return m_view; }
+    KWCanvas *canvasWidget()const { return m_canvas; }
+    KoRuler *getVertRuler()const { return m_vertRuler; }
+    KoRuler *getHorzRuler()const { return m_horRuler; }
+    KoTabChooser *getTabChooser()const { return m_tabChooser; }
+    KWDocStruct *getDocStruct()const { return m_docStruct; }
 
 public slots:
     void reorganize();
@@ -848,47 +837,14 @@ protected slots:
 protected:
     void resizeEvent( QResizeEvent *e );
 
-    KoRuler *r_vert, *r_horz;
-    KWCanvas *canvas;
-    KWView *view;
-    KoTabChooser *tabChooser;
-    KWDocStruct *docStruct;
-    QSplitter *panner;
-    KWLayoutWidget *left;
+    KoRuler *m_vertRuler, *m_horRuler;
+    KWCanvas *m_canvas;
+    KWView *m_view;
+    KoTabChooser *m_tabChooser;
+    KWDocStruct *m_docStruct;
+    QSplitter *m_panner;
+    KWLayoutWidget *m_left;
 
-};
-
-/******************************************************************/
-/* Class: KWStatisticsDialog                                      */
-/******************************************************************/
-/**
-* Is not intended to inherit from
-*/
-
-class KWStatisticsDialog : public KDialogBase
-{
-    Q_OBJECT
-
-public:
-    KWStatisticsDialog( QWidget *parent, KWDocument *doc );
-    bool wasCanceled()const { return m_canceled; }
-
-private:
-    KWDocument *m_doc;
-    QWidget *m_parent;
-    bool m_canceled;
-    QLabel *resultLabelAll[7];
-    QLabel *resultLabelSelected[7];
-    QLabel *resultGeneralLabel[6];
-    void addBox( QFrame *page, QLabel **resultLabel, bool calcWithFootNoteCheckbox );
-    void addBoxGeneral( QFrame *page, QLabel **resultLabel );
-
-    bool calcStats( QLabel **resultLabel, bool selection, bool useFootEndNote );
-    void calcGeneral( QLabel **resultLabel );
-    bool docHasSelection()const;
-    double calcFlesch(ulong sentences, ulong words, ulong syllables);
-private slots:
-    void slotRefreshValue(bool);
 };
 
 #endif

@@ -27,7 +27,7 @@ libkwordprivate_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWForm
 		KWTableTemplate.cpp KWTableTemplateSelector.cpp KWTableDia.cpp \
 		KWInsertDia.cpp KWDeleteDia.cpp KWDocStruct.cpp \
 		KWInsertTOCCommand.cpp KWStyleManager.cpp KWFindReplace.cpp \
-		KWCommand.cpp \
+		KWCommand.cpp KWStatisticsDialog.cpp \
 		KWordMailMergeDatabaseIface.skel kwordmailmergedatabaseiface.cc KWMailMergeDataBase.cpp \
 		KWMailMergeLabelAction.cpp \
 		KWEditPersonnalExpression.cpp \
