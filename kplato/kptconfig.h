@@ -25,10 +25,10 @@
 namespace KPlato
 {
 
-class KPTBehavior {
+class Behavior {
 public:
     enum CalculationMode { Manual, OnChange };
-    KPTBehavior() {
+    Behavior() {
         calculationMode = Manual;
         allowOverbooking = true;
     }
@@ -36,26 +36,26 @@ public:
     bool allowOverbooking;
 };
 
-class KPTConfig {
+class Config {
 public:
     
-    KPTConfig();
-    ~KPTConfig();
+    Config();
+    ~Config();
 
     void setReadWrite(bool readWrite) { m_readWrite = readWrite; }
     void load();
     void save();
 
-    KPTTask &taskDefaults() { return m_taskDefaults; }
-    KPTBehavior &behavior() { return m_behavior; }
+    Task &taskDefaults() { return m_taskDefaults; }
+    Behavior &behavior() { return m_behavior; }
     
 private:
     bool m_readWrite;
-    KPTBehavior m_behavior;  
-    KPTTask m_taskDefaults;
+    Behavior m_behavior;  
+    Task m_taskDefaults;
 
 };
 
 }  //KPlato namespace
 
-#endif // KPTCONFIG_H
+#endif // CONFIG_H

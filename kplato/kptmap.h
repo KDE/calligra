@@ -32,128 +32,128 @@
 namespace KPlato
 {
 
-namespace KPTMap {
+namespace Map {
 enum State { None=0, NonWorking=1, Working=2 };
 }
 
-typedef QMap<QString, int> KPTDateMapType;
-class KPTDateMap : public KPTDateMapType
+typedef QMap<QString, int> DateMapType;
+class DateMap : public DateMapType
 {
 public:
-    KPTDateMap() {}
-    virtual ~KPTDateMap() {}
+    DateMap() {}
+    virtual ~DateMap() {}
 
-    virtual bool contains(QDate date) const { return KPTDateMapType::contains(date.toString(Qt::ISODate)); }
+    virtual bool contains(QDate date) const { return DateMapType::contains(date.toString(Qt::ISODate)); }
 
-    void insert(QString date, int state=KPTMap::NonWorking) {
+    void insert(QString date, int state=Map::NonWorking) {
         //kdDebug()<<k_funcinfo<<date<<"="<<state<<endl;
-        if (state == KPTMap::None)
-            KPTDateMapType::remove(date);
+        if (state == Map::None)
+            DateMapType::remove(date);
         else
-            KPTDateMapType::insert(date, state);
+            DateMapType::insert(date, state);
     }
-    void insert(QDate date, int state=KPTMap::NonWorking) { insert(date.toString(Qt::ISODate), state); }
+    void insert(QDate date, int state=Map::NonWorking) { insert(date.toString(Qt::ISODate), state); }
 
     void remove(QDate date) {
         //kdDebug()<<k_funcinfo<<date.toString(Qt::ISODate)<<endl;
-        KPTDateMapType::remove(date.toString(Qt::ISODate));
+        DateMapType::remove(date.toString(Qt::ISODate));
     }
 
     int state(QString date) {
-        KPTDateMapType::iterator it = find(date);
+        DateMapType::iterator it = find(date);
         if (it == end()) return 0;
         else return it.data();
     }
     int state(QDate date) { return state(date.toString(Qt::ISODate)); }
 
-    bool operator==(const KPTDateMap &m) const { 
+    bool operator==(const DateMap &m) const { 
         return keys() == m.keys() && values() == m.values(); 
     }
-    bool operator!=(const KPTDateMap &m) const { 
+    bool operator!=(const DateMap &m) const { 
         return keys() != m.keys() || values() != m.values(); 
     }
     
     // boolean use
-    void toggle(QString date, int state=KPTMap::NonWorking) {
+    void toggle(QString date, int state=Map::NonWorking) {
         //kdDebug()<<k_funcinfo<<date<<"="<<state<<endl;
-        if (KPTDateMapType::contains(date))
-            KPTDateMapType::remove(date);
+        if (DateMapType::contains(date))
+            DateMapType::remove(date);
         else
-            KPTDateMapType::insert(date, state);
+            DateMapType::insert(date, state);
     }
-    void toggle(QDate date, int state=KPTMap::NonWorking) { return toggle(date.toString(Qt::ISODate)); }
-    void toggleClear(QString date, int state=KPTMap::NonWorking) {
+    void toggle(QDate date, int state=Map::NonWorking) { return toggle(date.toString(Qt::ISODate)); }
+    void toggleClear(QString date, int state=Map::NonWorking) {
         //kdDebug()<<k_funcinfo<<date<<"="<<state<<endl;
-        bool s = KPTDateMapType::contains(date);
+        bool s = DateMapType::contains(date);
         clear();
         if (!s) insert(date, state);
     }
-    void toggleClear(QDate date, int state=KPTMap::NonWorking) { toggleClear(date.toString(Qt::ISODate)); }
+    void toggleClear(QDate date, int state=Map::NonWorking) { toggleClear(date.toString(Qt::ISODate)); }
 };
 
-typedef QMap<int, int> KPTIntMapType;
-class KPTIntMap : public KPTIntMapType
+typedef QMap<int, int> IntMapType;
+class IntMap : public IntMapType
 {
 public:
-    KPTIntMap() {}
-    virtual ~KPTIntMap() {}
+    IntMap() {}
+    virtual ~IntMap() {}
 
-    void insert(int key, int state=KPTMap::NonWorking) {
-        if (state == KPTMap::None)
-            KPTIntMapType::remove(key);
+    void insert(int key, int state=Map::NonWorking) {
+        if (state == Map::None)
+            IntMapType::remove(key);
         else
-            KPTIntMapType::insert(key, state); }
+            IntMapType::insert(key, state); }
 
     virtual int state(int key) {
-        KPTIntMapType::iterator it = KPTIntMapType::find(key);
-        if (it == KPTIntMapType::end()) return 0;
+        IntMapType::iterator it = IntMapType::find(key);
+        if (it == IntMapType::end()) return 0;
         else return it.data();
     }
 
-    bool operator==(const KPTIntMap &m) const { 
+    bool operator==(const IntMap &m) const { 
         return keys() == m.keys() && values() == m.values(); 
     }
-    bool operator!=(const KPTIntMap &m) const { 
+    bool operator!=(const IntMap &m) const { 
         return keys() != m.keys() || values() != m.values(); 
     }
     
     // boolean use
-    void toggle(int key, int state=KPTMap::NonWorking) { KPTIntMapType::contains(key) ? remove(key) : insert(key, state); }
-    void toggleClear(int key, int state=KPTMap::NonWorking) {
+    void toggle(int key, int state=Map::NonWorking) { IntMapType::contains(key) ? remove(key) : insert(key, state); }
+    void toggleClear(int key, int state=Map::NonWorking) {
         bool s =contains(key);
         clear();
         if (!s) insert(key, state);
     }
 };
 
-class KPTWeekMap : public KPTIntMap
+class WeekMap : public IntMap
 {
 public:
-    bool contains(int week, int year) { return KPTIntMap::contains(week*10000 + year); }
+    bool contains(int week, int year) { return IntMap::contains(week*10000 + year); }
     bool contains(QPair<int,int> week) { return contains(week.first,  week.second); }
 
-    void insert(int week, int year, int state=KPTMap::NonWorking) {
+    void insert(int week, int year, int state=Map::NonWorking) {
         if (week < 1 || week > 53) { kdError()<<k_funcinfo<<"Illegal week number: "<<week<<endl; return; }
-        KPTIntMap::insert(week*10000 + year, state);
+        IntMap::insert(week*10000 + year, state);
     }
-    void insert(QPair<int,int> week, int state=KPTMap::NonWorking) { insert(week.first, week.second, state); }
+    void insert(QPair<int,int> week, int state=Map::NonWorking) { insert(week.first, week.second, state); }
 
-    void insert(KPTWeekMap::iterator it, int state) { insert(week(it.key()), state); }
+    void insert(WeekMap::iterator it, int state) { insert(week(it.key()), state); }
 
-    void remove(QPair<int,int> week) { KPTIntMap::remove(week.first*10000 + week.second); }
+    void remove(QPair<int,int> week) { IntMap::remove(week.first*10000 + week.second); }
 
     static QPair<int, int> week(int key) { return QPair<int, int>(key/10000, key%10000); }
 
-    int state(QPair<int, int> week) { return KPTIntMap::state(week.first*10000 + week.second); }
+    int state(QPair<int, int> week) { return IntMap::state(week.first*10000 + week.second); }
     int state(int week, int year) { return state(QPair<int, int>(week, year)); }
 
-    void toggle(QPair<int,int> week, int state=KPTMap::NonWorking) {
+    void toggle(QPair<int,int> week, int state=Map::NonWorking) {
         if (week.first < 1 || week.first > 53) { kdError()<<k_funcinfo<<"Illegal week number: "<<week.first<<endl; return; }
-        KPTIntMap::toggle(week.first*10000 + week.second, state);
+        IntMap::toggle(week.first*10000 + week.second, state);
     }
-    void toggleClear(QPair<int,int> week, int state=KPTMap::NonWorking) {
+    void toggleClear(QPair<int,int> week, int state=Map::NonWorking) {
         if (week.first < 1 || week.first > 53) { kdError()<<k_funcinfo<<"Illegal week number: "<<week.first<<endl; return; }
-        KPTIntMap::toggleClear(week.first*10000 + week.second, state);
+        IntMap::toggleClear(week.first*10000 + week.second, state);
     }
 };
 

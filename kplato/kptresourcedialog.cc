@@ -45,7 +45,7 @@
 namespace KPlato
 {
 
-KPTResourceDialogImpl::KPTResourceDialogImpl (QWidget *parent)
+ResourceDialogImpl::ResourceDialogImpl (QWidget *parent)
     : ResourceDialogBase(parent)
 {
 
@@ -67,16 +67,16 @@ KPTResourceDialogImpl::KPTResourceDialogImpl (QWidget *parent)
 }
 
 
-void KPTResourceDialogImpl::slotChanged() {
+void ResourceDialogImpl::slotChanged() {
     emit changed();
 }
 
-void KPTResourceDialogImpl::slotCalculationNeeded(const QString&) {
+void ResourceDialogImpl::slotCalculationNeeded(const QString&) {
     emit calculate();
     emit changed();
 }
 
-void KPTResourceDialogImpl::slotChooseResource()
+void ResourceDialogImpl::slotChooseResource()
 {
     KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
     if (!a.isEmpty()) {
@@ -92,18 +92,18 @@ void KPTResourceDialogImpl::slotChooseResource()
     }
 }
 
-void KPTResourceDialogImpl::slotEditCalendarClicked()
+void ResourceDialogImpl::slotEditCalendarClicked()
 {
 }
 
-//////////////////  KPTResourceDialog  ////////////////////////
+//////////////////  ResourceDialog  ////////////////////////
 
-KPTResourceDialog::KPTResourceDialog(KPTProject &project, KPTResource &resource, QWidget *parent, const char *name)
+ResourceDialog::ResourceDialog(Project &project, Resource &resource, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Resource Settings"), Ok|Cancel, Ok, parent, name, true, true),
       m_resource(resource),
       m_calculationNeeded(false)
 {
-    dia = new KPTResourceDialogImpl(this);
+    dia = new ResourceDialogImpl(this);
     setMainWidget(dia);
     enableButtonOK(false);
 
@@ -119,7 +119,7 @@ KPTResourceDialog::KPTResourceDialog(KPTProject &project, KPTResource &resource,
     int cal = 0;
     dia->calendarList->insertItem("None");
     m_calendars.insert(0, 0);      
-    QPtrListIterator<KPTCalendar> cit(project.calendars());
+    QPtrListIterator<Calendar> cit(project.calendars());
     for(int i=1; cit.current(); ++cit, ++i) {
         dia->calendarList->insertItem(cit.current()->name(), i);
         m_calendars.insert(i, cit.current());
@@ -134,19 +134,19 @@ KPTResourceDialog::KPTResourceDialog(KPTProject &project, KPTResource &resource,
 }
 
 
-void KPTResourceDialog::enableButtonOk() {
+void ResourceDialog::enableButtonOk() {
     enableButtonOK(true);
 }
 
-void KPTResourceDialog::slotCalculationNeeded() {
+void ResourceDialog::slotCalculationNeeded() {
     m_calculationNeeded = true;
 }
 
-void KPTResourceDialog::slotOk() {
+void ResourceDialog::slotOk() {
     m_resource.setName(dia->nameEdit->text());
     m_resource.setInitials(dia->initialsEdit->text());
     m_resource.setEmail(dia->emailEdit->text());
-    m_resource.setType((KPTResource::Type)(dia->type->currentItem()));
+    m_resource.setType((Resource::Type)(dia->type->currentItem()));
     m_resource.setUnits(dia->units->value());
     //FIXME: readMoney() can't read formatMoney() format!!
     m_resource.setNormalRate(KGlobal::locale()->readMoney(dia->rateEdit->text()));
@@ -157,7 +157,7 @@ void KPTResourceDialog::slotOk() {
     accept();
 }
 
-void KPTResourceDialog::slotCalendarChanged(int cal) {
+void ResourceDialog::slotCalendarChanged(int cal) {
     
 }
 

@@ -26,13 +26,13 @@
 namespace KPlato
 {
 
-KPTContext::KPTContext() {
+Context::Context() {
 }
 
-KPTContext::~KPTContext() {
+Context::~Context() {
 }
 
-bool KPTContext::load(QDomElement &element) {
+bool Context::load(QDomElement &element) {
     currentView = element.attribute("current-view");
     
     QDomNodeList list = element.childNodes();
@@ -76,7 +76,7 @@ bool KPTContext::load(QDomElement &element) {
     return true;
 }
 
-void KPTContext::save(QDomElement &element) const {
+void Context::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("context");
     element.appendChild(me);
     me.setAttribute("current-view", currentView);

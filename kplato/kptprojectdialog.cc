@@ -44,12 +44,12 @@
 namespace KPlato
 {
 
-KPTProjectDialog::KPTProjectDialog(KPTProject &p, QWidget *parent, const char *name)
+ProjectDialog::ProjectDialog(Project &p, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Project Settings"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
 {
-    dia = new KPTProjectDialogImpl(this);
-    resourcesTab = new KPTResourcesPanel(dia, &project);
+    dia = new ProjectDialogImpl(this);
+    resourcesTab = new ResourcesPanel(dia, &project);
     dia->daTabs->insertTab(resourcesTab, i18n("Resources"), 1);
     setMainWidget(dia);
     enableButtonOK(false);
@@ -67,8 +67,8 @@ KPTProjectDialog::KPTProjectDialog(KPTProject &p, QWidget *parent, const char *n
 }
 
 
-void KPTProjectDialog::slotOk() {
-    project.setConstraint((KPTNode::ConstraintType) dia->schedulerType->currentItem());
+void ProjectDialog::slotOk() {
+    project.setConstraint((Node::ConstraintType) dia->schedulerType->currentItem());
     //FIXME
     project.setStartTime(QDateTime(dia->schedulerDate->date(), dia->schedulerTime->time()));
     project.setConstraintStartTime(QDateTime(dia->schedulerDate->date(), dia->schedulerTime->time()));
@@ -82,7 +82,7 @@ void KPTProjectDialog::slotOk() {
     accept();
 }
 
-void KPTProjectDialog::slotSchedulingChanged(int activated) {
+void ProjectDialog::slotSchedulingChanged(int activated) {
     bool needDate = activated >= 2;
     dia->schedulerTime->setEnabled(needDate);
     dia->schedulerDate->setEnabled(needDate);
@@ -117,22 +117,22 @@ void KPTProjectDialog::slotSchedulingChanged(int activated) {
     dia->lSchedulingExplain->setText(label);
 }
 
-KPTProjectDialogImpl::KPTProjectDialogImpl (QWidget *parent) : KPTProjectDialogBase(parent) {
+ProjectDialogImpl::ProjectDialogImpl (QWidget *parent) : ProjectDialogBase(parent) {
     connect (namefield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
     connect (leaderfield, SIGNAL(textChanged( const QString& )), this, SLOT(slotCheckAllFieldsFilled()) );
     connect (schedulerType, SIGNAL(activated( int )), this, SLOT(slotSchedulingChanged( int )) );
 	connect (chooseLeader, SIGNAL(pressed()), this, SLOT(slotChooseLeader()));
 }
 
-void KPTProjectDialogImpl::slotCheckAllFieldsFilled() {
+void ProjectDialogImpl::slotCheckAllFieldsFilled() {
     emit obligatedFieldsFilled( !(namefield->text().isEmpty() || leaderfield->text().isEmpty()));
 }
 
-void KPTProjectDialogImpl::slotSchedulingChanged(int activated) {
+void ProjectDialogImpl::slotSchedulingChanged(int activated) {
     emit schedulingTypeChanged(activated);
 }
 
-void KPTProjectDialogImpl::slotChooseLeader()
+void ProjectDialogImpl::slotChooseLeader()
 {
   KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
   if (!a.isEmpty()) {

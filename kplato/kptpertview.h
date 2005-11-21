@@ -30,48 +30,48 @@ class KPrinter;
 namespace KPlato
 {
 
-class KPTView;
-class KPTPertCanvas;
-class KPTNode;
-class KPTRelation;
-class KPTContext;
+class View;
+class PertCanvas;
+class Node;
+class Relation;
+class Context;
 
-class KPTPertView : public QWidget
+class PertView : public QWidget
 {
     Q_OBJECT
     
 public:
  
-    KPTPertView( KPTView *view, QWidget *parent, QLayout *layout );
+    PertView( View *view, QWidget *parent, QLayout *layout );
 
-    ~KPTPertView();
+    ~PertView();
     
     void zoom(double /*zoom*/) {}
 
     void draw();
-    KPTView *mainView() const { return m_mainview; } 
+    View *mainView() const { return m_mainview; } 
 
     void print(KPrinter &printer);
 
-    KPTNode *currentNode();
+    Node *currentNode();
 
-    virtual bool setContext(KPTContext &context);
-    virtual void getContext(KPTContext &context) const;
+    virtual bool setContext(Context &context);
+    virtual void getContext(Context &context) const;
 
 public slots:
-    void slotRMBPressed(KPTNode *node, const QPoint & point);
-    void slotAddRelation(KPTNode *par, KPTNode *child);
-    void slotModifyRelation(KPTRelation *rel);
+    void slotRMBPressed(Node *node, const QPoint & point);
+    void slotAddRelation(Node *par, Node *child);
+    void slotModifyRelation(Relation *rel);
 
 signals:
-    void addRelation(KPTNode *par, KPTNode *child);
-    void modifyRelation(KPTRelation *rel);
+    void addRelation(Node *par, Node *child);
+    void modifyRelation(Relation *rel);
 
 private:
     void init(QLayout *layout);
-    KPTView *m_mainview;
-    KPTPertCanvas *m_canvasview;
-    KPTNode *m_node;
+    View *m_mainview;
+    PertCanvas *m_canvasview;
+    Node *m_node;
     int m_defaultFontSize;
 };
 

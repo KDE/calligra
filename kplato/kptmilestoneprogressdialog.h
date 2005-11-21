@@ -27,26 +27,26 @@ class KCommand;
 namespace KPlato
 {
 
-class KPTMilestoneProgressPanel;
-class KPTTask;
-class KPTPart;
+class MilestoneProgressPanel;
+class Task;
+class Part;
 
-class KPTMilestoneProgressDialog : public KDialogBase {
+class MilestoneProgressDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTMilestoneProgressDialog(KPTTask &task, QWidget *parent=0);
+    MilestoneProgressDialog(Task &task, QWidget *parent=0);
 
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
 
 protected slots:
     void slotChanged();
     void slotOk();
 
 private:
-    KPTMilestoneProgressPanel *m_panel;
+    MilestoneProgressPanel *m_panel;
 
 };
 
 } //KPlato namespace
 
-#endif // KPTMILESTONEPROGRESSDIALOG_H
+#endif // MILESTONEPROGRESSDIALOG_H

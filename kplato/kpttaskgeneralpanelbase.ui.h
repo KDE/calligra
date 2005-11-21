@@ -32,7 +32,7 @@
 namespace KPlato
 {
 
-void KPTTaskGeneralPanelBase::setSchedulingType(int type)
+void TaskGeneralPanelBase::setSchedulingType(int type)
 
 {
     enableDateTime(type);
@@ -41,12 +41,12 @@ void KPTTaskGeneralPanelBase::setSchedulingType(int type)
  
 }
 
-int KPTTaskGeneralPanelBase::schedulingType() const 
+int TaskGeneralPanelBase::schedulingType() const 
 {
     return scheduleType->currentItem();
 }
 
-void KPTTaskGeneralPanelBase::changeLeader()
+void TaskGeneralPanelBase::changeLeader()
 {
     KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
     if (!a.isEmpty())
@@ -55,37 +55,37 @@ void KPTTaskGeneralPanelBase::changeLeader()
     }
 }
 
-void KPTTaskGeneralPanelBase::setEstimationType( int type )
+void TaskGeneralPanelBase::setEstimationType( int type )
 {
     estimateType->setCurrentItem(type);
 }
 
-int KPTTaskGeneralPanelBase::estimationType() const
+int TaskGeneralPanelBase::estimationType() const
 {
     return estimateType->currentItem();
 }
 
-void KPTTaskGeneralPanelBase::setOptimistic( int value )
+void TaskGeneralPanelBase::setOptimistic( int value )
 {
     optimisticValue->setValue(value);
 }
 
-void KPTTaskGeneralPanelBase::setPessimistic( int value )
+void TaskGeneralPanelBase::setPessimistic( int value )
 {
     pessimisticValue->setValue(value);
 }
 
-int KPTTaskGeneralPanelBase::optimistic() const
+int TaskGeneralPanelBase::optimistic() const
 {
     return optimisticValue->value();
 }
 
-int KPTTaskGeneralPanelBase::pessimistic()
+int TaskGeneralPanelBase::pessimistic()
 {
     return pessimisticValue->value();
 }
 
-void KPTTaskGeneralPanelBase::enableDateTime( int scheduleType )
+void TaskGeneralPanelBase::enableDateTime( int scheduleType )
 {
     scheduleStartTime->setEnabled(false);
     scheduleEndTime->setEnabled(false);
@@ -128,45 +128,45 @@ void KPTTaskGeneralPanelBase::enableDateTime( int scheduleType )
 }
 
 
-void KPTTaskGeneralPanelBase::estimationTypeChanged( int type )
+void TaskGeneralPanelBase::estimationTypeChanged( int type )
 {
     checkAllFieldsFilled();
 }
 
 
 
-void KPTTaskGeneralPanelBase::setEstimate( const KPTDuration & duration)
+void TaskGeneralPanelBase::setEstimate( const Duration & duration)
 {
     estimate->setValue( duration );
 }
 
 
-void KPTTaskGeneralPanelBase::setEstimateType( int type)
+void TaskGeneralPanelBase::setEstimateType( int type)
 {
     estimateType->setCurrentItem(type);
 }
 
 
-void KPTTaskGeneralPanelBase::checkAllFieldsFilled()
+void TaskGeneralPanelBase::checkAllFieldsFilled()
 {
     emit changed();
     emit obligatedFieldsFilled(!namefield->text().isEmpty() && !idfield->text().isEmpty());
 }
 
 
-KPTDuration KPTTaskGeneralPanelBase::estimationValue()
+Duration TaskGeneralPanelBase::estimationValue()
 {
     return estimate->value();
 }
 
 
-void KPTTaskGeneralPanelBase::setEstimateFields( int mask )
+void TaskGeneralPanelBase::setEstimateFields( int mask )
 {
     estimate->setVisibleFields(mask);
 }
 
 
-void KPTTaskGeneralPanelBase::setEstimateScales( int day )
+void TaskGeneralPanelBase::setEstimateScales( int day )
 {
     estimate->setFieldScale(0, day);
     estimate->setFieldRightscale(0, day);
@@ -175,12 +175,12 @@ void KPTTaskGeneralPanelBase::setEstimateScales( int day )
 }
 
 
-void KPTTaskGeneralPanelBase::setEstimateFieldUnit( int field, QString unit )
+void TaskGeneralPanelBase::setEstimateFieldUnit( int field, QString unit )
 {
     estimate->setFieldUnit(field, unit);
 }
 
-void KPTTaskGeneralPanelBase::startDateChanged()
+void TaskGeneralPanelBase::startDateChanged()
 {
     if (!scheduleStartDate->isEnabled()) {
         return;
@@ -198,7 +198,7 @@ void KPTTaskGeneralPanelBase::startDateChanged()
     }
 }
 
-void KPTTaskGeneralPanelBase::startTimeChanged( const QTime &time )
+void TaskGeneralPanelBase::startTimeChanged( const QTime &time )
 {
     if (!scheduleStartTime->isEnabled()) {
         return;
@@ -217,7 +217,7 @@ void KPTTaskGeneralPanelBase::startTimeChanged( const QTime &time )
 }
 
 
-void KPTTaskGeneralPanelBase::endDateChanged()
+void TaskGeneralPanelBase::endDateChanged()
 {
     if (!scheduleEndDate->isEnabled()) {
         return;
@@ -236,7 +236,7 @@ void KPTTaskGeneralPanelBase::endDateChanged()
     }
 }
 
-void KPTTaskGeneralPanelBase::endTimeChanged( const QTime &time )
+void TaskGeneralPanelBase::endTimeChanged( const QTime &time )
 {
     if (!scheduleEndTime->isEnabled()) {
         return;
@@ -254,74 +254,74 @@ void KPTTaskGeneralPanelBase::endTimeChanged( const QTime &time )
     }
 }
 
-void KPTTaskGeneralPanelBase::scheduleTypeChanged( int value )
+void TaskGeneralPanelBase::scheduleTypeChanged( int value )
 {
      estimationTypeChanged(estimateType->currentItem());
 }
 
 
-QDateTime KPTTaskGeneralPanelBase::startDateTime()
+QDateTime TaskGeneralPanelBase::startDateTime()
 {
     return QDateTime(startDate(), startTime());
 }
 
 
-QDateTime KPTTaskGeneralPanelBase::endDateTime()
+QDateTime TaskGeneralPanelBase::endDateTime()
 {
     return QDateTime(endDate(), endTime());
 }
 
-void KPTTaskGeneralPanelBase::setStartTime( const QTime &time )
+void TaskGeneralPanelBase::setStartTime( const QTime &time )
 {
     scheduleStartTime->setTime(time);
 }
 
-void KPTTaskGeneralPanelBase::setEndTime( const QTime &time )
+void TaskGeneralPanelBase::setEndTime( const QTime &time )
 {
     scheduleEndTime->setTime(time);
 }
 
-QTime KPTTaskGeneralPanelBase::startTime() const
+QTime TaskGeneralPanelBase::startTime() const
 {
     return scheduleStartTime->time();
 }
 
-QTime KPTTaskGeneralPanelBase::endTime()
+QTime TaskGeneralPanelBase::endTime()
 {
     return scheduleEndTime->time();
 }
 
-QDate KPTTaskGeneralPanelBase::startDate()
+QDate TaskGeneralPanelBase::startDate()
 {
     return scheduleStartDate->date();
 }
 
 
-QDate KPTTaskGeneralPanelBase::endDate()
+QDate TaskGeneralPanelBase::endDate()
 {
     return scheduleEndDate->date();
 }
 
-void KPTTaskGeneralPanelBase::setStartDateTime( const QDateTime &dt )
+void TaskGeneralPanelBase::setStartDateTime( const QDateTime &dt )
 {
     setStartDate(dt.date());
     setStartTime(dt.time());
 }
 
 
-void KPTTaskGeneralPanelBase::setEndDateTime( const QDateTime &dt )
+void TaskGeneralPanelBase::setEndDateTime( const QDateTime &dt )
 {
     setEndDate(dt.date());
     setEndTime(dt.time());
 }
 
-void KPTTaskGeneralPanelBase::setStartDate( const QDate &date )
+void TaskGeneralPanelBase::setStartDate( const QDate &date )
 {
     scheduleStartDate->setDate(date);
 }
 
 
-void KPTTaskGeneralPanelBase::setEndDate( const QDate &date )
+void TaskGeneralPanelBase::setEndDate( const QDate &date )
 {
     scheduleEndDate->setDate(date);
 }

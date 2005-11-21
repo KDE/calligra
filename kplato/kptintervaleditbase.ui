@@ -1,9 +1,9 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>KPlato::KPTIntervalEditBase</class>
+<class>KPlato::IntervalEditBase</class>
 <author>Dag Andersen</author>
 <widget class="QWidget">
     <property name="name">
-        <cstring>KPTIntervalEditBase</cstring>
+        <cstring>IntervalEditBase</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -14,7 +14,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>KPTCalendarEditBase</string>
+        <string>CalendarEditBase</string>
     </property>
     <grid>
         <property name="name">

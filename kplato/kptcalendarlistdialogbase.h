@@ -37,15 +37,15 @@ class QLabel;
 namespace KPlato
 {
 
-class KPTCalendarEdit;
+class CalendarEdit;
 
-class KPTCalendarListDialogBase : public QWidget
+class CalendarListDialogBase : public QWidget
 {
     Q_OBJECT
 
 public:
-    KPTCalendarListDialogBase( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
-    ~KPTCalendarListDialogBase();
+    CalendarListDialogBase( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    ~CalendarListDialogBase();
 
     QListView* calendarList;
     QLineEdit* editName;
@@ -54,10 +54,10 @@ public:
     QLabel* textLabel2;
     QComboBox* baseCalendar;
    
-    KPTCalendarEdit* calendar;
+    CalendarEdit* calendar;
 
 protected:
-    QHBoxLayout* KPTCalendarListDialogBaseLayout;
+    QHBoxLayout* CalendarListDialogBaseLayout;
     QGridLayout* layout6;
     QHBoxLayout* layout10;
     QVBoxLayout* layout1;
@@ -69,4 +69,4 @@ protected slots:
 
 } //KPlato namespace
 
-#endif // KPTCALENDARLISTDIALOGBASE_H
+#endif // CALENDARLISTDIALOGBASE_H

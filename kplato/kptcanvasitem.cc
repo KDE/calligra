@@ -17,10 +17,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kpttask.h"
 #include "kptcanvasitem.h"
 #include "kptrelation.h"
 #include "kptpertcanvas.h"
-#include "kpttask.h"
 #include "kptganttview.h"
 
 #include <qpainter.h>
@@ -34,7 +34,7 @@
 namespace KPlato
 {
 
-KPTPertNodeItem::KPTPertNodeItem( KPTPertCanvas *view, KPTNode &node, int row, int col )
+PertNodeItem::PertNodeItem( PertCanvas *view, Node &node, int row, int col )
     : QCanvasPolygon(view->canvas()),
 	m_node(node),
 	m_row(row),
@@ -50,7 +50,7 @@ KPTPertNodeItem::KPTPertNodeItem( KPTPertCanvas *view, KPTNode &node, int row, i
     m_childRelations.setAutoDelete(true);
 }
 
-KPTPertNodeItem::~KPTPertNodeItem()
+PertNodeItem::~PertNodeItem()
 {
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
@@ -64,10 +64,10 @@ KPTPertNodeItem::~KPTPertNodeItem()
    hide();
  }
 
-int KPTPertNodeItem::rtti() const { return RTTI; }
-int KPTPertNodeItem::RTTI = 2000;
+int PertNodeItem::rtti() const { return RTTI; }
+int PertNodeItem::RTTI = 2000;
 
-void KPTPertNodeItem::setVisible(bool yes)
+void PertNodeItem::setVisible(bool yes)
 {
     //kdDebug()<<k_funcinfo<<m_node.name()<<endl;
 	QCanvasPolygon::setVisible(yes);
@@ -82,14 +82,14 @@ void KPTPertNodeItem::setVisible(bool yes)
     }
 }
 
-void KPTPertNodeItem::move(KPTPertCanvas *view, int row, int col)
+void PertNodeItem::move(PertCanvas *view, int row, int col)
 {
     //kdDebug()<<k_funcinfo<<endl;
     m_row = row; m_col = col;
     view->mapNode(this);
 
     // Now map my children
-    QPtrListIterator<Relation> it(m_childRelations);
+    QPtrListIterator<PertNodeRelation> it(m_childRelations);
     for (; it.current(); ++it)
     {
         view->mapChildNode(this, it.current()->childItem, it.current()->relation->type());
@@ -107,7 +107,7 @@ void KPTPertNodeItem::move(KPTPertCanvas *view, int row, int col)
     //kdDebug()<<k_funcinfo<<m_node.name()<<" moved to row,col=("<<m_row<<","<<m_col<<")"<<endl;
 }
 
-void KPTPertNodeItem::drawShape(QPainter &p)
+void PertNodeItem::drawShape(QPainter &p)
 {
     //QPen pen(pen());
 	if (isSelected())
@@ -122,34 +122,34 @@ void KPTPertNodeItem::drawShape(QPainter &p)
 	//setPen(pen);
 }
 
-QPoint KPTPertNodeItem::exitPoint(KPTRelation::Type type) const
+QPoint PertNodeItem::exitPoint(Relation::Type type) const
 {
     QPoint ret;
     switch(type)
 	{
-	    case KPTRelation::FinishStart:
-		case KPTRelation::FinishFinish:
+	    case Relation::FinishStart:
+		case Relation::FinishFinish:
 		    ret = m_right + QPoint(pen().width(), 0);
 			break;
-		case KPTRelation::StartStart:
+		case Relation::StartStart:
 		    ret = m_left + QPoint(0, 4);
 			break;
 	}
 	return ret;
 }
 
-QPoint KPTPertNodeItem::entryPoint(KPTRelation::Type type) const
+QPoint PertNodeItem::entryPoint(Relation::Type type) const
 {
     QPoint ret;
     switch(type)
 	{
-	    case KPTRelation::FinishStart:
+	    case Relation::FinishStart:
 		    ret = m_left - QPoint(pen().width(), 0);
 			break;
-		case KPTRelation::FinishFinish:
+		case Relation::FinishFinish:
 		    ret = m_right - QPoint(pen().width(), 4);
 			break;
-		case KPTRelation::StartStart:
+		case Relation::StartStart:
 		    ret = m_left  - QPoint(pen().width(), 0);
 			break;
 	}
@@ -157,15 +157,15 @@ QPoint KPTPertNodeItem::entryPoint(KPTRelation::Type type) const
 }
 
 #ifndef NDEBUG
-void KPTPertNodeItem::printDebug( int /*info*/ )
+void PertNodeItem::printDebug( int /*info*/ )
 {
 }
 #endif
 
-////////////////////   KPTPertProjectItem   //////////////////////////
+////////////////////   PertProjectItem   //////////////////////////
 
-KPTPertProjectItem::KPTPertProjectItem(KPTPertCanvas *view, KPTNode &node, int row, int col)
-    : KPTPertNodeItem(view, node, row, col)
+PertProjectItem::PertProjectItem(PertCanvas *view, Node &node, int row, int col)
+    : PertNodeItem(view, node, row, col)
 {
     //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
 
@@ -177,28 +177,28 @@ KPTPertProjectItem::KPTPertProjectItem(KPTPertCanvas *view, KPTNode &node, int r
 	setPen(QPen(Qt::cyan, 2));
 }
 
-KPTPertProjectItem::~KPTPertProjectItem()
+PertProjectItem::~PertProjectItem()
 {
 }
 
-int KPTPertProjectItem::rtti() const { return RTTI; }
-int KPTPertProjectItem::RTTI = 2001;
+int PertProjectItem::rtti() const { return RTTI; }
+int PertProjectItem::RTTI = 2001;
 
 #ifndef NDEBUG
-void KPTPertProjectItem::printDebug( int /*info*/ )
+void PertProjectItem::printDebug( int /*info*/ )
 {
 }
 #endif
 
 
-////////////////////   KPTPertTaskItem   //////////////////////////
+////////////////////   PertTaskItem   //////////////////////////
 
-KPTPertTaskItem::KPTPertTaskItem(KPTPertCanvas *view, KPTNode &node, int row, int col)
-    : KPTPertNodeItem(view, node, row, col)
+PertTaskItem::PertTaskItem(PertCanvas *view, Node &node, int row, int col)
+    : PertNodeItem(view, node, row, col)
 {
     //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
 	QPointArray a;
-	if (node.type() == KPTNode::Type_Summarytask)
+	if (node.type() == Node::Type_Summarytask)
 	{
 	    a.putPoints(0, 5, m_x+6, m_y, m_x+m_width, m_y, m_x+m_width-6, m_y+m_height, m_x, m_y+m_height, m_x+6, m_y);
     	setPen(QPen(Qt::cyan, 2));
@@ -212,25 +212,25 @@ KPTPertTaskItem::KPTPertTaskItem(KPTPertCanvas *view, KPTNode &node, int row, in
 
 }
 
-KPTPertTaskItem::~KPTPertTaskItem()
+PertTaskItem::~PertTaskItem()
 {
 }
 
-int KPTPertTaskItem::rtti() const { return RTTI; }
-int KPTPertTaskItem::RTTI = 2002;
+int PertTaskItem::rtti() const { return RTTI; }
+int PertTaskItem::RTTI = 2002;
 
 
 #ifndef NDEBUG
-void KPTPertTaskItem::printDebug( int /*info*/ )
+void PertTaskItem::printDebug( int /*info*/ )
 {
 }
 #endif
 
 
-////////////////////   KPTPertMilestoneItem   //////////////////////////
+////////////////////   PertMilestoneItem   //////////////////////////
 
-KPTPertMilestoneItem::KPTPertMilestoneItem(KPTPertCanvas *view, KPTNode &node, int row, int col)
-    : KPTPertNodeItem(view, node, row, col)
+PertMilestoneItem::PertMilestoneItem(PertCanvas *view, Node &node, int row, int col)
+    : PertNodeItem(view, node, row, col)
 {
     //kdDebug()<<k_funcinfo<<"Node="<<node.name()<<" ("<<row<<","<<col<<")"<<endl;
 
@@ -249,23 +249,23 @@ KPTPertMilestoneItem::KPTPertMilestoneItem(KPTPertCanvas *view, KPTNode &node, i
 	setPen(QPen(Qt::blue, 2));
 }
 
-KPTPertMilestoneItem::~KPTPertMilestoneItem()
+PertMilestoneItem::~PertMilestoneItem()
 {
 }
 
-int KPTPertMilestoneItem::rtti() const { return RTTI; }
-int KPTPertMilestoneItem::RTTI = 2003;
+int PertMilestoneItem::rtti() const { return RTTI; }
+int PertMilestoneItem::RTTI = 2003;
 
 #ifndef NDEBUG
-void KPTPertMilestoneItem::printDebug( int /*info*/ )
+void PertMilestoneItem::printDebug( int /*info*/ )
 {
 }
 #endif
 
 
-////////////////////   KPTPertRelationItem   //////////////////////////
+////////////////////   PertRelationItem   //////////////////////////
 
-KPTPertRelationItem::KPTPertRelationItem( KPTPertCanvas *view, KPTPertNodeItem *parent, KPTPertNodeItem *child, KPTRelation *rel)
+PertRelationItem::PertRelationItem( PertCanvas *view, PertNodeItem *parent, PertNodeItem *child, Relation *rel)
     : QCanvasPolygon(view->canvas()),
     m_view(view),
     m_rel(rel),
@@ -277,21 +277,21 @@ KPTPertRelationItem::KPTPertRelationItem( KPTPertCanvas *view, KPTPertNodeItem *
     setVisible(true);
 }
 
-KPTPertRelationItem::~KPTPertRelationItem()
+PertRelationItem::~PertRelationItem()
 {
     hide();
 }
 
-int KPTPertRelationItem::rtti() const { return RTTI; }
-int KPTPertRelationItem::RTTI = 2020;
+int PertRelationItem::rtti() const { return RTTI; }
+int PertRelationItem::RTTI = 2020;
 
-void KPTPertRelationItem::draw()
+void PertRelationItem::draw()
 {
     //kdDebug()<<k_funcinfo<<endl;
 	// Some "rules":
-	//  a) KPTRelation::FinishStart: child column > parent column
-	//  b) KPTRelation::FinishFinish: child column >= parent column
-	//  c) KPTRelation::StartStart: child column >= parent column
+	//  a) Relation::FinishStart: child column > parent column
+	//  b) Relation::FinishFinish: child column >= parent column
+	//  c) Relation::StartStart: child column >= parent column
 	//  d) Child row can be >= parent row
 
 	wgap = m_view->verticalGap();
@@ -310,13 +310,13 @@ void KPTPertRelationItem::draw()
 
 	switch (type())
 	{
-	    case KPTRelation::FinishStart:
+	    case Relation::FinishStart:
 		    setFinishStartPoints();
 		    break;
-	    case KPTRelation::FinishFinish:
+	    case Relation::FinishFinish:
 		    setFinishFinishPoints();
 		    break;
-	    case KPTRelation::StartStart:
+	    case Relation::StartStart:
 		    setStartStartPoints();
 		    break;
 	}
@@ -337,7 +337,7 @@ void KPTPertRelationItem::draw()
 	setZ(45);
 
 /*#ifndef NDEBUG
-	kdDebug()<<" Relation from parent: "<<m_rel->parent()->name()<<" to child: "<<m_rel->child()->name()<<endl;
+	kdDebug()<<" PertNodeRelation from parent: "<<m_rel->parent()->name()<<" to child: "<<m_rel->child()->name()<<endl;
 	QPointArray pa = poly;
     for (int i = 0; i < pa.size(); ++i)
         kdDebug()<<"            pa["<<i<<"]="<<pa[i].x()<<","<<pa[i].y()<<endl;
@@ -345,10 +345,10 @@ void KPTPertRelationItem::draw()
 
 }
 
-void KPTPertRelationItem::setFinishStartPoints()
+void PertRelationItem::setFinishStartPoints()
 {
-	QPoint parentPoint = m_parentItem->exitPoint(KPTRelation::FinishStart);
-	QPoint childPoint = m_childItem->entryPoint(KPTRelation::FinishStart);
+	QPoint parentPoint = m_parentItem->exitPoint(Relation::FinishStart);
+	QPoint childPoint = m_childItem->entryPoint(Relation::FinishStart);
 
 	QPointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
@@ -427,11 +427,11 @@ void KPTPertRelationItem::setFinishStartPoints()
 	setPoints(a);
 }
 
-void KPTPertRelationItem::setFinishFinishPoints()
+void PertRelationItem::setFinishFinishPoints()
 {
     //kdDebug()<<k_funcinfo<<endl;
-	QPoint parentPoint = m_parentItem->exitPoint(KPTRelation::FinishFinish);
-	QPoint childPoint = m_childItem->entryPoint(KPTRelation::FinishFinish);
+	QPoint parentPoint = m_parentItem->exitPoint(Relation::FinishFinish);
+	QPoint childPoint = m_childItem->entryPoint(Relation::FinishFinish);
 
 	QPointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
@@ -511,11 +511,11 @@ void KPTPertRelationItem::setFinishFinishPoints()
 	setPoints(a);
 }
 
-void KPTPertRelationItem::setStartStartPoints()
+void PertRelationItem::setStartStartPoints()
 {
     //kdDebug()<<k_funcinfo<<endl;
-	QPoint parentPoint = m_parentItem->exitPoint(KPTRelation::StartStart);
-	QPoint childPoint = m_childItem->entryPoint(KPTRelation::StartStart);
+	QPoint parentPoint = m_parentItem->exitPoint(Relation::StartStart);
+	QPoint childPoint = m_childItem->entryPoint(Relation::StartStart);
 
 	QPointArray a;
 	a.putPoints(0, 1, parentPoint.x(), parentPoint.y());
@@ -583,7 +583,7 @@ void KPTPertRelationItem::setStartStartPoints()
 	setPoints(a);
 }
 
-void KPTPertRelationItem::drawShape(QPainter &p)
+void PertRelationItem::drawShape(QPainter &p)
 {
     //kdDebug()<<k_funcinfo<<" "<<m_rel->parent()->name()<<" to "<<m_rel->child()->name()<<endl;
     // cannot use polygon's drawShape() as it doesn't use the pen
@@ -606,7 +606,7 @@ void KPTPertRelationItem::drawShape(QPainter &p)
 	p.drawLine(a[pos], pnt);
 }
 
-QPointArray KPTPertRelationItem::areaPoints () const
+QPointArray PertRelationItem::areaPoints () const
 {
     QPointArray pa(4);
     int pw = (pen().width()+1)/2;
@@ -622,17 +622,17 @@ QPointArray KPTPertRelationItem::areaPoints () const
     return pa;
 }
 
-bool KPTPertRelationItem::rowFree(int row, int startCol, int endCol)
+bool PertRelationItem::rowFree(int row, int startCol, int endCol)
 {
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
     for (; it != list.end(); ++it)
     {
-		if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
-			(*it)->rtti() == KPTPertTaskItem::RTTI  ||
-			(*it)->rtti() == KPTPertMilestoneItem::RTTI )
+		if ( (*it)->rtti() == PertProjectItem::RTTI ||
+			(*it)->rtti() == PertTaskItem::RTTI  ||
+			(*it)->rtti() == PertMilestoneItem::RTTI )
 		{
-		    KPTPertNodeItem *item = (KPTPertNodeItem *)(*it);
+		    PertNodeItem *item = (PertNodeItem *)(*it);
             if ( item->row() == row )
 			{
 			    int col = item->column();
@@ -648,21 +648,21 @@ bool KPTPertRelationItem::rowFree(int row, int startCol, int endCol)
 }
 
 #ifndef NDEBUG
-void KPTPertRelationItem::printDebug( int /*info*/ )
+void PertRelationItem::printDebug( int /*info*/ )
 {
 }
 #endif
 
-////////////////////   KPTItemBase   //////////////////////////
-KDGanttViewTaskLink::LinkType KPTItemBase::kdLinkType(int relationType) {
+////////////////////   ItemBase   //////////////////////////
+KDGanttViewTaskLink::LinkType ItemBase::kdLinkType(int relationType) {
     switch (relationType) {
-        case KPTRelation::FinishStart:
+        case Relation::FinishStart:
             return KDGanttViewTaskLink::FinishStart;
             break;
-        case KPTRelation::FinishFinish:
+        case Relation::FinishFinish:
             return KDGanttViewTaskLink::FinishFinish;
             break;
-        case KPTRelation::StartStart:
+        case Relation::StartStart:
             return KDGanttViewTaskLink::StartStart;
             break;
         default:
@@ -671,10 +671,10 @@ KDGanttViewTaskLink::LinkType KPTItemBase::kdLinkType(int relationType) {
     return KDGanttViewTaskLink::None;
 }
 
-////////////////////   KPTGanttViewSummaryItem   //////////////////////////
+////////////////////   GanttViewSummaryItem   //////////////////////////
 
 
-KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode *node)
+GanttViewSummaryItem::GanttViewSummaryItem(KDGanttView *parent, Node *node)
     : KDGanttViewSummaryItem(parent, node->name()),
       m_node(node),
       m_view(parent)
@@ -683,24 +683,24 @@ KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttView *parent, KPTNode *n
     setOpen(true);
 }
 
-KPTGanttViewSummaryItem::KPTGanttViewSummaryItem(KDGanttViewItem *parent, KPTNode *node)
+GanttViewSummaryItem::GanttViewSummaryItem(KDGanttViewItem *parent, Node *node)
     : KDGanttViewSummaryItem(parent, node->name()),
       m_node(node),
       m_view(0)
 {
     m_drawn = false;
-    KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
+    GanttViewSummaryItem *p = dynamic_cast<GanttViewSummaryItem*>(parent);
     if (p)
         m_view = p->ganttView();
     setExpandable(true);
     setOpen(true);
 }
 
-void KPTGanttViewSummaryItem::insertRelations(KPTGanttView *view)
+void GanttViewSummaryItem::insertRelations(GanttView *view)
 {
     //kdDebug()<<k_funcinfo<<endl;
 
-    QPtrListIterator<KPTRelation> it(m_node->dependChildNodes());
+    QPtrListIterator<Relation> it(m_node->dependChildNodes());
     for (; it.current(); ++it)
     {
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
@@ -710,14 +710,14 @@ void KPTGanttViewSummaryItem::insertRelations(KPTGanttView *view)
             //TODO i18n
             QString t = QString("From: %1").arg(this->listViewText(0));
             t += QString("\nTo: %1").arg(child->listViewText(0));
-            t += QString("\nLag: %1").arg(it.current()->lag().toString(KPTDuration::Format_Hour));
+            t += QString("\nLag: %1").arg(it.current()->lag().toString(Duration::Format_Hour));
             link->setTooltipText(t);
             view->addTaskLink(link);
         }
     }
 }
 
-KDGanttViewItem *KPTGanttViewSummaryItem::find(KPTNode *node)
+KDGanttViewItem *GanttViewSummaryItem::find(Node *node)
 {
     //kdDebug()<<k_funcinfo<<endl;
     if (m_node == node)
@@ -731,55 +731,55 @@ KDGanttViewItem *KPTGanttViewSummaryItem::find(KPTNode *node)
 }
 
 
-KDGanttViewItem *KPTGanttViewSummaryItem::find(KDGanttViewItem *item, KPTNode *node)
+KDGanttViewItem *GanttViewSummaryItem::find(KDGanttViewItem *item, Node *node)
 {
     if (!item)
         return 0;
 
     if (item->type() == Event)
     {
-        KPTGanttViewEventItem *i = static_cast<KPTGanttViewEventItem *>(item);
+        GanttViewEventItem *i = static_cast<GanttViewEventItem *>(item);
         return i->find(node);
     }
     else if (item->type() == Task)
     {
-        KPTGanttViewTaskItem *i = static_cast<KPTGanttViewTaskItem *>(item);
+        GanttViewTaskItem *i = static_cast<GanttViewTaskItem *>(item);
         return i->find(node);
     }
     else if (item->type() == Summary)
     {
-        KPTGanttViewSummaryItem *i = static_cast<KPTGanttViewSummaryItem *>(item);
+        GanttViewSummaryItem *i = static_cast<GanttViewSummaryItem *>(item);
         return i->find(node);
     }
     return 0;
 }
 
-////////////////////   KPTGanttViewTaskItem   //////////////////////////
+////////////////////   GanttViewTaskItem   //////////////////////////
 
 
-KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttView *parent, KPTTask *task)
+GanttViewTaskItem::GanttViewTaskItem(KDGanttView *parent, KPlato::Task *task)
     : KDGanttViewTaskItem(parent, task->name()),
       m_task(task),
       m_view(parent)
 {
 }
 
-KPTGanttViewTaskItem::KPTGanttViewTaskItem(KDGanttViewItem *parent, KPTTask *task)
+GanttViewTaskItem::GanttViewTaskItem(KDGanttViewItem *parent, KPlato::Task *task)
     : KDGanttViewTaskItem(parent, task->name()),
       m_task(task),
       m_view()
 {
     m_drawn = false;
-    KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
+    GanttViewSummaryItem *p = dynamic_cast<GanttViewSummaryItem*>(parent);
     if (p)
         m_view = p->ganttView();
 }
 
-void KPTGanttViewTaskItem::insertRelations(KPTGanttView *view)
+void GanttViewTaskItem::insertRelations(GanttView *view)
 {
     //kdDebug()<<k_funcinfo<<endl;
 
-    QPtrListIterator<KPTRelation> it(m_task->dependChildNodes());
+    QPtrListIterator<Relation> it(m_task->dependChildNodes());
     for (; it.current(); ++it)
     {
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
@@ -789,14 +789,14 @@ void KPTGanttViewTaskItem::insertRelations(KPTGanttView *view)
             //TODO i18n
             QString t = QString("From: %1").arg(this->listViewText(0));
             t += QString("\nTo: %1").arg(child->listViewText(0));
-            t += QString("\nLag: %1").arg(it.current()->lag().toString(KPTDuration::Format_Hour));
+            t += QString("\nLag: %1").arg(it.current()->lag().toString(Duration::Format_Hour));
             link->setTooltipText(t);
             view->addTaskLink(link);
         }
     }
 }
 
-KDGanttViewItem *KPTGanttViewTaskItem::find(KPTNode *node)
+KDGanttViewItem *GanttViewTaskItem::find(Node *node)
 {
     //kdDebug()<<k_funcinfo<<endl;
     if (m_task == node)
@@ -810,56 +810,56 @@ KDGanttViewItem *KPTGanttViewTaskItem::find(KPTNode *node)
 }
 
 
-KDGanttViewItem *KPTGanttViewTaskItem::find(KDGanttViewItem *item, KPTNode *node)
+KDGanttViewItem *GanttViewTaskItem::find(KDGanttViewItem *item, Node *node)
 {
     if (!item)
         return 0;
 
     if (item->type() == Event)
     {
-        KPTGanttViewEventItem *i = static_cast<KPTGanttViewEventItem *>(item);
+        GanttViewEventItem *i = static_cast<GanttViewEventItem *>(item);
         return i->find(node);
     }
     else if (item->type() == Task)
     {
-        KPTGanttViewTaskItem *i= static_cast<KPTGanttViewTaskItem *>(item);
+        GanttViewTaskItem *i= static_cast<GanttViewTaskItem *>(item);
         return i->find(node);
     }
     else if (item->type() == Summary)
     {
-        KPTGanttViewSummaryItem *i = static_cast<KPTGanttViewSummaryItem *>(item);
+        GanttViewSummaryItem *i = static_cast<GanttViewSummaryItem *>(item);
         return i->find(node);
     }
     return 0; // avoid warning
 }
 
-////////////////////   KPTGanttViewEventItem   //////////////////////////
+////////////////////   GanttViewEventItem   //////////////////////////
 
 
-KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttView *parent, KPTTask *task)
+GanttViewEventItem::GanttViewEventItem(KDGanttView *parent, KPlato::Task *task)
     : KDGanttViewEventItem(parent, task->name()),
       m_task(task),
       m_view(parent)
 {
 }
 
-KPTGanttViewEventItem::KPTGanttViewEventItem(KDGanttViewItem *parent, KPTTask *task)
+GanttViewEventItem::GanttViewEventItem(KDGanttViewItem *parent, KPlato::Task *task)
     : KDGanttViewEventItem(parent, task->name()),
       m_task(task),
       m_view()
 {
     m_drawn = false;
-    KPTGanttViewSummaryItem *p = dynamic_cast<KPTGanttViewSummaryItem*>(parent);
+    GanttViewSummaryItem *p = dynamic_cast<GanttViewSummaryItem*>(parent);
     if (p)
         m_view = p->ganttView();
 }
 
 
-void KPTGanttViewEventItem::insertRelations(KPTGanttView *view)
+void GanttViewEventItem::insertRelations(GanttView *view)
 {
     //kdDebug()<<k_funcinfo<<endl;
 
-    QPtrListIterator<KPTRelation> it(m_task->dependChildNodes());
+    QPtrListIterator<Relation> it(m_task->dependChildNodes());
     for (; it.current(); ++it)
     {
         KDGanttViewItem *child = find(m_view->firstChild(), it.current()->child());
@@ -869,14 +869,14 @@ void KPTGanttViewEventItem::insertRelations(KPTGanttView *view)
             //TODO i18n
             QString t = QString("From: %1").arg(this->listViewText(0));
             t += QString("\nTo: %1").arg(child->listViewText(0));
-            t += QString("\nLag: %1").arg(it.current()->lag().toString(KPTDuration::Format_Hour));
+            t += QString("\nLag: %1").arg(it.current()->lag().toString(Duration::Format_Hour));
             link->setTooltipText(t);
             view->addTaskLink(link);
         }
     }
 }
 
-KDGanttViewItem *KPTGanttViewEventItem::find(KPTNode *node)
+KDGanttViewItem *GanttViewEventItem::find(Node *node)
 {
     //kdDebug()<<k_funcinfo<<endl;
     if (m_task == node)
@@ -890,24 +890,24 @@ KDGanttViewItem *KPTGanttViewEventItem::find(KPTNode *node)
 }
 
 
-KDGanttViewItem *KPTGanttViewEventItem::find(KDGanttViewItem *item, KPTNode *node)
+KDGanttViewItem *GanttViewEventItem::find(KDGanttViewItem *item, Node *node)
 {
     if (!item)
         return 0;
 
     if (item->type() == Event)
     {
-        KPTGanttViewEventItem *i = static_cast<KPTGanttViewEventItem *>(item);
+        GanttViewEventItem *i = static_cast<GanttViewEventItem *>(item);
         return i->find(node);
     }
     else if (item->type() == Task)
     {
-        KPTGanttViewTaskItem *i = static_cast<KPTGanttViewTaskItem *>(item);
+        GanttViewTaskItem *i = static_cast<GanttViewTaskItem *>(item);
         return i->find(node);
     }
     else if (item->type() == Summary)
     {
-        KPTGanttViewSummaryItem *i = static_cast<KPTGanttViewSummaryItem *>(item);
+        GanttViewSummaryItem *i = static_cast<GanttViewSummaryItem *>(item);
         return i->find(node);
     }
     return 0;

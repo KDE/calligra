@@ -39,15 +39,15 @@ namespace KPlato
 {
 
 /*
- *  Constructs a KPTCalendarListDialogBase as a child of 'parent', with the
+ *  Constructs a CalendarListDialogBase as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  */
-KPTCalendarListDialogBase::KPTCalendarListDialogBase( QWidget* parent, const char* name, WFlags fl )
+CalendarListDialogBase::CalendarListDialogBase( QWidget* parent, const char* name, WFlags fl )
     : QWidget( parent, name, fl )
 {
     if ( !name )
-	setName( "KPTCalendarListDialogBase" );
-    KPTCalendarListDialogBaseLayout = new QHBoxLayout( this, 11, 6, "KPTCalendarListDialogBaseLayout");
+	setName( "CalendarListDialogBase" );
+    CalendarListDialogBaseLayout = new QHBoxLayout( this, 11, 6, "CalendarListDialogBaseLayout");
 
     layout6 = new QGridLayout( 0, 1, 1, 0, 6, "layout6");
 
@@ -71,7 +71,7 @@ KPTCalendarListDialogBase::KPTCalendarListDialogBase( QWidget* parent, const cha
     bAdd->setMaximumWidth(75);
 
     layout6->addWidget( bAdd, 2, 0 );
-    KPTCalendarListDialogBaseLayout->addLayout( layout6 );
+    CalendarListDialogBaseLayout->addLayout( layout6 );
     
     layout1 = new QVBoxLayout( 0, 0, 6, "layout1"); // 
     layout10 = new QHBoxLayout( 0, 0, 6, "layout10"); // label+basecalendar
@@ -83,12 +83,12 @@ KPTCalendarListDialogBase::KPTCalendarListDialogBase( QWidget* parent, const cha
     baseCalendar = new QComboBox( FALSE, this, "baseCalendar" );
     layout10->addWidget( baseCalendar );
     
-    KPTCalendarListDialogBaseLayout->addLayout( layout1 );
+    CalendarListDialogBaseLayout->addLayout( layout1 );
 
-    calendar = new KPTCalendarEdit( this, "calendar" );
+    calendar = new CalendarEdit( this, "calendar" );
     layout1->addWidget( calendar );
-    KPTCalendarListDialogBaseLayout->setStretchFactor(layout1, 1);
-    KPTCalendarListDialogBaseLayout->setStretchFactor(calendar, 2);
+    CalendarListDialogBaseLayout->setStretchFactor(layout1, 1);
+    CalendarListDialogBaseLayout->setStretchFactor(calendar, 2);
     languageChange();
     resize( QSize(598, 350).expandedTo(minimumSizeHint()) );
     clearWState( WState_Polished );
@@ -98,7 +98,7 @@ KPTCalendarListDialogBase::KPTCalendarListDialogBase( QWidget* parent, const cha
 /*
  *  Destroys the object and frees any allocated resources
  */
-KPTCalendarListDialogBase::~KPTCalendarListDialogBase()
+CalendarListDialogBase::~CalendarListDialogBase()
 {
     // no need to delete child widgets, Qt does it all for us
 }
@@ -107,9 +107,9 @@ KPTCalendarListDialogBase::~KPTCalendarListDialogBase()
  *  Sets the strings of the subwidgets using the current
  *  language.
  */
-void KPTCalendarListDialogBase::languageChange()
+void CalendarListDialogBase::languageChange()
 {
-    setCaption( tr2i18n( "KPTCalendarListDialogBase" ) );
+    setCaption( tr2i18n( "CalendarListDialogBase" ) );
     calendarList->header()->setLabel( 0, tr2i18n( "Calendar name" ) );
     bDelete->setText( tr2i18n( "Remove" ) );
     bAdd->setText( tr2i18n( "Add" ) );

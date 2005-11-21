@@ -1,9 +1,9 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPlato::KPTTaskGeneralPanelBase</class>
+<class>KPlato::TaskGeneralPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">
-        <cstring>KPTTaskGeneralPanelBase</cstring>
+        <cstring>TaskGeneralPanelBase</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -14,7 +14,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>KPTTaskGeneralPanelBase</string>
+        <string>TaskGeneralPanelBase</string>
     </property>
     <vbox>
         <property name="name">
@@ -298,7 +298,7 @@
                         <cstring>scheduleEndTime</cstring>
                     </property>
                 </widget>
-                <widget class="KPlato::KPTDurationWidget" row="2" column="2" rowspan="1" colspan="2">
+                <widget class="KPlato::DurationWidget" row="2" column="2" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>estimate</cstring>
                     </property>
@@ -379,7 +379,7 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>KPlato::KPTDurationWidget</class>
+        <class>KPlato::DurationWidget</class>
         <header location="local">kptdurationwidget.h</header>
         <sizehint>
             <width>0</width>
@@ -395,7 +395,7 @@
         <pixmap>image0</pixmap>
         <signal>valueChanged()</signal>
         <slot access="public" specifier="">slot()</slot>
-        <slot access="public" specifier="">setValue( const KPLato::KPTDuration &amp; newDuration )</slot>
+        <slot access="public" specifier="">setValue( const KPLato::Duration &amp; newDuration )</slot>
         <slot access="public" specifier="">slot()</slot>
         <slot access="public" specifier="">handleFocus( int field )</slot>
     </customwidget>
@@ -409,121 +409,121 @@
     <connection>
         <sender>scheduleType</sender>
         <signal>activated(int)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>enableDateTime(int)</slot>
     </connection>
     <connection>
         <sender>pessimisticValue</sender>
         <signal>valueChanged(int)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>optimisticValue</sender>
         <signal>valueChanged(int)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>estimateType</sender>
         <signal>activated(int)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>estimationTypeChanged(int)</slot>
     </connection>
     <connection>
         <sender>namefield</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>idfield</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>descriptionfield</sender>
         <signal>textChanged()</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>leaderfield</sender>
         <signal>textChanged(const QString&amp;)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>scheduleType</sender>
         <signal>activated(int)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>chooseLeader</sender>
         <signal>clicked()</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>changeLeader()</slot>
     </connection>
     <connection>
         <sender>estimate</sender>
         <signal>valueChanged()</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>scheduleType</sender>
         <signal>activated(int)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>scheduleTypeChanged(int)</slot>
     </connection>
     <connection>
         <sender>scheduleEndDate</sender>
         <signal>changed(QDate)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>scheduleEndTime</sender>
         <signal>valueChanged(const QTime&amp;)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>scheduleStartDate</sender>
         <signal>changed(QDate)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>scheduleStartTime</sender>
         <signal>valueChanged(const QTime&amp;)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>checkAllFieldsFilled()</slot>
     </connection>
     <connection>
         <sender>scheduleStartTime</sender>
         <signal>valueChanged(const QTime&amp;)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>startTimeChanged(const QTime&amp;)</slot>
     </connection>
     <connection>
         <sender>scheduleEndTime</sender>
         <signal>valueChanged(const QTime&amp;)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>endTimeChanged(const QTime&amp;)</slot>
     </connection>
     <connection>
         <sender>scheduleStartDate</sender>
         <signal>changed(QDate)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>startDateChanged()</slot>
     </connection>
     <connection>
         <sender>scheduleEndDate</sender>
         <signal>changed(QDate)</signal>
-        <receiver>KPTTaskGeneralPanelBase</receiver>
+        <receiver>TaskGeneralPanelBase</receiver>
         <slot>endDateChanged()</slot>
     </connection>
 </connections>
@@ -568,7 +568,7 @@
     <slot>setPessimistic( int value )</slot>
     <slot>enableDateTime( int scheduleType )</slot>
     <slot>estimationTypeChanged( int type )</slot>
-    <slot>setEstimate( const KPTDuration &amp; duration )</slot>
+    <slot>setEstimate( const Duration &amp; duration )</slot>
     <slot>setEstimateType( int type )</slot>
     <slot>checkAllFieldsFilled()</slot>
     <slot>setEstimateFields( int mask )</slot>
@@ -591,7 +591,7 @@
     <function returnType="int">estimationType() const</function>
     <function returnType="int">optimistic() const</function>
     <function returnType="int">pessimistic()</function>
-    <function returnType="KPTDuration">estimationValue()</function>
+    <function returnType="Duration">estimationValue()</function>
     <function returnType="QDateTime">startDateTime()</function>
     <function returnType="QDateTime">endDateTime()</function>
     <function returnType="QTime">startTime() const</function>

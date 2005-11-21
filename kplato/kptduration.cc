@@ -29,18 +29,18 @@
 namespace KPlato
 {
 
-// Set the value of KPTDuration::zeroDuration to zero.
-const KPTDuration KPTDuration::zeroDuration( 0, 0, 0 );
+// Set the value of Duration::zeroDuration to zero.
+const Duration Duration::zeroDuration( 0, 0, 0 );
 
-KPTDuration::KPTDuration() {
+Duration::Duration() {
     m_ms = 0;
 }
 
-KPTDuration::KPTDuration(const KPTDuration &d) {
+Duration::Duration(const Duration &d) {
     m_ms = d.m_ms;
 }
 
-KPTDuration::KPTDuration(unsigned d, unsigned h, unsigned m, unsigned s, unsigned ms) {
+Duration::Duration(unsigned d, unsigned h, unsigned m, unsigned s, unsigned ms) {
     m_ms = ms;
     m_ms += static_cast<Q_INT64>(s) * 1000; // cast to avoid potential overflow problem
     m_ms += static_cast<Q_INT64>(m) * 60 * 1000;
@@ -48,18 +48,18 @@ KPTDuration::KPTDuration(unsigned d, unsigned h, unsigned m, unsigned s, unsigne
     m_ms += static_cast<Q_INT64>(d) * 24 * 60 * 60 * 1000;
 }
 
-KPTDuration::KPTDuration(Q_INT64 seconds) {
+Duration::Duration(Q_INT64 seconds) {
     m_ms = seconds * 1000;
 }
 
-KPTDuration::~KPTDuration() {
+Duration::~Duration() {
 }
 
-void KPTDuration::add(const KPTDuration &delta) {
+void Duration::add(const Duration &delta) {
     m_ms += delta.m_ms;
 }
 
-void KPTDuration::add(Q_INT64 delta) {
+void Duration::add(Q_INT64 delta) {
     Q_INT64 tmp = m_ms + delta;
     if (tmp < 0) {
         kdDebug()<<k_funcinfo<<"Underflow"<<(long int)delta<<" from "<<this->toString()<<endl;
@@ -69,7 +69,7 @@ void KPTDuration::add(Q_INT64 delta) {
     m_ms = tmp;
 }
 
-void KPTDuration::subtract(const KPTDuration &delta) {
+void Duration::subtract(const Duration &delta) {
     if (m_ms < delta.m_ms) {
         kdDebug()<<k_funcinfo<<"Underflow"<<delta.toString()<<" from "<<this->toString()<<endl;
         m_ms = 0;
@@ -78,8 +78,8 @@ void KPTDuration::subtract(const KPTDuration &delta) {
     m_ms -= delta.m_ms;
 }
 
-KPTDuration KPTDuration::operator*(int unit) const {
-    KPTDuration dur(*this);
+Duration Duration::operator*(int unit) const {
+    Duration dur(*this);
     if (unit < 0) {
         kdDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
     }
@@ -89,8 +89,8 @@ KPTDuration KPTDuration::operator*(int unit) const {
     return dur;
 }
 
-KPTDuration KPTDuration::operator/(int unit) const {
-    KPTDuration dur(*this);
+Duration Duration::operator/(int unit) const {
+    Duration dur(*this);
     if (unit <= 0) {
         kdDebug()<<k_funcinfo<<"Underflow"<<unit<<" from "<<this->toString()<<endl;
     }
@@ -100,7 +100,7 @@ KPTDuration KPTDuration::operator/(int unit) const {
     return dur;
 }
 
-double KPTDuration::operator/(const KPTDuration &d) const {
+double Duration::operator/(const Duration &d) const {
     if (d == zeroDuration) {
         kdDebug()<<k_funcinfo<<"Devide by zero: "<<this->toString()<<endl;
         return 0.0;
@@ -108,13 +108,13 @@ double KPTDuration::operator/(const KPTDuration &d) const {
     return (double)(m_ms) / (double)(d.m_ms);
 }
 
-bool KPTDuration::isCloseTo(const KPTDuration &d) const {
+bool Duration::isCloseTo(const Duration &d) const {
     Q_INT64 limit = 30000;
     Q_INT64 delta = m_ms - d.m_ms;
     return (delta >= 0) ? (delta < limit) : (-delta < limit);
 }
 
-QString KPTDuration::toString(Format format) const {
+QString Duration::toString(Format format) const {
     Q_INT64 ms;
     double days;
     unsigned hours;
@@ -159,7 +159,7 @@ QString KPTDuration::toString(Format format) const {
     return result;
 }
 
-KPTDuration::KPTDuration KPTDuration::fromString(const QString &s, Format format, bool *ok) {
+Duration::Duration Duration::fromString(const QString &s, Format format, bool *ok) {
     // FIXME: Older versions of this code saved durations as QDateTime's. To avoid
     // making all test files instantly obsolete, we detect this case here. Before
     // we ship, this should be removed!
@@ -169,10 +169,10 @@ KPTDuration::KPTDuration KPTDuration::fromString(const QString &s, Format format
         QDateTime zero(QDate(0, 1, 1));
         int seconds = zero.secsTo(QDateTime::fromString(s));
         if (ok) *ok = true;
-        return KPTDuration(seconds);
+        return Duration(seconds);
     }
     QRegExp matcher;
-    KPTDuration tmp;
+    Duration tmp;
     switch (format) {
         case Format_Hour: {
             matcher.setPattern("^(\\d*)h(\\d*)m$" );
@@ -203,7 +203,7 @@ KPTDuration::KPTDuration KPTDuration::fromString(const QString &s, Format format
             double f = KGlobal::locale()->readNumber(s, &res);
             if (ok) *ok = res;
             if (res) {
-                return KPTDuration((Q_INT64)(f*3600.0));
+                return Duration((Q_INT64)(f*3600.0));
             }
             break;
         }
@@ -214,7 +214,7 @@ KPTDuration::KPTDuration KPTDuration::fromString(const QString &s, Format format
     return tmp;
 }
 
-void KPTDuration::get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds, unsigned *milliseconds) const {
+void Duration::get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds, unsigned *milliseconds) const {
     Q_INT64 ms;
     unsigned tmp;
 

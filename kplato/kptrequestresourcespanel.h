@@ -34,69 +34,69 @@ class KMacroCommand;
 namespace KPlato
 {
 
-class KPTAccount;
-class KPTTask;
-class KPTResourceGroup;
-class KPTResource;
-class KPTResourceGroupRequest;
-class KPTResourceRequest;
-class KPTStandardWorktime;
-class KPTPart;
-class KPTDuration;
+class Account;
+class Task;
+class ResourceGroup;
+class Resource;
+class ResourceGroupRequest;
+class ResourceRequest;
+class StandardWorktime;
+class Part;
+class Duration;
 
-class KPTResourceTableItem {
+class ResourceTableItem {
 public:
-    KPTResourceTableItem(KPTResource *resource, KPTResourceRequest *request, bool check = false);
-    ~KPTResourceTableItem() ;
+    ResourceTableItem(Resource *resource, ResourceRequest *request, bool check = false);
+    ~ResourceTableItem() ;
 
     void update();
     void insert(QTable *table, int row, QStringList &accounts);
-    void ok(KPTResourceGroupRequest *group);
+    void ok(ResourceGroupRequest *group);
 
     bool isChecked() const { return m_checked; }
     bool isOrigChecked() const { return m_origChecked; }
-    KPTResource *resource() { return m_resource; }
-    KPTResourceRequest *request() { return m_request; }
+    Resource *resource() { return m_resource; }
+    ResourceRequest *request() { return m_request; }
     int numRequests() const { return m_checked ? 1 : 0; }
     int units() const { return m_units; }
 
-    KPTResource *m_resource;
+    Resource *m_resource;
     int m_units, m_origUnits;
     bool m_checked, m_origChecked;
     QCheckTableItem *m_checkitem;
-    KPTResourceRequest *m_request;
+    ResourceRequest *m_request;
     QComboTableItem *m_accountitem;
-    KPTAccount *m_account;
+    Account *m_account;
     int m_curAccountItem;
     QString m_curAccountText;
 };
 
-class KPTGroupLVItem : public QListViewItem {
+class GroupLVItem : public QListViewItem {
 public:
-    KPTGroupLVItem(QListView *parent, KPTResourceGroup *group, KPTTask &task);
-    ~KPTGroupLVItem();
+    GroupLVItem(QListView *parent, ResourceGroup *group, Task &task);
+    ~GroupLVItem();
 
     void update();
     void insert(QTable *table, QStringList &accounts);
-    const QPtrList<KPTResourceTableItem> &resources() const { return m_resources; }
-    void ok(KPTTask &task);
+    const QPtrList<ResourceTableItem> &resources() const { return m_resources; }
+    void ok(Task &task);
 
     int numRequests();
     bool isNull() const;
     
-    KPTResourceGroup *m_group;
+    ResourceGroup *m_group;
     int m_units;
-    QPtrList<KPTResourceTableItem> m_resources;
-    KPTResourceGroupRequest *m_request;
+    QPtrList<ResourceTableItem> m_resources;
+    ResourceGroupRequest *m_request;
 };
 
 
-class KPTRequestResourcesPanel : public KPTTaskResourcesPanelBase {
+class RequestResourcesPanel : public TaskResourcesPanelBase {
     Q_OBJECT
 public:
-    KPTRequestResourcesPanel(QWidget *parent, KPTTask &task, bool baseline=false);
+    RequestResourcesPanel(QWidget *parent, Task &task, bool baseline=false);
 
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
     
     bool ok();
     
@@ -111,9 +111,9 @@ signals:
     void changed();
 
 private:
-    KPTTask &m_task;
-    KPTStandardWorktime *m_worktime;
-    KPTGroupLVItem *selectedGroup;
+    Task &m_task;
+    StandardWorktime *m_worktime;
+    GroupLVItem *selectedGroup;
     bool m_blockChanged;
     QStringList m_accounts;
     

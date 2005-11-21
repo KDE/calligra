@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef kpttask_h
-#define kpttask_h
+#ifndef KPTTASK_H
+#define KPTTASK_H
 
 #include "kptnode.h"
 #include "kptduration.h"
@@ -30,18 +30,18 @@
 namespace KPlato
 {
 
-class KPTDateTime;
+class DateTime;
 
 /**
   * A task in the scheduling software is represented by this class. A task
   * can be anything from 'build house' to 'drill hole' It will always mean
   * an activity.
   */
-class KPTTask : public KPTNode {
+class Task : public Node {
 public:
-    KPTTask(KPTNode *parent = 0);
-    KPTTask(KPTTask &task, KPTNode *parent = 0);
-    ~KPTTask();
+    Task(Node *parent = 0);
+    Task(Task &task, Node *parent = 0);
+    ~Task();
 
     /// Return task type. Can be Type_Task, Type_Summarytask ot Type_Milestone.
     virtual int type() const;
@@ -50,24 +50,24 @@ public:
      * Returns the (previously) calculated duration.
      * The caller must delete returned object.
      */
-    KPTDuration *getExpectedDuration();
+    Duration *getExpectedDuration();
 
     /**
      * Instead of using the expected duration, generate a random value using
      * the Distribution of each Task. This can be used for Monte-Carlo
      * estimation of Project duration.
      */
-    KPTDuration *getRandomDuration();
+    Duration *getRandomDuration();
 
     /**
      * Return the resource request made to group
      * (There should be only one)
      */
-    KPTResourceGroupRequest *resourceGroupRequest(KPTResourceGroup *group) const;
+    ResourceGroupRequest *resourceGroupRequest(ResourceGroup *group) const;
     void clearResourceRequests();
-    void addRequest(KPTResourceGroup *group, int numResources);
-    void addRequest(KPTResourceGroupRequest *request);
-    void takeRequest(KPTResourceGroupRequest *request);
+    void addRequest(ResourceGroup *group, int numResources);
+    void addRequest(ResourceGroupRequest *request);
+    void takeRequest(ResourceGroupRequest *request);
     int units() const;
     int workUnits() const;
     void makeAppointments();
@@ -77,26 +77,26 @@ public:
      */
     void calcResourceOverbooked();
     
-    void setConstraint(KPTNode::ConstraintType type);
+    void setConstraint(Node::ConstraintType type);
 
     /// Load from document
-    virtual bool load(QDomElement &element, KPTProject &project);
+    virtual bool load(QDomElement &element, Project &project);
     /// Save to document
     virtual void save(QDomElement &element);
 
     /// Returns the total planned effort for this task (or subtasks) 
-    virtual KPTDuration plannedEffort();
+    virtual Duration plannedEffort();
     /// Returns the total planned effort for this task (or subtasks) on date
-    virtual KPTDuration plannedEffort(const QDate &date);
+    virtual Duration plannedEffort(const QDate &date);
     /// Returns the planned effort up to and including date
-    virtual KPTDuration plannedEffortTo(const QDate &date);
+    virtual Duration plannedEffortTo(const QDate &date);
     
     /// Returns the total actual effort for this task (or subtasks) 
-    virtual KPTDuration actualEffort();
+    virtual Duration actualEffort();
     /// Returns the total actual effort for this task (or subtasks) on date
-    virtual KPTDuration actualEffort(const QDate &date);
+    virtual Duration actualEffort(const QDate &date);
     /// Returns the actual effort up to and including date
-    virtual KPTDuration actualEffortTo(const QDate &date);
+    virtual Duration actualEffortTo(const QDate &date);
     
     /**
      * Returns the total planned cost for this task (or subtasks)
@@ -126,7 +126,7 @@ public:
      * This includes adding summarytasks relations to subtasks
      * and lists for start- and endnodes.
      */
-    void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks);
+    void initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node> &endnodes, QPtrList<Node> &summarytasks);
     /**
      * Calculates @ref m_durationForward from @ref earliestStart and
      * returns the resulting end time, 
@@ -134,7 +134,7 @@ public:
      *
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */
-    KPTDateTime calculateForward(int use);
+    DateTime calculateForward(int use);
     /**
      * Calculates @ref m_durationBackward from @ref latestFinish and
      * returns the resulting start time, 
@@ -142,7 +142,7 @@ public:
      *
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */
-    KPTDateTime calculateBackward(int use);
+    DateTime calculateBackward(int use);
     /**
      * Schedules the task within the limits of earliestStart and latestFinish.
      * Calculates @ref m_startTime, @ref m_endTime and @ref m_duration,
@@ -152,7 +152,7 @@ public:
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      * @return The tasks endtime which can be used for scheduling the successor.
      */
-    KPTDateTime &scheduleForward(KPTDateTime &earliest, int use);
+    DateTime &scheduleForward(DateTime &earliest, int use);
     /**
      * Schedules the task within the limits of earliestStart and latestFinish.
      * Calculates @ref m_startTime, @ref m_endTime and @ref m_duration,
@@ -162,7 +162,7 @@ public:
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      * @return The tasks starttime which can be used for scheduling the predeccessor.
      */
-    KPTDateTime &scheduleBackward(KPTDateTime &latest, int use);
+    DateTime &scheduleBackward(DateTime &latest, int use);
     
     /**
      * Summarytasks (with milestones) need special treatment because 
@@ -173,15 +173,15 @@ public:
     /**
      * Return the duration calculated on bases of the requested resources
      */
-    KPTDuration calcDuration(const KPTDateTime &time, const KPTDuration &effort, bool backward);
+    Duration calcDuration(const DateTime &time, const Duration &effort, bool backward);
 
     // Proxy relations are relations to/from summarytasks. 
     // These relations are distrubuted to the relevant tasks before calculation.
     void clearProxyRelations();
-    void addParentProxyRelations(QPtrList<KPTRelation> &list);
-    void addChildProxyRelations(QPtrList<KPTRelation> &list);
-    void addParentProxyRelation(KPTNode *node, const KPTRelation *rel);
-    void addChildProxyRelation(KPTNode *node, const KPTRelation *rel);
+    void addParentProxyRelations(QPtrList<Relation> &list);
+    void addChildProxyRelations(QPtrList<Relation> &list);
+    void addParentProxyRelation(Node *node, const Relation *rel);
+    void addChildProxyRelation(Node *node, const Relation *rel);
     
     /// Check if this node has any dependent child nodes.
     bool isEndNode() const;
@@ -194,7 +194,7 @@ public:
      * with their calendar, or if no resources have been assigned,
      * the scheduled starttime is used.
      */
-    virtual const KPTDateTime &workStartTime() const;
+    virtual const DateTime &workStartTime() const;
     
     /**
      * Return the time when work can actually finish on this task.
@@ -202,34 +202,34 @@ public:
      * with their calendar, or if no resources have been assigned,
      * the scheduled endtime is used.
      */
-    virtual const KPTDateTime &workEndTime() const;
+    virtual const DateTime &workEndTime() const;
     
     /**
      * Return the duration that an activity's start can be delayed 
      * without affecting the project completion date. 
      * An activity with positive float is not on the critical path.
      */
-    KPTDuration positiveFloat();
+    Duration positiveFloat();
     /**
      * Return the duration by which the duration of an activity or path 
      * has to be reduced in order to fullfill a timing constraint.
      */
-    KPTDuration negativeFloat() { return KPTDuration(); }
+    Duration negativeFloat() { return Duration(); }
     /**
      * Return the duration by which an activity can be delayed or extended 
      * without affecting the start of any succeeding activity.
      */
-    KPTDuration freeFloat() { return KPTDuration(); }
+    Duration freeFloat() { return Duration(); }
     /**
      * Return the duration from Early Start to Late Start.
      */
-    KPTDuration startFloat() { return KPTDuration(); }
+    Duration startFloat() { return Duration(); }
     /**
      * Return the duration the task has at its finish  before a successor task starts.
      * This is the difference between the start time of the successor and
      * the finish time of this task.
      */
-    KPTDuration finishFloat() { return KPTDuration(); }
+    Duration finishFloat() { return Duration(); }
     
     /// A task is critical if there is no positive float
     virtual bool isCritical();
@@ -255,29 +255,29 @@ public:
             return *this;
         }
         bool started, finished;
-        KPTDateTime startTime, finishTime;
+        DateTime startTime, finishTime;
         int percentFinished;
-        KPTDuration remainingEffort;
-        KPTDuration totalPerformed;        
+        Duration remainingEffort;
+        Duration totalPerformed;        
     };
     struct Progress &progress() { return m_progress; }
     
 private:
-    KPTDateTime calculateSuccessors(const QPtrList<KPTRelation> &list, int use);
-    KPTDateTime calculatePredeccessors(const QPtrList<KPTRelation> &list, int use);
-    KPTDateTime scheduleSuccessors(const QPtrList<KPTRelation> &list, int use);
-    KPTDateTime schedulePredeccessors(const QPtrList<KPTRelation> &list, int use);
+    DateTime calculateSuccessors(const QPtrList<Relation> &list, int use);
+    DateTime calculatePredeccessors(const QPtrList<Relation> &list, int use);
+    DateTime scheduleSuccessors(const QPtrList<Relation> &list, int use);
+    DateTime schedulePredeccessors(const QPtrList<Relation> &list, int use);
     
-    KPTDateTime workStartAfter(const KPTDateTime &dt);
-    KPTDateTime workFinishBefore(const KPTDateTime &dt);
+    DateTime workStartAfter(const DateTime &dt);
+    DateTime workFinishBefore(const DateTime &dt);
 
 private:
-    QPtrList<KPTResourceGroup> m_resource;
+    QPtrList<ResourceGroup> m_resource;
 
-    KPTResourceRequestCollection *m_requests;
+    ResourceRequestCollection *m_requests;
  
-    QPtrList<KPTRelation> m_parentProxyRelations;
-    QPtrList<KPTRelation> m_childProxyRelations;
+    QPtrList<Relation> m_parentProxyRelations;
+    QPtrList<Relation> m_childProxyRelations;
       
     struct Progress m_progress;
     

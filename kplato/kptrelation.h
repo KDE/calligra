@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef kptrelation_h
-#define kptrelation_h
+#ifndef KPTRELATION_H
+#define KPTRELATION_H
 
 #include "kptduration.h"
 
@@ -31,9 +31,9 @@ class QDomElement;
 namespace KPlato
 {
 
-class KPTNode;
-class KPTProject;
-class KPTPertCanvas;
+class Node;
+class Project;
+class PertCanvas;
 
 /**
   * The relation class couples a 2 nodes together which are dependent on each other.
@@ -42,19 +42,19 @@ class KPTPertCanvas;
   * The roof can't be put up if the walls are not there yet.
   * We actually have a number of relationtypes so this relation can be used in different manners.
   */
-class KPTRelation {
+class Relation {
 public:
     enum Type { FinishStart, FinishFinish, StartStart };
 
-    KPTRelation(KPTNode *parent, KPTNode *child, Type type, KPTDuration lag);
-    KPTRelation(KPTNode *parent=0, KPTNode *child=0, Type type=FinishStart);
-    KPTRelation(KPTRelation *rel);
+    Relation(Node *parent, Node *child, Type type, Duration lag);
+    Relation(Node *parent=0, Node *child=0, Type type=FinishStart);
+    Relation(Relation *rel);
     
     /** 
     *  When deleted the relation will remove itself from 
     *  the parent- and child nodes lists
     */
-    virtual ~KPTRelation();
+    virtual ~Relation();
 
     void setType(Type );
     Type type() const { return m_type; }
@@ -63,17 +63,17 @@ public:
     *  The lag of a relation is the time it takes between the parent starting/stopping
     *  and the start of the child.
     */
-    const KPTDuration &lag() const { return m_lag; }
-    void setLag(KPTDuration lag) { m_lag = lag; }
+    const Duration &lag() const { return m_lag; }
+    void setLag(Duration lag) { m_lag = lag; }
 
     /**
      * @return The parent dependent node.
      */
-    KPTNode *parent() const { return m_parent; }
+    Node *parent() const { return m_parent; }
     /**
      * @return The child dependent node.
      */
-    KPTNode *child() const { return m_child; }
+    Node *child() const { return m_child; }
 
     enum Result {
         SUCCESS = 0l,
@@ -81,14 +81,14 @@ public:
         NOTIMPL = 2l
     };
 
-    bool load(QDomElement &element, KPTProject &project);
+    bool load(QDomElement &element, Project &project);
     void save(QDomElement &element) const;
     
 protected: // variables
-    KPTNode *m_parent;
-    KPTNode *m_child;
+    Node *m_parent;
+    Node *m_child;
     Type m_type;
-    KPTDuration m_lag;
+    Duration m_lag;
 
 private:
     QString m_parentId;
@@ -100,14 +100,14 @@ public:
 
 };
 
-class KPTProxyRelation : public KPTRelation
+class ProxyRelation : public Relation
 {
 public:
-    KPTProxyRelation(KPTNode *parent, KPTNode *child, KPTRelation::Type type, KPTDuration lag) 
-    : KPTRelation(parent, child, type, lag) 
+    ProxyRelation(Node *parent, Node *child, Relation::Type type, Duration lag) 
+    : Relation(parent, child, type, lag) 
     {}
 
-    ~KPTProxyRelation() { m_parent = 0; m_child = 0;}
+    ~ProxyRelation() { m_parent = 0; m_child = 0;}
 };
 
 }  //KPlato namespace

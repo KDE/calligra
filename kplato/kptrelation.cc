@@ -31,28 +31,28 @@
 namespace KPlato
 {
 
-KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, Type type, KPTDuration lag) {
+Relation::Relation(Node *parent, Node *child, Type type, Duration lag) {
     m_parent=parent;
     m_child=child;
     m_type=type;
     m_lag=lag;
 }
 
-KPTRelation::KPTRelation(KPTNode *parent, KPTNode *child, Type type) {
+Relation::Relation(Node *parent, Node *child, Type type) {
     m_parent=parent;
     m_child=child;
     m_type=type;
-    m_lag=KPTDuration();
+    m_lag=Duration();
 }
 
-KPTRelation::KPTRelation(KPTRelation *rel) {
+Relation::Relation(Relation *rel) {
     m_parent=rel->parent();
     m_child=rel->child();
     m_type=rel->type();
     m_lag=rel->lag();
 }
 
-KPTRelation::~KPTRelation() {
+Relation::~Relation() {
     //kdDebug()<<k_funcinfo<<"parent: "<<(m_parent ? m_parent->name():"none")<<" child: "<<(m_child ? m_child->name():"None")<<endl;
     if (m_parent)
         m_parent->takeDependChildNode(this);
@@ -60,12 +60,12 @@ KPTRelation::~KPTRelation() {
         m_child->takeDependParentNode(this);
 }
 
-void KPTRelation::setType(Type type) {
+void Relation::setType(Type type) {
     m_type=type;
 }
 
 
-bool KPTRelation::load(QDomElement &element, KPTProject &project) {
+bool Relation::load(QDomElement &element, Project &project) {
     m_parent = project.findNode(element.attribute("parent-id"));
     if (m_parent == 0) {
         return false;
@@ -87,7 +87,7 @@ bool KPTRelation::load(QDomElement &element, KPTProject &project) {
     else
         m_type = FinishStart;
 
-    m_lag = KPTDuration::fromString(element.attribute("lag"));
+    m_lag = Duration::fromString(element.attribute("lag"));
 
     if (!m_parent->addDependChildNode(this)) {
         kdError()<<k_funcinfo<<"Failed to add relation: Child="<<m_child->name()<<" parent="<<m_parent->name()<<endl;
@@ -104,7 +104,7 @@ bool KPTRelation::load(QDomElement &element, KPTProject &project) {
 }
 
 
-void KPTRelation::save(QDomElement &element) const {
+void Relation::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("relation");
     element.appendChild(me);
 
@@ -127,7 +127,7 @@ void KPTRelation::save(QDomElement &element) const {
 }
 
 #ifndef NDEBUG
-void KPTRelation::printDebug(QCString indent) {
+void Relation::printDebug(QCString indent) {
     indent += "  ";
     kdDebug()<<indent<<"  Parent: "<<m_parent->name()<<endl;
     kdDebug()<<indent<<"  Child: "<<m_child->name()<<endl;

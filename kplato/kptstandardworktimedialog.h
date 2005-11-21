@@ -32,15 +32,15 @@ class KMacroCommand;
 namespace KPlato
 {
 
-class KPTProject;
-class KPTPart;
+class Project;
+class Part;
 
-class KPTStandardWorktimeDialogImpl : public StandardWorktimeDialogBase {
+class StandardWorktimeDialogImpl : public StandardWorktimeDialogBase {
     Q_OBJECT
 public:
-    KPTStandardWorktimeDialogImpl ( KPTStandardWorktime *std, QWidget *parent);
+    StandardWorktimeDialogImpl ( StandardWorktime *std, QWidget *parent);
 
-    KPTStandardWorktime *standardWorktime() { return m_std; }
+    StandardWorktime *standardWorktime() { return m_std; }
     
 private slots:
     void slotCheckAllFieldsFilled();
@@ -80,25 +80,25 @@ signals:
     void enableButtonOk(bool);
 
 private:
-    KPTStandardWorktime *m_std;
+    StandardWorktime *m_std;
 };
 
-class KPTStandardWorktimeDialog : public KDialogBase {
+class StandardWorktimeDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTStandardWorktimeDialog(KPTProject &project, QWidget *parent=0, const char *name=0);
+    StandardWorktimeDialog(Project &project, QWidget *parent=0, const char *name=0);
     
-    KMacroCommand *buildCommand(KPTPart *part);
+    KMacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();
     
 private:
-    KPTProject &project;
-    KPTStandardWorktimeDialogImpl *dia;
-    KPTStandardWorktime *m_original;
+    Project &project;
+    StandardWorktimeDialogImpl *dia;
+    StandardWorktime *m_original;
 };
 
 } //KPlato namespace
 
-#endif // KPTSTANDARDWORKTIMEDIALOG_H
+#endif // STANDARDWORKTIMEDIALOG_H

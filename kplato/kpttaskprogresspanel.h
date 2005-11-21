@@ -28,13 +28,13 @@ class KCommand;
 namespace KPlato
 {
 
-class KPTPart;
-class KPTStandardWorktime;
+class Part;
+class StandardWorktime;
 
-class KPTTaskProgressPanelImpl : public KPTTaskProgressPanelBase {
+class TaskProgressPanelImpl : public TaskProgressPanelBase {
     Q_OBJECT
 public:
-    KPTTaskProgressPanelImpl(QWidget *parent=0, const char *name=0, WFlags f=0);
+    TaskProgressPanelImpl(QWidget *parent=0, const char *name=0, WFlags f=0);
     
     void enableWidgets();
 
@@ -48,12 +48,12 @@ public slots:
     void slotPercentFinishedChanged(int value);
 };
 
-class KPTTaskProgressPanel : public KPTTaskProgressPanelImpl {
+class TaskProgressPanel : public TaskProgressPanelImpl {
     Q_OBJECT
 public:
-    KPTTaskProgressPanel(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
+    TaskProgressPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
     
     bool ok();
 
@@ -61,11 +61,11 @@ protected:
     void setEstimateScales( int day );
     
 private:
-    KPTTask &m_task;
+    Task &m_task;
     int m_dayLength;
-    struct KPTTask::Progress m_progress;
+    struct Task::Progress m_progress;
 };
 
 }  //KPlato namespace
 
-#endif // KPTTASKPROGRESSPANEL_H
+#endif // TASKPROGRESSPANEL_H

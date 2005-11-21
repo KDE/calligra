@@ -35,21 +35,21 @@ class QSize;
 namespace KPlato
 {
 
-class KPTPertNodeItem;
+class PertNodeItem;
 
-class KPTPertCanvas : public QCanvasView
+class PertCanvas : public QCanvasView
 {
     Q_OBJECT
 
 public:
-    KPTPertCanvas( QWidget *parent );
-    virtual ~KPTPertCanvas();
+    PertCanvas( QWidget *parent );
+    virtual ~PertCanvas();
 
-    void draw(KPTProject& project);
+    void draw(Project& project);
     void clear();
     QSize canvasSize();
 
-    KPTPertNodeItem *selectedItem();
+    PertNodeItem *selectedItem();
 
     int verticalGap() { return m_verticalGap; }
     int horizontalGap() { return m_horizontalGap; }
@@ -57,25 +57,25 @@ public:
 
     void setColumn(int row, int col) { m_rows.at(row)[col] = true; }
 
-    void mapNode(KPTPertNodeItem *item);
-    void mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *childItem, KPTRelation::Type type);
+    void mapNode(PertNodeItem *item);
+    void mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem, Relation::Type type);
     
-    KPTNode *selectedNode();
+    Node *selectedNode();
 
 protected:
     void drawRelations();
 
-    void createChildItems(KPTPertNodeItem *node);
-    KPTPertNodeItem *createNodeItem(KPTNode *node);
+    void createChildItems(PertNodeItem *node);
+    PertNodeItem *createNodeItem(Node *node);
 
     void contentsMousePressEvent ( QMouseEvent * e );
     void contentsMouseReleaseEvent ( QMouseEvent * e );
 
 signals:
-    void rightButtonPressed(KPTNode *node, const QPoint & point);
+    void rightButtonPressed(Node *node, const QPoint & point);
     void updateView(bool calculate);
-    void addRelation(KPTNode *par, KPTNode *child);
-    void modifyRelation(KPTRelation *rel);
+    void addRelation(Node *par, Node *child);
+    void modifyRelation(Relation *rel);
 
 
 private:
@@ -89,8 +89,8 @@ private:
 	int m_horizontalGap;
 	QSize m_itemSize;
 
-    QPtrDict<KPTPertNodeItem> m_nodes;
-    QPtrList<KPTRelation> m_relations;
+    QPtrDict<PertNodeItem> m_nodes;
+    QPtrList<Relation> m_relations;
 
     QPtrList<QMemArray<bool> > m_rows;
 

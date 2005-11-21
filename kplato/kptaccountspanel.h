@@ -34,17 +34,17 @@ class KMacroCommand;
 namespace KPlato
 {
 
-class KPTAccount;
-class KPTAccounts;
-class KPTPart;
-class KPTProject;
+class Account;
+class Accounts;
+class Part;
+class Project;
 
-class KPTAccountsPanel : public KPTAccountsPanelBase {
+class AccountsPanel : public AccountsPanelBase {
     Q_OBJECT
 public:
-    KPTAccountsPanel(KPTAccounts &acc, QWidget *parent=0, const char *name=0);
+    AccountsPanel(Accounts &acc, QWidget *parent=0, const char *name=0);
     
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
     
 signals:
     void changed(bool);
@@ -61,13 +61,13 @@ protected slots:
     void slotSubBtn();
     
 protected:
-    void addItems(QListView *lv, KPTAccounts &acc);
-    void addItems(QListViewItem *item, KPTAccount *acc);
-    KCommand *save(KPTPart *part, KPTProject &project);
-    KCommand *save(KPTPart *part, KPTProject &project, QListViewItem *item);
+    void addItems(QListView *lv, Accounts &acc);
+    void addItems(QListViewItem *item, Account *acc);
+    KCommand *save(Part *part, Project &project);
+    KCommand *save(Part *part, Project &project, QListViewItem *item);
     
 private:
-    KPTAccounts &m_accounts;
+    Accounts &m_accounts;
     
     QPtrList<QListViewItem> m_removedItems;
 };

@@ -40,7 +40,7 @@
 namespace KPlato
 {
 
-KPTPertView::KPTPertView( KPTView *view, QWidget *parent, QLayout *layout )
+PertView::PertView( View *view, QWidget *parent, QLayout *layout )
     : QWidget( parent, "Pert view" ),
     m_mainview( view ),
     m_node( 0 )
@@ -48,36 +48,36 @@ KPTPertView::KPTPertView( KPTView *view, QWidget *parent, QLayout *layout )
     init(layout);
 }
 
-KPTPertView::~KPTPertView()
+PertView::~PertView()
 {
 }
 
-void KPTPertView::init(QLayout *layout)
+void PertView::init(QLayout *layout)
 {
     //kdDebug()<<k_funcinfo<<endl;
     QGridLayout *gl = new QGridLayout(this, 1, 1, -1, -1, "Pert QGridLayout");
-    m_canvasview = new KPTPertCanvas(this);
+    m_canvasview = new PertCanvas(this);
         gl->addWidget(m_canvasview, 0, 0);
     draw();
-    connect(m_canvasview, SIGNAL(rightButtonPressed(KPTNode *, const QPoint &)), this, SLOT(slotRMBPressed(KPTNode *,const QPoint &)));
+    connect(m_canvasview, SIGNAL(rightButtonPressed(Node *, const QPoint &)), this, SLOT(slotRMBPressed(Node *,const QPoint &)));
     connect(m_canvasview, SIGNAL(updateView(bool)), m_mainview, SLOT(slotUpdate(bool)));
 
-    connect(m_canvasview, SIGNAL(addRelation(KPTNode*, KPTNode*)), SLOT(slotAddRelation(KPTNode*, KPTNode*)));
-    connect(m_canvasview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
+    connect(m_canvasview, SIGNAL(addRelation(Node*, Node*)), SLOT(slotAddRelation(Node*, Node*)));
+    connect(m_canvasview, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)));
 }    
 
-void KPTPertView::draw() 
+void PertView::draw() 
 {
     //kdDebug()<<k_funcinfo<<endl;
     m_canvasview->draw(m_mainview->getPart()->getProject());
     m_canvasview->show();
 }
 
-void KPTPertView::slotRMBPressed(KPTNode *node, const QPoint & point)
+void PertView::slotRMBPressed(Node *node, const QPoint & point)
 {
     //kdDebug()<<k_funcinfo<<" node: "<<node->name()<<endl;
     m_node = node;
-    if (node && (node->type() == KPTNode::Type_Task || node->type() == KPTNode::Type_Milestone)) {
+    if (node && (node->type() == Node::Type_Task || node->type() == Node::Type_Milestone)) {
         QPopupMenu *menu = m_mainview->popupMenu("task_popup");
         if (menu)
         {
@@ -86,7 +86,7 @@ void KPTPertView::slotRMBPressed(KPTNode *node, const QPoint & point)
         }
         return;
     }
-    if (node && node->type() == KPTNode::Type_Summarytask) {
+    if (node && node->type() == Node::Type_Summarytask) {
         QPopupMenu *menu = m_mainview->popupMenu("node_popup");
         if (menu)
         {
@@ -98,36 +98,36 @@ void KPTPertView::slotRMBPressed(KPTNode *node, const QPoint & point)
     //TODO: Other nodetypes
 }
 
-void KPTPertView::slotAddRelation(KPTNode* par, KPTNode* child)
+void PertView::slotAddRelation(Node* par, Node* child)
 {
     kdDebug()<<k_funcinfo<<endl;
     emit addRelation(par, child);
 }
 
-void KPTPertView::slotModifyRelation(KPTRelation *rel)
+void PertView::slotModifyRelation(Relation *rel)
 {
     kdDebug()<<k_funcinfo<<endl;
     emit modifyRelation(rel);
 }
 
-void KPTPertView::print(KPrinter &printer)
+void PertView::print(KPrinter &printer)
 {
     kdDebug()<<k_funcinfo<<endl;
 
 }
 
-KPTNode *KPTPertView::currentNode()
+Node *PertView::currentNode()
 {
     return m_canvasview->selectedNode(); 
 }
 
-bool KPTPertView::setContext(KPTContext &context)
+bool PertView::setContext(Context &context)
 {
     kdDebug()<<k_funcinfo<<endl;
     return true;
 }
 
-void KPTPertView::getContext(KPTContext &context) const
+void PertView::getContext(Context &context) const
 {
     kdDebug()<<k_funcinfo<<endl;
 }

@@ -32,7 +32,7 @@
 namespace KPlato
 {
 
-void KPTTaskAppointmentsView::clear()
+void TaskAppointmentsView::clear()
 {
     if (m_appList) m_appList->clear();
     if (m_taskName) m_taskName->clear();
@@ -45,7 +45,7 @@ void KPTTaskAppointmentsView::clear()
     if (m_cpi) m_cpi->clear();
 }
 
-void KPTTaskAppointmentsView::draw(KPTTask *task)
+void TaskAppointmentsView::draw(Task *task)
 {
     //kdDebug()<<k_funcinfo<<endl;
     m_task = task;
@@ -54,26 +54,26 @@ void KPTTaskAppointmentsView::draw(KPTTask *task)
         return;
     m_taskName->setText(task->name());
 
-    QPtrListIterator<KPTAppointment> it(task->appointments());
+    QPtrListIterator<Appointment> it(task->appointments());
     for (; it.current(); ++it) {
-        KPTResource *r = it.current()->resource();
+        Resource *r = it.current()->resource();
         QListViewItem *item = new QListViewItem(m_appList, r->name());
  int i = 1;
         item->setText(i++, r->typeToString());
         item->setText(i++, it.current()->startTime().date().toString(ISODate));
         item->setText(i++, it.current()->endTime().date().toString(ISODate));
-        item->setText(i++, it.current()->plannedEffort().toString(KPTDuration::Format_HourFraction));
+        item->setText(i++, it.current()->plannedEffort().toString(Duration::Format_HourFraction));
         item->setText(i++, KGlobal::locale()->formatMoney(r->normalRate()));
         item->setText(i++, KGlobal::locale()->formatMoney(r->overtimeRate()));
         item->setText(i++, KGlobal::locale()->formatMoney(r->fixedCost()));
-        QPtrListIterator<KPTAppointmentInterval> ait = it.current()->intervals();
+        QPtrListIterator<AppointmentInterval> ait = it.current()->intervals();
         for (; ait.current(); ++ait) {
             QListViewItem *sub = new QListViewItem(item, "");
             i = 1;
             sub->setText(i++, "");
             sub->setText(i++, ait.current()->startTime().date().toString(ISODate));
             sub->setText(i++, ait.current()->endTime().date().toString(ISODate));
-            sub->setText(i++, ait.current()->effort().toString(KPTDuration::Format_HourFraction));
+            sub->setText(i++, ait.current()->effort().toString(Duration::Format_HourFraction));
         }
         
     }
@@ -81,7 +81,7 @@ void KPTTaskAppointmentsView::draw(KPTTask *task)
 }
 
 
-void KPTTaskAppointmentsView::init()
+void TaskAppointmentsView::init()
 {
     m_appList->setColumnAlignment(1, AlignHCenter);
     m_appList->setColumnAlignment(3, AlignRight);
@@ -94,7 +94,7 @@ void KPTTaskAppointmentsView::init()
      
 }
 
-void KPTTaskAppointmentsView::drawCostEffort()
+void TaskAppointmentsView::drawCostEffort()
 {
     if (m_task == 0)
  return;
@@ -102,9 +102,9 @@ void KPTTaskAppointmentsView::drawCostEffort()
     m_plannedCost->setText(KGlobal::locale()->formatMoney(m_task->plannedCostTo(m_date->date())));
     m_plannedCostTotal->setText(KGlobal::locale()->formatMoney(m_task->plannedCost()));
     
-    m_actualEffort->setText(m_task->actualEffortTo(m_date->date()).toString(KPTDuration::Format_HourFraction));
-    m_plannedEffort->setText(m_task->plannedEffortTo(m_date->date()).toString(KPTDuration::Format_HourFraction));
-    m_plannedEffortTotal->setText(m_task->plannedEffort().toString(KPTDuration::Format_HourFraction));
+    m_actualEffort->setText(m_task->actualEffortTo(m_date->date()).toString(Duration::Format_HourFraction));
+    m_plannedEffort->setText(m_task->plannedEffortTo(m_date->date()).toString(Duration::Format_HourFraction));
+    m_plannedEffortTotal->setText(m_task->plannedEffort().toString(Duration::Format_HourFraction));
     
     m_epi->setText(QString("%1").arg(m_task->effortPerformanceIndex(m_date->date()),3,'f',2));
     m_cpi->setText(QString("%1").arg(m_task->costPerformanceIndex(m_date->date()),3,'f',2));

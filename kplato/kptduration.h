@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef kptduration_h
-#define kptduration_h
+#ifndef KPTDURATION_H
+#define KPTDURATION_H
 
 #include <qglobal.h>
 #include <qstring.h>
@@ -31,7 +31,7 @@ namespace KPlato
  * The duration class can be used to store a timespan in a convenient format.
  * The timespan can be in length in many many hours down to miliseconds.
  */
-class KPTDuration {
+class Duration {
     public:
         /**
          * DayTime  = d hh:mm:ss.sss
@@ -41,11 +41,11 @@ class KPTDuration {
          */
         enum Format { Format_DayTime, Format_Day, Format_Hour, Format_HourFraction };
 
-        KPTDuration();
-        KPTDuration(const KPTDuration &d);
-        KPTDuration(unsigned d, unsigned h, unsigned m, unsigned s=0, unsigned ms=0);
-        KPTDuration(Q_INT64 seconds);
-        ~KPTDuration();
+        Duration();
+        Duration(const Duration &d);
+        Duration(unsigned d, unsigned h, unsigned m, unsigned s=0, unsigned ms=0);
+        Duration(Q_INT64 seconds);
+        ~Duration();
 
         /**
          * Adds @param delta to *this. If @param delta > *this, *this is set to zeroDuration.
@@ -80,29 +80,29 @@ class KPTDuration {
         unsigned days() const { return hours() / 24; }
         void get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds=0, unsigned *milliseconds=0) const;
 
-        bool isCloseTo(const KPTDuration &d) const;
+        bool isCloseTo(const Duration &d) const;
 
-        bool   operator==( const KPTDuration &d ) const { return m_ms == d.m_ms; }
-        bool   operator!=( const KPTDuration &d ) const { return m_ms != d.m_ms; }
-        bool   operator<( const KPTDuration &d ) const { return m_ms < d.m_ms; }
-        bool   operator<=( const KPTDuration &d ) const { return m_ms <= d.m_ms; }
-        bool   operator>( const KPTDuration &d ) const { return m_ms > d.m_ms; }
-        bool   operator>=( const KPTDuration &d ) const { return m_ms >= d.m_ms; }
-        KPTDuration &operator=(const KPTDuration &d ) { m_ms = d.m_ms; return *this;}
-        KPTDuration operator*(int unit) const; 
-        KPTDuration operator/(int unit) const;
-        double operator/(const KPTDuration &d) const;
+        bool   operator==( const Duration &d ) const { return m_ms == d.m_ms; }
+        bool   operator!=( const Duration &d ) const { return m_ms != d.m_ms; }
+        bool   operator<( const Duration &d ) const { return m_ms < d.m_ms; }
+        bool   operator<=( const Duration &d ) const { return m_ms <= d.m_ms; }
+        bool   operator>( const Duration &d ) const { return m_ms > d.m_ms; }
+        bool   operator>=( const Duration &d ) const { return m_ms >= d.m_ms; }
+        Duration &operator=(const Duration &d ) { m_ms = d.m_ms; return *this;}
+        Duration operator*(int unit) const; 
+        Duration operator/(int unit) const;
+        double operator/(const Duration &d) const;
         
-        KPTDuration operator+(KPTDuration &d) const
-            {KPTDuration dur(*this); dur.add(d); return dur; }
-        KPTDuration &operator+=(const KPTDuration &d) {add(d); return *this; }
+        Duration operator+(Duration &d) const
+            {Duration dur(*this); dur.add(d); return dur; }
+        Duration &operator+=(const Duration &d) {add(d); return *this; }
         
-        KPTDuration operator-(const KPTDuration &d) const
-            {KPTDuration dur(*this); dur.subtract(d); return dur; }
-        KPTDuration &operator-=(const KPTDuration &d) {subtract(d); return *this; }
+        Duration operator-(const Duration &d) const
+            {Duration dur(*this); dur.subtract(d); return dur; }
+        Duration &operator-=(const Duration &d) {subtract(d); return *this; }
 
         QString toString(Format format = Format_DayTime) const;
-        static KPTDuration fromString(const QString &s, Format format = Format_DayTime, bool *ok=0);
+        static Duration fromString(const QString &s, Format format = Format_DayTime, bool *ok=0);
         
         enum Unit { Unit_ms, Unit_s, Unit_m, Unit_h, Unit_d };
         double toDouble(Unit u=Unit_ms) const { 
@@ -117,7 +117,7 @@ class KPTDuration {
         /**
          * This is useful for occasions where we need a zero duration.
          */
-        static const KPTDuration zeroDuration;
+        static const Duration zeroDuration;
 
     private:
 	/**
@@ -127,12 +127,12 @@ class KPTDuration {
         Q_INT64 m_ms;
 
         void add(Q_INT64 delta);
-        void add(const KPTDuration &delta);
+        void add(const Duration &delta);
 
         /**
          * Subtracts @param delta from *this. If @param delta > *this, *this is set to zeroDuration.
          */
-        void subtract(const KPTDuration &delta);
+        void subtract(const Duration &delta);
 };
 
 }  //KPlato namespace

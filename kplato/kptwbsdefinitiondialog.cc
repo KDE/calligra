@@ -29,11 +29,11 @@
 namespace KPlato
 {
 
-KPTWBSDefinitionDialog::KPTWBSDefinitionDialog(KPTWBSDefinition &def, QWidget *p, const char *n)
+WBSDefinitionDialog::WBSDefinitionDialog(WBSDefinition &def, QWidget *p, const char *n)
     : KDialogBase(Swallow, i18n("WBS Definition"), Ok|Cancel, Ok, p, n, true, true)
 {
     
-    m_panel = new KPTWBSDefinitionPanel(def, this);
+    m_panel = new WBSDefinitionPanel(def, this);
     setMainWidget(m_panel);
     
     enableButtonOK(false);
@@ -41,7 +41,7 @@ KPTWBSDefinitionDialog::KPTWBSDefinitionDialog(KPTWBSDefinition &def, QWidget *p
 }
 
 
-KMacroCommand *KPTWBSDefinitionDialog::buildCommand(KPTPart *part) {
+KMacroCommand *WBSDefinitionDialog::buildCommand(Part *part) {
     KMacroCommand *m = new KMacroCommand(i18n("Modify WBS Definition"));
     bool modified = false;
     KCommand *cmd = m_panel->buildCommand(part);
@@ -56,7 +56,7 @@ KMacroCommand *KPTWBSDefinitionDialog::buildCommand(KPTPart *part) {
     return m;
 }
 
-void KPTWBSDefinitionDialog::slotOk() {
+void WBSDefinitionDialog::slotOk() {
     if (!m_panel->ok())
         return;
     accept();

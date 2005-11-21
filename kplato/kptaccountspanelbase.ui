@@ -1,9 +1,9 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPlato::KPTAccountsPanelBase</class>
+<class>KPlato::AccountsPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">
-        <cstring>KPTAccountsPanelBase</cstring>
+        <cstring>AccountsPanelBase</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -20,7 +20,7 @@
         </size>
     </property>
     <property name="caption">
-        <string>KPTAccountsPanelBase</string>
+        <string>AccountsPanelBase</string>
     </property>
     <grid>
         <property name="name">

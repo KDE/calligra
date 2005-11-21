@@ -31,7 +31,7 @@ namespace KPlato
 {
 
 
-KPTWBSDefinition::KPTWBSDefinition() {
+WBSDefinition::WBSDefinition() {
     m_levelsEnabled = false;
     
     m_defaultDef.code = "Number";
@@ -44,15 +44,15 @@ KPTWBSDefinition::KPTWBSDefinition() {
     m_codeLists.append(qMakePair(QString("Letter, lower case"), i18n("Letter, lower case")));
 }
 
-KPTWBSDefinition::~KPTWBSDefinition() {
+WBSDefinition::~WBSDefinition() {
 }
 
-void KPTWBSDefinition::clear() {
+void WBSDefinition::clear() {
     m_defaultDef.clear();
     m_levelsDef.clear();
 }
     
-QString KPTWBSDefinition::wbs(uint index, int level) {
+QString WBSDefinition::wbs(uint index, int level) {
     if (isLevelsDefEnabled()) {
         CodeDef def = levelsDef(level);
         if (!def.isEmpty()) {
@@ -63,7 +63,7 @@ QString KPTWBSDefinition::wbs(uint index, int level) {
 }
 
 
-QString KPTWBSDefinition::code(uint index, int level) {
+QString WBSDefinition::code(uint index, int level) {
     if (isLevelsDefEnabled()) {
         CodeDef def = levelsDef(level);
         if (!def.isEmpty()) {
@@ -73,7 +73,7 @@ QString KPTWBSDefinition::code(uint index, int level) {
     return code(m_defaultDef, index);
 }
 
-QString KPTWBSDefinition::separator(int level) {
+QString WBSDefinition::separator(int level) {
     if (isLevelsDefEnabled()) {
         CodeDef def = levelsDef(level);
         if (!def.isEmpty()) {
@@ -83,30 +83,30 @@ QString KPTWBSDefinition::separator(int level) {
     return m_defaultDef.separator;
 }
 
-void KPTWBSDefinition::setLevelsDef(QMap<int, CodeDef> def) { 
+void WBSDefinition::setLevelsDef(QMap<int, CodeDef> def) { 
     m_levelsDef.clear();
     m_levelsDef = def; 
 }
 
-KPTWBSDefinition::CodeDef KPTWBSDefinition::levelsDef(int level) const { 
+WBSDefinition::CodeDef WBSDefinition::levelsDef(int level) const { 
     return m_levelsDef.contains(level) ? m_levelsDef[level] : CodeDef(); 
 }
     
-void KPTWBSDefinition::setLevelsDef(int level, CodeDef def) {
+void WBSDefinition::setLevelsDef(int level, CodeDef def) {
     m_levelsDef.insert(level, def);
 }
 
-void KPTWBSDefinition::setLevelsDef(int level, QString c, QString s) {
+void WBSDefinition::setLevelsDef(int level, QString c, QString s) {
     m_levelsDef.insert(level, CodeDef(c, s));
 }
 
-bool KPTWBSDefinition::level0Enabled() {
+bool WBSDefinition::level0Enabled() {
     return m_levelsEnabled && !levelsDef(0).isEmpty();
 }
 
 const QChar Letters[] = { '?','a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z' };
 
-QString KPTWBSDefinition::code(CodeDef &def, uint index) {
+QString WBSDefinition::code(CodeDef &def, uint index) {
     if (def.code == "Number") {
         return QString("%1").arg(index);
     }
@@ -137,7 +137,7 @@ const QCString RNTens[] = {"", "x", "xx", "xxx", "xl", "l", "lx", "lxx", "lxxx",
 const QCString RNHundreds[] = {"", "c", "cc", "ccc", "cd", "d", "dc", "dcc", "dccc", "cm"};
 const QCString RNThousands[] = {"", "m", "mm", "mmm"};
 
-QString KPTWBSDefinition::toRoman( int n, bool upper )
+QString WBSDefinition::toRoman( int n, bool upper )
 {
     if ( n >= 0 ) {
         QString s = QString::fromLatin1( RNThousands[ ( n / 1000 ) ] +
@@ -152,7 +152,7 @@ QString KPTWBSDefinition::toRoman( int n, bool upper )
     }
 }
 
-QStringList KPTWBSDefinition::codeList() {
+QStringList WBSDefinition::codeList() {
     QStringList cl;
     QValueList<QPair<QString, QString> >::Iterator it;
     for (it = m_codeLists.begin(); it != m_codeLists.end(); ++it) {
@@ -161,7 +161,7 @@ QStringList KPTWBSDefinition::codeList() {
     return cl;
 }
 
-int KPTWBSDefinition::defaultCodeIndex() const {
+int WBSDefinition::defaultCodeIndex() const {
     QValueList<QPair<QString, QString> >::const_iterator it;
     int i = -1;
     for(it = m_codeLists.begin(); it != m_codeLists.end(); ++it) {
@@ -172,7 +172,7 @@ int KPTWBSDefinition::defaultCodeIndex() const {
     return i;
 }
 
-bool KPTWBSDefinition::setDefaultCode(uint index) {
+bool WBSDefinition::setDefaultCode(uint index) {
     QValueList<QPair<QString, QString> >::const_iterator it = m_codeLists.at(index);
     if (it == m_codeLists.end()) {
         return false;
@@ -181,7 +181,7 @@ bool KPTWBSDefinition::setDefaultCode(uint index) {
     return true;
 }
 
-void KPTWBSDefinition::setDefaultSeparator(QString s) {
+void WBSDefinition::setDefaultSeparator(QString s) {
     m_defaultDef.separator = s;
 }
 

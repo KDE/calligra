@@ -94,7 +94,7 @@
 namespace KPlato
 {
 
-KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
+View::View(Part* part, QWidget* parent, const char* /*name*/)
     : KoView(part, parent, "Main View"),
     m_ganttview(0),
     m_ganttlayout(0),
@@ -104,7 +104,7 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     m_baselineMode(false)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    setInstance(KPTFactory::global());
+    setInstance(Factory::global());
     if ( !part->isReadWrite() )
         setXMLFile("kplato_readonly.rc");
     else
@@ -117,26 +117,26 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
     QVBoxLayout *layout = new QVBoxLayout(this);
 	layout->add(m_tab);
 
-	m_ganttview = new KPTGanttView(this, m_tab, part->isReadWrite());
+	m_ganttview = new GanttView(this, m_tab, part->isReadWrite());
 	m_tab->addWidget(m_ganttview);
 
-	m_pertview = new KPTPertView( this, m_tab, layout );
+	m_pertview = new PertView( this, m_tab, layout );
     m_tab->addWidget(m_pertview);
 
-    m_resourceview = new KPTResourceView( this, m_tab );
+    m_resourceview = new ResourceView( this, m_tab );
     m_tab->addWidget(m_resourceview);
     
-    m_reportview = new KPTReportView(this, m_tab);
+    m_reportview = new ReportView(this, m_tab);
     m_tab->addWidget(m_reportview);
 
     connect(m_tab, SIGNAL(aboutToShow(QWidget *)), this, SLOT(slotAboutToShow(QWidget *)));
     
-    connect(m_pertview, SIGNAL(addRelation(KPTNode*, KPTNode*)), SLOT(slotAddRelation(KPTNode*, KPTNode*)));
-    connect(m_pertview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
+    connect(m_pertview, SIGNAL(addRelation(Node*, Node*)), SLOT(slotAddRelation(Node*, Node*)));
+    connect(m_pertview, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)));
 
-    connect(m_ganttview, SIGNAL(addRelation(KPTNode*, KPTNode*, int)), SLOT(slotAddRelation(KPTNode*, KPTNode*, int)));
-    connect(m_ganttview, SIGNAL(modifyRelation(KPTRelation*, int)), SLOT(slotModifyRelation(KPTRelation*, int)));
-    connect(m_ganttview, SIGNAL(modifyRelation(KPTRelation*)), SLOT(slotModifyRelation(KPTRelation*)));
+    connect(m_ganttview, SIGNAL(addRelation(Node*, Node*, int)), SLOT(slotAddRelation(Node*, Node*, int)));
+    connect(m_ganttview, SIGNAL(modifyRelation(Relation*, int)), SLOT(slotModifyRelation(Relation*, int)));
+    connect(m_ganttview, SIGNAL(modifyRelation(Relation*)), SLOT(slotModifyRelation(Relation*)));
 
 
 	// The menu items
@@ -244,36 +244,36 @@ KPTView::KPTView(KPTPart* part, QWidget* parent, const char* /*name*/)
 
 }
 
-KPTView::~KPTView()
+View::~View()
 {
   delete m_dcop;
 }
 
-DCOPObject * KPTView::dcopObject()
+DCOPObject * View::dcopObject()
 {
   if ( !m_dcop )
-    m_dcop = new KPtViewIface( this );
+    m_dcop = new ViewIface( this );
 
   return m_dcop;
 }
 
 
-KPTProject& KPTView::getProject() const
+Project& View::getProject() const
 {
 	return getPart()->getProject();
 }
 
-void KPTView::setZoom(double zoom) {
+void View::setZoom(double zoom) {
     m_ganttview->zoom(zoom);
 	m_pertview->zoom(zoom);
 }
 
-void KPTView::setupPrinter(KPrinter &printer) {
+void View::setupPrinter(KPrinter &printer) {
     kdDebug()<<k_funcinfo<<endl;
 
 }
 
-void KPTView::print(KPrinter &printer) {
+void View::print(KPrinter &printer) {
     kdDebug()<<k_funcinfo<<endl;
 	if (m_tab->visibleWidget() == m_ganttview)
 	{
@@ -294,86 +294,86 @@ void KPTView::print(KPrinter &printer) {
 
 }
 
-void KPTView::slotEditCut() {
+void View::slotEditCut() {
     //kdDebug()<<k_funcinfo<<endl;
 }
 
-void KPTView::slotEditCopy() {
+void View::slotEditCopy() {
     //kdDebug()<<k_funcinfo<<endl;
 }
 
-void KPTView::slotEditPaste() {
+void View::slotEditPaste() {
     //kdDebug()<<k_funcinfo<<endl;
 }
 
-void KPTView::slotViewGanttResources() {
+void View::slotViewGanttResources() {
     kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowResources(actionViewGanttResources->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
-void KPTView::slotViewGanttTaskName() {
+void View::slotViewGanttTaskName() {
     kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowTaskName(actionViewGanttTaskName->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
-void KPTView::slotViewGanttTaskLinks() {
+void View::slotViewGanttTaskLinks() {
     kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowTaskLinks(actionViewGanttTaskLinks->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
-void KPTView::slotViewGanttProgress() {
+void View::slotViewGanttProgress() {
     kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowProgress(actionViewGanttProgress->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
-void KPTView::slotViewGanttFloat() {
+void View::slotViewGanttFloat() {
     kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowPositiveFloat(actionViewGanttFloat->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
-void KPTView::slotViewGanttCriticalTasks() {
+void View::slotViewGanttCriticalTasks() {
     kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowCriticalTasks(actionViewGanttCriticalTasks->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
-void KPTView::slotViewGanttCriticalPath() {
+void View::slotViewGanttCriticalPath() {
     kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowCriticalPath(actionViewGanttCriticalPath->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
-void KPTView::slotViewGantt() {
+void View::slotViewGantt() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_ganttview);
 }
 
-void KPTView::slotViewPert() {
+void View::slotViewPert() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_pertview);
     m_pertview->draw();
 }
 
-void KPTView::slotViewResources() {
+void View::slotViewResources() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_resourceview);
 	m_resourceview->draw(getPart()->getProject());
 }
 
-void KPTView::slotProjectEdit() {
-    KPTMainProjectDialog *dia = new KPTMainProjectDialog(getProject());
+void View::slotProjectEdit() {
+    MainProjectDialog *dia = new MainProjectDialog(getProject());
     if (dia->exec()) {
         KCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
@@ -383,8 +383,8 @@ void KPTView::slotProjectEdit() {
     delete dia;
 }
 
-void KPTView::slotProjectCalendar() {
-    KPTCalendarListDialog *dia = new KPTCalendarListDialog(getProject());
+void View::slotProjectCalendar() {
+    CalendarListDialog *dia = new CalendarListDialog(getProject());
     if (dia->exec()) {
         KCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
@@ -395,8 +395,8 @@ void KPTView::slotProjectCalendar() {
     delete dia;
 }
 
-void KPTView::slotProjectAccounts() {
-    KPTAccountsDialog *dia = new KPTAccountsDialog(getProject().accounts());
+void View::slotProjectAccounts() {
+    AccountsDialog *dia = new AccountsDialog(getProject().accounts());
     if (dia->exec()) {
         KCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
@@ -407,8 +407,8 @@ void KPTView::slotProjectAccounts() {
     delete dia;
 }
 
-void KPTView::slotProjectWorktime() {
-    KPTStandardWorktimeDialog *dia = new KPTStandardWorktimeDialog(getProject());
+void View::slotProjectWorktime() {
+    StandardWorktimeDialog *dia = new StandardWorktimeDialog(getProject());
     if (dia->exec()) {
         KCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
@@ -419,8 +419,8 @@ void KPTView::slotProjectWorktime() {
     delete dia;
 }
 
-void KPTView::slotProjectResources() {
-    KPTResourcesDialog *dia = new KPTResourcesDialog(getProject());
+void View::slotProjectResources() {
+    ResourcesDialog *dia = new ResourcesDialog(getProject());
     if (dia->exec()) {
         KCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
@@ -431,11 +431,11 @@ void KPTView::slotProjectResources() {
     delete dia;
 }
 
-void KPTView::slotProjectCalculate() {
+void View::slotProjectCalculate() {
     slotUpdate(true);
 }
 
-void KPTView::projectCalculate() {
+void View::projectCalculate() {
     if (getProject().actualEffort() > 0.0) {
         // NOTE: This can be removed when proper baselining etc is implemented
         if (KMessageBox::warningContinueCancel(this, i18n("Progress information will be deleted if the project is recalculated."), i18n("Calculate"), i18n("Calculate")) == KMessageBox::Cancel) {
@@ -447,11 +447,11 @@ void KPTView::projectCalculate() {
     QApplication::restoreOverrideCursor();
 }
 
-void KPTView::slotReportDesign() {
+void View::slotReportDesign() {
     //kdDebug()<<k_funcinfo<<endl;
 }
 
-void KPTView::slotReportGenerate(int idx) {
+void View::slotReportGenerate(int idx) {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_reportview);
     QString *file = m_reportTemplateFiles.at(idx);
@@ -461,20 +461,20 @@ void KPTView::slotReportGenerate(int idx) {
     actionReportGenerate->setCurrentItem(-1); //remove checkmark
 }
 
-void KPTView::slotAddSubTask() {
+void View::slotAddSubTask() {
 	// If we are positionend on the root project, then what we really want to
 	// do is to add a first project. We will silently accept the challenge
 	// and will not complain.
-    KPTTask* node = new KPTTask(getPart()->config().taskDefaults(), currentTask());
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
+    Task* node = new Task(getPart()->config().taskDefaults(), currentTask());
+    TaskDialog *dia = new TaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
     if (dia->exec()) {
-		KPTNode *currNode = currentTask();
+		Node *currNode = currentTask();
 		if (currNode)
         {
             KCommand *m = dia->buildCommand(getPart());
             m->execute(); // do changes to task
             delete m;
-            KPTSubtaskAddCmd *cmd = new KPTSubtaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Subtask"));
+            SubtaskAddCmd *cmd = new SubtaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Subtask"));
             getPart()->addCommand(cmd); // add task to project
 			return;
 	    }
@@ -486,17 +486,17 @@ void KPTView::slotAddSubTask() {
 }
 
 
-void KPTView::slotAddTask() {
-    KPTTask *node = new KPTTask(getPart()->config().taskDefaults(), currentTask());
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
+void View::slotAddTask() {
+    Task *node = new Task(getPart()->config().taskDefaults(), currentTask());
+    TaskDialog *dia = new TaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
     if (dia->exec()) {
-		KPTNode* currNode = currentTask();
+		Node* currNode = currentTask();
 		if (currNode)
         {
             KCommand *m = dia->buildCommand(getPart());
             m->execute(); // do changes to task
             delete m;
-            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Task"));
+            TaskAddCmd *cmd = new TaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Task"));
             getPart()->addCommand(cmd); // add task to project
 			return;
 	    }
@@ -507,23 +507,23 @@ void KPTView::slotAddTask() {
     delete dia;
 }
 
-void KPTView::slotAddMilestone() {
-	KPTDuration zeroDuration(0);
-    KPTTask* node = new KPTTask(currentTask());
+void View::slotAddMilestone() {
+	Duration zeroDuration(0);
+    Task* node = new Task(currentTask());
 	node->effort()->set( zeroDuration );
 
-    //KPTMilestone *node = new KPTMilestone(currentTask());
+    //Milestone *node = new Milestone(currentTask());
     node->setName(i18n("Milestone"));
 
-    KPTTaskDialog *dia = new KPTTaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
+    TaskDialog *dia = new TaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
     if (dia->exec()) {
-		KPTNode *currNode = currentTask();
+		Node *currNode = currentTask();
 		if (currNode)
         {
             KCommand *m = dia->buildCommand(getPart());
             m->execute(); // do changes to task
             delete m;
-            KPTTaskAddCmd *cmd = new KPTTaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Milestone"));
+            TaskAddCmd *cmd = new TaskAddCmd(getPart(), &(getProject()), node, currNode, i18n("Add Milestone"));
             getPart()->addCommand(cmd); // add task to project
 			return;
 	    }
@@ -534,30 +534,30 @@ void KPTView::slotAddMilestone() {
     delete dia;
 }
 
-void KPTView::slotDefineWBS() {
+void View::slotDefineWBS() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTWBSDefinitionDialog *dia = new KPTWBSDefinitionDialog(getPart()->wbsDefinition());
+    WBSDefinitionDialog *dia = new WBSDefinitionDialog(getPart()->wbsDefinition());
     dia->exec();
     
     delete dia;
 }
 
-void KPTView::slotGenerateWBS() {
+void View::slotGenerateWBS() {
     //kdDebug()<<k_funcinfo<<endl;
     getPart()->generateWBS();
     slotUpdate(false);
 }
 
-void KPTView::slotConfigure() {
+void View::slotConfigure() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTConfigDialog *dia = new KPTConfigDialog(getPart()->config());
+    ConfigDialog *dia = new ConfigDialog(getPart()->config());
     dia->exec();
     delete dia;
 }
 
-KPTNode *KPTView::currentTask()
+Node *View::currentTask()
 {
-	KPTNode* task = 0;
+	Node* task = 0;
 	if (m_tab->visibleWidget() == m_ganttview) {
 	    task = m_ganttview->currentNode();
 	}
@@ -573,16 +573,16 @@ KPTNode *KPTView::currentTask()
 	return &(getProject());
 }
 
-void KPTView::slotOpenNode() {
+void View::slotOpenNode() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTNode *node = currentTask();
+    Node *node = currentTask();
     if (!node)
         return;
 
     switch (node->type()) {
-        case KPTNode::Type_Project: {
-            KPTProject *project = dynamic_cast<KPTProject *>(node);
-            KPTMainProjectDialog *dia = new KPTMainProjectDialog(*project);
+        case Node::Type_Project: {
+            Project *project = dynamic_cast<Project *>(node);
+            MainProjectDialog *dia = new MainProjectDialog(*project);
             if (dia->exec()){
                 KCommand *m = dia->buildCommand(getPart());
                 if (m) {
@@ -592,12 +592,12 @@ void KPTView::slotOpenNode() {
             delete dia;
             break;
         }
-        case KPTNode::Type_Subproject:
+        case Node::Type_Subproject:
             //TODO
             break;
-        case KPTNode::Type_Task: {
-            KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
+        case Node::Type_Task: {
+            Task *task = dynamic_cast<Task *>(node);
+            TaskDialog *dia = new TaskDialog(*task, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
             if (dia->exec()) {
                 KCommand *m = dia->buildCommand(getPart());
                 if (m) {
@@ -607,13 +607,13 @@ void KPTView::slotOpenNode() {
             delete dia;
             break;
         }
-        case KPTNode::Type_Milestone: {
+        case Node::Type_Milestone: {
             // Use the normal task dialog for now.
             // Maybe milestone should have it's own dialog, but we need to be able to
             // enter a duration in case we accidentally set a tasks duration to zero
             // and hence, create a milestone
-            KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTTaskDialog *dia = new KPTTaskDialog(*task, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
+            Task *task = dynamic_cast<Task *>(node);
+            TaskDialog *dia = new TaskDialog(*task, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
             if (dia->exec()) {
                 KCommand *m = dia->buildCommand(getPart());
                 if (m) {
@@ -623,7 +623,7 @@ void KPTView::slotOpenNode() {
             delete dia;
             break;
         }
-        case KPTNode::Type_Summarytask: {
+        case Node::Type_Summarytask: {
             // TODO
             break;
         }
@@ -632,22 +632,22 @@ void KPTView::slotOpenNode() {
     }
 }
 
-void KPTView::slotTaskProgress() {
+void View::slotTaskProgress() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTNode *node = currentTask();
+    Node *node = currentTask();
     if (!node)
         return;
 
     switch (node->type()) {
-        case KPTNode::Type_Project: {
+        case Node::Type_Project: {
             break;
         }
-        case KPTNode::Type_Subproject:
+        case Node::Type_Subproject:
             //TODO
             break;
-        case KPTNode::Type_Task: {
-            KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTTaskProgressDialog *dia = new KPTTaskProgressDialog(*task, getProject().standardWorktime());
+        case Node::Type_Task: {
+            Task *task = dynamic_cast<Task *>(node);
+            TaskProgressDialog *dia = new TaskProgressDialog(*task, getProject().standardWorktime());
             if (dia->exec()) {
                 KCommand *m = dia->buildCommand(getPart());
                 if (m) {
@@ -657,9 +657,9 @@ void KPTView::slotTaskProgress() {
             delete dia;
             break;
         }
-        case KPTNode::Type_Milestone: {
-            KPTTask *task = dynamic_cast<KPTTask *>(node);
-            KPTMilestoneProgressDialog *dia = new KPTMilestoneProgressDialog(*task);
+        case Node::Type_Milestone: {
+            Task *task = dynamic_cast<Task *>(node);
+            MilestoneProgressDialog *dia = new MilestoneProgressDialog(*task);
             if (dia->exec()) {
                 KCommand *m = dia->buildCommand(getPart());
                 if (m) {
@@ -669,7 +669,7 @@ void KPTView::slotTaskProgress() {
             delete dia;
             break;
         }
-        case KPTNode::Type_Summarytask: {
+        case Node::Type_Summarytask: {
             // TODO
             break;
         }
@@ -678,102 +678,102 @@ void KPTView::slotTaskProgress() {
     }
 }
 
-void KPTView::slotDeleteTask()
+void View::slotDeleteTask()
 {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTNode *node = currentTask();
+    Node *node = currentTask();
     if (node == 0 || node->getParent() == 0) {
         kdDebug()<<k_funcinfo<<(node ? "Task is main project" : "No current task")<<endl;
         return;
     }
     KMacroCommand *cmd = new KMacroCommand(i18n("Delete Task"));
-    cmd->addCommand(new KPTNodeDeleteCmd(getPart(), node));
-    QPtrListIterator<KPTRelation> it = node->dependChildNodes();
+    cmd->addCommand(new NodeDeleteCmd(getPart(), node));
+    QPtrListIterator<Relation> it = node->dependChildNodes();
     for (; it.current(); ++it) {
-        cmd->addCommand(new KPTDeleteRelationCmd(getPart(), it.current()));
+        cmd->addCommand(new DeleteRelationCmd(getPart(), it.current()));
     }
     it = node->dependParentNodes();
     for (; it.current(); ++it) {
-        cmd->addCommand(new KPTDeleteRelationCmd(getPart(),it.current()));
+        cmd->addCommand(new DeleteRelationCmd(getPart(),it.current()));
     }
     getPart()->addCommand(cmd);
 }
 
-void KPTView::slotIndentTask()
+void View::slotIndentTask()
 {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTNode *node = currentTask();
+    Node *node = currentTask();
     if (node == 0 || node->getParent() == 0) {
         kdDebug()<<k_funcinfo<<(node ? "Task is main project" : "No current task")<<endl;
         return;
     }
     if (getProject().canIndentTask(node)) {
-        KPTNodeIndentCmd *cmd = new KPTNodeIndentCmd(getPart(), *node, i18n("Indent Task"));
+        NodeIndentCmd *cmd = new NodeIndentCmd(getPart(), *node, i18n("Indent Task"));
         getPart()->addCommand(cmd);
     }
 }
 
-void KPTView::slotUnindentTask()
+void View::slotUnindentTask()
 {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTNode *node = currentTask();
+    Node *node = currentTask();
     if (node == 0 || node->getParent() == 0) {
         kdDebug()<<k_funcinfo<<(node ? "Task is main project" : "No current task")<<endl;
         return;
     }
     if (getProject().canUnindentTask(node)) {
-        KPTNodeUnindentCmd *cmd = new KPTNodeUnindentCmd(getPart(), *node, i18n("Unindent Task"));
+        NodeUnindentCmd *cmd = new NodeUnindentCmd(getPart(), *node, i18n("Unindent Task"));
         getPart()->addCommand(cmd);
     }
 }
 
-void KPTView::slotMoveTaskUp()
+void View::slotMoveTaskUp()
 {
     //kdDebug()<<k_funcinfo<<endl;
 
-	KPTNode* task = currentTask();
+	Node* task = currentTask();
 	if ( 0 == task ) {
-		// is always != 0. At least we would get the KPTProject, but you never know who might change that
+		// is always != 0. At least we would get the Project, but you never know who might change that
 		// so better be careful
 		kdError()<<k_funcinfo<<"No current task"<<endl;
 		return;
 	}
 
-	if ( KPTNode::Type_Project == task->type() ) {
+	if ( Node::Type_Project == task->type() ) {
 		kdDebug()<<k_funcinfo<<"The root node cannot be moved up"<<endl;
 		return;
 	}
     if (getProject().canMoveTaskUp(task)) {
-        KPTNodeMoveUpCmd *cmd = new KPTNodeMoveUpCmd(getPart(), *task, i18n("Move Task Up"));
+        NodeMoveUpCmd *cmd = new NodeMoveUpCmd(getPart(), *task, i18n("Move Task Up"));
         getPart()->addCommand(cmd);
     }
 }
 
-void KPTView::slotMoveTaskDown()
+void View::slotMoveTaskDown()
 {
     //kdDebug()<<k_funcinfo<<endl;
 
-	KPTNode* task = currentTask();
+	Node* task = currentTask();
 	if ( 0 == task ) {
-		// is always != 0. At least we would get the KPTProject, but you never know who might change that
+		// is always != 0. At least we would get the Project, but you never know who might change that
 		// so better be careful
 		return;
 	}
 
-	if ( KPTNode::Type_Project == task->type() ) {
+	if ( Node::Type_Project == task->type() ) {
 		kdDebug()<<k_funcinfo<<"The root node cannot be moved down"<<endl;
 		return;
 	}
     if (getProject().canMoveTaskDown(task)) {
-        KPTNodeMoveDownCmd *cmd = new KPTNodeMoveDownCmd(getPart(), *task, i18n("Move Task Down"));
+        NodeMoveDownCmd *cmd = new NodeMoveDownCmd(getPart(), *task, i18n("Move Task Down"));
         getPart()->addCommand(cmd);
     }
 }
 
-void KPTView::slotAddRelation(KPTNode *par, KPTNode *child) {
+void View::slotAddRelation(Node *par, Node *child) {
     kdDebug()<<k_funcinfo<<endl;
-    KPTRelation *rel = new KPTRelation(par, child);
-    KPTAddRelationDialog *dia = new KPTAddRelationDialog(rel, this);
+    Relation *rel = new Relation(par, child);
+    AddRelationDialog *dia = new AddRelationDialog(rel, this);
     if (dia->exec()) {
         KCommand *cmd = dia->buildCommand(getPart());
         if (cmd)
@@ -784,25 +784,25 @@ void KPTView::slotAddRelation(KPTNode *par, KPTNode *child) {
     delete dia;
 }
 
-void KPTView::slotAddRelation(KPTNode *par, KPTNode *child, int linkType) {
+void View::slotAddRelation(Node *par, Node *child, int linkType) {
     kdDebug()<<k_funcinfo<<endl;
-    if (linkType == KPTRelation::FinishStart ||
-        linkType == KPTRelation::StartStart ||
-        linkType == KPTRelation::FinishFinish) 
+    if (linkType == Relation::FinishStart ||
+        linkType == Relation::StartStart ||
+        linkType == Relation::FinishFinish) 
     {
-        KPTRelation *rel = new KPTRelation(par, child,  static_cast<KPTRelation::Type>(linkType));
-        getPart()->addCommand(new KPTAddRelationCmd(getPart(), rel, i18n("Add Relation")));
+        Relation *rel = new Relation(par, child,  static_cast<Relation::Type>(linkType));
+        getPart()->addCommand(new AddRelationCmd(getPart(), rel, i18n("Add Relation")));
     } else {
         slotAddRelation(par, child);
     }
 }
 
-void KPTView::slotModifyRelation(KPTRelation *rel) {
+void View::slotModifyRelation(Relation *rel) {
     kdDebug()<<k_funcinfo<<endl;
-    KPTModifyRelationDialog *dia = new KPTModifyRelationDialog(rel, this);
+    ModifyRelationDialog *dia = new ModifyRelationDialog(rel, this);
     if (dia->exec()) {
         if (dia->relationIsDeleted()) {
-            getPart()->addCommand(new KPTDeleteRelationCmd(getPart(), rel, i18n("Delete Relation")));
+            getPart()->addCommand(new DeleteRelationCmd(getPart(), rel, i18n("Delete Relation")));
         } else {
             KCommand *cmd = dia->buildCommand(getPart());
             if (cmd) {
@@ -813,20 +813,20 @@ void KPTView::slotModifyRelation(KPTRelation *rel) {
     delete dia;
 }
 
-void KPTView::slotModifyRelation(KPTRelation *rel, int linkType) {
+void View::slotModifyRelation(Relation *rel, int linkType) {
     kdDebug()<<k_funcinfo<<endl;
-    if (linkType == KPTRelation::FinishStart ||
-        linkType == KPTRelation::StartStart ||
-        linkType == KPTRelation::FinishFinish) 
+    if (linkType == Relation::FinishStart ||
+        linkType == Relation::StartStart ||
+        linkType == Relation::FinishFinish) 
     {
-        getPart()->addCommand(new KPTModifyRelationTypeCmd(getPart(), rel, static_cast<KPTRelation::Type>(linkType)));
+        getPart()->addCommand(new ModifyRelationTypeCmd(getPart(), rel, static_cast<Relation::Type>(linkType)));
     } else {
         slotModifyRelation(rel);
     }
 }
 
 // testing
-void KPTView::slotExportGantt() {
+void View::slotExportGantt() {
     kdDebug()<<k_funcinfo<<endl;
     if (!m_ganttview) {
         return;
@@ -838,33 +838,33 @@ void KPTView::slotExportGantt() {
     }
 }
 
-void KPTView::slotEditResource() {
+void View::slotEditResource() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTResource *r = m_resourceview->currentResource();
+    Resource *r = m_resourceview->currentResource();
     if (!r)
         return;
-    KPTResourceDialog *dia = new KPTResourceDialog(getProject(), *r);
+    ResourceDialog *dia = new ResourceDialog(getProject(), *r);
     if (dia->exec())
         slotUpdate(true); //FIXME: just refresh the view
     delete dia;
 }
 
-void KPTView::updateReadWrite(bool /*readwrite*/) {
+void View::updateReadWrite(bool /*readwrite*/) {
 }
 
-KPTPart *KPTView::getPart()const {
-    return (KPTPart *)koDocument();
+Part *View::getPart()const {
+    return (Part *)koDocument();
 }
 
-void KPTView::slotConnectNode() {
+void View::slotConnectNode() {
     //kdDebug()<<k_funcinfo<<endl;
-/*    KPTNodeItem *curr = m_ganttview->currentItem();
+/*    NodeItem *curr = m_ganttview->currentItem();
     if (curr) {
         kdDebug()<<k_funcinfo<<"node="<<curr->getNode().name()<<endl;
     }*/
 }
 
-QPopupMenu * KPTView::popupMenu( const QString& name )
+QPopupMenu * View::popupMenu( const QString& name )
 {
     //kdDebug()<<k_funcinfo<<endl;
     Q_ASSERT(factory());
@@ -873,19 +873,19 @@ QPopupMenu * KPTView::popupMenu( const QString& name )
     return 0L;
 }
 
-void KPTView::slotChanged(QWidget *)
+void View::slotChanged(QWidget *)
 {
     //kdDebug()<<k_funcinfo<<endl;
     slotUpdate(false);
 }
 
-void KPTView::slotChanged()
+void View::slotChanged()
 {
     //kdDebug()<<k_funcinfo<<endl;
     slotUpdate(false);
 }
 
-void KPTView::slotUpdate(bool calculate)
+void View::slotUpdate(bool calculate)
 {
     kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
     if (calculate)
@@ -913,7 +913,7 @@ void KPTView::slotUpdate(bool calculate)
 }
 
 //FIXME: We need a solution that takes care project specific reports.
-void KPTView::setReportGenerateMenu() {
+void View::setReportGenerateMenu() {
     kdDebug()<<k_funcinfo<<endl;
     QStringList list;
     m_reportTemplateFiles.clear();
@@ -941,7 +941,7 @@ void KPTView::setReportGenerateMenu() {
     actionReportGenerate->setItems(list);
 }
 
-void KPTView::slotAboutToShow(QWidget *widget) {
+void View::slotAboutToShow(QWidget *widget) {
 	if (widget == m_ganttview)
 	{
         //kdDebug()<<k_funcinfo<<"draw gantt"<<endl;
@@ -968,15 +968,15 @@ void KPTView::slotAboutToShow(QWidget *widget) {
 
 }
 
-void KPTView::renameNode(KPTNode *node, QString name) {
+void View::renameNode(Node *node, QString name) {
     //kdDebug()<<k_funcinfo<<name<<endl;
     if (node) {
-        KPTNodeModifyNameCmd *cmd = new KPTNodeModifyNameCmd(getPart(), *node, name, i18n("Modify Name"));
+        NodeModifyNameCmd *cmd = new NodeModifyNameCmd(getPart(), *node, name, i18n("Modify Name"));
         getPart()->addCommand(cmd);
     }
 }
 
-bool KPTView::setContext(KPTContext &context) {
+bool View::setContext(Context &context) {
     kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setContext(context);
     // hmmm, can't decide if these should be here or actions moved to ganttview
@@ -1005,7 +1005,7 @@ bool KPTView::setContext(KPTContext &context) {
     return true;
 }
 
-void KPTView::getContext(KPTContext &context) const {
+void View::getContext(Context &context) const {
     kdDebug()<<k_funcinfo<<endl;
     if (m_tab->visibleWidget() == m_ganttview) {
         context.currentView = "ganttview";
@@ -1022,7 +1022,7 @@ void KPTView::getContext(KPTContext &context) const {
     m_reportview->getContext(context);
 }
 
-void KPTView::setBaselineMode(bool on) {
+void View::setBaselineMode(bool on) {
     kdDebug()<<k_funcinfo<<endl;
     m_baselineMode = on;
     
@@ -1051,17 +1051,17 @@ void KPTView::setBaselineMode(bool on) {
 }
 
 #ifndef NDEBUG
-void KPTView::slotPrintDebug() {
+void View::slotPrintDebug() {
     kdDebug()<<"-------- Debug printout: Node list" <<endl;
-/*    KPTNode *curr = m_ganttview->currentNode();
+/*    Node *curr = m_ganttview->currentNode();
     if (curr) {
         curr->printDebug(true,"");
     } else*/
         getPart()->getProject().printDebug(true, "");
 }
-void KPTView::slotPrintCalendarDebug() {
+void View::slotPrintCalendarDebug() {
     kdDebug()<<"-------- Debug printout: Node list" <<endl;
-/*    KPTNode *curr = m_ganttview->currentNode();
+/*    Node *curr = m_ganttview->currentNode();
     if (curr) {
         curr->printDebug(true,"");
     } else*/

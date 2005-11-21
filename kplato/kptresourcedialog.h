@@ -33,14 +33,14 @@ class QString;
 namespace KPlato
 {
 
-class KPTProject;
-class KPTResource;
-class KPTCalendar;
+class Project;
+class Resource;
+class Calendar;
 
-class KPTResourceDialogImpl : public ResourceDialogBase {
+class ResourceDialogImpl : public ResourceDialogBase {
     Q_OBJECT
 public:
-    KPTResourceDialogImpl (QWidget *parent);
+    ResourceDialogImpl (QWidget *parent);
 
 public slots:
     void slotChanged();
@@ -53,14 +53,14 @@ signals:
     void calculate();
 };
 
-class KPTResourceDialog : public KDialogBase {
+class ResourceDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTResourceDialog(KPTProject &project, KPTResource &resource, QWidget *parent=0, const char *name=0);
+    ResourceDialog(Project &project, Resource &resource, QWidget *parent=0, const char *name=0);
 
     bool calculationNeeded() {  return m_calculationNeeded; }
 
-    KPTCalendar *calendar() { return m_calendars[dia->calendarList->currentItem()]; }
+    Calendar *calendar() { return m_calendars[dia->calendarList->currentItem()]; }
     
 protected slots:
     void enableButtonOk();
@@ -69,11 +69,11 @@ protected slots:
     void slotCalendarChanged(int);
 
 private:
-    KPTResource &m_resource;
-    KPTResourceDialogImpl *dia;
+    Resource &m_resource;
+    ResourceDialogImpl *dia;
     bool m_calculationNeeded;
     
-    QMap<int, KPTCalendar*> m_calendars;
+    QMap<int, Calendar*> m_calendars;
 };
 
 } //KPlato namespace

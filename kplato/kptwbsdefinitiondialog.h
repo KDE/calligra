@@ -29,24 +29,24 @@ class KMacroCommand;
 namespace KPlato
 {
 
-class KPTWBSDefinitionPanel;
-class KPTWBSDefinition;
-class KPTPart;
+class WBSDefinitionPanel;
+class WBSDefinition;
+class Part;
 
-class KPTWBSDefinitionDialog : public KDialogBase {
+class WBSDefinitionDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTWBSDefinitionDialog(KPTWBSDefinition &def, QWidget *parent=0, const char *name=0);
+    WBSDefinitionDialog(WBSDefinition &def, QWidget *parent=0, const char *name=0);
 
-    KMacroCommand *buildCommand(KPTPart *part);
+    KMacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();
 
 private:
-    KPTWBSDefinitionPanel *m_panel;
+    WBSDefinitionPanel *m_panel;
 };
 
 } //KPlato namespace
 
-#endif // KPTWBSDEFINITIONDIALOG_H
+#endif // WBSDEFINITIONDIALOG_H

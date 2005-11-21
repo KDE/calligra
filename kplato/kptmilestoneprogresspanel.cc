@@ -34,8 +34,8 @@
 namespace KPlato
 {
 
-KPTMilestoneProgressPanel::KPTMilestoneProgressPanel(KPTTask &task, QWidget *parent, const char *name)
-    : KPTMilestoneProgressPanelImpl(parent, name),
+MilestoneProgressPanel::MilestoneProgressPanel(Task &task, QWidget *parent, const char *name)
+    : MilestoneProgressPanelImpl(parent, name),
       m_task(task)
 {
     kdDebug()<<k_funcinfo<<endl;
@@ -48,7 +48,7 @@ KPTMilestoneProgressPanel::KPTMilestoneProgressPanel(KPTTask &task, QWidget *par
 }
 
 
-bool KPTMilestoneProgressPanel::ok() {
+bool MilestoneProgressPanel::ok() {
     m_progress.started = finished->isChecked();
     m_progress.finished = finished->isChecked();
     m_progress.startTime = finishTime->dateTime();
@@ -57,19 +57,19 @@ bool KPTMilestoneProgressPanel::ok() {
     return true;
 }
 
-KCommand *KPTMilestoneProgressPanel::buildCommand(KPTPart *part) {
+KCommand *MilestoneProgressPanel::buildCommand(Part *part) {
     KCommand *cmd = 0;
     QString c = i18n("Modify progress");
     if (m_task.progress() != m_progress) {
-        cmd = new KPTTaskModifyProgressCmd(part, m_task, m_progress, c);
+        cmd = new TaskModifyProgressCmd(part, m_task, m_progress, c);
     }
     return cmd;
 }
 
 //-------------------------------------
 
-KPTMilestoneProgressPanelImpl::KPTMilestoneProgressPanelImpl(QWidget *parent, const char *name, WFlags f)
-    : KPTMilestoneProgressPanelBase(parent, name, f) {
+MilestoneProgressPanelImpl::MilestoneProgressPanelImpl(QWidget *parent, const char *name, WFlags f)
+    : MilestoneProgressPanelBase(parent, name, f) {
     
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotChanged()));
@@ -78,11 +78,11 @@ KPTMilestoneProgressPanelImpl::KPTMilestoneProgressPanelImpl(QWidget *parent, co
     
 }
 
-void KPTMilestoneProgressPanelImpl::slotChanged() {
+void MilestoneProgressPanelImpl::slotChanged() {
     emit changed();
 }
 
-void KPTMilestoneProgressPanelImpl::slotFinishedChanged(bool state) {
+void MilestoneProgressPanelImpl::slotFinishedChanged(bool state) {
     if (state) {
         if (!finishTime->dateTime().isValid()) {
             finishTime->setDateTime(QDateTime::currentDateTime());
@@ -92,7 +92,7 @@ void KPTMilestoneProgressPanelImpl::slotFinishedChanged(bool state) {
 }
 
 
-void KPTMilestoneProgressPanelImpl::enableWidgets() {
+void MilestoneProgressPanelImpl::enableWidgets() {
     finished->setEnabled(true);
     finishTime->setEnabled(finished->isChecked());
 }

@@ -11,14 +11,14 @@
 namespace KPlato
 {
 
-class KPTView;
+class View;
 
-class KPtViewIface : public KoViewIface
+class ViewIface : public KoViewIface
 {
     K_DCOP
 public:
-    KPtViewIface( KPTView* );
-    ~KPtViewIface();
+    ViewIface( View* );
+    ~ViewIface();
 
 k_dcop:
     void slotEditResource();
@@ -35,7 +35,7 @@ k_dcop:
     void slotConfigure();
 
 private:
-    KPTView* m_view;
+    View* m_view;
 };
 
 }

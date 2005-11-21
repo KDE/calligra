@@ -38,8 +38,8 @@
 namespace KPlato
 {
 
-KPTWBSDefinitionPanel::KPTWBSDefinitionPanel(KPTWBSDefinition &def, QWidget *p, const char *n)
-    : KPTWBSDefinitionPanelBase(p, n),
+WBSDefinitionPanel::WBSDefinitionPanel(WBSDefinition &def, QWidget *p, const char *n)
+    : WBSDefinitionPanelBase(p, n),
       m_def(def)
 {
     removeBtn->setEnabled(false);
@@ -52,10 +52,10 @@ KPTWBSDefinitionPanel::KPTWBSDefinitionPanel(KPTWBSDefinition &def, QWidget *p, 
     
     levelsGroup->setChecked(def.isLevelsDefEnabled());
     int i = 0;
-    const QMap<int, KPTWBSDefinition::CodeDef> &lev = def.levelsDef();
+    const QMap<int, WBSDefinition::CodeDef> &lev = def.levelsDef();
     levelsTable->setNumRows(lev.count());
     kdDebug()<<"Map size="<<lev.count()<<endl;
-    QMap<int, KPTWBSDefinition::CodeDef>::const_iterator it;
+    QMap<int, WBSDefinition::CodeDef>::const_iterator it;
     for (it = lev.begin(); it != lev.end(); ++it) {
         levelsTable->verticalHeader()->setLabel(i, QString("%1").arg(it.key()));
         QComboTableItem *item = new QComboTableItem(levelsTable, codeList, true);
@@ -77,16 +77,16 @@ KPTWBSDefinitionPanel::KPTWBSDefinitionPanel(KPTWBSDefinition &def, QWidget *p, 
     connect(addBtn, SIGNAL(clicked()), SLOT(slotAddBtnClicked()));
 }
 
-void KPTWBSDefinitionPanel::setStartValues(KPTPart *part) {
+void WBSDefinitionPanel::setStartValues(Part *part) {
 }
 
-KMacroCommand *KPTWBSDefinitionPanel::buildCommand(KPTPart *part) {
+KMacroCommand *WBSDefinitionPanel::buildCommand(Part *part) {
     KMacroCommand *cmd = new KMacroCommand(i18n("Modify WBS Definition"));
 
     return cmd;
 }
 
-bool KPTWBSDefinitionPanel::ok() {
+bool WBSDefinitionPanel::ok() {
     m_def.setDefaultCode(defaultCode->currentItem());
     m_def.setDefaultSeparator(defaultSeparator->text());
     
@@ -99,11 +99,11 @@ bool KPTWBSDefinitionPanel::ok() {
     return true;
 }
 
-void KPTWBSDefinitionPanel::slotChanged() {
+void WBSDefinitionPanel::slotChanged() {
     emit changed(true);
 }
 
-void KPTWBSDefinitionPanel::slotSelectionChanged() {
+void WBSDefinitionPanel::slotSelectionChanged() {
     QString s;
     bool rowSelected = false;
     for (int i=0; i < levelsTable->numRows(); ++i) {
@@ -117,7 +117,7 @@ void KPTWBSDefinitionPanel::slotSelectionChanged() {
     kdDebug()<<k_funcinfo<<s<<endl;
 }
 
-void KPTWBSDefinitionPanel::slotRemoveBtnClicked() {
+void WBSDefinitionPanel::slotRemoveBtnClicked() {
     QMemArray<int> rows;
     for (int i=0; i < levelsTable->numRows(); ++i) {
         if (levelsTable->isRowSelected(i)) {
@@ -130,7 +130,7 @@ void KPTWBSDefinitionPanel::slotRemoveBtnClicked() {
     slotLevelChanged(level->value());
 }
 
-void KPTWBSDefinitionPanel::slotAddBtnClicked() {
+void WBSDefinitionPanel::slotAddBtnClicked() {
     kdDebug()<<k_funcinfo<<endl;
     int i=levelsTable->numRows()-1;
     for (; i >= 0; --i) {
@@ -153,7 +153,7 @@ void KPTWBSDefinitionPanel::slotAddBtnClicked() {
     kdDebug()<<k_funcinfo<<"Added row="<<i<<" level="<<level->value()<<endl;
 }
 
-void KPTWBSDefinitionPanel::slotLevelChanged(int value) {
+void WBSDefinitionPanel::slotLevelChanged(int value) {
     for (int i=0; i < levelsTable->numRows(); ++i) {
         if (value == levelsTable->verticalHeader()->label(i).toInt()) {
             addBtn->setEnabled(false);
@@ -162,7 +162,7 @@ void KPTWBSDefinitionPanel::slotLevelChanged(int value) {
     }
     addBtn->setEnabled(levelsGroup->isChecked());
 }
-void KPTWBSDefinitionPanel::slotLevelsGroupToggled(bool on) {
+void WBSDefinitionPanel::slotLevelsGroupToggled(bool on) {
     slotLevelChanged(level->value());
 }
 

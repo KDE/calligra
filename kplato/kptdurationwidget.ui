@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>KPlato::KPTDurationWidget</class>
+<class>KPlato::DurationWidget</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>KPTDurationWidget</cstring>
+        <cstring>DurationWidget</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -27,7 +27,7 @@
         </size>
     </property>
     <property name="caption">
-        <string>KPTDurationWidget</string>
+        <string>DurationWidget</string>
     </property>
     <hbox>
         <property name="name">
@@ -343,31 +343,31 @@
     <connection>
         <sender>m_ddd</sender>
         <signal>lostFocus()</signal>
-        <receiver>KPTDurationWidget</receiver>
+        <receiver>DurationWidget</receiver>
         <slot>dddLostFocus()</slot>
     </connection>
     <connection>
         <sender>m_hh</sender>
         <signal>lostFocus()</signal>
-        <receiver>KPTDurationWidget</receiver>
+        <receiver>DurationWidget</receiver>
         <slot>hhLostFocus()</slot>
     </connection>
     <connection>
         <sender>m_mm</sender>
         <signal>lostFocus()</signal>
-        <receiver>KPTDurationWidget</receiver>
+        <receiver>DurationWidget</receiver>
         <slot>mmLostFocus()</slot>
     </connection>
     <connection>
         <sender>m_ss</sender>
         <signal>lostFocus()</signal>
-        <receiver>KPTDurationWidget</receiver>
+        <receiver>DurationWidget</receiver>
         <slot>ssLostFocus()</slot>
     </connection>
     <connection>
         <sender>m_ms</sender>
         <signal>lostFocus()</signal>
-        <receiver>KPTDurationWidget</receiver>
+        <receiver>DurationWidget</receiver>
         <slot>msLostFocus()</slot>
     </connection>
 </connections>
@@ -390,7 +390,7 @@
     <signal>valueChanged()</signal>
 </signals>
 <slots>
-    <slot>setValue( const KPlato::KPTDuration &amp; newDuration )</slot>
+    <slot>setValue( const KPlato::Duration &amp; newDuration )</slot>
     <slot access="private">dddLostFocus()</slot>
     <slot access="private">hhLostFocus()</slot>
     <slot access="private">mmLostFocus()</slot>
@@ -401,7 +401,7 @@
 <functions>
     <function access="private">init()</function>
     <function access="private" specifier="non virtual">destroy()</function>
-    <function returnType="KPTDuration">value() const</function>
+    <function returnType="Duration">value() const</function>
     <function>setVisibleFields( int fieldMask )</function>
     <function returnType="int">visibleFields()</function>
     <function>setFieldLeftscale( int f, unsigned ls )</function>

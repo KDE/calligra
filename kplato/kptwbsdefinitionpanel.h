@@ -27,19 +27,19 @@ class KMacroCommand;
 namespace KPlato
 {
 
-class KPTPart;
-class KPTWBSDefinition;
+class Part;
+class WBSDefinition;
 
-class KPTWBSDefinitionPanel : public KPTWBSDefinitionPanelBase {
+class WBSDefinitionPanel : public WBSDefinitionPanelBase {
     Q_OBJECT
 public:
-    KPTWBSDefinitionPanel(KPTWBSDefinition &def, QWidget *parent=0, const char *name=0);
+    WBSDefinitionPanel(WBSDefinition &def, QWidget *parent=0, const char *name=0);
 
-    KMacroCommand *buildCommand(KPTPart *part);
+    KMacroCommand *buildCommand(Part *part);
 
     bool ok();
 
-    void setStartValues(KPTPart *part);
+    void setStartValues(Part *part);
 
 signals:
     void changed(bool enable);
@@ -53,9 +53,9 @@ protected slots:
     void slotLevelsGroupToggled(bool on);
 private:
     
-    KPTWBSDefinition &m_def;
+    WBSDefinition &m_def;
 };
 
 } //KPlato namespace
 
-#endif // KPTWBSDEFINITIONPANEL_H
+#endif // WBSDEFINITIONPANEL_H

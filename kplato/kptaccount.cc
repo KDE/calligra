@@ -30,25 +30,25 @@ namespace KPlato
 {
 
 
-KPTAccount::KPTAccount() {
+Account::Account() {
     m_accountList.setAutoDelete(true);
 }
 
-KPTAccount::KPTAccount(QString name, QString description)
+Account::Account(QString name, QString description)
     : m_name(name),
       m_description(description) {
     
     m_accountList.setAutoDelete(true);
 }
 
-KPTAccount::~KPTAccount() {
+Account::~Account() {
     kdDebug()<<k_funcinfo<<m_name<<": "<<m_accountList.count()<<endl;
     m_accountList.clear();
     removeId();
 }
     
 
-void KPTAccount::setName(QString name) {
+void Account::setName(QString name) {
     if (findAccount() == this) {
         removeId();
     }
@@ -56,7 +56,7 @@ void KPTAccount::setName(QString name) {
     insertId();
 }
 
-void KPTAccount::append(KPTAccount *account){
+void Account::append(Account *account){
     Q_ASSERT(account);
     m_accountList.append(account); 
     account->setList(m_list);
@@ -65,8 +65,8 @@ void KPTAccount::append(KPTAccount *account){
     kdDebug()<<k_funcinfo<<account->name()<<endl;
 }
 
-void KPTAccount::insertChildren() {
-    KPTAccountListIterator it = m_accountList;
+void Account::insertChildren() {
+    AccountListIterator it = m_accountList;
     for (; it.current(); ++it) {
         it.current()->setList(m_list);
         it.current()->setParent(this);
@@ -75,7 +75,7 @@ void KPTAccount::insertChildren() {
     }
 }
 
-void KPTAccount::take(KPTAccount *account){
+void Account::take(Account *account){
     if (account == 0) {
         return;
     }
@@ -87,7 +87,7 @@ void KPTAccount::take(KPTAccount *account){
     kdDebug()<<k_funcinfo<<account->name()<<endl;
 }
     
-bool KPTAccount::load(QDomElement &element) {
+bool Account::load(QDomElement &element) {
     m_name = element.attribute("name");
     m_description = element.attribute("description");
     QDomNodeList list = element.childNodes();
@@ -95,7 +95,7 @@ bool KPTAccount::load(QDomElement &element) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "account") {
-                KPTAccount *child = new KPTAccount();
+                Account *child = new Account();
                 if (child->load(e)) {
                     m_accountList.append(child);
                 } else {
@@ -109,45 +109,45 @@ bool KPTAccount::load(QDomElement &element) {
     return true;
 }
 
-void KPTAccount::save(QDomElement &element) const {
+void Account::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("account");
     element.appendChild(me);
     me.setAttribute("name", m_name);
     me.setAttribute("description", m_description);
-    KPTAccountListIterator it = m_accountList;
+    AccountListIterator it = m_accountList;
     for (; it.current(); ++it) {
         it.current()->save(me);
     }
 }
 
-KPTAccount *KPTAccount::findAccount(const QString &id) const {
+Account *Account::findAccount(const QString &id) const {
     if (m_list) 
         return m_list->findAccount(id);
     return 0;
 }
 
-bool KPTAccount::removeId(const QString &id) {
+bool Account::removeId(const QString &id) {
     return (m_list ? m_list->removeId(id) : false);
 }
 
-bool KPTAccount::insertId() {
+bool Account::insertId() {
     return insertId(this);
 }
 
-bool KPTAccount::insertId(const KPTAccount *account) {
+bool Account::insertId(const Account *account) {
     return (m_list ? m_list->insertId(account) : false);
 }
 
 //------------------------------------
-KPTAccounts::KPTAccounts() {
+Accounts::Accounts() {
     m_accountList.setAutoDelete(true);
 }
 
-KPTAccounts::~KPTAccounts() {
+Accounts::~Accounts() {
     m_accountList.clear();
 }
 
-void KPTAccounts::append(KPTAccount *account) {
+void Accounts::append(Account *account) {
     Q_ASSERT(account);
     m_accountList.append(account); 
     account->setList(this);
@@ -157,7 +157,7 @@ void KPTAccounts::append(KPTAccount *account) {
     account->insertChildren();
 }
 
-void KPTAccounts::take(KPTAccount *account){
+void Accounts::take(Account *account){
     if (account == 0) {
         return;
     }
@@ -170,13 +170,13 @@ void KPTAccounts::take(KPTAccount *account){
     kdDebug()<<k_funcinfo<<account->name()<<endl;
 }
     
-bool KPTAccounts::load(QDomElement &element) {
+bool Accounts::load(QDomElement &element) {
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "account") {
-                KPTAccount *child = new KPTAccount();
+                Account *child = new Account();
                 if (child->load(e)) {
                     append(child);
                 } else {
@@ -190,17 +190,17 @@ bool KPTAccounts::load(QDomElement &element) {
     return true;
 }
 
-void KPTAccounts::save(QDomElement &element) const {
+void Accounts::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("accounts");
     element.appendChild(me);
-    KPTAccountListIterator it = m_accountList;
+    AccountListIterator it = m_accountList;
     for (; it.current(); ++it) {
         it.current()->save(me);
     }
 }
 
-QStringList KPTAccounts::costElements() const {
-    QDictIterator<KPTAccount> it(m_idDict);
+QStringList Accounts::costElements() const {
+    QDictIterator<Account> it(m_idDict);
     QStringList l;
     for(; it.current(); ++it) {
         if (it.current()->isElement())
@@ -210,8 +210,8 @@ QStringList KPTAccounts::costElements() const {
 }
     
 
-QStringList KPTAccounts::nameList() const {
-    QDictIterator<KPTAccount> it(m_idDict);
+QStringList Accounts::nameList() const {
+    QDictIterator<Account> it(m_idDict);
     QStringList l;
     for(; it.current(); ++it) {
         l << it.currentKey();
@@ -219,13 +219,13 @@ QStringList KPTAccounts::nameList() const {
     return l;
 }
     
-KPTAccount *KPTAccounts::findAccount(const QString &id) const {
+Account *Accounts::findAccount(const QString &id) const {
     return m_idDict.find(id);
 }
 
-bool KPTAccounts::insertId(const KPTAccount *account) {
+bool Accounts::insertId(const Account *account) {
     Q_ASSERT(account);
-    KPTAccount *a = m_idDict.find(account->name());
+    Account *a = m_idDict.find(account->name());
     if (a == 0) {
         kdDebug()<<k_funcinfo<<"'"<<account->name()<<"' inserted"<<endl;
         m_idDict.insert(account->name(), account);
@@ -240,7 +240,7 @@ bool KPTAccounts::insertId(const KPTAccount *account) {
     return false;
 }
 
-bool KPTAccounts::removeId(const QString &id) {
+bool Accounts::removeId(const QString &id) {
     bool res = m_idDict.remove(id);
     kdDebug()<<k_funcinfo<<id<<": removed="<<res<<endl;
     return res;

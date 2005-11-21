@@ -26,20 +26,21 @@
 #include <kdebug.h>
 #include <kstandarddirs.h>
 
-using namespace KPlato;
+namespace KPlato
+{
 
-K_EXPORT_COMPONENT_FACTORY( libkplatopart, KPTFactory )
+K_EXPORT_COMPONENT_FACTORY( libkplatopart, Factory )
 
-KInstance* KPTFactory::s_global = 0L;
-KAboutData* KPTFactory::s_aboutData = 0L;
+KInstance* Factory::s_global = 0L;
+KAboutData* Factory::s_aboutData = 0L;
 
-KPTFactory::KPTFactory( QObject* parent, const char* name )
+Factory::Factory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
     global();
 }
 
-KPTFactory::~KPTFactory()
+Factory::~Factory()
 {
     delete s_aboutData;
     s_aboutData = 0L;
@@ -47,7 +48,7 @@ KPTFactory::~KPTFactory()
     s_global = 0L;
 }
 
-KParts::Part *KPTFactory::createPartObject(QWidget *parentWidget,
+KParts::Part *Factory::createPartObject(QWidget *parentWidget,
 					   const char *widgetName,
 					   QObject* parent, const char* name,
 					   const char* classname,
@@ -60,7 +61,7 @@ KParts::Part *KPTFactory::createPartObject(QWidget *parentWidget,
 
     // parentWidget and widgetName are used by KoDocument for the
     // "readonly+singleView" case.
-    KPTPart *part = new KPTPart(parentWidget, widgetName, parent, name,
+    Part *part = new Part(parentWidget, widgetName, parent, name,
 				!bWantKoDocument);
 
     if (!bWantKoDocument)
@@ -69,14 +70,14 @@ KParts::Part *KPTFactory::createPartObject(QWidget *parentWidget,
     return part;
 }
 
-KAboutData* KPTFactory::aboutData()
+KAboutData* Factory::aboutData()
 {
     if ( !s_aboutData )
-        s_aboutData = newKPTAboutData();
+        s_aboutData = newAboutData();
     return s_aboutData;
 }
 
-KInstance* KPTFactory::global()
+KInstance* Factory::global()
 {
     if ( !s_global )
     {
@@ -94,5 +95,7 @@ KInstance* KPTFactory::global()
     }
     return s_global;
 }
+
+} // KPlato namespace
 
 #include "kptfactory.moc"

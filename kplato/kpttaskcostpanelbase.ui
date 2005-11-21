@@ -1,9 +1,9 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPlato::KPTTaskCostPanelBase</class>
+<class>KPlato::TaskCostPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">
-        <cstring>KPTTaskCostPanelBase</cstring>
+        <cstring>TaskCostPanelBase</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -14,7 +14,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>KPTTaskCostPanelBase</string>
+        <string>TaskCostPanelBase</string>
     </property>
     <vbox>
         <property name="name">

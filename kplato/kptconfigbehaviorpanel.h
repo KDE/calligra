@@ -28,24 +28,24 @@ class KMacroCommand;
 namespace KPlato
 {
 
-class KPTConfigBehaviourPanelBase;
-class KPTPart;
+class ConfigBehaviourPanelBase;
+class Part;
 
-class KPTConfigBehaviorPanel : public KPTConfigBehaviorPanelBase {
+class ConfigBehaviorPanel : public ConfigBehaviorPanelBase {
     Q_OBJECT
 public:
-    KPTConfigBehaviorPanel(KPTBehavior &behavior, QWidget *parent=0, const char *name=0);
+    ConfigBehaviorPanel(Behavior &behavior, QWidget *parent=0, const char *name=0);
 
     void setStartValues();
     bool ok();
     bool apply();
     
 private:
-    KPTBehavior m_oldvalues;
-    KPTBehavior &m_behavior;
+    Behavior m_oldvalues;
+    Behavior &m_behavior;
 
 };
 
 } //KPlato namespace
 
-#endif // KPTCONFIGBEHAVIORPANEL_H
+#endif // CONFIGBEHAVIORPANEL_H

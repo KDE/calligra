@@ -39,15 +39,15 @@ namespace KPlato
 {
 
 /*
- *  Constructs a KPTCalendarEditBase as a child of 'parent', with the
+ *  Constructs a CalendarEditBase as a child of 'parent', with the
  *  name 'name' and widget flags set to 'f'.
  */
-KPTCalendarEditBase::KPTCalendarEditBase( QWidget* parent, const char* name, WFlags fl )
+CalendarEditBase::CalendarEditBase( QWidget* parent, const char* name, WFlags fl )
     : QWidget( parent, name, fl )
 {
     if ( !name )
-	setName( "KPTCalendarEditBase" );
-    KPTCalendarEditBaseLayout = new QHBoxLayout( this, 11, 6, "KPTCalendarEditBaseLayout");
+	setName( "CalendarEditBase" );
+    CalendarEditBaseLayout = new QHBoxLayout( this, 11, 6, "CalendarEditBaseLayout");
 
     groupBox2 = new QGroupBox( this, "groupBox2" );
     groupBox2->setColumnLayout(0, Qt::Vertical );
@@ -56,7 +56,7 @@ KPTCalendarEditBase::KPTCalendarEditBase( QWidget* parent, const char* name, WFl
     groupBox2Layout = new QGridLayout( groupBox2->layout() );
     groupBox2Layout->setAlignment( Qt::AlignTop );
 
-    calendarPanel = new KPTCalendarPanel( groupBox2, "calendarPanel" );
+    calendarPanel = new CalendarPanel( groupBox2, "calendarPanel" );
 
     groupBox2Layout->addWidget( calendarPanel, 1, 0 );
 
@@ -107,7 +107,7 @@ KPTCalendarEditBase::KPTCalendarEditBase( QWidget* parent, const char* name, WFl
     dayLayout->addWidget( groupBox4 );
 
     groupBox2Layout->addWidget( day, 1, 1 );
-    KPTCalendarEditBaseLayout->addWidget( groupBox2 );
+    CalendarEditBaseLayout->addWidget( groupBox2 );
     languageChange();
     resize( QSize(540, 326).expandedTo(minimumSizeHint()) );
     clearWState( WState_Polished );
@@ -116,7 +116,7 @@ KPTCalendarEditBase::KPTCalendarEditBase( QWidget* parent, const char* name, WFl
 /*
  *  Destroys the object and frees any allocated resources
  */
-KPTCalendarEditBase::~KPTCalendarEditBase()
+CalendarEditBase::~CalendarEditBase()
 {
     // no need to delete child widgets, Qt does it all for us
 }
@@ -125,9 +125,9 @@ KPTCalendarEditBase::~KPTCalendarEditBase()
  *  Sets the strings of the subwidgets using the current
  *  language.
  */
-void KPTCalendarEditBase::languageChange()
+void CalendarEditBase::languageChange()
 {
-    setCaption( tr2i18n( "KPTCalendarEditBase" ) );
+    setCaption( tr2i18n( "CalendarEditBase" ) );
     groupBox2->setTitle( QString::null );
     day->setTitle( QString::null );
     bApply->setText( tr2i18n( "Apply" ) );

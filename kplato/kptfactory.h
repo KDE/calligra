@@ -24,14 +24,17 @@
 
 class KAboutData;
 
-//FIXME KPTFactory is not in the KPlato namespace, can it be put there? (external dependencies?)
+namespace KPlato
+{
 
-class KPTFactory : public KoFactory
+//FIXME Factory is not in the KPlato namespace, can it be put there? (external dependencies?)
+
+class Factory : public KoFactory
 {
     Q_OBJECT
 public:
-    KPTFactory( QObject* parent = 0, const char* name = 0 );
-    ~KPTFactory();
+    Factory( QObject* parent = 0, const char* name = 0 );
+    ~Factory();
 
     virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0, const char *name = 0, const char *classname = "KoDocument", const QStringList &args = QStringList() );
 
@@ -44,5 +47,7 @@ private:
     static KInstance* s_global;
     static KAboutData* s_aboutData;
 };
+
+} // KPlato namespace
 
 #endif

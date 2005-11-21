@@ -45,7 +45,7 @@ static inline QPixmap loadIcon( const char * name ) {
 }
 
 
-KPTConfigDialog::KPTConfigDialog(KPTConfig &config, QWidget *parent, const char *n)
+ConfigDialog::ConfigDialog(Config &config, QWidget *parent, const char *n)
     : KDialogBase(KDialogBase::IconList, i18n("Configure KPlato"),
                   KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
                   KDialogBase::Ok, parent),
@@ -53,10 +53,10 @@ KPTConfigDialog::KPTConfigDialog(KPTConfig &config, QWidget *parent, const char 
 {
 
     QVBox *page = addVBoxPage(i18n("Behavior"), i18n("Behavior"), loadIcon("misc"));
-    m_behaviorPage = new KPTConfigBehaviorPanel(config.behavior(), page);
+    m_behaviorPage = new ConfigBehaviorPanel(config.behavior(), page);
     
     page = addVBoxPage(i18n("Task defaults"), i18n("Task defaults"), loadIcon("misc"));
-    m_taskDefaultPage = new KPTTaskDefaultPanel(config.taskDefaults(), 0, page);
+    m_taskDefaultPage = new TaskDefaultPanel(config.taskDefaults(), 0, page);
     
     enableButtonOK(false);
     enableButtonApply(false);
@@ -66,7 +66,7 @@ KPTConfigDialog::KPTConfigDialog(KPTConfig &config, QWidget *parent, const char 
 }
 
 
-void KPTConfigDialog::slotApply() {
+void ConfigDialog::slotApply() {
     if (!m_taskDefaultPage->ok())
         return;
     if (!m_behaviorPage->ok())
@@ -78,12 +78,12 @@ void KPTConfigDialog::slotApply() {
     m_behaviorPage->apply();
 }
 
-void KPTConfigDialog::slotOk() {
+void ConfigDialog::slotOk() {
     slotApply();
     accept();
 }
 
-void KPTConfigDialog::slotDefault() {
+void ConfigDialog::slotDefault() {
     kdDebug()<<k_funcinfo<<endl;
     m_taskDefaultPage->setStartValues(m_config.taskDefaults());
     m_behaviorPage->setStartValues();
@@ -91,7 +91,7 @@ void KPTConfigDialog::slotDefault() {
     //enableButtonOk(false);
 }
 
-void KPTConfigDialog::slotChanged() {
+void ConfigDialog::slotChanged() {
     enableButtonOK(true);
     enableButtonApply(true);
 }

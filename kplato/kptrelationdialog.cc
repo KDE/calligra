@@ -39,7 +39,7 @@
 namespace KPlato
 {
 
-KPTAddRelationDialog::KPTAddRelationDialog(KPTRelation *rel, QWidget *p, QString caption, int buttons, const char *n)
+AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption, int buttons, const char *n)
     : KDialogBase(Swallow, caption, buttons, Ok, p, n, true, true)
 {
     if (caption.isEmpty())
@@ -53,7 +53,7 @@ KPTAddRelationDialog::KPTAddRelationDialog(KPTRelation *rel, QWidget *p, QString
     m_panel->toName->setText(rel->child()->name());
     m_panel->relationType->setButton(rel->type());
     
-    m_panel->lag->setVisibleFields(KPTDurationWidget::Days|KPTDurationWidget::Hours|KPTDurationWidget::Minutes);
+    m_panel->lag->setVisibleFields(DurationWidget::Days|DurationWidget::Hours|DurationWidget::Minutes);
     m_panel->lag->setFieldUnit(0, i18n("days"));
     m_panel->lag->setFieldUnit(1, i18n("hours"));
     m_panel->lag->setFieldUnit(2, i18n("minutes"));
@@ -65,11 +65,11 @@ KPTAddRelationDialog::KPTAddRelationDialog(KPTRelation *rel, QWidget *p, QString
     connect(m_panel->lag, SIGNAL(valueChanged()), SLOT(lagChanged()));
 }
 
-KCommand *KPTAddRelationDialog::buildCommand(KPTPart *part) {
-    return new KPTAddRelationCmd(part, m_relation, i18n("Add Relation"));
+KCommand *AddRelationDialog::buildCommand(Part *part) {
+    return new AddRelationCmd(part, m_relation, i18n("Add Relation"));
 }
 
-void KPTAddRelationDialog::slotOk() {
+void AddRelationDialog::slotOk() {
     if ( m_panel->relationType->selected() == 0 ) {
         KMessageBox::sorry(this, i18n("You must select a relationship type"));
         return;
@@ -77,19 +77,19 @@ void KPTAddRelationDialog::slotOk() {
     accept();
 }
 
-void KPTAddRelationDialog::lagChanged() {
+void AddRelationDialog::lagChanged() {
     enableButtonOK(true);
 }
 
-void KPTAddRelationDialog::typeClicked(int id) {
+void AddRelationDialog::typeClicked(int id) {
     if (id != m_relation->type())
         enableButtonOK(true);
 }
 
 //////////////////
 
-KPTModifyRelationDialog::KPTModifyRelationDialog(KPTRelation *rel, QWidget *p, const char *n)
-    : KPTAddRelationDialog(rel, p, i18n("Edit Relationship"), Ok|Cancel|User1, n)
+ModifyRelationDialog::ModifyRelationDialog(Relation *rel, QWidget *p, const char *n)
+    : AddRelationDialog(rel, p, i18n("Edit Relationship"), Ok|Cancel|User1, n)
 {
     setButtonText( KDialogBase::User1, i18n("Delete") );
     m_deleted = false;
@@ -97,22 +97,22 @@ KPTModifyRelationDialog::KPTModifyRelationDialog(KPTRelation *rel, QWidget *p, c
 }
 
 // Delete
-void KPTModifyRelationDialog::slotUser1() {
+void ModifyRelationDialog::slotUser1() {
     m_deleted = true;
     accept();
 }
 
-KCommand *KPTModifyRelationDialog::buildCommand(KPTPart *part) {
+KCommand *ModifyRelationDialog::buildCommand(Part *part) {
     KMacroCommand *cmd=0;
     if (m_panel->relationType->selectedId() != m_relation->type()) {
         if (cmd == 0)
             cmd = new KMacroCommand(i18n("Modify Relation"));
-        cmd->addCommand(new KPTModifyRelationTypeCmd(part, m_relation, (KPTRelation::Type)m_panel->relationType->selectedId()));
+        cmd->addCommand(new ModifyRelationTypeCmd(part, m_relation, (Relation::Type)m_panel->relationType->selectedId()));
     }
     if (m_relation->lag() != m_panel->lag->value()) {
         if (cmd == 0)
             cmd = new KMacroCommand(i18n("Modify Relation"));
-        cmd->addCommand(new KPTModifyRelationLagCmd(part, m_relation, m_panel->lag->value()));
+        cmd->addCommand(new ModifyRelationLagCmd(part, m_relation, m_panel->lag->value()));
     }
     return cmd;
 }

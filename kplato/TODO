@@ -12,7 +12,7 @@ before the 1.5 release!
 --------------------------------------------------------------------------------
 Status      Description
 --------------------------------------------------------------------------------
-            User manual
+Taken       User manual (contact: raphael.langerhorst@kdemail.net)
             
 Taken       Cost Breakdown Structure:
             - Define account class/list and necessary dialogs.
@@ -115,14 +115,14 @@ Taken       Cost Breakdown Structure:
             Write good doxygen compatible API docs in the source code!
             
             Taskjuggler???
-
-            Remove KPT prefix from all KPlato classes (ask mailing list!)
-
+            
             Implement multiple scheduling. (Expected, optimistic, pessimistic)
             
             Make a summarytask dialog.
             
 ------------------------------------------------------------------
+
+Done        Remove KPT prefix from all KPlato classes (ask mailing list!)
 
 Done        Requirements specification
 

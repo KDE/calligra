@@ -39,47 +39,47 @@ namespace KPlato
 {
 
 /// Use for main projects
-KPTProject::KPTProject(KPTNode *parent)
-    : KPTNode(parent), m_baselined(false)
+Project::Project(Node *parent)
+    : Node(parent), m_baselined(false)
 {
-    m_constraint = KPTNode::MustStartOn;
-    m_standardWorktime = new KPTStandardWorktime();
-    m_defaultCalendar = new KPTCalendar(*m_standardWorktime);
+    m_constraint = Node::MustStartOn;
+    m_standardWorktime = new StandardWorktime();
+    m_defaultCalendar = new Calendar(*m_standardWorktime);
     m_defaultCalendar->setProject(this);
     init();
 }
 
-void KPTProject::init() {
+void Project::init() {
     if (m_parent == 0) {
         // set sensible defaults for a project wo parent
-        m_startTime = KPTDateTime(QDate::currentDate(),m_standardWorktime->startOfDay(QDate::currentDate()));
-        m_endTime = KPTDateTime(QDate::currentDate(),m_standardWorktime->endOfDay(QDate::currentDate()));
+        m_startTime = DateTime(QDate::currentDate(),m_standardWorktime->startOfDay(QDate::currentDate()));
+        m_endTime = DateTime(QDate::currentDate(),m_standardWorktime->endOfDay(QDate::currentDate()));
         m_duration = m_endTime - m_startTime;
-        if (m_duration == KPTDuration::zeroDuration)
+        if (m_duration == Duration::zeroDuration)
             m_duration.addDays(1);
     }    
     m_calendars.setAutoDelete(true);
 }
 
 
-KPTProject::~KPTProject() {
+Project::~Project() {
     m_resourceGroups.setAutoDelete(true);
     m_resourceGroups.clear();
     delete m_standardWorktime;
 }
 
-int KPTProject::type() const { return KPTNode::Type_Project; }
+int Project::type() const { return Node::Type_Project; }
 
-void KPTProject::calculate(KPTEffort::Use use) {
+void Project::calculate(Effort::Use use) {
     //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_startTime.toString()<<endl;
     // clear all resource appointments
-    QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
+    QPtrListIterator<ResourceGroup> git(m_resourceGroups);
     for ( ; git.current(); ++git ) {
         git.current()->clearAppointments();
     }
     if (type() == Type_Project) {
         initiateCalculation();
-        if (m_constraint == KPTNode::MustStartOn) {
+        if (m_constraint == Node::MustStartOn) {
             // Calculate from start time
             propagateEarliestStart(m_startTime);
             m_endTime = calculateForward(use);
@@ -104,32 +104,32 @@ void KPTProject::calculate(KPTEffort::Use use) {
     }
 }
 
-bool KPTProject::calcCriticalPath() {
+bool Project::calcCriticalPath() {
     kdDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<KPTNode> endnodes = m_endNodes;
+    QPtrListIterator<Node> endnodes = m_endNodes;
     for (; endnodes.current(); ++endnodes) {
         endnodes.current()->calcCriticalPath();
     }
     return false;
 }
 
-KPTDuration *KPTProject::getExpectedDuration() {
+Duration *Project::getExpectedDuration() {
     //kdDebug()<<k_funcinfo<<endl;
-    return new KPTDuration(getLatestFinish() - getEarliestStart());
+    return new Duration(getLatestFinish() - getEarliestStart());
 }
 
-KPTDuration *KPTProject::getRandomDuration() {
+Duration *Project::getRandomDuration() {
     return 0L;
 }
 
-KPTDateTime KPTProject::calculateForward(int use) {
+DateTime Project::calculateForward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
-    if (type() == KPTNode::Type_Project) {
+    if (type() == Node::Type_Project) {
         // Follow *parent* relations back and
         // calculate forwards following the child relations
-        KPTDateTime finish;
-        KPTDateTime time;
-        QPtrListIterator<KPTNode> endnodes = m_endNodes;
+        DateTime finish;
+        DateTime time;
+        QPtrListIterator<Node> endnodes = m_endNodes;
         for (; endnodes.current(); ++endnodes) {
             time = endnodes.current()->calculateForward(use);
             if (!finish.isValid() || time > finish)
@@ -140,17 +140,17 @@ KPTDateTime KPTProject::calculateForward(int use) {
     } else {
         //TODO: subproject
     }
-    return KPTDateTime();
+    return DateTime();
 }
 
-KPTDateTime KPTProject::calculateBackward(int use) {
+DateTime Project::calculateBackward(int use) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
-    if (type() == KPTNode::Type_Project) {
+    if (type() == Node::Type_Project) {
         // Follow *child* relations back and
         // calculate backwards following parent relation
-        KPTDateTime start;
-        KPTDateTime time;
-        QPtrListIterator<KPTNode> startnodes = m_startNodes;
+        DateTime start;
+        DateTime time;
+        QPtrListIterator<Node> startnodes = m_startNodes;
         for (; startnodes.current(); ++startnodes) {
             time = startnodes.current()->calculateBackward(use);
             if (!start.isValid() || time < start)
@@ -161,12 +161,12 @@ KPTDateTime KPTProject::calculateBackward(int use) {
     } else {
         //TODO: subproject
     }
-    return KPTDateTime();
+    return DateTime();
 }
 
-KPTDateTime &KPTProject::scheduleForward(KPTDateTime &earliest, int use) {
+DateTime &Project::scheduleForward(DateTime &earliest, int use) {
     resetVisited();
-    QPtrListIterator<KPTNode> it(m_endNodes);
+    QPtrListIterator<Node> it(m_endNodes);
     for (; it.current(); ++it) {
         it.current()->scheduleForward(earliest, use);
     }
@@ -175,9 +175,9 @@ KPTDateTime &KPTProject::scheduleForward(KPTDateTime &earliest, int use) {
     return m_endTime;
 }
 
-KPTDateTime &KPTProject::scheduleBackward(KPTDateTime &latest, int use) {
+DateTime &Project::scheduleBackward(DateTime &latest, int use) {
     resetVisited();
-    QPtrListIterator<KPTNode> it(m_startNodes);
+    QPtrListIterator<Node> it(m_startNodes);
     for (; it.current(); ++it) {
         it.current()->scheduleBackward(latest, use);
     }
@@ -186,26 +186,26 @@ KPTDateTime &KPTProject::scheduleBackward(KPTDateTime &latest, int use) {
     return m_startTime;
 }
 
-void KPTProject::adjustSummarytask() {
-    QPtrListIterator<KPTNode> it(m_summarytasks);
+void Project::adjustSummarytask() {
+    QPtrListIterator<Node> it(m_summarytasks);
     for (; it.current(); ++it) {
         it.current()->adjustSummarytask();
     }
 }
 
-void KPTProject::initiateCalculation() {
+void Project::initiateCalculation() {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
-    KPTNode::initiateCalculation();
+    Node::initiateCalculation();
     m_startNodes.clear();
     m_endNodes.clear();
     m_summarytasks.clear();
     initiateCalculationLists(m_startNodes, m_endNodes, m_summarytasks);
 }
 
-void KPTProject::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks) {
+void Project::initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node> &endnodes, QPtrList<Node> &summarytasks) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
-    if (type() == KPTNode::Type_Project) {
-        QPtrListIterator<KPTNode> it = childNodeIterator();
+    if (type() == Node::Type_Project) {
+        QPtrListIterator<Node> it = childNodeIterator();
         for (; it.current(); ++it) {
             it.current()->initiateCalculationLists(startnodes, endnodes, summarytasks);
         }
@@ -214,7 +214,7 @@ void KPTProject::initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrLis
     }
 }
 
-bool KPTProject::load(QDomElement &element) {
+bool Project::load(QDomElement &element) {
     // Maybe TODO: Delete old stuff here
     bool ok = false;
     QString id = element.attribute("id");
@@ -229,13 +229,13 @@ bool KPTProject::load(QDomElement &element) {
     
     // Allow for both numeric and text
     QString c = element.attribute("scheduling","0");
-    m_constraint = (KPTNode::ConstraintType)c.toInt(&ok);
+    m_constraint = (Node::ConstraintType)c.toInt(&ok);
     if (!ok)
         setConstraint(c);
-    if (m_constraint != KPTNode::MustStartOn &&
-        m_constraint != KPTNode::MustFinishOn) {
+    if (m_constraint != Node::MustStartOn &&
+        m_constraint != Node::MustFinishOn) {
         kdError()<<k_funcinfo<<"Illegal constraint: "<<constraintToString()<<endl;
-        setConstraint(KPTNode::MustStartOn);
+        setConstraint(Node::MustStartOn);
     }
 
     // Must do these first
@@ -251,7 +251,7 @@ bool KPTProject::load(QDomElement &element) {
             } else if (e.tagName() == "calendar") {
                 // Load the calendar.
                 // References by resources
-                KPTCalendar *child = new KPTCalendar();
+                Calendar *child = new Calendar();
                 child->setProject(this);
                 if (child->load(e)) {
                     addCalendar(child);
@@ -262,7 +262,7 @@ bool KPTProject::load(QDomElement &element) {
                 }
             } else if (e.tagName() == "standard-worktime") {
                 // Load standard worktime
-                KPTStandardWorktime *child = new KPTStandardWorktime();
+                StandardWorktime *child = new StandardWorktime();
                 if (child->load(e)) {
                     addStandardWorktime(child);
                     addDefaultCalendar(child);
@@ -280,7 +280,7 @@ bool KPTProject::load(QDomElement &element) {
             if (e.tagName() == "resource-group") {
                 // Load the resources
                 // References calendars
-                KPTResourceGroup *child = new KPTResourceGroup(this);
+                ResourceGroup *child = new ResourceGroup(this);
                 if (child->load(e)) {
                         addResourceGroup(child);
                 } else {
@@ -297,7 +297,7 @@ bool KPTProject::load(QDomElement &element) {
     
             if (e.tagName() == "project") {
                 // Load the subproject
-                KPTProject *child = new KPTProject(this);
+                Project *child = new Project(this);
                 if (child->load(e)) {
                     addChildNode(child);
                 } else {
@@ -307,7 +307,7 @@ bool KPTProject::load(QDomElement &element) {
             } else if (e.tagName() == "task") {
                 // Load the task (and resourcerequests). 
                 // Depends on resources already loaded
-                KPTTask *child = new KPTTask(this);
+                Task *child = new Task(this);
                 if (child->load(e, *this)) {
                     addChildNode(child);
                 } else {
@@ -325,7 +325,7 @@ bool KPTProject::load(QDomElement &element) {
             if (e.tagName() == "relation") {
                 // Load the relation
                 // References tasks
-                KPTRelation *child = new KPTRelation();
+                Relation *child = new Relation();
                 if (!child->load(e, *this)) {
                     // TODO: Complain about this
                     kdError()<<k_funcinfo<<"Failed to load relation"<<endl;
@@ -339,7 +339,7 @@ bool KPTProject::load(QDomElement &element) {
                     if (lst.item(i).isElement()) {
                         QDomElement sch = lst.item(i).toElement();
                         if (sch.tagName() == "schedule") {
-                            KPTDateTime dt( QDateTime::currentDateTime() );
+                            DateTime dt( QDateTime::currentDateTime() );
                             dt = dt.fromString(sch.attribute("project-start", dt.toString()) );
                             //kdDebug()<<k_funcinfo<<"Start="<<dt.toString()<<endl;
                             setStartTime(dt);
@@ -356,7 +356,7 @@ bool KPTProject::load(QDomElement &element) {
                                     if (app.tagName() == "appointment") {
                                         // Load the appointments. 
                                         // Resources and tasks must allready loaded
-                                        KPTAppointment *child = new KPTAppointment();
+                                        Appointment *child = new Appointment();
                                         if (!child->loadXML(app, *this)) {
                                             // TODO: Complain about this
                                             kdError()<<k_funcinfo<<"Failed to load appointment"<<endl;
@@ -373,7 +373,7 @@ bool KPTProject::load(QDomElement &element) {
     }
     
     // calendars references calendars in arbritary saved order
-    QPtrListIterator<KPTCalendar> calit(m_calendars);
+    QPtrListIterator<Calendar> calit(m_calendars);
     for (; calit.current(); ++calit) {
         if (calit.current()->id() == calit.current()->parentId()) {
             kdError()<<k_funcinfo<<"Calendar want itself as parent"<<endl;
@@ -385,7 +385,7 @@ bool KPTProject::load(QDomElement &element) {
 }
 
 
-void KPTProject::save(QDomElement &element)  {
+void Project::save(QDomElement &element)  {
     QDomElement me = element.ownerDocument().createElement("project");
     element.appendChild(me);
 
@@ -401,7 +401,7 @@ void KPTProject::save(QDomElement &element)  {
     m_accounts.save(me);
     
     // save calendars
-    QPtrListIterator<KPTCalendar> calit(m_calendars);
+    QPtrListIterator<Calendar> calit(m_calendars);
     for (; calit.current(); ++calit) {
         calit.current()->save(me);
     }
@@ -410,13 +410,13 @@ void KPTProject::save(QDomElement &element)  {
         m_standardWorktime->save(me);
     
     // save project resources, must be after calendars
-    QPtrListIterator<KPTResourceGroup> git(m_resourceGroups);
+    QPtrListIterator<ResourceGroup> git(m_resourceGroups);
     for ( ; git.current(); ++git ) {
         git.current()->save(me);
     }
 
     // Only save parent relations
-    QPtrListIterator<KPTRelation> it(m_dependParentNodes);
+    QPtrListIterator<Relation> it(m_dependParentNodes);
     for ( ; it.current(); ++it ) {
         it.current()->save(me);
     }
@@ -426,7 +426,7 @@ void KPTProject::save(QDomElement &element)  {
     getChildNode(i)->save(me);
 
     // Now we can save relations assuming no tasks have relations outside the project
-    QPtrListIterator<KPTNode> nodes(m_nodes);
+    QPtrListIterator<Node> nodes(m_nodes);
     for ( ; nodes.current(); ++nodes ) {
         nodes.current()->saveRelations(me);
     }
@@ -443,37 +443,37 @@ void KPTProject::save(QDomElement &element)  {
         sch.setAttribute("project-start",startTime().toString());
         sch.setAttribute("project-end",endTime().toString());
         // save appointments
-        QPtrListIterator<KPTResourceGroup> rgit(m_resourceGroups);
+        QPtrListIterator<ResourceGroup> rgit(m_resourceGroups);
         for ( ; rgit.current(); ++rgit ) {
             rgit.current()->saveAppointments(sch);
         }
     }
 }
 
-void KPTProject::addResourceGroup(KPTResourceGroup * group) {
+void Project::addResourceGroup(ResourceGroup * group) {
     m_resourceGroups.append(group);
 }
 
 
-void KPTProject::removeResourceGroup(KPTResourceGroup * group){
+void Project::removeResourceGroup(ResourceGroup * group){
     m_resourceGroups.remove(group);
 }
 
 
-void KPTProject::removeResourceGroup(int /* number */){
+void Project::removeResourceGroup(int /* number */){
    // always auto remove
 }
 
 
-void KPTProject::insertResourceGroup( unsigned int /* index */,
-			      KPTResourceGroup * /* resource */) {
+void Project::insertResourceGroup( unsigned int /* index */,
+			      ResourceGroup * /* resource */) {
 }
 
-QPtrList<KPTResourceGroup> &KPTProject::resourceGroups() {
+QPtrList<ResourceGroup> &Project::resourceGroups() {
      return m_resourceGroups;
 }
 
-bool KPTProject::addTask( KPTNode* task, KPTNode* position )
+bool Project::addTask( Node* task, Node* position )
 {
 	// we want to add a task at the given position. => the new node will
 	// become next sibling right after position.
@@ -484,12 +484,12 @@ bool KPTProject::addTask( KPTNode* task, KPTNode* position )
     //kdDebug()<<k_funcinfo<<"Add "<<task->name()<<" after "<<position->name()<<endl;
 	// in case we want to add to the main project, we make it child element
 	// of the root element.
-	if ( KPTNode::Type_Project == position->type() ) {
+	if ( Node::Type_Project == position->type() ) {
         return addSubTask(task, position);
 	}
 	// find the position
 	// we have to tell the parent that we want to delete one of its children
-	KPTNode* parentNode = position->getParent();
+	Node* parentNode = position->getParent();
 	if ( !parentNode ) {
 		kdDebug()<<k_funcinfo<<"parent node not found???"<<endl;
 		return false;
@@ -504,7 +504,7 @@ bool KPTProject::addTask( KPTNode* task, KPTNode* position )
     return true;
 }
 
-bool KPTProject::addSubTask( KPTNode* task, KPTNode* position )
+bool Project::addSubTask( Node* task, Node* position )
 {
 	// we want to add a subtask to the node "position". It will become
 	// position's last child.
@@ -516,19 +516,19 @@ bool KPTProject::addSubTask( KPTNode* task, KPTNode* position )
     return true;
 }
 
-bool KPTProject::canIndentTask(KPTNode* node)
+bool Project::canIndentTask(Node* node)
 {
     if (0 == node) {
-        // should always be != 0. At least we would get the KPTProject,
+        // should always be != 0. At least we would get the Project,
         // but you never know who might change that, so better be careful
         return false;
     }
-    if (node->type() == KPTNode::Type_Project) {
+    if (node->type() == Node::Type_Project) {
         kdDebug()<<k_funcinfo<<"The root node cannot be indented"<<endl;
         return false;
     }
     // we have to find the parent of task to manipulate its list of children
-    KPTNode* parentNode = node->getParent();
+    Node* parentNode = node->getParent();
     if ( !parentNode ) {
         return false;
     }
@@ -536,7 +536,7 @@ bool KPTProject::canIndentTask(KPTNode* node)
         kdError()<<k_funcinfo<<"Tasknot found???"<<endl;
         return false;
     }
-    KPTNode *sib = node->siblingBefore();
+    Node *sib = node->siblingBefore();
     if (!sib) {
         kdDebug()<<k_funcinfo<<"new parent node not found"<<endl;
         return false;
@@ -548,10 +548,10 @@ bool KPTProject::canIndentTask(KPTNode* node)
     return true;
 }
 
-bool KPTProject::indentTask( KPTNode* node )
+bool Project::indentTask( Node* node )
 {
     if (canIndentTask(node)) {
-        KPTNode *newParent = node->siblingBefore();
+        Node *newParent = node->siblingBefore();
         node->getParent()->delChildNode(node, false/*do not delete objekt*/);
         newParent->addChildNode(node);
         return true;
@@ -559,24 +559,24 @@ bool KPTProject::indentTask( KPTNode* node )
     return false;
 }
 
-bool KPTProject::canUnindentTask( KPTNode* node )
+bool Project::canUnindentTask( Node* node )
 {
     if ( 0 == node ) {
-        // is always != 0. At least we would get the KPTProject, but you
+        // is always != 0. At least we would get the Project, but you
         // never know who might change that, so better be careful
         return false;
     }
-    if ( KPTNode::Type_Project == node->type() ) {
+    if ( Node::Type_Project == node->type() ) {
         kdDebug()<<k_funcinfo<<"The root node cannot be unindented"<<endl;
         return false;
     }
     // we have to find the parent of task to manipulate its list of children
     // and we need the parent's parent too
-    KPTNode* parentNode = node->getParent();
+    Node* parentNode = node->getParent();
     if ( !parentNode ) {
         return false;
     }
-    KPTNode* grandParentNode = parentNode->getParent();
+    Node* grandParentNode = parentNode->getParent();
     if ( !grandParentNode ) {
         kdDebug()<<k_funcinfo<<"This node already is at the top level"<<endl;
         return false;
@@ -589,11 +589,11 @@ bool KPTProject::canUnindentTask( KPTNode* node )
     return true;
 }
 
-bool KPTProject::unindentTask( KPTNode* node )
+bool Project::unindentTask( Node* node )
 {
     if (canUnindentTask(node)) {
-        KPTNode *parentNode = node->getParent();
-        KPTNode *grandParentNode = parentNode->getParent();
+        Node *parentNode = node->getParent();
+        Node *grandParentNode = parentNode->getParent();
         parentNode->delChildNode(node, false/*do not delete objekt*/);
         grandParentNode->addChildNode(node,parentNode);
         return true;
@@ -601,10 +601,10 @@ bool KPTProject::unindentTask( KPTNode* node )
     return false;
 }
 
-bool KPTProject::canMoveTaskUp( KPTNode* node )
+bool Project::canMoveTaskUp( Node* node )
 {
     // we have to find the parent of task to manipulate its list of children
-    KPTNode* parentNode = node->getParent();
+    Node* parentNode = node->getParent();
     if (!parentNode) {
         kdDebug()<<k_funcinfo<<"No parent found"<<endl;
         return false;
@@ -619,7 +619,7 @@ bool KPTProject::canMoveTaskUp( KPTNode* node )
     return false;
 }
 
-bool KPTProject::moveTaskUp( KPTNode* node )
+bool Project::moveTaskUp( Node* node )
 {
     if (canMoveTaskUp(node)) {
         return node->getParent()->moveChildUp(node);
@@ -627,10 +627,10 @@ bool KPTProject::moveTaskUp( KPTNode* node )
     return false;
 }
 
-bool KPTProject::canMoveTaskDown( KPTNode* node )
+bool Project::canMoveTaskDown( Node* node )
 {
     // we have to find the parent of task to manipulate its list of children
-    KPTNode* parentNode = node->getParent();
+    Node* parentNode = node->getParent();
     if (!parentNode) {
         return false;
     }
@@ -644,7 +644,7 @@ bool KPTProject::canMoveTaskDown( KPTNode* node )
     return false;
 }
 
-bool KPTProject::moveTaskDown( KPTNode* node )
+bool Project::moveTaskDown( Node* node )
 {
     if (canMoveTaskDown(node)) {
         return node->getParent()->moveChildDown(node);
@@ -652,19 +652,19 @@ bool KPTProject::moveTaskDown( KPTNode* node )
     return false;
 }
 
-KPTResourceGroup *KPTProject::group(QString id) {
+ResourceGroup *Project::group(QString id) {
     return findResourceGroup(id);
 }
 
-KPTResource *KPTProject::resource(QString id) {
+Resource *Project::resource(QString id) {
     return findResource(id);
 }
 
 // Returns the total planned effort for this project (or subproject) 
-KPTDuration KPTProject::plannedEffort() {
+Duration Project::plannedEffort() {
    //kdDebug()<<k_funcinfo<<endl;
-    KPTDuration eff;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    Duration eff;
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->plannedEffort();
     }
@@ -672,10 +672,10 @@ KPTDuration KPTProject::plannedEffort() {
 }
 
 // Returns the total planned effort for this project (or subproject) on date
-KPTDuration KPTProject::plannedEffort(const QDate &date) {
+Duration Project::plannedEffort(const QDate &date) {
    //kdDebug()<<k_funcinfo<<endl;
-    KPTDuration eff;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    Duration eff;
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->plannedEffort(date);
     }
@@ -683,10 +683,10 @@ KPTDuration KPTProject::plannedEffort(const QDate &date) {
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-KPTDuration KPTProject::plannedEffortTo(const QDate &date) {
+Duration Project::plannedEffortTo(const QDate &date) {
    //kdDebug()<<k_funcinfo<<endl;
-    KPTDuration eff;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    Duration eff;
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->plannedEffortTo(date);
     }
@@ -694,10 +694,10 @@ KPTDuration KPTProject::plannedEffortTo(const QDate &date) {
 }
 
 // Returns the total actual effort for this project (or subproject) 
-KPTDuration KPTProject::actualEffort() {
+Duration Project::actualEffort() {
    //kdDebug()<<k_funcinfo<<endl;
-    KPTDuration eff;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    Duration eff;
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->actualEffort();
     }
@@ -705,10 +705,10 @@ KPTDuration KPTProject::actualEffort() {
 }
 
 // Returns the total actual effort for this project (or subproject) on date
-KPTDuration KPTProject::actualEffort(const QDate &date) {
+Duration Project::actualEffort(const QDate &date) {
    //kdDebug()<<k_funcinfo<<endl;
-    KPTDuration eff;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    Duration eff;
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->actualEffort(date);
     }
@@ -716,20 +716,20 @@ KPTDuration KPTProject::actualEffort(const QDate &date) {
 }
 
 // Returns the total actual effort for this project (or subproject) upto and including date
-KPTDuration KPTProject::actualEffortTo(const QDate &date) {
+Duration Project::actualEffortTo(const QDate &date) {
    //kdDebug()<<k_funcinfo<<endl;
-    KPTDuration eff;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    Duration eff;
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         eff += it.current()->actualEffortTo(date);
     }
     return eff;
 }
 
-double KPTProject::plannedCost() {
+double Project::plannedCost() {
     //kdDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->plannedCost();
     }
@@ -737,10 +737,10 @@ double KPTProject::plannedCost() {
 }
 
 // Returns the total planned effort for this project (or subproject) on date
-double KPTProject::plannedCost(const QDate &date) {
+double Project::plannedCost(const QDate &date) {
    //kdDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->plannedCost(date);
     }
@@ -748,20 +748,20 @@ double KPTProject::plannedCost(const QDate &date) {
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-double KPTProject::plannedCostTo(const QDate &date) {
+double Project::plannedCostTo(const QDate &date) {
    //kdDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->plannedCostTo(date);
     }
     return c;
 }
 
-double KPTProject::actualCost() {
+double Project::actualCost() {
     //kdDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->actualCost();
     }
@@ -769,10 +769,10 @@ double KPTProject::actualCost() {
 }
 
 // Returns the total planned effort for this project (or subproject) on date
-double KPTProject::actualCost(const QDate &date) {
+double Project::actualCost(const QDate &date) {
    //kdDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->actualCost(date);
     }
@@ -780,39 +780,39 @@ double KPTProject::actualCost(const QDate &date) {
 }
 
 // Returns the total planned effort for this project (or subproject) upto and including date
-double KPTProject::actualCostTo(const QDate &date) {
+double Project::actualCostTo(const QDate &date) {
    //kdDebug()<<k_funcinfo<<endl;
     double c = 0;
-    QPtrListIterator<KPTNode> it(childNodeIterator());
+    QPtrListIterator<Node> it(childNodeIterator());
     for (; it.current(); ++it) {
         c += it.current()->actualCostTo(date);
     }
     return c;
 }
 
-void KPTProject::addCalendar(KPTCalendar *calendar) {
+void Project::addCalendar(Calendar *calendar) {
     //kdDebug()<<k_funcinfo<<calendar->name()<<endl;
     m_calendars.append(calendar);
 }
 
-KPTCalendar *KPTProject::calendar(const QString id) const {
+Calendar *Project::calendar(const QString id) const {
     return findCalendar(id);
 }
 
-void KPTProject::addStandardWorktime(KPTStandardWorktime * worktime) {
+void Project::addStandardWorktime(StandardWorktime * worktime) {
     if (m_standardWorktime != worktime) {
         delete m_standardWorktime; 
         m_standardWorktime = worktime; 
     }
 }
 
-void KPTProject::addDefaultCalendar(KPTStandardWorktime * worktime) {
+void Project::addDefaultCalendar(StandardWorktime * worktime) {
     delete m_defaultCalendar;
-    m_defaultCalendar = new KPTCalendar(*worktime);
+    m_defaultCalendar = new Calendar(*worktime);
     m_defaultCalendar->setProject(this);
 }
 
-bool KPTProject::legalToLink(KPTNode *par, KPTNode *child) {
+bool Project::legalToLink(Node *par, Node *child) {
     //kdDebug()<<k_funcinfo<<par.name()<<" ("<<par.numDependParentNodes()<<" parents) "<<child.name()<<" ("<<child.numDependChildNodes()<<" children)"<<endl;
     
     if (!child || par->isDependChildOf(child)) {
@@ -831,11 +831,11 @@ bool KPTProject::legalToLink(KPTNode *par, KPTNode *child) {
     return legal;
 }
 
-bool KPTProject::legalParents(KPTNode *par, KPTNode *child) {
+bool Project::legalParents(Node *par, Node *child) {
     bool legal = true;
     //kdDebug()<<k_funcinfo<<par->name()<<" ("<<par->numDependParentNodes()<<" parents) "<<child->name()<<" ("<<child->numDependChildNodes()<<" children)"<<endl;
     for (int i=0; i < par->numDependParentNodes() && legal; ++i) {
-        KPTNode *pNode = par->getDependParentNode(i)->parent();
+        Node *pNode = par->getDependParentNode(i)->parent();
         if (child->isParentOf(pNode) || pNode->isParentOf(child)) {
             //kdDebug()<<k_funcinfo<<"Found: "<<pNode->name()<<" is related to "<<child->name()<<endl;
             legal = false;
@@ -848,11 +848,11 @@ bool KPTProject::legalParents(KPTNode *par, KPTNode *child) {
     return legal;
 }
 
-bool KPTProject::legalChildren(KPTNode *par, KPTNode *child) {
+bool Project::legalChildren(Node *par, Node *child) {
     bool legal = true;
     //kdDebug()<<k_funcinfo<<par->name()<<" ("<<par->numDependParentNodes()<<" parents) "<<child->name()<<" ("<<child->numDependChildNodes()<<" children)"<<endl;
     for (int j=0; j < child->numDependChildNodes() && legal; ++j) {
-        KPTNode *cNode = child->getDependChildNode(j)->child();
+        Node *cNode = child->getDependChildNode(j)->child();
         if (par->isParentOf(cNode) || cNode->isParentOf(par)) {
             //kdDebug()<<k_funcinfo<<"Found: "<<par->name()<<" is related to "<<cNode->name()<<endl;
             legal = false;
@@ -863,11 +863,11 @@ bool KPTProject::legalChildren(KPTNode *par, KPTNode *child) {
     return legal;
 }
 
-void KPTProject::generateWBS(int count, KPTWBSDefinition &def, QString wbs) {
+void Project::generateWBS(int count, WBSDefinition &def, QString wbs) {
     if (type() == Type_Subproject || def.level0Enabled()) {
-        KPTNode::generateWBS(count, def, wbs);
+        Node::generateWBS(count, def, wbs);
     } else {
-        QPtrListIterator<KPTNode> it = m_nodes;
+        QPtrListIterator<Node> it = m_nodes;
         for (int i=0; it.current(); ++it) {
             it.current()->generateWBS(++i, def, m_wbs);
         }
@@ -876,19 +876,19 @@ void KPTProject::generateWBS(int count, KPTWBSDefinition &def, QString wbs) {
 
 
 #ifndef NDEBUG
-void KPTProject::printDebug(bool children, QCString indent) {
+void Project::printDebug(bool children, QCString indent) {
 
     kdDebug()<<indent<<"+ Project node: "<<name()<<endl;
     indent += "!";
-    QPtrListIterator<KPTResourceGroup> it(resourceGroups());
+    QPtrListIterator<ResourceGroup> it(resourceGroups());
     for ( ; it.current(); ++it)
         it.current()->printDebug(indent);
 
-    KPTNode::printDebug(children, indent);
+    Node::printDebug(children, indent);
 }
-void KPTProject::printCalendarDebug(QCString indent) {
+void Project::printCalendarDebug(QCString indent) {
     kdDebug()<<indent<<"-------- Calendars debug printout --------"<<endl;
-    QPtrListIterator<KPTCalendar> it = m_calendars;
+    QPtrListIterator<Calendar> it = m_calendars;
     for (; it.current(); ++it) {
         it.current()->printDebug(indent + "--");
         kdDebug()<<endl;

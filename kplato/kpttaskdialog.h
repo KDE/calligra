@@ -23,7 +23,7 @@
 
 #include <kdialogbase.h>
 
-class KPTDuration;
+class Duration;
 
 class KLineEdit;
 class KCommand;
@@ -43,18 +43,18 @@ class QDateTime;
 namespace KPlato
 {
 
-class KPTAccounts;
-class KPTTaskGeneralPanel;
-class KPTRequestResourcesPanel;
-class KPTTaskCostPanel;
-class KPTPart;
-class KPTTask;
-class KPTStandardWorktime;
+class Accounts;
+class TaskGeneralPanel;
+class RequestResourcesPanel;
+class TaskCostPanel;
+class Part;
+class Task;
+class StandardWorktime;
 
 /**
  * The dialog that shows and allows you to alter any task.
  */
-class KPTTaskDialog : public KDialogBase {
+class TaskDialog : public KDialogBase {
     Q_OBJECT
 public:
     /**
@@ -65,19 +65,19 @@ public:
      * @param baseline if true, project is baselined
      * @param parent parent widget
      */
-    KPTTaskDialog(KPTTask &task, KPTAccounts &accounts, KPTStandardWorktime *workTime=0, bool baseline=false,  QWidget *parent=0);
+    TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTime=0, bool baseline=false,  QWidget *parent=0);
 
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();
 
 private:
-    KPTTaskGeneralPanel *m_generalTab;
-    KPTRequestResourcesPanel *m_resourcesTab;
-    KPTTaskCostPanel *m_costTab;
+    TaskGeneralPanel *m_generalTab;
+    RequestResourcesPanel *m_resourcesTab;
+    TaskCostPanel *m_costTab;
 };
 
 } //KPlato namespace
 
-#endif // KPTTASKDIALOG_H
+#endif // TASKDIALOG_H

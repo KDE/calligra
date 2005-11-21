@@ -1,9 +1,9 @@
 <!DOCTYPE UI><UI version="3.2" stdsetdef="1">
-<class>KPTConfigBehaviorPanelBase</class>
+<class>ConfigBehaviorPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">
-        <cstring>KPTConfigBehaviorPanelBase</cstring>
+        <cstring>ConfigBehaviorPanelBase</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -73,19 +73,19 @@
     <connection>
         <sender>calcManual</sender>
         <signal>toggled(bool)</signal>
-        <receiver>KPTConfigBehaviorPanelBase</receiver>
+        <receiver>ConfigBehaviorPanelBase</receiver>
         <slot>slotChanged()</slot>
     </connection>
     <connection>
         <sender>calcImmedate</sender>
         <signal>toggled(bool)</signal>
-        <receiver>KPTConfigBehaviorPanelBase</receiver>
+        <receiver>ConfigBehaviorPanelBase</receiver>
         <slot>slotChanged()</slot>
     </connection>
     <connection>
         <sender>allowOverbooking</sender>
         <signal>toggled(bool)</signal>
-        <receiver>KPTConfigBehaviorPanelBase</receiver>
+        <receiver>ConfigBehaviorPanelBase</receiver>
         <slot>slotChanged()</slot>
     </connection>
 </connections>

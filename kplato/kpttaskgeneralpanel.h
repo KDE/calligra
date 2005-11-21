@@ -27,35 +27,35 @@ class KMacroCommand;
 namespace KPlato
 {
 
-class KPTTaskGeneralPanel;
-class KPTRequestResourcesPanel;
-class KPTPart;
-class KPTTask;
-class KPTStandardWorktime;
+class TaskGeneralPanel;
+class RequestResourcesPanel;
+class Part;
+class Task;
+class StandardWorktime;
 
-class KPTTaskGeneralPanel : public KPTTaskGeneralPanelBase {
+class TaskGeneralPanel : public TaskGeneralPanelBase {
     Q_OBJECT
 public:
-    KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime=0, bool baseline=false, QWidget *parent=0, const char *name=0);
+    TaskGeneralPanel(Task &task, StandardWorktime *workTime=0, bool baseline=false, QWidget *parent=0, const char *name=0);
 
-    KMacroCommand *buildCommand(KPTPart *part);
+    KMacroCommand *buildCommand(Part *part);
 
     bool ok();
 
-    void setStartValues(KPTTask &task, KPTStandardWorktime *workTime=0);
+    void setStartValues(Task &task, StandardWorktime *workTime=0);
 
 public slots:
     virtual void estimationTypeChanged(int type);
     virtual void scheduleTypeChanged(int value);
     
 private:
-    KPTTask &m_task;
+    Task &m_task;
     int m_dayLength;
     
-    KPTDuration m_effort;
-    KPTDuration m_duration;
+    Duration m_effort;
+    Duration m_duration;
 };
 
 } //KPlato namespace
 
-#endif // KPTTASKGENERALPANEL_H
+#endif // TASKGENERALPANEL_H

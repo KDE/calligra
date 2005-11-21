@@ -29,13 +29,13 @@
 namespace KPlato
 {
 
-KPTNode::KPTNode(KPTNode *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
+Node::Node(Node *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
     m_parent = parent;
     init();
     m_id = QString(); // Not mapped
 }
 
-KPTNode::KPTNode(KPTNode &node, KPTNode *parent) 
+Node::Node(Node &node, Node *parent) 
     : m_nodes(), 
       m_dependChildNodes(), 
       m_dependParentNodes() {
@@ -63,29 +63,29 @@ KPTNode::KPTNode(KPTNode &node, KPTNode *parent)
     m_shutdownCost = node.shutdownCost();
 }
 
-KPTNode::~KPTNode() {
-    KPTRelation *rel = 0;
+Node::~Node() {
+    Relation *rel = 0;
     while ((rel = m_dependParentNodes.getFirst())) {
         delete rel;
     }
     while ((rel = m_dependChildNodes.getFirst())) {
         delete rel;
     }
-    KPTAppointment *a;
+    Appointment *a;
     while ((a = m_appointments.getFirst())) {
         delete a;
     }
 }
 
-void KPTNode::init() {
+void Node::init() {
     m_nodes.setAutoDelete(true);
     m_name="";
-    m_startTime = KPTDateTime::currentDateTime();
+    m_startTime = DateTime::currentDateTime();
     m_endTime = m_startTime.addDays(1);
     earliestStart = m_startTime;
     latestFinish = m_endTime;
     m_duration = m_endTime - m_startTime;
-    m_constraint = KPTNode::ASAP;
+    m_constraint = Node::ASAP;
     m_effort = 0;
     m_resourceOverbooked = false;
     m_resourceError = false;
@@ -106,7 +106,7 @@ void KPTNode::init() {
     m_shutdownCost = 0.0;
 }
 
-KPTNode *KPTNode::projectNode() {
+Node *Node::projectNode() {
     if ((type() == Type_Project) || (type() == Type_Subproject)) {
         return this;
     }
@@ -117,7 +117,7 @@ KPTNode *KPTNode::projectNode() {
     return 0;
 }
 
-void KPTNode::delChildNode( KPTNode *node, bool remove) {
+void Node::delChildNode( Node *node, bool remove) {
     //kdDebug()<<k_funcinfo<<"find="<<m_nodes.findRef(node)<<endl;
     if ( m_nodes.findRef(node) != -1 ) {
         removeId(node->id());
@@ -128,8 +128,8 @@ void KPTNode::delChildNode( KPTNode *node, bool remove) {
     }
 }
 
-void KPTNode::delChildNode( int number, bool remove) {
-    KPTNode *n = m_nodes.at(number);
+void Node::delChildNode( int number, bool remove) {
+    Node *n = m_nodes.at(number);
     if (n)
         removeId(n->id());
     if(remove)
@@ -138,7 +138,7 @@ void KPTNode::delChildNode( int number, bool remove) {
         m_nodes.take(number);
 }
 
-void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
+void Node::insertChildNode( unsigned int index, Node *node) {
     if (!node->setId(node->id())) {
         kdError()<<k_funcinfo<<node->name()<<" Not unique id: "<<m_id<<endl;
     }
@@ -146,7 +146,7 @@ void KPTNode::insertChildNode( unsigned int index, KPTNode *node) {
     node->setParent(this);
 }
 
-void KPTNode::addChildNode( KPTNode *node, KPTNode *after) {
+void Node::addChildNode( Node *node, Node *after) {
     int index = m_nodes.findRef(after);
     if (index == -1) {
         if (!node->setId(node->id())) {
@@ -160,46 +160,46 @@ void KPTNode::addChildNode( KPTNode *node, KPTNode *after) {
     node->setParent(this);
 }
 
-int KPTNode::findChildNode( KPTNode* node )
+int Node::findChildNode( Node* node )
 {
 	return m_nodes.findRef( node );
 }
 
 
-const KPTNode* KPTNode::getChildNode(int number) const {
+const Node* Node::getChildNode(int number) const {
     // Work around missing const at() method in QPtrList
-    const QPtrList<KPTNode> &nodes = m_nodes;
-    return (const_cast<QPtrList<KPTNode> &>(nodes)).at(number);
+    const QPtrList<Node> &nodes = m_nodes;
+    return (const_cast<QPtrList<Node> &>(nodes)).at(number);
 }
 
-KPTDuration *KPTNode::getDelay() {
+Duration *Node::getDelay() {
     /* TODO
        Calculate the delay of this node. Use the calculated startTime and the setted startTime.
     */
     return 0L;
 }
 
-void KPTNode::addDependChildNode( KPTNode *node, KPTRelation::Type p) {
-    addDependChildNode(node,p,KPTDuration());
+void Node::addDependChildNode( Node *node, Relation::Type p) {
+    addDependChildNode(node,p,Duration());
 }
 
-void KPTNode::addDependChildNode( KPTNode *node, KPTRelation::Type p, KPTDuration lag) {
-    KPTRelation *relation = new KPTRelation(this, node, p, lag);
+void Node::addDependChildNode( Node *node, Relation::Type p, Duration lag) {
+    Relation *relation = new Relation(this, node, p, lag);
     if (node->addDependParentNode(relation))
         m_dependChildNodes.append(relation);
     else
         delete relation;
 }
 
-void KPTNode::insertDependChildNode( unsigned int index, KPTNode *node, KPTRelation::Type p) {
-    KPTRelation *relation = new KPTRelation(this, node, p, KPTDuration());
+void Node::insertDependChildNode( unsigned int index, Node *node, Relation::Type p) {
+    Relation *relation = new Relation(this, node, p, Duration());
     if (node->addDependParentNode(relation))
         m_dependChildNodes.insert(index, relation);
     else
         delete relation;
 }
 
-bool KPTNode::addDependChildNode( KPTRelation *relation) {
+bool Node::addDependChildNode( Relation *relation) {
     if(m_dependChildNodes.findRef(relation) != -1)
         return false;
     m_dependChildNodes.append(relation);
@@ -207,7 +207,7 @@ bool KPTNode::addDependChildNode( KPTRelation *relation) {
 }
 
 // These delDepend... methods look suspicious to me, can someone review?
-void KPTNode::delDependChildNode( KPTNode *node, bool remove) {
+void Node::delDependChildNode( Node *node, bool remove) {
     if ( m_nodes.findRef(node) != -1 ) {
         if(remove)
             m_dependChildNodes.remove();
@@ -216,7 +216,7 @@ void KPTNode::delDependChildNode( KPTNode *node, bool remove) {
     }
 }
 
-void KPTNode::delDependChildNode( KPTRelation *rel, bool remove) {
+void Node::delDependChildNode( Relation *rel, bool remove) {
     if ( m_dependChildNodes.findRef(rel) != -1 ) {
         if(remove)
             m_dependChildNodes.remove();
@@ -225,40 +225,40 @@ void KPTNode::delDependChildNode( KPTRelation *rel, bool remove) {
     }
 }
 
-void KPTNode::delDependChildNode( int number, bool remove) {
+void Node::delDependChildNode( int number, bool remove) {
     if(remove)
         m_dependChildNodes.remove(number);
     else
         m_dependChildNodes.take(number);
 }
 
-void KPTNode::takeDependChildNode(KPTRelation *rel) {
+void Node::takeDependChildNode(Relation *rel) {
     if (m_dependChildNodes.findRef(rel) != -1) {
         m_dependChildNodes.take();
     }
 }
 
-void KPTNode::addDependParentNode( KPTNode *node, KPTRelation::Type p) {
-    addDependParentNode(node,p,KPTDuration());
+void Node::addDependParentNode( Node *node, Relation::Type p) {
+    addDependParentNode(node,p,Duration());
 }
 
-void KPTNode::addDependParentNode( KPTNode *node, KPTRelation::Type p, KPTDuration lag) {
-    KPTRelation *relation = new KPTRelation(node, this, p, lag);
+void Node::addDependParentNode( Node *node, Relation::Type p, Duration lag) {
+    Relation *relation = new Relation(node, this, p, lag);
     if (node->addDependChildNode(relation))
         m_dependParentNodes.append(relation);
     else
         delete relation;
 }
 
-void KPTNode::insertDependParentNode( unsigned int index, KPTNode *node, KPTRelation::Type p) {
-    KPTRelation *relation = new KPTRelation(this, node, p, KPTDuration());
+void Node::insertDependParentNode( unsigned int index, Node *node, Relation::Type p) {
+    Relation *relation = new Relation(this, node, p, Duration());
     if (node->addDependChildNode(relation))
         m_dependParentNodes.insert(index,relation);
     else
         delete relation;
 }
 
-bool KPTNode::addDependParentNode( KPTRelation *relation) {
+bool Node::addDependParentNode( Relation *relation) {
     if(m_dependParentNodes.findRef(relation) != -1)
         return false;
     m_dependParentNodes.append(relation);
@@ -266,7 +266,7 @@ bool KPTNode::addDependParentNode( KPTRelation *relation) {
 }
 
 // These delDepend... methods look suspicious to me, can someone review?
-void KPTNode::delDependParentNode( KPTNode *node, bool remove) {
+void Node::delDependParentNode( Node *node, bool remove) {
     if ( m_nodes.findRef(node) != -1 ) {
         if(remove)
             m_dependParentNodes.remove();
@@ -275,7 +275,7 @@ void KPTNode::delDependParentNode( KPTNode *node, bool remove) {
     }
 }
 
-void KPTNode::delDependParentNode( KPTRelation *rel, bool remove) {
+void Node::delDependParentNode( Relation *rel, bool remove) {
     if ( m_dependParentNodes.findRef(rel) != -1 ) {
         if(remove)
             m_dependParentNodes.remove();
@@ -284,24 +284,24 @@ void KPTNode::delDependParentNode( KPTRelation *rel, bool remove) {
     }
 }
 
-void KPTNode::delDependParentNode( int number, bool remove) {
+void Node::delDependParentNode( int number, bool remove) {
     if(remove)
         m_dependParentNodes.remove(number);
     else
         m_dependParentNodes.take(number);
 }
 
-void KPTNode::takeDependParentNode(KPTRelation *rel) {
+void Node::takeDependParentNode(Relation *rel) {
     if (m_dependParentNodes.findRef(rel) != -1) {
         rel = m_dependParentNodes.take();
     }      
 }
 
-bool KPTNode::isParentOf(KPTNode *node) {
+bool Node::isParentOf(Node *node) {
     if (m_nodes.findRef(node) != -1)
 	    return true;
 
-	QPtrListIterator<KPTNode> nit(childNodeIterator());
+	QPtrListIterator<Node> nit(childNodeIterator());
 	for ( ; nit.current(); ++nit ) {
 		if (nit.current()->isParentOf(node))
 		    return true;
@@ -309,35 +309,35 @@ bool KPTNode::isParentOf(KPTNode *node) {
 	return false;
 }
 
-KPTRelation *KPTNode::findParentRelation(KPTNode *node) {
+Relation *Node::findParentRelation(Node *node) {
     for (int i=0; i<numDependParentNodes(); i++) {
-        KPTRelation *rel = getDependParentNode(i);
+        Relation *rel = getDependParentNode(i);
         if (rel->parent() == node)
             return rel;
     }
-    return (KPTRelation *)0;
+    return (Relation *)0;
 }
 
-KPTRelation *KPTNode::findChildRelation(KPTNode *node) {
+Relation *Node::findChildRelation(Node *node) {
     for (int i=0; i<numDependChildNodes(); i++) {
-        KPTRelation *rel = getDependChildNode(i);
+        Relation *rel = getDependChildNode(i);
         if (rel->child() == node)
             return rel;
     }
-    return (KPTRelation *)0;
+    return (Relation *)0;
 }
 
-KPTRelation *KPTNode::findRelation(KPTNode *node) {
-    KPTRelation *rel = findParentRelation(node);
+Relation *Node::findRelation(Node *node) {
+    Relation *rel = findParentRelation(node);
     if (!rel)
         rel = findChildRelation(node);
     return rel;
 }
 
-bool KPTNode::isDependChildOf(KPTNode *node) {
+bool Node::isDependChildOf(Node *node) {
     //kdDebug()<<k_funcinfo<<" '"<<m_name<<"' checking against '"<<node->name()<<"'"<<endl;
     for (int i=0; i<numDependParentNodes(); i++) {
-        KPTRelation *rel = getDependParentNode(i);
+        Relation *rel = getDependParentNode(i);
         if (rel->parent() == node)
             return true;
 		if (rel->parent()->isDependChildOf(node))
@@ -346,21 +346,21 @@ bool KPTNode::isDependChildOf(KPTNode *node) {
 	return false;
 }
 
-KPTDuration KPTNode::duration(const KPTDateTime &time, int use, bool backward) {
+Duration Node::duration(const DateTime &time, int use, bool backward) {
     //kdDebug()<<k_funcinfo<<endl;
     if (!m_effort) {
         kdError()<<k_funcinfo<<"m_effort = 0"<<endl;
-        return KPTDuration::zeroDuration;
+        return Duration::zeroDuration;
     }
-    KPTDuration effort = m_effort->effort(use);
-    if (effort == KPTDuration::zeroDuration) {
-        return KPTDuration::zeroDuration;
+    Duration effort = m_effort->effort(use);
+    if (effort == Duration::zeroDuration) {
+        return Duration::zeroDuration;
     }
-    KPTDuration dur = effort; // use effort as default duration
-    if (m_effort->type() == KPTEffort::Type_Effort ||
-        m_effort->type() == KPTEffort::Type_FixedDuration) {
+    Duration dur = effort; // use effort as default duration
+    if (m_effort->type() == Effort::Type_Effort ||
+        m_effort->type() == Effort::Type_FixedDuration) {
         dur = calcDuration(time, effort, backward);
-        if (dur == KPTDuration::zeroDuration) {
+        if (dur == Duration::zeroDuration) {
             kdWarning()<<k_funcinfo<<"zero duration: Resource not available"<<endl;
             m_resourceNotAvailable = true;
             return effort;
@@ -374,32 +374,32 @@ KPTDuration KPTNode::duration(const KPTDateTime &time, int use, bool backward) {
     return dur;
 }
 
-void KPTNode::makeAppointments() {
-    QPtrListIterator<KPTNode> nit(m_nodes);
+void Node::makeAppointments() {
+    QPtrListIterator<Node> nit(m_nodes);
     for ( ; nit.current(); ++nit ) {
         nit.current()->makeAppointments();
     }
 }
 
-void KPTNode::calcResourceOverbooked() {
-    QPtrListIterator<KPTNode> nit(m_nodes);
+void Node::calcResourceOverbooked() {
+    QPtrListIterator<Node> nit(m_nodes);
     for ( ; nit.current(); ++nit ) {
         nit.current()->calcResourceOverbooked();
     }
 }
 
-void KPTNode::saveRelations(QDomElement &element) {
-    QPtrListIterator<KPTRelation> it(m_dependChildNodes);
+void Node::saveRelations(QDomElement &element) {
+    QPtrListIterator<Relation> it(m_dependChildNodes);
     for (; it.current(); ++it) {
         it.current()->save(element);
     }
-    QPtrListIterator<KPTNode> nodes(m_nodes);
+    QPtrListIterator<Node> nodes(m_nodes);
     for ( ; nodes.current(); ++nodes ) {
         nodes.current()->saveRelations(element);
     }
 }
 
-void KPTNode::setConstraint(QString &type) {
+void Node::setConstraint(QString &type) {
     // Do not i18n these, they are used in load()
     if (type == "ASAP")
         setConstraint(ASAP);
@@ -419,7 +419,7 @@ void KPTNode::setConstraint(QString &type) {
         setConstraint(ASAP);  // default
 }
 
-QString KPTNode::constraintToString() const {
+QString Node::constraintToString() const {
     // Do not i18n these, they are used in save()
     if (m_constraint == ASAP)
         return QString("ASAP");
@@ -439,43 +439,43 @@ QString KPTNode::constraintToString() const {
     return QString();
 }
 
-void KPTNode::propagateEarliestStart(KPTDateTime &time) {
+void Node::propagateEarliestStart(DateTime &time) {
     earliestStart = time;
     //kdDebug()<<k_funcinfo<<m_name<<": "<<earliestStart.toString()<<endl;
-    QPtrListIterator<KPTNode> it = m_nodes;
+    QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->propagateEarliestStart(time);
     }
 }
 
-void KPTNode::propagateLatestFinish(KPTDateTime &time) {
+void Node::propagateLatestFinish(DateTime &time) {
     latestFinish = time;
     //kdDebug()<<k_funcinfo<<m_name<<": "<<latestFinish.toString()<<endl;
-    QPtrListIterator<KPTNode> it = m_nodes;
+    QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->propagateLatestFinish(time);
     }
 }
 
-void KPTNode::moveEarliestStart(KPTDateTime &time) {
+void Node::moveEarliestStart(DateTime &time) {
     if (earliestStart < time)
         earliestStart = time;
-    QPtrListIterator<KPTNode> it = m_nodes;
+    QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->moveEarliestStart(time);
     }
 }
 
-void KPTNode::moveLatestFinish(KPTDateTime &time) {
+void Node::moveLatestFinish(DateTime &time) {
     if (latestFinish > time)
         latestFinish = time;
-    QPtrListIterator<KPTNode> it = m_nodes;
+    QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->moveLatestFinish(time);
     }
 }
 
-void KPTNode::initiateCalculation() {
+void Node::initiateCalculation() {
     m_visitedForward = false;
     m_visitedBackward = false;
     m_resourceError = false;
@@ -483,29 +483,29 @@ void KPTNode::initiateCalculation() {
     m_schedulingError = false;
     m_inCriticalPath = false;
     clearProxyRelations();
-    QPtrListIterator<KPTNode> it = m_nodes;
+    QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->initiateCalculation();
     }
 }
 
-void KPTNode::resetVisited() {
+void Node::resetVisited() {
     m_visitedForward = false;
     m_visitedBackward = false;
-    QPtrListIterator<KPTNode> it = m_nodes;
+    QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->resetVisited();
     }
 }
 
-KPTNode *KPTNode::siblingBefore() {
+Node *Node::siblingBefore() {
     //kdDebug()<<k_funcinfo<<endl;
     if (getParent())
         return getParent()->childBefore(this);
     return 0;
 }
 
-KPTNode *KPTNode::childBefore(KPTNode *node) {
+Node *Node::childBefore(Node *node) {
     //kdDebug()<<k_funcinfo<<endl;
     int index = m_nodes.findRef(node);
     if (index > 0){
@@ -514,14 +514,14 @@ KPTNode *KPTNode::childBefore(KPTNode *node) {
     return 0;
 }
 
-KPTNode *KPTNode::siblingAfter() {
+Node *Node::siblingAfter() {
     //kdDebug()<<k_funcinfo<<endl;
     if (getParent())
         return getParent()->childAfter(this);
     return 0;
 }
 
-KPTNode *KPTNode::childAfter(KPTNode *node)
+Node *Node::childAfter(Node *node)
 {
     //kdDebug()<<k_funcinfo<<endl;
     uint index = m_nodes.findRef(node);
@@ -530,11 +530,11 @@ KPTNode *KPTNode::childAfter(KPTNode *node)
     return 0;
 }
 
-bool KPTNode::moveChildUp(KPTNode* node)
+bool Node::moveChildUp(Node* node)
 {
     if (findChildNode(node) == -1)
         return false; // not my node!
-    KPTNode *sib = node->siblingBefore();
+    Node *sib = node->siblingBefore();
     if (!sib)
         return false;
     sib = sib->siblingBefore();
@@ -547,11 +547,11 @@ bool KPTNode::moveChildUp(KPTNode* node)
     return true;
 }
 
-bool KPTNode::moveChildDown(KPTNode* node)
+bool Node::moveChildDown(Node* node)
 {
     if (findChildNode(node) == -1)
         return false; // not my node!
-    KPTNode *sib = node->siblingAfter();
+    Node *sib = node->siblingAfter();
     if (!sib)
         return false;
     delChildNode(node, false);
@@ -559,28 +559,28 @@ bool KPTNode::moveChildDown(KPTNode* node)
     return true;
 }
 
-bool KPTNode::legalToLink(KPTNode *node) {
-    KPTNode *p = projectNode();
+bool Node::legalToLink(Node *node) {
+    Node *p = projectNode();
     if (p)
         return p->legalToLink(this, node);
     return false;
 }
 
-bool KPTNode::isEndNode() const {
+bool Node::isEndNode() const {
     return m_dependChildNodes.isEmpty();
 }
-bool KPTNode::isStartNode() const {
+bool Node::isStartNode() const {
     return m_dependParentNodes.isEmpty();
 }
 
-bool KPTNode::setId(QString id) {
+bool Node::setId(QString id) {
     //kdDebug()<<k_funcinfo<<id<<endl;
     if (id.isEmpty()) {
         kdError()<<k_funcinfo<<"id is empty"<<endl;
         m_id = id;
         return false;
     }
-    KPTNode *n = findNode();
+    Node *n = findNode();
     if (n == this) {
         //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
         removeId();
@@ -599,20 +599,20 @@ bool KPTNode::setId(QString id) {
     return true;
 }
 
-void KPTNode::setStartTime(KPTDateTime startTime) { 
+void Node::setStartTime(DateTime startTime) { 
     m_startTime = startTime; 
     m_dateOnlyStartDate = startTime.date();
 }
 
-void KPTNode::setEndTime(KPTDateTime endTime) { 
+void Node::setEndTime(DateTime endTime) { 
     m_endTime = endTime; 
     m_dateOnlyEndDate = endTime.date();
     if (endTime.time().isNull() && m_dateOnlyEndDate > m_dateOnlyStartDate)
         m_dateOnlyEndDate = m_dateOnlyEndDate.addDays(-1);
 }
 
-KPTAppointment *KPTNode::findAppointment(KPTResource *resource) {
-    QPtrListIterator<KPTAppointment> it = m_appointments;
+Appointment *Node::findAppointment(Resource *resource) {
+    QPtrListIterator<Appointment> it = m_appointments;
     for (; it.current(); ++it) {
         if (it.current()->resource() == resource)
             return it.current();
@@ -620,7 +620,7 @@ KPTAppointment *KPTNode::findAppointment(KPTResource *resource) {
     return 0;
 }
 
-bool KPTNode::addAppointment(KPTAppointment *appointment) {
+bool Node::addAppointment(Appointment *appointment) {
     if (m_appointments.findRef(appointment) != -1) {
         kdError()<<k_funcinfo<<"Appointment allready exists"<<endl;
         return false;
@@ -630,13 +630,13 @@ bool KPTNode::addAppointment(KPTAppointment *appointment) {
         
 }
 
-void KPTNode::addAppointment(KPTResource *resource, KPTDateTime &start, KPTDateTime &end, double load) {
-    KPTAppointment *a = findAppointment(resource);
+void Node::addAppointment(Resource *resource, DateTime &start, DateTime &end, double load) {
+    Appointment *a = findAppointment(resource);
     if (a != 0) {
         a->addInterval(start, end, load);
         return;
     }
-    a = new KPTAppointment(resource, this, start, end, load);
+    a = new Appointment(resource, this, start, end, load);
     if (resource->addAppointment(a)) {
         m_appointments.append(a);
     } else {
@@ -644,12 +644,12 @@ void KPTNode::addAppointment(KPTResource *resource, KPTDateTime &start, KPTDateT
     }
 }
 
-void KPTNode::removeAppointment(KPTAppointment *appointment) {
+void Node::removeAppointment(Appointment *appointment) {
     takeAppointment(appointment);
     delete appointment;
 }
 
-void KPTNode::takeAppointment(KPTAppointment *appointment) {
+void Node::takeAppointment(Appointment *appointment) {
     int i = m_appointments.findRef(appointment);
     if (i != -1) {
         m_appointments.take(i);
@@ -658,7 +658,7 @@ void KPTNode::takeAppointment(KPTAppointment *appointment) {
 }
 
 
-bool KPTNode::calcCriticalPath() {
+bool Node::calcCriticalPath() {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (!isCritical()) {
         return false;
@@ -667,7 +667,7 @@ bool KPTNode::calcCriticalPath() {
         m_inCriticalPath = true;
         return true;
     }
-    QPtrListIterator<KPTRelation> pit(m_dependParentNodes);
+    QPtrListIterator<Relation> pit(m_dependParentNodes);
     for (; pit.current(); ++pit) {
         if (pit.current()->parent()->calcCriticalPath()) {
             m_inCriticalPath = true;
@@ -676,54 +676,54 @@ bool KPTNode::calcCriticalPath() {
     return m_inCriticalPath;
 }
 
-int KPTNode::level() {
-    KPTNode *n = getParent();
+int Node::level() {
+    Node *n = getParent();
     return n ? n->level() + 1 : 0;
 }
 
-void KPTNode::generateWBS(int count, KPTWBSDefinition &def, QString wbs) {
+void Node::generateWBS(int count, WBSDefinition &def, QString wbs) {
     m_wbs = wbs + def.code(count, level());
     kdDebug()<<k_funcinfo<<m_name<<" wbs: "<<m_wbs<<endl;
     QString w = wbs + def.wbs(count, level());
-    QPtrListIterator<KPTNode> it = m_nodes;
+    QPtrListIterator<Node> it = m_nodes;
     for (int i=0; it.current(); ++it) {
         it.current()->generateWBS(++i, def, w);
     }
 
 }
 
-//////////////////////////   KPTEffort   /////////////////////////////////
+//////////////////////////   Effort   /////////////////////////////////
 
-KPTEffort::KPTEffort( KPTDuration e, KPTDuration p, KPTDuration o) {
+Effort::Effort( Duration e, Duration p, Duration o) {
   m_expectedEffort = e;
   m_pessimisticEffort = p;
   m_optimisticEffort = o;
   m_type = Type_Effort;
 }
 
-KPTEffort::KPTEffort(const KPTEffort &effort) {
+Effort::Effort(const Effort &effort) {
     set(effort.expected(), effort.pessimistic(), effort.optimistic());
     setType(effort.type());
 }
 
-KPTEffort::~KPTEffort() {
+Effort::~Effort() {
 }
 
-const KPTEffort KPTEffort::zeroEffort( KPTDuration::zeroDuration,
-                       KPTDuration::zeroDuration,
-                       KPTDuration::zeroDuration );
+const Effort Effort::zeroEffort( Duration::zeroDuration,
+                       Duration::zeroDuration,
+                       Duration::zeroDuration );
 
-void KPTEffort::set( KPTDuration e, KPTDuration p, KPTDuration o ) {
+void Effort::set( Duration e, Duration p, Duration o ) {
     m_expectedEffort = e;
-    m_pessimisticEffort = (p == KPTDuration::zeroDuration) ? e :  p;
-    m_optimisticEffort = (o == KPTDuration::zeroDuration) ? e :  o;
+    m_pessimisticEffort = (p == Duration::zeroDuration) ? e :  p;
+    m_optimisticEffort = (o == Duration::zeroDuration) ? e :  o;
     //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.toString()<<endl;
 }
 
-void KPTEffort::set( int e, int p, int o ) {
-    m_expectedEffort = KPTDuration(e);
-    m_pessimisticEffort = (p < 0) ? KPTDuration(e) :  KPTDuration(p);
-    m_optimisticEffort = (o < 0) ? KPTDuration(e) :  KPTDuration(o);
+void Effort::set( int e, int p, int o ) {
+    m_expectedEffort = Duration(e);
+    m_pessimisticEffort = (p < 0) ? Duration(e) :  Duration(p);
+    m_optimisticEffort = (o < 0) ? Duration(e) :  Duration(o);
     //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.toString()<<endl;
     //kdDebug()<<k_funcinfo<<"   Optimistic: "<<m_optimisticEffort.toString()<<endl;
     //kdDebug()<<k_funcinfo<<"   Pessimistic: "<<m_pessimisticEffort.toString()<<endl;
@@ -731,26 +731,26 @@ void KPTEffort::set( int e, int p, int o ) {
     //kdDebug()<<k_funcinfo<<"   Expected: "<<m_expectedEffort.duration()<<" manseconds"<<endl;
 }
 
-//TODO (?): effort is not really a duration, should maybe not use KPTDuration for storage
-void KPTEffort::set(unsigned days, unsigned hours, unsigned minutes) {
-    KPTDuration dur(days, hours, minutes);
+//TODO (?): effort is not really a duration, should maybe not use Duration for storage
+void Effort::set(unsigned days, unsigned hours, unsigned minutes) {
+    Duration dur(days, hours, minutes);
     set(dur);
     //kdDebug()<<k_funcinfo<<"effort="<<dur.toString()<<endl;
 }
 
-void KPTEffort::expectedEffort(unsigned *days, unsigned *hours, unsigned *minutes) {
+void Effort::expectedEffort(unsigned *days, unsigned *hours, unsigned *minutes) {
     m_expectedEffort.get(days, hours, minutes);
 }
 
-bool KPTEffort::load(QDomElement &element) {
-    m_expectedEffort = KPTDuration::fromString(element.attribute("expected"));
-    m_optimisticEffort = KPTDuration::fromString(element.attribute("optimistic"));
-    m_pessimisticEffort = KPTDuration::fromString(element.attribute("pessimistic"));
+bool Effort::load(QDomElement &element) {
+    m_expectedEffort = Duration::fromString(element.attribute("expected"));
+    m_optimisticEffort = Duration::fromString(element.attribute("optimistic"));
+    m_pessimisticEffort = Duration::fromString(element.attribute("pessimistic"));
     setType(element.attribute("type", "WorkBased"));
     return true;
 }
 
-void KPTEffort::save(QDomElement &element) const {
+void Effort::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("effort");
     element.appendChild(me);
     me.setAttribute("expected", m_expectedEffort.toString());
@@ -759,7 +759,7 @@ void KPTEffort::save(QDomElement &element) const {
     me.setAttribute("type", typeToString());
 }
 
-QString KPTEffort::typeToString() const {
+QString Effort::typeToString() const {
     if (m_type == Type_Effort)
         return QString("Effort");
     if (m_type == Type_FixedDuration)
@@ -768,7 +768,7 @@ QString KPTEffort::typeToString() const {
     return QString();
 }
 
-void KPTEffort::setType(QString type) {
+void Effort::setType(QString type) {
     if (type == "Effort")
         setType(Type_Effort);
     else if (type == "Type_FixedDuration")
@@ -777,32 +777,32 @@ void KPTEffort::setType(QString type) {
         setType(Type_Effort); // default
 }
 
-void KPTEffort::setOptimisticRatio(int percent)
+void Effort::setOptimisticRatio(int percent)
 {
     int p = percent>0 ? -percent : percent;
     m_optimisticEffort = m_expectedEffort*(100+p)/100;
 }
 
-int KPTEffort::optimisticRatio() const {
-    if (m_expectedEffort == KPTDuration::zeroDuration)
+int Effort::optimisticRatio() const {
+    if (m_expectedEffort == Duration::zeroDuration)
         return 0;
     return (m_optimisticEffort.milliseconds()*100/m_expectedEffort.milliseconds())-100;
 }
 
-void KPTEffort::setPessimisticRatio(int percent) 
+void Effort::setPessimisticRatio(int percent) 
 {
     int p = percent<0 ? -percent : percent;
     m_pessimisticEffort = m_expectedEffort*(100+p)/100;
 }
-int KPTEffort::pessimisticRatio() const {
-    if (m_expectedEffort == KPTDuration::zeroDuration)
+int Effort::pessimisticRatio() const {
+    if (m_expectedEffort == Duration::zeroDuration)
         return 0;
     return m_pessimisticEffort.milliseconds()*100/m_expectedEffort.milliseconds()-100;
 }
 
 // Debugging
 #ifndef NDEBUG
-void KPTNode::printDebug(bool children, QCString indent) {
+void Node::printDebug(bool children, QCString indent) {
     kdDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
@@ -820,7 +820,7 @@ void KPTNode::printDebug(bool children, QCString indent) {
     //kdDebug()<<indent<<"  Successors="<<start_node()->successors.number<<" unvisited="<<start_node()->successors.unvisited<<endl;
 
 
-    QPtrListIterator<KPTRelation> pit(m_dependParentNodes);
+    QPtrListIterator<Relation> pit(m_dependParentNodes);
     //kdDebug()<<indent<<"  Dependant parents="<<pit.count()<<endl;
     if (pit.count() > 0) {
         for ( ; pit.current(); ++pit ) {
@@ -828,7 +828,7 @@ void KPTNode::printDebug(bool children, QCString indent) {
         }
     }
 
-    QPtrListIterator<KPTRelation> cit(m_dependChildNodes);
+    QPtrListIterator<Relation> cit(m_dependChildNodes);
     //kdDebug()<<indent<<"  Dependant children="<<cit.count()<<endl;
     if (cit.count() > 0) {
         for ( ; cit.current(); ++cit ) {
@@ -839,7 +839,7 @@ void KPTNode::printDebug(bool children, QCString indent) {
     //kdDebug()<<indent<<endl;
     indent += "  ";
     if (children) {
-        QPtrListIterator<KPTNode> it(m_nodes);
+        QPtrListIterator<Node> it(m_nodes);
         for ( ; it.current(); ++it ) {
             it.current()->printDebug(true,indent);
         }
@@ -850,7 +850,7 @@ void KPTNode::printDebug(bool children, QCString indent) {
 
 
 #ifndef NDEBUG
-void KPTEffort::printDebug(QCString indent) {
+void Effort::printDebug(QCString indent) {
     kdDebug()<<indent<<"  Effort: "<<m_expectedEffort.toString()<<endl;
     indent += "  ";
     kdDebug()<<indent<<"  Expected: "<<m_expectedEffort.toString()<<endl;

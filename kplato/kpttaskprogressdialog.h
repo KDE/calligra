@@ -27,27 +27,27 @@ class KCommand;
 namespace KPlato
 {
 
-class KPTTaskProgressPanel;
-class KPTTask;
-class KPTPart;
-class KPTStandardWorktime;
+class TaskProgressPanel;
+class Task;
+class Part;
+class StandardWorktime;
 
-class KPTTaskProgressDialog : public KDialogBase {
+class TaskProgressDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTTaskProgressDialog(KPTTask &task, KPTStandardWorktime *workTime, QWidget *parent=0);
+    TaskProgressDialog(Task &task, StandardWorktime *workTime, QWidget *parent=0);
 
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
 
 protected slots:
     void slotChanged();
     void slotOk();
 
 private:
-    KPTTaskProgressPanel *m_panel;
+    TaskProgressPanel *m_panel;
 
 };
 
 } //KPlato namespace
 
-#endif // KPTTASKPROGRESSDIALOG_H
+#endif // TASKPROGRESSDIALOG_H

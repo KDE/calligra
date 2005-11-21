@@ -30,21 +30,21 @@ class QString;
 namespace KPlato
 {
 
-class KPTAccounts;
-class KPTAccount;
+class Accounts;
+class Account;
 
 
 /**
- *  KPTAccount holds one account.
+ *  Account holds one account.
  *  An account can have any number of sub-accounts.
  *  Account names must be unique.
  */
-class KPTAccount
+class Account
 {
 public:
-    KPTAccount();
-    KPTAccount(QString name, QString description=QString::null);
-    ~KPTAccount();
+    Account();
+    Account(QString name, QString description=QString::null);
+    ~Account();
     
     QString name() const { return m_name; }
     void setName(QString name);
@@ -54,50 +54,50 @@ public:
 
     bool isElement() const { return m_accountList.isEmpty(); }
     
-    KPTAccounts *list() const { return m_list; }
-    void setList(KPTAccounts *list) { m_list = list; }
-    KPTAccount *parent() const { return m_parent; }
-    void setParent(KPTAccount *parent) { m_parent = parent; }
+    Accounts *list() const { return m_list; }
+    void setList(Accounts *list) { m_list = list; }
+    Account *parent() const { return m_parent; }
+    void setParent(Account *parent) { m_parent = parent; }
     void clear() { m_accountList.clear(); }
-    void append(KPTAccount *account);
-    void take(KPTAccount *account);
+    void append(Account *account);
+    void take(Account *account);
     void insertChildren();
     
     bool load(QDomElement &element);
     void save(QDomElement &element) const;
     
-    const QPtrList<KPTAccount> &accountList() const { return m_accountList; }
+    const QPtrList<Account> &accountList() const { return m_accountList; }
     
-    KPTAccount *findAccount() const { return findAccount(m_name); }
-    KPTAccount *findAccount(const QString &id) const;
+    Account *findAccount() const { return findAccount(m_name); }
+    Account *findAccount(const QString &id) const;
     bool removeId() { return removeId(m_name); }
     bool removeId(const QString &id);
     bool insertId();
-    bool insertId(const KPTAccount *account);
+    bool insertId(const Account *account);
     
 private:
     QString m_name;
     QString m_description;
-    KPTAccounts *m_list;
-    KPTAccount *m_parent;
-    QPtrList<KPTAccount> m_accountList;
+    Accounts *m_list;
+    Account *m_parent;
+    QPtrList<Account> m_accountList;
 };
 
-typedef QPtrList<KPTAccount> KPTAccountList;
-typedef QPtrListIterator<KPTAccount> KPTAccountListIterator;
+typedef QPtrList<Account> AccountList;
+typedef QPtrListIterator<Account> AccountListIterator;
 
 /**
- *  KPTAccounts administrates all accounts.
+ *  Accounts administrates all accounts.
  */
 
-class KPTAccounts
+class Accounts
 {
 public:
-    KPTAccounts();
-    ~KPTAccounts();
+    Accounts();
+    ~Accounts();
     void clear() { m_accountList.clear(); m_idDict.clear(); }
-    void append(KPTAccount *account);
-    void take(KPTAccount *account);
+    void append(Account *account);
+    void take(Account *account);
     
     bool load(QDomElement &element);
     void save(QDomElement &element) const;
@@ -105,14 +105,14 @@ public:
     QStringList costElements() const;
     QStringList nameList() const;
         
-    const KPTAccountList &accountList() const { return m_accountList; }
-    KPTAccount *findAccount(const QString &id) const;
-    bool insertId(const KPTAccount *account);
+    const AccountList &accountList() const { return m_accountList; }
+    Account *findAccount(const QString &id) const;
+    bool insertId(const Account *account);
     bool removeId(const QString &id);
     
 private:
-    KPTAccountList m_accountList;
-    QDict<KPTAccount> m_idDict;
+    AccountList m_accountList;
+    QDict<Account> m_idDict;
 };
 
 } //namespace KPlato

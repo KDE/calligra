@@ -41,30 +41,30 @@ class DCOPObject;
 namespace KPlato
 {
 
-class KPTGanttView;
-class KPTPertView;
-class KPTResourceView;
-class KPTReportView;
-class KPTPart;
-class KPTNode;
-class KPTProject;
-class KPTRelation;
-class KPTContext;
+class GanttView;
+class PertView;
+class ResourceView;
+class ReportView;
+class Part;
+class Node;
+class Project;
+class Relation;
+class Context;
 
-class KPTView : public KoView {
+class View : public KoView {
     Q_OBJECT
 
 public:
-    KPTView(KPTPart* part, QWidget* parent=0, const char* name=0);
-    ~KPTView();
+    View(Part* part, QWidget* parent=0, const char* name=0);
+    ~View();
     /**
      * Support zooming.
      */
     virtual void setZoom(double zoom);
 
-    KPTPart *getPart()const;
+    Part *getPart()const;
 
-    KPTProject& getProject() const;
+    Project& getProject() const;
 
     virtual void setupPrinter(KPrinter &printer);
     virtual void print(KPrinter &printer);
@@ -76,10 +76,10 @@ public:
 
     virtual DCOPObject* dcopObject();
     
-    void renameNode(KPTNode *node, QString name);
+    void renameNode(Node *node, QString name);
    
-    virtual bool setContext(KPTContext &context);
-    virtual void getContext(KPTContext &context) const;
+    virtual bool setContext(Context &context);
+    virtual void getContext(Context &context) const;
 
 public slots:
     void slotUpdate(bool calculate);
@@ -104,10 +104,10 @@ public slots:
     void slotDefineWBS();
     void slotGenerateWBS();
     void slotConfigure();
-    void slotAddRelation(KPTNode *par, KPTNode *child);
-    void slotModifyRelation(KPTRelation *rel);
-    void slotAddRelation(KPTNode *par, KPTNode *child, int linkType);
-    void slotModifyRelation(KPTRelation *rel, int linkType);
+    void slotAddRelation(Node *par, Node *child);
+    void slotModifyRelation(Relation *rel);
+    void slotAddRelation(Node *par, Node *child, int linkType);
+    void slotModifyRelation(Relation *rel, int linkType);
   
     void setBaselineMode(bool on);
     
@@ -146,16 +146,16 @@ protected slots:
 
 protected:
     virtual void updateReadWrite(bool readwrite);
-	KPTNode *currentTask();
+	Node *currentTask();
 
 private:
-    KPTGanttView *m_ganttview;
+    GanttView *m_ganttview;
     QHBoxLayout *m_ganttlayout;
-    KPTPertView *m_pertview;
+    PertView *m_pertview;
     QHBoxLayout *m_pertlayout;
 	QWidgetStack *m_tab;
-    KPTResourceView *m_resourceview;
-    KPTReportView *m_reportview;
+    ResourceView *m_resourceview;
+    ReportView *m_reportview;
     QPtrList<QString> m_reportTemplateFiles;
 
     bool m_baselineMode;

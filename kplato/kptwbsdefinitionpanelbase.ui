@@ -1,9 +1,9 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPlato::KPTWBSDefinitionPanelBase</class>
+<class>KPlato::WBSDefinitionPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">
-        <cstring>KPTWBSDefinitionPanelBase</cstring>
+        <cstring>WBSDefinitionPanelBase</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -14,7 +14,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>KPTWBSDefinitionPanelBase</string>
+        <string>WBSDefinitionPanelBase</string>
     </property>
     <grid>
         <property name="name">

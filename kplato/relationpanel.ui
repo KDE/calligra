@@ -224,7 +224,7 @@
                                 <set>AlignBottom</set>
                             </property>
                         </widget>
-                        <widget class="KPlato::KPTDurationWidget">
+                        <widget class="KPlato::DurationWidget">
                             <property name="name">
                                 <cstring>lag</cstring>
                             </property>
@@ -251,7 +251,7 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>KPlato::KPTDurationWidget</class>
+        <class>KPlato::DurationWidget</class>
         <header location="local">kptdurationwidget.h</header>
         <sizehint>
             <width>0</width>
@@ -267,7 +267,7 @@
         <pixmap>image0</pixmap>
         <signal>valueChanged()</signal>
         <slot access="public" specifier="">slot()</slot>
-        <slot access="public" specifier="">setValue( const KPLato::KPTDuration &amp; newDuration )</slot>
+        <slot access="public" specifier="">setValue( const KPLato::Duration &amp; newDuration )</slot>
         <slot access="public" specifier="">slot()</slot>
         <slot access="public" specifier="">handleFocus( int field )</slot>
     </customwidget>

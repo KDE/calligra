@@ -26,21 +26,21 @@
 namespace KPlato
 {
 
-KPTAccountsDialog::KPTAccountsDialog(KPTAccounts &acc, QWidget *p, const char *n)
+AccountsDialog::AccountsDialog(Accounts &acc, QWidget *p, const char *n)
     : KDialogBase(Swallow, i18n("Edit Accounts"), Ok|Cancel, Ok, p, n, true, true)
 {
-    m_panel = new KPTAccountsPanel(acc, this);
+    m_panel = new AccountsPanel(acc, this);
     setMainWidget(m_panel);
     
     enableButtonOK(false);
     connect(m_panel, SIGNAL(changed(bool)), SLOT(enableButtonOK(bool)));
 }
 
-KCommand *KPTAccountsDialog::buildCommand(KPTPart *part) {
+KCommand *AccountsDialog::buildCommand(Part *part) {
     return m_panel->buildCommand(part);
 }
 
-void KPTAccountsDialog::slotOk() {
+void AccountsDialog::slotOk() {
     m_panel->slotOk();
     accept();
 }

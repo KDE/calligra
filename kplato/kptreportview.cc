@@ -94,8 +94,8 @@ public:
                 return (m_task ? m_task->startTime().date().toString() : QString::null);
             else if (tag.section(".", 1, 1) == "duration") {
                 if (m_task) {
-                    KPTDuration *d = m_task->getExpectedDuration();
-                    QString s = d->toString(KPTDuration::Format_Hour);
+                    Duration *d = m_task->getExpectedDuration();
+                    QString s = d->toString(Duration::Format_Hour);
                     delete d;
                     return s;
                 }
@@ -116,10 +116,10 @@ public:
 	return QString::null;
     }
 
-    KPTProject *m_project;
-    KPTTask *m_task;
-    KPTResourceGroup *m_resourcegroup;
-    KPTResource *m_resource;
+    Project *m_project;
+    Task *m_task;
+    ResourceGroup *m_resourcegroup;
+    Resource *m_resource;
 
     QString alltasksLevel;
     QStringList alltasksProps;
@@ -137,7 +137,7 @@ public:
 };
 
 
-KPTReportView::KPTReportView(KPTView *view, QWidget *parent)
+ReportView::ReportView(View *view, QWidget *parent)
     : QWidget(parent, "Report view"),
     m_mainview(view),
     m_reportTags(0)
@@ -165,12 +165,12 @@ KPTReportView::KPTReportView(KPTView *view, QWidget *parent)
 }
 
 
- KPTReportView::~KPTReportView() {
+ ReportView::~ReportView() {
    //safe
    delete m_reportTags;
 }
 
-void KPTReportView::draw(const QString &report) {
+void ReportView::draw(const QString &report) {
     //kdDebug()<<k_funcinfo<<endl;
     m_reportview->clearReport();
     m_reportTags = new ReportTagsPrivate();
@@ -183,13 +183,13 @@ void KPTReportView::draw(const QString &report) {
     m_reportTags=0L;
 }
 
-void KPTReportView::print(KPrinter &printer) {
+void ReportView::print(KPrinter &printer) {
     //kdDebug()<<k_funcinfo<<endl;
 	m_reportview->printReport(printer);
 }
 
 // Generate report data based on info from the template file
-void KPTReportView::setReportData() {
+void ReportView::setReportData() {
     QString s = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n";
     s+="<KugarData>\n";
     s += setReportDetail();
@@ -198,7 +198,7 @@ void KPTReportView::setReportData() {
     m_reportview->setReportData(s);
 }
 
-QString KPTReportView::setReportDetail() {
+QString ReportView::setReportDetail() {
     //kdDebug()<<k_funcinfo<<endl;
     QString s;
     if (m_reportTags->alltasksLevel != "-1") {
@@ -215,16 +215,16 @@ QString KPTReportView::setReportDetail() {
             m_reportTags->milestonesLevel = m_reportTags->alltasksLevel;
             m_reportTags->milestonesProps = m_reportTags->alltasksProps;
         }
-        QPtrListIterator<KPTNode> it(mainView()->getProject().childNodeIterator());
+        QPtrListIterator<Node> it(mainView()->getProject().childNodeIterator());
         for (; it.current(); ++it) {
             s += setTaskDetail(it.current());
         }
 
     } else if (m_reportTags->summarytasksLevel == "0") {
         // make a report that has summarytasks as starting points
-        QPtrListIterator<KPTNode> it(mainView()->getProject().childNodeIterator());
+        QPtrListIterator<Node> it(mainView()->getProject().childNodeIterator());
         for (; it.current(); ++it) {
-            if (it.current()->type() == KPTNode::Type_Summarytask) {
+            if (it.current()->type() == Node::Type_Summarytask) {
                 s += setTaskDetail(it.current());
                 // Now do subtasks
                 s+= setTaskChildren(it.current());
@@ -233,12 +233,12 @@ QString KPTReportView::setReportDetail() {
 
     } else if (m_reportTags->tasksLevel == "0") {
         // make a report that has tasks as starting points
-        QPtrListIterator<KPTNode> it(mainView()->getProject().childNodeIterator());
+        QPtrListIterator<Node> it(mainView()->getProject().childNodeIterator());
         for (; it.current(); ++it) {
-            if (it.current()->type() == KPTNode::Type_Task) {
+            if (it.current()->type() == Node::Type_Task) {
                 s += setTaskDetail(it.current());
             }
-            if (it.current()->type() == KPTNode::Type_Summarytask) {
+            if (it.current()->type() == Node::Type_Summarytask) {
                 s+= setTaskChildren(it.current());
                 if (m_reportTags->summarytasksLevel != "-1") {
                     s += setTaskDetail(it.current());
@@ -252,9 +252,9 @@ QString KPTReportView::setReportDetail() {
 
     } else if (m_reportTags->resourcesLevel == "0") {
         // make a report that has resources as starting points
-        QPtrListIterator<KPTResourceGroup> it(mainView()->getProject().resourceGroups());
+        QPtrListIterator<ResourceGroup> it(mainView()->getProject().resourceGroups());
         for (; it.current(); ++it) {
-            QPtrListIterator<KPTResource> rit(it.current()->resources());
+            QPtrListIterator<Resource> rit(it.current()->resources());
             for (; rit.current(); ++rit) {
                 s += setResourceDetail(rit.current());
             }
@@ -264,7 +264,7 @@ QString KPTReportView::setReportDetail() {
     return s;
 }
 
-QString KPTReportView::setResourceDetail(KPTResource *res) {
+QString ReportView::setResourceDetail(Resource *res) {
     //kdDebug()<<k_funcinfo<<endl;
     QString s;
     if (m_reportTags->resourcesLevel != "-1") {
@@ -274,41 +274,41 @@ QString KPTReportView::setResourceDetail(KPTResource *res) {
     return s;
 }
 
-QString KPTReportView::setTaskChildren(KPTNode *node) {
+QString ReportView::setTaskChildren(Node *node) {
     //kdDebug()<<k_funcinfo<<endl;
     QString s;
-    QPtrListIterator<KPTNode> it(node->childNodeIterator());
+    QPtrListIterator<Node> it(node->childNodeIterator());
     for (; it.current(); ++it) {
         s += setTaskDetail(it.current());
-        if (node->type() == KPTNode::Type_Summarytask)
+        if (node->type() == Node::Type_Summarytask)
             s+= setTaskChildren(it.current());
     }
     return s;
 }
 
-QString KPTReportView::setTaskDetail(KPTNode *node) {
+QString ReportView::setTaskDetail(Node *node) {
     //kdDebug()<<k_funcinfo<<endl;
     QString s;
     QStringList props;
     QString level = "-1";
-    if (node->type() == KPTNode::Type_Task) {
+    if (node->type() == Node::Type_Task) {
         props = m_reportTags->tasksProps;
         level = m_reportTags->tasksLevel;
-    } else if (node->type() == KPTNode::Type_Summarytask) {
+    } else if (node->type() == Node::Type_Summarytask) {
         props = m_reportTags->summarytasksProps;
         level = m_reportTags->summarytasksLevel;
-    } else if (node->type() == KPTNode::Type_Milestone) {
+    } else if (node->type() == Node::Type_Milestone) {
         props = m_reportTags->milestonesProps;
         level = m_reportTags->milestonesLevel;
     }
     if (level != "-1") {
-        m_reportTags->m_task = static_cast<KPTTask *>(node);
+        m_reportTags->m_task = static_cast<Task *>(node);
         s = setDetail("task", props, level);
     }
     return s;
 }
 
-QString KPTReportView::setDetail(const QString & source, QStringList &properties, QString &level) {
+QString ReportView::setDetail(const QString & source, QStringList &properties, QString &level) {
     QString s = "<Row";
     s += " level=\"" + level + "\"";
     for (unsigned int i=0; i < properties.count(); ++i) {
@@ -327,7 +327,7 @@ QString KPTReportView::setDetail(const QString & source, QStringList &properties
 }
 
 // Most of this is from KoDocument::loadNativeFormat
-void KPTReportView::openTemplateFile(const QString &file) {
+void ReportView::openTemplateFile(const QString &file) {
     if (!QFileInfo(file).isFile()) {
         KMessageBox::sorry( this, i18n("Cannot find report template file!"),
                                                         i18n("Generate Report"));
@@ -378,7 +378,7 @@ void KPTReportView::openTemplateFile(const QString &file) {
     store->close();
 }
 
-void KPTReportView::loadTemplate(QIODevice &dev) {
+void ReportView::loadTemplate(QIODevice &dev) {
     QString errorMsg;
     int errorLine;
     int errorColumn;
@@ -390,7 +390,7 @@ void KPTReportView::loadTemplate(QIODevice &dev) {
     loadTemplate(templateDoc);
 }
 
-void KPTReportView::loadTemplate(QDomDocument &doc) {
+void ReportView::loadTemplate(QDomDocument &doc) {
     QDomNode tpl;
     QDomNode child;
     for (tpl = doc.firstChild(); !tpl.isNull(); tpl = tpl.nextSibling())
@@ -434,7 +434,7 @@ void KPTReportView::loadTemplate(QDomDocument &doc) {
     }
 }
 
-void KPTReportView::handleHeader(QDomNode &node) {
+void ReportView::handleHeader(QDomNode &node) {
     QDomNode child;
     QDomNodeList children = node.childNodes();
     int childCount = children.length();
@@ -459,7 +459,7 @@ void KPTReportView::handleHeader(QDomNode &node) {
     }
 }
 
-void KPTReportView::handleDetailHeader(QDomNode &node) {
+void ReportView::handleDetailHeader(QDomNode &node) {
     QDomNode child;
     QDomNodeList children = node.childNodes();
     int childCount = children.length();
@@ -471,7 +471,7 @@ void KPTReportView::handleDetailHeader(QDomNode &node) {
     }
 }
 
-QStringList KPTReportView::getProperties(QDomElement &elem) {
+QStringList ReportView::getProperties(QDomElement &elem) {
     QStringList props;
     QDomNodeList list(elem.childNodes());
     int childCount = list.length();
@@ -484,7 +484,7 @@ QStringList KPTReportView::getProperties(QDomElement &elem) {
     return props;
 }
 
-void KPTReportView::handleDetail(QDomElement &elem) {
+void ReportView::handleDetail(QDomElement &elem) {
 
     QString source = elem.attribute("SelectFrom");
     if (source.isNull())
@@ -520,12 +520,12 @@ void KPTReportView::handleDetail(QDomElement &elem) {
     }
 }
 
-void KPTReportView::replaceTags(QDomNode &node) {
+void ReportView::replaceTags(QDomNode &node) {
     if (node.isNull())
         return;
 }
 
-void KPTReportView::getTemplateFile(const QString &tpl) {
+void ReportView::getTemplateFile(const QString &tpl) {
 
 	KURL url(tpl);
 	QString localtpl;
@@ -551,28 +551,28 @@ void KPTReportView::getTemplateFile(const QString &tpl) {
 	}
 }
 
-void KPTReportView::slotFirstPage() {
+void ReportView::slotFirstPage() {
     m_reportview->slotFirstPage();
 }
 
-void KPTReportView::slotNextPage() {
+void ReportView::slotNextPage() {
     m_reportview->slotNextPage();
 }
 
-void KPTReportView::slotPrevPage() {
+void ReportView::slotPrevPage() {
     m_reportview->slotPrevPage();
 }
 
-void KPTReportView::slotLastPage() {
+void ReportView::slotLastPage() {
     m_reportview->slotLastPage();
 }
 
-bool KPTReportView::setContext(KPTContext &context) {
+bool ReportView::setContext(Context &context) {
     kdDebug()<<k_funcinfo<<endl;
     return true;
 }
 
-void KPTReportView::getContext(KPTContext &context) const {
+void ReportView::getContext(Context &context) const {
     kdDebug()<<k_funcinfo<<endl;
 }
 

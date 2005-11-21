@@ -46,29 +46,29 @@
 namespace KPlato
 {
 
-class KPTCalendarPanel::KPTCalendarPanelPrivate
+class CalendarPanel::CalendarPanelPrivate
 {
 public:
-    KPTCalendarPanelPrivate() : closeButton(0L), selectWeek(0L) {}
+    CalendarPanelPrivate() : closeButton(0L), selectWeek(0L) {}
 
     QToolButton *closeButton;
     QToolButton *selectWeek;
 };
 
 
-KPTCalendarPanel::KPTCalendarPanel(QWidget *parent, QDate dt, const char *name, WFlags f)
+CalendarPanel::CalendarPanel(QWidget *parent, QDate dt, const char *name, WFlags f)
   : QFrame(parent,name, f)
 {
   init( dt );
 }
 
-KPTCalendarPanel::KPTCalendarPanel( QWidget *parent, const char *name )
+CalendarPanel::CalendarPanel( QWidget *parent, const char *name )
   : QFrame(parent,name)
 {
     init( QDate::currentDate() );
 }
 
-void KPTCalendarPanel::init( const QDate &dt )
+void CalendarPanel::init( const QDate &dt )
 {
   yearForward = new QToolButton(this);
   yearBackward = new QToolButton(this);
@@ -77,11 +77,11 @@ void KPTCalendarPanel::init( const QDate &dt )
   selectMonth = new QToolButton(this);
   selectYear = new QToolButton(this);
   line = new KLineEdit(this);
-  val = new KPTDateValidator(this);
-  table = new KPTDateTable(this, dt, "Calendar table", 0);
+  val = new DateValidator(this);
+  table = new DateTable(this, dt, "Calendar table", 0);
   fontsize = 10;
 
-  d = new KPTCalendarPanelPrivate();
+  d = new CalendarPanelPrivate();
   d->selectWeek = new QToolButton( this );
 
   QToolTip::add(yearForward, i18n("Next year"));
@@ -119,13 +119,13 @@ void KPTCalendarPanel::init( const QDate &dt )
   table->setFocus();
 }
 
-KPTCalendarPanel::~KPTCalendarPanel()
+CalendarPanel::~CalendarPanel()
 {
   delete d;
 }
 
 bool
-KPTCalendarPanel::eventFilter(QObject *o, QEvent *e )
+CalendarPanel::eventFilter(QObject *o, QEvent *e )
 {
    if ( e->type() == QEvent::KeyPress ) {
       QKeyEvent *k = (QKeyEvent *)e;
@@ -144,7 +144,7 @@ KPTCalendarPanel::eventFilter(QObject *o, QEvent *e )
 }
 
 void
-KPTCalendarPanel::resizeEvent(QResizeEvent*)
+CalendarPanel::resizeEvent(QResizeEvent*)
 {
     QWidget *buttons[] = {
 	yearBackward,
@@ -205,9 +205,9 @@ KPTCalendarPanel::resizeEvent(QResizeEvent*)
 }
 
 void
-KPTCalendarPanel::dateChangedSlot(QDate date)
+CalendarPanel::dateChangedSlot(QDate date)
 {
-    //kdDebug() << "KPTCalendarPanel::dateChangedSlot: date changed (" << date.year() << "/" << date.month() << "/" << date.day() << ")." << endl;
+    //kdDebug() << "CalendarPanel::dateChangedSlot: date changed (" << date.year() << "/" << date.month() << "/" << date.day() << ")." << endl;
     line->setText(KGlobal::locale()->formatDate(date, true));
     d->selectWeek->setText(i18n("Week %1").arg(weekOfYear(date)));
     selectMonth->setText(KGlobal::locale()->calendar()->monthName(date.month(), false));
@@ -216,27 +216,27 @@ KPTCalendarPanel::dateChangedSlot(QDate date)
 }
 
 void
-KPTCalendarPanel::tableClickedSlot()
+CalendarPanel::tableClickedSlot()
 {
-  //kdDebug() << "KPTCalendarPanel::tableClickedSlot: table clicked." << endl;
+  //kdDebug() << "CalendarPanel::tableClickedSlot: table clicked." << endl;
   emit(dateSelected(table->getDate()));
   emit(tableClicked());
 }
 
 const QDate&
-KPTCalendarPanel::getDate() const
+CalendarPanel::getDate() const
 {
   return table->getDate();
 }
 
 const QDate &
-KPTCalendarPanel::date() const
+CalendarPanel::date() const
 {
     return table->getDate();
 }
 
 bool
-KPTCalendarPanel::setDate(const QDate& date)
+CalendarPanel::setDate(const QDate& date)
 {
     if(date.isValid()) {
 	QString temp;
@@ -249,41 +249,41 @@ KPTCalendarPanel::setDate(const QDate& date)
 	line->setText(KGlobal::locale()->formatDate(date, true));
 	return true;
     } else {
-	kdDebug() << "KPTCalendarPanel::setDate: refusing to set invalid date." << endl;
+	kdDebug() << "CalendarPanel::setDate: refusing to set invalid date." << endl;
 	return false;
     }
 }
 
 void
-KPTCalendarPanel::monthForwardClicked()
+CalendarPanel::monthForwardClicked()
 {
     setDate( table->getDate().addMonths(1) );
 }
 
 void
-KPTCalendarPanel::monthBackwardClicked()
+CalendarPanel::monthBackwardClicked()
 {
     setDate( table->getDate().addMonths(-1) );
 }
 
 void
-KPTCalendarPanel::yearForwardClicked()
+CalendarPanel::yearForwardClicked()
 {
     setDate( table->getDate().addYears(1) );
 }
 
 void
-KPTCalendarPanel::yearBackwardClicked()
+CalendarPanel::yearBackwardClicked()
 {
     setDate( table->getDate().addYears(-1) );
 }
 
 void
-KPTCalendarPanel::selectWeekClicked()
+CalendarPanel::selectWeekClicked()
 {
   int week;
-  KPTPopupFrame* popup = new KPTPopupFrame(this);
-  KPTDateInternalWeekSelector* picker = new KPTDateInternalWeekSelector(fontsize, popup);
+  PopupFrame* popup = new PopupFrame(this);
+  DateInternalWeekSelector* picker = new DateInternalWeekSelector(fontsize, popup);
   // -----
   picker->resize(picker->sizeHint());
   popup->setMainWidget(picker);
@@ -316,11 +316,11 @@ KPTCalendarPanel::selectWeekClicked()
 }
 
 void
-KPTCalendarPanel::selectMonthClicked()
+CalendarPanel::selectMonthClicked()
 {
   int month;
-  KPTPopupFrame* popup = new KPTPopupFrame(this);
-  KPTDateInternalMonthPicker* picker = new KPTDateInternalMonthPicker(fontsize, popup);
+  PopupFrame* popup = new PopupFrame(this);
+  DateInternalMonthPicker* picker = new DateInternalMonthPicker(fontsize, popup);
   // -----
   picker->resize(picker->sizeHint());
   popup->setMainWidget(picker);
@@ -346,11 +346,11 @@ KPTCalendarPanel::selectMonthClicked()
 }
 
 void
-KPTCalendarPanel::selectYearClicked()
+CalendarPanel::selectYearClicked()
 {
   int year;
-  KPTPopupFrame* popup = new KPTPopupFrame(this);
-  KPTDateInternalYearSelector* picker = new KPTDateInternalYearSelector(fontsize, popup);
+  PopupFrame* popup = new PopupFrame(this);
+  DateInternalYearSelector* picker = new DateInternalYearSelector(fontsize, popup);
   // -----
   picker->resize(picker->sizeHint());
   popup->setMainWidget(picker);
@@ -376,7 +376,7 @@ KPTCalendarPanel::selectYearClicked()
 }
 
 void
-KPTCalendarPanel::setEnabled(bool enable)
+CalendarPanel::setEnabled(bool enable)
 {
   QWidget *widgets[]= {
     yearForward, yearBackward, monthForward, monthBackward,
@@ -393,23 +393,23 @@ KPTCalendarPanel::setEnabled(bool enable)
 }
 
 void
-KPTCalendarPanel::lineEnterPressed()
+CalendarPanel::lineEnterPressed()
 {
   QDate temp;
   // -----
   if(val->date(line->text(), temp)==QValidator::Acceptable)
     {
-        //kdDebug() << "KPTCalendarPanel::lineEnterPressed: valid date entered." << endl;
+        //kdDebug() << "CalendarPanel::lineEnterPressed: valid date entered." << endl;
         emit(dateEntered(temp));
         setDate(temp);
     } else {
       KNotifyClient::beep();
-      //kdDebug() << "KPTCalendarPanel::lineEnterPressed: invalid date entered." << endl;
+      //kdDebug() << "CalendarPanel::lineEnterPressed: invalid date entered." << endl;
     }
 }
 
 QSize
-KPTCalendarPanel::sizeHint() const
+CalendarPanel::sizeHint() const
 {
   QSize tableSize=table->sizeHint();
   QWidget *buttons[]={
@@ -447,7 +447,7 @@ KPTCalendarPanel::sizeHint() const
 }
 
 void
-KPTCalendarPanel::setFontSize(int s)
+CalendarPanel::setFontSize(int s)
 {
   QWidget *buttons[]= {
     // yearBackward,
@@ -480,7 +480,7 @@ KPTCalendarPanel::setFontSize(int s)
 }
 
 void
-KPTCalendarPanel::setCloseButton( bool enable )
+CalendarPanel::setCloseButton( bool enable )
 {
     if ( enable == (d->closeButton != 0L) )
         return;
@@ -500,12 +500,12 @@ KPTCalendarPanel::setCloseButton( bool enable )
     updateGeometry();
 }
 
-bool KPTCalendarPanel::hasCloseButton() const
+bool CalendarPanel::hasCloseButton() const
 {
     return (d->closeButton != 0L);
 }
 
-int KPTCalendarPanel::weekOfYear(QDate date)
+int CalendarPanel::weekOfYear(QDate date)
 {
     // Calculate ISO 8601 week number (taken from glibc/Gnumeric)
     int year, week, wday, jan1wday, nextjan1wday;
@@ -538,26 +538,26 @@ int KPTCalendarPanel::weekOfYear(QDate date)
     return week;
 }
 
-void KPTCalendarPanel::slotWeekdaySelected(int day) {
+void CalendarPanel::slotWeekdaySelected(int day) {
     //kdDebug()<<k_funcinfo<<endl;
     emit weekdaySelected(day);
 }
 
-void KPTCalendarPanel::slotWeekSelected(int week, int year) {
+void CalendarPanel::slotWeekSelected(int week, int year) {
     //kdDebug()<<k_funcinfo<<endl;
     emit weekSelected(week, year);
 }
 
-void KPTCalendarPanel::setCalendar(KPTCalendar *cal) {
+void CalendarPanel::setCalendar(Calendar *cal) {
     //kdDebug()<<k_funcinfo<<endl;
     table->clear();
     if (cal) {
         table->setMarkedWeeks(cal->weekMap());
         table->setMarkedWeekdays(cal->weekdaysMap());
-        QPtrListIterator<KPTCalendarDay> it = cal->days();
+        QPtrListIterator<CalendarDay> it = cal->days();
         //kdDebug()<<k_funcinfo<<"Days="<<it.count()<<endl;
         for (; it.current(); ++it) {
-            if (it.current()->state() != KPTMap::None) {
+            if (it.current()->state() != Map::None) {
                 table->addMarkedDate(it.current()->date(), it.current()->state());
             //kdDebug()<<k_funcinfo<<"Added day: "<<it.current()->date().toString()<<"="<<it.current()->state()<<endl;
             }
@@ -567,44 +567,44 @@ void KPTCalendarPanel::setCalendar(KPTCalendar *cal) {
     }
 }
 
-KPTDateMap  KPTCalendarPanel::selectedDates() {
+DateMap  CalendarPanel::selectedDates() {
     return table->selectedDates();
 }
 
-KPTIntMap  KPTCalendarPanel::selectedWeekdays() {
+IntMap  CalendarPanel::selectedWeekdays() {
     return table->selectedWeekdays();
 }
 
-KPTWeekMap  KPTCalendarPanel::selectedWeeks() {
+WeekMap  CalendarPanel::selectedWeeks() {
     return table->selectedWeeks();
 }
 
-KPTDateMap  KPTCalendarPanel::markedDates() {
+DateMap  CalendarPanel::markedDates() {
     return table->markedDates();
 }
 
-KPTIntMap  KPTCalendarPanel::markedWeekdays() {
+IntMap  CalendarPanel::markedWeekdays() {
     return table->markedWeekdays();
 }
 
-KPTWeekMap  KPTCalendarPanel::markedWeeks() {
+WeekMap  CalendarPanel::markedWeeks() {
     return table->markedWeeks();
 }
 
-void KPTCalendarPanel::clear() {
+void CalendarPanel::clear() {
     table->clear();
     setEnabled(false);
 }
 
-void KPTCalendarPanel::markSelected(int state) {
+void CalendarPanel::markSelected(int state) {
     table->markSelected(state);
  }
 
-void KPTCalendarPanel::slotSelectionCleared() {
+void CalendarPanel::slotSelectionCleared() {
     emit selectionCleared();
  }
 
-void KPTCalendarPanel::virtual_hook( int /*id*/, void* /*data*/ )
+void CalendarPanel::virtual_hook( int /*id*/, void* /*data*/ )
 { /*BASE::virtual_hook( id, data );*/ }
 
 }  //KPlato namespace

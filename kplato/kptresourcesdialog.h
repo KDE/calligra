@@ -27,27 +27,27 @@ class KCommand;
 namespace KPlato
 {
 
-class KPTProject;
-class KPTResourcesPanel;
-class KPTPart;
+class Project;
+class ResourcesPanel;
+class Part;
 
 
-class KPTResourcesDialog : public KDialogBase {
+class ResourcesDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTResourcesDialog(KPTProject &project, QWidget *parent=0, const char *name=0);
+    ResourcesDialog(Project &project, QWidget *parent=0, const char *name=0);
 
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
     
 protected slots:
     void slotChanged();
     void slotOk();
 
 private:
-    KPTProject &project;
-    KPTResourcesPanel *panel;
+    Project &project;
+    ResourcesPanel *panel;
 };
 
 }  //KPlato namespace
 
-#endif // KPTRESOURCESDIALOG_H
+#endif // RESOURCESDIALOG_H

@@ -44,7 +44,7 @@ namespace KPlato
 * @version $Id$
 * @author Stephan Binner
 */
-class KPTDateInternalWeekSelector : public QLineEdit
+class DateInternalWeekSelector : public QLineEdit
 {
   Q_OBJECT
 protected:
@@ -55,15 +55,15 @@ public slots:
 signals:
   void closeMe(int);
 public:
-  KPTDateInternalWeekSelector(int fontsize,
+  DateInternalWeekSelector(int fontsize,
 			    QWidget* parent=0,
 			    const char* name=0);
   int getWeek() const;
   void setWeek(int week);
 
 private:
-  class KPTDateInternalWeekPrivate;
-  KPTDateInternalWeekPrivate *d;
+  class DateInternalWeekPrivate;
+  DateInternalWeekPrivate *d;
 };
 
 /**
@@ -72,7 +72,7 @@ private:
 * @version $Id$
 * @author Tim Gilman, Mirko Boehm
 */
-class KPTDateInternalMonthPicker : public QGridView
+class DateInternalMonthPicker : public QGridView
 {
   Q_OBJECT
 protected:
@@ -98,7 +98,7 @@ public:
   /**
    * The constructor.
    */
-  KPTDateInternalMonthPicker(int fontsize, QWidget* parent, const char* name=0);
+  DateInternalMonthPicker(int fontsize, QWidget* parent, const char* name=0);
   /**
    * The size hint.
    */
@@ -136,8 +136,8 @@ protected:
   virtual void contentsMouseReleaseEvent(QMouseEvent *e);
 
 private:
-  class KPTDateInternalMonthPrivate;
-  KPTDateInternalMonthPrivate *d;
+  class DateInternalMonthPrivate;
+  DateInternalMonthPrivate *d;
 };
 
 /** Year selection widget.
@@ -145,7 +145,7 @@ private:
 * @version $Id$
 * @author Tim Gilman, Mirko Boehm
 */
-class KPTDateInternalYearSelector : public QLineEdit
+class DateInternalYearSelector : public QLineEdit
 {
   Q_OBJECT
 protected:
@@ -156,15 +156,15 @@ public slots:
 signals:
   void closeMe(int);
 public:
-  KPTDateInternalYearSelector(int fontsize,
+  DateInternalYearSelector(int fontsize,
 			    QWidget* parent=0,
 			    const char* name=0);
   int getYear() const;
   void setYear(int year);
 
 private:
-  class KPTDateInternalYearPrivate;
-  KPTDateInternalYearPrivate *d;
+  class DateInternalYearPrivate;
+  DateInternalYearPrivate *d;
 };
 
 /**
@@ -172,7 +172,7 @@ private:
  * @author Tim Gilman, Mirko Boehm
  * @version $Id$
  */
-class KPTPopupFrame : public QFrame
+class PopupFrame : public QFrame
 {
   Q_OBJECT
 protected:
@@ -198,7 +198,7 @@ public:
   /**
    * The contructor. Creates a dialog without buttons.
    */
-  KPTPopupFrame(QWidget* parent=0, const char*  name=0);
+  PopupFrame(QWidget* parent=0, const char*  name=0);
   /**
    * Set the main widget. You cannot set the main widget from the constructor,
    * since it must be a child of the frame itselfes.
@@ -231,32 +231,32 @@ private:
 protected:
   virtual void virtual_hook( int id, void* data );
 private:
-  class KPTPopupFramePrivate;
-  KPTPopupFramePrivate *d;
+  class PopupFramePrivate;
+  PopupFramePrivate *d;
 };
 
 /**
 * Validates user-entered dates.
 */
-class KPTDateValidator : public QValidator
+class DateValidator : public QValidator
 {
 public:
-    KPTDateValidator(QWidget* parent=0, const char* name=0);
+    DateValidator(QWidget* parent=0, const char* name=0);
     virtual State validate(QString&, int&) const;
     virtual void fixup ( QString & input ) const;
     State date(const QString&, QDate&) const;
 };
 
 
-class KPTDateTable : public QGridView
+class DateTable : public QGridView
 {
     Q_OBJECT
 public:
     /**
      * The constructor.
      */
-    KPTDateTable(QWidget *parent=0, QDate date=QDate::currentDate(),
-                 const char* name="KPTDateTable", WFlags f=0);
+    DateTable(QWidget *parent=0, QDate date=QDate::currentDate(),
+                 const char* name="DateTable", WFlags f=0);
 
     /**
      * Returns a recommended size for the widget.
@@ -282,20 +282,20 @@ public:
 
     void addMarkedWeekday(int day, int state);
     void setMarkedWeekday(int day, int state) { m_markedWeekdays.insert(day, state); }
-    void setMarkedWeekdays(const KPTIntMap days);
+    void setMarkedWeekdays(const IntMap days);
     bool weekdayMarked(int day);
 
-    void setMarkedWeeks(KPTWeekMap weeks);
+    void setMarkedWeeks(WeekMap weeks);
     void addMarkedWeek(int week, int year, int holiday);
     bool weekMarked(QPair<int, int> week);
 
-    KPTDateMap selectedDates() const { return m_selectedDates; }
-    KPTIntMap selectedWeekdays() const { return m_selectedWeekdays; }
-    KPTWeekMap selectedWeeks() const { return m_selectedWeeks; }
+    DateMap selectedDates() const { return m_selectedDates; }
+    IntMap selectedWeekdays() const { return m_selectedWeekdays; }
+    WeekMap selectedWeeks() const { return m_selectedWeeks; }
 
-    KPTDateMap markedDates() const { return m_markedDates; }
-    KPTIntMap markedWeekdays() const { return m_markedWeekdays; }
-    KPTWeekMap markedWeeks() const { return m_markedWeeks; }
+    DateMap markedDates() const { return m_markedDates; }
+    IntMap markedWeekdays() const { return m_markedWeekdays; }
+    WeekMap markedWeeks() const { return m_markedWeeks; }
 
     void clear();
     void clearSelection();
@@ -406,14 +406,14 @@ private:
 
     // User has selected these, results in "select coloring" the dates in datetable
 
-    KPTDateMap m_selectedDates;
-    KPTIntMap m_selectedWeekdays;
-    KPTWeekMap m_selectedWeeks;
+    DateMap m_selectedDates;
+    IntMap m_selectedWeekdays;
+    WeekMap m_selectedWeeks;
 
     // These results in marking the dates, weekdays and weeks respectivly
-    KPTDateMap m_markedDates;
-    KPTIntMap m_markedWeekdays;
-    KPTWeekMap m_markedWeeks;
+    DateMap m_markedDates;
+    IntMap m_markedWeekdays;
+    WeekMap m_markedWeeks;
 
     int m_dateStartCol;
     bool m_enabled;
@@ -429,10 +429,10 @@ private:
 protected:
   virtual void virtual_hook( int id, void* data );
 private:
-    class KPTDateTablePrivate;
-    KPTDateTablePrivate *d;
+    class DateTablePrivate;
+    DateTablePrivate *d;
 };
 
 }  //KPlato namespace
 
-#endif // KPTDATETABEL_H
+#endif // DATETABEL_H

@@ -44,26 +44,26 @@ class QIODevice;
 namespace KPlato
 {
 
-class KPTView;
-class KPTNode;
-class KPTContext;
+class View;
+class Node;
+class Context;
 
 class ReportTagsPrivate;
 
-class KPTReportView : public QWidget
+class ReportView : public QWidget
 {
     Q_OBJECT
 
  public:
 
-    KPTReportView( KPTView *view, QWidget *parent);
+    ReportView( View *view, QWidget *parent);
 
-    ~KPTReportView();
+    ~ReportView();
 
 	void zoom(double /*zoom*/) {}
 
     void draw(const QString &report);
-    KPTView *mainView() const { return m_mainview; }
+    View *mainView() const { return m_mainview; }
 
     void print(KPrinter &printer);
 
@@ -79,16 +79,16 @@ class KPTReportView : public QWidget
     void replaceTags(QDomNode &node);
 
     QString setReportDetail();
-    QString setTaskChildren(KPTNode *node);
-    QString setTaskDetail(KPTNode *node);
+    QString setTaskChildren(Node *node);
+    QString setTaskDetail(Node *node);
     QStringList getProperties(QDomElement &elem);
 
-    QString setResourceDetail(KPTResource *res);
+    QString setResourceDetail(Resource *res);
 
     QString setDetail(const QString &source, QStringList &properties, QString &level);
 
-    virtual bool setContext(KPTContext &context);
-    virtual void getContext(KPTContext &context) const;
+    virtual bool setContext(Context &context);
+    virtual void getContext(Context &context) const;
 
 public slots:
 	void slotFirstPage();
@@ -98,7 +98,7 @@ public slots:
 
 
 private:
-    KPTView *m_mainview;
+    View *m_mainview;
     Kugar::MReportViewer *m_reportview;
     int m_defaultFontSize;
 

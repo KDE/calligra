@@ -1,9 +1,9 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPlato::KPTTaskProgressPanelBase</class>
+<class>KPlato::TaskProgressPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">
-        <cstring>KPTTaskProgressPanelBase</cstring>
+        <cstring>TaskProgressPanelBase</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -14,7 +14,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>KPTTaskProgressPanelBase</string>
+        <string>TaskProgressPanelBase</string>
     </property>
     <vbox>
         <property name="name">
@@ -141,7 +141,7 @@
                         <cstring>totalPerformed</cstring>
                     </property>
                 </widget>
-                <widget class="KPlato::KPTDurationWidget" row="1" column="1" rowspan="1" colspan="2">
+                <widget class="KPlato::DurationWidget" row="1" column="1" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>remainingEffort</cstring>
                     </property>
@@ -152,7 +152,7 @@
                         <enum>TabFocus</enum>
                     </property>
                 </widget>
-                <widget class="KPlato::KPTDurationWidget" row="2" column="1" rowspan="1" colspan="2">
+                <widget class="KPlato::DurationWidget" row="2" column="1" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>actualEffort</cstring>
                     </property>
@@ -296,7 +296,7 @@
                         <property name="name">
                             <cstring>unnamed</cstring>
                         </property>
-                        <widget class="KPlato::KPTDurationWidget">
+                        <widget class="KPlato::DurationWidget">
                             <property name="name">
                                 <cstring>scheduledEffort</cstring>
                             </property>
@@ -376,7 +376,7 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>KPlato::KPTDurationWidget</class>
+        <class>KPlato::DurationWidget</class>
         <header location="local">kptdurationwidget.h</header>
         <sizehint>
             <width>0</width>
@@ -392,7 +392,7 @@
         <pixmap>image0</pixmap>
         <signal>valueChanged()</signal>
         <slot access="public" specifier="">slot()</slot>
-        <slot access="public" specifier="">setValue( const KPLato::KPTDuration &amp; newDuration )</slot>
+        <slot access="public" specifier="">setValue( const KPLato::Duration &amp; newDuration )</slot>
         <slot access="public" specifier="">slot()</slot>
         <slot access="public" specifier="">handleFocus( int field )</slot>
     </customwidget>

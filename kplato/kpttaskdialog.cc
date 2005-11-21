@@ -32,20 +32,20 @@
 namespace KPlato
 {
 
-KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTAccounts &accounts, KPTStandardWorktime *workTime, bool baseline, QWidget *p)
+TaskDialog::TaskDialog(Task &task, Accounts &accounts, StandardWorktime *workTime, bool baseline, QWidget *p)
     : KDialogBase(Tabbed, i18n("Task Settings"), Ok|Cancel, Ok, p, "Task Settings Dialog", true, true)
 {
     QVBox *page;
     
     // Create all the tabs.
     page = addVBoxPage(i18n("&General"));
-    m_generalTab = new KPTTaskGeneralPanel(task, workTime, baseline, page);
+    m_generalTab = new TaskGeneralPanel(task, workTime, baseline, page);
 
     page = addVBoxPage(i18n("&Resources"));
-    m_resourcesTab = new KPTRequestResourcesPanel(page, task, baseline);
+    m_resourcesTab = new RequestResourcesPanel(page, task, baseline);
     
     page = addVBoxPage(i18n("&Cost"));
-    m_costTab = new KPTTaskCostPanel(task, accounts, page);
+    m_costTab = new TaskCostPanel(task, accounts, page);
     
     // Set the state of all the child widgets.
     enableButtonOK(false);
@@ -56,7 +56,7 @@ KPTTaskDialog::KPTTaskDialog(KPTTask &task, KPTAccounts &accounts, KPTStandardWo
 }
 
 
-KCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
+KCommand *TaskDialog::buildCommand(Part *part) {
     KMacroCommand *m = new KMacroCommand(i18n("Modify Task"));
     bool modified = false;
     KCommand *cmd = m_generalTab->buildCommand(part);
@@ -81,7 +81,7 @@ KCommand *KPTTaskDialog::buildCommand(KPTPart *part) {
     return m;
 }
 
-void KPTTaskDialog::slotOk() {
+void TaskDialog::slotOk() {
     if (!m_generalTab->ok())
         return;
     if (!m_resourcesTab->ok())

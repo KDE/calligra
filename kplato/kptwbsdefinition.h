@@ -30,13 +30,13 @@ class QStringList;
 namespace KPlato
 {
 
-class KPTPart;
+class Part;
 
-class KPTWBSDefinition {
+class WBSDefinition {
 
 public:
-    KPTWBSDefinition();
-    ~KPTWBSDefinition();
+    WBSDefinition();
+    ~WBSDefinition();
 
     class CodeDef {
         public:
@@ -92,4 +92,4 @@ private:
 
 } //namespace KPlato
 
-#endif //KPTWBSDEFINITION_H
+#endif //WBSDEFINITION_H

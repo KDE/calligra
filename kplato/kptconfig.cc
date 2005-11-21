@@ -27,18 +27,18 @@
 namespace KPlato
 {
 
-KPTConfig::KPTConfig()
+Config::Config()
 {
     m_readWrite = true;
 }
 
-KPTConfig::~KPTConfig()
+Config::~Config()
 {
 }
 
-void KPTConfig::load() {
+void Config::load() {
     //kdDebug()<<k_funcinfo<<endl;
-    KConfig *config = KPTFactory::global()->config();
+    KConfig *config = Factory::global()->config();
     
     if( config->hasGroup("Behavior"))
     {
@@ -51,22 +51,22 @@ void KPTConfig::load() {
         config->setGroup("Task defaults");
         m_taskDefaults.setLeader(config->readEntry("Leader"));
         m_taskDefaults.setDescription(config->readEntry("Description"));
-        m_taskDefaults.setConstraint((KPTNode::ConstraintType)config->readNumEntry("ConstraintType"));
+        m_taskDefaults.setConstraint((Node::ConstraintType)config->readNumEntry("ConstraintType"));
         m_taskDefaults.setConstraintStartTime(config->readDateTimeEntry("ConstraintStartTime"));
         m_taskDefaults.setConstraintEndTime(config->readDateTimeEntry("ConstraintEndTime"));
-        m_taskDefaults.effort()->setType((KPTEffort::Type)config->readNumEntry("EffortType"));
-        m_taskDefaults.effort()->set(KPTDuration((Q_INT64)config->readNumEntry("ExpectedEffort")));
+        m_taskDefaults.effort()->setType((Effort::Type)config->readNumEntry("EffortType"));
+        m_taskDefaults.effort()->set(Duration((Q_INT64)config->readNumEntry("ExpectedEffort")));
         m_taskDefaults.effort()->setPessimisticRatio(config->readNumEntry("PessimisticEffort"));
         m_taskDefaults.effort()->setOptimisticRatio(config->readNumEntry("OptimisticEffort"));
     }
 }
 
-void KPTConfig::save() {
+void Config::save() {
     //kdDebug()<<k_funcinfo<<m_readWrite<<endl;
     if (!m_readWrite)
         return;
         
-    KConfig *config = KPTFactory::global()->config();
+    KConfig *config = Factory::global()->config();
     
     config->setGroup( "Behavior" );
     config->writeEntry("CalculationMode",m_behavior.calculationMode);

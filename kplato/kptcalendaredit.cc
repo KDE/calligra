@@ -48,8 +48,8 @@
 namespace KPlato
 {
 
-KPTCalendarEdit::KPTCalendarEdit (QWidget *parent, const char *name)
-    : KPTCalendarEditBase(parent),
+CalendarEdit::CalendarEdit (QWidget *parent, const char *name)
+    : CalendarEditBase(parent),
       m_calendar(0)
  {
 
@@ -68,7 +68,7 @@ KPTCalendarEdit::KPTCalendarEdit (QWidget *parent, const char *name)
     connect (bApply, SIGNAL(clicked()), SLOT(slotApplyClicked()));
 }
 
-void KPTCalendarEdit::slotStateActivated(int id) {
+void CalendarEdit::slotStateActivated(int id) {
     //kdDebug()<<k_funcinfo<<"id="<<id<<endl;
     if (id == 0) { // undefined
         startTime->setEnabled(false);
@@ -94,32 +94,32 @@ void KPTCalendarEdit::slotStateActivated(int id) {
     }
 }
 
-void KPTCalendarEdit::slotClearClicked() {
+void CalendarEdit::slotClearClicked() {
     //kdDebug()<<k_funcinfo<<endl;
     intervalList->clear();
     bApply->setEnabled(false);
 }
-void KPTCalendarEdit::slotAddIntervalClicked() {
+void CalendarEdit::slotAddIntervalClicked() {
     //kdDebug()<<k_funcinfo<<endl;
     intervalList->insertItem(new IntervalItem(intervalList, startTime->time(), endTime->time()));
     bApply->setEnabled(true);
 }
 
-//NOTE: enum KPTMap::State must match combobox state!
-void KPTCalendarEdit::slotApplyClicked() {
+//NOTE: enum Map::State must match combobox state!
+void CalendarEdit::slotApplyClicked() {
     //kdDebug()<<k_funcinfo<<"("<<m_calendar<<")"<<endl;
-    KPTDateMap dates = calendarPanel->selectedDates();
-    for(KPTDateMap::iterator it = dates.begin(); it != dates.end(); ++it) {
+    DateMap dates = calendarPanel->selectedDates();
+    for(DateMap::iterator it = dates.begin(); it != dates.end(); ++it) {
         QDate date = QDate::fromString(it.key(), Qt::ISODate);
         //kdDebug()<<k_funcinfo<<"Date: "<<date<<endl;
-        KPTCalendarDay *calDay = m_calendar->findDay(date);
+        CalendarDay *calDay = m_calendar->findDay(date);
         if (!calDay) {
-            calDay = new KPTCalendarDay(date);
+            calDay = new CalendarDay(date);
             m_calendar->addDay(calDay);
         }
         calDay->setState(state->currentItem()); //NOTE!!
         calDay->clearIntervals();
-        if (calDay->state() == KPTMap::Working) {
+        if (calDay->state() == Map::Working) {
             for (QListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
                 //kdDebug()<<k_funcinfo<<"Adding interval"<<endl;
                 calDay->addInterval(static_cast<IntervalItem *>(item)->interval());
@@ -127,18 +127,18 @@ void KPTCalendarEdit::slotApplyClicked() {
         }
     }
 
-    KPTWeekMap weeks = calendarPanel->selectedWeeks();
-    for(KPTWeekMap::iterator it = weeks.begin(); it != weeks.end(); ++it) {
+    WeekMap weeks = calendarPanel->selectedWeeks();
+    for(WeekMap::iterator it = weeks.begin(); it != weeks.end(); ++it) {
         m_calendar->setWeek(it, state->currentItem());//NOTE!!
     }
 
-    KPTIntMap weekdays = calendarPanel->selectedWeekdays();
-    for(KPTIntMap::iterator it = weekdays.begin(); it != weekdays.end(); ++it) {
+    IntMap weekdays = calendarPanel->selectedWeekdays();
+    for(IntMap::iterator it = weekdays.begin(); it != weekdays.end(); ++it) {
         //kdDebug()<<k_funcinfo<<"weekday="<<it.key()<<endl;
-        KPTCalendarDay *weekday = m_calendar->weekday(it.key()-1);
+        CalendarDay *weekday = m_calendar->weekday(it.key()-1);
         weekday->setState(state->currentItem());//NOTE!!
         weekday->clearIntervals();
-        if (weekday->state() == KPTMap::Working) {
+        if (weekday->state() == Map::Working) {
             for (QListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
                 //kdDebug()<<k_funcinfo<<"Adding interval"<<endl;
                 weekday->addInterval(static_cast<IntervalItem *>(item)->interval());
@@ -151,7 +151,7 @@ void KPTCalendarEdit::slotApplyClicked() {
     slotCheckAllFieldsFilled();
 }
 
-void KPTCalendarEdit::slotCheckAllFieldsFilled() {
+void CalendarEdit::slotCheckAllFieldsFilled() {
     //kdDebug()<<k_funcinfo<<endl;
     if (state->currentItem() == 0 /*undefined*/ ||
         state->currentItem() == 1 /*Non-working*/||
@@ -165,22 +165,22 @@ void KPTCalendarEdit::slotCheckAllFieldsFilled() {
     }
 }
 
-void KPTCalendarEdit::setCalendar(KPTCalendar *cal) {
+void CalendarEdit::setCalendar(Calendar *cal) {
     m_calendar = cal;
     clear();
     calendarPanel->setCalendar(cal);
 }
 
-void KPTCalendarEdit::clear() {
+void CalendarEdit::clear() {
     clearPanel();
     clearEditPart();
 }
 
-void KPTCalendarEdit::clearPanel() {
+void CalendarEdit::clearPanel() {
     calendarPanel->clear();
 }
 
-void KPTCalendarEdit::clearEditPart() {
+void CalendarEdit::clearEditPart() {
     day->setEnabled(true);
     intervalList->clear();
     intervalList->setEnabled(false);
@@ -195,7 +195,7 @@ void KPTCalendarEdit::clearEditPart() {
     state->setEnabled(false);
 }
 
-void KPTCalendarEdit::slotDateSelected(QDate date) {
+void CalendarEdit::slotDateSelected(QDate date) {
     if (m_calendar == 0)
         return;
     //kdDebug()<<k_funcinfo<<"("<<date.toString()<<")"<<endl;
@@ -205,7 +205,7 @@ void KPTCalendarEdit::slotDateSelected(QDate date) {
     state->insertItem(i18n("Non-working"));
     state->insertItem(i18n("Working"));
 
-    KPTCalendarDay *calDay = m_calendar->findDay(date);
+    CalendarDay *calDay = m_calendar->findDay(date);
     state->setEnabled(true);
     if (calDay) {
         QPtrListIterator<QPair<QTime, QTime> > it = calDay->workingIntervals();
@@ -213,12 +213,12 @@ void KPTCalendarEdit::slotDateSelected(QDate date) {
             IntervalItem *item = new IntervalItem(intervalList, it.current()->first, it.current()->second);
             intervalList->insertItem(item);
         }
-        if (calDay->state() == KPTMap::Working) {
+        if (calDay->state() == Map::Working) {
             //kdDebug()<<k_funcinfo<<"("<<date.toString()<<") is workday"<<endl;
             state->setCurrentItem(2);
             slotStateActivated(2);
             bApply->setEnabled(calDay->workingIntervals().count() > 0);
-        } else if (calDay->state() == KPTMap::NonWorking){
+        } else if (calDay->state() == Map::NonWorking){
             //kdDebug()<<k_funcinfo<<"("<<date.toString()<<") is holiday"<<endl;
             state->setCurrentItem(1);
             slotStateActivated(1);
@@ -237,14 +237,14 @@ void KPTCalendarEdit::slotDateSelected(QDate date) {
     }
 }
 
-void KPTCalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
+void CalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
     if (m_calendar == 0 || day_ < 1 || day_ > 7) {
         kdError()<<k_funcinfo<<"No calendar or weekday ("<<day_<<") not defined!"<<endl;
         return;
     }
     //kdDebug()<<k_funcinfo<<"("<<day_<<")"<<endl;
     clearEditPart();
-    KPTCalendarDay *calDay = m_calendar->weekday(day_-1); // 0..6
+    CalendarDay *calDay = m_calendar->weekday(day_-1); // 0..6
     if (!calDay) {
         kdError()<<k_funcinfo<<"Weekday ("<<day_<<") not defined!"<<endl;
         return;
@@ -259,12 +259,12 @@ void KPTCalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
         intervalList->insertItem(item);
     }
     state->setEnabled(true);
-    if (calDay->state() == KPTMap::Working) {
+    if (calDay->state() == Map::Working) {
         //kdDebug()<<k_funcinfo<<"("<<day_<<")=workday"<<endl;
         state->setCurrentItem(2);
         slotStateActivated(2);
         bApply->setEnabled(calDay->workingIntervals().count() > 0);
-    } else if (calDay->state() == KPTMap::NonWorking) {
+    } else if (calDay->state() == Map::NonWorking) {
         //kdDebug()<<k_funcinfo<<"("<<day_<<")=Holiday"<<endl;
         state->setCurrentItem(1);
         slotStateActivated(1);
@@ -277,27 +277,27 @@ void KPTCalendarEdit::slotWeekdaySelected(int day_/* 1..7 */) {
     }
 }
 
-void KPTCalendarEdit::slotWeekSelected(int week, int year) {
+void CalendarEdit::slotWeekSelected(int week, int year) {
     clearEditPart();
     state->clear();
     state->insertItem(i18n("Undefined"));
     state->insertItem(i18n("Non-working"));
-    KPTWeekMap weeks = calendarPanel->markedWeeks();
+    WeekMap weeks = calendarPanel->markedWeeks();
     int s = weeks.state(QPair<int, int>(week, year));
     //kdDebug()<<k_funcinfo<<"("<<week<<", "<<year<<")="<<s<<endl;
     state->setEnabled(true);
-    if (s == KPTMap::NonWorking) {
+    if (s == Map::NonWorking) {
         state->setCurrentItem(1);
         slotStateActivated(1);
         bApply->setEnabled(true);
-    } else if (s == KPTMap::None) {
+    } else if (s == Map::None) {
         state->setCurrentItem(0);
         slotStateActivated(0);
         bApply->setEnabled(true);
     }
 }
 
-void KPTCalendarEdit::slotSelectionCleared() {
+void CalendarEdit::slotSelectionCleared() {
     clearEditPart();
 }
 

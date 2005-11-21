@@ -43,8 +43,8 @@
 namespace KPlato
 {
 
-KPTMainProjectPanel::KPTMainProjectPanel(KPTProject &p, QWidget *parent, const char *name)
-    : KPTMainProjectPanelImpl(parent, name),
+MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name)
+    : MainProjectPanelImpl(parent, name),
       project(p)
 {
     namefield->setText(project.name());
@@ -56,10 +56,10 @@ KPTMainProjectPanel::KPTMainProjectPanel(KPTProject &p, QWidget *parent, const c
     
     startDate->setDate(project.startTime().date());
     endDate->setDate(project.endTime().date());
-    if (project.constraint() == KPTNode::MustStartOn) {
+    if (project.constraint() == Node::MustStartOn) {
         schedulingGroup->setButton(0);
     }
-    else if (project.constraint() == KPTNode::MustFinishOn) {
+    else if (project.constraint() == Node::MustFinishOn) {
         schedulingGroup->setButton(1);
     } else {
         kdWarning()<<k_funcinfo<<"Illegal constraint: "<<project.constraint()<<endl;
@@ -71,7 +71,7 @@ KPTMainProjectPanel::KPTMainProjectPanel(KPTProject &p, QWidget *parent, const c
 }
 
 
-bool KPTMainProjectPanel::ok() {
+bool MainProjectPanel::ok() {
     if (idfield->text() != project.id() && project.findNode(idfield->text())) {
         KMessageBox::sorry(this, i18n("Project id must be unique"));
         idfield->setFocus();
@@ -80,52 +80,52 @@ bool KPTMainProjectPanel::ok() {
     return true;
 }
 
-KCommand *KPTMainProjectPanel::buildCommand(KPTPart *part) {
+KCommand *MainProjectPanel::buildCommand(Part *part) {
     KMacroCommand *m = 0;
     QString c = i18n("Modify main project");
     if (project.name() != namefield->text()) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTNodeModifyNameCmd(part, project, namefield->text()));
+        m->addCommand(new NodeModifyNameCmd(part, project, namefield->text()));
     }
     if (project.id() != idfield->text()) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTNodeModifyIdCmd(part, project, idfield->text()));
+        m->addCommand(new NodeModifyIdCmd(part, project, idfield->text()));
     }
     if (project.leader() != leaderfield->text()) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTNodeModifyLeaderCmd(part, project, leaderfield->text()));
+        m->addCommand(new NodeModifyLeaderCmd(part, project, leaderfield->text()));
     }
     if (project.description() != descriptionfield->text()) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTNodeModifyDescriptionCmd(part, project, descriptionfield->text()));
+        m->addCommand(new NodeModifyDescriptionCmd(part, project, descriptionfield->text()));
     }
 /*  FIXME: Removed for this release  
     if (baseline->isChecked() != project.isBaselined()) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTProjectModifyBaselineCmd(part, project, baseline->isChecked()));
+        m->addCommand(new ProjectModifyBaselineCmd(part, project, baseline->isChecked()));
     } */
-    if (bStartDate->state() && project.constraint() != KPTNode::MustStartOn) {
+    if (bStartDate->state() && project.constraint() != Node::MustStartOn) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTNodeModifyConstraintCmd(part, project, KPTNode::MustStartOn));
+        m->addCommand(new NodeModifyConstraintCmd(part, project, Node::MustStartOn));
     } 
-    if (bEndDate->state() && project.constraint() != KPTNode::MustFinishOn) {
+    if (bEndDate->state() && project.constraint() != Node::MustFinishOn) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTNodeModifyConstraintCmd(part, project, KPTNode::MustFinishOn));
+        m->addCommand(new NodeModifyConstraintCmd(part, project, Node::MustFinishOn));
     } 
     if (startDateTime() != project.startTime()) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTNodeModifyStartTimeCmd(part, project, startDateTime()));
+        m->addCommand(new NodeModifyStartTimeCmd(part, project, startDateTime()));
     }
     if (endDateTime() != project.endTime()) {
         if (!m) m = new KMacroCommand(c);
-        m->addCommand(new KPTNodeModifyEndTimeCmd(part, project, endDateTime()));
+        m->addCommand(new NodeModifyEndTimeCmd(part, project, endDateTime()));
     }
     return m;
 }
 
 //-------------------------------------------------------------------
-KPTMainProjectPanelImpl::KPTMainProjectPanelImpl(QWidget *parent, const char *name)
-    :  KPTMainProjectPanelBase(parent, name) {
+MainProjectPanelImpl::MainProjectPanelImpl(QWidget *parent, const char *name)
+    :  MainProjectPanelBase(parent, name) {
 
     // signals and slots connections
     connect( bStartDate, SIGNAL( clicked() ), this, SLOT( slotStartDateClicked() ) );
@@ -145,14 +145,14 @@ KPTMainProjectPanelImpl::KPTMainProjectPanelImpl(QWidget *parent, const char *na
     connect( chooseLeader, SIGNAL( clicked() ), this, SLOT( slotChooseLeader() ) );
 }
 
-void KPTMainProjectPanelImpl::slotCheckAllFieldsFilled()
+void MainProjectPanelImpl::slotCheckAllFieldsFilled()
 {
     emit changed();
     emit obligatedFieldsFilled(!namefield->text().isEmpty() && !idfield->text().isEmpty() && !leaderfield->text().isEmpty());
 }
 
 
-void KPTMainProjectPanelImpl::slotChooseLeader()
+void MainProjectPanelImpl::slotChooseLeader()
 {
     KABC::Addressee a = KABC::AddresseeDialog::getAddressee(this);
     if (!a.isEmpty()) 
@@ -162,20 +162,20 @@ void KPTMainProjectPanelImpl::slotChooseLeader()
 }
 
 
-void KPTMainProjectPanelImpl::slotStartDateClicked()
+void MainProjectPanelImpl::slotStartDateClicked()
 {
     enableDateTime();    
 }
 
 
-void KPTMainProjectPanelImpl::slotEndDateClicked()
+void MainProjectPanelImpl::slotEndDateClicked()
 {
     enableDateTime();
 }
 
 
 
-void KPTMainProjectPanelImpl::enableDateTime()
+void MainProjectPanelImpl::enableDateTime()
 {
     if (schedulingGroup->selected() == bStartDate)
     {
@@ -194,19 +194,19 @@ void KPTMainProjectPanelImpl::enableDateTime()
 }
 
 
-QDateTime KPTMainProjectPanelImpl::startDateTime()
+QDateTime MainProjectPanelImpl::startDateTime()
 {
     return QDateTime(startDate->date(), startTime->time());
 }
 
 
-QDateTime KPTMainProjectPanelImpl::endDateTime()
+QDateTime MainProjectPanelImpl::endDateTime()
 {
     return QDateTime(endDate->date(), endTime->time());
 }
 
 
-void KPTMainProjectPanelImpl::slotBaseline()
+void MainProjectPanelImpl::slotBaseline()
 {
     bool b = false;
     //b = baseline->isChecked(); FIXME: Removed for this release  

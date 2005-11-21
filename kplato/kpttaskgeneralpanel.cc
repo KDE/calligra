@@ -45,8 +45,8 @@
 namespace KPlato
 {
 
-KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *workTime, bool baseline, QWidget *p, const char *n)
-    : KPTTaskGeneralPanelBase(p, n),
+TaskGeneralPanel::TaskGeneralPanel(Task &task, StandardWorktime *workTime, bool baseline, QWidget *p, const char *n)
+    : TaskGeneralPanelBase(p, n),
       m_task(task),
       m_dayLength(24)
 {
@@ -60,7 +60,7 @@ KPTTaskGeneralPanel::KPTTaskGeneralPanel(KPTTask &task, KPTStandardWorktime *wor
 */
 }
 
-void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *workTime) {
+void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
     m_effort = m_duration = task.effort()->expected();
     namefield->setText(task.name());
     leaderfield->setText(task.leader());
@@ -68,7 +68,7 @@ void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *wor
     idfield->setText(task.id());
     wbsfield->setText(task.wbs());
     
-    setEstimateFields(KPTDurationWidget::Days|KPTDurationWidget::Hours|KPTDurationWidget::Minutes);
+    setEstimateFields(DurationWidget::Days|DurationWidget::Hours|DurationWidget::Minutes);
     if (workTime) {
         kdDebug()<<k_funcinfo<<"daylength="<<workTime->durationDay().hours()<<endl;
         m_dayLength = workTime->durationDay().hours();
@@ -100,64 +100,64 @@ void KPTTaskGeneralPanel::setStartValues(KPTTask &task, KPTStandardWorktime *wor
     setPessimistic(task.effort()->pessimisticRatio());
 }
 
-KMacroCommand *KPTTaskGeneralPanel::buildCommand(KPTPart *part) {
+KMacroCommand *TaskGeneralPanel::buildCommand(Part *part) {
     KMacroCommand *cmd = new KMacroCommand(i18n("Modify Task"));
     bool modified = false;
 
-    KPTDuration dt = KPTDuration();
+    Duration dt = Duration();
 
     if (!namefield->isHidden() && m_task.name() != namefield->text()) {
-        cmd->addCommand(new KPTNodeModifyNameCmd(part, m_task, namefield->text()));
+        cmd->addCommand(new NodeModifyNameCmd(part, m_task, namefield->text()));
         modified = true;
     }
     if (!leaderfield->isHidden() && m_task.leader() != leaderfield->text()) {
-        cmd->addCommand(new KPTNodeModifyLeaderCmd(part, m_task, leaderfield->text()));
+        cmd->addCommand(new NodeModifyLeaderCmd(part, m_task, leaderfield->text()));
         modified = true;
     }
     if (!descriptionfield->isHidden() && 
         m_task.description() != descriptionfield->text()) {
-        cmd->addCommand(new KPTNodeModifyDescriptionCmd(part, m_task, descriptionfield->text()));
+        cmd->addCommand(new NodeModifyDescriptionCmd(part, m_task, descriptionfield->text()));
         modified = true;
     }
-    KPTNode::ConstraintType c = (KPTNode::ConstraintType)schedulingType();
+    Node::ConstraintType c = (Node::ConstraintType)schedulingType();
     if (c != m_task.constraint()) {
-        cmd->addCommand(new KPTNodeModifyConstraintCmd(part, m_task, c));
+        cmd->addCommand(new NodeModifyConstraintCmd(part, m_task, c));
         modified = true;
     }
     if (startDateTime() != m_task.constraintStartTime() &&
-        (c == KPTNode::FixedInterval || c == KPTNode::StartNotEarlier || c == KPTNode::MustStartOn)) {
-        cmd->addCommand(new KPTNodeModifyConstraintStartTimeCmd(part, m_task, startDateTime()));
+        (c == Node::FixedInterval || c == Node::StartNotEarlier || c == Node::MustStartOn)) {
+        cmd->addCommand(new NodeModifyConstraintStartTimeCmd(part, m_task, startDateTime()));
         modified = true;
     }
     if (endDateTime() != m_task.constraintEndTime() &&
-        (c == KPTNode::FinishNotLater || c == KPTNode::FixedInterval || c == KPTNode::MustFinishOn)) {
-        cmd->addCommand(new KPTNodeModifyConstraintEndTimeCmd(part, m_task, endDateTime()));
+        (c == Node::FinishNotLater || c == Node::FixedInterval || c == Node::MustFinishOn)) {
+        cmd->addCommand(new NodeModifyConstraintEndTimeCmd(part, m_task, endDateTime()));
         modified = true;
     }
     if (!idfield->isHidden() && idfield->text() != m_task.id()) {
         
-        cmd->addCommand(new KPTNodeModifyIdCmd(part, m_task, idfield->text()));
+        cmd->addCommand(new NodeModifyIdCmd(part, m_task, idfield->text()));
         modified = true;
     }
     int et = estimationType();
     if (et != m_task.effort()->type()) {
-        cmd->addCommand(new KPTModifyEffortTypeCmd(part, m_task.effort(),  m_task.effort()->type(), et));
+        cmd->addCommand(new ModifyEffortTypeCmd(part, m_task.effort(),  m_task.effort()->type(), et));
         modified = true;
     }
     dt = estimationValue();
     bool expchanged = dt != m_task.effort()->expected();
     if ( expchanged ) {
-        cmd->addCommand(new KPTModifyEffortCmd(part, m_task.effort(), m_task.effort()->expected(), dt));
+        cmd->addCommand(new ModifyEffortCmd(part, m_task.effort(), m_task.effort()->expected(), dt));
         modified = true;
     }
     int x = optimistic();
     if ( x != m_task.effort()->optimisticRatio() || expchanged) {
-        cmd->addCommand(new KPTEffortModifyOptimisticRatioCmd(part, m_task.effort(), m_task.effort()->optimisticRatio(), x));
+        cmd->addCommand(new EffortModifyOptimisticRatioCmd(part, m_task.effort(), m_task.effort()->optimisticRatio(), x));
         modified = true;
     }
     x = pessimistic();
     if ( x != m_task.effort()->pessimisticRatio() || expchanged) {
-        cmd->addCommand(new KPTEffortModifyPessimisticRatioCmd(part, m_task.effort(), m_task.effort()->pessimisticRatio(), x));
+        cmd->addCommand(new EffortModifyPessimisticRatioCmd(part, m_task.effort(), m_task.effort()->pessimisticRatio(), x));
         modified = true;
     }
     if (!modified) {
@@ -167,7 +167,7 @@ KMacroCommand *KPTTaskGeneralPanel::buildCommand(KPTPart *part) {
     return cmd;
 }
 
-bool KPTTaskGeneralPanel::ok() {
+bool TaskGeneralPanel::ok() {
     if (idfield->text() != m_task.id() && m_task.findNode(idfield->text())) {
         KMessageBox::sorry(this, i18n("Task id must be unique"));
         idfield->setFocus();
@@ -176,7 +176,7 @@ bool KPTTaskGeneralPanel::ok() {
     return true;
 }
 
-void KPTTaskGeneralPanel::estimationTypeChanged(int type) {
+void TaskGeneralPanel::estimationTypeChanged(int type) {
     if (scheduleType->currentItem() == 6 /* Fixed interval */) {
         if (type == 0 /*Effort*/) {
             setEstimateScales(m_dayLength);
@@ -185,17 +185,17 @@ void KPTTaskGeneralPanel::estimationTypeChanged(int type) {
         } else {
             setEstimateScales(24);
             estimate->setEnabled(false);
-            KPTDateTime st = startDateTime();
-            KPTDateTime end = endDateTime();
+            DateTime st = startDateTime();
+            DateTime end = endDateTime();
             m_duration = end - st;
             estimate->setValue(m_duration);
         }
         return;
     }
-    KPTTaskGeneralPanelBase::estimationTypeChanged(type);
+    TaskGeneralPanelBase::estimationTypeChanged(type);
 }
 
-void KPTTaskGeneralPanel::scheduleTypeChanged(int value)
+void TaskGeneralPanel::scheduleTypeChanged(int value)
 {
     if (value == 6 /*Fixed interval*/) { 
         if (estimateType->currentItem() == 1/*duration*/){
@@ -206,7 +206,7 @@ void KPTTaskGeneralPanel::scheduleTypeChanged(int value)
         setEstimateScales(m_dayLength);
         estimate->setEnabled(true);
     }
-    KPTTaskGeneralPanelBase::scheduleTypeChanged(value);
+    TaskGeneralPanelBase::scheduleTypeChanged(value);
 }
 
 

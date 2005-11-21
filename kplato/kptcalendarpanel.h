@@ -35,15 +35,15 @@ class QToolButton;
 namespace KPlato
 {
 
-class KPTDateValidator;
-class KPTDateTable;
-class KPTCalendar;
+class DateValidator;
+class DateTable;
+class Calendar;
 
 /**
  * Provides a widget for calendar input.
  *
  **/
-class KPTCalendarPanel: public QFrame
+class CalendarPanel: public QFrame
 {
     Q_OBJECT
     Q_PROPERTY( QDate date READ date WRITE setDate)
@@ -53,18 +53,18 @@ public:
     /** The usual constructor.  The given date will be displayed
     * initially.
     **/
-    KPTCalendarPanel(QWidget *parent=0, QDate=QDate::currentDate(), const char *name=0, WFlags f=0);
+    CalendarPanel(QWidget *parent=0, QDate=QDate::currentDate(), const char *name=0, WFlags f=0);
     
     /**
     * Standard qt widget constructor. The initial date will be the
     * current date.
     */
-    KPTCalendarPanel( QWidget *parent, const char *name );
+    CalendarPanel( QWidget *parent, const char *name );
     
     /**
     * The destructor.
     **/
-    virtual ~KPTCalendarPanel();
+    virtual ~CalendarPanel();
     
     /** The size hint for date pickers. The size hint recommends the
     *   minimum size of the widget so that all elements may be placed
@@ -110,9 +110,9 @@ public:
         { return fontsize; }
     
     /**
-    * By calling this method with @p enable = true, KPTCalendarPanel will show
+    * By calling this method with @p enable = true, CalendarPanel will show
     * a little close-button in the upper button-row. Clicking the
-    * close-button will cause the KPTCalendarPanel's topLevelWidget()'s close()
+    * close-button will cause the CalendarPanel's topLevelWidget()'s close()
     * method being called. This is mostly useful for toplevel datepickers
     * without a window manager decoration.
     * @see #hasCloseButton
@@ -120,20 +120,20 @@ public:
     void setCloseButton( bool enable );
     
     /**
-    * @returns true if a KPTCalendarPanel shows a close-button.
+    * @returns true if a CalendarPanel shows a close-button.
     * @see #setCloseButton
     */
     bool hasCloseButton() const;
     
-    void setCalendar(KPTCalendar *cal);
+    void setCalendar(Calendar *cal);
     
-    KPTDateMap selectedDates();
-    KPTIntMap selectedWeekdays();
-    KPTWeekMap selectedWeeks();
+    DateMap selectedDates();
+    IntMap selectedWeekdays();
+    WeekMap selectedWeeks();
     
-    KPTDateMap markedDates();
-    KPTIntMap markedWeekdays();
-    KPTWeekMap markedWeeks();
+    DateMap markedDates();
+    IntMap markedWeekdays();
+    WeekMap markedWeeks();
     
     void clear();
     
@@ -159,9 +159,9 @@ protected:
     /// the line edit to enter the date directly
     QLineEdit *line;
     /// the validator for the line edit:
-    KPTDateValidator *val;
+    DateValidator *val;
     /// the date table
-    KPTDateTable *table;
+    DateTable *table;
     // the widest month string in pixels:
     QSize maxMonthRect;
 
@@ -221,12 +221,12 @@ protected:
     virtual void virtual_hook( int id, void* data );
 private:
     void init( const QDate &dt );
-    class KPTCalendarPanelPrivate;
-    KPTCalendarPanelPrivate *d;
+    class CalendarPanelPrivate;
+    CalendarPanelPrivate *d;
     // calculate ISO 8601 week number
     int weekOfYear(QDate);
 };
 
 }  //KPlato namespace
 
-#endif //  KPTCALENDARPANEL_H
+#endif //  CALENDARPANEL_H

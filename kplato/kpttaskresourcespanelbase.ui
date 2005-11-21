@@ -1,9 +1,9 @@
 <!DOCTYPE UI><UI version="3.3" stdsetdef="1">
-<class>KPlato::KPTTaskResourcesPanelBase</class>
+<class>KPlato::TaskResourcesPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
     <property name="name">
-        <cstring>KPTTaskResourcesPanelBase</cstring>
+        <cstring>TaskResourcesPanelBase</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -14,7 +14,7 @@
         </rect>
     </property>
     <property name="caption">
-        <string>KPTTaskResourcesPanelBase</string>
+        <string>TaskResourcesPanelBase</string>
     </property>
     <hbox>
         <property name="name">

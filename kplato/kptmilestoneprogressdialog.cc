@@ -28,10 +28,10 @@
 namespace KPlato
 {
 
-KPTMilestoneProgressDialog::KPTMilestoneProgressDialog(KPTTask &task, QWidget *p)
+MilestoneProgressDialog::MilestoneProgressDialog(Task &task, QWidget *p)
     : KDialogBase(Swallow, i18n("Milestone Progress"), Ok|Cancel, Ok, p, "Milestone Progress Dialog", true, true)
 {
-    m_panel = new KPTMilestoneProgressPanel(task, this);
+    m_panel = new MilestoneProgressPanel(task, this);
 
     setMainWidget(m_panel);
     
@@ -40,11 +40,11 @@ KPTMilestoneProgressDialog::KPTMilestoneProgressDialog(KPTTask &task, QWidget *p
     connect(m_panel, SIGNAL(changed()), SLOT(slotChanged()));
 }
 
-void KPTMilestoneProgressDialog::slotChanged() {
+void MilestoneProgressDialog::slotChanged() {
     enableButtonOK(true);
 }
 
-KCommand *KPTMilestoneProgressDialog::buildCommand(KPTPart *part) {
+KCommand *MilestoneProgressDialog::buildCommand(Part *part) {
     KMacroCommand *m = new KMacroCommand(i18n("Modify Milestone Progress"));
     bool modified = false;
     KCommand *cmd = m_panel->buildCommand(part);
@@ -59,7 +59,7 @@ KCommand *KPTMilestoneProgressDialog::buildCommand(KPTPart *part) {
     return m;
 }
 
-void KPTMilestoneProgressDialog::slotOk() {
+void MilestoneProgressDialog::slotOk() {
     if (!m_panel->ok())
         return;
     accept();

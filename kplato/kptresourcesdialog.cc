@@ -32,11 +32,11 @@
 namespace KPlato
 {
 
-KPTResourcesDialog::KPTResourcesDialog(KPTProject &p, QWidget *parent, const char *name)
+ResourcesDialog::ResourcesDialog(Project &p, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Resources"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
 {
-    panel = new KPTResourcesPanel(this, &project);
+    panel = new ResourcesPanel(this, &project);
     
     setMainWidget(panel);
     enableButtonOK(false);
@@ -45,17 +45,17 @@ KPTResourcesDialog::KPTResourcesDialog(KPTProject &p, QWidget *parent, const cha
 }
 
 
-void KPTResourcesDialog::slotChanged() {
+void ResourcesDialog::slotChanged() {
     enableButtonOK(true);
 }
 
-void KPTResourcesDialog::slotOk() {
+void ResourcesDialog::slotOk() {
     if (!panel->ok())
         return;
     accept();
 }
 
-KCommand *KPTResourcesDialog::buildCommand(KPTPart *part) {
+KCommand *ResourcesDialog::buildCommand(Part *part) {
     KMacroCommand *m = 0;
     QString c = i18n("Modify resources");
     KCommand *cmd = panel->buildCommand(part);

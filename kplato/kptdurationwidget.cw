@@ -1,7 +1,7 @@
 <!DOCTYPE CW><CW>
 <customwidgets>
     <customwidget>
-        <class>KPTDurationWidget</class>
+        <class>DurationWidget</class>
         <header location="local">kptdurationwidget.h</header>
         <sizehint>
             <width>0</width>
@@ -17,7 +17,7 @@
         </pixmap>
         <signal>valueChanged()</signal>
         <slot access="public">slot()</slot>
-        <slot access="public">setValue( const KPLato::KPTDuration &amp; newDuration )</slot>
+        <slot access="public">setValue( const KPLato::Duration &amp; newDuration )</slot>
         <slot access="public">slot()</slot>
         <slot access="public">handleFocus( int field )</slot>
     </customwidget>

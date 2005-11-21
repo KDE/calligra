@@ -31,13 +31,13 @@ class KCommand;
 namespace KPlato
 {
 
-class KPTProject;
-class KPTPart;
+class Project;
+class Part;
 
-class KPTMainProjectPanelImpl : public KPTMainProjectPanelBase {
+class MainProjectPanelImpl : public MainProjectPanelBase {
     Q_OBJECT
 public:
-    KPTMainProjectPanelImpl(QWidget *parent=0, const char *name=0);
+    MainProjectPanelImpl(QWidget *parent=0, const char *name=0);
 
     virtual QDateTime startDateTime();
     virtual QDateTime endDateTime();
@@ -56,19 +56,19 @@ signals:
 
 };
 
-class KPTMainProjectPanel : public KPTMainProjectPanelImpl {
+class MainProjectPanel : public MainProjectPanelImpl {
     Q_OBJECT
 public:
-    KPTMainProjectPanel(KPTProject &project, QWidget *parent=0, const char *name=0);
+    MainProjectPanel(Project &project, QWidget *parent=0, const char *name=0);
 
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
     
     bool ok();
 
 private:
-    KPTProject &project;
+    Project &project;
 };
 
 }  //KPlato namespace
 
-#endif // KPTMAINPROJECTPANEL_H
+#endif // MAINPROJECTPANEL_H

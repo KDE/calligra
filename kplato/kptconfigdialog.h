@@ -27,14 +27,14 @@ class QWidget;
 namespace KPlato
 {
 
-class KPTTaskDefaultPanel;
-class KPTConfigBehaviorPanel;
-class KPTConfig;
+class TaskDefaultPanel;
+class ConfigBehaviorPanel;
+class Config;
 
-class KPTConfigDialog : public KDialogBase {
+class ConfigDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTConfigDialog(KPTConfig &config, QWidget *parent=0, const char *name=0);
+    ConfigDialog(Config &config, QWidget *parent=0, const char *name=0);
 
 protected slots:
     void slotApply();
@@ -43,12 +43,12 @@ protected slots:
     void slotChanged();
     
 private:
-    KPTConfig &m_config;
-    KPTTaskDefaultPanel *m_taskDefaultPage;
-    KPTConfigBehaviorPanel *m_behaviorPage;
+    Config &m_config;
+    TaskDefaultPanel *m_taskDefaultPage;
+    ConfigBehaviorPanel *m_behaviorPage;
 
 };
 
 } //KPlato namespace
 
-#endif // KPTCONFIGDIALOG_H
+#endif // CONFIGDIALOG_H

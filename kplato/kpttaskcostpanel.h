@@ -27,15 +27,15 @@ class KCommand;
 namespace KPlato
 {
 
-class KPTTaskCostPanel;
-class KPTAccounts;
-class KPTPart;
-class KPTTask;
+class TaskCostPanel;
+class Accounts;
+class Part;
+class Task;
 
-class KPTTaskCostPanelImpl : public KPTTaskCostPanelBase {
+class TaskCostPanelImpl : public TaskCostPanelBase {
     Q_OBJECT
 public:
-    KPTTaskCostPanelImpl(QWidget *parent=0, const char *name=0);
+    TaskCostPanelImpl(QWidget *parent=0, const char *name=0);
 
 signals:
     void changed();
@@ -44,26 +44,26 @@ public slots:
     void slotChanged();
 };
 
-class KPTTaskCostPanel : public KPTTaskCostPanelImpl {
+class TaskCostPanel : public TaskCostPanelImpl {
     Q_OBJECT
 public:
-    KPTTaskCostPanel(KPTTask &task, KPTAccounts &accounts, QWidget *parent=0, const char *name=0);
+    TaskCostPanel(Task &task, Accounts &accounts, QWidget *parent=0, const char *name=0);
 
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
 
     bool ok();
 
-    void setStartValues(KPTTask &task);
+    void setStartValues(Task &task);
 
 protected:
     void setCurrentItem(QComboBox *box, QString name);
     
 private:
-    KPTTask &m_task;
-    KPTAccounts &m_accounts;
+    Task &m_task;
+    Accounts &m_accounts;
     QStringList m_accountList;
 };
 
 } //KPlato namespace
 
-#endif // KPTTASKCOSTPANEL_H
+#endif // TASKCOSTPANEL_H

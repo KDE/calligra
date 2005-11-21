@@ -41,8 +41,8 @@
 namespace KPlato
 {
 
-KPTTaskProgressPanel::KPTTaskProgressPanel(KPTTask &task, KPTStandardWorktime *workTime, QWidget *parent, const char *name)
-    : KPTTaskProgressPanelImpl(parent, name),
+TaskProgressPanel::TaskProgressPanel(Task &task, StandardWorktime *workTime, QWidget *parent, const char *name)
+    : TaskProgressPanelImpl(parent, name),
       m_task(task),
       m_dayLength(24)
 {
@@ -61,14 +61,14 @@ KPTTaskProgressPanel::KPTTaskProgressPanel(KPTTask &task, KPTStandardWorktime *w
         setEstimateScales(m_dayLength);
     }
     remainingEffort->setValue(m_progress.remainingEffort);
-    remainingEffort->setVisibleFields(KPTDurationWidget::Days | KPTDurationWidget::Hours | KPTDurationWidget::Minutes);
+    remainingEffort->setVisibleFields(DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes);
     remainingEffort->setFieldUnit(0, i18n("day", "d"));
     remainingEffort->setFieldUnit(1, i18n("hour", "h"));
     remainingEffort->setFieldUnit(2, i18n("minute", "m"));
 
     m_progress.totalPerformed = task.actualEffort(); //FIXME
     actualEffort->setValue(m_progress.totalPerformed);
-    actualEffort->setVisibleFields(KPTDurationWidget::Days | KPTDurationWidget::Hours | KPTDurationWidget::Minutes);
+    actualEffort->setVisibleFields(DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes);
     actualEffort->setFieldUnit(0, i18n("day", "d"));
     actualEffort->setFieldUnit(1, i18n("hour", "h"));
     actualEffort->setFieldUnit(2, i18n("minute", "m"));
@@ -76,7 +76,7 @@ KPTTaskProgressPanel::KPTTaskProgressPanel(KPTTask &task, KPTStandardWorktime *w
     scheduledStart->setDateTime(task.startTime());
     scheduledFinish->setDateTime(task.endTime());
     scheduledEffort->setValue(task.effort()->expected());
-    scheduledEffort->setVisibleFields(KPTDurationWidget::Days | KPTDurationWidget::Hours | KPTDurationWidget::Minutes);
+    scheduledEffort->setVisibleFields(DurationWidget::Days | DurationWidget::Hours | DurationWidget::Minutes);
     scheduledEffort->setFieldUnit(0, i18n("day", "d"));
     scheduledEffort->setFieldUnit(1, i18n("hour", "h"));
     scheduledEffort->setFieldUnit(2, i18n("minute", "m"));
@@ -87,7 +87,7 @@ KPTTaskProgressPanel::KPTTaskProgressPanel(KPTTask &task, KPTStandardWorktime *w
 }
 
 
-bool KPTTaskProgressPanel::ok() {
+bool TaskProgressPanel::ok() {
     m_progress.started = started->isChecked();
     m_progress.finished = finished->isChecked();
     m_progress.startTime = startTime->dateTime();
@@ -98,16 +98,16 @@ bool KPTTaskProgressPanel::ok() {
     return true;
 }
 
-KCommand *KPTTaskProgressPanel::buildCommand(KPTPart *part) {
+KCommand *TaskProgressPanel::buildCommand(Part *part) {
     KCommand *cmd = 0;
     QString c = i18n("Modify progress");
     if (m_task.progress() != m_progress) {
-        cmd = new KPTTaskModifyProgressCmd(part, m_task, m_progress, c);
+        cmd = new TaskModifyProgressCmd(part, m_task, m_progress, c);
     }
     return cmd;
 }
 
-void KPTTaskProgressPanel::setEstimateScales( int day )
+void TaskProgressPanel::setEstimateScales( int day )
 {
     remainingEffort->setFieldScale(0, day);
     remainingEffort->setFieldRightscale(0, day);
@@ -124,8 +124,8 @@ void KPTTaskProgressPanel::setEstimateScales( int day )
 
 //-------------------------------------
 
-KPTTaskProgressPanelImpl::KPTTaskProgressPanelImpl(QWidget *parent, const char *name, WFlags f)
-    : KPTTaskProgressPanelBase(parent, name, f) {
+TaskProgressPanelImpl::TaskProgressPanelImpl(QWidget *parent, const char *name, WFlags f)
+    : TaskProgressPanelBase(parent, name, f) {
     
     connect(started, SIGNAL(toggled(bool)), SLOT(slotStartedChanged(bool)));
     connect(finished, SIGNAL(toggled(bool)), SLOT(slotFinishedChanged(bool)));
@@ -141,11 +141,11 @@ KPTTaskProgressPanelImpl::KPTTaskProgressPanelImpl(QWidget *parent, const char *
 
 }
 
-void KPTTaskProgressPanelImpl::slotChanged() {
+void TaskProgressPanelImpl::slotChanged() {
     emit changed();
 }
 
-void KPTTaskProgressPanelImpl::slotStartedChanged(bool state) {
+void TaskProgressPanelImpl::slotStartedChanged(bool state) {
     if (state) {
         startTime->setDateTime(QDateTime::currentDateTime());
         percentFinished->setValue(0);
@@ -154,7 +154,7 @@ void KPTTaskProgressPanelImpl::slotStartedChanged(bool state) {
 }
 
 
-void KPTTaskProgressPanelImpl::slotFinishedChanged(bool state) {
+void TaskProgressPanelImpl::slotFinishedChanged(bool state) {
     if (state) {
         percentFinished->setValue(100);
         if (!finishTime->dateTime().isValid()) {
@@ -165,7 +165,7 @@ void KPTTaskProgressPanelImpl::slotFinishedChanged(bool state) {
 }
 
 
-void KPTTaskProgressPanelImpl::enableWidgets() {
+void TaskProgressPanelImpl::enableWidgets() {
     started->setEnabled(!finished->isChecked());
     finished->setEnabled(started->isChecked());
     finishTime->setEnabled(started->isChecked());
@@ -178,9 +178,9 @@ void KPTTaskProgressPanelImpl::enableWidgets() {
 }
 
 
-void KPTTaskProgressPanelImpl::slotPercentFinishedChanged( int value ) {
+void TaskProgressPanelImpl::slotPercentFinishedChanged( int value ) {
     if (value == 100) {
-        //remainingEffort->setValue(KPTDuration::zeroDuration); //FIXME
+        //remainingEffort->setValue(Duration::zeroDuration); //FIXME
     }
 }
 

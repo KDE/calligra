@@ -43,7 +43,7 @@
 namespace KPlato
 {
 
-KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
+Part::Part(QWidget *parentWidget, const char *widgetName,
 		 QObject *parent, const char *name, bool singleViewMode)
     : KoDocument(parentWidget, widgetName, parent, name, singleViewMode),
       m_project(0), m_projectDialog(0), m_view(0),
@@ -52,12 +52,12 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
     m_update = m_calculate = false;
     m_commandHistory = new KoCommandHistory(actionCollection());
 
-    setInstance(KPTFactory::global());
+    setInstance(Factory::global());
     setTemplateType("kplato_template");
     m_config.setReadWrite(isReadWrite()|| !isEmbedded());
     m_config.load();
 
-    m_project = new KPTProject(); // after config is loaded
+    m_project = new Project(); // after config is loaded
 
     connect(m_commandHistory, SIGNAL(commandExecuted()), SLOT(slotCommandExecuted()));
     connect(m_commandHistory, SIGNAL(documentRestored()), SLOT(slotDocumentRestored()));
@@ -65,7 +65,7 @@ KPTPart::KPTPart(QWidget *parentWidget, const char *widgetName,
 }
 
 
-KPTPart::~KPTPart() {
+Part::~Part() {
     m_config.save();
     delete m_project;
     delete m_projectDialog;
@@ -73,12 +73,12 @@ KPTPart::~KPTPart() {
 }
 
 
-bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
+bool Part::initDoc(InitDocFlags flags, QWidget* parentWidget) {
     bool result = true;
 
     if (flags==KoDocument::InitDocEmpty)
     {
-        m_project = new KPTProject();
+        m_project = new Project();
         setAutoSave(0); // disable
         setModified(false);
         return true;
@@ -92,7 +92,7 @@ bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
     else
 	    dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
-    ret = KoTemplateChooseDia::choose(KPTFactory::global(), templateDoc,
+    ret = KoTemplateChooseDia::choose(Factory::global(), templateDoc,
 				      dlgtype,
 				      "kplato_template",
 				      NULL);
@@ -103,13 +103,13 @@ bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
             showLoadingErrorDialog();
     } else if (ret == KoTemplateChooseDia::File) {
         KURL url(templateDoc);
-        kdDebug() << "KPTPart::initDoc opening URL " << url.prettyURL() <<endl;
+        kdDebug() << "Part::initDoc opening URL " << url.prettyURL() <<endl;
         result = openURL(url);
     } else if (ret == KoTemplateChooseDia::Empty) {
 	// Make a fresh project and let the user enter some info
-	m_project = new KPTProject();
+	m_project = new Project();
 	// an emty project should be empty
-	// m_projectDialog = new KPTProjectDialog(*m_project, m_view);
+	// m_projectDialog = new ProjectDialog(*m_project, m_view);
 	// m_projectDialog->exec();
 
 	result = true;
@@ -122,8 +122,8 @@ bool KPTPart::initDoc(InitDocFlags flags, QWidget* parentWidget) {
 }
 
 
-KoView *KPTPart::createViewInstance(QWidget *parent, const char *name) {
-    m_view = new KPTView(this, parent, name);
+KoView *Part::createViewInstance(QWidget *parent, const char *name) {
+    m_view = new View(this, parent, name);
 
     // If there is a project dialog this should be deleted so it will
     // use the m_view as parent. If the dialog will be needed again,
@@ -141,16 +141,16 @@ KoView *KPTPart::createViewInstance(QWidget *parent, const char *name) {
 }
 
 
-void KPTPart::editProject() {
+void Part::editProject() {
     if (m_projectDialog == 0)
 	// Make the dialog
-	m_projectDialog = new KPTProjectDialog(*m_project, m_view);
+	m_projectDialog = new ProjectDialog(*m_project, m_view);
 
     m_projectDialog->exec();
 }
 
 
-bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
+bool Part::loadXML(QIODevice *, const QDomDocument &document) {
     QTime dt;
     dt.start();
     emit sigProgress( 0 );
@@ -199,10 +199,10 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
 
             if (e.tagName() == "context") {
                 delete m_context;
-                m_context = new KPTContext();
+                m_context = new Context();
                 m_context->load(e);
             } else if (e.tagName() == "project") {
-                KPTProject *newProject = new KPTProject();
+                Project *newProject = new Project();
                 if (newProject->load(e)) {
                     // The load went fine. Throw out the old project
                     delete m_project;
@@ -229,7 +229,7 @@ bool KPTPart::loadXML(QIODevice *, const QDomDocument &document) {
     return true;
 }
 
-QDomDocument KPTPart::saveXML() {
+QDomDocument Part::saveXML() {
     QDomDocument document("kplato");
 
     document.appendChild(document.createProcessingInstruction(
@@ -245,7 +245,7 @@ QDomDocument KPTPart::saveXML() {
     delete m_context;
     m_context = 0;
     if (m_view) {
-        m_context = new KPTContext();
+        m_context = new Context();
         m_view->getContext(*m_context);
     }
     if (m_context) {
@@ -259,13 +259,13 @@ QDomDocument KPTPart::saveXML() {
 }
 
 
-void KPTPart::slotDocumentRestored() {
+void Part::slotDocumentRestored() {
     //kdDebug()<<k_funcinfo<<endl;
     setModified(false);
 }
 
 
-void KPTPart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/,
+void Part::paintContent(QPainter &/*painter*/, const QRect &/*rect*/,
 			   bool /*transparent*/,
 			   double /*zoomX*/, double /*zoomY*/)
 {
@@ -284,16 +284,16 @@ void KPTPart::paintContent(QPainter &/*painter*/, const QRect &/*rect*/,
 }
 
 
-void KPTPart::addCommand(KCommand * cmd, bool execute)
+void Part::addCommand(KCommand * cmd, bool execute)
 {
     m_commandHistory->addCommand(cmd, execute);
 }
 
-void KPTPart::slotCommandExecuted() {
+void Part::slotCommandExecuted() {
     //kdDebug()<<k_funcinfo<<endl;
     setModified(true);
     if (m_calculate)
-        m_view->slotUpdate(config().behavior().calculationMode == KPTBehavior::OnChange);
+        m_view->slotUpdate(config().behavior().calculationMode == Behavior::OnChange);
     else if (m_update)
         m_view->slotUpdate(false);
 
@@ -303,7 +303,7 @@ void KPTPart::slotCommandExecuted() {
     m_update = m_calculate = m_baseline = false;
 }
 
-void KPTPart::setCommandType(int type) {
+void Part::setCommandType(int type) {
     //kdDebug()<<k_funcinfo<<"type="<<type<<endl;
     if (type == 0)
         m_update = true;
@@ -313,7 +313,7 @@ void KPTPart::setCommandType(int type) {
         m_baseline = true;
 }
 
-void KPTPart::generateWBS() {
+void Part::generateWBS() {
     m_project->generateWBS(1, m_wbsDefinition);
 }
 

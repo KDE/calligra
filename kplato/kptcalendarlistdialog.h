@@ -34,18 +34,18 @@ namespace KPlato
 {
 
 class CalendarListViewItem;
-class KPTProject;
-class KPTPart;
+class Project;
+class Part;
 
-class KPTCalendarListDialogImpl : public KPTCalendarListDialogBase {
+class CalendarListDialogImpl : public CalendarListDialogBase {
     Q_OBJECT
 public:
-    KPTCalendarListDialogImpl(KPTProject &project, QWidget *parent);
+    CalendarListDialogImpl(Project &project, QWidget *parent);
 
     void setBaseCalendars();
     
-    KPTCalendar *getCalendar() { return calendar->getCalendar(); }
-    void setCalendar(KPTCalendar *cal);
+    Calendar *getCalendar() { return calendar->getCalendar(); }
+    void setCalendar(Calendar *cal);
 
     QPtrList<CalendarListViewItem> &deletedItems();
 
@@ -67,29 +67,29 @@ signals:
     void enableButtonOk(bool on);
 
 protected:
-    CalendarListViewItem *findItem(KPTCalendar *cal);
+    CalendarListViewItem *findItem(Calendar *cal);
     
 private:
-    KPTProject &project;
+    Project &project;
     QPtrList<CalendarListViewItem> m_deletedItems;
     QPtrList<CalendarListViewItem> baseCalendarList;
 };
 
-class KPTCalendarListDialog : public KDialogBase {
+class CalendarListDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTCalendarListDialog(KPTProject &project, QWidget *parent=0, const char *name=0);
+    CalendarListDialog(Project &project, QWidget *parent=0, const char *name=0);
     
-    KMacroCommand *buildCommand(KPTPart *part);
+    KMacroCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();
     
 private:
-    KPTProject &project;
-    KPTCalendarListDialogImpl *dia;
+    Project &project;
+    CalendarListDialogImpl *dia;
 };
 
 }  //KPlato namespace
 
-#endif // KPTCALENDARLISTDIALOG_H
+#endif // CALENDARLISTDIALOG_H

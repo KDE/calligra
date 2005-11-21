@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.1" stdsetdef="1">
-<class>KPlato::KPTProjectDialogBase</class>
+<class>KPlato::ProjectDialogBase</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>KPTProjectDialogBase</cstring>
+        <cstring>ProjectDialogBase</cstring>
     </property>
     <property name="geometry">
         <rect>

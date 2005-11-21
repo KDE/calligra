@@ -35,18 +35,18 @@ class QTime;
 namespace KPlato
 {
 
-class KPTAccount;
-class KPTRisk;
-class KPTEffort;
-class KPTAppointment;
-class KPTTask;
-class KPTNode;
-class KPTProject;
-class KPTResource;
-class KPTResourceRequest;
-class KPTResourceGroupRequest;
-class KPTCalendar;
-class KPTResourceRequestCollection;
+class Account;
+class Risk;
+class Effort;
+class Appointment;
+class Task;
+class Node;
+class Project;
+class Resource;
+class ResourceRequest;
+class ResourceGroupRequest;
+class Calendar;
+class ResourceRequestCollection;
 
 /**
   * This class represents a group of similar resources to be assigned to a task
@@ -55,14 +55,14 @@ class KPTResourceRequestCollection;
 
 /* IDEA; lets create a resourceGroup that has the intelligence to import PIM schedules
  *  from the kroupware project and use the schedules to use the factory pattern to build
- *  KPTResources (probably a derived class) which returns values on getFirstAvailableTime
+ *  Resources (probably a derived class) which returns values on getFirstAvailableTime
  *  and friends based on the schedules we got from the PIM projects.
  *  (Thomas Zander mrt-2003 by suggestion of Shaheed)
  */
-class KPTResourceGroup {
+class ResourceGroup {
     public:
-	      KPTResourceGroup(KPTProject *project);
-	      ~KPTResourceGroup();
+	      ResourceGroup(Project *project);
+	      ~ResourceGroup();
 
           enum Type { Type_Work, Type_Material };
           
@@ -70,7 +70,7 @@ class KPTResourceGroup {
           bool setId(QString id);
           void generateId();
           
-          KPTProject *project() { return m_project; }
+          Project *project() { return m_project; }
           
 	      void setName(QString n) {m_name=n;}
 	      const QString &name() const {return m_name;}
@@ -83,33 +83,33 @@ class KPTResourceGroup {
 	        * (e.g. you can't add a person to a list of computers
 	        *
 	        * <p>Risks must always be associated with a resource, so there is no option
-	        * to manipulate risks (@ref KPTRisk) seperately
+	        * to manipulate risks (@ref Risk) seperately
 	        */
-	      void addResource(KPTResource*, KPTRisk*);
-          void insertResource( unsigned int index, KPTResource *resource );
-          void removeResource( KPTResource *resource );
-          KPTResource *takeResource( KPTResource *resource );
+	      void addResource(Resource*, Risk*);
+          void insertResource( unsigned int index, Resource *resource );
+          void removeResource( Resource *resource );
+          Resource *takeResource( Resource *resource );
 	      void removeResource(int);
 
-	      KPTResource* getResource(int);
-	      KPTRisk* getRisk(int);
+	      Resource* getResource(int);
+	      Risk* getRisk(int);
 
 	      /** Get the @num resources which is available in the time frame
             * defined by @start and @duration.
             */
-          QPtrList<KPTResource> availableResources(const KPTDateTime start, const KPTDuration duration, int num);
+          QPtrList<Resource> availableResources(const DateTime start, const Duration duration, int num);
 	      /** Manage the dependent resources.  This is a list of the resource
 	        * groups that must have available resources for this resource to
 	        * perform the work
             * <p>see also @ref getRequiredResource, @ref getRequiredResource
 	        */
-	      void addRequiredResource(KPTResourceGroup*);
+	      void addRequiredResource(ResourceGroup*);
 	      /** Manage the dependent resources.  This is a list of the resource
 	        * groups that must have available resources for this resource to
 	        * perform the work
             * <p>see also @ref addRequiredResource, @ref getRequiredResource
 	        */
-	      KPTResourceGroup* getRequiredResource(int);
+	      ResourceGroup* getRequiredResource(int);
 	      /** Manage the dependent resources.  This is a list of the resource
 	        * groups that must have available resources for this resource to
 	        * perform the work
@@ -117,7 +117,7 @@ class KPTResourceGroup {
 	        */
 	      void removeRequiredResource(int);
           int numResources() const { return m_resources.count(); }
-          QPtrList<KPTResource> &resources() { return m_resources; }
+          QPtrList<Resource> &resources() { return m_resources; }
 
           bool load(QDomElement &element);
           void save(QDomElement &element);
@@ -126,46 +126,46 @@ class KPTResourceGroup {
           void saveAppointments(QDomElement &element);
 
 
-          void addNode(const KPTNode *node) { m_nodes.append(node); }
+          void addNode(const Node *node) { m_nodes.append(node); }
           void clearNodes() { m_nodes.clear(); }
 
-          KPTCalendar *defaultCalendar() { return m_defaultCalendar; }
+          Calendar *defaultCalendar() { return m_defaultCalendar; }
 
           int units();
         
-          void registerRequest(KPTResourceGroupRequest *request)
+          void registerRequest(ResourceGroupRequest *request)
             { m_requests.append(request); }
-          void unregisterRequest(KPTResourceGroupRequest *request)
+          void unregisterRequest(ResourceGroupRequest *request)
             { m_requests.removeRef(request); }
-          const QPtrList<KPTResourceGroupRequest> &requests() const
+          const QPtrList<ResourceGroupRequest> &requests() const
             { return m_requests; }
 
-          KPTResourceGroup *findId() const { return findId(m_id); }
-          KPTResourceGroup *findId(const QString &id) const;
+          ResourceGroup *findId() const { return findId(m_id); }
+          ResourceGroup *findId(const QString &id) const;
           bool removeId() { return removeId(m_id); }
           bool removeId(const QString &id);
           void insertId(const QString &id);
 
-          KPTAppointment appointmentIntervals() const;
+          Appointment appointmentIntervals() const;
 
 #ifndef NDEBUG
         void printDebug(QString ident);
 #endif
 
     private:
-        KPTProject  *m_project;
+        Project  *m_project;
         QString m_id;   // unique id
         QString m_name;
-        QPtrList<KPTResource> m_resources;
-        QPtrList<KPTRisk> m_risks;
-        QPtrList<KPTResourceGroup> m_requires;
+        QPtrList<Resource> m_resources;
+        QPtrList<Risk> m_risks;
+        QPtrList<ResourceGroup> m_requires;
 
-        QPtrList<KPTNode> m_nodes; //The nodes that want resources from us
+        QPtrList<Node> m_nodes; //The nodes that want resources from us
 
-        KPTCalendar *m_defaultCalendar;
+        Calendar *m_defaultCalendar;
         Type m_type;
         
-        QPtrList<KPTResourceGroupRequest> m_requests;
+        QPtrList<ResourceGroupRequest> m_requests;
         
 };
 
@@ -176,15 +176,15 @@ class KPTResourceGroup {
   * resource to schedule the resource available time for the project.
   * The Idea is that all nodes which need this resource point to it and the scheduling
   * code (partly implemented here) schedules the actual usage.
-  * See also @ref KPTResourceGroup
+  * See also @ref ResourceGroup
   */
 
-class KPTResource {
+class Resource {
 public:
 
-    KPTResource(KPTProject *project);
-    KPTResource(KPTResource *resource) { copy(resource); }
-    virtual ~KPTResource();
+    Resource(Project *project);
+    Resource(Resource *resource) { copy(resource); }
+    virtual ~Resource();
 
     QString id() const { return m_id; }
     bool setId(QString id);
@@ -205,50 +205,50 @@ public:
     void setEmail(QString email) {m_email=email;}
     const QString &email() const {return m_email;}
 
-    void copy(KPTResource *resource);
+    void copy(Resource *resource);
 
     /// Set the time from when the resource is available to this project
     void setAvailableFrom(const QDateTime &af) {m_availableFrom=af;}
     /// Return the time when the resource is available to this project
-    const KPTDateTime &availableFrom() const {return m_availableFrom;}
+    const DateTime &availableFrom() const {return m_availableFrom;}
     /// Set the time when the resource is no longer available to this project
     void setAvailableUntil(const QDateTime au) {m_availableUntil=au;}
     /// Return the time when the resource is no longer available to this project.
-    const KPTDateTime &availableUntil() const {return m_availableUntil;}
+    const DateTime &availableUntil() const {return m_availableUntil;}
 
     void addWorkingHour(QTime from, QTime until);
     QPtrList<QTime> workingHours() { return m_workingHours; }
 
-    KPTDateTime *getFirstAvailableTime(KPTDateTime after = KPTDateTime());
-    KPTDateTime *getBestAvailableTime(KPTDuration duration);
-    KPTDateTime *getBestAvailableTime(const KPTDateTime after, const KPTDuration duration);
+    DateTime *getFirstAvailableTime(DateTime after = DateTime());
+    DateTime *getBestAvailableTime(Duration duration);
+    DateTime *getBestAvailableTime(const DateTime after, const Duration duration);
 
     bool load(QDomElement &element);
     void save(QDomElement &element);
 
     /// removes appoinrment and deletes it (independent of setAutoDelete)
-    void removeAppointment(KPTAppointment *appointment);
+    void removeAppointment(Appointment *appointment);
     /// removes appointment without deleting it (independent of setAutoDelete)
-    void takeAppointment(KPTAppointment *appointment);
+    void takeAppointment(Appointment *appointment);
     
     ///Return the list of appointments
-    QPtrList<KPTAppointment> &appointments() { return m_appointments; }
+    QPtrList<Appointment> &appointments() { return m_appointments; }
     
-    KPTAppointment *findAppointment(KPTNode *node);
+    Appointment *findAppointment(Node *node);
     int numAppointments() const { return m_appointments.count(); }
     /// Adds appointment to this resource only (not to node)
-    virtual bool addAppointment(KPTAppointment *appointment);
+    virtual bool addAppointment(Appointment *appointment);
     /// Adds appointment to both this resource and node
-    virtual void addAppointment(KPTNode *node, KPTDateTime &start, KPTDateTime &end, double load=100);
+    virtual void addAppointment(Node *node, DateTime &start, DateTime &end, double load=100);
     
     void clearAppointments();
-    bool isAvailable(KPTTask *task);
-    void makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task);
+    bool isAvailable(Task *task);
+    void makeAppointment(DateTime &start, Duration &duration, Task *task);
     void saveAppointments(QDomElement &element);
 
     bool isOverbooked() const;
     bool isOverbooked(const QDate &date) const;
-    bool isOverbooked(const KPTDateTime &start, const KPTDateTime &end) const;
+    bool isOverbooked(const DateTime &start, const DateTime &end) const;
 
     double normalRate() const { return cost.normalRate; }
     void setNormalRate(double rate) { cost.normalRate = rate; }
@@ -266,46 +266,46 @@ public:
      */
     void setUnits(int units) { m_units = units; }
 
-    KPTProject *project() const { return m_project; }
+    Project *project() const { return m_project; }
 
-    KPTCalendar *calendar() const;
-    KPTCalendar *calendar(const QString id) const;
-    void setCalendar(KPTCalendar *calendar) { m_calendar = calendar; }
+    Calendar *calendar() const;
+    Calendar *calendar(const QString id) const;
+    void setCalendar(Calendar *calendar) { m_calendar = calendar; }
 
     /**
      * Used to clean up requests when the resource is deleted.
      */
-    void registerRequest(const KPTResourceRequest *request)
+    void registerRequest(const ResourceRequest *request)
         { m_requests.append(request); }
-    void unregisterRequest(const KPTResourceRequest *request)
+    void unregisterRequest(const ResourceRequest *request)
         { m_requests.removeRef(request); }
-    const QPtrList<KPTResourceRequest> &requests() const
+    const QPtrList<ResourceRequest> &requests() const
         { return m_requests; }
         
-    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration, bool *ok=0) const;
+    Duration effort(const DateTime &start, const Duration &duration, bool *ok=0) const;
 
-    KPTDateTime availableAfter(const KPTDateTime &time);
-    KPTDateTime availableBefore(const KPTDateTime &time);
+    DateTime availableAfter(const DateTime &time);
+    DateTime availableBefore(const DateTime &time);
 
-    KPTResource *findId() const { return findId(m_id); }
-    KPTResource *findId(const QString &id) const;
+    Resource *findId() const { return findId(m_id); }
+    Resource *findId(const QString &id) const;
     bool removeId() { return removeId(m_id); }
     bool removeId(const QString &id);
     void insertId(const QString &id);
 
-    KPTCalendar *findCalendar(const QString &id) const;
+    Calendar *findCalendar(const QString &id) const;
 
-    KPTAppointment appointmentIntervals() const;
-    KPTDuration plannedEffort(const QDate &date) const;
+    Appointment appointmentIntervals() const;
+    Duration plannedEffort(const QDate &date) const;
 private:
-    KPTProject *m_project;
-    QPtrList<KPTAppointment> m_appointments;
+    Project *m_project;
+    QPtrList<Appointment> m_appointments;
     QString m_id; // unique id
     QString m_name;
     QString m_initials;
     QString m_email;
-    KPTDateTime m_availableFrom;
-    KPTDateTime m_availableUntil;
+    DateTime m_availableFrom;
+    DateTime m_availableUntil;
     QPtrList<QTime> m_workingHours;
 
     int m_units; // avalable units in percent
@@ -319,8 +319,8 @@ private:
         double fixed;
     } cost;
 
-    KPTCalendar *m_calendar;
-    QPtrList<KPTResourceRequest> m_requests;
+    Calendar *m_calendar;
+    QPtrList<ResourceRequest> m_requests;
     
 public:
 #ifndef NDEBUG
@@ -329,44 +329,44 @@ public:
 };
 
 
-class KPTAppointmentInterval {
+class AppointmentInterval {
 public:
-    KPTAppointmentInterval();
-    KPTAppointmentInterval(const KPTAppointmentInterval &KPTAppointmentInterval);
-    KPTAppointmentInterval(const KPTDateTime &start, const KPTDateTime end, double load=100);
-    ~KPTAppointmentInterval();
+    AppointmentInterval();
+    AppointmentInterval(const AppointmentInterval &AppointmentInterval);
+    AppointmentInterval(const DateTime &start, const DateTime end, double load=100);
+    ~AppointmentInterval();
     
-    void set(KPTDateTime &start, KPTDateTime &end, double load=100);
-    void set(KPTDateTime &start, KPTDuration &duration, double load=100);
+    void set(DateTime &start, DateTime &end, double load=100);
+    void set(DateTime &start, Duration &duration, double load=100);
     
-    KPTDuration effort() const { return (m_end - m_start) * m_load / 100; }
-    KPTDuration effort(const KPTDateTime &start, const KPTDateTime end) const;
-    KPTDuration effort(const KPTDateTime &time, bool upto) const;
+    Duration effort() const { return (m_end - m_start) * m_load / 100; }
+    Duration effort(const DateTime &start, const DateTime end) const;
+    Duration effort(const DateTime &time, bool upto) const;
     
     bool loadXML(QDomElement &element);
     void saveXML(QDomElement &element);
     
-    const KPTDateTime &startTime() const { return m_start; }
-    void setStartTime(const KPTDateTime &time) { m_start = time; }
-    const KPTDateTime &endTime() const { return m_end; }
-    void setEndTime(const KPTDateTime &time) { m_end = time; }
+    const DateTime &startTime() const { return m_start; }
+    void setStartTime(const DateTime &time) { m_start = time; }
+    const DateTime &endTime() const { return m_end; }
+    void setEndTime(const DateTime &time) { m_end = time; }
     double load() const { return m_load; }
     void setLoad(double load) { m_load = load; }
     
     bool isValid() const;
-    KPTAppointmentInterval firstInterval(const KPTAppointmentInterval &interval, const KPTDateTime &from) const;
+    AppointmentInterval firstInterval(const AppointmentInterval &interval, const DateTime &from) const;
 
 private:
-    KPTDateTime m_start;
-    KPTDateTime m_end;
+    DateTime m_start;
+    DateTime m_end;
     double m_load; //percent
 };
 
-class KPTAppointmentIntervalList : public QPtrList<KPTAppointmentInterval> {
+class AppointmentIntervalList : public QPtrList<AppointmentInterval> {
 protected:
     int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2) {
-        KPTAppointmentInterval *i1 = static_cast<KPTAppointmentInterval*>(item1);
-        KPTAppointmentInterval *i2 = static_cast<KPTAppointmentInterval*>(item2);
+        AppointmentInterval *i1 = static_cast<AppointmentInterval*>(item1);
+        AppointmentInterval *i2 = static_cast<AppointmentInterval*>(item2);
         if (i1->startTime() < i2->startTime()) {
             return -1;
         }
@@ -384,78 +384,78 @@ protected:
 };
 
 /**
-  * A resource (@ref KPTResource) can be scheduled to be used at any time, 
-  * this is represented internally with KPTAppointments
-  * There is one KPTAppointment per resource-task pair.
+  * A resource (@ref Resource) can be scheduled to be used at any time, 
+  * this is represented internally with Appointments
+  * There is one Appointment per resource-task pair.
   * An appointment can be devided into several intervals, represented with
-  * a list of KPTAppointmentInterval
+  * a list of AppointmentInterval
   */
 
-class KPTAppointment {
+class Appointment {
 public:
-    KPTAppointment();
-    KPTAppointment(KPTResource *resource, KPTNode *node, KPTDateTime start, KPTDateTime end, double load);
-    KPTAppointment(KPTResource *resource, KPTNode *node, KPTDateTime start, KPTDuration duration, double load);
-    ~KPTAppointment();
+    Appointment();
+    Appointment(Resource *resource, Node *node, DateTime start, DateTime end, double load);
+    Appointment(Resource *resource, Node *node, DateTime start, Duration duration, double load);
+    ~Appointment();
 
     // get/set member values.
-    KPTNode *node() const { return m_node; }
-    void setNode(KPTNode *n) { m_node = n; }
+    Node *node() const { return m_node; }
+    void setNode(Node *n) { m_node = n; }
 
-    KPTResource *resource() const { return m_resource; }
-    void setResource(KPTResource *r) { m_resource = r; }
+    Resource *resource() const { return m_resource; }
+    void setResource(Resource *r) { m_resource = r; }
 
-    KPTDateTime startTime() const;
-    KPTDateTime endTime() const;
+    DateTime startTime() const;
+    DateTime endTime() const;
     double maxLoad() const;
     
-    const KPTDuration &repeatInterval() const {return m_repeatInterval;}
-    void setRepeatInterval(KPTDuration ri) {m_repeatInterval=ri;}
+    const Duration &repeatInterval() const {return m_repeatInterval;}
+    void setRepeatInterval(Duration ri) {m_repeatInterval=ri;}
 
     int repeatCount() const { return m_repeatCount; }
     void setRepeatCount(int rc) { m_repeatCount=rc; }
 
-    void deleteAppointmentFromRepeatList(KPTDateTime time);
-    void addAppointmentToRepeatList(KPTDateTime time);
+    void deleteAppointmentFromRepeatList(DateTime time);
+    void addAppointmentToRepeatList(DateTime time);
 
-    bool isBusy(const KPTDateTime &start, const KPTDateTime &end);
+    bool isBusy(const DateTime &start, const DateTime &end);
 
     /// attach appointment to resource and node
     bool attach();
     /// detach appointment from resource and node
     void detach();
     
-    void addInterval(KPTAppointmentInterval *a);
-    void addInterval(KPTAppointmentInterval &a) 
-        { addInterval(new KPTAppointmentInterval(a)); }
-    void addInterval(const KPTDateTime &start, const KPTDateTime &end, double load=100);
-    void addInterval(const KPTDateTime &start, const KPTDuration &duration, double load=100);
+    void addInterval(AppointmentInterval *a);
+    void addInterval(AppointmentInterval &a) 
+        { addInterval(new AppointmentInterval(a)); }
+    void addInterval(const DateTime &start, const DateTime &end, double load=100);
+    void addInterval(const DateTime &start, const Duration &duration, double load=100);
     
-    const KPTAppointmentIntervalList &intervals() const { return m_intervals; }
+    const AppointmentIntervalList &intervals() const { return m_intervals; }
 
-    bool loadXML(QDomElement &element, KPTProject &project);
+    bool loadXML(QDomElement &element, Project &project);
     void saveXML(QDomElement &element);
 
     /// Returns the planned effort from start to end
-    KPTDuration effort(const KPTDateTime &start, const KPTDateTime &end) const;
+    Duration effort(const DateTime &start, const DateTime &end) const;
     /// Returns the planned effort from start for the duration
-    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
+    Duration effort(const DateTime &start, const Duration &duration) const;
     /// Returns the planned effort from time onwards
-    KPTDuration effortFrom(const KPTDateTime &time) const;
+    Duration effortFrom(const DateTime &time) const;
     
     /// Returns the total planned effort for this appointment
-    KPTDuration plannedEffort() const;
+    Duration plannedEffort() const;
     /// Returns the planned effort on the date
-    KPTDuration plannedEffort(const QDate &date) const;
+    Duration plannedEffort(const QDate &date) const;
     /// Returns the planned effort upto and including date
-    KPTDuration plannedEffortTo(const QDate &date) const;
+    Duration plannedEffortTo(const QDate &date) const;
 
     /// Returns the total actual effort for this appointment
-    KPTDuration actualEffort() const;
+    Duration actualEffort() const;
     /// Returns the actual effort on the date
-    KPTDuration actualEffort(const QDate &date) const;
+    Duration actualEffort(const QDate &date) const;
     /// Returns the actual effort on the date
-    KPTDuration actualEffortTo(const QDate &date) const;
+    Duration actualEffortTo(const QDate &date) const;
 
      /// Calculates the total planned cost for this appointment
     double plannedCost();
@@ -471,46 +471,46 @@ public:
     /// Calculates the actual cost upto and including date
     double actualCostTo(const QDate &date);
 
-    KPTAppointment &operator=(const KPTAppointment &app);
-    KPTAppointment &operator+=(const KPTAppointment &app);
-    KPTAppointment operator+(const KPTAppointment &app);
+    Appointment &operator=(const Appointment &app);
+    Appointment &operator+=(const Appointment &app);
+    Appointment operator+(const Appointment &app);
     
-    void addActualEffort(QDate date, KPTDuration effort, bool overtime=false);
+    void addActualEffort(QDate date, Duration effort, bool overtime=false);
     
-    KPTAccount *account() { return m_account; }
+    Account *account() { return m_account; }
     
 private:
-    KPTNode *m_node;
-    KPTResource *m_resource;
-    KPTDuration m_repeatInterval;
+    Node *m_node;
+    Resource *m_resource;
+    Duration m_repeatInterval;
     int m_repeatCount;
-    QPtrList<KPTDuration> m_extraRepeats;
-    QPtrList<KPTDuration> m_skipRepeats;
+    QPtrList<Duration> m_extraRepeats;
+    QPtrList<Duration> m_skipRepeats;
 
-    KPTAppointmentIntervalList m_intervals;
+    AppointmentIntervalList m_intervals;
     
     class UsedEffortItem {
     public:
-        UsedEffortItem(QDate date, KPTDuration effort, bool overtime=false);
+        UsedEffortItem(QDate date, Duration effort, bool overtime=false);
         QDate date();
-        KPTDuration effort();
+        Duration effort();
         bool isOvertime();
     private:
         QDate m_date;
-        KPTDuration m_effort;
+        Duration m_effort;
         bool m_overtime;
     };
     class UsedEffort : QPtrList<UsedEffortItem> {
     public:
         UsedEffort();
         ~UsedEffort() {}
-        void inSort(QDate date, KPTDuration effort, bool overtime=false);
-        KPTDuration usedEffort(bool includeOvertime=true) const;
-        KPTDuration usedEffort(const QDate &date, bool includeOvertime=true) const;
-        KPTDuration usedEffortTo(const QDate &date, bool includeOvertime=true) const;
-        KPTDuration usedOvertime() const;
-        KPTDuration usedOvertime(const QDate &date) const;
-        KPTDuration usedOvertimeTo(const QDate &date) const;
+        void inSort(QDate date, Duration effort, bool overtime=false);
+        Duration usedEffort(bool includeOvertime=true) const;
+        Duration usedEffort(const QDate &date, bool includeOvertime=true) const;
+        Duration usedEffortTo(const QDate &date, bool includeOvertime=true) const;
+        Duration usedOvertime() const;
+        Duration usedOvertime(const QDate &date) const;
+        Duration usedOvertimeTo(const QDate &date) const;
         bool load(QDomElement &element);
         void save(QDomElement &element);
     
@@ -520,7 +520,7 @@ private:
     
     UsedEffort m_actualEffort;
 
-    KPTAccount *m_account;
+    Account *m_account;
     
 #ifndef NDEBUG
 public:
@@ -534,7 +534,7 @@ public:
  * estimated effort. Risk can be one of none, low, or high. Some factors that may be taken into
  * account for risk are the experience of the person and the reliability of equipment.
  */
-class KPTRisk {
+class Risk {
     public:
 
         enum RiskType {
@@ -543,33 +543,33 @@ class KPTRisk {
             HIGH=2
         };
 
-        KPTRisk(KPTNode *n, KPTResource *r, RiskType rt=NONE);
-        ~KPTRisk();
+        Risk(Node *n, Resource *r, RiskType rt=NONE);
+        ~Risk();
 
         RiskType riskType() { return m_riskType; }
 
-        KPTNode *node() { return m_node; }
-        KPTResource *resource() { return m_resource; }
+        Node *node() { return m_node; }
+        Resource *resource() { return m_resource; }
 
     private:
-        KPTNode *m_node;
-        KPTResource *m_resource;
+        Node *m_node;
+        Resource *m_resource;
         RiskType m_riskType;
 };
 
-class KPTResourceRequest {
+class ResourceRequest {
     public:
-        KPTResourceRequest(KPTResource *resource=0, int units = 1);
+        ResourceRequest(Resource *resource=0, int units = 1);
 
-        ~KPTResourceRequest();
+        ~ResourceRequest();
 
-        KPTResourceGroupRequest *parent() const { return m_parent; }
-        void setParent(KPTResourceGroupRequest *parent) { m_parent = parent; }
+        ResourceGroupRequest *parent() const { return m_parent; }
+        void setParent(ResourceGroupRequest *parent) { m_parent = parent; }
         
-        KPTResource *resource() const { return m_resource; }
-        void setResource(KPTResource* resource) { m_resource = resource; }
+        Resource *resource() const { return m_resource; }
+        void setResource(Resource* resource) { m_resource = resource; }
         
-        bool load(QDomElement &element, KPTProject &project);
+        bool load(QDomElement &element, Project &project);
         void save(QDomElement &element);
 
         /**
@@ -585,17 +585,17 @@ class KPTResourceRequest {
         void registerRequest() { if (m_resource) m_resource->registerRequest(this); }
         void unregisterRequest() { if (m_resource) m_resource->unregisterRequest(this); }
  
-        void makeAppointment(KPTDateTime &start, KPTDuration &duration, KPTTask *task) 
+        void makeAppointment(DateTime &start, Duration &duration, Task *task) 
             { if (m_resource) m_resource->makeAppointment(start, duration, task); }
         
-        KPTAccount *account() const { return m_account; }
-        void setAccount(KPTAccount *account) { m_account = account; }
+        Account *account() const { return m_account; }
+        void setAccount(Account *account) { m_account = account; }
         
     private:
-        KPTResource *m_resource;
+        Resource *m_resource;
         int m_units;
-        KPTResourceGroupRequest *m_parent;
-        KPTAccount *m_account;
+        ResourceGroupRequest *m_parent;
+        Account *m_account;
 
 #ifndef NDEBUG
 public:
@@ -603,22 +603,22 @@ public:
 #endif
 };
 
-class KPTResourceGroupRequest {
+class ResourceGroupRequest {
     public:
-        KPTResourceGroupRequest(KPTResourceGroup *group=0, int units=0);
-        ~KPTResourceGroupRequest();
+        ResourceGroupRequest(ResourceGroup *group=0, int units=0);
+        ~ResourceGroupRequest();
 
-        void setParent(KPTResourceRequestCollection *parent) { m_parent = parent;}
-        KPTResourceRequestCollection *parent() const { return m_parent; }
+        void setParent(ResourceRequestCollection *parent) { m_parent = parent;}
+        ResourceRequestCollection *parent() const { return m_parent; }
         
-        KPTResourceGroup *group() const { return m_group; }
-        QPtrList<KPTResourceRequest> &resourceRequests() { return m_resourceRequests; }
-        void addResourceRequest(KPTResourceRequest *request);
-        void removeResourceRequest(KPTResourceRequest *request) { m_resourceRequests.removeRef(request); }
-        KPTResourceRequest *takeResourceRequest(KPTResourceRequest *request);
-        KPTResourceRequest *find(KPTResource *resource) const;
+        ResourceGroup *group() const { return m_group; }
+        QPtrList<ResourceRequest> &resourceRequests() { return m_resourceRequests; }
+        void addResourceRequest(ResourceRequest *request);
+        void removeResourceRequest(ResourceRequest *request) { m_resourceRequests.removeRef(request); }
+        ResourceRequest *takeResourceRequest(ResourceRequest *request);
+        ResourceRequest *find(Resource *resource) const;
 
-        bool load(QDomElement &element, KPTProject &project);
+        bool load(QDomElement &element, Project &project);
         void save(QDomElement &element);
 
         /**
@@ -631,38 +631,38 @@ class KPTResourceGroupRequest {
         */
         int workUnits() const;
     
-        KPTDuration effort(const KPTDateTime &time, const KPTDuration &duration, bool *ok=0) const;
+        Duration effort(const DateTime &time, const Duration &duration, bool *ok=0) const;
         
         /**
          * Returns the duration needed to do the effort @param effort
          * starting at @param start.
          */
-        KPTDuration duration(const KPTDateTime &start, const KPTDuration &effort, bool backward=false);
+        Duration duration(const DateTime &start, const Duration &effort, bool backward=false);
         
-        KPTDateTime availableAfter(const KPTDateTime &time);
-        KPTDateTime availableBefore(const KPTDateTime &time);
+        DateTime availableAfter(const DateTime &time);
+        DateTime availableBefore(const DateTime &time);
         
         /**
          * Makes appointments for task @param task to the 
          * requested resources for the duration found in @ref duration().
          */
-        void makeAppointments(KPTTask *task);
+        void makeAppointments(Task *task);
             
         /**
          * Reserves the requested resources for the specified interval
          */
-        void reserve(const KPTDateTime &start, const KPTDuration &duration);
+        void reserve(const DateTime &start, const Duration &duration);
 
         bool isEmpty() const;
     
     private:
-        KPTResourceGroup *m_group;
+        ResourceGroup *m_group;
         int m_units;
-        KPTResourceRequestCollection *m_parent;
+        ResourceRequestCollection *m_parent;
         
-        QPtrList<KPTResourceRequest> m_resourceRequests;
-        KPTDateTime m_start;
-        KPTDuration m_duration;
+        QPtrList<ResourceRequest> m_resourceRequests;
+        DateTime m_start;
+        Duration m_duration;
 
 #ifndef NDEBUG
 public:
@@ -670,23 +670,23 @@ public:
 #endif
 };
 
-class KPTResourceRequestCollection {
+class ResourceRequestCollection {
 public:
-    KPTResourceRequestCollection(KPTTask &task);
-    ~KPTResourceRequestCollection();
+    ResourceRequestCollection(Task &task);
+    ~ResourceRequestCollection();
 
-    const QPtrList<KPTResourceGroupRequest> &requests() const { return m_requests; }
-    void addRequest(KPTResourceGroupRequest *request) {                 
+    const QPtrList<ResourceGroupRequest> &requests() const { return m_requests; }
+    void addRequest(ResourceGroupRequest *request) {                 
         m_requests.append(request);
         request->setParent(this);
     }
-    void removeRequest(KPTResourceGroupRequest *request) { m_requests.removeRef(request); }
-    void takeRequest(KPTResourceGroupRequest *request) { m_requests.take(m_requests.findRef(request)); }
-    KPTResourceGroupRequest *find(KPTResourceGroup *resource) const;
-    KPTResourceRequest *find(KPTResource *resource) const;
+    void removeRequest(ResourceGroupRequest *request) { m_requests.removeRef(request); }
+    void takeRequest(ResourceGroupRequest *request) { m_requests.take(m_requests.findRef(request)); }
+    ResourceGroupRequest *find(ResourceGroup *resource) const;
+    ResourceRequest *find(Resource *resource) const;
     bool isEmpty() const;
     
-    //bool load(QDomElement &element, KPTProject &project);
+    //bool load(QDomElement &element, Project &project);
     void save(QDomElement &element);
 
     void clear() { m_requests.clear(); }
@@ -705,34 +705,34 @@ public:
     * Returns the duration needed to do the effort @param effort
     * starting at @param time.
     */
-    KPTDuration duration(const KPTDateTime &time, const KPTDuration &effort, bool backward=false);
+    Duration duration(const DateTime &time, const Duration &effort, bool backward=false);
     
-    KPTDateTime availableAfter(const KPTDateTime &time);
-    KPTDateTime availableBefore(const KPTDateTime &time);
+    DateTime availableAfter(const DateTime &time);
+    DateTime availableBefore(const DateTime &time);
     
     /**
     * Makes appointments for the task @param task to the requested resources.
     * Assumes that @ref duration() has been run.
     */
-    void makeAppointments(KPTTask *task);
+    void makeAppointments(Task *task);
     /**
      * Reserves the requested resources for the specified interval
      */
-    void reserve(const KPTDateTime &start, const KPTDuration &duration);
+    void reserve(const DateTime &start, const Duration &duration);
 
-    KPTTask &task() const { return m_task; }
+    Task &task() const { return m_task; }
     
 protected:
     struct Interval {
-        KPTDateTime start;
-        KPTDateTime end;
-        KPTDuration effort;
+        DateTime start;
+        DateTime end;
+        Duration effort;
     };
     
 
 private:
-    KPTTask &m_task;
-    QPtrList<KPTResourceGroupRequest> m_requests;
+    Task &m_task;
+    QPtrList<ResourceGroupRequest> m_requests;
 
 #ifndef NDEBUG
 public:

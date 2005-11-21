@@ -35,40 +35,40 @@ class KPrinter;
 namespace KPlato
 {
 
-class KPTView;
-class KPTProject;
-class KPTResource;
-class KPTNode;
+class View;
+class Project;
+class Resource;
+class Node;
 
-class KPTResourceGroup;
-class KPTResource;
+class ResourceGroup;
+class Resource;
 class ResourceItemPrivate;
-class KPTContext;
+class Context;
 
 
- class KPTResourceView : public QSplitter
+ class ResourceView : public QSplitter
 {
     Q_OBJECT
 
  public:
 
-    KPTResourceView( KPTView *view, QWidget *parent );
+    ResourceView( View *view, QWidget *parent );
 
-    //~KPTResourceView();
+    //~ResourceView();
 
     void zoom(double zoom);
 
-    void draw(KPTProject &project);
-    KPTView *mainView();
+    void draw(Project &project);
+    View *mainView();
 
-    KPTResource *currentResource();
+    Resource *currentResource();
 
     void print(KPrinter &printer);
 
-    KPTNode *currentNode() const { return m_currentNode; }
+    Node *currentNode() const { return m_currentNode; }
     
-    virtual bool setContext(KPTContext &context);
-    virtual void getContext(KPTContext &context) const;
+    virtual bool setContext(Context &context);
+    virtual void getContext(Context &context) const;
 
 public slots:
     void resSelectionChanged(QListViewItem *item);
@@ -78,17 +78,17 @@ public slots:
 protected slots:
     void slotItemRenamed(QListViewItem* item, int col, const QString& text);
 private:
-    void drawResources(QListViewItem *parent, KPTResourceGroup *group);
-    void drawAppointments(KPTResource *resource);
+    void drawResources(QListViewItem *parent, ResourceGroup *group);
+    void drawAppointments(Resource *resource);
 
-	KPTView *m_mainview;
+	View *m_mainview;
     int m_defaultFontSize;
 
     ResourceItemPrivate *m_selectedItem;
     QListView *resList;
     QListView *appList;
     
-    KPTNode *m_currentNode;
+    Node *m_currentNode;
     QDate m_start;
     QDate m_end;
 

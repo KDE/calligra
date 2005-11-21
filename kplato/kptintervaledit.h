@@ -31,10 +31,10 @@
 namespace KPlato
 {
 
-class KPTIntervalEditImpl : public KPTIntervalEditBase {
+class IntervalEditImpl : public IntervalEditBase {
     Q_OBJECT
 public:
-    KPTIntervalEditImpl(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent);
+    IntervalEditImpl(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent);
     
     QPtrList<QPair<QTime, QTime> > intervals() const;
     
@@ -51,17 +51,17 @@ signals:
     
 };
 
-class KPTIntervalEdit : public KDialogBase {
+class IntervalEdit : public KDialogBase {
     Q_OBJECT
 public:
-    KPTIntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent=0, const char *name=0);
+    IntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent=0, const char *name=0);
     
     QPtrList<QPair<QTime, QTime> > intervals() const;
     
 private:
-    KPTIntervalEditImpl *dia;
+    IntervalEditImpl *dia;
 };
 
 }  //KPlato namespace
 
-#endif // KPTINTERVALEDIT_H
+#endif // INTERVALEDIT_H

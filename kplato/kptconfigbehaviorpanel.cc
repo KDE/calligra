@@ -41,8 +41,8 @@
 namespace KPlato
 {
 
-KPTConfigBehaviorPanel::KPTConfigBehaviorPanel(KPTBehavior &behavior, QWidget *p, const char *n)
-    : KPTConfigBehaviorPanelBase(p, n),
+ConfigBehaviorPanel::ConfigBehaviorPanel(Behavior &behavior, QWidget *p, const char *n)
+    : ConfigBehaviorPanelBase(p, n),
       m_oldvalues(behavior),
       m_behavior(behavior)
 {
@@ -51,16 +51,16 @@ KPTConfigBehaviorPanel::KPTConfigBehaviorPanel(KPTBehavior &behavior, QWidget *p
     allowOverbooking->setEnabled(false); // not yet used
 }
 
-void KPTConfigBehaviorPanel::setStartValues() {
+void ConfigBehaviorPanel::setStartValues() {
     calculationGroup->setButton(m_oldvalues.calculationMode);
     allowOverbooking->setChecked(m_oldvalues.allowOverbooking);
 }
 
-bool KPTConfigBehaviorPanel::ok() {
+bool ConfigBehaviorPanel::ok() {
     return true;
 }
 
-bool KPTConfigBehaviorPanel::apply() {
+bool ConfigBehaviorPanel::apply() {
     m_behavior.calculationMode = calculationGroup->selectedId();
     m_behavior.allowOverbooking = allowOverbooking->isChecked();
     return true;

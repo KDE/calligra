@@ -31,19 +31,19 @@ class KCommand;
 namespace KPlato
 {
 
-class KPTProject;
-class KPTGroupItem;
-class KPTResourceItem;
-class KPTGroupLBItem;
-class KPTPart;
+class Project;
+class GroupItem;
+class ResourceItem;
+class GroupLBItem;
+class Part;
 
-class KPTResourcesPanel : public ResourcesPanelBase {
+class ResourcesPanel : public ResourcesPanelBase {
     Q_OBJECT
 public:
-    KPTResourcesPanel (QWidget *parent, KPTProject *project);
+    ResourcesPanel (QWidget *parent, Project *project);
 
     bool ok();
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
 
     void sendChanged();
 
@@ -64,15 +64,15 @@ signals:
 	void changed();
 
 private:
-    KPTProject *project;
-    KPTGroupLBItem *m_groupItem;
+    Project *project;
+    GroupLBItem *m_groupItem;
 
-    QPtrList<KPTGroupItem> m_groupItems;
-    QPtrList<KPTGroupItem> m_deletedGroupItems;
+    QPtrList<GroupItem> m_groupItems;
+    QPtrList<GroupItem> m_deletedGroupItems;
 
     bool m_blockResourceRename;
 };
 
 } //KPlato namespace
 
-#endif // KPTPRESOURCESPANEL_H
+#endif // PRESOURCESPANEL_H

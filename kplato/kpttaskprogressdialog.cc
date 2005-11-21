@@ -28,10 +28,10 @@
 namespace KPlato
 {
 
-KPTTaskProgressDialog::KPTTaskProgressDialog(KPTTask &task, KPTStandardWorktime *workTime, QWidget *p)
+TaskProgressDialog::TaskProgressDialog(Task &task, StandardWorktime *workTime, QWidget *p)
     : KDialogBase(Swallow, i18n("Task Progress"), Ok|Cancel, Ok, p, "Task Progress Dialog", true, true)
 {
-    m_panel = new KPTTaskProgressPanel(task, workTime, this);
+    m_panel = new TaskProgressPanel(task, workTime, this);
 
     setMainWidget(m_panel);
     
@@ -40,11 +40,11 @@ KPTTaskProgressDialog::KPTTaskProgressDialog(KPTTask &task, KPTStandardWorktime 
     connect(m_panel, SIGNAL( changed() ), SLOT(slotChanged()));
 }
 
-void KPTTaskProgressDialog::slotChanged() {
+void TaskProgressDialog::slotChanged() {
     enableButtonOK(true);
 }
 
-KCommand *KPTTaskProgressDialog::buildCommand(KPTPart *part) {
+KCommand *TaskProgressDialog::buildCommand(Part *part) {
     KMacroCommand *m = new KMacroCommand(i18n("Modify Task Progress"));
     bool modified = false;
     KCommand *cmd = m_panel->buildCommand(part);
@@ -59,7 +59,7 @@ KCommand *KPTTaskProgressDialog::buildCommand(KPTPart *part) {
     return m;
 }
 
-void KPTTaskProgressDialog::slotOk() {
+void TaskProgressDialog::slotOk() {
     if (!m_panel->ok())
         return;
     accept();

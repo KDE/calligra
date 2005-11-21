@@ -38,18 +38,18 @@ class QTimeEdit;
 namespace KPlato
 {
 
-class KPTCalendarPanel;
+class CalendarPanel;
 
-class KPTCalendarEditBase : public QWidget
+class CalendarEditBase : public QWidget
 {
     Q_OBJECT
 
 public:
-    KPTCalendarEditBase( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
-    ~KPTCalendarEditBase();
+    CalendarEditBase( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+    ~CalendarEditBase();
 
     QGroupBox* groupBox2;
-    KPTCalendarPanel* calendarPanel;
+    CalendarPanel* calendarPanel;
     QButtonGroup* day;
     QComboBox* state;
     QPushButton* bApply;
@@ -61,7 +61,7 @@ public:
     QPushButton* bAddInterval;
 
 protected:
-    QHBoxLayout* KPTCalendarEditBaseLayout;
+    QHBoxLayout* CalendarEditBaseLayout;
     QGridLayout* groupBox2Layout;
     QHBoxLayout* layout10;
     QVBoxLayout* dayLayout;
@@ -77,4 +77,4 @@ protected slots:
 
 }  //KPlato namespace
 
-#endif // KPTCALENDAREDITBASE_H
+#endif // CALENDAREDITBASE_H

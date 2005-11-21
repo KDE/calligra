@@ -36,17 +36,17 @@ class QString;
 namespace KPlato
 {
 
-class KPTDateTime;
-class KPTProject;
+class DateTime;
+class Project;
 
-class KPTCalendarDay {
+class CalendarDay {
 
 public:
-    KPTCalendarDay();
-    KPTCalendarDay(int state);
-    KPTCalendarDay(QDate date, int state=0);
-    KPTCalendarDay(KPTCalendarDay *day);
-    ~KPTCalendarDay();
+    CalendarDay();
+    CalendarDay(int state);
+    CalendarDay(QDate date, int state=0);
+    CalendarDay(CalendarDay *day);
+    ~CalendarDay();
 
     bool load(QDomElement &element);
     void save(QDomElement &element);
@@ -68,14 +68,14 @@ public:
     int state() const { return m_state; }
     void setState(int state) { m_state = state; }
 
-    bool operator==(const KPTCalendarDay *day) const;
-    bool operator!=(const KPTCalendarDay *day) const;
+    bool operator==(const CalendarDay *day) const;
+    bool operator!=(const CalendarDay *day) const;
 
     /**
      * Returns the amount of 'worktime' that can be done on
      * this day between the times start and end.
      */
-    KPTDuration effort(const QTime &start, const QTime &end);
+    Duration effort(const QTime &start, const QTime &end);
 
     /**
      * Returns the actual 'work interval' for the interval start to end.
@@ -95,9 +95,9 @@ public:
     bool hasIntervalBefore(const QTime &time) const;
     bool hasIntervalAfter(const QTime &time) const;
 
-    KPTDuration duration() const;
+    Duration duration() const;
     
-    const KPTCalendarDay &copy(const KPTCalendarDay &day);
+    const CalendarDay &copy(const CalendarDay &day);
 
 private:
     QDate m_date; //NOTE: inValid if used for weekdays
@@ -110,28 +110,28 @@ public:
 #endif
 };
 
-class KPTCalendarWeekdays {
+class CalendarWeekdays {
 
 public:
-    KPTCalendarWeekdays();
-    KPTCalendarWeekdays(KPTCalendarWeekdays *weekdays);
-    ~KPTCalendarWeekdays();
+    CalendarWeekdays();
+    CalendarWeekdays(CalendarWeekdays *weekdays);
+    ~CalendarWeekdays();
 
     bool load(QDomElement &element);
     void save(QDomElement &element);
 
-    void addWeekday(KPTCalendarDay *day) { m_weekdays.append(day); }
-    const QPtrList<KPTCalendarDay> &weekdays() const { return m_weekdays; }
+    void addWeekday(CalendarDay *day) { m_weekdays.append(day); }
+    const QPtrList<CalendarDay> &weekdays() const { return m_weekdays; }
     /**
-     * Returns the pointer to KPTCalendarDay for @day or 0 if not defined. 
+     * Returns the pointer to CalendarDay for @day or 0 if not defined. 
      * day is 0..6.
      */
-    KPTCalendarDay *weekday(int day) const;
-    KPTCalendarDay *weekday(const QDate &date) const { return weekday(date.dayOfWeek()-1); }
+    CalendarDay *weekday(int day) const;
+    CalendarDay *weekday(const QDate &date) const { return weekday(date.dayOfWeek()-1); }
 
-    KPTIntMap map();
+    IntMap map();
     
-    void setWeekday(KPTIntMap::iterator it, int state) { m_weekdays.at(it.key())->setState(state); }
+    void setWeekday(IntMap::iterator it, int state) { m_weekdays.at(it.key())->setState(state); }
 
     int state(const QDate &date) const;
     int state(int weekday) const;
@@ -141,10 +141,10 @@ public:
     void setIntervals(int weekday, QPtrList<QPair<QTime, QTime> >intervals);
     void clearIntervals(int weekday);
     
-    bool operator==(const KPTCalendarWeekdays *weekdays) const;
-    bool operator!=(const KPTCalendarWeekdays *weekdays) const;
+    bool operator==(const CalendarWeekdays *weekdays) const;
+    bool operator!=(const CalendarWeekdays *weekdays) const;
 
-    KPTDuration effort(const QDate &date, const QTime &start, const QTime &end);
+    Duration effort(const QDate &date, const QTime &start, const QTime &end);
     
     /**
      * Returns the actual 'work interval' on the weekday defined by date
@@ -163,18 +163,18 @@ public:
 
     bool hasInterval() const;
 
-    KPTDuration duration() const;
-    KPTDuration duration(int weekday) const;
+    Duration duration() const;
+    Duration duration(int weekday) const;
 
     /// Returns the time when the  weekday starts
     QTime startOfDay(int weekday) const;
     /// Returns the time when the  weekday ends
     QTime endOfDay(int weekday) const;
 
-    const KPTCalendarWeekdays &copy(const KPTCalendarWeekdays &weekdays);
+    const CalendarWeekdays &copy(const CalendarWeekdays &weekdays);
 
 private:
-    QPtrList<KPTCalendarDay> m_weekdays;
+    QPtrList<CalendarDay> m_weekdays;
     double m_workHours;
 
 #ifndef NDEBUG
@@ -183,34 +183,34 @@ public:
 #endif
 };
 
-class KPTCalendarWeeks {
+class CalendarWeeks {
 
 public:
-    KPTCalendarWeeks();
-    KPTCalendarWeeks(KPTCalendarWeeks *weeks);
-    ~KPTCalendarWeeks();
+    CalendarWeeks();
+    CalendarWeeks(CalendarWeeks *weeks);
+    ~CalendarWeeks();
 
     bool load(QDomElement &element);
     void save(QDomElement &element);
 
     void setWeek(int week, int year, int type);
-    void setWeek(KPTWeekMap::iterator it, int state){ m_weeks.insert(it, state); }
-    void setWeeks(KPTWeekMap m){ m_weeks = m; }
-    KPTWeekMap weeks() const { return m_weeks; }
+    void setWeek(WeekMap::iterator it, int state){ m_weeks.insert(it, state); }
+    void setWeeks(WeekMap m){ m_weeks = m; }
+    WeekMap weeks() const { return m_weeks; }
     
-    bool operator==(const KPTCalendarWeeks *w) const { 
+    bool operator==(const CalendarWeeks *w) const { 
         return weeks() == w->weeks(); 
     }
-    bool operator!=(const KPTCalendarWeeks *w) const { 
+    bool operator!=(const CalendarWeeks *w) const { 
         return weeks() != w->weeks(); 
     }
     
     int state(const QDate &date);
 
-    KPTCalendarWeeks &copy(KPTCalendarWeeks &weeks);
+    CalendarWeeks &copy(CalendarWeeks &weeks);
 
 private:
-    KPTWeekMap m_weeks;
+    WeekMap m_weeks;
 
 #ifndef NDEBUG
 public:
@@ -218,9 +218,9 @@ public:
 #endif
 };
 
-class KPTStandardWorktime;
+class StandardWorktime;
 /**
- * KPTCalendar defines the working and nonworking days and hours.
+ * Calendar defines the working and nonworking days and hours.
  * A day can have the three states None (Undefined), NonWorking, or Working.
  * A calendar can have a parent calendar that defines the days that are 
  * undefined in this calendar. If a day is still undefined, it defaults
@@ -244,23 +244,23 @@ class KPTStandardWorktime;
  *  3. Definitions for groups of resources/individual resources.
  *
  */
-class KPTCalendar {
+class Calendar {
 
 public:
-    KPTCalendar();
-    KPTCalendar(QString name, KPTCalendar *parent=0);
-    KPTCalendar(KPTCalendar *calendar);
-    KPTCalendar(KPTStandardWorktime &wt);
-    ~KPTCalendar();
+    Calendar();
+    Calendar(QString name, Calendar *parent=0);
+    Calendar(Calendar *calendar);
+    Calendar(StandardWorktime &wt);
+    ~Calendar();
 
     QString name() const { return m_name; }
     void setName(QString name) { m_name = name; }
 
-    KPTCalendar *parent() const { return m_parent; }
-    void setParent(KPTCalendar *parent) { m_parent = parent; }
+    Calendar *parent() const { return m_parent; }
+    void setParent(Calendar *parent) { m_parent = parent; }
     
-    KPTProject *project() const { return m_project; }
-    void setProject(KPTProject *project);
+    Project *project() const { return m_project; }
+    void setProject(Project *project);
 
     bool isDeleted() const { return m_deleted; }
     void setDeleted(bool yes);
@@ -276,10 +276,10 @@ public:
      * Find the definition for the day date.
      * If skipNone=true the day is NOT returned if it has state None.
      */
-    KPTCalendarDay *findDay(const QDate &date, bool skipNone=false) const;
-    bool addDay(KPTCalendarDay *day) { return m_days.insert(0, day); }
-    bool removeDay(KPTCalendarDay *day) { return m_days.removeRef(day); }
-    const QPtrList<KPTCalendarDay> &days() const { return m_days; }
+    CalendarDay *findDay(const QDate &date, bool skipNone=false) const;
+    bool addDay(CalendarDay *day) { return m_days.insert(0, day); }
+    bool removeDay(CalendarDay *day) { return m_days.removeRef(day); }
+    const QPtrList<CalendarDay> &days() const { return m_days; }
     
     /**
      * Returns the state of definition for the day and week with date in it.
@@ -298,30 +298,30 @@ public:
     int weekState(const QDate &date) const;
     
     void setWeek(int week, int year, int type) { m_weeks->setWeek(week, year, type); }
-    void setWeek(KPTWeekMap::iterator it, int state){ m_weeks->setWeek(it, state); }
-    KPTWeekMap weekMap() { return m_weeks->weeks(); }
-    KPTCalendarWeeks *weeks() { return m_weeks; }
+    void setWeek(WeekMap::iterator it, int state){ m_weeks->setWeek(it, state); }
+    WeekMap weekMap() { return m_weeks->weeks(); }
+    CalendarWeeks *weeks() { return m_weeks; }
     
-    KPTIntMap weekdaysMap() { return m_weekdays->map(); }
-    void setWeekday(KPTIntMap::iterator it, int state) { m_weekdays->setWeekday(it, state); }
-    KPTCalendarWeekdays *weekdays() { return m_weekdays; }
-    KPTCalendarDay *weekday(int day) const { return m_weekdays->weekday(day); }
+    IntMap weekdaysMap() { return m_weekdays->map(); }
+    void setWeekday(IntMap::iterator it, int state) { m_weekdays->setWeekday(it, state); }
+    CalendarWeekdays *weekdays() { return m_weekdays; }
+    CalendarDay *weekday(int day) const { return m_weekdays->weekday(day); }
 
     QString parentId() const { return m_parentId; }
     void setParentId(QString id) { m_parentId = id; }
 
-    bool hasParent(KPTCalendar *cal);
+    bool hasParent(Calendar *cal);
 
     /**
      * Returns the amount of 'worktime' that can be done on
      * the date  date between the times  start and  end.
      */
-    KPTDuration effort(const QDate &date, const QTime &start, const QTime &end) const;
+    Duration effort(const QDate &date, const QTime &start, const QTime &end) const;
     /**
      * Returns the amount of 'worktime' that can be done in the
      * interval from start with the duration  duration
      */
-    KPTDuration effort(const KPTDateTime &start, const KPTDuration &duration) const;
+    Duration effort(const DateTime &start, const Duration &duration) const;
 
     /**
      * Returns the first 'work interval' for the interval 
@@ -329,18 +329,18 @@ public:
      * If no 'work interval' exists, returns the interval (start, end).
      * Use @ref hasInterval() to check if a 'work interval' exists.
      */
-    QPair<KPTDateTime, KPTDateTime> interval(const KPTDateTime &start, const KPTDateTime &end) const;
+    QPair<DateTime, DateTime> interval(const DateTime &start, const DateTime &end) const;
     
     /// Checks if a work interval exists before time
-    bool hasIntervalBefore(const KPTDateTime &time) const;
+    bool hasIntervalBefore(const DateTime &time) const;
     /// Checks if a work interval exists after time
-    bool hasIntervalAfter(const KPTDateTime &time) const;
+    bool hasIntervalAfter(const DateTime &time) const;
 
     /**
      * Returns true if at least a part of a 'work interval' exists 
      * for the interval starting at start and ending at end.
      */
-    bool hasInterval(const KPTDateTime &start, const KPTDateTime &end) const;
+    bool hasInterval(const DateTime &start, const DateTime &end) const;
         
     /**
      * Returns true if at least a part of a 'work interval' exists 
@@ -348,37 +348,37 @@ public:
      */
     bool hasInterval(const QDate &date, const QTime &start, const QTime &end) const;
         
-    KPTDateTime availableAfter(const KPTDateTime &time);
-    KPTDateTime availableBefore(const KPTDateTime &time);
+    DateTime availableAfter(const DateTime &time);
+    DateTime availableBefore(const DateTime &time);
 
-    KPTCalendar *findCalendar() const { return findCalendar(m_id); }
-    KPTCalendar *findCalendar(const QString &id) const;
+    Calendar *findCalendar() const { return findCalendar(m_id); }
+    Calendar *findCalendar(const QString &id) const;
     bool removeId() { return removeId(m_id); }
     bool removeId(const QString &id);
     void insertId(const QString &id);
     
-    KPTDuration parentDayWeekEffort(const QDate &date, const QTime &start, const QTime &end) const;
-    KPTDuration parentWeekdayEffort(const QDate &date, const QTime &start, const QTime &end) const;
+    Duration parentDayWeekEffort(const QDate &date, const QTime &start, const QTime &end) const;
+    Duration parentWeekdayEffort(const QDate &date, const QTime &start, const QTime &end) const;
     int parentDayWeekHasInterval(const QDate &date, const QTime &start, const QTime &end) const;
     bool parentWeekdayHasInterval(const QDate &date, const QTime &start, const QTime &end) const;
     QPair<QTime, QTime> parentDayWeekInterval(const QDate &date, const QTime &start, const QTime &end) const;
     QPair<QTime, QTime> parentWeekdayInterval(const QDate &date, const QTime &start, const QTime &end) const;
 
 protected:
-    const KPTCalendar &copy(KPTCalendar &calendar);
+    const Calendar &copy(Calendar &calendar);
     void init();
     
 private:
     QString m_name;
-    KPTCalendar *m_parent;
-    KPTProject *m_project;
+    Calendar *m_parent;
+    Project *m_project;
     bool m_deleted;
     QString m_id;
     QString m_parentId;
 
-    QPtrList<KPTCalendarDay> m_days;
-    KPTCalendarWeeks *m_weeks;
-    KPTCalendarWeekdays *m_weekdays;
+    QPtrList<CalendarDay> m_days;
+    CalendarWeeks *m_weeks;
+    CalendarWeekdays *m_weekdays;
 
 #ifndef NDEBUG
 public:
@@ -386,33 +386,33 @@ public:
 #endif
 };
 
-class KPTStandardWorktime
+class StandardWorktime
 {
 public:
-    KPTStandardWorktime();
-    KPTStandardWorktime(KPTStandardWorktime* worktime);
-    ~KPTStandardWorktime();
+    StandardWorktime();
+    StandardWorktime(StandardWorktime* worktime);
+    ~StandardWorktime();
     
     /// The work time of a normal year.
-    KPTDuration durationYear() const;
+    Duration durationYear() const;
     /// Set the work time of a normal year.
-    void setYear(KPTDuration year) { m_year = year; }
+    void setYear(Duration year) { m_year = year; }
     
     /// The work time of a normal month
-    KPTDuration durationMonth() const;
+    Duration durationMonth() const;
     /// Set the work time of a normal month
-    void setMonth(KPTDuration month) { m_month = month; }
+    void setMonth(Duration month) { m_month = month; }
     
     /// The work time of a normal week
-    KPTDuration durationWeek() const;
+    Duration durationWeek() const;
     /// Set the work time of a normal week
     void setWeek();
     
     /// The work time of a  weekday
-    KPTDuration durationWeekday(int weekday) const;
+    Duration durationWeekday(int weekday) const;
     
     /// The work time of a normal day
-    KPTDuration durationDay() const;
+    Duration durationDay() const;
     /// The number of work time in a normal day
     void setDay();
     
@@ -423,8 +423,8 @@ public:
     QTime endOfDay(int weekday) const;
     QTime endOfDay(const QDate &date) const;
     
-    KPTCalendarDay day() const { return m_day;}
-    KPTCalendarWeekdays weekdays() const { return m_weekdays;}
+    CalendarDay day() const { return m_day;}
+    CalendarWeekdays weekdays() const { return m_weekdays;}
     
     bool load(QDomElement &element);
     void save(QDomElement &element);
@@ -449,17 +449,17 @@ public:
     void clearIntervals() { m_day.clearIntervals(); }
     void clearIntervals(int weekday) { m_weekdays.clearIntervals(weekday); }
     
-    KPTDateTime workStartAfter(const KPTDateTime &dt) const;
-    KPTDateTime workFinishBefore(const KPTDateTime &dt) const;
+    DateTime workStartAfter(const DateTime &dt) const;
+    DateTime workFinishBefore(const DateTime &dt) const;
 
 protected:
     void init();
     
 private:
-    KPTDuration m_year;
-    KPTDuration m_month;
-    KPTCalendarDay m_day;
-    KPTCalendarWeekdays m_weekdays;
+    Duration m_year;
+    Duration m_month;
+    CalendarDay m_day;
+    CalendarWeekdays m_weekdays;
     
 #ifndef NDEBUG
 public:

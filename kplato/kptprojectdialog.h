@@ -31,14 +31,14 @@
 namespace KPlato
 {
 
-class KPTProject;
-class KPTProjectDialogImpl;
-class KPTResourcesPanel;
+class Project;
+class ProjectDialogImpl;
+class ResourcesPanel;
 
-class KPTProjectDialogImpl : public KPTProjectDialogBase {
+class ProjectDialogImpl : public ProjectDialogBase {
     Q_OBJECT
 public:
-    KPTProjectDialogImpl (QWidget *parent);
+    ProjectDialogImpl (QWidget *parent);
 
 private slots:
     void slotCheckAllFieldsFilled();
@@ -50,10 +50,10 @@ signals:
     void schedulingTypeChanged(int activated);
 };
 
-class KPTProjectDialog : public KDialogBase {
+class ProjectDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTProjectDialog(KPTProject &project, QWidget *parent=0,
+    ProjectDialog(Project &project, QWidget *parent=0,
 		     const char *name=0);
 
 
@@ -62,11 +62,11 @@ protected slots:
     void slotSchedulingChanged(int activated);
 
 private:
-    KPTProject &project;
-    KPTProjectDialogImpl *dia;
-    KPTResourcesPanel *resourcesTab;
+    Project &project;
+    ProjectDialogImpl *dia;
+    ResourcesPanel *resourcesTab;
 };
 
 }  //KPlato namespace
 
-#endif // KPTPROJECTDIALOG_H
+#endif // PROJECTDIALOG_H

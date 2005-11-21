@@ -46,7 +46,7 @@ namespace KPlato
 class CalendarListViewItem : public QListViewItem
 {
 public:
-    CalendarListViewItem(QListView *lv, KPTCalendar *cal,  KPTCalendar *orig=0)
+    CalendarListViewItem(QListView *lv, Calendar *cal,  Calendar *orig=0)
         : QListViewItem(lv, cal->name()) {
 
         calendar = cal;
@@ -68,7 +68,7 @@ public:
         if (original)
             original->setDeleted(true);
     }
-    KPTCalendar *baseCalendar() {
+    Calendar *baseCalendar() {
         if (state == Deleted) return 0;
         return original ? original : calendar;
     }
@@ -76,24 +76,24 @@ public:
         if (!base) return false;
         return base == item || base->hasBaseCalendar(item);
     }
-    void ok(KPTPart *part, KPTProject &p, KMacroCommand *macro) {
+    void ok(Part *part, Project &p, KMacroCommand *macro) {
         if (state == New) {
             //kdDebug()<<k_funcinfo<<"add: "<<calendar->name()<<" p="<<&p<<endl;
             base ? calendar->setParent(base->baseCalendar()) : calendar->setParent(0);
-            macro->addCommand(new KPTCalendarAddCmd(part, &p, calendar));
+            macro->addCommand(new CalendarAddCmd(part, &p, calendar));
             calendar = 0;
         } else if (state == Modified) {
             //kdDebug()<<k_funcinfo<<"modified: "<<calendar->name()<<endl;
-            KPTCalendar *c = base ? base->baseCalendar() : 0;
+            Calendar *c = base ? base->baseCalendar() : 0;
             if (c != original->parent()) {
                 original->setParent(c);
                 //kdDebug()<<k_funcinfo<<"Base modified: "<<c->name()<<endl;
             }
             if (calendar->days() != original->days()) {
                 //kdDebug()<<k_funcinfo<<"Days modified: "<<calendar->name()<<endl;
-                QPtrListIterator<KPTCalendarDay> it = calendar->days();
+                QPtrListIterator<CalendarDay> it = calendar->days();
                 for (; it.current(); ++it) {
-                    KPTCalendarDay *day = original->findDay(it.current()->date());
+                    CalendarDay *day = original->findDay(it.current()->date());
                     if (day) {
                         if (it.current()->state() != day->state()) {
                             day->setState(it.current()->state());
@@ -103,7 +103,7 @@ public:
                             day->setIntervals(it.current()->workingIntervals());
                         }
                     } else {
-                        original->addDay(new KPTCalendarDay(it.current()));
+                        original->addDay(new CalendarDay(it.current()));
                         //kdDebug()<<k_funcinfo<<"Day added: "<<it.current()->date().toString()<<endl;
                     }
                 }
@@ -114,7 +114,7 @@ public:
             }
             if (calendar->weekdays() != original->weekdays()) {
                 //kdDebug()<<k_funcinfo<<"Weekdays modified: "<<calendar->name()<<endl;
-                KPTCalendarDay *day = 0, *org = 0;
+                CalendarDay *day = 0, *org = 0;
                 for (int i=0; i < 7; ++i) {
                     day = calendar->weekdays()->weekday(i);
                     org = original->weekdays()->weekday(i);
@@ -137,23 +137,23 @@ public:
         }
     }
 
-    KPTCalendar *calendar;
-    KPTCalendar *original;
+    Calendar *calendar;
+    Calendar *original;
     int state;
     CalendarListViewItem* base;
 };
 
-KPTCalendarListDialog::KPTCalendarListDialog(KPTProject &p, QWidget *parent, const char *name)
+CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Calendar's Settings"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
 {
     //kdDebug()<<k_funcinfo<<&p<<endl;
-    dia = new KPTCalendarListDialogImpl(p, this);
-    QPtrListIterator<KPTCalendar> it = p.calendars();
+    dia = new CalendarListDialogImpl(p, this);
+    QPtrListIterator<Calendar> it = p.calendars();
     for (; it.current(); ++it) {
         //kdDebug()<<k_funcinfo<<"Add calendar: "<<it.current()->name()<<" deleted="<<it.current()->isDeleted()<<endl;
         if (!it.current()->isDeleted()) {
-            KPTCalendar *c = new KPTCalendar(it.current());
+            Calendar *c = new Calendar(it.current());
             c->setProject(&p);
             new CalendarListViewItem(dia->calendarList, c, it.current());
         }
@@ -175,7 +175,7 @@ KPTCalendarListDialog::KPTCalendarListDialog(KPTProject &p, QWidget *parent, con
     connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOK(bool)));
 }
 
-KMacroCommand *KPTCalendarListDialog::buildCommand(KPTPart *part) {
+KMacroCommand *CalendarListDialog::buildCommand(Part *part) {
     //kdDebug()<<k_funcinfo<<endl;
     KMacroCommand *cmd = new KMacroCommand(i18n("Modify Calendars"));
     bool modified = false;
@@ -183,7 +183,7 @@ KMacroCommand *KPTCalendarListDialog::buildCommand(KPTPart *part) {
     for (; it.current(); ++it) {
         //kdDebug()<<k_funcinfo<<"deleted: "<<it.current()->calendar->name()<<endl;
         if (it.current()->original) {
-            cmd->addCommand(new KPTCalendarDeleteCmd(part, it.current()->original));
+            cmd->addCommand(new CalendarDeleteCmd(part, it.current()->original));
             modified = true;
         }
     }
@@ -202,13 +202,13 @@ KMacroCommand *KPTCalendarListDialog::buildCommand(KPTPart *part) {
     return 0;
 }
 
-void KPTCalendarListDialog::slotOk() {
+void CalendarListDialog::slotOk() {
     accept();
 }
 
 
-KPTCalendarListDialogImpl::KPTCalendarListDialogImpl (KPTProject &p, QWidget *parent) 
-    : KPTCalendarListDialogBase(parent),
+CalendarListDialogImpl::CalendarListDialogImpl (Project &p, QWidget *parent) 
+    : CalendarListDialogBase(parent),
       project(p) {
 
     m_deletedItems.setAutoDelete(true);
@@ -226,7 +226,7 @@ KPTCalendarListDialogImpl::KPTCalendarListDialogImpl (KPTProject &p, QWidget *pa
     connect (baseCalendar, SIGNAL(activated(int)), SLOT(slotBaseCalendarActivated(int)));
 }
 
-void KPTCalendarListDialogImpl::setBaseCalendars() {
+void CalendarListDialogImpl::setBaseCalendars() {
     QListViewItemIterator it(calendarList);
     for (;it.current(); ++it) {
         CalendarListViewItem *item = dynamic_cast<CalendarListViewItem *>(it.current());
@@ -236,15 +236,15 @@ void KPTCalendarListDialogImpl::setBaseCalendars() {
     }
 }
 
-void KPTCalendarListDialogImpl::slotEnableButtonOk(bool on) {
+void CalendarListDialogImpl::slotEnableButtonOk(bool on) {
     emit enableButtonOk(on);
 }
 
-void KPTCalendarListDialogImpl::slotCheckAllFieldsFilled() {
+void CalendarListDialogImpl::slotCheckAllFieldsFilled() {
     emit obligatedFieldsFilled(!editName->text().isEmpty());
 }
 
-void KPTCalendarListDialogImpl::slotBaseCalendarActivated(int id) {
+void CalendarListDialogImpl::slotBaseCalendarActivated(int id) {
     CalendarListViewItem *item = dynamic_cast<CalendarListViewItem*>(calendarList->selectedItem());
     if (item) {
         item->base = baseCalendarList.at(id);
@@ -255,7 +255,7 @@ void KPTCalendarListDialogImpl::slotBaseCalendarActivated(int id) {
     }
 }
 
-void KPTCalendarListDialogImpl::slotSelectionChanged(QListViewItem *listItem) {
+void CalendarListDialogImpl::slotSelectionChanged(QListViewItem *listItem) {
     //kdDebug()<<k_funcinfo<<endl;
     baseCalendarList.clear();
     baseCalendar->clear();
@@ -285,13 +285,13 @@ void KPTCalendarListDialogImpl::slotSelectionChanged(QListViewItem *listItem) {
     }
     calendar->clear();
 }
-void KPTCalendarListDialogImpl::setCalendar(KPTCalendar *cal) {
-    QPtrList<KPTCalendar> list;
+void CalendarListDialogImpl::setCalendar(Calendar *cal) {
+    QPtrList<Calendar> list;
     calendar->setCalendar(cal); 
     calendar->setEnabled(true); 
 }
  
-void KPTCalendarListDialogImpl::slotCalendarModified() {
+void CalendarListDialogImpl::slotCalendarModified() {
     CalendarListViewItem *item = dynamic_cast<CalendarListViewItem*>(calendarList->currentItem());
     if (item) {
         item->setState(CalendarListViewItem::Modified);
@@ -300,7 +300,7 @@ void KPTCalendarListDialogImpl::slotCalendarModified() {
     emit calendarModified();
 }
 
-void KPTCalendarListDialogImpl::slotDeleteClicked() {
+void CalendarListDialogImpl::slotDeleteClicked() {
     CalendarListViewItem *item = static_cast<CalendarListViewItem*>(calendarList->selectedItem());
     if (item) {
         slotSelectionChanged(0);
@@ -313,10 +313,10 @@ void KPTCalendarListDialogImpl::slotDeleteClicked() {
     editName->clear();
 }
 
-void KPTCalendarListDialogImpl::slotAddClicked() {
+void CalendarListDialogImpl::slotAddClicked() {
     if (editName->text().isEmpty())
         return;
-    KPTCalendar *cal = new KPTCalendar(editName->text());
+    Calendar *cal = new Calendar(editName->text());
     cal->setProject(&project);
     CalendarListViewItem *item = new CalendarListViewItem(calendarList, cal);
     item->state = CalendarListViewItem::New;
@@ -326,11 +326,11 @@ void KPTCalendarListDialogImpl::slotAddClicked() {
     emit enableButtonOk(true);
 }
 
-QPtrList<CalendarListViewItem> &KPTCalendarListDialogImpl::deletedItems() {
+QPtrList<CalendarListViewItem> &CalendarListDialogImpl::deletedItems() {
     return m_deletedItems;
 }
 
-CalendarListViewItem *KPTCalendarListDialogImpl::findItem(KPTCalendar *cal) {
+CalendarListViewItem *CalendarListDialogImpl::findItem(Calendar *cal) {
     if (!cal)
         return 0;
     QListViewItemIterator it(calendarList);

@@ -31,11 +31,11 @@
 namespace KPlato
 {
 
-KPTMainProjectDialog::KPTMainProjectDialog(KPTProject &p, QWidget *parent, const char *name)
+MainProjectDialog::MainProjectDialog(Project &p, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Project Settings"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
 {
-    panel = new KPTMainProjectPanel(project, this);
+    panel = new MainProjectPanel(project, this);
     
     setMainWidget(panel);
     enableButtonOK(false);
@@ -44,14 +44,14 @@ KPTMainProjectDialog::KPTMainProjectDialog(KPTProject &p, QWidget *parent, const
 }
 
 
-void KPTMainProjectDialog::slotOk() {
+void MainProjectDialog::slotOk() {
     if (!panel->ok())
         return;
     
     accept();
 }
 
-KCommand *KPTMainProjectDialog::buildCommand(KPTPart *part) {
+KCommand *MainProjectDialog::buildCommand(Part *part) {
     KMacroCommand *m = 0;
     QString c = i18n("Modify main project");
     KCommand *cmd = panel->buildCommand(part);

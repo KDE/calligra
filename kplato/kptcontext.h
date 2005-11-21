@@ -29,16 +29,16 @@ class QDomElement;
 namespace KPlato
 {
 
-class KPTContext {
+class Context {
 public:
-    KPTContext();
-    virtual ~KPTContext();
+    Context();
+    virtual ~Context();
     
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) const;
     
 
-    // KPTView
+    // View
     QString currentView;
     
     // Ganttview
@@ -58,4 +58,4 @@ public:
 
 }  //KPlato namespace
 
-#endif //KPTCONTEXT_H
+#endif //CONTEXT_H

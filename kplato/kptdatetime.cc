@@ -24,27 +24,27 @@
 namespace KPlato
 {
 
-KPTDateTime::KPTDateTime() : QDateTime() {
+DateTime::DateTime() : QDateTime() {
 }
 
-KPTDateTime::KPTDateTime(const QDateTime &dt) : QDateTime(dt.date(), dt.time()) {
+DateTime::DateTime(const QDateTime &dt) : QDateTime(dt.date(), dt.time()) {
 }
 
-KPTDateTime::KPTDateTime(const QDate &date, const QTime &time) : QDateTime(date, time) {
+DateTime::DateTime(const QDate &date, const QTime &time) : QDateTime(date, time) {
 }
 
-void KPTDateTime::add(const KPTDuration &duration) {
+void DateTime::add(const Duration &duration) {
     *this = addSecs(duration.seconds());
     //kdDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
 }
 
-void KPTDateTime::subtract(const KPTDuration &duration) {
+void DateTime::subtract(const Duration &duration) {
     *this = addSecs(-duration.seconds());
     //kdDebug()<<k_funcinfo<<"days,secs: "<<days<<","<<secs<<" gives: "<<toString()<<endl;
 }
 
-KPTDuration KPTDateTime::duration(const KPTDateTime &dt) const {
-    KPTDuration dur;
+Duration DateTime::duration(const DateTime &dt) const {
+    Duration dur;
     if (*this > dt) {
         dur.addDays(dt.daysTo(*this));
         dur.addSeconds(dt.time().secsTo(time()));
@@ -56,24 +56,24 @@ KPTDuration KPTDateTime::duration(const KPTDateTime &dt) const {
     return dur;
 }
 
-KPTDateTime KPTDateTime::operator+(const KPTDuration &duration) const {
-    KPTDateTime d(*this);
+DateTime DateTime::operator+(const Duration &duration) const {
+    DateTime d(*this);
     d.add(duration);
     return d;
 }
 
-KPTDateTime& KPTDateTime::operator+=(const KPTDuration &duration) {
+DateTime& DateTime::operator+=(const Duration &duration) {
     add(duration);
     return *this;
 }
 
-KPTDateTime KPTDateTime::operator-(const KPTDuration &duration) const {
-    KPTDateTime d(*this);
+DateTime DateTime::operator-(const Duration &duration) const {
+    DateTime d(*this);
     d.subtract(duration);
     return d;
 }
 
-KPTDateTime& KPTDateTime::operator-=(const KPTDuration &duration) {
+DateTime& DateTime::operator-=(const Duration &duration) {
     subtract(duration);
     return *this;
 }

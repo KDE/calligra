@@ -28,13 +28,13 @@ class KCommand;
 namespace KPlato
 {
 
-class KPTPart;
-class KPTStandardWorktime;
+class Part;
+class StandardWorktime;
 
-class KPTMilestoneProgressPanelImpl : public KPTMilestoneProgressPanelBase {
+class MilestoneProgressPanelImpl : public MilestoneProgressPanelBase {
     Q_OBJECT
 public:
-    KPTMilestoneProgressPanelImpl(QWidget *parent=0, const char *name=0, WFlags f=0);
+    MilestoneProgressPanelImpl(QWidget *parent=0, const char *name=0, WFlags f=0);
     
     void enableWidgets();
 
@@ -46,20 +46,20 @@ public slots:
     void slotFinishedChanged(bool state);
 };
 
-class KPTMilestoneProgressPanel : public KPTMilestoneProgressPanelImpl {
+class MilestoneProgressPanel : public MilestoneProgressPanelImpl {
     Q_OBJECT
 public:
-    KPTMilestoneProgressPanel(KPTTask &task, QWidget *parent=0, const char *name=0);
+    MilestoneProgressPanel(Task &task, QWidget *parent=0, const char *name=0);
 
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
     
     bool ok();
 
 private:
-    KPTTask &m_task;
-    struct KPTTask::Progress m_progress;
+    Task &m_task;
+    struct Task::Progress m_progress;
 };
 
 }  //KPlato namespace
 
-#endif // KPTMILESTONEPROGRESSPANEL_H
+#endif // MILESTONEPROGRESSPANEL_H

@@ -73,7 +73,7 @@ do \
     m_fields[f].unit = u; \
 } while (0)
     
-void KPTDurationWidget::init()
+void DurationWidget::init()
 {
     // Use the user's decimal point!
     m_decimalPoint = tr2i18n(".");
@@ -110,13 +110,13 @@ void KPTDurationWidget::init()
     setField(4, m_ss, 1000, m_ms, "%03u", NULL, 0, m_dot, 0, 0, m_msUnit);
 }
 
-void KPTDurationWidget::destroy()
+void DurationWidget::destroy()
 {
     delete m_fields;
     //delete m_validator;  //QWidget takes care of this
 }
 
-void KPTDurationWidget::setValue(const KPlato::KPTDuration &newDuration)
+void DurationWidget::setValue(const KPlato::Duration &newDuration)
 {
     int i;
     unsigned v[5];
@@ -143,7 +143,7 @@ void KPTDurationWidget::setValue(const KPlato::KPTDuration &newDuration)
     emit valueChanged();
 }
 
-KPTDuration KPTDurationWidget::value() const
+Duration DurationWidget::value() const
 {
     int i;
     unsigned v[5];
@@ -162,41 +162,41 @@ KPTDuration KPTDurationWidget::value() const
         if (m_fields[i].current->isHidden())
             v[i] = 0;
     }
-    KPlato::KPTDuration tmp(v[0], v[1], v[2], v[3], v[4]);
+    KPlato::Duration tmp(v[0], v[1], v[2], v[3], v[4]);
     return tmp;
 }
 
-void KPTDurationWidget::dddLostFocus()
+void DurationWidget::dddLostFocus()
 {
     handleLostFocus(0);
     emit valueChanged();
 }
 
-void KPTDurationWidget::hhLostFocus( )
+void DurationWidget::hhLostFocus( )
 {
     handleLostFocus(1);
     emit valueChanged();
 }
 
-void KPTDurationWidget::mmLostFocus()
+void DurationWidget::mmLostFocus()
 {
     handleLostFocus(2);
     emit valueChanged();
 }
 
-void KPTDurationWidget::ssLostFocus()
+void DurationWidget::ssLostFocus()
 {
     handleLostFocus(3);
     emit valueChanged();
 }
 
-void KPTDurationWidget::msLostFocus()
+void DurationWidget::msLostFocus()
 {
     handleLostFocus(4);
     emit valueChanged();
 }
 
-void KPTDurationWidget::handleLostFocus(
+void DurationWidget::handleLostFocus(
     int field)
 {
     // Get our own info, and that of our left and right neighbours.
@@ -247,7 +247,7 @@ void KPTDurationWidget::handleLostFocus(
 }
 
 // Set which fields are visible.
-void KPTDurationWidget::setVisibleFields( int fieldMask )
+void DurationWidget::setVisibleFields( int fieldMask )
 {
     int i;
     for (i = 0; i < 5; i++)
@@ -283,7 +283,7 @@ void KPTDurationWidget::setVisibleFields( int fieldMask )
 }
 
 // Retreive the visible fields.
-int KPTDurationWidget::visibleFields()
+int DurationWidget::visibleFields()
 {
     int i;
     int fieldMask = 0;
@@ -297,22 +297,22 @@ int KPTDurationWidget::visibleFields()
     return fieldMask;
 }
 
-void KPTDurationWidget::setFieldLeftscale(int f, unsigned ls)
+void DurationWidget::setFieldLeftscale(int f, unsigned ls)
 {
     m_fields[f].leftScale = ls;
 }
 
-void KPTDurationWidget::setFieldRightscale(int f, unsigned rs)
+void DurationWidget::setFieldRightscale(int f, unsigned rs)
 {
     m_fields[f].rightScale = rs;
 }
 
-void KPTDurationWidget::setFieldScale(int f, unsigned scale)
+void DurationWidget::setFieldScale(int f, unsigned scale)
 {
     m_fields[f].scale = scale;
 }
 
-void KPTDurationWidget::setFieldUnit(int f, QString unit)
+void DurationWidget::setFieldUnit(int f, QString unit)
 {
     if (m_fields[f].unit)
     {

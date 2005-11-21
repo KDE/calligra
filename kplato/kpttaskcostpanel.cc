@@ -34,8 +34,8 @@
 namespace KPlato
 {
 
-KPTTaskCostPanel::KPTTaskCostPanel(KPTTask &task, KPTAccounts &accounts, QWidget *p, const char *n)
-    : KPTTaskCostPanelImpl(p, n),
+TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const char *n)
+    : TaskCostPanelImpl(p, n),
       m_task(task),
       m_accounts(accounts) {
       
@@ -44,7 +44,7 @@ KPTTaskCostPanel::KPTTaskCostPanel(KPTTask &task, KPTAccounts &accounts, QWidget
     setStartValues(task);
 }
 
-void KPTTaskCostPanel::setStartValues(KPTTask &task) {
+void TaskCostPanel::setStartValues(Task &task) {
     runningAccount->insertStringList(m_accountList);
     if (task.runningAccount()) {
         setCurrentItem(runningAccount, task.runningAccount()->name());
@@ -63,7 +63,7 @@ void KPTTaskCostPanel::setStartValues(KPTTask &task) {
     }
 }
 
-void KPTTaskCostPanel::setCurrentItem(QComboBox *box, QString name) {
+void TaskCostPanel::setCurrentItem(QComboBox *box, QString name) {
     box->setCurrentItem(0);
     for (int i = 0; i < box->count(); ++i) {
         if (name == box->text(i)) {
@@ -73,33 +73,33 @@ void KPTTaskCostPanel::setCurrentItem(QComboBox *box, QString name) {
     }
 }
 
-KCommand *KPTTaskCostPanel::buildCommand(KPTPart *part) {
+KCommand *TaskCostPanel::buildCommand(Part *part) {
     KMacroCommand *cmd = new KMacroCommand(i18n("Modify Task Cost"));
     bool modified = false;
     
     if (!m_task.runningAccount() ||
         (m_task.runningAccount()->name() != runningAccount->currentText())) {
-        cmd->addCommand(new KPTNodeModifyRunningAccountCmd(part, m_task, m_accounts.findAccount(runningAccount->currentText())));
+        cmd->addCommand(new NodeModifyRunningAccountCmd(part, m_task, m_accounts.findAccount(runningAccount->currentText())));
         modified = true;
     }
     if (!m_task.startupAccount() ||
         (m_task.startupAccount()->name() != startupAccount->currentText())) {
-        cmd->addCommand(new KPTNodeModifyStartupAccountCmd(part, m_task,  m_accounts.findAccount(startupAccount->currentText())));
+        cmd->addCommand(new NodeModifyStartupAccountCmd(part, m_task,  m_accounts.findAccount(startupAccount->currentText())));
         modified = true;
     }
     if (!m_task.shutdownAccount() ||
         (m_task.shutdownAccount()->name() != shutdownAccount->currentText())) {
-        cmd->addCommand(new KPTNodeModifyShutdownAccountCmd(part, m_task,  m_accounts.findAccount(shutdownAccount->currentText())));
+        cmd->addCommand(new NodeModifyShutdownAccountCmd(part, m_task,  m_accounts.findAccount(shutdownAccount->currentText())));
         modified = true;
     }
     double money = KGlobal::locale()->readMoney(startupCost->text());
     if (money != m_task.startupCost()) {
-        cmd->addCommand(new KPTNodeModifyStartupCostCmd(part, m_task, money));
+        cmd->addCommand(new NodeModifyStartupCostCmd(part, m_task, money));
         modified = true;
     }
     money = KGlobal::locale()->readMoney(shutdownCost->text());
     if (money != m_task.shutdownCost()) {
-        cmd->addCommand(new KPTNodeModifyShutdownCostCmd(part, m_task, money));
+        cmd->addCommand(new NodeModifyShutdownCostCmd(part, m_task, money));
         modified = true;
     }
     if (!modified) {
@@ -109,7 +109,7 @@ KCommand *KPTTaskCostPanel::buildCommand(KPTPart *part) {
     return cmd;
 }
 
-bool KPTTaskCostPanel::ok() {
+bool TaskCostPanel::ok() {
     if (runningAccount->currentItem() == 0 ||
         m_accounts.findAccount(runningAccount->currentText()) == 0) {
         //message
@@ -129,8 +129,8 @@ bool KPTTaskCostPanel::ok() {
 }
 
 
-KPTTaskCostPanelImpl::KPTTaskCostPanelImpl(QWidget *p, const char *n)
-    : KPTTaskCostPanelBase(p, n)
+TaskCostPanelImpl::TaskCostPanelImpl(QWidget *p, const char *n)
+    : TaskCostPanelBase(p, n)
 {
     connect(runningAccount, SIGNAL(activated(int)), SLOT(slotChanged()));
     connect(startupAccount, SIGNAL(activated(int)), SLOT(slotChanged()));
@@ -139,7 +139,7 @@ KPTTaskCostPanelImpl::KPTTaskCostPanelImpl(QWidget *p, const char *n)
     connect(shutdownCost, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
 }
 
-void KPTTaskCostPanelImpl::slotChanged() {
+void TaskCostPanelImpl::slotChanged() {
     emit changed();
 }
 

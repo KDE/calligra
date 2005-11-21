@@ -11,76 +11,76 @@ namespace KPlato
 
 /************************************************
  *
- * KPtViewIface
+ * ViewIface
  *
  ************************************************/
 
-KPtViewIface::KPtViewIface( KPTView* t )
+ViewIface::ViewIface( View* t )
     : KoViewIface( t )
 {
     m_view = t;
 }
 
-KPtViewIface::~KPtViewIface()
+ViewIface::~ViewIface()
 {
 }
 
-void KPtViewIface::slotEditResource()
+void ViewIface::slotEditResource()
 {
   m_view->slotEditResource();
 }
 
-void KPtViewIface::slotEditCut()
+void ViewIface::slotEditCut()
 {
   m_view->slotEditCut();
 }
 
-void KPtViewIface::slotEditCopy()
+void ViewIface::slotEditCopy()
 {
   m_view->slotEditCopy();
 }
 
-void KPtViewIface::slotEditPaste()
+void ViewIface::slotEditPaste()
 {
   m_view->slotEditPaste();
 }
 
-void KPtViewIface::slotViewGantt()
+void ViewIface::slotViewGantt()
 {
   m_view->slotViewGantt();
 }
 
-void KPtViewIface::slotViewPert()
+void ViewIface::slotViewPert()
 {
   m_view->slotViewPert();
 }
 
-void KPtViewIface::slotViewResources()
+void ViewIface::slotViewResources()
 {
   m_view->slotViewResources();
 }
 
-void KPtViewIface::slotAddTask()
+void ViewIface::slotAddTask()
 {
   m_view->slotAddTask();
 }
 
-void KPtViewIface::slotAddSubTask()
+void ViewIface::slotAddSubTask()
 {
   m_view->slotAddSubTask();
 }
 
-void KPtViewIface::slotAddMilestone()
+void ViewIface::slotAddMilestone()
 {
   m_view->slotAddMilestone();
 }
 
-void KPtViewIface::slotProjectEdit()
+void ViewIface::slotProjectEdit()
 {
   m_view->slotProjectEdit();
 }
 
-void KPtViewIface::slotConfigure()
+void ViewIface::slotConfigure()
 {
   m_view->slotConfigure();
 }

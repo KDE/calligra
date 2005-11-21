@@ -30,20 +30,20 @@ namespace KPlato
 {
 
 class RelationPanel;
-class KPTDurationWidget;
+class DurationWidget;
 
-class KPTNode;
-class KPTRelation;
-class KPTPart;
-class KPTModifyRelationTypeCmd;
+class Node;
+class Relation;
+class Part;
+class ModifyRelationTypeCmd;
 
-class KPTAddRelationDialog : public KDialogBase 
+class AddRelationDialog : public KDialogBase 
 {
     Q_OBJECT
 public:
-    KPTAddRelationDialog(KPTRelation *rel, QWidget *p, QString caption=QString::null, int buttons=Ok|Cancel, const char *n=0);
+    AddRelationDialog(Relation *rel, QWidget *p, QString caption=QString::null, int buttons=Ok|Cancel, const char *n=0);
     
-    virtual KCommand *buildCommand(KPTPart *part);
+    virtual KCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();
@@ -53,18 +53,18 @@ protected slots:
 protected:
     RelationPanel *m_panel;
     QButtonGroup *relationType;
-    KPTRelation *m_relation;
-    KPTDurationWidget *m_lag;
+    Relation *m_relation;
+    DurationWidget *m_lag;
 };
 
 
-class KPTModifyRelationDialog : public KPTAddRelationDialog 
+class ModifyRelationDialog : public AddRelationDialog 
 {
     Q_OBJECT
 public:
-    KPTModifyRelationDialog(KPTRelation *rel, QWidget *p=0, const char *n=0);
+    ModifyRelationDialog(Relation *rel, QWidget *p=0, const char *n=0);
 
-    virtual KCommand *buildCommand(KPTPart *part);
+    virtual KCommand *buildCommand(Part *part);
     bool relationIsDeleted() { return m_deleted; }
     
 protected slots:
@@ -76,4 +76,4 @@ private:
 
 }  //KPlato namespace
 
-#endif // KPTRELATIONDIALOG_H
+#endif // RELATIONDIALOG_H

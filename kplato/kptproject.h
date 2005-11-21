@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef kptproject_h
-#define kptproject_h
+#ifndef KPTPROJECT_H
+#define KPTPROJECT_H
 
 #include "kptnode.h"
 
@@ -35,19 +35,19 @@
 namespace KPlato
 {
 
-class KPTPart;
-class KPTStandardWorktime;
+class Part;
+class StandardWorktime;
 
 //#define DEBUGPERT
 /**
- * KPTProject is the main node in a project, it contains child nodes and
+ * Project is the main node in a project, it contains child nodes and
  * possibly sub-projects. A sub-project is just another instantion of this
  * node however.
  */
-class KPTProject : public KPTNode {
+class Project : public Node {
 public:
-    KPTProject(KPTNode *parent = 0);
-    ~KPTProject();
+    Project(Node *parent = 0);
+    ~Project();
 
     /// Returns the node type. Can be Type_Project or Type_Subproject.
     virtual int type() const;
@@ -57,63 +57,63 @@ public:
      *
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      */
-    void calculate(KPTEffort::Use use=KPTEffort::Use_Expected);
+    void calculate(Effort::Use use=Effort::Use_Expected);
      
     virtual bool calcCriticalPath();
     
     ///Returns the duration calculated as latestFinish - earliestStart.
-    KPTDuration *getExpectedDuration();
+    Duration *getExpectedDuration();
 
     /**
      * Instead of using the expected duration, generate a random value using
      * the Distribution of each Task. This can be used for Monte-Carlo
      * estimation of Project duration.
      */
-    KPTDuration *getRandomDuration();
+    Duration *getRandomDuration();
 
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) ;
 
-    KPTDateTime getEarliestStart() const { return earliestStart; }
-    KPTDateTime getLatestFinish() const { return latestFinish; }
+    DateTime getEarliestStart() const { return earliestStart; }
+    DateTime getLatestFinish() const { return latestFinish; }
 
-    QPtrList<KPTResourceGroup> &resourceGroups();
-    virtual void addResourceGroup(KPTResourceGroup *resource);
-    virtual void insertResourceGroup(unsigned int index, KPTResourceGroup *resource);
-    void removeResourceGroup(KPTResourceGroup *resource);
+    QPtrList<ResourceGroup> &resourceGroups();
+    virtual void addResourceGroup(ResourceGroup *resource);
+    virtual void insertResourceGroup(unsigned int index, ResourceGroup *resource);
+    void removeResourceGroup(ResourceGroup *resource);
     void removeResourceGroup(int number);
-    KPTResourceGroup *takeResourceGroup(KPTResourceGroup *resource)
+    ResourceGroup *takeResourceGroup(ResourceGroup *resource)
         { return m_resourceGroups.take(m_resourceGroups.findRef(resource)); }
 
-    bool addTask( KPTNode* task, KPTNode* position );
-    bool addSubTask( KPTNode* task, KPTNode* position );
-    bool canIndentTask(KPTNode* node);
-    bool indentTask( KPTNode* node );
-    bool canUnindentTask( KPTNode* node );
-    bool unindentTask( KPTNode* node );
-    bool canMoveTaskUp( KPTNode* node );
-    bool moveTaskUp( KPTNode* node );
-    bool canMoveTaskDown( KPTNode* node );
-    bool moveTaskDown( KPTNode* node );
+    bool addTask( Node* task, Node* position );
+    bool addSubTask( Node* task, Node* position );
+    bool canIndentTask(Node* node);
+    bool indentTask( Node* node );
+    bool canUnindentTask( Node* node );
+    bool unindentTask( Node* node );
+    bool canMoveTaskUp( Node* node );
+    bool moveTaskUp( Node* node );
+    bool canMoveTaskDown( Node* node );
+    bool moveTaskDown( Node* node );
 
     /// Returns the resourcegroup with identity id.
-    KPTResourceGroup *group(QString id);
+    ResourceGroup *group(QString id);
     /// Returns the resource with identity id.
-    KPTResource *resource(QString id);
+    Resource *resource(QString id);
 
     /// Returns the total planned effort for this project (or subproject) 
-    virtual KPTDuration plannedEffort();
+    virtual Duration plannedEffort();
     /// Returns the total planned effort for this project (or subproject) on date
-    virtual KPTDuration plannedEffort(const QDate &date);
+    virtual Duration plannedEffort(const QDate &date);
     /// Returns the planned effort up to and including date
-    virtual KPTDuration plannedEffortTo(const QDate &date);
+    virtual Duration plannedEffortTo(const QDate &date);
     
     /// Returns the actual effort 
-    virtual KPTDuration actualEffort();
+    virtual Duration actualEffort();
     /// Returns the actual effort on date
-    virtual KPTDuration actualEffort(const QDate &date);
+    virtual Duration actualEffort(const QDate &date);
     /// Returns the actual effort up to and including date
-    virtual KPTDuration actualEffortTo(const QDate &date);
+    virtual Duration actualEffortTo(const QDate &date);
     /**
      * Returns the total planned cost for this project
      */
@@ -132,60 +132,60 @@ public:
     /// Actual cost up to and including date
     virtual double actualCostTo(const QDate &date);
 
-    KPTCalendar *defaultCalendar() { return m_defaultCalendar; }
-    const QPtrList<KPTCalendar> &calendars() const { return m_calendars; }
-    void addCalendar(KPTCalendar *calendar);
+    Calendar *defaultCalendar() { return m_defaultCalendar; }
+    const QPtrList<Calendar> &calendars() const { return m_calendars; }
+    void addCalendar(Calendar *calendar);
     /// Returns the calendar with identity id.
-    KPTCalendar *calendar(const QString id) const;
+    Calendar *calendar(const QString id) const;
 
     /**
      * Defines the length of days, weeks, months and years.
      * Used for estimation and calculation of effort, 
      * and presentation in gantt chart.
      */    
-    KPTStandardWorktime *standardWorktime() { return m_standardWorktime; }
-    void addStandardWorktime(KPTStandardWorktime * worktime); //FIXME
-    void addDefaultCalendar(KPTStandardWorktime * worktime); //FIXME
+    StandardWorktime *standardWorktime() { return m_standardWorktime; }
+    void addStandardWorktime(StandardWorktime * worktime); //FIXME
+    void addDefaultCalendar(StandardWorktime * worktime); //FIXME
 
     /// Check if node par can be linked to node child.
-    bool legalToLink(KPTNode *par, KPTNode *child);
+    bool legalToLink(Node *par, Node *child);
     
     /// Find the node with identity id
-    virtual KPTNode *findNode(const QString &id) const 
+    virtual Node *findNode(const QString &id) const 
         { return (m_parent ? m_parent->findNode(id) : nodeIdDict.find(id)); }
     /// Remove the node with identity id from the register
     virtual bool removeId(const QString &id) 
         { return (m_parent ? m_parent->removeId(id) : nodeIdDict.remove(id)); }
     /// Insert the node with identity id
-    virtual void insertId(const QString &id, const KPTNode *node)
+    virtual void insertId(const QString &id, const Node *node)
         { m_parent ? m_parent->insertId(id, node) : nodeIdDict.insert(id, node); }
     
-    KPTResourceGroup *findResourceGroup(const QString &id) const 
+    ResourceGroup *findResourceGroup(const QString &id) const 
         { return resourceGroupIdDict.find(id); }
     /// Remove the resourcegroup with identity id from the register
     bool removeResourceGroupId(const QString &id) 
         { return resourceGroupIdDict.remove(id); }
     /// Insert the resourcegroup with identity id
-    void insertResourceGroupId(const QString &id, const KPTResourceGroup* group) 
+    void insertResourceGroupId(const QString &id, const ResourceGroup* group) 
         { resourceGroupIdDict.insert(id, group); }
     
-    KPTResource *findResource(const QString &id) const 
+    Resource *findResource(const QString &id) const 
         { return resourceIdDict.find(id); }
     /// Remove the resource with identity id from the register
     bool removeResourceId(const QString &id) 
         { return resourceIdDict.remove(id); }
     /// Insert the resource with identity id
-    void insertResourceId(const QString &id, const KPTResource *resource) 
+    void insertResourceId(const QString &id, const Resource *resource) 
         { resourceIdDict.insert(id, resource); }
 
     /// Find the calendar with identity id
-    virtual KPTCalendar *findCalendar(const QString &id) const 
+    virtual Calendar *findCalendar(const QString &id) const 
         { return calendarIdDict.find(id); }
     /// Remove the calendar with identity id from the register
     virtual bool removeCalendarId(const QString &id) 
         { return calendarIdDict.remove(id); }
     /// Insert the calendar with identity id
-    virtual void insertCalendarId(const QString &id, const KPTCalendar *calendar)
+    virtual void insertCalendarId(const QString &id, const Calendar *calendar)
         { calendarIdDict.insert(id, calendar); }
     
     /**
@@ -198,44 +198,44 @@ public:
      */
     bool isBaselined() const { return m_baselined; }
     
-    void generateWBS(int count, KPTWBSDefinition &def, QString wbs=QString());
+    void generateWBS(int count, WBSDefinition &def, QString wbs=QString());
 
-    KPTAccounts &accounts() { return m_accounts; }
+    Accounts &accounts() { return m_accounts; }
     
 protected:
-    KPTAccounts m_accounts;
-    QPtrList<KPTResourceGroup> m_resourceGroups;
+    Accounts m_accounts;
+    QPtrList<ResourceGroup> m_resourceGroups;
 
-    KPTCalendar *m_defaultCalendar;
-    QPtrList<KPTCalendar> m_calendars;
+    Calendar *m_defaultCalendar;
+    QPtrList<Calendar> m_calendars;
 
-    KPTStandardWorktime *m_standardWorktime;
+    StandardWorktime *m_standardWorktime;
         
-    KPTDateTime calculateForward(int use);
-    KPTDateTime calculateBackward(int use);
-    KPTDateTime &scheduleForward(KPTDateTime &earliest, int use);
-    KPTDateTime &scheduleBackward(KPTDateTime &latest, int use);
+    DateTime calculateForward(int use);
+    DateTime calculateBackward(int use);
+    DateTime &scheduleForward(DateTime &earliest, int use);
+    DateTime &scheduleBackward(DateTime &latest, int use);
     void adjustSummarytask();
 
     void initiateCalculation();
-    void initiateCalculationLists(QPtrList<KPTNode> &startnodes, QPtrList<KPTNode> &endnodes, QPtrList<KPTNode> &summarytasks);
+    void initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node> &endnodes, QPtrList<Node> &summarytasks);
 
-    bool legalParents(KPTNode *par, KPTNode *child);
-    bool legalChildren(KPTNode *par, KPTNode *child);
+    bool legalParents(Node *par, Node *child);
+    bool legalChildren(Node *par, Node *child);
     
 private:
     void init();
     
-    QPtrList<KPTNode> m_startNodes;
-    QPtrList<KPTNode> m_endNodes;
-    QPtrList<KPTNode> m_summarytasks;
+    QPtrList<Node> m_startNodes;
+    QPtrList<Node> m_endNodes;
+    QPtrList<Node> m_summarytasks;
     
     bool m_baselined;
     
-    QDict<KPTResourceGroup> resourceGroupIdDict;
-    QDict<KPTResource> resourceIdDict;
-    QDict<KPTNode> nodeIdDict;        
-    QDict<KPTCalendar> calendarIdDict;
+    QDict<ResourceGroup> resourceGroupIdDict;
+    QDict<Resource> resourceIdDict;
+    QDict<Node> nodeIdDict;        
+    QDict<Calendar> calendarIdDict;
     
 #ifndef NDEBUG
 #include <qcstring.h>
@@ -244,7 +244,7 @@ public:
     void printCalendarDebug(QCString indent="");
 #ifdef DEBUGPERT
     static void pert_test();
-    static void printTree(KPTNode *n, QString s);
+    static void printTree(Node *n, QString s);
 #endif
 #endif
 };

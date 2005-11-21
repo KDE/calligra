@@ -34,20 +34,20 @@ class KCommand;
 namespace KPlato
 {
 
-class KPTView;
-class KPTProject;
-class KPTProjectDialog;
-class KPTResourceGroup;
-class KPTContext;
+class View;
+class Project;
+class ProjectDialog;
+class ResourceGroup;
+class Context;
 
-class KPTPart : public KoDocument {
+class Part : public KoDocument {
     Q_OBJECT
 
 public:
-    KPTPart(QWidget *parentWidget = 0, const char *widgetName = 0,
+    Part(QWidget *parentWidget = 0, const char *widgetName = 0,
 	    QObject* parent = 0, const char* name = 0,
 	    bool singleViewMode = false);
-    ~KPTPart();
+    ~Part();
 
     virtual void paintContent(QPainter& painter, const QRect& rect,
 			      bool transparent = FALSE,
@@ -60,8 +60,8 @@ public:
      */
     void editProject();
 
-    KPTProject &getProject() { return *m_project; }
-    const KPTProject &getProject() const { return *m_project; }
+    Project &getProject() { return *m_project; }
+    const Project &getProject() const { return *m_project; }
 
     // The load and save functions. Look in the file kplato.dtd for info
     virtual bool loadXML(QIODevice *, const QDomDocument &document);
@@ -74,10 +74,10 @@ public:
     
     void setCommandType(int type);
     
-    KPTConfig &config() { return m_config; }
+    Config &config() { return m_config; }
     
     void generateWBS();
-    KPTWBSDefinition &wbsDefinition() { return m_wbsDefinition; }
+    WBSDefinition &wbsDefinition() { return m_wbsDefinition; }
     
 protected:
     virtual KoView* createViewInstance(QWidget* parent, const char* name);
@@ -87,16 +87,16 @@ protected slots:
     void slotCommandExecuted();
 
 private:
-    KPTProject *m_project;
-    KPTProjectDialog *m_projectDialog;
-    KPTView *m_view;
+    Project *m_project;
+    ProjectDialog *m_projectDialog;
+    View *m_view;
     KoCommandHistory *m_commandHistory;
     bool m_update, m_calculate, m_baseline;
     
-    KPTConfig m_config;
-    KPTContext *m_context;
+    Config m_config;
+    Context *m_context;
     
-    KPTWBSDefinition m_wbsDefinition;
+    WBSDefinition m_wbsDefinition;
 };
 
 }  //KPlato namespace

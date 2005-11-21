@@ -34,11 +34,11 @@
 namespace KPlato
 {
 
-KPTIntervalEdit::KPTIntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent, const char *name)
+IntervalEdit::IntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Edit Interval"), Ok|Cancel, Ok, parent, name, true, true)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    dia = new KPTIntervalEditImpl(intervals, this);
+    dia = new IntervalEditImpl(intervals, this);
 
     setMainWidget(dia);
     enableButtonOK(false);
@@ -47,13 +47,13 @@ KPTIntervalEdit::KPTIntervalEdit(const QPtrList<QPair<QTime, QTime> > &intervals
     connect(dia, SIGNAL(enableButtonOk(bool)), SLOT(enableButtonOK(bool)));
 }
 
-QPtrList<QPair<QTime, QTime> > KPTIntervalEdit::intervals() const {
+QPtrList<QPair<QTime, QTime> > IntervalEdit::intervals() const {
     return dia->intervals();
 }
 
 
-KPTIntervalEditImpl::KPTIntervalEditImpl(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent)
-    : KPTIntervalEditBase(parent) {
+IntervalEditImpl::IntervalEditImpl(const QPtrList<QPair<QTime, QTime> > &intervals, QWidget *parent)
+    : IntervalEditBase(parent) {
 
     intervalList->setSortColumn(0);
     QPtrListIterator<QPair<QTime, QTime> > it = intervals;
@@ -68,24 +68,24 @@ KPTIntervalEditImpl::KPTIntervalEditImpl(const QPtrList<QPair<QTime, QTime> > &i
 }
 
 
-void KPTIntervalEditImpl::slotEnableButtonOk(bool on) {
+void IntervalEditImpl::slotEnableButtonOk(bool on) {
     emit enableButtonOk(on);
 }
 
-void KPTIntervalEditImpl::slotCheckAllFieldsFilled() {
+void IntervalEditImpl::slotCheckAllFieldsFilled() {
     emit obligatedFieldsFilled(true); //FIXME
 }
 
-void KPTIntervalEditImpl::slotClearClicked() {
+void IntervalEditImpl::slotClearClicked() {
     intervalList->clear();
 }
 
-void KPTIntervalEditImpl::slotAddIntervalClicked() {
+void IntervalEditImpl::slotAddIntervalClicked() {
     new IntervalItem(intervalList, startTime->time(), endTime->time());
     slotEnableButtonOk(true);
 }
 
-void KPTIntervalEditImpl::slotIntervalSelectionChanged(QListViewItem *item) {
+void IntervalEditImpl::slotIntervalSelectionChanged(QListViewItem *item) {
     IntervalItem *ii = dynamic_cast<IntervalItem *>(item);
     if (!ii)
         return;
@@ -93,7 +93,7 @@ void KPTIntervalEditImpl::slotIntervalSelectionChanged(QListViewItem *item) {
     endTime->setTime(ii->interval().second);
 }
 
-QPtrList<QPair<QTime, QTime> > KPTIntervalEditImpl::intervals() const {
+QPtrList<QPair<QTime, QTime> > IntervalEditImpl::intervals() const {
     QPtrList<QPair<QTime, QTime> > l;
     QListViewItem *i = intervalList->firstChild();
     for (; i; i = i->nextSibling()) {

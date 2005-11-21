@@ -29,7 +29,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-void KPTConfigBehaviorPanelBase::slotChanged()
+void ConfigBehaviorPanelBase::slotChanged()
 {
     emit changed();
 }

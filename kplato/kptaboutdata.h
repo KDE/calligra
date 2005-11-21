@@ -30,15 +30,16 @@ namespace KPlato
 static const char* KPLATO_DESCRIPTION=I18N_NOOP("KPlato - KDE Planning Tool");
 static const char* KPLATO_VERSION="0.0.1";
 
-KAboutData * newKPTAboutData()
+KAboutData * newAboutData()
 {
     KAboutData * aboutData=new KAboutData( "kplato", I18N_NOOP("KPlato"),
                                            KPLATO_VERSION, KPLATO_DESCRIPTION, KAboutData::License_GPL,
-                                           I18N_NOOP("(c) 1998-2004, The KPlato Team"), 0,
+                                           I18N_NOOP("(c) 1998-2005, The KPlato Team"), 0,
 					   "http://www.koffice.org/kplato/" );
     aboutData->addAuthor("Thomas Zander", 0, "zander@kde.org");
     aboutData->addAuthor("Bo Thorsen", 0, "bo@sonofthor.dk");
     aboutData->addAuthor("Dag Andersen", 0, "danders@get2net.dk");
+    aboutData->addAuthor("Raphael Langerhorst",0,"raphael.langerhorst@kdemail.net");
     aboutData->addCredit("Nuno Pinheiro and Danny Allen", I18N_NOOP("Application icon for kplato"), "danny@dannyallen.co.uk");
     return aboutData;
 }

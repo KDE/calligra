@@ -29,22 +29,22 @@ class KCommand;
 namespace KPlato
 {
 
-class KPTAccounts;
-class KPTAccountsPanel;
-class KPTPart;
+class Accounts;
+class AccountsPanel;
+class Part;
 
-class KPTAccountsDialog : public KDialogBase {
+class AccountsDialog : public KDialogBase {
     Q_OBJECT
 public:
-    KPTAccountsDialog(KPTAccounts &acc, QWidget *parent=0, const char *name=0);
+    AccountsDialog(Accounts &acc, QWidget *parent=0, const char *name=0);
 
-    KCommand *buildCommand(KPTPart *part);
+    KCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();
 
 private:
-    KPTAccountsPanel *m_panel;
+    AccountsPanel *m_panel;
 };
 
 } //namespace KPlato

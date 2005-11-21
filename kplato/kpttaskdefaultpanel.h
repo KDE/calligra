@@ -26,16 +26,16 @@
 namespace KPlato
 {
 
-class KPTTask;
-class KPTStandardWorktime;
+class Task;
+class StandardWorktime;
 
-class KPTTaskDefaultPanel : public KPTTaskGeneralPanel {
+class TaskDefaultPanel : public TaskGeneralPanel {
     Q_OBJECT
 public:
-    KPTTaskDefaultPanel(KPTTask &task, KPTStandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
+    TaskDefaultPanel(Task &task, StandardWorktime *workTime=0, QWidget *parent=0, const char *name=0);
 
 };
 
 } //KPlato namespace
 
-#endif // KPTTASKDEFAULTPANEL_H
+#endif // TASKDEFAULTPANEL_H

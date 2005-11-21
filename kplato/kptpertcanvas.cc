@@ -51,7 +51,7 @@
 namespace KPlato
 {
 
-KPTPertCanvas::KPTPertCanvas( QWidget *parent )
+PertCanvas::PertCanvas( QWidget *parent )
     : QCanvasView( parent, "Pert canvas" /*WNorthWestGravity WStaticContents| WResizeNoErase | WRepaintNoErase */),
 	m_verticalGap(20),
 	m_horizontalGap(10),
@@ -63,24 +63,24 @@ KPTPertCanvas::KPTPertCanvas( QWidget *parent )
     setCanvas( m_canvas );
 }
 
-KPTPertCanvas::~KPTPertCanvas()
+PertCanvas::~PertCanvas()
 {
 }
 
-void KPTPertCanvas::draw(KPTProject& project)
+void PertCanvas::draw(Project& project)
 {
     //kdDebug()<<k_funcinfo<<endl;
     clear();
     updateContents();
 
     // First make node items
-    QPtrListIterator<KPTNode> nit(project.childNodeIterator());
+    QPtrListIterator<Node> nit(project.childNodeIterator());
     for ( ; nit.current(); ++nit ) {
         createChildItems(createNodeItem(nit.current()));
     }
 
     // First all items with relations
-    QPtrDictIterator<KPTPertNodeItem> it(m_nodes);
+    QPtrDictIterator<PertNodeItem> it(m_nodes);
     for(; it.current(); ++it)
     {
         if (!(it.current()->hasParent()) && it.current()->hasChild())
@@ -104,21 +104,21 @@ void KPTPertCanvas::draw(KPTProject& project)
     update();
 }
 
-KPTPertNodeItem *KPTPertCanvas::createNodeItem(KPTNode *node)
+PertNodeItem *PertCanvas::createNodeItem(Node *node)
 {
-    KPTPertNodeItem *item = m_nodes.find(node);
+    PertNodeItem *item = m_nodes.find(node);
     if (!item)
     {
-        if ( node->type() == KPTNode::Type_Project)
+        if ( node->type() == Node::Type_Project)
             kdDebug()<<k_funcinfo<<"Project nodes should not have relations"<<endl;
-        else if (node->type() == KPTNode::Type_Subproject)
-            item  = new KPTPertProjectItem(this, *node);
-        else if (node->type()== KPTNode::Type_Summarytask)
-            item  = new KPTPertTaskItem(this, *node);
-        else if (node->type()== KPTNode::Type_Task)
-            item  = new KPTPertTaskItem(this, *node);
-        else if (node->type() == KPTNode::Type_Milestone)
-            item  = new KPTPertMilestoneItem(this, *node);
+        else if (node->type() == Node::Type_Subproject)
+            item  = new PertProjectItem(this, *node);
+        else if (node->type()== Node::Type_Summarytask)
+            item  = new PertTaskItem(this, *node);
+        else if (node->type()== Node::Type_Task)
+            item  = new PertTaskItem(this, *node);
+        else if (node->type() == Node::Type_Milestone)
+            item  = new PertMilestoneItem(this, *node);
         else
             kdDebug()<<k_funcinfo<<"Not implemented yet"<<endl;
 
@@ -128,45 +128,45 @@ KPTPertNodeItem *KPTPertCanvas::createNodeItem(KPTNode *node)
     return item;
 }
 
-void KPTPertCanvas::createChildItems(KPTPertNodeItem *parentItem)
+void PertCanvas::createChildItems(PertNodeItem *parentItem)
 {
     //kdDebug()<<k_funcinfo<<"parentItem="<<(parentItem ? parentItem->node().name() : "nil")<<endl;
     if (!parentItem)
         return;
 
-    QPtrListIterator<KPTRelation> it(parentItem->node().dependChildNodes());
+    QPtrListIterator<Relation> it(parentItem->node().dependChildNodes());
     for (; it.current(); ++it)
     {
-        KPTPertNodeItem *childItem = createNodeItem(it.current()->child());
+        PertNodeItem *childItem = createNodeItem(it.current()->child());
         if (childItem)
             parentItem->addChildRelation(it.current(), childItem);
             m_relations.append(it.current());
     }
 
     // Now my children
-	QPtrListIterator<KPTNode> nit(parentItem->node().childNodeIterator());
+	QPtrListIterator<Node> nit(parentItem->node().childNodeIterator());
     for ( ; nit.current(); ++nit ) {
         createChildItems(createNodeItem(nit.current()));
 	}
 }
 
-void KPTPertCanvas::drawRelations()
+void PertCanvas::drawRelations()
 {
 	//kdDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<KPTRelation> it(m_relations);
+    QPtrListIterator<Relation> it(m_relations);
     for (; it.current(); ++it)
     {
-        KPTPertNodeItem *parentItem = m_nodes.find(it.current()->parent());
-        KPTPertNodeItem *childItem = m_nodes.find(it.current()->child());
+        PertNodeItem *parentItem = m_nodes.find(it.current()->parent());
+        PertNodeItem *childItem = m_nodes.find(it.current()->child());
         if (parentItem && childItem)
         {
-            KPTPertRelationItem *item = new KPTPertRelationItem(this, parentItem, childItem, it.current());
+            PertRelationItem *item = new PertRelationItem(this, parentItem, childItem, it.current());
             item->show();
         }
     }
 }
 
-void KPTPertCanvas::mapNode(KPTPertNodeItem *item)
+void PertCanvas::mapNode(PertNodeItem *item)
 {
 	//kdDebug()<<k_funcinfo<<endl;
     if (! m_rows.at(item->row()) || m_rows.at(item->row())->count() <= item->column())
@@ -177,7 +177,7 @@ void KPTPertCanvas::mapNode(KPTPertNodeItem *item)
     m_rows.at(item->row())->at(item->column()) = true;
 }
 
-void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *childItem, KPTRelation::Type type)
+void PertCanvas::mapChildNode(PertNodeItem *parentItem, PertNodeItem *childItem, Relation::Type type)
 {
 	//kdDebug()<<k_funcinfo<<"Parent: "<<parentItem->node().name()<<" to child: "<<(childItem ? childItem->node().name() : "None")<<endl;
     if (!childItem)
@@ -192,8 +192,8 @@ void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *c
     bool chMapped = (chRow > -1 && chCol > -1);
 	//kdDebug()<<k_funcinfo<<"Parent: "<<parentItem->node().name()<<" at ("<<row<<","<<col<<"): Moving "<<childItem->node().name()<<" from: "<<chRow<<","<<chCol<<endl;
 
-    if (type == KPTRelation::StartStart ||
-        type == KPTRelation::FinishFinish)
+    if (type == Relation::StartStart ||
+        type == Relation::FinishFinish)
     {
         // node goes into row below parent, at least same col
         if (chMapped)
@@ -233,7 +233,7 @@ void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *c
             chCol = col;
         }
     }
-    else if (type == KPTRelation::FinishStart)
+    else if (type == Relation::FinishStart)
     {
         // node goes into same row, next col if col free
         if (chMapped)
@@ -268,7 +268,7 @@ void KPTPertCanvas::mapChildNode(KPTPertNodeItem *parentItem, KPTPertNodeItem *c
     childItem->move(this, chRow, chCol);
 }
 
-QSize KPTPertCanvas::canvasSize()
+QSize PertCanvas::canvasSize()
 {
     //kdDebug()<<k_funcinfo<<endl;
 	QSize s(0,0);
@@ -285,7 +285,7 @@ QSize KPTPertCanvas::canvasSize()
 	return s;
 }
 
-void KPTPertCanvas::clear()
+void PertCanvas::clear()
 {
     m_nodes.clear();
     m_relations.clear();
@@ -299,7 +299,7 @@ void KPTPertCanvas::clear()
     }
 }
 
-void KPTPertCanvas::contentsMousePressEvent ( QMouseEvent * e )
+void PertCanvas::contentsMousePressEvent ( QMouseEvent * e )
 {
     //kdDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
     switch (e->button())
@@ -310,7 +310,7 @@ void KPTPertCanvas::contentsMousePressEvent ( QMouseEvent * e )
         }
         case QEvent::RightButton:
         {
-            KPTPertNodeItem *item = selectedItem();
+            PertNodeItem *item = selectedItem();
             if (item)
                 item->setSelected(false);
             canvas()->update();
@@ -318,11 +318,11 @@ void KPTPertCanvas::contentsMousePressEvent ( QMouseEvent * e )
             QCanvasItemList l = canvas()->collisions(e->pos());
             for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
             {
-                if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
-                     (*it)->rtti() == KPTPertTaskItem::RTTI  ||
-                     (*it)->rtti() == KPTPertMilestoneItem::RTTI )
+                if ( (*it)->rtti() == PertProjectItem::RTTI ||
+                     (*it)->rtti() == PertTaskItem::RTTI  ||
+                     (*it)->rtti() == PertMilestoneItem::RTTI )
                 {
-                    KPTPertNodeItem *item = (KPTPertNodeItem *)(*it);
+                    PertNodeItem *item = (PertNodeItem *)(*it);
                     {
                         item->setSelected(true);
                         canvas()->update();
@@ -345,7 +345,7 @@ void KPTPertCanvas::contentsMousePressEvent ( QMouseEvent * e )
     }
 }
 
-void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
+void PertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 {
     //kdDebug()<<k_funcinfo<<" gl.X,gl.Y="<<e->globalX()<<","<<e->globalY()<<" x,y="<<e->x()<<","<<e->y()<<endl;
     switch (e->button())
@@ -356,13 +356,13 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
             QCanvasItemList l = canvas()->collisions(e->pos());
             for (QCanvasItemList::Iterator it=l.begin(); it!=l.end(); ++it)
 		    {
-	            if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
-	                 (*it)->rtti() == KPTPertTaskItem::RTTI  ||
-	                 (*it)->rtti() == KPTPertMilestoneItem::RTTI )
+	            if ( (*it)->rtti() == PertProjectItem::RTTI ||
+	                 (*it)->rtti() == PertTaskItem::RTTI  ||
+	                 (*it)->rtti() == PertMilestoneItem::RTTI )
 				{
                     hit = true;
-				    KPTPertNodeItem *item = (KPTPertNodeItem *)(*it);
-					KPTPertNodeItem *par = selectedItem();
+				    PertNodeItem *item = (PertNodeItem *)(*it);
+					PertNodeItem *par = selectedItem();
 					if ( !par)
 					{
 						//kdDebug()<<k_funcinfo<<" First node="<<item->node().name()<<endl;
@@ -380,7 +380,7 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 					if (!par->node().legalToLink(&(item->node()))) {
                         KMessageBox::sorry(this, i18n("Cannot link these nodes"));
 					} else {
-						KPTRelation *rel = item->node().findRelation(&(par->node()));
+						Relation *rel = item->node().findRelation(&(par->node()));
 						if (rel)
                             emit modifyRelation(rel);
 						else
@@ -390,7 +390,7 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
 				}
 			}
             if (!hit) {
-                KPTPertNodeItem *i = selectedItem();
+                PertNodeItem *i = selectedItem();
                 if (i) i->setSelected(false);
             }
             canvas()->update();
@@ -407,7 +407,7 @@ void KPTPertCanvas::contentsMouseReleaseEvent ( QMouseEvent * e )
     }
 }
 
-KPTPertNodeItem *KPTPertCanvas::selectedItem()
+PertNodeItem *PertCanvas::selectedItem()
 {
     QCanvasItemList list = canvas()->allItems();
     QCanvasItemList::Iterator it = list.begin();
@@ -415,21 +415,21 @@ KPTPertNodeItem *KPTPertCanvas::selectedItem()
     {
         if ( (*it)->isSelected() )
 		{
-		if ( (*it)->rtti() == KPTPertProjectItem::RTTI ||
-			(*it)->rtti() == KPTPertTaskItem::RTTI  ||
-			(*it)->rtti() == KPTPertMilestoneItem::RTTI )
-                return (KPTPertNodeItem *)(*it);
+		if ( (*it)->rtti() == PertProjectItem::RTTI ||
+			(*it)->rtti() == PertTaskItem::RTTI  ||
+			(*it)->rtti() == PertMilestoneItem::RTTI )
+                return (PertNodeItem *)(*it);
 		}
     }
 	return 0;
 }
 
-KPTNode *KPTPertCanvas::selectedNode() { 
+Node *PertCanvas::selectedNode() { 
     return selectedItem() ? &(selectedItem()->node()) : 0; 
 }
  
 #ifndef NDEBUG
-void KPTPertCanvas::printDebug( int /*info*/ )
+void PertCanvas::printDebug( int /*info*/ )
 {
 }
 #endif

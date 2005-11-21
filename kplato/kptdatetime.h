@@ -25,40 +25,40 @@
 namespace KPlato
 {
 
-class KPTDuration;
+class Duration;
 
 /**
- * KPTDateTime is a @ref QDateTime which knows about @ref KPTDuration
+ * DateTime is a @ref QDateTime which knows about @ref Duration
  */
-class KPTDateTime : public QDateTime {
+class DateTime : public QDateTime {
 
 public:
-    KPTDateTime();
-    KPTDateTime(const QDateTime &dt);
-    KPTDateTime(const QDate &date, const QTime &time);
+    DateTime();
+    DateTime(const QDateTime &dt);
+    DateTime(const QDate &date, const QTime &time);
 
     /**
      * Adds the duration @param duration to the datetime
      */
-    KPTDateTime operator+(const KPTDuration &duration) const;
+    DateTime operator+(const Duration &duration) const;
     /**
      * Subtracts the duration @param duration from the datetime
      */
-    KPTDateTime operator-(const KPTDuration &duration) const ;
+    DateTime operator-(const Duration &duration) const ;
     /**
      * Returns the absolute duration between the two datetimes
      */
-    KPTDuration operator-(const KPTDateTime &dt) const { return duration(dt); }
-    KPTDuration operator-(const KPTDateTime &dt) { return duration(dt); }
+    Duration operator-(const DateTime &dt) const { return duration(dt); }
+    Duration operator-(const DateTime &dt) { return duration(dt); }
 
-    KPTDateTime &operator+=(const KPTDuration &duration);
-    KPTDateTime &operator-=(const KPTDuration &duration);
+    DateTime &operator+=(const Duration &duration);
+    DateTime &operator-=(const Duration &duration);
 
 private:
 
-    KPTDuration duration(const KPTDateTime &dt) const;
-    void add(const KPTDuration &duration);
-    void subtract(const KPTDuration &duration);
+    Duration duration(const DateTime &dt) const;
+    void add(const Duration &duration);
+    void subtract(const Duration &duration);
 
 };
 

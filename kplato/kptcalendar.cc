@@ -31,35 +31,35 @@
 namespace KPlato
 {
 
-/////   KPTCalendarDay   ////
-KPTCalendarDay::KPTCalendarDay()
+/////   CalendarDay   ////
+CalendarDay::CalendarDay()
     : m_state(0) {
 
     m_workingIntervals.setAutoDelete(true);
 }
 
-KPTCalendarDay::KPTCalendarDay(int state)
+CalendarDay::CalendarDay(int state)
     : m_state(state) {
 
     m_workingIntervals.setAutoDelete(true);
 }
 
-KPTCalendarDay::KPTCalendarDay(QDate date, int state)
+CalendarDay::CalendarDay(QDate date, int state)
     : m_date(date),
       m_state(state) {
 
     m_workingIntervals.setAutoDelete(true);
 }
 
-KPTCalendarDay::KPTCalendarDay(KPTCalendarDay *day) {
+CalendarDay::CalendarDay(CalendarDay *day) {
     copy(*day);
 }
 
-KPTCalendarDay::~KPTCalendarDay() {
+CalendarDay::~CalendarDay() {
     //kdDebug()<<k_funcinfo<<endl;
 }
 
-const KPTCalendarDay &KPTCalendarDay::copy(const KPTCalendarDay &day) {
+const CalendarDay &CalendarDay::copy(const CalendarDay &day) {
     //kdDebug()<<k_funcinfo<<endl;
     m_date = day.date();
     m_state = day.state();
@@ -72,7 +72,7 @@ const KPTCalendarDay &KPTCalendarDay::copy(const KPTCalendarDay &day) {
     return *this;
 }
 
-bool KPTCalendarDay::load(QDomElement &element) {
+bool CalendarDay::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
     bool ok=false;
     m_state = QString(element.attribute("state", "-1")).toInt(&ok);
@@ -98,9 +98,9 @@ bool KPTCalendarDay::load(QDomElement &element) {
     return true;
 }
 
-void KPTCalendarDay::save(QDomElement &element) {
+void CalendarDay::save(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<m_date.toString()<<endl;
-    if (m_state == KPTMap::None)
+    if (m_state == Map::None)
         return;
     if (m_date.isValid()) {
         element.setAttribute("date", m_date.toString());
@@ -118,11 +118,11 @@ void KPTCalendarDay::save(QDomElement &element) {
     }
 } 
 
-void KPTCalendarDay::addInterval(QPair<QTime, QTime> *interval) {
+void CalendarDay::addInterval(QPair<QTime, QTime> *interval) {
     m_workingIntervals.append(interval);
 }
 
-QTime KPTCalendarDay::startOfDay() const {
+QTime CalendarDay::startOfDay() const {
     QTime t;
     if (!m_workingIntervals.isEmpty()) {
         QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
@@ -135,7 +135,7 @@ QTime KPTCalendarDay::startOfDay() const {
     return t;
 }
 
-QTime KPTCalendarDay::endOfDay() const {
+QTime CalendarDay::endOfDay() const {
     QTime t;
     if (!m_workingIntervals.isEmpty()) {
         QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
@@ -148,17 +148,17 @@ QTime KPTCalendarDay::endOfDay() const {
     return t;
 }
     
-bool KPTCalendarDay::operator==(const KPTCalendarDay *day) const {
+bool CalendarDay::operator==(const CalendarDay *day) const {
     return m_state == day->state() && m_workingIntervals == day->workingIntervals();
 }
-bool KPTCalendarDay::operator!=(const KPTCalendarDay *day) const {
+bool CalendarDay::operator!=(const CalendarDay *day) const {
     return m_state != day->state() || m_workingIntervals != day->workingIntervals();
 }
 
-KPTDuration KPTCalendarDay::effort(const QTime &start, const QTime &end) {
+Duration CalendarDay::effort(const QTime &start, const QTime &end) {
     //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
-    KPTDuration eff;
-    if (m_state != KPTMap::Working) {
+    Duration eff;
+    if (m_state != Map::Working) {
         //kdDebug()<<k_funcinfo<<"Non working day"<<endl;
         return eff;
     }
@@ -166,25 +166,25 @@ KPTDuration KPTCalendarDay::effort(const QTime &start, const QTime &end) {
     for (; it.current(); ++it) {
         //kdDebug()<<k_funcinfo<<"Interval: "<<it.current()->first.toString()<<" - "<<it.current()->second.toString()<<endl;
         if (end > it.current()->first && start < it.current()->second) {
-            KPTDateTime dtStart(QDate::currentDate(), start);
+            DateTime dtStart(QDate::currentDate(), start);
             if (start < it.current()->first) {
                 dtStart.setTime(it.current()->first);
             }
-            KPTDateTime dtEnd(QDate::currentDate(), end);
+            DateTime dtEnd(QDate::currentDate(), end);
             if (end > it.current()->second) {
                 dtEnd.setTime(it.current()->second);
             }
             eff += dtEnd - dtStart;
-            //kdDebug()<<k_funcinfo<<dtStart.time().toString()<<" - "<<dtEnd.time().toString()<<"="<<eff.toString(KPTDuration::Format_Day)<<endl;
+            //kdDebug()<<k_funcinfo<<dtStart.time().toString()<<" - "<<dtEnd.time().toString()<<"="<<eff.toString(Duration::Format_Day)<<endl;
         }
     }
-    //kdDebug()<<k_funcinfo<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<": "<<start.toString()<<" - "<<end.toString()<<": total="<<eff.toString(KPTDuration::Format_Day)<<endl;
+    //kdDebug()<<k_funcinfo<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<": "<<start.toString()<<" - "<<end.toString()<<": total="<<eff.toString(Duration::Format_Day)<<endl;
     return eff;
 }
 
-QPair<QTime, QTime> KPTCalendarDay::interval(const QTime &start, const QTime &end) const {
+QPair<QTime, QTime> CalendarDay::interval(const QTime &start, const QTime &end) const {
     //kdDebug()<<k_funcinfo<<endl;
-    if (m_state == KPTMap::Working) {
+    if (m_state == Map::Working) {
         QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
         for (; it.current(); ++it) {
             QTime t1, t2;
@@ -200,13 +200,13 @@ QPair<QTime, QTime> KPTCalendarDay::interval(const QTime &start, const QTime &en
     return QPair<QTime, QTime>(start, end); // hmmmm, what else to do?
 }
 
-bool KPTCalendarDay::hasInterval() const {
-    return m_state == KPTMap::Working && m_workingIntervals.count() > 0;
+bool CalendarDay::hasInterval() const {
+    return m_state == Map::Working && m_workingIntervals.count() > 0;
 }
 
-bool KPTCalendarDay::hasInterval(const QTime &start, const QTime &end) const {
+bool CalendarDay::hasInterval(const QTime &start, const QTime &end) const {
     //kdDebug()<<k_funcinfo<<(m_date.isValid()?m_date.toString(Qt::ISODate):"Weekday")<<" "<<start.toString()<<" - "<<end.toString()<<endl;
-    if (m_state != KPTMap::Working) {
+    if (m_state != Map::Working) {
         return false;
     }
     QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
@@ -219,7 +219,7 @@ bool KPTCalendarDay::hasInterval(const QTime &start, const QTime &end) const {
     return false;
 }
 
-bool KPTCalendarDay::hasIntervalBefore(const QTime &time) const {
+bool CalendarDay::hasIntervalBefore(const QTime &time) const {
     //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
     for (; it.current(); ++it) {
@@ -231,7 +231,7 @@ bool KPTCalendarDay::hasIntervalBefore(const QTime &time) const {
     return false;
 }
 
-bool KPTCalendarDay::hasIntervalAfter(const QTime &time) const {
+bool CalendarDay::hasIntervalAfter(const QTime &time) const {
     //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
     for (; it.current(); ++it) {
@@ -243,46 +243,46 @@ bool KPTCalendarDay::hasIntervalAfter(const QTime &time) const {
     return false;
 }
 
-KPTDuration KPTCalendarDay::duration() const {
-    KPTDuration dur;
+Duration CalendarDay::duration() const {
+    Duration dur;
     QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
     for (; it.current(); ++it) {
-        KPTDateTime start(QDate::currentDate(), it.current()->first);
-        KPTDateTime end(QDate::currentDate(), it.current()->second);
+        DateTime start(QDate::currentDate(), it.current()->first);
+        DateTime end(QDate::currentDate(), it.current()->second);
         dur += end - start;
     }
     return dur;
 }
 
-/////   KPTCalendarWeekdays   ////
-KPTCalendarWeekdays::KPTCalendarWeekdays()
+/////   CalendarWeekdays   ////
+CalendarWeekdays::CalendarWeekdays()
     : m_workHours(40) {
 
     for (int i=0; i < 7; ++i) {
-        m_weekdays.append(new KPTCalendarDay());
+        m_weekdays.append(new CalendarDay());
     }
     m_weekdays.setAutoDelete(true);
 }
 
-KPTCalendarWeekdays::KPTCalendarWeekdays(KPTCalendarWeekdays *weekdays) {
+CalendarWeekdays::CalendarWeekdays(CalendarWeekdays *weekdays) {
     copy(*weekdays);
 }
 
-KPTCalendarWeekdays::~KPTCalendarWeekdays() {
+CalendarWeekdays::~CalendarWeekdays() {
     //kdDebug()<<k_funcinfo<<endl;
 }
 
-const KPTCalendarWeekdays &KPTCalendarWeekdays::copy(const KPTCalendarWeekdays &weekdays) {
+const CalendarWeekdays &CalendarWeekdays::copy(const CalendarWeekdays &weekdays) {
     //kdDebug()<<k_funcinfo<<endl;
     m_weekdays.clear();
-    QPtrListIterator<KPTCalendarDay> it = weekdays.weekdays();
+    QPtrListIterator<CalendarDay> it = weekdays.weekdays();
     for (; it.current(); ++it) {
-        m_weekdays.append(new KPTCalendarDay(it.current()));
+        m_weekdays.append(new CalendarDay(it.current()));
     }
     return *this;
 }
 
-bool KPTCalendarWeekdays::load(QDomElement &element) {
+bool CalendarWeekdays::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
     bool ok;
     int dayNo = QString(element.attribute("day","-1")).toInt(&ok);
@@ -290,17 +290,17 @@ bool KPTCalendarWeekdays::load(QDomElement &element) {
         kdError()<<k_funcinfo<<"Illegal weekday: "<<dayNo<<endl;
         return true; // we continue anyway
     }
-    KPTCalendarDay *day = m_weekdays.at(dayNo);
+    CalendarDay *day = m_weekdays.at(dayNo);
     if (!day)
-        day = new KPTCalendarDay();
+        day = new CalendarDay();
     if (!day->load(element))
-        day->setState(KPTMap::None);
+        day->setState(Map::None);
     return true;
 }
 
-void KPTCalendarWeekdays::save(QDomElement &element) {
+void CalendarWeekdays::save(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<KPTCalendarDay> it = m_weekdays;
+    QPtrListIterator<CalendarDay> it = m_weekdays;
     for (int i=0; it.current(); ++it) {
         QDomElement me = element.ownerDocument().createElement("weekday");
         element.appendChild(me);
@@ -309,8 +309,8 @@ void KPTCalendarWeekdays::save(QDomElement &element) {
     }
 }    
 
-KPTIntMap KPTCalendarWeekdays::map() {
-    KPTIntMap days;
+IntMap CalendarWeekdays::map() {
+    IntMap days;
     for (unsigned int i=0; i < m_weekdays.count(); ++i) {
         if (m_weekdays.at(i)->state() > 0)
             days.insert(i+1, m_weekdays.at(i)->state()); //Note: day numbers 1..7
@@ -318,78 +318,78 @@ KPTIntMap KPTCalendarWeekdays::map() {
     return days;
 }
 
-int KPTCalendarWeekdays::state(const QDate &date) const {
+int CalendarWeekdays::state(const QDate &date) const {
     return state(date.dayOfWeek()-1);
 }
 
-int KPTCalendarWeekdays::state(int weekday) const {
-    KPTCalendarDay *day = const_cast<KPTCalendarWeekdays*>(this)->m_weekdays.at(weekday);
-    return day ? day->state() : KPTMap::None;
+int CalendarWeekdays::state(int weekday) const {
+    CalendarDay *day = const_cast<CalendarWeekdays*>(this)->m_weekdays.at(weekday);
+    return day ? day->state() : Map::None;
 }
 
-void KPTCalendarWeekdays::setState(int weekday, int state) {
-    KPTCalendarDay *day = m_weekdays.at(weekday);
+void CalendarWeekdays::setState(int weekday, int state) {
+    CalendarDay *day = m_weekdays.at(weekday);
     if (!day)
         return;
     day->setState(state);
 }
 
-const QPtrList<QPair<QTime, QTime> > &KPTCalendarWeekdays::intervals(int weekday) const { 
-    KPTCalendarDay *day = const_cast<KPTCalendarWeekdays*>(this)->m_weekdays.at(weekday);
+const QPtrList<QPair<QTime, QTime> > &CalendarWeekdays::intervals(int weekday) const { 
+    CalendarDay *day = const_cast<CalendarWeekdays*>(this)->m_weekdays.at(weekday);
     Q_ASSERT(day);
     return day->workingIntervals();
 }
 
-void KPTCalendarWeekdays::setIntervals(int weekday, QPtrList<QPair<QTime, QTime> >intervals) {
-    KPTCalendarDay *day = m_weekdays.at(weekday);
+void CalendarWeekdays::setIntervals(int weekday, QPtrList<QPair<QTime, QTime> >intervals) {
+    CalendarDay *day = m_weekdays.at(weekday);
     if (day)
         day->setIntervals(intervals); 
 }
 
-void KPTCalendarWeekdays::clearIntervals(int weekday) {
-    KPTCalendarDay *day = m_weekdays.at(weekday);
+void CalendarWeekdays::clearIntervals(int weekday) {
+    CalendarDay *day = m_weekdays.at(weekday);
     if (day)
         day->clearIntervals(); 
 }
 
-bool KPTCalendarWeekdays::operator==(const KPTCalendarWeekdays *wd) const {
+bool CalendarWeekdays::operator==(const CalendarWeekdays *wd) const {
     if (m_weekdays.count() != wd->weekdays().count())
         return false;
     for (unsigned int i=0; i < m_weekdays.count(); ++i) {
         // is there a better way to get around this const stuff?
-        KPTCalendarDay *day1 = const_cast<KPTCalendarWeekdays*>(this)->m_weekdays.at(i);
-        KPTCalendarDay *day2 = const_cast<QPtrList<KPTCalendarDay>&>(wd->weekdays()).at(i);
+        CalendarDay *day1 = const_cast<CalendarWeekdays*>(this)->m_weekdays.at(i);
+        CalendarDay *day2 = const_cast<QPtrList<CalendarDay>&>(wd->weekdays()).at(i);
         if (day1 != day2)
             return false;
     }
     return true;
 }
-bool KPTCalendarWeekdays::operator!=(const KPTCalendarWeekdays *wd) const {
+bool CalendarWeekdays::operator!=(const CalendarWeekdays *wd) const {
     if (m_weekdays.count() != wd->weekdays().count())
         return true;
     for (unsigned int i=0; i < m_weekdays.count(); ++i) {
         // is there a better way to get around this const stuff?
-        KPTCalendarDay *day1 = const_cast<KPTCalendarWeekdays*>(this)->m_weekdays.at(i);
-        KPTCalendarDay *day2 = const_cast<QPtrList<KPTCalendarDay>&>(wd->weekdays()).at(i);
+        CalendarDay *day1 = const_cast<CalendarWeekdays*>(this)->m_weekdays.at(i);
+        CalendarDay *day2 = const_cast<QPtrList<CalendarDay>&>(wd->weekdays()).at(i);
         if (day1 != day2)
             return true;
     }
     return false;
 }
 
-KPTDuration KPTCalendarWeekdays::effort(const QDate &date, const QTime &start, const QTime &end) {
+Duration CalendarWeekdays::effort(const QDate &date, const QTime &start, const QTime &end) {
     //kdDebug()<<k_funcinfo<<"Day of week="<<date.dayOfWeek()-1<<endl;
-    KPTCalendarDay *day = weekday(date.dayOfWeek()-1);
-    if (day && day->state() == KPTMap::Working) {
+    CalendarDay *day = weekday(date.dayOfWeek()-1);
+    if (day && day->state() == Map::Working) {
         return day->effort(start, end);
     }
-    return KPTDuration::zeroDuration;
+    return Duration::zeroDuration;
 }
 
-QPair<QTime, QTime> KPTCalendarWeekdays::interval(const QDate date, const QTime &start, const QTime &end) const {
+QPair<QTime, QTime> CalendarWeekdays::interval(const QDate date, const QTime &start, const QTime &end) const {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTCalendarDay *day = weekday(date.dayOfWeek()-1);
-    if (day && day->state() == KPTMap::Working) {
+    CalendarDay *day = weekday(date.dayOfWeek()-1);
+    if (day && day->state() == Map::Working) {
         if (day->hasInterval(start, end)) {
             return day->interval(start, end);
         }
@@ -397,27 +397,27 @@ QPair<QTime, QTime> KPTCalendarWeekdays::interval(const QDate date, const QTime 
     return QPair<QTime, QTime>(start, end); // what to do?
 }
 
-bool KPTCalendarWeekdays::hasInterval(const QDate date, const QTime &start, const QTime &end) const {
+bool CalendarWeekdays::hasInterval(const QDate date, const QTime &start, const QTime &end) const {
     //kdDebug()<<k_funcinfo<<date.toString()<<": "<<start.toString()<<" - "<<end.toString()<<endl;
-    KPTCalendarDay *day = weekday(date.dayOfWeek()-1);
+    CalendarDay *day = weekday(date.dayOfWeek()-1);
     return day && day->hasInterval(start, end);
 }
 
-bool KPTCalendarWeekdays::hasIntervalAfter(const QDate date, const QTime &time) const {
+bool CalendarWeekdays::hasIntervalAfter(const QDate date, const QTime &time) const {
     //kdDebug()<<k_funcinfo<<date.toString(Qt::ISODate)<<": "<<time.toString()<<endl;
-    KPTCalendarDay *day = weekday(date.dayOfWeek()-1);
+    CalendarDay *day = weekday(date.dayOfWeek()-1);
     return day && day->hasIntervalAfter(time);
 }
 
-bool KPTCalendarWeekdays::hasIntervalBefore(const QDate date, const QTime &time) const {
+bool CalendarWeekdays::hasIntervalBefore(const QDate date, const QTime &time) const {
     //kdDebug()<<k_funcinfo<<date.toString(Qt::ISODate)<<": "<<time.toString()<<endl;
-    KPTCalendarDay *day = weekday(date.dayOfWeek()-1);
+    CalendarDay *day = weekday(date.dayOfWeek()-1);
     return day && day->hasIntervalBefore(time);
 }
 
-bool KPTCalendarWeekdays::hasInterval() const {
+bool CalendarWeekdays::hasInterval() const {
     //kdDebug()<<k_funcinfo<<endl;
-    QPtrListIterator<KPTCalendarDay> it = m_weekdays;
+    QPtrListIterator<CalendarDay> it = m_weekdays;
     for (; it.current(); ++it) {
         if (it.current()->hasInterval())
             return true;
@@ -425,8 +425,8 @@ bool KPTCalendarWeekdays::hasInterval() const {
     return false;
 }
 
-KPTCalendarDay *KPTCalendarWeekdays::weekday(int day) const {
-    QPtrListIterator<KPTCalendarDay> it = m_weekdays;
+CalendarDay *CalendarWeekdays::weekday(int day) const {
+    QPtrListIterator<CalendarDay> it = m_weekdays;
     for (int i=0; it.current(); ++it, ++i) {
         if (i == day)
             return it.current();
@@ -434,55 +434,55 @@ KPTCalendarDay *KPTCalendarWeekdays::weekday(int day) const {
     return 0;
 }
 
-KPTDuration KPTCalendarWeekdays::duration() const {
-    KPTDuration dur;
-    QPtrListIterator<KPTCalendarDay> it = m_weekdays;
+Duration CalendarWeekdays::duration() const {
+    Duration dur;
+    QPtrListIterator<CalendarDay> it = m_weekdays;
     for (; it.current(); ++it) {
         dur += it.current()->duration();
     }
     return dur;
 }
 
-KPTDuration KPTCalendarWeekdays::duration(int _weekday) const {
-    KPTCalendarDay *day = weekday(_weekday);
+Duration CalendarWeekdays::duration(int _weekday) const {
+    CalendarDay *day = weekday(_weekday);
     if (day)
         return day->duration();
-    return KPTDuration();
+    return Duration();
 }
 
-QTime KPTCalendarWeekdays::startOfDay(int _weekday) const {
-    KPTCalendarDay *day = weekday(_weekday);
+QTime CalendarWeekdays::startOfDay(int _weekday) const {
+    CalendarDay *day = weekday(_weekday);
     if (day)
         return day->startOfDay();
     return QTime();
 }
 
-QTime KPTCalendarWeekdays::endOfDay(int _weekday) const {
-    KPTCalendarDay *day = weekday(_weekday);
+QTime CalendarWeekdays::endOfDay(int _weekday) const {
+    CalendarDay *day = weekday(_weekday);
     if (day)
         return day->endOfDay();
     return QTime();
 }
     
 
-/////   KPTCalendarWeek  ////
-KPTCalendarWeeks::KPTCalendarWeeks() {
+/////   CalendarWeek  ////
+CalendarWeeks::CalendarWeeks() {
 }
 
-KPTCalendarWeeks::~KPTCalendarWeeks() {
+CalendarWeeks::~CalendarWeeks() {
     //kdDebug()<<k_funcinfo<<endl;
 }
 
-KPTCalendarWeeks::KPTCalendarWeeks(KPTCalendarWeeks *weeks) {
+CalendarWeeks::CalendarWeeks(CalendarWeeks *weeks) {
     copy(*weeks);
 }
 
-KPTCalendarWeeks &KPTCalendarWeeks::copy(KPTCalendarWeeks& weeks) {
+CalendarWeeks &CalendarWeeks::copy(CalendarWeeks& weeks) {
     m_weeks = weeks.weeks();
     return *this;
 }
 
-bool KPTCalendarWeeks::load(QDomElement &element) {
+bool CalendarWeeks::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
     bool ok;
     int w = QString(element.attribute("week","-1")).toInt(&ok);
@@ -492,24 +492,24 @@ bool KPTCalendarWeeks::load(QDomElement &element) {
     return true;
 }
 
-void KPTCalendarWeeks::save(QDomElement &element) {
+void CalendarWeeks::save(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTWeekMap::iterator it;
+    WeekMap::iterator it;
     for (it = m_weeks.begin(); it != m_weeks.end(); ++it) {
         QDomElement me = element.ownerDocument().createElement("week");
         element.appendChild(me);
-        QPair<int, int> w = KPTWeekMap::week(it.key());
+        QPair<int, int> w = WeekMap::week(it.key());
         me.setAttribute("week", w.first);
         me.setAttribute("year", w.second);
         me.setAttribute("state", it.data());
     }
 }    
 
-void KPTCalendarWeeks::setWeek(int week, int year, int type) {
+void CalendarWeeks::setWeek(int week, int year, int type) {
     m_weeks.insert(week, year, type);
 }
 
-int KPTCalendarWeeks::state(const QDate &date) {
+int CalendarWeeks::state(const QDate &date) {
     int year;
     int week = date.weekNumber(&year);
     int st = m_weeks.state(week, year);
@@ -517,9 +517,9 @@ int KPTCalendarWeeks::state(const QDate &date) {
     return st;
 }
 
-/////   KPTCalendar   ////
+/////   Calendar   ////
 
-KPTCalendar::KPTCalendar()
+Calendar::Calendar()
     : m_parent(0),
       m_project(0),
       m_deleted(false) {
@@ -527,7 +527,7 @@ KPTCalendar::KPTCalendar()
     init();
 }
 
-KPTCalendar::KPTCalendar(QString name, KPTCalendar *parent)
+Calendar::Calendar(QString name, Calendar *parent)
     : m_name(name),
       m_parent(parent),
       m_project(0),
@@ -536,7 +536,7 @@ KPTCalendar::KPTCalendar(QString name, KPTCalendar *parent)
     init();
 }
 
-KPTCalendar::KPTCalendar(KPTStandardWorktime &wt)
+Calendar::Calendar(StandardWorktime &wt)
     : m_name(i18n("Standard calendar")),
       m_parent(0),
       m_project(0),
@@ -547,47 +547,47 @@ KPTCalendar::KPTCalendar(KPTStandardWorktime &wt)
             break;
     }
     m_days.setAutoDelete(true);
-    m_weeks = new KPTCalendarWeeks();
-    m_weekdays = new KPTCalendarWeekdays(wt.weekdays());
+    m_weeks = new CalendarWeeks();
+    m_weekdays = new CalendarWeekdays(wt.weekdays());
     
 }
 
-KPTCalendar::~KPTCalendar() {
+Calendar::~Calendar() {
     //kdDebug()<<k_funcinfo<<"deleting "<<m_name<<endl;
     removeId();
     delete m_weeks; 
     delete m_weekdays; 
 }
-KPTCalendar::KPTCalendar(KPTCalendar *calendar) {
+Calendar::Calendar(Calendar *calendar) {
     copy(*calendar);
 }
 
-const KPTCalendar &KPTCalendar::copy(KPTCalendar &calendar) {
+const Calendar &Calendar::copy(Calendar &calendar) {
     m_name = calendar.name();
     m_parent = calendar.parent();
     m_deleted = calendar.isDeleted();
     m_id = calendar.id();
-    QPtrListIterator<KPTCalendarDay> it = calendar.days();
+    QPtrListIterator<CalendarDay> it = calendar.days();
     for (; it.current(); ++it) {
-        m_days.append(new KPTCalendarDay(it.current()));
+        m_days.append(new CalendarDay(it.current()));
     }
-    m_weeks = new KPTCalendarWeeks(calendar.weeks());
-    m_weekdays = new KPTCalendarWeekdays(calendar.weekdays());
+    m_weeks = new CalendarWeeks(calendar.weeks());
+    m_weekdays = new CalendarWeekdays(calendar.weekdays());
     return *this;
 }
 
-void KPTCalendar::init() {
+void Calendar::init() {
     m_days.setAutoDelete(true);
-    m_weeks = new KPTCalendarWeeks();
-    m_weekdays = new KPTCalendarWeekdays();
+    m_weeks = new CalendarWeeks();
+    m_weekdays = new CalendarWeekdays();
 }
 
-void KPTCalendar::setProject(KPTProject *project) { 
+void Calendar::setProject(Project *project) { 
     m_project = project;
     generateId();
 }
 
-void KPTCalendar::setDeleted(bool yes) {
+void Calendar::setDeleted(bool yes) {
     if (yes) {
         removeId();
     } else {
@@ -595,14 +595,14 @@ void KPTCalendar::setDeleted(bool yes) {
     }
     m_deleted = yes;
 }
-bool KPTCalendar::setId(QString id) {
+bool Calendar::setId(QString id) {
     //kdDebug()<<k_funcinfo<<id<<endl;
     if (id.isEmpty()) {
         kdError()<<k_funcinfo<<"id is empty"<<endl;
         m_id = id;
         return false;
     }
-    KPTCalendar *c = findCalendar();
+    Calendar *c = findCalendar();
     if (c == this) {
         //kdDebug()<<k_funcinfo<<"My id found, remove it"<<endl;
         removeId();
@@ -621,7 +621,7 @@ bool KPTCalendar::setId(QString id) {
     return true;
 }
 
-void KPTCalendar::generateId() {
+void Calendar::generateId() {
     if (!m_id.isEmpty()) {
         removeId();
     }
@@ -635,7 +635,7 @@ void KPTCalendar::generateId() {
     m_id = QString();
 }
 
-bool KPTCalendar::load(QDomElement &element) {
+bool Calendar::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<element.text()<<endl;
     bool ok;
     setId(element.attribute("id"));
@@ -657,13 +657,13 @@ bool KPTCalendar::load(QDomElement &element) {
                 }
             }
             if (e.tagName() == "day") {
-                KPTCalendarDay *day = new KPTCalendarDay();
+                CalendarDay *day = new CalendarDay();
                 if (day->load(e)) {
                     if (!day->date().isValid()) {
                         delete day;
                         kdError()<<k_funcinfo<<m_name<<": Failed to load calendarDay - Invalid date"<<endl;
                     } else {
-                        KPTCalendarDay *d = findDay(day->date());
+                        CalendarDay *d = findDay(day->date());
                         if (d) {
                             // already exists, keep the new
                             removeDay(d);
@@ -682,7 +682,7 @@ bool KPTCalendar::load(QDomElement &element) {
     return true;
 }
 
-void KPTCalendar::save(QDomElement &element) {
+void Calendar::save(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (m_deleted)
         return;
@@ -695,7 +695,7 @@ void KPTCalendar::save(QDomElement &element) {
     me.setAttribute("id", m_id);
     m_weeks->save(me);
     m_weekdays->save(me);
-    QPtrListIterator<KPTCalendarDay> it = m_days;
+    QPtrListIterator<CalendarDay> it = m_days;
     for (; it.current(); ++it) {
         QDomElement e = me.ownerDocument().createElement("day");
         me.appendChild(e);
@@ -704,12 +704,12 @@ void KPTCalendar::save(QDomElement &element) {
     
 }
 
-KPTCalendarDay *KPTCalendar::findDay(const QDate &date, bool skipNone) const {
+CalendarDay *Calendar::findDay(const QDate &date, bool skipNone) const {
     //kdDebug()<<k_funcinfo<<date.toString()<<endl;
-    QPtrListIterator<KPTCalendarDay> it = m_days;
+    QPtrListIterator<CalendarDay> it = m_days;
     for (; it.current(); ++it) {
         if (it.current()->date() == date) {
-            if (skipNone  && it.current()->state() == KPTMap::None) {
+            if (skipNone  && it.current()->state() == Map::None) {
                 continue; // hmmm, break?
             }
             return it.current();
@@ -719,11 +719,11 @@ KPTCalendarDay *KPTCalendar::findDay(const QDate &date, bool skipNone) const {
     return 0;
 }
 
-int KPTCalendar::weekState(const QDate &date) const {
-    return m_weeks ? m_weeks->state(date) : KPTMap::None;
+int Calendar::weekState(const QDate &date) const {
+    return m_weeks ? m_weeks->state(date) : Map::None;
 }
 
-bool KPTCalendar::hasParent(KPTCalendar *cal) {
+bool Calendar::hasParent(Calendar *cal) {
     //kdDebug()<<k_funcinfo<<endl;
     if (!m_parent)
         return false;
@@ -732,41 +732,41 @@ bool KPTCalendar::hasParent(KPTCalendar *cal) {
     return m_parent->hasParent(cal);
 }
 
-KPTDuration KPTCalendar::parentDayWeekEffort(const QDate &date, const QTime &start, const QTime &end) const {
+Duration Calendar::parentDayWeekEffort(const QDate &date, const QTime &start, const QTime &end) const {
     if (!m_parent || m_parent->isDeleted()) {
-        return KPTDuration::zeroDuration;
+        return Duration::zeroDuration;
     }    
     //kdDebug()<<k_funcinfo<<m_name<<" "<<date.toString(Qt::ISODate)<<": "<<start.toString()<<" - "<<end.toString()<<endl;
-    KPTCalendarDay *day = m_parent->findDay(date, true);
+    CalendarDay *day = m_parent->findDay(date, true);
     if (day) {
         return day->effort(start, end);
     }
-    if (m_parent->weekState(date) == KPTMap::NonWorking) {
-        return KPTDuration::zeroDuration;
+    if (m_parent->weekState(date) == Map::NonWorking) {
+        return Duration::zeroDuration;
     }
     return m_parent->parentDayWeekEffort(date, start, end);
 }
 
-KPTDuration KPTCalendar::parentWeekdayEffort(const QDate &date, const QTime &start, const QTime &end) const {
+Duration Calendar::parentWeekdayEffort(const QDate &date, const QTime &start, const QTime &end) const {
     if (!m_parent || m_parent->isDeleted()) {
-        return KPTDuration::zeroDuration;
+        return Duration::zeroDuration;
     }
     //kdDebug()<<k_funcinfo<<m_name<<" "<<date.toString(Qt::ISODate)<<": "<<start.toString()<<" - "<<end.toString()<<endl;
     if (m_parent->weekdays()) {
-        if (m_parent->weekdays()->state(date) == KPTMap::Working) {
+        if (m_parent->weekdays()->state(date) == Map::Working) {
             return m_parent->weekdays()->effort(date, start, end);
         }
-        if (m_parent->weekdays()->state(date) == KPTMap::NonWorking) {
-            return KPTDuration::zeroDuration;
+        if (m_parent->weekdays()->state(date) == Map::NonWorking) {
+            return Duration::zeroDuration;
         }
     }
     return m_parent->parentWeekdayEffort(date, start, end);
 }
 
-KPTDuration KPTCalendar::effort(const QDate &date, const QTime &start, const QTime &end) const {
+Duration Calendar::effort(const QDate &date, const QTime &start, const QTime &end) const {
     //kdDebug()<<k_funcinfo<<m_name<<": "<<date.toString(Qt::ISODate)<<" "<<start.toString()<<" - "<<end.toString()<<endl;
     if (start == end) {
-        return KPTDuration::zeroDuration;
+        return Duration::zeroDuration;
     }
     QTime _start = start;
     QTime _end = end;
@@ -775,47 +775,47 @@ KPTDuration KPTCalendar::effort(const QDate &date, const QTime &start, const QTi
         _end = start;
     }
     // first, check my own day
-    KPTCalendarDay *day = findDay(date, true);
-    if (day&& day->state() != KPTMap::None) {
-        if (day->state() == KPTMap::Working) {
+    CalendarDay *day = findDay(date, true);
+    if (day&& day->state() != Map::None) {
+        if (day->state() == Map::Working) {
             return day->effort(_start, _end);
         } else {
-            return KPTDuration::zeroDuration;
+            return Duration::zeroDuration;
         }
     }
     // check my own weeks
-    if (weekState(date) == KPTMap::NonWorking) {
+    if (weekState(date) == Map::NonWorking) {
         // nonworking week, no effort
         //kdDebug()<<k_funcinfo<<"Non working week"<<endl;
-        return KPTDuration::zeroDuration;
+        return Duration::zeroDuration;
     }
     // check my parent's day & weeks
     int st = parentDayWeekHasInterval(date, _start, _end);
-    if (st == KPTMap::NonWorking) {
-        return KPTDuration::zeroDuration;
+    if (st == Map::NonWorking) {
+        return Duration::zeroDuration;
     }
-    if (st == KPTMap::Working) {
+    if (st == Map::Working) {
         return parentDayWeekEffort(date, _start, _end);
     }
     // check my own weekdays
-    if (m_weekdays && m_weekdays->state(date) != KPTMap::None) {
+    if (m_weekdays && m_weekdays->state(date) != Map::None) {
         return m_weekdays->effort(date, _start, _end);
     }
     // check my parent's weekdays
     if (parentWeekdayHasInterval(date, _start, _end)) {
         return parentWeekdayEffort(date, _start, _end);
     }
-    return KPTDuration::zeroDuration;
+    return Duration::zeroDuration;
 }
 
-KPTDuration KPTCalendar::effort(const KPTDateTime &start, const KPTDuration &duration) const {
+Duration Calendar::effort(const DateTime &start, const Duration &duration) const {
     //kdDebug()<<k_funcinfo<<start.toString()<<" duration "<<duration.toString()<<endl;
-    KPTDuration eff;
-    if (duration == KPTDuration::zeroDuration)
+    Duration eff;
+    if (duration == Duration::zeroDuration)
         return eff;
     QDate date = start.date();
     QTime startTime = start.time();
-    KPTDateTime end = start + duration;
+    DateTime end = start + duration;
     QTime endTime = end.time();
     if (end.date() > date) {
         endTime.setHMS(23, 59, 59, 999);
@@ -828,29 +828,29 @@ KPTDuration KPTCalendar::effort(const KPTDateTime &start, const KPTDuration &dur
              eff += effort(date, QTime(), QTime(23, 59, 59, 999)); // whole day
         else 
              eff += effort(date, QTime(), end.time());
-        //kdDebug()<<k_funcinfo<<": eff now="<<eff.toString(KPTDuration::Format_Day)<<endl;
+        //kdDebug()<<k_funcinfo<<": eff now="<<eff.toString(Duration::Format_Day)<<endl;
     }
-    //kdDebug()<<k_funcinfo<<start.date().toString()<<"- "<<end.date().toString()<<": total="<<eff.toString(KPTDuration::Format_Day)<<endl;
+    //kdDebug()<<k_funcinfo<<start.date().toString()<<"- "<<end.date().toString()<<": total="<<eff.toString(Duration::Format_Day)<<endl;
     return eff;
 }
 
-QPair<QTime, QTime> KPTCalendar::parentDayWeekInterval(const QDate &date, const QTime &start, const QTime &end) const {
+QPair<QTime, QTime> Calendar::parentDayWeekInterval(const QDate &date, const QTime &start, const QTime &end) const {
     //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     if (!m_parent)
         return QPair<QTime, QTime>(start, end);
     
-    KPTCalendarDay *day = m_parent->findDay(date, true);
-    if (day && day->state() != KPTMap::None) {
+    CalendarDay *day = m_parent->findDay(date, true);
+    if (day && day->state() != Map::None) {
         if (day->hasInterval(start, end))
             return day->interval(start, end);
     } 
-    if (m_parent->weekState(date) == KPTMap::NonWorking) {
+    if (m_parent->weekState(date) == Map::NonWorking) {
             return QPair<QTime, QTime>(start, end);
     }
     return m_parent->parentDayWeekInterval(date, start, end);
 }
 
-QPair<QTime, QTime> KPTCalendar::parentWeekdayInterval(const QDate &date, const QTime &start, const QTime &end) const {
+QPair<QTime, QTime> Calendar::parentWeekdayInterval(const QDate &date, const QTime &start, const QTime &end) const {
     //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     if (!m_parent || m_parent->isDeleted())
         return QPair<QTime, QTime>(start, end);
@@ -861,7 +861,7 @@ QPair<QTime, QTime> KPTCalendar::parentWeekdayInterval(const QDate &date, const 
     return m_parent->parentWeekdayInterval(date, start, end);
 }
 
-QPair<KPTDateTime, KPTDateTime> KPTCalendar::interval(const KPTDateTime &start, const KPTDateTime &end) const {
+QPair<DateTime, DateTime> Calendar::interval(const DateTime &start, const DateTime &end) const {
     //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     QTime startTime;
     QTime endTime;
@@ -877,48 +877,48 @@ QPair<KPTDateTime, KPTDateTime> KPTCalendar::interval(const KPTDateTime &start, 
             startTime = start.time();
             
         //kdDebug()<<k_funcinfo<<date.toString()<<": "<<startTime.toString()<<" - "<<endTime.toString()<<endl;
-        KPTCalendarDay *day = findDay(date, true);
-        if (day && day->state() != KPTMap::None) {
+        CalendarDay *day = findDay(date, true);
+        if (day && day->state() != Map::None) {
             if (day->hasInterval(startTime, endTime)) {
                 QPair<QTime, QTime> res = day->interval(startTime, endTime);
                 //kdDebug()<<k_funcinfo<<res.first.toString()<<" to "<<res.second.toString()<<endl;
-                return QPair<KPTDateTime, KPTDateTime>(KPTDateTime(date,res.first), KPTDateTime(date,res.second));
+                return QPair<DateTime, DateTime>(DateTime(date,res.first), DateTime(date,res.second));
             }
         }
-        if (weekState(date) == KPTMap::NonWorking) {
+        if (weekState(date) == Map::NonWorking) {
             //kdDebug()<<k_funcinfo<<date.toString()<<" is nonworking day"<<endl;
             continue;
         }
         int st = parentDayWeekHasInterval(date, startTime, endTime);
-        if (st == KPTMap::NonWorking) {
+        if (st == Map::NonWorking) {
             continue;
         }
-        if (st == KPTMap::Working) {
+        if (st == Map::Working) {
             QPair<QTime, QTime> res = parentDayWeekInterval(date, startTime, endTime);
-            return QPair<KPTDateTime, KPTDateTime>(KPTDateTime(date,res.first), KPTDateTime(date,res.second));
+            return QPair<DateTime, DateTime>(DateTime(date,res.first), DateTime(date,res.second));
         }
         if (m_weekdays && m_weekdays->hasInterval(date, startTime, endTime)) {
             QPair<QTime, QTime> res = m_weekdays->interval(date, startTime, endTime);
             //kdDebug()<<k_funcinfo<<res.first.toString()<<" to "<<res.second.toString()<<endl;
-            return QPair<KPTDateTime, KPTDateTime>(KPTDateTime(date,res.first), KPTDateTime(date,res.second));
+            return QPair<DateTime, DateTime>(DateTime(date,res.first), DateTime(date,res.second));
         }
         if (parentWeekdayHasInterval(date, startTime, endTime)) {
             QPair<QTime, QTime> res = parentWeekdayInterval(date, startTime, endTime);
-            return QPair<KPTDateTime, KPTDateTime>(KPTDateTime(date,res.first), KPTDateTime(date,res.second)); 
+            return QPair<DateTime, DateTime>(DateTime(date,res.first), DateTime(date,res.second)); 
         }
     }
     kdError()<<k_funcinfo<<"Didn't find an interval"<<endl;
-    return QPair<KPTDateTime, KPTDateTime>(start, end); // hmmmm, what else to do?
+    return QPair<DateTime, DateTime>(start, end); // hmmmm, what else to do?
 }
 
 // FIXME: This logic is full of holes
-bool KPTCalendar::hasIntervalBefore(const KPTDateTime &time) const {
+bool Calendar::hasIntervalBefore(const DateTime &time) const {
     if (m_weekdays->hasInterval()) {
         return true;
     }
-    QPtrListIterator<KPTCalendarDay> it = m_days;
+    QPtrListIterator<CalendarDay> it = m_days;
     for (; it.current(); ++it) {
-        if (it.current()->state() == KPTMap::Working) {
+        if (it.current()->state() == Map::Working) {
             if (it.current()->date() == time.date()) {
                 if (it.current()->hasIntervalBefore(time.time()))
                     return true;
@@ -932,13 +932,13 @@ bool KPTCalendar::hasIntervalBefore(const KPTDateTime &time) const {
 }
 
 // FIXME: This logic is full of holes
-bool KPTCalendar::hasIntervalAfter(const KPTDateTime &time) const {
+bool Calendar::hasIntervalAfter(const DateTime &time) const {
     if (m_weekdays->hasInterval()) {
         return true;
     }
-    QPtrListIterator<KPTCalendarDay> it = m_days;
+    QPtrListIterator<CalendarDay> it = m_days;
     for (; it.current(); ++it) {
-        if (it.current()->state() == KPTMap::Working) {
+        if (it.current()->state() == Map::Working) {
             if (it.current()->date() == time.date()) {
                 if (it.current()->hasIntervalAfter(time.time()))
                     return true;
@@ -951,36 +951,36 @@ bool KPTCalendar::hasIntervalAfter(const KPTDateTime &time) const {
     return m_parent ? m_parent->hasIntervalAfter(time) : false;
 }
 
-int KPTCalendar::parentDayWeekHasInterval(const QDate &date, const QTime &start, const QTime &end) const {
+int Calendar::parentDayWeekHasInterval(const QDate &date, const QTime &start, const QTime &end) const {
     if (!m_parent || m_parent->isDeleted()) {
         //kdDebug()<<k_funcinfo<<m_name<<" "<<date.toString(Qt::ISODate)<<": "<<start.toString()<<" - "<<end.toString()<<"=false"<<endl;
-        return KPTMap::None;
+        return Map::None;
     }
-    KPTCalendarDay *day = m_parent->findDay(date, true);
+    CalendarDay *day = m_parent->findDay(date, true);
     if (day) {
-        if (day->state() == KPTMap::Working && day->hasInterval(start, end))
-            return KPTMap::Working;
+        if (day->state() == Map::Working && day->hasInterval(start, end))
+            return Map::Working;
         else
-            return KPTMap::NonWorking;
+            return Map::NonWorking;
     } 
-    if (m_parent->weekState(date) == KPTMap::NonWorking) {
+    if (m_parent->weekState(date) == Map::NonWorking) {
         //kdDebug()<<k_funcinfo<<m_name<<" "<<date.toString(Qt::ISODate)<<": "<<start.toString()<<" - "<<end.toString()<<"weekState=NonWorking"<<endl;
-        return KPTMap::NonWorking;
+        return Map::NonWorking;
     }
     return m_parent->parentDayWeekHasInterval(date, start, end);
 }
 
-bool KPTCalendar::parentWeekdayHasInterval(const QDate &date, const QTime &start, const QTime &end) const {
+bool Calendar::parentWeekdayHasInterval(const QDate &date, const QTime &start, const QTime &end) const {
     if (!m_parent || m_parent->isDeleted()) {
         //kdDebug()<<k_funcinfo<<m_name<<" "<<date.toString(Qt::ISODate)<<": "<<start.toString()<<" - "<<end.toString()<<"=false"<<endl;
         return false;
     }
     if (m_parent->weekdays()) {
-        KPTCalendarDay *day = m_parent->weekdays()->weekday(date);
-        if (day && day->state() == KPTMap::NonWorking) {
+        CalendarDay *day = m_parent->weekdays()->weekday(date);
+        if (day && day->state() == Map::NonWorking) {
             return false;
         }
-        if (day && day->state() == KPTMap::Working) {
+        if (day && day->state() == Map::Working) {
             if (day->hasInterval(start, end)) {
                 return true;
             }
@@ -990,7 +990,7 @@ bool KPTCalendar::parentWeekdayHasInterval(const QDate &date, const QTime &start
     return m_parent->parentWeekdayHasInterval(date, start, end);
 }
 
-bool KPTCalendar::hasInterval(const KPTDateTime &start, const KPTDateTime &end) const {
+bool Calendar::hasInterval(const DateTime &start, const DateTime &end) const {
     //kdDebug()<<k_funcinfo<<start.toString()<<" - "<<end.toString()<<endl;
     QTime startTime;
     QTime endTime;
@@ -1005,16 +1005,16 @@ bool KPTCalendar::hasInterval(const KPTDateTime &start, const KPTDateTime &end) 
         else 
             startTime = start.time();
         
-        KPTCalendarDay *day = findDay(date, true);
+        CalendarDay *day = findDay(date, true);
         if (day) {
             return day->hasInterval(startTime, endTime);
         } 
-        if (weekState(date) == KPTMap::NonWorking) {
+        if (weekState(date) == Map::NonWorking) {
              continue;
         }
         int st = parentDayWeekHasInterval(date, startTime, endTime);
-        if (st != KPTMap::None) {
-            return st == KPTMap::Working;
+        if (st != Map::None) {
+            return st == Map::Working;
         }
         if (m_weekdays && m_weekdays->hasInterval(date, startTime, endTime)) {
             return true;
@@ -1026,15 +1026,15 @@ bool KPTCalendar::hasInterval(const KPTDateTime &start, const KPTDateTime &end) 
     return false;
 }
 
-KPTDateTime KPTCalendar::availableAfter(const KPTDateTime &time) {
+DateTime Calendar::availableAfter(const DateTime &time) {
     //kdDebug()<<k_funcinfo<<m_name<<" "<<time.toString()<<endl;
-    KPTDateTime start = time;
-    KPTDateTime end(time.date(), QTime(23,59,59,999));
-    KPTDateTime t = time;
+    DateTime start = time;
+    DateTime end(time.date(), QTime(23,59,59,999));
+    DateTime t = time;
     int i=28;
     for (; i > 0 && !hasInterval(start, end); --i) { //FIXME Set a period for which this calendar is valid
         end = end.addDays(1);
-        start = KPTDateTime(end.date(), QTime());
+        start = DateTime(end.date(), QTime());
     }
     if (i > 0)
         t = interval(start, end).first;
@@ -1042,15 +1042,15 @@ KPTDateTime KPTCalendar::availableAfter(const KPTDateTime &time) {
     return t;
 }
 
-KPTDateTime KPTCalendar::availableBefore(const KPTDateTime &time) {
+DateTime Calendar::availableBefore(const DateTime &time) {
     //kdDebug()<<k_funcinfo<<time.toString()<<endl;
-    KPTDateTime start(time.date(), QTime());
-    KPTDateTime end = time;
-    KPTDateTime t = time;
+    DateTime start(time.date(), QTime());
+    DateTime end = time;
+    DateTime t = time;
     int i=28;
     for (; i > 0 && !hasInterval(start, end); --i) { //FIXME Set a period for which this calendar is valid
         start = start.addDays(-1);
-        end = KPTDateTime(start.date(), QTime(23,59,59,999));
+        end = DateTime(start.date(), QTime(23,59,59,999));
     }
     if (i > 0)
         t = interval(start, end).second;
@@ -1058,25 +1058,25 @@ KPTDateTime KPTCalendar::availableBefore(const KPTDateTime &time) {
     return t;
 }
 
-KPTCalendar *KPTCalendar::findCalendar(const QString &id) const { 
+Calendar *Calendar::findCalendar(const QString &id) const { 
     return (m_project ? m_project->findCalendar(id) : 0); 
 }
 
-bool KPTCalendar::removeId(const QString &id) { 
+bool Calendar::removeId(const QString &id) { 
     return (m_project ? m_project->removeCalendarId(id) : false); 
 }
 
-void KPTCalendar::insertId(const QString &id){ 
+void Calendar::insertId(const QString &id){ 
     if (m_project)
         m_project->insertCalendarId(id, this); 
 }
 
 /////////////
-KPTStandardWorktime::KPTStandardWorktime() {
+StandardWorktime::StandardWorktime() {
     init();
 }
 
-KPTStandardWorktime::KPTStandardWorktime(KPTStandardWorktime *worktime) {
+StandardWorktime::StandardWorktime(StandardWorktime *worktime) {
     if (worktime) {
         m_year = worktime->durationYear();
         m_month = worktime->durationMonth();
@@ -1087,73 +1087,73 @@ KPTStandardWorktime::KPTStandardWorktime(KPTStandardWorktime *worktime) {
     }
 }
 
-KPTStandardWorktime::~KPTStandardWorktime() {
+StandardWorktime::~StandardWorktime() {
     //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
-void KPTStandardWorktime::init() {
+void StandardWorktime::init() {
     // Some temporary sane default values
-    m_year = KPTDuration(0, 1760, 0);
-    m_month = KPTDuration(0, 176, 0);
-    m_day.setState(KPTMap::Working);
+    m_year = Duration(0, 1760, 0);
+    m_month = Duration(0, 176, 0);
+    m_day.setState(Map::Working);
     m_day.addInterval(new QPair<QTime, QTime>(QTime(8, 0, 0), QTime(16, 0, 0)));
     
     for (int i=0; i<5; ++i) {
-        setState(i, KPTMap::Working);
+        setState(i, Map::Working);
         QPtrList<QPair<QTime, QTime> > l;
         l.append(new QPair<QTime, QTime>(QTime(8, 0, 0), QTime(16, 0, 0)));
         setIntervals(i, l);
     }
-    m_weekdays.setState(5, KPTMap::NonWorking);
-    m_weekdays.setState(6, KPTMap::NonWorking);
+    m_weekdays.setState(5, Map::NonWorking);
+    m_weekdays.setState(6, Map::NonWorking);
 }    
 
-KPTDuration KPTStandardWorktime::durationYear() const {
+Duration StandardWorktime::durationYear() const {
     return m_year;
 }
 
-KPTDuration KPTStandardWorktime::durationMonth() const {
+Duration StandardWorktime::durationMonth() const {
     return m_month;
 }
 
-KPTDuration KPTStandardWorktime::durationWeek() const {
+Duration StandardWorktime::durationWeek() const {
     return m_weekdays.duration();
 }
 
-void KPTStandardWorktime::setWeek() {
+void StandardWorktime::setWeek() {
 }
 
-KPTDuration KPTStandardWorktime::durationWeekday(int weekday) const {
+Duration StandardWorktime::durationWeekday(int weekday) const {
     return m_weekdays.duration(weekday);
 }
 
-KPTDuration KPTStandardWorktime::durationDay() const {
+Duration StandardWorktime::durationDay() const {
     return m_day.duration();
 }
 
-void KPTStandardWorktime::setDay() {
+void StandardWorktime::setDay() {
 }
 
-QTime KPTStandardWorktime::startOfDay(int weekday) const {
+QTime StandardWorktime::startOfDay(int weekday) const {
     return m_weekdays.startOfDay(weekday);
 }
 
-QTime KPTStandardWorktime::startOfDay(const QDate &date) const {
+QTime StandardWorktime::startOfDay(const QDate &date) const {
     return m_weekdays.startOfDay(date.dayOfWeek()-1);
 }
 
-QTime KPTStandardWorktime::endOfDay(int weekday) const {
+QTime StandardWorktime::endOfDay(int weekday) const {
     return m_weekdays.endOfDay(weekday);
 }
     
-QTime KPTStandardWorktime::endOfDay(const QDate &date) const {
+QTime StandardWorktime::endOfDay(const QDate &date) const {
     return m_weekdays.endOfDay(date.dayOfWeek()-1);
 }
     
-bool KPTStandardWorktime::load(QDomElement &element) {
+bool StandardWorktime::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
-    m_year = KPTDuration::fromString(element.attribute("year"), KPTDuration::Format_Hour); //FIXME
-    m_month = KPTDuration::fromString(element.attribute("month"), KPTDuration::Format_Hour); //FIXME
+    m_year = Duration::fromString(element.attribute("year"), Duration::Format_Hour); //FIXME
+    m_month = Duration::fromString(element.attribute("month"), Duration::Format_Hour); //FIXME
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
@@ -1173,61 +1173,61 @@ bool KPTStandardWorktime::load(QDomElement &element) {
     return true;
 }
 
-void KPTStandardWorktime::save(QDomElement &element) {
+void StandardWorktime::save(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
     QDomElement me = element.ownerDocument().createElement("standard-worktime");
     element.appendChild(me);
-    me.setAttribute("year", m_year.toString(KPTDuration::Format_Hour)); //FIXME
-    me.setAttribute("month", m_month.toString(KPTDuration::Format_Hour)); //FIXME
+    me.setAttribute("year", m_year.toString(Duration::Format_Hour)); //FIXME
+    me.setAttribute("month", m_month.toString(Duration::Format_Hour)); //FIXME
     QDomElement e = me.ownerDocument().createElement("day");
     me.appendChild(e);
     m_day.save(e);
     m_weekdays.save(me);
 }
 
-int KPTStandardWorktime::state(int weekday) const {
+int StandardWorktime::state(int weekday) const {
     return m_weekdays.state(weekday);
 }
 
-int KPTStandardWorktime::state(const QDate &date) const {
+int StandardWorktime::state(const QDate &date) const {
     return m_weekdays.state(date.dayOfWeek()-1);
 }
 
-void KPTStandardWorktime::setState(int weekday, int state) {
+void StandardWorktime::setState(int weekday, int state) {
     m_weekdays.setState(weekday, state);
 }
 
-KPTDateTime KPTStandardWorktime::workStartAfter(const KPTDateTime &dt) const {
+DateTime StandardWorktime::workStartAfter(const DateTime &dt) const {
     QDate date = dt.date();
-    if (state(date) == KPTMap::Working && endOfDay(date) > dt.time())
+    if (state(date) == Map::Working && endOfDay(date) > dt.time())
         return dt;
     date = date.addDays(1);
     for (int i = 0; i < 6; ++i) {
-        if (state(date) == KPTMap::Working)
-            return KPTDateTime(date, startOfDay(date));
+        if (state(date) == Map::Working)
+            return DateTime(date, startOfDay(date));
         date = date.addDays(1);
     }
     return dt;
 }
 
-KPTDateTime KPTStandardWorktime::workFinishBefore(const KPTDateTime &dt) const {
+DateTime StandardWorktime::workFinishBefore(const DateTime &dt) const {
     QDate date = dt.date();
-    if (state(date) == KPTMap::Working && startOfDay(date) < dt.time())
+    if (state(date) == Map::Working && startOfDay(date) < dt.time())
         return dt;
     date = date.addDays(-1);
     for (int i = 0; i < 6; ++i) {
-        if (state(date) == KPTMap::Working)
-            return KPTDateTime(date, endOfDay(date));
+        if (state(date) == Map::Working)
+            return DateTime(date, endOfDay(date));
         date = date.addDays(-1);
     }
     return dt;
 }
 
 #ifndef NDEBUG
-void KPTCalendarDay::printDebug(QCString indent) {
+void CalendarDay::printDebug(QCString indent) {
     QString s[] = {"None", "Non-working", "Working"};
     kdDebug()<<indent<<" "<<m_date.toString()<<" = "<<s[m_state]<<endl;
-    if (m_state == KPTMap::Working) {
+    if (m_state == Map::Working) {
         indent += "  ";
         QPtrListIterator<QPair<QTime, QTime> > it = m_workingIntervals;
         for (; it.current(); ++it) {
@@ -1236,37 +1236,37 @@ void KPTCalendarDay::printDebug(QCString indent) {
     }
     
 }
-void KPTCalendarWeekdays::printDebug(QCString indent) {
+void CalendarWeekdays::printDebug(QCString indent) {
     kdDebug()<<indent<<"Weekdays ------"<<endl;
-    QPtrListIterator<KPTCalendarDay> it = m_weekdays;
+    QPtrListIterator<CalendarDay> it = m_weekdays;
     for (char c='0'; it.current(); ++it) {
         it.current()->printDebug(indent + "  Day " + c++ + ": ");
     }
 
 }
-void KPTCalendarWeeks::printDebug(QCString indent) {
+void CalendarWeeks::printDebug(QCString indent) {
     QCString s[] = {"None", "Non-working", "Working"};
     kdDebug()<<indent<<" Weeks ------"<<endl;
     indent += "  ";
-    KPTWeekMap::iterator it;
+    WeekMap::iterator it;
     for (it = m_weeks.begin(); it != m_weeks.end(); ++it) {
         kdDebug()<<indent<<" Week: "<<it.key()<<" = "<<s[it.data()]<<endl;
     }
 }
-void KPTCalendar::printDebug(QCString indent) {
-    kdDebug()<<indent<<"KPTCalendar "<<m_id<<": '"<<m_name<<"' Deleted="<<m_deleted<<endl;
+void Calendar::printDebug(QCString indent) {
+    kdDebug()<<indent<<"Calendar "<<m_id<<": '"<<m_name<<"' Deleted="<<m_deleted<<endl;
     kdDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : "No parent")<<endl;
     m_weekdays->printDebug(indent + "  ");
     m_weeks->printDebug(indent + "  ");
     kdDebug()<<indent<<"  Days --------"<<endl;
-    QPtrListIterator<KPTCalendarDay> it = m_days;
+    QPtrListIterator<CalendarDay> it = m_days;
     for (; it.current(); ++it) {
         it.current()->printDebug(indent + "  ");
     }
 }
 
-void KPTStandardWorktime::printDebug(QCString indent) {
-    kdDebug()<<indent<<"KPTStandardWorktime "<<endl;
+void StandardWorktime::printDebug(QCString indent) {
+    kdDebug()<<indent<<"StandardWorktime "<<endl;
     kdDebug()<<indent<<"Year: "<<m_year.toString()<<endl;
     kdDebug()<<indent<<"Month: "<<m_year.toString()<<endl;
     m_weekdays.printDebug(indent + "  ");

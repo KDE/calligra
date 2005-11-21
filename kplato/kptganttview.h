@@ -42,32 +42,32 @@ class KPrinter;
 namespace KPlato
 {
 
-class KPTTaskAppointmentsView;
+class TaskAppointmentsView;
 
-class KPTView;
-class KPTNode;
-class KPTTask;
-class KPTProject;
-class KPTRelation;
-class KPTContext;
+class View;
+class Node;
+class Task;
+class Project;
+class Relation;
+class Context;
 
-class KPTGanttView : public QSplitter
+class GanttView : public QSplitter
 {
     Q_OBJECT
 
  public:
 
-    KPTGanttView(KPTView *view, QWidget *parent, bool readWrite=true, const char* name = 0  );
+    GanttView(View *view, QWidget *parent, bool readWrite=true, const char* name = 0  );
 
-    //~KPTGanttView();
+    //~GanttView();
 
     void zoom(double zoom);
 
-    void draw(KPTProject &project);
-    void drawChanges(KPTProject &project);
-    KPTView *mainView();
+    void draw(Project &project);
+    void drawChanges(Project &project);
+    View *mainView();
 
-    KPTNode *currentNode() const;
+    Node *currentNode() const;
 
     void clear();
     void print(KPrinter &prts);
@@ -76,17 +76,17 @@ class KPTGanttView : public QSplitter
     
     bool exportGantt(QIODevice* device); // testing
     
-    virtual bool setContext(KPTContext &context);
-    virtual void getContext(KPTContext &context) const;
+    virtual bool setContext(Context &context);
+    virtual void getContext(Context &context) const;
 
     void setReadWriteMode(bool on);
     bool isReadWriteMode() const { return m_readWrite; }
     
 signals:
-    void modifyRelation(KPTRelation *rel) ;
-    void addRelation(KPTNode *par, KPTNode *child);
-    void modifyRelation(KPTRelation *rel, int linkType) ;
-    void addRelation(KPTNode *par, KPTNode *child, int linkType);
+    void modifyRelation(Relation *rel) ;
+    void addRelation(Node *par, Node *child);
+    void modifyRelation(Relation *rel, int linkType) ;
+    void addRelation(Node *par, Node *child, int linkType);
     
 public slots:
     void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);
@@ -114,56 +114,56 @@ protected:
     int linkTypeToRelation(int linkType);
     void setRenameEnabled(QListViewItem *item, bool on);
 private:
-    KDGanttViewItem *findItem(KPTNode *node);
-    KDGanttViewItem *findItem(KPTNode *node, KDGanttViewItem *item);
-    KPTNode *getNode(KDGanttViewItem *item) const;
+    KDGanttViewItem *findItem(Node *node);
+    KDGanttViewItem *findItem(Node *node, KDGanttViewItem *item);
+    Node *getNode(KDGanttViewItem *item) const;
     bool isDrawn(KDGanttViewItem *item);
     void setDrawn(KDGanttViewItem *item, bool state);
     void resetDrawn(KDGanttViewItem *_item);
     void removeNotDrawn(KDGanttViewItem *_item);
     void deleteItem(KDGanttViewItem *item);
-    KDGanttViewItem *correctType(KDGanttViewItem *item, KPTNode *node);
-    void correctPosition(KDGanttViewItem *item, KPTNode *node);
-    KDGanttViewItem *correctParent(KDGanttViewItem *item, KPTNode *node);
+    KDGanttViewItem *correctType(KDGanttViewItem *item, Node *node);
+    void correctPosition(KDGanttViewItem *item, Node *node);
+    KDGanttViewItem *correctParent(KDGanttViewItem *item, Node *node);
 
-    void updateChildren(KPTNode *node);
-    void updateNode(KPTNode *node);
+    void updateChildren(Node *node);
+    void updateNode(Node *node);
     
-    void modifyChildren(KPTNode *node);
-    void modifyNode(KPTNode *node);    
-    void modifyProject(KDGanttViewItem *item, KPTNode *node);
-    void modifySummaryTask(KDGanttViewItem *item, KPTTask *task);
-    void modifyTask(KDGanttViewItem *item, KPTTask *task);
-    void modifyMilestone(KDGanttViewItem *item, KPTTask *task);
+    void modifyChildren(Node *node);
+    void modifyNode(Node *node);    
+    void modifyProject(KDGanttViewItem *item, Node *node);
+    void modifySummaryTask(KDGanttViewItem *item, Task *task);
+    void modifyTask(KDGanttViewItem *item, Task *task);
+    void modifyMilestone(KDGanttViewItem *item, Task *task);
     
-    KDGanttViewItem *addNode(KDGanttViewItem *parentItem, KPTNode *node,KDGanttViewItem *after=0);
+    KDGanttViewItem *addNode(KDGanttViewItem *parentItem, Node *node,KDGanttViewItem *after=0);
     
-    KDGanttViewItem *addProject(KDGanttViewItem *parentItem, KPTNode *node, KDGanttViewItem *after=0);
-    KDGanttViewItem *addSubProject(KDGanttViewItem *parentItem, KPTNode *node, KDGanttViewItem *after=0);
-    KDGanttViewItem *addSummaryTask(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after=0);
-    KDGanttViewItem *addTask(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after=0);
-    KDGanttViewItem *addMilestone(KDGanttViewItem *parentItem, KPTTask *task, KDGanttViewItem *after=0);
+    KDGanttViewItem *addProject(KDGanttViewItem *parentItem, Node *node, KDGanttViewItem *after=0);
+    KDGanttViewItem *addSubProject(KDGanttViewItem *parentItem, Node *node, KDGanttViewItem *after=0);
+    KDGanttViewItem *addSummaryTask(KDGanttViewItem *parentItem, Task *task, KDGanttViewItem *after=0);
+    KDGanttViewItem *addTask(KDGanttViewItem *parentItem, Task *task, KDGanttViewItem *after=0);
+    KDGanttViewItem *addMilestone(KDGanttViewItem *parentItem, Task *task, KDGanttViewItem *after=0);
     
-    void drawChildren(KDGanttViewItem *item, KPTNode &node);
-    void drawProject(KDGanttViewItem *parentItem, KPTNode *node);
-    void drawSubProject(KDGanttViewItem *parentItem, KPTNode *node);
-    void drawSummaryTask(KDGanttViewItem *parentItem, KPTTask *task);
-    void drawTask(KDGanttViewItem *parentItem, KPTTask *task);
-    void drawMilestone(KDGanttViewItem *parentItem, KPTTask *task);
+    void drawChildren(KDGanttViewItem *item, Node &node);
+    void drawProject(KDGanttViewItem *parentItem, Node *node);
+    void drawSubProject(KDGanttViewItem *parentItem, Node *node);
+    void drawSummaryTask(KDGanttViewItem *parentItem, Task *task);
+    void drawTask(KDGanttViewItem *parentItem, Task *task);
+    void drawMilestone(KDGanttViewItem *parentItem, Task *task);
 
     void drawRelations();
     void drawRelations(KDGanttViewItem *item);
     void drawChildRelations(KDGanttViewItem *item);
 
-    void getContextClosedNodes(KPTContext &context, KDGanttViewItem *item) const;
+    void getContextClosedNodes(Context &context, KDGanttViewItem *item) const;
     
 private:
-    KPTView *m_mainview;
+    View *m_mainview;
     bool m_readWrite;
     int m_defaultFontSize;
     KDGanttViewItem *m_currentItem;
     KDGanttView *m_gantt;
-    KPTTaskAppointmentsView *m_taskView;
+    TaskAppointmentsView *m_taskView;
     bool m_showResources;
     bool m_showTaskName;
     bool m_showTaskLinks;

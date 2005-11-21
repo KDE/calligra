@@ -32,8 +32,8 @@
 namespace KPlato
 {
 
-KPTCalendarAddCmd::KPTCalendarAddCmd(KPTPart *part, KPTProject *project,KPTCalendar *cal, QString name)
-    : KPTNamedCommand(part, name),
+CalendarAddCmd::CalendarAddCmd(Part *part, Project *project,Calendar *cal, QString name)
+    : NamedCommand(part, name),
       m_project(project),
       m_cal(cal),
       m_added(false) {
@@ -41,7 +41,7 @@ KPTCalendarAddCmd::KPTCalendarAddCmd(KPTPart *part, KPTProject *project,KPTCalen
     //kdDebug()<<k_funcinfo<<cal->name()<<endl;
 }
 
-void KPTCalendarAddCmd::execute() {
+void CalendarAddCmd::execute() {
     if (!m_added && m_project) {
         m_project->addCalendar(m_cal);
         m_added = true;
@@ -52,32 +52,32 @@ void KPTCalendarAddCmd::execute() {
     //kdDebug()<<k_funcinfo<<m_cal->name()<<" added to: "<<m_project->name()<<endl;
 }
 
-void KPTCalendarAddCmd::unexecute() {
+void CalendarAddCmd::unexecute() {
     m_cal->setDeleted(true);
     
     setCommandType(0);
     //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 
-KPTCalendarDeleteCmd::KPTCalendarDeleteCmd(KPTPart *part, KPTCalendar *cal, QString name)
-    : KPTNamedCommand(part, name),
+CalendarDeleteCmd::CalendarDeleteCmd(Part *part, Calendar *cal, QString name)
+    : NamedCommand(part, name),
       m_cal(cal) {
 }
 
-void KPTCalendarDeleteCmd::execute() {
+void CalendarDeleteCmd::execute() {
     m_cal->setDeleted(true);
     
     setCommandType(0);
 }
 
-void KPTCalendarDeleteCmd::unexecute() {
+void CalendarDeleteCmd::unexecute() {
     m_cal->setDeleted(false);
     
     setCommandType(0);
 }
 
-KPTNodeDeleteCmd::KPTNodeDeleteCmd(KPTPart *part, KPTNode *node, QString name)
-    : KPTNamedCommand(part, name),
+NodeDeleteCmd::NodeDeleteCmd(Part *part, Node *node, QString name)
+    : NamedCommand(part, name),
       m_node(node),
        m_index(-1) {
     
@@ -87,14 +87,14 @@ KPTNodeDeleteCmd::KPTNodeDeleteCmd(KPTPart *part, KPTNode *node, QString name)
     m_mine = false;
     m_appointments.setAutoDelete(true);
 }
-KPTNodeDeleteCmd::~KPTNodeDeleteCmd() {
+NodeDeleteCmd::~NodeDeleteCmd() {
     if (m_mine)
         delete m_node;
 }
-void KPTNodeDeleteCmd::execute() {
+void NodeDeleteCmd::execute() {
     if (m_parent) {
         //kdDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
-        QPtrListIterator<KPTAppointment> it = m_node->appointments();
+        QPtrListIterator<Appointment> it = m_node->appointments();
         for (; it.current(); ++it) {
             it.current()->detach();
             m_appointments.append(it.current());
@@ -105,11 +105,11 @@ void KPTNodeDeleteCmd::execute() {
         setCommandType(1);
     }
 }
-void KPTNodeDeleteCmd::unexecute() {
+void NodeDeleteCmd::unexecute() {
     if (m_parent) {
         //kdDebug()<<k_funcinfo<<m_node->name()<<" "<<m_index<<endl;
         m_parent->insertChildNode(m_index, m_node);
-        KPTAppointment *a;
+        Appointment *a;
         for (a = m_appointments.first(); a != 0; m_appointments.take()) {
             a->attach();
         }
@@ -119,8 +119,8 @@ void KPTNodeDeleteCmd::unexecute() {
     }
 }
 
-KPTTaskAddCmd::KPTTaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *after,  QString name)
-    : KPTNamedCommand(part, name),
+TaskAddCmd::TaskAddCmd(Part *part, Project *project, Node *node, Node *after,  QString name)
+    : NamedCommand(part, name),
       m_project(project),
       m_node(node),
       m_after(after),
@@ -131,7 +131,7 @@ KPTTaskAddCmd::KPTTaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, 
         node->setStartTime(after->getParent()->startTime());
         node->setEndTime(node->startTime() + node->duration());
     } else {
-        if (project->constraint() == KPTNode::MustFinishOn) {
+        if (project->constraint() == Node::MustFinishOn) {
             node->setEndTime(project->endTime());
             node->setStartTime(node->endTime() - node->duration());
         } else {
@@ -144,26 +144,26 @@ KPTTaskAddCmd::KPTTaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, 
     node->setWorkStartTime(node->startTime());
     node->setWorkEndTime(node->endTime());
 }
-KPTTaskAddCmd::~KPTTaskAddCmd() {
+TaskAddCmd::~TaskAddCmd() {
     if (!m_added)
         delete m_node;
 }
-void KPTTaskAddCmd::execute() {
+void TaskAddCmd::execute() {
     //kdDebug()<<k_funcinfo<<m_node->name()<<endl;
     m_project->addTask(m_node, m_after);
     m_added = true;
     
     setCommandType(1);
 }
-void KPTTaskAddCmd::unexecute() {
+void TaskAddCmd::unexecute() {
     m_node->getParent()->delChildNode(m_node, false/*take*/);
     m_added = false;
     
     setCommandType(1);
 }
 
-KPTSubtaskAddCmd::KPTSubtaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *parent,  QString name)
-    : KPTNamedCommand(part, name),
+SubtaskAddCmd::SubtaskAddCmd(Part *part, Project *project, Node *node, Node *parent,  QString name)
+    : NamedCommand(part, name),
       m_project(project),
       m_node(node),
       m_parent(parent),
@@ -177,196 +177,196 @@ KPTSubtaskAddCmd::KPTSubtaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *
     node->setWorkStartTime(node->startTime());
     node->setWorkEndTime(node->endTime());
 }
-KPTSubtaskAddCmd::~KPTSubtaskAddCmd() {
+SubtaskAddCmd::~SubtaskAddCmd() {
     if (!m_added)
         delete m_node;
 }
-void KPTSubtaskAddCmd::execute() {
+void SubtaskAddCmd::execute() {
     m_project->addSubTask(m_node, m_parent);
     m_added = true;
     
     setCommandType(1);
 }
-void KPTSubtaskAddCmd::unexecute() {
+void SubtaskAddCmd::unexecute() {
     m_parent->delChildNode(m_node, false/*take*/);
     m_added = false;
     
     setCommandType(1);
 }
 
-KPTNodeModifyNameCmd::KPTNodeModifyNameCmd(KPTPart *part, KPTNode &node, QString nodename, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyNameCmd::NodeModifyNameCmd(Part *part, Node &node, QString nodename, QString name)
+    : NamedCommand(part, name),
       m_node(node),
       newName(nodename),
       oldName(node.name()) {
 
 }
-void KPTNodeModifyNameCmd::execute() {
+void NodeModifyNameCmd::execute() {
     m_node.setName(newName);
     
     setCommandType(0);
 }
-void KPTNodeModifyNameCmd::unexecute() {
+void NodeModifyNameCmd::unexecute() {
     m_node.setName(oldName);
     
     setCommandType(0);
 }
 
-KPTNodeModifyLeaderCmd::KPTNodeModifyLeaderCmd(KPTPart *part, KPTNode &node, QString leader, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyLeaderCmd::NodeModifyLeaderCmd(Part *part, Node &node, QString leader, QString name)
+    : NamedCommand(part, name),
       m_node(node),
       newLeader(leader),
       oldLeader(node.leader()) {
 
 }
-void KPTNodeModifyLeaderCmd::execute() {
+void NodeModifyLeaderCmd::execute() {
     m_node.setLeader(newLeader);
     
     setCommandType(0);
 }
-void KPTNodeModifyLeaderCmd::unexecute() {
+void NodeModifyLeaderCmd::unexecute() {
     m_node.setLeader(oldLeader);
     
     setCommandType(0);
 }
 
-KPTNodeModifyDescriptionCmd::KPTNodeModifyDescriptionCmd(KPTPart *part, KPTNode &node, QString description, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyDescriptionCmd::NodeModifyDescriptionCmd(Part *part, Node &node, QString description, QString name)
+    : NamedCommand(part, name),
       m_node(node),
       newDescription(description),
       oldDescription(node.description()) {
 
 }
-void KPTNodeModifyDescriptionCmd::execute() {
+void NodeModifyDescriptionCmd::execute() {
     m_node.setDescription(newDescription);
     
     setCommandType(0);
 }
-void KPTNodeModifyDescriptionCmd::unexecute() {
+void NodeModifyDescriptionCmd::unexecute() {
     m_node.setDescription(oldDescription);
     
     setCommandType(0);
 }
 
-KPTNodeModifyConstraintCmd::KPTNodeModifyConstraintCmd(KPTPart *part, KPTNode &node, KPTNode::ConstraintType c, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyConstraintCmd::NodeModifyConstraintCmd(Part *part, Node &node, Node::ConstraintType c, QString name)
+    : NamedCommand(part, name),
       m_node(node),
       newConstraint(c),
-      oldConstraint(static_cast<KPTNode::ConstraintType>(node.constraint())) {
+      oldConstraint(static_cast<Node::ConstraintType>(node.constraint())) {
 
 }
-void KPTNodeModifyConstraintCmd::execute() {
+void NodeModifyConstraintCmd::execute() {
     m_node.setConstraint(newConstraint);
     
     setCommandType(1);
 }
-void KPTNodeModifyConstraintCmd::unexecute() {
+void NodeModifyConstraintCmd::unexecute() {
     m_node.setConstraint(oldConstraint);
     
     setCommandType(1);
 }
 
-KPTNodeModifyConstraintStartTimeCmd::KPTNodeModifyConstraintStartTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyConstraintStartTimeCmd::NodeModifyConstraintStartTimeCmd(Part *part, Node &node, QDateTime dt, QString name)
+    : NamedCommand(part, name),
       m_node(node),
       newTime(dt),
       oldTime(node.constraintStartTime()) {
 
 }
-void KPTNodeModifyConstraintStartTimeCmd::execute() {
+void NodeModifyConstraintStartTimeCmd::execute() {
     m_node.setConstraintStartTime(newTime);
     
     setCommandType(1);
 }
-void KPTNodeModifyConstraintStartTimeCmd::unexecute() {
+void NodeModifyConstraintStartTimeCmd::unexecute() {
     m_node.setConstraintStartTime(oldTime);
     
     setCommandType(1);
 }
 
-KPTNodeModifyConstraintEndTimeCmd::KPTNodeModifyConstraintEndTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyConstraintEndTimeCmd::NodeModifyConstraintEndTimeCmd(Part *part, Node &node, QDateTime dt, QString name)
+    : NamedCommand(part, name),
       m_node(node),
       newTime(dt),
       oldTime(node.constraintEndTime()) {
 
 }
-void KPTNodeModifyConstraintEndTimeCmd::execute() {
+void NodeModifyConstraintEndTimeCmd::execute() {
     m_node.setConstraintEndTime(newTime);
     
     setCommandType(1);
 }
-void KPTNodeModifyConstraintEndTimeCmd::unexecute() {
+void NodeModifyConstraintEndTimeCmd::unexecute() {
     m_node.setConstraintEndTime(oldTime);
     
     setCommandType(1);
 }
 
-KPTNodeModifyStartTimeCmd::KPTNodeModifyStartTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyStartTimeCmd::NodeModifyStartTimeCmd(Part *part, Node &node, QDateTime dt, QString name)
+    : NamedCommand(part, name),
       m_node(node),
       newTime(dt),
       oldTime(node.startTime()) {
 
 }
-void KPTNodeModifyStartTimeCmd::execute() {
+void NodeModifyStartTimeCmd::execute() {
     m_node.setStartTime(newTime);
     
     setCommandType(1);
 }
-void KPTNodeModifyStartTimeCmd::unexecute() {
+void NodeModifyStartTimeCmd::unexecute() {
     m_node.setStartTime(oldTime);
     
     setCommandType(1);
 }
 
-KPTNodeModifyEndTimeCmd::KPTNodeModifyEndTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyEndTimeCmd::NodeModifyEndTimeCmd(Part *part, Node &node, QDateTime dt, QString name)
+    : NamedCommand(part, name),
       m_node(node),
       newTime(dt),
       oldTime(node.endTime()) {
 
 }
-void KPTNodeModifyEndTimeCmd::execute() {
+void NodeModifyEndTimeCmd::execute() {
     m_node.setEndTime(newTime);
     
     setCommandType(1);
 }
-void KPTNodeModifyEndTimeCmd::unexecute() {
+void NodeModifyEndTimeCmd::unexecute() {
     m_node.setEndTime(oldTime);
     
     setCommandType(1);
 }
 
-KPTNodeModifyIdCmd::KPTNodeModifyIdCmd(KPTPart *part, KPTNode &node, QString id, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyIdCmd::NodeModifyIdCmd(Part *part, Node &node, QString id, QString name)
+    : NamedCommand(part, name),
       m_node(node),
       newId(id),
       oldId(node.id()) {
 
 }
-void KPTNodeModifyIdCmd::execute() {
+void NodeModifyIdCmd::execute() {
     m_node.setId(newId);
     
     setCommandType(0);
 }
-void KPTNodeModifyIdCmd::unexecute() {
+void NodeModifyIdCmd::unexecute() {
     m_node.setId(oldId);
     
     setCommandType(0);
 }
 
-KPTNodeIndentCmd::KPTNodeIndentCmd(KPTPart *part, KPTNode &node, QString name)
-    : KPTNamedCommand(part, name),
+NodeIndentCmd::NodeIndentCmd(Part *part, Node &node, QString name)
+    : NamedCommand(part, name),
       m_node(node), 
       m_newparent(0), 
       m_newindex(-1) {
 
 }
-void KPTNodeIndentCmd::execute() {
+void NodeIndentCmd::execute() {
     m_oldparent = m_node.getParent();
     m_oldindex = m_oldparent->findChildNode(&m_node);
-    KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
+    Project *p = dynamic_cast<Project *>(m_node.projectNode());
     if (p && p->indentTask(&m_node)) {
         m_newparent = m_node.getParent();
         m_newindex = m_newparent->findChildNode(&m_node);
@@ -375,7 +375,7 @@ void KPTNodeIndentCmd::execute() {
     
     setCommandType(1);
 }
-void KPTNodeIndentCmd::unexecute() {
+void NodeIndentCmd::unexecute() {
     if (m_newindex != -1) {
         m_newparent->delChildNode(m_newindex, false);
         m_oldparent->insertChildNode(m_oldindex, &m_node);
@@ -386,16 +386,16 @@ void KPTNodeIndentCmd::unexecute() {
     setCommandType(1);
 }
 
-KPTNodeUnindentCmd::KPTNodeUnindentCmd(KPTPart *part, KPTNode &node, QString name)
-    : KPTNamedCommand(part, name),
+NodeUnindentCmd::NodeUnindentCmd(Part *part, Node &node, QString name)
+    : NamedCommand(part, name),
       m_node(node), 
       m_newparent(0),  
       m_newindex(-1) {
 }
-void KPTNodeUnindentCmd::execute() {
+void NodeUnindentCmd::execute() {
     m_oldparent = m_node.getParent();
     m_oldindex = m_oldparent->findChildNode(&m_node);
-    KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
+    Project *p = dynamic_cast<Project *>(m_node.projectNode());
     if (p && p->unindentTask(&m_node)) {
         m_newparent = m_node.getParent();
         m_newindex = m_newparent->findChildNode(&m_node);
@@ -404,7 +404,7 @@ void KPTNodeUnindentCmd::execute() {
     
     setCommandType(1);
 }
-void KPTNodeUnindentCmd::unexecute() {
+void NodeUnindentCmd::unexecute() {
     if (m_newindex != -1) {
         m_newparent->delChildNode(m_newindex, false);
         m_oldparent->insertChildNode(m_oldindex, &m_node);
@@ -415,21 +415,21 @@ void KPTNodeUnindentCmd::unexecute() {
     setCommandType(1);
 }
 
-KPTNodeMoveUpCmd::KPTNodeMoveUpCmd(KPTPart *part, KPTNode &node, QString name)
-    : KPTNamedCommand(part, name),
+NodeMoveUpCmd::NodeMoveUpCmd(Part *part, Node &node, QString name)
+    : NamedCommand(part, name),
       m_node(node), 
       m_newindex(-1) {
 }
-void KPTNodeMoveUpCmd::execute() {
+void NodeMoveUpCmd::execute() {
     m_oldindex = m_node.getParent()->findChildNode(&m_node);
-    KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
+    Project *p = dynamic_cast<Project *>(m_node.projectNode());
     if (p && p->moveTaskUp(&m_node)) {
         m_newindex = m_node.getParent()->findChildNode(&m_node);
     }
     
     setCommandType(0);
 }
-void KPTNodeMoveUpCmd::unexecute() {
+void NodeMoveUpCmd::unexecute() {
     if (m_newindex != -1) {
         m_node.getParent()->delChildNode(m_newindex, false);
         m_node.getParent()->insertChildNode(m_oldindex, &m_node);
@@ -439,21 +439,21 @@ void KPTNodeMoveUpCmd::unexecute() {
     setCommandType(0);
 }
 
-KPTNodeMoveDownCmd::KPTNodeMoveDownCmd(KPTPart *part, KPTNode &node, QString name)
-    : KPTNamedCommand(part, name),
+NodeMoveDownCmd::NodeMoveDownCmd(Part *part, Node &node, QString name)
+    : NamedCommand(part, name),
       m_node(node), 
       m_newindex(-1) {
 }
-void KPTNodeMoveDownCmd::execute() {
+void NodeMoveDownCmd::execute() {
     m_oldindex = m_node.getParent()->findChildNode(&m_node);
-    KPTProject *p = dynamic_cast<KPTProject *>(m_node.projectNode());
+    Project *p = dynamic_cast<Project *>(m_node.projectNode());
     if (p && p->moveTaskDown(&m_node)) {
         m_newindex = m_node.getParent()->findChildNode(&m_node);
     }
     
     setCommandType(0);
 }
-void KPTNodeMoveDownCmd::unexecute() {
+void NodeMoveDownCmd::unexecute() {
     if (m_newindex != -1) {
         m_node.getParent()->delChildNode(m_newindex, false);
         m_node.getParent()->insertChildNode(m_oldindex, &m_node);
@@ -463,17 +463,17 @@ void KPTNodeMoveDownCmd::unexecute() {
     setCommandType(0);
 }
 
-KPTAddRelationCmd::KPTAddRelationCmd(KPTPart *part, KPTRelation *rel, QString name)
-    : KPTNamedCommand(part, name),
+AddRelationCmd::AddRelationCmd(Part *part, Relation *rel, QString name)
+    : NamedCommand(part, name),
       m_rel(rel) {
     
     m_taken = true;
 }
-KPTAddRelationCmd::~KPTAddRelationCmd() {
+AddRelationCmd::~AddRelationCmd() {
     if (m_taken)
         delete m_rel;
 }
-void KPTAddRelationCmd::execute() {
+void AddRelationCmd::execute() {
     //kdDebug()<<k_funcinfo<<m_rel->parent()<<" to "<<m_rel->child()<<endl;
     m_taken = false;
     m_rel->parent()->addDependChildNode(m_rel);
@@ -481,7 +481,7 @@ void KPTAddRelationCmd::execute() {
     
     setCommandType(1);
 }
-void KPTAddRelationCmd::unexecute() {
+void AddRelationCmd::unexecute() {
     m_taken = true;
     m_rel->parent()->takeDependChildNode(m_rel);
     m_rel->child()->takeDependParentNode(m_rel);
@@ -489,17 +489,17 @@ void KPTAddRelationCmd::unexecute() {
     setCommandType(1);
 }
 
-KPTDeleteRelationCmd::KPTDeleteRelationCmd(KPTPart *part, KPTRelation *rel, QString name)
-    : KPTNamedCommand(part, name),
+DeleteRelationCmd::DeleteRelationCmd(Part *part, Relation *rel, QString name)
+    : NamedCommand(part, name),
       m_rel(rel) {
     
     m_taken = false;
 }
-KPTDeleteRelationCmd::~KPTDeleteRelationCmd() {
+DeleteRelationCmd::~DeleteRelationCmd() {
     if (m_taken)
         delete m_rel;
 }
-void KPTDeleteRelationCmd::execute() {
+void DeleteRelationCmd::execute() {
     //kdDebug()<<k_funcinfo<<m_rel->parent()<<" to "<<m_rel->child()<<endl;
     m_taken = true;
     m_rel->parent()->takeDependChildNode(m_rel);
@@ -507,7 +507,7 @@ void KPTDeleteRelationCmd::execute() {
     
     setCommandType(1);
 }
-void KPTDeleteRelationCmd::unexecute() {
+void DeleteRelationCmd::unexecute() {
     m_taken = false;
     m_rel->parent()->addDependChildNode(m_rel);
     m_rel->child()->addDependParentNode(m_rel);
@@ -515,61 +515,61 @@ void KPTDeleteRelationCmd::unexecute() {
     setCommandType(1);
 }
 
-KPTModifyRelationTypeCmd::KPTModifyRelationTypeCmd(KPTPart *part, KPTRelation *rel, KPTRelation::Type type, QString name)
-    : KPTNamedCommand(part, name),
+ModifyRelationTypeCmd::ModifyRelationTypeCmd(Part *part, Relation *rel, Relation::Type type, QString name)
+    : NamedCommand(part, name),
       m_rel(rel),
       m_newtype(type) {
     
     m_oldtype = rel->type();
 }
-void KPTModifyRelationTypeCmd::execute() {
+void ModifyRelationTypeCmd::execute() {
     m_rel->setType(m_newtype);
     
     setCommandType(1);
 }
-void KPTModifyRelationTypeCmd::unexecute() {
+void ModifyRelationTypeCmd::unexecute() {
     m_rel->setType(m_oldtype);
     
     setCommandType(1);
 }
 
-KPTModifyRelationLagCmd::KPTModifyRelationLagCmd(KPTPart *part, KPTRelation *rel, KPTDuration lag, QString name)
-    : KPTNamedCommand(part, name),
+ModifyRelationLagCmd::ModifyRelationLagCmd(Part *part, Relation *rel, Duration lag, QString name)
+    : NamedCommand(part, name),
       m_rel(rel),
       m_newlag(lag) {
     
     m_oldlag = rel->lag();
 }
-void KPTModifyRelationLagCmd::execute() {
+void ModifyRelationLagCmd::execute() {
     m_rel->setLag(m_newlag);
     
     setCommandType(1);
 }
-void KPTModifyRelationLagCmd::unexecute() {
+void ModifyRelationLagCmd::unexecute() {
     m_rel->setLag(m_oldlag);
     
     setCommandType(1);
 }
 
-KPTAddResourceRequestCmd::KPTAddResourceRequestCmd(KPTPart *part, KPTResourceGroupRequest *group, KPTResourceRequest *request, QString name)
-    : KPTNamedCommand(part, name),
+AddResourceRequestCmd::AddResourceRequestCmd(Part *part, ResourceGroupRequest *group, ResourceRequest *request, QString name)
+    : NamedCommand(part, name),
       m_group(group),
       m_request(request) {
     
     m_mine = true;
 }
-KPTAddResourceRequestCmd::~KPTAddResourceRequestCmd() {
+AddResourceRequestCmd::~AddResourceRequestCmd() {
     if (m_mine)
         delete m_request;
 }
-void KPTAddResourceRequestCmd::execute() {
+void AddResourceRequestCmd::execute() {
     //kdDebug()<<k_funcinfo<<"group="<<m_group<<" req="<<m_request<<endl;
     m_group->addResourceRequest(m_request);
     m_mine = false;
     
     setCommandType(1);
 }
-void KPTAddResourceRequestCmd::unexecute() {
+void AddResourceRequestCmd::unexecute() {
     //kdDebug()<<k_funcinfo<<"group="<<m_group<<" req="<<m_request<<endl;
     m_group->takeResourceRequest(m_request);
     m_mine = true;
@@ -577,136 +577,136 @@ void KPTAddResourceRequestCmd::unexecute() {
     setCommandType(1);
 }
 
-KPTRemoveResourceRequestCmd::KPTRemoveResourceRequestCmd(KPTPart *part,  KPTResourceGroupRequest *group, KPTResourceRequest *request, QString name)
-    : KPTNamedCommand(part, name),
+RemoveResourceRequestCmd::RemoveResourceRequestCmd(Part *part,  ResourceGroupRequest *group, ResourceRequest *request, QString name)
+    : NamedCommand(part, name),
       m_group(group),
       m_request(request) {
     
     m_mine = false;
     //kdDebug()<<k_funcinfo<<"group="<<group<<" req="<<request<<endl;
 }
-KPTRemoveResourceRequestCmd::~KPTRemoveResourceRequestCmd() {
+RemoveResourceRequestCmd::~RemoveResourceRequestCmd() {
     if (m_mine)
         delete m_request;
 }
-void KPTRemoveResourceRequestCmd::execute() {
+void RemoveResourceRequestCmd::execute() {
     m_group->takeResourceRequest(m_request);
     m_mine = true;
     
     setCommandType(1);
 }
-void KPTRemoveResourceRequestCmd::unexecute() {
+void RemoveResourceRequestCmd::unexecute() {
     m_group->addResourceRequest(m_request);
     m_mine = false;
     
     setCommandType(1);
 }
 
-KPTModifyResourceRequestAccountCmd::KPTModifyResourceRequestAccountCmd(KPTPart *part, KPTResourceRequest *request, QString account, QString name)
-    : KPTNamedCommand(part, name),
+ModifyResourceRequestAccountCmd::ModifyResourceRequestAccountCmd(Part *part, ResourceRequest *request, QString account, QString name)
+    : NamedCommand(part, name),
       m_request(request) {    
     m_newaccount = part->getProject().accounts().findAccount(account);
     m_oldaccount = m_request->account();
     //kdDebug()<<k_funcinfo<<"group="<<group<<" req="<<request<<endl;
 }
 
-KPTModifyResourceRequestAccountCmd::~KPTModifyResourceRequestAccountCmd() {
+ModifyResourceRequestAccountCmd::~ModifyResourceRequestAccountCmd() {
 }
 
-void KPTModifyResourceRequestAccountCmd::execute() {
+void ModifyResourceRequestAccountCmd::execute() {
     m_request->setAccount(m_newaccount);
     
     setCommandType(1);
 }
-void KPTModifyResourceRequestAccountCmd::unexecute() {
+void ModifyResourceRequestAccountCmd::unexecute() {
     m_request->setAccount(m_oldaccount);
     
     setCommandType(1);
 }
 
-KPTModifyEffortCmd::KPTModifyEffortCmd(KPTPart *part, KPTEffort *effort, KPTDuration oldvalue, KPTDuration newvalue, QString name)
-    : KPTNamedCommand(part, name),
+ModifyEffortCmd::ModifyEffortCmd(Part *part, Effort *effort, Duration oldvalue, Duration newvalue, QString name)
+    : NamedCommand(part, name),
       m_effort(effort),
       m_oldvalue(oldvalue),
       m_newvalue(newvalue) {
 }
-void KPTModifyEffortCmd::execute() {
+void ModifyEffortCmd::execute() {
     m_effort->set(m_newvalue);
     
     setCommandType(1);
 }
-void KPTModifyEffortCmd::unexecute() {
+void ModifyEffortCmd::unexecute() {
     m_effort->set(m_oldvalue);
     
     setCommandType(1);
 }
 
-KPTEffortModifyOptimisticRatioCmd::KPTEffortModifyOptimisticRatioCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name)
-    : KPTNamedCommand(part, name),
+EffortModifyOptimisticRatioCmd::EffortModifyOptimisticRatioCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name)
+    : NamedCommand(part, name),
       m_effort(effort),
       m_oldvalue(oldvalue),
       m_newvalue(newvalue) {
 }
-void KPTEffortModifyOptimisticRatioCmd::execute() {
+void EffortModifyOptimisticRatioCmd::execute() {
     m_effort->setOptimisticRatio(m_newvalue);
     
     setCommandType(1);
 }
-void KPTEffortModifyOptimisticRatioCmd::unexecute() {
+void EffortModifyOptimisticRatioCmd::unexecute() {
     m_effort->setOptimisticRatio(m_oldvalue);
     
     setCommandType(1);
 }
 
-KPTEffortModifyPessimisticRatioCmd::KPTEffortModifyPessimisticRatioCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name)
-    : KPTNamedCommand(part, name),
+EffortModifyPessimisticRatioCmd::EffortModifyPessimisticRatioCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name)
+    : NamedCommand(part, name),
       m_effort(effort),
       m_oldvalue(oldvalue),
       m_newvalue(newvalue) {
 }
-void KPTEffortModifyPessimisticRatioCmd::execute() {
+void EffortModifyPessimisticRatioCmd::execute() {
     m_effort->setPessimisticRatio(m_newvalue);
     
     setCommandType(1);
 }
-void KPTEffortModifyPessimisticRatioCmd::unexecute() {
+void EffortModifyPessimisticRatioCmd::unexecute() {
     m_effort->setPessimisticRatio(m_oldvalue);
     
     setCommandType(1);
 }
 
-KPTModifyEffortTypeCmd::KPTModifyEffortTypeCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name)
-    : KPTNamedCommand(part, name),
+ModifyEffortTypeCmd::ModifyEffortTypeCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name)
+    : NamedCommand(part, name),
       m_effort(effort),
       m_oldvalue(oldvalue),
       m_newvalue(newvalue) {
 }
-void KPTModifyEffortTypeCmd::execute() {
-    m_effort->setType(static_cast<KPTEffort::Type>(m_newvalue));
+void ModifyEffortTypeCmd::execute() {
+    m_effort->setType(static_cast<Effort::Type>(m_newvalue));
     
     setCommandType(1);
 }
-void KPTModifyEffortTypeCmd::unexecute() {
-    m_effort->setType(static_cast<KPTEffort::Type>(m_oldvalue));
+void ModifyEffortTypeCmd::unexecute() {
+    m_effort->setType(static_cast<Effort::Type>(m_oldvalue));
     
     setCommandType(1);
 }
 
-KPTAddResourceGroupRequestCmd::KPTAddResourceGroupRequestCmd(KPTPart *part, KPTTask &task, KPTResourceGroupRequest *request, QString name)
-    : KPTNamedCommand(part, name),
+AddResourceGroupRequestCmd::AddResourceGroupRequestCmd(Part *part, Task &task, ResourceGroupRequest *request, QString name)
+    : NamedCommand(part, name),
       m_task(task),
       m_request(request) {
       
     m_mine = true;
 }
-void KPTAddResourceGroupRequestCmd::execute() {
+void AddResourceGroupRequestCmd::execute() {
     //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
     m_task.addRequest(m_request);
     m_mine = false;
     
     setCommandType(1);
 }
-void KPTAddResourceGroupRequestCmd::unexecute() {
+void AddResourceGroupRequestCmd::unexecute() {
     //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
     m_task.takeRequest(m_request); // group should now be empty of resourceRequests
     m_mine = true;
@@ -714,29 +714,29 @@ void KPTAddResourceGroupRequestCmd::unexecute() {
     setCommandType(1);
 }
 
-KPTRemoveResourceGroupRequestCmd::KPTRemoveResourceGroupRequestCmd(KPTPart *part, KPTResourceGroupRequest *request, QString name)
-    : KPTNamedCommand(part, name),
+RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd(Part *part, ResourceGroupRequest *request, QString name)
+    : NamedCommand(part, name),
       m_task(request->parent()->task()),
       m_request(request) {
       
     m_mine = false;
 }
 
-KPTRemoveResourceGroupRequestCmd::KPTRemoveResourceGroupRequestCmd(KPTPart *part, KPTTask &task, KPTResourceGroupRequest *request, QString name)
-    : KPTNamedCommand(part, name),
+RemoveResourceGroupRequestCmd::RemoveResourceGroupRequestCmd(Part *part, Task &task, ResourceGroupRequest *request, QString name)
+    : NamedCommand(part, name),
       m_task(task),
       m_request(request) {
       
     m_mine = false;
 }
-void KPTRemoveResourceGroupRequestCmd::execute() {
+void RemoveResourceGroupRequestCmd::execute() {
     //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
     m_task.takeRequest(m_request); // group should now be empty of resourceRequests
     m_mine = true;
     
     setCommandType(1);
 }
-void KPTRemoveResourceGroupRequestCmd::unexecute() {
+void RemoveResourceGroupRequestCmd::unexecute() {
     //kdDebug()<<k_funcinfo<<"group="<<m_request<<endl;
     m_task.addRequest(m_request);
     m_mine = false;
@@ -744,192 +744,192 @@ void KPTRemoveResourceGroupRequestCmd::unexecute() {
     setCommandType(1);
 }
 
-KPTAddResourceCmd::KPTAddResourceCmd(KPTPart *part, KPTResourceGroup *group, KPTResource *resource, QString name)
-    : KPTNamedCommand(part, name),
+AddResourceCmd::AddResourceCmd(Part *part, ResourceGroup *group, Resource *resource, QString name)
+    : NamedCommand(part, name),
       m_group(group),
       m_resource(resource) {
       
     m_mine = true;
 }
-KPTAddResourceCmd::~KPTAddResourceCmd() {
+AddResourceCmd::~AddResourceCmd() {
     if (m_mine)
         delete m_resource;
 }
-void KPTAddResourceCmd::execute() {
+void AddResourceCmd::execute() {
     m_group->addResource(m_resource, 0/*risk*/); 
     m_mine = false;
     
     setCommandType(0);
 }
-void KPTAddResourceCmd::unexecute() {
+void AddResourceCmd::unexecute() {
     m_group->takeResource(m_resource);
     m_mine = true;
     
     setCommandType(0);
 }
 
-KPTRemoveResourceCmd::KPTRemoveResourceCmd(KPTPart *part, KPTResourceGroup *group, KPTResource *resource, QString name)
-    : KPTAddResourceCmd(part, group, resource, name) {
+RemoveResourceCmd::RemoveResourceCmd(Part *part, ResourceGroup *group, Resource *resource, QString name)
+    : AddResourceCmd(part, group, resource, name) {
 
     m_mine = false;
     m_requests = m_resource->requests();
     
     m_appointments.setAutoDelete(true);
 }
-void KPTRemoveResourceCmd::execute() {
-    QPtrListIterator<KPTResourceRequest> it = m_requests;
+void RemoveResourceCmd::execute() {
+    QPtrListIterator<ResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->parent()->takeResourceRequest(it.current());
         //kdDebug()<<"Remove request for"<<it.current()->resource()->name()<<endl;
     }
-    QPtrListIterator<KPTAppointment> ait = m_resource->appointments();
+    QPtrListIterator<Appointment> ait = m_resource->appointments();
     for (; ait.current(); ++ait) {
         ait.current()->detach();
         m_appointments.append(ait.current());
     }
-    KPTAddResourceCmd::unexecute();
+    AddResourceCmd::unexecute();
 }
-void KPTRemoveResourceCmd::unexecute() {
-    KPTAppointment *a;
+void RemoveResourceCmd::unexecute() {
+    Appointment *a;
     for (a = m_appointments.first(); a != 0; m_appointments.take()) {
         a->attach();
     }
-    QPtrListIterator<KPTResourceRequest> it = m_requests;
+    QPtrListIterator<ResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->parent()->addResourceRequest(it.current());
         //kdDebug()<<"Add request for "<<it.current()->resource()->name()<<endl;
     }
-    KPTAddResourceCmd::execute();
+    AddResourceCmd::execute();
 }
 
-KPTModifyResourceNameCmd::KPTModifyResourceNameCmd(KPTPart *part, KPTResource *resource, QString value, QString name)
-    : KPTNamedCommand(part, name),
+ModifyResourceNameCmd::ModifyResourceNameCmd(Part *part, Resource *resource, QString value, QString name)
+    : NamedCommand(part, name),
       m_resource(resource),
       m_newvalue(value) {
     m_oldvalue = resource->name();
 }
-void KPTModifyResourceNameCmd::execute() {
+void ModifyResourceNameCmd::execute() {
     m_resource->setName(m_newvalue);
     
     setCommandType(0);
 }
-void KPTModifyResourceNameCmd::unexecute() {
+void ModifyResourceNameCmd::unexecute() {
     m_resource->setName(m_oldvalue);
     
     setCommandType(0);
 }
-KPTModifyResourceInitialsCmd::KPTModifyResourceInitialsCmd(KPTPart *part, KPTResource *resource, QString value, QString name)
-    : KPTNamedCommand(part, name),
+ModifyResourceInitialsCmd::ModifyResourceInitialsCmd(Part *part, Resource *resource, QString value, QString name)
+    : NamedCommand(part, name),
       m_resource(resource),
       m_newvalue(value) {
     m_oldvalue = resource->initials();
 }
-void KPTModifyResourceInitialsCmd::execute() {
+void ModifyResourceInitialsCmd::execute() {
     m_resource->setInitials(m_newvalue);
     
     setCommandType(0);
 }
-void KPTModifyResourceInitialsCmd::unexecute() {
+void ModifyResourceInitialsCmd::unexecute() {
     m_resource->setInitials(m_oldvalue);
     
     setCommandType(0);
 }
-KPTModifyResourceEmailCmd::KPTModifyResourceEmailCmd(KPTPart *part, KPTResource *resource, QString value, QString name)
-    : KPTNamedCommand(part, name),
+ModifyResourceEmailCmd::ModifyResourceEmailCmd(Part *part, Resource *resource, QString value, QString name)
+    : NamedCommand(part, name),
       m_resource(resource),
       m_newvalue(value) {
     m_oldvalue = resource->email();
 }
-void KPTModifyResourceEmailCmd::execute() {
+void ModifyResourceEmailCmd::execute() {
     m_resource->setEmail(m_newvalue);
     
     setCommandType(0);
 }
-void KPTModifyResourceEmailCmd::unexecute() {
+void ModifyResourceEmailCmd::unexecute() {
     m_resource->setEmail(m_oldvalue);
     
     setCommandType(0);
 }
-KPTModifyResourceTypeCmd::KPTModifyResourceTypeCmd(KPTPart *part, KPTResource *resource, int value, QString name)
-    : KPTNamedCommand(part, name),
+ModifyResourceTypeCmd::ModifyResourceTypeCmd(Part *part, Resource *resource, int value, QString name)
+    : NamedCommand(part, name),
       m_resource(resource),
       m_newvalue(value) {
     m_oldvalue = resource->type();
 }
-void KPTModifyResourceTypeCmd::execute() {
-    m_resource->setType((KPTResource::Type)m_newvalue);
+void ModifyResourceTypeCmd::execute() {
+    m_resource->setType((Resource::Type)m_newvalue);
     
     setCommandType(0); //FIXME
 }
-void KPTModifyResourceTypeCmd::unexecute() {
-    m_resource->setType((KPTResource::Type)m_oldvalue);
+void ModifyResourceTypeCmd::unexecute() {
+    m_resource->setType((Resource::Type)m_oldvalue);
     
     setCommandType(0); //FIXME
 }
 
-KPTModifyResourceNormalRateCmd::KPTModifyResourceNormalRateCmd(KPTPart *part, KPTResource *resource, double value, QString name)
-    : KPTNamedCommand(part, name),
+ModifyResourceNormalRateCmd::ModifyResourceNormalRateCmd(Part *part, Resource *resource, double value, QString name)
+    : NamedCommand(part, name),
       m_resource(resource),
       m_newvalue(value) {
     m_oldvalue = resource->normalRate();
 }
-void KPTModifyResourceNormalRateCmd::execute() {
+void ModifyResourceNormalRateCmd::execute() {
     m_resource->setNormalRate(m_newvalue);
     
     setCommandType(0);
 }
-void KPTModifyResourceNormalRateCmd::unexecute() {
+void ModifyResourceNormalRateCmd::unexecute() {
     m_resource->setNormalRate(m_oldvalue);
     
     setCommandType(0);
 }
-KPTModifyResourceOvertimeRateCmd::KPTModifyResourceOvertimeRateCmd(KPTPart *part, KPTResource *resource, double value, QString name)
-    : KPTNamedCommand(part, name),
+ModifyResourceOvertimeRateCmd::ModifyResourceOvertimeRateCmd(Part *part, Resource *resource, double value, QString name)
+    : NamedCommand(part, name),
       m_resource(resource),
       m_newvalue(value) {
     m_oldvalue = resource->overtimeRate();
 }
-void KPTModifyResourceOvertimeRateCmd::execute() {
+void ModifyResourceOvertimeRateCmd::execute() {
     m_resource->setOvertimeRate(m_newvalue);
     
     setCommandType(0);
 }
-void KPTModifyResourceOvertimeRateCmd::unexecute() {
+void ModifyResourceOvertimeRateCmd::unexecute() {
     m_resource->setOvertimeRate(m_oldvalue);
     
     setCommandType(0);
 }
-KPTModifyResourceFixedCostCmd::KPTModifyResourceFixedCostCmd(KPTPart *part, KPTResource *resource, double value, QString name)
-    : KPTNamedCommand(part, name),
+ModifyResourceFixedCostCmd::ModifyResourceFixedCostCmd(Part *part, Resource *resource, double value, QString name)
+    : NamedCommand(part, name),
       m_resource(resource),
       m_newvalue(value) {
     m_oldvalue = resource->normalRate();
 }
-void KPTModifyResourceFixedCostCmd::execute() {
+void ModifyResourceFixedCostCmd::execute() {
     m_resource->setFixedCost(m_newvalue);
     
     setCommandType(0);
 }
-void KPTModifyResourceFixedCostCmd::unexecute() {
+void ModifyResourceFixedCostCmd::unexecute() {
     m_resource->setFixedCost(m_oldvalue);
     
     setCommandType(0);
 }
 
-KPTRemoveResourceGroupCmd::KPTRemoveResourceGroupCmd(KPTPart *part, KPTResourceGroup *group, QString name)
-    : KPTNamedCommand(part, name),
+RemoveResourceGroupCmd::RemoveResourceGroupCmd(Part *part, ResourceGroup *group, QString name)
+    : NamedCommand(part, name),
       m_group(group) {
             
     m_mine = false;
 }
-KPTRemoveResourceGroupCmd::~KPTRemoveResourceGroupCmd() {
+RemoveResourceGroupCmd::~RemoveResourceGroupCmd() {
     if (m_mine)
         delete m_group;
 }
-void KPTRemoveResourceGroupCmd::execute() {
+void RemoveResourceGroupCmd::execute() {
     // remove all requests to this group
     int c=0;
-    QPtrListIterator<KPTResourceGroupRequest> it = m_group->requests();
+    QPtrListIterator<ResourceGroupRequest> it = m_group->requests();
     for (; it.current(); ++it) {
         if (it.current()->parent()) {
             it.current()->parent()->takeRequest(it.current());
@@ -942,10 +942,10 @@ void KPTRemoveResourceGroupCmd::execute() {
     
     setCommandType(c);
 }
-void KPTRemoveResourceGroupCmd::unexecute() {
+void RemoveResourceGroupCmd::unexecute() {
     // add all requests
     int c=0;
-    QPtrListIterator<KPTResourceGroupRequest> it = m_group->requests();
+    QPtrListIterator<ResourceGroupRequest> it = m_group->requests();
     for (; it.current(); ++it) {
         if (it.current()->parent()) {
             it.current()->parent()->addRequest(it.current());
@@ -960,71 +960,71 @@ void KPTRemoveResourceGroupCmd::unexecute() {
     setCommandType(c);
 }
 
-KPTAddResourceGroupCmd::KPTAddResourceGroupCmd(KPTPart *part, KPTResourceGroup *group, QString name)
-    : KPTRemoveResourceGroupCmd(part, group, name) {
+AddResourceGroupCmd::AddResourceGroupCmd(Part *part, ResourceGroup *group, QString name)
+    : RemoveResourceGroupCmd(part, group, name) {
                 
     m_mine = true;
 }
-void KPTAddResourceGroupCmd::execute() {
-    KPTRemoveResourceGroupCmd::unexecute();
+void AddResourceGroupCmd::execute() {
+    RemoveResourceGroupCmd::unexecute();
 }
-void KPTAddResourceGroupCmd::unexecute() {
-    KPTRemoveResourceGroupCmd::execute();
+void AddResourceGroupCmd::unexecute() {
+    RemoveResourceGroupCmd::execute();
 }
 
-KPTModifyResourceGroupNameCmd::KPTModifyResourceGroupNameCmd(KPTPart *part, KPTResourceGroup *group, QString value, QString name)
-    : KPTNamedCommand(part, name),
+ModifyResourceGroupNameCmd::ModifyResourceGroupNameCmd(Part *part, ResourceGroup *group, QString value, QString name)
+    : NamedCommand(part, name),
       m_group(group),
       m_newvalue(value) {
     m_oldvalue = group->name();
 }
-void KPTModifyResourceGroupNameCmd::execute() {
+void ModifyResourceGroupNameCmd::execute() {
     m_group->setName(m_newvalue);
     
     setCommandType(0);
 }
-void KPTModifyResourceGroupNameCmd::unexecute() {
+void ModifyResourceGroupNameCmd::unexecute() {
     m_group->setName(m_oldvalue);
     
     setCommandType(0);
 }
 
-KPTTaskModifyProgressCmd::KPTTaskModifyProgressCmd(KPTPart *part, KPTTask &task, struct KPTTask::Progress &value, QString name)
-    : KPTNamedCommand(part, name),
+TaskModifyProgressCmd::TaskModifyProgressCmd(Part *part, Task &task, struct Task::Progress &value, QString name)
+    : NamedCommand(part, name),
       m_task(task),
       m_newvalue(value) {
     m_oldvalue = task.progress();
 }
-void KPTTaskModifyProgressCmd::execute() {
+void TaskModifyProgressCmd::execute() {
     m_task.progress() = m_newvalue;
     
     setCommandType(0);
 }
-void KPTTaskModifyProgressCmd::unexecute() {
+void TaskModifyProgressCmd::unexecute() {
     m_task.progress() = m_oldvalue;
     
     setCommandType(0);
 }
 
-KPTProjectModifyBaselineCmd::KPTProjectModifyBaselineCmd(KPTPart *part, KPTProject &project, bool value, QString name)
-    : KPTNamedCommand(part, name),
+ProjectModifyBaselineCmd::ProjectModifyBaselineCmd(Part *part, Project &project, bool value, QString name)
+    : NamedCommand(part, name),
       m_project(project),
       m_newvalue(value) {
     m_oldvalue = project.isBaselined();
 }
-void KPTProjectModifyBaselineCmd::execute() {
+void ProjectModifyBaselineCmd::execute() {
     m_project.setBaselined(m_newvalue);
     
     setCommandType(2);
 }
-void KPTProjectModifyBaselineCmd::unexecute() {
+void ProjectModifyBaselineCmd::unexecute() {
     m_project.setBaselined(m_oldvalue);
     
     setCommandType(2);
 }
 
-KPTAddAccountCmd::KPTAddAccountCmd(KPTPart *part, KPTProject &project, KPTAccount *account, QString parent, QString name)
-    : KPTNamedCommand(part, name),
+AddAccountCmd::AddAccountCmd(Part *part, Project &project, Account *account, QString parent, QString name)
+    : NamedCommand(part, name),
       m_project(project),
       m_account(account),
       m_parent(0),
@@ -1032,20 +1032,20 @@ KPTAddAccountCmd::KPTAddAccountCmd(KPTPart *part, KPTProject &project, KPTAccoun
     m_mine = true;
 }
 
-KPTAddAccountCmd::KPTAddAccountCmd(KPTPart *part, KPTProject &project, KPTAccount *account, KPTAccount *parent, QString name)
-    : KPTNamedCommand(part, name),
+AddAccountCmd::AddAccountCmd(Part *part, Project &project, Account *account, Account *parent, QString name)
+    : NamedCommand(part, name),
       m_project(project),
       m_account(account),
       m_parent(parent) {
     m_mine = true;
 }
 
-KPTAddAccountCmd::~KPTAddAccountCmd() {
+AddAccountCmd::~AddAccountCmd() {
     if (m_mine)
         delete m_account;
 }
 
-void KPTAddAccountCmd::execute() {
+void AddAccountCmd::execute() {
     if (m_parent == 0 && !m_parentName.isEmpty()) {
         m_parent = m_project.accounts().findAccount(m_parentName);
     }
@@ -1057,7 +1057,7 @@ void KPTAddAccountCmd::execute() {
     setCommandType(2);
     m_mine = false;
 }
-void KPTAddAccountCmd::unexecute() {
+void AddAccountCmd::unexecute() {
     if (m_parent)
         m_parent->take(m_account);
     else
@@ -1067,19 +1067,19 @@ void KPTAddAccountCmd::unexecute() {
     m_mine = true;
 }
 
-KPTRemoveAccountCmd::KPTRemoveAccountCmd(KPTPart *part, KPTProject &project, KPTAccount *account, QString name)
-    : KPTNamedCommand(part, name),
+RemoveAccountCmd::RemoveAccountCmd(Part *part, Project &project, Account *account, QString name)
+    : NamedCommand(part, name),
       m_project(project),
       m_account(account) {
     m_mine = false;
 }
 
-KPTRemoveAccountCmd::~KPTRemoveAccountCmd() {
+RemoveAccountCmd::~RemoveAccountCmd() {
     if (m_mine)
         delete m_account;
 }
 
-void KPTRemoveAccountCmd::execute() {
+void RemoveAccountCmd::execute() {
     if (m_account->parent())
         m_account->parent()->take(m_account);
     else
@@ -1088,7 +1088,7 @@ void KPTRemoveAccountCmd::execute() {
     setCommandType(0);
     m_mine = true;
 }
-void KPTRemoveAccountCmd::unexecute() {
+void RemoveAccountCmd::unexecute() {
     if (m_account->parent())
         m_account->parent()->append(m_account);
     else
@@ -1098,115 +1098,115 @@ void KPTRemoveAccountCmd::unexecute() {
     m_mine = false;
 }
 
-KPTRenameAccountCmd::KPTRenameAccountCmd(KPTPart *part, KPTAccount *account, QString value, QString name)
-    : KPTNamedCommand(part, name),
+RenameAccountCmd::RenameAccountCmd(Part *part, Account *account, QString value, QString name)
+    : NamedCommand(part, name),
       m_account(account) {
     m_oldvalue = account->name();
     m_newvalue = value;
 }
 
-void KPTRenameAccountCmd::execute() {
+void RenameAccountCmd::execute() {
     m_account->setName(m_newvalue);        
     setCommandType(0);
 }
-void KPTRenameAccountCmd::unexecute() {
+void RenameAccountCmd::unexecute() {
     m_account->setName(m_oldvalue);
     setCommandType(0);
 }
 
-KPTModifyAccountDescriptionCmd::KPTModifyAccountDescriptionCmd(KPTPart *part, KPTAccount *account, QString value, QString name)
-    : KPTNamedCommand(part, name),
+ModifyAccountDescriptionCmd::ModifyAccountDescriptionCmd(Part *part, Account *account, QString value, QString name)
+    : NamedCommand(part, name),
       m_account(account) {
     m_oldvalue = account->description();
     m_newvalue = value;
 }
 
-void KPTModifyAccountDescriptionCmd::execute() {
+void ModifyAccountDescriptionCmd::execute() {
     m_account->setDescription(m_newvalue);        
     setCommandType(0);
 }
-void KPTModifyAccountDescriptionCmd::unexecute() {
+void ModifyAccountDescriptionCmd::unexecute() {
     m_account->setDescription(m_oldvalue);
     setCommandType(0);
 }
 
 
-KPTNodeModifyStartupCostCmd::KPTNodeModifyStartupCostCmd(KPTPart *part, KPTNode &node, double value, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyStartupCostCmd::NodeModifyStartupCostCmd(Part *part, Node &node, double value, QString name)
+    : NamedCommand(part, name),
       m_node(node) {
     m_oldvalue = node.startupCost();
     m_newvalue = value;
 }
 
-void KPTNodeModifyStartupCostCmd::execute() {
+void NodeModifyStartupCostCmd::execute() {
     m_node.setStartupCost(m_newvalue);        
     setCommandType(0);
 }
-void KPTNodeModifyStartupCostCmd::unexecute() {
+void NodeModifyStartupCostCmd::unexecute() {
     m_node.setStartupCost(m_oldvalue);
     setCommandType(0);
 }
 
-KPTNodeModifyShutdownCostCmd::KPTNodeModifyShutdownCostCmd(KPTPart *part, KPTNode &node, double value, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyShutdownCostCmd::NodeModifyShutdownCostCmd(Part *part, Node &node, double value, QString name)
+    : NamedCommand(part, name),
       m_node(node) {
     m_oldvalue = node.startupCost();
     m_newvalue = value;
 }
 
-void KPTNodeModifyShutdownCostCmd::execute() {
+void NodeModifyShutdownCostCmd::execute() {
     m_node.setShutdownCost(m_newvalue);        
     setCommandType(0);
 }
-void KPTNodeModifyShutdownCostCmd::unexecute() {
+void NodeModifyShutdownCostCmd::unexecute() {
     m_node.setShutdownCost(m_oldvalue);
     setCommandType(0);
 }
 
-KPTNodeModifyRunningAccountCmd::KPTNodeModifyRunningAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyRunningAccountCmd::NodeModifyRunningAccountCmd(Part *part, Node &node, Account *value, QString name)
+    : NamedCommand(part, name),
       m_node(node) {
     m_oldvalue = node.runningAccount();
     m_newvalue = value;
 }
 
-void KPTNodeModifyRunningAccountCmd::execute() {
+void NodeModifyRunningAccountCmd::execute() {
     m_node.setRunningAccount(m_newvalue);        
     setCommandType(0);
 }
-void KPTNodeModifyRunningAccountCmd::unexecute() {
+void NodeModifyRunningAccountCmd::unexecute() {
     m_node.setRunningAccount(m_oldvalue);
     setCommandType(0);
 }
 
-KPTNodeModifyStartupAccountCmd::KPTNodeModifyStartupAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyStartupAccountCmd::NodeModifyStartupAccountCmd(Part *part, Node &node, Account *value, QString name)
+    : NamedCommand(part, name),
       m_node(node) {
     m_oldvalue = node.startupAccount();
     m_newvalue = value;
 }
 
-void KPTNodeModifyStartupAccountCmd::execute() {
+void NodeModifyStartupAccountCmd::execute() {
     m_node.setStartupAccount(m_newvalue);        
     setCommandType(0);
 }
-void KPTNodeModifyStartupAccountCmd::unexecute() {
+void NodeModifyStartupAccountCmd::unexecute() {
     m_node.setStartupAccount(m_oldvalue);
     setCommandType(0);
 }
 
-KPTNodeModifyShutdownAccountCmd::KPTNodeModifyShutdownAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name)
-    : KPTNamedCommand(part, name),
+NodeModifyShutdownAccountCmd::NodeModifyShutdownAccountCmd(Part *part, Node &node, Account *value, QString name)
+    : NamedCommand(part, name),
       m_node(node) {
     m_oldvalue = node.shutdownAccount();
     m_newvalue = value;
 }
 
-void KPTNodeModifyShutdownAccountCmd::execute() {
+void NodeModifyShutdownAccountCmd::execute() {
     m_node.setShutdownAccount(m_newvalue);        
     setCommandType(0);
 }
-void KPTNodeModifyShutdownAccountCmd::unexecute() {
+void NodeModifyShutdownAccountCmd::unexecute() {
     m_node.setShutdownAccount(m_oldvalue);
     setCommandType(0);
 }

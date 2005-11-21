@@ -29,15 +29,15 @@ class QDate;
 namespace KPlato
 {
 
-class KPTCalendar;
+class Calendar;
 
-class KPTCalendarEdit : public KPTCalendarEditBase {
+class CalendarEdit : public CalendarEditBase {
     Q_OBJECT
 public:
-    KPTCalendarEdit (QWidget *parent=0, const char *name=0);
+    CalendarEdit (QWidget *parent=0, const char *name=0);
 
-    KPTCalendar *getCalendar() { return m_calendar; }
-    void setCalendar(KPTCalendar *cal);
+    Calendar *getCalendar() { return m_calendar; }
+    void setCalendar(Calendar *cal);
 
     void clear();
     void clearPanel();
@@ -59,9 +59,9 @@ signals:
     void applyClicked();
 
 private:
-    KPTCalendar *m_calendar;
+    Calendar *m_calendar;
 };
 
 }  //KPlato namespace
 
-#endif // KPTCALENDAREDIT_H
+#endif // CALENDAREDIT_H

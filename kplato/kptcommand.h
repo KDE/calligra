@@ -31,20 +31,20 @@ class QString;
 namespace KPlato
 {
 
-class KPTAccount;
-class KPTProject;
-class KPTTask;
-class KPTCalendar;
-class KPTRelation;
-class KPTResourceGroupRequest;
-class KPTResourceRequest;
-class KPTResourceGroup;
-class KPTResource;
+class Account;
+class Project;
+class Task;
+class Calendar;
+class Relation;
+class ResourceGroupRequest;
+class ResourceRequest;
+class ResourceGroup;
+class Resource;
 
-class KPTNamedCommand : public KNamedCommand
+class NamedCommand : public KNamedCommand
 {
 public:
-    KPTNamedCommand(KPTPart *part, QString name)
+    NamedCommand(Part *part, QString name)
     : KNamedCommand(name), m_part(part)
     {}
     
@@ -54,593 +54,593 @@ public:
             m_part->setCommandType(type);
     }
 private:
-    KPTPart *m_part;
+    Part *m_part;
 };
 
-class KPTCalendarAddCmd : public KPTNamedCommand
+class CalendarAddCmd : public NamedCommand
 {
 public:
-    KPTCalendarAddCmd(KPTPart *part, KPTProject *project, KPTCalendar *cal, QString name=0);
+    CalendarAddCmd(Part *part, Project *project, Calendar *cal, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTProject *m_project;
-    KPTCalendar *m_cal;
+    Project *m_project;
+    Calendar *m_cal;
     bool m_added;
 };
 
-class KPTCalendarDeleteCmd : public KPTNamedCommand
+class CalendarDeleteCmd : public NamedCommand
 {
 public:
-    KPTCalendarDeleteCmd(KPTPart *part, KPTCalendar *cal, QString name=0);
+    CalendarDeleteCmd(Part *part, Calendar *cal, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTCalendar *m_cal;
+    Calendar *m_cal;
 };
 
-class KPTNodeDeleteCmd : public KPTNamedCommand
+class NodeDeleteCmd : public NamedCommand
 {
 public:
-    KPTNodeDeleteCmd(KPTPart *part, KPTNode *node, QString name=0);
-    ~KPTNodeDeleteCmd();
+    NodeDeleteCmd(Part *part, Node *node, QString name=0);
+    ~NodeDeleteCmd();
     void execute();
     void unexecute();
 
 private:
-    KPTNode *m_node;
-    KPTNode *m_parent;
+    Node *m_node;
+    Node *m_parent;
     int m_index;
     bool m_mine;
-    QPtrList<KPTAppointment> m_appointments;
+    QPtrList<Appointment> m_appointments;
 };
 
-class KPTTaskAddCmd : public KPTNamedCommand
+class TaskAddCmd : public NamedCommand
 {
 public:
-    KPTTaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *after,  QString name=0);
-    ~KPTTaskAddCmd();
+    TaskAddCmd(Part *part, Project *project, Node *node, Node *after,  QString name=0);
+    ~TaskAddCmd();
     void execute();
     void unexecute();
 
 private:
-    KPTProject *m_project;
-    KPTNode *m_node;
-    KPTNode *m_after;
+    Project *m_project;
+    Node *m_node;
+    Node *m_after;
     bool m_added;
 };
 
-class KPTSubtaskAddCmd : public KPTNamedCommand
+class SubtaskAddCmd : public NamedCommand
 {
 public:
-    KPTSubtaskAddCmd(KPTPart *part, KPTProject *project, KPTNode *node, KPTNode *parent,  QString name=0);
-    ~KPTSubtaskAddCmd();
+    SubtaskAddCmd(Part *part, Project *project, Node *node, Node *parent,  QString name=0);
+    ~SubtaskAddCmd();
     void execute();
     void unexecute();
 
 private:
-    KPTProject *m_project;
-    KPTNode *m_node;
-    KPTNode *m_parent;
+    Project *m_project;
+    Node *m_node;
+    Node *m_parent;
     bool m_added;
 };
 
 
-class KPTNodeModifyNameCmd : public KPTNamedCommand
+class NodeModifyNameCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyNameCmd(KPTPart *part, KPTNode &node, QString nodename, QString name=0);
+    NodeModifyNameCmd(Part *part, Node &node, QString nodename, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     QString newName;
     QString oldName;
 };
 
-class KPTNodeModifyLeaderCmd : public KPTNamedCommand
+class NodeModifyLeaderCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyLeaderCmd(KPTPart *part, KPTNode &node, QString leader, QString name=0);
+    NodeModifyLeaderCmd(Part *part, Node &node, QString leader, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     QString newLeader;
     QString oldLeader;
 };
 
-class KPTNodeModifyDescriptionCmd : public KPTNamedCommand
+class NodeModifyDescriptionCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyDescriptionCmd(KPTPart *part, KPTNode &node, QString description, QString name=0);
+    NodeModifyDescriptionCmd(Part *part, Node &node, QString description, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     QString newDescription;
     QString oldDescription;
 };
 
-class KPTNodeModifyConstraintCmd : public KPTNamedCommand
+class NodeModifyConstraintCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyConstraintCmd(KPTPart *part, KPTNode &node, KPTNode::ConstraintType c, QString name=0);
+    NodeModifyConstraintCmd(Part *part, Node &node, Node::ConstraintType c, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
-    KPTNode::ConstraintType newConstraint;
-    KPTNode::ConstraintType oldConstraint;
+    Node &m_node;
+    Node::ConstraintType newConstraint;
+    Node::ConstraintType oldConstraint;
 };
 
-class KPTNodeModifyConstraintStartTimeCmd : public KPTNamedCommand
+class NodeModifyConstraintStartTimeCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyConstraintStartTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name=0);
+    NodeModifyConstraintStartTimeCmd(Part *part, Node &node, QDateTime dt, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     QDateTime newTime;
     QDateTime oldTime;
 };
-class KPTNodeModifyConstraintEndTimeCmd : public KPTNamedCommand
+class NodeModifyConstraintEndTimeCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyConstraintEndTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name=0);
+    NodeModifyConstraintEndTimeCmd(Part *part, Node &node, QDateTime dt, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     QDateTime newTime;
     QDateTime oldTime;
 };
-class KPTNodeModifyStartTimeCmd : public KPTNamedCommand
+class NodeModifyStartTimeCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyStartTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name=0);
+    NodeModifyStartTimeCmd(Part *part, Node &node, QDateTime dt, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     QDateTime newTime;
     QDateTime oldTime;
 };
-class KPTNodeModifyEndTimeCmd : public KPTNamedCommand
+class NodeModifyEndTimeCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyEndTimeCmd(KPTPart *part, KPTNode &node, QDateTime dt, QString name=0);
+    NodeModifyEndTimeCmd(Part *part, Node &node, QDateTime dt, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     QDateTime newTime;
     QDateTime oldTime;
 };
-class KPTNodeModifyIdCmd : public KPTNamedCommand
+class NodeModifyIdCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyIdCmd(KPTPart *part, KPTNode &node, QString id, QString name=0);
+    NodeModifyIdCmd(Part *part, Node &node, QString id, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     QString newId;
     QString oldId;
 };
 
-class KPTNodeIndentCmd : public KPTNamedCommand
+class NodeIndentCmd : public NamedCommand
 {
 public:
-    KPTNodeIndentCmd(KPTPart *part, KPTNode &node, QString name=0);
+    NodeIndentCmd(Part *part, Node &node, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
-    KPTNode *m_oldparent, *m_newparent;
+    Node &m_node;
+    Node *m_oldparent, *m_newparent;
     int m_oldindex, m_newindex;
 };
 
-class KPTNodeUnindentCmd : public KPTNamedCommand
+class NodeUnindentCmd : public NamedCommand
 {
 public:
-    KPTNodeUnindentCmd(KPTPart *part, KPTNode &node, QString name=0);
+    NodeUnindentCmd(Part *part, Node &node, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
-    KPTNode *m_oldparent, *m_newparent;
+    Node &m_node;
+    Node *m_oldparent, *m_newparent;
     int m_oldindex, m_newindex;
 };
 
-class KPTNodeMoveUpCmd : public KPTNamedCommand
+class NodeMoveUpCmd : public NamedCommand
 {
 public:
-    KPTNodeMoveUpCmd(KPTPart *part, KPTNode &node, QString name=0);
+    NodeMoveUpCmd(Part *part, Node &node, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     int m_oldindex, m_newindex;
 };
 
-class KPTNodeMoveDownCmd : public KPTNamedCommand
+class NodeMoveDownCmd : public NamedCommand
 {
 public:
-    KPTNodeMoveDownCmd(KPTPart *part, KPTNode &node, QString name=0);
+    NodeMoveDownCmd(Part *part, Node &node, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     int m_oldindex, m_newindex;
 };
 
-class KPTAddRelationCmd : public KPTNamedCommand
+class AddRelationCmd : public NamedCommand
 {
 public:
-    KPTAddRelationCmd(KPTPart *part, KPTRelation *rel, QString name=0);
-    ~KPTAddRelationCmd();
+    AddRelationCmd(Part *part, Relation *rel, QString name=0);
+    ~AddRelationCmd();
     void execute();
     void unexecute();
 
 private:
-    KPTRelation *m_rel;
+    Relation *m_rel;
     bool m_taken;
 };
 
-class KPTDeleteRelationCmd : public KPTNamedCommand
+class DeleteRelationCmd : public NamedCommand
 {
 public:
-    KPTDeleteRelationCmd(KPTPart *part, KPTRelation *rel, QString name=0);
-    ~KPTDeleteRelationCmd();
+    DeleteRelationCmd(Part *part, Relation *rel, QString name=0);
+    ~DeleteRelationCmd();
     void execute();
     void unexecute();
 
 private:
-    KPTRelation *m_rel;
+    Relation *m_rel;
     bool m_taken;
 };
 
-class KPTModifyRelationTypeCmd : public KPTNamedCommand
+class ModifyRelationTypeCmd : public NamedCommand
 {
 public:
-    KPTModifyRelationTypeCmd(KPTPart *part, KPTRelation *rel, KPTRelation::Type type, QString name=0);
+    ModifyRelationTypeCmd(Part *part, Relation *rel, Relation::Type type, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTRelation *m_rel;
-    KPTRelation::Type m_newtype;
-    KPTRelation::Type m_oldtype;
+    Relation *m_rel;
+    Relation::Type m_newtype;
+    Relation::Type m_oldtype;
 };
 
-class KPTModifyRelationLagCmd : public KPTNamedCommand
+class ModifyRelationLagCmd : public NamedCommand
 {
 public:
-    KPTModifyRelationLagCmd(KPTPart *part, KPTRelation *rel, KPTDuration lag, QString name=0);
+    ModifyRelationLagCmd(Part *part, Relation *rel, Duration lag, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTRelation *m_rel;
-    KPTDuration m_newlag;
-    KPTDuration m_oldlag;
+    Relation *m_rel;
+    Duration m_newlag;
+    Duration m_oldlag;
 };
 
-class KPTAddResourceRequestCmd : public KPTNamedCommand
+class AddResourceRequestCmd : public NamedCommand
 {
 public:
-    KPTAddResourceRequestCmd(KPTPart *part, KPTResourceGroupRequest *group, KPTResourceRequest *request, QString name=0);
-    ~KPTAddResourceRequestCmd();
+    AddResourceRequestCmd(Part *part, ResourceGroupRequest *group, ResourceRequest *request, QString name=0);
+    ~AddResourceRequestCmd();
     void execute();
     void unexecute();
 
 private:
-    KPTResourceGroupRequest *m_group;
-    KPTResourceRequest *m_request;
+    ResourceGroupRequest *m_group;
+    ResourceRequest *m_request;
     bool m_mine;
 };
 
-class KPTRemoveResourceRequestCmd : public KPTNamedCommand
+class RemoveResourceRequestCmd : public NamedCommand
 {
 public:
-    KPTRemoveResourceRequestCmd(KPTPart *part, KPTResourceGroupRequest *group, KPTResourceRequest *request, QString name=0);
-    ~KPTRemoveResourceRequestCmd();
+    RemoveResourceRequestCmd(Part *part, ResourceGroupRequest *group, ResourceRequest *request, QString name=0);
+    ~RemoveResourceRequestCmd();
     void execute();
     void unexecute();
 
 private:
-    KPTResourceGroupRequest *m_group;
-    KPTResourceRequest *m_request;
+    ResourceGroupRequest *m_group;
+    ResourceRequest *m_request;
     bool m_mine;
 };
 
-class KPTModifyResourceRequestAccountCmd : public KPTNamedCommand
+class ModifyResourceRequestAccountCmd : public NamedCommand
 {
 public:
-    KPTModifyResourceRequestAccountCmd(KPTPart *part, KPTResourceRequest *request, QString account, QString name=0);
-    ~KPTModifyResourceRequestAccountCmd();
+    ModifyResourceRequestAccountCmd(Part *part, ResourceRequest *request, QString account, QString name=0);
+    ~ModifyResourceRequestAccountCmd();
     void execute();
     void unexecute();
 
 private:
-    KPTResourceRequest *m_request;
-    KPTAccount *m_oldaccount;
-    KPTAccount *m_newaccount;
+    ResourceRequest *m_request;
+    Account *m_oldaccount;
+    Account *m_newaccount;
 };
 
-class KPTModifyEffortCmd : public KPTNamedCommand
+class ModifyEffortCmd : public NamedCommand
 {
 public:
-    KPTModifyEffortCmd(KPTPart *part, KPTEffort *effort, KPTDuration oldvalue, KPTDuration newvalue, QString name=0);
+    ModifyEffortCmd(Part *part, Effort *effort, Duration oldvalue, Duration newvalue, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTEffort *m_effort;
-    KPTDuration m_oldvalue, m_newvalue;
+    Effort *m_effort;
+    Duration m_oldvalue, m_newvalue;
 };
 
-class KPTEffortModifyOptimisticRatioCmd : public KPTNamedCommand
+class EffortModifyOptimisticRatioCmd : public NamedCommand
 {
 public:
-    KPTEffortModifyOptimisticRatioCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name=0);
+    EffortModifyOptimisticRatioCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTEffort *m_effort;
+    Effort *m_effort;
     int m_oldvalue, m_newvalue;
 };
 
-class KPTEffortModifyPessimisticRatioCmd : public KPTNamedCommand
+class EffortModifyPessimisticRatioCmd : public NamedCommand
 {
 public:
-    KPTEffortModifyPessimisticRatioCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name=0);
+    EffortModifyPessimisticRatioCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTEffort *m_effort;
+    Effort *m_effort;
     int m_oldvalue, m_newvalue;
 };
 
-class KPTModifyEffortTypeCmd : public KPTNamedCommand
+class ModifyEffortTypeCmd : public NamedCommand
 {
 public:
-    KPTModifyEffortTypeCmd(KPTPart *part, KPTEffort *effort, int oldvalue, int newvalue, QString name=0);
+    ModifyEffortTypeCmd(Part *part, Effort *effort, int oldvalue, int newvalue, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTEffort *m_effort;
+    Effort *m_effort;
     int m_oldvalue, m_newvalue;
 };
 
-class KPTAddResourceGroupRequestCmd : public KPTNamedCommand
+class AddResourceGroupRequestCmd : public NamedCommand
 {
 public:
-    KPTAddResourceGroupRequestCmd(KPTPart *part, KPTTask &task, KPTResourceGroupRequest *request, QString name=0);
+    AddResourceGroupRequestCmd(Part *part, Task &task, ResourceGroupRequest *request, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTTask &m_task;
-    KPTResourceGroupRequest *m_request;
+    Task &m_task;
+    ResourceGroupRequest *m_request;
     bool m_mine;
 };
 
-class KPTRemoveResourceGroupRequestCmd : public KPTNamedCommand
+class RemoveResourceGroupRequestCmd : public NamedCommand
 {
 public:
-    KPTRemoveResourceGroupRequestCmd(KPTPart *part, KPTResourceGroupRequest *request, QString name=0);
-    KPTRemoveResourceGroupRequestCmd(KPTPart *part, KPTTask &task, KPTResourceGroupRequest *request, QString name=0);
+    RemoveResourceGroupRequestCmd(Part *part, ResourceGroupRequest *request, QString name=0);
+    RemoveResourceGroupRequestCmd(Part *part, Task &task, ResourceGroupRequest *request, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTTask &m_task;
-    KPTResourceGroupRequest *m_request;
+    Task &m_task;
+    ResourceGroupRequest *m_request;
     bool m_mine;
 };
 
-class KPTAddResourceCmd : public KPTNamedCommand
+class AddResourceCmd : public NamedCommand
 {
 public:
-    KPTAddResourceCmd(KPTPart *part, KPTResourceGroup *group, KPTResource *resource, QString name=0);
-    ~KPTAddResourceCmd();
+    AddResourceCmd(Part *part, ResourceGroup *group, Resource *resource, QString name=0);
+    ~AddResourceCmd();
     void execute();
     void unexecute();
 
 protected:
 
-    KPTResourceGroup *m_group;
-    KPTResource *m_resource;
+    ResourceGroup *m_group;
+    Resource *m_resource;
     bool m_mine;
 };
 
-class KPTRemoveResourceCmd : public KPTAddResourceCmd
+class RemoveResourceCmd : public AddResourceCmd
 {
 public:
-    KPTRemoveResourceCmd(KPTPart *part, KPTResourceGroup *group, KPTResource *resource, QString name=0);
+    RemoveResourceCmd(Part *part, ResourceGroup *group, Resource *resource, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    QPtrList<KPTResourceRequest> m_requests;
-    QPtrList<KPTAppointment> m_appointments;
+    QPtrList<ResourceRequest> m_requests;
+    QPtrList<Appointment> m_appointments;
 };
 
-class KPTModifyResourceNameCmd : public KPTNamedCommand
+class ModifyResourceNameCmd : public NamedCommand
 {
 public:
-    KPTModifyResourceNameCmd(KPTPart *part, KPTResource *resource, QString value, QString name=0);
+    ModifyResourceNameCmd(Part *part, Resource *resource, QString value, QString name=0);
     void execute();
     void unexecute();
 
 private:
 
-    KPTResource *m_resource;
+    Resource *m_resource;
     QString m_newvalue;
     QString m_oldvalue;
 };
-class KPTModifyResourceInitialsCmd : public KPTNamedCommand
+class ModifyResourceInitialsCmd : public NamedCommand
 {
 public:
-    KPTModifyResourceInitialsCmd(KPTPart *part, KPTResource *resource, QString value, QString name=0);
+    ModifyResourceInitialsCmd(Part *part, Resource *resource, QString value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTResource *m_resource;
+    Resource *m_resource;
     QString m_newvalue;
     QString m_oldvalue;
 };
-class KPTModifyResourceEmailCmd : public KPTNamedCommand
+class ModifyResourceEmailCmd : public NamedCommand
 {
 public:
-    KPTModifyResourceEmailCmd(KPTPart *part, KPTResource *resource, QString value, QString name=0);
+    ModifyResourceEmailCmd(Part *part, Resource *resource, QString value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTResource *m_resource;
+    Resource *m_resource;
     QString m_newvalue;
     QString m_oldvalue;
 };
-class KPTModifyResourceTypeCmd : public KPTNamedCommand
+class ModifyResourceTypeCmd : public NamedCommand
 {
 public:
-    KPTModifyResourceTypeCmd(KPTPart *part, KPTResource *resource, int value, QString name=0);
+    ModifyResourceTypeCmd(Part *part, Resource *resource, int value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTResource *m_resource;
+    Resource *m_resource;
     int m_newvalue;
     int m_oldvalue;
 };
 
-class KPTModifyResourceNormalRateCmd : public KPTNamedCommand
+class ModifyResourceNormalRateCmd : public NamedCommand
 {
 public:
-    KPTModifyResourceNormalRateCmd(KPTPart *part, KPTResource *resource, double value, QString name=0);
+    ModifyResourceNormalRateCmd(Part *part, Resource *resource, double value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTResource *m_resource;
+    Resource *m_resource;
     double m_newvalue;
     double m_oldvalue;
 };
-class KPTModifyResourceOvertimeRateCmd : public KPTNamedCommand
+class ModifyResourceOvertimeRateCmd : public NamedCommand
 {
 public:
-    KPTModifyResourceOvertimeRateCmd(KPTPart *part, KPTResource *resource, double value, QString name=0);
+    ModifyResourceOvertimeRateCmd(Part *part, Resource *resource, double value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTResource *m_resource;
+    Resource *m_resource;
     double m_newvalue;
     double m_oldvalue;
 };
-class KPTModifyResourceFixedCostCmd : public KPTNamedCommand
+class ModifyResourceFixedCostCmd : public NamedCommand
 {
 public:
-    KPTModifyResourceFixedCostCmd(KPTPart *part, KPTResource *resource, double value, QString name=0);
+    ModifyResourceFixedCostCmd(Part *part, Resource *resource, double value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTResource *m_resource;
+    Resource *m_resource;
     double m_newvalue;
     double m_oldvalue;
 };
 
-class KPTRemoveResourceGroupCmd : public KPTNamedCommand
+class RemoveResourceGroupCmd : public NamedCommand
 {
 public:
-    KPTRemoveResourceGroupCmd(KPTPart *part, KPTResourceGroup *group, QString name=0);
-    ~KPTRemoveResourceGroupCmd();
+    RemoveResourceGroupCmd(Part *part, ResourceGroup *group, QString name=0);
+    ~RemoveResourceGroupCmd();
     void execute();
     void unexecute();
 
 protected:
 
-    KPTResourceGroup *m_group;
+    ResourceGroup *m_group;
     bool m_mine;
 };
 
-class KPTAddResourceGroupCmd : public KPTRemoveResourceGroupCmd
+class AddResourceGroupCmd : public RemoveResourceGroupCmd
 {
 public:
-    KPTAddResourceGroupCmd(KPTPart *part, KPTResourceGroup *group, QString name=0);
+    AddResourceGroupCmd(Part *part, ResourceGroup *group, QString name=0);
     void execute();
     void unexecute();
 };
 
-class KPTModifyResourceGroupNameCmd : public KPTNamedCommand
+class ModifyResourceGroupNameCmd : public NamedCommand
 {
 public:
-    KPTModifyResourceGroupNameCmd(KPTPart *part, KPTResourceGroup *group, QString value, QString name=0);
+    ModifyResourceGroupNameCmd(Part *part, ResourceGroup *group, QString value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTResourceGroup *m_group;
+    ResourceGroup *m_group;
     QString m_newvalue;
     QString m_oldvalue;
 };
 
-class KPTTaskModifyProgressCmd : public KPTNamedCommand
+class TaskModifyProgressCmd : public NamedCommand
 {
 public:
-    KPTTaskModifyProgressCmd(KPTPart *part, KPTTask &task, struct KPTTask::Progress &value, QString name=0);
+    TaskModifyProgressCmd(Part *part, Task &task, struct Task::Progress &value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTTask &m_task;
-    struct KPTTask::Progress m_newvalue;
-    struct KPTTask::Progress m_oldvalue;
+    Task &m_task;
+    struct Task::Progress m_newvalue;
+    struct Task::Progress m_oldvalue;
 };
 
-class KPTProjectModifyBaselineCmd : public KPTNamedCommand
+class ProjectModifyBaselineCmd : public NamedCommand
 {
 public:
-    KPTProjectModifyBaselineCmd(KPTPart *part, KPTProject &project, bool value, QString name=0);
+    ProjectModifyBaselineCmd(Part *part, Project &project, bool value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTProject &m_project;
+    Project &m_project;
     bool m_newvalue;
     bool m_oldvalue;
 };
 
-class KPTAddAccountCmd : public KPTNamedCommand
+class AddAccountCmd : public NamedCommand
 {
 public:
-    KPTAddAccountCmd(KPTPart *part, KPTProject &project, KPTAccount *account,  KPTAccount *parent=0, QString name=0);
-    KPTAddAccountCmd(KPTPart *part, KPTProject &project, KPTAccount *account,  QString parent, QString name=0);
-    ~KPTAddAccountCmd();
+    AddAccountCmd(Part *part, Project &project, Account *account,  Account *parent=0, QString name=0);
+    AddAccountCmd(Part *part, Project &project, Account *account,  QString parent, QString name=0);
+    ~AddAccountCmd();
     void execute();
     void unexecute();
 
@@ -648,119 +648,119 @@ protected:
     bool m_mine;
     
 private:
-    KPTProject &m_project;
-    KPTAccount *m_account;
-    KPTAccount *m_parent;
+    Project &m_project;
+    Account *m_account;
+    Account *m_parent;
     QString m_parentName;
 };
 
-class KPTRemoveAccountCmd : public KPTNamedCommand
+class RemoveAccountCmd : public NamedCommand
 {
 public:
-    KPTRemoveAccountCmd(KPTPart *part, KPTProject &project, KPTAccount *account, QString name=0);
-    ~KPTRemoveAccountCmd();
+    RemoveAccountCmd(Part *part, Project &project, Account *account, QString name=0);
+    ~RemoveAccountCmd();
     void execute();
     void unexecute();
     
 private:
-    KPTProject &m_project;
-    KPTAccount *m_account;
+    Project &m_project;
+    Account *m_account;
     bool m_mine;
 
 };
 
-class KPTRenameAccountCmd : public KPTNamedCommand
+class RenameAccountCmd : public NamedCommand
 {
 public:
-    KPTRenameAccountCmd(KPTPart *part, KPTAccount *account, QString value, QString name=0);
+    RenameAccountCmd(Part *part, Account *account, QString value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTAccount *m_account;
+    Account *m_account;
     QString m_oldvalue;
     QString m_newvalue;
 };
 
-class KPTModifyAccountDescriptionCmd : public KPTNamedCommand
+class ModifyAccountDescriptionCmd : public NamedCommand
 {
 public:
-    KPTModifyAccountDescriptionCmd(KPTPart *part, KPTAccount *account, QString value, QString name=0);
+    ModifyAccountDescriptionCmd(Part *part, Account *account, QString value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTAccount *m_account;
+    Account *m_account;
     QString m_oldvalue;
     QString m_newvalue;
 };
 
-class KPTNodeModifyStartupCostCmd : public KPTNamedCommand
+class NodeModifyStartupCostCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyStartupCostCmd(KPTPart *part, KPTNode &node, double value, QString name=0);
+    NodeModifyStartupCostCmd(Part *part, Node &node, double value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     double m_oldvalue;
     double m_newvalue;
 };
 
-class KPTNodeModifyShutdownCostCmd : public KPTNamedCommand
+class NodeModifyShutdownCostCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyShutdownCostCmd(KPTPart *part, KPTNode &node, double value, QString name=0);
+    NodeModifyShutdownCostCmd(Part *part, Node &node, double value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
+    Node &m_node;
     double m_oldvalue;
     double m_newvalue;
 };
 
-class KPTNodeModifyRunningAccountCmd : public KPTNamedCommand
+class NodeModifyRunningAccountCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyRunningAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name=0);
+    NodeModifyRunningAccountCmd(Part *part, Node &node, Account *value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
-    KPTAccount *m_oldvalue;
-    KPTAccount *m_newvalue;
+    Node &m_node;
+    Account *m_oldvalue;
+    Account *m_newvalue;
 };
 
-class KPTNodeModifyStartupAccountCmd : public KPTNamedCommand
+class NodeModifyStartupAccountCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyStartupAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name=0);
+    NodeModifyStartupAccountCmd(Part *part, Node &node, Account *value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
-    KPTAccount *m_oldvalue;
-    KPTAccount *m_newvalue;
+    Node &m_node;
+    Account *m_oldvalue;
+    Account *m_newvalue;
 };
 
-class KPTNodeModifyShutdownAccountCmd : public KPTNamedCommand
+class NodeModifyShutdownAccountCmd : public NamedCommand
 {
 public:
-    KPTNodeModifyShutdownAccountCmd(KPTPart *part, KPTNode &node, KPTAccount *value, QString name=0);
+    NodeModifyShutdownAccountCmd(Part *part, Node &node, Account *value, QString name=0);
     void execute();
     void unexecute();
 
 private:
-    KPTNode &m_node;
-    KPTAccount *m_oldvalue;
-    KPTAccount *m_newvalue;
+    Node &m_node;
+    Account *m_oldvalue;
+    Account *m_newvalue;
 };
 
 
 }  //KPlato namespace
 
-#endif //KPTCOMMAND_H
+#endif //COMMAND_H

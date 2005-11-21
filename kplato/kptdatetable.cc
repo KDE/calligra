@@ -40,13 +40,13 @@
 namespace KPlato
 {
 
-KPTDateValidator::KPTDateValidator(QWidget* parent, const char* name)
+DateValidator::DateValidator(QWidget* parent, const char* name)
     : QValidator(parent, name)
 {
 }
 
 QValidator::State
-KPTDateValidator::validate(QString& text, int&) const
+DateValidator::validate(QString& text, int&) const
 {
   QDate temp;
   // ----- everything is tested in date():
@@ -54,7 +54,7 @@ KPTDateValidator::validate(QString& text, int&) const
 }
 
 QValidator::State
-KPTDateValidator::date(const QString& text, QDate& d) const
+DateValidator::date(const QString& text, QDate& d) const
 {
   QDate tmp = KGlobal::locale()->readDate(text);
   if (!tmp.isNull())
@@ -66,13 +66,13 @@ KPTDateValidator::date(const QString& text, QDate& d) const
 }
 
 void
-KPTDateValidator::fixup( QString& ) const
+DateValidator::fixup( QString& ) const
 {
 
 }
 
 
-KPTDateTable::KPTDateTable(QWidget *parent, QDate date_, const char* name, WFlags f)
+DateTable::DateTable(QWidget *parent, QDate date_, const char* name, WFlags f)
     : QGridView(parent, name, f),
       m_enabled(true)
 {
@@ -111,7 +111,7 @@ KPTDateTable::KPTDateTable(QWidget *parent, QDate date_, const char* name, WFlag
 
 }
 
-void KPTDateTable::paintWeekday(QPainter *painter, int col) {
+void DateTable::paintWeekday(QPainter *painter, int col) {
     QRect rect;
     int w=cellWidth();
     int h=cellHeight();
@@ -131,12 +131,12 @@ void KPTDateTable::paintWeekday(QPainter *painter, int col) {
     painter->drawRect(0, 0, w, h);
     painter->setPen(KGlobalSettings::textColor());
 
-    if (m_markedWeekdays.state(day) == KPTMap::Working) {
+    if (m_markedWeekdays.state(day) == Map::Working) {
         painter->setPen(colorBackgroundWorkday);
         painter->setBrush(colorBackgroundWorkday);
         painter->drawRect(0, 0, w, h);
         painter->setPen(colorTextWorkday);
-    } else if (m_markedWeekdays.state(day) == KPTMap::NonWorking) {
+    } else if (m_markedWeekdays.state(day) == Map::NonWorking) {
         painter->setPen(colorBackgroundHoliday);
         painter->setBrush(colorBackgroundHoliday);
         painter->drawRect(0, 0, w, h);
@@ -159,7 +159,7 @@ void KPTDateTable::paintWeekday(QPainter *painter, int col) {
     //kdDebug()<<k_funcinfo<<"headline: row,col=("<<row<<","<<col<<")"<<" day="<<daystr<<endl;
 }
 
-void KPTDateTable::paintWeekNumber(QPainter *painter, int row) {
+void DateTable::paintWeekNumber(QPainter *painter, int row) {
     QRect rect;
     int w=cellWidth();
     int h=cellHeight();
@@ -174,12 +174,12 @@ void KPTDateTable::paintWeekNumber(QPainter *painter, int row) {
     painter->setPen(KGlobalSettings::baseColor());
     painter->drawRect(0, 0, w, h);
     painter->setPen(KGlobalSettings::textColor());
-    if (m_markedWeeks.state(m_weeks[row]) == KPTMap::NonWorking) {
+    if (m_markedWeeks.state(m_weeks[row]) == Map::NonWorking) {
         painter->setPen(colorBackgroundHoliday);
         painter->setBrush(colorBackgroundHoliday);
         painter->drawRect(0, 0, w, h);
         painter->setPen(colorTextHoliday);
-    } else if (m_markedWeeks.state(m_weeks[row]) == KPTMap::Working) {
+    } else if (m_markedWeeks.state(m_weeks[row]) == Map::Working) {
         painter->setPen(colorBackgroundWorkday);
         painter->setBrush(colorBackgroundWorkday);
         painter->drawRect(0, 0, w, h);
@@ -201,7 +201,7 @@ void KPTDateTable::paintWeekNumber(QPainter *painter, int row) {
     if(rect.height()>maxCell.height()) maxCell.setHeight(rect.height());
 }
 
-void KPTDateTable::paintDay(QPainter *painter, int row, int col) {
+void DateTable::paintDay(QPainter *painter, int row, int col) {
     //kdDebug()<<k_funcinfo<<"row,col=("<<row<<","<<col<<")"<<" num col="<<numCols()<<endl;
     QRect rect;
     int w=cellWidth();
@@ -220,12 +220,12 @@ void KPTDateTable::paintDay(QPainter *painter, int row, int col) {
     painter->drawRect(0, 0, w, h);
 
     // First paint the dates background
-    if (m_markedDates.state(d) == KPTMap::NonWorking) {
+    if (m_markedDates.state(d) == Map::NonWorking) {
         //kdDebug()<<k_funcinfo<<"Marked date: "<<d<<"  row,col=("<<row<<","<<col<<")=NonWorking"<<endl;
         painter->setPen(colorBackgroundHoliday);
         painter->setBrush(colorBackgroundHoliday);
         painter->drawRect(0, 0, w, h);
-    } else if (m_markedDates.state(d) == KPTMap::Working) {
+    } else if (m_markedDates.state(d) == Map::Working) {
         //kdDebug()<<k_funcinfo<<"Marked date: "<<d<<"  row,col=("<<row<<","<<col<<")=Working"<<endl;
         painter->setPen(colorBackgroundWorkday);
         painter->setBrush(colorBackgroundWorkday);
@@ -239,7 +239,7 @@ void KPTDateTable::paintDay(QPainter *painter, int row, int col) {
     }
     // If weeks or weekdays are selected/marked we draw lines around the date
     QPen pen = painter->pen();
-    if (m_markedWeeks.state(m_weeks[row]) == KPTMap::NonWorking) {
+    if (m_markedWeeks.state(m_weeks[row]) == Map::NonWorking) {
         //kdDebug()<<k_funcinfo<<"Marked week: row,dayCol=("<<row<<","<<dayCol<<")=NonWorking"<<endl;
         painter->setPen(colorBackgroundHoliday);
         painter->moveTo(0, 0);
@@ -247,7 +247,7 @@ void KPTDateTable::paintDay(QPainter *painter, int row, int col) {
         painter->moveTo(0, h-1);
         painter->lineTo(w-1, h-1);
         pen.setStyle(DotLine);
-    } else if (m_markedWeeks.state(m_weeks[row]) == KPTMap::Working) {
+    } else if (m_markedWeeks.state(m_weeks[row]) == Map::Working) {
         //kdDebug()<<k_funcinfo<<"Marked week: row,dayCol=("<<row<<","<<dayCol<<")=Working"<<endl;
         painter->setPen(colorBackgroundWorkday);
         painter->moveTo(0, 0);
@@ -256,7 +256,7 @@ void KPTDateTable::paintDay(QPainter *painter, int row, int col) {
         painter->lineTo(w-1, h-1);
         pen.setStyle(DotLine);
     }
-    if (m_markedWeekdays.state(weekday(col)) == KPTMap::NonWorking) {
+    if (m_markedWeekdays.state(weekday(col)) == Map::NonWorking) {
         //kdDebug()<<k_funcinfo<<"Marked week: row,dayCol=("<<row<<","<<dayCol<<")=NonWorking"<<endl;
         pen.setColor(colorBackgroundHoliday);
         painter->setPen(pen);
@@ -264,7 +264,7 @@ void KPTDateTable::paintDay(QPainter *painter, int row, int col) {
         painter->lineTo(0, h-1);
         painter->moveTo(w-1, 0);
         painter->lineTo(w-1, h-1);
-    } else if (m_markedWeekdays.state(weekday(col)) == KPTMap::Working) {
+    } else if (m_markedWeekdays.state(weekday(col)) == Map::Working) {
         //kdDebug()<<k_funcinfo<<"Marked weekday: row,dayCol=("<<row<<","<<dayCol<<")=Working"<<endl;
         pen.setColor(colorBackgroundWorkday);
         painter->setPen(pen);
@@ -287,7 +287,7 @@ void KPTDateTable::paintDay(QPainter *painter, int row, int col) {
     if(rect.height()>maxCell.height()) maxCell.setHeight(rect.height());
 }
 
-void KPTDateTable::paintCell(QPainter *painter, int row, int col) {
+void DateTable::paintCell(QPainter *painter, int row, int col) {
     //kdDebug()<<k_funcinfo<<"row,col=("<<row<<","<<col<<")"<<"enabled="<<m_enabled<<endl;
     if (row == 0 && col == 0) {
         painter->save();
@@ -313,7 +313,7 @@ void KPTDateTable::paintCell(QPainter *painter, int row, int col) {
 }
 
 //FIXME
-void KPTDateTable::keyPressEvent( QKeyEvent *e ) {
+void DateTable::keyPressEvent( QKeyEvent *e ) {
     if (!m_enabled)
         return;
     if ( e->key() == Qt::Key_Prior ) {
@@ -372,14 +372,14 @@ void KPTDateTable::keyPressEvent( QKeyEvent *e ) {
     KNotifyClient::beep();
 }
 
-void KPTDateTable::viewportResizeEvent(QResizeEvent * e) {
+void DateTable::viewportResizeEvent(QResizeEvent * e) {
   QGridView::viewportResizeEvent(e);
 
   setCellWidth(viewport()->width()/numCols());
   setCellHeight(viewport()->height()/numRows());
 }
 
-void KPTDateTable::setFontSize(int size) {
+void DateTable::setFontSize(int size) {
   int count;
   QFontMetrics metrics(fontMetrics());
   QRect rect;
@@ -401,13 +401,13 @@ void KPTDateTable::setFontSize(int size) {
 }
 
 //FIXME
-void KPTDateTable::wheelEvent ( QWheelEvent * e ) {
+void DateTable::wheelEvent ( QWheelEvent * e ) {
     setDate(date.addMonths( -(int)(e->delta()/120)) );
     e->accept();
 }
 
 
-void KPTDateTable::contentsMousePressEvent(QMouseEvent *e) {
+void DateTable::contentsMousePressEvent(QMouseEvent *e) {
     if (!m_enabled)
         return;
     //kdDebug()<<k_funcinfo<<endl;
@@ -489,7 +489,7 @@ void KPTDateTable::contentsMousePressEvent(QMouseEvent *e) {
     repaintContents(false);
 }
 
-bool KPTDateTable::contentsMousePressEvent_internal(QMouseEvent *e) {
+bool DateTable::contentsMousePressEvent_internal(QMouseEvent *e) {
     QPoint mouseCoord = e->pos();
     int row=rowAt(mouseCoord.y());
     int col=columnAt(mouseCoord.x());
@@ -501,7 +501,7 @@ bool KPTDateTable::contentsMousePressEvent_internal(QMouseEvent *e) {
     return true;
 }
 
-bool KPTDateTable::selectDate(const QDate& date_) {
+bool DateTable::selectDate(const QDate& date_) {
     //kdDebug()<<k_funcinfo<<"date="<<date_.toString()<<endl;
     bool changed=false;
     QDate temp;
@@ -536,13 +536,13 @@ bool KPTDateTable::selectDate(const QDate& date_) {
     return true;
 }
 
-bool KPTDateTable::setDate(const QDate& date_, bool repaint) {
+bool DateTable::setDate(const QDate& date_, bool repaint) {
     //kdDebug()<<k_funcinfo<<"date="<<date_.toString()<<endl;
     bool changed=false;
     QDate temp;
     // -----
     if(!date_.isValid()) {
-        //kdDebug() << "KPTDateTable::setDate: refusing to set invalid date." << endl;
+        //kdDebug() << "DateTable::setDate: refusing to set invalid date." << endl;
         return false;
         }
     if(date!=date_) {
@@ -579,29 +579,29 @@ bool KPTDateTable::setDate(const QDate& date_, bool repaint) {
     return true;
 }
 
-const QDate& KPTDateTable::getDate() const {
+const QDate& DateTable::getDate() const {
   return date;
 }
 
-void KPTDateTable::focusInEvent( QFocusEvent *e ) {
+void DateTable::focusInEvent( QFocusEvent *e ) {
     QGridView::focusInEvent( e );
 }
 
-void KPTDateTable::focusOutEvent( QFocusEvent *e ) {
+void DateTable::focusOutEvent( QFocusEvent *e ) {
     QGridView::focusOutEvent( e );
 }
 
-QSize KPTDateTable::sizeHint() const {
+QSize DateTable::sizeHint() const {
     if(maxCell.height()>0 && maxCell.width()>0) {
       return QSize(maxCell.width()*numCols()+2*frameWidth(),
              (maxCell.height()+2)*numRows()+2*frameWidth());
     } else {
-      //kdDebug() << "KPTDateTable::sizeHint: obscure failure - " << endl;
+      //kdDebug() << "DateTable::sizeHint: obscure failure - " << endl;
       return QSize(-1, -1);
     }
 }
 
-void KPTDateTable::setWeekNumbers(QDate date) {
+void DateTable::setWeekNumbers(QDate date) {
     if (!date.isValid()) {
         kdError()<<k_funcinfo<<"Invalid date"<<endl;
     }
@@ -613,7 +613,7 @@ void KPTDateTable::setWeekNumbers(QDate date) {
     }
 }
 
-void KPTDateTable::updateCells() {
+void DateTable::updateCells() {
     //kdDebug()<<k_funcinfo<<endl;
     for (int row=0; row < numRows(); ++row) {
         for (int col=0; col < numCols(); ++col) {
@@ -622,7 +622,7 @@ void KPTDateTable::updateCells() {
     }
 }
 
-void KPTDateTable::updateSelectedCells() {
+void DateTable::updateSelectedCells() {
     //kdDebug()<<k_funcinfo<<endl;
     QDate dt(date.year(), date.month(), 1);
     dt = dt.addDays(-firstday);
@@ -637,7 +637,7 @@ void KPTDateTable::updateSelectedCells() {
     }
 }
 
-void KPTDateTable::updateMarkedCells() {
+void DateTable::updateMarkedCells() {
     QDate dt(date.year(), date.month(), 1);
     dt = dt.addDays(-firstday);
     for (int pos=0; pos < 42; ++pos) {
@@ -651,10 +651,10 @@ void KPTDateTable::updateMarkedCells() {
     }
 }
 
-void KPTDateTable::setMarkedWeeks(KPTWeekMap weeks) {
+void DateTable::setMarkedWeeks(WeekMap weeks) {
     updateMarkedCells();
     m_markedWeeks.clear();
-    KPTWeekMap::iterator it;
+    WeekMap::iterator it;
     for (it = weeks.begin(); it != weeks.end(); ++it) {
         //kdDebug()<<k_funcinfo<<"insert: "<<it.key()<<"="<<it.data()<<endl;
         m_markedWeeks.insert(it, it.data());
@@ -663,13 +663,13 @@ void KPTDateTable::setMarkedWeeks(KPTWeekMap weeks) {
     repaintContents(false);
 }
 
-void KPTDateTable::addMarkedWeek(int week, int year, int state) {
+void DateTable::addMarkedWeek(int week, int year, int state) {
     m_markedWeeks.insert(week, year, state);
     updateMarkedCells();
     repaintContents(false);
 }
 
-void KPTDateTable::setMarkedWeekdays(const KPTIntMap days) {
+void DateTable::setMarkedWeekdays(const IntMap days) {
     updateMarkedCells();
     m_markedWeekdays.clear();
     m_markedWeekdays = days;
@@ -677,19 +677,19 @@ void KPTDateTable::setMarkedWeekdays(const KPTIntMap days) {
     repaintContents(false);
 }
 
-bool KPTDateTable::weekdayMarked(int day) {
+bool DateTable::weekdayMarked(int day) {
     return m_markedWeekdays.contains(day);
 }
 
-bool KPTDateTable::dateMarked(QDate date) {
+bool DateTable::dateMarked(QDate date) {
     return m_markedDates[date.toString()];
 }
 
-bool KPTDateTable::weekMarked(QPair<int, int> week) {
+bool DateTable::weekMarked(QPair<int, int> week) {
     return m_markedWeeks.contains(week);
 }
 
-void KPTDateTable::clear() {
+void DateTable::clear() {
     clearSelection();
     m_markedDates.clear();
     m_markedWeekdays.clear();
@@ -697,37 +697,37 @@ void KPTDateTable::clear() {
     repaintContents(false);
 }
 
-void KPTDateTable::clearSelection() {
+void DateTable::clearSelection() {
     m_selectedDates.clear();
     m_selectedWeekdays.clear();
     m_selectedWeeks.clear();;
     repaintContents(false);
 }
 
- void KPTDateTable::setEnabled(bool yes) {
+ void DateTable::setEnabled(bool yes) {
     if (m_enabled == yes)
         return;
     m_enabled=yes;
     updateCells();
 }
 
-void KPTDateTable::markSelected(int state) {
+void DateTable::markSelected(int state) {
     if (!m_selectedDates.isEmpty()) {
-        KPTDateMap::iterator it;
+        DateMap::iterator it;
         for(it = m_selectedDates.begin(); it != m_selectedDates.end(); ++it) {
             m_markedDates.insert(it.key(), state);
             //kdDebug()<<k_funcinfo<<"marked date: "<<it.key()<<"="<<state<<endl;
         }
     } else if (!m_selectedWeekdays.isEmpty()) {
-        KPTIntMap::iterator it;
+        IntMap::iterator it;
         for(it = m_selectedWeekdays.begin(); it != m_selectedWeekdays.end(); ++it) {
             m_markedWeekdays.insert(it.key(), state);
             //kdDebug()<<k_funcinfo<<"marked weekday: "<<it.key()<<"="<<state<<endl;
         }
     } else if (!m_selectedWeeks.isEmpty()) {
-        KPTWeekMap::iterator it;
+        WeekMap::iterator it;
         for(it = m_selectedWeeks.begin(); it != m_selectedWeeks.end(); ++it) {
-            m_markedWeeks.insert(KPTWeekMap::week(it.key()), state);
+            m_markedWeeks.insert(WeekMap::week(it.key()), state);
             //kdDebug()<<k_funcinfo<<"marked week: "<<it.key()<<"="<<state<<endl;
         }
     }
@@ -735,7 +735,7 @@ void KPTDateTable::markSelected(int state) {
     repaintContents(false);
 }
 
-KPTDateInternalWeekSelector::KPTDateInternalWeekSelector
+DateInternalWeekSelector::DateInternalWeekSelector
 (int fontsize, QWidget* parent, const char* name)
   : QLineEdit(parent, name),
     val(new QIntValidator(this)),
@@ -753,7 +753,7 @@ KPTDateInternalWeekSelector::KPTDateInternalWeekSelector
 }
 
 void
-KPTDateInternalWeekSelector::weekEnteredSlot()
+DateInternalWeekSelector::weekEnteredSlot()
 {
   bool ok;
   int week;
@@ -769,13 +769,13 @@ KPTDateInternalWeekSelector::weekEnteredSlot()
 }
 
 int
-KPTDateInternalWeekSelector::getWeek() const
+DateInternalWeekSelector::getWeek() const
 {
   return result;
 }
 
 void
-KPTDateInternalWeekSelector::setWeek(int week)
+DateInternalWeekSelector::setWeek(int week)
 {
   QString temp;
   // -----
@@ -783,7 +783,7 @@ KPTDateInternalWeekSelector::setWeek(int week)
   setText(temp);
 }
 
-KPTDateInternalMonthPicker::KPTDateInternalMonthPicker
+DateInternalMonthPicker::DateInternalMonthPicker
 (int fontsize, QWidget* parent, const char* name)
   : QGridView(parent, name),
     result(0) // invalid
@@ -817,33 +817,33 @@ KPTDateInternalMonthPicker::KPTDateInternalMonthPicker
 }
 
 QSize
-KPTDateInternalMonthPicker::sizeHint() const
+DateInternalMonthPicker::sizeHint() const
 {
   return QSize((max.width()+6)*numCols()+2*frameWidth(),
          (max.height()+6)*numRows()+2*frameWidth());
 }
 
 int
-KPTDateInternalMonthPicker::getResult() const
+DateInternalMonthPicker::getResult() const
 {
   return result;
 }
 
 void
-KPTDateInternalMonthPicker::setupPainter(QPainter *p)
+DateInternalMonthPicker::setupPainter(QPainter *p)
 {
   p->setPen(KGlobalSettings::textColor());
 }
 
 void
-KPTDateInternalMonthPicker::viewportResizeEvent(QResizeEvent*)
+DateInternalMonthPicker::viewportResizeEvent(QResizeEvent*)
 {
   setCellWidth(width()/3);
   setCellHeight(height()/4);
 }
 
 void
-KPTDateInternalMonthPicker::paintCell(QPainter* painter, int row, int col)
+DateInternalMonthPicker::paintCell(QPainter* painter, int row, int col)
 {
   int index;
   QString text;
@@ -856,7 +856,7 @@ KPTDateInternalMonthPicker::paintCell(QPainter* painter, int row, int col)
 }
 
 void
-KPTDateInternalMonthPicker::contentsMousePressEvent(QMouseEvent *e)
+DateInternalMonthPicker::contentsMousePressEvent(QMouseEvent *e)
 {
   if(!isEnabled() || e->button() != LeftButton)
     {
@@ -883,7 +883,7 @@ KPTDateInternalMonthPicker::contentsMousePressEvent(QMouseEvent *e)
 }
 
 void
-KPTDateInternalMonthPicker::contentsMouseMoveEvent(QMouseEvent *e)
+DateInternalMonthPicker::contentsMouseMoveEvent(QMouseEvent *e)
 {
   if (e->state() & LeftButton)
     {
@@ -923,7 +923,7 @@ KPTDateInternalMonthPicker::contentsMouseMoveEvent(QMouseEvent *e)
 }
 
 void
-KPTDateInternalMonthPicker::contentsMouseReleaseEvent(QMouseEvent *e)
+DateInternalMonthPicker::contentsMouseReleaseEvent(QMouseEvent *e)
 {
   if(!isEnabled())
     {
@@ -947,7 +947,7 @@ KPTDateInternalMonthPicker::contentsMouseReleaseEvent(QMouseEvent *e)
 
 
 
-KPTDateInternalYearSelector::KPTDateInternalYearSelector
+DateInternalYearSelector::DateInternalYearSelector
 (int fontsize, QWidget* parent, const char* name)
   : QLineEdit(parent, name),
     val(new QIntValidator(this)),
@@ -966,7 +966,7 @@ KPTDateInternalYearSelector::KPTDateInternalYearSelector
 }
 
 void
-KPTDateInternalYearSelector::yearEnteredSlot()
+DateInternalYearSelector::yearEnteredSlot()
 {
   bool ok;
   int year;
@@ -989,13 +989,13 @@ KPTDateInternalYearSelector::yearEnteredSlot()
 }
 
 int
-KPTDateInternalYearSelector::getYear() const
+DateInternalYearSelector::getYear() const
 {
   return result;
 }
 
 void
-KPTDateInternalYearSelector::setYear(int year)
+DateInternalYearSelector::setYear(int year)
 {
   QString temp;
   // -----
@@ -1003,7 +1003,7 @@ KPTDateInternalYearSelector::setYear(int year)
   setText(temp);
 }
 
-KPTPopupFrame::KPTPopupFrame(QWidget* parent, const char*  name)
+PopupFrame::PopupFrame(QWidget* parent, const char*  name)
   : QFrame(parent, name, WType_Popup),
     result(0), // rejected
     main(0)
@@ -1013,7 +1013,7 @@ KPTPopupFrame::KPTPopupFrame(QWidget* parent, const char*  name)
 }
 
 void
-KPTPopupFrame::keyPressEvent(QKeyEvent* e)
+PopupFrame::keyPressEvent(QKeyEvent* e)
 {
   if(e->key()==Key_Escape)
     {
@@ -1023,14 +1023,14 @@ KPTPopupFrame::keyPressEvent(QKeyEvent* e)
 }
 
 void
-KPTPopupFrame::close(int r)
+PopupFrame::close(int r)
 {
   result=r;
   qApp->exit_loop();
 }
 
 void
-KPTPopupFrame::setMainWidget(QWidget* m)
+PopupFrame::setMainWidget(QWidget* m)
 {
   main=m;
   if(main!=0)
@@ -1040,7 +1040,7 @@ KPTPopupFrame::setMainWidget(QWidget* m)
 }
 
 void
-KPTPopupFrame::resizeEvent(QResizeEvent*)
+PopupFrame::resizeEvent(QResizeEvent*)
 {
   if(main!=0)
     {
@@ -1050,7 +1050,7 @@ KPTPopupFrame::resizeEvent(QResizeEvent*)
 }
 
 void
-KPTPopupFrame::popup(const QPoint &pos)
+PopupFrame::popup(const QPoint &pos)
 {
   // Make sure the whole popup is visible.
   QRect d = QApplication::desktop()->screenGeometry(QApplication::desktop()->screenNumber(pos));
@@ -1073,7 +1073,7 @@ KPTPopupFrame::popup(const QPoint &pos)
 }
 
 int
-KPTPopupFrame::exec(QPoint pos)
+PopupFrame::exec(QPoint pos)
 {
   popup(pos);
   repaint();
@@ -1083,15 +1083,15 @@ KPTPopupFrame::exec(QPoint pos)
 }
 
 int
-KPTPopupFrame::exec(int x, int y)
+PopupFrame::exec(int x, int y)
 {
   return exec(QPoint(x, y));
 }
 
-void KPTPopupFrame::virtual_hook( int, void* )
+void PopupFrame::virtual_hook( int, void* )
 { /*BASE::virtual_hook( id, data );*/ }
 
-void KPTDateTable::virtual_hook( int, void* )
+void DateTable::virtual_hook( int, void* )
 { /*BASE::virtual_hook( id, data );*/ }
 
 }  //KPlato namespace

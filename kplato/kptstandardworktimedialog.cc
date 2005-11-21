@@ -38,13 +38,13 @@
 namespace KPlato
 {
 
-KPTStandardWorktimeDialog::KPTStandardWorktimeDialog(KPTProject &p, QWidget *parent, const char *name)
+StandardWorktimeDialog::StandardWorktimeDialog(Project &p, QWidget *parent, const char *name)
     : KDialogBase( Swallow, i18n("Standard Worktime"), Ok|Cancel, Ok, parent, name, true, true),
       project(p)
 {
     //kdDebug()<<k_funcinfo<<&p<<endl;
     m_original = p.standardWorktime();
-    dia = new KPTStandardWorktimeDialogImpl(new KPTStandardWorktime(m_original), this); //FIXME
+    dia = new StandardWorktimeDialogImpl(new StandardWorktime(m_original), this); //FIXME
 
     setMainWidget(dia);
     enableButtonOK(false);
@@ -54,23 +54,23 @@ KPTStandardWorktimeDialog::KPTStandardWorktimeDialog(KPTProject &p, QWidget *par
 }
 
 // FIXME
-KMacroCommand *KPTStandardWorktimeDialog::buildCommand(KPTPart *part) {
+KMacroCommand *StandardWorktimeDialog::buildCommand(Part *part) {
     kdDebug()<<k_funcinfo<<endl;
     project.addStandardWorktime(dia->standardWorktime());
     return 0;
     
 }
 
-void KPTStandardWorktimeDialog::slotOk() {
+void StandardWorktimeDialog::slotOk() {
     accept();
 }
 
 
-KPTStandardWorktimeDialogImpl::KPTStandardWorktimeDialogImpl(KPTStandardWorktime *std, QWidget *parent) 
+StandardWorktimeDialogImpl::StandardWorktimeDialogImpl(StandardWorktime *std, QWidget *parent) 
     : StandardWorktimeDialogBase(parent),
       m_std(std) {
     if (!std) {
-        m_std = new KPTStandardWorktime();
+        m_std = new StandardWorktime();
     }
     year->setValue(m_std->durationYear().hours());
     month->setValue(m_std->durationMonth().hours());
@@ -79,42 +79,42 @@ KPTStandardWorktimeDialogImpl::KPTStandardWorktimeDialogImpl(KPTStandardWorktime
     
     dayTime->setTime(t.addSecs(m_std->durationDay().seconds()));
     
-    int state = (m_std->state(0) == KPTMap::Working) ? 0 : 1;
+    int state = (m_std->state(0) == Map::Working) ? 0 : 1;
     stateMonday->setCurrentItem(state);
     slotStateMondayActivated(state);
     mondayTime->setTime(t.addSecs(m_std->durationWeekday(0).seconds()));
     
-    state = (m_std->state(1) == KPTMap::Working) ? 0 : 1;
+    state = (m_std->state(1) == Map::Working) ? 0 : 1;
     stateTuesday->setCurrentItem(state);
     slotStateTuesdayActivated(state);
     tuesdayTime->setTime(t.addSecs(m_std->durationWeekday(1).seconds()));
     
-    state = (m_std->state(2) == KPTMap::Working) ? 0 : 1;
+    state = (m_std->state(2) == Map::Working) ? 0 : 1;
     stateWednesday->setCurrentItem(state);
     slotStateWednesdayActivated(state);
     wednesdayTime->setTime(t.addSecs(m_std->durationWeekday(2).seconds()));
 
-    state = (m_std->state(3) == KPTMap::Working) ? 0 : 1;
+    state = (m_std->state(3) == Map::Working) ? 0 : 1;
     stateThursday->setCurrentItem(state);
     slotStateThursdayActivated(state);
     thursdayTime->setTime(t.addSecs(m_std->durationWeekday(3).seconds()));
     
-    state = (m_std->state(4) == KPTMap::Working) ? 0 : 1;
+    state = (m_std->state(4) == Map::Working) ? 0 : 1;
     stateFriday->setCurrentItem(state);
     slotStateFridayActivated(state);
     fridayTime->setTime(t.addSecs(m_std->durationWeekday(4).seconds()));
     
-    state = (m_std->state(5) == KPTMap::Working) ? 0 : 1;
+    state = (m_std->state(5) == Map::Working) ? 0 : 1;
     stateSaturday->setCurrentItem(state);
     slotStateSaturdayActivated(state);
     saturdayTime->setTime(t.addSecs(m_std->durationWeekday(5).seconds()));
     
-    state = (m_std->state(6) == KPTMap::Working) ? 0 : 1;
+    state = (m_std->state(6) == Map::Working) ? 0 : 1;
     stateSunday->setCurrentItem(state);
     slotStateSundayActivated(state);
     sundayTime->setTime(t.addSecs(m_std->durationWeekday(6).seconds()));
     
-    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(KPTDuration::Format_HourFraction)));
+    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(Duration::Format_HourFraction)));
 
     connect(year, SIGNAL(valueChanged(int)), SLOT(slotYearChanged(int)));
     connect(month, SIGNAL(valueChanged(int)), SLOT(slotMonthChanged(int)));
@@ -147,28 +147,28 @@ KPTStandardWorktimeDialogImpl::KPTStandardWorktimeDialogImpl(KPTStandardWorktime
 }
 
 
-void KPTStandardWorktimeDialogImpl::slotEnableButtonOk(bool on) {
+void StandardWorktimeDialogImpl::slotEnableButtonOk(bool on) {
     emit enableButtonOk(on);
 }
 
-void KPTStandardWorktimeDialogImpl::slotCheckAllFieldsFilled() {
+void StandardWorktimeDialogImpl::slotCheckAllFieldsFilled() {
     emit obligatedFieldsFilled(true);
 }
 
-void KPTStandardWorktimeDialogImpl::slotYearChanged(int value) {
+void StandardWorktimeDialogImpl::slotYearChanged(int value) {
     kdDebug()<<k_funcinfo<<value<<endl;
-    m_std->setYear(KPTDuration(0, value, 0));
+    m_std->setYear(Duration(0, value, 0));
     slotEnableButtonOk(true);
 }
 
-void KPTStandardWorktimeDialogImpl::slotMonthChanged(int value) {
-    m_std->setMonth(KPTDuration(0, value, 0));
+void StandardWorktimeDialogImpl::slotMonthChanged(int value) {
+    m_std->setMonth(Duration(0, value, 0));
     slotEnableButtonOk(true);
 }
 
-void KPTStandardWorktimeDialogImpl::slotEditDayClicked() {
+void StandardWorktimeDialogImpl::slotEditDayClicked() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTIntervalEdit *dia = new KPTIntervalEdit(m_std->intervals(), this);
+    IntervalEdit *dia = new IntervalEdit(m_std->intervals(), this);
     if (dia->exec()) {
         m_std->clearIntervals();
         m_std->setIntervals(dia->intervals());
@@ -177,9 +177,9 @@ void KPTStandardWorktimeDialogImpl::slotEditDayClicked() {
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotEditMondayClicked() {
+void StandardWorktimeDialogImpl::slotEditMondayClicked() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTIntervalEdit *dia = new KPTIntervalEdit(m_std->intervals(0), this);
+    IntervalEdit *dia = new IntervalEdit(m_std->intervals(0), this);
     if (dia->exec()) {
         m_std->clearIntervals(0);
         m_std->setIntervals(0, dia->intervals());
@@ -188,9 +188,9 @@ void KPTStandardWorktimeDialogImpl::slotEditMondayClicked() {
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotEditTuesdayClicked() {
+void StandardWorktimeDialogImpl::slotEditTuesdayClicked() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTIntervalEdit *dia = new KPTIntervalEdit(m_std->intervals(1), this);
+    IntervalEdit *dia = new IntervalEdit(m_std->intervals(1), this);
     if (dia->exec()) {
         m_std->clearIntervals(1);
         m_std->setIntervals(1, dia->intervals());
@@ -199,9 +199,9 @@ void KPTStandardWorktimeDialogImpl::slotEditTuesdayClicked() {
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotEditWednesdayClicked() {
+void StandardWorktimeDialogImpl::slotEditWednesdayClicked() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTIntervalEdit *dia = new KPTIntervalEdit(m_std->intervals(2), this);
+    IntervalEdit *dia = new IntervalEdit(m_std->intervals(2), this);
     if (dia->exec()) {
         m_std->clearIntervals(2);
         m_std->setIntervals(2, dia->intervals());
@@ -210,9 +210,9 @@ void KPTStandardWorktimeDialogImpl::slotEditWednesdayClicked() {
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotEditThursdayClicked() {
+void StandardWorktimeDialogImpl::slotEditThursdayClicked() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTIntervalEdit *dia = new KPTIntervalEdit(m_std->intervals(3), this);
+    IntervalEdit *dia = new IntervalEdit(m_std->intervals(3), this);
     if (dia->exec()) {
         m_std->clearIntervals(3);
         m_std->setIntervals(3, dia->intervals());
@@ -221,9 +221,9 @@ void KPTStandardWorktimeDialogImpl::slotEditThursdayClicked() {
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotEditFridayClicked() {
+void StandardWorktimeDialogImpl::slotEditFridayClicked() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTIntervalEdit *dia = new KPTIntervalEdit(m_std->intervals(4), this);
+    IntervalEdit *dia = new IntervalEdit(m_std->intervals(4), this);
     if (dia->exec()) {
         m_std->clearIntervals(4);
         m_std->setIntervals(4, dia->intervals());
@@ -232,9 +232,9 @@ void KPTStandardWorktimeDialogImpl::slotEditFridayClicked() {
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotEditSaturdayClicked() {
+void StandardWorktimeDialogImpl::slotEditSaturdayClicked() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTIntervalEdit *dia = new KPTIntervalEdit(m_std->intervals(5), this);
+    IntervalEdit *dia = new IntervalEdit(m_std->intervals(5), this);
     if (dia->exec()) {
         m_std->clearIntervals(5);
         m_std->setIntervals(5, dia->intervals());
@@ -243,9 +243,9 @@ void KPTStandardWorktimeDialogImpl::slotEditSaturdayClicked() {
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotEditSundayClicked() {
+void StandardWorktimeDialogImpl::slotEditSundayClicked() {
     //kdDebug()<<k_funcinfo<<endl;
-    KPTIntervalEdit *dia = new KPTIntervalEdit(m_std->intervals(6), this);
+    IntervalEdit *dia = new IntervalEdit(m_std->intervals(6), this);
     if (dia->exec()) {
         m_std->clearIntervals(6);
         m_std->setIntervals(6, dia->intervals());
@@ -254,128 +254,128 @@ void KPTStandardWorktimeDialogImpl::slotEditSundayClicked() {
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotStateMondayActivated(int index) {
+void StandardWorktimeDialogImpl::slotStateMondayActivated(int index) {
     //kdDebug()<<k_funcinfo<<": "<<index<<endl;
     if (index == 0) {
         bEditMonday->setEnabled(true);
-        m_std->setState(0, KPTMap::Working);
+        m_std->setState(0, Map::Working);
     } else if (index == 1) {
         m_std->clearIntervals(0);
         bEditMonday->setEnabled(false);
-        m_std->setState(0, KPTMap::NonWorking);
+        m_std->setState(0, Map::NonWorking);
         mondayTime->setTime(QTime().addSecs(m_std->durationWeekday(0).seconds()));
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotStateTuesdayActivated(int index) {
+void StandardWorktimeDialogImpl::slotStateTuesdayActivated(int index) {
     //kdDebug()<<k_funcinfo<<": "<<index<<endl;
     if (index == 0) {
         bEditTuesday->setEnabled(true);
-        m_std->setState(1, KPTMap::Working);
+        m_std->setState(1, Map::Working);
     } else if (index == 1) {
         m_std->clearIntervals(1);
         bEditTuesday->setEnabled(false);
-        m_std->setState(1, KPTMap::NonWorking);
+        m_std->setState(1, Map::NonWorking);
         tuesdayTime->setTime(QTime().addSecs(m_std->durationWeekday(1).seconds()));
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotStateWednesdayActivated(int index) {
+void StandardWorktimeDialogImpl::slotStateWednesdayActivated(int index) {
     //kdDebug()<<k_funcinfo<<": "<<index<<endl;
     if (index == 0) {
         bEditWednesday->setEnabled(true);
-        m_std->setState(2, KPTMap::Working);
+        m_std->setState(2, Map::Working);
     } else if (index == 1) {
         m_std->clearIntervals(2);
         bEditWednesday->setEnabled(false);
-        m_std->setState(2, KPTMap::NonWorking);
+        m_std->setState(2, Map::NonWorking);
         wednesdayTime->setTime(QTime().addSecs(m_std->durationWeekday(2).seconds()));
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotStateThursdayActivated(int index) {
+void StandardWorktimeDialogImpl::slotStateThursdayActivated(int index) {
     //kdDebug()<<k_funcinfo<<": "<<index<<endl;
     if (index == 0) {
         bEditThursday->setEnabled(true);
-        m_std->setState(3, KPTMap::Working);
+        m_std->setState(3, Map::Working);
     } else if (index == 1) {
         m_std->clearIntervals(3);
         bEditThursday->setEnabled(false);
-        m_std->setState(3, KPTMap::NonWorking);
+        m_std->setState(3, Map::NonWorking);
         thursdayTime->setTime(QTime().addSecs(m_std->durationWeekday(3).seconds()));
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotStateFridayActivated(int index) {
+void StandardWorktimeDialogImpl::slotStateFridayActivated(int index) {
     //kdDebug()<<k_funcinfo<<": "<<index<<endl;
     if (index == 0) {
         bEditFriday->setEnabled(true);
-        m_std->setState(4, KPTMap::Working);
+        m_std->setState(4, Map::Working);
     } else if (index == 1) {
         m_std->clearIntervals(4);
         bEditFriday->setEnabled(false);
-        m_std->setState(4, KPTMap::NonWorking);
+        m_std->setState(4, Map::NonWorking);
         fridayTime->setTime(QTime().addSecs(m_std->durationWeekday(4).seconds()));
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotStateSaturdayActivated(int index) {
+void StandardWorktimeDialogImpl::slotStateSaturdayActivated(int index) {
     //kdDebug()<<k_funcinfo<<": "<<index<<endl;
     if (index == 0) {
         bEditSaturday->setEnabled(true);
-        m_std->setState(5, KPTMap::Working);
+        m_std->setState(5, Map::Working);
     } else if (index == 1) {
         m_std->clearIntervals(5);
         bEditSaturday->setEnabled(false);
-        m_std->setState(5, KPTMap::NonWorking);
+        m_std->setState(5, Map::NonWorking);
         saturdayTime->setTime(QTime().addSecs(m_std->durationWeekday(5).seconds()));
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotStateSundayActivated(int index) {
+void StandardWorktimeDialogImpl::slotStateSundayActivated(int index) {
     //kdDebug()<<k_funcinfo<<": "<<index<<endl;
     if (index == 0) {
         bEditSunday->setEnabled(true);
-        m_std->setState(6, KPTMap::Working);
+        m_std->setState(6, Map::Working);
     } else if (index == 1) {
         m_std->clearIntervals(6);
         bEditSunday->setEnabled(false);
-        m_std->setState(6, KPTMap::NonWorking);
+        m_std->setState(6, Map::NonWorking);
         sundayTime->setTime(QTime().addSecs(m_std->durationWeekday(6).seconds()));
     }
 }
 
-void KPTStandardWorktimeDialogImpl::slotMondayTimeChanged(const QTime& time) {
+void StandardWorktimeDialogImpl::slotMondayTimeChanged(const QTime& time) {
     kdDebug()<<k_funcinfo<<endl;
-    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(KPTDuration::Format_HourFraction)));
+    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(Duration::Format_HourFraction)));
 }
 
-void KPTStandardWorktimeDialogImpl::slotTuesdayTimeChanged(const QTime& time) {
+void StandardWorktimeDialogImpl::slotTuesdayTimeChanged(const QTime& time) {
     kdDebug()<<k_funcinfo<<endl;
-    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(KPTDuration::Format_HourFraction)));
+    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(Duration::Format_HourFraction)));
 }
 
-void KPTStandardWorktimeDialogImpl::slotWednesdayTimeChanged(const QTime& time) {
+void StandardWorktimeDialogImpl::slotWednesdayTimeChanged(const QTime& time) {
     kdDebug()<<k_funcinfo<<endl;
-    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(KPTDuration::Format_HourFraction)));
+    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(Duration::Format_HourFraction)));
 }
 
-void KPTStandardWorktimeDialogImpl::slotThursdayTimeChanged(const QTime& time) {
+void StandardWorktimeDialogImpl::slotThursdayTimeChanged(const QTime& time) {
     kdDebug()<<k_funcinfo<<endl;
-    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(KPTDuration::Format_HourFraction)));
+    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(Duration::Format_HourFraction)));
 }
 
-void KPTStandardWorktimeDialogImpl::slotFridayTimeChanged(const QTime& time) {
+void StandardWorktimeDialogImpl::slotFridayTimeChanged(const QTime& time) {
     kdDebug()<<k_funcinfo<<endl;
-    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(KPTDuration::Format_HourFraction)));
+    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(Duration::Format_HourFraction)));
 }
 
-void KPTStandardWorktimeDialogImpl::slotSaturdayTimeChanged(const QTime& time) {
+void StandardWorktimeDialogImpl::slotSaturdayTimeChanged(const QTime& time) {
     kdDebug()<<k_funcinfo<<endl;
-    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(KPTDuration::Format_HourFraction)));
+    weekTime->setText(QString("%1").arg(m_std->durationWeek().toString(Duration::Format_HourFraction)));
 }
 
-void KPTStandardWorktimeDialogImpl::slotSundayTimeTimeChanged(const QTime& time) {
+void StandardWorktimeDialogImpl::slotSundayTimeTimeChanged(const QTime& time) {
 }
 
 }  //KPlato namespace
