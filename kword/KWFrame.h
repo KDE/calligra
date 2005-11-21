@@ -268,7 +268,7 @@ public:
     double minFrameHeight(void)const {return m_minFrameHeight;}
 
     /** Return if the point is on the frame.
-        @param point the point in normal coordinates.
+        @param nPoint the point in normal coordinates.
         @param borderOfFrameOnly when true an additional check is done if the point
           is on the border.  */
     bool frameAtPos( const QPoint& nPoint, bool borderOfFrameOnly=false ) const;

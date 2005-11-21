@@ -109,7 +109,10 @@ public:
      * since this method is used for view stuff only (mouse).
      * @param hintDPoint hint, in case of copied frames. If specified, its y
      * value will be used as a minimum on the returned result, to prefer a frame
-     * over any of its copies (e.g. in the header/footer case). */
+     * over any of its copies (e.g. in the header/footer case).
+     * @param iPoint internal document point
+     * @param dPoint the other point
+     */
     KWFrame * internalToDocumentWithHint( const QPoint &iPoint, KoPoint &dPoint, const KoPoint &hintDPoint ) const;
 
     /** A variant of internalToDocument, when the frame is already known.
@@ -135,7 +138,9 @@ public:
     void deleteFrame( KWFrame *frm, bool remove = true, bool recalc = true )
         { KWFrameSet::deleteFrame( frm, remove, recalc ); } // strange C++ feature ;)
 
-    /** reshuffle frames so text is always displayed from top-left down and then right. */
+    /** reshuffle frames so text is always displayed from top-left down and then right.
+     * @param flags
+     */
     virtual void updateFrames( int flags = 0xff );
 
     /** Views notify the KWTextFrameSet of which area of the text
@@ -143,7 +148,9 @@ public:
      * correctly.
      * @param w the wigdet (usually kwcanvas) that identifies the view
      * @param w the current viewmode (to make sure the frameset is visible)
-     * @param nPointBottom the max the view looks at, in normal coordinates */
+     * @param nPointBottom the max the view looks at, in normal coordinates
+     * @param viewMode the current viewMode
+     */
     void updateViewArea( QWidget * w, KWViewMode* viewMode, const QPoint & nPointBottom );
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true )
@@ -213,8 +220,7 @@ public:
 
     /** Update the paragraph that use the given style, after this style was changed.
      *  The flags tell which changes should be applied.
-     *  @param paragLayoutChanged paragraph flags
-     *  @param formatChanged format flags
+     *  @param changed the changed style map
      */
     void applyStyleChange( KoStyleChangeDefMap changed );
 

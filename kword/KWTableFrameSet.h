@@ -242,8 +242,8 @@ public:
     class TableIterator {
     public:
         /**
-         *      @param The table to iterate over. The current item is set to the Cell
-         *      at row 0, column 0
+         * @param table The table to iterate over. The current item is set to the Cell
+         * at row 0, column 0
          */
         TableIterator (KWTableFrameSet *table);
 
@@ -315,6 +315,8 @@ public:
     /**
      * @param emptyRegion The region is modified to subtract the areas painted, thus
      *                    allowing the caller to determine which areas remain to be painted.
+     * @param crect  the clip rect, outside which nothing is important
+     * @param viewMode the current view mode
      */
     virtual void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode );
     void drawBorders( QPainter& painter, const QRect &crect, KWViewMode *viewMode );

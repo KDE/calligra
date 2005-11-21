@@ -29,15 +29,42 @@ class KActionSeparator;
 class KAction;
 class QPopupMenu;
 
+/**
+ * This base class is an interface for Policies used in the KWFrameView.
+ */
 class FramePolicy {
 public:
+    /** Constructor */
     FramePolicy(KWFrameView *view);
+    /**
+     * Return the MouseMeaning enum value for the parent view.
+     * @param point the point where the mouse is hovering.
+     * @param keyState the bitmask of keys that are pressed.  Same as Event::state();
+     */
     virtual MouseMeaning mouseMeaning( const KoPoint &point, int keyState ) = 0;
+    /**
+     * Return a fully initialized popup for the context of frame at @p point
+     * @param point the point where the mouse is hovering.
+     * @param keyState the bitmask of keys that are pressed.  Same as Event::state();
+     */
     virtual QPopupMenu* createPopup( const KoPoint &point, KWView *view ) = 0;
+    /**
+     * Override this method to do more then select the parent frame-view
+     */
     virtual void setSelected(MouseMeaning) { };
 
 protected:
+    /**
+     * Shared method for all policies called when the border of the frame is clicked.
+     * @param point the point where the mouse is hovering.
+     * @param keyState the bitmask of keys that are pressed.  Same as Event::state();
+     */
     virtual MouseMeaning mouseMeaningOnBorder(const KoPoint &point, int keyState);
+    /**
+     * Shared method for all policies to add the 'set floating' action to a popup menu.
+     * @param view the parent view widget
+     * @param actionList the list of actions where the floating action should be added to
+     */
     void addFloatingAction(KWView *view, QPtrList<KAction> &actionList);
 
     KWFrameView *m_view;
@@ -46,28 +73,75 @@ protected:
     friend class KWFrameView; // so it can call mouseMeaningOnBorder which assumes some stuff
 };
 
+/**
+ * an instance of a KWFrameView represents the view in the MVC model of a frame; there can be
+ * multiple KWFrameView objects per frame. Typically one per view.
+ * This class registers selectedness and has methods to show the frame and its interaction methods
+ */
 class KWFrameView {
 public:
+    /**
+     * Constructor
+     * @param parent the parent
+     * @param frame the frame this view represents.
+     */
     KWFrameView(KWFrameViewManager *parent, KWFrame *frame);
     virtual ~KWFrameView();
 
+    /// returns if this frameView is selected.  A selected frame is shown differently on screen.
     bool selected() const { return m_selected; }
+    /**
+     * Set the selected state of this frameView.
+     * @param selected the new selected state
+     * @param selectPolicy an optionaly mouseMeaning at which the mouse was clicked to
+     *  make this selection happen.  See the FramePolicy::setSelected() for more info.
+     */
     void setSelected(bool selected, MouseMeaning selectPolicy = MEANING_MOUSE_SELECT);
 
+    /// the frame this frameView represents
     KWFrame *frame() const { return m_frame; }
 
+    /// returns if the @p point is on the border
     bool isBorderHit(const KoPoint &point) const;
-    bool contains(const KoPoint &point, bool withBorders = true) const;
+    /// returns if the @p point is anywhere in te frame, if fuzzy is true; also a little outside
+    bool contains(const KoPoint &point, bool fuzzy = true) const;
 
+    /**
+     * Return the MouseMeaning enum value for the parent view.
+     * @param point the point where the mouse is hovering.
+     * @param keyState the bitmask of keys that are pressed.  Same as Event::state();
+     */
     MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
 
+    /// Return the parent KWFrameViewManager this frameView belongs to
     KWFrameViewManager *parent() { return m_manager; }
 
+    /**
+     * Show a context-sensitive popup menu based on the location of 'point'.
+     * @param point the point at which the mouse was clicked. The context is based on
+     *   what is present at that location.
+     * @para popupPoint the point in the same coordinate system as the parent widget of
+     *   where the popup menu should be located.
+     * @param view the parent widget for the popup.
+     */
     void showPopup( const KoPoint &point, KWView *view, const QPoint &popupPoint) const;
+
+    /**
+     * Paint view based items of the frameView, like selecteds state
+     * @param painter the painter to paint to
+     * @param crect the clip rect; nothing outside this rect is important
+     * @param zh the zoomHandler to convert from internal coordinates to view coordinates
+     */
     void paintFrameAtributes(QPainter *painter, const QRect &crect, KoZoomHandler *zh);
 
 private:
-    bool hit(const KoPoint &point, bool withBorders , bool borderOnly) const;
+    /**
+     * Helper method for isBorderHit() and contains()
+     * @param point the point
+     * @param borderOnly if true; exclude the range inside the frame
+     * @param fuzzy don't take all the coordinates too strict, allow for some margin
+     */
+    bool hit(const KoPoint &point, bool fuzzy , bool borderOnly) const;
 
 private:
     KWFrame *m_frame;
@@ -76,6 +150,7 @@ private:
     KWFrameViewManager *m_manager;
 };
 
+/**  A policy for Table Frames */
 class TableFramePolicy : public FramePolicy {
 public:
     TableFramePolicy(KWFrameView *view);
@@ -87,6 +162,7 @@ protected:
     MouseMeaning mouseMeaningOnBorder( const KoPoint &point, int keyState);
 };
 
+/**  A policy for Part Frames */
 class PartFramePolicy : public FramePolicy {
 public:
     PartFramePolicy(KWFrameView *view);
@@ -94,6 +170,7 @@ public:
     QPopupMenu* createPopup( const KoPoint &point, KWView *view );
 };
 
+/**  A policy for Text Frames */
 class TextFramePolicy : public FramePolicy {
 public:
     TextFramePolicy(KWFrameView *view);
@@ -101,6 +178,7 @@ public:
     QPopupMenu* createPopup( const KoPoint &point, KWView *view );
 };
 
+/**  A policy for Image (aka Picture) Frames */
 class ImageFramePolicy : public FramePolicy {
 public:
     ImageFramePolicy(KWFrameView *view);

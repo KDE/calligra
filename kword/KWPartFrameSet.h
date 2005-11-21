@@ -92,7 +92,7 @@ public:
     *   @param remove passing true means that there can not be an undo of the action.
     *   @param recalc do an updateFrames()
     */
-    void deleteFrame( unsigned int _num, bool remove = true, bool recalc = true );
+    void deleteFrame( unsigned int num, bool remove = true, bool recalc = true );
 
     void setDeleted( bool on = true );
 

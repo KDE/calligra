@@ -120,10 +120,10 @@ public:
     *   @param remove passing true means that there can not be an undo of the action.
     *   @param recalc do an updateFrames()
     */
-    virtual void deleteFrame( unsigned int _num, bool remove = true, bool recalc = true );
+    virtual void deleteFrame( unsigned int num, bool remove = true, bool recalc = true );
 
     /** Delete a frame from the set of frames this frameSet has.
-    *   @param frm. The frame that should be deleted
+    *   @param frm The frame that should be deleted
     *   @param remove passing true means that there can not be an undo of the action.
     *   @param recalc do an updateFrames()
     */
@@ -139,9 +139,11 @@ public:
     KWFrame *frameAtPos( double _x, double _y ) const;
 
     /** Return if the point is on the frame.
-        @param point the point in normal coordinates.
-        @param borderOfFrameOnly when true an additional check is done if the point
-          is on the border.  */
+     *  @param nPoint the point in normal coordinates.
+     *  @param borderOfFrameOnly when true an additional check is done if the point
+     *    is on the border.
+     *  @param frame the frame to check inside of
+     */
     bool isFrameAtPos( const KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false ) const;
 
     /** return a frame if nPoint in on one of its borders */
@@ -185,6 +187,8 @@ public:
      *                    allowing the caller to determine which areas remain to be painted.
      * Framesets that can be transparent should reimplement this and make it a no-op,
      * so that the background is painted below the transparent frame.
+     * @param crect the cliprect; only parts inside this rect are of interrest to us
+     * @param viewMode the current viewmode
      */
     virtual void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode );
 
@@ -198,7 +202,6 @@ public:
      * @param resetChanged If true, set the changed flag to false after drawing.
      * @param edit If set, this frameset is being edited, so a cursor is needed.
      * @param viewMode For coordinate conversion, always set.
-     * @param canvas For view settings. WARNING: canvas can be 0 (e.g. in embedded documents).
      * @param frameViewManager the frameViewManager;
      *
      * The way this "onlyChanged/resetChanged" works is: when something changes,
@@ -223,6 +226,8 @@ public:
      * This is set to false by the default drawFrame implementation, so that the frames under a
      * transparent frame are simply drawn, without transparency handling (nor their own
      * double-buffering).
+     * @param frame the frame to draw
+     * @param painter the painter to draw to
      */
     void drawFrameAndBorders( KWFrame *frame,
                               QPainter *painter, const QRect &crect,
@@ -248,6 +253,8 @@ public:
      *
      * @param crect rectangle to be repainted, in view coordinates. Includes padding.
      * Default implementation does double-buffering and calls drawFrameContents.
+     * @param frame the frame to draw
+     * @param painter the painter to draw to
      */
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcrect, const QRect &crect,
                             const QPoint& translationOffset,
@@ -262,6 +269,8 @@ public:
      * In this method, the painter has been translated to the frame's coordinate system
      * @param fcrect rectangle to be repainted, in the _frame_'s coordinate system, in pixels.
      * Doesn't include padding.
+     * @param frame the frame to draw
+     * @param painter the painter to draw to
      */
     virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect& fcrect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
