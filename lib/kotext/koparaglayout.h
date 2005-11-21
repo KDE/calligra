@@ -128,7 +128,8 @@ public:
     /// Save this parag layout to Oasis XML
     /// @param savingStyle true if this is saved as part of a user style,
     ///                    false when saving a paragraph
-    /// @todo Document gs parameter.
+    /// @param gs the style where all the properties will be saved to
+    /// @param context the current context
     void saveOasis( KoGenStyle& gs, KoSavingContext& context, bool savingStyle ) const;
 
     /// Convert an alignment string into an alignment flag (load)

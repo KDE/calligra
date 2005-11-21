@@ -60,8 +60,7 @@ public:
      * Interface for setting the modified format
      * @param format can be a temporary format
      * @param zoomFont set to true if the font size was used-specified (e.g. in KoFontDia)
-     *
-     * @todo Document mystic flags parameter.
+     * @param flags see enum KoTextFormat::Flags
      */
     virtual KCommand *setFormatCommand( const KoTextFormat *format, int flags, bool zoomFont = false ) = 0;
 

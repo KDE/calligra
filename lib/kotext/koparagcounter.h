@@ -75,8 +75,10 @@ public:
      * @param heading true if heading, false if normal list
      * @param level 1-based
      * @param loadingStyle true if loading a style, false if loading a paragraph
-     *
-     * @todo Document other parameters.
+     * @param context the context
+     * @param restartNumbering if -1 then don't restart numbering, use the style value
+     * @param orderedList if true, make sure the parag will will be initialised as an ordered list
+     *    otherwise it may be initialised as a unordered list.
      */
     void loadOasis( KoOasisContext& context, int restartNumbering, bool orderedList, bool heading, int level, bool loadingStyle = false );
     /// Part of loadOasis that is shared with KWVariableSettings::loadOasis for footnotes/endnotes
