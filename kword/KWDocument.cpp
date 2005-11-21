@@ -626,7 +626,7 @@ void KWDocument::setPageLayout( const KoPageLayout& layout, const KoColumns& cl,
     if ( m_processingType == WP ) {
         //kdDebug() << "KWDocument::setPageLayout WP" << endl;
         m_pageLayout = layout;
-        pageManager()->setDefaultPageSize(layout.ptWidth, layout.ptHeight);
+        pageManager()->setDefaultPageSize(layout.ptWidth, layout.ptHeight, layout.format);
         pageManager()->setDefaultPageMargins(layout.ptTop, layout.ptLeft, layout.ptBottom, layout.ptRight);
         m_pageColumns = cl;
         m_pageHeaderFooter = hf;
@@ -650,7 +650,7 @@ void KWDocument::setPageLayout( const KoPageLayout& layout, const KoColumns& cl,
 
     } else {
         //kdDebug() << "KWDocument::setPageLayout NON-WP" << endl;
-        pageManager()->setDefaultPageSize(layout.ptWidth, layout.ptHeight);
+        pageManager()->setDefaultPageSize(layout.ptWidth, layout.ptHeight, layout.format);
         pageManager()->setDefaultPageMargins(0, 0, 0, 0);
         m_pageLayout = layout;
         m_pageLayout.ptLeft = 0;
@@ -1123,7 +1123,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                 setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
             return false;
         }
-        pageManager()->setDefaultPageSize(m_pageLayout.ptWidth, m_pageLayout.ptHeight);
+        pageManager()->setDefaultPageSize(m_pageLayout.ptWidth, m_pageLayout.ptHeight, m_pageLayout.format);
         pageManager()->setDefaultPageMargins(m_pageLayout.ptTop, m_pageLayout.ptLeft,
                 m_pageLayout.ptBottom, m_pageLayout.ptRight);
 
@@ -1204,7 +1204,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         m_headerVisible = false;
         m_footerVisible = false;
         m_pageLayout = KoPageLayout::standardLayout();
-        pageManager()->setDefaultPageSize(m_pageLayout.ptWidth, m_pageLayout.ptHeight);
+        pageManager()->setDefaultPageSize(m_pageLayout.ptWidth, m_pageLayout.ptHeight, m_pageLayout.format);
         pageManager()->setDefaultPageMargins(m_pageLayout.ptTop, m_pageLayout.ptLeft,
                 m_pageLayout.ptBottom, m_pageLayout.ptRight);
     }

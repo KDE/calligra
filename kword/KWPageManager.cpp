@@ -188,9 +188,10 @@ void KWPageManager::removePage(KWPage *page) {
     m_pageList.remove(page);
 }
 
-void KWPageManager::setDefaultPageSize(double width, double height) {
+void KWPageManager::setDefaultPageSize(double width, double height, KoFormat format) {
     m_defaultPageLayout.ptWidth = width;
     m_defaultPageLayout.ptHeight = height;
+    m_defaultPageLayout.format = format;
 }
 
 void KWPageManager::setDefaultPageMargins(double top, double left, double bottom, double right) {

@@ -112,7 +112,7 @@ public:
     const KoPageLayout pageLayout(int pageNumber) const;
 
     /// Set the page size for the whole document changing all pages that don't have a specific size set.
-    void setDefaultPageSize(double width, double height);
+    void setDefaultPageSize(double width, double height, KoFormat format);
     /// Set the margins for the whole document changing all pages that don't have specific margins set.
     void setDefaultPageMargins(double top, double left, double bottom, double right);
 
