@@ -39,9 +39,8 @@
     </personname>
     <email>js@iidea.pl</email>
   </author>
+  <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
-
-<!-- TRANS:ROLES_OF_TRANSLATORS -->
 
 <copyright>
   <year>2004</year>
@@ -130,7 +129,7 @@ consistent documentation style across all KDE apps. -->
       </para>
       <table>
       <title>
-	Comparison of data types used in Kexi and other database
+	Comparison of data types used in &kexi; and other database
 	applications
       </title>
       <tgroup cols="4">

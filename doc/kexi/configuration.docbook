@@ -4,7 +4,7 @@
 
 <chapter id="configuration">
   <title>
-    Configuring Kexi
+    Configuring &kexi;
   </title>
 
   <para>
@@ -35,7 +35,7 @@
       These modes are described in the following two sections.  You
       can change the MDI mode from the <guisubmenu>MDI
       mode</guisubmenu> sub-menu under the <guimenu>Window</guimenu>
-      menu.  Note that changing the MDI mode requires Kexi to be
+      menu.  Note that changing the MDI mode requires &kexi; to be
       restarted before the new mode takes effect.
     </para>
     <sect2 id="window-layout-ideal">
@@ -68,7 +68,7 @@
 	</action> from the menu.
       </para>
       <para>
-	Each child window has a title bar with buttons for maximizing,
+	Each child window has a titlebar with buttons for maximizing,
 	minimizing and closing it.  They can also be moved and resized
 	within the main window in the normal way (for example, they
 	can be moved by clicking and dragging the title bar).
