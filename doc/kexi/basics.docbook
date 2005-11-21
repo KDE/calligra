@@ -44,45 +44,43 @@
       Creating a New Database File
     </title>
 
-    <para>
-      <procedure>
-	<step>
-	  <para>
-	    Run &kexi;, or if it is already running, use
-	    <menuchoice>
-	      <guimenu>File</guimenu><guimenuitem>New</guimenuitem>
-	      <shortcut>
-		<keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
-	      </shortcut>
-	    </menuchoice>
-	  </para>
-	</step>
-	<step>
-	  <para>
-	    Click the <guibutton>OK</guibutton> to confirm the
-	    creation of the project.
-	  </para>
-	</step>
-	<step>
-	  <para>
-	    Enter a name for your project, and click <guibutton>Next</guibutton>.
-	  </para>
-	</step>
-	<step>
+    <procedure>
+      <step>
+	<para>
+	  Run &kexi;, or if it is already running, use
+	  <menuchoice>
+	    <shortcut>
+	      <keycombo action="simul">&Ctrl;<keycap>N</keycap></keycombo>
+	    </shortcut>
+	    <guimenu>File</guimenu><guimenuitem>New</guimenuitem>
+	  </menuchoice>
+	</para>
+      </step>
+      <step>
+	<para>
+	  Click the <guibutton>OK</guibutton> to confirm the
+	  creation of the project.
+	</para>
+      </step>
+      <step>
+	<para>
+	  Enter a name for your project, and click <guibutton>Next</guibutton>.
+	</para>
+      </step>
+      <step>
 	  <para>
 	    Use the file browser to choose a folder where you would
 	    like to save your database file.  You may change the file
 	    name in <guilabel>Location:</guilabel> box if you dislike
 	    the one that is suggested.
 	  </para>
-	</step>
-	<step>
-	  <para>
-	    Click <guibutton>Create</guibutton>.
-	  </para>
-	</step>
-      </procedure>
-    </para>
+      </step>
+      <step>
+	<para>
+	  Click <guibutton>Create</guibutton>.
+	</para>
+      </step>
+    </procedure>
   </sect1>
 
   <sect1 id="main-window">
