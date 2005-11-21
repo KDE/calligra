@@ -137,6 +137,7 @@ namespace Kross { namespace Api {
             /**
              * Add a new Child.
              *
+             * \param name the name of the child
              * \param object The Object to add.
              * \return true if the Object was added successfully
              *         else (e.g. if there exists already another
