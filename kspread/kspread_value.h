@@ -85,7 +85,7 @@ class KSPREAD_EXPORT Value
      */
     Value( const Value& _value );
 
-    /** 
+    /**
      * Assigns from another value.
      *
      * Because the data is implicitly shared, such assignment is very fast and
@@ -93,7 +93,7 @@ class KSPREAD_EXPORT Value
      */
     Value& operator= ( const Value& _value );
 
-    /** 
+    /**
      * Assigns from another value. Same as above.
      */
     Value& assign( const Value& _value );
@@ -216,7 +216,7 @@ class KSPREAD_EXPORT Value
      * Sets this value to integer value.
      */
     void setValue( int i );
-    
+
     /**
      * Sets this value to floating-point value.
      */
@@ -249,7 +249,7 @@ class KSPREAD_EXPORT Value
 
     /** Sets format information for this value. */
     void setFormat (Format fmt);
-    
+
     /**
      * Returns the boolean value of this value.
      *
@@ -297,18 +297,18 @@ class KSPREAD_EXPORT Value
      * Return an element in the array value. Do not call if isArray() is false.
      */
     Value element( unsigned column, unsigned row ) const;
-    
+
     /**
      * Sets an element in the array value. Do not use if isArray() is false.
      */
     void setElement( unsigned column, unsigned row, const Value& value );
-    
+
     /**
      * If this value is an array, return the number of columns.
      * Note that return value is undefined if isArray() returns false.
      */
     unsigned columns() const;
-    
+
     /**
      * If this value is an array, return the number of rows.
      * Note that return value is undefined if isArray() returns false.
@@ -397,7 +397,7 @@ class KSPREAD_EXPORT Value
      * greater than v.
      */
     int compare( const Value& v ) const;
-    
+
     /**
      * Returns true if this value is equal to v.
      */
@@ -412,7 +412,10 @@ class KSPREAD_EXPORT Value
      * Returns true if this value is greater than v.
      */
     bool greater( const Value& v ) const;
-    
+
+    // comparison operator - returns true only if strictly identical, unlike equal()/compare()
+    bool operator==( const Value& v ) const;
+
     static int compare( double v1, double v2 );
     
     bool isZero() const;

@@ -276,7 +276,8 @@ QString ValueFormatter::createNumberFormat ( double value, int precision,
       break;
     default :
       //other formatting?
-      kdDebug(36001)<<"Wrong usage of ValueFormatter::createNumberFormat\n";
+      // This happens with Custom_format...
+      kdDebug(36001)<<"Wrong usage of ValueFormatter::createNumberFormat fmt=" << fmt << "\n";
       break;
   }
 

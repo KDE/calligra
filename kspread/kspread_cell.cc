@@ -467,6 +467,9 @@ void Cell::setValue( const Value& v )
   if (v.type() != Value::Error)
     clearAllErrors();
 
+  if ( d->value == v )
+    return;
+
   d->value = v;
 
   setFlag(Flag_LayoutDirty);

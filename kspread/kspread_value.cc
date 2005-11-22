@@ -17,14 +17,16 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <float.h>
-#include <math.h>
-#include <limits.h>
+#include "kspread_value.h"
+
+#include <kdebug.h>
 
 #include <qstring.h>
 #include <qtextstream.h>
 
-#include "kspread_value.h"
+#include <float.h>
+#include <math.h>
+#include <limits.h>
 
 using namespace KSpread;
 
@@ -136,7 +138,7 @@ public:
       chunks[i] = 0;
   }
   
-  Value* at( unsigned c, unsigned r )
+  Value* at( unsigned c, unsigned r ) const
   {
     if( !chunks ) return 0;
     if( c >= columns ) return 0;
@@ -171,6 +173,22 @@ public:
     chunk->ptr[rpos * chunk->cols + cpos] = v;
   }
 
+  bool operator==( const ValueArray& other ) const
+  {
+    if ( columns != other.columns || rows != other.rows )
+      return false;
+    for ( unsigned r = 0; r < rows; ++r )
+      for ( unsigned c = 0; c < columns; ++c ) {
+        Value* v1 = at( c, r );
+        Value* v2 = other.at( c, r );
+        if ( ( v1 && !v2 ) || ( !v1 && v2 ) )
+            return false;
+        if ( !( v1 && v2 && *v1 == *v2 ) )
+            return false;
+    }
+    return true;
+  }
+
 };
 
 
@@ -184,7 +202,7 @@ class KSpread::ValueData
 
     // reference count, at least one when object exists
     unsigned int count:24;
-    
+
     union
     {
       bool b;
@@ -193,7 +211,7 @@ class KSpread::ValueData
       QString* ps;
       ValueArray* pa;
     };
-    
+
     // create empty data
     ValueData(): type( Value::Empty ),
       format (Value::fmt_None), count( 1 ), ps( 0 ) { };
@@ -208,7 +226,7 @@ class KSpread::ValueData
     // static empty data to be shared
     static ValueData* null()
       { if( !s_null) s_null = new ValueData; else s_null->ref(); return s_null; }
-      
+
     // increase reference count
     void ref() { count++; }
 
@@ -221,7 +239,7 @@ class KSpread::ValueData
 
     /** set most probable formatting based on the type */
     void setFormatByType ();
-    
+
   private:
 
     static ValueData* s_null;
@@ -301,6 +319,27 @@ Value::Value( const Value& _value )
 Value& Value::operator=( const Value& _value )
 {
   return assign( _value );
+}
+
+// comparison operator - returns true only if strictly identical, unlike equal()/compare()
+bool Value::operator==( const Value& v ) const
+{
+  const ValueData* n = v.d;
+  if ( d->type != n->type )
+    return false;
+  switch( d->type )
+  {
+    case Empty: return true;
+    case Boolean: return n->b == d->b;
+    case Integer: return n->i == d->i;
+    case Float:   return compare( n->f, d->f ) == 0;
+    case String:  return *n->ps == *d->ps;
+    case Array:   return *n->pa == *d->pa;
+    case Error:   return *n->ps == *d->ps;
+    default: break;
+  }
+  kdWarning() << "Unhandled type in Value::operator==: " << d->type << endl;
+  return false;
 }
 
 // create a boolean value
