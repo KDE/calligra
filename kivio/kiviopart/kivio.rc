@@ -32,13 +32,7 @@
       <Action name="snapGrid"/>
       <Action name="snapGuides"/>
       <Separator/>
-      <Menu name="Docker"><text>&amp;Docker</text>
-        <Action name="stencilGeometry"/>
-        <Action name="layersPanel"/>
-        <Action name="viewManager"/>
-        <Action name="birdEye"/>
-        <Action name="protection"/>
-        <Action name="addStencilSetDock"/>
+      <Action name="view_palette_action_menu"/>
       </Menu>
     </Menu> <Menu name="Page"><text>P&amp;age</text>
       <Action name="insertPage"/>

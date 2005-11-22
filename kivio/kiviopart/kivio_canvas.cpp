@@ -357,6 +357,10 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
 void KivioCanvas::updateScrollBars()
 {
+  if(!activePage()) {
+    return;
+  }
+
   KoPageLayout pl = activePage()->paperLayout();
   m_pScrollX = QMAX(m_pView->zoomHandler()->zoomItX(pl.ptWidth) - width(), 0);
   m_pScrollY = QMAX(m_pView->zoomHandler()->zoomItY(pl.ptHeight) - height(), 0);

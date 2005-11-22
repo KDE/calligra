@@ -95,6 +95,10 @@ void KivioGuideLines::resize(QSize s,KivioDoc* doc)
 
 void KivioGuideLines::resizeLinesPixmap(QSize s, QPixmap* vLine, QPixmap* hLine, QPixmap* linePattern)
 {
+  if(!vLine || !hLine || !linePattern) {
+    return;
+  }
+
   int d = linePattern->width();
   hLine->resize(s.width() + d,1);
   vLine->resize(1,s.height() + d);

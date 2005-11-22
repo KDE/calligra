@@ -75,8 +75,7 @@
 #include <kotabbar.h>
 #include <kolinewidthaction.h>
 #include <kolinestyleaction.h>
-#include "kotooldockmanager.h"
-#include "kotooldockbase.h"
+#include <kopalettemanager.h>
 
 #include "kivio_view.h"
 #include "kivio_dlg_pageshow.h"
@@ -138,6 +137,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 : KoView( doc, _parent, _name )
 {
   m_pluginManager = new PluginManager(this, "Kivio Plugin Manager");
+  m_pPaletteManager = new KoPaletteManager(this, actionCollection(), "kivio palette manager");
   m_zoomHandler = new KoZoomHandler();
   zoomHandler()->setZoomAndResolution(100, KoGlobal::dpiX(),
     KoGlobal::dpiY());
@@ -241,8 +241,6 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect( this, SIGNAL( invalidated() ), m_pCanvas, SLOT( update() ) );
   connect( this, SIGNAL( regionInvalidated( const QRegion&, bool ) ), m_pCanvas, SLOT( repaint( const QRegion&, bool ) ) );
 
-  m_pToolDockManager = new KoToolDockManager(canvasBase);
-
   setInstance(KivioFactory::global());
   if ( !m_pDoc->isReadWrite() )
     setXMLFile("kivio_readonly.rc");
@@ -314,67 +312,43 @@ DCOPObject* KivioView::dcopObject()
 void KivioView::createGeometryDock()
 {
   m_pStencilGeometryPanel = new KivioStencilGeometryPanel(this);
-  KoToolDockBase* stencilGeometryBase = toolDockManager()->createSimpleToolDock(m_pStencilGeometryPanel, "geometry");
-  stencilGeometryBase -> setCaption(i18n("Geometry"));
-  stencilGeometryBase -> restore();
+  m_pStencilGeometryPanel->setCaption(i18n("Geometry"));
+  paletteManager()->addWidget(m_pStencilGeometryPanel, "stencilgeometrypanel", "geometrydocker");
 
   connect( m_pStencilGeometryPanel, SIGNAL(positionChanged(double, double)), this, SLOT(slotChangeStencilPosition(double, double)) );
   connect( m_pStencilGeometryPanel, SIGNAL(sizeChanged(double, double)), this, SLOT(slotChangeStencilSize(double, double)) );
   connect(m_pStencilGeometryPanel, SIGNAL(rotationChanged(int)), SLOT(slotChangeStencilRotation(int)));
 
   connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_pStencilGeometryPanel, SLOT(setUnit(KoUnit::Unit)) );
-
-  KToggleAction* showStencilGeometry = new KToggleAction( i18n("Stencil Geometry Panel"), 0, actionCollection(), "stencilGeometry" );
-  connect( showStencilGeometry, SIGNAL(toggled(bool)), stencilGeometryBase, SLOT(makeVisible(bool)));
-  connect( stencilGeometryBase, SIGNAL(visibleChange(bool)), SLOT(toggleStencilGeometry(bool)));
 }
 
 void KivioView::createBirdEyeDock()
 {
   m_pBirdEyePanel = new KivioBirdEyePanel(this, this);
-  KoToolDockBase* birdEyeBase = toolDockManager()->createSimpleToolDock(m_pBirdEyePanel,  "birdeye");
-  birdEyeBase -> setCaption(i18n("Bird's Eye"));
-  birdEyeBase -> restore();
-
-  KToggleAction* showBirdEye = new KToggleAction( i18n("Bird's Eye"), 0, actionCollection(), "birdEye" );
-  connect( showBirdEye, SIGNAL(toggled(bool)), birdEyeBase, SLOT(makeVisible(bool)));
-  connect( birdEyeBase, SIGNAL(visibleChange(bool)), SLOT(toggleBirdEyePanel(bool)));
+  m_pBirdEyePanel->setCaption(i18n("Bird's Eye"));
+  paletteManager()->addWidget(m_pBirdEyePanel, "birdseyepanel", "birdeyedocker");
 }
 
 void KivioView::createLayerDock()
 {
   m_pLayersPanel = new KivioLayerPanel( this, this);
-  KoToolDockBase* layersBase = toolDockManager()->createSimpleToolDock(m_pLayersPanel, "layers");
-  layersBase -> setCaption(i18n("Layers"));
-  layersBase -> restore();
-
-  KToggleAction* showLayers = new KToggleAction( i18n("Layers Manager"), CTRL+Key_L, actionCollection(), "layersPanel" );
-  connect( showLayers, SIGNAL(toggled(bool)), layersBase, SLOT(makeVisible(bool)));
-  connect( layersBase, SIGNAL(visibleChange(bool)), SLOT(toggleLayersPanel(bool)));
+  m_pLayersPanel -> setCaption(i18n("Layers"));
+  paletteManager()->addWidget(m_pLayersPanel, "layerspanel", "layersdocker");
 }
 
 void KivioView::createProtectionDock()
 {
   m_pProtectionPanel = new KivioProtectionPanel(this,this);
-  KoToolDockBase* protectionBase = toolDockManager()->createSimpleToolDock(m_pProtectionPanel, "protection");
-  protectionBase -> setCaption(i18n("Protection"));
-  protectionBase -> restore();
-
-  KToggleAction *showProtection = new KToggleAction( i18n("Protection"), CTRL+SHIFT+Key_P, actionCollection(), "protection" );
-  connect( showProtection, SIGNAL(toggled(bool)), protectionBase, SLOT(makeVisible(bool)));
-  connect( protectionBase, SIGNAL(visibleChange(bool)), SLOT(toggleProtectionPanel(bool)));
+  m_pProtectionPanel -> setCaption(i18n("Protection"));
+  paletteManager()->addWidget(m_pProtectionPanel, "protectionpanel", "protectiondocker");
 }
 
 void KivioView::createAddStencilSetDock()
 {
   m_addStencilSetPanel = new Kivio::AddStencilSetPanel(this);
-  KoToolDockBase* addStencilSetBase = toolDockManager()->createSimpleToolDock(m_addStencilSetPanel,  "addstencilset");
-  addStencilSetBase -> setCaption(i18n("Add Stencil Set"));
-  addStencilSetBase -> restore();
+  m_addStencilSetPanel -> setCaption(i18n("Add Stencil Set"));
+  paletteManager()->addWidget(m_addStencilSetPanel, "addstencilsetpanel", "stencilsetdocker");
 
-  KToggleAction *showAddStencilSet = new KToggleAction( i18n("Add Stencil Set"), 0, actionCollection(), "addStencilSetDock" );
-  connect(showAddStencilSet, SIGNAL(toggled(bool)), addStencilSetBase, SLOT(makeVisible(bool)));
-  connect(addStencilSetBase, SIGNAL(visibleChange(bool)), SLOT(toggleAddStencilSetPanel(bool)));
   connect(m_addStencilSetPanel, SIGNAL(addStencilSet(const QString&)), this, SLOT(addStencilSet(const QString&)));
   connect(this, SIGNAL(updateStencilSetList()), m_addStencilSetPanel, SLOT(updateList()));
 }
@@ -1426,59 +1400,68 @@ void KivioView::updateToolBars()
 
 void KivioView::slotSetStartArrow( int i )
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-    if (!pStencil)
-      return;
-    KMacroCommand *macro = new KMacroCommand( i18n("Change Begin Arrow"));
-    bool createMacro = false;
-    while( pStencil )
-    {
-        if (pStencil->startAHType()!=i)
-        {
-            pStencil->setStartAHType(i);
-            KivioChangeBeginEndArrowCommand *cmd=new KivioChangeBeginEndArrowCommand( i18n("Change Arrow"),
-              m_pActivePage, pStencil,  pStencil->startAHType(),  i, true);
-            pStencil->setStartAHType(i);
+  if(!m_pActivePage) {
+    return;
+  }
 
-            macro->addCommand( cmd );
-            createMacro= true;
-        }
-        pStencil = m_pActivePage->selectedStencils()->next();
-    }
-    if (createMacro )
-        m_pDoc->addCommand( macro );
-    else
-        delete macro;
-    m_pDoc->updateView(m_pActivePage);
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  if (!pStencil)
+    return;
+
+  KMacroCommand *macro = new KMacroCommand( i18n("Change Begin Arrow"));
+  bool createMacro = false;
+  while( pStencil )
+  {
+      if (pStencil->startAHType()!=i)
+      {
+          pStencil->setStartAHType(i);
+          KivioChangeBeginEndArrowCommand *cmd=new KivioChangeBeginEndArrowCommand( i18n("Change Arrow"),
+            m_pActivePage, pStencil,  pStencil->startAHType(),  i, true);
+          pStencil->setStartAHType(i);
+
+          macro->addCommand( cmd );
+          createMacro= true;
+      }
+      pStencil = m_pActivePage->selectedStencils()->next();
+  }
+  if (createMacro )
+      m_pDoc->addCommand( macro );
+  else
+      delete macro;
+  m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::slotSetEndArrow( int i )
 {
-    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
-    if (!pStencil)
-      return;
-    KMacroCommand *macro = new KMacroCommand( i18n("Change End Arrow"));
-    bool createMacro = false;
+  if(!m_pActivePage) {
+    return;
+  }
 
-    while( pStencil )
-    {
-        if (pStencil->endAHType()!=i)
-        {
-            KivioChangeBeginEndArrowCommand *cmd=new KivioChangeBeginEndArrowCommand( i18n("Change Arrow"),
-              m_pActivePage, pStencil, pStencil->endAHType(),  i, false);
-            pStencil->setEndAHType(i);
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  if (!pStencil)
+    return;
+  KMacroCommand *macro = new KMacroCommand( i18n("Change End Arrow"));
+  bool createMacro = false;
 
-            macro->addCommand( cmd );
-            createMacro= true;
-        }
-        pStencil = m_pActivePage->selectedStencils()->next();
-    }
-    if (createMacro )
-        m_pDoc->addCommand( macro );
-    else
-        delete macro;
+  while( pStencil )
+  {
+      if (pStencil->endAHType()!=i)
+      {
+          KivioChangeBeginEndArrowCommand *cmd=new KivioChangeBeginEndArrowCommand( i18n("Change Arrow"),
+            m_pActivePage, pStencil, pStencil->endAHType(),  i, false);
+          pStencil->setEndAHType(i);
 
-    m_pDoc->updateView(m_pActivePage);
+          macro->addCommand( cmd );
+          createMacro= true;
+      }
+      pStencil = m_pActivePage->selectedStencils()->next();
+  }
+  if (createMacro )
+      m_pDoc->addCommand( macro );
+  else
+      delete macro;
+
+  m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::slotSetStartArrowSize()
@@ -1744,26 +1727,6 @@ void KivioView::toggleStencilGeometry(bool b)
 void KivioView::toggleViewManager(bool b)
 {
     TOGGLE_ACTION("viewManager")->setChecked(b);
-}
-
-void KivioView::toggleLayersPanel(bool b)
-{
-    TOGGLE_ACTION("layersPanel")->setChecked(b);
-}
-
-void KivioView::toggleProtectionPanel(bool b)
-{
-    TOGGLE_ACTION("protection")->setChecked(b);
-}
-
-void KivioView::toggleBirdEyePanel(bool b)
-{
-    TOGGLE_ACTION("birdEye")->setChecked(b);
-}
-
-void KivioView::toggleAddStencilSetPanel(bool b)
-{
-    TOGGLE_ACTION("addStencilSetDock")->setChecked(b);
 }
 
 void KivioView::setupPrinter(KPrinter &p)

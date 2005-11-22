@@ -113,6 +113,7 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
   m_currentFile = 0;
 
   setInstance( KivioFactory::global(), false );
+  setTemplateType("kivio_template");
 
   if ( !name )
   {
@@ -218,6 +219,22 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
   } else {
     return false;
   }
+}
+
+void KivioDoc::openExistingFile( const QString& file )
+{
+  KivioPage *t = createPage();
+  m_pMap->addPage( t );
+
+  KoDocument::openExistingFile(file);
+}
+
+void KivioDoc::openTemplate( const QString& file )
+{
+  KivioPage *t = createPage();
+  m_pMap->addPage( t );
+
+  KoDocument::openTemplate(file);
 }
 
 KoView* KivioDoc::createViewInstance( QWidget* parent, const char* name )

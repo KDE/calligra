@@ -162,6 +162,9 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     void slotCommandExecuted();
     void loadStencil();
 
+    virtual void openExistingFile( const QString& file );
+    virtual void openTemplate( const QString& file );
+
   signals:
     void sig_selectionChanged();
     void sig_addPage(KivioPage*);

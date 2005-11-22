@@ -60,11 +60,7 @@ k_dcop:
     virtual void toggleShowGuides(bool);
     virtual void toggleSnapGuides(bool);
 
-    virtual void toggleStencilGeometry(bool);
     virtual void toggleViewManager(bool);
-    virtual void toggleLayersPanel(bool);
-    virtual void toggleBirdEyePanel(bool);
-    virtual void toggleProtectionPanel(bool);
 
     virtual void alignStencilsDlg();
 

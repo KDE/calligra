@@ -148,6 +148,9 @@ void KivioBirdEyePanel::updateView()
   // FIXME: This whole function needs fixing!
   QSize s1 = canvas->size();
   QSize s2;
+ 
+  if (!m_pView || !m_pView->activePage()) return;
+
   KoPageLayout pl = m_pView->activePage()->paperLayout();
 
   int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
@@ -222,6 +225,10 @@ void KivioBirdEyePanel::show()
 
 void KivioBirdEyePanel::updateVisibleArea()
 {
+  if(!m_pView->activePage()) {
+    return;
+  }
+
   bitBlt(canvas,0,0,m_buffer);
 
   KoRect vr = m_pCanvas->visibleArea();

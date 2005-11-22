@@ -140,29 +140,9 @@ void KIvioViewIface::toggleSnapGuides(bool b)
     view->toggleSnapGuides(b);
 }
 
-void KIvioViewIface::toggleStencilGeometry(bool b)
-{
-    view->toggleStencilGeometry(b);
-}
-
 void KIvioViewIface::toggleViewManager(bool b)
 {
     view->toggleViewManager(b);
-}
-
-void KIvioViewIface::toggleLayersPanel(bool b)
-{
-    view->toggleLayersPanel(b);
-}
-
-void KIvioViewIface::toggleBirdEyePanel(bool b)
-{
-    view->toggleBirdEyePanel(b);
-}
-
-void KIvioViewIface::toggleProtectionPanel(bool b)
-{
-    view->toggleProtectionPanel(b);
 }
 
 void KIvioViewIface::groupStencils()

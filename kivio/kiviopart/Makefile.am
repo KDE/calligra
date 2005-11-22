@@ -7,6 +7,7 @@ INCLUDES = -I$(srcdir)/ui\
 	-I$(srcdir)/kiviosdk\
 	-I$(srcdir)/tools\
 	$(KOFFICE_INCLUDES)\
+	$(KOPALETTE_INCLUDES)\
 	$(KOTEXT_INCLUDES)\
 	-I$(top_srcdir)/lib/kformula\
 	$(all_includes)
@@ -21,7 +22,7 @@ libkiviocommon_la_LIBADD = \
 	$(top_builddir)/kivio/kiviopart/kiviosdk/libkiviosdk.la\
 	$(top_builddir)/kivio/kiviopart/config/libkivioconfig.la \
 	$(top_builddir)/kivio/kiviopart/ui/libui.la \
-	$(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOTEXT) $(LIBPYTHON) $(PYTHONLIB)
+	$(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_KOTEXT) $(LIBPYTHON) $(PYTHONLIB)
 
 libkiviocommon_la_METASOURCES = AUTO
 
