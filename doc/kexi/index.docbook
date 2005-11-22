@@ -1,3 +1,4 @@
+
 <?xml version="1.0" ?>
 <!DOCTYPE book PUBLIC "-//KDE//DTD DocBook XML V4.2-Based Variant V1.1//EN" "dtd/kdex.dtd" [
   <!ENTITY package "koffice">
@@ -67,7 +68,8 @@ Do NOT change these in the translation. -->
 <!-- Abstract about this handbook -->
 <abstract>
   <para>
-    &kexi; is the database management application in the KOffice productivity suite.
+    &kexi; is the database management application in the &koffice;
+    productivity suite.
   </para>
 </abstract>
 
@@ -135,7 +137,7 @@ consistent documentation style across all KDE apps. -->
       <tgroup cols="4">
 	<thead>
 	  <row>
-	    <entry>Kexi</entry>
+	    <entry>&kexi;</entry>
 	    <entry>MS Access</entry>
 	    <entry>dBase/FoxPro</entry>
 	    <entry>Paradox</entry>
