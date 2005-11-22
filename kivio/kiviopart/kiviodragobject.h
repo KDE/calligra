@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2005 Peter Simonsson <psn@linux.se>
+   Copyright (C) 2003 Peter Simonsson <psn@linux.se>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -13,32 +13,33 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef KIVIODRAGOBJECT_H
 #define KIVIODRAGOBJECT_H
 
 #include <qdragobject.h>
-#include <qvaluelist.h>
+#include <qptrlist.h>
 
-namespace Kivio {
-class Object;
-}
+#include "kivio_stencil.h"
+#include <koRect.h>
+
+class KivioPage;
 
 class KivioDragObject : public QDragObject
 {
   Q_OBJECT
   public:
     KivioDragObject(QWidget* dragSource = 0, const char* name = 0);
-    ~KivioDragObject();
 
     const char* format(int i) const;
     QByteArray encodedData(const char* mimetype) const;
     bool canDecode(QMimeSource*);
-    bool decode(QMimeSource* e, QValueList<Kivio::Object*>& objectList);
-    void addObject(Kivio::Object* object);
+    bool decode(QMimeSource* e, QPtrList<KivioStencil>& sl, KivioPage* page);
+    void setStencilList(QPtrList<KivioStencil> l);
+    void setStencilRect(KoRect r);
 
   protected:
     QByteArray kivioEncoded() const;
@@ -47,7 +48,8 @@ class KivioDragObject : public QDragObject
   private:
     enum { NumEncodeFormats = 3 };
     QCString m_encodeMimeList[NumEncodeFormats];
-    QValueList<Kivio::Object*> m_objectList;
+    QPtrList<KivioStencil> m_stencilList;
+    KoRect m_stencilRect;
 };
 
 #endif

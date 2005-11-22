@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #ifndef __kivio_canvas_h__
 #define __kivio_canvas_h__
@@ -53,10 +53,6 @@ class QTimer;
 class KoSize;
 class KoRect;
 
-namespace Kivio {
-  class Object;
-};
-
 #define YBORDER_WIDTH 50
 #define XBORDER_HEIGHT 20
 
@@ -90,6 +86,10 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     void continueRectDraw( const QPoint &p, RectType t );
     void endRectDraw();
     QRect rect()const { return currRect; }
+
+    void startSpawnerDragDraw( const QPoint &p );
+    void continueSpawnerDragDraw( const QPoint &p );
+    void endSpawnerDragDraw();
 
     void drawSelectedStencilsXOR();
     void drawStencilXOR( KivioStencil * );
@@ -195,7 +195,6 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     KivioScreenPainter* unclippedSpawnerPainter;
     KivioIntraStencilData m_dragStencilData;
     KivioStencil* m_pDragStencil;
-    QValueList<Kivio::Object*> m_dragObjectList;
 
     QTimer* m_borderTimer;
     QTimer* m_guideLinesTimer;

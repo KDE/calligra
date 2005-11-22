@@ -14,12 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kivio_common.h"
 #include "kivio_plugin_stencil_spawner.h"
 #include "kivio_sml_stencil_spawner.h"
 #include "kivio_dia_stencil_spawner.h"
+#include "kivio_py_stencil_spawner.h"
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_set.h"
 
@@ -127,6 +128,10 @@ KivioStencilSpawner* KivioStencilSpawnerSet::loadFile( const QString &fileName )
     else if( fileName.contains( ".so", false ) )
     {
         pSpawner = new KivioPluginStencilSpawner(this);
+    }
+    else if( fileName.contains( ".spy", false ) )
+    {
+        pSpawner = new KivioPyStencilSpawner(this);
     }
     else if( fileName.contains( ".shape", false ) )
     {

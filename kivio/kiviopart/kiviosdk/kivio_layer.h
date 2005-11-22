@@ -14,13 +14,13 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #ifndef KIVIO_LAYER_H
 #define KIVIO_LAYER_H
 
 #include <qdom.h>
-#include <qvaluelist.h>
+#include <qptrlist.h>
 #include <qobject.h>
 #include <koPoint.h>
 class KivioConnectorPoint;
@@ -39,27 +39,24 @@ class KoXmlWriter;
 #define FLOW_LAYER_VISIBLE 0x0001
 #define FLOW_LAYER_CONNECTABLE 0x0002
 
-namespace Kivio {
-  class Object;
-  struct CollisionFeedback;
-}
-
 class KivioLayer
 {
-  protected:
+protected:
     friend class KivioGroupStencil;
 
     int m_flags;
-    QValueList<Kivio::Object*> m_objectList;
+    QPtrList <KivioStencil> *m_pStencilList;
+    QPtrList <KivioStencil> *m_pDeletedStencilList;
     QString m_name;
     KivioPage *m_pPage;
     DCOPObject* m_dcop;
 
-    Kivio::Object *loadSMLStencil( const QDomElement & );
-    Kivio::Object *loadGroupStencil( const QDomElement & );
-    Kivio::Object *loadPluginStencil( const QDomElement & );
+    KivioStencil *loadSMLStencil( const QDomElement & );
+    KivioStencil *loadGroupStencil( const QDomElement & );
+    KivioStencil *loadPluginStencil( const QDomElement & );
 
-  public:
+
+public:
     KivioLayer( KivioPage * );
     virtual ~KivioLayer();
 
@@ -67,33 +64,43 @@ class KivioLayer
 
     virtual DCOPObject* dcopObject();
 
-    QValueList<Kivio::Object*>* objectList() { return &m_objectList; }
+    QPtrList<KivioStencil> *stencilList() { return m_pStencilList; }
 
-    bool visible() { return (m_flags & FLOW_LAYER_VISIBLE); }
+    bool visible() { return (m_flags & FLOW_LAYER_VISIBLE)?true:false; }
     void setVisible( bool f );
 
-    bool connectable() { return (m_flags & FLOW_LAYER_CONNECTABLE); }
+    bool connectable() { return (m_flags & FLOW_LAYER_CONNECTABLE)?true:false; }
     void setConnectable( bool f );
 
     QString name() const { return m_name; }
-    void setName( const QString &n ) { m_name = n; }
+    void setName( const QString &n ) { m_name = QString(n); }
 
-    bool addStencil( Kivio::Object * );
-    bool removeStencil( Kivio::Object * );
-    Kivio::Object* takeStencil( Kivio::Object * );
+    bool addStencil( KivioStencil * );
+    bool removeStencil( KivioStencil * );
 
     bool loadXML( const QDomElement & );
     void loadOasis(const QDomElement& layer);
     QDomElement saveXML( QDomDocument & );
     void saveOasis(KoXmlWriter* layerWriter);
 
-    Kivio::Object* checkForCollision(const KoPoint& point, Kivio::CollisionFeedback& collisionFeedback);
+    KivioStencil *checkForStencil( KoPoint *, int *, float, bool );
 
-    void printContent( QPainter& painter, int xdpi = 0, int ydpi = 0 );
-    void paintContent(QPainter& painter, const QRect& rect, bool transparent, QPoint p0,
-                      KoZoomHandler* zoom, bool paintHandles = true);
-    void paintConnectorTargets( QPainter& painter, const QRect& rect, bool transparent,
+    void printContent( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
+    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint p0,
+      KoZoomHandler* zoom );
+    void paintConnectorTargets( KivioPainter& painter, const QRect& rect, bool transparent,
       QPoint p0, KoZoomHandler* zoom );
+    void paintSelectionHandles( KivioPainter& painter, const QRect& rect, bool transparent,
+      QPoint p0, KoZoomHandler* zoom );
+
+    KivioStencil *firstStencil() { return m_pStencilList->first(); }
+    KivioStencil *nextStencil() { return m_pStencilList->next(); }
+    KivioStencil *prevStencil() { return m_pStencilList->prev(); }
+    KivioStencil *takeStencil() { return m_pStencilList->take(); }
+    KivioStencil *currentStencil() { return m_pStencilList->current(); }
+    KivioStencil *lastStencil() { return m_pStencilList->last(); }
+
+    KivioStencil *takeStencil( KivioStencil * );
 
     KivioConnectorTarget *connectPointToTarget( KivioConnectorPoint *, float );
 
@@ -102,6 +109,11 @@ class KivioLayer
     int generateStencilIds( int );
 
     void searchForConnections( KivioPage * );
+    void takeStencilFromList(  KivioStencil *pStencil );
+    void insertStencil( KivioStencil *pStencil );
+
 };
 
 #endif
+
+

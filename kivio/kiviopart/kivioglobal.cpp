@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "kivioglobal.h"
@@ -22,20 +22,15 @@
 #include <qdom.h>
 #include <qpixmap.h>
 #include <qprinter.h>
-#include <qpainter.h>
-#include <qrect.h>
 
 #include <kdebug.h>
 #include <kglobal.h>
 #include <klocale.h>
 
 #include <koGenStyles.h>
-#include <kozoomhandler.h>
-#include <koGlobal.h>
 
 #include "kivio_common.h"
 #include "kivio_settings.h"
-#include "object.h"
 
 struct PaperSizeDef {
   const char* title;
@@ -1290,24 +1285,4 @@ QString Kivio::systemDefaultUnit()
   }
 
   return defMS;
-}
-
-QPixmap Kivio::generatePixmapFromObject(int width, int height, Kivio::Object* object)
-{
-  KoZoomHandler zoomHandler;
-  QRect rect = zoomHandler.zoomRect(object->boundingBox());
-
-  double zw = (double)(width - 2) / (double)rect.width();
-  double zh = (double)(height - 2) / (double)rect.height();
-  zoomHandler.setZoomAndResolution(qRound(kMin(zw, zh) * 100.0), KoGlobal::dpiX(), KoGlobal::dpiY());
-  rect = zoomHandler.zoomRect(object->boundingBox());
-
-  QPixmap pix(width, height);
-  pix.fill(Qt::white);
-  QPainter painter(&pix);
-  painter.translate(((width - rect.width()) / 2), ((height - rect.height()) / 2));
-  object->paint(painter, &zoomHandler);
-  painter.end();
-
-  return pix;
 }

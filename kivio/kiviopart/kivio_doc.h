@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #ifndef __kivio_doc_h__
 #define __kivio_doc_h__
@@ -26,6 +26,7 @@
 
 #include <koDocument.h>
 #include <koMainWindow.h>
+#include <koUnit.h>
 #include <koGlobal.h>
 
 #include "kivio_config.h"
@@ -45,7 +46,6 @@ class KivioStencil;
 
 namespace Kivio {
   class DragBarButton;
-  class ShapeCollection;
 }
 
 class KoStore;
@@ -81,8 +81,6 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
 
     virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
 
-    virtual void addShell( KoMainWindow *shell );
-
     virtual QCString mimeType() const { return MIME_TYPE; }
 
     /**
@@ -103,39 +101,39 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     * Adds a KivioStencilSpawnerSet to the list of spawner sets and make it active.
     *
     */
-    void openShapeCollection(const QString& path);
-    void closeShapeCollection(Kivio::ShapeCollection* collection);
+    void addSpawnerSet( const QString& );
+    void addSpawnerSetDuringLoad( const QString& );
     bool removeSpawnerSet( KivioStencilSpawnerSet * );
 
     QPtrList<KivioStencilSpawnerSet> *spawnerSets()const { return m_pLstSpawnerSets; }
-    QValueList<Kivio::ShapeCollection*> shapeCollectionList() const { return m_shapeCollectionList; }
 
+    KivioStencilSpawner *findStencilSpawner( const QString& setId, const QString& stencilId );
     KivioStencilSpawner *findInternalStencilSpawner( const QString& title );
-
+    
     void addInternalStencilSpawner(KivioStencilSpawner* spawner);
     KivioStencilSpawnerSet* internalSpawnerSet() { return m_pInternalSet; }
 
     KivioMap* map() const { return m_pMap; }
 
     /**
-    * @return true if the document is currently loading.
+    * @return TRUE if the document is currently loading.
     */
     bool isLoading()const { return m_bLoading; }
 
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false, double zoomX = 1.0, double zoomY = 1.0 );
-    void paintContent( QPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, KoZoomHandler*, bool );
+    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, KoZoomHandler*, bool );
 
     void printContent( KPrinter& prn );
     bool exportPage( KivioPage *pPage, const QString &fileName, ExportPageDialog * );
 
     static QPtrList<KivioDoc>& documents();
 
-    // ### kivio calls units() what KoDocument calls unit()
-    KoUnit::Unit units() const { return unit(); }
+    KoUnit::Unit units()const { return m_units; }
 
     KivioGridData grid() { return Kivio::Config::grid(); }
 
     void initConfig();
+    void saveConfig();
     void updateButton();
     void addCommand( KCommand * cmd );
 
@@ -155,6 +153,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
 
     void slotDeleteStencilSet( DragBarButton *, QWidget *, KivioStackBar * );
     void slotSelectionChanged();
+    void setUnits(KoUnit::Unit);
 
     void setDefaultFont(const QFont& f) { m_font = f; }
 
@@ -167,11 +166,12 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     void sig_selectionChanged();
     void sig_addPage(KivioPage*);
     void sig_addSpawnerSet( KivioStencilSpawnerSet * );
-    void newShapeCollectionOpened(Kivio::ShapeCollection*);
     void sig_updateView(KivioPage*);
     void sig_pageNameChanged(KivioPage*, const QString&);
     void sig_deleteStencilSet( DragBarButton*, QWidget *, KivioStackBar * );
     void sig_updateGrid();
+
+    void unitsChanged(KoUnit::Unit);
 
     void initProgress();
     void progress(int);
@@ -226,7 +226,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     QString m_strFileURL;
 
     /**
-    * true if loading is in process, otherwise false.
+    * TRUE if loading is in process, otherwise FALSE.
     * This flag is used to avoid updates etc. during loading.
     *
     * @see #isLoading
@@ -238,6 +238,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
 
     KivioStencilSpawnerSet* m_pInternalSet;
 
+    KoUnit::Unit m_units;
     KivioGridData gridData;
 
     DCOPObject *dcop;
@@ -250,7 +251,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     KivioStencilSpawnerSet* m_currentSet;
     QValueList<KivioStencilSpawnerSet*> m_stencilSetLoadQueue;
 
-    QValueList<Kivio::ShapeCollection*> m_shapeCollectionList;
+    bool m_docOpened; // Used to for a hack that make kivio not crash if you cancel startup dialog.
 };
 
 #endif

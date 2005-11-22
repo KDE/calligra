@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #ifndef __kivio_gui_h__
 #define __kivio_gui_h__
@@ -33,12 +33,10 @@ class KivioTabBar;
 class TKSelectColorAction;
 class StencilBarDockManager;
 class KivioArrowHeadAction;
-
 namespace Kivio {
   class ToolController;
   class PluginManager;
   class AddStencilSetPanel;
-  class ShapeCollection;
 }
 
 class KivioBirdEyePanel;
@@ -48,6 +46,8 @@ class KivioStencilGeometryPanel;
 
 class KoDocumentEntry;
 class KoTabBar;
+class KoToolDockBase;
+class KoToolDockManager;
 
 class KAction;
 class KFontAction;
@@ -63,10 +63,10 @@ class QProgressBar;
 class DCOPObject;
 class KoRuler;
 class KoZoomHandler;
+class KoUnitDoubleSpinBox;
 class KStatusBarLabel;
 class KoLineWidthAction;
 class KoLineStyleAction;
-class KoPaletteManager;
 
 #include <qdom.h>
 #include <qptrlist.h>
@@ -101,11 +101,13 @@ class KIVIO_EXPORT KivioView : public KoView
     KivioStencilSpawnerSet *activeSpawnerSet();
 
     KoTabBar* tabBar()const { return  m_pTabBar;}
-    KoPaletteManager* paletteManager() { return m_pPaletteManager; };
+    KoToolDockManager* toolDockManager() { return m_pToolDockManager; }
     void updateMenuPage( );
 
     virtual void setupPrinter(KPrinter&);
     virtual void print(KPrinter&);
+
+    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent );
 
     virtual QWidget* canvas();
     virtual int canvasXOffset() const;
@@ -165,6 +167,10 @@ class KIVIO_EXPORT KivioView : public KoView
 
     void toggleStencilGeometry(bool);
     void toggleViewManager(bool);
+    void toggleLayersPanel(bool);
+    void toggleBirdEyePanel(bool);
+    void toggleProtectionPanel(bool);
+    void toggleAddStencilSetPanel(bool);
 
     void insertPage();
     void removePage();
@@ -182,6 +188,8 @@ class KIVIO_EXPORT KivioView : public KoView
 
     void bringStencilToFront();
     void sendStencilToBack();
+
+    void addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x = 0.0, double y = 0.0 );
 
     void changePage( const QString& _name );
 
@@ -251,8 +259,8 @@ class KIVIO_EXPORT KivioView : public KoView
 
     void viewZoom(const QString& s);
 
+    void addSpawnerToStackBar( KivioStencilSpawnerSet * );
     void addStencilSet( const QString& );
-    void addShapeCollectionToStackBar(Kivio::ShapeCollection* collection);
 
     void setMousePos( int mx, int my );
     void setRulerUnit(KoUnit::Unit);
@@ -316,7 +324,7 @@ class KIVIO_EXPORT KivioView : public KoView
     KivioStencilSpawnerSet* m_pActiveSpawnerSet;
 
     StencilBarDockManager* m_pStencilBarDockManager;
-    KoPaletteManager* m_pPaletteManager;
+    KoToolDockManager* m_pToolDockManager;
 
     KoRuler* vRuler;
     KoRuler* hRuler;

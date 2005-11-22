@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "kivioarrowheadformatdlg.h"
@@ -152,12 +152,12 @@ void KivioArrowHeadFormatDlg::setStartAHType(int t)
 
 void KivioArrowHeadFormatDlg::setStartAHWidth(double w)
 {
-  m_startAHWidthUSBox->changeValue(w);
+  m_startAHWidthUSBox->setValue(KoUnit::toUserValue(w, m_unit));
 }
 
 void KivioArrowHeadFormatDlg::setStartAHHeight(double h)
 {
-  m_startAHHeightUSBox->changeValue(h);
+  m_startAHHeightUSBox->setValue(KoUnit::toUserValue(h, m_unit));
 }
 
 void KivioArrowHeadFormatDlg::setEndAHType(int t)
@@ -167,12 +167,12 @@ void KivioArrowHeadFormatDlg::setEndAHType(int t)
 
 void KivioArrowHeadFormatDlg::setEndAHWidth(double w)
 {
-  m_endAHWidthUSBox->changeValue(w);
+  m_endAHWidthUSBox->setValue(KoUnit::toUserValue(w, m_unit));
 }
 
 void KivioArrowHeadFormatDlg::setEndAHHeight(double h)
 {
-  m_endAHHeightUSBox->changeValue(h);
+  m_endAHHeightUSBox->setValue(KoUnit::toUserValue(h, m_unit));
 }
 
 void KivioArrowHeadFormatDlg::slotDefault()

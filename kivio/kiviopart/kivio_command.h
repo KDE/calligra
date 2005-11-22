@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #ifndef kiviocommand_h
@@ -30,10 +30,6 @@ class KivioPage;
 class KivioLayer;
 class KivioStencil;
 struct KoPageLayout;
-
-namespace Kivio {
-  class Object;
-}
 
 class KivioChangePageNameCommand : public KNamedCommand
 {
@@ -101,24 +97,24 @@ protected:
 
 class KivioAddStencilCommand : public KNamedCommand
 {
-  public:
-    KivioAddStencilCommand( const QString &_name, KivioPage *_page,  KivioLayer * _layer, Kivio::Object* _stencil  );
+public:
+    KivioAddStencilCommand( const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil  );
     ~KivioAddStencilCommand();
 
     virtual void execute();
     virtual void unexecute();
 
-  protected:
+protected:
     KivioPage * m_page;
     KivioLayer * m_layer;
-    Kivio::Object* m_stencil;
+    KivioStencil *m_stencil;
 };
 
 
 class KivioRemoveStencilCommand : public KivioAddStencilCommand
 {
-  public:
-    KivioRemoveStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, Kivio::Object* _stencil );
+public:
+    KivioRemoveStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil );
     ~KivioRemoveStencilCommand() {}
 
     void execute() { KivioAddStencilCommand::unexecute(); }
@@ -197,19 +193,18 @@ protected:
 
 class KIVIO_EXPORT KivioMoveStencilCommand : public KNamedCommand
 {
-  public:
-    KivioMoveStencilCommand(const QString &_name, Kivio::Object* _stencil, const KoPoint& _origPosition,
-                            const KoPoint& _newPosition, KivioPage* _page);
+public:
+    KivioMoveStencilCommand(const QString &_name, KivioStencil *_stencil, KoRect _initSize, KoRect _endSize, KivioPage *_page );
     ~KivioMoveStencilCommand();
 
     virtual void execute();
     virtual void unexecute();
 
-  protected:
-    Kivio::Object* m_stencil;
-    KoPoint m_origPosition;
-    KoPoint m_newPosition;
-    KivioPage* m_page;
+protected:
+    KivioStencil *m_stencil;
+    KoRect initSize;
+    KoRect endSize;
+    KivioPage *m_page;
 };
 
 class KivioChangeLayoutCommand : public KNamedCommand
@@ -281,7 +276,7 @@ class KivioChangeStencilColorCommand : public KNamedCommand
 {
 public:
     enum ColorType { CT_TEXTCOLOR, CT_FGCOLOR, CT_BGCOLOR };
-    KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, Kivio::Object * _stencil, const QColor & _oldColor,  const QColor & _newColor, ColorType _type);
+    KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor & _oldColor,  const QColor & _newColor, ColorType _type);
     ~KivioChangeStencilColorCommand();
 
     virtual void execute();
@@ -289,7 +284,7 @@ public:
 
 protected:
     KivioPage *m_page;
-    Kivio::Object *m_stencil;
+    KivioStencil *m_stencil;
     QColor oldColor;
     QColor newColor;
     ColorType type;

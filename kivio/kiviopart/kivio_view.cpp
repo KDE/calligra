@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <kprinter.h> // has to be first
 
@@ -75,7 +75,8 @@
 #include <kotabbar.h>
 #include <kolinewidthaction.h>
 #include <kolinestyleaction.h>
-#include <kopalettemanager.h>
+#include "kotooldockmanager.h"
+#include "kotooldockbase.h"
 
 #include "kivio_view.h"
 #include "kivio_dlg_pageshow.h"
@@ -125,7 +126,6 @@
 #include "kivio_config.h"
 #include "kivioaddstencilsetpanel.h"
 #include "kiviostencilsetinstaller.h"
-#include "shapecollection.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -138,7 +138,6 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 : KoView( doc, _parent, _name )
 {
   m_pluginManager = new PluginManager(this, "Kivio Plugin Manager");
-  m_pPaletteManager = new KoPaletteManager(this, actionCollection(), "kivio palette manager");
   m_zoomHandler = new KoZoomHandler();
   zoomHandler()->setZoomAndResolution(100, KoGlobal::dpiX(),
     KoGlobal::dpiY());
@@ -154,7 +153,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   addStatusBarItem(m_infoSLbl, 0, false);
 
   // Add coords to the statusbar
-  QString unit = KoUnit::unitName(m_pDoc->unit());
+  QString unit = KoUnit::unitName(m_pDoc->units());
   KoPoint xy(0, 0);
   QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
   .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
@@ -210,11 +209,11 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   // Rulers
   vRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Vertical, Kivio::Config::defaultPageLayout(),
-    KoRuler::F_HELPLINES, m_pDoc->unit());
+    KoRuler::F_HELPLINES, m_pDoc->units());
   vRuler->showMousePos(true);
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());
   hRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Horizontal, Kivio::Config::defaultPageLayout(),
-    KoRuler::F_HELPLINES, m_pDoc->unit());
+    KoRuler::F_HELPLINES, m_pDoc->units());
   hRuler->showMousePos(true);
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
   connect(vertScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerVOffset(int)));
@@ -223,7 +222,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect(hRuler, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(rulerChangedUnit(KoUnit::Unit)));
   connect(vRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
   connect(hRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
-  connect( m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
+  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
   vRuler->installEventFilter(m_pCanvas);
   hRuler->installEventFilter(m_pCanvas);
 
@@ -242,6 +241,8 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect( this, SIGNAL( invalidated() ), m_pCanvas, SLOT( update() ) );
   connect( this, SIGNAL( regionInvalidated( const QRegion&, bool ) ), m_pCanvas, SLOT( repaint( const QRegion&, bool ) ) );
 
+  m_pToolDockManager = new KoToolDockManager(canvasBase);
+
   setInstance(KivioFactory::global());
   if ( !m_pDoc->isReadWrite() )
     setXMLFile("kivio_readonly.rc");
@@ -250,13 +251,11 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
 
   // Must be executed before setActivePage() and before setupActions()
-  createBirdEyeDock();
-  createLayerDock();
   createGeometryDock();
+  createLayerDock();
+  createBirdEyeDock();
   createProtectionDock();
-//   createAddStencilSetDock();
-  paletteManager()->showWidget("birdseyepanel");
-  paletteManager()->showWidget("stencilgeometrypanel");
+  createAddStencilSetDock();
 
   setupActions();
 
@@ -270,12 +269,12 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   connect( m_pDoc, SIGNAL( sig_selectionChanged() ), SLOT( updateToolBars() ) );
   connect( m_pDoc, SIGNAL( sig_addPage(KivioPage*) ), SLOT( slotAddPage(KivioPage*) ) );
-  connect( m_pDoc, SIGNAL( newShapeCollectionOpened(Kivio::ShapeCollection*) ), SLOT(addShapeCollectionToStackBar(Kivio::ShapeCollection*)) );
+  connect( m_pDoc, SIGNAL( sig_addSpawnerSet(KivioStencilSpawnerSet*) ), SLOT(addSpawnerToStackBar(KivioStencilSpawnerSet*)) );
   connect( m_pDoc, SIGNAL( sig_updateView(KivioPage*) ), SLOT(slotUpdateView(KivioPage*)) );
   connect( m_pDoc, SIGNAL( sig_pageNameChanged(KivioPage*,const QString&)), SLOT(slotPageRenamed(KivioPage*,const QString&)) );
 
   connect( m_pDoc, SIGNAL( sig_updateGrid()),SLOT(slotUpdateGrid()));
-
+  
   connect(m_pDoc, SIGNAL(updateActivePage(KivioPage*)), this, SLOT(setActivePage(KivioPage*)));
 
   initActions();
@@ -283,12 +282,12 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   // Load any already-loaded stencils into the stencil dock
   if( m_pDoc->isReadWrite() ) // only if not embedded in Konqueror
   {
-    QValueList<Kivio::ShapeCollection*> list = m_pDoc->shapeCollectionList();
-    QValueList<Kivio::ShapeCollection*>::iterator itEnd = list.end();
-
-    for(QValueList<Kivio::ShapeCollection*>::iterator it = list.begin(); it != itEnd; ++it)
+    KivioStencilSpawnerSet *pSet;
+    pSet = m_pDoc->spawnerSets()->first();
+    while( pSet )
     {
-      addShapeCollectionToStackBar(*it);
+      addSpawnerToStackBar( pSet );
+      pSet = m_pDoc->spawnerSets()->next();
     }
   }
 
@@ -301,9 +300,6 @@ KivioView::~KivioView()
 {
   delete dcop;
   delete m_zoomHandler;
-  m_zoomHandler = 0;
-  delete m_pluginManager;
-  m_pluginManager = 0;
 }
 
 DCOPObject* KivioView::dcopObject()
@@ -318,44 +314,67 @@ DCOPObject* KivioView::dcopObject()
 void KivioView::createGeometryDock()
 {
   m_pStencilGeometryPanel = new KivioStencilGeometryPanel(this);
-  m_pStencilGeometryPanel->setCaption(i18n("Geometry"));
-  paletteManager()->addWidget(m_pStencilGeometryPanel, "stencilgeometrypanel", "geometrydocker");
+  KoToolDockBase* stencilGeometryBase = toolDockManager()->createSimpleToolDock(m_pStencilGeometryPanel, "geometry");
+  stencilGeometryBase -> setCaption(i18n("Geometry"));
+  stencilGeometryBase -> restore();
 
   connect( m_pStencilGeometryPanel, SIGNAL(positionChanged(double, double)), this, SLOT(slotChangeStencilPosition(double, double)) );
   connect( m_pStencilGeometryPanel, SIGNAL(sizeChanged(double, double)), this, SLOT(slotChangeStencilSize(double, double)) );
   connect(m_pStencilGeometryPanel, SIGNAL(rotationChanged(int)), SLOT(slotChangeStencilRotation(int)));
 
-  connect( m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), m_pStencilGeometryPanel, SLOT(setUnit(KoUnit::Unit)) );
+  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_pStencilGeometryPanel, SLOT(setUnit(KoUnit::Unit)) );
 
+  KToggleAction* showStencilGeometry = new KToggleAction( i18n("Stencil Geometry Panel"), 0, actionCollection(), "stencilGeometry" );
+  connect( showStencilGeometry, SIGNAL(toggled(bool)), stencilGeometryBase, SLOT(makeVisible(bool)));
+  connect( stencilGeometryBase, SIGNAL(visibleChange(bool)), SLOT(toggleStencilGeometry(bool)));
 }
 
 void KivioView::createBirdEyeDock()
 {
   m_pBirdEyePanel = new KivioBirdEyePanel(this, this);
-  m_pBirdEyePanel->setCaption(i18n("Bird's Eye"));
-  paletteManager()->addWidget(m_pBirdEyePanel, "birdseyepanel", "birdeyedocker");
+  KoToolDockBase* birdEyeBase = toolDockManager()->createSimpleToolDock(m_pBirdEyePanel,  "birdeye");
+  birdEyeBase -> setCaption(i18n("Bird's Eye"));
+  birdEyeBase -> restore();
+
+  KToggleAction* showBirdEye = new KToggleAction( i18n("Bird's Eye"), 0, actionCollection(), "birdEye" );
+  connect( showBirdEye, SIGNAL(toggled(bool)), birdEyeBase, SLOT(makeVisible(bool)));
+  connect( birdEyeBase, SIGNAL(visibleChange(bool)), SLOT(toggleBirdEyePanel(bool)));
 }
 
 void KivioView::createLayerDock()
 {
   m_pLayersPanel = new KivioLayerPanel( this, this);
-  m_pLayersPanel -> setCaption(i18n("Layers"));
-  paletteManager()->addWidget(m_pLayersPanel, "layerspanel", "birdeyedocker");
+  KoToolDockBase* layersBase = toolDockManager()->createSimpleToolDock(m_pLayersPanel, "layers");
+  layersBase -> setCaption(i18n("Layers"));
+  layersBase -> restore();
+
+  KToggleAction* showLayers = new KToggleAction( i18n("Layers Manager"), CTRL+Key_L, actionCollection(), "layersPanel" );
+  connect( showLayers, SIGNAL(toggled(bool)), layersBase, SLOT(makeVisible(bool)));
+  connect( layersBase, SIGNAL(visibleChange(bool)), SLOT(toggleLayersPanel(bool)));
 }
 
 void KivioView::createProtectionDock()
 {
   m_pProtectionPanel = new KivioProtectionPanel(this,this);
-  m_pProtectionPanel -> setCaption(i18n("Protection"));
-  paletteManager()->addWidget(m_pProtectionPanel, "protectionpanel", "geometrydocker");
+  KoToolDockBase* protectionBase = toolDockManager()->createSimpleToolDock(m_pProtectionPanel, "protection");
+  protectionBase -> setCaption(i18n("Protection"));
+  protectionBase -> restore();
+
+  KToggleAction *showProtection = new KToggleAction( i18n("Protection"), CTRL+SHIFT+Key_P, actionCollection(), "protection" );
+  connect( showProtection, SIGNAL(toggled(bool)), protectionBase, SLOT(makeVisible(bool)));
+  connect( protectionBase, SIGNAL(visibleChange(bool)), SLOT(toggleProtectionPanel(bool)));
 }
 
 void KivioView::createAddStencilSetDock()
 {
   m_addStencilSetPanel = new Kivio::AddStencilSetPanel(this);
-  m_addStencilSetPanel -> setCaption(i18n("Add Stencil Set"));
-  paletteManager()->addWidget(m_addStencilSetPanel, "addstencilsetpanel", "stencilsetdocker");
+  KoToolDockBase* addStencilSetBase = toolDockManager()->createSimpleToolDock(m_addStencilSetPanel,  "addstencilset");
+  addStencilSetBase -> setCaption(i18n("Add Stencil Set"));
+  addStencilSetBase -> restore();
 
+  KToggleAction *showAddStencilSet = new KToggleAction( i18n("Add Stencil Set"), 0, actionCollection(), "addStencilSetDock" );
+  connect(showAddStencilSet, SIGNAL(toggled(bool)), addStencilSetBase, SLOT(makeVisible(bool)));
+  connect(addStencilSetBase, SIGNAL(visibleChange(bool)), SLOT(toggleAddStencilSetPanel(bool)));
   connect(m_addStencilSetPanel, SIGNAL(addStencilSet(const QString&)), this, SLOT(addStencilSet(const QString&)));
   connect(this, SIGNAL(updateStencilSetList()), m_addStencilSetPanel, SLOT(updateList()));
 }
@@ -434,7 +453,7 @@ void KivioView::setupActions()
                                       this, SLOT( textAlignCenter() ),
                                       actionCollection(), "textAlignCenter" );
   m_textAlignCenter->setExclusiveGroup( "align" );
-  m_textAlignCenter->setChecked( true );
+  m_textAlignCenter->setChecked( TRUE );
   m_textAlignRight = new KToggleAction( i18n( "Align &Right" ), "text_right", CTRL + ALT + Key_R,
                                       this, SLOT( textAlignRight() ),
                                       actionCollection(), "textAlignRight" );
@@ -450,8 +469,8 @@ void KivioView::setupActions()
 
   m_lineWidthAction = new KoLineWidthAction(i18n("Line Width"), "linewidth", this, SLOT(setLineWidth(double)),
     actionCollection(), "setLineWidth");
-  m_lineWidthAction->setUnit(m_pDoc->unit());
-  connect(m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), m_lineWidthAction, SLOT(setUnit(KoUnit::Unit)));
+  m_lineWidthAction->setUnit(m_pDoc->units());
+  connect(m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_lineWidthAction, SLOT(setUnit(KoUnit::Unit)));
 
   m_lineStyleAction = new KoLineStyleAction(i18n("Line Style"), "linestyle", this, SLOT(setLineStyle(int)),
     actionCollection(), "setLineStyle");
@@ -503,6 +522,7 @@ void KivioView::setupActions()
   m_setArrowHeads->setWhatsThis(i18n("Arrowheads allow you to add an arrow to the beginning and/or end of a line."));
   connect( m_setArrowHeads, SIGNAL(endChanged(int)), SLOT(slotSetEndArrow(int)));
   connect( m_setArrowHeads, SIGNAL(startChanged(int)), SLOT(slotSetStartArrow(int)));
+  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
 
   KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options");
 
@@ -575,7 +595,7 @@ void KivioView::addPage( KivioPage* page )
                     this, SLOT( slotPageHidden( KivioPage* ) ) );
   QObject::connect( page, SIGNAL( sig_PageShown( KivioPage* ) ),
                     this, SLOT( slotPageShown( KivioPage* ) ) );
-
+  
   updatePageStatusLabel();
 }
 
@@ -594,7 +614,7 @@ void KivioView::removePage( KivioPage *_t )
   m_pTabBar->removeTab( _t->pageName() );
   QString n = m_pDoc->map()->visiblePages().first();
   setActivePage( m_pDoc->map()->findPage( n ) );
-
+  
   updatePageStatusLabel();
 }
 
@@ -689,7 +709,7 @@ void KivioView::insertPage()
   m_pDoc->addPage(t);
   KivioAddPageCommand * cmd = new KivioAddPageCommand(i18n("Insert Page"), t);
   m_pDoc->addCommand( cmd );
-
+  
   updatePageStatusLabel();
 }
 
@@ -755,7 +775,7 @@ void KivioView::paperLayoutDlg()
   KoPageLayout l = page->paperLayout();
   KoHeadFoot headfoot;
   int tabs = FORMAT_AND_BORDERS | DISABLE_UNIT;
-  KoUnit::Unit unit = doc()->unit();
+  KoUnit::Unit unit = doc()->units();
 
   if(KoPageLayoutDia::pageLayout(l, headfoot, tabs, unit))
   {
@@ -806,6 +826,13 @@ void KivioView::slotUpdateView( KivioPage* page )
   hRuler->update();
 }
 
+void KivioView::paintContent( KivioPainter&, const QRect&, bool)
+{
+//  m_pDoc->paintContent( painter, rect, transparent, m_pActivePage );
+//  temporary
+  m_pCanvas->update();
+}
+
 QWidget *KivioView::canvas()
 {
   return canvasWidget();
@@ -823,7 +850,7 @@ int KivioView::canvasYOffset() const
 
 void KivioView::print(KPrinter& ptr)
 {
-  ptr.setFullPage(true);
+  ptr.setFullPage(TRUE);
   m_pDoc->printContent( ptr );
 }
 
@@ -912,43 +939,45 @@ void KivioView::toggleSnapGrid(bool b)
 
 void KivioView::addStencilSet( const QString& name )
 {
-  m_pDoc->openShapeCollection(name);
+  m_pDoc->addSpawnerSet(name);
 }
 
-void KivioView::addShapeCollectionToStackBar(Kivio::ShapeCollection* collection)
+void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
 {
-  if(!collection) {
-    kdDebug(43000) << "KivioView::addShapeCollectionToStackBar() - collection == NULL" << endl;
+  if(!pSpawner) {
+    kdDebug(43000) << "KivioView::addSpawnerToStackBar() - NULL pSpawner" << endl;
     return;
   }
 
-  KivioIconView *iconView = new KivioIconView(m_pDoc->isReadWrite());
-  iconView->setShapeCollection(collection);
-  m_pStencilBarDockManager->insertStencilSet(iconView, collection->name());
+  KivioIconView *pView = new KivioIconView(m_pDoc->isReadWrite());
+  QObject::connect(pView, SIGNAL(createNewStencil(KivioStencilSpawner*)), this,
+                   SLOT(addStencilFromSpawner(KivioStencilSpawner*)));
+
+  pView->setStencilSpawnerSet(pSpawner);
+  m_pStencilBarDockManager->insertStencilSet(pView, pSpawner->name());
 }
 
 void KivioView::setFGColor()
 {
-  KMacroCommand * macro = new KMacroCommand( i18n("Change Stroke Color"));
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  if (!pStencil)
+    return;
+  KMacroCommand * macro = new KMacroCommand( i18n("Change Foreground Color"));
   bool createMacro = false;
-  QColor col = m_setFGColor->color();
-
-  QValueList<Kivio::Object*>::iterator itEnd = m_pActivePage->selectedStencils()->end();
-  Kivio::Pen pen;
-
-  for(QValueList<Kivio::Object*>::iterator it = m_pActivePage->selectedStencils()->begin(); it != itEnd; ++it)
+  while( pStencil )
   {
-    pen = (*it)->pen();
-    if ( col != pen.color() )
-    {
-      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Stroke Color"), m_pActivePage, (*it),
-          pen.color(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
+    QColor col( m_setFGColor->color());
 
-      pen.setColor(col);
-      (*it)->setPen(pen);
+    if ( col != pStencil->fgColor() )
+    {
+      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Fg Color"), m_pActivePage, pStencil, pStencil->fgColor(), col, KivioChangeStencilColorCommand::CT_FGCOLOR);
+
+      pStencil->setFGColor( col );
       macro->addCommand( cmd );
       createMacro = true;
     }
+
+    pStencil = m_pActivePage->selectedStencils()->next();
   }
 
   if ( createMacro )
@@ -961,22 +990,26 @@ void KivioView::setFGColor()
 
 void KivioView::setBGColor()
 {
-/*  KMacroCommand * macro = new KMacroCommand( i18n("Change Background Color"));
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  if (!pStencil)
+    return;
+  KMacroCommand * macro = new KMacroCommand( i18n("Change Background Color"));
   bool createMacro = false;
-  QColor col = m_setBGColor->color();
 
-  QValueList<Kivio::Object*>::iterator itEnd = m_pActivePage->selectedStencils()->end();
-
-  for(QValueList<Kivio::Object*>::iterator it = m_pActivePage->selectedStencils()->begin(); it != itEnd; ++it)
+  while( pStencil )
   {
-    if ( col != (*it)->bgColor() )
-    {
-      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Bg Color"), m_pActivePage, (*it), (*it)->bgColor(), col, KivioChangeStencilColorCommand::CT_BGCOLOR);
+    QColor col( m_setBGColor->color());
 
-      (*it)->setBGColor( col );
+    if ( col != pStencil->bgColor() )
+    {
+      KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Bg Color"), m_pActivePage, pStencil, pStencil->bgColor(), col, KivioChangeStencilColorCommand::CT_BGCOLOR);
+
+      pStencil->setBGColor( col );
       macro->addCommand( cmd );
       createMacro = true;
     }
+
+    pStencil = m_pActivePage->selectedStencils()->next();
   }
 
   if ( createMacro )
@@ -984,22 +1017,22 @@ void KivioView::setBGColor()
   else
     delete macro;
 
-  m_pDoc->updateView(m_pActivePage);*/
+  m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::setTextColor()
 {
-/*  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
 
   if (!pStencil)
     return;
 
   KMacroCommand * macro = new KMacroCommand( i18n("Change Text Color"));
   bool createMacro = false;
-  QColor col(m_setTextColor->color());
-
   while( pStencil )
   {
+    QColor col(m_setTextColor->color());
+
     if ( col != pStencil->textColor() )
     {
       KivioChangeStencilColorCommand * cmd = new KivioChangeStencilColorCommand( i18n("Change Text Color"), m_pActivePage, pStencil, pStencil->textColor(), col, KivioChangeStencilColorCommand::CT_TEXTCOLOR);
@@ -1016,27 +1049,32 @@ void KivioView::setTextColor()
   else
     delete macro;
 
-  m_pDoc->updateView(m_pActivePage);*/
+  m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::setLineWidth(double width)
 {
-/*  KMacroCommand * macro = new KMacroCommand( i18n("Change Line Width") );
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+
+  if (!pStencil)
+    return;
+
+  KMacroCommand * macro = new KMacroCommand( i18n("Change Line Width") );
   bool createMacro = false ;
 
-  QValueList<Kivio::Object*>::iterator itEnd = m_pActivePage->selectedStencils()->end();
-
-  for(QValueList<Kivio::Object*>::iterator it = m_pActivePage->selectedStencils()->begin(); it != itEnd; ++it)
+  while( pStencil )
   {
-    if ( width != (*it)->lineWidth() )
+    if ( width != pStencil->lineWidth() )
     {
       KivioChangeLineWidthCommand * cmd = new KivioChangeLineWidthCommand( i18n("Change Line Width"),
-          m_pActivePage, (*it), (*it)->lineWidth(), width );
+        m_pActivePage, pStencil, pStencil->lineWidth(), width );
 
-      (*it)->setLineWidth( width );
+      pStencil->setLineWidth( width );
       macro->addCommand( cmd );
       createMacro = true;
     }
+
+    pStencil = m_pActivePage->selectedStencils()->next();
   }
 
   if ( createMacro ) {
@@ -1045,34 +1083,38 @@ void KivioView::setLineWidth(double width)
     delete macro;
   }
 
-  m_pDoc->updateView(m_pActivePage);*/
+  m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::setLineStyle(int style)
 {
-/*  KMacroCommand * macro = new KMacroCommand( i18n("Change Line Style") );
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+
+  if(!pStencil)
+    return;
+
+  KMacroCommand * macro = new KMacroCommand( i18n("Change Line Style") );
   bool createMacro = false ;
 
-  QValueList<Kivio::Object*>::iterator itEnd = m_pActivePage->selectedStencils()->end();
-
-  for(QValueList<Kivio::Object*>::iterator it = m_pActivePage->selectedStencils()->.begin(); it != itEnd; ++it)
+  while(pStencil)
   {
-    if(style != (*it)->linePattern())
+    if(style != pStencil->linePattern())
     {
-      KivioChangeLineStyleCommand * cmd = new KivioChangeLineStyleCommand( i18n("Change Line Style"),
-          m_pActivePage, (*it), (*it)->linePattern(), style );
-      (*it)->setLinePattern(style);
-      macro->addCommand( cmd );
-      createMacro = true;
+        KivioChangeLineStyleCommand * cmd = new KivioChangeLineStyleCommand( i18n("Change Line Style"),
+        m_pActivePage, pStencil, pStencil->linePattern(), style );
+        pStencil->setLinePattern(style);
+        macro->addCommand( cmd );
+        createMacro = true;
     }
 
+    pStencil = m_pActivePage->selectedStencils()->next();
   }
 
-  if ( createMacro ) {
+    if ( createMacro ) {
     m_pDoc->addCommand( macro );
   } else {
     delete macro;
-  }*/
+  }
 }
 
 void KivioView::groupStencils()
@@ -1122,7 +1164,7 @@ int KivioView::lineStyle() const
 
 void KivioView::setFontFamily( const QString &str )
 {
-/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
 
@@ -1147,12 +1189,12 @@ void KivioView::setFontFamily( const QString &str )
     }
     if ( macro )
         m_pDoc->addCommand( macro  );
-    m_pDoc->updateView(m_pActivePage);*/
+    m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::setFontSize(int size )
 {
-/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
 
@@ -1177,12 +1219,12 @@ void KivioView::setFontSize(int size )
     }
     if ( macro )
         m_pDoc->addCommand( macro   );
-    m_pDoc->updateView(m_pActivePage);*/
+    m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::toggleFontBold(bool b)
 {
-/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
 
@@ -1206,12 +1248,12 @@ void KivioView::toggleFontBold(bool b)
     }
     if ( macro )
         m_pDoc->addCommand( macro );
-    m_pDoc->updateView(m_pActivePage);*/
+    m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::toggleFontItalics(bool b)
 {
-/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
         return;
 
@@ -1236,12 +1278,12 @@ void KivioView::toggleFontItalics(bool b)
     }
     if ( macro )
         m_pDoc->addCommand( macro );
-    m_pDoc->updateView(m_pActivePage);*/
+    m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::toggleFontUnderline( bool b)
 {
-/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
     KMacroCommand * macro = 0L;
@@ -1265,119 +1307,126 @@ void KivioView::toggleFontUnderline( bool b)
     }
     if ( macro )
         m_pDoc->addCommand( macro );
-    m_pDoc->updateView(m_pActivePage);*/
+    m_pDoc->updateView(m_pActivePage);
 }
 
 
 
 void KivioView::updateToolBars()
 {
-  m_pStencilGeometryPanel->setEmitSignals(false);
-  m_setArrowHeads->setEmitSignals(false);
+    KivioStencil *pStencil;
+    pStencil = m_pActivePage->selectedStencils()->first();
+    m_pStencilGeometryPanel->setEmitSignals(false);
+    m_setArrowHeads->setEmitSignals(false);
 
-  if(m_pActivePage->selectedStencils()->count() == 0) {
-    m_setFontFamily->setFont( doc()->defaultFont().family() );
-    m_setFontSize->setFontSize( doc()->defaultFont().pointSize() );
-    m_setBold->setChecked( false );
-    m_setItalics->setChecked( false );
-    m_setUnderline->setChecked( false );
-    m_lineWidthAction->setCurrentWidth(1.0);
-    m_lineStyleAction->setCurrentSelection(Qt::SolidLine);
-    showAlign(Qt::AlignHCenter);
-    showVAlign(Qt::AlignVCenter);
+    if( !pStencil )
+    {
+        m_setFontFamily->setFont( doc()->defaultFont().family() );
+        m_setFontSize->setFontSize( doc()->defaultFont().pointSize() );
+        m_setBold->setChecked( false );
+        m_setItalics->setChecked( false );
+        m_setUnderline->setChecked( false );
+        m_lineWidthAction->setCurrentWidth(1.0);
+        m_lineStyleAction->setCurrentSelection(Qt::SolidLine);
+        showAlign(Qt::AlignHCenter);
+        showVAlign(Qt::AlignVCenter);
 
-    m_pStencilGeometryPanel->setSize(0.0,0.0);
-    m_pStencilGeometryPanel->setPosition(0.0,0.0);
-    m_pStencilGeometryPanel->setRotation(0);
+        m_pStencilGeometryPanel->setSize(0.0,0.0);
+        m_pStencilGeometryPanel->setPosition(0.0,0.0);
+        m_pStencilGeometryPanel->setRotation(0);
 
-    m_setArrowHeads->setCurrentStartArrow(0);
-    m_setArrowHeads->setCurrentEndArrow(0);
+        m_setArrowHeads->setCurrentStartArrow(0);
+        m_setArrowHeads->setCurrentEndArrow(0);
 
-    m_menuTextFormatAction->setEnabled(false);
-    m_menuStencilConnectorsAction->setEnabled(false);
-    m_editCut->setEnabled(false);
-    m_editCopy->setEnabled(false);
-    m_ungroupAction->setEnabled(false);
-    m_stencilToBack->setEnabled(false);
-    m_stencilToFront->setEnabled(false);
-    m_setArrowHeads->setEnabled(false);
-    m_arrowHeadsMenuAction->setEnabled(false);
-    m_pStencilGeometryPanel->setEnabled(false);
-    m_pProtectionPanel->setEnabled(false);
-  } else {
-    Kivio::Object* pStencil = m_pActivePage->selectedStencils()->first();
-//     QFont f = pStencil->textFont();
-//
-//     m_setFontFamily->setFont( f.family() );
-//     m_setFontSize->setFontSize( f.pointSize() );
-//     m_setBold->setChecked( f.bold() );
-//     m_setItalics->setChecked( f.italic() );
-//     m_setUnderline->setChecked( f.underline() );
+        m_menuTextFormatAction->setEnabled( false );
+        m_menuStencilConnectorsAction->setEnabled( false );
+    }
+    else
+    {
+        QFont f = pStencil->textFont();
 
-    Kivio::Pen pen = pStencil->pen();
+        m_setFontFamily->setFont( f.family() );
+        m_setFontSize->setFontSize( f.pointSize() );
+        m_setBold->setChecked( f.bold() );
+        m_setItalics->setChecked( f.italic() );
+        m_setUnderline->setChecked( f.underline() );
 
-    m_lineWidthAction->setCurrentWidth(pen.pointWidth());
-    m_lineStyleAction->setCurrentSelection(pen.style());
+        m_lineWidthAction->setCurrentWidth(pStencil->lineWidth());
+        m_lineStyleAction->setCurrentSelection(pStencil->linePattern());
 
-//     showAlign(pStencil->hTextAlign());
-//     showVAlign(pStencil->vTextAlign());
+        showAlign(pStencil->hTextAlign());
+        showVAlign(pStencil->vTextAlign());
 
-    m_pStencilGeometryPanel->setEnabled(true);
-//     m_pStencilGeometryPanel->setSize(pStencil->size().width(), pStencil->size().height());
-    m_pStencilGeometryPanel->setPosition(pStencil->position().x(), pStencil->position().y());
-//     m_pStencilGeometryPanel->setRotation(pStencil->rotation());
+        m_pStencilGeometryPanel->setSize( pStencil->w(), pStencil->h() );
+        m_pStencilGeometryPanel->setPosition( pStencil->x(), pStencil->y() );
+        m_pStencilGeometryPanel->setRotation(pStencil->rotation());
 
-    m_menuTextFormatAction->setEnabled(true);
-    m_menuStencilConnectorsAction->setEnabled(true);
+        m_menuTextFormatAction->setEnabled( true );
+        m_menuStencilConnectorsAction->setEnabled( true );
 
-    if(pStencil->type() != Kivio::kstConnector) {
+        if ( pStencil->type() != kstConnector )
+        {
+           m_setArrowHeads->setEnabled (false);
+           m_arrowHeadsMenuAction->setEnabled (false);
+        }
+        else
+        {
+            m_setArrowHeads->setEnabled (true);
+            m_arrowHeadsMenuAction->setEnabled (true);
+            m_setArrowHeads->setCurrentStartArrow( pStencil->startAHType() );
+            m_setArrowHeads->setCurrentEndArrow( pStencil->endAHType() );
+        }
+
+        if ( pStencil->type() != kstText )
+        {
+            m_setFGColor->setEnabled (true);
+            m_setBGColor->setEnabled (true);
+        }
+        else
+        {
+            m_setFGColor->setEnabled (false);
+            m_setBGColor->setEnabled (false);
+        }
+    }
+
+    m_pStencilGeometryPanel->setEmitSignals(true);
+    m_setArrowHeads->setEmitSignals(true);
+    m_pProtectionPanel->updateCheckBoxes();
+
+    if(activePage()->selectedStencils()->count() > 1) {
+      m_groupAction->setEnabled(true);
+      m_alignAndDistribute->setEnabled(true);
+    } else {
+      m_groupAction->setEnabled(false);
+      m_alignAndDistribute->setEnabled(false);
+    }
+
+    if(activePage()->selectedStencils()->count() > 0) {
+      m_editCut->setEnabled(true);
+      m_editCopy->setEnabled(true);
+
+      if(activePage()->checkForStencilTypeInSelection(kstGroup)) {
+        m_ungroupAction->setEnabled(true);
+      } else {
+        m_ungroupAction->setEnabled(false);
+      }
+
+      m_stencilToBack->setEnabled(true);
+      m_stencilToFront->setEnabled(true);
+    } else {
+      m_editCut->setEnabled(false);
+      m_editCopy->setEnabled(false);
+      m_ungroupAction->setEnabled(false);
+      m_stencilToBack->setEnabled(false);
+      m_stencilToFront->setEnabled(false);
       m_setArrowHeads->setEnabled (false);
       m_arrowHeadsMenuAction->setEnabled (false);
-    } else {
-/*      m_setArrowHeads->setEnabled (true);
-      m_arrowHeadsMenuAction->setEnabled (true);
-      m_setArrowHeads->setCurrentStartArrow( pStencil->startAHType() );
-      m_setArrowHeads->setCurrentEndArrow( pStencil->endAHType() );*/
     }
-
-    if ( pStencil->type() != kstText ) {
-      m_setFGColor->setEnabled(true);
-      m_setBGColor->setEnabled(true);
-    } else {
-      m_setFGColor->setEnabled(false);
-      m_setBGColor->setEnabled(false);
-    }
-
-    m_editCut->setEnabled(true);
-    m_editCopy->setEnabled(true);
-
-    if(activePage()->checkForStencilTypeInSelection(Kivio::kstGroup)) {
-      m_ungroupAction->setEnabled(true);
-    } else {
-      m_ungroupAction->setEnabled(false);
-    }
-
-    m_stencilToBack->setEnabled(true);
-    m_stencilToFront->setEnabled(true);
-    m_pProtectionPanel->setEnabled(true);
-  }
-
-  m_pStencilGeometryPanel->setEmitSignals(true);
-  m_setArrowHeads->setEmitSignals(true);
-  m_pProtectionPanel->updateCheckBoxes();
-
-  if(activePage()->selectedStencils()->count() > 1) {
-    m_groupAction->setEnabled(true);
-    m_alignAndDistribute->setEnabled(true);
-  } else {
-    m_groupAction->setEnabled(false);
-    m_alignAndDistribute->setEnabled(false);
-  }
 }
 
 void KivioView::slotSetStartArrow( int i )
 {
-/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Begin Arrow"));
@@ -1400,12 +1449,12 @@ void KivioView::slotSetStartArrow( int i )
         m_pDoc->addCommand( macro );
     else
         delete macro;
-    m_pDoc->updateView(m_pActivePage);*/
+    m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::slotSetEndArrow( int i )
 {
-/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
     KMacroCommand *macro = new KMacroCommand( i18n("Change End Arrow"));
@@ -1429,16 +1478,17 @@ void KivioView::slotSetEndArrow( int i )
     else
         delete macro;
 
-    m_pDoc->updateView(m_pActivePage);*/
+    m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::slotSetStartArrowSize()
 {
-/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
 
-    float w = -1, h = -1;
+    float w = 0.0;
+    float h = 0.0;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Size of Begin Arrow"));
     bool createMacro = false;
     while( pStencil )
@@ -1458,16 +1508,17 @@ void KivioView::slotSetStartArrowSize()
         m_pDoc->addCommand( macro );
     else
         delete macro;
-    m_pDoc->updateView(m_pActivePage);*/
+    m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::slotSetEndArrowSize()
 {
-/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
 
-    float w=-1,h=-1;
+    float w = 0.0;
+    float h = 0.0;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Size of End Arrow"));
     bool createMacro = false;
     while( pStencil )
@@ -1486,12 +1537,12 @@ void KivioView::slotSetEndArrowSize()
         m_pDoc->addCommand( macro );
     else
         delete macro;
-    m_pDoc->updateView(m_pActivePage);*/
+    m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::setHParaAlign( int i )
 {
-/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Horizontal Alignment"));
@@ -1513,13 +1564,13 @@ void KivioView::setHParaAlign( int i )
         m_pDoc->addCommand( macro );
     else
         delete macro;
-    m_pDoc->updateView(m_pActivePage);*/
+    m_pDoc->updateView(m_pActivePage);
 }
 
 
 void KivioView::setVParaAlign( int i )
 {
-/*    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+    KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
     if (!pStencil)
       return;
     KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Vertical Alignment"));
@@ -1540,7 +1591,7 @@ void KivioView::setVParaAlign( int i )
         m_pDoc->addCommand( macro );
     else
         delete macro;
-    m_pDoc->updateView(m_pActivePage);*/
+    m_pDoc->updateView(m_pActivePage);
 }
 
 void KivioView::bringStencilToFront()
@@ -1575,7 +1626,7 @@ void KivioView::pasteStencil()
 
 void KivioView::slotChangeStencilSize(double newW, double newH)
 {
-/*  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
 
   if ( pStencil )
   {
@@ -1587,37 +1638,81 @@ void KivioView::slotChangeStencilSize(double newW, double newH)
       m_pDoc->updateView(m_pActivePage);
       m_pDoc->addCommand( cmd );
     }
-  }*/
+  }
 }
 
 void KivioView::slotChangeStencilPosition(double newW, double newH)
 {
-  Kivio::Object *pStencil = m_pActivePage->selectedStencils()->first();
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
 
-  if(pStencil) {
-    KoPoint newPos(newW, newH);
-
-    if(newPos != pStencil->position()) {
-      KoPoint oldPos(pStencil->position());
-      pStencil->setPosition(newPos);
-      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand(i18n("Move Stencil"), pStencil,
-          oldPos, newPos, m_pActivePage);
+  if ( pStencil )
+  {
+    KoRect oldPos(pStencil->rect());
+    pStencil->setPosition(newW, newH);
+    if ((oldPos.x() != pStencil->rect().x()) || (oldPos.y() != pStencil->rect().y()))
+    {
+      KivioMoveStencilCommand * cmd = new KivioMoveStencilCommand( i18n("Move Stencil"), pStencil, oldPos , pStencil->rect(), m_pCanvas->activePage());
       m_pDoc->updateView(m_pActivePage);
-      m_pDoc->addCommand(cmd);
+      m_pDoc->addCommand( cmd );
     }
   }
 }
 
 void KivioView::slotChangeStencilRotation(int d)
 {
-/*  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
+  KivioStencil *pStencil = m_pActivePage->selectedStencils()->first();
 
   if(pStencil && pStencil->rotation() != d) {
       pStencil->setRotation(d);
       KivioChangeRotationCommand * cmd = new KivioChangeRotationCommand( i18n("Change Stencil Rotation"), m_pCanvas->activePage(), pStencil, pStencil->rotation() , d);
       m_pDoc->updateView(m_pActivePage);
       m_pDoc->addCommand( cmd );
-  }*/
+  }
+}
+
+/**
+ * When passed a spawner, this will create a new stencil at x, y.
+*/
+void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, double y )
+{
+    KivioStencil *pStencil;
+
+    // Allocate the new stencil and set it's default size/style
+    pStencil = pSpawner->newStencil();
+
+    pStencil->setPosition( x, y );
+
+    // Use default properties if we held ctrl down
+#if KDE_IS_VERSION(3, 4, 0)
+    if(kapp->keyboardMouseState() & Qt::ControlButton) {
+#else
+    if(KApplication::keyboardModifiers() & KApplication::ControlModifier) {
+#endif
+      pStencil->setTextFont(doc()->defaultFont());
+    } else {
+      pStencil->setFGColor(m_setFGColor->color());
+      pStencil->setBGColor(m_setBGColor->color());
+      QFont f = m_setFontFamily->font();
+      f.setPointSize(m_setFontSize->fontSize());
+      f.setBold(m_setBold->isChecked());
+      f.setItalic(m_setItalics->isChecked());
+      f.setUnderline(m_setUnderline->isChecked());
+      pStencil->setTextFont(f);
+      pStencil->setTextColor(m_setTextColor->color());
+      pStencil->setVTextAlign(vTextAlign());
+      pStencil->setHTextAlign(hTextAlign());
+      pStencil->setLinePattern(m_lineStyleAction->currentSelection());
+      pStencil->setLineWidth(m_lineWidthAction->currentWidth());
+    }
+
+    // Unselect everything, then the stencil to the page, and select it
+    m_pActivePage->unselectAllStencils();
+    m_pActivePage->addStencil( pStencil );
+    m_pActivePage->selectStencil( pStencil );
+
+    // Mark the page as modified and repaint
+    m_pDoc->updateView(m_pActivePage);
+    pluginManager()->activateDefaultTool();
 }
 
 void KivioView::alignStencilsDlg()
@@ -1649,6 +1744,26 @@ void KivioView::toggleStencilGeometry(bool b)
 void KivioView::toggleViewManager(bool b)
 {
     TOGGLE_ACTION("viewManager")->setChecked(b);
+}
+
+void KivioView::toggleLayersPanel(bool b)
+{
+    TOGGLE_ACTION("layersPanel")->setChecked(b);
+}
+
+void KivioView::toggleProtectionPanel(bool b)
+{
+    TOGGLE_ACTION("protection")->setChecked(b);
+}
+
+void KivioView::toggleBirdEyePanel(bool b)
+{
+    TOGGLE_ACTION("birdEye")->setChecked(b);
+}
+
+void KivioView::toggleAddStencilSetPanel(bool b)
+{
+    TOGGLE_ACTION("addStencilSetDock")->setChecked(b);
 }
 
 void KivioView::setupPrinter(KPrinter &p)
@@ -1773,10 +1888,10 @@ void KivioView::setMousePos( int mx, int my )
   hRuler->setMousePos(mx, my);
 
   if((mx >= 0) && (my >= 0)) {
-    QString unit = KoUnit::unitName(m_pDoc->unit());
+    QString unit = KoUnit::unitName(m_pDoc->units());
     KoPoint xy = m_pCanvas->mapFromScreen(QPoint(mx, my));
-    xy.setX(KoUnit::toUserValue(xy.x(), m_pDoc->unit()));
-    xy.setY(KoUnit::toUserValue(xy.y(), m_pDoc->unit()));
+    xy.setX(KoUnit::toUserValue(xy.x(), m_pDoc->units()));
+    xy.setY(KoUnit::toUserValue(xy.y(), m_pDoc->units()));
     QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
       .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
     m_coordSLbl->setText(text);
@@ -1805,7 +1920,7 @@ void KivioView::setRulerVOffset(int v)
 
 void KivioView::rulerChangedUnit(KoUnit::Unit u)
 {
-  m_pDoc->setUnit(u);
+  m_pDoc->setUnits(u);
 }
 
 KoZoomHandler* KivioView::zoomHandler() const
@@ -1924,7 +2039,7 @@ void KivioView::showVAlign( int align )
 
 void KivioView::textFormat()
 {
-/*  KivioTextFormatDlg dlg(this);
+  KivioTextFormatDlg dlg(this);
   KivioStencil* stencil = activePage()->selectedStencils()->getLast();
 
   if(stencil) {
@@ -1951,12 +2066,12 @@ void KivioView::textFormat()
     }
 
     updateToolBars();
-  }*/
+  }
 }
 
 void KivioView::stencilFormat()
 {
-/*  KivioStencilFormatDlg dlg(this);
+  KivioStencilFormatDlg dlg(this);
   KivioStencil* stencil = activePage()->selectedStencils()->getLast();
   KivioLineStyle ls;
 
@@ -1965,11 +2080,11 @@ void KivioView::stencilFormat()
     dlg.setFillColor(stencil->bgColor());
     dlg.setFillPattern(stencil->fillPattern());
   } else {
-    dlg.setLineWidth(1.0, m_pDoc->unit());
+    dlg.setLineWidth(1.0, m_pDoc->units());
     dlg.setLineColor(QColor(0, 0, 0));
   }
 
-  dlg.setLineWidth(ls.width(), m_pDoc->unit());
+  dlg.setLineWidth(ls.width(), m_pDoc->units());
   dlg.setLineColor(ls.color());
   dlg.setLinePattern(ls.style());
   dlg.setLineEndStyle(ls.capStyle());
@@ -1987,13 +2102,13 @@ void KivioView::stencilFormat()
     }
 
     updateToolBars();
-  }*/
+  }
 }
 
 void KivioView::arrowHeadFormat()
 {
-/*  KivioArrowHeadFormatDlg dlg(this);
-  dlg.setUnit(m_pDoc->unit());
+  KivioArrowHeadFormatDlg dlg(this);
+  dlg.setUnit(m_pDoc->units());
   dlg.setStartAHType(0);
   dlg.setEndAHType(0);
   dlg.setStartAHWidth(10.0);
@@ -2005,7 +2120,7 @@ void KivioView::arrowHeadFormat()
 
   if(stencil) {
     if(stencil->type() == kstConnector) {
-      dlg.setUnit(m_pDoc->unit());
+      dlg.setUnit(m_pDoc->units());
       dlg.setStartAHType(stencil->startAHType());
       dlg.setEndAHType(stencil->endAHType());
       dlg.setStartAHWidth(stencil->startAHWidth());
@@ -2032,7 +2147,7 @@ void KivioView::arrowHeadFormat()
     }
 
     updateToolBars();
-  }*/
+  }
 }
 
 Kivio::PluginManager* KivioView::pluginManager()

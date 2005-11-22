@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #ifndef TOOL_CONNECTOR_H
 #define TOOL_CONNECTOR_H
@@ -27,7 +27,6 @@ class QCursor;
 
 namespace Kivio {
   class MouseToolAction;
-  class Connector;
 }
 
 class KivioView;
@@ -41,43 +40,63 @@ class ConnectorTool : public Kivio::MouseTool
   public:
     ConnectorTool( KivioView* parent );
     ~ConnectorTool();
-
+  
     virtual bool processEvent(QEvent* e);
-
+  
+    void connector(QRect);
+    
   public slots:
     void setActivated(bool a);
-
+  
   protected slots:
+    void activateStraight();
     void activatePolyline();
-
+    
     void makePermanent();
-
+  
   signals:
     void operationDone();
-
+  
   protected:
     void mousePress(QMouseEvent *);
     void mouseMove(QMouseEvent *);
-
+    void mouseRelease(QMouseEvent *);
+  
     bool startRubberBanding(QMouseEvent*);
     void continueRubberBanding(QMouseEvent *);
     void endRubberBanding(QMouseEvent *);
-
+  
+  
+  
+    QPoint m_startPoint, m_releasePoint;
+  
     // Connector Tool Mode
     enum
     {
       stmNone,
       stmDrawRubber
     };
-
+    
+    enum {
+      StraightConnector,
+      PolyLineConnector
+    };
+  
   private:
     int m_mode; // Flag to indicate that we are drawing a rubber band
+    int m_type; // Type of connector
     QCursor* m_pConnectorCursor1;
     QCursor* m_pConnectorCursor2;
-    Kivio::Connector* m_connector;
-
+    Kivio1DStencil* m_pStencil;
+    KoPoint startPoint;
+    KivioCustomDragData* m_pDragData;
+    
+    Kivio::MouseToolAction* m_connectorAction;
     Kivio::MouseToolAction* m_polyLineAction;
+    
     bool m_permanent;
 };
 
 #endif
+
+

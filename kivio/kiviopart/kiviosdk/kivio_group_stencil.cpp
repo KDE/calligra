@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kivio_group_stencil.h"
 #include "kivio_intra_stencil_data.h"
@@ -202,54 +202,53 @@ KivioStencil *KivioGroupStencil::duplicate()
 
 bool KivioGroupStencil::loadXML( const QDomElement &e, KivioLayer *pLayer )
 {
-  //FIXME Port to Object code
-//     QDomNode node;
-//     KivioStencil *pStencil;
-// 
-//     node = e.firstChild();
-//     while( !node.isNull() )
-//     {
-//         QString name = node.nodeName();
-// 
-//         if( name == "KivioGroupStencil" )
-//         {
-//             pStencil = pLayer->loadGroupStencil( node.toElement() );
-//             if( pStencil )
-//             {
-//                 addToGroup( pStencil );
-//             }
-//             else
-//             {
-// 	       kdDebug(43000) << "KivioGroupStencil::loadXML() - Error loading group stencil" << endl;
-//             }
-//         }
-//         else if( name == "KivioSMLStencil" || name == "KivioPyStencil" )
-//         {
-//             pStencil = pLayer->loadSMLStencil( node.toElement() );
-//             if( pStencil )
-//             {
-//                 addToGroup( pStencil );
-//             }
-//             else
-//             {
-// 	       kdDebug(43000) << "KivioGroupStencil::loadXML() - Error loading group stencil" << endl;
-//             }
-//         }
-//         else if( name == "KivioPluginStencil" )
-//         {
-//             KivioStencil *pStencil = pLayer->loadPluginStencil( node.toElement() );
-//             if( pStencil )
-//             {
-//                 addToGroup( pStencil );
-//             }
-//             else
-//             {
-// 	       kdDebug(43000) << "KivioGroupStencil::loadXML() - Error loading group stencil" << endl;
-//             }
-//         }
-// 
-//         node = node.nextSibling();
-//     }
+    QDomNode node;
+    KivioStencil *pStencil;
+
+    node = e.firstChild();
+    while( !node.isNull() )
+    {
+        QString name = node.nodeName();
+
+        if( name == "KivioGroupStencil" )
+        {
+            pStencil = pLayer->loadGroupStencil( node.toElement() );
+            if( pStencil )
+            {
+                addToGroup( pStencil );
+            }
+            else
+            {
+	       kdDebug(43000) << "KivioGroupStencil::loadXML() - Error loading group stencil" << endl;
+            }
+        }
+        else if( name == "KivioSMLStencil" || name == "KivioPyStencil" )
+        {
+            pStencil = pLayer->loadSMLStencil( node.toElement() );
+            if( pStencil )
+            {
+                addToGroup( pStencil );
+            }
+            else
+            {
+	       kdDebug(43000) << "KivioGroupStencil::loadXML() - Error loading group stencil" << endl;
+            }
+        }
+        else if( name == "KivioPluginStencil" )
+        {
+            KivioStencil *pStencil = pLayer->loadPluginStencil( node.toElement() );
+            if( pStencil )
+            {
+                addToGroup( pStencil );
+            }
+            else
+            {
+	       kdDebug(43000) << "KivioGroupStencil::loadXML() - Error loading group stencil" << endl;
+            }
+        }
+
+        node = node.nextSibling();
+    }
 
     return true;
 }

@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="kivio" version="27">
+<kpartgui name="kivio" version="26">
   <MenuBar>
     <Menu name="file">
       <Action name="installStencilSet"/>
@@ -32,9 +32,15 @@
       <Action name="snapGrid"/>
       <Action name="snapGuides"/>
       <Separator/>
-      <Action name="view_palette_action_menu"/>
-    </Menu>
-    <Menu name="Page"><text>P&amp;age</text>
+      <Menu name="Docker"><text>&amp;Docker</text>
+        <Action name="stencilGeometry"/>
+        <Action name="layersPanel"/>
+        <Action name="viewManager"/>
+        <Action name="birdEye"/>
+        <Action name="protection"/>
+        <Action name="addStencilSetDock"/>
+      </Menu>
+    </Menu> <Menu name="Page"><text>P&amp;age</text>
       <Action name="insertPage"/>
       <Action name="removePage"/>
       <Separator/>

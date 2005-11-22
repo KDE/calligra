@@ -14,18 +14,15 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #ifndef TOOL_SELECT_H
 #define TOOL_SELECT_H
 
 #include <qptrlist.h>
-#include <qvaluelist.h>
-
 #include <koPoint.h>
-
+#include <koRect.h>
 #include "kivio_mousetool.h"
-#include "object.h"
 
 class KivioView;
 class KivioPage;
@@ -34,6 +31,24 @@ class QKeyEvent;
 class KPopupMenu;
 class KRadioAction;
 class KAction;
+
+class KivioStencil;
+
+class KivioSelectDragData
+{
+  public:
+    KoRect rect;
+};
+
+enum {
+    stCut=1,
+    stCopy,
+    stPaste,
+    stSendToBack,
+    stBringToFront,
+    stGroup,
+    stUngroup
+};
 
 class SelectTool : public Kivio::MouseTool
 {
@@ -49,65 +64,71 @@ class SelectTool : public Kivio::MouseTool
   public slots:
     void setActivated(bool a);
 
+  signals:
+    void operationDone();
+
   protected slots:
     void editText(QPtrList<KivioStencil>* stencils);
+    void showProperties();
     void editStencilText();
 
   protected:
+    void mousePress(const QPoint&);
     void mouseMove(QMouseEvent*);
     void mouseRelease(const QPoint&);
     void leftDoubleClick(const QPoint&);
-    /** This is called when the left mouse button is pressed
-      * @p pos current mouse position
-      * @p selectMultiple if we should allow more then one selected object
-      */
-    void leftMouseButtonPressed(const QPoint& pos, bool selectMultiple);
 
     bool startResizing(const QPoint&);
     bool startDragging(const QPoint&, bool);
     bool startCustomDragging(const QPoint&, bool);
     bool startRubberBanding(const QPoint&);
 
-    void move(const QPoint& pos);
-    void endMove();
-
-    void resize(const QPoint& pos);
-    void endResize();
-
+    void continueDragging(const QPoint&, bool ignoreGridGuides = false);
     void continueCustomDragging(const QPoint&);
     void continueResizing(const QPoint&, bool ignoreGridGuides = false);
     void continueRubberBanding(const QPoint&);
 
     void endResizing(const QPoint&);
+    void endDragging(const QPoint&);
     void endCustomDragging(const QPoint&);
     void endRubberBanding(const QPoint&);
 
     void showPopupMenu(const QPoint&);
 
     void changeMouseCursor(const QPoint&);
-
+    int isOverResizeHandle( KivioStencil *pStencil, const double x, const double y );
+    
     void keyPress(QKeyEvent* e);
+    
+    QPoint m_startPoint, m_releasePoint;
+    KoPoint m_lastPoint;
+    KoPoint m_origPoint;
 
-  protected:
-    typedef enum Mode {
-      MSelect,
-      MMove,
-      MResize,
-      MCustom
+    // Select Tool Mode
+    enum {
+      stmNone,
+      stmDrawRubber,
+      stmDragging,
+      stmCustomDragging,
+      stmResizing
     };
 
   private:
-    Mode m_mode;
+    int m_mode;     // Flag to indicate that we are drawing a rubber band
+    KivioStencil *m_pResizingStencil;
+    KivioStencil *m_pCustomDraggingStencil;
+    int m_resizeHandle;
+    bool m_controlKey;
+    int m_customDragID;
+    QPtrList <KivioSelectDragData> m_lstOldGeometry;
+    KoRect m_selectedRect;
 
     KRadioAction* m_selectAction;
     KAction* m_arrowHeadAction;
     KAction* m_textEditAction;
     KAction* m_textFormatAction;
 
-    Kivio::CollisionFeedback m_collisionFeedback;
-    KoPoint m_previousPos;
-    QValueList<Kivio::Object*> m_origObjectList;
-    Kivio::Object* m_clickedObject;
+    bool m_firstTime;
 };
 
 #endif

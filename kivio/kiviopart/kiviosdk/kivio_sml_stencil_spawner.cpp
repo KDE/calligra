@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kivio_common.h"
 #include "kivio_connector_target.h"
@@ -25,8 +25,6 @@
 #include "kivio_stencil_spawner_set.h"
 #include "kivio_stencil_spawner.h"
 #include "kivio_stencil_spawner_info.h"
-#include "object.h"
-#include "smlobjectloader.h"
 
 #include <qdom.h>
 #include <qfile.h>
@@ -173,12 +171,6 @@ void KivioSMLStencilSpawner::loadShape( QDomNode &shapeNode )
     KivioShapeData::KivioShapeType t;
     KivioShape *pShape = NULL;
     QDomElement shapeElement = shapeNode.toElement();
-    Kivio::SmlObjectLoader objectloader;
-    Kivio::Object* object = objectloader.loadObject(shapeElement);
-
-    if(object) {
-      m_pStencil->addChildObject(object);
-    }
 
     t = KivioShapeData::shapeTypeFromString( XmlReadString( shapeElement, "type", "None" ) );
 

@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #ifndef __kivio_page_h__
 #define __kivio_page_h__
@@ -44,11 +44,9 @@ class DCOPObject;
 #include <qrect.h>
 #include <qpalette.h>
 #include <qwidget.h>
-#include <qvaluelist.h>
 #include <koPoint.h>
 
 #include "kivio_stencil.h"
-#include "object.h"
 #include <koffice_export.h>
 class KivioPainter;
 class KPrinter;
@@ -88,7 +86,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     virtual DCOPObject* dcopObject();
 
     QString pageName()const { return m_strName; }
-    bool setPageName( const QString& name, bool init = false );
+    bool setPageName( const QString& name, bool init = FALSE );
 
     virtual QDomElement save( QDomDocument& );
     virtual void saveOasis(KoStore* store, KoXmlWriter* docWriter, KoGenStyles* styles);
@@ -114,18 +112,18 @@ class KIVIO_EXPORT KivioPage : public QObject
     KoPageLayout paperLayout()const { return m_pPageLayout; }
     void setPaperLayout(const KoPageLayout&);
 
-    void paintContent( QPainter& painter, const QRect& rect, bool transparent, QPoint, KoZoomHandler*, bool );
-    void printContent( QPainter& painter, int xdpi = 0, int ydpi = 0 );
-    void printSelected( QPainter& painter, int xdpi = 0, int ydpi = 0 );
+    void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, KoZoomHandler*, bool );
+    void printContent( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
+    void printSelected( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
 
-    bool isStencilSelected(Kivio::Object* object);
+    bool isStencilSelected( KivioStencil * );
     void selectAllStencils();
     void unselectAllStencils();
-    bool unselectStencil(Kivio::Object* object);
-    void selectStencil(Kivio::Object* object);
+    bool unselectStencil( KivioStencil * );
+    void selectStencil( KivioStencil * );
     void selectStencils( double, double, double, double );
-    QValueList<Kivio::Object*>* selectedStencils() { return &m_lstSelection; }
-    bool checkForStencilTypeInSelection(Kivio::ShapeType type);
+    QPtrList<KivioStencil> *selectedStencils() { return &m_lstSelection; }
+    bool checkForStencilTypeInSelection(KivioStencilType type);
     bool checkForTextBoxesInSelection();
 
     KoRect getRectForAllSelectedStencils();
@@ -134,7 +132,6 @@ class KIVIO_EXPORT KivioPage : public QObject
     int generateStencilIds( int );
 
     KivioStencil *checkForStencil( KoPoint *, int *, double, bool);
-    Kivio::Object* checkForCollision(const KoPoint& point, Kivio::CollisionFeedback& collisionFeedback);
 
 
     KivioLayer *curLayer()const { return m_pCurLayer; }
@@ -155,7 +152,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     /*
     * Stencil routines
     */
-    bool addStencil( Kivio::Object* );
+    bool addStencil( KivioStencil * );
     void alignStencils( AlignData );
     void distributeStencils( DistributeData );
 
@@ -202,7 +199,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     QPtrList<KivioLayer> m_lstLayers;
     KivioLayer *m_pCurLayer;
 
-    QValueList<Kivio::Object*> m_lstSelection;
+    QPtrList<KivioStencil> m_lstSelection;
 
     int m_id;
     bool m_bPageHide;

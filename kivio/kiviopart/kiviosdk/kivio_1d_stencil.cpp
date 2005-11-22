@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 
 /*
@@ -586,8 +586,7 @@ bool Kivio1DStencil::boolContainsFalse( bool *boolArray, int count )
 
 void Kivio1DStencil::searchForConnections( KivioPage *pPage )
 {
-  //FIXME Clean this up and port to Object code
-/*  bool *done = new bool[ m_pConnectorPoints->count()];
+  bool *done = new bool[ m_pConnectorPoints->count()];
   unsigned int i;
 
   for(i = 0; i < m_pConnectorPoints->count(); i++) {
@@ -653,13 +652,12 @@ void Kivio1DStencil::searchForConnections( KivioPage *pPage )
     pLayer = pPage->nextLayer();
   }
 
-  delete [] done;*/
+  delete [] done;
 }
 
 void Kivio1DStencil::searchForConnections( KivioPage *pPage, double threshold )
 {
-  //FIXME Clean this up and port to Object code
-/*  bool *done = new bool[ m_pConnectorPoints->count()];
+  bool *done = new bool[ m_pConnectorPoints->count()];
   int i;
 
   for( i=0; i<(int)m_pConnectorPoints->count(); i++ ) {
@@ -726,7 +724,7 @@ void Kivio1DStencil::searchForConnections( KivioPage *pPage, double threshold )
     pLayer = pPage->nextLayer();
   }
 
-  delete [] done;*/
+  delete [] done;
 }
 
 //////////////////////

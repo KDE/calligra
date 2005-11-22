@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "KIvioMapIface.h"
@@ -103,17 +103,17 @@ bool KIvioMapIface::processDynamic(const QCString &fun, const QByteArray &/*data
     // Does the name follow the pattern "foobar()" ?
     uint len = fun.length();
     if ( len < 3 )
-        return false;
+        return FALSE;
 
     if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
-        return false;
+        return FALSE;
 
     KivioPage* t = m_map->findPage( fun.left( len - 2 ).data() );
     if ( !t )
-        return false;
+        return FALSE;
 
     replyType = "DCOPRef";
     QDataStream out( replyData, IO_WriteOnly );
     out << DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
-    return true;
+    return TRUE;
 }

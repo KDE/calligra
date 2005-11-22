@@ -15,7 +15,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "tool_text.h"
 
@@ -111,8 +111,7 @@ void TextTool::setActivated(bool a)
 
 void TextTool::text(QRect r)
 {
-  //FIXME Port to Object code
-/*  // Calculate the start and end clicks in terms of page coordinates
+  // Calculate the start and end clicks in terms of page coordinates
   KoPoint startPoint = view()->canvasWidget()->mapFromScreen( QPoint( r.x(), r.y() ) );
   KoPoint releasePoint = view()->canvasWidget()->mapFromScreen( QPoint( r.x() + r.width(), r.y() + r.height() ) );
 
@@ -159,7 +158,7 @@ void TextTool::text(QRect r)
   if (stencil->text().isEmpty()) {
     page->deleteSelectedStencils();
     doc->updateView(page);
-  }*/
+  }
 }
 
 void TextTool::mousePress( QMouseEvent *e )

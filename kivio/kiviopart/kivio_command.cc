@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 #include <kcommand.h>
 #include <koGlobal.h>
@@ -23,7 +23,6 @@
 #include "kivio_map.h"
 #include "kivio_doc.h"
 #include "kivio_layer.h"
-#include "object.h"
 
 KivioChangePageNameCommand::KivioChangePageNameCommand(const QString &_name,  const QString & _oldPageName, const QString & _newPageName, KivioPage *_page)
     : KNamedCommand( _name ),
@@ -120,7 +119,7 @@ void KivioRemovePageCommand::unexecute()
 
 }
 
-KivioAddStencilCommand::KivioAddStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, Kivio::Object* _stencil )
+KivioAddStencilCommand::KivioAddStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil )
     : KNamedCommand( _name ),
       m_page( _page ),
       m_layer( _layer),
@@ -134,24 +133,22 @@ KivioAddStencilCommand::~KivioAddStencilCommand()
 
 void KivioAddStencilCommand::execute()
 {
-  //FIXME Port to Object code
-/*    m_layer->addStencil( m_stencil );
+    m_layer->insertStencil( m_stencil );
     m_page->doc()->updateView(m_page);
     m_stencil->unselect();
     m_stencil->searchForConnections(m_page, 4.0); //FIXME: The threshold should probably be zoomed....
-    m_page->doc()->slotSelectionChanged();*/
+    m_page->doc()->slotSelectionChanged();
 }
 
 void KivioAddStencilCommand::unexecute()
 {
-  //FIXME Port to Object code
-/*    m_layer->takeStencil( m_stencil );
+    m_layer->takeStencilFromList( m_stencil );
     m_page->doc()->updateView(m_page);
     m_stencil->unselect();
-    m_page->doc()->slotSelectionChanged();*/
+    m_page->doc()->slotSelectionChanged();
 }
 
-KivioRemoveStencilCommand::KivioRemoveStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, Kivio::Object* _stencil )
+KivioRemoveStencilCommand::KivioRemoveStencilCommand(const QString &_name, KivioPage *_page,  KivioLayer * _layer, KivioStencil *_stencil )
     : KivioAddStencilCommand(_name, _page, _layer, _stencil )
 {
 }
@@ -267,13 +264,12 @@ void KivioResizeStencilCommand::unexecute()
 }
 
 
-KivioMoveStencilCommand::KivioMoveStencilCommand(const QString &_name, Kivio::Object* _stencil, const KoPoint& _origPosition,
-    const KoPoint& _newPosition, KivioPage* _page)
-  : KNamedCommand( _name ),
-    m_stencil(_stencil),
-    m_origPosition(_origPosition),
-    m_newPosition(_newPosition),
-    m_page(_page)
+KivioMoveStencilCommand::KivioMoveStencilCommand( const QString &_name, KivioStencil *_stencil, KoRect _initSize, KoRect _endSize, KivioPage *_page)
+    :KNamedCommand( _name ),
+     m_stencil( _stencil),
+     initSize( _initSize),
+     endSize( _endSize ),
+     m_page( _page)
 {
 }
 
@@ -283,14 +279,16 @@ KivioMoveStencilCommand::~KivioMoveStencilCommand()
 
 void KivioMoveStencilCommand::execute()
 {
-  m_stencil->setPosition(m_newPosition);
-  m_page->doc()->updateView(m_page);
+    m_stencil->setDimensions( endSize.width(), endSize.height() );
+    m_stencil->setPosition( endSize.x(), endSize.y() );
+    m_page->doc()->updateView(m_page);
 }
 
 void KivioMoveStencilCommand::unexecute()
 {
-  m_stencil->setPosition(m_origPosition);
-  m_page->doc()->updateView(m_page);
+    m_stencil->setDimensions( initSize.width(), initSize.height() );
+    m_stencil->setPosition( initSize.x(), initSize.y() );
+    m_page->doc()->updateView(m_page);
 }
 
 KivioChangeLayoutCommand::KivioChangeLayoutCommand( const QString &_name, KivioPage *_page, KoPageLayout _oldLayout, KoPageLayout _newLayout)
@@ -397,7 +395,7 @@ void KivioChangeStencilFontCommand::unexecute()
     m_page->doc()->slotSelectionChanged();
 }
 
-KivioChangeStencilColorCommand::KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, Kivio::Object * _stencil, const QColor &_oldColor,  const QColor & _newColor, ColorType _type)
+KivioChangeStencilColorCommand::KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor &_oldColor,  const QColor & _newColor, ColorType _type)
     :KNamedCommand( _name),
      m_page(_page),
      m_stencil( _stencil ),
@@ -413,56 +411,38 @@ KivioChangeStencilColorCommand::~KivioChangeStencilColorCommand()
 
 void KivioChangeStencilColorCommand::execute()
 {
-  switch( type )
-  {
+    switch( type )
+    {
     case CT_TEXTCOLOR:
-    {
-//       m_stencil->setTextColor( oldColor );
-      break;
-    }
+        m_stencil->setTextColor( newColor );
+        break;
     case CT_BGCOLOR:
-    {
-//       m_stencil->setBGColor( oldColor );
-      break;
-    }
+        m_stencil->setBGColor( newColor );
+        break;
     case CT_FGCOLOR:
-    {
-      Kivio::Pen pen = m_stencil->pen();
-      pen.setColor(oldColor);
-      m_stencil->setPen(pen);
-      break;
+        m_stencil->setFGColor( newColor );
+        break;
     }
-  }
-
-  m_page->doc()->updateView(m_page);
-  m_page->doc()->slotSelectionChanged();
+    m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
 
 void KivioChangeStencilColorCommand::unexecute()
 {
-  switch( type )
-  {
+    switch( type )
+    {
     case CT_TEXTCOLOR:
-    {
-//       m_stencil->setTextColor( oldColor );
-      break;
-    }
+        m_stencil->setTextColor( oldColor );
+        break;
     case CT_BGCOLOR:
-    {
-//       m_stencil->setBGColor( oldColor );
-      break;
-    }
+        m_stencil->setBGColor( oldColor );
+        break;
     case CT_FGCOLOR:
-    {
-      Kivio::Pen pen = m_stencil->pen();
-      pen.setColor(oldColor);
-      m_stencil->setPen(pen);
-      break;
+        m_stencil->setFGColor( oldColor );
+        break;
     }
-  }
-
-  m_page->doc()->updateView(m_page);
-  m_page->doc()->slotSelectionChanged();
+    m_page->doc()->updateView(m_page);
+    m_page->doc()->slotSelectionChanged();
 }
 
 

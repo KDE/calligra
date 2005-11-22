@@ -14,7 +14,7 @@
  *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
- * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
+ * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include <qdom.h>
 #include <qtextstream.h>
@@ -39,8 +39,6 @@
 #include "kivioglobal.h"
 #include "kivio_config.h"
 #include "polylineconnectorspawner.h"
-#include "shapecollection.h"
-#include "smlobjectloader.h"
 
 #include "stencilbarbutton.h"
 
@@ -88,7 +86,6 @@
 #include <koOasisSettings.h>
 #include <kodom.h>
 #include <koxmlns.h>
-#include <koMainWindow.h>
 
 //using namespace std;
 
@@ -116,7 +113,6 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
   m_currentFile = 0;
 
   setInstance( KivioFactory::global(), false );
-  setTemplateType("kivio_template");
 
   if ( !name )
   {
@@ -154,9 +150,6 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
 
   if ( name )
       dcopObject();
-
-  KivioPage *t = createPage();
-  m_pMap->addPage( t );
 }
 
 DCOPObject* KivioDoc::dcopObject()
@@ -179,12 +172,17 @@ QPtrList<KivioDoc>& KivioDoc::documents()
 
 bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 {
+  KivioPage *t = createPage();
+  m_pMap->addPage( t );
+  m_docOpened = false; // Used to for a hack that make kivio not crash if you cancel startup dialog.
+
   if(flags == KoDocument::InitDocEmpty) {
     setEmpty();
+    m_docOpened = true; // Used to for a hack that make kivio not crash if you cancel startup dialog.
     return true;
   }
 
-  QString urlString;
+  QString f;
   KoTemplateChooseDia::ReturnType ret;
   KoTemplateChooseDia::DialogType dlgtype;
 
@@ -195,36 +193,32 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     dlgtype = KoTemplateChooseDia::OnlyTemplates;
   }
 
-  ret = KoTemplateChooseDia::choose( KivioFactory::global(), urlString,
+  ret = KoTemplateChooseDia::choose( KivioFactory::global(), f,
                                      dlgtype, "kivio_template", parentWidget );
 
   if( ret == KoTemplateChooseDia::File ) {
-    KURL url(urlString);
+    KURL url(f);
     bool ok = openURL(url);
+    m_docOpened = ok; // Used to for a hack that make kivio not crash if you cancel startup dialog.
     return ok;
   } else if ( ret == KoTemplateChooseDia::Template ) {
-    QFileInfo fileInfo(urlString);
+    QFileInfo fileInfo( f );
     QString fileName( fileInfo.dirPath(true) + "/" + fileInfo.baseName() + ".kft" );
     resetURL();
     bool ok = loadNativeFormat( fileName );
     if ( !ok )
         showLoadingErrorDialog();
     setEmpty();
+    m_docOpened = ok; // Used to for a hack that make kivio not crash if you cancel startup dialog.
     return ok;
   } else if ( ret == KoTemplateChooseDia::Empty ) {
     setEmpty();
+    m_docOpened = true; // Used to for a hack that make kivio not crash if you cancel startup dialog.
     return true;
   } else {
     return false;
   }
 }
-
-void KivioDoc::addShell( KoMainWindow *shell )
-{
-  connect( shell, SIGNAL( documentSaved() ), m_commandHistory, SLOT( documentSaved() ) );
-  KoDocument::addShell( shell );
-}
-
 
 KoView* KivioDoc::createViewInstance( QWidget* parent, const char* name )
 {
@@ -243,7 +237,7 @@ QDomDocument KivioDoc::saveXML()
   kivio.setAttribute( "editor", "Kivio" );
   kivio.setAttribute( "mime", MIME_TYPE );
 
-  kivio.setAttribute( "units", unitName() );
+  kivio.setAttribute( "units", KoUnit::unitName(m_units) );
   gridData.save(kivio,"grid");
 
   QDomElement viewItemsElement = doc.createElement("ViewItems");
@@ -366,7 +360,7 @@ bool KivioDoc::saveOasis(KoStore* store, KoXmlWriter* manifestWriter)
     settingsWriter->startElement("config:config-item-set");
     settingsWriter->addAttribute("config:name", "view-settings");
 
-    KoUnit::saveOasis( settingsWriter, unit() );
+    KoUnit::saveOasis( settingsWriter, units() );
     saveOasisSettings( *settingsWriter );
 
     settingsWriter->endElement(); // config:config-item-set
@@ -396,29 +390,20 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, c
   m_bLoading = true;
 
   QDomElement contents = doc.documentElement();
-  QDomElement realBody(KoDom::namedItemNS( contents, KoXmlNS::office, "body"));
+  QDomElement body(KoDom::namedItemNS( contents, KoXmlNS::office, "body"));
 
-  if(realBody.isNull()) {
+  if(body.isNull()) {
     kdDebug(43000) << "No office:body found!" << endl;
     setErrorMessage(i18n("Invalid OASIS document. No office:body tag found."));
     m_bLoading = false;
     return false;
   }
 
-  QDomElement body = KoDom::namedItemNS( realBody, KoXmlNS::office, "drawing");
+  body = KoDom::namedItemNS( body, KoXmlNS::office, "drawing");
 
   if(body.isNull()) {
     kdDebug(43000) << "No office:drawing found!" << endl;
-    QDomElement childElem;
-    QString localName;
-    forEachElement( childElem, realBody ) {
-        localName = childElem.localName();
-    }
-    if ( localName.isEmpty() )
-        setErrorMessage( i18n( "Invalid OASIS OpenDocument file. No tag found inside office:body." ) );
-    else
-        setErrorMessage( i18n( "This document is not a drawing, but %1. Please try opening it with the appropriate application." ).arg( KoDocument::tagNameToDocumentType( localName ) ) );
-
+    setErrorMessage(i18n("Invalid OASIS document. No office:drawing tag found."));
     m_bLoading = false;
     return false;
   }
@@ -459,7 +444,7 @@ void KivioDoc::loadOasisSettings( const QDomDocument&settingsDoc )
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     if ( !viewSettings.isNull() )
     {
-        setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
+        setUnits(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
         //todo add other config here.
     }
 }
@@ -524,9 +509,9 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
   int u = us.toInt(&isInt);
 
   if(!isInt) {
-    setUnit(KoUnit::unit(us));
+    setUnits(KoUnit::unit(us));
   } else {
-    setUnit(Kivio::convToKoUnit(u));
+    setUnits(Kivio::convToKoUnit(u));
   }
 
   if(kivio.hasAttribute("gridIsShow")) {
@@ -587,7 +572,7 @@ bool KivioDoc::loadStencilSpawnerSet( const QString &id )
             {
 
               // Load the spawner set with  rootDir + "/" + fi.fileName()
-              openShapeCollection(innerFI->absFilePath());
+              addSpawnerSetDuringLoad( innerFI->absFilePath() );
               return true;
             }
           }
@@ -651,6 +636,8 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
     return;
 
   KoZoomHandler zoom;
+  zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
+    KoGlobal::dpiY());
   KoRect r = page->getRectForAllStencils();
 
   float zw = (float) rect.width() / (float)zoom.zoomItX(r.width());
@@ -660,13 +647,13 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
 
   zoom.setZoomAndResolution(qRound(z * 100), KoGlobal::dpiX(),
     KoGlobal::dpiY());
-  int x = zoom.zoomItX(r.x());
-  int y = zoom.zoomItY(r.y());
-  painter.translate(-x, -y);
-  paintContent(painter, rect, transparent, page, QPoint(x, y), &zoom, false);
+  KivioScreenPainter ksp(&painter);
+  ksp.painter()->translate( - zoom.zoomItX(r.x()), - zoom.zoomItY(r.y()) );
+  paintContent(ksp,rect,transparent,page, QPoint(zoom.zoomItX(r.x()), zoom.zoomItY(r.y())), &zoom, false);
+  ksp.setPainter(0L); // Important! Don't delete the QPainter!!!
 }
 
-void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint p0, KoZoomHandler* zoom, bool drawHandles )
+void KivioDoc::paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint p0, KoZoomHandler* zoom, bool drawHandles )
 {
   if ( isLoading() )
     return;
@@ -676,7 +663,7 @@ void KivioDoc::paintContent( QPainter& painter, const QRect& rect, bool transpar
 
 void KivioDoc::printContent( KPrinter &prn )
 {
-  QPainter p;
+  KivioScreenPainter p;
   QValueList<int> pages = prn.pageList();
   KivioPage *pPage;
 
@@ -687,10 +674,10 @@ void KivioDoc::printContent( KPrinter &prn )
   int dpiX = doZoom ? 300 : KoGlobal::dpiX();
   int dpiY = doZoom ? 300 : KoGlobal::dpiY();
 
-  p.begin(&prn);
+  p.start(&prn);
 
   QPaintDeviceMetrics metrics( &prn );
-  p.scale( (double)metrics.logicalDpiX() / (double)dpiX,
+  p.painter()->scale( (double)metrics.logicalDpiX() / (double)dpiX,
     (double)metrics.logicalDpiY() / (double)dpiY );
 
   QValueList<int>::iterator it;
@@ -704,7 +691,7 @@ void KivioDoc::printContent( KPrinter &prn )
     }
   }
 
-  p.end();
+  p.stop();
 }
 
 /* TODO:
@@ -737,15 +724,17 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
 
   kdDebug(43000) << "KivioDoc::exportCurPage() to " << fileName << "\n";
 
+  KivioScreenPainter p;
+
   buffer.fill(Qt::white);
 
-  QPainter p( &buffer );
-  p.translate( dlg->border(), dlg->border() );
+  p.start( &buffer );
+  p.setTranslation( dlg->border(), dlg->border() );
 
   if( dlg->fullPage()==true )
   {
     if(dlg->crop()) {
-      p.translate(-zoom.zoomItX(pPage->getRectForAllStencils().x()),
+      p.setTranslation(-zoom.zoomItX(pPage->getRectForAllStencils().x()),
         -zoom.zoomItY(pPage->getRectForAllStencils().y()));
     }
 
@@ -754,14 +743,14 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
   else
   {
     if(dlg->crop()) {
-      p.translate(-zoom.zoomItX(pPage->getRectForAllSelectedStencils().x()),
+      p.setTranslation(-zoom.zoomItX(pPage->getRectForAllSelectedStencils().x()),
         -zoom.zoomItY(pPage->getRectForAllSelectedStencils().y()));
     }
 
     pPage->printSelected(p);
   }
 
-  p.end();
+  p.stop();
 
 
   QFileInfo finfo(fileName);
@@ -773,33 +762,82 @@ bool KivioDoc::exportPage(KivioPage *pPage,const QString &fileName, ExportPageDi
 // TODO: Fix for id system
 bool KivioDoc::setIsAlreadyLoaded( QString dirName, QString id )
 {
-//     KivioStencilSpawnerSet *pSet = m_pLstSpawnerSets->first();
-//     while(pSet)
-//     {
-//         if( pSet->dir() == dirName || pSet->id() == id )
-//         {
-//             return true;
-//         }
-//
-//         pSet = m_pLstSpawnerSets->next();
-//     }
+    KivioStencilSpawnerSet *pSet = m_pLstSpawnerSets->first();
+    while(pSet)
+    {
+        if( pSet->dir() == dirName || pSet->id() == id )
+        {
+            return true;
+        }
+
+        pSet = m_pLstSpawnerSets->next();
+    }
 
     return false;
 }
 
-void KivioDoc::openShapeCollection(const QString& path)
+void KivioDoc::addSpawnerSet( const QString &dirName )
 {
-  Kivio::SmlObjectLoader loader;
-  Kivio::ShapeCollection* collection = loader.loadShapeCollection(path);
+  QString id = KivioStencilSpawnerSet::readId( dirName );
 
-  if(!m_bLoading) {
-    emit newShapeCollectionOpened(collection);
+  if( setIsAlreadyLoaded( dirName, id ) )
+  {
+      kdDebug(43000) << "KivioDoc::addSpawnerSet() - Cannot load duplicate stencil sets" << endl;
+      return;
   }
+
+
+  KivioStencilSpawnerSet* set = new KivioStencilSpawnerSet();
+
+  if( set->loadDir(dirName)==false )
+  {
+      kdDebug(43000) << "KivioDoc::addSpawnerSet() - Error loading dir set" << endl;
+      delete set;
+      return;
+  }
+
+  // Queue set for loading stencils
+  m_stencilSetLoadQueue.append(set);
+
+  if(!m_loadTimer) {
+    m_loadTimer = new QTimer(this);
+    connect(m_loadTimer, SIGNAL(timeout()), this, SLOT(loadStencil()));
+  }
+
+  if(!m_loadTimer->isActive()) {
+    emit initProgress();
+    m_loadTimer->start(0, false);
+  }
+}
+
+void KivioDoc::addSpawnerSetDuringLoad( const QString &dirName )
+{
+  KivioStencilSpawnerSet *set;
+
+  set = new KivioStencilSpawnerSet();
+  if( set->loadDir(dirName)==false )
+  {
+    kdDebug(43000) << "KivioDoc::addSpawnerSetDuringLoad() - Error loading dir set" << endl;
+    delete set;
+    return;
+  }
+
+  QStringList::iterator it;
+  QStringList files = set->files();
+
+  for(it = files.begin(); it != files.end(); ++it) {
+    QString fileName = set->dir() + "/" + (*it);
+    set->loadFile(fileName);
+  }
+
+  m_pLstSpawnerSets->append(set);
 }
 
 KivioDoc::~KivioDoc()
 {
-  Kivio::Config::self()->writeConfig();
+  if(m_docOpened) {
+    saveConfig();
+  }
 
   // ***MUST*** Delete the pages first because they may
   // contain plugins which will be unloaded soon.  The stencils which are
@@ -812,22 +850,17 @@ KivioDoc::~KivioDoc()
   delete m_pLstSpawnerSets;
   m_pLstSpawnerSets = 0;
 
-  QValueList<Kivio::ShapeCollection*>::iterator it = m_shapeCollectionList.begin();
-  QValueList<Kivio::ShapeCollection*>::iterator itEnd = m_shapeCollectionList.end();
-  Kivio::ShapeCollection* collection;
-
-  while(it != itEnd) {
-    collection = *it;
-    it = m_shapeCollectionList.remove(it);
-    delete collection;
-  }
-
   s_docs->removeRef(this);
+}
+
+void KivioDoc::saveConfig()
+{
+  Kivio::Config::self()->writeConfig();
 }
 
 void KivioDoc::initConfig()
 {
-  setUnit( KoUnit::unit(Kivio::Config::unit()) );
+  m_units = KoUnit::unit(Kivio::Config::unit());
   m_font = KoGlobal::defaultFont();
   m_pageLayout = Kivio::Config::defaultPageLayout();
 }
@@ -837,36 +870,45 @@ bool KivioDoc::removeSpawnerSet( KivioStencilSpawnerSet *pSet )
     return m_pLstSpawnerSets->removeRef( pSet );
 }
 
-void KivioDoc::closeShapeCollection(Kivio::ShapeCollection* collection)
-{
-  if(!collection) {
-    return;
-  }
-
-  m_shapeCollectionList.remove(m_shapeCollectionList.find(collection));
-  delete collection;
-  collection = 0;
-}
-
 /**
  * Iterates through all spawner objects in the stencil set checking if
  * they exist in any of the pages.
  */
 void KivioDoc::slotDeleteStencilSet( DragBarButton *pBtn, QWidget *w, KivioStackBar *pBar )
 {
-  //FIXME Port to Object code
-/*    // Iterate through all spawners in the set checking if they exist in any of
+    // Iterate through all spawners in the set checking if they exist in any of
     // the pages
     KivioIconView *pIconView = (KivioIconView *)w;
     KivioStencilSpawnerSet *pSet = pIconView->spawnerSet();
 
-    // Destroying the IconView does not destroy the spawner set, so we remove
-    // it here
-    closeShapeCollection();
-    removeSpawnerSet( pIconView->spawnerSet() );
+    // Start the iteration
+    KivioStencilSpawner *pSpawner = pSet->spawners()->first();
+    while( pSpawner )
+    {
+        // Check for a spawner.  If there is one, the set cannot be deleted
+        if( checkStencilsForSpawner( pSpawner )==true )
+        {
+            KMessageBox::error(NULL, i18n("Cannot delete stencil set because there are still stencils in use."),
+                i18n("Cannot Delete Stencil Set"));
+            return;
+        }
 
-    // And emit the signal to kill the set (page & button)
-    emit sig_deleteStencilSet( pBtn, w, pBar );*/
+        pSpawner = pSet->spawners()->next();
+    }
+
+
+
+    // If we made it this far, it's ok to delete this stencil set, so do it
+//    if( KMessageBox::questionYesNo(NULL, i18n("Are you sure you want to delete this stencil set?"),
+//        i18n("Delete Stencil Set?"))==KMessageBox::Yes )
+    {
+        // Destroying the IconView does not destroy the spawner set, so we remove
+        // it here
+        removeSpawnerSet( pIconView->spawnerSet() );
+
+        // And emit the signal to kill the set (page & button)
+        emit sig_deleteStencilSet( pBtn, w, pBar );
+    }
 }
 
 /**
@@ -874,38 +916,37 @@ void KivioDoc::slotDeleteStencilSet( DragBarButton *pBtn, QWidget *w, KivioStack
  */
 bool KivioDoc::checkStencilsForSpawner( KivioStencilSpawner *pSpawner )
 {
-  //FIXME Port to Object code
-//     KivioPage *pPage;
-//     KivioLayer *pLayer;
-//     KivioStencil *pStencil;
-//
-//     // Iterate across all the pages
-//     pPage = m_pMap->firstPage();
-//     while( pPage )
-//     {
-//         pLayer = pPage->layers()->first();
-//         while( pLayer )
-//         {
-//             pStencil = pLayer->objectList()->first();
-//             while( pStencil )
-//             {
-//                 // If this is a group stencil, then we must check all child stencils
-//                 if( pStencil->groupList() && pStencil->groupList()->count() > 0 )
-//                 {
-//                     if( checkGroupForSpawner( pStencil, pSpawner )==true )
-//                         return true;
-//                 }
-//                 else if( pStencil->spawner() == pSpawner )
-//                     return true;
-//
-//                 pStencil = pLayer->objectList()->next();
-//             }
-//
-//             pLayer = pPage->layers()->next();
-//         }
-//
-//         pPage = m_pMap->nextPage();
-//     }
+    KivioPage *pPage;
+    KivioLayer *pLayer;
+    KivioStencil *pStencil;
+
+    // Iterate across all the pages
+    pPage = m_pMap->firstPage();
+    while( pPage )
+    {
+        pLayer = pPage->layers()->first();
+        while( pLayer )
+        {
+            pStencil = pLayer->stencilList()->first();
+            while( pStencil )
+            {
+                // If this is a group stencil, then we must check all child stencils
+                if( pStencil->groupList() && pStencil->groupList()->count() > 0 )
+                {
+                    if( checkGroupForSpawner( pStencil, pSpawner )==true )
+                        return true;
+                }
+                else if( pStencil->spawner() == pSpawner )
+                    return true;
+
+                pStencil = pLayer->stencilList()->next();
+            }
+
+            pLayer = pPage->layers()->next();
+        }
+
+        pPage = m_pMap->nextPage();
+    }
 
     return false;
 }
@@ -938,6 +979,27 @@ void KivioDoc::slotSelectionChanged()
     emit sig_selectionChanged();
 }
 
+KivioStencilSpawner* KivioDoc::findStencilSpawner( const QString& setId, const QString& stencilId )
+{
+    KivioStencilSpawnerSet *pSpawnerSet = m_pLstSpawnerSets->first();
+    while( pSpawnerSet )
+    {
+        if( pSpawnerSet->id() == setId && pSpawnerSet->find(stencilId) )
+        {
+            return pSpawnerSet->find(stencilId);
+	    // return pSpawnerSet->find(name)
+        }
+        pSpawnerSet = m_pLstSpawnerSets->next();
+    }
+
+    if( m_pInternalSet->id() == setId && m_pInternalSet->find(stencilId) )
+    {
+        return m_pInternalSet->find(stencilId);
+    }
+
+    return NULL;
+}
+
 KivioStencilSpawner* KivioDoc::findInternalStencilSpawner( const QString& stencilId )
 {
     return m_pInternalSet->find(stencilId);
@@ -946,6 +1008,15 @@ KivioStencilSpawner* KivioDoc::findInternalStencilSpawner( const QString& stenci
 void KivioDoc::addInternalStencilSpawner(KivioStencilSpawner* spawner)
 {
   m_pInternalSet->addSpawner(spawner);
+}
+
+void KivioDoc::setUnits(KoUnit::Unit unit)
+{
+  if (m_units == unit)
+    return;
+
+  m_units = unit;
+  emit unitsChanged(unit);
 }
 
 void KivioDoc::updateView(KivioPage* page)

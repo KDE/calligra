@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "kiviooptionsdialog.h"
@@ -94,7 +94,7 @@ KivioOptionsDialog::KivioOptionsDialog(KivioView* parent, const char* name)
   initPage();
   initGrid();
   initGuides();
-  unitChanged(parent->doc()->unit());
+  unitChanged(parent->doc()->units());
 }
 
 void KivioOptionsDialog::initPage()
@@ -160,7 +160,7 @@ void KivioOptionsDialog::initGrid()
   QFrame* page = addPage(i18n("Grid"), i18n("Grid Settings"), BarIcon( "grid", KIcon::SizeMedium ));
   m_gridIndex = pageIndex(page);
 
-  KoUnit::Unit unit = static_cast<KivioView*>(parent())->doc()->unit();
+  KoUnit::Unit unit = static_cast<KivioView*>(parent())->doc()->units();
   KivioGridData d = static_cast<KivioView*>(parent())->doc()->grid();
   double pgw = m_layout.ptWidth;
   double pgh = m_layout.ptHeight;
@@ -244,7 +244,7 @@ void KivioOptionsDialog::initGuides()
   orientBGrp->insert(m_orientHorizRBtn);
   orientBGrp->insert(m_orientVertRBtn);
   QLabel* posLbl = new QLabel(i18n("&Position:"), m_propertiesGrp);
-  KoUnit::Unit unit = view->doc()->unit();
+  KoUnit::Unit unit = view->doc()->units();
   m_posUSpin = new KoUnitDoubleSpinBox(m_propertiesGrp, 0.0, 0.0, 0.0, unit);
   posLbl->setBuddy(m_posUSpin);
 
@@ -308,8 +308,8 @@ void KivioOptionsDialog::initGuides()
 void KivioOptionsDialog::applyPage()
 {
   KivioView* view = static_cast<KivioView*>(parent());
-  view->doc()->setUnit(static_cast<KoUnit::Unit>(m_unitCombo->currentItem()));
-  Kivio::Config::setUnit(KoUnit::unitName(view->doc()->unit()));
+  view->doc()->setUnits(static_cast<KoUnit::Unit>(m_unitCombo->currentItem()));
+  Kivio::Config::setUnit(KoUnit::unitName(view->doc()->units()));
   Kivio::Config::setDefaultPageLayout(m_layout);
   Kivio::Config::setFont(m_font);
   view->togglePageMargins(m_marginsChBox->isChecked());
@@ -365,10 +365,11 @@ void KivioOptionsDialog::defaultPage()
 
 void KivioOptionsDialog::defaultGrid()
 {
-  m_spaceHorizUSpin->changeValue(Kivio::Config::gridXSpacing());
-  m_spaceVertUSpin->changeValue(Kivio::Config::gridYSpacing());
-  m_snapHorizUSpin->changeValue(Kivio::Config::gridXSnap());
-  m_snapVertUSpin->changeValue(Kivio::Config::gridYSnap());
+  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
+  m_spaceHorizUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridXSpacing(), unit));
+  m_spaceVertUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridYSpacing(), unit));
+  m_snapHorizUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridXSnap(), unit));
+  m_snapVertUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridYSnap(), unit));
   m_gridChBox->setChecked(Kivio::Config::showGrid());
   m_snapChBox->setChecked(Kivio::Config::snapGrid());
   m_gridColorBtn->setColor(Kivio::Config::gridColor());
@@ -492,7 +493,7 @@ void KivioOptionsDialog::guideSelectionChanged(QListViewItem* li)
   }
 
   m_posUSpin->setMaxValue(max);
-  m_posUSpin->changeValue(data->position());
+  m_posUSpin->changeValue(KoUnit::toUserValue(data->position(), unit));
 }
 
 void KivioOptionsDialog::changePos(double p)

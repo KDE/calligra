@@ -13,8 +13,8 @@
 
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
+   Boston, MA 02111-1307, USA.
 */
 
 #include "KIvioViewIface.h"
@@ -140,9 +140,29 @@ void KIvioViewIface::toggleSnapGuides(bool b)
     view->toggleSnapGuides(b);
 }
 
+void KIvioViewIface::toggleStencilGeometry(bool b)
+{
+    view->toggleStencilGeometry(b);
+}
+
 void KIvioViewIface::toggleViewManager(bool b)
 {
     view->toggleViewManager(b);
+}
+
+void KIvioViewIface::toggleLayersPanel(bool b)
+{
+    view->toggleLayersPanel(b);
+}
+
+void KIvioViewIface::toggleBirdEyePanel(bool b)
+{
+    view->toggleBirdEyePanel(b);
+}
+
+void KIvioViewIface::toggleProtectionPanel(bool b)
+{
+    view->toggleProtectionPanel(b);
 }
 
 void KIvioViewIface::groupStencils()

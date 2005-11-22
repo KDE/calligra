@@ -7,7 +7,6 @@ INCLUDES = -I$(srcdir)/ui\
 	-I$(srcdir)/kiviosdk\
 	-I$(srcdir)/tools\
 	$(KOFFICE_INCLUDES)\
-	$(KOPALETTE_INCLUDES)\
 	$(KOTEXT_INCLUDES)\
 	-I$(top_srcdir)/lib/kformula\
 	$(all_includes)
@@ -22,19 +21,11 @@ libkiviocommon_la_LIBADD = \
 	$(top_builddir)/kivio/kiviopart/kiviosdk/libkiviosdk.la\
 	$(top_builddir)/kivio/kiviopart/config/libkivioconfig.la \
 	$(top_builddir)/kivio/kiviopart/ui/libui.la \
-	$(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOPALETTE) $(LIB_KOTEXT) $(LIBPYTHON) $(PYTHONLIB)
+	$(LIB_KOFFICEUI) $(LIB_KOPAINTER) $(LIB_KOTEXT) $(LIBPYTHON) $(PYTHONLIB)
 
 libkiviocommon_la_METASOURCES = AUTO
 
-libkiviocommon_la_SOURCES = kivio_canvas.cpp kivio_doc.cpp kivio_factory.cpp \
-	kivio_view.cpp kivio_map.cpp kivio_page.cpp kivio_dlg_pageshow.cpp \
-	kivio_zoomaction.cpp kivio_icon_view.cpp kivio_intra_stencil_data.cpp stencilbarbutton.cpp \
-	stencilbardockmanager.cpp kivio_grid_data.cpp kivio_guidelines.cpp \
-	kivio_stencil_geometry_panel.cpp KIvioViewIface.skel KIvioViewIface.cc KIvioDocIface.skel \
-	KIvioDocIface.cc KIvioMapIface.skel KIvioMapIface.cc KIvioPageIface.skel \
-	KIvioPageIface.cc kivio_command.cc KIvioLayerIface.skel KIvioLayerIface.cc \
-	kivioglobal.cpp kiviostencilsetaction.cpp kivioarrowheadaction.cpp kivio_stackbar.cpp \
-	KIvioStencilIface.skel KIvioStencilIface.cc kiviodragobject.cpp kiviostencilsetinstaller.cpp
+libkiviocommon_la_SOURCES = kivio_canvas.cpp kivio_doc.cpp kivio_factory.cpp kivio_view.cpp kivio_map.cpp kivio_page.cpp kivio_dlg_pageshow.cpp kivio_zoomaction.cpp kivio_icon_view.cpp kivio_spawner_drag.cpp kivio_intra_stencil_data.cpp kivio_stackbar.cpp stencilbarbutton.cpp stencilbardockmanager.cpp kivio_grid_data.cpp kivio_guidelines.cpp kivio_stencil_geometry_panel.cpp KIvioViewIface.skel KIvioViewIface.cc KIvioDocIface.skel KIvioDocIface.cc KIvioMapIface.skel KIvioMapIface.cc KIvioPageIface.skel KIvioPageIface.cc kivio_command.cc KIvioLayerIface.skel KIvioLayerIface.cc kivioglobal.cpp kiviostencilsetaction.cpp kivioarrowheadaction.cpp KIvioStencilIface.skel KIvioStencilIface.cc kiviodragobject.cpp kiviostencilsetinstaller.cpp
 
 kde_module_LTLIBRARIES = libkiviopart.la
 libkiviopart_la_LDFLAGS = -avoid-version $(all_libraries) -module
