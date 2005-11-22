@@ -34,9 +34,26 @@ typedef QPtrListIterator<VObject> VObjectListIterator;
 class KARBONBASE_EXPORT VGroup : public VObject
 {
 public:
+	/**
+	 * Constructs a new group object that is child of parent and has the given state.
+	 *
+	 * The object's fill and stroke are created here.
+	 *
+	 * @param parent the new object's parent
+	 * @param state the new object's state
+	 */
 	VGroup( VObject* parent, VState state = normal );
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param group the group to copy properties from
+	 */
 	VGroup( const VGroup& group );
 
+	/** 
+	 * Destroys the group and all of the child objects.
+	 */
 	virtual ~VGroup();
 
 	virtual void draw( VPainter* painter, const KoRect* rect = 0L ) const;
@@ -51,26 +68,32 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
 	virtual void load( const QDomElement& element );
-	virtual bool loadOasis( const QDomElement &lement, KoOasisContext &context );
+	virtual bool loadOasis( const QDomElement &element, KoOasisContext &context );
 
 	virtual VGroup* clone() const;
 
 	virtual void accept( VVisitor& visitor );
 
-
 	/**
-	 * Removes the reference to the object, not the object itself.
+	 * Removes the reference to child object, not the object itself.
+	 *
+	 * @param object the child object to remove
 	 */
 	void take( const VObject& object );
 
 	/**
-	 * Appends a new object.
+	 * Appends a new child object.
+	 *
+	 * @param object the object to append
 	 */
 	void append( VObject* object );
 
 	/**
 	 * This function is important for undo/redo. It inserts newObject in front
 	 * of oldObject.
+	 *
+	 * @param newObject the new object to insert
+	 * @param oldObject the old object the new object is inserted in front of
 	 */
 	virtual void insertInfrontOf( VObject* newObject, VObject* oldObject );
 
@@ -81,11 +104,13 @@ public:
 
 	/**
 	 * Read only access to the grouped objects.
+	 *
+	 * @return reference to the list of grouped objects
 	 */
 	const VObjectList& objects() const { return m_objects; }
 
 protected:
-	VObjectList m_objects;
+	VObjectList m_objects; /**< the list of grouped objects */
 };
 
 #endif

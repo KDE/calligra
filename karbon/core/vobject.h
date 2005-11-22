@@ -162,14 +162,14 @@ public:
 	virtual void setState( const VState state ) { m_state = state; }
 
 	/**
-	 * Gets the objects actual stroke.
+	 * Gets the object's actual stroke.
 	 *
 	 * @return pointer to the object's stroke
 	 */
 	virtual VStroke* stroke() const { return m_stroke; }
 
 	/**
-	 * Gets the objects actual fill.
+	 * Gets the object's actual fill.
 	 *
 	 * @return pointer to the object's fill
 	 */
@@ -197,7 +197,7 @@ public:
 	virtual void save( QDomElement& element ) const;
 
 	/**
-	 * Save this objects's state to OpenDocument.
+	 * Save this object's state to OpenDocument.
 	 *
 	 * @param store FIXME
 	 * @param docWriter FIXME
@@ -208,6 +208,8 @@ public:
 	/**
 	 * Load this object's state from xml and initialize
 	 * this object accordingly.
+	 *
+	 * @param element the DOM element from which the attributes are read
 	 */
 	virtual void load( const QDomElement& element );
 
@@ -274,7 +276,7 @@ protected:
 	 * Adds a new given style to the specified OASIS context
 	 *
 	 * @param style FIXME
-	 * @param conext FIXME
+	 * @param context FIXME
 	 */
 	void addStyles( const QDomElement* style, KoOasisContext & context );
 
@@ -286,7 +288,7 @@ protected:
 	VStroke* m_stroke; /**< the object's stroke */
 	VFill* m_fill; /**< the object's fill */
 
-	DCOPObject *m_dcop; /**< the objects DCOP object */
+	DCOPObject *m_dcop; /**< the object's DCOP object */
 
 private:
 	VObject* m_parent;
