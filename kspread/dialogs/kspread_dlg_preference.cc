@@ -435,7 +435,7 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
                        KoUnit::toUserValue( 10.0, _view->doc()->unit()) );
   valIndent->setRange( 0.0, 100.0, 10.0 );
   valIndent->setValue ( KoUnit::toUserValue( _indent, _view->doc()->unit() ) );
-  QWhatsThis::add(valIndent, i18n( "Lets you define the amount of indenting used by the Increase indent option in the Format  menu." ) );
+  QWhatsThis::add(valIndent, i18n( "Lets you define the amount of indenting used by the Increase indent option in the Format  menu.\nThe unit taken here is the one you fixe in the Configure KSpread... dialog, in the Page Layout tab in the Default page units setting." ) );
   valIndent->setLabel(i18n("&Value of indent:"));
 
   label=new QLabel(i18n("&Press enter to move selection to:"), tmpQGroupBox);
