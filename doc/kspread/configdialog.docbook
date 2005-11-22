@@ -199,7 +199,8 @@ range of options in the drop down selection box.
 <listitem><para>Lets you define the amount of indenting used by the 
 <guimenuitem>Increase indent</guimenuitem> option in the <guimenu>Format
 </guimenu> menu.
-</para></listitem>
+</para>
+<para>The unit taken here is the one you fixe in the Configure &kspread;... dialog, in the Page Layout tab in the <guilabel>Default page units</guilabel> setting. </para></listitem>
 </varlistentry>
 
 <varlistentry>

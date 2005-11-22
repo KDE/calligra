@@ -216,6 +216,20 @@ negative values are shown in red.
 <para>The <guilabel>Font</guilabel> page lets you select the font style, size 
 and color, including some additional options like underlined or striked out text.
 The lower part of the page gives a preview of the selected text format.</para>
+<!--anma-->
+<variablelist>
+<varlistentry>
+            <term><guilabel>Requested Font</guilabel></term>
+            <listitem><para>Allows you to choose a new font.</para>
+        </listitem>
+</varlistentry>
+<varlistentry>
+    <term><guilabel>Actual Font</guilabel></term>
+    <listitem><para>Indicates the family, size, weight and style of the currently used font and previews it in the field on the right.</para>
+    </listitem>
+</varlistentry>
+</variablelist>
+<!--end of anma-->
 </sect2>
 
 <sect2 id="formatposition">
