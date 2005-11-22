@@ -28,7 +28,7 @@
 
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO( pqxxSqlDriver, pqxxsql );
+KEXIDB_DRIVER_INFO( pqxxSqlDriver, pqxxsql )
 
 //==================================================================================
 //

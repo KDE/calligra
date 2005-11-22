@@ -37,7 +37,7 @@
 
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO( ODBCDriver, odbc );
+KEXIDB_DRIVER_INFO( ODBCDriver, odbc )
 
 ODBCDriver::ODBCDriver( QObject *parent, const char *name, const QStringList &args )
 	: Driver( parent, name, args )

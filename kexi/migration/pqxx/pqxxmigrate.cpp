@@ -41,7 +41,7 @@ to compile, let alone work.  This is meant as an example of
 what the system might be and is a work in progress
 */
 
-KEXIMIGRATE_DRIVER_INFO( PqxxMigrate, pqxx );
+KEXIMIGRATE_DRIVER_INFO( PqxxMigrate, pqxx )
 
 //==================================================================================
 //Constructor

@@ -40,7 +40,7 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 
 using namespace KexiDB;
 
-KEXIDB_DRIVER_INFO( MySqlDriver, mysql );
+KEXIDB_DRIVER_INFO( MySqlDriver, mysql )
 
 /* TODO: Implement buffered/unbuffered, rather than buffer everything.
    Each MYSQL connection can only handle at most one unbuffered cursor,

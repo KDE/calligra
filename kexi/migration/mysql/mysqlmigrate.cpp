@@ -39,7 +39,7 @@ using namespace KexiMigration;
 
 /* This is the implementation for the MySQL specific import routines. */
 
-KEXIMIGRATE_DRIVER_INFO( MySQLMigrate, mysql );
+KEXIMIGRATE_DRIVER_INFO( MySQLMigrate, mysql )
 
 /* ************************************************************************** */
 //! Constructor
