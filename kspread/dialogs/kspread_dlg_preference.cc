@@ -401,13 +401,14 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   QGroupBox* tmpQGroupBox = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
 
   config = Factory::global()->config();
-  double _indent = 10.0;
+  indentUnit = _view->doc()->unit();
+  double _indent = KoUnit::toUserValue( 10.0, indentUnit);
   bool m_bMsgError=false;
   bool m_bCommentIndicator=true;
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
-        _indent = (double)config->readNumEntry( "Indent" , (int)_indent ) ;
+        _indent = config->readDoubleNumEntry( "Indent" , _indent ) ;
         m_bMsgError=config->readBoolEntry( "Msg error" ,false) ;
 	m_bCommentIndicator=config->readBoolEntry( "Comment Indicator",true);
         }
@@ -430,13 +431,15 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
 
 //   valIndent = new KDoubleNumInput( _indent, tmpQGroupBox , 10.0 );
   valIndent = new KDoubleNumInput( tmpQGroupBox );
-  valIndent->setRange( KoUnit::toUserValue( 0.0, _view->doc()->unit() ),
-                       KoUnit::toUserValue( 400.0, _view->doc()->unit() ),
-                       KoUnit::toUserValue( 10.0, _view->doc()->unit()) );
-  valIndent->setRange( 0.0, 100.0, 10.0 );
-  valIndent->setValue ( KoUnit::toUserValue( _indent, _view->doc()->unit() ) );
-  QWhatsThis::add(valIndent, i18n( "Lets you define the amount of indenting used by the Increase indent option in the Format  menu.\nThe unit taken here is the one you fixe in the Configure KSpread... dialog, in the Page Layout tab in the Default page units setting." ) );
-  valIndent->setLabel(i18n("&Value of indent:"));
+  valIndent->setRange( KoUnit::toUserValue( 0.0, indentUnit ),
+                       KoUnit::toUserValue( 400.0, indentUnit ),
+                       KoUnit::toUserValue( 10.0, indentUnit) );
+//   valIndent->setRange( 0.0, 100.0, 10.0 );
+  valIndent->setValue ( KoUnit::toUserValue( _indent, indentUnit ) );
+  QWhatsThis::add(valIndent, i18n( "Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu." ) );
+  valIndent->setLabel(i18n("&Value of indent (%1):").arg(
+      KoUnit::unitName(indentUnit)));
+  
 
   label=new QLabel(i18n("&Press enter to move selection to:"), tmpQGroupBox);
   typeOfMove=new QComboBox( tmpQGroupBox);
@@ -566,7 +569,7 @@ switch( m_pView->doc()->getTypeOfCalc())
 
 void miscParameters::slotDefault()
 {
-  valIndent->setValue( 10.0 );
+  valIndent->setValue( KoUnit::toUserValue( 10.0, indentUnit) );
   typeCompletion->setCurrentItem(3);
   typeOfMove->setCurrentItem(0);
   msgError->setChecked(false);
@@ -577,6 +580,7 @@ void miscParameters::slotDefault()
 
 void miscParameters::apply()
 {
+    kdDebug() << "Applying misc preferences" << endl;
     config->setGroup( "Parameters" );
     KGlobalSettings::Completion tmpCompletion=KGlobalSettings::CompletionNone;
 
@@ -646,7 +650,7 @@ void miscParameters::apply()
         case 3:
             tmpMethodCalc=Average;
             break;
-	case 4:
+        case 4:
             tmpMethodCalc=Count;
             break;
         case 5:
@@ -661,15 +665,18 @@ void miscParameters::apply()
     {
         m_pView->doc()->setTypeOfCalc(tmpMethodCalc);
         config->writeEntry( "Method of Calc", (int)tmpMethodCalc);
-	m_pView->resultOfCalc();
+        m_pView->resultOfCalc();
         m_pView->initCalcMenu();
     }
 
     double val = valIndent->value();
     if( val != m_pView->doc()->getIndentValue() )
     {
+        KoUnit::Unit oldUnit = m_pView->doc()->unit();
+        m_pView->doc()->setUnit(indentUnit);
         m_pView->doc()->setIndentValue( val );
-        config->writeEntry( "Indent", val );
+        m_pView->doc()->setUnit(oldUnit);
+        config->writeEntry( "Indent", KoUnit::fromUserValue( val, indentUnit ) );
     }
 
     bool active=msgError->isChecked();
@@ -788,6 +795,7 @@ configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
 
   defaultOrientationPage=new QComboBox( tmpQGroupBox);
   label->setBuddy(defaultOrientationPage);
+  
   QStringList listType;
   listType+=i18n( "Portrait" );
   listType+=i18n( "Landscape" );
@@ -801,17 +809,8 @@ configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
   grid1->addWidget(label,4,0);
   defaultUnit=new QComboBox( tmpQGroupBox);
   label->setBuddy(defaultUnit);
-  listType.clear();
-  listType=KoUnit::unitDescription( KoUnit::U_MM );
-  listType+=KoUnit::unitDescription( KoUnit::U_PT );
-  listType+=KoUnit::unitDescription( KoUnit::U_INCH );
-  listType+=KoUnit::unitDescription( KoUnit::U_CM );
-  listType+=KoUnit::unitDescription( KoUnit::U_PI );
-  listType+=KoUnit::unitDescription( KoUnit::U_CC );
-  listType+=KoUnit::unitDescription( KoUnit::U_DD );
-  listType+=KoUnit::unitDescription( KoUnit::U_DM );
-
-  defaultUnit->insertStringList(listType);
+  
+  defaultUnit->insertStringList(KoUnit::listOfUnitName());
   defaultUnit->setCurrentItem(0);
   QWhatsThis::add(defaultUnit, i18n( "Choose the default unit that will be used in your sheet.\nNote that you can overwrite the unit for the current sheet using the Format -> Page Layout... dialog." ) );
   grid1->addWidget(defaultUnit,5,0);
@@ -839,41 +838,9 @@ void configureLayoutPage::initCombo()
         unit=config->readNumEntry( "Default unit page" ,0);
     }
 
-    switch (m_pView->doc()->unit() )
-    {
-    case KoUnit::U_MM:
-        unit=0;
-        break;
-    case KoUnit::U_PT:
-        unit=1;
-        break;
-    case KoUnit::U_INCH:
-        unit=2;
-        break;
-    case KoUnit::U_CM:
-        unit=3;
-        break;
-    case KoUnit::U_DM:
-        unit = 4;
-        break;
-    case KoUnit::U_PI:
-        unit = 5;
-        break;
-    case KoUnit::U_DD:
-        unit = 6;
-        break;
-    case KoUnit::U_CC:
-        unit = 7;
-        break;
-    default:
-        unit=3;
-    }
-    defaultUnit->setCurrentItem(unit);
-
-
+    defaultUnit->setCurrentItem(m_pView->doc()->unit());
     defaultSizePage->setCurrentItem(paper);
     defaultOrientationPage->setCurrentItem(orientation);
-    defaultUnit->setCurrentItem(unit);
 }
 
 

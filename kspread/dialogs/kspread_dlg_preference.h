@@ -102,6 +102,11 @@ public slots:
 protected:
   View* m_pView;
   KDoubleNumInput  *valIndent;
+  
+  /**
+   * Needed to ensure the same unit for loading and saving.
+   */
+  KoUnit::Unit indentUnit;
   KConfig* config;
   QComboBox *typeCompletion;
   QComboBox *typeCalc;
