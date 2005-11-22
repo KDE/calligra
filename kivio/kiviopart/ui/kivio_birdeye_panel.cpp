@@ -39,22 +39,9 @@ KivioBirdEyePanel::KivioBirdEyePanel(KivioView* view, QWidget* parent, const cha
 
   zoomIn = new KAction( i18n("Zoom In"), "kivio_zoom_plus", 0, this, SLOT(zoomPlus()), this, "zoomIn" );
   zoomOut = new KAction( i18n("Zoom Out"), "kivio_zoom_minus", 0, this, SLOT(zoomMinus()), this, "zoomOut" );
-  KToggleAction* act3 = new KToggleAction( i18n("Show Page Border"),BarIcon("view_pageborder", KivioFactory::global()), 0, this, "pageBorder" );
-#if KDE_IS_VERSION(3,2,90)
-  act3->setCheckedState(i18n("Hide Page Border"));
-#endif
-  KAction* act5 = new KAction( i18n("Autoresize"), "window_nofullscreen", 0, this, SLOT(doAutoResizeMin()), this, "autoResizeMin" );
-  KAction* act6 = new KAction( i18n("Autoresize"), "window_fullscreen", 0, this, SLOT(doAutoResizeMax()), this, "autoResizeMax" );
-
-  connect( act3, SIGNAL(toggled(bool)), SLOT(togglePageBorder(bool)));
 
   zoomIn->plug(bar);
   zoomOut->plug(bar);
-  act3->plug(bar);
-  act5->plug(bar);
-  act6->plug(bar);
-
-  togglePageBorder(true);
 
   canvasZoomChanged();
 }
@@ -174,9 +161,6 @@ void KivioBirdEyePanel::updateView()
   int pcx0 = (s1.width()-pcw)/2;
   int pcy0 = (s1.height()-pch)/2;
 
-  cMinSize = QSize((int)(s2.width()*QMIN(zx,zy)), (int)(s2.height()*QMIN(zx,zy)));
-  cMaxSize = QSize((int)(s2.width()*QMAX(zx,zy)), (int)(s2.height()*QMAX(zx,zy)));
-
   QPoint p0 = QPoint(px0,py0);
 
   QRect rect(QPoint(0,0),s1);
@@ -185,42 +169,13 @@ void KivioBirdEyePanel::updateView()
   kpainter.start(m_buffer);
   kpainter.painter()->fillRect(rect, QColor(120, 120, 120));
 
-  if (m_bShowPageBorders) {
-    kpainter.painter()->fillRect(pcx0, pcy0, pcw, pch, QColor(200, 200, 200));
-    kpainter.painter()->fillRect(px0, py0, pw, ph, white);
-  } else {
-    kpainter.painter()->fillRect(pcx0, pcy0, pcw, pch, white);
-  }
+  kpainter.painter()->fillRect(px0, py0, pw, ph, white);
 
   kpainter.painter()->translate(px0, py0);
   m_pDoc->paintContent(kpainter, rect, false, m_pView->activePage(), p0, m_zoomHandler, false);
   kpainter.stop();
 
   updateVisibleArea();
-}
-
-void KivioBirdEyePanel::togglePageBorder(bool b)
-{
-  TOGGLE_ACTION("pageBorder")->setChecked(b);
-  m_bShowPageBorders = b;
-
-  slotUpdateView(m_pView->activePage());
-}
-
-void KivioBirdEyePanel::doAutoResizeMin()
-{
-  parentWidget()->resize(parentWidget()->width() - canvas->width() + cMinSize.width(), parentWidget()->height() - canvas->height() + cMinSize.height());
-}
-
-void KivioBirdEyePanel::doAutoResizeMax()
-{
-  parentWidget()->resize(parentWidget()->width() - canvas->width() + cMaxSize.width(), parentWidget()->height() - canvas->height() + cMaxSize.height());
-}
-
-void KivioBirdEyePanel::show()
-{
-  KivioBirdEyePanelBase::show();
-//   doAutoResizeMax();
 }
 
 void KivioBirdEyePanel::updateVisibleArea()

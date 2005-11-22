@@ -249,11 +249,13 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
 
   // Must be executed before setActivePage() and before setupActions()
-  createGeometryDock();
-  createLayerDock();
   createBirdEyeDock();
+  createLayerDock();
+  createGeometryDock();
   createProtectionDock();
-  createAddStencilSetDock();
+//   createAddStencilSetDock();
+  paletteManager()->showWidget("birdseyepanel");
+  paletteManager()->showWidget("stencilgeometrypanel");
 
   setupActions();
 
@@ -333,14 +335,14 @@ void KivioView::createLayerDock()
 {
   m_pLayersPanel = new KivioLayerPanel( this, this);
   m_pLayersPanel -> setCaption(i18n("Layers"));
-  paletteManager()->addWidget(m_pLayersPanel, "layerspanel", "layersdocker");
+  paletteManager()->addWidget(m_pLayersPanel, "layerspanel", "birdeyedocker");
 }
 
 void KivioView::createProtectionDock()
 {
   m_pProtectionPanel = new KivioProtectionPanel(this,this);
   m_pProtectionPanel -> setCaption(i18n("Protection"));
-  paletteManager()->addWidget(m_pProtectionPanel, "protectionpanel", "protectiondocker");
+  paletteManager()->addWidget(m_pProtectionPanel, "protectionpanel", "geometrydocker");
 }
 
 void KivioView::createAddStencilSetDock()
@@ -1387,14 +1389,18 @@ void KivioView::updateToolBars()
 
       m_stencilToBack->setEnabled(true);
       m_stencilToFront->setEnabled(true);
+      m_pStencilGeometryPanel->setEnabled(true);
+      m_pProtectionPanel->setEnabled(true);
     } else {
       m_editCut->setEnabled(false);
       m_editCopy->setEnabled(false);
       m_ungroupAction->setEnabled(false);
       m_stencilToBack->setEnabled(false);
       m_stencilToFront->setEnabled(false);
-      m_setArrowHeads->setEnabled (false);
-      m_arrowHeadsMenuAction->setEnabled (false);
+      m_setArrowHeads->setEnabled(false);
+      m_arrowHeadsMenuAction->setEnabled(false);
+      m_pStencilGeometryPanel->setEnabled(false);
+      m_pProtectionPanel->setEnabled(false);
     }
 }
 

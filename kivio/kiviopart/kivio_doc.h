@@ -116,7 +116,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     KivioMap* map() const { return m_pMap; }
 
     /**
-    * @return TRUE if the document is currently loading.
+    * @return true if the document is currently loading.
     */
     bool isLoading()const { return m_bLoading; }
 
@@ -229,7 +229,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     QString m_strFileURL;
 
     /**
-    * TRUE if loading is in process, otherwise FALSE.
+    * true if loading is in process, otherwise false.
     * This flag is used to avoid updates etc. during loading.
     *
     * @see #isLoading

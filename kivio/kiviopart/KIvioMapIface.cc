@@ -103,17 +103,17 @@ bool KIvioMapIface::processDynamic(const QCString &fun, const QByteArray &/*data
     // Does the name follow the pattern "foobar()" ?
     uint len = fun.length();
     if ( len < 3 )
-        return FALSE;
+        return false;
 
     if ( fun[ len - 1 ] != ')' || fun[ len - 2 ] != '(' )
-        return FALSE;
+        return false;
 
     KivioPage* t = m_map->findPage( fun.left( len - 2 ).data() );
     if ( !t )
-        return FALSE;
+        return false;
 
     replyType = "DCOPRef";
     QDataStream out( replyData, IO_WriteOnly );
     out << DCOPRef( kapp->dcopClient()->appId(), t->dcopObject()->objId() );
-    return TRUE;
+    return true;
 }

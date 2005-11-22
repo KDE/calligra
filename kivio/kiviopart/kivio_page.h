@@ -86,7 +86,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     virtual DCOPObject* dcopObject();
 
     QString pageName()const { return m_strName; }
-    bool setPageName( const QString& name, bool init = FALSE );
+    bool setPageName( const QString& name, bool init = false );
 
     virtual QDomElement save( QDomDocument& );
     virtual void saveOasis(KoStore* store, KoXmlWriter* docWriter, KoGenStyles* styles);
