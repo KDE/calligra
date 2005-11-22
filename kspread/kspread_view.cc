@@ -1976,7 +1976,7 @@ void View::spellCheckerReady()
       }
 
       d->spell.currentCell = d->spell.currentCell->nextCell();
-      if ( d->spell.currentCell->isDefault() )
+      if ( d->spell.currentCell && d->spell.currentCell->isDefault() )
         kdDebug() << "checking default cell!!" << endl << endl;
     }
 
