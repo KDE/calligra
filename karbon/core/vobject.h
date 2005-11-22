@@ -50,22 +50,43 @@ class KARBONBASE_EXPORT VObject
 public:
 	enum VState
 	{
-		normal        = 0,	/// visible, not active
-		normal_locked = 1,	/// visible, but locked (r/o)
-		hidden        = 2,	/// hidden
-		hidden_locked = 3,	/// hidden and locked (r/o)
-		deleted       = 4,	/// deleted, nearly dead
+		normal        = 0,	/**< visible, not active */
+		normal_locked = 1,	/**< visible, but locked (r/o) */
+		hidden        = 2,	/**< hidden */
+		hidden_locked = 3,	/**< hidden and locked (r/o) */
+		deleted       = 4,	/**< deleted, nearly dead */
 
 		// shape specific states:
-		selected      = 5,	/// visible, active and can be manipulated by tools
-		edit          = 6	/// visible, active and is currently manipulated by a tool
+		selected      = 5,	/**< visible, active and can be manipulated by tools */
+		edit          = 6	/**< visible, active and is currently manipulated by a tool */
 	};
 
+	/**
+	 * Constructs a new object that is child of parent and has the given state.
+	 *
+	 * @param parent the new object's parent
+	 * @param state the new object's state
+	 */
 	VObject( VObject* parent, VState state = edit );
+	
+	/**
+	 * Copy constructor.
+	 * Copies parent, state and name of given object.
+	 *
+	 * @param obj the object to copy properties from
+	 */
 	VObject( const VObject& obj );
 
+	/** 
+	 * Destroys the object and deletes the stroke, fill and DCOP-object.
+	 */
 	virtual ~VObject();
 
+	/**
+	 * Returns pointer to internal DCOP object.
+	 *
+	 * If no internal DCOP object exist yet, it is created.
+	 */
 	virtual DCOPObject* dcopObject();
 
 	/**
@@ -75,7 +96,11 @@ public:
 	 * @param rect represents the visible rectangular area. If this object doesn't
 	 *             intersect with this area it is not drawn.
 	 */
-	virtual void draw( VPainter* /*painter*/, const KoRect* /*rect*/ = 0L ) const {}
+	virtual void draw( VPainter* painter, const KoRect* rect = 0L ) const 
+	{ 
+		Q_UNUSED( painter );
+		Q_UNUSED( rect );
+	}
 
 	/**
 	 * Calculates the tightest bounding box around the object.
@@ -106,7 +131,18 @@ public:
 			m_parent->invalidateBoundingBox();
 	}
 
+	/**
+	 * Sets a new parent object.
+	 *
+	 * @param parent the new parent object
+	 */
 	void setParent( VObject* parent ) { m_parent = parent; }
+
+	/**
+	 * Returns pointer to current parent object.
+	 *
+	 * @return pointer to current parent object or 0 if no parent object is set
+	 */
 	VObject* parent() const { return m_parent; }
 
 	/**
@@ -125,17 +161,48 @@ public:
 	 */
 	virtual void setState( const VState state ) { m_state = state; }
 
+	/**
+	 * Gets the objects actual stroke.
+	 *
+	 * @return pointer to the object's stroke
+	 */
 	virtual VStroke* stroke() const { return m_stroke; }
+
+	/**
+	 * Gets the objects actual fill.
+	 *
+	 * @return pointer to the object's fill
+	 */
 	virtual VFill* fill() const { return m_fill; }
 
+	/**
+	 * Sets the stroke to a given new stroke.
+	 *
+	 * @param stroke the new stroke
+	 */
 	virtual void setStroke( const VStroke& stroke );
+
+	/**
+	 * Sets the fill to a given new fill.
+	 *
+	 * @param fill the new fill
+	 */
 	virtual void setFill( const VFill& fill );
 
 	/**
 	 * Save this object's state to xml.
+	 * 
+	 * @param element the DOM element to which the attributes are saved
 	 */
 	virtual void save( QDomElement& element ) const;
 
+	/**
+	 * Save this objects's state to OpenDocument.
+	 *
+	 * @param store FIXME
+	 * @param docWriter FIXME
+	 * @param mainStyles FIXME
+	 */
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
 
 	/**
@@ -144,40 +211,82 @@ public:
 	 */
 	virtual void load( const QDomElement& element );
 
+	/**
+	 * Load this object's state from OpenDocument and initialize
+	 * this object accordingly.
+	 *
+	 * @param element the DOM element to read attributes from
+	 * @param context FIXME
+	 */
 	virtual bool loadOasis( const QDomElement &element, KoOasisContext &context );
 
 	/**
 	 * Create an exact copy of this object.
+	 *
+	 * @return the exact object copy
 	 */
 	virtual VObject* clone() const = 0;
 
-	/// Accept a VVisitor.
-	virtual void accept( VVisitor& /*visitor*/ ) {}
+	/** 
+	 * Accept a VVisitor.
+	 *
+	 * @param visitor the visitor to accept
+	 */
+	virtual void accept( VVisitor& visitor ) 
+		{ Q_UNUSED( visitor ); }
 
 	/**
 	 * This function is important for undo/redo. It inserts newObject in front
 	 * of oldObject.
+	 *
+	 * @param newObject the new object to insert
+	 * @param oldObject the old object the new object is inserted in front of
 	 */
-	virtual void insertInfrontOf( VObject* /*newObject*/, VObject* /*oldObject*/ ) { }
+	virtual void insertInfrontOf( VObject* newObject, VObject* oldObject )
+	{ 
+		Q_UNUSED( newObject );
+		Q_UNUSED( oldObject );
+	}
 
+	/**
+	 * Returns the name of the object.
+	 *
+	 * @return the object's name
+	 */
 	virtual QString name() const;
-	void setName( const QString & );
+	
+	/**
+	 * Sets the object's name to a given new name.
+	 *
+	 * @param s the new object name 
+	 */
+	void setName( const QString &s );
 
+	/**
+	 * Return document the object belongs to.
+	 *
+	 * @return pointer to parent document or 0 if object does not belong to a document
+	 */
 	VDocument *document() const;
 
 protected:
+	/**
+	 * Adds a new given style to the specified OASIS context
+	 *
+	 * @param style FIXME
+	 * @param conext FIXME
+	 */
 	void addStyles( const QDomElement* style, KoOasisContext & context );
 
 protected:
-	/// Bounding box.
-	mutable KoRect m_boundingBox;
-	mutable VState m_state				: 8;
-	mutable bool m_boundingBoxIsInvalid : 1;
+	mutable KoRect m_boundingBox; /**< the object's bounding box */
+	mutable VState m_state				: 8; /**< the object's state */
+	mutable bool m_boundingBoxIsInvalid : 1; /**< the flag stating if the bounding box is valid */
 
-	VStroke* m_stroke;
-	VFill* m_fill;
+	VStroke* m_stroke; /**< the object's stroke */
+	VFill* m_fill; /**< the object's fill */
 
-	DCOPObject *m_dcop;
+	DCOPObject *m_dcop; /**< the objects DCOP object */
 
 private:
 	VObject* m_parent;
