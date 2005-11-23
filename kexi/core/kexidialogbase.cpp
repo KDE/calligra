@@ -485,20 +485,24 @@ tristate KexiDialogBase::storeNewData()
 
 		//temp. hack: avoid problems with autonumber
 		// see http://bugs.kde.org/show_bug.cgi?id=89381
-		int p_id = part()->info()->projectPartID(); 
-		// = KexiPart::LastObjectType+1; //min is == 3+1
+		int p_id = part()->info()->projectPartID();
+
 		if (p_id<0) {
-			//find 1st maximum custom id
+			// Find first available custom part ID by taking the greatest
+			// existing custom ID (if it exists) and adding 1.
 			p_id = (int)KexiPart::UserObjectType;
-			if (!m_parentWindow->project()->dbConnection()->querySingleNumber(
-				"SELECT max(p_id) FROM kexi__parts", p_id))
+			tristate success = m_parentWindow->project()->dbConnection()->querySingleNumber(
+				"SELECT max(p_id) FROM kexi__parts", p_id);
+			if (!success) {
+			       	// Couldn't read part id's from the kexi__parts table
 				return false;
-			else {//ok or not record found:
-				p_id = QMAX(++p_id, (int)KexiPart::UserObjectType);
+			} else {
+			       	// Got a maximum part ID, or there were no parts
+				p_id = p_id + 1;
+				p_id = QMAX(p_id, (int)KexiPart::UserObjectType);
 			}
 		}
 
-//		KexiDB::FieldList *fl = ts->subList("p_name", "p_mime", "p_url");
 		KexiDB::FieldList *fl = ts->subList("p_id", "p_name", "p_mime", "p_url");
 		kexidbg << "KexiMainWindowImpl::newObject(): fieldlist: " 
 			<< (fl ? fl->debugString() : QString::null) << endl;
