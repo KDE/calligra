@@ -34,7 +34,7 @@
       <Separator/>
       <Action name="view_palette_action_menu"/>
       </Menu>
-    </Menu> <Menu name="Page"><text>P&amp;age</text>
+    <Menu name="Page"><text>P&amp;age</text>
       <Action name="insertPage"/>
       <Action name="removePage"/>
       <Separator/>

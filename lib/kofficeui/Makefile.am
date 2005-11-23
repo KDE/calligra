@@ -1,6 +1,6 @@
 ###### General stuff
 
-KDE_CXXFLAGS = $(USE_RTTI)
+KDE_CXXFLAGS = $(USE_RTTI) -DMAKE_KOFFICEUI_LIB
 INCLUDES =  $(KSTORE_INCLUDES) $(KOFFICECORE_INCLUDES) $(all_includes)
 
 ####### Files
