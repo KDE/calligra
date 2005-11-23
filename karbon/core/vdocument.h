@@ -51,104 +51,223 @@ typedef QPtrListIterator<VLayer> VLayerListIterator;
 class KARBONBASE_EXPORT VDocument : public VObject
 {
 public:
+	/** The different selection modes */
 	enum VSelectionMode {
-		ActiveLayer,
-		VisibleLayers,
-		SelectedLayers,
-		AllLayers
+		ActiveLayer,	/**< selection within the active layer */
+		VisibleLayers,	/**< selection within all visible layers */
+		SelectedLayers,	/**< selection within all selected layers */
+		AllLayers		/**< selection within all layers */
 	};
 
+	/**
+	 * Constructs a new document.
+	 */
 	VDocument();
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param document the document to copy properties from
+	 */
 	VDocument( const VDocument& document );
 
+	/** 
+	 * Destroys the document and all of the layers.
+	 */
 	virtual ~VDocument();
 
 	virtual void draw( VPainter* painter, const KoRect* rect ) const;
+	
+	/**
+	 *	Draw the document frame to a painting device.
+	 *
+	 * @param painter abstraction that is used to render to a painting device.
+	 */
 	void drawPage( VPainter *painter ) const;
 
+	/**
+	 * Returns the mime type.
+	 *
+	 * @return the document's mime type
+	 */ 
 	const QString& mime()
 		{ return m_mime; }
+
+	/**
+	 * Sets the mime type.
+	 *
+	 * @param mime the new mime type
+	 */
 	void setMime( const QString& mime )
 		{ m_mime = mime; }
 
+	/**
+	 * Returns the version.
+	 *
+	 * @return the document's version
+	 */ 
 	const QString& version()
 		{ return m_version; }
+
+	/**
+	 * Sets the version.
+	 *
+	 * @param mime the new version
+	 */ 
 	void setVersion( const QString& version )
 		{ m_version = version; }
 
+	/**
+	 * Returns the editor.
+	 *
+	 * @return the document's editor
+	 */ 
 	const QString& editor()
 		{ return m_editor; }
+
+	/**
+	 * Sets the editor.
+	 *
+	 * @param mime the new editor
+	 */ 
 	void setEditor( const QString& editor )
 		{ m_editor = editor; }
 
+	/**
+	 * Returns the syntax version.
+	 *
+	 * @return the document's syntax version
+	 */ 
 	const QString& syntaxVersion()
 		{ return m_syntaxVersion; }
+
+	/**
+	 * Sets the syntax version.
+	 *
+	 * @param mime the new syntax version
+	 */ 
 	void setSyntaxVersion( const QString& syntaxVersion )
 		{ m_syntaxVersion = syntaxVersion; }
 
-
 	/**
 	 * Returns document width.
+	 *
+	 * @return the document's width
 	 */
 	double width() const { return m_width; }
 
 	/**
 	 * Returns document height.
+	 *
+	 * @return the document's height
 	 */
 	double height() const { return m_height; }
 
 	/**
 	 * Sets document width.
+	 *
+	 * @param width the new document width
 	 */
 	void setWidth( double width ) { m_width = width; m_boundingBox.setWidth( width ); }
 
 	/**
 	 * Sets document height.
+	 *
+	 * @param height the new document height
 	 */
 	void setHeight( double height ) { m_height = height; m_boundingBox.setHeight( height ); }
 
-
+	/**
+	 * Returns document unit.
+	 *
+	 * @return the document's unit
+	 */
 	KoUnit::Unit unit() const
 		{ return m_unit; }
+
+	/**
+	 * Sets document unit.
+	 *
+	 * @param the new document unit
+	 */
 	void setUnit( KoUnit::Unit unit )
 		{ m_unit = unit; }
 
+	/**
+	 * Checks if specified layer can be raised. 
+	 *
+	 * A layer can be raised if there is more than one layer and the specified layer
+	 * is not already at the top.
+	 *
+	 * @param layer the layer to check
+	 * @return true if layer can be raised, else false
+	 */
 	bool canRaiseLayer( VLayer* layer );
+
+	/**
+	 * Checks if specified layer can be lowered. 
+	 *
+	 * A layer can be lowered if there is more than one layer and the specified layer
+	 * is not already at the bottom.
+	 *
+	 * @param layer the layer to check
+	 * @return true if layer can be lowered, else false
+	 */
 	bool canLowerLayer( VLayer* layer );
 
 	/**
-	 * Lifts the layer.
+	 * Raises the layer.
+	 * 
+	 * @param layer the layer to raise
 	 */
 	void raiseLayer( VLayer* layer );
 
 	/**
 	 * Lowers the layer.
+	 * 
+	 * @param layer the layer to lower
 	 */
 	void lowerLayer( VLayer* layer );
 
 	/**
-	 * Returns the position of the layer.
+	 * Returns the position of the specified layer.
+	 *
+	 * @param layer the layer to retrieve the position for
+	 * @return the layer position
 	 */
 	int layerPos( VLayer* layer );
 
 	/**
 	 * Inserts a new layer.
-	 * if pos is -1, appends it to the list.
+	 * 
+	 * The layer is appended at the end, on top of all other layers, and is activated.
+	 *
+	 * @param layer the layer to insert
 	 */
 	void insertLayer( VLayer* layer );
 
 	/**
 	 * Removes the layer.
+	 *
+	 * If there is no layer left, a new layer is created, inserted and activated.
+	 *
+	 * @param layer the layer to remove
 	 */
 	void removeLayer( VLayer* layer );
 
 	/**
 	 * Sets the active layer.
+	 *
+	 * The specified layer is set active, if it is found in the layer list.
+	 *
+	 * @param layer the layer to set active
 	 */
 	void setActiveLayer( VLayer* layer );
 
 	/**
 	 * Returns a pointer to the active layer.
+	 *
+	 * @return the currently active layer
 	 */
 	VLayer* activeLayer() const { return m_activeLayer; }
 
@@ -162,8 +281,8 @@ public:
 	enum { STYLE_GRAPHICAUTO = 20, STYLE_LINEAR_GRADIENT, STYLE_RADIAL_GRADIENT, STYLE_STROKE };
 	bool loadXML( const QDomElement& doc );
 	virtual bool loadOasis( const QDomElement &element, KoOasisContext &context );
-	virtual void save( QDomElement& me ) const;
-	virtual void load( const QDomElement& me );
+	virtual void save( QDomElement& element ) const;
+	virtual void load( const QDomElement& element );
 	void loadDocumentContent( const QDomElement& doc );
 
 	virtual VDocument* clone() const;
@@ -173,31 +292,60 @@ public:
 
 	/**
 	 * Returns a pointer to the selection.
+	 *
+	 * @return the document's selection
 	 */
 	VSelection* selection() const
 		{ return m_selection; }
 
 	/**
 	 * Returns the selection mode.
+	 * 
+	 * @return the actual selection mode
 	 */
 	VSelectionMode selectionMode() { return m_selectionMode; }
 
 	/**
 	 * Sets the selection mode.
+	 *
+	 * @param mode the new selection mode
 	 */
 	void setSelectionMode( VSelectionMode mode ) { m_selectionMode = mode; }
 
 	/**
-	 * Append a new object.
+	 * Appends a new object to the active layer.
+	 *
+	 * @param object the object to append
 	 */
 	void append( VObject* object );
 
+	/**
+	 * Returns custom name of specified object.
+	 *
+	 * @param obj the object to retrieve name for
+	 * @return the custom name of the object or an empty string if no custom name is set
+	 */
 	QString objectName( const VObject *obj ) const;
+
+	/**
+	 * Sets custom name of specified object.
+	 *
+	 * By default all object have generic names like path, rectangle or text that
+	 * is defined within the object's class.
+	 * 
+	 * @param obj the object to set custom name for
+	 * @param name the the custom name to set
+	 */
 	void setObjectName( const VObject *obj, const QString name ) { m_objectNames.insert( obj, name ); }
 
 	bool saveAsPath() const { return m_saveAsPath; }
 	void saveAsPath( bool b ) { m_saveAsPath = b; }
 
+	/**
+	 * Returns the document's grid.
+	 *
+	 * @return the doument's grid 
+	 */
 	KarbonGridData &grid() { return m_gridData; }
 
 private:
@@ -241,6 +389,7 @@ private:
 
 	QMap<const VObject *, QString>	m_objectNames;
 
+	// TODO this flag is used nowhere, can we remove it?
 	bool m_saveAsPath;
 
 	KarbonGridData m_gridData;

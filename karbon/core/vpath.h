@@ -106,8 +106,8 @@ public:
 	virtual const KoRect& boundingBox() const;
 
 
-	virtual void save( QDomElement& ) const
-		{}	// VSubpaths cant be saved.
+	virtual void save( QDomElement& element) const
+		{ Q_UNUSED(element); }	// VSubpaths cant be saved.
 
 	// TODO: remove this backward compatibility function after koffice 1.3.x
 	virtual void load( const QDomElement& element );
