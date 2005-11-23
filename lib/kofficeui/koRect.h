@@ -24,9 +24,6 @@
 #include <qrect.h>
 #include "koffice_export.h"
 
-#ifdef MAKE_KOFFICEUI_LIB
-#warning Andris
-#endif
 /**
  * A rect whose coordinates are floating-point values ( "double"s ).
  * The API isn't documented, it's a perfect mirror of QRect.
