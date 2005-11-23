@@ -61,9 +61,6 @@ public:
         IT_PART = FT_PART,
         IT_FORMULA = FT_FORMULA,
         IT_CLIPART = FT_CLIPART,
-#if 0 // KWORD_HORIZONTAL_LINE
-        IT_HORZLINE = FT_HORZLINE,
-#endif
         IT_TABLE = FT_TABLE,
         IT_ROOT = 11,
         IT_TEXTFRAME = 12,

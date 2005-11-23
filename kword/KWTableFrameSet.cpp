@@ -922,12 +922,6 @@ void KWTableFrameSet::moveBy( double dx, double dy ) {
     }
 }
 
-void KWTableFrameSet::deselectAll()
-{
-    for (TableIter i(this) ; i; ++i )
-        i->frame( 0 )->setSelected( false );
-}
-
 void KWTableFrameSet::selectUntil( double x, double y) {
     KWFrame *f = frameAtPos(x,y);
     if(f) selectUntil(static_cast<KWTableFrameSet::Cell *> (f->frameSet()));

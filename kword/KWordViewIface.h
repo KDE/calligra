@@ -124,15 +124,6 @@ k_dcop:
     void convertToTextBox();
     void addIgnoreAllWord();
     void addPersonalExpression();
-#if 0 // KWORD_HORIZONTAL_LINE
-    // MOC_SKIP_BEGIN
-    // Comment out, as dcopidl has no stop/start words
-    /*
-    void insertHorizontalLine();
-    void changeHorizontalLine();
-    */
-    // MOC_SKIP_END
-#endif
     void addWordToDictionary();
     void sortText();
     void insertPage();

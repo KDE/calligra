@@ -44,7 +44,6 @@
 #include "KWFrameStyle.h"
 #include "KWFrameStyleManager.h"
 #include "KWImportStyleDia.h"
-#include "KWInsertHorizontalLineDia.h"
 #include "KWInsertPageDia.h"
 #include "KWInsertPicDia.h"
 #include "KWPartFrameSet.h"
@@ -318,7 +317,6 @@ KWView::~KWView()
 
     // Abort any find/replace
     delete m_findReplace;
-    deselectAllFrames(); // don't let resizehandles hang around
     // Delete gui while we still exist ( it needs documentDeleted() )
     delete m_gui;
     delete m_sbPageLabel;
@@ -957,13 +955,13 @@ void KWView::setupActions()
     m_actionTableInsertCol->setToolTip( i18n( "Insert one or more columns into the current table." ) );
     m_actionTableInsertCol->setWhatsThis( i18n( "Insert one or more columns into the current table." ) );
 
-    m_actionTableDelRow = new KAction( i18n( "&Delete Selected Rows..." ), "delete_table_row", 0,
+    m_actionTableDelRow = new KAction( 0, "delete_table_row", 0,
                                      this, SLOT( tableDeleteRow() ),
                                      actionCollection(), "table_delrow" );
     m_actionTableDelRow->setToolTip( i18n( "Delete selected rows from the current table." ) );
     m_actionTableDelRow->setWhatsThis( i18n( "Delete selected rows from the current table." ) );
 
-    m_actionTableDelCol = new KAction( i18n( "D&elete Selected Columns..." ), "delete_table_col", 0,
+    m_actionTableDelCol = new KAction( 0, "delete_table_col", 0,
                                      this, SLOT( tableDeleteCol() ),
                                      actionCollection(), "table_delcol" );
     m_actionTableDelCol->setToolTip( i18n( "Delete selected columns from the current table." ) );
@@ -1259,16 +1257,6 @@ void KWView::setupActions()
     m_actionSpellIgnoreAll = new KAction( i18n( "Ignore All" ), 0,
                                         this, SLOT( slotAddIgnoreAllWord() ),
                                         actionCollection(), "ignore_all" );
-
-#if 0 // KWORD_HORIZONTAL_LINE
-    actionInsertHorizontalLine = new KAction( i18n( "Horizontal Line..." ), 0,
-                                        this, SLOT( insertHorizontalLine() ),
-                                        actionCollection(), "insert_horizontal_line" );
-
-    actionChangeHorizontalLine=new KAction( i18n( "Change Horizontal Line..." ),0,
-                                            this, SLOT( changeHorizontalLine() ),
-                                            actionCollection(), "change_horizontal_line" );
-#endif
 
     m_actionAddWordToPersonalDictionary=new KAction( i18n( "Add Word to Dictionary" ),0,
                                                    this, SLOT( addWordToDictionary() ),
@@ -5619,9 +5607,6 @@ void KWView::slotFrameSetEditChanged()
 
     //m_actionFormatIncreaseIndent->setEnabled(state);
     m_actionInsertLink->setEnabled(state);
-#if 0 // KWORD_HORIZONTAL_LINE
-    actionInsertHorizontalLine->setEnabled( state);
-#endif
     m_actionCreateStyleFromSelection->setEnabled( state /*&& hasSelection*/);
     m_actionConvertToTextBox->setEnabled( state && hasSelection);
     m_actionAddPersonalExpression->setEnabled( state && hasSelection);
@@ -5651,7 +5636,7 @@ void KWView::slotFrameSetEditChanged()
     else
         m_actionChangeCase->setEnabled( true );
 
-    updateTableActions( -1 );
+    updateTableActions( frameViewManager()->selectedFrames() ) ;
 
     m_actionInsertFormula->setEnabled(state && (m_gui->canvasWidget()->viewMode()->type()!="ModeText"));
     actionInsertVariable->setEnabled(state);
@@ -5791,7 +5776,7 @@ void KWView::frameSelectedChanged()
     m_actionCreateFrameStyle->setEnabled( selectedFrames.count()==1 );
     m_actionCreateLinkedFrame->setEnabled( selectedFrames.count()==1 );
 
-    updateTableActions( selectedFrames.count() );
+    updateTableActions( selectedFrames );
     updatePageInfo(); // takes care of slotUpdateRuler()
     updateFrameStatusBarItem();
 
@@ -5817,47 +5802,108 @@ void KWView::frameSelectedChanged()
 }
 
 
-void KWView::updateTableActions( int nbFramesSelected )
+void KWView::updateTableActions( QValueList<KWFrameView*> selectedFrames)
 {
-    if ( nbFramesSelected == -1 ) // not calculated by caller
-        nbFramesSelected = frameViewManager()->selectedFrames().count();
+    class TableInfo {
+        public:
+            TableInfo( QValueList<KWFrameView*> selectedFrames ) {
+                m_protectContent = false;
+                m_views = selectedFrames;
+                int amountSelected = 0;
+                QMap<KWTableFrameSet*, QValueList<unsigned int> > tableRows, tableCols;
 
+                QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+                for(;framesIterator != selectedFrames.end(); ++framesIterator) {
+                    KWFrameView *view = *framesIterator;
+                    if(!view->selected()) continue;
+                    KWFrameSet *fs = view->frame()->frameSet();
+                    Q_ASSERT(fs);
+                    KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell*>(fs);
+                    if(cell == 0) continue;
+                    amountSelected++;
+                    if(cell->protectContent())
+                        m_protectContent=true;
+
+                    if(! tableRows.contains(fs->groupmanager())) { // create empty lists.
+                        QValueList<unsigned int> rows;
+                        for(unsigned int i=fs->groupmanager()->getRows(); i != 0; i--)
+                            rows.append(0);
+                        tableRows.insert(fs->groupmanager(), rows);
+                        QValueList<unsigned int> cols;
+                        for(unsigned int i=fs->groupmanager()->getCols(); i != 0; i--)
+                            cols.append(0);
+                        tableCols.insert(fs->groupmanager(), cols);
+                    }
+                    QValueList<unsigned int> rows = tableRows[fs->groupmanager()];
+                    for(unsigned int r=cell->firstRow(); r <= cell->lastRow(); r++)
+                        rows[r] = rows[r] + 1;
+                    tableRows[fs->groupmanager()] = rows;
+                    QValueList<unsigned int> columns = tableCols[fs->groupmanager()];
+                    for(unsigned int c=cell->firstCol(); c <= cell->lastCol(); c++)
+                        columns[c] = columns[c] + 1;
+                    tableCols[fs->groupmanager()] = columns;
+                }
+
+                m_row = 0;
+                m_col = 0;
+                m_selected = amountSelected != 0;
+                m_oneCellSelected = amountSelected == 1;
+                if(amountSelected == 0) return;
+
+                for(QMapIterator<KWTableFrameSet*, QValueList<unsigned int> > iter = tableRows.begin();
+                        iter != tableRows.end(); ++iter) {
+                    QValueList<unsigned int> rows = iter.data();
+                    QValueListIterator<unsigned int> rowsIter = rows.begin();
+                    for(;rowsIter != rows.end(); ++rowsIter)
+                        if(*rowsIter == iter.key()->getCols())
+                            m_row++;
+
+                    QValueList<unsigned int> columns = tableCols[iter.key()];
+                    QValueListIterator<unsigned int> colsIter = columns.begin();
+                    for(;colsIter != columns.end(); ++colsIter)
+                        if(*colsIter == iter.key()->getRows())
+                            m_col++;
+                }
+            }
+
+            int tableCellsSelected() { return m_selected; }
+            int amountRowsSelected() { return m_row; }
+            bool amountColumnsSelected() { return m_col; }
+            bool oneCellSelected() { return m_oneCellSelected; }
+            bool protectContentEnabled() { return m_protectContent; }
+        private:
+            QValueList<KWFrameView*> m_views;
+            bool m_oneCellSelected, m_selected, m_protectContent;
+            int m_row, m_col;
+    };
+
+    TableInfo ti(selectedFrames);
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    m_actionTableJoinCells->setEnabled( table && (nbFramesSelected>1));
+    m_actionTableJoinCells->setEnabled( ti.tableCellsSelected());
     m_actionConvertTableToText->setEnabled( table && table->isFloating() );
 
-    bool oneCellSelected = (table && nbFramesSelected==1);
-    m_actionTableSplitCells->setEnabled( oneCellSelected ); // TODO also allow to split current cell
+    m_actionTableSplitCells->setEnabled( ti.oneCellSelected() ); // TODO also allow to split current cell
 
-    // cellEdited: true if the cursor is in a table cell
-    bool cellEdited = table && ( m_gui->canvasWidget()->currentTableRow() > -1 );
-    // rowKnown: true if cellEdited or if entire row(s) selected
-    bool rowKnown = table && ( cellEdited || table->isRowsSelected() );
-    m_actionTableInsertRow->setEnabled( rowKnown );
-    m_actionTableDelRow->setEnabled( rowKnown );
-    // colKnown: true if cellEdited or if entire col(s) selected
-    bool colKnown = table && ( cellEdited || table->isColsSelected() );
-    m_actionTableInsertCol->setEnabled( colKnown );
-    m_actionTableDelCol->setEnabled( colKnown );
-    // TODO (after msg freeze) : update text of m_actionTableDelCol to
-    // either "Delete Current Column" or "Delete Selected Columns".
-    // Same with m_actionTableDelRow.
+    m_actionTableInsertRow->setEnabled( ti.amountRowsSelected() );
+    m_actionTableDelRow->setEnabled( ti.amountRowsSelected() );
+    m_actionTableInsertCol->setEnabled( ti.amountColumnsSelected() );
+
+    if(ti.amountColumnsSelected() == 1)
+        m_actionTableDelCol->setText(i18n("D&elete Current Column..."));
+    else
+        m_actionTableDelCol->setText(i18n("D&elete Selected Columns..."));
+    if(ti.amountRowsSelected() == 1)
+        m_actionTableDelRow->setText(i18n("&Delete Current Row..."));
+    else
+        m_actionTableDelRow->setText(i18n("&Delete Selected Rows..."));
 
     m_actionTableResizeCol->setEnabled( table );
     m_actionTableDelete->setEnabled( table );
     m_actionTablePropertiesMenu->setEnabled( table );
 
-    bool cellsSelected = (table && nbFramesSelected>0);
-    m_actionTableUngroup->setEnabled( cellsSelected );
-    m_actionTableProtectCells->setEnabled( cellsSelected );
-    if ( cellsSelected )
-    {
-        unsigned int row = 0;
-        unsigned int col = 0;
-        table->getFirstSelected(row, col );
-        bool protect = table->cell( row, col )->protectContent();
-        m_actionTableProtectCells->setChecked(protect);
-    }
+    m_actionTableUngroup->setEnabled( ti.tableCellsSelected() );
+    m_actionTableProtectCells->setEnabled( ti.tableCellsSelected() );
+    m_actionTableProtectCells->setChecked( ti.protectContentEnabled() );
 }
 
 void KWView::docStructChanged(int type)
@@ -7245,56 +7291,6 @@ void KWView::addPersonalExpression()
     file.close();
     m_doc->refreshMenuExpression();
 }
-
-#if 0 // KWORD_HORIZONTAL_LINE
-void KWView::insertHorizontalLine()
-{
-    KWTextFrameSetEdit* edit = currentTextEdit();
-    if ( edit && edit->textFrameSet() && !edit->textFrameSet()->textObject()->protectContent() )
-    {
-        KWinsertHorizontalLineDia *dia = new KWinsertHorizontalLineDia( m_doc, this);
-        if ( dia->exec() )
-        {
-            KWHorzLineFrameSet *horizontalLine = new KWHorzLineFrameSet( m_doc, QString::null /*automatic name*/ );
-
-            KWFrame *frame = new KWFrame(horizontalLine, 50, 50, edit->textFrameSet()->frame(0)->width(), 10 );
-            horizontalLine->addFrame( frame );
-            frame->setZOrder( m_doc->maxZOrder( frame->pageNumber(m_doc) ) + 1 ); // make sure it's on top
-            m_doc->addFrameSet( horizontalLine, false );
-            horizontalLine->loadPicture( dia->horizontalLineName() );
-            edit->insertFloatingFrameSet( horizontalLine, i18n("Insert Horizontal Line") );
-
-            m_doc->updateAllFrames();
-        }
-        delete dia;
-    }
-}
-
-void KWView::changeHorizontalLine()
-{
-
-    KWFrame * frame = m_doc->getFirstSelectedFrame();
-    KWHorzLineFrameSet *frameset = static_cast<KWHorzLineFrameSet *>(frame->frameSet());
-    KoPictureKey oldKey ( frameset->picture().getKey() );
-    QString oldFile ( oldKey.filename() );
-    KWinsertHorizontalLineDia *dia = new KWinsertHorizontalLineDia( m_doc, this);
-    if ( dia->exec() )
-    {
-        QString file( dia->horizontalLineName() );
-        KoPictureKey key;
-        key.setKeyFromFile( file );
-        KoPicture picture;
-        picture.setKey( key );
-        picture.loadFromFile( file );
-        KWFrameChangePictureCommand *cmd= new KWFrameChangePictureCommand( i18n("Change HorizontalLine"), FrameIndex(frame), oldFile, file) ;
-
-        frameset->insertPicture( picture );
-        m_doc->frameChanged( frame );
-        m_doc->addCommand(cmd);
-    }
-    delete dia;
-}
-#endif
 
 void KWView::addWordToDictionary()
 {

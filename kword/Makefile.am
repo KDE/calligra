@@ -46,7 +46,6 @@ libkwordprivate_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWForm
 		KWConfigFootNoteDia.cpp KWCreateBookmarkDia.cpp KWImportStyleDia.cpp \
 		KWordFootNoteFrameSetIface.skel KWordFootNoteFrameSetIface.cc \
 		KWCreateBookmarkDiaBase.ui  KWSelectBookmarkDiaBase.ui \
-		KWordHorizontalLineFrameSetIface.cc KWInsertHorizontalLineDia.cpp \
 		KWSortDia.cpp KWInsertPageDia.cpp KWBookMark.cpp KWCollectFramesetsVisitor.cpp \
 		KWOasisLoader.cpp KWOasisSaver.cpp KWFrameList.cpp KWPage.cpp \
 		KWPageManager.cpp KWFrameSet.cpp KWFrameSetEdit.cpp KWPictureFrameSet.cpp \

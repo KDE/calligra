@@ -46,6 +46,7 @@ class KWDocument;
 class KWGUI;
 class KWFrame;
 class KoSearchContext;
+class KWFrameView;
 class KWFrameViewManager;
 class KWView;
 class QResizeEvent;
@@ -442,13 +443,6 @@ public slots:
 
     void slotAddIgnoreAllWord();
 
-#if 0 // KWORD_HORIZONTAL_LINE
-    // MOC_SKIP_BEGIN
-    void insertHorizontalLine();
-    void changeHorizontalLine();
-    // MOC_SKIP_END
-#endif
-
     void embeddedStoreInternal();
 
     void goToDocumentStructure();
@@ -499,7 +493,12 @@ protected:
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
 
     virtual void updateReadWrite( bool readwrite );
-    void updateTableActions( int nbFramesSelected );
+    /**
+     * Make sure the actions related to tables have the right texts and enabled options.
+     * @param selectFrames a list of selected frames
+     * @see KWFrameViewManager::selectedFrames()
+     */
+    void updateTableActions( QValueList<KWFrameView*> selectFrames);
 
     enum borderChanged { BorderOutline, BorderLeft, BorderRight, BorderTop, BorderBottom };
     void borderShowValues();
@@ -731,12 +730,6 @@ private: // variables
     KAction *m_actionSpellIgnoreAll;
     KAction *m_actionSpellCheck;
 
-#if 0 // KWORD_HORIZONTAL_LINE
-    // MOC_SKIP_BEGIN
-    KAction *actionInsertHorizontalLine;
-    KAction *actionChangeHorizontalLine;
-    // MOC_SKIP_END
-#endif
     KAction *m_actionEditFrameSetProperties;
     KToggleAction *m_actionEmbeddedStoreInternal;
 

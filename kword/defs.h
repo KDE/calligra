@@ -50,9 +50,6 @@ const unsigned int s_minFrameHeight=11;
  */
 enum FrameSetType { FT_BASE = 0, FT_TEXT = 1, FT_PICTURE = 2, FT_PART = 3,
                     FT_FORMULA = 4, FT_CLIPART = 5,
-#if 0 // KWORD_HORIZONTAL_LINE
-                    FT_HORZLINE = 6,
-#endif
                     FT_TABLE = 10 };
 // This has to remain here because of KWDocument::refreshDocStructure()
 

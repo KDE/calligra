@@ -47,7 +47,6 @@
 #include "KWordFormulaFrameSetIface.h"
 #include "KWordFormulaFrameSetEditIface.h"
 #include "KWordPictureFrameSetIface.h"
-#include "KWordHorizontalLineFrameSetIface.h"
 
 #include "KWFormulaFrameSet.h"
 

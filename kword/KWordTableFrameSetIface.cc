@@ -54,11 +54,6 @@ bool KWordTableFrameSetIface::hasSelectedFrame()
   return m_table->hasSelectedFrame();
 }
 
-void KWordTableFrameSetIface::deselectAll()
-{
-  m_table->deselectAll();
-}
-
 DCOPRef KWordTableFrameSetIface::cell( int pos )
 {
     // This method now sucks

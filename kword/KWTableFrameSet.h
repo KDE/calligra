@@ -397,9 +397,6 @@ public:
     unsigned int getNumCells()const { return m_nr_cells; }
 
 
-    /** deselect all frames */
-    void deselectAll();
-
     /** move the whole of the table, this is mainly for anchored frames. */
     void moveBy( double dx, double dy );
 

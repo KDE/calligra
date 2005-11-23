@@ -427,18 +427,6 @@ void KWordViewIface::addPersonalExpression()
     view->addPersonalExpression();
 }
 
-#if 0 // KWORD_HORIZONTAL_LINE
-void KWordViewIface::insertHorizontalLine()
-{
-    view->insertHorizontalLine();
-}
-
-void KWordViewIface::changeHorizontalLine()
-{
-    view->changeHorizontalLine();
-}
-#endif
-
 void KWordViewIface::addWordToDictionary()
 {
     view->addWordToDictionary();

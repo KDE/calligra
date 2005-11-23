@@ -112,11 +112,6 @@ class KWDocument : public KoDocument, public KoTextZoomHandler
     Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
     Q_PROPERTY( QString globalLanguage READ globalLanguage WRITE setGlobalLanguage )
     Q_PROPERTY( bool globalHyphenation READ globalHyphenation WRITE setGlobalHyphenation )
-#if 0 // KWORD_HORIZONTAL_LINE
-    // MOC_SKIP_BEGIN
-    Q_PROPERTY( QStringList horizontalLinePath READ horizontalLinePath WRITE setHorizontalLinePath )
-    // MOC_SKIP_END
-#endif
     Q_PROPERTY( bool insertDirectCursor READ insertDirectCursor WRITE setInsertDirectCursor )
     Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
     Q_PROPERTY( QStringList personalExpressionPath READ personalExpressionPath WRITE setPersonalExpressionPath )
@@ -744,12 +739,6 @@ public:
     QStringList personalExpressionPath() const { return m_personalExpressionPath;}
     void setPersonalExpressionPath( const QStringList & );
 
-#if 0 // KWORD_HORIZONTAL_LINE
-    // MOC_SKIP_BEGIN
-    QStringList horizontalLinePath() const { return m_horizontalLinePath;}
-    void setHorizontalLinePath( const QStringList & );
-    // MOC_SKIP_END
-#endif
 
     QString picturePath()const { return m_picturePath; }
     void setPicturePath( const QString & path ) { m_picturePath = path ; }
@@ -972,11 +961,6 @@ private:
     QStringList m_personalExpressionPath;
     QString m_picturePath;
     QString m_globalLanguage;
-#if 0 // KWORD_HORIZONTAL_LINE
-    // MOC_SKIP_BEGIN
-    QStringList m_horizontalLinePath;
-    // MOC_SKIP_END
-#endif
     bool m_bGlobalHyphenation;
     bool m_bGeneratingPreview;
 

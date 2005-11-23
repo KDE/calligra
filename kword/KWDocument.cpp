@@ -178,9 +178,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
     m_bShowGrid = false;
     m_bSnapToGrid = false;
 
-#if 0 // KWORD_HORIZONTAL_LINE
-    m_horizontalLinePath = KWFactory::instance()->dirs()->resourceDirs("horizontalLine");
-#endif
 
     setInstance( KWFactory::instance(), false );
     setTemplateType( "kword_template" );
@@ -406,10 +403,6 @@ void KWDocument::initConfig()
       config->setGroup( "Kword Path" );
       if ( config->hasKey( "expression path" ) )
           m_personalExpressionPath = config->readPathListEntry( "expression path" );
-#if 0 // KWORD_HORIZONTAL_LINE
-      if ( config->hasKey( "horizontal line path" ) )
-          m_horizontalLinePath = config->readPathListEntry( "horizontal line path" );
-#endif
       if ( config->hasKey( "picture path" ) )
           m_picturePath = config->readPathEntry( "picture path" );
       setBackupPath(config->readPathEntry( "backup path" ));
@@ -2325,15 +2318,6 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
         m_lstFrameSet.append( fs );
         return fs;
     } break;
-#if 0 // KWORD_HORIZONTAL_LINE
-    case FT_HORZLINE:
-    {
-        KWHorzLineFrameSet *fs = new KWHorzLineFrameSet( this, fsname );
-        fs->load( framesetElem, loadFrames );
-        m_lstFrameSet.append( fs );
-        return fs;
-    } break;
-#endif
     case FT_FORMULA: {
         KWFormulaFrameSet *fs = new KWFormulaFrameSet( this, fsname );
         fs->load( framesetElem, loadFrames );
@@ -4620,7 +4604,6 @@ void KWDocument::deleteTable( KWTableFrameSet *table )
 {
     if ( !table )
         return;
-    table->deselectAll();
     if ( table->isFloating() )
     {
         emit sig_terminateEditing( table ); // to unselect its cells, especially
@@ -4664,11 +4647,6 @@ void KWDocument::deleteFrame( KWFrame * frame )
         cmdName=i18n("Delete Object Frame");
         docItem=Embedded;
         break;
-#if 0 // KWORD_HORIZONTAL_LINE
-    case FT_HORZLINE:
-        cmdName=i18n("Delete Horizontal Line");
-        break;
-#endif
     case FT_TABLE:
     case FT_BASE:
         Q_ASSERT( 0 );
@@ -5408,13 +5386,6 @@ void KWDocument::saveDialogShown()
     kdDebug() << "Suggested filename:" << first_row << endl;
     setURL(first_row);
 }
-
-#if 0 // KWORD_HORIZONTAL_LINE
-void KWDocument::setHorizontalLinePath( const QStringList & lst)
-{
-    m_horizontalLinePath = lst;
-}
-#endif
 
 void KWDocument::addWordToDictionary( const QString& word )
 {
