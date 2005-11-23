@@ -186,6 +186,7 @@ void ImportWizard::setupSrcConn()
 
 	m_srcConn = new KexiConnSelectorWidget(Kexi::connset(), m_srcConnPage, "m_srcConnSelector");
 	m_srcConn->hideConnectonIcon();
+	m_srcConn->showSimpleConn();
 
 //	m_srcConn->hideHelpers();
 	vbox->addWidget(m_srcConn);
@@ -376,7 +377,7 @@ void ImportWizard::arriveSrcConnPage()
 
 //	checkIfSrcTypeFileBased(m_srcTypeCombo->currentText());
 //	if (fileBasedSrcSelected()) {
-		m_srcConn->showSimpleConn();
+//moved		m_srcConn->showSimpleConn();
 		/*! @todo KexiStartupFileDialog needs "open file" and "open server" modes
 		in addition to just "open" */
 		if (m_setupFileBasedSrcNeeded) {
@@ -771,7 +772,7 @@ void ImportWizard::next()
 	}
 	else if (currentPage() == m_dstPage) {
 		if (m_fileBasedDstWasPresented) {
-			if (!m_dstConn->m_fileDlg->checkFileName())
+			if (fileBasedSrcSelected() && !m_dstConn->m_fileDlg->checkFileName())
 				return;
 		}
 	}
