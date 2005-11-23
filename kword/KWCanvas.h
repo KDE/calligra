@@ -152,12 +152,6 @@ public:
 
     void setTableFormat(int _nb){ m_table.format=_nb;}
 
-    unsigned int splitCellRows()const{return m_tableSplit.nbRows;}
-    unsigned int splitCellCols()const{return m_tableSplit.nbCols;}
-
-    void setSplitCellRows(unsigned int _nb){ m_tableSplit.nbRows=_nb;}
-    void setSplitCellCols(unsigned int _nb){ m_tableSplit.nbCols=_nb;}
-
     QString tableTemplateName()const { return m_table.tableTemplateName;}
     void setTableTemplateName(const QString &_name) { m_table.tableTemplateName=_name;}
 
@@ -359,13 +353,6 @@ private:
     } m_table;
     KWTableFrameSet *m_currentTable;
     KWFrameMoveCommand *m_moveFrameCommand;
-
-    // Split cell in table
-    struct
-    {
-        unsigned int nbCols;
-        unsigned int nbRows;
-    }m_tableSplit;
 
     struct
     {

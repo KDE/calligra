@@ -27,11 +27,11 @@
 
 #include <klocale.h>
 
-KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int numrows, unsigned int numcols)
+KWSplitCellDia::KWSplitCellDia( QWidget* parent, const char* name, unsigned int columns, unsigned int rows)
     : KDialogBase( Plain, i18n("Split Cell"), Ok | Cancel, Ok, parent, name, true)
 {
-    m_cols= numcols;
-    m_rows= numrows;
+    m_cols = columns;
+    m_rows = rows;
 
     setInitialSize( QSize(400, 300) );
 

@@ -92,9 +92,6 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
     m_table.tableTemplateName=QString::null;
     m_table.format=31;
 
-    m_tableSplit.nbRows=1;
-    m_tableSplit.nbCols=1;
-
     m_footEndNote.noteType = FootNote;
     m_footEndNote.numberingType = KWFootNoteVariable::Auto;
 

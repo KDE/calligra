@@ -159,6 +159,8 @@ KWView::KWView( KWViewMode* viewMode, QWidget *parent, const char *name, KWDocum
     m_findReplace = 0L;
     m_fontDlg = 0L;
     m_paragDlg = 0L;
+    m_tableSplit.columns = 0;
+    m_tableSplit.rows = 0;
 
     m_actionList.setAutoDelete( true );
     m_variableActionList.setAutoDelete( true );
@@ -4185,8 +4187,6 @@ void KWView::tableResizeCol()
 
 void KWView::tableJoinCells()
 {
-    //m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT_FRAME );
-
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     Q_ASSERT(table);
     if (!table)
@@ -4205,21 +4205,18 @@ void KWView::tableJoinCells()
 }
 
 void KWView::tableSplitCells() {
-    KWSplitCellDia *splitDia=new KWSplitCellDia( this,"split cell",m_gui->canvasWidget()->splitCellRows(),m_gui->canvasWidget()->splitCellCols() );
+    KWSplitCellDia *splitDia=new KWSplitCellDia( this,"split cell",
+            m_tableSplit.rows, m_tableSplit.columns );
     if(splitDia->exec()) {
-        unsigned int nbCols=splitDia->cols();
-        unsigned int nbRows=splitDia->rows();
-        m_gui->canvasWidget()->setSplitCellRows(nbRows);
-        m_gui->canvasWidget()->setSplitCellCols(nbCols);
-        tableSplitCells(nbCols, nbRows);
+        m_tableSplit.rows = splitDia->rows();
+        m_tableSplit.columns = splitDia->columns();
+        tableSplitCells( m_tableSplit.columns, m_tableSplit.rows );
     }
     delete splitDia;
 }
 
 void KWView::tableSplitCells(int cols, int rows)
 {
-    //m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT_FRAME );
-
     QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     if ( !table && selectedFrames.count() > 0) {
@@ -4234,7 +4231,6 @@ void KWView::tableSplitCells(int cols, int rows)
         return;
     }
 
-    //int rows=1, cols=2;
     KCommand *cmd=table->splitCell(rows,cols);
     if ( !cmd ) {
         KMessageBox::sorry( this,

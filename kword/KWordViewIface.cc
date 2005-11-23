@@ -262,16 +262,6 @@ void KWordViewIface::insertFootNote()
     view->insertFootNote();
 }
 
-void KWordViewIface::setConfigSplitCellRows( unsigned int _nb )
-{
-    view->getGUI()->canvasWidget()->setSplitCellRows( _nb );
-}
-
-void KWordViewIface::setConfigSplitCellCols( unsigned int _nb )
-{
-    view->getGUI()->canvasWidget()->setSplitCellCols( _nb );
-}
-
 int KWordViewIface::configTableRows() const
 {
     return (int)view->getGUI()->canvasWidget()->tableRows();
@@ -285,16 +275,6 @@ int KWordViewIface::configTableCols() const
 bool KWordViewIface::configTableIsFloating() const
 {
     return view->getGUI()->canvasWidget()->tableIsFloating();
-}
-
-int KWordViewIface::configSplitCellRows() const
-{
-    return (int)view->getGUI()->canvasWidget()->splitCellRows();
-}
-
-int KWordViewIface::configSplitCellCols() const
-{
-    return (int)view->getGUI()->canvasWidget()->splitCellCols();
 }
 
 QString KWordViewIface::configTableTemplateName() const

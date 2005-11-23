@@ -783,6 +783,11 @@ private: // variables
 
 
     KWFrameSet *m_fsInline;
+
+    // Split cell in table
+    struct {
+        unsigned int columns, rows;
+    } m_tableSplit;
 };
 
 /******************************************************************/

@@ -86,10 +86,6 @@ k_dcop:
     int configTableRows() const;
     int configTableCols() const;
     bool configTableIsFloating() const;
-    int configSplitCellRows() const;
-    int configSplitCellCols() const;
-    void setConfigSplitCellRows( unsigned int _nb );
-    void setConfigSplitCellCols( unsigned int _nb );
 
     //it can return QString::null if there is any template selected
     QString configTableTemplateName() const;
