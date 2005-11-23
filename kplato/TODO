@@ -120,6 +120,9 @@ Taken       Cost Breakdown Structure:
             
             Make a summarytask dialog.
             
+            Change source filenames to 'classname'.cpp and d:o .h
+            Eg: kpttask.cc -> Task.cpp kpttask.h -> Task.h
+            Also remove the .ui filename prefix.
 ------------------------------------------------------------------
 
 Done        Remove KPT prefix from all KPlato classes (ask mailing list!)
