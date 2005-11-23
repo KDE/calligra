@@ -17,7 +17,7 @@ data pics main migration $(SCRIPTINGSUBDIR) plugins . tests
 #(will be reenabled after main/startup move)
 
 kdelnkdir = $(kde_appsdir)/Office
-xdg_apps_DATA = kexi.desktop
+kdelnk_DATA = kexi.desktop
 
 install-data-local:
 #	$(mkinstalldirs) $(kde_servicetypesdir)/
