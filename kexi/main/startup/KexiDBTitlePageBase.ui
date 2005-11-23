@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.1" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KexiDBTitlePageBase</class>
 <widget class="QWidget">
     <property name="name">
@@ -11,6 +11,9 @@
             <width>379</width>
             <height>87</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KexiDBTitlePageBase</string>
     </property>
     <grid>
         <property name="name">
@@ -25,6 +28,9 @@
             </property>
             <property name="text">
                 <string>Project caption: </string>
+            </property>
+            <property name="buddy" stdset="0">
+                <cstring>le_caption</cstring>
             </property>
         </widget>
         <spacer row="1" column="1">

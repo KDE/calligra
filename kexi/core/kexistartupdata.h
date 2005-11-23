@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,8 @@
 
 class KexiProjectData;
 
+//! Startup data used for storing results of startup operations in Kexi. 
+//! @see KexiStartupHandler
 class KEXICORE_EXPORT KexiStartupData
 {
 	public:
@@ -32,9 +34,22 @@ class KEXICORE_EXPORT KexiStartupData
 			CreateBlankProject = 1,
 			UseTemplate = 2,
 			OpenProject = 3,
-			Exit = 4
+			ImportProject = 4,
+			Exit = 5
 		};
-		
+
+		/*! Data required to perform import action. 
+		 It is set by KexiStartupHandler::detectActionForFile() 
+		 if a need for project/data importing has been detected. */
+		class KEXICORE_EXPORT Import
+		{
+			public:
+				Import();
+				operator bool() const;
+				QString fileName;
+				QString mimeType;
+		};
+
 		KexiStartupData();
 		virtual ~KexiStartupData();
 		
@@ -42,7 +57,11 @@ class KEXICORE_EXPORT KexiStartupData
 
 		Action action() const;
 
+		//! \return project data of a project that should be opened (for action()==OpenProject)
 		KexiProjectData *projectData() const;
+
+		//! \return import action's data needed to perform import (for action()==ImportProject)
+		KexiStartupData::Import importActionData() const;
 
 		/*! \return true is the Design Mode is forced for this project. 
 			Used on startup (by --design-mode comman line switch). */
@@ -56,6 +75,7 @@ class KEXICORE_EXPORT KexiStartupData
 	protected:
 		KexiProjectData *m_projectData;
 		Action m_action;
+		KexiStartupData::Import m_importActionData;
 		bool m_forcedFinalMode : 1;
 		bool m_forcedDesignMode : 1;
 		bool m_createDB : 1;
@@ -64,4 +84,3 @@ class KEXICORE_EXPORT KexiStartupData
 };
 
 #endif
-

@@ -753,7 +753,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_project_relations = d->dummy_action;
 #endif
 #ifndef KEXI_NO_MIGRATION
-	d->action_tools_data_migration = new KAction(i18n("&Import Database..."), "", 0,
+	d->action_tools_data_migration = new KAction(i18n("&Import Database..."), "database_import", 0,
 		this, SLOT(slotToolsProjectMigration()), actionCollection(), "tools_import_project");
 #else
 	d->action_tools_data_migration = d->dummy_action;
@@ -1107,6 +1107,11 @@ tristate KexiMainWindowImpl::startup()
 				return false;
 		}
 		break;
+	case KexiStartupHandler::ImportProject:
+		return showProjectMigrationWizard(
+			Kexi::startupHandler().importActionData().mimeType,
+			Kexi::startupHandler().importActionData().fileName
+		);
 	default:;
 		makeDockInvisible( manager()->findWidgetParentDock(d->propEditorTabWidget) );
 	}
@@ -2341,9 +2346,9 @@ KexiMainWindowImpl::slotProjectOpen()
 	openProject(dlg.selectedExistingFile(), dlg.selectedExistingConnection());
 }
 
-void KexiMainWindowImpl::openProject(const QString& fileName, KexiDB::ConnectionData *cdata)
+tristate KexiMainWindowImpl::openProject(const QString& fileName, KexiDB::ConnectionData *cdata)
 {
-	if (d->prj) {//js: TODO: start new instance!
+	if (d->prj) {
 		QProcess *proc;
 		QStringList args;
 		if (!fileName.isEmpty()) {
@@ -2353,18 +2358,19 @@ void KexiMainWindowImpl::openProject(const QString& fileName, KexiDB::Connection
 			proc->setWorkingDirectory( QFileInfo(fileName).dir(true) );
 		}
 		//! @todo server-based
-		if (!proc->start()) {
-			d->showStartProcessMsg(args);
-		}
+		bool ok = proc->start();
+		d->showStartProcessMsg(args);
 		delete proc;
-		return;
+		return ok;
 	}
 
 	KexiProjectData* projectData = 0;
 //	KexiDB::ConnectionData *cdata = dlg.selectedExistingConnection();
 	if (cdata) {
-		bool cancelled;
-		projectData = Kexi::startupHandler().selectProject( cdata, cancelled, this );
+		bool cancel;
+		projectData = Kexi::startupHandler().selectProject( cdata, cancel, this );
+		if (cancel)
+			return cancelled;
 //		if (!projectData && !Kexi::startupHandler().error()) {
 //			showErrorMessage(&Kexi::startupHandler());
 //		}
@@ -2376,16 +2382,30 @@ void KexiMainWindowImpl::openProject(const QString& fileName, KexiDB::Connection
 			kdDebug() << "Project File: " << fileName << endl;
 			KexiDB::ConnectionData cdata;
 			cdata.setFileName( fileName );
-			cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName, fileName, this );
+//			cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName, fileName, this );
+			QString detectedDriverName;
+			KexiStartupData::Import importActionData;
+			const tristate res = KexiStartupHandler::detectActionForFile( 
+				importActionData, detectedDriverName, cdata.driverName, fileName, this );
+			if (true != res)
+				return res;
+
+			if (importActionData) { //importing requested
+				return showProjectMigrationWizard( importActionData.mimeType, importActionData.fileName );
+			}
+			cdata.driverName = detectedDriverName;
+
 			if (cdata.driverName.isEmpty())
-				return;
+				return false;
+
+			//opening requested
 			projectData = new KexiProjectData(cdata, fileName);
 		}
 	}
 
 	if (!projectData)
-		return;
-	openProject(projectData);
+		return false;
+	return openProject(projectData);
 }
 
 void
@@ -3697,29 +3717,43 @@ KexiMainWindowImpl::initUserActions()
 
 void KexiMainWindowImpl::slotToolsProjectMigration()
 {
+	showProjectMigrationWizard(QString::null, QString::null);
+}
+
+tristate KexiMainWindowImpl::showProjectMigrationWizard(const QString& mimeType, const QString& fileName)
+{
 #ifndef KEXI_NO_MIGRATION
-	QVariant fileName;
-	QDialog *dlg = KexiInternalPart::createModalDialogInstance("migration", this, this, 0, &fileName);
+	//pass arguments
+	QMap<QString,QString> args;
+	args.insert("mimeType", mimeType);
+	args.insert("fileName", fileName);
+
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance("migration", this, this, 0, &args);
 	if (!dlg)
-		return; //error msg has been shown by KexiInternalPart
+		return false; //error msg has been shown by KexiInternalPart
+
 	const int result = dlg->exec();
 	delete dlg;
-	raise();
+	//raise();
 	if (result!=QDialog::Accepted)
-		return;
+		return cancelled;
+
 	//open imported project in a new Kexi instance
 //! @todo migration wizard should have added "open project after importing" checkbox (on, by default)
-	if (!fileName.isNull()) {
-		openProject(fileName.toString(), 0);
+	QString destinationFileName( args["destinationFileName"] );
+	if (!destinationFileName.isEmpty()) {
+		return openProject(destinationFileName, 0);
 	}
+	return true;
 #endif
 }
 
 void KexiMainWindowImpl::slotToolsProjectImportDataTable()
 {
 #ifndef KEXI_NO_CSV_IMPORT
-	QVariant arg = "file";
-	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_import", this, this, 0, &arg);
+	QMap<QString,QString> args;
+	args.insert("sourceType", "file");
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_import", this, this, 0, &args);
 	if (!dlg)
 		return; //error msg has been shown by KexiInternalPart
 	dlg->exec();
@@ -3737,8 +3771,9 @@ void KexiMainWindowImpl::slotToolsScriptsAboutToShow()
 void KexiMainWindowImpl::slotEditPasteSpecialDataTable()
 {
 #ifndef KEXI_NO_CSV_IMPORT
-	QVariant arg = "clipboard";
-	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_import", this, this, 0, &arg);
+	QMap<QString,QString> args;
+	args.insert("sourceType", "clipboard");
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_import", this, this, 0, &args);
 	if (!dlg)
 		return; //error msg has been shown by KexiInternalPart
 	dlg->exec();

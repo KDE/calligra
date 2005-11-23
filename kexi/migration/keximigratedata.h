@@ -51,7 +51,7 @@ namespace KexiMigration
 //			//! New database name
 //			QString destName;
 			
-			//! Flag to determin structure copy, or structure + data
+			//! Flag to determine structure copy, or structure + data
 			bool keepData;
 	};
 }//namespace KexiMigration

@@ -100,7 +100,7 @@ KexiGUIMessageHandler::showErrorMessage(const QString &message, Kexi::ObjectStat
 				desc = status->description;
 			}
 		}
-		showErrorMessage(message, desc, status->dbObject());
+		showErrorMessage(msg, desc, status->dbObject());
 	}
 	else {
 		showErrorMessage(message);
@@ -132,6 +132,7 @@ KexiGUIMessageHandler::showMessage(MessageType type,
 		}
 	}
 	else {
-		KMessageBox::messageBox(m_messageHandlerParentWidget, type==Error?KMessageBox::Error:KMessageBox::Sorry, msg);
+		KMessageBox::messageBox(m_messageHandlerParentWidget, 
+			type==Error ? KMessageBox::Error : KMessageBox::Sorry, msg);
 	}
 }

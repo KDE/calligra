@@ -22,8 +22,8 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
 #ifdef Q_WS_WIN
 # include <mysql/config-win.h>
 #endif
-#include <mysql.h>
 #include <mysql_version.h>
+#include <mysql.h>
 #define BOOL bool
 
 #include <qvariant.h>

@@ -28,8 +28,9 @@
 
 class KexiProjectDataPrivate;
 
-/**
- Kexi project core data member:
+/** @short Kexi project core data member
+
+ Contains:
  - project name
  - database name
  - connection data

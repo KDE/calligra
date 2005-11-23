@@ -22,16 +22,19 @@
 
 #include "KexiDBTitlePageBase.h"
 
+//! @short A helper widget used to displaying a line edit with a label and layout
 class KEXIMAIN_EXPORT KexiDBTitlePage : public KexiDBTitlePageBase
 {
-    Q_OBJECT
+	Q_OBJECT
 
 public:
-    KexiDBTitlePage( QWidget* parent = 0, const char* name = 0 );
-    ~KexiDBTitlePage();
-
+	//! Constructs title page. \a labelText can be provided to change default 
+	//! "Project caption:" label.
+	KexiDBTitlePage( const QString& labelText, QWidget* parent = 0, const char* name = 0 );
+	~KexiDBTitlePage();
+	
 protected slots:
-    virtual void languageChange() { KexiDBTitlePageBase::languageChange(); }
+	virtual void languageChange() { KexiDBTitlePageBase::languageChange(); }
 
 };
 

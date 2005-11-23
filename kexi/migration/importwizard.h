@@ -27,32 +27,33 @@
 #include <kapplication.h>
 
 
+class QLabel;
+class QCheckBox;
 class QHBoxLayout;
 class QVBoxLayout;
+class QVButtonGroup;
 class KComboBox;
 class KListView;
 class KLineEdit;
-class QLabel;
+class KActiveLabel;
 class KexiConnSelectorWidget;
 class KexiProjectSelectorWidget;
 class KexiProjectSet;
 class KexiDBTitlePage;
 class KexiDBDriverComboBox;
-class QVButtonGroup;
 
 namespace KexiMigration {
 
-//! GUI for importing non-native databases.
-/**
-@author Adam Pigg
-*/
+//! GUI for importing external databases (file-based and server-based)
 class KEXIMIGR_EXPORT ImportWizard : public KWizard
 {
 Q_OBJECT
 public:
-	/*! Creates wizard's instance. \a result will be set to imported project's filename, on success
+	/*! Creates wizard's instance. 
+	 \a args contains arguments that can be parsed by parseArguments().
+	 \a *arg will be also set to imported project's filename on success
 	 and to null value on failure or cancellation. */
-	ImportWizard(QWidget *parent = 0, QVariant* result = 0);
+	ImportWizard(QWidget *parent = 0, QMap<QString,QString>* args = 0);
 	virtual ~ImportWizard();
 
 public slots:
@@ -67,44 +68,55 @@ protected slots:
 	void helpClicked();
 
 private:
-	void setupintro();
-	void setupsrcType();
-	void setupsrcconn();
-	void setupsrcdb();
-	void setupdstType();
-	void setupdstTitle();
-	void setupdst();
-	void setupfinish();
+	void parseArguments();
+	void setupIntro();
+//	void setupSrcType();
+	void setupSrcConn();
+	void setupSrcDB();
+	void setupDstType();
+	void setupDstTitle();
+	void setupDst();
+	void setupFinish();
 	void setupImportType();
+	void setupImporting();
 	bool checkUserInput();
-		void acceptImport();
+	bool acceptImport();
 
-	void checkIfSrcTypeFileBased(const QString& srcType);
-	void checkIfDstTypeFileBased(const QString& dstType);
+	bool fileBasedSrcSelected() const;
+	bool fileBasedDstSelected() const;
+	QString driverNameForSelectedSource();
+//	void checkIfSrcTypeFileBased(const QString& srcType);
+//	void checkIfDstTypeFileBased(const QString& dstType);
 
 	void arriveSrcConnPage();
 	void arriveSrcDBPage();
 	void arriveDstTitlePage();
 	void arriveDstPage();
 	void arriveFinishPage();
+	void arriveImportingPage();
 
-	QWidget *introPage, *srcTypePage, *srcConnPage, *srcdbPage, *dstTypePage, *dstPage, *importTypePage, *finishPage;
+	QWidget *m_introPage, /* *m_srcTypePage,*/ *m_srcConnPage, *m_srcDBPage, 
+		*m_dstTypePage, *m_dstPage, *m_importTypePage, *m_importingPage, *m_finishPage;
 
-	QVButtonGroup *importTypeButtonGroup ;
-	KexiDBTitlePage* dstTitlePage;
+	QVButtonGroup *m_importTypeButtonGroup;
+	KexiDBTitlePage* m_dstTitlePage;
 
-	KComboBox *srcTypeCombo;
-	KexiDBDriverComboBox *dstTypeCombo;
+	KComboBox *m_srcTypeCombo;
+	KexiDBDriverComboBox *m_dstTypeCombo;
 
-	KexiConnSelectorWidget *srcConn, *dstConn;
-	KLineEdit *dstNewDBName;
-	KexiProjectSelectorWidget *srcdbname;
+	KexiConnSelectorWidget *m_srcConn, *m_dstConn;
+	KLineEdit *m_dstNewDBNameLineEdit;
+	KexiProjectSelectorWidget *m_srcDBName;
 
-	QLabel *lblfinishTxt;
-	bool fileBasedSrc, fileBasedDst, fileBasedDstWasPresented, setupFileBasedSrcNeeded;
+	QLabel *m_lblImportingTxt;
+	KActiveLabel *m_lblImportingErrTxt, *m_finishLbl;
+	QCheckBox *m_openImportedProjectCheckBox;
+	bool m_fileBasedDstWasPresented, m_setupFileBasedSrcNeeded, 
+		m_acceptImportExecuted; //!< used in acceptImport()
 	KexiProjectSet* m_prjSet;
-	KProgress *progress;
-	QVariant *m_result;
+	KProgress *m_progress;
+	QMap<QString,QString> *m_args;
+	QString m_predefinedFileName, m_predefinedMimeType;
 };
 
 }

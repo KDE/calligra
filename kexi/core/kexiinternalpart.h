@@ -59,16 +59,19 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		 \a widgetClass is a pseudo class used in case when the part offers more 
 		 than one widget type.
 		 \a msgHdr is a message handler for displaying error messages.
+		 \a args is two-way optional argument: it can contain custom options used 
+		 on widget's creation. Depending on implementation, the created widget can write its 
+		 state (e.g. result or status information) back to this argument.
 		 Created widget will have assigned \a parent widget and \a objName name. */
 		static QWidget* createWidgetInstance(const char* partName, const char* widgetClass, 
 			KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
-			QWidget *parent, const char *objName = 0, QVariant* arg = 0);
+			QWidget *parent, const char *objName = 0, QMap<QString,QString>* args = 0);
 
 		/*! For convenience. */
 		static QWidget* createWidgetInstance(const char* partName,
 			KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
-			QWidget *parent, const char *objName = 0, QVariant* arg = 0)
-		 { return createWidgetInstance(partName, 0, msgHdr, mainWin, parent, objName, arg); }
+			QWidget *parent, const char *objName = 0, QMap<QString,QString>* args = 0)
+		 { return createWidgetInstance(partName, 0, msgHdr, mainWin, parent, objName, args); }
 
 		/*! Creates a new dialog instance. If such instance already exists, 
 		 and is unique (see uniqueDialog()) it is just returned.
@@ -86,18 +89,22 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		 \a dialogClass is a pseudo class used in case when the part offers more 
 		 than one dialog type.
 		 \a msgHdr is a message handler for displaying error messages.
+		 \a args is two-way optional argument: it can contain custom options used 
+		 on widget's creation. Depending on implementation, the created dialog can write its 
+		 state (e.g. result or status information) back to this argument.
 		 The part knows about destroying its dialog instance, (if it is uinque), 
 		 so on another call the dialog will be created again. 
 		 The dialog is assigned to \a mainWin as its parent, 
 		 and \a objName name is set. */
 		static QDialog* createModalDialogInstance(const char* partName, 
 			const char* dialogClass, KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, 
-			const char *objName = 0, QVariant* arg = 0);
+			const char *objName = 0, QMap<QString,QString>* args = 0);
 
+		/*! Adeded For convenience. */
 		static QDialog* createModalDialogInstance(const char* partName, 
 			KexiDB::MessageHandler *msgHdr, KexiMainWindow* mainWin, const char *objName = 0, 
-			QVariant* arg = 0)
-		{ return createModalDialogInstance(partName, 0, msgHdr, mainWin, objName, arg); }
+			QMap<QString,QString>* args = 0)
+		{ return createModalDialogInstance(partName, 0, msgHdr, mainWin, objName, args); }
 
 		/*! \return internal part of a name \a partName. Shouldn't be usable. */
 		static const KexiInternalPart* part(KexiDB::MessageHandler *msgHdr, const char* partName);
@@ -118,7 +125,7 @@ class KEXICORE_EXPORT KexiInternalPart : public QObject
 		/*! Reimplement this if your internal part has to return widgets 
 		 or QDialog objects. */
 		virtual QWidget *createWidget(const char* /*widgetClass*/, KexiMainWindow* /*mainWin*/, 
-		 QWidget * /*parent*/, const char * /*objName*/ =0, QVariant* /*arg*/ = 0) { return 0; }
+		 QWidget * /*parent*/, const char * /*objName*/ =0, QMap<QString,QString>* /*args*/ = 0) { return 0; }
 		
 //		//! Reimplement this if your internal part has to return dialogs
 //		virtual KexiDialogBase *createDialog(KexiMainWindow* /*mainWin*/, 

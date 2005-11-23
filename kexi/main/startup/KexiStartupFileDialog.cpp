@@ -98,7 +98,7 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode,
 			filter += KexiUtils::fileDialogFilterString(mime);
 //			filter += mime->patterns().join(" ") + "|" + mime->comment() 
 //					+ " ("+mime->patterns().join(" ")+")\n";
-			allfilters += mime->patterns().join(" ");
+			allfilters += mime->patterns();
 		}
 	}
 #ifdef KEXI_SERVER_SUPPORT
@@ -109,10 +109,28 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode,
 //			filter += mime->patterns().join(" ") + "|" + mime->comment() 
 //				+ " ("+mime->patterns().join(" ")+")\n";
 			filter += KexiUtils::fileDialogFilterString(mime);
-//			allfilters += mime->patterns().join(" ");
+			allfilters += mime->patterns();
+		}
+	}
+	if (m_mode == KexiStartupFileDialog::Opening 
+		|| m_mode == KexiStartupFileDialog::SavingServerBasedDB) {
+		mime = KMimeType::mimeType("application/x-kexi-connectiondata");
+		if (mime) {
+//			filter += mime->patterns().join(" ") + "|" + mime->comment() 
+//				+ " ("+mime->patterns().join(" ")+")\n";
+			filter += KexiUtils::fileDialogFilterString(mime);
+			allfilters += mime->patterns();
 		}
 	}
 #endif
+
+//! @todo hardcoded for MSA:
+	mime = KMimeType::mimeType("application/x-msaccess");
+	if (mime) {
+		filter += KexiUtils::fileDialogFilterString(mime);
+		allfilters += mime->patterns();
+	}
+
 	foreach (QStringList::ConstIterator, it, additionalMimeTypes) {
 //		mime = KMimeType::mimeType(*it);
 //		filter += mime->patterns().join(" ") + "|" + mime->comment() + " ("
@@ -126,9 +144,17 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode,
 //		filter += QString(mime->patterns().isEmpty() ? "*" : mime->patterns().join(" ")) 
 //			+ "|" + mime->comment()+ " (*)\n";
 //	}
+	//remove duplicated made because upper- and lower-case extenstions are used:
+	QStringList allfiltersUnique;
+	foreach (QStringList::ConstIterator, it, allfilters) {
+//		kdDebug() << *it << endl;
+		if ((*it) == (*it).lower())
+			allfiltersUnique += *it;
+	}
 	
 	if (allfilters.count()>1) {//prepend "all supoported files" entry
-		filter = allfilters.join(" ")+"|" + i18n("All Kexi Files")+" ("+allfilters.join(" ")+")\n" + filter;
+		filter.prepend(allfilters.join(" ")+"|" + i18n("All Supported Files")
+			+" ("+allfiltersUnique.join(" ")+")\n");
 	}
 	
 	if (filter.right(1)=="\n")

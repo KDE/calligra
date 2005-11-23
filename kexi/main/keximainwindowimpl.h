@@ -185,7 +185,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! Helper. Opens project pointed by \a fileName.
 		 If \a fileName is empty, a dialog with projects available 
 		 for connection \a cdata is opened. */
-		void openProject(const QString& fileName, KexiDB::ConnectionData *cdata);
+		tristate openProject(const QString& fileName, KexiDB::ConnectionData *cdata);
 
 		/*! Closes current project, \return true on success.
 		 Application state (e.g. actions) is updated.
@@ -346,11 +346,16 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		void slotMdiModeHasBeenChangedTo(KMdi::MdiMode);
 
-		//reimplemented to add "restart is required" message box
+		//! reimplemented to add "restart is required" message box
 		virtual void switchToIDEAlMode();
 		void switchToIDEAlMode(bool showMessage);
 		virtual void switchToChildframeMode();
 		void switchToChildframeMode(bool showMessage);
+		/*! Shows Project Migration Wizard. \return true on successfull migration, 
+		 cancelled on cancellation, and false on failure.
+		 If \a mimeType and \a fileName are not empty, the wizard will only ask about 
+		 parameters of destination project and skip pages related to source project. */
+		tristate showProjectMigrationWizard(const QString& mimeType, const QString& fileName);
 
 	private:
 

@@ -468,6 +468,10 @@ void KexiStartupDialog::tabShown(QWidget *w)
 //	kdDebug() << "KexiStartupDialog::tabShown " << (long)w << " "<< long(d->pageTemplates)<<endl;
 
 	updateDialogOKButton(w);
+
+	if (w==d->pageOpenExisting) {
+		d->openExistingConnWidget->setFocus();
+	}
 }
 
 void KexiStartupDialog::updateDialogOKButton(QWidget *w)
@@ -522,6 +526,7 @@ void KexiStartupDialog::setupPageOpenExisting()
 
 	d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet, d->pageOpenExisting, 
 		"KexiConnSelectorWidget");
+	d->openExistingConnWidget->hideConnectonIcon();
 	lyr->addWidget( d->openExistingConnWidget );
 	if (KGlobal::config()->readEntry("OpenExistingType","File")=="File")
 		d->openExistingConnWidget->showSimpleConn();

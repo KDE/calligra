@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -59,9 +59,6 @@
 #include <qcstring.h>
 #include <qapplication.h>
 #include <qlayout.h>
-
-//undef this for hardcoded conn. data
-//#define KEXI_HARDCODED_CONNDATA
 
 namespace Kexi {
 	static KStaticDeleter<KexiStartupHandler> Kexi_startupHandlerDeleter;
@@ -401,11 +398,20 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
 				if (m_dropDB)
 					detectOptions |= DontConvert;
-				cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName,
-					cdata.fileName(), 0, detectOptions );
-				if (cdata.driverName.isEmpty())
-					return false;
 
+				QString detectedDriverName;
+				const tristate res = detectActionForFile( m_importActionData, detectedDriverName, 
+					cdata.driverName, cdata.fileName(), 0, detectOptions );
+				if (true != res)
+					return res;
+
+				if (m_importActionData) { //importing action
+					m_action = ImportProject;
+					return true;
+				}
+
+				//opening action
+				cdata.driverName = detectedDriverName;
 				if (cdata.driverName=="shortcut") {
 					//get information for a shortcut file
 					d->shortcutFile = new KexiDBShortcutFile(cdata.fileName());
@@ -566,51 +572,16 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 
 	if (!m_projectData) {
 		cdata = KexiDB::ConnectionData(); //clear
-//		importantInfo(true);
-
-#ifdef KEXI_HARDCODED_CONNDATA
-//<TEMP>
-		//some connection data
-		Kexi::connset().clear();
-		KexiDB::ConnectionData *conndata;
-		
-#ifdef KEXI_CUSTOM_HARDCODED_CONNDATA
-#include <custom_connectiondata.h>
-#endif
-
-		conndata = new KexiDB::ConnectionData();
-			conndata->caption = "Local MySQL Connection";
-			conndata->driverName = "mysql";
-			conndata->hostName = "localhost";
-//			conndata->userName = "otheruser";
-//			conndata->port = 53121;
-		Kexi::connset().addConnectionData(conndata);
-		conndata = new KexiDB::ConnectionData();
-			conndata->caption = "Local Pgsql Connection";
-			conndata->driverName = "postgresql";
-			conndata->hostName = "localhost"; // -- default //"host.net";
-#if !KDE_IS_VERSION(3,1,9)
-			conndata->userName = getlogin(); //-- temporary
-#else
-			conndata->userName = KUser().loginName(); //-- temporary
-#endif
-		Kexi::connset().addConnectionData(conndata);
-
-		//some recent projects data
-		KexiProjectData *projectData = new KexiProjectData( *conndata, "bigdb", "Big DB" );
-		projectData->setCaption("My Big Project");
-		projectData->setDescription("This is my first biger project started yesterday. Have fun!");
-		Kexi::recentProjects().addProjectData(projectData);
-//</TEMP>
-#endif //KEXI_HARDCODED_CONNDATA
 
 		if (!KexiStartupDialog::shouldBeShown())
 			return true;
 
-		if (!d->startupDialog) //create d->startupDialog for reuse because it can be used again after conn err.
+		if (!d->startupDialog) {
+			//create d->startupDialog for reuse because it can be used again after conn err.
 			d->startupDialog = new KexiStartupDialog(
 				KexiStartupDialog::Everything, KexiStartupDialog::CheckBoxDoNotShowAgain,
 				Kexi::connset(), Kexi::recentProjects(), 0, "KexiStartupDialog");
+		}
 		if (d->startupDialog->exec()!=QDialog::Accepted)
 			return true;
 
@@ -632,13 +603,24 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 				//file-based project
 				kdDebug() << "Project File: " << selFile << endl;
 				cdata.setFileName( selFile );
-				cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName, selFile );
-				if (cdata.driverName.isEmpty())
+				QString detectedDriverName;
+				const tristate res = detectActionForFile( m_importActionData, detectedDriverName, 
+					cdata.driverName, selFile );
+				if (true != res)
+					return res;
+				if (m_importActionData) { //importing action
+					m_action = ImportProject;
+					return true;
+				}
+
+				if (detectedDriverName.isEmpty())
 					return false;
+				cdata.driverName = detectedDriverName;
 				m_projectData = new KexiProjectData(cdata, selFile);
 			}
 			else if (d->startupDialog->selectedExistingConnection()) {
-				kdDebug() << "Existing connection: " << d->startupDialog->selectedExistingConnection()->serverInfoString() << endl;
+				kdDebug() << "Existing connection: " <<
+					d->startupDialog->selectedExistingConnection()->serverInfoString() << endl;
 				KexiDB::ConnectionData *cdata = d->startupDialog->selectedExistingConnection();
 				//ok, now we will try to show projects for this connection to the user
 				bool cancelled;
@@ -676,29 +658,31 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	return true;
 }
 
-QString KexiStartupHandler::detectDriverForFile( 
-	const QString& driverName, const QString &dbFileName, QWidget *parent, int options )
+tristate KexiStartupHandler::detectActionForFile( 
+	KexiStartupData::Import& detectedImportAction, QString& detectedDriverName,
+	const QString& _suggestedDriverName, const QString &dbFileName, QWidget *parent, int options )
 {
-	QString ret;
+	detectedImportAction = KexiStartupData::Import(); //clear
+	QString suggestedDriverName(_suggestedDriverName); //safe
+	detectedDriverName = QString::null;
 	QFileInfo finfo(dbFileName);
 	if (dbFileName.isEmpty() || !finfo.isReadable()) {
-		KMessageBox::sorry(parent, i18n(
-			"<qt><p>Could not load project.</p><p>The file <nobr>\"%1\"</nobr> does not exist.</p></qt>").arg(dbFileName));
-		return QString::null;
-	}
-	if (!finfo.isWritable()) {
-		//TODO: if file is ro: change project mode
+		KMessageBox::sorry(parent, i18n("<qt><p>Could not load project.</p>"
+			"<p>The file <nobr>\"%1\"</nobr> does not exist.</p></qt>").arg(dbFileName));
+		return false;
 	}
 
 	KMimeType::Ptr ptr;
 	QString mimename;
 
-	if ((options & ThisIsAProjectFile) 
-		|| !( (options & ThisIsAShortcutToAProjectFile) || (options & ThisIsAShortcutToAConnectionData)) ) {
+	const bool thisIsShortcut = (options & ThisIsAShortcutToAProjectFile) 
+		|| (options & ThisIsAShortcutToAConnectionData);
+
+	if ((options & ThisIsAProjectFile) || !thisIsShortcut) {
 		//try this detection if "project file" mode is forced or no type is forced:
 		ptr = KMimeType::findByFileContent(dbFileName);
 		mimename = ptr.data()->name();
-		kdDebug() << "KexiStartupHandler::detectDriverForFile(): found mime is: " 
+		kdDebug() << "KexiStartupHandler::detectActionForFile(): found mime is: " 
 			<< mimename << endl;
 		if (mimename.isEmpty() || mimename=="application/octet-stream" || mimename=="text/plain") {
 			//try by URL:
@@ -706,33 +690,67 @@ QString KexiStartupHandler::detectDriverForFile(
 			mimename = ptr.data()->name();
 		}
 	}
-	if ((options & ThisIsAShortcutToAProjectFile) || mimename=="application/x-kexiproject-shortcut")
-		return "shortcut";
+	if ((options & ThisIsAShortcutToAProjectFile) || mimename=="application/x-kexiproject-shortcut") {
+		detectedDriverName = "shortcut";
+		return true;
+	}
 
-	if ((options & ThisIsAShortcutToAConnectionData) || mimename=="application/x-kexi-connectiondata")
-		return "connection";
+	if ((options & ThisIsAShortcutToAConnectionData) || mimename=="application/x-kexi-connectiondata") {
+		detectedDriverName = "connection";
+		return true;
+	}
 
-	// "application/x-kexiproject-sqlite", etc.
-	QString detectedDriverName = Kexi::driverManager().lookupByMime(mimename).latin1();
+	//! @todo rather check this using migration drivers' 
+	//! X-KexiSupportedMimeTypes [strlist] property
+	if (ptr.data()) {
+		if (mimename=="application/x-msaccess") {
+			if (KMessageBox::Yes != KMessageBox::questionYesNo(parent, i18n(
+				"\"%1\" is an external file of type:\n\"%2\".\n"
+				"Do you want to import the file as a Kexi project?")
+				.arg(dbFileName).arg(ptr.data()->comment()),
+				i18n("Open External File"), KGuiItem(i18n("Import...")), KStdGuiItem::cancel() ) )
+			{
+				return cancelled;
+			}
+			detectedImportAction.mimeType = mimename;
+			detectedImportAction.fileName = dbFileName;
+			return true;
+		}
+	}
+
+	if (!finfo.isWritable()) {
+		//! @todo if file is ro: change project mode (but do not care if we're jsut importing)
+	}
+
+	// "application/x-kexiproject-sqlite", etc.:
+	QString tmpDriverName = Kexi::driverManager().lookupByMime(mimename).latin1();
 //@todo What about trying to reuse KOFFICE FILTER CHAINS here?
-	if (/*cdata.driverName.isEmpty() 
-		||*/ (!driverName.isEmpty() && driverName.lower()!=detectedDriverName.lower() 
-			&& KMessageBox::Yes == KMessageBox::warningYesNo(parent, i18n(
+	bool useDetectedDriver = suggestedDriverName.isEmpty() || suggestedDriverName.lower()==detectedDriverName.lower();
+	if (!useDetectedDriver) {
+		int res = KMessageBox::warningYesNoCancel(parent, i18n(
 			"The project file \"%1\" is recognized as compatible with \"%2\" database driver, "
 			"while you have asked for \"%3\" database driver to be used.\n"
 			"Do you want to use \"%4\" database driver?")
-			.arg(dbFileName).arg(detectedDriverName).arg(driverName).arg(detectedDriverName)) ))
-	{
-		ret = detectedDriverName;
+			.arg(dbFileName).arg(tmpDriverName).arg(suggestedDriverName).arg(tmpDriverName));
+		if (KMessageBox::Yes == res)
+			useDetectedDriver = true;
+		else if (KMessageBox::Cancel == res)
+			return cancelled;
 	}
-	kdDebug() << "KexiStartupHandler::detectDriverForFile(): driver name: " << ret << endl;
+	if (useDetectedDriver) {
+		detectedDriverName = tmpDriverName;
+	}
+	else {//use suggested driver
+		detectedDriverName = suggestedDriverName;
+	}
+	kdDebug() << "KexiStartupHandler::detectActionForFile(): driver name: " << detectedDriverName << endl;
 //hardcoded for convenience:
 	const QString newFileFormat = "SQLite3";
 	if (!(options & DontConvert) 
-		&& detectedDriverName.lower()=="sqlite2" && detectedDriverName.lower()!=driverName.lower()
+		&& detectedDriverName.lower()=="sqlite2" && detectedDriverName.lower()!=suggestedDriverName.lower()
 		&& KMessageBox::Yes == KMessageBox::questionYesNo(parent, i18n(
-			"Previous version of database file format (\"%1\") is detected in the \"%2\" project file.\n"
-			"Do you want to convert the project to a new \"%3\" format (recommended)?")
+			"Previous version of database file format (\"%1\") is detected in the \"%2\" "
+			"project file.\nDo you want to convert the project to a new \"%3\" format (recommended)?")
 			.arg(detectedDriverName).arg(dbFileName).arg(newFileFormat)) )
 	{
 //		SQLite2ToSQLite3Migration *migr = new 
@@ -743,15 +761,15 @@ QString KexiStartupHandler::detectDriverForFile(
 			//TODO msg
 			KMessageBox::sorry(parent, i18n(
 				"Failed converting project file \"%1\" to a new \"%2\" format.\n"
-				"The file format remain unchanged.")
+				"The file format remains unchanged.")
 				.arg(dbFileName).arg(newFileFormat) );
 			//continue...
 		}
 		if (res)
 			detectedDriverName = newFileFormat;
 	}
-	ret = detectedDriverName;
-	if (ret.isEmpty()) {
+//	action.driverName = detectedDriverName;
+	if (detectedDriverName.isEmpty()) {
 		QString possibleProblemsInfoMsg( Kexi::driverManager().possibleProblemsInfoMsg() );
 		if (!possibleProblemsInfoMsg.isEmpty()) {
 			possibleProblemsInfoMsg.prepend(QString::fromLatin1("<p>")+i18n("Possible problems:"));
@@ -761,12 +779,13 @@ QString KexiStartupHandler::detectDriverForFile(
 			i18n( "The file \"%1\" is not recognized as being supported by Kexi.").arg(dbFileName),
 			QString::fromLatin1("<p>")
 			+i18n("Database driver for this file type not found.\nDetected MIME type: %1").arg(mimename)
-			+(ptr.data()->comment().isEmpty() ? QString::fromLatin1(".") : QString(" (%1).").arg(ptr.data()->comment()))
+			+(ptr.data()->comment().isEmpty() 
+				? QString::fromLatin1(".") : QString::fromLatin1(" (%1).").arg(ptr.data()->comment()))
 			+QString::fromLatin1("</p>")
 			+possibleProblemsInfoMsg);
-		return QString::null;
+		return false;
 	}
-	return ret;
+	return true;
 }
 
 KexiProjectData*

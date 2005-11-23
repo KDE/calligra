@@ -124,6 +124,14 @@ namespace KexiUtils
 	 hue is decreased so the result will be more bleached. 
 	 For black color the result is dark gray rather than black. */
 	KEXIUTILS_EXPORT QColor bleachedColor(const QColor& c, int factor);
+
+	/*! \return byte array of data serialized from \a map.
+	 KexiUtils::deserializeMap() can be used to deserialize this array back to map. */
+	KEXIUTILS_EXPORT QByteArray serializeMap(const QMap<QString,QString>& map);
+
+	/*! \return a map deserialized from a byte array \a array.
+	 \a array need to contain data previously serialized using KexiUtils::serializeMap(). */
+	KEXIUTILS_EXPORT QMap<QString,QString> deserializeMap(const QByteArray& array);
 }
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here

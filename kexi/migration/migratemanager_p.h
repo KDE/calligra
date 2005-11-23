@@ -35,7 +35,7 @@ class MigrateManagerInternal : public QObject, public KexiDB::Object
 
 		/*! Tries to load db driver \a name.
 			\return db driver, or 0 if error (then error message is also set) */
-		KexiMigrate* migrateDriver(const QString& name);
+		KexiMigrate* driver(const QString& name);
 
 		static MigrateManagerInternal *self();
 

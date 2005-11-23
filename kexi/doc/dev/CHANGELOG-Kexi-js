@@ -12,6 +12,28 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-11-22..23
+Project Migration
+- "All Supported Files" filter added to Kexi file dialogs
+- Files like MS Access .mdb can be now clicked and then Import Wizard will pop up 
+  with preselected parameters. This alos works using command line.
+- Import Wizard's GUI: improved messages, added real Finish page
+- No need to select source driver, it's enought to select a filename or db connection
+Startup
+- Better usablity of 'Open Existing' tab page
+- Better usablity of 'New project wizard'
+
+General
+- compile fix for some compilers
+0.9: backported
+0.8: backported
+
+2005-11-15
+Forms
+- AutoField widget: update m_label for font/palette change
+- AutoField widget: display "Unbounded Auto Field" text when 
+  no data source is set (in design time, like for image box)
+
 2005-11-09..14
 Forms
 - AutoField widget: improved behaviour in design time 

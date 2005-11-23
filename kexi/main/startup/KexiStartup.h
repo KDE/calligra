@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -70,15 +70,21 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 		};
 
 		/*! Used for opening existing file-based projects. 
-		 Detects project file type by mime type.
-		 \return driver name suitable for it -- if it can be detected, otherwise - NULL. 
-		 Can return "shortcut" string if the file looks like a shortcut to a project/connection file
-		 or "connection" if the file looks like a connection data file.
+		 Detects actions that should be performed for by looking at the file's mime type.
+		 \return true if actions should be performed or cancelled if action should be cancelled
+		 In this case there are two possibilities:
+		 - \a detectedImportAction == true means "import action" should be performed
+		 - nonempty \a detectedDriverName means "open action" should be performed.
+
+		 \a detectedDriverName can contain following special strings:
+		 - "shortcut" if the file looks like a shortcut to a project/connection file
+		 - "connection" if the file looks like a connection data file.
+
 		 \a parent is passed as a parent for potential error message boxes.
-		 \a driverName is a preferred driver name. For 
-		 cdata.driverName is adjusted, if a file-based project has been detected.
-		*/
-		static QString detectDriverForFile( const QString& driverName, 
+		 \a driverName is a preferred driver name. */
+		static tristate detectActionForFile( 
+			KexiStartupData::Import& detectedImportAction, QString& detectedDriverName,
+			const QString& _suggestedDriverName, 
 			const QString &dbFileName, QWidget *parent = 0, int options = 0 );
 
 		/*! Allows user to select a project with KexiProjectSelectorDialog.
@@ -100,6 +106,7 @@ class KEXIMAIN_EXPORT KexiStartupHandler
 
 namespace Kexi
 {
+	//! \return singleton Startup Handler singleton.
 	KEXIMAIN_EXPORT KexiStartupHandler& startupHandler();
 }
 

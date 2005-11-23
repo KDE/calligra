@@ -46,18 +46,18 @@ class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object
 		/*! Tries to load db driver with named name \a name.
 			The name is case insensitive.
 			\return db driver, or 0 if error (then error message is also set) */
-		KexiMigrate* migrateDriver(const QString& name);
+		KexiMigrate* driver(const QString& name);
 
 		/*! returns list of available drivers names. 
 			That drivers can be loaded by first use of driver() method. */
-		const QStringList migrateDriverNames();
+		const QStringList driverNames();
 
 		/*! Looks up a drivers list by MIME type of database file.
 		 Only file-based database drivers are checked.
 		 The lookup is case insensitive.
 		 \return driver name or null string if no driver found.
 		*/
-		QString lookupByMime(const QString &mimeType);
+		QString driverForMimeType(const QString &mimeType);
 
 		//! server error is set if there is error at KService level (useful for debugging)
 		virtual QString serverErrorMsg();

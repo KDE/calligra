@@ -12,6 +12,9 @@
             <height>203</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>KexiNewPrjTypeSelector</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -22,39 +25,6 @@
         <spacer row="2" column="0">
             <property name="name">
                 <cstring>spacer9</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Fixed</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>16</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QCheckBox" row="3" column="0">
-            <property name="name">
-                <cstring>chk_always</cstring>
-            </property>
-            <property name="sizePolicy">
-                <sizepolicy>
-                    <hsizetype>5</hsizetype>
-                    <vsizetype>0</vsizetype>
-                    <horstretch>0</horstretch>
-                    <verstretch>0</verstretch>
-                </sizepolicy>
-            </property>
-            <property name="text">
-                <string>Always &amp;use files for creating new projects</string>
-            </property>
-        </widget>
-        <spacer row="4" column="0">
-            <property name="name">
-                <cstring>spacer9_2</cstring>
             </property>
             <property name="orientation">
                 <enum>Vertical</enum>
@@ -116,7 +86,6 @@
 <customwidgets>
 </customwidgets>
 <tabstops>
-    <tabstop>chk_always</tabstop>
 </tabstops>
 <functions>
     <function access="private" specifier="non virtual">init()</function>

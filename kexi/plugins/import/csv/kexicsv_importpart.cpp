@@ -33,10 +33,10 @@ KexiCSVImportPart::~KexiCSVImportPart()
 }
 
 QWidget *KexiCSVImportPart::createWidget(const char* /*widgetClass*/, KexiMainWindow* mainWin, 
- QWidget *parent, const char *objName, QVariant* arg )
+ QWidget *parent, const char *objName, QMap<QString,QString>* args )
 {
 	KexiCSVDialog *dlg = new KexiCSVDialog( 
-		(arg && arg->toString()=="file")? KexiCSVDialog::File : KexiCSVDialog::Clipboard, 
+		(args && (*args)["sourceType"]=="file")? KexiCSVDialog::File : KexiCSVDialog::Clipboard, 
 		mainWin, parent, objName );
 	m_cancelled = dlg->cancelled();
 	if (m_cancelled) {

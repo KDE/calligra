@@ -35,7 +35,7 @@ class KEXICORE_EXPORT KexiGUIMessageHandler : public KexiDB::MessageHandler
 		void showErrorMessage(Kexi::ObjectStatus *status);
 		void showErrorMessage(const QString &message, Kexi::ObjectStatus *status);
 		void showSorryMessage(const QString &title, const QString &details = QString::null);
-		void showMessage(MessageType type, const QString &title, const QString &details);
+		virtual void showMessage(MessageType type, const QString &title, const QString &details);
 };
 
 #endif

@@ -81,6 +81,7 @@ class KEXIMAIN_EXPORT KexiNewProjectWizard : public KWizard
 		KexiProjectSelectorWidget* m_project_selector;
 		
 		KexiConnSelectorWidget *m_conn_sel;
+		QWidget *m_conn_sel_widget;
 		
 		KexiNewProjectWizardPrivate *d;
 };

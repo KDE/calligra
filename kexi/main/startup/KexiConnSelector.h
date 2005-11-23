@@ -27,7 +27,6 @@
 #include <kdialogbase.h>
 #include <klistview.h>
 
-#include <qwidgetstack.h>
 #include <qguardedptr.h>
 
 class KexiConnSelectorBase;
@@ -48,12 +47,12 @@ class ConnectionDataLVItem : public QListViewItem
 };
 
 
-class KexiOpenExistingFile;
+//class KexiOpenExistingFile;
 class KexiConnSelectorWidgetPrivate;
 
 /*! Widget that allows to select a database connection (without choosing database itself)
 */
-class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidgetStack
+class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 {
 	Q_OBJECT
 
@@ -66,7 +65,7 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidgetStack
 		KexiConnSelectorWidget( KexiDBConnectionSet& conn_set, QWidget* parent = 0, 
 			const char* name = 0 );
 
-		~KexiConnSelectorWidget();
+		virtual ~KexiConnSelectorWidget();
 		
 		/*! After accepting this dialog this method returns wherher user selected
 		 file- or server- based connection (ConnType enum). */
@@ -86,13 +85,17 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidgetStack
 		*/
 		QString selectedFileName();
 
-		//! Usable when we want to do other things for "back" button
-		void disconnectShowSimpleConnButton();
+		/*! Sets selected filename to \a fileName. 
+		 Only works when selectedConnectionType()==FileBased. */
+		void setSelectedFileName(const QString& fileName);
+
+//		//! Usable when we want to do other things for "back" button
+//		void disconnectShowSimpleConnButton();
 
 		QListView* connectionsList() const;
 		
 		KexiConnSelectorBase *m_remote;
-		KexiOpenExistingFile *m_file;
+//		KexiOpenExistingFile *m_file;
 		KexiStartupFileDialog *m_fileDlg;
 
 		/*! If true, user will be asked to accept overwriting existing project. 
@@ -116,6 +119,7 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidgetStack
 		- "Click "Back" button" (label at the bottom)
 		- "Back" button itself */
 		void hideHelpers();
+		void hideConnectonIcon();
 
 	protected slots:
 		void slotConnectionItemExecuted(QListViewItem *item);
@@ -123,6 +127,7 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidgetStack
 		void slotRemoteEditBtnClicked();
 		void slotRemoteRemoveBtnClicked();
 		void slotConnectionSelectionChanged();
+		void slotPrjTypeSelected(int id);
 
 	private:
 		ConnectionDataLVItem* addConnectionData( KexiDB::ConnectionData* data );

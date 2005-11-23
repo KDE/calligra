@@ -24,7 +24,8 @@
 
 #include <kexi.h>
 #include "KexiConnSelectorBase.h"
-#include "KexiOpenExistingFile.h"
+//#include "KexiOpenExistingFile.h"
+#include "KexiPrjTypeSelector.h"
 #include <widget/kexidbconnectionwidget.h>
 
 #include <kapplication.h>
@@ -46,6 +47,8 @@
 #include <qtooltip.h>
 #include <qtextedit.h>
 #include <qgroupbox.h>
+#include <qwidgetstack.h>
+#include <qbuttongroup.h>
 
 ConnectionDataLVItem::ConnectionDataLVItem(KexiDB::ConnectionData *data, 
 	const KexiDB::Driver::Info& info, QListView *list)
@@ -84,6 +87,9 @@ public:
 	{
 	}
 	
+	QWidget* openExistingWidget;
+	KexiPrjTypeSelector* prjTypeSelector;
+	QWidgetStack *stack;
 	QGuardedPtr<KexiDBConnectionSet> conn_set;
 	KexiDB::DriverManager manager;
 	bool conn_sel_shown;//! helper
@@ -95,33 +101,55 @@ public:
 
 KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set, 
 	QWidget* parent,  const char* name )
-	: QWidgetStack( parent, name )
+	: QWidget( parent, name )
 	,d(new KexiConnSelectorWidgetPrivate())
 {
 	d->conn_set = &conn_set;
 	QString none, iconname = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
 	const QPixmap &icon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
 	setIcon( icon );
-	
-	m_file = new KexiOpenExistingFile( this, "KexiOpenExistingFile");
-	m_file->btn_advanced->setIconSet( SmallIconSet("1downarrow") );
+
+	QVBoxLayout* globalLyr = new QVBoxLayout( this );
+
+	//create header with radio buttons
+	d->openExistingWidget = new QWidget(this, "openExistingWidget");
+	QVBoxLayout* openExistingWidgetLyr = new QVBoxLayout( d->openExistingWidget );
+//	QLabel* lbl = new QLabel(i18n("<b>Select existing Kexi project to open:</b>"), openExistingWidget);
+//	openExistingWidgetLyr->addWidget( lbl );
+	d->prjTypeSelector = new KexiPrjTypeSelector( d->openExistingWidget );
+	connect(d->prjTypeSelector->buttonGroup,SIGNAL(clicked(int)),this,SLOT(slotPrjTypeSelected(int)));
+	openExistingWidgetLyr->addWidget( d->prjTypeSelector );
+	openExistingWidgetLyr->addSpacing( KDialogBase::spacingHint() );
+	QFrame* line = new QFrame( d->openExistingWidget, "line" );
+	line->setFrameShape( QFrame::HLine );
+	line->setFrameShadow( QFrame::Sunken );
+	openExistingWidgetLyr->addWidget( line );
+	globalLyr->addWidget(d->openExistingWidget);
+
+	d->stack = new QWidgetStack(this, "stack");
+	globalLyr->addWidget(d->stack);
+
+//	m_file = new KexiOpenExistingFile( this, "KexiOpenExistingFile");
+//	m_file->btn_advanced->setIconSet( SmallIconSet("1downarrow") );
 	m_fileDlg = 0;
 		
-	addWidget(m_file);
-	connect(m_file->btn_advanced,SIGNAL(clicked()),this,SLOT(showAdvancedConn()));
-	m_remote = new KexiConnSelectorBase(this,"conn_sel");
-	m_remote->icon->setPixmap( DesktopIcon("socket") );
-	m_remote->btn_back->setIconSet( SmallIconSet("1uparrow") );
+//	addWidget(m_file);
+//	connect(m_file->btn_advanced,SIGNAL(clicked()),this,SLOT(showAdvancedConn()));
+
+	m_remote = new KexiConnSelectorBase(d->stack, "conn_sel");
+	m_remote->icon->setPixmap( DesktopIcon("network") );
+	m_remote->icon->setFixedSize( m_remote->icon->pixmap()->size() );
+//	m_remote->btn_back->setIconSet( SmallIconSet("1uparrow") );
 	connect(m_remote->btn_add, SIGNAL(clicked()), this, SLOT(slotRemoteAddBtnClicked()));
 	connect(m_remote->btn_edit, SIGNAL(clicked()), this, SLOT(slotRemoteEditBtnClicked()));
 	connect(m_remote->btn_remove, SIGNAL(clicked()), this, SLOT(slotRemoteRemoveBtnClicked()));
 	QToolTip::add(m_remote->btn_add, i18n("Add a new database connection"));
 	QToolTip::add(m_remote->btn_edit, i18n("Edit selected database connection"));
 	QToolTip::add(m_remote->btn_remove, i18n("Remove selected database connections"));
-	addWidget(m_remote);
+	d->stack->addWidget(m_remote);
 	if (m_remote->layout())
 		m_remote->layout()->setMargin(0);
-	connect(m_remote->btn_back,SIGNAL(clicked()),this,SLOT(showSimpleConn()));
+//	connect(m_remote->btn_back,SIGNAL(clicked()),this,SLOT(showSimpleConn()));
 	connect(m_remote->list,SIGNAL(doubleClicked(QListViewItem*)),
 		this,SLOT(slotConnectionItemExecuted(QListViewItem*)));
 	connect(m_remote->list,SIGNAL(returnPressed(QListViewItem*)),
@@ -135,49 +163,46 @@ KexiConnSelectorWidget::~KexiConnSelectorWidget()
 	delete d;
 }
 
-void KexiConnSelectorWidget::disconnectShowSimpleConnButton()
+/*void KexiConnSelectorWidget::disconnectShowSimpleConnButton()
 {
 	m_remote->btn_back->disconnect(this,SLOT(showSimpleConn()));
-}
+}*/
 
 void KexiConnSelectorWidget::showAdvancedConn()
 {
+	slotPrjTypeSelected(2);
+	d->prjTypeSelector->buttonGroup->setButton(2);
+}
+
+//void KexiConnSelectorWidget::showAdvancedConn()
+void KexiConnSelectorWidget::slotPrjTypeSelected(int id)
+{
 #ifdef KEXI_SERVER_SUPPORT
-	if (!d->conn_sel_shown) {
-		d->conn_sel_shown=true;
-		//setup
-//TODO 
-//		new KToolBarButton("change", 1, m_remote->frm_change, "change", i18n("Change"));
-/*		KPopupMenu *pm = new KPopupMenu(0);
-		pm->insertItem("aaa");
-		new KDropDownButtton(m_remote->frm_change, pm, 
-	m_remote->frm_change->setFixedWidth(100);
-//		m_remote->frm_change->setBackgroundColor(black);
-	//	KToolBar *tbar = new KToolBar(m_remote->frm_change);
-//		tbar->insertButton("change", 1, pm, true, i18n("Change"));
-		tbar->insertButton("change", 1, 
-		KActionMenu * act_change = new KActionMenu(i18n2005-04-07("Change"), this, "change");
-		act_change->insert( new KAction("Add connection", KShortcut(), 0, 0, 0) );
-		act_change->plug( tbar );*/
-//TODO
-		
-		//show connections (on demand):
-		for (KexiDB::ConnectionData::ListIterator it(d->conn_set->list()); it.current(); ++it) {
-			addConnectionData( it.current() );
-//			else {
-//this error should be more verbose:
-//				kdWarning() << "KexiConnSelector::KexiConnSelector(): no driver found for '" << it.current()->driverName << "'!" << endl;
-//			}
-		}
-		if (m_remote->list->firstChild()) {
-			m_remote->list->setSelected(m_remote->list->firstChild(),true);
-		}
-		m_remote->descriptionEdit->setPaletteBackgroundColor(palette().active().background());
-		m_remote->descGroupBox->layout()->setMargin(2);
-		m_remote->list->setFocus();
-		slotConnectionSelectionChanged();
+	if (id==1) {//file-based prj type
+		showSimpleConn();
 	}
-	raiseWidget(m_remote);
+	else if (id==2) {//server-based prj type
+		if (!d->conn_sel_shown) {
+			d->conn_sel_shown=true;
+		
+			//show connections (on demand):
+			for (KexiDB::ConnectionData::ListIterator it(d->conn_set->list()); it.current(); ++it) {
+				addConnectionData( it.current() );
+	//			else {
+	//this error should be more verbose:
+	//				kdWarning() << "KexiConnSelector::KexiConnSelector(): no driver found for '" << it.current()->driverName << "'!" << endl;
+	//			}
+			}
+			if (m_remote->list->firstChild()) {
+				m_remote->list->setSelected(m_remote->list->firstChild(),true);
+			}
+			m_remote->descriptionEdit->setPaletteBackgroundColor(palette().active().background());
+			m_remote->descGroupBox->layout()->setMargin(2);
+			m_remote->list->setFocus();
+			slotConnectionSelectionChanged();
+		}
+		d->stack->raiseWidget(m_remote);
+	}
 #else
 	showSimpleConn(); //safe
 #endif
@@ -193,12 +218,14 @@ ConnectionDataLVItem* KexiConnSelectorWidget::addConnectionData( KexiDB::Connect
 
 void KexiConnSelectorWidget::showSimpleConn()
 {
+	d->prjTypeSelector->buttonGroup->setButton(1);
 	if (!d->file_sel_shown) {
 		d->file_sel_shown=true;
 		m_fileDlg = new KexiStartupFileDialog( "", KexiStartupFileDialog::Opening,
-			m_file, "openExistingFileDlg");
+			d->stack, "openExistingFileDlg");
 		m_fileDlg->setConfirmOverwrites( d->confirmOverwrites );
-		static_cast<QVBoxLayout*>(m_file->layout())->insertWidget( 2, m_fileDlg );
+//		static_cast<QVBoxLayout*>(m_file->layout())->insertWidget( 2, m_fileDlg );
+		d->stack->addWidget(m_fileDlg);
 
 		for (QWidget *w = parentWidget(true);w;w=w->parentWidget(true)) {
 			if (w->isDialog()) {
@@ -210,18 +237,19 @@ void KexiConnSelectorWidget::showSimpleConn()
 			}
 		}
 	}
-	raiseWidget(m_file);
+	d->stack->raiseWidget(m_fileDlg);
 #ifndef KEXI_SERVER_SUPPORT
-	m_file->spacer->hide();
+/*	m_file->spacer->hide();
 	m_file->label->hide();
 	m_file->btn_advanced->hide();
-	m_file->label->parentWidget()->hide();
+	m_file->label->parentWidget()->hide();*/
+
 #endif
 }
 
 int KexiConnSelectorWidget::selectedConnectionType() const
 {
-	return (visibleWidget()==m_file) ? FileBased : ServerBased;
+	return (d->stack->visibleWidget()==m_fileDlg) ? FileBased : ServerBased;
 }
 
 /*ConnectionDataLVItem* KexiConnSelectorWidget::selectedConnectionDataItem() const
@@ -252,6 +280,13 @@ QString KexiConnSelectorWidget::selectedFileName()
 	if (selectedConnectionType()!=KexiConnSelectorWidget::FileBased)
 		return QString::null;
 	return m_fileDlg->currentFileName();
+}
+
+void KexiConnSelectorWidget::setSelectedFileName(const QString& fileName)
+{
+	if (selectedConnectionType()!=KexiConnSelectorWidget::FileBased)
+		return;
+	return m_fileDlg->setSelection(fileName);
 }
 
 void KexiConnSelectorWidget::slotConnectionItemExecuted(QListViewItem *item)
@@ -289,8 +324,8 @@ QListView* KexiConnSelectorWidget::connectionsList() const
 
 void KexiConnSelectorWidget::setFocus()
 {
-	QWidgetStack::setFocus();
-	if (visibleWidget()==m_file)
+	QWidget::setFocus();
+	if (d->stack->visibleWidget()==m_fileDlg)
 		m_fileDlg->setFocus(); //m_fileDlg->locationWidget()->setFocus();
 	else
 		m_remote->list->setFocus();
@@ -298,14 +333,16 @@ void KexiConnSelectorWidget::setFocus()
 
 void KexiConnSelectorWidget::hideHelpers()
 {
-	m_file->lbl->hide();
+	d->openExistingWidget->hide();
+
+/*	m_file->lbl->hide();
 	m_file->line->hide();
 	m_file->spacer->hide();
 	m_file->label->hide();
 	m_remote->label->hide();
 	m_remote->label_back->hide();
 	m_remote->btn_back->hide();
-	m_remote->icon->hide();
+	m_remote->icon->hide();*/
 }
 
 void KexiConnSelectorWidget::setConfirmOverwrites(bool set)
@@ -392,6 +429,12 @@ void KexiConnSelectorWidget::slotRemoteRemoveBtnClicked()
 	if (nextItem)
 		m_remote->list->setSelected(nextItem, true);
 	slotConnectionSelectionChanged();
+}
+
+void KexiConnSelectorWidget::hideConnectonIcon()
+{
+	m_remote->icon->setFixedWidth(0);
+	m_remote->icon->setPixmap(QPixmap());
 }
 
 #include "KexiConnSelector.moc"

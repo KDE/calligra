@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,16 +23,8 @@
 #include <kexidb/driver.h>
 #include <kexidb/drivermanager.h>
 
-#include <kdebug.h>
-#include <klocale.h>
-#include <kmimetype.h>
-#include <kmessagebox.h>
-#include <kcmdlineargs.h>
-#include <kdeversion.h>
-
 #include <qfileinfo.h>
 #include <qcstring.h>
-
 
 KexiStartupData::KexiStartupData()
 	: m_projectData(0)
@@ -69,3 +61,15 @@ bool KexiStartupData::forcedDesignMode() const
 	return m_forcedDesignMode;
 }
 
+KexiStartupData::Import KexiStartupData::importActionData() const
+{
+	return m_importActionData;
+}
+
+KexiStartupData::Import::Import()
+{
+}
+
+KexiStartupData::Import::operator bool() const {
+	return !fileName.isEmpty() && !mimeType.isEmpty();
+}

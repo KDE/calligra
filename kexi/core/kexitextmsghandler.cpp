@@ -17,30 +17,40 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "keximigrationpart.h"
+#include "kexitextmsghandler.h"
 
-#include <migration/importwizard.h>
+#include "kexi.h"
+#include <kexidb/utils.h>
+#include <kexiutils/utils.h>
 
-#include <kgenericfactory.h>
+KexiTextMessageHandler::KexiTextMessageHandler(QString &messageTarget, QString &detailsTarget)
+	: KexiGUIMessageHandler(0)
+	, m_messageTarget(&messageTarget)
+	, m_detailsTarget(&detailsTarget)
+{
+	*m_messageTarget = QString::null;
+	*m_detailsTarget = QString::null;
+}
 
-KexiMigrationPart::KexiMigrationPart(QObject *parent, const char *name, const QStringList &args)
- : KexiInternalPart(parent, name, args)
+KexiTextMessageHandler::~KexiTextMessageHandler()
 {
 }
 
-KexiMigrationPart::~KexiMigrationPart()
+void
+KexiTextMessageHandler::showMessage(MessageType type,
+	const QString &title, const QString &details)
 {
+	Q_UNUSED(type);
+	if (!m_enableMessages)
+		return;
+
+	//'wait' cursor is a nonsense now
+	KexiUtils::removeWaitCursor();
+
+	QString msg(title);
+	if (title.isEmpty())
+		msg = i18n("Unknown error");
+	msg = "<qt><p>"+msg+"</p>";
+	*m_messageTarget = msg;
+	*m_detailsTarget = details;
 }
-
-QWidget *KexiMigrationPart::createWidget(const char* /*widgetClass*/, KexiMainWindow* mainWin, 
- QWidget *parent, const char *objName, QMap<QString,QString>* args )
-{
-	Q_UNUSED( mainWin );
-
-	KexiMigration::ImportWizard *w = new KexiMigration::ImportWizard(parent, args);
-	w->setName(objName);
-	return w;
-}
-
-K_EXPORT_COMPONENT_FACTORY( kexihandler_migration, 
-	KGenericFactory<KexiMigrationPart>("kexihandler_migration") )

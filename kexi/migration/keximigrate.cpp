@@ -92,6 +92,9 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 		return false;
 	}
 
+	//tmp to force error!!!
+	//tables.prepend("$$$$$");
+
 	// Check if there are any tables
 	if (tables.isEmpty()) {
 		kdDebug() << "There were no tables to import" << endl;
@@ -133,7 +136,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 			delete tableSchema;
 			if (result)
 				result->setStatus(
-					i18n("Could not import project from data source \"%1\". Error reading table \"%2\"")
+					i18n("Could not import project from data source \"%1\". Error reading table \"%2\".")
 					.arg(m_migrateData->source->serverInfoString()).arg(tableName), "");
 			return false;
 		}
@@ -183,7 +186,7 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 		}
 		kdDebug() << "Copying data for table: " << tname << endl;
 		ok = drv_copyTable(
-			ts.current()->caption(), //caption is equal to the original name
+			ts.current()->caption().isEmpty() ? tname : ts.current()->caption(), //caption is equal to the original name
 			destConn, 
 			ts.current()
 		);
@@ -243,11 +246,15 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 			result->setStatus(destConn,
 				i18n("Could not import data from data source \"%1\".")
 					.arg(m_migrateData->source->serverInfoString()));
-		destConn->debugError();
-		destConn->rollbackTransaction(trans);
+		if (destConn) {
+			destConn->debugError();
+			destConn->rollbackTransaction(trans);
+		}
 		drv_disconnect();
-		destConn->disconnect();
-		destConn->dropDatabase(m_migrateData->destination->databaseName());
+		if (destConn) {
+			destConn->disconnect();
+			destConn->dropDatabase(m_migrateData->destination->databaseName());
+		}
 		//later		delete prj;
 		return false;
 	}

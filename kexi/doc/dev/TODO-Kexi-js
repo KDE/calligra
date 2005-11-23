@@ -515,6 +515,8 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
   (THIS SHOULD BE DEFAULT BEHAVIOUR)
 - (linux) remove stupid message 'Please select the file to open' 
    when opening exisiting server project and clicking 'OK'
+- database files accessed remotely: make it work without copying a file to temp. dir. 
+  (maybe even without copying entire file? - patching sqlite required)
 
 === CLI TODO ===
 - add kexicmd as a symlink to kexi binary, for totally non-gui usage
@@ -680,6 +682,7 @@ GENERAL:
 -- renaming kexi to kexi-standalone
 - rename "data view mode" to "browse view mode" (as in Filemaker)
 
+
 MARKETING:
 - add "Created With Kexi" page and a link to it from k-p.org and kexi.pl
 - when releasing new Kexi version publish: A first look at Kexi x.y" page, like this:
@@ -733,7 +736,7 @@ MDB Migration:
 
 
 OOPL 2006 PRO TODO:
-     -obs³uga baz danych MySQL i PostgreSQL, w tym:
+DONE -obs³uga baz danych MySQL i PostgreSQL, w tym:
 DONE -import ww. Baz do plikowego projektu Kexi
      -eksport baz plikowych do serwerów
      -proste raporty (autoraporty, bez projektowania)
@@ -741,10 +744,19 @@ DONE -import ww. Baz do plikowego projektu Kexi
 DONE -import z csv (edytowany znak rozdzielenia kolumn) i ze schowka
      -eksport do csv (edytowany znak rozdzielenia kolumn) i do schowka
      -obs³uga comboboksów w formularzach i tabelach
+     -update dokumentacji, w tym dot. serwerow
 IN-PR-trzymanie obrazków w bazie
 
+=== Kexi Web Site TODO ===
+- move to mediawiki (JJ?)
+- Add "Features" page like this http://www.agata.org.br/us/index.php?file=features.php
+- Extend "Creadits" page with Gold Users/Translators, etc. like here: 
+   http://www.agata.org.br/us/index.php?file=thanks.php
 
 AUTOFIELD:
-- display "Unbounded Auto Field" text when no data source is set (in design time, like for image box)
-- update m_label for font/palette change
+- for data mode do not display (unbounded) text
+- copy/paste doesn't preserve caption text (maybe caption should be copied 
+  to from QueryColumnInfo to a property)
 
+KexiFrame:
+- fix highlight for data mode! (very old bug)

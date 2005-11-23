@@ -141,4 +141,20 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
 	return c2;
 }
 
+QByteArray KexiUtils::serializeMap(const QMap<QString,QString>& map)
+{
+	QByteArray ba;
+	QDataStream ds(ba, IO_WriteOnly);
+	ds << map;
+	return ba;
+}
+
+QMap<QString,QString> KexiUtils::deserializeMap(const QByteArray& array)
+{
+	QMap<QString,QString> map;
+	QDataStream ds(array, IO_ReadOnly);
+	ds >> map;
+	return map;
+}
+
 #include "utils_p.moc"

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,19 +17,21 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "KexiDBTitlePage.h"
+#ifndef KEXIPRJTYPESELECTOR_H
+#define KEXIPRJTYPESELECTOR_H
 
-#include <qlabel.h>
+#include "KexiPrjTypeSelectorBase.h"
 
-KexiDBTitlePage::KexiDBTitlePage( const QString& labelText, QWidget* parent, const char* name )
- : KexiDBTitlePageBase( parent, name )
+//! @short A simple widget with radio buttons with "show file/server-based projects" options
+class KEXIMAIN_EXPORT KexiPrjTypeSelector : public KexiPrjTypeSelectorBase
 {
-	if (!labelText.isEmpty())
-		label->setText(labelText);
-}
+	Q_OBJECT
 
-KexiDBTitlePage::~KexiDBTitlePage()
-{
-}
+public:
+	KexiPrjTypeSelector( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
+	~KexiPrjTypeSelector();
 
-#include "KexiDBTitlePage.moc"
+
+};
+
+#endif // KEXIPRJTYPESELECTOR_H
