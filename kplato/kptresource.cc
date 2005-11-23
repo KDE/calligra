@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas zander <zander@kde.org>
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1336,38 +1336,20 @@ Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &dura
     return e;
 }
 
-// FIXME: Handle 'any' duration, atm stops at a year.
+// FIXME: Handle 'any' duration, atm stops at 2 years.
 Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_effort, bool backward) {
     //kdDebug()<<k_funcinfo<<"--->"<<(backward?"(B) ":"(F) ")<<m_group->name()<<" "<<time.toString()<<": effort: "<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")"<<endl;
     Duration e;
-    bool sts=false;
+    if (_effort == Duration::zeroDuration) {
+        return e;
+    }
+    bool sts=true;
     bool match = false;
     DateTime start = time;
     int inc = backward ? -1 : 1;
     DateTime end = start;
-    end.setTime(QTime());
     Duration e1;
-    for (int i=0; !match && i < 52; ++i) {
-        // weeks
-        end = end.addDays(inc*7);
-        e1 = backward ? effort(end, start - end, &sts) 
-                      : effort(start, end - start, &sts);
-        if (e + e1 < _effort) {
-            e += e1;
-            if (!sts)
-                break;
-            start = end;
-        } else if (e + e1 == _effort) {
-            e += e1;
-            match = true;
-        } else {
-            end = start;
-            break;
-        }
-        //kdDebug()<<"duration(w)["<<i<<"]"<<(backward?"backward":"forward:")<<" date="<<start.date().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
-    }
-    //kdDebug()<<"duration "<<(backward?"backward":"forward: ")<<start.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
-    for (int i=0; !match && i < 7 && sts; ++i) {
+    for (int i=0; !match && i < 730 && sts; ++i) {
         // days
         end = end.addDays(inc);
         e1 = backward ? effort(end, start - end, &sts) 
@@ -1429,6 +1411,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     //kdDebug()<<"duration "<<(backward?"backward":"forward:")<<"  start="<<start.toString()<<" e="<<e.toString()<<" match="<<match<<" sts="<<sts<<endl;
     for (int i=0; !match && i < 60 && sts; ++i) {
         //seconds
+        end = end.addSecs(inc);
         e1 = backward ? effort(end, start - end, &sts) 
                       : effort(start, end - start, &sts);
         if (e + e1 < _effort) {
@@ -1436,7 +1419,6 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
             if (!sts)
                 break;
             start = end;
-            end = end.addSecs(inc);
         } else if (e + e1 == _effort) {
             e += e1;
             match = true;
@@ -1460,7 +1442,6 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
             e += e1;
             match = true;
         } else if (e + e1 > _effort) {
-            end = start;
             break;
         }
         //kdDebug()<<"duration(ms)["<<i<<"]"<<(backward?"backward":"forward:")<<" time="<<start.time().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
