@@ -188,7 +188,7 @@ public:
      * Framesets that can be transparent should reimplement this and make it a no-op,
      * so that the background is painted below the transparent frame.
      * @param crect the cliprect; only parts inside this rect are of interrest to us
-     * @param viewMode the current viewmode
+     * @param viewMode For coordinate conversion, always set.
      */
     virtual void createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode );
 
@@ -228,6 +228,11 @@ public:
      * double-buffering).
      * @param frame the frame to draw
      * @param painter the painter to draw to
+     * @param settingsFrame The frame from which we take the settings (usually @p frame, but not with Copy behaviour)
+     * @param cg The colorgroup from which to get the colors
+     * @param edit If set, this frameset is being edited, so a cursor is needed.
+     * @param viewMode For coordinate conversion, always set.
+     * @param crect rectangle to be repainted, in view coordinates. Includes padding.
      */
     void drawFrameAndBorders( KWFrame *frame,
                               QPainter *painter, const QRect &crect,
@@ -241,6 +246,7 @@ public:
      * @param frame The frame to be drawn
      * @param settingsFrame The frame from which we take the settings (usually @p frame, but not with Copy behaviour)
      * @param crect The rectangle (in "contents coordinates") to be painted
+     * @param viewMode For coordinate conversion, always set.
      */
     void drawFrameBorder( QPainter *painter, KWFrame *frame, KWFrame *settingsFrame,
                           const QRect &crect, KWViewMode *viewMode );
@@ -255,6 +261,13 @@ public:
      * Default implementation does double-buffering and calls drawFrameContents.
      * @param frame the frame to draw
      * @param painter the painter to draw to
+     * @param settingsFrame The frame from which we take the settings (usually @p frame, but not with Copy behaviour)
+     * @param cg The colorgroup from which to get the colors
+     * @param onlyChanged If true, only redraw what has changed (see KWCanvas::repaintChanged)
+     * @param resetChanged If true, set the changed flag to false after drawing.
+     * @param edit If set, this frameset is being edited, so a cursor is needed.
+     * @param viewMode For coordinate conversion, always set.
+     * @param drawUnderlyingFrames if the frame implements it, then it should draw underlying frames.
      */
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcrect, const QRect &crect,
                             const QPoint& translationOffset,
@@ -271,6 +284,11 @@ public:
      * Doesn't include padding.
      * @param frame the frame to draw
      * @param painter the painter to draw to
+     * @param cg The colorgroup from which to get the colors
+     * @param onlyChanged If true, only redraw what has changed (see KWCanvas::repaintChanged)
+     * @param resetChanged If true, set the changed flag to false after drawing.
+     * @param edit If set, this frameset is being edited, so a cursor is needed.
+     * @param viewMode For coordinate conversion, always set.
      */
     virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect& fcrect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
