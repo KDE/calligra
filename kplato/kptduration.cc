@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas Zander zander@kde.org
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -222,7 +222,7 @@ Duration::Duration Duration::fromString(const QString &s, Format format, bool *o
 
 void Duration::get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds, unsigned *milliseconds) const {
     Q_INT64 ms;
-    unsigned tmp;
+    Q_INT64 tmp;
 
     ms = m_ms;
     tmp = ms / (1000 * 60 * 60 * 24);
