@@ -1,0 +1,68 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KPlato::AccountsviewConfigurePanelBase</class>
+<author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>AccountsviewConfigurePanelBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>337</width>
+            <height>81</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>AccountsviewConfigurePanelBase</string>
+    </property>
+    <grid>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
+        </property>
+        <widget class="QLabel" row="0" column="0">
+            <property name="name">
+                <cstring>textLabel1</cstring>
+            </property>
+            <property name="text">
+                <string>Cut-off date:</string>
+            </property>
+        </widget>
+        <widget class="QComboBox" row="1" column="1">
+            <property name="name">
+                <cstring>periodBox</cstring>
+            </property>
+        </widget>
+        <widget class="KDateWidget" row="0" column="1">
+            <property name="name">
+                <cstring>dateEdit</cstring>
+            </property>
+        </widget>
+        <widget class="QLabel" row="1" column="0">
+            <property name="name">
+                <cstring>textLabel1_2</cstring>
+            </property>
+            <property name="text">
+                <string>Periodicity:</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>cumulative</cstring>
+            </property>
+            <property name="text">
+                <string>Cumulative</string>
+            </property>
+        </widget>
+    </grid>
+</widget>
+<customwidgets>
+</customwidgets>
+<layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>kdatewidget.h</includehint>
+</includehints>
+</UI>

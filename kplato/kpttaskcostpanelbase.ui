@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>234</width>
+            <width>280</width>
             <height>286</height>
         </rect>
     </property>
@@ -55,6 +55,23 @@
                         </sizepolicy>
                     </property>
                 </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
             </hbox>
         </widget>
         <widget class="QGroupBox">
@@ -73,19 +90,6 @@
                         <cstring>startupCost</cstring>
                     </property>
                 </widget>
-                <widget class="QComboBox" row="1" column="1">
-                    <property name="name">
-                        <cstring>startupAccount</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>5</hsizetype>
-                            <vsizetype>0</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                </widget>
                 <widget class="QLabel" row="0" column="0">
                     <property name="name">
                         <cstring>textLabel1</cstring>
@@ -102,6 +106,36 @@
                         <string>Account:</string>
                     </property>
                 </widget>
+                <widget class="QComboBox" row="1" column="1">
+                    <property name="name">
+                        <cstring>startupAccount</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>5</hsizetype>
+                            <vsizetype>0</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                </widget>
+                <spacer row="0" column="2">
+                    <property name="name">
+                        <cstring>spacer3_2</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
             </grid>
         </widget>
         <widget class="QGroupBox">
@@ -123,9 +157,12 @@
                         <string>Account:</string>
                     </property>
                 </widget>
-                <widget class="KLineEdit" row="0" column="1">
+                <widget class="QLabel" row="0" column="0">
                     <property name="name">
-                        <cstring>shutdownCost</cstring>
+                        <cstring>textLabel2</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Cost:</string>
                     </property>
                 </widget>
                 <widget class="QComboBox" row="1" column="1">
@@ -141,14 +178,28 @@
                         </sizepolicy>
                     </property>
                 </widget>
-                <widget class="QLabel" row="0" column="0">
+                <widget class="KLineEdit" row="0" column="1">
                     <property name="name">
-                        <cstring>textLabel2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Cost:</string>
+                        <cstring>shutdownCost</cstring>
                     </property>
                 </widget>
+                <spacer row="1" column="2">
+                    <property name="name">
+                        <cstring>spacer4</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>40</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
             </grid>
         </widget>
         <spacer>

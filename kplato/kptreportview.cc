@@ -567,12 +567,14 @@ void ReportView::slotLastPage() {
     m_reportview->slotLastPage();
 }
 
-bool ReportView::setContext(Context &context) {
+bool ReportView::setContext(Context::Reportview &context) {
+    Q_UNUSED(context);
     kdDebug()<<k_funcinfo<<endl;
     return true;
 }
 
-void ReportView::getContext(Context &context) const {
+void ReportView::getContext(Context::Reportview &context) const {
+    Q_UNUSED(context);
     kdDebug()<<k_funcinfo<<endl;
 }
 

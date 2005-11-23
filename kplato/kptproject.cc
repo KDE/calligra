@@ -24,6 +24,7 @@
 #include "kptdatetime.h"
 #include "kptpart.h"
 #include "kptconfig.h"
+#include "kpteffortcostmap.h"
 
 #include <qdom.h>
 #include <qstring.h>
@@ -40,8 +41,9 @@ namespace KPlato
 
 /// Use for main projects
 Project::Project(Node *parent)
-    : Node(parent), m_baselined(false)
-{
+    : Node(parent),
+      m_accounts(),
+      m_baselined(false) {
     m_constraint = Node::MustStartOn;
     m_standardWorktime = new StandardWorktime();
     m_defaultCalendar = new Calendar(*m_standardWorktime);
@@ -238,17 +240,13 @@ bool Project::load(QDomElement &element) {
         setConstraint(Node::MustStartOn);
     }
 
+    // Load the project children
     // Must do these first
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
-            if (e.tagName() == "accounts") {
-                // Load accounts
-                if (!m_accounts.load(e)) {
-                    kdError()<<k_funcinfo<<"Failed to load accounts"<<endl;
-                }
-            } else if (e.tagName() == "calendar") {
+            if (e.tagName() == "calendar") {
                 // Load the calendar.
                 // References by resources
                 Calendar *child = new Calendar();
@@ -290,7 +288,6 @@ bool Project::load(QDomElement &element) {
             }
         }
     }
-    // Load the project children
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
@@ -321,8 +318,13 @@ bool Project::load(QDomElement &element) {
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
-    
-            if (e.tagName() == "relation") {
+            if (e.tagName() == "accounts") {
+                // Load accounts
+                // References tasks
+                if (!m_accounts.load(e, *this)) {
+                    kdError()<<k_funcinfo<<"Failed to load accounts"<<endl;
+                }
+            } else if (e.tagName() == "relation") {
                 // Load the relation
                 // References tasks
                 Relation *child = new Relation();
@@ -658,6 +660,14 @@ ResourceGroup *Project::group(QString id) {
 
 Resource *Project::resource(QString id) {
     return findResource(id);
+}
+
+// TODO
+EffortCostMap Project::plannedEffortCostPrDay(const QDate &start, const QDate &end) const {
+    kdDebug()<<k_funcinfo<<endl;
+    EffortCostMap ec;
+    return ec;
+
 }
 
 // Returns the total planned effort for this project (or subproject) 

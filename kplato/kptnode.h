@@ -45,6 +45,7 @@ class Resource;
 class ResourceGroupRequest;
 class Effort;
 class WBSDefinition;
+class EffortCostMap;
 
 /**
  * This class represents any node in the project, a node can be a project or
@@ -272,6 +273,8 @@ public:
     /// The node has not been scheduled
     bool notScheduled() const { return m_notScheduled; }
     
+    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end) const=0;
+        
     /// Returns the total planned effort for this task (or subtasks) 
     virtual Duration plannedEffort() { return Duration::zeroDuration; }
     /// Returns the total planned effort for this task (or subtasks) on date

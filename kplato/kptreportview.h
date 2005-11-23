@@ -20,6 +20,7 @@
 #ifndef KPTREPORTVIEW_H
 #define KPTREPORTVIEW_H
 
+#include "kptcontext.h"
 #include "kptproject.h"
 #include "kpttask.h"
 #include "kptresource.h"
@@ -46,7 +47,6 @@ namespace KPlato
 
 class View;
 class Node;
-class Context;
 
 class ReportTagsPrivate;
 
@@ -87,8 +87,8 @@ class ReportView : public QWidget
 
     QString setDetail(const QString &source, QStringList &properties, QString &level);
 
-    virtual bool setContext(Context &context);
-    virtual void getContext(Context &context) const;
+    virtual bool setContext(Context::Reportview &context);
+    virtual void getContext(Context::Reportview &context) const;
 
 public slots:
 	void slotFirstPage();

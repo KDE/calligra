@@ -22,6 +22,7 @@
 #include "kptcommand.h"
 #include "kptproject.h"
 
+#include <qheader.h>
 #include <qlistview.h>
 #include <qpushbutton.h>
 #include <qstring.h>
@@ -71,6 +72,7 @@ AccountsPanel::AccountsPanel(Accounts &acc, QWidget *p, const char *n)
 {
 
     accountList->setRootIsDecorated(true);
+    accountList->header()->setStretchEnabled(true, 1);
     addItems(accountList, acc);
 
     slotSelectionChanged();

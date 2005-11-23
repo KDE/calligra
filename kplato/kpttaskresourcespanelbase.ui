@@ -84,14 +84,6 @@
                             <pixmap></pixmap>
                         </property>
                     </column>
-                    <column>
-                        <property name="text">
-                            <string>Account</string>
-                        </property>
-                        <property name="pixmap">
-                            <pixmap></pixmap>
-                        </property>
-                    </column>
                     <property name="name">
                         <cstring>resourceTable</cstring>
                     </property>
@@ -102,7 +94,7 @@
                         <number>0</number>
                     </property>
                     <property name="numCols">
-                        <number>2</number>
+                        <number>1</number>
                     </property>
                     <property name="readOnly">
                         <bool>true</bool>

@@ -40,16 +40,16 @@ bool Context::load(QDomElement &element) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();    
             if (e.tagName() == "gantt-view") {
-                ganttviewsize = e.attribute("ganttview-size").toInt();
-                taskviewsize = e.attribute("taskview-size").toInt();
-                currentNode = e.attribute("current-node");
-                showResources = e.attribute("show-resources").toInt();
-                showTaskName = e.attribute("show-taskname").toInt();
-                showTaskLinks = e.attribute("show-tasklinks").toInt();
-                showProgress = e.attribute("show-progress").toInt();
-                showPositiveFloat = e.attribute("show-positivefloat").toInt();
-                showCriticalTasks = e.attribute("show-criticaltasks").toInt();
-                showCriticalPath = e.attribute("show-criticalpath").toInt();
+                ganttview.ganttviewsize = e.attribute("ganttview-size").toInt();
+                ganttview.taskviewsize = e.attribute("taskview-size").toInt();
+                ganttview.currentNode = e.attribute("current-node");
+                ganttview.showResources = e.attribute("show-resources").toInt();
+                ganttview.showTaskName = e.attribute("show-taskname").toInt();
+                ganttview.showTaskLinks = e.attribute("show-tasklinks").toInt();
+                ganttview.showProgress = e.attribute("show-progress").toInt();
+                ganttview.showPositiveFloat = e.attribute("show-positivefloat").toInt();
+                ganttview.showCriticalTasks = e.attribute("show-criticaltasks").toInt();
+                ganttview.showCriticalPath = e.attribute("show-criticalpath").toInt();
                 
                 QDomNodeList list = e.childNodes();
                 for (unsigned int i=0; i<list.count(); ++i) {
@@ -61,18 +61,25 @@ bool Context::load(QDomElement &element) {
                                 if (list.item(i).isElement()) {
                                     QDomElement ei = list.item(i).toElement();
                                     if (ei.tagName() == "node") {
-                                        closedNodes.append(ei.attribute("id"));
+                                        ganttview.closedNodes.append(ei.attribute("id"));
                                     }
                                 }
                             }
                         }
                     }
                 }
+            } else if (e.tagName() == "accounts-view") {
+                accountsview.accountsviewsize = e.attribute("accountsview-size").toInt();
+                accountsview.periodviewsize = e.attribute("periodview-size").toInt();
+                accountsview.date = QDate::fromString(e.attribute("date"), Qt::ISODate);
+                accountsview.period = e.attribute("period").toInt();
+                accountsview.cumulative = e.attribute("cumulative").toInt();
             } else {
                 kdError()<<k_funcinfo<<"Unknown tag: "<<e.tagName()<<endl;
             }
         }
     }
+
     return true;
 }
 
@@ -83,25 +90,33 @@ void Context::save(QDomElement &element) const {
     // Ganttview
     QDomElement g = me.ownerDocument().createElement("gantt-view");
     me.appendChild(g);
-    g.setAttribute("ganttview-size", ganttviewsize);
-    g.setAttribute("taskview-size", taskviewsize);
-    g.setAttribute("current-node", currentNode);
-    g.setAttribute("show-resources", showResources);
-    g.setAttribute("show-taskname", showTaskName);
-    g.setAttribute("show-tasklinks", showTaskLinks);
-    g.setAttribute("show-progress", showProgress);
-    g.setAttribute("show-positivefloat", showPositiveFloat);
-    g.setAttribute("show-criticaltasks", showCriticalTasks);
-    g.setAttribute("show-criticalpath", showCriticalPath);
-    if (!closedNodes.isEmpty()) {
+    g.setAttribute("ganttview-size", ganttview.ganttviewsize);
+    g.setAttribute("taskview-size", ganttview.taskviewsize);
+    g.setAttribute("current-node", ganttview.currentNode);
+    g.setAttribute("show-resources", ganttview.showResources);
+    g.setAttribute("show-taskname", ganttview.showTaskName);
+    g.setAttribute("show-tasklinks", ganttview.showTaskLinks);
+    g.setAttribute("show-progress", ganttview.showProgress);
+    g.setAttribute("show-positivefloat", ganttview.showPositiveFloat);
+    g.setAttribute("show-criticaltasks", ganttview.showCriticalTasks);
+    g.setAttribute("show-criticalpath", ganttview.showCriticalPath);
+    if (!ganttview.closedNodes.isEmpty()) {
         QDomElement e = g.ownerDocument().createElement("closed-nodes");
         g.appendChild(e);
-        for (QStringList::ConstIterator it = closedNodes.begin(); it != closedNodes.end(); ++it) {
+        for (QStringList::ConstIterator it = ganttview.closedNodes.begin(); it != ganttview.closedNodes.end(); ++it) {
             QDomElement c = e.ownerDocument().createElement("node");
             e.appendChild(c);
             c.setAttribute("id", (*it));
         }
     }
+    // Accountview
+    QDomElement a = me.ownerDocument().createElement("accounts-view");
+    me.appendChild(a);
+    a.setAttribute("accountsview-size", accountsview.accountsviewsize);
+    a.setAttribute("periodview-size", accountsview.periodviewsize);
+    a.setAttribute("date", accountsview.date.toString(Qt::ISODate));
+    a.setAttribute("period", accountsview.period);
+    a.setAttribute("cumulative", accountsview.cumulative);
 }
 
 }  //KPlato namespace

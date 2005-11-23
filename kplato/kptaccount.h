@@ -20,9 +20,15 @@
 #ifndef KPTACCOUNT_H
 #define KPTACCOUNT_H
 
+#include <qdatetime.h>
 #include <qdict.h>
 #include <qptrlist.h>
 #include <qstringlist.h>
+
+#include "kpteffortcostmap.h"
+#include "kptnode.h"
+
+#include <kdebug.h>
 
 class QDomElement;
 class QString;
@@ -63,7 +69,7 @@ public:
     void take(Account *account);
     void insertChildren();
     
-    bool load(QDomElement &element);
+    bool load(QDomElement &element, const Project &project);
     void save(QDomElement &element) const;
     
     const QPtrList<Account> &accountList() const { return m_accountList; }
@@ -75,12 +81,69 @@ public:
     bool insertId();
     bool insertId(const Account *account);
     
+    class CostPlace {
+    public:
+        CostPlace() 
+            : m_nodeId(), m_node(0), m_running(false), m_startup(false), m_shutdown(false)
+        {}
+        CostPlace(Node *node, bool running=false, bool strtup=false, bool shutdown=false)
+            : m_nodeId(node->id()), m_node(node), m_running(running), m_startup(strtup), m_shutdown(shutdown)
+        {}
+        CostPlace(CostPlace *cp) {
+            m_nodeId = cp->m_nodeId;
+            m_node = cp->m_node;
+            m_running = cp->m_running;
+            m_startup = cp->m_startup;
+            m_shutdown = cp->m_shutdown;
+        }
+        ~CostPlace()
+        {}
+        bool isEmpty() { return !(m_running || m_startup || m_shutdown); }
+        Node *node() const { return m_node; }
+        
+        bool running() const { return m_running; }
+        void setRunning(bool on ) { m_running = on; }
+        bool startup() const  { return m_startup; }
+        void setStartup(bool on) { kdDebug()<<k_funcinfo<<endl;m_startup = on; }
+        bool shutdown() const  { return m_shutdown; }
+        void setShutdown(bool on) { m_shutdown = on; }
+    
+        bool load(QDomElement &element, const Project &project);
+        void save(QDomElement &element) const;
+    
+    private:
+        QString m_nodeId;
+        Node *m_node;
+        bool m_running;
+        bool m_startup;
+        bool m_shutdown;
+    };
+    
+    void append(const CostPlace *cp) { m_costPlaces.append(cp); }
+    const QPtrList<CostPlace> &costPlaces() const {return m_costPlaces; }
+    Account::CostPlace *findCostPlace(const Node &node) const;
+    CostPlace *findRunning(const Node &node) const;
+    void removeRunning(const Node &node);
+    void addRunning(Node &node);
+    CostPlace *findStartup(const Node &node) const;
+    void removeStartup(const Node &node);
+    void addStartup(Node &node);
+    CostPlace *findShutdown(const Node &node) const;
+    void removeShutdown(const Node &node);
+    void addShutdown(Node &node);
+
 private:
     QString m_name;
     QString m_description;
     Accounts *m_list;
     Account *m_parent;
     QPtrList<Account> m_accountList;
+    QPtrList<CostPlace> m_costPlaces;
+    
+#ifndef NDEBUG
+public:
+    void printDebug(QString indent);
+#endif
 };
 
 typedef QPtrList<Account> AccountList;
@@ -95,17 +158,24 @@ class Accounts
 public:
     Accounts();
     ~Accounts();
+    
+    static EffortCostMap plannedCost(const Account &account, const QDate &start, const QDate &end);
+    
     void clear() { m_accountList.clear(); m_idDict.clear(); }
     void append(Account *account);
     void take(Account *account);
     
-    bool load(QDomElement &element);
+    bool load(QDomElement &element, const Project &project);
     void save(QDomElement &element) const;
 
     QStringList costElements() const;
     QStringList nameList() const;
         
     const AccountList &accountList() const { return m_accountList; }
+    
+    Account *findRunningAccount(const Node &node) const;
+    Account *findStartupAccount(const Node &node) const;
+    Account *findShutdownAccount(const Node &node) const;
     Account *findAccount(const QString &id) const;
     bool insertId(const Account *account);
     bool removeId(const QString &id);
@@ -113,6 +183,13 @@ public:
 private:
     AccountList m_accountList;
     QDict<Account> m_idDict;
+
+    Account *m_defaultAccount;
+
+#ifndef NDEBUG
+public:
+    void printDebug(QString indent);
+#endif
 };
 
 } //namespace KPlato

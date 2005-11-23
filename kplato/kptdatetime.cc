@@ -45,14 +45,8 @@ void DateTime::subtract(const Duration &duration) {
 
 Duration DateTime::duration(const DateTime &dt) const {
     Duration dur;
-    if (*this > dt) {
-        dur.addDays(dt.daysTo(*this));
-        dur.addSeconds(dt.time().secsTo(time()));
-    } else {
-        dur.addDays(daysTo(dt));
-        dur.addSeconds(time().secsTo(dt.time()));
-    }
-    //kdDebug()<<k_funcinfo<<"this="<<this->toString()<<" - dt="<<dt.toString()<<" gives: "<<dur.toString()<<endl;
+    dur.addDays(QABS(dt.daysTo(*this)));
+    dur.addSeconds(QABS(dt.time().secsTo(time())));
     return dur;
 }
 

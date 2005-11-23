@@ -41,6 +41,7 @@ class DCOPObject;
 namespace KPlato
 {
 
+class AccountsView;
 class GanttView;
 class PertView;
 class ResourceView;
@@ -97,6 +98,7 @@ public slots:
     void slotViewGanttCriticalPath();
     void slotViewPert();
     void slotViewResources();
+    void slotViewAccounts();
     void slotAddTask();
     void slotAddSubTask();
     void slotAddMilestone();
@@ -155,6 +157,7 @@ private:
     QHBoxLayout *m_pertlayout;
 	QWidgetStack *m_tab;
     ResourceView *m_resourceview;
+    AccountsView *m_accountsview;
     ReportView *m_reportview;
     QPtrList<QString> m_reportTemplateFiles;
 
@@ -186,7 +189,8 @@ private:
     KToggleAction *actionViewGanttCriticalPath;
     KAction *actionViewPert;
     KAction *actionViewResources;
-
+    KAction *actionViewAccounts;
+    
     // ------ Insert
     KAction *actionAddTask;
     KAction *actionAddSubtask;
@@ -222,6 +226,7 @@ private:
     KAction *actionTaskProgress;
     KAction *actionDeleteTask;
     KAction *actionEditResource;
+
 };
 
 } //Kplato namespace

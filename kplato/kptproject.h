@@ -101,6 +101,8 @@ public:
     /// Returns the resource with identity id.
     Resource *resource(QString id);
 
+    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end) const;
+    
     /// Returns the total planned effort for this project (or subproject) 
     virtual Duration plannedEffort();
     /// Returns the total planned effort for this project (or subproject) on date
@@ -149,6 +151,8 @@ public:
 
     /// Check if node par can be linked to node child.
     bool legalToLink(Node *par, Node *child);
+    
+    virtual const QDict<Node> &nodeDict() { return nodeIdDict; }
     
     /// Find the node with identity id
     virtual Node *findNode(const QString &id) const 

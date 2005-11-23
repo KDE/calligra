@@ -46,20 +46,23 @@ TaskCostPanel::TaskCostPanel(Task &task, Accounts &accounts, QWidget *p, const c
 
 void TaskCostPanel::setStartValues(Task &task) {
     runningAccount->insertStringList(m_accountList);
-    if (task.runningAccount()) {
-        setCurrentItem(runningAccount, task.runningAccount()->name());
+    m_oldrunning = m_accounts.findRunningAccount(task);
+    if (m_oldrunning) {
+        setCurrentItem(runningAccount, m_oldrunning->name());
     }
     
     startupCost->setText(KGlobal::locale()->formatMoney(task.startupCost()));
     startupAccount->insertStringList(m_accountList);
-    if (task.startupAccount()) {
-        setCurrentItem(startupAccount, task.startupAccount()->name());
+    m_oldstartup = m_accounts.findStartupAccount(task);
+    if (m_oldstartup) {
+        setCurrentItem(startupAccount, m_oldstartup->name());
     }
     
     shutdownCost->setText(KGlobal::locale()->formatMoney(task.shutdownCost()));
     shutdownAccount->insertStringList(m_accountList);
-    if (task.shutdownAccount()) {
-        setCurrentItem(shutdownAccount, task.shutdownAccount()->name());
+    m_oldshutdown = m_accounts.findShutdownAccount(task);
+    if (m_oldshutdown) {
+        setCurrentItem(shutdownAccount, m_oldshutdown->name());
     }
 }
 
@@ -77,19 +80,19 @@ KCommand *TaskCostPanel::buildCommand(Part *part) {
     KMacroCommand *cmd = new KMacroCommand(i18n("Modify Task Cost"));
     bool modified = false;
     
-    if (!m_task.runningAccount() ||
-        (m_task.runningAccount()->name() != runningAccount->currentText())) {
-        cmd->addCommand(new NodeModifyRunningAccountCmd(part, m_task, m_accounts.findAccount(runningAccount->currentText())));
+    if ((m_oldrunning == 0 && runningAccount->currentItem() != 0) ||
+        (m_oldrunning && m_oldrunning->name() != runningAccount->currentText())) {
+        cmd->addCommand(new NodeModifyRunningAccountCmd(part, m_task, m_oldrunning, m_accounts.findAccount(runningAccount->currentText())));
         modified = true;
     }
-    if (!m_task.startupAccount() ||
-        (m_task.startupAccount()->name() != startupAccount->currentText())) {
-        cmd->addCommand(new NodeModifyStartupAccountCmd(part, m_task,  m_accounts.findAccount(startupAccount->currentText())));
+    if ((m_oldstartup == 0 && startupAccount->currentItem() != 0) ||
+        (m_oldstartup && m_oldstartup->name() != startupAccount->currentText())) {
+        cmd->addCommand(new NodeModifyStartupAccountCmd(part, m_task, m_oldstartup,  m_accounts.findAccount(startupAccount->currentText())));
         modified = true;
     }
-    if (!m_task.shutdownAccount() ||
-        (m_task.shutdownAccount()->name() != shutdownAccount->currentText())) {
-        cmd->addCommand(new NodeModifyShutdownAccountCmd(part, m_task,  m_accounts.findAccount(shutdownAccount->currentText())));
+    if ((m_oldshutdown == 0 && shutdownAccount->currentItem() != 0) ||
+        (m_oldshutdown && m_oldshutdown->name() != shutdownAccount->currentText())) {
+        cmd->addCommand(new NodeModifyShutdownAccountCmd(part, m_task, m_oldshutdown,  m_accounts.findAccount(shutdownAccount->currentText())));
         modified = true;
     }
     double money = KGlobal::locale()->readMoney(startupCost->text());

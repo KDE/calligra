@@ -35,7 +35,6 @@ class QTime;
 namespace KPlato
 {
 
-class Account;
 class Risk;
 class Effort;
 class Appointment;
@@ -47,6 +46,7 @@ class ResourceRequest;
 class ResourceGroupRequest;
 class Calendar;
 class ResourceRequestCollection;
+class EffortCostMap;
 
 /**
   * This class represents a group of similar resources to be assigned to a task
@@ -362,6 +362,12 @@ private:
     double m_load; //percent
 };
 
+
+/**
+ * This list is sorted after 1) startdatetime, 2) enddatetime.
+ * The intervals do not overlap, an interval does not start before the
+ * previous interval ends.
+ */
 class AppointmentIntervalList : public QPtrList<AppointmentInterval> {
 protected:
     int compareItems(QPtrCollection::Item item1, QPtrCollection::Item item2) {
@@ -382,15 +388,19 @@ protected:
         return 0;
     }
 };
+typedef QPtrListIterator<AppointmentInterval> AppointmentIntervalListIterator;
 
 /**
-  * A resource (@ref Resource) can be scheduled to be used at any time, 
-  * this is represented internally with Appointments
-  * There is one Appointment per resource-task pair.
-  * An appointment can be devided into several intervals, represented with
-  * a list of AppointmentInterval
-  */
-
+ * A resource (@ref Resource) can be scheduled to be used at any time, 
+ * this is represented internally with Appointments
+ * There is one Appointment per resource-task pair.
+ * An appointment can be devided into several intervals, represented with
+ * a list of AppointmentInterval.
+ * This list is sorted after 1) startdatetime, 2) enddatetime.
+ * The intervals do not overlap, an interval does not start before the
+ * previous interval ends.
+ * An interval is a countinous time interval with the same load. It can span dates.
+ */
 class Appointment {
 public:
     Appointment();
@@ -436,6 +446,12 @@ public:
     bool loadXML(QDomElement &element, Project &project);
     void saveXML(QDomElement &element);
 
+    /**
+     * Returns the planned effort and cost for the interval start to end.
+     * Only dates with any planned effort is returned.
+     */
+    EffortCostMap plannedPrDay(const QDate& start, const QDate& end) const;
+    
     /// Returns the planned effort from start to end
     Duration effort(const DateTime &start, const DateTime &end) const;
     /// Returns the planned effort from start for the duration
@@ -476,8 +492,6 @@ public:
     Appointment operator+(const Appointment &app);
     
     void addActualEffort(QDate date, Duration effort, bool overtime=false);
-    
-    Account *account() { return m_account; }
     
 private:
     Node *m_node;
@@ -520,8 +534,6 @@ private:
     
     UsedEffort m_actualEffort;
 
-    Account *m_account;
-    
 #ifndef NDEBUG
 public:
         void printDebug(QString ident);
@@ -585,17 +597,15 @@ class ResourceRequest {
         void registerRequest() { if (m_resource) m_resource->registerRequest(this); }
         void unregisterRequest() { if (m_resource) m_resource->unregisterRequest(this); }
  
-        void makeAppointment(DateTime &start, Duration &duration, Task *task) 
-            { if (m_resource) m_resource->makeAppointment(start, duration, task); }
-        
-        Account *account() const { return m_account; }
-        void setAccount(Account *account) { m_account = account; }
+        void makeAppointment(DateTime &start, Duration &duration, Task *task) { 
+            if (m_resource) 
+                m_resource->makeAppointment(start, duration, task);
+        }
         
     private:
         Resource *m_resource;
         int m_units;
         ResourceGroupRequest *m_parent;
-        Account *m_account;
 
 #ifndef NDEBUG
 public:

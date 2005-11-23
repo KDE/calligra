@@ -4,6 +4,9 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib
            $(all_includes)
 
 libkplatopart_la_SOURCES = \
+    kptaccountsviewconfigdialog.cc \
+    kptaccountsviewconfigurepanelbase.ui \
+    kptaccountsview.cc \
     kpttaskcostpanelbase.ui \
     kpttaskcostpanel.cc \
     kptmilestoneprogresspanel.cc \
@@ -44,6 +47,8 @@ libkplatopart_la_SOURCES = \
 
 # (this is not used)
 noinst_HEADERS = \
+    kptaccountsviewconfigdialog.h \
+    kptaccountsview.h \
     kpttaskcostpanel.h \
     kpttaskprogresspanel.h \
     kpttaskprogressdialog.h \
@@ -62,7 +67,7 @@ noinst_HEADERS = \
     kptcalendarpanel.h kptdatetable.h \
     kptcalendarlistdialogbase.h kptcalendareditbase.h \
     kptcommand.h \
-    kptstandardworktimedialog.h kptintervaledit.h \
+    kptstandardworktimedialog.h kptintervaledit.h intervalitem.h \
     kpttaskgeneralpanel.h kpttaskdefaultpanel.h \
     kptconfigdialog.h \
     kpttaskprogresspanel.h \
@@ -70,7 +75,8 @@ noinst_HEADERS = \
     kptconfig.h kptcontext.h \
     kptresourcesdialog.h \
     kptwbsdefinitiondialog.h kptwbsdefinitionpanel.h \
-    kptwbsdefinition.h
+    kptwbsdefinition.h \
+    kpteffortcostmap.h
     
 ## The part
 lib_LTLIBRARIES = 

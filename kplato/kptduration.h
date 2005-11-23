@@ -91,6 +91,7 @@ class Duration {
         Duration &operator=(const Duration &d ) { m_ms = d.m_ms; return *this;}
         Duration operator*(int unit) const; 
         Duration operator/(int unit) const;
+        Duration operator*(const double value) const;
         double operator/(const Duration &d) const;
         
         Duration operator+(Duration &d) const

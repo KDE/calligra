@@ -112,6 +112,7 @@ void PertView::slotModifyRelation(Relation *rel)
 
 void PertView::print(KPrinter &printer)
 {
+    Q_UNUSED(printer);
     kdDebug()<<k_funcinfo<<endl;
 
 }
@@ -121,14 +122,16 @@ Node *PertView::currentNode()
     return m_canvasview->selectedNode(); 
 }
 
-bool PertView::setContext(Context &context)
+bool PertView::setContext(Context::Pertview &context)
 {
+    Q_UNUSED(context);
     kdDebug()<<k_funcinfo<<endl;
     return true;
 }
 
-void PertView::getContext(Context &context) const
+void PertView::getContext(Context::Pertview &context) const
 {
+    Q_UNUSED(context);
     kdDebug()<<k_funcinfo<<endl;
 }
 

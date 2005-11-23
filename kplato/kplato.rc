@@ -33,6 +33,8 @@
             <Separator/>
             <Action name="view_resources"/>
             <Separator/>
+            <Action name="view_accounts"/>
+            <Separator/>
         </Menu>
         <Menu name="insert"><text>&amp;Insert</text>
             <Action name="add_task"/>
@@ -71,6 +73,7 @@
         <!--<Action name="view_pert"/> -->
         <Action name="view_resources"/>
         <Action name="view_resourceuse"/>
+        <Action name="view_accounts"/>
     </ToolBar>
     <ToolBar name="project" position="top"><Text>Project</Text>
         <Action name="koffice_undo"/>

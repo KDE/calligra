@@ -23,6 +23,7 @@
 #include "kpttask.h"
 #include "kptdatetime.h"
 #include "kptcalendar.h"
+#include "kpteffortcostmap.h"
 
 #include <kdebug.h>
 
@@ -437,7 +438,7 @@ void Resource::makeAppointment(DateTime &start, Duration &duration, Task *task) 
         QPair<DateTime, DateTime> i = cal->interval(time, end);
         if (time == i.second)
             return; // hmmm, didn't get a new interval, avoid loop
-        addAppointment(task, i.first, i.second);
+        addAppointment(task, i.first, i.second, 100); //FIXME
         time = i.second;
     }
 }
@@ -806,7 +807,8 @@ Appointment::Appointment()
 }
 
 Appointment::Appointment(Resource *resource, Node *node, DateTime start, DateTime end, double load) 
-    : m_extraRepeats(), m_skipRepeats() {
+    : m_extraRepeats(), 
+      m_skipRepeats() {
     
     m_node = node;
     m_resource = resource;
@@ -820,8 +822,7 @@ Appointment::Appointment(Resource *resource, Node *node, DateTime start, DateTim
 
 Appointment::Appointment(Resource *resource, Node *node, DateTime start, Duration duration, double load) 
     : m_extraRepeats(), 
-      m_skipRepeats(),
-      m_account(0) {
+      m_skipRepeats() {
     
     m_node = node;
     m_resource = resource;
@@ -971,6 +972,36 @@ Duration Appointment::plannedEffortTo(const QDate& date) const {
         d += it.current()->effort(e, true);
     }
     return d;
+}
+
+// Returns a list of efforts pr day for interval start, end inclusive
+// The list only includes days with any planned effort
+EffortCostMap Appointment::plannedPrDay(const QDate& start, const QDate& end) const {
+    //kdDebug()<<k_funcinfo<<m_node->name()<<", "<<m_resource->name()<<endl;
+    EffortCostMap ec;
+    Duration eff;
+    DateTime dt(start);
+    DateTime ndt(dt.addDays(1));
+    AppointmentIntervalListIterator it = m_intervals;
+    for (; it.current(); ++it) {
+        DateTime st = it.current()->startTime();
+        DateTime e = it.current()->endTime();
+        if (end < st.date())
+            break;
+        if (dt.date() < st.date()) {
+            dt.setDate(st.date());
+        }
+        ndt = dt.addDays(1);
+        // loop trough the interval (it may span dates)
+        while (dt.date() <= e.date()) {
+            eff = it.current()->effort(dt, ndt);
+            double cost = eff.toDouble(Duration::Unit_h) * m_resource->normalRate(); //TODO overtime and cost unit
+            ec.insert(dt.date(), eff, cost);
+            dt = ndt;
+            ndt = ndt.addDays(1);
+        }
+    }
+    return ec;
 }
 
 
@@ -1147,8 +1178,7 @@ Risk::~Risk() {
 ResourceRequest::ResourceRequest(Resource *resource, int units)
     : m_resource(resource),
       m_units(units),
-      m_parent(0),
-      m_account(0) {
+      m_parent(0) {
     //kdDebug()<<k_funcinfo<<"Request to: "<<(resource ? resource->name() : QString("None"))<<endl;
 }
 
@@ -1167,10 +1197,6 @@ bool ResourceRequest::load(QDomElement &element, Project &project) {
         return false;
     }
     m_units  = element.attribute("units").toInt();
-    QString a = element.attribute("account");
-    if (!a.isEmpty()) {
-        m_account = project.accounts().findAccount(a);
-    }
     return true;
 }
 
@@ -1179,9 +1205,6 @@ void ResourceRequest::save(QDomElement &element) {
     element.appendChild(me);
     me.setAttribute("resource-id", m_resource->id());
     me.setAttribute("units", m_units);
-    if (m_account) {
-        me.setAttribute("account", m_account->name());
-    }
 }
 
 int ResourceRequest::units() const {

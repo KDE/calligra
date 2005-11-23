@@ -21,6 +21,7 @@
 #ifndef KPTCONTEXT_H
 #define KPTCONTEXT_H
 
+#include <qdatetime.h>
 #include <qstring.h>
 #include <qstringlist.h>
 
@@ -41,19 +42,37 @@ public:
     // View
     QString currentView;
     
-    // Ganttview
-    int ganttviewsize;
-    int taskviewsize;
-    QString currentNode;
-    bool showResources;
-    bool showTaskName;
-    bool showTaskLinks;
-    bool showProgress;
-    bool showPositiveFloat;
-    bool showCriticalTasks;
-    bool showCriticalPath;
-    QStringList closedNodes;
+    struct Ganttview {
+        int ganttviewsize;
+        int taskviewsize;
+        QString currentNode;
+        bool showResources;
+        bool showTaskName;
+        bool showTaskLinks;
+        bool showProgress;
+        bool showPositiveFloat;
+        bool showCriticalTasks;
+        bool showCriticalPath;
+        QStringList closedNodes;
+    } ganttview;    
     
+    struct Pertview {
+    } pertview;
+    
+    struct Resourceview {
+    } resourceview;
+    
+    struct Accountsview {
+        int accountsviewsize;
+        int periodviewsize;
+        QDate date;
+        int period;
+        bool cumulative;
+    } accountsview;
+    
+    struct Reportview {
+    } reportview;
+
 };
 
 }  //KPlato namespace

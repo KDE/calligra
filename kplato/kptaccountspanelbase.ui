@@ -9,9 +9,15 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>296</width>
-            <height>201</height>
+            <width>350</width>
+            <height>220</height>
         </rect>
+    </property>
+    <property name="minimumSize">
+        <size>
+            <width>350</width>
+            <height>220</height>
+        </size>
     </property>
     <property name="baseSize">
         <size>

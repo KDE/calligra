@@ -60,6 +60,7 @@
 #include <kfiledialog.h>
 
 #include "kptview.h"
+#include "kptaccountsview.h"
 #include "kptfactory.h"
 #include "kptmilestoneprogressdialog.h"
 #include "kptpart.h"
@@ -126,6 +127,9 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     m_resourceview = new ResourceView( this, m_tab );
     m_tab->addWidget(m_resourceview);
     
+    m_accountsview = new AccountsView( getProject(), this, m_tab );
+    m_tab->addWidget(m_accountsview);
+    
     m_reportview = new ReportView(this, m_tab);
     m_tab->addWidget(m_reportview);
 
@@ -167,6 +171,8 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionViewPert = new KAction(i18n("Network"), "pert_chart", 0, this, SLOT(slotViewPert()), actionCollection(), "view_pert");
     
     actionViewResources = new KAction(i18n("Resources"), "resources", 0, this, SLOT(slotViewResources()), actionCollection(), "view_resources");
+
+    actionViewAccounts = new KAction(i18n("Accounts"), "accounts", 0, this, SLOT(slotViewAccounts()), actionCollection(), "view_accounts");
 
     // ------ Insert
     actionAddTask = new KAction(i18n("Task..."), "add_task", 0, this,
@@ -287,6 +293,10 @@ void View::print(KPrinter &printer) {
 	{
         m_resourceview->print(printer);
 	}
+	else if (m_tab->visibleWidget() == m_accountsview)
+    {
+        m_accountsview->print(printer);
+    }
 	else if (m_tab->visibleWidget() == m_reportview)
 	{
         m_reportview->print(printer);
@@ -370,6 +380,12 @@ void View::slotViewResources() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_resourceview);
 	m_resourceview->draw(getPart()->getProject());
+}
+
+void View::slotViewAccounts() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_tab->raiseWidget(m_accountsview);
+    m_accountsview->draw();
 }
 
 void View::slotProjectEdit() {
@@ -907,6 +923,10 @@ void View::slotUpdate(bool calculate)
     	m_resourceview->draw(getProject());
 	    m_resourceview->show();
 	}
+	else if (m_tab->visibleWidget() == m_accountsview)
+	{
+        m_accountsview->draw();
+	}
 	else if (m_tab->visibleWidget() == m_reportview)
 	{
 	}
@@ -960,7 +980,12 @@ void View::slotAboutToShow(QWidget *widget) {
         //kdDebug()<<k_funcinfo<<"draw resourceview"<<endl;
     	m_resourceview->draw(getPart()->getProject());
 	    m_resourceview->show();
-	}
+    }
+    else if (widget == m_accountsview)
+    {
+        //kdDebug()<<k_funcinfo<<"draw accountsview"<<endl;
+        m_accountsview->draw();
+    }
 	else if (widget == m_reportview)
 	{
         //kdDebug()<<k_funcinfo<<"draw reportview"<<endl;
@@ -978,19 +1003,20 @@ void View::renameNode(Node *node, QString name) {
 
 bool View::setContext(Context &context) {
     kdDebug()<<k_funcinfo<<endl;
-    m_ganttview->setContext(context);
+    m_ganttview->setContext(context.ganttview);
     // hmmm, can't decide if these should be here or actions moved to ganttview
-    actionViewGanttResources->setChecked(context.showResources);
-    actionViewGanttTaskName->setChecked(context.showTaskName);
-    actionViewGanttTaskLinks->setChecked(context.showTaskLinks);
-    actionViewGanttProgress->setChecked(context.showProgress);
-    actionViewGanttFloat->setChecked(context.showPositiveFloat);
-    actionViewGanttCriticalTasks->setChecked(context.showCriticalTasks);
-    actionViewGanttCriticalPath->setChecked(context.showCriticalPath);
+    actionViewGanttResources->setChecked(context.ganttview.showResources);
+    actionViewGanttTaskName->setChecked(context.ganttview.showTaskName);
+    actionViewGanttTaskLinks->setChecked(context.ganttview.showTaskLinks);
+    actionViewGanttProgress->setChecked(context.ganttview.showProgress);
+    actionViewGanttFloat->setChecked(context.ganttview.showPositiveFloat);
+    actionViewGanttCriticalTasks->setChecked(context.ganttview.showCriticalTasks);
+    actionViewGanttCriticalPath->setChecked(context.ganttview.showCriticalPath);
 
-    m_pertview->setContext(context);
-    m_resourceview->setContext(context);
-    m_reportview->setContext(context);
+    m_pertview->setContext(context.pertview);
+    m_resourceview->setContext(context.resourceview);
+    m_accountsview->setContext(context.accountsview);
+    m_reportview->setContext(context.reportview);
     
     if (context.currentView == "ganttview") {
         slotViewGantt();
@@ -998,6 +1024,8 @@ bool View::setContext(Context &context) {
         slotViewPert();
     } else if (context.currentView == "resourceview") {
         slotViewResources();
+    } else if (context.currentView == "accountsview") {
+        slotViewAccounts();
     } else if (context.currentView == "reportview") {
         //slotViewReport();
     }
@@ -1013,13 +1041,16 @@ void View::getContext(Context &context) const {
         context.currentView = "pertview";
     } else if (m_tab->visibleWidget() == m_resourceview) {
         context.currentView = "resourceview";
+    } else if (m_tab->visibleWidget() == m_accountsview) {
+        context.currentView = "accountsview";
     } else if (m_tab->visibleWidget() == m_reportview) {
         context.currentView = "reportview";
     }
-    m_ganttview->getContext(context);
-    m_pertview->getContext(context);
-    m_resourceview->getContext(context);
-    m_reportview->getContext(context);
+    m_ganttview->getContext(context.ganttview);
+    m_pertview->getContext(context.pertview);
+    m_resourceview->getContext(context.resourceview);
+    m_accountsview->getContext(context.accountsview);
+    m_reportview->getContext(context.reportview);
 }
 
 void View::setBaselineMode(bool on) {

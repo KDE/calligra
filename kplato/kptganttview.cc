@@ -958,7 +958,7 @@ void GanttView::slotModifyLink(KDGanttViewTaskLink* link) {
         emit modifyRelation(rel);
 }
 
-bool GanttView::setContext(Context &context) {
+bool GanttView::setContext(Context::Ganttview &context) {
     kdDebug()<<k_funcinfo<<endl;
     
     QValueList<int> list = sizes();
@@ -987,7 +987,7 @@ bool GanttView::setContext(Context &context) {
     return true;
 }
 
-void GanttView::getContext(Context &context) const {
+void GanttView::getContext(Context::Ganttview &context) const {
     //kdDebug()<<k_funcinfo<<endl;
     context.ganttviewsize = sizes()[0];
     context.taskviewsize = sizes()[1];
@@ -1005,7 +1005,7 @@ void GanttView::getContext(Context &context) const {
     getContextClosedNodes(context, m_gantt->firstChild());
 }
 
-void GanttView::getContextClosedNodes(Context &context, KDGanttViewItem *item) const {
+void GanttView::getContextClosedNodes(Context::Ganttview &context, KDGanttViewItem *item) const {
     if (item == 0)
         return;
     for (KDGanttViewItem *i = item; i; i = i->nextSibling()) {

@@ -84,6 +84,12 @@ public:
     /// Save to document
     virtual void save(QDomElement &element);
 
+    /**
+     * Returns a list of planned effort and cost for this task
+     * for the interval start, end inclusive
+     */
+    virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end) const;
+    
     /// Returns the total planned effort for this task (or subtasks) 
     virtual Duration plannedEffort();
     /// Returns the total planned effort for this task (or subtasks) on date

@@ -20,6 +20,8 @@
 #ifndef KPTPERTVIEW_H
 #define KPTPERTVIEW_H
 
+#include "kptcontext.h"
+
 #include <qsplitter.h>
 
 class QLayout;
@@ -34,7 +36,6 @@ class View;
 class PertCanvas;
 class Node;
 class Relation;
-class Context;
 
 class PertView : public QWidget
 {
@@ -55,8 +56,8 @@ public:
 
     Node *currentNode();
 
-    virtual bool setContext(Context &context);
-    virtual void getContext(Context &context) const;
+    virtual bool setContext(Context::Pertview &context);
+    virtual void getContext(Context::Pertview &context) const;
 
 public slots:
     void slotRMBPressed(Node *node, const QPoint & point);

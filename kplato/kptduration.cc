@@ -100,6 +100,12 @@ Duration Duration::operator/(int unit) const {
     return dur;
 }
 
+Duration Duration::operator*(const double value) const {
+    Duration dur(*this);
+    dur.m_ms = QABS(m_ms * (Q_INT64)value);
+    return dur;
+}
+
 double Duration::operator/(const Duration &d) const {
     if (d == zeroDuration) {
         kdDebug()<<k_funcinfo<<"Devide by zero: "<<this->toString()<<endl;

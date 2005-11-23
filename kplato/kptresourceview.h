@@ -23,6 +23,8 @@
 #include <qsplitter.h>
 #include <qdatetime.h>
 
+#include "kptcontext.h"
+
 class QLayout;
 class KDGanttView;
 class KDGanttViewItem;
@@ -43,7 +45,6 @@ class Node;
 class ResourceGroup;
 class Resource;
 class ResourceItemPrivate;
-class Context;
 
 
  class ResourceView : public QSplitter
@@ -67,8 +68,8 @@ class Context;
 
     Node *currentNode() const { return m_currentNode; }
     
-    virtual bool setContext(Context &context);
-    virtual void getContext(Context &context) const;
+    virtual bool setContext(Context::Resourceview &context);
+    virtual void getContext(Context::Resourceview &context) const;
 
 public slots:
     void resSelectionChanged(QListViewItem *item);

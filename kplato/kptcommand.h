@@ -371,20 +371,6 @@ private:
     bool m_mine;
 };
 
-class ModifyResourceRequestAccountCmd : public NamedCommand
-{
-public:
-    ModifyResourceRequestAccountCmd(Part *part, ResourceRequest *request, QString account, QString name=0);
-    ~ModifyResourceRequestAccountCmd();
-    void execute();
-    void unexecute();
-
-private:
-    ResourceRequest *m_request;
-    Account *m_oldaccount;
-    Account *m_newaccount;
-};
-
 class ModifyEffortCmd : public NamedCommand
 {
 public:
@@ -724,7 +710,7 @@ private:
 class NodeModifyRunningAccountCmd : public NamedCommand
 {
 public:
-    NodeModifyRunningAccountCmd(Part *part, Node &node, Account *value, QString name=0);
+    NodeModifyRunningAccountCmd(Part *part, Node &node, Account *oldvalue, Account *newvalue, QString name=0);
     void execute();
     void unexecute();
 
@@ -737,7 +723,7 @@ private:
 class NodeModifyStartupAccountCmd : public NamedCommand
 {
 public:
-    NodeModifyStartupAccountCmd(Part *part, Node &node, Account *value, QString name=0);
+    NodeModifyStartupAccountCmd(Part *part, Node &node, Account *oldvalue, Account *newvalue, QString name=0);
     void execute();
     void unexecute();
 
@@ -750,7 +736,7 @@ private:
 class NodeModifyShutdownAccountCmd : public NamedCommand
 {
 public:
-    NodeModifyShutdownAccountCmd(Part *part, Node &node, Account *value, QString name=0);
+    NodeModifyShutdownAccountCmd(Part *part, Node &node, Account *oldvalue, Account *newvalue, QString name=0);
     void execute();
     void unexecute();
 

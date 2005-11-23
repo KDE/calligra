@@ -325,12 +325,12 @@ void ResourceView::print(KPrinter &printer) {
 
 }
 
-bool ResourceView::setContext(Context &context) {
+bool ResourceView::setContext(Context::Resourceview &context) {
     kdDebug()<<k_funcinfo<<endl;
     return true;
 }
 
-void ResourceView::getContext(Context &context) const {
+void ResourceView::getContext(Context::Resourceview &context) const {
     kdDebug()<<k_funcinfo<<endl;
 }
 

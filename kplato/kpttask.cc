@@ -25,6 +25,7 @@
 #include "kptrelation.h"
 #include "kptdatetime.h"
 #include "kptcalendar.h"
+#include "kpteffortcostmap.h"
 
 #include <qdom.h>
 #include <qbrush.h>
@@ -194,18 +195,6 @@ bool Task::load(QDomElement &element, Project &project) {
     m_constraintStartTime = DateTime::fromString(element.attribute("constraint-starttime"));
     m_constraintEndTime = DateTime::fromString(element.attribute("constraint-endtime"));
     
-    QString s = element.attribute("running-account");
-    if (!s.isEmpty()) {
-        m_runningAccount = project.accounts().findAccount(s);
-    }
-    s = element.attribute("startup-account");
-    if (!s.isEmpty()) {
-        m_startupAccount =  project.accounts().findAccount(s);
-    }
-    s = element.attribute("shutdown-account");
-    if (!s.isEmpty()) {
-        m_shutdownAccount = project.accounts().findAccount(s);
-    }    
     m_startupCost = element.attribute("startup-cost", "0.0").toDouble();
     m_shutdownCost = element.attribute("shutdown-cost", "0.0").toDouble();
     
@@ -302,12 +291,6 @@ void Task::save(QDomElement &element)  {
     me.setAttribute("constraint-starttime",m_constraintStartTime.toString());
     me.setAttribute("constraint-endtime",m_constraintEndTime.toString());    
 
-    if (m_runningAccount)
-        me.setAttribute("running-account", m_runningAccount->name());
-    if (m_startupAccount)
-        me.setAttribute("startup-account", m_startupAccount->name());
-    if (m_shutdownAccount)
-        me.setAttribute("shutdown-account", m_shutdownAccount->name());
     me.setAttribute("startup-cost", m_startupCost);
     me.setAttribute("shutdown-cost", m_shutdownCost);
     
@@ -358,6 +341,17 @@ void Task::save(QDomElement &element)  {
     for (int i=0; i<numChildren(); i++)
     	// First add the child
 	    getChildNode(i)->save(me);
+}
+
+EffortCostMap Task::plannedEffortCostPrDay(const QDate &start, const QDate &end) const {
+    //kdDebug()<<k_funcinfo<<m_name<<endl;
+    EffortCostMap ec;
+    QPtrListIterator<Appointment> it(m_appointments);
+    for (; it.current(); ++it) {
+        //kdDebug()<<k_funcinfo<<m_name<<endl;
+        ec += it.current()->plannedPrDay(start, end);
+    }
+    return ec;
 }
 
 // Returns the total planned effort for this task (or subtasks) 

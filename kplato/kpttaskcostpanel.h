@@ -28,6 +28,7 @@ namespace KPlato
 {
 
 class TaskCostPanel;
+class Account;
 class Accounts;
 class Part;
 class Task;
@@ -62,6 +63,9 @@ private:
     Task &m_task;
     Accounts &m_accounts;
     QStringList m_accountList;
+    Account *m_oldrunning;
+    Account *m_oldstartup;
+    Account *m_oldshutdown;
 };
 
 } //KPlato namespace

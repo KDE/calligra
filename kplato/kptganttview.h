@@ -20,6 +20,8 @@
 #ifndef KPTGANTTVIEW_H
 #define KPTGANTTVIEW_H
 
+#include "kptcontext.h"
+
 #include <qsplitter.h>
 #include <qcursor.h>
 
@@ -49,7 +51,6 @@ class Node;
 class Task;
 class Project;
 class Relation;
-class Context;
 
 class GanttView : public QSplitter
 {
@@ -76,8 +77,8 @@ class GanttView : public QSplitter
     
     bool exportGantt(QIODevice* device); // testing
     
-    virtual bool setContext(Context &context);
-    virtual void getContext(Context &context) const;
+    virtual bool setContext(Context::Ganttview &context);
+    virtual void getContext(Context::Ganttview &context) const;
 
     void setReadWriteMode(bool on);
     bool isReadWriteMode() const { return m_readWrite; }
@@ -155,7 +156,7 @@ private:
     void drawRelations(KDGanttViewItem *item);
     void drawChildRelations(KDGanttViewItem *item);
 
-    void getContextClosedNodes(Context &context, KDGanttViewItem *item) const;
+    void getContextClosedNodes(Context::Ganttview &context, KDGanttViewItem *item) const;
     
 private:
     View *m_mainview;

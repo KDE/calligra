@@ -35,6 +35,7 @@ namespace KPlato
 {
 
 class Account;
+class Accounts;
 class Task;
 class ResourceGroup;
 class Resource;
@@ -50,7 +51,7 @@ public:
     ~ResourceTableItem() ;
 
     void update();
-    void insert(QTable *table, int row, QStringList &accounts);
+    void insert(QTable *table, int row);
     void ok(ResourceGroupRequest *group);
 
     bool isChecked() const { return m_checked; }
@@ -65,8 +66,6 @@ public:
     bool m_checked, m_origChecked;
     QCheckTableItem *m_checkitem;
     ResourceRequest *m_request;
-    QComboTableItem *m_accountitem;
-    Account *m_account;
     int m_curAccountItem;
     QString m_curAccountText;
 };
@@ -77,7 +76,7 @@ public:
     ~GroupLVItem();
 
     void update();
-    void insert(QTable *table, QStringList &accounts);
+    void insert(QTable *table);
     const QPtrList<ResourceTableItem> &resources() const { return m_resources; }
     void ok(Task &task);
 
@@ -115,7 +114,6 @@ private:
     StandardWorktime *m_worktime;
     GroupLVItem *selectedGroup;
     bool m_blockChanged;
-    QStringList m_accounts;
     
 };
 
