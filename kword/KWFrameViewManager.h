@@ -42,7 +42,7 @@ class QRegion;
  * Class that knows about all the (visible) frames in the document and will act as
  * a manager between the GUI code and the data objects to couple any GUI action to the
  * right frame.
- * All coordinates used in this object are pt based, i.e. the same as the Frames. Any
+ * All coordinates used in this object are point (pt) based, i.e. the same as in KWFrame. Any
  * coordinates in pixels should first be converted in the KoZoomHandler (in KWord
  * thats the KWDocument)
  */
@@ -59,19 +59,24 @@ public:
     virtual ~KWFrameViewManager();
 
     /**
-     * Used to change the behavior of view()
-     *   selected: return the first selected with the highest z-ordering (i.e. on top).
-     * unselected: return the first unselected on top.
-     * nextUnselected:  return the first unselected directly under a selected frame, or
-     *  the top most one if nothing is selected.
-     * frameOnTop: return the frame highest z-ordering, regardless of selection.
+     * Used to change the behavior of view()<dl>
+     * <dt>selected</dt>
+     *   <dd>return the first selected with the highest z-ordering (i.e. on top).</dd>
+     * <dt>unselected</dt>
+     *   <dd>return the first unselected on top.</dd>
+     * <dt>nextUnselected</dt>
+     *    <dd>return the first unselected directly under a selected frame, or
+     *    the top most one if nothing is selected.</dd>
+     * <dt>frameOnTop</dt>
+     *    <dd>return the frame highest z-ordering, regardless of selection.</dd>
+     * </dl>
      */
     enum selectionEnum { selected, unselected, nextUnselected, frameOnTop };
     /**
      * Returns a frameView representing a frame positioned at @p point, or 0 when no match found.
      * @param point the position of the frame
-     * @param selectionEnum this alters the behavior of which frame to return if more then one
-     *   exist at the appointed location.  @see selectionEnum
+     * @param select this alters the behavior of which frame to return if more then one
+     *   exist at the appointed location.
      * @param borderOnly If true frames only frames that have the border at the point will be
      *  looked at.
      */
@@ -94,14 +99,14 @@ public:
 
     /**
      * Return the MouseMeaning of what a click of the mouse would do at the @p point.
-     * All the frames that have a presence as the point are considered and depeding on
-     * what kind of frame and where in the frame the mouse is the meaning is returned.
+     * All the frames that have a presence at the point are considered and depending on
+     * what kind of frame and where in the frame the mouse is the meaning is calculated.
      * @param point the point where the mouse is hovering.
      * @param keyState the bitmask of keys that are pressed.  Same as Event::state();
      */
     MouseMeaning mouseMeaning( const KoPoint &point, int keyState) const;
     /**
-     * Similar to mouseMeaning, but instead of returning the meaning this will return
+     * Similar to mouseMeaning(), but instead of returning the meaning this will return
      * a mouse cursor to represent the action.
      * @param point the point where the mouse is hovering.
      * @param keyState the bitmask of keys that are pressed.  Same as Event::state();
@@ -113,7 +118,7 @@ public:
      * @param point the point at which the mouse was clicked. The context is based on
      *   what is present at that location.
      * @param keyState the bitmask of keys that are pressed.  Same as Event::state();
-     * @para popupPoint the point in the same coordinate system as the parent widget of
+     * @param popupPoint the point in the same coordinate system as the parent widget of
      *   where the popup menu should be located.
      * @param view the parent widget for the popup.
      */
@@ -126,7 +131,7 @@ public:
     /**
      * Select frames based on a mouse click at @p point using @p keystate.
      * Handles the click of a mouse and searches for frames at the location selecting and
-     * unselecting any frames based on this information.
+     * / or unselecting any frames based on this information.
      */
     void selectFrames(KoPoint &point, int keyState);
 
@@ -157,12 +162,9 @@ signals:
 
 protected slots:
     /**
-     * Various classes are not, not should be heavyweight QObjects, but still want to
-     * keep uptodate about frames being deleted.  This method will propagate all the
-     * events saved up to the listeners.
-     * Note; this method should be called _after_ all the events from the slots have
-     * come in, which is needed to minimize race conditions.  So; first update all the
-     * data objects and when that is done all the views will be updated.
+     * This method will propagate all the events saved up to the listeners.
+     * You don't normally want to call this method; call requestFireEvents() instead
+     * which will eventually call this method for you.
      */
     void fireEvents();
 

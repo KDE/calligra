@@ -45,7 +45,7 @@ public:
     /**
      * Return a fully initialized popup for the context of frame at @p point
      * @param point the point where the mouse is hovering.
-     * @param keyState the bitmask of keys that are pressed.  Same as Event::state();
+     * @param view the parent view widget
      */
     virtual QPopupMenu* createPopup( const KoPoint &point, KWView *view ) = 0;
     /**
@@ -75,7 +75,7 @@ protected:
 
 /**
  * an instance of a KWFrameView represents the view in the MVC model of a frame; there can be
- * multiple KWFrameView objects per frame. Typically one per view.
+ * multiple KWFrameView objects per frame. Typically there is one per view (KWView).
  * This class registers selectedness and has methods to show the frame and its interaction methods
  */
 class KWFrameView {
@@ -98,7 +98,7 @@ public:
      */
     void setSelected(bool selected, MouseMeaning selectPolicy = MEANING_MOUSE_SELECT);
 
-    /// the frame this frameView represents
+    /// returns the frame this frameView represents
     KWFrame *frame() const { return m_frame; }
 
     /// returns if the @p point is on the border
@@ -120,7 +120,7 @@ public:
      * Show a context-sensitive popup menu based on the location of 'point'.
      * @param point the point at which the mouse was clicked. The context is based on
      *   what is present at that location.
-     * @para popupPoint the point in the same coordinate system as the parent widget of
+     * @param popupPoint the point in the same coordinate system as the parent widget of
      *   where the popup menu should be located.
      * @param view the parent widget for the popup.
      */
@@ -154,7 +154,7 @@ private:
 class TableFramePolicy : public FramePolicy {
 public:
     TableFramePolicy(KWFrameView *view);
-    MouseMeaning mouseMeaning( const KoPoint &nPoint, int keyState );
+    MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
     QPopupMenu* createPopup( const KoPoint &point, KWView *view );
     void setSelected(MouseMeaning selectPolicy);
 
@@ -166,7 +166,7 @@ protected:
 class PartFramePolicy : public FramePolicy {
 public:
     PartFramePolicy(KWFrameView *view);
-    MouseMeaning mouseMeaning( const KoPoint &nPoint, int keyState );
+    MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
     QPopupMenu* createPopup( const KoPoint &point, KWView *view );
 };
 
@@ -174,7 +174,7 @@ public:
 class TextFramePolicy : public FramePolicy {
 public:
     TextFramePolicy(KWFrameView *view);
-    MouseMeaning mouseMeaning( const KoPoint &nPoint, int keyState );
+    MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
     QPopupMenu* createPopup( const KoPoint &point, KWView *view );
 };
 
@@ -182,7 +182,7 @@ public:
 class ImageFramePolicy : public FramePolicy {
 public:
     ImageFramePolicy(KWFrameView *view);
-    MouseMeaning mouseMeaning( const KoPoint &nPoint, int keyState );
+    MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
     QPopupMenu* createPopup( const KoPoint &point, KWView *view );
 };
 #endif

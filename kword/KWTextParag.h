@@ -70,7 +70,7 @@ public:
     /** Load (from KWord-1.3 XML) the paragraph */
     void load( QDomElement &attributes );
 
-    /** Load (from KWord-1.3 XML) and apply <FORMAT> tags (used by KWTextParag::load and by KWPasteCommand) */
+    /** Load (from KWord-1.3 XML) and apply \<FORMAT\> tags (used by KWTextParag::load and by KWPasteCommand) */
     void loadFormatting( QDomElement &attributes, int offset = 0, bool loadFootNote=true );
 
     /** Load (from KWord-1.3 XML) and apply paragraph layout */
