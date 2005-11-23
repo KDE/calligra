@@ -269,6 +269,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
   m_openButton->setGuiItem(openGItem);
   m_alwaysUseCheckbox->hide();
   m_documentList->header()->hide();
+  m_documentList->setSorting(-1); // Disable sorting
 
   QString oldGroup = instance->config()->group();
   instance->config()->setGroup("RecentFiles");
@@ -302,7 +303,8 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
         KFileItem* fileItem = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
         fileList.append(fileItem);
         QString listText = "<b>" + name + "</b><br>" + url.path();
-        KoRichTextListItem* item = new KoRichTextListItem(m_documentList, listText, name, url.path());
+        KoRichTextListItem* item = new KoRichTextListItem(m_documentList, m_documentList->lastItem(),
+            listText, name, url.path());
         item->setFileItem(fileItem);
         //center all icons in 64x64 area
         QImage icon = fileItem->pixmap(64).convertToImage();
