@@ -28,6 +28,7 @@
 #include "kptaccount.h"
 #include "kptcontext.h"
 #include "kpteffortcostmap.h"
+#include "kptdoublelistviewbase.h"
 
 class QComboBox;
 class QDateEdit;
@@ -54,9 +55,7 @@ class ResourceGroup;
 class Resource;
 class ResourceItemPrivate;
 
-class AccountItem;
-
- class AccountsView : public QWidget
+class AccountsView : public QWidget
 {
     Q_OBJECT
 public:
@@ -74,54 +73,6 @@ public:
     virtual bool setContext(Context::Accountsview &context);
     virtual void getContext(Context::Accountsview &context) const;
 
-    class AccountItem;
-    class AccountPeriodItem : public KListViewItem {
-    public:
-        AccountPeriodItem(AccountItem *o, QListView *parent, QListViewItem *after, bool highlight=false);
-        AccountPeriodItem(AccountItem *o, QListViewItem *parent, QListViewItem *after, bool _highlight=false);
-        ~AccountPeriodItem();
-    
-        void setColumn(int col, double cost);
-        void clearColumn(int col);
-                
-        AccountItem *owner;
-        double value;
-        bool highlight;
-        
-        QMap<int, double> costMap;
-        
-        virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);
-    };
-
-    class AccountItem : public KListViewItem {
-    public:
-        AccountItem(Account *a, QListView *parent, bool highlight=false);
-        AccountItem(Account *a, QListViewItem *parent, bool highlight=false);
-        AccountItem(QString text, Account *a, QListViewItem *parent, bool _highlight=false);
-        ~AccountItem();
-        
-        void createPeriods(QListView *lv, QListViewItem *after=0);
-        void periodDeleted();
-        void setTotal(double tot);
-        double calcTotal();
-        void add(int col, const QDate &date, const EffortCost &ec);
-        void addToTotal(double v);
-        void setPeriod(int col, double cost);
-        void clearColumn(int col);
-        void calcPeriods();
-        double calcPeriod(int col);
-        
-        Account *account;
-        AccountPeriodItem *period;
-        double value;
-        bool highlight;
-        EffortCostMap costMap;
-        
-        
-        virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);    
-    
-    };
-
 signals:
     void update();
     
@@ -134,6 +85,18 @@ protected slots:
     void slotCollapsed(QListViewItem* item);
     
 private:
+    class AccountItem : public DoubleListViewBase::MasterListItem {
+    public:
+        AccountItem(Account *a, QListView *parent, bool highlight=false);
+        AccountItem(Account *a, QListViewItem *parent, bool highlight=false);
+        AccountItem(QString text, Account *a, QListViewItem *parent, bool _highlight=false);
+        
+        void add(int col, const QDate &date, const EffortCost &ec);
+        
+        Account *account;
+        EffortCostMap costMap;
+    };
+
     void init();
     void initAccList(const AccountList &list);
     void initAccSubItems(Account *acc, AccountItem *parent);
@@ -149,13 +112,11 @@ private:
     
     int m_defaultFontSize;
 
-    KListView *m_accList;
-    KListView *m_periodList;
-    
     QDate m_date;
     int m_period;
     bool m_cumulative;
-    QSplitter *m_splitter;
+    
+    DoubleListViewBase *m_dlv;
 
     QStringList m_periodTexts;
     QPushButton *m_changeBtn;
