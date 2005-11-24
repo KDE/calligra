@@ -48,29 +48,40 @@ class DoubleListViewBase : public QSplitter
     Q_OBJECT
 public:
 
-    DoubleListViewBase(Project &project, View *view, QWidget *parent, bool description=false);
+    DoubleListViewBase(QWidget *parent, bool description=false);
 
     //~DoubleListViewBase();
 
-    virtual View *mainView() { return m_mainview; }
+    KListView *masterListView() const { return m_masterList; }
+    KListView *slaveListView() const { return m_slaveList; }
+    
+    void setNameHeader(QString text);
+    void setTotalHeader(QString text);
+    void setDescriptionHeader(QString text);
+    void addSlaveColumn(QString text);
     virtual void print(KPrinter &printer);
 
-    class MasterDLVItem;
-    class SlaveDLVItem : public KListViewItem {
+    void calculate();
+    void clearLists();
+    void createSlaveItems();
+    void clearSlaveList();
+    
+    class MasterListItem;
+    class SlaveListItem : public KListViewItem {
     public:
-        SlaveDLVItem(MasterDLVItem *master, QListView *parent, QListViewItem *after, bool highlight=false);
-        SlaveDLVItem(MasterDLVItem *master, QListViewItem *parent, QListViewItem *after, bool highlight=false);
-        ~SlaveDLVItem();
+        SlaveListItem(MasterListItem *master, QListView *parent, QListViewItem *after, bool highlight=false);
+        SlaveListItem(MasterListItem *master, QListViewItem *parent, QListViewItem *after, bool highlight=false);
+        ~SlaveListItem();
         void masterItemDeleted() { m_masterItem = 0; }
         
-        void setColumn(int col, double value);
-        void clearColumn(int col);
+        virtual void setColumn(int col, double value);
+        virtual void clearColumn(int col);
 
         double value(int col) const { return m_valueMap[col]; }
         
         virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);
-    private:
-        MasterDLVItem *m_masterItem;
+    protected:
+        MasterListItem *m_masterItem;
         double m_value;
         bool m_highlight;
 
@@ -78,18 +89,19 @@ public:
         
     };
 
-    class MasterDLVItem : public KListViewItem {
+    class MasterListItem : public KListViewItem {
     public:
-        MasterDLVItem(QListView *parent, bool highlight=false);
-        MasterDLVItem(QListViewItem *parent, QString text, bool highlight=false);
-        MasterDLVItem(QListViewItem *parent, QString text, QString text2, bool highlight=false);
-        ~MasterDLVItem();
+        MasterListItem(QListView *parent, bool highlight=false);
+        MasterListItem(QListView *parent, QString text, bool highlight=false);
+        MasterListItem(QListViewItem *parent, bool highlight=false);
+        MasterListItem(QListViewItem *parent, QString text, bool highlight=false);
+        ~MasterListItem();
         
         /// Creates slaveitems for myself and my children
         void createSlaveItems(QListView *lv, QListViewItem *after=0);
         void slaveItemDeleted();
         void setSlaveOpen(bool on);
-        SlaveDLVItem *slaveItem() const { return m_slaveItem; }
+        SlaveListItem *slaveItem() const { return m_slaveItem; }
         
         void setTotal(double tot);
         double calcTotal();
@@ -101,8 +113,8 @@ public:
 
         virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);    
 
-    private:
-        SlaveDLVItem *m_slaveItem;
+    protected:
+        SlaveListItem *m_slaveItem;
         double m_value;
         bool m_highlight;
         
@@ -114,13 +126,8 @@ protected slots:
     void slotCollapsed(QListViewItem* item);
 
 private:
-    void createSlaveItems();
-    void clearSlaveList();
 
 private:
-    Project &m_project;
-    View *m_mainview;
-
     KListView *m_masterList;
     KListView *m_slaveList;
 };
