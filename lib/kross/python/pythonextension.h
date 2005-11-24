@@ -124,8 +124,8 @@ namespace Kross { namespace Python {
              */
             Kross::Api::Object::Ptr getObject();
 
-            //virtual Py::Object repr() { return Py::String(m_object->getName().latin1()); }
-            //virtual Py::Object str() { return Py::String(m_object->getName().latin1()); }
+            //virtual Py::Object repr() { return Py::String(m_object->getName().utf8()); }
+            //virtual Py::Object str() { return Py::String(m_object->getName().utf8()); }
             //virtual int print(FILE *, int) {}
 
         private:

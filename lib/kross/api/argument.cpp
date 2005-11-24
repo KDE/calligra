@@ -21,9 +21,10 @@
 
 using namespace Kross::Api;
 
-Argument::Argument(const QString& classname, Object::Ptr object)
+Argument::Argument(const QString& classname, Object::Ptr object, bool visible)
     : m_classname(classname)
     , m_object(object)
+    , m_visible(visible)
 {
 }
 
@@ -36,9 +37,14 @@ const QString& Argument::getClassName()
     return m_classname;
 }
 
-Object::Ptr Argument::getObject()
+Object::Ptr Argument::getObject() const
 {
     return m_object;
+}
+
+bool Argument::isVisible() const
+{
+    return m_visible;
 }
 
 ArgumentList& Argument::operator << (ArgumentList& arglist)
@@ -57,28 +63,25 @@ ArgumentList::~ArgumentList()
 {
 }
 
-ArgumentList& ArgumentList::operator << (Argument arg)
+ArgumentList& ArgumentList::operator << (const Argument& arg)
 {
-    if(! arg.getObject())
-        m_minparams++;
-    m_maxparams++;
+    if(arg.isVisible()) {
+        if(! arg.getObject())
+            m_minparams++;
+        m_maxparams++;
+    }
     m_arguments.append(arg);
     return *this;
 }
 
-uint ArgumentList::getMinParams()
+uint ArgumentList::getMinParams() const
 {
     return m_minparams;
 }
 
-uint ArgumentList::getMaxParams()
+uint ArgumentList::getMaxParams() const
 {
     return m_maxparams;
-}
-
-QValueList<Argument>& ArgumentList::getArguments()
-{
-    return m_arguments;
 }
 
 QString ArgumentList::toString()

@@ -64,6 +64,7 @@ namespace Kross { namespace Api {
              * \return The value this Value-class holds.
              */
             V& getValue() { return m_value; }
+            //operator V& () { return m_value; }
 
 #if 0
 //do we need it anyway?

@@ -100,8 +100,8 @@ void runInterpreter(const QString& interpretername, const QString& scriptcode)
         /*Kross::Api::Object* o =*/ scriptcontainer->execute();
 
         // Call a function.
-        kdDebug()<<"--------------------------"<<endl;
-        scriptcontainer->callFunction("testobjectCallback" /*, Kross::Api::List* functionarguments */);
+        //kdDebug()<<"--------------------------"<<endl;
+        //scriptcontainer->callFunction("testobjectCallback" /*, Kross::Api::List* functionarguments */);
 
         // Call a class.
         /*

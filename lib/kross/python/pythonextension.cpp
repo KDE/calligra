@@ -362,8 +362,10 @@ Py::Object PythonExtension::toPyObject(Kross::Api::Object::Ptr object)
         Py::Dict pydict;
         Kross::Api::Dict* dict = static_cast<Kross::Api::Dict*>( object.data() );
         QMap<QString, Kross::Api::Object::Ptr> valuedict = dict->getValue();
-        for(QMap<QString, Kross::Api::Object::Ptr>::Iterator it = valuedict.begin(); it != valuedict.end(); ++it)
-            pydict[ it.key().latin1() ] = toPyObject( it.data() ); // recursive
+        for(QMap<QString, Kross::Api::Object::Ptr>::Iterator it = valuedict.begin(); it != valuedict.end(); ++it) {
+            const char* n = it.key().latin1();
+            pydict[ n ] = toPyObject( it.data() ); // recursive
+        }
         return pydict;
     }
 
@@ -410,7 +412,7 @@ Py::Object PythonExtension::_call_(const Py::Tuple& args)
     }
     catch(Kross::Api::Exception::Ptr e) {
         kdDebug() << "EXCEPTION in PythonExtension::_call_" << endl;
-        throw Py::RuntimeError( e->toString().latin1() );
+        throw Py::RuntimeError( (char*) e->toString().latin1() );
     }
 
     return obj ? toPyObject(obj) : Py::None();

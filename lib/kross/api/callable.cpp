@@ -83,7 +83,8 @@ bool Callable::validArguments(List::Ptr arguments)
 void Callable::checkArguments(List::Ptr arguments)
 {
 #ifdef KROSS_API_CALLABLE_CHECKARG_DEBUG
-    kdDebug() << QString("Kross::Api::Callable::checkArguments() getName()=%1 arguments=%2").arg(getName()).arg(arguments.toString()) << endl;
+    kdDebug() << QString("Kross::Api::Callable::checkArguments() getName()=%1 arguments=%2")
+                 .arg(getName()).arg(arguments ? arguments->toString() : QString::null) << endl;
 #endif
 
     QValueList<Object::Ptr>& arglist = arguments->getValue();
@@ -97,12 +98,74 @@ void Callable::checkArguments(List::Ptr arguments)
         throw Exception::Ptr( new Exception(QString("Too many parameters for callable object '%1'.").arg(getName())) );
 
     // check type of passed parameters.
-    QValueList<Argument> farglist = m_arglist.getArguments();
+    QValueList<Argument>& farglist = m_arglist;
+    QValueList<Argument>::Iterator it = farglist.begin();
+    QValueList<Object::Ptr>::Iterator argit = arglist.begin();
+    for(; it != farglist.end(); ++it) {
+        bool argend = ( argit == arglist.end() );
+
+        if( ! (*it).isVisible() ) {
+            // if the argument isn't visibled, we always use the default argument.
+            Object::Ptr o = (*it).getObject();
+            if(! o)
+                throw Exception::Ptr( new Exception(QString("Callable object '%1' is hidden, but has no default value.").arg(getName())) );
+            if(argend)
+                arglist.append(o);
+            else
+                arglist.insert(argit, o);
+        }
+        else {
+            // the argument is visibled and therefore the passed arguments may
+            // define the value.
+
+            if(argend) {
+                // no argument defined, use the default value.
+                Object::Ptr o = (*it).getObject();
+                if(! o)
+                    throw Exception::Ptr( new Exception(QString("Callable object '%1' was not passed, but has also no default value.").arg(getName())) );
+                arglist.append( o );
+            }
+            else {
+
+                // Check if the type of the passed argument matches to what we 
+                // expect. The given argument could have just the same type like 
+                // the expected argument or could be a specialization of it.
+                Object::Ptr o = (*argit);
+                QString fcn = (*it).getClassName(); // expected argument
+                QString ocn = o->getClassName(); // given argument
+                bool ok = ocn.startsWith(fcn);
+                if(! ok) {
+                    if(ocn.startsWith("Kross::Api::Variant")) {
+                        ocn = Variant::getVariantType(o);
+                        ok = (
+                            ocn == fcn ||
+                            (
+                                (fcn == "Kross::Api::Variant::Integer" || fcn == "Kross::Api::Variant::UInt") &&
+                                (ocn == "Kross::Api::Variant::Integer" || ocn == "Kross::Api::Variant::UInt")
+                            )
+                        );
+                    }
+                    if(! ok)
+                        throw Exception::Ptr( new Exception(QString("Callable object '%1' expected parameter of type '%2', but got '%3'").arg(getName()).arg(fcn).arg(ocn)) );
+                }
+
+            }
+        }
+
+        if(! argend)
+            ++argit;
+    }
+
+/*
+    // check type of passed parameters.
+    QValueList<Argument>& farglist = m_arglist;
     for(uint i = 0; i < fmax; i++) {
         if(i >= arglist.count()) { // handle default arguments
+kdDebug()<<"##############> ("<<farglist[i].getObject()->getName()<<") "<<farglist[i].getObject()->toString()<<endl;
             arglist.append( farglist[i].getObject() );
             continue;
         }
+kdDebug()<<"==> "<<arguments->toString()<<endl;
 
         Object::Ptr o = arguments->item(i);
         QString fcn = farglist[i].getClassName(); // expected argument
@@ -129,6 +192,7 @@ void Callable::checkArguments(List::Ptr arguments)
                 throw Exception::Ptr( new Exception(QString("Callable object '%1' expected parameter of type '%2', but got '%3'").arg(getName()).arg(fcn).arg(ocn)) );
         }
     }
+*/
 }
 
 Object::Ptr Callable::hasChild(List::Ptr args)

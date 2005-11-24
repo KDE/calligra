@@ -92,7 +92,7 @@ void PythonScript::initialize()
     clearException(); // clear previously thrown exceptions.
 
     try {
-        PyObject* pymod = PyModule_New((char*)m_scriptcontainer->getName().latin1());
+        PyObject* pymod = PyModule_New( (char*) m_scriptcontainer->getName().latin1() );
         d->m_module = new Py::Module(pymod, true);
         if(! d->m_module)
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to initialize local module context for script '%1'").arg( m_scriptcontainer->getName() )) );
@@ -119,7 +119,7 @@ void PythonScript::initialize()
             "  self.stderr = Redirect( self.get(\"stderr\") )\n"
             ;
         Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->mainModule()->getDict();
-        PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, mainmoduledict.ptr(), moduledict.ptr());
+        PyObject* pyrun = PyRun_StringFlags((char*)s.latin1(), Py_file_input, mainmoduledict.ptr(), moduledict.ptr());
         if(! pyrun)
             throw Py::Exception(); // throw exception
         Py_XDECREF(pyrun); // free the reference.
@@ -142,15 +142,13 @@ void PythonScript::initialize()
 
         }
         else {
-            /*
-            PyCompilerFlags cf;
-            cf.cf_flags |= PyCF_SOURCE_IS_UTF8;
-            */
+            //PyCompilerFlags* cf = new PyCompilerFlags;
+            //cf->cf_flags |= PyCF_SOURCE_IS_UTF8;
 
             // Just compile the code without any restrictions.
             code = Py_CompileString(
-                (char*)m_scriptcontainer->getCode().latin1(),
-                (char*)m_scriptcontainer->getName().latin1(),
+                (char*) m_scriptcontainer->getCode().latin1(),
+                (char*) m_scriptcontainer->getName().latin1(),
                 Py_file_input
             );
         }
@@ -244,7 +242,8 @@ Kross::Api::Object::Ptr PythonScript::execute()
             "if self.has(\"stderr\"):\n"
             "  sys.stderr = Redirect( self.get(\"stderr\") )\n"
             ;
-        PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, mainmoduledict.ptr(), moduledict.ptr());
+
+        PyObject* pyrun = PyRun_String(s.latin1(), Py_file_input, mainmoduledict.ptr(), moduledict.ptr());
         if(! pyrun)
             throw Py::Exception(); // throw exception
         Py_XDECREF(pyrun); // free the reference.

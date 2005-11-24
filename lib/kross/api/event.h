@@ -138,17 +138,20 @@ namespace Kross { namespace Api {
 #endif
 
                 if(name.isEmpty() && m_function) {
-                    kdDebug() << "Event::call() 0-1"
-                        << " arguments=" << arguments.data()->toString()
-                        << " m_arglist=" << m_arglist.toString() << endl;
+#ifdef KROSS_API_EVENT_CALL_DEBUG
+                    kdDebug() << QString("Event::call() arguments='%1' arglist='%2'").arg(arguments.data()->toString()).arg(m_arglist.toString()) << endl;
+#endif
 
                     // Check the arguments. Throws an exception if failed.
                     checkArguments(arguments);
 
-                    // We try to redirect the call to the m_function of
-                    // the parent event.
-                    Object::Ptr parent = getParent(); //FIXME don't rely on the parent
+                    // We try to redirect the call to the m_function pointer the
+                    // parent object defines.
+                    Object::Ptr parent = getParent();
                     if(parent) {
+#ifdef KROSS_API_EVENT_CALL_DEBUG
+                        kdDebug() << QString("Event::call() Call builtin function in object '%1'").arg(parent->getName()) << endl;
+#endif
                         T *self = static_cast<T*>( parent.data() );
                         if(self)
                             return (self->*m_function)(arguments);
@@ -184,11 +187,10 @@ namespace Kross { namespace Api {
                     }
 
                     if(event) {
-                        kdDebug()<<"Event::call() 7 event"
-                            <<" event.name="<<event->getName()
-                            <<" event.tostring="<<event->toString()
-                            <<" event.args.tostring="<<event->m_arglist.toString()
-                            <<endl;
+#ifdef KROSS_API_EVENT_CALL_DEBUG
+                        kdDebug() << QString("Event::call() event.name='%1' event.tostring='%2' event.args.tostring='%3'")
+                                     .arg(event->getName()).arg(event->toString()).arg(event->m_arglist.toString()) << endl;
+#endif
 
                         // We have an valid event, so just call it...
                         QString s = ""; // empty string cause we like to execute the event itself.

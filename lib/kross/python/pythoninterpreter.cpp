@@ -112,10 +112,10 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
     // Determinate additional module-paths we like to add.
     QStringList dirs = KGlobal::dirs()->findDirs("data", "kross/python");
     for(QStringList::Iterator it = dirs.begin(); it != dirs.end(); ++it)
-        path.append(PYPATHDELIMITER + *it);
+        path.append(*it + PYPATHDELIMITER);
 
     // Set the extended sys.path.
-    PySys_SetPath( const_cast<char*>( path.latin1() ) );
+    PySys_SetPath( (char*) path.latin1() );
 
     kdDebug() << "Python ProgramName: " << Py_GetProgramName() << endl;
     kdDebug() << "Python ProgramFullPath: " << Py_GetProgramFullPath() << endl;
@@ -171,7 +171,7 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
         "Importer()\n"
         ;
 
-    PyObject* pyrun = PyRun_String((char*)s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
+    PyObject* pyrun = PyRun_String(s.latin1(), Py_file_input, moduledict.ptr(), moduledict.ptr());
     if(! pyrun) {
         Py::Object errobj = Py::value(Py::Exception()); // get last error
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to prepare the __main__ module: %1").arg(errobj.as_string().c_str())) );

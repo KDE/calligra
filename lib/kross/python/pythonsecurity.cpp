@@ -130,9 +130,9 @@ kdDebug()<<"PythonSecurity::compile_restricted 4"<<endl;
 
 kdDebug()<<"PythonSecurity::compile_restricted 5"<<endl;
         Py::Tuple args(3);
-        args[0] = Py::String(source.latin1());
-        args[1] = Py::String(filename.latin1());
-        args[2] = Py::String(mode.latin1());
+        args[0] = Py::String(source.utf8());
+        args[1] = Py::String(filename.utf8());
+        args[2] = Py::String(mode.utf8());
 
         Py::Object result = funcobject.apply(args);
 

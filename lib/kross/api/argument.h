@@ -46,8 +46,14 @@ namespace Kross { namespace Api {
              *        argument expects.
              * \param object The optional default \a Object this
              *        class holds.
+             * \param visible defines if the @a Argument is visible
+             *        to scripting-languages. If the argument is
+             *        hidden, it's somewhat 'const' and cant be
+             *        changed by scripting code. In that case the
+             *        argument won't be even visible by scripting
+             *        languages.
              */
-            Argument(const QString& classname = QString::null, Object::Ptr object = 0);
+            explicit Argument(const QString& classname = QString::null, Object::Ptr object = 0, bool visible = true);
 
             /**
              * Destructor.
@@ -69,7 +75,13 @@ namespace Kross { namespace Api {
              *         isn't optional and therefore doesn't have
              *         an default object.
              */
-            Object::Ptr getObject();
+            Object::Ptr getObject() const;
+
+            /**
+             * \return true if the \a Argument should be hidden
+             * to the scripting backend.
+             */
+            bool isVisible() const;
 
             /**
              * Implementation of the << operator.
@@ -88,6 +100,8 @@ namespace Kross { namespace Api {
             QString m_classname;
             /// The optional default \a Object this argument holds.
             Object::Ptr m_object;
+            /// Defines if the argument is visible to the user.
+            bool m_visible;
     };
 
     /**
@@ -109,33 +123,35 @@ namespace Kross { namespace Api {
             ~ArgumentList();
 
             /**
+             * Operator to return the list of arguments call-by-reference
+             * to let code like the \a Callable::checkArguments method
+             * enable manipulate those list.
+             *
+             * \return List of \a Argument instances.
+             */
+            operator QValueList<Argument>& () { return m_arguments; }
+
+            /**
              * Implementation of the << operator.
              *
              * \param arg The passed \a Argument.
              * \return The changed \a ArgumentList.
              */
-            ArgumentList& operator << (Argument arg);
+            ArgumentList& operator << (const Argument& arg);
 
             /**
              * Return number of minimal needed parameters.
              *
              * \return Minimal needed parameters.
              */
-            uint getMinParams();
+            uint getMinParams() const;
 
             /**
              * Return the number of maximal allowed parameters.
              *
              * \return Maximal needed parameters.
              */
-            uint getMaxParams();
-
-            /**
-             * Return the list of arguments.
-             *
-             * \return List of \a Argument.
-             */
-            QValueList<Argument>& getArguments();
+            uint getMaxParams() const;
 
             /**
              * \return a string of the classnames each argument in the

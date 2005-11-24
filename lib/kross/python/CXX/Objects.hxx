@@ -354,7 +354,7 @@ namespace Py
 		// PyObject_SetItem is too weird to be using from C++
 		// so it is intentionally omitted.
 
-		void delItem (const Object& key)
+		void delItem (const Object& /*key*/)
 			{
 			//if(PyObject_DelItem(p, *key) == -1)
 			// failed to link on Windows?
