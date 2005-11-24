@@ -190,7 +190,6 @@ void KWFrame::updateRulerHandles(){
 void KWFrame::setSelected( bool selected )
 {
     //kdDebug(32001) << this << " KWFrame::setSelected " << selected << endl;
-    bool s = m_selected;
     m_selected = selected;
 }
 
