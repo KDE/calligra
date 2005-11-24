@@ -1,4 +1,4 @@
-include $(top_srcdir)/kexi/Makefile.global
+include $(top_srcdir)/lib/kross/Makefile.global
 
 noinst_PROGRAMS = krosstest
 
