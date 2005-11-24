@@ -2465,7 +2465,7 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
   grid->addWidget(box1);
 
   box1 = new QGroupBox(this, "Box2");
-  box1->setTitle(i18n("Actual Font"));
+  box1->setTitle(i18n("Font Preview"));
   grid2 = new QGridLayout(box1,4,5,KDialog::marginHint(), KDialog::spacingHint());
   grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
 
