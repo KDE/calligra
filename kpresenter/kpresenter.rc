@@ -63,7 +63,6 @@
   <Action name="insert_file"/>
   <Separator/>
   <Action name="tools_text"/>
-  <Action name="tools_autoform"/>
   <Action name="tools_diagramm"/>
   <Action name="tools_table"/>
   <Action name="tools_object"/>
@@ -87,6 +86,7 @@
     <Action name="tools_closed_polyline"/>
     <Action name="tools_closed_quadricbeziercurve"/>
     <Action name="tools_closed_cubicbeziercurve"/>
+    <Action name="tools_autoform"/>
   </Menu>
  </Menu>
  <Menu name="Format"><text>F&amp;ormat</text>

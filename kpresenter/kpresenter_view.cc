@@ -2351,7 +2351,7 @@ void KPresenterView::setupActions()
                                          actionCollection(), "tools_text" );
     actionToolsText->setExclusiveGroup( "tools" );
 
-    actionToolsAutoform = new KToggleAction( i18n( "&Autoform" ), "autoform",
+    actionToolsAutoform = new KToggleAction( i18n( "&Arrows && Connections" ), "autoform",
                                              0, this, SLOT( toolsAutoform() ),
                                              actionCollection(), "tools_autoform" );
     actionToolsAutoform->setExclusiveGroup( "tools" );
