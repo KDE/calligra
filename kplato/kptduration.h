@@ -74,8 +74,8 @@ class Duration {
 
         //FIXME: overflow problem
         Q_INT64 milliseconds() const { return m_ms; }
-        unsigned seconds() const { return m_ms / 1000; }
-        unsigned minutes() const { return seconds() / 60; }
+        Q_INT64 seconds() const { return m_ms / 1000; }
+        Q_INT64 minutes() const { return seconds() / 60; }
         unsigned hours() const { return minutes() / 60; }
         unsigned days() const { return hours() / 24; }
         void get(unsigned *days, unsigned *hours, unsigned *minutes, unsigned *seconds=0, unsigned *milliseconds=0) const;
