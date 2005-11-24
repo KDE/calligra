@@ -1,6 +1,8 @@
 since 1.4.2
 ===========
 - Fix zoomed printouts (#115879)
+- Fix indentation setting in preferences (#116903)
+- Fix unit setting in preferences (#116901)
 
 since 1.4.1
 ===========
