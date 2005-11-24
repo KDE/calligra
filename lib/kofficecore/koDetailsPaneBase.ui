@@ -210,6 +210,9 @@
                         <property name="name">
                             <cstring>m_openButton</cstring>
                         </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
                         <property name="text">
                             <string></string>
                         </property>

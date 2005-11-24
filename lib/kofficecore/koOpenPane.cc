@@ -98,9 +98,7 @@ void KoOpenPane::initRecentDocs()
   connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
   KListViewItem* item = addPane(i18n("Recent Documents"), "fileopen", recentDocPane);
 
-  if(item) {
-    item->setEnabled(d->m_instance->config()->hasGroup("RecentFiles"));
-  } else {
+  if(d->m_instance->config()->hasGroup("RecentFiles")) {
     m_sectionList->setSelected(m_sectionList->firstChild(), true);
   }
 }

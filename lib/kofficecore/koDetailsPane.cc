@@ -226,8 +226,15 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
 
 void KoTemplatesPane::selectionChanged(QListViewItem* item)
 {
-  m_titleLabel->setText(item->text(1));
-  m_previewLabel->setPixmap(*(item->pixmap(0)));
+  if(item) {
+    m_openButton->setEnabled(true);
+    m_titleLabel->setText(item->text(1));
+    m_previewLabel->setPixmap(*(item->pixmap(0)));
+  } else {
+    m_openButton->setEnabled(false);
+    m_titleLabel->setText("");
+    m_previewLabel->setPixmap(QPixmap());
+  }
 }
 
 void KoTemplatesPane::openTemplate()
@@ -344,20 +351,25 @@ KoRecentDocumentsPane::~KoRecentDocumentsPane()
 
 void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
 {
-  m_titleLabel->setText(item->text(1));
-  m_previewLabel->setPixmap(*(item->pixmap(2)));
+  if(item) {
+    m_openButton->setEnabled(true);
+    m_titleLabel->setText(item->text(1));
+    m_previewLabel->setPixmap(*(item->pixmap(2)));
 
-  if(static_cast<KoRichTextListItem*>(item)->fileItem()) {
-    KFileItem* fileItem = static_cast<KoRichTextListItem*>(item)->fileItem();
-    QString details = "<table border=\"0\">";
-    details += "<tr><td><b>Modified:</b></td>";
-    details += "<td>" + fileItem->timeString(KIO::UDS_MODIFICATION_TIME) + "</td></tr>";
-    details += "<tr><td><b>Accessed:</b></td>";
-    details += "<td>" + fileItem->timeString(KIO::UDS_ACCESS_TIME) + "</td></tr>";
-    details += "</table>";
-    m_detailsLabel->setText(details);
+    if(static_cast<KoRichTextListItem*>(item)->fileItem()) {
+      KFileItem* fileItem = static_cast<KoRichTextListItem*>(item)->fileItem();
+      QString details = "<table border=\"0\">";
+      details += "<tr><td><b>Modified:</b></td>";
+      details += "<td>" + fileItem->timeString(KIO::UDS_MODIFICATION_TIME) + "</td></tr>";
+      details += "<tr><td><b>Accessed:</b></td>";
+      details += "<td>" + fileItem->timeString(KIO::UDS_ACCESS_TIME) + "</td></tr>";
+      details += "</table>";
+      m_detailsLabel->setText(details);
+    } else {
+      m_detailsLabel->setText("");
+    }
   } else {
-    m_detailsLabel->setText("");
+    m_openButton->setEnabled(true);
   }
 }
 
