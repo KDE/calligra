@@ -337,18 +337,6 @@ void AccountsView::getContext(Context::Accountsview &context) const {
     //kdDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
 }
 
-void AccountsView::slotExpanded(QListViewItem* item) {
-    if (item) {
-        static_cast<AccountsView::AccountItem*>(item)->setSlaveOpen(true);
-    }
-}
-
-void AccountsView::slotCollapsed(QListViewItem*item) {
-    if (item) {
-        static_cast<AccountsView::AccountItem*>(item)->setSlaveOpen(false);
-    }
-}
-
 void AccountsView::slotConfigure() {
     //kdDebug()<<k_funcinfo<<endl;
     AccountsviewConfigDialog *dia = new AccountsviewConfigDialog(m_date, m_period, m_periodTexts, m_cumulative, this);

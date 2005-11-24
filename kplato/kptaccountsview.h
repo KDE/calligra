@@ -20,7 +20,6 @@
 #ifndef KPTACCOUNTSVIEW_H
 #define KPTACCOUNTSVIEW_H
 
-#include <qsplitter.h>
 #include <qdatetime.h>
 
 #include <klistview.h>
@@ -81,8 +80,6 @@ public slots:
 
 protected slots:
     void slotUpdate();
-    void slotExpanded(QListViewItem* item);
-    void slotCollapsed(QListViewItem* item);
     
 private:
     class AccountItem : public DoubleListViewBase::MasterListItem {
