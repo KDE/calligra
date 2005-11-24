@@ -465,10 +465,18 @@ public:
 
     /** merge cells to one cell. Will loose all text not in top-left cell */
     KCommand *joinCells(unsigned int colBegin=0,unsigned int rowBegin=0, unsigned int colEnd=0,unsigned int rowEnd=0);
-    /** split selected cell into a number of cells */
-    KCommand * splitCell(unsigned int intoRows, unsigned int intoCols, int _col=-1, int _row=-1,
-        QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(),
-        QPtrList<KWFrame>listFrame=QPtrList<KWFrame>());
+    /**
+     * split one cell into a number of cells and return a command for undo purposes.
+     * @param intoRows the amount of rows the cell should be split into
+     * @param intoColumns the amount of columns the cell should be split into
+     * @param column the column of the cell to be split
+     * @param row the row of the cell to be split
+     * @param listFrameSet needed for undo reasons
+     * @param listFrame needed for undo reasons
+     */
+    KCommand * splitCell(unsigned int intoRows, unsigned int intoColumns, unsigned int column,
+            unsigned int row, QPtrList<KWFrameSet> listFrameSet=QPtrList<KWFrameSet>(),
+            QPtrList<KWFrame>listFrame=QPtrList<KWFrame>() );
 
     /** display formatting information */
     void viewFormatting( QPainter &painter, int zoom );

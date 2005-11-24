@@ -45,7 +45,7 @@ KWFrameView::KWFrameView(KWFrameViewManager *parent, KWFrame *frame) {
     Q_ASSERT(frame->frameSet());
     m_frame = frame;
     m_selected = false;
-    if(frame->frameSet()->groupmanager())
+    if(frame->frameSet()->groupmanager() || dynamic_cast<KWTableFrameSet *>(frame->frameSet()) != 0)
         m_policy = new TableFramePolicy(this);
     else if(dynamic_cast<KWTextFrameSet *>(frame->frameSet()) != 0)
         m_policy = new TextFramePolicy(this);

@@ -1471,23 +1471,11 @@ KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin
     return new KWJoinCellCommand( i18n("Join Cells"), this,colBegin,rowBegin, colEnd,rowEnd,listFrameSet,listCopyFrame);
 }
 
-KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols, int _col, int _row,QPtrList<KWFrameSet> listFrameSet, QPtrList<KWFrame>listFrame) {
+KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCols, unsigned int col, unsigned int row, QPtrList<KWFrameSet> listFrameSet, QPtrList<KWFrame>listFrame) {
     if(intoRows < 1 || intoCols < 1)
         return 0L;
 
     kdDebug(32004) << "KWTableFrameSet::splitCell" << endl;
-    unsigned int col, row;
-    if(_col!=-1 && _row!=-1)
-    {
-        row=_row;
-        col=_col;
-    }
-    else
-    {
-        if ( !isOneSelected( row, col ) )
-            return 0L;
-    }
-
     Cell *daCell=cell(row,col);
     int rowsDiff = intoRows - daCell->rowSpan();
     int colsDiff = ((int) intoCols) - daCell->colSpan();
@@ -1573,13 +1561,10 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
             Cell *lastFrameSet=0L;
 
             if(listFrameSet.isEmpty())
-            {
-                lastFrameSet= new Cell( this, y + row, x + col );
-            }
+                lastFrameSet = new Cell( this, y + row, x + col );
             else
-            {
                 lastFrameSet = static_cast<KWTableFrameSet::Cell*> (listFrameSet.at(i));
-            }
+            lastFrameSet->setGroupManager(this);
 
             KWFrame *theFrame=0L;
             if(listFrame.isEmpty())
@@ -1605,8 +1590,6 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
         }
     }
 
-
-
     // set new row and col-span. Use intermediate ints otherwise we get strange results as the
     // intermediate result could be negative (which goes wrong with unsigned ints)
     int r = (daCell->rowSpan() +1) - intoRows;
@@ -1620,7 +1603,6 @@ KCommand *KWTableFrameSet::splitCell(unsigned int intoRows, unsigned int intoCol
     position(daCell);
     addCell(daCell);
     validate();
-    firstFrame->setSelected(true);
 
     finalize();
 

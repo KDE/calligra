@@ -132,6 +132,93 @@
 
 using namespace KSpell2;
 
+/******************************************************************/
+/* Class: TableInfo                                               */
+/******************************************************************/
+class TableInfo {
+    public:
+        TableInfo( QValueList<KWFrameView*> selectedFrames ) {
+            m_protectContent = false;
+            m_views = selectedFrames;
+            int amountSelected = 0;
+            m_cell = 0;
+            QMap<KWTableFrameSet*, QValueList<unsigned int> > tableRows, tableCols;
+
+            QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+            for(;framesIterator != selectedFrames.end(); ++framesIterator) {
+                KWFrameView *view = *framesIterator;
+                if(!view->selected()) continue;
+                KWFrameSet *fs = view->frame()->frameSet();
+                Q_ASSERT(fs);
+                KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell*>(fs);
+                if(cell == 0) continue;
+                amountSelected++;
+                if(cell->protectContent())
+                    m_protectContent=true;
+
+                if(! tableRows.contains(fs->groupmanager())) { // create empty lists.
+                    QValueList<unsigned int> rows;
+                    for(unsigned int i=fs->groupmanager()->getRows(); i != 0; i--)
+                        rows.append(0);
+                    tableRows.insert(fs->groupmanager(), rows);
+                    QValueList<unsigned int> cols;
+                    for(unsigned int i=fs->groupmanager()->getCols(); i != 0; i--)
+                        cols.append(0);
+                    tableCols.insert(fs->groupmanager(), cols);
+                }
+                QValueList<unsigned int> rows = tableRows[fs->groupmanager()];
+                for(unsigned int r=cell->firstRow(); r <= cell->lastRow(); r++)
+                    rows[r] = rows[r] + 1;
+                tableRows[fs->groupmanager()] = rows;
+                QValueList<unsigned int> columns = tableCols[fs->groupmanager()];
+                for(unsigned int c=cell->firstCol(); c <= cell->lastCol(); c++)
+                    columns[c] = columns[c] + 1;
+                tableCols[fs->groupmanager()] = columns;
+
+                if(m_cell == 0 || m_cell->firstRow() > cell->firstRow() || 
+                        m_cell->firstRow() == cell->firstRow() &&
+                        m_cell->firstCol() > cell->firstCol())
+                    m_cell = cell;
+            }
+
+            m_row = 0;
+            m_col = 0;
+            m_selected = amountSelected != 0;
+            m_oneCellSelected = amountSelected == 1;
+            if(amountSelected == 0) return;
+
+            for(QMapIterator<KWTableFrameSet*, QValueList<unsigned int> > iter = tableRows.begin();
+                    iter != tableRows.end(); ++iter) {
+                QValueList<unsigned int> rows = iter.data();
+                QValueListIterator<unsigned int> rowsIter = rows.begin();
+                for(;rowsIter != rows.end(); ++rowsIter)
+                    if(*rowsIter == iter.key()->getCols())
+                        m_row++;
+
+                QValueList<unsigned int> columns = tableCols[iter.key()];
+                QValueListIterator<unsigned int> colsIter = columns.begin();
+                for(;colsIter != columns.end(); ++colsIter)
+                    if(*colsIter == iter.key()->getRows())
+                        m_col++;
+            }
+        }
+
+        int tableCellsSelected() { return m_selected; }
+        int amountRowsSelected() { return m_row; }
+        bool amountColumnsSelected() { return m_col; }
+        bool oneCellSelected() { return m_oneCellSelected; }
+        bool protectContentEnabled() { return m_protectContent; }
+        KWTableFrameSet::Cell *firstSelectedCell() { return m_cell; }
+    private:
+        QValueList<KWFrameView*> m_views;
+        bool m_oneCellSelected, m_selected, m_protectContent;
+        int m_row, m_col;
+        KWTableFrameSet::Cell *m_cell;
+};
+
+/******************************************************************/
+/* Class: KWView                                                  */
+/******************************************************************/
 KWView::KWView( KWViewMode* viewMode, QWidget *parent, const char *name, KWDocument* doc )
     : KoView( doc, parent, name )
 {
@@ -159,8 +246,8 @@ KWView::KWView( KWViewMode* viewMode, QWidget *parent, const char *name, KWDocum
     m_findReplace = 0L;
     m_fontDlg = 0L;
     m_paragDlg = 0L;
-    m_tableSplit.columns = 0;
-    m_tableSplit.rows = 0;
+    m_tableSplit.columns = 1;
+    m_tableSplit.rows = 1;
 
     m_actionList.setAutoDelete( true );
     m_variableActionList.setAutoDelete( true );
@@ -4206,7 +4293,7 @@ void KWView::tableJoinCells()
 
 void KWView::tableSplitCells() {
     KWSplitCellDia *splitDia=new KWSplitCellDia( this,"split cell",
-            m_tableSplit.rows, m_tableSplit.columns );
+            m_tableSplit.columns, m_tableSplit.rows );
     if(splitDia->exec()) {
         m_tableSplit.rows = splitDia->rows();
         m_tableSplit.columns = splitDia->columns();
@@ -4217,13 +4304,8 @@ void KWView::tableSplitCells() {
 
 void KWView::tableSplitCells(int cols, int rows)
 {
-    QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
-    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    if ( !table && selectedFrames.count() > 0) {
-        table=selectedFrames[0]->frame()->frameSet()->groupmanager();
-    }
-
-    if(selectedFrames.count() >1 || table == 0) {
+    TableInfo ti( frameViewManager()->selectedFrames() );
+    if(! ti.oneCellSelected()) {
         KMessageBox::sorry( this,
                             i18n( "You have to put the cursor into a table "
                                   "before splitting cells." ),
@@ -4231,7 +4313,8 @@ void KWView::tableSplitCells(int cols, int rows)
         return;
     }
 
-    KCommand *cmd=table->splitCell(rows,cols);
+    KWTableFrameSet::Cell *cell = ti.firstSelectedCell();
+    KCommand *cmd=cell->groupmanager()->splitCell(rows, cols, cell->firstCol(), cell->firstRow());
     if ( !cmd ) {
         KMessageBox::sorry( this,
                             i18n("There is not enough space to split the cell into that many parts, make it bigger first"),
@@ -4239,10 +4322,9 @@ void KWView::tableSplitCells(int cols, int rows)
         return;
     }
     m_doc->addCommand(cmd);
-    //KoRect r = m_doc->zoomRect( table->boundingRect() );
-    //m_gui->canvasWidget()->repaintScreen( r, TRUE );
     m_doc->updateAllFrames();
     m_doc->layout();
+    frameViewManager()->view(cell->frame(0))->setSelected(true);
 }
 
 void KWView::tableUngroupTable()
@@ -5800,79 +5882,6 @@ void KWView::frameSelectedChanged()
 
 void KWView::updateTableActions( QValueList<KWFrameView*> selectedFrames)
 {
-    class TableInfo {
-        public:
-            TableInfo( QValueList<KWFrameView*> selectedFrames ) {
-                m_protectContent = false;
-                m_views = selectedFrames;
-                int amountSelected = 0;
-                QMap<KWTableFrameSet*, QValueList<unsigned int> > tableRows, tableCols;
-
-                QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
-                for(;framesIterator != selectedFrames.end(); ++framesIterator) {
-                    KWFrameView *view = *framesIterator;
-                    if(!view->selected()) continue;
-                    KWFrameSet *fs = view->frame()->frameSet();
-                    Q_ASSERT(fs);
-                    KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell*>(fs);
-                    if(cell == 0) continue;
-                    amountSelected++;
-                    if(cell->protectContent())
-                        m_protectContent=true;
-
-                    if(! tableRows.contains(fs->groupmanager())) { // create empty lists.
-                        QValueList<unsigned int> rows;
-                        for(unsigned int i=fs->groupmanager()->getRows(); i != 0; i--)
-                            rows.append(0);
-                        tableRows.insert(fs->groupmanager(), rows);
-                        QValueList<unsigned int> cols;
-                        for(unsigned int i=fs->groupmanager()->getCols(); i != 0; i--)
-                            cols.append(0);
-                        tableCols.insert(fs->groupmanager(), cols);
-                    }
-                    QValueList<unsigned int> rows = tableRows[fs->groupmanager()];
-                    for(unsigned int r=cell->firstRow(); r <= cell->lastRow(); r++)
-                        rows[r] = rows[r] + 1;
-                    tableRows[fs->groupmanager()] = rows;
-                    QValueList<unsigned int> columns = tableCols[fs->groupmanager()];
-                    for(unsigned int c=cell->firstCol(); c <= cell->lastCol(); c++)
-                        columns[c] = columns[c] + 1;
-                    tableCols[fs->groupmanager()] = columns;
-                }
-
-                m_row = 0;
-                m_col = 0;
-                m_selected = amountSelected != 0;
-                m_oneCellSelected = amountSelected == 1;
-                if(amountSelected == 0) return;
-
-                for(QMapIterator<KWTableFrameSet*, QValueList<unsigned int> > iter = tableRows.begin();
-                        iter != tableRows.end(); ++iter) {
-                    QValueList<unsigned int> rows = iter.data();
-                    QValueListIterator<unsigned int> rowsIter = rows.begin();
-                    for(;rowsIter != rows.end(); ++rowsIter)
-                        if(*rowsIter == iter.key()->getCols())
-                            m_row++;
-
-                    QValueList<unsigned int> columns = tableCols[iter.key()];
-                    QValueListIterator<unsigned int> colsIter = columns.begin();
-                    for(;colsIter != columns.end(); ++colsIter)
-                        if(*colsIter == iter.key()->getRows())
-                            m_col++;
-                }
-            }
-
-            int tableCellsSelected() { return m_selected; }
-            int amountRowsSelected() { return m_row; }
-            bool amountColumnsSelected() { return m_col; }
-            bool oneCellSelected() { return m_oneCellSelected; }
-            bool protectContentEnabled() { return m_protectContent; }
-        private:
-            QValueList<KWFrameView*> m_views;
-            bool m_oneCellSelected, m_selected, m_protectContent;
-            int m_row, m_col;
-    };
-
     TableInfo ti(selectedFrames);
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     m_actionTableJoinCells->setEnabled( ti.tableCellsSelected());
@@ -7619,5 +7628,6 @@ void KWGUI::unitChanged( KoUnit::Unit u )
 {
     m_view->kWordDocument()->setUnit( u );
 }
+
 
 #include "KWView.moc"
