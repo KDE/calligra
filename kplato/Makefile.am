@@ -4,6 +4,7 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib
            $(all_includes)
 
 libkplatopart_la_SOURCES = \
+    kpttaskappointmentsview.cc \
     kptdoublelistviewbase.cc \
     kptaccountsviewconfigdialog.cc \
     kptaccountsviewconfigurepanelbase.ui \
@@ -29,7 +30,7 @@ libkplatopart_la_SOURCES = \
     resourcedialogbase.ui kptresourcedialog.cc \
     kpttaskgeneralpanelbase.ui \
     kpttasknotespanelbase.ui \
-    kptdatetime.cc kptreportview.cc kpttaskappointmentsview.ui \
+    kptdatetime.cc kptreportview.cc \
     kptcalendar.cc kptcalendaredit.cc kptcalendarlistdialog.cc \
     kptcalendarpanel.cc kptdatetable.cc \
     kptcalendarlistdialogbase.cc kptcalendareditbase.cc \
@@ -48,6 +49,7 @@ libkplatopart_la_SOURCES = \
 
 # (this is not used)
 noinst_HEADERS = \
+    kpttaskappointmentsview.h \
     kptdoublelistviewbase.h \
     kptaccountsviewconfigdialog.h \
     kptaccountsview.h \

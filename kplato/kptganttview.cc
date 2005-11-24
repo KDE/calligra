@@ -93,7 +93,7 @@ GanttView::GanttView(View *view, QWidget *parent, bool readWrite, const char* na
     m_gantt->setScale(KDGanttView::Day);
     m_gantt->setShowLegendButton(false);
     m_gantt->setShowHeaderPopupMenu();
-    m_taskView = new TaskAppointmentsView(this, "Task widget");
+    m_taskView = new TaskAppointmentsView(view, this);
     // hide TaskAppointmentsView
     QValueList<int> list = sizes();
     list[0] += list[1];
