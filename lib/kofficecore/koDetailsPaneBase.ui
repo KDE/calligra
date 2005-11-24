@@ -119,7 +119,10 @@
                     </spacer>
                     <widget class="QCheckBox" row="3" column="1" rowspan="1" colspan="3">
                         <property name="name">
-                            <cstring>m_alwaysUseCheckbox</cstring>
+                            <cstring>m_alwaysUseCheckBox</cstring>
+                        </property>
+                        <property name="enabled">
+                            <bool>false</bool>
                         </property>
                         <property name="text">
                             <string>Always use this template</string>

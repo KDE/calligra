@@ -228,10 +228,12 @@ void KoTemplatesPane::selectionChanged(QListViewItem* item)
 {
   if(item) {
     m_openButton->setEnabled(true);
+    m_alwaysUseCheckBox->setEnabled(true);
     m_titleLabel->setText(item->text(1));
     m_previewLabel->setPixmap(*(item->pixmap(0)));
   } else {
     m_openButton->setEnabled(false);
+    m_alwaysUseCheckBox->setEnabled(false);
     m_titleLabel->setText("");
     m_previewLabel->setPixmap(QPixmap());
   }
@@ -274,7 +276,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
   d = new KoRecentDocumentsPanePrivate;
   KGuiItem openGItem(i18n("Open Document"), "fileopen");
   m_openButton->setGuiItem(openGItem);
-  m_alwaysUseCheckbox->hide();
+  m_alwaysUseCheckBox->hide();
   m_documentList->header()->hide();
   m_documentList->setSorting(-1); // Disable sorting
 
@@ -370,6 +372,9 @@ void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
     }
   } else {
     m_openButton->setEnabled(true);
+    m_titleLabel->setText("");
+    m_previewLabel->setPixmap(QPixmap());
+    m_detailsLabel->setText("");
   }
 }
 
