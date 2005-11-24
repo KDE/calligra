@@ -6032,7 +6032,8 @@ void Canvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 		//later repainting
 		d->highlightedRanges=new std::vector<HighlightRange>(*cells);
 
-		/*std::vector<HighlightRange>::iterator iter;
+#if 0
+		std::vector<HighlightRange>::iterator iter;
 
 		for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
 		{
@@ -6043,7 +6044,7 @@ void Canvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 				/*QRect range=rg.range;
 				range.setWidth(range.width()+1);
 				range.setHeight(range.height()+1);*/
-				/*rg.sheet->setRegionPaintDirty(rg.range);
+				rg.sheet->setRegionPaintDirty(rg.range);
 			}
 			else
 			{
@@ -6055,7 +6056,7 @@ void Canvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 			//iter->cell->setFlag(Cell::Flag_DisplayDirty);
 		}
 
-				*/
+#endif
 	}
 
 	//activeSheet()->setRegionPaintDirty(visibleCells());
