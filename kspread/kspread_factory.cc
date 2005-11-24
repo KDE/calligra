@@ -28,8 +28,6 @@
 
 using namespace KSpread;
 
-K_EXPORT_COMPONENT_FACTORY( libkspread, Factory )
-
 KInstance* Factory::s_global = 0;
 DCOPObject* Factory::s_dcopObject = 0;
 KAboutData* Factory::s_aboutData = 0;
