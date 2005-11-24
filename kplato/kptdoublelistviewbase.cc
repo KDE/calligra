@@ -48,6 +48,7 @@ DoubleListViewBase::SlaveListItem::SlaveListItem(DoubleListViewBase::MasterListI
       m_highlight(highlight),
       m_valueMap() {
     
+    setFormat();
     setExpandable(master->isExpandable());
     setOpen(master->isOpen());
     //kdDebug()<<"DoubleListViewBase::SlaveListItem "<<master->text(0)<<" parent="<<static_cast<DoubleListViewBase::SlaveListItem*>(parent)->m_masterItem->text(0)<<endl;
@@ -59,6 +60,7 @@ DoubleListViewBase::SlaveListItem::SlaveListItem(DoubleListViewBase::MasterListI
       m_highlight(highlight),
       m_valueMap() {
     
+    setFormat();
     setExpandable(master->isExpandable());
     setOpen(master->isOpen());
     //kdDebug()<<"DoubleListViewBase::SlaveListItem "<<master->text(0)<<" parent="<<static_cast<DoubleListViewBase::SlaveListItem*>(parent)->m_masterItem->text(0)<<endl;
@@ -79,7 +81,7 @@ void DoubleListViewBase::SlaveListItem::clearColumn(int col) {
 }
 void DoubleListViewBase::SlaveListItem::setColumn(int col, double value) {
     if (col < listView()->columns()) {
-        setText(col, QString("%1").arg(value, 0, 'f', 0));
+        setText(col, QString("%1").arg(value, m_fieldwidth, m_fmt, m_prec));
         m_valueMap.replace(col, value);
         //kdDebug()<<k_funcinfo<<m_masterItem->text(0)<<": column["<<col<<"]="<<value<<endl;
     }
@@ -98,12 +100,20 @@ void DoubleListViewBase::SlaveListItem::paintCell(QPainter *p, const QColorGroup
     KListViewItem::paintCell(p, g, column, width, align);
 }
 
+void DoubleListViewBase::SlaveListItem::setFormat(int fieldwidth, char fmt, int prec) {
+    m_fieldwidth = fieldwidth;
+    m_fmt = fmt;
+    m_prec = prec;
+}
+
+//----------------------------
 DoubleListViewBase::MasterListItem::MasterListItem(QListView *parent, bool highlight)
     : KListViewItem(parent),
       m_slaveItem(0),
       m_value(0.0),
       m_highlight(highlight) {
     
+    setFormat();
     //kdDebug()<<k_funcinfo<<endl;
 }
 
@@ -113,6 +123,7 @@ DoubleListViewBase::MasterListItem::MasterListItem(QListView *parent, QString te
       m_value(0.0),
       m_highlight(highlight) {
 
+    setFormat();
     //kdDebug()<<k_funcinfo<<endl;
 }
 
@@ -122,6 +133,7 @@ DoubleListViewBase::MasterListItem::MasterListItem(QListViewItem *parent, bool h
       m_value(0.0),
       m_highlight(highlight) {
     
+    setFormat();
     //kdDebug()<<k_funcinfo<<endl;
 }
 
@@ -131,6 +143,7 @@ DoubleListViewBase::MasterListItem::MasterListItem(QListViewItem *parent, QStrin
       m_value(0.0),
       m_highlight(highlight) {
 
+    setFormat();
     //kdDebug()<<k_funcinfo<<endl;
 }
 
@@ -169,13 +182,13 @@ void DoubleListViewBase::MasterListItem::slaveItemDeleted() {
 
 void DoubleListViewBase::MasterListItem::setTotal(double tot) {
     m_value = tot;
-    setText(1, QString("%1").arg(tot, 0, 'f', 0));
+    setText(1, QString("%1").arg(tot, m_fieldwidth, m_fmt, m_prec));
     //kdDebug()<<k_funcinfo<<text(0)<<"="<<tot<<endl;
 }
 
 void DoubleListViewBase::MasterListItem::addToTotal(double v) {
     m_value += v;
-    setText(1, QString("%1").arg(m_value, 0, 'f', 0));
+    setText(1, QString("%1").arg(m_value, m_fieldwidth, m_fmt, m_prec));
 }
 
 double DoubleListViewBase::MasterListItem::calcTotal() {
@@ -250,8 +263,18 @@ void DoubleListViewBase::MasterListItem::paintCell(QPainter *p, const QColorGrou
     KListViewItem::paintCell(p, g, column, width, align);
 }
 
+void DoubleListViewBase::MasterListItem::setFormat(int fieldwidth, char fmt, int prec) {
+    m_fieldwidth = fieldwidth;
+    m_fmt = fmt;
+    m_prec = prec;
+}
+
+//-------------------------------------
 DoubleListViewBase::DoubleListViewBase(QWidget *parent, bool description)
-    : QSplitter(parent) {
+    : QSplitter(parent),
+      m_fieldwidth(0),
+      m_fmt('f'),
+      m_prec(0) {
     
     setOrientation(QSplitter::Horizontal);
     setHandleWidth(QMIN(2, handleWidth()));
@@ -352,6 +375,27 @@ void DoubleListViewBase::calculate() {
 void DoubleListViewBase::clearLists() {
     m_slaveList->clear();
     m_masterList->clear();
+}
+
+void DoubleListViewBase::setMasterFormat(int fieldwidth, char fmt, int prec) {
+    QListViewItemIterator it = m_masterList;
+    for (; it.current(); ++it) {
+        static_cast<DoubleListViewBase::MasterListItem*>(it.current())->setFormat(fieldwidth, fmt, prec);
+    }
+}
+void DoubleListViewBase::setSlaveFormat(int fieldwidth, char fmt, int prec) {
+    QListViewItemIterator it = m_slaveList;
+    for (; it.current(); ++it) {
+        static_cast<DoubleListViewBase::SlaveListItem*>(it.current())->setFormat(fieldwidth, fmt, prec);
+    }
+}
+
+void DoubleListViewBase::setFormat(int fieldwidth, char fmt, int prec) {
+    m_fieldwidth = fieldwidth;
+    m_fmt = fmt;
+    m_prec = prec;
+    setMasterFormat(fieldwidth, fmt, prec);
+    setSlaveFormat(fieldwidth, fmt, prec);
 }
 
 }  //KPlato namespace

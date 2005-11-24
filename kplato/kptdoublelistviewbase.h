@@ -63,8 +63,11 @@ public:
 
     void calculate();
     void clearLists();
-    void createSlaveItems();
+    virtual void createSlaveItems();
     void clearSlaveList();
+    void setFormat(int fieldwidth=0, char fmt='f', int prec=0);
+    void setMasterFormat(int fieldwidth=0, char fmt='f', int prec=0);
+    void setSlaveFormat(int fieldwidth=0, char fmt='f', int prec=0);
     
     class MasterListItem;
     class SlaveListItem : public KListViewItem {
@@ -80,6 +83,9 @@ public:
         double value(int col) const { return m_valueMap[col]; }
         
         virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);
+        
+        void setFormat(int fieldwidth=0, char fmt='f', int prec=0);
+
     protected:
         MasterListItem *m_masterItem;
         double m_value;
@@ -87,6 +93,9 @@ public:
 
         QMap<int, double> m_valueMap;
         
+        int m_fieldwidth;
+        char m_fmt;
+        int m_prec;
     };
 
     class MasterListItem : public KListViewItem {
@@ -113,12 +122,18 @@ public:
 
         virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);    
 
+        void setFormat(int fieldwidth=0, char fmt='f', int prec=0);
+
     protected:
         SlaveListItem *m_slaveItem;
         double m_value;
         bool m_highlight;
         
         QMap<int, double> m_valueMap;
+    
+        int m_fieldwidth;
+        char m_fmt;
+        int m_prec;
     };
 
 protected slots:
@@ -130,6 +145,10 @@ private:
 private:
     KListView *m_masterList;
     KListView *m_slaveList;
+    
+    int m_fieldwidth;
+    char m_fmt;
+    int m_prec;
 };
 
 }  //KPlato namespace
