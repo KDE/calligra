@@ -27,6 +27,7 @@ class KoTemplateGroup;
 class KoOpenPanePrivate;
 class KInstance;
 class QPixmap;
+class KListViewItem;
 
 class KoOpenPane : public KoOpenPaneBase
 {
@@ -36,8 +37,8 @@ class KoOpenPane : public KoOpenPaneBase
     KoOpenPane(QWidget *parent, KInstance* instance, const QString& templateType = QString::null);
     virtual ~KoOpenPane();
 
-    void addPane(const QString& title, const QString& icon, QWidget* widget);
-    void addPane(const QString& title, const QPixmap& icon, QWidget* widget);
+    KListViewItem* addPane(const QString& title, const QString& icon, QWidget* widget);
+    KListViewItem* addPane(const QString& title, const QPixmap& icon, QWidget* widget);
 
   protected slots:
     void showOpenFileDialog();

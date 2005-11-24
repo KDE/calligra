@@ -72,8 +72,6 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
 
   initTemplates(templateType);
 
-  m_sectionList->setSelected(m_sectionList->firstChild(), true);
-
   QValueList<int> sizes;
   sizes << 20 << width() - 20;
   m_splitter->setSizes(sizes);
@@ -98,11 +96,19 @@ void KoOpenPane::initRecentDocs()
 {
   KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(this, d->m_instance);
   connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
-  addPane(i18n("Recent Documents"), "fileopen", recentDocPane);
+  KListViewItem* item = addPane(i18n("Recent Documents"), "fileopen", recentDocPane);
+
+  if(item) {
+    item->setEnabled(d->m_instance->config()->hasGroup("RecentFiles"));
+  } else {
+    m_sectionList->setSelected(m_sectionList->firstChild(), true);
+  }
 }
 
 void KoOpenPane::initTemplates(const QString& templateType)
 {
+  KListViewItem* selectItem = 0;
+
   if(!templateType.isEmpty())
   {
     KoTemplateTree templateTree(templateType.local8Bit(), d->m_instance, true);
@@ -114,20 +120,27 @@ void KoOpenPane::initTemplates(const QString& templateType)
 
       KoTemplatesPane* pane = new KoTemplatesPane(this, d->m_instance, group);
       connect(pane, SIGNAL(openTemplate(const QString&)), this, SIGNAL(openTemplate(const QString&)));
-      addPane(group->name(), group->first()->loadPicture(d->m_instance), pane);
+      KListViewItem* item = addPane(group->name(), group->first()->loadPicture(d->m_instance), pane);
+
+      if(!selectItem)
+        selectItem = item;
     }
+  }
+
+  if(!m_sectionList->selectedItem() && selectItem) {
+    m_sectionList->setSelected(selectItem, true);
   }
 }
 
-void KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget)
+KListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget)
 {
-  addPane(title, SmallIcon(icon, KIcon::SizeLarge, KIcon::DefaultState, d->m_instance), widget);
+  return addPane(title, SmallIcon(icon, KIcon::SizeLarge, KIcon::DefaultState, d->m_instance), widget);
 }
 
-void KoOpenPane::addPane(const QString& title, const QPixmap& icon, QWidget* widget)
+KListViewItem* KoOpenPane::addPane(const QString& title, const QPixmap& icon, QWidget* widget)
 {
   if(!widget) {
-    return;
+    return 0;
   }
 
   KListViewItem* listItem = new KListViewItem(m_sectionList, m_sectionList->lastItem(), title);
@@ -138,6 +151,8 @@ void KoOpenPane::addPane(const QString& title, const QPixmap& icon, QWidget* wid
 
   int id = m_widgetStack->addWidget(widget);
   listItem->setText(1, QString::number(id));
+
+  return listItem;
 }
 
 void KoOpenPane::selectionChanged(QListViewItem* item)
