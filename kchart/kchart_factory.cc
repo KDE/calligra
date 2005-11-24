@@ -17,9 +17,6 @@
 namespace KChart
 {
 
-K_EXPORT_COMPONENT_FACTORY( libkchart, KChartFactory )
-
-
 KInstance   *KChartFactory::s_global    = 0;
 KAboutData  *KChartFactory::s_aboutData = 0;
 

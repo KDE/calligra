@@ -39,13 +39,9 @@ libkchartcommon_la_LDFLAGS = $(KDE_RPATH) -version-info 2:0:0 -no-undefined
 
 ## The part
 kde_module_LTLIBRARIES = libkchartpart.la
-libkchartpart_la_SOURCES = dummy.cc
+libkchartpart_la_SOURCES = kchart_factory_init.cc
 libkchartpart_la_LDFLAGS = $(KDE_PLUGIN)
 libkchartpart_la_LIBADD = libkchartcommon.la
-
-dummy.cc: $(srcdir)/Makefile.am
-	echo 'extern "C" void* init_libkchart();' > $@
-	echo 'extern "C" void* init_libkchartpart() { return init_libkchart(); } ' >> $@
 
 ## The kdeinit loadable module and executable
 kdeinit_LTLIBRARIES = kchart.la
