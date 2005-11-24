@@ -30,7 +30,7 @@ libkarbonbase_la_SOURCES = \
 libkarbonbase_la_LDFLAGS = $(KDE_RPATH) -version-info 2:0:0 -no-undefined
 libkarbonbase_la_LIBADD = $(LIB_KOFFICEUI)
 
-libkarboncommon_la_LDFLAGS = $(KDE_RPATH) $(LIBFREETYPE_RPATH)
+libkarboncommon_la_LDFLAGS = $(KDE_RPATH) $(LIBFREETYPE_RPATH) -no-undefined
 libkarboncommon_la_LIBADD = $(LIB_KOFFICECORE) $(LIB_KOFFICEUI) $(LIB_KOPALETTE) $(LIB_KOPAINTER) $(LIB_KOTEXT) \
 	dockers/libkarbondockers.la \
 	widgets/libkarbonwidgets.la \
@@ -47,7 +47,7 @@ libkarboncommon_la_LIBADD = $(LIB_KOFFICECORE) $(LIB_KOFFICEUI) $(LIB_KOPALETTE)
 	$(LIBMAGICK_LIBS) \
 	$(LIBFREETYPE_LIBS)
 
-libkarbonpart_la_SOURCES = dummy.cpp
+libkarbonpart_la_SOURCES = karbon_factory_init.cc
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN) $(LIBFREETYPE_RPATH)
 libkarbonpart_la_LIBADD = libkarboncommon.la
 libkarbonpart_la_METASOURCES = AUTO
@@ -57,9 +57,6 @@ kdeinit_LTLIBRARIES = karbon.la
 karbon_la_SOURCES = main.cc
 karbon_la_LDFLAGS = $(all_libraries) -module -avoid-version
 karbon_la_LIBADD = libkarboncommon.la
-
-dummy.cpp:
-	echo > dummy.cpp
 
 noinst_HEADERS = \
 	karbon_factory.h \
