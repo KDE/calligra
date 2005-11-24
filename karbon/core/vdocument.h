@@ -112,7 +112,7 @@ public:
 	/**
 	 * Sets the version.
 	 *
-	 * @param mime the new version
+	 * @param version the new version
 	 */ 
 	void setVersion( const QString& version )
 		{ m_version = version; }
@@ -128,7 +128,7 @@ public:
 	/**
 	 * Sets the editor.
 	 *
-	 * @param mime the new editor
+	 * @param editor the new editor
 	 */ 
 	void setEditor( const QString& editor )
 		{ m_editor = editor; }
@@ -144,7 +144,7 @@ public:
 	/**
 	 * Sets the syntax version.
 	 *
-	 * @param mime the new syntax version
+	 * @param syntaxVersion the new syntax version
 	 */ 
 	void setSyntaxVersion( const QString& syntaxVersion )
 		{ m_syntaxVersion = syntaxVersion; }
@@ -188,7 +188,7 @@ public:
 	/**
 	 * Sets document unit.
 	 *
-	 * @param the new document unit
+	 * @param unit the new document unit
 	 */
 	void setUnit( KoUnit::Unit unit )
 		{ m_unit = unit; }
