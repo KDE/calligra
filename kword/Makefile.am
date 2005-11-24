@@ -7,7 +7,7 @@ kde_module_LTLIBRARIES = libkwordpart.la
 lib_LTLIBRARIES = libkwmailmerge_interface.la libkwordprivate.la
 
 ## The part
-libkwordpart_la_SOURCES = KWFactory.cpp
+libkwordpart_la_SOURCES = KWFactoryInit.cpp
 libkwordpart_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 libkwordpart_la_LIBADD = libkwordprivate.la
 

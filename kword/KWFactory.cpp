@@ -25,9 +25,6 @@
 
 #include <kiconloader.h>
 
-K_EXPORT_COMPONENT_FACTORY( libkwordpart, KWFactory )
-
-
 KInstance* KWFactory::s_instance = 0;
 KAboutData* KWFactory::s_aboutData = 0;
 
