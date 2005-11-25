@@ -1248,9 +1248,9 @@ press the &Esc; key to cancel, or use
 </textobject>
 </mediaobject>
 </screenshot>
-<para>Left clicking on the slide will zoom in. Right clicking on the current slide will present you a menu to allow you to zoom in, to zoom out, to zoom the entire slide, the width or the weight or zoom all objects which put back all objects in your view.
+<para>Left clicking on the slide will zoom in. Right clicking on the current slide will present you a menu to allow you to zoom in, to zoom out, to zoom the entire slide, the width or the height or zoom all objects which put back all objects in your view.
 </para>
-<para>This action has the same effect than <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom</guimenuitem>
+<para>This action has the same effect as <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom</guimenuitem>
 </menuchoice> on another form.</para>
 </listitem>
 </varlistentry>

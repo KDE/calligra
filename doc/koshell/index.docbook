@@ -83,7 +83,7 @@ Word-processor/Desktop Publishing Program.)</para></listitem>
 <listitem><para>&kspread; (A spreadsheet application.)</para></listitem>
 <listitem><para>&kpresenter; (A presentation creator.)</para></listitem>
 <listitem><para>Kexi (An integrated environment for databases.)  </para></listitem>
-<listitem><para>&kivio; (A flowchart creator)</para></listitem>
+<listitem><para>&kivio; (A flowchart creator.)</para></listitem>
 <listitem><para><application>Karbon14</application> (A vector drawing program.)</para></listitem>
 <listitem><para>&krita; (A pixel based drawing program.)</para></listitem>
 <listitem><para>&kchart; (A chart and graph creator.)</para></listitem>
@@ -103,7 +103,7 @@ running the applications as components inside &koshell; just as well as running 
 <sect1 id="General">
 <title>General</title>
 
-<para>&koshell; consists in a friendly workspace to allow you to work on several &koffice; applications at the same time. In &koshell; main window you can see a side pane on the left showing the icons of the available &koffice; components and the main view on the right which contains the main window of the active component and the usual menubar and toolbar. </para>
+<para>&koshell; consists in a friendly workspace to allow you to work on several &koffice; applications at the same time. In the &koshell; main window you can see a side pane on the left showing the icons of the available &koffice; components and the main view on the right which contains the main window of the active component and the usual menubar and toolbar. </para>
 
 <screenshot>
 <screeninfo>Here's a screenshot of &koshell; when you start it for the first time</screeninfo>
@@ -188,7 +188,7 @@ window the component uses when run as a stand-alone application. </para>
 <para>Each new component is opened in a new tab. Using the &RMB; on each tab title, you can save the document in that tab or close that tab. The small button on the right bottom with a red cross also allows you to close the current tab.</para>
 
 <para>A special action common to all components is the
- <menuchoice><guimenu>File</guimenu><guimenuitem>New</guimenuitem> </menuchoice> action in &koshell; menubar. It opens the Insert Object dialog which start the &koffice; component as if it was a stand-alone application.</para>
+ <menuchoice><guimenu>File</guimenu><guimenuitem>New</guimenuitem> </menuchoice> action in &koshell; menubar. It opens the Insert Object dialog which starts the &koffice; component as if it was a stand-alone application.</para>
 
 <screenshot>
 <screeninfo>&koshell; Insert Object dialog</screeninfo>
@@ -278,7 +278,7 @@ window the component uses when run as a stand-alone application. </para>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Import</guimenuitem>
+<guimenuitem>Import...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Import</action> a supported document. </para></listitem>
 </varlistentry>
@@ -286,7 +286,7 @@ window the component uses when run as a stand-alone application. </para>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Export</guimenuitem>
+<guimenuitem>Export...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Export</action> the current document. </para></listitem>
 </varlistentry>
@@ -299,7 +299,7 @@ window the component uses when run as a stand-alone application. </para>
 <guimenu>File</guimenu>
 <guimenuitem>Quit</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Quits</action> &koshell;</para></listitem>
+<listitem><para><action>Quits</action> &koshell;.</para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -313,19 +313,27 @@ window the component uses when run as a stand-alone application. </para>
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
-<guisubmenu>Toolbars</guisubmenu>
-<guimenuitem>Show Main</guimenuitem>
+<guimenuitem>Hide/Show Toolbar</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Toggle</action> the Main Toolbar</para></listitem>
+<listitem><para><action>Toggle</action> the Main Toolbar.</para></listitem>
 </varlistentry>
 
 
 <varlistentry>
 <term><menuchoice>
 <guimenu>Settings</guimenu>
+<guimenuitem>Configure Shortcuts...</guimenuitem>
+</menuchoice></term>
+<listitem><para><action>Configure</action> the shortcuts.
+</para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><menuchoice>
+<guimenu>Settings</guimenu>
 <guimenuitem>Configure Toolbars...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Configure</action> the items you want to put in the toolbar
+<listitem><para><action>Configure</action> the items you want to put in the toolbar.
 </para></listitem>
 </varlistentry>
 

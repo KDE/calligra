@@ -221,7 +221,7 @@ document.</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Open Recent</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>displays a selection of recently saved documents you can open.</action></para></listitem>
+<listitem><para><action>Displays a selection of recently saved documents you can open.</action></para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -289,7 +289,7 @@ document.</action></para></listitem>
 <varlistentry>
 <term><menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Document Information...</guimenuitem>
+<guimenuitem>Document Information</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Provides a dialog box where you can enter your name,
 email address and a short description about the document.</action></para></listitem>

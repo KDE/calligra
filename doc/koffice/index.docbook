@@ -534,10 +534,6 @@ find many documents about programming with &Qt; and &kde;. Here you can find
 the online version of the complete &kde; library documentation.
 </para></listitem> 
 <listitem><para>
-Use <application>kdoc</application> (in the <filename>kdoc</filename>
-CVS module) to generate your own &kde; library documentation.  
-</para></listitem>      
-<listitem><para>
 In the &koffice; sources you'll find an example application in the
 <filename class="directory">example</filename> folder.  
 </para></listitem>
