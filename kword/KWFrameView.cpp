@@ -128,7 +128,7 @@ void KWFrameView::showPopup( const KoPoint &point, KWView *view, const QPoint &p
     popup->popup(popupPoint);
 }
 
-void KWFrameView::paintFrameAtributes(QPainter *painter, const QRect &crect, KoZoomHandler *zh) {
+void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, KoZoomHandler *zh) {
     if( !m_selected )
         return;
 

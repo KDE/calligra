@@ -21,6 +21,7 @@
 #include "KWTextFrameSet.h"
 #include "KWDocument.h"
 #include "KWViewMode.h"
+#include "KWView.h"
 #include <koxmlwriter.h>
 #include <kdebug.h>
 
@@ -163,7 +164,14 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
 #endif
 
     QColorGroup cg2( cg );
-    m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), 0);
+
+    KWFrameViewManager *fvm = 0;
+    if(m_frameset->kWordDocument()) {
+        KWView *view = m_frameset->kWordDocument()->getAllViews()[0];
+        if(view)
+            fvm = view->frameViewManager();
+    }
+    m_frameset->drawContents( p, crect, cg2, false, true, 0L, fs->currentViewMode(), fvm);
 
     if( selected && placement() == PlaceInline && p->device()->devType() != QInternal::Printer )
     {
