@@ -547,18 +547,6 @@ private:
     double m_newvalue;
     double m_oldvalue;
 };
-class ModifyResourceFixedCostCmd : public NamedCommand
-{
-public:
-    ModifyResourceFixedCostCmd(Part *part, Resource *resource, double value, QString name=0);
-    void execute();
-    void unexecute();
-
-private:
-    Resource *m_resource;
-    double m_newvalue;
-    double m_oldvalue;
-};
 
 class RemoveResourceGroupCmd : public NamedCommand
 {

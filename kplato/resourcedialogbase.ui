@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KPlato::ResourceDialogBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>625</width>
-            <height>257</height>
+            <height>254</height>
         </rect>
     </property>
     <property name="caption">
@@ -19,6 +19,9 @@
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
         </property>
         <widget class="QFrame">
             <property name="name">
@@ -75,7 +78,7 @@
                         <cstring>initialsEdit</cstring>
                     </property>
                 </widget>
-                <widget class="QLayoutWidget" row="1" column="1">
+                <widget class="QLayoutWidget" row="1" column="1" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>layout6</cstring>
                     </property>
@@ -162,14 +165,6 @@
                 <widget class="QComboBox">
                     <property name="name">
                         <cstring>calendarList</cstring>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>editCalendarBtn</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Edit...</string>
                     </property>
                 </widget>
             </hbox>
@@ -274,40 +269,7 @@
                         <string></string>
                     </property>
                 </widget>
-                <widget class="QLineEdit" row="0" column="3">
-                    <property name="name">
-                        <cstring>fixedCostEdit</cstring>
-                    </property>
-                </widget>
-                <widget class="QLabel" row="0" column="2">
-                    <property name="name">
-                        <cstring>textLabel8_2</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Fixed cost:</string>
-                    </property>
-                    <property name="buddy" stdset="0">
-                        <cstring>fixedCostEdit</cstring>
-                    </property>
-                </widget>
                 <spacer row="1" column="2">
-                    <property name="name">
-                        <cstring>spacer9</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>40</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <spacer row="1" column="3">
                     <property name="name">
                         <cstring>spacer10</cstring>
                     </property>

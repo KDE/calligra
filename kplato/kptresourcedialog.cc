@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003, 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -59,11 +59,9 @@ ResourceDialogImpl::ResourceDialogImpl (QWidget *parent)
 
     connect(rateEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
     connect(overtimeEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
-    connect(fixedCostEdit, SIGNAL(textChanged(const QString&)), SLOT(slotChanged()));
 
     connect(chooseBtn, SIGNAL(clicked()), SLOT(slotChooseResource()));
     
-    connect(editCalendarBtn, SIGNAL(clicked()), SLOT(slotEditCalendarClicked()));
 }
 
 
@@ -92,10 +90,6 @@ void ResourceDialogImpl::slotChooseResource()
     }
 }
 
-void ResourceDialogImpl::slotEditCalendarClicked()
-{
-}
-
 //////////////////  ResourceDialog  ////////////////////////
 
 ResourceDialog::ResourceDialog(Project &project, Resource &resource, QWidget *parent, const char *name)
@@ -114,7 +108,6 @@ ResourceDialog::ResourceDialog(Project &project, Resource &resource, QWidget *pa
     dia->units->setValue(resource.units());
     dia->rateEdit->setText(KGlobal::locale()->formatMoney(resource.normalRate()));
     dia->overtimeEdit->setText(KGlobal::locale()->formatMoney(resource.overtimeRate()));
-    dia->fixedCostEdit->setText(KGlobal::locale()->formatMoney(resource.fixedCost()));
 
     int cal = 0;
     dia->calendarList->insertItem("None");
@@ -148,10 +141,9 @@ void ResourceDialog::slotOk() {
     m_resource.setEmail(dia->emailEdit->text());
     m_resource.setType((Resource::Type)(dia->type->currentItem()));
     m_resource.setUnits(dia->units->value());
-    //FIXME: readMoney() can't read formatMoney() format!!
+
     m_resource.setNormalRate(KGlobal::locale()->readMoney(dia->rateEdit->text()));
     m_resource.setOvertimeRate(KGlobal::locale()->readMoney(dia->overtimeEdit->text()));
-    m_resource.setFixedCost(KGlobal::locale()->readMoney(dia->fixedCostEdit->text()));
     m_resource.setCalendar(m_calendars[dia->calendarList->currentItem()]);
     
     accept();

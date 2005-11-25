@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Thomas Zander <zander@kde.org>
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -180,9 +180,6 @@ KCommand *ResourceItem::saveResource(Part *part, GroupItem *gitem) {
         }
         if (m_resource->overtimeRate() != m_originalResource->overtimeRate()) {
             m->addCommand(new ModifyResourceOvertimeRateCmd(part, m_originalResource, m_resource->overtimeRate()));
-        }
-        if (m_resource->fixedCost() != m_originalResource->fixedCost()) {
-            m->addCommand(new ModifyResourceFixedCostCmd(part, m_originalResource, m_resource->fixedCost()));
         }
         m_originalResource->copy(m_resource);
     }

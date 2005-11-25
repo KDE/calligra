@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003, 2004 Dag Andersen <kplato@kde.org>
+   Copyright (C) 2003 - 2005 Dag Andersen <kplato@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -46,7 +46,6 @@ public slots:
     void slotChanged();
     void slotCalculationNeeded(const QString&);
     void slotChooseResource();
-    void slotEditCalendarClicked();
     
 signals:
     void changed();

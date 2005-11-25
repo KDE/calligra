@@ -877,22 +877,6 @@ void ModifyResourceOvertimeRateCmd::unexecute() {
     
     setCommandType(0);
 }
-ModifyResourceFixedCostCmd::ModifyResourceFixedCostCmd(Part *part, Resource *resource, double value, QString name)
-    : NamedCommand(part, name),
-      m_resource(resource),
-      m_newvalue(value) {
-    m_oldvalue = resource->normalRate();
-}
-void ModifyResourceFixedCostCmd::execute() {
-    m_resource->setFixedCost(m_newvalue);
-    
-    setCommandType(0);
-}
-void ModifyResourceFixedCostCmd::unexecute() {
-    m_resource->setFixedCost(m_oldvalue);
-    
-    setCommandType(0);
-}
 
 RemoveResourceGroupCmd::RemoveResourceGroupCmd(Part *part, ResourceGroup *group, QString name)
     : NamedCommand(part, name),
