@@ -2,7 +2,8 @@ KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES  = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(interfacedir) \
 	-I$(srcdir)/tests \
 	$(KOSCRIPT_INCLUDES) -I$(top_srcdir)/interfaces \
-	 -I$(top_srcdir)/kchart/kdchart $(all_includes)
+	 -I$(top_srcdir)/kchart/kdchart $(all_includes) \
+	 -I$(builddir)/dialogs
 
 lib_LTLIBRARIES = libkspreadcommon.la
 kde_module_LTLIBRARIES = libkspreadpart.la
