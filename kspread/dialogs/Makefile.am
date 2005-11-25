@@ -42,7 +42,8 @@ libdialogs_la_SOURCES = \
     link.cc \
 	sheet_properties_base.ui \
 	sheet_properties.cc \
-	kspread_dlg_find.cc
+	kspread_dlg_find.cc \
+	position_cell_format.ui
 
 noinst_HEADERS = \
 	kspread_dlg_angle.h \

@@ -41,6 +41,7 @@
 #include "kspread_cell.h"
 #include "kspread_doc.h"
 #include "kspread_value.h"
+#include "position_cell_format.h"
 
 #include <qpushbutton.h>
 #include <qcheckbox.h>
@@ -307,7 +308,7 @@ protected:
     bool m_bFormatColorChanged;
 };
 
-class CellFormatPagePosition : public QWidget
+class CellFormatPagePosition : public PositionTab
 {
     Q_OBJECT
 public:
@@ -322,6 +323,7 @@ public:
     double getSizeHeight() const;
     double getSizeWidth() const;
     bool getMergedCellState() const;
+
 public slots:
     void slotChangeHeightState();
     void slotChangeWidthState();
@@ -331,23 +333,10 @@ public slots:
     void slotChangeMultiState();
 
 protected:
-    QRadioButton *bottom;
-    QRadioButton *top;
-    QRadioButton *middle;
-    QRadioButton *left;
-    QRadioButton *right;
-    QRadioButton *center;
-    QRadioButton *standard;
-    QCheckBox *multi;
-    QCheckBox *vertical;
     KoUnitDoubleSpinBox *width;
     KoUnitDoubleSpinBox *height;
-    CellFormatDialog *dlg;
-    QCheckBox *defaultWidth;
-    QCheckBox *defaultHeight;
-    QCheckBox *mergeCell;
-    KIntNumInput *angleRotation;
     KoUnitDoubleSpinBox *m_indent;
+    CellFormatDialog *dlg;
     bool m_bOptionText;
 };
 

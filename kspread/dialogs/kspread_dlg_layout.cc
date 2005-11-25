@@ -42,10 +42,12 @@
 #include "valueformatter.h"
 
 #include <qbitmap.h>
+#include <qframe.h>
 #include <qlabel.h>
 #include <qlistbox.h>
 #include <qlayout.h>
 #include <qfontdatabase.h>
+#include <qslider.h>
 #include <qwhatsthis.h>
 #include <kdialog.h>
 #include <kdebug.h>
@@ -2801,26 +2803,9 @@ void CellFormatPageFont::setCombos()
 }
 
 CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialog *_dlg )
-  : QWidget( parent ),
+  : PositionTab(parent ),
     dlg( _dlg )
 {
-    QGridLayout *grid3 = new QGridLayout(this, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
-    QButtonGroup *grp = new QButtonGroup( i18n("Horizontal"), this);
-    grp->setRadioButtonExclusive( true );
-
-    QGridLayout *grid2 = new QGridLayout(grp, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
-    int fHeight = grp->fontMetrics().height();
-    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
-    standard = new QRadioButton( i18n("Standard"), grp );
-    grid2->addWidget(standard, 2, 0);
-    left = new QRadioButton( i18n("Left"), grp );
-    grid2->addWidget(left, 1, 1);
-    center = new QRadioButton( i18n("Center"), grp );
-    grid2->addWidget(center, 2, 1);
-    right = new QRadioButton( i18n("Right"), grp );
-    grid2->addWidget(right, 3, 1);
-    grid3->addWidget(grp, 0, 0);
-
     if ( dlg->alignX == Cell::Left )
         left->setChecked( true );
     else if ( dlg->alignX == Cell::Center )
@@ -2830,21 +2815,7 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     else if ( dlg->alignX == Cell::Undefined )
         standard->setChecked( true );
 
-    connect(grp,  SIGNAL(clicked(int)), this, SLOT(slotStateChanged(int)));
-
-    grp = new QButtonGroup( i18n("Vertical"), this);
-    grp->setRadioButtonExclusive( true );
-
-    grid2 = new QGridLayout(grp, 4, 1, KDialog::marginHint(), KDialog::spacingHint());
-    fHeight = grp->fontMetrics().height();
-    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
-    top = new QRadioButton( i18n("Top"), grp );
-    grid2->addWidget(top, 1, 0);
-    middle = new QRadioButton( i18n("Middle"), grp );
-    grid2->addWidget(middle, 2, 0);
-    bottom = new QRadioButton( i18n("Bottom"), grp );
-    grid2->addWidget(bottom, 3, 0);
-    grid3->addWidget(grp, 0, 1);
+    connect(horizontalGroup,  SIGNAL(clicked(int)), this, SLOT(slotStateChanged(int)));
 
     if ( dlg->alignY ==Cell::Top )
         top->setChecked( true );
@@ -2853,71 +2824,29 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     else if ( dlg->alignY ==Cell::Bottom )
         bottom->setChecked( true );
 
-    grp = new QButtonGroup( i18n("Text Option"), this);
-    //grp->setRadioButtonExclusive( false );
-    grid2 = new QGridLayout(grp, 3, 1, KDialog::marginHint(), KDialog::spacingHint());
-    fHeight = grp->fontMetrics().height();
-    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
-    multi = new QCheckBox( i18n("Wrap text"), grp);
-
-    grid2->addWidget(multi, 1, 0);
     multi->setChecked(dlg->bMultiRow);
 
-    vertical = new QCheckBox( i18n("Vertical text"), grp);
-    grid2->addWidget(vertical, 2, 0);
     vertical->setChecked(dlg->bVerticalText);
 
-    grid3->addWidget(grp, 1, 0);
-
-    grp = new QButtonGroup(i18n("Rotation"), this);
-
-    grid2 = new QGridLayout(grp, 2, 1, KDialog::marginHint(), KDialog::spacingHint());
-    fHeight = grp->fontMetrics().height();
-    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
-    angleRotation=new KIntNumInput((-dlg->textRotation), grp, 10);
-    angleRotation->setLabel(i18n("Angle:"));
-    angleRotation->setRange(-90, 90, 1);
-    angleRotation->setSuffix(QString::fromUtf8("°"));
-
-    grid2->addWidget(angleRotation, 1, 0);
-    grid3->addWidget(grp, 1, 1);
+    angleRotation->setValue(-dlg->textRotation);//annma
+    spinBox3->setValue(-dlg->textRotation);
     if ( dlg->textRotation != 0 )
     {
         multi->setEnabled(false );
-	vertical->setEnabled(false);
+	    vertical->setEnabled(false);
     }
 
-    grp = new QButtonGroup( i18n("Merge Cells"), this);
-    grid2 = new QGridLayout(grp, 2, 1, KDialog::marginHint(), KDialog::spacingHint());
-
-    fHeight = grp->fontMetrics().height();
-    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
-
-    mergeCell=new QCheckBox(i18n("Merge cells"), grp);
     mergeCell->setChecked(dlg->isMerged);
     mergeCell->setEnabled(!dlg->oneCell && ((!dlg->isRowSelected) && (!dlg->isColumnSelected)));
-    grid2->addWidget(mergeCell, 1, 0);
-    grid3->addWidget(grp, 2, 0);
 
-    grp = new QButtonGroup( i18n("Indent"), this);
-    grid2 = new QGridLayout(grp, 2, 1, KDialog::marginHint(), KDialog::spacingHint());
-    fHeight = grp->fontMetrics().height();
-    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
+    QGridLayout *grid2 = new QGridLayout(indentGroup, 1, 1, KDialog::marginHint(), KDialog::spacingHint());
+    grid2->addRowSpacing( 0, indentGroup->fontMetrics().height()/8 ); // groupbox title
+    m_indent = new KoUnitDoubleSpinBox( indentGroup, 0.0,  400.0, 10.0,dlg->indent,dlg->getDoc()->unit() );
+    grid2->addWidget(m_indent, 0, 0);
 
-    m_indent = new KoUnitDoubleSpinBox( grp, 0.0,  400.0, 10.0,dlg->indent,dlg->getDoc()->unit() );
-    grid2->addWidget(m_indent, 1, 0);
-    grid3->addWidget(grp, 2, 1);
-
-    grp = new QButtonGroup( i18n("Size of Cell"), this);
-    grid2 = new QGridLayout(grp, 3, 4, KDialog::marginHint(), KDialog::spacingHint());
-    fHeight = grp->fontMetrics().height();
-    grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
-
-    QLabel *tmpLabel=new QLabel(grp, "label");
-    tmpLabel->setText(i18n("Width:"));
-    grid2->addWidget(tmpLabel, 1, 0);
-
-    width = new KoUnitDoubleSpinBox( grp );
+    width = new KoUnitDoubleSpinBox( m_widthPanel );
+    QGridLayout *gridWidth = new QGridLayout(m_widthPanel, 1, 1, 0, 0);
+    gridWidth->addWidget(width, 0, 0);
     width->setValue ( dlg->widthSize );
     width->setUnit( dlg->getDoc()->unit() );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
@@ -2926,18 +2855,13 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     if ( dlg->isRowSelected )
         width->setEnabled(false);
 
-    grid2->addWidget(width, 1, 1);
-    defaultWidth=new QCheckBox(i18n("Default width (%1 %2)").arg(KoUnit::toUserValue( 60, dlg->getDoc()->unit())).arg(dlg->getDoc()->unitName()), grp);
+    defaultWidth->setText(i18n("Default width (%1 %2)").arg(KoUnit::toUserValue( 60, dlg->getDoc()->unit())).arg(dlg->getDoc()->unitName()));
     if ( dlg->isRowSelected )
         defaultWidth->setEnabled(false);
 
-    grid2->addMultiCellWidget(defaultWidth, 2, 2, 0, 1);
-
-    tmpLabel=new QLabel(grp, "label1");
-    tmpLabel->setText(i18n("Height:"));
-    grid2->addWidget(tmpLabel, 1, 2);
-
-    height=new KoUnitDoubleSpinBox( grp );
+    height=new KoUnitDoubleSpinBox( m_heightPanel );
+    QGridLayout *gridHeight = new QGridLayout(m_heightPanel, 1, 1, 0, 0);
+    gridHeight->addWidget(height, 0, 0);
     height->setValue( dlg->heightSize );
     height->setUnit(  dlg->getDoc()->unit() );
     //to ensure, that we don't get rounding problems, we store the displayed value (for later check for changes)
@@ -2946,15 +2870,9 @@ CellFormatPagePosition::CellFormatPagePosition( QWidget* parent, CellFormatDialo
     if ( dlg->isColumnSelected )
         height->setEnabled(false);
 
-    grid2->addWidget(height, 1, 3);
-
-    defaultHeight=new QCheckBox(i18n("Default height (%1 %2)").arg(KoUnit::toUserValue(  20 , dlg->getDoc()->unit())).arg(dlg->getDoc()->unitName()), grp);
+    defaultHeight->setText(i18n("Default height (%1 %2)").arg(KoUnit::toUserValue(  20 , dlg->getDoc()->unit())).arg(dlg->getDoc()->unitName())); //annma
     if ( dlg->isColumnSelected )
         defaultHeight->setEnabled(false);
-
-    grid2->addMultiCellWidget(defaultHeight, 2, 2, 2, 3);
-
-    grid3->addMultiCellWidget(grp, 3, 3, 0, 1);
 
     connect(defaultWidth , SIGNAL(clicked() ),this, SLOT(slotChangeWidthState()));
     connect(defaultHeight , SIGNAL(clicked() ),this, SLOT(slotChangeHeightState()));
