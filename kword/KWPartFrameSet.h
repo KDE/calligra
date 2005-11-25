@@ -57,7 +57,7 @@ public:
                                     KWFrameSetEdit * edit, KWViewMode *viewMode );
 
     // Embedded parts can be transparent
-    virtual void createEmptyRegion( const QRect &, QRegion &, KWViewMode * ) { }
+    virtual void createEmptyRegion( const QRect &crect, QRegion &emptyRegion, KWViewMode *viewMode ) { }
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );

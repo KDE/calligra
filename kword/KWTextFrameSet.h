@@ -183,17 +183,17 @@ public:
     /** returns the selected text [without formatting] if hasSelection() */
     QString selectedText() const;
 
-    virtual void drawContents( QPainter *p, const QRect &r,
+    virtual void drawContents( QPainter *painter, const QRect &crect,
                                const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                KWFrameSetEdit* edit, KWViewMode *viewMode,
                                KWFrameViewManager *frameViewManager );
 
-    virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect& fcrect, const QRect& fcrect,
+    virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect& fcrect, const QRect& crect,
                             const QPoint& translationOffset,
                             KWFrame *settingsFrame, const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit * edit, KWViewMode *viewMode, bool drawUnderlyingFrames );
 
-    virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & crect,
+    virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & fcrect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                     KWFrameSetEdit * edit, KWViewMode *viewMode );
 
