@@ -150,12 +150,40 @@ Kross::Api::List::Ptr PythonExtension::toObject(const Py::Tuple& tuple)
 #endif
 
     QValueList<Kross::Api::Object::Ptr> list;
-    for(uint i = 0; i < tuple.size(); i++) {
-        Py::Object po = tuple[i];
-        Kross::Api::Object::Ptr o = toObject(po);
+    uint size = tuple.size();
+    for(uint i = 0; i < size; i++) {
+        Kross::Api::Object::Ptr o = toObject( Py::Object(tuple[i]) );
         if(o) list.append(o);
     }
     return new Kross::Api::List(list);
+}
+
+Kross::Api::List::Ptr PythonExtension::toObject(const Py::List& list)
+{
+#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
+    kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::List)") << endl;
+#endif
+
+    QValueList<Kross::Api::Object::Ptr> l;
+    uint length = list.length();
+    for(Py::List::size_type i = 0; i < length; ++i) {
+        Kross::Api::Object::Ptr o = toObject( Py::Object(list[i]) );
+        if(o) l.append(o);
+    }
+    return new Kross::Api::List(l);
+}
+
+Kross::Api::Dict::Ptr PythonExtension::toObject(const Py::Dict& dict)
+{
+    QMap<QString, Kross::Api::Object::Ptr> map;
+    Py::List l = dict.keys();
+    uint length = l.length();
+    for(Py::List::size_type i = 0; i < length; ++i) {
+        const char* n = l[i].str().as_string().c_str();
+        Kross::Api::Object::Ptr o = toObject( dict[n] );
+        if(o) map.replace(n, o);
+    }
+    return new Kross::Api::Dict(map);
 }
 
 Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
@@ -194,15 +222,35 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
         // an own Py::UnsignedLong class) and if true used it
         // rather then long to prevent overflows (needed to
         // handle e.g. uint correct!)
-        Py::Long l = object;
-        return new Kross::Api::Variant(Q_LLONG(long(l)));
+
+        //Py::Long l = object;
+        //return new Kross::Api::Variant(Q_LLONG(long(l)));
+
+        Py::Int i = object;
+        return new Kross::Api::Variant(int(i));
     }
 
     if(object.isString()) {
 #ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
         kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isString='%1'").arg(object.as_string().c_str()) << endl;
 #endif
-        return new Kross::Api::Variant(object.as_string().c_str());
+        return new Kross::Api::Variant(QString(object.as_string().c_str()));
+    }
+
+    if(object.isDict()) {
+#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isDict") << endl;
+#endif
+        Py::Dict dict(object.ptr());
+        return toObject(dict).data();
+    }
+
+    if(object.isList()) {
+#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isList") << endl;
+#endif
+        Py::List list = object;
+        return toObject(list).data();
     }
 
     /*TODO
@@ -210,10 +258,7 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
         Py::String s = object;
         return Kross::Api::Variant::create(QVariant(s.as_unicodestring().c_str()));
     }
-    isDict()
-    isList()
     isMapping()
-    isNumeric()
     isSequence()
     isTrue()
     */

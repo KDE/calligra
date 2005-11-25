@@ -23,6 +23,7 @@
 #include "pythonconfig.h"
 #include "../api/object.h"
 #include "../api/list.h"
+#include "../api/dict.h"
 #include "../api/class.h"
 
 #include <qstring.h>
@@ -135,12 +136,28 @@ namespace Kross { namespace Python {
             QString m_methodname;
 
             /**
-             * Converts a \a Py::Tuple into a \a Kross::Api::List.
+             * Converts a \a Py::Tuple into a \a Kross::Api::List .
              *
              * \param tuple The Py::Tuple to convert.
-             * \return The to a Kross::Api::List converted Py::Tuple.
+             * \return The to a Kross::Api::List converted Py::Tuple .
              */
             static Kross::Api::List::Ptr toObject(const Py::Tuple& tuple);
+
+            /**
+             * Converts a \a Py::List into a \a Kross::Api::List .
+             *
+             * \param list The Py::List to convert.
+             * \return The to a Kross::Api::List converted Py::List .
+             */
+            static Kross::Api::List::Ptr toObject(const Py::List& list);
+
+            /**
+             * Converts a \a Py::Dict into a \a Kross::Api::Dict .
+             *
+             * \param dict The Py::Dict to convert.
+             * \return The to a Kross::Api::Dict converted Py::Dict .
+             */
+            static Kross::Api::Dict::Ptr toObject(const Py::Dict& dict);
 
             /**
              * Converts a \a Py::Object into a \a Kross::Api::Object.

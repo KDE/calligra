@@ -76,6 +76,12 @@ namespace Kross { namespace KexiDB {
             void initialize();
 
             /**
+             * Return the last errormessage.
+             * Wrapper for \a ::KexiDB::Object::errorMsg
+             */
+            Kross::Api::Object::Ptr lastError(Kross::Api::List::Ptr);
+
+            /**
              * Return the KexiDBConnectionData object
              * used to create this connection.
              * Wrapper for \a ::KexiDB::Connection::data

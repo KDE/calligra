@@ -110,26 +110,24 @@ class TkDialog:
 				tkMessageBox.showerror("Exception", fp.getvalue())
 				#self.dialog.root.destroy()
 
-	class Entry(Widget):
-		def __init__(self, dialog, parent, caption):
+	class Edit(Widget):
+		def __init__(self, dialog, parent, caption, text):
 			#TkDialog.Widget.__init__(self, dialog, parent)
 			import Tkinter
-
 			self.widget = Tkinter.Frame(parent)
 			self.widget.pack()
-
 			label = Tkinter.Label(self.widget, text=caption)
 			label.pack(side=Tkinter.LEFT)
-
 			self.entrytext = Tkinter.StringVar()
+			self.entrytext.set(text)
 			self.entry = Tkinter.Entry(self.widget, width=36, textvariable=self.entrytext)
 			self.entry.pack(side=Tkinter.LEFT)
 		def get(self):
 			return self.entrytext.get()
 
-	class FileChooser(Entry):
+	class FileChooser(Edit):
 		def __init__(self, dialog, parent, caption, initialfile = None, filetypes = None):
-			TkDialog.Entry.__init__(self, dialog, parent, caption)
+			Edit.__init__(self, dialog, parent, caption, initialfile)
 			import Tkinter
 
 			self.initialfile = initialfile
@@ -181,13 +179,26 @@ class QtDialog:
 				
 		class Label(qt.QLabel):
 			def __init__(self, dialog, parent, caption):
-				qt.QLabel.__init__(self, caption, parent)
+				qt.QLabel.__init__(self, parent)
+				self.setText("<qt>%s</qt>" % caption.replace("\n","<br>"))
 				
 		class Frame(qt.QHBox):
 			def __init__(self, dialog, parent):
 				qt.QHBox.__init__(self, parent)
 				self.widget = self
 				self.setSpacing(6)
+
+		class Edit(qt.QHBox):
+			def __init__(self, dialog, parent, caption, text):
+				qt.QHBox.__init__(self, parent)
+				self.setSpacing(6)
+				label = qt.QLabel(caption, self)
+				self.edit = qt.QLineEdit(self)
+				self.edit.setText( str(text) )
+				self.setStretchFactor(self.edit, 1)
+				label.setBuddy(self.edit)
+			def get(self):
+				return self.edit.text()
 
 		class Button(qt.QPushButton):
 			#def __init__(self, *args):
@@ -269,6 +280,23 @@ class QtDialog:
 					filename = qt.QFileDialog.getOpenFileName(self.initialfile, filtermask, self, "Save to file")
 				if filename != None and filename != "":
 					self.edit.setText(filename)
+					
+		class MessageBox:
+			def __init__(self, dialog, typename, caption, message):
+				self.widget = dialog.widget
+				self.typename = typename
+				self.caption = str(caption)
+				self.message = str(message)
+			def show(self):
+				result = 1
+				if self.typename == "okcancel":
+					result = qt.QMessageBox.question(self.widget, self.caption, self.message, "&Ok", "&Cancel", "", 1)
+				else:
+					qt.QMessageBox.information(self.widget, self.caption, self.message, "&Ok")
+					result = 0
+				if result == 0:
+					return True
+				return False
 
 		app = qt.qApp
 		self.dialog = Dialog(app.mainWidget(), "Dialog", 1)
@@ -280,10 +308,12 @@ class QtDialog:
 
 		self.Frame = Frame
 		self.Label = Label
+		self.Edit = Edit
 		self.Button = Button
  		self.CheckBox = CheckBox
  		self.List = List
 		self.FileChooser = FileChooser
+		self.MessageBox = MessageBox
 		
 	def show(self):
 		self.dialog.show()
@@ -330,11 +360,14 @@ class Dialog:
 	def addButton(self, parentwidget, caption, commandmethod):
 		return self.dialog.Button(self.dialog, parentwidget.widget, caption, commandmethod)
 
-	#def addEntry(self, parentwidget, caption):
-	#	return self.dialog.Entry(self.dialog, parentwidget.widget, caption)
+	def addEdit(self, parentwidget, caption, text):
+		return self.dialog.Edit(self.dialog, parentwidget.widget, caption, text)
 
 	def addFileChooser(self, parentwidget, caption, initialfile = None, filetypes = None):
 		return self.dialog.FileChooser(self.dialog, parentwidget.widget, caption, initialfile, filetypes)
 
 	def addList(self, parentwidget, caption, items):
 		return self.dialog.List(self.dialog, parentwidget.widget, caption, items)
+		
+	def showMessageBox(self, typename, caption, message):
+		return self.dialog.MessageBox(self.dialog, typename, caption, message)

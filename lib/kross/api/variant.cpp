@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "variant.h"
+#include "list.h"
 
 #include <kdebug.h>
 
@@ -134,8 +135,15 @@ bool Variant::toBool(Object::Ptr object)
 
 QValueList<QVariant> Variant::toList(Object::Ptr object)
 {
+    if(object->getClassName() == "Kross::Api::List") {
+        QValueList<QVariant> l;
+        QValueList<Object::Ptr> list = Object::fromObject<List>( object.data() )->getValue();
+        for(QValueList<Object::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
+            l.append( toVariant(*it) );
+        return l;
+    }
     QVariant variant = toVariant(object);
     if(variant.type() != QVariant::List)
-        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::List expected, but got %1.").arg(variant.typeName()).latin1()) );
+        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::List expected, but got '%1'.").arg(variant.typeName()).latin1()) );
     return variant.toList();
 }

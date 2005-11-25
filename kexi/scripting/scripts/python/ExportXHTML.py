@@ -1,5 +1,5 @@
 """
-Export table or query data
+Export table or query data.
 
 Description:
 This script exports a KexiDB table or query to different fileformats.
@@ -81,40 +81,44 @@ class HtmlExporter:
 	def __init__(self, datasource):
 		self.datasource = datasource
 
+	def htmlescape(self, text):
+		import string
+		return string.replace(string.replace(string.replace(str(text),'&','&amp;'),'<','&lt;'),'>','&gt;')
+
 	def write(self, output, style):
 		name = self.datasource.name()
 		
-		output.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>")
-		output.write("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 4.01 Strict//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11-strict.dtd\">")
-		output.write("<html><head><title>%s</title>" % name)
-		output.write("<style type=\"text/css\">")
+		output.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n")
+		output.write("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 4.01 Strict//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11-strict.dtd\">\n")
+		output.write("<html><head><title>%s</title>\n" % name)
+		output.write("<style type=\"text/css\">\n<!--\n")
 		if style == "Paper":
-			output.write("  html { background-color:#efefef; }")
-			output.write("  body { background-color:#fafafa; color:#303030; margin:1em; padding:1em; border:#606060 1px solid; }")
+			output.write("html { background-color:#efefef; }")
+			output.write("body { background-color:#fafafa; color:#303030; margin:1em; padding:1em; border:#606060 1px solid; }")
 		elif style == "Blues":
-			output.write("  html { background-color:#0000aa; }")
-			output.write("  body { background-color:#000066; color:#efefff; margin:1em; padding:1em; border:#00f 1px solid; }")
-			output.write("  h1 { color:#0000ff; }")
-			output.write("  th { color:#0000aa; }")
+			output.write("html { background-color:#0000aa; }")
+			output.write("body { background-color:#000066; color:#efefff; margin:1em; padding:1em; border:#00f 1px solid; }")
+			output.write("h1 { color:#0000ff; }")
+			output.write("th { color:#0000aa; }")
 		else:
-			output.write("  html { background-color:#ffffff; color:#000; }")
-			output.write("  body { margin:1em; }")
-		output.write("</style>")
-		output.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />")
-		output.write("</head><body><h1>%s</h1>" % name)
+			output.write("html { background-color:#ffffff; color:#000; }")
+			output.write("body { margin:1em; }")
+		output.write("\n//-->\n</style>\n")
+		output.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />\n")
+		output.write("</head><body><h1>%s</h1>\n" % name)
 
 		caption = self.datasource.caption()
 		if caption and caption != name:
-			output.write("caption: %s<br />" % caption)
+			output.write("caption: %s<br />\n" % caption)
 
 		description = self.datasource.description()
 		if description:
-			output.write("description: %s<br />" % description)
+			output.write("description: %s<br />\n" % description)
 
 		#import datetime
 		#output.write("date: %s<br />" % datetime.datetime.now())
 
-		output.write("<table border='1'>")
+		output.write("<table border='1'>\n")
 
 		#output.write("<tr>")
 		#for h in self.datasource.header():
@@ -126,10 +130,11 @@ class HtmlExporter:
 			if items == None: break
 			output.write("<tr>")
 			for item in items:
-				output.write("<td>%s</td>" % item)
-			output.write("</tr>")
-		output.write("</table>")
-		output.write("</body></html>")
+				u = unicode(str(self.htmlescape(item)),"latin-1")
+				output.write("<td>%s</td>" % u.encode("utf-8"))
+			output.write("</tr>\n")
+		output.write("</table>\n")
+		output.write("</body></html>\n")
 
 class GuiApp:
 	def __init__(self, datasource):
@@ -140,7 +145,7 @@ class GuiApp:
 		except:
 			raise "Import of the Kross GUI module failed."
 
-		self.dialog = gui.Dialog("Export to XHTML-file")
+		self.dialog = gui.Dialog("Export XHTML")
                 self.dialog.addLabel(self.dialog, "Export a table- or query-datasource to a XHTML-file.")
 
 		datasourceitems = self.datasource.getSources()
@@ -158,7 +163,7 @@ class GuiApp:
 
 		self.file = self.dialog.addFileChooser(self.dialog,
 			"File:",
-			gui.getHome() + "/export.xhtml",
+			gui.getHome() + "/kexidata.xhtml",
 			(('XHTML files', '*.xhtml'),('All files', '*')))
 
 		btnframe = self.dialog.addFrame(self.dialog)
