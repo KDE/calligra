@@ -68,6 +68,10 @@ public:
 
     void setShowFormulaIndicator( bool b );
 
+    bool showCommentIndicator() const;
+
+    void setShowCommentIndicator( bool b );
+
     bool columnAsNumber() const;
 
     void setColumnAsNumber( bool b );

@@ -138,7 +138,6 @@ public:
   double indentValue;
   bool showStatusBar:1;
   bool showTabBar:1;
-  bool showCommentIndicator:1;
   bool showFormulaBar:1;
   bool showError:1;
   KGlobalSettings::Completion completionMode;
@@ -233,7 +232,6 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
   d->showStatusBar = true;
   d->showFormulaBar = true;
   d->showTabBar = true;
-  d->showCommentIndicator = true;
   d->showError = false;
   d->calcMethod = SumOfNumber;
   d->moveTo = Bottom;
@@ -1316,16 +1314,6 @@ void Doc::setShowTabBar(bool _tabbar)
 bool Doc::showTabBar()const
 {
   return  d->showTabBar;
-}
-
-void Doc::setShowCommentIndicator(bool _indic)
-{
-  d->showCommentIndicator=_indic;
-}
-
-bool Doc::showCommentIndicator() const
-{
-  return  d->showCommentIndicator;
 }
 
 void Doc::setShowFormulaBar(bool _formulaBar)

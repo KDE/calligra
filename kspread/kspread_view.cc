@@ -419,7 +419,6 @@ public:
     KToggleAction* showStatusBar;
     KToggleAction* showTabBar;
     KToggleAction* showFormulaBar;
-    KToggleAction* showCommentIndicator;
     KAction* preference;
 
     // running calculation
@@ -1048,13 +1047,6 @@ void View::Private::initActions()
       view, SLOT( showFormulaBar( bool ) ) );
   actions->showFormulaBar->setToolTip(i18n("Show the formula bar."));
 
-  actions->showCommentIndicator = new KToggleAction( i18n("Show Comment Indicator"),
-      0, ac, "showCommentIndicator" );
-  actions->showCommentIndicator->setCheckedState(i18n("Hide Comment Indicator"));
-  QObject::connect( actions->showCommentIndicator, SIGNAL( toggled( bool ) ),
-      view, SLOT( showCommentIndicator( bool ) ) );
-  actions->showCommentIndicator->setToolTip(i18n("Show indicator for cells with comments."));
-
   actions->preference = new KAction( i18n("Configure KSpread..."),"configure",
       0, view, SLOT( preference() ), ac, "preference" );
   actions->preference->setToolTip(i18n("Set various KSpread options."));
@@ -1240,7 +1232,6 @@ void View::Private::adjustActions( bool mode )
   actions->showStatusBar->setChecked( view->doc()->showStatusBar() );
   actions->showTabBar->setChecked( view->doc()->showTabBar() );
   actions->showFormulaBar->setChecked( view->doc()->showFormulaBar() );
-  actions->showCommentIndicator->setChecked( view->doc()->showCommentIndicator() );
 
   formulaButton->setEnabled( mode );
 
@@ -1735,8 +1726,6 @@ void View::initConfig()
             doc()->setShowTabBar(config->readBoolEntry("Tabbar",true));
 
   doc()->setShowMessageError(config->readBoolEntry( "Msg error" ,false) );
-
-  doc()->setShowCommentIndicator(config->readBoolEntry("Comment Indicator",true));
 
   doc()->setShowFormulaBar(config->readBoolEntry("Formula bar",true));
         doc()->setShowStatusBar(config->readBoolEntry("Status bar",true));
@@ -3510,6 +3499,7 @@ void View::sheetProperties()
     dlg->setShowFormula( d->activeSheet->getShowFormula() );
     dlg->setHideZero( d->activeSheet->getHideZero() );
     dlg->setShowFormulaIndicator( d->activeSheet->getShowFormulaIndicator() );
+    dlg->setShowCommentIndicator( d->activeSheet->getShowCommentIndicator() );
     dlg->setColumnAsNumber( d->activeSheet->getShowColumnNumber() );
     dlg->setLcMode( d->activeSheet->getLcMode() );
     dlg->setCapitalizeFirstLetter( d->activeSheet->getFirstLetterUpper() );
@@ -3528,6 +3518,7 @@ void View::sheetProperties()
         command->setShowFormula( dlg->showFormula() );
         command->setHideZero( dlg->hideZero() );
         command->setShowFormulaIndicator( dlg->showFormulaIndicator() );
+        command->setShowCommentIndicator( dlg->showCommentIndicator() );
         command->setColumnAsNumber( dlg->columnAsNumber() );
         command->setLcMode( dlg->lcMode() );
         command->setCapitalizeFirstLetter( dlg->capitalizeFirstLetter() );
@@ -4684,17 +4675,6 @@ void View::showTabBar( bool b )
 void View::showFormulaBar( bool b )
 {
   doc()->setShowFormulaBar( b );
-  refreshView();
-}
-
-void View::showCommentIndicator( bool b )
-{
-  doc()->setShowCommentIndicator( b );
-
-  d->adjustActions( !d->activeSheet->isProtected() );
-
-  doc()->emitBeginOperation( false );
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   refreshView();
 }
 

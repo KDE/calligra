@@ -112,7 +112,6 @@ protected:
   QComboBox *typeCalc;
   QComboBox *typeOfMove;
   QCheckBox *msgError;
-  QCheckBox *commentIndicator;
   bool comboChanged;
 } ;
 

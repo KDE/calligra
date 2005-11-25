@@ -52,10 +52,8 @@ k_dcop:
     void setShowColHeader(bool _show);
     void setShowRowHeader(bool _show);
     void setShowTabBar(bool _show);
-    void setShowCommentIndicator(bool _show);
 
     void changeDefaultGridPenColor( const QColor &_col);
-    bool showCommentIndicator()const;
     bool showFormulaBar()const;
     bool showStatusBar()const;
 

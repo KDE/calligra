@@ -125,6 +125,17 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
         </widget>
         <widget class="QCheckBox">
             <property name="name">
+                <cstring>showCommentIndicatorCheckBox</cstring>
+            </property>
+            <property name="text">
+                <string>Show c&amp;omment indicator</string>
+            </property>
+            <property name="whatsThis">
+                <string>If this box is checked cells containing comments will be marked by a small red triangle at the top right corner.</string>
+            </property>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
                 <cstring>showColumnAsNumbersCheckBox</cstring>
             </property>
             <property name="text">

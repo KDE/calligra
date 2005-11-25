@@ -343,22 +343,6 @@ public:
   bool getShowFormulaBar() const { return showFormulaBar(); }
 
   /**
-   * If b is true, comment indicator is visible, otherwise
-   * it will be hidden.
-   */
-  void setShowCommentIndicator( bool b );
-
-  /**
-   * Returns true if comment indicator is visible.
-   */
-  bool showCommentIndicator() const;
-
-  /**
-   * \deprecated Use showCommentIndicator().
-   */
-  bool getShowCommentIndicator() const { return showCommentIndicator(); }
-
-  /**
    * If b is true, an error message will pop up whenever error occurs.
    */
   void setShowMessageError( bool b );

@@ -2868,7 +2868,7 @@ void Cell::paintCommentIndicator( QPainter& painter,
        && cellRect.width() > 10.0
        && cellRect.height() > 10.0
        && ( sheet()->print()->printCommentIndicator()
-            || ( !painter.device()->isExtDev() && doc->getShowCommentIndicator() ) ) ) {
+           || ( !painter.device()->isExtDev() && sheet()->getShowCommentIndicator() ) ) ) {
     QColor penColor = Qt::red;
 
     // If background has high red part, switch to blue.

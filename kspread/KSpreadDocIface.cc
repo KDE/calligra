@@ -60,12 +60,6 @@ QColor DocIface::pageBorderColor() const
     return doc->pageBorderColor();
 }
 
-
-bool DocIface::showCommentIndicator()const
-{
-    return doc->getShowCommentIndicator();
-}
-
 bool DocIface::showFormulaBar()const
 {
     return doc->getShowFormulaBar();
@@ -108,12 +102,6 @@ void DocIface::setShowRowHeader(bool _show)
 void DocIface::setShowTabBar(bool _show)
 {
     doc->setShowTabBar(_show);
-    doc->refreshInterface();
-}
-
-void DocIface::setShowCommentIndicator(bool _show)
-{
-    doc->setShowCommentIndicator(_show);
     doc->refreshInterface();
 }
 

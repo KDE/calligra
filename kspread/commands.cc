@@ -275,6 +275,7 @@ SheetPropertiesCommand::SheetPropertiesCommand( Doc* d, Sheet* s )
     oldShowFormula = newShowFormula = sheet->getShowFormula();
     oldHideZero = newHideZero = sheet->getHideZero();
     oldShowFormulaIndicator = newShowFormulaIndicator = sheet->getShowFormulaIndicator();
+    oldShowCommentIndicator = newShowCommentIndicator = sheet->getShowCommentIndicator();
     oldColumnAsNumber = newColumnAsNumber = sheet->getShowColumnNumber();
     oldLcMode = newLcMode = sheet->getLcMode();
     oldCapitalizeFirstLetter = newCapitalizeFirstLetter = sheet->getFirstLetterUpper();
@@ -320,6 +321,11 @@ void SheetPropertiesCommand::setShowFormulaIndicator( bool b )
     newShowFormulaIndicator = b;
 }
 
+void SheetPropertiesCommand::setShowCommentIndicator( bool b )
+{
+  newShowCommentIndicator = b;
+}
+
 void SheetPropertiesCommand::setColumnAsNumber( bool b  )
 {
     newColumnAsNumber = b;
@@ -344,6 +350,7 @@ void SheetPropertiesCommand::execute()
     sheet->setShowFormula( newShowFormula );
     sheet->setHideZero( newHideZero );
     sheet->setShowFormulaIndicator( newShowFormulaIndicator );
+    sheet->setShowCommentIndicator( newShowCommentIndicator );
     sheet->setShowColumnNumber( newColumnAsNumber );
     sheet->setLcMode( newLcMode );
     sheet->setFirstLetterUpper( newCapitalizeFirstLetter );
@@ -359,6 +366,7 @@ void SheetPropertiesCommand::unexecute()
     sheet->setShowFormula( oldShowFormula );
     sheet->setHideZero( oldHideZero );
     sheet->setShowFormulaIndicator( oldShowFormulaIndicator );
+    sheet->setShowCommentIndicator( oldShowCommentIndicator );
     sheet->setShowColumnNumber( oldColumnAsNumber );
     sheet->setLcMode( oldLcMode );
     sheet->setFirstLetterUpper( oldCapitalizeFirstLetter );

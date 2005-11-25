@@ -248,6 +248,7 @@ public:
   bool showGrid;
   bool showFormula;
   bool showFormulaIndicator;
+  bool showCommentIndicator;
   bool autoCalc;
   bool lcMode;
   bool showColumnNumber;
@@ -369,6 +370,7 @@ Sheet::Sheet (Map* map,
   d->showGrid=true;
   d->showFormula=false;
   d->showFormulaIndicator=true;
+  d->showCommentIndicator=true;
   d->showPageBorders = false;
 
   d->lcMode=false;
@@ -471,6 +473,16 @@ bool Sheet::getShowFormulaIndicator() const
 void Sheet::setShowFormulaIndicator( bool _showFormulaIndicator )
 {
     d->showFormulaIndicator=_showFormulaIndicator;
+}
+
+bool Sheet::getShowCommentIndicator() const
+{
+    return d->showCommentIndicator;
+}
+
+void Sheet::setShowCommentIndicator(bool _indic)
+{
+    d->showCommentIndicator=_indic;
 }
 
 bool Sheet::getLcMode() const
@@ -6580,6 +6592,7 @@ QDomElement Sheet::saveXML( QDomDocument& dd )
     else
       sheet.setAttribute( "showFormula", (int)d->showFormula);
     sheet.setAttribute( "showFormulaIndicator", (int)d->showFormulaIndicator);
+    sheet.setAttribute( "showCommentIndicator", (int)d->showCommentIndicator);
     sheet.setAttribute( "lcmode", (int)d->lcMode);
     sheet.setAttribute( "autoCalc", (int)d->autoCalc);
     sheet.setAttribute( "borders1.2", 1);
@@ -7724,7 +7737,8 @@ void Sheet::loadOasisSettings( const KoOasisSettings::NamedMap &settings )
     doc()->loadingInfo()->addMarkerSelection( this, QPoint( cursorX, cursorY ) );
     kdDebug()<<"d->hideZero :"<<d->hideZero<<" d->showGrid :"<<d->showGrid<<" d->firstLetterUpper :"<<d->firstLetterUpper<<" cursorX :"<<cursorX<<" cursorY :"<<cursorY<< endl;
 
-    d->showFormulaIndicator = items.parseConfigItemBool("ShowFormulaIndicator" );
+    d->showFormulaIndicator = items.parseConfigItemBool( "ShowFormulaIndicator" );
+    d->showCommentIndicator = items.parseConfigItemBool( "ShowCommentIndicator" );
     d->showPageBorders = items.parseConfigItemBool( "ShowPageBorders" );
     d->lcMode = items.parseConfigItemBool( "lcmode" );
     d->autoCalc = items.parseConfigItemBool( "autoCalc" );
@@ -7747,6 +7761,7 @@ void Sheet::saveOasisSettings( KoXmlWriter &settingsWriter, const QPoint& marker
     settingsWriter.addConfigItem( "CursorPositionY", marker.y() );
 
     settingsWriter.addConfigItem( "ShowFormulaIndicator", d->showFormulaIndicator );
+    settingsWriter.addConfigItem( "ShowCommentIndicator", d->showCommentIndicator );
     settingsWriter.addConfigItem( "ShowPageBorders",d->showPageBorders );
     settingsWriter.addConfigItem( "lcmode", d->lcMode );
     settingsWriter.addConfigItem( "autoCalc", d->autoCalc );
@@ -8046,6 +8061,11 @@ bool Sheet::loadXML( const QDomElement& sheet )
     if( sheet.hasAttribute( "showFormulaIndicator" ) )
     {
         d->showFormulaIndicator = (bool)sheet.attribute("showFormulaIndicator").toInt( &ok );
+        // we just ignore 'ok' - if it didn't work, go on
+    }
+    if( sheet.hasAttribute( "showCommentIndicator" ) )
+    {
+      d->showCommentIndicator = (bool)sheet.attribute("showCommentIndicator").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "borders" ) )

@@ -56,6 +56,7 @@ void SheetPropertiesDialog::slotDefault()
   setShowFormula( false );
   setHideZero( false );
   setShowFormulaIndicator( true );
+  setShowCommentIndicator( true );
   setColumnAsNumber( false );
   setLcMode( false );
   setCapitalizeFirstLetter( false );
@@ -145,6 +146,16 @@ bool SheetPropertiesDialog::showFormulaIndicator() const
 void SheetPropertiesDialog::setShowFormulaIndicator( bool b )
 {
   d->showFormulaIndicatorCheckBox->setChecked( b );
+}
+
+bool SheetPropertiesDialog::showCommentIndicator() const
+{
+  return d->showCommentIndicatorCheckBox->isChecked();
+}
+    
+void SheetPropertiesDialog::setShowCommentIndicator( bool b )
+{
+  d->showCommentIndicatorCheckBox->setChecked( b );
 }
     
 bool SheetPropertiesDialog::columnAsNumber() const

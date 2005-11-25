@@ -457,12 +457,6 @@ public slots:
     void showFormulaBar( bool b );
 
     /**
-     * If b is true, a red triangle is displayed on the corner of cells
-     * which have comments.
-     */
-    void showCommentIndicator( bool b );
-
-    /**
      * Shows context menu when tabbar is double-clicked.
      */
     void popupTabBarMenu( const QPoint& );

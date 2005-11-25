@@ -748,6 +748,17 @@ public:
 
     void setShowFormulaIndicator(bool _showFormulaIndicator);
 
+    /**
+     * Returns true if comment indicator is visible.
+     */
+    bool getShowCommentIndicator() const;
+
+    /**
+     * If b is true, comment indicator is visible, otherwise
+     * it will be hidden.
+     */
+    void setShowCommentIndicator( bool b );
+
     bool getLcMode() const;
 
     void setLcMode(bool _lcMode);

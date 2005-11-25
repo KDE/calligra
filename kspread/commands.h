@@ -233,6 +233,7 @@ public:
   void setShowFormula( bool b );
   void setHideZero( bool b );
   void setShowFormulaIndicator( bool b );
+  void setShowCommentIndicator( bool b );
   void setColumnAsNumber( bool b );
   void setLcMode( bool b );
   void setCapitalizeFirstLetter( bool b );
@@ -251,6 +252,7 @@ protected:
   bool oldShowFormula, newShowFormula;
   bool oldHideZero, newHideZero;
   bool oldShowFormulaIndicator, newShowFormulaIndicator;
+  bool oldShowCommentIndicator, newShowCommentIndicator;
   bool oldColumnAsNumber, newColumnAsNumber;
   bool oldLcMode, newLcMode;
   bool oldCapitalizeFirstLetter, newCapitalizeFirstLetter;

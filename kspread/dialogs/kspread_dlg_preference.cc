@@ -405,13 +405,11 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   indentUnit = _view->doc()->unit();
   double _indent = KoUnit::toUserValue( 10.0, indentUnit);
   bool m_bMsgError=false;
-  bool m_bCommentIndicator=true;
   if( config->hasGroup("Parameters" ))
         {
         config->setGroup( "Parameters" );
         _indent = config->readDoubleNumEntry( "Indent" , _indent ) ;
         m_bMsgError=config->readBoolEntry( "Msg error" ,false) ;
-	m_bCommentIndicator=config->readBoolEntry( "Comment Indicator",true);
         }
 
   QLabel *label=new QLabel(i18n("&Completion mode:"), tmpQGroupBox);
@@ -475,9 +473,6 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   typeCalc->setCurrentItem(0);
   QWhatsThis::add(typeCalc, i18n( "This drop down selection box can be used to choose the calculation performed by the Statusbar Summary  function." ) );
 
-  commentIndicator=new QCheckBox(i18n("Show comment &indicator"),tmpQGroupBox);
-  commentIndicator->setChecked(m_bCommentIndicator);
-  QWhatsThis::add(commentIndicator, i18n( "If this box is checked cells containing comments will be marked by a small red triangle at the top right corner." ) );
   initComboBox();
 }
 
@@ -575,7 +570,6 @@ void miscParameters::slotDefault()
   typeOfMove->setCurrentItem(0);
   msgError->setChecked(false);
   typeCalc->setCurrentItem(0);
-  commentIndicator->setChecked(true);
 }
 
 
@@ -685,13 +679,6 @@ void miscParameters::apply()
     {
         m_pView->doc()->setShowMessageError( active);
         config->writeEntry( "Msg error" ,(int)active);
-    }
-
-    active=commentIndicator->isChecked();
-    if(active!=m_pView->doc()->getShowCommentIndicator())
-    {
-        m_pView->doc()->setShowCommentIndicator( active);
-        config->writeEntry( "Comment Indicator" ,(int)active);
     }
 }
 
