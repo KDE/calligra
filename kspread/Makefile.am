@@ -3,7 +3,7 @@ INCLUDES  = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(interfacedir) \
 	-I$(srcdir)/tests \
 	-Idialogs \
 	$(KOSCRIPT_INCLUDES) -I$(top_srcdir)/interfaces \
-	 -I$(top_srcdir)/kchart/kdchart $(all_includes) \
+	 -I$(top_srcdir)/kchart/kdchart $(all_includes)
 
 lib_LTLIBRARIES = libkspreadcommon.la
 kde_module_LTLIBRARIES = libkspreadpart.la
