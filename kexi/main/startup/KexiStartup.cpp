@@ -707,7 +707,7 @@ tristate KexiStartupHandler::detectActionForFile(
 			if (KMessageBox::Yes != KMessageBox::questionYesNo(parent, i18n(
 				"\"%1\" is an external file of type:\n\"%2\".\n"
 				"Do you want to import the file as a Kexi project?")
-				.arg(dbFileName).arg(ptr.data()->comment()),
+				.arg(QDir::convertSeparators(dbFileName)).arg(ptr.data()->comment()),
 				i18n("Open External File"), KGuiItem(i18n("Import...")), KStdGuiItem::cancel() ) )
 			{
 				return cancelled;
