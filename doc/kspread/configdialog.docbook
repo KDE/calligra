@@ -87,6 +87,16 @@ type in will automatically be converted to uppercase.
 
 <sect1 id="configlocale">
 <title><guilabel>Locale Parameters</guilabel></title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure1.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+            <phrase>Locale Parameters Configuration.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
 <para>This page of &kspread;'s configuration dialog box shows how items 
 such as numbers, date, time and money are displayed.</para>
 <para>If you have loaded a spreadsheet that was generated using a different 
@@ -96,6 +106,16 @@ button on this page will update it to conform to your locale settings as they ar
 
 <sect1 id="configinterface">
 <title><guilabel>Interface</guilabel></title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure2.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+            <phrase>Interface Configuration.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
 <para>This page of &kspread;'s configuration dialog box (obtained by selecting 
 <guimenuitem>Configure Kspread...</guimenuitem> from the <guimenu>Settings
 </guimenu> menu) controls some more &kspread; features:</para>
@@ -183,6 +203,16 @@ at the bottom of the worksheet.
 
 <sect1 id="configmisc">
 <title><guilabel>Misc</guilabel></title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure3.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+            <phrase>Miscellaneous Configuration.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
 <para>The <guilabel>Misc</guilabel> page of &kspread;'s configuration 
 dialog box contains the following items;</para>
 
@@ -239,6 +269,16 @@ marked by a small red triangle at the top right corner.
 
 <sect1 id="configcolor">
 <title><guilabel>Color</guilabel></title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure4.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+            <phrase>Color Configuration.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
 <para>This page of &kspread;'s configuration dialog box lets you choose the 
 color of the sheet grid. If you do not want the grid to appear at all, uncheck the <guilabel>Show grid</guilabel> box in 
 the <menuchoice><guimenu>Format</guimenu><guimenuitem>Sheet</guimenuitem><guimenuitem>Sheet Properties</guimenuitem></menuchoice> dialog.</para>
@@ -268,6 +308,16 @@ box in the <guimenu>View</guimenu> menu is checked.</para>
 
 <sect1 id="configpagelayout">
 <title><guilabel>Page layout</guilabel></title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure5.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+            <phrase>Page Layout Configuration.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
 <para>This page of &kspread;'s configuration dialog box lets you set up the 
 default page size, orientation and units used by the printer and by the 
 <guilabel>Page Layout</guilabel> dialog box (obtained by selecting 
@@ -300,6 +350,16 @@ default page size, orientation and units used by the printer and by the
 
 <sect1 id="configspelling">
 <title><guilabel>Spelling</guilabel></title>
+<para>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="configure6.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+            <phrase>Spelling Configuration.</phrase>
+        </textobject>
+    </mediaobject>
+</para>
 <para>This page lets you configure the behavior of &kspread;'s spell 
 checker.</para>
 <para><variablelist>
