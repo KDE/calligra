@@ -191,11 +191,12 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
         m_name = element.attribute( "value" );
 
     element = parentElem.namedItem( "PFRAMESTYLE" ).toElement();
-    if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
-         && ( _doc->frameStyleCollection()->findFrameStyle( element.attribute( "name" ) ) ) )
-        m_frameStyle = _doc->frameStyleCollection()->findFrameStyle( element.attribute( "name" ) );
-    else {
-        if ( _doc->frameStyleCollection()->frameStyleList().count()>0 )
+    m_frameStyle = 0;
+    if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) )
+        m_frameStyle = _doc->frameStyleCollection()->findStyle( element.attribute( "name" ) );
+
+    if ( !m_frameStyle ) {
+        if ( !_doc->frameStyleCollection()->isEmpty() )
             m_frameStyle = _doc->frameStyleCollection()->frameStyleAt( 0 );
         else { // Isn't possible ( I hope )
             KWFrameStyle * standardFrameStyle = new KWFrameStyle( "Plain" );
@@ -210,10 +211,11 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
     }
 
     element = parentElem.namedItem( "PSTYLE" ).toElement();
-    if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
-         && ( _doc->styleCollection()->findStyle( element.attribute( "name" ) ) ) )
+    m_style = 0;
+    if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) )
         m_style = _doc->styleCollection()->findStyle( element.attribute( "name" ) );
-    else {
+
+    if ( !m_style ) {
         if ( _doc->styleCollection()->styleList().count()>0 )
             m_style = _doc->styleCollection()->styleAt( 0 );
         else { // Isn't possible ( I hope )

@@ -26,53 +26,71 @@
 #include <qptrlist.h>
 #include <qbrush.h>
 #include <qstringlist.h>
+class KoOasisContext;
+class KoSavingContext;
+class KoGenStyles;
 class KWFrameStyle;
 class KWFrame;
 
-/******************************************************************/
-/* Class: KWFrameStyleCollection                                  */
-/******************************************************************/
-
-class KWFrameStyleCollection
+class KWGenericStyle
 {
 public:
-    KWFrameStyleCollection();
-    ~KWFrameStyleCollection();
+    KWGenericStyle( const QString & name );
 
-    const QPtrList<KWFrameStyle> & frameStyleList() const { return m_styleList; }
+    /** The internal name (untranslated if a standard style) */
+    QString name() const { return m_name; }
+    void setName( const QString & name ) { m_name = name; }
+
+    /** The user-visible name (e.g. translated) */
+    QString displayName() const;
+    void setDisplayName( const QString& name );
+
+protected:
+    QString m_name;
+    QString m_displayName;
+};
+
+/**
+ * Generic style collection class; to be used by other style collections and moved out.
+ */
+class KWGenericStyleCollection
+{
+public:
+    KWGenericStyleCollection();
+    ~KWGenericStyleCollection();
+
     void clear();
 
-    /**
-     * find frame style based on the untranslated name @p name
-     */
-    KWFrameStyle* findFrameStyle( const QString & name );
-    /**
-     * find frame style based on the translated name @p name
-     */
-    KWFrameStyle* findTranslatedFrameStyle( const QString & name );
-    KWFrameStyle* findStyleByShortcut( const QString & _shortCut );
-    /**
-     * Return style number @p i.
-     */
-    KWFrameStyle* frameStyleAt( int i ) { return m_styleList.at(i); }
+    bool isEmpty() const { return m_styleList.isEmpty(); }
+    int count() const { return m_styleList.count(); }
+    int indexOf( KWGenericStyle* style ) /*const*/ { return m_styleList.findRef( style ); }
 
-    KWFrameStyle* addFrameStyleTemplate( KWFrameStyle *style );
+    const QPtrList<KWGenericStyle> & styleList() const { return m_styleList; }
 
-    void removeFrameStyleTemplate ( KWFrameStyle *style );
-    void updateFrameStyleListOrder( const QStringList &list );
+    QString generateUniqueName() const;
 
-private:
-    QPtrList<KWFrameStyle> m_styleList;
-    QPtrList<KWFrameStyle> m_deletedStyles;
-    static int styleNumber;
-    KWFrameStyle *m_lastStyle; ///< Last style that was searched
+    /// Return the list composed of the display-name of each style in the collection
+    QStringList displayNameList() const;
+
+    /**
+     * Find style based on the untranslated name @p name
+     */
+    KWGenericStyle* findStyle( const QString & name ) const;
+
+    // TODO move many methods here
+
+protected:
+    // TODO switch to QValueList<KWGenericStyle *> in preparation for KDE4
+    QPtrList<KWGenericStyle> m_styleList;
+    QPtrList<KWGenericStyle> m_deletedStyles;
+    mutable KWGenericStyle *m_lastStyle; ///< Last style that was searched
 };
 
 /******************************************************************/
 /* Class: KWFrameStyle                                            */
 /******************************************************************/
 
-class KWFrameStyle
+class KWFrameStyle : public KWGenericStyle
 {
 public:
     /** Create a blank framestyle (with default attributes) */
@@ -82,7 +100,7 @@ public:
     KWFrameStyle( QDomElement & parentElem, int docVersion=2 );
 
     /** Copy another framestyle */
-    KWFrameStyle( const KWFrameStyle & rhs ) { *this = rhs; }
+    //KWFrameStyle( const KWFrameStyle & rhs ) { *this = rhs; }
 
     ~KWFrameStyle() {}
 
@@ -93,11 +111,13 @@ public:
     void operator=( const KWFrameStyle & );
     int compare( const KWFrameStyle & frameStyle ) const;
 
-    /** The internal name (untranslated if a standard style) */
-    QString name() const { return m_name; }
-    void setName( const QString & name ) { m_name = name; }
-    /** The translated name */
-    QString displayName() const;
+    QString shortCutName() const {
+        return m_shortCut_name;
+    }
+
+    void setShortCutName( const QString & _shortCut) {
+        m_shortCut_name = _shortCut;
+    }
 
     // ATTRIBUTES
     QBrush backgroundColor() const { return m_backgroundColor; }
@@ -117,22 +137,58 @@ public:
 
     // SAVING METHODS
     void saveFrameStyle( QDomElement & parentElem );
+    void saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const;
 
-    // STATIC METHODS
+    // LOADING METHODS
     static KWFrameStyle *loadStyle( QDomElement & parentElem, int docVersion=2 );
-    QString shortCutName() const {
-        return m_shortCut_name;
-    }
-
-    void setShortCutName( const QString & _shortCut) {
-        m_shortCut_name=_shortCut;
-    }
+    void loadOasis( QDomElement & styleElem, KoOasisContext& context );
 
 private:
-    QString m_name;
     QString m_shortCut_name;
     QBrush m_backgroundColor;
     KoBorder m_borderLeft, m_borderRight, m_borderTop, m_borderBottom;
+};
+
+/******************************************************************/
+/* Class: KWFrameStyleCollection                                  */
+/******************************************************************/
+
+class KWFrameStyleCollection : public KWGenericStyleCollection
+{
+public:
+    KWFrameStyleCollection();
+
+    // ######## slow, avoid calling this
+    const QPtrList<KWFrameStyle> frameStyleList() const;
+
+    /**
+     * Find style based on the untranslated name @p name
+     */
+    KWFrameStyle* findStyle( const QString & name ) const {
+        return static_cast<KWFrameStyle*>( KWGenericStyleCollection::findStyle( name ) );
+    }
+
+    /**
+     * find frame style based on the translated name @p name
+     */
+    KWFrameStyle* findTranslatedFrameStyle( const QString & name );
+    KWFrameStyle* findStyleByShortcut( const QString & _shortCut );
+    /**
+     * Return style number @p i.
+     */
+    KWFrameStyle* frameStyleAt( int i ) { return static_cast<KWFrameStyle*>( m_styleList.at(i) ); }
+
+    KWFrameStyle* addFrameStyleTemplate( KWFrameStyle *style );
+
+    void removeFrameStyleTemplate ( KWFrameStyle *style );
+    void updateFrameStyleListOrder( const QStringList &list );
+
+    void saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const;
+    void loadOasisStyles( KoOasisContext& context );
+
+private:
+    mutable KWFrameStyle *m_lastStyle; ///< Last style that was searched
+    static int styleNumber;
 };
 
 #endif

@@ -139,7 +139,17 @@ public:
     void initEmpty();
 
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store );
-    enum {  STYLE_FRAME = 20, STYLE_TABLE, STYLE_TABLE_COLUMN, STYLE_TABLE_ROW, STYLE_TABLE_CELL };
+
+    /**
+     * Those values are used as KoGenStyle types.
+     *
+     * STYLE_FRAME_AUTO: for frame styles (family="graphic") used by actual frames, saved into content.xml
+     * STYLE_FRAME_USER: for frame styles (family="graphic") defined by the user, saved into styles.xml
+     * ...
+     */
+    enum {  STYLE_FRAME_AUTO = 20, STYLE_FRAME_USER,
+            STYLE_TABLE, STYLE_TABLE_COLUMN, STYLE_TABLE_ROW, STYLE_TABLE_CELL };
+
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
     virtual int supportedSpecialFormats() const;

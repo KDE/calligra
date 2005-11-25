@@ -116,7 +116,7 @@ void KWOasisSaver::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles
         (*it).style->writeStyle( &contentWriter, mainStyles, "text:list-style", (*it).name, 0 );
     }
 
-    styles = mainStyles.styles( KWDocument::STYLE_FRAME, stylesDotXml );
+    styles = mainStyles.styles( KWDocument::STYLE_FRAME_AUTO, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );

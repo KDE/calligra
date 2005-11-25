@@ -49,9 +49,9 @@ public:
      */
     virtual QPopupMenu* createPopup( const KoPoint &point, KWView *view ) = 0;
     /**
-     * Override this method to do more then select the parent frame-view
+     * Override this method to do more than select the parent frame-view
      */
-    virtual void setSelected(MouseMeaning) { };
+    virtual void setSelected(MouseMeaning) { }
 
 protected:
     /**
@@ -114,7 +114,7 @@ public:
     MouseMeaning mouseMeaning( const KoPoint &point, int keyState );
 
     /// Return the parent KWFrameViewManager this frameView belongs to
-    KWFrameViewManager *parent() { return m_manager; }
+    KWFrameViewManager *parent() const { return m_manager; }
 
     /**
      * Show a context-sensitive popup menu based on the location of 'point'.
@@ -127,7 +127,7 @@ public:
     void showPopup( const KoPoint &point, KWView *view, const QPoint &popupPoint) const;
 
     /**
-     * Paint view based items of the frameView, like selecteds state
+     * Paint view based items of the frameView, like selected state
      * @param painter the painter to paint to
      * @param crect the clip rect; nothing outside this rect is important
      * @param zh the zoomHandler to convert from internal coordinates to view coordinates
@@ -141,7 +141,7 @@ private:
      * @param borderOnly if true; exclude the range inside the frame
      * @param fuzzy don't take all the coordinates too strict, allow for some margin
      */
-    bool hit(const KoPoint &point, bool fuzzy , bool borderOnly) const;
+    bool hit(const KoPoint &point, bool fuzzy, bool borderOnly) const;
 
 private:
     KWFrame *m_frame;

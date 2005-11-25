@@ -146,7 +146,7 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
         }
         else {
             ts = new KWTableStyle( "Plain", 0L, 0L );
-            KWFrameStyle *fs = _doc->frameStyleCollection()->findFrameStyle( "Plain" );
+            KWFrameStyle *fs = _doc->frameStyleCollection()->findStyle( "Plain" );
             KWStyle *s = _doc->styleCollection()->findStyle( "Standard" );
             if ( fs )
                 ts->setFrameStyle( fs );

@@ -1234,6 +1234,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 
     // Load all styles before the corresponding paragraphs try to use them!
     m_styleColl->loadOasisStyleTemplates( context );
+    m_frameStyleColl->loadOasisStyles( context );
     static_cast<KWVariableSettings *>( m_varColl->variableSetting() )
         ->loadNoteConfiguration( oasisStyles.officeStyle() );
 
@@ -1998,7 +1999,7 @@ void KWDocument::loadFrameStyleTemplates( const QDomElement &stylesElem )
 {
     QDomNodeList listStyles = stylesElem.elementsByTagName( "FRAMESTYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
-        KWFrameStyle *s = m_frameStyleColl->findFrameStyle("Plain");
+        KWFrameStyle *s = m_frameStyleColl->findStyle("Plain");
         if(s) // delete the standard style.
             m_frameStyleColl->removeFrameStyleTemplate(s);
     }
@@ -2022,7 +2023,7 @@ void KWDocument::loadDefaultFrameStyleTemplates()
     if ( ! QFile::exists( fsfileName ) )
     {
         kdWarning(30003) << "Cannot find any framestyles.xml" << endl;
-        if (!m_frameStyleColl->findFrameStyle("Plain")) {
+        if (!m_frameStyleColl->findStyle("Plain")) {
             KWFrameStyle * standardFrameStyle = new KWFrameStyle( "Plain" );
             standardFrameStyle->setBackgroundColor(QColor("white"));
             standardFrameStyle->setTopBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
@@ -2061,7 +2062,7 @@ void KWDocument::loadDefaultFrameStyleTemplates()
 
     QDomNodeList listStyles = stylesElem.elementsByTagName( "FRAMESTYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
-        KWFrameStyle *s = m_frameStyleColl->findFrameStyle("Plain");
+        KWFrameStyle *s = m_frameStyleColl->findStyle("Plain");
         if(s) // delete the standard style.
             m_frameStyleColl->removeFrameStyleTemplate(s);
     }
@@ -3051,7 +3052,10 @@ void KWDocument::saveOasisSettings( KoXmlWriter& settingsWriter ) const
 
 void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, KoSavingContext& savingContext, SaveFlag saveFlag, const QByteArray& headerFooterContent ) const
 {
-    Q_UNUSED( savingContext ); // maybe we need it later again :)
+    if ( saveFlag == SaveAll )
+    {
+        m_frameStyleColl->saveOasis( mainStyles, savingContext );
+    }
 
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
@@ -3072,6 +3076,11 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     QValueList<KoGenStyles::NamedStyle>::const_iterator it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name, "style:paragraph-properties" );
+    }
+    styles = mainStyles.styles( KWDocument::STYLE_FRAME_USER );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
     }
     styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
     it = styles.begin();

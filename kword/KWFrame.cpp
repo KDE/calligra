@@ -641,7 +641,7 @@ void KWFrame::saveMarginProperties( KoGenStyle& frameStyle ) const
 
 QString KWFrame::saveOasisFrameStyle( KoGenStyles& mainStyles ) const
 {
-    KoGenStyle frameStyle( KWDocument::STYLE_FRAME, "graphic" );
+    KoGenStyle frameStyle( KWDocument::STYLE_FRAME_AUTO, "graphic" );
     QString protect;
     if ( frameSet()->protectContent() )
         protect = "content";

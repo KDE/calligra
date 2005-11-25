@@ -21,63 +21,46 @@
 #include "KWDocument.h"
 #include "KWFrame.h"
 
+#include <koGenStyles.h>
+#include <koOasisStyles.h>
+#include <kooasiscontext.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <qdom.h>
+#include <koxmlns.h>
 
+KWGenericStyle::KWGenericStyle( const QString & name )
+    : m_name( name ), m_displayName( i18n( "Style name", name.utf8() ) )
+{
+}
 
-/******************************************************************/
-/* Class: KWFrameStyleCollection                                  */
-/******************************************************************/
-//necessary to create unique shortcut
-int KWFrameStyleCollection::styleNumber = 0;
+QString KWGenericStyle::displayName() const
+{
+    return m_displayName;
+}
 
-KWFrameStyleCollection::KWFrameStyleCollection()
+void KWGenericStyle::setDisplayName( const QString& name )
+{
+    m_displayName = name;
+}
+
+////
+
+KWGenericStyleCollection::KWGenericStyleCollection()
 {
     m_styleList.setAutoDelete( false );
     m_deletedStyles.setAutoDelete( true );
-    m_lastStyle = 0L;
+    m_lastStyle = 0;
 }
 
-KWFrameStyleCollection::~KWFrameStyleCollection()
-{
-    clear();
-}
-
-void KWFrameStyleCollection::clear()
-{
-    m_styleList.setAutoDelete( true );
-    m_styleList.clear();
-    m_styleList.setAutoDelete( false );
-    m_deletedStyles.clear();
-    m_lastStyle = 0L;
-}
-
-KWFrameStyle* KWFrameStyleCollection::findStyleByShortcut( const QString & _shortCut )
-{
-    // Caching, to speed things up
-    if ( m_lastStyle && m_lastStyle->shortCutName() == _shortCut )
-        return m_lastStyle;
-
-    QPtrListIterator<KWFrameStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->shortCutName() == _shortCut ) {
-            m_lastStyle = styleIt.current();
-            return m_lastStyle;
-        }
-    }
-    return 0L;
-}
-
-
-KWFrameStyle* KWFrameStyleCollection::findFrameStyle( const QString & _name )
+KWGenericStyle* KWGenericStyleCollection::findStyle( const QString & _name ) const
 {
     // Caching, to speed things up
     if ( m_lastStyle && m_lastStyle->name() == _name )
         return m_lastStyle;
 
-    QPtrListIterator<KWFrameStyle> styleIt( m_styleList );
+    QPtrListIterator<KWGenericStyle> styleIt( m_styleList );
     for ( ; styleIt.current(); ++styleIt )
     {
         if ( styleIt.current()->name() == _name ) {
@@ -86,9 +69,71 @@ KWFrameStyle* KWFrameStyleCollection::findFrameStyle( const QString & _name )
         }
     }
 
-    if( _name == "Plain" )
-        return m_styleList.at(0); // fallback..
+    if( _name == "Plain" && !m_styleList.isEmpty() )
+        return m_styleList.getFirst(); // fallback..
 
+    return 0;
+}
+
+QString KWGenericStyleCollection::generateUniqueName() const
+{
+    int count = 1;
+    QString name;
+    do {
+        name = "new" + QString::number( count++ );
+    } while ( findStyle( name ) );
+    return name;
+}
+
+KWGenericStyleCollection::~KWGenericStyleCollection()
+{
+    clear();
+}
+
+void KWGenericStyleCollection::clear()
+{
+    m_styleList.setAutoDelete( true );
+    m_styleList.clear();
+    m_styleList.setAutoDelete( false );
+    m_deletedStyles.clear();
+    m_lastStyle = 0;
+}
+
+QStringList KWGenericStyleCollection::displayNameList() const
+{
+    QStringList lst;
+    QPtrListIterator<KWGenericStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+        lst.append( styleIt.current()->displayName() );
+    return lst;
+}
+
+/******************************************************************/
+/* Class: KWFrameStyleCollection                                  */
+/******************************************************************/
+
+//necessary to create unique shortcut
+int KWFrameStyleCollection::styleNumber = 0;
+
+KWFrameStyleCollection::KWFrameStyleCollection()
+{
+}
+
+KWFrameStyle* KWFrameStyleCollection::findStyleByShortcut( const QString & _shortCut )
+{
+    // Caching, to speed things up
+    if ( m_lastStyle && m_lastStyle->shortCutName() == _shortCut )
+        return m_lastStyle;
+
+    QPtrListIterator<KWGenericStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        KWFrameStyle* style = static_cast<KWFrameStyle *>( styleIt.current() );
+        if ( style->shortCutName() == _shortCut ) {
+            m_lastStyle = style;
+            return m_lastStyle;
+        }
+    }
     return 0L;
 }
 
@@ -99,17 +144,18 @@ KWFrameStyle* KWFrameStyleCollection::findTranslatedFrameStyle( const QString & 
     if ( m_lastStyle && m_lastStyle->displayName() == _name )
         return m_lastStyle;
 
-    QPtrListIterator<KWFrameStyle> styleIt( m_styleList );
+    QPtrListIterator<KWGenericStyle> styleIt( m_styleList );
     for ( ; styleIt.current(); ++styleIt )
     {
-        if ( styleIt.current()->displayName() == _name ) {
-            m_lastStyle = styleIt.current();
+        KWFrameStyle* style = static_cast<KWFrameStyle *>( styleIt.current() );
+        if ( style->displayName() == _name ) {
+            m_lastStyle = style;
             return m_lastStyle;
         }
     }
 
     if( ( _name == "Plain" ) || ( _name == i18n( "Style name", "Plain" ) ) )
-        return m_styleList.at(0); // fallback..
+        return static_cast<KWFrameStyle *>(m_styleList.getFirst()); // fallback..
 
     return 0L;
 }
@@ -118,16 +164,20 @@ KWFrameStyle* KWFrameStyleCollection::findTranslatedFrameStyle( const QString & 
 KWFrameStyle* KWFrameStyleCollection::addFrameStyleTemplate( KWFrameStyle * sty )
 {
     // First check for duplicates.
-    for ( KWFrameStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    for ( KWGenericStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
     {
         if ( p->name() == sty->name() ) {
-            // Replace existing style
-            if ( sty != p )
-            {
-                *p = *sty;
-                delete sty;
+            if ( p->displayName() == sty->displayName() ) {
+                // Replace existing style
+                if ( sty != p )
+                {
+                    *p = *sty;
+                    delete sty;
+                }
+                return static_cast<KWFrameStyle *>( p );
+            } else { // internal name conflict, but it's not the same style as far as the user is concerned
+                sty->setName( generateUniqueName() );
             }
-            return p;
         }
     }
     m_styleList.append( sty );
@@ -147,12 +197,12 @@ void KWFrameStyleCollection::removeFrameStyleTemplate ( KWFrameStyle *style ) {
 
 void KWFrameStyleCollection::updateFrameStyleListOrder( const QStringList &list )
 {
-    QPtrList<KWFrameStyle> orderStyle;
+    QPtrList<KWGenericStyle> orderStyle;
     QStringList lst( list );
     for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
     {
         //kdDebug()<<" style :"<<(*it)<<endl;
-        QPtrListIterator<KWFrameStyle> style( m_styleList );
+        QPtrListIterator<KWGenericStyle> style( m_styleList );
         for ( ; style.current() ; ++style )
         {
             if ( style.current()->name() == *it)
@@ -166,30 +216,69 @@ void KWFrameStyleCollection::updateFrameStyleListOrder( const QStringList &list 
     m_styleList.setAutoDelete( false );
     m_styleList.clear();
     m_styleList = orderStyle;
-#if 0
-    QPtrListIterator<KoParagStyle> style( m_styleList );
-    for ( ; style.current() ; ++style )
-    {
-        kdDebug()<<" style.current()->name() :"<<style.current()->name()<<endl;
-    }
-#endif
 }
 
+void KWFrameStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
+{
+    QPtrListIterator<KWGenericStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+    {
+        KWFrameStyle* style = static_cast<KWFrameStyle *>( styleIt.current() );
+        style->saveOasis( mainStyles, savingContext );
+    }
+}
+
+void KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
+{
+    QValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
+    uint nStyles = userStyles.count();
+    if( nStyles ) { // we are going to import at least one style.
+        KWFrameStyle *s = findStyle("Standard");
+        //kdDebug() << "loadOasisStyleTemplates looking for Standard, to delete it. Found " << s << endl;
+        if(s) // delete the standard style.
+            removeFrameStyleTemplate(s);
+    }
+    for (unsigned int item = 0; item < nStyles; item++) {
+        QDomElement styleElem = userStyles[item];
+	Q_ASSERT( !styleElem.isNull() );
+
+        if ( styleElem.attributeNS( KoXmlNS::style, "family", QString::null ) != "graphic" )
+            continue;
+
+        KWFrameStyle *sty = new KWFrameStyle( QString::null );
+        // Load the style
+        sty->loadOasis( styleElem, context );
+        // Style created, now let's try to add it
+        sty = addFrameStyleTemplate( sty );
+
+        kdDebug() << " Loaded frame style " << sty->name() << " - now " << count() << " styles" << endl;
+    }
+}
+
+const QPtrList<KWFrameStyle> KWFrameStyleCollection::frameStyleList() const
+{
+    // TODO get rid of this method, I think.
+    QPtrList<KWFrameStyle> lst;
+    QPtrListIterator<KWGenericStyle> styleIt( m_styleList );
+    for ( ; styleIt.current(); ++styleIt )
+        lst.append( static_cast<KWFrameStyle *>( styleIt.current() ) );
+    return lst;
+}
 
 /******************************************************************/
 /* Class: KWFrameStyle                                            */
 /******************************************************************/
 
 KWFrameStyle::KWFrameStyle( const QString & name )
+    : KWGenericStyle( name )
 {
-    m_name = name;
     m_shortCut_name = QString::null;
     m_backgroundColor.setColor( Qt::white );
 }
 
 KWFrameStyle::KWFrameStyle( const QString & name, KWFrame * frame )
+    : KWGenericStyle( name )
 {
-    m_name = name;
     m_backgroundColor = frame->backgroundColor();
     m_borderLeft = frame->leftBorder();
     m_borderRight = frame->rightBorder();
@@ -198,6 +287,7 @@ KWFrameStyle::KWFrameStyle( const QString & name, KWFrame * frame )
 }
 
 KWFrameStyle::KWFrameStyle( QDomElement & parentElem, int /*docVersion=2*/ )
+    : KWGenericStyle( QString::null )
 {
     QDomElement element = parentElem.namedItem( "NAME" ).toElement();
     if ( ( !element.isNull() ) && ( element.hasAttribute("value") ) )
@@ -237,22 +327,16 @@ KWFrameStyle::KWFrameStyle( QDomElement & parentElem, int /*docVersion=2*/ )
     m_backgroundColor = QBrush( c );
 }
 
-
 void KWFrameStyle::operator=( const KWFrameStyle &rhs )
 {
     m_name = rhs.m_name;
+    m_displayName = rhs.m_displayName;
     m_backgroundColor = rhs.m_backgroundColor;
     m_shortCut_name = rhs.m_shortCut_name;
     m_borderLeft = rhs.m_borderLeft;
     m_borderRight = rhs.m_borderRight;
     m_borderTop = rhs.m_borderTop;
     m_borderBottom = rhs.m_borderBottom;
-}
-
-QString KWFrameStyle::displayName() const
-{
-    //kdDebug() << "KWFrameStyle::displayName() " << name() << " => " << i18n( "Style name", name().utf8() ) << endl;
-    return i18n( "Style name", name().utf8() );
 }
 
 int KWFrameStyle::compare( const KWFrameStyle & frameStyle ) const
@@ -313,4 +397,71 @@ void KWFrameStyle::saveFrameStyle( QDomElement & parentElem )
 KWFrameStyle *KWFrameStyle::loadStyle( QDomElement & parentElem, int docVersion )
 {
     return new KWFrameStyle( parentElem, docVersion );
+}
+
+void KWFrameStyle::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
+{
+    Q_UNUSED( savingContext );
+
+    KoGenStyle frameStyle( KWDocument::STYLE_FRAME_USER, "graphic" );
+    frameStyle.addAttribute( "style:display-name", displayName() );
+
+    // Borders (taken from KWFrame::saveBorderProperties)
+    if (  ( m_borderLeft == m_borderRight )
+          && ( m_borderLeft == m_borderTop )
+          && ( m_borderLeft == m_borderBottom ) )
+    {
+        frameStyle.addProperty( "fo:border", m_borderLeft.saveFoBorder() );
+    }
+    else
+    {
+        frameStyle.addProperty( "fo:border-left", m_borderLeft.saveFoBorder() );
+        frameStyle.addProperty( "fo:border-right", m_borderRight.saveFoBorder() );
+        frameStyle.addProperty( "fo:border-top", m_borderTop.saveFoBorder() );
+        frameStyle.addProperty( "fo:border-bottom", m_borderBottom.saveFoBorder() );
+    }
+
+    // Background (taken from KWFrame::saveBorderProperties)
+    if ( m_backgroundColor.style() == Qt::NoBrush )
+        frameStyle.addProperty( "fo:background-color", "transparent" );
+    else if ( m_backgroundColor.color().isValid() )
+        frameStyle.addProperty( "fo:background-color", m_backgroundColor.color().name() );
+
+    // try to preserve existing internal name, if it looks adequate (no spaces)
+    // ## TODO: check XML-Schemacs NCName conformity
+    const bool nameIsConform = !m_name.isEmpty() && m_name.find( ' ' ) == -1;
+    if ( nameIsConform )
+        (void)mainStyles.lookup( frameStyle, m_name, false );
+    else
+        (void)mainStyles.lookup( frameStyle, "fr", true /*force numbering*/ );
+}
+
+void KWFrameStyle::loadOasis( QDomElement & styleElem, KoOasisContext& context )
+{
+    // Load name
+    m_name = styleElem.attributeNS( KoXmlNS::style, "name", QString::null );
+    m_displayName = styleElem.attributeNS( KoXmlNS::style, "display-name", QString::null );
+    if ( m_displayName.isEmpty() )
+        m_displayName = m_name;
+
+    KoStyleStack& styleStack = context.styleStack();
+    styleStack.setTypeProperties( "graphic" );
+
+    styleStack.save();
+    context.addStyles( &styleElem ); // Load all parents - only because we don't support inheritance.
+
+    if ( styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
+        QString color = styleStack.attributeNS( KoXmlNS::fo, "background-color" );
+        if ( color == "transparent" )
+            m_backgroundColor = QBrush( QColor(), Qt::NoBrush );
+        else
+            m_backgroundColor = QBrush( QColor( color ) /*, brush style is a dead feature, ignored */ );
+    }
+
+    m_borderLeft.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "left") );
+    m_borderRight.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "right") );
+    m_borderTop.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "top") );
+    m_borderBottom.loadFoBorder( styleStack.attributeNS( KoXmlNS::fo, "border", "bottom") );
+
+    styleStack.restore();
 }

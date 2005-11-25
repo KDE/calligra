@@ -66,6 +66,9 @@ KWTableStylePreview::~KWTableStylePreview()
 
 }
 
+#undef ptToPx
+#define ptToPx qRound
+
 void KWTableStylePreview::drawContents( QPainter *p )
 {
     p->save();
@@ -82,22 +85,22 @@ void KWTableStylePreview::drawContents( QPainter *p )
     // 2: create borders (KWFrameStyle)
 
     if (tableStyle->pFrameStyle()->topBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->topBorder(), tableStyle->pFrameStyle()->topBorder().width(),black) ); // Top border
+        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->topBorder(), ptToPx( tableStyle->pFrameStyle()->topBorder().width() ), black) ); // Top border
         p->drawLine( 20 - int(tableStyle->pFrameStyle()->leftBorder().width()/2), 30,
                      20 + wid + int(tableStyle->pFrameStyle()->rightBorder().width()/2), 30 );
     }
     if (tableStyle->pFrameStyle()->leftBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->leftBorder(), tableStyle->pFrameStyle()->leftBorder().width(),black) ); // Left border
+        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->leftBorder(), ptToPx( tableStyle->pFrameStyle()->leftBorder().width() ), black) ); // Left border
         p->drawLine( 20, 30 - int(tableStyle->pFrameStyle()->topBorder().width()/2),
                      20 , 30 + hei + int(tableStyle->pFrameStyle()->bottomBorder().width()/2) );
     }
     if (tableStyle->pFrameStyle()->bottomBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->bottomBorder(), tableStyle->pFrameStyle()->bottomBorder().width(),black) ); // Bottom border
+        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->bottomBorder(), ptToPx( tableStyle->pFrameStyle()->bottomBorder().width() ), black) ); // Bottom border
         p->drawLine( 20 + wid + int(ceil(tableStyle->pFrameStyle()->rightBorder().width()/2)), 30 + hei,
                      20 - int(tableStyle->pFrameStyle()->leftBorder().width()/2), 30 + hei );
     }
     if (tableStyle->pFrameStyle()->rightBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->rightBorder(), tableStyle->pFrameStyle()->rightBorder().width(),black) ); // Right border
+        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->rightBorder(), ptToPx( tableStyle->pFrameStyle()->rightBorder().width() ), black) ); // Right border
         p->drawLine( 20 + wid, 30 - int(tableStyle->pFrameStyle()->topBorder().width()/2) ,
                      20 + wid, 30 + hei + int(tableStyle->pFrameStyle()->bottomBorder().width()/2) );
     }
@@ -381,7 +384,7 @@ void KWTableStyleManager::updateGUI()
     // Update style and framestyle
     if ( m_doc->styleCollection()->findStyle( m_currentTableStyle->pStyle()->name() ) )
         m_style->setCurrentText(m_currentTableStyle->pStyle()->displayName());
-    if ( m_doc->frameStyleCollection()->findFrameStyle( m_currentTableStyle->pFrameStyle()->name() ) )
+    if ( m_doc->frameStyleCollection()->findStyle( m_currentTableStyle->pFrameStyle()->name() ) )
         m_frameStyle->setCurrentText(m_currentTableStyle->pFrameStyle()->displayName());
 
     // update delete button (can't delete first style);
@@ -608,8 +611,8 @@ void KWTableStyleManager::changeFrameStyle()
 // 0. Save name, otherwise it will be gone when you return
     save();
 
-// 1. Execute frameStylist
-    KWFrameStyleManager *frameStylist = new KWFrameStyleManager( this, m_doc, m_doc->frameStyleCollection()->frameStyleList() );
+// 1. Execute frame style manager
+    KWFrameStyleManager *frameStylist = new KWFrameStyleManager( this, m_doc );
 
     frameStylist->exec();
 
@@ -667,7 +670,7 @@ void KWTableStyleManager::updateAllStyleCombos()
             ( m_style->listBox()->findItem( oldS ) ) ) {
         oldSindex = m_style->listBox()->index( m_style->listBox()->findItem( oldS ) );
     }
-    if ( ( static_cast<unsigned int>(m_frameStyle->count())!=m_doc->frameStyleCollection()->frameStyleList().count() ) &&
+    if ( ( m_frameStyle->count() != m_doc->frameStyleCollection()->count() ) &&
             ( m_frameStyle->listBox()->findItem( oldFS ) ) ) {
         oldFSindex = m_frameStyle->listBox()->index( m_frameStyle->listBox()->findItem( oldFS ) );
     }
@@ -675,11 +678,7 @@ void KWTableStyleManager::updateAllStyleCombos()
     // Update the comboboxes
 
     m_frameStyle->clear();
-    QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
-    for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
-    {
-        m_frameStyle->insertItem( styleIt.current()->name() );
-    }
+    m_frameStyle->insertStringList( m_doc->frameStyleCollection()->displayNameList() );
     m_frameStyle->setCurrentItem( oldFSindex );
 
     m_style->clear();
@@ -695,7 +694,7 @@ void KWTableStyleManager::selectFrameStyle(int index)
 {
     kdDebug() << "KWTableStyleManager::selectFrameStyle index " << index << endl;
 
-    if ( (index>=0) && ( index < (int)m_doc->frameStyleCollection()->frameStyleList().count() ) )
+    if ( (index>=0) && ( index < (int)m_doc->frameStyleCollection()->count() ) )
         m_currentTableStyle->setFrameStyle( m_doc->frameStyleCollection()->frameStyleAt(index) );
     save();
     updateGUI();

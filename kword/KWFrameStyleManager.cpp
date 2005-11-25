@@ -42,6 +42,9 @@
 /* Class: KWTableStylePreview                                     */
 /******************************************************************/
 
+#undef ptToPx
+#define ptToPx qRound
+
 void KWFrameStylePreview::paintEvent( QPaintEvent * )
 {
     int wid = ( width() - 20 );
@@ -52,22 +55,22 @@ void KWFrameStylePreview::paintEvent( QPaintEvent * )
 
     // 1: create borders
     if (frameStyle->topBorder().width()>0) {
-      p.setPen( KoBorder::borderPen(frameStyle->topBorder(), frameStyle->topBorder().width(),black) ); // Top border
+      p.setPen( KoBorder::borderPen(frameStyle->topBorder(), ptToPx( frameStyle->topBorder().width() ), black) ); // Top border
       p.drawLine( 10 - int(frameStyle->leftBorder().width()/2), 10,
                   10 + wid + int(frameStyle->rightBorder().width()/2), 10 );
     }
     if (frameStyle->leftBorder().width()>0) {
-      p.setPen( KoBorder::borderPen(frameStyle->leftBorder(), frameStyle->leftBorder().width(),black) ); // Left border
+      p.setPen( KoBorder::borderPen(frameStyle->leftBorder(), ptToPx( frameStyle->leftBorder().width() ), black) ); // Left border
       p.drawLine( 10, 10 - int(frameStyle->topBorder().width()/2),
                   10 , 10 + hei + int(frameStyle->bottomBorder().width()/2) );
     }
     if (frameStyle->bottomBorder().width()>0) {
-      p.setPen( KoBorder::borderPen(frameStyle->bottomBorder(), frameStyle->bottomBorder().width(),black) ); // Bottom border
+      p.setPen( KoBorder::borderPen(frameStyle->bottomBorder(), ptToPx( frameStyle->bottomBorder().width() ), black) ); // Bottom border
       p.drawLine( 10 + wid + int(ceil(frameStyle->rightBorder().width()/2)), 10 + hei,
                   10 - int(frameStyle->leftBorder().width()/2), 10 + hei );
     }
     if (frameStyle->rightBorder().width()>0) {
-      p.setPen( KoBorder::borderPen(frameStyle->rightBorder(), frameStyle->rightBorder().width(),black) ); // Right border
+      p.setPen( KoBorder::borderPen(frameStyle->rightBorder(), ptToPx( frameStyle->rightBorder().width() ), black) ); // Right border
       p.drawLine( 10 + wid, 10 - int(frameStyle->topBorder().width()/2) ,
                   10 + wid, 10 + hei + int(frameStyle->bottomBorder().width()/2) );
     }
@@ -96,11 +99,13 @@ void KWFrameStylePreview::setFrameStyle( KWFrameStyle *_frameStyle )
 
 KWFrameStyleListItem::~KWFrameStyleListItem()
 {
+    delete m_changedFrameStyle;
 }
 
 void KWFrameStyleListItem::switchStyle()
 {
     delete m_changedFrameStyle;
+    m_changedFrameStyle = 0;
 
     if ( m_origFrameStyle )
         m_changedFrameStyle = new KWFrameStyle( *m_origFrameStyle );
@@ -110,7 +115,7 @@ void KWFrameStyleListItem::deleteStyle( KWFrameStyle *current )
 {
     Q_ASSERT( m_changedFrameStyle == current );
     delete m_changedFrameStyle;
-    m_changedFrameStyle =  0L;
+    m_changedFrameStyle =  0;
 }
 
 void KWFrameStyleListItem::apply()
@@ -122,21 +127,19 @@ void KWFrameStyleListItem::apply()
 /* Class: KWFrameStyleManager                                     */
 /******************************************************************/
 
-// Proof reader comment: stylist sounds like a hair dresser
-
-KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc, const QPtrList<KWFrameStyle> & style)
-    : KDialogBase( _parent, "Framestylist", true,
+KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc )
+    : KDialogBase( _parent, "", true,
                    i18n("Frame Style Manager"),
                    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply| KDialogBase::User1 )
 {
     m_doc = _doc;
 
-    m_currentFrameStyle =0L;
+    m_currentFrameStyle = 0;
     noSignals=true;
 
     m_frameStyles.setAutoDelete(false);
 
-    setupWidget(style); // build the widget with the buttons and the list selector.
+    setupWidget(); // build the widget with the buttons and the list selector.
 
     addGeneralTab();
 
@@ -167,20 +170,24 @@ void KWFrameStyleManager::addTab( KWFrameStyleManagerTab * tab )
     m_tabs->insertTab( tab, tab->tabName() );
 }
 
-void KWFrameStyleManager::setupWidget(const QPtrList<KWFrameStyle> & styleList)
+void KWFrameStyleManager::setupWidget()
 {
     QFrame * frame1 = makeMainWidget();
     QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
                                                  0, KDialog::spacingHint() );
-    QPtrListIterator<KWFrameStyle> style( styleList );
-    numFrameStyles = styleList.count();
+    KWFrameStyleCollection* collection = m_doc->frameStyleCollection();
+    numFrameStyles = collection->count();
     m_stylesList = new QListBox( frame1, "stylesList" );
+    m_stylesList->insertStringList( collection->displayNameList() );
+    QPtrList<KWFrameStyle> styleList = collection->frameStyleList(); /*slow*/
+    QPtrListIterator<KWFrameStyle> style( styleList );
     for ( ; style.current() ; ++style )
     {
-        m_stylesList->insertItem( style.current()->displayName() );
         m_frameStyles.append( new KWFrameStyleListItem( style.current(),new KWFrameStyle(*style.current())) );
         m_styleOrder<<style.current()->name();
     }
+    Q_ASSERT( m_stylesList->count() == m_styleOrder.count() );
+    Q_ASSERT( m_styleOrder.count() == m_frameStyles.count() );
 
     frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
 
@@ -290,7 +297,7 @@ int KWFrameStyleManager::frameStyleIndex( int pos ) {
             return i;
         ++p;
     }
-    kdWarning() << "KWFrameStyleManager::frameStyleIndex no style found at pos " << pos << endl;
+    kdWarning() << "KWFrameStyleManager::frameStyleIndex no style found at pos " << pos << " count=" << m_frameStyles.count() << endl;
 
 #ifdef __GNUC_
 #warning implement undo/redo
@@ -332,7 +339,7 @@ void KWFrameStyleManager::save() {
         for ( ; it.current() ; ++it )
             it.current()->save();
 
-        m_currentFrameStyle->setName( m_nameString->text() );
+        m_currentFrameStyle->setDisplayName( m_nameString->text() );
     }
 }
 
@@ -346,12 +353,11 @@ void KWFrameStyleManager::importFromFile()
 
     KWImportFrameTableStyleDia dia( m_doc, lst, KWImportFrameTableStyleDia::frameStyle, this, 0 );
     if ( dia.listOfFrameStyleImported().count() > 0 && dia.exec() ) {
-        QPtrList<KWFrameStyle> list = dia.listOfFrameStyleImported();
-        addStyle( list);
+        addStyles( dia.listOfFrameStyleImported() );
     }
 }
 
-void KWFrameStyleManager::addStyle(const QPtrList<KWFrameStyle> &listStyle )
+void KWFrameStyleManager::addStyles( const QPtrList<KWFrameStyle> &listStyle )
 {
     save();
 
@@ -376,7 +382,8 @@ void KWFrameStyleManager::addStyle()
     if ( m_currentFrameStyle )
     {
         m_currentFrameStyle = new KWFrameStyle( *m_currentFrameStyle ); // Create a new style, initializing from the current one
-        m_currentFrameStyle->setName( str );
+        m_currentFrameStyle->setDisplayName( str );
+        m_currentFrameStyle->setName( m_doc->frameStyleCollection()->generateUniqueName() );
     }
     else
         m_currentFrameStyle = new KWFrameStyle( str );
@@ -500,7 +507,7 @@ void KWFrameStyleManager::apply()
             m_frameStyles.at(i)->apply();
         }
     }
-    updateFrameStyleListOrder( m_styleOrder);
+    updateFrameStyleListOrder( m_styleOrder );
     updateAllStyleLists();
     noSignals=false;
 }

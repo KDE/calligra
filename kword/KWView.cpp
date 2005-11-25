@@ -175,7 +175,7 @@ class TableInfo {
                     columns[c] = columns[c] + 1;
                 tableCols[fs->groupmanager()] = columns;
 
-                if(m_cell == 0 || m_cell->firstRow() > cell->firstRow() || 
+                if(m_cell == 0 || m_cell->firstRow() > cell->firstRow() ||
                         m_cell->firstRow() == cell->firstRow() &&
                         m_cell->firstCol() > cell->firstCol())
                     m_cell = cell;
@@ -2224,18 +2224,13 @@ void KWView::updateStyleList()
 
 void KWView::updateFrameStyleList()
 {
-    QString currentStyle = m_actionFrameStyle->currentText();
+    // Remember selected style (by name; better would be by pointer, but what if it got deleted?)
+    // This is all in case the index of the selected style has changed.
+    const QString currentStyle = m_actionFrameStyle->currentText();
     // Generate list of styles
-    QStringList lst;
-    QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
-    int pos = -1;
-    for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
-        QString name = styleIt.current()->displayName();
-        lst << name;
-        if ( pos == -1 && name == currentStyle )
-            pos = i;
-    }
-    // Fill the combo - using a KSelectAction
+    const QStringList lst = m_doc->frameStyleCollection()->displayNameList();
+    const int pos = lst.findIndex( currentStyle );
+    // Fill the combo
     m_actionFrameStyle->setItems( lst );
     if ( pos > -1 )
         m_actionFrameStyle->setCurrentItem( pos );
@@ -3896,7 +3891,7 @@ void KWView::extraFrameStylist()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->hideCursor();
-    KWFrameStyleManager * frameStyleManager = new KWFrameStyleManager( this, m_doc, m_doc->frameStyleCollection()->frameStyleList() );
+    KWFrameStyleManager * frameStyleManager = new KWFrameStyleManager( this, m_doc );
     frameStyleManager->exec();
     delete frameStyleManager;
     if ( edit )
@@ -3912,11 +3907,7 @@ void KWView::createFrameStyle()
 
     KWFrame* frame = selectedFrames[0]->frame();
 
-    QStringList list;
-    QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
-    for ( ; styleIt.current(); ++styleIt )
-        list.append( styleIt.current()->name() );
-    KoCreateStyleDia *dia = new KoCreateStyleDia( list , this, 0 );
+    KoCreateStyleDia *dia = new KoCreateStyleDia( m_doc->frameStyleCollection()->displayNameList(), this, 0 );
     if ( dia->exec() )
     {
         KWFrameStyle *style= new KWFrameStyle( dia->nameOfNewStyle(), frame );
@@ -4505,17 +4496,12 @@ void KWView::frameStyleSelected( KWFrameStyle *sty )
     m_gui->canvasWidget()->setFocus(); // the combo keeps focus...*/
 
     // Adjust GUI
-    QPtrListIterator<KWFrameStyle> styleIt( m_doc->frameStyleCollection()->frameStyleList() );
-    for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
-    {
-        if ( styleIt.current()->name() == sty->name() ) {
-            m_actionFrameStyle->setCurrentItem( pos );
-            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( styleIt.current()->shortCutName().latin1() ));
-            if ( act )
-                act->setChecked( true );
-            return;
-        }
-    }
+    const int pos = m_doc->frameStyleCollection()->indexOf( sty );
+    Q_ASSERT( pos >= 0 );
+    m_actionFrameStyle->setCurrentItem( pos );
+    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->shortCutName().latin1() ));
+    if ( act )
+        act->setChecked( true );
 }
 
 

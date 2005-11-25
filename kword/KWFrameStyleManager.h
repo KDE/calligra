@@ -100,7 +100,7 @@ class KWFrameStyleManager : public KDialogBase
     Q_OBJECT
 
 public:
-    KWFrameStyleManager( QWidget *_parent, KWDocument *_doc, const QPtrList<KWFrameStyle> & style );
+    KWFrameStyleManager( QWidget *_parent, KWDocument *_doc );
     ~KWFrameStyleManager();
 
     KWFrameStyle* addFrameStyleTemplate(KWFrameStyle *style);
@@ -109,8 +109,8 @@ public:
     void updateFrameStyleListOrder( const QStringList &list );
 
 protected:
-    void addStyle(const QPtrList<KWFrameStyle> & style );
-    void setupWidget(const QPtrList<KWFrameStyle> & style);
+    void addStyles(const QPtrList<KWFrameStyle> & style );
+    void setupWidget();
     void addGeneralTab();
     void apply();
     void updateGUI();
