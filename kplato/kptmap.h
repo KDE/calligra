@@ -34,7 +34,7 @@ namespace KPlato
 
 namespace Map {
 enum State { None=0, NonWorking=1, Working=2 };
-}
+} // Map namespace
 
 typedef QMap<QString, int> DateMapType;
 class DateMap : public DateMapType

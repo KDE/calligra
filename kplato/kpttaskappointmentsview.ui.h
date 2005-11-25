@@ -111,4 +111,4 @@ void TaskAppointmentsView::drawCostEffort()
 
 }
 
-}
+}  // KPlato namespace

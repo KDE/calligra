@@ -38,6 +38,6 @@ private:
     View* m_view;
 };
 
-}
+}  //KPlato namespace
 
 #endif

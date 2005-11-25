@@ -34,7 +34,7 @@ class KPrinter;
 namespace Kugar
 {
   class MReportViewer;
-}
+} // Kugar namespace
 
 //class QString;
 class QStringList;

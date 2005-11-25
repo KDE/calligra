@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef KPTTASKAPPOINTMENTSVIEW_H
-#define KPTTASKAPPOINTMENTSVIEW_H
+#ifndef KPTRESOURCEAPPOINTMENTSVIEW_H
+#define KPTRESOURCEAPPOINTMENTSVIEW_H
 
 #include "kptcontext.h"
 #include "kptdoublelistviewbase.h"

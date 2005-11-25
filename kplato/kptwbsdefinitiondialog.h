@@ -24,8 +24,6 @@
 
 class KMacroCommand;
 
-//TODO ui files are not in the KPlato namespace!!
-
 namespace KPlato
 {
 
