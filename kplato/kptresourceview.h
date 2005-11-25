@@ -25,11 +25,9 @@
 
 #include "kptcontext.h"
 
-class QLayout;
-class KDGanttView;
-class KDGanttViewItem;
+class KListView;
+
 class QPoint;
-class QListView;
 class QListViewItem;
 
 class KPrinter;
@@ -42,6 +40,7 @@ class Project;
 class Resource;
 class Node;
 
+class ResourceAppointmentsView;
 class ResourceGroup;
 class Resource;
 class ResourceItemPrivate;
@@ -52,8 +51,7 @@ class ResourceItemPrivate;
     Q_OBJECT
 
  public:
-
-    ResourceView( View *view, QWidget *parent );
+    ResourceView(View *view, QWidget *parent);
 
     //~ResourceView();
 
@@ -71,24 +69,20 @@ class ResourceItemPrivate;
     virtual bool setContext(Context::Resourceview &context);
     virtual void getContext(Context::Resourceview &context) const;
 
-public slots:
+protected slots:
     void resSelectionChanged(QListViewItem *item);
     void popupMenuRequested(QListViewItem * item, const QPoint & pos, int);
-    void appListMenuRequested(QListViewItem * item, const QPoint & pos, int);
 
-protected slots:
-    void slotItemRenamed(QListViewItem* item, int col, const QString& text);
 private:
     void drawResources(QListViewItem *parent, ResourceGroup *group);
-    void drawAppointments(Resource *resource);
 
+private:
 	View *m_mainview;
     int m_defaultFontSize;
 
     ResourceItemPrivate *m_selectedItem;
-    QListView *resList;
-    QListView *appList;
-    
+    KListView *resList;
+    ResourceAppointmentsView *m_appview;
     Node *m_currentNode;
     QDate m_start;
     QDate m_end;
