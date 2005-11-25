@@ -1,8 +1,9 @@
 #include <koborder.h>
-#include <qwidget.h>
-#include <kapplication.h>
-#include <qpainter.h>
 #include <kozoomhandler.h>
+#include <kapplication.h>
+#include <kcmdlineargs.h>
+#include <qpainter.h>
+#include <qwidget.h>
 #include <qgrid.h>
 
 class MyWidget : public QWidget
@@ -46,7 +47,10 @@ private:
 
 int main (int argc, char ** argv)
 {
-    KApplication app(argc, argv, "KoBorder test");
+    KApplication::disableAutoDcopRegistration();
+    KCmdLineArgs::init(argc,argv,"kobordertest", 0, 0, 0, 0);
+    KApplication app;
+
     KoZoomHandler* zh = new KoZoomHandler();
 
     QGrid* grid = new QGrid(2, Qt::Horizontal, 0L); // 2 columns

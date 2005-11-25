@@ -9,7 +9,7 @@
 #include "kotextformat.h"
 #include "kotextdocument.h"
 #include "kotextparag.h"
-#include "kozoomhandler.h"
+#include "kotextzoomhandler.h"
 #include "koparagcounter.h"
 
 #include <assert.h>
@@ -31,7 +31,7 @@ public:
     void tooWideChar();
 
 private:
-    KoZoomHandler* zh;
+    KoTextZoomHandler* zh;
     KoTextDocument* doc;
 };
 
@@ -71,7 +71,7 @@ private:
 
 KoTextFormatterTest::KoTextFormatterTest()
 {
-    zh = new KoZoomHandler;
+    zh = new KoTextZoomHandler;
     QFont defaultFont( "helvetica", 12 );
     KoTextFormatCollection* fc = new KoTextFormatCollection( defaultFont, Qt::black, "en_US", false /*no hyphenation*/ );
     KoTextFormatter* formatter = new KoTextFormatter;
