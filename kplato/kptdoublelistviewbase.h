@@ -20,7 +20,11 @@
 #ifndef KPTDOUBLELISTVIEWBASE_H
 #define KPTDOUBLELISTVIEWBASE_H
 
+#include <qcolor.h>
+#include <qmap.h>
+#include <qptrvector.h>
 #include <qsplitter.h>
+
 #include <klistview.h>
 
 class QListViewItem;
@@ -61,7 +65,7 @@ public:
     void addSlaveColumn(QString text);
     virtual void print(KPrinter &printer);
 
-    void calculate();
+    virtual void calculate();
     void clearLists();
     virtual void createSlaveItems();
     void clearSlaveList();
@@ -79,9 +83,11 @@ public:
         
         virtual void setColumn(int col, double value);
         virtual void clearColumn(int col);
-
-        double value(int col) const { return m_valueMap[col]; }
         
+        double value(int col) const { return m_valueMap[col]; }
+        void setLimit(int col, double limit);
+        void setHighlight(bool on) { m_highlight = on; }
+
         virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);
         
         void setFormat(int fieldwidth=0, char fmt='f', int prec=0);
@@ -92,6 +98,7 @@ public:
         bool m_highlight;
 
         QMap<int, double> m_valueMap;
+        QMap<int, double> m_limitMap;
         
         int m_fieldwidth;
         char m_fmt;
@@ -111,14 +118,19 @@ public:
         void slaveItemDeleted();
         void setSlaveOpen(bool on);
         SlaveListItem *slaveItem() const { return m_slaveItem; }
+        double value() const { return m_value; }
         
         void setTotal(double tot);
         double calcTotal();
         void addToTotal(double v);
         void setSlaveItem(int col, double value);
+        void setSlaveLimit(int col, double limit);
+        void setLimit(double limit) { m_limit = limit; }
+        void setHighlight(bool on) { m_highlight = on; }
+        void setSlaveHighlight(bool on);
         void clearColumn(int col);
         void calcSlaveItems();
-        double calcSlaveItems(int col);
+        virtual double calcSlaveItems(int col);
 
         virtual void paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align);    
 
@@ -128,6 +140,7 @@ public:
         SlaveListItem *m_slaveItem;
         double m_value;
         bool m_highlight;
+        double m_limit;
         
         QMap<int, double> m_valueMap;
     

@@ -24,8 +24,10 @@
 
 #include <qheader.h>
 #include <qlayout.h>
+#include <qmap.h>
 #include <qpainter.h>
 #include <qpalette.h>
+#include <qptrvector.h>
 #include <qsplitter.h>
 #include <qstring.h>
 #include <qvaluelist.h>
@@ -87,14 +89,20 @@ void DoubleListViewBase::SlaveListItem::setColumn(int col, double value) {
     }
 }
 
+void DoubleListViewBase::SlaveListItem::setLimit(int col, double limit) {
+    m_limitMap[col] = limit;
+}
+
 void DoubleListViewBase::SlaveListItem::paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align) {
     //kdDebug()<<k_funcinfo<<"c="<<column<<endl;
     QColorGroup g = cg;
     if (m_highlight) {
-        if (m_value < 0.0) {
-            g.setColor(QColorGroup::Text, QColor(red));
-        } else if (m_value > 0.0) {
-            g.setColor(QColorGroup::Text, QColor(green));
+        if (m_limitMap.contains(column)) {
+            if (m_valueMap[column] > m_limitMap[column]) {
+                g.setColor(QColorGroup::Text, QColor(red));
+            } else if (m_valueMap[column] < m_limitMap[column]) {
+                g.setColor(QColorGroup::Text, QColor(green));
+            }
         }
     }
     KListViewItem::paintCell(p, g, column, width, align);
@@ -111,6 +119,7 @@ DoubleListViewBase::MasterListItem::MasterListItem(QListView *parent, bool highl
     : KListViewItem(parent),
       m_slaveItem(0),
       m_value(0.0),
+      m_limit(0.0),
       m_highlight(highlight) {
     
     setFormat();
@@ -121,6 +130,7 @@ DoubleListViewBase::MasterListItem::MasterListItem(QListView *parent, QString te
     : KListViewItem(parent, text),
       m_slaveItem(0),
       m_value(0.0),
+      m_limit(0.0),
       m_highlight(highlight) {
 
     setFormat();
@@ -131,6 +141,7 @@ DoubleListViewBase::MasterListItem::MasterListItem(QListViewItem *parent, bool h
     : KListViewItem(parent),
       m_slaveItem(0),
       m_value(0.0),
+      m_limit(0.0),
       m_highlight(highlight) {
     
     setFormat();
@@ -141,6 +152,7 @@ DoubleListViewBase::MasterListItem::MasterListItem(QListViewItem *parent, QStrin
     : KListViewItem(parent, text),
       m_slaveItem(0),
       m_value(0.0),
+      m_limit(0.0),
       m_highlight(highlight) {
 
     setFormat();
@@ -250,13 +262,25 @@ double DoubleListViewBase::MasterListItem::calcSlaveItems(int col) {
     return tot;
 }
 
+void DoubleListViewBase::MasterListItem::setSlaveLimit(int col, double limit) {
+    if (m_slaveItem) {
+        m_slaveItem->setLimit(col, limit);
+    }
+}
+
+void DoubleListViewBase::MasterListItem::setSlaveHighlight(bool on) {
+    if (m_slaveItem) {
+        m_slaveItem->setHighlight(on);
+    }
+}
+
 void DoubleListViewBase::MasterListItem::paintCell(QPainter *p, const QColorGroup &cg, int column, int width, int align) {
-    //kdDebug()<<k_funcinfo<<"c="<<column<<" prio="<<(columnPrio.contains(column)?columnPrio[column]:0)<<endl;
+    //kdDebug()<<k_funcinfo<<"c="<<column<<" value="<<m_value<<" limit="<<m_limit<<endl;
     QColorGroup g = cg;
-    if (m_highlight && column == 1) { //Total
-        if (m_value < 0.0) {
+    if (column == 1 && m_highlight) {
+        if (m_value > m_limit) {
             g.setColor(QColorGroup::Text, QColor(red));
-        } else if (m_value > 0.0) {
+        } else if (m_value < m_limit) {
             g.setColor(QColorGroup::Text, QColor(green));
         }
     }
@@ -397,6 +421,7 @@ void DoubleListViewBase::setFormat(int fieldwidth, char fmt, int prec) {
     setMasterFormat(fieldwidth, fmt, prec);
     setSlaveFormat(fieldwidth, fmt, prec);
 }
+
 
 }  //KPlato namespace
 
