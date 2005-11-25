@@ -236,8 +236,8 @@ class DriverPrivate
 
 }
 
-//! driver's static version information (impementation), 
-//! with KLibFactory symbol declaration
+//! Driver's static version information (implementation), 
+//! with KLibFactory symbol declaration.
 #define KEXIDB_DRIVER_INFO( class_name, internal_name ) \
 	int class_name::versionMajor() const { return KEXIDB_VERSION_MAJOR; } \
 	int class_name::versionMinor() const { return KEXIDB_VERSION_MINOR; } \

@@ -257,6 +257,18 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		QValueList<QCString> propertyNames() const;
 
 	protected:
+		/*! Used by DriverManager. 
+		 Note for driver developers: Reimplement this.
+		 In your reimplementation you should initialize:
+		 - d->typeNames - to types accepted by your engine
+		 - d->isFileDriver - to true or false depending if your driver is file-based
+		 - d->features - to combination of selected values from Features enum
+		 
+		 You may also want to change options in DriverBehaviour *beh member.
+		 See drivers/mySQL/mysqldriver.cpp for usage example.
+		 */
+		Driver( QObject *parent, const char *name, const QStringList &args = QStringList() );
+
 		/*! For reimplemenation: creates and returns connection object 
 		 with additional structures specific for a given driver.
 		 Connection object should inherit Connection and have a destructor 
@@ -284,18 +296,6 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 a given driver implementation. For implementation.*/
 		virtual bool drv_isSystemFieldName( const QString& n ) const = 0;
 		
-		/*! Used by DriverManager. 
-		 Note for driver developers: Reimplement this.
-		 In your reimplementation you should initialize:
-		 - d->typeNames - to types accepted by your engine
-		 - d->isFileDriver - to true or false depending if your driver is file-based
-		 - d->features - to combination of selected values from Features enum
-		 
-		 You may also want to change options in DriverBehaviour *beh member.
-		 See drivers/mySQL/mysqldriver.cpp for usage example.
-		 */
-		Driver( QObject *parent, const char *name, const QStringList &args = QStringList() );
-
 		/*! \return connection \a conn , do not deletes it nor affect.
 		 Returns 0 if \a conn is not owned by this driver.
 		 After this, you are owner of \a conn object, so you should
@@ -320,8 +320,8 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 
 } //namespace KexiDB
 
-/*! driver's static version information, automatically impemented for KexiDB drivers
- put this into Driver class declaration just like Q_OBJECT macro */
+/*! Driver's static version information, automatically impemented for KexiDB drivers.
+ Put this into driver class declaration just like Q_OBJECT macro. */
 #define KEXIDB_DRIVER \
 	public: \
 	virtual int versionMajor() const; \
