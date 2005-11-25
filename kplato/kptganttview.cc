@@ -141,6 +141,7 @@ void GanttView::draw(Project &project)
         m_firstTime = false;
     }
     m_gantt->setUpdateEnabled(true);
+    currentItemChanged(m_currentItem);
 }
 
 void GanttView::drawChanges(Project &project)
@@ -159,6 +160,7 @@ void GanttView::drawChanges(Project &project)
         m_gantt->firstChild()->listView()->setCurrentItem(m_gantt->firstChild());
         currentItemChanged(m_gantt->firstChild()); //hmmm
     }
+    currentItemChanged(m_currentItem);
 }
 
 KDGanttViewItem *GanttView::findItem(Node *node)
