@@ -62,6 +62,7 @@
 #include <kexidb/connection.h>
 #include <kexidb/tableschema.h>
 #include <kexidb/transaction.h>
+#include <widget/kexicharencodingcombobox.h>
 
 #include "kexicsvdialog.h"
 #include "kexicsvoptionsdlg.h"
@@ -1268,8 +1269,8 @@ void KexiCSVDialog::optionsButtonClicked()
 	if (QDialog::Accepted != dlg.exec())
 		return;
 
-	if (m_encoding != dlg.selectedEncoding()) {
-		m_encoding = dlg.selectedEncoding();
+	if (m_encoding != dlg.encodingComboBox()->selectedEncoding()) {
+		m_encoding = dlg.encodingComboBox()->selectedEncoding();
 		if (!loadData())
 			return;
 		fillTable();

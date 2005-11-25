@@ -18,8 +18,9 @@
  */
 
 #include "kexicsvoptionsdlg.h"
-#include "kexicsvoptions.h"
+#include <widget/kexicharencodingcombobox.h>
 
+#include <qlabel.h>
 #include <qlayout.h>
 #include <qtextcodec.h>
 
@@ -39,62 +40,29 @@ KexiCSVOptionsDialog::KexiCSVOptionsDialog( const QString& selectedEncoding, QWi
 	true, 
 	false
  )
- , m_defaultEncodingAdded(false)
 {
-	QVBoxLayout *lyr = new QVBoxLayout( plainPage(), 0, spacingHint() );
+	QGridLayout *lyr = new QGridLayout( plainPage(), 1, 1, KDialogBase::marginHint(), KDialogBase::spacingHint());
 
-	m_widget = new KexiCSVOptionsWidget(plainPage(), "KexiCSVOptionsWidget");
-	lyr->addWidget(m_widget);
+	m_encodingComboBox = new KexiCharacterEncodingComboBox(plainPage(), selectedEncoding);
+	lyr->addWidget( m_encodingComboBox, 0, 1 );
 
-	QString defaultEncoding(QString::fromLatin1(KGlobal::locale()->encoding()));
-	QString defaultEncodingDescriptiveName;
+	QLabel* lbl = new QLabel( m_encodingComboBox, i18n("Text encoding:"), plainPage());
+	lyr->addWidget( lbl, 0, 0 );
 
-	QStringList descEncodings(KGlobal::charsets()->descriptiveEncodingNames());
-	QStringList::ConstIterator it = descEncodings.constBegin();
-	for (uint id = 0; it!=descEncodings.constEnd(); ++it) {
-		bool found = false;
-		QString name( KGlobal::charsets()->encodingForName( *it ) );
-		QTextCodec *codecForEnc = KGlobal::charsets()->codecForName(name, found);
-		if (found) {
-			m_widget->cbEncodings->insertItem(*it);
-			if (codecForEnc->name() == defaultEncoding || name == defaultEncoding) {
-				defaultEncodingDescriptiveName = *it;
-			}
-			if (codecForEnc->name() == selectedEncoding || name == selectedEncoding) {
-				m_widget->cbEncodings->setCurrentItem(id);
-			}
-			id++;
-		}
-	}
-
-	if (!defaultEncodingDescriptiveName.isEmpty()) {
-		m_defaultEncodingAdded = true;
-		m_widget->cbEncodings->insertItem( i18n("Text encoding: Default", "Default: %1")
-			.arg(defaultEncodingDescriptiveName), 0 );
-		if (selectedEncoding==defaultEncoding) {
-			m_widget->cbEncodings->setCurrentItem(0);
-		}
-		else
-			m_widget->cbEncodings->setCurrentItem(m_widget->cbEncodings->currentItem()+1);
-	}
+	lyr->addItem( new QSpacerItem( 20, 111, QSizePolicy::Minimum, QSizePolicy::Expanding ), 1, 1 );
+	lyr->addItem( new QSpacerItem( 121, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ), 0, 2 );
 
 	adjustSize();
+
+	m_encodingComboBox->setFocus();
 }
 
 KexiCSVOptionsDialog::~KexiCSVOptionsDialog()
 {
 }
 
-void KexiCSVOptionsDialog::accept()
+KexiCharacterEncodingComboBox* KexiCSVOptionsDialog::encodingComboBox() const
 {
-	if (m_defaultEncodingAdded && 0==m_widget->cbEncodings->currentItem()) {
-		m_selectedEncoding = QString::fromLatin1(KGlobal::locale()->encoding());
-	}
-	else {
-		m_selectedEncoding = KGlobal::charsets()->encodingForName( m_widget->cbEncodings->currentText() );
-	}
-
-	KDialogBase::accept();
+	return m_encodingComboBox;
 }
 
-#include "kexicsvoptionsdlg.moc"

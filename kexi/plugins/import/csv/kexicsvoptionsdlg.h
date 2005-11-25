@@ -22,24 +22,19 @@
 
 #include <kdialogbase.h>
 
-class KexiCSVOptionsWidget;
+class KexiCharacterEncodingComboBox;
 
+//! @short CSV Options dialog.
 class KexiCSVOptionsDialog : public KDialogBase
 {
-	Q_OBJECT
-
 	public:
 		KexiCSVOptionsDialog( const QString& selectedEncoding, QWidget* parent = 0 );
-		~KexiCSVOptionsDialog();
+		virtual ~KexiCSVOptionsDialog();
 
-		QString selectedEncoding() const { return m_selectedEncoding; }
+		KexiCharacterEncodingComboBox* encodingComboBox() const;
 
 	protected:
-		virtual void accept();
-
-		KexiCSVOptionsWidget *m_widget;
-		QString m_selectedEncoding;
-		bool m_defaultEncodingAdded : 1;
+		KexiCharacterEncodingComboBox *m_encodingComboBox;
 };
 
 #endif
