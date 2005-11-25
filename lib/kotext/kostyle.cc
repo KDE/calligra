@@ -76,7 +76,9 @@ void KoStyleCollection::loadOasisStyleTemplates( KoOasisContext& context )
     for (unsigned int item = 0; item < nStyles; item++) {
         QDomElement styleElem = userStyles[item];
 	Q_ASSERT( !styleElem.isNull() );
-        // TODO check style:family/style:class (for other styles than paragraph styles)
+
+        if ( styleElem.attributeNS( KoXmlNS::style, "family", QString::null ) != "paragraph" )
+            continue;
 
         KoParagStyle *sty = new KoParagStyle( QString::null );
         // Load the style
