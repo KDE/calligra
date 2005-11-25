@@ -760,3 +760,6 @@ AUTOFIELD:
 
 KexiFrame:
 - fix highlight for data mode! (very old bug)
+
+Migration:
+- fix: server as destination is broken

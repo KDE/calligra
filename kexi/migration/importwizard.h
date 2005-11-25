@@ -29,6 +29,7 @@
 
 class QLabel;
 class QCheckBox;
+class QPushButton;
 class QHBoxLayout;
 class QVBoxLayout;
 class QVButtonGroup;
@@ -42,7 +43,14 @@ class KexiProjectSet;
 class KexiDBTitlePage;
 class KexiDBDriverComboBox;
 
+namespace Kexi
+{
+	class ObjectStatus;
+}
+
 namespace KexiMigration {
+
+class KexiMigrate;
 
 //! GUI for importing external databases (file-based and server-based)
 class KEXIMIGR_EXPORT ImportWizard : public KWizard
@@ -66,6 +74,7 @@ protected slots:
 	virtual void accept();
 	virtual void reject();
 	void helpClicked();
+	void slotOptionsButtonClicked();
 
 private:
 	void parseArguments();
@@ -80,7 +89,8 @@ private:
 	void setupImportType();
 	void setupImporting();
 	bool checkUserInput();
-	bool acceptImport();
+	KexiMigrate* prepareImport(Kexi::ObjectStatus& result);
+	bool import();
 
 	bool fileBasedSrcSelected() const;
 	bool fileBasedDstSelected() const;
@@ -112,11 +122,16 @@ private:
 	KActiveLabel *m_lblImportingErrTxt, *m_finishLbl;
 	QCheckBox *m_openImportedProjectCheckBox;
 	bool m_fileBasedDstWasPresented, m_setupFileBasedSrcNeeded, 
-		m_acceptImportExecuted; //!< used in acceptImport()
+		m_importExecuted; //!< used in import()
 	KexiProjectSet* m_prjSet;
-	KProgress *m_progress;
+	KProgress *m_progressBar;
+	QPushButton* m_importOptionsButton;
 	QMap<QString,QString> *m_args;
 	QString m_predefinedFileName, m_predefinedMimeType;
+
+	//! Encoding for source db. Currently only used for MDB driver.
+//! @todo Hardcoded. Move to KexiMigrate driver's impl.
+	QString m_sourceDBEncoding;
 };
 
 }

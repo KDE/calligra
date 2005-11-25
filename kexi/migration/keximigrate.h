@@ -26,6 +26,7 @@
 #include "kexidb/tableschema.h"
 #include "keximigratedata.h"
 
+#include <kgenericfactory.h>
 #include <qstringlist.h>
 
 class KexiProject;
@@ -34,141 +35,208 @@ namespace Kexi
 	class ObjectStatus;
 }
 
+/*! KexiMigration implementation version. 
+ It is altered after every change: 
+ - major number is increased after every major Kexi release, 
+ - minor is increased after adding binary-incompatible change.
+ In external code: do not use this to get library version information:
+ use KexiMigration::versionMajor() and KexiMigration::versionMinor() instead to get real version.
+*/
+#define KEXI_MIGRATION_VERSION_MAJOR 1
+#define KEXI_MIGRATION_VERSION_MINOR 1
+
 /*!
  * \namespace KexiMigration
  * \brief Framework for importing databases into native KexiDB databases.
  */
 namespace KexiMigration 
 {
-  //! Imports non-native databases into Kexi projects.
-	/*! A generic API for importing data from an existing
-	database into a new Kexi project.
 
-	Basic idea is this:
-	-# User selects an existing DB and new project (file or server based)
-	-# User specifies whether to import structure and data or structure only.
-	-# Import tool connects to db
-	-# Checks if it is already a kexi project (not implemented yet)
-	-# If not, then read structure and construct new project
-	-# Ask user what to do if column type is not supported
+//! \return KexiMigration version info (most significant part)
+KEXIMIGR_EXPORT int versionMajor();
 
-	See kexi/doc/dev/kexi_import.txt for more info.
-	*/
-	class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
-	{
-		Q_OBJECT
+//! \return KexiMigration version info (least significant part)
+KEXIMIGR_EXPORT int versionMinor();
 
-		public:
-			//KexiMigrate();
-			KexiMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
-			virtual ~KexiMigrate();
 
-			//! Data Setup.  Requires two connection objects, a name and a bool
-			void setData(KexiMigration::Data*);
+//! @short Imports non-native databases into Kexi projects.
+/*! A generic API for importing schema and data from an existing
+database into a new Kexi project. Can be also used for importing native Kexi databases.
 
-			//! Perform an import operation
-			bool performImport(Kexi::ObjectStatus* result = 0);
+Basic idea is this:
+-# User selects an existing DB and new project (file or server based)
+-# User specifies whether to import structure and data or structure only.
+-# Import tool connects to db
+-# Checks if it is already a kexi project (not implemented yet)
+-# If not, then read structure and construct new project
+-# Ask user what to do if column type is not supported
 
-			//! Perform an export operation
-			bool performExport(Kexi::ObjectStatus* result = 0);
+See kexi/doc/dev/kexi_import.txt for more info.
+*/
+class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
+{
+	Q_OBJECT
 
-			//! Returns true if the migration driver supports progress updates.
-			inline bool progressSupported() { return drv_progressSupported(); }
+	public:
+		virtual ~KexiMigrate();
 
-		signals:
-			void progressPercent(int percent);
+//! @todo Remove this! KexiMigrate should be usable for multiple concurrent migrations!
+		KexiMigration::Data* data() const { return m_migrateData; }
 
-		public:
-			virtual int versionMajor() const = 0;
-			virtual int versionMinor() const = 0;
-		protected:
+//! @todo Remove this! KexiMigrate should be usable for multiple concurrent migrations!
+		//! Data Setup.  Requires two connection objects, a name and a bool
+		void setData(KexiMigration::Data* migrateData);
 
-			//! Connect to source database (driver specific)
-			virtual bool drv_connect() = 0;
-			//! Disconnect from source database (driver specific)
-			virtual bool drv_disconnect() = 0;
+		//! Perform an import operation
+		bool performImport(Kexi::ObjectStatus* result = 0);
 
-			//! Get table names in source database (driver specific)
-			virtual bool drv_tableNames(QStringList& tablenames) = 0;
+		//! Perform an export operation
+		bool performExport(Kexi::ObjectStatus* result = 0);
 
-			//! Read schema for a given table (driver specific)
-			virtual bool drv_readTableSchema(
-				const QString& originalName, KexiDB::TableSchema& tableSchema) = 0;
+		//! Returns true if the migration driver supports progress updates.
+		inline bool progressSupported() { return drv_progressSupported(); }
 
-			//! Copy a table from source DB to target DB (driver specific)
-			virtual bool drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn, 
-				KexiDB::TableSchema* dstTable) = 0;
+		virtual int versionMajor() const = 0;
+		virtual int versionMinor() const = 0;
 
-			virtual bool drv_progressSupported() { return false; }
+//! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
+		//! \return property value for \a propeName available for this driver. 
+		//! If there's no such property defined for driver, Null QVariant value is returned.
+		virtual QVariant propertyValue( const QCString& propName );
 
-			//! Return the size of a table to be imported, or 0 if not supported
-			/*! Finds the size of the named table, in order to provide feedback on
-			    migration progress.
+//! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
+		void setPropertyValue( const QCString& propName, const QVariant& value );
 
-			    The units of the return type are deliberately unspecified.  Migration
-			    drivers may return the number of records in the table, or the size in
-			    bytes, etc.  Units should be chosen in order that the driver can 
-			    return the size in the fastest way possible (e.g. migration from CSV
-			    files should use file size to avoid counting the number of rows, and
-			    migration from MDB files should return the number of rows as this is
-			    stored within the file).
+//! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
+		//! \return translated property caption for \a propeName. 
+		//! If there's no such property defined for driver, empty string value is returned.
+		QString propertyCaption( const QCString& propName ) const;
 
-			    Obviously, the driver should use the same units when reporting
-			    migration progress.
+//! @todo This is copied from KexiDB::Driver. One day it will be merged with KexiDB.
+		//! \return a list of property names available for this driver.
+		QValueList<QCString> propertyNames() const;
 
-			    \return size of the specified table
-			*/
-			virtual bool drv_getTableSize(const QString&, Q_ULLONG&)
-			{ return false; }
+		/*! \return true is driver is valid. Checks if KexiMigrate::versionMajor() 
+		 and KexiMigrate::versionMinor() are matching. 
+		 You can reimplement this but always call KexiMigrate::isValid() implementation. */
+		virtual bool isValid();
 
-			void updateProgress(Q_ULLONG step = 1ULL);
+	signals:
+		void progressPercent(int percent);
 
-			//! Prompt user to select a field type for unrecognised fields
-			KexiDB::Field::Type userType(const QString& fname);
+	protected:
+		//! Used by MigrateManager.
+		KexiMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
 
-			// Protected data members
-			//! Migrate Options
-			KexiMigration::Data* m_migrateData;
+		//! Connect to source database (driver specific)
+		virtual bool drv_connect() = 0;
+		//! Disconnect from source database (driver specific)
+		virtual bool drv_disconnect() = 0;
 
-			// Temporary values used during import (set by driver specific methods)
-			KexiDB::Field* m_f;
+		//! Get table names in source database (driver specific)
+		virtual bool drv_tableNames(QStringList& tablenames) = 0;
 
-		private:
-			//! Get the list of tables
-			bool tableNames(QStringList& tablenames);
+		//! Read schema for a given table (driver specific)
+		virtual bool drv_readTableSchema(
+			const QString& originalName, KexiDB::TableSchema& tableSchema) = 0;
 
-			//! Create the target database project
-			KexiProject* createProject(Kexi::ObjectStatus* result);
+		//! Copy a table from source DB to target DB (driver specific)
+		virtual bool drv_copyTable(const QString& srcTable, KexiDB::Connection *destConn, 
+			KexiDB::TableSchema* dstTable) = 0;
 
-			//Private data members
-			//! Flag indicating whether data should be copied
-			bool m_keepData;
+		virtual bool drv_progressSupported() { return false; }
 
-			//! Table schemas from source DB
-			QPtrList<KexiDB::TableSchema> m_tableSchemas;
+		/*! \return the size of a table to be imported, or 0 if not supported
+			Finds the size of the named table, in order to provide feedback on
+			migration progress.
 
-			//! Estimate size of migration job
-			/*! Calls drv_getTableSize for each table to be copied.
-			    \return sum of the size of all tables to be copied.
-			*/
-			bool progressInitialise();
+			The units of the return type are deliberately unspecified.  Migration
+			drivers may return the number of records in the table, or the size in
+			bytes, etc.  Units should be chosen in order that the driver can 
+			return the size in the fastest way possible (e.g. migration from CSV
+			files should use file size to avoid counting the number of rows, and
+			migration from MDB files should return the number of rows as this is
+			stored within the file).
 
-			KexiProject *m_destPrj;
+			Obviously, the driver should use the same units when reporting
+			migration progress.
 
-			//! Size of migration job
-			Q_ULLONG m_progressTotal;
-			//! Amount of migration job complete
-			Q_ULLONG m_progressDone;
-			//! Don't recalculate progress done until this value is reached.
-			Q_ULLONG m_progressNextReport;
-	};
+			\return size of the specified table
+		*/
+		virtual bool drv_getTableSize(const QString&, Q_ULLONG&)
+		{ return false; }
+
+		void updateProgress(Q_ULLONG step = 1ULL);
+
+//! @todo user should be asked ONCE using a convenient wizard's page, not a popup dialog
+		//! Prompt user to select a field type for unrecognized fields
+		KexiDB::Field::Type userType(const QString& fname);
+
+//! @todo Remove this! KexiMigrate should be usable for multiple concurrent migrations!
+		//! Migrate Options
+		KexiMigration::Data* m_migrateData;
+
+//			// Temporary values used during import (set by driver specific methods)
+//			KexiDB::Field* m_f;
+
+		/*! Driver properties dictionary (indexed by name), 
+		 useful for presenting properties to the user. 
+		 Set available properties here in driver implementation. */
+		QMap<QCString,QVariant> m_properties;
+
+		/*! i18n'd captions for properties. You do not need 
+		 to set predefined properties' caption in driver implementation 
+		 -it's done automatically. */
+		QMap<QCString,QString> m_propertyCaptions;
+
+	private:
+		//! Get the list of tables
+		bool tableNames(QStringList& tablenames);
+
+		//! Create the target database project
+		KexiProject* createProject(Kexi::ObjectStatus* result);
+
+//		//Private data members
+//		//! Flag indicating whether data should be copied
+//		bool m_keepData;
+
+		//! Table schemas from source DB
+		QPtrList<KexiDB::TableSchema> m_tableSchemas;
+
+		//! Estimate size of migration job
+		/*! Calls drv_getTableSize for each table to be copied.
+			\return sum of the size of all tables to be copied.
+		*/
+		bool progressInitialise();
+
+		KexiProject *m_destPrj;
+
+		//! Size of migration job
+		Q_ULLONG m_progressTotal;
+		//! Amount of migration job complete
+		Q_ULLONG m_progressDone;
+		//! Don't recalculate progress done until this value is reached.
+		Q_ULLONG m_progressNextReport;
+
+		friend class MigrateManager;
+};
+
 } //namespace KexiMigration
 
-#include <kgenericfactory.h>
+//! Driver's static version information (implementation), 
+//! with KLibFactory symbol declaration.
 #define KEXIMIGRATE_DRIVER_INFO( class_name, internal_name ) \
-	int class_name::versionMajor() const { return 0; } \
-	int class_name::versionMinor() const { return 0; } \
+	int class_name::versionMajor() const { return KEXI_MIGRATION_VERSION_MAJOR; } \
+	int class_name::versionMinor() const { return KEXI_MIGRATION_VERSION_MINOR; } \
 	K_EXPORT_COMPONENT_FACTORY(keximigrate_ ## internal_name, \
 	  KGenericFactory<KexiMigration::class_name>( "keximigrate_" #internal_name ))
+
+/*! Driver's static version information, automatically implemented for KexiDB drivers.
+ Put this into migration driver class declaration just like Q_OBJECT macro. */
+#define KEXIMIGRATION_DRIVER \
+	public: \
+	virtual int versionMajor() const; \
+	virtual int versionMinor() const;
+
 #endif
 

@@ -12,11 +12,23 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-11-25
+Project Migration
+(API CHANGED)
+- Added versioning for migration drivers (current one is 1.1)
+- Added properties support for migration drivers
+- All error messages are displayed on the last "Failure" page
+- Added "Advanced settings" button and dialog, currently with "Encoding" parameter 
+  for source database. Currently used by MDB driver for MSJet3 files.
+General
+- KexiCharacterEncodingComboBox added - a combobox widget providing 
+  a list of possible character encodings
+
 2005-11-22..23
 Project Migration
 - "All Supported Files" filter added to Kexi file dialogs
 - Files like MS Access .mdb can be now clicked and then Import Wizard will pop up 
-  with preselected parameters. This alos works using command line.
+  with preselected parameters. This also works using command line.
 - Import Wizard's GUI: improved messages, added real Finish page
 - No need to select source driver, it's enought to select a filename or db connection
 Startup

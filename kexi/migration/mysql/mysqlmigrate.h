@@ -31,6 +31,8 @@ namespace KexiMigration
 	class MySQLMigrate : public KexiMigrate
 	{
 		Q_OBJECT
+		KEXIMIGRATION_DRIVER
+
 		private:
 			MySqlConnectionInternal *d;
 
@@ -70,11 +72,6 @@ namespace KexiMigration
 			                             const MYSQL_FIELD* fld);
 			void getConstraints(int mysqlConstraints, KexiDB::Field* fld);
 			void getOptions(int flags, KexiDB::Field* fld);
-
-		/*! driver's static version information, it is automatically implemented
-		 in implementation using KEXIDB_DRIVER macro (see driver_p.h) */
-		virtual int versionMajor() const;
-		virtual int versionMinor() const;
 	};
 }
 

@@ -1,7 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
-   Copyright (C) 2005 Martin Ellis <kde@martinellis.co.uk>
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,18 +15,31 @@
    along with this program; see the file COPYING.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
-*/
+ */
 
-#include "keximigratedata.h"
+#ifndef KEXIMIGRATIONOPTIONSDIALOG_H
+#define KEXIMIGRATIONOPTIONSDIALOG_H
 
-using namespace KexiMigration;
+#include <kdialogbase.h>
 
-Data::Data()
- : source(0)
- , destination(0)
+class KexiCharacterEncodingComboBox;
+
+namespace KexiMigration {
+
+//! @short Import Options dialog.
+//! It is currently used for MDB driver only
+//! @todo Hardcoded. Move such code to KexiMigrate drivers.
+class OptionsDialog : public KDialogBase
 {
+	public:
+		OptionsDialog( const QString& databaseFile, const QString& selectedEncoding, QWidget* parent = 0 );
+		virtual ~OptionsDialog();
+
+		KexiCharacterEncodingComboBox* encodingComboBox() const;
+
+	protected:
+		KexiCharacterEncodingComboBox *m_encodingComboBox;
+};
 }
 
-Data::~Data()
-{
-}
+#endif

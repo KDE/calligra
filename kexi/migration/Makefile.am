@@ -23,7 +23,7 @@ SUBDIRS = . $(pgsql_dir) $(mysql_dir)
 libkeximigrate_la_METASOURCES = AUTO
 
 libkeximigrate_la_SOURCES = keximigrate.cpp importwizard.cpp migratemanager.cpp \
-	keximigratedata.cpp
+	keximigratedata.cpp importoptionsdlg.cpp
 
 libkeximigrate_la_LIBADD = \
 	$(top_builddir)/kexi/core/libkexicore.la $(LIB_QT) $(LIB_KDECORE) \

@@ -20,6 +20,7 @@
 */
 
 #include "keximigrate.h"
+
 #include <kdebug.h>
 #include <kinputdialog.h>
 #include <kapplication.h>
@@ -32,14 +33,11 @@
 using namespace KexiDB;
 using namespace KexiMigration;
 
-/*KexiMigrate::KexiMigrate()
-{
-}*/
-
 KexiMigrate::KexiMigrate(QObject *parent, const char *name,
   const QStringList&) 
   : QObject( parent, name )
   , m_destPrj(0)
+  , m_migrateData(0)
 //  , m_copyOfKexi__objects(0)
 {
 }
@@ -280,7 +278,6 @@ KexiProject *KexiMigrate::createProject(Kexi::ObjectStatus* result)
 	kdDebug() << "Creating database [" << m_migrateData->destination->databaseName() 
 		<< "]" << endl;
 
-//m_migrateData->destination->databaseName()
 	KexiProject *prj = new KexiProject(m_migrateData->destination,
 		(KexiDB::MessageHandler*)*result);
 	tristate r = prj->create(true /*forceOverwrite*/);
@@ -443,6 +440,43 @@ KexiDB::Field::Type KexiMigrate::userType(const QString& fname)
 		return KexiDB::Field::BLOB;
 	else
 		return KexiDB::Field::Text;
+}
+
+QVariant KexiMigrate::propertyValue( const QCString& propName )
+{
+	return m_properties[propName.lower()];
+}
+
+QString KexiMigrate::propertyCaption( const QCString& propName ) const
+{
+	return m_propertyCaptions[propName.lower()];
+}
+
+void KexiMigrate::setPropertyValue( const QCString& propName, const QVariant& value )
+{
+	m_properties[propName.lower()] = value;
+}
+
+QValueList<QCString> KexiMigrate::propertyNames() const
+{
+	QValueList<QCString> names = m_properties.keys();
+	qHeapSort(names);
+	return names;
+}
+
+bool KexiMigrate::isValid()
+{
+	if (KexiMigration::versionMajor() != versionMajor()
+		|| KexiMigration::versionMinor() != versionMinor())
+	{
+		setError(ERR_INCOMPAT_DRIVER_VERSION,
+		i18n("Incompatible migration driver's \"%1\" version: found version %2, expected version %3.")
+		.arg(name())
+		.arg(QString("%1.%2").arg(versionMajor()).arg(versionMinor()))
+		.arg(QString("%1.%2").arg(KexiMigration::versionMajor()).arg(KexiMigration::versionMinor())));
+		return false;
+	}
+	return true;
 }
 
 #include "keximigrate.moc"

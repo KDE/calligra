@@ -35,6 +35,7 @@ namespace KexiMigration
 	{
 		public:
 			Data();
+			~Data();
 			
 			//! Connection data for the source database
 			KexiDB::ConnectionData* source;

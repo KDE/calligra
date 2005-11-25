@@ -36,3 +36,4 @@ Type=Service
 InitialPreference=8
 X-Kexi-MigrationDriverName=PostgreSQL
 X-Kexi-MigrationDriverType=Network
+X-Kexi-KexiMigrationVersion=1.1

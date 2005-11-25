@@ -40,3 +40,6 @@ Type=QString
 
 [PropertyDef::X-Kexi-MigrationDriverType]
 Type=QString
+
+[PropertyDef::X-Kexi-KexiMigrationVersion]
+Type=QString

@@ -76,6 +76,8 @@ class MigrateManagerInternal : public QObject, public KexiDB::Object
 
 		bool lookupDriversNeeded : 1;
 
+		QStringList possibleProblems;
+
 	friend class MigrateManager;
 };
 }

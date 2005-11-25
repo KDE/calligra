@@ -33,14 +33,13 @@ namespace KexiMigration
 	class PqxxMigrate : public KexiMigrate
 	{
 		Q_OBJECT
+		KEXIMIGRATION_DRIVER
+
 		public:
 //			PqxxMigrate();
 			PqxxMigrate(QObject *parent, const char *name, const QStringList &args = QStringList());
 			virtual ~PqxxMigrate();
 			
-			virtual int versionMajor() const;
-			virtual int versionMinor() const;
-		
 		protected:
 			//Driver specific function to return table names
 			virtual bool drv_tableNames(QStringList& tablenames);

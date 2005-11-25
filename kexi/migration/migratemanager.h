@@ -34,7 +34,7 @@ namespace KexiMigration {
 
 class MigrateManagerInternal;
 
-//! Migration library management, e.g. finding and loading drivers.
+//! @short Migration library management, for finding and loading mogration drivers.
 class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object
 {
 	public:
@@ -63,6 +63,12 @@ class KEXIMIGR_EXPORT MigrateManager : public QObject, public KexiDB::Object
 		virtual QString serverErrorMsg();
 		virtual int serverResult();
 		virtual QString serverResultName();
+
+//! @todo copied from KexiDB::DriverManager, merge it.
+		/*! HTML information about possible problems encountered.
+		 It's displayed in 'details' section, if an error encountered. 
+		 Currently it contains a list of incompatible migration drivers. */
+		QString possibleProblemsInfoMsg() const;
 
 	protected:
 		virtual void drv_clearServerResult();

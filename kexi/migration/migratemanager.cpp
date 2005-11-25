@@ -42,6 +42,13 @@ using namespace KexiMigration;
 
 MigrateManagerInternal* MigrateManagerInternal::s_self = 0L;
 
+/*! @todo
+ Temporary, needed because MigrateManagerInternal::m_drivers is autodeleted
+ drivers currently own KexiMigrate::Data members so these are destroyed when 
+ last MigrateManager instance is deleted. Remove this hack when 
+ KexiMigrate is splitted into Driver and Connection. */
+MigrateManager __manager;
+
 MigrateManagerInternal::MigrateManagerInternal() /* protected */
 	: QObject( 0, "KexiMigrate::MigrateManagerInternal" )
 	, Object()
@@ -101,14 +108,46 @@ bool MigrateManagerInternal::lookupDrivers()
 		QString srv_name = ptr->property("X-Kexi-MigrationDriverName").toString();
 		if (srv_name.isEmpty()) {
 			KexiDBWarn << "MigrateManagerInternal::lookupDrivers(): "
-				"X-Kexi-MigrationDriverName must be set for KexiDB driver \"" 
+				"X-Kexi-MigrationDriverName must be set for migration driver \"" 
 				<< ptr->property("Name").toString() << "\" service!\n -- skipped!" << endl;
 			continue;
 		}
 		if (m_services_lcase.contains(srv_name.lower())) {
 			continue;
 		}
-		
+
+//! @todo could be merged. Copied from KexiDB::DriverManager.
+//<COPIED>
+		QString srv_ver_str = ptr->property("X-Kexi-KexiMigrationVersion").toString();
+		QStringList lst( QStringList::split(".", srv_ver_str) );
+		int minor_ver, major_ver;
+		bool ok = (lst.count() == 2);
+		if (ok)
+			major_ver = lst[0].toUInt(&ok);
+		if (ok)
+			minor_ver = lst[1].toUInt(&ok);
+		if (!ok) {
+			KexiDBWarn << "MigrateManagerInternal::lookupDrivers(): problem with detecting '"
+			<< srv_name.lower() << "' driver's version -- skipping it!" << endl;
+			possibleProblems += QString("\"%1\" migration driver has unrecognized version; "
+				"required driver version is \"%2.%3\"")
+				.arg(srv_name.lower())
+				.arg(KexiMigration::versionMajor()).arg(KexiMigration::versionMinor());
+			continue;
+		}
+		if (major_ver != KexiMigration::versionMajor() || minor_ver != KexiMigration::versionMinor()) {
+			KexiDBWarn << QString("MigrateManagerInternal::lookupDrivers(): '%1' driver" 
+				" has version '%2' but required migration driver version is '%3.%4'\n"
+				" -- skipping this driver!").arg(srv_name.lower()).arg(srv_ver_str)
+				.arg(KexiMigration::versionMajor()).arg(KexiMigration::versionMinor()) << endl;
+			possibleProblems += QString("\"%1\" migration driver has version \"%2\" "
+				"but required driver version is \"%3.%4\"")
+				.arg(srv_name.lower()).arg(srv_ver_str)
+				.arg(KexiMigration::versionMajor()).arg(KexiMigration::versionMinor());
+			continue;
+		}
+//</COPIED>
+
 		QString mime = ptr->property("X-Kexi-FileDBDriverMime").toString().lower();
 		QString drvType = ptr->property("X-Kexi-MigrationDriverType").toString().lower();
 		if (drvType=="file") {
@@ -117,7 +156,8 @@ bool MigrateManagerInternal::lookupDrivers()
 					m_services_by_mimetype.insert(mime, ptr);
 				}
 				else {
-					KexiDBWarn << "MigrateManagerInternal::lookupDrivers(): more than one driver for '" << mime << "' mime type!" << endl;
+					KexiDBWarn << "MigrateManagerInternal::lookupDrivers(): more than one driver for '" 
+						<< mime << "' mime type!" << endl;
 				}
 			}
 		}
@@ -130,7 +170,8 @@ bool MigrateManagerInternal::lookupDrivers()
 
 		m_services.insert(srv_name, ptr);
 		m_services_lcase.insert(srv_name.lower(), ptr);
-		KexiDBDbg << "MigrateManager::lookupDrivers(): registered driver: " << ptr->name() << "(" << ptr->library() << ")" << endl;
+		KexiDBDbg << "MigrateManager::lookupDrivers(): registered driver: " << ptr->name() 
+			<< "(" << ptr->library() << ")" << endl;
 	}
 
 	if (tlist.isEmpty())
@@ -161,7 +202,7 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
 	KService::Ptr ptr= *(m_services_lcase.find(name.lower()));
 	QString srv_name = ptr->property("X-Kexi-MigrationDriverName").toString();
 
-	KexiDBDbg << "KexiDBInterfaceManager::load(): library: "<<ptr->library()<<endl;
+	KexiDBDbg << "MigrateManagerInternal::driver(): library: "<<ptr->library()<<endl;
 	drv = KParts::ComponentFactory::createInstanceFromService<KexiMigrate>(ptr,
 		this, srv_name.latin1(), QStringList(),&m_serverResultNum);
 
@@ -178,13 +219,20 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
 		m_serverResultName=m_componentLoadingErrors[m_serverResultNum];
 		return 0;
 	}
-	KexiDBDbg << "KexiDBInterfaceManager::load(): loading succeed: " << name <<endl;
+	KexiDBDbg << "MigrateManagerInternal::driver(): loading succeed: " << name <<endl;
 	KexiDBDbg << "drv="<<(long)drv <<endl;
 
 //	drv->setName(srv_name.latin1());
 //	drv->d->service = ptr; //store info
 //	drv->d->fileDBDriverMimeType = ptr->property("X-Kexi-FileDBDriverMime").toString();
 //	drv->d->initInternalProperties();
+
+	if (!drv->isValid()) {
+		setError(drv);
+		delete drv;
+		return 0;
+	}
+
 	m_drivers.insert(name.latin1(), drv); //cache it
 	return drv;
 }
@@ -192,13 +240,13 @@ KexiMigrate* MigrateManagerInternal::driver(const QString& name)
 void MigrateManagerInternal::incRefCount()
 {
 	m_refCount++;
-	KexiDBDbg << "MigrationManagerInternal::incRefCount(): " << m_refCount << endl;
+	KexiDBDbg << "MigrateManagerInternal::incRefCount(): " << m_refCount << endl;
 }
 
 void MigrateManagerInternal::decRefCount()
 {
 	m_refCount--;
-	KexiDBDbg << "DriverMaMigrationManagerInternal::decRefCount(): " << m_refCount << endl;
+	KexiDBDbg << "MigrateManagerInternal::decRefCount(): " << m_refCount << endl;
 //	if (m_refCount<1) {
 //		KexiDBDbg<<"KexiDB::DriverManagerInternal::decRefCount(): reached m_refCount<1 -->deletelater()"<<endl;
 //		s_self=0;
@@ -312,5 +360,32 @@ void MigrateManager::drv_clearServerResult()
 	d_int->m_serverResultName=QString::null;
 }
 
-#include "migratemanager_p.moc"
+QString MigrateManager::possibleProblemsInfoMsg() const
+{
+	if (d_int->possibleProblems.isEmpty())
+		return QString::null;
+	QString str;
+	str.reserve(1024);
+	str = "<ul>";
+	for (QStringList::ConstIterator it = d_int->possibleProblems.constBegin();
+		it!=d_int->possibleProblems.constEnd(); ++it)
+	{
+		str += (QString::fromLatin1("<li>") + *it + QString::fromLatin1("</li>"));
+	}
+	str += "</ul>";
+	return str;
+}
 
+//------------------------
+
+int KexiMigration::versionMajor()
+{
+	return KEXI_MIGRATION_VERSION_MAJOR;
+}
+
+int KexiMigration::versionMinor()
+{
+	return KEXI_MIGRATION_VERSION_MINOR;
+}
+
+#include "migratemanager_p.moc"
