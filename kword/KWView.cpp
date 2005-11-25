@@ -2240,7 +2240,7 @@ void KWView::updateFrameStyleList()
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
     KAccelGen::generate( lst, lstWithAccels );
-    QMap<QString, KShortcut> shortCut;
+    QMap<QString, KShortcut> shortCuts; // style (internal) name -> shortcut
 
 
     KActionPtrList lst2 = actionCollection()->actions("frameStyleList");
@@ -2251,9 +2251,9 @@ void KWView::updateFrameStyleList()
     {
         if ( !(*it)->shortcut().toString().isEmpty())
         {
-            KWFrameStyle* tmp = m_doc->frameStyleCollection()->findStyleByShortcut( (*it)->name() );
+            KWFrameStyle* tmp = m_doc->frameStyleCollection()->findStyle( (*it)->name() );
             if ( tmp )
-                shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
+                shortCuts.insert( (*it)->name(), (*it)->shortcut() );
         }
         m_actionFrameStyleMenu->remove(*it );
         delete *it;
@@ -2262,25 +2262,14 @@ void KWView::updateFrameStyleList()
     uint i = 0;
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
-        KToggleAction* act =0L;
-
         // The list lst was created (unsorted) from the frame style collection, so we have still the same order.
         KWFrameStyle *tmp = m_doc->frameStyleCollection()->frameStyleAt( i );
         if ( tmp )
         {
-            QCString name = tmp->shortCutName().latin1();
-
-            if ( shortCut.contains(name))
-            {
-                act = new KToggleAction( (*it),
-                                         (shortCut)[name], this, SLOT( slotFrameStyleSelected() ),
-                                         actionCollection(), name );
-
-            }
-            else
-                act = new KToggleAction( (*it),
-                                         0, this, SLOT( slotFrameStyleSelected() ),
-                                         actionCollection(), name );
+            KShortcut cut = shortCuts[ tmp->name() ]; // KDE4: use value()
+            KToggleAction* act = new KToggleAction( (*it),
+                                                    cut, this, SLOT( slotFrameStyleSelected() ),
+                                                    actionCollection(), tmp->name().utf8() /*KDE4: remove conversion*/ );
             act->setGroup( "frameStyleList" );
             act->setExclusiveGroup( "frameStyleList" );
             m_actionFrameStyleMenu->insert( act );
@@ -2289,7 +2278,6 @@ void KWView::updateFrameStyleList()
             kdWarning() << "No frame style found for " << *it << endl;
     }
 }
-
 
 
 void KWView::updateTableStyleList()
@@ -3911,7 +3899,7 @@ void KWView::createFrameStyle()
     if ( dia->exec() )
     {
         KWFrameStyle *style= new KWFrameStyle( dia->nameOfNewStyle(), frame );
-        m_doc->frameStyleCollection()->addFrameStyleTemplate( style );
+        m_doc->frameStyleCollection()->addStyle( style );
         m_doc->updateAllFrameStyleLists();
     }
     delete dia;
@@ -4439,11 +4427,11 @@ void KWView::textStyleSelected( int index )
 // Slot is called when selecting a framestyle in the Frames / Framestyle menu
 void KWView::slotFrameStyleSelected()
 {
-    QString actionName = QString::fromLatin1(sender()->name());
+    QString actionName = QString::fromUtf8(sender()->name());
     if ( actionName.startsWith( "shortcut_framestyle_" ) )//see kwframestyle.cc
     {
         //kdDebug() << "KWView::slotFrameStyleSelected " << styleStr << endl;
-        frameStyleSelected( m_doc->frameStyleCollection()->findStyleByShortcut( actionName) );
+        frameStyleSelected( m_doc->frameStyleCollection()->findStyle( actionName ) );
     }
 }
 
@@ -4499,7 +4487,7 @@ void KWView::frameStyleSelected( KWFrameStyle *sty )
     const int pos = m_doc->frameStyleCollection()->indexOf( sty );
     Q_ASSERT( pos >= 0 );
     m_actionFrameStyle->setCurrentItem( pos );
-    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->shortCutName().latin1() ));
+    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->name().utf8() ));
     if ( act )
         act->setChecked( true );
 }

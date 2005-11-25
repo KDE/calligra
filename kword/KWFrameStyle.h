@@ -37,12 +37,16 @@ class KWGenericStyle
 public:
     KWGenericStyle( const QString & name );
 
-    /** The internal name (untranslated if a standard style) */
+    /// The internal name (used for loading/saving, but not shown to the user)
+    /// Should be unique in a given style collection.
     QString name() const { return m_name; }
+    /// Set the internal name - see generateUniqueName() if needed
+    /// Should be unique in a given style collection.
     void setName( const QString & name ) { m_name = name; }
 
-    /** The user-visible name (e.g. translated) */
+    /// The user-visible name (e.g. translated, or set by the user)
     QString displayName() const;
+    /// Set the user-visible name
     void setDisplayName( const QString& name );
 
 protected:
@@ -73,9 +77,16 @@ public:
     QStringList displayNameList() const;
 
     /**
-     * Find style based on the untranslated name @p name
+     * Find style based on the internal name @p name
+     * If the style with that name can't be found, then
+     * 1) if @p name is @defaultStyleName, return the first one, never 0
+     * 2) otherwise return 0
      */
-    KWGenericStyle* findStyle( const QString & name ) const;
+    KWGenericStyle* findStyle( const QString & name, const QString& defaultStyleName ) const;
+
+    void removeStyle( KWGenericStyle *style );
+    void updateStyleListOrder( const QStringList& list );
+    KWGenericStyle* addStyle( KWGenericStyle* sty );
 
     // TODO move many methods here
 
@@ -111,14 +122,6 @@ public:
     void operator=( const KWFrameStyle & );
     int compare( const KWFrameStyle & frameStyle ) const;
 
-    QString shortCutName() const {
-        return m_shortCut_name;
-    }
-
-    void setShortCutName( const QString & _shortCut) {
-        m_shortCut_name = _shortCut;
-    }
-
     // ATTRIBUTES
     QBrush backgroundColor() const { return m_backgroundColor; }
     void setBackgroundColor( const QBrush &_color ) { m_backgroundColor = _color; }
@@ -144,7 +147,6 @@ public:
     void loadOasis( QDomElement & styleElem, KoOasisContext& context );
 
 private:
-    QString m_shortCut_name;
     QBrush m_backgroundColor;
     KoBorder m_borderLeft, m_borderRight, m_borderTop, m_borderBottom;
 };
@@ -158,37 +160,24 @@ class KWFrameStyleCollection : public KWGenericStyleCollection
 public:
     KWFrameStyleCollection();
 
-    // ######## slow, avoid calling this
-    const QPtrList<KWFrameStyle> frameStyleList() const;
+    /// WARNING: slow method, since it has to convert the item types, avoid calling this.
+    /// It should be only called for the old xml saving and for iteration by KWFrameStyleManager.
+    QValueList<KWFrameStyle *> frameStyleList() const;
 
     /**
      * Find style based on the untranslated name @p name
      */
     KWFrameStyle* findStyle( const QString & name ) const {
-        return static_cast<KWFrameStyle*>( KWGenericStyleCollection::findStyle( name ) );
+        return static_cast<KWFrameStyle*>( KWGenericStyleCollection::findStyle( name, QString::fromLatin1( "Plain" ) ) );
     }
 
-    /**
-     * find frame style based on the translated name @p name
-     */
-    KWFrameStyle* findTranslatedFrameStyle( const QString & name );
-    KWFrameStyle* findStyleByShortcut( const QString & _shortCut );
     /**
      * Return style number @p i.
      */
     KWFrameStyle* frameStyleAt( int i ) { return static_cast<KWFrameStyle*>( m_styleList.at(i) ); }
 
-    KWFrameStyle* addFrameStyleTemplate( KWFrameStyle *style );
-
-    void removeFrameStyleTemplate ( KWFrameStyle *style );
-    void updateFrameStyleListOrder( const QStringList &list );
-
     void saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const;
     void loadOasisStyles( KoOasisContext& context );
-
-private:
-    mutable KWFrameStyle *m_lastStyle; ///< Last style that was searched
-    static int styleNumber;
 };
 
 #endif

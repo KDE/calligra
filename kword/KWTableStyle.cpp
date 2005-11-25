@@ -205,7 +205,7 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
             standardFrameStyle->setRightBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
             standardFrameStyle->setLeftBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
             standardFrameStyle->setBottomBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
-            _doc->frameStyleCollection()->addFrameStyleTemplate( standardFrameStyle );
+            _doc->frameStyleCollection()->addStyle( standardFrameStyle );
             m_frameStyle = _doc->frameStyleCollection()->frameStyleAt( 0 );
         }
     }

@@ -1406,7 +1406,7 @@ void KWDocument::clear()
     standardFrameStyle->setRightBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
     standardFrameStyle->setLeftBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
     standardFrameStyle->setBottomBorder(KoBorder(Qt::black,KoBorder::SOLID,0));
-    m_frameStyleColl->addFrameStyleTemplate( standardFrameStyle );
+    m_frameStyleColl->addStyle( standardFrameStyle );
 
     // And let's do the same for tablestyles
     KWTableStyle *standardTableStyle = new KWTableStyle( "Plain", standardStyle, standardFrameStyle );
@@ -2001,13 +2001,13 @@ void KWDocument::loadFrameStyleTemplates( const QDomElement &stylesElem )
     if( listStyles.count() > 0) { // we are going to import at least one style.
         KWFrameStyle *s = m_frameStyleColl->findStyle("Plain");
         if(s) // delete the standard style.
-            m_frameStyleColl->removeFrameStyleTemplate(s);
+            m_frameStyleColl->removeStyle(s);
     }
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWFrameStyle *sty = new KWFrameStyle( styleElem );
-        m_frameStyleColl->addFrameStyleTemplate( sty );
+        m_frameStyleColl->addStyle( sty );
     }
 }
 
@@ -2030,7 +2030,7 @@ void KWDocument::loadDefaultFrameStyleTemplates()
             standardFrameStyle->setRightBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
             standardFrameStyle->setLeftBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
             standardFrameStyle->setBottomBorder(KoBorder(QColor("black"),KoBorder::SOLID,0));
-            m_frameStyleColl->addFrameStyleTemplate( standardFrameStyle );
+            m_frameStyleColl->addStyle( standardFrameStyle );
         }
         return;
     }
@@ -2064,13 +2064,13 @@ void KWDocument::loadDefaultFrameStyleTemplates()
     if( listStyles.count() > 0) { // we are going to import at least one style.
         KWFrameStyle *s = m_frameStyleColl->findStyle("Plain");
         if(s) // delete the standard style.
-            m_frameStyleColl->removeFrameStyleTemplate(s);
+            m_frameStyleColl->removeStyle(s);
     }
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWFrameStyle *sty = new KWFrameStyle( styleElem );
-        m_frameStyleColl->addFrameStyleTemplate( sty );
+        m_frameStyleColl->addStyle( sty );
     }
 }
 
@@ -3467,9 +3467,10 @@ QDomDocument KWDocument::saveXML()
 
     QDomElement frameStyles = doc.createElement( "FRAMESTYLES" );
     kwdoc.appendChild( frameStyles );
-    QPtrList<KWFrameStyle> m_frameStyleList(m_frameStyleColl->frameStyleList());
-    for ( KWFrameStyle * p = m_frameStyleList.first(); p != 0L; p = m_frameStyleList.next() )
-        saveFrameStyle( p, frameStyles );
+    const QValueList<KWFrameStyle*> frameStyleList(m_frameStyleColl->frameStyleList());
+    for ( QValueList<KWFrameStyle *>::const_iterator it = frameStyleList.begin(), end = frameStyleList.end();
+          it != end ; ++it )
+        saveFrameStyle( *it, frameStyles );
 
     QDomElement tableStyles = doc.createElement( "TABLESTYLES" );
     kwdoc.appendChild( tableStyles );

@@ -103,11 +103,6 @@ public:
     KWFrameStyleManager( QWidget *_parent, KWDocument *_doc );
     ~KWFrameStyleManager();
 
-    KWFrameStyle* addFrameStyleTemplate(KWFrameStyle *style);
-    void removeFrameStyleTemplate( KWFrameStyle *style );
-    void updateAllStyleLists();
-    void updateFrameStyleListOrder( const QStringList &list );
-
 protected:
     void addStyles(const QPtrList<KWFrameStyle> & style );
     void setupWidget();

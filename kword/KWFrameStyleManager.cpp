@@ -179,12 +179,13 @@ void KWFrameStyleManager::setupWidget()
     numFrameStyles = collection->count();
     m_stylesList = new QListBox( frame1, "stylesList" );
     m_stylesList->insertStringList( collection->displayNameList() );
-    QPtrList<KWFrameStyle> styleList = collection->frameStyleList(); /*slow*/
-    QPtrListIterator<KWFrameStyle> style( styleList );
-    for ( ; style.current() ; ++style )
+    const QValueList<KWFrameStyle*> styleList = collection->frameStyleList(); /*slow*/
+    for ( QValueList<KWFrameStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+          it != end ; ++it )
     {
-        m_frameStyles.append( new KWFrameStyleListItem( style.current(),new KWFrameStyle(*style.current())) );
-        m_styleOrder<<style.current()->name();
+        KWFrameStyle* style = *it;
+        m_frameStyles.append( new KWFrameStyleListItem( style, new KWFrameStyle(*style) ) );
+        m_styleOrder << style->name();
     }
     Q_ASSERT( m_stylesList->count() == m_styleOrder.count() );
     Q_ASSERT( m_styleOrder.count() == m_frameStyles.count() );
@@ -491,15 +492,16 @@ void KWFrameStyleManager::apply()
 
             kdDebug() << "adding new " << m_frameStyles.at(i)->changedFrameStyle()->name() << " (" << i << ")" << endl;
 
-            KWFrameStyle *tmp = addFrameStyleTemplate(m_frameStyles.take(i)->changedFrameStyle());
-            m_frameStyles.insert(i, new KWFrameStyleListItem(0, tmp) );
+            KWGenericStyle* tmp = m_doc->frameStyleCollection()->addStyle(m_frameStyles.take(i)->changedFrameStyle());
+            KWFrameStyle* style = static_cast<KWFrameStyle *>( tmp );
+            m_frameStyles.insert( i, new KWFrameStyleListItem(0, style) );
 
         } else if(m_frameStyles.at(i)->changedFrameStyle() == 0) { // deleted style
 
             kdDebug() << "deleting orig " << m_frameStyles.at(i)->origFrameStyle()->name() << " (" << i << ")" << endl;
 
             KWFrameStyle *orig = m_frameStyles.at(i)->origFrameStyle();
-            removeFrameStyleTemplate( orig );
+            m_doc->frameStyleCollection()->removeStyle( orig );
 
         } else {
 
@@ -507,8 +509,8 @@ void KWFrameStyleManager::apply()
             m_frameStyles.at(i)->apply();
         }
     }
-    updateFrameStyleListOrder( m_styleOrder );
-    updateAllStyleLists();
+    m_doc->frameStyleCollection()->updateStyleListOrder( m_styleOrder );
+    m_doc->updateAllFrameStyleLists();
     noSignals=false;
 }
 
@@ -551,27 +553,6 @@ void KWFrameStyleManager::renameStyle(const QString &theText) {
         m_moveDownButton->setEnabled(false);
     }
 }
-
-KWFrameStyle* KWFrameStyleManager::addFrameStyleTemplate(KWFrameStyle *style)
-{
-    return m_doc->frameStyleCollection()->addFrameStyleTemplate(style);
-}
-
-void KWFrameStyleManager::removeFrameStyleTemplate( KWFrameStyle *style )
-{
-    m_doc->frameStyleCollection()->removeFrameStyleTemplate(style);
-}
-
-void KWFrameStyleManager::updateAllStyleLists()
-{
-    m_doc->updateAllFrameStyleLists();
-}
-
-void KWFrameStyleManager::updateFrameStyleListOrder( const QStringList &list )
-{
-    m_doc->frameStyleCollection()->updateFrameStyleListOrder( list );
-}
-
 
 /******************************************************************/
 /* Class: KWFrameStyleBackgroundTab                               */
