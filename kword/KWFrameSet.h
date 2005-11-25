@@ -268,6 +268,7 @@ public:
      * @param edit If set, this frameset is being edited, so a cursor is needed.
      * @param viewMode For coordinate conversion, always set.
      * @param drawUnderlyingFrames if the frame implements it, then it should draw underlying frames.
+     * @param translationOffset offset this method will translate the paiter before doing its work.
      */
     virtual void drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcrect, const QRect &crect,
                             const QPoint& translationOffset,

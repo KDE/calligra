@@ -52,7 +52,7 @@ public:
 
     void updateChildGeometry( KWViewMode* viewMode );
 
-    virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & crect,
+    virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & fcrect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                     KWFrameSetEdit * edit, KWViewMode *viewMode );
 

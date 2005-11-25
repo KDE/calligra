@@ -188,7 +188,7 @@ public:
                                KWFrameSetEdit* edit, KWViewMode *viewMode,
                                KWFrameViewManager *frameViewManager );
 
-    virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect& fcrect, const QRect& crect,
+    virtual void drawFrame( KWFrame * frame, QPainter *painter, const QRect& fcrect, const QRect& fcrect,
                             const QPoint& translationOffset,
                             KWFrame *settingsFrame, const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                             KWFrameSetEdit * edit, KWViewMode *viewMode, bool drawUnderlyingFrames );
