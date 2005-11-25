@@ -452,7 +452,7 @@ void View::slotProjectCalculate() {
 }
 
 void View::projectCalculate() {
-    if (getProject().actualEffort() > 0.0) {
+    if (getProject().actualEffort() > 0) {
         // NOTE: This can be removed when proper baselining etc is implemented
         if (KMessageBox::warningContinueCancel(this, i18n("Progress information will be deleted if the project is recalculated."), i18n("Calculate"), i18n("Calculate")) == KMessageBox::Cancel) {
             return;
