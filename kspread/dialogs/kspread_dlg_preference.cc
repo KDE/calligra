@@ -428,19 +428,7 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   comboChanged=false;
   connect(typeCompletion,SIGNAL(activated( const QString & )),this,SLOT(slotTextComboChanged(const QString &)));
 
-//   valIndent = new KDoubleNumInput( _indent, tmpQGroupBox , 10.0 );
-  valIndent = new KDoubleNumInput( tmpQGroupBox );
-  valIndent->setRange( KoUnit::toUserValue( 0.0, indentUnit ),
-                       KoUnit::toUserValue( 400.0, indentUnit ),
-                       KoUnit::toUserValue( 10.0, indentUnit) );
-//   valIndent->setRange( 0.0, 100.0, 10.0 );
-  valIndent->setValue ( KoUnit::toUserValue( _indent, indentUnit ) );
-  QWhatsThis::add(valIndent, i18n( "Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu." ) );
-  valIndent->setLabel(i18n("&Value of indent (%1):").arg(
-      KoUnit::unitName(indentUnit)));
-  
-
-  label=new QLabel(i18n("&Press enter to move selection to:"), tmpQGroupBox);
+  label=new QLabel(i18n("&Pressing enter moves selection to:"), tmpQGroupBox);
   typeOfMove=new QComboBox( tmpQGroupBox);
   label->setBuddy(typeOfMove);
   listType.clear();
@@ -452,10 +440,6 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   typeOfMove->insertStringList(listType);
   typeOfMove->setCurrentItem(0);
   QWhatsThis::add(typeOfMove, i18n( "When you have selected a cell then press the Enter key the selection will move one place to the left, right, up or down as determined by the setting in this drop down selection box." ) );
-
-  msgError= new QCheckBox(i18n("&Show error message"),tmpQGroupBox);
-  msgError->setChecked(m_bMsgError);
-  QWhatsThis::add(msgError, i18n( "If this box is checked a message box will pop up when what you have entered into a cell cannot be understood by KSpread." ) );
 
   label=new QLabel(i18n("&Method of calc:"), tmpQGroupBox);
 
@@ -472,6 +456,20 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   typeCalc->insertStringList(listTypeCalc);
   typeCalc->setCurrentItem(0);
   QWhatsThis::add(typeCalc, i18n( "This drop down selection box can be used to choose the calculation performed by the Statusbar Summary  function." ) );
+
+//   valIndent = new KDoubleNumInput( _indent, tmpQGroupBox , 10.0 );
+  valIndent = new KDoubleNumInput( tmpQGroupBox );
+  valIndent->setRange( KoUnit::toUserValue( 0.0, indentUnit ),
+                       KoUnit::toUserValue( 400.0, indentUnit ),
+                       KoUnit::toUserValue( 10.0, indentUnit) );
+//   valIndent->setRange( 0.0, 100.0, 10.0 );
+  valIndent->setValue ( KoUnit::toUserValue( _indent, indentUnit ) );
+  QWhatsThis::add(valIndent, i18n( "Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu." ) );
+  valIndent->setLabel(i18n("&Indentation step (%1):").arg(KoUnit::unitName(indentUnit)));
+
+  msgError= new QCheckBox(i18n("&Show error message for invalid formulas"),tmpQGroupBox);
+  msgError->setChecked(m_bMsgError);
+  QWhatsThis::add(msgError, i18n( "If this box is checked a message box will pop up when what you have entered into a cell cannot be understood by KSpread." ) );
 
   initComboBox();
 }
