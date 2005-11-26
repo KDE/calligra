@@ -42,6 +42,7 @@
 #include "kspread_doc.h"
 #include "kspread_value.h"
 #include "position_cell_format.h"
+#include "font_cell_format.h"
 
 #include <qpushbutton.h>
 #include <qcheckbox.h>
@@ -157,7 +158,7 @@ class GeneralTab : public QWidget
 
 /**
  */
-class CellFormatPageFont : public QWidget
+class CellFormatPageFont : public FontTab
 {
     Q_OBJECT
 public:
@@ -186,47 +187,15 @@ private slots:
     void      strike_chosen_slot();
     void      display_example(const QFont &font);
     void      slotSetTextColor( const QColor &_color );
-    void      slotSearchFont(const QString &);
 
 private:
 
     void setCombos();
-
-    QGroupBox	 *box1;
-    QGroupBox	 *box2;
-
-    QLabel	 *family_label;
-    QLabel	 *size_label;
-    QLabel       *weight_label;
-    QLabel       *style_label;
-
-    QLabel	 *actual_family_label;
-    QLabel	 *actual_size_label;
-    QLabel       *actual_weight_label;
-    QLabel       *actual_style_label;
-
-    QLabel	 *actual_family_label_data;
-    QLabel	 *actual_size_label_data;
-    QLabel       *actual_weight_label_data;
-    QLabel       *actual_style_label_data;
-
-    //QComboBox    *family_combo;
-    QListBox     *family_combo;
-    QComboBox    *size_combo;
-    QComboBox    *weight_combo;
-    QComboBox    *style_combo;
-
-    QLabel       *example_label;
-    QFont         selFont;
-    QCheckBox* strike;
-    QCheckBox* underline;
-    CellFormatDialog *dlg;
     QColor textColor;
-    bool bTextColorUndefined;
-    KColorButton *textColorButton;
-    KLineEdit *searchFont;
-    KCompletion listFont;
+    QFont         selFont;
     bool fontChanged;
+    bool bTextColorUndefined;
+    CellFormatDialog *dlg;
 };
 
 class CellFormatPageMisc : public QWidget

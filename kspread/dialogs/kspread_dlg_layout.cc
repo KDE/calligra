@@ -2330,56 +2330,20 @@ void CellFormatPageMisc::slotStyle( int _i )
 }
 
 
-CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg ) : QWidget ( parent )
+CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg ) : FontTab( parent )
 {
   dlg = _dlg;
 
   bTextColorUndefined = !dlg->bTextColor;
 
-  QVBoxLayout* grid = new QVBoxLayout( this, 6 );
-
-  box1 = new QGroupBox( this, "Box1");
-  box1->setTitle(i18n("Requested Font"));
-  QGridLayout *grid2 = new QGridLayout(box1,7,3,KDialog::marginHint(), KDialog::spacingHint());
-  int fHeight = box1->fontMetrics().height();
-  grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
-
-  family_label = new QLabel(box1,"family");
-  family_label->setText(i18n("Family:"));
-  grid2->addWidget(family_label,1,0);
-
-  size_label = new QLabel(box1,"size");
-  size_label->setText(i18n("Size:"));
-  grid2->addWidget(size_label,1,2);
-
-  weight_label = new QLabel(box1,"weight");
-  weight_label->setText(i18n("Weight:"));
-  grid2->addWidget(weight_label,3,1);
-
-  QLabel *tmpQLabel = new QLabel( box1, "Label_1" );
-  tmpQLabel->setText( i18n("Text color:") );
-  grid2->addWidget(tmpQLabel,5,1);
-
-  textColorButton = new KColorButton( box1, "textColor" );
-  grid2->addWidget(textColorButton,6,1);
-
   connect( textColorButton, SIGNAL( changed( const QColor & ) ),
              this, SLOT( slotSetTextColor( const QColor & ) ) );
 
-
-
-  style_label = new QLabel(box1,"style");
-  style_label->setText(i18n("Style:"));
-  grid2->addWidget(style_label,1,1);
-
-  family_combo = new QListBox( box1, "Family" );
 
   QStringList tmpListFont;
   QFontDatabase *fontDataBase = new QFontDatabase();
   tmpListFont = fontDataBase->families();
   delete fontDataBase;
-
-  listFont.setItems(tmpListFont);
 
   family_combo->insertStringList( tmpListFont);
   selFont = dlg->textFont;
@@ -2403,20 +2367,9 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
         family_combo->setCurrentItem(0);
    }
 
-  grid2->addMultiCellWidget(family_combo,3,6,0,0);
-
   connect( family_combo, SIGNAL(highlighted(const QString &)),
            SLOT(family_chosen_slot(const QString &)) );
 
-  searchFont=new KLineEdit(box1);
-  grid2->addWidget(searchFont,2,0);
-  searchFont->setCompletionMode(KGlobalSettings::CompletionAuto  );
-  searchFont->setCompletionObject( &listFont,true );
-
-  connect(searchFont, SIGNAL( textChanged( const QString & )),
-          this,SLOT(slotSearchFont(const QString &)));
-
-  size_combo = new QComboBox( true, box1, "Size" );
   QStringList lst;
   lst.append("");
   for ( unsigned int i = 1; i < 100; ++i )
@@ -2426,106 +2379,35 @@ CellFormatPageFont::CellFormatPageFont( QWidget* parent, CellFormatDialog *_dlg 
 
 
   size_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  grid2->addWidget(size_combo,2,2);
+
   connect( size_combo, SIGNAL(activated(const QString &)),
            SLOT(size_chosen_slot(const QString &)) );
   connect( size_combo ,SIGNAL( textChanged(const QString &)),
         this,SLOT(size_chosen_slot(const QString &)));
 
-  weight_combo = new QComboBox( box1, "Weight" );
-  weight_combo->insertItem( "", 0 );
-  weight_combo->insertItem( i18n("Normal") );
-  weight_combo->insertItem( i18n("Bold") );
-
-  weight_combo->setInsertionPolicy(QComboBox::NoInsertion);
-  grid2->addWidget(weight_combo,4,1);
   connect( weight_combo, SIGNAL(activated(const QString &)),
            SLOT(weight_chosen_slot(const QString &)) );
 
-  style_combo = new QComboBox( box1, "Style" );
-  style_combo->insertItem( "", 0 );
-  style_combo->insertItem( i18n("Roman") );
-  style_combo->insertItem( i18n("Italic"), 2 );
-  grid2->addWidget(style_combo,2,1);
-  style_combo->setInsertionPolicy(QComboBox::NoInsertion);
   connect( style_combo, SIGNAL(activated(const QString &)),
            SLOT(style_chosen_slot(const QString &)) );
 
-  strike = new QCheckBox(i18n("Strike out"),box1);
-  grid2->addWidget(strike,6,2);
   strike->setChecked(dlg->strike);
   connect( strike, SIGNAL( clicked()),
            SLOT(strike_chosen_slot()) );
 
-  underline = new QCheckBox(i18n("Underline"),box1);
-  grid2->addWidget(underline,4,2);
   underline->setChecked(dlg->underline);
   connect( underline, SIGNAL( clicked()),
            SLOT(underline_chosen_slot()) );
 
-
-  grid->addWidget(box1);
-
-  box1 = new QGroupBox(this, "Box2");
-  box1->setTitle(i18n("Font Preview"));
-  grid2 = new QGridLayout(box1,4,5,KDialog::marginHint(), KDialog::spacingHint());
-  grid2->addRowSpacing( 0, fHeight/2 ); // groupbox title
-
-  actual_family_label = new QLabel(box1,"afamily");
-  actual_family_label->setText(i18n("Family:"));
-  grid2->addWidget(actual_family_label,1,0);
-
-  actual_family_label_data = new QLabel(box1,"afamilyd");
-  grid2->addWidget(actual_family_label_data,1,1);
-
-  actual_size_label = new QLabel(box1,"asize");
-  actual_size_label->setText(i18n("Size:"));
-  grid2->addWidget(actual_size_label,2,0);
-
-  actual_size_label_data = new QLabel(box1,"asized");
-  grid2->addWidget(actual_size_label_data,2,1);
-
-  actual_weight_label = new QLabel(box1,"aweight");
-  actual_weight_label->setText(i18n("Weight:"));
-  grid2->addWidget(actual_weight_label,3,0);
-
-  actual_weight_label_data = new QLabel(box1,"aweightd");
-  grid2->addWidget(actual_weight_label_data,3,1);
-
-  actual_style_label = new QLabel(box1,"astyle");
-  actual_style_label->setText(i18n("Style:"));
-  grid2->addWidget(actual_style_label,4,0);
-
-  actual_style_label_data = new QLabel(box1,"astyled");
-  grid2->addWidget(actual_style_label_data,4,1);
-
-
-  example_label = new QLabel(box1,"examples");
-  example_label->setFont(selFont);
-  example_label->setAlignment(AlignCenter);
-  example_label->setBackgroundColor(colorGroup().base());
-  example_label->setFrameStyle( QFrame::WinPanel | QFrame::Sunken );
-  example_label->setLineWidth( 1 );
   example_label->setText(i18n("Dolor Ipse"));
-  //  example_label->setAutoResize(true);
-  grid2->addMultiCellWidget(example_label,1,4,2,3);
+
   connect(this,SIGNAL(fontSelected( const QFont&  )),
           this,SLOT(display_example( const QFont&)));
 
-
-  grid->addWidget(box1);
   setCombos();
   display_example( selFont );
   fontChanged=false;
   this->resize( 400, 400 );
-}
-
-void CellFormatPageFont::slotSearchFont(const QString &_text)
-{
-  QString result;
-  result = listFont.makeCompletion( _text );
-  if ( !result.isNull() )
-    family_combo->setCurrentItem( family_combo->index( family_combo->findItem( result ) ) );
 }
 
 void CellFormatPageFont::slotSetTextColor( const QColor &_color )
@@ -2714,26 +2596,6 @@ void CellFormatPageFont::display_example(const QFont& font)
   fontChanged=true;
   example_label->setFont(font);
   example_label->repaint();
-
-  kdDebug(36001) << "FAMILY 2 '" << font.family() << "' " << font.pointSize() << endl;
-
-  QFontInfo info = example_label->fontInfo();
-  actual_family_label_data->setText(info.family());
-
-  kdDebug(36001) << "FAMILY 3 '" << info.family() << "' " << info.pointSize() << endl;
-
-  string.setNum(info.pointSize());
-  actual_size_label_data->setText(string);
-
-  if (info.bold())
-    actual_weight_label_data->setText(i18n("Bold"));
-  else
-    actual_weight_label_data->setText(i18n("Normal"));
-
-  if (info.italic())
-    actual_style_label_data->setText(i18n("Italic"));
-  else
-    actual_style_label_data->setText(i18n("Roman"));
 }
 
 void CellFormatPageFont::setCombos()
