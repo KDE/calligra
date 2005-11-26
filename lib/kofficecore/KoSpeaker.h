@@ -152,6 +152,18 @@ signals:
      * IMPORTANT: This signal is emitted from the @ref maybeSayWidget method.  Slots who
      * call maybeSayWidget should take care to avoid infinite recursion.
      */
+    void customSpeakNewWidget(QWidget* w, const QPoint& p, uint flags);
+
+    /**
+     * This signal is emitted each polling interval when KoSpeaker did not speak the widget
+     * (either because it did not think the widget was a new one or because it did not
+     * understand the widget).
+     * @param w         The widget.
+     * @param p         Mouse pointer global coordinates, or in the case of a focus change (0,0).
+     * @param flag      Speech options.  @ref SpeakFlags.
+     *
+     * IMPORTANT: This signal is emitted frequently.  Receivers should be coded efficiently.
+     */
     void customSpeakWidget(QWidget* w, const QPoint& p, uint flags);
 
 protected:
