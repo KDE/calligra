@@ -55,7 +55,7 @@ class KoSpeakerPrivate;
   * KDE 3.x anyway, since it lacks a screen reader.  Instead, this capability is intended as
   * an aid to users with other vision disabilities.
   *
-  * KOffice applications can access this object using the @ref kospeaker global.
+  * KOffice applications can access this object using the kospeaker global.
   */
 class KOFFICECORE_EXPORT KoSpeaker : public QObject
 {
@@ -147,7 +147,7 @@ signals:
      * it should call @ref cancelSpeakWidget() .
      * @param w         The widget.
      * @param p         Mouse pointer global coordinates, or in the case of a focus change (0,0).
-     * @param flag      Speech options.  @ref SpeakFlags.
+     * @param flags     Speech options.  @ref SpeakFlags.
      *
      * IMPORTANT: This signal is emitted from the @ref maybeSayWidget method.  Slots who
      * call maybeSayWidget should take care to avoid infinite recursion.
@@ -161,7 +161,7 @@ signals:
      * emit twice per polling interval.
      * @param w         The widget.
      * @param p         Mouse pointer global coordinates, or in the case of a focus change (0,0).
-     * @param flag      Speech options.  @ref SpeakFlags.
+     * @param flags     Speech options.  @ref SpeakFlags.
      *
      * IMPORTANT: This signal is emitted frequently.  Receivers should be coded efficiently.
      */
