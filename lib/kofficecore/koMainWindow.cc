@@ -30,6 +30,7 @@
 #include "kofiledialog.h"
 #include "koversiondialog.h"
 #include "kkbdaccessextensions.h"
+#include "KoSpeaker.h"
 
 #include <kprinter.h>
 #include <kdeversion.h>
@@ -240,7 +241,8 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     setCentralWidget( d->m_splitter );
     // Keyboard accessibility enhancements.
     new KKbdAccessExtensions(this, "mw-panelSizer");
-
+    // TTS accessibility enhancement (only if KDE 3.4 or later and KTTSD daemon is installed.)
+    if (KoSpeaker::isKttsdInstalled()) new KoSpeaker(this, "mw-speaker");
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     d->m_veryHackyActionList.append(
         new KAction(i18n("&Close All Views"), "fileclose",
