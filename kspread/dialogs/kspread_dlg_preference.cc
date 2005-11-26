@@ -791,7 +791,7 @@ configureLayoutPage::configureLayoutPage( View* _view,QVBox *box , char *name )
   grid1->addWidget(defaultOrientationPage,3,0);
 
   label=new QLabel(tmpQGroupBox);
-  label->setText(i18n("Default page &units:"));
+  label->setText(i18n("Default page &unit:"));
   grid1->addWidget(label,4,0);
   defaultUnit=new QComboBox( tmpQGroupBox);
   label->setBuddy(defaultUnit);

@@ -12,9 +12,6 @@
             <height>337</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -38,7 +35,11 @@
                 <string>Horizontal</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Set the content position horizontally in the cell. Standard is default and is set from the format you set. Left means the content will be displayed on the left of the cell, Center means the content will be in the center horizontally in the cell and Right means the content of the cell will be displayed on the right of the cell.</string>
+                <string>Set the content position horizontally in the cell. 
+&lt;b&gt;Standard&lt;/b&gt; is default and is set from the format you set. 
+&lt;b&gt;Left&lt;/b&gt; means the content will be displayed on the left of the cell.
+&lt;b&gt;Center&lt;/b&gt; means the content will be in the center horizontally in the cell.
+&lt;b&gt;Right&lt;/b&gt; means the content of the cell will be displayed on the right of the cell.</string>
             </property>
             <hbox>
                 <property name="name">
@@ -96,7 +97,10 @@
                 <string>Vertical</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Set the content position vertically in the cell. Top means the content will be displayed on top of the cell, Middle means the content will be in the middle vertically in the cell and Bottom means the content of the cell will be displayed at the bottom of the cell.</string>
+                <string>Set the content position vertically in the cell. 
+&lt;b&gt;Top&lt;/b&gt; means the content will be displayed on top of the cell.
+&lt;b&gt;Middle&lt;/b&gt; means the content will be in the middle vertically in the cell.
+&lt;b&gt;Bottom&lt;/b&gt; means the content of the cell will be displayed at the bottom of the cell.</string>
             </property>
             <vbox>
                 <property name="name">
@@ -134,6 +138,9 @@
             </property>
             <property name="title">
                 <string>Rotation</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Your text will appear orieted in the angle you set here. Positive values wil move it anticlockwise and negative values will move it clockwise.</string>
             </property>
             <hbox>
                 <property name="name">
@@ -185,6 +192,11 @@
             <property name="title">
                 <string>Text Option</string>
             </property>
+            <property name="whatsThis" stdset="0">
+                <string>This is only available when the rotation is 0°. 
+Wrap text wraps the text so it fits in the previous cell size. If this is not checked, the text will stay on one line and the cell size will be adjusted to contain the text.
+Vertical text puts your text vertically.</string>
+            </property>
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
@@ -213,6 +225,9 @@
             </property>
             <property name="title">
                 <string>Indent</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>Set the amount of indent that will be used in the cell when you choose the Format -&gt; Increase Indent or Format -&gt; Decrease Indent menus.</string>
             </property>
         </widget>
         <widget class="QGroupBox" row="2" column="0">
@@ -265,6 +280,9 @@
                             <property name="text">
                                 <string>Default height (%1)</string>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If checked, the default height will be used for the cell instead of the value above.</string>
+                            </property>
                         </widget>
                         <spacer row="0" column="2">
                             <property name="name">
@@ -309,6 +327,9 @@
                             <property name="frameShadow">
                                 <enum>Raised</enum>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Set the height of the cell.</string>
+                            </property>
                         </widget>
                     </grid>
                 </widget>
@@ -326,6 +347,9 @@
                             </property>
                             <property name="text">
                                 <string>Default width (%1)</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>If checked, the default width will be used for the cell instead of the value above.</string>
                             </property>
                         </widget>
                         <spacer row="0" column="2">
