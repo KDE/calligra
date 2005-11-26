@@ -262,16 +262,28 @@ bool KHTMLReader::parseTag(DOM::Element e) {
 
 
 void KHTMLReader::parseStyle(DOM::Element e) {
-#if 0  // styles are broken broken broken broken broken broken.
+  // styles are broken broken broken broken broken broken.
+  //FIXME: wait until getComputedStyle is more than
+  // 'return 0' in khtml
+  kdDebug() << "entering parseStyle" << endl;
      DOM::CSSStyleDeclaration s1=e.style();
      DOM::Document doc=_html->document();
      DOM::CSSStyleDeclaration s2=doc.defaultView().getComputedStyle(e,"");
-     				//FIXME: wait until getComputedStyle is more than
-     				// 'return 0' in khtml
 
-     if (PROPV("font-weight") == "bolder")
+     kdDebug() << "font-weight=" << s1.getPropertyValue("font-weight").string();
+     if ( s1.getPropertyValue("font-weight").string() == "bolder" )
+     {
 	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
-
+     }
+     if ( s1.getPropertyValue("font-weight").string() == "bold" )
+     {
+	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
+     }
+     /*if (DOM::PROPV("font-weight") == "bolder")
+	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
+     if (PROPV("font-weight") == "bold")
+	_writer->formatAttribute(state()->paragraph,"WEIGHT","value","75");
+/*
      // debugging code.
      kdDebug(30503) << "e.style()" << endl;
      for (unsigned int i=0;i<s1.length();i++) {
@@ -281,7 +293,7 @@ void KHTMLReader::parseStyle(DOM::Element e) {
      for (unsigned int i=0;i<s2.length();i++) {
         kdDebug(30503) << QString("%1: %2").arg(s2.item(i).string()).arg(s2.getPropertyValue(s2.item(i)).string()) << endl;
      }
-#endif
+*/
 }
 
 void KHTMLReader::startNewParagraph(bool startnewformat, bool startnewlayout) {
