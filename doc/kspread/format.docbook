@@ -213,23 +213,49 @@ negative values are shown in red.
 </textobject>
 </mediaobject>
 </para>
-<para>The <guilabel>Font</guilabel> page lets you select the font style, size 
-and color, including some additional options like underlined or striked out text.
+<para>The <guilabel>Font</guilabel> page lets you select the font family, style, size 
+and color for the current cell, including some additional options like underlined or striked out text.
 The lower part of the page gives a preview of the selected text format.</para>
-<!--anma-->
+<para>The default font is set for all cells in the <menuchoice><guimenu>Format</guimenu><guimenuitem>Style Manager</guimenuitem></menuchoice> menu with the currently used style.</para>
+<!--annma-->
 <variablelist>
 <varlistentry>
-            <term><guilabel>Requested Font</guilabel></term>
-            <listitem><para>Allows you to choose a new font.</para>
-        </listitem>
+<term><guilabel>Family List box</guilabel></term>
+<listitem><para>Allows you to choose a new font family.</para>
+</listitem>
 </varlistentry>
 <varlistentry>
-    <term><guilabel>Actual Font</guilabel></term>
-    <listitem><para>Indicates the family, size, weight and style of the currently used font and previews it in the field on the right.</para>
-    </listitem>
+<term><guilabel>Style:</guilabel></term>
+<listitem><para>Choose the style for your font for the currently selected cells. When you select several cells with different styles, the displayed style is set to <guilabel>Varying (No Change)</guilabel> and leaving it that way will keep all your current style settings for each cell. Changing to <guilabel>Roman</guilabel> for example will change all the selected cells style text to <guilabel>Roman</guilabel>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Size:</guilabel></term>
+<listitem><para>Choose the size for your font for the currently selected cells. When you select several cells with different sizes, the displayed size is set to <guilabel> </guilabel> (no number written) and leaving it that way will keep all your current size settings for each cell. Changing to <guilabel>14</guilabel> for example will change all the selected cells font size to <guilabel>14</guilabel>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Weight:</guilabel></term>
+<listitem><para>Choose the weight for your font for the currently selected cells. When you select several cells with different font weight, the displayed weight is set to <guilabel>Varying (No Change)</guilabel> and leaving it that way will keep all your current weight settings for each cell. Changing to <guilabel>Bold</guilabel> for example will change all the selected cells font weight to <guilabel>Bold</guilabel>.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Color:</guilabel></term>
+<listitem><para>Choose the color for the currently selected cells text. Clicking on the color bar will bring you the standard KDE Select Color dialog where you will be able to choose the new color. </para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Underline</guilabel></term>
+<listitem><para>Underlines the currently selected cells text if checked. This is not checked per default.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Strike out</guilabel></term>
+<listitem><para>This will strike out the currently selected cells text if this is checked. This is not checked per default.</para>
+</listitem>
 </varlistentry>
 </variablelist>
-<!--end of anma-->
+<!--end of annma-->
 </sect2>
 
 <sect2 id="formatposition">
