@@ -557,6 +557,7 @@ void HtmlCssWorker::openParagraph(const QString& strTag,
     {
         *m_streamOut << "<sup>"; //Superscript
     }
+    if ( layout.alignment == "center" ) *m_streamOut << "<center>";
 }
 
 void HtmlCssWorker::closeParagraph(const QString& strTag,
@@ -571,6 +572,7 @@ void HtmlCssWorker::closeParagraph(const QString& strTag,
         *m_streamOut << "</sub>"; //Subscript
     }
 
+    if ( layout.alignment == "center" ) *m_streamOut << "</center>";
     *m_streamOut << "</" << strTag << ">\n";
 }
 
