@@ -2126,7 +2126,9 @@ void KPresenterView::createGUI()
         connect( getHRuler(), SIGNAL( moveGuide( const QPoint &, bool, int ) ),
                  &( m_canvas->guideLines() ), SLOT( moveGuide( const QPoint &, bool, int ) ) );
         connect( &( m_canvas->guideLines() ), SIGNAL( moveGuides( bool ) ),
-                 m_canvas, SLOT( setMoveGuides( bool ) ) );
+                 m_canvas, SLOT( setPaintGuides( bool ) ) );
+        connect( &( m_canvas->guideLines() ), SIGNAL( paintGuides( bool ) ),
+                 m_canvas, SLOT( setPaintGuides( bool ) ) );
         connect( &( m_canvas->guideLines() ), SIGNAL( guideLinesChanged( KoView * ) ),
                  m_pKPresenterDoc, SLOT( slotGuideLinesChanged( KoView * ) ) );
         m_canvas->guideLines().setGuideLines( m_pKPresenterDoc->horizontalGuideLines(), m_pKPresenterDoc->verticalGuideLines() );

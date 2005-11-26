@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005 Casper Boemann Rasmussen <cbr@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,9 +42,8 @@ public:
      *
      * @param view The view in which the guides will be shown
      * @param zoomHandler The zoom handler of the view
-     * @param autoStyle TODO
      */
-    KoGuides( KoView *view, KoZoomHandler *zoomHandler, bool autoStyle = false );
+    KoGuides( KoView *view, KoZoomHandler *zoomHandler );
 
     /**
      * @brief Destructor
@@ -56,6 +56,9 @@ public:
      * @param painter with which the guides are painted
      */
     void paintGuides( QPainter &painter );
+
+    typedef int SnapStatus;
+    static const SnapStatus SNAP_NONE, SNAP_HORIZ, SNAP_VERT, SNAP_BOTH;
 
     /**
      * @brief Handle mousePressEvent
@@ -120,6 +123,16 @@ public:
     void setGuideLines( const QValueList<double> &horizontalPos, const QValueList<double> &verticalPos );
 
     /**
+     * @brief Set the positions for snapping of auto guide lines
+     *
+     * This removes all existing auto guide lines and set up new ones at the positions given.
+     *
+     * @param horizontalPos A list of the position of the horizontal guide lines.
+     * @param verticalPos A list of the position of the vertical guide lines.
+     */
+    void setAutoGuideLines( const QValueList<double> &horizontalPos, const QValueList<double> &verticalPos );
+
+    /**
      * @brief Get the position of the guide lines
      *
      * This filles the passed lists with the positions of the guide lines. 
@@ -133,14 +146,14 @@ public:
     /**
      * @brief Snap rect to guidelines
      *
-     * This looks fo a guide which is in reach for the guide as defined in snap.
+     * This looks for a guide which is in reach for the guide as defined in snap.
      *
      * @param rect the rect which should be snapped
-     * @param snap the distance the guide should snap
-     *
-     * @return the distance to the guide or ( 0, 0 ) if there is no guide to snap to.
+     * @param snap the distance within the guide should snap - but always snap if already snapped
+     * @param snapStatus if horiz,vert or both directions are snapped (both in and out param)
+     * @param diff distance away from guide. Only valid if status is snapping (both in and out param)
      */
-    KoPoint snapToGuideLines( KoRect &rect, int snap );
+    void snapToGuideLines( KoRect &rect, int snap, SnapStatus &snapStatus, KoPoint &diff );
 
     /**
      * @brief Snap rect to guidelines
@@ -148,33 +161,46 @@ public:
      * This looks fo a guide which is in reach for the guide as defined in snap.
      *
      * @param pos the position which should be snapped
-     * @param snap the distance the guide should snap
-     *
-     * @return the distance to the guide or ( 0, 0 ) if there is no guide to snap to.
+     * @param snap the distance wherein the guide should snap - but always snap if already snapped
+     * @param snapStatus if horiz,vert or both directions are snapped (both in and out param)
+     * @param diff distance away from guide. Only valid if status is snapping (both in and out param)
      */
-    KoPoint snapToGuideLines( KoPoint &pos, int snap );
+    void snapToGuideLines( KoPoint &pos, int snap, SnapStatus &snapStatus, KoPoint &diff );
 
     /**
-     * @brief Find the next guide distance to snap to
+     * @brief repaint guides if any changed snapping status
      *
-     * @param rect the rect which should be snapped
-     * @param diffx The range in x distance in which the guide has to be.
-     * @param diffy The range in y distance in which the guide has to be.
+     * This issues a paint request if any guides have changed snapping status.
      *
-     * @return the distance to the guide or ( 0, 0 ) if there is no guide to snap to.
+     * @param snappedRect the rect after it has been snapped
      */
-    KoPoint diffGuide( KoRect &rect, double diffx, double diffy );
+    void repaintSnapping( const KoRect &snappedRect );
 
     /**
-     * @brief Get the disance to the next guide in the indicated directions
+     * @brief repaint guides if any changed snapping status
+     *
+     * This issues a paint request if any guides have changed snapping status.
+     *
+     * @param snappedPoint the point after it has been snapped
+     */
+    void repaintSnapping( const KoPoint &snappedPoint, SnapStatus snapStatus );
+
+    /**
+     * @brief repaint guides so none is snapped
+     *
+     * This issues a paint request if any guides have changed snapping status.
+     * It also effectively un-snaps all since it doesn't take an argument 
+     */
+    void repaintAfterSnapping( );
+
+    /**
+     * @brief Find the closesed disance to the next guide within the given distance
      *
      * @param rect The rect which should be snapped
-     * @param right If true, search to the right otherwise to the left.
-     * @param bottom If true, search to the bottom otherwise to the top.
-     *
-     * @return the distance to the guide or ( 0, 0 ) if there is no guide to snap to.
+     * @param diff distance in which too look for the closesed guide. The parameter is updated
+     * with the closesed distance to a guide if one is found (both in and out param)
      */
-    KoPoint diffNextGuide( KoRect &rect, bool right, bool bottom );
+    void diffNextGuide( KoRect &rect, KoPoint &diff );
 
 public slots:
     /**
@@ -219,6 +245,17 @@ signals:
      */
     void moveGuides( bool state );
 
+    /**
+     * @brief This signal is emitted when guides start/stop painting.
+     *
+     * With this signal it is possible to only repaint the guides in the paint 
+     * method of the canvas. Just set/unset a flag when this signal is emmited.
+     * This signal is emitted before and after a repaint is done.
+     *
+     * @param state true when starting painting guides, false when stopping.
+     */
+    void paintGuides( bool state );
+
 private slots:
     /**
      * @brief Execute a dialog to set the position of the guide
@@ -234,16 +271,18 @@ private:
     /// Strukt holding the data of a guide line
     struct KoGuideLine 
     {
-        KoGuideLine( Qt::Orientation o, double pos )
+        KoGuideLine( Qt::Orientation o, double pos, bool a = false )
         : orientation( o )
         , position( pos )
         , selected( false )
         , snapping( false )
+        , automatic( a )
         {}
         Qt::Orientation orientation;
         double position;
-        bool selected;
+        bool selected; // if this guide is selected
         bool snapping; // if this guide is being snapped to
+        bool automatic; // if this is a atomatic guide line
     };
 
     /**
@@ -337,22 +376,39 @@ private:
      */
     QPoint mapToScreen( const KoPoint & pos );
 
+    /**
+     * @brief Check if the both values are nearly the same.
+     *
+     * @param a first value
+     * @param a second value
+     *
+     * @return true if they are the same
+     * @return false otherwise
+     */ 
+    bool virtuallyEqual( double a, double b ) { return QABS( a - b ) < 1E-4; }
+
     /// view
     KoView * m_view;
     /// zoom handler of the view
     KoZoomHandler * m_zoomHandler;
-    /// list of the position of unselected guide lines
-    QValueList<KoGuideLine *> m_guideLines;
-    /// list of the position of selected guide lines
-    QValueList<KoGuideLine *> m_selectedGuideLines;
+
+    enum GuideLineType
+    {
+        GL,
+        GL_SELECTED, 
+        GL_AUTOMATIC,
+        GL_END
+    };
+
+    /// array of list of the different guide line types
+    QValueList<KoGuideLine *> m_guideLines[GL_END];
+    
     /// used to save the last mouse position
     QPoint m_lastPoint;
     /// true if a guide is selected at the moment
     bool m_mouseSelected;
     /// true if a guide is inserted at the moment
     bool m_insertGuide;
-    /// true if the guide are of auto style and thus are not painted until snapped
-    bool m_autoStyle;
     /// popup menu
     class Popup;
     Popup * m_popup;

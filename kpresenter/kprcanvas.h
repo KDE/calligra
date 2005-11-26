@@ -388,7 +388,7 @@ public slots:
      * @param state true set guide move state
      *              false unset guide move state
      */
-    void setMoveGuides( bool state );
+    void setPaintGuides( bool state );
 
 signals:
 
@@ -654,10 +654,13 @@ private:
      * If so it returns the position it has snapped to.
      *
      * @param pos the point which should be snapped
+     * @param repaintSnapping true if the guides should be repainted.
+     * @param repaintSnapping false when the guides should not be repainted.
+     *        You have to call repaint by yourself.
      *
      * @return the position of the snapped point
      */
-    KoPoint snapPoint( KoPoint &pos );
+    KoPoint snapPoint( KoPoint &pos, bool repaintSnapping = true );
 
     /**
      * @brief Find the next grid in distance
@@ -853,10 +856,8 @@ private:
 
     /// guides
     KoGuides m_gl;
-    /// guides - the auto style ones
-    KoGuides m_autoGl;
     /// true if we are in guide move state, false otherwise
-    bool m_moveGuides;
+    bool m_paintGuides;
 };
 
 #endif // __KPRCANVAS__

@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005 Casper Boemann Rasmussen <cbr@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -68,10 +69,14 @@ private:
     int m_pos;
 };
 
-KoGuides::KoGuides( KoView *view, KoZoomHandler *zoomHandler, bool autoStyle )
+const KoGuides::SnapStatus KoGuides::SNAP_NONE = 0;
+const KoGuides::SnapStatus KoGuides::SNAP_HORIZ = 1;
+const KoGuides::SnapStatus KoGuides::SNAP_VERT = 2;
+const KoGuides::SnapStatus KoGuides::SNAP_BOTH = 3;
+
+KoGuides::KoGuides( KoView *view, KoZoomHandler *zoomHandler )
 : m_view( view )
 , m_zoomHandler( zoomHandler )
-, m_autoStyle(autoStyle)
 {
     m_popup = new Popup( this );
 }
@@ -86,50 +91,38 @@ KoGuides::~KoGuides()
 void KoGuides::paintGuides( QPainter &painter )
 {
     //painter.setRasterOp( NotROP );
-    painter.setPen( QPen( blue, 0, DotLine ) );
     const KoPageLayout& pl = m_view->koDocument()->pageLayout();
     int width = QMAX( m_view->canvas()->width(), m_zoomHandler->zoomItX( pl.ptWidth ) );
     int height = QMAX( m_view->canvas()->height(), m_zoomHandler->zoomItY( pl.ptHeight ) );
 
-    QValueList<KoGuideLine *>::iterator it = m_guideLines.begin();
-    for ( ; it != m_guideLines.end(); ++it )
+    for ( int i = 0; i < GL_END; ++i )
     {
-        if (! m_autoStyle || ( *it )->snapping )
+        QValueList<KoGuideLine *>::iterator it = m_guideLines[i].begin();
+        for ( ; it != m_guideLines[i].end(); ++it )
         {
-            // dont paint autoStyle guides when they are not snapping
-
-            painter.save();
-            if ( ( *it )->orientation == Qt::Vertical )
+            if ( !( *it )->automatic || ( *it )->snapping ) // dont paint autoStyle guides when they are not snapping
             {
-                painter.translate( m_zoomHandler->zoomItX( ( *it )->position ), 0 );
-                painter.drawLine( 0, 0, 0, height );
-            }
-            else
-            {
-                painter.translate( 0, m_zoomHandler->zoomItY( ( *it )->position ) );
-                painter.drawLine( 0, 0, width, 0 );
-            }
-            painter.restore();
-        }
-    }
+                if ( ( *it )->snapping )
+                    painter.setPen( QPen( green, 0, DotLine ) );
+                else if ( ( *it )->selected )
+                    painter.setPen( QPen( red, 0, DotLine ) );
+                else
+                    painter.setPen( QPen( blue, 0, DotLine ) );
 
-    painter.setPen( QPen( red, 0, DotLine ) );
-    it = m_selectedGuideLines.begin();
-    for ( ; it != m_selectedGuideLines.end(); ++it )
-    {
-        // no need to take care of autoStyle guides as they are never selected
-        painter.save();
-        if ( ( *it )->orientation == Qt::Vertical )
-        {
-            painter.translate( m_zoomHandler->zoomItX( ( *it )->position ), 0 );
-            painter.drawLine( 0, 0, 0, height );
+                painter.save();
+                if ( ( *it )->orientation == Qt::Vertical )
+                {
+                    painter.translate( m_zoomHandler->zoomItX( ( *it )->position ), 0 );
+                    painter.drawLine( 0, 0, 0, height );
+                }
+                else
+                {
+                    painter.translate( 0, m_zoomHandler->zoomItY( ( *it )->position ) );
+                    painter.drawLine( 0, 0, width, 0 );
+                }
+                painter.restore();
+            }
         }
-        else
-        {
-            painter.translate( 0, m_zoomHandler->zoomItY( ( *it )->position ) );
-            painter.drawLine( 0, 0, width, 0 );
-        }
-        painter.restore();
     }
 }
 
@@ -143,9 +136,6 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
     KoGuideLine * guideLine = find( p, m_zoomHandler->unzoomItY( 2 ) );
     if ( guideLine )
     {
-        if( m_autoStyle )
-            return false;
-
         m_lastPoint = e->pos();
         if ( e->button() == Qt::LeftButton || e->button() == Qt::RightButton )
         {
@@ -200,7 +190,7 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
 
     if ( e->button() == Qt::RightButton && hasSelected() )
     {
-        m_popup->update( m_selectedGuideLines.count() );
+        m_popup->update( m_guideLines[GL_SELECTED].count() );
         m_popup->exec( QCursor::pos() );
         emit moveGuides( false );
     }
@@ -211,7 +201,6 @@ bool KoGuides::mousePressEvent( QMouseEvent *e )
 
 bool KoGuides::mouseMoveEvent( QMouseEvent *e )
 {
-    //kdDebug(33001) << "KoGuideLines::mouseMoveEvent" << endl;
     bool eventProcessed = false;
     if ( m_mouseSelected )
     {
@@ -243,12 +232,12 @@ bool KoGuides::mouseReleaseEvent( QMouseEvent *e )
     if ( m_mouseSelected )
     {
         KoPoint p( mapFromScreen( e->pos() ) );
-        if ( m_selectedGuideLines.count() == 1 )
+        if ( m_guideLines[GL_SELECTED].count() == 1 )
         {
             int x1, y1, x2, y2;
             m_view->canvas()->rect().coords( &x1, &y1, &x2, &y2 );
             QPoint gp( m_view->canvas()->mapFromGlobal( e->globalPos() ) );
-            if ( m_selectedGuideLines.first()->orientation == Qt::Vertical )
+            if ( m_guideLines[GL_SELECTED].first()->orientation == Qt::Vertical )
             {
                 if ( gp.x() < x1 || gp.x() > x2 )
                     removeSelected();
@@ -268,14 +257,13 @@ bool KoGuides::mouseReleaseEvent( QMouseEvent *e )
         eventProcessed = true;
         emit guideLinesChanged( m_view );
     }
-        emit moveGuides( false );
+    emit moveGuides( false );
     return eventProcessed;
 }
 
 
 bool KoGuides::keyPressEvent( QKeyEvent *e )
 {
-    //kdDebug( 33001 ) << "KoGuideLines::keyPressEvent" << endl;
     bool eventProcessed = false;
     switch( e->key() )
     {
@@ -298,26 +286,49 @@ void KoGuides::setGuideLines( const QValueList<double> &horizontalPos, const QVa
 {
     removeSelected();
 
-    QValueList<KoGuideLine *>::iterator it = m_guideLines.begin();
-    for ( ; it != m_guideLines.end(); ++it )
+    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL].begin();
+    for ( ; it != m_guideLines[GL].end(); ++it )
     {
         delete ( *it );
     }
-    m_guideLines.clear();
+    m_guideLines[GL].clear();
 
     QValueList<double>::ConstIterator posIt = horizontalPos.begin();
     for ( ; posIt != horizontalPos.end(); ++posIt )
     {
-        KoGuideLine *guideLine = new KoGuideLine( Qt::Horizontal, *posIt );
-        m_guideLines.append( guideLine );
+        KoGuideLine *guideLine = new KoGuideLine( Qt::Horizontal, *posIt, false );
+        m_guideLines[GL].append( guideLine );
     }
     posIt = verticalPos.begin();
     for ( ; posIt != verticalPos.end(); ++posIt )
     {
-        KoGuideLine *guideLine = new KoGuideLine( Qt::Vertical, *posIt );
-        m_guideLines.append( guideLine );
+        KoGuideLine *guideLine = new KoGuideLine( Qt::Vertical, *posIt, false );
+        m_guideLines[GL].append( guideLine );
     }
     paint();
+}
+
+void KoGuides::setAutoGuideLines( const QValueList<double> &horizontalPos, const QValueList<double> &verticalPos )
+{
+    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_AUTOMATIC].begin();
+    for ( ; it != m_guideLines[GL_AUTOMATIC].end(); ++it )
+    {
+        delete ( *it );
+    }
+    m_guideLines[GL_AUTOMATIC].clear();
+
+    QValueList<double>::ConstIterator posIt = horizontalPos.begin();
+    for ( ; posIt != horizontalPos.end(); ++posIt )
+    {
+        KoGuideLine *guideLine = new KoGuideLine( Qt::Horizontal, *posIt, true );
+        m_guideLines[GL_AUTOMATIC].append( guideLine );
+    }
+    posIt = verticalPos.begin();
+    for ( ; posIt != verticalPos.end(); ++posIt )
+    {
+        KoGuideLine *guideLine = new KoGuideLine( Qt::Vertical, *posIt, true );
+        m_guideLines[GL_AUTOMATIC].append( guideLine );
+    }
 }
 
 
@@ -326,8 +337,8 @@ void KoGuides::getGuideLines( QValueList<double> &horizontalPos, QValueList<doub
     horizontalPos.clear();
     verticalPos.clear();
 
-    QValueList<KoGuideLine *>::const_iterator it = m_guideLines.begin();
-    for ( ; it != m_guideLines.end(); ++it )
+    QValueList<KoGuideLine *>::const_iterator it = m_guideLines[GL].begin();
+    for ( ; it != m_guideLines[GL].end(); ++it )
     {
         if ( ( *it )->orientation == Qt::Horizontal )
         {
@@ -338,8 +349,8 @@ void KoGuides::getGuideLines( QValueList<double> &horizontalPos, QValueList<doub
             verticalPos.append( ( *it )->position );
         }
     }
-    it = m_selectedGuideLines.begin();
-    for ( ; it != m_selectedGuideLines.end(); ++it )
+    it = m_guideLines[GL_SELECTED].begin();
+    for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
     {
         if ( ( *it )->orientation == Qt::Horizontal )
         {
@@ -353,386 +364,315 @@ void KoGuides::getGuideLines( QValueList<double> &horizontalPos, QValueList<doub
 }
 
 
-KoPoint KoGuides::snapToGuideLines( KoRect &rect, int snap)
+void KoGuides::snapToGuideLines( KoRect &rect, int snap, SnapStatus &snapStatus, KoPoint &diff )
 {
-    bool needRepaint = false;
-    KoPoint diff( 10000, 10000 );
-    KoGuideLine *vClosest=0;
-    KoGuideLine *hClosest=0;
+    if( !(snapStatus & SNAP_VERT))
+        diff.setX(10000);
+    if( !(snapStatus & SNAP_HORIZ))
+        diff.setY(10000);
 
-    QValueList<KoGuideLine *>::const_iterator it = m_guideLines.begin();
-    for ( ; it != m_guideLines.end(); ++it )
+    for ( int i = 0; i < GL_END; ++i )
     {
-        if(( *it )->snapping)
-            needRepaint = true;
-
-        ( *it )->snapping = false;
-
-        if ( ( *it )->orientation == Qt::Horizontal )
+        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        for ( ; it != m_guideLines[i].end(); ++it )
         {
-            double tmp = (*it)->position - rect.top();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+            if ( ( *it )->orientation == Qt::Horizontal )
             {
-                if(QABS( tmp ) < diff.y())
+                double tmp = (*it)->position - rect.top();
+                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
                 {
-                    diff.setY( tmp );
-                    hClosest = *it;
+                    if(QABS( tmp ) < QABS(diff.y()))
+                    {
+                        diff.setY( tmp );
+                        snapStatus |= SNAP_HORIZ;
+                    }
+                }
+                tmp = (*it)->position - rect.bottom();
+                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+                {
+                    if(QABS( tmp ) < QABS(diff.y()))
+                    {
+                        diff.setY( tmp );
+                        snapStatus |= SNAP_HORIZ;
+                    }
                 }
             }
-            tmp = (*it)->position - rect.bottom();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+            else
             {
-                if(QABS( tmp ) < diff.y())
+                double tmp = (*it)->position - rect.left();
+                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
                 {
-                    diff.setY( tmp );
-                    hClosest = *it;
+                    if(QABS( tmp ) < QABS(diff.x()))
+                    {
+                        diff.setX( tmp );
+                        snapStatus |= SNAP_VERT;
+                    }
                 }
-            }
-        }
-        else
-        {
-            double tmp = (*it)->position - rect.left();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
-            {
-                if(QABS( tmp ) < diff.x())
+                tmp = (*it)->position - rect.right();
+                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
                 {
-                    diff.setX( tmp );
-                    vClosest = *it;
-                }
-            }
-            tmp = (*it)->position - rect.right();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
-            {
-                if(QABS( tmp ) < diff.x())
-                {
-                    diff.setX( tmp );
-                    vClosest = *it;
+                    if(QABS( tmp ) < QABS(diff.x()))
+                    {
+                        diff.setX( tmp );
+                        snapStatus |= SNAP_VERT;
+                    }
                 }
             }
         }
     }
 
-    it = m_selectedGuideLines.begin();
-    for ( ; it != m_selectedGuideLines.end(); ++it )
-    {
-        ( *it )->snapping = false;
-
-        if ( ( *it )->orientation == Qt::Horizontal )
-        {
-            double tmp = (*it)->position - rect.top();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
-            {
-                if(QABS( tmp ) < diff.y())
-                {
-                    diff.setY( tmp );
-                    hClosest = *it;
-                }
-            }
-            tmp =  (*it)->position - rect.bottom();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
-            {
-                if(QABS( tmp ) < diff.y())
-                {
-                    diff.setY( tmp );
-                    hClosest = *it;
-                }
-            }
-        }
-        else
-        {
-            double tmp = (*it)->position - rect.left();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
-            {
-                if(QABS( tmp ) < diff.x())
-                {
-                    diff.setX( tmp );
-                    vClosest = *it;
-                }
-            }
-            tmp = (*it)->position - rect.right();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
-            {
-                if(QABS( tmp ) < diff.x())
-                {
-                    diff.setX( tmp );
-                    vClosest = *it;
-                }
-            }
-        }
-     }
-
-    if( vClosest )
-    {
-        vClosest->snapping = true;
-        needRepaint=true;
-    }
-    else
+    if(!(snapStatus & SNAP_VERT))
         diff.setX( 0 );
 
-    if( hClosest )
-    {
-        hClosest->snapping = true;
-        needRepaint=true;
-    }
-    else
+    if(!(snapStatus & SNAP_HORIZ))
         diff.setY( 0 );
-
-    if(needRepaint && m_autoStyle)
-        paint();
-
-    return diff;
 }
 
-
-KoPoint KoGuides::snapToGuideLines( KoPoint &pos, int snap)
+void KoGuides::snapToGuideLines( KoPoint &pos, int snap, SnapStatus &snapStatus, KoPoint &diff )
 {
-    bool needRepaint = false;
-    KoPoint diff( 10000, 10000 );
-    KoGuideLine *vClosest=0;
-    KoGuideLine *hClosest=0;
+    if( !(snapStatus & SNAP_VERT))
+        diff.setX(10000);
+    if( !(snapStatus & SNAP_HORIZ))
+        diff.setY(10000);
 
-    QValueList<KoGuideLine *>::const_iterator it = m_guideLines.begin();
-    for ( ; it != m_guideLines.end(); ++it )
+    for ( int i = 0; i < GL_END; ++i )
     {
-        if(( *it )->snapping)
-            needRepaint = true;
-
-        ( *it )->snapping = false;
-
-        if ( ( *it )->orientation == Qt::Horizontal )
+        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        for ( ; it != m_guideLines[i].end(); ++it )
         {
-            double tmp = (*it)->position - pos.y();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
+            if ( ( *it )->orientation == Qt::Horizontal )
             {
-                if(QABS( tmp ) < diff.y())
+                double tmp = (*it)->position - pos.y();
+                if ( snapStatus & SNAP_HORIZ || QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
                 {
-                    diff.setY( tmp );
-                    hClosest = *it;
+                    if(QABS( tmp ) < QABS(diff.y()))
+                    {
+                        diff.setY( tmp );
+                        snapStatus |= SNAP_HORIZ;
+                    }
                 }
             }
-        }
-        else
-        {
-            double tmp = (*it)->position - pos.x();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
+            else
             {
-                if(QABS( tmp ) < diff.x())
+                double tmp = (*it)->position - pos.x();
+                if ( snapStatus & SNAP_VERT || QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
                 {
-                    diff.setX( tmp );
-                    vClosest = *it;
+                    if(QABS( tmp ) < QABS(diff.x()))
+                    {
+                        diff.setX( tmp );
+                        snapStatus |= SNAP_VERT;
+                    }
                 }
             }
         }
     }
 
-    it = m_selectedGuideLines.begin();
-    for ( ; it != m_selectedGuideLines.end(); ++it )
-    {
-        ( *it )->snapping = false;
-
-        if ( ( *it )->orientation == Qt::Horizontal )
-        {
-            double tmp = (*it)->position - pos.y();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItY( snap ) )
-            {
-                if(QABS( tmp ) < diff.y())
-                {
-                    diff.setY( tmp );
-                    hClosest = *it;
-                }
-            }
-        }
-        else
-        {
-            double tmp = (*it)->position - pos.x();
-            if ( QABS( tmp ) < m_zoomHandler->unzoomItX( snap ) )
-            {
-                if(QABS( tmp ) < diff.x())
-                {
-                    diff.setX( tmp );
-                    vClosest = *it;
-                }
-            }
-        }
-     }
-
-    if( vClosest )
-    {
-        vClosest->snapping = true;
-        needRepaint=true;
-    }
-    else
+    if(!(snapStatus & SNAP_VERT))
         diff.setX( 0 );
 
-    if( hClosest )
-    {
-        hClosest->snapping = true;
-        needRepaint=true;
-    }
-    else
+    if(!(snapStatus & SNAP_HORIZ))
         diff.setY( 0 );
+}
 
-    if(needRepaint && m_autoStyle)
+
+void KoGuides::repaintSnapping( const KoRect &snappedRect )
+{
+    bool needRepaint = false;
+    for ( int i = 0; i < GL_END; ++i )
+    {
+        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        for ( ; it != m_guideLines[i].end(); ++it )
+        {
+            if ( ( *it )->orientation == Qt::Horizontal )
+            {
+                if ( virtuallyEqual( snappedRect.top(), (*it)->position ) 
+                        || virtuallyEqual( snappedRect.bottom(), ( *it )->position ) )
+                {
+                    if ( ! ( *it )->snapping )
+                    {
+                        ( *it )->snapping = true;
+                        needRepaint = true;
+                    }
+                }
+                else if ( ( *it )->snapping )
+                {
+                    ( *it )->snapping = false;
+                    needRepaint = true;
+                }
+            }
+            else
+            {
+                if ( virtuallyEqual( snappedRect.left(), (*it)->position )
+                        || virtuallyEqual( snappedRect.right(), ( *it )->position ) )
+                {
+                    if ( ! ( *it )->snapping )
+                    {
+                        ( *it )->snapping = true;
+                        needRepaint = true;
+                    }
+                }
+                else if ( ( *it )->snapping )
+                {
+                    ( *it )->snapping = false;
+                    needRepaint = true;
+                }
+            }
+        }
+    }
+
+    if ( needRepaint )
+    {
+        emit paintGuides( true );
         paint();
-
-    return diff;
+        emit paintGuides( false );
+    }
 }
 
 
-KoPoint KoGuides::diffGuide( KoRect &rect, double diffx, double diffy )
+void KoGuides::repaintSnapping( const KoPoint &snappedPoint, SnapStatus snapStatus )
 {
-    KoPoint move( 0, 0 );
-    QValueList<double> horizHelplines;
-    QValueList<double> vertHelplines;
-    getGuideLines( horizHelplines, vertHelplines );
-
-    QValueList<double>::const_iterator it( vertHelplines.begin() );
-    for ( ; it != vertHelplines.end(); ++it )
+    bool needRepaint = false;
+    for ( int i = 0; i < GL_END; ++i )
     {
-        double movexl = *it - rect.left();
-        double movexr = *it - rect.right();
-        if ( diffx > 0 )
+        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        for ( ; it != m_guideLines[i].end(); ++it )
         {
-            if ( diffx > movexl && movexl > move.x() )
+            if ( ( *it )->orientation == Qt::Horizontal && ( snapStatus & SNAP_HORIZ ) )
             {
-                move.setX( movexl );
+                if( virtuallyEqual( snappedPoint.y(), (*it)->position ) )
+                {
+                    if ( ! ( *it )->snapping )
+                    {
+                        ( *it )->snapping = true;
+                        needRepaint = true;
+                    }
+                }
+                else if ( ( *it )->snapping )
+                {
+                    ( *it )->snapping = false;
+                    needRepaint = true;
+                }
             }
-            if ( diffx > movexr && movexr > move.x() )
+            else
             {
-                move.setX( movexr );
-            }
-        }
-        else
-        {
-            if ( diffx < movexl && movexl < move.x() )
-            {
-                move.setX( movexl );
-            }
-            if ( diffx < movexr && movexr < move.x() )
-            {
-                move.setX( movexr );
+                if ( snapStatus & SNAP_VERT )
+                {
+                    if( virtuallyEqual( snappedPoint.x(), (*it)->position ) )
+                    {
+                        if ( ! ( *it )->snapping )
+                        {
+                            ( *it )->snapping = true;
+                            needRepaint = true;
+                        }
+                    }
+                    else if ( ( *it )->snapping )
+                    {
+                        ( *it )->snapping = false;
+                        needRepaint = true;
+                    }
+                }
             }
         }
     }
 
-    it = horizHelplines.begin();
-    for ( ; it != horizHelplines.end(); ++it )
+    if ( needRepaint )
     {
-        double moveyl = *it - rect.top();
-        double moveyr = *it - rect.bottom();
-        if ( diffy > 0 )
-        {
-            if ( diffy > moveyl && moveyl > move.y() )
-            {
-                move.setY( moveyl );
-            }
-            if ( diffy > moveyr && moveyr > move.y() )
-            {
-                move.setY( moveyr );
-            }
-        }
-        else
-        {
-            if ( diffy < moveyl && moveyl < move.y() )
-            {
-                move.setY( moveyl );
-            }
-            if ( diffy < moveyr && moveyr < move.y() )
-            {
-                move.setY( moveyr );
-            }
-        }
+        emit paintGuides( true );
+        paint();
+        emit paintGuides( false );
     }
-
-    return move;
 }
 
 
-KoPoint KoGuides::diffNextGuide( KoRect &rect, bool right, bool bottom )
+void KoGuides::repaintAfterSnapping()
 {
-    KoPoint move( 0, 0 );
-    QValueList<double> horizHelplines;
-    QValueList<double> vertHelplines;
-    getGuideLines( horizHelplines, vertHelplines );
+    bool needRepaint = false;
 
-    QValueList<double>::const_iterator it( vertHelplines.begin() );
-    bool xset = false;
-    bool yset = false;
-    for ( ; it != vertHelplines.end(); ++it )
+    for ( int i = 0; i < GL_END; ++i )
     {
-        double movexl = *it - rect.left();
-        double movexr = *it - rect.right();
-        if ( right )
+        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        for ( ; it != m_guideLines[i].end(); ++it )
         {
-            if ( ( !xset || movexl < move.x() ) && movexl > 0 )
+            if ( ( *it )->snapping )
             {
-                move.setX( movexl );
-                xset = true;
-            }
-            if ( ( !xset || movexr < move.x() ) && movexr > 0 )
-            {
-                move.setX( movexr );
-                xset = true;
-            }
-        }
-        else
-        {
-            if ( ( !xset || movexl > move.x() ) && movexl < 0 )
-            {
-                move.setX( movexl );
-                xset = true;
-            }
-            if ( ( !xset || movexr > move.x() )  && movexr < 0 )
-            {
-                move.setX( movexr );
-                xset = true;
+                needRepaint = true;
+                ( *it )->snapping = false;
             }
         }
     }
 
-    it = horizHelplines.begin();
-    for ( ; it != horizHelplines.end(); ++it )
+    if ( needRepaint )
     {
-        double moveyl = *it - rect.top();
-        double moveyr = *it - rect.bottom();
-        if ( bottom )
+        emit paintGuides( true );
+        paint();
+        emit paintGuides( false );
+    }
+}
+
+
+void KoGuides::diffNextGuide( KoRect &rect, KoPoint &diff )
+{
+    for ( int i = 0; i < GL_END; ++i )
+    {
+        QValueList<KoGuideLine *>::const_iterator it = m_guideLines[i].begin();
+        for ( ; it != m_guideLines[i].end(); ++it )
         {
-            if ( ( !yset || moveyl < move.y() ) && moveyl > 0 )
+            if ( ( *it )->orientation == Qt::Horizontal )
             {
-                move.setY( moveyl );
-                yset = true;
+                double moveyl = ( *it )->position - rect.top();
+                double moveyr = ( *it )->position - rect.bottom();
+                if ( diff.y() > 0 )
+                {
+                    if ( moveyl < diff.y() && moveyl > 1E-10 )
+                    {
+                        diff.setY( moveyl );
+                    }
+                    if ( moveyr < diff.y() && moveyr > 1E-10 )
+                    {
+                        diff.setY( moveyr );
+                    }
+                }
+                else if ( diff.y() < 0 )
+                {
+                    if ( moveyl > diff.y() && moveyl < -1E-10 )
+                    {
+                        diff.setY( moveyl );
+                    }
+                    if ( moveyr > diff.y() && moveyr < -1E-10 )
+                    {
+                        diff.setY( moveyr );
+                    }
+                }
             }
-            if ( ( !yset || moveyr < move.y() ) && moveyr > 0 )
+            else
             {
-                move.setY( moveyr );
-                yset = true;
+                double movexl = ( *it )->position - rect.left();
+                double movexr = ( *it )->position - rect.right();
+                if ( diff.x() > 0 )
+                {
+                    if ( movexl < diff.x() && movexl > 1E-10 )
+                    {
+                        diff.setX( movexl );
+                    }
+                    if ( ( movexr < diff.x() ) && movexr > 1E-10 )
+                    {
+                        diff.setX( movexr );
+                    }
+                }
+                else if ( diff.x() < 0 )
+                {
+                    if ( movexl > diff.x() && movexl < -1E-10 )
+                    {
+                        diff.setX( movexl );
+                    }
+                    if ( movexr > diff.x() && movexr < -1E-10 )
+                    {
+                        diff.setX( movexr );
+                    }
+                }
             }
         }
-        else
-        {
-            if ( ( !yset || moveyl > move.y() ) && moveyl < 0 )
-            {
-                move.setY( moveyl );
-                yset = true;
-            }
-            if ( ( !yset || moveyr > move.y() ) && moveyr < 0 )
-            {
-                move.setY( moveyr );
-                yset = true;
-            }
-        }
     }
-
-    if ( QABS( move.x() ) < 1E-10 ) 
-    {
-        move.setX( 0 );
-    }
-    if ( QABS( move.y() ) < 1E-10 ) 
-    {
-        move.setY( 0 );
-    }
-
-    return move;
 }
 
 
@@ -821,16 +761,16 @@ void KoGuides::add( Qt::Orientation o, QPoint &pos )
 {
     KoPoint p( mapFromScreen( pos ) );
     KoGuideLine *guideLine = new KoGuideLine( o, o == Qt::Vertical ? p.x(): p.y() );
-    m_guideLines.append( guideLine );
+    m_guideLines[GL].append( guideLine );
 }
 
 
 void KoGuides::select( KoGuideLine *guideLine )
 {
     guideLine->selected = true;
-    if ( m_guideLines.remove( guideLine ) == 1 )
+    if ( m_guideLines[GL].remove( guideLine ) == 1 )
     {
-        m_selectedGuideLines.append( guideLine );
+        m_guideLines[GL_SELECTED].append( guideLine );
     }
 }
 
@@ -838,24 +778,24 @@ void KoGuides::select( KoGuideLine *guideLine )
 void KoGuides::unselect( KoGuideLine *guideLine )
 {
     guideLine->selected = false;
-    if ( m_selectedGuideLines.remove( guideLine ) == 1 )
+    if ( m_guideLines[GL_SELECTED].remove( guideLine ) == 1 )
     {
-        m_guideLines.append( guideLine );
+        m_guideLines[GL].append( guideLine );
     }
 }
 
 
 bool KoGuides::unselectAll()
 {
-    bool selected = m_selectedGuideLines.empty() == false;
+    bool selected = m_guideLines[GL_SELECTED].empty() == false;
     
-    QValueList<KoGuideLine *>::iterator it = m_selectedGuideLines.begin();
-    for ( ; it != m_selectedGuideLines.end(); ++it )
+    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
+    for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
     {
         ( *it )->selected = false;
-        m_guideLines.append( *it );
+        m_guideLines[GL].append( *it );
     }
-    m_selectedGuideLines.clear();
+    m_guideLines[GL_SELECTED].clear();
     
     return selected;
 }
@@ -863,25 +803,25 @@ bool KoGuides::unselectAll()
 
 void KoGuides::removeSelected()
 {
-    QValueList<KoGuideLine *>::iterator it = m_selectedGuideLines.begin();
-    for ( ; it != m_selectedGuideLines.end(); ++it )
+    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
+    for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
     {
         delete ( *it );
     }
-    m_selectedGuideLines.clear();
+    m_guideLines[GL_SELECTED].clear();
 }
 
 
 bool KoGuides::hasSelected()
 {
-    return m_selectedGuideLines.empty() == false;
+    return m_guideLines[GL_SELECTED].empty() == false;
 }
 
 
 KoGuides::KoGuideLine * KoGuides::find( KoPoint &p, double diff )
 {
-    QValueList<KoGuideLine *>::iterator it = m_selectedGuideLines.begin();
-    for ( ; it != m_selectedGuideLines.end(); ++it )
+    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
+    for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
     {
         if ( ( *it )->orientation == Qt::Vertical && QABS( ( *it )->position - p.x() ) < diff )
         {
@@ -893,8 +833,8 @@ KoGuides::KoGuideLine * KoGuides::find( KoPoint &p, double diff )
         }
     }
 
-    it = m_guideLines.begin();
-    for ( ; it != m_guideLines.end(); ++it )
+    it = m_guideLines[GL].begin();
+    for ( ; it != m_guideLines[GL].end(); ++it )
     {
         if ( ( *it )->orientation == Qt::Vertical && QABS( ( *it )->position - p.x() ) < diff )
         {
@@ -912,14 +852,14 @@ KoGuides::KoGuideLine * KoGuides::find( KoPoint &p, double diff )
 void KoGuides::moveSelectedBy( QPoint &p )
 {
     KoPoint point( m_zoomHandler->unzoomPoint( p ) );
-    if ( m_selectedGuideLines.count() > 1 )
+    if ( m_guideLines[GL_SELECTED].count() > 1 )
     {
         const KoPageLayout& pl = m_view->koDocument()->pageLayout();
         double right = QMAX( pl.ptWidth, m_zoomHandler->unzoomItX( m_view->canvas()->width() + m_view->canvasXOffset() - 1 ) );
         double bottom = QMAX( pl.ptHeight, m_zoomHandler->unzoomItY( m_view->canvas()->height() + m_view->canvasYOffset() - 1 ) );
 
-        QValueList<KoGuideLine *>::iterator it = m_selectedGuideLines.begin();
-        for ( ; it != m_selectedGuideLines.end(); ++it )
+        QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
+        for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
         {
             if ( ( *it )->orientation == Qt::Vertical )
             {
@@ -947,9 +887,11 @@ void KoGuides::moveSelectedBy( QPoint &p )
             }
         }
     }
-    QValueList<KoGuideLine *>::iterator it = m_selectedGuideLines.begin();
-    for ( ; it != m_selectedGuideLines.end(); ++it )
+    QValueList<KoGuideLine *>::iterator it = m_guideLines[GL_SELECTED].begin();
+    for ( ; it != m_guideLines[GL_SELECTED].end(); ++it )
     {
+        ( *it )->snapping = false;
+
         if ( ( *it )->orientation == Qt::Vertical && p.x() != 0 )
         {
             ( *it )->position = ( *it )->position + point.x();
@@ -978,5 +920,6 @@ QPoint KoGuides::mapToScreen( const KoPoint & pos )
     int y = m_zoomHandler->zoomItY( pos.y() ) - m_view->canvasYOffset();
     return QPoint( x, y );
 }
+
 
 #include "koGuides.moc"

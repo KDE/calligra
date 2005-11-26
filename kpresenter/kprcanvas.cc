@@ -1,6 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
    Copyright (C) 2002-2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005 Casper Boemann Rasmussen <cbr@boemann.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -95,8 +96,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
 : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase )
 , buffer( size() )
 , m_gl( _view, _view->zoomHandler() )
-, m_autoGl( _view, _view->zoomHandler(), true )
-, m_moveGuides( false )    
+, m_paintGuides( false )    
 {
     m_presMenu = 0;
     m_currentTextObjectView=0L;
@@ -281,9 +281,10 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 {
     if ( isUpdatesEnabled() )
     {
+        //kdDebug(33001) << "KPrCanvas::paintEvent m_paintGuides = " << m_paintGuides << endl; //<< " " << kdBacktrace( 10 ) << endl;
         KPresenterDoc *doc =m_view->kPresenterDoc();
 
-        if ( ! m_moveGuides  )
+        if ( ! m_paintGuides  )
         {
             //kdDebug(33001) << "KPrCanvas::paintEvent" << endl;
             QPainter bufPainter;
@@ -364,7 +365,6 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             guidePainter.translate( -diffx(), -diffy() );
             guidePainter.setBrushOrigin( -diffx(), -diffy() );
             m_gl.paintGuides( guidePainter );
-            m_autoGl.paintGuides( guidePainter );
             guidePainter.end();
             bitBlt( this, paintEvent->rect().topLeft(), &m_guideBuffer, paintEvent->rect() );
         }
@@ -594,7 +594,7 @@ void KPrCanvas::recalcAutoGuides( )
             it.current()->addSelfToGuides( horizontalPos, verticalPos);
     }
 
-    m_autoGl.setGuideLines( horizontalPos, verticalPos );
+    m_gl.setAutoGuideLines( horizontalPos, verticalPos );
 }
 
 void KPrCanvas::mousePressEvent( QMouseEvent *e )
@@ -770,6 +770,10 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         m_rectBeforeResize = kpobject->getRect();
                     }
                     recalcAutoGuides();
+                    if ( m_view->kPresenterDoc()->showGuideLines() && !m_changeSnap )
+                    {
+                        m_gl.repaintSnapping( kpobject->getRealRect() );
+                    }
                 }
                 else
                 {
@@ -840,6 +844,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             } break;
             case INS_LINE:
                 deSelectAllObj();
+                recalcAutoGuides();
                 mousePressed = true;
 
                 m_startPoint = snapPoint( docPoint );
@@ -847,6 +852,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 break;
             case INS_FREEHAND: case INS_CLOSED_FREEHAND: {
                 deSelectAllObj();
+                recalcAutoGuides();
                 mousePressed = true;
 
                 m_indexPointArray = 0;
@@ -857,6 +863,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             } break;
             case INS_POLYLINE: case INS_CLOSED_POLYLINE: {
                 deSelectAllObj();
+                recalcAutoGuides();
                 mousePressed = true;
 
                 m_drawPolyline = true;
@@ -869,6 +876,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:
             case INS_CLOSED_CUBICBEZIERCURVE: case INS_CLOSED_QUADRICBEZIERCURVE: {
                 deSelectAllObj();
+                recalcAutoGuides();
                 mousePressed = true;
 
                 m_drawCubicBezierCurve = true;
@@ -885,6 +893,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             } break;
             default: {
                 deSelectAllObj();
+                recalcAutoGuides();
                 mousePressed = true;
                 KoPoint sp( snapPoint( docPoint ) );
                 m_insertRect = KoRect( sp.x(), sp.y(),0 ,0 );
@@ -1262,6 +1271,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             finishResizeObject( i18n( "Resize Object Right && Down" ) );
             break;
         }
+        m_gl.repaintAfterSnapping();
     } break;
     case INS_TEXT:
         if ( !m_insertRect.isNull() ) 
@@ -1504,7 +1514,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                       m_isResizing = true;
                     }
 
-                    KoPoint sp( snapPoint( docPoint ) );
+                    KoPoint sp( snapPoint( docPoint, false ) );
                     resizeObject( modType, sp );
                 }
             } break;
@@ -4466,111 +4476,82 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
     KPresenterDoc *doc( m_view->kPresenterDoc() );
 
     KoRect rect( objectRect( false ) );
-    KoPoint move( 0, 0 );
     double diffx = m_view->zoomHandler()->unzoomItX( x );
     double diffy = m_view->zoomHandler()->unzoomItY( y );
+    KoPoint move( diffx, diffy );
 
     bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && !doc->showGuideLines() && m_changeSnap );
     bool snapToGuideLines = doc->showGuideLines() && !m_changeSnap;
 
-    if ( snapToGrid && !snapToGuideLines )
+    if ( snapToGrid )
     {
+        /* 
+         * Find the distance to the next grid pos.
+         * The 1E-10 is needed when the object is on the grid when finding the next one, as
+         * calcualtion with doubles is tricky.
+         */
+        double tempx = int( rect.x() / doc->getGridX() ) * doc->getGridX();
         if ( diffx > 0 )
         {
-            diffx = doc->getGridX() + 0.1;
+            move.setX( tempx - rect.x() );
+            while ( rect.x() - tempx >= -1E-10 )
+            {
+                tempx += doc->getGridX();
+                move.setX( tempx - rect.x() );
+            }
         }
         else if ( diffx < 0 )
         {
-            diffx = -doc->getGridX() - 0.1;
+            move.setX( tempx - rect.x() );
+            while ( rect.x() - tempx <= 1E-10 )
+            {
+                tempx -= doc->getGridX();
+                move.setX( tempx - rect.x() );
+            }
         }
+
+        double tempy = int( rect.y() / doc->getGridY() ) * doc->getGridY();
         if ( diffy > 0 )
         {
-            diffy = doc->getGridY() + 0.1;
+            move.setY( tempy - rect.y() );
+            while ( rect.y() - tempy >= -1E-10 )
+            {
+                tempy += doc->getGridY();
+                move.setY( tempy - rect.y() );
+            }
         }
         else if ( diffy < 0 )
         {
-            diffy = -doc->getGridY() - 0.1;
+            move.setY( tempy - rect.y() );
+            while ( rect.y() - tempy <= 1E-10 )
+            {
+                tempy -= doc->getGridY();
+                move.setY( tempy - rect.y() );
+            }
         }
-        move = diffGrid( rect, diffx, diffy );
     }
-    else if ( snapToGuideLines && !snapToGrid )
+
+    if ( snapToGuideLines )
     {
-        move.setX( diffx );
-        move.setY( diffy );
-        KoRect movedRect( rect );
-        movedRect.moveBy( diffx, diffy );
-        if ( m_moveSnapDiff != KoPoint( 0, 0 ) )
+        if ( !snapToGrid )
         {
+            // unwind last snapping
+            KoRect movedRect( rect );
+            movedRect.moveBy( diffx, diffy );
             movedRect.moveBy( -m_moveSnapDiff.x(), -m_moveSnapDiff.y() );
             move -= m_moveSnapDiff;
-        }
 
-        KoPoint diff( m_gl.snapToGuideLines( movedRect, KEY_SNAP_DISTANCE ) );
+            m_moveSnapDiff = KoPoint( 0, 0 );
 
-        if ( diff != KoPoint( 0, 0 ) )
-        {
-            m_moveSnapDiff = diff;
-            move += diff;
+            KoGuides::SnapStatus snapStatus = KoGuides::SNAP_NONE;
+            m_gl.snapToGuideLines( movedRect, KEY_SNAP_DISTANCE, snapStatus, m_moveSnapDiff );
+
+            move += m_moveSnapDiff;
         }
         else
         {
-            m_moveSnapDiff = KoPoint( 0, 0 );
+            m_gl.diffNextGuide( rect, move );
         }
-    }
-    else if ( snapToGrid && snapToGuideLines )
-    {
-        if ( diffx > 0 )
-        {
-            diffx = doc->getGridX() + 0.1;
-        }
-        else if ( diffx < 0 )
-        {
-            diffx = -doc->getGridX() - 0.1;
-        }
-        if ( diffy > 0 )
-        {
-            diffy = doc->getGridY() + 0.1;
-        }
-        else if ( diffy < 0 )
-        {
-            diffy = -doc->getGridY() - 0.1;
-        }
-        move = diffGrid( rect, diffx, diffy );
-        KoPoint diff( m_gl.diffNextGuide( rect, diffx > 0, diffy > 0 ) );
-        
-        if ( diffx > 0 )
-        {
-            if ( diff.x() > 0 && diff.x() < move.x() )
-            {
-                move.setX( diff.x() );
-            }
-        }
-        else if ( diffx < 0 )
-        {
-            if ( diff.x() < 0 && diff.x() > move.x() )
-            {
-                move.setX( diff.x() );
-            }
-        }
-        if ( diffy > 0 )
-        {
-            if ( diff.y() > 0 && diff.y() < move.y() )
-            {
-                move.setY( diff.y() );
-            }
-        }
-        else if ( diffy < 0)
-        {
-            if ( diff.y() < 0 && diff.y() > move.y() )
-            {
-                move.setY( diff.y() );
-            }
-        }
-    }
-    else
-    {
-        move.setX( diffx );
-        move.setY( diffy );
     }
 
     // don't move object from canvas
@@ -4590,6 +4571,15 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
     else if ( rect.bottom() + move.y() > pageRect.bottom() )
     {
         move.setY( pageRect.bottom() - rect.bottom() );
+    }
+
+    // we only want a repaint if we have guide lines
+    if ( snapToGuideLines )
+    {
+        // redraw guidelines (intentionally always)
+        KoRect movedRect( rect );
+        movedRect.moveBy( move.x(), move.y() );
+        m_gl.repaintSnapping( movedRect );
     }
 
     if ( move != KoPoint( 0, 0 ) )
@@ -4610,101 +4600,59 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
     KoPoint move( 0, 0 );
     double diffx = pos.x() - m_origMousePos.x();
     double diffy = pos.y() - m_origMousePos.y();
-    KoPoint mouseDiff( diffx, diffy );
 
     bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && !doc->showGuideLines() && m_changeSnap );
     bool snapToGuideLines = doc->showGuideLines() && !m_changeSnap;
 
-    if ( snapToGrid && !snapToGuideLines )
-    {
-        move = diffGrid( rect, diffx, diffy );
-        mouseDiff = move;
-    }
-    else if ( snapToGuideLines && !snapToGrid )
-    {
-        move.setX( diffx );
-        move.setY( diffy );
-        KoRect movedRect( rect );
-        movedRect.moveBy( diffx, diffy );
-        if ( m_moveSnapDiff != KoPoint( 0, 0 ) )
-        {
-            movedRect.moveBy( -m_moveSnapDiff.x(), -m_moveSnapDiff.y() );
-            move -= m_moveSnapDiff;
-        }
+    move = KoPoint( diffx, diffy );
+    m_origMousePos = pos;
 
-        KoPoint diff( m_gl.snapToGuideLines( movedRect, MOUSE_SNAP_DISTANCE ) );
+    // unwind last snapping
+    KoRect movedRect( rect );
+    movedRect.moveBy( diffx, diffy );
+    movedRect.moveBy( -m_moveSnapDiff.x(), -m_moveSnapDiff.y() );
+    move -= m_moveSnapDiff;
 
-        if ( diff != KoPoint( 0, 0 ) )
-        {
-            m_moveSnapDiff = diff;
-            move += diff;
-        }
-        else
-        {
-            m_moveSnapDiff = KoPoint( 0, 0 );
-        }
-    }
-    else if ( snapToGrid && snapToGuideLines )
+    m_moveSnapDiff = KoPoint( 0, 0 ); // needed if all snapping is off
+    KoGuides::SnapStatus snapStatus = KoGuides::SNAP_NONE;
+
+    if ( snapToGrid )
     {
-        move = diffGrid( rect, diffx, diffy );
-        KoPoint diff( m_gl.diffGuide( rect, diffx, diffy ) );
-        if ( diffx > 0 )
-        {
-            if ( diff.x() > move.x() )
-            {
-                move.setX( diff.x() );
-            }
-        }
-        else
-        {
-            if ( diff.x() < move.x() )
-            {
-                move.setX( diff.x() );
-            }
-        }
-        if ( diffy > 0 )
-        {
-            if ( diff.y() > move.y() )
-            {
-                move.setY( diff.y() );
-            }
-        }
-        else
-        {
-            if ( diff.y() < move.y() )
-            {
-                move.setY( diff.y() );
-            }
-        }
-        mouseDiff = move;
-    }
-    else
-    {
-        move.setX( diffx );
-        move.setY( diffy );
+        m_moveSnapDiff.setX( qRound( movedRect.topLeft().x() / doc->getGridX()) * doc->getGridX()
+                                                                                             - movedRect.topLeft().x() );
+        m_moveSnapDiff.setY( qRound( movedRect.topLeft().y() / doc->getGridY()) * doc->getGridY()
+                                                                                             - movedRect.topLeft().y() );
+        snapStatus = KoGuides::SNAP_BOTH;
     }
 
-    // don't move object from canvas
+    if ( snapToGuideLines )
+    {
+        m_gl.snapToGuideLines( movedRect, MOUSE_SNAP_DISTANCE, snapStatus, m_moveSnapDiff );
+    }
+
+    move += m_moveSnapDiff;
+
+    // don't move object off canvas
+    KoPoint diffDueToBorders(0,0);
     KoRect pageRect( m_activePage->getPageRect() );
     if ( rect.left() + move.x() < pageRect.left() )
-    {
-        move.setX( pageRect.left() - rect.left() );
-        mouseDiff.setX( pageRect.left() - rect.left() );
-    }
+        diffDueToBorders.setX( pageRect.left() - (rect.left() + move.x()) );
     else if ( rect.right() + move.x() > pageRect.right() )
-    {
-        move.setX( pageRect.right() - rect.right() );
-        mouseDiff.setX( pageRect.right() - rect.right() );
-    }
+        diffDueToBorders.setX( pageRect.right() - (rect.right() + move.x()) );
+
     if ( rect.top() + move.y() < pageRect.top() )
-    {
-        move.setY( pageRect.top() - rect.top() );
-        mouseDiff.setY( pageRect.top() - rect.top() );
-    }
+        diffDueToBorders.setY( pageRect.top() - (rect.top() + move.y()) );
     else if ( rect.bottom() + move.y() > pageRect.bottom() )
+        diffDueToBorders.setY( pageRect.bottom() - (rect.bottom() + move.y()) );
+
+    m_moveSnapDiff += diffDueToBorders;
+    move += diffDueToBorders;
+
+    if ( snapToGuideLines )
     {
-        move.setY( pageRect.bottom() - rect.bottom() );
-        mouseDiff.setY( pageRect.bottom() - rect.bottom() );
+        // redraw guidelines (intentionally always)
+        movedRect.moveBy( m_moveSnapDiff.x(), m_moveSnapDiff.y() );
+        m_gl.repaintSnapping( movedRect );
     }
 
     if ( move != KoPoint( 0, 0 ) )
@@ -4713,7 +4661,6 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
         m_activePage->moveObject( m_view, move, false );
         scrollCanvas( move );
     }
-    m_origMousePos += mouseDiff;
 }
 
 
@@ -4725,6 +4672,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
 
     KoSize objSize = kpobject->getSize();
     KoRect objRect = kpobject->getRealRect();
+    KoPoint sp( point );
+    KoGuides::SnapStatus snapStatus( KoGuides::SNAP_NONE );
 
     bool repaintNeeded = false;
     switch ( _modType ) 
@@ -4743,6 +4692,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
                 kpobject->moveBy( KoPoint( 0, dy ) );
             repaintNeeded = true;
         }
+        sp = kpobject->getRealRect().topLeft();
+        snapStatus = KoGuides::SNAP_BOTH;
         break;
     case MT_RESIZE_LF:
         if ( objRect.left() != point.x() )
@@ -4756,6 +4707,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
                 kpobject->moveBy( KoPoint( dx, 0 ) );
             repaintNeeded = true;
         }
+        sp.setX( kpobject->getRealRect().left() );
+        snapStatus = KoGuides::SNAP_VERT;
         break;
     case MT_RESIZE_LD:
         if ( objRect.bottomLeft() != point )
@@ -4769,6 +4722,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
                 kpobject->moveBy( KoPoint( dx, 0 ) );
             repaintNeeded = true;
         }
+        sp = kpobject->getRealRect().bottomLeft();
+        snapStatus = KoGuides::SNAP_BOTH;
         break;
     case MT_RESIZE_RU:
         if ( objRect.topRight() != point )
@@ -4782,6 +4737,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
                 kpobject->moveBy( KoPoint( 0, dy ) );
             repaintNeeded = true;
         }
+        sp = kpobject->getRealRect().topRight();
+        snapStatus = KoGuides::SNAP_BOTH;
         break;
     case MT_RESIZE_RT:
         if ( objRect.right() != point.x() )
@@ -4793,6 +4750,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
             kpobject->resizeBy( dx, dy );
             repaintNeeded = true;
         }
+        sp.setX( kpobject->getRealRect().right() );
+        snapStatus = KoGuides::SNAP_VERT;
         break;
     case MT_RESIZE_RD:
         if ( objRect.bottomRight() != point )
@@ -4804,6 +4763,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
             kpobject->resizeBy( dx, dy );
             repaintNeeded = true;
         }
+        sp = kpobject->getRealRect().bottomRight();
+        snapStatus = KoGuides::SNAP_BOTH;
         break;
     case MT_RESIZE_UP:
         if ( objRect.top() != point.y() )
@@ -4817,6 +4778,8 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
                 kpobject->moveBy( KoPoint( 0, dy ) );
             repaintNeeded = true;
         }
+        sp.setY( kpobject->getRealRect().top() );
+        snapStatus = KoGuides::SNAP_HORIZ;
         break;
     case MT_RESIZE_DN:
         if ( objRect.bottom() != point.y() )
@@ -4828,9 +4791,16 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
             kpobject->resizeBy( dx, dy );
             repaintNeeded = true;
         }
+        sp.setY( kpobject->getRealRect().bottom() );
+        snapStatus = KoGuides::SNAP_HORIZ;
         break;
     default:
         break;
+    }
+
+    if ( m_view->kPresenterDoc()->showGuideLines() && !m_changeSnap )
+    {
+        m_gl.repaintSnapping( sp, snapStatus );
     }
 
     if ( repaintNeeded )
@@ -5178,9 +5148,9 @@ void KPrCanvas::setActivePage( KPrPage* active )
     m_activePage = active;
 }
 
-void KPrCanvas::setMoveGuides( bool state )
+void KPrCanvas::setPaintGuides( bool state )
 {
-    m_moveGuides = state;
+    m_paintGuides = state;
 }
 
 bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj) const
@@ -5506,7 +5476,7 @@ void KPrCanvas::layout()
     }
 }
 
-KoPoint KPrCanvas::snapPoint( KoPoint &pos )
+KoPoint KPrCanvas::snapPoint( KoPoint &pos, bool repaintSnapping )
 {
     KoPoint sp( pos );
     KPresenterDoc * doc( m_view->kPresenterDoc() );
@@ -5514,58 +5484,39 @@ KoPoint KPrCanvas::snapPoint( KoPoint &pos )
     bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && !doc->showGuideLines() && m_changeSnap );
     bool snapToGuideLines = doc->showGuideLines() && !m_changeSnap;
 
-    if ( snapToGrid && !snapToGuideLines )
+    KoPoint snapDiff = KoPoint( 0, 0 ); // needed if all snapping is off
+    KoGuides::SnapStatus snapStatus = KoGuides::SNAP_NONE;
+
+    if ( snapToGrid )
     {
-        sp.setX( qRound( pos.x() / doc->getGridX() ) * doc->getGridX() );
-        sp.setY( qRound( pos.y() / doc->getGridY() ) * doc->getGridY() );
+        snapDiff.setX( qRound( sp.x() / doc->getGridX()) * doc->getGridX() - sp.x() );
+        snapDiff.setY( qRound( sp.y() / doc->getGridY()) * doc->getGridY() - sp.y() );
+        snapStatus = KoGuides::SNAP_BOTH;
     }
-    else if ( snapToGuideLines && !snapToGrid )
+
+    if ( snapToGuideLines )
     {
-        sp += m_gl.snapToGuideLines( pos, MOUSE_SNAP_DISTANCE );
+        m_gl.snapToGuideLines( sp, MOUSE_SNAP_DISTANCE, snapStatus, snapDiff );
     }
-    else if ( snapToGrid && snapToGuideLines )
-    {
-        KoPoint diff( m_gl.snapToGuideLines( pos, QMAX( 
-                        m_view->kPresenterDoc()->zoomHandler()->zoomItX( doc->getGridX() ), 
-                        m_view->kPresenterDoc()->zoomHandler()->zoomItY( doc->getGridY() ) ) ) );
-        double gridx = qRound( pos.x() / doc->getGridX() ) * doc->getGridX();
-        double gridy = qRound( pos.y() / doc->getGridY() ) * doc->getGridY();
-        if ( diff.x() == 0 || QABS( diff.x() ) > QABS( pos.x() - gridx ) )
-        {
-            sp.setX( gridx );
-        }
-        else
-        {
-            sp.setX( sp.x() + diff.x() );
-        }
-        
-        if ( diff.y() == 0 || QABS( diff.y() ) > QABS( pos.y() - gridy ) )
-        {
-            sp.setY( gridy );
-        }
-        else
-        {
-            sp.setY( sp.y() + diff.y() );
-        }
-    }
+
+    sp += snapDiff;
 
     // don't snap out of canvas
     KoRect pageRect( m_activePage->getPageRect() );
     if ( sp.x() < pageRect.left() )
-    {
         sp.setX( pageRect.left() );
-    }
     else if ( sp.x() > pageRect.right() )
-    {
         sp.setX( pageRect.right() );
-    }
+
     if ( sp.y() < pageRect.top() )
-    {
         sp.setY( pageRect.top() );
-    }
     else if ( sp.y() > pageRect.bottom() )
-    {
         sp.setY( pageRect.bottom() );
+
+    // redraw guidelines (intentionally always)
+    if ( repaintSnapping && snapToGuideLines )
+    {
+        m_gl.repaintSnapping( sp, KoGuides::SNAP_BOTH );
     }
 
     return sp;
