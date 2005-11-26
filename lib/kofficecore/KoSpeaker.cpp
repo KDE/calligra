@@ -66,9 +66,11 @@ public:
         m_timeout(600),
         m_timer(0),
         m_prevPointerWidget(0),
-        m_prevPointerId(0),
+        m_prevPointerId(-1),
         m_prevFocusWidget(0),
-        m_prevFocusId(0),
+        m_prevFocusId(-1),
+        m_prevWidget(0),
+        m_prevId(-1),
         m_firstKttsdStart(true),
         m_cancelSpeakWidget(false)
         {}
@@ -88,11 +90,14 @@ public:
     // Timer which implements the polling interval.
     int m_timeout;
     QTimer* m_timer;
-    // Previously spoken mouse pointer widget, focus widget, and "part" of the widget.
+    // Widget and part of widget for 1) last widget under mouse pointer, 2) last widget with focus, and
+    // last widget spoken.
     QWidget* m_prevPointerWidget;
     int m_prevPointerId;
     QWidget* m_prevFocusWidget;
     int m_prevFocusId;
+    QWidget* m_prevWidget;
+    int m_prevId;
     // False after startKttsd() has been called the first time.
     bool m_firstKttsdStart;
     // True when cancelSpeakWidget has been called in response to customSpeakWidget signal.
@@ -129,19 +134,25 @@ bool KoSpeaker::isEnabled() { return startKttsd(); }
 void KoSpeaker::probe()
 {
     d->m_timer->stop();
-    bool spoke = false;
     QWidget* w;
     QPoint pos;
+    bool spoke = false;
     if ( d->m_speakFlags & SpeakFocusWidget ) {
         w = kapp->focusWidget();
-        if (w) spoke = maybeSayWidget(w);
+        if (w) {
+            spoke = maybeSayWidget(w);
+            if (!spoke)
+                emit customSpeakWidget(w, pos, d->m_speakFlags);
+        }
     }
     if ( !spoke && d->m_speakFlags & SpeakPointerWidget ) {
         pos = QCursor::pos();
         w = kapp->widgetAt(pos, true);
-        if (w) spoke = maybeSayWidget(w, pos);
+        if (w) {
+            if (!maybeSayWidget(w, pos))
+                emit customSpeakWidget(w, pos, d->m_speakFlags);
+        }
     }
-    if (!spoke && w) emit customSpeakWidget(w, pos, d->m_speakFlags);
     d->m_timer->start(d->m_timeout);
 }
 
@@ -211,7 +222,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
 {
     if (!w) return false;
 
-    int id = 0;
+    int id = -1;
     QString text;
 
     if (w->inherits("QViewportWidget")) {
@@ -229,14 +240,11 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
                     id = menuBar->idAt(i);
                     break;
                 }
-        } else
-            id = 0;
+        }
             // TODO: This doesn't work.  Need way to figure out the QMenuItem underneath mouse pointer.
             // id = menuBarItemAt(menuBar, pos);
         if ( id != -1 )
             text = menuBar->text(id);
-        else
-            id = 0;
     }
     else
     if (w->inherits("QPopupMenu")) {
@@ -251,8 +259,6 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
             id = popupMenu->idAt(popupMenu->mapFromGlobal(pos));
         if ( id != -1 )
             text = popupMenu->text(id);
-        else
-            id = 0;
     }
     else
     if (w->inherits("QTabBar")) {
@@ -307,8 +313,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
         if (item) {
             id = item->index();
             text = item->text();
-        } else
-            id = 0;
+        }
     }
     else
     if (w->inherits("QTable")) {
@@ -326,8 +331,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
         if (row >= 0 && col >= 0) {
             id = (row * tbl->numCols()) + col;
             text = tbl->text(row, col);
-        } else
-            id = 0;
+        }
     }
     else
     if (w->inherits("QGridView")) {
@@ -340,10 +344,8 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
             row = gv->rowAt(p.y());
             col = gv->columnAt(p.x());
         }
-        if (row >= 0 && col >= 0) {
+        if (row >= 0 && col >= 0)
             id = (row * gv->numCols()) + col;
-        } else
-            id = 0;
     }
 
     if (pos == QPoint()) {
@@ -355,8 +357,11 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
         d->m_prevPointerWidget = w;
         d->m_prevPointerId = id;
     }
+    if (w == d->m_prevWidget && id == d->m_prevId) return false;
+    d->m_prevWidget = w;
+    d->m_prevId = id;
 
-    kdDebug() << " w = " << w << endl;
+    // kdDebug() << " w = " << w << endl;
 
     d->m_cancelSpeakWidget = false;
     emit customSpeakNewWidget(w, pos, d->m_speakFlags);

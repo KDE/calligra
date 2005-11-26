@@ -157,7 +157,8 @@ signals:
     /**
      * This signal is emitted each polling interval when KoSpeaker did not speak the widget
      * (either because it did not think the widget was a new one or because it did not
-     * understand the widget).
+     * understand the widget).  If both mouse pointer and focus flags are set, it may
+     * emit twice per polling interval.
      * @param w         The widget.
      * @param p         Mouse pointer global coordinates, or in the case of a focus change (0,0).
      * @param flag      Speech options.  @ref SpeakFlags.
