@@ -451,7 +451,7 @@ bool KoSpeaker::sayWidget(const QString& msg)
     s.replace("Ctrl+", i18n("control plus "));
     s.replace("Alt+", i18n("alt plus "));
     s.replace("+", i18n(" plus "));
-    sayScreenReaderOutput(s, 0);
+    sayScreenReaderOutput(s, "");
     return true;
 }
 
