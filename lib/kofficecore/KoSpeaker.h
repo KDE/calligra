@@ -140,13 +140,6 @@ public:
      */
     static KoSpeaker* koSpeaker() { return KSpkr; }
 
-public slots:
-    /**
-     * Tells the class to do it's stuff - ie. figure out
-     * which widget is under the mouse pointer or which has focus and speak it.
-     */
-    void probe();
-
 signals:
     /**
      * This signal is emitted whenever a new widget has received focus or the mouse pointer
@@ -163,6 +156,13 @@ signals:
 
 protected:
     static KoSpeaker* KSpkr;
+
+private slots:
+    /**
+     * Tells the class to do it's stuff - ie. figure out
+     * which widget is under the mouse pointer or which has focus and speak it.
+     */
+    void probe();
 
 private:
     // int menuBarItemAt(QMenuBar* m, const QPoint& p);

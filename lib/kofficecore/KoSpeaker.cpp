@@ -128,12 +128,15 @@ bool KoSpeaker::isEnabled() { return startKttsd(); }
 
 void KoSpeaker::probe()
 {
+    d->m_timer->stop();
     QWidget* w;
     if ( d->m_speakFlags & SpeakFocusWidget ) {
         w = kapp->focusWidget();
         if (w)
-            if (maybeSayWidget(w))
+            if (maybeSayWidget(w)) {
+                d->m_timer->start(d->m_timeout);
                 return;
+            }
     }
     if ( d->m_speakFlags & SpeakPointerWidget ) {
         QPoint pos = QCursor::pos();
@@ -141,6 +144,7 @@ void KoSpeaker::probe()
         if (w)
             maybeSayWidget(w, pos);
     }
+    d->m_timer->start(d->m_timeout);
 }
 
 void KoSpeaker::queueSpeech(const QString& msg, const QString& langCode /*= QString()*/, bool first /*= true*/)
@@ -321,6 +325,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
             row = tbl->rowAt(p.y());
             col = tbl->columnAt(p.x());
         }
+        kdDebug() << "QTable: row = " << row << " col = " << col << endl;
         if (row >= 0 && col >= 0) {
             id = (row * tbl->numCols()) + col;
             text = tbl->text(row, col);
@@ -338,6 +343,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
             row = gv->rowAt(p.y());
             col = gv->columnAt(p.x());
         }
+        kdDebug() << "QGridView: row = " << row << " col = " << col << endl;
         if (row >= 0 && col >= 0) {
             id = (row * gv->numCols()) + col;
         } else
@@ -354,7 +360,7 @@ bool KoSpeaker::maybeSayWidget(QWidget* w, const QPoint& pos /*=QPoint()*/)
         d->m_prevPointerId = id;
     }
 
-    // kdDebug() << " w = " << w << endl;
+    kdDebug() << " w = " << w << endl;
 
     d->m_cancelSpeakWidget = false;
     emit customSpeakWidget(w, pos, d->m_speakFlags);
