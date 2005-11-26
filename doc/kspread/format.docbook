@@ -249,6 +249,53 @@ of text within a cell by making suitable selections in the <guilabel>Horizontal
 </guilabel> and <guilabel>Vertical</guilabel> areas or by setting the 
 <guilabel>Indent</guilabel> value. You can also choose to have the text 
 appear vertically rather than horizontally, or even at an angle.</para>
+
+<variablelist>
+<varlistentry>
+<term><guilabel>Horizontal</guilabel></term>
+<listitem><para>Set the content position horizontally in the cell. 
+Standard is default and is set from the format you choose 
+Left means the content will be displayed on the left of the cell.
+Center means the content will be in the center horizontally in the cell.
+Right means the content of the cell will be displayed on the right of the cell.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Vertical</guilabel></term>
+<listitem><para>Set the content position vertically in the cell. 
+Top means the content will be displayed on top of the cell.
+Middle means the content will be in the middle vertically in the cell.
+Bottom means the content of the cell will be displayed at the bottom of the cell.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Text option</guilabel></term>
+<listitem><para>This is only available when the rotation is 0°. 
+Wrap text wraps the text so it fits in the previous cell size. If this is not checked, the text will stay on one line and the cell size will be adjusted to contain the text.</para>
+<para>Vertical text puts your text vertically.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Rotation</guilabel></term>
+<listitem><para>Your text will appear orieted in the angle you set here. Positive values wil move it anticlockwise and negative values will move it clockwise.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Merge cells</guilabel></term>
+<listitem><para>-<!-- FIXME--></para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Indent</guilabel></term>
+<listitem><para>Set the amount of indent that will be used in the cell when you choose the <menuchoice><guimenu>Format</guimenu><guimenuitem>Increase Indent</guimenuitem></menuchoice> or <menuchoice><guimenu>Format</guimenu><guimenuitem>Decrease Indent</guimenuitem></menuchoice> menus.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Size of cell</guilabel></term>
+<listitem><para>You set here the size of the cell, either a custom width and height or choose the default width and height.</para>
+</listitem>
+</varlistentry>
+</variablelist>
 </sect2>
 
 <sect2 id="formatborder">

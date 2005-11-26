@@ -339,7 +339,7 @@ default page size, orientation and units used by the printer and by the
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Default page unit:</guilabel></term>
+<term><guilabel>Default page units:</guilabel></term>
 <listitem><para>Choose the default unit that will be used in your all your sheets. Note that you can overwrite the unit for the current sheet using the <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice> dialog.
 </para></listitem>
 </varlistentry>
