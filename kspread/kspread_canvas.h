@@ -168,7 +168,7 @@ public:
 
     /**
      * Move the cursor to the specified cell. This may include switching
-     * the sheet. In addition @ref #View::updateEditWidget is called.
+     * the sheet. In addition @ref View::updateEditWidget() is called.
      *
      * @param location the cell to move to
      *
