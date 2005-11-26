@@ -35,6 +35,7 @@ class KDoubleNumInput;
 class KSpellConfig;
 class QCheckBox;
 class QComboBox;
+class QVGroupBox;
 class QPushButton;
 class KColorButton;
 
@@ -165,6 +166,29 @@ protected:
     QCheckBox *dontCheckTitleCase;
 } ;
 
+class configureTTSPage : public QObject
+{
+  Q_OBJECT
+public:
+  configureTTSPage( View *_view, QVBox *box, char *name = 0 );
+  void slotDefault();
+  void apply();
+private slots:
+  void screenReaderOptionChanged();
+private:
+  KConfig* config;
+  QCheckBox* m_cbSpeakPointerWidget;
+  QCheckBox* m_cbSpeakFocusWidget;
+  QVGroupBox* m_gbScreenReaderOptions;
+  QCheckBox* m_cbSpeakTooltips;
+  QCheckBox* m_cbSpeakWhatsThis;
+  QCheckBox* m_cbSpeakDisabled;
+  QCheckBox* m_cbSpeakAccelerators;
+  QLabel* m_lblAcceleratorPrefix;
+  QLineEdit* m_leAcceleratorPrefixWord;
+  KIntNumInput* m_iniPollingInterval;
+};
+
 class PreferenceDialog : public KDialogBase
 {
   Q_OBJECT
@@ -184,6 +208,7 @@ private :
   configureLayoutPage *_layoutPage;
   configureSpellPage *_spellPage;
   parameterLocale *_localePage;
+  configureTTSPage *_ttsPage;
 };
 
 } // namespace KSpread
