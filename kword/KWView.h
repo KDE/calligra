@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef kwview_h
@@ -452,6 +452,7 @@ public slots:
 
     void deleteFrameSet();
     void editFrameSetProperties();
+    void speakFrameSet();
 
 protected slots:
     virtual void slotChildActivated( bool a ); ///< from KoView
@@ -731,6 +732,7 @@ private: // variables
     KAction *m_actionSpellCheck;
 
     KAction *m_actionEditFrameSetProperties;
+    KAction *m_actionSpeakFrameSet;
     KToggleAction *m_actionEmbeddedStoreInternal;
 
     KAction *m_actionAddWordToPersonalDictionary;

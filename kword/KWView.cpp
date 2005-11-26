@@ -97,6 +97,7 @@
 #include <koVariableDlgs.h>
 #include <kotextobject.h>
 #include <tkcoloractions.h>
+#include <KoSpeaker.h>
 
 #include <kaccelgen.h>
 #include <kcolordialog.h>
@@ -1309,11 +1310,13 @@ void KWView::setupActions()
                                         this, SLOT( editFrameSetProperties() ),
                                         actionCollection(), "edit_frameset_properties" );
 
+    m_actionSpeakFrameSet = new KAction( i18n("Speak Text" ), 0,
+                                        this, SLOT( speakFrameSet() ),
+                                        actionCollection(), "speak_frameset" );
 
     m_actionSelectedFrameSet = new KAction( i18n( "Select Frameset" ), 0,
                                             this, SLOT( selectFrameSet() ),
                                             actionCollection(), "select_frameset" );
-
 
     m_actionAddBookmark= new KAction( i18n( "&Bookmark..." ), 0,
                                             this, SLOT( addBookmark() ),
@@ -6569,6 +6572,7 @@ void KWView::openDocStructurePopupMenu( const QPoint &p, KWFrameSet *frameset)
     if ( state )
         actionList.append(m_actionEditFrameSet);
     m_actionDeleteFrameSet->setEnabled( (!frameset->isMainFrameset() && !frameset->isFootEndNote() && !frameset->isHeaderOrFooter()) );
+    m_actionSpeakFrameSet->setEnabled( KoSpeaker::isKttsdInstalled() );
 
     plugActionList( "edit_action", actionList );
 
@@ -6609,6 +6613,14 @@ void KWView::deleteFrameSet()
     if ( m_gui->getDocStruct() )
     {
         m_gui->getDocStruct()->deleteItem();
+    }
+}
+
+void KWView::speakFrameSet()
+{
+    if ( m_gui->getDocStruct() )
+    {
+        m_gui->getDocStruct()->speakItem();
     }
 }
 

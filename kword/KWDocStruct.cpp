@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+// KWord includes.
 #include "KWDocument.h"
 #include "KWView.h"
 #include "KWCanvas.h"
@@ -26,9 +27,13 @@
 #include "KWPartFrameSet.h"
 #include "KWFormulaFrameSet.h"
 #include "KWPictureFrameSet.h"
-#include <koparagcounter.h>
 #include "KWTextDocument.h"
 
+// KOffice includes.
+#include <koparagcounter.h>
+#include <KoSpeaker.h>
+
+// KDE includes.
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
@@ -63,18 +68,22 @@ bool KWOrderedTextFrameSet::operator<( KWOrderedTextFrameSet ofs )
     return (p1.y() < p2.y() || (p1.y() == p2.y() && p1.x() < p2.x()));
 }
 
-KWDocListViewItem::KWDocListViewItem(QListViewItem *_parent, const QString &_text)
-    :KListViewItem( _parent, _text )
+/******************************************************************/
+/* Class: KWDocDocListViewItem                                    */
+/******************************************************************/
+
+KWDocListViewItem::KWDocListViewItem(QListViewItem* parent, const QString& text)
+    : KListViewItem(parent, text)
 {
 }
 
-KWDocListViewItem::KWDocListViewItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text )
-    :KListViewItem( _parent, _after, _text )
+KWDocListViewItem::KWDocListViewItem(QListViewItem* parent, QListViewItem* after, const QString& text )
+    :KListViewItem(parent, after, text)
 {
 }
 
-KWDocListViewItem::KWDocListViewItem(QListView *_parent, const QString &_text)
-    :KListViewItem( _parent, _text )
+KWDocListViewItem::KWDocListViewItem(QListView* parent, const QString& text)
+    :KListViewItem(parent, text)
 {
 }
 
@@ -94,52 +103,64 @@ void KWDocListViewItem::deleteAllChildren()
     }
 }
 
+KWDocument* KWDocListViewItem::doc()
+{
+    return dynamic_cast<KWDocStructTree *>(listView())->doc();
+}
+
+KWGUI* KWDocListViewItem::gui()
+{
+    return dynamic_cast<KWDocStructTree *>(listView())->gui();
+}
+
 
 /******************************************************************/
 /* Class: KWDocStructParagItem                                    */
 /******************************************************************/
 
-KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, const QString &_text, KWTextParag *_parag, KWGUI*__parent )
-    : KWDocListViewItem(_parent,_text)
+KWDocStructParagItem::KWDocStructParagItem(QListViewItem* parent, const QString& text, KWTextParag* parag )
+    : KWDocListViewItem(parent, text), m_parag(parag)
 {
-    parag = _parag;
-    gui = __parent;
 }
 
-KWDocStructParagItem::KWDocStructParagItem( QListViewItem *_parent, QListViewItem *_after, const QString &_text, KWTextParag *_parag, KWGUI*__parent )
-    : KWDocListViewItem( _parent, _after, _text )
+KWDocStructParagItem::KWDocStructParagItem(QListViewItem* parent, QListViewItem* after,
+    const QString& text, KWTextParag* parag )
+    : KWDocListViewItem(parent, after, text), m_parag(parag)
 {
-    parag = _parag;
-    gui = __parent;
 }
 
-void KWDocStructParagItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructParagItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
-    if ( _item == this )
+    if (item == this)
     {
-        KWTextFrameSet * fs = parag->kwTextDocument()->textFrameSet();
-        gui->getView()->openDocStructurePopupMenu( p, fs);
+        KWTextFrameSet* fs = m_parag->kwTextDocument()->textFrameSet();
+        gui()->getView()->openDocStructurePopupMenu(p, fs);
     }
 }
 
 void KWDocStructParagItem::selectItem()
 {
-    KWTextFrameSet * fs = parag->kwTextDocument()->textFrameSet();
-    QPoint iPoint = parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
+    KWTextFrameSet* fs = m_parag->kwTextDocument()->textFrameSet();
+    QPoint iPoint = m_parag->rect().topLeft(); // small bug if a paragraph is cut between two pages.
     KoPoint dPoint;
-    fs->internalToDocument( iPoint, dPoint );
-    QPoint nPoint = fs->kWordDocument()->zoomPoint( dPoint );
-    gui->canvasWidget()->scrollToOffset( fs->kWordDocument()->unzoomPoint( nPoint ) );
+    fs->internalToDocument(iPoint, dPoint);
+    QPoint nPoint = fs->kWordDocument()->zoomPoint(dPoint);
+    gui()->canvasWidget()->scrollToOffset(fs->kWordDocument()->unzoomPoint(nPoint));
 
 }
 
 void KWDocStructParagItem::editItem()
 {
-    gui->canvasWidget()->editTextFrameSet( parag->kwTextDocument()->textFrameSet(), parag, 0 );
+    gui()->canvasWidget()->editTextFrameSet(m_parag->kwTextDocument()->textFrameSet(), m_parag, 0);
 }
 
 void KWDocStructParagItem::deleteItem()
 {
+}
+
+void KWDocStructParagItem::speakItem()
+{
+    // TODO
 }
 
 
@@ -147,69 +168,76 @@ void KWDocStructParagItem::deleteItem()
 /* Class: KWDocStructTextFrameSetItem                             */
 /******************************************************************/
 
-KWDocStructTextFrameSetItem::KWDocStructTextFrameSetItem( QListViewItem *_parent, const QString &_text,
-    KWTextFrameSet *_frameset, KWGUI*__parent )
-    : KWDocListViewItem( _parent, _text )
+KWDocStructTextFrameSetItem::KWDocStructTextFrameSetItem(QListViewItem* parent, const QString& text,
+    KWTextFrameSet* frameset)
+    : KWDocListViewItem(parent, text ), m_frameset(frameset)
 {
-    frameset = _frameset;
-    gui = __parent;
 }
 
-KWDocStructTextFrameSetItem::KWDocStructTextFrameSetItem( QListViewItem *_parent, QListViewItem *_after,
-    const QString &_text, KWTextFrameSet *_frameset, KWGUI*__parent )
-    : KWDocListViewItem( _parent, _after, _text )
+KWDocStructTextFrameSetItem::KWDocStructTextFrameSetItem(QListViewItem* parent, QListViewItem* after,
+    const QString& text, KWTextFrameSet* frameset)
+    : KWDocListViewItem(parent, after, text), m_frameset(frameset)
 {
-    frameset = _frameset;
-    gui = __parent;
 }
 
-void KWDocStructTextFrameSetItem::setupTextFrames(KWDocument* doc)
+void KWDocStructTextFrameSetItem::setupTextFrames()
 {
     deleteAllChildren();
 
+    KWDocument* dok = doc();
     QString name;
     KWDocStructTextFrameItem* child;
-    for ( int j = frameset->frameCount() - 1; j >= 0; j-- )
+    for ( int j = m_frameset->frameCount() - 1; j >= 0; j-- )
     {
-        if ( KListViewItem::parent()->firstChild() == this && doc->processingType() == KWDocument::WP )
+        if ( KListViewItem::parent()->firstChild() == this && dok->processingType() == KWDocument::WP )
         {
-            if ( doc->numColumns() == 1 )
+            if ( dok->numColumns() == 1 )
                 name=i18n( "Page %1" ).arg(QString::number(j + 1));
             else
                 name=i18n( "Column %1" ).arg(QString::number(j + 1));
         }
         else
             name=i18n( "Text Frame %1" ).arg(QString::number(j + 1));
-        child = new KWDocStructTextFrameItem( this, name, frameset, frameset->frame( j ), gui );
+        child = new KWDocStructTextFrameItem(this, name, m_frameset, m_frameset->frame(j));
     }
 }
 
-void KWDocStructTextFrameSetItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructTextFrameSetItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
-    if ( _item == this )
-        gui->getView()->openDocStructurePopupMenu( p, frameset);
+    if (item == this)
+        gui()->getView()->openDocStructurePopupMenu(p, m_frameset);
 }
 
 void KWDocStructTextFrameSetItem::selectItem()
 {
-    KWFrame* frame = frameset->frame(0);
+    KWFrame* frame = m_frameset->frame(0);
     if (!frame) return;
-    gui->canvasWidget()->scrollToOffset( frame->topLeft() );
+    gui()->canvasWidget()->scrollToOffset(frame->topLeft());
 }
 
 void KWDocStructTextFrameSetItem::editItem()
 {
-    gui->canvasWidget()->editTextFrameSet( frameset, 0L, 0 );
+    gui()->canvasWidget()->editTextFrameSet(m_frameset, 0L, 0);
 }
 
 void KWDocStructTextFrameSetItem::deleteItem()
 {
-    gui->getView()->deleteFrameSet( frameset );
+    gui()->getView()->deleteFrameSet(m_frameset);
 }
 
 void KWDocStructTextFrameSetItem::editProperties()
 {
-     gui->canvasWidget()->editFrameProperties( frameset );
+    gui()->canvasWidget()->editFrameProperties(m_frameset);
+}
+
+void KWDocStructTextFrameSetItem::speakItem()
+{
+    KoTextParag* parag = m_frameset->textDocument()->firstParag();
+    kospeaker->queueSpeech(parag->string()->toString(), parag->paragraphFormat()->language(), true);
+    parag = parag->next();
+    for ( ; parag ; parag = parag->next() )
+        kospeaker->queueSpeech(parag->string()->toString(), parag->paragraphFormat()->language(), false);
+    kospeaker->startSpeech();
 }
 
 
@@ -217,24 +245,21 @@ void KWDocStructTextFrameSetItem::editProperties()
 /* Class: KWDocStructTextFrameItem                                */
 /******************************************************************/
 
-KWDocStructTextFrameItem::KWDocStructTextFrameItem( QListViewItem *_parent, const QString &_text,
-    KWTextFrameSet *_frameset, KWFrame *_frame, KWGUI*__parent )
-    : KWDocListViewItem( _parent, _text )
+KWDocStructTextFrameItem::KWDocStructTextFrameItem(QListViewItem* parent, const QString& text,
+    KWTextFrameSet* frameset, KWFrame* frame)
+    : KWDocListViewItem(parent, text), m_frame(frame), m_frameset(frameset)
 {
-    frame = _frame;
-    frameset = _frameset;
-    gui = __parent;
 }
 
-void KWDocStructTextFrameItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructTextFrameItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
-    if ( _item == this )
-        gui->getView()->openDocStructurePopupMenu( p, frameset);
+    if (item == this)
+        gui()->getView()->openDocStructurePopupMenu(p, m_frameset);
 }
 
 void KWDocStructTextFrameItem::selectItem()
 {
-    gui->canvasWidget()->scrollToOffset( frame->topLeft() );
+    gui()->canvasWidget()->scrollToOffset(m_frame->topLeft());
 }
 
 void KWDocStructTextFrameItem::editItem()
@@ -242,84 +267,110 @@ void KWDocStructTextFrameItem::editItem()
     KoTextParag* parag = 0L;
     int index = 0;
     // Get upperleft corner of the frame and get coordinates just inside it.
-    KoPoint dPoint = frame->topLeft() + KoPoint(2,2);
-    frameset->findPosition(dPoint, parag, index);
-    gui->canvasWidget()->editTextFrameSet( frameset, parag, 0 );
+    KoPoint dPoint = m_frame->topLeft() + KoPoint(2,2);
+    m_frameset->findPosition(dPoint, parag, index);
+    gui()->canvasWidget()->editTextFrameSet(m_frameset, parag, 0);
 }
 
 void KWDocStructTextFrameItem::deleteItem()
 {
-    gui->getView()->deleteFrameSet( frameset );
+    gui()->getView()->deleteFrameSet(m_frameset);
 }
 
 void KWDocStructTextFrameItem::editProperties()
 {
-     gui->canvasWidget()->editFrameProperties( frameset );
+     gui()->canvasWidget()->editFrameProperties(m_frameset);
 }
+
+void KWDocStructTextFrameItem::speakItem()
+{
+    KoTextParag* parag = 0L;
+    int index = 0;
+    // Get upperleft corner of the frame and get coordinates just inside it.
+    KoPoint dPoint = m_frame->topLeft() + KoPoint(2,2);
+    m_frameset->findPosition(dPoint, parag, index);
+    kospeaker->queueSpeech(parag->string()->toString(), parag->paragraphFormat()->language(), true);
+    kospeaker->startSpeech();
+}
+
 
 /******************************************************************/
 /* Class: KWDocStructTableItem                                    */
 /******************************************************************/
 
-KWDocStructTableItem::KWDocStructTableItem( QListViewItem *_parent, const QString &_text,
-    KWTableFrameSet *_table, KWGUI*__parent )
-    :KWDocListViewItem( _parent, _text )
+KWDocStructTableItem::KWDocStructTableItem(QListViewItem* parent, const QString& text,
+    KWTableFrameSet* table)
+    :KWDocListViewItem(parent, text), m_table(table)
 {
-    table = _table;
-    gui = __parent;
 }
 
-void KWDocStructTableItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructTableItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
-    if ( _item == this )
-        gui->getView()->openDocStructurePopupMenu( p, table);
+    if (item == this)
+        gui()->getView()->openDocStructurePopupMenu(p, m_table);
 }
 
 
 void KWDocStructTableItem::selectItem()
 {
-    KWFrame *frame = table->cell( 0, 0 )->frame( 0 );
-    gui->canvasWidget()->scrollToOffset( frame->topLeft() );
+    KWFrame* frame = m_table->cell( 0, 0 )->frame( 0 );
+    gui()->canvasWidget()->scrollToOffset(frame->topLeft());
 }
 
 void KWDocStructTableItem::editItem()
 {
     //activate the first cell
-    gui->canvasWidget()->editTextFrameSet( table->cell(0,0), 0L, 0 );
+    gui()->canvasWidget()->editTextFrameSet(m_table->cell(0,0), 0L, 0);
 }
 
 void KWDocStructTableItem::deleteItem()
 {
-    gui->getView()->deleteFrameSet( table );
+    gui()->getView()->deleteFrameSet(m_table);
 }
 
 void KWDocStructTableItem::editProperties()
 {
-     gui->canvasWidget()->editFrameProperties( table );
+     gui()->canvasWidget()->editFrameProperties(m_table);
 }
+
+void KWDocStructTableItem::speakItem()
+{
+    bool first = true;
+    for (int row = 0; row < m_table->getRows(); ++row) {
+        for (int col = 0; col < m_table->getCols(); ++ col) {
+            KoTextParag* parag = m_table->cell(row, col)->textDocument()->firstParag();
+            kospeaker->queueSpeech(parag->string()->toString(), parag->paragraphFormat()->language(), first);
+            first = false;
+            parag = parag->next();
+            for ( ; parag ; parag = parag->next() )
+                kospeaker->queueSpeech(parag->string()->toString(), parag->paragraphFormat()->language(), false);
+        }
+    }
+    kospeaker->startSpeech();
+}
+
 
 /******************************************************************/
 /* Class: KWDocStructPictureItem                                  */
 /******************************************************************/
 
-KWDocStructPictureItem::KWDocStructPictureItem( QListViewItem *_parent, const QString &_text, KWPictureFrameSet *_pic, KWGUI*__parent )
-    : KWDocListViewItem( _parent, _text )
+KWDocStructPictureItem::KWDocStructPictureItem(QListViewItem* parent, const QString& text,
+    KWPictureFrameSet* pic)
+    : KWDocListViewItem(parent, text), m_pic(pic)
 {
-    pic = _pic;
-    gui = __parent;
 }
 
-void KWDocStructPictureItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructPictureItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
-    if ( _item == this )
-        gui->getView()->openDocStructurePopupMenu( p, pic);
+    if (item == this)
+        gui()->getView()->openDocStructurePopupMenu(p, m_pic);
 }
 
 
 void KWDocStructPictureItem::selectItem()
 {
-    KWFrame *frame = pic->frame( 0 );
-    gui->canvasWidget()->scrollToOffset( frame->topLeft() );
+    KWFrame *frame = m_pic->frame(0);
+    gui()->canvasWidget()->scrollToOffset(frame->topLeft() );
 
 }
 
@@ -331,76 +382,81 @@ void KWDocStructPictureItem::editItem()
 
 void KWDocStructPictureItem::deleteItem()
 {
-    gui->getView()->deleteFrameSet( pic );
+    gui()->getView()->deleteFrameSet(m_pic);
 }
 
 void KWDocStructPictureItem::editProperties()
 {
-    gui->canvasWidget()->editFrameProperties( pic );
+    gui()->canvasWidget()->editFrameProperties(m_pic);
 }
 
 /******************************************************************/
 /* Class: KWDocStructFormulaItem                                  */
 /******************************************************************/
 
-KWDocStructFormulaItem::KWDocStructFormulaItem( QListViewItem *_parent, const QString &_text, KWFormulaFrameSet *_form, KWGUI*__parent )
-    : KWDocListViewItem( _parent, _text )
+KWDocStructFormulaItem::KWDocStructFormulaItem(QListViewItem* parent, const QString& text,
+    KWFormulaFrameSet* form)
+    : KWDocListViewItem(parent, text), m_form(form)
 {
-    form = _form;
-    gui = __parent;
 }
 
-void KWDocStructFormulaItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructFormulaItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
-    if ( _item == this )
-        gui->getView()->openDocStructurePopupMenu( p, form);
+    if (item == this)
+        gui()->getView()->openDocStructurePopupMenu(p, m_form);
 }
 
 void KWDocStructFormulaItem::selectItem()
 {
-    KWFrame *frame = form->frame( 0 );
-    gui->canvasWidget()->scrollToOffset( frame->topLeft() );
+    KWFrame* frame = m_form->frame( 0 );
+    gui()->canvasWidget()->scrollToOffset(frame->topLeft());
 }
 
 void KWDocStructFormulaItem::editItem()
 {
     // TODO: Formula has to be selected first to bring it into view. Bug?
     selectItem(); 
-    gui->canvasWidget()->editFrameSet( form );
+    gui()->canvasWidget()->editFrameSet(m_form);
 
 }
 
 void KWDocStructFormulaItem::deleteItem()
 {
-    gui->getView()->deleteFrameSet( form );
+    gui()->getView()->deleteFrameSet(m_form);
 }
 
 void KWDocStructFormulaItem::editProperties()
 {
-    gui->canvasWidget()->editFrameProperties( form );
+    gui()->canvasWidget()->editFrameProperties(m_form);
 }
+
+void KWDocStructFormulaItem::speakItem()
+{
+    // TODO
+}
+
 
 /******************************************************************/
 /* Class: KWDocStructPartItem                                     */
 /******************************************************************/
 
-KWDocStructPartItem::KWDocStructPartItem( QListViewItem *_parent, const QString &_text, KWPartFrameSet *_part, KWGUI*__parent )
-    : KWDocListViewItem( _parent, _text )
+KWDocStructPartItem::KWDocStructPartItem(QListViewItem* parent, const QString& text,
+    KWPartFrameSet* part)
+    : KWDocListViewItem(parent, text), m_part(part)
 {
-    part = _part;
-    gui = __parent;
 }
-void KWDocStructPartItem::contextMenu( QListViewItem *_item, const QPoint &p, int )
+
+void KWDocStructPartItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
-    if ( _item == this )
-        gui->getView()->openDocStructurePopupMenu( p, part);
+    if (item == this)
+        gui()->getView()->openDocStructurePopupMenu(p, m_part);
 }
 
 
 void KWDocStructPartItem::selectItem()
 {
-    KWFrame *frame = part->frame( 0 );
-    gui->canvasWidget()->scrollToOffset( frame->topLeft() );
+    KWFrame* frame = m_part->frame(0);
+    gui()->canvasWidget()->scrollToOffset(frame->topLeft());
 }
 
 void KWDocStructPartItem::editItem()
@@ -412,26 +468,22 @@ void KWDocStructPartItem::editItem()
 
 void KWDocStructPartItem::deleteItem()
 {
-    gui->getView()->deleteFrameSet( part );
+    gui()->getView()->deleteFrameSet(m_part);
 }
 
 void KWDocStructPartItem::editProperties()
 {
-     gui->canvasWidget()->editFrameProperties( part );
+    gui()->canvasWidget()->editFrameProperties(m_part);
 }
 
 /******************************************************************/
 /* Class: KWDocStructRootItem                                     */
 /******************************************************************/
 
-KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, const QString &_text,
-    KWDocument *_doc, TypeStructDocItem _type, KWGUI*__parent ) :
-    KWDocListViewItem( _parent, _text )
+KWDocStructRootItem::KWDocStructRootItem(QListView* parent, const QString& text,
+    TypeStructDocItem type )
+    : KWDocListViewItem(parent, text), m_type(type)
 {
-    doc = _doc;
-    type = _type;
-    gui = __parent;
-
     switch ( type ) {
         case Arrangement: {
             setPixmap( 0, KGlobal::iconLoader()->loadIcon( "tree_arrange", KIcon::Small ) );
@@ -454,11 +506,11 @@ KWDocStructRootItem::KWDocStructRootItem( QListView *_parent, const QString &_te
     }
 }
 
-void KWDocStructRootItem::setOpen( bool o )
+void KWDocStructRootItem::setOpen(bool o)
 {
     if ( o )
     {
-        switch ( type )
+        switch (m_type)
         {
             case Arrangement:
                 setupArrangement();
@@ -480,7 +532,7 @@ void KWDocStructRootItem::setOpen( bool o )
                 break;
         }
     }
-    QListViewItem::setOpen( o );
+    QListViewItem::setOpen(o);
 }
 
 void KWDocStructRootItem::setupArrangement()
@@ -490,20 +542,21 @@ void KWDocStructRootItem::setupArrangement()
     QIntDict<KWDocStructParagItem> parags;
     parags.setAutoDelete( false );
 
-    KWFrameSet *frameset = 0L;
-    KWTextParag *parag = 0L;
-    KoTextDocument * textdoc=0L;
+    KWFrameSet* frameset = 0L;
+    KWTextParag* parag = 0L;
+    KoTextDocument* textdoc = 0L;
 
+    KWDocument* dok = doc();
     KWDocStructTextFrameSetItem *item = 0L;
     QString _name;
 
-    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
+    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- )
     {
-        frameset = doc->frameSet( i );
+        frameset = dok->frameSet( i );
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->frameCount()>0)
         {
             KWTextFrameSet *tmpParag = dynamic_cast<KWTextFrameSet*> (frameset) ;
-            item = new KWDocStructTextFrameSetItem( this, frameset->name(), tmpParag, gui );
+            item = new KWDocStructTextFrameSetItem( this, frameset->name(), tmpParag);
             textdoc= tmpParag->textDocument();
             parag = static_cast<KWTextParag *>(textdoc->firstParag());
             while ( parag )
@@ -515,18 +568,18 @@ void KWDocStructRootItem::setupArrangement()
                     if ( _depth == 0 )
                     {
                         if ( item->childCount() == 0 )
-                            parags.replace( _depth, new KWDocStructParagItem( item,QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                            parags.replace( _depth, new KWDocStructParagItem( item,QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag) );
                         else
-                            parags.replace( _depth, new KWDocStructParagItem( item, parags[ _depth ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                            parags.replace( _depth, new KWDocStructParagItem( item, parags[ _depth ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag) );
                     }
                     else
                     {
                         if (parags[ _depth - 1 ]==0)
-                            parags.replace( _depth, new KWDocStructParagItem( item,QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                            parags.replace( _depth, new KWDocStructParagItem( item,QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ), parag) );
                         else if ( parags[ _depth - 1 ]->childCount() == 0 )
-                            parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                            parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ), parag) );
                         else
-                            parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ], parags[ _depth ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ),parag, gui ) );
+                            parags.replace( _depth, new KWDocStructParagItem( parags[ _depth - 1 ], parags[ _depth ],QString( tmpCounter->text(parag) + "  " +parag->string()->toString().mid( 0, parag->string()->length() ) ), parag) );
                     }
                 }
                 parag = static_cast<KWTextParag *>(parag->next());
@@ -546,13 +599,14 @@ void KWDocStructRootItem::setupTextFrameSets()
     QListViewItem* lvItem = firstChild();
     if (lvItem && (lvItem->text(0) == i18n("Empty"))) delete lvItem;
 
-    KWFrameSet *frameset = 0L;
-    KWDocStructTextFrameSetItem *item = 0L;
+    KWFrameSet* frameset = 0L;
+    KWDocStructTextFrameSetItem* item = 0L;
+    KWDocument* dok = doc();
 
     // Build a list of framesets ordered by their screen position (top left corner).
     QValueList<KWOrderedTextFrameSet> orderedFrameSets;
-    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- ) {
-        frameset = doc->frameSet(i);
+    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- ) {
+        frameset = dok->frameSet(i);
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY &&
             !frameset->groupmanager() && frameset->frameCount()>0)
 
@@ -585,12 +639,12 @@ void KWDocStructRootItem::setupTextFrameSets()
         else {
             if (after)
                 item = new KWDocStructTextFrameSetItem(
-                    this, after, textFrameset->name(), textFrameset, gui );
+                    this, after, textFrameset->name(), textFrameset);
             else
-                item = new KWDocStructTextFrameSetItem( this, textFrameset->name(), textFrameset, gui );
+                item = new KWDocStructTextFrameSetItem(this, textFrameset->name(), textFrameset);
         }
         after = item;
-        item->setupTextFrames(doc);
+        item->setupTextFrames();
     }
 
     if ( childCount() == 0 )
@@ -601,18 +655,19 @@ void KWDocStructRootItem::setupFormulaFrames()
 {
     deleteAllChildren();
 
-    KWFrameSet *frameset = 0L;
+    KWFrameSet* frameset = 0L;
     QString _name;
-    KWDocStructFormulaItem *child;
+    KWDocStructFormulaItem* child;
+    KWDocument* dok = doc();
 
-    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
+    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- )
     {
-        frameset = doc->frameSet( i );
+        frameset = dok->frameSet( i );
         if ( frameset->type() == FT_FORMULA &&
             frameset->frameCount()>0  )
         {
             _name=i18n("Formula Frame %1").arg(QString::number(i+1));
-            child = new KWDocStructFormulaItem( this, _name, dynamic_cast<KWFormulaFrameSet*>( frameset ), gui );
+            child = new KWDocStructFormulaItem(this, _name, dynamic_cast<KWFormulaFrameSet*>( frameset ));
         }
     }
 
@@ -625,19 +680,20 @@ void KWDocStructRootItem::setupTables()
     deleteAllChildren();
 
     QString _name;
-    KWDocStructTableItem *child;
+    KWDocStructTableItem* child;
+    KWDocument* dok = doc();
 
-    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
+    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- )
     {
-        KWFrameSet *fs = doc->frameSet(i);
+        KWFrameSet* fs = dok->frameSet(i);
         if ( fs->type() != FT_TABLE)
             continue;
-        KWTableFrameSet *tfs = static_cast<KWTableFrameSet *> (fs);
+        KWTableFrameSet* tfs = static_cast<KWTableFrameSet *>(fs);
         if(!tfs->isActive() )
             continue;
 
         _name=i18n( "Table %1" ).arg(QString::number( i + 1 ));
-        child = new KWDocStructTableItem( this, _name, tfs, gui );
+        child = new KWDocStructTableItem(this, _name, tfs);
     }
 
     if ( childCount() == 0 )
@@ -648,18 +704,19 @@ void KWDocStructRootItem::setupPictures()
 {
     deleteAllChildren();
 
-    KWFrameSet *frameset = 0L;
+    KWFrameSet* frameset = 0L;
     QString _name;
-    KWDocStructPictureItem *child;
+    KWDocStructPictureItem* child;
+    KWDocument* dok = doc();
 
     int j = 0;
-    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
+    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- )
     {
-        frameset = doc->frameSet( i );
+        frameset = dok->frameSet( i );
         if ( frameset->type() == FT_PICTURE && frameset->frameCount()>0)
         {
             _name=i18n("Picture (%1) %2").arg(dynamic_cast<KWPictureFrameSet*>( frameset )->key().filename()).arg(++j);
-            child = new KWDocStructPictureItem( this, _name, dynamic_cast<KWPictureFrameSet*>( frameset ), gui );
+            child = new KWDocStructPictureItem(this, _name, dynamic_cast<KWPictureFrameSet*>( frameset ));
         }
     }
 
@@ -671,18 +728,19 @@ void KWDocStructRootItem::setupEmbedded()
 {
     deleteAllChildren();
 
-    KWFrameSet *frameset = 0L;
+    KWFrameSet* frameset = 0L;
     QString _name;
-    KWDocStructPartItem *child;
+    KWDocStructPartItem* child;
+    KWDocument* dok = doc();
 
-    for ( int i = doc->numFrameSets() - 1; i >= 0; i-- )
+    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- )
     {
-        frameset = doc->frameSet( i );
+        frameset = dok->frameSet( i );
         if ( frameset->type() == FT_PART && frameset->frameCount()>0)
         {
             // Use the name of the frameset as the entry for the object.
             _name=frameset->name();
-            child = new KWDocStructPartItem( this, _name, dynamic_cast<KWPartFrameSet*>( frameset ), gui );
+            child = new KWDocStructPartItem(this, _name, dynamic_cast<KWPartFrameSet*>( frameset ));
         }
     }
 
@@ -711,30 +769,27 @@ KWDocStructTextFrameSetItem* KWDocStructRootItem::findTextFrameSetItem(const KWF
 /* Class: KWDocStructTree                                         */
 /******************************************************************/
 
-KWDocStructTree::KWDocStructTree( QWidget *_parent, KWDocument *_doc, KWGUI*__parent )
-    : KListView( _parent )
+KWDocStructTree::KWDocStructTree(QWidget* parent, KWDocument* doc, KWGUI* gui)
+    : KListView(parent), m_doc(doc), m_gui(gui)
 {
-    doc = _doc;
-    gui = __parent;
-
-    embedded = new KWDocStructRootItem( this, i18n( "Embedded Objects" ), doc, Embedded, gui );
-    formulafrms = new KWDocStructRootItem( this, i18n( "Formula Frames" ), doc, FormulaFrames, gui );
-    tables = new KWDocStructRootItem( this, i18n( "Tables" ), doc, Tables, gui );
-    pictures = new KWDocStructRootItem( this, i18n( "Pictures" ), doc, Pictures, gui );
-    textfrms = new KWDocStructRootItem( this, i18n( "Text Frames/Frame Sets" ), doc, TextFrames, gui );
-    arrangement = new KWDocStructRootItem( this, i18n( "Arrangement" ), doc, Arrangement, gui );
+    embedded = new KWDocStructRootItem( this, i18n( "Embedded Objects" ), Embedded);
+    formulafrms = new KWDocStructRootItem( this, i18n( "Formula Frames" ), FormulaFrames);
+    tables = new KWDocStructRootItem( this, i18n( "Tables" ), Tables);
+    pictures = new KWDocStructRootItem( this, i18n( "Pictures" ), Pictures);
+    textfrms = new KWDocStructRootItem( this, i18n( "Text Frames/Frame Sets" ), TextFrames);
+    arrangement = new KWDocStructRootItem( this, i18n( "Arrangement" ), Arrangement);
 
     addColumn( i18n( "Document Structure" ) );
     setFullWidth( true );
 
-    connect( this, SIGNAL( doubleClicked( QListViewItem* ) ),
-        this, SLOT( slotDoubleClicked( QListViewItem* ) ) );
-    connect( this, SIGNAL( returnPressed( QListViewItem* ) ),
-        this, SLOT( slotReturnPressed( QListViewItem* ) ) );
-    connect( this, SIGNAL(rightButtonClicked ( QListViewItem *, const QPoint &,int )),
-        this, SLOT( slotRightButtonClicked( QListViewItem *, const QPoint &, int )));
-    connect( this, SIGNAL(contextMenu(KListView *, QListViewItem *, const QPoint &)),
-        this, SLOT(slotContextMenu(KListView *, QListViewItem *, const QPoint &)) );
+    connect( this, SIGNAL( doubleClicked(QListViewItem*) ),
+        this, SLOT( slotDoubleClicked(QListViewItem*)) );
+    connect( this, SIGNAL( returnPressed(QListViewItem*) ),
+        this, SLOT( slotReturnPressed(QListViewItem* )) );
+    connect( this, SIGNAL(rightButtonClicked(QListViewItem*, const QPoint&,int)),
+        this, SLOT( slotRightButtonClicked(QListViewItem *, const QPoint&, int)));
+    connect( this, SIGNAL(contextMenu(KListView*, QListViewItem*, const QPoint&)),
+        this, SLOT(slotContextMenu(KListView*, QListViewItem*, const QPoint&)) );
 }
 
 KWDocStructTree::~KWDocStructTree()
@@ -754,23 +809,23 @@ void KWDocStructTree::setup()
     refreshTree((int)(TextFrames | FormulaFrames | Tables | Pictures | Embedded));
 }
 
-void KWDocStructTree::refreshTree(int _type)
+void KWDocStructTree::refreshTree(int type)
 {
     QString curItemText;
     if (currentItem()) curItemText = currentItem()->text(0);
-    if(((int)Arrangement) & _type)
+    if(((int)Arrangement) & type)
         arrangement->setupArrangement();
-    if(((int)TextFrames) & _type)
+    if(((int)TextFrames) & type)
         textfrms->setupTextFrameSets();
-    if(((int)FormulaFrames) & _type)
+    if(((int)FormulaFrames) & type)
         formulafrms->setupFormulaFrames();
-    if(((int)Tables) & _type)
+    if(((int)Tables) & type)
         tables->setupTables();
-    if(((int)Pictures) & _type)
+    if(((int)Pictures) & type)
         pictures->setupPictures();
-    if(((int)Embedded) & _type)
+    if(((int)Embedded) & type)
         embedded->setupEmbedded();
-    if (!curItemText.isNull()) {
+    if (!curItemText.isEmpty()) {
         QListViewItem* item = findItem(curItemText, 0);
         if (item) setCurrentItem(item);
     }
@@ -778,16 +833,16 @@ void KWDocStructTree::refreshTree(int _type)
 
 void KWDocStructTree::selectItem()
 {
-    QListViewItem * select=currentItem ();
-    KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
+    QListViewItem* select = currentItem ();
+    KWDocListViewItem* tmp = dynamic_cast<KWDocListViewItem *>(select);
     if ( tmp )
         tmp->selectItem();
 }
 
 void KWDocStructTree::editItem()
 {
-    QListViewItem * select=currentItem ();
-    KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
+    QListViewItem* select = currentItem();
+    KWDocListViewItem* tmp = dynamic_cast<KWDocListViewItem *>(select);
     if ( tmp )
         tmp->editItem();
 }
@@ -795,7 +850,7 @@ void KWDocStructTree::editItem()
 
 void KWDocStructTree::deleteItem()
 {
-    QListViewItem * select=currentItem ();
+    QListViewItem* select = currentItem();
     KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
     if ( tmp )
         tmp->deleteItem();
@@ -803,13 +858,21 @@ void KWDocStructTree::deleteItem()
 
 void KWDocStructTree::editProperties()
 {
-    QListViewItem * select=currentItem ();
-    KWDocListViewItem *tmp = dynamic_cast<KWDocListViewItem *>(select);
+    QListViewItem* select = currentItem();
+    KWDocListViewItem* tmp = dynamic_cast<KWDocListViewItem *>(select);
     if ( tmp )
         tmp->editProperties();
 }
 
-void KWDocStructTree::slotContextMenu(KListView *lv, QListViewItem *i, const QPoint &p)
+void KWDocStructTree::speakItem()
+{
+    QListViewItem* select = currentItem();
+    KWDocListViewItem* tmp = dynamic_cast<KWDocListViewItem *>(select);
+    if ( tmp )
+        tmp->speakItem();
+}
+
+void KWDocStructTree::slotContextMenu(KListView* lv, QListViewItem* i, const QPoint& p)
 {
     if (lv != this)
         return;
@@ -818,27 +881,27 @@ void KWDocStructTree::slotContextMenu(KListView *lv, QListViewItem *i, const QPo
         item->contextMenu(item, p, 0);
 }
 
-void KWDocStructTree::slotRightButtonClicked( QListViewItem *_item, const QPoint &p, int )
+void KWDocStructTree::slotRightButtonClicked(QListViewItem* i, const QPoint& p, int)
 {
-    KWDocListViewItem *item = dynamic_cast<KWDocListViewItem *>(_item);
+    KWDocListViewItem* item = dynamic_cast<KWDocListViewItem *>(i);
     if (item)
         item->contextMenu(item, p, 0);
 }
 
-void KWDocStructTree::slotDoubleClicked( QListViewItem *_item )
+void KWDocStructTree::slotDoubleClicked(QListViewItem* i)
 {
-    KWDocListViewItem *item = dynamic_cast<KWDocListViewItem *>(_item);
+    KWDocListViewItem* item = dynamic_cast<KWDocListViewItem *>(i);
     if (item)
         item->selectItem();
 }
 
-void KWDocStructTree::slotReturnPressed( QListViewItem *_item )
+void KWDocStructTree::slotReturnPressed(QListViewItem* i)
 {
-    KWDocListViewItem *item = dynamic_cast<KWDocListViewItem *>(_item);
+    KWDocListViewItem* item = dynamic_cast<KWDocListViewItem *>(i);
     if (item) {
         item->editItem();
         //return focus to canvas.
-        gui->canvasWidget()->setFocus();
+        m_gui->canvasWidget()->setFocus();
     }
 }
 
@@ -847,70 +910,72 @@ void KWDocStructTree::slotReturnPressed( QListViewItem *_item )
 /* Class: KWDocStruct                                             */
 /******************************************************************/
 
-KWDocStruct::KWDocStruct( QWidget *_parent, KWDocument *_doc, KWGUI*__parent )
-    : QWidget( _parent )
+KWDocStruct::KWDocStruct(QWidget* parent, KWDocument* doc, KWGUI* gui)
+    : QWidget(parent), m_doc(doc), m_gui(gui)
 {
-    doc = _doc;
-    parent = __parent;
-
-    layout = new QVBoxLayout( this );
+    m_layout = new QVBoxLayout( this );
 
     KToolBar* searchBar = new KToolBar( this );
     searchBar->setFlat( true );
     searchBar->setMovingEnabled( false );
 
     KToolBarButton* eraseButton = new KToolBarButton( "locationbar_erase", 0, searchBar );
-    tree = new KWDocStructTree( this, doc, __parent );
-    tree->setAlternateBackground( KGlobalSettings::alternateBackgroundColor() );
-    KListViewSearchLine* searchLine = new KListViewSearchLine( searchBar, tree );
+    m_tree = new KWDocStructTree( this, doc, gui );
+    m_tree->setAlternateBackground( KGlobalSettings::alternateBackgroundColor() );
+    KListViewSearchLine* searchLine = new KListViewSearchLine( searchBar, m_tree );
     searchBar->setStretchableWidget( searchLine );
     connect( eraseButton, SIGNAL( clicked() ), searchLine, SLOT( clear() ) );
 
-    layout->addWidget( searchBar );
-    layout->addWidget( tree );
-    tree->setup();
+    m_layout->addWidget(searchBar);
+    m_layout->addWidget(m_tree);
+    m_tree->setup();
     dirtyTreeTypes = 0;
 }
 
-void KWDocStruct::paintEvent ( QPaintEvent * ev)
+void KWDocStruct::paintEvent (QPaintEvent* ev)
 {
     if (dirtyTreeTypes) {
-        tree->refreshTree(dirtyTreeTypes);
+        m_tree->refreshTree(dirtyTreeTypes);
         dirtyTreeTypes = 0;
     }
     QWidget::paintEvent(ev);
 }
 
-void KWDocStruct::refreshTree(int _type)
+void KWDocStruct::refreshTree(int type)
 {
-    if ((dirtyTreeTypes | _type) != dirtyTreeTypes) {
-        dirtyTreeTypes |= _type;
+    if ((dirtyTreeTypes | type) != dirtyTreeTypes) {
+        dirtyTreeTypes |= type;
         update();
     }
 }
 
 void KWDocStruct::setFocusHere()
 {
-    if (tree)
-        if (tree->isVisible()) tree->setFocus();
+    if (m_tree)
+        if (m_tree->isVisible()) m_tree->setFocus();
 }
 
 void KWDocStruct::selectItem()
 {
-    tree->selectItem();
+    m_tree->selectItem();
 }
 
 void KWDocStruct::editItem()
 {
-    tree->editItem();
+    m_tree->editItem();
 }
 
 void KWDocStruct::deleteItem()
 {
-    tree->deleteItem();
+    m_tree->deleteItem();
 }
 
 void KWDocStruct::editProperties()
 {
-    tree->editProperties();
+    m_tree->editProperties();
+}
+
+void KWDocStruct::speakItem()
+{
+    m_tree->speakItem();
 }
