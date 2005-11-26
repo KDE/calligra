@@ -77,9 +77,9 @@ public:
     QStringList displayNameList() const;
 
     /**
-     * Find style based on the internal name @p name
-     * If the style with that name can't be found, then
-     * 1) if @p name is @defaultStyleName, return the first one, never 0
+     * Find style based on the internal name @p name.
+     * If the style with that name can't be found, then<br>
+     * 1) if @p name equals @p defaultStyleName, return the first one, never 0<br>
      * 2) otherwise return 0
      */
     KWGenericStyle* findStyle( const QString & name, const QString& defaultStyleName ) const;
