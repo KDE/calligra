@@ -37,6 +37,7 @@ class KCommand;
 class KWDocument;
 class KListView;
 class QVGroupBox;
+class QLabel;
 
 namespace KSpell2 {
     class ConfigWidget;
@@ -170,6 +171,7 @@ private:
     QCheckBox* m_cbSpeakWhatsThis;
     QCheckBox* m_cbSpeakDisabled;
     QCheckBox* m_cbSpeakAccelerators;
+    QLabel* m_lblAcceleratorPrefix;
     QLineEdit* m_leAcceleratorPrefixWord;
     KIntNumInput* m_iniPollingInterval;
 };

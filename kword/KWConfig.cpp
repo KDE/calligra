@@ -1030,27 +1030,32 @@ ConfigureTTSPage::ConfigureTTSPage( KWView *_view, QVBox *box, char *name )
     // m_pView=_view;
     // KWDocument * doc = m_pView->kWordDocument();
 
-    m_cbSpeakPointerWidget = new QCheckBox(i18n("Speak widget under mouse pointer"), box);
-    m_cbSpeakFocusWidget = new QCheckBox(i18n("Speak widget with focus"), box);
+    m_cbSpeakPointerWidget = new QCheckBox(i18n("Speak widget under &mouse pointer"), box);
+    m_cbSpeakFocusWidget = new QCheckBox(i18n("Speak widget with &focus"), box);
     m_gbScreenReaderOptions = new QVGroupBox("", box);
     m_gbScreenReaderOptions->setMargin( KDialog::marginHint() );
     m_gbScreenReaderOptions->setInsideSpacing( KDialog::spacingHint() );
-    m_cbSpeakTooltips = new QCheckBox(i18n("Speak tool tips"), m_gbScreenReaderOptions);
-    m_cbSpeakWhatsThis = new QCheckBox(i18n("Speak What's This"), m_gbScreenReaderOptions);
+    m_cbSpeakTooltips = new QCheckBox(i18n("Speak &tool tips"), m_gbScreenReaderOptions);
+    m_cbSpeakWhatsThis = new QCheckBox(i18n("Speak &What's This"), m_gbScreenReaderOptions);
     m_cbSpeakDisabled = new QCheckBox(i18n("Verbal indication if widget is disabled (grayed)",
-        "Say whether disabled"), m_gbScreenReaderOptions);
-    QHBox* hbSpeakAccelerators = new QHBox(m_gbScreenReaderOptions);
-    hbSpeakAccelerators->setMargin( 0 );
-    m_cbSpeakAccelerators = new QCheckBox(
-        i18n("Speak accelerators, prefaced by the word:"), hbSpeakAccelerators);
+        "&Say whether disabled"), m_gbScreenReaderOptions);
+    m_cbSpeakAccelerators = new QCheckBox(i18n("Spea&k accelerators"), m_gbScreenReaderOptions);
+    QHBox* hbAcceleratorPrefix = new QHBox(m_gbScreenReaderOptions);
+    QWidget* spacer = new QWidget(hbAcceleratorPrefix);
+    spacer->setMinimumWidth(2 * KDialog::marginHint());
+    m_lblAcceleratorPrefix = 
+        new QLabel(i18n("A word spoken before another word", "Pr&efaced by the word:"),
+        hbAcceleratorPrefix);
     m_leAcceleratorPrefixWord = new QLineEdit(i18n("Keyboard accelerator, such as Alt+F", "Accelerator"),
-        hbSpeakAccelerators);
+        hbAcceleratorPrefix);
+    m_lblAcceleratorPrefix->setBuddy(m_leAcceleratorPrefixWord);
     QHBox* hbPollingInterval = new QHBox(m_gbScreenReaderOptions);
     hbPollingInterval->setMargin( 0 );
-    new QLabel(i18n("Polling interval:"), hbPollingInterval);
+    QLabel* lblPollingInterval = new QLabel(i18n("&Polling interval:"), hbPollingInterval);
     m_iniPollingInterval = new KIntNumInput(hbPollingInterval);
     m_iniPollingInterval->setSuffix(" ms");
     m_iniPollingInterval->setRange(100, 5000, 100, true);
+    lblPollingInterval->setBuddy(m_iniPollingInterval);
 
     config = KWFactory::instance()->config();
     config->setGroup("TTS");
@@ -1067,6 +1072,7 @@ ConfigureTTSPage::ConfigureTTSPage( KWView *_view, QVBox *box, char *name )
     screenReaderOptionChanged();
     connect(m_cbSpeakPointerWidget, SIGNAL(toggled(bool)), this, SLOT(screenReaderOptionChanged()));
     connect(m_cbSpeakFocusWidget, SIGNAL(toggled(bool)), this, SLOT(screenReaderOptionChanged()));
+    connect(m_cbSpeakAccelerators, SIGNAL(toggled(bool)), this, SLOT(screenReaderOptionChanged()));
 }
 
 void ConfigureTTSPage::slotDefault()
@@ -1099,6 +1105,8 @@ void ConfigureTTSPage::screenReaderOptionChanged()
 {
     m_gbScreenReaderOptions->setEnabled(
         m_cbSpeakPointerWidget->isChecked() | m_cbSpeakFocusWidget->isChecked());
+    m_leAcceleratorPrefixWord->setEnabled(m_cbSpeakAccelerators->isChecked());
+    m_lblAcceleratorPrefix->setEnabled(m_cbSpeakAccelerators->isChecked());
 }
 
 #include "KWConfig.moc"
