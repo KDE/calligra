@@ -342,6 +342,7 @@ protected:
 
 private slots:
     void doAutoScroll();
+    void speakCell(QWidget* w, const QPoint& p, uint flags);
 
 private:
     virtual void chooseMousePressEvent( QMouseEvent* _ev );
