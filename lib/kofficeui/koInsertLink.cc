@@ -228,7 +228,7 @@ internetLinkPage::internetLinkPage( QWidget *parent , char *name  )
   QLabel* tmpQLabel = new QLabel( this);
 
   lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Comment:"));
+  tmpQLabel->setText(i18n("Text to display:"));
 
   m_linkName = new QLineEdit( this );
   lay2->addWidget(m_linkName);
@@ -301,7 +301,7 @@ bookmarkLinkPage::bookmarkLinkPage( QWidget *parent , char *name  )
   QLabel* tmpQLabel = new QLabel( this);
 
   lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Comment:"));
+  tmpQLabel->setText(i18n("Text to display:"));
 
   m_linkName = new QLineEdit( this );
   lay2->addWidget(m_linkName);
@@ -383,7 +383,7 @@ mailLinkPage::mailLinkPage( QWidget *parent , char *name  )
   QLabel* tmpQLabel = new QLabel( this);
 
   lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Comment:"));
+  tmpQLabel->setText(i18n("Text to display:"));
 
   m_linkName = new QLineEdit( this );
   lay2->addWidget(m_linkName);
@@ -453,7 +453,7 @@ fileLinkPage::fileLinkPage( QWidget *parent , char *name  )
   QLabel* tmpQLabel = new QLabel( this);
 
   lay2->addWidget(tmpQLabel);
-  tmpQLabel->setText(i18n("Comment:"));
+  tmpQLabel->setText(i18n("Text to display:"));
 
   m_linkName = new QLineEdit( this );
   lay2->addWidget(m_linkName);
