@@ -182,8 +182,6 @@ class TableInfo {
                     m_cell = cell;
             }
 
-            m_row = 0;
-            m_col = 0;
             m_selected = amountSelected != 0;
             m_oneCellSelected = amountSelected == 1;
             if(amountSelected == 0) return;
@@ -192,28 +190,30 @@ class TableInfo {
                     iter != tableRows.end(); ++iter) {
                 QValueList<unsigned int> rows = iter.data();
                 QValueListIterator<unsigned int> rowsIter = rows.begin();
-                for(;rowsIter != rows.end(); ++rowsIter)
+                for(int x=0;rowsIter != rows.end(); ++rowsIter, x++)
                     if(*rowsIter == iter.key()->getCols())
-                        m_row++;
+                        m_rows.append(x);
 
                 QValueList<unsigned int> columns = tableCols[iter.key()];
                 QValueListIterator<unsigned int> colsIter = columns.begin();
-                for(;colsIter != columns.end(); ++colsIter)
+                for(int x=0;colsIter != columns.end(); ++colsIter, x++)
                     if(*colsIter == iter.key()->getRows())
-                        m_col++;
+                        m_columns.append(x);
             }
         }
 
         int tableCellsSelected() { return m_selected; }
-        int amountRowsSelected() { return m_row; }
-        bool amountColumnsSelected() { return m_col; }
+        int amountRowsSelected() { return m_rows.count(); }
+        bool amountColumnsSelected() { return m_columns.count(); }
         bool oneCellSelected() { return m_oneCellSelected; }
         bool protectContentEnabled() { return m_protectContent; }
+        QValueList<uint> selectedRows() { return m_rows; }
+        QValueList<uint> selectedColumns() { return m_columns; }
         KWTableFrameSet::Cell *firstSelectedCell() { return m_cell; }
     private:
         QValueList<KWFrameView*> m_views;
         bool m_oneCellSelected, m_selected, m_protectContent;
-        int m_row, m_col;
+        QValueList<uint> m_rows, m_columns;
         KWTableFrameSet::Cell *m_cell;
 };
 
@@ -4188,59 +4188,22 @@ void KWView::tableInsertCol(uint col,  KWTableFrameSet *table  )
 
 void KWView::tableDeleteRow()
 {
-    m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
+    TableInfo ti( frameViewManager()->selectedFrames() );
+    if(ti.amountRowsSelected() == 0) return;
 
-    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    Q_ASSERT(table);
-    if (!table)
-        return;
-    if ( table->getRows() == 1 )
-    {
-        int result;
-        result = KMessageBox::warningContinueCancel(this,
-                                                    i18n("The table has only one row. "
-                                                         "Deleting this row will delete the table.\n"
-                                                         "Do you want to delete the table?"),
-                                                    i18n("Delete Row"),
-                                                    KGuiItem(i18n("&Delete"),"editdelete"));
-        if (result == KMessageBox::Continue)
-            m_doc->deleteTable( table );
-    }
-    else
-    {
-        KWDeleteDia dia( this, "", table, m_doc, KWDeleteDia::ROW, m_gui->canvasWidget() );
-        dia.setCaption( i18n( "Delete Row" ) );
-        dia.exec();
-    }
-
+    KWDeleteDia dia( this, "", ti.firstSelectedCell()->groupmanager(),
+            KWDeleteDia::deleteRow, ti.selectedRows() );
+    dia.exec();
 }
 
 void KWView::tableDeleteCol()
 {
-    m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
+    TableInfo ti( frameViewManager()->selectedFrames() );
+    if(ti.amountColumnsSelected() == 0) return;
 
-    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    Q_ASSERT(table);
-    if (!table)
-        return;
-    if ( table->getCols() == 1 )
-    {
-        int result;
-        result = KMessageBox::warningContinueCancel(this,
-                                                    i18n("The table has only one column. "
-                                                         "Deleting this column will delete the table.\n"
-                                                         "Do you want to delete the table?"),
-                                                    i18n("Delete Column"),
-                                                    KGuiItem(i18n("&Delete"),"editdelete"));
-        if (result == KMessageBox::Continue)
-            m_doc->deleteTable( table );
-    }
-    else
-    {
-        KWDeleteDia dia( this, "", table, m_doc, KWDeleteDia::COL, m_gui->canvasWidget() );
-        dia.setCaption( i18n( "Delete Column" ) );
-        dia.exec();
-    }
+    KWDeleteDia dia( this, "", ti.firstSelectedCell()->groupmanager(),
+            KWDeleteDia::deleteColumn, ti.selectedColumns() );
+    dia.exec();
 }
 
 void KWView::tableResizeCol()
@@ -5900,10 +5863,12 @@ void KWView::updateTableActions( QValueList<KWFrameView*> selectedFrames)
         m_actionTableDelCol->setText(i18n("D&elete Current Column..."));
     else
         m_actionTableDelCol->setText(i18n("D&elete Selected Columns..."));
+    m_actionTableDelCol->setEnabled( ti.amountColumnsSelected() > 0 );
     if(ti.amountRowsSelected() == 1)
         m_actionTableDelRow->setText(i18n("&Delete Current Row..."));
     else
         m_actionTableDelRow->setText(i18n("&Delete Selected Rows..."));
+    m_actionTableDelRow->setEnabled( ti.amountRowsSelected() > 0 );
 
     m_actionTableResizeCol->setEnabled( table );
     m_actionTableDelete->setEnabled( table );

@@ -39,24 +39,26 @@ class KWDeleteDia : public KDialogBase
     Q_OBJECT
 
 public:
-    enum DeleteType {ROW, COL};
-    KWDeleteDia( QWidget *parent, const char *name, KWTableFrameSet *_table, KWDocument *_doc, DeleteType _type, KWCanvas *_canvas );
+    enum DeleteType {deleteRow, deleteColumn};
+
+    /**
+     * Constructor for the ok-to-delete dialog.
+     * @param parent the parent widget
+     * @param name the internal name for the widget
+     * @param table the table the rows or columns are to be deleted from
+     * @param type the type of dialog this should become, either deleteRow or deleteColumn
+     * @param remove a list of all the rows or columns that should be deleted.
+     */
+    KWDeleteDia( KWView *parent, const char *name, KWTableFrameSet *table, DeleteType type, QValueList<uint> remove);
 
 protected:
     void setupTab1();
-    bool doDelete();
 
-    QWidget *tab1;
-    QGridLayout *grid1;
-    QLabel *rc;
-    QSpinBox *value;
+    KWView *m_view;
+    KWTableFrameSet *m_table;
+    DeleteType m_type;
 
-    KWTableFrameSet *table;
-    KWDocument *doc;
-    DeleteType type;
-    KWCanvas *canvas;
-    
-    QValueList<uint> m_toRemove; // not really sure i should hold this here but ok.
+    QValueList<uint> m_toRemove;
 
 protected slots:
     virtual void slotOk();
