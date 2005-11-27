@@ -604,10 +604,10 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     Value const value( cell->value() );
     if ( !cell->isDefault() )
     {
-      font = cell->textFont( i, row );
+      font = cell->format()->textFont( i, row );
       m_styles.addFont( font );
 
-      if ( cell->hasProperty( Format::PComment ) )
+      if ( cell->format()->hasProperty( Format::PComment ) )
         hasComment = true;
     }
 
@@ -627,7 +627,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
         CellStyle c1;
         CellStyle::loadData( c1, cell1 ); // TODO: number style
 
-        if ( cell1->isEmpty() && !cell->hasProperty( Format::PComment )
+        if ( cell1->isEmpty() && !cell->format()->hasProperty( Format::PComment )
              && CellStyle::isEqual( &c, c1 ) && !cell->isObscuringForced() && !cell->isForceExtraCells() )
           ++repeated;
         else
@@ -647,7 +647,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     else if ( value.isNumber() )
     {
       kdDebug(30518) << "Type: Number" << endl;
-      FormatType type = cell->getFormatType( i, row );
+      FormatType type = cell->format()->getFormatType( i, row );
 
       if ( type == Percentage_format )
         cellElem.setAttribute( "table:value-type", "percentage" );
@@ -707,7 +707,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
 
     if ( hasComment )
     {
-      QString comment( cell->comment( i, row ) );
+      QString comment( cell->format()->comment( i, row ) );
       QDomElement annotation = doc.createElement( "office:annotation" );
       QDomElement text = doc.createElement( "text:p" );
       text.appendChild( doc.createTextNode( comment ) );

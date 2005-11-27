@@ -470,7 +470,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
             if ( !cell )
                 cell = table->nonDefaultCell( columns, row );
             kdDebug(30518)<<" columns :"<<columns<<" row :"<<row<<endl;
-            cell->setComment( comment );
+            cell->format()->setComment( comment );
         }
     }
 
@@ -490,7 +490,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
       Format * layout = m_defaultStyles[psName];
 
       if ( layout )
-        cell->copy( *layout );
+        cell->format()->copy( *layout );
 
       QDomElement * st = 0;
       if ( e.hasAttributeNS( ooNS::table, "style-name" ) )
@@ -516,11 +516,11 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
             }
             if ( property.localName() == "properties" && property.namespaceURI() == ooNS::style )
             {
-              loadStyleProperties( cell, property );
-              if ( cell->getAngle( columns, row ) != 0 )
+              loadStyleProperties( cell->format(), property );
+              if ( cell->format()->getAngle( columns, row ) != 0 )
               {
-                QFontMetrics fm( cell->textFont( columns, row ) );
-                int tmpAngle = cell->getAngle( columns, row );
+                QFontMetrics fm( cell->format()->textFont( columns, row ) );
+                int tmpAngle = cell->format()->getAngle( columns, row );
                 int textHeight = static_cast<int>( cos( tmpAngle * M_PI / 180 )
                                                    * ( fm.ascent() + fm.descent() )
                                                    + abs ( ( int )(  fm.width( cell->strOutText() )
@@ -558,7 +558,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
       Format * layout = m_defaultStyles[psName];
 
       if ( layout )
-        cell->copy( *layout );
+        cell->format()->copy( *layout );
     }
     if ( e.hasAttributeNS( ooNS::table, "formula" ) )
     {
@@ -600,8 +600,8 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
 
           if ( type == "currency" )
           {
-            cell->setCurrency( 1, e.attributeNS( ooNS::table, "currency", QString::null ) );
-            cell->setFormatType( Money_format );
+            cell->format()->setCurrency( 1, e.attributeNS( ooNS::table, "currency", QString::null ) );
+            cell->format()->setFormatType( Money_format );
           }
         }
       }
@@ -616,7 +616,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
             //TODO fixme
 			//cell->setFactor( 100 );
             // TODO: replace with custom...
-            cell->setFormatType( Percentage_format );
+            cell->format()->setFormatType( Percentage_format );
           }
         }
         else if ( type == "boolean" )
@@ -630,7 +630,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
           else
             cell->setValue( false );
           ok = true;
-          cell->setFormatType( Custom_format );
+          cell->format()->setFormatType( Custom_format );
         }
         else if ( type == "date" )
         {
@@ -710,7 +710,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
             // KSpreadValue kval( timeToNum( hours, minutes, seconds ) );
             // cell->setValue( kval );
             cell->setValue( QTime( hours % 24, minutes, seconds ) );
-            cell->setFormatType( Custom_format );
+            cell->format()->setFormatType( Custom_format );
           }
         }
 
@@ -1482,7 +1482,7 @@ bool OpenCalcImport::parseBody( int numOfTables )
     {
       Cell* defaultCell = table->defaultCell();
       kdDebug(30518) << "Copy default style to default cell" << endl;
-      defaultCell->copy( *defaultStyle );
+      defaultCell->format()->copy( *defaultStyle );
     }
     table->setDefaultHeight( MM_TO_POINT( 4.3 ) );
     table->setDefaultWidth( MM_TO_POINT( 22.7 ) );

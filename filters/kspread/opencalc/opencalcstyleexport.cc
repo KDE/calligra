@@ -452,11 +452,11 @@ void CellStyle::loadData( CellStyle & cs, Cell const * const cell )
 
   Format * f = new Format( 0, cell->sheet()->doc()->styleManager()->defaultStyle() );
 
-  QFont font = cell->textFont( col, row );
+  QFont font = cell->format()->textFont( col, row );
   if ( font != f->font() )
     cs.font = font;
 
-  QColor color = cell->textColor( col, row );
+  QColor color = cell->format()->textColor( col, row );
   if ( color != f->textColor( col, row ) )
     cs.color   = color;
 
@@ -464,49 +464,49 @@ void CellStyle::loadData( CellStyle & cs, Cell const * const cell )
   if ( bgColor != f->bgColor( col, row ) )
     cs.bgColor = bgColor;
 
-  if ( cell->hasProperty( Format::PAlign ) || !cell->hasNoFallBackProperties( Format::PAlign ) )
-    cs.alignX = cell->align( col, row );
+  if ( cell->format()->hasProperty( Format::PAlign ) || !cell->format()->hasNoFallBackProperties( Format::PAlign ) )
+    cs.alignX = cell->format()->align( col, row );
 
-  if ( cell->hasProperty( Format::PAlignY ) || !cell->hasNoFallBackProperties( Format::PAlignY ) )
-    cs.alignY = cell->alignY( col, row );
+  if ( cell->format()->hasProperty( Format::PAlignY ) || !cell->format()->hasNoFallBackProperties( Format::PAlignY ) )
+    cs.alignY = cell->format()->alignY( col, row );
 
-  if ( cell->hasProperty( Format::PIndent ) || !cell->hasNoFallBackProperties( Format::PIndent ) )
-    cs.indent = cell->getIndent( col, row );
+  if ( cell->format()->hasProperty( Format::PIndent ) || !cell->format()->hasNoFallBackProperties( Format::PIndent ) )
+    cs.indent = cell->format()->getIndent( col, row );
 
-  if ( cell->hasProperty( Format::PAngle ) || !cell->hasNoFallBackProperties( Format::PAngle ) )
-    cs.angle  = -cell->getAngle( col, row );
+  if ( cell->format()->hasProperty( Format::PAngle ) || !cell->format()->hasNoFallBackProperties( Format::PAngle ) )
+    cs.angle  = -cell->format()->getAngle( col, row );
 
-  if ( cell->hasProperty( Format::PMultiRow ) || !cell->hasNoFallBackProperties( Format::PMultiRow ) )
-    cs.wrap   = cell->multiRow( col, row );
+  if ( cell->format()->hasProperty( Format::PMultiRow ) || !cell->format()->hasNoFallBackProperties( Format::PMultiRow ) )
+    cs.wrap   = cell->format()->multiRow( col, row );
 
-  if ( cell->hasProperty( Format::PVerticalText )
-       || !cell->hasNoFallBackProperties( Format::PVerticalText ) )
-    cs.vertical = cell->verticalText( col, row );
+  if ( cell->format()->hasProperty( Format::PVerticalText )
+       || !cell->format()->hasNoFallBackProperties( Format::PVerticalText ) )
+    cs.vertical = cell->format()->verticalText( col, row );
 
-  if ( cell->hasProperty( Format::PDontPrintText )
-       || !cell->hasNoFallBackProperties( Format::PDontPrintText ) )
-    cs.print = !cell->getDontprintText( col, row );
+  if ( cell->format()->hasProperty( Format::PDontPrintText )
+       || !cell->format()->hasNoFallBackProperties( Format::PDontPrintText ) )
+    cs.print = !cell->format()->getDontprintText( col, row );
 
-  if ( cell->hasProperty( Format::PLeftBorder ) || !cell->hasNoFallBackProperties( Format::PLeftBorder ) )
+  if ( cell->format()->hasProperty( Format::PLeftBorder ) || !cell->format()->hasNoFallBackProperties( Format::PLeftBorder ) )
     cs.left  = cell->leftBorderPen( col, row );
 
-  if ( cell->hasProperty( Format::PRightBorder ) || !cell->hasNoFallBackProperties( Format::PRightBorder ) )
+  if ( cell->format()->hasProperty( Format::PRightBorder ) || !cell->format()->hasNoFallBackProperties( Format::PRightBorder ) )
     cs.right = cell->rightBorderPen( col, row );
 
-  if ( cell->hasProperty( Format::PTopBorder ) || !cell->hasNoFallBackProperties( Format::PTopBorder ) )
+  if ( cell->format()->hasProperty( Format::PTopBorder ) || !cell->format()->hasNoFallBackProperties( Format::PTopBorder ) )
     cs.top  = cell->topBorderPen( col, row );
 
-  if ( cell->hasProperty( Format::PBottomBorder ) || !cell->hasNoFallBackProperties( Format::PBottomBorder ) )
+  if ( cell->format()->hasProperty( Format::PBottomBorder ) || !cell->format()->hasNoFallBackProperties( Format::PBottomBorder ) )
     cs.bottom  = cell->bottomBorderPen( col, row );
 
-  if ( cell->hasProperty( Format::PNotProtected ) || !cell->hasNoFallBackProperties( Format::PNotProtected ) )
-    cs.notProtected = cell->notProtected( col, row );
+  if ( cell->format()->hasProperty( Format::PNotProtected ) || !cell->format()->hasNoFallBackProperties( Format::PNotProtected ) )
+    cs.notProtected = cell->format()->notProtected( col, row );
 
-  if ( cell->hasProperty( Format::PHideAll ) || !cell->hasNoFallBackProperties( Format::PHideAll ) )
-    cs.hideAll = cell->isHideAll( col, row );
+  if ( cell->format()->hasProperty( Format::PHideAll ) || !cell->format()->hasNoFallBackProperties( Format::PHideAll ) )
+    cs.hideAll = cell->format()->isHideAll( col, row );
 
-  if ( cell->hasProperty( Format::PHideFormula ) || !cell->hasNoFallBackProperties( Format::PHideFormula ) )
-    cs.hideFormula = cell->isHideFormula( col, row );
+  if ( cell->format()->hasProperty( Format::PHideFormula ) || !cell->format()->hasNoFallBackProperties( Format::PHideFormula ) )
+    cs.hideFormula = cell->format()->isHideFormula( col, row );
 }
 
 bool NumberStyle::isEqual( NumberStyle const * const t1, NumberStyle const & t2 )

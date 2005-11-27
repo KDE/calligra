@@ -133,7 +133,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
       widths[i] = init;
 
     Cell* c = sheet->nonDefaultCell( 1, 1 );
-    QFontMetrics fm( c->textFont( 1, 1 ) );
+    QFontMetrics fm( c->format()->textFont( 1, 1 ) );
 
     Style * s = ksdoc->styleManager()->defaultStyle();
 
@@ -161,7 +161,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
                cell->setCellText( text );
                
-               cell->setFormatType (Generic_format);
+               cell->format()->setFormatType (Generic_format);
                
                /* old code
               cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
@@ -186,7 +186,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                         cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setNumber( d );
                     }
-                    cell->setPrecision( 2 );
+                    cell->format()->setPrecision( 2 );
                     break;
                 }
              case CSVDialog::COMMANUMBER:
@@ -207,7 +207,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                         cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setNumber( d );
                     }
-                    cell->setPrecision( 2 );
+                    cell->format()->setPrecision( 2 );
                     break;
                 }
              case CSVDialog::POINTNUMBER:
@@ -228,19 +228,19 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
                         cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
                         cell->setNumber( d );
                     }
-                    cell->setPrecision( 2 );
+                    cell->format()->setPrecision( 2 );
                     break;
                 }
              case CSVDialog::DATE:
               cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
               cell->setCellText( text );
-              cell->setFormatType( ShortDate_format );
+              cell->format()->setFormatType( ShortDate_format );
               break;
              case CSVDialog::CURRENCY:
               cell = sheet->nonDefaultCell( col + 1, row + 1, false, s );
               cell->setCellText( text, false );
-              cell->setFormatType( Money_format );
-              cell->setPrecision( 2 );
+              cell->format()->setFormatType( Money_format );
+              cell->format()->setPrecision( 2 );
               break;
             }
         }

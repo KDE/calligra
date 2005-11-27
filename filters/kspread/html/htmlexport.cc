@@ -301,32 +301,32 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             if (bgcolor.isValid() && bgcolor.name()!="#ffffff") // change color only for non-white cells
                 line += " bgcolor=\"" + bgcolor.name() + "\"";
 
-            switch((Cell::Align)cell->defineAlignX())
+            switch((Format::Align)cell->defineAlignX())
             {
-            case Cell::Left:
+            case Format::Left:
                 line+=" align=\"" + html_left +"\"";
                 break;
-            case Cell::Right:
+            case Format::Right:
                 line+=" align=\"" + html_right +"\"";
                 break;
-            case Cell::Center:
+            case Format::Center:
                 line+=" align=\"" + html_center +"\"";
                 break;
-            case Cell::Undefined:
+            case Format::Undefined:
                 break;
             }
-            switch((Cell::AlignY)cell-> alignY(currentrow, currentcolumn))
+            switch((Format::AlignY)cell-> format()->alignY(currentrow, currentcolumn))
             {
-            case Cell::Top:
+            case Format::Top:
                 line+=" valign=\"" + html_top +"\"";
                 break;
-            case Cell::Middle:
+            case Format::Middle:
                 line+=" valign=\"" + html_middle +"\"";
                 break;
-            case Cell::Bottom:
+            case Format::Bottom:
                 line+=" valign=\"" + html_bottom +"\"";
                 break;
-            case Cell::UndefinedY:
+            case Format::UndefinedY:
                 break;
             }
             line+=" width=\""+QString::number(cell->width())+"\"";
@@ -352,22 +352,22 @@ void HTMLExport::convertSheet( Sheet *sheet, QString &str, int iMaxUsedRow, int 
             }
             line += ">\n";
 
-            if (cell->textFontBold(currentcolumn,currentrow))
+            if (cell->format()->textFontBold(currentcolumn,currentrow))
             {
                 text.insert(0, "<" + html_bold + ">");
                 text.append("</" + html_bold + ">");
             }
-            if (cell->textFontItalic(currentcolumn,currentrow))
+            if (cell->format()->textFontItalic(currentcolumn,currentrow))
             {
                 text.insert(0, "<" + html_italic + ">");
                 text.append("</" + html_italic + ">");
             }
-            if (cell->textFontUnderline(currentcolumn,currentrow))
+            if (cell->format()->textFontUnderline(currentcolumn,currentrow))
             {
                 text.insert(0, "<" + html_underline + ">");
                 text.append("</" + html_underline + ">");
             }
-            QColor textColor = cell->textColor(currentcolumn,currentrow);
+            QColor textColor = cell->format()->textColor(currentcolumn,currentrow);
             if (textColor.isValid() && textColor.name()!="#000000") // change color only for non-default text
             {
                 text.insert(0, "<font color=\"" + textColor.name() + "\">");

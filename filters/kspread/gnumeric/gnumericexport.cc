@@ -59,18 +59,18 @@ KoFilter()
  */
 bool GNUMERICExport::hasBorder(Cell *cell, int currentcolumn, int currentrow)
 {
-    if ( ( (cell->leftBorderWidth(currentcolumn, currentrow) != 0) &&
-           (cell->leftBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) ) ||
-         ( (cell->rightBorderWidth(currentcolumn, currentrow) != 0) &&
-           (cell->rightBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) ) ||
-         ( (cell->topBorderWidth(currentcolumn, currentrow) != 0) &&
-           (cell->topBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) ) ||
-         ( (cell->bottomBorderWidth(currentcolumn, currentrow) != 0) &&
-           (cell->bottomBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) ) ||
-         ( (cell->fallDiagonalWidth(currentcolumn, currentrow) != 0) &&
-           (cell->fallDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) ) ||
-         ( (cell->goUpDiagonalWidth(currentcolumn, currentrow) != 0) &&
-           (cell->goUpDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) ) )
+    if ( ( (cell->format()->leftBorderWidth(currentcolumn, currentrow) != 0) &&
+           (cell->format()->leftBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) ) ||
+         ( (cell->format()->rightBorderWidth(currentcolumn, currentrow) != 0) &&
+           (cell->format()->rightBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) ) ||
+         ( (cell->format()->topBorderWidth(currentcolumn, currentrow) != 0) &&
+           (cell->format()->topBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) ) ||
+         ( (cell->format()->bottomBorderWidth(currentcolumn, currentrow) != 0) &&
+           (cell->format()->bottomBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) ) ||
+         ( (cell->format()->fallDiagonalWidth(currentcolumn, currentrow) != 0) &&
+           (cell->format()->fallDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) ) ||
+         ( (cell->format()->goUpDiagonalWidth(currentcolumn, currentrow) != 0) &&
+           (cell->format()->goUpDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) ) )
         return true;
     else
         return false;
@@ -91,13 +91,13 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
 
     border_style = gnumeric_doc.createElement("gmr:StyleBorder");
 
-    if ( (cell->leftBorderWidth(currentcolumn, currentrow) != 0) &&
-         (cell->leftBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
+    if ( (cell->format()->leftBorderWidth(currentcolumn, currentrow) != 0) &&
+         (cell->format()->leftBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
     {
         border = gnumeric_doc.createElement("gmr:Left");
         border.setAttribute("Style","1");
 
-        color =  cell->leftBorderColor(currentcolumn, currentrow);
+        color =  cell->format()->leftBorderColor(currentcolumn, currentrow);
         red = color.red()<<8;
         green = color.green()<<8;
         blue = color.blue()<<8;
@@ -112,13 +112,13 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
 
     border_style.appendChild(border);
 
-    if ( (cell->rightBorderWidth(currentcolumn, currentrow) != 0) &&
-         (cell->rightBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
+    if ( (cell->format()->rightBorderWidth(currentcolumn, currentrow) != 0) &&
+         (cell->format()->rightBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
     {
         border = gnumeric_doc.createElement("gmr:Right");
         border.setAttribute("Style","1");
 
-        color =  cell->rightBorderColor(currentcolumn, currentrow);
+        color =  cell->format()->rightBorderColor(currentcolumn, currentrow);
         red = color.red()<<8;
         green = color.green()<<8;
         blue = color.blue()<<8;
@@ -133,13 +133,13 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
 
     border_style.appendChild(border);
 
-    if ( (cell->topBorderWidth(currentcolumn, currentrow) != 0) &&
-         (cell->topBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
+    if ( (cell->format()->topBorderWidth(currentcolumn, currentrow) != 0) &&
+         (cell->format()->topBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
     {
         border = gnumeric_doc.createElement("gmr:Top");
         border.setAttribute("Style","1");
 
-        color =  cell->topBorderColor(currentcolumn, currentrow);
+        color =  cell->format()->topBorderColor(currentcolumn, currentrow);
         red = color.red()<<8;
         green = color.green()<<8;
         blue = color.blue()<<8;
@@ -154,13 +154,13 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
 
     border_style.appendChild(border);
 
-    if ( (cell->bottomBorderWidth(currentcolumn, currentrow) != 0) &&
-         (cell->bottomBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
+    if ( (cell->format()->bottomBorderWidth(currentcolumn, currentrow) != 0) &&
+         (cell->format()->bottomBorderStyle(currentcolumn, currentrow) != Qt::NoPen ) )
     {
         border = gnumeric_doc.createElement("gmr:Bottom");
         border.setAttribute("Style","1");
 
-        color =  cell->bottomBorderColor(currentcolumn, currentrow);
+        color =  cell->format()->bottomBorderColor(currentcolumn, currentrow);
         red = color.red()<<8;
         green = color.green()<<8;
         blue = color.blue()<<8;
@@ -175,13 +175,13 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
 
     border_style.appendChild(border);
 
-    if ( (cell->fallDiagonalWidth(currentcolumn, currentrow) != 0) &&
-         (cell->fallDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) )
+    if ( (cell->format()->fallDiagonalWidth(currentcolumn, currentrow) != 0) &&
+         (cell->format()->fallDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) )
     {
         border = gnumeric_doc.createElement("gmr:Diagonal");
         border.setAttribute("Style","1");
 
-        color =  cell->fallDiagonalColor(currentcolumn, currentrow);
+        color =  cell->format()->fallDiagonalColor(currentcolumn, currentrow);
         red = color.red()<<8;
         green = color.green()<<8;
         blue = color.blue()<<8;
@@ -196,13 +196,13 @@ QDomElement GNUMERICExport::GetBorderStyle(QDomDocument gnumeric_doc,Cell * cell
 
     border_style.appendChild(border);
 
-    if ( (cell->goUpDiagonalWidth(currentcolumn, currentrow) != 0) &&
-         (cell->goUpDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) )
+    if ( (cell->format()->goUpDiagonalWidth(currentcolumn, currentrow) != 0) &&
+         (cell->format()->goUpDiagonalStyle(currentcolumn, currentrow) != Qt::NoPen ) )
     {
         border = gnumeric_doc.createElement("gmr:Rev-Diagonal");
         border.setAttribute("Style","1");
 
-        color =  cell->goUpDiagonalColor(currentcolumn, currentrow);
+        color =  cell->format()->goUpDiagonalColor(currentcolumn, currentrow);
         red = color.red()<<8;
         green = color.green()<<8;
         blue = color.blue()<<8;
@@ -483,27 +483,27 @@ QDomElement GNUMERICExport::GetFontStyle( QDomDocument gnumeric_doc,Cell * cell,
     QDomElement font_style;
     kdDebug()<<" currentcolumn :"<<currentcolumn<<" currentrow :"<<currentrow<<endl;
     font_style = gnumeric_doc.createElement("gmr:Font");
-    font_style.appendChild(gnumeric_doc.createTextNode(cell->textFontFamily(currentcolumn, currentrow)));
+    font_style.appendChild(gnumeric_doc.createTextNode(cell->format()->textFontFamily(currentcolumn, currentrow)));
 
-    if (cell->textFontItalic(currentcolumn,currentrow) || (isLink && isLinkItalic))
+    if (cell->format()->textFontItalic(currentcolumn,currentrow) || (isLink && isLinkItalic))
     {
         font_style.setAttribute("Italic","1");
     }
-    if (cell->textFontBold(currentcolumn,currentrow) || (isLink && isLinkBold))
+    if (cell->format()->textFontBold(currentcolumn,currentrow) || (isLink && isLinkBold))
     {
         font_style.setAttribute("Bold","1");
     }
-    if (cell->textFontUnderline(currentcolumn,currentrow))
+    if (cell->format()->textFontUnderline(currentcolumn,currentrow))
     {
         font_style.setAttribute("Underline","1");
     }
-    if (cell->textFontStrike(currentcolumn,currentrow))
+    if (cell->format()->textFontStrike(currentcolumn,currentrow))
     {
         font_style.setAttribute("StrikeThrough","1");
     }
-    if (cell->textFontSize(currentcolumn,currentrow))
+    if (cell->format()->textFontSize(currentcolumn,currentrow))
     {
-        font_style.setAttribute("Unit",QString::number(cell->textFontSize(currentcolumn,currentrow)));
+        font_style.setAttribute("Unit",QString::number(cell->format()->textFontSize(currentcolumn,currentrow)));
     }
 
     return font_style;
@@ -553,7 +553,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 	green = bgColor.green()<<8;
 	blue = bgColor.blue()<<8;
 
-    switch (cell->backGroundBrushStyle(currentcolumn, currentrow))
+    switch (cell->format()->backGroundBrushStyle(currentcolumn, currentrow))
     {
         case Qt::NoBrush:
             cell_style.setAttribute("Shade","0");
@@ -619,44 +619,44 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 	cell_style.setAttribute("Back",QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16) );
 
 
-	QColor textColor =  cell->textColor(currentcolumn, currentrow);
+	QColor textColor =  cell->format()->textColor(currentcolumn, currentrow);
 	red = textColor.red()<<8;
 	green = textColor.green()<<8;
 	blue = textColor.blue()<<8;
 
 	cell_style.setAttribute("Fore",QString::number(red,16)+":"+QString::number(green,16) +":"+QString::number(blue,16) );
 
- if (cell->align(currentcolumn,currentrow) ==  Format::Undefined)
+ if (cell->format()->align(currentcolumn,currentrow) ==  Format::Undefined)
     {
         cell_style.setAttribute("HAlign","1");
     }
-    else if (cell->align(currentcolumn,currentrow) ==  Format::Left)
+    else if (cell->format()->align(currentcolumn,currentrow) ==  Format::Left)
 	{
         cell_style.setAttribute("HAlign","2");
     }
-    else if (cell->align(currentcolumn,currentrow) ==  Format::Right)
+    else if (cell->format()->align(currentcolumn,currentrow) ==  Format::Right)
 	{
         cell_style.setAttribute("HAlign","4");
 	}
- else if (cell->align(currentcolumn,currentrow) ==  Format::Center)
+ else if (cell->format()->align(currentcolumn,currentrow) ==  Format::Center)
 	{
         cell_style.setAttribute("HAlign","8");
     }
 
-    if (cell->alignY(currentcolumn,currentrow) ==  Format::Top)
+    if (cell->format()->alignY(currentcolumn,currentrow) ==  Format::Top)
 	{
 	    cell_style.setAttribute("VAlign","1");
 	}
- else if (cell->alignY(currentcolumn,currentrow) ==  Format::Bottom)
+ else if (cell->format()->alignY(currentcolumn,currentrow) ==  Format::Bottom)
 	{
         cell_style.setAttribute("VAlign","2");
     }
-    else if (cell->alignY(currentcolumn,currentrow) ==  Format::Middle)
+    else if (cell->format()->alignY(currentcolumn,currentrow) ==  Format::Middle)
     {
         cell_style.setAttribute("VAlign","4");
 	}
 
-    if (cell->multiRow(currentcolumn,currentrow))
+    if (cell->format()->multiRow(currentcolumn,currentrow))
         cell_style.setAttribute("WrapText","1");
     else
         cell_style.setAttribute("WrapText","0");
@@ -666,21 +666,21 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 
     // I'm not sure about the rotation values.
     // I never got it to work in GNumeric.
-    cell_style.setAttribute("Rotation", QString::number(-1*cell->getAngle(currentcolumn,currentrow)));
+    cell_style.setAttribute("Rotation", QString::number(-1*cell->format()->getAngle(currentcolumn,currentrow)));
 
     // The indentation in GNumeric is an integer value. In KSpread, it's a double.
     // Save the double anyway, makes it even better when importing the document back in KSpread.
     // TODO verify if it's correct, in import we "* 10.0"
-    cell_style.setAttribute("Indent", QString::number(cell->getIndent(currentcolumn,currentrow)));
+    cell_style.setAttribute("Indent", QString::number(cell->format()->getIndent(currentcolumn,currentrow)));
 
-    cell_style.setAttribute("Locked", !cell->notProtected(currentcolumn,currentrow));
+    cell_style.setAttribute("Locked", !cell->format()->notProtected(currentcolumn,currentrow));
 
     // A KSpread cell can have two options to hide: only formula hidden, or everything hidden.
     // I only consider a cell with everything hidden as hidden.
     // Gnumeric hides everything or nothing.
-    cell_style.setAttribute("Hidden", cell->isHideAll(currentcolumn,currentrow));
+    cell_style.setAttribute("Hidden", cell->format()->isHideAll(currentcolumn,currentrow));
 
-    QColor patColor =  cell->backGroundBrushColor(currentcolumn, currentrow);
+    QColor patColor =  cell->format()->backGroundBrushColor(currentcolumn, currentrow);
     red = patColor.red()<<8;
     green = patColor.green()<<8;
     blue = patColor.blue()<<8;
@@ -702,7 +702,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
  Format::Currency c;
     Currency currency;
 
-	switch( cell->getFormatType(currentcolumn, currentrow))
+	switch( cell->format()->getFormatType(currentcolumn, currentrow))
 	{
         case Number_format:
             stringFormat="0.00";
@@ -712,7 +712,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
             break;
 		case Money_format:
 
-            if (!cell->currencyInfo(c))
+            if (!cell->format()->currencyInfo(c))
             {
                 stringFormat = "0.00";
                 break;
@@ -878,7 +878,7 @@ QDomElement GNUMERICExport::GetCellStyle(QDomDocument gnumeric_doc,Cell * cell, 
 			stringFormat="# ?\?\?/?\?\?";
 			break;
         case Custom_format:
-            stringFormat = cell->getFormatString(currentcolumn,currentrow);
+            stringFormat = cell->format()->getFormatString(currentcolumn,currentrow);
             break;
     }
     cell_style.setAttribute("Format",stringFormat);
@@ -1436,11 +1436,11 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                         merged.appendChild(merge);
                     }
                     // ---
-                    if ( !cell->comment( currentcolumn, currentrow ).isEmpty() )
+                    if ( !cell->format()->comment( currentcolumn, currentrow ).isEmpty() )
                     {
                         //<gmr:CellComment Author="" Text="cvbcvbxcvb&#10;cb&#10;xc&#10;vbxcv&#10;" ObjectBound="A1" ObjectOffset="0 0 0 0" ObjectAnchorType="17 16 17 16" Direction="17"/>
                         cellComment = gnumeric_doc.createElement("gmr:CellComment");
-                        cellComment.setAttribute( "Text", cell->comment( currentcolumn, currentrow ) );
+                        cellComment.setAttribute( "Text", cell->format()->comment( currentcolumn, currentrow ) );
                         QString sCell=QString( "%1%2" ).arg( Cell::columnName(currentcolumn ) ).arg( currentrow );
 
                         cellComment.setAttribute("ObjectBound", sCell );
