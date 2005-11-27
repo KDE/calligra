@@ -112,7 +112,7 @@ KWConfig::KWConfig( KWView* parent )
       QVBox *page7 = addVBoxPage( i18n("Abbreviation for Text-to-Speech", "TTS"),
           i18n("Text-to-Speech Settings"), loadIcon("access") );
       m_ttsPage=new ConfigureTTSPage(parent, page7);
-  }
+  } else m_ttsPage = 0;
 
   m_doc = parent->kWordDocument();
   connect(this, SIGNAL(okClicked()),this,SLOT(slotApply()));
@@ -171,7 +171,7 @@ void KWConfig::slotApply()
         macro->addCommand( cmd );
     }
     m_formulaPage->apply();
-    m_ttsPage->apply();
+    if (m_ttsPage) m_ttsPage->apply();
     if (macro)
         m_doc->addCommand( macro );
     KWFactory::instance()->config()->sync();
