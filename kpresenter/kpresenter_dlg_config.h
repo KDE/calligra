@@ -39,6 +39,7 @@ class RectProperty;
 class PolygonProperty;
 class PieProperty;
 class KoUnitDoubleSpinBox;
+class QVGroupBox;
 
 namespace KSpell2 {
     class ConfigWidget;
@@ -177,6 +178,29 @@ private:
     QPushButton *m_modifyPath;
 };
 
+class configureTTSPage : public QWidget
+{
+  Q_OBJECT
+public:
+  configureTTSPage( KPresenterView *_view, QWidget *parent, char *name = 0 );
+  void slotDefault();
+  void apply();
+private slots:
+  void screenReaderOptionChanged();
+private:
+  KConfig* config;
+  QCheckBox* m_cbSpeakPointerWidget;
+  QCheckBox* m_cbSpeakFocusWidget;
+  QVGroupBox* m_gbScreenReaderOptions;
+  QCheckBox* m_cbSpeakTooltips;
+  QCheckBox* m_cbSpeakWhatsThis;
+  QCheckBox* m_cbSpeakDisabled;
+  QCheckBox* m_cbSpeakAccelerators;
+  QLabel* m_lblAcceleratorPrefix;
+  QLineEdit* m_leAcceleratorPrefixWord;
+  KIntNumInput* m_iniPollingInterval;
+};
+
 
 class KPConfig : public KDialogBase
 {
@@ -196,6 +220,7 @@ private:
     configureDefaultDocPage *_defaultDocPage;
     configureToolsPage *_toolsPage;
     configurePathPage *m_pathPage;
+    configureTTSPage *m_ttsPage;
     KPresenterDoc* m_doc;
 
 };
