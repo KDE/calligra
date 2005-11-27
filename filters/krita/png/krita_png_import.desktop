@@ -11,6 +11,7 @@ Name[pt_BR]=Filtro de Importação de PNG para o Krita
 Name[sr]=Krita-ин филтер за увоз из PNG-а
 Name[sr@Latn]=Krita-ин филтер за увоз из PNG-а
 Name[sv]=Krita PNG-importfilter
+Name[xx]=xxKrita PNG Import Filterxx
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/png
 X-KDE-Weight=1
