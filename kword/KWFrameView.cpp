@@ -188,6 +188,7 @@ void FramePolicy::addFloatingAction(KWView *view, QPtrList<KAction> &actionList)
     actionList.append(action);
 }
 MouseMeaning FramePolicy::mouseMeaningOnBorder( const KoPoint &point, int keyState ) {
+    Q_UNUSED(keyState);
     double hs = HORIZONTAL_SNAP;
     KWFrame *frame = m_view->frame();
     if(frame->width() < HORIZONTAL_SNAP * 3)
@@ -232,6 +233,7 @@ MouseMeaning FramePolicy::mouseMeaningOnBorder( const KoPoint &point, int keySta
 TableFramePolicy::TableFramePolicy(KWFrameView *view) : FramePolicy (view) {
 }
 MouseMeaning TableFramePolicy::mouseMeaning( const KoPoint &point, int keyState ) {
+    Q_UNUSED(point);
     // Found a frame under the cursor
     // Ctrl -> select
     if ( keyState & Qt::ControlButton )
@@ -254,39 +256,33 @@ MouseMeaning TableFramePolicy::mouseMeaningOnBorder(const KoPoint &point, int ke
     double hs = HORIZONTAL_SNAP; // horizontal snap zone (in pt)
     double vs = VERTICAL_SNAP; // vertical snap zone (in pt)
 
-//kdDebug() << "TableFramePolicy::mouseMeaningOnBorder " << point << endl;
+    if ( QABS( frame->x() - point.x() ) < hs
+            && point.y() >= frame->y() && point.y() <= frame->bottom() ) {
+        if( static_cast<KWTableFrameSet::Cell *>(frame->frameSet())->firstCol() == 0 )
+            return MEANING_SELECT_ROW;
+        return MEANING_RESIZE_COLUMN;
+    }
+    if ( QABS( frame->y() - point.y() ) < vs
+            && point.x() >= frame->x() && point.x() <= frame->right() ) {
+        if( static_cast<KWTableFrameSet::Cell *>(frame->frameSet())->firstRow() == 0 )
+            return MEANING_SELECT_COLUMN;
+        return MEANING_RESIZE_ROW;
+    }
 
+    if(keyState == Qt::ControlButton)
+        return MEANING_MOUSE_SELECT;
     if ( QABS( frame->right() - point.x() ) < hs
             && point.y() >= frame->y() && point.y() <= frame->bottom() )
         return MEANING_RESIZE_COLUMN;
     if ( QABS( frame->bottom() - point.y() ) < vs
             && point.x() >= frame->x() && point.x() <= frame->right() )
         return MEANING_RESIZE_ROW;
-
-    if ( QABS( frame->x() - point.x() ) < hs
-            && point.y() >= frame->y() && point.y() <= frame->bottom() ) {
-        if( static_cast<KWTableFrameSet::Cell *>(frame->frameSet())->firstCol() == 0 )
-//{kdDebug() << "  a" << endl;
-            return MEANING_SELECT_ROW;
-//}
-//kdDebug() << "  b" << endl;
-        return MEANING_RESIZE_COLUMN;
-    }
-    if ( QABS( frame->y() - point.y() ) < vs
-            && point.x() >= frame->x() && point.x() <= frame->right() ) {
-        if( static_cast<KWTableFrameSet::Cell *>(frame->frameSet())->firstRow() == 0 )
-//{kdDebug() << "  c" << endl;
-            return MEANING_SELECT_COLUMN;
-//}
-//kdDebug() << "  d" << endl;
-        return MEANING_RESIZE_ROW;
-    }
     return MEANING_NONE;
 }
 void TableFramePolicy::setSelected(MouseMeaning selectPolicy) {
     KWFrameSet *fs = m_view->frame()->frameSet();
     if( selectPolicy == MEANING_SELECT_COLUMN ) {
-        int column = static_cast<KWTableFrameSet::Cell *>(fs)->firstCol();
+        unsigned int column = static_cast<KWTableFrameSet::Cell *>(fs)->firstCol();
         for (KWTableFrameSet::TableIter cells(fs->groupmanager()); cells; ++cells) {
             if(cells->firstCol() >= column && cells->lastCol() <= column) {
                 KWFrameView *fv = m_view->parent()->view(cells->frame(0));
@@ -296,7 +292,7 @@ void TableFramePolicy::setSelected(MouseMeaning selectPolicy) {
         }
     }
     else if( selectPolicy == MEANING_SELECT_ROW ) {
-        int row = static_cast<KWTableFrameSet::Cell *>(fs)->firstRow();
+        unsigned int row = static_cast<KWTableFrameSet::Cell *>(fs)->firstRow();
         for (KWTableFrameSet::TableIter cells(fs->groupmanager()); cells; ++cells) {
             if(cells->firstRow() >= row && cells->lastRow() <= row) {
                 KWFrameView *fv = m_view->parent()->view(cells->frame(0));
@@ -313,6 +309,7 @@ kdDebug() << "not yet implemented; select table range\n"; // TODO
 PartFramePolicy::PartFramePolicy(KWFrameView *view) : FramePolicy (view) {
 }
 MouseMeaning PartFramePolicy::mouseMeaning( const KoPoint &point, int keyState ) {
+    Q_UNUSED(point);
     // Clicking on a selected part frame, but not on its border -> either resize or "activate part"
     if( keyState & Qt::ControlButton )
         return MEANING_MOUSE_SELECT;
@@ -321,6 +318,7 @@ MouseMeaning PartFramePolicy::mouseMeaning( const KoPoint &point, int keyState )
     return MEANING_NONE;
 }
 QPopupMenu* PartFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
+    Q_UNUSED(point);
     KWPartFrameSet *part = static_cast<KWPartFrameSet *>(m_view->frame()->frameSet());
     KActionSeparator *separator=new KActionSeparator();
     KActionCollection *actionCollection = view->actionCollection();
@@ -450,9 +448,12 @@ QPopupMenu* TextFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
 ImageFramePolicy::ImageFramePolicy(KWFrameView *view) : FramePolicy (view) {
 }
 MouseMeaning ImageFramePolicy::mouseMeaning( const KoPoint &point, int keyState ) {
+    Q_UNUSED(point);
+    Q_UNUSED(keyState);
     return m_view->selected() ? MEANING_MOUSE_MOVE: MEANING_MOUSE_SELECT;
 }
 QPopupMenu* ImageFramePolicy::createPopup( const KoPoint &point, KWView *view ) {
+    Q_UNUSED(point);
     KWFrameSet *fs = m_view->frame()->frameSet();
     KActionSeparator *separator=new KActionSeparator();
     KActionCollection *actionCollection = view->actionCollection();
