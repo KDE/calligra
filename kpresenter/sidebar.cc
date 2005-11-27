@@ -681,6 +681,7 @@ OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPObject* _objec
                                       bool sticky, const QString& name )
     : KListViewItem( parent ), m_object( _object )
 {
+    Q_UNUSED( sticky );
     setObject( m_object );
     setDragEnabled( false );
 
@@ -768,6 +769,8 @@ Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
     connect( this, SIGNAL( currentChanged( QListViewItem * ) ), this, SLOT( itemClicked( QListViewItem * ) ) );
     connect( this, SIGNAL( rightButtonPressed( QListViewItem *, const QPoint &, int ) ),
              this, SLOT( rightButtonPressed( QListViewItem *, const QPoint &, int ) ) );
+    connect( this, SIGNAL( contextMenu( KListView*, QListViewItem*, const QPoint& ) ),
+             this, SLOT( slotContextMenu( KListView*, QListViewItem*, const QPoint&) ) );
 
     connect( this, SIGNAL( doubleClicked ( QListViewItem * )),
              this, SLOT(renamePageTitle()));
@@ -1120,6 +1123,11 @@ void Outline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
             }
         }
     }
+}
+
+void Outline::slotContextMenu( KListView*, QListViewItem* item, const QPoint& p )
+{
+    rightButtonPressed( item, p, 0 );
 }
 
 void Outline::renamePageTitle()

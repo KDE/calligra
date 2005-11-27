@@ -134,6 +134,7 @@ private slots:
     void itemClicked( QListViewItem *i );
     void slotDropped( QDropEvent *e, QListViewItem *parent, QListViewItem *target );
     void rightButtonPressed( QListViewItem *i, const QPoint &pnt, int c );
+    void slotContextMenu( KListView*, QListViewItem *item, const QPoint &p );
 
 private:
     QListViewItem *m_movedItem, *m_movedAfter;
