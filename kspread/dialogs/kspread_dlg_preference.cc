@@ -88,7 +88,7 @@ PreferenceDialog::PreferenceDialog( View* parent, const char* /*name*/)
       QVBox *page8 = addVBoxPage( i18n("Abbreviation for Text-to-Speech", "TTS"),
           i18n("Text-to-Speech Settings"), BarIcon("access", KIcon::SizeMedium) );
       _ttsPage=new configureTTSPage(parent, page8);
-  }
+  } else _ttsPage = 0;
 
 }
 
@@ -117,7 +117,7 @@ void PreferenceDialog::slotApply()
   _layoutPage->apply();
   _spellPage->apply();
   _localePage->apply();
-  _ttsPage->apply();
+  if (_ttsPage) _ttsPage->apply();
   m_pView->doc()->refreshInterface();
   m_pView->slotUpdateView( m_pView->activeSheet() );
 }
