@@ -4,6 +4,9 @@ since 1.4.2
 - Fix indentation setting in preferences (#116903)
 - Fix unit setting in preferences (#116901)
 - Move Comment Indicator setting from KSpread preferences to Sheet properties (#114693)
+- Prevent hiding all rows/columns (#483630)
+- Add a lot of QWhatsThis help to various dialogs
+- Handbook update for some dialogs
 
 since 1.4.1
 ===========
