@@ -345,7 +345,6 @@ void KWCanvas::switchViewMode( KWViewMode * newViewMode )
 }
 
 void KWCanvas::mpEditFrame( const QPoint &nPoint, MouseMeaning meaning, QMouseEvent *event ) // mouse press in edit-frame mode
-// This can be called by KWResizeHandle::mousePressEvent
 {
     KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
     m_mouseMeaning = meaning;
@@ -354,11 +353,8 @@ void KWCanvas::mpEditFrame( const QPoint &nPoint, MouseMeaning meaning, QMouseEv
     m_frameResized = false;
     m_ctrlClickOnSelectedFrame = false;
 
-    if ( event )
-    {
-        KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
-        m_frameViewManager->selectFrames(docPoint, event->state());
-    }
+    if ( event && (event->button() == Qt::LeftButton || event->button() == Qt::RightButton) )
+        m_frameViewManager->selectFrames(docPoint, event->state(), event->button() == Qt::LeftButton );
 
     // At least one frame selected ?
     KWFrameView *view = m_frameViewManager->selectedFrame();

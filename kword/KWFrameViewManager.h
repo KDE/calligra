@@ -132,8 +132,9 @@ public:
      * Select frames based on a mouse click at @p point using @p keystate.
      * Handles the click of a mouse and searches for frames at the location selecting and
      * / or unselecting any frames based on this information.
+     * @param leftClick true if this select is due to the main button being clicked.
      */
-    void selectFrames(KoPoint &point, int keyState);
+    void selectFrames(KoPoint &point, int keyState, bool leftClick);
 
 public slots:
     /// notify this slot if a FrameSet has been created and should become visible.

@@ -374,10 +374,13 @@ void KWFrameViewManager::showPopup( const KoPoint &point, KWView *view, int keyS
     framesThatAreHit[0]->showPopup(point, view, popupPoint);
 }
 
-void KWFrameViewManager::selectFrames(KoPoint &point, int keyState) {
+void KWFrameViewManager::selectFrames(KoPoint &point, int keyState, bool leftClick) {
     MouseMeaning mm = mouseMeaning(point, keyState);
     bool multiSelect = mm == MEANING_MOUSE_SELECT || keyState & Qt::ControlButton;
-    KWFrameView *toBeSelected = view(point, multiSelect?nextUnselected:frameOnTop, !multiSelect);
+    selectionEnum se = frameOnTop;
+    if(leftClick && multiSelect)
+        se = nextUnselected;
+    KWFrameView *toBeSelected = view(point, se, !multiSelect);
     //kdDebug() << "KWFrameViewManager::selectFrames" << point << " got: " << toBeSelected << endl;
     if(toBeSelected == 0)
         return;
