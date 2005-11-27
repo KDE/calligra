@@ -2662,8 +2662,16 @@ void View::hideColumn()
 {
   if ( !d->activeSheet )
     return;
-  doc()->emitBeginOperation( false );
+  
   QRect r( d->selectionInfo->selection() );
+  if ( util_isRowSelected( selection() ) )
+  {
+    KMessageBox::error( this, i18n( "Area is too large." ) );
+    return;
+  }
+  
+  doc()->emitBeginOperation( false );
+  
   d->activeSheet->hideColumn( r.left(), ( r.right()-r.left() ) );
 
   QRect vr( d->activeSheet->visibleRect( d->canvas ) );
@@ -2736,9 +2744,15 @@ void View::hideRow()
   if ( !d->activeSheet )
     return;
 
-  doc()->emitBeginOperation( false );
-
   QRect r( d->selectionInfo->selection() );
+  if ( util_isColumnSelected( selection() ) )
+  {
+    KMessageBox::error( this, i18n( "Area is too large." ) );
+    return;
+  }
+  
+  doc()->emitBeginOperation( false );
+  
   d->activeSheet->hideRow( r.top(), ( r.bottom() - r.top() ) );
 
   QRect vr( d->activeSheet->visibleRect( d->canvas ) );
@@ -6204,10 +6218,12 @@ void View::slotChangeSelection( Sheet *_sheet,
   {
     d->actions->resizeRow->setEnabled( !colSelected );
     d->actions->equalizeRow->setEnabled( !colSelected );
+    d->actions->hideRow->setEnabled( !colSelected );
     d->actions->validity->setEnabled( !colSelected && !rowSelected);
     d->actions->conditional->setEnabled( !colSelected && !rowSelected);
     d->actions->resizeColumn->setEnabled( !rowSelected );
     d->actions->equalizeColumn->setEnabled( !rowSelected );
+    d->actions->hideColumn->setEnabled( !rowSelected );
     d->actions->textToColumns->setEnabled( !rowSelected );
 
     bool simpleSelection = d->selectionInfo->singleCellSelection()
