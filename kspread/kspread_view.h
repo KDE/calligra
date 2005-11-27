@@ -491,7 +491,7 @@ protected slots:
     
     /**
      * Deletes an embedded document. This has a different
-     * purpose to the @ref slotRemoveChild() function
+     * purpose to the @ref View::slotRemoveChild() function
      * which is called whilst an embedded document is
      * being deleted in order for the view to make any
      * necessary updates. 
