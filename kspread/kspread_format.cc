@@ -70,6 +70,7 @@ Format::Format( Sheet * _sheet, Style * _style )
   m_mask = 0;
   m_flagsMask = 0;
   m_bNoFallBack = 0;
+  m_pCell = 0;
 }
 
 Format::~Format()
@@ -2102,6 +2103,12 @@ void Format::setCurrency( int type, QString const & symbol )
   c.symbol = symbol.simplifyWhiteSpace();
   c.type   = type;
 
+  if (c.symbol.length() == 0)
+  {
+    c.type = 0;
+    c.symbol = sheet()->doc()->locale()->currencySymbol();
+  }
+
   m_pStyle = m_pStyle->setCurrency( c );
 }
 
@@ -2779,16 +2786,21 @@ const QPen & Format::textPen() const
 
 void Format::formatChanged()
 {
+  if (m_pCell)
+  {
+    m_pCell->setFlag(Cell::Flag_LayoutDirty);
+    m_pCell->setFlag(Cell::Flag_TextFormatDirty);
+  }
 }
 
-Format* Format::fallbackFormat( int, int )
+Format* Format::fallbackFormat( int, int row )
 {
-  return 0;
+  return m_pCell ? m_pSheet->rowFormat( row ) : 0;
 }
 
-const Format* Format::fallbackFormat( int, int ) const
+const Format* Format::fallbackFormat( int, int row ) const
 {
-  return 0;
+  return m_pCell ? m_pSheet->rowFormat( row ) : 0;
 }
 
 bool Format::isDefault() const
@@ -3028,7 +3040,7 @@ void RowFormat::setHide( bool _hide )
     }
 }
 
-Format * RowFormat::fallbackFormat( int col, int )
+Format* RowFormat::fallbackFormat( int col, int )
 {
     return sheet()->columnFormat( col );
 }

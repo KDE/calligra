@@ -43,6 +43,7 @@ class KoGenStyle;
 namespace KSpread
 {
 class Canvas;
+class Cell;
 class Currency;
 class Sheet;
 class Style;
@@ -114,9 +115,9 @@ public:
     QDomElement save( QDomDocument& doc,int _col, int _row,bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, bool force = false, bool copy = false ) const;
     QDomElement saveFormat( QDomDocument& doc, int _col, int _row, bool force = false, bool copy = false ) const;
-    virtual bool loadOasisStyleProperties(KoStyleStack & styleStack, const KoOasisStyles& oasisStyles );
-    virtual QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle ,int _col, int _row , bool force = false, bool copy = false);
-    virtual QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle );
+    bool loadOasisStyleProperties(KoStyleStack & styleStack, const KoOasisStyles& oasisStyles );
+    QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle ,int _col, int _row , bool force = false, bool copy = false);
+    QString saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mainStyle );
     void saveOasisFontCellStyle( KoGenStyle &currentCellStyle, const QFont &_font );
     bool loadFontOasisStyle( KoStyleStack & font );
     ////////////////////////////////
@@ -163,18 +164,19 @@ public:
     static double globalColWidth();
 
 
-    virtual void setStyle( Style * style );
+    void setStyle( Style * style );
+    void setCell( Cell* cell ) { m_pCell = cell; }
 
     /**
      * sets the format of the content, e.g. #.##0.00, dd/mmm/yyyy,...
      */
-    virtual void setFormatString( QString const & format );
+    void setFormatString( QString const & format );
 
-    virtual void setAlign( Align _align );
-    virtual void setAlignY( AlignY _alignY );
-    virtual void setPrefix( const QString& _prefix );
-    virtual void setPostfix( const QString& _postfix );
-    virtual void setPrecision( int _p );
+    void setAlign( Align _align );
+    void setAlignY( AlignY _alignY );
+    void setPrefix( const QString& _prefix );
+    void setPostfix( const QString& _postfix );
+    void setPrecision( int _p );
 
     virtual void setLeftBorderPen( const QPen& _p );
     void setLeftBorderStyle( Qt::PenStyle s );
@@ -196,21 +198,21 @@ public:
     void setBottomBorderColor( const QColor & _c );
     void setBottomBorderWidth( int _w );
 
-    virtual void setFallDiagonalPen( const QPen& _p );
+    void setFallDiagonalPen( const QPen& _p );
     void setFallDiagonalStyle( Qt::PenStyle s );
     void setFallDiagonalColor( const QColor & _c );
     void setFallDiagonalWidth( int _w );
 
-    virtual void setGoUpDiagonalPen( const QPen& _p );
+    void setGoUpDiagonalPen( const QPen& _p );
     void setGoUpDiagonalStyle( Qt::PenStyle s );
     void setGoUpDiagonalColor( const QColor & _c );
     void setGoUpDiagonalWidth( int _w );
 
-    virtual void setBackGroundBrush( const QBrush& _p);
+    void setBackGroundBrush( const QBrush& _p);
     void setBackGroundBrushStyle( Qt::BrushStyle s);
     void setBackGroundBrushColor( const QColor & _c);
 
-    virtual void setTextFont( const QFont& _f );
+    void setTextFont( const QFont& _f );
     void setTextFontSize( int _s );
     void setTextFontFamily( const QString& _f );
     void setTextFontBold( bool _b );
@@ -218,32 +220,32 @@ public:
     void setTextFontUnderline( bool _i );
     void setTextFontStrike( bool _i );
 
-    virtual void setTextPen( const QPen& _p );
+    void setTextPen( const QPen& _p );
     void setTextColor( const QColor & _c );
 
-    virtual void setBgColor( const QColor & _c );
+    void setBgColor( const QColor & _c );
 
-    virtual void setFloatFormat( FloatFormat _f );
-    virtual void setFloatColor( FloatColor _c );
+    void setFloatFormat( FloatFormat _f );
+    void setFloatColor( FloatColor _c );
 
-    virtual void setMultiRow( bool _b );
+    void setMultiRow( bool _b );
 
-    virtual void setVerticalText( bool _b );
+    void setVerticalText( bool _b );
 
-    virtual void setFormatType(FormatType _format);
+    void setFormatType(FormatType _format);
 
-    virtual void setAngle(int _angle);
+    void setAngle(int _angle);
 
-    virtual void setComment( const QString& c );
+    void setComment( const QString& c );
 
-    virtual void setIndent( double _indent );
+    void setIndent( double _indent );
 
-    virtual void setDontPrintText ( bool _b );
-    virtual void setNotProtected ( bool _b );
-    virtual void setHideAll( bool _b );
-    virtual void setHideFormula( bool _b );
+    void setDontPrintText( bool _b );
+    void setNotProtected( bool _b );
+    void setHideAll( bool _b );
+    void setHideFormula( bool _b );
 
-    virtual void setCurrency( Currency const & c );
+    void setCurrency( Currency const & c );
     virtual void setCurrency( int type, QString const & symbol );
 
     ////////////////////////////////
@@ -274,12 +276,12 @@ public:
     Qt::PenStyle bottomBorderStyle( int col, int row ) const;
     const QColor& bottomBorderColor( int col, int row ) const;
 
-    virtual const QPen& fallDiagonalPen( int col, int row ) const;
+    const QPen& fallDiagonalPen( int col, int row ) const;
     int fallDiagonalWidth( int col, int row ) const;
     Qt::PenStyle fallDiagonalStyle( int col, int row ) const;
     const QColor& fallDiagonalColor( int col, int row ) const;
 
-    virtual const QPen& goUpDiagonalPen( int col, int row ) const;
+    const QPen& goUpDiagonalPen( int col, int row ) const;
     int goUpDiagonalWidth( int col, int row ) const;
     Qt::PenStyle goUpDiagonalStyle( int col, int row ) const;
     const QColor& goUpDiagonalColor( int col, int row ) const;
@@ -288,33 +290,33 @@ public:
     Qt::BrushStyle backGroundBrushStyle( int col, int row ) const;
     const QColor& backGroundBrushColor(int col, int row ) const;
 
-    virtual uint bottomBorderValue( int col, int row ) const;
-    virtual uint rightBorderValue( int col, int row ) const;
-    virtual uint leftBorderValue( int col, int row ) const;
-    virtual uint topBorderValue( int col, int row ) const;
+    uint bottomBorderValue( int col, int row ) const;
+    uint rightBorderValue( int col, int row ) const;
+    uint leftBorderValue( int col, int row ) const;
+    uint topBorderValue( int col, int row ) const;
 
     /**
      * @return the precision of the floating point representation.
      */
-    virtual int precision( int col, int row ) const;
+    int precision( int col, int row ) const;
     /**
      * @return the prefix of a numeric value ( for example "$" )
      */
-    virtual QString prefix( int col, int row ) const;
+    QString prefix( int col, int row ) const;
     /**
      * @return the postfix of a numeric value ( for example "DM" )
      */
-    virtual QString postfix( int col, int row ) const;
+    QString postfix( int col, int row ) const;
     /**
      * @return the way of formatting a floating point value
      */
-    virtual FloatFormat floatFormat( int col, int row ) const;
+    FloatFormat floatFormat( int col, int row ) const;
     /**
      * @return the color format of a floating point value
      */
-    virtual FloatColor floatColor( int col, int row ) const;
+    FloatColor floatColor( int col, int row ) const;
 
-    virtual const QPen& textPen( int col, int row ) const;
+    const QPen& textPen( int col, int row ) const;
     /**
      * @return the text color.
      */
@@ -336,58 +338,59 @@ public:
     bool textFontUnderline( int col, int row ) const;
     bool textFontStrike( int col, int row ) const;
 
-    virtual Align align( int col, int row ) const;
-    virtual AlignY alignY( int col, int row ) const;
+    Align align( int col, int row ) const;
+    AlignY alignY( int col, int row ) const;
 
-    virtual bool multiRow( int col, int row ) const;
+    bool multiRow( int col, int row ) const;
 
-    virtual bool verticalText( int col, int row ) const;
+    bool verticalText( int col, int row ) const;
 
-    virtual FormatType getFormatType(int col, int row )const ;
+    FormatType getFormatType(int col, int row )const ;
 
-    virtual int getAngle(int col, int row) const;
+    int getAngle(int col, int row) const;
 
-    virtual QString comment(int col, int row) const;
-    virtual QString * commentP( int col, int row ) const;
+    const QString* comment() const { return m_strComment; };
+    QString comment(int col, int row) const;
+    QString * commentP( int col, int row ) const;
 
-    virtual double getIndent(int col, int row) const;
+    double getIndent(int col, int row) const;
 
-    virtual bool getDontprintText( int col, int row) const;
-    virtual bool notProtected( int col, int row) const;
-    virtual bool isHideAll( int col, int row) const;
-    virtual bool isHideFormula( int col, int row) const;
-    virtual bool isProtected( int col, int row ) const;
+    bool getDontprintText( int col, int row) const;
+    bool notProtected( int col, int row) const;
+    bool isHideAll( int col, int row) const;
+    bool isHideFormula( int col, int row) const;
+    bool isProtected( int col, int row ) const;
 
     Style * kspreadStyle() const { return m_pStyle; }
     Sheet* sheet() { return m_pSheet; }
     const Sheet* sheet() const { return m_pSheet; }
 
-    virtual bool hasProperty( Properties p, bool withoutParent = false ) const;
+    bool hasProperty( Properties p, bool withoutParent = false ) const;
 
     /**
      * returns false if no currency information is set or
      * doesn't apply
      */
-    virtual bool currencyInfo( Currency & currency) const;
+    bool currencyInfo( Currency & currency) const;
 
     QString getCurrencySymbol() const;
     QFont font() const;
 
 protected:
-    virtual const QPen& rightBorderPen() const;
-    virtual const QPen& bottomBorderPen() const;
+    const QPen& rightBorderPen() const;
+    const QPen& bottomBorderPen() const;
 
     /**
-     * Default implementation does nothing.
+     * If a cell is set, marks its Layout and TextFormat as dirty.
      */
-    virtual void formatChanged();
+    void formatChanged();
 
     /**
-     * Default implementation returns 0.
+     * If a cell is set, it returns the row format of the sheet. Otherwise, it returns 0.
      */
     virtual Format* fallbackFormat( int col, int row );
     /**
-     * Default implementation returns 0.
+     * If a cell is set, it returns the row format of the sheet. Otherwise, it returns 0.
      */
     virtual const Format* fallbackFormat( int col, int row ) const;
 
@@ -427,6 +430,8 @@ private:
     const QBrush & backGroundBrush() const;
     const QFont textFont() const;
     const QPen  & textPen() const;
+
+    Cell* m_pCell;
 };
 
 /**

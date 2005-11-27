@@ -288,9 +288,9 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
 
     Cell * cell = m_pSheet->nonDefaultCell( mainCol, row + 1 );
     cell->setCellText( text );
-    cell->setTextFontBold( true );
-    cell->setTextFontItalic( true );
-    cell->setTextFontUnderline( true );
+    cell->format()->setTextFontBold( true );
+    cell->format()->setTextFontItalic( true );
+    cell->format()->setTextFontUnderline( true );
   }
 
   QString colName = Cell::columnName( column );
@@ -310,9 +310,9 @@ bool SubtotalDialog::addSubtotal( int mainCol, int column, int row, int topRow,
 
   Cell * cell = m_pSheet->nonDefaultCell( column, row + 1 );
   cell->setCellText( formula );
-  cell->setTextFontBold( true );
-  cell->setTextFontItalic( true );
-  cell->setTextFontUnderline( true );
+  cell->format()->setTextFontBold( true );
+  cell->format()->setTextFontItalic( true );
+  cell->format()->setTextFontUnderline( true );
 
   return true;
 }

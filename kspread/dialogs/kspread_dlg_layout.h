@@ -38,7 +38,7 @@
 #include <knuminput.h>
 #include <kcompletion.h>
 #include "kspread_view.h"
-#include "kspread_cell.h"
+#include "kspread_format.h"
 #include "kspread_doc.h"
 #include "kspread_value.h"
 #include "position_cell_format.h"
@@ -575,10 +575,10 @@ public:
     QString prefix;
     QString postfix;
     int precision;
-    Cell::FloatFormat floatFormat;
+    Format::FloatFormat floatFormat;
     bool bFloatFormat;
-    Cell::FloatColor floatColor;
-    Cell::Currency   cCurrency;
+    Format::FloatColor floatColor;
+    Format::Currency   cCurrency;
     bool bFloatColor;
     bool bCurrency;
     QColor textColor;
@@ -599,8 +599,8 @@ public:
     QColor bgColor;
     bool bBgColor;
     QString actionText;
-    Cell::Align alignX;
-    Cell::AlignY alignY;
+    Format::Align alignX;
+    Format::AlignY alignY;
     QString styleName;
     QString styleParent;
 

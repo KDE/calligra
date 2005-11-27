@@ -1242,7 +1242,7 @@ void View::Private::adjustActions( bool mode )
 void View::Private::adjustActions( Sheet* sheet, Cell* cell )
 {
   QRect selection = selectionInfo->selection();
-  if ( sheet->isProtected() && !cell->isDefault() && cell->notProtected( cell->column(), cell->row() ) )
+  if ( sheet->isProtected() && !cell->isDefault() && cell->format()->notProtected( cell->column(), cell->row() ) )
   {
     if ( ( selection.width() > 1 ) || ( selection.height() > 1 ) )
     {
@@ -1293,7 +1293,7 @@ void View::Private::updateButton( Cell *cell, int column, int row)
     // find the font name (e.g. not installed in the system)
     QStringList fontList;
     KFontChooser::getFontList( fontList, 0 );
-    QString fontFamily = cell->textFontFamily( column,row );
+    QString fontFamily = cell->format()->textFontFamily( column,row );
     for ( QStringList::Iterator it = fontList.begin(); it != fontList.end(); ++it )
       if ((*it).lower() == fontFamily.lower())
       {
@@ -1301,33 +1301,33 @@ void View::Private::updateButton( Cell *cell, int column, int row)
         break;
       }
 
-    actions->selectFontSize->setFontSize( cell->textFontSize( column, row ) );
-    actions->bold->setChecked( cell->textFontBold( column, row ) );
-    actions->italic->setChecked( cell->textFontItalic(  column, row) );
-    actions->underline->setChecked( cell->textFontUnderline( column, row ) );
-    actions->strikeOut->setChecked( cell->textFontStrike( column, row ) );
+      actions->selectFontSize->setFontSize( cell->format()->textFontSize( column, row ) );
+      actions->bold->setChecked( cell->format()->textFontBold( column, row ) );
+      actions->italic->setChecked( cell->format()->textFontItalic(  column, row) );
+      actions->underline->setChecked( cell->format()->textFontUnderline( column, row ) );
+      actions->strikeOut->setChecked( cell->format()->textFontStrike( column, row ) );
 
-    actions->alignLeft->setChecked( cell->align( column, row ) == Format::Left );
-    actions->alignCenter->setChecked( cell->align( column, row ) == Format::Center );
-    actions->alignRight->setChecked( cell->align( column, row ) == Format::Right );
+      actions->alignLeft->setChecked( cell->format()->align( column, row ) == Format::Left );
+      actions->alignCenter->setChecked( cell->format()->align( column, row ) == Format::Center );
+      actions->alignRight->setChecked( cell->format()->align( column, row ) == Format::Right );
 
-    actions->alignTop->setChecked( cell->alignY( column, row ) == Format::Top );
-    actions->alignMiddle->setChecked( cell->alignY( column, row ) == Format::Middle );
-    actions->alignBottom->setChecked( cell->alignY( column, row ) == Format::Bottom );
+      actions->alignTop->setChecked( cell->format()->alignY( column, row ) == Format::Top );
+      actions->alignMiddle->setChecked( cell->format()->alignY( column, row ) == Format::Middle );
+      actions->alignBottom->setChecked( cell->format()->alignY( column, row ) == Format::Bottom );
 
-    actions->verticalText->setChecked( cell->verticalText( column,row ) );
+      actions->verticalText->setChecked( cell->format()->verticalText( column,row ) );
 
-    actions->wrapText->setChecked( cell->multiRow( column,row ) );
+      actions->wrapText->setChecked( cell->format()->multiRow( column,row ) );
 
     FormatType ft = cell->formatType();
     actions->percent->setChecked( ft == Percentage_format );
     actions->money->setChecked( ft == Money_format );
 
     if ( activeSheet && !activeSheet->isProtected() )
-      actions->removeComment->setEnabled( !cell->comment(column,row).isEmpty() );
+      actions->removeComment->setEnabled( !cell->format()->comment(column,row).isEmpty() );
 
     if ( activeSheet && !activeSheet->isProtected() )
-      actions->decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
+      actions->decreaseIndent->setEnabled( cell->format()->getIndent( column, row ) > 0.0 );
 
     toolbarLock = false;
     if ( activeSheet )
@@ -2326,9 +2326,9 @@ void View::updateEditWidgetOnPress()
         editWidget()->setText( "" );
         return;
     }
-    if ( d->activeSheet->isProtected() && cell->isHideFormula( column, row ) )
+    if ( d->activeSheet->isProtected() && cell->format()->isHideFormula( column, row ) )
         editWidget()->setText( cell->strOutText() );
-    else if ( d->activeSheet->isProtected() && cell->isHideAll( column, row ) )
+    else if ( d->activeSheet->isProtected() && cell->format()->isHideAll( column, row ) )
         editWidget()->setText( "" );
     else
         editWidget()->setText( cell->text() );
@@ -2344,7 +2344,7 @@ void View::updateEditWidget()
 
     Cell * cell = d->activeSheet->cellAt( column, row );
     bool active = activeSheet()->getShowFormula()
-      && !( d->activeSheet->isProtected() && cell && cell->isHideFormula( column, row ) );
+        && !( d->activeSheet->isProtected() && cell && cell->format()->isHideFormula( column, row ) );
 
     if ( d->activeSheet && !d->activeSheet->isProtected() )
     {
@@ -2363,21 +2363,21 @@ void View::updateEditWidget()
         return;
     }
 
-    if ( d->activeSheet->isProtected() && cell->isHideFormula( column, row ) )
+    if ( d->activeSheet->isProtected() && cell->format()->isHideFormula( column, row ) )
         editWidget()->setText( cell->strOutText() );
-    else if ( d->activeSheet->isProtected() && cell->isHideAll( column, row ) )
+    else if ( d->activeSheet->isProtected() && cell->format()->isHideAll( column, row ) )
         editWidget()->setText( "" );
     else
         editWidget()->setText( cell->text() );
 
-    if ( d->activeSheet->isProtected() && !cell->notProtected( column, row ) )
+    if ( d->activeSheet->isProtected() && !cell->format()->notProtected( column, row ) )
       editWidget()->setEnabled( false );
     else
       editWidget()->setEnabled( true );
 
     if ( d->canvas->editor() )
     {
-      d->canvas->editor()->setEditorFont(cell->textFont(column, row), true);
+      d->canvas->editor()->setEditorFont(cell->format()->textFont(column, row), true);
       d->canvas->editor()->setFocus();
     }
     d->updateButton(cell, column, row);
@@ -2820,7 +2820,7 @@ void View::fontSelected( const QString & _font )
   if ( d->canvas->editor() )
   {
     Cell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
-    d->canvas->editor()->setEditorFont( cell->textFont( cell->column(), cell->row() ), true );
+    d->canvas->editor()->setEditorFont( cell->format()->textFont( cell->column(), cell->row() ), true );
     d->canvas->editor()->setFocus();
   }
   else
@@ -2939,9 +2939,9 @@ void View::slotSpecialChar( QChar c, const QString & _font )
   {
     QPoint marker( selectionInfo()->marker() );
     Cell * cell = d->activeSheet->nonDefaultCell( marker );
-    if ( cell->textFont( marker.x(), marker.y() ).family() != _font )
+    if ( cell->format()->textFont( marker.x(), marker.y() ).family() != _font )
     {
-      cell->setTextFontFamily( _font );
+      cell->format()->setTextFontFamily( _font );
     }
     EditWidget * edit = d->canvas->editWidget();
     QKeyEvent ev( QEvent::KeyPress, 0, 0, 0, QString( c ) );
@@ -2991,8 +2991,8 @@ void View::fontSizeSelected( int _size )
   if ( d->canvas->editor() )
   {
     Cell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
-    d->canvas->editor()->setEditorFont( cell->textFont( d->canvas->markerColumn(),
-                                                        d->canvas->markerRow() ), true );
+    d->canvas->editor()->setEditorFont( cell->format()->textFont( d->canvas->markerColumn(),
+                                                                  d->canvas->markerRow() ), true );
     d->canvas->editor()->setFocus();
   }
   else
@@ -3017,7 +3017,7 @@ void View::bold( bool b )
   if ( d->canvas->editor() )
   {
     Cell * cell = d->activeSheet->cellAt( col, row );
-    d->canvas->editor()->setEditorFont( cell->textFont( col, row ), true );
+    d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
   endOperation( d->selectionInfo->selection() );
@@ -3039,7 +3039,7 @@ void View::underline( bool b )
   if ( d->canvas->editor() )
   {
     Cell * cell = d->activeSheet->cellAt( col, row );
-    d->canvas->editor()->setEditorFont( cell->textFont( col, row ), true );
+    d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
   endOperation( d->selectionInfo->selection() );
@@ -3061,7 +3061,7 @@ void View::strikeOut( bool b )
   if ( d->canvas->editor() )
   {
     Cell * cell = d->activeSheet->cellAt( col, row );
-    d->canvas->editor()->setEditorFont( cell->textFont( col, row ), true );
+    d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
   endOperation( d->selectionInfo->selection() );
@@ -3084,7 +3084,7 @@ void View::italic( bool b )
   if ( d->canvas->editor() )
   {
     Cell * cell = d->activeSheet->cellAt( col, row );
-    d->canvas->editor()->setEditorFont( cell->textFont( col, row ), true );
+    d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
   endOperation( d->selectionInfo->selection() );
@@ -3799,7 +3799,7 @@ void View::decreaseIndent()
   Cell * cell = d->activeSheet->cellAt( column, row );
   if ( cell )
     if ( !d->activeSheet->isProtected() )
-      d->actions->decreaseIndent->setEnabled( cell->getIndent( column, row ) > 0.0 );
+      d->actions->decreaseIndent->setEnabled( cell->format()->getIndent( column, row ) > 0.0 );
 
   endOperation( d->selectionInfo->selection() );
 }
@@ -3969,7 +3969,7 @@ void View::findNext()
         if ( findObj->needData() )
         {
             if ( d->typeValue == FindOption::Note )
-                findObj->setData( cell->comment( cell->column(), cell->row() ) );
+                findObj->setData( cell->format()->comment( cell->column(), cell->row() ) );
             else
                 findObj->setData( cell->text() );
             d->findPos = QPoint( cell->column(), cell->row() );
@@ -4025,7 +4025,7 @@ Cell* View::nextFindValidCell( int col, int row )
     Cell *cell = d->searchInSheets.currentSheet->cellAt( col, row );
     if ( cell->isDefault() || cell->isObscured() || cell->isFormula() )
         cell = 0L;
-    if ( d->typeValue == FindOption::Note && cell && cell->comment(col, row).isEmpty())
+    if ( d->typeValue == FindOption::Note && cell && cell->format()->comment(col, row).isEmpty())
         cell = 0L;
     return cell;
 }
@@ -4184,7 +4184,7 @@ void View::slotReplace( const QString &newText, int, int, int )
     if ( d->typeValue == FindOption::Value )
         cell->setCellText( newText );
     else if ( d->typeValue == FindOption::Note )
-        cell->setComment( newText );
+      cell->format()->setComment( newText );
     cell->clearDisplayDirtyFlag();
 }
 
@@ -5279,7 +5279,7 @@ void View::openPopupMenu( const QPoint & _point )
     Cell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
 
     bool isProtected = d->activeSheet->isProtected();
-    if ( !cell->isDefault() && cell->notProtected( d->canvas->markerColumn(), d->canvas->markerRow() )
+    if ( !cell->isDefault() && cell->format()->notProtected( d->canvas->markerColumn(), d->canvas->markerRow() )
          && ( selection().width() == 1 ) && ( selection().height() == 1 ) )
       isProtected = false;
 
@@ -5313,7 +5313,7 @@ void View::openPopupMenu( const QPoint & _point )
 
       d->popupMenu->insertSeparator();
       d->actions->addModifyComment->plug( d->popupMenu );
-      if ( !cell->comment(d->canvas->markerColumn(), d->canvas->markerRow()).isEmpty() )
+      if ( !cell->format()->comment(d->canvas->markerColumn(), d->canvas->markerRow()).isEmpty() )
       {
         d->actions->removeComment->plug( d->popupMenu );
       }
@@ -5844,10 +5844,10 @@ void View::createStyleFromCell()
     break;
   }
 
-  CustomStyle * style = new CustomStyle( cell->kspreadStyle(), styleName );
+  CustomStyle * style = new CustomStyle( cell->format()->kspreadStyle(), styleName );
 
   doc()->styleManager()->m_styles[ styleName ] = style;
-  cell->setStyle( style );
+  cell->format()->setStyle( style );
   QStringList lst( d->actions->selectStyle->items() );
   lst.push_back( styleName );
   d->actions->selectStyle->setItems( lst );

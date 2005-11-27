@@ -450,7 +450,7 @@ TextEditor::TextEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
   connect( functionCompletionTimer, SIGNAL( timeout() ), 
     SLOT( triggerFunctionAutoComplete() ) );
 
-  if (!cell()->multiRow(cell()->column(),cell()->row()))
+  if (!cell()->format()->multiRow(cell()->column(),cell()->row()))
   {
     m_pEdit->setWordWrap(QTextEdit::NoWrap);
   }
@@ -476,7 +476,7 @@ TextEditor::TextEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
   m_blockCheck = false;
 
   // set font size according to zoom factor
-  QFont font( _cell->font() );
+  QFont font( _cell->format()->font() );
   font.setPointSizeFloat( 0.01 * _parent->doc()->zoom() * font.pointSizeFloat() );
   m_pEdit->setFont( font );
 

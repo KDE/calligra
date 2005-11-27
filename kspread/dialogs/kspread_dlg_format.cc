@@ -6,7 +6,7 @@
              (C) 2000-2002 Laurent Montel <montel@kde.org>
              (C) 2000 Werner Trobin <trobin@kde.org>
              (C) 1998-2000 Torben Weis <weis@kde.org>
-          
+
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -170,7 +170,7 @@ void FormatDialog::slotOk()
 
     // Top left corner
     Cell* cell = m_view->activeSheet()->nonDefaultCell( r.left(), r.top() );
-    cell->copy( *m_cells[0] );
+    cell->format()->copy( *m_cells[0] );
 
     // Top column
     int x, y;
@@ -180,7 +180,7 @@ void FormatDialog::slotOk()
 	Cell* cell = m_view->activeSheet()->nonDefaultCell( x, r.top() );
         if(!cell->isObscuringForced())
         {
-        cell->copy( *m_cells[ pos ] );
+          cell->format()->copy( *m_cells[ pos ] );
 
 	Format* c;
 	if ( x == r.right() )
@@ -212,7 +212,7 @@ void FormatDialog::slotOk()
 	Cell* cell = m_view->activeSheet()->nonDefaultCell( r.left(), y );
         if(!cell->isObscuringForced())
         {
-        cell->copy( *m_cells[ pos ] );
+          cell->format()->copy( *m_cells[ pos ] );
 
 	Format* c;
 	if ( y == r.bottom() )
@@ -241,7 +241,7 @@ void FormatDialog::slotOk()
 	    Cell* cell = m_view->activeSheet()->nonDefaultCell( x, y );
             if(!cell->isObscuringForced())
             {
-            cell->copy( *m_cells[ pos ] );
+              cell->format()->copy( *m_cells[ pos ] );
 
 	    Format* c;
 	    if ( x == r.left() + 1 )

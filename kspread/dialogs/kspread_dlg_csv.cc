@@ -665,14 +665,14 @@ void CSVDialog::accept()
       double w = fm.width( cell->strOutText() );
       if ( w == 0.0 )
       {
-        QFontMetrics fm( cell->textFont( left + col, top + row ) );
+        QFontMetrics fm( cell->format()->textFont( left + col, top + row ) );
         w = fm.width('x') * (double) getText( row, col ).length();
       }
 
       if ( w > widths[col] )
         widths[col] = w;
 
-      cell->setFormatType (Generic_format);
+      cell->format()->setFormatType(Generic_format);
       /*
       Disabling this code for now, everything will use Generic formatting,
       hoping for the best (Tomas)
@@ -683,14 +683,14 @@ void CSVDialog::accept()
        case TEXT:
         break;
        case NUMBER:
-        cell->setFormatType(Number_format);
+        cell->format()->setFormatType(Number_format);
         cell->setPrecision(2);
         break;
        case DATE:
-        cell->setFormatType(ShortDate_format);
+        cell->format()->setFormatType(ShortDate_format);
         break;
        case CURRENCY:
-        cell->setFormatType(Money_format);
+        cell->format()->setFormatType(Money_format);
         break;
       }
       */

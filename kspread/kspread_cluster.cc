@@ -23,6 +23,7 @@
 #include <kdebug.h>
 
 #include "kspread_cell.h"
+#include "kspread_format.h"
 
 #include "kspread_cluster.h"
 

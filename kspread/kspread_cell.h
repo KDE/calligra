@@ -39,7 +39,6 @@
 #include <qdatetime.h>
 
 #include "kspread_condition.h"
-#include "kspread_format.h"
 
 class KLocale;
 class QDomElement;
@@ -55,6 +54,7 @@ class KoOasisStyles;
 namespace KSpread
 {
 class Canvas;
+class Format;
 class GenValidationStyles;
 class Sheet;
 class Value;
@@ -106,9 +106,8 @@ class Formula;
  * default cell. @ref #isDefault tells wether a cell is the default one
  * or not.
  */
-class KSPREAD_EXPORT Cell : public Format
+class KSPREAD_EXPORT Cell
 {
-  friend class SelectPrivate;
   friend class Conditions;
 public:
 
@@ -199,6 +198,12 @@ public:
     QString strOutText() const;
 
     Formula *formula () const;
+
+    /** Returns the format object of this cell */
+    Format* format();
+    /** Returns the format object of this cell */
+    const Format* format() const;
+
     /**
      * Returns the value that this cell holds. It could be from the user
      * (i.e. when s/he enters a value) or a result of formula.
@@ -262,7 +267,7 @@ public:
     bool loadOasis( const QDomElement & element, const KoOasisStyles &oasisStyles );
     void loadOasisValidation( const QString& validationName );
 
-    QTime toTime(const QDomElement &element) ;
+    QTime toTime(const QDomElement &element);
     QDate toDate(const QDomElement &element);
 
     /**
@@ -496,11 +501,6 @@ public:
      */
     void setBottomBorderPen( const QPen& p );
 
-    /**
-     * @reimp
-     */
-    virtual void setCurrency( int type, QString const & symbol );
-
     //////////////////////
     //
     // Other stuff
@@ -515,7 +515,9 @@ public:
      */
     FormatType formatType() const;
 
+    /** returns true, if cell format is of date type or content is a date */
     bool isDate() const;
+    /** returns true, if cell format is of time type or content is a time */
     bool isTime() const;
 
     void setNumber( double number );
@@ -523,16 +525,20 @@ public:
     /** return the cell's value as a double */
     double getDouble ();
 
+    /** converts content to double format */
     void convertToDouble ();
+    /** converts content to percentageformat */
     void convertToPercent ();
+    /** converts content to money format */
     void convertToMoney ();
+    /** converts content to time format */
     void convertToTime ();
+    /** converts content to date format */
     void convertToDate ();
 
-    /**
-     * return size of the text
-     */
+    /** return width of the text */
     double textWidth() const;
+    /** return height of the text */
     double textHeight() const;
 
 
@@ -564,11 +570,9 @@ public:
      */
     bool calc(bool delay = true);
 
-    /**
-     * Set the calcDirtyFlag
-     */
+    /** Set the calcDirtyFlag */
     void setCalcDirtyFlag();
-
+    /** Checks the calcDirtyFlag */
     bool calcDirtyFlag();
 
     /**
@@ -829,7 +833,7 @@ public:
    * the control. If a function changes the contents/layout of this cell and this
    * flag is not set, then the function must set it at once. After the changes
    * are done the function must call <tt>m_pSheet->updateCell(...).
-   * The flag is cleared by the function m_pSheet->updateCell.
+   * The flag is cleared by the function format()->sheet()->updateCell.
    *
    * ForceExtra
    * Tells whether the cell is forced to exceed its size.
@@ -848,21 +852,8 @@ public:
    * it's true when text size is bigger that cell height
 
    */
-    
-protected:
-    /**
-     * @reimp
-     */
-    void formatChanged();
-    /**
-     * @reimp
-     */
-    Format* fallbackFormat( int col, int row );
-    /**
-     * @reimp
-     */
-    const Format* fallbackFormat( int col, int row ) const;
 
+protected:
     /**
      * Applies the font to use to @p painter
      */

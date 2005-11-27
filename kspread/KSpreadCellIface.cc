@@ -91,14 +91,14 @@ QString CellIface::comment() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    return cell->comment(m_point.x(), m_point.y());
+    return cell->format()->comment(m_point.x(), m_point.y());
 }
 
 void CellIface::setComment( const QString& comment )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setComment( comment);
+    cell->format()->setComment( comment);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -128,7 +128,7 @@ void CellIface::setBgColor(const QString& _c)
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(_c);
-    cell->setBgColor(c);
+    cell->format()->setBgColor(c);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -137,7 +137,7 @@ void CellIface::setBgColor(int r,int g,int b)
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
-    cell->setBgColor(c);
+    cell->format()->setBgColor(c);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -152,7 +152,7 @@ QString CellIface::textColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    return cell->textColor( m_point.x(), m_point.y() ).name();
+    return cell->format()->textColor( m_point.x(), m_point.y() ).name();
 }
 
 void CellIface::setTextColor(int r,int g,int b)
@@ -160,7 +160,7 @@ void CellIface::setTextColor(int r,int g,int b)
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
-    cell->setTextColor(c);
+    cell->format()->setTextColor(c);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -169,7 +169,7 @@ void CellIface::setTextColor(const QString& _c)
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(_c);
-    cell->setTextColor(c);
+    cell->format()->setTextColor(c);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -177,7 +177,7 @@ void CellIface::setAngle(int angle)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setAngle(angle);
+    cell->format()->setAngle(angle);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -185,14 +185,14 @@ int  CellIface::angle() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->getAngle(m_point.x(), m_point.y());
+    return cell->format()->getAngle(m_point.x(), m_point.y());
 }
 
 void CellIface::setVerticalText(bool _vertical)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setVerticalText(_vertical);
+    cell->format()->setVerticalText(_vertical);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -200,7 +200,7 @@ bool CellIface::verticalText() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->verticalText( m_point.x(), m_point.y() );
+    return cell->format()->verticalText( m_point.x(), m_point.y() );
 }
 
 
@@ -208,7 +208,7 @@ void CellIface::setMultiRow(bool _multi)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setMultiRow( _multi );
+    cell->format()->setMultiRow( _multi );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -216,23 +216,23 @@ bool CellIface::multiRow() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->multiRow( m_point.x(), m_point.y() );
+    return cell->format()->multiRow( m_point.x(), m_point.y() );
 }
 
 void CellIface::setAlign( const QString& _Align )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    Cell::Align Align;
+    Format::Align Align;
     if(_Align=="Left")
-        Align=Cell::Left;
+        Align=Format::Left;
     else if(_Align=="Right")
-        Align=Cell::Right;
+        Align=Format::Right;
     else if(_Align=="Center")
-        Align=Cell::Center;
+        Align=Format::Center;
     else
-        Align=Cell::Undefined;
-    cell->setAlign( Align);
+        Align=Format::Undefined;
+    cell->format()->setAlign( Align);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -241,18 +241,18 @@ QString CellIface::align() const
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QString alignString;
-    switch( cell->align( m_point.x(), m_point.y() ) )
+    switch( cell->format()->align( m_point.x(), m_point.y() ) )
         {
-        case Cell::Left :
+        case Format::Left :
                 alignString="Left";
                 break;
-        case Cell::Right :
+        case Format::Right :
                 alignString="Right";
                 break;
-        case Cell::Center :
+        case Format::Center :
                 alignString="Center";
                 break;
-        case Cell::Undefined :
+        case Format::Undefined :
                 alignString="Undefined";
                 break;
         }
@@ -263,16 +263,16 @@ void CellIface::setAlignY( const QString& _AlignY )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    Cell::AlignY AlignY;
+    Format::AlignY AlignY;
     if(_AlignY=="Top")
-        AlignY=Cell::Top;
+        AlignY=Format::Top;
     else if(_AlignY=="Middle")
-        AlignY=Cell::Middle;
+        AlignY=Format::Middle;
     else if(_AlignY=="Bottom")
-        AlignY=Cell::Bottom;
+        AlignY=Format::Bottom;
     else
-        AlignY=Cell::Middle;
-    cell->setAlignY( AlignY);
+        AlignY=Format::Middle;
+    cell->format()->setAlignY( AlignY);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -281,18 +281,18 @@ QString CellIface::alignY() const
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QString alignString;
-    switch( cell->alignY( m_point.x(), m_point.y() ) )
+    switch( cell->format()->alignY( m_point.x(), m_point.y() ) )
         {
-        case Cell::Top :
+        case Format::Top :
                 alignString="Top";
                 break;
-        case Cell::Middle :
+        case Format::Middle :
                 alignString="Middle";
                 break;
-        case Cell::Bottom :
+        case Format::Bottom :
                 alignString="Bottom";
                 break;
-        case Cell::UndefinedY :
+        case Format::UndefinedY :
                 alignString="UndefinedY";
                 break;
         }
@@ -303,7 +303,7 @@ void CellIface::setPostfix(const QString &_postfix)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setPostfix( _postfix );
+    cell->format()->setPostfix( _postfix );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -311,14 +311,14 @@ QString CellIface::prefix() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->prefix( m_point.x(), m_point.y() );
+    return cell->format()->prefix( m_point.x(), m_point.y() );
 }
 
 void CellIface::setPrefix(const QString &_prefix)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setPrefix( _prefix );
+    cell->format()->setPrefix( _prefix );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -326,7 +326,7 @@ QString CellIface::postfix() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->postfix( m_point.x(), m_point.y() );
+    return cell->format()->postfix( m_point.x(), m_point.y() );
 }
 
 void CellIface::setFormatType(const QString &_formatType)
@@ -335,7 +335,7 @@ void CellIface::setFormatType(const QString &_formatType)
 
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     FormatType format;
-    cell->setPrecision(2);
+    cell->format()->setPrecision(2);
     if (_formatType=="Generic")
         format = Generic_format;
     else if(_formatType=="Number")
@@ -376,7 +376,7 @@ void CellIface::setFormatType(const QString &_formatType)
         format=fraction_three_digits;
     else
         format=Generic_format;
-    cell->setFormatType( format);
+    cell->format()->setFormatType( format);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -386,7 +386,7 @@ QString CellIface::getFormatType() const
 
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QString stringFormat;
-    switch( cell->getFormatType(m_point.x(), m_point.y()))
+    switch( cell->format()->getFormatType(m_point.x(), m_point.y()))
         {
         case Text_format:
             stringFormat="Text";
@@ -488,7 +488,7 @@ void CellIface::setPrecision(int _p)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setPrecision( _p );
+    cell->format()->setPrecision( _p );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -496,14 +496,14 @@ int CellIface::precision() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->precision( m_point.x(), m_point.y() );
+    return cell->format()->precision( m_point.x(), m_point.y() );
 }
 
 void CellIface::setTextFontBold(bool _b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setTextFontBold( _b );
+    cell->format()->setTextFontBold( _b );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -511,14 +511,14 @@ bool CellIface::textFontBold() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->textFontBold( m_point.x(), m_point.y() );
+    return cell->format()->textFontBold( m_point.x(), m_point.y() );
 }
 
 void CellIface::setTextFontItalic(bool _b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setTextFontItalic( _b );
+    cell->format()->setTextFontItalic( _b );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -526,7 +526,7 @@ bool CellIface::textFontItalic() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->textFontItalic( m_point.x(), m_point.y() );
+    return cell->format()->textFontItalic( m_point.x(), m_point.y() );
 }
 
 
@@ -534,7 +534,7 @@ void CellIface::setTextFontUnderline(bool _b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setTextFontUnderline( _b );
+    cell->format()->setTextFontUnderline( _b );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -542,14 +542,14 @@ bool CellIface::textFontUnderline() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->textFontUnderline( m_point.x(), m_point.y() );
+    return cell->format()->textFontUnderline( m_point.x(), m_point.y() );
 }
 
 void CellIface::setTextFontStrike(bool _b)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setTextFontStrike( _b );
+    cell->format()->setTextFontStrike( _b );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -557,14 +557,14 @@ bool CellIface::textFontStrike() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->textFontStrike( m_point.x(), m_point.y() );
+    return cell->format()->textFontStrike( m_point.x(), m_point.y() );
 }
 
 void CellIface::setTextFontSize( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setTextFontSize( _size );
+    cell->format()->setTextFontSize( _size );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -572,14 +572,14 @@ int CellIface::textFontSize() const
 {
     if( !m_sheet ) return 10;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->textFontSize( m_point.x(), m_point.y() );
+    return cell->format()->textFontSize( m_point.x(), m_point.y() );
 }
 
 void CellIface::setTextFontFamily( const QString& _font )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setTextFontFamily( _font );
+    cell->format()->setTextFontFamily( _font );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -587,7 +587,7 @@ QString CellIface::textFontFamily() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->textFontFamily( m_point.x(), m_point.y() );
+    return cell->format()->textFontFamily( m_point.x(), m_point.y() );
 }
 
 //border left
@@ -596,17 +596,17 @@ void CellIface::setLeftBorderStyle( const QString& _style )
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
-        cell->setLeftBorderStyle(Qt::DotLine);
+      cell->format()->setLeftBorderStyle(Qt::DotLine);
     else if(_style=="DashLine")
-        cell->setLeftBorderStyle(Qt::DashLine);
+      cell->format()->setLeftBorderStyle(Qt::DashLine);
     else if(_style=="DashDotLine")
-        cell->setLeftBorderStyle(Qt::DashDotLine);
+      cell->format()->setLeftBorderStyle(Qt::DashDotLine);
     else if(_style=="DashDotDotLine")
-        cell->setLeftBorderStyle(Qt::DashDotDotLine);
+      cell->format()->setLeftBorderStyle(Qt::DashDotDotLine);
     else if(_style=="SolidLine")
-        cell->setLeftBorderStyle(Qt::SolidLine);
+      cell->format()->setLeftBorderStyle(Qt::SolidLine);
     else
-        cell->setLeftBorderStyle(Qt::SolidLine);
+      cell->format()->setLeftBorderStyle(Qt::SolidLine);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -616,7 +616,7 @@ void CellIface::setLeftBorderColor(const QString& _c)
     if( !m_sheet ) return;
     QColor c(_c);
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setLeftBorderColor(c );
+    cell->format()->setLeftBorderColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -626,7 +626,7 @@ void CellIface::setLeftBorderColor(int r,int g,int b)
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
-    cell->setLeftBorderColor(c );
+    cell->format()->setLeftBorderColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -634,7 +634,7 @@ void CellIface::setLeftBorderWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setLeftBorderWidth( _size );
+    cell->format()->setLeftBorderWidth( _size );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -643,21 +643,21 @@ int  CellIface::leftBorderWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->leftBorderWidth(m_point.x(), m_point.y());
+    return cell->format()->leftBorderWidth(m_point.x(), m_point.y());
 }
 
 QString CellIface::leftBorderColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    return cell->leftBorderColor( m_point.x(), m_point.y() ).name();
+    return cell->format()->leftBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::leftBorderStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    Qt::PenStyle penStyle=cell->leftBorderStyle( m_point.x(), m_point.y() );
+    Qt::PenStyle penStyle=cell->format()->leftBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)
         tmp="DotLine";
@@ -680,17 +680,17 @@ void CellIface::setRightBorderStyle( const QString& _style )
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
-        cell->setRightBorderStyle(Qt::DotLine);
+      cell->format()->setRightBorderStyle(Qt::DotLine);
     else if(_style=="DashLine")
-        cell->setRightBorderStyle(Qt::DashLine);
+      cell->format()->setRightBorderStyle(Qt::DashLine);
     else if(_style=="DashDotLine")
-        cell->setRightBorderStyle(Qt::DashDotLine);
+      cell->format()->setRightBorderStyle(Qt::DashDotLine);
     else if(_style=="DashDotDotLine")
-        cell->setRightBorderStyle(Qt::DashDotDotLine);
+      cell->format()->setRightBorderStyle(Qt::DashDotDotLine);
     else if(_style=="SolidLine")
-        cell->setRightBorderStyle(Qt::SolidLine);
+      cell->format()->setRightBorderStyle(Qt::SolidLine);
     else
-        cell->setRightBorderStyle(Qt::SolidLine);
+      cell->format()->setRightBorderStyle(Qt::SolidLine);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -700,7 +700,7 @@ void CellIface::setRightBorderColor(const QString& _c)
     if( !m_sheet ) return;
     QColor c(_c);
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setRightBorderColor(c );
+    cell->format()->setRightBorderColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -709,7 +709,7 @@ void CellIface::setRightBorderColor(int r,int g,int b)
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
-    cell->setRightBorderColor(c );
+    cell->format()->setRightBorderColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -717,7 +717,7 @@ void CellIface::setRightBorderWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setRightBorderWidth( _size );
+    cell->format()->setRightBorderWidth( _size );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -726,21 +726,21 @@ int  CellIface::rightBorderWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->rightBorderWidth(m_point.x(), m_point.y());
+    return cell->format()->rightBorderWidth(m_point.x(), m_point.y());
 }
 
 QString CellIface::rightBorderColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    return cell->rightBorderColor( m_point.x(), m_point.y() ).name();
+    return cell->format()->rightBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::rightBorderStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    Qt::PenStyle penStyle=cell->rightBorderStyle( m_point.x(), m_point.y() );
+    Qt::PenStyle penStyle=cell->format()->rightBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)
         tmp="DotLine";
@@ -763,17 +763,17 @@ void CellIface::setTopBorderStyle( const QString& _style )
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
-        cell->setTopBorderStyle(Qt::DotLine);
+      cell->format()->setTopBorderStyle(Qt::DotLine);
     else if(_style=="DashLine")
-        cell->setTopBorderStyle(Qt::DashLine);
+      cell->format()->setTopBorderStyle(Qt::DashLine);
     else if(_style=="DashDotLine")
-        cell->setTopBorderStyle(Qt::DashDotLine);
+      cell->format()->setTopBorderStyle(Qt::DashDotLine);
     else if(_style=="DashDotDotLine")
-        cell->setTopBorderStyle(Qt::DashDotDotLine);
+      cell->format()->setTopBorderStyle(Qt::DashDotDotLine);
     else if(_style=="SolidLine")
-        cell->setTopBorderStyle(Qt::SolidLine);
+      cell->format()->setTopBorderStyle(Qt::SolidLine);
     else
-        cell->setTopBorderStyle(Qt::SolidLine);
+      cell->format()->setTopBorderStyle(Qt::SolidLine);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -783,7 +783,7 @@ void CellIface::setTopBorderColor(const QString& _c)
     if( !m_sheet ) return;
     QColor c(_c);
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setTopBorderColor(c );
+    cell->format()->setTopBorderColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -792,7 +792,7 @@ void CellIface::setTopBorderColor(int r,int g,int b)
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
-    cell->setTopBorderColor(c );
+    cell->format()->setTopBorderColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -800,7 +800,7 @@ void CellIface::setTopBorderWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setTopBorderWidth( _size );
+    cell->format()->setTopBorderWidth( _size );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -808,21 +808,21 @@ int  CellIface::topBorderWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->topBorderWidth(m_point.x(), m_point.y());
+    return cell->format()->topBorderWidth(m_point.x(), m_point.y());
 }
 
 QString CellIface::topBorderColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    return cell->topBorderColor( m_point.x(), m_point.y() ).name();
+    return cell->format()->topBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::topBorderStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    Qt::PenStyle penStyle=cell->topBorderStyle( m_point.x(), m_point.y() );
+    Qt::PenStyle penStyle=cell->format()->topBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)
         tmp="DotLine";
@@ -845,17 +845,17 @@ void CellIface::setBottomBorderStyle( const QString& _style )
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
-        cell->setBottomBorderStyle(Qt::DotLine);
+      cell->format()->setBottomBorderStyle(Qt::DotLine);
     else if(_style=="DashLine")
-        cell->setBottomBorderStyle(Qt::DashLine);
+      cell->format()->setBottomBorderStyle(Qt::DashLine);
     else if(_style=="DashDotLine")
-        cell->setBottomBorderStyle(Qt::DashDotLine);
+      cell->format()->setBottomBorderStyle(Qt::DashDotLine);
     else if(_style=="DashDotDotLine")
-        cell->setBottomBorderStyle(Qt::DashDotDotLine);
+      cell->format()->setBottomBorderStyle(Qt::DashDotDotLine);
     else if(_style=="SolidLine")
-        cell->setBottomBorderStyle(Qt::SolidLine);
+      cell->format()->setBottomBorderStyle(Qt::SolidLine);
     else
-        cell->setBottomBorderStyle(Qt::SolidLine);
+      cell->format()->setBottomBorderStyle(Qt::SolidLine);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -865,7 +865,7 @@ void CellIface::setBottomBorderColor(const QString& _c)
     if( !m_sheet ) return;
     QColor c(_c);
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setBottomBorderColor(c );
+    cell->format()->setBottomBorderColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -874,7 +874,7 @@ void CellIface::setBottomBorderColor(int r,int g,int b)
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
-    cell->setBottomBorderColor(c );
+    cell->format()->setBottomBorderColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -882,7 +882,7 @@ void CellIface::setBottomBorderWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setBottomBorderWidth( _size );
+    cell->format()->setBottomBorderWidth( _size );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -890,21 +890,21 @@ int  CellIface::bottomBorderWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->bottomBorderWidth(m_point.x(), m_point.y());
+    return cell->format()->bottomBorderWidth(m_point.x(), m_point.y());
 }
 
 QString CellIface::bottomBorderColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    return cell->bottomBorderColor( m_point.x(), m_point.y() ).name();
+    return cell->format()->bottomBorderColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::bottomBorderStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    Qt::PenStyle penStyle=cell->bottomBorderStyle( m_point.x(), m_point.y() );
+    Qt::PenStyle penStyle=cell->format()->bottomBorderStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)
         tmp="DotLine";
@@ -927,17 +927,17 @@ void CellIface::setFallDiagonalStyle( const QString& _style )
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
-        cell->setFallDiagonalStyle(Qt::DotLine);
+      cell->format()->setFallDiagonalStyle(Qt::DotLine);
     else if(_style=="DashLine")
-        cell->setFallDiagonalStyle(Qt::DashLine);
+      cell->format()->setFallDiagonalStyle(Qt::DashLine);
     else if(_style=="DashDotLine")
-        cell->setFallDiagonalStyle(Qt::DashDotLine);
+      cell->format()->setFallDiagonalStyle(Qt::DashDotLine);
     else if(_style=="DashDotDotLine")
-        cell->setFallDiagonalStyle(Qt::DashDotDotLine);
+      cell->format()->setFallDiagonalStyle(Qt::DashDotDotLine);
     else if(_style=="SolidLine")
-        cell->setFallDiagonalStyle(Qt::SolidLine);
+      cell->format()->setFallDiagonalStyle(Qt::SolidLine);
     else
-        cell->setFallDiagonalStyle(Qt::SolidLine);
+      cell->format()->setFallDiagonalStyle(Qt::SolidLine);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -947,7 +947,7 @@ void CellIface::setFallDiagonalColor(const QString& _c)
     if( !m_sheet ) return;
     QColor c(_c);
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setFallDiagonalColor(c );
+    cell->format()->setFallDiagonalColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -956,7 +956,7 @@ void CellIface::setFallDiagonalColor(int r,int g,int b)
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
-    cell->setFallDiagonalColor(c );
+    cell->format()->setFallDiagonalColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -964,7 +964,7 @@ void CellIface::setFallDiagonalWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setFallDiagonalWidth( _size );
+    cell->format()->setFallDiagonalWidth( _size );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -972,21 +972,21 @@ int  CellIface::fallDiagonalWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->fallDiagonalWidth(m_point.x(), m_point.y());
+    return cell->format()->fallDiagonalWidth(m_point.x(), m_point.y());
 }
 
 QString CellIface::fallDiagonalColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    return cell->fallDiagonalColor( m_point.x(), m_point.y() ).name();
+    return cell->format()->fallDiagonalColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::fallDiagonalStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    Qt::PenStyle penStyle=cell->fallDiagonalStyle( m_point.x(), m_point.y() );
+    Qt::PenStyle penStyle=cell->format()->fallDiagonalStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)
         tmp="DotLine";
@@ -1010,17 +1010,17 @@ void CellIface::setGoUpDiagonalStyle( const QString& _style )
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     if(_style=="DotLine")
-        cell->setGoUpDiagonalStyle(Qt::DotLine);
+      cell->format()->setGoUpDiagonalStyle(Qt::DotLine);
     else if(_style=="DashLine")
-        cell->setGoUpDiagonalStyle(Qt::DashLine);
+      cell->format()->setGoUpDiagonalStyle(Qt::DashLine);
     else if(_style=="DashDotLine")
-        cell->setGoUpDiagonalStyle(Qt::DashDotLine);
+      cell->format()->setGoUpDiagonalStyle(Qt::DashDotLine);
     else if(_style=="DashDotDotLine")
-        cell->setGoUpDiagonalStyle(Qt::DashDotDotLine);
+      cell->format()->setGoUpDiagonalStyle(Qt::DashDotDotLine);
     else if(_style=="SolidLine")
-        cell->setGoUpDiagonalStyle(Qt::SolidLine);
+      cell->format()->setGoUpDiagonalStyle(Qt::SolidLine);
     else
-        cell->setGoUpDiagonalStyle(Qt::SolidLine);
+      cell->format()->setGoUpDiagonalStyle(Qt::SolidLine);
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -1030,7 +1030,7 @@ void CellIface::setGoUpDiagonalColor(const QString& _c)
     if( !m_sheet ) return;
     QColor c(_c);
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setGoUpDiagonalColor(c );
+    cell->format()->setGoUpDiagonalColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 
 }
@@ -1039,7 +1039,7 @@ void CellIface::setGoUpDiagonalColor(int r,int g,int b)
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     QColor c(r,g,b);
-    cell->setGoUpDiagonalColor(c );
+    cell->format()->setGoUpDiagonalColor(c );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -1047,7 +1047,7 @@ void CellIface::setGoUpDiagonalWidth( int _size )
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setGoUpDiagonalWidth( _size );
+    cell->format()->setGoUpDiagonalWidth( _size );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -1055,21 +1055,21 @@ int  CellIface::goUpDiagonalWidth() const
 {
     if( !m_sheet ) return 0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->goUpDiagonalWidth(m_point.x(), m_point.y());
+    return cell->format()->goUpDiagonalWidth(m_point.x(), m_point.y());
 }
 
 QString CellIface::goUpDiagonalColor() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    return cell->goUpDiagonalColor( m_point.x(), m_point.y() ).name();
+    return cell->format()->goUpDiagonalColor( m_point.x(), m_point.y() ).name();
 }
 
 QString CellIface::goUpDiagonalStyle() const
 {
     if( !m_sheet ) return QString::null;
     Cell* cell = m_sheet->cellAt( m_point );
-    Qt::PenStyle penStyle=cell->goUpDiagonalStyle( m_point.x(), m_point.y() );
+    Qt::PenStyle penStyle=cell->format()->goUpDiagonalStyle( m_point.x(), m_point.y() );
     QString tmp;
     if( penStyle==Qt::DotLine)
         tmp="DotLine";
@@ -1091,9 +1091,9 @@ void CellIface::setIndent(double indent)
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
     if( indent >= 0.0 )
-        cell->setIndent( indent );
+      cell->format()->setIndent( indent );
     else
-        cell->setIndent( 0.0 );
+      cell->format()->setIndent( 0.0 );
     m_sheet->setRegionPaintDirty(cell->cellRect());
 }
 
@@ -1101,21 +1101,21 @@ double CellIface::getIndent() const
 {
     if( !m_sheet ) return 0.0;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->getIndent( m_point.x(), m_point.y() );
+    return cell->format()->getIndent( m_point.x(), m_point.y() );
 }
 
 void CellIface::setDontPrintText ( bool _print)
 {
     if( !m_sheet ) return;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    cell->setDontPrintText ( _print);
+    cell->format()->setDontPrintText ( _print);
 }
 
 bool CellIface::getDontprintText() const
 {
     if( !m_sheet ) return false;
     Cell* cell = m_sheet->nonDefaultCell( m_point.x(), m_point.y() );
-    return cell->getDontprintText(m_point.x(), m_point.y());
+    return cell->format()->getDontprintText(m_point.x(), m_point.y());
 }
 
 bool CellIface::hasValidation() const

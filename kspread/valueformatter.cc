@@ -46,10 +46,10 @@ QString ValueFormatter::formatText (Cell *cell, FormatType fmtType)
   QString str;
   
   Format::FloatFormat floatFormat =
-      cell->floatFormat (cell->column(), cell->row());
-  int precision = cell->precision (cell->column(), cell->row());
-  QString prefix = cell->prefix (cell->column(), cell->row());
-  QString postfix = cell->postfix (cell->column(), cell->row());
+      cell->format()->floatFormat (cell->column(), cell->row());
+  int precision = cell->format()->precision (cell->column(), cell->row());
+  QString prefix = cell->format()->prefix (cell->column(), cell->row());
+  QString postfix = cell->format()->postfix (cell->column(), cell->row());
 
   return formatText (cell->value(), fmtType, precision,
       floatFormat, prefix, postfix);
@@ -102,12 +102,12 @@ QString ValueFormatter::formatText (const Value &value,
     double v = converter->asFloat (value).asFloat();
 
     // Always unsigned ?
-    if ((floatFormat == Cell::AlwaysUnsigned) && (v < 0.0))
+    if ((floatFormat == Format::AlwaysUnsigned) && (v < 0.0))
       v *= -1.0;
 
     // Make a string out of it.
     str = createNumberFormat (v, precision, fmtType,
-        (floatFormat == Cell::AlwaysSigned));
+        (floatFormat == Format::AlwaysSigned));
 
     // Remove trailing zeros and the decimal point if necessary
     // unless the number has no decimal point

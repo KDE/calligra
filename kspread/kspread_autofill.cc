@@ -865,7 +865,7 @@ bool Sheet::FillSequenceWithInterval(QPtrList<Cell>& _srcList,
 
         dest->setCellText( res );
         dest->copyFormat( src );
-        dest->setFormatType( src->formatType() );
+        dest->format()->setFormatType( src->formatType() );
 
         if (down)
         {

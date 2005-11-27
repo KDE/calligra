@@ -143,7 +143,7 @@ void ChartBinding::cellChanged( Cell* )
     if ( m_bIgnoreChanges )
         return;
 
-    kdDebug(36001) << "with=" << m_rctDataArea.width() << "  height=" << m_rctDataArea.height() << endl;
+    kdDebug(36001) << m_rctDataArea << endl;
 
     KoChart::Data matrix( m_rctDataArea.height(), m_rctDataArea.width() );
 
@@ -411,6 +411,11 @@ Map* Sheet::workbook()
 }
 
 Doc* Sheet::doc()
+{
+  return d->workbook->doc();
+}
+
+const Doc* Sheet::doc() const
 {
   return d->workbook->doc();
 }
@@ -1065,7 +1070,7 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
 
     if ( isProtected() )
     {
-      if ( !cell->notProtected( _column, _row ) )
+      if ( !cell->format()->notProtected( _column, _row ) )
         NO_MODIFICATION_POSSIBLE;
     }
 
@@ -1091,7 +1096,7 @@ void Sheet::setArrayFormula (int _row, int _column, int rows, int cols,
     for (int row = _row; row < _row+rows; ++row)
       for (int col = _column; col < _column+cols; ++col) {
         Cell * cell = nonDefaultCell (col, row);
-        if ( !cell->notProtected( _column, _row ) )
+        if ( !cell->format()->notProtected( _column, _row ) )
         {
           nomodify = true;
           break;
@@ -1604,7 +1609,7 @@ struct SetSelectionFontWorker : public Sheet::CellWorkerTypeA
 
     QString getUndoTitle() { return i18n("Change Font"); }
     bool testCondition( RowFormat* rw ) {
-        return ( rw->hasProperty( Cell::PFont ) );
+        return ( rw->hasProperty( Format::PFont ) );
     }
     void doWork( RowFormat* rw ) {
   if ( _font )
@@ -1635,8 +1640,8 @@ struct SetSelectionFontWorker : public Sheet::CellWorkerTypeA
       cl->setTextFontStrike( (bool)_strike );
     }
     void prepareCell( Cell* cell ) {
-  cell->clearProperty( Cell::PFont );
-  cell->clearNoFallBackProperties( Cell::PFont );
+  cell->format()->clearProperty( Format::PFont );
+  cell->format()->clearNoFallBackProperties( Format::PFont );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -1645,17 +1650,17 @@ struct SetSelectionFontWorker : public Sheet::CellWorkerTypeA
   if ( cellRegion )
       cell->setDisplayDirtyFlag();
   if ( _font )
-      cell->setTextFontFamily( _font );
+      cell->format()->setTextFontFamily( _font );
   if ( _size > 0 )
-      cell->setTextFontSize( _size );
+      cell->format()->setTextFontSize( _size );
   if ( _italic >= 0 )
-      cell->setTextFontItalic( (bool)_italic );
+      cell->format()->setTextFontItalic( (bool)_italic );
   if ( _bold >= 0 )
-      cell->setTextFontBold( (bool)_bold );
+      cell->format()->setTextFontBold( (bool)_bold );
   if ( _underline >= 0 )
-      cell->setTextFontUnderline( (bool)_underline );
+      cell->format()->setTextFontUnderline( (bool)_underline );
   if ( _strike >= 0 )
-      cell->setTextFontStrike( (bool)_strike );
+      cell->format()->setTextFontStrike( (bool)_strike );
         if ( cellRegion )
       cell->clearDisplayDirtyFlag();
     }
@@ -1676,7 +1681,7 @@ struct SetSelectionSizeWorker : public Sheet::CellWorkerTypeA {
 
     QString getUndoTitle() { return i18n("Change Font"); }
     bool testCondition( RowFormat* rw ) {
-        return ( rw->hasProperty( Cell::PFont ) );
+        return ( rw->hasProperty( Format::PFont ) );
     }
     void doWork( RowFormat* rw ) {
   rw->setTextFontSize( size + _size) ;
@@ -1685,8 +1690,8 @@ struct SetSelectionSizeWorker : public Sheet::CellWorkerTypeA {
   cl->setTextFontSize( size + _size );
     }
     void prepareCell( Cell* cell ) {
-  cell->clearProperty( Cell::PFont );
-  cell->clearNoFallBackProperties( Cell::PFont );
+  cell->format()->clearProperty( Format::PFont );
+  cell->format()->clearNoFallBackProperties( Format::PFont );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -1694,7 +1699,7 @@ struct SetSelectionSizeWorker : public Sheet::CellWorkerTypeA {
     void doWork( Cell* cell, bool cellRegion, int, int ) {
   if ( cellRegion )
       cell->setDisplayDirtyFlag();
-  cell->setTextFontSize( size + _size );
+  cell->format()->setTextFontSize( size + _size );
         if ( cellRegion )
       cell->clearDisplayDirtyFlag();
     }
@@ -1706,7 +1711,7 @@ void Sheet::setSelectionSize( Selection* selectionInfo, int _size )
     Cell* c;
     QPoint marker(selectionInfo->marker());
     c = cellAt(marker);
-    size = c->textFontSize(marker.x(), marker.y());
+    size = c->format()->textFontSize(marker.x(), marker.y());
 
     SetSelectionSizeWorker w( _size, size );
     workOnCells( selectionInfo, w );
@@ -1792,9 +1797,9 @@ struct SetSelectionVerticalTextWorker : public Sheet::CellWorker {
     }
     void doWork( Cell* cell, bool, int, int ) {
   cell->setDisplayDirtyFlag();
-  cell->setVerticalText( _b );
-  cell->setMultiRow( false );
-  cell->setAngle( 0 );
+  cell->format()->setVerticalText( _b );
+  cell->format()->setMultiRow( false );
+  cell->format()->setAngle( 0 );
   cell->clearDisplayDirtyFlag();
     }
 };
@@ -1820,7 +1825,7 @@ struct SetSelectionCommentWorker : public Sheet::CellWorker {
     }
     void doWork( Cell* cell, bool, int, int ) {
   cell->setDisplayDirtyFlag();
-  cell->setComment( _comment );
+  cell->format()->setComment( _comment );
   cell->clearDisplayDirtyFlag();
     }
 };
@@ -1843,7 +1848,7 @@ struct SetSelectionAngleWorker : public Sheet::CellWorkerTypeA {
     }
 
     bool testCondition( RowFormat* rw ) {
-        return ( rw->hasProperty( Cell::PAngle ) );
+        return ( rw->hasProperty( Format::PAngle ) );
     }
     void doWork( RowFormat* rw ) {
   rw->setAngle( _value );
@@ -1852,8 +1857,8 @@ struct SetSelectionAngleWorker : public Sheet::CellWorkerTypeA {
   cl->setAngle( _value );
     }
     void prepareCell( Cell* cell ) {
-  cell->clearProperty( Cell::PAngle );
-  cell->clearNoFallBackProperties( Cell::PAngle );
+  cell->format()->clearProperty( Format::PAngle );
+  cell->format()->clearNoFallBackProperties( Format::PAngle );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -1861,10 +1866,10 @@ struct SetSelectionAngleWorker : public Sheet::CellWorkerTypeA {
     void doWork( Cell* cell, bool cellRegion, int, int ) {
   if ( cellRegion )
       cell->setDisplayDirtyFlag();
-  cell->setAngle( _value );
+  cell->format()->setAngle( _value );
   if ( cellRegion ) {
-      cell->setVerticalText(false);
-      cell->setMultiRow( false );
+    cell->format()->setVerticalText(false);
+    cell->format()->setMultiRow( false );
       cell->clearDisplayDirtyFlag();
   }
     }
@@ -1889,7 +1894,7 @@ struct SetSelectionRemoveCommentWorker : public Sheet::CellWorker {
     }
     void doWork( Cell* cell, bool, int, int ) {
   cell->setDisplayDirtyFlag();
-  cell->setComment( "" );
+  cell->format()->setComment( "" );
   cell->clearDisplayDirtyFlag();
     }
 };
@@ -1909,7 +1914,7 @@ struct SetSelectionTextColorWorker : public Sheet::CellWorkerTypeA {
 
     QString getUndoTitle() { return i18n("Change Text Color"); }
     bool testCondition( RowFormat* rw ) {
-        return ( rw->hasProperty( Cell::PTextPen ) );
+        return ( rw->hasProperty( Format::PTextPen ) );
     }
     void doWork( RowFormat* rw ) {
   rw->setTextColor( tb_Color );
@@ -1918,8 +1923,8 @@ struct SetSelectionTextColorWorker : public Sheet::CellWorkerTypeA {
   cl->setTextColor( tb_Color );
     }
     void prepareCell( Cell* cell ) {
-  cell->clearProperty( Cell::PTextPen );
-  cell->clearNoFallBackProperties( Cell::PTextPen );
+  cell->format()->clearProperty( Format::PTextPen );
+  cell->format()->clearNoFallBackProperties( Format::PTextPen );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -1927,7 +1932,7 @@ struct SetSelectionTextColorWorker : public Sheet::CellWorkerTypeA {
     void doWork( Cell* cell, bool cellRegion, int, int ) {
   if ( cellRegion )
       cell->setDisplayDirtyFlag();
-  cell->setTextColor( tb_Color );
+  cell->format()->setTextColor( tb_Color );
   if ( cellRegion )
       cell->clearDisplayDirtyFlag();
     }
@@ -1947,7 +1952,7 @@ struct SetSelectionBgColorWorker : public Sheet::CellWorkerTypeA {
 
     QString getUndoTitle() { return i18n("Change Background Color"); }
     bool testCondition( RowFormat* rw ) {
-        return ( rw->hasProperty( Cell::PBackgroundColor ) );
+        return ( rw->hasProperty( Format::PBackgroundColor ) );
     }
     void doWork( RowFormat* rw ) {
   rw->setBgColor( bg_Color );
@@ -1956,8 +1961,8 @@ struct SetSelectionBgColorWorker : public Sheet::CellWorkerTypeA {
   cl->setBgColor( bg_Color );
     }
     void prepareCell( Cell* cell ) {
-  cell->clearProperty( Cell::PBackgroundColor );
-  cell->clearNoFallBackProperties( Cell::PBackgroundColor );
+  cell->format()->clearProperty( Format::PBackgroundColor );
+  cell->format()->clearNoFallBackProperties( Format::PBackgroundColor );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -1965,7 +1970,7 @@ struct SetSelectionBgColorWorker : public Sheet::CellWorkerTypeA {
     void doWork( Cell* cell, bool cellRegion, int, int ) {
   if ( cellRegion )
       cell->setDisplayDirtyFlag();
-  cell->setBgColor( bg_Color );
+  cell->format()->setBgColor( bg_Color );
   if ( cellRegion )
       cell->clearDisplayDirtyFlag();
     }
@@ -1994,18 +1999,18 @@ struct SetSelectionBorderColorWorker : public Sheet::CellWorker {
   cell->setDisplayDirtyFlag();
   int it_Row = cell->row();
   int it_Col = cell->column();
-  if ( cell->topBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-      cell->setTopBorderColor( bd_Color );
-  if ( cell->leftBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-      cell->setLeftBorderColor( bd_Color );
-  if ( cell->fallDiagonalStyle( it_Row, it_Col )!=Qt::NoPen )
-      cell->setFallDiagonalColor( bd_Color );
-  if ( cell->goUpDiagonalStyle( it_Row, it_Col )!=Qt::NoPen )
-      cell->setGoUpDiagonalColor( bd_Color );
-  if ( cell->bottomBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-      cell->setBottomBorderColor( bd_Color );
-  if ( cell->rightBorderStyle( it_Row, it_Col )!=Qt::NoPen )
-      cell->setRightBorderColor( bd_Color );
+  if ( cell->format()->topBorderStyle( it_Row, it_Col )!=Qt::NoPen )
+    cell->format()->setTopBorderColor( bd_Color );
+  if ( cell->format()->leftBorderStyle( it_Row, it_Col )!=Qt::NoPen )
+    cell->format()->setLeftBorderColor( bd_Color );
+  if ( cell->format()->fallDiagonalStyle( it_Row, it_Col )!=Qt::NoPen )
+    cell->format()->setFallDiagonalColor( bd_Color );
+  if ( cell->format()->goUpDiagonalStyle( it_Row, it_Col )!=Qt::NoPen )
+    cell->format()->setGoUpDiagonalColor( bd_Color );
+  if ( cell->format()->bottomBorderStyle( it_Row, it_Col )!=Qt::NoPen )
+    cell->format()->setBottomBorderColor( bd_Color );
+  if ( cell->format()->rightBorderStyle( it_Row, it_Col )!=Qt::NoPen )
+    cell->format()->setRightBorderColor( bd_Color );
   cell->clearDisplayDirtyFlag();
     }
 };
@@ -2297,8 +2302,8 @@ struct SetSelectionPercentWorker : public Sheet::CellWorkerTypeA
   cl->setFormatType( b ? Percentage_format : Generic_format);
     }
     void prepareCell( Cell* cell ) {
-  cell->clearProperty(Cell::PFormatType);
-  cell->clearNoFallBackProperties( Cell::PFormatType );
+  cell->format()->clearProperty(Format::PFormatType);
+  cell->format()->clearNoFallBackProperties( Format::PFormatType );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -2306,7 +2311,7 @@ struct SetSelectionPercentWorker : public Sheet::CellWorkerTypeA
     void doWork( Cell* cell, bool cellRegion, int, int ) {
   if ( cellRegion )
       cell->setDisplayDirtyFlag();
-  cell->setFormatType( b ? Percentage_format : Generic_format);
+  cell->format()->setFormatType( b ? Percentage_format : Generic_format);
   if ( cellRegion )
       cell->clearDisplayDirtyFlag();
     }
@@ -3152,8 +3157,8 @@ void Sheet::borderBottom( Selection* selectionInfo,
     Cell * c = getFirstCellRow( row );
     while ( c )
     {
-      c->clearProperty( Cell::PBottomBorder );
-      c->clearNoFallBackProperties( Cell::PBottomBorder );
+      c->format()->clearProperty( Format::PBottomBorder );
+      c->format()->clearNoFallBackProperties( Format::PBottomBorder );
 
       c = getNextCellRight( c->column(), row );
     }
@@ -3223,8 +3228,8 @@ void Sheet::borderRight( Selection* selectionInfo,
     {
       if ( !c->isObscuringForced() )
       {
-        c->clearProperty( Cell::PRightBorder );
-        c->clearNoFallBackProperties( Cell::PRightBorder );
+        c->format()->clearProperty( Format::PRightBorder );
+        c->format()->clearNoFallBackProperties( Format::PRightBorder );
       }
       c = getNextCellDown( col, c->row() );
     }
@@ -3238,7 +3243,7 @@ void Sheet::borderRight( Selection* selectionInfo,
     rw = d->rows.first();
     for( ; rw; rw = rw->next() )
     {
-      if ( !rw->isDefault() && (rw->hasProperty(Cell::PRightBorder)))
+      if ( !rw->isDefault() && (rw->hasProperty(Format::PRightBorder)))
       {
         for(int i = selection.left(); i <= selection.right(); i++)
         {
@@ -3300,8 +3305,8 @@ void Sheet::borderLeft( Selection* selectionInfo,
     Cell * c = getFirstCellColumn( col );
     while ( c )
     {
-      c->clearProperty( Cell::PLeftBorder );
-      c->clearNoFallBackProperties( Cell::PLeftBorder );
+      c->format()->clearProperty( Format::PLeftBorder );
+      c->format()->clearNoFallBackProperties( Format::PLeftBorder );
 
       c = getNextCellDown( col, c->row() );
     }
@@ -3314,7 +3319,7 @@ void Sheet::borderLeft( Selection* selectionInfo,
     rw = d->rows.first();
     for( ; rw; rw = rw->next() )
     {
-      if ( !rw->isDefault() && (rw->hasProperty(Cell::PLeftBorder)))
+      if ( !rw->isDefault() && (rw->hasProperty(Format::PLeftBorder)))
       {
         for(int i = selection.left(); i <= selection.right(); ++i)
         {
@@ -3375,8 +3380,8 @@ void Sheet::borderTop( Selection* selectionInfo,
     Cell * c = getFirstCellRow( row );
     while ( c )
     {
-      c->clearProperty( Cell::PTopBorder );
-      c->clearNoFallBackProperties( Cell::PTopBorder );
+      c->format()->clearProperty( Format::PTopBorder );
+      c->format()->clearNoFallBackProperties( Format::PTopBorder );
 
       c = getNextCellRight( c->column(), row );
     }
@@ -3433,8 +3438,8 @@ void Sheet::borderOutline( Selection* selectionInfo,
     Cell * c = getFirstCellRow( row );
     while ( c )
     {
-      c->clearProperty( Cell::PTopBorder );
-      c->clearNoFallBackProperties( Cell::PTopBorder );
+      c->format()->clearProperty( Format::PTopBorder );
+      c->format()->clearNoFallBackProperties( Format::PTopBorder );
 
       c = getNextCellRight( c->column(), row );
     }
@@ -3443,8 +3448,8 @@ void Sheet::borderOutline( Selection* selectionInfo,
     c = getFirstCellRow( row );
     while ( c )
     {
-      c->clearProperty( Cell::PBottomBorder );
-      c->clearNoFallBackProperties( Cell::PBottomBorder );
+      c->format()->clearProperty( Format::PBottomBorder );
+      c->format()->clearNoFallBackProperties( Format::PBottomBorder );
 
       c = getNextCellRight( c->column(), row );
     }
@@ -3473,8 +3478,8 @@ void Sheet::borderOutline( Selection* selectionInfo,
     Cell * c = getFirstCellColumn( col );
     while ( c )
     {
-      c->clearProperty( Cell::PLeftBorder );
-      c->clearNoFallBackProperties( Cell::PLeftBorder );
+      c->format()->clearProperty( Format::PLeftBorder );
+      c->format()->clearNoFallBackProperties( Format::PLeftBorder );
 
       c = getNextCellDown( col, c->row() );
     }
@@ -3483,8 +3488,8 @@ void Sheet::borderOutline( Selection* selectionInfo,
     c = getFirstCellColumn( col );
     while ( c )
     {
-      c->clearProperty( Cell::PRightBorder );
-      c->clearNoFallBackProperties( Cell::PRightBorder );
+      c->format()->clearProperty( Format::PRightBorder );
+      c->format()->clearNoFallBackProperties( Format::PRightBorder );
 
       c = getNextCellDown( col, c->row() );
     }
@@ -3539,10 +3544,10 @@ struct SetSelectionBorderAllWorker : public Sheet::CellWorkerTypeA {
 
     QString getUndoTitle() { return i18n("Change Border"); }
     bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Cell::PRightBorder )
-     || rw->hasProperty( Cell::PLeftBorder )
-     || rw->hasProperty( Cell::PTopBorder )
-     || rw->hasProperty( Cell::PBottomBorder ) );
+  return ( rw->hasProperty( Format::PRightBorder )
+     || rw->hasProperty( Format::PLeftBorder )
+     || rw->hasProperty( Format::PTopBorder )
+     || rw->hasProperty( Format::PBottomBorder ) );
     }
     void doWork( RowFormat* rw ) {
   rw->setTopBorderPen( pen );
@@ -3557,14 +3562,14 @@ struct SetSelectionBorderAllWorker : public Sheet::CellWorkerTypeA {
         cl->setBottomBorderPen( pen );
     }
     void prepareCell( Cell* c ) {
-  c->clearProperty( Cell::PTopBorder );
-  c->clearNoFallBackProperties( Cell::PTopBorder );
-  c->clearProperty( Cell::PBottomBorder );
-  c->clearNoFallBackProperties( Cell::PBottomBorder );
-  c->clearProperty( Cell::PLeftBorder );
-  c->clearNoFallBackProperties( Cell::PLeftBorder );
-  c->clearProperty( Cell::PRightBorder );
-  c->clearNoFallBackProperties( Cell::PRightBorder );
+  c->format()->clearProperty( Format::PTopBorder );
+  c->format()->clearNoFallBackProperties( Format::PTopBorder );
+  c->format()->clearProperty( Format::PBottomBorder );
+  c->format()->clearNoFallBackProperties( Format::PBottomBorder );
+  c->format()->clearProperty( Format::PLeftBorder );
+  c->format()->clearNoFallBackProperties( Format::PLeftBorder );
+  c->format()->clearProperty( Format::PRightBorder );
+  c->format()->clearNoFallBackProperties( Format::PRightBorder );
     }
 
   bool testCondition( Cell */* cell*/ ) { return true; }
@@ -3572,7 +3577,7 @@ struct SetSelectionBorderAllWorker : public Sheet::CellWorkerTypeA {
     void doWork( Cell* cell, bool, int, int ) {
   //if ( cellRegion )
   //    cell->setDisplayDirtyFlag();
-  cell->setTopBorderPen( pen );
+        cell->setTopBorderPen( pen );
         cell->setRightBorderPen( pen );
         cell->setLeftBorderPen( pen );
         cell->setBottomBorderPen( pen );
@@ -3600,12 +3605,12 @@ struct SetSelectionBorderRemoveWorker : public Sheet::CellWorkerTypeA {
     SetSelectionBorderRemoveWorker() : pen( Qt::black, 1, Qt::NoPen  ) { }
     QString getUndoTitle() { return i18n("Change Border"); }
     bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Cell::PRightBorder )
-     || rw->hasProperty( Cell::PLeftBorder )
-     || rw->hasProperty( Cell::PTopBorder )
-     || rw->hasProperty( Cell::PBottomBorder )
-     || rw->hasProperty( Cell::PFallDiagonal )
-     || rw->hasProperty( Cell::PGoUpDiagonal ) );
+  return ( rw->hasProperty( Format::PRightBorder )
+     || rw->hasProperty( Format::PLeftBorder )
+     || rw->hasProperty( Format::PTopBorder )
+     || rw->hasProperty( Format::PBottomBorder )
+     || rw->hasProperty( Format::PFallDiagonal )
+     || rw->hasProperty( Format::PGoUpDiagonal ) );
     }
     void doWork( RowFormat* rw ) {
   rw->setTopBorderPen( pen );
@@ -3624,18 +3629,18 @@ struct SetSelectionBorderRemoveWorker : public Sheet::CellWorkerTypeA {
         cl->setGoUpDiagonalPen (pen );
     }
     void prepareCell( Cell* c ) {
-  c->clearProperty( Cell::PTopBorder );
-  c->clearNoFallBackProperties( Cell::PTopBorder );
-  c->clearProperty( Cell::PLeftBorder );
-  c->clearNoFallBackProperties( Cell::PLeftBorder );
-  c->clearProperty( Cell::PRightBorder );
-  c->clearNoFallBackProperties( Cell::PRightBorder );
-  c->clearProperty( Cell::PBottomBorder );
-  c->clearNoFallBackProperties( Cell::PBottomBorder );
-  c->clearProperty( Cell::PFallDiagonal );
-  c->clearNoFallBackProperties( Cell::PFallDiagonal );
-  c->clearProperty( Cell::PGoUpDiagonal );
-  c->clearNoFallBackProperties( Cell::PGoUpDiagonal );
+  c->format()->clearProperty( Format::PTopBorder );
+  c->format()->clearNoFallBackProperties( Format::PTopBorder );
+  c->format()->clearProperty( Format::PLeftBorder );
+  c->format()->clearNoFallBackProperties( Format::PLeftBorder );
+  c->format()->clearProperty( Format::PRightBorder );
+  c->format()->clearNoFallBackProperties( Format::PRightBorder );
+  c->format()->clearProperty( Format::PBottomBorder );
+  c->format()->clearNoFallBackProperties( Format::PBottomBorder );
+  c->format()->clearProperty( Format::PFallDiagonal );
+  c->format()->clearNoFallBackProperties( Format::PFallDiagonal );
+  c->format()->clearProperty( Format::PGoUpDiagonal );
+  c->format()->clearNoFallBackProperties( Format::PGoUpDiagonal );
     }
 
     bool testCondition(Cell* /*cell*/ ){ return true; }
@@ -3643,12 +3648,12 @@ struct SetSelectionBorderRemoveWorker : public Sheet::CellWorkerTypeA {
     void doWork( Cell* cell, bool, int, int ) {
   //if ( cellRegion )
   //    cell->setDisplayDirtyFlag();
-  cell->setTopBorderPen( pen );
+        cell->setTopBorderPen( pen );
         cell->setRightBorderPen( pen );
         cell->setLeftBorderPen( pen );
         cell->setBottomBorderPen( pen);
-        cell->setFallDiagonalPen( pen );
-        cell->setGoUpDiagonalPen (pen );
+        cell->format()->setFallDiagonalPen( pen );
+        cell->format()->setGoUpDiagonalPen (pen );
   //if ( cellRegion )
   //    cell->clearDisplayDirtyFlag();
     }
@@ -4439,9 +4444,9 @@ void Sheet::copyCells( int x1, int y1, int x2, int y2, bool cpFormat )
   {
     targetCell->copyFormat( sourceCell );
     /*
-    targetCell->setAlign( sourceCell->align( x1, y1 ) );
-    targetCell->setAlignY( sourceCell->alignY( x1, y1 ) );
-    targetCell->setTextFont( sourceCell->textFont( x1, y1 ) );
+    targetCell->setAlign( sourceCell->format()->align( x1, y1 ) );
+    targetCell->setAlignY( sourceCell->format()->alignY( x1, y1 ) );
+    targetCell->setTextFont( sourceCell->format()->textFont( x1, y1 ) );
     targetCell->setTextColor( sourceCell->textColor( x1, y1 ) );
     targetCell->setBgColor( sourceCell->bgColor( x1, y1 ) );
     targetCell->setLeftBorderPen( sourceCell->leftBorderPen( x1, y1 ) );
@@ -4452,19 +4457,19 @@ void Sheet::copyCells( int x1, int y1, int x2, int y2, bool cpFormat )
     targetCell->setGoUpDiagonalPen( sourceCell->goUpDiagonalPen( x1, y1 ) );
     targetCell->setBackGroundBrush( sourceCell->backGroundBrush( x1, y1 ) );
     targetCell->setPrecision( sourceCell->precision( x1, y1 ) );
-    targetCell->setPrefix( sourceCell->prefix( x1, y1 ) );
-    targetCell->setPostfix( sourceCell->postfix( x1, y1 ) );
+    targetCell->format()->setPrefix( sourceCell->prefix( x1, y1 ) );
+    targetCell->format()->setPostfix( sourceCell->postfix( x1, y1 ) );
     targetCell->setFloatFormat( sourceCell->floatFormat( x1, y1 ) );
     targetCell->setFloatColor( sourceCell->floatColor( x1, y1 ) );
     targetCell->setMultiRow( sourceCell->multiRow( x1, y1 ) );
     targetCell->setVerticalText( sourceCell->verticalText( x1, y1 ) );
     targetCell->setStyle( sourceCell->style() );
     targetCell->setDontPrintText( sourceCell->getDontprintText( x1, y1 ) );
-    targetCell->setIndent( sourceCell->getIndent( x1, y1 ) );
+    targetCell->format()->setIndent( sourceCell->format()->getIndent( x1, y1 ) );
     targetCell->SetConditionList(sourceCell->GetConditionList());
     targetCell->setComment( sourceCell->comment( x1, y1 ) );
     targetCell->setAngle( sourceCell->getAngle( x1, y1 ) );
-    targetCell->setFormatType( sourceCell->getFormatType( x1, y1 ) );
+    targetCell->setFormatType( sourceCell->format()->getFormatType( x1, y1 ) );
     */
   }
 }
@@ -4538,25 +4543,25 @@ void Sheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
 
   if (cpFormat)
   {
-    Format::Align a = ref1->align( ref1->column(), ref1->row() );
-    ref1->setAlign( ref2->align( ref2->column(), ref2->row() ) );
-    ref2->setAlign(a);
+    Format::Align a = ref1->format()->align( ref1->column(), ref1->row() );
+    ref1->format()->setAlign( ref2->format()->align( ref2->column(), ref2->row() ) );
+    ref2->format()->setAlign(a);
 
-    Format::AlignY ay = ref1->alignY( ref1->column(), ref1->row() );
-    ref1->setAlignY( ref2->alignY( ref2->column(), ref2->row() ) );
-    ref2->setAlignY(ay);
+    Format::AlignY ay = ref1->format()->alignY( ref1->column(), ref1->row() );
+    ref1->format()->setAlignY( ref2->format()->alignY( ref2->column(), ref2->row() ) );
+    ref2->format()->setAlignY(ay);
 
-    QFont textFont = ref1->textFont( ref1->column(), ref1->row() );
-    ref1->setTextFont( ref2->textFont( ref2->column(), ref2->row() ) );
-    ref2->setTextFont(textFont);
+    QFont textFont = ref1->format()->textFont( ref1->column(), ref1->row() );
+    ref1->format()->setTextFont( ref2->format()->textFont( ref2->column(), ref2->row() ) );
+    ref2->format()->setTextFont(textFont);
 
-    QColor textColor = ref1->textColor( ref1->column(), ref1->row() );
-    ref1->setTextColor( ref2->textColor( ref2->column(), ref2->row() ) );
-    ref2->setTextColor(textColor);
+    QColor textColor = ref1->format()->textColor( ref1->column(), ref1->row() );
+    ref1->format()->setTextColor( ref2->format()->textColor( ref2->column(), ref2->row() ) );
+    ref2->format()->setTextColor(textColor);
 
     QColor bgColor = ref1->bgColor( ref1->column(), ref1->row() );
-    ref1->setBgColor( ref2->bgColor( ref2->column(), ref2->row() ) );
-    ref2->setBgColor(bgColor);
+    ref1->format()->setBgColor( ref2->bgColor( ref2->column(), ref2->row() ) );
+    ref2->format()->setBgColor(bgColor);
 
     QPen lbp = ref1->leftBorderPen( ref1->column(), ref1->row() );
     ref1->setLeftBorderPen( ref2->leftBorderPen( ref2->column(), ref2->row() ) );
@@ -4574,69 +4579,69 @@ void Sheet::swapCells( int x1, int y1, int x2, int y2, bool cpFormat )
     ref1->setRightBorderPen( ref2->rightBorderPen( ref2->column(), ref2->row() ) );
     ref2->setRightBorderPen(rbp);
 
-    QPen fdp = ref1->fallDiagonalPen( ref1->column(), ref1->row() );
-    ref1->setFallDiagonalPen( ref2->fallDiagonalPen( ref2->column(), ref2->row() ) );
-    ref2->setFallDiagonalPen(fdp);
+    QPen fdp = ref1->format()->fallDiagonalPen( ref1->column(), ref1->row() );
+    ref1->format()->setFallDiagonalPen( ref2->format()->fallDiagonalPen( ref2->column(), ref2->row() ) );
+    ref2->format()->setFallDiagonalPen(fdp);
 
-    QPen udp = ref1->goUpDiagonalPen( ref1->column(), ref1->row() );
-    ref1->setGoUpDiagonalPen( ref2->goUpDiagonalPen( ref2->column(), ref2->row() ) );
-    ref2->setGoUpDiagonalPen(udp);
+    QPen udp = ref1->format()->goUpDiagonalPen( ref1->column(), ref1->row() );
+    ref1->format()->setGoUpDiagonalPen( ref2->format()->goUpDiagonalPen( ref2->column(), ref2->row() ) );
+    ref2->format()->setGoUpDiagonalPen(udp);
 
     QBrush bgBrush = ref1->backGroundBrush( ref1->column(), ref1->row() );
-    ref1->setBackGroundBrush( ref2->backGroundBrush( ref2->column(), ref2->row() ) );
-    ref2->setBackGroundBrush(bgBrush);
+    ref1->format()->setBackGroundBrush( ref2->backGroundBrush( ref2->column(), ref2->row() ) );
+    ref2->format()->setBackGroundBrush(bgBrush);
 
-    int pre = ref1->precision( ref1->column(), ref1->row() );
-    ref1->setPrecision( ref2->precision( ref2->column(), ref2->row() ) );
-    ref2->setPrecision(pre);
+    int pre = ref1->format()->precision( ref1->column(), ref1->row() );
+    ref1->format()->setPrecision( ref2->format()->precision( ref2->column(), ref2->row() ) );
+    ref2->format()->setPrecision(pre);
 
-    QString prefix = ref1->prefix( ref1->column(), ref1->row() );
-    ref1->setPrefix( ref2->prefix( ref2->column(), ref2->row() ) );
-    ref2->setPrefix(prefix);
+    QString prefix = ref1->format()->prefix( ref1->column(), ref1->row() );
+    ref1->format()->setPrefix( ref2->format()->prefix( ref2->column(), ref2->row() ) );
+    ref2->format()->setPrefix(prefix);
 
-    QString postfix = ref1->postfix( ref1->column(), ref1->row() );
-    ref1->setPostfix( ref2->postfix( ref2->column(), ref2->row() ) );
-    ref2->setPostfix(postfix);
+    QString postfix = ref1->format()->postfix( ref1->column(), ref1->row() );
+    ref1->format()->setPostfix( ref2->format()->postfix( ref2->column(), ref2->row() ) );
+    ref2->format()->setPostfix(postfix);
 
-    Format::FloatFormat f = ref1->floatFormat( ref1->column(), ref1->row() );
-    ref1->setFloatFormat( ref2->floatFormat( ref2->column(), ref2->row() ) );
-    ref2->setFloatFormat(f);
+    Format::FloatFormat f = ref1->format()->floatFormat( ref1->column(), ref1->row() );
+    ref1->format()->setFloatFormat( ref2->format()->floatFormat( ref2->column(), ref2->row() ) );
+    ref2->format()->setFloatFormat(f);
 
-    Format::FloatColor c = ref1->floatColor( ref1->column(), ref1->row() );
-    ref1->setFloatColor( ref2->floatColor( ref2->column(), ref2->row() ) );
-    ref2->setFloatColor(c);
+    Format::FloatColor c = ref1->format()->floatColor( ref1->column(), ref1->row() );
+    ref1->format()->setFloatColor( ref2->format()->floatColor( ref2->column(), ref2->row() ) );
+    ref2->format()->setFloatColor(c);
 
-    bool multi = ref1->multiRow( ref1->column(), ref1->row() );
-    ref1->setMultiRow( ref2->multiRow( ref2->column(), ref2->row() ) );
-    ref2->setMultiRow(multi);
+    bool multi = ref1->format()->multiRow( ref1->column(), ref1->row() );
+    ref1->format()->setMultiRow( ref2->format()->multiRow( ref2->column(), ref2->row() ) );
+    ref2->format()->setMultiRow(multi);
 
-    bool vert = ref1->verticalText( ref1->column(), ref1->row() );
-    ref1->setVerticalText( ref2->verticalText( ref2->column(), ref2->row() ) );
-    ref2->setVerticalText(vert);
+    bool vert = ref1->format()->verticalText( ref1->column(), ref1->row() );
+    ref1->format()->setVerticalText( ref2->format()->verticalText( ref2->column(), ref2->row() ) );
+    ref2->format()->setVerticalText(vert);
 
-    bool print = ref1->getDontprintText( ref1->column(), ref1->row() );
-    ref1->setDontPrintText( ref2->getDontprintText( ref2->column(), ref2->row() ) );
-    ref2->setDontPrintText(print);
+    bool print = ref1->format()->getDontprintText( ref1->column(), ref1->row() );
+    ref1->format()->setDontPrintText( ref2->format()->getDontprintText( ref2->column(), ref2->row() ) );
+    ref2->format()->setDontPrintText(print);
 
-    double ind = ref1->getIndent( ref1->column(), ref1->row() );
-    ref1->setIndent( ref2->getIndent( ref2->column(), ref2->row() ) );
-    ref2->setIndent( ind );
+    double ind = ref1->format()->getIndent( ref1->column(), ref1->row() );
+    ref1->format()->setIndent( ref2->format()->getIndent( ref2->column(), ref2->row() ) );
+    ref2->format()->setIndent( ind );
 
     QValueList<Conditional> conditionList = ref1->conditionList();
     ref1->setConditionList(ref2->conditionList());
     ref2->setConditionList(conditionList);
 
-    QString com = ref1->comment( ref1->column(), ref1->row() );
-    ref1->setComment( ref2->comment( ref2->column(), ref2->row() ) );
-    ref2->setComment(com);
+    QString com = ref1->format()->comment( ref1->column(), ref1->row() );
+    ref1->format()->setComment( ref2->format()->comment( ref2->column(), ref2->row() ) );
+    ref2->format()->setComment(com);
 
-    int angle = ref1->getAngle( ref1->column(), ref1->row() );
-    ref1->setAngle( ref2->getAngle( ref2->column(), ref2->row() ) );
-    ref2->setAngle(angle);
+    int angle = ref1->format()->getAngle( ref1->column(), ref1->row() );
+    ref1->format()->setAngle( ref2->format()->getAngle( ref2->column(), ref2->row() ) );
+    ref2->format()->setAngle(angle);
 
-    FormatType form = ref1->getFormatType( ref1->column(), ref1->row() );
-    ref1->setFormatType( ref2->getFormatType( ref2->column(), ref2->row() ) );
-    ref2->setFormatType(form);
+    FormatType form = ref1->format()->getFormatType( ref1->column(), ref1->row() );
+    ref1->format()->setFormatType( ref2->format()->getFormatType( ref2->column(), ref2->row() ) );
+    ref2->format()->setFormatType(form);
   }
 }
 
@@ -4673,7 +4678,7 @@ bool Sheet::areaIsEmpty(const QRect &area, TestType _type)
                             return false;
                         break;
                     case Comment:
-                        if ( !c->comment(c->column(), row).isEmpty())
+                        if ( !c->format()->comment(c->column(), row).isEmpty())
                             return false;
                         break;
                     case ConditionalCellAttribute:
@@ -4708,7 +4713,7 @@ bool Sheet::areaIsEmpty(const QRect &area, TestType _type)
                             return false;
                         break;
                     case Comment:
-                        if ( !c->comment(col, c->row()).isEmpty())
+                        if ( !c->format()->comment(col, c->row()).isEmpty())
                             return false;
                         break;
                     case ConditionalCellAttribute:
@@ -4745,7 +4750,7 @@ bool Sheet::areaIsEmpty(const QRect &area, TestType _type)
                             return false;
                         break;
                     case Comment:
-                        if ( !cell->comment(x, y).isEmpty())
+                        if ( !cell->format()->comment(x, y).isEmpty())
                             return false;
                         break;
                     case ConditionalCellAttribute:
@@ -4779,9 +4784,9 @@ struct SetSelectionMultiRowWorker : public Sheet::CellWorker
   void doWork( Cell * cell, bool, int, int )
   {
     cell->setDisplayDirtyFlag();
-    cell->setMultiRow( enable );
-    cell->setVerticalText( false );
-    cell->setAngle( 0 );
+    cell->format()->setMultiRow( enable );
+    cell->format()->setVerticalText( false );
+    cell->format()->setAngle( 0 );
     cell->clearDisplayDirtyFlag();
   }
 };
@@ -4801,7 +4806,7 @@ struct SetSelectionAlignWorker
   SetSelectionAlignWorker( Format::Align align ) : _align( align ) {}
     QString getUndoTitle() { return i18n("Change Horizontal Alignment"); }
     bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Cell::PAlign ) );
+  return ( rw->hasProperty( Format::PAlign ) );
     }
     void doWork( RowFormat* rw ) {
   rw->setAlign( _align );
@@ -4810,8 +4815,8 @@ struct SetSelectionAlignWorker
   cl->setAlign( _align );
     }
     void prepareCell( Cell* c ) {
-  c->clearProperty( Cell::PAlign );
-  c->clearNoFallBackProperties( Cell::PAlign );
+  c->format()->clearProperty( Format::PAlign );
+  c->format()->clearNoFallBackProperties( Format::PAlign );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -4819,7 +4824,7 @@ struct SetSelectionAlignWorker
     void doWork( Cell* cell, bool cellRegion, int, int ) {
   if ( cellRegion )
       cell->setDisplayDirtyFlag();
-  cell->setAlign( _align );
+  cell->format()->setAlign( _align );
   if ( cellRegion )
       cell->clearDisplayDirtyFlag();
     }
@@ -4893,7 +4898,7 @@ struct SetSelectionAlignYWorker : public Sheet::CellWorkerTypeA {
     }
     QString getUndoTitle() { return i18n("Change Vertical Alignment"); }
     bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Cell::PAlignY ) );
+  return ( rw->hasProperty( Format::PAlignY ) );
     }
     void doWork( RowFormat* rw ) {
   rw->setAlignY( _alignY );
@@ -4902,8 +4907,8 @@ struct SetSelectionAlignYWorker : public Sheet::CellWorkerTypeA {
   cl->setAlignY( _alignY );
     }
     void prepareCell( Cell* c ) {
-  c->clearProperty( Cell::PAlignY );
-  c->clearNoFallBackProperties( Cell::PAlignY );
+  c->format()->clearProperty( Format::PAlignY );
+  c->format()->clearNoFallBackProperties( Format::PAlignY );
     }
     bool testCondition( Cell* cell ) {
         kdDebug() << "testCondition" << endl;
@@ -4913,7 +4918,7 @@ struct SetSelectionAlignYWorker : public Sheet::CellWorkerTypeA {
   if ( cellRegion )
       cell->setDisplayDirtyFlag();
         kdDebug() << "cell->setAlignY: " << _alignY << endl;
-  cell->setAlignY( _alignY );
+        cell->format()->setAlignY( _alignY );
   if ( cellRegion )
       cell->clearDisplayDirtyFlag();
     }
@@ -4982,7 +4987,7 @@ struct SetSelectionStyleWorker : public Sheet::CellWorkerTypeA
 
   bool testCondition( Cell* cell )
   {
-    return ( !cell->isObscuringForced() && cell->kspreadStyle() != m_style );
+    return ( !cell->isObscuringForced() && cell->format()->kspreadStyle() != m_style );
   }
 
   void doWork( Cell* cell, bool cellRegion, int, int )
@@ -4990,7 +4995,7 @@ struct SetSelectionStyleWorker : public Sheet::CellWorkerTypeA
     if ( cellRegion )
       cell->setDisplayDirtyFlag();
 
-    cell->setStyle( m_style );
+    cell->format()->setStyle( m_style );
 
     if ( cellRegion )
       cell->clearDisplayDirtyFlag();
@@ -5011,8 +5016,8 @@ struct SetSelectionMoneyFormatWorker : public Sheet::CellWorkerTypeA
     SetSelectionMoneyFormatWorker( bool _b,Doc* _doc ) : b( _b ), m_pDoc(_doc) { }
     QString getUndoTitle() { return i18n("Format Money"); }
     bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Cell::PFormatType )
-     || rw->hasProperty( Cell::PPrecision ) );
+  return ( rw->hasProperty( Format::PFormatType )
+     || rw->hasProperty( Format::PPrecision ) );
     }
     void doWork( RowFormat* rw ) {
   rw->setFormatType( b ? Money_format : Generic_format );
@@ -5023,10 +5028,10 @@ struct SetSelectionMoneyFormatWorker : public Sheet::CellWorkerTypeA
   cl->setPrecision( b ? m_pDoc->locale()->fracDigits() : 0 );
     }
     void prepareCell( Cell* c ) {
-  c->clearProperty( Cell::PPrecision );
-  c->clearNoFallBackProperties( Cell::PPrecision );
-  c->clearProperty( Cell::PFormatType );
-  c->clearNoFallBackProperties( Cell::PFormatType );
+  c->format()->clearProperty( Format::PPrecision );
+  c->format()->clearNoFallBackProperties( Format::PPrecision );
+  c->format()->clearProperty( Format::PFormatType );
+  c->format()->clearNoFallBackProperties( Format::PFormatType );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -5034,8 +5039,8 @@ struct SetSelectionMoneyFormatWorker : public Sheet::CellWorkerTypeA
     void doWork( Cell* cell, bool cellRegion, int, int ) {
   if ( cellRegion )
       cell->setDisplayDirtyFlag();
-  cell->setFormatType( b ? Money_format : Generic_format );
-  cell->setPrecision( b ?  m_pDoc->locale()->fracDigits() : 0 );
+  cell->format()->setFormatType( b ? Money_format : Generic_format );
+  cell->format()->setPrecision( b ?  m_pDoc->locale()->fracDigits() : 0 );
   if ( cellRegion )
       cell->clearDisplayDirtyFlag();
     }
@@ -5059,39 +5064,39 @@ struct IncreaseIndentWorker : public Sheet::CellWorkerTypeA {
 
     QString  getUndoTitle() { return i18n("Increase Indent"); }
     bool     testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Cell::PIndent ) );
+  return ( rw->hasProperty( Format::PIndent ) );
     }
 
     void doWork( RowFormat* rw ) {
   rw->setIndent( tmpIndent+valIndent );
-  //rw->setAlign( Cell::Left );
+  //rw->setAlign( Format::Left );
     }
     void doWork( ColumnFormat* cl ) {
   cl->setIndent( tmpIndent+valIndent );
-  //cl->setAlign( Cell::Left );
+  //cl->setAlign( Format::Left );
     }
     void prepareCell( Cell* c ) {
-  c->clearProperty( Cell::PIndent );
-  c->clearNoFallBackProperties( Cell::PIndent );
-  //c->clearProperty( Cell::PAlign );
-  //c->clearNoFallBackProperties( Cell::PAlign );
+  c->format()->clearProperty( Format::PIndent );
+  c->format()->clearNoFallBackProperties( Format::PIndent );
+  //c->format()->clearProperty( Format::PAlign );
+  //c->format()->clearNoFallBackProperties( Format::PAlign );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
     }
     void doWork( Cell* cell, bool cellRegion, int x, int y ) {
   if ( cellRegion ) {
-      if(cell->align(x,y)!=Cell::Left)
+      if(cell->format()->align(x,y)!=Format::Left)
       {
-    //cell->setAlign(Cell::Left);
-    //cell->setIndent( 0.0 );
+    //cell->setAlign(Format::Left);
+    //cell->format()->setIndent( 0.0 );
       }
       cell->setDisplayDirtyFlag();
-      cell->setIndent( /* ### ??? --> */ cell->getIndent(x,y) /* <-- */ +valIndent );
+      cell->format()->setIndent( /* ### ??? --> */ cell->format()->getIndent(x,y) /* <-- */ +valIndent );
       cell->clearDisplayDirtyFlag();
   } else {
-      cell->setIndent( tmpIndent+valIndent);
-      //cell->setAlign( Cell::Left);
+      cell->format()->setIndent( tmpIndent+valIndent);
+      //cell->setAlign( Format::Left);
   }
     }
 };
@@ -5102,7 +5107,7 @@ void Sheet::increaseIndent(Selection* selectionInfo)
     QPoint       marker(selectionInfo->marker());
     double       valIndent = doc()->getIndentValue();
     Cell *c         = cellAt( marker );
-    double       tmpIndent = c->getIndent( marker.x(), marker.y() );
+    double       tmpIndent = c->format()->getIndent( marker.x(), marker.y() );
 
     IncreaseIndentWorker  w( tmpIndent, valIndent );
     workOnCells( selectionInfo, w );
@@ -5114,7 +5119,7 @@ struct DecreaseIndentWorker : public Sheet::CellWorkerTypeA {
     DecreaseIndentWorker( double _tmpIndent, double _valIndent ) : tmpIndent( _tmpIndent ), valIndent( _valIndent ) { }
     QString getUndoTitle() { return i18n("Decrease Indent"); }
     bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Cell::PIndent ) );
+  return ( rw->hasProperty( Format::PIndent ) );
     }
     void doWork( RowFormat* rw ) {
         rw->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
@@ -5123,8 +5128,8 @@ struct DecreaseIndentWorker : public Sheet::CellWorkerTypeA {
         cl->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
     }
     void prepareCell( Cell* c ) {
-  c->clearProperty( Cell::PIndent );
-  c->clearNoFallBackProperties( Cell::PIndent );
+  c->format()->clearProperty( Format::PIndent );
+  c->format()->clearNoFallBackProperties( Format::PIndent );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -5132,10 +5137,10 @@ struct DecreaseIndentWorker : public Sheet::CellWorkerTypeA {
     void doWork( Cell* cell, bool cellRegion, int x, int y ) {
   if ( cellRegion ) {
       cell->setDisplayDirtyFlag();
-      cell->setIndent( QMAX( 0.0, cell->getIndent( x, y ) - valIndent ) );
+      cell->format()->setIndent( QMAX( 0.0, cell->format()->getIndent( x, y ) - valIndent ) );
       cell->clearDisplayDirtyFlag();
   } else {
-      cell->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
+      cell->format()->setIndent( QMAX( 0.0, tmpIndent - valIndent ) );
   }
     }
 };
@@ -5146,7 +5151,7 @@ void Sheet::decreaseIndent( Selection* selectionInfo )
     double valIndent = doc()->getIndentValue();
     QPoint marker(selectionInfo->marker());
     Cell* c = cellAt( marker );
-    double tmpIndent = c->getIndent( marker.x(), marker.y() );
+    double tmpIndent = c->format()->getIndent( marker.x(), marker.y() );
 
     DecreaseIndentWorker w( tmpIndent, valIndent );
     workOnCells( selectionInfo, w );
@@ -5160,20 +5165,20 @@ int Sheet::adjustColumnHelper( Cell * c, int _col, int _row )
     if ( c->textWidth() > long_max )
     {
         double indent = 0.0;
-        int a = c->align( c->column(), c->row() );
-        if ( a == Cell::Undefined )
+        int a = c->format()->align( c->column(), c->row() );
+        if ( a == Format::Undefined )
         {
             if ( c->value().isNumber() || c->isDate() || c->isTime())
-                a = Cell::Right;
+                a = Format::Right;
             else
-                a = Cell::Left;
+                a = Format::Left;
         }
 
-        if ( a == Cell::Left )
-            indent = c->getIndent( c->column(), c->row() );
+        if ( a == Format::Left )
+            indent = c->format()->getIndent( c->column(), c->row() );
         long_max = indent + c->textWidth()
-                   + c->leftBorderWidth( c->column(), c->row() )
-                   + c->rightBorderWidth( c->column(), c->row() );
+            + c->format()->leftBorderWidth( c->column(), c->row() )
+            + c->format()->rightBorderWidth( c->column(), c->row() );
     }
     return (int)long_max;
 }
@@ -5259,8 +5264,8 @@ int Sheet::adjustRow( Selection* selectionInfo, int _row )
             c->calculateTextParameters( painter(), c->column(), row );
             if( c->textHeight() > long_max )
               long_max = c->textHeight()
-                + c->topBorderWidth( c->column(), c->row() )
-                + c->bottomBorderWidth( c->column(), c->row() );
+                  + c->format()->topBorderWidth( c->column(), c->row() )
+                  + c->format()->bottomBorderWidth( c->column(), c->row() );
           }
           c = getNextCellRight( c->column(), row );
         }
@@ -5281,8 +5286,8 @@ int Sheet::adjustRow( Selection* selectionInfo, int _row )
             c->calculateTextParameters( painter(), c->column(), row );
             if ( c->textHeight() > long_max )
               long_max = c->textHeight()
-                + c->topBorderWidth( c->column(), c->row() )
-                + c->bottomBorderWidth( c->column(), c->row() );
+                  + c->format()->topBorderWidth( c->column(), c->row() )
+                  + c->format()->bottomBorderWidth( c->column(), c->row() );
           }
           c = getNextCellRight( c->column(), row );
         }
@@ -5301,8 +5306,8 @@ int Sheet::adjustRow( Selection* selectionInfo, int _row )
           cell->calculateTextParameters( painter(), x, y );
           if ( cell->textHeight() > long_max )
             long_max = cell->textHeight()
-              + cell->topBorderWidth( cell->column(), cell->row() )
-              + cell->bottomBorderWidth( cell->column(), cell->row() );
+                + cell->format()->topBorderWidth( cell->column(), cell->row() )
+                + cell->format()->bottomBorderWidth( cell->column(), cell->row() );
         }
       }
     }
@@ -5919,7 +5924,7 @@ void Sheet::pasteTextPlain( QString &_text, QRect pasteArea)
 
     rowtext = tmp.left(p);
 
-    if ( !isProtected() || cell->notProtected( mx, my + i ) )
+    if ( !isProtected() || cell->format()->notProtected( mx, my + i ) )
     {
       cell->setCellText( rowtext );
       cell->updateChart();
@@ -6072,7 +6077,7 @@ bool Sheet::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
             //          << roff << "," << coff << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
 
             cell = nonDefaultCell( col + coff, row + roff );
-            if ( isProtected() && !cell->notProtected( col + coff, row + roff ) )
+            if ( isProtected() && !cell->format()->notProtected( col + coff, row + roff ) )
               continue;
 
             cellBackup = new Cell(this, cell->column(), cell->row());
@@ -7360,7 +7365,7 @@ bool Sheet::loadRowFormat( const QDomElement& row, int &rowIndex,const KoOasisSt
                     cols = cellElement.attributeNS( KoXmlNS::table, "number-columns-repeated", QString::null ).toInt( &ok );
                     //kdDebug()<<" cols :"<<cols<<endl;
                     //TODO: correct ?????
-                    if ( !haveStyle && ( cell->isEmpty() && cell->comment( columnIndex, backupRow ).isEmpty() ) )
+                    if ( !haveStyle && ( cell->isEmpty() && cell->format()->comment( columnIndex, backupRow ).isEmpty() ) )
                     {
                         //just increment it
                         columnIndex +=cols - 1;
@@ -8696,10 +8701,10 @@ void Sheet::convertObscuringBorders()
       rightPen = c->rightBorderPen(c->column(), c->row());
       bottomPen = c->bottomBorderPen(c->column(), c->row());
 
-      c->setTopBorderStyle(Qt::NoPen);
-      c->setLeftBorderStyle(Qt::NoPen);
-      c->setRightBorderStyle(Qt::NoPen);
-      c->setBottomBorderStyle(Qt::NoPen);
+      c->format()->setTopBorderStyle(Qt::NoPen);
+      c->format()->setLeftBorderStyle(Qt::NoPen);
+      c->format()->setRightBorderStyle(Qt::NoPen);
+      c->format()->setBottomBorderStyle(Qt::NoPen);
 
       for (int x = c->column(); x < c->column() + c->extraXCells(); x++)
       {

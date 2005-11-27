@@ -856,8 +856,8 @@ void UndoSetText::undo()
     doc()->emitBeginOperation();
     Cell *cell = sheet->nonDefaultCell( m_iColumn, m_iRow );
     m_strRedoText = cell->text();
-    m_eFormatTypeRedo=cell->getFormatType( m_iColumn, m_iRow );
-    cell->setFormatType(m_eFormatType);
+    m_eFormatTypeRedo=cell->format()->getFormatType( m_iColumn, m_iRow );
+    cell->format()->setFormatType(m_eFormatType);
 
     if ( m_strText.isNull() )
 	cell->setCellText( "" );
@@ -877,12 +877,12 @@ void UndoSetText::redo()
     doc()->emitBeginOperation();
     Cell *cell = sheet->nonDefaultCell( m_iColumn, m_iRow );
     m_strText = cell->text();
-    m_eFormatType=cell->getFormatType( m_iColumn, m_iRow );
+    m_eFormatType=cell->format()->getFormatType( m_iColumn, m_iRow );
     if ( m_strRedoText.isNull() )
 	cell->setCellText( "" );
     else
 	cell->setCellText( m_strRedoText );
-    cell->setFormatType(m_eFormatTypeRedo);
+    cell->format()->setFormatType(m_eFormatTypeRedo);
     sheet->updateView( QRect( m_iColumn, m_iRow, 1, 1 ) );
     doc()->undoUnlock();
 }
@@ -958,7 +958,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
         tmplayout.col = c;
         tmplayout.row = cell->row();
         tmplayout.l = new Format( sheet, 0 );
-        tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )) );
+        tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )->format()) );
         list.append(tmplayout);
 
         cell = sheet->getNextCellDown( c, cell->row() );
@@ -1004,7 +1004,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
         tmplayout.col = cell->column();
         tmplayout.row = row;
         tmplayout.l = new Format( sheet, 0 );
-        tmplayout.l->copy( *(sheet->cellAt( cell->column(), row )) );
+        tmplayout.l->copy( *(sheet->cellAt( cell->column(), row )->format()) );
         list.append(tmplayout);
 
         cell = sheet->getNextCellRight( cell->column(), row );
@@ -1040,7 +1040,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
           tmplayout.col = x;
           tmplayout.row = y;
           tmplayout.l = new Format( sheet, 0 );
-          tmplayout.l->copy( *(sheet->cellAt( x, y )) );
+          tmplayout.l->copy( *(sheet->cellAt( x, y )->format()) );
           list.append(tmplayout);
         }
       }
@@ -1123,7 +1123,7 @@ void UndoCellFormat::undo()
   for ( it2 = m_lstFormats.begin(); it2 != m_lstFormats.end(); ++it2 )
   {
     Cell *cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
-    cell->copy( *(*it2).l );
+    cell->format()->copy( *(*it2).l );
     cell->setLayoutDirtyFlag();
     cell->setDisplayDirtyFlag();
     sheet->updateCell( cell, (*it2).col, (*it2).row );
@@ -1167,7 +1167,7 @@ void UndoCellFormat::redo()
   for ( it2 = m_lstRedoFormats.begin(); it2 != m_lstRedoFormats.end(); ++it2 )
   {
     Cell * cell = sheet->nonDefaultCell( (*it2).col,(*it2).row );
-    cell->copy( *(*it2).l );
+    cell->format()->copy( *(*it2).l );
     cell->setLayoutDirtyFlag();
     cell->setDisplayDirtyFlag();
     sheet->updateCell( cell, (*it2).col, (*it2).row );
@@ -1258,7 +1258,7 @@ void UndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColum
           tmplayout.col = col;
           tmplayout.row = c->row();
           tmplayout.l = new Format( sheet, 0 );
-          tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )) );
+          tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )->format()) );
           tmplayout.text = c->text();
           list.append(tmplayout);
         }
@@ -1287,7 +1287,7 @@ void UndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColum
           tmplayout.col = c->column();
           tmplayout.row = row;
           tmplayout.l   = new Format( sheet, 0 );
-          tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )) );
+          tmplayout.l->copy( *(sheet->cellAt( tmplayout.col, tmplayout.row )->format()) );
           tmplayout.text = c->text();
           list.append(tmplayout);
         }
@@ -1310,7 +1310,7 @@ void UndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColum
           tmplayout.col = x;
           tmplayout.row = y;
           tmplayout.l   = new Format( sheet, 0 );
-          tmplayout.l->copy( *(sheet->cellAt( x, y )) );
+          tmplayout.l->copy( *(sheet->cellAt( x, y )->format()) );
           tmplayout.text = cell->text();
           list.append(tmplayout);
         }
@@ -1404,7 +1404,7 @@ void UndoSort::undo()
     else
       cell->setCellText( (*it2).text );
 
-    cell->copy( *(*it2).l );
+    cell->format()->copy( *(*it2).l );
     cell->setLayoutDirtyFlag();
     cell->setDisplayDirtyFlag();
     sheet->updateCell( cell, (*it2).col, (*it2).row );
@@ -1457,7 +1457,7 @@ void UndoSort::redo()
       else
         cell->setCellText( (*it2).text );
 
-      cell->copy( *(*it2).l );
+      cell->format()->copy( *(*it2).l );
       cell->setLayoutDirtyFlag();
       cell->setDisplayDirtyFlag();
       sheet->updateCell( cell, (*it2).col, (*it2).row );

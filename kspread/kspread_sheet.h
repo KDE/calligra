@@ -286,6 +286,7 @@ public:
 
     Map* workbook();
     Doc* doc();
+    const Doc* doc() const;
 
     /**
      * Saves the sheet and all it's children in XML format

@@ -21,6 +21,7 @@
 #include "valueparser.h"
 
 #include "kspread_cell.h"
+#include "kspread_format.h"
 #include "kspread_locale.h"
 #include "kspread_value.h"
 
@@ -64,7 +65,7 @@ void ValueParser::parse (const QString& str, Cell *cell)
   double money = parserLocale->readMoney (strStripped, &ok);
   if (ok)
   {
-    cell->setPrecision(2);
+    cell->format()->setPrecision(2);
     Value val (money);
     val.setFormat (Value::fmt_Money);
     cell->setValue (val);

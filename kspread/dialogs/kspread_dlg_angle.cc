@@ -63,7 +63,7 @@ AngleDialog::AngleDialog(View* parent, const char* name, const QPoint &_marker)
   connect( this, SIGNAL( okClicked() ), this, SLOT( slotOk() ) );
 
   Cell *cell = m_pView->activeSheet()->cellAt( marker.x(), marker.y() );
-  int angle=-(cell->getAngle(marker.x(), marker.y()));
+  int angle=-(cell->format()->getAngle(marker.x(), marker.y()));
   m_pAngle->setValue( angle );
 }
 

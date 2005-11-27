@@ -3036,8 +3036,8 @@ bool Canvas::formatCellByKey (Cell *cell, int key, const QRect &rect)
   {
     case Key_Exclam:
     cell->convertToDouble ();
-    cell->setFormatType (Number_format);
-    cell->setPrecision( 2 );
+    cell->format()->setFormatType (Number_format);
+    cell->format()->setPrecision( 2 );
     break;
 
     case Key_Dollar:
@@ -3057,7 +3057,7 @@ bool Canvas::formatCellByKey (Cell *cell, int key, const QRect &rect)
     break;
 
     case Key_AsciiCircum:
-    cell->setFormatType (Scientific_format);
+    cell->format()->setFormatType (Scientific_format);
     cell->convertToDouble ();
     break;
 
@@ -3288,7 +3288,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
   {
     Cell * cell = sheet->nonDefaultCell( marker().x(), marker().y(), false );
 
-    if ( sheet->isProtected() && !cell->notProtected( marker().x(), marker().y() ) )
+    if ( sheet->isProtected() && !cell->format()->notProtected( marker().x(), marker().y() ) )
       return false;
 
     if ( ed == CellEditor )
@@ -3338,7 +3338,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
     QPalette p = d->cellEditor->palette();
     QColorGroup g( p.active() );
 
-    QColor color = cell->textColor( markerColumn(), markerRow() );
+    QColor color = cell->format()->textColor( markerColumn(), markerRow() );
     if ( !color.isValid() )
         color = QApplication::palette().active().text();
     g.setColor( QColorGroup::Text, color);
@@ -3349,7 +3349,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
     g.setColor( QColorGroup::Background, color );
 
     d->cellEditor->setPalette( QPalette( g, p.disabled(), g ) );
-    QFont tmpFont = cell->textFont( markerColumn(), markerRow() );
+    QFont tmpFont = cell->format()->textFont( markerColumn(), markerRow() );
     tmpFont.setPointSizeFloat( 0.01 * d->view->doc()->zoom() * tmpFont.pointSizeFloat() );
     d->cellEditor->setFont( tmpFont );
 
@@ -6010,7 +6010,7 @@ void ToolTip::maybeTip( const QPoint& p )
         tipText = cell->strOutText();
 
         //Add 2 extra lines and a text, when both should be in the tooltip
-        QString comment = cell->comment( col, row );
+        QString comment = cell->format()->comment( col, row );
         if ( !comment.isEmpty() )
             comment = "\n\n" + i18n("Comment:") + "\n" + comment;
 
@@ -6020,7 +6020,7 @@ void ToolTip::maybeTip( const QPoint& p )
     // Show comment, if any
     if( tipText.isEmpty() )
     {
-        tipText = cell->comment( col, row );
+      tipText = cell->format()->comment( col, row );
     }
     // Show hyperlink, if any
     if( tipText.isEmpty() )
