@@ -265,6 +265,14 @@ void KWPartFrameSet::deleteFrame( unsigned int _num, bool remove, bool recalc )
         m_child->setDeleted();
 }
 
+void KWPartFrameSet::KWPartFrameSet::createEmptyRegion( const QRect &crect, QRegion &emptyRegion, KWViewMode *viewMode ) {
+    Q_UNUSED(crect);
+    Q_UNUSED(emptyRegion);
+    Q_UNUSED(viewMode);
+
+    // empty implementation since embedded parts can be transparant.
+}
+
 #if 0
 KWPartFrameSetEdit::KWPartFrameSetEdit( KWPartFrameSet * fs, KWCanvas * canvas )
     : KWFrameSetEdit( fs, canvas )

@@ -56,8 +56,7 @@ public:
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
                                     KWFrameSetEdit * edit, KWViewMode *viewMode );
 
-    // Embedded parts can be transparent
-    virtual void createEmptyRegion( const QRect &crect, QRegion &emptyRegion, KWViewMode *viewMode ) { }
+    virtual void createEmptyRegion( const QRect &crect, QRegion &emptyRegion, KWViewMode *viewMode );
 
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
