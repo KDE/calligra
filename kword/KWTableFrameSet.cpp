@@ -1406,43 +1406,9 @@ void KWTableFrameSet::group()
 
 KCommand *KWTableFrameSet::joinCells(unsigned int colBegin,unsigned int rowBegin, unsigned int colEnd,unsigned int rowEnd) {
     Cell *firstCell = cell(rowBegin, colBegin);
-    if(colBegin==0 && rowBegin==0 && colEnd==0 && rowEnd==0)
-    {
-
-        if ( !getFirstSelected( rowBegin, colBegin ) )
-            return 0L;
-
-        firstCell = cell(rowBegin, colBegin);
-        colEnd = colBegin + firstCell->colSpan() - 1;
-        rowEnd = rowBegin + firstCell->rowSpan() - 1;
-
-        while(colEnd+1 <getCols()) { // count all horizontal selected cells
-            Cell *daCell = cell(rowEnd,colEnd+1);
-            if(daCell->frame(0)->isSelected()) {
-                colEnd += daCell->colSpan();
-            } else
-                break;
-        }
-
-        while(rowEnd+1 < getRows()) { // count all vertical selected cells
-            Cell *daCell = cell(rowEnd+1, colBegin);
-            if(daCell->frame(0)->isSelected()) {
-                for(unsigned int j=1; j <= daCell->rowSpan(); j++) {
-                    for(unsigned int i=colBegin; i<=colEnd; i++) {
-                        if(! cell(rowEnd+j,i)->frame(0)->isSelected())
-                            return 0L; // can't use this selection..
-                    }
-                }
-                rowEnd += daCell->rowSpan();
-            } else
-                break;
-        }
-        // if just one cell selected for joining; exit.
-        if(rowBegin == rowEnd && colBegin == colEnd ||
-           cell(rowBegin,colBegin) == cell(rowEnd,colEnd))
-            return 0L;
-    }
-
+    // if just one cell selected for joining; exit.
+    if(rowBegin == rowEnd && colBegin == colEnd || cell(rowBegin,colBegin) == cell(rowEnd,colEnd))
+        return 0L;
     QPtrList<KWFrameSet> listFrameSet;
     QPtrList<KWFrame> listCopyFrame;
 

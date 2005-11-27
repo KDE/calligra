@@ -4256,11 +4256,37 @@ void KWView::tableResizeCol()
 
 void KWView::tableJoinCells()
 {
-    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
+    KWTableFrameSet *table = 0;
+    QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
+    QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+    unsigned int x1=10000, y1=10000, x2=0, y2=0;
+    for(;framesIterator != selectedFrames.end(); ++framesIterator) {
+        KWFrameView *view = *framesIterator;
+        if(!view->selected()) continue;
+        KWFrameSet *fs = view->frame()->frameSet();
+        Q_ASSERT(fs);
+        KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell*>(fs);
+        if(cell == 0) continue;
+        if(!table)
+            table = cell->groupmanager();
+        else if(table != cell->groupmanager()) { // more then one table has selected cells
+            KMessageBox::sorry( this,
+                    i18n( "More then one table has selected cells, please make sure "
+                        "the selected cells are in one table and are connecting"),
+                    i18n( "Join Cells Failed" ) );
+            return;
+        }
+
+        if(cell->firstRow() < y1)  y1 = cell->firstRow();
+        if(cell->firstCol() < x1)  x1 = cell->firstCol();
+        if(cell->lastRow() > y2) y2 = cell->lastRow();
+        if(cell->lastCol() > x2) x2 = cell->lastCol();
+    }
+
     Q_ASSERT(table);
     if (!table)
         return;
-    KCommand * cmd=table->joinCells();
+    KCommand * cmd=table->joinCells(x1, y1, x2, y2);
     if ( !cmd )
     {
         KMessageBox::sorry( this,

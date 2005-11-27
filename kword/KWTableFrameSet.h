@@ -463,8 +463,13 @@ public:
 
     bool isActive()const { return m_active; }
 
-    /** merge cells to one cell. Will loose all text not in top-left cell */
-    KCommand *joinCells(unsigned int colBegin=0,unsigned int rowBegin=0, unsigned int colEnd=0,unsigned int rowEnd=0);
+    /** merge cells to one cell. Will loose all text not in top-left cell
+     * @param firstColumn the first column of the square of columns that will be used to merge
+     * @param firstRow the first row
+     * @param endColumn the last column that will end up in the merged cell
+     * @param endRow last row
+     */
+    KCommand *joinCells(unsigned int firstColumn,unsigned int firstRow, unsigned int endColumn,unsigned int endRow);
     /**
      * split one cell into a number of cells and return a command for undo purposes.
      * @param intoRows the amount of rows the cell should be split into
