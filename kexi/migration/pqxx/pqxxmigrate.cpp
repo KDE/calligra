@@ -90,7 +90,7 @@ bool PqxxMigrate::drv_readTableSchema(
             const pqxx::oid toid = tableOid(originalName);
             if (toid==0)
                 return false;
-            m_f = new KexiDB::Field(fldID, fldType);
+            KexiDB::Field* m_f = new KexiDB::Field(fldID, fldType);
             m_f->setCaption(fldName);
             m_f->setPrimaryKey(primaryKey(toid, i));
             m_f->setUniqueKey(uniqueKey(toid, i));
