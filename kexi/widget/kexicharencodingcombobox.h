@@ -20,6 +20,7 @@
 #ifndef KEXICHARENCODINGCOMBO_H
 #define KEXICHARENCODINGCOMBO_H
 
+#include <qmap.h>
 #include <kcombobox.h>
 
 /*! @short Combobox widget providing a list of possible character encodings.
@@ -33,9 +34,11 @@ class KEXIEXTWIDGETS_EXPORT KexiCharacterEncodingComboBox : public KComboBox
 		~KexiCharacterEncodingComboBox();
 
 		QString selectedEncoding() const;
+		void setSelectedEncoding(const QString& encodingName);
 		bool defaultEncodingSelected() const;
 
 	protected:
+		QMap<QString,QString> m_encodingDescriptionForName;
 		bool m_defaultEncodingAdded : 1;
 };
 

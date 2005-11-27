@@ -22,6 +22,7 @@
 
 #include <kdialogbase.h>
 
+class QCheckBox;
 class KexiCharacterEncodingComboBox;
 
 namespace KexiMigration {
@@ -31,14 +32,19 @@ namespace KexiMigration {
 //! @todo Hardcoded. Move such code to KexiMigrate drivers.
 class OptionsDialog : public KDialogBase
 {
+	Q_OBJECT
 	public:
 		OptionsDialog( const QString& databaseFile, const QString& selectedEncoding, QWidget* parent = 0 );
 		virtual ~OptionsDialog();
 
 		KexiCharacterEncodingComboBox* encodingComboBox() const;
 
+	protected slots:
+		virtual void accept();
+
 	protected:
 		KexiCharacterEncodingComboBox *m_encodingComboBox;
+		QCheckBox *m_chkAlwaysUseThisEncoding;
 };
 }
 

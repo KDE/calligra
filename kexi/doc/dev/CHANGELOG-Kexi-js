@@ -12,13 +12,18 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-11-26
+Project Migration
+- added "Always use this encoding in similar situations" option 
+  to "Advanced options" dialog (saved to Kexi config file).
+
 2005-11-25
 Project Migration
 (API CHANGED)
 - Added versioning for migration drivers (current one is 1.1)
 - Added properties support for migration drivers
 - All error messages are displayed on the last "Failure" page
-- Added "Advanced settings" button and dialog, currently with "Encoding" parameter 
+- Added "Advanced options" button and dialog, currently with "Encoding" parameter 
   for source database. Currently used by MDB driver for MSJet3 files.
 General
 - KexiCharacterEncodingComboBox added - a combobox widget providing 
