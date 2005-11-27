@@ -52,6 +52,7 @@
 #include <klocale.h>
 #include <kstatusbar.h>
 #include <kglobalsettings.h>
+#include <ksharedptr.h>
 
 #include <qobjectlist.h>
 
@@ -109,6 +110,15 @@ public:
     m_isExporting = false;
     m_windowSizeDirty = false;
     m_lastExportSpecialOutputFlag = 0;
+
+    // TTS accessibility enhancement (only if KDE 3.4 or later and KTTSD daemon is installed.)
+    if (KoSpeaker::isKttsdInstalled()) {
+        if (kospeaker)
+            m_koSpeaker = kospeaker;
+        else
+            m_koSpeaker = new KoSpeaker();
+    } else
+        m_koSpeaker = 0;
   }
   ~KoMainWindowPrivate()
   {
@@ -161,6 +171,8 @@ public:
   KURL m_lastExportURL;
   QCString m_lastExportFormat;
   int m_lastExportSpecialOutputFlag;
+
+  KSharedPtr<KoSpeaker> m_koSpeaker;
 };
 
 KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
@@ -241,8 +253,6 @@ KoMainWindow::KoMainWindow( KInstance *instance, const char* name )
     setCentralWidget( d->m_splitter );
     // Keyboard accessibility enhancements.
     new KKbdAccessExtensions(this, "mw-panelSizer");
-    // TTS accessibility enhancement (only if KDE 3.4 or later and KTTSD daemon is installed.)
-    if (KoSpeaker::isKttsdInstalled()) new KoSpeaker(this, "mw-speaker");
     // set up the action "list" for "Close all Views" (hacky :) (Werner)
     d->m_veryHackyActionList.append(
         new KAction(i18n("&Close All Views"), "fileclose",

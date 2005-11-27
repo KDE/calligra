@@ -61,6 +61,7 @@ class KoSpeakerPrivate
 {
 public:
     KoSpeakerPrivate::KoSpeakerPrivate() :
+        m_versionChecked(false),
         m_enabled(false),
         m_speakFlags(0),
         m_timeout(600),
@@ -71,12 +72,13 @@ public:
         m_prevFocusId(-1),
         m_prevWidget(0),
         m_prevId(-1),
-        m_firstKttsdStart(true),
         m_cancelSpeakWidget(false)
         {}
 
     // List of text jobs.
     QValueList<uint> m_jobNums;
+    // Whether the version of KTTSD has been requested from the daemon.
+    bool m_versionChecked;
     // KTTSD version string.
     QString m_kttsdVersion;
     // Language code of last spoken text.
@@ -98,8 +100,6 @@ public:
     int m_prevFocusId;
     QWidget* m_prevWidget;
     int m_prevId;
-    // False after startKttsd() has been called the first time.
-    bool m_firstKttsdStart;
     // True when cancelSpeakWidget has been called in response to customSpeakWidget signal.
     bool m_cancelSpeakWidget;
 };
@@ -108,10 +108,8 @@ public:
 
 KoSpeaker* KoSpeaker::KSpkr = 0L;
 
-KoSpeaker::KoSpeaker(QObject* parent, const char* name)
-    : QObject(parent)
+KoSpeaker::KoSpeaker()
 {
-    Q_UNUSED(name);
     Q_ASSERT(!KSpkr);
     KSpkr = this;
     d = new KoSpeakerPrivate();
@@ -129,7 +127,7 @@ KoSpeaker::~KoSpeaker()
     KSpkr = 0;
 }
 
-bool KoSpeaker::isEnabled() { return startKttsd(); }
+bool KoSpeaker::isEnabled() const { return d->m_enabled; }
 
 void KoSpeaker::probe()
 {
@@ -178,7 +176,7 @@ void KoSpeaker::queueSpeech(const QString& msg, const QString& langCode /*= QStr
     // single, multi-part text job.  Otherwise, must submit separate text jobs.
     // If language code changes, then must also start a new text job so that it will
     // be spoken in correct talker.
-    if (d->m_kttsdVersion.isEmpty())
+    if (getKttsdVersion().isEmpty())
         d->m_jobNums.append(setText(s, languageCode));
     else {
         if ((jobCount == 0) || (languageCode != d->m_langCode))
@@ -485,7 +483,6 @@ bool KoSpeaker::startKttsd()
 {
     DCOPClient *client = kapp->dcopClient();
     // If KTTSD not running, start it.
-    d->m_enabled = true;
     if (!client->isApplicationRegistered("kttsd"))
     {
         QString error;
@@ -493,23 +490,31 @@ bool KoSpeaker::startKttsd()
             kdDebug() << "KoSpeaker::startKttsd: error starting KTTSD service: " << error << endl;
             d->m_enabled = false;
         } else
-            d->m_firstKttsdStart = true;
-    }
+            d->m_enabled = true;
+    } else
+        d->m_enabled = true;
+    return d->m_enabled;
+}
 
+QString KoSpeaker::getKttsdVersion()
+{
     // Determine which version of KTTSD is running.  Note that earlier versions of KSpeech interface
     // did not support version() method, so we must manually marshall this call ourselves.
-    if (d->m_enabled && d->m_firstKttsdStart) {
-        QByteArray  data;
-        QCString    replyType;
-        QByteArray  replyData;
-        if ( client->call("kttsd", "KSpeech", "version()", data, replyType, replyData, true) ) {
-            QDataStream arg(replyData, IO_ReadOnly);
-            arg >> d->m_kttsdVersion;
-            kdDebug() << "KoSpeaker::startKttsd: KTTSD version = " << d->m_kttsdVersion << endl;
+    if (d->m_enabled) {
+        if (!d->m_versionChecked) {
+            DCOPClient *client = kapp->dcopClient();
+            QByteArray  data;
+            QCString    replyType;
+            QByteArray  replyData;
+            if ( client->call("kttsd", "KSpeech", "version()", data, replyType, replyData, true) ) {
+                QDataStream arg(replyData, IO_ReadOnly);
+                arg >> d->m_kttsdVersion;
+                kdDebug() << "KoSpeaker::startKttsd: KTTSD version = " << d->m_kttsdVersion << endl;
+            }
+            d->m_versionChecked = true;
         }
-        d->m_firstKttsdStart = false;
     }
-    return d->m_enabled;
+    return d->m_kttsdVersion;
 }
 
 void KoSpeaker::sayScreenReaderOutput(const QString &msg, const QString &talker)

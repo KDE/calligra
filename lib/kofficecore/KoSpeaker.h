@@ -28,6 +28,9 @@
 #include <qobject.h>
 #include <qstring.h>
 
+// KDE includes.
+#include <ksharedptr.h>
+
 // KOffice includes.
 #include <koffice_export.h>
 
@@ -57,11 +60,11 @@ class KoSpeakerPrivate;
   *
   * KOffice applications can access this object using the kospeaker global.
   */
-class KOFFICECORE_EXPORT KoSpeaker : public QObject
+class KOFFICECORE_EXPORT KoSpeaker : public QObject, public KShared
 {
    Q_OBJECT
 public:
-    KoSpeaker(QObject* parent=0, const char* name=0);
+    KoSpeaker();
     ~KoSpeaker();
 
     enum SpeakFlags {
@@ -79,7 +82,7 @@ public:
      * -- KTTSD daemon is not installed, or
      * -- Was not able to start KTTSD daemon for some reason.
      */
-    bool isEnabled();
+    bool isEnabled() const;
 
     /**
      * Reads configuration options from @p config object and starts TTS if screen reader
@@ -182,6 +185,8 @@ private:
 
     // Start the KTTSD daemon if not already running.
     bool startKttsd();
+    // Return the KTTSD daemon version string.
+    QString getKttsdVersion();
 
     // These methods correspond to dcop interface in kdelibs/interfaces/kspeech/kspeech.h.
     // They use manual marshalling, instead of using kspeech_stub, because KOffice
