@@ -550,7 +550,7 @@ void KWDocStructRootItem::setupArrangement()
     KWDocStructTextFrameSetItem *item = 0L;
     QString _name;
 
-    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- )
+    for ( int i = dok->frameSetCount() - 1; i >= 0; i-- )
     {
         frameset = dok->frameSet( i );
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY && !frameset->groupmanager() && frameset->frameCount()>0)
@@ -605,7 +605,7 @@ void KWDocStructRootItem::setupTextFrameSets()
 
     // Build a list of framesets ordered by their screen position (top left corner).
     QValueList<KWOrderedTextFrameSet> orderedFrameSets;
-    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- ) {
+    for ( int i = dok->frameSetCount() - 1; i >= 0; i-- ) {
         frameset = dok->frameSet(i);
         if ( frameset->type() == FT_TEXT && frameset->frameSetInfo() == KWFrameSet::FI_BODY &&
             !frameset->groupmanager() && frameset->frameCount()>0)
@@ -660,7 +660,7 @@ void KWDocStructRootItem::setupFormulaFrames()
     KWDocStructFormulaItem* child;
     KWDocument* dok = doc();
 
-    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- )
+    for ( int i = dok->frameSetCount() - 1; i >= 0; i-- )
     {
         frameset = dok->frameSet( i );
         if ( frameset->type() == FT_FORMULA &&
@@ -683,7 +683,7 @@ void KWDocStructRootItem::setupTables()
     KWDocStructTableItem* child;
     KWDocument* dok = doc();
 
-    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- )
+    for ( int i = dok->frameSetCount() - 1; i >= 0; i-- )
     {
         KWFrameSet* fs = dok->frameSet(i);
         if ( fs->type() != FT_TABLE)
@@ -710,7 +710,7 @@ void KWDocStructRootItem::setupPictures()
     KWDocument* dok = doc();
 
     int j = 0;
-    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- )
+    for ( int i = dok->frameSetCount() - 1; i >= 0; i-- )
     {
         frameset = dok->frameSet( i );
         if ( frameset->type() == FT_PICTURE && frameset->frameCount()>0)
@@ -733,7 +733,7 @@ void KWDocStructRootItem::setupEmbedded()
     KWDocStructPartItem* child;
     KWDocument* dok = doc();
 
-    for ( int i = dok->numFrameSets() - 1; i >= 0; i-- )
+    for ( int i = dok->frameSetCount() - 1; i >= 0; i-- )
     {
         frameset = dok->frameSet( i );
         if ( frameset->type() == FT_PART && frameset->frameCount()>0)

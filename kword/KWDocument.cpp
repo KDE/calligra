@@ -1826,7 +1826,7 @@ void KWDocument::endOfLoading()
     }
 
     // do some sanity checking on document.
-    for (int i = numFrameSets()-1; i>-1; i--) {
+    for (int i = frameSetCount()-1; i>-1; i--) {
         KWFrameSet *fs = frameSet(i);
         if(!fs) {
             kdWarning() << "frameset " << i << " is NULL!!" << endl;
@@ -4351,7 +4351,7 @@ void KWDocument::updateFooterButton()
 void KWDocument::setFramePadding( double l, double r, double t, double b )
 {
     // todo, make this more OO, and update the tableheaders as well..
-    for ( unsigned int i = 0; i < numFrameSets(); i++ ) {
+    for ( unsigned int i = 0; i < frameSetCount(); i++ ) {
         if ( frameSet( i )->hasSelectedFrame() ) {
             KWFrameSet *frameset = frameSet( i );
             for ( unsigned int j = 0; j < frameset->frameCount(); j++ ) {
@@ -4535,7 +4535,7 @@ void KWDocument::printDebug()
     kdDebug() << "Header visible: " << isHeaderVisible() << endl;
     kdDebug() << "Footer visible: " << isFooterVisible() << endl;
     kdDebug() << "Units: " << unit() <<endl;
-    kdDebug() << "# Framesets: " << numFrameSets() <<endl;
+    kdDebug() << "# Framesets: " << frameSetCount() <<endl;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( unsigned int iFrameset = 0; fit.current() ; ++fit, iFrameset++ )
     {

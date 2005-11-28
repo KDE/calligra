@@ -24,7 +24,6 @@ DESCRIPTION
 */
 
 // ### TODO : multi page tables
-// ### TODO: Doxygen-ify the .h
 
 #include "KWTableFrameSet.h"
 #include "KWDocument.h"
@@ -60,11 +59,8 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
 {
     m_rows = m_cols = m_nr_cells = 0;
     m_name = QString::null;
-    m_showHeaderOnAllPages = true;
-    m_hasTmpHeaders = false;
     m_active = true;
     m_frames.setAutoDelete(false);
-    //m_anchor = 0L;
     if ( name.isEmpty() )
         m_name = doc->generateFramesetName( i18n( "Table %1" ) );
     else
@@ -73,8 +69,6 @@ KWTableFrameSet::KWTableFrameSet( KWDocument *doc, const QString & name ) :
 
 KWTableFrameSet::~KWTableFrameSet()
 {
-    //delete m_anchor;
-    //m_anchor = 0L;
     m_doc = 0L;
 }
 
@@ -149,15 +143,12 @@ void KWTableFrameSet::createAnchors( KoTextParag * parag, int index, bool placeH
 {
     //kdDebug(32004) << "KWTableFrameSet::createAnchors" << endl;
     // TODO make one rect per page, and create one anchor per page
-    //if ( !m_anchor )
-    {
-        // Anchor this frame, after the previous one
-        KWAnchor * anchor = createAnchor( m_anchorTextFs->textDocument(), 0 );
-        if ( !placeHolderExists )
-            parag->insert( index, KoTextObject::customItemChar() );
-        parag->setCustomItem( index, anchor, 0 );
-        kdDebug(32004) << "KWTableFrameSet::createAnchors setting anchor" << endl;
-    }
+    // Anchor this frame, after the previous one
+    KWAnchor * anchor = createAnchor( m_anchorTextFs->textDocument(), 0 );
+    if ( !placeHolderExists )
+        parag->insert( index, KoTextObject::customItemChar() );
+    parag->setCustomItem( index, anchor, 0 );
+    kdDebug(32004) << "KWTableFrameSet::createAnchors setting anchor" << endl;
     parag->setChanged( true );
     if ( repaint )
         emit repaintChanged( m_anchorTextFs );
@@ -469,7 +460,6 @@ void KWTableFrameSet::recalcRows(int _col, int _row) {
             if(pageBound!=m_pageBoundaries.end()) {
                 if((int)*pageBound == lineNumber) { // next page
                     if(lineNumber >= (int)row) { // then delete line j
-                        // TODO remove headers and  m_hasTmpHeaders = false;
                         QValueList<double>::iterator nextJ = j;
                         ++nextJ;
                         difference -= *(nextJ)-*(j);
@@ -1839,15 +1829,6 @@ void KWTableFrameSet::drawContents( QPainter * painter, const QRect & crect,
     drawBorders( *painter, crect, viewMode );
     //kdDebug(32004) << "drawContents()" << endl;
 }
-
-#if 0
-void KWTableFrameSet::preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags )
-{
-    for (TableIter cells(this) ; cells ; ++cells)
-        cells->preparePrinting( painter, progress, processedParags );
-    }
-}
-#endif
 
 // Called by KWAnchor for inline tables
 // TODO: for non-inline ones we need a text-box around us...

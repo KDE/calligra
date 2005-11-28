@@ -841,7 +841,7 @@ void KWFrameDia::setupTab3(){ // TAB Frameset
 
     int amount=0;
     // now fill the gui.
-    for ( unsigned int i = 0; i < m_doc->numFrameSets(); i++ ) {
+    for ( unsigned int i = 0; i < m_doc->frameSetCount(); i++ ) {
         KWFrameSet * fs = m_doc->frameSet( i );
         if ( i == 0 && m_doc->processingType() == KWDocument::WP )
             continue;

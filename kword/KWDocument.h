@@ -234,7 +234,7 @@ public:
     KWFrameSet * frameSetByName( const QString & name );
 
     /// Return the total number of framesets
-    unsigned int numFrameSets() const
+    unsigned int frameSetCount() const
     { return m_lstFrameSet.count(); }
 
     /// Generate a new name for a frameset. @p templateName must contain a %1 [for a number].

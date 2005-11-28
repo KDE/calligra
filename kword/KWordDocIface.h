@@ -37,7 +37,9 @@ k_dcop:
     virtual DCOPRef textFrameSet( int num );
     virtual DCOPRef frameSet( int num );
 
+    /// deprecated method, use frameSetCount instead.
     virtual int numFrameSets()const;
+    virtual int frameSetCount()const;
     virtual unsigned int nbColumns()const;
 
     //paper

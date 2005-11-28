@@ -400,7 +400,7 @@ KWTextFrameSet * KWViewModeText::determineTextFrameSet( KWDocument* doc ) // sta
 
     if (!fs || fs->isHeaderOrFooter() || fs->isFootEndNote())
         // if not a textFS, or header/footer/footnote: fallback to fs 0
-        if ( doc->numFrameSets() > 0 && doc->frameSet( 0 )->isVisible() )
+        if ( doc->frameSetCount() > 0 && doc->frameSet( 0 )->isVisible() )
             fs = dynamic_cast<KWTextFrameSet *>( doc->frameSet( 0 ) );
 
     return fs;

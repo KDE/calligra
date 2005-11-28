@@ -76,7 +76,7 @@ public:
         }
 
     public:
-        // constructor
+        /// constructor
         Cell( KWTableFrameSet *table, unsigned int row, unsigned int col, const QString & name = QString::null );
         Cell( KWTableFrameSet *table, const Cell &original );
         // destructor
@@ -400,9 +400,6 @@ public:
     /** move the whole of the table, this is mainly for anchored frames. */
     void moveBy( double dx, double dy );
 
-    // /** point the outlines of all the cells */
-    //void drawAllRects( QPainter &p, int xOffset, int yOffset );
-
     /** Return true if exactly one frame is selected. The parameters row
     *  and col will receive the values of the active row and col.<br>
     *  When no frame or more then one frame is selected row and col will
@@ -425,13 +422,6 @@ public:
     void reInsertRow(RemovedRow &row);
     /** replace a column that was removed with deleteColumn() */
     void reInsertColumn(RemovedColumn &col);
-
-    // the boolean actually works, but is not saved (to xml) yet :(
-    void setShowHeaderOnAllPages( bool s ) { m_showHeaderOnAllPages = s; }
-    bool getShowHeaderOnAllPages() const { return m_showHeaderOnAllPages; }
-
-    /** redraw contents of temp headers. */
-    bool hasTempHeaders() const { return m_hasTmpHeaders; }
 
     /** release the constrains of the table and allow all frames to be
      * edited apart from each other. (ps. there is no way back..) */
@@ -483,8 +473,6 @@ public:
     /** from and to XML - used when copying and pasting a table */
     virtual QDomElement toXML( QDomElement &parentElem, bool saveFrames = true );
     virtual void fromXML( QDomElement &framesetElem, bool loadFrames = true, bool useNames = true );
-
-    //virtual void preparePrinting( QPainter *painter, QProgressDialog *progress, int &processedParags );
 
     /** Contribute to the document statistics */
     virtual int paragraphs();
@@ -617,8 +605,6 @@ private:
 
 private:
     unsigned int m_rows, m_cols, m_nr_cells;
-    bool m_showHeaderOnAllPages;
-    bool m_hasTmpHeaders;
     bool m_active;
     QPtrVector< Row > m_rowArray;
 
