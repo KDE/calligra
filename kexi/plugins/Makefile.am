@@ -7,6 +7,6 @@ if compile_kexi_scripting_gui_plugin
   SCRIPTING_GUI=scripting
 endif
 
-SUBDIRS = tables relations migration queries forms $(REPORTS) $(SCRIPTING_GUI) import
+SUBDIRS = tables relations migration queries forms $(REPORTS) $(SCRIPTING_GUI) importexport
 
 #importwizard relations
