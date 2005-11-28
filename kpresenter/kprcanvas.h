@@ -715,6 +715,12 @@ private slots:
 
     void slotDoPageEffect();
 
+    /**
+     * Speak the text object under the mouse.  This slot is normally
+     * connected to the kospeaker customSpeakWidget signal.
+     */
+    void speakTextUnderMouse(QWidget* w, const QPoint& p, uint flags);
+
 private:
     /// Distance for snapping to guide line with mouse 
     static const int MOUSE_SNAP_DISTANCE;
@@ -858,6 +864,9 @@ private:
     KoGuides m_gl;
     /// true if we are in guide move state, false otherwise
     bool m_paintGuides;
+
+    /// Previously spoken text object.
+    KPTextObject *m_prevSpokenTO;
 };
 
 #endif // __KPRCANVAS__
