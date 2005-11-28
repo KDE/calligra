@@ -186,7 +186,7 @@ void KWPageManagerTester::removePages() {
 }
 void KWPageManagerTester::pageInfo() {
     KWPageManager *pageManager = new KWPageManager();
-    pageManager->setDefaultPageSize(300, 600);
+    pageManager->setDefaultPageSize(300, 600, PG_DIN_A4);
     pageManager->setStartPage(1);
     KWPage *page1 = pageManager->appendPage();
     page1->setWidth(100);
@@ -198,7 +198,7 @@ void KWPageManagerTester::pageInfo() {
 
     CHECK(pageManager->topOfPage(3), 300.0);
     CHECK(pageManager->bottomOfPage(3), 900.0);
-    pageManager->setDefaultPageSize(300, 500.0);
+    pageManager->setDefaultPageSize(300, 500.0, PG_DIN_A4);
     CHECK(pageManager->bottomOfPage(3), 800.0);
     page2->setHeight(-1);
     CHECK(pageManager->bottomOfPage(3), 1200.0);
