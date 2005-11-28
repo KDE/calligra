@@ -160,6 +160,7 @@ void PythonScript::initialize()
     catch(Py::Exception& e) {
         QString err = Py::value(e).as_string().c_str();
         long lineno = getLineNo(e);
+        e.clear(); // exception is handled. clear it now.
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to compile python code: %1").arg(err), lineno) );
     }
 }
@@ -319,7 +320,9 @@ PyGILState_Release(gilstate);
             setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(err), lineno) );
         }
         catch(Py::Exception& e) {
-            setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(Py::value(e).as_string().c_str())) );
+            QString err = Py::value(e).as_string().c_str();
+            e.clear(); // exception is handled. clear it now.
+            setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(err)) );
         }
     }
     catch(Kross::Api::Exception::Ptr e) {
@@ -366,6 +369,7 @@ Kross::Api::Object::Ptr PythonScript::callFunction(const QString& name, Kross::A
     }
     catch(Py::Exception& e) {
         QString err = Py::value(e).as_string().c_str();
+        e.clear(); // exception is handled. clear it now.
         setException( new Kross::Api::Exception(QString("Python Exception: %1").arg(err)) );
     }
     catch(Kross::Api::Exception::Ptr e) {
@@ -411,8 +415,9 @@ Kross::Api::Object::Ptr PythonScript::classInstance(const QString& name)
         return PythonExtension::toObject(classobject);
     }
     catch(Py::Exception& e) {
-        Py::Object errobj = Py::value(e);
-        setException( Kross::Api::Exception::Ptr( new Kross::Api::Exception(errobj.as_string().c_str()) ) );
+        QString err = Py::value(e).as_string().c_str();
+        e.clear(); // exception is handled. clear it now.
+        setException( Kross::Api::Exception::Ptr( new Kross::Api::Exception(err) ) );
     }
     catch(Kross::Api::Exception::Ptr e) {
         setException(e);
