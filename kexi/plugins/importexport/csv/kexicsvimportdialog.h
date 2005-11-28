@@ -61,14 +61,13 @@ class KexiCSVTextQuoteComboBox;
  *
  * Provides dialog for managing CSV (comma separated value) data.
  *
- * Currently KexiCSVDialog is used for converting text into columns,
+ * Currently KexiCSVImportDialog is used for converting text into columns,
  * inserting text file and pasting text from clipboard, where conversion
  * from CSV (comma separated value) data is is all required. 
  * The different purposed mentioned above is determined
  * using mode, which can be Column, File, or Clipboard respectively.
 */
-
-class KexiCSVDialog : public KDialogBase
+class KexiCSVImportDialog : public KDialogBase
 {
   Q_OBJECT
 
@@ -78,9 +77,9 @@ class KexiCSVDialog : public KDialogBase
   enum Header { TEXT, NUMBER, DATE, CURRENCY };
 
 //! @todo what about making it kexidb-independent?
-  KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * parent, const char * name = 0/*, QRect const & rect*/);
+  KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, QWidget * parent, const char * name = 0/*, QRect const & rect*/);
 
-  ~KexiCSVDialog();
+  ~KexiCSVImportDialog();
 
   bool cancelled();
 

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#include "kexicsvoptionsdlg.h"
+#include "kexicsvimportoptionsdlg.h"
 #include <widget/kexicharencodingcombobox.h>
 
 #include <qlabel.h>
@@ -32,14 +32,14 @@
 #include <kglobal.h>
 #include <kcharsets.h>
 
-KexiCSVOptionsDialog::KexiCSVOptionsDialog( const QString& selectedEncoding, QWidget* parent )
+KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog( const QString& selectedEncoding, QWidget* parent )
  : KDialogBase( 
 	KDialogBase::Plain, 
 	i18n( "CSV Import Options" ),
 	Ok|Cancel, 
 	Ok,
 	parent, 
-	"KexiCSVOptionsDialog", 
+	"KexiCSVImportOptionsDialog", 
 	true, 
 	false
  )
@@ -73,16 +73,16 @@ KexiCSVOptionsDialog::KexiCSVOptionsDialog( const QString& selectedEncoding, QWi
 	m_encodingComboBox->setFocus();
 }
 
-KexiCSVOptionsDialog::~KexiCSVOptionsDialog()
+KexiCSVImportOptionsDialog::~KexiCSVImportOptionsDialog()
 {
 }
 
-KexiCharacterEncodingComboBox* KexiCSVOptionsDialog::encodingComboBox() const
+KexiCharacterEncodingComboBox* KexiCSVImportOptionsDialog::encodingComboBox() const
 {
 	return m_encodingComboBox;
 }
 
-void KexiCSVOptionsDialog::accept()
+void KexiCSVImportOptionsDialog::accept()
 {
 	kapp->config()->setGroup("ImportExport");
 	if (m_chkAlwaysUseThisEncoding->isChecked())
@@ -94,4 +94,4 @@ void KexiCSVOptionsDialog::accept()
 	KDialogBase::accept();
 }
 
-#include "kexicsvoptionsdlg.moc"
+#include "kexicsvimportoptionsdlg.moc"

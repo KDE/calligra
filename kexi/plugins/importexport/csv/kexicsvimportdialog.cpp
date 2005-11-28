@@ -63,8 +63,8 @@
 #include <kexidb/transaction.h>
 #include <widget/kexicharencodingcombobox.h>
 
-#include "kexicsvdialog.h"
-#include "kexicsvoptionsdlg.h"
+#include "kexicsvimportdialog.h"
+#include "kexicsvimportoptionsdlg.h"
 #include "kexicsvwidgets.h"
 
 #ifdef Q_WS_WIN
@@ -89,10 +89,10 @@
 #define _NO_TYPE_YET -1 //allows to accept a number of empty cells, before something non-empty
 #define _FP_NUMBER_TYPE 255 //_NUMBER_TYPE variant
 
-class KexiCSVDialogTable : public QTable
+class KexiCSVImportDialogTable : public QTable
 {
 public:
-	KexiCSVDialogTable( QWidget * parent = 0, const char * name = 0 )
+	KexiCSVImportDialogTable( QWidget * parent = 0, const char * name = 0 )
 	: QTable(parent, name) {
 		f = font();
 		f.setBold(true);
@@ -111,7 +111,7 @@ public:
 	QFont f;
 };
 
-KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * parent, const char * name
+KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, QWidget * parent, const char * name
 //, QRect const & rect, Mode mode
 )
  : KDialogBase( 
@@ -120,7 +120,7 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
 	(mode==File ? User1 : (ButtonCode)0) |Ok|Cancel, 
 	Ok,
 	parent, 
-	name ? name : "KexiCSVDialog", 
+	name ? name : "KexiCSVImportDialog", 
 	true, 
 	false,
 	KGuiItem( i18n("&Options..."))
@@ -328,7 +328,7 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
   m_1stRowForFieldNames->setText( i18n( "First row contains column names" ) );
   MyDialogLayout->addMultiCellWidget( m_1stRowForFieldNames, 5, 5, 2, 4 );
 
-  m_table = new KexiCSVDialogTable( plainPage(), "m_table" );
+  m_table = new KexiCSVImportDialogTable( plainPage(), "m_table" );
   m_table->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum, 2, 2) );
   //m_table->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, m_table->sizePolicy().hasHeightForWidth() ) );
   m_table->setNumRows( 0 );
@@ -371,7 +371,7 @@ if ( m_mode == Clipboard )
 	//! @todo remove
 		m_fname = QFileDialog::getOpenFileName( KGlobalSettings::documentPath(), 
 			KexiUtils::fileDialogFilterStrings(mimetypes, false),
-			this, "KexiCSVDialog", i18n("Open CSV Data File"));
+			this, "KexiCSVImportDialog", i18n("Open CSV Data File"));
 #else
 		m_fname = KFileDialog::getOpenFileName(":CSVImportDialog", mimetypes.join(" "), this);
 #endif
@@ -461,12 +461,12 @@ if ( m_mode == Clipboard )
 	m_table->setFocus();
 }
 
-KexiCSVDialog::~KexiCSVDialog()
+KexiCSVImportDialog::~KexiCSVImportDialog()
 {
   // no need to delete child widgets, Qt does it all for us
 }
 
-bool KexiCSVDialog::loadData()
+bool KexiCSVImportDialog::loadData()
 {
 	if (m_mode!=File) //data already loaded, no encoding stuff needed
 		return true;
@@ -496,12 +496,12 @@ bool KexiCSVDialog::loadData()
 	return true;
 }
 
-bool KexiCSVDialog::cancelled()
+bool KexiCSVImportDialog::cancelled()
 {
   return m_cancelled;
 }
 
-void KexiCSVDialog::fillTable()
+void KexiCSVImportDialog::fillTable()
 {
 	setEnabled(false);
 	QPushButton *pb = actionButton(KDialogBase::Cancel);
@@ -742,7 +742,7 @@ void KexiCSVDialog::fillTable()
 	fillComboBox();
 }
 
-void KexiCSVDialog::updateColumnText(int col)
+void KexiCSVImportDialog::updateColumnText(int col)
 {
 	QString colName;
 	if (col<(int)m_columnNames.count() && (m_1stRowForFieldNames->isChecked() || m_changedColumnNames[col]))
@@ -787,7 +787,7 @@ void KexiCSVDialog::updateColumnText(int col)
 		list->clear();
 }
 
-void KexiCSVDialog::fillComboBox()
+void KexiCSVImportDialog::fillComboBox()
 {
 	m_comboLine->clear();
 	const uint count = QMAX(0, m_table->numRows()-1+m_startline);
@@ -796,7 +796,7 @@ void KexiCSVDialog::fillComboBox()
 	m_comboLine->setCurrentItem(m_startline);
 }
 
-void KexiCSVDialog::detectTypeAndUniqueness(int row, int col, const QString& text)
+void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QString& text)
 {
 	int intValue;
 	const int type = m_detectedTypes[col];
@@ -855,7 +855,7 @@ void KexiCSVDialog::detectTypeAndUniqueness(int row, int col, const QString& tex
 	}
 }
 
-void KexiCSVDialog::setText(int row, int col, const QString& text)
+void KexiCSVImportDialog::setText(int row, int col, const QString& text)
 {
 	if (m_table->numCols() < col) {
 		m_table->setNumCols(col);
@@ -909,7 +909,7 @@ void KexiCSVDialog::setText(int row, int col, const QString& text)
 /*
  * Called after the first fillTable() when number of rows are unknown.
  */
-void KexiCSVDialog::adjustRows(int iRows)
+void KexiCSVImportDialog::adjustRows(int iRows)
 {
 	if (m_adjustRows)
 	{
@@ -918,7 +918,7 @@ void KexiCSVDialog::adjustRows(int iRows)
 	}
 }
 
-void KexiCSVDialog::returnPressed()
+void KexiCSVImportDialog::returnPressed()
 {
 	if (m_delimiterCombo->currentItem() != 4)
 		return;
@@ -927,13 +927,13 @@ void KexiCSVDialog::returnPressed()
 	fillTable();
 }
 
-void KexiCSVDialog::textChanged ( const QString & )
+void KexiCSVImportDialog::textChanged ( const QString & )
 {
 //	m_radioOther->setChecked ( true );
 	delimiterChanged(4); // other
 }
 
-void KexiCSVDialog::formatChanged(int id)
+void KexiCSVImportDialog::formatChanged(int id)
 {
 	if (id==_PK_FLAG) {
 		if (m_primaryKeyColumn>=0 && m_primaryKeyColumn<m_table->numCols()) {
@@ -955,7 +955,7 @@ void KexiCSVDialog::formatChanged(int id)
 	updateColumnText(m_table->currentColumn());
 }
 
-void KexiCSVDialog::delimiterChanged(int id)
+void KexiCSVImportDialog::delimiterChanged(int id)
 {
 	switch (id)
 	{
@@ -980,7 +980,7 @@ void KexiCSVDialog::delimiterChanged(int id)
 	fillTable();
 }
 
-void KexiCSVDialog::textquoteSelected(const QString& mark)
+void KexiCSVImportDialog::textquoteSelected(const QString& mark)
 {
 	if (mark == i18n("none"))
 	m_textquote = 0;
@@ -990,7 +990,7 @@ void KexiCSVDialog::textquoteSelected(const QString& mark)
 	fillTable();
 }
 
-void KexiCSVDialog::lineSelected(const QString& line)
+void KexiCSVImportDialog::lineSelected(const QString& line)
 {
 	const int startline = line.toInt() - 1;
 	if (m_startline == startline)
@@ -1000,7 +1000,7 @@ void KexiCSVDialog::lineSelected(const QString& line)
 	fillTable();
 }
 
-void KexiCSVDialog::currentCellChanged(int, int col)
+void KexiCSVImportDialog::currentCellChanged(int, int col)
 {
 	if (m_prevSelectedCol==col)
 		return;
@@ -1027,7 +1027,7 @@ void KexiCSVDialog::currentCellChanged(int, int col)
 	m_primaryKeyField->setChecked( m_primaryKeyColumn == col );
 }
 
-void KexiCSVDialog::cellValueChanged(int row,int col)
+void KexiCSVImportDialog::cellValueChanged(int row,int col)
 {
 	if (row==0) {//column name has changed
 		m_columnNames[ col ] = m_table->text(row, col);
@@ -1035,7 +1035,7 @@ void KexiCSVDialog::cellValueChanged(int row,int col)
 	}
 }
 
-void KexiCSVDialog::accept()
+void KexiCSVImportDialog::accept()
 {
 //! @todo MOVE MOST OF THIS TO CORE/ (KexiProject?) after KexiDialogBase code is moved to non-gui place
 
@@ -1259,7 +1259,7 @@ void KexiCSVDialog::accept()
 	parentWidget()->raise();
 }
 
-int KexiCSVDialog::getHeader(int col)
+int KexiCSVImportDialog::getHeader(int col)
 {
 	QString header = m_table->horizontalHeader()->label(col);
 
@@ -1273,17 +1273,17 @@ int KexiCSVDialog::getHeader(int col)
 	return DATE;
 }
 
-QString KexiCSVDialog::getText(int row, int col)
+QString KexiCSVImportDialog::getText(int row, int col)
 {
 	return m_table->text(row, col);
 }
 
-void KexiCSVDialog::ignoreDuplicatesChanged(int)
+void KexiCSVImportDialog::ignoreDuplicatesChanged(int)
 {
 	fillTable();
 }
 
-void KexiCSVDialog::slot1stRowForFieldNamesChanged(int)
+void KexiCSVImportDialog::slot1stRowForFieldNamesChanged(int)
 {
 	m_adjustRows=1;
 	if (m_1stRowForFieldNames->isChecked() && m_startline>0 && m_startline>=(m_comboLine->count()-1))
@@ -1295,9 +1295,9 @@ void KexiCSVDialog::slot1stRowForFieldNamesChanged(int)
 //		m_comboLine->insertItem(QString::number(m_comboLine->count()+1));
 }
 
-void KexiCSVDialog::optionsButtonClicked()
+void KexiCSVImportDialog::optionsButtonClicked()
 {
-	KexiCSVOptionsDialog dlg(m_encoding, this);
+	KexiCSVImportOptionsDialog dlg(m_encoding, this);
 	if (QDialog::Accepted != dlg.exec())
 		return;
 
@@ -1309,4 +1309,4 @@ void KexiCSVDialog::optionsButtonClicked()
 	}
 }
 
-#include "kexicsvdialog.moc"
+#include "kexicsvimportdialog.moc"

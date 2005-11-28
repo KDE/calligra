@@ -22,12 +22,12 @@
 
 #include <core/kexiinternalpart.h>
 
-/*! Internal part for import wizard. */
-class KexiCSVImportPart : public KexiInternalPart
+/*! Internal part for CSV data import/export dialogs. */
+class KexiCSVImportExportPart : public KexiInternalPart
 {
 	public:
-		KexiCSVImportPart(QObject *parent, const char *name, const QStringList &args);
-		virtual ~KexiCSVImportPart();
+		KexiCSVImportExportPart(QObject *parent, const char *name, const QStringList &args);
+		virtual ~KexiCSVImportExportPart();
 
 		/*! Reimplement this if your internal part has to return widgets 
 		 or QDialog objects. */

@@ -17,26 +17,26 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "kexicsv_importpart.h"
-#include "kexicsvdialog.h"
+#include "kexicsv_importexportpart.h"
+#include "kexicsvimportdialog.h"
 #include <core/keximainwindow.h>
 
 #include <kgenericfactory.h>
 
-KexiCSVImportPart::KexiCSVImportPart(QObject *parent, const char *name, const QStringList &args)
+KexiCSVImportExportPart::KexiCSVImportExportPart(QObject *parent, const char *name, const QStringList &args)
  : KexiInternalPart(parent, name, args)
 {
 }
 
-KexiCSVImportPart::~KexiCSVImportPart()
+KexiCSVImportExportPart::~KexiCSVImportExportPart()
 {
 }
 
-QWidget *KexiCSVImportPart::createWidget(const char* /*widgetClass*/, KexiMainWindow* mainWin, 
+QWidget *KexiCSVImportExportPart::createWidget(const char* /*widgetClass*/, KexiMainWindow* mainWin, 
  QWidget *parent, const char *objName, QMap<QString,QString>* args )
 {
-	KexiCSVDialog *dlg = new KexiCSVDialog( 
-		(args && (*args)["sourceType"]=="file")? KexiCSVDialog::File : KexiCSVDialog::Clipboard, 
+	KexiCSVImportDialog *dlg = new KexiCSVImportDialog( 
+		(args && (*args)["sourceType"]=="file")? KexiCSVImportDialog::File : KexiCSVImportDialog::Clipboard, 
 		mainWin, parent, objName );
 	m_cancelled = dlg->cancelled();
 	if (m_cancelled) {
@@ -46,5 +46,5 @@ QWidget *KexiCSVImportPart::createWidget(const char* /*widgetClass*/, KexiMainWi
 	return dlg;
 }
 
-K_EXPORT_COMPONENT_FACTORY( kexihandler_csv_import, 
-	KGenericFactory<KexiCSVImportPart>("kexihandler_csv_import") )
+K_EXPORT_COMPONENT_FACTORY( kexihandler_csv_importexport, 
+	KGenericFactory<KexiCSVImportExportPart>("kexihandler_csv_importexport") )

@@ -23,10 +23,10 @@ Name[sv]=Kexi import av CSV-data
 Name[tr]=Kexi CSV Veri İçeri Alma
 Name[xx]=xxKexi CSV Data Importxx
 
-X-KDE-Library=kexihandler_csv_import
+X-KDE-Library=kexihandler_csv_importexport
 X-KDE-ParentApp=kexi
 X-Kexi-PartVersion=2
-X-Kexi-TypeName=csv_import
-X-Kexi-GroupIcon=csv_import
-X-Kexi-ItemIcon=csv_import
+X-Kexi-TypeName=csv_importexport
+X-Kexi-GroupIcon=csv_importexport
+X-Kexi-ItemIcon=csv_importexport
 X-Kexi-NoObject=true

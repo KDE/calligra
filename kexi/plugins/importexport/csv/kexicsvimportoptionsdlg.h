@@ -26,12 +26,12 @@ class KexiCharacterEncodingComboBox;
 class QCheckBox;
 
 //! @short CSV Options dialog.
-class KexiCSVOptionsDialog : public KDialogBase
+class KexiCSVImportOptionsDialog : public KDialogBase
 {
 	Q_OBJECT
 	public:
-		KexiCSVOptionsDialog( const QString& selectedEncoding, QWidget* parent = 0 );
-		virtual ~KexiCSVOptionsDialog();
+		KexiCSVImportOptionsDialog( const QString& selectedEncoding, QWidget* parent = 0 );
+		virtual ~KexiCSVImportOptionsDialog();
 
 		KexiCharacterEncodingComboBox* encodingComboBox() const;
 
