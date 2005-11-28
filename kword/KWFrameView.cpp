@@ -258,7 +258,7 @@ MouseMeaning TableFramePolicy::mouseMeaningOnBorder(const KoPoint &point, int ke
 
     if ( QABS( frame->x() - point.x() ) < hs
             && point.y() >= frame->y() && point.y() <= frame->bottom() ) {
-        if( static_cast<KWTableFrameSet::Cell *>(frame->frameSet())->firstCol() == 0 )
+        if( static_cast<KWTableFrameSet::Cell *>(frame->frameSet())->firstColumn() == 0 )
             return MEANING_SELECT_ROW;
         return MEANING_RESIZE_COLUMN;
     }
@@ -282,9 +282,9 @@ MouseMeaning TableFramePolicy::mouseMeaningOnBorder(const KoPoint &point, int ke
 void TableFramePolicy::setSelected(MouseMeaning selectPolicy) {
     KWFrameSet *fs = m_view->frame()->frameSet();
     if( selectPolicy == MEANING_SELECT_COLUMN ) {
-        unsigned int column = static_cast<KWTableFrameSet::Cell *>(fs)->firstCol();
+        unsigned int column = static_cast<KWTableFrameSet::Cell *>(fs)->firstColumn();
         for (KWTableFrameSet::TableIter cells(fs->groupmanager()); cells; ++cells) {
-            if(cells->firstCol() >= column && cells->lastCol() <= column) {
+            if(cells->firstColumn() >= column && cells->lastColumn() <= column) {
                 KWFrameView *fv = m_view->parent()->view(cells->frame(0));
                 if(fv)
                     fv->setSelected(true);

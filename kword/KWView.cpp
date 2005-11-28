@@ -163,7 +163,7 @@ class TableInfo {
                         rows.append(0);
                     tableRows.insert(fs->groupmanager(), rows);
                     QValueList<unsigned int> cols;
-                    for(unsigned int i=fs->groupmanager()->getCols(); i != 0; i--)
+                    for(unsigned int i=fs->groupmanager()->getColumns(); i != 0; i--)
                         cols.append(0);
                     tableCols.insert(fs->groupmanager(), cols);
                 }
@@ -172,13 +172,13 @@ class TableInfo {
                     rows[r] = rows[r] + 1;
                 tableRows[fs->groupmanager()] = rows;
                 QValueList<unsigned int> columns = tableCols[fs->groupmanager()];
-                for(unsigned int c=cell->firstCol(); c <= cell->lastCol(); c++)
+                for(unsigned int c=cell->firstColumn(); c <= cell->lastColumn(); c++)
                     columns[c] = columns[c] + 1;
                 tableCols[fs->groupmanager()] = columns;
 
                 if(m_cell == 0 || m_cell->firstRow() > cell->firstRow() ||
                         m_cell->firstRow() == cell->firstRow() &&
-                        m_cell->firstCol() > cell->firstCol())
+                        m_cell->firstColumn() > cell->firstColumn())
                     m_cell = cell;
             }
 
@@ -191,7 +191,7 @@ class TableInfo {
                 QValueList<unsigned int> rows = iter.data();
                 QValueListIterator<unsigned int> rowsIter = rows.begin();
                 for(int x=0;rowsIter != rows.end(); ++rowsIter, x++)
-                    if(*rowsIter == iter.key()->getCols())
+                    if(*rowsIter == iter.key()->getColumns())
                         m_rows.append(x);
 
                 QValueList<unsigned int> columns = tableCols[iter.key()];
@@ -4016,7 +4016,7 @@ int KWView::tableSelectCell(const QString &tableName, uint row, uint col)
     KWTableFrameSet *table = dynamic_cast<KWTableFrameSet*>(fs);
     if(!table)
         return -1;
-    if (row >= table->getRows() || col >= table->getCols())
+    if (row >= table->getRows() || col >= table->getColumns())
         return -1;
 
     KWTableFrameSet::Cell *cell = table->cell(row, col);
@@ -4062,7 +4062,7 @@ int KWView::tableDeleteCol(const QValueList<uint>& cols, KWTableFrameSet *table)
     if (!m_doc || !table)
         return -1;
 
-    if(cols.count() >= table->getCols()) {
+    if(cols.count() >= table->getColumns()) {
         m_doc->deleteTable(table);
         return 0;
     }
@@ -4089,7 +4089,7 @@ void KWView::tableProperties()
         canvas->setMouseMode( KWCanvas::MM_EDIT );
         KWTableDia *tableDia = new KWTableDia( this, 0, KWTableDia::EDIT, canvas, m_doc,
                                                table->getRows(),
-                                               table->getCols(),
+                                               table->getColumns(),
                                                canvas->tableWidthMode(),
                                                canvas->tableHeightMode(),
                                                canvas->tableIsFloating(),
@@ -4135,7 +4135,7 @@ void KWView::tableInsertCol()
     KWTableFrameSet::Cell *cell = ti.firstSelectedCell();
     if(! cell) return;
 
-    KWInsertDia dia( this, cell->groupmanager(), KWInsertDia::insertColumn,  cell->firstCol());
+    KWInsertDia dia( this, cell->groupmanager(), KWInsertDia::insertColumn,  cell->firstColumn());
     dia.exec();
 }
 
@@ -4147,7 +4147,7 @@ void KWView::tableInsertCol(uint col,  KWTableFrameSet *table  )
     if (!m_doc || !table)
         return;
 
-    if(col > table->getCols())
+    if(col > table->getColumns())
         return;
 
     // we pass as last parameter the maximum offset that the table can use.
@@ -4193,7 +4193,7 @@ void KWView::tableResizeCol()
     KWTableFrameSet::Cell *cell = ti.firstSelectedCell();
     if(cell == 0)
         return;
-    KWResizeTableDia dia(this, cell->groupmanager(), m_doc, cell->firstCol());
+    KWResizeTableDia dia(this, cell->groupmanager(), m_doc, cell->firstColumn());
     dia.exec();
 }
 
@@ -4221,9 +4221,9 @@ void KWView::tableJoinCells()
         }
 
         if(cell->firstRow() < y1)  y1 = cell->firstRow();
-        if(cell->firstCol() < x1)  x1 = cell->firstCol();
+        if(cell->firstColumn() < x1)  x1 = cell->firstColumn();
         if(cell->lastRow() > y2) y2 = cell->lastRow();
-        if(cell->lastCol() > x2) x2 = cell->lastCol();
+        if(cell->lastColumn() > x2) x2 = cell->lastColumn();
     }
 
     Q_ASSERT(table);
@@ -4265,7 +4265,7 @@ void KWView::tableSplitCells(int cols, int rows)
     }
 
     KWTableFrameSet::Cell *cell = ti.firstSelectedCell();
-    KCommand *cmd=cell->groupmanager()->splitCell(rows, cols, cell->firstCol(), cell->firstRow());
+    KCommand *cmd=cell->groupmanager()->splitCell(rows, cols, cell->firstColumn(), cell->firstRow());
     if ( !cmd ) {
         KMessageBox::sorry( this,
                             i18n("There is not enough space to split the cell into that many parts, make it bigger first"),
@@ -4610,7 +4610,7 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
                     KWTableFrameSet* kwtableframeset = static_cast<KWTableFrameSet *>( *it );
                     //kdDebug() << "table found: " << kwtableframeset->frameCount() << endl;
                     int const rows  = kwtableframeset->getRows();
-                    int const cols = kwtableframeset->getCols();
+                    int const cols = kwtableframeset->getColumns();
                     //finding all cells and add them to the interface list
                     for (int r=0; r<rows; ++r)
                     {

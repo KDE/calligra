@@ -385,7 +385,7 @@ void KWCanvas::mpEditFrame( const QPoint &nPoint, MouseMeaning meaning, QMouseEv
             // We'll have to do better in the long run
             if ( table ) {
                 KWTableFrameSet::Cell *theCell=static_cast<KWTableFrameSet::Cell *>(fs);
-                for(unsigned int col=0; col < table->getCols(); col++) {
+                for(unsigned int col=0; col < table->getColumns(); col++) {
                     KWTableFrameSet::Cell *c = table->cell(theCell->firstRow(), col);
                     m_boundingRect |= *c->frame(0);
                 }
@@ -2902,7 +2902,7 @@ int KWCanvas::currentTableCol() const
         return -1;
     KWTextFrameSet* textfs = edit->textFrameSet();
     if ( textfs && textfs->groupmanager() )
-        return static_cast<KWTableFrameSet::Cell *>(textfs)->firstCol();
+        return static_cast<KWTableFrameSet::Cell *>(textfs)->firstColumn();
     return -1;
 }
 

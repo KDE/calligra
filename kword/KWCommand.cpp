@@ -652,7 +652,7 @@ KWTableTemplateCommand::KWTableTemplateCommand( const QString &name, KWTableFram
 
     KWTableStyle *cell = 0L;
     unsigned int rows = m_table->getRows();
-    unsigned int cols = m_table->getCols();
+    unsigned int cols = m_table->getColumns();
 
     for ( unsigned int i = 0; i < rows; i++ )
     {
@@ -733,8 +733,8 @@ void KWFrameResizeCommand::execute()
         KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
         if(cell)
         {
-            table->recalcCols(cell->firstCol(), cell->firstRow());
-            table->recalcRows(cell->firstCol(), cell->firstRow());
+            table->recalcCols(cell->firstColumn(), cell->firstRow());
+            table->recalcRows(cell->firstColumn(), cell->firstRow());
         }
         else
         {
@@ -764,8 +764,8 @@ void KWFrameResizeCommand::unexecute()
         KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
         if(cell)
         {
-            table->recalcCols(cell->firstCol(), cell->firstRow());
-            table->recalcRows(cell->firstCol(), cell->firstRow());
+            table->recalcCols(cell->firstColumn(), cell->firstRow());
+            table->recalcRows(cell->firstColumn(), cell->firstRow());
         }
         else
         {
@@ -1267,14 +1267,14 @@ void KWInsertColumnCommand::execute()
         // here we calculate the new table size for a table that would take the
         // entire width of the page, which what the user wants 99% of the time.
         double newTableWidth =m_maxRight - m_pTable->boundingRect().left();
-        double newColSize = newTableWidth / (m_pTable->getCols()+1);
+        double newColSize = newTableWidth / (m_pTable->getColumns()+1);
         double resizeTableWidth = m_maxRight - m_pTable->boundingRect().left();
         m_pTable->resizeWidth(resizeTableWidth - newColSize);
-        m_pTable->insertNewCol(m_colPos, newColSize);
+        m_pTable->insertNewColumn(m_colPos, newColSize);
     }
     else
     {   // simply insert the column without asking for a specific size :
-        m_pTable->insertNewCol(m_colPos);
+        m_pTable->insertNewColumn(m_colPos);
     }
     Q_ASSERT(m_pTable->boundingRect().right() <= m_maxRight);
     doc->updateAllFrames();
@@ -1287,7 +1287,7 @@ void KWInsertColumnCommand::unexecute()
     kdDebug(32001) << "KWInsertColumnCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
-    m_pTable->deleteCol(m_colPos, *m_rc);
+    m_pTable->deleteColumn(m_colPos, *m_rc);
     // now undo the resize of the table if necessary:
     if (m_oldWidth) {
         // yes, the table was resized, let's undo that :
@@ -1399,7 +1399,7 @@ void KWRemoveColumnCommand::execute()
     KWDocument * doc = m_pTable->kWordDocument();
     doc->terminateEditing(m_pTable);
 
-    m_pTable->deleteCol( m_colPos, *m_rc);
+    m_pTable->deleteColumn( m_colPos, *m_rc);
     doc->updateAllFrames();
     doc->layout();
 }
@@ -1408,7 +1408,7 @@ void KWRemoveColumnCommand::unexecute()
 {
     kdDebug(32001) << "KWRemoveColumnCommand::unexecute" << endl;
     KWDocument * doc = m_pTable->kWordDocument();
-    m_pTable->reInsertCol(*m_rc);
+    m_pTable->reInsertColumn(*m_rc);
     doc->updateAllFrames();
     doc->layout();
     doc->repaintAllViews();
@@ -1448,7 +1448,7 @@ void KWSplitCellCommand::unexecute()
 
     if(m_ListFrameSet.isEmpty())
     {
-        for ( unsigned int i = 0; i < m_pTable->getCols(); i++ )
+        for ( unsigned int i = 0; i < m_pTable->getColumns(); i++ )
         {
             for ( unsigned int j = 0; j < m_pTable->getRows(); j++ )
             {
@@ -1468,7 +1468,7 @@ void KWSplitCellCommand::unexecute()
         }
     }
     KWTableFrameSet::Cell *cell=static_cast<KWTableFrameSet::Cell *>(m_pTable->cell( m_rowBegin,m_colBegin ));
-    m_pTable->joinCells(m_colBegin, m_rowBegin, m_colEnd+m_colBegin-1+cell->colSpan()-1,
+    m_pTable->joinCells(m_colBegin, m_rowBegin, m_colEnd+m_colBegin-1+cell->columnSpan()-1,
         m_rowBegin+m_rowEnd-1+cell->rowSpan()-1);
 
     doc->updateAllFrames();

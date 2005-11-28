@@ -337,7 +337,7 @@ void KWDocStructTableItem::speakItem()
 {
     bool first = true;
     for (uint row = 0; row < m_table->getRows(); ++row) {
-        for (uint col = 0; col < m_table->getCols(); ++ col) {
+        for (uint col = 0; col < m_table->getColumns(); ++ col) {
             KoTextParag* parag = m_table->cell(row, col)->textDocument()->firstParag();
             kospeaker->queueSpeech(parag->string()->toString(), parag->paragraphFormat()->language(), first);
             first = false;

@@ -83,22 +83,22 @@ public:
         virtual ~Cell();
 
         uint firstRow() const { return m_row; }
-        uint firstCol() const { return m_col; }
+        uint firstColumn() const { return m_col; }
         uint rowSpan() const { return m_rows; }
-        uint colSpan() const { return m_cols; }
+        uint columnSpan() const { return m_cols; }
 
         uint lastRow() const { return m_row + m_rows - 1; }
-        uint lastCol() const { return m_col + m_cols - 1; }
+        uint lastColumn() const { return m_col + m_cols - 1; }
         uint rowAfter() const { return m_row + m_rows; }
-        uint colAfter() const { return m_col + m_cols; }
+        uint columnAfter() const { return m_col + m_cols; }
 
         void setFirstRow(uint row) { m_row = row; }
-        void setFirstCol(uint col) { m_col = col; }
+        void setFirstColumn(uint col) { m_col = col; }
         void setRowSpan(uint rows) {
             m_rows = rows;
             calcIfJoinedCell();
         }
-        void setColSpan(uint cols) {
+        void setColumnSpan(uint cols) {
             m_cols = cols;
             calcIfJoinedCell();
         }
@@ -115,8 +115,8 @@ public:
         /// Called by deleteFrame when it really deletes a frame (remove=true), to remove it from the table too
         virtual void frameDeleted( KWFrame* frm, bool recalc );
 
-        bool isAboveOrLeftOf( unsigned row, unsigned col ) const;
-        bool containsCell( unsigned row, unsigned col ) const;
+        bool isAboveOrLeftOf( unsigned row, unsigned column ) const;
+        bool containsCell( unsigned row, unsigned column ) const;
 
         double leftBorder();
         double rightBorder();
@@ -331,7 +331,7 @@ public:
                            KWFrameSetEdit *, KWViewMode *, bool ) {}
 
     // Frameset management
-    Cell *cell( unsigned int row, unsigned int col ) const;
+    Cell *cell( unsigned int row, unsigned int column ) const;
     Cell *cellByPos( double x, double y ) const;
 
     enum CellSize {
@@ -390,7 +390,7 @@ public:
     /** returns the number of rows */
     unsigned int getRows() const { return m_rows; }
     /** returns the number of columns */
-    unsigned int getCols() const { return m_cols; }
+    unsigned int getColumns() const { return m_cols; }
 
     /** returns the number of cells the table contains, this includes
      * temporary headers. */
@@ -413,18 +413,18 @@ public:
     /** insert a row of new cells, use the getCols() call to decide how many cells are created */
     void insertNewRow( uint _idx, bool _recalc = true, bool _removeable = false );
     /** insert a column of new cells use the getRows() call to decide how many cells are created */
-    void insertNewCol( uint _idx, double width = KWTableFrameSet::m_sDefaultColWidth);
+    void insertNewColumn( uint _idx, double width = KWTableFrameSet::m_sDefaultColWidth);
 
     /** Remove all the cells in a certain row */
     void deleteRow( uint _idx, RemovedRow &rr, bool _recalc = true);
 
     /** remove all the cells in a certain column */
-    void deleteCol( uint _idx, RemovedColumn &rc);
+    void deleteColumn( uint _idx, RemovedColumn &rc);
 
     /** replace a row that was removed with deleteRow() */
     void reInsertRow(RemovedRow &row);
-    /** replace a column that was removed with deleteCol() */
-    void reInsertCol(RemovedColumn &col);
+    /** replace a column that was removed with deleteColumn() */
+    void reInsertColumn(RemovedColumn &col);
 
     // the boolean actually works, but is not saved (to xml) yet :(
     void setShowHeaderOnAllPages( bool s ) { m_showHeaderOnAllPages = s; }
@@ -652,7 +652,7 @@ KWTableFrameSet::TableIterator<VisitStyle>::TableIterator(KWTableFrameSet *table
         m_table(table)
 {
         Q_ASSERT(m_table);
-        set_limits(0, m_table->getCols() - 1, 0, m_table->getRows() - 1);
+        set_limits(0, m_table->getColumns() - 1, 0, m_table->getRows() - 1);
         toFirstCell();
 }
 
@@ -667,7 +667,7 @@ KWTableFrameSet::TableIterator<VisitStyle>::toFirstCell (){
         m_cell = m_table->cell(m_limit[HIGH], m_limit[LEFT]);
         Q_ASSERT(m_cell);
         m_row = m_cell->firstRow();
-        m_col = m_cell->firstCol();
+        m_col = m_cell->firstColumn();
         return m_cell;
 }
 
@@ -677,7 +677,7 @@ KWTableFrameSet::TableIterator<VisitStyle>::goToCell(KWTableFrameSet::Cell *cell
 {
         m_cell = cell;
         m_row = m_cell->firstRow();
-        m_col = m_cell->firstCol();
+        m_col = m_cell->firstColumn();
 }
 
 // CHECKED specialises to first cell

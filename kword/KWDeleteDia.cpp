@@ -48,7 +48,7 @@ void KWDeleteDia::setupTab1() {
     Q_ASSERT(count > 0);
 
     QString message;
-    if ( count == ( (m_type == deleteRow) ? m_table->getRows() : m_table->getCols() ) )
+    if ( count == ( (m_type == deleteRow) ? m_table->getRows() : m_table->getColumns() ) )
         // all the columns are selected and the user asked to remove columns or the same with rows
         // => we want to delete the whole table
         message = i18n("Delete the whole table?");

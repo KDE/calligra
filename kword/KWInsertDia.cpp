@@ -64,7 +64,7 @@ void KWInsertDia::setupTab1(int insertHint)
     QLabel *rc = new QLabel( m_type == insertRow ? i18n( "Row:" ) : i18n( "Column:" ), tab1 );
     grid1->addWidget( rc, 1, 0 );
 
-    m_value = new QSpinBox( 1, m_type == insertRow ? m_table->getRows() : m_table->getCols(),
+    m_value = new QSpinBox( 1, m_type == insertRow ? m_table->getRows() : m_table->getColumns(),
         1, tab1, "row_col_spinbox" );
     m_value->setValue( insertHint + 1 ); // +1 due to the fact that humans count starting at 1
 

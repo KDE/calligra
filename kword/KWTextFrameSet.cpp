@@ -1648,9 +1648,9 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
 
         KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)this;
         framesetElem.setAttribute( "row", cell->firstRow() );
-        framesetElem.setAttribute( "col", cell->firstCol() );
+        framesetElem.setAttribute( "col", cell->firstColumn() );
         framesetElem.setAttribute( "rows", cell->rowSpan() );
-        framesetElem.setAttribute( "cols", cell->colSpan() );
+        framesetElem.setAttribute( "cols", cell->columnSpan() );
         framesetElem.setAttribute( "removable", static_cast<int>( m_removeableHeader ) );
     }
     if ( protectContent() )
@@ -1955,8 +1955,8 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                 if ( resized ) {
                     theFrame->setMinFrameHeight( newMinFrameHeight );
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
-                    table->recalcCols(cell->firstCol(), cell->firstRow());
-                    table->recalcRows(cell->firstCol(), cell->firstRow());
+                    table->recalcCols(cell->firstColumn(), cell->firstRow());
+                    table->recalcRows(cell->firstColumn(), cell->firstRow());
 
                     if (!  table->anchorFrameset() )
                         ;// do nothing
@@ -2103,8 +2103,8 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
                     kdDebug(32002) << "is table cell; only setting new minFrameHeight to " << theFrame->minFrameHeight() << ", recalcrows will do the rest" << endl;
 #endif
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
-                    table->recalcCols(cell->firstCol(), cell->firstRow());
-                    table->recalcRows(cell->firstCol(), cell->firstRow());
+                    table->recalcCols(cell->firstColumn(), cell->firstRow());
+                    table->recalcRows(cell->firstColumn(), cell->firstRow());
 
                     if (!  table->anchorFrameset() )
                         ;// do nothing
