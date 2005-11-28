@@ -403,28 +403,6 @@ public:
     // /** point the outlines of all the cells */
     //void drawAllRects( QPainter &p, int xOffset, int yOffset );
 
-    /**
-     * @brief select all frames from the first selected to the argument frameset.
-     *
-     * the selectUntil method will select all frames from the first
-     * selected to the frame of the argument frameset.
-     */
-    void selectUntil( Cell *cell );
-
-    /** @overload KWTableFrameSet::selectUntil */
-    void selectUntil( double x, double y);
-
-    bool getFirstSelected(unsigned int &row, unsigned int &col);
-
-    bool isRowSelected(uint row);
-    bool isColSelected(uint column);
-
-    /** is at least one row selected on the whole table?*/
-    bool isRowsSelected();
-
-    /** is at least one col selected on the whole table?*/
-    bool isColsSelected();
-
     /** Return true if exactly one frame is selected. The parameters row
     *  and col will receive the values of the active row and col.<br>
     *  When no frame or more then one frame is selected row and col will

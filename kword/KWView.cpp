@@ -4104,13 +4104,11 @@ void KWView::tableProperties()
 
 void KWView::tableInsertRow()
 {
-    m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
-    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    Q_ASSERT(table);
-    if (!table)
-        return;
-    KWInsertDia dia( this, "insert_row_dialog", table, m_doc, KWInsertDia::ROW, m_gui->canvasWidget() );
-    dia.setCaption( i18n( "Insert Row" ) );
+    TableInfo ti(frameViewManager()->selectedFrames());
+    KWTableFrameSet::Cell *cell = ti.firstSelectedCell();
+    if(! cell) return;
+
+    KWInsertDia dia( this, cell->groupmanager(), KWInsertDia::insertRow,  cell->firstRow());
     dia.exec();
 }
 
@@ -4133,31 +4131,12 @@ void KWView::tableInsertRow(uint row, KWTableFrameSet *table)
 
 void KWView::tableInsertCol()
 {
-#if 0
-    m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
-    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    Q_ASSERT(table);
-    if (!table)
-        return;
-/*
-    // value = 62 because a insert column = 60 +2 (border )see kwtableframeset.cc
-    if ( table->boundingRect().right() + 62 > static_cast<int>( m_doc->ptPaperWidth() ) )
-    {
-        KMessageBox::sorry( this,
-                            i18n( "There is not enough space at the right of the table "
-                                  "to insert a new column." ),
-                            i18n( "Insert Column" ) );
-    }
-    else
-    {
-        KWInsertDia dia( this, "", table, m_doc, KWInsertDia::COL, m_gui->canvasWidget() );
-        dia.setCaption( i18n( "Insert Column" ) );
-        dia.exec();
-    } */
-    KWInsertDia dia( this, "insert_column_dialog", table, m_doc, KWInsertDia::COL, m_gui->canvasWidget() );
-    dia.setCaption( i18n( "Insert Column" ) );
+    TableInfo ti(frameViewManager()->selectedFrames());
+    KWTableFrameSet::Cell *cell = ti.firstSelectedCell();
+    if(! cell) return;
+
+    KWInsertDia dia( this, cell->groupmanager(), KWInsertDia::insertColumn,  cell->firstCol());
     dia.exec();
-#endif
 }
 
 void KWView::tableInsertCol(uint col,  KWTableFrameSet *table  )

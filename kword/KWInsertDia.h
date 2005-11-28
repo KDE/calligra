@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C)  2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,42 +24,27 @@
 #include <kdialogbase.h>
 
 class KWTableFrameSet;
-class KWDocument;
-class KWCanvas;
-class QWidget;
-class QGridLayout;
-class QButtonGroup;
 class QRadioButton;
-class QLabel;
 class QSpinBox;
-
-/******************************************************************/
-/* Class: KWInsertDia                                             */
-/******************************************************************/
+class KWView;
 
 class KWInsertDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    enum InsertType {ROW, COL};
-    KWInsertDia( QWidget *parent, const char *name, KWTableFrameSet *_grpMgr, KWDocument *_doc, InsertType _type, KWCanvas *_canvas );
+    enum InsertType {insertRow, insertColumn};
+    KWInsertDia( KWView *parent, KWTableFrameSet *table, InsertType type, int insertHint);
 
 protected:
-    void setupTab1();
-    bool doInsert();
+    void setupTab1(int insertHint);
 
-    QWidget *tab1;
-    QGridLayout *grid1, *grid2;
-    QButtonGroup *grp;
-    QRadioButton *rBefore, *rAfter;
-    QLabel *rc;
-    QSpinBox *value;
+    QRadioButton *m_rBefore;
+    QSpinBox *m_value;
 
-    KWTableFrameSet *table;
-    KWDocument *doc;
-    InsertType type;
-    KWCanvas *canvas;
+    KWTableFrameSet *m_table;
+    InsertType m_type;
+    KWView *m_view;
 
 protected slots:
     virtual void slotOk();

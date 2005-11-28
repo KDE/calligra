@@ -922,56 +922,6 @@ void KWTableFrameSet::moveBy( double dx, double dy ) {
     }
 }
 
-void KWTableFrameSet::selectUntil( double x, double y) {
-    KWFrame *f = frameAtPos(x,y);
-    if(f) selectUntil(static_cast<KWTableFrameSet::Cell *> (f->frameSet()));
-}
-
-void KWTableFrameSet::selectUntil( Cell *daCell)
-{
-    unsigned int toRow = 0, toCol = 0;
-    toRow = daCell->lastRow();
-    toCol = daCell->lastCol();
-
-    unsigned int fromRow = 0, fromCol = 0;
-    getFirstSelected( fromRow, fromCol );
-    if(daCell->colSpan() != 1 )
-        fromCol = kMin(fromCol, daCell->firstCol());
-    if(daCell->rowSpan() != 1 )
-        fromRow = kMin(fromRow, daCell->firstRow());
-
-
-
-    if ( fromRow > toRow ) { // doSwap
-        fromRow = fromRow^toRow;
-        toRow = fromRow^toRow;
-        fromRow = fromRow^toRow;
-    }
-
-    if ( fromCol > toCol ) { // doSwap
-        fromCol = fromCol^toCol;
-        toCol = fromCol^toCol;
-        fromCol = fromCol^toCol;
-    }
-
-    for ( TableIter cells(this); cells; ++cells ) {
-        // check if cell falls completely in square.
-        unsigned int row = cells->lastRow();
-        unsigned int col = cells->lastCol();
-        if(row >= fromRow && row <= toRow && col >= fromCol && col <= toCol)
-        {
-            cells->frame(0)->setSelected( true );
-        }
-        else
-        {
-            if(cells->frame( 0 )->isSelected())
-            {
-                cells->frame( 0 )->setSelected( false );
-            }
-        }
-    }
-}
-
 /* Return true if exactly one frame is selected. The parameters row
    and col will receive the values of the active row and col.
    When no frame or more then one frame is selected row and col will
@@ -994,64 +944,6 @@ bool KWTableFrameSet::isOneSelected(unsigned int &row, unsigned int &col) {
         row = selected->firstRow();
         col = selected->firstCol();
         return true;
-    }
-    return false;
-}
-
-bool KWTableFrameSet::isRowSelected(uint row) {
-    Q_ASSERT(row < getRows());
-    Row *r = m_rowArray[row];
-
-    // if just one cell of the row is not selected, the row is not selected
-    for ( uint i = 0; i < r->size(); i++ ) {
-        if ( !((*r)[i]->frame(0)->isSelected()) ) {
-//              kdDebug() << "row " << row << " row is not selected" << endl;
-                return false;
-        }
-    }
-//  kdDebug() << "row " << row << " row is selected" << endl;
-    return true;
-}
-
-bool KWTableFrameSet::isColSelected(uint col) {
-    Q_ASSERT(col <= getCols());
-    Row *r;
-    // if just one cell of the col is not selected, the col is not selected
-    for ( uint i = 0; i < getRows(); i++ ) {
-        r = m_rowArray[i];
-        if ( !((*r)[col]->frame( 0 )->isSelected()) ) {
-//            kdDebug() << "column " << col << " column is not selected" << endl;
-            return false;
-        }
-    }
-//    kdDebug() << "column " << col << " column is selected" << endl;
-    return true;
-}
-
-bool KWTableFrameSet::isRowsSelected() {
-    for (uint i=0;i<getRows();i++) {
-        if (isRowSelected(i))
-            return true;
-    }
-    return false;
-}
-
-bool KWTableFrameSet::isColsSelected() {
-    for (uint i=0;i<getCols();i++) {
-        if (isColSelected(i))
-            return true;
-    }
-    return false;
-}
-
-bool KWTableFrameSet::getFirstSelected( unsigned int &row, unsigned int &col )
-{
-    for ( TableIter i(this); i ; ++i ) {
-        if (i->frame( 0 )->isSelected()) {
-            row = i->firstRow();
-            col = i->firstCol();
-            return true;
-        }
     }
     return false;
 }
