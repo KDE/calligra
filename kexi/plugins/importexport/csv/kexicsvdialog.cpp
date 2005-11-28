@@ -65,6 +65,7 @@
 
 #include "kexicsvdialog.h"
 #include "kexicsvoptionsdlg.h"
+#include "kexicsvwidgets.h"
 
 #ifdef Q_WS_WIN
 #include <windows.h>
@@ -129,8 +130,8 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
 	m_cancelled( false ),
 	m_adjustRows( 0 ),
 	m_startline( 0 ),
-	m_textquote( '"' ),
-	m_delimiter( "," ),
+	m_textquote( KEXICSV_DEFAULT_TEXT_QUOTE ),
+	m_delimiter( KEXICSV_DEFAULT_DELIMITER ),
 	m_mode(mode),
 	m_prevSelectedCol(-1),
 //	m_targetRect( rect ),
@@ -198,12 +199,7 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
 */
 
 	// Delimiter: comma, semicolon, tab, space, other
-	m_delimiterCombo = new KComboBox(plainPage(), "m_delimiterCombo");
-	m_delimiterCombo->insertItem(i18n("Comma \",\""));
-	m_delimiterCombo->insertItem( i18n( "Semicolon \";\"" ) );
-	m_delimiterCombo->insertItem( i18n( "Tabulator" ) );
-	m_delimiterCombo->insertItem( i18n( "Space \" \"" ) );
-	m_delimiterCombo->insertItem( i18n( "Other" ) );
+	m_delimiterCombo = new KexiCSVDelimiterComboBox(plainPage());
 //	m_delimiterCombo->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 	MyDialogLayout->addWidget( m_delimiterCombo, 3, 0 );
 
@@ -297,10 +293,7 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
   m_formatBoxLayout->addWidget( m_radioDate, 0, 1 );
 #endif //0
 
-  m_comboQuote = new KComboBox( plainPage(), "m_comboQuote" );
-  m_comboQuote->insertItem( i18n( "\"" ) );
-  m_comboQuote->insertItem( i18n( "'" ) );
-  m_comboQuote->insertItem( i18n( "None" ) );
+  m_comboQuote = new KexiCSVTextQuoteComboBox( plainPage() );
 //  m_comboQuote->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
 ////  m_comboQuote->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 //  m_comboQuote->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboQuote->sizePolicy().hasHeightForWidth() ) );
@@ -465,7 +458,7 @@ if ( m_mode == Clipboard )
 
 	currentCellChanged(0, 0);
 	updateGeometry();
-	m_delimiterCombo->setFocus();
+	m_table->setFocus();
 }
 
 KexiCSVDialog::~KexiCSVDialog()

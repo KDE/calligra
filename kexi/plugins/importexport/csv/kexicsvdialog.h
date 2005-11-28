@@ -48,9 +48,12 @@ class QRadioButton;
 class QTable;
 class KComboBox;
 
-//class KSpreadView;
-
 class KexiMainWindow;
+class KexiCSVDelimiterComboBox;
+class KexiCSVTextQuoteComboBox;
+
+#define KEXICSV_DEFAULT_TEXT_QUOTE '"'
+#define KEXICSV_DEFAULT_DELIMITER ","
 
 /**
  * This is temporary solution for Kexi CSV support,
@@ -95,7 +98,7 @@ class KexiCSVDialog : public KDialogBase
 //  QGridLayout* m_formatBoxLayout;
   QTable* m_table;
   QLabel* m_delimiterLabel;
-  KComboBox* m_delimiterCombo;
+  KexiCSVDelimiterComboBox* m_delimiterCombo;
 /*  QButtonGroup* m_delimiterBox;
   QRadioButton* m_radioComma;
   QRadioButton* m_radioSemicolon;
@@ -112,7 +115,7 @@ class KexiCSVDialog : public KDialogBase
   QRadioButton* m_radioCurrency;
   QRadioButton* m_radioDate;*/
   KComboBox* m_comboLine;
-  KComboBox* m_comboQuote;
+  KexiCSVTextQuoteComboBox* m_comboQuote;
   QLabel* TextLabel3;
   QLabel* TextLabel2;
   QCheckBox* m_ignoreDuplicates;
