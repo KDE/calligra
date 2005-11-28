@@ -50,7 +50,7 @@ KParts::Part* KPresenterFactory::createPartObject( QWidget *parentWidget, const 
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
 
-    KPresenterDoc *doc = new KPresenterDoc( parentWidget, widgetName, parent, name, !bWantKoDocument );
+    KPrDocument *doc = new KPrDocument( parentWidget, widgetName, parent, name, !bWantKoDocument );
 
     if ( !bWantKoDocument )
         doc->setReadWrite( false );

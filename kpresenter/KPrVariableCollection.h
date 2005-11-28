@@ -26,7 +26,7 @@
 #include <kovariable.h>
 
 #include "KPrTextDocument.h"
-class KPresenterDoc;
+class KPrDocument;
 class KoVariable;
 class KoPageVariable;
 class KoTextFormat;
@@ -49,23 +49,23 @@ class KPrPgNumVariable : public KoPageVariable
 {
 public:
     KPrPgNumVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat,
-                      KoVariableCollection *_varColl, KPresenterDoc *doc );
+                      KoVariableCollection *_varColl, KPrDocument *doc );
 
     virtual void recalc();
 
 private:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
 };
 
 
 class KPrStatisticVariable : public KoStatisticVariable
 {
 public:
-    KPrStatisticVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *doc );
+    KPrStatisticVariable( KoTextDocument *textdoc, int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPrDocument *doc );
     virtual void recalc();
     virtual QString text(bool realValue=false);
 
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
 };
 #endif

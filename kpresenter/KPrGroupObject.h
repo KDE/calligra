@@ -22,7 +22,7 @@
 #ifndef kpgroupobject_h
 #define kpgroupobject_h
 
-class KPresenterDoc;
+class KPrDocument;
 class KoOasisContext;
 class KPrPage;
 class KoXmlWriter;
@@ -69,8 +69,8 @@ public:
         { return i18n("Group"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual double load(const QDomElement &element, KPresenterDoc *doc);
-    virtual void loadOasisGroupObject( KPresenterDoc *doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPRLoadingInfo *info);
+    virtual double load(const QDomElement &element, KPrDocument *doc);
+    virtual void loadOasisGroupObject( KPrDocument *doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPRLoadingInfo *info);
 
     virtual void draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
                        int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );

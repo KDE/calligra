@@ -20,7 +20,7 @@
 */
 
 #include "KPrPolygonObject.h"
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include <kotextzoomhandler.h>
 #include <kdebug.h>
 #include <qbitmap.h>

@@ -35,7 +35,7 @@
 
 #include "KPrBackground.h"
 #include "KPrCanvas.h"
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include "KPrDocument.h"
 #include "KPrSoundPlayer.h"
 #include "KPrView.h"

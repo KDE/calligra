@@ -20,7 +20,7 @@
 */
 
 #include "KPrRectObject.h"
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include "KPrRectObjectIface.h"
 
 #include <kotextzoomhandler.h>

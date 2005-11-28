@@ -22,7 +22,7 @@
 #ifndef kprbgspellcheck_h
 #define kprbgspellcheck_h
 
-class KPresenterDoc;
+class KPrDocument;
 class KPTextObject;
 #include "kobgspellcheck.h"
 
@@ -30,13 +30,13 @@ class KPTextObject;
 class KPrBgSpellCheck : public KoBgSpellCheck
 {
 public:
-    KPrBgSpellCheck(KPresenterDoc *_doc);
+    KPrBgSpellCheck(KPrDocument *_doc);
     virtual ~KPrBgSpellCheck();
     virtual KoTextIterator *createWholeDocIterator() const;
 
 
 private:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPTextObject *m_currentObj;
 };
 #endif

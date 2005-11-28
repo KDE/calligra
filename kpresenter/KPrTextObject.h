@@ -30,7 +30,7 @@
 
 class KoSavingContext;
 class KPresenterView;
-class KPresenterDoc;
+class KPrDocument;
 class QDomElement;
 class TextCmd;
 class KPGradient;
@@ -52,7 +52,7 @@ class KPTextObject :  public QObject, public KP2DObject, public KoTextFlow
 {
     Q_OBJECT
 public:
-    KPTextObject( KPresenterDoc *doc );
+    KPTextObject( KPrDocument *doc );
     virtual ~KPTextObject();
 
     virtual DCOPObject* dcopObject();
@@ -107,7 +107,7 @@ public:
 
     KPrTextDocument *textDocument() const;
 
-    KPresenterDoc* kPresenterDocument() const { return m_doc; }
+    KPrDocument* kPresenterDocument() const { return m_doc; }
 
     KPTextView * createKPTextView( KPrCanvas *,bool temp=false );
     void applyStyleChange( KoStyleChangeDefMap changed );
@@ -122,7 +122,7 @@ public:
                         QDomElement &parentElem,
                         int from /* default 0 */,
                         int to /* default length()-2 */ );
-    KoParagLayout loadParagLayout( QDomElement & parentElem, KPresenterDoc *doc, bool useRefStyle);
+    KoParagLayout loadParagLayout( QDomElement & parentElem, KPrDocument *doc, bool useRefStyle);
 
     static KoTextFormat loadFormat( QDomElement &n, KoTextFormat * refFormat, const QFont & defaultFont,
                                     const QString & defaultLanguage, bool hyphen );
@@ -215,7 +215,7 @@ private:
 
     /** The contained text object */
     KoTextObject *m_textobj;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KoParagLayout m_paragLayout;
     VerticalAlignmentType m_textVertAlign;
     double bleft, bright, btop, bbottom; // margins

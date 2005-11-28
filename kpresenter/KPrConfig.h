@@ -25,7 +25,7 @@
 #include <kdialogbase.h>
 
 class KPresenterView;
-class KPresenterDoc;
+class KPrDocument;
 class KIntNumInput;
 class KColorButton;
 class KConfig;
@@ -221,7 +221,7 @@ private:
     configureToolsPage *_toolsPage;
     configurePathPage *m_pathPage;
     configureTTSPage *m_ttsPage;
-    KPresenterDoc* m_doc;
+    KPrDocument* m_doc;
 
 };
 

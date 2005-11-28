@@ -21,7 +21,7 @@
 #include "KPrVariableCollection.h"
 #include <kovariable.h>
 #include "KPrDocument.h"
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include <klocale.h>
 #include <kdebug.h>
 #include <koxmlns.h>
@@ -66,7 +66,7 @@ KoVariable *KPrVariableCollection::createVariable( int type, short int subtype, 
                                                    KoVariableFormat *varFormat,KoTextDocument *textdoc,
                                                    KoDocument * doc,  int _correct, bool _forceDefaultFormat, bool /*loadFootNote*/ )
 {
-    KPresenterDoc*m_doc=static_cast<KPresenterDoc*>(doc);
+    KPrDocument*m_doc=static_cast<KPrDocument*>(doc);
     KoVariable * var = 0L;
     switch(type) {
     case VT_PGNUM:
@@ -92,7 +92,7 @@ KoVariable *KPrVariableCollection::createVariable( int type, short int subtype, 
 
 
 KPrPgNumVariable::KPrPgNumVariable( KoTextDocument *textdoc, short int subtype, KoVariableFormat *varFormat,
-                                    KoVariableCollection *_varColl, KPresenterDoc *doc  )
+                                    KoVariableCollection *_varColl, KPrDocument *doc  )
     : KoPageVariable( textdoc, subtype, varFormat ,_varColl ),m_doc(doc)
 {
 }
@@ -109,7 +109,7 @@ void KPrPgNumVariable::recalc()
         width = 0;
 }
 
-KPrStatisticVariable::KPrStatisticVariable( KoTextDocument *textdoc,  int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPresenterDoc *doc )
+KPrStatisticVariable::KPrStatisticVariable( KoTextDocument *textdoc,  int subtype, KoVariableFormat *varFormat,KoVariableCollection *_varColl, KPrDocument *doc )
     : KoStatisticVariable( textdoc, subtype, varFormat, _varColl ),
       m_doc(doc)
 {

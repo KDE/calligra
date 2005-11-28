@@ -30,7 +30,7 @@
 #include "KPrVariableCollection.h"
 #include <koAutoFormat.h>
 
-KPresenterDocIface::KPresenterDocIface( KPresenterDoc *doc_ )
+KPresenterDocIface::KPresenterDocIface( KPrDocument *doc_ )
     : KoDocumentIface( doc_ )
 {
     doc = doc_;

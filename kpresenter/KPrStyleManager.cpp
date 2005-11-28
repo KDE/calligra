@@ -26,7 +26,7 @@
 #include <koStylist.h>
 #include <kostyle.h>
 
-KPrStyleManager::KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPresenterDoc *_doc,
+KPrStyleManager::KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPrDocument *_doc,
                                   const QPtrList<KoParagStyle> & style, const QString & activeStyleName)
     : KoStyleManager(_parent,unit,style, activeStyleName)
 {

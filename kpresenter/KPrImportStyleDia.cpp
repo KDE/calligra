@@ -34,7 +34,7 @@
 #include <qlabel.h>
 #include "KPrTextObject.h"
 
-KPrImportStyleDia::KPrImportStyleDia( KPresenterDoc *_doc, KoStyleCollection* currentCollection,
+KPrImportStyleDia::KPrImportStyleDia( KPrDocument *_doc, KoStyleCollection* currentCollection,
                                       QWidget *parent, const char *name )
     :KoImportStyleDia( currentCollection, parent, name ),
      m_doc(_doc)

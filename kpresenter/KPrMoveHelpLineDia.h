@@ -25,7 +25,7 @@
 #include <koRect.h>
 
 class QRadioButton;
-class KPresenterDoc;
+class KPrDocument;
 class KLineEdit;
 class KFloatValidator;
 class KoUnitDoubleSpinBox;
@@ -35,7 +35,7 @@ class KPrMoveHelpLineDia : public KDialogBase
     Q_OBJECT
 public:
     KPrMoveHelpLineDia( QWidget *parent, double value, double limitTop, double limitBottom,
-                        KPresenterDoc *_doc, const char *name=0L);
+                        KPrDocument *_doc, const char *name=0L);
 
     double newPosition() const;
     bool removeLine() const { return m_bRemoveLine;}
@@ -45,7 +45,7 @@ private slots:
 
 protected:
     KoUnitDoubleSpinBox* position;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     bool m_bRemoveLine;
 };
 
@@ -53,7 +53,7 @@ class KPrInsertHelpLineDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KPrInsertHelpLineDia( QWidget *parent, const KoRect &r, KPresenterDoc *_doc, const char *name=0L);
+    KPrInsertHelpLineDia( QWidget *parent, const KoRect &r, KPrDocument *_doc, const char *name=0L);
 
     double newPosition() const;
     //return true if we add a new horizontal line help
@@ -67,7 +67,7 @@ protected:
     KoUnitDoubleSpinBox* position;
     QRadioButton *m_rbHoriz;
     QRadioButton *m_rbVert;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
 };
 
 
@@ -75,7 +75,7 @@ class KPrInsertHelpPointDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KPrInsertHelpPointDia( QWidget *parent, const KoRect &r, KPresenterDoc *_doc, double poxX=0.0,
+    KPrInsertHelpPointDia( QWidget *parent, const KoRect &r, KPrDocument *_doc, double poxX=0.0,
                            double posY=0.0, const char *name=0L);
 
     KoPoint newPosition() const;
@@ -88,7 +88,7 @@ protected:
     bool m_bRemovePoint;
     KoUnitDoubleSpinBox* positionX;
     KoUnitDoubleSpinBox* positionY;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
 };
 
 

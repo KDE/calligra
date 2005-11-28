@@ -23,7 +23,7 @@
 
 #include <qptrlist.h>
 #include "global.h"
-#include "KPGradient.h"
+#include "KPrGradient.h"
 
 class QPixmap;
 

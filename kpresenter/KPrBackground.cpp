@@ -22,7 +22,7 @@
 #include "KPrBackground.h"
 #include "KPrDocument.h"
 #include <kapplication.h>
-#include "KPGradientCollection.h"
+#include "KPrGradientCollection.h"
 #include "KPrTextObject.h"
 #include "KPrPage.h"
 #include "KPrUtils.h"
@@ -226,7 +226,7 @@ void KPBackGround::saveOasisBackgroundPageStyle( KoGenStyle& stylepageauto, KoGe
 QString KPBackGround::saveOasisPictureStyle( KoGenStyles& mainStyles )
 {
     //<draw:fill-image draw:name="Pattern" xlink:href="#Pictures/100000000000005E0000005E43C87AF2.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
-    KoGenStyle pictureStyle( KPresenterDoc::STYLE_PICTURE /*no family name*/ );
+    KoGenStyle pictureStyle( KPrDocument::STYLE_PICTURE /*no family name*/ );
     pictureStyle.addAttribute( "xlink:show", "embed" );
     pictureStyle.addAttribute( "xlink:actuate", "onLoad" );
     pictureStyle.addAttribute( "xlink:type", "simple" );
@@ -236,7 +236,7 @@ QString KPBackGround::saveOasisPictureStyle( KoGenStyles& mainStyles )
 
 QString KPBackGround::saveOasisGradientStyle( KoGenStyles& mainStyles )
 {
-    KoGenStyle gradientStyle( KPresenterDoc::STYLE_GRADIENT /*no family name*/);
+    KoGenStyle gradientStyle( KPrDocument::STYLE_GRADIENT /*no family name*/);
     gradientStyle.addAttribute( "draw:start-color", backColor1.name() );
     gradientStyle.addAttribute( "draw:end-color", backColor2.name() );
     QString unbalancedx( "50%" );

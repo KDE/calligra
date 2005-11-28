@@ -24,7 +24,7 @@
 #include <qlabel.h>
 #include <qbuttongroup.h>
 
-#include "KPrDuplicatObjDia.h"
+#include "KPrDuplicateObjDia.h"
 #include "KPrPage.h"
 #include <knuminput.h>
 #include <qlineedit.h>
@@ -34,7 +34,7 @@
 #include <kseparator.h>
 #include <koUnitWidgets.h>
 
-KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPresenterDoc * _doc, const char *name)
+KPrDuplicatObjDia::KPrDuplicatObjDia( QWidget *parent, KPrDocument * _doc, const char *name)
     : KDialogBase( parent, name, true, "", Ok | Cancel, Ok, true )
 {
     m_doc=_doc;
@@ -122,4 +122,4 @@ double KPrDuplicatObjDia::moveY() const
 }
 
 
-#include "KPrDuplicatObjDia.moc"
+#include "KPrDuplicateObjDia.moc"

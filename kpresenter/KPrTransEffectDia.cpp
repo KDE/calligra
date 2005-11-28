@@ -55,7 +55,7 @@
 #include <kfiledialog.h>
 
 
-KPEffectPreview::KPEffectPreview( QWidget *parent, KPresenterDoc *_doc, KPresenterView *_view )
+KPEffectPreview::KPEffectPreview( QWidget *parent, KPrDocument *_doc, KPresenterView *_view )
     : QLabel( parent ), doc( _doc ), view( _view ), m_pageEffect( 0 )
 {
     setFrameStyle( StyledPanel | Sunken );
@@ -143,7 +143,7 @@ void KPEffectPreview::slotDoPageEffect()
 
 
 KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
-                                    KPresenterDoc *_doc, KPresenterView *_view )
+                                    KPrDocument *_doc, KPresenterView *_view )
     : KDialogBase( parent, name, true, "", KDialogBase::User1|Ok|Cancel ),
       doc( _doc ), view( _view ), soundPlayer( 0 )
 {

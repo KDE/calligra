@@ -165,7 +165,7 @@ static QString EscapeEncodingOnly(const QTextCodec* codec, const QString& strIn)
     return strReturn;
 }
 
-KPWebPresentation::KPWebPresentation( KPresenterDoc *_doc, KPresenterView *_view )
+KPWebPresentation::KPWebPresentation( KPrDocument *_doc, KPresenterView *_view )
     : config( QString::null ), xml( false )
 {
     doc = _doc;
@@ -173,7 +173,7 @@ KPWebPresentation::KPWebPresentation( KPresenterDoc *_doc, KPresenterView *_view
     init();
 }
 
-KPWebPresentation::KPWebPresentation( const QString &_config, KPresenterDoc *_doc, KPresenterView *_view )
+KPWebPresentation::KPWebPresentation( const QString &_config, KPrDocument *_doc, KPresenterView *_view )
     : config( _config ), xml( false ), m_bWriteHeader( true ), m_bWriteFooter( true ), m_bLoopSlides( false )
 {
     doc = _doc;
@@ -614,7 +614,7 @@ void KPWebPresentation::init()
     m_encoding = QTextCodec::codecForLocale()->name();
 }
 
-KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPresenterDoc *_doc,
+KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPrDocument *_doc,
                                                   KPresenterView *_view )
     : KWizard( 0, "", false ), config( _config ), webPres( config, _doc, _view )
 {
@@ -637,7 +637,7 @@ KPWebPresentationWizard::~KPWebPresentationWizard()
     view->enableWebPres();
 }
 
-void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPresenterDoc *_doc,
+void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPrDocument *_doc,
                                                      KPresenterView *_view )
 {
     KPWebPresentationWizard *dlg = new KPWebPresentationWizard( _config, _doc, _view );
@@ -1132,7 +1132,7 @@ void KPWebPresentationWizard::slotChoosePath(const QString &text)
     webPres.setPath(text);
 }
 
-KPWebPresentationCreateDialog::KPWebPresentationCreateDialog( KPresenterDoc *_doc, KPresenterView *_view,
+KPWebPresentationCreateDialog::KPWebPresentationCreateDialog( KPrDocument *_doc, KPresenterView *_view,
                                                               const KPWebPresentation &_webPres )
     : QDialog( 0, "", false ), webPres( _webPres )
 {
@@ -1147,7 +1147,7 @@ KPWebPresentationCreateDialog::~KPWebPresentationCreateDialog()
     view->enableWebPres();
 }
 
-void KPWebPresentationCreateDialog::createWebPresentation( KPresenterDoc *_doc, KPresenterView *_view,
+void KPWebPresentationCreateDialog::createWebPresentation( KPrDocument *_doc, KPresenterView *_view,
                                                            const KPWebPresentation &_webPres )
 {
     KPWebPresentationCreateDialog *dlg = new KPWebPresentationCreateDialog( _doc, _view, _webPres );
@@ -1301,5 +1301,5 @@ void KPWebPresentationCreateDialog::saveConfig()
     }
 }
 
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include "KPrWebPresentation.moc"

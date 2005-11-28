@@ -45,7 +45,7 @@
 #include <kodom.h>
 
 #include "KPrPixmapObject.h"
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include "KPrPixmapObjectIface.h"
 
 

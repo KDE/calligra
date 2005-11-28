@@ -27,7 +27,7 @@
 #include <qvaluelist.h>
 
 
-class KPresenterDoc;
+class KPrDocument;
 class KPresenterView;
 
 class KURLRequester;
@@ -51,8 +51,8 @@ class KPWebPresentation
 {
 public:
 
-    KPWebPresentation( KPresenterDoc *_doc, KPresenterView *_view );
-    KPWebPresentation( const QString &_config, KPresenterDoc *_doc, KPresenterView *_view );
+    KPWebPresentation( KPrDocument *_doc, KPresenterView *_view );
+    KPWebPresentation( const QString &_config, KPrDocument *_doc, KPresenterView *_view );
     KPWebPresentation( const KPWebPresentation &webPres );
 
     void setAuthor( const QString &_author )
@@ -132,7 +132,7 @@ protected:
     void writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec,
                             const QString& subtitle, const QString& dest );
 
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPresenterView *view;
     QString config;
     QString author, title, email;
@@ -151,10 +151,10 @@ class KPWebPresentationWizard : public KWizard
     Q_OBJECT
 
 public:
-    KPWebPresentationWizard( const QString &_config, KPresenterDoc *_doc, KPresenterView *_view );
+    KPWebPresentationWizard( const QString &_config, KPrDocument *_doc, KPresenterView *_view );
     ~KPWebPresentationWizard();
 
-    static void createWebPresentation( const QString &_config, KPresenterDoc *_doc, KPresenterView *_view );
+    static void createWebPresentation( const QString &_config, KPrDocument *_doc, KPresenterView *_view );
 
 protected:
 
@@ -167,7 +167,7 @@ protected:
     void closeEvent( QCloseEvent *e );
 
     QString config;
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPresenterView *view;
     KPWebPresentation webPres;
 
@@ -195,10 +195,10 @@ class KPWebPresentationCreateDialog : public QDialog
     Q_OBJECT
 
 public:
-    KPWebPresentationCreateDialog( KPresenterDoc *_doc, KPresenterView *_view, const KPWebPresentation &_webPres );
+    KPWebPresentationCreateDialog( KPrDocument *_doc, KPresenterView *_view, const KPWebPresentation &_webPres );
     ~KPWebPresentationCreateDialog();
 
-    static void createWebPresentation( KPresenterDoc *_doc, KPresenterView *_view, const KPWebPresentation &_webPres );
+    static void createWebPresentation( KPrDocument *_doc, KPresenterView *_view, const KPWebPresentation &_webPres );
 
     void start();
 
@@ -212,7 +212,7 @@ protected:
     void resizeEvent( QResizeEvent *e );
 
     KPresenterView *view;
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPWebPresentation webPres;
 
     KProgress *progressBar;

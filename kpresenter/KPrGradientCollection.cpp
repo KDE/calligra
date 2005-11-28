@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPGradientCollection.h"
-#include "KPGradient.h"
+#include "KPrGradientCollection.h"
+#include "KPrGradient.h"
 #include <qstring.h>
 
 const QPixmap& KPGradientCollection::getGradient( const QColor &_color1, const QColor &_color2,

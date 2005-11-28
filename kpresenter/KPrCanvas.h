@@ -44,7 +44,7 @@
 class KURL;
 class KoTextFormatInterface;
 class KPresenterView;
-class KPresenterDoc;
+class KPrDocument;
 class QPainter;
 class KTextEdit;
 class KPTextObject;

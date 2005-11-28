@@ -26,7 +26,7 @@
 class QPainter;
 class QLabel;
 
-class KPresenterDoc;
+class KPrDocument;
 class KPresenterView;
 class KPrinter;
 class KTextEdit;

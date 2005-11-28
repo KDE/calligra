@@ -26,7 +26,7 @@
 class KCommand;
 class KPObject;
 class KPrPage;
-class KPresenterDoc;
+class KPrDocument;
 class PenStyleWidget;
 class BrushProperty;
 class RectProperty;
@@ -41,7 +41,7 @@ class PropertyEditor : public QTabDialog
     Q_OBJECT
 
 public:
-    PropertyEditor( QWidget *parent = 0, const char *name = 0, KPrPage *page = 0, KPresenterDoc *doc = 0 );
+    PropertyEditor( QWidget *parent = 0, const char *name = 0, KPrPage *page = 0, KPrDocument *doc = 0 );
     ~PropertyEditor();
 
     KCommand * getCommand();
@@ -63,7 +63,7 @@ private:
     GeneralProperty::GeneralValue getGeneralValue();
 
     KPrPage *m_page;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     QPtrList<KPObject> m_objects;
 
     PenStyleWidget *m_penProperty;

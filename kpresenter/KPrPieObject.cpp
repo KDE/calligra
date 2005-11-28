@@ -19,7 +19,7 @@
 */
 
 #include "KPrPieObject.h"
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include "KPrUtils.h"
 #include "KPrPieObjectIface.h"
 

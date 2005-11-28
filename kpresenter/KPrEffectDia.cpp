@@ -21,7 +21,7 @@
 #include "KPrView.h"
 #include "KPrDocument.h"
 #include "KPrEffectDia.h"
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include "KPrObject.h"
 #include "KPrSoundPlayer.h"
 

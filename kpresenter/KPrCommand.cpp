@@ -21,7 +21,7 @@
 
 #include "KPrDocument.h"
 #include "KPrPage.h"
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include "KPrBackground.h"
 #include "KPrGroupObject.h"
 
@@ -60,7 +60,7 @@
 
 
 ShadowCmd::ShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
-                      QPtrList<KPObject> &_objects, KPresenterDoc *_doc )
+                      QPtrList<KPObject> &_objects, KPrDocument *_doc )
     : KNamedCommand( _name ), oldShadow( _oldShadow ), objects( _objects )
 {
     objects.setAutoDelete( false );
@@ -110,7 +110,7 @@ void ShadowCmd::unexecute()
 
 SetOptionsCmd::SetOptionsCmd( const QString &_name, QValueList<KoPoint> &_diffs, QPtrList<KPObject> &_objects,
                               double _gridX, double _gridY, double _oldGridX, double _oldGridY,
-                              const QColor &_txtBackCol, const QColor &_otxtBackCol, KPresenterDoc *_doc )
+                              const QColor &_txtBackCol, const QColor &_otxtBackCol, KPrDocument *_doc )
     : KNamedCommand( _name ),
       diffs( _diffs ),
       objects( _objects ),
@@ -158,7 +158,7 @@ void SetOptionsCmd::unexecute()
 SetBackCmd::SetBackCmd( const QString &name, const KPBackGround::Settings &settings,
                         const KPBackGround::Settings &oldSettings,
                         bool useMasterBackground,
-                        bool takeGlobal, KPresenterDoc *doc, KPrPage *page )
+                        bool takeGlobal, KPrDocument *doc, KPrPage *page )
 : KNamedCommand( name )
 , m_settings( settings )
 , m_oldSettings( oldSettings )
@@ -228,7 +228,7 @@ void SetBackCmd::unexecute()
 }
 
 RotateCmd::RotateCmd( const QString &_name, float newAngle, QPtrList<KPObject> &objects,
-                      KPresenterDoc *doc, bool addAngle )
+                      KPrDocument *doc, bool addAngle )
     : KNamedCommand( _name ), m_doc( doc ), m_newAngle( newAngle ), m_addAngle( addAngle )
 {
     m_objects.setAutoDelete( false );
@@ -286,7 +286,7 @@ void RotateCmd::unexecute()
 
 
 ChgPixCmd::ChgPixCmd( const QString &_name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
-                      KPresenterDoc *_doc, KPrPage *_page)
+                      KPrDocument *_doc, KPrPage *_page)
     : KNamedCommand( _name )
 {
     oldObject = _oldObject;
@@ -322,7 +322,7 @@ void ChgPixCmd::unexecute()
 }
 
 DeleteCmd::DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects,
-                      KPresenterDoc *_doc, KPrPage *_page )
+                      KPrDocument *_doc, KPrPage *_page )
 : KNamedCommand( _name )
 , m_oldObjectList( _page->objectList() )
 , m_objectsToDelete( _objects )
@@ -461,7 +461,7 @@ void EffectCmd::unexecute()
 
 GroupObjCmd::GroupObjCmd( const QString &_name,
                           const QPtrList<KPObject> &_objects,
-                          KPresenterDoc *_doc, KPrPage *_page )
+                          KPrDocument *_doc, KPrPage *_page )
 : KNamedCommand( _name )
 , m_objectsToGroup( _objects )
 , m_oldObjectList( _page->objectList() )
@@ -526,7 +526,7 @@ void GroupObjCmd::unexecute()
 
 UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
                               KPGroupObject *grpObj_,
-                              KPresenterDoc *_doc, KPrPage *_page )
+                              KPrDocument *_doc, KPrPage *_page )
 : KNamedCommand( _name )
 , m_groupedObjects( grpObj_->getObjects() )
 , m_groupObject( grpObj_ )
@@ -590,7 +590,7 @@ void UnGroupObjCmd::unexecute()
 }
 
 InsertCmd::InsertCmd( const QString &_name, KPObject *_object,
-                      KPresenterDoc *_doc, KPrPage *_page )
+                      KPrDocument *_doc, KPrPage *_page )
     : KNamedCommand( _name )
 {
     object = _object;
@@ -635,7 +635,7 @@ void InsertCmd::unexecute()
 }
 
 LowerRaiseCmd::LowerRaiseCmd( const QString &_name, const QPtrList<KPObject>& _oldList,
-                              const QPtrList<KPObject>& _newList, KPresenterDoc *_doc,
+                              const QPtrList<KPObject>& _newList, KPrDocument *_doc,
                               KPrPage *_page )
     : KNamedCommand( _name )
 {
@@ -676,7 +676,7 @@ void LowerRaiseCmd::unexecute()
 
 
 MoveByCmd::MoveByCmd( const QString &_name, const KoPoint &_diff, QPtrList<KPObject> &_objects,
-                      KPresenterDoc *_doc,KPrPage *_page )
+                      KPrDocument *_doc,KPrPage *_page )
     : KNamedCommand( _name ), diff( _diff ), objects( _objects )
 {
     objects.setAutoDelete( false );
@@ -736,7 +736,7 @@ void MoveByCmd::unexecute()
     doc->updateObjectStatusBarItem();
 }
 
-AlignCmd::AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignType _at, KPresenterDoc *_doc )
+AlignCmd::AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignType _at, KPrDocument *_doc )
     : KNamedCommand( _name ), doc(_doc)
 {
     objects.setAutoDelete( false );
@@ -841,7 +841,7 @@ void AlignCmd::unexecute()
 }
 
 PenCmd::PenCmd( const QString &_name, QPtrList<KPObject> &_objects, Pen _newPen,
-                KPresenterDoc *_doc, KPrPage *_page, int _flags )
+                KPrDocument *_doc, KPrPage *_page, int _flags )
 : KNamedCommand(_name), doc(_doc), m_page( _page ), newPen(_newPen), flags(_flags)
 {
     objects.setAutoDelete( false );
@@ -1016,7 +1016,7 @@ void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
 
 
 BrushCmd::BrushCmd( const QString &_name, QPtrList<KPObject> &_objects, Brush _newBrush,
-                    KPresenterDoc *_doc, KPrPage *_page, int _flags )
+                    KPrDocument *_doc, KPrPage *_page, int _flags )
 : KNamedCommand(_name), doc(_doc), newBrush(_newBrush), m_page(_page), flags(_flags)
 {
     objects.setAutoDelete( false );
@@ -1140,7 +1140,7 @@ PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLo
                       bool _oldManualSwitch, bool _oldInfiniteLoop,
                       bool _oldShowPresentationDuration, QPen _oldPen,
                       QValueList<bool> _oldSelectedSlides, const QString & _oldPresentationName,
-                      KPresenterDoc *_doc )
+                      KPrDocument *_doc )
     : KNamedCommand( _name )
 {
     manualSwitch = _manualSwitch;
@@ -1190,7 +1190,7 @@ void PgConfCmd::unexecute()
 
 TransEffectCmd::TransEffectCmd( QValueVector<PageEffectSettings> oldSettings,
                                 PageEffectSettings newSettings,
-                                KPrPage* page, KPresenterDoc* doc )
+                                KPrPage* page, KPrDocument* doc )
 {
     m_newSettings = newSettings;
     m_oldSettings = oldSettings;
@@ -1238,7 +1238,7 @@ QString TransEffectCmd::name() const
 }
 
 PgLayoutCmd::PgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
-                          KoUnit::Unit _oldUnit, KoUnit::Unit _unit,KPresenterDoc *_doc )
+                          KoUnit::Unit _oldUnit, KoUnit::Unit _unit,KPrDocument *_doc )
     : KNamedCommand( _name )
 {
     m_doc=_doc;
@@ -1268,7 +1268,7 @@ void PgLayoutCmd::unexecute()
 
 
 PieValueCmd::PieValueCmd( const QString &name, PieValues newValues,
-                          QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                          QPtrList<KPObject> &objects, KPrDocument *doc,
                           KPrPage *page, int flags )
 : KNamedCommand( name )
 , m_doc( doc )
@@ -1283,7 +1283,7 @@ PieValueCmd::PieValueCmd( const QString &name, PieValues newValues,
 }
 
 PieValueCmd::PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
-                          QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags )
+                          QPtrList<KPObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags )
     : KNamedCommand( _name ), m_oldValues( _oldValues ), m_objects( _objects ), m_flags(_flags)
 {
     m_objects.setAutoDelete( false );
@@ -1377,7 +1377,7 @@ void PieValueCmd::unexecute()
 
 
 PolygonSettingCmd::PolygonSettingCmd( const QString &name, PolygonSettings newSettings,
-                                      QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                                      QPtrList<KPObject> &objects, KPrDocument *doc,
                                       KPrPage *page, int flags )
 : KNamedCommand( name )
 , m_doc( doc )
@@ -1394,7 +1394,7 @@ PolygonSettingCmd::PolygonSettingCmd( const QString &name, PolygonSettings newSe
 
 PolygonSettingCmd::PolygonSettingCmd( const QString &name, QPtrList<PolygonSettings> &oldSettings,
                                       PolygonSettings newSettings, QPtrList<KPObject> &objects,
-                                      KPresenterDoc *doc, KPrPage *page, int flags )
+                                      KPrDocument *doc, KPrPage *page, int flags )
 : KNamedCommand( name )
 , m_doc( doc )
 , m_page( page )
@@ -1493,7 +1493,7 @@ void PolygonSettingCmd::unexecute()
 
 
 PictureSettingCmd::PictureSettingCmd( const QString &name, PictureSettings newSettings,
-                                      QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                                      QPtrList<KPObject> &objects, KPrDocument *doc,
                                       KPrPage *page, int flags )
 : KNamedCommand( name )
 , m_doc( doc )
@@ -1509,7 +1509,7 @@ PictureSettingCmd::PictureSettingCmd( const QString &name, PictureSettings newSe
 
 PictureSettingCmd::PictureSettingCmd( const QString &_name, QPtrList<PictureSettings> &_oldSettings,
                                       PictureSettings _newSettings, QPtrList<KPObject> &_objects,
-                                      KPresenterDoc *_doc, int flags )
+                                      KPrDocument *_doc, int flags )
     : KNamedCommand( _name ), m_oldValues( _oldSettings ), m_objects( _objects ), m_flags( flags )
 {
     m_objects.setAutoDelete( false );
@@ -1611,7 +1611,7 @@ void PictureSettingCmd::unexecute()
 
 
 RectValueCmd::RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
-                            QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags )
+                            QPtrList<KPObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags )
     : KNamedCommand( _name ), m_oldValues( _oldValues ), m_objects( _objects ), m_flags(_flags)
 {
     m_objects.setAutoDelete( false );
@@ -1627,7 +1627,7 @@ RectValueCmd::RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValu
 
 
 RectValueCmd::RectValueCmd( const QString &name, QPtrList<KPObject> &objects, RectValues newValues,
-                            KPresenterDoc *doc, KPrPage *page, int flags )
+                            KPrDocument *doc, KPrPage *page, int flags )
 : KNamedCommand( name )
 , m_doc( doc )
 , m_page( page )
@@ -1732,7 +1732,7 @@ void RectValueCmd::unexecute()
 
 
 ResizeCmd::ResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize &_r_diff,
-                      KPObject *_object, KPresenterDoc *_doc )
+                      KPObject *_object, KPrDocument *_doc )
     : KNamedCommand( _name ), m_diff( _m_diff ), r_diff( _r_diff )
 {
     object = _object;
@@ -1839,7 +1839,7 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
 
     KoOasisStyles oasisStyles;
     oasisStyles.createStyleMap( domDoc );
-    KPresenterDoc *doc = textdoc->textObject()->kPresenterDocument();
+    KPrDocument *doc = textdoc->textObject()->kPresenterDocument();
     KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, 0 /*TODO store*/ );
     *c = textdoc->textObject()->textObject()->pasteOasisText( tmpbody, context, cursor, doc->styleCollection() );
     textdoc->textObject()->textObject()->setNeedSpellCheck( true );
@@ -1888,7 +1888,7 @@ KoTextCursor * KPrOasisPasteTextCommand::unexecute( KoTextCursor *c )
 }
 
 
-KPrChangeStartingPageCommand::KPrChangeStartingPageCommand( const QString &name, KPresenterDoc *_doc,
+KPrChangeStartingPageCommand::KPrChangeStartingPageCommand( const QString &name, KPrDocument *_doc,
                                                             int _oldStartingPage, int _newStartingPage):
     KNamedCommand(name),
     m_doc(_doc),
@@ -1910,7 +1910,7 @@ void KPrChangeStartingPageCommand::unexecute()
 }
 
 
-KPrChangeVariableSettingsCommand::KPrChangeVariableSettingsCommand( const QString &name, KPresenterDoc *_doc,
+KPrChangeVariableSettingsCommand::KPrChangeVariableSettingsCommand( const QString &name, KPrDocument *_doc,
                                                                     bool _oldValue, bool _newValue,
                                                                     VariableProperties _type):
     KNamedCommand(name),
@@ -1954,7 +1954,7 @@ void KPrChangeVariableSettingsCommand::unexecute()
     changeValue(m_bOldValue);
 }
 
-KPrDeletePageCmd::KPrDeletePageCmd( const QString &name, int pageNum, KPresenterDoc *doc )
+KPrDeletePageCmd::KPrDeletePageCmd( const QString &name, int pageNum, KPrDocument *doc )
 : KNamedCommand( name )
 , m_doc( doc )
 , m_pageNum( pageNum )
@@ -1981,7 +1981,7 @@ void KPrDeletePageCmd::unexecute()
 }
 
 KPrInsertPageCmd::KPrInsertPageCmd( const QString &name, int pageNum, InsertPos pos,
-                                    KPrPage *page, KPresenterDoc *doc )
+                                    KPrPage *page, KPrDocument *doc )
 : KNamedCommand(name)
 , m_doc( doc )
 , m_page( page )
@@ -2018,7 +2018,7 @@ void KPrInsertPageCmd::unexecute()
     m_doc->updatePresentationButton();
 }
 
-KPrMovePageCmd::KPrMovePageCmd( const QString &_name,int from, int to, KPresenterDoc *_doc ) :
+KPrMovePageCmd::KPrMovePageCmd( const QString &_name,int from, int to, KPrDocument *_doc ) :
     KNamedCommand( _name ),
     m_doc( _doc ),
     m_oldPosition( from ),
@@ -2043,7 +2043,7 @@ void KPrMovePageCmd::unexecute()
 }
 
 
-KPrChangeTitlePageNameCommand::KPrChangeTitlePageNameCommand( const QString &_name,KPresenterDoc *_doc,
+KPrChangeTitlePageNameCommand::KPrChangeTitlePageNameCommand( const QString &_name,KPrDocument *_doc,
                                                               const QString &_oldPageName,
                                                               const QString &_newPageName, KPrPage *_page ) :
     KNamedCommand(_name),
@@ -2068,7 +2068,7 @@ void KPrChangeTitlePageNameCommand::unexecute()
     m_doc->recalcVariables( VT_PGNUM );
 }
 
-KPrChangeCustomVariableValue::KPrChangeCustomVariableValue( const QString &name, KPresenterDoc *_doc,
+KPrChangeCustomVariableValue::KPrChangeCustomVariableValue( const QString &name, KPrDocument *_doc,
                                                             const QString & _oldValue, const QString & _newValue,
                                                             KoCustomVariable *var):
     KNamedCommand(name),
@@ -2093,7 +2093,7 @@ void KPrChangeCustomVariableValue::unexecute()
     m_doc->recalcVariables( VT_CUSTOM );
 }
 
-KPrChangeLinkVariable::KPrChangeLinkVariable( const QString &name, KPresenterDoc *_doc,
+KPrChangeLinkVariable::KPrChangeLinkVariable( const QString &name, KPrDocument *_doc,
                                               const QString & _oldHref, const QString & _newHref,
                                               const QString & _oldLink,const QString &_newLink,
                                               KoLinkVariable *var):
@@ -2121,7 +2121,7 @@ void KPrChangeLinkVariable::unexecute()
 }
 
 KPrStickyObjCommand::KPrStickyObjCommand( const QString &_name, QPtrList<KPObject> &_objects,
-                                          bool sticky, KPrPage*_page, KPresenterDoc *_doc )
+                                          bool sticky, KPrPage*_page, KPrDocument *_doc )
     : KNamedCommand( _name ),
       objects( _objects ),
       m_bSticky(sticky)
@@ -2186,7 +2186,7 @@ void KPrStickyObjCommand::unstickObj(KPObject *_obj)
 }
 
 KPrNameObjectCommand::KPrNameObjectCommand( const QString &_name, const QString &_objectName,
-                                            KPObject *_obj, KPresenterDoc *_doc ):
+                                            KPObject *_obj, KPrDocument *_doc ):
     KNamedCommand( _name ),
     newObjectName( _objectName ),
     object( _obj ),
@@ -2216,7 +2216,7 @@ void KPrNameObjectCommand::unexecute()
     doc->updateSideBarItem( m_page );
 }
 
-KPrDisplayObjectFromMasterPage::KPrDisplayObjectFromMasterPage(const QString &name, KPresenterDoc *_doc, KPrPage *_page, bool _newValue)
+KPrDisplayObjectFromMasterPage::KPrDisplayObjectFromMasterPage(const QString &name, KPrDocument *_doc, KPrPage *_page, bool _newValue)
     :KNamedCommand(name),
      m_doc( _doc ),
      m_page(_page),
@@ -2237,7 +2237,7 @@ void KPrDisplayObjectFromMasterPage::unexecute()
 }
 
 
-KPrDisplayBackgroundPage::KPrDisplayBackgroundPage(const QString &name, KPresenterDoc *_doc, KPrPage *_page, bool _newValue)
+KPrDisplayBackgroundPage::KPrDisplayBackgroundPage(const QString &name, KPrDocument *_doc, KPrPage *_page, bool _newValue)
     :KNamedCommand(name),
      m_doc( _doc ),
      m_page(_page),
@@ -2258,7 +2258,7 @@ void KPrDisplayBackgroundPage::unexecute()
 }
 
 
-KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPresenterDoc *_doc, KPrPage *_page,
+KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPrDocument *_doc, KPrPage *_page,
                                                   bool _newValue, KPTextObject *_textObject):
     KNamedCommand(name),
     m_doc( _doc ),
@@ -2293,7 +2293,7 @@ void KPrHideShowHeaderFooter::unexecute()
     m_doc->updateSideBarItem( m_doc->masterPage() );
 }
 
-KPrFlipObjectCommand::KPrFlipObjectCommand( const QString &name, KPresenterDoc *_doc,
+KPrFlipObjectCommand::KPrFlipObjectCommand( const QString &name, KPrDocument *_doc,
                                             bool _horizontal, QPtrList<KPObject> &_objects ):
     KNamedCommand( name ),
     m_doc( _doc ),
@@ -2340,7 +2340,7 @@ void KPrFlipObjectCommand::flipObjects()
 
 
 KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name, QPtrList<KPObject> &objects,
-                                                            bool newValue, KgpType type,KPresenterDoc *_doc )
+                                                            bool newValue, KgpType type,KPrDocument *_doc )
 : KNamedCommand( name )
 , m_objects( objects )
 , m_newValue( newValue )
@@ -2360,7 +2360,7 @@ KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name,
 
 KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name, QValueList<bool> &lst,
                                                             QPtrList<KPObject> &objects, bool newValue,
-                                                            KgpType type, KPresenterDoc *_doc)
+                                                            KgpType type, KPrDocument *_doc)
 : KNamedCommand( name )
 , m_oldValue( lst )
 , m_objects( objects )
@@ -2413,7 +2413,7 @@ void KPrGeometryPropertiesCommand::unexecute()
 }
 
 KPrProtectContentCommand::KPrProtectContentCommand( const QString &name, QPtrList<KPObject> &objects,
-                                                    bool protectContent, KPresenterDoc *doc )
+                                                    bool protectContent, KPrDocument *doc )
 : KNamedCommand( name )
 , m_protectContent( protectContent )
 , m_doc( doc )
@@ -2424,7 +2424,7 @@ KPrProtectContentCommand::KPrProtectContentCommand( const QString &name, QPtrLis
 }
 
 KPrProtectContentCommand::KPrProtectContentCommand( const QString &name, bool protectContent,
-                                                    KPTextObject *obj, KPresenterDoc *doc )
+                                                    KPTextObject *obj, KPrDocument *doc )
 : KNamedCommand( name )
 , m_protectContent( protectContent )
 , m_doc( doc )
@@ -2490,7 +2490,7 @@ void KPrProtectContentCommand::unexecute()
     m_doc->updateRulerInProtectContentMode();
 }
 
-KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &_name, KPObject *_obj, KPresenterDoc *_doc )
+KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &_name, KPObject *_obj, KPrDocument *_doc )
     : KNamedCommand( _name ),
       objects( _obj ),
       doc(_doc)
@@ -2574,7 +2574,7 @@ MarginsStruct::MarginsStruct( double _left, double _top, double _right, double _
 
 
 KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, QPtrList<KPObject> &objects,
-                                                MarginsStruct newMargins, KPresenterDoc *doc,
+                                                MarginsStruct newMargins, KPrDocument *doc,
                                                 KPrPage *page )
 : KNamedCommand( name )
 , m_newMargins( newMargins )
@@ -2589,7 +2589,7 @@ KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, QPtrList<KP
 
 
 KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, KPTextObject *_obj, MarginsStruct _MarginsBegin,
-                                                MarginsStruct _MarginsEnd, KPresenterDoc *_doc ) :
+                                                MarginsStruct _MarginsEnd, KPrDocument *_doc ) :
     KNamedCommand(name),
     m_newMargins(_MarginsEnd),
     m_doc( _doc )
@@ -2674,7 +2674,7 @@ void KPrChangeMarginCommand::unexecute()
 KPrChangeVerticalAlignmentCommand::KPrChangeVerticalAlignmentCommand( const QString &name, KPTextObject *_obj,
                                                                       VerticalAlignmentType _oldAlign,
                                                                       VerticalAlignmentType _newAlign,
-                                                                      KPresenterDoc *_doc) :
+                                                                      KPrDocument *_doc) :
     KNamedCommand(name),
     m_obj( _obj ),
     m_oldAlign(_oldAlign),
@@ -2704,7 +2704,7 @@ void KPrChangeVerticalAlignmentCommand::unexecute()
 
 
 KPrChangeTabStopValueCommand::KPrChangeTabStopValueCommand( const QString &name, double _oldValue, double _newValue,
-                                                            KPresenterDoc *_doc):
+                                                            KPrDocument *_doc):
     KNamedCommand(name),
     m_doc( _doc ),
     m_oldValue(_oldValue),
@@ -2724,7 +2724,7 @@ void KPrChangeTabStopValueCommand::unexecute()
 
 ImageEffectCmd::ImageEffectCmd(const QString &_name, QPtrList<ImageEffectSettings> &_oldSettings,
                                ImageEffectSettings _newSettings, QPtrList<KPObject> &_objects,
-                               KPresenterDoc *_doc )
+                               KPrDocument *_doc )
     :KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects )
 {
     objects.setAutoDelete( false );
@@ -2778,7 +2778,7 @@ void ImageEffectCmd::unexecute()
     doc->updateSideBarItem( m_page );
 }
 
-KPrChangeVariableNoteText::KPrChangeVariableNoteText( const QString &name, KPresenterDoc *_doc,
+KPrChangeVariableNoteText::KPrChangeVariableNoteText( const QString &name, KPrDocument *_doc,
                         const QString &_oldValue,const QString &_newValue,
                         KoNoteVariable *var):
     KNamedCommand(name),

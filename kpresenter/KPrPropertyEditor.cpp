@@ -23,7 +23,7 @@
 #include "KPrPage.h"
 #include "KPrDocument.h"
 #include "KPrUtils.h"
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include "KPrPenStyleWidget.h"
 #include "KPrBrushProperty.h"
 #include "KPrRectProperty.h"
@@ -36,7 +36,7 @@
 #include <klocale.h>
 #include <kstdguiitem.h>
 
-PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page, KPresenterDoc *doc )
+PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page, KPrDocument *doc )
     : QTabDialog( parent, name, true )
     , m_page( page )
     , m_doc( doc )

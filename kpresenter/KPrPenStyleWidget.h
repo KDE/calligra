@@ -25,7 +25,7 @@
 
 #include <qwidget.h>
 
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include "KPrPen.h"
 
 class PenStyleUI;

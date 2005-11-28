@@ -26,7 +26,7 @@
 #include <qstringlist.h>
 class QLineEdit;
 class QListBox;
-class KPresenterDoc;
+class KPrDocument;
 class QPushButton;
 class KoParagStyle;
 
@@ -34,14 +34,14 @@ class KPrImportStyleDia : public KoImportStyleDia
 {
     Q_OBJECT
 public:
-    KPrImportStyleDia( KPresenterDoc *_doc, KoStyleCollection* currentCollection, QWidget *parent, const char *name = 0 );
+    KPrImportStyleDia( KPrDocument *_doc, KoStyleCollection* currentCollection, QWidget *parent, const char *name = 0 );
     ~KPrImportStyleDia();
 
 protected:
     virtual void loadFile();
 
 private:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
 };
 
 #endif

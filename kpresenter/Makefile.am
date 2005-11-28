@@ -11,15 +11,15 @@ libkpresenterpart_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp KPrPage.cpp KPrFin
 	KPrBrush.cpp \
 	KPrDocument.cpp \
 	KPrSoundPlayer.cpp \
-	KPrPgConfDia.cpp KPrEffectDia.cpp KPCommand.cpp \
+	KPrPgConfDia.cpp KPrEffectDia.cpp KPrCommand.cpp \
 	KPrUtils.cpp  \
 	KPrEffectHandler.cpp KPrPageEffects.cpp\
 	KPrTransEffectDia.cpp \
 	KPrObject.cpp KPrLineObject.cpp KPrRectObject.cpp KPrEllipseObject.cpp \
 	KPrAutoformObject.cpp KPrTextObject.cpp \
 	KPrPixmapObject.cpp KPrPieObject.cpp KPrPartObject.cpp KPrGroupObject.cpp \
-	KPrBackground.cpp KPGradient.cpp \
-	KPGradientCollection.cpp \
+	KPrBackground.cpp KPrGradient.cpp \
+	KPrGradientCollection.cpp \
 	KPrGotoPage.cpp \
 	KPrFactory.cpp \
 	KPrDocumentIface.skel KPrDocumentIface.cpp \
@@ -48,7 +48,7 @@ libkpresenterpart_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp KPrPage.cpp KPrFin
 	KPrFreehandObjectIface.skel KPrFreehandObjectIface.cpp KPrStyleManager.cpp \
 	KPrBgSpellCheck.cpp KPrMoveHelpLineDia.cpp \
 	KPrPolyLineObjectIface.skel KPrPolyLineObjectIface.cpp \
-	KPrDuplicatObjDia.cpp KPrClosedLineObject.cpp \
+	KPrDuplicateObjDia.cpp KPrClosedLineObject.cpp \
 	KPrImportStyleDia.cpp \
 	KPrImageEffectDia.cpp imageEffectBase.ui KPrCustomSlideShowDia.cpp \
 	KPrPBPreview.cpp penstyle.ui KPrPenStyleWidget.cpp \

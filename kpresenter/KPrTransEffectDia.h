@@ -28,7 +28,7 @@
 #include <qtimer.h>
 #include "global.h"
 
-class KPresenterDoc;
+class KPrDocument;
 class KPresenterView;
 class QCheckBox;
 class QSplitter;
@@ -51,14 +51,14 @@ class KPEffectPreview : public QLabel
     Q_OBJECT
 
 public:
-    KPEffectPreview( QWidget *parent, KPresenterDoc *_doc, KPresenterView *_view );
+    KPEffectPreview( QWidget *parent, KPrDocument *_doc, KPresenterView *_view );
 
 public slots:
     void setPixmap( const QPixmap& pixmap );
     void run( PageEffect effect, EffectSpeed speed );
 
 protected:
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPresenterView *view;
     QPixmap m_pixmap;
     QPixmap m_target;
@@ -77,7 +77,7 @@ class KPTransEffectDia: public KDialogBase
 
 public:
     KPTransEffectDia( QWidget *parent, const char *name,
-                      KPresenterDoc *_doc, KPresenterView *_view );
+                      KPrDocument *_doc, KPresenterView *_view );
 
     PageEffect getPageEffect() const { return pageEffect; }
     EffectSpeed getPageEffectSpeed() const { return speed; }
@@ -93,7 +93,7 @@ protected:
     virtual void slotOk();
     virtual void slotUser1();
 
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPresenterView *view;
 
     PageEffect pageEffect;

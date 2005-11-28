@@ -18,7 +18,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include <qpainter.h>
 #include <kpixmapeffect.h>
 #include <kdebug.h>

@@ -62,7 +62,7 @@
 #include <float.h>
 #include <knumvalidator.h>
 #include <qlineedit.h>
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include <qvgroupbox.h>
 #include <kfontdialog.h>
 #include <klineedit.h>
@@ -266,7 +266,7 @@ void configureInterfacePage::apply()
     bool ruler=showRuler->isChecked();
     bool statusBar=showStatusBar->isChecked();
 
-    KPresenterDoc * doc = m_pView->kPresenterDoc();
+    KPrDocument * doc = m_pView->kPresenterDoc();
 
     config->setGroup( "Interface" );
 
@@ -350,7 +350,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
 
 void configureColorBackground::apply()
 {
-    KPresenterDoc * doc = m_pView->kPresenterDoc();
+    KPrDocument * doc = m_pView->kPresenterDoc();
     bool repaintNeeded = false;
     QColor _col = bgColor->color();
     if( oldBgColor != _col ) {
@@ -394,7 +394,7 @@ configureSpellPage::configureSpellPage( KPresenterView *_view, QWidget *parent, 
 void configureSpellPage::apply()
 {
 
-    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    KPrDocument* doc = m_pView->kPresenterDoc();
     m_spellConfigWidget->save();
 
 
@@ -438,7 +438,7 @@ configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, ch
     QWhatsThis::add(m_undoRedoLimit, i18n( "Set the number of actions you can undo and redo (how many actions KPresenter keeps in its Undo buffer). Default is 30. Maximum is 60 and minimum is 0. Any action that exceeds the number set will be forgotten." ) );
     grid->addWidget(m_undoRedoLimit,0,0);
 
-    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    KPrDocument* doc = m_pView->kPresenterDoc();
 
     m_displayLink=new QCheckBox(i18n("Display links"),tmpQGroupBox);
     QWhatsThis::add(m_displayLink, i18n( "When you want to include a link in your slide, you will use the Insert->Link... menu which allows you to insert URL, mail or file links. If the option Display links is checked, all links will be displayed in a different color. This makes document links visible. This is the default behavior. If the option is unchecked, the link will be the same color as the text color. The links are visible(or not) both in the edited slides and in the slide show." ) );
@@ -503,7 +503,7 @@ KCommand * configureMiscPage::apply()
 {
     config->setGroup( "Misc" );
     int newUndo=m_undoRedoLimit->value();
-    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    KPrDocument* doc = m_pView->kPresenterDoc();
     if(newUndo!=m_oldNbRedo)
     {
         config->writeEntry("UndoRedo",newUndo);
@@ -582,7 +582,7 @@ void configureMiscPage::slotDefault()
     m_underlineLink->setChecked(true);
     m_displayFieldCode->setChecked( false );
     m_cbPrintNotes->setChecked(true);
-    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    KPrDocument* doc = m_pView->kPresenterDoc();
 
     resolutionY->setValue( MM_TO_POINT( 5.0 ));
     resolutionX->setValue( MM_TO_POINT( 5.0 ));
@@ -595,7 +595,7 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
 
     m_pView=_view;
     config = KPresenterFactory::global()->config();
-    KPresenterDoc *doc = m_pView->kPresenterDoc();
+    KPrDocument *doc = m_pView->kPresenterDoc();
     oldAutoSaveValue =  doc->defaultAutoSave()/60;
     m_oldBackupFile = true;
     m_oldLanguage = doc->globalLanguage();
@@ -717,7 +717,7 @@ configureDefaultDocPage::~configureDefaultDocPage()
 KCommand *configureDefaultDocPage::apply()
 {
     config->setGroup( "Document defaults" );
-    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    KPrDocument* doc = m_pView->kPresenterDoc();
     config->writeEntry("DefaultFont",font->toString());
 
     config->setGroup( "Interface" );
@@ -936,7 +936,7 @@ configurePathPage::configurePathPage( KPresenterView *_view, QWidget *parent, ch
     QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
 
     m_pView=_view;
-    KPresenterDoc* doc = m_pView->kPresenterDoc();
+    KPrDocument* doc = m_pView->kPresenterDoc();
     config = KPresenterFactory::global()->config();
 
     m_pPathView = new KListView( this );

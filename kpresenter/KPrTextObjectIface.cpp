@@ -38,7 +38,7 @@ KPTextObjectIface::KPTextObjectIface( KPTextObject *_textobject )
 
 DCOPRef KPTextObjectIface::startEditing()
 {
-    KPresenterDoc *doc=m_textobject->kPresenterDocument();
+    KPrDocument *doc=m_textobject->kPresenterDocument();
     KPresenterView *view=doc->firstView();
     view->getCanvas()->createEditing( m_textobject);
     return DCOPRef( kapp->dcopClient()->appId(),

@@ -23,8 +23,8 @@
 #endif
 #include "KPrTextObject.h"
 #include "KPrTextObject.moc"
-#include "KPGradient.h"
-#include "KPCommand.h"
+#include "KPrGradient.h"
+#include "KPrCommand.h"
 #include "KPrCanvas.h"
 #include "KPrPage.h"
 #include "KPrView.h"
@@ -103,7 +103,7 @@ const QString &KPTextObject::attrTextBackColor=KGlobal::staticQString("textbackc
 const QString &KPTextObject::attrVertAlign=KGlobal::staticQString("VERTALIGN");
 
 
-KPTextObject::KPTextObject(  KPresenterDoc *doc )
+KPTextObject::KPTextObject(  KPrDocument *doc )
     : KP2DObject()
 {
     m_doc=doc;
@@ -967,7 +967,7 @@ KoTextFormat KPTextObject::loadFormat( QDomElement &n, KoTextFormat * refFormat,
     return format;
 }
 
-KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPresenterDoc *doc, bool findStyle)
+KoParagLayout KPTextObject::loadParagLayout( QDomElement & parentElem, KPrDocument *doc, bool findStyle)
 {
     KoParagLayout layout;
 
@@ -1456,7 +1456,7 @@ void KPTextObject::highlightPortion( KoTextParag * parag, int index, int length,
     m_textobj->highlightPortion( parag, index, length, repaint );
     if ( repaint )
     {
-        KPresenterDoc* doc = canvas->getView()->kPresenterDoc();
+        KPrDocument* doc = canvas->getView()->kPresenterDoc();
 
         // Is this object in the current active page?
         if ( canvas->activePage()->findTextObject( this ) ||
@@ -1933,7 +1933,7 @@ void KPTextView::ensureCursorVisible()
     parag->lineHeightOfChar( cursor()->index(), &dummy, &y );
     y += parag->rect().y();
     int w = 1;
-    KPresenterDoc *doc= m_kptextobj->kPresenterDocument();
+    KPrDocument *doc= m_kptextobj->kPresenterDocument();
     KoPoint pt= kpTextObject()->getOrig();
     pt.setX( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelXToPt( x) ) +pt.x());
     pt.setY( doc->zoomHandler()->layoutUnitPtToPt( doc->zoomHandler()->pixelYToPt( y ))+pt.y() );
@@ -2190,7 +2190,7 @@ bool KPTextView::isLinkVariable( const QPoint & pos )
 
 void KPTextView::openLink()
 {
-    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+    KPrDocument * doc = kpTextObject()->kPresenterDocument();
     if ( doc->getVariableCollection()->variableSetting()->displayLink() ) {
         KoLinkVariable* v = linkVariable();
         if ( v )
@@ -2277,7 +2277,7 @@ void KPTextView::showPopup( KPresenterView *view, const QPoint &point, QPtrList<
 
 void KPTextView::insertCustomVariable( const QString &name)
 {
-    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+    KPrDocument * doc = kpTextObject()->kPresenterDocument();
     KoVariable * var = new KoCustomVariable( textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),
                                 doc->getVariableCollection());
     insertVariable( var);
@@ -2285,7 +2285,7 @@ void KPTextView::insertCustomVariable( const QString &name)
 
 void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
 {
-    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+    KPrDocument * doc = kpTextObject()->kPresenterDocument();
     KoVariable * var = new KoLinkVariable( textDocument(), _linkName, hrefName,
                                            doc->variableFormatCollection()->format( "STRING" ),
                                            doc->getVariableCollection());
@@ -2296,7 +2296,7 @@ void KPTextView::insertLink(const QString &_linkName, const QString & hrefName)
 void KPTextView::insertComment(const QString &_comment)
 {
     KoVariable * var = 0L;
-    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+    KPrDocument * doc = kpTextObject()->kPresenterDocument();
 
     var = new KoNoteVariable( textDocument(),_comment, doc->variableFormatCollection()->format( "STRING" ),
                               doc->getVariableCollection());
@@ -2306,7 +2306,7 @@ void KPTextView::insertComment(const QString &_comment)
 
 void KPTextView::insertVariable( int type, int subtype )
 {
-    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+    KPrDocument * doc = kpTextObject()->kPresenterDocument();
     bool refreshCustomMenu = false;
     KoVariable * var = 0L;
     if ( type == VT_CUSTOM )
@@ -2389,7 +2389,7 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent )
     KoSavingContext savingContext( mainStyles, KoSavingContext::Flat );
 
     // Save user styles as KoGenStyle objects - useful when pasting to another document
-    KPresenterDoc * doc = kpTextObject()->kPresenterDocument();
+    KPrDocument * doc = kpTextObject()->kPresenterDocument();
     KoSavingContext::StyleNameMap map = doc->styleCollection()->saveOasis( mainStyles, KoGenStyle::STYLE_USER );
     savingContext.setStyleNameMap( map );
 
@@ -2410,7 +2410,7 @@ KPrTextDrag * KPTextView::newDrag( QWidget * parent )
     contentTmpWriter.endElement(); // office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
-    KPresenterDoc::writeAutomaticStyles( *contentWriter, mainStyles );
+    KPrDocument::writeAutomaticStyles( *contentWriter, mainStyles );
 
     // And now we can copy over the contents from the tempfile to the real one
     tmpFile->close();
@@ -2443,7 +2443,7 @@ void KPTextView::dragEnterEvent( QDragEnterEvent *e )
 
 void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
 {
-    KPresenterDoc *doc= kpTextObject()->kPresenterDocument();
+    KPrDocument *doc= kpTextObject()->kPresenterDocument();
     if ( !doc->isReadWrite() || !KPrTextDrag::canDecode( e ) )
     {
         e->ignore();
@@ -2459,7 +2459,7 @@ void KPTextView::dragMoveEvent( QDragMoveEvent *e, const QPoint & )
 
 void KPTextView::dropEvent( QDropEvent * e )
 {
-    KPresenterDoc *doc = kpTextObject()->kPresenterDocument();
+    KPrDocument *doc = kpTextObject()->kPresenterDocument();
     if ( doc->isReadWrite() && KPrTextDrag::canDecode( e ) )
     {
         e->acceptAction();

@@ -27,13 +27,13 @@
 #include <qstring.h>
 #include <qstringlist.h>
 #include <qcolor.h>
-class KPresenterDoc;
+class KPrDocument;
 
 class KPresenterDocIface : public KoDocumentIface
 {
     K_DCOP
 public:
-    KPresenterDocIface( KPresenterDoc *doc_ );
+    KPresenterDocIface( KPrDocument *doc_ );
 
 k_dcop:
     virtual int numPages() const;
@@ -181,7 +181,7 @@ k_dcop:
     void repaint();
 
 private:
-    KPresenterDoc *doc;
+    KPrDocument *doc;
 
 };
 

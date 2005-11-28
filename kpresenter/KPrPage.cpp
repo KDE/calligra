@@ -35,7 +35,7 @@
 #include "KPrPieObject.h"
 #include "KPrPartObject.h"
 #include "KPrGroupObject.h"
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include "KPrFreehandObject.h"
 #include "KPrPolylineObject.h"
 #include "KPrQuadricBezierCurveObject.h"
@@ -75,7 +75,7 @@ struct listAnimation {
 typedef QMap<int, QPtrList<listAnimation> > lstMap;
 
 
-KPrPage::KPrPage(KPresenterDoc *_doc, KPrPage *masterPage )
+KPrPage::KPrPage(KPrDocument *_doc, KPrPage *masterPage )
     : m_doc( _doc )
     , m_masterPage( masterPage )
     , m_dcop( 0 )
@@ -91,7 +91,7 @@ KPrPage::KPrPage(KPresenterDoc *_doc, KPrPage *masterPage )
     , m_soundFileName( QString::null )
     , m_pageTimer( 1 )
 {
-    kdDebug(33001)<<"create page : KPrPage::KPrPage(KPresenterDoc *_doc )"<<this<<endl;
+    kdDebug(33001)<<"create page : KPrPage::KPrPage(KPrDocument *_doc )"<<this<<endl;
     m_objectList.setAutoDelete( false );
 
     m_kpbackground= new KPBackGround( this );
@@ -531,7 +531,7 @@ bool KPrPage::saveOasisPage( KoStore *store, KoXmlWriter &xmlWriter, int posPage
 
 QString KPrPage::saveOasisPageStyle( KoStore *, KoGenStyles& mainStyles ) const
 {
-    KoGenStyle stylepageauto( KPresenterDoc::STYLE_BACKGROUNDPAGEAUTO, "drawing-page" );
+    KoGenStyle stylepageauto( KPrDocument::STYLE_BACKGROUNDPAGEAUTO, "drawing-page" );
 
 
     //presentation:background-visible is for visible background and not "use or not" master page

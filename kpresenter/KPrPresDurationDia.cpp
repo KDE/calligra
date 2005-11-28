@@ -31,7 +31,7 @@
 #include <klocale.h>
 
 KPPresDurationDia::KPPresDurationDia( QWidget *parent, const char *name,
-                                      KPresenterDoc *_doc, QStringList _durationListString,
+                                      KPrDocument *_doc, QStringList _durationListString,
                                       const QString &_durationString )
     : KDialogBase( parent, name, false, "", KDialogBase::Close ),
       doc( _doc )

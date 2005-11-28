@@ -25,7 +25,7 @@
 
 #include <qframe.h>
 
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include "KPrPen.h"
 
 class KoTextZoomHandler;

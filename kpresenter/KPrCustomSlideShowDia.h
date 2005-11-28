@@ -27,7 +27,7 @@ class QListBox;
 class QListBoxItem;
 class QLineEdit;
 class QPushButton;
-class KPresenterDoc;
+class KPrDocument;
 class QToolButton;
 class KPresenterView;
 
@@ -36,7 +36,7 @@ class CustomSlideShowDia : public KDialogBase
     Q_OBJECT
 
 public:
-    CustomSlideShowDia( KPresenterView* _view, KPresenterDoc *_doc, const char* name );
+    CustomSlideShowDia( KPresenterView* _view, KPrDocument *_doc, const char* name );
     ~CustomSlideShowDia();
 public slots:
     virtual void slotOk();
@@ -63,7 +63,7 @@ protected:
     QPushButton* m_pCopy;
     QPushButton* m_pTest;
     bool m_bChanged;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPresenterView *m_view;
     CustomListMap m_customListMap;
     QStringList listPageName;

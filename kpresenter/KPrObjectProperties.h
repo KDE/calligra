@@ -21,7 +21,7 @@
 #ifndef KPOBJECTPROPERTIES_H
 #define KPOBJECTPROPERTIES_H
 
-#include "KPCommand.h"
+#include "KPrCommand.h"
 
 class KPObjectProperties
 {

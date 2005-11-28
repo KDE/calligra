@@ -32,7 +32,7 @@
 
 #include "global.h"
 
-class KPresenterDoc;
+class KPrDocument;
 class QPainter;
 class QPixmap;
 class KPGradientCollection;

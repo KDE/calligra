@@ -59,7 +59,7 @@
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
 
-KPMSPresentation::KPMSPresentation( KPresenterDoc *_doc, KPresenterView *_view )
+KPMSPresentation::KPMSPresentation( KPrDocument *_doc, KPresenterView *_view )
 {
     doc = _doc;
     view = _view;
@@ -290,7 +290,7 @@ void KPMSPresentation::init()
     path = KGlobalSettings::documentPath();
 }
 
-KPMSPresentationSetup::KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterView *_view )
+KPMSPresentationSetup::KPMSPresentationSetup( KPrDocument *_doc, KPresenterView *_view )
     : QDialog( 0, "", false ), msPres(  _doc, _view )
 {
     doc = _doc;
@@ -399,7 +399,7 @@ KPMSPresentationSetup::~KPMSPresentationSetup()
     view->enableMSPres();
 }
 
-void KPMSPresentationSetup::createMSPresentation( KPresenterDoc *_doc, KPresenterView *_view )
+void KPMSPresentationSetup::createMSPresentation( KPrDocument *_doc, KPresenterView *_view )
 {
     KPMSPresentationSetup *dlg = new KPMSPresentationSetup( _doc, _view );
 
@@ -493,7 +493,7 @@ void KPMSPresentationSetup::slotChoosePath(const QString &text)
 
 
 
-KPMSPresentationCreateDialog::KPMSPresentationCreateDialog( KPresenterDoc *_doc, KPresenterView *_view,
+KPMSPresentationCreateDialog::KPMSPresentationCreateDialog( KPrDocument *_doc, KPresenterView *_view,
                                                             const KPMSPresentation &_msPres )
     : QDialog( 0, "", false ), msPres( _msPres )
 {
@@ -508,7 +508,7 @@ KPMSPresentationCreateDialog::~KPMSPresentationCreateDialog()
     view->enableMSPres();
 }
 
-void KPMSPresentationCreateDialog::createMSPresentation( KPresenterDoc *_doc, KPresenterView *_view,
+void KPMSPresentationCreateDialog::createMSPresentation( KPrDocument *_doc, KPresenterView *_view,
                                                          const KPMSPresentation &_msPres )
 {
     KPMSPresentationCreateDialog *dlg = new KPMSPresentationCreateDialog( _doc, _view, _msPres );
@@ -615,5 +615,5 @@ void KPMSPresentationCreateDialog::resizeEvent( QResizeEvent *e )
     back->resize( size() );
 }
 
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include "KPrMSPresentationSetup.moc"

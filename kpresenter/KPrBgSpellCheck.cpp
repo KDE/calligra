@@ -34,7 +34,7 @@ using namespace KSpell2;
 #include <kconfig.h>
 #include <klocale.h>
 
-KPrBgSpellCheck::KPrBgSpellCheck(KPresenterDoc *_doc)
+KPrBgSpellCheck::KPrBgSpellCheck(KPrDocument *_doc)
     : KoBgSpellCheck(Broker::openBroker( KSharedConfig::openConfig( "kpresenterrc" ) ), _doc )
 {
     m_doc=_doc;

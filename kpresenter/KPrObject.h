@@ -27,7 +27,7 @@
 
 #include "global.h"
 
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include "KoPointArray.h"
 #include <klocale.h>
 #include <koPoint.h>
@@ -48,7 +48,7 @@ class QDomDocumentFragment;
 class QDomDocument;
 class QDomElement;
 class KoTextZoomHandler;
-class KPresenterDoc;
+class KPrDocument;
 class KPTextObject;
 class KoTextObject;
 class KoOasisContext;
@@ -261,7 +261,7 @@ public:
      */
     virtual bool intersects( const KoRect & rect ) const;
 
-    virtual QCursor getCursor( const KoPoint &_point, ModifyType &_modType, KPresenterDoc *doc ) const;
+    virtual QCursor getCursor( const KoPoint &_point, ModifyType &_modType, KPrDocument *doc ) const;
 
     KoRect rotateRectObject() const;
     void rotateObject(QPainter *paint,KoTextZoomHandler *_zoomHandler);

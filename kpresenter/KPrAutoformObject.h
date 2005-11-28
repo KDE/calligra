@@ -26,7 +26,7 @@
 
 #include "KPrObject.h"
 #include "global.h"
-#include "autoformEdit/atfinterpreter.h"
+#include "autoformEdit/ATFInterpreter.h"
 
 class KPGradient;
 class DCOPObject;

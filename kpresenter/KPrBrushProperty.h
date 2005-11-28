@@ -22,7 +22,7 @@
 #include <qbrush.h>
 #include <qwidget.h>
 
-#include "KPCommand.h"
+#include "KPrCommand.h"
 
 class BrushPropertyUI;
 class GradientPropertyUI;

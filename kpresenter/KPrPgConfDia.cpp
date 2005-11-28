@@ -47,7 +47,7 @@
 #include <knuminput.h>
 #include <qslider.h>
 
-PgConfDia::PgConfDia( QWidget* parent, KPresenterDoc* doc )
+PgConfDia::PgConfDia( QWidget* parent, KPrDocument* doc )
     : KDialogBase( KDialogBase::Tabbed, i18n("Configure Slide Show"),
                    Ok|Cancel, Ok, parent, "pgConfDia", true ),
       m_doc( doc )
@@ -297,5 +297,5 @@ QString PgConfDia::presentationName() const
         return QString::null;
 }
 
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include "KPrPgConfDia.moc"

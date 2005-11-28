@@ -43,7 +43,7 @@
 #include "KPrPage.h"
 #include "KPrObject.h"
 #include <qapplication.h>
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include <qvalidator.h>
 #include "KPrFreehandObject.h"
 #include "KPrCubicBezierCurveObject.h"
@@ -138,7 +138,7 @@ private:
     bool uptodate;
 };
 
-SideBar::SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
+SideBar::SideBar(QWidget *parent, KPrDocument *d, KPresenterView *v)
     :QTabWidget(parent), m_doc(d), m_view(v)
 {
     setTabPosition(QTabWidget::Top);
@@ -223,7 +223,7 @@ void SideBar::setViewMasterPage( bool _masterPage )
     m_thb->rebuildItems();
 }
 
-SideBarBase::SideBarBase(KPresenterDoc *_doc, KPresenterView *_view)
+SideBarBase::SideBarBase(KPrDocument *_doc, KPresenterView *_view)
     : m_doc( _doc ), m_view( _view ), m_viewMasterPage( false )
 {
 }
@@ -233,7 +233,7 @@ void SideBarBase::setViewMasterPage( bool _b )
     m_viewMasterPage = _b;
 }
 
-ThumbBar::ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v)
+ThumbBar::ThumbBar(QWidget *parent, KPrDocument *d, KPresenterView *v)
     :KIconView(parent), SideBarBase( d,v)
 {
     uptodate = false;
@@ -603,7 +603,7 @@ void OutlineSlideItem::setPage( KPrPage* p )
 void OutlineSlideItem::update()
 {
     if( !m_page ) return;
-    KPresenterDoc *doc = m_page->kPresenterDoc();
+    KPrDocument *doc = m_page->kPresenterDoc();
     updateTitle();
 
     // add all objects
@@ -757,7 +757,7 @@ void OutlineObjectItem::setObject( KPObject* object )
     }
 }
 
-Outline::Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v )
+Outline::Outline( QWidget *parent, KPrDocument *d, KPresenterView *v )
     : KListView( parent ), SideBarBase( d, v)
 {
     rebuildItems();

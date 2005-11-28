@@ -43,7 +43,7 @@
 #include "KPrVariableCollection.h"
 #include "KPrPen.h"
 
-class KPresenterDoc;
+class KPrDocument;
 class KPTextObject;
 class KPObject;
 class KP2DObject;
@@ -71,14 +71,14 @@ public:
     };
 
     ShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
-               QPtrList<KPObject> &_objects, KPresenterDoc *_doc );
+               QPtrList<KPObject> &_objects, KPrDocument *_doc );
     ~ShadowCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     QPtrList<ShadowValues> oldShadow;
     QPtrList<KPObject> objects;
     ShadowValues newShadow;
@@ -90,7 +90,7 @@ class SetOptionsCmd : public KNamedCommand
 public:
     SetOptionsCmd( const QString &_name, QValueList<KoPoint> &_diffs, QPtrList<KPObject> &_objects,
                    double _rastX, double _rastY, double _orastX, double _orastY,
-                   const QColor &_txtBackCol, const QColor &_otxtBackCol, KPresenterDoc *_doc );
+                   const QColor &_txtBackCol, const QColor &_otxtBackCol, KPrDocument *_doc );
     ~SetOptionsCmd();
 
     virtual void execute();
@@ -104,7 +104,7 @@ protected:
     double gridY;
     double oldGridX;
     double oldGridY;
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     QColor txtBackCol;
     QColor otxtBackCol;
 };
@@ -115,7 +115,7 @@ public:
     SetBackCmd( const QString &name, const KPBackGround::Settings &settings,
                 const KPBackGround::Settings &oldSettings,
                 bool useMasterBackground,
-                bool takeGlobal, KPresenterDoc *doc, KPrPage *page );
+                bool takeGlobal, KPrDocument *doc, KPrPage *page );
 
     virtual void execute();
     virtual void unexecute();
@@ -127,7 +127,7 @@ protected:
     bool m_useMasterBackground;
     bool m_oldUseMasterBackground;
     bool m_takeGlobal;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_page;
 };
 
@@ -140,14 +140,14 @@ public:
     };
 
     RotateCmd( const QString &_name, float newAngle, QPtrList<KPObject> &objects,
-               KPresenterDoc *doc, bool addAngle = false );
+               KPrDocument *doc, bool addAngle = false );
     ~RotateCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     QPtrList<RotateValues> m_oldAngles;
     QPtrList<KPObject> m_objects;
     float m_newAngle;
@@ -160,7 +160,7 @@ class ResizeCmd : public KNamedCommand
 {
 public:
     ResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize &_r_diff,
-               KPObject *_object, KPresenterDoc *_doc );
+               KPObject *_object, KPrDocument *_doc );
     ~ResizeCmd();
 
     virtual void execute();
@@ -171,7 +171,7 @@ protected:
     KoPoint m_diff;
     KoSize r_diff;
     KPObject *object;
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPrPage *m_page;
 };
 
@@ -179,7 +179,7 @@ class ChgPixCmd : public KNamedCommand
 {
 public:
     ChgPixCmd( const QString &_name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
-               KPresenterDoc *_doc, KPrPage *_page );
+               KPrDocument *_doc, KPrPage *_page );
     ~ChgPixCmd();
 
     virtual void execute();
@@ -188,14 +188,14 @@ public:
 protected:
 
     KPPixmapObject *oldObject, *newObject;
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPrPage *m_page;
 };
 
 class DeleteCmd : public KNamedCommand
 {
 public:
-    DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects, KPresenterDoc *_doc,
+    DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects, KPrDocument *_doc,
                KPrPage *_page);
     ~DeleteCmd();
 
@@ -205,7 +205,7 @@ public:
 protected:
     QPtrList<KPObject> m_oldObjectList;
     QPtrList<KPObject> m_objectsToDelete;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_page;
 };
 
@@ -244,7 +244,7 @@ class GroupObjCmd : public KNamedCommand
 public:
     GroupObjCmd( const QString &_name,
                  const QPtrList<KPObject> &_objects,
-                 KPresenterDoc *_doc, KPrPage *_page );
+                 KPrDocument *_doc, KPrPage *_page );
     ~GroupObjCmd();
 
     virtual void execute();
@@ -254,7 +254,7 @@ protected:
 
     QPtrList<KPObject> m_objectsToGroup;
     QPtrList<KPObject> m_oldObjectList;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPGroupObject *m_groupObject;
     KPrPage *m_page;
 
@@ -265,7 +265,7 @@ class UnGroupObjCmd : public KNamedCommand
 public:
     UnGroupObjCmd( const QString &_name,
                    KPGroupObject *grpObj_,
-                   KPresenterDoc *_doc, KPrPage *_page );
+                   KPrDocument *_doc, KPrPage *_page );
     ~UnGroupObjCmd();
 
     virtual void execute();
@@ -275,7 +275,7 @@ protected:
 
     QPtrList<KPObject> m_groupedObjects;
     KPGroupObject *m_groupObject;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_page;
 };
 
@@ -283,7 +283,7 @@ protected:
 class InsertCmd : public KNamedCommand
 {
 public:
-    InsertCmd( const QString &_name, KPObject *_object, KPresenterDoc *_doc, KPrPage *_page );
+    InsertCmd( const QString &_name, KPObject *_object, KPrDocument *_doc, KPrPage *_page );
     ~InsertCmd();
 
     virtual void execute();
@@ -292,7 +292,7 @@ public:
 protected:
 
     KPObject *object;
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPrPage *m_page;
 };
 
@@ -302,7 +302,7 @@ class LowerRaiseCmd : public KNamedCommand
 public:
     LowerRaiseCmd( const QString &_name, const QPtrList<KPObject>& _oldList,
                    const QPtrList<KPObject>& _newList,
-                   KPresenterDoc *_doc, KPrPage *_page );
+                   KPrDocument *_doc, KPrPage *_page );
     ~LowerRaiseCmd();
 
     virtual void execute();
@@ -311,7 +311,7 @@ public:
 protected:
 
     QPtrList<KPObject> oldList, newList;
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPrPage *m_page;
 };
 
@@ -319,7 +319,7 @@ class MoveByCmd : public KNamedCommand
 {
 public:
     MoveByCmd( const QString &_name, const KoPoint &_diff, QPtrList<KPObject> &_objects,
-               KPresenterDoc *_doc, KPrPage *_page );
+               KPrDocument *_doc, KPrPage *_page );
     ~MoveByCmd();
 
     virtual void execute();
@@ -329,7 +329,7 @@ protected:
 
     KoPoint diff;
     QPtrList<KPObject> objects;
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPrPage *m_page;
 };
 
@@ -339,7 +339,7 @@ protected:
 class AlignCmd : public KNamedCommand
 {
 public:
-    AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignType _at, KPresenterDoc *_doc );
+    AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignType _at, KPrDocument *_doc );
     ~AlignCmd();
 
     virtual void execute();
@@ -348,7 +348,7 @@ public:
 protected:
     QPtrList<KoPoint> diffs;
     QPtrList<KPObject> objects;
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPrPage *m_page;
 };
 
@@ -384,7 +384,7 @@ public:
     };
 
     PenCmd( const QString &_name, QPtrList<KPObject> &_objects, Pen _newPen,
-            KPresenterDoc *_doc, KPrPage *_page, int _flags = All);
+            KPrDocument *_doc, KPrPage *_page, int _flags = All);
     ~PenCmd();
 
     virtual void execute();
@@ -394,7 +394,7 @@ protected:
     void addObjects( const QPtrList<KPObject> &_objects );
     void applyPen( KPObject *object, Pen *tmpPen );
 
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPrPage *m_page;
     QPtrList<Pen> oldPen;
     QPtrList<KPObject> objects;
@@ -456,7 +456,7 @@ public:
     };
 
     BrushCmd( const QString &_name, QPtrList<KPObject> &_objects, Brush _newBrush,
-              KPresenterDoc *_doc, KPrPage *_page, int _flags = All );
+              KPrDocument *_doc, KPrPage *_page, int _flags = All );
     ~BrushCmd();
 
     virtual void execute();
@@ -466,7 +466,7 @@ protected:
     void addObjects( const QPtrList<KPObject> &_objects );
     void applyBrush( KP2DObject *object, Brush *tmpBrush );
 
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     QPtrList<Brush> oldBrush;
     QPtrList<KP2DObject> objects;
     Brush newBrush;
@@ -483,7 +483,7 @@ public:
                bool _oldManualSwitch, bool _oldInfiniteLoop,
                bool _oldShowPresentationDuration, QPen _oldPen,
                QValueList<bool> _oldSelectedSlides, const QString & _oldPresentationName,
-               KPresenterDoc *_doc );
+               KPrDocument *_doc );
 
     virtual void execute();
     virtual void unexecute();
@@ -496,7 +496,7 @@ protected:
     QValueList<bool> selectedSlides, oldSelectedSlides;
     QString oldPresentationName, presentationName;
 
-    KPresenterDoc *doc;
+    KPrDocument *doc;
 };
 
 class TransEffectCmd : public KCommand
@@ -514,7 +514,7 @@ public:
     // TODO also pass a flag to know which settings need to be applied (especially for "all pages")
     TransEffectCmd( QValueVector<PageEffectSettings> oldSettings,
                     PageEffectSettings newSettings,
-                    KPrPage* page, KPresenterDoc* doc );
+                    KPrPage* page, KPrDocument* doc );
 
     virtual void execute();
     virtual void unexecute();
@@ -527,20 +527,20 @@ private:
     QValueVector<PageEffectSettings> m_oldSettings;
     PageEffectSettings m_newSettings;
     KPrPage *m_page;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
 };
 
 class PgLayoutCmd : public KNamedCommand
 {
 public:
     PgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
-                 KoUnit::Unit _oldUnit, KoUnit::Unit _unit,KPresenterDoc *_doc );
+                 KoUnit::Unit _oldUnit, KoUnit::Unit _unit,KPrDocument *_doc );
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KoPageLayout layout, oldLayout;
     KoUnit::Unit unit, oldUnit;
 };
@@ -563,10 +563,10 @@ public:
     };
 
     PieValueCmd( const QString &name, PieValues newValues,
-                 QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                 QPtrList<KPObject> &objects, KPrDocument *doc,
                  KPrPage *page, int flags = All );
     PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
-                 QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags = All );
+                 QPtrList<KPObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags = All );
     ~PieValueCmd();
 
     virtual void execute();
@@ -575,7 +575,7 @@ public:
 protected:
     void addObjects( const QPtrList<KPObject> &objects );
 
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_page;
     QPtrList<PieValues> m_oldValues;
     QPtrList<KPObject> m_objects;
@@ -602,11 +602,11 @@ public:
     };
 
     PolygonSettingCmd( const QString &name, PolygonSettings newSettings,
-                       QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                       QPtrList<KPObject> &objects, KPrDocument *doc,
                        KPrPage *page, int flags = All );
     PolygonSettingCmd( const QString &name, QPtrList<PolygonSettings> &oldSettings,
                        PolygonSettings newSettings, QPtrList<KPObject> &objects,
-                       KPresenterDoc *doc,  KPrPage *page, int flags = All );
+                       KPrDocument *doc,  KPrPage *page, int flags = All );
     ~PolygonSettingCmd();
 
     virtual void execute();
@@ -615,7 +615,7 @@ public:
 protected:
     void addObjects( const QPtrList<KPObject> &objects );
 
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_page;
     QPtrList<PolygonSettings> m_oldSettings;
     QPtrList<KPObject> m_objects;
@@ -645,11 +645,11 @@ public:
     };
 
     PictureSettingCmd( const QString &name, PictureSettings newSettings,
-                       QPtrList<KPObject> &objects, KPresenterDoc *doc,
+                       QPtrList<KPObject> &objects, KPrDocument *doc,
                        KPrPage *page, int flags = All );
     PictureSettingCmd( const QString &_name, QPtrList<PictureSettings> &_oldSettings,
                        PictureSettings _newSettings, QPtrList<KPObject> &_objects,
-                       KPresenterDoc *_doc, int flags = All );
+                       KPrDocument *_doc, int flags = All );
     ~PictureSettingCmd();
 
     virtual void execute();
@@ -658,7 +658,7 @@ public:
 protected:
     void addObjects( const QPtrList<KPObject> &_objects );
 
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     QPtrList<PictureSettings> m_oldValues;
     QPtrList<KPObject> m_objects;
     PictureSettings m_newSettings;
@@ -679,14 +679,14 @@ public:
 
     ImageEffectCmd(const QString &_name, QPtrList<ImageEffectSettings> &_oldSettings,
                    ImageEffectSettings _newSettings, QPtrList<KPObject> &_objects,
-                   KPresenterDoc *_doc );
+                   KPrDocument *_doc );
     ~ImageEffectCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     QPtrList<ImageEffectSettings> oldSettings;
     QPtrList<KPObject> objects;
     ImageEffectSettings newSettings;
@@ -710,9 +710,9 @@ public:
     };
 
     RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
-                  QPtrList<KPObject> &_objects, KPresenterDoc *_doc, KPrPage *_page, int _flags = All );
+                  QPtrList<KPObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags = All );
     RectValueCmd( const QString &_name, QPtrList<KPObject> &_objects, RectValues _newValues,
-                  KPresenterDoc *_doc, KPrPage *_page, int _flags = All );
+                  KPrDocument *_doc, KPrPage *_page, int _flags = All );
     ~RectValueCmd();
 
     virtual void execute();
@@ -721,7 +721,7 @@ public:
 protected:
     void addObjects( const QPtrList<KPObject> &_objects );
 
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_page;
     QPtrList<RectValues> m_oldValues;
     QPtrList<KPObject> m_objects;
@@ -732,14 +732,14 @@ protected:
 class KPrDeletePageCmd : public KNamedCommand
 {
 public:
-    KPrDeletePageCmd( const QString &name, int pageNum, KPresenterDoc *doc );
+    KPrDeletePageCmd( const QString &name, int pageNum, KPrDocument *doc );
     ~KPrDeletePageCmd();
 
     virtual void execute();
     virtual void unexecute();
 
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_page;
     int m_pageNum;
 };
@@ -748,13 +748,13 @@ class KPrInsertPageCmd : public KNamedCommand
 {
 public:
     KPrInsertPageCmd( const QString &name, int currentPageNum, InsertPos pos,
-                      KPrPage *page, KPresenterDoc *doc );
+                      KPrPage *page, KPrDocument *doc );
     ~KPrInsertPageCmd();
 
     virtual void execute();
     virtual void unexecute();
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_page;
     int m_currentPageNum;
     int m_insertPageNum;
@@ -763,13 +763,13 @@ protected:
 class KPrMovePageCmd : public KNamedCommand
 {
 public:
-    KPrMovePageCmd( const QString &_name, int from,int to, KPresenterDoc *_doc );
+    KPrMovePageCmd( const QString &_name, int from,int to, KPrDocument *_doc );
     ~KPrMovePageCmd();
 
     virtual void execute();
     virtual void unexecute();
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     int m_oldPosition;
     int m_newPosition;
 };
@@ -806,14 +806,14 @@ struct ParagBookmark {
 class KPrChangeStartingPageCommand : public KNamedCommand
 {
 public:
-    KPrChangeStartingPageCommand( const QString &name, KPresenterDoc *_doc,
+    KPrChangeStartingPageCommand( const QString &name, KPrDocument *_doc,
                                   int _oldStartingPage, int _newStartingPage);
     ~KPrChangeStartingPageCommand(){}
 
     void execute();
     void unexecute();
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     int oldStartingPage;
     int newStartingPage;
 };
@@ -825,7 +825,7 @@ class KPrChangeVariableSettingsCommand : public KNamedCommand
 {
 public:
     enum VariableProperties { VS_DISPLAYLINK, VS_UNDERLINELINK, VS_DISPLAYCOMMENT, VS_DISPLAYFIELDCODE};
-    KPrChangeVariableSettingsCommand( const QString &name, KPresenterDoc *_doc, bool _oldValue,
+    KPrChangeVariableSettingsCommand( const QString &name, KPrDocument *_doc, bool _oldValue,
                                       bool _newValue, VariableProperties _type);
     ~KPrChangeVariableSettingsCommand(){}
 
@@ -833,7 +833,7 @@ public:
     void unexecute();
 protected:
     void changeValue( bool b );
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     VariableProperties type;
     bool m_bOldValue;
     bool m_bNewValue;
@@ -845,14 +845,14 @@ protected:
 class KPrChangeTitlePageNameCommand : public KNamedCommand
 {
 public:
-    KPrChangeTitlePageNameCommand( const QString &name, KPresenterDoc *_doc, const QString &_oldPageName,
+    KPrChangeTitlePageNameCommand( const QString &name, KPrDocument *_doc, const QString &_oldPageName,
                                    const QString &_newPageName, KPrPage *_page);
     ~KPrChangeTitlePageNameCommand(){}
 
     void execute();
     void unexecute();
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     QString oldPageName;
     QString newPageName;
     KPrPage *m_page;
@@ -861,13 +861,13 @@ protected:
 class KPrChangeCustomVariableValue : public KNamedCommand
 {
 public:
-    KPrChangeCustomVariableValue( const QString &name, KPresenterDoc *_doc,const QString & _oldValue,
+    KPrChangeCustomVariableValue( const QString &name, KPrDocument *_doc,const QString & _oldValue,
                                   const QString & _newValue, KoCustomVariable *var);
 
     void execute();
     void unexecute();
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     QString newValue;
     QString oldValue;
     KoCustomVariable *m_var;
@@ -876,13 +876,13 @@ protected:
 class KPrChangeLinkVariable : public KNamedCommand
 {
 public:
-    KPrChangeLinkVariable( const QString &name, KPresenterDoc *_doc,const QString & _oldHref,
+    KPrChangeLinkVariable( const QString &name, KPrDocument *_doc,const QString & _oldHref,
                            const QString & _newHref, const QString & _oldLink,const QString &_newLink, KoLinkVariable *var);
     ~KPrChangeLinkVariable(){};
     void execute();
     void unexecute();
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     QString oldHref;
     QString newHref;
     QString oldLink;
@@ -894,7 +894,7 @@ class KPrStickyObjCommand : public KNamedCommand
 {
 public:
     KPrStickyObjCommand( const QString &_name, QPtrList<KPObject> &_objects, bool sticky,
-                         KPrPage*_page,KPresenterDoc *_doc );
+                         KPrPage*_page,KPrDocument *_doc );
 
     ~KPrStickyObjCommand();
     void execute();
@@ -904,33 +904,33 @@ public:
 protected:
     QPtrList<KPObject> objects;
     bool m_bSticky;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage*m_page;
 };
 
 class KPrNameObjectCommand : public KNamedCommand
 {
 public:
-    KPrNameObjectCommand( const QString &_name, const QString &_objectName, KPObject *_obj, KPresenterDoc *_doc );
+    KPrNameObjectCommand( const QString &_name, const QString &_objectName, KPObject *_obj, KPrDocument *_doc );
     ~KPrNameObjectCommand();
     void execute();
     void unexecute();
 protected:
     QString oldObjectName, newObjectName;
     KPObject *object;
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPrPage *m_page;
 };
 
 class KPrDisplayObjectFromMasterPage : public KNamedCommand
 {
 public:
-    KPrDisplayObjectFromMasterPage( const QString &name, KPresenterDoc *_doc, KPrPage *_page, bool _newValue);
+    KPrDisplayObjectFromMasterPage( const QString &name, KPrDocument *_doc, KPrPage *_page, bool _newValue);
     ~KPrDisplayObjectFromMasterPage(){};
     void execute();
     void unexecute();
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_page;
     bool newValue;
 };
@@ -938,12 +938,12 @@ protected:
 class KPrDisplayBackgroundPage : public KNamedCommand
 {
 public:
-    KPrDisplayBackgroundPage( const QString &name, KPresenterDoc *_doc, KPrPage *_page, bool _newValue);
+    KPrDisplayBackgroundPage( const QString &name, KPrDocument *_doc, KPrPage *_page, bool _newValue);
     ~KPrDisplayBackgroundPage(){};
     void execute();
     void unexecute();
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_page;
     bool newValue;
 };
@@ -951,12 +951,12 @@ protected:
 class KPrHideShowHeaderFooter : public KNamedCommand
 {
 public:
-    KPrHideShowHeaderFooter( const QString &name, KPresenterDoc *_doc, KPrPage *_page, bool _newValue,KPTextObject *_textObject);
+    KPrHideShowHeaderFooter( const QString &name, KPrDocument *_doc, KPrPage *_page, bool _newValue,KPTextObject *_textObject);
     ~KPrHideShowHeaderFooter(){};
     void execute();
     void unexecute();
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_page;
     KPTextObject *m_textObject;
     bool newValue;
@@ -965,14 +965,14 @@ protected:
 class KPrFlipObjectCommand : public KNamedCommand
 {
 public:
-    KPrFlipObjectCommand( const QString &name, KPresenterDoc *_doc, bool _horizontal ,
+    KPrFlipObjectCommand( const QString &name, KPrDocument *_doc, bool _horizontal ,
                           QPtrList<KPObject> &_objects );
     ~KPrFlipObjectCommand();
     void execute();
     void unexecute();
 protected:
     void flipObjects();
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     QPtrList<KPObject> objects;
     bool horizontal;
     KPrPage *m_page;
@@ -983,9 +983,9 @@ class KPrGeometryPropertiesCommand : public KNamedCommand
 public:
     enum KgpType { ProtectSize, KeepRatio};
     KPrGeometryPropertiesCommand( const QString &name, QPtrList<KPObject> &objects,
-                                  bool newValue, KgpType type, KPresenterDoc *_doc );
+                                  bool newValue, KgpType type, KPrDocument *_doc );
     KPrGeometryPropertiesCommand( const QString &name, QValueList<bool> &lst, QPtrList<KPObject> &objects,
-                                  bool newValue, KgpType type, KPresenterDoc *_doc );
+                                  bool newValue, KgpType type, KPrDocument *_doc );
     ~KPrGeometryPropertiesCommand();
 
     virtual void execute();
@@ -996,16 +996,16 @@ protected:
     QPtrList<KPObject> m_objects;
     bool m_newValue;
     KgpType m_type;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
 };
 
 class KPrProtectContentCommand : public KNamedCommand
 {
 public:
     KPrProtectContentCommand( const QString &name, QPtrList<KPObject> &objects,
-                              bool protectContent, KPresenterDoc *doc );
+                              bool protectContent, KPrDocument *doc );
     KPrProtectContentCommand( const QString &name, bool protectContent,
-                              KPTextObject *obj, KPresenterDoc *doc );
+                              KPTextObject *obj, KPrDocument *doc );
 
     ~KPrProtectContentCommand();
     virtual void execute();
@@ -1017,13 +1017,13 @@ protected:
     QPtrList<KPTextObject> m_objects;
     bool m_protectContent;
     QValueList<bool> m_oldValues;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
 };
 
 class KPrCloseObjectCommand : public KNamedCommand
 {
 public:
-    KPrCloseObjectCommand( const QString &_name, KPObject *_obj, KPresenterDoc *_doc );
+    KPrCloseObjectCommand( const QString &_name, KPObject *_obj, KPrDocument *_doc );
 
     ~KPrCloseObjectCommand();
     virtual void execute();
@@ -1033,7 +1033,7 @@ protected:
     void closeObject(bool close);
 
     KPObject *objects;
-    KPresenterDoc * doc;
+    KPrDocument * doc;
     KPrPage *m_page;
 };
 
@@ -1051,9 +1051,9 @@ class KPrChangeMarginCommand : public KNamedCommand
 {
 public:
     KPrChangeMarginCommand( const QString &name, QPtrList<KPObject> &objects, MarginsStruct newMargins,
-                            KPresenterDoc *doc, KPrPage *page );
+                            KPrDocument *doc, KPrPage *page );
     KPrChangeMarginCommand( const QString &name, KPTextObject *_obj, MarginsStruct _MarginsBegin,
-                            MarginsStruct _MarginsEnd, KPresenterDoc *_doc );
+                            MarginsStruct _MarginsEnd, KPrDocument *_doc );
     ~KPrChangeMarginCommand();
 
     virtual void execute();
@@ -1064,7 +1064,7 @@ protected:
     QPtrList<KPTextObject> m_objects;
     MarginsStruct m_newMargins;
     KPrPage *m_page;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
 };
 
 
@@ -1072,7 +1072,7 @@ class KPrChangeVerticalAlignmentCommand : public KNamedCommand
 {
 public:
     KPrChangeVerticalAlignmentCommand( const QString &name, KPTextObject *_obj, VerticalAlignmentType _oldAlign,
-                                       VerticalAlignmentType _newAlign, KPresenterDoc *_doc);
+                                       VerticalAlignmentType _newAlign, KPrDocument *_doc);
     ~KPrChangeVerticalAlignmentCommand() {}
 
     virtual void execute();
@@ -1082,21 +1082,21 @@ protected:
     VerticalAlignmentType m_oldAlign;
     VerticalAlignmentType m_newAlign;
     KPrPage *m_page;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
 };
 
 
 class KPrChangeTabStopValueCommand : public KNamedCommand
 {
 public:
-    KPrChangeTabStopValueCommand( const QString &name, double _oldValue, double _newValue, KPresenterDoc *_doc);
+    KPrChangeTabStopValueCommand( const QString &name, double _oldValue, double _newValue, KPrDocument *_doc);
 
     ~KPrChangeTabStopValueCommand() {}
 
     virtual void execute();
     virtual void unexecute();
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     double m_oldValue;
     double m_newValue;
 };
@@ -1104,12 +1104,12 @@ protected:
 class KPrChangeVariableNoteText : public KNamedCommand
 {
  public:
-    KPrChangeVariableNoteText( const QString &name, KPresenterDoc *_doc, const QString &_oldValue,const QString &_newValue, KoNoteVariable *var);
+    KPrChangeVariableNoteText( const QString &name, KPrDocument *_doc, const QString &_oldValue,const QString &_newValue, KoNoteVariable *var);
     ~KPrChangeVariableNoteText();
     void execute();
     void unexecute();
  protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     QString newValue;
     QString oldValue;
     KoNoteVariable *m_var;

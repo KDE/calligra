@@ -22,7 +22,7 @@
 #include "KPrPartObject.h"
 #include "KPrDocument.h"
 #include "KPrView.h"
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include <kodom.h>
 #include <koxmlns.h>
 #include "kooasiscontext.h"

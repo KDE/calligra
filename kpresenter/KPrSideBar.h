@@ -30,7 +30,7 @@
 #include <klistview.h>
 
 class QListViewItem;
-class KPresenterDoc;
+class KPrDocument;
 class KPresenterView;
 class QDropEvent;
 class QPopupMenu;
@@ -55,10 +55,10 @@ class RenamePageValidator : public QValidator
 class SideBarBase
 {
 public:
-    SideBarBase(KPresenterDoc *_doc, KPresenterView *_view);
+    SideBarBase(KPrDocument *_doc, KPresenterView *_view);
     void setViewMasterPage( bool _b );
 protected:
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPresenterView *m_view;
     bool m_viewMasterPage;
 };
@@ -68,7 +68,7 @@ class ThumbBar : public KIconView, public SideBarBase
     Q_OBJECT
 
 public:
-    ThumbBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
+    ThumbBar(QWidget *parent, KPrDocument *d, KPresenterView *v);
     ~ThumbBar();
     void setCurrentPage( int pg );
     void updateItem( int pagenr, bool sticky = false );
@@ -104,7 +104,7 @@ class Outline: public KListView, public SideBarBase
     Q_OBJECT
 
 public:
-    Outline( QWidget *parent, KPresenterDoc *d, KPresenterView *v );
+    Outline( QWidget *parent, KPrDocument *d, KPresenterView *v );
     ~Outline();
     void setCurrentPage( int pg );
     QSize sizeHint() const { return QSize( 145, KListView::sizeHint().height() ); }
@@ -145,7 +145,7 @@ class SideBar: public QTabWidget
     Q_OBJECT
 
 public:
-    SideBar(QWidget *parent, KPresenterDoc *d, KPresenterView *v);
+    SideBar(QWidget *parent, KPrDocument *d, KPresenterView *v);
     void setCurrentPage( int pg ) {
         m_outline->setCurrentPage(pg);
         m_thb->setCurrentPage(pg);
@@ -175,7 +175,7 @@ private:
     Outline *m_outline;
     ThumbBar *m_thb;
 
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPresenterView *m_view;
 };
 

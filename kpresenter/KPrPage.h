@@ -37,7 +37,7 @@ class KoSavingContext;
 class KURL;
 class KPTextView;
 class KPObject;
-class KPresenterDoc;
+class KPrDocument;
 class KPresenterView;
 class KoDocumentEntry;
 class KoPageLayout;
@@ -64,7 +64,7 @@ public:
      * @param doc pointer to the kpresenter document
      * @param masterPage master page, 0 if it is a master page
      */
-    KPrPage(KPresenterDoc *_doc, KPrPage *masterPage = 0 );
+    KPrPage(KPrDocument *_doc, KPrPage *masterPage = 0 );
 
     /**
      * @brief Desctructor
@@ -79,7 +79,7 @@ public:
     /**
      * @brief Return a DCOP interface for this page
      */
-    KPresenterDoc * kPresenterDoc() const {return m_doc; }
+    KPrDocument * kPresenterDoc() const {return m_doc; }
 
     /**
      * @brief Get the manual title
@@ -553,7 +553,7 @@ private:
 
     // list of objects
     QPtrList<KPObject> m_objectList;
-    KPresenterDoc *m_doc;
+    KPrDocument *m_doc;
     KPrPage *m_masterPage;
     KPBackGround *m_kpbackground;
     QString m_manualTitle;

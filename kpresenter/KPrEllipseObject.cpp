@@ -20,7 +20,7 @@
 */
 #include "KPrObject2DIface.h"
 #include "KPrEllipseObject.h"
-#include "KPGradient.h"
+#include "KPrGradient.h"
 
 #include <kdebug.h>
 #include <qbitmap.h>

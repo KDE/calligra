@@ -36,7 +36,7 @@
 #include "KPrCustomSlideShowDia.h"
 
 
-CustomSlideShowDia::CustomSlideShowDia( KPresenterView* _view, KPresenterDoc *_doc, const char* name )
+CustomSlideShowDia::CustomSlideShowDia( KPresenterView* _view, KPrDocument *_doc, const char* name )
     : KDialogBase( _view, name, true, i18n("Custom Slide Show"), Ok|Cancel ), m_doc( _doc ), m_view( _view )
 {
   QWidget* page = new QWidget( this );

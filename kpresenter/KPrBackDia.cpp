@@ -407,5 +407,5 @@ void BackDia::afterSelectPic( const QString &url )
     updateConfiguration();
 }
 
-#include "KPGradient.h"
+#include "KPrGradient.h"
 #include "KPrBackDia.moc"

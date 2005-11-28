@@ -23,7 +23,7 @@
 
 #include <qwidget.h>
 
-#include "KPCommand.h"
+#include "KPrCommand.h"
 
 class PicturePropertyUI;
 class QPixmap;

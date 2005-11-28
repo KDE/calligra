@@ -165,7 +165,7 @@ const char * KPGroupObject::getOasisElementName() const
 }
 
 
-void KPGroupObject::loadOasisGroupObject( KPresenterDoc *_doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPRLoadingInfo *info)
+void KPGroupObject::loadOasisGroupObject( KPrDocument *_doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPRLoadingInfo *info)
 {
     //KPObject::loadOasis( element, context, info );
     updateObjs = false;
@@ -187,7 +187,7 @@ void KPGroupObject::addObjects( KPObject * obj )
     objects.append( obj );
 }
 
-double KPGroupObject::load( const QDomElement &element, KPresenterDoc *doc)
+double KPGroupObject::load( const QDomElement &element, KPrDocument *doc)
 {
     //FIXME
     double offset=KPObject::load(element);

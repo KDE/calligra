@@ -29,7 +29,7 @@
 #include <qvaluelist.h>
 
 
-class KPresenterDoc;
+class KPrDocument;
 class KPresenterView;
 
 class KURLRequester;
@@ -53,7 +53,7 @@ class KPMSPresentation
 {
 public:
 
-    KPMSPresentation( KPresenterDoc *_doc, KPresenterView *_view );
+    KPMSPresentation( KPrDocument *_doc, KPresenterView *_view );
     KPMSPresentation( const KPMSPresentation &msPres );
 
     void setTitle( const QString &_title )
@@ -86,7 +86,7 @@ public:
 protected:
     void init();
 
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPresenterView *view;
 
     QString title;
@@ -102,13 +102,13 @@ class KPMSPresentationSetup : public QDialog
     Q_OBJECT
 
 public:
-    KPMSPresentationSetup( KPresenterDoc *_doc, KPresenterView *_view );
+    KPMSPresentationSetup( KPrDocument *_doc, KPresenterView *_view );
     ~KPMSPresentationSetup();
 
-    static void createMSPresentation( KPresenterDoc *_doc, KPresenterView *_view );
+    static void createMSPresentation( KPrDocument *_doc, KPresenterView *_view );
 
 protected:
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPresenterView *view;
     KPMSPresentation msPres;
 
@@ -130,10 +130,10 @@ class KPMSPresentationCreateDialog : public QDialog
     Q_OBJECT
 
 public:
-    KPMSPresentationCreateDialog( KPresenterDoc *_doc, KPresenterView *_view, const KPMSPresentation &_msPres );
+    KPMSPresentationCreateDialog( KPrDocument *_doc, KPresenterView *_view, const KPMSPresentation &_msPres );
     ~KPMSPresentationCreateDialog();
 
-    static void createMSPresentation( KPresenterDoc *_doc, KPresenterView *_view, const KPMSPresentation &_msPres );
+    static void createMSPresentation( KPrDocument *_doc, KPresenterView *_view, const KPMSPresentation &_msPres );
 
     void start();
 
@@ -146,7 +146,7 @@ protected:
     void resizeEvent( QResizeEvent *e );
 
     KPresenterView *view;
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KPMSPresentation msPres;
 
     KProgress *progressBar;

@@ -35,7 +35,7 @@
 
 
 KPrMoveHelpLineDia::KPrMoveHelpLineDia( QWidget *parent, double value, double limitTop, double limitBottom,
-                                        KPresenterDoc *_doc, const char *name)
+                                        KPrDocument *_doc, const char *name)
     : KDialogBase( parent, name , true, "", Ok | Cancel | User1, Ok, true )
 {
     m_doc=_doc;
@@ -65,7 +65,7 @@ double KPrMoveHelpLineDia::newPosition() const
 
 
 KPrInsertHelpLineDia::KPrInsertHelpLineDia( QWidget *parent, const KoRect & _pageRect,
-                                            KPresenterDoc *_doc, const char *name)
+                                            KPrDocument *_doc, const char *name)
     : KDialogBase( parent, name , true, "", Ok|Cancel, Ok, true )
 {
     limitOfPage=_pageRect;
@@ -114,7 +114,7 @@ void KPrInsertHelpLineDia::slotRadioButtonClicked()
 }
 
 KPrInsertHelpPointDia::KPrInsertHelpPointDia( QWidget *parent, const KoRect & _pageRect,
-                                              KPresenterDoc *_doc, double posX, double posY, const char *name)
+                                              KPrDocument *_doc, double posX, double posY, const char *name)
     : KDialogBase( parent, name , true, "", Ok|Cancel| User1, Ok, true ),
       m_bRemovePoint( false )
 {

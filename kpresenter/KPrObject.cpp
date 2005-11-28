@@ -180,7 +180,7 @@ void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyl
 
 QString KPStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, const LineEnd &_element ) const
 {
-    KoGenStyle marker( KPresenterDoc::STYLE_MARKER /*, "graphic"*/ /*no name*/ );
+    KoGenStyle marker( KPrDocument::STYLE_MARKER /*, "graphic"*/ /*no name*/ );
     // value used from ooimpress filter I don't know if it's good
     switch( _element )
     {
@@ -369,7 +369,7 @@ QString KPObject::getStyle( KPOasisSaveContext &sc ) const
     KoGenStyles &mainStyles( sc.context.mainStyles() );
     if ( sc.onMaster )
     {
-        styleObjectAuto = KoGenStyle( KPresenterDoc::STYLE_PRESENTATIONSTICKYOBJECT, "presentation" );
+        styleObjectAuto = KoGenStyle( KPrDocument::STYLE_PRESENTATIONSTICKYOBJECT, "presentation" );
     }
     else
     {
@@ -1200,7 +1200,7 @@ bool KPObject::intersects( const KoRect &rect ) const
 }
 
 QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType,
-                             KPresenterDoc *doc ) const
+                             KPrDocument *doc ) const
 {
     KoTextZoomHandler * zh = doc->zoomHandler();
     int px = zh->zoomItX(_point.x());
@@ -1629,7 +1629,7 @@ void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle
 
 QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles ) const
 {
-    KoGenStyle stroke( KPresenterDoc::STYLE_STROKE /*, "graphic"*/ /*no name*/ );
+    KoGenStyle stroke( KPrDocument::STYLE_STROKE /*, "graphic"*/ /*no name*/ );
     switch( pen.style() )
     {
     case Qt::NoPen:
@@ -1993,7 +1993,7 @@ void KP2DObject::saveOasisBackgroundElement( KoGenStyle& styleObjectAuto, KoGenS
 
 QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
 {
-    KoGenStyle gradientStyle( KPresenterDoc::STYLE_GRADIENT /*no family name*/);
+    KoGenStyle gradientStyle( KPrDocument::STYLE_GRADIENT /*no family name*/);
     gradientStyle.addAttribute( "draw:start-color", getGColor1().name() );
     gradientStyle.addAttribute( "draw:end-color", getGColor2().name() );
 

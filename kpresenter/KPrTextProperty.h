@@ -27,7 +27,7 @@
 
 #include <koUnit.h>
 
-#include "KPCommand.h"
+#include "KPrCommand.h"
 
 class KPMarginWidget;
 class QCheckBox;

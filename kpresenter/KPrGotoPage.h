@@ -28,16 +28,16 @@ class QWidget;
 class QObject;
 class QResizeEvent;
 class QListBox;
-class KPresenterDoc;
+class KPrDocument;
 
 class KPGotoPage : public KDialogBase
 {
 public:
-    KPGotoPage( const KPresenterDoc *doc,
+    KPGotoPage( const KPrDocument *doc,
                 const QValueList<int> &slides, int start,
                 QWidget *parent = 0L, const char *name = 0L );
 
-    static int gotoPage( const KPresenterDoc *doc,
+    static int gotoPage( const KPrDocument *doc,
                          const QValueList<int> &slides, int start,
                          QWidget *parent = 0L );
 

@@ -112,7 +112,7 @@
 
 #include <kotextparag.h>
 #include <kotextobject.h>
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include <koFontDia.h>
 #include <koCharSelectDia.h>
 #include <koInsertLink.h>
@@ -140,7 +140,7 @@
 #include "KPrPixmapObject.h"
 #include <koCommentDia.h>
 
-#include "KPrDuplicatObjDia.h"
+#include "KPrDuplicateObjDia.h"
 #include <kstdaccel.h>
 #include <koDocumentInfo.h>
 #include <kaccelgen.h>
@@ -199,7 +199,7 @@ static const char * const pagedown_xpm[] = {
     "##############"
 };
 
-KPresenterView::KPresenterView( KPresenterDoc* _doc, QWidget *_parent, const char *_name )
+KPresenterView::KPresenterView( KPrDocument* _doc, QWidget *_parent, const char *_name )
     : KoView( _doc, _parent, _name )
 {
 

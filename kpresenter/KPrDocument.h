@@ -66,7 +66,7 @@ class KoSavingContext;
 #include "global.h"
 #include <koStyleStack.h>
 #include <koPictureCollection.h>
-#include "KPGradientCollection.h"
+#include "KPrGradientCollection.h"
 #include <kotextzoomhandler.h>
 #include <kostyle.h> // for KoStyleChangeDefMap
 #include <kocommandhistory.h>
@@ -76,7 +76,7 @@ class KPTextObject;
 class KPPartObject;
 class KPrPage;
 class KPObject;
-class KPresenterDoc;
+class KPrDocument;
 
 class KoParagStyle;
 class KoStyleCollection;
@@ -86,20 +86,20 @@ class KPresenterChild : public KoDocumentChild
 public:
 
     // constructor - destructor
-    KPresenterChild( KPresenterDoc *_kpr, KoDocument* _doc, const QRect& _rect );
-    KPresenterChild( KPresenterDoc *_kpr );
+    KPresenterChild( KPrDocument *_kpr, KoDocument* _doc, const QRect& _rect );
+    KPresenterChild( KPrDocument *_kpr );
     ~KPresenterChild();
 
     // get parent
-    KPresenterDoc* parent()const { return m_parent; }
+    KPrDocument* parent()const { return m_parent; }
 
     virtual KoDocument *hitTest( const QPoint &, const QWMatrix & );
 
 protected:
-    KPresenterDoc *m_parent;
+    KPrDocument *m_parent;
 };
 
-class KPresenterDoc : public KoDocument
+class KPrDocument : public KoDocument
 {
     Q_OBJECT
     Q_PROPERTY( int maxRecentFiles READ maxRecentFiles )
@@ -126,9 +126,9 @@ class KPresenterDoc : public KoDocument
 
   public:
     // constructor - destructor
-    KPresenterDoc( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* doc = 0,
+    KPrDocument( QWidget *parentWidget = 0, const char *widgetName = 0, QObject* doc = 0,
                    const char* name = 0, bool singleViewMode = false );
-    ~KPresenterDoc();
+    ~KPrDocument();
 
     // Drawing
     virtual void paintContent( QPainter& painter, const QRect& rect, bool transparent = false,

@@ -89,7 +89,7 @@ class KoFontDia;
 class KoParagDia;
 class KPObject;
 class KPPixmapObject;
-class KPresenterDoc;
+class KPrDocument;
 class KPrPage;
 class KPTextObject;
 class KoTextIterator;
@@ -119,7 +119,7 @@ class KPresenterView : public KoView
     Q_OBJECT
 
 public:
-    KPresenterView( KPresenterDoc* _doc, QWidget *_parent = 0, const char *_name = 0 );
+    KPresenterView( KPrDocument* _doc, QWidget *_parent = 0, const char *_name = 0 );
     ~KPresenterView();
 
     void initGui();
@@ -482,7 +482,7 @@ public:
     void recalcCurrentPageNum();
 
     // return pointer to document
-    KPresenterDoc *kPresenterDoc() const {return m_pKPresenterDoc; }
+    KPrDocument *kPresenterDoc() const {return m_pKPresenterDoc; }
 
     // properties
     void changePicture( const QString & );
@@ -807,7 +807,7 @@ private:
 // ********** variables **********
 
     // document
-    KPresenterDoc *m_pKPresenterDoc;
+    KPrDocument *m_pKPresenterDoc;
 
     // flags
     /**

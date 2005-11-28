@@ -30,7 +30,7 @@
 #include "KPrCanvas.h"
 #include <kdebug.h>
 #include <kcommand.h>
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include <koPoint.h>
 #include <koRect.h>
 

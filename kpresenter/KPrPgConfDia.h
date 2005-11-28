@@ -30,7 +30,7 @@
 
 #include <kdialogbase.h>
 
-class KPresenterDoc;
+class KPrDocument;
 
 class QCheckBox;
 class QComboBox;
@@ -49,7 +49,7 @@ class PgConfDia : public KDialogBase
 public:
 
     // constructor - destructor
-    PgConfDia( QWidget* parent, KPresenterDoc* doc );
+    PgConfDia( QWidget* parent, KPrDocument* doc );
     ~PgConfDia();
     bool getInfiniteLoop() const;
     bool getManualSwitch() const;
@@ -61,7 +61,7 @@ public:
 
 protected:
 
-    KPresenterDoc* m_doc;
+    KPrDocument* m_doc;
 
     QCheckBox *infiniteLoop, *presentationDuration;
     QRadioButton *m_manualButton, *m_autoButton;

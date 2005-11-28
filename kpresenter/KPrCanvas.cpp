@@ -75,7 +75,7 @@
 #include "KPrNoteBar.h"
 #include "KPrPartObject.h"
 #include "KPrUtils.h"
-#include "KPCommand.h"
+#include "KPrCommand.h"
 #include "KPrPolylineObject.h"
 #include "KPrClosedLineObject.h"
 #include "KPrPage.h"
@@ -288,7 +288,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
     if ( isUpdatesEnabled() )
     {
         //kdDebug(33001) << "KPrCanvas::paintEvent m_paintGuides = " << m_paintGuides << endl; //<< " " << kdBacktrace( 10 ) << endl;
-        KPresenterDoc *doc =m_view->kPresenterDoc();
+        KPrDocument *doc =m_view->kPresenterDoc();
 
         if ( ! m_paintGuides  )
         {
@@ -555,7 +555,7 @@ void KPrCanvas::drawPresPage( QPainter *painter, const QRect &_rect, PresStep st
 
 void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2) const
 {
-    KPresenterDoc *doc=m_view->kPresenterDoc();
+    KPrDocument *doc=m_view->kPresenterDoc();
 
     if(!doc->isReadWrite())
         return;
@@ -2810,7 +2810,7 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
 
     exitEditMode();
 
-    KPresenterDoc * doc = m_view->kPresenterDoc();
+    KPrDocument * doc = m_view->kPresenterDoc();
 
     // Text can't zoom with a different x and y factor, yet.
     // So we have to choose the smallest zoom (but still paint background everywhere)
@@ -2872,7 +2872,7 @@ void KPrCanvas::stopScreenPresentation()
     //kdDebug(33001) << "KPrCanvas::stopScreenPresentation m_showOnlyPage=" << m_showOnlyPage << endl;
     setCursor( waitCursor );
 
-    KPresenterDoc * doc = m_view->kPresenterDoc();
+    KPrDocument * doc = m_view->kPresenterDoc();
     doc->zoomHandler()->setZoomAndResolution( m_zoomBeforePresentation,
                                               KoGlobal::dpiX(), KoGlobal::dpiY() );
     doc->newZoomAndResolution(false,false);
@@ -2891,7 +2891,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
 
     bool objectEffectFinished = finishObjectEffects();
 
-    KPresenterDoc * doc = m_view->kPresenterDoc();
+    KPrDocument * doc = m_view->kPresenterDoc();
 
     if ( !gotoNextPage )
     {
@@ -3079,7 +3079,7 @@ bool KPrCanvas::pPrev( bool gotoPreviousPage )
 
         m_step.m_pageNumber = *( --m_presentationSlidesIterator ) - 1;
 
-        KPresenterDoc * doc = m_view->kPresenterDoc();
+        KPrDocument * doc = m_view->kPresenterDoc();
 
         m_pageEffectSteps = doc->getPageEffectSteps( m_step.m_pageNumber );
 
@@ -3133,7 +3133,7 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
 {
     //kdDebug(33001) << "Page::drawPageInPix" << endl;
 
-    KPresenterDoc *doc = m_view->kPresenterDoc();
+    KPrDocument *doc = m_view->kPresenterDoc();
     int oldZoom = doc->zoomHandler()->zoom();
     bool oldDisplayFieldValue = false;
 
@@ -3241,7 +3241,7 @@ void KPrCanvas::drawCurrentPageInPix( QPixmap &_pix ) const
 void KPrCanvas::printPage( QPainter* painter, PresStep step, KPrinter *printer, int rows, int cols )
 {
     //kdDebug(33001) << "KPrCanvas::printPage" << endl;
-    KPresenterDoc *doc = m_view->kPresenterDoc();
+    KPrDocument *doc = m_view->kPresenterDoc();
     KPrPage* page = doc->pageList().at( step.m_pageNumber );
     QRect const rect = page->getZoomPageRect();
     bool const drawBorder = printer->option("kde-kpresenter-printslideborders").toInt() && rows>1 && cols>1;
@@ -4117,7 +4117,7 @@ void KPrCanvas::copyObjs()
 
     m_activePage->copyObjs(doc, presenter, savePictures);
 
-    KPresenterDoc* kprdoc = m_view->kPresenterDoc();
+    KPrDocument* kprdoc = m_view->kPresenterDoc();
     if ( !embeddedObjectsActivePage.isEmpty())
     {
         kprdoc->saveEmbeddedObject(m_activePage, embeddedObjectsActivePage,doc,presenter);
@@ -4321,7 +4321,7 @@ bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, KoSize *origS
 
 void KPrCanvas::picViewOriginalSize()
 {
-    KPresenterDoc *doc = m_view->kPresenterDoc();
+    KPrDocument *doc = m_view->kPresenterDoc();
     KPPixmapObject *object = m_activePage->picViewOrigHelper();
 
     KoSize newSize( doc->zoomHandler()->pixelXToPt( object->originalSize().width() ),
@@ -4433,7 +4433,7 @@ void KPrCanvas::setTextBackground( KPTextObject */*obj*/ )
 
 KoPoint KPrCanvas::diffGrid( KoRect &rect, double diffx, double diffy )
 {
-    KPresenterDoc * doc( m_view->kPresenterDoc() );
+    KPrDocument * doc( m_view->kPresenterDoc() );
     KoPoint move( 0, 0 );
 
     double tempx = ( int( rect.topLeft().x() / doc->getGridX() ) * doc->getGridX() ) - rect.topLeft().x();
@@ -4479,7 +4479,7 @@ KoPoint KPrCanvas::diffGrid( KoRect &rect, double diffx, double diffy )
 
 void KPrCanvas::moveObjectsByKey( int x, int y )
 {
-    KPresenterDoc *doc( m_view->kPresenterDoc() );
+    KPrDocument *doc( m_view->kPresenterDoc() );
 
     KoRect rect( objectRect( false ) );
     double diffx = m_view->zoomHandler()->unzoomItX( x );
@@ -4600,7 +4600,7 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
 
 void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
 {
-    KPresenterDoc *doc( m_view->kPresenterDoc() );
+    KPrDocument *doc( m_view->kPresenterDoc() );
 
     KoRect rect( objectRect( false ) );
     KoPoint move( 0, 0 );
@@ -5412,7 +5412,7 @@ bool KPrCanvas::checkCurrentTextEdit( KPTextObject * textObj )
 
 void KPrCanvas::alignObjects( AlignType at )
 {
-    KPresenterDoc * doc = m_view->kPresenterDoc();
+    KPrDocument * doc = m_view->kPresenterDoc();
 
     QString name;
 
@@ -5501,7 +5501,7 @@ void KPrCanvas::layout()
 KoPoint KPrCanvas::snapPoint( KoPoint &pos, bool repaintSnapping )
 {
     KoPoint sp( pos );
-    KPresenterDoc * doc( m_view->kPresenterDoc() );
+    KPrDocument * doc( m_view->kPresenterDoc() );
 
     bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && !doc->showGuideLines() && m_changeSnap );
     bool snapToGuideLines = doc->showGuideLines() && !m_changeSnap;

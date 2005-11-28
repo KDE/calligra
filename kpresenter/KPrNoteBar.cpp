@@ -165,7 +165,7 @@ QString NoteBar::getNotesTextForPrinting(QValueList<int> _list) const
     bool firstText = true;
     bool noteIsEmpty = true;
     int pageCount = 1;
-    KPresenterDoc *doc=view->kPresenterDoc();
+    KPrDocument *doc=view->kPresenterDoc();
     for ( int i = 0; i < static_cast<int>( doc->pageList().count() ); i++, ++pageCount )
     {
         if (_list.contains(i+1)==0) // that slide isn't printed, don't print its note either

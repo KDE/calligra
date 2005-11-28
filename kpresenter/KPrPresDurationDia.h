@@ -23,7 +23,7 @@
 
 #include <kdialogbase.h>
 
-class KPresenterDoc;
+class KPrDocument;
 class KListView;
 class QLabel;
 
@@ -33,7 +33,7 @@ class KPPresDurationDia : public KDialogBase
 
 public:
     KPPresDurationDia( QWidget *parent, const char *name,
-                       KPresenterDoc *_doc,
+                       KPrDocument *_doc,
                        QStringList _durationListString,
                        const QString &_durationString );
 
@@ -41,7 +41,7 @@ protected:
     void setupSlideList( QWidget *_page );
 
 private:
-    KPresenterDoc *doc;
+    KPrDocument *doc;
     KListView *slides;
     QLabel *label;
 

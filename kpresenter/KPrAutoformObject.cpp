@@ -22,7 +22,7 @@
 #include "KPrAutoformObject.h"
 #include "KPrAutoFormObjectIface.h"
 #include "KPrUtils.h"
-#include "KPGradient.h"
+#include "KPrGradient.h"
 
 #include <qbitmap.h>
 #include <qpointarray.h>
