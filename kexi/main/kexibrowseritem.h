@@ -31,18 +31,19 @@ namespace KexiPart
 	class Info;
 }
 
-class KEXIMAIN_EXPORT KexiBrowserItem : public KListViewItem
+//! @internal
+class KexiBrowserItem : public KListViewItem
 {
 	public:
 		KexiBrowserItem(KListView *parent, KexiPart::Info *i);
 		KexiBrowserItem(KListViewItem *parent, KexiPart::Info *i, KexiPart::Item *item);
 
-		void			clearChildren();
+		void clearChildren();
 
-		KexiPart::Info	*info() { return m_info; }
+		KexiPart::Info *info() const { return m_info; }
 
-		//! can be null
-		KexiPart::Item* item() { return m_item; }
+		//! \return part item. Can be null if the browser item is a "folder", i.e. a parent node.
+		KexiPart::Item* item() const { return m_item; }
 
 		void updateItemName();
 	protected:
@@ -57,4 +58,3 @@ class KEXIMAIN_EXPORT KexiBrowserItem : public KListViewItem
 };
 
 #endif
-

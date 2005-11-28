@@ -67,7 +67,7 @@
 #include "kexi.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
-#include "kexiuseraction.h"
+//#include "kexiuseraction.h"
 
 #include "core/kexiscripting.h"
 
@@ -171,8 +171,9 @@ class KexiMainWindowImpl::Private
 
 		//! project menu
 		KAction *action_save, *action_save_as, *action_close,
-		 *action_project_properties, *action_open_recent_more,
-		 *action_project_relations, *action_project_import_data_table;
+			*action_project_properties, *action_open_recent_more,
+			*action_project_relations, *action_project_import_data_table,
+ 			*action_project_export_data_table;
 //		KRecentFilesAction *action_open_recent;
 		KActionMenu *action_open_recent, *action_show_other;
 //		int action_open_recent_more_id;
@@ -186,7 +187,8 @@ class KexiMainWindowImpl::Private
 			*action_edit_undo, *action_edit_redo,
 			*action_edit_insert_empty_row,
 			*action_edit_edititem, *action_edit_clear_table,
-			*action_edit_paste_special_data_table;
+			*action_edit_paste_special_data_table,
+			*action_edit_copy_special_data_table;
 
 		//! view menu
 		KAction *action_view_nav, *action_view_propeditor;
@@ -741,7 +743,7 @@ void KexiMainWindowImpl::initActions()
 	d->action_close->setToolTip(i18n("Close the current project"));
 	d->action_close->setWhatsThis(i18n("Closes the current project."));
 
-	KStdAction::quit( this, SLOT(slotQuit()), actionCollection(), "quit");
+	KStdAction::quit( this, SLOT(slotProjectQuit()), actionCollection(), "quit");
 
 #ifdef KEXI_SHOW_UNIMPLEMENTED
 	d->action_project_relations = new KAction(i18n("&Relationships..."), "relation", CTRL + Key_R,
@@ -769,11 +771,14 @@ void KexiMainWindowImpl::initActions()
 
 #ifndef KEXI_NO_CSV_IMPORT
 	d->action_project_import_data_table = new KAction(i18n("Import->Data Table...", "Data &Table..."),
-		"download_manager"/*todo: change to "file_import" or so*/,
-		0, this, SLOT(slotToolsProjectImportDataTable()), actionCollection(), "project_import_data_table");
+		"download_manager"/*! @todo: change to "file_import" or so*/,
+		0, this, SLOT(slotProjectImportDataTable()), actionCollection(), "project_import_data_table");
 #else
 	d->action_project_import_data_table = d->dummy_action;
 #endif
+	d->action_project_export_data_table = new KAction(i18n("Export->Table or Query As Data Table...", "Table or Query As Data &Table..."),
+		""/*! @todo: change to "file_export" or so*/,
+		0, this, SLOT(slotProjectExportDataTable()), actionCollection(), "project_export_data_table");
 
 //TODO	new KAction(i18n("From File..."), "fileopen", 0,
 //TODO		this, SLOT(slotImportFile()), actionCollection(), "project_import_file");
@@ -786,12 +791,17 @@ void KexiMainWindowImpl::initActions()
 	d->action_edit_paste = createSharedAction( KStdAction::Paste, "edit_paste");
 
 #ifndef KEXI_NO_CSV_IMPORT
-	d->action_edit_paste_special_data_table = new KAction(i18n("Paste Special->As Data &Table...", "As Data &Table..."),
+	d->action_edit_paste_special_data_table = 
+		new KAction(i18n("Paste Special->As Data &Table...", "As Data &Table..."),
 		"table", 0, this, SLOT(slotEditPasteSpecialDataTable()),
 		actionCollection(), "edit_paste_special_data_table");
 #else
 	d->action_edit_paste_special_data_table = d->dummy_action;
 #endif
+	d->action_edit_copy_special_data_table 
+		= new KAction(i18n("Copy Special->Table or Query As Data Table...", "Table or Query As Data Table..."),
+		"table", 0, this, SLOT(slotEditCopySpecialDataTable()),
+		actionCollection(), "edit_copy_special_data_table");
 
 	d->action_edit_undo = createSharedAction( KStdAction::Undo, "edit_undo");
 	d->action_edit_redo = createSharedAction( KStdAction::Redo, "edit_redo");
@@ -1041,6 +1051,17 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	//EDIT MENU
 	d->action_edit_paste_special_data_table->setEnabled(d->prj);
 
+//! @todo "copy special" is currently enabled only for data view mode; 
+//! 	what about allowing it to enable in design view for "kexi/table" ?
+	if (d->curDialog && d->curDialog->currentViewMode()==Kexi::DataViewMode) {
+		QCString activePartItemMimeType( d->curDialog->partItem()->mimeType() );
+		KexiPart::Info *activePartInfo = Kexi::partManager().infoForMimeType( activePartItemMimeType );
+		d->action_edit_copy_special_data_table->setEnabled(
+			activePartInfo ? activePartInfo->isDataExportSuppored() : false );
+	}
+	else
+		d->action_edit_copy_special_data_table->setEnabled( false );
+
 	//VIEW MENU
 	d->action_view_nav->setEnabled(d->prj);
 	d->action_view_propeditor->setEnabled(d->prj);
@@ -1162,7 +1183,7 @@ void KexiMainWindowImpl::slotAutoOpenObjectsLater()
 		it != d->prj->data()->autoopenObjects.constEnd(); ++it )
 	{
 		KexiProjectData::ObjectInfo info = *it;
-		KexiPart::Info *i = Kexi::partManager().info( QCString("kexi/")+info["type"].lower().latin1() );
+		KexiPart::Info *i = Kexi::partManager().infoForMimeType( QCString("kexi/")+info["type"].lower().latin1() );
 		if (!i) {
 			not_found_msg += "<li>";
 			if (!info["name"].isEmpty())
@@ -1366,10 +1387,15 @@ KexiMainWindowImpl::initNavigator()
 			this,SLOT(removeObject(KexiPart::Item*)));
 		connect(d->nav,SIGNAL(renameItem(KexiPart::Item*,const QString&, bool&)),
 			this,SLOT(renameObject(KexiPart::Item*,const QString&, bool&)));
+		connect(d->nav,SIGNAL(exportItemAsDataTable(KexiPart::Item*)),
+			this,SLOT(exportItemAsDataTable(KexiPart::Item*)));
 		if (d->prj) {//connect to the project
 			connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
 				d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
 		}
+		connect(d->nav,SIGNAL(selectionChanged(KexiPart::Item*)),
+			this,SLOT(slotPartItemSelectedInNavigator(KexiPart::Item*)));
+
 //		d->restoreNavigatorWidth();
 	}
 	if(d->prj->isConnected()) {
@@ -1378,7 +1404,7 @@ KexiMainWindowImpl::initNavigator()
 		KexiPart::PartInfoList *pl = Kexi::partManager().partInfoList();
 		for(KexiPart::Info *it = pl->first(); it; it = pl->next())
 		{
-			if (!it->addTree())
+			if (!it->isVisibleInNavigator())
 				continue;
 			kdDebug() << "KexiMainWindowImpl::initNavigator(): adding " << it->groupName() << endl;
 			d->nav->addGroup(*it);
@@ -2536,7 +2562,7 @@ void KexiMainWindowImpl::slotImportServer()
 }
 
 void
-KexiMainWindowImpl::slotQuit()
+KexiMainWindowImpl::slotProjectQuit()
 {
 	if (~ closeProject())
 		return;
@@ -3237,9 +3263,9 @@ bool KexiMainWindowImpl::eventFilter( QObject *obj, QEvent * e )
 }
 
 KexiDialogBase *
-KexiMainWindowImpl::openObject(const QCString& mime, const QString& name, int viewMode)
+KexiMainWindowImpl::openObject(const QCString& mimeType, const QString& name, int viewMode)
 {
-	KexiPart::Item *item = d->prj->item(mime,name);
+	KexiPart::Item *item = d->prj->itemForMimeType(mimeType,name);
 	if (!item)
 		return 0;
 	return openObject(item, viewMode);
@@ -3274,7 +3300,7 @@ KexiMainWindowImpl::openObject(KexiPart::Item* item, int viewMode)
 	}
 	else {
 		d->updatePropEditorVisibility(viewMode);
-		KexiPart::Part *part = Kexi::partManager().part(item->mime());
+		KexiPart::Part *part = Kexi::partManager().partForMimeType(item->mimeType());
 		//update tabs before opening
 		updateCustomPropertyPanelTabs(d->curDialog ? d->curDialog->part() : 0,
 			d->curDialog ? d->curDialog->currentViewMode() : Kexi::NoViewMode,
@@ -3321,7 +3347,7 @@ KexiMainWindowImpl::openObjectFromNavigator(KexiPart::Item* item, int viewMode)
 		}
 	}
 	//if DataViewMode is not supported, try Design, then Text mode (currently useful for script part)
-	KexiPart::Part *part = Kexi::partManager().part(item->mime());
+	KexiPart::Part *part = Kexi::partManager().partForMimeType(item->mimeType());
 	if (!part)
 		return 0;
 	if (viewMode == Kexi::DataViewMode && !(part->supportedViewModes() & Kexi::DataViewMode)) {
@@ -3338,7 +3364,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 {
 	if (!d->prj || !info)
 		return false;
-	KexiPart::Part *part = Kexi::partManager().part(info->mime());
+	KexiPart::Part *part = Kexi::partManager().partForMimeType(info->mimeType());
 	if(!part)
 		return false;
 
@@ -3370,7 +3396,7 @@ bool KexiMainWindowImpl::newObject( KexiPart::Info *info )
 		if (!project()->dbConnection()->insertRecord(*fl,
 				QVariant(p_id),
 				QVariant(info->ptr()->untranslatedGenericName()),
-				QVariant(info->mime()), QVariant("http://www.koffice.org/kexi/")))
+				QVariant(info->mimeType()), QVariant("http://www.koffice.org/kexi/")))
 			return false;
 
 		kdDebug() << "KexiMainWindowImpl::newObject(): insert success!" << endl;
@@ -3399,7 +3425,7 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 	if (!d->prj || !item)
 		return false;
 
-	KexiPart::Part *part = Kexi::partManager().part(item->mime());
+	KexiPart::Part *part = Kexi::partManager().partForMimeType(item->mimeType());
 	if (!part)
 		return false;
 
@@ -3674,7 +3700,7 @@ KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
 	setStandardToolBarMenuEnabled(false);
 	setHelpMenuEnabled(false);
 
-	KexiPart::Info *i = Kexi::partManager().info(startupPart.latin1());
+	KexiPart::Info *i = Kexi::partManager().infoForMimeType(startupPart.latin1());
 	if (!i) {
 		hide();
 		showErrorMessage( err_msg, i18n("Specified plugin does not exist.") );
@@ -3697,6 +3723,7 @@ KexiMainWindowImpl::initFinalMode(KexiProjectData *projectData)
 void
 KexiMainWindowImpl::initUserActions()
 {
+#if 0 //unused for now
 	KexiDB::Cursor *c = d->prj->dbConnection()->executeQuery("SELECT p_id, name, text, icon, method, arguments FROM kexi__useractions WHERE scope = 0");
 	if(!c)
 		return;
@@ -3713,6 +3740,7 @@ KexiMainWindowImpl::initUserActions()
 	args.append(QVariant("persons"));
 	a1->setMethod(KexiUserAction::OpenObject, args);
 */
+#endif
 }
 
 void KexiMainWindowImpl::slotToolsProjectMigration()
@@ -3748,7 +3776,7 @@ tristate KexiMainWindowImpl::showProjectMigrationWizard(const QString& mimeType,
 #endif
 }
 
-void KexiMainWindowImpl::slotToolsProjectImportDataTable()
+void KexiMainWindowImpl::slotProjectImportDataTable()
 {
 #ifndef KEXI_NO_CSV_IMPORT
 	QMap<QString,QString> args;
@@ -3761,11 +3789,31 @@ void KexiMainWindowImpl::slotToolsProjectImportDataTable()
 #endif
 }
 
+void KexiMainWindowImpl::exportItemAsDataTable(KexiPart::Item* item)
+{
+	if (!item)
+		return;
+
+}
+
+void KexiMainWindowImpl::slotProjectExportDataTable()
+{
+	if (!d->nav)
+		return;
+	
+	exportItemAsDataTable(d->nav->selectedPartItem());
+}
+
 void KexiMainWindowImpl::slotToolsScriptsAboutToShow()
 {
 #ifdef KEXI_SCRIPTS_SUPPORT
 	KexiScriptManager::self(this)->plugExtensions( d->action_tools_scripts->popupMenu() );
 #endif
+}
+
+void KexiMainWindowImpl::slotEditCopySpecialDataTable()
+{
+	//! @todo
 }
 
 void KexiMainWindowImpl::slotEditPasteSpecialDataTable()
@@ -3809,12 +3857,20 @@ void KexiMainWindowImpl::highlightObject(const QCString& mime, const QCString& n
 	slotViewNavigator();
 	if (!d->prj)
 		return;
-	KexiPart::Item *item = d->prj->item(mime, name);
+	KexiPart::Item *item = d->prj->itemForMimeType(mime, name);
 	if (!item)
 		return;
 	if (d->nav) {
 		d->nav->highlightItem(*item);
 	}
+}
+
+void KexiMainWindowImpl::slotPartItemSelectedInNavigator(KexiPart::Item* item)
+{
+	QCString selectedNavigatorItemMimeType = item ? item->mimeType() : QString::null;
+	KexiPart::Info *partInfo = Kexi::partManager().infoForMimeType( selectedNavigatorItemMimeType );
+	d->action_project_export_data_table->setEnabled( 
+		partInfo ? partInfo->isDataExportSuppored() : false );
 }
 
 #include "keximainwindowimpl.moc"

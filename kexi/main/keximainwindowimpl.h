@@ -295,15 +295,6 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void invalidateSharedActions();
 		void invalidateSharedActionsLater();
 
-		void slotEditPasteSpecialDataTable();
-		void slotViewNavigator();
-		void slotViewPropertyEditor();
-		void slotViewDataMode();
-		void slotViewDesignMode();
-		void slotViewTextMode(); //!< sometimes called "SQL View"
-		void slotShowSettings();
-		void slotConfigureKeys();
-		void slotConfigureToolbars();
 		void slotProjectNew();
 		void slotProjectOpen();
 		void slotProjectOpenRecentAboutToShow();
@@ -314,10 +305,21 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotProjectProperties();
 		void slotProjectClose();
 		void slotProjectRelations();
+		void slotProjectImportDataTable();
+		void slotProjectExportDataTable();
+		void slotProjectQuit();
+		void slotEditPasteSpecialDataTable();
+		void slotEditCopySpecialDataTable();
+		void slotViewNavigator();
+		void slotViewPropertyEditor();
+		void slotViewDataMode();
+		void slotViewDesignMode();
+		void slotViewTextMode(); //!< sometimes called "SQL View"
+		void slotShowSettings();
+		void slotConfigureKeys();
+		void slotConfigureToolbars();
 		void slotToolsProjectMigration();
-		void slotToolsProjectImportDataTable();
 		void slotToolsScriptsAboutToShow();
-		void slotQuit();
 		/// TMP: Display a dialog to download db examples from internet
 		void  slotGetNewStuff();
 
@@ -351,11 +353,17 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void switchToIDEAlMode(bool showMessage);
 		virtual void switchToChildframeMode();
 		void switchToChildframeMode(bool showMessage);
+
 		/*! Shows Project Migration Wizard. \return true on successfull migration, 
 		 cancelled on cancellation, and false on failure.
 		 If \a mimeType and \a fileName are not empty, the wizard will only ask about 
 		 parameters of destination project and skip pages related to source project. */
 		tristate showProjectMigrationWizard(const QString& mimeType, const QString& fileName);
+
+		//! Receives "selectionCHanged()" signal from navigator to update some actions.
+		void slotPartItemSelectedInNavigator(KexiPart::Item* item);
+
+		void exportItemAsDataTable(KexiPart::Item* item);
 
 	private:
 

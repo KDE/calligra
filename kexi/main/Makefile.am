@@ -31,6 +31,6 @@ INCLUDES = -I$(INC_KFEEDBACK) $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/kexi/migration -I$(top_srcdir)/lib -I$(top_srcdir)/lib/kofficecore \
 	$(all_includes)
 
-noinst_HEADERS = ksplitter.h
+noinst_HEADERS = ksplitter.h kexibrowser_p.h
 
 METASOURCES = AUTO

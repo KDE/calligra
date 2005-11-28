@@ -23,20 +23,16 @@
 
 #include "kexiviewbase.h"
 
-/**
-  *@author Lucijan Busch
-  */
-
 class QListViewItem;
-
 class KIconLoader;
+class KPopupMenu;
+class KListView;
+class KToolBar;
 class KexiBrowserItem;
 class KexiView;
 class KexiMainWindow;
 class KexiSmallToolButton;
-class KPopupMenu;
-class KListView;
-class KToolBar;
+class KexiBrowserListView;
 
 namespace KexiPart
 {
@@ -44,19 +40,6 @@ namespace KexiPart
 	class Item;
 	class Part;
 }
-
-/*! @internal */
-class KexiBrowserListView : public KListView
-{
-	Q_OBJECT
-	public:
-		KexiBrowserListView(QWidget *parent);
-
-		bool nameEndsWithAsterisk : 1;
-	public slots:
-		virtual void rename(QListViewItem *item, int c);
-	protected:
-};
 
 //! Main Kexi Navigator Widget
 class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
@@ -66,6 +49,8 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 	public:
 		KexiBrowser(KexiMainWindow *mainWin);
 		virtual ~KexiBrowser(); 
+
+		KexiPart::Item* selectedPartItem() const;
 
 		void installEventFilter ( const QObject * filterObj );
 		virtual bool eventFilter ( QObject *o, QEvent * e );
@@ -94,6 +79,10 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 
 		void renameItem( KexiPart::Item *item, const QString& _newName, bool &succes );
 
+		void selectionChanged(KexiPart::Item* item);
+
+		void exportItemAsDataTable( KexiPart::Item* );
+
 //		void actionAvailable(const char *name, bool avail);
 
 	protected slots:
@@ -113,6 +102,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		void slotCopy();
 		void slotPaste();
 		void slotRename();
+		void slotExportAsDataTable();
 
 	protected:
 		void itemRenameDone();
@@ -121,10 +111,13 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		QIntDict<KexiBrowserItem> m_normalItems;
 		KPopupMenu *m_itemPopup, *m_partPopup;
 		KAction *m_newObjectAction, // *m_newObjectToolbarAction,
-			*m_openAction, *m_designAction, *m_editTextAction;
+			*m_openAction, *m_designAction, *m_editTextAction,
+			*m_dataExportAction;
+		KActionMenu* m_exportActionMenu;
 		KPopupMenu* m_newObjectPopup;
 		int m_itemPopupTitle_id, m_partPopupTitle_id, 
-			m_openAction_id, m_designAction_id, m_editTextAction_id;
+			m_openAction_id, m_designAction_id, m_editTextAction_id,
+			m_exportActionMenu_id;
 
 		KexiPart::Part *m_prevSelectedPart;
 		KToolBar *m_toolbar;

@@ -18,6 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kexibrowser.h"
+#include "kexibrowser_p.h"
+#include "kexibrowseritem.h"
+
 #include <qheader.h>
 #include <qpoint.h>
 #include <qpixmapcache.h>
@@ -45,9 +49,6 @@
 #include <kexiutils/identifier.h>
 #include <widget/utils/kexiflowlayout.h>
 #include <widget/kexismalltoolbutton.h>
-
-#include "kexibrowser.h"
-#include "kexibrowseritem.h"
 
 KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
  : KexiViewBase(mainWin, mainWin, "KexiBrowser")
@@ -153,6 +154,13 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	plugSharedAction("edit_copy", m_itemPopup);
 	m_itemPopup->insertSeparator();
 #endif
+	m_exportActionMenu = new KActionMenu(i18n("Export"));
+	m_dataExportAction = new KAction(i18n("Export->As Data &Table... ", "As Data &Table..."), "", 0, this, 
+		SLOT(slotExportAsDataTable()), this, "exportAsDataTable");
+	m_exportActionMenu->insert( m_dataExportAction );
+	m_exportActionMenu->plug(m_itemPopup);
+	m_exportActionMenu_id = m_exportActionMenu->menuId(0);
+
 	plugSharedAction("edit_edititem", i18n("&Rename"), m_itemPopup);
 //	m_renameObjectAction = new KAction(i18n("&Rename"), 0, Key_F2, this, 
 //		SLOT(slotRename()), this, "rename_object");
@@ -181,11 +189,11 @@ KexiBrowser::clear()
 void
 KexiBrowser::addGroup(KexiPart::Info& info)
 {
-	if(!info.addTree())
+	if(!info.isVisibleInNavigator())
 		return;
 
 	KexiBrowserItem *item = new KexiBrowserItem(m_list, &info);
-	m_baseItems.insert(info.mime().lower(), item);
+	m_baseItems.insert(info.mimeType().lower(), item);
 
 //	kdDebug() << "KexiBrowser::addGroup()" << endl;
 }
@@ -194,7 +202,7 @@ void
 KexiBrowser::addItem(KexiPart::Item& item)
 {
 	//part object for this item
-	KexiBrowserItem *parent = item.mime().isEmpty() ? 0 : m_baseItems.find(item.mime().lower());
+	KexiBrowserItem *parent = item.mimeType().isEmpty() ? 0 : m_baseItems.find(item.mimeType().lower());
 	if (!parent) //TODO: add "Other" part group for that
 		return;
 //	kdDebug() << "KexiBrowser::addItem() found parent:" << parent << endl;
@@ -302,6 +310,7 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	m_itemPopup->setItemVisible(m_openAction_id, m_openAction->isEnabled());
 	m_itemPopup->setItemVisible(m_designAction_id, m_designAction->isEnabled());
 	m_itemPopup->setItemVisible(m_editTextAction_id, part && m_editTextAction->isEnabled());
+	m_itemPopup->setItemVisible(m_exportActionMenu_id, it->info() && it->info()->isDataExportSuppored());
 
 	if (m_prevSelectedPart != part) {
 		m_prevSelectedPart = part;
@@ -324,6 +333,7 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 			QWhatsThis::add(m_newObjectToolButton, i18n("Creates a new object"));
 		}
 	}
+	emit selectionChanged(it ? it->item() : 0);
 }
 
 void KexiBrowser::installEventFilter ( const QObject * filterObj )
@@ -513,6 +523,19 @@ void KexiBrowser::slotNewObjectPopupAboutToShow()
 	}
 }
 
+void KexiBrowser::slotExportAsDataTable()
+{
+	KexiPart::Item* item = selectedPartItem();
+	if (item)
+		emit exportItemAsDataTable( item );
+}
+
+KexiPart::Item* KexiBrowser::selectedPartItem() const
+{
+	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
+	return it ? it->item() : 0;
+}
+
 //--------------------------------------------
 
 KexiBrowserListView::KexiBrowserListView(QWidget *parent)
@@ -540,4 +563,4 @@ void KexiBrowserListView::rename(QListViewItem *item, int c)
 }
 
 #include "kexibrowser.moc"
-
+#include "kexibrowser_p.moc"
