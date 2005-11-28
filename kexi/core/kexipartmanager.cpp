@@ -54,7 +54,8 @@ Manager::lookup()
 	m_partlist.clear();
 	m_partsByMime.clear();
 	m_parts.clear();
-	KTrader::OfferList tlist = KTrader::self()->query("Kexi/Handler", "[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
+	KTrader::OfferList tlist = KTrader::self()->query("Kexi/Handler", 
+		"[X-Kexi-PartVersion] == " + QString::number(KEXI_PART_VERSION));
 	
 	KConfig conf("kexirc", true);
 	conf.setGroup("Parts");
@@ -67,7 +68,7 @@ Manager::lookup()
 	for(KTrader::OfferList::ConstIterator it(tlist.constBegin()); it != tlist.constEnd(); ++it)
 	{
 		KService::Ptr ptr = (*it);
-		QString mime = ptr->property("X-Kexi-TypeMime").toString();
+		QCString mime = ptr->property("X-Kexi-TypeMime").toCString();
 		kdDebug() << "Manager::lookup(): " << mime << endl;
 //<TEMP>: disable some parts if needed
 		if (!Kexi::tempShowForms() && mime=="kexi/form")
@@ -88,12 +89,12 @@ Manager::lookup()
 		KService::Ptr ptr = ordered[i];
 		if (ptr) {
 			Info *info = new Info(ptr);
-			info->setProjectPartID(m_nextTempProjectPartID--); //temp. part id are -1, -2, and so on, to avoid duplicates
-			if (!info->mime().isEmpty()) {
-				m_partsByMime.insert(info->mime(), info);
-				kdDebug() << "Manager::lookup(): inserting info to " << info->mime() << endl;
+			info->setProjectPartID(m_nextTempProjectPartID--); // temp. part id are -1, -2, and so on, 
+			                                                   // to avoid duplicates
+			if (!info->mimeType().isEmpty()) {
+				m_partsByMime.insert(info->mimeType(), info);
+				kdDebug() << "Manager::lookup(): inserting info to " << info->mimeType() << endl;
 			}
-//			m_partsByMime.insert(ptr->property("X-Kexi-TypeMime").toString(), info);
 			m_partlist.append(info);
 		}
 	}
@@ -112,7 +113,7 @@ Manager::part(Info *i)
 
 	kdDebug() << "Manager::part( id = " << i->projectPartID() << " )" << endl;
 
-	if (i->broken()) {
+	if (i->isBroken()) {
 			setError(i->errorMessage());
 			return 0;
 	}
@@ -197,18 +198,18 @@ Manager::removeClients( KexiMainWindow *win )
 }*/
 
 Part *
-Manager::part(const QCString &mime)
+Manager::partForMimeType(const QCString &mimeType)
 {
-	return part(m_partsByMime[mime]);
+	return mimeType.isEmpty() ? 0 : part(m_partsByMime[mimeType]);
 }
 
 Info *
-Manager::info(const QCString &mime)
+Manager::infoForMimeType(const QCString &mimeType)
 {
-	Info *i = m_partsByMime[mime];
+	Info *i = mimeType.isEmpty() ? 0 : m_partsByMime[mimeType];
 	if (i)
 		return i;
-	setError(i18n("No plugin for mime type \"%1\"").arg(mime));
+	setError(i18n("No plugin for mime type \"%1\"").arg(mimeType));
 	return 0;
 }
 
@@ -236,7 +237,7 @@ Manager::checkProject(KexiDB::Connection *conn)
 	for(cursor->moveFirst(); !cursor->eof(); cursor->moveNext())
 	{
 //		id++;
-		Info *i = info(cursor->value(2).toCString());
+		Info *i = infoForMimeType(cursor->value(2).toCString());
 		if(!i)
 		{
 			Missing m;
@@ -249,7 +250,7 @@ Manager::checkProject(KexiDB::Connection *conn)
 		else
 		{
 			i->setProjectPartID(cursor->value(0).toInt());
-			i->m_idStoredInPartDatabase = true;
+			i->setIdStoredInPartDatabase(true);
 //			parts_found+=cursor->value(2).toString();
 		}
 	}

@@ -75,10 +75,10 @@ Name[tr]=Formlar
 Name[uk]=Форми
 Name[xx]=xxFormsxx
 Name[zh_CN]=表单
+X-KDE-Library=kexihandler_form
 X-KDE-ParentApp=kexi
-X-Kexi-PartVersion=1
+X-Kexi-PartVersion=2
 X-Kexi-TypeName=form
 X-Kexi-TypeMime=kexi/form
 X-Kexi-ItemIcon=form
-
-X-KDE-Library=kexihandler_form
+X-Kexi-SupportsDataExport=false

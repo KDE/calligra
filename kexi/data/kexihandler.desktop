@@ -59,5 +59,7 @@ Type=QString
 Type=QString
 
 [PropertyDef::X-Kexi-NoObject]
-Type=int
+Type=bool
 
+[PropertyDef::X-Kexi-SupportsDataExport]
+Type=bool

@@ -36,7 +36,7 @@ KexiUserAction::execute()
 		case OpenObject: //open a project object
 		{
 			//get partinfo
-			KexiPart::Info *i = Kexi::partManager().info(m_args[0].toString().latin1());
+			KexiPart::Info *i = Kexi::partManager().infoForMimeType(m_args[0].toString().latin1());
 			if (!i) {
 				KMessageBox::error(m_win, i18n("Specified part does not exist"));
 				return;

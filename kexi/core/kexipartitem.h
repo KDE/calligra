@@ -51,8 +51,8 @@ class KEXICORE_EXPORT Item
 		int identifier() const { return m_id; }
 		void setIdentifier(int id) { m_id = id; }
 
-		QCString mime() const { return m_mime; }
-		void setMime(const QCString &mime) { m_mime = mime; }
+		QCString mimeType() const { return m_mime; }
+		void setMimeType(const QCString &mime) { m_mime = mime; }
 
 		QString name() const { return m_name; }
 		void setName(const QString &name) { m_name = name; }

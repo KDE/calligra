@@ -73,10 +73,10 @@ Name[tr]=Raporlar
 Name[uk]=Звіти
 Name[xx]=xxReportsxx
 Name[zh_CN]=报表
+X-KDE-Library=kexihandler_report
 X-KDE-ParentApp=kexi
-X-Kexi-PartVersion=1
+X-Kexi-PartVersion=2
 X-Kexi-TypeName=report
 X-Kexi-TypeMime=kexi/report
 X-Kexi-ItemIcon=report
-
-X-KDE-Library=kexihandler_report
+X-Kexi-SupportsDataExport=false

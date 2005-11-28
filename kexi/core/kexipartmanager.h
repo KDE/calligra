@@ -83,7 +83,7 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 		 * \return a part object for specified mime type. Dlopens a part using KexiPart::Info
 		 * if needed. Return 0 if loading failed.
 		 */
-		Part *part(const QCString &mime);
+		Part *partForMimeType(const QCString& mimeTypt);
 
 		/**
 		 * \return a part object for specified info. Dlopens a part using KexiPart::Info
@@ -94,7 +94,7 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 		/**
 		 * \return the info for a coresponding internal mime
 		 */
-		Info *info(const QCString &mime);
+		Info *infoForMimeType(const QCString& mimeType);
 
 		/**
 		 * checks project's kexi__part table

@@ -40,18 +40,18 @@ namespace KexiPart
 class KEXICORE_EXPORT Info
 {
 	public:
-		Info(KService::Ptr service); //js, Manager *manager);
+		Info(KService::Ptr service);
 		~Info();
 
 		/**
 		 * @return a i18n'ed group name e.g. "Tables"
 		 */
-		inline QString groupName() const { return m_groupName; }
+		QString groupName() const;
 
 		/**
-		 * @return the internal mime of this part
+		 * @return the internal mime type of this part
 		 */
-		inline QCString mime() const { return m_mime; }
+		QCString mimeType() const;
 
 //		/**
 //		 * @return the icon for groups
@@ -61,34 +61,42 @@ class KEXICORE_EXPORT Info
 		/**
 		 * @return the icon for a item
 		 */
-		inline QString itemIcon() const { return m_itemIcon; }
+		QString itemIcon() const;
 
 		/**
 		 * @return the icon for a item
 		 */
-		inline QString createItemIcon() const { return m_itemIcon+"_newobj"; }
+		QString createItemIcon() const;
 
 		/**
 		 * @return the object name associated with this part (e.g. "table")
 		 */
-		inline QString objectName() const { return m_objectName; }
+		QString objectName() const;
 
 		/**
 		 * @return the project-part-id
 		 */
-		inline int projectPartID() const { return m_projectPartID; }
+		int projectPartID() const;
 
 		/**
 		 * @return the KService::Ptr associated with this part
 		 */
-		KService::Ptr ptr() const { return m_ptr; }
+		KService::Ptr ptr() const;
 
 		/**
 		 * @return true if loading was tried but failed
 		 */
-		bool broken() const { return m_broken; }
+		bool isBroken() const;
 
-		bool addTree() { return m_addTree; }
+		/**
+		 * \return true if the part should be visible in the Project Navigator (as a folder).
+		 */
+		bool isVisibleInNavigator() const;
+
+		/**
+		 * \return true if the part supports data exporting.
+		 */
+		bool isDataExportSuppored() const;
 
 	protected:
 		friend class Manager;
@@ -97,49 +105,39 @@ class KEXICORE_EXPORT Info
 		friend class ::KexiDialogBase;
 
 		/**
-		 * sets the project-part-id
+		 * Sets the project-part-id.
 		 */
-		void setProjectPartID(int id) { m_projectPartID=id; }
+		void setProjectPartID(int id);
 
 		/**
 		 * Sets the broken flag and error message. 
 		 * Most likely to be called by @ref KexiPart::Manager
 		 */
-		void setBroken(bool broken, const QString& errorMessage) 
-		{ m_broken = broken; m_errorMessage = errorMessage; }
+		void setBroken(bool broken, const QString& errorMessage);
 
 		/**
 		 * \return i18n'd error message set by setBroken().
 		 */
-		QString errorMessage() const { return m_errorMessage; }
+		QString errorMessage() const;
+
+		void setIdStoredInPartDatabase(bool set);
 
 		/**
-		 * true if ID of the part is stored in project's database
+		 * \return true if ID of the part is stored in project's database
 		 * false by default. This flag is updated in Manager::checkProject()
 		 * and set to true on first successful execution of KexiDialogBase::storeNewData()
 		 * @internal
 		 */
-		bool m_idStoredInPartDatabase : 1;
+		bool isIdStoredInPartDatabase() const;
 
 	private:
-		KService::Ptr m_ptr;
-		bool m_broken;
-		QString m_errorMessage;
-//		Part 			*m_instance;
-
-		QString m_groupName;
-		QCString m_mime;
-//		QString m_groupIcon;
-		QString m_itemIcon;
-		QString m_objectName;
-		int m_projectPartID;
-		bool m_addTree;
-//		Manager 		*m_manager;
-
+		class Private;
+		Private *d;
 };
 
-//! \return "create" KAction name for part defined by \a info. 
-//! The result is like "tablepart_create".
+/*! \return "create" KAction's name for part defined by \a info. 
+ The result is like "tablepart_create". Used in Part::createGUIClients() 
+ and KexiBrowser. */
 KEXICORE_EXPORT QCString nameForCreateAction(const Info& info);
 
 }

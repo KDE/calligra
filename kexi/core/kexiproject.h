@@ -124,7 +124,7 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 * @return all items of a type \a mime in this project
 		 * It is a convenience function.
 		 */
-		KexiPart::ItemDict* items(const QCString &mime);
+		KexiPart::ItemDict* itemsForMimeType(const QCString &mimeType);
 
 		/**
 		 * Puts a list of items of a type \a i in this project into \a list.
@@ -133,15 +133,15 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		void getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
 
 		/**
-		 * Puts a sorted list of items of a type \a mime in this project into \a list.
+		 * Puts a sorted list of items of a type \a mimeType in this project into \a list.
 		 * You can then sort this list using ItemList::sort().
 		 */
-		void getSortedItems(KexiPart::ItemList& list, const QCString &mime);
+		void getSortedItemsForMimeType(KexiPart::ItemList& list, const QCString &mimeType);
 
 		/**
 		 * @return item of type \a mime and name \a name
 		 */
-		KexiPart::Item* item(const QCString &mime, const QString &name);
+		KexiPart::Item* itemForMimeType(const QCString &mimeType, const QString &name);
 
 		/**
 		 * @return item of type \a i and name \a name
@@ -158,7 +158,8 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		KexiDialogBase* openObject(KexiMainWindow *wnd, KexiPart::Item& item, int viewMode = Kexi::DataViewMode);
 
 		//! For convenience
-		KexiDialogBase* openObject(KexiMainWindow *wnd, const QCString &mime, const QString& name, int viewMode = Kexi::DataViewMode);
+		KexiDialogBase* openObject(KexiMainWindow *wnd, const QCString &mimeType, 
+			const QString& name, int viewMode = Kexi::DataViewMode);
 
 		/*! Remove a part instance pointed by \a item.
 		 \return true on success. */

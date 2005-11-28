@@ -76,8 +76,8 @@ Name[xx]=xxQueriesxx
 Name[zh_CN]=查询
 X-KDE-Library=kexihandler_query
 X-KDE-ParentApp=kexi
-X-Kexi-PartVersion=1
+X-Kexi-PartVersion=2
 X-Kexi-TypeName=query
 X-Kexi-TypeMime=kexi/query
 X-Kexi-ItemIcon=query
-
+X-Kexi-SupportsDataExport=true

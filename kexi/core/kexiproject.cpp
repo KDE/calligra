@@ -506,7 +506,7 @@ KexiProject::items(KexiPart::Info *i)
 			&& KexiUtils::isIdentifier(objName) )
 		{
 			it->setIdentifier(ident);
-			it->setMime(i->mime()); //js: may be not null???
+			it->setMimeType(i->mimeType()); //js: may be not null???
 			it->setName(objName);
 			it->setCaption(cursor->value(2).toString());
 		}
@@ -521,9 +521,9 @@ KexiProject::items(KexiPart::Info *i)
 }
 
 KexiPart::ItemDict*
-KexiProject::items(const QCString &mime)
+KexiProject::itemsForMimeType(const QCString &mimeType)
 {
-	KexiPart::Info *info = Kexi::partManager().info(mime);
+	KexiPart::Info *info = Kexi::partManager().infoForMimeType(mimeType);
 	return items(info);
 }
 
@@ -539,9 +539,9 @@ KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i)
 }
 
 void
-KexiProject::getSortedItems(KexiPart::ItemList& list, const QCString &mime)
+KexiProject::getSortedItemsForMimeType(KexiPart::ItemList& list, const QCString &mimeType)
 {
-	KexiPart::Info *info = Kexi::partManager().info(mime);
+	KexiPart::Info *info = Kexi::partManager().infoForMimeType(mimeType);
 	getSortedItems(list, info);
 }
 
@@ -559,9 +559,9 @@ KexiProject::addStoredItem(KexiPart::Info *info, KexiPart::Item *item)
 }
 
 KexiPart::Item*
-KexiProject::item(const QCString &mime, const QString &name)
+KexiProject::itemForMimeType(const QCString &mimeType, const QString &name)
 {
-	KexiPart::ItemDict *dict = items(mime);
+	KexiPart::ItemDict *dict = itemsForMimeType(mimeType);
 	if (!dict)
 		return 0;
 	const QString l_name = name.lower();
@@ -631,7 +631,7 @@ KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
 {
 	clearError();
 	KexiDB::MessageTitle et(this);
-	KexiPart::Part *part = Kexi::partManager().part(item.mime());
+	KexiPart::Part *part = Kexi::partManager().partForMimeType(item.mimeType());
 	if (!part)
 		setError(&Kexi::partManager());
 	return part;
@@ -654,10 +654,10 @@ KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& ite
 	return dlg;
 }
 
-KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QCString &mime, const QString& name, 
-	int viewMode)
+KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, const QCString &mimeType, 
+	const QString& name, int viewMode)
 {
-	KexiPart::Item *it = item(mime, name);
+	KexiPart::Item *it = itemForMimeType(mimeType, name);
 	return it ? openObject(wnd, *it, viewMode) : 0;
 }
 
@@ -706,7 +706,7 @@ bool KexiProject::renameObject( KexiMainWindow *wnd, KexiPart::Item& item, const
 			setError( i18n("Could not set empty name for this object.") );
 			return false;
 		}
-		if (this->item(item.mime(), newName)!=0) {
+		if (this->itemForMimeType(item.mimeType(), newName)!=0) {
 			setError( i18n("Could not use this name. Object with name \"%1\" already exists.")
 				.arg(newName) );
 			return false;
@@ -800,7 +800,7 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 
 	KexiPart::Item *item = new KexiPart::Item();
 	item->setIdentifier( --d->tempPartItemID_Counter );//temporary
-	item->setMime(info->mime());
+	item->setMimeType(info->mimeType());
 	item->setName(new_name);
 	item->setCaption(new_caption);
 	item->setNeverSaved(true);

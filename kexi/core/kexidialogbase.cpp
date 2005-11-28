@@ -476,7 +476,7 @@ tristate KexiDialogBase::storeNewData()
 		return false;
 	}
 
-	if (!part()->info()->m_idStoredInPartDatabase) {
+	if (!part()->info()->isIdStoredInPartDatabase()) {
 		//this part's ID is not stored within kexi__parts:
 		KexiDB::TableSchema *ts = m_parentWindow->project()->dbConnection()->tableSchema("kexi__parts");
 		kdDebug() << "KexiMainWindowImpl::newObject(): schema: " << ts << endl;
@@ -517,7 +517,7 @@ tristate KexiDialogBase::storeNewData()
 				*fl,
 				QVariant(p_id),
 				QVariant(part()->info()->ptr()->untranslatedGenericName()),
-				QVariant(part()->info()->mime()), QVariant("http://www.koffice.org/kexi/" /*always ok?*/)))
+				QVariant(part()->info()->mimeType()), QVariant("http://www.koffice.org/kexi/" /*always ok?*/)))
 			return false;
 
 		kdDebug() << "KexiMainWindowImpl::newObject(): insert success!" << endl;
@@ -526,7 +526,7 @@ tristate KexiDialogBase::storeNewData()
 		kdDebug() << "KexiMainWindowImpl::newObject(): new id is: " 
 			<< part()->info()->projectPartID()  << endl;
 
-		part()->info()->m_idStoredInPartDatabase = true;
+		part()->info()->setIdStoredInPartDatabase(true);
 	}
 
 	/* Sets 'dirty' flag on every dialog's view. */
