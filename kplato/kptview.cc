@@ -174,6 +174,8 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
     actionViewAccounts = new KAction(i18n("Accounts"), "accounts", 0, this, SLOT(slotViewAccounts()), actionCollection(), "view_accounts");
 
+    actionViewReports = new KAction(i18n("Reports"), "reports", 0, this, SLOT(slotViewReports()), actionCollection(), "view_reports");
+
     // ------ Insert
     actionAddTask = new KAction(i18n("Task..."), "add_task", 0, this,
         SLOT(slotAddTask()), actionCollection(), "add_task");
@@ -191,10 +193,6 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionCalculate = new KAction(i18n("Calculate"), "project_calculate", 0, this, SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
     
     // ------ Reports
-    actionReportGenerate = new KSelectAction(i18n("Generate"), 0, actionCollection(), "report_generate");
-    setReportGenerateMenu();
-    connect(actionReportGenerate, SIGNAL(activated(int)), SLOT(slotReportGenerate(int)));
-
     actionFirstpage = KStdAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
     actionPriorpage = KStdAction::prior(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_prevpage");
     actionNextpage = KStdAction::next(m_reportview,SLOT(slotNextPage()),actionCollection(), "go_nextpage");
@@ -463,18 +461,13 @@ void View::projectCalculate() {
     QApplication::restoreOverrideCursor();
 }
 
-void View::slotReportDesign() {
+void View::slotViewReportDesign() {
     //kdDebug()<<k_funcinfo<<endl;
 }
 
-void View::slotReportGenerate(int idx) {
+void View::slotViewReports() {
     //kdDebug()<<k_funcinfo<<endl;
     m_tab->raiseWidget(m_reportview);
-    QString *file = m_reportTemplateFiles.at(idx);
-    if (file)
-        m_reportview->draw(*file);
-
-    actionReportGenerate->setCurrentItem(-1); //remove checkmark
 }
 
 void View::slotAddSubTask() {
@@ -933,34 +926,6 @@ void View::slotUpdate(bool calculate)
 }
 
 //FIXME: We need a solution that takes care project specific reports.
-void View::setReportGenerateMenu() {
-    kdDebug()<<k_funcinfo<<endl;
-    QStringList list;
-    m_reportTemplateFiles.clear();
-    KStandardDirs std;
-    QStringList reportDesktopFiles = std.findAllResources("data", "kplato/reports/*.desktop", true, true);
-    for (QStringList::iterator it = reportDesktopFiles.begin(); it != reportDesktopFiles.end(); ++it) {
-        KDesktopFile file((*it), true);
-        QString name = file.readName();
-        if (!name.isNull()) {
-            list.append(name);
-            kdDebug()<<" file: "<<*it<<" name="<<name<<endl;
-            QString *url = new QString(file.readURL());
-            if (url->isNull()) {
-                delete url;
-            } else {
-                if (url[0] != "/" || url->left(6) != "file:/") {
-                    QString path = (*it).left((*it).findRev('/', -1)+1); // include '/'
-                    *url = path + *url;
-                }
-
-                m_reportTemplateFiles.append(url);
-            }
-        }
-    }
-    actionReportGenerate->setItems(list);
-}
-
 void View::slotAboutToShow(QWidget *widget) {
 	if (widget == m_ganttview)
 	{

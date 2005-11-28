@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,9 +37,12 @@
 #include <kio/netaccess.h>
 #include <klocale.h>
 #include <kglobal.h>
+#include <kdesktopfile.h>
+#include <kfiledialog.h>
 
 #include <qfile.h>
 #include <qfileinfo.h>
+#include <qheader.h>
 #include <qpopupmenu.h>
 #include <qlayout.h>
 #include <qdom.h>
@@ -138,16 +141,21 @@ public:
 
 
 ReportView::ReportView(View *view, QWidget *parent)
-    : QWidget(parent, "Report view"),
+    : QSplitter(parent),
     m_mainview(view),
     m_reportTags(0)
 {
     //kdDebug()<<k_funcinfo<<endl;
-    QVBoxLayout *layout = new QVBoxLayout(this);
+    m_reportList = new KListView(this);
+    m_reportList->addColumn(i18n("Name"));
+    m_reportList->header()->setStretchEnabled(true, 0);
+    
     m_reportview = new Kugar::MReportViewer(this);
-    layout->add(m_reportview);
 
-	//connect(m_reportview,SIGNAL(preferedTemplate(const QString &)), SLOT(slotPreferredTemplate(const QString &)));
+    initReportList();
+    
+	connect(m_reportList, SIGNAL(clicked(QListViewItem*)), SLOT(slotReportListClicked(QListViewItem*)));
+	connect(m_reportList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(slotReportListSelectionChanged(QListViewItem*)));
 
 	//setCentralWidget(m_reportview);
 
@@ -165,9 +173,33 @@ ReportView::ReportView(View *view, QWidget *parent)
 }
 
 
- ReportView::~ReportView() {
+ReportView::~ReportView() {
    //safe
    delete m_reportTags;
+}
+
+void ReportView::initReportList() {
+//FIXME: We need a solution that takes care project specific reports.
+    //kdDebug()<<k_funcinfo<<endl;
+    QStringList list;
+    m_reportList->clear();
+    KStandardDirs std;
+    QStringList reportDesktopFiles = std.findAllResources("data", "kplato/reports/*.desktop", true, true);
+    for (QStringList::iterator it = reportDesktopFiles.begin(); it != reportDesktopFiles.end(); ++it) {
+        KDesktopFile file((*it), true);
+        QString name = file.readName();
+        if (!name.isNull()) {
+            //kdDebug()<<" file: "<<*it<<" name="<<name<<endl;
+            QString url = file.readURL();
+            if (!url.isNull()) {
+                if (url.left(1) != "/" || url.left(6) != "file:/") {
+                    QString path = (*it).left((*it).findRev('/', -1)+1); // include '/'
+                    url = path + url;
+                }
+                m_reportList->insertItem(new ReportItem(m_reportList, name, url));
+            }
+        }
+    }
 }
 
 void ReportView::draw(const QString &report) {
@@ -319,6 +351,8 @@ QString ReportView::setDetail(const QString & source, QStringList &properties, Q
             data = "";
         data = data.replace('<', "&lt;");
         data = data.replace('>', "&gt;");
+        data = data.replace('"', "&quot;");
+        
         s += "\"" + data + "\""; // Property
         //kdDebug()<<k_funcinfo<<s<<endl;
     }
@@ -577,6 +611,19 @@ void ReportView::getContext(Context::Reportview &context) const {
     Q_UNUSED(context);
     kdDebug()<<k_funcinfo<<endl;
 }
+
+void ReportView::slotReportListClicked(QListViewItem* item) {
+    if (item == m_reportList->selectedItem())
+        slotReportListSelectionChanged(item);
+}
+
+void ReportView::slotReportListSelectionChanged(QListViewItem* item) {
+    ReportItem *ri = dynamic_cast<ReportItem*>(item);
+    if (ri == 0)
+        return;
+    draw(ri->url);
+}
+
 
 }  //KPlato namespace
 

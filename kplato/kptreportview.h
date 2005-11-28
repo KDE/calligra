@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2003 - 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -25,8 +25,10 @@
 #include "kpttask.h"
 #include "kptresource.h"
 #include "kptduration.h"
-#include <qwidget.h>
+#include <qsplitter.h>
 #include <qstring.h>
+
+#include <klistview.h>
 
 class KAction;
 class KPrinter;
@@ -50,13 +52,13 @@ class Node;
 
 class ReportTagsPrivate;
 
-class ReportView : public QWidget
+class ReportView : public QSplitter
 {
     Q_OBJECT
 
  public:
 
-    ReportView( View *view, QWidget *parent);
+    ReportView(View *view, QWidget *parent);
 
     ~ReportView();
 
@@ -96,9 +98,24 @@ public slots:
 	void slotPrevPage();
 	void slotLastPage();
 
-
+protected slots:
+    void slotReportListClicked(QListViewItem* item);
+    void slotReportListSelectionChanged(QListViewItem* item);
+    
+private:
+    class ReportItem : public KListViewItem {
+    public:
+        ReportItem(KListView *p, QString name, QString _url) 
+            : KListViewItem(p, name),
+              url(_url)
+        {}
+        QString url;
+    };
+    void initReportList();
+    
 private:
     View *m_mainview;
+    KListView *m_reportList;
     Kugar::MReportViewer *m_reportview;
     int m_defaultFontSize;
 

@@ -32,6 +32,8 @@
 #include <qptrlist.h>
 #include <qdict.h>
 
+#include <klistview.h>
+
 namespace KPlato
 {
 

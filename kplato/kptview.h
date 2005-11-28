@@ -71,7 +71,6 @@ public:
     virtual void print(KPrinter &printer);
 
     QPopupMenu *popupMenu(const QString& name);
-    void setReportGenerateMenu();
 
     void projectCalculate();
 
@@ -121,8 +120,8 @@ protected slots:
     void slotProjectCalculate();
     void slotProjectAccounts();
     void slotProjectResources();
-    void slotReportDesign();
-    void slotReportGenerate(int);
+    void slotViewReportDesign();
+    void slotViewReports();
 
     void slotOpenNode();
     void slotTaskProgress();
@@ -190,6 +189,7 @@ private:
     KAction *actionViewPert;
     KAction *actionViewResources;
     KAction *actionViewAccounts;
+    KAction *actionViewReports;
     
     // ------ Insert
     KAction *actionAddTask;
@@ -205,7 +205,6 @@ private:
     KAction *actionCalculate;
     
     // ------ Reports
-    KSelectAction *actionReportGenerate;
     KAction *actionFirstpage;
     KAction *actionPriorpage;
     KAction *actionNextpage;
