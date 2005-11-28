@@ -375,7 +375,7 @@ KisImageBuilder_Result KisPNGConverter::buildImage(const KURL& uri)
         KIO::NetAccess::removeTempFile(tmpFile);
     }
 
-    return KisImageBuilder_RESULT_OK;
+    return result;
 }
 
 

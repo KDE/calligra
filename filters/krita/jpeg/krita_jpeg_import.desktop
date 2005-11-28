@@ -1,0 +1,11 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=Krita PNG Import Filter
+Name[fr]=Filtre d'importation PNG de Krita
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Export=application/x-krita
+X-KDE-Import=image/jpeg
+X-KDE-Library=libkritajpegimport
+X-KDE-Weight=1
