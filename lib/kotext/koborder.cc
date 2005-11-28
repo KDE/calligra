@@ -115,7 +115,7 @@ void KoBorder::loadFoBorder( const QString& border )
 
     //TODO: let the user choose a more precise border width (in the current unit)
     double const penWidth = KoUnit::parseValue( _width, 1.0 );
-    kdDebug() << "penWidth:" << penWidth << endl;
+    //kdDebug() << "penWidth:" << penWidth << endl;
     if ( penWidth < 1.5 )
         setPenWidth( 1.0 );
     else if ( penWidth < 2.5 )
