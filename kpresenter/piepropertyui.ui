@@ -142,6 +142,5 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
-    <includehint>piepreview.h</includehint>
 </includehints>
 </UI>

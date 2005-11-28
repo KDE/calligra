@@ -143,7 +143,6 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>kcombobox.h</includehint>
-    <includehint>polygonpreview.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>

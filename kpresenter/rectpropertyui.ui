@@ -178,7 +178,4 @@
     </image>
 </images>
 <layoutdefaults spacing="6" margin="11"/>
-<includehints>
-    <includehint>rectpreview.h</includehint>
-</includehints>
 </UI>

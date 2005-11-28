@@ -191,7 +191,6 @@
 <includehints>
     <includehint>kcombobox.h</includehint>
     <includehint>kcombobox.h</includehint>
-    <includehint>pbpreview.h</includehint>
     <includehint>kcombobox.h</includehint>
     <includehint>kcolorbutton.h</includehint>
     <includehint>knuminput.h</includehint>
