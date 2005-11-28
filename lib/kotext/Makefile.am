@@ -17,7 +17,8 @@ libkotext_la_SOURCES = qcomplextext.cpp korichtext.cpp \
 	kofontdiapreview.cc \
 	KoTextViewIface.skel KoTextViewIface.cc koFontDia.cc kobgspellcheck.cc \
 	koCommentDia.cc kospell.cc koCreateStyleDia.cc kotextcustomitem.cc \
-	koimportstyledia.cc kotextiterator.cc kooasiscontext.cc koliststylestack.cc
+	koimportstyledia.cc kotextiterator.cc kooasiscontext.cc koliststylestack.cc \
+	KoUserStyle.cpp KoUserStyleCollection.cpp
 
 libkotext_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
 # We use kofficeui for koRect :)

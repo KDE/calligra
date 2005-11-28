@@ -11,3 +11,12 @@ AM_LDFLAGS = $(KDE_RPATH) $(all_libraries)
 kobordertest_SOURCES = kobordertest.cpp
 kotextformattertest_SOURCES = kotextformattertest.cpp
 kovariabletest_SOURCES = kovariabletest.cpp
+
+check_LTLIBRARIES = kunittest_KoUserStyleTester.la \
+
+kunittest_KoUserStyleTester_la_SOURCES = KoUserStyleTester.cpp
+kunittest_KoUserStyleTester_la_LIBADD = -lkunittest ../libkotext.la
+kunittest_KoUserStyleTester_la_LDFLAGS = -module $(KDE_CHECK_PLUGIN) $(all_libraries)
+
+check-local:
+	kunittestmodrunner
