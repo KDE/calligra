@@ -155,10 +155,10 @@ in &kcontrolcenter; in <menuchoice><guimenu>Regional &amp;
 Accessibility</guimenu><guimenuitem>Time &amp;
 Dates</guimenuitem></menuchoice>.There are two formats set here: the date format
 and the short date format.</para>
-<para>A random natural number NN will be transformed in the date from 31st
-December 1899 (which is 1) with the number of days NN added. For example if you have a cell
+<para>A random natural number NN will be transformed in the date from 30st
+December 1899 (which is 0) with the number of days NN added. For example if you have a cell
 with 100 and you choose Data Format -&gt; Date, "1900-04-09" will be displayed
-in the cell witch is 100 days after 31st December 1899. This starting date is one day early as it was a bug in Lotus 123 and then it stays that way in Excel in order to keep compatibility. Few people will need to calculate from 1st January 1900 anyway and adding 10 days to 1st November 2000 for example will give you 10th November 2000 so all normal calculations on dates are correct.</para>
+in the cell which is 100 days after 30st December 1899. This starting date is two days early as it was a bug in Lotus 123 and then it stayed that way in Excel in order to keep compatibility. Few people will need to calculate from 1st January 1900 anyway and adding 9 days to 1st November 2000 for example will give you 10th November 2000 so all normal calculations on dates are correct.</para>
 <note><para>Just like you can drag down numbers you can also drag down dates and
 the next cells will also get dates.</para></note><!--TODO explain that better-->
 </listitem>
