@@ -3140,7 +3140,7 @@ void Canvas::doAutoScroll()
 void Canvas::speakCell(QWidget* w, const QPoint& p, uint flags)
 {
   Q_UNUSED(flags);
-  if (!w->inherits("KSpread::Canvas")) return;
+  if (w != this) return;
   Sheet* sheet = activeSheet();
   if (!sheet) return;
   int row = -1;
