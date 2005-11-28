@@ -35,114 +35,61 @@
 #include <koUnitWidgets.h>
 #include <koRect.h>
 
-KWResizeTableDia::KWResizeTableDia( QWidget *parent, const char *name, KWTableFrameSet *_table, KWDocument *_doc, ResizeType _type, KWCanvas *_canvas )
-    : KDialogBase( parent, name , true, "", Ok | Cancel | User1 | Apply )
+KWResizeTableDia::KWResizeTableDia( QWidget *parent, KWTableFrameSet *table, KWDocument *doc, int resizeColumn )
+    : KDialogBase( parent, "resize column dialog" , true, "", Ok | Cancel | User1 | Apply )
 {
     setButtonText( KDialogBase::User1, i18n("Reset") );
+    setCaption( i18n( "Resize Column" ) );
 
-    type = _type;
-    table = _table;
-    doc = _doc;
-    canvas = _canvas;
+    m_table = table;
+    m_doc = doc;
 
-    setupTab1();
-
+    setupTab1(resizeColumn);
 }
 
-void KWResizeTableDia::setupTab1()
-{
+void KWResizeTableDia::setupTab1(int resizeColumn) {
     QVBox *page = makeVBoxMainWidget();
-    QLabel *rc = new QLabel( type == ROW ? i18n( "Row:" ) : i18n( "Column:" ), page );
+    QLabel *rc = new QLabel( i18n( "Column:" ), page );
     rc->resize( rc->sizeHint() );
     rc->setAlignment( AlignLeft | AlignBottom );
+    m_value = new QSpinBox( 1, m_table->getCols(), 1, page );
+    m_value->resize( m_value->sizeHint() );
+    m_value->setValue( resizeColumn );
 
-    value = new QSpinBox( 1, type == ROW ? table->getRows() : table->getCols(), 1, page );
-    value->resize( value->sizeHint() );
-    unsigned int rowSelected;
-    unsigned int colSelected;
-    bool ret = table->getFirstSelected(rowSelected, colSelected );
-    if ( !ret )
-    {
-        // Get cursor row
-        int val = type == ROW ? canvas->currentTableRow() : canvas->currentTableCol();
-        if ( val == -1 )
-        {
-            // Fallback
-            val = ( type == ROW ? table->getRows() : table->getCols() );
-        }
-        else
-            ++val;
-        value->setValue( val );
-    }
-    else
-        value->setValue( type == ROW ? (rowSelected+1) : (colSelected+1) );
-    rc = new QLabel( type == ROW ? i18n( "Height:" ) : i18n( "Width:" ), page );
-    position= new KoUnitDoubleSpinBox( page, 0.01, table->anchorFrameset()->isFloating() ? table->anchorFrameset()->frame(0)->width(): 9999, 1, 0.0, doc->unit(), doc->unit() );
-    slotValueChanged( value->value());
-    connect( value, SIGNAL( valueChanged ( int )), this, SLOT( slotValueChanged( int )));
-
+    rc = new QLabel( i18n( "Width:" ), page );
+    m_position= new KoUnitDoubleSpinBox( page, 0.01, m_table->anchorFrameset()->isFloating() ? m_table->anchorFrameset()->frame(0)->width(): 9999, 1, 0.0, m_doc->unit(), m_doc->unit() );
+    slotValueChanged( m_value->value());
+    connect( m_value, SIGNAL( valueChanged ( int )), this, SLOT( slotValueChanged( int )));
 }
 
 bool KWResizeTableDia::doResize()
 {
-    unsigned int resize= value->value() - 1;
-    if ( type == ROW )
-    {
-        KWFrame *frm = table->cell( resize, 0 )->frame(0);
-        if (frm)
-        {
-            FrameIndex index( frm );
-            KoRect newRect( frm->normalize() );
-            newRect.setHeight( position->value() );
-            FrameResizeStruct resizeStruct( frm->normalize(), frm->minFrameHeight(), newRect );
-            KWFrameResizeCommand * cmd = new KWFrameResizeCommand( i18n("Resize Column"), index, resizeStruct );
-            cmd->execute();
-            doc->addCommand( cmd );
-        }
-    }
-    else
-    {
-        KWFrame *frm = table->cell( 0, resize )->frame(0);
-        if (frm)
-        {
-            FrameIndex index( frm );
-            KoRect newRect( frm->normalize() );
-            newRect.setWidth( position->value() );
-            FrameResizeStruct resizeStruct( frm->normalize(), frm->minFrameHeight(), newRect );
-            KWFrameResizeCommand * cmd =new KWFrameResizeCommand( i18n("Resize Column"), index, resizeStruct );
-            cmd->execute();
-            doc->addCommand( cmd );
-        }
+    unsigned int resize= m_value->value() - 1;
+    KWFrame *frm = m_table->cell( 0, resize )->frame(0);
+    if (frm) {
+        FrameIndex index( frm );
+        KoRect newRect( frm->normalize() );
+        newRect.setWidth( m_position->value() );
+        FrameResizeStruct resizeStruct( frm->normalize(), frm->minFrameHeight(), newRect );
+        KWFrameResizeCommand * cmd =new KWFrameResizeCommand( i18n("Resize Column"), index, resizeStruct );
+        cmd->execute();
+        m_doc->addCommand( cmd );
     }
     return true;
 }
 
 void KWResizeTableDia::slotValueChanged( int pos)
 {
-    if ( type == ROW )
-    {
-        KWFrame *frm = table->cell( pos-1, 0 )->frame(0);
-        if (frm)
-        {
-            position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().height()), doc->unit() ) );
-            resetValue = position->value();
-        }
-
-    }
-    else
-    {
-        KWFrame *frm = table->cell( 0, pos-1 )->frame(0);
-        if (frm)
-        {
-            position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().width()), doc->unit() ) );
-            resetValue = position->value();
-        }
+    KWFrame *frm = m_table->cell( 0, pos-1 )->frame(0);
+    if (frm) {
+        m_position->setValue( KoUnit::toUserValue( QMAX(0.00, frm->normalize().width()), m_doc->unit() ) );
+        m_resetValue = m_position->value();
     }
 }
 
 void KWResizeTableDia::slotUser1()
 {
-    position->setValue( KoUnit::toUserValue(resetValue, doc->unit() ) );
+    m_position->setValue( KoUnit::toUserValue(m_resetValue, m_doc->unit() ) );
     doResize();
 }
 

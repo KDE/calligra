@@ -33,23 +33,30 @@ class QLabel;
 class QSpinBox;
 class KoUnitDoubleSpinBox;
 
+/**
+ * A dialog that can be used to resize columns of a table using numeric input.
+ */
 class KWResizeTableDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    enum ResizeType {ROW, COL};
-    KWResizeTableDia( QWidget *parent, const char *name, KWTableFrameSet *_grpMgr, KWDocument *_doc, ResizeType _type, KWCanvas *_canvas );
+    /**
+     * Constructor.
+     * @param parent parent widget for dialog
+     * @param table the table to do the resizes on
+     * @param doc the document this table belongs to, for undo information
+     * @param resizeColumn the initial column that the user can resize.
+     */
+    KWResizeTableDia( QWidget *parent, KWTableFrameSet *table, KWDocument *doc, int resizeColumn);
 
 protected:
-    void setupTab1();
+    void setupTab1( int resizeColumn);
     bool doResize();
-    QSpinBox *value;
-    KWTableFrameSet *table;
-    KWDocument *doc;
-    ResizeType type;
-    KWCanvas *canvas;
-    KoUnitDoubleSpinBox *position;
-    double resetValue;
+    QSpinBox *m_value;
+    KWTableFrameSet *m_table;
+    KWDocument *m_doc;
+    KoUnitDoubleSpinBox *m_position;
+    double m_resetValue;
 protected slots:
     virtual void slotOk();
     virtual void slotApply();

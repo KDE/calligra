@@ -4208,12 +4208,11 @@ void KWView::tableDeleteCol()
 
 void KWView::tableResizeCol()
 {
-    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    Q_ASSERT(table);
-    if (!table)
+    TableInfo ti( frameViewManager()->selectedFrames() );
+    KWTableFrameSet::Cell *cell = ti.firstSelectedCell();
+    if(cell == 0)
         return;
-    KWResizeTableDia dia( this, "", table, m_doc, KWResizeTableDia::COL, m_gui->canvasWidget() );
-    dia.setCaption( i18n( "Resize Column" ) );
+    KWResizeTableDia dia(this, cell->groupmanager(), m_doc, cell->firstCol());
     dia.exec();
 }
 
@@ -5853,7 +5852,7 @@ void KWView::updateTableActions( QValueList<KWFrameView*> selectedFrames)
     m_actionTableJoinCells->setEnabled( ti.tableCellsSelected());
     m_actionConvertTableToText->setEnabled( table && table->isFloating() );
 
-    m_actionTableSplitCells->setEnabled( ti.oneCellSelected() ); // TODO also allow to split current cell
+    m_actionTableSplitCells->setEnabled( ti.oneCellSelected() );
 
     m_actionTableInsertRow->setEnabled( ti.amountRowsSelected() );
     m_actionTableDelRow->setEnabled( ti.amountRowsSelected() );
@@ -5870,9 +5869,9 @@ void KWView::updateTableActions( QValueList<KWFrameView*> selectedFrames)
         m_actionTableDelRow->setText(i18n("&Delete Selected Rows..."));
     m_actionTableDelRow->setEnabled( ti.amountRowsSelected() > 0 );
 
-    m_actionTableResizeCol->setEnabled( table );
-    m_actionTableDelete->setEnabled( table );
-    m_actionTablePropertiesMenu->setEnabled( table );
+    m_actionTableResizeCol->setEnabled( ti.tableCellsSelected() );
+    m_actionTableDelete->setEnabled( ti.tableCellsSelected() );
+    m_actionTablePropertiesMenu->setEnabled( ti.tableCellsSelected() );
 
     m_actionTableUngroup->setEnabled( ti.tableCellsSelected() );
     m_actionTableProtectCells->setEnabled( ti.tableCellsSelected() );
