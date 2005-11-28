@@ -149,14 +149,15 @@ CalendarListDialog::CalendarListDialog(Project &p, QWidget *parent, const char *
 {
     //kdDebug()<<k_funcinfo<<&p<<endl;
     dia = new CalendarListDialogImpl(p, this);
-    QPtrListIterator<Calendar> it = p.calendars();
+    QPtrList<Calendar> list = p.calendars();
+    QPtrListIterator<Calendar> it = list;
     for (; it.current(); ++it) {
         //kdDebug()<<k_funcinfo<<"Add calendar: "<<it.current()->name()<<" deleted="<<it.current()->isDeleted()<<endl;
-        if (!it.current()->isDeleted()) {
+//        if (!it.current()->isDeleted()) {
             Calendar *c = new Calendar(it.current());
             c->setProject(&p);
             new CalendarListViewItem(dia->calendarList, c, it.current());
-        }
+//        }
     }    
     dia->setBaseCalendars();
     

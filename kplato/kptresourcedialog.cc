@@ -112,7 +112,8 @@ ResourceDialog::ResourceDialog(Project &project, Resource &resource, QWidget *pa
     int cal = 0;
     dia->calendarList->insertItem("None");
     m_calendars.insert(0, 0);      
-    QPtrListIterator<Calendar> cit(project.calendars());
+    QPtrList<Calendar> list = project.calendars();
+    QPtrListIterator<Calendar> cit = list;
     for(int i=1; cit.current(); ++cit, ++i) {
         dia->calendarList->insertItem(cit.current()->name(), i);
         m_calendars.insert(i, cit.current());

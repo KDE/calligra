@@ -809,6 +809,18 @@ Calendar *Project::calendar(const QString id) const {
     return findCalendar(id);
 }
 
+QPtrList<Calendar> Project::calendars() {
+    QPtrList<Calendar> list;
+    QPtrListIterator<Calendar> it = m_calendars;
+    for (; it.current(); ++it) {
+        kdDebug()<<k_funcinfo<<it.current()->name()<<" deleted="<<it.current()->isDeleted()<<endl;
+        if (!it.current()->isDeleted()) {
+            list.append(it.current());
+        }
+    }
+    return list;
+}
+
 void Project::addStandardWorktime(StandardWorktime * worktime) {
     if (m_standardWorktime != worktime) {
         delete m_standardWorktime; 

@@ -135,7 +135,7 @@ public:
     virtual double actualCostTo(const QDate &date);
 
     Calendar *defaultCalendar() { return m_defaultCalendar; }
-    const QPtrList<Calendar> &calendars() const { return m_calendars; }
+    QPtrList<Calendar> calendars();
     void addCalendar(Calendar *calendar);
     /// Returns the calendar with identity id.
     Calendar *calendar(const QString id) const;
