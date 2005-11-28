@@ -133,6 +133,8 @@ public:
      * Handles the click of a mouse and searches for frames at the location selecting and
      * / or unselecting any frames based on this information.
      * @param leftClick true if this select is due to the main button being clicked.
+     * @param point the point clicked.
+     * @param keyState the bitmask of keys that are pressed.  Same as Event::state();
      */
     void selectFrames(KoPoint &point, int keyState, bool leftClick);
 
