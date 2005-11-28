@@ -25,8 +25,6 @@
 #include <kstandarddirs.h>
 #include <kinstance.h>
 
-K_EXPORT_COMPONENT_FACTORY( libkpresenterpart, KPresenterFactory )
-
 
 KInstance* KPresenterFactory::s_global = 0;
 KAboutData* KPresenterFactory::s_aboutData = 0;

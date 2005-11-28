@@ -3,10 +3,10 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(kde_includes)/arts $(all_i
 
 bin_SCRIPTS = kprconverter.pl
 
-## The part
-lib_LTLIBRARIES =
-kde_module_LTLIBRARIES = libkpresenterpart.la
-libkpresenterpart_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp KPrPage.cpp KPrFindReplace.cpp KPrBackDia.cpp \
+## A lib with all the code; can be used by filters
+lib_LTLIBRARIES = libkpresenterprivate.la
+libkpresenterprivate_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp \
+	KPrPage.cpp KPrFindReplace.cpp KPrBackDia.cpp \
 	KPrWebPresentation.cpp KPrView.cpp  KPrMSPresentationSetup.cpp \
 	KPrBrush.cpp \
 	KPrDocument.cpp \
@@ -55,7 +55,7 @@ libkpresenterpart_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp KPrPage.cpp KPrFin
 	KPrRectPreview.cpp rectpropertyui.ui KPrRectProperty.cpp \
 	KPrPiePreview.cpp \
 	KPrPolygonPreview.cpp \
-    KPrPicturePreview.cpp \
+	KPrPicturePreview.cpp \
 	brushpropertyui.ui gradientpropertyui.ui KPrBrushProperty.cpp \
 	generalpropertyui.ui KPrGeneralProperty.cpp \
 	polygonpropertyui.ui KPrPolygonProperty.cpp \
@@ -67,13 +67,17 @@ libkpresenterpart_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp KPrPage.cpp KPrFin
 	slidetransitionwidget.ui KPrSlideTransitionDia.cpp \
 	KPrPen.cpp KPrPrinterDlg.cpp
 
+libkpresenterprivate_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
 if include_ARTS
 ARTSKDE = -lartskde
 endif
+libkpresenterprivate_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) $(ARTSKDE)
 
-libkpresenterpart_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN)
-libkpresenterpart_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) $(ARTSKDE) -lkdefx
-libkpresenterpart_la_METASOURCES = AUTO
+## The part
+kde_module_LTLIBRARIES = libkpresenterpart.la
+libkpresenterpart_la_SOURCES = KPrFactoryInit.cpp
+libkpresenterpart_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
+libkpresenterpart_la_LIBADD = libkpresenterprivate.la
 
 ## The kdeinit loadable module and the executable
 kdeinit_LTLIBRARIES = kpresenter.la
@@ -82,6 +86,7 @@ kpresenter_la_SOURCES = main.cpp
 kpresenter_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kpresenter_la_LIBADD = $(LIB_KOFFICECORE)
 
+METASOURCES = AUTO
 
 kdelnk_DATA = kpresenter.desktop
 kdelnkdir = $(kde_appsdir)/Office
