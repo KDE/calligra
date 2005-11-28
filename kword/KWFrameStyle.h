@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Nash Hoogwater <nrhoogwater@wanadoo.nl>
+                 2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,7 +24,7 @@
 #include "koborder.h"
 
 #include <qdom.h>
-#include <qptrlist.h>
+#include <qvaluelist.h>
 #include <qbrush.h>
 #include <qstringlist.h>
 class KoOasisContext;
@@ -32,10 +33,14 @@ class KoGenStyles;
 class KWFrameStyle;
 class KWFrame;
 
-class KWGenericStyle
+/**
+ * Base class for any kind of style that the user can create/modify/delete/display.
+ * Use in conjunction with KoUserStyleCollection.
+ */
+class KoUserStyle
 {
 public:
-    KWGenericStyle( const QString & name );
+    KoUserStyle( const QString & name );
 
     /// The internal name (used for loading/saving, but not shown to the user)
     /// Should be unique in a given style collection.
@@ -57,19 +62,29 @@ protected:
 /**
  * Generic style collection class; to be used by other style collections and moved out.
  */
-class KWGenericStyleCollection
+class KoUserStyleCollection
 {
 public:
-    KWGenericStyleCollection();
-    ~KWGenericStyleCollection();
+    /**
+     * @param prefix used by generateUniqueName to prefix new style names
+     * (to avoid clashes between different kinds of styles)
+     */
+    KoUserStyleCollection( const QString& prefix );
+    ~KoUserStyleCollection();
 
+    /**
+     * Erase all styles
+     */
     void clear();
 
+    /// @return true if the collection is empty
     bool isEmpty() const { return m_styleList.isEmpty(); }
+    /// @return the number of items in the collection
     int count() const { return m_styleList.count(); }
-    int indexOf( KWGenericStyle* style ) /*const*/ { return m_styleList.findRef( style ); }
+    /// @return the index of @p style in the collection
+    int indexOf( KoUserStyle* style ) const { return m_styleList.findIndex( style ); }
 
-    const QPtrList<KWGenericStyle> & styleList() const { return m_styleList; }
+    const QValueList<KoUserStyle *> & styleList() const { return m_styleList; }
 
     QString generateUniqueName() const;
 
@@ -82,26 +97,47 @@ public:
      * 1) if @p name equals @p defaultStyleName, return the first one, never 0<br>
      * 2) otherwise return 0
      */
-    KWGenericStyle* findStyle( const QString & name, const QString& defaultStyleName ) const;
+    KoUserStyle* findStyle( const QString & name, const QString& defaultStyleName ) const;
 
-    void removeStyle( KWGenericStyle *style );
+    /**
+     * Remove @p style from the collection. If the style isn't in the collection, nothing happens.
+     * The style mustn't be deleted yet; it is stored into a list of styles to delete in clear().
+     */
+    void removeStyle( KoUserStyle *style );
+
+    /**
+     * Reorder the styles in the collection
+     * @param list the list of internal names of the styles
+     * WARNING, if an existing style isn't listed, it will be lost
+     */
     void updateStyleListOrder( const QStringList& list );
-    KWGenericStyle* addStyle( KWGenericStyle* sty );
 
-    // TODO move many methods here
+    /**
+     * Try adding @p sty to the collection.
+     *
+     * Either this succeeds, and @p sty is returned, or a style with the exact same
+     * internal name and display name is present already, in which case the existing style
+     * is updated, @p sty is deleted, and the existing style is returned.
+     *
+     * WARNING: @p sty can be deleted; use the returned value for any further processing.
+     */
+    KoUserStyle* addStyle( KoUserStyle* sty );
 
 protected:
-    // TODO switch to QValueList<KWGenericStyle *> in preparation for KDE4
-    QPtrList<KWGenericStyle> m_styleList;
-    QPtrList<KWGenericStyle> m_deletedStyles;
-    mutable KWGenericStyle *m_lastStyle; ///< Last style that was searched
+    KoUserStyleCollection( const KoUserStyleCollection& rhs ); // forbidden
+    void operator=( const KoUserStyleCollection& rhs ); // forbidden
+
+    QValueList<KoUserStyle *> m_styleList;
+    QValueList<KoUserStyle *> m_deletedStyles;
+    const QString m_prefix;
+    mutable KoUserStyle *m_lastStyle; ///< Last style that was searched
 };
 
 /******************************************************************/
 /* Class: KWFrameStyle                                            */
 /******************************************************************/
 
-class KWFrameStyle : public KWGenericStyle
+class KWFrameStyle : public KoUserStyle
 {
 public:
     /** Create a blank framestyle (with default attributes) */
@@ -111,7 +147,8 @@ public:
     KWFrameStyle( QDomElement & parentElem, int docVersion=2 );
 
     /** Copy another framestyle */
-    //KWFrameStyle( const KWFrameStyle & rhs ) { *this = rhs; }
+    KWFrameStyle( const KWFrameStyle & rhs );
+    void operator=( const KWFrameStyle& rhs );
 
     ~KWFrameStyle() {}
 
@@ -119,7 +156,6 @@ public:
            Background = 2
     } Flags;
 
-    void operator=( const KWFrameStyle & );
     int compare( const KWFrameStyle & frameStyle ) const;
 
     // ATTRIBUTES
@@ -138,12 +174,14 @@ public:
     const KoBorder & bottomBorder() const { return m_borderBottom; }
     void setBottomBorder( KoBorder _bottom )  { m_borderBottom = _bottom; }
 
-    // SAVING METHODS
+    /// save (old xml format)
     void saveFrameStyle( QDomElement & parentElem );
+    /// save (new oasis xml format)
     void saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const;
 
-    // LOADING METHODS
+    /// load (old xml format)
     static KWFrameStyle *loadStyle( QDomElement & parentElem, int docVersion=2 );
+    /// load (new oasis xml format)
     void loadOasis( QDomElement & styleElem, KoOasisContext& context );
 
 private:
@@ -151,11 +189,10 @@ private:
     KoBorder m_borderLeft, m_borderRight, m_borderTop, m_borderBottom;
 };
 
-/******************************************************************/
-/* Class: KWFrameStyleCollection                                  */
-/******************************************************************/
-
-class KWFrameStyleCollection : public KWGenericStyleCollection
+/**
+ *
+ */
+class KWFrameStyleCollection : public KoUserStyleCollection
 {
 public:
     KWFrameStyleCollection();
@@ -165,16 +202,25 @@ public:
     QValueList<KWFrameStyle *> frameStyleList() const;
 
     /**
-     * Find style based on the untranslated name @p name
+     * Find style based on the untranslated name @p name.
+     * Overloaded for convenience
      */
     KWFrameStyle* findStyle( const QString & name ) const {
-        return static_cast<KWFrameStyle*>( KWGenericStyleCollection::findStyle( name, QString::fromLatin1( "Plain" ) ) );
+        return static_cast<KWFrameStyle*>( KoUserStyleCollection::findStyle( name, QString::fromLatin1( "Plain" ) ) );
+    }
+
+    /**
+     * See KoUserStyleCollection::addStyle.
+     * Overloaded for convenience.
+     */
+    KWFrameStyle* addStyle( KWFrameStyle* sty ) {
+        return static_cast<KWFrameStyle*>( KoUserStyleCollection::addStyle( sty ) );
     }
 
     /**
      * Return style number @p i.
      */
-    KWFrameStyle* frameStyleAt( int i ) { return static_cast<KWFrameStyle*>( m_styleList.at(i) ); }
+    KWFrameStyle* frameStyleAt( int i ) { return static_cast<KWFrameStyle*>( m_styleList[i] ); }
 
     void saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const;
     void loadOasisStyles( KoOasisContext& context );

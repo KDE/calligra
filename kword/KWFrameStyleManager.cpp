@@ -492,8 +492,7 @@ void KWFrameStyleManager::apply()
 
             kdDebug() << "adding new " << m_frameStyles.at(i)->changedFrameStyle()->name() << " (" << i << ")" << endl;
 
-            KWGenericStyle* tmp = m_doc->frameStyleCollection()->addStyle(m_frameStyles.take(i)->changedFrameStyle());
-            KWFrameStyle* style = static_cast<KWFrameStyle *>( tmp );
+            KWFrameStyle* style = m_doc->frameStyleCollection()->addStyle(m_frameStyles.take(i)->changedFrameStyle());
             m_frameStyles.insert( i, new KWFrameStyleListItem(0, style) );
 
         } else if(m_frameStyles.at(i)->changedFrameStyle() == 0) { // deleted style

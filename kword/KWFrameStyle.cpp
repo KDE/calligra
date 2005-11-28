@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 Nash Hoogwater <nrhoogwater@wanadoo.nl>
+                 2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -30,89 +31,87 @@
 #include <qdom.h>
 #include <koxmlns.h>
 
-KWGenericStyle::KWGenericStyle( const QString & name )
+KoUserStyle::KoUserStyle( const QString & name )
     : m_name( name ), m_displayName( i18n( "Style name", name.utf8() ) )
 {
 }
 
-QString KWGenericStyle::displayName() const
+QString KoUserStyle::displayName() const
 {
     return m_displayName;
 }
 
-void KWGenericStyle::setDisplayName( const QString& name )
+void KoUserStyle::setDisplayName( const QString& name )
 {
     m_displayName = name;
 }
 
 ////
 
-KWGenericStyleCollection::KWGenericStyleCollection()
+KoUserStyleCollection::KoUserStyleCollection( const QString& prefix )
+    : m_prefix( prefix ),
+      m_lastStyle( 0 )
 {
-    m_styleList.setAutoDelete( false );
-    m_deletedStyles.setAutoDelete( true );
-    m_lastStyle = 0;
 }
 
-KWGenericStyle* KWGenericStyleCollection::findStyle( const QString & _name, const QString& defaultStyleName ) const
+KoUserStyle* KoUserStyleCollection::findStyle( const QString & _name, const QString& defaultStyleName ) const
 {
     // Caching, to speed things up
     if ( m_lastStyle && m_lastStyle->name() == _name )
         return m_lastStyle;
 
-    QPtrListIterator<KWGenericStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->name() == _name ) {
-            m_lastStyle = styleIt.current();
+    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
+        if ( (*styleIt)->name() == _name ) {
+            m_lastStyle = *styleIt;
             return m_lastStyle;
         }
     }
 
     if( !defaultStyleName.isEmpty() && _name == defaultStyleName && !m_styleList.isEmpty() )
-        return m_styleList.getFirst(); // fallback..
+        return m_styleList.first(); // fallback..
 
     return 0;
 }
 
-QString KWGenericStyleCollection::generateUniqueName() const
+QString KoUserStyleCollection::generateUniqueName() const
 {
     int count = 1;
     QString name;
     do {
-        name = "new" + QString::number( count++ );
+        name = m_prefix + QString::number( count++ );
     } while ( findStyle( name, QString::null ) );
     return name;
 }
 
-KWGenericStyleCollection::~KWGenericStyleCollection()
+KoUserStyleCollection::~KoUserStyleCollection()
 {
     clear();
 }
 
-void KWGenericStyleCollection::clear()
+void KoUserStyleCollection::clear()
 {
-    m_styleList.setAutoDelete( true );
-    m_styleList.clear();
-    m_styleList.setAutoDelete( false );
-    m_deletedStyles.clear();
+    // KDE4: qDeleteAll
+    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+        delete *styleIt;
+    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_deletedStyles.begin(), styleEnd = m_deletedStyles.end() ; styleIt != styleEnd ; ++styleIt )
+        delete *styleIt;
     m_lastStyle = 0;
 }
 
-QStringList KWGenericStyleCollection::displayNameList() const
+QStringList KoUserStyleCollection::displayNameList() const
 {
     QStringList lst;
-    QPtrListIterator<KWGenericStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-        lst.append( styleIt.current()->displayName() );
+    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+        lst.append( (*styleIt)->displayName() );
     return lst;
 }
 
-KWGenericStyle* KWGenericStyleCollection::addStyle( KWGenericStyle* sty )
+KoUserStyle* KoUserStyleCollection::addStyle( KoUserStyle* sty )
 {
     // First check for duplicates.
-    for ( KWGenericStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
+    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
     {
+        KoUserStyle* p = *styleIt;
         if ( p->name() == sty->name() ) {
             if ( p->displayName() == sty->displayName() ) {
                 // Replace existing style
@@ -131,8 +130,8 @@ KWGenericStyle* KWGenericStyleCollection::addStyle( KWGenericStyle* sty )
     return sty;
 }
 
-void KWGenericStyleCollection::removeStyle ( KWGenericStyle *style ) {
-    if( m_styleList.removeRef(style)) {
+void KoUserStyleCollection::removeStyle ( KoUserStyle *style ) {
+    if( m_styleList.remove(style)) {
         if ( m_lastStyle == style )
             m_lastStyle = 0;
         // Remember to delete this style when deleting the document
@@ -140,24 +139,19 @@ void KWGenericStyleCollection::removeStyle ( KWGenericStyle *style ) {
     }
 }
 
-void KWGenericStyleCollection::updateStyleListOrder( const QStringList &lst )
+void KoUserStyleCollection::updateStyleListOrder( const QStringList &lst )
 {
-    QPtrList<KWGenericStyle> orderStyle;
+    QValueList<KoUserStyle *> orderStyle;
     for ( QStringList::const_iterator it = lst.begin(); it != lst.end(); ++it )
     {
-        //kdDebug()<<" style :"<<(*it)<<endl;
-        QPtrListIterator<KWGenericStyle> style( m_styleList );
-        for ( ; style.current() ; ++style )
-        {
-            if ( style.current()->name() == *it)
-            {
-                orderStyle.append( style.current() );
-                //kdDebug()<<" found !!!!!!!!!!!!\n";
-                break;
-            }
-        }
+        KoUserStyle* style = findStyle( *it, QString::null );
+        if ( style )
+            orderStyle.append( style );
+        else
+            kdWarning() << "updateStyleListOrder: style " << *it << " not found!" << endl;
     }
-    m_styleList.setAutoDelete( false );
+    // we'll lose (and leak) styles if the list didn't have all the styles
+    Q_ASSERT( m_styleList.count() == orderStyle.count() );
     m_styleList.clear();
     m_styleList = orderStyle;
 }
@@ -167,15 +161,15 @@ void KWGenericStyleCollection::updateStyleListOrder( const QStringList &lst )
 /******************************************************************/
 
 KWFrameStyleCollection::KWFrameStyleCollection()
+    : KoUserStyleCollection( QString::fromLatin1( "frame" ) )
 {
 }
 
 void KWFrameStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
 {
-    QPtrListIterator<KWGenericStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
+    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
     {
-        KWFrameStyle* style = static_cast<KWFrameStyle *>( styleIt.current() );
+        KWFrameStyle* style = static_cast<KWFrameStyle *>( *styleIt );
         style->saveOasis( mainStyles, savingContext );
     }
 }
@@ -210,9 +204,8 @@ void KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
 QValueList<KWFrameStyle *> KWFrameStyleCollection::frameStyleList() const
 {
     QValueList<KWFrameStyle *> lst;
-    QPtrListIterator<KWGenericStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-        lst.append( static_cast<KWFrameStyle *>( styleIt.current() ) );
+    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+        lst.append( static_cast<KWFrameStyle *>( *styleIt ) );
     return lst;
 }
 
@@ -221,13 +214,13 @@ QValueList<KWFrameStyle *> KWFrameStyleCollection::frameStyleList() const
 /******************************************************************/
 
 KWFrameStyle::KWFrameStyle( const QString & name )
-    : KWGenericStyle( name )
+    : KoUserStyle( name )
 {
     m_backgroundColor.setColor( Qt::white );
 }
 
 KWFrameStyle::KWFrameStyle( const QString & name, KWFrame * frame )
-    : KWGenericStyle( name )
+    : KoUserStyle( name )
 {
     m_backgroundColor = frame->backgroundColor();
     m_borderLeft = frame->leftBorder();
@@ -237,11 +230,14 @@ KWFrameStyle::KWFrameStyle( const QString & name, KWFrame * frame )
 }
 
 KWFrameStyle::KWFrameStyle( QDomElement & parentElem, int /*docVersion=2*/ )
-    : KWGenericStyle( QString::null )
+    : KoUserStyle( QString::null )
 {
     QDomElement element = parentElem.namedItem( "NAME" ).toElement();
-    if ( ( !element.isNull() ) && ( element.hasAttribute("value") ) )
+    if ( ( !element.isNull() ) && ( element.hasAttribute("value") ) ) {
         m_name = element.attribute( "value" );
+        m_displayName = i18n( "Style name", m_name.utf8() );
+    } else
+        kdWarning() << "No NAME tag in frame style!" << endl;
 
     element = parentElem.namedItem( "LEFTBORDER" ).toElement();
     if ( !element.isNull() )
@@ -277,9 +273,15 @@ KWFrameStyle::KWFrameStyle( QDomElement & parentElem, int /*docVersion=2*/ )
     m_backgroundColor = QBrush( c );
 }
 
+KWFrameStyle::KWFrameStyle( const KWFrameStyle &rhs )
+    : KoUserStyle( QString::null )
+{
+    operator=( rhs );
+}
+
 void KWFrameStyle::operator=( const KWFrameStyle &rhs )
 {
-    KWGenericStyle::operator=( rhs );
+    KoUserStyle::operator=( rhs );
     m_backgroundColor = rhs.m_backgroundColor;
     m_borderLeft = rhs.m_borderLeft;
     m_borderRight = rhs.m_borderRight;

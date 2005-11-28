@@ -42,7 +42,7 @@ uint KWordTableFrameSetIface::nbRows()
 
 uint KWordTableFrameSetIface::numCols()
 {
-  return m_table->getColumns();
+  return m_table->getCols();
 }
 uint KWordTableFrameSetIface::numCells()
 {
@@ -69,7 +69,7 @@ DCOPRef KWordTableFrameSetIface::cell( int pos )
 
 DCOPRef KWordTableFrameSetIface::cell( uint row, uint col )
 {
-  if( row>=m_table->getRows() || col>= m_table->getColumns())
+  if( row>=m_table->getRows() || col>= m_table->getCols())
         return DCOPRef();
     return DCOPRef( kapp->dcopClient()->appId(),
             m_table->cell(row,col)->dcopObject()->objId() );
@@ -77,7 +77,7 @@ DCOPRef KWordTableFrameSetIface::cell( uint row, uint col )
 
 DCOPRef KWordTableFrameSetIface::startEditingCell(uint row, uint col )
 {
-    if( row>=m_table->getRows() || col>= m_table->getColumns())
+    if( row>=m_table->getRows() || col>= m_table->getCols())
         return DCOPRef();
 
     KWDocument *doc=m_table->kWordDocument();

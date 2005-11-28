@@ -2254,8 +2254,8 @@ void KWView::updateFrameStyleList()
     {
         if ( !(*it)->shortcut().toString().isEmpty())
         {
-            KWFrameStyle* tmp = m_doc->frameStyleCollection()->findStyle( (*it)->name() );
-            if ( tmp )
+            KWFrameStyle* style = m_doc->frameStyleCollection()->findStyle( (*it)->name() );
+            if ( style )
                 shortCuts.insert( (*it)->name(), (*it)->shortcut() );
         }
         m_actionFrameStyleMenu->remove(*it );
@@ -2266,13 +2266,13 @@ void KWView::updateFrameStyleList()
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
         // The list lst was created (unsorted) from the frame style collection, so we have still the same order.
-        KWFrameStyle *tmp = m_doc->frameStyleCollection()->frameStyleAt( i );
-        if ( tmp )
+        KWFrameStyle *style = m_doc->frameStyleCollection()->frameStyleAt( i );
+        if ( style )
         {
-            KShortcut cut = shortCuts[ tmp->name() ]; // KDE4: use value()
+            const KShortcut cut = shortCuts[ style->name() ]; // KDE4: use value()
             KToggleAction* act = new KToggleAction( (*it),
                                                     cut, this, SLOT( slotFrameStyleSelected() ),
-                                                    actionCollection(), tmp->name().utf8() /*KDE4: remove conversion*/ );
+                                                    actionCollection(), style->name().utf8() /*KDE4: remove conversion*/ );
             act->setGroup( "frameStyleList" );
             act->setExclusiveGroup( "frameStyleList" );
             m_actionFrameStyleMenu->insert( act );
@@ -4338,11 +4338,8 @@ void KWView::tableProtectCells()
 void KWView::slotStyleSelected()
 {
     QString actionName = QString::fromLatin1(sender()->name());
-    if ( actionName.startsWith( "shortcut_style_" ) )//see lib/kotext/kostyle.cc
-    {
-        kdDebug() << "KWView::slotStyleSelected " << actionName << endl;
-        textStyleSelected( m_doc->styleCollection()->findStyleByShortcut( actionName) );
-    }
+    kdDebug() << "KWView::slotStyleSelected " << actionName << endl;
+    textStyleSelected( m_doc->styleCollection()->findStyleByShortcut( actionName ) );
 }
 
 void KWView::textStyleSelected( KoParagStyle *sty )
@@ -4400,11 +4397,8 @@ void KWView::textStyleSelected( int index )
 void KWView::slotFrameStyleSelected()
 {
     QString actionName = QString::fromUtf8(sender()->name());
-    if ( actionName.startsWith( "shortcut_framestyle_" ) )//see kwframestyle.cc
-    {
-        //kdDebug() << "KWView::slotFrameStyleSelected " << styleStr << endl;
-        frameStyleSelected( m_doc->frameStyleCollection()->findStyle( actionName ) );
-    }
+    kdDebug() << k_funcinfo << endl;
+    frameStyleSelected( m_doc->frameStyleCollection()->findStyle( actionName ) );
 }
 
 void KWView::frameStyleSelected( int index )
@@ -4469,10 +4463,7 @@ void KWView::frameStyleSelected( KWFrameStyle *sty )
 void KWView::slotTableStyleSelected()
 {
     QString actionName = QString::fromLatin1(sender()->name());
-    if ( actionName.startsWith( "shortcut_tablestyle_" ) )
-    {
-        tableStyleSelected( m_doc->tableStyleCollection()->findStyleByShortcut( actionName) );
-    }
+    tableStyleSelected( m_doc->tableStyleCollection()->findStyleByShortcut( actionName) );
 }
 
 void KWView::tableStyleSelected( int index )
@@ -4847,49 +4838,46 @@ void KWView::textAlignBlock()
 void KWView::slotCounterStyleSelected()
 {
     QString actionName = QString::fromLatin1(sender()->name());
-    if ( actionName.startsWith( "counterstyle_" ) )
-    {
-        QString styleStr = actionName.mid(13);
-        //kdDebug() << "KWView::slotCounterStyleSelected styleStr=" << styleStr << endl;
-        KoParagCounter::Style style = (KoParagCounter::Style)(styleStr.toInt());
-        KoParagCounter c;
-        if ( style == KoParagCounter::STYLE_NONE )
-            c.setNumbering( KoParagCounter::NUM_NONE );
-        else {
-            c.setNumbering( KoParagCounter::NUM_LIST );
-            c.setStyle( style );
-            if ( c.isBullet() )
-                c.setSuffix( QString::null );
-            else
-                c.setSuffix( "." );
-            // TODO save this setting, to use the last one selected in the dialog?
-            // (same for custom bullet char etc.)
+    QString styleStr = actionName.mid(13);
+    //kdDebug() << "KWView::slotCounterStyleSelected styleStr=" << styleStr << endl;
+    KoParagCounter::Style style = (KoParagCounter::Style)(styleStr.toInt());
+    KoParagCounter c;
+    if ( style == KoParagCounter::STYLE_NONE )
+        c.setNumbering( KoParagCounter::NUM_NONE );
+    else {
+        c.setNumbering( KoParagCounter::NUM_LIST );
+        c.setStyle( style );
+        if ( c.isBullet() )
+            c.setSuffix( QString::null );
+        else
+            c.setSuffix( "." );
+        // TODO save this setting, to use the last one selected in the dialog?
+        // (same for custom bullet char etc.)
 
-            // 68927: restart numbering, by default, if last parag wasn't numbered
-            // (and if we're not applying this to a selection)
-            if ( currentTextEdit() && !currentTextEdit()->textFrameSet()->hasSelection() ) {
-                KoTextParag* parag = currentTextEdit()->cursor()->parag();
-                if ( parag->prev() && !parag->prev()->counter() )
-                    c.setRestartCounter(true);
-            }
+        // 68927: restart numbering, by default, if last parag wasn't numbered
+        // (and if we're not applying this to a selection)
+        if ( currentTextEdit() && !currentTextEdit()->textFrameSet()->hasSelection() ) {
+            KoTextParag* parag = currentTextEdit()->cursor()->parag();
+            if ( parag->prev() && !parag->prev()->counter() )
+                c.setRestartCounter(true);
         }
-
-        QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
-        QPtrListIterator<KoTextFormatInterface> it( lst );
-        KMacroCommand* macroCmd = 0L;
-        for ( ; it.current() ; ++it )
-        {
-            KCommand *cmd = it.current()->setCounterCommand( c );
-            if ( cmd )
-            {
-                if ( !macroCmd )
-                    macroCmd=new KMacroCommand( i18n("Change List Type") );
-                macroCmd->addCommand( cmd );
-            }
-        }
-        if( macroCmd)
-            m_doc->addCommand( macroCmd );
     }
+
+    QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+    QPtrListIterator<KoTextFormatInterface> it( lst );
+    KMacroCommand* macroCmd = 0L;
+    for ( ; it.current() ; ++it )
+    {
+        KCommand *cmd = it.current()->setCounterCommand( c );
+        if ( cmd )
+        {
+            if ( !macroCmd )
+                macroCmd=new KMacroCommand( i18n("Change List Type") );
+            macroCmd->addCommand( cmd );
+        }
+    }
+    if( macroCmd)
+        m_doc->addCommand( macroCmd );
 }
 
 void KWView::textSuperScript()

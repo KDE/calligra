@@ -96,11 +96,11 @@ public:
     QString displayName() const;
 
     // ATTRIBUTES
-    KWStyle style() const { return *m_style; }
+    //KWStyle style() const { return *m_style; }
     KWStyle* pStyle() const { return m_style; }
     void setStyle( KWStyle *_style ) { m_style = _style; }
 
-    KWFrameStyle frameStyle() const { return *m_frameStyle; }
+    //KWFrameStyle frameStyle() const { return *m_frameStyle; }
     KWFrameStyle* pFrameStyle() const { return m_frameStyle; }
     void setFrameStyle( KWFrameStyle *_frameStyle ) { m_frameStyle = _frameStyle; }
 

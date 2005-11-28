@@ -28,23 +28,23 @@ libkwordprivate_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWForm
 		KWInsertDia.cpp KWDeleteDia.cpp KWDocStruct.cpp \
 		KWInsertTOCCommand.cpp KWStyleManager.cpp KWFindReplace.cpp \
 		KWCommand.cpp KWStatisticsDialog.cpp \
-		KWordMailMergeDatabaseIface.skel kwordmailmergedatabaseiface.cc KWMailMergeDataBase.cpp \
+		KWordMailMergeDatabaseIface.skel kwordmailmergedatabaseiface.cpp KWMailMergeDataBase.cpp \
 		KWMailMergeLabelAction.cpp \
 		KWEditPersonnalExpression.cpp \
 		KWSplitCellDia.cpp KWInsertPicDia.cpp \
-		KWordDocIface.skel KWordDocIface.cc \
-		KWordViewIface.skel KWordViewIface.cc \
-		KWordTextFrameSetIface.skel KWordTextFrameSetIface.cc \
-		KWordTextFrameSetEditIface.skel KWordTextFrameSetEditIface.cc \
-		KWordFrameSetIface.skel KWordFrameSetIface.cc \
-		KWordFormulaFrameSetIface.skel KWordFormulaFrameSetIface.cc \
-		KWordFormulaFrameSetEditIface.skel KWordFormulaFrameSetEditIface.cc \
-		KWordPictureFrameSetIface.skel KWordPictureFrameSetIface.cc \
-		KWordTableFrameSetIface.skel KWordTableFrameSetIface.cc \
-		KWordPartFrameSetIface.skel KWordPartFrameSetIface.cc \
+		KWordDocIface.skel KWordDocIface.cpp \
+		KWordViewIface.skel KWordViewIface.cpp \
+		KWordTextFrameSetIface.skel KWordTextFrameSetIface.cpp \
+		KWordTextFrameSetEditIface.skel KWordTextFrameSetEditIface.cpp \
+		KWordFrameSetIface.skel KWordFrameSetIface.cpp \
+		KWordFormulaFrameSetIface.skel KWordFormulaFrameSetIface.cpp \
+		KWordFormulaFrameSetEditIface.skel KWordFormulaFrameSetEditIface.cpp \
+		KWordPictureFrameSetIface.skel KWordPictureFrameSetIface.cpp \
+		KWordTableFrameSetIface.skel KWordTableFrameSetIface.cpp \
+		KWordPartFrameSetIface.skel KWordPartFrameSetIface.cpp \
 		KWBgSpellCheck.cpp KWResizeTableDia.cpp KWFrameLayout.cpp \
 		KWConfigFootNoteDia.cpp KWCreateBookmarkDia.cpp KWImportStyleDia.cpp \
-		KWordFootNoteFrameSetIface.skel KWordFootNoteFrameSetIface.cc \
+		KWordFootNoteFrameSetIface.skel KWordFootNoteFrameSetIface.cpp \
 		KWCreateBookmarkDiaBase.ui  KWSelectBookmarkDiaBase.ui \
 		KWSortDia.cpp KWInsertPageDia.cpp KWBookMark.cpp KWCollectFramesetsVisitor.cpp \
 		KWOasisLoader.cpp KWOasisSaver.cpp KWFrameList.cpp KWPage.cpp \
