@@ -28,9 +28,9 @@
 //#include <koStoreDevice.h>
 #include <kgenericfactory.h>
 
-#include "kpresenter_doc.h"
-#include "kpresenter_view.h"
-#include "kprcanvas.h"
+#include "KPrDocument.h"
+#include "KPrView.h"
+#include "KPrCanvas.h"
 
 #include "svgexport.h"
 
@@ -56,9 +56,9 @@ SvgExport::convert(const QCString& from, const QCString& to)
     if ( !document )
         return KoFilter::StupidError;
 
-    if ( strcmp(document->className(), "KPresenterDoc") != 0)
+    if ( strcmp(document->className(), "KPrDocument") != 0)
     {
-        kdWarning() << "document isn't a KPresenterDoc but a "
+        kdWarning() << "document isn't a KPrDocument but a "
                      << document->className() << endl;
         return KoFilter::NotImplemented;
     }
@@ -69,7 +69,7 @@ SvgExport::convert(const QCString& from, const QCString& to)
         kdWarning() << "Invalid mimetypes " << to << " " << from << endl;
         return KoFilter::NotImplemented;
     }
-    KPresenterDoc * kpresenterdoc = static_cast<const KPresenterDoc *>(document);
+    KPrDocument * kpresenterdoc = static_cast<const KPrDocument *>(document);
 
     if ( kpresenterdoc->mimeType() != "application/x-kpresenter" )
     {

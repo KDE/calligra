@@ -27,9 +27,9 @@
 #include <kgenericfactory.h>
 #include <koDocument.h>
 
-#include "kpresenter_doc.h"
-#include "kpresenter_view.h"
-#include "kprcanvas.h"
+#include "KPrDocument.h"
+#include "KPrView.h"
+#include "KPrCanvas.h"
 #include "jpegexport.h"
 #include "exportsizedia.h"
 

@@ -2323,7 +2323,7 @@ void OoImpressImport::createPresentationAnimation(const QDomElement& element)
 
 QDomElement OoImpressImport::findAnimationByObjectID(const QString & id,  int & order)
 {
-    //kdDebug(30518)<<"QDomElement OoImpressImport::findAnimationByObjectID(const QString & id) :"<<id<<endl;
+    kdDebug(30518)<<"QDomElement OoImpressImport::findAnimationByObjectID(const QString & id) :"<<id<<endl;
     if (m_animations.isEmpty() )
         return QDomElement();
 
@@ -2335,7 +2335,7 @@ QDomElement OoImpressImport::findAnimationByObjectID(const QString & id,  int & 
     {
         QDomElement e = node.toElement();
         order = animation->order;
-        //kdDebug(30518)<<"e.tagName() :"<<e.tagName()<<" e.attribute(draw:shape-id) :"<<e.attributeNS( ooNS::draw, "shape-id", QString::null)<<endl;
+        kdDebug(30518)<<"e.tagName() :"<<e.tagName()<<" e.attribute(draw:shape-id) :"<<e.attributeNS( ooNS::draw, "shape-id", QString::null)<<endl;
         if (e.tagName()=="presentation:show-shape" && e.attributeNS( ooNS::draw, "shape-id", QString::null)==id)
                 return e;
     }
