@@ -110,7 +110,7 @@ ResourceDialog::ResourceDialog(Project &project, Resource &resource, QWidget *pa
     dia->overtimeEdit->setText(KGlobal::locale()->formatMoney(resource.overtimeRate()));
 
     int cal = 0;
-    dia->calendarList->insertItem("None");
+    dia->calendarList->insertItem(i18n("None"));
     m_calendars.insert(0, 0);      
     QPtrList<Calendar> list = project.calendars();
     QPtrListIterator<Calendar> cit = list;
