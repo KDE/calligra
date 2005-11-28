@@ -2,6 +2,7 @@
    This file is part of the KDE project
    Copyright (C) 2001 Ewald Snel <ewald@rambo.its.tudelft.nl>
    Copyright (C) 2001 Tomasz Grobelny <grotk@poczta.onet.pl>
+   Copyright (C) 2005 Tommi Rantala <tommi.rantala@cs.helsinki.fi>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -169,31 +170,31 @@ void RTFTokenizer::next()
 	}
 	else if (ch=='\'')
 	{
+	    // Got hex value, for example \'2d
+
 	    type = RTFTokenizer::ControlWord;
 	    *_text++ = ch;
 
-            int n = nextChar();
-
-            if ( n <= 0 ) {
-                type = RTFTokenizer::CloseGroup;
-                return;
-            }
-	    ch = *fileBufferPtr++;
 	    for(int i=0;i<2;i++)
 	    {
+		int n = nextChar();
+
+		if ( n <= 0 ) {
+		    if ( i == 0 ) {
+		        type = RTFTokenizer::CloseGroup;
+		        return;
+		    } else {
+                        ch = ' ';
+			break;
+		    }
+		}
+
+		ch = n;
+
 		hasParam = true;
 		value<<=4;
 		value=value|((ch + ((ch & 16) ? 0 : 9)) & 0xf);
-
-                int n = nextChar();
-
-                if ( n <= 0 ) {
-                    ch = ' ';
-                    break;
-                }
-		ch = *fileBufferPtr++;
 	    }
-            --fileBufferPtr;
         }
 	else
 	{
