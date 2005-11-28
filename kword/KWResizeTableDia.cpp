@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C)  2002 Montel Laurent <lmontel@mandrakesoft.com>
+   Copyright (C)  2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,22 +19,14 @@
 */
 
 #include "KWDocument.h"
-#include "KWCanvas.h"
-#include <koRect.h>
 #include "KWResizeTableDia.h"
-#include "KWResizeTableDia.moc"
 #include "KWTableFrameSet.h"
 #include "KWCommand.h"
 
-#include <klocale.h>
-
-#include <qlabel.h>
-#include <qspinbox.h>
-#include <qradiobutton.h>
-#include <qbuttongroup.h>
-#include <qvbox.h>
 #include <koUnitWidgets.h>
-#include <koRect.h>
+#include <klocale.h>
+#include <qlabel.h>
+#include <qvbox.h>
 
 KWResizeTableDia::KWResizeTableDia( QWidget *parent, KWTableFrameSet *table, KWDocument *doc, int resizeColumn )
     : KDialogBase( parent, "resize column dialog" , true, "", Ok | Cancel | User1 | Apply )
@@ -105,3 +98,5 @@ void KWResizeTableDia::slotOk()
       KDialogBase::slotOk();
    }
 }
+
+#include "KWResizeTableDia.moc"

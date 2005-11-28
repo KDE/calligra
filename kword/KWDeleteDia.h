@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C)  2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -23,12 +24,7 @@
 #include <kdialogbase.h>
 
 class KWTableFrameSet;
-class KWDocument;
-class KWCanvas;
-class QWidget;
-class QGridLayout;
-class QLabel;
-class QSpinBox;
+class KWView;
 
 /******************************************************************/
 /* Class: KWDeleteDia                                             */
@@ -49,7 +45,7 @@ public:
      * @param type the type of dialog this should become, either deleteRow or deleteColumn
      * @param remove a list of all the rows or columns that should be deleted.
      */
-    KWDeleteDia( KWView *parent, const char *name, KWTableFrameSet *table, DeleteType type, QValueList<uint> remove);
+    KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType type, QValueList<uint> remove);
 
 protected:
     void setupTab1();

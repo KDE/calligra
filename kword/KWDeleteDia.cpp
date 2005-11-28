@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C)  2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -17,27 +18,15 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KWDocument.h"
 #include "KWTableFrameSet.h"
 #include "KWDeleteDia.h"
-#include "KWDeleteDia.moc"
-#include "KWCommand.h"
 #include "KWView.h"
-#include "KWCanvas.h"
 
 #include <klocale.h>
-
 #include <qlabel.h>
-#include <qspinbox.h>
 
-#include <stdlib.h>
-
-/******************************************************************/
-/* Class: KWDeleteDia                                             */
-/******************************************************************/
-
-KWDeleteDia::KWDeleteDia( KWView *parent, const char *name, KWTableFrameSet *table, DeleteType type, QValueList<uint> remove)
-    : KDialogBase( Plain, (type==deleteRow?i18n("Delete Row") : i18n("Delete Column")), Ok | Cancel, Ok, parent, name, true )
+KWDeleteDia::KWDeleteDia( KWView *parent, KWTableFrameSet *table, DeleteType type, QValueList<uint> remove)
+    : KDialogBase( Plain, (type==deleteRow?i18n("Delete Row") : i18n("Delete Column")), Ok | Cancel, Ok, parent, "Delete Table items dialog", true )
 {
     Q_ASSERT(type == deleteRow || type == deleteColumn);
     m_type = type;
@@ -96,3 +85,5 @@ void KWDeleteDia::slotOk() {
         m_view->tableDeleteCol(m_toRemove);
     KDialogBase::slotOk();
 }
+
+#include "KWDeleteDia.moc"

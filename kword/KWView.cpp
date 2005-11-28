@@ -4133,6 +4133,7 @@ void KWView::tableInsertRow(uint row, KWTableFrameSet *table)
 
 void KWView::tableInsertCol()
 {
+#if 0
     m_gui->canvasWidget()->setMouseMode( KWCanvas::MM_EDIT );
     KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
     Q_ASSERT(table);
@@ -4156,6 +4157,7 @@ void KWView::tableInsertCol()
     KWInsertDia dia( this, "insert_column_dialog", table, m_doc, KWInsertDia::COL, m_gui->canvasWidget() );
     dia.setCaption( i18n( "Insert Column" ) );
     dia.exec();
+#endif
 }
 
 void KWView::tableInsertCol(uint col,  KWTableFrameSet *table  )
@@ -4191,7 +4193,7 @@ void KWView::tableDeleteRow()
     TableInfo ti( frameViewManager()->selectedFrames() );
     if(ti.amountRowsSelected() == 0) return;
 
-    KWDeleteDia dia( this, "", ti.firstSelectedCell()->groupmanager(),
+    KWDeleteDia dia( this, ti.firstSelectedCell()->groupmanager(),
             KWDeleteDia::deleteRow, ti.selectedRows() );
     dia.exec();
 }
@@ -4201,7 +4203,7 @@ void KWView::tableDeleteCol()
     TableInfo ti( frameViewManager()->selectedFrames() );
     if(ti.amountColumnsSelected() == 0) return;
 
-    KWDeleteDia dia( this, "", ti.firstSelectedCell()->groupmanager(),
+    KWDeleteDia dia( this, ti.firstSelectedCell()->groupmanager(),
             KWDeleteDia::deleteColumn, ti.selectedColumns() );
     dia.exec();
 }
