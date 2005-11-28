@@ -322,6 +322,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                 switch(color_nb_bits)
                 {
                     case 8:
+                    {
                         Q_UINT8 *src = row_pointers[y];
                         while (!it.isDone()) {
                             Q_UINT8 *d = it.rawData();
@@ -333,6 +334,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                             ++it;
                         }
                         break;
+                    }
                     default: // TODO:support for 1,2 and 4 bits
                         return KisImageBuilder_RESULT_UNSUPPORTED;
                 }
