@@ -36,8 +36,9 @@
 #include <kurl.h>
 #include <kfileitem.h>
 #include <kio/previewjob.h>
-#include <kactivelabel.h>
 #include <kdebug.h>
+#include <ktextbrowser.h>
+#include <kapplication.h>
 
 #include "koTemplates.h"
 
@@ -212,6 +213,11 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName");
   bool dontShowAtStartUp = cfgGrp.readEntry("NoStartDlg") == QString("yes");
+  changePalette();
+
+  if(kapp) {
+    connect(kapp, SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
+  }
 
   KGuiItem openGItem(i18n("Use This Template"));
   m_openButton->setGuiItem(openGItem);
@@ -228,14 +234,15 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
       listText += "<br>" + t->description();
     }
 
-    KoRichTextListItem* item = new KoRichTextListItem(m_documentList, listText, t->name(), t->file());
+    KoRichTextListItem* item = new KoRichTextListItem(m_documentList, listText,
+        t->name(), t->description(), t->file());
     item->setPixmap(0, t->loadPicture(instance));
 
     if(t->file() == fullTemplateName) {
       selectItem = item;
 
       if(dontShowAtStartUp) {
-        item->setText(3, "yes");
+        item->setText(4, "yes");
       }
     }
   }
@@ -255,6 +262,11 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
   }
 }
 
+KoTemplatesPane::~KoTemplatesPane()
+{
+  delete d;
+}
+
 void KoTemplatesPane::selectionChanged(QListViewItem* item)
 {
   if(item) {
@@ -262,7 +274,8 @@ void KoTemplatesPane::selectionChanged(QListViewItem* item)
     m_alwaysUseCheckBox->setEnabled(true);
     m_titleLabel->setText(item->text(1));
     m_previewLabel->setPixmap(*(item->pixmap(0)));
-    m_alwaysUseCheckBox->setChecked(item->text(3) == "yes");
+    m_alwaysUseCheckBox->setChecked(item->text(4) == "yes");
+    m_detailsLabel->setText(item->text(2));
   } else {
     m_openButton->setEnabled(false);
     m_alwaysUseCheckBox->setEnabled(false);
@@ -281,12 +294,20 @@ void KoTemplatesPane::openTemplate()
 void KoTemplatesPane::openTemplate(QListViewItem* item)
 {
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
-  cfgGrp.writePathEntry("FullTemplateName", item->text(2));
+  cfgGrp.writePathEntry("FullTemplateName", item->text(3));
   cfgGrp.writeEntry("NoStartDlg", m_alwaysUseCheckBox->isChecked() ? "yes" : "no");
 
   if(item) {
-    emit openTemplate(item->text(2));
+    emit openTemplate(item->text(3));
   }
+}
+
+void KoTemplatesPane::changePalette()
+{
+  QPalette p = kapp ? kapp->palette() : palette();
+  p.setBrush(QColorGroup::Base, p.brush(QPalette::Normal, QColorGroup::Background));
+  p.setColor(QColorGroup::Text, p.color(QPalette::Normal, QColorGroup::Foreground));
+  m_detailsLabel->setPalette(p);
 }
 
 
@@ -311,11 +332,16 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
   : KoDetailsPaneBase(parent, "RecentDocsPane")
 {
   d = new KoRecentDocumentsPanePrivate;
-  KGuiItem openGItem(i18n("Open Document"), "fileopen");
+  KGuiItem openGItem(i18n("Open This Document"), "fileopen");
   m_openButton->setGuiItem(openGItem);
   m_alwaysUseCheckBox->hide();
   m_documentList->header()->hide();
   m_documentList->setSorting(-1); // Disable sorting
+  changePalette();
+
+  if(kapp) {
+    connect(kapp, SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
+  }
 
   QString oldGroup = instance->config()->group();
   instance->config()->setGroup("RecentFiles");
@@ -459,6 +485,14 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixm
 
     it++;
   }
+}
+
+void KoRecentDocumentsPane::changePalette()
+{
+  QPalette p = kapp ? kapp->palette() : palette();
+  p.setBrush(QColorGroup::Base, p.brush(QPalette::Normal, QColorGroup::Background));
+  p.setColor(QColorGroup::Text, p.color(QPalette::Normal, QColorGroup::Foreground));
+  m_detailsLabel->setPalette(p);
 }
 
 #include "koDetailsPane.moc"

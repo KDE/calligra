@@ -94,7 +94,7 @@ class KoTemplatesPane : public KoDetailsPaneBase
   Q_OBJECT
   public:
     KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplateGroup* group);
-
+    ~KoTemplatesPane();
 
   signals:
     void openTemplate(const QString&);
@@ -103,6 +103,8 @@ class KoTemplatesPane : public KoDetailsPaneBase
     void selectionChanged(QListViewItem* item);
     void openTemplate();
     void openTemplate(QListViewItem* item);
+
+    void changePalette();
 
   private:
     KoTemplatesPanePrivate* d;
@@ -126,6 +128,8 @@ class KoRecentDocumentsPane : public KoDetailsPaneBase
 
     void previewResult(KIO::Job* job);
     void updatePreview(const KFileItem* fileItem, const QPixmap& preview);
+
+    void changePalette();
 
   private:
     KoRecentDocumentsPanePrivate* d;
