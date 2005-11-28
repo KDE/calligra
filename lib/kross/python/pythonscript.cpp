@@ -279,8 +279,10 @@ PyGILState_Release(gilstate);
 //KApplication::kApplication()->wakeUpGuiThread ();
 //KApplication::kApplication()->unlock (TRUE);
 
-        if(! pyresult)
+        if(! pyresult) {
+            kdWarning() << "Kross::Python::PythonScript::execute(): Failed to PyEval_EvalCode" << endl;
             throw Py::Exception();
+        }
         Py::Object result(pyresult, true);
 
 #ifdef KROSS_PYTHON_SCRIPT_EXEC_DEBUG
@@ -313,6 +315,7 @@ PyGILState_Release(gilstate);
                 errobj = Py::type(e);
             QString err = errobj.as_string().c_str();
             long lineno = getLineNo(e);
+            e.clear(); // exception is handled. clear it now.
             setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(err), lineno) );
         }
         catch(Py::Exception& e) {
