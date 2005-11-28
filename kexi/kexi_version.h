@@ -84,13 +84,13 @@ namespace Kexi
 }
 
 /*
- * this is the version a part has to be only increase it if the 
- * interface isn't binary compatible anymore
- 
- * @todo
+ * This is the version a part has to be only increase it if the 
+ * interface isn't binary compatible anymore.
+ * 
+ * Note: update X-Kexi-PartVersion values in kexi*handler.desktop 
+ * files everytime you are increasing this value.
  */
  
-#define KEXI_PART_VERSION 1
+#define KEXI_PART_VERSION 2
 
 #endif /* _KEXI_VERSION_ */
-

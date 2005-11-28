@@ -107,7 +107,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj)
 	KCompletion *comp = completionObject();
 
 	//tables
-	KexiPart::Info* partInfo = Kexi::partManager().info("kexi/table");
+	KexiPart::Info* partInfo = Kexi::partManager().infoForMimeType("kexi/table");
 	if (!partInfo)
 		return;
 	KexiPart::ItemList list;
@@ -120,7 +120,7 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj)
 	}
 
 	//queries
-	partInfo = Kexi::partManager().info("kexi/query");
+	partInfo = Kexi::partManager().infoForMimeType("kexi/query");
 	if (!partInfo)
 		return;
 	prj->getSortedItems(list, partInfo);
@@ -160,7 +160,7 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
 {
 	QString name(item.name());
 	//insert a new item, maintaining sort order and splitting to tables and queries
-	if (item.mime()=="kexi/table") {
+	if (item.mimeType()=="kexi/table") {
 		uint i = 2; /*skip empty and 'define query' row*/
 		for (; i < d->firstQueryIndex() && name>=text(i); i++)
 			;
@@ -168,7 +168,7 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
 		completionObject()->addItem(name);
 		d->tablesCount++;
 	}
-	else if (item.mime()=="kexi/query") {
+	else if (item.mimeType()=="kexi/query") {
 		int i;
 		for (i=d->firstQueryIndex(); i<count() && name>=text(i); i++)
 			;
@@ -202,12 +202,12 @@ int KexiDataSourceComboBox::findItem(const QCString& mimeType, const QCString& n
 
 void KexiDataSourceComboBox::slotItemRemoved(const KexiPart::Item& item)
 {
-	const int i = findItem(item.mime(), item.name().latin1());
+	const int i = findItem(item.mimeType(), item.name().latin1());
 	if (i==-1)
 		return;
 	removeItem(i);
 	completionObject()->removeItem(item.name());
-	if (item.mime()=="kexi/table")
+	if (item.mimeType()=="kexi/table")
 		d->tablesCount--;
 	if (currentItem()==i) {
 		if (i==(count()-1))
@@ -215,10 +215,10 @@ void KexiDataSourceComboBox::slotItemRemoved(const KexiPart::Item& item)
 		else
 			setCurrentItem(i);
 	}
-/*	if (item.mime()=="kexi/table" || item.mime()=="kexi/query") {
+/*	if (item.mimeType()=="kexi/table" || item.mime()=="kexi/query") {
 		QString name(item.name());
 		uint i, end;
-		if (item.mime()=="kexi/table") {
+		if (item.mimeType()=="kexi/table") {
 			i = 1; //skip 'define query'
 			end = 1+d->tablesCount;
 		}
@@ -230,7 +230,7 @@ void KexiDataSourceComboBox::slotItemRemoved(const KexiPart::Item& item)
 			if (text(i)==name) {
 				removeItem(i);
 				completionObject()->removeItem(name);
-				if (item.mime()=="kexi/table")
+				if (item.mimeType()=="kexi/table")
 					d->tablesCount--;
 				if (currentItem()==i) {
 					if (i==(count()-1))
@@ -246,16 +246,16 @@ void KexiDataSourceComboBox::slotItemRemoved(const KexiPart::Item& item)
 
 void KexiDataSourceComboBox::slotItemRenamed(const KexiPart::Item& item, const QCString& oldName)
 {
-	const int i = findItem(item.mime(), oldName);
+	const int i = findItem(item.mimeType(), oldName);
 	if (i==-1)
 		return;
 	changeItem(item.name(), i);
 	completionObject()->removeItem(QString(oldName));
 	completionObject()->addItem(item.name());
-/*	if (item.mime()=="kexi/table" || item.mime()=="kexi/query") {
+/*	if (item.mimeType()=="kexi/table" || item.mime()=="kexi/query") {
 		QString oldStrName(oldName);
 		uint i, end;
-		if (item.mime()=="kexi/table") {
+		if (item.mimeType()=="kexi/table") {
 			i = 1; //skip 'define query'
 			end = 1+d->tablesCount;
 		}

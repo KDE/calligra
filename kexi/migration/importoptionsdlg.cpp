@@ -98,11 +98,12 @@ KexiCharacterEncodingComboBox* OptionsDialog::encodingComboBox() const
 
 void OptionsDialog::accept()
 {
-	if (m_chkAlwaysUseThisEncoding->isChecked()) {
-		kapp->config()->setGroup("ImportExport");
+	kapp->config()->setGroup("ImportExport");
+	if (m_chkAlwaysUseThisEncoding->isChecked())
 		kapp->config()->writeEntry("defaultEncodingForMSAccessFiles", 
 			m_encodingComboBox->selectedEncoding());
-	}
+	else
+		kapp->config()->deleteEntry("defaultEncodingForMSAccessFiles");
 
 	KDialogBase::accept();
 }

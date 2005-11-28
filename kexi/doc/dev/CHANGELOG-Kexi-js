@@ -12,6 +12,19 @@
 
 CCMAIL: dkite@shaw.ca
 
+2005-11-28
+Main Window
+- "File->Export->Data Table" and "Edit->Copy Special->As Data Table" 
+  actions added
+Parts
+- X-Kexi-PartVersion increased to 2
+- added boolean servicetype property: X-Kexi-SupportsDataExport; 
+  true for tables and queries
+CSV Import
+- space saved: radio buttons replaced by combo boxes
+- added "Always use this encoding when importing CSV data files" option 
+  to "CSV Import Options" dialog (saved to Kexi config file).
+
 2005-11-26
 Project Migration
 - added "Always use this encoding in similar situations" option 

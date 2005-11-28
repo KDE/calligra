@@ -71,9 +71,13 @@ TODO:-styleName [string]
 TODO:-autoTabStop [bool]
 
 Group: ImportExport
-# Default encoding for MS Access MDB/MDE files (older than 2000).
+# Default character encoding for MS Access MDB/MDE files (older than 2000).
 # Currently used by in Advanced Options of Importing Wizard. 
 # Useful if you are performing many imports of MS Access databases.
 # Valid values can be "cp 1250", "cp 1251", etc. Case insensitive.
 # If not provided, system default will be is assumed.
 -defaultEncodingForMSAccessFiles [string]
+
+# Default character encoding for importing CSV (Comma-Separated Value) files.
+# If not provided, system default will be is assumed.
+- defaultEncodingForImportingCSVFiles [string]

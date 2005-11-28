@@ -1451,17 +1451,17 @@ void KexiQueryDesignerGuiEditor::slotPropertyChanged(KoProperty::Set& set, KoPro
 
 void KexiQueryDesignerGuiEditor::slotNewItemStored(KexiPart::Item& item)
 {
-	d->relations->objectCreated(item.mime(), item.name().latin1());
+	d->relations->objectCreated(item.mimeType(), item.name().latin1());
 }
 
 void KexiQueryDesignerGuiEditor::slotItemRemoved(const KexiPart::Item& item)
 {
-	d->relations->objectDeleted(item.mime(), item.name().latin1());
+	d->relations->objectDeleted(item.mimeType(), item.name().latin1());
 }
 
 void KexiQueryDesignerGuiEditor::slotItemRenamed(const KexiPart::Item& item, const QCString& oldName)
 {
-	d->relations->objectRenamed(item.mime(), oldName, item.name().latin1());
+	d->relations->objectRenamed(item.mimeType(), oldName, item.name().latin1());
 }
 
 #include "kexiquerydesignerguieditor.moc"
