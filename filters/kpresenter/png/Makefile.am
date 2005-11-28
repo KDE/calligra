@@ -13,7 +13,7 @@ kde_module_LTLIBRARIES = libkpresenterpngexport.la
 
 libkpresenterpngexport_la_SOURCES = pngexport.cpp
 libkpresenterpngexport_la_LDFLAGS = -module $(KDE_PLUGIN) -no-undefined
-libkpresenterpngexport_la_LIBADD = ../../../kpresenter/libkpresenterpart.la ../../../filters/libdialogfilter/libdialogfilter.la ../libimageexport/libkpresenterimageexport.la $(KOFFICE_LIBS)
+libkpresenterpngexport_la_LIBADD = ../../../kpresenter/libkpresenterprivate.la ../../../filters/libdialogfilter/libdialogfilter.la ../libimageexport/libkpresenterimageexport.la $(KOFFICE_LIBS)
 noinst_HEADERS = \
 	pngexport.h
 

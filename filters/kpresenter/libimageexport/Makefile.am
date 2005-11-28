@@ -11,7 +11,7 @@ kde_module_LTLIBRARIES = libkpresenterimageexport.la
 
 libkpresenterimageexport_la_SOURCES = imageexport.cpp
 libkpresenterimageexport_la_LDFLAGS = -module $(KDE_PLUGIN) -no-undefined
-libkpresenterimageexport_la_LIBADD = ../../../kpresenter/libkpresenterpart.la $(KOFFICE_LIBS)
+libkpresenterimageexport_la_LIBADD = ../../../kpresenter/libkpresenterprivate.la $(KOFFICE_LIBS)
 noinst_HEADERS = \
 	imageexport.h
 

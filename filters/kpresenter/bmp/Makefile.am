@@ -13,7 +13,7 @@ kde_module_LTLIBRARIES = libkpresenterbmpexport.la
 
 libkpresenterbmpexport_la_SOURCES = bmpexport.cpp
 libkpresenterbmpexport_la_LDFLAGS = -module $(KDE_PLUGIN) -no-undefined
-libkpresenterbmpexport_la_LIBADD = ../../../kpresenter/libkpresenterpart.la ../../../filters/libdialogfilter/libdialogfilter.la ../libimageexport/libkpresenterimageexport.la $(KOFFICE_LIBS)
+libkpresenterbmpexport_la_LIBADD = ../../../kpresenter/libkpresenterprivate.la ../../../filters/libdialogfilter/libdialogfilter.la ../libimageexport/libkpresenterimageexport.la $(KOFFICE_LIBS)
 noinst_HEADERS = \
 	bmpexport.h
 

@@ -10,7 +10,7 @@ kde_module_LTLIBRARIES = libkpresentersvgexport.la
 
 libkpresentersvgexport_la_SOURCES = svgexport.cc
 libkpresentersvgexport_la_LDFLAGS = -module $(KDE_PLUGIN) -no-undefined
-libkpresentersvgexport_la_LIBADD = ../../../kpresenter/libkpresenterpart.la $(KOFFICE_LIBS)
+libkpresentersvgexport_la_LIBADD = ../../../kpresenter/libkpresenterprivate.la $(KOFFICE_LIBS)
 noinst_HEADERS = \
 	svgexport.h
 

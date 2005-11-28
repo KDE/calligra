@@ -13,7 +13,7 @@ kde_module_LTLIBRARIES = libkpresenterxpmexport.la
 
 libkpresenterxpmexport_la_SOURCES = xpmexport.cpp
 libkpresenterxpmexport_la_LDFLAGS = -module $(KDE_PLUGIN) -no-undefined
-libkpresenterxpmexport_la_LIBADD = ../../../kpresenter/libkpresenterpart.la ../../../filters/libdialogfilter/libdialogfilter.la ../libimageexport/libkpresenterimageexport.la $(KOFFICE_LIBS)
+libkpresenterxpmexport_la_LIBADD = ../../../kpresenter/libkpresenterprivate.la ../../../filters/libdialogfilter/libdialogfilter.la ../libimageexport/libkpresenterimageexport.la $(KOFFICE_LIBS)
 noinst_HEADERS = \
 	xpmexport.h
 
