@@ -1,8 +1,9 @@
 """
-Import data from a XHTML file.
+Import data from a XHTML file to a KexiDB table.
 
 Description:
-This script implements import of data from a XHTML file to a KexiDB table.
+This script implements import of data from a XHTML file to a KexiDB table. The
+table needs to be an already existing table the data should be added to.
 
 Author:
 Sebastian Sauer <mail@dipe.org>
@@ -34,8 +35,10 @@ class SaxInput:
 
 		import xml.sax.saxlib
 		import xml.sax.saxexts
-		
+
 		class SaxHandler(xml.sax.saxlib.HandlerBase):
+			""" The SaxHandler is our event-handler SAX calls on
+			parsing the XML-file. """
 
 			tablebase = ["html","body","table"]
 			""" The table-base defines where we will find our table-tag
@@ -43,6 +46,8 @@ class SaxInput:
 			is to look at <html><body><table></table></body></html>. """
 			
 			def __init__(self, inputreader, outputwriter):
+				""" Constructor. """
+
 				# The to a SaxInput instance pointing inputreader.
 				self.inputreader = inputreader
 				# The to a KexiDBOutput instance pointing outputwriter.
@@ -58,25 +63,22 @@ class SaxInput:
 				self.field = None
 
 			def startDocument(self):
-				print "=> Starting parsing"
+				sys.stdout.write('=> Starting parsing\n')
+
 			def endDocument(self):
-				print "=> Fineshed parsing"
+				sys.stdout.write('=> Fineshed parsing\n')
 
 			def startElement(self, name, attrs):
-                                if self.level < len(self.tablebase):
+				""" This method is called by SAX if a DOM-element starts. """
+
+				if self.level < len(self.tablebase):
 					if self.tablebase[self.level] != name:
 						self.intable = False
 					else:
 						self.intable = True
-                                self.level += 1
-                                if not self.intable:
+				self.level += 1
+				if not self.intable:
 					return
-
-				if name == "tr" and (self.level == len(self.tablebase) + 1):
-					self.record = self.outputwriter.Record()
-				elif name == "td" and (self.level == len(self.tablebase) + 2):
-					self.field = self.outputwriter.Field()
-				#elif name == "table": pass
 
 				# Print some debugging-output to stdout.
 				for idx in range(self.level): sys.stdout.write('  ')
@@ -85,24 +87,39 @@ class SaxInput:
 					sys.stdout.write(' %s="%s"' % (attrName,attrs.get(attrName)))
 				sys.stdout.write('\n')
 
+				# handle tr- and td-tags inide the table.
+				if name == "tr" and (self.level == len(self.tablebase) + 1):
+					self.record = self.outputwriter.Record()
+				elif name == "td" and (self.level == len(self.tablebase) + 2):
+					self.field = self.outputwriter.Field()
+				#elif name == "table": pass
+
 			def endElement(self, name):
+				""" This method is called by SAX if a DOM-Element ends. """
+
 				self.level -= 1
-                                #sys.stdout.write('EndElement:%s level:%s len(self.tablebase):%s\n' % (name,self.level,len(self.tablebase)))
+				#sys.stdout.write('EndElement:%s level:%s len(self.tablebase):%s\n' % (name,self.level,len(self.tablebase)))
 
 				if self.record != None:
+					# a record is defined. so, we are looking for the matching
+					# end-tags to close a record or a field.
 					if name == "tr" and (self.level == len(self.tablebase)):
 						self.outputwriter.write(self.record)
 						self.record = None
 						self.field = None
 					elif name == "td" and (self.level == len(self.tablebase) + 1):
-						if self.field == None:
-							raise "Unexpected closing </td>"
-						import string
+						#if self.field == None:
+						#	raise "Unexpected closing </td>"
 						self.record.setField( self.field )
 						self.field = None
 
-                        def characters(self, chars, offset, length):
+			def characters(self, chars, offset, length):
+				""" This method is called by SAX if the text-content of a DOM-Element
+				was parsed. """
+
 				if self.field != None:
+					# the xml-data is unicode and we need to encode it
+					# to latin-1 cause KexiDB deals only with latin-1.
 					u = unicode(chars[offset:offset+length])
 					self.field.append(u.encode("latin-1"))
 
@@ -120,7 +137,26 @@ class KexiDBOutput:
 	""" The destination target we like to import the data to. This class
 	provides abstract access to the KexiDB module. """
 
+	class Result:
+		""" Holds some informations about the import-result. """
+		def __init__(self):
+			# number of records successfully imported.
+			self.successcount = 0
+			# number of records where import failed.
+			self.failedcount = 0
+			
+		def success(self, record):
+			""" Called if a record was written successfully. """
+			print "SUCCESS: %s" % str(record)
+			self.successcount += 1
+
+		def failed(self, record):
+			""" Called if we failed to write a record. """
+			print "FAILED: %s" % str(record)
+			self.failedcount += 1
+
 	class Record:
+		""" A Record in the dataset. """
 		def __init__(self):
 			self.fields = []
 		def setField(self, field):
@@ -132,6 +168,7 @@ class KexiDBOutput:
 			return s + "]"
 
 	class Field:
+		""" A field in a record. """
 		def __init__(self):
 			self.content = []
 		def append(self, content):
@@ -153,15 +190,20 @@ class KexiDBOutput:
 
 		self.tableschema = None
 
+		global KexiDBOutput
+		self.result = KexiDBOutput.Result()
+
 	#def tableExists(self, tablename):
 	#	return tablename in self.connection.tableNames()
+	def getResult(self):
+		return self.result
 
 	def getTables(self):
 		""" return a list of avaiable tablenames. """
 		tables = self.connection.tableNames()
 		tables.sort()
 		return tables
-		
+
 	def setTable(self, tablename):
 		""" Set the tablename we like to import the data to. """
 		self.tableschema = self.connection.tableSchema(tablename)
@@ -171,24 +213,27 @@ class KexiDBOutput:
 		for field in fields:
 			print "KexiDBOutput.setTable(%s): %s(%s)" % (tablename,field.name(),field.type())
 		print "names=%s" % self.tableschema.fieldlist().names()
-		
+
 	def write(self, record):
 		""" Write the record to the KexiDB table. """
 
 		if self.tableschema == None:
 			raise "Invalid tableschema!"
 
-                sys.stdout.write('KexiDBOutput.write:')
+		sys.stdout.write('KexiDBOutput.write:')
 		for f in record.fields:
 			sys.stdout.write(' "%s"' % f)
 		sys.stdout.write('\n')
-		
+
 		values = []
 		for field in record.fields:
 			values.append( str(field) )
-		if not self.connection.insertRecord(self.tableschema, values):
-			raise Exception("Failed to insert into table \"%s\" the record:\n%s\n%s" % (self.tableschema.name(),values,self.connection.lastError()))
-
+		
+		if self.connection.insertRecord(self.tableschema, values):
+			self.result.success(record)
+		else:
+			self.result.failed(record)
+			#raise Exception("Failed to insert into table \"%s\" the record:\n%s\n%s" % (self.tableschema.name(),values,self.connection.lastError()))
 
 class GuiApp:
 	""" The GUI-dialog displayed to let the user define the source
@@ -206,7 +251,7 @@ class GuiApp:
 			raise "Import of the Kross GUI module failed."
 
 		self.dialog = gui.Dialog("Import XHTML")
-                self.dialog.addLabel(self.dialog, "Import data from a XHTML-file to a KexiDB table.\n"
+		self.dialog.addLabel(self.dialog, "Import data from a XHTML-file to a KexiDB table.\n"
                                                   "The destination table needs to be an existing table the data should be added to.")
 
 		self.importfile = self.dialog.addFileChooser(self.dialog,
@@ -235,6 +280,10 @@ class GuiApp:
 		try:
 			self.inputreader.read( self.outputwriter )
 			self.dialog.close()
+
+			msgbox = self.dialog.showMessageBox("info","Import done",
+				"Successfully imported records: %s\nFailed to import records: %s" % (self.outputwriter.result.successcount, self.outputwriter.result.failedcount) )
+			msgbox.show()
 		except Exception, e:
 			import traceback
 			traceback.print_exc()
