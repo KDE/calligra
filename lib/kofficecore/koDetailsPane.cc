@@ -192,12 +192,31 @@ KFileItem* KoRichTextListItem::fileItem() const
 }
 
 
+class KoTemplatesPanePrivate
+{
+  public:
+    KoTemplatesPanePrivate()
+      : m_instance(0)
+    {
+    }
+
+    KInstance* m_instance;
+};
+
+
 KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplateGroup *group)
   : KoDetailsPaneBase(parent, "TemplatesPane")
 {
+  d = new KoTemplatesPanePrivate;
+  d->m_instance = instance;
+  KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
+  QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName");
+  bool dontShowAtStartUp = cfgGrp.readEntry("NoStartDlg") == QString("yes");
+
   KGuiItem openGItem(i18n("Use This Template"));
   m_openButton->setGuiItem(openGItem);
   m_documentList->header()->hide();
+  KoRichTextListItem* selectItem = 0;
 
   for (KoTemplate* t = group->first(); t != 0L; t = group->next()) {
     if(t->isHidden())
@@ -211,6 +230,14 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
 
     KoRichTextListItem* item = new KoRichTextListItem(m_documentList, listText, t->name(), t->file());
     item->setPixmap(0, t->loadPicture(instance));
+
+    if(t->file() == fullTemplateName) {
+      selectItem = item;
+
+      if(dontShowAtStartUp) {
+        item->setText(3, "yes");
+      }
+    }
   }
 
   connect(m_documentList, SIGNAL(selectionChanged(QListViewItem*)),
@@ -221,7 +248,11 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
           this, SLOT(openTemplate(QListViewItem*)));
   connect(m_openButton, SIGNAL(clicked()), this, SLOT(openTemplate()));
 
-  m_documentList->setSelected(m_documentList->firstChild(), true);
+  if(selectItem) {
+    m_documentList->setSelected(selectItem, true);
+  } else {
+    m_documentList->setSelected(m_documentList->firstChild(), true);
+  }
 }
 
 void KoTemplatesPane::selectionChanged(QListViewItem* item)
@@ -231,11 +262,13 @@ void KoTemplatesPane::selectionChanged(QListViewItem* item)
     m_alwaysUseCheckBox->setEnabled(true);
     m_titleLabel->setText(item->text(1));
     m_previewLabel->setPixmap(*(item->pixmap(0)));
+    m_alwaysUseCheckBox->setChecked(item->text(3) == "yes");
   } else {
     m_openButton->setEnabled(false);
     m_alwaysUseCheckBox->setEnabled(false);
     m_titleLabel->setText("");
     m_previewLabel->setPixmap(QPixmap());
+    m_alwaysUseCheckBox->setChecked(false);
   }
 }
 
@@ -247,6 +280,10 @@ void KoTemplatesPane::openTemplate()
 
 void KoTemplatesPane::openTemplate(QListViewItem* item)
 {
+  KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
+  cfgGrp.writePathEntry("FullTemplateName", item->text(2));
+  cfgGrp.writeEntry("NoStartDlg", m_alwaysUseCheckBox->isChecked() ? "yes" : "no");
+
   if(item) {
     emit openTemplate(item->text(2));
   }

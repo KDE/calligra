@@ -87,6 +87,8 @@ class KoRichTextListItem : public KListViewItem
     KoRichTextListItemPrivate* d;
 };
 
+class KoTemplatesPanePrivate;
+
 class KoTemplatesPane : public KoDetailsPaneBase
 {
   Q_OBJECT
@@ -101,6 +103,9 @@ class KoTemplatesPane : public KoDetailsPaneBase
     void selectionChanged(QListViewItem* item);
     void openTemplate();
     void openTemplate(QListViewItem* item);
+
+  private:
+    KoTemplatesPanePrivate* d;
 };
 
 

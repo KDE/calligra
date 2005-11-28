@@ -461,8 +461,9 @@ public:
      * Creates and shows the start up widget.
      * You have to overload this method if you want to add a custom pane.
      * @param parent the KoMainWindow used as parent for the widget.
+     * @param alwaysShow always show the widget even if the user has configured it to not show.
      */
-    virtual void showStartUpWidget(KoMainWindow* parent);
+    virtual void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
 
     /**
      *  Sets the modified flag on the document. This means that it has

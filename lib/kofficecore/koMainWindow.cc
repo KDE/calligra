@@ -1069,7 +1069,7 @@ void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFl
         KoMainWindow *s = new KoMainWindow( newdoc->instance() );
         s->show();
         newdoc->addShell( s );
-        newdoc->showStartUpWidget( s );
+        newdoc->showStartUpWidget( s, true /*Always show widget*/ );
         return;
     }
 
@@ -1080,7 +1080,7 @@ void KoMainWindow::chooseNewDocument( int /*KoDocument::InitDocFlags*/ initDocFl
     }
 
     newdoc->addShell( this );
-    newdoc->showStartUpWidget( this );
+    newdoc->showStartUpWidget( this, true /*Always show widget*/ );
 }
 
 void KoMainWindow::slotFileNew()

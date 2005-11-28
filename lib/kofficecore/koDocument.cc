@@ -2461,8 +2461,19 @@ QString KoDocument::unitName() const
     return KoUnit::unitName( unit() );
 }
 
-void KoDocument::showStartUpWidget( KoMainWindow* parent )
+void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
 {
+    if(!alwaysShow) {
+        KConfigGroup cfgGrp( instance()->config(), "TemplateChooserDialog" );
+        QString fullTemplateName = cfgGrp.readPathEntry( "FullTemplateName" );
+
+        if( ( cfgGrp.readEntry( "NoStartDlg" ) == QString( "yes" ) ) && !fullTemplateName.isEmpty() ) {
+            openTemplate( fullTemplateName );
+            shells().getFirst()->setRootDocument( this );
+            return;
+        }
+    }
+
     createOpenPane( parent, instance(), templateType() );
     parent->setDocToOpen( this );
 }
@@ -2475,7 +2486,6 @@ void KoDocument::openExistingFile( const QString& file )
 
     if( ok ) {
       deleteOpenPane();
-      shells().getFirst()->setRootDocument( this );
     }
 }
 
@@ -2496,8 +2506,10 @@ void KoDocument::openTemplate( const QString& file )
 KoOpenPane* KoDocument::createOpenPane( KoMainWindow* parent, KInstance* instance,
                                         const QString& templateType )
 {
-    if(d->m_startUpWidget)
+    if(d->m_startUpWidget){
+        d->m_startUpWidget->show();
         return d->m_startUpWidget;
+    }
 
     d->m_startUpWidget = new KoOpenPane( parent->centralWidget(), instance, templateType );
     d->m_startUpWidget->show();
