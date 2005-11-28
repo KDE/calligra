@@ -40,13 +40,13 @@ class QVBoxLayout;
 class QHBoxLayout;
 class QGridLayout;
 class QButtonGroup;
-class QComboBox;
 class QCheckBox;
 class QLabel;
 class QLineEdit;
 class QPushButton;
 class QRadioButton;
 class QTable;
+class KComboBox;
 
 //class KSpreadView;
 
@@ -91,24 +91,28 @@ class KexiCSVDialog : public KDialogBase
 
   QGridLayout* MyDialogLayout;
   QHBoxLayout* Layout1;
-  QGridLayout* m_delimiterBoxLayout;
-  QGridLayout* m_formatBoxLayout;
+//  QGridLayout* m_delimiterBoxLayout;
+//  QGridLayout* m_formatBoxLayout;
   QTable* m_table;
-  QButtonGroup* m_delimiterBox;
+  QLabel* m_delimiterLabel;
+  KComboBox* m_delimiterCombo;
+/*  QButtonGroup* m_delimiterBox;
   QRadioButton* m_radioComma;
   QRadioButton* m_radioSemicolon;
   QRadioButton* m_radioTab;
   QRadioButton* m_radioSpace;
-  QRadioButton* m_radioOther;
+  QRadioButton* m_radioOther;*/
   QLineEdit* m_delimiterEdit;
-  QButtonGroup* m_formatBox;
-	QString m_formatBoxTitle;
-  QRadioButton* m_radioNumber;
+//  QButtonGroup* m_formatBox;
+  QString m_formatComboText;
+  QLabel* m_formatLabel;
+  KComboBox* m_formatCombo;
+/*  QRadioButton* m_radioNumber;
   QRadioButton* m_radioText;
   QRadioButton* m_radioCurrency;
-  QRadioButton* m_radioDate;
-  QComboBox* m_comboLine;
-  QComboBox* m_comboQuote;
+  QRadioButton* m_radioDate;*/
+  KComboBox* m_comboLine;
+  KComboBox* m_comboQuote;
   QLabel* TextLabel3;
   QLabel* TextLabel2;
   QCheckBox* m_ignoreDuplicates;
@@ -159,8 +163,8 @@ class KexiCSVDialog : public KDialogBase
 
  private slots:
   void returnPressed();
-  void formatClicked(int id);
-  void delimiterClicked(int id);
+  void formatChanged(int id);
+  void delimiterChanged(int id);
   void lineSelected(const QString& line);
   void textquoteSelected(const QString& mark);
   void currentCellChanged(int, int col);

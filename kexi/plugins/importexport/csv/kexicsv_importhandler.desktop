@@ -25,8 +25,8 @@ Name[xx]=xxKexi CSV Data Importxx
 
 X-KDE-Library=kexihandler_csv_import
 X-KDE-ParentApp=kexi
-X-Kexi-PartVersion=1
+X-Kexi-PartVersion=2
 X-Kexi-TypeName=csv_import
 X-Kexi-GroupIcon=csv_import
 X-Kexi-ItemIcon=csv_import
-X-Kexi-NoObject=1
+X-Kexi-NoObject=true

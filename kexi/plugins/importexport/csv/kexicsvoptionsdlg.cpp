@@ -23,7 +23,10 @@
 #include <qlabel.h>
 #include <qlayout.h>
 #include <qtextcodec.h>
+#include <qcheckbox.h>
 
+#include <kapplication.h>
+#include <kconfig.h>
 #include <kcombobox.h>
 #include <klocale.h>
 #include <kglobal.h>
@@ -41,7 +44,8 @@ KexiCSVOptionsDialog::KexiCSVOptionsDialog( const QString& selectedEncoding, QWi
 	false
  )
 {
-	QGridLayout *lyr = new QGridLayout( plainPage(), 1, 1, KDialogBase::marginHint(), KDialogBase::spacingHint());
+	QGridLayout *lyr = new QGridLayout( plainPage(), 3, 3, 
+		KDialogBase::marginHint(), KDialogBase::spacingHint());
 
 	m_encodingComboBox = new KexiCharacterEncodingComboBox(plainPage(), selectedEncoding);
 	lyr->addWidget( m_encodingComboBox, 0, 1 );
@@ -49,11 +53,23 @@ KexiCSVOptionsDialog::KexiCSVOptionsDialog( const QString& selectedEncoding, QWi
 	QLabel* lbl = new QLabel( m_encodingComboBox, i18n("Text encoding:"), plainPage());
 	lyr->addWidget( lbl, 0, 0 );
 
-	lyr->addItem( new QSpacerItem( 20, 111, QSizePolicy::Minimum, QSizePolicy::Expanding ), 1, 1 );
+	lyr->addItem( new QSpacerItem( 20, 111, QSizePolicy::Minimum, QSizePolicy::Expanding ), 2, 1 );
 	lyr->addItem( new QSpacerItem( 121, 20, QSizePolicy::Expanding, QSizePolicy::Minimum ), 0, 2 );
 
-	adjustSize();
+	m_chkAlwaysUseThisEncoding = new QCheckBox(
+		i18n("Always use this encoding when importing CSV data files"), plainPage());
+	lyr->addWidget( m_chkAlwaysUseThisEncoding, 1, 1 );
 
+	//read config
+	kapp->config()->setGroup("ImportExport");
+	QString defaultEncodingForImportingCSVFiles 
+		= kapp->config()->readEntry("defaultEncodingForImportingCSVFiles");
+	if (!defaultEncodingForImportingCSVFiles.isEmpty()) {
+		m_encodingComboBox->setSelectedEncoding(defaultEncodingForImportingCSVFiles);
+		m_chkAlwaysUseThisEncoding->setChecked(true);
+	}
+
+	adjustSize();
 	m_encodingComboBox->setFocus();
 }
 
@@ -66,3 +82,16 @@ KexiCharacterEncodingComboBox* KexiCSVOptionsDialog::encodingComboBox() const
 	return m_encodingComboBox;
 }
 
+void KexiCSVOptionsDialog::accept()
+{
+	kapp->config()->setGroup("ImportExport");
+	if (m_chkAlwaysUseThisEncoding->isChecked())
+		kapp->config()->writeEntry("defaultEncodingForImportingCSVFiles", 
+			m_encodingComboBox->selectedEncoding());
+	else
+		kapp->config()->deleteEntry("defaultEncodingForImportingCSVFiles");
+
+	KDialogBase::accept();
+}
+
+#include "kexicsvoptionsdlg.moc"

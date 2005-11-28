@@ -28,7 +28,6 @@
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qclipboard.h>
-#include <qcombobox.h>
 #include <qlabel.h>
 #include <qlineedit.h>
 #include <qmime.h>
@@ -160,9 +159,10 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
   plainPage()->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred, 5, 5));
 //  setMainWidget( page );
   //  MyDialogLayout = new QGridLayout( page, 4, 4, marginHint(), spacingHint(), "MyDialogLayout");
-  MyDialogLayout = new QGridLayout( plainPage(), 4, 6, 11, 6, "MyDialogLayout");
+	MyDialogLayout = new QGridLayout( plainPage(), 6, 5, 
+		KDialogBase::marginHint(), KDialogBase::spacingHint(), "MyDialogLayout");
 
-  QHBoxLayout *hbox = new QHBoxLayout( plainPage() );
+	QHBoxLayout *hbox = new QHBoxLayout( plainPage() );
 	QLabel *lbl = new QLabel(
 		mode==File ? i18n("<b>Preview of data from file:</b>")
 			: i18n("<b>Preview of data from clipboard:</b>"),
@@ -179,7 +179,15 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
 	hbox->addSpacing(5);
 	hbox->addWidget(iconLbl);
 	hbox->addWidget(fnameLbl);
-	MyDialogLayout->addMultiCellLayout(hbox, 0, 0, 0, 3);
+	MyDialogLayout->addMultiCellLayout(hbox, 0, 0, 0, 4);
+
+	QFrame* separator = new QFrame(plainPage());
+	separator->setFrameShape(QFrame::HLine);
+	separator->setFrameShadow(QFrame::Sunken);
+	MyDialogLayout->addMultiCellWidget(separator, 1, 1, 0, 4);
+
+///	MyDialogLayout->addItem( 
+///		new QSpacerItem( 20, 111, QSizePolicy::Minimum, QSizePolicy::Expanding ), 2, 4 );
 
 /*  // Limit the range
   int column = m_targetRect.left();
@@ -189,7 +197,26 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
 	  m_targetRect.setBottom( lastCell->row() );
 */
 
-  // Delimiter: comma, semicolon, tab, space, other
+	// Delimiter: comma, semicolon, tab, space, other
+	m_delimiterCombo = new KComboBox(plainPage(), "m_delimiterCombo");
+	m_delimiterCombo->insertItem(i18n("Comma \",\""));
+	m_delimiterCombo->insertItem( i18n( "Semicolon \";\"" ) );
+	m_delimiterCombo->insertItem( i18n( "Tabulator" ) );
+	m_delimiterCombo->insertItem( i18n( "Space \" \"" ) );
+	m_delimiterCombo->insertItem( i18n( "Other" ) );
+//	m_delimiterCombo->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
+	MyDialogLayout->addWidget( m_delimiterCombo, 3, 0 );
+
+	m_delimiterLabel = new QLabel(m_delimiterCombo, i18n("Delimiter:"), plainPage());
+	MyDialogLayout->addWidget( m_delimiterLabel, 2, 0 );
+
+	m_delimiterEdit = new QLineEdit( plainPage(), "m_delimiterEdit" );
+//  m_delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, m_delimiterEdit->sizePolicy().hasHeightForWidth() ) );
+	m_delimiterEdit->setMaximumSize( QSize( 30, 32767 ) );
+	m_delimiterEdit->setMaxLength(1);
+	MyDialogLayout->addWidget( m_delimiterEdit, 4, 0 );
+
+#if 0
   m_delimiterBox = new QButtonGroup( plainPage(), "m_delimiterBox" );
   m_delimiterBox->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
   m_delimiterBox->setTitle( i18n( "Delimiter" ) );
@@ -199,14 +226,6 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
   m_delimiterBoxLayout = new QGridLayout( m_delimiterBox->layout() );
   m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
   MyDialogLayout->addMultiCellWidget( m_delimiterBox, 1, 4, 0, 0 );
-
-  m_ignoreDuplicates = new QCheckBox( plainPage(), "m_ignoreDuplicates" );
-  m_ignoreDuplicates->setText( i18n( "Ignore duplicated delimiters" ) );
-  MyDialogLayout->addMultiCellWidget( m_ignoreDuplicates, 3, 3, 2, 3 );
-
-  m_1stRowForFieldNames = new QCheckBox( plainPage(), "m_1stRowForFieldNames" );
-  m_1stRowForFieldNames->setText( i18n( "First row contains column names" ) );
-  MyDialogLayout->addMultiCellWidget( m_1stRowForFieldNames, 4, 4, 2, 3 );
 
   m_radioComma = new QRadioButton( m_delimiterBox, "m_radioComma" );
   m_radioComma->setText( i18n( "Comma" ) );
@@ -228,13 +247,25 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
   m_radioOther = new QRadioButton( m_delimiterBox, "m_radioOther" );
   m_radioOther->setText( i18n( "Other delimiter", "Other" ) );
   m_delimiterBoxLayout->addWidget( m_radioOther, 2, 0 );
+#endif //0
 
-  m_delimiterEdit = new QLineEdit( m_delimiterBox, "m_delimiterEdit" );
-//  m_delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, m_delimiterEdit->sizePolicy().hasHeightForWidth() ) );
-  m_delimiterEdit->setMaximumSize( QSize( 30, 32767 ) );
-  m_delimiterBoxLayout->addWidget( m_delimiterEdit, 2, 1 );
+	// Format: number, text, currency,
+	m_formatComboText = i18n( "Format for column %1:" );
+	m_formatCombo = new KComboBox(plainPage(), "m_formatCombo");
+	m_formatCombo->insertItem(i18n("Text"));
+	m_formatCombo->insertItem(i18n("Number"));
+	m_formatCombo->insertItem(i18n("Date"));
+//	m_formatCombo->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
+	MyDialogLayout->addWidget( m_formatCombo, 3, 1 );
 
-  // Format: number, text, currency,
+	m_formatLabel = new QLabel(m_formatCombo, "", plainPage());
+	m_formatLabel->setAlignment(Qt::AlignAuto | Qt::WordBreak);
+	MyDialogLayout->addWidget( m_formatLabel, 2, 1 );
+
+	m_primaryKeyField = new QCheckBox( i18n( "Primary key" ), plainPage(), "m_primaryKeyField" );
+	MyDialogLayout->addWidget( m_primaryKeyField, 4, 1 );
+
+#if 0
   m_formatBox = new QButtonGroup( plainPage(), "m_formatBox" );
   m_formatBox->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 //  m_formatBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_formatBox->sizePolicy().hasHeightForWidth() ) );
@@ -264,46 +295,52 @@ KexiCSVDialog::KexiCSVDialog( Mode mode, KexiMainWindow* mainWin, QWidget * pare
   m_radioDate->setText( i18n( "Date" ) );
 //js  m_formatBoxLayout->addWidget( m_radioDate, 1, 2 );
   m_formatBoxLayout->addWidget( m_radioDate, 0, 1 );
+#endif //0
 
-  m_primaryKeyField = new QCheckBox( i18n( "Primary key" ), m_formatBox, "m_primaryKeyField" );
-  m_formatBoxLayout->addMultiCellWidget( m_primaryKeyField, 2, 2, 0, 1 );
-
-  m_comboLine = new QComboBox( FALSE, plainPage(), "m_comboLine" );
-  m_comboLine->insertItem( i18n( "1" ) );
-  m_comboLine->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
-//  m_comboLine->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboLine->sizePolicy().hasHeightForWidth() ) );
-  MyDialogLayout->addWidget( m_comboLine, 2, 3 );
-
-  m_comboQuote = new QComboBox( FALSE, plainPage(), "m_comboQuote" );
+  m_comboQuote = new KComboBox( plainPage(), "m_comboQuote" );
   m_comboQuote->insertItem( i18n( "\"" ) );
   m_comboQuote->insertItem( i18n( "'" ) );
   m_comboQuote->insertItem( i18n( "None" ) );
 //  m_comboQuote->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
-  m_comboQuote->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
+////  m_comboQuote->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 //  m_comboQuote->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboQuote->sizePolicy().hasHeightForWidth() ) );
+  MyDialogLayout->addWidget( m_comboQuote, 3, 2 );
 
-  MyDialogLayout->addWidget( m_comboQuote, 2, 2 );
-  QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
-  MyDialogLayout->addItem( spacer_2, 3, 3 );
+  m_comboLine = new KComboBox( FALSE, plainPage(), "m_comboLine" );
+  m_comboLine->insertItem( i18n( "1" ) );
+////  m_comboLine->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
+//  m_comboLine->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboLine->sizePolicy().hasHeightForWidth() ) );
+  MyDialogLayout->addWidget( m_comboLine, 3, 3 );
 
-  TextLabel2 = new QLabel( plainPage(), "TextLabel2" );
-  TextLabel2->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
+//  QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
+//  MyDialogLayout->addItem( spacer_2, 4, 3 );
+
+  TextLabel2 = new QLabel( m_comboQuote, i18n( "Text quote:" ), plainPage(), "TextLabel2" );
+////  TextLabel2->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 //js  TextLabel2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, TextLabel2->sizePolicy().hasHeightForWidth() ) );
-  TextLabel2->setText( i18n( "Text quote:" ) );
-  MyDialogLayout->addWidget( TextLabel2, 1, 2 );
+  TextLabel2->setAlignment(Qt::AlignAuto | Qt::WordBreak);
+  MyDialogLayout->addWidget( TextLabel2, 2, 2 );
 
-  TextLabel3 = new QLabel( plainPage(), "TextLabel3" );
-  TextLabel3->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
+  TextLabel3 = new QLabel( m_comboLine, i18n( "Start at line:" ), plainPage(), "TextLabel3" );
+////  TextLabel3->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 //  TextLabel3->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, TextLabel3->sizePolicy().hasHeightForWidth() ) );
-  TextLabel3->setText( i18n( "Start at line:" ) );
-  MyDialogLayout->addWidget( TextLabel3, 1, 3 );
+  TextLabel3->setAlignment(Qt::AlignAuto | Qt::WordBreak);
+  MyDialogLayout->addWidget( TextLabel3, 2, 3 );
+
+  m_ignoreDuplicates = new QCheckBox( plainPage(), "m_ignoreDuplicates" );
+  m_ignoreDuplicates->setText( i18n( "Ignore duplicated delimiters" ) );
+  MyDialogLayout->addMultiCellWidget( m_ignoreDuplicates, 4, 4, 2, 4 );
+
+  m_1stRowForFieldNames = new QCheckBox( plainPage(), "m_1stRowForFieldNames" );
+  m_1stRowForFieldNames->setText( i18n( "First row contains column names" ) );
+  MyDialogLayout->addMultiCellWidget( m_1stRowForFieldNames, 5, 5, 2, 4 );
 
   m_table = new KexiCSVDialogTable( plainPage(), "m_table" );
-	m_table->setSizePolicy( QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::Minimum, 1, 1) );
+  m_table->setSizePolicy( QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum, 2, 2) );
   //m_table->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)5, (QSizePolicy::SizeType)7, 0, 0, m_table->sizePolicy().hasHeightForWidth() ) );
   m_table->setNumRows( 0 );
   m_table->setNumCols( 0 );
-  MyDialogLayout->addMultiCellWidget( m_table, 5, 5, 0, 3 );
+  MyDialogLayout->addMultiCellWidget( m_table, 6, 6, 0, 4 );
 
 //	delimiterClicked(0);
 
@@ -384,7 +421,7 @@ if ( m_mode == Clipboard )
 		}
 	}
 
-	delimiterClicked(detectedDelimiter); // this will cause fillTable()
+	delimiterChanged(detectedDelimiter); // this will cause fillTable()
 
 	if (m_mode==File) {
 		iconLbl->setPixmap(KMimeType::pixmapForURL(KURL::fromPathOrURL(m_fname), 0, KIcon::Desktop));
@@ -400,10 +437,12 @@ if ( m_mode == Clipboard )
 
 	m_table->setSelectionMode(QTable::NoSelection);
 
-	connect(m_formatBox, SIGNAL(clicked(int)),
-	  this, SLOT(formatClicked(int)));
-	connect(m_delimiterBox, SIGNAL(clicked(int)),
-	  this, SLOT(delimiterClicked(int)));
+	connect(m_formatCombo, SIGNAL(activated(int)),
+	  this, SLOT(formatChanged(int)));
+//	connect(m_delimiterBox, SIGNAL(clicked(int)),
+//	  this, SLOT(delimiterClicked(int)));
+	connect(m_delimiterCombo, SIGNAL(activated(int)),
+	  this, SLOT(delimiterChanged(int)));
 	connect(m_delimiterEdit, SIGNAL(returnPressed()),
 	  this, SLOT(returnPressed()));
 	connect(m_delimiterEdit, SIGNAL(textChanged ( const QString & )),
@@ -426,7 +465,7 @@ if ( m_mode == Clipboard )
 
 	currentCellChanged(0, 0);
 	updateGeometry();
-	m_delimiterBox->setFocus();
+	m_delimiterCombo->setFocus();
 }
 
 KexiCSVDialog::~KexiCSVDialog()
@@ -888,8 +927,8 @@ void KexiCSVDialog::adjustRows(int iRows)
 
 void KexiCSVDialog::returnPressed()
 {
-	if (m_delimiterBox->id(m_delimiterBox->selected()) != 4)
-	return;
+	if (m_delimiterCombo->currentItem() != 4)
+		return;
 
 	m_delimiter = m_delimiterEdit->text();
 	fillTable();
@@ -897,11 +936,11 @@ void KexiCSVDialog::returnPressed()
 
 void KexiCSVDialog::textChanged ( const QString & )
 {
-	m_radioOther->setChecked ( true );
-	delimiterClicked(4); // other
+//	m_radioOther->setChecked ( true );
+	delimiterChanged(4); // other
 }
 
-void KexiCSVDialog::formatClicked(int id)
+void KexiCSVDialog::formatChanged(int id)
 {
 	if (id==_PK_FLAG) {
 		if (m_primaryKeyColumn>=0 && m_primaryKeyColumn<m_table->numCols()) {
@@ -923,15 +962,15 @@ void KexiCSVDialog::formatClicked(int id)
 	updateColumnText(m_table->currentColumn());
 }
 
-void KexiCSVDialog::delimiterClicked(int id)
+void KexiCSVDialog::delimiterChanged(int id)
 {
 	switch (id)
 	{
 	 case 0: // comma
 	m_delimiter = ",";
 	break;
-	 case 4: // other
-	m_delimiter = m_delimiterEdit->text();
+	 case 1: // semicolon
+	m_delimiter = ";";
 	break;
 	 case 2: // tab
 	m_delimiter = "\t";
@@ -939,8 +978,8 @@ void KexiCSVDialog::delimiterClicked(int id)
 	 case 3: // space
 	m_delimiter = " ";
 	break;
-	 case 1: // semicolon
-	m_delimiter = ";";
+	 case 4: // other
+	m_delimiter = m_delimiterEdit->text();
 	break;
 	}
 	m_delimiterEdit->setEnabled(id==4);
@@ -989,8 +1028,8 @@ void KexiCSVDialog::currentCellChanged(int, int col)
 	if (type==_FP_NUMBER_TYPE)
 		type=_NUMBER_TYPE; //we're simplifying that for now
 
-	m_formatBox->setButton( type );
-	m_formatBox->setTitle( m_formatBoxTitle.arg(col+1) );
+	m_formatCombo->setCurrentItem( type );
+	m_formatLabel->setText( m_formatComboText.arg(col+1) );
 	m_primaryKeyField->setEnabled( _NUMBER_TYPE == m_detectedTypes[col]);
 	m_primaryKeyField->setChecked( m_primaryKeyColumn == col );
 }
@@ -1028,7 +1067,7 @@ void KexiCSVDialog::accept()
 		msg.showErrorMessage(i18n("No database connection available."));
 		return;
 	}
-	KexiPart::Part *part = Kexi::partManager().part("kexi/table");
+	KexiPart::Part *part = Kexi::partManager().partForMimeType("kexi/table");
 	if (!part) {
 		msg.showErrorMessage(&Kexi::partManager());
 		return;
