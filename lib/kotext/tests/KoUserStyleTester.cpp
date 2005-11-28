@@ -86,9 +86,9 @@ void KoUserStyleTester::testFindStyle()
     ret = coll.findStyle( "foo", QString::null );
     COMPARE( ret, (KoUserStyle*)0 );
 
-    ret = coll.findStyle( "foo", "test1" ); // test the fallback code
-    COMPARE( ret, style );
+    ret = coll.findStyle( "foo", "test1" ); // fallback not used for style 'foo'
+    COMPARE( ret, (KoUserStyle*)0 );
 
-    ret = coll.findStyle( "test1", "test1" );
+    ret = coll.findStyle( "test1", "test1" ); // fallback used for standard style test1
     COMPARE( ret, style );
 }
