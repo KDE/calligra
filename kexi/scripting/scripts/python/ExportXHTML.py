@@ -89,8 +89,9 @@ class HtmlExporter:
 		name = self.datasource.name()
 		
 		output.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>\n")
-		output.write("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 4.01 Strict//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11-strict.dtd\">\n")
-		output.write("<html><head><title>%s</title>\n" % name)
+		output.write("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.1//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd\">\n")
+		output.write("<html xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">\n")
+		output.write("<head><title>%s</title>\n" % name)
 		output.write("<style type=\"text/css\">\n<!--\n")
 		if style == "Paper":
 			output.write("html { background-color:#efefef; }")
