@@ -1,9 +1,9 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-kde_module_LTLIBRARIES = kexihandler_csv_import.la
+kde_module_LTLIBRARIES = kexihandler_csv_importexport.la
 
 kexihandler_csv_import_la_SOURCES = kexicsv_importexportpart.cpp kexicsvdialog.cpp \
-	kexicsvoptionsdlg.cpp kexicsvwidgets.cpp
+	kexicsvimportoptionsdlg.cpp kexicsvwidgets.cpp
 
 kexihandler_csv_import_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
 kexihandler_csv_import_la_LIBADD = ../../../core/libkexicore.la \

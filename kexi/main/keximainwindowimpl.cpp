@@ -3781,7 +3781,7 @@ void KexiMainWindowImpl::slotProjectImportDataTable()
 #ifndef KEXI_NO_CSV_IMPORT
 	QMap<QString,QString> args;
 	args.insert("sourceType", "file");
-	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_import", this, this, 0, &args);
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_importexport", this, this, 0, &args);
 	if (!dlg)
 		return; //error msg has been shown by KexiInternalPart
 	dlg->exec();
@@ -3821,7 +3821,7 @@ void KexiMainWindowImpl::slotEditPasteSpecialDataTable()
 #ifndef KEXI_NO_CSV_IMPORT
 	QMap<QString,QString> args;
 	args.insert("sourceType", "clipboard");
-	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_import", this, this, 0, &args);
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_importexport", this, this, 0, &args);
 	if (!dlg)
 		return; //error msg has been shown by KexiInternalPart
 	dlg->exec();
