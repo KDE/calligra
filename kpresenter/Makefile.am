@@ -6,66 +6,66 @@ bin_SCRIPTS = kprconverter.pl
 ## The part
 lib_LTLIBRARIES =
 kde_module_LTLIBRARIES = libkpresenterpart.la
-libkpresenterpart_la_SOURCES = koPointArray.cc kprcanvas.cc kprpage.cc searchdia.cc backdia.cc \
-	webpresentation.cc kpresenter_view.cc  mspresentation.cc \
-	kprbrush.cc \
-	kpresenter_doc.cc \
-	kpresenter_sound_player.cc \
-	pgconfdia.cc effectdia.cc kprcommand.cc \
-	kpresenter_utils.cc  \
-	effecthandler.cc pageeffects.cc\
-	transeffectdia.cc \
-	kpobject.cc kplineobject.cc kprectobject.cc kpellipseobject.cc \
-	kpautoformobject.cc kptextobject.cc \
-	kppixmapobject.cc kppieobject.cc kppartobject.cc kpgroupobject.cc \
-	kpbackground.cc kpgradient.cc \
-	kpgradientcollection.cc \
-	gotopage.cc \
-	kpresenter_factory.cc \
-	KPresenterDocIface.skel KPresenterDocIface.cc \
-	KPresenterViewIface.skel KPresenterViewIface.cc\
-	KPresenterObjectIface.skel KPresenterObjectIface.cc \
-	KPresenterPageIface.skel KPresenterPageIface.cc \
-	sidebar.cc \
+libkpresenterpart_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp KPrPage.cpp KPrFindReplace.cpp KPrBackDia.cpp \
+	KPrWebPresentation.cpp KPrView.cpp  KPrMSPresentationSetup.cpp \
+	KPrBrush.cpp \
+	KPrDocument.cpp \
+	KPrSoundPlayer.cpp \
+	KPrPgConfDia.cpp KPrEffectDia.cpp KPCommand.cpp \
+	KPrUtils.cpp  \
+	KPrEffectHandler.cpp KPrPageEffects.cpp\
+	KPrTransEffectDia.cpp \
+	KPrObject.cpp KPrLineObject.cpp KPrRectObject.cpp KPrEllipseObject.cpp \
+	KPrAutoformObject.cpp KPrTextObject.cpp \
+	KPrPixmapObject.cpp KPrPieObject.cpp KPrPartObject.cpp KPrGroupObject.cpp \
+	KPrBackground.cpp KPGradient.cpp \
+	KPGradientCollection.cpp \
+	KPrGotoPage.cpp \
+	KPrFactory.cpp \
+	KPrDocumentIface.skel KPrDocumentIface.cpp \
+	KPrViewIface.skel KPrViewIface.cpp\
+	KPrObjectIface.skel KPrObjectIface.cpp \
+	KPrPageIface.skel KPrPageIface.cpp \
+	KPrSideBar.cpp \
 	insertpagedia.ui \
-	kpresenter_dlg_config.cc kprvariable.cc kprdrag.cc \
-	kprtextdocument.cc kppointobject.cc kpfreehandobject.cc kppolylineobject.cc \
-	kpquadricbeziercurveobject.cc kpcubicbeziercurveobject.cc \
-	kppolygonobject.cc notebar.cc \
-	KPTextObjectIface.skel KPTextObjectIface.cc \
-	KPTextViewIface.skel KPTextViewIface.cc presdurationdia.cc \
-	KPPieObjectIface.skel KPPieObjectIface.cc \
-	KPPolygonObjectIface.skel KPPolygonObjectIface.cc \
-	KPRectObjectIface.skel KPRectObjectIface.cc \
-	KPPixmapObjectIface.skel KPPixmapObjectIface.cc \
-	KPAutoFormObjectIface.skel KPAutoFormObjectIface.cc \
-	KPresenterObject2DIface.skel KPresenterObject2DIface.cc \
-	KPLineObjectIface.skel KPLineObjectIface.cc \
-	KPQuadricbezierCurveObjectIface.skel KPQuadricbezierCurveObjectIface.cc \
-	KPCubicbeziercurveObjectIface.skel KPCubicbeziercurveObjectIface.cc \
-	shadowdialog.ui shadowdialogimpl.cc textpreview.cc \
-	rotationdialogimpl.cc rotationpropertyui.ui \
-	KPFreehandObjectIface.skel KPFreehandObjectIface.cc kprstylemanager.cc \
-	kprbgspellcheck.cc kprhelplinedia.cc \
-	KPPolyLineObjectIface.skel KPPolyLineObjectIface.cc \
-	kprduplicateobjdia.cc kpclosedlineobject.cc \
-	kprimportstyledia.cc \
-	imageEffectDia.cc imageEffectBase.ui customslideshowdia.cc \
-	pbpreview.cc penstyle.ui penstylewidget.cc \
-	rectpreview.cc rectpropertyui.ui rectproperty.cc \
-	piepreview.cc \
-	polygonpreview.cc \
-    picturepreview.cc \
-	brushpropertyui.ui gradientpropertyui.ui brushproperty.cc \
-	generalpropertyui.ui generalproperty.cc \
-	polygonpropertyui.ui polygonproperty.cc \
-	piepropertyui.ui pieproperty.cc \
-	picturepropertyui.ui pictureproperty.cc \
-	marginui.ui kpmarginwidget.cc textproperty.cc \
-	kpobjectproperties.cc \
-	propertyeditor.cc \
-	slidetransitionwidget.ui slidetransitiondia.cc \
-	kppen.cc printerDlg.cc
+	KPrConfig.cpp KPrVariableCollection.cpp KPrTextDrag.cpp \
+	KPrTextDocument.cpp KPrPointObject.cpp KPrFreehandObject.cpp KPrPolylineObject.cpp \
+	KPrQuadricBezierCurveObject.cpp KPrCubicBezierCurveObject.cpp \
+	KPrPolygonObject.cpp KPrNoteBar.cpp \
+	KPrTextObjectIface.skel KPrTextObjectIface.cpp \
+	KPrTextViewIface.skel KPrTextViewIface.cpp KPrPresDurationDia.cpp \
+	KPrPieObjectIface.skel KPrPieObjectIface.cpp \
+	KPrPolygonObjectIface.skel KPrPolygonObjectIface.cpp \
+	KPrRectObjectIface.skel KPrRectObjectIface.cpp \
+	KPrPixmapObjectIface.skel KPrPixmapObjectIface.cpp \
+	KPrAutoFormObjectIface.skel KPrAutoFormObjectIface.cpp \
+	KPrObject2DIface.skel KPrObject2DIface.cpp \
+	KPrLineObjectIface.skel KPrLineObjectIface.cpp \
+	KPrQuadricBezierCurveObjectIface.skel KPrQuadricBezierCurveObjectIface.cpp \
+	KPrCubicBezierCurveObjectIface.skel KPrCubicBezierCurveObjectIface.cpp \
+	shadowdialog.ui KPrShadowDialogImpl.cpp KPrTextPreview.cpp \
+	KPrRotationDialogImpl.cpp rotationpropertyui.ui \
+	KPrFreehandObjectIface.skel KPrFreehandObjectIface.cpp KPrStyleManager.cpp \
+	KPrBgSpellCheck.cpp KPrMoveHelpLineDia.cpp \
+	KPrPolyLineObjectIface.skel KPrPolyLineObjectIface.cpp \
+	KPrDuplicatObjDia.cpp KPrClosedLineObject.cpp \
+	KPrImportStyleDia.cpp \
+	KPrImageEffectDia.cpp imageEffectBase.ui KPrCustomSlideShowDia.cpp \
+	KPrPBPreview.cpp penstyle.ui KPrPenStyleWidget.cpp \
+	KPrRectPreview.cpp rectpropertyui.ui KPrRectProperty.cpp \
+	KPrPiePreview.cpp \
+	KPrPolygonPreview.cpp \
+    KPrPicturePreview.cpp \
+	brushpropertyui.ui gradientpropertyui.ui KPrBrushProperty.cpp \
+	generalpropertyui.ui KPrGeneralProperty.cpp \
+	polygonpropertyui.ui KPrPolygonProperty.cpp \
+	piepropertyui.ui KPrPieProperty.cpp \
+	picturepropertyui.ui KPrPictureProperty.cpp \
+	marginui.ui KPrMarginWidget.cpp KPrTextProperty.cpp \
+	KPrObjectProperties.cpp \
+	KPrPropertyEditor.cpp \
+	slidetransitionwidget.ui KPrSlideTransitionDia.cpp \
+	KPrPen.cpp KPrPrinterDlg.cpp
 
 if include_ARTS
 ARTSKDE = -lartskde
@@ -78,7 +78,7 @@ libkpresenterpart_la_METASOURCES = AUTO
 ## The kdeinit loadable module and the executable
 kdeinit_LTLIBRARIES = kpresenter.la
 bin_PROGRAMS =
-kpresenter_la_SOURCES = main.cc
+kpresenter_la_SOURCES = main.cpp
 kpresenter_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kpresenter_la_LIBADD = $(LIB_KOFFICECORE)
 
@@ -94,4 +94,4 @@ rc_DATA = kpresenter.rc kpresenter_readonly.rc
 SUBDIRS = autoformEdit autoforms . pics templates dtd slideshow toolbar
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp */*.cc *.cc *.h kpresenter_aboutdata.h -o $(podir)/kpresenter.pot
+	$(XGETTEXT) rc.cpp */*.cc *.cc *.h KPrAboutData.h -o $(podir)/kpresenter.pot

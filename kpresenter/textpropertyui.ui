@@ -34,7 +34,7 @@
 <customwidgets>
     <customwidget>
         <class>KPMarginWidget</class>
-        <header location="global">kpmarginwidget.h</header>
+        <header location="global">KPrMarginWidget.h</header>>
         <sizehint>
             <width>-1</width>
             <height>-1</height>

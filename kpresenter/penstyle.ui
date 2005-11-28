@@ -160,7 +160,7 @@
 <customwidgets>
     <customwidget>
         <class>PBPreview</class>
-        <header location="global">pbpreview.h</header>
+        <header location="global">KPrPBPreview.h</header>
         <sizehint>
             <width>80</width>
             <height>40</height>

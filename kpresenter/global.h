@@ -21,7 +21,7 @@
 #define GLOBAL_H
 
 #include <kiconloader.h>
-#include "kpresenter_factory.h"
+#include "KPrFactory.h"
 #define KPBarIcon( x ) BarIcon( x, KPresenterFactory::global() )
 
 #define MAX_UNDO_REDO 100

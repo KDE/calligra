@@ -157,7 +157,7 @@
 <customwidgets>
     <customwidget>
         <class>RectPreview</class>
-        <header location="global">rectpreview.h</header>
+        <header location="global">KPrRectPreview.h</header>>
         <sizehint>
             <width>100</width>
             <height>50</height>

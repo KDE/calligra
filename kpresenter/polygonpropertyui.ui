@@ -120,7 +120,7 @@
 <customwidgets>
     <customwidget>
         <class>PolygonPreview</class>
-        <header location="global">polygonpreview.h</header>
+        <header location="global">KPrPolygonPreview.h</header>>
         <sizehint>
             <width>200</width>
             <height>200</height>

@@ -116,7 +116,7 @@
 <customwidgets>
     <customwidget>
         <class>PiePreview</class>
-        <header location="global">piepreview.h</header>
+        <header location="global">KPrPiePreview.h</header>>
         <sizehint>
             <width>200</width>
             <height>200</height>

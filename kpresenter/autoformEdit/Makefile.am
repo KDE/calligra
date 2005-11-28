@@ -6,7 +6,7 @@ INCLUDES = -I$(srcdir)/.. $(KOFFICE_INCLUDES) $(all_includes)
 
 noinst_LTLIBRARIES = libaf.la
 
-libaf_la_SOURCES = atfinterpreter.cc afchoose.cc
+libaf_la_SOURCES = ATFInterpreter.cpp AFChoose.cpp
 
 METASOURCES = AUTO
 
