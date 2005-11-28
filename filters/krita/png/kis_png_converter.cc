@@ -79,6 +79,8 @@ namespace {
                 case 16:
                     return "RGBA16";
             }
+        } else if(color_type ==  PNG_COLOR_TYPE_PALETTE) {
+            return "RGBA"; // <-- we will convert the index image to RGBA
         }
         return "";
     }
@@ -234,6 +236,13 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     {
         row_pointers[y] = new png_byte[rowbytes];
     }
+    
+    // Read the palette if the file is indexed
+    png_colorp palette ;
+    int num_palette;
+    if(color_type == PNG_COLOR_TYPE_PALETTE) {
+        png_get_PLTE(png_ptr, info_ptr, &palette, &num_palette);
+    }
 //     png_read_png(png_ptr, info_ptr, PNG_TRANSFORM_IDENTITY, NULL );
 //     png_bytepp row_pointers = png_get_rows(png_ptr, info_ptr); // By using this function libpng will take care of freeing memory
     png_read_image(png_ptr, row_pointers);
@@ -308,6 +317,26 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
                         ++it;
                     }
                 }
+                break;
+            case PNG_COLOR_TYPE_PALETTE:
+                switch(color_nb_bits)
+                {
+                    case 8:
+                        Q_UINT8 *src = row_pointers[y];
+                        while (!it.isDone()) {
+                            Q_UINT8 *d = it.rawData();
+                            png_color c = palette[*(src++)];
+                            d[2] = c.red;
+                            d[1] = c.green;
+                            d[0] = c.blue;
+                            d[3] = Q_UINT8_MAX;
+                            ++it;
+                        }
+                        break;
+                    default: // TODO:support for 1,2 and 4 bits
+                        return KisImageBuilder_RESULT_UNSUPPORTED;
+                }
+                
                 break;
             default:
                 return KisImageBuilder_RESULT_UNSUPPORTED;
