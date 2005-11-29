@@ -381,14 +381,44 @@ cell background.</para>
 </para>
 <para>You can change the way the content of a cell is protected in the
 <guilabel>Cell protection</guilabel> page.</para>
+<para>All cells are protected by default (that means cell content cannot be
+changed) and for the cell protection to be active you also need to protect the
+sheet using the <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
+Document </guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
+menu and to provide a password.
+You can also hide the cell formula in order to protect the way you calculate the
+formula. This also needs to enable shet protection to work.
+You can hide the cell content with Hide all and again this needs sheet
+protection.
+You can learn more about all these settings in the <link
+linkend="protection">Advanced KSpread chapter, Protection section</link>.</para>
 <variablelist>
 <varlistentry>
-<term><guilabel>Protection</guilabel></term>
-<listitem><para>-</para>
+<term><guilabel>Protected</guilabel></term>
+<listitem><para>If checked, the cell content will be protected. This is
+the default behaviour. You need to protect the whole sheet using the
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
+Document </guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
+menu for this individual cell protection to work. When a cell is protected, its
+content cannot be changed.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Printing</guilabel></term>
+<term><guilabel>Hide formula</guilabel></term>
+<listitem><para>When this is checked, the cell is still visible. However,
+its contents do not appear in the Formula bar. Hiding formula is only working
+for cells that contain formulae so the user cannot view the formula. And the
+sheet must be protected for this to work.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Hide all</guilabel></term>
+<listitem><para>This hides the cell content and works only when the sheet is
+protected. Whether the cell itself is protected or not does not matter.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Do not print text</guilabel></term>
 <listitem><para>If you check <guilabel>Do not print text</guilabel> then the
 text in the cell will not be printed. This is unchecked per default which means
 that the cell text will always be printed by default.</para>
