@@ -49,7 +49,10 @@ class KWFrameStylePreview : public QWidget
     Q_OBJECT
 
 public:
-    KWFrameStylePreview( QWidget *parent ) : QWidget( parent ) { setBackgroundColor( white ); }
+    KWFrameStylePreview( QWidget *parent )
+        : QWidget( parent ), frameStyle( 0 ) {
+            setBackgroundColor( white );
+        }
 
     void setFrameStyle(KWFrameStyle *_frameStyle);
 

@@ -5392,12 +5392,13 @@ void KPresenterView::updateStyleList()
         KoParagStyle *style = m_pKPresenterDoc->styleCollection()->styleAt( i );
         if ( style )
         {
-            QString name = style->name();
+            QString name = "paragstyle_" + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotStyleSelected() ),
                                      actionCollection(), name.utf8() );
             act->setGroup( "styleList" );
             act->setExclusiveGroup( "styleListAction" );
+            act->setToolTip( i18n( "Apply a paragraph style" ) );
             actionFormatStyleMenu->insert( act );
         }
     }

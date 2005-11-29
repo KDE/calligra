@@ -2176,12 +2176,13 @@ void KWView::updateStyleList()
         KoParagStyle *style = m_doc->styleCollection()->styleAt( i );
         if ( style )
         {
-            QString name = style->name();
+            QString name = "paragstyle_" + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotStyleSelected() ),
                                      actionCollection(), name.utf8() );
             act->setGroup( "styleList" );
             act->setExclusiveGroup( "styleListAction" );
+            act->setToolTip( i18n( "Apply a paragraph style" ) );
             m_actionFormatStyleMenu->insert( act );
         }
         else
@@ -2217,7 +2218,7 @@ void KWView::updateFrameStyleList()
     for (; it != end; ++it )
     {
         shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
-        m_actionFrameStyleMenu->remove(*it );
+        m_actionFrameStyleMenu->remove( *it );
         delete *it;
     }
 
@@ -2228,13 +2229,14 @@ void KWView::updateFrameStyleList()
         KWFrameStyle *style = m_doc->frameStyleCollection()->frameStyleAt( i );
         if ( style )
         {
-            QString name = style->name();
+            QString name = "framestyle_" + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                                     shortCuts[name], // KDE4: use value()
                                                     this, SLOT( slotFrameStyleSelected() ),
                                                     actionCollection(), name.utf8() /*KDE4: remove conversion*/ );
             act->setGroup( "frameStyleList" );
             act->setExclusiveGroup( "frameStyleList" );
+            act->setToolTip( i18n( "Apply a frame style" ) );
             m_actionFrameStyleMenu->insert( act );
         }
         else
@@ -2285,12 +2287,13 @@ void KWView::updateTableStyleList()
         KWTableStyle *style = m_doc->tableStyleCollection()->tableStyleAt( i );
         if ( style )
         {
-            QString name = style->name();
+            QString name = "tablestyle_" + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotTableStyleSelected() ),
                                      actionCollection(), name.utf8() );
             act->setExclusiveGroup( "tableStyleList" );
             act->setGroup( "tableStyleList" );
+            act->setToolTip( i18n( "Apply a table style" ) );
             m_actionTableStyleMenu->insert( act );
         }
         else

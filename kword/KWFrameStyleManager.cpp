@@ -422,11 +422,11 @@ void KWFrameStyleManager::moveUpStyle()
     if(m_currentFrameStyle !=0L)
         save();
     unsigned int pos = 0;
-    QString currentStyleName=m_stylesList->currentText ();
+    QString currentStyleName = m_stylesList->currentText();
     if ( currentStyleName.isEmpty() )
         return;
     int pos2 = m_styleOrder.findIndex( currentStyleName );
-    if ( pos2 != -1 )
+    if ( pos2 > 0 ) // neither -1 nor 0
     {
         m_styleOrder.remove( m_styleOrder.at(pos2));
         m_styleOrder.insert( m_styleOrder.at(pos2-1), currentStyleName);

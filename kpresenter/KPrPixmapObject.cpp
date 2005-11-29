@@ -65,6 +65,7 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     m_ie_par3 = QVariant();
     // Forbid QPixmap to cache the X-Window resources (Yes, it is slower!)
     m_cachedPixmap.setOptimization(QPixmap::MemoryOptim);
+    keepRatio = true;
 }
 
 KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoPictureKey & key )
