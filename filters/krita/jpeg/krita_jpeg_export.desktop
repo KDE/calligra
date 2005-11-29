@@ -2,7 +2,16 @@
 Encoding=UTF-8
 Icon=
 Name=Krita PNG Export Filter
-Name[fr]=Filtre d'exportation PNG de Krita
+Name[da]=Krita PNG-eksportfilter
+Name[es]=Filtro de exportación a PNG de Krita
+Name[ga]=Scagaire Easpórtála PNG Krita
+Name[it]=Filtro di esportazione PNG per Krita
+Name[pt]=Filtro de Exportação de PNG para o Krita
+Name[pt_BR]=Filtro de Exportação de PNG para o Krita
+Name[sr]=Krita-ин филтер за извоз у PNG
+Name[sr@Latn]=Krita-ин филтер за извоз у PNG
+Name[sv]=Krita PNG-exportfilter
+Name[xx]=xxKrita PNG Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=image/jpeg
