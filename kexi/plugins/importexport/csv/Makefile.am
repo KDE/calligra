@@ -16,6 +16,6 @@ INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
 METASOURCES = AUTO
 
 servicesdir=$(kde_servicesdir)/kexi
-services_DATA=kexicsv_importhandler.desktop
+services_DATA=kexicsv_importexporthandler.desktop
 
 include ../../Makefile.common
