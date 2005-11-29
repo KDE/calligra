@@ -90,12 +90,12 @@ bool PqxxMigrate::drv_readTableSchema(
             const pqxx::oid toid = tableOid(originalName);
             if (toid==0)
                 return false;
-            KexiDB::Field* m_f = new KexiDB::Field(fldID, fldType);
-            m_f->setCaption(fldName);
-            m_f->setPrimaryKey(primaryKey(toid, i));
-            m_f->setUniqueKey(uniqueKey(toid, i));
-            m_f->setAutoIncrement(autoInc(toid, i));//This should be safe for all field types
-            tableSchema.addField(m_f);
+            KexiDB::Field *f = new KexiDB::Field(fldID, fldType);
+            f->setCaption(fldName);
+            f->setPrimaryKey(primaryKey(toid, i));
+            f->setUniqueKey(uniqueKey(toid, i));
+            f->setAutoIncrement(autoInc(toid, i));//This should be safe for all field types
+            tableSchema.addField(f);
 
             // Do this for var/char types
             //m_f->setLength(m_res->at(0)[i].size());
@@ -104,7 +104,8 @@ bool PqxxMigrate::drv_readTableSchema(
            /*m_f->setScale(0);
            m_f->setPrecision(0);*/
 
-           kdDebug() << "Added field [" << m_f->name() << "] type [" << m_f->typeName() << "]" << endl;
+           kdDebug() << "Added field [" << f->name() << "] type [" << f->typeName() 
+           	<< "]" << endl;
         }
         return true;
     }
