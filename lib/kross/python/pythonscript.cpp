@@ -187,8 +187,27 @@ long PythonScript::getLineNo(Py::Exception& /*exception*/)
     Py_FlushLine();
     PyErr_NormalizeException(&type, &value, &traceback);
 
-    if(traceback)
+    if(traceback) {
         lineobj = PyObject_GetAttrString(traceback, "tb_lineno");
+
+        try {
+            Py::Module tbmodule( PyImport_Import(Py::String("traceback").ptr()) );
+            Py::Dict tbdict = tbmodule.getDict();
+            Py::Callable tbfunc(tbdict.getItem("format_tb"));
+            Py::Tuple args(1);
+            args.setItem(0, Py::Object(traceback));
+            Py::List tblist = tbfunc.apply(args);
+            uint length = tblist.length();
+            for(Py::List::size_type i = 0; i < length; ++i)
+                kdDebug() << Py::Object(tblist[i]).as_string().c_str() << endl;
+        }
+        catch(Py::Exception& e) {
+            QString err = Py::value(e).as_string().c_str();
+            e.clear(); // exception is handled. clear it now.
+            kdWarning() << QString("Kross::Python::PythonScript::getLineNo() Failed to fetch a traceback: %1").arg(err) << endl;
+        }
+    }
+
     if((! lineobj) && value)
         lineobj = PyObject_GetAttrString(value, "lineno"); //['args', 'filename', 'lineno', 'msg', 'offset', 'print_file_and_line', 'text']
 
