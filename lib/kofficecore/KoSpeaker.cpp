@@ -60,7 +60,7 @@
 class KoSpeakerPrivate
 {
 public:
-    KoSpeakerPrivate::KoSpeakerPrivate() :
+    KoSpeakerPrivate() :
         m_versionChecked(false),
         m_enabled(false),
         m_speakFlags(0),
