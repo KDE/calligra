@@ -738,8 +738,8 @@ void KWFrameResizeCommand::execute()
         }
         else
         {
-           table->recalcCols();
-           table->recalcRows();
+           table->recalcCols(0, 0);
+           table->recalcRows(0, 0);
         }
         //repaintTableHeaders( table );
     }
@@ -769,8 +769,8 @@ void KWFrameResizeCommand::unexecute()
         }
         else
         {
-           table->recalcCols();
-           table->recalcRows();
+           table->recalcCols(0, 0);
+           table->recalcRows(0, 0);
         }
         //repaintTableHeaders( table );
     }

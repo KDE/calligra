@@ -1267,11 +1267,11 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
     //kdDebug() << "KWCanvas::mrEditFrame m_frameMoved=" << m_frameMoved << " m_frameResized=" << m_frameResized << endl;
     if ( firstFrame && ( m_frameMoved || m_frameResized ) )
     {
-        KWTableFrameSet *table = firstFrame->frameSet()->groupmanager();
-        if (table) {
-            table->recalcCols();
-            table->recalcRows();
-            //repaintTableHeaders( table );
+        KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell*>(firstFrame->frameSet());
+        if (cell) {
+            KWTableFrameSet *table = cell->groupmanager();
+            table->recalcCols( cell->firstColumn(), 0 );
+            table->recalcRows( 0, cell->firstRow() );
         }
 
         // Create command

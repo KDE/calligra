@@ -371,8 +371,8 @@ public:
     void resizeWidth( double width );
 
     /** resize and position all cells */
-    void recalcCols(int _col=-1,int _row=-1);
-    void recalcRows(int _col=-1,int _row=-1);
+    void recalcCols(uint column, uint row);
+    void recalcRows(uint column, uint row);
 
     /** move a column edge (i.e. col can be 0 to getCols()+1) */
     void resizeColumn( unsigned int col, double x );
@@ -399,13 +399,6 @@ public:
 
     /** move the whole of the table, this is mainly for anchored frames. */
     void moveBy( double dx, double dy );
-
-    /** Return true if exactly one frame is selected. The parameters row
-    *  and col will receive the values of the active row and col.<br>
-    *  When no frame or more then one frame is selected row and col will
-    *  stay unchanged (and false is returned).
-    */
-    bool isOneSelected( unsigned int &row, unsigned int &col );
 
     /** insert a row of new cells, use the getCols() call to decide how many cells are created */
     void insertNewRow( uint _idx, bool _recalc = true, bool _removeable = false );

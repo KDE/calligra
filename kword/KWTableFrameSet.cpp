@@ -278,19 +278,11 @@ KWTableFrameSet::Cell *KWTableFrameSet::cellByPos( double x, double y ) const
     return 0L;
 }
 
-void KWTableFrameSet::recalcCols(int _col,int _row) {
-    //kdDebug(32004) << "KWTableFrameSet::recalcCols" << endl;
-
-    // check/set sizes of m_frames
-    unsigned int row=0,col=0;
-    if(_col!=-1 && _row!=-1)
-    {
-        row=(unsigned int)_row;
-        col=(unsigned int)_col;
-    }
-    else
-        isOneSelected(row,col);
-
+void KWTableFrameSet::recalcCols(unsigned int col,unsigned int row) {
+    if(col >= getColumns())
+        col = getColumns()-1;
+    if(row >= getRows())
+        row = getRows()-1;
     Cell *activeCell = cell(row,col);
     double difference = 0;
 
@@ -338,20 +330,9 @@ void KWTableFrameSet::recalcCols(int _col,int _row) {
 // Step through the whole table and recalculate the position and size
 // of each cell.
 
-void KWTableFrameSet::recalcRows(int _col, int _row) {
-    kdDebug(32004) << name() << " KWTableFrameSet::recalcRows ("<< _col <<"," << _row << ")" << endl;
+void KWTableFrameSet::recalcRows(unsigned int col, unsigned int row) {
+    kdDebug(32004) << name() << " KWTableFrameSet::recalcRows ("<< col <<"," << row << ")" << endl;
     //for(unsigned int i=0; i < m_rowPositions.count() ; i++) kdDebug(32004) << "row: " << i << " = " << m_rowPositions[i] << endl;
-
-
-    // check/set sizes of m_frames
-    unsigned int row=0,col=0;
-    if(_col!=-1 && _row!=-1)
-    {
-        row=(unsigned int)_row;
-        col=(unsigned int)_col;
-    }
-    else
-        isOneSelected(row,col);
 
     Cell *activeCell = cell(row,col);
     double difference = 0;
@@ -747,7 +728,7 @@ void KWTableFrameSet::resizeColumn( unsigned int col, double x )
             position(cell);
         }
     }
-    recalcCols( col );
+    recalcCols( col-1, 0 );
 }
 
 void KWTableFrameSet::resizeRow( unsigned int row, double y )
@@ -774,7 +755,7 @@ void KWTableFrameSet::resizeRow( unsigned int row, double y )
             position(cell);
         }
     }
-    recalcRows( row );
+    recalcRows( 0, row-1 );
 }
 
 void KWTableFrameSet::resizeWidth( double width ) {
@@ -912,32 +893,6 @@ void KWTableFrameSet::moveBy( double dx, double dy ) {
     }
 }
 
-/* Return true if exactly one frame is selected. The parameters row
-   and col will receive the values of the active row and col.
-   When no frame or more then one frame is selected row and col will
-   stay unchanged (and false is returned).
-*/
-bool KWTableFrameSet::isOneSelected(unsigned int &row, unsigned int &col) {
-    Cell *selected = 0;
-    bool one = false;
-    for ( TableIter cells(this); cells; ++cells) {
-        if(cells->frame(0)->isSelected())  {
-            if(one)
-                selected = 0;
-            else{
-                selected = (Cell*) cells;
-                one  = true;
-            }
-        }
-    }
-    if(selected) {
-        row = selected->firstRow();
-        col = selected->firstColumn();
-        return true;
-    }
-    return false;
-}
-
 /* Delete all cells that are completely in this row.              */
 void KWTableFrameSet::deleteRow( unsigned int row, RemovedRow &rr, bool _recalc)
 {
@@ -979,7 +934,7 @@ void KWTableFrameSet::deleteRow( unsigned int row, RemovedRow &rr, bool _recalc)
     validate();
 
     if ( _recalc )
-        recalcRows();
+        recalcRows( 0, row-1 );
 }
 
 void KWTableFrameSet::reInsertRow(RemovedRow &rr)
@@ -1172,8 +1127,8 @@ void KWTableFrameSet::deleteColumn(uint col, RemovedColumn &rc)
     rc.m_initialized = true;
 
     validate();
-    recalcCols();
-    recalcRows();
+    recalcCols( col, 0 );
+    recalcRows( col, 0 );
 }
 
 void KWTableFrameSet::reInsertColumn(RemovedColumn &rc)
@@ -2233,8 +2188,8 @@ void KWTableFrameSet::finalize( ) {
         cells->finalize();
     }
 
-    recalcCols();
-    recalcRows();
+    recalcCols(0, 0);
+    recalcRows(0, 0);
     KWFrameSet::finalize();
 }
 
@@ -2301,7 +2256,7 @@ void KWTableFrameSet::setTopBorder(KoBorder newBorder)
             }
         }
     }
-    recalcRows();
+    recalcRows(0, 0);
 }
 
 void KWTableFrameSet::setBottomBorder(KoBorder newBorder)
@@ -2314,7 +2269,7 @@ void KWTableFrameSet::setBottomBorder(KoBorder newBorder)
             }
         }
     }
-    recalcRows();
+    recalcRows(0, 0);
 }
 
 void KWTableFrameSet::setRightBorder(KoBorder newBorder)
