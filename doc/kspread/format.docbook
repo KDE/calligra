@@ -297,23 +297,39 @@ Bottom means the content of the cell will be displayed at the bottom of the cell
 <varlistentry>
 <term><guilabel>Text option</guilabel></term>
 <listitem><para>This is only available when the rotation is 0°. 
-Wrap text wraps the text so it fits in the previous cell size. If this is not checked, the text will stay on one line and the cell size will be adjusted to contain the text.</para>
+Wrap text wraps the text so it fits in the previous cell size. If this is not
+checked, the text will stay on one line and the cell size will be adjusted to
+contain the text.</para>
 <para>Vertical text puts your text vertically.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Rotation</guilabel></term>
-<listitem><para>Your text will appear orieted in the angle you set here. Positive values wil move it anticlockwise and negative values will move it clockwise.</para>
+<listitem><para>Your text will appear orieted in the angle you set here.
+Positive values wil move it anticlockwise and negative values will move it
+clockwise.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Merge cells</guilabel></term>
-<listitem><para>-<!-- FIXME--></para>
+<listitem><para>When checked, this has the same effect
+as <menuchoice><guimenu>Data</guimenu><guimenuitem>Merge
+Cells</guimenuitem></menuchoice>. You need to have at least two
+consecutive cells selected. Those consecutive cells are then merged into a
+bigger one.</para>
+<para>When a merged cell is selected and when you uncheck this, then all cells
+come back to their original size as before the merging. It has the same effect
+as <menuchoice><guimenu>Data</guimenu><guimenuitem>Dissociate
+Cells</guimenuitem></menuchoice>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Indent</guilabel></term>
-<listitem><para>Set the amount of indent that will be used in the cell when you choose the <menuchoice><guimenu>Format</guimenu><guimenuitem>Increase Indent</guimenuitem></menuchoice> or <menuchoice><guimenu>Format</guimenu><guimenuitem>Decrease Indent</guimenuitem></menuchoice> menus.</para>
+<listitem><para>Set the amount of indent that will be used in the cell when you
+choose the <menuchoice><guimenu>Format</guimenu><guimenuitem>Increase
+Indent</guimenuitem></menuchoice> or
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Decrease
+Indent</guimenuitem></menuchoice> menus.</para>
 </listitem>
 </varlistentry>
 <varlistentry>

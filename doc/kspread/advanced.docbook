@@ -508,6 +508,9 @@ Show a sheet
 <listitem><para>
 See the sheet properties
 </para></listitem>
+<listitem><para>
+Merge or dissociate cells
+</para></listitem>
 </itemizedlist>
 </sect2>
 
