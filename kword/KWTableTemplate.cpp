@@ -21,7 +21,7 @@
 
 #include "KWDocument.h"
 #include "KWFrameStyle.h"
-#include "KWStyle.h"
+#include "KoParagStyle.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -147,7 +147,7 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
         else {
             ts = new KWTableStyle( "Plain", 0L, 0L );
             KWFrameStyle *fs = _doc->frameStyleCollection()->findStyle( "Plain" );
-            KWStyle *s = _doc->styleCollection()->findStyle( "Standard" );
+            KoParagStyle *s = _doc->styleCollection()->findStyle( "Standard" );
             if ( fs )
                 ts->setFrameStyle( fs );
             else {
@@ -164,9 +164,9 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
             if ( s )
                 ts->setStyle( s );
             else {
-                KWStyle * standardStyle = new KWStyle( "Standard" );
+                KoParagStyle * standardStyle = new KoParagStyle( "Standard" );
                 standardStyle->format().setFont( _doc->defaultFont() );
-                _doc->styleCollection()->addStyleTemplate( standardStyle );
+                _doc->styleCollection()->addStyle( standardStyle );
                 ts->setStyle( s );
             }
             setBodyCell ( ts );

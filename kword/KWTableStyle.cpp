@@ -176,7 +176,7 @@ void KWTableStyleCollection::updateTableStyleListOrder( const QStringList &list 
 /* Class: KWTableStyle                                            */
 /******************************************************************/
 
-KWTableStyle::KWTableStyle( const QString & name, KWStyle * _style, KWFrameStyle * _frameStyle )
+KWTableStyle::KWTableStyle( const QString & name, KoParagStyle * _style, KWFrameStyle * _frameStyle )
 {
     m_name = name;
     m_shortCut_name = QString::null;
@@ -219,9 +219,9 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
         if ( _doc->styleCollection()->styleList().count()>0 )
             m_style = _doc->styleCollection()->styleAt( 0 );
         else { // Isn't possible ( I hope )
-            KWStyle * standardStyle = new KWStyle( "Standard" );
+            KoParagStyle * standardStyle = new KoParagStyle( "Standard" );
             standardStyle->format().setFont( _doc->defaultFont() );
-            _doc->styleCollection()->addStyleTemplate( standardStyle );
+            _doc->styleCollection()->addStyle( standardStyle );
             m_style = _doc->styleCollection()->styleAt( 0 );
         }
     }

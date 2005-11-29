@@ -59,7 +59,7 @@ public:
 };
 
 KoStyleManager::KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
-                                const QPtrList<KoParagStyle> & style, const QString & activeStyleName,
+                                const KoStyleCollection& styles, const QString & activeStyleName,
                                 int flags )
     : KDialogBase( _parent, "Stylist", true,
                    i18n("Style Manager"),
@@ -71,7 +71,7 @@ KoStyleManager::KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
     noSignals=true;
     m_origStyles.setAutoDelete(false);
     m_changedStyles.setAutoDelete(false);
-    setupWidget(style); // build the widget with the buttons and the list selector.
+    setupWidget(styles); // build the widget with the buttons and the list selector.
     addGeneralTab( flags );
     KoStyleFontTab * fontTab = new KoStyleFontTab( m_tabs );
     addTab( fontTab );
@@ -126,20 +126,23 @@ void KoStyleManager::addTab( KoStyleManagerTab * tab )
     tab->layout()->activate();
 }
 
-void KoStyleManager::setupWidget(const QPtrList<KoParagStyle> & styleList)
+void KoStyleManager::setupWidget(const KoStyleCollection& styleCollection)
 {
     QFrame * frame1 = makeMainWidget();
     QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
                                                  0, KDialog::spacingHint() );
-    QPtrListIterator<KoParagStyle> style( styleList );
-    numStyles = styleList.count();
+    numStyles = styleCollection.count();
     m_stylesList = new QListBox( frame1, "stylesList" );
-    for ( ; style.current() ; ++style )
+    m_stylesList->insertStringList( styleCollection.displayNameList() );
+
+    const QValueList<KoUserStyle*> styleList = styleCollection.styleList();
+    for ( QValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+          it != end ; ++it )
     {
-        m_stylesList->insertItem( style.current()->displayName() );
-        m_origStyles.append( style.current() );
-        m_changedStyles.append( style.current() );
-        m_styleOrder<< style.current()->name();
+        KoParagStyle* style = static_cast<KoParagStyle *>( *it );
+        m_origStyles.append( style );
+        m_changedStyles.append( style );
+        m_styleOrder<< style->name();
     }
 
     frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );

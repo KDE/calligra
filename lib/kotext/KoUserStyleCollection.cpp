@@ -45,6 +45,21 @@ KoUserStyle* KoUserStyleCollection::findStyle( const QString & _name, const QStr
     return 0;
 }
 
+KoUserStyle* KoUserStyleCollection::findStyleByDisplayName( const QString& displayName ) const
+{
+    if ( m_lastStyle && m_lastStyle->displayName() == displayName )
+        return m_lastStyle;
+
+    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt ) {
+        if ( (*styleIt)->displayName() == displayName ) {
+            m_lastStyle = *styleIt;
+            return m_lastStyle;
+        }
+    }
+
+    return 0;
+}
+
 QString KoUserStyleCollection::generateUniqueName() const
 {
     int count = 1;
@@ -127,4 +142,3 @@ void KoUserStyleCollection::updateStyleListOrder( const QStringList &lst )
     m_styleList.clear();
     m_styleList = orderStyle;
 }
-

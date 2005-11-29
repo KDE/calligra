@@ -5348,13 +5348,11 @@ void KPresenterView::viewHeader()
 
 void KPresenterView::showStyle( const QString & styleName )
 {
-    QPtrListIterator<KoParagStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
-    for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
-    {
-        if ( styleIt.current()->name() == styleName ) {
-            actionFormatStyle->setCurrentItem( pos );
-            return;
-        }
+    KoParagStyle* style = m_pKPresenterDoc->styleCollection()->findStyle( styleName );
+    if ( style ) {
+        int pos = m_pKPresenterDoc->styleCollection()->indexOf( style );
+        // Select style in combo
+        actionFormatStyle->setCurrentItem( pos );
     }
 }
 
@@ -5362,15 +5360,8 @@ void KPresenterView::updateStyleList()
 {
     QString currentStyle = actionFormatStyle->currentText();
     // Generate list of styles
-    QStringList lst;
-    QPtrListIterator<KoParagStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
-    int pos = -1;
-    for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
-        QString name = styleIt.current()->displayName();
-        lst << name;
-        if ( pos == -1 && name == currentStyle )
-            pos = i;
-    }
+    const QStringList lst = m_pKPresenterDoc->styleCollection()->displayNameList();
+    const int pos = lst.findIndex( currentStyle );
     // Fill the combo - using a KSelectAction
     actionFormatStyle->setItems( lst );
     if ( pos > -1 )
@@ -5426,7 +5417,7 @@ void KPresenterView::extraStylist()
             activeStyleName = edit->cursor()->parag()->style()->displayName();
     }
     KPrStyleManager * styleManager = new KPrStyleManager( this, m_pKPresenterDoc->unit(), m_pKPresenterDoc,
-                                                          m_pKPresenterDoc->styleCollection()->styleList(), activeStyleName);
+                                                          *m_pKPresenterDoc->styleCollection(), activeStyleName);
     styleManager->exec();
     delete styleManager;
     if ( edit )
@@ -5981,26 +5972,21 @@ void KPresenterView::createStyleFromSelection()
     KPTextView *edit=m_canvas->currentTextObjectView();
     if ( edit )
     {
-        QStringList list;
-        QPtrListIterator<KoParagStyle> styleIt( m_pKPresenterDoc->styleCollection()->styleList() );
-        for ( ; styleIt.current(); ++styleIt )
-            list.append( styleIt.current()->name() );
+        KoStyleCollection* coll = m_pKPresenterDoc->styleCollection();
         KoCreateStyleDia *dia = new KoCreateStyleDia( QStringList(), this, 0 );
         if ( dia->exec() )
         {
             QString name = dia->nameOfNewStyle();
-            if ( list.contains( name ) ) // update existing style
+            KoParagStyle* style = coll->findStyleByDisplayName( name );
+            if ( style ) // update existing style
             {
                 // TODO confirmation message box
-                KoParagStyle* style = m_pKPresenterDoc->styleCollection()->findStyle( name );
-                Q_ASSERT( style );
-                if ( style )
-                    edit->updateStyleFromSelection( style );
+                edit->updateStyleFromSelection( style );
             }
             else // create new style
             {
-                KoParagStyle *style = edit->createStyleFromSelection( name );
-                m_pKPresenterDoc->styleCollection()->addStyleTemplate( style );
+                style = edit->createStyleFromSelection( name );
+                m_pKPresenterDoc->styleCollection()->addStyle( style );
                 m_pKPresenterDoc->updateAllStyleLists();
             }
             showStyle( name );

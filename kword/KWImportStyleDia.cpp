@@ -98,7 +98,7 @@ void KWImportStyleDia::loadFile()
                 {
                     QDomElement styleElem = listStyles.item( item ).toElement();
 
-                    KWStyle *sty = new KWStyle( QString::null );
+                    KoParagStyle *sty = new KoParagStyle( QString::null );
                     // Load the paraglayout from the <STYLE> element
                     sty->loadStyle( styleElem, m_doc->syntaxVersion() ); //#### wrong syntaxVersion!
 
@@ -107,7 +107,7 @@ void KWImportStyleDia::loadFile()
                         sty->setName(generateStyleName(sty->name() + "-%1"));
                     // ### TODO: we should offer the option of updating the
                     // existing style instead of creating a foo-1 style. Any ideas for a GUI?
-                    if ( currentCollection()->findTranslatedStyle( name ) )
+                    if ( currentCollection()->findStyleByDisplayName( name ) )
                         sty->setDisplayName(generateStyleDisplayName(sty->displayName() + "-%1"));
                     insertStyle.insert( name, sty->name() ); // old name -> new name
 
@@ -118,7 +118,7 @@ void KWImportStyleDia::loadFile()
                         kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 
                     // Style created, now let's try to add it
-                    m_styleList.append(sty);
+                    sty = m_styleList.addStyle(sty);
 
                     if(m_styleList.count() > followingStyles.count() )
                     {
@@ -137,9 +137,9 @@ void KWImportStyleDia::loadFile()
                     if ( insertStyle.contains( *it ) )
                         newName = (insertStyle)[ *it ];
 
-                    KWStyle * style = findStyle(newName);
+                    KoParagStyle * style = m_styleList.findStyle(newName);
                     if ( style )
-                        m_styleList.at(i++)->setFollowingStyle( style );
+                        m_styleList.styleAt(i++)->setFollowingStyle( style );
                 }
 
             }

@@ -55,6 +55,9 @@ void KoUserStyleTester::testAddStyle()
     KoUserStyle* style = new KoUserStyle( "test1" );
     COMPARE( style->name(), QString( "test1" ) );
     COMPARE( style->displayName(), QString( "test1" ) );
+    const QString displayName = "A lovely name";
+    style->setDisplayName( displayName );
+    COMPARE( style->displayName(), displayName );
 
     KoUserStyle* ret = coll.addStyle( style );
     COMPARE( ret, style );
@@ -78,8 +81,11 @@ void KoUserStyleTester::testFindStyle()
 {
     KoUserStyleCollection coll( "test" );
     KoUserStyle* style = new KoUserStyle( "test1" );
+    const QString displayName = "A lovely name";
+    style->setDisplayName( displayName );
     coll.addStyle( style );
 
+    // --- findStyle tests ---
     KoUserStyle* ret = coll.findStyle( "test1", QString::null );
     COMPARE( ret, style );
 
@@ -92,6 +98,14 @@ void KoUserStyleTester::testFindStyle()
     ret = coll.findStyle( "test1", "test1" ); // fallback used for standard style test1
     COMPARE( ret, style );
 
+    // --- findStyleByDisplayName tests ---
+    ret = coll.findStyleByDisplayName( displayName );
+    COMPARE( ret, style );
+
+    ret = coll.findStyleByDisplayName( "foo" );
+    COMPARE( ret, (KoUserStyle*)0 );
+
+    // --- indexOf tests ---
     int pos = coll.indexOf( style );
     COMPARE( pos, 0 );
 

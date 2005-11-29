@@ -93,12 +93,12 @@ void KPrImportStyleDia::loadFile()
                     // Load the style from the <STYLE> element
                     sty->loadStyle( styleElem );
 
-                    QString name = sty->displayName();
-                    if ( currentCollection()->findStyle( name ) )
+                    if ( currentCollection()->findStyle( sty->name() ) )
                         sty->setName(generateStyleName(sty->name() + "-%1"));
+                    QString name = sty->displayName();
                     // ### TODO: we should offer the option of updating the
                     // existing style instead of creating a foo-1 style. Any ideas for a GUI?
-                    if ( currentCollection()->findTranslatedStyle( name ) )
+                    if ( currentCollection()->findStyleByDisplayName( name ) )
                         sty->setDisplayName(generateStyleDisplayName(sty->displayName() + "-%1"));
                     insertStyle.insert( name, sty->name() );
 
@@ -111,7 +111,7 @@ void KPrImportStyleDia::loadFile()
 
 
                     // Style created, now let's try to add it
-                    m_styleList.append(sty);
+                    sty = m_styleList.addStyle(sty);
 
                     if(m_styleList.count() > followingStyles.count() )
                     {
@@ -130,9 +130,9 @@ void KPrImportStyleDia::loadFile()
                     if ( insertStyle.contains( *it ) )
                         newName = (insertStyle)[ *it ];
 
-                    KoParagStyle * style = findStyle(newName);
+                    KoParagStyle * style = m_styleList.findStyle(newName);
                     if ( style )
-                        m_styleList.at(i++)->setFollowingStyle( style );
+                        m_styleList.styleAt(i++)->setFollowingStyle( style );
                 }
 
             }

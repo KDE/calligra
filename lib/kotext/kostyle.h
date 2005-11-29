@@ -1,10 +1,9 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2001-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License, or (at your option) any later version.
+   License version 2 as published by the Free Software Foundation.
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
@@ -14,18 +13,16 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef kostyle_h
 #define kostyle_h
 
-#include "kotextformat.h"
-#include "koparaglayout.h"
 #include <qdom.h>
-#include <qptrlist.h>
 #include <qvaluevector.h>
-#include "KoUserStyle.h"
+#include "KoParagStyle.h"
+#include "KoUserStyleCollection.h"
 
 class KoGenStyles;
 class KoParagStyle;
@@ -46,44 +43,52 @@ struct KoStyleChangeDef {
 };
 typedef QMap<KoParagStyle *, KoStyleChangeDef> KoStyleChangeDefMap;
 
-/// TODO rename to KoParagStyleCollection
-class KOTEXT_EXPORT KoStyleCollection
+/// TODO rename to KoParagStyleCollection - or should char styles be part of it too?
+class KOTEXT_EXPORT KoStyleCollection : public KoUserStyleCollection
 {
 public:
     KoStyleCollection();
     ~KoStyleCollection();
 
-    const QPtrList<KoParagStyle> & styleList() const { return m_styleList; }
-    QStringList translatedStyleNames() const;
+    //const QPtrList<KoParagStyle> & styleList() const { return m_styleList; }
+
+    // compat method, TODO: remove
+    QStringList translatedStyleNames() const { return displayNameList(); }
 
     /**
-     * find style based on the untranslated name @p name
+     * See KoUserStyleCollection::addStyle.
+     * Overloaded for convenience.
      */
-    KoParagStyle* findStyle( const QString & name ) const;
+    KoParagStyle* addStyle( KoParagStyle* sty ) {
+        return static_cast<KoParagStyle*>( KoUserStyleCollection::addStyle( sty ) );
+    }
+
     /**
-     * find style based on the translated name @p name
+     * Find style based on the internal name @p name.
+     * Overloaded for convenience.
      */
-    KoParagStyle* findTranslatedStyle( const QString & name ) const;
+    KoParagStyle* findStyle( const QString & name ) const {
+        return static_cast<KoParagStyle*>( KoUserStyleCollection::findStyle( name, QString::fromLatin1( "Standard" ) ) );
+    }
+
+    /**
+     * Find style based on the display name @p displayName.
+     * Overloaded for convenience.
+     */
+    KoParagStyle* findStyleByDisplayName( const QString & name ) const {
+        return static_cast<KoParagStyle*>( KoUserStyleCollection::findStyleByDisplayName( name ) );
+    }
 
     /**
      * Return style number @p i.
      */
-    KoParagStyle* styleAt( int i ) { return m_styleList.at(i); }
+    KoParagStyle* styleAt( int i ) { return static_cast<KoParagStyle*>( m_styleList[i] ); }
 
-    int indexOf( KoParagStyle* style ) /*TODO const*/ { return m_styleList.find( style ); }
-
-   // #### TODO: remove Template from those method names
-    KoParagStyle* addStyleTemplate( KoParagStyle *style );
-
-    void removeStyleTemplate ( KoParagStyle *style );
 
     /// Import a number of styles (e.g. loaded from another document)
-    void importStyles( const QPtrList<KoParagStyle>& styleList );
+    void importStyles( const KoStyleCollection& styleList );
 
-    /// Change the order of the styles. Those not listed will be deleted.
-    void updateStyleListOrder( const QStringList &list );
-
-    void loadOasisStyleTemplates( KoOasisContext& context );
+    void loadOasisStyles( KoOasisContext& context );
 
     /// Save the entire style collection to OASIS
     /// @p styleType is the STYLE_* value for this style.
@@ -108,99 +113,9 @@ public:
     /// The current implementation is to return Standard or the first one in the collection.
     KoParagStyle* defaultStyle() const;
 
-    QString generateUniqueName() const;
-
-    /// delete all styles
-    void clear();
-
 #ifndef NDEBUG
     void printDebug() const;
 #endif
-
-private:
-    QPtrList<KoParagStyle> m_styleList;
-    QPtrList<KoParagStyle> m_deletedStyles;
-    mutable KoParagStyle *m_lastStyle;
-};
-
-/**
- * A KoCharStyle is a set of formatting attributes (font, color, etc.)
- * to be applied to a run of text.
- */
-class KOTEXT_EXPORT KoCharStyle : public KoUserStyle
-{
-public:
-    /** Create a blank style (with default attributes) */
-    KoCharStyle( const QString & name );
-
-    /** Copy another style */
-    KoCharStyle( const KoCharStyle & rhs ) : KoUserStyle( QString::null ) { *this = rhs; }
-
-    /** Return a format. Don't forget to use the format collection
-     * of your KoTextDocument from the result of that method. */
-    const KoTextFormat & format() const;
-    KoTextFormat & format();
-
-protected:
-    KoTextFormat m_format;
-};
-
-/**
- * A paragraph style is a combination of a character style
- * and paragraph-layout attributes, all grouped under a name.
- */
-class KOTEXT_EXPORT KoParagStyle : public KoCharStyle
-{
-public:
-    /** Create a blank style (with default attributes) */
-    KoParagStyle( const QString & name );
-
-    /** Copy another style */
-    KoParagStyle( const KoParagStyle & rhs );
-
-    ~KoParagStyle();
-
-    void operator=( const KoParagStyle & );
-
-
-    const KoParagLayout & paragLayout() const;
-    KoParagLayout & paragLayout();
-
-    KoParagStyle *followingStyle() const { return m_followingStyle; }
-    void setFollowingStyle( KoParagStyle *fst );
-
-    /// Saves the name, layout, the following style and the outline bool. Not the format.
-    /// @deprecated  (1.3 format)
-    void saveStyle( QDomElement & parentElem );
-    /// Loads the name, layout and the outline bool. Not the "following style" nor the format.
-    /// (1.3 format)
-    void loadStyle( QDomElement & parentElem, int docVersion = 2 );
-
-    /// Load the style from OASIS
-    void loadStyle( QDomElement & styleElem, KoOasisContext& context );
-    /// Save the style to OASIS
-    /// Don't use, use the method in KoStyleCollection instead
-    QString saveStyle( KoGenStyles& genStyles, int styleType, const QString& parentStyleName, KoSavingContext& context ) const;
-
-    KoParagStyle * parentStyle() const {return m_parentStyle;}
-    void setParentStyle( KoParagStyle *_style){ m_parentStyle = _style;}
-
-    int inheritedParagLayoutFlag() const { return m_inheritedParagLayoutFlag; }
-    int inheritedFormatFlag() const { return m_inheritedFormatFlag; }
-
-    void propagateChanges( int paragLayoutFlag, int formatFlag );
-
-    // If true, paragraphs with this style will be included in the table of contents
-    bool isOutline() const { return m_bOutline; }
-    void setOutline( bool b );
-
-private:
-    KoParagLayout m_paragLayout;
-    KoParagStyle *m_followingStyle;
-    KoParagStyle *m_parentStyle;
-    int m_inheritedParagLayoutFlag;
-    int m_inheritedFormatFlag;
-    bool m_bOutline;
 };
 
 #endif

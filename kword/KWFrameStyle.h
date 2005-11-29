@@ -99,7 +99,7 @@ public:
     KWFrameStyleCollection();
 
     /// WARNING: slow method, since it has to convert the item types, avoid calling this.
-    /// It should be only called for the old xml saving and for iteration by KWFrameStyleManager.
+    /// It should be only called for the old xml saving...
     QValueList<KWFrameStyle *> frameStyleList() const;
 
     /**

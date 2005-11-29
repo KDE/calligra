@@ -27,8 +27,8 @@
 #include <kostyle.h>
 
 KPrStyleManager::KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPrDocument *_doc,
-                                  const QPtrList<KoParagStyle> & style, const QString & activeStyleName)
-    : KoStyleManager(_parent,unit,style, activeStyleName)
+                                  const KoStyleCollection& styleCollection, const QString & activeStyleName)
+    : KoStyleManager(_parent,unit,styleCollection,activeStyleName)
 {
     m_doc = _doc;
 }
@@ -36,7 +36,7 @@ KPrStyleManager::KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPrDocumen
 KoParagStyle* KPrStyleManager::addStyleTemplate(KoParagStyle *style)
 {
     m_doc->setModified( true );
-    return m_doc->styleCollection()->addStyleTemplate(style);
+    return m_doc->styleCollection()->addStyle(style);
 }
 
 void KPrStyleManager::applyStyleChange( KoStyleChangeDefMap changed )
@@ -47,7 +47,7 @@ void KPrStyleManager::applyStyleChange( KoStyleChangeDefMap changed )
 void KPrStyleManager::removeStyleTemplate( KoParagStyle *style )
 {
     m_doc->setModified( true );
-    m_doc->styleCollection()->removeStyleTemplate(style);
+    m_doc->styleCollection()->removeStyle(style);
 }
 
 void KPrStyleManager::updateAllStyleLists()

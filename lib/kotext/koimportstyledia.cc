@@ -14,7 +14,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #include <klocale.h>
@@ -46,40 +46,31 @@ KoImportStyleDia::KoImportStyleDia( KoStyleCollection* currentCollection, QWidge
 
 KoImportStyleDia::~KoImportStyleDia()
 {
-    m_styleList.setAutoDelete(true);
-    m_styleList.clear();
 }
 
 void KoImportStyleDia::generateStyleList()
 {
     for (uint i = 0; i< m_listStyleName->count();i++)
     {
-        if ( !m_listStyleName->isSelected( i ))
+        if ( !m_listStyleName->isSelected( i ) )
         {
-            QString name = m_listStyleName->text( i );
             //remove this style from list
-            QPtrListIterator<KoParagStyle> styleIt( m_styleList );
-            for ( ; styleIt.current(); ++styleIt )
-            {
-                if ( styleIt.current()->displayName() == name )
-                {
-                    updateFollowingStyle( styleIt.current()->displayName() );
-                    m_styleList.remove(styleIt.current());
-                    break;
-                }
-            }
+            KoParagStyle* style = m_styleList.styleAt( i );
+            updateFollowingStyle( style );
+            m_styleList.removeStyle( style );
+            break;
         }
     }
 }
 
-void KoImportStyleDia::updateFollowingStyle(const QString & _name)
+void KoImportStyleDia::updateFollowingStyle( KoParagStyle* removedStyle )
 {
-    QPtrListIterator<KoParagStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->followingStyle()->displayName() == _name )
+    QValueList<KoUserStyle *> lst = m_styleList.styleList();
+    for( QValueList<KoUserStyle *>::Iterator it = lst.begin(); it != lst.end(); ++it ) {
+        KoParagStyle* style = static_cast<KoParagStyle *>( *it );
+        if ( style->followingStyle() == removedStyle )
         {
-            styleIt.current()->setFollowingStyle(styleIt.current());
+            style->setFollowingStyle( style );
         }
     }
 }
@@ -92,11 +83,7 @@ void KoImportStyleDia::slotLoadFile()
 
 void KoImportStyleDia::initList()
 {
-    QStringList lst;
-    QPtrListIterator<KoParagStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-        lst << styleIt.current()->displayName();
-    m_listStyleName->insertStringList(lst);
+    m_listStyleName->insertStringList( m_styleList.displayNameList() );
 }
 
 void KoImportStyleDia::slotOk()
@@ -125,39 +112,14 @@ QString KoImportStyleDia::generateStyleDisplayName( const QString & templateName
     bool exists;
     do {
         name = templateName.arg( num );
-        exists = m_currentCollection->findTranslatedStyle( name ) != 0;
+        exists = m_currentCollection->findStyleByDisplayName( name ) != 0;
         ++num;
     } while ( exists );
     return name;
 }
 
-KoParagStyle *KoImportStyleDia::findStyle( const QString & name ) const
-{
-    QPtrListIterator<KoParagStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->name() == name ) {
-            return styleIt.current();
-        }
-    }
-    return 0;
-}
-
-KoParagStyle * KoImportStyleDia::findTranslatedStyle( const QString & name ) const
-{
-    QPtrListIterator<KoParagStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->displayName() == name ) {
-            return styleIt.current();
-        }
-    }
-    return 0;
-}
-
 void KoImportStyleDia::clear()
 {
-    m_styleList.setAutoDelete(true);
     m_styleList.clear();
 }
 

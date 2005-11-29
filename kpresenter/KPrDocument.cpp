@@ -154,7 +154,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
     _duplicatePage=false;
 
     KoParagStyle* m_standardStyle = new KoParagStyle( "Standard" );
-    m_styleColl->addStyleTemplate( m_standardStyle );
+    m_styleColl->addStyle( m_standardStyle );
 
     KConfig *config = KPresenterFactory::global()->config();
     config->setGroup("Document defaults" );
@@ -646,9 +646,10 @@ QDomDocument KPrDocument::saveXML()
     {
         QDomElement styles = doc.createElement( "STYLES" );
         presenter.appendChild( styles );
-        QPtrList<KoParagStyle> styleList(m_styleColl->styleList());
-        for ( KoParagStyle * p = styleList.first(); p != 0L; p = styleList.next() )
-            saveStyle( p, styles );
+        QValueList<KoUserStyle *> styleList(m_styleColl->styleList());
+        for ( QValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+              it != end ; ++it )
+            saveStyle( static_cast<KoParagStyle *>( *it ), styles );
 
         emit sigProgress( 60 );
     }
@@ -1597,7 +1598,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
     Q_ASSERT( !oasisStyles.officeStyle().isNull() );
 
     // Load all styles before the corresponding paragraphs try to use them!
-    m_styleColl->loadOasisStyleTemplates( context );
+    m_styleColl->loadOasisStyles( context );
 
 
 
@@ -4292,7 +4293,7 @@ void KPrDocument::loadStyleTemplates( const QDomElement &stylesElem )
         KoParagStyle *s = m_styleColl->findStyle("Standard");
         kdDebug(32001) << "KPrDocument::loadStyleTemplates looking for Standard, to delete it. Found " << s << endl;
         if(s) // delete the standard style.
-            m_styleColl->removeStyleTemplate(s);
+            m_styleColl->removeStyle(s);
     }
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
@@ -4308,7 +4309,7 @@ void KPrDocument::loadStyleTemplates( const QDomElement &stylesElem )
             kdWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 
         // Style created, now let's try to add it
-        sty = m_styleColl->addStyleTemplate( sty );
+        sty = m_styleColl->addStyle( sty );
         kdDebug() << k_funcinfo << m_styleColl->styleList().count() << " styles, " << followingStyles.count() << " following styles" << endl;
         if(m_styleColl->styleList().count() > followingStyles.count() )
         {
@@ -4482,8 +4483,8 @@ void KPrDocument::updateGuideLineButton()
 void KPrDocument::loadGuideLines( const QDomElement &element )
 {
     // In early versions of KPresenter 1.2 (up to Beta 2), there is child also naed <HELPLINES>
-    // Before KPresenter 1.5 the guide lines where named helplines that is why they are still 
-    // named like this in the fileformat 
+    // Before KPresenter 1.5 the guide lines where named helplines that is why they are still
+    // named like this in the fileformat
     QDomElement guidelines = element.namedItem( "HELPLINES" ).toElement();
     if ( guidelines.isNull() )
         guidelines = element;

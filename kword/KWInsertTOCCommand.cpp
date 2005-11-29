@@ -49,7 +49,7 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
     // Create new very first paragraph
     KWTextParag *parag = static_cast<KWTextParag *>( textdoc->createParag( textdoc, body->prev() /*prev*/, body /*next*/, true ) );
     parag->append( i18n( "Table of Contents" ) );
-    KWStyle * style = findOrCreateTOCStyle( fs, -1 ); // "Contents Title"
+    KoParagStyle * style = findOrCreateTOCStyle( fs, -1 ); // "Contents Title"
     parag->setParagLayout( style->paragLayout() );
     parag->setFormat( 0, parag->string()->length(), textdoc->formatCollection()->format( &style->format() ) );
 
@@ -104,7 +104,7 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
 
         // Apply style
         int depth = p->counter() ? p->counter()->depth() : 0;
-        KWStyle * tocStyle = findOrCreateTOCStyle( fs, depth );
+        KoParagStyle * tocStyle = findOrCreateTOCStyle( fs, depth );
         parag->setParagLayout( tocStyle->paragLayout() );
         parag->setFormat( 0, parag->string()->length(), & tocStyle->format() );
     }
@@ -209,7 +209,7 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
     return posOfTable;
 }
 
-KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int depth )
+KoParagStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int depth )
 {
     // Determine style name.
     // NOTE: don't add i18n here ! This is translated using
@@ -219,10 +219,10 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
         name = QString( "Contents Head %1" ).arg( depth+1 );
     else
         name = "Contents Title";
-    KWStyle * style = fs->kWordDocument()->styleCollection()->findStyle( name );
+    KoParagStyle * style = fs->kWordDocument()->styleCollection()->findStyle( name );
     if ( !style )
     {
-        style = new KWStyle( name );
+        style = new KoParagStyle( name );
         style->format().setBold( ( ( depth==-1) || ( depth==0 ) ) ? true : false );
         style->format().setPointSize( depth==-1 ? 20 : 12 );
         if ( depth == -1 )
@@ -249,7 +249,7 @@ KWStyle * KWInsertTOCCommand::findOrCreateTOCStyle( KWTextFrameSet *fs, int dept
             style->paragLayout().setTabList( tabList );
             style->paragLayout().margins[QStyleSheetItem::MarginLeft] = KoUnit::fromUserValue( (depth*4.5), KoUnit::unit("mm") );
         }
-        style = fs->kWordDocument()->styleCollection()->addStyleTemplate( style );     // register the new style
+        style = fs->kWordDocument()->styleCollection()->addStyle( style );     // register the new style
         fs->kWordDocument()->updateAllStyleLists();                 // show it in the UI
     }
     return style;

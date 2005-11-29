@@ -36,7 +36,7 @@ public:
     KoImportStyleDia( KoStyleCollection* currentCollection, QWidget *parent, const char *name );
     ~KoImportStyleDia();
 
-    const QPtrList<KoParagStyle>& importedStyles() const { return m_styleList; }
+    const KoStyleCollection& importedStyles() const { return m_styleList; }
 
 protected slots:
     virtual void slotOk();
@@ -51,9 +51,6 @@ protected:
     QString generateStyleName( const QString & templateName ) const;
     QString generateStyleDisplayName( const QString & templateName ) const;
 
-    KoParagStyle *findStyle( const QString & _name) const;
-    KoParagStyle *findTranslatedStyle( const QString & _name) const;
-
     // @return collection of styles already present in the document
     const KoStyleCollection* currentCollection() const { return m_currentCollection; }
 
@@ -61,11 +58,11 @@ protected:
 
     // used by subclasses, hmm...
     QListBox *m_listStyleName;
-    QPtrList<KoParagStyle> m_styleList; // ## should be a KoStyleCollection?
+    KoStyleCollection m_styleList;
 
 private:
     void generateStyleList();
-    void updateFollowingStyle(const QString & _name);
+    void updateFollowingStyle( KoParagStyle* removedStyle );
 
     KoStyleCollection* m_currentCollection; // Styles already present in the document
 };

@@ -28,9 +28,11 @@
 /* Class: KWStyleManager                                          */
 /******************************************************************/
 
-KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,KWDocument *_doc, const QPtrList<KoParagStyle> & style, const QString & activeStyleName)
+KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,
+                                KWDocument *_doc, const KoStyleCollection & styles,
+                                const QString & activeStyleName)
     : KoStyleManager( _parent, unit,
-                      style, activeStyleName,
+                      styles, activeStyleName,
                       ShowIncludeInToc )
 {
     m_doc = _doc;
@@ -39,7 +41,7 @@ KWStyleManager::KWStyleManager( QWidget *_parent, KoUnit::Unit unit,KWDocument *
 KoParagStyle* KWStyleManager::addStyleTemplate(KoParagStyle *style)
 {
     m_doc->setModified( true);
-    return m_doc->styleCollection()->addStyleTemplate(style);
+    return m_doc->styleCollection()->addStyle(style);
 }
 
 void KWStyleManager::applyStyleChange( KoStyleChangeDefMap changed )
@@ -50,7 +52,7 @@ void KWStyleManager::applyStyleChange( KoStyleChangeDefMap changed )
 void KWStyleManager::removeStyleTemplate( KoParagStyle *style )
 {
     m_doc->setModified( true);
-    m_doc->styleCollection()->removeStyleTemplate(style);
+    m_doc->styleCollection()->removeStyle(style);
 }
 
 void KWStyleManager::updateAllStyleLists()

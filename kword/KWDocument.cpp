@@ -1233,7 +1233,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     Q_ASSERT( !oasisStyles.officeStyle().isNull() );
 
     // Load all styles before the corresponding paragraphs try to use them!
-    m_styleColl->loadOasisStyleTemplates( context );
+    m_styleColl->loadOasisStyles( context );
     m_frameStyleColl->loadOasisStyles( context );
     static_cast<KWVariableSettings *>( m_varColl->variableSetting() )
         ->loadNoteConfiguration( oasisStyles.officeStyle() );
@@ -1397,7 +1397,7 @@ void KWDocument::clear()
     KoParagStyle * standardStyle = new KoParagStyle( "Standard" ); // This gets translated later on
     //kdDebug() << "KWDocument::KWDocument creating standardStyle " << standardStyle << endl;
     standardStyle->format().setFont( m_defaultFont );
-    m_styleColl->addStyleTemplate( standardStyle );
+    m_styleColl->addStyle( standardStyle );
 
     // And let's do the same for framestyles
     KWFrameStyle * standardFrameStyle = new KWFrameStyle( "Plain" );
@@ -1945,7 +1945,7 @@ void KWDocument::loadStyleTemplates( const QDomElement &stylesElem )
         KoParagStyle *s = m_styleColl->findStyle("Standard");
         //kdDebug(32001) << "KWDocument::loadStyleTemplates looking for Standard, to delete it. Found " << s << endl;
         if(s) // delete the standard style.
-            m_styleColl->removeStyleTemplate(s);
+            m_styleColl->removeStyle(s);
     }
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
@@ -1974,7 +1974,7 @@ void KWDocument::loadStyleTemplates( const QDomElement &stylesElem )
             kdWarning(32001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 
         // Style created, now let's try to add it
-        sty = m_styleColl->addStyleTemplate( sty );
+        sty = m_styleColl->addStyle( sty );
 
         if(m_styleColl->styleList().count() > followingStyles.count() )
         {
@@ -3461,16 +3461,17 @@ QDomDocument KWDocument::saveXML()
 
     QDomElement styles = doc.createElement( "STYLES" );
     kwdoc.appendChild( styles );
-    QPtrList<KoParagStyle> styleList(m_styleColl->styleList());
-    for ( KoParagStyle * p = styleList.first(); p != 0L; p = styleList.next() )
-        saveStyle( p, styles );
+    QValueList<KoUserStyle *> styleList(m_styleColl->styleList());
+    for ( QValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+          it != end ; ++it )
+        saveStyle( static_cast<KoParagStyle *>( *it ), styles );
 
     QDomElement frameStyles = doc.createElement( "FRAMESTYLES" );
     kwdoc.appendChild( frameStyles );
-    const QValueList<KWFrameStyle*> frameStyleList(m_frameStyleColl->frameStyleList());
-    for ( QValueList<KWFrameStyle *>::const_iterator it = frameStyleList.begin(), end = frameStyleList.end();
+    QValueList<KoUserStyle *> frameStyleList(m_frameStyleColl->styleList());
+    for ( QValueList<KoUserStyle *>::const_iterator it = frameStyleList.begin(), end = frameStyleList.end();
           it != end ; ++it )
-        saveFrameStyle( *it, frameStyles );
+        saveFrameStyle( static_cast<KWFrameStyle *>(*it), frameStyles );
 
     QDomElement tableStyles = doc.createElement( "TABLESTYLES" );
     kwdoc.appendChild( tableStyles );
@@ -4512,17 +4513,7 @@ void KWDocument::slotCommandExecuted()
 void KWDocument::printStyleDebug()
 {
     kdDebug() << "----------------------------------------"<<endl;
-    QPtrList<KoParagStyle> styleList(m_styleColl->styleList());
-    for ( KoParagStyle * p = styleList.first(); p != 0L; p = styleList.next() )
-    {
-        kdDebug() << "Style " << p << "  " << p->name() <<endl;
-        kdDebug() << "   format: " << p->format().key() <<endl;
-        static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
-        kdDebug() << "  align: " << s_align[(Qt::AlignmentFlags)p->paragLayout().alignment] << endl;
-
-        kdDebug() << "   following style: " << p->followingStyle() << " "
-                  << ( p->followingStyle() ? p->followingStyle()->name() : QString::null ) << endl;
-    }
+    m_styleColl->printDebug();
 }
 
 void KWDocument::printDebug()

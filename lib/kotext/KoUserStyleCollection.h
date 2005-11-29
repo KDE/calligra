@@ -89,6 +89,15 @@ public:
     KoUserStyle* findStyle( const QString & name, const QString& defaultStyleName ) const;
 
     /**
+     * Find style based on the display name @p displayName.
+     * There could be 0, 1 or more than 1 style with that name,
+     * the method simply returns the first one found, or 0 if none was found.
+     * This is mostly useful to detect similar styles when importing styles
+     * from another document.
+     */
+    KoUserStyle* findStyleByDisplayName( const QString& displayName ) const;
+
+    /**
      * Remove @p style from the collection. If the style isn't in the collection, nothing happens.
      * The style mustn't be deleted yet; it is stored into a list of styles to delete in clear().
      */

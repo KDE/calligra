@@ -26,7 +26,7 @@
 #include <koparagcounter.h>
 #include <kotextdocument.h>
 
-#include "KWStyle.h"
+#include "KoParagStyle.h"
 #include "KWFrameStyleManager.h"
 #include "KWStyleManager.h"
 
@@ -112,7 +112,7 @@ void KWTableStylePreview::drawContents( QPainter *p )
 
     p->fillRect( fr, tableStyle->pFrameStyle()->backgroundColor() );
 
-   // 4: create text (KWStyle)
+   // 4: create text (KoParagStyle)
 
     KoTextParag * parag = m_textdoc->firstParag();
     int widthLU = m_zoomHandler->pixelToLayoutUnitX( fr.width() - 2 ); // keep one pixel border horizontally
@@ -632,7 +632,7 @@ void KWTableStyleManager::changeStyle()
     save();
 
 // 1. Execute stylist
-    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->unit(),m_doc, m_doc->styleCollection()->styleList());
+    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->unit(), m_doc, *m_doc->styleCollection());
     styleManager->exec();
 
 // 2. Apply changes
@@ -682,11 +682,7 @@ void KWTableStyleManager::updateAllStyleCombos()
     m_frameStyle->setCurrentItem( oldFSindex );
 
     m_style->clear();
-    QPtrListIterator<KWStyle> styleIt2( m_doc->styleCollection()->styleList() );
-    for ( int pos = 0 ; styleIt2.current(); ++styleIt2, ++pos )
-    {
-        m_style->insertItem( styleIt2.current()->name() );
-    }
+    m_style->insertStringList( m_doc->styleCollection()->displayNameList() );
     m_style->setCurrentItem( oldSindex );
 }
 

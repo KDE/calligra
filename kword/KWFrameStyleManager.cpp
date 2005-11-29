@@ -179,11 +179,11 @@ void KWFrameStyleManager::setupWidget()
     numFrameStyles = collection->count();
     m_stylesList = new QListBox( frame1, "stylesList" );
     m_stylesList->insertStringList( collection->displayNameList() );
-    const QValueList<KWFrameStyle*> styleList = collection->frameStyleList(); /*slow*/
-    for ( QValueList<KWFrameStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+    const QValueList<KoUserStyle*> styleList = collection->styleList();
+    for ( QValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
           it != end ; ++it )
     {
-        KWFrameStyle* style = *it;
+        KWFrameStyle* style = static_cast<KWFrameStyle *>( *it );
         m_frameStyles.append( new KWFrameStyleListItem( style, new KWFrameStyle(*style) ) );
         m_styleOrder << style->name();
     }

@@ -2129,7 +2129,7 @@ void KWView::showMouseMode( int mouseMode )
 
 void KWView::showStyle( const QString & styleName )
 {
-    KWStyle* style = m_doc->styleCollection()->findStyle( styleName );
+    KoParagStyle* style = m_doc->styleCollection()->findStyle( styleName );
     if ( style ) {
         int pos = m_doc->styleCollection()->indexOf( style );
         // Select style in combo
@@ -2145,15 +2145,8 @@ void KWView::updateStyleList()
 {
     QString currentStyle = m_actionFormatStyle->currentText();
     // Generate list of styles
-    QStringList lst;
-    QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
-    int pos = -1;
-    for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
-        QString name = styleIt.current()->displayName();
-        lst << name;
-        if ( pos == -1 && name == currentStyle )
-            pos = i;
-    }
+    const QStringList lst = m_doc->styleCollection()->displayNameList();
+    const int pos = lst.findIndex( currentStyle );
     // Fill the combo - using a KSelectAction
     m_actionFormatStyle->setItems( lst );
     if ( pos > -1 )
@@ -3868,7 +3861,7 @@ void KWView::extraStylist()
         if (edit->cursor() && edit->cursor()->parag() && edit->cursor()->parag()->style())
             activeStyleName = edit->cursor()->parag()->style()->displayName();
     }
-    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->unit(),m_doc, m_doc->styleCollection()->styleList(), activeStyleName );
+    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->unit(),m_doc, *m_doc->styleCollection(), activeStyleName );
     styleManager->exec();
     delete styleManager;
     if ( edit )
@@ -6271,28 +6264,21 @@ void KWView::createStyleFromSelection()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
     {
-        QStringList list;
-        QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
-        for ( ; styleIt.current(); ++styleIt )
-        {
-            list.append( styleIt.current()->name() );
-        }
+        KoStyleCollection* coll = m_doc->styleCollection();
         KoCreateStyleDia *dia = new KoCreateStyleDia( QStringList(), this, 0 );
         if ( dia->exec() )
         {
             QString name = dia->nameOfNewStyle();
-            if ( list.contains( name ) ) // update existing style
+            KoParagStyle* style = coll->findStyleByDisplayName( name );
+            if ( style ) // update existing style
             {
                 // TODO confirmation message box
-                KoParagStyle* style = m_doc->styleCollection()->findStyle( name );
-                Q_ASSERT( style );
-                if ( style )
-                    edit->updateStyleFromSelection( style );
+                edit->updateStyleFromSelection( style );
             }
             else // create new style
             {
-                KoParagStyle *style = edit->createStyleFromSelection( name );
-                m_doc->styleCollection()->addStyleTemplate( style );
+                style = edit->createStyleFromSelection( name );
+                m_doc->styleCollection()->addStyle( style );
                 m_doc->updateAllStyleLists();
             }
             showStyle( name );
