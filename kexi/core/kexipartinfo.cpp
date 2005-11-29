@@ -28,7 +28,7 @@ namespace KexiPart
 class Info::Private
 {
 	public:
-	Info::Private(const KService::Ptr& aPtr)
+	Private(const KService::Ptr& aPtr)
 	 : ptr(aPtr)
 	 , groupName(aPtr->name())
 	 , mimeType(aPtr->property("X-Kexi-TypeMime").toCString())
