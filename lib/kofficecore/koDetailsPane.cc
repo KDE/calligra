@@ -69,11 +69,12 @@ class KoTemplatesPanePrivate
 {
   public:
     KoTemplatesPanePrivate()
-      : m_instance(0)
+  : m_instance(0), m_selected(false)
     {
     }
 
     KInstance* m_instance;
+    bool m_selected;
 };
 
 
@@ -84,7 +85,8 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
   d->m_instance = instance;
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName");
-  bool dontShowAtStartUp = cfgGrp.readEntry("NoStartDlg") == QString("yes");
+  m_alwaysUseCheckBox->setChecked(cfgGrp.readEntry("NoStartDlg") == QString("yes"));
+  connect(m_alwaysUseCheckBox, SIGNAL(toggled(bool)), this, SLOT(alwaysUseToggled(bool)));
   changePalette();
 
   if(kapp) {
@@ -111,10 +113,6 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
 
     if(t->file() == fullTemplateName) {
       selectItem = item;
-
-      if(dontShowAtStartUp) {
-        item->setText(3, "yes");
-      }
     }
   }
 
@@ -128,6 +126,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
 
   if(selectItem) {
     m_documentList->setSelected(selectItem, true);
+    d->m_selected = true;
   } else {
     m_documentList->setSelected(m_documentList->firstChild(), true);
   }
@@ -145,14 +144,12 @@ void KoTemplatesPane::selectionChanged(QListViewItem* item)
     m_alwaysUseCheckBox->setEnabled(true);
     m_titleLabel->setText(item->text(0));
     m_previewLabel->setPixmap(*(item->pixmap(0)));
-    m_alwaysUseCheckBox->setChecked(item->text(3) == "yes");
     m_detailsLabel->setText(item->text(1));
   } else {
     m_openButton->setEnabled(false);
     m_alwaysUseCheckBox->setEnabled(false);
     m_titleLabel->setText("");
     m_previewLabel->setPixmap(QPixmap());
-    m_alwaysUseCheckBox->setChecked(false);
   }
 }
 
@@ -167,6 +164,7 @@ void KoTemplatesPane::openTemplate(QListViewItem* item)
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   cfgGrp.writePathEntry("FullTemplateName", item->text(2));
   cfgGrp.writeEntry("NoStartDlg", m_alwaysUseCheckBox->isChecked() ? "yes" : "no");
+  cfgGrp.writeEntry("LastReturnType", "Template");
 
   if(item) {
     emit openTemplate(item->text(2));
@@ -181,12 +179,25 @@ void KoTemplatesPane::changePalette()
   m_detailsLabel->setPalette(p);
 }
 
+bool KoTemplatesPane::isSelected()
+{
+  return d->m_selected;
+}
+
+void KoTemplatesPane::alwaysUseToggled(bool on)
+{
+  if(!on) {
+    KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
+    cfgGrp.writeEntry("NoStartDlg", "no");
+  }
+}
+
 
 class KoRecentDocumentsPanePrivate
 {
   public:
     KoRecentDocumentsPanePrivate()
-      : m_previewJob(0)
+      : m_previewJob(0), m_instance(0)
     {
     }
 
@@ -197,12 +208,14 @@ class KoRecentDocumentsPanePrivate
     }
 
     KIO::PreviewJob* m_previewJob;
+    KInstance* m_instance;
 };
 
 KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instance)
   : KoDetailsPaneBase(parent, "RecentDocsPane")
 {
   d = new KoRecentDocumentsPanePrivate;
+  d->m_instance = instance;
   KGuiItem openGItem(i18n("Open This Document"), "fileopen");
   m_openButton->setGuiItem(openGItem);
   m_alwaysUseCheckBox->hide();
@@ -293,12 +306,12 @@ void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
 
     if(static_cast<KoFileListItem*>(item)->fileItem()) {
       KFileItem* fileItem = static_cast<KoFileListItem*>(item)->fileItem();
-      QString details = "<table border=\"0\">";
+      QString details = "<center><table border=\"0\">";
       details += "<tr><td><b>Modified:</b></td>";
       details += "<td>" + fileItem->timeString(KIO::UDS_MODIFICATION_TIME) + "</td></tr>";
       details += "<tr><td><b>Accessed:</b></td>";
       details += "<td>" + fileItem->timeString(KIO::UDS_ACCESS_TIME) + "</td></tr>";
-      details += "</table>";
+      details += "</table></center>";
       m_detailsLabel->setText(details);
     } else {
       m_detailsLabel->setText("");
@@ -319,6 +332,9 @@ void KoRecentDocumentsPane::openFile()
 
 void KoRecentDocumentsPane::openFile(QListViewItem* item)
 {
+  KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
+  cfgGrp.writeEntry("LastReturnType", "File");
+
   if(item)
     emit openFile(item->text(1));
 }

@@ -89,7 +89,11 @@ void KoOpenPane::showOpenFileDialog()
 
   KURL url = KFileDialog::getOpenURL(":OpenDialog", mimeFilter.join(" "), this);
 
-  emit openExistingFile(url.path());
+  if(!url.isEmpty()) {
+    KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
+    cfgGrp.writeEntry("LastReturnType", "File");
+    emit openExistingFile(url.path());
+  }
 }
 
 void KoOpenPane::initRecentDocs()
@@ -99,13 +103,14 @@ void KoOpenPane::initRecentDocs()
   KListViewItem* item = addPane(i18n("Recent Documents"), "fileopen", recentDocPane);
 
   if(d->m_instance->config()->hasGroup("RecentFiles")) {
-    m_sectionList->setSelected(m_sectionList->firstChild(), true);
+    m_sectionList->setSelected(item, true);
   }
 }
 
 void KoOpenPane::initTemplates(const QString& templateType)
 {
   KListViewItem* selectItem = 0;
+  KListViewItem* firstItem = 0;
 
   if(!templateType.isEmpty())
   {
@@ -120,13 +125,21 @@ void KoOpenPane::initTemplates(const QString& templateType)
       connect(pane, SIGNAL(openTemplate(const QString&)), this, SIGNAL(openTemplate(const QString&)));
       KListViewItem* item = addPane(group->name(), group->first()->loadPicture(d->m_instance), pane);
 
-      if(!selectItem)
+      if(!firstItem)
+        firstItem = item;
+
+      if(pane->isSelected()) {
         selectItem = item;
+      }
     }
   }
 
-  if(!m_sectionList->selectedItem() && selectItem) {
+  KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
+
+  if(selectItem && (cfgGrp.readEntry("LastReturnType") == "Template")) {
     m_sectionList->setSelected(selectItem, true);
+  } else if(!m_sectionList->selectedItem() && firstItem) {
+    m_sectionList->setSelected(firstItem, true);
   }
 }
 

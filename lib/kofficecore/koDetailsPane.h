@@ -44,6 +44,9 @@ class KoTemplatesPane : public KoDetailsPaneBase
     KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplateGroup* group);
     ~KoTemplatesPane();
 
+    /// Returns true if a template in this group was the last one selected
+    bool isSelected();
+
   signals:
     void openTemplate(const QString&);
 
@@ -51,6 +54,7 @@ class KoTemplatesPane : public KoDetailsPaneBase
     void selectionChanged(QListViewItem* item);
     void openTemplate();
     void openTemplate(QListViewItem* item);
+    void alwaysUseToggled(bool on);
 
     void changePalette();
 
