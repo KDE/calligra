@@ -341,6 +341,7 @@ KActionCollection* KexiScriptManager::getExtensions()
 				"appdata",
 				QString("kross/%1/%2").arg( (*infoit)->getInterpretername() ).arg( (*infoit)->getWildcard() )
 			);
+			files.sort();
 			for(QStringList::Iterator fileit = files.begin(); fileit != files.end(); ++fileit) {
 				KexiScriptExtension* extension = new KexiScriptExtension((*infoit)->getInterpretername(), *fileit, d->actioncollection);
 				connect(extension, SIGNAL(activated()), this, SLOT(executeExtension()));
