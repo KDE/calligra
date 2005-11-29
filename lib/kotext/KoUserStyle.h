@@ -19,6 +19,7 @@
 #ifndef KOUSERSTYLE_H
 #define KOUSERSTYLE_H
 
+#include <koffice_export.h>
 #include <qstring.h>
 
 /**
@@ -29,7 +30,7 @@
  * i18n("Style name", "Foo") is available in a .cpp file, and create KoUserStyle("Foo").
  * The display name of the style will be set automatically to the translation of "Foo".
  */
-class KoUserStyle
+class KOTEXT_EXPORT KoUserStyle
 {
 public:
     KoUserStyle( const QString & name );

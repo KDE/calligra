@@ -4757,12 +4757,11 @@ void KPresenterView::refreshCustomMenu()
     QValueList<KAction *> actions = lst2;
     QValueList<KAction *>::ConstIterator it2 = lst2.begin();
     QValueList<KAction *>::ConstIterator end = lst2.end();
-    QMap<QString, KShortcut> shortCut;
+    QMap<QString, KShortcut> shortCuts;
 
     for (; it2 != end; ++it2 )
     {
-        if ( !(*it2)->shortcut().toString().isEmpty())
-            shortCut.insert((*it2)->text(), KShortcut( (*it2)->shortcut()));
+        shortCuts.insert((*it2)->text(), (*it2)->shortcut());
         delete *it2;
     }
 
@@ -4789,13 +4788,8 @@ void KPresenterView::refreshCustomMenu()
             {
                 lst.append( varName );
                 QCString name = QString("custom-action_%1").arg(i).latin1();
-
-                if ( shortCut.contains( varName ))
-                    act = new KAction( varName, (shortCut)[varName], this,
-                                       SLOT( insertCustomVariable() ), actionCollection(), name );
-                else
-                    act = new KAction( varName, 0, this, SLOT( insertCustomVariable() ),
-                                       actionCollection(), name );
+                act = new KAction( varName, shortCuts[varName], this,
+                                   SLOT( insertCustomVariable() ), actionCollection(), name );
 
                 act->setGroup( "custom-variable-action" );
                 actionInsertCustom->insert( act );
@@ -5387,7 +5381,7 @@ void KPresenterView::updateStyleList()
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
     KAccelGen::generate( lst, lstWithAccels );
-    QMap<QString, KShortcut> shortCut;
+    QMap<QString, KShortcut> shortCuts;
 
     KActionPtrList lst2 = actionCollection()->actions("styleList");
     QValueList<KAction *> actions = lst2;
@@ -5395,12 +5389,7 @@ void KPresenterView::updateStyleList()
     QValueList<KAction *>::ConstIterator end = lst2.end();
     for (; it != end; ++it )
     {
-        if ( !(*it)->shortcut().toString().isEmpty())
-        {
-            KoParagStyle* tmp = m_pKPresenterDoc->styleCollection()->findStyleByShortcut( (*it)->name() );
-            if ( tmp )
-                shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
-        }
+        shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
         actionFormatStyleMenu->remove( *it );
         delete *it;
     }
@@ -5409,22 +5398,13 @@ void KPresenterView::updateStyleList()
     uint i = 0;
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
-        KToggleAction* act = 0L;
-        KoParagStyle *tmp = m_pKPresenterDoc->styleCollection()->findStyle( lst[ i]);
-        if ( tmp )
+        KoParagStyle *style = m_pKPresenterDoc->styleCollection()->styleAt( i );
+        if ( style )
         {
-            QCString name = tmp->shortCutName().latin1();
-            if ( shortCut.contains(name))
-            {
-                act = new KToggleAction( (*it),
-                                         (shortCut)[name], this, SLOT( slotStyleSelected() ),
-                                         actionCollection(), name );
-
-            }
-            else
-                act = new KToggleAction( (*it),
-                                         0, this, SLOT( slotStyleSelected() ),
-                                         actionCollection(),name );
+            QString name = style->name();
+            KToggleAction* act = new KToggleAction( (*it),
+                                     shortCuts[name], this, SLOT( slotStyleSelected() ),
+                                     actionCollection(), name.utf8() );
             act->setGroup( "styleList" );
             act->setExclusiveGroup( "styleListAction" );
             actionFormatStyleMenu->insert( act );
@@ -5456,12 +5436,9 @@ void KPresenterView::extraStylist()
 // Called when selecting a style in the Format / Style menu
 void KPresenterView::slotStyleSelected()
 {
-    QString actionName = QString::fromLatin1(sender()->name());
-    if ( actionName.startsWith( "shortcut_style_" ) )//see lib/kotext/kostyle.cc
-    {
-        kdDebug(33001) << "KPresenterView::slotStyleSelected " << actionName << endl;
-        textStyleSelected( m_pKPresenterDoc->styleCollection()->findStyleByShortcut( actionName) );
-    }
+    QString actionName = QString::fromUtf8(sender()->name());
+    kdDebug(33001) << "KPresenterView::slotStyleSelected " << actionName << endl;
+    textStyleSelected( m_pKPresenterDoc->styleCollection()->findStyle( actionName ) );
 }
 
 void KPresenterView::textStyleSelected( int index )

@@ -31,9 +31,6 @@
 
 #include <qdom.h>
 
-//necessary to create unique shortcut
-int KoStyleCollection::styleNumber = 0;
-
 KoStyleCollection::KoStyleCollection()
 {
     m_styleList.setAutoDelete( false );
@@ -198,23 +195,6 @@ KoParagStyle* KoStyleCollection::findTranslatedStyle( const QString & _name ) co
 }
 
 
-KoParagStyle* KoStyleCollection::findStyleByShortcut( const QString & _shortCut ) const
-{
-    // Caching, to speed things up
-    if ( m_lastStyle && m_lastStyle->shortCutName() == _shortCut )
-        return m_lastStyle;
-
-    QPtrListIterator<KoParagStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->shortCutName() == _shortCut ) {
-            m_lastStyle = styleIt.current();
-            return m_lastStyle;
-        }
-    }
-    return 0L;
-}
-
 KoParagStyle* KoStyleCollection::addStyleTemplate( KoParagStyle * sty )
 {
     // First check for duplicates.
@@ -231,14 +211,12 @@ KoParagStyle* KoStyleCollection::addStyleTemplate( KoParagStyle * sty )
                 }
                 return p;
             } else { // internal name conflict, but it's not the same style as far as the user is concerned
-                sty->setInternalName( generateUniqueName() );
+                sty->setName( generateUniqueName() );
             }
         }
     }
     m_styleList.append( sty );
 
-    sty->setShortCutName( QString("shortcut_style_%1").arg(styleNumber).latin1());
-    styleNumber++;
     return sty;
 }
 
@@ -404,19 +382,8 @@ void KoStyleCollection::printDebug() const
 /////////////
 
 KoCharStyle::KoCharStyle( const QString & name )
+    : KoUserStyle( name )
 {
-    m_name = name;
-    m_displayName = i18n( "Style name", m_name.utf8() );
-}
-
-QString KoCharStyle::displayName() const
-{
-    return m_displayName;
-}
-
-void KoCharStyle::setDisplayName( const QString& name )
-{
-    m_displayName = name;
 }
 
 const KoTextFormat & KoCharStyle::format() const

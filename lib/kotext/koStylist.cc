@@ -399,7 +399,7 @@ void KoStyleManager::addStyle() {
     {
         m_currentStyle = new KoParagStyle( *m_currentStyle ); // Create a new style, initializing from the current one
         m_currentStyle->setDisplayName( str );
-        m_currentStyle->setInternalName( generateUniqueName() );
+        m_currentStyle->setName( generateUniqueName() );
     }
     else
         m_currentStyle = new KoParagStyle( str );

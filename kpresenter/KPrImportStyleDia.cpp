@@ -95,7 +95,7 @@ void KPrImportStyleDia::loadFile()
 
                     QString name = sty->displayName();
                     if ( currentCollection()->findStyle( name ) )
-                        sty->setInternalName(generateStyleName(sty->name() + "-%1"));
+                        sty->setName(generateStyleName(sty->name() + "-%1"));
                     // ### TODO: we should offer the option of updating the
                     // existing style instead of creating a foo-1 style. Any ideas for a GUI?
                     if ( currentCollection()->findTranslatedStyle( name ) )

@@ -346,10 +346,11 @@ void KWFrameStyleManager::save() {
 
 void KWFrameStyleManager::importFromFile()
 {
+    // ## why not just use collection->displayNameList()?
     QStringList lst;
     for ( int i = 0; i<(int)m_stylesList->count();i++)
     {
-        lst << m_stylesList->text(i );
+        lst << m_stylesList->text(i);
     }
 
     KWImportFrameTableStyleDia dia( m_doc, lst, KWImportFrameTableStyleDia::frameStyle, this, 0 );

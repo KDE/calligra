@@ -20,6 +20,7 @@
 #define KOUSERSTYLECOLLECTION_H
 
 class KoUserStyle;
+#include <koffice_export.h>
 #include <qstringlist.h>
 
 /**
@@ -28,7 +29,7 @@ class KoUserStyle;
  * and derive from KoUserStyleCollection (to add loading, saving, as well as
  * re-defined findStyle and addStyle in order to cast to the correct style class).
  */
-class KoUserStyleCollection
+class KOTEXT_EXPORT KoUserStyleCollection
 {
 public:
     /**

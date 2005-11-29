@@ -25,6 +25,7 @@
 #include <qdom.h>
 #include <qptrlist.h>
 #include <qvaluevector.h>
+#include "KoUserStyle.h"
 
 class KoGenStyles;
 class KoParagStyle;
@@ -45,6 +46,7 @@ struct KoStyleChangeDef {
 };
 typedef QMap<KoParagStyle *, KoStyleChangeDef> KoStyleChangeDefMap;
 
+/// TODO rename to KoParagStyleCollection
 class KOTEXT_EXPORT KoStyleCollection
 {
 public:
@@ -63,11 +65,12 @@ public:
      */
     KoParagStyle* findTranslatedStyle( const QString & name ) const;
 
-    KoParagStyle* findStyleByShortcut( const QString & _shortCut ) const;
     /**
      * Return style number @p i.
      */
     KoParagStyle* styleAt( int i ) { return m_styleList.at(i); }
+
+    int indexOf( KoParagStyle* style ) /*TODO const*/ { return m_styleList.find( style ); }
 
    // #### TODO: remove Template from those method names
     KoParagStyle* addStyleTemplate( KoParagStyle *style );
@@ -117,7 +120,6 @@ public:
 private:
     QPtrList<KoParagStyle> m_styleList;
     QPtrList<KoParagStyle> m_deletedStyles;
-    static int styleNumber;
     mutable KoParagStyle *m_lastStyle;
 };
 
@@ -125,41 +127,21 @@ private:
  * A KoCharStyle is a set of formatting attributes (font, color, etc.)
  * to be applied to a run of text.
  */
-class KOTEXT_EXPORT KoCharStyle
+class KOTEXT_EXPORT KoCharStyle : public KoUserStyle
 {
 public:
     /** Create a blank style (with default attributes) */
     KoCharStyle( const QString & name );
 
     /** Copy another style */
-    KoCharStyle( const KoCharStyle & rhs ) { *this = rhs; }
-
-    virtual ~KoCharStyle() {}
+    KoCharStyle( const KoCharStyle & rhs ) : KoUserStyle( QString::null ) { *this = rhs; }
 
     /** Return a format. Don't forget to use the format collection
      * of your KoTextDocument from the result of that method. */
     const KoTextFormat & format() const;
     KoTextFormat & format();
 
-    /** The internal name (untranslated if a standard style) */
-    QString name() const { return m_name; }
-    void setInternalName( const QString & name ) { m_name = name; }
-    /** The user-visible name (e.g. translated) */
-    QString displayName() const;
-    void setDisplayName( const QString& name );
-
-    QString shortCutName() const {
-        return m_shortCutName;
-    }
-
-    void setShortCutName( const QString & shortCut) {
-        m_shortCutName = shortCut;
-    }
-
 protected:
-    QString m_name;
-    QString m_shortCutName;
-    QString m_displayName;
     KoTextFormat m_format;
 };
 

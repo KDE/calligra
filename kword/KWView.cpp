@@ -1393,13 +1393,10 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
     QValueList<KAction *>::ConstIterator it = lst.begin();
     QValueList<KAction *>::ConstIterator end = lst.end();
     // Delete all actions but keep their shortcuts in mind
-    QMap<QString, KShortcut> personalShortCut;
+    QMap<QString, KShortcut> personalShortCuts;
     for (; it != end; ++it )
     {
-        if ( !(*it)->shortcut().isNull() )
-        {
-            personalShortCut.insert( (*it)->text(), (*it)->shortcut() );
-        }
+        personalShortCuts.insert( (*it)->text(), (*it)->shortcut() );
         delete *it;
     }
 
@@ -1413,7 +1410,7 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
         {
             QStringList tmp = dir.entryList("*.xml");
             for ( QStringList::Iterator it2 = tmp.begin(); it2 != tmp.end(); ++it2 )
-                files.append( QString( (*it) + (*it2)));
+                files.append( QString( (*it) + (*it2) ));
         }
     }
 
@@ -1421,7 +1418,7 @@ void KWView::loadexpressionActions( KActionMenu * parentMenu)
     int i = 0;
     int nbFile = 0;
     for( QStringList::Iterator it = files.begin(); it != files.end(); ++it,nbFile++ )
-        createExpressionActions( parentMenu,*it, i,(nbFile<(int)files.count()-1), personalShortCut );
+        createExpressionActions( parentMenu,*it, i,(nbFile<(int)files.count()-1), personalShortCuts );
 }
 
 void KWView::createExpressionActions( KActionMenu * parentMenu,const QString& filename,int &i, bool insertSepar, const QMap<QString, KShortcut>& personalShortCut )
@@ -1524,14 +1521,11 @@ void KWView::refreshCustomMenu()
     QValueList<KAction *> actions = lst2;
     QValueList<KAction *>::ConstIterator it2 = lst2.begin();
     QValueList<KAction *>::ConstIterator end = lst2.end();
-    QMap<QString, KShortcut> shortCut;
+    QMap<QString, KShortcut> shortCuts;
 
     for (; it2 != end; ++it2 )
     {
-        if ( !(*it2)->shortcut().toString().isEmpty())
-        {
-            shortCut.insert((*it2)->text(), KShortcut( (*it2)->shortcut()));
-        }
+        shortCuts.insert((*it2)->text(), (*it2)->shortcut());
         delete *it2;
     }
 
@@ -1556,13 +1550,7 @@ void KWView::refreshCustomMenu()
             {
                  lst.append( varName );
                  QCString name = QString("custom-action_%1").arg(i).latin1();
-                 if ( shortCut.contains( varName ))
-                 {
-                     act = new KAction( varName, (shortCut)[varName], this, SLOT( insertCustomVariable() ),actionCollection(), name );
-                 }
-                 else
-                     act = new KAction( varName, 0, this, SLOT( insertCustomVariable() ),
-                                        actionCollection(), name );
+                 act = new KAction( varName, shortCuts[varName], this, SLOT( insertCustomVariable() ),actionCollection(), name );
                  act->setGroup( "custom-variable-action" );
                  m_actionInsertCustom->insert( act );
                  i++;
@@ -2141,18 +2129,15 @@ void KWView::showMouseMode( int mouseMode )
 
 void KWView::showStyle( const QString & styleName )
 {
-    QPtrListIterator<KWStyle> styleIt( m_doc->styleCollection()->styleList() );
-    for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
-    {
-        if ( styleIt.current()->name() == styleName ) {
-            // Select style in combo
-            m_actionFormatStyle->setCurrentItem( pos );
-            // Check the appropriate action among the m_actionFormatStyleMenu actions
-            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( /*QString("style_%1").arg(pos).latin1()*/ styleIt.current()->shortCutName().latin1()));
-            if ( act )
-                act->setChecked( true );
-            return;
-        }
+    KWStyle* style = m_doc->styleCollection()->findStyle( styleName );
+    if ( style ) {
+        int pos = m_doc->styleCollection()->indexOf( style );
+        // Select style in combo
+        m_actionFormatStyle->setCurrentItem( pos );
+        // Check the appropriate action among the m_actionFormatStyleMenu actions
+        KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action(style->name().utf8()));
+        if ( act )
+            act->setChecked( true );
     }
 }
 
@@ -2179,43 +2164,29 @@ void KWView::updateStyleList()
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
     KAccelGen::generate( lst, lstWithAccels );
-    QMap<QString, KShortcut> shortCut;
+    QMap<QString, KShortcut> shortCuts;
 
     KActionPtrList lst2 = actionCollection()->actions("styleList");
     QValueList<KAction *> actions = lst2;
     QValueList<KAction *>::ConstIterator it = lst2.begin();
-    QValueList<KAction *>::ConstIterator end = lst2.end();
+    const QValueList<KAction *>::ConstIterator end = lst2.end();
     for (; it != end; ++it )
     {
-        if ( !(*it)->shortcut().toString().isEmpty())
-        {
-            KoParagStyle* tmp = m_doc->styleCollection()->findStyleByShortcut( (*it)->name() );
-            if ( tmp )
-                shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
-        }
+        shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
         m_actionFormatStyleMenu->remove( *it );
         delete *it;
     }
     uint i = 0;
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
-        KToggleAction* act = 0L;
         // The list lst was created (unsorted) from the style collection, so we have still the same order.
-        KoParagStyle *tmp = m_doc->styleCollection()->styleAt( i );
-        if ( tmp )
+        KoParagStyle *style = m_doc->styleCollection()->styleAt( i );
+        if ( style )
         {
-            QCString name = tmp->shortCutName().latin1();
-            if ( shortCut.contains(name))
-            {
-                act = new KToggleAction( (*it),
-                                         (shortCut)[name], this, SLOT( slotStyleSelected() ),
-                                         actionCollection(), name );
-
-            }
-            else
-                act = new KToggleAction( (*it),
-                                         0, this, SLOT( slotStyleSelected() ),
-                                         actionCollection(),name );
+            QString name = style->name();
+            KToggleAction* act = new KToggleAction( (*it),
+                                     shortCuts[name], this, SLOT( slotStyleSelected() ),
+                                     actionCollection(), name.utf8() );
             act->setGroup( "styleList" );
             act->setExclusiveGroup( "styleListAction" );
             m_actionFormatStyleMenu->insert( act );
@@ -2252,12 +2223,7 @@ void KWView::updateFrameStyleList()
     QValueList<KAction *>::ConstIterator end = lst2.end();
     for (; it != end; ++it )
     {
-        if ( !(*it)->shortcut().toString().isEmpty())
-        {
-            KWFrameStyle* style = m_doc->frameStyleCollection()->findStyle( (*it)->name() );
-            if ( style )
-                shortCuts.insert( (*it)->name(), (*it)->shortcut() );
-        }
+        shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
         m_actionFrameStyleMenu->remove(*it );
         delete *it;
     }
@@ -2269,10 +2235,11 @@ void KWView::updateFrameStyleList()
         KWFrameStyle *style = m_doc->frameStyleCollection()->frameStyleAt( i );
         if ( style )
         {
-            const KShortcut cut = shortCuts[ style->name() ]; // KDE4: use value()
+            QString name = style->name();
             KToggleAction* act = new KToggleAction( (*it),
-                                                    cut, this, SLOT( slotFrameStyleSelected() ),
-                                                    actionCollection(), style->name().utf8() /*KDE4: remove conversion*/ );
+                                                    shortCuts[name], // KDE4: use value()
+                                                    this, SLOT( slotFrameStyleSelected() ),
+                                                    actionCollection(), name.utf8() /*KDE4: remove conversion*/ );
             act->setGroup( "frameStyleList" );
             act->setExclusiveGroup( "frameStyleList" );
             m_actionFrameStyleMenu->insert( act );
@@ -2306,20 +2273,14 @@ void KWView::updateTableStyleList()
     QStringList lstWithAccels;
     // Generate unique accelerators for the menu items
     KAccelGen::generate( lst, lstWithAccels );
-    QMap<QString, KShortcut> shortCut;
+    QMap<QString, KShortcut> shortCuts;
 
-    KActionPtrList lst2 = actionCollection()->actions("tableStyleList");
-    QValueList<KAction *> actions = lst2;
-    QValueList<KAction *>::ConstIterator it = lst2.begin();
-    QValueList<KAction *>::ConstIterator end = lst2.end();
+    QValueList<KAction *> actions = actionCollection()->actions("tableStyleList");
+    QValueList<KAction *>::ConstIterator it = actions.begin();
+    const QValueList<KAction *>::ConstIterator end = actions.end();
     for (; it != end; ++it )
     {
-        if ( !(*it)->shortcut().toString().isEmpty())
-        {
-            KWTableStyle* tmp = m_doc->tableStyleCollection()->findStyleByShortcut( (*it)->name() );
-            if ( tmp )
-                shortCut.insert( tmp->shortCutName(), KShortcut( (*it)->shortcut()));
-        }
+        shortCuts.insert( QString::fromUtf8( (*it)->name() ), (*it)->shortcut() );
         m_actionTableStyleMenu->remove( *it );
         delete *it;
     }
@@ -2327,25 +2288,14 @@ void KWView::updateTableStyleList()
     uint i = 0;
     for ( QStringList::Iterator it = lstWithAccels.begin(); it != lstWithAccels.end(); ++it, ++i )
     {
-        KToggleAction* act =0L;
-
         // The list lst was created (unsorted) from the table style collection, so we have still the same order.
-        KWTableStyle *tmp = m_doc->tableStyleCollection()->tableStyleAt( i );
-        if ( tmp)
+        KWTableStyle *style = m_doc->tableStyleCollection()->tableStyleAt( i );
+        if ( style )
         {
-            QCString name = tmp->shortCutName().latin1();
-            if ( shortCut.contains(name))
-            {
-
-                act = new KToggleAction( (*it),
-                                         (shortCut)[name], this, SLOT( slotTableStyleSelected() ),
-                                         actionCollection(), name );
-            }
-            else
-                act = new KToggleAction( (*it),
-                                         0, this, SLOT( slotTableStyleSelected() ),
-                                         actionCollection(), name );
-
+            QString name = style->name();
+            KToggleAction* act = new KToggleAction( (*it),
+                                     shortCuts[name], this, SLOT( slotTableStyleSelected() ),
+                                     actionCollection(), name.utf8() );
             act->setExclusiveGroup( "tableStyleList" );
             act->setGroup( "tableStyleList" );
             m_actionTableStyleMenu->insert( act );
@@ -4337,9 +4287,9 @@ void KWView::tableProtectCells()
 // Called when selecting a style in the Format / Style menu
 void KWView::slotStyleSelected()
 {
-    QString actionName = QString::fromLatin1(sender()->name());
+    QString actionName = QString::fromUtf8(sender()->name());
     kdDebug() << "KWView::slotStyleSelected " << actionName << endl;
-    textStyleSelected( m_doc->styleCollection()->findStyleByShortcut( actionName ) );
+    textStyleSelected( m_doc->styleCollection()->findStyle( actionName ) );
 }
 
 void KWView::textStyleSelected( KoParagStyle *sty )
@@ -4397,7 +4347,6 @@ void KWView::textStyleSelected( int index )
 void KWView::slotFrameStyleSelected()
 {
     QString actionName = QString::fromUtf8(sender()->name());
-    kdDebug() << k_funcinfo << endl;
     frameStyleSelected( m_doc->frameStyleCollection()->findStyle( actionName ) );
 }
 
