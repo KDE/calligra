@@ -478,7 +478,7 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   QWhatsThis::add(valIndent, i18n( "Lets you define the amount of indenting used by the Increase Indent and Decrease Indent option in the Format menu." ) );
   valIndent->setLabel(i18n("&Indentation step (%1):").arg(KoUnit::unitName(indentUnit)));
 
-  msgError= new QCheckBox(i18n("&Show error message for invalid formulas"),tmpQGroupBox);
+  msgError= new QCheckBox(i18n("&Show error message for invalid formulae"),tmpQGroupBox);
   msgError->setChecked(m_bMsgError);
   QWhatsThis::add(msgError, i18n( "If this box is checked a message box will pop up when what you have entered into a cell cannot be understood by KSpread." ) );
 
