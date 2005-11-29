@@ -35,58 +35,6 @@ namespace KIO {
   class Job;
 }
 
-class KoRichTextListItem : public KListViewItem
-{
-  public:
-    /**
-      * constructors. The semantics remain as in QListViewItem.
-      * Although they accept a QListViewItem as parent, please
-      * don't mix KoRichTextListItem (or subclasses) with QListViewItem
-      * (or subclasses).
-    */
-    KoRichTextListItem(QListView *parent);
-    KoRichTextListItem(QListViewItem *parent);
-    KoRichTextListItem(QListView *parent, QListViewItem *after);
-    KoRichTextListItem(QListViewItem *parent, QListViewItem *after);
-
-    KoRichTextListItem(QListView *parent,
-                  QString, QString = QString::null,
-                  QString = QString::null, QString = QString::null,
-                  QString = QString::null, QString = QString::null,
-                  QString = QString::null, QString = QString::null);
-
-    KoRichTextListItem(QListViewItem *parent,
-                  QString, QString = QString::null,
-                  QString = QString::null, QString = QString::null,
-                  QString = QString::null, QString = QString::null,
-                  QString = QString::null, QString = QString::null);
-
-    KoRichTextListItem(QListView *parent, QListViewItem *after,
-                  QString, QString = QString::null,
-                  QString = QString::null, QString = QString::null,
-                  QString = QString::null, QString = QString::null,
-                  QString = QString::null, QString = QString::null);
-
-    KoRichTextListItem(QListViewItem *parent, QListViewItem *after,
-                  QString, QString = QString::null,
-                  QString = QString::null, QString = QString::null,
-                  QString = QString::null, QString = QString::null,
-                  QString = QString::null, QString = QString::null);
-
-    virtual ~KoRichTextListItem();
-
-    virtual void paintCell(QPainter *p, const QColorGroup& cg, int column, int width, int alignment);
-    virtual void setup();
-
-    void setFileItem(KFileItem* item);
-    KFileItem* fileItem() const;
-
-  private:
-    void init();
-
-    KoRichTextListItemPrivate* d;
-};
-
 class KoTemplatesPanePrivate;
 
 class KoTemplatesPane : public KoDetailsPaneBase

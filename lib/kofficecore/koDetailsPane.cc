@@ -42,156 +42,28 @@
 
 #include "koTemplates.h"
 
-class KoRichTextListItemPrivate
+class KoFileListItem : public KListViewItem
 {
   public:
-    KoRichTextListItemPrivate()
-      : m_fileItem(0)
+    KoFileListItem(KListView* listView, QListViewItem* after, const QString& filename,
+                   const QString& fullPath, KFileItem* fileItem)
+      : KListViewItem(listView, after, filename, fullPath), m_fileItem(fileItem)
     {
     }
 
-    ~KoRichTextListItemPrivate()
+    ~KoFileListItem()
     {
       delete m_fileItem;
     }
 
+    KFileItem* fileItem() const
+    {
+      return m_fileItem;
+    }
+
+  private:
     KFileItem* m_fileItem;
 };
-
-KoRichTextListItem::KoRichTextListItem(QListView *parent)
-  : KListViewItem(parent)
-{
-  init();
-}
-
-KoRichTextListItem::KoRichTextListItem(QListViewItem *parent)
-  : KListViewItem(parent)
-{
-  init();
-}
-
-KoRichTextListItem::KoRichTextListItem(QListView *parent, QListViewItem *after)
-  : KListViewItem(parent, after)
-{
-  init();
-}
-
-KoRichTextListItem::KoRichTextListItem(QListViewItem *parent, QListViewItem *after)
-  : KListViewItem(parent, after)
-{
-  init();
-}
-
-KoRichTextListItem::KoRichTextListItem(QListView *parent,
-                             QString label1, QString label2, QString label3, QString label4,
-                             QString label5, QString label6, QString label7, QString label8)
-  : KListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8)
-{
-  init();
-}
-
-KoRichTextListItem::KoRichTextListItem(QListViewItem *parent,
-                             QString label1, QString label2, QString label3, QString label4,
-                             QString label5, QString label6, QString label7, QString label8)
-  : KListViewItem(parent, label1, label2, label3, label4, label5, label6, label7, label8)
-{
-  init();
-}
-
-KoRichTextListItem::KoRichTextListItem(QListView *parent, QListViewItem *after,
-                             QString label1, QString label2, QString label3, QString label4,
-                             QString label5, QString label6, QString label7, QString label8)
-  : KListViewItem(parent, after, label1, label2, label3, label4, label5, label6, label7, label8)
-{
-  init();
-}
-
-KoRichTextListItem::KoRichTextListItem(QListViewItem *parent, QListViewItem *after,
-                             QString label1, QString label2, QString label3, QString label4,
-                             QString label5, QString label6, QString label7, QString label8)
-  : KListViewItem(parent, after, label1, label2, label3, label4, label5, label6, label7, label8)
-{
-  init();
-}
-
-KoRichTextListItem::~KoRichTextListItem()
-{
-  delete d;
-}
-
-void KoRichTextListItem::init()
-{
-  d = new KoRichTextListItemPrivate;
-}
-
-void KoRichTextListItem::paintCell(QPainter *p, const QColorGroup& cg, int column, int width, int alignment)
-{
-  QColorGroup _cg = cg;
-  const QPixmap *pm = listView()->viewport()->backgroundPixmap();
-
-  if (pm && !pm->isNull())
-  {
-    _cg.setBrush(QColorGroup::Base, QBrush(backgroundColor(column), *pm));
-    QPoint o = p->brushOrigin();
-    p->setBrushOrigin( o.x()-listView()->contentsX(), o.y()-listView()->contentsY() );
-  }
-  else
-  {
-    _cg.setColor((listView()->viewport()->backgroundMode() == Qt::FixedColor) ?
-        QColorGroup::Background : QColorGroup::Base,
-    backgroundColor(column));
-  }
-
-  QBrush paper;
-
-  if(isSelected()) {
-    paper = _cg.highlight();
-    _cg.setColor(QColorGroup::Text, _cg.highlightedText());
-  } else {
-    paper = backgroundColor(column);
-  }
-
-  if(pm && !pm->isNull()) {
-    paper.setPixmap(*pm);
-  }
-
-  p->fillRect(0, 0, width, height(), paper);
-  int py = (height() - pixmap(column)->height()) / 2;
-  p->drawPixmap(0, py, *pixmap(column));
-  QSimpleRichText richText(text(column), listView()->font());
-  richText.setWidth(width);
-  int x = pixmap(column)->width() + listView()->itemMargin();
-  int y = (height() - richText.height());
-
-  if( y > 0) {
-    y /= 2;
-  } else {
-    y = 0;
-  }
-
-  richText.draw(p, x, y, QRect(), _cg, &paper);
-}
-
-void KoRichTextListItem::setup()
-{
-  KListViewItem::setup();
-  QSimpleRichText richText(text(0), listView()->font());
-  richText.setWidth(listView()->width());
-  int h = richText.height() + (2 * listView()->itemMargin());
-  h = QMAX(height(), h);
-  setHeight(h);
-}
-
-void KoRichTextListItem::setFileItem(KFileItem* item)
-{
-  d->m_fileItem = item;
-}
-
-KFileItem* KoRichTextListItem::fileItem() const
-{
-  return d->m_fileItem;
-}
-
 
 class KoTemplatesPanePrivate
 {
@@ -222,7 +94,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
   KGuiItem openGItem(i18n("Use This Template"));
   m_openButton->setGuiItem(openGItem);
   m_documentList->header()->hide();
-  KoRichTextListItem* selectItem = 0;
+  KListViewItem* selectItem = 0;
 
   for (KoTemplate* t = group->first(); t != 0L; t = group->next()) {
     if(t->isHidden())
@@ -234,15 +106,14 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
       listText += "<br>" + t->description();
     }
 
-    KoRichTextListItem* item = new KoRichTextListItem(m_documentList, listText,
-        t->name(), t->description(), t->file());
+    KListViewItem* item = new KListViewItem(m_documentList, t->name(), t->description(), t->file());
     item->setPixmap(0, t->loadPicture(instance));
 
     if(t->file() == fullTemplateName) {
       selectItem = item;
 
       if(dontShowAtStartUp) {
-        item->setText(4, "yes");
+        item->setText(3, "yes");
       }
     }
   }
@@ -272,10 +143,10 @@ void KoTemplatesPane::selectionChanged(QListViewItem* item)
   if(item) {
     m_openButton->setEnabled(true);
     m_alwaysUseCheckBox->setEnabled(true);
-    m_titleLabel->setText(item->text(1));
+    m_titleLabel->setText(item->text(0));
     m_previewLabel->setPixmap(*(item->pixmap(0)));
-    m_alwaysUseCheckBox->setChecked(item->text(4) == "yes");
-    m_detailsLabel->setText(item->text(2));
+    m_alwaysUseCheckBox->setChecked(item->text(3) == "yes");
+    m_detailsLabel->setText(item->text(1));
   } else {
     m_openButton->setEnabled(false);
     m_alwaysUseCheckBox->setEnabled(false);
@@ -294,11 +165,11 @@ void KoTemplatesPane::openTemplate()
 void KoTemplatesPane::openTemplate(QListViewItem* item)
 {
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
-  cfgGrp.writePathEntry("FullTemplateName", item->text(3));
+  cfgGrp.writePathEntry("FullTemplateName", item->text(2));
   cfgGrp.writeEntry("NoStartDlg", m_alwaysUseCheckBox->isChecked() ? "yes" : "no");
 
   if(item) {
-    emit openTemplate(item->text(3));
+    emit openTemplate(item->text(2));
   }
 }
 
@@ -375,9 +246,8 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
         KFileItem* fileItem = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
         fileList.append(fileItem);
         QString listText = "<b>" + name + "</b><br>" + url.path();
-        KoRichTextListItem* item = new KoRichTextListItem(m_documentList, m_documentList->lastItem(),
-            listText, name, url.path());
-        item->setFileItem(fileItem);
+        KoFileListItem* item = new KoFileListItem(m_documentList,
+            m_documentList->lastItem(), name, url.path(), fileItem);
         //center all icons in 64x64 area
         QImage icon = fileItem->pixmap(64).convertToImage();
         icon.setAlphaBuffer(true);
@@ -418,11 +288,11 @@ void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
 {
   if(item) {
     m_openButton->setEnabled(true);
-    m_titleLabel->setText(item->text(1));
+    m_titleLabel->setText(item->text(0));
     m_previewLabel->setPixmap(*(item->pixmap(2)));
 
-    if(static_cast<KoRichTextListItem*>(item)->fileItem()) {
-      KFileItem* fileItem = static_cast<KoRichTextListItem*>(item)->fileItem();
+    if(static_cast<KoFileListItem*>(item)->fileItem()) {
+      KFileItem* fileItem = static_cast<KoFileListItem*>(item)->fileItem();
       QString details = "<table border=\"0\">";
       details += "<tr><td><b>Modified:</b></td>";
       details += "<td>" + fileItem->timeString(KIO::UDS_MODIFICATION_TIME) + "</td></tr>";
@@ -450,7 +320,7 @@ void KoRecentDocumentsPane::openFile()
 void KoRecentDocumentsPane::openFile(QListViewItem* item)
 {
   if(item)
-    emit openFile(item->text(2));
+    emit openFile(item->text(1));
 }
 
 void KoRecentDocumentsPane::previewResult(KIO::Job* job)
@@ -468,7 +338,7 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixm
   QListViewItemIterator it(m_documentList);
 
   while(it.current()) {
-    if(it.current()->text(2) == fileItem->url().path()) {
+    if(it.current()->text(1) == fileItem->url().path()) {
       it.current()->setPixmap(2, preview);
       QImage icon = preview.convertToImage();
       icon = icon.smoothScale(64, 64, QImage::ScaleMin);
