@@ -131,7 +131,7 @@ cell formatting to look like your current currency:
 notation. For example, 0.0012 will be changed to 1.2E-03. Going back using
 Generic cell format will display 0.0012 again. The Generic cell data format does
 not keep scientific notation so if you want this notation, you have to specify
-it using this menu item. </para>
+it using this menu item.</para>
 </listitem>
 </varlistentry>
 <varlistentry>

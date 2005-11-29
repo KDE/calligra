@@ -934,7 +934,7 @@ by &kspread;.</action>
 <guimenuitem>Protect Sheet...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
-<action>Protect the sheet with a password. A dialog pops up prompting you for a password. Unchecking this option will prompt you for the password in order to unprotect the sheet.</action>
+<action>Protect the sheet with a password. A dialog pops up prompting you for a password. Unchecking this option will prompt you for the password in order to unprotect the sheet. Protecting a sheet means protecting all cells in the sheet. In a protected sheet, the cells cannot be reformated or overwritten.</action>
 </para></listitem>
 </varlistentry>
 
@@ -945,7 +945,7 @@ by &kspread;.</action>
 <guimenuitem>Protect Doc...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
-<action>Protect the whole document with a password. A dialog pops up prompting you for a password. Unchecking this option will prompt you for the password in order to unprotect the document.</action>
+<action>Protect the whole document with a password. A dialog pops up prompting you for a password. Unchecking this option will prompt you for the password in order to unprotect the document. In a protected document you cannot rename or remove a sheet. Document protection does not mean that each individual sheet are protected.</action>
 </para></listitem>
 </varlistentry>
 

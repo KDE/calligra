@@ -225,26 +225,10 @@ range of options in the drop down selection box.
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Value of indent:</guilabel></term>
-<listitem><para>Lets you define the amount of indenting used by the 
-<guimenuitem>Increase indent</guimenuitem> option in the <guimenu>Format
-</guimenu> menu.
-</para>
-<para>The unit taken here is the one you fixe in the Configure &kspread;... dialog, in the Page Layout tab in the <guilabel>Default page units</guilabel> setting. </para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Press enter to move selection to:</guilabel></term>
+<term><guilabel>Pressing enter moves selection to:</guilabel></term>
 <listitem><para>When you have selected a cell then press the <keysym>Enter
 </keysym> key the selection will move one place to the left, right, up or 
 down as determined by the setting in this drop down selection box.
-</para></listitem>
-</varlistentry>
-
-<varlistentry>
-<term><guilabel>Show error message</guilabel></term>
-<listitem><para>If this box is checked a message box will pop up when what 
-you have entered into a cell cannot be understood by &kspread;.
 </para></listitem>
 </varlistentry>
 
@@ -257,11 +241,27 @@ calculation performed by the <link linkend="statusbarsum">Statusbar Summary
 </varlistentry>
 
 <varlistentry>
+<term><guilabel>Indentation step:</guilabel></term>
+<listitem><para>Lets you define the amount of indenting used by the 
+<guimenuitem>Increase indent</guimenuitem> option in the <guimenu>Format
+</guimenu> menu.
+</para>
+<para>The unit taken here is the one you fixe in the Configure &kspread;... dialog, in the Page Layout tab in the <guilabel>Default page units</guilabel> setting. </para></listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show error message for invalid formulas</guilabel></term>
+<listitem><para>If this box is checked a message box will pop up when what 
+you have entered into a cell cannot be understood by &kspread;.
+</para></listitem>
+</varlistentry>
+
+<!--<varlistentry>
 <term><guilabel>Show comment indicator</guilabel></term>
 <listitem><para>If this box is checked cells containing comments will be 
 marked by a small red triangle at the top right corner.
 </para></listitem>
-</varlistentry>
+</varlistentry>-->
 
 </variablelist></para>
 
