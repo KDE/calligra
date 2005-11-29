@@ -2385,7 +2385,9 @@ tristate KexiMainWindowImpl::openProject(const QString& fileName, KexiDB::Connec
 		}
 		//! @todo server-based
 		bool ok = proc->start();
-		d->showStartProcessMsg(args);
+		if (!ok) {
+			d->showStartProcessMsg(args);
+		}
 		delete proc;
 		return ok;
 	}
@@ -3781,7 +3783,8 @@ void KexiMainWindowImpl::slotProjectImportDataTable()
 #ifndef KEXI_NO_CSV_IMPORT
 	QMap<QString,QString> args;
 	args.insert("sourceType", "file");
-	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_importexport", this, this, 0, &args);
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
+		"csv_importexport", "KexiCSVImportDialog", this, this, 0, &args);
 	if (!dlg)
 		return; //error msg has been shown by KexiInternalPart
 	dlg->exec();
@@ -3794,13 +3797,21 @@ void KexiMainWindowImpl::exportItemAsDataTable(KexiPart::Item* item)
 	if (!item)
 		return;
 
+	QMap<QString,QString> args;
+	args.insert("destinationType", "file");
+	args.insert("itemId", QString::number(item->identifier()));
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
+		"csv_importexport", "KexiCSVExportWizard", this, this, 0, &args);
+	if (!dlg)
+		return; //error msg has been shown by KexiInternalPart
+	dlg->exec();
+	delete dlg;
 }
 
 void KexiMainWindowImpl::slotProjectExportDataTable()
 {
 	if (!d->nav)
 		return;
-	
 	exportItemAsDataTable(d->nav->selectedPartItem());
 }
 
@@ -3813,7 +3824,18 @@ void KexiMainWindowImpl::slotToolsScriptsAboutToShow()
 
 void KexiMainWindowImpl::slotEditCopySpecialDataTable()
 {
-	//! @todo
+	KexiPart::Item* item = d->nav->selectedPartItem();
+	if (!item)
+		return;
+	QMap<QString,QString> args;
+	args.insert("destinationType", "clipboard");
+	args.insert("itemId", QString::number(item->identifier()));
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
+		"csv_importexport", "KexiCSVExportWizard", this, this, 0, &args);
+	if (!dlg)
+		return; //error msg has been shown by KexiInternalPart
+	dlg->exec();
+	delete dlg;
 }
 
 void KexiMainWindowImpl::slotEditPasteSpecialDataTable()
@@ -3821,7 +3843,8 @@ void KexiMainWindowImpl::slotEditPasteSpecialDataTable()
 #ifndef KEXI_NO_CSV_IMPORT
 	QMap<QString,QString> args;
 	args.insert("sourceType", "clipboard");
-	QDialog *dlg = KexiInternalPart::createModalDialogInstance("csv_importexport", this, this, 0, &args);
+	QDialog *dlg = KexiInternalPart::createModalDialogInstance(
+		"csv_importexport", "KexiCSVImportDialog", this, this, 0, &args);
 	if (!dlg)
 		return; //error msg has been shown by KexiInternalPart
 	dlg->exec();
