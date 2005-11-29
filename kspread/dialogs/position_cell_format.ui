@@ -35,11 +35,11 @@
                 <string>Horizontal</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Set the content position horizontally in the cell. 
+                <string>&lt;qt&gt;Set the content position horizontally in the cell. 
 &lt;b&gt;Standard&lt;/b&gt; is default and is set from the format you choose. 
 &lt;b&gt;Left&lt;/b&gt; means the content will be displayed on the left of the cell.
 &lt;b&gt;Center&lt;/b&gt; means the content will be in the center horizontally in the cell.
-&lt;b&gt;Right&lt;/b&gt; means the content of the cell will be displayed on the right of the cell.</string>
+&lt;b&gt;Right&lt;/b&gt; means the content of the cell will be displayed on the right of the cell.&lt;/qt&gt;</string>
             </property>
             <hbox>
                 <property name="name">
@@ -140,7 +140,7 @@
                 <string>Rotation</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Your text will appear orieted in the angle you set here. Positive values wil move it anticlockwise and negative values will move it clockwise.</string>
+                <string>Your text will appear oriented in the angle you set here. Positive values will move it anticlockwise and negative values will move it clockwise.</string>
             </property>
             <hbox>
                 <property name="name">
@@ -236,6 +236,10 @@ Vertical text puts your text vertically.</string>
             </property>
             <property name="title">
                 <string>Merge Cells</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>When checked, this has the same effect as Data -&gt;Merge Cells. You need to have at least two consecutive cells selected. Those consecutive cells are then merged into a bigger one.
+When a merged cell is selected and when you uncheck this, then all cells come back to their original size as before the merging. It has the same effect as Data -&gt; Dissociate Cells.</string>
             </property>
             <hbox>
                 <property name="name">
