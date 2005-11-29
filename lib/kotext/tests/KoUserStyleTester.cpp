@@ -91,4 +91,51 @@ void KoUserStyleTester::testFindStyle()
 
     ret = coll.findStyle( "test1", "test1" ); // fallback used for standard style test1
     COMPARE( ret, style );
+
+    int pos = coll.indexOf( style );
+    COMPARE( pos, 0 );
+
+    KoUserStyle* style2 = new KoUserStyle( "test1" );
+    pos = coll.indexOf( style2 );
+    COMPARE( pos, -1 );
+    delete style2;
+}
+
+void KoUserStyleTester::testRemoveStyle()
+{
+    KoUserStyleCollection coll( "test" );
+    KoUserStyle* style = new KoUserStyle( "test1" );
+    coll.addStyle( style );
+    COMPARE( coll.count(), 1 );
+
+    // Try removing an unrelated style (noop)
+    KoUserStyle* style2 = new KoUserStyle( "test1" );
+    coll.removeStyle( style2 );
+    delete style2;
+    COMPARE( coll.count(), 1 );
+
+    coll.removeStyle( style );
+    COMPARE( coll.count(), 0 );
+}
+
+void KoUserStyleTester::testReorder()
+{
+    KoUserStyleCollection coll( "test" );
+    KoUserStyle* style = new KoUserStyle( "test1" );
+    coll.addStyle( style );
+    style = new KoUserStyle( "test2" );
+    coll.addStyle( style );
+    style = new KoUserStyle( "test3" );
+    coll.addStyle( style );
+    COMPARE( coll.count(), 3 );
+
+    QStringList newOrder;
+    newOrder << "test3";
+    newOrder << "test2";
+    newOrder << "test1";
+    coll.updateStyleListOrder( newOrder );
+    COMPARE( coll.count(), 3 );
+    QStringList displayNames = coll.displayNameList();
+    COMPARE( (int)displayNames.count(), 3 );
+    COMPARE( displayNames.join(","), newOrder.join(",") );
 }

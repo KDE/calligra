@@ -27,6 +27,8 @@ private slots:
     void testEmptyCollection();
     void testAddStyle();
     void testFindStyle();
+    void testRemoveStyle();
+    void testReorder();
 };
 
 #endif
