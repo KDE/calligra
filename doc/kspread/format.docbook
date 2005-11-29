@@ -305,8 +305,8 @@ contain the text.</para>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Rotation</guilabel></term>
-<listitem><para>Your text will appear orieted in the angle you set here.
-Positive values wil move it anticlockwise and negative values will move it
+<listitem><para>Your text will appear oriented in the angle you set here.
+Positive values will move it anticlockwise and negative values will move it
 clockwise.</para>
 </listitem>
 </varlistentry>
