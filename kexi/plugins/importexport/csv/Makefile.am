@@ -1,12 +1,12 @@
 include $(top_srcdir)/kexi/Makefile.global
 
-kde_module_LTLIBRARIES = kexihandler_csv_importexport.la
+kde_module_LTLIBRARIES = libkexihandler_csv_importexport.la
 
-kexihandler_csv_import_la_SOURCES = kexicsv_importexportpart.cpp kexicsvimportdialog.cpp \
+libkexihandler_csv_import_la_SOURCES = kexicsv_importexportpart.cpp kexicsvimportdialog.cpp \
 	kexicsvimportoptionsdlg.cpp kexicsvwidgets.cpp
 
-kexihandler_csv_import_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
-kexihandler_csv_import_la_LIBADD = ../../../core/libkexicore.la \
+libkexihandler_csv_import_la_LDFLAGS = $(all_libraries) $(KDE_PLUGIN) $(VER_INFO) -module
+libkexihandler_csv_import_la_LIBADD = ../../../core/libkexicore.la \
 	../../../migration/libkeximigrate.la
 
 INCLUDES= -I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi \
