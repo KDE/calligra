@@ -191,7 +191,7 @@ long PythonScript::getLineNo(Py::Exception& /*exception*/)
         lineobj = PyObject_GetAttrString(traceback, "tb_lineno");
 
         try {
-            Py::Module tbmodule( PyImport_Import(Py::String("traceback").ptr()) );
+            Py::Module tbmodule( PyImport_Import(Py::String("traceback").ptr()), true );
             Py::Dict tbdict = tbmodule.getDict();
             Py::Callable tbfunc(tbdict.getItem("format_tb"));
             Py::Tuple args(1);
