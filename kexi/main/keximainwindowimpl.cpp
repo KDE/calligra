@@ -3867,7 +3867,7 @@ void KexiMainWindowImpl::highlightObject(const QCString& mime, const QCString& n
 
 void KexiMainWindowImpl::slotPartItemSelectedInNavigator(KexiPart::Item* item)
 {
-	QCString selectedNavigatorItemMimeType = item ? item->mimeType() : QString::null;
+	QString selectedNavigatorItemMimeType = item ? item->mimeType() : QString::null;
 	KexiPart::Info *partInfo = Kexi::partManager().infoForMimeType( selectedNavigatorItemMimeType );
 	d->action_project_export_data_table->setEnabled( 
 		partInfo ? partInfo->isDataExportSuppored() : false );
