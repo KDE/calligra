@@ -198,15 +198,15 @@ Manager::removeClients( KexiMainWindow *win )
 }*/
 
 Part *
-Manager::partForMimeType(const QCString &mimeType)
+Manager::partForMimeType(const QString &mimeType)
 {
-	return mimeType.isEmpty() ? 0 : part(m_partsByMime[mimeType]);
+	return mimeType.isEmpty() ? 0 : part(m_partsByMime[mimeType.latin1()]);
 }
 
 Info *
-Manager::infoForMimeType(const QCString &mimeType)
+Manager::infoForMimeType(const QString &mimeType)
 {
-	Info *i = mimeType.isEmpty() ? 0 : m_partsByMime[mimeType];
+	Info *i = mimeType.isEmpty() ? 0 : m_partsByMime[mimeType.latin1()];
 	if (i)
 		return i;
 	setError(i18n("No plugin for mime type \"%1\"").arg(mimeType));
