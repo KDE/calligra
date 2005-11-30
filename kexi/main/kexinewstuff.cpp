@@ -52,8 +52,11 @@ KexiNewStuff::install(const QString &fileName)
 	if ( !archive.open( IO_ReadOnly ) )
 		return false;
 	const KArchiveDirectory *archiveDir = archive.directory();
-	const QString destDir = KFileDialog::getExistingDirectory(QString::null, parentWidget(),
+	const QString destDir = KFileDialog::getExistingDirectory(
+		":downloadExampleDatabases", parentWidget(),
 		i18n("Choose Directory Where to Install Example Database"));
+	if (destDir.isEmpty())
+		return false;
 	archiveDir->copyTo(destDir);
 	archive.close();
 

@@ -692,7 +692,7 @@ void KexiMainWindowImpl::initActions()
 	action->setWhatsThis(i18n("Opens an existing project. Currently opened project is not affected."));
 
 #ifdef HAVE_KNEWSTUFF
-	action = new KAction(i18n("&Download Example Databases..."), QString::null, KShortcut(0),
+	action = new KAction(i18n("&Download Example Databases..."), "kget", KShortcut(0),
 		this, SLOT(slotGetNewStuff()), actionCollection(), "project_download_examples");
 	action->setToolTip(i18n("Download example databases from the Internet"));
 	action->setWhatsThis(i18n("Downloads example databases from the Internet"));
@@ -3871,6 +3871,7 @@ void KexiMainWindowImpl::slotGetNewStuff()
 	if(!d->newStuff)
 		d->newStuff = new KexiNewStuff(this);
 	d->newStuff->download();
+	
 	//KNS::DownloadDialog::open(newstuff->customEngine(), "kexi/template");
 #endif
 }
