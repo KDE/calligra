@@ -2050,40 +2050,9 @@ void CellFormatPageFloat::apply( ColumnFormat *_obj )
 }
 
 CellFormatPageProtection::CellFormatPageProtection( QWidget* parent, CellFormatDialog * _dlg )
-  : QWidget( parent ),
+  : ProtectionTab( parent ),
     m_dlg( _dlg )
 {
-  QVBoxLayout * Form1Layout     = new QVBoxLayout( this, KDialog::marginHint(), KDialog::spacingHint(), "Form1Layout");
-
-  QGroupBox   * groupBox1       = new QGroupBox( 0, Qt::Vertical, i18n( "Protection" ), this, "groupBox1" );
-  groupBox1->layout()->setSpacing( KDialog::spacingHint() );
-  groupBox1->layout()->setMargin( KDialog::marginHint() );
-  QVBoxLayout * groupBox1Layout = new QVBoxLayout( groupBox1->layout() );
-
-  m_bIsProtected = new QCheckBox( i18n( "&Protected" ), groupBox1, "m_bIsProtected" );
-  QWhatsThis::add(m_bIsProtected, i18n( "If checked, the cell content will be protected. This is the default behaviour. You need to protect the whole sheet using theTools->Protect document->Protect Sheet... menu for this to work. " ) );
-  m_bIsProtected->setChecked( true );
-  groupBox1Layout->addWidget( m_bIsProtected );
-
-  m_bHideFormula = new QCheckBox( i18n( "&Hide formula" ), groupBox1, "m_bHideFormula" );
-  groupBox1Layout->addWidget( m_bHideFormula );
-
-  m_bHideAll = new QCheckBox( i18n( "Hide &all" ), groupBox1, "m_bHideAll" );
-  groupBox1Layout->addWidget( m_bHideAll );
-  Form1Layout->addWidget( groupBox1 );
-
-  QGroupBox   * groupBox2       = new QGroupBox( 0, Qt::Vertical, i18n( "Printing" ), this, "groupBox2" );
-  groupBox2->layout()->setSpacing( KDialog::spacingHint() );
-  groupBox2->layout()->setMargin( KDialog::marginHint() );
-  QVBoxLayout * groupBox2Layout = new QVBoxLayout( groupBox2->layout() );
-
-  m_bDontPrint = new QCheckBox( i18n( "&Do not print text" ), groupBox2, "m_bDontPrint" );
-  QWhatsThis::add(m_bDontPrint, i18n( "If checked, the content of the cell will not be printed. If this is not checked (default), the cell content will be printed.\nNote that you can print it even if the cell is protected." ) );
-  groupBox2Layout->addWidget( m_bDontPrint );
-  Form1Layout->addWidget( groupBox2 );
-  QSpacerItem * spacer_4 = new QSpacerItem( 20, 90, QSizePolicy::Minimum, QSizePolicy::Expanding );
-  Form1Layout->addItem( spacer_4 );
-
   m_bDontPrint->setChecked( m_dlg->bDontPrintText );
   m_bHideAll->setChecked( m_dlg->bHideAll );
   m_bHideFormula->setChecked( m_dlg->bHideFormula );

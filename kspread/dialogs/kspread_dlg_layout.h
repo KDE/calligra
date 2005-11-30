@@ -43,6 +43,7 @@
 #include "kspread_value.h"
 #include "position_cell_format.h"
 #include "font_cell_format.h"
+#include "protection_cell_format.h"
 
 #include <qpushbutton.h>
 #include <qcheckbox.h>
@@ -485,7 +486,7 @@ protected:
     CellFormatDialog *dlg;
 };
 
-class CellFormatPageProtection : public QWidget
+class CellFormatPageProtection : public ProtectionTab
 {
   Q_OBJECT
 
@@ -500,11 +501,6 @@ class CellFormatPageProtection : public QWidget
   void applyFormat( Format * _obj );
 
  protected:
-  QCheckBox *     m_bIsProtected;
-  QCheckBox *     m_bHideFormula;
-  QCheckBox *     m_bHideAll;
-  QCheckBox *     m_bDontPrint;
-
   CellFormatDialog * m_dlg;
   bool            m_isProtected;
   bool            m_hideFormula;
