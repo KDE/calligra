@@ -76,7 +76,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                         <cstring>directionComboBox</cstring>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Defaut is that the first column of the sheet is on the left. If you choose Right to Left, then the first column will be on the right and the pthers added from right to left.</string>
+                        <string>Defaut is that the first column of the sheet is on the left. If you choose Right to Left, then the first column will be on the right and the others added from right to left.</string>
                     </property>
                 </widget>
             </hbox>
@@ -89,7 +89,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                 <string>&amp;Automatic recalculation</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Controls whether formulae are recalculated automatically when the value of any cell they refer to changes.</string>
+                <string>This setting controls whether formulae are recalculated automatically when the value of any cell they refer to changes.</string>
             </property>
         </widget>
         <widget class="QCheckBox">
@@ -100,7 +100,7 @@ Suite 330, Boston, MA 02111-1307, USA.</comment>
                 <string>Show &amp;grid</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>If checked the grid (the cell limits) will be shown. This is default. If you ncheck it, the grid willl be hidden.</string>
+                <string>If checked the grid (the cell limits) will be shown. This is default. If you uncheck it, the grid willl be hidden.</string>
             </property>
         </widget>
         <widget class="QCheckBox">
