@@ -553,9 +553,12 @@ erasure of formulae.</para></note>
 <title>Cell or selected cells protection</title>
 <warning><para>Cell protection is active for all cells by default.</para></warning>
 <para>If you want only certain cells to be protected, this default protection
-must be turned off for all other cells. So you need 3 steps in order to protect
-only some cells: unprotect all the cells, select the cell to protect and protect
-them and then protect the whole sheet.</para>
+must be turned off for all other cells. For example you might  want most cells
+to accept user input so you will uncheck <guilabel>Protected</guilabel> for
+those and choose to keep protected cells that should stay unchanged (such as
+titles).So you need 3 steps in order to protect only some cells: unprotect all
+the cells, select the cells to protect and protect them and then protect the
+whole sheet.</para>
 <para>To unprotect all the cells:</para>
 <itemizedlist>
 <listitem><para>
@@ -606,12 +609,106 @@ In the dialog that appears, provide a safe password, then confirm it by typing
 it again. Click on <guibutton>OK</guibutton>.
 </para></listitem>
 <listitem><para>
-The protected cells will now be uneditable and cannot be changed without
-unprotecting the whole sheet.
+Protected cells in a protected sheet cannot be edited without unprotecting the
+whole sheet, and other sheet changes are disabled. For example, no one can
+insert rows or columns, change column width, or create embedded charts. 
 </para></listitem>
 </itemizedlist>
 </sect2>
 
+<sect2 id="hide-formula">
+<title>Hide cell formula</title>
+<para>You might want to hide your formulae so other people cannot see
+them. By default, every cell is protected and not hidden. But it is important to
+remember that these attributes have no effect unless the sheet itself is
+protected.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula1.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>A default cell with a formula</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>To hide the current cell formula or the selected cells formulae, select
+the appropriate cell or range and then choose the
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
+Format...</guimenuitem></menuchoice> menu. In the Cell format
+dialog, click the Protection tab and select <guilabel>Hide formula</guilabel>.
+After you protect the sheet, the results of the formulae will be visible, but
+the formulae will not. </para>
+<para>You have now to protect the sheet: choose
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
+Document</guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
+to display the Protect Sheet dialog box. Enter a safe password twice to prevent
+others from unprotecting the sheet. </para>
+<para>When <guilabel>Hide formula</guilabel> is enabled and
+<guilabel>Protected</guilabel> is disabled, the formula is hidden after
+protecting the sheet but the cell content can be changed.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula5.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Hide formula is enabled but the cell is not protected and the
+sheet is protected</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>When <guilabel>Hide formula</guilabel> and <guilabel>Protected</guilabel>
+are enabled, the formula is hidden after protecting the sheet and the cell
+content cannot be changed.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula2.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Hide formula and Protected are enabled in Cell Protection and the
+sheet is protected</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>Keep in mind that it is very easy to break the password for a protected
+sheet so if you are looking for real security, this is not the
+best solution.</para>
+</sect2>
+
+<sect2 id="hide-all">
+<title>Hide all in the cell</title>
+<para>You can hide both the formula and the content of the cell by
+choosing <guilabel>Hide all</guilabel> in the Cell Protection tab in the
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
+Format...</guimenuitem></menuchoice> menu. In the screenshot below, the
+cell itself is not protected (<guilabel>Protected</guilabel> is uncheck) thus
+the cell content can be changed.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula3.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase><guilabel>Hide all</guilabel> only is enabled (no cell protection) and
+the sheet is protected</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>Here the cell itself is protected so it cannot be overwritten.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="hideformula4.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase><guilabel>Hide all</guilabel> and <guilabel>Protected</guilabel> are
+enabled in Cell Protection and the sheet is protected</phrase>
+</textobject>
+</mediaobject>
+</para>
+</sect2>
 </sect1>
 
 
