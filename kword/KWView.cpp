@@ -912,6 +912,19 @@ void KWView::setupActions()
                                         actionCollection(), "format_alignblock" );
     m_actionFormatAlignBlock->setExclusiveGroup( "align" );
 
+    m_actionFormatSpacingSingle = new KToggleAction( i18n( "Line Spacing &1" ), "spacesimple", Qt::CTRL + Qt::Key_1,
+                                           this, SLOT( textSpacingSingle() ),
+                                           actionCollection(), "format_spacingsingle" );
+    m_actionFormatSpacingSingle->setExclusiveGroup( "spacing" );
+    m_actionFormatSpacingOneAndHalf = new KToggleAction( i18n( "Line Spacing 1.&5" ), "spacedouble", Qt::CTRL + Qt::Key_5,
+                                       this, SLOT( textSpacingOneAndHalf() ),
+                                       actionCollection(), "format_spacing15" );
+    m_actionFormatSpacingOneAndHalf->setExclusiveGroup( "spacing" );
+    m_actionFormatSpacingDouble = new KToggleAction( i18n( "Line Spacing &2" ), "spacetriple", Qt::CTRL + Qt::Key_2,
+                                           this, SLOT( textSpacingDouble() ),
+                                           actionCollection(), "format_spacingdouble" );
+    m_actionFormatSpacingDouble->setExclusiveGroup( "spacing" );
+    
     m_actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
                                               this, SLOT( textSuperScript() ),
                                               actionCollection(), "format_super" );
@@ -1997,6 +2010,25 @@ void KWView::showAlign( int align ) {
             m_actionFormatAlignBlock->setChecked( TRUE );
             break;
     }
+}
+
+void KWView::showSpacing( int spacing ) {
+  switch ( spacing ) 
+  {
+    case KoParagLayout::LS_SINGLE:
+      m_actionFormatSpacingSingle->setChecked( TRUE );
+      break;
+    case KoParagLayout::LS_ONEANDHALF:
+      m_actionFormatSpacingOneAndHalf->setChecked( TRUE );
+      break;
+    case KoParagLayout::LS_DOUBLE:
+      m_actionFormatSpacingDouble->setChecked( TRUE );
+      break;
+    default:
+      m_actionFormatSpacingSingle->setChecked( FALSE );
+      m_actionFormatSpacingOneAndHalf->setChecked( FALSE );
+      m_actionFormatSpacingDouble->setChecked( FALSE );
+  }
 }
 
 void KWView::showCounter( KoParagCounter &c )
@@ -4780,6 +4812,53 @@ void KWView::textAlignBlock()
         m_actionFormatAlignBlock->setChecked( true );
 }
 
+void KWView::setSpacing( KoParagLayout::SpacingType spacing, const QString& commandName)
+{
+  QPtrList<KoTextFormatInterface> lst = applicableTextInterfaces();
+  if ( lst.isEmpty() ) return;
+  QPtrListIterator<KoTextFormatInterface> it( lst );
+  KMacroCommand* macroCmd = 0L;
+  for ( ; it.current() ; ++it )
+  {
+    KoParagLayout layout( *it.current()->currentParagLayoutFormat() );
+    layout.lineSpacingType = spacing;
+
+    KCommand *cmd = it.current()->setParagLayoutFormatCommand( &layout, KoParagLayout::LineSpacing );
+    if (cmd)
+    {
+      if ( !macroCmd )
+        macroCmd = new KMacroCommand( commandName );
+      macroCmd->addCommand(cmd);
+    }
+  }
+  if( macroCmd)
+    m_doc->addCommand(macroCmd);
+}
+
+void KWView::textSpacingSingle()
+{
+  if ( m_actionFormatSpacingSingle->isChecked() )
+    setSpacing( KoParagLayout::LS_SINGLE, i18n("Set Single Line Spacing") );
+  else
+    m_actionFormatSpacingSingle->setChecked( true );
+}
+
+void KWView::textSpacingOneAndHalf()
+{
+  if ( m_actionFormatSpacingOneAndHalf->isChecked() )
+    setSpacing( KoParagLayout::LS_ONEANDHALF, i18n("Set One and a Half Line Spacing") );
+  else
+    m_actionFormatSpacingOneAndHalf->setChecked( true );
+}
+
+void KWView::textSpacingDouble()
+{
+  if ( m_actionFormatSpacingDouble->isChecked() )
+    setSpacing( KoParagLayout::LS_DOUBLE, i18n("Set Double Line Spacing") );
+  else
+    m_actionFormatSpacingDouble->setChecked( true );
+}
+
 void KWView::slotCounterStyleSelected()
 {
     QString actionName = QString::fromLatin1(sender()->name());
@@ -5577,6 +5656,9 @@ void KWView::slotFrameSetEditChanged()
     m_actionFormatBullet->setEnabled(isFootNoteSelected);
     m_actionFormatNumber->setEnabled(isFootNoteSelected);
     m_actionFormatStyle->setEnabled(isFootNoteSelected);
+    m_actionFormatSpacingSingle->setEnabled(rw);
+    m_actionFormatSpacingOneAndHalf->setEnabled(rw);
+    m_actionFormatSpacingDouble->setEnabled(rw);
     m_actionFormatSuper->setEnabled(rw);
     m_actionFormatSub->setEnabled(rw);
     m_actionFormatParag->setEnabled(state);
@@ -5753,6 +5835,8 @@ void KWView::frameSelectedChanged()
         if ( align == Qt::AlignAuto )
             align = Qt::AlignLeft; // ## seems hard to detect RTL here
         showAlign( align );
+        KoParagLayout::SpacingType spacing=paragLayout->lineSpacingType;
+        showSpacing( spacing );
     }
 
     m_gui->canvasWidget()->repaintAll(false);

@@ -3905,9 +3905,14 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
         if ( hr )
             hr->setTabList( parag->tabList() );
     }
+    if( m_paragLayout.lineSpacingType != parag->paragLayout().lineSpacingType || force)
+    {
+      m_paragLayout.lineSpacingType = parag->paragLayout().lineSpacingType;
+      m_canvas->gui()->getView()->showSpacing( m_paragLayout.lineSpacingType );
+    } 
     // There are more paragraph settings, but those that are not directly
     // visible in the UI don't need to be handled here.
-    // For instance parag and line spacing stuff, borders etc.
+    // For instance parag stuff, borders etc.
 }
 
 void KWTextFrameSetEdit::showFormat( KoTextFormat *format )

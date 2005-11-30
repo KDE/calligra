@@ -102,6 +102,7 @@ public:
     void showFormat( const KoTextFormat &currentFormat );
     void showAlign( int align );
     void showCounter( KoParagCounter &c );
+    void showSpacing( int spacing );
     /**
      * Updates the checked state of the border buttons based on the parameters.
      * @param left represents the left border being currently visible
@@ -313,6 +314,9 @@ public slots:
     void textAlignCenter();
     void textAlignRight();
     void textAlignBlock();
+    void textSpacingSingle();
+    void textSpacingOneAndHalf();
+    void textSpacingDouble();
     void textSuperScript();
     void textSubScript();
     void textIncreaseIndent();
@@ -528,6 +532,8 @@ protected:
 
     void spellCheckerRemoveHighlight();
 
+    void setSpacing( KoParagLayout::SpacingType spacing, const QString &commandName ); 
+
 private:  // methods
     void deleteSelectedFrames();
 
@@ -627,6 +633,9 @@ private: // variables
     KToggleAction *m_actionFormatAlignCenter;
     KToggleAction *m_actionFormatAlignRight;
     KToggleAction *m_actionFormatAlignBlock;
+    KToggleAction *m_actionFormatSpacingSingle;
+    KToggleAction *m_actionFormatSpacingOneAndHalf;
+    KToggleAction *m_actionFormatSpacingDouble;
     KAction *m_actionFormatParag;
     KAction *m_actionFormatFrameSet;
     KAction *m_actionFormatIncreaseIndent;
