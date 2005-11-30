@@ -81,7 +81,8 @@ in the Format Toolbar: <inlinemediaobject><imageobject>
 <variablelist>
 <varlistentry>
 <term><guilabel>Generic</guilabel></term>
-<listitem><para>This is the default format and &kspread; autodetects the actual
+<listitem><para>This is the default format and &kspread; autodetects the
+actual
 data type depending on the current cell data. By default, &kspread; right
 justifies numbers, dates and times within a cell and left justifies anything
 else.</para>
@@ -156,9 +157,14 @@ Accessibility</guimenu><guimenuitem>Time &amp;
 Dates</guimenuitem></menuchoice>.There are two formats set here: the date format
 and the short date format.</para>
 <para>A random natural number NN will be transformed in the date from 30st
-December 1899 (which is 0) with the number of days NN added. For example if you have a cell
+December 1899 (which is 0) with the number of days NN added. For example if you
+have a cell
 with 100 and you choose Data Format -&gt; Date, "1900-04-09" will be displayed
-in the cell which is 100 days after 30st December 1899. This starting date is two days early as it was a bug in Lotus 123 and then it stayed that way in Excel in order to keep compatibility. Few people will need to calculate from 1st January 1900 anyway and adding 9 days to 1st November 2000 for example will give you 10th November 2000 so all normal calculations on dates are correct.</para>
+in the cell which is 100 days after 30st December 1899. This starting date is
+two days early as it was a bug in Lotus 123 and then it stayed that way in Excel
+in order to keep compatibility. Few people will need to calculate from 1st
+January 1900 anyway and adding 9 days to 1st November 2000 for example will give
+you 10th November 2000 so all normal calculations on dates are correct.</para>
 <note><para>Just like you can drag down numbers you can also drag down dates and
 the next cells will also get dates.</para></note><!--TODO explain that better-->
 </listitem>
@@ -213,10 +219,14 @@ negative values are shown in red.
 </textobject>
 </mediaobject>
 </para>
-<para>The <guilabel>Font</guilabel> page lets you select the font family, style, size 
-and color for the current cell, including some additional options like underlined or striked out text.
+<para>The <guilabel>Font</guilabel> page lets you select the font family, style,
+size 
+and color for the current cell, including some additional options like
+underlined or striked out text.
 The lower part of the page gives a preview of the selected text format.</para>
-<para>The default font is set for all cells in the <menuchoice><guimenu>Format</guimenu><guimenuitem>Style Manager</guimenuitem></menuchoice> menu with the currently used style.</para>
+<para>The default font is set for all cells in the
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Style
+Manager</guimenuitem></menuchoice> menu with the currently used style.</para>
 <!--annma-->
 <variablelist>
 <varlistentry>
@@ -226,32 +236,51 @@ The lower part of the page gives a preview of the selected text format.</para>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Style:</guilabel></term>
-<listitem><para>Choose the style for your font for the currently selected cells. When you select several cells with different styles, the displayed style is set to <guilabel>Varying (No Change)</guilabel> and leaving it that way will keep all your current style settings for each cell. Changing to <guilabel>Roman</guilabel> for example will change all the selected cells style text to <guilabel>Roman</guilabel>.</para>
+<listitem><para>Choose the style for your font for the currently selected cells.
+When you select several cells with different styles, the displayed style is set
+to <guilabel>Varying (No Change)</guilabel> and leaving it that way will keep
+all your current style settings for each cell. Changing to
+<guilabel>Roman</guilabel> for example will change all the selected cells style
+text to <guilabel>Roman</guilabel>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Size:</guilabel></term>
-<listitem><para>Choose the size for your font for the currently selected cells. When you select several cells with different sizes, the displayed size is set to <guilabel> </guilabel> (no number written) and leaving it that way will keep all your current size settings for each cell. Changing to <guilabel>14</guilabel> for example will change all the selected cells font size to <guilabel>14</guilabel>.</para>
+<listitem><para>Choose the size for your font for the currently selected cells.
+When you select several cells with different sizes, the displayed size is set to
+<guilabel> </guilabel> (no number written) and leaving it that way will keep all
+your current size settings for each cell. Changing to <guilabel>14</guilabel>
+for example will change all the selected cells font size to
+<guilabel>14</guilabel>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Weight:</guilabel></term>
-<listitem><para>Choose the weight for your font for the currently selected cells. When you select several cells with different font weight, the displayed weight is set to <guilabel>Varying (No Change)</guilabel> and leaving it that way will keep all your current weight settings for each cell. Changing to <guilabel>Bold</guilabel> for example will change all the selected cells font weight to <guilabel>Bold</guilabel>.</para>
+<listitem><para>Choose the weight for your font for the currently selected
+cells. When you select several cells with different font weight, the displayed
+weight is set to <guilabel>Varying (No Change)</guilabel> and leaving it that
+way will keep all your current weight settings for each cell. Changing to
+<guilabel>Bold</guilabel> for example will change all the selected cells font
+weight to <guilabel>Bold</guilabel>.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Color:</guilabel></term>
-<listitem><para>Choose the color for the currently selected cells text. Clicking on the color bar will bring you the standard KDE Select Color dialog where you will be able to choose the new color. </para>
+<listitem><para>Choose the color for the currently selected cells text. Clicking
+on the color bar will bring you the standard KDE Select Color dialog where you
+will be able to choose the new color. </para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Underline</guilabel></term>
-<listitem><para>Underlines the currently selected cells text if checked. This is not checked per default.</para>
+<listitem><para>Underlines the currently selected cells text if checked. This is
+not checked per default.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Strike out</guilabel></term>
-<listitem><para>This will strike out the currently selected cells text if this is checked. This is not checked per default.</para>
+<listitem><para>This will strike out the currently selected cells text if this
+is checked. This is not checked per default.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -283,7 +312,8 @@ appear vertically rather than horizontally, or even at an angle.</para>
 Standard is default and is set from the format you choose 
 Left means the content will be displayed on the left of the cell.
 Center means the content will be in the center horizontally in the cell.
-Right means the content of the cell will be displayed on the right of the cell.</para>
+Right means the content of the cell will be displayed on the right of the
+cell.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -291,7 +321,8 @@ Right means the content of the cell will be displayed on the right of the cell.<
 <listitem><para>Set the content position vertically in the cell. 
 Top means the content will be displayed on top of the cell.
 Middle means the content will be in the middle vertically in the cell.
-Bottom means the content of the cell will be displayed at the bottom of the cell.</para>
+Bottom means the content of the cell will be displayed at the bottom of the
+cell.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -334,7 +365,8 @@ Indent</guimenuitem></menuchoice> menus.</para>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Size of cell</guilabel></term>
-<listitem><para>You set here the size of the cell, either a custom width and height or choose the default width and height.</para>
+<listitem><para>You set here the size of the cell, either a custom width and
+height or choose the default width and height.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -407,7 +439,8 @@ formula. This also needs to enable shet protection to work.
 You can hide the cell content with Hide all and again this needs sheet
 protection.
 You can learn more about all these settings in the <link
-linkend="protection">Advanced KSpread chapter, Protection section</link>.</para>
+linkend="protection">Advanced &kspread; chapter, Protection
+section</link>.</para>
 <variablelist>
 <varlistentry>
 <term><guilabel>Protected</guilabel></term>
@@ -530,6 +563,101 @@ menu. In the dialog box which appears, you can select any number of
 rows to show (use &Ctrl;+click to select multiple rows or columns).</para>
 </sect1>
 
+<sect1 id="sheet-properties">
+<title>Sheet properties</title>
+<para>You can access the current sheet properties either by right clicking
+on the sheet tab and choosing <guilabel>Sheet Properties</guilabel> or by
+using the <menuchoice><guimenu>Format</guimenu>
+<guisubmenu>Sheet</guisubmenu><guisubmenu>Sheet
+Properties</guisubmenu></menuchoice> menu. Please note that you can only
+access the sheet properties when the document or the sheet is not
+protected.</para>
+<para>You can set different properties that will be valid in the current
+sheet. Clicking on <guibutton>OK</guibutton> will validate your changes
+and <guibutton>Defaults</guibutton> will bring back the default settings.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="sheetproperties.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Sheet Properties dialog.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<variablelist>
+<varlistentry>
+<term><guilabel>Layout direction:</guilabel></term>
+<listitem><para>Let you choose the sheet orientation. Defaut is that the first
+column of the sheet is on the left. If you choose Right to Left, then the first
+column will be on the right and the others added from right to left.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Automatic recalculation</guilabel></term>
+<listitem><para> This setting controls whether formulae are recalculated
+automatically when the value of any cell they refer to changes.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show grid</guilabel></term>
+<listitem><para>If checked the grid (the cell limits) will be shown. This is
+default. If you uncheck it, the grid willl be hidden.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show page borders</guilabel></term>
+<listitem><para>If you check this option, the page borders will be drawn on your
+current sheet. Per default the page borders are not displayed. It is useful to
+see the page borders if you want to print your sheet.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show formula</guilabel></term>
+<listitem><para>If this box is checked &kspread; will display the actual
+formulae in cells rather than the results.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Hide zero</guilabel></term>
+<listitem><para>If this box is checked any cell containing the value zero will
+appear blank.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show formula indicator</guilabel></term>
+<listitem><para>If this box is checked &kspread; will display a small blue
+triangle at the bottom left corner of cells containing formulae. This is useful
+if you want to protect cells with formulae.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show comment indicator</guilabel></term>
+<listitem><para>If this box is checked cells containing comments will be marked
+by a small red triangle at the top right corner.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Show column as numbers</guilabel></term>
+<listitem><para>If this box is checked the column headings will show as numbers
+rather than as letters. Letters are default.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Use LC mode</guilabel></term>
+<listitem><para>If this box is checked the cell reference shown at the left end
+of the Formula Bar will be displayed in LC mode (i.e. L2C3) rather than in its
+normal form B3. This does not seem to be of much use at the moment.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Convert first letter to uppercase</guilabel></term>
+<listitem><para>Check this box and the first letter of any text you type in will
+automatically be converted to uppercase.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+</sect1>
 </chapter>
 
 <!--
