@@ -80,4 +80,10 @@ Group: ImportExport
 
 # Default character encoding for importing CSV (Comma-Separated Value) files.
 # If not provided, system default will be is assumed.
-- defaultEncodingForImportingCSVFiles [string]
+-defaultEncodingForImportingCSVFiles [string]
+
+Group: Recent Dirs
+# A list of recently displayed directories in file dialogs related to CSV import/export.
+-CSVImportExport [string list]
+# A list of recent displayed directories in file dialogs related to images (e.g. images within forms).
+-lastVisitedImagePath [string list]
