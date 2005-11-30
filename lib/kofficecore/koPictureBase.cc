@@ -20,7 +20,7 @@
 
 #include "koPictureBase.h"
 
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 
 #include <kdebug.h>
 #include <kconfig.h>

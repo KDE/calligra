@@ -28,8 +28,8 @@
 #include <kmessagebox.h>
 
 #include <koFilterChain.h>
-#include <koStore.h>
-#include <koStoreDevice.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 
 
 #include "pngexport.h"

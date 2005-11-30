@@ -26,7 +26,7 @@
 #include <koGlobal.h>
 #include <koGenStyles.h>
 #include <koStyleStack.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koxmlns.h>
 
 #include "kspread_util.h"

@@ -25,10 +25,10 @@
 #include "vobject_iface.h"
 #include "vstroke.h"
 
-#include <koStore.h>
+#include <KoStore.h>
 #include <koGenStyles.h>
 #include <koStyleStack.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koxmlns.h>
 #include <kooasiscontext.h>
 #include <koOasisStyles.h>

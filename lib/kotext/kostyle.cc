@@ -23,7 +23,7 @@
 
 #include <koOasisStyles.h>
 #include <koGenStyles.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koxmlns.h>
 
 #include <kdebug.h>

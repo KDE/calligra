@@ -90,8 +90,8 @@
 #include <koPartSelectAction.h>
 #include <koPictureFilePreview.h>
 #include <koSearchDia.h>
-#include <koStore.h>
-#include <koStoreDrag.h>
+#include <KoStore.h>
+#include <KoStoreDrag.h>
 #include <koTemplateCreateDia.h>
 #include <kovariable.h>
 #include <koVariableDlgs.h>

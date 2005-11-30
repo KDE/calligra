@@ -40,7 +40,7 @@
 
 #include <koGlobal.h>
 #include <koPageLayout.h>
-#include <koStore.h>
+#include <KoStore.h>
 #include <koFilterChain.h>
 #include <koFilterManager.h>
 

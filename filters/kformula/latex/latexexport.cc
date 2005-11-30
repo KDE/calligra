@@ -27,7 +27,7 @@
 #include <kmessagebox.h>
 
 #include <koFilterChain.h>
-#include <koStoreDevice.h>
+#include <KoStoreDevice.h>
 
 #include <kformuladocument.h>
 #include <kformulacontainer.h>

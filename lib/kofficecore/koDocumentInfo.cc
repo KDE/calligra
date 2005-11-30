@@ -24,8 +24,8 @@
 #include "kofficeversion.h"
 #include "koApplication.h"
 
-#include <koStoreDevice.h>
-#include <koxmlwriter.h>
+#include <KoStoreDevice.h>
+#include <KoXmlWriter.h>
 
 #include <kconfig.h>
 #include <kdebug.h>

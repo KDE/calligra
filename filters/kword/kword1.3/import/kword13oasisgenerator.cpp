@@ -29,9 +29,9 @@
 #include <kmimetype.h>
 
 #include <kofficeversion.h>
-#include <koStore.h>
-#include <koStoreDevice.h>
-#include <koxmlwriter.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
+#include <KoXmlWriter.h>
 #include <koGenStyles.h>
 #include <koDocument.h>
 

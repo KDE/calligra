@@ -26,7 +26,7 @@ DESCRIPTION
 #include <kdebug.h>
 #include <kgenericfactory.h>
 #include <koFilterChain.h>
-#include <koStoreDevice.h>
+#include <KoStoreDevice.h>
 #include <core/vdocument.h>
 
 #include "wmfimport.h"

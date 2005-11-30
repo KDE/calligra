@@ -22,7 +22,7 @@
 
 #include "kapplication.h"
 #include <kfiledialog.h>
-#include <koStore.h>
+#include <KoStore.h>
 #include "xsltdialog.h"
 
 class XSLTImportDia : public XSLTDialog

@@ -26,7 +26,7 @@
 #include <kgenericfactory.h>
 #include <koFilter.h>
 #include <koFilterChain.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 #include "svgexport.h"
 #include "vcolor.h"

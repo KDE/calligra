@@ -46,7 +46,7 @@
 
 #include <kdialogbase.h>
 #include <kdebug.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 class LATEXImportDia : public KDialogBase, public DCOPObject
 {

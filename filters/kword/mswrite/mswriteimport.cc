@@ -34,7 +34,7 @@
 #include <kgenericfactory.h>
 
 #include <koFilterChain.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 #include "list.h"
 #include "libmswrite.h"

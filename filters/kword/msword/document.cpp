@@ -36,7 +36,7 @@
 #include <wv2/paragraphproperties.h>
 #include <wv2/associatedstrings.h>
 #include <klocale.h>
-#include <koStore.h>
+#include <KoStore.h>
 #include <koFilterChain.h>
 
 

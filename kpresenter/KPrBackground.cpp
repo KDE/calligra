@@ -38,8 +38,8 @@
 using namespace std;
 #include <kdebug.h>
 #include <kglobalsettings.h>
-#include <koStore.h>
-#include <koStoreDevice.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <koGenStyles.h>
 #include <koxmlns.h>
 

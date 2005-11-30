@@ -47,8 +47,8 @@
 #include <koDocumentInfo.h>
 #include <kocommandhistory.h>
 #include <koTemplateChooseDia.h>
-#include <koxmlwriter.h>
-#include <koStoreDevice.h>
+#include <KoXmlWriter.h>
+#include <KoStoreDevice.h>
 #include <koOasisSettings.h>
 
 #include "kspread_doc.h"

@@ -21,7 +21,7 @@
 #include <qtextstream.h>
 
 #include "kdebug.h"
-#include <koStore.h>
+#include <KoStore.h>
 #include "document.h"
 #include "latex.h"
 #include <param.h>

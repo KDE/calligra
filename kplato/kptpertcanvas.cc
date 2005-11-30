@@ -35,8 +35,7 @@
 #include <qsize.h>
 #include <qptrlist.h>
 
-#include <koStore.h>
-#include <koStoreDrag.h>
+#include <KoStore.h>
 #include <ktempfile.h>
 #include <klocale.h>
 #include <kdebug.h>

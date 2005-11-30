@@ -48,10 +48,10 @@
 #include <koRect.h>
 #include <kozoomhandler.h>
 #include <kapplication.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koxmlns.h>
 #include <kodom.h>
-#include <koStore.h>
+#include <KoStore.h>
 #include <koOasisStyles.h>
 #include <koGenStyles.h>
 

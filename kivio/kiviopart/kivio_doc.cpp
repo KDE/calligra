@@ -74,14 +74,14 @@
 #include <kconfig.h>
 #include <koTemplateChooseDia.h>
 #include <koFilterManager.h>
-#include <koStoreDevice.h>
+#include <KoStoreDevice.h>
 #include "KIvioDocIface.h"
 #include <kcommand.h>
 #include <kozoomhandler.h>
 #include <koApplication.h>
 #include <kglobal.h>
 #include <kocommandhistory.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koGenStyles.h>
 #include <koOasisSettings.h>
 #include <kodom.h>

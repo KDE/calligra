@@ -26,7 +26,7 @@
 
 #include <koFilter.h>
 #include <koQueryTrader.h>
-#include <koStoreDevice.h>
+#include <KoStoreDevice.h>
 #include <koffice_export.h>
 
 class KTempFile;

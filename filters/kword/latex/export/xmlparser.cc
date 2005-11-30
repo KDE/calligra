@@ -20,7 +20,7 @@
 */
 
 #include <kdebug.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 #include "xmlparser.h"
 #include "qfile.h"

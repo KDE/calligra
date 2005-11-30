@@ -21,7 +21,7 @@
 
 
 #include <qrect.h>
-#include <koStore.h>
+#include <KoStore.h>
 #include <qdom.h>
 
 /**

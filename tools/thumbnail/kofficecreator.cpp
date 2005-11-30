@@ -33,7 +33,7 @@
 #include <kparts/componentfactory.h>
 
 #include "kofficecreator.h"
-#include <koStore.h>
+#include <KoStore.h>
 #include <koDocument.h>
 #include "koffice_export.h"
 

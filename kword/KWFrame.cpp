@@ -29,7 +29,7 @@
 
 #include <kooasiscontext.h>
 #include <koxmlns.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koStyleStack.h>
 
 #include <kcommand.h>

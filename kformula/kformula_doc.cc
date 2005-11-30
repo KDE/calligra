@@ -46,8 +46,8 @@
 #include <kstdaction.h>
 #include <kstandarddirs.h>
 #include <kurl.h>
-#include <koxmlwriter.h>
-#include <koStoreDevice.h>
+#include <KoXmlWriter.h>
+#include <KoStoreDevice.h>
 #include <ktempfile.h>
 #include <koMainWindow.h>
 

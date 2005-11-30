@@ -35,7 +35,7 @@
 #include <koRect.h>
 #include <koStyleStack.h>
 #include <koOasisStyles.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koGenStyles.h>
 #include "KPrLoadingInfo.h"
 #include "KPrBrush.h"

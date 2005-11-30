@@ -17,7 +17,7 @@
 */
 
 #include "koGenStyles.h"
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <float.h>
 #include <kdebug.h>
 

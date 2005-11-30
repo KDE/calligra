@@ -23,7 +23,7 @@
 
 #include <kdebug.h>
 
-#include <koStore.h>
+#include <KoStore.h>
 
 #include "kword13picture.h"
 #include "kword13document.h"

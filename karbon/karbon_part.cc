@@ -28,10 +28,10 @@
 #include <klocale.h>
 #include <ktempfile.h>
 #include <koTemplateChooseDia.h>
-#include <koStoreDevice.h>
+#include <KoStoreDevice.h>
 #include <koOasisStyles.h>
 #include <kooasiscontext.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koxmlns.h>
 #include <kodom.h>
 #include <koOasisSettings.h>

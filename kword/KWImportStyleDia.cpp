@@ -27,7 +27,7 @@
 #include <qlistbox.h>
 #include <kmessagebox.h>
 #include "KWImportStyleDia.h"
-#include <koStore.h>
+#include <KoStore.h>
 #include <qfile.h>
 
 #include <kfiledialog.h>

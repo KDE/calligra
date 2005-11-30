@@ -41,8 +41,8 @@
 
 #include <klocale.h>
 #include <kgenericfactory.h>
-#include <koStore.h>
-#include <koStoreDevice.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <kzip.h>
 #include <ktempfile.h>
 #include <qptrstack.h>

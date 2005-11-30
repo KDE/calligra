@@ -21,7 +21,7 @@
 #define OODRAW_IMPORT_H__
 
 #include <koFilter.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 #include <qdom.h>
 #include <qdict.h>

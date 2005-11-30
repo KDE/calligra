@@ -147,8 +147,8 @@
 #include "KPrImportStyleDia.h"
 #include <kurldrag.h>
 #include <config.h>
-#include <koStore.h>
-#include <koStoreDrag.h>
+#include <KoStore.h>
+#include <KoStoreDrag.h>
 
 #include <kspell2/broker.h>
 #include <kspell2/defaultdictionary.h>

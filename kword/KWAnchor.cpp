@@ -22,7 +22,7 @@
 #include "KWDocument.h"
 #include "KWViewMode.h"
 #include "KWView.h"
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <kdebug.h>
 
 //#define DEBUG_DRAWING

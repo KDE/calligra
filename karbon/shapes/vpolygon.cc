@@ -25,8 +25,8 @@
 #include "vtransformcmd.h"
 #include <klocale.h>
 #include <koUnit.h>
-#include <koStore.h>
-#include <koxmlwriter.h>
+#include <KoStore.h>
+#include <KoXmlWriter.h>
 #include <vdocument.h>
 
 VPolygon::VPolygon( VObject* parent, VState state ) 

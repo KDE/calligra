@@ -60,10 +60,10 @@
 #include <kooasiscontext.h>
 #include <kocommandhistory.h>
 #include <koGenStyles.h>
-#include <koStore.h>
-#include <koStoreDrag.h>
-#include <koStoreDevice.h>
-#include <koxmlwriter.h>
+#include <KoStore.h>
+#include <KoStoreDrag.h>
+#include <KoStoreDevice.h>
+#include <KoXmlWriter.h>
 #include <koOasisStore.h>
 #include <koOasisStyles.h>
 #include <koxmlns.h>

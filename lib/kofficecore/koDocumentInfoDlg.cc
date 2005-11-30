@@ -27,7 +27,7 @@
 #include "koDocument.h"
 
 #include <koGlobal.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 #include <sys/stat.h>
 #include <unistd.h>

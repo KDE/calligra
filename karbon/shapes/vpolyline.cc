@@ -25,8 +25,8 @@
 #include <klocale.h>
 #include <vdocument.h>
 
-#include <koStore.h>
-#include <koxmlwriter.h>
+#include <KoStore.h>
+#include <KoXmlWriter.h>
 
 VPolyline::VPolyline( VObject* parent, VState state )
 	: VPath( parent, state )

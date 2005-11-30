@@ -27,7 +27,7 @@
 #include "KWPartFrameSet.h"
 #include "KWPageManager.h"
 
-#include <koStore.h>
+#include <KoStore.h>
 #include <kooasiscontext.h>
 #include <koOasisStyles.h>
 #include <koOasisStore.h>

@@ -26,7 +26,7 @@
 #include <ktempfile.h>
 
 #include <koFilterChain.h>
-#include <koStoreDevice.h>
+#include <KoStoreDevice.h>
 
 #include "kword13parser.h"
 #include "kword13document.h"

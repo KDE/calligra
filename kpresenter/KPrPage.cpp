@@ -47,8 +47,8 @@
 #include <koQueryTrader.h>
 #include "KPrDocument.h"
 
-#include <koStore.h>
-#include <koStoreDevice.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <kotextzoomhandler.h>
 #include <koxmlns.h>
 #include "KoPointArray.h"
@@ -60,7 +60,7 @@
 #include <kostyle.h>
 #include <kovariable.h>
 #include <koGenStyles.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <ktempfile.h>
 #include <qbuffer.h>
 #include <qregexp.h>

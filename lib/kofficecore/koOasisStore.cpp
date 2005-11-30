@@ -21,9 +21,9 @@
 #include "koDocument.h"
 #include "koxmlns.h"
 #include "kodom.h"
-#include <koStore.h>
-#include <koStoreDevice.h>
-#include <koxmlwriter.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
+#include <KoXmlWriter.h>
 
 #include <ktempfile.h>
 #include <kdebug.h>

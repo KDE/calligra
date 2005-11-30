@@ -23,10 +23,10 @@
 #include <assert.h>
 #include <stdlib.h>
 
-#include "koStore.h"
-#include "koTarStore.h"
-#include "koZipStore.h"
-#include "koDirectoryStore.h"
+#include "KoStore.h"
+#include "KoTarStore.h"
+#include "KoZipStore.h"
+#include "KoDirectoryStore.h"
 
 #include <qfileinfo.h>
 #include <qfile.h>

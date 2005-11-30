@@ -25,7 +25,7 @@
 #include <kgenericfactory.h>
 #include <koFilterChain.h>
 
-#include <koStore.h>
+#include <KoStore.h>
 
 #include <khtmlreader.h>
 #include <kwdwriter.h>

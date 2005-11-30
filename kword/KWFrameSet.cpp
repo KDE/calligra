@@ -35,7 +35,7 @@
 
 #include <kooasiscontext.h>
 #include <koxmlns.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 
 #include <qpopupmenu.h>
 

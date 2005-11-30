@@ -25,7 +25,7 @@
 
 #include <mreportviewer.h>
 
-#include <koStoreDevice.h>
+#include <KoStore.h>
 
 #include <kdebug.h>
 #include <kaction.h>

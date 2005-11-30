@@ -31,7 +31,7 @@
 
 #include <koDocumentInfo.h>
 #include <koOasisStyles.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koDocument.h>
 #include <koxmlns.h>
 #include <kodom.h>

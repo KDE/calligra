@@ -27,7 +27,7 @@
 #include <kgenericfactory.h>
 #include <kdebug.h>
 #include <koGlobal.h>
-#include <koStore.h>
+#include <KoStore.h>
 #include <kapplication.h>
 #include <kprogress.h>
 

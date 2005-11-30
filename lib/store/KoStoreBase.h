@@ -18,12 +18,34 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koStoreBase.h"
+#ifndef KOSTORE_BASE_H
+#define KOSTORE_BASE_H
 
-KoStoreBase::KoStoreBase(void) : m_fileMode(Local), m_window(0)
-{
-}
+#include <kurl.h>
 
-KoStoreBase::~KoStoreBase(void)
+#include "KoStore.h"
+
+/**
+ * Helper class for KoStore (mainly for remote file support)
+ * @since 1.4
+ */
+class KoStoreBase : public KoStore
 {
-}
+public:
+    KoStoreBase(void);
+    virtual ~KoStoreBase(void);
+public:
+    enum FileMode { /*Bad=0,*/ Local=1, RemoteRead, RemoteWrite };
+
+protected:
+    /**
+     * original URL of the remote file
+     * (undefined for a local file)
+     */
+    KURL m_url;
+    FileMode m_fileMode;
+    QString m_localFileName;
+    QWidget* m_window;
+};
+
+#endif //KOSTORE_BASE_H

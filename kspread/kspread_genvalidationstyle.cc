@@ -20,7 +20,7 @@
 
 #include "kspread_genvalidationstyle.h"
 #include "kspread_cell.h"
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 
 using namespace KSpread;
 

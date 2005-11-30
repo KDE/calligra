@@ -22,7 +22,7 @@
 #include "koparagcounter.h"
 #include "kostyle.h"
 #include "kooasiscontext.h"
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koxmlns.h>
 #include <kodom.h>
 #include <koGenStyles.h>

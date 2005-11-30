@@ -24,7 +24,7 @@
 #include "kostyle.h"
 #include "kovariable.h"
 #include <kooasiscontext.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koGenStyles.h>
 #include <kodom.h>
 #include <koxmlns.h>

@@ -23,8 +23,8 @@
 
 #include <qdom.h>
 
-#include <koStore.h>
-#include <koxmlwriter.h>
+#include <KoStore.h>
+#include <KoXmlWriter.h>
 #include <kooasiscontext.h>
 #include <koStyleStack.h>
 

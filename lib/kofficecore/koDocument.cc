@@ -32,8 +32,8 @@
 #include "koxmlns.h"
 #include "koOpenPane.h"
 
-#include <koStoreDevice.h>
-#include <koxmlwriter.h>
+#include <KoStoreDevice.h>
+#include <KoXmlWriter.h>
 
 #include <kapplication.h>
 #include <kdebug.h>

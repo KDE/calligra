@@ -39,7 +39,7 @@ DESCRIPTION
 #include "KWPage.h"
 
 #include <kooasiscontext.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <kodom.h>
 #include <koxmlns.h>
 #include <kotextobject.h> // for customItemChar !

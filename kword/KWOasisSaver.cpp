@@ -17,10 +17,10 @@
 */
 
 #include "KWOasisSaver.h"
-#include <koStore.h>
+#include <KoStore.h>
 #include <koOasisStore.h>
 #include <kooasiscontext.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include "KWDocument.h"
 
 KWOasisSaver::KWOasisSaver( KWDocument* doc )

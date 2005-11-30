@@ -31,7 +31,7 @@
 #include <qdragobject.h>
 
 #include <koOasisStyles.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koDocument.h>
 #include <koDocumentChild.h>
 #include <koOasisSettings.h> // for KoOasisSettings::NamedMap

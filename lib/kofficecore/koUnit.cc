@@ -20,11 +20,13 @@
 
 //#include <koGlobal.h>
 #include "koUnit.h"
+#include <KoXmlWriter.h>
+
 #include <klocale.h>
 #include <kglobal.h>
-#include <qregexp.h>
 #include <kdebug.h>
-#include "koxmlwriter.h"
+
+#include <qregexp.h>
 #include <qdom.h>
 
 QStringList KoUnit::listOfUnitName()

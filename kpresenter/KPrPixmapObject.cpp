@@ -38,8 +38,8 @@
 #include <kimageeffect.h>
 #include <koSize.h>
 #include <kotextzoomhandler.h>
-#include <koStore.h>
-#include <koStoreDevice.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <kooasiscontext.h>
 #include <koxmlns.h>
 #include <kodom.h>

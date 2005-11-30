@@ -50,9 +50,9 @@
 #include <kotextformatter.h>
 #include <koChangeCaseDia.h>
 #include <koxmlns.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <kooasiscontext.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 #include <kapplication.h>
 #include <klocale.h>

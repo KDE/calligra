@@ -24,8 +24,8 @@
 
 #include <koPoint.h>
 #include <koRect.h>
-#include <koStore.h>
-#include <koxmlwriter.h>
+#include <KoStore.h>
+#include <KoXmlWriter.h>
 #include <koxmlns.h>
 
 #include "vcomposite.h"

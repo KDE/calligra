@@ -40,7 +40,7 @@
 #include <kooasiscontext.h>
 #include <koxmlns.h>
 #include <kodom.h>
-#include <koStore.h>
+#include <KoStore.h>
 #include <koOasisStore.h>
 
 #include <klocale.h>

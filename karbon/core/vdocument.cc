@@ -26,8 +26,8 @@
 #include "vstroke.h"
 #include "vpainter.h"
 
-#include <koStore.h>
-#include <koxmlwriter.h>
+#include <KoStore.h>
+#include <KoXmlWriter.h>
 
 #include <kdebug.h>
 

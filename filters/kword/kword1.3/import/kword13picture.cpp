@@ -23,8 +23,8 @@
 #include <kdebug.h>
 #include <ktempfile.h>
 
-#include <koStore.h>
-#include <koStoreDevice.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 
 #include "kword13picture.h"
     

@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koxmlwriter.h"
+#include "KoXmlWriter.h"
 
 #include <kglobal.h> // kMin
 #include <kdebug.h>

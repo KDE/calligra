@@ -37,8 +37,8 @@
 #include <kdebug.h>
 #include <kozoomhandler.h>
 #include <koPoint.h>
-#include <koStore.h>
-#include <koxmlwriter.h>
+#include <KoStore.h>
+#include <KoXmlWriter.h>
 
 KivioLayer::KivioLayer( KivioPage *pPage )
     :m_pStencilList(NULL)

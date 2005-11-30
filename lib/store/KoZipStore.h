@@ -17,29 +17,31 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef koTarStore_h
-#define koTarStore_h
+#ifndef koZipStore_h
+#define koZipStore_h
 
-#include "koStoreBase.h"
+#include "KoStoreBase.h"
 
-class KTar;
+class KZip;
 class KArchiveDirectory;
 class KURL;
 
-class KoTarStore : public KoStoreBase
+class KoZipStore : public KoStoreBase
 {
 public:
-    KoTarStore( const QString & _filename, Mode _mode, const QCString & appIdentification );
-    KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
+    KoZipStore( const QString & _filename, Mode _mode, const QCString & appIdentification );
+    KoZipStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
     /**
      * KURL-constructor
      * @todo saving not completely implemented (fixed temporary file)
      * @since 1.4
      */
-    KoTarStore( QWidget* window, const KURL& url, const QString & _filename, Mode _mode, const QCString & appIdentification );
-    ~KoTarStore();
+    KoZipStore( QWidget* window, const KURL& _url, const QString & _filename, Mode _mode, const QCString & appIdentification );
+    ~KoZipStore();
+
+    virtual Q_LONG write( const char* _data, Q_ULONG _len );
 protected:
-    virtual bool init( Mode _mode );
+    virtual bool init( Mode _mode, const QCString& appIdentification );
     virtual bool openWrite( const QString& name );
     virtual bool openRead( const QString& name );
     virtual bool closeWrite();
@@ -48,18 +50,12 @@ protected:
     virtual bool enterAbsoluteDirectory( const QString& path );
     virtual bool fileExists( const QString& absPath ) const;
 
-    static QCString completeMagic( const QCString& appMimetype );
-
-    /// The tar archive
-    KTar * m_pTar;
+    /// The archive
+    KZip * m_pZip;
 
     /** In "Read" mode this pointer is pointing to the
     current directory in the archive to speed up the verification process */
     const KArchiveDirectory* m_currentDir;
-
-    /// Buffer used when writing
-    QByteArray m_byteArray;
-
 };
 
 #endif

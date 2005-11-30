@@ -5,7 +5,7 @@
 #include <kglobal.h>
 #include <klocale.h>
 #include <koFilter.h>
-#include <koStore.h>
+#include <KoStore.h>
 #include<qtextstream.h>
 
 

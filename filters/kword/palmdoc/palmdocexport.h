@@ -21,7 +21,7 @@
 #define __PALMDOCEXPORT_H
 
 #include <koFilter.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 class PalmDocExport : public KoFilter
 {

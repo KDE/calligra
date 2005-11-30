@@ -22,8 +22,8 @@
 
 #include <klocale.h>
 #include <kgenericfactory.h>
-#include <koStore.h>
-#include <koStoreDevice.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 
 #include <qdom.h>
 #include <qfile.h>

@@ -20,8 +20,8 @@
 #include <qdom.h>
 #include <qmessagebox.h>
 
-#include <koStore.h>
-#include <koxmlwriter.h>
+#include <KoStore.h>
+#include <KoXmlWriter.h>
 #include <koGenStyles.h>
 
 #include "kivio_map.h"

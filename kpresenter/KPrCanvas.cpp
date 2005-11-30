@@ -58,8 +58,8 @@
 #include <koparagcounter.h>
 #include <koPoint.h>
 #include <kotextzoomhandler.h>
-#include <koStore.h>
-#include <koStoreDrag.h>
+#include <KoStore.h>
+#include <KoStoreDrag.h>
 #include "KoPointArray.h"
 #include <KoSpeaker.h>
 

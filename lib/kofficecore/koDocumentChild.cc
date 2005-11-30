@@ -22,11 +22,11 @@
 #include "koOasisStore.h"
 #include <koDocument.h>
 #include <koQueryTrader.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koxmlns.h>
 #include <koUnit.h>
-#include <koStore.h>
-#include <koStoreDevice.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 
 #include <kparts/partmanager.h>
 

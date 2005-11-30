@@ -23,7 +23,7 @@
 #include "kotextformat.h"
 #include "kotextdocument.h"
 #include "kooasiscontext.h"
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koGenStyles.h>
 #include <koxmlns.h>
 #include <kdebug.h>

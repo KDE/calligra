@@ -21,8 +21,8 @@
 #include "vrectangle.h"
 #include <klocale.h>
 #include <koUnit.h>
-#include <koStore.h>
-#include <koxmlwriter.h>
+#include <KoStore.h>
+#include <KoXmlWriter.h>
 #include <qdom.h>
 #include <kdebug.h>
 #include "vglobal.h"

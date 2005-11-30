@@ -18,7 +18,7 @@
 #include <qwidget.h>
 #include <kfiledialog.h>
 #include <kdebug.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 #if defined(HAVE_CONFIG_H)
 #include "config.h"

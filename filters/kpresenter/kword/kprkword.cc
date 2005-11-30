@@ -20,7 +20,7 @@
 #include <config.h>
 
 #include <kgenericfactory.h>
-#include <koStoreDevice.h>
+#include <KoStoreDevice.h>
 #include <koFilterChain.h>
 #include <koGlobal.h>
 #include <kprkword.h>

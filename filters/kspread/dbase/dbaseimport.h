@@ -21,7 +21,7 @@
 #define __DBASEIMPORT_H
 
 #include <koFilter.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 class DBaseImport : public KoFilter {
 

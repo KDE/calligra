@@ -25,7 +25,7 @@
 #include "vgradient.h"
 
 #include <koGenStyles.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koxmlns.h>
 
 int VGradient::VColorStopList::compareItems( QPtrCollection::Item item1, QPtrCollection::Item item2 )

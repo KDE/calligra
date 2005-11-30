@@ -25,7 +25,7 @@
 
 #include <kprocess.h>
 #include <koFilter.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 class GenericFilter : public KoFilter
 {

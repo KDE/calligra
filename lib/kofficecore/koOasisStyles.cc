@@ -17,7 +17,7 @@
 */
 
 #include "koOasisStyles.h"
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <kdebug.h>
 #include <qdom.h>
 #include "kodom.h"

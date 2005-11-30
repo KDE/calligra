@@ -71,7 +71,7 @@
 #include <koRect.h>
 #include <koxmlns.h>
 #include <kodom.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koOasisStyles.h>
 
 #include <kmessagebox.h>

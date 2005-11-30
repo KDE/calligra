@@ -17,38 +17,49 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef koDirectoryStore_h
-#define koDirectoryStore_h
+#ifndef koTarStore_h
+#define koTarStore_h
 
-#include "koStoreBase.h"
+#include "KoStoreBase.h"
 
-class QFile;
+class KTar;
+class KArchiveDirectory;
+class KURL;
 
-class KoDirectoryStore : public KoStoreBase
+class KoTarStore : public KoStoreBase
 {
 public:
-    KoDirectoryStore( const QString& path, Mode _mode );
-    ~KoDirectoryStore();
+    KoTarStore( const QString & _filename, Mode _mode, const QCString & appIdentification );
+    KoTarStore( QIODevice *dev, Mode mode, const QCString & appIdentification );
+    /**
+     * KURL-constructor
+     * @todo saving not completely implemented (fixed temporary file)
+     * @since 1.4
+     */
+    KoTarStore( QWidget* window, const KURL& url, const QString & _filename, Mode _mode, const QCString & appIdentification );
+    ~KoTarStore();
 protected:
     virtual bool init( Mode _mode );
-    virtual bool openWrite( const QString& name ) { return openReadOrWrite( name, IO_WriteOnly ); }
-    virtual bool openRead( const QString& name ) { return openReadOrWrite( name, IO_ReadOnly ); }
+    virtual bool openWrite( const QString& name );
+    virtual bool openRead( const QString& name );
+    virtual bool closeWrite();
     virtual bool closeRead() { return true; }
-    virtual bool closeWrite() { return true; }
     virtual bool enterRelativeDirectory( const QString& dirName );
     virtual bool enterAbsoluteDirectory( const QString& path );
     virtual bool fileExists( const QString& absPath ) const;
 
-    bool openReadOrWrite( const QString& name, int iomode );
-private:
-    // Path to base directory (== the ctor argument)
-    QString m_basePath;
+    static QCString completeMagic( const QCString& appMimetype );
 
-    // Path to current directory
-    QString m_currentPath;
+    /// The tar archive
+    KTar * m_pTar;
 
-    // Current File
-    QFile* m_file;
+    /** In "Read" mode this pointer is pointing to the
+    current directory in the archive to speed up the verification process */
+    const KArchiveDirectory* m_currentDir;
+
+    /// Buffer used when writing
+    QByteArray m_byteArray;
+
 };
 
 #endif

@@ -21,12 +21,12 @@
 #include "KWPictureFrameSet.h"
 #include "KWDocument.h"
 #include "KWordPictureFrameSetIface.h"
-#include <koStoreDevice.h>
+#include <KoStoreDevice.h>
 #include <kooasiscontext.h>
 #include <koPictureCollection.h>
 #include <kodom.h>
 #include <koxmlns.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <klocale.h>
 #include <kdebug.h>
 

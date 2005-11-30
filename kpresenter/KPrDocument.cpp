@@ -70,10 +70,10 @@
 #include <koRuler.h>
 #include <koGenStyles.h>
 #include <koFilterManager.h>
-#include <koStore.h>
-#include <koStoreDevice.h>
+#include <KoStore.h>
+#include <KoStoreDevice.h>
 #include <koQueryTrader.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <koOasisSettings.h>
 #include <koMainWindow.h>
 

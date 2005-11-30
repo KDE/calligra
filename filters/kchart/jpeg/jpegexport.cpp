@@ -23,7 +23,7 @@
 #include <kmessagebox.h>
 
 #include <koFilterChain.h>
-#include <koStore.h>
+#include <KoStore.h>
 #include <kgenericfactory.h>
 #include <koDocument.h>
 

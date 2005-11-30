@@ -44,8 +44,8 @@
 #include <qobjectlist.h>
 #include <qwhatsthis.h>
 
-#include <koStore.h>
-#include <koStoreDrag.h>
+#include <KoStore.h>
+#include <KoStoreDrag.h>
 #include <koPictureCollection.h>
 
 #include <ktempfile.h>

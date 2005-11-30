@@ -21,7 +21,7 @@
 #include <koOasisStyles.h>
 #include <koOasisStore.h>
 #include <koxmlns.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include <kdebug.h>
 #include <kodom.h>
 

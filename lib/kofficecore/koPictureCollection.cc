@@ -24,8 +24,8 @@
 #include <kdebug.h>
 #include <kurl.h>
 
-#include <koStoreDevice.h>
-#include <koxmlwriter.h>
+#include <KoStoreDevice.h>
+#include <KoXmlWriter.h>
 
 #include "koPicture.h"
 #include "koPictureCollection.h"

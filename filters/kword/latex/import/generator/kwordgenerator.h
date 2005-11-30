@@ -20,7 +20,7 @@
 #ifndef __KWORD_LATEX_IMPORT_KWORDGENERATOR__
 #define __KWORD_LATEX_IMPORT_KWORDGENERATOR__
 
-#include <koStore.h>
+#include <KoStore.h>
 
 //#include "document.h"
 #include "element.h"

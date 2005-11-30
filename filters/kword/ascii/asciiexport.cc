@@ -36,7 +36,7 @@
 
 #include <koFilterChain.h>
 #include <koFilterManager.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 #include <KWEFStructures.h>
 #include <KWEFBaseWorker.h>

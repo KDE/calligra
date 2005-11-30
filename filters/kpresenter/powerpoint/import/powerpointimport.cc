@@ -38,7 +38,7 @@
 #include <koUnit.h>
 #include <kgenericfactory.h>
 
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 
 #include "libppt.h"
 #include <iostream>

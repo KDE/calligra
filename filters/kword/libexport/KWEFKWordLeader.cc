@@ -41,7 +41,7 @@
 #include <kmessagebox.h>
 
 #include <koGlobal.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 #include "KWEFStructures.h"
 #include "TagProcessing.h"

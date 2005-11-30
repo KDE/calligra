@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koDirectoryStore.h"
+#include "KoDirectoryStore.h"
 #include <qfile.h>
 #include <qdir.h>
 #include <kdebug.h>

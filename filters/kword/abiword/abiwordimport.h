@@ -38,7 +38,7 @@
 #include <qobject.h>
 
 #include <koFilter.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 class ABIWORDImport : public KoFilter {
 

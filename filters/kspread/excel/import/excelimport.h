@@ -21,7 +21,7 @@
 #define EXCELIMPORT_H
 
 #include <koFilter.h>
-#include <koStore.h>
+#include <KoStore.h>
 
 class ExcelImport : public KoFilter {
 
