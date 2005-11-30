@@ -6,7 +6,7 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
 kde_module_LTLIBRARIES = kwmailmerge_kabc.la
 
 ## Plugin encapsulating the QT SQL database interface
-kwmailmerge_kabc_la_SOURCES = kwmailmerge_kabc.cc kwmailmerge_kabc_config.cc addresspicker.ui
+kwmailmerge_kabc_la_SOURCES = KWMailMergeKABC.cpp KWMailMergeKABCConfig.cpp addresspicker.ui
 kwmailmerge_kabc_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN)
 kwmailmerge_kabc_la_LIBADD = ../../libkwmailmerge_interface.la $(LIB_KDEUI) $(LIB_KABC)
 

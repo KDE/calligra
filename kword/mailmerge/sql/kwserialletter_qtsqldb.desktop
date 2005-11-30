@@ -79,5 +79,5 @@ Comment[zh_TW]=這個資料來源類別讓你使用在一個 SQL 伺服器上面
 
 X-KDE-Library=kwmailmerge_qtsqldb
 X-KDE-Capabilities=edit,open
-X-KDE-InternalName=QTSQLEasy
+X-KDE-InternalName=QtSqlEasy
 X-KDE-PluginVersion=1

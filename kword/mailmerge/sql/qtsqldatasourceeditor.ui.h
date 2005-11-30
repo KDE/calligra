@@ -7,7 +7,7 @@
 *****************************************************************************/
 
 
-void QTSQLDataSourceEditor::filterCheckBox_toggled( bool fcb_state )
+void QtSqlDataSourceEditor::filterCheckBox_toggled( bool fcb_state )
 {
     editFilter->setEnabled(fcb_state);
 }

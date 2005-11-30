@@ -1,12 +1,12 @@
-#include "mailmerge_qtsqlplugin_easyfilter.h"
-#include "mailmerge_qtsqlplugin_easyfilter.moc"
+#include "KWQtSqlEasyFilter.h"
+#include "KWQtSqlEasyFilter.moc"
 #include <qtable.h>
 #include <qscrollview.h>
 #include <klocale.h>
 #include <qlayout.h>
 #include <qcheckbox.h>
 
-KWQTSqlEasyFilter::KWQTSqlEasyFilter( QWidget *parent)
+KWQtSqlEasyFilter::KWQtSqlEasyFilter( QWidget *parent)
         :KDialogBase( Swallow, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true)
 {
        m_fieldList << "" <<"one" << "two" << "three" << "four";
@@ -43,7 +43,7 @@ KWQTSqlEasyFilter::KWQTSqlEasyFilter( QWidget *parent)
 	connect(m_table,SIGNAL(valueChanged ( int, int)),this,SLOT(slotValueChanged ( int, int)));
 }
 
-void KWQTSqlEasyFilter::createColumn(int i)
+void KWQtSqlEasyFilter::createColumn(int i)
 {
 	QTableItem *it;
 	m_table->setItem(0,i,it=new QComboTableItem(m_table,m_fieldList,false));
@@ -61,7 +61,7 @@ void KWQTSqlEasyFilter::createColumn(int i)
 }
 
 
-void KWQTSqlEasyFilter::slotValueChanged ( int row, int col )
+void KWQtSqlEasyFilter::slotValueChanged ( int row, int col )
 {
 	switch (row)
 	{
@@ -94,5 +94,5 @@ void KWQTSqlEasyFilter::slotValueChanged ( int row, int col )
 	}
 }
 
-KWQTSqlEasyFilter::~KWQTSqlEasyFilter(){;}
+KWQtSqlEasyFilter::~KWQtSqlEasyFilter(){;}
 

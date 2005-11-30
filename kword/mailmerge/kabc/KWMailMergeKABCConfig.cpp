@@ -35,8 +35,8 @@
 #include <kabc/distributionlist.h>
 
 #include "addresspicker.h"
-#include "kwmailmerge_kabc.h"
-#include "kwmailmerge_kabc_config.h"
+#include "KWMailMergeKABC.h"
+#include "KWMailMergeKABCConfig.h"
 
 
 KWMailMergeKABCConfig::KWMailMergeKABCConfig( QWidget *parent, KWMailMergeKABC *db_)
@@ -543,4 +543,4 @@ QString KWMailMergeKABCConfigListItem::text( int column ) const
     }
 }
 
-#include "kwmailmerge_kabc_config.moc"
+#include "KWMailMergeKABCConfig.moc"

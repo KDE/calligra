@@ -17,37 +17,27 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _SERIALLETTER_QTSQL_POWER_PLUGIN_H_
-#define _SERIALLETTER_QTSQL_POWER_PLUGIN_H_
+#ifndef _SERIALLETTER_QtSql_PLUGIN_H_
+#define _SERIALLETTER_QtSql_PLUGIN_H_
 
 #include <qdom.h>
-#include <klocale.h>
-#include <kiconloader.h>
-#include <kdialogbase.h>
-#include <qsqldatabase.h>
-/* FOR THE DIRTY HACK */
 #include <qsqlcursor.h>
-#include <qsqldriver.h>
-/* END FOR THE DIRTY HACK */
-#include <qguardedptr.h>
-
-#include "defs.h"
 #include "KWMailMergeDataSource.h"
-#include "serialletter_qtsql_base.h"
-#include "kwqtsqlpower.h"
-#include "serialletter_sqlcursor.h"
+#include "KWQtSqlSerialDataSourceBase.h"
+#include "qtsqldatasourceeditor.h"
+
 
 /******************************************************************
  *
- * Class: KWQTSQLSerialDataSource
+ * Class: KWQtSqlSerialDataSource
  *
  ******************************************************************/
-class KWQTSQLPowerSerialDataSource: public KWQTSQLSerialDataSourceBase
+
+class KWQtSqlSerialDataSource: public KWQtSqlSerialDataSourceBase
 {
-    Q_OBJECT
     public:
-    KWQTSQLPowerSerialDataSource(KInstance *inst,QObject *parent);
-    ~KWQTSQLPowerSerialDataSource();
+    KWQtSqlSerialDataSource(KInstance *inst,QObject *parent);
+    ~KWQtSqlSerialDataSource();
 
     virtual void save( QDomDocument &doc,QDomElement&);
     virtual void load( QDomElement& elem );
@@ -55,41 +45,40 @@ class KWQTSQLPowerSerialDataSource: public KWQTSQLSerialDataSourceBase
     virtual int getNumRecords() const {
         return (myquery?((myquery->size()<0)?0:myquery->size()):0);
     }
+    virtual void refresh(bool);
     virtual  bool showConfigDialog(QWidget *,int);
-    virtual void refresh(bool force);
 
     protected:
-	friend class KWQTSQLPowerMailMergeEditor;
-	QString query;
-	QMySqlCursor *myquery;
-
-    void clearSampleRecord();
-    void addSampleRecordEntry(QString name);
-
+	friend class KWQtSqlDataSourceEditor;
+	QString tableName;
+	QString filter;
+	QSqlCursor *myquery;
 };
 
 /******************************************************************
  *
- * Class: KWQTSQLPowerMailMergeEditor
+ * Class: KWQtSqlDataSourceEditor
  *
  ******************************************************************/
 
-class KWQTSQLPowerMailMergeEditor : public KDialogBase
+class KWQtSqlDataSourceEditor : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KWQTSQLPowerMailMergeEditor( QWidget *parent, KWQTSQLPowerSerialDataSource *db_ );
-    ~KWQTSQLPowerMailMergeEditor();
+    KWQtSqlDataSourceEditor( QWidget *parent, KWQtSqlSerialDataSource *db_ );
+    ~KWQtSqlDataSourceEditor(){;}
 private:
- KWQTSQLPowerSerialDataSource *db;
- KWQTSQLPowerWidget *widget;
+  KWQtSqlSerialDataSource *db;
+  QtSqlDataSourceEditor *widget;
+  void updateTableCombo();
+  QString filter;
+  QString tableName;
+
 private slots:
- void openSetup();
- void updateDBViews();
- void slotTableChanged ( QListBoxItem * item );
- void slotExecute();
- void slotSetQuery();
+  void tableChanged(int);
+  void slotSetQuery();
+  void editFilter();
 };
 
 

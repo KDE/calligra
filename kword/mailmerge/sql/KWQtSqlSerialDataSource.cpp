@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "serialletter_qtsqlplugin.h"
-#include "serialletter_qtsqlplugin.moc"
-#include "mailmerge_qtsqlplugin_easyfilter.h"
+#include "KWQtSqlSerialDataSource.h"
+#include "KWQtSqlSerialDataSource.moc"
+#include "KWQtSqlEasyFilter.h"
 
 #include <klocale.h>
 #include <qlayout.h>
@@ -30,28 +30,28 @@
 #include <qsqlquery.h>
 #include <kdebug.h>
 
-#define KWQTSQLBarIcon( x ) BarIcon( x, db->KWInstance() )
+#define KWQtSqlBarIcon( x ) BarIcon( x, db->KWInstance() )
 
 /******************************************************************
  *
- * Class: KWQTSQLSerialDataSource
+ * Class: KWQtSqlSerialDataSource
  *
  ******************************************************************/
 
-KWQTSQLSerialDataSource::KWQTSQLSerialDataSource(KInstance *inst,QObject *parent)
-	: KWQTSQLSerialDataSourceBase(inst,parent)
+KWQtSqlSerialDataSource::KWQtSqlSerialDataSource(KInstance *inst,QObject *parent)
+	: KWQtSqlSerialDataSourceBase(inst,parent)
 {
   myquery=0;
 }
 
-KWQTSQLSerialDataSource::~KWQTSQLSerialDataSource()
+KWQtSqlSerialDataSource::~KWQtSqlSerialDataSource()
 {
         delete myquery;
         QSqlDatabase::removeDatabase("KWQTSQLPOWER");
 }
 
 
-QString KWQTSQLSerialDataSource::getValue( const QString &name, int record ) const
+QString KWQtSqlSerialDataSource::getValue( const QString &name, int record ) const
 {
         int num=record;
 
@@ -63,7 +63,7 @@ QString KWQTSQLSerialDataSource::getValue( const QString &name, int record ) con
         return (myquery->value(name)).toString();
 }
 
-void KWQTSQLSerialDataSource::save( QDomDocument & /*doc*/, QDomElement & /*parent*/)
+void KWQtSqlSerialDataSource::save( QDomDocument & /*doc*/, QDomElement & /*parent*/)
 {
 /*
 	QDomElement def=doc.createElement(QString::fromLatin1("DEFINITION"));
@@ -91,7 +91,7 @@ void KWQTSQLSerialDataSource::save( QDomDocument & /*doc*/, QDomElement & /*pare
 */
 }
 
-void KWQTSQLSerialDataSource::load( QDomElement& /*parentElem*/ )
+void KWQtSqlSerialDataSource::load( QDomElement& /*parentElem*/ )
 {
 /*
 	db.clear();
@@ -117,21 +117,21 @@ void KWQTSQLSerialDataSource::load( QDomElement& /*parentElem*/ )
 */
 }
 
-bool KWQTSQLSerialDataSource::showConfigDialog(QWidget *par,int action)
+bool KWQtSqlSerialDataSource::showConfigDialog(QWidget *par,int action)
 {
 	bool ret=false;
 	if (action==KWSLEdit)
 	{
-		KWQTSQLDataSourceEditor *dia=new KWQTSQLDataSourceEditor(par,this);
+		KWQtSqlDataSourceEditor *dia=new KWQtSqlDataSourceEditor(par,this);
 		ret=dia->exec();
 		delete dia;
 	}
-	else ret=KWQTSQLSerialDataSourceBase::showConfigDialog(par,action);
+	else ret=KWQtSqlSerialDataSourceBase::showConfigDialog(par,action);
 
 	return ret;
 }
 
-void KWQTSQLSerialDataSource::refresh(bool force)
+void KWQtSqlSerialDataSource::refresh(bool force)
 {
         if ((force) || (myquery==0))
         {
@@ -156,19 +156,19 @@ void KWQTSQLSerialDataSource::refresh(bool force)
 
 /******************************************************************
  *
- * Class: KWQTSQLDataSourceEditor
+ * Class: KWQtSqlDataSourceEditor
  *
  ******************************************************************/
 
 
 
-KWQTSQLDataSourceEditor::KWQTSQLDataSourceEditor( QWidget *parent, KWQTSQLSerialDataSource *db_ )
+KWQtSqlDataSourceEditor::KWQtSqlDataSourceEditor( QWidget *parent, KWQtSqlSerialDataSource *db_ )
         :KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
 {
 	tableName=db->tableName;
 	filter=db->filter;
         (new QVBoxLayout(plainPage()))->setAutoAdd(true);
-        setMainWidget(widget=new QTSQLDataSourceEditor(plainPage()));
+        setMainWidget(widget=new QtSqlDataSourceEditor(plainPage()));
 	connect(widget->tableCombo,SIGNAL(activated(int)),this,SLOT(tableChanged(int)));
 	connect(widget->editFilter,SIGNAL(clicked()),this,SLOT(editFilter()));
 	updateTableCombo();
@@ -176,7 +176,7 @@ KWQTSQLDataSourceEditor::KWQTSQLDataSourceEditor( QWidget *parent, KWQTSQLSerial
 //        connect(this,SIGNAL(okClicked()),this,SLOT(slotSetQuery()));
 }
 
-void KWQTSQLDataSourceEditor::tableChanged(int item)
+void KWQtSqlDataSourceEditor::tableChanged(int item)
 {
 	tableName=widget->tableCombo->text(item);
 	QSqlCursor *tmpCursor=new QSqlCursor(tableName,true,db->database);
@@ -188,7 +188,7 @@ void KWQTSQLDataSourceEditor::tableChanged(int item)
 	widget->DataTable->refresh(QDataTable::RefreshAll);
 }
 
-void KWQTSQLDataSourceEditor::updateTableCombo()
+void KWQtSqlDataSourceEditor::updateTableCombo()
 {
 	widget->tableCombo->clear();
         if (!db->database) return;
@@ -196,7 +196,7 @@ void KWQTSQLDataSourceEditor::updateTableCombo()
         widget->tableCombo->insertStringList(db->database->tables());
 }
 
-void KWQTSQLDataSourceEditor::slotSetQuery()
+void KWQtSqlDataSourceEditor::slotSetQuery()
 {
         db->tableName=tableName;
 	db->filter=filter;
@@ -204,15 +204,15 @@ void KWQTSQLDataSourceEditor::slotSetQuery()
 }
 
 
-void KWQTSQLDataSourceEditor::editFilter()
+void KWQtSqlDataSourceEditor::editFilter()
 {
-	KWQTSqlEasyFilter *f=new KWQTSqlEasyFilter(static_cast<QWidget*>(parent()));
+	KWQtSqlEasyFilter *f=new KWQtSqlEasyFilter(static_cast<QWidget*>(parent()));
 	f->exec();
 }
 
 extern "C" {
         KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_qtsqldb(KInstance *inst,QObject *parent)
         {
-                return new KWQTSQLSerialDataSource(inst,parent);
+                return new KWQtSqlSerialDataSource(inst,parent);
         }
 }

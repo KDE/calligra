@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "serialletter_qtsql_base.h"
-#include "serialletter_qtsql_base.moc"
-#include "qtsqlopeneditor.h"
+#include "KWQtSqlSerialDataSourceBase.h"
+#include "KWQtSqlSerialDataSourceBase.moc"
+#include "KWQtSqlMailMergeOpen.h"
 #include <qlayout.h>
 #include <qdom.h>
 #include <kcombobox.h>
@@ -40,31 +40,31 @@
 
 /******************************************************************
  *
- * Class: KWQTSQLSerialDataSourceBase
+ * Class: KWQtSqlSerialDataSourceBase
  *
  ******************************************************************/
 
-int KWQTSQLSerialDataSourceBase::connectionId=0;
+int KWQtSqlSerialDataSourceBase::connectionId=0;
 
-KWQTSQLSerialDataSourceBase::KWQTSQLSerialDataSourceBase(KInstance *inst,QObject *parent)
+KWQtSqlSerialDataSourceBase::KWQtSqlSerialDataSourceBase(KInstance *inst,QObject *parent)
 	: KWMailMergeDataSource(inst,parent)
 {
 	DataBaseConnection=QString("KWQTSQLPOWER")+parent->name()+QString("--%1").arg(connectionId++);
 	port=i18n("default");
 }
 
-KWQTSQLSerialDataSourceBase::~KWQTSQLSerialDataSourceBase()
+KWQtSqlSerialDataSourceBase::~KWQtSqlSerialDataSourceBase()
 {
 	QSqlDatabase::removeDatabase(DataBaseConnection);
 }
 
 
-bool KWQTSQLSerialDataSourceBase::showConfigDialog(QWidget *par,int action)
+bool KWQtSqlSerialDataSourceBase::showConfigDialog(QWidget *par,int action)
 {
    bool ret=false;
    if (action==KWSLOpen)
    {
-   	KWQTSQLMailMergeOpen *dia=new KWQTSQLMailMergeOpen(par,this);
+   	KWQtSqlMailMergeOpen *dia=new KWQtSqlMailMergeOpen(par,this);
 
 	ret=dia->exec();
 	if (ret) openDatabase();
@@ -73,7 +73,7 @@ bool KWQTSQLSerialDataSourceBase::showConfigDialog(QWidget *par,int action)
    return ret;
 }
 
-bool  KWQTSQLSerialDataSourceBase::openDatabase()
+bool  KWQtSqlSerialDataSourceBase::openDatabase()
 {
 	QCString pwd;
 	QSqlDatabase::removeDatabase(DataBaseConnection);

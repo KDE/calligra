@@ -25,7 +25,7 @@
 #include <klistview.h>
 #include <kabc/stdaddressbook.h>
 
-#include "kwmailmerge_kabc.h"
+#include "KWMailMergeKABC.h"
 
 
 class AddressPickerUI;

@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
-<class>QTSQLDataSourceEditor</class>
+<class>QtSqlDataSourceEditor</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>QTSQLDataSourceEditor</cstring>
+        <cstring>QtSqlDataSourceEditor</cstring>
     </property>
     <property name="geometry">
         <rect>
@@ -144,7 +144,7 @@
     <connection>
         <sender>filterCheckBox</sender>
         <signal>toggled(bool)</signal>
-        <receiver>QTSQLDataSourceEditor</receiver>
+        <receiver>QtSqlDataSourceEditor</receiver>
         <slot>filterCheckBox_toggled(bool)</slot>
     </connection>
 </connections>

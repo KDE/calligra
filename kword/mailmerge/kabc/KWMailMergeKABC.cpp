@@ -30,8 +30,8 @@
 #include <kabc/distributionlist.h>
 #include <kabc/stdaddressbook.h>
 
-#include "kwmailmerge_kabc.h"
-#include "kwmailmerge_kabc_config.h"
+#include "KWMailMergeKABC.h"
+#include "KWMailMergeKABCConfig.h"
 
 KWMailMergeKABC::KWMailMergeKABC( KInstance *inst, QObject *parent )
         : KWMailMergeDataSource( inst, parent )
@@ -546,6 +546,6 @@ extern "C"
 
 
 
-#include "kwmailmerge_kabc.moc"
+#include "KWMailMergeKABC.moc"
 
 

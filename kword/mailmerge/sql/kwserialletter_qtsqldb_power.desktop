@@ -86,5 +86,5 @@ Comment[zh_TW]=這個資料來源類別讓你使用在一個 SQL 伺服器上面
 
 X-KDE-Library=kwmailmerge_qtsqldb_power
 X-KDE-Capabilities=edit,open
-X-KDE-InternalName=QTSQLPower
+X-KDE-InternalName=QtSqlPower
 X-KDE-PluginVersion=1

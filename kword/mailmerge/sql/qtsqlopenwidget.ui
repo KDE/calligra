@@ -1,8 +1,8 @@
 <!DOCTYPE UI><UI version="3.0" stdsetdef="1">
-<class>KWQTSQLOpenWidget</class>
+<class>KWQtSqlOpenWidget</class>
 <widget class="QWidget">
     <property name="name">
-        <cstring>KWQTSQLOpenWidget</cstring>
+        <cstring>KWQtSqlOpenWidget</cstring>
     </property>
     <property name="geometry">
         <rect>

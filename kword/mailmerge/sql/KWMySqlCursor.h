@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _SERIALLETTER_QTSQL_SQLCURSOR_H_
-#define _SERIALLETTER_QTSQL_SQLCURSOR_H_
+#ifndef _SERIALLETTER_QtSql_SQLCURSOR_H_
+#define _SERIALLETTER_QtSql_SQLCURSOR_H_
 
 /* FOR THE DIRTY HACK */
 #include <qsqlcursor.h>
@@ -34,10 +34,10 @@
 
 
 
-class QMySqlCursor: public QSqlCursor
+class KWMySqlCursor: public QSqlCursor
 {
 public:
-    QMySqlCursor( const QString & query = QString::null, bool autopopulate = 
+    KWMySqlCursor( const QString & query = QString::null, bool autopopulate = 
 TRUE, QSqlDatabase* db = 0 ): QSqlCursor( QString::null, autopopulate, db )
     {
         exec( query );
@@ -46,8 +46,8 @@ TRUE, QSqlDatabase* db = 0 ): QSqlCursor( QString::null, autopopulate, db )
 *(QSqlQuery*)this );
         setMode( QSqlCursor::ReadOnly );
     }
-    QMySqlCursor( const QMySqlCursor & other ): QSqlCursor( other ) {}
-    QMySqlCursor( const QSqlQuery & query, bool autopopulate = TRUE ): 
+    KWMySqlCursor( const KWMySqlCursor & other ): QSqlCursor( other ) {}
+    KWMySqlCursor( const QSqlQuery & query, bool autopopulate = TRUE ): 
 QSqlCursor( QString::null, autopopulate )
     {
         *(QSqlQuery*)this = query;

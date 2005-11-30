@@ -1,5 +1,5 @@
-#ifndef MAILMERGE_QTSQLPLUGIN_EASYFILTER
-#define MAILMERGE_QTSQLPLUGIN_EASYFILTER
+#ifndef MAILMERGE_QtSqlPLUGIN_EASYFILTER
+#define MAILMERGE_QtSqlPLUGIN_EASYFILTER
 
 #include <kdialogbase.h>
 
@@ -7,12 +7,12 @@ class QTable;
 class QScrollView;
 class QStringList;
 
-class KWQTSqlEasyFilter: public KDialogBase
+class KWQtSqlEasyFilter: public KDialogBase
 {
 	Q_OBJECT
 public:
-    KWQTSqlEasyFilter( QWidget *parent);
-    virtual ~KWQTSqlEasyFilter();
+    KWQtSqlEasyFilter( QWidget *parent);
+    virtual ~KWQtSqlEasyFilter();
 protected:
     void createColumn(int i);
 

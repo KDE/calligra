@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _SERIALLETTER_QTSQL_BASE_H_
-#define _SERIALLETTER_QTSQL_BASE_H_
+#ifndef _SERIALLETTER_QtSql_BASE_H_
+#define _SERIALLETTER_QtSql_BASE_H_
 
 #include <qdom.h>
 #include <kdialogbase.h>
@@ -32,21 +32,21 @@
 
 /******************************************************************
  *
- * Class: KWQTSQLSerialDataSourceBase
+ * Class: KWQtSqlSerialDataSourceBase
  *
  ******************************************************************/
-class KWQTSQLSerialDataSourceBase: public KWMailMergeDataSource
+class KWQtSqlSerialDataSourceBase: public KWMailMergeDataSource
 {
     Q_OBJECT
     K_DCOP
     public:
-    KWQTSQLSerialDataSourceBase(KInstance *inst,QObject *parent);
-    ~KWQTSQLSerialDataSourceBase();
+    KWQtSqlSerialDataSourceBase(KInstance *inst,QObject *parent);
+    ~KWQtSqlSerialDataSourceBase();
 
    virtual bool showConfigDialog(QWidget *par,int action);
 
     protected:
-	friend class KWQTSQLMailMergeOpen;
+	friend class KWQtSqlMailMergeOpen;
 	QString hostname;
 	QString username;
 	QString driver;

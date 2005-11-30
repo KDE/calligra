@@ -17,32 +17,32 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#ifndef _SERIALLETTER_QTSQL_OPEN_EDITOR_H_
-#define _SERIALLETTER_QTSQL_OPEN_EDITOR_H_
+#ifndef _SERIALLETTER_QtSql_OPEN_EDITOR_H_
+#define _SERIALLETTER_QtSql_OPEN_EDITOR_H_
 
 #include <qdom.h>
 #include <kdialogbase.h>
 #include <qwidget.h>
 
 #include "KWMailMergeDataSource.h"
-#include "serialletter_qtsql_base.h"
+#include "KWQtSqlSerialDataSourceBase.h"
 #include "qtsqlopenwidget.h"
 
 /******************************************************************
  *
- * Class: KWQTSQLMailMergeOpen
+ * Class: KWQtSqlMailMergeOpen
  *
  ******************************************************************/
-class KWQTSQLMailMergeOpen : public KDialogBase
+class KWQtSqlMailMergeOpen : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KWQTSQLMailMergeOpen( QWidget *parent, KWQTSQLSerialDataSourceBase *db_ );
-    ~KWQTSQLMailMergeOpen();
+    KWQtSqlMailMergeOpen( QWidget *parent, KWQtSqlSerialDataSourceBase *db_ );
+    ~KWQtSqlMailMergeOpen();
 private:
- KWQTSQLSerialDataSourceBase *db;
- KWQTSQLOpenWidget *widget;
+ KWQtSqlSerialDataSourceBase *db;
+ KWQtSqlOpenWidget *widget;
 
  void fillSavedProperties();
 

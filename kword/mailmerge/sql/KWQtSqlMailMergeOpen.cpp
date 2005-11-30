@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "qtsqlopeneditor.h"
-#include "qtsqlopeneditor.moc"
+#include "KWQtSqlMailMergeOpen.h"
+#include "KWQtSqlMailMergeOpen.moc"
 #include <kcombobox.h>
 #include <klineedit.h>
 #include <kdebug.h>
@@ -33,14 +33,14 @@
 
 /******************************************************************
  *
- * Class: KWQTSQLMailMergeOpen
+ * Class: KWQtSqlMailMergeOpen
  *
  ******************************************************************/
 
-KWQTSQLMailMergeOpen::KWQTSQLMailMergeOpen( QWidget *parent, KWQTSQLSerialDataSourceBase *db_ )
+KWQtSqlMailMergeOpen::KWQtSqlMailMergeOpen( QWidget *parent, KWQtSqlSerialDataSourceBase *db_ )
         :KDialogBase( Plain, i18n( "Mail Merge - Setup Database Connection" ), Ok | Cancel, Ok, parent, "", true ), db( db_ ){
         (new QVBoxLayout(plainPage()))->setAutoAdd(true);
-        setMainWidget(widget=new KWQTSQLOpenWidget(plainPage()));
+        setMainWidget(widget=new KWQtSqlOpenWidget(plainPage()));
         widget->drivers->insertStringList(QSqlDatabase::drivers());
         widget->hostname->setText(db->hostname);
         widget->username->setText(db->username);
@@ -54,9 +54,9 @@ KWQTSQLMailMergeOpen::KWQTSQLMailMergeOpen( QWidget *parent, KWQTSQLSerialDataSo
 		this, SLOT(slotSave()));
 }
 
-KWQTSQLMailMergeOpen::~KWQTSQLMailMergeOpen(){;}
+KWQtSqlMailMergeOpen::~KWQtSqlMailMergeOpen(){;}
 
-void KWQTSQLMailMergeOpen::savedPropertiesChanged(const QString& name)
+void KWQtSqlMailMergeOpen::savedPropertiesChanged(const QString& name)
 {
 	if (name!=i18n("<not saved>"))
 	{
@@ -77,7 +77,7 @@ void KWQTSQLMailMergeOpen::savedPropertiesChanged(const QString& name)
 
 }
 
-void KWQTSQLMailMergeOpen::fillSavedProperties()
+void KWQtSqlMailMergeOpen::fillSavedProperties()
 {
 	widget->savedProperties->clear();
 	widget->savedProperties->insertItem(i18n("<not saved>"));
@@ -91,7 +91,7 @@ void KWQTSQLMailMergeOpen::fillSavedProperties()
 	}
 }
 
-void KWQTSQLMailMergeOpen::slotSave()
+void KWQtSqlMailMergeOpen::slotSave()
 {
 	QString value;
 	bool ok;
@@ -113,7 +113,7 @@ void KWQTSQLMailMergeOpen::slotSave()
 	}
 }
 
-void KWQTSQLMailMergeOpen::handleOk()
+void KWQtSqlMailMergeOpen::handleOk()
 {
         db->hostname=widget->hostname->text();
         db->username=widget->username->text();

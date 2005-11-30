@@ -18,8 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "serialletter_classicplugin.h"
-#include "serialletter_classicplugin.moc"
+#include "KWClassicSerialDataSource.h"
+#include "KWClassicSerialDataSource.moc"
 #include "KWMailMergeDataBase.h"
 #include <kinputdialog.h>
 #include <qlabel.h>

@@ -17,9 +17,9 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "serialletter_qtsql_power_plugin.h"
-#include "serialletter_qtsql_power_plugin.moc"
-#include "qtsqlopeneditor.h"
+#include "KWQtSqlPowerSerialDataSource.h"
+#include "KWQtSqlPowerSerialDataSource.moc"
+#include "KWQtSqlMailMergeOpen.h"
 #include <qlayout.h>
 #include <qdom.h>
 #include <kcombobox.h>
@@ -33,27 +33,27 @@
 #include <qdatatable.h>
 #include <kdebug.h>
 
-#define KWQTSQLBarIcon( x ) BarIcon( x, db->KWInstance() )
+#define KWQtSqlBarIcon( x ) BarIcon( x, db->KWInstance() )
 
 /******************************************************************
  *
- * Class: KWQTSQLSerialDataSource
+ * Class: KWQtSqlSerialDataSource
  *
  ******************************************************************/
 
-KWQTSQLPowerSerialDataSource::KWQTSQLPowerSerialDataSource(KInstance *inst,QObject *parent)
-	: KWQTSQLSerialDataSourceBase(inst,parent),myquery(0)
+KWQtSqlPowerSerialDataSource::KWQtSqlPowerSerialDataSource(KInstance *inst,QObject *parent)
+	: KWQtSqlSerialDataSourceBase(inst,parent),myquery(0)
 {
 	port=i18n("default");
 }
 
-KWQTSQLPowerSerialDataSource::~KWQTSQLPowerSerialDataSource()
+KWQtSqlPowerSerialDataSource::~KWQtSqlPowerSerialDataSource()
 {
 	if (myquery) delete myquery;
 	QSqlDatabase::removeDatabase("KWQTSQLPOWER");
 }
 
-void KWQTSQLPowerSerialDataSource::refresh(bool force)
+void KWQtSqlPowerSerialDataSource::refresh(bool force)
 {
 	if ((force) || (myquery==0))
 	{
@@ -65,13 +65,13 @@ void KWQTSQLPowerSerialDataSource::refresh(bool force)
 		QString tmp=query.upper();
 		if (!tmp.startsWith("SELECT")) return;
 		if ((!database) || (!database->isOpen()))openDatabase();
-		myquery=new QMySqlCursor(query,true,database);
+		myquery=new KWMySqlCursor(query,true,database);
 		myquery->setMode(QSqlCursor::ReadOnly);
 	}
 	kdDebug()<<QString("There were %1 rows in the query").arg(myquery->size())<<endl;
 }
 
-QString KWQTSQLPowerSerialDataSource::getValue( const QString &name, int record ) const
+QString KWQtSqlPowerSerialDataSource::getValue( const QString &name, int record ) const
 {
 	int num=record;
 
@@ -83,7 +83,7 @@ QString KWQTSQLPowerSerialDataSource::getValue( const QString &name, int record 
 	return (myquery->value(name)).toString();
 }
 
-void KWQTSQLPowerSerialDataSource::save( QDomDocument &doc, QDomElement &parent)
+void KWQtSqlPowerSerialDataSource::save( QDomDocument &doc, QDomElement &parent)
 {
         QDomElement def=doc.createElement(QString::fromLatin1("DEFINITION"));
         parent.appendChild(def);
@@ -111,7 +111,7 @@ void KWQTSQLPowerSerialDataSource::save( QDomDocument &doc, QDomElement &parent)
         }
 }
 
-void KWQTSQLPowerSerialDataSource::load( QDomElement& parentElem )
+void KWQtSqlPowerSerialDataSource::load( QDomElement& parentElem )
 {
         clearSampleRecord();
         QDomNode defNd=parentElem.namedItem("DEFINITION");
@@ -149,37 +149,37 @@ void KWQTSQLPowerSerialDataSource::load( QDomElement& parentElem )
 	}
 }
 
-bool KWQTSQLPowerSerialDataSource::showConfigDialog(QWidget *par,int action)
+bool KWQtSqlPowerSerialDataSource::showConfigDialog(QWidget *par,int action)
 {
    bool ret=false;
    if (action==KWSLEdit)
    {
         if ((!database) || (!database->isOpen()))openDatabase();
-	KWQTSQLPowerMailMergeEditor *dia=new KWQTSQLPowerMailMergeEditor(par,this);
+	KWQtSqlPowerMailMergeEditor *dia=new KWQtSqlPowerMailMergeEditor(par,this);
 	ret=dia->exec();
 	delete dia;
    }
-	else ret=KWQTSQLSerialDataSourceBase::showConfigDialog(par,action);
+	else ret=KWQtSqlSerialDataSourceBase::showConfigDialog(par,action);
    return ret;
 }
 
-void KWQTSQLPowerSerialDataSource::clearSampleRecord() {sampleRecord.clear();}
+void KWQtSqlPowerSerialDataSource::clearSampleRecord() {sampleRecord.clear();}
 
-void KWQTSQLPowerSerialDataSource::addSampleRecordEntry(QString name)
+void KWQtSqlPowerSerialDataSource::addSampleRecordEntry(QString name)
 {sampleRecord[name]=name; }//i18n("No Value");}
 
 
 /******************************************************************
  *
- * Class: KWQTSQLMailMergeEditor
+ * Class: KWQtSqlMailMergeEditor
  *
  ******************************************************************/
 
-KWQTSQLPowerMailMergeEditor::KWQTSQLPowerMailMergeEditor( QWidget *parent, KWQTSQLPowerSerialDataSource *db_ )
+KWQtSqlPowerMailMergeEditor::KWQtSqlPowerMailMergeEditor( QWidget *parent, KWQtSqlPowerSerialDataSource *db_ )
 	:KDialogBase( Plain, i18n( "Mail Merge - Editor" ), Ok | Cancel, Ok, parent, "", true ), db( db_ )
 {
         (new QVBoxLayout(plainPage()))->setAutoAdd(true);
-        setMainWidget(widget=new KWQTSQLPowerWidget(plainPage()));
+        setMainWidget(widget=new KWQtSqlPowerWidget(plainPage()));
 	connect(widget->setup,SIGNAL(clicked()),this,SLOT(openSetup()));
 	connect(widget->tables,SIGNAL(currentChanged(QListBoxItem*)),this,SLOT(slotTableChanged(QListBoxItem*)));
 	connect(widget->execute,SIGNAL(clicked()),this,SLOT(slotExecute()));
@@ -188,18 +188,18 @@ KWQTSQLPowerMailMergeEditor::KWQTSQLPowerMailMergeEditor( QWidget *parent, KWQTS
 	updateDBViews();
 }
 
-void KWQTSQLPowerMailMergeEditor::slotSetQuery()
+void KWQtSqlPowerMailMergeEditor::slotSetQuery()
 {
 	db->query=widget->query->text();
 	db->refresh(true);
 }
 
-void KWQTSQLPowerMailMergeEditor::slotExecute()
+void KWQtSqlPowerMailMergeEditor::slotExecute()
 {
 	if (!db->database) if (!db->openDatabase()) return;
 	QString tmp=widget->query->text().upper();
 	if (!tmp.startsWith("SELECT")) return;
-	QMySqlCursor *cur=new QMySqlCursor(widget->query->text(),true,db->database);
+	KWMySqlCursor *cur=new KWMySqlCursor(widget->query->text(),true,db->database);
 	cur->setMode(QSqlCursor::ReadOnly);
 
 	db->clearSampleRecord();
@@ -211,7 +211,7 @@ void KWQTSQLPowerMailMergeEditor::slotExecute()
 	widget->queryresult->refresh(QDataTable::RefreshAll);
 }
 
-void KWQTSQLPowerMailMergeEditor::slotTableChanged ( QListBoxItem * item )
+void KWQtSqlPowerMailMergeEditor::slotTableChanged ( QListBoxItem * item )
 {
 	widget->fields->clear();
 	if (item)
@@ -225,9 +225,9 @@ void KWQTSQLPowerMailMergeEditor::slotTableChanged ( QListBoxItem * item )
 	}
 }
 
-void KWQTSQLPowerMailMergeEditor::openSetup()
+void KWQtSqlPowerMailMergeEditor::openSetup()
 {
-        KWQTSQLMailMergeOpen *dia=new KWQTSQLMailMergeOpen(this,db);
+        KWQtSqlMailMergeOpen *dia=new KWQtSqlMailMergeOpen(this,db);
         if (dia->exec())
 	{
 		 db->openDatabase();
@@ -237,7 +237,7 @@ void KWQTSQLPowerMailMergeEditor::openSetup()
 }
 
 
-void KWQTSQLPowerMailMergeEditor::updateDBViews()
+void KWQtSqlPowerMailMergeEditor::updateDBViews()
 {
 	widget->fields->clear();
 	widget->tables->clear();
@@ -245,12 +245,12 @@ void KWQTSQLPowerMailMergeEditor::updateDBViews()
 	widget->tables->insertStringList(db->database->tables());
 }
 
-KWQTSQLPowerMailMergeEditor::~KWQTSQLPowerMailMergeEditor(){;}
+KWQtSqlPowerMailMergeEditor::~KWQtSqlPowerMailMergeEditor(){;}
 
 
 extern "C" {
         KWORD_MAILMERGE_EXPORT KWMailMergeDataSource *create_kwmailmerge_qtsqldb_power(KInstance *inst,QObject *parent)
         {
-                return new KWQTSQLPowerSerialDataSource(inst,parent);
+                return new KWQtSqlPowerSerialDataSource(inst,parent);
         }
 }
