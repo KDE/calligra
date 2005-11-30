@@ -139,8 +139,8 @@ public:
     protected:
         SlaveListItem *m_slaveItem;
         double m_value;
-        bool m_highlight;
         double m_limit;
+        bool m_highlight;
         
         QMap<int, double> m_valueMap;
     
