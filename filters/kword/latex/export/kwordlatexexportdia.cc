@@ -221,7 +221,6 @@ void KWordLatexExportDia::accept()
 	config->setDefaultLanguage(langUsedList->currentText());
 
 	Xml2LatexParser LATEXParser(_in, _fileOut, config);
-	LATEXParser.analyse();
 	kdDebug(30522) << "---------- analyse input file -------------" << endl;
 	LATEXParser.analyse();
 	kdDebug(30522) << "---------- generate output file -------------" << endl;
