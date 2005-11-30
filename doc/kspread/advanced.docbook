@@ -516,15 +516,16 @@ Merge or dissociate cells
 
 <sect2 id="sheet-protection">
 <title>Sheet protection</title>
-<para>Protecting a sheet means protecting the contents of all cells and objects
-on a worksheet. Protecting a sheet is protecting all cells in the sheet.
-Individual cells or a selection of cells can be unprotected without unprotecting
-the whole sheet, see <link linkend="cell-protection">next section</link>.</para>
-<para>Select <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
+<para>Protecting a sheet means protecting the contents of all protected cells
+and objects on a sheet. Individual cells or a selection of cells can be
+unprotected within a protected sheet, see <link
+linkend="cell-protection">next section</link>.</para>
+<para>To protect a sheet, select
+<menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
 Document</guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>.A
  dialog appears asking you for a password. The Password strength meter indicates
 if your password is secure enough. The longer the indicator is, the more secure
-your password.</para>
+will be your password.</para>
 <para>That password will then be required to unprotect the sheet.</para>
 <para>When a sheet is protected, the user may not:</para>
 <itemizedlist>
@@ -551,7 +552,9 @@ erasure of formulae.</para></note>
 
 <sect2 id="cell-protection">
 <title>Cell or selected cells protection</title>
-<warning><para>Cell protection is active for all cells by default.</para></warning>
+<warning><para>Cell protection is active for all cells by default and is
+effective when you enable sheet protection. So if you keep the default and if
+you protect the sheet, all cells will be protected.</para></warning>
 <para>If you want only certain cells to be protected, this default protection
 must be turned off for all other cells. For example you might  want most cells
 to accept user input so you will uncheck <guilabel>Protected</guilabel> for
