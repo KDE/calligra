@@ -9,10 +9,10 @@ INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) \
 
 ####### Files
 
-kde_module_LTLIBRARIES = libkchartimageexport.la
+lib_LTLIBRARIES = libkchartimageexport.la
 
 libkchartimageexport_la_SOURCES = imageexport.cpp
-libkchartimageexport_la_LDFLAGS = -module $(KDE_PLUGIN) -no-undefined
+libkchartimageexport_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
 libkchartimageexport_la_LIBADD = ../../../kchart/libkchartcommon.la ../../../filters/libdialogfilter/libdialogfilter.la $(KOFFICE_LIBS)
 
 noinst_HEADERS = \
