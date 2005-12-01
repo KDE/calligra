@@ -12,6 +12,9 @@
             <height>337</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>PositionTab</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -140,7 +143,7 @@
                 <string>Rotation</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Your text will appear oriented in the angle you set here. Positive values will move it anticlockwise and negative values will move it clockwise.</string>
+                <string>Your text will appear oriented in the angle you set here. Positive values will move it counter-clockwise and negative values will move it clockwise.</string>
             </property>
             <hbox>
                 <property name="name">
@@ -296,7 +299,7 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
                                 <enum>Horizontal</enum>
                             </property>
                             <property name="sizeType">
-                                <enum>Fixed</enum>
+                                <enum>MinimumExpanding</enum>
                             </property>
                             <property name="sizeHint">
                                 <size>
@@ -317,16 +320,8 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
                             <property name="name">
                                 <cstring>m_heightPanel</cstring>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>3</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
                             <property name="frameShape">
-                                <enum>StyledPanel</enum>
+                                <enum>NoFrame</enum>
                             </property>
                             <property name="frameShadow">
                                 <enum>Raised</enum>
@@ -364,7 +359,7 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
                                 <enum>Horizontal</enum>
                             </property>
                             <property name="sizeType">
-                                <enum>Minimum</enum>
+                                <enum>MinimumExpanding</enum>
                             </property>
                             <property name="sizeHint">
                                 <size>
@@ -377,16 +372,8 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
                             <property name="name">
                                 <cstring>m_widthPanel</cstring>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>3</hsizetype>
-                                    <vsizetype>5</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
-                            </property>
                             <property name="frameShape">
-                                <enum>StyledPanel</enum>
+                                <enum>NoFrame</enum>
                             </property>
                             <property name="frameShadow">
                                 <enum>Raised</enum>
