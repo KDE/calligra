@@ -4302,13 +4302,26 @@ void KWView::tableStylist()
 
 void KWView::tableProtectCells()
 {
-    KWTableFrameSet *table = m_gui->canvasWidget()->getCurrentTable();
-    Q_ASSERT(table);
-    if (!table)
-        return;
-    KCommand *cmd = table->setProtectContentCommand( m_actionTableProtectCells->isChecked() );
-    if ( cmd )
-        m_doc->addCommand( cmd );
+    KMacroCommand *macro = 0;
+    QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
+    QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+    for(;framesIterator != selectedFrames.end(); ++framesIterator) {
+        KWFrameView *view = *framesIterator;
+        KWFrameSet *fs = view->frame()->frameSet();
+        Q_ASSERT(fs);
+        KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell*>(fs);
+        if(cell == 0) continue;
+        if(!cell->protectContent() ) {
+            KWProtectContentCommand *cmd = new KWProtectContentCommand( i18n("Protect Content"), cell , true);
+            if ( !macro )
+                macro = new KMacroCommand( i18n("Protect Content"));
+            macro->addCommand( cmd );
+        }
+    }
+    if(macro) {
+        macro->execute();
+        m_doc->addCommand( macro );
+    }
 }
 
 // Called when selecting a style in the Format / Style menu

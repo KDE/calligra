@@ -498,8 +498,6 @@ public:
      */
     void removeCell( Cell* cell );
 
-    KCommand *setProtectContentCommand ( bool _protect );
-
     // The normal mechanism doesn't apply to tables; cells are protected individually
     // (in terms of data; the GUI has an item for protecting all cells at once)
     virtual void setProtectContent ( bool ) {}

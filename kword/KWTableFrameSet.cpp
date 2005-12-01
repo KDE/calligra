@@ -2234,27 +2234,6 @@ void KWTableFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst, bool onl
             lst.append(cells);
 }
 
-KCommand *KWTableFrameSet::setProtectContentCommand( bool _protect )
-{
-#if 0
-    KMacroCommand *macro = 0L;
-    for (TableIter cells(this) ; cells ; ++cells  ) {
-        if (cells->frame( 0 )->isSelected()) {
-            if ( cells->protectContent() != _protect )
-            {
-                KWProtectContentCommand *cmd = new KWProtectContentCommand( i18n("Protect Content"), cells , _protect);
-                cells->setProtectContent( _protect );
-                if ( !macro )
-                    macro = new KMacroCommand( i18n("Protect Content"));
-                macro->addCommand( cmd );
-            }
-        }
-    }
-    return macro;
-#endif
-}
-
-
 KWTextFrameSet* KWTableFrameSet::nextTextObject( KWFrameSet *obj )
 {
     bool found = false;
