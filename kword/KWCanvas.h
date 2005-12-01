@@ -88,14 +88,6 @@ public:
     bool eventFilter( QObject *o, QEvent *e );
     bool focusNextPrevChild( bool next);
 
-    /**
-    * set frame border. Sets frame border to newBorder, or to 0 if on==false.
-    */
-    KCommand *setLeftFrameBorder( KoBorder newBorder, bool on );
-    KCommand *setRightFrameBorder( KoBorder newBorder, bool on );
-    KCommand *setTopFrameBorder( KoBorder newBorder, bool on );
-    KCommand *setBottomFrameBorder( KoBorder newBorder, bool on );
-
     void setFrameBackgroundColor( const QBrush &backColor );
 
     void editFrameProperties();

@@ -405,25 +405,25 @@ void KWFrameBorderCommand::execute()
 
         switch( tmpFrameStruct->m_EFrameType)
         {
-            case  FBLeft:
+            case KoBorder::LeftBorder:
                 if(cell) // is a table cell
                     cell->setLeftBorder(m_newBorder);
                 else
                     frame->setLeftBorder(m_newBorder);
                 break;
-            case FBRight:
+            case KoBorder::RightBorder:
                 if(cell) // is a table cell
                     cell->setRightBorder(m_newBorder);
                 else
                      frame->setRightBorder(m_newBorder);
                 break;
-            case FBTop:
+            case KoBorder::TopBorder:
                 if(cell) // is a table cell
                     cell->setTopBorder(m_newBorder);
                 else
                       frame->setTopBorder(m_newBorder);
                 break;
-            case FBBottom:
+            case KoBorder::BottomBorder:
                 if(cell) // is a table cell
                     cell->setBottomBorder(m_newBorder);
                 else
@@ -459,25 +459,25 @@ void KWFrameBorderCommand::unexecute()
         FrameBorderTypeStruct *tmpFrameStruct=m_oldBorderFrameType.at(m_indexFrame.find(tmp));
         switch(tmpFrameStruct->m_EFrameType)
         {
-            case  FBLeft:
+            case KoBorder::LeftBorder:
                 if(cell) // is a table cell
                     cell->setLeftBorder(tmpFrameStruct->m_OldBorder);
                 else
                     frame->setLeftBorder(tmpFrameStruct->m_OldBorder);
                 break;
-            case FBRight:
+            case KoBorder::RightBorder:
                 if(cell) // is a table cell
                     cell->setRightBorder(tmpFrameStruct->m_OldBorder);
                 else
                     frame->setRightBorder(tmpFrameStruct->m_OldBorder);
                 break;
-            case FBTop:
+            case KoBorder::TopBorder:
                 if(cell) // is a table cell
                     cell->setTopBorder(tmpFrameStruct->m_OldBorder);
                 else
                     frame->setTopBorder(tmpFrameStruct->m_OldBorder);
                 break;
-            case FBBottom:
+            case KoBorder::BottomBorder:
                 if(cell) // is a table cell
                     cell->setBottomBorder(tmpFrameStruct->m_OldBorder);
                 else

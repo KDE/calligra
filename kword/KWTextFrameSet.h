@@ -456,6 +456,13 @@ public:
     void pasteData( QMimeSource* data, int provides );
     KCommand* pasteOasisCommand( QMimeSource* data );
 
+    /**
+     * Return the requested border of the paragraph that the cursor currently is in.
+     * @param type specifies which of the borders to return;
+     * @return the requested border of the current paragraph
+     */
+    KoBorder border(KoBorder::BorderType type);
+
 public slots:
     // Reimplemented from KWFrameSet and connected to KoTextView's signals
     virtual void cut();

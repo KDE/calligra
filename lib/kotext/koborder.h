@@ -36,6 +36,7 @@ class KOTEXT_EXPORT KoBorder : public Qt
 public:
     // Update the DTDs if you add something here!
     enum BorderStyle {SOLID = 0, DASH = 1, DOT = 2, DASH_DOT = 3, DASH_DOT_DOT = 4, DOUBLE_LINE = 5};
+    enum BorderType { LeftBorder = 0, RightBorder, TopBorder, BottomBorder };
 
     KoBorder();
     KoBorder( const QColor & c, BorderStyle s, double width );

@@ -127,12 +127,6 @@ struct FrameIndex {
     unsigned int m_iFrameIndex;
 };
 
-enum FrameBorderType { FBLeft=0, FBRight=1, FBTop=2, FBBottom=3};
-
-struct FrameBorderTypeStruct {
-    FrameBorderType m_EFrameType;
-    KoBorder m_OldBorder;
-};
 
 /**
  * Command created when changing frame border
@@ -140,6 +134,12 @@ struct FrameBorderTypeStruct {
 class KWFrameBorderCommand : public KNamedCommand
 {
 public:
+    //enum FrameBorderType { FBLeft=0, FBRight=1, FBTop=2, FBBottom=3};
+    struct FrameBorderTypeStruct {
+        KoBorder::BorderType m_EFrameType;
+        KoBorder m_OldBorder;
+    };
+
     KWFrameBorderCommand( const QString &name, QPtrList<FrameIndex> &_listFrameIndex, QPtrList<FrameBorderTypeStruct> &_frameTypeBorder,const KoBorder & _newBorder ) ;
     ~ KWFrameBorderCommand();
 

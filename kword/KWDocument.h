@@ -466,7 +466,6 @@ public:
     KoHFType footerType() const { return m_pageHeaderFooter.footer; }
     const KoKWHeaderFooter& headerFooterInfo() const { return m_pageHeaderFooter; }
 
-    void setFramePadding( double l, double r, double t, double b );
     void setFrameCoords( double x, double y, double w, double h );
 
     void addCommand( KCommand * cmd );

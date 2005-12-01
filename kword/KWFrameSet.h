@@ -423,9 +423,6 @@ public:
     void setIsRemoveableHeader( bool h ) { m_removeableHeader = h; }
     bool isRemoveableHeader()const { return m_removeableHeader; }
 
-    /// returns if one of our frames has been selected.
-    bool hasSelectedFrame();
-
     bool isProtectSize()const { return m_protectSize; }
     void setProtectSize( bool _b);
 

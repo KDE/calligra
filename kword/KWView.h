@@ -505,10 +505,6 @@ protected:
      */
     void updateTableActions( QValueList<KWFrameView*> selectFrames);
 
-    enum borderChanged { BorderOutline, BorderLeft, BorderRight, BorderTop, BorderBottom };
-    void borderShowValues();
-    void borderSet( borderChanged type);
-
 
     void startKSpell();
     void clearSpellChecker(bool cancelSpellCheck = false );
@@ -536,6 +532,7 @@ protected:
 
 private:  // methods
     void deleteSelectedFrames();
+    void borderChanged(KoBorder::BorderType type);
 
 private: // variables
     KWDocument *m_doc;
@@ -660,13 +657,6 @@ private: // variables
     KSelectAction *m_actionBorderWidth;
     KSelectAction *m_actionBorderStyle;
     TKSelectColorAction *m_actionBackgroundColor;
-    struct
-    {
-        KoBorder left;    ///< Values specific to left border.
-        KoBorder right;   ///< right.
-        KoBorder top;     ///< top.
-        KoBorder bottom;  ///< bottom.
-    } m_border;
 
     KAction *m_actionTableDelRow;
     KAction *m_actionTableDelCol;

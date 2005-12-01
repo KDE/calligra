@@ -3833,6 +3833,16 @@ void KWTextFrameSetEdit::insertWPPage()
     textobj->emitShowCursor();
 }
 
+KoBorder KWTextFrameSetEdit::border(KoBorder::BorderType type) {
+    if(type == KoBorder::LeftBorder)
+        return m_paragLayout.leftBorder;
+    if(type == KoBorder::RightBorder)
+        return m_paragLayout.rightBorder;
+    if(type == KoBorder::TopBorder)
+        return m_paragLayout.topBorder;
+    return m_paragLayout.bottomBorder;
+}
+
 // Update the GUI toolbar button etc. to reflect the current cursor position.
 void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
 {

@@ -4349,26 +4349,6 @@ void KWDocument::updateFooterButton()
     }
 }
 
-void KWDocument::setFramePadding( double l, double r, double t, double b )
-{
-    // todo, make this more OO, and update the tableheaders as well..
-    for ( unsigned int i = 0; i < frameSetCount(); i++ ) {
-        if ( frameSet( i )->hasSelectedFrame() ) {
-            KWFrameSet *frameset = frameSet( i );
-            for ( unsigned int j = 0; j < frameset->frameCount(); j++ ) {
-                if ( frameset->frame( j )->isSelected() ) {
-                    frameset->frame( j )->setPaddingLeft( l );
-                    frameset->frame( j )->setPaddingRight( r );
-                    frameset->frame( j )->setPaddingTop( t );
-                    frameset->frame( j )->setPaddingBottom( b );
-                }
-            }
-        }
-    }
-
-    setModified(TRUE);
-}
-
 void KWDocument::addTextImageRequest( KWTextImage *img )
 {
     m_textImageRequests.append( img );

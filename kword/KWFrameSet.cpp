@@ -994,16 +994,6 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
     return frame;
 }
 
-bool KWFrameSet::hasSelectedFrame()
-{
-    for ( unsigned int i = 0; i < m_frames.count(); i++ ) {
-        if ( m_frames.at( i )->isSelected() )
-            return true;
-    }
-
-    return false;
-}
-
 void KWFrameSet::setVisible( bool v )
 {
     m_visible = v;

@@ -39,7 +39,6 @@ k_dcop:
     uint nbRows();
     uint numCols();
     uint numCells() ;
-    bool hasSelectedFrame();
     //return reference to a cell
     DCOPRef cell( int pos );
     DCOPRef cell( uint row, uint col );

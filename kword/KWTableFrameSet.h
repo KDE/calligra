@@ -498,30 +498,6 @@ public:
      */
     void removeCell( Cell* cell );
 
-    /** set left border. Uses all selected frames in this table to set the left border. Will
-        only set the left border to frames that are selected and don't have a frame to their
-        left that is also selected.
-    */
-    void setLeftBorder(KoBorder newBorder);
-
-    /** set top border. Uses all selected frames in this table to set the top border. Will
-        only set the top border to frames that are selected and don't have a frame to their
-        top that is also selected.
-    */
-    void setTopBorder(KoBorder newBorder);
-
-    /** set bottom border. Uses all selected frames in this table to set the bottom border. Will
-        only set the bottom border to frames that are selected and don't have a frame to their
-        bottom that is also selected.
-    */
-    void setBottomBorder(KoBorder newBorder);
-
-    /** set right border. Uses all selected frames in this table to set the right border. Will
-        only set the right border to frames that are selected and don't have a frame to their
-        right that is also selected.
-    */
-    void setRightBorder(KoBorder newBorder);
-
     KCommand *setProtectContentCommand ( bool _protect );
 
     // The normal mechanism doesn't apply to tables; cells are protected individually

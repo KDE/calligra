@@ -2234,58 +2234,9 @@ void KWTableFrameSet::addTextFrameSets( QPtrList<KWTextFrameSet> & lst, bool onl
             lst.append(cells);
 }
 
-void KWTableFrameSet::setLeftBorder(KoBorder newBorder)
-{
-    for (TableIter cells(this) ; cells ; ++cells  ) {
-        if (cells->frame( 0 )->isSelected()) {
-            Cell *cellLeft = cells->firstColumn() > 0 ? cell(cells->firstRow(), cells->firstColumn()-1) : 0;
-            if(!(cellLeft && cellLeft->frame(0)->isSelected())) {
-                cells->setLeftBorder(newBorder);
-            }
-        }
-    }
-}
-
-void KWTableFrameSet::setTopBorder(KoBorder newBorder)
-{
-    for (TableIter cells(this) ; cells ; ++cells  ) {
-        if (cells->frame( 0 )->isSelected()) {
-            Cell *cellAbove = cells->firstRow() > 0 ? cell(cells->firstRow()-1, cells->firstColumn()) : 0;
-            if(!(cellAbove && cellAbove->frame(0)->isSelected())) {
-                cells->setTopBorder(newBorder);
-            }
-        }
-    }
-    recalcRows(0, 0);
-}
-
-void KWTableFrameSet::setBottomBorder(KoBorder newBorder)
-{
-    for (TableIter cells(this) ; cells ; ++cells  ) {
-        if (cells->frame( 0 )->isSelected()) {
-            Cell *otherCell = cells->firstRow() < getRows() ? cell(cells->firstRow()+1, cells->firstColumn()) : 0;
-            if(!(otherCell && otherCell->frame(0)->isSelected())) {
-                cells->setBottomBorder(newBorder);
-            }
-        }
-    }
-    recalcRows(0, 0);
-}
-
-void KWTableFrameSet::setRightBorder(KoBorder newBorder)
-{
-    for (TableIter cells(this) ; cells ; ++cells  ) {
-        if (cells->frame( 0 )->isSelected()) {
-            Cell *otherCell = cells->firstColumn() < getColumns() ? cell(cells->firstRow(), cells->firstColumn()+1) : 0;
-            if(!(otherCell && otherCell->frame(0)->isSelected())) {
-                cells->setRightBorder(newBorder);
-            }
-        }
-    }
-}
-
 KCommand *KWTableFrameSet::setProtectContentCommand( bool _protect )
 {
+#if 0
     KMacroCommand *macro = 0L;
     for (TableIter cells(this) ; cells ; ++cells  ) {
         if (cells->frame( 0 )->isSelected()) {
@@ -2300,6 +2251,7 @@ KCommand *KWTableFrameSet::setProtectContentCommand( bool _protect )
         }
     }
     return macro;
+#endif
 }
 
 

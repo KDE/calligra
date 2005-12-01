@@ -49,11 +49,6 @@ uint KWordTableFrameSetIface::numCells()
   return m_table->getNumCells();
 }
 
-bool KWordTableFrameSetIface::hasSelectedFrame()
-{
-  return m_table->hasSelectedFrame();
-}
-
 DCOPRef KWordTableFrameSetIface::cell( int pos )
 {
     // This method now sucks

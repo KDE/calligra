@@ -2248,16 +2248,17 @@ bool KWFrameDia::applyChanges()
         if(f==0L) f=m_frame;
         for ( ; f ; f = m_allFrames.next() )
         {
+            // TODO can't this become shorter??
             if ( f->leftBorder() != m_leftBorder )
             {
                 kdDebug() << "Changing borders!" << endl;
-                QPtrList<FrameBorderTypeStruct> tmpBorderList;
+                QPtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
                 QPtrList<FrameIndex> frameindexList;
                 f = KWFrameSet::settingsFrame( f );
                 FrameIndex *index = new FrameIndex( f );
-                FrameBorderTypeStruct *tmp =new FrameBorderTypeStruct;
+                KWFrameBorderCommand::FrameBorderTypeStruct *tmp =new KWFrameBorderCommand::FrameBorderTypeStruct;
                 tmp->m_OldBorder = f->leftBorder();
-                tmp->m_EFrameType = FBLeft;
+                tmp->m_EFrameType = KoBorder::LeftBorder;
                 tmpBorderList.append( tmp );
                 frameindexList.append( index );
                 if ( !macroCmd )
@@ -2268,13 +2269,13 @@ bool KWFrameDia::applyChanges()
             }
             if ( f->rightBorder() != m_rightBorder )
             {
-                QPtrList<FrameBorderTypeStruct> tmpBorderList;
+                QPtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
                 QPtrList<FrameIndex> frameindexList;
                 f = KWFrameSet::settingsFrame( f );
                 FrameIndex *index = new FrameIndex( f );
-                FrameBorderTypeStruct *tmp =new FrameBorderTypeStruct;
+                KWFrameBorderCommand::FrameBorderTypeStruct *tmp =new KWFrameBorderCommand::FrameBorderTypeStruct;
                 tmp->m_OldBorder = f->rightBorder();
-                tmp->m_EFrameType = FBRight;
+                tmp->m_EFrameType = KoBorder::RightBorder;
                 tmpBorderList.append( tmp );
                 frameindexList.append( index );
                 if ( !macroCmd )
@@ -2285,13 +2286,13 @@ bool KWFrameDia::applyChanges()
             }
             if ( f->topBorder() != m_topBorder )
             {
-                QPtrList<FrameBorderTypeStruct> tmpBorderList;
+                QPtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
                 QPtrList<FrameIndex> frameindexList;
                 f = KWFrameSet::settingsFrame( f );
                 FrameIndex *index = new FrameIndex( f );
-                FrameBorderTypeStruct *tmp =new FrameBorderTypeStruct;
+                KWFrameBorderCommand::FrameBorderTypeStruct *tmp =new KWFrameBorderCommand::FrameBorderTypeStruct;
                 tmp->m_OldBorder = f->topBorder();
-                tmp->m_EFrameType = FBTop;
+                tmp->m_EFrameType = KoBorder::TopBorder;
                 tmpBorderList.append( tmp );
                 frameindexList.append( index );
                 if ( !macroCmd )
@@ -2302,13 +2303,13 @@ bool KWFrameDia::applyChanges()
             }
             if ( f->bottomBorder() != m_bottomBorder )
             {
-                QPtrList<FrameBorderTypeStruct> tmpBorderList;
+                QPtrList<KWFrameBorderCommand::FrameBorderTypeStruct> tmpBorderList;
                 QPtrList<FrameIndex> frameindexList;
                 f = KWFrameSet::settingsFrame( f );
                 FrameIndex *index = new FrameIndex( f );
-                FrameBorderTypeStruct *tmp =new FrameBorderTypeStruct;
+                KWFrameBorderCommand::FrameBorderTypeStruct *tmp =new KWFrameBorderCommand::FrameBorderTypeStruct;
                 tmp->m_OldBorder = f->bottomBorder();
-                tmp->m_EFrameType = FBBottom;
+                tmp->m_EFrameType = KoBorder::BottomBorder;
                 tmpBorderList.append( tmp );
                 frameindexList.append( index );
                 if ( !macroCmd )
