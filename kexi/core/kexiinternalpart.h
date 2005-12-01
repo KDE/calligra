@@ -36,14 +36,15 @@ namespace KexiDB {
 class QWidget;
 
 /**
- * This is a virtual prototype for the internal Kexi part implementation
- * Internal Kexi parts are a parts that are not available for users, but loaded
+ * @short A prototype for Kexi Internal Parts (plugins) implementation.
+ *
+ * Internal Kexi parts are parts that are not available for users, but loaded
  * internally be application when needed. Example of such part is Relations Window.
  * The internal part instance is unique and has no explicity stored data.
- * Parts can be able to create widgets or/and dialogs, depending on implementation
+ * Parts may be able to create widgets or/and dialogs, depending on implementation
  * (createWidgetInstance(), createDialogInstance()).
  * Parts can have unique flag set for dialogs (true by default) 
- * - then dialog created by createDialogInstance() is unique.
+ * - then a dialog created by createDialogInstance() is unique.
  */
 class KEXICORE_EXPORT KexiInternalPart : public QObject
 {

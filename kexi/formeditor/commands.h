@@ -29,6 +29,7 @@
 #include <qdom.h>
 
 #include <kcommand.h>
+#include "utils.h"
 
 class QWidget;
 class QRect;
@@ -38,7 +39,6 @@ class QCString;
 
 namespace KFormDesigner {
 
-typedef QPtrList<QWidget> WidgetList;
 class WidgetPropertySet;
 class ObjectTreeItem;
 class Container;

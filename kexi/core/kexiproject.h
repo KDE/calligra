@@ -60,7 +60,8 @@ class KexiMainWindow;
 class KexiDialogBase;
 
 /**
- * This class represents a project's controller. It also contains connection data,
+ * @short A project's main controller. 
+ * It also contains connection data,
  * current file state, etc.
  */
 class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object

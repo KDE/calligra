@@ -26,10 +26,14 @@
 namespace KFormDesigner {
 
 class Form;
+
+//! @short A list of widget pointers.
 typedef QPtrList<QWidget> WidgetList;
+
+//! @short An iterator for WidgetList.
 typedef QPtrListIterator<QWidget> WidgetListIterator;
 
-// Helper classes for sorting widgets
+//! Helper classes for sorting widgets horizontally
 class HorWidgetList : public WidgetList
 {
 	public:
@@ -47,6 +51,7 @@ class HorWidgetList : public WidgetList
 	}
 };
 
+//! Helper classes for sorting widgets vertically
 class VerWidgetList : public WidgetList
 {
 	public:

@@ -36,20 +36,32 @@ namespace KFormDesigner {
 class ObjectTreeItem;
 class Container;
 class EventEater;
+
+//! @short An list of ObjectTreeItem pointers.
 typedef QPtrList<ObjectTreeItem> ObjectTreeList;
+
+//! @short An iterator for ObjectTreeList.
 typedef QPtrListIterator<ObjectTreeItem> ObjectTreeListIterator;
+
+//! @short A QString-based disctionary of ObjectTreeItem pointers.
 typedef QDict<ObjectTreeItem> ObjectTreeDict;
+
+//! @short An iterator for ObjectTreeDict.
 typedef QDictIterator<ObjectTreeItem> ObjectTreeDictIterator;
+
+//! @short A QString -> QVarinat map.
 typedef QMap<QString, QVariant> QVariantMap;
+
+//! @short A const iterator for QVariantMap.
 typedef QMapConstIterator<QString, QVariant> QVariantMapConstIterator;
 
-/*! This class holds the properties of a widget (classname, name, parent, children ..).
-    \author Lucijan Busch <lucijan@kde.org>
+/*! 
+ @short An item representing a widget
+ Holds the properties of a widget (classname, name, parent, children ..).
+ @author Lucijan Busch <lucijan@kde.org>
  */
- //! An item representing a widget
 class KFORMEDITOR_EXPORT ObjectTreeItem
 {
-
 	public:
 		ObjectTreeItem(const QString &className, const QString &name, QWidget *widget, Container *parentContainer, Container *container=0);
 		virtual ~ObjectTreeItem();
@@ -117,9 +129,8 @@ class KFORMEDITOR_EXPORT ObjectTreeItem
 		friend class FormIO;
 };
 
-//! A class representing all the objects in a Form
-/*! This class holds ObjectTreeItem for each widget in a Form.
- */
+/*! @short Represents all the objects available within a form.
+ This class holds ObjectTreeItem for each widget in a Form. */
 class KFORMEDITOR_EXPORT ObjectTree : public ObjectTreeItem
 {
 	public:

@@ -61,7 +61,9 @@ namespace KexiPart
 //	typedef QPtrList<DataSource> DataSourceList;
 
 /**
- * queries parts and dlopens them when needed, they aren't dlopened at startup tough
+ * @short KexiPart's manager: looks up and instantiates them
+ *
+ * It dlopens them when needed, they aren't dlopened at startup is not necessary.
  */
 class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 {

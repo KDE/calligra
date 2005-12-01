@@ -26,13 +26,13 @@
 #include <qptrlist.h>
 #include <qwidget.h>
 
+#include "utils.h"
+
 class QEvent;
 class QWidget;
 class QLayout;
 
 namespace KFormDesigner {
-
-typedef QPtrList<QWidget> WidgetList;
 
 class Container;
 class WidgetLibrary;

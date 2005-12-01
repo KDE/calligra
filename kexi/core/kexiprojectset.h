@@ -30,9 +30,7 @@ namespace KexiDB {
 	class MessageHandler;
 }
 
-/*! Stores information about multiple kexi project-data items
-*/
-
+/*! @short Stores information about multiple kexi project-data items */
 class KEXICORE_EXPORT KexiProjectSet : public KexiDB::Object
 {
 	public:

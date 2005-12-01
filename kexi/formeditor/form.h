@@ -26,6 +26,8 @@
 #include <qptrlist.h>
 
 #include "resizehandle.h"
+#include "utils.h"
+#include "objecttree.h"
 
 class QWidget;
 class QDomElement;
@@ -43,10 +45,6 @@ class FormManager;
 class ObjectTree;
 class ObjectTreeItem;
 class ConnectionBuffer;
-typedef QPtrList<ObjectTreeItem> ObjectTreeList;
-typedef QPtrListIterator<ObjectTreeItem> ObjectTreeListIterator;
-typedef QPtrList<QWidget> WidgetList;
-typedef QPtrListIterator<QWidget> WidgetListIterator;
 
 //! Base (virtual) class for all form widgets
 /*! You need to inherit this class, and implement the drawing functions. This is necessary
