@@ -92,8 +92,6 @@ public:
 
     void editFrameProperties();
     void editFrameProperties( KWFrameSet * frameset );
-    void copySelectedFrames();
-    void cutSelectedFrames();
 
     void pasteFrames();
 

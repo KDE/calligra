@@ -2334,12 +2334,13 @@ void KWView::updateTableStyleList()
 
 void KWView::editCut()
 {
-    KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
+    KWFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->cut();
-    else
-    {
-        m_gui->canvasWidget()->cutSelectedFrames();
+    else {
+        QDragObject *drag = m_doc->dragSelected( 0 );
+        QApplication::clipboard()->setData( drag );
+        deleteFrame(false);
     }
 }
 
