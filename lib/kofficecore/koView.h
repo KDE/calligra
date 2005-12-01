@@ -221,6 +221,16 @@ public:
   virtual KoDocumentChild *activeChild();
 
   /**
+   * Sets up so that autoScroll signals are emitted when the mouse pointer is outside the view
+   */
+  void enableAutoScroll();
+
+  /**
+   * Stops the emitting of autoScroll signals
+   */
+  void disableAutoScroll();
+
+  /**
    * calls KoDocument::paintEverything()
    */
   virtual void paintEverything( QPainter &painter, const QRect &rect, bool transparent = false );
@@ -388,6 +398,8 @@ signals:
   void activated( bool active );
   void selected( bool select );
 
+  void autoScroll(const QPoint &scrollDistance);
+
   void childSelected( KoDocumentChild *child );
   void childUnselected( KoDocumentChild *child );
 
@@ -416,12 +428,13 @@ signals:
 protected slots:
   virtual void slotChildActivated( bool a );
   virtual void slotChildChanged( KoDocumentChild *child );
+  virtual void slotAutoScroll( );
 
 private:
   KAction *actionNewView;
   virtual void setupGlobalActions( void );
   KoViewPrivate *d;
-
+  int autoScrollAcceleration( int offset ) const;
 };
 
 /**

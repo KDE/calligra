@@ -29,9 +29,11 @@
 #include <kdebug.h>
 #include <kparts/partmanager.h>
 #include <kparts/event.h>
+#include <kcursor.h>
 #include <assert.h>
 #include <kstatusbar.h>
-#include <qapplication.h>
+#include <kapplication.h>
+#include <qtimer.h>
 
 class KoViewPrivate
 {
@@ -61,6 +63,7 @@ public:
   bool m_documentDeleted; // true when m_doc gets deleted [can't use m_doc==0
                           // since this only happens in ~QObject, and views
                           // get deleted by ~KoDocument].
+  QTimer *m_scrollTimer;
 
   // Hmm sorry for polluting the private class with such a big inner class.
   // At the beginning it was a little struct :)
@@ -153,11 +156,15 @@ KoView::KoView( KoDocument *document, QWidget *parent, const char *name )
                this, SLOT( slotClearStatusText() ) );
   }
   d->m_doc->setCurrent();
+
+  d->m_scrollTimer = new QTimer( this );
+  connect (d->m_scrollTimer, SIGNAL( timeout() ), this, SLOT( slotAutoScroll() ) );
 }
 
 KoView::~KoView()
 {
   kdDebug(30003) << "KoView::~KoView " << this << endl;
+  delete d->m_scrollTimer;
   delete d->m_dcopObject;
   if (!d->m_documentDeleted)
   {
@@ -462,6 +469,16 @@ KoDocumentChild *KoView::activeChild()
   return koDocument()->child( (KoDocument *)activePart );
 }
 
+void KoView::enableAutoScroll( )
+{
+    d->m_scrollTimer->start( 50 );
+}
+
+void KoView::disableAutoScroll( )
+{
+    d->m_scrollTimer->stop();
+}
+
 void KoView::paintEverything( QPainter &painter, const QRect &rect, bool transparent )
 {
   koDocument()->paintEverything( painter, rect, transparent, this );
@@ -556,6 +573,58 @@ void KoView::slotChildChanged( KoDocumentChild *child )
   QRegion region( child->oldPointArray( matrix() ) );
   emit regionInvalidated( child->frameRegion( matrix(), true ).unite( region ), true );
 }
+
+int KoView::autoScrollAcceleration( int offset ) const
+{
+    if(offset < 40)
+        return offset;
+    else
+        return offset*offset/40;
+}
+
+void KoView::slotAutoScroll(  )
+{
+    QPoint scrollDistance;
+    bool actuallyDoScroll = false;
+    QPoint pos( mapFromGlobal( QCursor::pos() ) );
+
+    //Provide progressive scrolling depending on the mouse position
+    if ( pos.y() < topBorder() )
+    {
+        scrollDistance.setY ((int) - autoScrollAcceleration( - pos.y() + topBorder() ));
+        actuallyDoScroll = true;
+    }
+    else if ( pos.y() > height() - bottomBorder() )
+    {
+        scrollDistance.setY ((int) autoScrollAcceleration(pos.y() - height() + bottomBorder() ));
+        actuallyDoScroll = true;
+    }
+
+    if ( pos.x() < leftBorder() )
+    {
+        scrollDistance.setX ((int) - autoScrollAcceleration( - pos.x() + leftBorder() ));
+        actuallyDoScroll = true;
+    }
+    else if ( pos.x() > width() - rightBorder() )
+    {
+        scrollDistance.setX ((int) autoScrollAcceleration( pos.x() - width() + rightBorder() ));
+        actuallyDoScroll = true;
+    }
+
+    if ( actuallyDoScroll )
+    {
+        int state=0;
+#if KDE_IS_VERSION(3,4,0)
+        state = kapp->keyboardMouseState();
+#endif
+
+        QMouseEvent * event = new QMouseEvent(QEvent::MouseMove, pos, 0, state);
+
+        QApplication::postEvent( canvas(), event );
+        emit autoScroll( scrollDistance );
+    }
+}
+
 
 void KoView::setupGlobalActions() {
     actionNewView = new KAction( i18n( "&New View" ), "window_new", 0,
