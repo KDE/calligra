@@ -343,6 +343,22 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 
 	m_tabWidget->addTab( textWidget, i18n( "Text" ) );
 
+	QWidget* posWidget = new QWidget( m_tabWidget );
+	
+	QGridLayout* posLayout = new QGridLayout( posWidget );
+	textLayout->setMargin( 3 );
+	posLayout->setSpacing( 2 );
+	posLayout->addWidget( new QLabel( i18n( "Alignment:" ), posWidget ), 0, 0 );
+	posLayout->addWidget( m_textAlignment = new QComboBox( posWidget ), 0, 1 );
+	posLayout->addWidget( new QLabel( i18n( "Position:" ), posWidget ), 1, 0 );
+	posLayout->addWidget( m_textPosition = new QComboBox( posWidget ), 1, 1 );
+	posLayout->addWidget( new QLabel( i18n( "Offset:" ), posWidget ), 2, 0 );
+	posLayout->addWidget( m_textOffset = new KDoubleNumInput( posWidget ), 2, 1 );
+	posLayout->setColStretch( 0, 0 );
+	posLayout->setColStretch( 1, 1 );
+	
+	m_tabWidget->addTab( posWidget, i18n( "Position" ) );
+
 	QWidget* fxWidget = new QWidget( m_tabWidget );
 
 	QVBoxLayout* fxLayout = new QVBoxLayout( fxWidget );
@@ -351,17 +367,11 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 	fxLayout->setSpacing( 2 );
 	fxLayout->add( m_shadow = new ShadowWidget( fxWidget, 0L, 315, 4, true ) );
 
-	QGridLayout* fxLayout2 = new QGridLayout( fxLayout );
+	QHBoxLayout* fxLayout2 = new QHBoxLayout( fxLayout );
 
 	fxLayout2->setSpacing( 2 );
-	fxLayout2->addWidget( new QLabel( i18n( "Alignment:" ), fxWidget ), 1, 0 );
-	fxLayout2->addWidget( m_textAlignment = new QComboBox( fxWidget ), 1, 1 );
-	fxLayout2->addWidget( new QLabel( i18n( "Position:" ), fxWidget ), 1, 2 );
-	fxLayout2->addWidget( m_textPosition = new QComboBox( fxWidget ), 1, 3 );
-	fxLayout2->addMultiCellWidget( m_editBasePath = new QPushButton( i18n( "Edit Base Path" ), fxWidget ), 2, 2, 0, 1 );
-	fxLayout2->addMultiCellWidget( m_convertToShapes = new QPushButton( i18n( "Convert to Shapes" ), fxWidget ), 2, 2, 2, 3 );
-	fxLayout2->setColStretch( 1, 1 );
-	fxLayout2->setColStretch( 3, 1 );
+	fxLayout2->addWidget( m_editBasePath = new QPushButton( i18n( "Edit Base Path" ), fxWidget ) );
+	fxLayout2->addWidget( m_convertToShapes = new QPushButton( i18n( "Convert to Shapes" ), fxWidget ) );
 
 	m_tabWidget->addTab( fxWidget, i18n( "Effects" ) );
 
@@ -381,9 +391,11 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 	m_textAlignment->insertItem( "Center" );
 	m_textAlignment->insertItem( "Right" );
 
-	m_textPosition->insertItem( SmallIcon( "14_text_above" ) );
-	m_textPosition->insertItem( SmallIcon( "14_text_on" ) );
-	m_textPosition->insertItem( SmallIcon( "14_text_under" ) );
+	m_textPosition->insertItem( "Above" );
+	m_textPosition->insertItem( "On" );
+	m_textPosition->insertItem( "Under" );
+
+	m_textOffset->setRange( 0.0, 100.0, 1.0, true );
 
 	connect( m_fontCombo, SIGNAL( activated( int ) ), this, SLOT( valueChanged( int ) ) );
 	connect( m_boldCheck, SIGNAL( stateChanged( int ) ), this, SLOT( valueChanged( int ) ) );
@@ -391,6 +403,7 @@ VTextOptionsWidget::VTextOptionsWidget( VTextTool* tool, QWidget *parent )
 	connect( m_fontSize, SIGNAL( valueChanged( int ) ), this, SLOT( valueChanged( int ) ) );
 	connect( m_textPosition, SIGNAL( activated( int ) ), this, SLOT( valueChanged( int ) ) );
 	connect( m_textAlignment, SIGNAL( activated( int ) ), this, SLOT( valueChanged( int ) ) );
+	connect( m_textOffset, SIGNAL( valueChanged( double ) ), this, SLOT( valueChanged( double ) ) );
 	connect( m_textEditor, SIGNAL( returnPressed() ), this, SLOT( accept() ) );
 	connect( m_textEditor, SIGNAL( textChanged( const QString& ) ), this, SLOT( textChanged( const QString& ) ) );
 	connect( m_editBasePath, SIGNAL( clicked() ), this, SLOT( editBasePath() ) );
@@ -413,6 +426,13 @@ VTextOptionsWidget::valueChanged( int )
 
 	m_textEditor->setFont( QFont( m_fontCombo->currentText(), m_fontSize->value(), ( m_boldCheck->isChecked() ? 75 : 50 ), m_italicCheck->isChecked() ) );
 
+	if( m_tool && isVisible() ) 
+		m_tool->textChanged();
+}
+
+void
+VTextOptionsWidget::valueChanged( double )
+{
 	if( m_tool && isVisible() ) 
 		m_tool->textChanged();
 }
@@ -506,6 +526,20 @@ VTextOptionsWidget::setAlignment( VText::Alignment alignment )
 VText::Alignment VTextOptionsWidget::alignment()
 {
 	return ( VText::Alignment ) m_textAlignment->currentItem();
+}
+
+void 
+VTextOptionsWidget::setOffset( double offset )
+{
+	if( offset < 0.0 ) offset = 0.0;
+	if( offset > 100.0 ) offset = 100.0;
+
+	m_textOffset->setValue( offset );
+}
+double 
+VTextOptionsWidget::offset()
+{
+	return m_textOffset->value();
 }
 
 void
@@ -760,7 +794,7 @@ VTextTool::textChanged()
 	m_editedText->setFont( m_optionsWidget->font() );
 	m_editedText->setPosition( m_optionsWidget->position() );
 	m_editedText->setAlignment( m_optionsWidget->alignment() );
-
+	m_editedText->setOffset( 0.01 * m_optionsWidget->offset()  );
 #ifdef HAVE_KARBONTEXT
 	m_editedText->traceText();
 #endif
@@ -786,6 +820,7 @@ VTextTool::accept()
 				  m_editedText->basePath(),
 				  m_editedText->position(),
 				  m_editedText->alignment(),
+				  m_editedText->offset(),
 				  m_editedText->text(),
 				  m_optionsWidget->useShadow(),
 				  m_optionsWidget->shadowAngle(),
@@ -885,9 +920,9 @@ VTextTool::visitVText( VText& text )
 	m_optionsWidget->setText( text.text() );
 	m_optionsWidget->setPosition( text.position() );
 	m_optionsWidget->setAlignment( text.alignment() );
+	m_optionsWidget->setOffset( text.offset() * 100.0 );
 	m_optionsWidget->setUseShadow( text.useShadow() );
 	m_optionsWidget->setShadow( text.shadowAngle(), text.shadowDistance(), text.translucentShadow() );
-
 	m_creating = false;
 }
 
@@ -900,7 +935,7 @@ VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text 
 }
 
 VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text,
-							   const QFont &newFont, const VSubpath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
+							   const QFont &newFont, const VSubpath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, double newOffset, const QString& newText,
 							   bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow )
 		: VCommand( doc, name, "14_text" ), m_text( text )
 {
@@ -913,6 +948,8 @@ VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text,
 	m_textModifications->oldPosition = text->position();
 	m_textModifications->newAlignment = newAlignment;
 	m_textModifications->oldAlignment = text->alignment();
+	m_textModifications->newOffset = newOffset;
+	m_textModifications->oldOffset = text->offset();
 	m_textModifications->newText = newText;
 	m_textModifications->oldText = text->text();
 	m_textModifications->newUseShadow = newUseShadow;
@@ -956,6 +993,7 @@ VTextTool::VTextCmd::execute()
 		m_text->setBasePath( m_textModifications->newBasePath );
 		m_text->setPosition( m_textModifications->newPosition );
 		m_text->setAlignment( m_textModifications->newAlignment );
+		m_text->setOffset( m_textModifications->newOffset );
 		m_text->setText( m_textModifications->newText );
 		m_text->setUseShadow( m_textModifications->newUseShadow );
 		m_text->setShadow( m_textModifications->newShadowAngle, m_textModifications->newShadowDistance, m_textModifications->newTranslucentShadow );
@@ -989,6 +1027,7 @@ VTextTool::VTextCmd::unexecute()
 		m_text->setBasePath( m_textModifications->oldBasePath );
 		m_text->setPosition( m_textModifications->oldPosition );
 		m_text->setAlignment( m_textModifications->oldAlignment );
+		m_text->setOffset( m_textModifications->oldOffset );
 		m_text->setText( m_textModifications->oldText );
 		m_text->setUseShadow( m_textModifications->oldUseShadow );
 		m_text->setShadow( m_textModifications->oldShadowAngle, m_textModifications->oldShadowDistance, m_textModifications->oldTranslucentShadow );

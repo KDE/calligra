@@ -79,6 +79,8 @@ public:
 	virtual bool translucentShadow() { return m_translucentShadow; }
 	virtual int shadowAngle() { return m_shadowAngle; }
 	virtual int shadowDistance() { return m_shadowDistance; }
+	virtual void setOffset( double offset );
+	virtual double offset() { return m_offset; }
 
 	/**
 	 * Provides read only access to the glyphs.
@@ -127,6 +129,8 @@ private:
 	int         m_shadowAngle;
 		// The glyphs (allow to keep a font even if not present on the computer. works as long as you don't edit the text.)
 	VPathList   m_glyphs;
+		// the position offset
+	double      m_offset;
 };
 
 #endif

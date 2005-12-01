@@ -943,16 +943,22 @@ VObject* SvgImport::findObject( const QString &name )
 
 void SvgImport::createText( VGroup *grp, const QDomElement &b )
 {
+	const double pathLength = 10.0;
+
 	VText *text = 0L;
 	QString content;
+	QString anchor;
 	VSubpath base( 0L );
 	VPath *path = 0L;
+	double offset = 0.0;
 
 	addGraphicContext();
 	setupTransform( b );
-	VTransformCmd trafo( 0L, m_gc.current()->matrix );
 	
 	parseFont( b );
+
+	if( ! b.attribute( "text-anchor" ).isEmpty() )
+		anchor = b.attribute( "text-anchor" );
 
 	if( b.hasChildNodes() )
 	{
@@ -961,7 +967,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 			double x = parseUnit( b.attribute( "x" ) );
 			double y = parseUnit( b.attribute( "y" ) );
 			base.moveTo( KoPoint( x, y ) );
-			base.lineTo( KoPoint( x + 10, y ) );
+			base.lineTo( KoPoint( x + pathLength, y ) );
 		}
 
 		for( QDomNode n = b.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -998,6 +1004,24 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 					continue;
 				base = *path->paths().getFirst();
 				content += e.text();
+				
+				if( ! e.attribute( "startOffset" ).isEmpty() )
+				{
+					QString start = e.attribute( "startOffset" );
+					if( start.endsWith( "%" ) )
+						offset = 0.01 * start.remove( '%' ).toDouble();
+					else
+					{
+						float pathLength = 0;
+						VSubpathIterator pIt( base );
+							
+						for( ; pIt.current(); ++pIt )
+							pathLength += pIt.current()->length();
+						
+						if( pathLength > 0.0 )
+							offset = start.toDouble() / pathLength;
+					}
+				}
 			}
 			else if( e.tagName() == "tspan" )
 			{
@@ -1013,7 +1037,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 						double x = parseUnit( posX.first() );
 						double y = parseUnit( posY.first() );
 						base.moveTo( KoPoint( x, y ) );
-						base.lineTo( KoPoint( x + 10, y ) );
+						base.lineTo( KoPoint( x + pathLength, y ) );
 					}
 				}
 			}
@@ -1041,6 +1065,9 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 			}
 			else 
 				continue;
+
+			if( ! e.attribute( "text-anchor" ).isEmpty() )
+				anchor = e.attribute( "text-anchor" );
 		}
 		text = new VText( m_gc.current()->font, base, VText::Above, VText::Left, content.simplifyWhiteSpace() );
 	}
@@ -1050,7 +1077,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 		double x = parseUnit( b.attribute( "x" ) );
 		double y = parseUnit( b.attribute( "y" ) );
 		base.moveTo( KoPoint( x, y ) );
-		base.lineTo( KoPoint( x + 10, y ) );
+		base.lineTo( KoPoint( x + pathLength, y ) );
 		text = new VText( m_gc.current()->font, base, VText::Above, VText::Left, b.text().simplifyWhiteSpace() );
 	}
 
@@ -1062,10 +1089,19 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 
 		text->setFont( m_gc.current()->font );
 
+		VTransformCmd trafo( 0L, m_gc.current()->matrix );
 		trafo.visit( *text );
 
 		if( !b.attribute("id").isEmpty() )
 			text->setName( b.attribute("id") );
+
+		if( anchor == "middle" )
+			text->setAlignment( VText::Center );
+		else if( anchor == "end" )
+			text->setAlignment( VText::Right );
+		
+		if( offset > 0.0 )
+			text->setOffset( offset );
 
 		if( grp ) 
 			grp->append( text );

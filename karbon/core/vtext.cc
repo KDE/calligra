@@ -133,6 +133,7 @@ VText::VText( VObject* parent, VState state )
 	m_translucentShadow	= false;
 	m_shadowAngle		= 0;
 	m_shadowDistance	= 0;
+	m_offset			= 0.0;
 }
 
 
@@ -143,10 +144,11 @@ VText::VText( const QFont &font, const VSubpath& basePath, Position position, Al
 	m_boundingBoxIsInvalid = true;
 	m_stroke = new VStroke( this );
 	m_fill = new VFill();
+	m_offset = 0.0;
 }
 
 VText::VText( const VText& text )
-	: VObject( text ), m_font( text.m_font ), m_basePath( text.m_basePath ), m_position( text.m_position ), m_alignment( text.m_alignment ), m_text( text.m_text ), m_shadow( text.m_shadow ), m_translucentShadow( text.m_translucentShadow ), m_shadowDistance( text.m_shadowDistance ), m_shadowAngle( text.m_shadowAngle )
+	: VObject( text ), m_font( text.m_font ), m_basePath( text.m_basePath ), m_position( text.m_position ), m_alignment( text.m_alignment ), m_text( text.m_text ), m_shadow( text.m_shadow ), m_translucentShadow( text.m_translucentShadow ), m_shadowDistance( text.m_shadowDistance ), m_shadowAngle( text.m_shadowAngle ), m_offset( text.m_offset )
 {
 	m_stroke = new VStroke( *text.m_stroke );
 	m_stroke->setParent( this );
@@ -326,7 +328,7 @@ VText::save( QDomElement& element ) const
 		me.setAttribute( "translucentshadow",	m_translucentShadow );
 		me.setAttribute( "shadowangle",			m_shadowAngle );
 		me.setAttribute( "shadowdist",			m_shadowDistance );
-
+		me.setAttribute( "offset",				m_offset );
 		element.appendChild( me );
 
 		// save all glyphs / paths
@@ -352,7 +354,7 @@ VText::load( const QDomElement& element )
 	m_translucentShadow	= ( element.attribute( "translucentshadow" ).toInt() == 1 );
 	m_shadowAngle		= element.attribute( "shadowangle" ).toInt();
 	m_shadowDistance	= element.attribute( "shadowdist" ).toInt();
-
+	m_offset			= element.attribute( "offset" ).toDouble();
 	m_text = element.attribute( "text", "" );
 
 	VObject::load( element );
@@ -570,12 +572,14 @@ VText::traceText()
 		if( (seg = pIt.current() ) ) 
 			pathLength += seg->length();
 
-	float x = 0;
+	kdDebug(38000) << "traceText(), using offset : " << m_offset << endl;
+	float x = m_offset * pathLength;
+	
 	switch( m_alignment )
 	{
-		case Left: x = 0; break;
-		case Center: x = ( pathLength - l ) / 2; break;
-		case Right: x = pathLength - l; break;
+		case Left: x += 0; break;
+		case Center: x -=  0.5 * l; break;
+		case Right: x -= l; break;
 	}
 	float y = 0;
 	float dx = 0;
@@ -726,6 +730,16 @@ VText::buildRequest( QString family, int weight, int slant, double size, int &id
 
 	
 	return fileName;
+}
+
+void VText::setOffset( double offset )
+{
+	if( offset < 0.0 )
+		m_offset = 0.0;
+	else if( offset > 1.0 )
+		m_offset = 1.0;
+	else
+		m_offset = offset;
 }
 
 #endif // HAVE_KARBONTEXT

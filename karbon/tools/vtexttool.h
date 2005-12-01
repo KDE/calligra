@@ -112,6 +112,8 @@ public:
 	VText::Position position();
 	void setAlignment( VText::Alignment alignment );
 	VText::Alignment alignment();
+	void setOffset( double offset );
+	double offset();
 	void setUseShadow( bool state );
 	bool useShadow();
 	void setShadow( int angle, int distance, bool translucent );
@@ -121,6 +123,7 @@ public:
 
 public slots:
 	void valueChanged( int );
+	void valueChanged( double );
 	void accept();
 	void cancel();
 	void textChanged( const QString& );
@@ -142,7 +145,7 @@ protected:
 	QComboBox* m_textPosition;
 	QPushButton* m_editBasePath;
 	QPushButton* m_convertToShapes;
-
+	KDoubleNumInput* m_textOffset;
 	VTextTool* m_tool;
 };
 
@@ -195,7 +198,7 @@ private:
 	public:
 		VTextCmd( VDocument* doc, const QString& name, VText* text );
 		VTextCmd( VDocument* doc, const QString& name, VText* text,
-				  const QFont &newFont, const VSubpath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, const QString& newText,
+				  const QFont &newFont, const VSubpath& newBasePath, VText::Position newPosition, VText::Alignment newAlignment, double newOffset, const QString& newText,
 				  bool newUseShadow, int newShadowAngle, int newShadowDistance, bool newTranslucentShadow );
 		virtual ~VTextCmd();
 
@@ -222,6 +225,8 @@ private:
 			VText::Position newPosition;
 			VText::Alignment oldAlignment;
 			VText::Alignment newAlignment;
+			double oldOffset;
+			double newOffset;
 			QString oldText;
 			QString newText;
 			bool oldUseShadow;

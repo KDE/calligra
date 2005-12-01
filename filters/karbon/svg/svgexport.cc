@@ -490,10 +490,17 @@ SvgExport::visitVText( VText& text )
 		*m_body << " font-weight=\"bold\"";
 	if( text.font().italic() )
 		*m_body << " font-style=\"italic\"";
+	if( text.alignment() == VText::Center )
+		*m_body << " text-anchor=\"middle\"";
+	else if( text.alignment() == VText::Right )
+		*m_body << " text-anchor=\"end\"";
+
 	*m_body << ">" << endl;
 	
 	printIndentation( m_body, m_indent );
-	*m_body << "<textPath xlink:href=\"#" << id << "\">"; 
+	*m_body << "<textPath xlink:href=\"#" << id << "\"";
+	if( text.offset() > 0.0 )
+		*m_body << " startOffset=\"" << text.offset() * 100.0 << "%\">"; 
 	*m_body << text.text();
 	*m_body << "</textPath>" << endl;
 	printIndentation( m_body, --m_indent );
