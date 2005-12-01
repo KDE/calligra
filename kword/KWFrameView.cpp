@@ -255,21 +255,24 @@ MouseMeaning TableFramePolicy::mouseMeaningOnBorder(const KoPoint &point, int ke
     KWFrame *frame = m_view->frame();
     double hs = HORIZONTAL_SNAP; // horizontal snap zone (in pt)
     double vs = VERTICAL_SNAP; // vertical snap zone (in pt)
+    bool ctrl = keyState & Qt::ControlButton;
 
     if ( QABS( frame->x() - point.x() ) < hs
             && point.y() >= frame->y() && point.y() <= frame->bottom() ) {
         if( static_cast<KWTableFrameSet::Cell *>(frame->frameSet())->firstColumn() == 0 )
             return MEANING_SELECT_ROW;
-        return MEANING_RESIZE_COLUMN;
+        if(!ctrl)
+            return MEANING_RESIZE_COLUMN;
     }
     if ( QABS( frame->y() - point.y() ) < vs
             && point.x() >= frame->x() && point.x() <= frame->right() ) {
         if( static_cast<KWTableFrameSet::Cell *>(frame->frameSet())->firstRow() == 0 )
             return MEANING_SELECT_COLUMN;
-        return MEANING_RESIZE_ROW;
+        if(!ctrl)
+            return MEANING_RESIZE_ROW;
     }
 
-    if(keyState == Qt::ControlButton)
+    if (ctrl)
         return MEANING_MOUSE_SELECT;
     if ( QABS( frame->right() - point.x() ) < hs
             && point.y() >= frame->y() && point.y() <= frame->bottom() )
