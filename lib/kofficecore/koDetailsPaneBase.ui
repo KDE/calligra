@@ -141,6 +141,9 @@
                         <property name="text">
                             <string>Always use this template</string>
                         </property>
+                        <property name="toolTip" stdset="0">
+                            <string>Always use this template at application start up</string>
+                        </property>
                     </widget>
                     <spacer row="3" column="4">
                         <property name="name">

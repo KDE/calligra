@@ -123,6 +123,10 @@ void KoOpenPane::initTemplates(const QString& templateType)
 
       KoTemplatesPane* pane = new KoTemplatesPane(this, d->m_instance, group);
       connect(pane, SIGNAL(openTemplate(const QString&)), this, SIGNAL(openTemplate(const QString&)));
+      connect(pane, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
+              this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)));
+      connect(this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
+              pane, SLOT(changeAlwaysUseTemplate(KoTemplatesPane*, const QString&)));
       KListViewItem* item = addPane(group->name(), group->first()->loadPicture(d->m_instance), pane);
 
       if(!firstItem)

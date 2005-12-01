@@ -2465,9 +2465,9 @@ void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
 {
     if(!alwaysShow) {
         KConfigGroup cfgGrp( instance()->config(), "TemplateChooserDialog" );
-        QString fullTemplateName = cfgGrp.readPathEntry( "FullTemplateName" );
+        QString fullTemplateName = cfgGrp.readEntry( "AlwaysUseTemplate" );
 
-        if( ( cfgGrp.readEntry( "NoStartDlg" ) == QString( "yes" ) ) && !fullTemplateName.isEmpty() ) {
+        if( !fullTemplateName.isEmpty() ) {
             openTemplate( fullTemplateName );
             shells().getFirst()->setRootDocument( this );
             return;

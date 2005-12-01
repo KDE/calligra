@@ -28,6 +28,7 @@ class KoOpenPanePrivate;
 class KInstance;
 class QPixmap;
 class KListViewItem;
+class KoTemplatesPane;
 
 class KoOpenPane : public KoOpenPaneBase
 {
@@ -48,6 +49,9 @@ class KoOpenPane : public KoOpenPaneBase
   signals:
     void openExistingFile(const QString&);
     void openTemplate(const QString&);
+
+    /// Emitted when the always use template has changed
+    void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
   protected:
     void initRecentDocs();

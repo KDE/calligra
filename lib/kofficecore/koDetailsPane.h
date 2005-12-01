@@ -49,12 +49,15 @@ class KoTemplatesPane : public KoDetailsPaneBase
 
   signals:
     void openTemplate(const QString&);
+    /// Emited when the always use checkbox is selected
+    void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
   protected slots:
     void selectionChanged(QListViewItem* item);
     void openTemplate();
     void openTemplate(QListViewItem* item);
-    void alwaysUseToggled(bool on);
+    void alwaysUseClicked();
+    void changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse);
 
     void changePalette();
 

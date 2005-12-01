@@ -12,6 +12,9 @@
             <height>482</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>KoOpenPaneBase</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -25,14 +28,11 @@
             </property>
             <widget class="QLayoutWidget">
                 <property name="name">
-                    <cstring>layout2</cstring>
+                    <cstring>layout5</cstring>
                 </property>
                 <vbox>
                     <property name="name">
                         <cstring>unnamed</cstring>
-                    </property>
-                    <property name="margin">
-                        <number>0</number>
                     </property>
                     <widget class="KListView">
                         <column>
@@ -70,6 +70,23 @@
                             <string></string>
                         </property>
                     </widget>
+                    <spacer>
+                        <property name="name">
+                            <cstring>spacer6</cstring>
+                        </property>
+                        <property name="orientation">
+                            <enum>Vertical</enum>
+                        </property>
+                        <property name="sizeType">
+                            <enum>Expanding</enum>
+                        </property>
+                        <property name="sizeHint">
+                            <size>
+                                <width>20</width>
+                                <height>41</height>
+                            </size>
+                        </property>
+                    </spacer>
                 </vbox>
             </widget>
             <widget class="QLayoutWidget">

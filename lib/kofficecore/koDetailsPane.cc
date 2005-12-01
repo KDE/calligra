@@ -69,12 +69,13 @@ class KoTemplatesPanePrivate
 {
   public:
     KoTemplatesPanePrivate()
-  : m_instance(0), m_selected(false)
+      : m_instance(0), m_selected(false)
     {
     }
 
     KInstance* m_instance;
     bool m_selected;
+    QString m_alwaysUseTemplate;
 };
 
 
@@ -85,8 +86,8 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
   d->m_instance = instance;
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName");
-  m_alwaysUseCheckBox->setChecked(cfgGrp.readEntry("NoStartDlg") == QString("yes"));
-  connect(m_alwaysUseCheckBox, SIGNAL(toggled(bool)), this, SLOT(alwaysUseToggled(bool)));
+  d->m_alwaysUseTemplate = cfgGrp.readEntry("AlwaysUseTemplate");
+  connect(m_alwaysUseCheckBox, SIGNAL(clicked()), this, SLOT(alwaysUseClicked()));
   changePalette();
 
   if(kapp) {
@@ -111,7 +112,9 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
     KListViewItem* item = new KListViewItem(m_documentList, t->name(), t->description(), t->file());
     item->setPixmap(0, t->loadPicture(instance));
 
-    if(t->file() == fullTemplateName) {
+    if(d->m_alwaysUseTemplate == t->file()) {
+      selectItem = item;
+    } else if(!selectItem && (t->file() == fullTemplateName)) {
       selectItem = item;
     }
   }
@@ -145,9 +148,11 @@ void KoTemplatesPane::selectionChanged(QListViewItem* item)
     m_titleLabel->setText(item->text(0));
     m_previewLabel->setPixmap(*(item->pixmap(0)));
     m_detailsLabel->setText(item->text(1));
+    m_alwaysUseCheckBox->setChecked(item->text(2) == d->m_alwaysUseTemplate);
   } else {
     m_openButton->setEnabled(false);
     m_alwaysUseCheckBox->setEnabled(false);
+    m_alwaysUseCheckBox->setChecked(false);
     m_titleLabel->setText("");
     m_previewLabel->setPixmap(QPixmap());
   }
@@ -161,12 +166,12 @@ void KoTemplatesPane::openTemplate()
 
 void KoTemplatesPane::openTemplate(QListViewItem* item)
 {
-  KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
-  cfgGrp.writePathEntry("FullTemplateName", item->text(2));
-  cfgGrp.writeEntry("NoStartDlg", m_alwaysUseCheckBox->isChecked() ? "yes" : "no");
-  cfgGrp.writeEntry("LastReturnType", "Template");
-
   if(item) {
+    KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
+    cfgGrp.writePathEntry("FullTemplateName", item->text(2));
+    cfgGrp.writeEntry("LastReturnType", "Template");
+    cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
+    kdDebug() << "AlwaysUseTemplate == " << d->m_alwaysUseTemplate << endl;
     emit openTemplate(item->text(2));
   }
 }
@@ -184,12 +189,34 @@ bool KoTemplatesPane::isSelected()
   return d->m_selected;
 }
 
-void KoTemplatesPane::alwaysUseToggled(bool on)
+void KoTemplatesPane::alwaysUseClicked()
 {
-  if(!on) {
+  QListViewItem* item = m_documentList->selectedItem();
+
+  if(!m_alwaysUseCheckBox->isChecked()) {
     KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
-    cfgGrp.writeEntry("NoStartDlg", "no");
+    cfgGrp.writeEntry("AlwaysUseTemplate", "");
+    d->m_alwaysUseTemplate = "";
+  } else {
+    d->m_alwaysUseTemplate = item->text(2);
   }
+
+  emit alwaysUseChanged(this, d->m_alwaysUseTemplate);
+}
+
+void KoTemplatesPane::changeAlwaysUseTemplate(KoTemplatesPane* sender, const QString& alwaysUse)
+{
+  if(this == sender)
+    return;
+
+  QListViewItem* item = m_documentList->selectedItem();
+
+  // If the old always use template is selected uncheck the checkbox
+  if(item && (item->text(2) == d->m_alwaysUseTemplate)) {
+    m_alwaysUseCheckBox->setChecked(false);
+  }
+
+  d->m_alwaysUseTemplate = alwaysUse;
 }
 
 
