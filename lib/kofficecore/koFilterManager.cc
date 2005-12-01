@@ -466,13 +466,26 @@ namespace  // in order not to mess with the global namespace ;)
 // graph this mimetype has a connection to.
 QStringList KoFilterManager::mimeFilter( const QCString& mimetype, Direction direction, const QStringList& extraNativeMimeTypes )
 {
+    //kdDebug(s_area) << "mimetype=" << mimetype << " extraNativeMimeTypes=" << extraNativeMimeTypes << endl;
     QAsciiDict<Vertex> vertices;
     buildGraph( vertices, direction );
-    QStringList lst = connected( vertices, mimetype );
-    QStringList::Iterator mimeFilterIt = lst.at( 1 );
-    for( QStringList::ConstIterator extrait = extraNativeMimeTypes.begin(); extrait != extraNativeMimeTypes.end(); ++extrait ) {
-        mimeFilterIt = lst.insert( mimeFilterIt, *extrait );
-        ++mimeFilterIt;
+
+    // TODO maybe use the fake vertex trick from the method below, to make the search faster?
+
+    QStringList nativeMimeTypes;
+    nativeMimeTypes.append( QString::fromLatin1( mimetype ) );
+    nativeMimeTypes += extraNativeMimeTypes;
+
+    // Add the native mimetypes first so that they are on top.
+    QStringList lst = nativeMimeTypes;
+
+    // Now look for filters which output each of those natives mimetypes
+    for( QStringList::ConstIterator natit = nativeMimeTypes.begin(); natit != nativeMimeTypes.end(); ++natit ) {
+        const QStringList outMimes = connected( vertices, (*natit).latin1() );
+        //kdDebug(s_area) << k_funcinfo << "output formats connected to mime " << *natit << " : " << outMimes << endl;
+        for ( QStringList::ConstIterator mit = outMimes.begin(); mit != outMimes.end(); ++mit )
+            if ( lst.find( *mit ) == lst.end() ) // append only if not there already. Qt4: QSet<QString>?
+                lst.append( *mit );
     }
     return lst;
 }
