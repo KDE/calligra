@@ -19,7 +19,7 @@
 #include "kwdwriter.h"
 #include <stdlib.h>
 #include "qrect.h"
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <qpaintdevice.h>
 
 KWDWriter::KWDWriter(KoStore *store){
