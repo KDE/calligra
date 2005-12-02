@@ -493,14 +493,14 @@ bool Canvas::gotoLocation( const Point& _cell )
 
   Sheet* sheet = activeSheet();
   if ( _cell.isSheetKnown() )
-    sheet = _cell.sheet;
+    sheet = _cell.sheet();
   if ( !sheet )
   {
-    KMessageBox::error( this, i18n("Unknown table name %1").arg( _cell.sheetName ) );
+    KMessageBox::error( this, i18n("Unknown table name %1").arg( _cell.sheetName() ) );
     return false;
   }
 
-  gotoLocation( _cell.pos, sheet );
+  gotoLocation( _cell.pos(), sheet );
   return true;
 }
 
@@ -923,7 +923,7 @@ bool Canvas::getHighlightedRangesAt(const int col, const int row, std::vector<Hi
 		Point pt;
 		pt.setRow(row);
 		pt.setColumn(col);
-		pt.sheet=activeSheet();
+		pt.setSheet( activeSheet() );
 
 		if (rg.contains(pt))
 		{
@@ -4087,7 +4087,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 	for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
 	{
 		//Only paint ranges or cells on the current sheet
-		if (iter->firstCell()->sheet != activeSheet())
+		if (iter->firstCell()->sheet() != activeSheet())
 			continue;
 
 		QRect region;
@@ -6102,7 +6102,7 @@ void Canvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 				QRect cellRect(iter->firstCell()->column(),iter->firstCell()->row(),
 				       1,1);
 
-				iter->firstCell()->sheet->setRegionPaintDirty(cellRect);
+				iter->firstCell()->sheet()->setRegionPaintDirty(cellRect);
 			}
 		}
 

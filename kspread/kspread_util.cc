@@ -184,15 +184,57 @@ QPen KSpread::util_toPen( QDomElement & element )
 
 Point::Point(const QString & _str)
 {
-    sheet = 0;
+    _sheet = 0;
     init(_str);
 }
+
+void Point::setPos(QPoint pos)
+{
+    _pos=pos;
+}
+QPoint Point::pos() const
+{
+    return _pos;
+}
+void Point::setSheet(Sheet* sheet)
+{
+    _sheet=sheet;
+}
+Sheet* Point::sheet() const
+{
+    return _sheet;
+}
+void Point::setSheetName(QString name)
+{
+    _sheetName=name;
+}
+QString Point::sheetName() const
+{
+    return _sheetName;
+}
+void Point::setColumnFixed(bool colFixed)
+{
+    _columnFixed=colFixed;
+}
+bool Point::columnFixed() const
+{
+    return _columnFixed;
+}
+void Point::setRowFixed(bool rowFixed)
+{
+    _rowFixed=rowFixed;
+}
+bool Point::rowFixed() const
+{
+    return _rowFixed;
+}
+
 
 void Point::init(const QString & _str)
 {
 
 //    kdDebug(36001) <<"Point::init ("<<_str<<")"<<endl;
-    pos.setX(-1);
+    _pos.setX(-1);
 
     uint len = _str.length();
     if ( !len )
@@ -205,7 +247,7 @@ void Point::init(const QString & _str)
     int n = _str.find( '!' );
     if ( n != -1 )
     {
-      sheetName = _str.left( n );
+      _sheetName = _str.left( n );
       str = _str.right( len - n - 1 ); // remove the '!'
       len = str.length();
     }
@@ -215,11 +257,11 @@ void Point::init(const QString & _str)
     // Fixed ?
     if ( str[0] == '$' )
     {
-  columnFixed = true;
+  _columnFixed = true;
   p++;
     }
     else
-  columnFixed = false;
+  _columnFixed = false;
 
     // Malformed ?
     if ( p == len )
@@ -266,7 +308,7 @@ void Point::init(const QString & _str)
 
     if (str[p] == '$')
     {
-  rowFixed = true;
+  _rowFixed = true;
   p++;
   // Malformed ?
   if ( p == len )
@@ -276,7 +318,7 @@ void Point::init(const QString & _str)
   }
     }
     else
-  rowFixed = false;
+  _rowFixed = false;
 
     uint p2 = p;
     while ( p < len )
@@ -305,23 +347,23 @@ void Point::init(const QString & _str)
   kdDebug(36001) << "Point::init: y <= 0" << endl;
   return;
     }
-    pos = QPoint( x, y );
+    _pos = QPoint( x, y );
 }
 
-Point::Point( const QString & _str, Map * _map,
-                            Sheet * _sheet )
+Point::Point( const QString & str, Map * map,
+                            Sheet * sheet )
 {
     uint p = 0;
-    int p2 = _str.find( '!' );
+    int p2 = str.find( '!' );
     if ( p2 != -1 )
     {
-        sheetName = _str.left( p2++ );
+        _sheetName = str.left( p2++ );
         while ( true )
         {
-            sheet = _map->findSheet( sheetName );
-            if ( !sheet && sheetName[0] == ' ' )
+            _sheet = map->findSheet( _sheetName );
+            if ( !sheet && _sheetName[0] == ' ' )
             {
-                sheetName = sheetName.right( sheetName.length() - 1 );
+                _sheetName = _sheetName.right( _sheetName.length() - 1 );
                 continue;
             }
             break;
@@ -329,42 +371,42 @@ Point::Point( const QString & _str, Map * _map,
         p = p2;
 
         //If the loop didn't return a sheet, better keep a string for isValid
-        if ( sheetName.isEmpty() )
+        if ( _sheetName.isEmpty() )
         {
             kdDebug(36001) << "Point: tableName is unknown" << endl;
-            sheetName = "unknown";
+            _sheetName = "unknown";
         }
     }
     else
     {
-        if ( _sheet != 0 )
+        if ( sheet != 0 )
         {
-            sheet = _sheet;
-            sheetName = _sheet->sheetName();
+            _sheet = sheet;
+            _sheetName = sheet->sheetName();
         }
         else
-            sheet = 0;
+            _sheet = 0;
     }
 
-    init( _str.mid( p ) );
+    init( str.mid( p ) );
 }
 
 Cell *Point::cell() const
 {
-    return sheet->cellAt(pos);
+    return _sheet->cellAt(_pos);
 }
 
 bool Point::operator== (const Point &cell) const
 {
   //sheet info ignored
-  return (pos == cell.pos);
+  return (_pos == cell.pos());
 }
 
 bool Point::operator< (const Point &cell) const
 {
   //sheet info ignored
-  return (pos.y() < cell.pos.y()) ? true :
-      ((pos.y() == cell.pos.y()) && (pos.x() < cell.pos.x()));
+  return (pos().y() < cell.pos().y()) ? true :
+      ((pos().y() == cell.pos().y()) && (pos().x() < cell.pos().x()));
 }
 
 Range::Range()
@@ -388,13 +430,13 @@ Range::Range(const QString & _str)
 
     Point ul(_str.left(p));
     Point lr(_str.mid(p + 1));
-    range = QRect(ul.pos, lr.pos);
-    sheetName = ul.sheetName;
+    range = QRect(ul.pos(), lr.pos());
+    sheetName = ul.sheetName();
 
-    leftFixed = ul.columnFixed;
-    rightFixed = lr.columnFixed;
-    topFixed = ul.rowFixed;
-    bottomFixed = lr.rowFixed;
+    leftFixed = ul.columnFixed();
+    rightFixed = lr.columnFixed();
+    topFixed = ul.rowFixed();
+    bottomFixed = lr.rowFixed();
 }
 
 Range::Range(const QString & _str, Map * _map,
@@ -456,12 +498,12 @@ Range::Range(const QString & _str, Map * _map,
 
     Point ul(_str.mid(p, p3 - p));
     Point lr(_str.mid(p3 + 1));
-    range = QRect(ul.pos, lr.pos);
+    range = QRect(ul.pos(), lr.pos());
 
-    leftFixed = ul.columnFixed;
-    rightFixed = lr.columnFixed;
-    topFixed = ul.rowFixed;
-    bottomFixed = lr.rowFixed;
+    leftFixed = ul.columnFixed();
+    rightFixed = lr.columnFixed();
+    topFixed = ul.rowFixed();
+    bottomFixed = lr.rowFixed();
 }
 
 QString Range::toString()
@@ -515,10 +557,10 @@ void Range::getStartPoint(Point* pt)
 
   pt->setRow(startRow());
   pt->setColumn(startCol());
-  pt->columnFixed=leftFixed;
-  pt->rowFixed=topFixed;
-  pt->sheet=sheet;
-  pt->sheetName=sheetName;
+  pt->setColumnFixed(leftFixed);
+  pt->setRowFixed(topFixed);
+  pt->setSheet(sheet);
+  pt->setSheetName(sheetName);
 }
 
 void Range::getEndPoint(Point* pt)
@@ -527,15 +569,15 @@ void Range::getEndPoint(Point* pt)
 
   pt->setRow(endRow());
   pt->setColumn(endCol());
-  pt->columnFixed=rightFixed;
-  pt->rowFixed=bottomFixed;
-  pt->sheet=sheet;
-  pt->sheetName=sheetName;
+  pt->setColumnFixed(rightFixed);
+  pt->setRowFixed(bottomFixed);
+  pt->setSheet(sheet);
+  pt->setSheetName(sheetName);
 }
 
 bool Range::contains (const Point &cell) const
 {
-  return range.contains (cell.pos);
+  return range.contains (cell.pos());
 }
 
 bool Range::intersects (const Range &r) const

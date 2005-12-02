@@ -48,4 +48,12 @@ void HighlightRange::getRange(Range& rg)
     }
 }
 
+void HighlightRange::setArea(const QRect& newArea)
+{
+    Range rg;
+    getRange(rg);
+    
+   // emit areaChanged(firstCell()->sheet,rg.range,newArea);
+}
+
 

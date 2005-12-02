@@ -1164,7 +1164,7 @@ void Sheet::valueChanged (Cell *cell)
   Point c;
   c.setRow (cell->row());
   c.setColumn (cell->column());
-  c.sheet = this;
+  c.setSheet( this );
 
   //update dependencies
   d->dependencies->cellChanged (c);
@@ -2951,12 +2951,12 @@ void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
             Point point( str );
             if ( point.isValid() )
             {
-              int col = point.pos.x();
-              int row = point.pos.y();
+              int col = point.pos().x();
+              int row = point.pos().y();
               QString newPoint;
 
               // Update column
-              if ( point.columnFixed )
+              if ( point.columnFixed() )
                 newPoint = '$';
 
               if( ref == ColumnInsert
@@ -2978,7 +2978,7 @@ void Sheet::changeNameCellRef( const QPoint & pos, bool fullRowOrColumn,
                 newPoint += Cell::columnName( col );
 
               // Update row
-              if ( point.rowFixed )
+              if ( point.rowFixed() )
                 newPoint += '$';
 
               if( ref == RowInsert
@@ -3670,11 +3670,11 @@ void Sheet::borderRemove( Selection* selectionInfo )
 void Sheet::sortByRow( const QRect &area, int ref_row, SortingOrder mode )
 {
   Point point;
-  point.sheet = this;
-  point.sheetName = d->name;
-  point.pos = area.topLeft();
-  point.columnFixed = false;
-  point.rowFixed = false;
+  point.setSheet(this);
+  point.setSheetName (d->name);
+  point.setPos(area.topLeft());
+  point.setColumnFixed(false);
+  point.setRowFixed(false);
 
   sortByRow( area, ref_row, 0, 0, mode, mode, mode, 0, false, false, point,true );
 }
@@ -3682,11 +3682,11 @@ void Sheet::sortByRow( const QRect &area, int ref_row, SortingOrder mode )
 void Sheet::sortByColumn( const QRect &area, int ref_column, SortingOrder mode )
 {
   Point point;
-  point.sheet = this;
-  point.sheetName = d->name;
-  point.pos = area.topLeft();
-  point.columnFixed = false;
-  point.rowFixed = false;
+  point.setSheet(this);
+  point.setSheetName(d->name);
+  point.setPos(area.topLeft());
+  point.setColumnFixed(false);
+  point.setRowFixed(false);
 
   sortByColumn( area, ref_column, 0, 0, mode, mode, mode, 0, false, false,
                 point,true );
@@ -3760,7 +3760,7 @@ void Sheet::sortByRow( const QRect &area, int key1, int key2, int key3,
     }
   }
 
-  QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
+  QRect target( outputPoint.pos().x(), outputPoint.pos().y(), r.width(), r.height() );
 
   doc()->emitBeginOperation();
 
@@ -4102,7 +4102,7 @@ void Sheet::sortByColumn( const QRect &area, int key1, int key2, int key3,
       return;
     }
   }
-  QRect target( outputPoint.pos.x(), outputPoint.pos.y(), r.width(), r.height() );
+  QRect target( outputPoint.pos().x(), outputPoint.pos().y(), r.width(), r.height() );
 
   if ( !doc()->undoLocked() )
   {

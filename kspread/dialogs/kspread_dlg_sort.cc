@@ -467,15 +467,15 @@ void SortDlg::slotOk()
     m_pView->slotUpdateView( m_pView->activeSheet() );
     return;
   }
-  outputPoint.sheet = sheet;
+  outputPoint.setSheet(sheet);
 
   QRect r = m_pView->selection();
-  if ( r.topLeft() != outputPoint.pos )
+  if ( r.topLeft() != outputPoint.pos() )
   {
-    int h = outputPoint.pos.y() + r.height();
-    int w = outputPoint.pos.x() + r.width();
+    int h = outputPoint.pos().y() + r.height();
+    int w = outputPoint.pos().x() + r.width();
 
-    if ( r.contains(outputPoint.pos)
+    if ( r.contains(outputPoint.pos())
          || ( w >= r.left() && w <= r.right() )
          || ( h >= r.top()  && h <= r.bottom() ) )
     {

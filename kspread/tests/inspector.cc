@@ -118,7 +118,7 @@ void Inspector::Private::handleSheet()
 void Inspector::Private::handleDep()
 {  
   Point cellPoint;
-  cellPoint.sheet = sheet;
+  cellPoint.setSheet(sheet);
   cellPoint.setRow( cell->row() );
   cellPoint.setColumn( cell->column() );
   
@@ -133,7 +133,7 @@ void Inspector::Private::handleDep()
     Point point = deps[i];
     int row = point.row();
     int column = point.column();
-    k1 = Cell::fullName( point.sheet, column, row );
+    k1 = Cell::fullName( point.sheet(), column, row );
     
     new QListViewItem( depView, k1, k2 );
   }

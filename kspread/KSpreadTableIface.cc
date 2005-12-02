@@ -98,14 +98,14 @@ bool KSpread::CellProxy::process( const QCString& obj, const QCString& fun, cons
     kdDebug()<<"CellProxy::process: cellID="<<cellID<<endl;
 
     Point p( cellID); //obj.data() + m_prefix.length() );
-    if ( p.pos.x()<0 ) {
+    if ( p.pos().x()<0 ) {
 	kdDebug(36001)<<"CellProyxy::process: resulting Point is not valid"<<endl;
         return false;
     }
 
-    kdDebug(36001)<<"all checks finsihed, trying to access cell (x):"<<p.pos.x()<<endl;
+    kdDebug(36001)<<"all checks finsihed, trying to access cell (x):"<<p.pos().x()<<endl;
 
-    m_cell->setCell( m_sheet, p.pos );
+    m_cell->setCell( m_sheet, p.pos() );
     return m_cell->process( fun, data, replyType, replyData );
 }
 

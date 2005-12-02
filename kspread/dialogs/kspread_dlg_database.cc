@@ -564,7 +564,7 @@ void DatabaseDialog::accept()
       m_cell->selectAll();
       return;
     }
-    point.sheet = sheet;
+    point.setSheet(sheet);
     //    if ( point.pos.x() < 1 || point.pos.y() < 1 )
     if ( !point.isValid() )
     {
@@ -573,8 +573,8 @@ void DatabaseDialog::accept()
       m_cell->selectAll();
       return;
     }
-    top  = point.pos.y();
-    left = point.pos.x();
+    top  = point.pos().y();
+    left = point.pos().x();
   }
 
   int i;

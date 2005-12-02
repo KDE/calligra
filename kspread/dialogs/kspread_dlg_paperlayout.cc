@@ -324,10 +324,10 @@ void PaperLayout::slotOk()
                 if ( point2.isValid() )
                 {
                     error = false;
-                    print->setPrintRange ( QRect( QPoint( QMIN( point1.pos.x(), point2.pos.x() ),
-                                                          QMIN( point1.pos.y(), point2.pos.y() ) ),
-                                                  QPoint( QMAX( point1.pos.x(), point2.pos.x() ),
-                                                          QMAX( point1.pos.y(), point2.pos.y() ) ) ) );
+                    print->setPrintRange ( QRect( QPoint( QMIN( point1.pos().x(), point2.pos().x() ),
+                                                          QMIN( point1.pos().y(), point2.pos().y() ) ),
+                                                  QPoint( QMAX( point1.pos().x(), point2.pos().x() ),
+                                                          QMAX( point1.pos().y(), point2.pos().y() ) ) ) );
                 }
             }
         }

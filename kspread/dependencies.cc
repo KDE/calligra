@@ -237,7 +237,7 @@ QValueList<Point> DependencyList::getDependants (const Point &cell)
       Point c;
       c.setRow ((*it).cellrow);
       c.setColumn ((*it).cellcolumn);
-      c.sheet = (*it).cellsheet;
+      c.setSheet ( (*it).cellsheet );
       list.push_back (c);
     }
   }
@@ -268,7 +268,7 @@ void DependencyList::addDependency (const Point &cell1,
     const Point &cell2)
 {
   //cell2 can be in another sheet (inter-sheet dependency)
-  Sheet *sh = cell2.sheet;
+  Sheet *sh = cell2.sheet();
   if (!sh)
     sh = sheet;
 
@@ -284,7 +284,7 @@ void DependencyList::addRangeDependency (const RangeDependency &rd)
     sh = sheet;
   
   Point cell;
-  cell.sheet = rd.cellsheet;
+  cell.setSheet (rd.cellsheet);
   cell.setRow (rd.cellrow);
   cell.setColumn (rd.cellcolumn);
   dependencies[cell].ranges.push_back (rd.range);
@@ -311,7 +311,7 @@ void DependencyList::removeDependencies (const Point &cell)
   for (it1 = cells.begin(); it1 != cells.end(); ++it1)
   {
     //get sheet-pointer - needed to handle inter-sheet dependencies correctly
-    Sheet *sh = (*it1).sheet;
+    Sheet *sh = (*it1).sheet();
     if (!sh)
       sh = sheet;
     
@@ -341,7 +341,7 @@ void DependencyList::removeDependencies (const Point &cell)
   for (it1 = leads.begin(); it1 != leads.end(); ++it1)
   {
     //get sheet-pointer - needed to handle inter-sheet dependencies correctly
-    Sheet *sh = (*it1).sheet;
+    Sheet *sh = (*it1).sheet();
     if (!sh)
       sh = sheet;
 
@@ -417,7 +417,7 @@ void DependencyList::generateDependencies (const Range &range)
       Point c;
       c.setRow (row);
       c.setColumn (col);
-      c.sheet = sheet;
+      c.setSheet(sheet);
       generateDependencies (c);
     }
 }
@@ -463,7 +463,7 @@ void DependencyList::processRangeDependencies (const Point &cell)
       Point c;
       c.setRow ((*it).cellrow);
       c.setColumn ((*it).cellcolumn);
-      c.sheet = (*it).cellsheet;
+      c.setSheet ( (*it).cellsheet );
       updateCell (c);
     }
   }
@@ -479,7 +479,7 @@ void DependencyList::processDependencies (const Range &range)
       Point c;
       c.setRow (row);
       c.setColumn (col);
-      c.sheet = sheet;
+      c.setSheet( sheet );
       if (cellDeps.contains (c))
       {
         QValueList<Point> d = cellDeps[c];
@@ -515,7 +515,7 @@ void DependencyList::processRangeDependencies (const Range &range)
         Point c;
         c.setRow ((*it2).range.startRow());
         c.setColumn ((*it2).range.startCol());
-        c.sheet = sheet;
+        c.setSheet(sheet);
         updateCell (c);
       }
     }
@@ -566,7 +566,7 @@ Point DependencyList::leadingCell (const Point &cell) const
   Point c;
   c.setRow (cell.row() - cell.row() % CELLCHUNK_ROWS + 1);
   c.setColumn (cell.column() - cell.column() % CELLCHUNK_COLS + 1);
-  c.sheet = cell.sheet;
+  c.setSheet(cell.sheet());
   return c;
 }
 
@@ -579,8 +579,8 @@ QValueList<Point> DependencyList::leadingCells (const Range &range) const
   cell1.setColumn (range.startCol());
   cell2.setRow (range.endRow());
   cell2.setColumn (range.endCol());
-  cell1.sheet = range.sheet;
-  cell2.sheet = range.sheet;
+  cell1.setSheet(range.sheet);
+  cell2.setSheet(range.sheet);
   
   cell1 = leadingCell (cell1);
   cell2 = leadingCell (cell2);
@@ -590,7 +590,7 @@ QValueList<Point> DependencyList::leadingCells (const Range &range) const
     {
       cell.setRow (row);
       cell.setColumn (col);
-      cell.sheet = range.sheet;
+      cell.setSheet(range.sheet);
       cells.push_back (cell);
     }
   return cells;

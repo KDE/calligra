@@ -103,8 +103,8 @@ class Formula;
  * contains the calculation algorithm.
  *
  * However, all empty cells are represented by one instace, called the
- * default cell. @ref #isDefault tells wether a cell is the default one
- * or not.
+ * default cell. @ref #isDefault can be used to determine whether or not a Cell object represents
+ * the default one.
  */
 class KSPREAD_EXPORT Cell
 {

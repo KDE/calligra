@@ -42,49 +42,75 @@ class Cell;
 class Map;
 class Sheet;
 
-struct KSPREAD_EXPORT Point
+/**
+* Represents the position of a single cell in a workbook.  Each position has a row, column and optionally an associated Sheet.
+* Columns and rows can be marked as fixed.  This is for handling absolute coordinates in formulae (eg. in the
+* formula "=$C$1" both the column (C) and row (1) are fixed.
+*/
+class KSPREAD_EXPORT Point
 {
 public:
-  Point() { pos.setX( -1 ); sheet = 0; columnFixed = false; rowFixed = false; }
+  Point() { _pos.setX( -1 ); _sheet = 0; _columnFixed = false; _rowFixed = false; }
   Point( const QString& );
   Point( const QString&, Map*, Sheet* default_sheet = 0 );
   Point( const Point& c ) {
-    pos = c.pos;
-    sheet = c.sheet; sheetName = c.sheetName;
-    columnFixed = c.columnFixed;
-    rowFixed = c.rowFixed;
+    _pos = c._pos;
+    _sheet = c._sheet; 
+    _sheetName = c._sheetName;
+    _columnFixed = c._columnFixed;
+    _rowFixed = c._rowFixed;
   }
 
-  bool isValid() const { return ( pos.x() >= 0 && ( sheet != 0 || sheetName.isEmpty() ) ); }
-  bool isSheetKnown() const { return ( !sheetName.isEmpty() && sheet != 0 ); }
+  bool isValid() const { return ( _pos.x() >= 0 && ( _sheet != 0 || _sheetName.isEmpty() ) ); }
+  bool isSheetKnown() const { return ( ! _sheetName.isEmpty() && _sheet != 0 ); }
 
   Cell* cell() const;
 
   bool operator== (const Point &cell) const;
   bool operator< (const Point &cell) const;
 
-  int row () const { return pos.y(); };
-  int column () const { return pos.x(); };
-  void setRow (int r) { pos.setY (r); };
-  void setColumn (int c) { pos.setX (c); };
+  int row () const { return _pos.y(); };
+  int column () const { return _pos.x(); };
+  void setRow (int r) { _pos.setY (r); };
+  void setColumn (int c) { _pos.setX (c); };
 
-
-
-  /*
-    TODO
-  bool columnFixed() const { return m_columnFixed; }
-  bool rowFixed() const { return m_rowFixed; }
-  QPoint pos() const { return m_pos; }
-  QString sheetName() const { return m_sheetName; }
-  Sheet* sheet() const { return m_sheet; }
-
-private:
+  /**
+  * Sets the sheet which this point lies on.
   */
-  Sheet* sheet;
-  QString sheetName;
-  QPoint pos;
-  bool columnFixed;
-  bool rowFixed;
+  void      setSheet(Sheet* sheet);
+  Sheet*    sheet() const;     
+  
+  /**
+  * Sets the name of the sheet which this point lies on.
+  */ 
+  void      setSheetName(QString name);  
+  QString   sheetName() const;
+  
+  /**
+  * Sets the position of this point (in rows and columns)
+  */
+  void      setPos(QPoint pos);
+  QPoint    pos() const;          
+  
+  /**
+  * Sets whether or not the column (x coordinate) of this point is fixed (ie. it represents an absolute
+  * coordinate - eg. the column letter B in the formula "=$B30" is fixed)
+  */
+  void      setColumnFixed(bool colFixed);
+  bool      columnFixed() const;   
+  
+  /**
+  * Sets whether or not the row (y coordinate) of this point is fixed (ie. it represents an absolute coordinate - eg. the row number 30 in the formula "=A$30" is fixed)
+  */
+  void      setRowFixed(bool rowFixed);
+  bool      rowFixed() const;  
+  
+private:
+  Sheet* _sheet;
+  QString _sheetName;
+  QPoint _pos;
+  bool _columnFixed;
+  bool _rowFixed;
 
 private:
   void init( const QString& );
@@ -103,18 +129,18 @@ struct KSPREAD_EXPORT Range
   }
   Range( const Point& ul, const Point& lr )
   {
-    range = QRect( ul.pos, lr.pos );
-    if ( ul.sheetName != lr.sheetName )
+    range = QRect( ul.pos(), lr.pos() );
+    if ( ul.sheetName() != lr.sheetName() )
     {
       range.setLeft( -1 );
       return;
     }
-    sheetName = ul.sheetName;
-    sheet = ul.sheet;
-    leftFixed = ul.columnFixed;
-    rightFixed = lr.columnFixed;
-    topFixed = ul.rowFixed;
-    bottomFixed = lr.rowFixed;
+    sheetName = ul.sheetName();
+    sheet = ul.sheet();
+    leftFixed = ul.columnFixed();
+    rightFixed = lr.columnFixed();
+    topFixed = ul.rowFixed();
+    bottomFixed = lr.rowFixed();
   }
 
   bool isValid() const;

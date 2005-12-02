@@ -1357,7 +1357,7 @@ Value Formula::eval() const
           Point cell (c, sheet->workbook(), sheet);
           if (cell.isValid())
           {
-            val1 = cell.sheet->value (cell.column(), cell.row());
+            val1 = cell.sheet()->value (cell.column(), cell.row());
             // store the reference, so we can use it within functions
             entry.col1 = entry.col2 = cell.column();
             entry.row1 = entry.row2 = cell.row();
