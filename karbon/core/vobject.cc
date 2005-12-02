@@ -30,7 +30,7 @@
 #include <koStyleStack.h>
 #include <KoXmlWriter.h>
 #include <koxmlns.h>
-#include <kooasiscontext.h>
+#include <KoOasisLoadingContext.h>
 #include <koOasisStyles.h>
 
 VObject::VObject( VObject* parent, VState state ) : m_dcop( 0L )
@@ -146,7 +146,7 @@ VObject::load( const QDomElement& element )
 }
 
 bool
-VObject::loadOasis( const QDomElement &object, KoOasisContext &context )
+VObject::loadOasis( const QDomElement &object, KoOasisLoadingContext &context )
 {
 	if( !m_stroke )
 		m_stroke = new VStroke( this );
@@ -165,7 +165,7 @@ VObject::loadOasis( const QDomElement &object, KoOasisContext &context )
 }
 
 void
-VObject::addStyles( const QDomElement* style, KoOasisContext & context )
+VObject::addStyles( const QDomElement* style, KoOasisLoadingContext & context )
 {
 	// this function is necessary as parent styles can have parents themself
 	if( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) )

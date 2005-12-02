@@ -30,13 +30,12 @@
 #include <koTemplateChooseDia.h>
 #include <KoStoreDevice.h>
 #include <koOasisStyles.h>
-#include <kooasiscontext.h>
+#include <KoOasisLoadingContext.h>
 #include <KoXmlWriter.h>
 #include <koxmlns.h>
 #include <kodom.h>
 #include <koOasisSettings.h>
 #include <koMainWindow.h>
-#include "kovariable.h"
 
 #include "karbon_factory.h"
 #include "karbon_part.h"
@@ -241,9 +240,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 	else
 		return false;
 
-	KoVariableFormatCollection varFormatColl;
-	KoVariableCollection varColl( new KoVariableSettings(), &varFormatColl );
-	KoOasisContext context( this, varColl, styles, store );
+	KoOasisLoadingContext context( this, styles, store );
 	m_doc.loadOasis( page, context );
         loadOasisSettings( settings );
 	return true;

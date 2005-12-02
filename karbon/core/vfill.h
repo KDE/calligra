@@ -29,7 +29,7 @@
 class QDomElement;
 class KoGenStyle;
 class KoGenStyles;
-class KoOasisContext;
+class KoOasisLoadingContext;
 
 
 /**
@@ -72,7 +72,7 @@ public:
 	void save( QDomElement& element ) const;
 	void saveOasis( KoGenStyles &mainStyles, KoGenStyle &style ) const;
 	void load( const QDomElement& element );
-	void loadOasis( const QDomElement &object, KoOasisContext &context );
+	void loadOasis( const QDomElement &object, KoOasisLoadingContext &context );
 
 	VFill& operator=( const VFill& fill );
 

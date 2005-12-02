@@ -43,7 +43,7 @@ public:
 	virtual void save( QDomElement& element ) const;
 	virtual void saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyles ) const;
 	virtual void load( const QDomElement& element );
-	virtual bool loadOasis( const QDomElement &element, KoOasisContext &context );
+	virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );
 
 	virtual VPath* clone() const;
 

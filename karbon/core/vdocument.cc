@@ -291,7 +291,7 @@ VDocument::loadDocumentContent( const QDomElement& doc )
 }
 
 bool
-VDocument::loadOasis( const QDomElement &element, KoOasisContext &context )
+VDocument::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
 	return m_layers.current()->loadOasis( element, context );
 }

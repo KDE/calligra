@@ -22,7 +22,7 @@
 #include <kdebug.h>
 
 #include <koGenStyles.h>
-#include <kooasiscontext.h>
+#include <KoOasisLoadingContext.h>
 #include <koOasisStyles.h>
 #include <koxmlns.h>
 
@@ -100,7 +100,7 @@ VFill::saveOasis( KoGenStyles &mainStyles, KoGenStyle &style ) const
 }
 
 void
-VFill::loadOasis( const QDomElement &object, KoOasisContext &context )
+VFill::loadOasis( const QDomElement &object, KoOasisLoadingContext &context )
 {
 	KoStyleStack &stack = context.styleStack();
 	if( stack.hasAttributeNS( KoXmlNS::draw, "fill" ) )

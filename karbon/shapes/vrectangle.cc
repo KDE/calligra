@@ -157,7 +157,7 @@ VRectangle::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &main
 }
 
 bool
-VRectangle::loadOasis( const QDomElement &element, KoOasisContext &context )
+VRectangle::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
 	setState( normal );
 

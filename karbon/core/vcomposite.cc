@@ -378,7 +378,7 @@ VPath::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyle
 }
 
 bool
-VPath::loadOasis( const QDomElement &element, KoOasisContext &context )
+VPath::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
 	setState( normal );
 

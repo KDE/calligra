@@ -35,7 +35,7 @@ class VVisitor;
 class DCOPObject;
 class KoStore;
 class KoXmlWriter;
-class KoOasisContext;
+class KoOasisLoadingContext;
 class KoGenStyles;
 
 /**
@@ -220,7 +220,7 @@ public:
 	 * @param element the DOM element to read attributes from
 	 * @param context FIXME
 	 */
-	virtual bool loadOasis( const QDomElement &element, KoOasisContext &context );
+	virtual bool loadOasis( const QDomElement &element, KoOasisLoadingContext &context );
 
 	/**
 	 * Create an exact copy of this object.
@@ -278,7 +278,7 @@ protected:
 	 * @param style FIXME
 	 * @param context FIXME
 	 */
-	void addStyles( const QDomElement* style, KoOasisContext & context );
+	void addStyles( const QDomElement* style, KoOasisLoadingContext & context );
 
 protected:
 	mutable KoRect m_boundingBox; /**< the object's bounding box */

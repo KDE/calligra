@@ -185,7 +185,7 @@ VEllipse::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainSt
 }
 
 bool
-VEllipse::loadOasis( const QDomElement &element, KoOasisContext &context )
+VEllipse::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
 	setState( normal );
 

@@ -25,7 +25,7 @@
 
 #include <KoStore.h>
 #include <KoXmlWriter.h>
-#include <kooasiscontext.h>
+#include <KoOasisLoadingContext.h>
 #include <koStyleStack.h>
 
 #include "vcomposite.h"
@@ -188,7 +188,7 @@ VGroup::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainStyl
 }
 
 bool
-VGroup::loadOasis( const QDomElement &element, KoOasisContext &context )
+VGroup::loadOasis( const QDomElement &element, KoOasisLoadingContext &context )
 {
 	m_objects.setAutoDelete( true );
 	m_objects.clear();
