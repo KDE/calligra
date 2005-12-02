@@ -64,6 +64,7 @@ void KoUserStyleTester::testAddStyle()
 
     KoUserStyle* style2 = new KoUserStyle( "test1" );
     COMPARE( style2->name(), QString( "test1" ) );
+    style2->setDisplayName( displayName );
     ret = coll.addStyle( style2 );
     // here style2 got deleted.
     COMPARE( ret, style );
@@ -72,9 +73,15 @@ void KoUserStyleTester::testAddStyle()
     COMPARE( coll.count(), 1 );
     COMPARE( (int)coll.styleList().count(), 1 );
 
+    // Add another style for good this time
+    KoUserStyle* style3 = new KoUserStyle( "test3" );
+    COMPARE( style3->name(), QString( "test3" ) );
+    ret = coll.addStyle( style3 );
+
     QStringList displayNames = coll.displayNameList();
-    COMPARE( (int)displayNames.count(), 1 );
-    COMPARE( displayNames.first(), style->name() );
+    COMPARE( (int)displayNames.count(), 2 );
+    COMPARE( displayNames[0], displayName );
+    COMPARE( displayNames[1], style3->name() );
 }
 
 void KoUserStyleTester::testFindStyle()
