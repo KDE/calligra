@@ -292,34 +292,32 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
   // Draw Grid
   if (m_pDoc->grid().isShow) {
-    int x = paintRect.x();
-    int y = paintRect.y();
-    int w = QMIN(x + paintRect.width() + m_iXOffset, pw);
-    int h = QMIN(y + paintRect.height() + m_iYOffset, ph);
+    KoPoint topLeft = mapFromScreen(paintRect.topLeft());
+    KoPoint bottomRight = mapFromScreen(paintRect.bottomRight());
+    bottomRight.setX(QMIN(bottomRight.x(), pl.ptWidth));
+    bottomRight.setY(QMIN(bottomRight.y(), pl.ptHeight));
+    QPoint zoomedTL = m_pView->zoomHandler()->zoomPoint(topLeft);
+    QPoint zoomedBR = m_pView->zoomHandler()->zoomPoint(bottomRight);
 
-    QSize dxy = m_pView->zoomHandler()->zoomSize(m_pDoc->grid().freq);
-    
-    if(m_pView->zoomHandler()->zoom() >= 150) {
-      dxy = dxy / 2;
-    } else if(m_pView->zoomHandler()->zoom() <= 50) {
-      dxy = dxy * 2;
-    }
-    
+    KoSize freq = m_pDoc->grid().freq;
+
     painter.setPen(m_pDoc->grid().color);
-    
-    x = qRound(x / dxy.width()) * dxy.width();
 
-    while (x <= w) {
-      painter.drawLine(x, y, x, h);
-      x += dxy.width();
+    double x = qRound(topLeft.x() / freq.width()) * freq.width();
+    int zoomed = 0;
+
+    while (x <= bottomRight.x()) {
+      zoomed = m_pView->zoomHandler()->zoomItX(x);
+      painter.drawLine(zoomed, zoomedTL.y(), zoomed, zoomedBR.y());
+      x += freq.width();
     }
 
-    x = paintRect.x();
-    y = qRound(y / dxy.height()) * dxy.height();
+    double y = qRound(topLeft.y() / freq.height()) * freq.height();
 
-    while (y <= h) {
-      painter.drawLine(x, y, w, y);
-      y += dxy.height();
+    while (y <= bottomRight.y()) {
+      zoomed = m_pView->zoomHandler()->zoomItY(y);
+      painter.drawLine(zoomedTL.x(), zoomed, zoomedBR.x(), zoomed);
+      y += freq.height();
     }
   }
 
@@ -1044,24 +1042,18 @@ KoPoint KivioCanvas::snapToGrid(KoPoint point)
   KoSize dist = m_pDoc->grid().snap;
   KoSize freq = m_pDoc->grid().freq;
 
-  if(m_pView->zoomHandler()->zoom() >= 150) {
-    freq = freq / 2;
-  } else if(m_pView->zoomHandler()->zoom() <= 50) {
-    freq = freq * 2;
-  }
+  double dx = qRound(p.x() / freq.width());
+  double dy = qRound(p.y() / freq.height());
 
-  int dx = qRound(p.x() / freq.width());
-  int dy = qRound(p.y() / freq.height());
-
-  double distx = QABS(p.x() - freq.width() * dx);
-  double disty = QABS(p.y() - freq.height() * dy);
+  double distx = QABS(p.x() - (freq.width() * dx));
+  double disty = QABS(p.y() - (freq.height() * dy));
 
   if(distx < dist.width()) {
-    p.setX(m_pView->zoomHandler()->unzoomItX(m_pView->zoomHandler()->zoomItX(freq.width()) * dx));
+    p.setX(freq.width() * dx);
   }
 
   if(disty < dist.height()) {
-    p.setY(m_pView->zoomHandler()->unzoomItY(m_pView->zoomHandler()->zoomItY(freq.height()) * dy));
+    p.setY(freq.height() * dy);
   }
 
   return p;
