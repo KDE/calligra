@@ -62,11 +62,14 @@ KivioStencilGeometryPanel::~KivioStencilGeometryPanel()
 
 void KivioStencilGeometryPanel::setUnit( KoUnit::Unit m )
 {
+  bool oldEmitSignals = m_emitSignals;
+  m_emitSignals = false;
   m_pX->setUnit(m);
   m_pY->setUnit(m);
   m_pW->setUnit(m);
   m_pH->setUnit(m);
   m_unit = m;
+  m_emitSignals = oldEmitSignals;
 }
 
 void KivioStencilGeometryPanel::xChange( double d )
@@ -106,14 +109,14 @@ void KivioStencilGeometryPanel::rotationChange(int d)
 
 void KivioStencilGeometryPanel::setPosition( double x, double y )
 {
-  m_pX->setValue(KoUnit::toUserValue(x, m_unit));
-  m_pY->setValue(KoUnit::toUserValue(y, m_unit));
+  m_pX->changeValue(x);
+  m_pY->changeValue(y);
 }
 
 void KivioStencilGeometryPanel::setSize( double w, double h )
 {
-  m_pW->setValue(KoUnit::toUserValue(w, m_unit));
-  m_pH->setValue(KoUnit::toUserValue(h, m_unit));
+  m_pW->changeValue(w);
+  m_pH->changeValue(h);
 }
 
 void KivioStencilGeometryPanel::setPageLayout(const KoPageLayout& l)

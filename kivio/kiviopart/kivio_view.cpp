@@ -315,6 +315,7 @@ void KivioView::createGeometryDock()
 {
   m_pStencilGeometryPanel = new KivioStencilGeometryPanel(this);
   m_pStencilGeometryPanel->setCaption(i18n("Geometry"));
+  m_pStencilGeometryPanel->setUnit(m_pDoc->units());
   paletteManager()->addWidget(m_pStencilGeometryPanel, "stencilgeometrypanel", "geometrydocker");
 
   connect( m_pStencilGeometryPanel, SIGNAL(positionChanged(double, double)), this, SLOT(slotChangeStencilPosition(double, double)) );
