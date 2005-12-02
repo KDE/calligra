@@ -57,7 +57,7 @@ When it has started you will be given the choice of opening a recent
 document, creating a new document from a template (with templates categories) or
 opening an existing document . Select the <guilabel>General</guilabel> category
 on the left and choose the <guilabel>Blank Worksheet</guilabel> template. Then
-click the <guilabel>Use this template</guilabel> button.</para>
+click the <guibutton>Use This Template</guibutton> button.</para>
 
 <para>Looking at &kspread; once it has started up, you will see a sheet of
 empty rectangular cells arranged in numbered rows and lettered columns. This

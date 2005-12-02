@@ -35,8 +35,8 @@ need them for translation coordination !
 Please respect the format of the date (DD/MM/YYYY) and of the version
 (Major.minor.lesser), it could be used by automation scripts -->
 
-<date>2005-09-20</date>
-<releaseinfo>1.4.88</releaseinfo>
+<date>2005-12-02</date>
+<releaseinfo>1.5.0</releaseinfo>
 
 <!-- Abstract about this handbook -->
 

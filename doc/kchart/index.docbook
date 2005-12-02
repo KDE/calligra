@@ -34,8 +34,8 @@
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-04-30</date>
-<releaseinfo>1.4</releaseinfo>
+<date>2005-12-02</date>
+<releaseinfo>1.5.0</releaseinfo>
 
 <abstract>
 <para>
@@ -109,26 +109,27 @@ templates or load existing chart documents.
   </mediaobject>
 </screenshot>
 <para>
-You can choose between various ways to startup &kchart;. At the top
-of the dialog you see three option pages. The first is for creating a
-new chart from various templates, the second for opening an existing
-chart with a file dialog and the last page lets you choose between
-recently opened charts.
+You can choose between various ways to startup &kchart;. On the left, you can
+see three options: Open Recent Documents, Charts templates and Open Existing
+Document. The first option lets you choose between
+recently opened charts, the second is for creating a
+new chart from various templates and the third is for opening an existing
+chart with a file dialog.
 </para>
 <para>
-For now we will start with the default template. Select the
-<guimenu>Create Document</guimenu> page, then select
-<guimenu>Charts</guimenu> in the left area and finally select
+For now we will start with the default template. Select
+<guimenu>Charts</guimenu> in the left area and then select
 <guimenu>Bar chart</guimenu> in the main template area. Normally
-this template should already be selected when you launch &kchart;.
+this template should already be selected after choosing
+<guimenu>Charts</guimenu>. 
 </para>
 <para>
-If you decide to start &kchart; with a selected template as default
-you can also select this option at the bottom of the dialog.
+If you decide to always start &kchart; with a selected template as default
+you can also check <guilabel>Always use this template</guilabel>.
 </para>
 <para>
-Now click on the <guimenu>OK</guimenu> button to start with
-a bar chart.
+Click  the <guibutton>Use This Template</guibutton>
+button on the right, under the template preview.
 </para>
 <screenshot>
 <screeninfo>&kchart; User Interface</screeninfo>
