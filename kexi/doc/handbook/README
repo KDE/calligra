@@ -1,10 +1,13 @@
 Kexi Handbook: README
 ---------------------
 
-
 0. Notes
-- For now lets' leave <img> tags untouched. We will need to prepare english 
-screenshots because for now only polish version exists.
+- For now let's leave <img> tags untouched. We will need to prepare english 
+  screenshots because for now only polish version exists.
+- Development version of this handbook generated out of the docbook sources:
+  http://docs.kde.org/development/en/koffice/kexi/index.html
+- Current version from Martin:
+  http://www.ntpb.co.uk/koffice/manual/index.html
 
 1. States:
 -DONE
@@ -15,6 +18,8 @@ screenshots because for now only polish version exists.
 -add "File types supported by Kexi" (describe .kexis, .kexic, .kexi -- appendix?)
 
 3. Translation status:
+Note: the numbering is taken from original Polish HTML version:
+      http://iidea.pl/~js/kexi/manual/pl/html/contents.html
 
 DONE 1. Introduction to databases
 DONE  1.1. What is a database?
