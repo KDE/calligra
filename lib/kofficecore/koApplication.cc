@@ -135,7 +135,9 @@ bool KoApplication::start()
         // and for KoDocument::slotStarted
         doc->addShell( shell );
 
-        if ( !doc->checkAutoSaveFile() ) {
+        if ( doc->checkAutoSaveFile() ) {
+          shell->setRootDocument( doc );
+        } else {
           doc->showStartUpWidget( shell );
         }
 
