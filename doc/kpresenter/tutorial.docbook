@@ -43,27 +43,29 @@ presentation, and adding some basic effects.
 <title>Start a new document</title>
 
 <para>
-When you start &kpresenter;, the Choose Template dialog appears.
+When you start &kpresenter;, the usual &koffice; startup dialog appears.
 </para>
 
 <screenshot>
-<screeninfo>The <guilabel>Choose a Template</guilabel>
+<screeninfo>The <guilabel></guilabel>
 dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tut01.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guilabel>Create Document</guilabel>
-dialog</phrase></textobject>
+<textobject><phrase>The &koffice; startup dialog</phrase></textobject>
 </mediaobject>
 </screenshot>
 
 <para>
-Select the template labeled <guilabel>Title</guilabel> (highlighted in blue) by clicking on it. You can check <guilabel>Always start KPresenter with the selected template</guilabel> to make it the default template.  
+Select <guilabel>Screen</guilabel> on the left then select the template labeled
+<guilabel>Title</guilabel> (highlighted in blue in the screenshot above) by
+clicking on it. You can check <guilabel>Always use this template</guilabel> to
+make it the default template.  
 </para>
 
 <para>
-Now click <guibutton>OK</guibutton>. This brings up the slide editor
-window, where you can view and edit the slides (and objects contained in
+Now click <guibutton>Use This Template</guibutton>. This brings up the slide
+editor window, where you can view and edit the slides (and objects contained in
 them) in your document. At the moment, we just have one slide, with one
 object on it, which is a text box.
 </para>
@@ -78,7 +80,8 @@ object on it, which is a text box.
 
 <para>
 Double-click the text box. The cursor changes to a vertical bar to show
-that you can now type some text and the background of the edited area becomes grey.
+that you can now type some text and the background of the edited area
+becomes grey.
 </para>
 
 <screenshot>
@@ -272,7 +275,8 @@ You can now draw the logo where you want it to be with the mouse. The logo graph
 
 <para>
 Place the mouse cursor anywhere in the middle of the logo, and drag it
-to the middle of the title page. Then use the selection handles to resize it correctly.
+to the middle of the title page. Then use the selection handles to resize
+it correctly.
 </para>
 
 <screenshot>
@@ -291,12 +295,14 @@ That's it. Now you have a picture on the title page!
 
 <sect1 id="insert-object">
 <title>Insert a KOffice object</title>
-<para>Let's insert another &koffice; object under the picture, for example a chart.</para>
+<para>Let's insert another &koffice; object under the picture, for example
+a chart.</para>
 
 <para>
-Every &koffice; supported document can be embedded in a &kpresenter; slide. Let's choose a chart from &kchart;. To do so, the first step is to click on the
-<guimenu>Insert</guimenu> menu item, and then on
-<guimenuitem>Object</guimenuitem>.
+Every &koffice; supported document can be embedded in a &kpresenter; slide.
+Let's choose a chart from &kchart;. To do so, the first step is to click on the
+<guimenu>Insert</guimenu> menu item, and then
+on <guimenuitem>Object</guimenuitem>.
 </para>
 
 <screenshot>
@@ -308,7 +314,9 @@ Every &koffice; supported document can be embedded in a &kpresenter; slide. Let'
 </screenshot>
 
 <para>
-A list of the &koffice; available components appears as submenu. Select <guilabel>Chart</guilabel> and then outline with your mouse the area you want to put your chart in on the &kpresenter; slide.
+A list of the &koffice; available components appears as submenu.
+Select <guilabel>Chart</guilabel> and then outline with your mouse the area you
+want to put your chart in on the &kpresenter; slide.
 </para>
 
 <screenshot>
@@ -319,10 +327,13 @@ A list of the &koffice; available components appears as submenu. Select <guilabe
 </mediaobject>
 </screenshot>
 
-<!--TODO check if the Open Document dialog should appear when the chart is created and not a blank chart-->
+<!--TODO check if the Open Document dialog should appear when the chart is
+created and not a blank chart-->
 
 <para>
-Once you release the mouse button, a blank chart is added on the slide. Whenever you work in the chart, the toolbars and menubar in &kpresenter; main window are replaced by those from &kchart;.
+Once you release the mouse button, a blank chart is added on the slide. Whenever
+you work in the chart, the toolbars and menubar in &kpresenter; main window are
+replaced by those from &kchart;.
 </para>
 
 <screenshot>
@@ -333,11 +344,18 @@ Once you release the mouse button, a blank chart is added on the slide. Whenever
 </mediaobject>
 </screenshot>
 
-<para>While you are in the chart, clicking with the &RMB; will bring the &kchart; settings menu which allows you to modify the parameters of the chart. Please see the &kchart; user manual to get more information on how to use &kchart;.</para>
+<para>While you are in the chart, clicking with the &RMB; will bring the
+&kchart; settings menu which allows you to modify the parameters of the chart.
+Please see the &kchart; user manual to get more information on how to use
+&kchart;.</para>
 
-<para>Click anywhere with the &LMB; outside the chart to go back to &kpresenter; slide.</para>
+<para>Click anywhere with the &LMB; outside the chart to go back to
+&kpresenter; slide.</para>
 
-<para>A single click on the chart  will allow you to drag it to change its location and also to drag the borders to make it bigger as with any other &kpresenter; object. Double click on the chart to get into &kchart; mode and modify any of the chart property.</para>
+<para>A single click on the chart  will allow you to drag it to change its
+location and also to drag the borders to make it bigger as with any other
+&kpresenter; object. Double click on the chart to get into &kchart; mode and
+modify any of the chart property.</para>
 
 </sect1>
 
@@ -415,7 +433,8 @@ blue. To do so, select the title text by double-clicking the text box.
 
 <para>
 Change the color to blue by clicking on the <guiicon>dark blue A</guiicon>
-icon in the color palette on the right side of the editing window (this icon has a Color... tooltip) or choose
+icon in the color palette on the right side of the editing window (this icon has
+a Color... tooltip) or choose
 the <guimenu>Text</guimenu> menu and then click on
 <guimenuitem>Color...</guimenuitem>.</para>
 
@@ -428,9 +447,9 @@ the <guimenu>Text</guimenu> menu and then click on
 </screenshot>
 
 <para>
-Click <guilabel>OK</guilabel> in the Select Color dialog. Changing the color of the selected text to blue changes its
-appearance. The exact color that highlighted text turns depends on your
-system color scheme.
+Click <guilabel>OK</guilabel> in the Select Color dialog. Changing the color of
+the selected text to blue changes its appearance. The exact color that
+highlighted text turns depends on your system color scheme.
 </para>
 
 <screenshot>
