@@ -43,12 +43,21 @@ on your desktop or panel, or you can select
 <menuchoice><guimenu>Office</guimenu><guimenuitem>&kspread;</guimenuitem>
 </menuchoice>
 from the K menu.</para>
-<para>When it has started you will be given the choice of creating a new
-document from a template, opening an existing or recent document, or starting
-with an empty document. Select the <guilabel>Create Document</guilabel> tab,
-then select the <guilabel>General</guilabel> category on the left and
-choose the <guilabel>Blank Worksheet</guilabel> template. Then click the
-<guilabel>OK</guilabel> button.</para>
+
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="newdocument.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>KSpread at first run</phrase>
+</textobject>
+</mediaobject>
+When it has started you will be given the choice of opening a recent
+document, creating a new document from a template (with templates categories) or
+opening an existing document . Select the <guilabel>General</guilabel> category
+on the left and choose the <guilabel>Blank Worksheet</guilabel> template. Then
+click the <guilabel>Use this template</guilabel> button.</para>
 
 <para>Looking at &kspread; once it has started up, you will see a sheet of
 empty rectangular cells arranged in numbered rows and lettered columns. This

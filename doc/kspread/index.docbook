@@ -29,6 +29,13 @@
 <address><email>pamroberts@blueyonder.co.uk</email></address>
 </affiliation>
 </author>
+<author>
+<firstname>Anne-Marie</firstname>
+<surname>Mahfouf</surname>
+<affiliation>
+<address><email>annemarie.mahfouf@free.fr</email></address>
+</affiliation>
+</author>
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 
@@ -36,6 +43,11 @@
 
 <year>2002</year>
 <holder>Pamela Roberts</holder>
+</copyright>
+<copyright>
+
+<year>2005</year>
+<holder>Anne-Marie Mahfouf</holder>
 </copyright>
 <!-- Translators: put here the copyright notice of the translation -->
 
