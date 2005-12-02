@@ -1031,15 +1031,6 @@ void KWView::setupActions()
     m_actionTablePropertiesMenu->setToolTip( i18n( "Adjust properties of the current table." ) );
     m_actionTablePropertiesMenu->setWhatsThis( i18n( "Adjust properties of the current table." ) );
 
-/* TODO: disabled for the moment because I first want a nice icon :-) (09-06-2002)
-
-    m_actionTableProperties = new KAction( i18n( "&Properties" ), 0,
-                               this, SLOT( tableProperties() ),
-                               actionCollection(), "table_properties" );
-    m_actionTableProperties->setToolTip( i18n( "Adjust properties of the current table." ) );
-    m_actionTableProperties->setWhatsThis( i18n( "Adjust properties of the current table." ) );
-
-*/
     m_actionTableInsertRow = new KAction( i18n( "&Insert Row..." ), "insert_table_row", 0,
                                this, SLOT( tableInsertRow() ),
                                actionCollection(), "table_insrow" );
