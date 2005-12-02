@@ -45,6 +45,8 @@
 #include "KWFrameList.h"
 #include "KWPageManager.h"
 #include "KWPage.h"
+#include "KWFrameView.h"
+#include "KWFrameViewManager.h"
 
 #include <koPictureCollection.h>
 #include <koTemplateChooseDia.h>
@@ -2271,7 +2273,7 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
             // No such table yet -> create
             if ( !table ) {
                 table = new KWTableFrameSet( this, tableName );
-                m_lstFrameSet.append( table );
+                addFrameSet(table, false);
             }
             // Load the cell
             return table->loadCell( framesetElem );
@@ -2286,14 +2288,14 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
                 // Footnote -> create a KWFootNoteFrameSet
                 KWFootNoteFrameSet *fs = new KWFootNoteFrameSet( this, fsname );
                 fs->load( framesetElem, loadFrames );
-                m_lstFrameSet.append( fs );
+                addFrameSet(fs, false);
                 return fs;
             }
             else // Normal text frame
             {
                 KWTextFrameSet *fs = new KWTextFrameSet( this, fsname );
                 fs->load( framesetElem, loadFrames );
-                m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
+                addFrameSet(fs, false);
 
                 // Old file format had autoCreateNewFrame as a frameset attribute
                 if ( framesetElem.hasAttribute( "autoCreateNewFrame" ) )
@@ -2316,13 +2318,13 @@ KWFrameSet * KWDocument::loadFrameSet( QDomElement framesetElem, bool loadFrames
     {
         KWPictureFrameSet *fs = new KWPictureFrameSet( this, fsname );
         fs->load( framesetElem, loadFrames );
-        m_lstFrameSet.append( fs );
+        addFrameSet(fs, false);
         return fs;
     } break;
     case FT_FORMULA: {
         KWFormulaFrameSet *fs = new KWFormulaFrameSet( this, fsname );
         fs->load( framesetElem, loadFrames );
-        m_lstFrameSet.append( fs );
+        addFrameSet(fs, false);
         return fs;
     } break;
     // Note that FT_PART cannot happen when loading from a file (part frames are saved into the SETTINGS tag)
@@ -2524,10 +2526,11 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, boo
         {
             // Prepare a new name for the frameset
             QString oldName = elem.attribute( "name" );
-            QString newName = uniqueFramesetName( oldName ); // make up a new name for the frame
+            QString newName = uniqueFramesetName( oldName ); // make up a new name for the frameset
 
             m_pasteFramesetsMap->insert( oldName, newName ); // remember the name transformation
-            kdDebug(32001) << "KWDocument::pasteFrames new frame : " << oldName << "->" << newName << endl;
+            if(oldName != newName)
+                kdDebug(32001) << "KWDocument::pasteFrames new frameset: " << oldName << "->" << newName << endl;
             FrameSetType frameSetType = static_cast<FrameSetType>( KWDocument::getAttribute( elem, "frameType", FT_BASE ) );
             switch ( frameSetType ) {
             case FT_TABLE: {
@@ -2558,7 +2561,7 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, boo
                 fs = loadFrameSet( elem, false, loadFootNote );
                 if ( fs )
                 {
-                    kdDebug() << "KWDocument::pasteFrames created frame " << newName << endl;
+                    kdDebug() << "KWDocument::pasteFrames created frameset: '" << newName << "'\n";
                     fs->setName( newName );
                     frameElem = elem.namedItem( "FRAME" ).toElement();
                 }
@@ -2588,10 +2591,16 @@ void KWDocument::pasteFrames( QDomElement topElem, KMacroCommand * macroCmd, boo
                 KWFrame * frame = new KWFrame( fs, rect.x(), rect.y(), rect.width(), rect.height() );
                 frame->load( frameElem, fs, KWDocument::CURRENT_SYNTAX_VERSION );
                 frame->setZOrder( maxZOrder( frame->pageNumber(this) ) + 1 +nb ); // make sure it's on top
-                if ( selectFrames )
-                    frame->setSelected(TRUE);
                 nb++;
                 fs->addFrame( frame, false );
+                if ( selectFrames ) {
+                    for( QValueList<KWView *>::Iterator it = m_lstViews.begin();
+                            it != m_lstViews.end(); ++it ) {
+                        KWFrameView *fv = (*it)->frameViewManager()->view(frame);
+                        if(fv)
+                            fv->setSelected(true);
+                    }
+                }
                 if ( macroCmd )
                 {
                     KWCreateFrameCommand *cmd = new KWCreateFrameCommand( QString::null, frame );
@@ -4603,7 +4612,6 @@ void KWDocument::deleteFrame( KWFrame * frame )
 {
     KWFrameSet * fs = frame->frameSet();
     kdDebug(32002) << "KWDocument::deleteFrame frame=" << frame << " fs=" << fs << endl;
-    frame->setSelected(false);
     QString cmdName;
     TypeStructDocItem docItem = (TypeStructDocItem) 0;
     switch (fs->type() ) {
