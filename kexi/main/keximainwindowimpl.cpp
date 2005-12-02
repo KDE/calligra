@@ -902,6 +902,14 @@ void KexiMainWindowImpl::initActions()
 
 	//TOOLS MENU
 
+	//WINDOW MENU
+#ifndef Q_WS_WIN
+	//KMDI <= 3.5.1 has no shortcut here:
+	KAction *closeWindowAction = actionCollection()->action("window_close");
+	if (closeWindowAction)
+		closeWindowAction->setShortcut(KStdAccel::close());
+#endif
+
 	//additional 'Window' menu items
 	d->action_window_next = new KAction( i18n("&Next Window"), "",
 #ifdef Q_WS_WIN
