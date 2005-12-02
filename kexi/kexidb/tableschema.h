@@ -24,6 +24,7 @@
 #include <qvaluelist.h>
 #include <qptrlist.h>
 #include <qstring.h>
+#include <qguardedptr.h>
 
 #include <kexidb/fieldlist.h>
 #include <kexidb/schemadata.h>
@@ -61,17 +62,17 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		virtual void removeField(KexiDB::Field *field);
 
 		/*! \return list of fields that are primary key of this table.
-		 This method never returns NULL value,
+		 This method never returns 0 value,
 		 if there is no primary key, empty IndexSchema object is returned.
 		 IndexSchema object is owned by the table schema. */
 		IndexSchema* primaryKey() const { return m_pkey; }
 
-		/*! Sets table's primary key index to \a pkey. Pass pkey==NULL if you want to unassign
+		/*! Sets table's primary key index to \a pkey. Pass pkey==0 if you want to unassign
 		 existing primary key ("primary" property of given IndexSchema object will be
 		 cleared then so this index becomes ordinary index, still existing on table indeices list). 
 		 
 		 If this table already has primary key assigned, 
-		 it is unassigned using setPrimaryKey(NULL) call.
+		 it is unassigned using setPrimaryKey(0) call.
 		 
 		 Before assigning as primary key, you should add the index to indices list 
 		 with addIndex() (this is not done automatically!).
@@ -90,8 +91,8 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		/*! \return String for debugging purposes. */
 		virtual QString debugString();
 
-		/*! if table was created using a connection, 
-			returns this connection object, otherwise NULL. */
+		/*! \return connection object if table was created/retrieved using a connection, 
+			otherwise 0. */
 		Connection* connection() const { return m_conn; }
 
 		/*! \return true if this is KexiDB storage system's table 
@@ -125,11 +126,12 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 		/*! \return query schema object that is defined by "select * from <this_table_name>"
 		 This query schema object is owned by the table schema object.
 		 It is convenient way to get such a query when it is available otherwise.
-		 Always return non-null.
+		 Always returns non-0.
 		*/
 		QuerySchema* query();
 
-		/*! */
+		/*! \return any field not being a part of primary key of this table.
+		 If there is no such field, returns 0. */
 		Field* anyNonPKField();
 
 	protected:
@@ -140,7 +142,7 @@ class KEXI_DB_EXPORT TableSchema : public FieldList, public SchemaData
 
 		IndexSchema::List m_indices;
 
-		Connection *m_conn;
+		QGuardedPtr<Connection> m_conn;
 		
 		IndexSchema *m_pkey;
 

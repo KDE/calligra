@@ -50,8 +50,11 @@ class ConnectionPrivate;
 class RowEditBuffer;
 class DatabaseProperties;
 
-//! Database connection API, allowing queries and updates.
-/*! This class represents a database connection established with given database source.
+/*! @short Provides database connection, allowing queries and data modification.
+
+ This class represents a database connection established within a data source.
+ It supports data queries and modification by creating client-side database cursors.
+ Database transactions are supported.
 */
 class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 {

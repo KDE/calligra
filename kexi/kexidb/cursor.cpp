@@ -88,6 +88,7 @@ void Cursor::init()
 		m_fieldsExpanded = 0;
 		m_fieldCount = 0;
 	}
+	m_orderByColumnList = 0;
 
 	m_containsROWIDInfo = (m_query && m_query->masterTable()) 
 		&& m_conn->m_driver->beh->ROW_ID_FIELD_RETURNS_LAST_AUTOINCREMENTED_VALUE == false;
@@ -501,6 +502,29 @@ QString Cursor::debugString() const
 void Cursor::debug() const
 {
 	KexiDBDbg << debugString() << endl;
+}
+
+void Cursor::setOrderByColumnList(const QStringList& columnNames)
+{
+//! @todo implement this:
+// all field names should be fooun, exit otherwise ..........
+
+	// OK
+//TODO	if (!m_orderByColumnList)
+//TODO
+}
+
+/*! Convenience method, similar to setOrderBy(const QStringList&). */
+void Cursor::setOrderByColumnList(const QString& column1, const QString& column2, 
+	const QString& column3, const QString& column4, const QString& column5)
+{
+//! @todo implement this, like above
+//! @todo add ORDER BY info to debugString()
+}
+
+QueryColumnInfo::Vector Cursor::orderByColumnList() const
+{
+	return m_orderByColumnList ? *m_orderByColumnList: QueryColumnInfo::Vector();
 }
 
 #include "cursor.moc"

@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
    Copyright (C) 2003 Joseph Wenninger <jowenn@kde.org>
 
    This program is free software; you can redistribute it and/or
@@ -93,8 +93,10 @@
                                                     //!< because it does not contain entire 
                                                     //!< master table's primary key
 
+//! errors related to queries
 #define ERR_SQL_EXECUTION_ERROR 260 //!< general server error for sql statement execution
-                                    //! Usually returned by Connection::executeSQL()
+                                    //!< usually returned by Connection::executeSQL()
+#define ERR_SQL_PARSE_ERROR 270 //!< Parse error coming from arser::parse()
 
 #define ERR_OTHER 0xffff //!< use this if you have not (yet?) the name for given error 
 

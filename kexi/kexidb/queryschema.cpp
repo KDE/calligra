@@ -48,6 +48,7 @@ class QuerySchemaPrivate
 		 , maxIndexWithAlias(-1)
 		 , visibility(64)
 		 , fieldsExpanded(0)
+		 , orderByColumnList(0)
 		 , autoincFields(0)
 		 , fieldsOrder(0)
 		 , pkeyFieldsOrder(0)
@@ -69,6 +70,7 @@ class QuerySchemaPrivate
 		~QuerySchemaPrivate()
 		{
 			delete fieldsExpanded;
+			delete orderByColumnList;
 			delete autoincFields;
 			delete fieldsOrder;
 			delete pkeyFieldsOrder;
@@ -197,6 +199,9 @@ class QuerySchemaPrivate
 		/*! Temporary field vector for using in fieldsExpanded() */
 //		Field::Vector *fieldsExpanded;
 		QueryColumnInfo::Vector *fieldsExpanded;
+
+		/*! A list of fields for ORDER BY section. @see QuerySchema::orderByColumnList(). */
+		QueryColumnInfo::Vector *orderByColumnList;
 
 		/*! A cache for autoIncrementFields(). */
 		QueryColumnInfo::List *autoincFields;
@@ -1066,6 +1071,29 @@ void QuerySchema::addToWhereExpression(KexiDB::Field *field, const QVariant& val
 BaseExpr *QuerySchema::whereExpression() const
 {
 	return d->whereExpr;
+}
+
+void QuerySchema::setOrderByColumnList(const QStringList& columnNames)
+{
+//! @todo implement this:
+// all field names should be fooun, exit otherwise ..........
+
+	// OK
+//TODO	if (!d->orderByColumnList)
+//TODO
+}
+
+/*! Convenience method, similar to setOrderBy(const QStringList&). */
+void QuerySchema::setOrderByColumnList(const QString& column1, const QString& column2, 
+	const QString& column3, const QString& column4, const QString& column5)
+{
+//! @todo implement this, like above
+//! @todo add ORDER BY info to debugString()
+}
+
+QueryColumnInfo::Vector QuerySchema::orderByColumnList() const
+{
+	return d->orderByColumnList ? *d->orderByColumnList: QueryColumnInfo::Vector();
 }
 
 

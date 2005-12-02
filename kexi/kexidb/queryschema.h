@@ -459,6 +459,22 @@ class KEXI_DB_EXPORT QuerySchema : public FieldList, public SchemaData
 		 of setWhereExpression(BaseExpr *expr). */
 		void addToWhereExpression(KexiDB::Field *field, const QVariant& value, int relation = '=');
 
+		/*! Sets a list of columns for ORDER BY section of the query. 
+		 Each name on the list must be a field or alias present within the query 
+		 and must not be covered by aliases. If one or more names cannot be found within 
+		 the query, the method will have no effect. Any previous ORDER BY settings will be removed. 
+		 */
+		void setOrderByColumnList(const QStringList& columnNames);
+
+		/*! Convenience method, similar to setOrderByColumnList(const QStringList&). */
+		void setOrderByColumnList(const QString& column1, const QString& column2 = QString::null, 
+			const QString& column3 = QString::null, const QString& column4 = QString::null, 
+			const QString& column5 = QString::null);
+
+		/*! \return a list of columns contained in ORDER BY section of the query. 
+		 @see setOrderBy(const QStringList&) */
+		QueryColumnInfo::Vector orderByColumnList() const;
+
 	protected:
 		void init();
 

@@ -132,7 +132,7 @@ void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
 	if (!obj->serverErrorMsg().isEmpty())
 		details += "<p><b><nobr>" +i18n("Message from server:") + "</nobr></b><br>" + obj->serverErrorMsg();
 	if (!obj->recentSQLString().isEmpty())
-		details += "<p><b><nobr>" +i18n("SQL statement:") + "</nobr></b><br>" + obj->recentSQLString();
+		details += "<p><b><nobr>" +i18n("SQL statement:") + QString("</nobr></b><br><tt>%1</tt>").arg(obj->recentSQLString());
 	int serverResult;
 	QString serverResultName;
 	if (obj->serverResult()!=0) {
@@ -185,9 +185,20 @@ TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QCString& name, b
  , m_query(table ? 0 : conn->querySchema(QString(name)))
 {
 	if (table && !m_table)
-		kdWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : no table specified!" << endl;
+		kdWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : "
+			"no table specified!" << endl;
 	if (!table && !m_query)
-		kdWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : no query specified!" << endl;
+		kdWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : "
+			"no query specified!" << endl;
+}
+
+TableOrQuerySchema::TableOrQuerySchema(Connection *conn, int id)
+{
+	m_table = conn->tableSchema(id);
+	m_query = m_table ? 0 : conn->querySchema(id);
+	if (!m_table && !m_query)
+		kdWarning() << "TableOrQuery(Connection *conn, int id) : no table or query found for id==" 
+			<< id << "!" << endl;
 }
 
 TableOrQuerySchema::TableOrQuerySchema(TableSchema* table)
@@ -225,6 +236,14 @@ QCString TableOrQuerySchema::name() const
 	if (m_query)
 		return m_query->name().latin1();
 	return QCString();
+}
+
+QString TableOrQuerySchema::captionOrName() const
+{
+	SchemaData *sdata = m_table ? static_cast<SchemaData *>(m_table) : static_cast<SchemaData *>(m_query);
+	if (!sdata)
+		return QString::null;
+	return sdata->caption().isEmpty() ? sdata->name() : sdata->caption();
 }
 
 Field* TableOrQuerySchema::field(const QString& name)
@@ -397,6 +416,56 @@ void KexiDB::connectionTestDialog(QWidget* parent, const KexiDB::ConnectionData&
 {
 	ConnectionTestDialog dlg(parent, data, msgHandler);
 	dlg.exec();
+}
+
+int KexiDB::rowCount(const KexiDB::TableSchema& tableSchema)
+{
+//! @todo does not work with non-SQL data sources
+	if (!tableSchema.connection()) {
+		KexiDBWarn << "KexiDB::rowsCount(const KexiDB::TableSchema&): no tableSchema.connection() !" << endl;
+		return -1;
+	}
+	int count = -1; //will be changed only on success of querySingleNumber()
+	tableSchema.connection()->querySingleNumber(
+		QString::fromLatin1("SELECT COUNT() FROM ") 
+		+ tableSchema.connection()->driver()->escapeIdentifier(tableSchema.name()), 
+		count
+	);
+	return count;
+}
+
+int KexiDB::rowCount(KexiDB::QuerySchema& querySchema)
+{
+//! @todo does not work with non-SQL data sources
+	if (!querySchema.connection()) {
+		KexiDBWarn << "KexiDB::rowsCount(const KexiDB::QuerySchema&): no querySchema.connection() !" << endl;
+		return -1;
+	}
+	int count = -1; //will be changed only on success of querySingleNumber()
+	querySchema.connection()->querySingleNumber(
+		QString::fromLatin1("SELECT COUNT() FROM (") 
+		+ querySchema.connection()->selectStatement(querySchema) + ")",
+		count
+	);
+	return count;
+}
+
+int KexiDB::rowCount(KexiDB::TableOrQuerySchema& tableOrQuery)
+{
+	if (tableOrQuery.table())
+		return rowCount( *tableOrQuery.table() );
+	if (tableOrQuery.query())
+		return rowCount( *tableOrQuery.query() );
+	return -1;
+}
+
+int KexiDB::fieldCount(KexiDB::TableOrQuerySchema& tableOrQuery)
+{
+	if (tableOrQuery.table())
+		return tableOrQuery.table()->fieldCount();
+	if (tableOrQuery.query())
+		tableOrQuery.query()->fieldsExpanded().count();
+	return -1;
 }
 
 #include "utils_p.moc"

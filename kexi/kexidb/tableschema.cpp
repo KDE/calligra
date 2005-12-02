@@ -47,7 +47,6 @@ using namespace KexiDB;
 TableSchema::TableSchema(const QString& name)
 	: FieldList(true)
 	, SchemaData(KexiDB::TableObjectType)
-	, m_conn(0)
 	, m_query(0)
 	, m_isKexiDBSystem(false)
 {
@@ -58,7 +57,6 @@ TableSchema::TableSchema(const QString& name)
 TableSchema::TableSchema(const SchemaData& sdata)
 	: FieldList(true)
 	, SchemaData(sdata)
-	, m_conn(0)
 	, m_query(0)
 	, m_isKexiDBSystem(false)
 {
@@ -68,7 +66,6 @@ TableSchema::TableSchema(const SchemaData& sdata)
 TableSchema::TableSchema()
 	: FieldList(true)
 	, SchemaData(KexiDB::TableObjectType)
-	, m_conn(0)
 	, m_query(0)
 	, m_isKexiDBSystem(false)
 {

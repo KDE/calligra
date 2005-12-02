@@ -34,15 +34,12 @@ class TableSchema;
 class QuerySchema;
 class Relationship;
 
-/*! KexiDB::IndexSchema provides information about database index
-	that can be created on database table. 
+/*! @short Provides information about database index that can be created for a database table. 
 	
 	IndexSchema object stores information about table fields that
 	defines this index and additional properties like: whether index is unique
 	or primary key (requires unique). Single-field index can be also auto generated.
-
 */
-
 class KEXI_DB_EXPORT IndexSchema : public FieldList, public SchemaData
 {
 	public:

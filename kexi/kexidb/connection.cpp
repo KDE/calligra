@@ -44,8 +44,6 @@
 #include <klocale.h>
 #include <kdebug.h>
 
-#include <assert.h>
-
 namespace KexiDB {
 
 ConnectionInternal::ConnectionInternal()
@@ -762,7 +760,8 @@ QValueList<int> Connection::objectIds(int objType)
 	if (!checkIsDatabaseUsed())
 		return list;
 
-	Cursor *c = executeQuery(QString("select o_id, o_name from kexi__objects where o_type=%1").arg(objType));
+	Cursor *c = executeQuery(
+		QString::fromLatin1("select o_id, o_name from kexi__objects where o_type=%1").arg(objType));
 	if (!c)
 		return list;
 	for (c->moveFirst(); !c->eof(); c->moveNext())
@@ -1314,6 +1313,8 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 			m_tables.insert(tableSchema->id(), tableSchema);
 			m_tables_byname.insert(tableSchema->name().lower(), tableSchema);
 		}
+		//ok, this table is not created by the connection
+		tableSchema->m_conn = this;
 	}
 	return res;
 }
@@ -2017,7 +2018,8 @@ bool Connection::storeObjectSchemaData( SchemaData &sdata, bool newObject )
 
 tristate Connection::querySingleRecordInternal(RowData &data, const QString* sql, QuerySchema* query)
 {
-	assert(sql || query);
+	Q_ASSERT(sql || query);
+//! @todo does not work with non-SQL data sources
 	if (sql)
 		m_sql = *sql + " LIMIT 1"; // is this safe?
 	KexiDB::Cursor *cursor;
@@ -2160,7 +2162,7 @@ bool Connection::isEmpty( TableSchema& table, bool &success )
 int Connection::resultCount(const QString& sql)
 {
 	int count = -1; //will be changed only on success of querySingleNumber()
-	m_sql = QString("SELECT COUNT() FROM (") + sql + ")";
+	m_sql = QString::fromLatin1("SELECT COUNT() FROM (") + sql + ")";
 	querySingleNumber(m_sql, count);
 	return count;
 }
@@ -2322,13 +2324,19 @@ KexiDB::QuerySchema* Connection::setupQuerySchema( const RowData &data )
 		return false;
 	QString sqlText;
 	if (!loadDataBlock( objID, sqlText, "sql" )) {
+		setError(ERR_OBJECT_NOT_FOUND, 
+			i18n("Could not find definition for query \"%1\". Removing this query is recommended.").arg(data[2].toString()));
 		return 0;
 	}
 	d->parser()->parse( sqlText );
 	KexiDB::QuerySchema *query = d->parser()->query();
 	//error?
 	if (!query) {
-		//todo
+		setError(ERR_SQL_PARSE_ERROR, 
+			i18n("<p>Could not load definition for query \"%1\". "
+			"SQL statement for this query is invalid:<br><tt>%2</tt></p>\n"
+			"<p>You can open this query in Text View and correct it.</p>").arg(data[2].toString())
+			.arg(d->parser()->statement()));
 		return 0;
 	}
 	if (!setupObjectSchemaData( data, *query )) {
@@ -2361,6 +2369,7 @@ QuerySchema* Connection::querySchema( int queryId )
 	if (q)
 		return q;
 	//not found: retrieve schema
+	clearError();
 	RowData data;
 	if (true!=querySingleRecord(QString("select o_id, o_type, o_name, o_caption, o_desc from kexi__objects where o_id=%1").arg(queryId), data))
 		return 0;

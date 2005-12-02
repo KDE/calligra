@@ -176,6 +176,31 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		/*! [PROTOTYPE] \return current record data or NULL if there is no current records. */
 		virtual const char ** rowData() const = 0;
 
+		/*! Sets a list of columns for ORDER BY section of the query. 
+		 Only works when the cursor has been created using QuerySchema object 
+		 (i.e. when query()!=0; does not work with raw statements).
+		 Each name on the list must be a field or alias present within the query 
+		 and must not be covered by aliases. If one or more names cannot be found within 
+		 the query, the method will have no effect. Any previous ORDER BY settings will be removed. 
+
+		 The order list provided here has priority over a list defined in the QuerySchema
+		 object itseld (using QuerySchema::setOrderByColumnList()).
+		 The QuerySchema object itself is not modifed by this method: only order of records retrieved 
+		 by this cursor is affected. 
+		
+		 Use this method before calling open(). You can also call reopen() after calling this method 
+		 to see effects of applying records order. */
+		void setOrderByColumnList(const QStringList& columnNames);
+
+		/*! Convenience method, similar to setOrderByColumnList(const QStringList&). */
+		void setOrderByColumnList(const QString& column1, const QString& column2 = QString::null, 
+			const QString& column3 = QString::null, const QString& column4 = QString::null, 
+			const QString& column5 = QString::null);
+
+		/*! \return a list of fields contained in ORDER BY section of the query. 
+		 @see setOrderBy(const QStringList&) */
+		QueryColumnInfo::Vector orderByColumnList() const;
+
 		/*! Puts current record's data into \a data (makes a deep copy).
 		 This have unspecified behaviour if the cursor is not at valid record.
 		 Note: For reimplementation in driver's code. Shortly, this method translates
@@ -312,6 +337,10 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		//! Usefull e.g. for value(int) method when we need access to schema def.
 		QueryColumnInfo::Vector* m_fieldsExpanded;
 
+		//! Used by setOrderByColumnList()
+		QueryColumnInfo::Vector* m_orderByColumnList;
+
+
 //		QValueList<bool> m_detailedVisibility;
 
 	private:
@@ -320,6 +349,7 @@ class KEXI_DB_EXPORT Cursor: public QObject, public Object
 		//<members related to buffering>
 		bool m_at_buffer : 1;             //! true if we already point to the buffer with curr_coldata
 		//</members related to buffering>
+
 
 		class Private;
 		Private *d;

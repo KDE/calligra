@@ -136,8 +136,12 @@ namespace KexiDB
 	class KEXI_DB_EXPORT TableOrQuerySchema {
 		public:
 			//! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
-			//! using \a conn connection.
+			//! using \a conn connection and \a name.
 			TableOrQuerySchema(Connection *conn, const QCString& name, bool table);
+
+			//! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
+			//! using \a conn connection and \a id.
+			TableOrQuerySchema(Connection *conn, int id);
 
 			TableOrQuerySchema(TableSchema* table);
 			TableOrQuerySchema(QuerySchema* query);
@@ -150,6 +154,8 @@ namespace KexiDB
 
 			//! \return name of a query or table
 			QCString name() const;
+			//! \return caption (if present) or name of the table/query
+			QString captionOrName() const;
 
 			//! \return all columns for the table or the query
 			const QueryColumnInfo::Vector columns(bool unique = false);
@@ -166,6 +172,26 @@ namespace KexiDB
 			TableSchema* m_table;
 			QuerySchema* m_query;
 	};
+
+//! @todo perhaps use Q_ULLONG here?
+	/*! \return a number of rows that can be retrieved from \a tableSchema. 
+	 The table must be created or retrieved using a Connection object,
+	 i.e. tableSchema.connection() must not return 0.
+	 For SQL sata sources it does not fetch any records, only "COUNT()" 
+	 SQL aggregation is used at the backed. 
+	 -1 is returned if error occured. */
+	KEXI_DB_EXPORT int rowCount(const TableSchema& tableSchema);
+
+	/*! Like above but operates on a query schema. */
+	KEXI_DB_EXPORT int rowCount(QuerySchema& querySchema);
+
+	/*! Like above but operates on a table or query schema variant. */
+	KEXI_DB_EXPORT int rowCount(TableOrQuerySchema& tableOrQuery);
+
+	/*! \return a number of columns that can be retrieved from table or query schema. 
+	 In case of query, expanded fields are counted. Can return -1 if \a tableOrQuery 
+	 has neither table or query assigned. */
+	KEXI_DB_EXPORT int fieldCount(KexiDB::TableOrQuerySchema& tableOrQuery);
 
 	/*! shows connection test dialog with a progress bar indicating connection testing 
 	 (within a second thread).
