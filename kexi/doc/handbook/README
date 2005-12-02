@@ -45,7 +45,7 @@ DONE  4.6. Main application elements
 DONE  4.6.1. Project Navigator pane
 DONE  4.6.2. Database object windows
 DONE  4.6.3. Property pane
-5. Building a simple database
+5. Building simple databases
   5.1. Designing database tables
     5.1.1. Table Designer window
   5.2. Entering data to tables
@@ -65,7 +65,7 @@ DONE  4.6.3. Property pane
     5.4.9. Setting widgets size and position
     5.4.10. Setting the tab order
   5.5. Entering data using forms
-6. Advanced database creation
+6. Advanced database topics
   6.1. Sharing a Kexi database project with others
     6.1.1. File-based database
     6.1.2. Server database

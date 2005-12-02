@@ -12,6 +12,14 @@
 
 CCMAIL: kexi@kde.org
 
+2005-12-02
+Main Window
+- usability: for IDEAl mode tabs are also visible when one window is opened
+  (otherwise user could not know what the window's caption is)
+- usability: added "close" button to the tab widget for IDEAl mode
+- 'hover close button' is now turned off by default for IDEAl mode
+  (added HoverCloseButtonForTabs setting to kexirc for changing this)
+
 2005-11-29..12-01
 General
 - file dialog's filters now contain only filters that make sense, 

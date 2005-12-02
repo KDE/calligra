@@ -742,8 +742,8 @@ DONE -import ww. Baz do plikowego projektu Kexi
      -proste raporty (autoraporty, bez projektowania)
      -drukowanie raportów
 DONE -import z csv (edytowany znak rozdzielenia kolumn) i ze schowka
-     -eksport do csv (edytowany znak rozdzielenia kolumn) i do schowka
-     -obs³uga comboboksów w formularzach i tabelach
+DONE -eksport do csv (edytowany znak rozdzielenia kolumn) i do schowka
+IN-PR-obs³uga comboboksów w formularzach i tabelach
      -update dokumentacji, w tym dot. serwerow
 IN-PR-trzymanie obrazków w bazie
 
