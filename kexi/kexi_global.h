@@ -49,5 +49,7 @@
 #define foreach_list(_class, _variable, _list) \
 	for (_class _variable(_list); _variable.current(); ++_variable)
 
+#define foreach_dict(_class, _variable, _list) foreach_list(_class, _variable, _list)
+
 #endif /* _KEXI_GLOBAL_ */
 
