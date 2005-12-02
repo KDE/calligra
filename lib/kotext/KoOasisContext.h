@@ -20,34 +20,28 @@
 #ifndef KOOASISCONTEXT_H
 #define KOOASISCONTEXT_H
 
+#include <KoOasisLoadingContext.h>
+
 class KoVariableSettings;
-class KoXmlWriter;
 class KoTextParag;
 class KoParagStyle;
 class KoGenStyles;
-class QDomElement;
-class KoDocument;
-class KoOasisStyles;
-class KoPictureCollection;
-class KoStore;
 class KoVariableCollection;
 
-#include <koStyleStack.h>
 #include "KoListStyleStack.h"
-#include <qmap.h>
-#include <koffice_export.h>
-#include <qstringlist.h>
+
+// ####### TODO rename to KoTextOasisLoadingContext (wow that's long).
+// ####### maybe KoTextLoadingContext?
 
 /**
  * Used during loading of Oasis format (and discarded at the end of the loading).
- * In addition to keeping a reference to the KoOasisStyles instance, this class
- * also has 'state' information - a stack with the currently used styles
- * (with its ancestors in the stack), another one with the list styles
- * currently applicable (one item in the stack per list level).
+ * In addition to what KoOasisLoadingContext stores, this class has 'state' information:
+ * a stack with the currently used styles (with its ancestors in the stack),
+ * another one with the list styles currently applicable (one item in the stack per list level).
  *
  * @author David Faure <faure@kde.org>
  */
-class KOTEXT_EXPORT KoOasisContext
+class KOTEXT_EXPORT KoOasisContext : public KoOasisLoadingContext
 {
 public:
     /**
@@ -63,20 +57,7 @@ public:
                     KoOasisStyles& styles, KoStore* store );
     ~KoOasisContext();
 
-    KoDocument* koDocument() { return m_doc; }
     KoVariableCollection& variableCollection() { return m_varColl; }
-    KoStore* store() { return m_store; }
-
-    KoOasisStyles& oasisStyles() { return m_styles; }
-    KoStyleStack& styleStack() { return m_styleStack; }
-
-    const QDomDocument& manifestDocument() const { return m_manifestDoc; }
-
-    /// Return the <meta:generator> of the document, e.g. "KOffice/1.4.0a"
-    QString generator() const;
-
-    void fillStyleStack( const QDomElement& object, const char* nsURI, const char* attrName );
-    void addStyles( const QDomElement* style );
 
     ///// List handling
 
@@ -100,30 +81,23 @@ public:
 private:
     /// @return true on success (a list style was found and pushed)
     bool pushListLevelStyle( const QString& listStyleName, const QDomElement& fullListStyle, int level );
-    void parseMeta() const;
 
 private:
-    KoDocument* m_doc;
-    KoStore* m_store;
-    KoVariableCollection& m_varColl;
-    KoOasisStyles& m_styles;
-    KoStyleStack m_styleStack;
-
     KoListStyleStack m_listStyleStack;
     QString m_currentListStyleName;
+    KoVariableCollection& m_varColl;
 
     KoTextParag* m_cursorTextParagraph;
     int m_cursorTextIndex;
 
-    QDomDocument m_manifestDoc;
-
-    mutable QString m_generator;
-    mutable bool m_metaXmlParsed;
-    bool m_unused1;
-
     class Private;
     Private *d;
 };
+
+// TODO extract non-text base class for kofficecore, see KoOasisLoadingContext
+
+// ####### TODO rename to KoTextOasisSavingContext (wow that's long).
+// ####### maybe KoTextSavingContext?
 
 /**
  * Used during saving to Oasis format (and discarded at the end of the saving).

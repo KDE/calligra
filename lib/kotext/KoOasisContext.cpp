@@ -27,56 +27,10 @@
 
 KoOasisContext::KoOasisContext( KoDocument* doc, KoVariableCollection& varColl,
                                 KoOasisStyles& styles, KoStore* store )
-    : m_doc( doc ), m_store( store ), m_varColl( varColl ), m_styles( styles ),
-      m_cursorTextParagraph( 0 ), m_metaXmlParsed( false )
+    : KoOasisLoadingContext( doc, styles, store ),
+      m_varColl( varColl ),
+      m_cursorTextParagraph( 0 )
 {
-    // Ideally this should be done by KoDocument and passed as argument here...
-    KoOasisStore oasisStore( store );
-    QString dummy;
-    (void)oasisStore.loadAndParse( "tar:/META-INF/manifest.xml", m_manifestDoc, dummy );
-}
-
-void KoOasisContext::fillStyleStack( const QDomElement& object, const char* nsURI, const char* attrName )
-{
-    // find all styles associated with an object and push them on the stack
-    // OoImpressImport has more tests here, but I don't think they're relevant to OoWriterImport
-    // ### TODO check the above comment, now that things are in kotext...
-    if ( object.hasAttributeNS( nsURI, attrName ) ) {
-        const QString styleName = object.attributeNS( nsURI, attrName, QString::null );
-        const QDomElement* style = m_styles.styles()[styleName];
-        if ( style )
-            addStyles( style );
-        else
-            kdWarning(32500) << "fillStyleStack: no style named " << styleName << " found." << endl;
-    }
-}
-
-void KoOasisContext::addStyles( const QDomElement* style )
-{
-    Q_ASSERT( style );
-    if ( !style ) return;
-    // this recursive function is necessary as parent styles can have parents themselves
-    if ( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) ) {
-        const QString parentStyleName = style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
-        QDomElement* parentStyle = m_styles.styles()[ parentStyleName ];
-        if ( parentStyle )
-            addStyles( parentStyle );
-        else
-            kdWarning(32500) << "Parent style not found: " << parentStyleName << endl;
-    }
-    else {
-        QString family = style->attributeNS( KoXmlNS::style, "family", QString::null );
-        if ( !family.isEmpty() ) {
-            QDomElement* def = m_styles.defaultStyle( family );
-            if ( def ) { // on top of all, the default style for this family
-                //kdDebug(32500) << "pushing default style " << style->attributeNS( KoXmlNS::style, "name", QString::null ) << endl;
-                m_styleStack.push( *def );
-            }
-        }
-    }
-
-    //kdDebug(32500) << "pushing style " << style->attributeNS( KoXmlNS::style, "name", QString::null ) << endl;
-    m_styleStack.push( *style );
 }
 
 static QDomElement findListLevelStyle( const QDomElement& fullListStyle, int level )
@@ -92,7 +46,7 @@ static QDomElement findListLevelStyle( const QDomElement& fullListStyle, int lev
 
 bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, int level )
 {
-    QDomElement* fullListStyle = m_styles.listStyles()[listStyleName];
+    QDomElement* fullListStyle = oasisStyles().listStyles()[listStyleName];
     if ( !fullListStyle ) {
         kdWarning(32500) << "List style " << listStyleName << " not found!" << endl;
         return false;
@@ -103,7 +57,7 @@ bool KoOasisContext::pushListLevelStyle( const QString& listStyleName, int level
 
 bool KoOasisContext::pushOutlineListLevelStyle( int level )
 {
-    QDomElement outlineStyle = KoDom::namedItemNS( m_styles.officeStyle(), KoXmlNS::text, "outline-style" );
+    QDomElement outlineStyle = KoDom::namedItemNS( oasisStyles().officeStyle(), KoXmlNS::text, "outline-style" );
     Q_ASSERT( !outlineStyle.isNull() );
     return pushListLevelStyle( "<outline-style>", outlineStyle, level );
 }
@@ -179,28 +133,4 @@ void KoSavingContext::writeFontFaces( KoXmlWriter& writer )
         writer.endElement(); // style:font-face
     }
     writer.endElement(); // office:font-face-decls
-}
-
-QString KoOasisContext::generator() const
-{
-    parseMeta();
-    return m_generator;
-}
-
-void KoOasisContext::parseMeta() const
-{
-    if ( !m_metaXmlParsed && m_store )
-    {
-        QDomDocument metaDoc;
-        KoOasisStore oasisStore( m_store );
-        QString errorMsg;
-        if ( oasisStore.loadAndParse( "meta.xml", metaDoc, errorMsg ) ) {
-            QDomNode meta   = KoDom::namedItemNS( metaDoc, KoXmlNS::office, "document-meta" );
-            QDomNode office = KoDom::namedItemNS( meta, KoXmlNS::office, "meta" );
-            QDomElement generator = KoDom::namedItemNS( office, KoXmlNS::meta, "generator" );
-            if ( !generator.isNull() )
-                m_generator = generator.text();
-        }
-        m_metaXmlParsed = true;
-    }
 }
