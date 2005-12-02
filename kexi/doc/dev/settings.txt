@@ -8,12 +8,15 @@ Started: 2004-08-20, js
 -----------------------------------------------------------
 
 Group: MainWindow
-#percentage navigator's width
+# percentage navigator's width
 -LeftDockPosition [integer: 0..100]
-#percentage property editor's width
+# percentage property editor's width
 -RightDockPosition [integer: 0..100]
-#default: true
--ShowProjectNavigator [boolean]
+# True id project navigator is visible after startup.
+-ShowProjectNavigator [boolean] (default: true)
+# True if "hover close button" should be available for tabs in the main window.
+# Only affects IDEAl user unterface mode.
+-HoverCloseButtonForTabs [boolean] (default: false)
 
 Group: PropertyEditor
 -FontSize [integer]
@@ -32,7 +35,7 @@ Group: Recent Dirs
 
 Group: Startup
 -OpenExistingType [File|Server]
--ShowStartupDialog [bool]
+-ShowStartupDialog [boolean]
 #default file db driver name, used on file db creation:
 TODO: -DefaultFileDBDriverName [string default="sqlite3", can be also "sqlite2"]
 
@@ -47,19 +50,19 @@ TODO: -defaultTextFieldLength [uint, <255] default=50
 TODO: -defaultIntegerFieldSubtype [the list of types (byte, short, etc.)] default=long
 
 Group: QueryDesigner
-TODO: -autoJoinOnTableInserting [bool]
+TODO: -autoJoinOnTableInserting [boolean]
 
 Group: KeyboardNavigation
 -cursorPlacementAfterLastOrFirstFormField [stringlist: nextOrPrevRecord|firstOrLastField(default)]
 
 Group: Forms
 TODO:-overrideStyleName [string] (empty if do not override)
-TODO:-doNotFocusAutonumberFields [bool] (true by default; when this and autoTabStop for a form is true, 
+TODO:-doNotFocusAutonumberFields [boolean] (true by default; when this and autoTabStop for a form is true, 
                                          autonumber text fields are skipped)
                                          implement this in KexiFormView::afterSwitchFrom()
-TODO:-appendColonToAutoLabels [bool] (true by default; when true, colon character is appended 
+TODO:-appendColonToAutoLabels [boolean] (true by default; when true, colon character is appended 
                                       to autolabel text)
-TODO:-makeFirstCharacterUpperCaseInAutoLabels [bool] (true by default; when true, first character 
+TODO:-makeFirstCharacterUpperCaseInAutoLabels [boolean] (true by default; when true, first character 
                                       in autolabel text is converted to upper case. 
                                       Usable when no field's title is provided)
 TODO:-labelPositionInAutoLabels [enum: Left, Top] (Left by default)
@@ -68,7 +71,7 @@ TODO:-gridSize [uint] (10 by default)
 
 Group: NewFormDefaults
 TODO:-styleName [string]
-TODO:-autoTabStop [bool]
+TODO:-autoTabStop [boolean]
 
 Group: ImportExport
 # Default character encoding for MS Access MDB/MDE files (older than 2000).
@@ -83,10 +86,10 @@ Group: ImportExport
 -DefaultEncodingForImportingCSVFiles [string]
 
 # True if options should be visible in the "CSV Export dialog".
--ShowOptionsInCSVExportDialog [bool] (false by default)
+-ShowOptionsInCSVExportDialog [boolean] (false by default)
 
 # If provided, appropriate options for CSV Export Dialog will be loaded
--StoreOptionsForCSVExportDialog [bool] (default: false)
+-StoreOptionsForCSVExportDialog [boolean] (default: false)
 
 # Default delimiter used for exporting CSV (Comma-Separated Value) files.
 -DefaultDelimiterForExportingCSVFiles [string] (default is ",")
