@@ -127,7 +127,8 @@ void KWFrameStyleListItem::apply()
 /* Class: KWFrameStyleManager                                     */
 /******************************************************************/
 
-KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc )
+KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc,
+                                          const QString & activeStyleName )
     : KDialogBase( _parent, "", true,
                    i18n("Frame Style Manager"),
                    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply| KDialogBase::User1 )
@@ -150,7 +151,9 @@ KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc )
     KWFrameStyleBackgroundTab *bgTab = new KWFrameStyleBackgroundTab( m_tabs );
     addTab( bgTab );
 
-    m_stylesList->setCurrentItem( 0 );
+    QListBoxItem * item = m_stylesList->findItem( activeStyleName );
+    m_stylesList->setCurrentItem( item ? m_stylesList->index(item) : 0 );
+
     noSignals=false;
     switchStyle();
     setInitialSize( QSize( 600, 370 ) );

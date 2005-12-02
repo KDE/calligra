@@ -60,10 +60,8 @@ KWTableStylePreview::KWTableStylePreview( const QString& title, const QString& t
 
 KWTableStylePreview::~KWTableStylePreview()
 {
-
     delete m_textdoc;
     delete m_zoomHandler;
-
 }
 
 #undef ptToPx
@@ -84,33 +82,33 @@ void KWTableStylePreview::drawContents( QPainter *p )
 
     // 2: create borders (KWFrameStyle)
 
-    if (tableStyle->pFrameStyle()->topBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->topBorder(), ptToPx( tableStyle->pFrameStyle()->topBorder().width() ), black) ); // Top border
-        p->drawLine( 20 - int(tableStyle->pFrameStyle()->leftBorder().width()/2), 30,
-                     20 + wid + int(tableStyle->pFrameStyle()->rightBorder().width()/2), 30 );
+    if (tableStyle->frameStyle()->topBorder().width()>0) {
+        p->setPen( KoBorder::borderPen(tableStyle->frameStyle()->topBorder(), ptToPx( tableStyle->frameStyle()->topBorder().width() ), black) ); // Top border
+        p->drawLine( 20 - int(tableStyle->frameStyle()->leftBorder().width()/2), 30,
+                     20 + wid + int(tableStyle->frameStyle()->rightBorder().width()/2), 30 );
     }
-    if (tableStyle->pFrameStyle()->leftBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->leftBorder(), ptToPx( tableStyle->pFrameStyle()->leftBorder().width() ), black) ); // Left border
-        p->drawLine( 20, 30 - int(tableStyle->pFrameStyle()->topBorder().width()/2),
-                     20 , 30 + hei + int(tableStyle->pFrameStyle()->bottomBorder().width()/2) );
+    if (tableStyle->frameStyle()->leftBorder().width()>0) {
+        p->setPen( KoBorder::borderPen(tableStyle->frameStyle()->leftBorder(), ptToPx( tableStyle->frameStyle()->leftBorder().width() ), black) ); // Left border
+        p->drawLine( 20, 30 - int(tableStyle->frameStyle()->topBorder().width()/2),
+                     20 , 30 + hei + int(tableStyle->frameStyle()->bottomBorder().width()/2) );
     }
-    if (tableStyle->pFrameStyle()->bottomBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->bottomBorder(), ptToPx( tableStyle->pFrameStyle()->bottomBorder().width() ), black) ); // Bottom border
-        p->drawLine( 20 + wid + int(ceil(tableStyle->pFrameStyle()->rightBorder().width()/2)), 30 + hei,
-                     20 - int(tableStyle->pFrameStyle()->leftBorder().width()/2), 30 + hei );
+    if (tableStyle->frameStyle()->bottomBorder().width()>0) {
+        p->setPen( KoBorder::borderPen(tableStyle->frameStyle()->bottomBorder(), ptToPx( tableStyle->frameStyle()->bottomBorder().width() ), black) ); // Bottom border
+        p->drawLine( 20 + wid + int(ceil(tableStyle->frameStyle()->rightBorder().width()/2)), 30 + hei,
+                     20 - int(tableStyle->frameStyle()->leftBorder().width()/2), 30 + hei );
     }
-    if (tableStyle->pFrameStyle()->rightBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(tableStyle->pFrameStyle()->rightBorder(), ptToPx( tableStyle->pFrameStyle()->rightBorder().width() ), black) ); // Right border
-        p->drawLine( 20 + wid, 30 - int(tableStyle->pFrameStyle()->topBorder().width()/2) ,
-                     20 + wid, 30 + hei + int(tableStyle->pFrameStyle()->bottomBorder().width()/2) );
+    if (tableStyle->frameStyle()->rightBorder().width()>0) {
+        p->setPen( KoBorder::borderPen(tableStyle->frameStyle()->rightBorder(), ptToPx( tableStyle->frameStyle()->rightBorder().width() ), black) ); // Right border
+        p->drawLine( 20 + wid, 30 - int(tableStyle->frameStyle()->topBorder().width()/2) ,
+                     20 + wid, 30 + hei + int(tableStyle->frameStyle()->bottomBorder().width()/2) );
     }
 
    // 3: create background whithin "frame"
 
-    QRect fr( QPoint(20 + int(ceil(tableStyle->pFrameStyle()->leftBorder().width()/2)), 30 + int(ceil(tableStyle->pFrameStyle()->topBorder().width()/2))),
-              QPoint(20 + wid - int(floor(tableStyle->pFrameStyle()->rightBorder().width()/2)+1), 30 + hei - int(floor(tableStyle->pFrameStyle()->bottomBorder().width()/2)+1)) );
+    QRect fr( QPoint(20 + int(ceil(tableStyle->frameStyle()->leftBorder().width()/2)), 30 + int(ceil(tableStyle->frameStyle()->topBorder().width()/2))),
+              QPoint(20 + wid - int(floor(tableStyle->frameStyle()->rightBorder().width()/2)+1), 30 + hei - int(floor(tableStyle->frameStyle()->bottomBorder().width()/2)+1)) );
 
-    p->fillRect( fr, tableStyle->pFrameStyle()->backgroundColor() );
+    p->fillRect( fr, tableStyle->frameStyle()->backgroundColor() );
 
    // 4: create text (KoParagStyle)
 
@@ -133,7 +131,7 @@ void KWTableStylePreview::drawContents( QPainter *p )
     p->translate( textRect.x(), textRect.y() );
 
     QColorGroup cg = QApplication::palette().active();
-    cg.setBrush( QColorGroup::Base, tableStyle->pFrameStyle()->backgroundColor() );
+    cg.setBrush( QColorGroup::Base, tableStyle->frameStyle()->backgroundColor() );
 
     m_textdoc->drawWYSIWYG( p, 1, 0, textRect.width() - 1, textRect.height(), cg, m_zoomHandler );
 
@@ -145,7 +143,7 @@ void KWTableStylePreview::setTableStyle( KWTableStyle *_tableStyle )
     tableStyle = _tableStyle;
 
     KoTextParag * parag = m_textdoc->firstParag();
-    parag->applyStyle( tableStyle->pStyle() );
+    parag->applyStyle( tableStyle->paragraphStyle() );
 
     repaint(true);
 }
@@ -184,24 +182,19 @@ void KWTableStyleListItem::apply()
 
 // Proof reader comment: stylist sounds like a hair dresser
 
-KWTableStyleManager::KWTableStyleManager( QWidget *_parent, KWDocument *_doc, const QPtrList<KWTableStyle> & style)
+KWTableStyleManager::KWTableStyleManager( QWidget *_parent, KWDocument *_doc )
     : KDialogBase( _parent, "Tablestylist", true,
                    i18n("Table Style Manager"),
                    KDialogBase::Ok | KDialogBase::Cancel | KDialogBase::Apply | KDialogBase::User1 )
 {
     m_doc = _doc;
 
-    QPtrListIterator<KWTableStyle> it( style );
-
-    m_defaultFrameStyle = it.current()->pFrameStyle();
-    m_defaultStyle = it.current()->pStyle();
-
     m_currentTableStyle = 0L;
     noSignals=true;
 
     m_tableStyles.setAutoDelete(false);
 
-    setupWidget(style); // build the widget with the buttons and the list selector.
+    setupWidget(); // build the widget with the buttons and the list selector.
 
     m_stylesList->setCurrentItem( 0 );
     noSignals=false;
@@ -218,20 +211,27 @@ KWTableStyleManager::~KWTableStyleManager()
     m_tableStyles.clear();
 }
 
-void KWTableStyleManager::setupWidget(const QPtrList<KWTableStyle> & styleList)
+void KWTableStyleManager::setupWidget()
 {
     QFrame * frame1 = makeMainWidget();
     QGridLayout *frame1Layout = new QGridLayout( frame1, 0, 0, // auto
                                                  0, KDialog::spacingHint() );
-    QPtrListIterator<KWTableStyle> style( styleList );
-    numTableStyles = styleList.count();
+
+
+    KWTableStyleCollection* collection = m_doc->tableStyleCollection();
+    numTableStyles = collection->count();
     m_stylesList = new QListBox( frame1, "stylesList" );
-    for ( ; style.current() ; ++style )
+    m_stylesList->insertStringList( collection->displayNameList() );
+    const QValueList<KoUserStyle*> styleList = collection->styleList();
+    for ( QValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
+          it != end ; ++it )
     {
-        m_stylesList->insertItem( style.current()->displayName() );
-        m_tableStyles.append( new KWTableStyleListItem(style.current(),new KWTableStyle(*style.current()) ) );
-        m_styleOrder<<style.current()->name();
+        KWTableStyle* style = static_cast<KWTableStyle *>( *it );
+        m_tableStyles.append( new KWTableStyleListItem(style,new KWTableStyle(*style) ) );
+        m_styleOrder << style->name();
     }
+    Q_ASSERT( m_stylesList->count() == m_styleOrder.count() );
+    Q_ASSERT( m_styleOrder.count() == m_tableStyles.count() );
 
     frame1Layout->addMultiCellWidget( m_stylesList, 0, 0, 0, 1 );
 
@@ -382,10 +382,10 @@ void KWTableStyleManager::updateGUI()
     // Update name
     m_nameString->setText(m_currentTableStyle->displayName());
     // Update style and framestyle
-    if ( m_doc->styleCollection()->findStyle( m_currentTableStyle->pStyle()->name() ) )
-        m_style->setCurrentText(m_currentTableStyle->pStyle()->displayName());
-    if ( m_doc->frameStyleCollection()->findStyle( m_currentTableStyle->pFrameStyle()->name() ) )
-        m_frameStyle->setCurrentText(m_currentTableStyle->pFrameStyle()->displayName());
+    if ( m_doc->styleCollection()->findStyle( m_currentTableStyle->paragraphStyle()->name() ) )
+        m_style->setCurrentText(m_currentTableStyle->paragraphStyle()->displayName());
+    if ( m_doc->frameStyleCollection()->findStyle( m_currentTableStyle->frameStyle()->name() ) )
+        m_frameStyle->setCurrentText(m_currentTableStyle->frameStyle()->displayName());
 
     // update delete button (can't delete first style);
     m_deleteButton->setEnabled(m_stylesList->currentItem() != 0);
@@ -409,9 +409,25 @@ void KWTableStyleManager::save()
 void KWTableStyleManager::addStyle()
 {
     save();
+    KWTableStyleCollection* collection = m_doc->tableStyleCollection();
 
     QString str = i18n( "New Tablestyle Template (%1)" ).arg(numTableStyles++);
-    m_currentTableStyle = new KWTableStyle( str, m_defaultStyle, m_defaultFrameStyle );
+    if ( m_currentTableStyle )
+    {
+        m_currentTableStyle = new KWTableStyle( *m_currentTableStyle );
+        m_currentTableStyle->setDisplayName( str );
+        m_currentTableStyle->setName( collection->generateUniqueName() );
+    }
+    else
+    {
+        KWTableStyle* defaultTableStyle = collection->findStyle( collection->defaultStyleName() );
+        Q_ASSERT( defaultTableStyle ); // can't be 0 except if there are no styles at all
+
+        KWFrameStyle *defaultFrameStyle = defaultTableStyle->frameStyle();
+        KoParagStyle *defaultParagraphStyle = defaultTableStyle->paragraphStyle();
+
+        m_currentTableStyle = new KWTableStyle( str, defaultParagraphStyle, defaultFrameStyle );
+    }
 
     noSignals=true;
     m_tableStyles.append(new KWTableStyleListItem(0L,m_currentTableStyle));
@@ -434,11 +450,11 @@ void KWTableStyleManager::importFromFile()
     KWImportFrameTableStyleDia dia( m_doc, lst, KWImportFrameTableStyleDia::TableStyle, this, 0 );
     if ( dia.listOfTableStyleImported().count() > 0 && dia.exec() ) {
         QPtrList<KWTableStyle> list = dia.listOfTableStyleImported();
-        addStyle( list);
+        addStyles( list);
     }
 }
 
-void KWTableStyleManager::addStyle(const QPtrList<KWTableStyle> &listStyle )
+void KWTableStyleManager::addStyles(const QPtrList<KWTableStyle> &listStyle )
 {
     save();
 
@@ -604,7 +620,7 @@ void KWTableStyleManager::renameStyle(const QString &theText) {
 
 }
 
-/** Show the framestylist and apply changes to the current selected tablestyle.
+/** Show the frame-style-manager and apply changes to the current selected tablestyle.
  */
 void KWTableStyleManager::changeFrameStyle()
 {
@@ -612,16 +628,12 @@ void KWTableStyleManager::changeFrameStyle()
     save();
 
 // 1. Execute frame style manager
-    KWFrameStyleManager *frameStylist = new KWFrameStyleManager( this, m_doc );
-
-    frameStylist->exec();
+    KWFrameStyleManager frameStylist( this, m_doc, m_currentTableStyle->frameStyle()->name() );
+    frameStylist.exec();
 
 // 2. Apply changes
     updateAllStyleCombos();
     updateGUI();
-
-// 3. Cleanup
-    delete frameStylist;
 }
 
 /** Show the stylist and apply changes to the current selected tablestyle.
@@ -632,15 +644,12 @@ void KWTableStyleManager::changeStyle()
     save();
 
 // 1. Execute stylist
-    KWStyleManager * styleManager = new KWStyleManager( this, m_doc->unit(), m_doc, *m_doc->styleCollection());
-    styleManager->exec();
+    KWStyleManager styleManager( this, m_doc->unit(), m_doc, *m_doc->styleCollection());
+    styleManager.exec();
 
 // 2. Apply changes
     updateAllStyleCombos();
     updateGUI();
-
-// 3. Cleanup
-    delete styleManager;
 }
 
 void KWTableStyleManager::updateAllStyleCombos()
@@ -700,24 +709,24 @@ void KWTableStyleManager::selectStyle(int index)
 {
     kdDebug() << "KWTableStyleManager::selectStyle index " << index << endl;
     if ( (index>=0) && ( index < (int)m_doc->styleCollection()->styleList().count() ) )
-        m_currentTableStyle->setStyle( m_doc->styleCollection()->styleAt(index) );
+        m_currentTableStyle->setParagraphStyle( m_doc->styleCollection()->styleAt(index) );
     save();
     updateGUI();
 }
 
 KWTableStyle* KWTableStyleManager::addTableStyleTemplate(KWTableStyle *style)
 {
-    return m_doc->tableStyleCollection()->addTableStyleTemplate(style);
+    return m_doc->tableStyleCollection()->addStyle(style);
 }
 
 void KWTableStyleManager::removeTableStyleTemplate( KWTableStyle *style )
 {
-    m_doc->tableStyleCollection()->removeTableStyleTemplate(style);
+    m_doc->tableStyleCollection()->removeStyle(style);
 }
 
 void KWTableStyleManager::updateTableStyleListOrder( const QStringList &list )
 {
-    m_doc->tableStyleCollection()->updateTableStyleListOrder( list );
+    m_doc->tableStyleCollection()->updateStyleListOrder( list );
 }
 
 void KWTableStyleManager::updateAllStyleLists()

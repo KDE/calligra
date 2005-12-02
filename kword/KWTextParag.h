@@ -28,7 +28,7 @@ class KWTextFrameSet;
 class KWTextDocument;
 class KWDocument;
 class KWTextParag;
-class KWStyle;
+class KoParagStyle;
 
 // At the moment those are the same - to be discussed
 typedef KoParagLayout KWParagLayout;

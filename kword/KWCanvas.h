@@ -36,19 +36,13 @@ class KWDocument;
 class KWFrame;
 class KWFrameSet;
 class KWFrameSetEdit;
-class KWTextFrameSet;
 class KWTableFrameSet;
 class KWFrameMoveCommand;
 class KWViewMode;
 class KWFrameViewManager;
 class KWGUI;
-class KWStyle;
-class KWAnchor;
 class KWTableTemplate;
-class KoTextCursor;
 class KoTextParag;
-class KoTextFormat;
-class KoTextDocument;
 class QTimer;
 
 /**

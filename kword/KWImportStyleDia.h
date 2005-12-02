@@ -31,7 +31,7 @@ class QLineEdit;
 class QListBox;
 class KWDocument;
 class QPushButton;
-class KWStyle;
+class KoParagStyle;
 
 class KWImportStyleDia : public KoImportStyleDia
 {

@@ -42,7 +42,7 @@ class KoParagStyle;
 class KWFrameStyle;
 class KWTableStyle;
 class KWTableTemplate;
-#define KWStyle KoParagStyle
+#define KoParagStyle KoParagStyle
 class KWFrame;
 class KWViewMode;
 class KMacroCommand;
@@ -826,7 +826,7 @@ protected:
 
     void loadFrameSets( const QDomElement &framesets );
     void loadStyleTemplates( const QDomElement &styles );
-    void saveStyle( KWStyle *sty, QDomElement parentElem );
+    void saveStyle( KoParagStyle *sty, QDomElement parentElem );
     void saveFrameStyle( KWFrameStyle *sty, QDomElement parentElem );
     void saveTableStyle( KWTableStyle *sty, QDomElement parentElem );
 

@@ -599,7 +599,7 @@ KWTableStyleCommand::KWTableStyleCommand( const QString &name, KWFrame *_frame, 
     repaintViews = _repaintViews;
 
     // No need for i18n because it will never be displayed.
-    m_fsc = new KWFrameStyleCommand( "Apply Framestyle to Frame", m_frame, m_ts->pFrameStyle(), repaintViews );
+    m_fsc = new KWFrameStyleCommand( "Apply Framestyle to Frame", m_frame, m_ts->frameStyle(), repaintViews );
     m_sc = 0L;
 }
 
@@ -614,11 +614,11 @@ void KWTableStyleCommand::execute()
     if (m_fsc)
         m_fsc->execute();
 
-    if ( (m_ts) && ( m_frame->frameSet()->type() == FT_TEXT ) && ( m_ts->pStyle() ) )
+    if ( (m_ts) && ( m_frame->frameSet()->type() == FT_TEXT ) && ( m_ts->paragraphStyle() ) )
     {
         KoTextObject *textObject = ((KWTextFrameSet*)m_frame->frameSet())->textObject();
         textObject->textDocument()->selectAll( KoTextDocument::Temp );
-        m_sc = textObject->applyStyleCommand( 0L, m_ts->pStyle(), KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, false );
+        m_sc = textObject->applyStyleCommand( 0L, m_ts->paragraphStyle(), KoTextDocument::Temp, KoParagLayout::All, KoTextFormat::Format, true, false );
         textObject->textDocument()->removeSelection( KoTextDocument::Temp );
     }
 

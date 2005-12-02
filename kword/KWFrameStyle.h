@@ -98,10 +98,6 @@ class KWFrameStyleCollection : public KoUserStyleCollection
 public:
     KWFrameStyleCollection();
 
-    /// WARNING: slow method, since it has to convert the item types, avoid calling this.
-    /// It should be only called for the old xml saving...
-    QValueList<KWFrameStyle *> frameStyleList() const;
-
     /**
      * Find style based on the untranslated name @p name.
      * Overloaded for convenience
@@ -121,7 +117,9 @@ public:
     /**
      * Return style number @p i.
      */
-    KWFrameStyle* frameStyleAt( int i ) { return static_cast<KWFrameStyle*>( m_styleList[i] ); }
+    KWFrameStyle* frameStyleAt( int i ) const {
+        return static_cast<KWFrameStyle*>( m_styleList[i] );
+    }
 
     void saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const;
     void loadOasisStyles( KoOasisContext& context );

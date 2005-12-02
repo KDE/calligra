@@ -103,7 +103,8 @@ class KWFrameStyleManager : public KDialogBase
     Q_OBJECT
 
 public:
-    KWFrameStyleManager( QWidget *_parent, KWDocument *_doc );
+    KWFrameStyleManager( QWidget *_parent, KWDocument *_doc,
+                         const QString & activeStyleName );
     ~KWFrameStyleManager();
 
 protected:

@@ -1412,7 +1412,7 @@ void KWDocument::clear()
 
     // And let's do the same for tablestyles
     KWTableStyle *standardTableStyle = new KWTableStyle( "Plain", standardStyle, standardFrameStyle );
-    m_tableStyleColl->addTableStyleTemplate( standardTableStyle );
+    m_tableStyleColl->addStyle( standardTableStyle );
 }
 
 bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
@@ -2080,15 +2080,15 @@ void KWDocument::loadTableStyleTemplates( const QDomElement& stylesElem )
 {
     QDomNodeList listStyles = stylesElem.elementsByTagName( "TABLESTYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
-        KWTableStyle *s = m_tableStyleColl->findTableStyle("Plain");
+        KWTableStyle *s = m_tableStyleColl->findStyle("Plain");
         if(s) // delete the standard style.
-            m_tableStyleColl->removeTableStyleTemplate(s);
+            m_tableStyleColl->removeStyle(s);
     }
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWTableStyle *sty = new KWTableStyle( styleElem, this );
-        m_tableStyleColl->addTableStyleTemplate( sty );
+        m_tableStyleColl->addStyle( sty );
     }
 }
 
@@ -2098,8 +2098,8 @@ void KWDocument::loadDefaultTableStyleTemplates()
 
     if ( ! QFile::exists(locate("appdata", "tablestyles.xml")) )
     {
-        if (!m_tableStyleColl->findTableStyle("Plain")) {
-            m_tableStyleColl->addTableStyleTemplate( new KWTableStyle( "Plain", m_styleColl->styleAt(0), m_frameStyleColl->frameStyleAt(0) ) );
+        if (!m_tableStyleColl->findStyle("Plain")) {
+            m_tableStyleColl->addStyle( new KWTableStyle( "Plain", m_styleColl->styleAt(0), m_frameStyleColl->frameStyleAt(0) ) );
         }
         return;
     }
@@ -2133,15 +2133,15 @@ void KWDocument::loadDefaultTableStyleTemplates()
 
     QDomNodeList listStyles = stylesElem.elementsByTagName( "TABLESTYLE" );
     if( listStyles.count() > 0) { // we are going to import at least one style.
-        KWTableStyle *s = m_tableStyleColl->findTableStyle("Plain");
+        KWTableStyle *s = m_tableStyleColl->findStyle("Plain");
         if(s) // delete the standard style.
-            m_tableStyleColl->removeTableStyleTemplate(s);
+            m_tableStyleColl->removeStyle(s);
     }
     for (unsigned int item = 0; item < listStyles.count(); item++) {
         QDomElement styleElem = listStyles.item( item ).toElement();
 
         KWTableStyle *sty = new KWTableStyle( styleElem, this );
-        m_tableStyleColl->addTableStyleTemplate( sty );
+        m_tableStyleColl->addStyle( sty );
     }
 }
 
@@ -2153,15 +2153,15 @@ void KWDocument::loadDefaultTableTemplates()
     {
         if (!m_tableTemplateColl->findTableTemplate("Plain")) {
             KWTableTemplate * standardTableTemplate = new KWTableTemplate( "Plain" );
-            standardTableTemplate->setFirstRow(tableStyleCollection()->findTableStyle("Plain"));
-            standardTableTemplate->setLastRow(tableStyleCollection()->findTableStyle("Plain"));
-            standardTableTemplate->setFirstCol(tableStyleCollection()->findTableStyle("Plain"));
-            standardTableTemplate->setLastCol(tableStyleCollection()->findTableStyle("Plain"));
-            standardTableTemplate->setBodyCell(tableStyleCollection()->findTableStyle("Plain"));
-            standardTableTemplate->setTopLeftCorner(tableStyleCollection()->findTableStyle("Plain"));
-            standardTableTemplate->setTopRightCorner(tableStyleCollection()->findTableStyle("Plain"));
-            standardTableTemplate->setBottomLeftCorner(tableStyleCollection()->findTableStyle("Plain"));
-            standardTableTemplate->setBottomRightCorner(tableStyleCollection()->findTableStyle("Plain"));
+            standardTableTemplate->setFirstRow(tableStyleCollection()->findStyle("Plain"));
+            standardTableTemplate->setLastRow(tableStyleCollection()->findStyle("Plain"));
+            standardTableTemplate->setFirstCol(tableStyleCollection()->findStyle("Plain"));
+            standardTableTemplate->setLastCol(tableStyleCollection()->findStyle("Plain"));
+            standardTableTemplate->setBodyCell(tableStyleCollection()->findStyle("Plain"));
+            standardTableTemplate->setTopLeftCorner(tableStyleCollection()->findStyle("Plain"));
+            standardTableTemplate->setTopRightCorner(tableStyleCollection()->findStyle("Plain"));
+            standardTableTemplate->setBottomLeftCorner(tableStyleCollection()->findStyle("Plain"));
+            standardTableTemplate->setBottomRightCorner(tableStyleCollection()->findStyle("Plain"));
             m_tableTemplateColl->addTableTemplate( standardTableTemplate );
         }
         return;
@@ -3463,9 +3463,10 @@ QDomDocument KWDocument::saveXML()
 
     QDomElement tableStyles = doc.createElement( "TABLESTYLES" );
     kwdoc.appendChild( tableStyles );
-    QPtrList<KWTableStyle> m_tableStyleList(m_tableStyleColl->tableStyleList());
-    for ( KWTableStyle * p = m_tableStyleList.first(); p != 0L; p = m_tableStyleList.next() )
-        saveTableStyle( p, tableStyles );
+    QValueList<KoUserStyle *> tableStyleList(m_tableStyleColl->styleList());
+    for ( QValueList<KoUserStyle *>::const_iterator it = tableStyleList.begin(), end = tableStyleList.end();
+          it != end ; ++it )
+        saveTableStyle( static_cast<KWTableStyle *>(*it), tableStyles );
 
     if (specialOutputFlag()==SaveAsKOffice1dot1)
     {

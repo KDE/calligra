@@ -921,7 +921,7 @@ void KWView::setupActions()
                                            this, SLOT( textSpacingDouble() ),
                                            actionCollection(), "format_spacingdouble" );
     m_actionFormatSpacingDouble->setExclusiveGroup( "spacing" );
-    
+
     m_actionFormatSuper = new KToggleAction( i18n( "Superscript" ), "super", 0,
                                               this, SLOT( textSuperScript() ),
                                               actionCollection(), "format_super" );
@@ -2001,7 +2001,7 @@ void KWView::showAlign( int align ) {
 }
 
 void KWView::showSpacing( int spacing ) {
-  switch ( spacing ) 
+  switch ( spacing )
   {
     case KoParagLayout::LS_SINGLE:
       m_actionFormatSpacingSingle->setChecked( TRUE );
@@ -2272,18 +2272,11 @@ void KWView::updateFrameStyleList()
 
 void KWView::updateTableStyleList()
 {
-    QString currentStyle = m_actionTableStyle->currentText();
+    const QString currentStyle = m_actionTableStyle->currentText();
     // Generate list of styles
-    QStringList lst;
-    QPtrListIterator<KWTableStyle> styleIt( m_doc->tableStyleCollection()->tableStyleList() );
-    int pos = -1;
-    for ( int i = 0; styleIt.current(); ++styleIt, ++i ) {
-        QString name = styleIt.current()->displayName();
-        lst << name;
-        if ( pos == -1 && name == currentStyle )
-            pos = i;
-    }
-    // Fill the combo - using a KSelectAction
+    const QStringList lst = m_doc->tableStyleCollection()->displayNameList();
+    const int pos = lst.findIndex( currentStyle );
+    // Fill the combo
     m_actionTableStyle->setItems( lst );
     if ( pos > -1 )
         m_actionTableStyle->setCurrentItem( pos );
@@ -3853,7 +3846,7 @@ void KWView::extraFrameStylist()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->hideCursor();
-    KWFrameStyleManager * frameStyleManager = new KWFrameStyleManager( this, m_doc );
+    KWFrameStyleManager * frameStyleManager = new KWFrameStyleManager( this, m_doc, QString::null );
     frameStyleManager->exec();
     delete frameStyleManager;
     if ( edit )
@@ -4287,7 +4280,7 @@ void KWView::tableStylist()
     KWTextFrameSetEdit * edit = currentTextEdit();
     if ( edit )
         edit->hideCursor();
-    KWTableStyleManager * tableStyleManager = new KWTableStyleManager( this, m_doc, m_doc->tableStyleCollection()->tableStyleList() );
+    KWTableStyleManager * tableStyleManager = new KWTableStyleManager( this, m_doc );
     tableStyleManager->exec();
     delete tableStyleManager;
     if ( edit )
@@ -4445,8 +4438,8 @@ void KWView::frameStyleSelected( KWFrameStyle *sty )
 // Called when selecting a tablestyle in the Table / Tablestyle menu
 void KWView::slotTableStyleSelected()
 {
-    QString actionName = QString::fromLatin1(sender()->name());
-    tableStyleSelected( m_doc->tableStyleCollection()->findStyleByShortcut( actionName) );
+    QString actionName = QString::fromUtf8(sender()->name());
+    tableStyleSelected( m_doc->tableStyleCollection()->findStyle( actionName ) );
 }
 
 void KWView::tableStyleSelected( int index )
@@ -4499,17 +4492,11 @@ void KWView::tableStyleSelected( KWTableStyle *sty )
     m_gui->canvasWidget()->setFocus(); // the combo keeps focus...*/
 
     // Adjust GUI
-    QPtrListIterator<KWTableStyle> styleIt( m_doc->tableStyleCollection()->tableStyleList() );
-    for ( int pos = 0 ; styleIt.current(); ++styleIt, ++pos )
-    {
-        if ( styleIt.current()->name() == sty->name() ) {
-            m_actionTableStyle->setCurrentItem( pos );
-            KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( styleIt.current()->shortCutName().latin1() ));
-            if ( act )
-                act->setChecked( true );
-            return;
-        }
-    }
+    int pos = m_doc->tableStyleCollection()->indexOf( sty );
+    m_actionTableStyle->setCurrentItem( pos );
+    KToggleAction* act = dynamic_cast<KToggleAction *>(actionCollection()->action( sty->name().utf8() ));
+    if ( act )
+        act->setChecked( true );
 }
 
 void KWView::increaseFontSize()

@@ -77,31 +77,31 @@ int KWTableTemplatePreview::bottomBorder(const int rows, const int cols, const i
     if ( (rowpos<0) || (colpos<0) ) return 0;
 
     if ( (rowpos==0) && (colpos==0) ) // TOP LEFT CORNER
-        return int( tableTemplate->pTopLeftCorner()->pFrameStyle()->bottomBorder().width() );
+        return int( tableTemplate->pTopLeftCorner()->frameStyle()->bottomBorder().width() );
     else
     if ( (rowpos==0) && ( colpos==(cols-1) ) ) // TOP RIGHT CORNER
-        return int( tableTemplate->pTopRightCorner()->pFrameStyle()->bottomBorder().width() );
+        return int( tableTemplate->pTopRightCorner()->frameStyle()->bottomBorder().width() );
     else
     if ( ( rowpos==(rows-1) ) && (colpos==0) ) // BOTTOM LEFT CORNER
-        return int( tableTemplate->pBottomLeftCorner()->pFrameStyle()->bottomBorder().width() );
+        return int( tableTemplate->pBottomLeftCorner()->frameStyle()->bottomBorder().width() );
     else
     if ( ( rowpos==(rows-1) ) && ( colpos==(cols-1) ) ) // BOTTOM RIGHT CORNER
-        return int( tableTemplate->pBottomRightCorner()->pFrameStyle()->bottomBorder().width() );
+        return int( tableTemplate->pBottomRightCorner()->frameStyle()->bottomBorder().width() );
     else
     if ( ( rowpos==0 ) && ( colpos>0 ) && ( colpos<(cols-1) ) ) // FIRST ROW
-        return int( tableTemplate->pFirstRow()->pFrameStyle()->bottomBorder().width() );
+        return int( tableTemplate->pFirstRow()->frameStyle()->bottomBorder().width() );
     else
     if ( ( colpos==0 ) && ( rowpos>0 ) && ( rowpos<(rows-1) ) ) // FIRST COL
-        return int( tableTemplate->pFirstCol()->pFrameStyle()->bottomBorder().width() );
+        return int( tableTemplate->pFirstCol()->frameStyle()->bottomBorder().width() );
     else
     if ( ( rowpos==(rows-1) ) && ( colpos>0 ) && ( colpos<(cols-1) ) )  // LAST ROW
-        return int( tableTemplate->pLastRow()->pFrameStyle()->bottomBorder().width() );
+        return int( tableTemplate->pLastRow()->frameStyle()->bottomBorder().width() );
     else
     if ( ( colpos==(cols-1) ) && ( rowpos>0 ) && ( rowpos<(rows-1) ) ) // LAST COL
-        return int( tableTemplate->pLastCol()->pFrameStyle()->bottomBorder().width() );
+        return int( tableTemplate->pLastCol()->frameStyle()->bottomBorder().width() );
     else
     if ( (rowpos>0) && (colpos>0) && (rowpos<(rows-1)) && (colpos<(cols-1)) ) // BODY
-        return int( tableTemplate->pBodyCell()->pFrameStyle()->bottomBorder().width() );
+        return int( tableTemplate->pBodyCell()->frameStyle()->bottomBorder().width() );
 
     return 0;
 }
@@ -111,31 +111,31 @@ int KWTableTemplatePreview::rightBorder(const int rows, const int cols, const in
     if ( (rowpos<0) || (colpos<0) ) return 0;
 
     if ( (rowpos==0) && (colpos==0) ) // TOP LEFT CORNER
-        return int( tableTemplate->pTopLeftCorner()->pFrameStyle()->rightBorder().width() );
+        return int( tableTemplate->pTopLeftCorner()->frameStyle()->rightBorder().width() );
     else
     if ( (rowpos==0) && ( colpos==(cols-1) ) ) // TOP RIGHT CORNER
-        return int( tableTemplate->pTopRightCorner()->pFrameStyle()->rightBorder().width() );
+        return int( tableTemplate->pTopRightCorner()->frameStyle()->rightBorder().width() );
     else
     if ( ( rowpos==(rows-1) ) && (colpos==0) ) // BOTTOM LEFT CORNER
-        return int( tableTemplate->pBottomLeftCorner()->pFrameStyle()->rightBorder().width() );
+        return int( tableTemplate->pBottomLeftCorner()->frameStyle()->rightBorder().width() );
     else
     if ( ( rowpos==(rows-1) ) && ( colpos==(cols-1) ) ) // BOTTOM RIGHT CORNER
-        return int( tableTemplate->pBottomRightCorner()->pFrameStyle()->rightBorder().width() );
+        return int( tableTemplate->pBottomRightCorner()->frameStyle()->rightBorder().width() );
     else
     if ( ( rowpos==0 ) && ( colpos>0 ) && ( colpos<(cols-1) ) ) // FIRST ROW
-        return int( tableTemplate->pFirstRow()->pFrameStyle()->rightBorder().width() );
+        return int( tableTemplate->pFirstRow()->frameStyle()->rightBorder().width() );
     else
     if ( ( colpos==0 ) && ( rowpos>0 ) && ( rowpos<(rows-1) ) ) // FIRST COL
-        return int( tableTemplate->pFirstCol()->pFrameStyle()->rightBorder().width() );
+        return int( tableTemplate->pFirstCol()->frameStyle()->rightBorder().width() );
     else
     if ( ( rowpos==(rows-1) ) && ( colpos>0 ) && ( colpos<(cols-1) ) )  // LAST ROW
-        return int( tableTemplate->pLastRow()->pFrameStyle()->rightBorder().width() );
+        return int( tableTemplate->pLastRow()->frameStyle()->rightBorder().width() );
     else
     if ( ( colpos==(cols-1) ) && ( rowpos>0 ) && ( rowpos<(rows-1) ) ) // LAST COL
-        return int( tableTemplate->pLastCol()->pFrameStyle()->rightBorder().width() );
+        return int( tableTemplate->pLastCol()->frameStyle()->rightBorder().width() );
     else
     if ( (rowpos>0) && (colpos>0) && (rowpos<(rows-1)) && (colpos<(cols-1)) ) // BODY
-        return int( tableTemplate->pBodyCell()->pFrameStyle()->rightBorder().width() );
+        return int( tableTemplate->pBodyCell()->frameStyle()->rightBorder().width() );
 
     return 0;
 }
@@ -156,8 +156,8 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
 
     insRect.setX( colpos*wid + globalRect.x() );
     insRect.setY( rowpos*hei + globalRect.y() );
-    insRect.setWidth( static_cast<int>(wid + ts->pFrameStyle()->rightBorder().width()) );
-    insRect.setHeight( static_cast<int>(hei + ts->pFrameStyle()->bottomBorder().width()) );
+    insRect.setWidth( static_cast<int>(wid + ts->frameStyle()->rightBorder().width()) );
+    insRect.setHeight( static_cast<int>(hei + ts->frameStyle()->bottomBorder().width()) );
 
     // 2. Set background
     // caching
@@ -171,18 +171,18 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
     if (bb==0)
         bb = bottomBorder(rows,cols,rowpos-1,colpos-1);
 
-    p->fillRect( QRect( colpos*wid + globalRect.x() + ( (rb <= ts->pFrameStyle()->rightBorder().width()) ? int(ts->pFrameStyle()->rightBorder().width()) : rb ),
-                        rowpos*hei + globalRect.y() + ( (bb <= ts->pFrameStyle()->topBorder().width()) ? int(ts->pFrameStyle()->topBorder().width()) : bb ),
-                        wid + ( ( (wrb > ts->pFrameStyle()->rightBorder().width()) && ((rb > ts->pFrameStyle()->rightBorder().width()) || ((rb==0) && (ts->pFrameStyle()->rightBorder().width()==0) ) ) && ((wrb-rb)>0) )  ? wrb : 0 ),
-                        hei + ( ( (hbb > ts->pFrameStyle()->bottomBorder().width()) && ((bb > ts->pFrameStyle()->topBorder().width()) || ((bb==0) && (ts->pFrameStyle()->topBorder().width()==0) ) ) && ((hbb-bb)>0) ) ? hbb : 0 )),
-                        ts->pFrameStyle()->backgroundColor() );
+    p->fillRect( QRect( colpos*wid + globalRect.x() + ( (rb <= ts->frameStyle()->rightBorder().width()) ? int(ts->frameStyle()->rightBorder().width()) : rb ),
+                        rowpos*hei + globalRect.y() + ( (bb <= ts->frameStyle()->topBorder().width()) ? int(ts->frameStyle()->topBorder().width()) : bb ),
+                        wid + ( ( (wrb > ts->frameStyle()->rightBorder().width()) && ((rb > ts->frameStyle()->rightBorder().width()) || ((rb==0) && (ts->frameStyle()->rightBorder().width()==0) ) ) && ((wrb-rb)>0) )  ? wrb : 0 ),
+                        hei + ( ( (hbb > ts->frameStyle()->bottomBorder().width()) && ((bb > ts->frameStyle()->topBorder().width()) || ((bb==0) && (ts->frameStyle()->topBorder().width()==0) ) ) && ((hbb-bb)>0) ) ? hbb : 0 )),
+                        ts->frameStyle()->backgroundColor() );
 
     // 2. set Style
     KoTextParag * parag = m_textdoc->firstParag();
 
     parag->remove( 0, parag->string()->length()-1 );
     parag->insert( 0, txt );
-    parag->applyStyle( ts->pStyle() );
+    parag->applyStyle( ts->paragraphStyle() );
 
     int widthLU = m_zoomHandler->pixelToLayoutUnitX( wid - 2 ); // keep one pixel border horizontally
     if ( m_textdoc->width() != widthLU )
@@ -191,10 +191,10 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
         m_textdoc->setWidth( widthLU );
         parag->invalidate(0);
     }
-    double x_add = ( (rb < ts->pFrameStyle()->rightBorder().width()) ?
-        ts->pFrameStyle()->rightBorder().width() : rb ) +1;
-    double y_add = ( (bb < ts->pFrameStyle()->topBorder().width()) ?
-        ts->pFrameStyle()->topBorder().width() : bb ) + 1;
+    double x_add = ( (rb < ts->frameStyle()->rightBorder().width()) ?
+        ts->frameStyle()->rightBorder().width() : rb ) +1;
+    double y_add = ( (bb < ts->frameStyle()->topBorder().width()) ?
+        ts->frameStyle()->topBorder().width() : bb ) + 1;
 
     QRect textRect = parag->pixelRect( m_zoomHandler );
     textRect.moveTopLeft( QPoint( insRect.x() + static_cast<int>(x_add),
@@ -207,7 +207,7 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
     p->translate( textRect.x(), textRect.y() );
 
     QColorGroup cg = QApplication::palette().active();
-    cg.setBrush( QColorGroup::Base, ts->pFrameStyle()->backgroundColor() );
+    cg.setBrush( QColorGroup::Base, ts->frameStyle()->backgroundColor() );
 
     m_textdoc->drawWYSIWYG( p, 1, 0, textRect.width() - 1, textRect.height(), cg, m_zoomHandler );
 
@@ -216,39 +216,39 @@ void KWTableTemplatePreview::drawCell( QPainter *p, const KWTableStyle *ts, cons
     p->setClipping( false );
 
     QRect cell(globalRect.x(), globalRect.y(),
-        int( globalRect.width() + ts->pFrameStyle()->rightBorder().width() ),
-        int( globalRect.height() + ts->pFrameStyle()->bottomBorder().width() ));
+        int( globalRect.width() + ts->frameStyle()->rightBorder().width() ),
+        int( globalRect.height() + ts->frameStyle()->bottomBorder().width() ));
     p->setClipRect( insRect.intersect( cell ) );
 
     p->translate( insRect.x(), insRect.y() );
 
-    if (ts->pFrameStyle()->topBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->topBorder(),
-            int(ts->pFrameStyle()->topBorder().width()), black) ); // Top border
+    if (ts->frameStyle()->topBorder().width()>0) {
+        p->setPen( KoBorder::borderPen(ts->frameStyle()->topBorder(),
+            int(ts->frameStyle()->topBorder().width()), black) ); // Top border
 
-        p->drawLine( 0, int( floor( ts->pFrameStyle()->topBorder().width()/2 ) ),
-            int(wid + ts->pFrameStyle()->rightBorder().width()), int( floor( ts->pFrameStyle()->topBorder().width()/2 ) ) );
+        p->drawLine( 0, int( floor( ts->frameStyle()->topBorder().width()/2 ) ),
+            int(wid + ts->frameStyle()->rightBorder().width()), int( floor( ts->frameStyle()->topBorder().width()/2 ) ) );
     }
-    if (ts->pFrameStyle()->leftBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->leftBorder(),
-            int(ts->pFrameStyle()->leftBorder().width()), black) ); // Left border
+    if (ts->frameStyle()->leftBorder().width()>0) {
+        p->setPen( KoBorder::borderPen(ts->frameStyle()->leftBorder(),
+            int(ts->frameStyle()->leftBorder().width()), black) ); // Left border
 
-        p->drawLine( int( floor( ts->pFrameStyle()->leftBorder().width()/2 ) ), 0,
-            int( floor( ts->pFrameStyle()->leftBorder().width()/2 ) ), hei + int(ts->pFrameStyle()->bottomBorder().width()) );
+        p->drawLine( int( floor( ts->frameStyle()->leftBorder().width()/2 ) ), 0,
+            int( floor( ts->frameStyle()->leftBorder().width()/2 ) ), hei + int(ts->frameStyle()->bottomBorder().width()) );
     }
-    if (ts->pFrameStyle()->bottomBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->bottomBorder(),
-            int(ts->pFrameStyle()->bottomBorder().width()), black) ); // Bottom border
+    if (ts->frameStyle()->bottomBorder().width()>0) {
+        p->setPen( KoBorder::borderPen(ts->frameStyle()->bottomBorder(),
+            int(ts->frameStyle()->bottomBorder().width()), black) ); // Bottom border
 
-        p->drawLine( 0, hei+int( floor( ts->pFrameStyle()->bottomBorder().width()/2 ) ),
-            int(wid + ts->pFrameStyle()->rightBorder().width()), hei + int( floor( ts->pFrameStyle()->bottomBorder().width()/2 ) ) );
+        p->drawLine( 0, hei+int( floor( ts->frameStyle()->bottomBorder().width()/2 ) ),
+            int(wid + ts->frameStyle()->rightBorder().width()), hei + int( floor( ts->frameStyle()->bottomBorder().width()/2 ) ) );
     }
-    if (ts->pFrameStyle()->rightBorder().width()>0) {
-        p->setPen( KoBorder::borderPen(ts->pFrameStyle()->rightBorder(),
-            int(ts->pFrameStyle()->rightBorder().width()), black) ); // Right border
+    if (ts->frameStyle()->rightBorder().width()>0) {
+        p->setPen( KoBorder::borderPen(ts->frameStyle()->rightBorder(),
+            int(ts->frameStyle()->rightBorder().width()), black) ); // Right border
 
-        p->drawLine( wid + int( floor( ts->pFrameStyle()->rightBorder().width()/2 ) ), 0,
-            wid + int( floor( ts->pFrameStyle()->rightBorder().width()/2 ) ), hei + int(ts->pFrameStyle()->bottomBorder().width()) );
+        p->drawLine( wid + int( floor( ts->frameStyle()->rightBorder().width()/2 ) ), 0,
+            wid + int( floor( ts->frameStyle()->rightBorder().width()/2 ) ), hei + int(ts->frameStyle()->bottomBorder().width()) );
     }
 }
 
@@ -320,22 +320,22 @@ void KWTableTemplatePreview::drawContents( QPainter *p )
         int x,y;
 
         // x
-        if ( tableTemplate->pTopRightCorner()->pFrameStyle()->rightBorder().width() >
-             tableTemplate->pLastCol()->pFrameStyle()->rightBorder().width() )
-             x = int( tableTemplate->pTopRightCorner()->pFrameStyle()->rightBorder().width() );
+        if ( tableTemplate->pTopRightCorner()->frameStyle()->rightBorder().width() >
+             tableTemplate->pLastCol()->frameStyle()->rightBorder().width() )
+             x = int( tableTemplate->pTopRightCorner()->frameStyle()->rightBorder().width() );
         else
-             x = int( tableTemplate->pLastCol()->pFrameStyle()->rightBorder().width() );
-        if ( tableTemplate->pBottomRightCorner()->pFrameStyle()->rightBorder().width() > x )
-             x = int( tableTemplate->pBottomRightCorner()->pFrameStyle()->rightBorder().width() );
+             x = int( tableTemplate->pLastCol()->frameStyle()->rightBorder().width() );
+        if ( tableTemplate->pBottomRightCorner()->frameStyle()->rightBorder().width() > x )
+             x = int( tableTemplate->pBottomRightCorner()->frameStyle()->rightBorder().width() );
 
         // y
-        if ( tableTemplate->pBottomRightCorner()->pFrameStyle()->bottomBorder().width() >
-             tableTemplate->pLastRow()->pFrameStyle()->bottomBorder().width() )
-             y = int( tableTemplate->pBottomRightCorner()->pFrameStyle()->bottomBorder().width() );
+        if ( tableTemplate->pBottomRightCorner()->frameStyle()->bottomBorder().width() >
+             tableTemplate->pLastRow()->frameStyle()->bottomBorder().width() )
+             y = int( tableTemplate->pBottomRightCorner()->frameStyle()->bottomBorder().width() );
         else
-             y = int( tableTemplate->pLastRow()->pFrameStyle()->bottomBorder().width() );
-        if ( tableTemplate->pBottomLeftCorner()->pFrameStyle()->bottomBorder().width() > y )
-             y = int( tableTemplate->pBottomLeftCorner()->pFrameStyle()->leftBorder().width() );
+             y = int( tableTemplate->pLastRow()->frameStyle()->bottomBorder().width() );
+        if ( tableTemplate->pBottomLeftCorner()->frameStyle()->bottomBorder().width() > y )
+             y = int( tableTemplate->pBottomLeftCorner()->frameStyle()->leftBorder().width() );
 
         tableRect.setX( 20 - int(x/2) );
         tableRect.setY( 30 - int(y/2) );
@@ -568,7 +568,7 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
 
     grid->addMultiCellWidget( innerHolder, 0, 2, 0, 0 );
 
-    preview = new KWTableTemplatePreview( i18n( "Preview" ), m_doc->tableStyleCollection()->findTableStyle("Plain"), this );
+    preview = new KWTableTemplatePreview( i18n( "Preview" ), m_doc->tableStyleCollection()->findStyle("Plain"), this );
     grid->addWidget( preview, 0, 1 );
 
     bgCustomize = new QButtonGroup( 3, Horizontal, i18n( "Apply To" ), this );

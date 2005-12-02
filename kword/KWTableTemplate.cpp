@@ -137,10 +137,10 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
 
     element = parentElem.namedItem( "BODYCELL" ).toElement();
     if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
-         && ( _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) ) ) )
-        m_bodyCell = _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) );
+         && ( _doc->tableStyleCollection()->findStyle( element.attribute( "name" ) ) ) )
+        m_bodyCell = _doc->tableStyleCollection()->findStyle( element.attribute( "name" ) );
     else {
-        KWTableStyle *ts = _doc->tableStyleCollection()->findTableStyle( "Plain" );
+        KWTableStyle *ts = _doc->tableStyleCollection()->findStyle( "Plain" );
         if (ts) {
             setBodyCell( ts );
         }
@@ -162,21 +162,21 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
             }
 
             if ( s )
-                ts->setStyle( s );
+                ts->setParagraphStyle( s );
             else {
                 KoParagStyle * standardStyle = new KoParagStyle( "Standard" );
                 standardStyle->format().setFont( _doc->defaultFont() );
                 _doc->styleCollection()->addStyle( standardStyle );
-                ts->setStyle( s );
+                ts->setParagraphStyle( s );
             }
             setBodyCell ( ts );
         }
     }
     element = parentElem.namedItem( "FIRSTROW" ).toElement();
     if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
-         && ( _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) ) ) )
+         && ( _doc->tableStyleCollection()->findStyle( element.attribute( "name" ) ) ) )
     {
-        m_firstRow = _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) );
+        m_firstRow = _doc->tableStyleCollection()->findStyle( element.attribute( "name" ) );
 
         if ( element.hasAttribute("topleftcorner") )
             m_topLeftCorner = m_firstRow;
@@ -188,9 +188,9 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
 
     element = parentElem.namedItem( "FIRSTCOL" ).toElement();
     if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
-         && ( _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) ) ) )
+         && ( _doc->tableStyleCollection()->findStyle( element.attribute( "name" ) ) ) )
     {
-        m_firstCol = _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) );
+        m_firstCol = _doc->tableStyleCollection()->findStyle( element.attribute( "name" ) );
 
         if ( element.hasAttribute("topleftcorner") )
             m_topLeftCorner = m_firstCol;
@@ -202,9 +202,9 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
 
     element = parentElem.namedItem( "LASTROW" ).toElement();
     if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
-         && ( _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) ) ) )
+         && ( _doc->tableStyleCollection()->findStyle( element.attribute( "name" ) ) ) )
     {
-        m_lastRow = _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) );
+        m_lastRow = _doc->tableStyleCollection()->findStyle( element.attribute( "name" ) );
 
         if ( ( !element.isNull() ) && ( element.hasAttribute("bottomrightcorner") ) )
             m_bottomRightCorner = m_lastRow;
@@ -216,9 +216,9 @@ KWTableTemplate::KWTableTemplate( QDomElement & parentElem, KWDocument *_doc, in
 
     element = parentElem.namedItem( "LASTCOL" ).toElement();
     if ( ( !element.isNull() ) && ( element.hasAttribute("name") )
-         && ( _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) ) ) )
+         && ( _doc->tableStyleCollection()->findStyle( element.attribute( "name" ) ) ) )
     {
-        m_lastCol = _doc->tableStyleCollection()->findTableStyle( element.attribute( "name" ) );
+        m_lastCol = _doc->tableStyleCollection()->findStyle( element.attribute( "name" ) );
 
         if ( element.hasAttribute("toprightcorner") )
             m_topRightCorner = m_lastCol;

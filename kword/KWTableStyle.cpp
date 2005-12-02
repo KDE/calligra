@@ -25,170 +25,41 @@
 #include <klocale.h>
 #include <qdom.h>
 
-
-/******************************************************************/
-/* Class: KWTableStyleCollection                                  */
-/******************************************************************/
-//necessary to create unique shortcut
-int KWTableStyleCollection::styleNumber = 0;
-
 KWTableStyleCollection::KWTableStyleCollection()
+    : KoUserStyleCollection( QString::fromLatin1( "table" ) )
 {
-    m_styleList.setAutoDelete( false );
-    m_deletedStyles.setAutoDelete( true );
-    m_lastStyle = 0L;
 }
 
-KWTableStyleCollection::~KWTableStyleCollection()
+void KWTableStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
 {
-    clear();
+
 }
 
-void KWTableStyleCollection::clear()
+void KWTableStyleCollection::loadOasisStyles( KoOasisContext& context )
 {
-    m_styleList.setAutoDelete( true );
-    m_styleList.clear();
-    m_styleList.setAutoDelete( false );
-    m_deletedStyles.clear();
-    m_lastStyle = 0L;
+
 }
-
-KWTableStyle* KWTableStyleCollection::findTableStyle( const QString & _name )
-{
-    // Caching, to speed things up
-    if ( m_lastStyle && m_lastStyle->name() == _name )
-        return m_lastStyle;
-
-    QPtrListIterator<KWTableStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->name() == _name ) {
-            m_lastStyle = styleIt.current();
-            return m_lastStyle;
-        }
-    }
-
-    if(_name == "Plain") return m_styleList.at(0); // fallback..
-
-    return 0L;
-}
-
-KWTableStyle* KWTableStyleCollection::findTranslatedTableStyle( const QString & _name )
-{
-    // Caching, to speed things up
-    if ( m_lastStyle && m_lastStyle->displayName() == _name )
-        return m_lastStyle;
-
-    QPtrListIterator<KWTableStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->displayName() == _name ) {
-            m_lastStyle = styleIt.current();
-            return m_lastStyle;
-        }
-    }
-
-    if ( ( _name == "Plain" ) || _name == i18n( "Style name", "Plain" ) )
-        return m_styleList.at(0); // fallback..
-
-    return 0L;
-}
-
-KWTableStyle* KWTableStyleCollection::findStyleByShortcut( const QString & _shortCut )
-{
-    // Caching, to speed things up
-    if ( m_lastStyle && m_lastStyle->shortCutName() == _shortCut )
-        return m_lastStyle;
-
-    QPtrListIterator<KWTableStyle> styleIt( m_styleList );
-    for ( ; styleIt.current(); ++styleIt )
-    {
-        if ( styleIt.current()->shortCutName() == _shortCut ) {
-            m_lastStyle = styleIt.current();
-            return m_lastStyle;
-        }
-    }
-    return 0L;
-}
-
-KWTableStyle* KWTableStyleCollection::addTableStyleTemplate( KWTableStyle * sty )
-{
-    // First check for duplicates.
-    for ( KWTableStyle* p = m_styleList.first(); p != 0L; p = m_styleList.next() )
-    {
-        if ( p->name() == sty->name() ) {
-            // Replace existing style
-            if ( sty != p )
-            {
-                *p = *sty;
-                delete sty;
-            }
-            return p;
-        }
-    }
-    m_styleList.append( sty );
-    sty->setShortCutName( QString("shortcut_tablestyle_%1").arg(styleNumber).latin1());
-    styleNumber++;
-    return sty;
-}
-
-void KWTableStyleCollection::removeTableStyleTemplate ( KWTableStyle *style ) {
-    if( m_styleList.removeRef(style)) {
-        if ( m_lastStyle == style )
-            m_lastStyle = 0L;
-        // Remember to delete this style when deleting the document
-        m_deletedStyles.append(style);
-    }
-}
-
-void KWTableStyleCollection::updateTableStyleListOrder( const QStringList &list )
-{
-    QPtrList<KWTableStyle> orderStyle;
-    QStringList lst( list );
-    for ( QStringList::Iterator it = lst.begin(); it != lst.end(); ++it )
-    {
-        //kdDebug()<<" style :"<<(*it)<<endl;
-        QPtrListIterator<KWTableStyle> style( m_styleList );
-        for ( ; style.current() ; ++style )
-        {
-            if ( style.current()->name() == *it)
-            {
-                orderStyle.append( style.current() );
-                //kdDebug()<<" found !!!!!!!!!!!!\n";
-                break;
-            }
-        }
-    }
-    m_styleList.setAutoDelete( false );
-    m_styleList.clear();
-    m_styleList = orderStyle;
-#if 0
-    QPtrListIterator<KoParagStyle> style( m_styleList );
-    for ( ; style.current() ; ++style )
-    {
-        kdDebug()<<" style.current()->name() :"<<style.current()->name()<<endl;
-    }
-#endif
-}
-
 
 /******************************************************************/
 /* Class: KWTableStyle                                            */
 /******************************************************************/
 
-KWTableStyle::KWTableStyle( const QString & name, KoParagStyle * _style, KWFrameStyle * _frameStyle )
+KWTableStyle::KWTableStyle( const QString & name, KoParagStyle * _paragStyle, KWFrameStyle * _frameStyle )
+    : KoUserStyle( name )
 {
-    m_name = name;
-    m_shortCut_name = QString::null;
-    m_style = _style;
+    m_paragStyle = _paragStyle;
     m_frameStyle = _frameStyle;
 }
 
 KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*docVersion*/ )
+    : KoUserStyle( QString::null )
 {
     QDomElement element = parentElem.namedItem( "NAME" ).toElement();
-    if ( ( !element.isNull() ) && ( element.hasAttribute("value") ) )
+    if ( ( !element.isNull() ) && ( element.hasAttribute("value") ) ) {
         m_name = element.attribute( "value" );
+        m_displayName = i18n( "Style name", m_name.utf8() );
+    } else
+        kdWarning() << "No NAME tag in table style!" << endl;
 
     element = parentElem.namedItem( "PFRAMESTYLE" ).toElement();
     m_frameStyle = 0;
@@ -211,33 +82,27 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
     }
 
     element = parentElem.namedItem( "PSTYLE" ).toElement();
-    m_style = 0;
+    m_paragStyle = 0;
     if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) )
-        m_style = _doc->styleCollection()->findStyle( element.attribute( "name" ) );
+        m_paragStyle = _doc->styleCollection()->findStyle( element.attribute( "name" ) );
 
-    if ( !m_style ) {
+    if ( !m_paragStyle ) {
         if ( _doc->styleCollection()->styleList().count()>0 )
-            m_style = _doc->styleCollection()->styleAt( 0 );
+            m_paragStyle = _doc->styleCollection()->styleAt( 0 );
         else { // Isn't possible ( I hope )
             KoParagStyle * standardStyle = new KoParagStyle( "Standard" );
             standardStyle->format().setFont( _doc->defaultFont() );
             _doc->styleCollection()->addStyle( standardStyle );
-            m_style = _doc->styleCollection()->styleAt( 0 );
+            m_paragStyle = _doc->styleCollection()->styleAt( 0 );
         }
     }
 }
 
 void KWTableStyle::operator=( const KWTableStyle &rhs )
 {
-    m_name = rhs.m_name;
-    m_shortCut_name = rhs.m_shortCut_name;
-    m_style = rhs.pStyle();
-    m_frameStyle = rhs.pFrameStyle();
-}
-
-QString KWTableStyle::displayName() const
-{
-    return i18n( "Style name", name().utf8() );
+    KoUserStyle::operator=( rhs );
+    m_paragStyle = rhs.paragraphStyle();
+    m_frameStyle = rhs.frameStyle();
 }
 
 void KWTableStyle::saveTableStyle( QDomElement & parentElem )
@@ -245,7 +110,7 @@ void KWTableStyle::saveTableStyle( QDomElement & parentElem )
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement element = doc.createElement( "NAME" );
     parentElem.appendChild( element );
-    element.setAttribute( "value", name() );
+    element.setAttribute( "value", displayName() );
 
     if (m_frameStyle)
     {
@@ -253,11 +118,11 @@ void KWTableStyle::saveTableStyle( QDomElement & parentElem )
         parentElem.appendChild( element );
         element.setAttribute( "name", m_frameStyle->name() );
     }
-    if (m_style)
+    if (m_paragStyle)
     {
         element = doc.createElement( "PSTYLE" );
         parentElem.appendChild( element );
-        element.setAttribute( "name", m_style->name() );
+        element.setAttribute( "name", m_paragStyle->name() );
     }
 
 }

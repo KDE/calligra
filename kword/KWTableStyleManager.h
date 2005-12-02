@@ -37,7 +37,7 @@ class QFrame;
 class QComboBox;
 
 class KWDocument;
-class KWStyle;
+class KoParagStyle;
 
 class KoTextDocument;
 
@@ -98,23 +98,24 @@ class KWTableStyleManager : public KDialogBase
     Q_OBJECT
 
 public:
-    KWTableStyleManager( QWidget *_parent, KWDocument *_doc, const QPtrList<KWTableStyle> & style );
+    KWTableStyleManager( QWidget *_parent, KWDocument *_doc );
     ~KWTableStyleManager();
-    KWTableStyle* addTableStyleTemplate(KWTableStyle *style);
-    void removeTableStyleTemplate( KWTableStyle *style );
-    void updateAllStyleLists();
-    void updateTableStyleListOrder( const QStringList &list );
 
-protected:
-
-    void setupWidget(const QPtrList<KWTableStyle> & style);
+private:
+    void setupWidget();
     void addGeneralTab();
     void apply();
     void updateGUI();
     void updatePreview();
     void save();
     int tableStyleIndex( int pos );
-    void addStyle(const QPtrList<KWTableStyle> &listStyle );
+
+    void addStyles(const QPtrList<KWTableStyle> &listStyle );
+    KWTableStyle* addTableStyleTemplate(KWTableStyle *style);
+    void removeTableStyleTemplate( KWTableStyle *style );
+    void updateAllStyleLists();
+    void updateTableStyleListOrder( const QStringList &list );
+
     QListBox *m_stylesList;
     QLineEdit *m_nameString;
     QPushButton *m_deleteButton;
@@ -137,8 +138,6 @@ protected:
     bool noSignals;
 
     KWDocument *m_doc;
-    KWFrameStyle *m_defaultFrameStyle;
-    KWStyle *m_defaultStyle;
 
 protected slots:
     virtual void slotOk();

@@ -29,7 +29,7 @@
 #include "KWVariable.h"
 
 class KoGenStyles;
-class KWStyle;
+class KoParagStyle;
 class KWDocument;
 class DCOPObject;
 #ifndef KWTextFormat

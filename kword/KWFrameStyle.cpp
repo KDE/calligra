@@ -31,8 +31,6 @@
 #include <qdom.h>
 #include <koxmlns.h>
 
-////
-
 KWFrameStyleCollection::KWFrameStyleCollection()
     : KoUserStyleCollection( QString::fromLatin1( "frame" ) )
 {
@@ -72,14 +70,6 @@ void KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
 
         kdDebug() << " Loaded frame style " << sty->name() << " - now " << count() << " styles" << endl;
     }
-}
-
-QValueList<KWFrameStyle *> KWFrameStyleCollection::frameStyleList() const
-{
-    QValueList<KWFrameStyle *> lst;
-    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
-        lst.append( static_cast<KWFrameStyle *>( *styleIt ) );
-    return lst;
 }
 
 /******************************************************************/
@@ -182,7 +172,7 @@ void KWFrameStyle::saveFrameStyle( QDomElement & parentElem )
     QDomDocument doc = parentElem.ownerDocument();
     QDomElement element = doc.createElement( "NAME" );
     parentElem.appendChild( element );
-    element.setAttribute( "value", name() );
+    element.setAttribute( "value", displayName() );
 
     if ( m_borderLeft.width() > 0 )
     {
