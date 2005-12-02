@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -19,6 +19,8 @@
 
 #include "utils.h"
 #include "utils_p.h"
+
+#include <qregexp.h>
 
 #include <kcursor.h>
 #include <kapplication.h>
@@ -155,6 +157,13 @@ QMap<QString,QString> KexiUtils::deserializeMap(const QByteArray& array)
 	QDataStream ds(array, IO_ReadOnly);
 	ds >> map;
 	return map;
+}
+
+QString KexiUtils::stringToFileName(const QString& string)
+{
+	QString _string(string);
+	_string.replace(QRegExp("[\\\\/:\\*?\"<>|]"), " ");
+	return _string.simplifyWhiteSpace();
 }
 
 #include "utils_p.moc"

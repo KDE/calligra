@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -132,6 +132,12 @@ namespace KexiUtils
 	/*! \return a map deserialized from a byte array \a array.
 	 \a array need to contain data previously serialized using KexiUtils::serializeMap(). */
 	KEXIUTILS_EXPORT QMap<QString,QString> deserializeMap(const QByteArray& array);
+
+	/*! \return a valid filename converted from \a string by:
+	 - replacing \\, /, :, *, ?, ", <, >, |, \n \t characters with a space
+	 - simplifing whitespace by removing redundant space characters using QString::simplifyWhiteSpace()
+	 Do not pass full paths here, but only filename strings. */
+	KEXIUTILS_EXPORT QString stringToFileName(const QString& string);
 }
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here
