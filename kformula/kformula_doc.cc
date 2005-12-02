@@ -181,7 +181,7 @@ bool KFormulaDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
     return TRUE;
 }
 
-void KFormulaDoc::showStartUpWidget(KoMainWindow* parent)
+void KFormulaDoc::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
 {
     parent->setRootDocument( this );
 }
