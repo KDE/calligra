@@ -312,14 +312,14 @@ void KexiDBImageBox::insertFromFile()
 #ifdef Q_WS_WIN
 	QString recentDir;
 	QString fileName = QFileDialog::getOpenFileName(
-		KFileDialog::getStartURL(":lastVisitedImagePath", recentDir).path(), 
+		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path(), 
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Reading)), 
 		this, 0, i18n("Insert Image From File"));
 	KURL url;
 	url.setPath( fileName );
 #else
 	KURL url( KFileDialog::getImageOpenURL(
-		":lastVisitedImagePath", this, i18n("Insert Image From File")) );
+		":LastVisitedImagePath", this, i18n("Insert Image From File")) );
 //	QString fileName = url.isLocalFile() ? url.path() : url.prettyURL();
 
 	//! @todo download the file if remote, then set fileName properly
@@ -361,7 +361,7 @@ void KexiDBImageBox::insertFromFile()
 	//save last visited path
 //	KURL url(fileName);
 	if (url.isLocalFile())
-		KRecentDirs::add(":lastVisitedImagePath", url.directory());
+		KRecentDirs::add(":LastVisitedImagePath", url.directory());
 #endif
 }
 
@@ -388,14 +388,14 @@ void KexiDBImageBox::saveAs()
 	QString recentDir;
 
 	QString fileName = QFileDialog::getSaveFileName(
-		KFileDialog::getStartURL(":lastVisitedImagePath", recentDir).path()
+		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path()
 		+"/"+m_data.originalFileName(), 
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Writing)), 
 		this, 0, i18n("Save Image To File"));
 #else
 	//! @todo add originalFileName! (requires access to KRecentDirs)
 	QString fileName = KFileDialog::getSaveFileName(
-		":lastVisitedImagePath", KImageIO::pattern(KImageIO::Writing), this, i18n("Save Image to File"));
+		":LastVisitedImagePath", KImageIO::pattern(KImageIO::Writing), this, i18n("Save Image to File"));
 #endif
 	if (fileName.isEmpty())
 		return;
@@ -425,7 +425,7 @@ void KexiDBImageBox::saveAs()
 	//save last visited path
 //	KURL url(fileName);
 	if (url.isLocalFile())
-		KRecentDirs::add(":lastVisitedImagePath", url.directory());
+		KRecentDirs::add(":LastVisitedImagePath", url.directory());
 #endif
 }
 

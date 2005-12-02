@@ -776,7 +776,8 @@ void KexiMainWindowImpl::initActions()
 #else
 	d->action_project_import_data_table = d->dummy_action;
 #endif
-	d->action_project_export_data_table = new KAction(i18n("Export->Table or Query As Data Table...", "Table or Query As Data &Table..."),
+	d->action_project_export_data_table = new KAction(i18n("Export->Table or Query As Data Table...", 
+		"Table or Query As Data &Table..."),
 		""/*! @todo: change to "file_export" or so*/,
 		0, this, SLOT(slotProjectExportDataTable()), actionCollection(), "project_export_data_table");
 
@@ -1047,6 +1048,8 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	d->action_close->setEnabled(d->prj);
 	d->action_project_relations->setEnabled(d->prj);
 	d->action_project_import_data_table->setEnabled(d->prj);
+	if (!d->prj)
+		d->action_project_export_data_table->setEnabled(false);
 
 	//EDIT MENU
 	d->action_edit_paste_special_data_table->setEnabled(d->prj);

@@ -46,9 +46,9 @@
 #include <klocale.h>
 #include <kmessagebox.h>
 #include <kglobalsettings.h>
-#include <kactivelabel.h>
 #include <kiconloader.h>
 #include <kcharsets.h>
+#include <knuminput.h>
 
 #include <kexiutils/identifier.h>
 #include <kexiutils/utils.h>
@@ -111,12 +111,13 @@ public:
 	QFont f;
 };
 
-KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, QWidget * parent, const char * name
+KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, 
+	QWidget * parent, const char * name
 //, QRect const & rect, Mode mode
 )
  : KDialogBase( 
 	KDialogBase::Plain, 
-	i18n( "Importing CSV Data File" ),
+	i18n( "Import CSV Data File" ),
 	(mode==File ? User1 : (ButtonCode)0) |Ok|Cancel, 
 	Ok,
 	parent, 
@@ -130,8 +131,8 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, QW
 	m_cancelled( false ),
 	m_adjustRows( 0 ),
 	m_startline( 0 ),
-	m_textquote( KEXICSV_DEFAULT_TEXT_QUOTE ),
-	m_delimiter( KEXICSV_DEFAULT_DELIMITER ),
+	m_textquote( QString(KEXICSV_DEFAULT_TEXT_QUOTE)[0] ),
+//moved	m_delimiter( KEXICSV_DEFAULT_DELIMITER ),
 	m_mode(mode),
 	m_prevSelectedCol(-1),
 //	m_targetRect( rect ),
@@ -157,12 +158,13 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, QW
 	m_encoding = QString::fromLatin1(KGlobal::locale()->encoding());
 
 //  QWidget* page = new QWidget( plainPage() );
-  plainPage()->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred, 5, 5));
+	plainPage()->setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Preferred, 5, 5));
 //  setMainWidget( page );
   //  MyDialogLayout = new QGridLayout( page, 4, 4, marginHint(), spacingHint(), "MyDialogLayout");
 	MyDialogLayout = new QGridLayout( plainPage(), 6, 5, 
 		KDialogBase::marginHint(), KDialogBase::spacingHint(), "MyDialogLayout");
 
+/*moved
 	QHBoxLayout *hbox = new QHBoxLayout( plainPage() );
 	QLabel *lbl = new QLabel(
 		mode==File ? i18n("<b>Preview of data from file:</b>")
@@ -186,6 +188,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, QW
 	separator->setFrameShape(QFrame::HLine);
 	separator->setFrameShadow(QFrame::Sunken);
 	MyDialogLayout->addMultiCellWidget(separator, 1, 1, 0, 4);
+	*/
 
 ///	MyDialogLayout->addItem( 
 ///		new QSpacerItem( 20, 111, QSizePolicy::Minimum, QSizePolicy::Expanding ), 2, 4 );
@@ -199,52 +202,20 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, QW
 */
 
 	// Delimiter: comma, semicolon, tab, space, other
-	m_delimiterCombo = new KexiCSVDelimiterComboBox(plainPage());
+	m_delimiterWidget = new KexiCSVDelimiterWidget(true /*lineEditOnBottom*/, plainPage());
 //	m_delimiterCombo->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
-	MyDialogLayout->addWidget( m_delimiterCombo, 3, 0 );
+	MyDialogLayout->addMultiCellWidget( m_delimiterWidget, 3, 4, 0, 0 );
 
-	m_delimiterLabel = new QLabel(m_delimiterCombo, i18n("Delimiter:"), plainPage());
-	MyDialogLayout->addWidget( m_delimiterLabel, 2, 0 );
+	QLabel *delimiterLabel = new QLabel(m_delimiterWidget, i18n("Delimiter:"), plainPage());
+	delimiterLabel->setAlignment(Qt::AlignAuto | Qt::AlignBottom | Qt::WordBreak);
+	MyDialogLayout->addWidget( delimiterLabel, 2, 0 );
 
-	m_delimiterEdit = new QLineEdit( plainPage(), "m_delimiterEdit" );
+/*moved	m_delimiterEdit = new QLineEdit( plainPage(), "m_delimiterEdit" );
 //  m_delimiterEdit->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)0, (QSizePolicy::SizeType)0, 0, 0, m_delimiterEdit->sizePolicy().hasHeightForWidth() ) );
 	m_delimiterEdit->setMaximumSize( QSize( 30, 32767 ) );
 	m_delimiterEdit->setMaxLength(1);
 	MyDialogLayout->addWidget( m_delimiterEdit, 4, 0 );
-
-#if 0
-  m_delimiterBox = new QButtonGroup( plainPage(), "m_delimiterBox" );
-  m_delimiterBox->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
-  m_delimiterBox->setTitle( i18n( "Delimiter" ) );
-  m_delimiterBox->setColumnLayout(0, Qt::Vertical );
-  m_delimiterBox->layout()->setSpacing( KDialog::spacingHint() );
-  m_delimiterBox->layout()->setMargin( KDialog::marginHint() );
-  m_delimiterBoxLayout = new QGridLayout( m_delimiterBox->layout() );
-  m_delimiterBoxLayout->setAlignment( Qt::AlignTop );
-  MyDialogLayout->addMultiCellWidget( m_delimiterBox, 1, 4, 0, 0 );
-
-  m_radioComma = new QRadioButton( m_delimiterBox, "m_radioComma" );
-  m_radioComma->setText( i18n( "Comma" ) );
-  m_radioComma->setChecked( TRUE );
-  m_delimiterBoxLayout->addWidget( m_radioComma, 0, 0 );
-
-  m_radioSemicolon = new QRadioButton( m_delimiterBox, "m_radioSemicolon" );
-  m_radioSemicolon->setText( i18n( "Semicolon" ) );
-  m_delimiterBoxLayout->addWidget( m_radioSemicolon, 0, 1 );
-
-  m_radioTab = new QRadioButton( m_delimiterBox, "m_radioTab" );
-  m_radioTab->setText( i18n( "Tabulator" ) );
-  m_delimiterBoxLayout->addWidget( m_radioTab, 1, 0 );
-
-  m_radioSpace = new QRadioButton( m_delimiterBox, "m_radioSpace" );
-  m_radioSpace->setText( i18n( "Space" ) );
-  m_delimiterBoxLayout->addWidget( m_radioSpace, 1, 1 );
-
-  m_radioOther = new QRadioButton( m_delimiterBox, "m_radioOther" );
-  m_radioOther->setText( i18n( "Other delimiter", "Other" ) );
-  m_delimiterBoxLayout->addWidget( m_radioOther, 2, 0 );
-#endif //0
-
+*/
 	// Format: number, text, currency,
 	m_formatComboText = i18n( "Format for column %1:" );
 	m_formatCombo = new KComboBox(plainPage(), "m_formatCombo");
@@ -261,64 +232,35 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, QW
 	m_primaryKeyField = new QCheckBox( i18n( "Primary key" ), plainPage(), "m_primaryKeyField" );
 	MyDialogLayout->addWidget( m_primaryKeyField, 4, 1 );
 
-#if 0
-  m_formatBox = new QButtonGroup( plainPage(), "m_formatBox" );
-  m_formatBox->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
-//  m_formatBox->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)1, 0, 0, m_formatBox->sizePolicy().hasHeightForWidth() ) );
-  m_formatBoxTitle = i18n( "Format for column %1" );
-  m_formatBox->setColumnLayout(0, Qt::Vertical );
-  m_formatBox->layout()->setSpacing( KDialog::spacingHint() );
-  m_formatBox->layout()->setMargin( KDialog::marginHint() );
-  m_formatBoxLayout = new QGridLayout( m_formatBox->layout(), 3, 2 );
-  m_formatBoxLayout->setAlignment( Qt::AlignTop );
-  MyDialogLayout->addMultiCellWidget( m_formatBox, 1, 4, 1, 1 );
-
-  m_radioText = new QRadioButton( m_formatBox, "m_radioText" );
-  m_radioText->setText( i18n( "Text" ) );
-  m_radioText->setChecked( TRUE );
-  m_formatBoxLayout->addWidget( m_radioText, 0, 0 );
-
-  m_radioNumber = new QRadioButton( m_formatBox, "m_radioNumber" );
-  m_radioNumber->setText( i18n( "Number" ) );
-//js  m_formatBoxLayout->addMultiCellWidget( m_radioNumber, 1, 1, 0, 1 );
-  m_formatBoxLayout->addWidget( m_radioNumber, 1, 0 );
-
-//js  m_radioCurrency = new QRadioButton( m_formatBox, "m_radioCurrency" );
-//js  m_radioCurrency->setText( i18n( "Currency" ) );
-//js  m_formatBoxLayout->addMultiCellWidget( m_radioCurrency, 0, 0, 1, 2 );
-
-  m_radioDate = new QRadioButton( m_formatBox, "m_radioDate" );
-  m_radioDate->setText( i18n( "Date" ) );
-//js  m_formatBoxLayout->addWidget( m_radioDate, 1, 2 );
-  m_formatBoxLayout->addWidget( m_radioDate, 0, 1 );
-#endif //0
-
   m_comboQuote = new KexiCSVTextQuoteComboBox( plainPage() );
 //  m_comboQuote->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
 ////  m_comboQuote->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 //  m_comboQuote->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboQuote->sizePolicy().hasHeightForWidth() ) );
   MyDialogLayout->addWidget( m_comboQuote, 3, 2 );
 
-  m_comboLine = new KComboBox( FALSE, plainPage(), "m_comboLine" );
-  m_comboLine->insertItem( i18n( "1" ) );
-////  m_comboLine->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
-//  m_comboLine->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboLine->sizePolicy().hasHeightForWidth() ) );
-  MyDialogLayout->addWidget( m_comboLine, 3, 3 );
-
-//  QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Preferred );
-//  MyDialogLayout->addItem( spacer_2, 4, 3 );
-
   TextLabel2 = new QLabel( m_comboQuote, i18n( "Text quote:" ), plainPage(), "TextLabel2" );
 ////  TextLabel2->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 //js  TextLabel2->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, TextLabel2->sizePolicy().hasHeightForWidth() ) );
-  TextLabel2->setAlignment(Qt::AlignAuto | Qt::WordBreak);
+  TextLabel2->setAlignment(Qt::AlignAuto | Qt::AlignBottom | Qt::WordBreak);
   MyDialogLayout->addWidget( TextLabel2, 2, 2 );
 
-  TextLabel3 = new QLabel( m_comboLine, i18n( "Start at line:" ), plainPage(), "TextLabel3" );
+	m_startAtLineSpinBox = new KIntSpinBox( plainPage(), "m_startAtLineSpinBox" );
+	m_startAtLineSpinBox->setMinValue(1);
+	m_startAtLineSpinBox->installEventFilter(this);
+//  m_comboLine->insertItem( i18n( "1" ) );
+	m_startAtLineSpinBox->setSizePolicy( QSizePolicy::Fixed, QSizePolicy::Preferred );
+//  m_comboLine->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, m_comboLine->sizePolicy().hasHeightForWidth() ) );
+	MyDialogLayout->addWidget( m_startAtLineSpinBox, 3, 3 );
+
+  m_startAtLineLabel = new QLabel( m_startAtLineSpinBox, "", 
+		plainPage(), "TextLabel3" );
 ////  TextLabel3->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 //  TextLabel3->setSizePolicy( QSizePolicy( (QSizePolicy::SizeType)1, (QSizePolicy::SizeType)0, 0, 0, TextLabel3->sizePolicy().hasHeightForWidth() ) );
-  TextLabel3->setAlignment(Qt::AlignAuto | Qt::WordBreak);
-  MyDialogLayout->addWidget( TextLabel3, 2, 3 );
+  m_startAtLineLabel->setAlignment(Qt::AlignAuto | Qt::AlignBottom | Qt::WordBreak);
+  MyDialogLayout->addWidget( m_startAtLineLabel, 2, 3 );
+
+  QSpacerItem* spacer_2 = new QSpacerItem( 0, 0, QSizePolicy::MinimumExpanding, QSizePolicy::Preferred );
+  MyDialogLayout->addItem( spacer_2, 3, 4 );
 
   m_ignoreDuplicates = new QCheckBox( plainPage(), "m_ignoreDuplicates" );
   m_ignoreDuplicates->setText( i18n( "Ignore duplicated delimiters" ) );
@@ -365,15 +307,14 @@ if ( m_mode == Clipboard )
 	m_fpNumberRegExp = QRegExp("\\d*[,\\.]\\d+");
 
 	if (mode == File) {
-		QStringList mimetypes;
-		mimetypes << "text/x-csv" << "text/plain" << "all/allfiles";
+		QStringList mimetypes( csvMimeTypes() );
 #ifdef Q_WS_WIN
 	//! @todo remove
 		m_fname = QFileDialog::getOpenFileName( KGlobalSettings::documentPath(), 
 			KexiUtils::fileDialogFilterStrings(mimetypes, false),
 			this, "KexiCSVImportDialog", i18n("Open CSV Data File"));
 #else
-		m_fname = KFileDialog::getOpenFileName(":CSVImportDialog", mimetypes.join(" "), this);
+		m_fname = KFileDialog::getOpenFileName(":CSVImportExport", mimetypes.join(" "), this);
 #endif
 		//cancel action !
 		if ( m_fname.isEmpty() )
@@ -386,8 +327,13 @@ if ( m_mode == Clipboard )
 		}
 	}
 	else if (mode == Clipboard) {
-		QCString type("plain");
-		m_data = QApplication::clipboard()->text(type);
+		QCString subtype("plain");
+		m_data = QApplication::clipboard()->text(subtype, QClipboard::Clipboard);
+/* debug
+		for (int i=0;QApplication::clipboard()->data(QClipboard::Clipboard)->format(i);i++)
+			kdDebug() << i << ": " 
+				<< QApplication::clipboard()->data(QClipboard::Clipboard)->format(i) << endl;
+*/
 	}
 	else {
 		return;
@@ -397,32 +343,35 @@ if ( m_mode == Clipboard )
 		return;
 
 	//try to detect delimiter
-	int detectedDelimiter = mode==File ? 0/*comma*/ : 2/*tab*/; //<-- defaults
+	QString detectedDelimiter = mode==File ? "," : "\t"; //<-- defaults
 	for (uint i=0; i < QMIN(128, m_data.length()); i++) {
 		const QChar c(m_data[i]);
 		if (c=='\t') {
-			detectedDelimiter = 2;
+			detectedDelimiter = "\t";
 			break;
 		}
 		else if (c==',') {
-			detectedDelimiter = 0;
+			detectedDelimiter = ",";
 			break;
 		}
 		else if (c==';') {
-			detectedDelimiter = 1;
+			detectedDelimiter = ";";
 			break;
 		}
 	}
 
 	delimiterChanged(detectedDelimiter); // this will cause fillTable()
 
-	if (m_mode==File) {
-		iconLbl->setPixmap(KMimeType::pixmapForURL(KURL::fromPathOrURL(m_fname), 0, KIcon::Desktop));
-		fnameLbl->setText( "  " + QDir::convertSeparators(m_fname) );
+	KexiCSVInfoLabel *infoLbl = new KexiCSVInfoLabel(
+		m_mode==File ? i18n("Preview of data from file:")
+		: i18n("Preview of data from clipboard:"),
+		plainPage()
+	);
+	infoLbl->setFileName( m_fname );
+	if (m_mode==Clipboard) {
+		infoLbl->setIcon("editpaste");
 	}
-	else {
-		iconLbl->setPixmap(DesktopIcon("editpaste"));
-	}
+	MyDialogLayout->addMultiCellWidget(infoLbl, 0, 1, 0, 4);
 
 	QSize s( sizeHint() );
 	s.setHeight(QMAX(500,s.height()));
@@ -432,18 +381,18 @@ if ( m_mode == Clipboard )
 
 	connect(m_formatCombo, SIGNAL(activated(int)),
 	  this, SLOT(formatChanged(int)));
-//	connect(m_delimiterBox, SIGNAL(clicked(int)),
-//	  this, SLOT(delimiterClicked(int)));
-	connect(m_delimiterCombo, SIGNAL(activated(int)),
-	  this, SLOT(delimiterChanged(int)));
-	connect(m_delimiterEdit, SIGNAL(returnPressed()),
+	connect(m_delimiterWidget, SIGNAL(delimiterChanged(const QString&)),
+	  this, SLOT(delimiterChanged(const QString&)));
+/*moved	connect(m_delimiterEdit, SIGNAL(returnPressed()),
 	  this, SLOT(returnPressed()));
 	connect(m_delimiterEdit, SIGNAL(textChanged ( const QString & )),
-	  this, SLOT(textChanged ( const QString & ) ));
-	connect(m_comboLine, SIGNAL(activated(const QString&)),
-	  this, SLOT(lineSelected(const QString&)));
-	connect(m_comboQuote, SIGNAL(activated(const QString&)),
-	  this, SLOT(textquoteSelected(const QString&)));
+	  this, SLOT(textChanged ( const QString & ) ));*/
+//	connect(m_comboLine, SIGNAL(activated(const QString&)),
+//	  this, SLOT(lineSelected(const QString&)));
+	connect(m_startAtLineSpinBox, SIGNAL(valueChanged ( int )),
+	  this, SLOT(startlineSelected(int)));
+	connect(m_comboQuote, SIGNAL(activated(int)),
+	  this, SLOT(textquoteSelected(int)));
 	connect(m_table, SIGNAL(currentChanged(int, int)),
 	  this, SLOT(currentCellChanged(int, int)));
 	connect(m_table, SIGNAL(valueChanged(int,int)),
@@ -496,7 +445,7 @@ bool KexiCSVImportDialog::loadData()
 	return true;
 }
 
-bool KexiCSVImportDialog::cancelled()
+bool KexiCSVImportDialog::cancelled() const
 {
   return m_cancelled;
 }
@@ -549,7 +498,7 @@ void KexiCSVImportDialog::fillTable()
 			{
 				state = S_QUOTED_FIELD;
 			}
-			else if (x == m_delimiter)
+			else if (x == m_delimiterWidget->delimiter())
 			{
 				setText(row - m_startline, column, field);
 				field = "";
@@ -603,7 +552,7 @@ void KexiCSVImportDialog::fillTable()
 				field += x;
 				state = S_QUOTED_FIELD;
 			}
-			else if (x == m_delimiter || x == '\n')
+			else if (x == m_delimiterWidget->delimiter() || x == '\n')
 			{
 				setText(row - m_startline, column, field);
 				field = "";
@@ -627,7 +576,7 @@ void KexiCSVImportDialog::fillTable()
 			}
 			break;
 		case S_END_OF_QUOTED_FIELD :
-			if (x == m_delimiter || x == '\n')
+			if (x == m_delimiterWidget->delimiter() || x == '\n')
 			{
 				setText(row - m_startline, column, field);
 				field = "";
@@ -658,7 +607,7 @@ void KexiCSVImportDialog::fillTable()
 				break;
 			}
 		case S_NORMAL_FIELD :
-			if (x == m_delimiter || x == '\n')
+			if (x == m_delimiterWidget->delimiter() || x == '\n')
 			{
 				setText(row - m_startline, column, field);
 				field = "";
@@ -681,7 +630,7 @@ void KexiCSVImportDialog::fillTable()
 				field += x;
 			}
 		}
-		if (x != m_delimiter)
+		if (x != m_delimiterWidget->delimiter())
 			lastCharDelimiter = false;
 
 		if (m_firstFillTableCall && row==2 && !m_1stRowForFieldNames->isChecked() && m_1stRowForFieldNamesDetected) {
@@ -739,7 +688,11 @@ void KexiCSVImportDialog::fillTable()
 		m_table->setPixmap(0, m_primaryKeyColumn, m_pkIcon);
 	setEnabled(true);
 
-	fillComboBox();
+//	fillComboBox();
+	const int count = QMAX(0, m_table->numRows()-1+m_startline);
+	m_startAtLineSpinBox->setMaxValue(count);
+	m_startAtLineSpinBox->setValue(m_startline+1);
+	m_startAtLineLabel->setText(i18n( "Start at line (1-%1):").arg(count));
 }
 
 void KexiCSVImportDialog::updateColumnText(int col)
@@ -787,14 +740,14 @@ void KexiCSVImportDialog::updateColumnText(int col)
 		list->clear();
 }
 
-void KexiCSVImportDialog::fillComboBox()
+/*void KexiCSVImportDialog::fillComboBox()
 {
 	m_comboLine->clear();
 	const uint count = QMAX(0, m_table->numRows()-1+m_startline);
 	for (uint row = 0; row < count; ++row)
 		m_comboLine->insertItem(QString::number(row + 1), row);
 	m_comboLine->setCurrentItem(m_startline);
-}
+}*/
 
 void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QString& text)
 {
@@ -918,20 +871,19 @@ void KexiCSVImportDialog::adjustRows(int iRows)
 	}
 }
 
-void KexiCSVImportDialog::returnPressed()
+/*moved void KexiCSVImportDialog::returnPressed()
 {
-	if (m_delimiterCombo->currentItem() != 4)
+	if (m_delimiterWidget->currentItem() != 4)
 		return;
 
 	m_delimiter = m_delimiterEdit->text();
 	fillTable();
-}
+}*/
 
-void KexiCSVImportDialog::textChanged ( const QString & )
+/*moved void KexiCSVImportDialog::textChanged ( const QString & )
 {
-//	m_radioOther->setChecked ( true );
 	delimiterChanged(4); // other
-}
+}*/
 
 void KexiCSVImportDialog::formatChanged(int id)
 {
@@ -955,9 +907,9 @@ void KexiCSVImportDialog::formatChanged(int id)
 	updateColumnText(m_table->currentColumn());
 }
 
-void KexiCSVImportDialog::delimiterChanged(int id)
+void KexiCSVImportDialog::delimiterChanged(const QString& delimiter)
 {
-	switch (id)
+/*moved	switch (id)
 	{
 	 case 0: // comma
 	m_delimiter = ",";
@@ -975,29 +927,31 @@ void KexiCSVImportDialog::delimiterChanged(int id)
 	m_delimiter = m_delimiterEdit->text();
 	break;
 	}
-	m_delimiterEdit->setEnabled(id==4);
+	m_delimiterEdit->setEnabled(id==4);*/
 	m_columnsAdjusted = false;
 	fillTable();
 }
 
-void KexiCSVImportDialog::textquoteSelected(const QString& mark)
+void KexiCSVImportDialog::textquoteSelected(int)
 {
-	if (mark == i18n("none"))
-	m_textquote = 0;
+	const QString tq(m_comboQuote->textQuote());
+	if (tq.isEmpty())
+		m_textquote = 0;
 	else
-	m_textquote = mark[0];
+		m_textquote = tq[0];
 
 	fillTable();
 }
 
-void KexiCSVImportDialog::lineSelected(const QString& line)
+void KexiCSVImportDialog::startlineSelected(int startline)
 {
-	const int startline = line.toInt() - 1;
-	if (m_startline == startline)
+//	const int startline = line.toInt() - 1;
+	if (m_startline == (startline-1))
 		return;
-	m_startline = startline;
+	m_startline = startline-1;
 	m_adjustRows=1;
 	fillTable();
+	m_table->setFocus();
 }
 
 void KexiCSVImportDialog::currentCellChanged(int, int col)
@@ -1286,7 +1240,7 @@ void KexiCSVImportDialog::ignoreDuplicatesChanged(int)
 void KexiCSVImportDialog::slot1stRowForFieldNamesChanged(int)
 {
 	m_adjustRows=1;
-	if (m_1stRowForFieldNames->isChecked() && m_startline>0 && m_startline>=(m_comboLine->count()-1))
+	if (m_1stRowForFieldNames->isChecked() && m_startline>0 && m_startline>=(m_startAtLineSpinBox->maxValue()-1))
 		m_startline--;
 	fillTable();
 //	if (m_1stRowForFieldNames->isChecked())
@@ -1307,6 +1261,18 @@ void KexiCSVImportDialog::optionsButtonClicked()
 			return;
 		fillTable();
 	}
+}
+
+bool KexiCSVImportDialog::eventFilter ( QObject * watched, QEvent * e )
+{
+	if (e->type()==QEvent::KeyPress) {
+		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+		if (ke->key()==Key_Enter || ke->key()==Key_Return) {
+			m_table->setFocus();
+			return true;
+		}
+	}
+	return KDialogBase::eventFilter( watched, e );
 }
 
 #include "kexicsvimportdialog.moc"

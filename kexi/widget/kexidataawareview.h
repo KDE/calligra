@@ -25,8 +25,8 @@
 class KexiDataAwareObjectInterface;
 class KexiSharedActionClient;
 
-//! \brief The KexiDataAwareView class provides a view displaying record-based data.
-/**
+/*! @short Provides a view displaying record-based data.
+
  The KexiDataAwareView is used to implement differently-looking views 
  for displaying record-based data in a consistent way:
  - tabular data views

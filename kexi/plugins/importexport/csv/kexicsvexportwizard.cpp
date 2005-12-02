@@ -1,0 +1,505 @@
+/* This file is part of the KDE project
+   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+
+   This library is free software; you can redistribute it and/or
+   modify it under the terms of the GNU Library General Public
+   License as published by the Free Software Foundation; either
+   version 2 of the License, or (at your option) any later version.
+
+   This library is distributed in the hope that it will be useful,
+   but WITHOUT ANY WARRANTY; without even the implied warranty of
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
+   Library General Public License for more details.
+
+   You should have received a copy of the GNU Library General Public License
+   along with this library; see the file COPYING.LIB.  If not, write to
+   the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
+ * Boston, MA 02110-1301, USA.
+*/
+
+#include "kexicsvexportwizard.h"
+#include "kexicsvwidgets.h"
+#include <main/startup/KexiStartupFileDialog.h>
+#include <kexidb/cursor.h>
+#include <kexidb/utils.h>
+#include <core/keximainwindow.h>
+#include <core/kexiproject.h>
+#include <core/kexipartinfo.h>
+#include <core/kexipartmanager.h>
+#include <core/kexiguimsghandler.h>
+#include <kexiutils/utils.h>
+#include <widget/kexicharencodingcombobox.h>
+
+#include <qcheckbox.h>
+#include <qgroupbox.h>
+#include <qclipboard.h>
+#include <klocale.h>
+#include <kiconloader.h>
+#include <kactivelabel.h>
+#include <kpushbutton.h>
+#include <kapplication.h>
+#include <kdebug.h>
+#include <ksavefile.h>
+
+//-------------------------------------------------------------
+
+KexiCSVExportWizard::KexiCSVExportWizard( Mode mode, int itemId, 
+	KexiMainWindow* mainWin, QWidget * parent, const char * name )
+ : KWizard(parent, name)
+ , m_mode(mode)
+ , m_itemId(itemId)
+ , m_mainWin(mainWin)
+ , m_fileSavePage(0)
+ , m_defaultsBtn(0)
+ , m_rowCountDetermined(false)
+ , m_cancelled(false)
+{
+	if (m_mode==Clipboard) {
+		finishButton()->setText(i18n("Copy"));
+		backButton()->hide();
+	}
+	else {
+		finishButton()->setText(i18n("Export"));
+	}
+	helpButton()->hide();
+
+	QString infoLblFromText;
+	KexiGUIMessageHandler msgh(this);
+	m_tableOrQuery = new KexiDB::TableOrQuerySchema(m_mainWin->project()->dbConnection(), itemId);
+	if (m_tableOrQuery->table()) {
+		if (m_mode==Clipboard) {
+			setCaption(i18n("Copy Data From a Table to Clipboard"));
+			infoLblFromText = i18n("Copying data from table:");
+		}
+		else {
+			setCaption(i18n("Export Data From a Table to CSV File"));
+			infoLblFromText = i18n("Exporting data from table:");
+		}
+	}
+	else if (m_tableOrQuery->query()) {
+		if (m_mode==Clipboard) {
+			setCaption(i18n("Copy Data From a Query to Clipboard"));
+			infoLblFromText = i18n("Copying data from table:");
+		}
+		else {
+			setCaption(i18n("Export Data From a Query to CSV File"));
+			infoLblFromText = i18n("Exporting data from query:");
+		}
+	}
+	else {
+		msgh.showErrorMessage(m_mainWin->project()->dbConnection(), 
+			i18n("Could not open data for exporting."));
+		m_cancelled = true;
+		return;
+	}
+	// OK, source data found.
+
+	// Setup pages
+
+	// 1. File Save Page
+	if (m_mode==File) {
+		m_fileSavePage = new KexiStartupFileDialog(
+			":CSVImportExport", //startDir
+			KexiStartupFileDialog::Custom | KexiStartupFileDialog::SavingFileBasedDB,
+			this, "m_fileSavePage");
+		m_fileSavePage->setAdditionalFilters( csvMimeTypes() );
+		m_fileSavePage->setDefaultExtension("csv");
+		m_fileSavePage->setLocationText( KexiUtils::stringToFileName(m_tableOrQuery->captionOrName()) );
+		connect(m_fileSavePage, SIGNAL(rejected()), this, SLOT(reject()));
+		addPage(m_fileSavePage, i18n("Enter the Name of the File You Want To Save the Data To"));
+	}
+
+	// 2. Export options
+	m_exportOptionsPage = new QWidget(this, "m_exportOptionsPage");
+	QGridLayout *exportOptionsLyr = new QGridLayout( m_exportOptionsPage, 6, 3, 
+		KDialogBase::marginHint(), KDialogBase::spacingHint(), "exportOptionsLyr");
+	m_infoLblFrom = new KexiCSVInfoLabel( infoLblFromText, m_exportOptionsPage );
+	KexiPart::Info *partInfo = Kexi::partManager().infoForMimeType(
+		m_tableOrQuery->table() ? "kexi/table" : "kexi/query");
+	if (partInfo)
+		m_infoLblFrom->setIcon(partInfo->itemIcon());
+	m_infoLblFrom->separator()->hide();
+	exportOptionsLyr->addMultiCellWidget(m_infoLblFrom, 0, 0, 0, 2);
+
+	m_infoLblTo = new KexiCSVInfoLabel(
+		(m_mode==File) ? i18n("To CSV file:") : i18n("To clipboard:"),
+		m_exportOptionsPage
+	);
+	if (m_mode==Clipboard)
+		m_infoLblTo->setIcon("editpaste");
+	exportOptionsLyr->addMultiCellWidget(m_infoLblTo, 1, 1, 0, 2);
+
+	m_showOptionsButton = new KPushButton(KGuiItem(i18n("Show Options >>"), "configure"), 
+		m_exportOptionsPage);
+	connect(m_showOptionsButton, SIGNAL(clicked()), this, SLOT(slotShowOptionsButtonClicked()));
+	exportOptionsLyr->addMultiCellWidget(m_showOptionsButton, 2, 2, 0, 0);
+	m_showOptionsButton->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+
+	// -<options section>
+	m_exportOptionsSection = new QGroupBox(1, Vertical, i18n("Options"), m_exportOptionsPage, 
+		"m_exportOptionsSection");
+	m_exportOptionsSection->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	exportOptionsLyr->addMultiCellWidget(m_exportOptionsSection, 3, 3, 0, 1);
+	QWidget *exportOptionsSectionWidget 
+		= new QWidget(m_exportOptionsSection, "exportOptionsSectionWidget");
+	QGridLayout *exportOptionsSectionLyr = new QGridLayout( exportOptionsSectionWidget, 5, 2, 
+		0, KDialogBase::spacingHint(), "exportOptionsLyr");
+
+	// -delimiter
+	m_delimiterWidget = new KexiCSVDelimiterWidget(false, //!lineEditOnBottom
+		exportOptionsSectionWidget);
+	exportOptionsSectionLyr->addWidget( m_delimiterWidget, 0, 1 );
+	QLabel *delimiterLabel = new QLabel(m_delimiterWidget, i18n("Delimiter:"), exportOptionsSectionWidget);
+	exportOptionsSectionLyr->addWidget( delimiterLabel, 0, 0 );
+
+	// -text quote
+	QWidget *textQuoteWidget = new QWidget(exportOptionsSectionWidget);
+	QHBoxLayout *textQuoteLyr = new QHBoxLayout(textQuoteWidget);
+	exportOptionsSectionLyr->addWidget(textQuoteWidget, 1, 1);
+	m_textQuote = new KexiCSVTextQuoteComboBox( textQuoteWidget );
+	textQuoteLyr->addWidget( m_textQuote );
+	textQuoteLyr->addStretch(0);
+	QLabel *textQuoteLabel = new QLabel(m_textQuote, i18n("Text quote:"), exportOptionsSectionWidget);
+	exportOptionsSectionLyr->addWidget( textQuoteLabel, 1, 0 );
+
+	// - character encoding
+	m_characterEncodingCombo = new KexiCharacterEncodingComboBox( exportOptionsSectionWidget );
+	m_characterEncodingCombo->setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
+	exportOptionsSectionLyr->addWidget( m_characterEncodingCombo, 2, 1 );
+	QLabel *characterEncodingLabel = new QLabel(m_characterEncodingCombo, i18n("Text encoding:"), 
+		exportOptionsSectionWidget);
+	exportOptionsSectionLyr->addWidget( characterEncodingLabel, 2, 0 );
+
+	// - checkboxes
+	m_addColumnNamesCheckBox = new QCheckBox(i18n("Add column names as the first row"), 
+		exportOptionsSectionWidget);
+	m_addColumnNamesCheckBox->setChecked(true);
+	exportOptionsSectionLyr->addWidget( m_addColumnNamesCheckBox, 3, 1 );
+	m_alwaysUseCheckBox = new QCheckBox(i18n("Always use above options for exporting"), 
+		m_exportOptionsPage);
+	exportOptionsLyr->addMultiCellWidget(m_alwaysUseCheckBox, 4, 4, 0, 1);
+//	exportOptionsSectionLyr->addWidget( m_alwaysUseCheckBox, 4, 1 );
+	m_exportOptionsSection->hide();
+	m_alwaysUseCheckBox->hide();
+	// -</options section>
+
+//	exportOptionsLyr->setColStretch(3, 1);
+	exportOptionsLyr->addMultiCell( 
+		new QSpacerItem( 0, 0, QSizePolicy::Preferred, QSizePolicy::MinimumExpanding), 5, 5, 0, 1 );
+
+//	addPage(m_exportOptionsPage, i18n("Set Export Options"));
+	addPage(m_exportOptionsPage, m_mode==Clipboard ? i18n("Copying") : i18n("Exporting"));
+	setFinishEnabled(m_exportOptionsPage, true);
+
+	// load settings
+	kapp->config()->setGroup("ImportExport");
+	if (kapp->config()->readBoolEntry("ShowOptionsInCSVExportDialog", false)) {
+		show();
+		slotShowOptionsButtonClicked();
+	}
+	if (kapp->config()->readBoolEntry("StoreOptionsForCSVExportDialog", false)) {
+		// load defaults:
+		m_alwaysUseCheckBox->setChecked(true);
+		QString s = kapp->config()->readEntry("DefaultDelimiterForExportingCSVFiles");
+		if (!s.isEmpty())
+			m_delimiterWidget->setDelimiter(s);
+		s = kapp->config()->readEntry("DefaultTextQuoteForExportingCSVFiles", KEXICSV_DEFAULT_TEXT_QUOTE);
+		m_textQuote->setTextQuote(s); //will be invaliudated here, so not a problem
+		s = kapp->config()->readEntry("DefaultEncodingForExportingCSVFiles");
+		if (!s.isEmpty())
+			m_characterEncodingCombo->setSelectedEncoding(s);
+		m_addColumnNamesCheckBox->setChecked( 
+			kapp->config()->readBoolEntry("AddColumnNamesForExportingCSVFiles", true) );
+	}
+
+	updateGeometry();
+
+	// -keep widths equal on page #2:
+	int width = QMAX( m_infoLblFrom->leftLabel()->sizeHint().width(), 
+		m_infoLblTo->leftLabel()->sizeHint().width());
+	m_infoLblFrom->leftLabel()->setFixedWidth(width);
+	m_infoLblTo->leftLabel()->setFixedWidth(width);
+}
+
+KexiCSVExportWizard::~KexiCSVExportWizard()
+{
+	delete m_tableOrQuery;
+}
+
+bool KexiCSVExportWizard::cancelled() const
+{
+	return m_cancelled;
+}
+
+void KexiCSVExportWizard::showPage ( QWidget * page ) 
+{
+	if (page == m_fileSavePage) {
+		m_fileSavePage->setFocus();
+	}
+	else if (page==m_exportOptionsPage) {
+		if (m_mode==File)
+			m_infoLblTo->setFileName( m_fileSavePage->currentFileName() );
+		QString text = m_tableOrQuery->captionOrName();
+		if (!m_rowCountDetermined) {
+			//do this costly operation only once
+			m_rowCount = KexiDB::rowCount(*m_tableOrQuery);
+			m_rowCountDetermined = true;
+		}
+		int columns = KexiDB::fieldCount(*m_tableOrQuery);
+		text += "\n";
+		if (m_rowCount>0)
+			text += i18n("(rows: %1, columns: %2)").arg(m_rowCount).arg(columns);
+		else
+			text += i18n("(columns: %1)").arg(columns);
+		m_infoLblFrom->setLabelText(text);
+		m_infoLblFrom->fileNameLabel()->setFixedHeight( 
+			QFontMetrics(m_infoLblFrom->fileNameLabel()->font()).height() * 2 );
+		if (m_defaultsBtn)
+			m_defaultsBtn->show();
+	}
+
+	if (page!=m_exportOptionsPage) {
+		if (m_defaultsBtn)
+			m_defaultsBtn->hide();
+	}
+
+	KWizard::showPage(page);
+}
+
+void KexiCSVExportWizard::next()
+{
+	if (currentPage() == m_fileSavePage) {
+		if (!m_fileSavePage->checkFileName())
+			return;
+		KWizard::next();
+		finishButton()->setFocus();
+		return;
+	}
+	KWizard::next();
+}
+
+void KexiCSVExportWizard::done(int result)
+{
+	if (QDialog::Accepted == result) {
+		
+		if (!export())
+			return;
+	}
+	else if (QDialog::Rejected == result) {
+		//nothing to do
+	}
+
+	//store options
+	KConfig *cfg = kapp->config();
+	cfg->setGroup("ImportExport");
+	cfg->writeEntry("ShowOptionsInCSVExportDialog", m_exportOptionsSection->isVisible());
+	const bool store = m_alwaysUseCheckBox->isChecked();
+	cfg->writeEntry("StoreOptionsForCSVExportDialog", store);
+	// only save if an option differs from default
+	if (store && m_delimiterWidget->delimiter()!=KEXICSV_DEFAULT_DELIMITER)
+		cfg->writeEntry("DefaultDelimiterForExportingCSVFiles", m_delimiterWidget->delimiter());
+	else
+		cfg->deleteEntry("DefaultDelimiterForExportingCSVFiles");
+	if (store && m_textQuote->textQuote()!=KEXICSV_DEFAULT_TEXT_QUOTE)
+		cfg->writeEntry("DefaultTextQuoteForExportingCSVFiles", m_textQuote->textQuote());
+	else
+		cfg->deleteEntry("DefaultTextQuoteForExportingCSVFiles");
+	if (store && !m_characterEncodingCombo->defaultEncodingSelected())
+		cfg->writeEntry("DefaultEncodingForExportingCSVFiles", m_characterEncodingCombo->selectedEncoding());
+	else
+		cfg->deleteEntry("DefaultEncodingForExportingCSVFiles");
+	if (store && !m_addColumnNamesCheckBox->isChecked())
+		cfg->writeEntry("AddColumnNamesForExportingCSVFiles", m_addColumnNamesCheckBox->isChecked());
+	else
+		cfg->deleteEntry("AddColumnNamesForExportingCSVFiles");
+
+	KWizard::done(result);
+}
+
+void KexiCSVExportWizard::slotShowOptionsButtonClicked()
+{
+	if (m_exportOptionsSection->isVisible()) {
+		m_showOptionsButton->setText(i18n("Show Options >>"));
+		m_exportOptionsSection->hide();
+		m_alwaysUseCheckBox->hide();
+		if (m_defaultsBtn)
+			m_defaultsBtn->hide();
+	}
+	else {
+		m_showOptionsButton->setText(i18n("Hide Options <<"));
+		m_exportOptionsSection->show();
+		m_alwaysUseCheckBox->show();
+		if (m_defaultsBtn)
+			m_defaultsBtn->show();
+	}
+}
+
+void KexiCSVExportWizard::layOutButtonRow( QHBoxLayout * layout )
+{
+	QWizard::layOutButtonRow( layout );
+
+	//find the last sublayout
+	QLayout *l = 0;
+	for (QLayoutIterator lit( layout->iterator() ); lit.current(); ++lit)
+		l = lit.current()->layout();
+	if (dynamic_cast<QBoxLayout*>(l)) {
+		if (!m_defaultsBtn) {
+			m_defaultsBtn = new KPushButton(i18n("Defaults"), this);
+			QWidget::setTabOrder(backButton(), m_defaultsBtn);
+			connect(m_defaultsBtn, SIGNAL(clicked()), this, SLOT(slotDefaultsButtonClicked()));
+		}
+		if (!m_exportOptionsSection->isVisible())
+			m_defaultsBtn->hide();
+		dynamic_cast<QBoxLayout*>(l)->insertWidget(0, m_defaultsBtn);
+	}
+}
+
+void KexiCSVExportWizard::slotDefaultsButtonClicked()
+{
+	m_delimiterWidget->setDelimiter(KEXICSV_DEFAULT_DELIMITER);
+	m_textQuote->setTextQuote(KEXICSV_DEFAULT_TEXT_QUOTE);
+	m_addColumnNamesCheckBox->setChecked(true);
+	m_characterEncodingCombo->selectDefaultEncoding();
+}
+
+bool KexiCSVExportWizard::export()
+{
+	KexiDB::Connection *conn = m_mainWin->project()->dbConnection();
+
+//! @todo move this to non-GUI location so it can be also used via command line
+//! @todo add a "finish" page with a progressbar.
+//! @todo look at m_rowCount whether the data is really large; 
+//!       if so: avoid copying to clipboard (or ask user) because of system memory
+
+//! @todo OPTIMIZATION: use fieldsExpanded(true /*UNIQUE*/)
+//! @todo OPTIMIZATION? (avoid multiple data retrieving) look for already fetched data within KexiProject..
+
+	KexiDB::QuerySchema* query = m_tableOrQuery->query();
+	if (!query)
+		query = m_tableOrQuery->table()->query();
+
+	KexiDB::QueryColumnInfo::Vector fields( query->fieldsExpanded() );
+	QString buffer;
+
+	KSaveFile *kSaveFile = 0;
+	QTextStream *stream = 0;
+
+	const bool copyToClipboard = m_mode==Clipboard;
+	if (copyToClipboard) {
+//! @todo (during exporting): enlarge bufSize by factor of 2 when it became too small
+		uint bufSize = QMIN((m_rowCount<0 ? 10 : m_rowCount) * fields.count() * 20, 128000);
+		buffer.reserve( bufSize );
+		if (buffer.capacity() < bufSize) {
+			kdWarning() << "KexiCSVExportWizard::export() cannot allocate memory for " << bufSize 
+				<< " characters" << endl;
+			return false;
+		}
+	}
+	else {
+		QString fname( m_fileSavePage->currentFileName() );
+		if (fname.isEmpty()) {//sanity
+			kdWarning() << "KexiCSVExportWizard::export(): fname is empty" << endl;
+			return false;
+		}
+		kSaveFile = new KSaveFile(m_fileSavePage->currentFileName());
+		if (0 == kSaveFile->status())
+			stream = kSaveFile->textStream();
+		if (0 != kSaveFile->status() || !stream) {//sanity
+			kdWarning() << "KexiCSVExportWizard::export(): status != 0 or stream == 0" << endl;
+			delete kSaveFile;
+			return false;
+		}
+	}
+
+//! @todo escape strings
+
+#define _ERR \
+	delete [] isText; \
+	if (kSaveFile) { kSaveFile->abort(); delete kSaveFile; } \
+	return false
+
+#define APPEND(what) \
+		if (copyToClipboard) buffer.append(what); else (*stream) << (what)
+
+	// 0. Cache information
+	const uint fieldsCount = fields.count();
+	const QCharRef delimiter( m_delimiterWidget->delimiter()[0] );
+	const bool hasTextQuote = !m_textQuote->textQuote().isEmpty();
+	const QCharRef textQuote( m_textQuote->textQuote()[0] );
+	bool *isText = new bool[fieldsCount]; //cache for faster checks
+//	bool isInteger[fieldsCount]; //cache for faster checks
+//	bool isFloatingPoint[fieldsCount]; //cache for faster checks
+	for (uint i=0; i<fieldsCount; i++) {
+		isText[i] = fields[i]->field->isTextType();
+//		isInteger[i] = fields[i]->field->isIntegerType() 
+//			|| fields[i]->field->type()==KexiDB::Field::Boolean;
+//		isFloatingPoint[i] = fields[i]->field->isFPNumericType();
+	}
+
+	// 1. Output column names
+	if (m_addColumnNamesCheckBox->isChecked()) {
+		for (uint i=0; i<fieldsCount; i++) {
+			if (i>0)
+				APPEND( delimiter );
+			if (hasTextQuote)
+				APPEND( textQuote );
+			APPEND( fields[i]->captionOrAliasOrName() );
+			if (hasTextQuote)
+				APPEND( textQuote );
+		}
+//! @todo or \r\n ?
+		APPEND("\n");
+	}
+	
+	KexiGUIMessageHandler handler;
+	KexiDB::Cursor *cursor = conn->executeQuery(*query);
+	if (!cursor) {
+		handler.showErrorMessage(conn);
+		_ERR;
+	}
+	for (cursor->moveFirst(); !cursor->eof() && !cursor->error(); cursor->moveNext()) {
+		const uint realFieldCount = QMIN(cursor->fieldCount(), fieldsCount);
+		for (uint i=0; i<realFieldCount; i++) {
+			if (i>0)
+				APPEND( delimiter );
+			if (cursor->value(i).isNull())
+				continue;
+			if (isText[i]) {
+				if (hasTextQuote)
+					APPEND( textQuote );
+				APPEND( cursor->value(i).toString() );
+				if (hasTextQuote)
+					APPEND( textQuote );
+			}
+			else {
+				APPEND( cursor->value(i).toString() );
+			}
+		}
+//! @todo or \r\n ?
+		APPEND("\n");
+	}
+
+	if (copyToClipboard)
+		buffer.squeeze();
+
+	if (!conn->deleteCursor(cursor)) {
+		handler.showErrorMessage(conn);
+		_ERR;
+	}
+
+	if (copyToClipboard)
+		kapp->clipboard()->setText(buffer, QClipboard::Clipboard);
+
+	delete [] isText;
+
+	if (kSaveFile) {
+		if (!kSaveFile->close()) {
+			kdWarning() << "KexiCSVExportWizard::export(): error close(); status == " 
+				<< kSaveFile->status() << endl;
+		}
+		delete kSaveFile;
+	}
+	return true;
+}
+
+#include "kexicsvexportwizard.moc"

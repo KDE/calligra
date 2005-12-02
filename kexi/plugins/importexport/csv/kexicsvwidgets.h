@@ -20,18 +20,90 @@
 #ifndef KEXI_CSVWIDGETS_H
 #define KEXI_CSVWIDGETS_H
 
+#include <qvaluevector.h>
 #include <kcombobox.h>
 
-class KexiCSVDelimiterComboBox : public KComboBox
+class KLineEdit;
+class KActiveLabel;
+class QLabel;
+
+#define KEXICSV_DEFAULT_TEXT_QUOTE "\""
+#define KEXICSV_DEFAULT_DELIMITER ","
+#define KEXICSV_DEFAULT_DELIMITER_INDEX 0
+
+//! \return a list of mimetypes usable for handling CSV format handling
+QStringList csvMimeTypes();
+
+/*! @short A helper widget showing a short text information with an icon.
+ See ctor for details.
+ Used by CSV import and export dialogs. */
+class KexiCSVInfoLabel : public QWidget
 {
 	public:
-		KexiCSVDelimiterComboBox( QWidget * parent = 0 );
+		/* Sets up a new info label with following parts:
+		 - \a labelText label with text like "Preview of data from file:"
+		 - \a fileName (active) label that can contain a filename or be empty.
+		 If \a setIconForFilename is true, icon will be set using a pixmap get 
+		 from a mime type for \a fileName. */
+		KexiCSVInfoLabel( const QString& labelText, QWidget* parent );
+
+		void setFileName( const QString& fileName );
+		void setLabelText( const QString& text );
+//		void setIconForFileName();
+
+		//! sets icon pixmap to \a iconName. Used wher setIconForFilename was false in ctor.
+		void setIcon(const QString& iconName);
+
+		QLabel* leftLabel() const { return m_leftLabel; }
+		KActiveLabel* fileNameLabel() const { return m_fnameLbl; }
+		QFrame* separator() const { return m_separator; }
+
+	protected:
+		QLabel *m_leftLabel, *m_iconLbl;
+		KActiveLabel *m_fnameLbl;
+		QFrame* m_separator;
 };
 
+//! @short A combo box widget providing a list of possible delimiters
+//! Used by CSV import and export dialogs
+class KexiCSVDelimiterWidget : public QWidget
+{
+	Q_OBJECT
+
+	public:
+		KexiCSVDelimiterWidget( bool lineEditOnBottom, QWidget * parent = 0 );
+
+		QString delimiter() const { return m_delimiter; }
+		void setDelimiter(const QString& delimiter);
+
+	signals:
+		void delimiterChanged(const QString& delimiter);
+
+	protected slots:
+		//! only called when a delimiter was set by user directly
+		void slotDelimiterChanged(int idx);
+		void slotDelimiterChangedInternal(int idx);
+		void slotDelimiterLineEditTextChanged( const QString & );
+		void slotDelimiterLineEditReturnPressed();
+
+	protected:
+		QString m_delimiter;
+		QValueVector<QString> m_availableDelimiters;
+		KComboBox* m_combo;
+		KLineEdit* m_delimiterEdit;
+};
+
+//! @short A combo box widget providing a list of possible quote characters
+//! Used by CSV import and export dialogs
 class KexiCSVTextQuoteComboBox : public KComboBox
 {
 	public:
 		KexiCSVTextQuoteComboBox( QWidget * parent = 0 );
+
+		QString textQuote() const;
+
+		//! Sets text quote. Only available are: ", ', and empty string.
+		void setTextQuote(const QString& textQuote);
 };
 
 #endif

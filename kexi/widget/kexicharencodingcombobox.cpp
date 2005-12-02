@@ -107,3 +107,8 @@ bool KexiCharacterEncodingComboBox::defaultEncodingSelected() const
 	return m_defaultEncodingAdded && 0==currentItem();
 }
 
+void KexiCharacterEncodingComboBox::selectDefaultEncoding()
+{
+	if (m_defaultEncodingAdded)
+		setCurrentItem(0);
+}

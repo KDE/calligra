@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -29,25 +29,36 @@
 #endif
 
 
-//! Widget for Kexi files opening/saving
+//! @short Widget for opening/saving files supported by Kexi
 class KEXIMAIN_EXPORT KexiStartupFileDialog : public KexiStartupFileDialogBase
 {
 	Q_OBJECT
 	
 public:
-
 	/*! Dialog mode:
 	 - Opening opens existing database (or shortcut)
 	 - SavingFileBasedDB saves file-based database file
 	 - SavingServerBasedDB saves server-based (shortcut) file
+	 - CustomOpening can be used for opening other files, like CSV
 	*/
-	typedef enum Mode { Opening = 1, SavingFileBasedDB = 2, SavingServerBasedDB = 3 };
+	typedef enum Mode { 
+		Opening = 1,
+		SavingFileBasedDB = 2,
+		SavingServerBasedDB = 4,
+		Custom = 256
+	};
 	
 	KexiStartupFileDialog(
-		const QString& startDir, Mode mode,
-		QWidget *parent=0, const char *name=0);
-		
-	void setMode(KexiStartupFileDialog::Mode mode, const QStringList &additionalMimeTypes = QStringList());
+		const QString& startDirOrVariable, int mode, QWidget *parent=0, const char *name=0);
+
+	virtual ~KexiStartupFileDialog();
+
+	void setMode(int mode);
+
+	QStringList additionalFilters() const;
+
+	//! Sets additional filters list, e.g. "text/x-csv"
+	void setAdditionalFilters(const QStringList &mimeTypes);
 	
 //	KURL currentURL();
 	QString currentFileName();
@@ -58,9 +69,16 @@ public:
 	//! just sets locationWidget()->setCurrentText(fn)
 	//! (and something similar on win32)
 	void setLocationText(const QString& fn);
+
+	//! Sets default extension which will be added after accepting
+	//! if user didn't provided one. This method is usable when there is 
+	//! more than one filter so there is no rule what extension should be selected
+	//! (by default first one is selected).
+	void setDefaultExtension(const QString& ext) { m_defaultExtension = ext; }
 	
-	/*! \return true if the current URL meets requiec constraints (eg. exists);
-	 shows appropriate msg box if not */
+	/*! \return true if the current URL meets requies constraints 
+	 (i.e. exists or doesn't exist);
+	 shows appropriate message box if needed. */
 	bool checkFileName();
 //	bool checkURL();
 
@@ -88,10 +106,15 @@ protected slots:
 	virtual void reject();
 
 private:
+	void updateFilters();
+
 //	KURL m_lastUrl;
 	QString m_lastFileName;
-	Mode m_mode;
+	int m_mode;
+	QStringList m_additionalMimeTypes;
+	QString m_defaultExtension;
 	bool m_confirmOverwrites : 1;
+	bool m_filtersUpdated : 1;
 };
 
 #endif

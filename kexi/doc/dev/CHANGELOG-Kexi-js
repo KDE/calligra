@@ -10,7 +10,24 @@
  Kexi home page: http://www.kexi-project.org/
 -------------------------------------------------------------
 
-CCMAIL: dkite@shaw.ca
+CCMAIL: kexi@kde.org
+
+2005-11-29..12-01
+General
+- file dialog's filters now contain only filters that make sense, 
+  e.g. there's no "mdb" filter when we're writing to a file.
+- usability: file dialogs now store recent directory paths 
+  in the config file, and this is now used everywhere in Kexi
+- default extension is properly added when there's multiple filters set
+  in the file dialog
+Startup Dialog
+- check for existence of a file user has selected to open
+CSV Files Export
+- CSV Export dialog added (also for copying to clipboard)
+  with storable export options
+CSV Files Import
+- usability: integer spin box used for "Start at line" option instead 
+  of a combo box
 
 2005-11-28
 Main Window

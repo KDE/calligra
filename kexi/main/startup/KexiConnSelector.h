@@ -61,9 +61,12 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 
 		/*! Constructs a KexiConnSelector which contain \a conn_set as connection set. 
 		 \a conn_set can be altered, because Add/Edit/Remove buttons are available 
-		 to users. */
-		KexiConnSelectorWidget( KexiDBConnectionSet& conn_set, QWidget* parent = 0, 
-			const char* name = 0 );
+		 to users. \a startDirOrVariable can be provided to specify a start dir for file browser
+		 (it can also contain a configuration variable name with ":" prefix as described 
+		 in KRecentDirs documentation). */
+		KexiConnSelectorWidget( KexiDBConnectionSet& conn_set, 
+			const QString& startDirOrVariable, 
+			QWidget* parent = 0, const char* name = 0 );
 
 		virtual ~KexiConnSelectorWidget();
 		

@@ -22,7 +22,7 @@
 
 #include <core/kexiinternalpart.h>
 
-/*! Internal part for import wizard. */
+/*! @short Internal part for data/project migration wizard. */
 class KexiMigrationPart : public KexiInternalPart
 {
 	public:

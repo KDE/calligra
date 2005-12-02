@@ -47,16 +47,16 @@ class QPushButton;
 class QRadioButton;
 class QTable;
 class KComboBox;
+class KIntSpinBox;
 
 class KexiMainWindow;
-class KexiCSVDelimiterComboBox;
+class KexiCSVDelimiterWidget;
 class KexiCSVTextQuoteComboBox;
 
-#define KEXICSV_DEFAULT_TEXT_QUOTE '"'
-#define KEXICSV_DEFAULT_DELIMITER ","
-
 /**
- * This is temporary solution for Kexi CSV support,
+ * @short Kexi CSV import dialog
+ *
+ * This is temporary solution for Kexi CSV import,
  * based on kspread/dialogs/kspread_dlg_csv.h, cc.
  *
  * Provides dialog for managing CSV (comma separated value) data.
@@ -77,11 +77,13 @@ class KexiCSVImportDialog : public KDialogBase
   enum Header { TEXT, NUMBER, DATE, CURRENCY };
 
 //! @todo what about making it kexidb-independent?
-  KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, QWidget * parent, const char * name = 0/*, QRect const & rect*/);
+  KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin, QWidget * parent, 
+	  const char * name = 0/*, QRect const & rect*/);
 
   ~KexiCSVImportDialog();
 
-  bool cancelled();
+  bool cancelled() const;
+  virtual bool eventFilter ( QObject * watched, QEvent * e );
 
  protected:
   bool loadData();
@@ -96,15 +98,14 @@ class KexiCSVImportDialog : public KDialogBase
 //  QGridLayout* m_delimiterBoxLayout;
 //  QGridLayout* m_formatBoxLayout;
   QTable* m_table;
-  QLabel* m_delimiterLabel;
-  KexiCSVDelimiterComboBox* m_delimiterCombo;
+  KexiCSVDelimiterWidget* m_delimiterWidget;
 /*  QButtonGroup* m_delimiterBox;
   QRadioButton* m_radioComma;
   QRadioButton* m_radioSemicolon;
   QRadioButton* m_radioTab;
   QRadioButton* m_radioSpace;
   QRadioButton* m_radioOther;*/
-  QLineEdit* m_delimiterEdit;
+//  QLineEdit* m_delimiterEdit;
 //  QButtonGroup* m_formatBox;
   QString m_formatComboText;
   QLabel* m_formatLabel;
@@ -113,9 +114,10 @@ class KexiCSVImportDialog : public KDialogBase
   QRadioButton* m_radioText;
   QRadioButton* m_radioCurrency;
   QRadioButton* m_radioDate;*/
-  KComboBox* m_comboLine;
+//  KComboBox* m_comboLine;
+  KIntSpinBox *m_startAtLineSpinBox;
   KexiCSVTextQuoteComboBox* m_comboQuote;
-  QLabel* TextLabel3;
+  QLabel* m_startAtLineLabel;
   QLabel* TextLabel2;
   QCheckBox* m_ignoreDuplicates;
   QCheckBox* m_1stRowForFieldNames;
@@ -124,7 +126,7 @@ class KexiCSVImportDialog : public KDialogBase
   KexiMainWindow* m_mainWin;
 
   void fillTable();
-  void fillComboBox();
+//  void fillComboBox();
   void detectTypeAndUniqueness(int row, int col, const QString& text);
   void setText(int row, int col, const QString& text);
   void adjustRows(int iRows);
@@ -136,7 +138,7 @@ class KexiCSVImportDialog : public KDialogBase
   int   m_adjustRows;
   int   m_startline;
   QChar m_textquote;
-  QString m_delimiter;
+//  QString m_delimiter;
   QString m_data;
   QByteArray m_fileArray;
 //  QRect m_targetRect;
@@ -164,13 +166,13 @@ class KexiCSVImportDialog : public KDialogBase
 	QString m_encoding;
 
  private slots:
-  void returnPressed();
+//  void returnPressed();
   void formatChanged(int id);
-  void delimiterChanged(int id);
-  void lineSelected(const QString& line);
-  void textquoteSelected(const QString& mark);
+  void delimiterChanged(const QString& delimiter);
+  void startlineSelected(int line);
+  void textquoteSelected(int);
   void currentCellChanged(int, int col);
-  void textChanged ( const QString & );
+//  void textChanged ( const QString & );
   void ignoreDuplicatesChanged(int);
   void slot1stRowForFieldNamesChanged(int);
   void cellValueChanged(int row,int col);

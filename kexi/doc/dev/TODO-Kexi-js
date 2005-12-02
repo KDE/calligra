@@ -763,3 +763,25 @@ KexiFrame:
 
 Migration:
 - fix: server as destination is broken
+
+CSV Import TODO:
+- switch from dialog to wizard; add filedlg widget as the 1st page
+- add better detection for CSV data with \t delimiters (needed for pasting from spreadsheets)
+- add option for storing import settings
+
+CSV Export TODO:
+- add "Include row count as first column - include row number in the first 
+   column of each row" option
+- add "Fixed columns width" option (can be extended to support "fixed width text" format
+- add "Set text to (null) on NULL value - use the string "(null)" to represent 
+   a NULL value in the document" option
+- MORE TODOs here: http://www.aquafold.com/docs-qw-save-results.html
+- by default, use delimiter=\t and quote=none for clipboard (needed for copying to spreadsheets)
+
+KexiDB TODO:
+-implement QuerySchema::setOrderByColumnList()
+-implement Cursor::setOrderByColumnList()
+
+TableView TODO (before 1.0)
+- fix repainting cells when moving down/up arrow at the window boundaries 
+  (weird, win32 is not affected)

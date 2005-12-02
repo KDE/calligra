@@ -63,7 +63,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString,QString>* args)
  , m_args(args)
 {
 	parseArguments();
-	setCaption(i18n("Database Importing"));
+	setCaption(i18n("Import Database"));
 	setIcon(DesktopIcon("database_import"));
 //	finishButton()->setText(i18n("&Import"));
 	m_prjSet = 0;
@@ -189,7 +189,8 @@ void ImportWizard::setupSrcConn()
 	m_srcConnPage = new QWidget(this);
 	QVBoxLayout *vbox = new QVBoxLayout(m_srcConnPage, KDialog::marginHint());
 
-	m_srcConn = new KexiConnSelectorWidget(Kexi::connset(), m_srcConnPage, "m_srcConnSelector");
+	m_srcConn = new KexiConnSelectorWidget(Kexi::connset(), 
+		":ProjectMigrationSourceDir", m_srcConnPage, "m_srcConnSelector");
 	m_srcConn->hideConnectonIcon();
 	m_srcConn->showSimpleConn();
 
@@ -253,7 +254,8 @@ void ImportWizard::setupDst()
 	m_dstPage = new QWidget(this);
 	QVBoxLayout *vbox = new QVBoxLayout(m_dstPage, KDialog::marginHint());
 
-	m_dstConn = new KexiConnSelectorWidget(Kexi::connset(), m_dstPage, "m_dstConnSelector");
+	m_dstConn = new KexiConnSelectorWidget(Kexi::connset(), 
+		":ProjectMigrationDestinationDir", m_dstPage, "m_dstConnSelector");
 	m_dstConn->hideHelpers();
 	//me: Can't connect m_dstConn->m_fileDlg here, it doesn't exist yet
 	//connect(this, SLOT(next()), m_dstConn->m_fileDlg, SIGNAL(accepted()));
@@ -401,7 +403,8 @@ void ImportWizard::arriveSrcConnPage()
 	//! @todo tmp: hardcoded!
 				additionalMimeTypes << "application/x-msaccess";
 			}*/
-			m_srcConn->m_fileDlg->setMode(KexiStartupFileDialog::Opening, additionalMimeTypes);
+			m_srcConn->m_fileDlg->setMode(KexiStartupFileDialog::Opening);
+			m_srcConn->m_fileDlg->setAdditionalFilters(additionalMimeTypes);
 /*moved			if (m_srcTypeCombo->currentText().contains("Access")) {
 	//! @todo tmp: hardcoded!
 	#ifdef Q_WS_WIN

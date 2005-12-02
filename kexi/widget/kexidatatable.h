@@ -35,8 +35,9 @@ namespace KexiDB
 	class Cursor;
 }
 
-//! \brief The KexiDataTable class provides a data-driven (record-based) tabular view .
-/*! The KexiDataTable can display data provided "by hand" 
+/*! @short Provides a data-driven (record-based) tabular view.
+
+ The KexiDataTable can display data provided "by hand" 
  or from KexiDB-compatible database source.
  @see KexiFormView
 */

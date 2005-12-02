@@ -76,14 +76,56 @@ Group: ImportExport
 # Useful if you are performing many imports of MS Access databases.
 # Valid values can be "cp 1250", "cp 1251", etc. Case insensitive.
 # If not provided, system default will be is assumed.
--defaultEncodingForMSAccessFiles [string]
+-DefaultEncodingForMSAccessFiles [string]
 
 # Default character encoding for importing CSV (Comma-Separated Value) files.
 # If not provided, system default will be is assumed.
--defaultEncodingForImportingCSVFiles [string]
+-DefaultEncodingForImportingCSVFiles [string]
+
+# True if options should be visible in the "CSV Export dialog".
+-ShowOptionsInCSVExportDialog [bool] (false by default)
+
+# If provided, appropriate options for CSV Export Dialog will be loaded
+-StoreOptionsForCSVExportDialog [bool] (default: false)
+
+# Default delimiter used for exporting CSV (Comma-Separated Value) files.
+-DefaultDelimiterForExportingCSVFiles [string] (default is ",")
+
+# Default text quote character used for exporting CSV (Comma-Separated Value) files.
+-DefaultTextQuoteForExportingCSVFiles [string] (default is ")
+
+# Default character encoding for exporting CSV (Comma-Separated Value) files.
+# If not provided, system default will be is assumed.
+# Only used when StoreOptionsForCSVExportDialog option is true.
+-DefaultEncodingForExportingCSVFiles [string]
+
+# Default setting used to specify whether column names should be added as the first row
+# for exporting CSV (Comma-Separated Value) files.
+# Only used when StoreOptionsForCSVExportDialog option is true.
+-AddColumnNamesForExportingCSVFiles [string] (default: true)
 
 Group: Recent Dirs
-# A list of recently displayed directories in file dialogs related to CSV import/export.
+# A list of recently displayed directories in file dialogs related to CSV 
+  import/export.
 -CSVImportExport [string list]
-# A list of recent displayed directories in file dialogs related to images (e.g. images within forms).
--lastVisitedImagePath [string list]
+
+# A list of recently displayed directories in "Source database" file dialog 
+  of Project Migration
+-ProjectMigrationSourceDir [string list]
+
+# A list of recently displayed directories in "Destination database" file 
+  dialog of Project Migration
+-ProjectMigrationDestinationDir [string list]
+
+# A list of recently displayed directories in "Open existing project" 
+  and "Create new project" file dialog of Startup Dialog
+-OpenExistingOrCreateNewProject [string list]
+
+# A list of recently displayed directories in file dialogs related to images 
+  (e.g. images within forms).
+-LastVisitedImagePath [string list]
+
+# A list of recent displayed directories in a file dialogs used for dowloading 
+  example databases (Get Hot New Stuff)
+-DownloadExampleDatabases [string list]
+

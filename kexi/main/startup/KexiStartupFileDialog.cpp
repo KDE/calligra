@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2003-2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -36,10 +36,11 @@
 #include <kurlcombobox.h>
 
 KexiStartupFileDialog::KexiStartupFileDialog(
-		const QString& startDir, Mode mode,
+		const QString& startDirOrVariable, int mode,
 		QWidget *parent, const char *name)
-	:  KexiStartupFileDialogBase(startDir, "", parent, name, 0)
+	:  KexiStartupFileDialogBase(startDirOrVariable, "", parent, name, 0)
 	, m_confirmOverwrites(true)
+	, m_filtersUpdated(false)
 {
 	setSizePolicy(QSizePolicy::Minimum,QSizePolicy::Minimum);
 	setMode( mode );
@@ -74,50 +75,77 @@ KexiStartupFileDialog::KexiStartupFileDialog(
 		delete l;
 	}	
 	
-#ifndef Q_WS_WIN
+#ifdef Q_WS_WIN
+	if (startDirOrVariable.startsWith(":"))
+		m_lastVisitedPathsVariable = startDirOrVariable; //store for later use
+#else
 	toggleSpeedbar(false);
 	setFocusProxy( locationEdit );//locationWidget() );
 #endif
-
 }
-	
-void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode, 
-	const QStringList &additionalMimeTypes)
+
+KexiStartupFileDialog::~KexiStartupFileDialog()
 {
+#ifdef Q_WS_WIN
+	saveLastVisitedPath(currentFileName());
+#endif
+}
+
+void KexiStartupFileDialog::setMode(int mode)
+{
+	//delayed
 	m_mode = mode;
+	m_filtersUpdated = false;
+}
+
+QStringList KexiStartupFileDialog::additionalFilters() const
+{
+	return m_additionalMimeTypes;
+}
+
+void KexiStartupFileDialog::setAdditionalFilters(const QStringList &mimeTypes)
+{
+	//delayed
+	m_additionalMimeTypes = mimeTypes;
+	m_filtersUpdated = false;
+}
+
+void KexiStartupFileDialog::updateFilters()
+{
+	if (m_filtersUpdated)
+		return;
+	m_filtersUpdated = true;
+
+	m_lastFileName = QString::null;
+//	m_lastUrl = KURL();
+
 	clearFilter();
 	
 	QString filter;
 	KMimeType::Ptr mime;
 	QStringList allfilters;
-	
-	if (m_mode == KexiStartupFileDialog::Opening 
-		|| m_mode == KexiStartupFileDialog::SavingFileBasedDB) {
+
+	const bool normalOpeningMode = m_mode & Opening && !(m_mode & Custom);
+	const bool normalSavingMode = m_mode & SavingFileBasedDB && !(m_mode & Custom);
+
+	if (normalOpeningMode || normalSavingMode) {
 		mime = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() );
 		if (mime) {
 			filter += KexiUtils::fileDialogFilterString(mime);
-//			filter += mime->patterns().join(" ") + "|" + mime->comment() 
-//					+ " ("+mime->patterns().join(" ")+")\n";
 			allfilters += mime->patterns();
 		}
 	}
 #ifdef KEXI_SERVER_SUPPORT
-	if (m_mode == KexiStartupFileDialog::Opening 
-		|| m_mode == KexiStartupFileDialog::SavingServerBasedDB) {
+	if (normalOpeningMode || m_mode & SavingServerBasedDB) {
 		mime = KMimeType::mimeType("application/x-kexiproject-shortcut");
 		if (mime) {
-//			filter += mime->patterns().join(" ") + "|" + mime->comment() 
-//				+ " ("+mime->patterns().join(" ")+")\n";
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();
 		}
 	}
-	if (m_mode == KexiStartupFileDialog::Opening 
-		|| m_mode == KexiStartupFileDialog::SavingServerBasedDB) {
+	if (normalOpeningMode || m_mode & SavingServerBasedDB) {
 		mime = KMimeType::mimeType("application/x-kexi-connectiondata");
 		if (mime) {
-//			filter += mime->patterns().join(" ") + "|" + mime->comment() 
-//				+ " ("+mime->patterns().join(" ")+")\n";
 			filter += KexiUtils::fileDialogFilterString(mime);
 			allfilters += mime->patterns();
 		}
@@ -125,17 +153,20 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode,
 #endif
 
 //! @todo hardcoded for MSA:
-	mime = KMimeType::mimeType("application/x-msaccess");
-	if (mime) {
-		filter += KexiUtils::fileDialogFilterString(mime);
-		allfilters += mime->patterns();
+	if (normalOpeningMode) {
+		mime = KMimeType::mimeType("application/x-msaccess");
+		if (mime) {
+			filter += KexiUtils::fileDialogFilterString(mime);
+			allfilters += mime->patterns();
+		}
 	}
 
-	foreach (QStringList::ConstIterator, it, additionalMimeTypes) {
-//		mime = KMimeType::mimeType(*it);
-//		filter += mime->patterns().join(" ") + "|" + mime->comment() + " ("
-//			+ mime->patterns().join(" ")+")\n";
+	foreach (QStringList::ConstIterator, it, m_additionalMimeTypes) {
+		if (*it == "all/allfiles")
+			continue;
 		filter += KexiUtils::fileDialogFilterString(*it);
+		mime = KMimeType::mimeType(*it);
+		allfilters += mime->patterns();
 	}
 
 	filter += KexiUtils::fileDialogFilterString("all/allfiles");
@@ -144,15 +175,19 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode,
 //		filter += QString(mime->patterns().isEmpty() ? "*" : mime->patterns().join(" ")) 
 //			+ "|" + mime->comment()+ " (*)\n";
 //	}
-	//remove duplicated made because upper- and lower-case extenstions are used:
+	//remove duplicates made because upper- and lower-case extenstions are used:
 	QStringList allfiltersUnique;
+	QDict<char> uniqueDict(499, false);
 	foreach (QStringList::ConstIterator, it, allfilters) {
 //		kdDebug() << *it << endl;
-		if ((*it) == (*it).lower())
-			allfiltersUnique += *it;
+		uniqueDict.insert(*it, (char*)1);
 	}
+	foreach_dict (QDictIterator<char>, it, uniqueDict) {
+		allfiltersUnique += it.currentKey();
+	}
+	allfiltersUnique.sort();
 	
-	if (allfilters.count()>1) {//prepend "all supoported files" entry
+	if (allfiltersUnique.count()>1) {//prepend "all supoported files" entry
 		filter.prepend(allfilters.join(" ")+"|" + i18n("All Supported Files")
 			+" ("+allfiltersUnique.join(" ")+")\n");
 	}
@@ -161,7 +196,7 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode,
 		filter.truncate(filter.length()-1);
 	setFilter(filter);
 	
-	if (m_mode == KexiStartupFileDialog::Opening) {
+	if (m_mode & Opening) {
 		KexiStartupFileDialogBase::setMode( KFile::ExistingOnly | KFile::LocalOnly | KFile::File );
 		setOperationMode( KFileDialog::Opening );
 	} else {
@@ -172,8 +207,8 @@ void KexiStartupFileDialog::setMode(KexiStartupFileDialog::Mode mode,
 
 void KexiStartupFileDialog::show()
 {
-	m_lastFileName = QString::null;
-//	m_lastUrl = KURL();
+	m_filtersUpdated = false;
+	updateFilters();
 	KexiStartupFileDialogBase::show();
 }
 
@@ -205,12 +240,23 @@ QString KexiStartupFileDialog::currentFileName()
 #endif
 	
 	if (!currentFilter().isEmpty()) {
-		if (m_mode == KexiStartupFileDialog::SavingFileBasedDB) {
-			QString filter = QStringList::split(" ", currentFilter()).first().stripWhiteSpace();
-			kdDebug()<< " filter == " << filter <<endl;
+		if (m_mode & SavingFileBasedDB) {
+			QStringList filters = QStringList::split(" ", currentFilter()); //.first().stripWhiteSpace();
+			kdDebug()<< " filter == " << filters << endl;
 			QString ext = QFileInfo(path).extension(false);
-			if ( !filter.mid(2).isEmpty() && ext!=filter.mid(2) ) {
-				path+=(QString(".")+filter.mid(2));
+			bool hasExtension = false;
+			for (QStringList::ConstIterator filterIt = filters.constBegin(); 
+				filterIt != filters.constEnd() && !hasExtension; ++filterIt)
+			{
+				QString f( (*filterIt).stripWhiteSpace() );
+				hasExtension = !f.mid(2).isEmpty() && ext==f.mid(2);
+			}
+			if (!hasExtension) {
+				//no extension: add one
+				QString defaultExtension( m_defaultExtension );
+				if (defaultExtension.isEmpty())
+					defaultExtension = filters.first().stripWhiteSpace().mid(2); //first one
+				path+=(QString(".")+defaultExtension);
 				kdDebug() << "KexiStartupFileDialog::checkURL(): append extension, " << path << endl;
 				setSelection( path );
 			}
@@ -230,7 +276,7 @@ bool KexiStartupFileDialog::checkFileName()
 	
 //	if (url.fileName().stripWhiteSpace().isEmpty()) {
 	if (path.isEmpty()) {
-		KMessageBox::error( this, i18n( "Enter a filename" ));
+		KMessageBox::error( this, i18n( "Enter a filename." ));
 		return false;
 	}
 	
@@ -240,14 +286,20 @@ bool KexiStartupFileDialog::checkFileName()
 		QFileInfo fi(path);
 		if (mode() & KFile::ExistingOnly) {
 			if ( !fi.exists() ) {
-				KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" doesn't exist." )
+				KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" does not exist." )
 					.arg( QDir::convertSeparators(path) ) );
 				return false;
 			}
-			else if ((mode() & KFile::File) && (!fi.isFile() || !fi.isReadable())) {
-				KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" is not readable." )
-					.arg( QDir::convertSeparators(path) ) );
-				return false;
+			else if (mode() & KFile::File) {
+				if (!fi.isFile()) {
+					KMessageBox::error( this, "<qt>"+i18n( "Enter a filename." ) );
+					return false;
+				}
+				else if (!fi.isReadable()) {
+					KMessageBox::error( this, "<qt>"+i18n( "The file \"%1\" is not readable." )
+						.arg( QDir::convertSeparators(path) ) );
+					return false;
+				}
 			}
 		}
 		else if (m_confirmOverwrites && fi.exists()) {
@@ -288,6 +340,10 @@ void KexiStartupFileDialog::accept()
 //	}
 //	m_lastUrl = currentURL();
 	m_lastFileName = currentFileName();
+
+#ifdef Q_WS_WIN
+	saveLastVisitedPath(m_lastFileName);
+#endif
 }
 
 void KexiStartupFileDialog::reject()

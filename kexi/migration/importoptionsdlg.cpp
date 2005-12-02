@@ -77,7 +77,7 @@ OptionsDialog::OptionsDialog( const QString& databaseFile, const QString& select
 
 	//read config
 	kapp->config()->setGroup("ImportExport");
-	QString defaultEncodingForMSAccessFiles = kapp->config()->readEntry("defaultEncodingForMSAccessFiles");
+	QString defaultEncodingForMSAccessFiles = kapp->config()->readEntry("DefaultEncodingForMSAccessFiles");
 	if (!defaultEncodingForMSAccessFiles.isEmpty()) {
 		m_encodingComboBox->setSelectedEncoding(defaultEncodingForMSAccessFiles);
 		m_chkAlwaysUseThisEncoding->setChecked(true);

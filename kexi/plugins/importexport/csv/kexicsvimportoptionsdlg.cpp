@@ -63,7 +63,7 @@ KexiCSVImportOptionsDialog::KexiCSVImportOptionsDialog( const QString& selectedE
 	//read config
 	kapp->config()->setGroup("ImportExport");
 	QString defaultEncodingForImportingCSVFiles 
-		= kapp->config()->readEntry("defaultEncodingForImportingCSVFiles");
+		= kapp->config()->readEntry("DefaultEncodingForImportingCSVFiles");
 	if (!defaultEncodingForImportingCSVFiles.isEmpty()) {
 		m_encodingComboBox->setSelectedEncoding(defaultEncodingForImportingCSVFiles);
 		m_chkAlwaysUseThisEncoding->setChecked(true);

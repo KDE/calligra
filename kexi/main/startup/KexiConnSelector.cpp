@@ -89,6 +89,7 @@ public:
 	
 	QWidget* openExistingWidget;
 	KexiPrjTypeSelector* prjTypeSelector;
+	QString startDirOrVariable;
 	QWidgetStack *stack;
 	QGuardedPtr<KexiDBConnectionSet> conn_set;
 	KexiDB::DriverManager manager;
@@ -100,11 +101,12 @@ public:
 /*================================================================*/
 
 KexiConnSelectorWidget::KexiConnSelectorWidget( KexiDBConnectionSet& conn_set, 
-	QWidget* parent,  const char* name )
+	const QString& startDirOrVariable, QWidget* parent, const char* name )
 	: QWidget( parent, name )
 	,d(new KexiConnSelectorWidgetPrivate())
 {
 	d->conn_set = &conn_set;
+	d->startDirOrVariable = startDirOrVariable;
 	QString none, iconname = KMimeType::mimeType( KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0);
 	const QPixmap &icon = KGlobal::iconLoader()->loadIcon( iconname, KIcon::Desktop );
 	setIcon( icon );
@@ -221,7 +223,7 @@ void KexiConnSelectorWidget::showSimpleConn()
 	d->prjTypeSelector->buttonGroup->setButton(1);
 	if (!d->file_sel_shown) {
 		d->file_sel_shown=true;
-		m_fileDlg = new KexiStartupFileDialog( "", KexiStartupFileDialog::Opening,
+		m_fileDlg = new KexiStartupFileDialog( d->startDirOrVariable, KexiStartupFileDialog::Opening,
 			d->stack, "openExistingFileDlg");
 		m_fileDlg->setConfirmOverwrites( d->confirmOverwrites );
 //		static_cast<QVBoxLayout*>(m_file->layout())->insertWidget( 2, m_fileDlg );

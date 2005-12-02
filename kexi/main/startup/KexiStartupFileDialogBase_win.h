@@ -52,8 +52,15 @@ protected:
 	void init(const QString& startDir, const QString& filter, QWidget* widget);
 	void updateAutoSelectExtension() {};
 
+	//! Helper added because QFileDialog on win32 doesn't support ":" prefixes 
+	//! for recent dir's storage. 
+	QString realStartDir(const QString& startDir);
+
+	void saveLastVisitedPath(const QString& path);
+
 	QPushButton* m_okBtn;
 	QLineEdit* m_lineEdit;
+	QString m_lastVisitedPathsVariable; //!< Used by win32; @see realStartDir()
 	KexiStartupFileDialogBasePrivate* d;
 };
 

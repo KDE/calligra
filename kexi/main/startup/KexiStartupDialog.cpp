@@ -284,15 +284,6 @@ void KexiStartupDialog::done(int r)
 	kdDebug() << "KexiStartupDialog::done(" << r << ")" << endl;
 	updateSelectedTemplateKeyInfo();
 
-	//save settings
-	KGlobal::config()->setGroup("Startup");
-	if (d->openExistingConnWidget)
-		KGlobal::config()->writeEntry("OpenExistingType", (d->openExistingConnWidget->selectedConnectionType() == KexiConnSelectorWidget::FileBased) ? "File" : "Server");
-	if (d->chkDoNotShow)
-		KGlobal::config()->writeEntry("ShowStartupDialog",!d->chkDoNotShow->isChecked());
-
-	KGlobal::config()->sync();
-
 	if (r==QDialog::Rejected) {
 		d->result = CancelResult;
 	} else {
@@ -301,9 +292,10 @@ void KexiStartupDialog::done(int r)
 			d->result = TemplateResult;
 		}
 		else if (idx == d->pageOpenExistingID) {
-			d->result = OpenExistingResult;
 			// return file or connection:
 			if (d->openExistingConnWidget->selectedConnectionType()==KexiConnSelectorWidget::FileBased) {
+				if (!d->openExistingFileDlg->checkFileName())
+					return;
 				d->existingFileToOpen = d->openExistingFileDlg->currentFileName();
 //				d->existingFileToOpen = d->openExistingFileDlg->currentURL().path();
 				d->selectedExistingConnection = 0;
@@ -312,11 +304,24 @@ void KexiStartupDialog::done(int r)
 				d->selectedExistingConnection
 					= d->openExistingConnWidget->selectedConnectionData();
 			}
+			d->result = OpenExistingResult;
 		}
 		else {
 			d->result = OpenRecentResult;
 		}
 	}
+
+	//save settings
+	KGlobal::config()->setGroup("Startup");
+	if (d->openExistingConnWidget)
+		KGlobal::config()->writeEntry("OpenExistingType", 
+		(d->openExistingConnWidget->selectedConnectionType() == KexiConnSelectorWidget::FileBased) 
+			? "File" : "Server");
+	if (d->chkDoNotShow)
+		KGlobal::config()->writeEntry("ShowStartupDialog",!d->chkDoNotShow->isChecked());
+
+	KGlobal::config()->sync();
+
 	KDialogBase::done(r);
 }
 
@@ -524,8 +529,9 @@ void KexiStartupDialog::setupPageOpenExisting()
 		d->pageOpenExisting = addPage( i18n("Open &Existing Project") );
 	QVBoxLayout *lyr = new QVBoxLayout( d->pageOpenExisting, 0, KDialogBase::spacingHint() );
 
-	d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet, d->pageOpenExisting, 
-		"KexiConnSelectorWidget");
+	d->openExistingConnWidget = new KexiConnSelectorWidget(*d->connSet, 
+		":OpenExistingOrCreateNewProject",
+		d->pageOpenExisting, "KexiConnSelectorWidget");
 	d->openExistingConnWidget->hideConnectonIcon();
 	lyr->addWidget( d->openExistingConnWidget );
 	if (KGlobal::config()->readEntry("OpenExistingType","File")=="File")
@@ -632,8 +638,10 @@ void KexiStartupDialog::recentProjectItemExecuted(KexiProjectData *data)
 bool KexiStartupDialog::eventFilter( QObject *o, QEvent *e )
 {
 	if (o==d->templatesWidget_IconListBox && d->templatesWidget_IconListBox) {
-		if (e->type()==QEvent::KeyPress && (static_cast<QKeyEvent*>(e)->key()==Key_Enter || static_cast<QKeyEvent*>(e)->key()==Key_Return)
-			|| e->type()==QEvent::MouseButtonDblClick) {
+		if (e->type()==QEvent::KeyPress 
+			&& (static_cast<QKeyEvent*>(e)->key()==Key_Enter || static_cast<QKeyEvent*>(e)->key()==Key_Return)
+			|| e->type()==QEvent::MouseButtonDblClick) 
+		{
 			if (d->templatesWidget->activePageIndex()==0 ) {
 				accept();
 			}
@@ -653,6 +661,4 @@ int KexiStartupDialog::activePageIndex() const
 	return 0; //there is always "plain page" #0 selected
 }
 
-
 #include "KexiStartupDialog.moc"
-

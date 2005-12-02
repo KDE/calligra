@@ -27,6 +27,7 @@
 
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <krecentdirs.h>
 
 #include <qobjectlist.h>
 #include <qlineedit.h>
@@ -47,10 +48,11 @@ class KexiStartupFileDialogBasePrivate
 KexiStartupFileDialogBase::KexiStartupFileDialogBase(
 	const QString & dirName, const QString & filter, 
 	QWidget * parent, const char * name, bool modal )
- : QFileDialog( dirName, filter, parent, name, modal )
+ : QFileDialog( realStartDir(dirName), filter, parent, name, modal )
  , d(new KexiStartupFileDialogBasePrivate())
 {
-	QString _dirName = dirName;
+//	QString _dirName = dirName;
+	QString _dirName = dirPath();
 	//make default 'My Documents' folder
 //TODO: store changes in the app's config file?
 	if (_dirName.isEmpty())
@@ -449,3 +451,20 @@ void KexiStartupFileDialogBase::setMimeFilter( const QStringList& mimeTypes,
 //TODO    updateAutoSelectExtension ();
 }
 
+QString KexiStartupFileDialogBase::realStartDir(const QString& startDir)
+{
+	if (!startDir.startsWith(":"))
+		return startDir;
+	QString recentDir; //dummy
+	return KFileDialog::getStartURL(startDir, recentDir).path();
+}
+
+void KexiStartupFileDialogBase::saveLastVisitedPath(const QString& path)
+{
+	if (!m_lastVisitedPathsVariable.isEmpty()) {
+		//save last visited dir path
+		QString dir = QDir(path).absPath();
+		if (!dir.isEmpty())
+			KRecentDirs::add(m_lastVisitedPathsVariable, dir);
+	}
+}
