@@ -79,10 +79,153 @@
 	window - note this causes the buttons to move to the top right
 	of the main window, above the <guilabel>Properties
 	editor</guilabel> if it is open.  The next button to the left
-	toggles the child window between minimized and restored.  The
-	left-most button detaches the child window, allowing it to be
-	moved out of the main window.
+	toggles the child window between minimized and restored.
       </para>
+      <para>
+	The left-most button detaches, or
+	<firstterm>undocks</firstterm>, the child window, allowing it
+	to be moved out of the main window.  For more information on
+	docking and undocking windows, see the next section.
+      </para>
+    </sect2>
+  </sect1>
+
+  <sect1 id="docking-windows">
+    <title>
+      Docking and Undocking Windows
+    </title>
+    <para>
+      By default, the <guilabel>Project Navigator</guilabel> and
+      <guilabel>Properties Editor</guilabel> panels are displayed as
+      part of the main &kexi; window.  It is possible to
+      <firstterm>undock</firstterm> each panel, so that it is
+      displayed in a separate window.  Once undocked, it is possible
+      to <firstterm>dock</firstterm> the panel so it appears back in
+      the main window again.
+    </para>
+    <para>
+      In <link linkend="window-layout-childframe">Childframe
+      mode</link>, it is also possible to undock child windows.  For
+      example, a child window showing a database table could be
+      undocked, allowing the child window showing the table to be
+      maximized on the screen.
+    </para>
+    <para>
+      It can be useful to undock a window when using:
+      <itemizedlist>
+	<listitem>
+	  <para>
+	  a small screen;
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	  large tables, queries or forms; and/or
+	  </para>
+	</listitem>
+	<listitem>
+	  <para>
+	    more than one montitor.
+	  </para>
+	</listitem>
+      </itemizedlist>
+    </para>
+    <sect2>
+      <title>
+	Docking and undocking side panels
+      </title>
+      <para>
+	The <guilabel>Project Navigator</guilabel> and
+	<guilabel>Properties Editor</guilabel> side panels may be
+	undocked by either:
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	      double-clicking on the 'grip' bar at the top of the
+	      panel; or
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para> 
+	      clicking once on the arrow at the top of the panel, next
+	      to the cross.
+	    </para>
+	  </listitem>
+	</itemizedlist>
+<!-- TODO: Screenshot -->
+      </para>
+      <para>
+	Once undocked, panel windows may be docked into the main
+	window again in a similar manner to they way that they were
+	undocked:
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	    double-clicking on the 'grip' bar at the top of the window; or
+	    </para>
+	  </listitem>
+	  <listitem>
+	    <para>
+	      clicking once on the arrow at the top of the panel, next
+	      to the cross.
+	    </para>
+	  </listitem>
+<!-- TODO: Screenshot -->
+	</itemizedlist>
+      </para>
+    </sect2>
+    <sect2>
+      <title>
+	Docking and undocking child windows
+      </title>
+      <para>
+	Child windows may be docked and undocked in <link
+	linkend="window-layout-childframe">Childframe mode</link>
+	only.
+      </para>
+      <para>
+	In Childframe mode, child windows may be undocked by:
+	<itemizedlist>
+	  <listitem>
+	    <para>
+	      right-clicking in the tab bar, on the tab corresponding
+	      to the window to be undocked, and selecting
+	      <guilabel>Undock</guilabel>; or
+	    </para>
+<!-- TODO: Screenshot -->
+	  </listitem>
+	  <listitem>
+	    <para>
+	      right-clicking on the title bar of the child window, and
+	      selecting <guilabel>Undock</guilabel>; or
+	    </para>
+<!-- TODO: Screenshot -->
+	  </listitem>
+	  <listitem>
+	    <para>
+	      if the child window is <emphasis>not</emphasis>
+	      maximized, clicking the arrow in the top right corner of
+	      the child window (next to the minimize, maximize and
+	      close buttons for that child window);
+	    </para>
+<!-- TODO: Screenshot -->
+	  </listitem>
+	  <listitem>
+	    <para>
+	      if the child window is maximized, clicking the arrow to
+	      the right of the menu bar (next to the minimize, restore
+	      and close buttons for that child window).
+	    </para>
+<!-- TODO: Screenshot -->
+	  </listitem>
+	</itemizedlist>
+      </para>
+      <para>
+	To dock a child window, right-clicking in the tab bar, on the
+	tab corresponding to the window to be docked, and select
+	<guilabel>Dock</guilabel>.  
+      </para>
+<!-- TODO: Screenshot -->
     </sect2>
   </sect1>
 </chapter>
