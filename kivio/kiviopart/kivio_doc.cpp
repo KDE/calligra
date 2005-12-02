@@ -687,7 +687,7 @@ void KivioDoc::printContent( KPrinter &prn )
   // ### HACK: disable zooming-when-printing if embedded parts are used.
   // No koffice app supports zooming in paintContent currently.
   // Disable in ALL cases now
-  bool doZoom = false;
+  bool doZoom = true;
   int dpiX = doZoom ? 300 : KoGlobal::dpiX();
   int dpiY = doZoom ? 300 : KoGlobal::dpiY();
 
