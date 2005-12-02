@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2002 David Faure <faure@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -153,7 +154,7 @@ public:
 
     void setPartFrameSet( KWPartFrameSet* fs ) { m_partFrameSet = fs; }
     KWPartFrameSet * partFrameSet() const { return m_partFrameSet; }
-    virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
+    //virtual KoDocument* hitTest( const QPoint& p, const QWMatrix& _matrix = QWMatrix() );
 
 protected:
     KWDocument *m_pKWordDoc;

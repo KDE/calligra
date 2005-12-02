@@ -110,11 +110,7 @@ void KWFrameSet::deleteFrame( unsigned int num, bool remove, bool recalc )
     }
     emit sigFrameRemoved(frm);
     if ( !remove )
-    {
-        if (frm->isSelected()) // get rid of the resize handles
-            frm->setSelected(false);
         frm->setFrameSet(0L);
-    }
     else {
         // ###### should something similar be done when just removing a frame from the list?
         frameDeleted( frm, recalc ); // inform kwtableframeset if necessary
@@ -1216,7 +1212,7 @@ void KWFrameSet::setZOrder()
 void KWFrameSet::setName( const QString &name )
 {
     m_name = name;
-    m_doc->updateFrameStatusBarItem();
+    emit sigNameChanged(this);
 }
 
 #ifndef NDEBUG

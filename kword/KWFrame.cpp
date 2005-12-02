@@ -59,7 +59,6 @@ int ZOrderedFrameList::compareItems(QPtrCollection::Item a, QPtrCollection::Item
 
 KWFrame::KWFrame(KWFrame * frame)
 {
-    m_selected = false;
     m_runAround = RA_NO;
     //kdDebug(32001) << "KWFrame::KWFrame this=" << this << " frame=" << frame << endl;
     copySettings( frame );
@@ -77,7 +76,6 @@ KWFrame::KWFrame(KWFrameSet *fs, double left, double top, double width, double h
       m_frameBehavior( AutoExtendFrame ),
       m_newFrameBehavior( ( fs && fs->type() == FT_TEXT ) ? Reconnect : NoFollowup ),
       m_bCopy( false ),
-      m_selected( false ),
       m_drawFootNoteLine( false ),
       m_runAroundLeft( 1.0 ),
       m_runAroundRight( 1.0 ),
@@ -163,7 +161,6 @@ void KWFrame::copySettings(KWFrame *frm)
     m_internalY = 0; // internal Y is recalculated
     setZOrder(frm->zOrder());
     setCopy(frm->isCopy());
-    setSelected( false );// don't copy this attribute [shouldn't be an attribute of KWFrame]
     m_drawFootNoteLine = false; // recalculated
     setBackgroundColor( frm->backgroundColor() );
     setLeftBorder(frm->leftBorder());
@@ -178,19 +175,15 @@ void KWFrame::frameBordersChanged() {
 
 
 void KWFrame::updateRulerHandles(){
+// TODO
+#if 0
     if(! isSelected())
     {
         KWDocument *doc = frameSet()->kWordDocument();
         if(doc)
             doc->updateRulerFrameStartEnd();
     }
-
-}
-
-void KWFrame::setSelected( bool selected )
-{
-    //kdDebug(32001) << this << " KWFrame::setSelected " << selected << endl;
-    m_selected = selected;
+#endif
 }
 
 QRect KWFrame::outerRect( KWViewMode* viewMode ) const

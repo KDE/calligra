@@ -2949,68 +2949,47 @@ void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, Ko
                                      QString* plainText ) const
 {
     QPtrList<KoDocumentChild> embeddedObjects;
-
-    QPtrListIterator<KWFrameSet> fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit ) {
-        KWFrameSet * fs = fit.current();
-        if ( fs->isVisible() && fs->type() == FT_PART
-             && fs->frameIterator().getFirst()->isSelected() ) {
+    QValueList<KWFrameView*> selectedFrames = getAllViews()[0]->frameViewManager()->selectedFrames();
+    QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+    for(; framesIterator != selectedFrames.end(); ++framesIterator) {
+        KWFrame *frame = (*framesIterator)->frame();
+        KWFrameSet *fs = frame->frameSet();
+        if ( fs->isVisible() && fs->type() == FT_PART) {
             embeddedObjects.append( static_cast<KWPartFrameSet *>(fs)->getChild() );
+            continue;
         }
-    }
+        bool isTable = fs->type() == FT_TABLE;
 
-    fit = framesetsIterator();
-    for ( ; fit.current() ; ++fit )
-    {
-        KWFrameSet * fs = fit.current();
-        if ( fs->isVisible() )
-        {
-            bool isTable = ( fs->type() == FT_TABLE );
-            if ( fs->type() == FT_PART )
-                continue;
-            QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
-            KWFrame * firstFrame = frameIt.current();
-            for ( ; frameIt.current(); ++frameIt )
-            {
-                KWFrame * frame = frameIt.current();
-                if ( frame->isSelected() )
-                {
-                    kdDebug(32001) << "Selected frame " << frame << " from " << fs->name() << endl;
-                    // Two cases to be distinguished here
-                    // If it's the first frame of a frameset, then copy the frameset contents and the frame itself
-                    // Otherwise copy only the frame information
-                    if ( frame == firstFrame || isTable )
-                    {
-                        fs->saveOasis( bodyWriter, savingContext, /*TODO: check this: isTable ? true :*/ false );
-                        if ( plainText )
-                            *plainText += fs->toPlainText();
-                    }
-                    else if ( !isTable )
-                    {
+        // Two cases to be distinguished here
+        // If it's the first frame of a frameset, then copy the frameset contents and the frame itself
+        // Otherwise copy only the frame information
+        if ( frame == fs->frame(0) || isTable ) {
+            fs->saveOasis( bodyWriter, savingContext, false );
+            if ( plainText )
+                *plainText += fs->toPlainText();
+        }
+        else if ( !isTable ) {
 #if 0
-                        // Save the frame information
-                        QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
-                        parentElem.appendChild( frameElem );
-                        frame->save( frameElem );
-                        if ( frame != firstFrame )
-                        {
-                            // Frame saved alone -> remember which frameset it's part of
-                            frameElem.setAttribute( "parentFrameset", fs->name() );
-                        }
+            // Save the frame information
+            QDomElement frameElem = parentElem.ownerDocument().createElement( "FRAME" );
+            parentElem.appendChild( frameElem );
+            frame->save( frameElem );
+            if ( frame != firstFrame )
+            {
+                // Frame saved alone -> remember which frameset it's part of
+                frameElem.setAttribute( "parentFrameset", fs->name() );
+            }
 #endif
-                    }
-                    if ( fs->type() == FT_PICTURE ) {
-                        kdDebug(32001) << "found non-inline picture framesets" << endl;
-
-                        const KoPictureKey key = static_cast<KWPictureFrameSet *>( fs )->key();
-                        if ( !pictureList.contains( key ) )
-                            pictureList.append( key );
-                    }
-                    if ( isTable ) // Copy tables only once, even if they have many cells selected
-                        break;
-                }
-            } // for each frame
         }
+        if ( fs->type() == FT_PICTURE ) {
+            kdDebug(32001) << "found non-inline picture framesets" << endl;
+
+            const KoPictureKey key = static_cast<KWPictureFrameSet *>( fs )->key();
+            if ( !pictureList.contains( key ) )
+                pictureList.append( key );
+        }
+        if ( isTable ) // Copy tables only once, even if they have many cells selected
+            break;
     }
 
     // Save embedded objects - code inspired from KoDocument::saveChildrenOasis
@@ -4284,8 +4263,6 @@ void KWDocument::frameChanged( KWFrame * frame, KWView * view )
     }
     repaintAllViewsExcept( view );
     updateRulerFrameStartEnd();
-    if ( frame && frame->isSelected() )
-        updateFrameStatusBarItem();
 }
 
 void KWDocument::framesChanged( const QPtrList<KWFrame> & frames, KWView * view )
@@ -4306,13 +4283,6 @@ void KWDocument::framesChanged( const QPtrList<KWFrame> & frames, KWView * view 
             break;
         }
     updateRulerFrameStartEnd();
-    // Is at least one frame selected ?
-    QPtrListIterator<KWFrame> it2( frames );
-    for ( ; it2.current() ; ++it2 )
-        if ( it2.current()->isSelected() ) {
-            updateFrameStatusBarItem();
-            break;
-        }
 }
 
 void KWDocument::setHeaderVisible( bool h )
@@ -4754,12 +4724,6 @@ void KWDocument::updateRulerFrameStartEnd()
 {
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
         (*it)->slotUpdateRuler();
-}
-
-void KWDocument::updateFrameStatusBarItem()
-{
-    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
-        (*it)->updateFrameStatusBarItem();
 }
 
 int KWDocument::undoRedoLimit() const

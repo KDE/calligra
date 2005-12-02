@@ -321,6 +321,9 @@ KWView::KWView( KWViewMode* viewMode, QWidget *parent, const char *name, KWDocum
     connect( frameViewManager(), SIGNAL(sigFrameSelectionChanged()),
              this, SLOT( frameSelectedChanged()));
 
+    connect( frameViewManager(), SIGNAL(sigFrameSetRenamed()),
+             this, SLOT( updateFrameStatusBarItem()));
+
     connect( QApplication::clipboard(), SIGNAL( dataChanged() ),
              this, SLOT( clipboardDataChanged() ) );
 
@@ -2405,7 +2408,7 @@ void KWView::pasteData( QMimeSource* data )
                     delete store;
                     QValueList<KWFrame *>::ConstIterator it = frames.begin();
                     for ( ; it != frames.end() ; ++it )
-                        (*it)->setSelected( true );
+                        frameViewManager()->view(*it)->setSelected(true);
                     // TODO undo/redo command for the frames created above
                 }
             }
@@ -2788,8 +2791,7 @@ void KWView::createLinkedFrame()
     newFrame->setNewFrameBehavior( KWFrame::Copy );
     frame->frameSet()->addFrame( newFrame );
 
-    frame->setSelected(false);
-    newFrame->setSelected(true);
+    frameViewManager()->view(newFrame)->setSelected(true);
 
     KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Create Linked Copy"), newFrame );
     m_doc->addCommand( cmd );
@@ -7253,7 +7255,7 @@ void KWView::deleteFrameSet( KWFrameSet * frameset)
 {
     if ( frameset  && frameset->frame(0))
     {
-        frameset->frame(0)->setSelected( true );
+        frameViewManager()->view(frameset->frame(0))->setSelected( true );
         deleteFrame();
     }
 }
@@ -7323,10 +7325,10 @@ void KWView::slotUnitChanged( KoUnit::Unit unit )
         m_sbUnitLabel->setText( ' ' + KoUnit::unitDescription( unit ) + ' ' );
 }
 
-
 KWFrameViewManager* KWView::frameViewManager() const {
     return getGUI()->canvasWidget()->frameViewManager();
 }
+
 void KWView::deleteSelectedFrames() {
     QValueList<KWFrameView*> selectedFrames=frameViewManager()->selectedFrames();
     int nbCommand=0;
@@ -7359,14 +7361,13 @@ void KWView::deleteSelectedFrames() {
                 nbCommand++;
             }
         }
-        else {// a simple frame
+        else { // a simple frame
             if ( fs->isMainFrameset() )
                 continue;
 
             docItem|=m_doc->typeItemDocStructure(fs->type());
 
             if ( fs->isFloating() ) {
-                frame->setSelected( false );
                 KWAnchor * anchor = fs->findAnchor( 0 );
                 KCommand *cmd=fs->anchorFrameset()->deleteAnchoredFrame( anchor );
                 macroCmd->addCommand(cmd);

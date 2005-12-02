@@ -478,6 +478,8 @@ signals:
     void sigFrameAdded(KWFrame*);
     void sigFrameRemoved(KWFrame*);
 
+    void sigNameChanged(KWFrameSet*);
+
 protected:
 
     /// save the common attributes for the frameset

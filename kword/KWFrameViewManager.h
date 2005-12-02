@@ -158,10 +158,14 @@ public slots:
     void slotFrameResized(KWFrame *f);
     /// notify this slot if one or more frames have been selected or unselected.
     void slotFrameSelectionChanged();
+    /// notify this slot if a frameset was renamed
+    void slotFrameSetRenamed(KWFrameSet *fs);
 
 signals:
     /// emitted after one or more incoming slotFrameSelectionChanged events.
     void sigFrameSelectionChanged();
+    /// emitted after a frameset that had at least one selected frame was renamed.
+    void sigFrameSetRenamed();
 
 protected slots:
     /**
@@ -182,7 +186,8 @@ private:
     /**  Internal class to store FrameEvents in (from the slots) until they are fired later */
     class FrameEvent {
         public:
-            enum actionEnum { FrameRemoved, FrameAdded, FrameSetRemoved, FrameSetAdded, FrameMoved, FrameResized, FrameSelectionChanged };
+            enum actionEnum { FrameRemoved, FrameAdded, FrameSetRemoved, FrameSetAdded, FrameMoved,
+                FrameResized, FrameSelectionChanged, FrameSetRenamed };
             FrameEvent (actionEnum action);
             FrameEvent (actionEnum action, KWFrame *frame);
             FrameEvent (actionEnum action, KWFrameSet *frameSet);

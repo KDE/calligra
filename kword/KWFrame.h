@@ -88,13 +88,6 @@ public:
      */
     virtual ~KWFrame();
 
-    /** a frame can be selected by the user clicking on it. The frame
-     * remembers if it is selected
-     * - which is actually pretty bad in terms of doc/view design (DF)
-     */
-    void setSelected( bool _selected );
-    bool isSelected()const { return m_selected; }
-
     double runAroundLeft() const { return m_runAroundLeft; }
     double runAroundRight() const { return m_runAroundRight; }
     double runAroundTop() const { return m_runAroundTop; }
@@ -288,7 +281,6 @@ private:
     FrameBehavior m_frameBehavior : 2;
     NewFrameBehavior m_newFrameBehavior : 2;
     bool m_bCopy;
-    bool m_selected;
     bool m_drawFootNoteLine;
 
     double m_runAroundLeft, m_runAroundRight, m_runAroundTop, m_runAroundBottom;

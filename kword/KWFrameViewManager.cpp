@@ -71,6 +71,7 @@ void KWFrameViewManager::slotFrameSetAdded(KWFrameSet *fs) {
         m_frameEvents.append(new FrameEvent(FrameEvent::FrameSetAdded, fs));
     connect(fs, SIGNAL( sigFrameAdded(KWFrame*)), SLOT( slotFrameAdded(KWFrame *)));
     connect(fs, SIGNAL( sigFrameRemoved(KWFrame*)), SLOT( slotFrameRemoved(KWFrame *)));
+    connect(fs, SIGNAL( sigNameChanged(KWFrameSet*)), SLOT( slotFrameSetRenamed(KWFrameSet *)));
     QPtrListIterator<KWFrame> frames = fs->frameIterator();
     while(frames.current()) {
         KWFrame *f = frames.current();
@@ -136,6 +137,12 @@ void KWFrameViewManager::slotFrameSelectionChanged() {
     requestFireEvents();
 }
 
+void KWFrameViewManager::slotFrameSetRenamed(KWFrameSet *fs) {
+    if(! m_blockEvents)
+        m_frameEvents.append(new FrameEvent(FrameEvent::FrameSetRenamed, fs));
+    requestFireEvents();
+}
+
 void KWFrameViewManager::requestFireEvents() {
     if(m_queueRequested && !m_blockEvents)
         return;
@@ -163,6 +170,14 @@ void KWFrameViewManager::fireEvents() {
         if(!selectionChangedFired && event->m_action == FrameEvent::FrameSelectionChanged) {
             emit sigFrameSelectionChanged();
             selectionChangedFired = true;  // only fire ones.
+        } else if(event->m_action == FrameEvent::FrameSetRenamed) {
+            QPtrListIterator<KWFrame> frames = event->m_frameSet->frameIterator();
+            for(;frames.current();++frames) {
+                if(view(frames.current())->selected()) {
+                    emit sigFrameSetRenamed();
+                    break;
+                }
+            }
         }
 
         // listener based
