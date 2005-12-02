@@ -909,25 +909,7 @@ void KexiCSVImportDialog::formatChanged(int id)
 
 void KexiCSVImportDialog::delimiterChanged(const QString& delimiter)
 {
-/*moved	switch (id)
-	{
-	 case 0: // comma
-	m_delimiter = ",";
-	break;
-	 case 1: // semicolon
-	m_delimiter = ";";
-	break;
-	 case 2: // tab
-	m_delimiter = "\t";
-	break;
-	 case 3: // space
-	m_delimiter = " ";
-	break;
-	 case 4: // other
-	m_delimiter = m_delimiterEdit->text();
-	break;
-	}
-	m_delimiterEdit->setEnabled(id==4);*/
+	Q_UNUSED(delimiter);
 	m_columnsAdjusted = false;
 	fillTable();
 }
