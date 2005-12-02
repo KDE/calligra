@@ -36,7 +36,19 @@ class DCOPObject;
 class KARBONBASE_EXPORT VLayer : public VGroup
 {
 public:
+	/**
+	 * Constructs a new layer object that is child of parent and has the given state.
+	 *
+	 * @param parent the new object's parent
+	 * @param state the new object's state
+	 */
 	VLayer( VObject* parent, VState state = normal );
+
+	/**
+	 * Copy constructor.
+	 *
+	 * @param layer the layer to copy properties from
+	 */
 	VLayer( const VLayer& layer );
 
 	virtual ~VLayer();
@@ -52,20 +64,54 @@ public:
 
 	virtual void accept( VVisitor& visitor );
 
-
+	/**
+	 * Moves the object to the top of the list.
+	 *
+	 * When the object is at the top this method has no effect.
+	 *
+	 * @param object the object to move
+	 */
 	void bringToFront( const VObject& object );
 
-	/// moves the object one step up the list.
-	/// When the object is at the top this method has no effect.
+	/** 
+	 * Moves the object one step up the list.
+	 *
+	 * When the object is at the top this method has no effect.
+	 *
+	 * @param object the object to move
+	 */
 	void upwards( const VObject& object );
 
-	/// moves the object one step down the list.
-	/// When the object is at the bottom this method has no effect.
+	/** 
+	 * Moves the object one step down the list.
+	 *
+	 * When the object is at the bottom this method has no effect.
+	 *
+	 * @param object the object to move
+	 */
 	void downwards( const VObject& object );
 
+	/** 
+	 * Moves the object to the end of the list.
+	 *
+	 * When the object is at the bottom this method has no effect.
+	 *
+	 * @param object the object to move
+	 */
 	void sendToBack( const VObject& object );
 
+	/**
+	 * Selects or unselects the layer 
+	 *
+	 * @param state the new selection state
+	 */
 	void setSelected( bool state ) { setState( state ? VObject::selected : VObject::normal ); }
+
+	/**
+	 * Returns the selection state of the layer
+	 *
+	 * @return the actual selection state
+	 */
 	bool selected() { return state() == VObject::selected; }
 };
 
