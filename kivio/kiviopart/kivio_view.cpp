@@ -328,7 +328,7 @@ void KivioView::createGeometryDock()
 void KivioView::createBirdEyeDock()
 {
   m_pBirdEyePanel = new KivioBirdEyePanel(this, this);
-  m_pBirdEyePanel->setCaption(i18n("Bird's Eye"));
+  m_pBirdEyePanel->setCaption(i18n("Overview"));
   paletteManager()->addWidget(m_pBirdEyePanel, "birdseyepanel", "birdeyedocker");
 }
 
