@@ -127,7 +127,7 @@ class TkDialog:
 
 	class FileChooser(Edit):
 		def __init__(self, dialog, parent, caption, initialfile = None, filetypes = None):
-			Edit.__init__(self, dialog, parent, caption, initialfile)
+			TkDialog.Edit.__init__(self, dialog, parent, caption, initialfile)
 			import Tkinter
 
 			self.initialfile = initialfile
@@ -156,6 +156,20 @@ class TkDialog:
 			)
 			if file:
 				self.entrytext.set( file )
+
+	class MessageBox:
+		def __init__(self, dialog, typename, caption, message):
+			self.widget = dialog.widget
+			self.typename = typename
+			self.caption = str(caption)
+			self.message = str(message)
+		def show(self):
+			import tkMessageBox
+			if self.typename == "okcancel":
+				return tkMessageBox.askokcancel(self.caption, self.message,icon=tkmessageBox.QESTION)
+			else:
+				tkMessageBox.showinfo(self.caption, self.message)
+			return True
 
 	def show(self):
 		self.root.mainloop()
