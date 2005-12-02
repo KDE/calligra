@@ -26,7 +26,7 @@
 #include <qdatetime.h>
 #include <koStyleStack.h>
 #include <koOasisStyles.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 
 #include <koPictureCollection.h>
 

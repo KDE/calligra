@@ -24,10 +24,10 @@
 
 #include <qstring.h>
 #include <qstringlist.h>
-#include <korichtext.h>
-#include <kotextobject.h>
-#include <kotextview.h>
-#include <koSearchDia.h>
+#include <KoRichText.h>
+#include <KoTextObject.h>
+#include <KoTextView.h>
+#include <KoSearchDia.h>
 
 class KWCanvas;
 class KWTextFrameSet;

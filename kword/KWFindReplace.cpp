@@ -24,11 +24,11 @@
 #include "KWCanvas.h"
 #include "KWDocument.h"
 #include "KWTextFrameSet.h"
-#include <kotextobject.h>
+#include <KoTextObject.h>
 #include <kcommand.h>
-#include <koSearchDia.h>
+#include <KoSearchDia.h>
 #include "KWTextDocument.h"
-//#include <kotextdocument.h>
+//#include <KoTextDocument.h>
 
 KWFindReplace::KWFindReplace( KWCanvas * canvas, KoSearchDia * dialog, const QValueList<KoTextObject *> & lstObjects, KWTextFrameSetEdit *textView)
     : KoFindReplace( canvas, dialog, lstObjects, textView )

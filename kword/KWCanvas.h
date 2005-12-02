@@ -24,7 +24,7 @@
 #include <koRect.h>
 #include <qscrollview.h>
 #include <qstylesheet.h>
-#include <korichtext.h>
+#include <KoRichText.h>
 #include <koQueryTrader.h>
 #include <koPicture.h>
 

@@ -83,17 +83,17 @@
 #include <unistd.h>
 #include <config.h>
 
-#include <korichtext.h>
-#include <kotextobject.h>
-#include <kotextzoomhandler.h>
-#include <kostyle.h>
+#include <KoRichText.h>
+#include <KoTextObject.h>
+#include <KoTextZoomHandler.h>
+#include <KoStyleCollection.h>
 #include <kcommand.h>
 #include "KPrDocumentIface.h"
 
 #include <kspell2/settings.h>
 
-#include <kovariable.h>
-#include <koAutoFormat.h>
+#include <KoVariable.h>
+#include <KoAutoFormat.h>
 #include <koDocumentInfo.h>
 #include "KPrVariableCollection.h"
 #include "KPrBackground.h"
@@ -103,7 +103,7 @@
 #include <kocommandhistory.h>
 #include "koApplication.h"
 #include <koOasisStyles.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 
 #include "KPrLoadingInfo.h"
 

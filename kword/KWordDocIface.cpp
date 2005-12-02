@@ -25,8 +25,8 @@
 
 #include <kapplication.h>
 #include <dcopclient.h>
-#include <kovariable.h>
-#include <koAutoFormat.h>
+#include <KoVariable.h>
+#include <KoAutoFormat.h>
 
 KWordDocIface::KWordDocIface( KWDocument *doc_ )
     : KoDocumentIface( doc_ )

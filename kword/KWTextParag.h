@@ -20,7 +20,7 @@
 #ifndef kwtextparag_h
 #define kwtextparag_h
 
-#include "kotextparag.h"
+#include "KoTextParag.h"
 
 class KoStyleCollection;
 class QDomDocument;

@@ -25,9 +25,9 @@
 #include "KWVariable.h"
 #include "KWLoadingInfo.h"
 
-#include <kovariable.h>
-#include <koparagcounter.h>
-#include <kooasiscontext.h>
+#include <KoVariable.h>
+#include <KoParagCounter.h>
+#include <KoOasisContext.h>
 #include <koxmlns.h>
 #include <koOasisStyles.h>
 

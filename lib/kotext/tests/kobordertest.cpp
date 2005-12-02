@@ -1,4 +1,4 @@
-#include <koborder.h>
+#include <KoBorder.h>
 #include <kozoomhandler.h>
 #include <kapplication.h>
 #include <kcmdlineargs.h>

@@ -20,7 +20,7 @@
 #ifndef KWSTYLEMANAGER_H
 #define KWSTYLEMANAGER_H
 
-#include <koStylist.h>
+#include <KoStyleManager.h>
 
 class KWDocument;
 class KoParagStyle;

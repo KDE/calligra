@@ -22,7 +22,7 @@
 #include <qpainter.h>
 #include <kpixmapeffect.h>
 #include <kdebug.h>
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 
 KPGradient::KPGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
                         bool _unbalanced, int _xfactor, int _yfactor )

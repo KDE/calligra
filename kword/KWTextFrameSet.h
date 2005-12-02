@@ -20,12 +20,12 @@
 #ifndef kwtextframeset_h
 #define kwtextframeset_h
 
-#include "korichtext.h"
+#include "KoRichText.h"
 #include "KWFrameSet.h"
 #include "KWFrameSetEdit.h"
-#include <kotextview.h>
-#include <koparaglayout.h>
-#include <koChangeCaseDia.h>
+#include <KoTextView.h>
+#include <KoParagLayout.h>
+#include <KoChangeCaseDia.h>
 #include "KWVariable.h"
 
 class KoGenStyles;

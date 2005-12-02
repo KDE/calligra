@@ -23,8 +23,8 @@
 #include "KPrUtils.h"
 #include "KPrPieObjectIface.h"
 
-#include <kotextzoomhandler.h>
-#include <kooasiscontext.h>
+#include <KoTextZoomHandler.h>
+#include <KoOasisContext.h>
 #include <koStyleStack.h>
 #include <koxmlns.h>
 

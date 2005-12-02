@@ -25,7 +25,7 @@
 #include "KPrGradient.h"
 #include <kodom.h>
 #include <koxmlns.h>
-#include "kooasiscontext.h"
+#include "KoOasisContext.h"
 #include <kparts/partmanager.h>
 
 #include <qpainter.h>

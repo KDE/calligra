@@ -25,14 +25,14 @@
 #include "KPrLineObjectIface.h"
 #include "KoPointArray.h"
 #include <koStyleStack.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qdom.h>
 #include <kdebug.h>
 #include <koUnit.h>
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <math.h>
 #include <kodom.h>
 #include <koxmlns.h>

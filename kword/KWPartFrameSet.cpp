@@ -24,7 +24,7 @@
 #include "KWordPartFrameSetIface.h"
 //#include "KWordPartFrameSetEditIface.h"
 
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <KoXmlWriter.h>
 #include <koxmlns.h>
 

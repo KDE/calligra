@@ -21,7 +21,7 @@
 #define __KWImportStyleDia__
 
 #include <kdialogbase.h>
-#include <koimportstyledia.h>
+#include <KoImportStyleDia.h>
 #include <qstringlist.h>
 
 #include "KWFrameStyle.h"

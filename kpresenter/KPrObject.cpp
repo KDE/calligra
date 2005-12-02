@@ -33,7 +33,7 @@
 #include <qbuffer.h>
 
 #include <kapplication.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include "koOasisStyles.h"
 
 #include <stdlib.h>
@@ -41,7 +41,7 @@
 #include <math.h>
 #include <float.h>
 
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <koRect.h>
 #include <koSize.h>
 #include <koPoint.h>

@@ -35,9 +35,9 @@
 #include "KWPictureFrameSet.h"
 #include "KWPageManager.h"
 
-#include <kotextobject.h>
+#include <KoTextObject.h>
 #include <koOasisStyles.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <koxmlns.h>
 #include <kodom.h>
 #include <KoStore.h>

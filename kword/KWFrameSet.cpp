@@ -33,7 +33,7 @@
 #include "KWFrameViewManager.h"
 #include "KWFrameView.h"
 
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <koxmlns.h>
 #include <KoXmlWriter.h>
 

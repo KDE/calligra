@@ -19,8 +19,8 @@
 #ifndef KOPARAGSTYLE_H
 #define KOPARAGSTYLE_H
 
-#include "kotextformat.h"
-#include "koparaglayout.h"
+#include "KoTextFormat.h"
+#include "KoParagLayout.h"
 #include "KoUserStyle.h"
 class KoGenStyles;
 class QDomElement;

@@ -23,7 +23,7 @@
 
 #include <qstring.h>
 #include <qasciidict.h>
-#include <kovariable.h>
+#include <KoVariable.h>
 
 #include "KPrTextDocument.h"
 class KPrDocument;

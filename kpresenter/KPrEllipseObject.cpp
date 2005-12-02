@@ -28,8 +28,8 @@
 #include <qdom.h>
 #include <qpicture.h>
 #include <qpainter.h>
-#include <kotextzoomhandler.h>
-#include <kooasiscontext.h>
+#include <KoTextZoomHandler.h>
+#include <KoOasisContext.h>
 
 using namespace std;
 

@@ -20,7 +20,7 @@
 #ifndef KWORD_PARAGVISITORS_H
 #define KWORD_PARAGVISITORS_H
 
-#include <kotextdocument.h>
+#include <KoTextDocument.h>
 class KWFrameSet;
 template <class T> class QValueList;
 

@@ -21,12 +21,14 @@
 #ifndef framedia_h
 #define framedia_h
 
-#include "../lib/kotext/koParagDia_p.h"
+#include "defs.h"
+#include "KWTextFrameSet.h"
 #include <kdialogbase.h>
 #include <koUnit.h>
 #include <koUnitWidgets.h>
 #include <qgroupbox.h>
 
+class KoBorderPreview;
 class KWFrame;
 class KWDocument;
 class KWPage;
@@ -116,7 +118,7 @@ protected:
     void setupTab6();
     void initBorderSettings();
     void initGeometrySettings();
-    
+
     void updateFrames();
     void enableOnNewPageOptions();
     void initBrush();

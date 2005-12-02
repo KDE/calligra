@@ -85,9 +85,9 @@ class KoOasisSettings;
 class KWBookMark;
 
 #include <koDocument.h>
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <koPictureKey.h>
-#include <kostyle.h> // for KoStyleChangeDefMap
+#include <KoStyleCollection.h> // for KoStyleChangeDefMap
 
 #include <qmap.h>
 #include <qptrlist.h>

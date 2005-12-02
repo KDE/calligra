@@ -4,20 +4,20 @@ INCLUDES= $(KOFFICECORE_INCLUDES) $(KOFFICEUI_INCLUDES) $(KSTORE_INCLUDES) $(all
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 
 lib_LTLIBRARIES = libkotext.la
-libkotext_la_SOURCES = qcomplextext.cpp korichtext.cpp \
-	kotextzoomhandler.cpp koborder.cc \
-	kotextformat.cc koparagcounter.cc kostyle.cc kocommand.cc \
-	kotextparag.cc kotextdocument.cc kotextformatter.cc koparaglayout.cc \
-	kotextobject.cc kotextview.cc koAutoFormat.cc koAutoFormatDia.cc \
-	koParagDia.cc kovariable.cc koVariableDlgs.cc \
-	koChangeCaseDia.cc koStylist.cc koSearchDia.cc \
-	timedateformatwidget.ui timeformatwidget_impl.cc dateformatwidget_impl.cc \
-	kfontdialog_local.cpp kofonttabbase.ui kofonttab.cc kohighlightingtabbase.ui kohighlightingtab.cc \
-	kodecorationtabbase.ui kodecorationtab.cc kolayouttabbase.ui kolayouttab.cc kolanguagetabbase.ui kolanguagetab.cc \
-	kofontdiapreview.cc \
-	KoTextViewIface.skel KoTextViewIface.cc koFontDia.cc kobgspellcheck.cc \
-	koCommentDia.cc kospell.cc koCreateStyleDia.cc kotextcustomitem.cc \
-	koimportstyledia.cc kotextiterator.cc kooasiscontext.cc koliststylestack.cc \
+libkotext_la_SOURCES = KoComplexText.cpp KoRichText.cpp \
+	KoTextZoomHandler.cpp KoBorder.cpp \
+	KoTextFormat.cpp KoParagCounter.cpp KoStyleCollection.cpp KoTextCommand.cpp \
+	KoTextParag.cpp KoTextDocument.cpp KoTextFormatter.cpp KoParagLayout.cpp \
+	KoTextObject.cpp KoTextView.cpp KoAutoFormat.cpp KoAutoFormatDia.cpp \
+	KoParagDia.cpp KoVariable.cpp KoCustomVariablesDia.cpp \
+	KoChangeCaseDia.cpp KoStyleManager.cpp KoSearchDia.cpp \
+	timedateformatwidget.ui TimeFormatWidget.cpp DateFormatWidget.cpp \
+	KFontDialog_local.cpp kofonttabbase.ui KoFontTab.cpp kohighlightingtabbase.ui KoHighlightingTab.cpp \
+	kodecorationtabbase.ui KoDecorationTab.cpp kolayouttabbase.ui KoLayoutTab.cpp kolanguagetabbase.ui KoLanguageTab.cpp \
+	KoFontDiaPreview.cpp \
+	KoTextViewIface.skel KoTextViewIface.cc KoFontDia.cpp KoBgSpellCheck.cpp \
+	KoCommentDia.cpp KoSpell.cpp KoCreateStyleDia.cpp KoTextCustomItem.cpp \
+	KoImportStyleDia.cpp KoTextIterator.cpp KoOasisContext.cpp KoListStyleStack.cpp \
 	KoUserStyle.cpp KoUserStyleCollection.cpp KoParagStyle.cpp
 
 libkotext_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
@@ -27,5 +27,5 @@ libkotext_la_LIBADD = $(LIB_KOFFICEUI) kohyphen/libkohyphen.la $(LIBKSPELL2) -lk
 METASOURCES = AUTO
 
 # include_HEADERS = 
-#	kotextzoomhandler.h kotextformat.h koparagcounter.h kostyle.h 
-#	kotextdocument.h kobgspellcheck.h koCommentDia.h koCreateStyleDia.h
+#	KoTextZoomHandler.h KoTextFormat.h KoParagCounter.h KoStyleCollection.h 
+#	KoTextDocument.h KoBgSpellCheck.h KoCommentDia.h KoCreateStyleDia.h

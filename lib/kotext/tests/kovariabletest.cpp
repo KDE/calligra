@@ -19,7 +19,7 @@
 #include <qstring.h>
 #include <assert.h>
 
-#include "../duration.h"
+#include "../IsoDuration.h"
 
 void testMinutes()
 {

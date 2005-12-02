@@ -22,7 +22,7 @@
 #define searchdia_h
 
 #include "KPrTextObject.h"
-#include <koSearchDia.h>
+#include <KoSearchDia.h>
 
 class KPrCanvas;
 class KMacroCommand;

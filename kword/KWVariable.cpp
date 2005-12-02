@@ -27,7 +27,7 @@
 #include "KWViewMode.h"
 #include "KWPageManager.h"
 
-#include <kovariable.h>
+#include <KoVariable.h>
 #include <KoXmlWriter.h>
 #include <koxmlns.h>
 #include <kodom.h>

@@ -24,7 +24,7 @@
 #include <KoUserStyle.h>
 #include <KoUserStyleCollection.h>
 
-#include "koborder.h"
+#include "KoBorder.h"
 #include <qbrush.h>
 
 class QDomElement;

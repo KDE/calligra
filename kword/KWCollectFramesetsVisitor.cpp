@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <kotextparag.h>
+#include <KoTextParag.h>
 #include "KWCollectFramesetsVisitor.h"
 #include "KWAnchor.h"
 

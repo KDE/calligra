@@ -20,8 +20,8 @@
 #ifndef kwtextdocument_h
 #define kwtextdocument_h
 
-#include "korichtext.h"
-#include <kotextdocument.h>
+#include "KoRichText.h"
+#include <KoTextDocument.h>
 
 class KWFrame;
 class KWTextFrameSet;

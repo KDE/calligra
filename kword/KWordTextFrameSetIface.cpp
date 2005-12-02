@@ -22,7 +22,7 @@
 #include "KWTextFrameSet.h"
 #include <KoTextViewIface.h>
 #include "KWView.h"
-#include <kotextobject.h>
+#include <KoTextObject.h>
 #include "KWCanvas.h"
 #include "KWDocument.h"
 #include <kapplication.h>

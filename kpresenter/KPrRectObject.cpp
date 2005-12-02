@@ -23,9 +23,9 @@
 #include "KPrGradient.h"
 #include "KPrRectObjectIface.h"
 
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <koUnit.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <koxmlns.h>
 
 #include <kdebug.h>

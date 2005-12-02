@@ -23,7 +23,7 @@
 class KWTextFrameSet;
 class KMacroCommand;
 class KoParagStyle;
-#include <korichtext.h>
+#include <KoRichText.h>
 
 // This command inserts a TOC at the beginning of a frameset, and is able to undo that.
 // The reason we don't use KWTextFrameSet's insert, applyStyle etc. is that it would

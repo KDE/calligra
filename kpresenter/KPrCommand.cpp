@@ -44,7 +44,7 @@
 #include "KPrPieObject.h"
 #include "KPrRectObject.h"
 #include "KPrView.h"
-#include "kotextobject.h"
+#include "KoTextObject.h"
 #include "KPrTextDocument.h"
 #include <kdebug.h>
 #include "KPrVariableCollection.h"
@@ -52,7 +52,7 @@
 #include <koSize.h>
 #include <koPoint.h>
 #include <kodom.h>
-#include <kotextparag.h>
+#include <KoTextParag.h>
 #include <koxmlns.h>
 
 #include <qxml.h>

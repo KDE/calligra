@@ -34,7 +34,7 @@
 #include <qcombobox.h>
 #include <koUnitWidgets.h>
 
-#include <koParagDia.h>
+#include <KoParagDia.h>
 
 
 KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc )

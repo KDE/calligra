@@ -42,16 +42,16 @@
 #include "KWPageManager.h"
 #include "KWPage.h"
 
-#include <koparagcounter.h>
-#include <koVariableDlgs.h>
-#include <koAutoFormat.h>
-#include <kotextobject.h>
-#include <kocommand.h>
-#include <kotextformatter.h>
-#include <koChangeCaseDia.h>
+#include <KoParagCounter.h>
+#include <KoCustomVariablesDia.h>
+#include <KoAutoFormat.h>
+#include <KoTextObject.h>
+#include <KoTextCommand.h>
+#include <KoTextFormatter.h>
+#include <KoChangeCaseDia.h>
 #include <koxmlns.h>
 #include <KoXmlWriter.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <KoStore.h>
 
 #include <kapplication.h>

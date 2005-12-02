@@ -33,15 +33,15 @@
 #include "KPrVariableCollection.h"
 #include "KPrTextDrag.h"
 
-#include <koAutoFormat.h>
-#include <kotextparag.h>
-#include <kotextobject.h>
-#include <kostyle.h>
-#include <kotextformatter.h>
-#include <kotextzoomhandler.h>
+#include <KoAutoFormat.h>
+#include <KoTextParag.h>
+#include <KoTextObject.h>
+#include <KoStyleCollection.h>
+#include <KoTextFormatter.h>
+#include <KoTextZoomHandler.h>
 #include "KPrTextViewIface.h"
 #include "KPrTextObjectIface.h"
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <koStyleStack.h>
 #include <ktempfile.h>
 #include <klocale.h>
@@ -60,10 +60,10 @@
 #include <qpopupmenu.h>
 #include <qclipboard.h>
 
-#include <koparagcounter.h>
+#include <KoParagCounter.h>
 #include <kaction.h>
-#include <kovariable.h>
-#include <koVariableDlgs.h>
+#include <KoVariable.h>
+#include <KoCustomVariablesDia.h>
 #include <koRuler.h>
 #include <koSize.h>
 #include <koxmlns.h>

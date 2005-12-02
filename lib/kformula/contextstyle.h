@@ -29,7 +29,7 @@
 
 //KDE Include
 #include <kconfig.h>
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 
 //Formula include
 #include "kformuladefs.h"

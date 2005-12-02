@@ -24,7 +24,7 @@
 #include "defs.h"
 #include <koRect.h>
 #include <qbrush.h>
-#include "koborder.h"
+#include "KoBorder.h"
 #include <qptrlist.h>
 
 class KWCanvas;

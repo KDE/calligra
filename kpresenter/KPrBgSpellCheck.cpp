@@ -24,8 +24,8 @@
 #include "KPrDocument.h"
 #include "KPrTextObject.h"
 
-#include "kotextiterator.h"
-#include "kotextobject.h"
+#include "KoTextIterator.h"
+#include "KoTextObject.h"
 
 #include <kspell2/broker.h>
 using namespace KSpell2;

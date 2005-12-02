@@ -27,7 +27,7 @@
 #include "KWViewMode.h"
 #include "KWCanvas.h"
 
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <koxmlns.h>
 #include <KoXmlWriter.h>
 #include <koStyleStack.h>

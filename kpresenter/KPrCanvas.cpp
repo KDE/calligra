@@ -55,9 +55,9 @@
 #include <kurldrag.h>
 #include <kio/netaccess.h>
 
-#include <koparagcounter.h>
+#include <KoParagCounter.h>
 #include <koPoint.h>
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <KoStore.h>
 #include <KoStoreDrag.h>
 #include "KoPointArray.h"

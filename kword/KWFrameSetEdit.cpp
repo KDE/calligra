@@ -26,7 +26,7 @@
 #include "KWFrameSet.h"
 #include "KWTextFrameSet.h"
 
-#include <kotextparag.h>
+#include <KoTextParag.h>
 
 KWFrameSetEdit::KWFrameSetEdit( KWFrameSet * fs, KWCanvas * canvas )
      : m_fs(fs), m_canvas(canvas), m_currentFrame( fs->frame(0) )

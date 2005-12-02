@@ -25,7 +25,7 @@
 
 #include <qstring.h>
 #include <qcolor.h>
-#include <korichtext.h>
+#include <KoRichText.h>
 #include <koffice_export.h>
 class KoTextView;
 

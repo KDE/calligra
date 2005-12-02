@@ -22,7 +22,7 @@
 
 #include <qpainter.h>
 
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include "KPrUtils.h"
 
 PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )

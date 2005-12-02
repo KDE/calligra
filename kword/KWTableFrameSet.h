@@ -34,7 +34,7 @@ DESCRIPTION
 #include <qvaluevector.h>
 #include <qobject.h>
 #include <qstring.h>
-#include <korichtext.h>
+#include <KoRichText.h>
 
 class KWDocument;
 class KWTableFrameSetEdit;

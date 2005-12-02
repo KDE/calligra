@@ -37,10 +37,10 @@
 #include <kdebug.h>
 #include <kimageeffect.h>
 #include <koSize.h>
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <koxmlns.h>
 #include <kodom.h>
 

@@ -74,28 +74,28 @@
 #include <kformuladocument.h>
 #include <kformulamimesource.h>
 
-#include <korichtext.h>
-#include <koAutoFormat.h>
-#include <koAutoFormatDia.h>
-#include <koChangeCaseDia.h>
+#include <KoRichText.h>
+#include <KoAutoFormat.h>
+#include <KoAutoFormatDia.h>
+#include <KoChangeCaseDia.h>
 #include <koCharSelectDia.h>
-#include <koCommentDia.h>
-#include <koCreateStyleDia.h>
+#include <KoCommentDia.h>
+#include <KoCreateStyleDia.h>
 #include <koDocumentInfo.h>
-#include <koFontDia.h>
+#include <KoFontDia.h>
 #include <koFrame.h>
 #include <koInsertLink.h>
 #include <koMainWindow.h>
-#include <koParagDia.h>
+#include <KoParagDia.h>
 #include <koPartSelectAction.h>
 #include <koPictureFilePreview.h>
-#include <koSearchDia.h>
+#include <KoSearchDia.h>
 #include <KoStore.h>
 #include <KoStoreDrag.h>
 #include <koTemplateCreateDia.h>
-#include <kovariable.h>
-#include <koVariableDlgs.h>
-#include <kotextobject.h>
+#include <KoVariable.h>
+#include <KoCustomVariablesDia.h>
+#include <KoTextObject.h>
 #include <tkcoloractions.h>
 #include <KoSpeaker.h>
 
@@ -129,7 +129,7 @@
 
 #include <kspell2/dialog.h>
 #include <kspell2/defaultdictionary.h>
-#include "kospell.h"
+#include "KoSpell.h"
 
 using namespace KSpell2;
 

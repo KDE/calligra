@@ -24,7 +24,7 @@
 
 class KPrDocument;
 class KPTextObject;
-#include "kobgspellcheck.h"
+#include "KoBgSpellCheck.h"
 
 
 class KPrBgSpellCheck : public KoBgSpellCheck

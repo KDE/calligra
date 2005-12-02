@@ -27,7 +27,7 @@
 #include "global.h"
 #include <koPoint.h>
 #include <koRect.h>
-#include <kostyle.h> // for KoStyleChangeDefMap
+#include <KoStyleCollection.h> // for KoStyleChangeDefMap
 #include <qvariant.h>
 #include <koDocumentChild.h>
 #include <koPictureCollection.h>

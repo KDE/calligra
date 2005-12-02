@@ -22,7 +22,7 @@
 #include "KWStyleManager.moc"
 
 #include <koUnit.h>
-#include <kostyle.h>
+#include <KoStyleCollection.h>
 #include <kdebug.h>
 /******************************************************************/
 /* Class: KWStyleManager                                          */

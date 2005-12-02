@@ -21,7 +21,7 @@
 
 #include "KPrPolygonObject.h"
 #include "KPrGradient.h"
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <kdebug.h>
 #include <qbitmap.h>
 #include <qregion.h>
@@ -30,7 +30,7 @@
 #include <qpainter.h>
 #include "KPrPolygonObjectIface.h"
 #include <koUnit.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <math.h>
 #include <koxmlns.h>
 #include "KPrPen.h"

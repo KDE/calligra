@@ -22,7 +22,7 @@
 #include "KWDocument.h"
 #include "KWordPictureFrameSetIface.h"
 #include <KoStoreDevice.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <koPictureCollection.h>
 #include <kodom.h>
 #include <koxmlns.h>

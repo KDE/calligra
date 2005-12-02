@@ -21,8 +21,8 @@
 #ifndef kprtextdocument_h
 #define kprtextdocument_h
 
-#include <korichtext.h>
-#include "kotextdocument.h"
+#include <KoRichText.h>
+#include "KoTextDocument.h"
 
 class KPTextObject;
 class KoTextFormatCollection;

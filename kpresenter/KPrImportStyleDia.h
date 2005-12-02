@@ -22,7 +22,7 @@
 #define __KPRImportStyleDia__
 
 #include <kdialogbase.h>
-#include <koimportstyledia.h>
+#include <KoImportStyleDia.h>
 #include <qstringlist.h>
 class QLineEdit;
 class QListBox;

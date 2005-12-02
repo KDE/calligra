@@ -48,7 +48,7 @@
 #include "KPrBackground.h"
 #include "KPrPenStyleWidget.h"
 
-#include <koAutoFormat.h>
+#include <KoAutoFormat.h>
 
 #include "KPrSlideTransitionDia.h"
 
@@ -60,7 +60,7 @@
 #include "KPrCustomSlideShowDia.h"
 
 #include <koPictureFilePreview.h>
-#include <koCreateStyleDia.h>
+#include <KoCreateStyleDia.h>
 
 #include <dcopclient.h>
 #include <kfiledialog.h>
@@ -98,7 +98,7 @@
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <koPartSelectAction.h>
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <kolinestyleaction.h>
 #include <kolinewidthaction.h>
 
@@ -110,35 +110,35 @@
 #include "KPrViewIface.h"
 #include "KPrConfig.h"
 
-#include <kotextparag.h>
-#include <kotextobject.h>
+#include <KoTextParag.h>
+#include <KoTextObject.h>
 #include "KPrCommand.h"
-#include <koFontDia.h>
+#include <KoFontDia.h>
 #include <koCharSelectDia.h>
 #include <koInsertLink.h>
-#include <koAutoFormatDia.h>
-#include <koparagcounter.h>
-#include <koParagDia.h>
-#include <kovariable.h>
-#include <koVariableDlgs.h>
+#include <KoAutoFormatDia.h>
+#include <KoParagCounter.h>
+#include <KoParagDia.h>
+#include <KoVariable.h>
+#include <KoCustomVariablesDia.h>
 #include <koGuideLineDia.h>
 
 #include <kspell.h>
 #include <kstatusbar.h>
 #include "KPrTextDocument.h"
 
-#include <koChangeCaseDia.h>
+#include <KoChangeCaseDia.h>
 #include <qregexp.h>
 
-#include <koSearchDia.h>
+#include <KoSearchDia.h>
 #include "KPrFindReplace.h"
 #include "KPrVariableCollection.h"
 #include "KPrCanvas.h"
 #include <qpaintdevicemetrics.h>
-#include <kostyle.h>
+#include <KoStyleCollection.h>
 #include "KPrStyleManager.h"
 #include "KPrPixmapObject.h"
-#include <koCommentDia.h>
+#include <KoCommentDia.h>
 
 #include "KPrDuplicateObjDia.h"
 #include <kstdaccel.h>
@@ -153,7 +153,7 @@
 #include <kspell2/broker.h>
 #include <kspell2/defaultdictionary.h>
 #include <kspell2/dialog.h>
-#include "kospell.h"
+#include "KoSpell.h"
 #include "KPrPrinterDlg.h"
 using namespace KSpell2;
 

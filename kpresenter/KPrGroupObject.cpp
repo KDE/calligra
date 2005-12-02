@@ -36,7 +36,7 @@
 #include "KPrPolygonObject.h"
 #include "KPrClosedLineObject.h"
 #include <kdebug.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 
 #include <qpainter.h>
 using namespace std;

@@ -24,11 +24,11 @@
 #include <kocommandhistory.h>
 #include <koPageLayout.h>
 #include <koRect.h>
-#include <koborder.h>
-#include <koparaglayout.h>
-#include <koparagcounter.h>
+#include <KoBorder.h>
+#include <KoParagLayout.h>
+#include <KoParagCounter.h>
 #include "KWFrameStyle.h"
-#include <kocommand.h>
+#include <KoTextCommand.h>
 #include "KWVariable.h"
 #include <koPoint.h>
 #include <koPictureKey.h>

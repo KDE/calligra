@@ -33,7 +33,7 @@
 #include <qwmatrix.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <math.h>
 using namespace std;
 

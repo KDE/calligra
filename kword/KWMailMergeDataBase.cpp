@@ -28,7 +28,7 @@
 #include "KWDocument.h"
 #include "KWMailMergeDataBase.h"
 #include "KWMailMergeDataBase.moc"
-#include <koVariableDlgs.h>
+#include <KoCustomVariablesDia.h>
 #include <kmainwindow.h>
 #include "defs.h"
 #include <qfile.h>

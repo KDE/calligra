@@ -20,9 +20,9 @@
             </widget>
 <layoutdefaults spacing="6" margin="11"/>
 <includes>
-	<include location="local" impldecl="in declaration">kfontdialog_local.h</include>
+	<include location="local" impldecl="in declaration">KFontDialog_local.h</include>
 </includes>
 <includehints>
-    <includehint>kfontdialog_local.h</includehint>
+    <includehint>KFontDialog_local.h</includehint>
 </includehints>
 </UI>

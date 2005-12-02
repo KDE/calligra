@@ -20,7 +20,7 @@
 #ifndef kwstyle_h
 #define kwstyle_h
 
-#include <kostyle.h>
+#include <KoStyleCollection.h>
 // Same thing at the moment
 #define KWStyle KoParagStyle
 

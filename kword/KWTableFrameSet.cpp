@@ -38,12 +38,12 @@ DESCRIPTION
 #include "KWPageManager.h"
 #include "KWPage.h"
 
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <KoXmlWriter.h>
 #include <kodom.h>
 #include <koxmlns.h>
-#include <kotextobject.h> // for customItemChar !
-#include <kotextparag.h>
+#include <KoTextObject.h> // for customItemChar !
+#include <KoTextParag.h>
 
 #include <kmessagebox.h>
 #include <kdebug.h>

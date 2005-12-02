@@ -21,14 +21,14 @@
 
 #include "KPrClosedLineObject.h"
 #include "KPrGradient.h"
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <kdebug.h>
 #include <qbitmap.h>
 #include <qregion.h>
 #include <qdom.h>
 #include <qpicture.h>
 #include <qpainter.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <math.h>
 #include <koUnit.h>
 #include <koxmlns.h>

@@ -49,7 +49,7 @@
 #include "KWPage.h"
 #include "KoSpeaker.h"
 
-#include <kovariable.h>
+#include <KoVariable.h>
 #include <kformulaconfigpage.h>
 
 #include <kspell2/configwidget.h>

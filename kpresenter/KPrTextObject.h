@@ -23,9 +23,9 @@
 #define kptextobject_h
 
 #include "KPrObject.h"
-#include "korichtext.h"
-#include <kotextview.h>
-#include <kostyle.h> // for KoStyleChangeDefMap
+#include "KoRichText.h"
+#include <KoTextView.h>
+#include <KoStyleCollection.h> // for KoStyleChangeDefMap
 #include <koStyleStack.h>
 
 class KoSavingContext;

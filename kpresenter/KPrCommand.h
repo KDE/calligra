@@ -33,8 +33,8 @@
 #include <qpen.h>
 #include <qbrush.h>
 #include <koPageLayoutDia.h>
-#include <koparaglayout.h>
-#include <kocommand.h>
+#include <KoParagLayout.h>
+#include <KoTextCommand.h>
 #include <koPoint.h>
 #include <koSize.h>
 #include <qvariant.h>

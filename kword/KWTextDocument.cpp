@@ -28,7 +28,7 @@
 #include "KWOasisLoader.h"
 #include "KWTableFrameSet.h"
 
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <koxmlns.h>
 #include <kodom.h>
 

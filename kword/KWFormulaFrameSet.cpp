@@ -27,7 +27,7 @@
 #include "KWTextFrameSet.h"
 #include "KWTableFrameSet.h"
 #include "KWAnchor.h"
-#include <kotextobject.h> // for customItemChar!
+#include <KoTextObject.h> // for customItemChar!
 #include <qpopupmenu.h>
 
 #include <kformulacontainer.h>

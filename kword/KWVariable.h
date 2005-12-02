@@ -26,8 +26,8 @@
 
 #include "defs.h"
 
-#include <kovariable.h>
-#include <koparagcounter.h>
+#include <KoVariable.h>
+#include <KoParagCounter.h>
 
 class KWDocument;
 class KWTextFrameSet;

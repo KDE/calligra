@@ -17,8 +17,8 @@
 */
 
 #include "KoParagStyle.h"
-#include "kooasiscontext.h"
-#include "koparagcounter.h"
+#include "KoOasisContext.h"
+#include "KoParagCounter.h"
 
 #include <koGenStyles.h>
 #include <KoXmlWriter.h>

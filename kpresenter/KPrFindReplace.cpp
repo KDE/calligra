@@ -24,9 +24,9 @@
 #include "KPrView.h"
 #include "KPrDocument.h"
 #include "KPrTextObject.h"
-#include <kotextobject.h>
+#include <KoTextObject.h>
 #include <kcommand.h>
-#include <koSearchDia.h>
+#include <KoSearchDia.h>
 #include "KPrTextDocument.h"
 
 KPrFindReplace::KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoSearchDia * dialog,

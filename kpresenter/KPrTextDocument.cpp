@@ -22,12 +22,12 @@
 
 #include "KPrDocument.h"
 #include "KPrTextObject.h"
-#include <kotextparag.h>
+#include <KoTextParag.h>
 #include <kdebug.h>
 
 #include "KPrVariableCollection.h"
 
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <kodom.h>
 #include <koxmlns.h>
 

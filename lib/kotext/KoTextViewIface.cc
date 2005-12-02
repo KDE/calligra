@@ -18,13 +18,13 @@
 */
 
 #include "KoTextViewIface.h"
-#include "kotextview.h"
-#include "kotextparag.h"
-#include "koborder.h"
+#include "KoTextView.h"
+#include "KoTextParag.h"
+#include "KoBorder.h"
 #include <kapplication.h>
 #include <dcopclient.h>
 #include <kdebug.h>
-#include <kovariable.h>
+#include <KoVariable.h>
 #include <kcommand.h>
 
 

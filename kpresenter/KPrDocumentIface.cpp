@@ -26,9 +26,9 @@
 
 #include <kapplication.h>
 #include <dcopclient.h>
-#include <kovariable.h>
+#include <KoVariable.h>
 #include "KPrVariableCollection.h"
-#include <koAutoFormat.h>
+#include <KoAutoFormat.h>
 
 KPresenterDocIface::KPresenterDocIface( KPrDocument *doc_ )
     : KoDocumentIface( doc_ )

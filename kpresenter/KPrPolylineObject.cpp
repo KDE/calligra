@@ -28,8 +28,8 @@
 #include <qdom.h>
 
 #include <kdebug.h>
-#include <kotextzoomhandler.h>
-#include <kooasiscontext.h>
+#include <KoTextZoomHandler.h>
+#include <KoOasisContext.h>
 #include <koUnit.h>
 
 #include <math.h>

@@ -21,12 +21,12 @@
 #include "KPrPointObject.h"
 #include "KPrUtils.h"
 #include "KPrDocument.h"
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <koUnit.h>
 #include <qdom.h>
 #include <qpainter.h>
 #include <koStyleStack.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 #include <koxmlns.h>
 
 KPPointObject::KPPointObject()

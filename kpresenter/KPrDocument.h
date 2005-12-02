@@ -67,8 +67,8 @@ class KoSavingContext;
 #include <koStyleStack.h>
 #include <koPictureCollection.h>
 #include "KPrGradientCollection.h"
-#include <kotextzoomhandler.h>
-#include <kostyle.h> // for KoStyleChangeDefMap
+#include <KoTextZoomHandler.h>
+#include <KoStyleCollection.h> // for KoStyleChangeDefMap
 #include <kocommandhistory.h>
 
 class KoDocumentEntry;

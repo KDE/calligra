@@ -24,7 +24,7 @@
 #include "KWDocument.h"
 #include "KWFrameDia.h" // for KWBrushStylePreview
 
-#include <koParagDia.h>
+#include <KoParagDia.h>
 
 #include <kcolorbutton.h>
 #include <klocale.h>

@@ -30,7 +30,7 @@
 #include "KWTextDocument.h"
 
 // KOffice includes.
-#include <koparagcounter.h>
+#include <KoParagCounter.h>
 #include <KoSpeaker.h>
 
 // KDE includes.

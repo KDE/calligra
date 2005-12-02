@@ -23,8 +23,8 @@
 #include "KPrStyleManager.moc"
 #include <koUnit.h>
 #include <kdebug.h>
-#include <koStylist.h>
-#include <kostyle.h>
+#include <KoStyleManager.h>
+#include <KoStyleCollection.h>
 
 KPrStyleManager::KPrStyleManager( QWidget *_parent, KoUnit::Unit unit,KPrDocument *_doc,
                                   const KoStyleCollection& styleCollection, const QString & activeStyleName)

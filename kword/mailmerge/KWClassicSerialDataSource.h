@@ -24,7 +24,7 @@
 #include <qdom.h>
 #include <qlistview.h>
 #include <kdialogbase.h>
-#include <koVariableDlgs.h>
+#include <KoCustomVariablesDia.h>
 #include "KWMailMergeDataSource.h"
 #include <qspinbox.h>
 

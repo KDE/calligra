@@ -21,7 +21,7 @@
 #include "KPrTextDrag.h"
 #include "KPrTextDrag.moc"
 #include <kdebug.h>
-#include <kotextobject.h>
+#include <KoTextObject.h>
 
 KPrTextDrag::KPrTextDrag( QWidget *dragSource, const char *name )
     : QTextDrag( dragSource, name )

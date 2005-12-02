@@ -31,8 +31,8 @@
 #include <qpicture.h>
 #include <qfileinfo.h>
 
-#include <korichtext.h>
-#include <kotextobject.h>
+#include <KoRichText.h>
+#include <KoTextObject.h>
 // for getenv ()
 #include <stdlib.h>
 using namespace std;

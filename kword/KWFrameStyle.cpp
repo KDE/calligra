@@ -24,7 +24,7 @@
 
 #include <koGenStyles.h>
 #include <koOasisStyles.h>
-#include <kooasiscontext.h>
+#include <KoOasisContext.h>
 
 #include <kdebug.h>
 #include <klocale.h>

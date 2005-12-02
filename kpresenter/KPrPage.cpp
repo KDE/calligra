@@ -49,16 +49,16 @@
 
 #include <KoStore.h>
 #include <KoStoreDevice.h>
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <koxmlns.h>
 #include "KoPointArray.h"
 #include "KPrTextDocument.h"
-#include <kotextobject.h>
-#include <kotextparag.h>
+#include <KoTextObject.h>
+#include <KoTextParag.h>
 #include <koRect.h>
 #include <qapplication.h>
-#include <kostyle.h>
-#include <kovariable.h>
+#include <KoStyleCollection.h>
+#include <KoVariable.h>
 #include <koGenStyles.h>
 #include <KoXmlWriter.h>
 #include <ktempfile.h>

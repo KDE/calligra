@@ -23,7 +23,7 @@
 #include <KoTextViewIface.h>
 #include "KPrDocument.h"
 #include "KPrView.h"
-#include <kotextobject.h>
+#include <KoTextObject.h>
 #include <kapplication.h>
 #include <dcopclient.h>
 #include "KPrCanvas.h"

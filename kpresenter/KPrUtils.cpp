@@ -29,7 +29,7 @@
 #include "KPrPieObject.h"
 
 #include <koxmlns.h>
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <koPoint.h>
 
 #include <qpainter.h>

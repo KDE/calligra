@@ -27,7 +27,7 @@
 #include <kprinter.h>
 #include <qbrush.h>
 
-#include "koborder.h"
+#include <KoBorder.h>
 #include "defs.h"
 #include "KWTextParag.h"
 

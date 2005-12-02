@@ -23,7 +23,7 @@
 
 #include <kdialogbase.h>
 #include <qstringlist.h>
-#include <koStylist.h>
+#include <KoStyleManager.h>
 
 class KPrDocument;
 class KoParagStyle;

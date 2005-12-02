@@ -22,7 +22,7 @@
 #include "KPrCubicBezierCurveObject.h"
 #include "KPrCubicBezierCurveObjectIface.h"
 #include "KPrUtils.h"
-#include <kotextzoomhandler.h>
+#include <KoTextZoomHandler.h>
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <qdom.h>

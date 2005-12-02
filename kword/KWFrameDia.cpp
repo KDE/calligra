@@ -18,11 +18,10 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KWDocument.h"
-#include "KWTextFrameSet.h"
 #include "KWFrameDia.h"
+#include "KWTextFrameSet.h"
+#include "KWDocument.h"
 #include "KWFrameDia.moc"
-#include "defs.h"
 #include "KWCommand.h"
 #include "KWTableFrameSet.h"
 #include "KWPageManager.h"
@@ -30,6 +29,7 @@
 #include "KWPictureFrameSet.h"
 
 #include <koSetPropCommand.h>
+#include <KoParagDia_p.h> // for KoBorderPreview
 
 #include <knuminput.h>
 #include <klocale.h>

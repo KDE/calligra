@@ -5,12 +5,12 @@
 #include <kglobal.h>
 #include <klocale.h>
 
-#include "kotextformatter.h"
-#include "kotextformat.h"
-#include "kotextdocument.h"
-#include "kotextparag.h"
-#include "kotextzoomhandler.h"
-#include "koparagcounter.h"
+#include "KoTextFormatter.h"
+#include "KoTextFormat.h"
+#include "KoTextDocument.h"
+#include "KoTextParag.h"
+#include "KoTextZoomHandler.h"
+#include "KoParagCounter.h"
 
 #include <assert.h>
 
