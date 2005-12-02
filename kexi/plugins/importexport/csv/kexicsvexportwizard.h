@@ -62,7 +62,7 @@ class KexiCSVExportWizard : public KWizard
 		virtual void layOutButtonRow( QHBoxLayout * layout );
 
 		//! Exporting, returns false on failure.
-		bool export();
+		bool exportData();
 
 		Mode m_mode;
 		int m_itemId;

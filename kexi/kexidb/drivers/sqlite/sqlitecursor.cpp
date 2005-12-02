@@ -286,8 +286,8 @@ bool SQLiteCursor::drv_close()
 
 void SQLiteCursor::drv_getNextRecord()
 {
-	static int _fieldCount;
 #ifdef SQLITE2
+	static int _fieldCount;
 	d->res = sqlite_step(
 	 d->prepared_st_handle,
 	 &_fieldCount,

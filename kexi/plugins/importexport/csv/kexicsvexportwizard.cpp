@@ -282,7 +282,7 @@ void KexiCSVExportWizard::done(int result)
 {
 	if (QDialog::Accepted == result) {
 		
-		if (!export())
+		if (!exportData())
 			return;
 	}
 	else if (QDialog::Rejected == result) {
@@ -362,7 +362,7 @@ void KexiCSVExportWizard::slotDefaultsButtonClicked()
 	m_characterEncodingCombo->selectDefaultEncoding();
 }
 
-bool KexiCSVExportWizard::export()
+bool KexiCSVExportWizard::exportData()
 {
 	KexiDB::Connection *conn = m_mainWin->project()->dbConnection();
 
@@ -390,7 +390,7 @@ bool KexiCSVExportWizard::export()
 		uint bufSize = QMIN((m_rowCount<0 ? 10 : m_rowCount) * fields.count() * 20, 128000);
 		buffer.reserve( bufSize );
 		if (buffer.capacity() < bufSize) {
-			kdWarning() << "KexiCSVExportWizard::export() cannot allocate memory for " << bufSize 
+			kdWarning() << "KexiCSVExportWizard::exportData() cannot allocate memory for " << bufSize 
 				<< " characters" << endl;
 			return false;
 		}
@@ -398,14 +398,14 @@ bool KexiCSVExportWizard::export()
 	else {
 		QString fname( m_fileSavePage->currentFileName() );
 		if (fname.isEmpty()) {//sanity
-			kdWarning() << "KexiCSVExportWizard::export(): fname is empty" << endl;
+			kdWarning() << "KexiCSVExportWizard::exportData(): fname is empty" << endl;
 			return false;
 		}
 		kSaveFile = new KSaveFile(m_fileSavePage->currentFileName());
 		if (0 == kSaveFile->status())
 			stream = kSaveFile->textStream();
 		if (0 != kSaveFile->status() || !stream) {//sanity
-			kdWarning() << "KexiCSVExportWizard::export(): status != 0 or stream == 0" << endl;
+			kdWarning() << "KexiCSVExportWizard::exportData(): status != 0 or stream == 0" << endl;
 			delete kSaveFile;
 			return false;
 		}
@@ -494,7 +494,7 @@ bool KexiCSVExportWizard::export()
 
 	if (kSaveFile) {
 		if (!kSaveFile->close()) {
-			kdWarning() << "KexiCSVExportWizard::export(): error close(); status == " 
+			kdWarning() << "KexiCSVExportWizard::exportData(): error close(); status == " 
 				<< kSaveFile->status() << endl;
 		}
 		delete kSaveFile;

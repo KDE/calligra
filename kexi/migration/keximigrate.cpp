@@ -36,8 +36,8 @@ using namespace KexiMigration;
 KexiMigrate::KexiMigrate(QObject *parent, const char *name,
   const QStringList&) 
   : QObject( parent, name )
-  , m_destPrj(0)
   , m_migrateData(0)
+  , m_destPrj(0)
 //  , m_copyOfKexi__objects(0)
 {
 }

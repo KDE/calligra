@@ -125,11 +125,11 @@ QImage KexiDBInternalLabel::makeShadow( const QImage& textImage,
 	}
 
 //	result.fill( 0 ); // all black
-	int realOpacity = SHADOW_OPACITY + QMIN(50.0/double(256.0-qGray(bgColor.rgb())), 50.0);
+	double realOpacity = SHADOW_OPACITY + QMIN(50.0/double(256.0-qGray(bgColor.rgb())), 50.0);
 	//int _h, _s, _v;
 	//.getHsv( &_h, &_s, &_v );
 	if (colorGroup().background()==Qt::red)//_s>=250 && _v>=250) //for colors like cyan or red, make the result more white
-		realOpacity += 50;
+		realOpacity += 50.0;
 	result.fill( (int)realOpacity );
 	result.setAlphaBuffer( true );
 
@@ -594,6 +594,7 @@ void KexiDBLabel::enabledChange( bool enabled ) {
 }
 
 void KexiDBLabel::paletteChange( const QPalette& oldPal ) {
+	Q_UNUSED(oldPal);
 	d->pixmapDirty = true;
 	d->internalLabel->setPalette( palette() );
 }
