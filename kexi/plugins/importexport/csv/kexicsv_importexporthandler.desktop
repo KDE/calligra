@@ -4,24 +4,6 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 Name=Kexi CSV Data Import/Export Plugin
-Name[bg]=Филтър за импорт от CSV в Kexi
-Name[cy]=Mewnforio Data CSV i Kexi
-Name[da]=Kexi CSV dataimport
-Name[eo]=CSV-datum-importado por Kexi
-Name[es]=Importar datos CSV en Kexi
-Name[et]=Kexi CSV-andmete import
-Name[fr]=Import de données CSV dans Kexi
-Name[it]=Importazione di dati CSV di Kexi
-Name[ja]=Kexi CSV データインポート
-Name[pl]=Import danych CSV programu Kexi
-Name[pt]=Importação de Dados CSV do Kexi
-Name[pt_BR]=Importação de Dados CSV do Kexi
-Name[ru]=Импорт в CSV из Kexi
-Name[sr]=Kexi-јев увоз из CSV-а
-Name[sr@Latn]=Kexi-јев увоз из CSV-а
-Name[sv]=Kexi import av CSV-data
-Name[tr]=Kexi CSV Veri İçeri Alma
-Name[xx]=xxKexi CSV Data Importxx
 
 X-KDE-Library=kexihandler_csv_importexport
 X-KDE-ParentApp=kexi
