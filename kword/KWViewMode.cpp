@@ -203,7 +203,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
     {
         KWPage *page = m_doc->pageManager()->page(pageNr);
 
-        int pageWidth = m_doc->zoomItY( page->width() );
+        int pageWidth = m_doc->zoomItX( page->width() );
         int pageHeight = m_doc->zoomItY( pagePosPt + page->height() ) - topOfPage;
         if(crect.bottom() < topOfPage)
             break;
