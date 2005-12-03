@@ -856,7 +856,6 @@ void GNUMERICFilter::ParsePrintInfo( QDomNode const & printInfo, Sheet * table )
   float fright = 2.0;
   float ftop = 2.0;
   float fbottom = 2.0;
-  bool ok = true;
 
   QString paperSize("A4");
   QString orientation("Portrait");
