@@ -141,7 +141,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_setPageTimer = true;
         m_drawLineInDrawMode = false;
         soundPlayer = 0;
-        m_changeSnap = false;
+        m_disableSnapping = false;
         m_drawPolyline = false;
         m_drawCubicBezierCurve = false;
         m_drawLineWithCubicBezierCurve = true;
@@ -643,7 +643,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     KPObject *kpobject = 0;
 
-    m_changeSnap = e->state() & ShiftButton;
+    m_disableSnapping = e->state() & ShiftButton;
     
     exitEditMode();
 
@@ -776,9 +776,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         m_rectBeforeResize = kpobject->getRect();
                     }
                     recalcAutoGuides();
-                    if ( m_view->kPresenterDoc()->showGuideLines() && !m_changeSnap )
+                    if ( m_view->kPresenterDoc()->showGuideLines() && !m_disableSnapping )
                     {
-                        m_gl.repaintSnapping( kpobject->getRealRect() );
+                        m_gl.repaintSnapping( objectRect( false ) );
                     }
                 }
                 else
@@ -1459,7 +1459,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         }
     }
 
-    m_changeSnap = e->state() & ShiftButton;
+    m_disableSnapping = e->state() & ShiftButton;
 
     if ( editMode ) {
         m_view->setRulerMousePos( e->x(), e->y() );
@@ -1916,8 +1916,6 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
     }
     else
     {
-        m_changeSnap = e->state() & ShiftButton;
-
         switch ( e->key() )
         {
             case Qt::Key_Next:
@@ -1938,6 +1936,8 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
 
         if ( mouseSelectedObject )
         {
+            m_disableSnapping = e->state() & ShiftButton;
+
             int offsetx = 1;
             int offsety = 1;
 
@@ -2022,6 +2022,21 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                   }
                   setToolEditMode( TEM_MOUSE );
                   break;
+                }
+                case Qt::Key_Shift:
+                {
+                    bool oldChangeSnap = m_disableSnapping;
+                    m_disableSnapping = e->key() == Qt::Key_Shift;
+                    if ( !oldChangeSnap && m_disableSnapping )
+                    {
+                        m_gl.repaintAfterSnapping();
+                    }
+                    // undo snapping for move by mouse
+                    if ( e->state() & Qt::LeftButton )
+                    {
+                        moveObjectsByMouse( m_origMousePos );
+                    }
+                    break;
                 }
                 default: break;
             }
@@ -2145,7 +2160,10 @@ void KPrCanvas::deSelectObj( KPObject *kpobject )
     kpobject->setSelected( false );
     _repaint( kpobject );
 
-    mouseSelectedObject = false;
+    if ( !m_activePage->isOneObjectSelected() )
+    {
+        mouseSelectedObject = false;
+    }
     emit objectSelectedChanged();
 }
 
@@ -4486,8 +4504,8 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
     double diffy = m_view->zoomHandler()->unzoomItY( y );
     KoPoint move( diffx, diffy );
 
-    bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && !doc->showGuideLines() && m_changeSnap );
-    bool snapToGuideLines = doc->showGuideLines() && !m_changeSnap;
+    bool snapToGrid = doc->snapToGrid() && !m_disableSnapping;
+    bool snapToGuideLines = doc->showGuideLines() && !m_disableSnapping;
 
     if ( snapToGrid )
     {
@@ -4607,8 +4625,8 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
     double diffx = pos.x() - m_origMousePos.x();
     double diffy = pos.y() - m_origMousePos.y();
 
-    bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && !doc->showGuideLines() && m_changeSnap );
-    bool snapToGuideLines = doc->showGuideLines() && !m_changeSnap;
+    bool snapToGrid = doc->snapToGrid() && !m_disableSnapping;
+    bool snapToGuideLines = doc->showGuideLines() && !m_disableSnapping;
 
     move = KoPoint( diffx, diffy );
     m_origMousePos = pos;
@@ -4804,7 +4822,7 @@ void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
         break;
     }
 
-    if ( m_view->kPresenterDoc()->showGuideLines() && !m_changeSnap )
+    if ( m_view->kPresenterDoc()->showGuideLines() && !m_disableSnapping )
     {
         m_gl.repaintSnapping( sp, snapStatus );
     }
@@ -5503,8 +5521,8 @@ KoPoint KPrCanvas::snapPoint( KoPoint &pos, bool repaintSnapping )
     KoPoint sp( pos );
     KPrDocument * doc( m_view->kPresenterDoc() );
 
-    bool snapToGrid = ( doc->snapToGrid() && !m_changeSnap || !doc->snapToGrid() && !doc->showGuideLines() && m_changeSnap );
-    bool snapToGuideLines = doc->showGuideLines() && !m_changeSnap;
+    bool snapToGrid = doc->snapToGrid() && !m_disableSnapping;
+    bool snapToGuideLines = doc->showGuideLines() && !m_disableSnapping;
 
     KoPoint snapDiff = KoPoint( 0, 0 ); // needed if all snapping is off
     KoGuides::SnapStatus snapStatus = KoGuides::SNAP_NONE;

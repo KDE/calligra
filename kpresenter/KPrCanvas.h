@@ -847,8 +847,8 @@ private:
     KoPoint m_moveStartPosMouse;
     /// This holds the distance it an object was snapped to a guide
     KoPoint m_moveSnapDiff;
-    /// This is set to true if the snap logic has to be reverted (by pressing shift during move)
-    bool m_changeSnap;
+    /// Set to true if snapping should be disabled (by pressing shift during move)
+    bool m_disableSnapping;
     /// The last position of the mouse during moving
     KoPoint m_origMousePos;
     /// start position for move with key
