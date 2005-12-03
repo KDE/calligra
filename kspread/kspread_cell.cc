@@ -4789,7 +4789,7 @@ bool Cell::isDate() const
 {
   FormatType ft = formatType();
 
-  return (formatIsTime (ft) || ((ft == Generic_format) &&
+  return (formatIsDate (ft) || ((ft == Generic_format) &&
       (value().format() == Value::fmt_Date)));
 }
 
