@@ -71,7 +71,7 @@ KoAutoFormatExceptionWidget::KoAutoFormatExceptionWidget(QWidget *parent, const 
 {
     m_bAbbreviation=_abreviation;
     m_listException=_list;
-    QGridLayout *grid = new QGridLayout(this, 4, 2, KDialog::marginHint(), KDialog::spacingHint());
+    QGridLayout *grid = new QGridLayout(this, 4, 2, 0, KDialog::spacingHint());
 
     QLabel *lab=new QLabel(name,this);
     grid->addMultiCellWidget(lab,0,0,0,1);
@@ -228,8 +228,7 @@ void KoAutoFormatDia::slotResetConf()
 void KoAutoFormatDia::setupTab1()
 {
     tab1 = addPage( i18n( "Simple Autocorrection" ) );
-    QVBoxLayout *vbox = new QVBoxLayout(tab1, KDialog::marginHint(),
-            KDialog::spacingHint());
+    QVBoxLayout *vbox = new QVBoxLayout(tab1, 0, KDialog::spacingHint());
 
     cbUpperCase = new QCheckBox( tab1 );
     cbUpperCase->setText( i18n(
@@ -335,9 +334,10 @@ void KoAutoFormatDia::setupTab1()
             SLOT( slotBulletStyleToggled( bool ) ) );
 
     vbox->addWidget(cbUseBulletStyle);
-    QHBoxLayout *hbox = new QHBoxLayout( );
+    QHBoxLayout *hbox = new QHBoxLayout();
 
     hbox->addSpacing( 20 );
+    hbox->setSpacing(KDialog::spacingHint());
     pbBulletStyle = new QPushButton( tab1 );
     pbBulletStyle->setFixedSize( pbBulletStyle->sizeHint() );
     hbox->addWidget( pbBulletStyle );
@@ -386,8 +386,7 @@ void KoAutoFormatDia::setupTab2()
 {
     tab2 = addPage( i18n( "Custom Quotes" ) );
 
-    QVBoxLayout *vbox = new QVBoxLayout(tab2, KDialog::marginHint(),
-            KDialog::spacingHint());
+    QVBoxLayout *vbox = new QVBoxLayout(tab2, 0, KDialog::spacingHint());
 
     cbTypographicDoubleQuotes = new QCheckBox( tab2 );
     cbTypographicDoubleQuotes->setText( i18n(
@@ -415,7 +414,7 @@ void KoAutoFormatDia::setupTab2()
         hbox->addWidget( pbDoubleQuote2 );
     }
 
-    hbox->addSpacing( 20 );
+    hbox->addSpacing( KDialog::spacingHint() );
 
     pbDoubleDefault = new QPushButton( tab2 );
     pbDoubleDefault->setText(i18n("Default"));
@@ -456,7 +455,7 @@ void KoAutoFormatDia::setupTab2()
         hbox->addWidget( pbSimpleQuote2 );
     }
 
-    hbox->addSpacing( 20 );
+    hbox->addSpacing( KDialog::spacingHint() );
 
     pbSimpleDefault = new QPushButton( tab2 );
     pbSimpleDefault->setText(i18n("Default"));
@@ -497,8 +496,7 @@ void KoAutoFormatDia::setupTab3()
 
     QLabel *lblFind, *lblReplace;
 
-    QGridLayout *grid = new QGridLayout( tab3, 3, 7, KDialog::marginHint(),
-            KDialog::spacingHint() );
+    QGridLayout *grid = new QGridLayout( tab3, 11, 7, 0, KDialog::spacingHint() );
 
     autoFormatLanguage = new QComboBox(tab3);
 
@@ -614,13 +612,12 @@ void KoAutoFormatDia::setupTab3()
     grid->addWidget( pbChangeFormat, 5, 6, Qt::AlignTop );
 
     connect( pbChangeFormat, SIGNAL(clicked()), SLOT(slotChangeTextFormatEntry()));
-    grid->setRowStretch( 2, 1 );
 
     pbClearFormat= new QPushButton( i18n( "Clear Format" ), tab3 );
     grid->addWidget( pbClearFormat, 6, 6, Qt::AlignTop );
 
     connect( pbClearFormat, SIGNAL(clicked()), SLOT(slotClearTextFormatEntry()));
-    grid->setRowStretch( 2, 1 );
+    grid->setRowStretch( 10, 1 );
 
     initTab3();
     slotChangeAdvancedAutoCorrection();
@@ -719,8 +716,7 @@ void KoAutoFormatDia::changeAutoformatLanguage(const QString & text)
 void KoAutoFormatDia::setupTab4()
 {
     tab4 = addPage( i18n( "Exceptions" ) );
-    QVBoxLayout *vbox = new QVBoxLayout(tab4, KDialog::marginHint(),
-            KDialog::spacingHint());
+    QVBoxLayout *vbox = new QVBoxLayout(tab4, 0, KDialog::spacingHint());
 
     abbreviation=new KoAutoFormatExceptionWidget(tab4,
             i18n("Do not treat as the end of a sentence:"),
