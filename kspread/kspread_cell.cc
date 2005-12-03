@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright 2004-2005 Tomas Mecir <mecirt@gmail.com>
    Copyright 1999-2002,2004,2005 Laurent Montel <montel@kde.org>
    Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
@@ -555,6 +556,10 @@ void Cell::copyFormat( Cell * _cell )
 void Cell::copyFormat( int _column, int _row )
 {
     const Cell * cell = format()->sheet()->cellAt( _column, _row );
+    
+    Q_ASSERT(cell);
+    
+    d->value.setFormat(cell->d->value.format());
 
     format()->setAlign( cell->format()->align( _column, _row ) );
     format()->setAlignY( cell->format()->alignY( _column, _row ) );

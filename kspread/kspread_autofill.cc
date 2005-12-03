@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2005 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
    Copyright 2002-2004 Ariya Hidayat <ariya@kde.org>
    Copyright 2002-2003 Norbert Andres <nandres@web.de>
    Copyright 2002 John Dailey <dailey@vt.edu>
@@ -1057,21 +1058,34 @@ void Sheet::FillSequenceWithCopy(QPtrList<Cell>& _srcList,
     {
       if ( _srcList.at( s )->isFormula() )
       {
- 	QString d = _srcList.at( s )->encodeFormula();
-	cell->setCellText( cell->decodeFormula( d ) );
+        QString d = _srcList.at( s )->encodeFormula();
+        cell->setCellText( cell->decodeFormula( d ) );
       }
       else if(_srcList.at( s )->value().isNumber() && _srcList.count()==1)
       {
-	double val;
-        if ( _srcList.at( s )->formatType() == Percentage_format )
-            factor = 0.01;
+        double val;
+        int format_type = _srcList.at( s )->formatType();
+        if ( format_type == Percentage_format )
+        {
+          factor = 0.01;  // one percent
+        }
+        else if ( _srcList.at( s )->isTime() )
+        {
+          // FIXME this is a workaround to avoid those nasty one minute off
+          //       "dragging down" time is inaccurate overa large lists!
+          //       This is the best approximation I could find (raphael)
+//           factor = 1.000002/24.  + 0.000000001;
+          factor = 0.041666751;
+        }
+
         if (!down)
           val = (_srcList.at( s )->value().asFloat() - (incr * factor));
         else
           val = (_srcList.at( s )->value().asFloat() + (incr * factor));
-	QString tmp;
-	tmp = tmp.setNum(val);
-	cell->setCellText( tmp );
+        
+        QString tmp;
+        tmp = tmp.setNum(val);
+        cell->setCellText( tmp );
         ++incr;
       }
       else if((AutoFillSequenceItem::month != 0L)

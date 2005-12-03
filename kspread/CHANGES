@@ -7,6 +7,12 @@ since 1.4.2
 - Prevent hiding all rows/columns (#483630)
 - Add a lot of QWhatsThis help to various dialogs
 - Handbook update for some dialogs
+- Implement move sheets
+- Fix date increment for autofill (#117252)
+
+Some important developer visible changes:
+- Decouple KSpread::Cell and KSpread::Format (association instead of inheritance)
+- Provide setter and getter methods for KSpread::Point
 
 since 1.4.1
 ===========
