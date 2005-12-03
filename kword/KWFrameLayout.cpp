@@ -24,7 +24,7 @@
 #include "KWDocument.h"
 #include <qtimer.h>
 
-//#define DEBUG_FRAMELAYOUT
+#define DEBUG_FRAMELAYOUT
 
 #ifdef NDEBUG
 #undef DEBUG_FRAMELAYOUT
@@ -81,6 +81,25 @@ bool KWFrameLayout::HeaderFooterFrameset::deleteFramesAfterLast( int lastPage )
     return deleted;
 }
 
+int KWFrameLayout::HeaderFooterFrameset::lastFrameNumber( int lastPage ) const {
+    if ( lastPage < m_startAtPage )
+        return -1; // we need none
+    int pg = lastPage;
+    if ( m_endAtPage > -1 )
+        pg = QMIN( m_endAtPage, pg );
+    pg -= m_startAtPage; // always >=0
+    Q_ASSERT( pg >= 0 );
+    switch (m_oddEvenAll) {
+        case Odd:
+        case Even:
+            return pg / 2; // page 0 and 1 -> 0. page 2 and 3 -> 1.
+        case All:
+            return pg; // page 0 -> 0 etc. ;)
+        default:
+            return -1;
+    }
+}
+
 /////
 
 void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
@@ -127,11 +146,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
     m_framesetsToUpdate.clear();
     // Necessary for end notes: find out the last frame of the main textframeset
     KWFrame* lastMainFrame = mainTextFrameSet->frameIterator().getLast();
-    m_lastMainFramePage = lastMainFrame->pageNumber();
     double lastMainFrameBottom = lastMainFrame->bottom(); // before we change it below!
-#ifdef DEBUG_FRAMELAYOUT
-    kdDebug(32002) << "m_lastMainFramePage = " << m_lastMainFramePage << " lastMainFrameBottom=" << lastMainFrameBottom << endl;
-#endif
 
     double ptColumnWidth = m_doc->ptColumnWidth();
     int mainTextFrameResized = -1; // contains the page number of the first resized main textframe
@@ -382,6 +397,10 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         }
 
     } // for all pages
+    m_lastMainFramePage = lastMainFrame->pageNumber();
+#ifdef DEBUG_FRAMELAYOUT
+    kdDebug(32002) << "m_lastMainFramePage = " << m_lastMainFramePage << " lastMainFrameBottom=" << lastMainFrameBottom << endl;
+#endif
 
     if ( ! ( flags & DontRemovePages ) )
     {
@@ -404,6 +423,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         // For the last main text frameset, we use m_lastMainFramePage, so that
         // there's no frame on the "end notes only" page(s).
         int lastFrame = m_lastMainFramePage * numColumns + (numColumns-1);
+kdDebug() << "lastFrame: " << lastFrame << " due to " << m_lastMainFramePage << endl;
         bool deleted = false;
         while ( (int)mainTextFrameSet->frameCount() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT

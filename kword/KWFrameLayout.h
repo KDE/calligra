@@ -92,25 +92,7 @@ public:
             }
 
         // the last frame we need, layout() will delete any frame after that
-        int lastFrameNumber( int lastPage ) const
-            {
-                if ( lastPage < m_startAtPage )
-                    return -1; // we need none
-                int pg = lastPage;
-                if ( m_endAtPage > -1 )
-                    pg = QMIN( m_endAtPage, pg );
-                pg -= m_startAtPage; // always >=0
-                Q_ASSERT( pg >= 0 );
-                switch (m_oddEvenAll) {
-                case Odd:
-                case Even:
-                    return pg / 2; // page 0 and 1 -> 0. page 2 and 3 -> 1.
-                case All:
-                    return pg; // page 0 -> 0 etc. ;)
-                default:
-                    return -1;
-                }
-            }
+        int lastFrameNumber( int lastPage ) const;
 
         void debug();
         bool deleteFramesAfterLast( int lastPage );
