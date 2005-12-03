@@ -472,7 +472,7 @@ void setObjectInfo(QDomNode * sheet, Sheet * table)
       if (e.hasAttribute("ObjectBound"))
       {
         Point point(e.attribute("ObjectBound"));
-        Cell * cell = table->nonDefaultCell( point.pos.x(), point.pos.y() );
+        Cell * cell = table->nonDefaultCell( point.pos().x(), point.pos().y() );
         cell->format()->setComment(e.attribute("Text"));
       }
     }

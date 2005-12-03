@@ -124,9 +124,9 @@ OpenCalcImport::OpenCalcPoint::OpenCalcPoint( QString const & str )
   else
   {
     Point newPoint( range );
-    table    = newPoint.sheetName;
-    topLeft  = newPoint.pos;
-    botRight = newPoint.pos;
+    table    = newPoint.sheetName();
+    topLeft  = newPoint.pos();
+    botRight = newPoint.pos();
   }
 }
 
