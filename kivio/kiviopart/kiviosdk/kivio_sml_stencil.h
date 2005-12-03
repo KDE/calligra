@@ -161,6 +161,7 @@ public:
     virtual QString text(const QString& name);
 
     virtual void addConnectorTarget(const KoPoint&);
+    virtual void removeConnectorTarget(const KoPoint&);
 
     virtual bool hasTextBox() const;
 };

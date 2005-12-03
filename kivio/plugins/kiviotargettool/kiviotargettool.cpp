@@ -29,6 +29,7 @@
 #include "kivio_doc.h"
 #include "mousetoolaction.h"
 #include "kivio_pluginmanager.h"
+#include "kivio_command.h"
 
 namespace Kivio {
   TargetTool::TargetTool(KivioView* parent) : MouseTool(parent, "Add Target Mouse Tool")
@@ -71,9 +72,9 @@ namespace Kivio {
   
   void TargetTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
   {
-    //TODO Add undo support!
-    stencil->addConnectorTarget(pos);
-    view()->doc()->updateView(view()->activePage());
+    KivioAddConnectorTargetCommand* command = new KivioAddConnectorTargetCommand(i18n("Add Connector Target"), view()->activePage(), stencil, pos);
+    command->execute();
+    view()->doc()->addCommand(command);
   }
 
   void TargetTool::mousePress(QMouseEvent* e)

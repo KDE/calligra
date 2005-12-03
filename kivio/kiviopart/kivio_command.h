@@ -397,6 +397,20 @@ protected:
     bool m_bValue;
 };
 
+class KivioAddConnectorTargetCommand : public KNamedCommand
+{
+  public:
+    KivioAddConnectorTargetCommand(const QString& name, KivioPage* page,
+                                   KivioStencil* stencil, const KoPoint& targetPoint);
+
+    virtual void execute();
+    virtual void unexecute();
+
+  protected:
+    KivioPage* m_page;
+    KivioStencil* m_stencil;
+    KoPoint m_targetPoint;
+};
 
 #endif
 

@@ -2093,6 +2093,22 @@ void KivioSMLStencil::addConnectorTarget(const KoPoint& p)
   m_pConnectorTargets->append(target);
 }
 
+void KivioSMLStencil::removeConnectorTarget(const KoPoint& pos)
+{
+  KivioConnectorTarget* target = m_pConnectorTargets->first();
+
+  while(target)
+  {
+    if(target->position() == pos)
+    {
+      m_pConnectorTargets->remove(target);
+      return;
+    }
+
+    target = m_pConnectorTargets->next();
+  }
+}
+
 bool KivioSMLStencil::hasTextBox() const
 {
   KivioShape* pShape = m_pShapeList->first();

@@ -661,3 +661,21 @@ void KivioChangeStencilProtectCommand::changeValue( bool b )
     m_page->doc()->updateProtectPanelCheckBox();
 }
 
+KivioAddConnectorTargetCommand::KivioAddConnectorTargetCommand(const QString& name, KivioPage* page,
+    KivioStencil* stencil, const KoPoint& targetPoint) : KNamedCommand(name)
+{
+  m_page = page;
+  m_stencil = stencil;
+  m_targetPoint = targetPoint;
+}
+void KivioAddConnectorTargetCommand::execute()
+{
+  m_stencil->addConnectorTarget(m_targetPoint);
+  m_page->doc()->updateView(m_page);
+}
+
+void KivioAddConnectorTargetCommand::unexecute()
+{
+  m_stencil->removeConnectorTarget(m_targetPoint);
+  m_page->doc()->updateView(m_page);
+}

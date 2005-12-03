@@ -273,6 +273,7 @@ class KIVIO_EXPORT KivioStencil
     virtual KoPoint pinPoint() const { return m_pinPoint; }
     
     virtual void addConnectorTarget(const KoPoint&) {}
+    virtual void removeConnectorTarget(const KoPoint&) {}
     
     virtual bool isInRect(const KoRect& rect);
     
