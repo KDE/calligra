@@ -290,7 +290,7 @@ void KoDocumentInfoDlg::addAboutPage( KoDocumentInfoAbout *aboutInfo )
 
 void KoDocumentInfoDlg::addUserMetadataPage( KoDocumentInfoUserMetadata *userMetadataInfo )
 {
-  QVBox *page = d->m_dialog->addVBoxPage( i18n( "User-defined Metadata" ) );
+  QVBox *page = d->m_dialog->addVBoxPage( i18n( "User-Defined Metadata" ) );
   d->m_metaWidget = new KoDocumentInfoUserMetadataWidget( page );
 
   d->m_metaWidget->metaListView->addColumn( "Name" );

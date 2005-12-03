@@ -215,7 +215,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     //    SLOT(slotExportGantt()), actionCollection(), "export_gantt");
     
     // ------ Settings
-    actionConfigure = new KAction(i18n("Define..."), "configure", 0, this,
+    actionConfigure = new KAction(i18n("Configure KPlato..."), "configure", 0, this,
         SLOT(slotConfigure()), actionCollection(), "configure");
     
     // ------ Popup

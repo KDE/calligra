@@ -55,7 +55,7 @@ ConfigDialog::ConfigDialog(Config &config, QWidget *parent, const char *n)
     QVBox *page = addVBoxPage(i18n("Behavior"), i18n("Behavior"), loadIcon("misc"));
     m_behaviorPage = new ConfigBehaviorPanel(config.behavior(), page);
     
-    page = addVBoxPage(i18n("Task defaults"), i18n("Task defaults"), loadIcon("misc"));
+    page = addVBoxPage(i18n("Task Defaults"), i18n("Task Defaults"), loadIcon("misc"));
     m_taskDefaultPage = new TaskDefaultPanel(config.taskDefaults(), 0, page);
     
     enableButtonOK(false);
