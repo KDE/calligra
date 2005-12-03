@@ -19,9 +19,9 @@
 */
 
 #include "KoAutoFormatDia.h"
-#include "KoAutoFormatDia.moc"
 #include "KoAutoFormat.h"
 #include "koCharSelectDia.h"
+#include <KoSearchDia.h>
 
 #include <klocale.h>
 #include <kmessagebox.h>
@@ -30,20 +30,12 @@
 
 #include <qlayout.h>
 #include <qwhatsthis.h>
-#include <qvbox.h>
 #include <qcheckbox.h>
 #include <qpushbutton.h>
-#include <qlabel.h>
-#include <qspinbox.h>
 #include <qtooltip.h>
-#include <kdebug.h>
-#include <knuminput.h>
-#include <kcompletion.h>
-#include <kconfig.h>
-#include <kinputdialog.h>
 #include <qcombobox.h>
 #include <qdir.h>
-#include <KoSearchDia.h>
+#include <qapplication.h>
 
 KoAutoFormatLineEdit::KoAutoFormatLineEdit ( QWidget * parent, const char * name )
     : QLineEdit(parent,name)
@@ -1147,220 +1139,4 @@ void KoAutoFormatDia::slotChangeStateDouble(bool b)
     pbDoubleDefault->setEnabled(b);
 }
 
-
-/******************************************************************/
-/* Class: KoCompletionDia                                         */
-/******************************************************************/
-
-KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name,
-      KoAutoFormat * autoFormat )
-    : KDialogBase( parent, name , true, i18n( "Completion" ), Ok|Cancel|User1,
-      Ok, true, KGuiItem( i18n( "&Reset" ), "undo" ) ),
-      m_autoFormat( *autoFormat ),
-      m_docAutoFormat( autoFormat )
-{
-    setup();
-    slotResetConf();
-    setInitialSize( QSize( 500, 500 ) );
-    connect( this, SIGNAL( user1Clicked() ), this, SLOT(slotResetConf()));
-    changeButtonStatus();
-}
-
-void KoCompletionDia::changeButtonStatus()
-{
-    bool state = cbAllowCompletion->isChecked();
-    cbAppendSpace->setEnabled( state );
-    cbShowToolTip->setEnabled( state );
-    cbAddCompletionWord->setEnabled( state );
-    pbRemoveCompletionEntry->setEnabled( state );
-    pbSaveCompletionEntry->setEnabled( state );
-    pbAddCompletionEntry->setEnabled( state );
-    m_lbListCompletion->setEnabled( state );
-    m_minWordLength->setEnabled( state );
-    m_maxNbWordCompletion->setEnabled( state );
-    m_completionKeyActionLabel->setEnabled( state );
-    m_completionKeyAction->setEnabled( state );
-    state = state && (m_lbListCompletion->count()!=0 && !m_lbListCompletion->currentText().isEmpty());
-    pbRemoveCompletionEntry->setEnabled( state );
-}
-
-void KoCompletionDia::setup()
-{
-    QVBox *page = makeVBoxMainWidget();
-    cbAllowCompletion = new QCheckBox( page );
-    cbAllowCompletion->setText( i18n( "E&nable completion" ) );
-    connect(cbAllowCompletion, SIGNAL(toggled ( bool )), this, SLOT( changeButtonStatus()));
-    // TODO whatsthis or text, to tell about the key to use for autocompletion....
-
-    cbShowToolTip = new QCheckBox( page );
-    cbShowToolTip->setText( i18n( "&Enable tool tip completion" ) );
-    QWhatsThis::add( cbShowToolTip, i18n("If this option is enabled, a tool tip box will appear when you type the beginning of a word that exists in the completion list. To complete the word, press the TAB or ENTER key." ) );
-    cbAddCompletionWord = new QCheckBox( page );
-    cbAddCompletionWord->setText( i18n( "&Automatically add new words to completion list" ) );
-    QWhatsThis::add( cbAddCompletionWord, i18n("If this option is enabled, any word typed in this document will automatically be added to the list of words used by the completion." ) );
-
-    m_lbListCompletion = new QListBox( page );
-    connect( m_lbListCompletion, SIGNAL( selected ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
-    connect( m_lbListCompletion, SIGNAL( highlighted ( const QString & ) ), this, SLOT( slotCompletionWordSelected( const QString & )));
-
-    pbAddCompletionEntry = new QPushButton( i18n("Add Completion Entry..."), page);
-    connect( pbAddCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotAddCompletionEntry()));
-
-    pbRemoveCompletionEntry = new QPushButton(i18n( "R&emove Completion Entry"), page  );
-    connect( pbRemoveCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotRemoveCompletionEntry()));
-
-    pbSaveCompletionEntry= new QPushButton(i18n( "&Save Completion List"), page );
-    connect( pbSaveCompletionEntry, SIGNAL( clicked() ), this, SLOT( slotSaveCompletionEntry()));
-
-
-    m_minWordLength = new KIntNumInput( page );
-    m_minWordLength->setRange ( 5, 100,1,true );
-    m_minWordLength->setLabel( i18n( "&Minimum word length:" ) );
-
-    m_maxNbWordCompletion = new KIntNumInput( page );
-    m_maxNbWordCompletion->setRange( 1, 500, 1, true);
-    m_maxNbWordCompletion->setLabel( i18n( "Ma&ximum number of completion words:" ) );
-
-    cbAppendSpace = new QCheckBox( page );
-    cbAppendSpace->setText( i18n( "A&ppend space" ) );
-
-    m_completionKeyActionLabel = new QLabel(i18n( "Key used for completion:" ),page );
-
-    m_completionKeyAction = new QComboBox( page );
-    QStringList lst;
-    lst << i18n( "Enter" );
-    lst << i18n( "Tab" );
-    lst << i18n( "Space" );
-    lst << i18n( "End" );
-    lst << i18n( "Right" );
-    m_completionKeyAction->insertStringList( lst );
-    m_listCompletion = m_docAutoFormat->listCompletion();
-}
-
-void KoCompletionDia::slotResetConf()
-{
-    cbAllowCompletion->setChecked( m_autoFormat.getConfigCompletion());
-    cbShowToolTip->setChecked( m_autoFormat.getConfigToolTipCompletion());
-    cbAddCompletionWord->setChecked( m_autoFormat.getConfigAddCompletionWord());
-    m_lbListCompletion->clear();
-    QStringList lst = m_docAutoFormat->listCompletion();
-    m_lbListCompletion->insertStringList( lst );
-    m_lbListCompletion->sort();
-    if( lst.isEmpty() || m_lbListCompletion->currentText().isEmpty())
-        pbRemoveCompletionEntry->setEnabled( false );
-    m_minWordLength->setValue ( m_docAutoFormat->getConfigMinWordLength() );
-    m_maxNbWordCompletion->setValue ( m_docAutoFormat->getConfigNbMaxCompletionWord() );
-    cbAppendSpace->setChecked( m_autoFormat.getConfigAppendSpace() );
-
-    switch( m_docAutoFormat->getConfigKeyAction() )
-    {
-    case KoAutoFormat::Enter:
-        m_completionKeyAction->setCurrentItem( 0 );
-        break;
-    case KoAutoFormat::Tab:
-        m_completionKeyAction->setCurrentItem( 1 );
-        break;
-    case KoAutoFormat::Space:
-        m_completionKeyAction->setCurrentItem( 2 );
-        break;
-    case KoAutoFormat::End:
-        m_completionKeyAction->setCurrentItem( 3 );
-        break;
-    case KoAutoFormat::Right:
-        m_completionKeyAction->setCurrentItem( 4 );
-        break;
-    default:
-        m_completionKeyAction->setCurrentItem( 0 );
-    }
-    changeButtonStatus();
-}
-
-void KoCompletionDia::slotSaveCompletionEntry()
-{
-
-    KConfig config("kofficerc");
-    KConfigGroupSaver cgs( &config, "Completion Word" );
-    config.writeEntry( "list", m_listCompletion );
-    config.sync();
-    KMessageBox::information( this, i18n(
-            "Completion list saved.\nIt will be used for all documents "
-            "from now on."), i18n("Completion List Saved") );
-}
-
-void KoCompletionDia::slotAddCompletionEntry()
-{
-    bool ok;
-    QString const newWord = KInputDialog::getText( i18n("Add Completion Entry"), i18n("Enter entry:"), QString::null, &ok, this ).lower();
-    if ( ok )
-    {
-        if ( !m_listCompletion.contains( newWord ))
-        {
-            m_listCompletion.append( newWord );
-            m_lbListCompletion->insertItem( newWord );
-            pbRemoveCompletionEntry->setEnabled( !m_lbListCompletion->currentText().isEmpty() );
-            m_lbListCompletion->sort();
-        }
-
-    }
-}
-
-void KoCompletionDia::slotOk()
-{
-    if (applyConfig())
-    {
-       KDialogBase::slotOk();
-    }
-}
-
-bool KoCompletionDia::applyConfig()
-{
-    m_docAutoFormat->configCompletion( cbAllowCompletion->isChecked());
-    m_docAutoFormat->configToolTipCompletion( cbShowToolTip->isChecked());
-    m_docAutoFormat->configAppendSpace( cbAppendSpace->isChecked() );
-    m_docAutoFormat->configMinWordLength( m_minWordLength->value() );
-    m_docAutoFormat->configNbMaxCompletionWord( m_maxNbWordCompletion->value () );
-    m_docAutoFormat->configAddCompletionWord( cbAddCompletionWord->isChecked());
-
-    m_docAutoFormat->getCompletion()->setItems( m_listCompletion );
-    m_docAutoFormat->updateMaxWords();
-    switch( m_completionKeyAction->currentItem() )
-    {
-    case 0:
-        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Enter );
-        break;
-    case 1:
-        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Tab );
-        break;
-    case 2:
-        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Space );
-        break;
-    case 3:
-        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::End );
-        break;
-    case 4:
-        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Right );
-        break;
-    default:
-        m_docAutoFormat->configKeyCompletionAction( KoAutoFormat::Enter );
-    }
-    // Save to config file
-    m_docAutoFormat->saveConfig();
-    return true;
-}
-
-void KoCompletionDia::slotRemoveCompletionEntry()
-{
-    QString text = m_lbListCompletion->currentText();
-    if( !text.isEmpty() )
-    {
-        m_listCompletion.remove( text );
-        m_lbListCompletion->removeItem( m_lbListCompletion->currentItem () );
-        if( m_lbListCompletion->count()==0 )
-            pbRemoveCompletionEntry->setEnabled( false );
-    }
-}
-
-void KoCompletionDia::slotCompletionWordSelected( const QString & word)
-{
-    pbRemoveCompletionEntry->setEnabled( !word.isEmpty() );
-}
+#include "KoAutoFormatDia.moc"

@@ -24,18 +24,11 @@
 #include <kdialogbase.h>
 #include <qlineedit.h>
 #include <KoAutoFormat.h>
-#include <koffice_export.h>
-class QPushButton;
 class QCheckBox;
-class QVBox;
-class QHBox;
 class KCharSelect;
-class KListView;
-class KLineEdit;
-class QListBox;
-class QSpinBox;
 class QComboBox;
-class KIntNumInput;
+
+
 /**
  *
  */
@@ -178,37 +171,4 @@ protected slots:
     void slotChangeAdvancedAutoCorrection();
 };
 
-class KOTEXT_EXPORT KoCompletionDia : public KDialogBase
-{
-    Q_OBJECT
-
-public:
-    KoCompletionDia( QWidget *parent, const char *name, KoAutoFormat * autoFormat );
-protected slots:
-    virtual void slotOk();
-    void slotRemoveCompletionEntry();
-    void slotCompletionWordSelected( const QString & );
-    void slotSaveCompletionEntry();
-    void slotAddCompletionEntry();
-    void slotResetConf();
-    bool applyConfig();
-    void changeButtonStatus();
-protected:
-    void setup();
-    KoAutoFormat m_autoFormat; // The copy we're working on
-    KoAutoFormat * m_docAutoFormat; // Pointer to the real one (in KWDocument)
-    QStringList m_listCompletion; // The copy of the completion items - don't use m_autoFormat.getCompletion()!
-    QCheckBox *cbAllowCompletion, *cbAppendSpace, *cbAddCompletionWord, *cbShowToolTip;
-    QPushButton *pbRemoveCompletionEntry;
-    QPushButton *pbSaveCompletionEntry;
-    QPushButton *pbAddCompletionEntry;
-    QListBox *m_lbListCompletion;
-    KIntNumInput *m_minWordLength;
-    KIntNumInput *m_maxNbWordCompletion;
-    QComboBox *m_completionKeyAction;
-    QLabel *m_completionKeyActionLabel;
-
-};
 #endif
-
-

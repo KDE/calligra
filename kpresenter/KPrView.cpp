@@ -122,6 +122,7 @@
 #include <KoVariable.h>
 #include <KoCustomVariablesDia.h>
 #include <koGuideLineDia.h>
+#include <KoCompletionDia.h>
 
 #include <kspell.h>
 #include <kstatusbar.h>

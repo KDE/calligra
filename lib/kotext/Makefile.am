@@ -14,7 +14,7 @@ libkotext_la_SOURCES = KoComplexText.cpp KoRichText.cpp \
 	timedateformatwidget.ui TimeFormatWidget.cpp DateFormatWidget.cpp \
 	KFontDialog_local.cpp kofonttabbase.ui KoFontTab.cpp kohighlightingtabbase.ui KoHighlightingTab.cpp \
 	kodecorationtabbase.ui KoDecorationTab.cpp kolayouttabbase.ui KoLayoutTab.cpp kolanguagetabbase.ui KoLanguageTab.cpp \
-	KoFontDiaPreview.cpp \
+	KoFontDiaPreview.cpp KoCompletionDia.cpp KoCompletionBase.ui \
 	KoTextViewIface.skel KoTextViewIface.cc KoFontDia.cpp KoBgSpellCheck.cpp \
 	KoCommentDia.cpp KoSpell.cpp KoCreateStyleDia.cpp KoTextCustomItem.cpp \
 	KoImportStyleDia.cpp KoTextIterator.cpp KoOasisContext.cpp KoListStyleStack.cpp \

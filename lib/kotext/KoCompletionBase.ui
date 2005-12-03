@@ -1,0 +1,341 @@
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
+<class>KoCompletionBase</class>
+<widget class="QWidget">
+    <property name="name">
+        <cstring>KoCompletionBase</cstring>
+    </property>
+    <property name="geometry">
+        <rect>
+            <x>0</x>
+            <y>0</y>
+            <width>462</width>
+            <height>339</height>
+        </rect>
+    </property>
+    <property name="caption">
+        <string>KoCompletionBase</string>
+    </property>
+    <vbox>
+        <property name="name">
+            <cstring>unnamed</cstring>
+        </property>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>cbAllowCompletion</cstring>
+            </property>
+            <property name="text">
+                <string>Enable word completion</string>
+            </property>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout9</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QListBox">
+                    <property name="name">
+                        <cstring>m_lbListCompletion</cstring>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout8</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>pbAddCompletionEntry</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Add</string>
+                            </property>
+                        </widget>
+                        <widget class="QPushButton">
+                            <property name="name">
+                                <cstring>pbRemoveCompletionEntry</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Remove</string>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer10</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Vertical</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>20</width>
+                                    <height>31</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </vbox>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="QCheckBox">
+            <property name="name">
+                <cstring>cbAddCompletionWord</cstring>
+            </property>
+            <property name="text">
+                <string>Automatically add new words to suggestions list list</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>If this option is enabled, any word typed in this document will automatically be added to the list of words used by the completion.</string>
+            </property>
+        </widget>
+        <widget class="QGroupBox">
+            <property name="name">
+                <cstring>completionBox</cstring>
+            </property>
+            <property name="title">
+                <string>Completion Options</string>
+            </property>
+            <vbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>cbShowToolTip</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Show words in tooltip</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If this option is enabled, a tool tip box will appear when you type the beginning of a word that exists in the completion list. To complete the word, press the TAB or ENTER key.</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout11</cstring>
+                    </property>
+                    <grid>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QSlider" row="1" column="1">
+                            <property name="name">
+                                <cstring>slider2</cstring>
+                            </property>
+                            <property name="minValue">
+                                <number>1</number>
+                            </property>
+                            <property name="maxValue">
+                                <number>500</number>
+                            </property>
+                            <property name="pageStep">
+                                <number>20</number>
+                            </property>
+                            <property name="value">
+                                <number>100</number>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="tickmarks">
+                                <enum>Below</enum>
+                            </property>
+                            <property name="tickInterval">
+                                <number>50</number>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="0" column="0">
+                            <property name="name">
+                                <cstring>textLabel2</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Characters needed:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>slider1</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QLabel" row="1" column="0">
+                            <property name="name">
+                                <cstring>textLabel3</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Suggest words:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>slider2</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="1" column="2">
+                            <property name="name">
+                                <cstring>m_maxNbWordCompletion</cstring>
+                            </property>
+                            <property name="maxValue">
+                                <number>500</number>
+                            </property>
+                            <property name="minValue">
+                                <number>1</number>
+                            </property>
+                            <property name="value">
+                                <number>100</number>
+                            </property>
+                        </widget>
+                        <widget class="QSlider" row="0" column="1">
+                            <property name="name">
+                                <cstring>slider1</cstring>
+                            </property>
+                            <property name="minValue">
+                                <number>5</number>
+                            </property>
+                            <property name="maxValue">
+                                <number>100</number>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="tickmarks">
+                                <enum>Below</enum>
+                            </property>
+                        </widget>
+                        <widget class="QSpinBox" row="0" column="2">
+                            <property name="name">
+                                <cstring>m_minWordLength</cstring>
+                            </property>
+                            <property name="maxValue">
+                                <number>100</number>
+                            </property>
+                            <property name="minValue">
+                                <number>5</number>
+                            </property>
+                        </widget>
+                    </grid>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>cbAppendSpace</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Append space</string>
+                    </property>
+                </widget>
+                <widget class="QLayoutWidget">
+                    <property name="name">
+                        <cstring>layout10</cstring>
+                    </property>
+                    <hbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>textLabel1</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Key to accept suggestion:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>m_completionKeyAction</cstring>
+                            </property>
+                        </widget>
+                        <widget class="QComboBox">
+                            <property name="name">
+                                <cstring>m_completionKeyAction</cstring>
+                            </property>
+                        </widget>
+                        <spacer>
+                            <property name="name">
+                                <cstring>spacer11</cstring>
+                            </property>
+                            <property name="orientation">
+                                <enum>Horizontal</enum>
+                            </property>
+                            <property name="sizeType">
+                                <enum>Expanding</enum>
+                            </property>
+                            <property name="sizeHint">
+                                <size>
+                                    <width>101</width>
+                                    <height>20</height>
+                                </size>
+                            </property>
+                        </spacer>
+                    </hbox>
+                </widget>
+            </vbox>
+        </widget>
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout5</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>pbSaveCompletionEntry</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Make Default</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Completion is configured per document, making this list the default will allow you to use this list for new documents automatically.</string>
+                    </property>
+                </widget>
+                <spacer>
+                    <property name="name">
+                        <cstring>spacer3</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Horizontal</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>101</width>
+                            <height>20</height>
+                        </size>
+                    </property>
+                </spacer>
+            </hbox>
+        </widget>
+    </vbox>
+</widget>
+<connections>
+    <connection>
+        <sender>slider1</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>m_minWordLength</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>m_minWordLength</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>slider1</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>slider2</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>m_maxNbWordCompletion</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+    <connection>
+        <sender>m_maxNbWordCompletion</sender>
+        <signal>valueChanged(int)</signal>
+        <receiver>slider2</receiver>
+        <slot>setValue(int)</slot>
+    </connection>
+</connections>
+<layoutdefaults spacing="6" margin="11"/>
+</UI>

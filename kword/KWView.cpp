@@ -93,6 +93,7 @@
 #include <KoStore.h>
 #include <KoStoreDrag.h>
 #include <koTemplateCreateDia.h>
+#include <KoCompletionDia.h>
 #include <KoVariable.h>
 #include <KoCustomVariablesDia.h>
 #include <KoTextObject.h>
