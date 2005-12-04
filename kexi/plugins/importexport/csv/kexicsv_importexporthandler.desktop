@@ -4,6 +4,7 @@ Type=Service
 ServiceTypes=Kexi/Handler
 
 Name=Kexi CSV Data Import/Export Plugin
+Name[es]=Extensión de Kexi para importar y exportar datos CSV
 
 X-KDE-Library=kexihandler_csv_importexport
 X-KDE-ParentApp=kexi
