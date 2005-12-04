@@ -310,6 +310,33 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
     else
       fmtType = ShortDate_format;
   }
+  if (!valid)
+  {
+    //try to use the standard Qt date parsing
+    tmpDate = QDate::fromString(str);
+    if (tmpDate.isValid())
+    {
+      valid = true;
+    }
+    else
+    {
+      tmpDate = QDate::fromString(str,Qt::ISODate);
+      if (tmpDate.isValid())
+      {
+        valid = true;
+      }
+      else
+      {
+        QString datestr = str;
+        tmpDate = QDate::fromString(datestr.replace("/","-"),Qt::ISODate);
+        if (tmpDate.isValid())
+        {
+            valid = true;
+        }
+      }
+    }
+  }
+  
   if (ok)
     *ok = valid;
     
