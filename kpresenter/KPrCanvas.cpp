@@ -1515,6 +1515,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 } else if ( modType == MT_MOVE ) {
                     if ( !m_isMoving )
                     {
+                        m_moveSnapDiff= KoPoint(0,0);
                         m_moveStartPoint = objectRect( false ).topLeft();
                         m_isMoving = true;
                     }
@@ -4690,6 +4691,8 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
     if ( move != KoPoint( 0, 0 ) )
     {
         //kdDebug(33001) << "moveObjectsByMouse move = " << move << endl;
+       printf("diffdueborders %f %f\n", diffDueToBorders.x(), diffDueToBorders.y() );
+       printf("move %f %f\n", move.x(), move.y() );
         m_activePage->moveObject( m_view, move, false );
     }
 }
