@@ -1702,8 +1702,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             } break;
             case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:
             case INS_CLOSED_CUBICBEZIERCURVE: case INS_CLOSED_QUADRICBEZIERCURVE:{
-                KoPoint sp( snapPoint( docPoint ) );
-                drawCubicBezierCurve( sp );
+                drawCubicBezierCurve( docPoint );
 
                 mouseSelectedObject = true;
             } break;
@@ -4956,7 +4955,6 @@ void KPrCanvas::terminateEditing( KPTextObject *textObj )
 void KPrCanvas::drawCubicBezierCurve( KoPoint &point )
 {
     KoPoint oldEndPoint( m_endPoint );
-    m_endPoint = point;
 
     unsigned int pointCount = m_pointArray.count();
 
@@ -4970,64 +4968,46 @@ void KPrCanvas::drawCubicBezierCurve( KoPoint &point )
         p.setBrush( Qt::NoBrush );
         p.setRasterOp( Qt::NotROP );
 
-        p.save();
         double _angle = KoPoint::getAngle( oldEndPoint, m_startPoint );
         drawFigure( L_SQUARE, &p, oldEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // erase old figure
-        p.restore();
 
         p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
                     m_view->zoomHandler()->zoomPoint( oldEndPoint ) );// erase old line
 
         m_symmetricEndPoint = m_startPoint * 2 - oldEndPoint;
 
-        p.save();
         _angle = KoPoint::getAngle( m_symmetricEndPoint, m_startPoint );
         drawFigure( L_SQUARE, &p, m_symmetricEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() );  // erase old figure
-        p.restore();
 
         p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
                     m_view->zoomHandler()->zoomPoint( m_symmetricEndPoint ) );// erase old line
 
         p.save();
+        p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+        p.drawCubicBezier( m_oldCubicBezierPointArray.zoomPointArray( m_view->zoomHandler() ) );
+        p.restore();
+
+        m_endPoint = snapPoint( point );
+
         _angle = KoPoint::getAngle( m_endPoint, m_startPoint );
         drawFigure( L_SQUARE, &p, m_endPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // draw new figure
-        p.restore();
 
         p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
                     m_view->zoomHandler()->zoomPoint( m_endPoint ) );// draw new line
 
         m_symmetricEndPoint = m_startPoint * 2 - m_endPoint;
 
-        p.save();
         _angle = KoPoint::getAngle( m_symmetricEndPoint, m_startPoint );
         drawFigure( L_SQUARE, &p, m_symmetricEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // draw new figure
-        p.restore();
 
         p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
                     m_view->zoomHandler()->zoomPoint( m_symmetricEndPoint ) );// draw new line
-    }
-    else if ( m_drawLineWithCubicBezierCurve ) {
-        p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
-        p.setBrush( Qt::NoBrush );
-        p.setRasterOp( Qt::NotROP );
 
-        KoPoint startPoint( m_pointArray.at( m_indexPointArray - 1 ) );
-
-        p.drawLine( m_view->zoomHandler()->zoomPoint( startPoint ), 
-                    m_view->zoomHandler()->zoomPoint( oldEndPoint ) );// draw new line
-
-        p.drawLine( m_view->zoomHandler()->zoomPoint( startPoint ), 
-                    m_view->zoomHandler()->zoomPoint( m_endPoint ) );// draw new line
-    }
-
-    if ( !m_drawLineWithCubicBezierCurve && ( ( pointCount % 2 ) == 0 ) ) {
         p.save();
 
         p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
         p.setBrush( Qt::NoBrush );
         p.setRasterOp( Qt::NotROP );
-        // erase old cubic bezier curve
-        p.drawCubicBezier( m_oldCubicBezierPointArray.zoomPointArray( m_view->zoomHandler() ) );
 
         double _firstX = m_pointArray.at( m_indexPointArray - 2 ).x();
         double _firstY = m_pointArray.at( m_indexPointArray - 2 ).y();
@@ -5062,6 +5042,21 @@ void KPrCanvas::drawCubicBezierCurve( KoPoint &point )
         m_oldCubicBezierPointArray = points;
 
         p.restore();
+    }
+    else if ( m_drawLineWithCubicBezierCurve ) {
+        p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+        p.setBrush( Qt::NoBrush );
+        p.setRasterOp( Qt::NotROP );
+
+        KoPoint startPoint( m_pointArray.at( m_indexPointArray - 1 ) );
+
+        p.drawLine( m_view->zoomHandler()->zoomPoint( startPoint ), 
+                    m_view->zoomHandler()->zoomPoint( oldEndPoint ) );// erase old line
+
+        m_endPoint = snapPoint( point );
+
+        p.drawLine( m_view->zoomHandler()->zoomPoint( startPoint ), 
+                    m_view->zoomHandler()->zoomPoint( m_endPoint ) );// draw new line
     }
 
     p.end();
