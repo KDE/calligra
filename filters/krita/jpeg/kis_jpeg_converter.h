@@ -22,7 +22,9 @@
 
 #include <stdio.h>
 
+extern "C" {
 #include <jpeglib.h>
+}
 
 #include <qvaluevector.h>
 
