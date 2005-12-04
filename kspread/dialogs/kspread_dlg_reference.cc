@@ -355,7 +355,7 @@ void EditAreaName::slotOk()
   m_pView->doc()->emitBeginOperation( false );
 
   m_pView->doc()->removeArea( m_areaName->text() );
-  m_pView->doc()->addAreaName(range.range, m_areaName->text(), m_sheets->currentText() );
+  m_pView->doc()->addAreaName(range.range(), m_areaName->text(), m_sheets->currentText() );
 
   Sheet *sheet;
 

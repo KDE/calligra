@@ -470,15 +470,15 @@ bool Canvas::gotoLocation( const Range & _range )
   }
   Sheet * sheet = activeSheet();
   if ( _range.isSheetKnown() )
-    sheet = _range.sheet;
+    sheet = _range.sheet();
   if ( !sheet )
   {
-    KMessageBox::error( this, i18n("Unknown table name %1" ).arg( _range.sheetName ) );
+    KMessageBox::error( this, i18n("Unknown table name %1" ).arg( _range.sheetName() ) );
     return false;
   }
 
-  gotoLocation( _range.range.topLeft(), sheet, false );
-  gotoLocation( _range.range.bottomRight(), sheet, true );
+  gotoLocation( _range.range().topLeft(), sheet, false );
+  gotoLocation( _range.range().bottomRight(), sheet, true );
   return true;
 }
 
@@ -1098,7 +1098,7 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
 	  Range rg;
 	  d->sizingHighlightRange->getRange(rg);
 	  QRect newRange;
-	  newRange.setCoords(rg.range.left(),rg.range.top(),col,row);
+	  newRange.setCoords(rg.range().left(),rg.range().top(),col,row);
 
 //	  resizeHighlightedRange(d->sizingHighlightRange,newRange);
 
@@ -6095,7 +6095,7 @@ void Canvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 				Range rg(*(iter->firstCell()),*(iter->lastCell()));
 
 
-				rg.sheet->setRegionPaintDirty(rg.range);
+				rg.sheet()->setRegionPaintDirty(rg.range());
 			}
 			else
 			{

@@ -4835,7 +4835,7 @@ QString Sheet::guessColumnTitle(QRect& area, int col)
   //Verify range
   Range rg;
   rg.setRange(area);
-  rg.sheet=this;
+  rg.setSheet(this);
 
   if ( (!rg.isValid()) || (col < area.left()) || (col > area.right()))
     return QString();
@@ -4861,7 +4861,7 @@ QString Sheet::guessRowTitle(QRect& area, int row)
   //Verify range
   Range rg;
   rg.setRange(area);
-  rg.sheet=this;
+  rg.setSheet(this);
 
   if ( (!rg.isValid()) || (row < area.top()) || (row > area.bottom()) )
     return QString();
@@ -7004,8 +7004,8 @@ bool Sheet::loadOasis( const QDomElement& sheetElement, const KoOasisStyles& oas
         // e.g.: Sheet4.A1:Sheet4.E28
         QString range = sheetElement.attributeNS( KoXmlNS::table, "print-ranges", QString::null );
         Range p( translateOpenCalcPoint( range ) );
-        if ( sheetName() == p.sheetName )
-            d->print->setPrintRange( p.range );
+        if ( sheetName() == p.sheetName() )
+            d->print->setPrintRange( p.range() );
     }
 
 

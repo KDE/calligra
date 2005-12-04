@@ -411,18 +411,18 @@ bool Point::operator< (const Point &cell) const
 
 Range::Range()
 {
-    sheet = 0;
-  range.setLeft( -1 );
+    _sheet = 0;
+    _range.setLeft( -1 );
 
-  leftFixed=false;
-  rightFixed=false;
-  topFixed=false;
-  bottomFixed=false;
+    _leftFixed=false;
+    _rightFixed=false;
+    _topFixed=false;
+    _bottomFixed=false;
 }
 Range::Range(const QString & _str)
 {
-    range.setLeft(-1);
-    sheet = 0;
+    _range.setLeft(-1);
+    _sheet = 0;
 
     int p = _str.find(':');
     if (p == -1)
@@ -430,93 +430,118 @@ Range::Range(const QString & _str)
 
     Point ul(_str.left(p));
     Point lr(_str.mid(p + 1));
-    range = QRect(ul.pos(), lr.pos());
-    sheetName = ul.sheetName();
+    _range = QRect(ul.pos(), lr.pos());
+    _sheetName = ul.sheetName();
 
-    leftFixed = ul.columnFixed();
-    rightFixed = lr.columnFixed();
-    topFixed = ul.rowFixed();
-    bottomFixed = lr.rowFixed();
+    _leftFixed = ul.columnFixed();
+    _rightFixed = lr.columnFixed();
+    _topFixed = ul.rowFixed();
+    _bottomFixed = lr.rowFixed();
 }
 
-Range::Range(const QString & _str, Map * _map,
-         Sheet * _sheet)
+ Range::Range( const Range& r ) 
+ {
+    _sheet = r.sheet();
+    _sheetName = r.sheetName();
+    _range = r.range();
+    _namedArea = r.namedArea();
+  }
+  
+ Range::Range( const Point& ul, const Point& lr )
+  {
+    _range = QRect( ul.pos(), lr.pos() );
+    if ( ul.sheetName() != lr.sheetName() )
+    {
+      _range.setLeft( -1 );
+      return;
+    }
+    _sheetName = ul.sheetName();
+    _sheet = ul.sheet();
+    _leftFixed = ul.columnFixed();
+    _rightFixed = lr.columnFixed();
+    _topFixed = ul.rowFixed();
+    _bottomFixed = lr.rowFixed();
+  }
+
+Range::Range(const QString & str, Map * map,
+         Sheet * sheet)
 {
-  range.setLeft(-1);
-  sheet = 0;
+  _range.setLeft(-1);
+  _sheet = 0;
 
   //try to parse as named area
   bool gotNamed = false;
-  QString tmp = _str.lower();
+  QString tmp = str.lower();
   QValueList < Reference >::Iterator it;
-  QValueList < Reference > area = _map->doc()->listArea();
+  QValueList < Reference > area = map->doc()->listArea();
   for (it = area.begin(); it != area.end(); ++it) {
     if ((*it).ref_name.lower() == tmp) {
       // success - such named area exists
-      range = (*it).rect;
-      sheet = _map->findSheet((*it).sheet_name);
+      _range = (*it).rect;
+      _sheet = map->findSheet((*it).sheet_name);
       gotNamed = true;
-      namedArea = tmp;
+      _namedArea = tmp;
       break;
     }
   }
   if (gotNamed) {
     // we have a named area - no need to proceed further
-    leftFixed = false;
-    rightFixed = false;
-    topFixed = false;
-    bottomFixed = false;
+    _leftFixed = false;
+    _rightFixed = false;
+    _topFixed = false;
+    _bottomFixed = false;
     return;
   }
 
-  range.setLeft(-1);
-    sheet = 0;
+    _range.setLeft(-1);
+    _sheet = 0;
 
     int p = 0;
-    int p2 = _str.find('!');
+    int p2 = str.find('!');
     if (p2 != -1)
     {
-      sheetName = _str.left(p2++);
+      _sheetName = str.left(p2++);
       while ( true )
       {
-  sheet = _map->findSheet(sheetName);
-        if ( !sheet && sheetName[0] == ' ' )
+        _sheet = map->findSheet(_sheetName);
+        
+        if ( !_sheet && _sheetName[0] == ' ' )
         {
-          sheetName = sheetName.right( sheetName.length() - 1 );
+          _sheetName = _sheetName.right( _sheetName.length() - 1 );
           continue;
         }
         break;
       }
       p = p2;
     } else
-      sheet = _sheet;
+      _sheet = sheet;
 
 
-    int p3 = _str.find(':', p);
+    int p3 = str.find(':', p);
     if (p3 == -1)
   return;
 
-    Point ul(_str.mid(p, p3 - p));
-    Point lr(_str.mid(p3 + 1));
-    range = QRect(ul.pos(), lr.pos());
+    Point ul(str.mid(p, p3 - p));
+    Point lr(str.mid(p3 + 1));
+    _range = QRect(ul.pos(), lr.pos());
 
-    leftFixed = ul.columnFixed();
-    rightFixed = lr.columnFixed();
-    topFixed = ul.rowFixed();
-    bottomFixed = lr.rowFixed();
+    _leftFixed = ul.columnFixed();
+    _rightFixed = lr.columnFixed();
+    _topFixed = ul.rowFixed();
+    _bottomFixed = lr.rowFixed();
 }
 
-QString Range::toString()
+QString Range::toString() const
 {
   QString result;
 
-  if (sheet)
+  if (_sheet)
   {
-    result=util_rangeName(sheet,range);
+    result=util_rangeName(_sheet,_range);
   }
   else
   {
-    result=util_rangeName(range);
+    result=util_rangeName(_range);
   }
 
   //Insert $ characters to show fixed parts of range
@@ -524,27 +549,27 @@ QString Range::toString()
   int pos=result.find("!")+1;
   Q_ASSERT(pos != -1);
 
-  if (leftFixed)
+  if (_leftFixed)
   {
     result.insert(pos,'$');
     pos++; //Takes account of extra character added in
   }
-  if (topFixed)
+  if (_topFixed)
   {
-    result.insert(pos+Cell::columnName(range.left()).length(),'$');
+    result.insert(pos+Cell::columnName(_range.left()).length(),'$');
   }
 
   pos=result.find(":")+1;
   Q_ASSERT(pos != -1);
 
-  if (rightFixed)
+  if (_rightFixed)
   {
     result.insert(pos,'$');
     pos++; //Takes account of extra character added in
   }
-  if (bottomFixed)
+  if (_bottomFixed)
   {
-    result.insert(pos+Cell::columnName(range.right()).length(),'$');
+    result.insert(pos+Cell::columnName(_range.right()).length(),'$');
   }
 
 
@@ -557,10 +582,10 @@ void Range::getStartPoint(Point* pt)
 
   pt->setRow(startRow());
   pt->setColumn(startCol());
-  pt->setColumnFixed(leftFixed);
-  pt->setRowFixed(topFixed);
-  pt->setSheet(sheet);
-  pt->setSheetName(sheetName);
+  pt->setColumnFixed(_leftFixed);
+  pt->setRowFixed(_topFixed);
+  pt->setSheet(_sheet);
+  pt->setSheetName(_sheetName);
 }
 
 void Range::getEndPoint(Point* pt)
@@ -569,29 +594,88 @@ void Range::getEndPoint(Point* pt)
 
   pt->setRow(endRow());
   pt->setColumn(endCol());
-  pt->setColumnFixed(rightFixed);
-  pt->setRowFixed(bottomFixed);
-  pt->setSheet(sheet);
-  pt->setSheetName(sheetName);
+  pt->setColumnFixed(_rightFixed);
+  pt->setRowFixed(_bottomFixed);
+  pt->setSheet(_sheet);
+  pt->setSheetName(_sheetName);
 }
 
 bool Range::contains (const Point &cell) const
 {
-  return range.contains (cell.pos());
+  return _range.contains (cell.pos());
 }
 
 bool Range::intersects (const Range &r) const
 {
-  return range.intersects (r.range);
+  return _range.intersects (r.range());
 }
 
 bool Range::isValid() const
 {
-  return  ( range.left() >= 0 ) &&
-    ( range.right() >= 0 ) &&
-    ( sheet != 0 || sheetName.isEmpty() ) &&
-    ( range.isValid() ) ;
+  return  ( _range.left() >= 0 ) &&
+    ( _range.right() >= 0 ) &&
+    ( _sheet != 0 || _sheetName.isEmpty() ) &&
+    ( _range.isValid() ) ;
 }
+
+QRect Range::range() const
+{
+    return _range;
+}
+
+void Range::setLeftFixed(bool fixed)
+{
+    _leftFixed=fixed;
+}
+bool Range::leftFixed() const
+{
+    return _leftFixed;
+}
+void Range::setRightFixed(bool fixed)
+{
+    _rightFixed=fixed;
+}
+bool Range::rightFixed() const
+{
+    return _rightFixed;
+}
+void Range::setTopFixed(bool fixed)
+{
+    _topFixed=fixed;
+}
+bool Range::topFixed() const
+{
+    return _topFixed;
+}
+void Range::setBottomFixed(bool fixed)
+{
+    _bottomFixed=fixed;
+}
+bool Range::bottomFixed() const
+{
+    return _bottomFixed;
+}
+void Range::setSheet(Sheet* sheet)
+{
+    _sheet=sheet;
+}
+Sheet* Range::sheet() const
+{
+    return _sheet;
+}
+void Range::setSheetName(QString sheetName)
+{
+    _sheetName=sheetName;
+}
+QString Range::sheetName() const
+{
+    return _sheetName;
+}
+QString Range::namedArea() const
+{
+    return _namedArea;
+}
+
 
 bool KSpread::util_isAllSelected(const QRect &selection)
 {

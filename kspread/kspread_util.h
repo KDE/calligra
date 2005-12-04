@@ -116,67 +116,106 @@ private:
   void init( const QString& );
 };
 
-struct KSPREAD_EXPORT Range
+/**
+* Represents a region within a workbook.  The region has an area (the columns and rows that it includes) and
+* optionally an associated @ref Sheet
+* A range is defined by four coordinates: Its left column, top row, right column and bottom row.  Each
+* of these coordinates may be set as fixed, to represent absolute coordinates in formulae.
+*/
+class KSPREAD_EXPORT Range
 {
+public:
   Range();
   Range( const QString& );
   Range( const QString&, Map*, Sheet* default_sheet = 0 );
-  Range( const Range& r ) {
-    sheet = r.sheet;
-    sheetName = r.sheetName;
-    range = r.range;
-    namedArea = r.namedArea;
-  }
-  Range( const Point& ul, const Point& lr )
-  {
-    range = QRect( ul.pos(), lr.pos() );
-    if ( ul.sheetName() != lr.sheetName() )
-    {
-      range.setLeft( -1 );
-      return;
-    }
-    sheetName = ul.sheetName();
-    sheet = ul.sheet();
-    leftFixed = ul.columnFixed();
-    rightFixed = lr.columnFixed();
-    topFixed = ul.rowFixed();
-    bottomFixed = lr.rowFixed();
-  }
+  Range( const Range& r );
+  Range( const Point& ul, const Point& lr );
 
+  /** 
+  * Returns true if this Range represents a valid region of a spreadsheet.
+  * A range is valid if:
+  * - It has an associated Sheet
+  * - The area is non-negative (ie. 
+  * - The left-most column is non-negative
+  * - The top-most row is non-negative
+  */
   bool isValid() const;
-  bool isSheetKnown() const { return ( !sheetName.isEmpty() && sheet != 0 ); }
+  
+  /** Returns true if this range has an associated Sheet or false otherwise */
+  bool isSheetKnown() const { return ( !sheetName().isEmpty() && sheet() != 0 ); }
 
   /** Fills a Point with info (row,column,sheet) about the first point in the range */
   void getStartPoint(Point* pt);
   /** Fills a Point with info (row,column,sheet) about the last point the range */
   void getEndPoint(Point* pt);
 
-  int startRow () const { return range.top(); };
-  int startCol () const { return range.left(); };
-  int endRow () const { return range.bottom(); };
-  int endCol () const { return range.right(); };
+  int startRow () const { return range().top(); };
+  int startCol () const { return range().left(); };
+  int endRow () const { return range().bottom(); };
+  int endCol () const { return range().right(); };
 
-  void setRange(QRect& newRange) {range=newRange;}
+  void setRange(QRect& newRange) {_range=newRange;}
   void setRange(int newStartCol, int newStartRow, int newEndCol, int newEndRow)
-  { range=QRect(newStartCol,newStartRow,newEndCol-newStartCol,newEndRow-newStartRow); }
+  { _range=QRect(newStartCol,newStartRow,newEndCol-newStartCol,newEndRow-newStartRow); }
+  
+  /** Returns the area on the spreadsheet occupied by this range. */
+  QRect range() const;
 
-  /** does this range contain the given cell? */
+  /** Returns true if this range includes the specified cell */
   bool contains (const Point &cell) const;
-  /** do these two ranges have at least one common cell? */
+  /** 
+  * Returns true if this range intersects Range @ref r  (ie. there is at least one cell 
+  * which is common to both Ranges )
+  */
   bool intersects (const Range &r) const;
 
-  /** returns a string representation of this range, ie.
-     " SheetName! [StartCell] : [EndCell] " */
-  QString toString();
+  /** 
+  * Returns a string representation of this range as it would appear in a formula.
+  * ie. In the format " SheetName! [StartCell] : [EndCell] " 
+  * The string representation uses $ characters to mark fixed parts of the range, eg. Sheet1!$A1:$A20
+  */
+  QString toString() const;
+  
+  /** Sets whether or not the left column is fixed . */
+  void setLeftFixed(bool fixed);
+  bool leftFixed() const;
+  
+  /** Sets whether or not the right column is fixed. */
+  void setRightFixed(bool fixed);
+  bool rightFixed() const;
+  
+  /** Sets whether or not the top row is fixed. */
+  void setTopFixed(bool fixed);
+  bool topFixed() const;
+  
+  /** Sets whether or not the bottom row is fixed. */
+  void setBottomFixed(bool fixed);
+  bool bottomFixed() const;
+  
+  /** Sets the Sheet object associated with this range.  The range can only span a single sheet. */
+  void setSheet(Sheet* sheet);
+  Sheet* sheet() const;
+  
+  /** Sets the name of the sheet associated with this range. */
+  void setSheetName(QString sheetName);
+  QString sheetName() const;
+  
+  /** 
+  * Returns the named area represented by this range or an empty string otherwise.
+  * This is the name of the area which was passed as a QString to the Range constructor
+  */
+  QString namedArea() const;
+  
 
-  Sheet* sheet;
-  QString sheetName;
-  QString namedArea;
-  QRect range;
-  bool leftFixed;
-  bool rightFixed;
-  bool topFixed;
-  bool bottomFixed;
+private:
+  Sheet* _sheet;
+  QString _sheetName;
+  QString _namedArea;
+  QRect _range;
+  bool _leftFixed;
+  bool _rightFixed;
+  bool _topFixed;
+  bool _bottomFixed;
 };
 
 /**

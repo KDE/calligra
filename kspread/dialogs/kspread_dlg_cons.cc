@@ -172,10 +172,10 @@ void ConsolidateDialog::slotOk()
     // TODO: Check for valid
     Q_ASSERT( r.isValid() );
 
-    if ( r.sheet == 0 )
+    if ( r.sheet() == 0 )
     {
-      r.sheet = sheet;
-      r.sheetName = sheet->sheetName();
+      r.setSheet(sheet);
+      r.setSheetName(sheet->sheetName());
     }
     ranges.append( r  );
   }
@@ -193,8 +193,8 @@ void ConsolidateDialog::slotOk()
   // Check whether all ranges have same size
   Q_ASSERT( ranges.count() > 0 );
   QValueList<Range>::Iterator it = ranges.begin();
-  int w = (*it).range.right() - (*it).range.left() + 1;
-  int h = (*it).range.bottom() - (*it).range.top() + 1;
+  int w = (*it).range().right() - (*it).range().left() + 1;
+  int h = (*it).range().bottom() - (*it).range().top() + 1;
   if ( w <= ( ( desc == D_BOTH || desc == D_COL ) ? 1 : 0 ) ||
        h <= ( ( desc == D_BOTH || desc == D_ROW ) ? 1 : 0 ) )
   {
@@ -203,7 +203,7 @@ void ConsolidateDialog::slotOk()
     return;
   }
 
-  if( (*it).range.bottom()==KS_rowMax || (*it).range.right()== KS_colMax )
+  if( (*it).range().bottom()==KS_rowMax || (*it).range().right()== KS_colMax )
   {
     m_pView->slotUpdateView( m_pView->activeSheet() );
     KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( *( r.begin() ) ));
@@ -214,9 +214,12 @@ void ConsolidateDialog::slotOk()
   int i = 1;
   for( ; it != ranges.end(); ++it, i++ )
   {
-    int w2 = (*it).range.right() - (*it).range.left() + 1;
-    int h2 = (*it).range.bottom() - (*it).range.top() + 1;
-    if((*it).range.bottom()==KS_rowMax || (*it).range.right()== KS_colMax)
+    QRect currentRange=(*it).range();
+    
+    int w2 = currentRange.right() - currentRange.left() + 1;
+    int h2 = currentRange.bottom() - currentRange.top() + 1;
+    
+    if(currentRange.bottom()==KS_rowMax || currentRange.right()== KS_colMax)
     {
       m_pView->slotUpdateView( m_pView->activeSheet() );
       KMessageBox::error( this, i18n( "The range\n%1\nis too large" ).arg( r[i]));
@@ -242,10 +245,13 @@ void ConsolidateDialog::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      Sheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet();
       Q_ASSERT( t );
       QRect r;
-      r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
+      
+      QRect currentRange=(*it).range();
+      
+      r.setCoords( currentRange.left(), currentRange.top(), currentRange.right(), currentRange.bottom() );
       if ( t == sheet && r.intersects( dest ) )
       {
         m_pView->slotUpdateView( m_pView->activeSheet() );
@@ -264,14 +270,14 @@ void ConsolidateDialog::slotOk()
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
-	  Sheet *t = (*it).sheet;
+	  Sheet *t = (*it).sheet();
 	  assert( t );
-	  Cell *c = t->cellAt( x + (*it).range.left(), y + (*it).range.top() );
+	  Cell *c = t->cellAt( x + (*it).range().left(), y + (*it).range().top() );
           if(!c->isDefault())
                 novalue=false;
 	  if ( it != ranges.begin() )
 	    formula += ";";
-	  formula += (*it).sheetName + "!";
+	  formula += (*it).sheetName() + "!";
 	  formula += c->name();
 	}
 	formula += ")";
@@ -289,12 +295,12 @@ void ConsolidateDialog::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      Sheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet();
       assert( t );
-      kdDebug(36001) << "FROM " << (*it).range.left() << " to " << (*it).range.right() << endl;
-      for( int x = (*it).range.left(); x <= (*it).range.right() ; ++x )
+//      kdDebug(36001) << "FROM " << (*it).range.left() << " to " << (*it).range.right() << endl;
+      for( int x = (*it).range().left(); x <= (*it).range().right() ; ++x )
       {
-	Cell *c = t->cellAt( x, (*it).range.top() );
+	Cell *c = t->cellAt( x, (*it).range().top() );
 	if ( c )
 	{
 	  QString s = c->value().asString();
@@ -311,10 +317,11 @@ void ConsolidateDialog::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      Sheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet();
       assert( t );
       QRect r;
-      r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
+      QRect currentRange=(*it).range();
+      r.setCoords( currentRange.left(), currentRange.top(), currentRange.right(), currentRange.bottom() );
       if ( t == sheet && r.intersects( dest ) )
       {
         m_pView->slotUpdateView( m_pView->activeSheet() );
@@ -338,11 +345,11 @@ void ConsolidateDialog::slotOk()
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
-	  for( int i = (*it).range.left(); i <= (*it).range.right(); ++i )
+	  for( int i = (*it).range().left(); i <= (*it).range().right(); ++i )
 	  {
-	    Sheet *t = (*it).sheet;
+	    Sheet *t = (*it).sheet();
 	    assert( t );
-	    Cell *c = t->cellAt( i, (*it).range.top() );
+	    Cell *c = t->cellAt( i, (*it).range().top() );
 	    if ( c )
 	    {
 	      if ( c->value().asString() == *s )
@@ -351,8 +358,8 @@ void ConsolidateDialog::slotOk()
 		count++;
 		if ( it != ranges.begin() )
 		  formula += ";";
-		formula += (*it).sheetName + "!";
-		formula += Cell::name( i, y + (*it).range.top() );
+		formula += (*it).sheetName() + "!";
+		formula += Cell::name( i, y + (*it).range().top() );
 	      }
 	    }
 	  }
@@ -371,11 +378,11 @@ void ConsolidateDialog::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      Sheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet();
       assert( t );
-      for( int y = (*it).range.top(); y <= (*it).range.bottom() ; ++y )
+      for( int y = (*it).range().top(); y <= (*it).range().bottom() ; ++y )
       {
-	Cell *c = t->cellAt( (*it).range.left(), y );
+	Cell *c = t->cellAt( (*it).range().left(), y );
 	if ( c )
 	{
 	  QString s = c->value().asString();
@@ -392,10 +399,11 @@ void ConsolidateDialog::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      Sheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet();
       assert( t );
       QRect r;
-      r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
+      QRect currentRange=(*it).range();
+      r.setCoords( currentRange.left(), currentRange.top(), currentRange.right(), currentRange.bottom() );
       if ( t == sheet && r.intersects( dest ) )
       {
         m_pView->slotUpdateView( m_pView->activeSheet() );
@@ -419,11 +427,11 @@ void ConsolidateDialog::slotOk()
 	it = ranges.begin();
 	for( ; it != ranges.end(); ++it )
         {
-	  for( int i = (*it).range.top(); i <= (*it).range.bottom(); i++ )
+	  for( int i = (*it).range().top(); i <= (*it).range().bottom(); i++ )
 	  {
-	    Sheet *t = (*it).sheet;
+	    Sheet *t = (*it).sheet();
 	    assert( t );
-	    Cell *c = t->cellAt( (*it).range.left(), i );
+	    Cell *c = t->cellAt( (*it).range().left(), i );
 	    if ( c )
 	    {
 	      QString v = c->value().asString();
@@ -432,8 +440,8 @@ void ConsolidateDialog::slotOk()
 //		Cell *c2 = t->cellAt( x + (*it).range.left(), i );
 		count++;
 		if ( it != ranges.begin() ) formula += ";";
-		formula += (*it).sheetName + "!";
-		formula += Cell::name( i, y + (*it).range.top() );
+		formula += (*it).sheetName() + "!";
+		formula += Cell::name( i, y + (*it).range().top() );
 	      }
 	    }
 	  }
@@ -453,11 +461,11 @@ void ConsolidateDialog::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      Sheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet();
       assert( t );
-      for( int y = (*it).range.top() + 1; y <= (*it).range.bottom() ; ++y )
+      for( int y = (*it).range().top() + 1; y <= (*it).range().bottom() ; ++y )
       {
-	Cell *c = t->cellAt( (*it).range.left(), y );
+	Cell *c = t->cellAt( (*it).range().left(), y );
 	if ( c )
 	{
 	  QString s = c->value().asString();
@@ -473,11 +481,11 @@ void ConsolidateDialog::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      Sheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet();
       assert( t );
-      for( int x = (*it).range.left() + 1; x <= (*it).range.right() ; ++x )
+      for( int x = (*it).range().left() + 1; x <= (*it).range().right() ; ++x )
       {
-	Cell *c = t->cellAt( x, (*it).range.top() );
+	Cell *c = t->cellAt( x, (*it).range().top() );
 	if ( c )
 	{
 	  QString s = c->value().asString();
@@ -494,10 +502,11 @@ void ConsolidateDialog::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      Sheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet();
       assert( t );
       QRect r;
-      r.setCoords( (*it).range.left(), (*it).range.top(), (*it).range.right(), (*it).range.bottom() );
+      QRect currentRange=(*it).range();
+      r.setCoords( currentRange.left(), currentRange.top(), currentRange.right(), currentRange.bottom() );
       if ( t == sheet && r.intersects( dest ) )
       {
         m_pView->slotUpdateView( m_pView->activeSheet() );
@@ -512,17 +521,17 @@ void ConsolidateDialog::slotOk()
     it = ranges.begin();
     for( ; it != ranges.end(); ++it )
     {
-      Sheet *t = (*it).sheet;
+      Sheet *t = (*it).sheet();
       assert( t );
-      for( int x = (*it).range.left() + 1; x <= (*it).range.right() ; ++x )
+      for( int x = (*it).range().left() + 1; x <= (*it).range().right() ; ++x )
       {
-	Cell *c = t->cellAt( x, (*it).range.top() );
+	Cell *c = t->cellAt( x, (*it).range().top() );
 	if ( c )
 	{
 	  QString ydesc = c->value().asString();
-	  for( int y = (*it).range.top() + 1; y <= (*it).range.bottom() ; ++y )
+	  for( int y = (*it).range().top() + 1; y <= (*it).range().bottom() ; ++y )
 	  {
-	    Cell *c2 = t->cellAt( (*it).range.left(), y );
+	    Cell *c2 = t->cellAt( (*it).range().left(), y );
 	    if ( c2 )
 	    {
 	      QString xdesc = c2->value().asString();
@@ -533,7 +542,7 @@ void ConsolidateDialog::slotOk()
 		k.xdesc = xdesc;
 		k.ydesc = ydesc;
 		k.cell = c3;
-		k.sheet = (*it).sheetName;
+		k.sheet = (*it).sheetName();
 		k.x = x;
 		k.y = y;
 		lst.append( k );
@@ -574,8 +583,8 @@ void ConsolidateDialog::slotOk()
 	  {
 	    count++;
   	    if ( it != ranges.begin() ) formula += ";";
-	    formula += (*it).sheetName + "!";
-	    formula += Cell::name( i, y + (*it).range.top() );
+	    formula += (*it).sheetName() + "!";
+	    formula += Cell::name( i, y + (*it).range().top() );
 	  }
 	}
 	formula += ")";

@@ -540,7 +540,7 @@ void DatabaseDialog::accept()
       return;
     }
 
-    range.sheet = sheet;
+    range.setSheet(sheet);
 
     if ( !range.isValid() )
     {
@@ -549,10 +549,11 @@ void DatabaseDialog::accept()
       m_region->selectAll();
       return;
     }
-    top    = range.range.top();
-    left   = range.range.left();
-    width  = range.range.width();
-    height = range.range.height();
+    
+    top    = range.range().top();
+    left   = range.range().left();
+    width  = range.range().width();
+    height = range.range().height();
   }
   else
   {

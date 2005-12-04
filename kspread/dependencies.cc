@@ -279,7 +279,7 @@ void DependencyList::addDependency (const Point &cell1,
 void DependencyList::addRangeDependency (const RangeDependency &rd)
 {
   //target range can be in another sheet (inter-sheet dependency)
-  Sheet *sh = rd.range.sheet;
+  Sheet *sh = rd.range.sheet();
   if (!sh)
     sh = sheet;
   
@@ -295,8 +295,8 @@ void DependencyList::addRangeDependency (const RangeDependency &rd)
     sh->dependencies()->deps->rangeDeps[*it].push_back (rd);
 
   // the target range could be a named area ...
-  if (!rd.range.namedArea.isNull())
-    areaDeps[rd.range.namedArea][cell] = true;
+  if (!rd.range.namedArea().isNull())
+    areaDeps[rd.range.namedArea()][cell] = true;
 }
 
 void DependencyList::removeDependencies (const Point &cell)
@@ -404,7 +404,10 @@ void DependencyList::generateDependencies (const Point &cell)
     rd.cellcolumn = cell.column();
     rd.cellsheet = sheet;
     rd.range = *it2;
-    if (rd.range.sheet == 0) rd.range.sheet = sheet;
+    
+    if (rd.range.sheet() == 0) 
+        rd.range.setSheet(sheet);
+        
     addRangeDependency (rd);
   }
 }
@@ -579,8 +582,8 @@ QValueList<Point> DependencyList::leadingCells (const Range &range) const
   cell1.setColumn (range.startCol());
   cell2.setRow (range.endRow());
   cell2.setColumn (range.endCol());
-  cell1.setSheet(range.sheet);
-  cell2.setSheet(range.sheet);
+  cell1.setSheet(range.sheet());
+  cell2.setSheet(range.sheet());
   
   cell1 = leadingCell (cell1);
   cell2 = leadingCell (cell2);
@@ -590,7 +593,7 @@ QValueList<Point> DependencyList::leadingCells (const Range &range) const
     {
       cell.setRow (row);
       cell.setColumn (col);
-      cell.setSheet(range.sheet);
+      cell.setSheet(range.sheet());
       cells.push_back (cell);
     }
   return cells;

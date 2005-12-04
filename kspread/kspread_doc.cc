@@ -2161,8 +2161,8 @@ void Doc::loadOasisAreaName( const QDomElement& body )
 
             Range p( range );
 
-            addAreaName( p.range, name, p.sheetName );
-            kdDebug() << "Area range: " << p.sheetName << endl;
+            addAreaName( p.range(), name, p.sheetName() );
+            kdDebug() << "Area range: " << p.sheetName() << endl;
 
             area = area.nextSibling();
         }

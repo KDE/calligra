@@ -2487,12 +2487,12 @@ void View::autoSum()
   if ( (sel.width() > 1) && (sel.height() > 1) )
     sel=QRect();
 
-  rg.range=sel;
+  rg.setRange(sel);
 
   d->canvas->createEditor( Canvas::CellEditor , true , true );
 
 
-  if ( (rg.range.isValid() ) && (!rg.range.isEmpty()) )
+  if ( (rg.range().isValid() ) && (!rg.range().isEmpty()) )
   {
         d->canvas->editor()->setText( "=SUM("+rg.toString()+")" );
     d->canvas->deleteEditor(true);

@@ -1376,7 +1376,7 @@ Value Formula::eval() const
           Range range (c, sheet->workbook(), sheet);
           if (range.isValid())
           {
-            val1 = range.sheet->valueRange (range.startCol(), range.startRow(),
+            val1 = range.sheet()->valueRange (range.startCol(), range.startRow(),
                 range.endCol(), range.endRow());
             // store the reference, so we can use it within functions
             entry.col1 = range.startCol();
