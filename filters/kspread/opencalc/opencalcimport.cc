@@ -116,10 +116,10 @@ OpenCalcImport::OpenCalcPoint::OpenCalcPoint( QString const & str )
 
   if ( isRange )
   {
-    Range newRange( range );
-    table    = newRange.sheetName;
-    topLeft  = newRange.range.topLeft();
-    botRight = newRange.range.bottomRight();
+	  KSpread::Range newRange( range );
+    table    = newRange.sheetName();
+    topLeft  = newRange.range().topLeft();
+    botRight = newRange.range().bottomRight();
   }
   else
   {
@@ -1530,12 +1530,12 @@ bool OpenCalcImport::parseBody( int numOfTables )
       OpenCalcPoint point( range );
 
       kdDebug(30518) << "Print range: " << point.translation << endl;
-      Range p( point.translation );
+      KSpread::Range p( point.translation );
 
-      kdDebug(30518) << "Print table: " << p.sheetName << endl;
+      kdDebug(30518) << "Print table: " << p.sheetName() << endl;
 
-      if ( table->sheetName() == p.sheetName )
-        table->print()->setPrintRange( p.range );
+      if ( table->sheetName() == p.sheetName() )
+        table->print()->setPrintRange( p.range() );
     }
 
     if ( !readColLayouts( t, table ) )
@@ -1641,10 +1641,10 @@ void OpenCalcImport::loadOasisAreaName( const QDomElement&body )
         kdDebug(30518) << "=> Area: " << range << endl;
       }
 
-      Range p( range );
+      KSpread::Range p( range );
 
-      m_doc->addAreaName( p.range, name, p.sheetName );
-      kdDebug(30518) << "Area range: " << p.sheetName << endl;
+      m_doc->addAreaName( p.range(), name, p.sheetName() );
+      kdDebug(30518) << "Area range: " << p.sheetName() << endl;
     }
   }
 }
