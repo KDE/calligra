@@ -1,7 +1,6 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
 Comment=
-DocPath=krita/index.html
 Encoding=UTF-8
 Exec=krita %u
 GenericName=Application de dessin et de manipulation d'images
