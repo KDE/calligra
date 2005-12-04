@@ -67,13 +67,14 @@ public:
     KoSpeaker();
     ~KoSpeaker();
 
+    /** Speech Options */
     enum SpeakFlags {
-        SpeakFocusWidget = 1,
-        SpeakPointerWidget = 2,
-        SpeakWhatsThis = 4,
-        SpeakTooltip = 8,
-        SpeakAccelerator = 16,
-        SpeakDisabled = 32
+        SpeakFocusWidget = 1    /**< Speak widget with focus */,
+        SpeakPointerWidget = 2  /**< Speak widget under mouse pointer */,
+        SpeakWhatsThis = 4      /**< Speak Whats This if available */,
+        SpeakTooltip = 8        /**< Speak tooltip if available */,
+        SpeakAccelerator = 16   /**< Speak accelerator */,
+        SpeakDisabled = 32      /**< Say 'disabled' if not enabled */
     };
 
     /**
