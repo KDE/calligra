@@ -5,4 +5,61 @@
 This section will describe &krita;'s palettes.
 </para>
 
+<sect2 id="commands-palettes-controlbox">
+<title>The <guilabel>Control box</guilabel> palette</title>
+<para></para>
+
+<sect3 id="commands-palettes-controlbox-overview">
+<title><guilabel>Overview</guilabel></title>
+<para></para>
+</sect3>
+
+<sect3 id="commands-palettes-controlbox-histogram">
+<title><guilabel>Histogram</guilabel></title>
+<para></para>
+</sect3>
+
+<!-- And one for each tool! -->
+
+<sect3 id="commands-palettes-controlbox-star">
+<title><guilabel>Star</guilabel></title>
+<para></para>
+</sect3>
+
+</sect2>
+
+<sect2 id="commands-palettes-colors">
+<title>The <guilabel>Layers</guilabel> palette</title>
+<para></para>
+
+<sect3 id="commands-palettes-colors-hsv">
+<title><guilabel>HSV</guilabel></title>
+<para></para>
+</sect3>
+<sect3 id="commands-palettes-colors-rgb">
+<title><guilabel>RGB</guilabel></title>
+<para></para>
+</sect3>
+<sect3 id="commands-palettes-colors-gray">
+<title><guilabel>Gray</guilabel></title>
+<para></para>
+</sect3>
+<sect3 id="commands-palettes-colors-palettes">
+<title><guilabel>Palettes</guilabel></title>
+<para></para>
+</sect3>
+
+</sect2>
+
+<sect2 id="commands-palettes-layers">
+<title>The <guilabel>Layers</guilabel> palette</title>
+<para></para>
+
+<sect3 id="commands-palettes-layers-layers">
+<title><guilabel>Layers</guilabel></title>
+<para></para>
+</sect3>
+
+</sect2>
+
 </sect1>

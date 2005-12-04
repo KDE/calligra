@@ -15,6 +15,7 @@
   <!ENTITY commands-toolbars SYSTEM "commands-toolbars.docbook">
   <!ENTITY commands-palettes SYSTEM "commands-palettes.docbook">
   <!ENTITY commands-menus SYSTEM "commands-menus.docbook">
+  <!ENTITY commands-dialogs SYSTEM "commands-dialogs.docbook">
   <!ENTITY developers SYSTEM "developers.docbook">
   <!ENTITY faq SYSTEM "faq.docbook">
   <!ENTITY credits SYSTEM "credits.docbook">
@@ -54,8 +55,8 @@
 
 <!-- Date and version information of the documentation -->
 
-<date>2005-09-01</date>
-<releaseinfo>0.01.00</releaseinfo>
+<date>2005-11-27</date>
+<releaseinfo>0.02.00</releaseinfo>
 
 <!-- Abstract about this handbook -->
 

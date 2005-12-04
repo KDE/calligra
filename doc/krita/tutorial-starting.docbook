@@ -85,8 +85,8 @@ image.
 </para>
 
 <para>
-You will now see the main &krita; screen . On the left hand side, there is the
-toolbox which offers you access to tools for painting, editing, and selecting.
+You will now see the main &krita; screen. On the left hand side and on the top, there are
+toolbars which offer you access to tools for painting, editing, and selecting.
 You can find a more detailed description of these toolbars in <link
 linkend="commands-toolbars">here</link>. The actual painting area is in the
 middle. On the right side of your screen, there are various palettes, which you
