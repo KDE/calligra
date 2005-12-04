@@ -6461,7 +6461,7 @@ DCOPObject * View::dcopObject()
   return d->dcop;
 }
 
-QWidget * View::canvas()
+QWidget * View::canvas() const
 {
   return canvasWidget();
 }

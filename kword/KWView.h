@@ -147,7 +147,7 @@ public:
     /**
      * Overloaded from View
      */
-    QWidget* canvas();
+    QWidget* canvas() const;
     /**
      * Overloaded from View
      */

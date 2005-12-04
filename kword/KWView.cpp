@@ -5848,7 +5848,7 @@ bool KWView::doubleClickActivation() const
     return TRUE;
 }
 
-QWidget* KWView::canvas()
+QWidget* KWView::canvas() const
 {
     return m_gui->canvasWidget()->viewport();
 }

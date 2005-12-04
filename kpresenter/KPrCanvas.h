@@ -716,6 +716,11 @@ private slots:
     void slotDoPageEffect();
 
     /**
+     * Scroll canvas when receiving this signal
+     */
+    void slotAutoScroll(const QPoint &scrollDist);
+
+    /**
      * Speak the text object under the mouse.  This slot is normally
      * connected to the kospeaker customSpeakWidget signal.
      */

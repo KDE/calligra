@@ -809,7 +809,7 @@ void KivioView::paintContent( KivioPainter&, const QRect&, bool)
   m_pCanvas->update();
 }
 
-QWidget *KivioView::canvas()
+QWidget *KivioView::canvas() const
 {
   return canvasWidget();
 }

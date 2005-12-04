@@ -3866,7 +3866,7 @@ bool KPresenterView::doubleClickActivation() const
     return true;
 }
 
-QWidget* KPresenterView::canvas()
+QWidget* KPresenterView::canvas() const
 {
     return m_canvas;
 }

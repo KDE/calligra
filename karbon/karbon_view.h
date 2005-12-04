@@ -79,7 +79,7 @@ public:
 	bool mouseEvent( QMouseEvent* event, const KoPoint & );
 	bool keyEvent( QEvent* event );
 
-	virtual QWidget* canvas();
+	virtual QWidget* canvas() const;
 
 	VCanvas* canvasWidget() const { return m_canvas; }
 

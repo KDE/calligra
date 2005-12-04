@@ -178,7 +178,7 @@ public:
    *
    * By default this function returns a pointer to the view.
    */
-  virtual QWidget *canvas();
+  virtual QWidget *canvas() const;
 
   /**
    * Overload this function if the content will be displayed

@@ -167,6 +167,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
         m_activePage=m_view->kPresenterDoc()->pageList().getFirst();
         connect( m_view->kPresenterDoc(), SIGNAL( sig_terminateEditing( KPTextObject * ) ),
                  this, SLOT( terminateEditing( KPTextObject * ) ) );
+        connect( m_view, SIGNAL( autoScroll( const QPoint & )), this, SLOT( slotAutoScroll( const QPoint &)));
     }
 
     if ( kospeaker )
@@ -605,6 +606,8 @@ void KPrCanvas::recalcAutoGuides( )
 
 void KPrCanvas::mousePressEvent( QMouseEvent *e )
 {
+    m_view->enableAutoScroll();
+
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
 
@@ -1170,6 +1173,8 @@ KoRect KPrCanvas::getAlignBoundingRect() const
 
 void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 {
+    m_view->disableAutoScroll();
+
     if ( editMode && m_view->kPresenterDoc()->showGuideLines() && toolEditMode == TEM_MOUSE && m_gl.mouseReleaseEvent( e ) )
         return;
 
@@ -3396,6 +3401,11 @@ void KPrCanvas::slotDoPageEffect()
     }
 }
 
+void KPrCanvas::slotAutoScroll(const QPoint &scrollDistance)
+{
+    scrollCanvas( scrollDistance );
+}
+
 
 bool KPrCanvas::finishObjectEffects()
 {
@@ -4609,7 +4619,6 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
     {
         //kdDebug(33001) << "moveObjectsByMouse move = " << move << endl;
         m_activePage->moveObject( m_view, move, false );
-        scrollCanvas( move );
         m_view->updateObjectStatusBarItem();
     }
 }
@@ -4682,7 +4691,6 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
     {
         //kdDebug(33001) << "moveObjectsByMouse move = " << move << endl;
         m_activePage->moveObject( m_view, move, false );
-        scrollCanvas( move );
     }
 }
 

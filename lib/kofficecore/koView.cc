@@ -303,9 +303,11 @@ double KoView::zoom() const
   return d->m_zoom;
 }
 
-QWidget *KoView::canvas()
+QWidget *KoView::canvas() const
 {
-  return this;
+    //dfaure: since the view plays two roles in this method (the const means "you can modify the canvas
+    // but not the view", it's just coincidence that the view is the canvas by default ;)
+   return const_cast<KoView *>(this);
 }
 
 int KoView::canvasXOffset() const
@@ -618,6 +620,7 @@ void KoView::slotAutoScroll(  )
         state = kapp->keyboardMouseState();
 #endif
 
+        pos = canvas()->mapFrom(this, pos);
         QMouseEvent * event = new QMouseEvent(QEvent::MouseMove, pos, 0, state);
 
         QApplication::postEvent( canvas(), event );

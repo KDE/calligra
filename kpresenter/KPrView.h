@@ -155,6 +155,10 @@ public:
     void updateDisplayObjectMasterPageButton();
 
     void updateDisplayBackgroundButton();
+    virtual int leftBorder() const { return canvas()->mapTo(const_cast<KPresenterView *>(this), QPoint(0,0)).x(); };
+    virtual int rightBorder() const { return width() - canvas()->mapTo(const_cast<KPresenterView *>(this), QPoint(canvas()->width(), 0)).x(); };
+    virtual int topBorder() const { return canvas()->mapTo(const_cast<KPresenterView *>(this), QPoint(0,0)).y(); };
+    virtual int bottomBorder() const { return height() - canvas()->mapTo(const_cast<KPresenterView *>(this), QPoint(0, canvas()->height())).y(); };
 
     void updateGuideLineButton();
 
@@ -564,7 +568,7 @@ public:
     /**
      * Overloaded from View
      */
-    QWidget* canvas();          // don't add const!!!
+    QWidget* canvas() const;
     /**
      * Overloaded from View
      */

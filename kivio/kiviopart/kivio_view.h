@@ -109,7 +109,7 @@ class KIVIO_EXPORT KivioView : public KoView
 
     void paintContent( KivioPainter& painter, const QRect& rect, bool transparent );
 
-    virtual QWidget* canvas();
+    virtual QWidget* canvas() const;
     virtual int canvasXOffset() const;
     virtual int canvasYOffset() const;
 

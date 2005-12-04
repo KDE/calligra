@@ -299,7 +299,7 @@ KarbonView::dcopObject()
 }
 
 QWidget*
-KarbonView::canvas()
+KarbonView::canvas() const
 {
 	return m_canvas;
 }
