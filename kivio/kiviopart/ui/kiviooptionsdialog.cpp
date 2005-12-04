@@ -94,7 +94,7 @@ KivioOptionsDialog::KivioOptionsDialog(KivioView* parent, const char* name)
   initPage();
   initGrid();
   initGuides();
-  unitChanged(parent->doc()->units());
+  unitChanged(parent->doc()->unit());
 }
 
 void KivioOptionsDialog::initPage()
@@ -160,7 +160,7 @@ void KivioOptionsDialog::initGrid()
   QFrame* page = addPage(i18n("Grid"), i18n("Grid Settings"), BarIcon( "grid", KIcon::SizeMedium ));
   m_gridIndex = pageIndex(page);
 
-  KoUnit::Unit unit = static_cast<KivioView*>(parent())->doc()->units();
+  KoUnit::Unit unit = static_cast<KivioView*>(parent())->doc()->unit();
   KivioGridData d = static_cast<KivioView*>(parent())->doc()->grid();
   double pgw = m_layout.ptWidth;
   double pgh = m_layout.ptHeight;
@@ -244,7 +244,7 @@ void KivioOptionsDialog::initGuides()
   orientBGrp->insert(m_orientHorizRBtn);
   orientBGrp->insert(m_orientVertRBtn);
   QLabel* posLbl = new QLabel(i18n("&Position:"), m_propertiesGrp);
-  KoUnit::Unit unit = view->doc()->units();
+  KoUnit::Unit unit = view->doc()->unit();
   m_posUSpin = new KoUnitDoubleSpinBox(m_propertiesGrp, 0.0, 0.0, 0.0, unit);
   posLbl->setBuddy(m_posUSpin);
 
@@ -308,8 +308,8 @@ void KivioOptionsDialog::initGuides()
 void KivioOptionsDialog::applyPage()
 {
   KivioView* view = static_cast<KivioView*>(parent());
-  view->doc()->setUnits(static_cast<KoUnit::Unit>(m_unitCombo->currentItem()));
-  Kivio::Config::setUnit(KoUnit::unitName(view->doc()->units()));
+  view->doc()->setUnit(static_cast<KoUnit::Unit>(m_unitCombo->currentItem()));
+  Kivio::Config::setUnit(KoUnit::unitName(view->doc()->unit()));
   Kivio::Config::setDefaultPageLayout(m_layout);
   Kivio::Config::setFont(m_font);
   view->togglePageMargins(m_marginsChBox->isChecked());
@@ -365,11 +365,10 @@ void KivioOptionsDialog::defaultPage()
 
 void KivioOptionsDialog::defaultGrid()
 {
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  m_spaceHorizUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridXSpacing(), unit));
-  m_spaceVertUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridYSpacing(), unit));
-  m_snapHorizUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridXSnap(), unit));
-  m_snapVertUSpin->changeValue(KoUnit::toUserValue(Kivio::Config::gridYSnap(), unit));
+  m_spaceHorizUSpin->changeValue(Kivio::Config::gridXSpacing());
+  m_spaceVertUSpin->changeValue(Kivio::Config::gridYSpacing());
+  m_snapHorizUSpin->changeValue(Kivio::Config::gridXSnap());
+  m_snapVertUSpin->changeValue(Kivio::Config::gridYSnap());
   m_gridChBox->setChecked(Kivio::Config::showGrid());
   m_snapChBox->setChecked(Kivio::Config::snapGrid());
   m_gridColorBtn->setColor(Kivio::Config::gridColor());

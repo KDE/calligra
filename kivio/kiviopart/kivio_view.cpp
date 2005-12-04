@@ -153,7 +153,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   addStatusBarItem(m_infoSLbl, 0, false);
 
   // Add coords to the statusbar
-  QString unit = KoUnit::unitName(m_pDoc->units());
+  QString unit = KoUnit::unitName(m_pDoc->unit());
   KoPoint xy(0, 0);
   QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
   .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
@@ -209,11 +209,11 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   // Rulers
   vRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Vertical, Kivio::Config::defaultPageLayout(),
-    KoRuler::F_HELPLINES, m_pDoc->units());
+    KoRuler::F_HELPLINES, m_pDoc->unit());
   vRuler->showMousePos(true);
   vRuler->setZoom(zoomHandler()->zoomedResolutionY());
   hRuler = new KoRuler(pRightSide, m_pCanvas, Qt::Horizontal, Kivio::Config::defaultPageLayout(),
-    KoRuler::F_HELPLINES, m_pDoc->units());
+    KoRuler::F_HELPLINES, m_pDoc->unit());
   hRuler->showMousePos(true);
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
   connect(vertScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerVOffset(int)));
@@ -222,7 +222,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect(hRuler, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(rulerChangedUnit(KoUnit::Unit)));
   connect(vRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
   connect(hRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
-  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
+  connect( m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
   vRuler->installEventFilter(m_pCanvas);
   hRuler->installEventFilter(m_pCanvas);
 
@@ -274,7 +274,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect( m_pDoc, SIGNAL( sig_pageNameChanged(KivioPage*,const QString&)), SLOT(slotPageRenamed(KivioPage*,const QString&)) );
 
   connect( m_pDoc, SIGNAL( sig_updateGrid()),SLOT(slotUpdateGrid()));
-  
+
   connect(m_pDoc, SIGNAL(updateActivePage(KivioPage*)), this, SLOT(setActivePage(KivioPage*)));
 
   initActions();
@@ -315,14 +315,14 @@ void KivioView::createGeometryDock()
 {
   m_pStencilGeometryPanel = new KivioStencilGeometryPanel(this);
   m_pStencilGeometryPanel->setCaption(i18n("Geometry"));
-  m_pStencilGeometryPanel->setUnit(m_pDoc->units());
+  m_pStencilGeometryPanel->setUnit(m_pDoc->unit());
   paletteManager()->addWidget(m_pStencilGeometryPanel, "stencilgeometrypanel", "geometrydocker");
 
   connect( m_pStencilGeometryPanel, SIGNAL(positionChanged(double, double)), this, SLOT(slotChangeStencilPosition(double, double)) );
   connect( m_pStencilGeometryPanel, SIGNAL(sizeChanged(double, double)), this, SLOT(slotChangeStencilSize(double, double)) );
-  connect(m_pStencilGeometryPanel, SIGNAL(rotationChanged(int)), SLOT(slotChangeStencilRotation(int)));
+//   connect(m_pStencilGeometryPanel, SIGNAL(rotationChanged(int)), SLOT(slotChangeStencilRotation(int)));
 
-  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_pStencilGeometryPanel, SLOT(setUnit(KoUnit::Unit)) );
+  connect( m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), m_pStencilGeometryPanel, SLOT(setUnit(KoUnit::Unit)) );
 }
 
 void KivioView::createBirdEyeDock()
@@ -446,8 +446,8 @@ void KivioView::setupActions()
 
   m_lineWidthAction = new KoLineWidthAction(i18n("Line Width"), "linewidth", this, SLOT(setLineWidth(double)),
     actionCollection(), "setLineWidth");
-  m_lineWidthAction->setUnit(m_pDoc->units());
-  connect(m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), m_lineWidthAction, SLOT(setUnit(KoUnit::Unit)));
+  m_lineWidthAction->setUnit(m_pDoc->unit());
+  connect(m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), m_lineWidthAction, SLOT(setUnit(KoUnit::Unit)));
 
   m_lineStyleAction = new KoLineStyleAction(i18n("Line Style"), "linestyle", this, SLOT(setLineStyle(int)),
     actionCollection(), "setLineStyle");
@@ -499,7 +499,6 @@ void KivioView::setupActions()
   m_setArrowHeads->setWhatsThis(i18n("Arrowheads allow you to add an arrow to the beginning and/or end of a line."));
   connect( m_setArrowHeads, SIGNAL(endChanged(int)), SLOT(slotSetEndArrow(int)));
   connect( m_setArrowHeads, SIGNAL(startChanged(int)), SLOT(slotSetStartArrow(int)));
-  connect( m_pDoc, SIGNAL(unitsChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
 
   KStdAction::preferences(this, SLOT(optionsDialog()), actionCollection(), "options");
 
@@ -572,7 +571,7 @@ void KivioView::addPage( KivioPage* page )
                     this, SLOT( slotPageHidden( KivioPage* ) ) );
   QObject::connect( page, SIGNAL( sig_PageShown( KivioPage* ) ),
                     this, SLOT( slotPageShown( KivioPage* ) ) );
-  
+
   updatePageStatusLabel();
 }
 
@@ -591,7 +590,7 @@ void KivioView::removePage( KivioPage *_t )
   m_pTabBar->removeTab( _t->pageName() );
   QString n = m_pDoc->map()->visiblePages().first();
   setActivePage( m_pDoc->map()->findPage( n ) );
-  
+
   updatePageStatusLabel();
 }
 
@@ -686,7 +685,7 @@ void KivioView::insertPage()
   m_pDoc->addPage(t);
   KivioAddPageCommand * cmd = new KivioAddPageCommand(i18n("Insert Page"), t);
   m_pDoc->addCommand( cmd );
-  
+
   updatePageStatusLabel();
 }
 
@@ -752,7 +751,7 @@ void KivioView::paperLayoutDlg()
   KoPageLayout l = page->paperLayout();
   KoHeadFoot headfoot;
   int tabs = FORMAT_AND_BORDERS | DISABLE_UNIT;
-  KoUnit::Unit unit = doc()->units();
+  KoUnit::Unit unit = doc()->unit();
 
   if(KoPageLayoutDia::pageLayout(l, headfoot, tabs, unit))
   {
@@ -1858,10 +1857,10 @@ void KivioView::setMousePos( int mx, int my )
   hRuler->setMousePos(mx, my);
 
   if((mx >= 0) && (my >= 0)) {
-    QString unit = KoUnit::unitName(m_pDoc->units());
+    QString unit = KoUnit::unitName(m_pDoc->unit());
     KoPoint xy = m_pCanvas->mapFromScreen(QPoint(mx, my));
-    xy.setX(KoUnit::toUserValue(xy.x(), m_pDoc->units()));
-    xy.setY(KoUnit::toUserValue(xy.y(), m_pDoc->units()));
+    xy.setX(KoUnit::toUserValue(xy.x(), m_pDoc->unit()));
+    xy.setY(KoUnit::toUserValue(xy.y(), m_pDoc->unit()));
     QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
       .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
     m_coordSLbl->setText(text);
@@ -1890,7 +1889,7 @@ void KivioView::setRulerVOffset(int v)
 
 void KivioView::rulerChangedUnit(KoUnit::Unit u)
 {
-  m_pDoc->setUnits(u);
+  m_pDoc->setUnit(u);
 }
 
 KoZoomHandler* KivioView::zoomHandler() const
@@ -2050,11 +2049,11 @@ void KivioView::stencilFormat()
     dlg.setFillColor(stencil->bgColor());
     dlg.setFillPattern(stencil->fillPattern());
   } else {
-    dlg.setLineWidth(1.0, m_pDoc->units());
+    dlg.setLineWidth(1.0, m_pDoc->unit());
     dlg.setLineColor(QColor(0, 0, 0));
   }
 
-  dlg.setLineWidth(ls.width(), m_pDoc->units());
+  dlg.setLineWidth(ls.width(), m_pDoc->unit());
   dlg.setLineColor(ls.color());
   dlg.setLinePattern(ls.style());
   dlg.setLineEndStyle(ls.capStyle());
@@ -2078,7 +2077,7 @@ void KivioView::stencilFormat()
 void KivioView::arrowHeadFormat()
 {
   KivioArrowHeadFormatDlg dlg(this);
-  dlg.setUnit(m_pDoc->units());
+  dlg.setUnit(m_pDoc->unit());
   dlg.setStartAHType(0);
   dlg.setEndAHType(0);
   dlg.setStartAHWidth(10.0);
@@ -2090,7 +2089,7 @@ void KivioView::arrowHeadFormat()
 
   if(stencil) {
     if(stencil->type() == kstConnector) {
-      dlg.setUnit(m_pDoc->units());
+      dlg.setUnit(m_pDoc->unit());
       dlg.setStartAHType(stencil->startAHType());
       dlg.setEndAHType(stencil->endAHType());
       dlg.setStartAHWidth(stencil->startAHWidth());

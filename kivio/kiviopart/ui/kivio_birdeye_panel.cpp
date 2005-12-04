@@ -158,8 +158,6 @@ void KivioBirdEyePanel::updateView()
 
   int pcw = m_zoomHandler->zoomItX(s2.width());
   int pch = m_zoomHandler->zoomItY(s2.height());
-  int pcx0 = (s1.width()-pcw)/2;
-  int pcy0 = (s1.height()-pch)/2;
 
   QPoint p0 = QPoint(px0,py0);
 
