@@ -28,9 +28,14 @@
 #include <klocale.h>
 
 #include <koGenStyles.h>
+#include <kozoomhandler.h>
+#include <koGlobal.h>
 
 #include "kivio_common.h"
 #include "kivio_settings.h"
+#include "kivio_stencil.h"
+#include "kivio_intra_stencil_data.h"
+#include "kivio_screen_painter.h"
 
 struct PaperSizeDef {
   const char* title;
@@ -1285,4 +1290,28 @@ QString Kivio::systemDefaultUnit()
   }
 
   return defMS;
+}
+
+QPixmap Kivio::generatePixmapFromStencil(int width, int height, KivioStencil* stencil)
+{
+  KoZoomHandler zoomHandler;
+  QRect rect = zoomHandler.zoomRect(stencil->rect());
+
+  double zw = (double)(width - 2) / (double)rect.width();
+  double zh = (double)(height - 2) / (double)rect.height();
+  zoomHandler.setZoomAndResolution(qRound(kMin(zw, zh) * 100.0), KoGlobal::dpiX(), KoGlobal::dpiY());
+  rect = zoomHandler.zoomRect(stencil->rect());
+
+  QPixmap pix(width, height);
+  pix.fill(Qt::white);
+  KivioScreenPainter kpainter;
+  kpainter.start(&pix);
+  kpainter.translateBy((width - rect.width()) / 2, (height - rect.height()) / 2);
+  KivioIntraStencilData data;
+  data.painter = &kpainter;
+  data.zoomHandler = &zoomHandler;
+  stencil->paint(&data);
+  kpainter.stop();
+
+  return pix;
 }

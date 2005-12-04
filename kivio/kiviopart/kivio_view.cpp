@@ -1678,8 +1678,6 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, 
 #else
     if(KApplication::keyboardModifiers() & KApplication::ControlModifier) {
 #endif
-      pStencil->setTextFont(doc()->defaultFont());
-    } else {
       pStencil->setFGColor(m_setFGColor->color());
       pStencil->setBGColor(m_setBGColor->color());
       QFont f = m_setFontFamily->font();
@@ -1693,6 +1691,8 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, 
       pStencil->setHTextAlign(hTextAlign());
       pStencil->setLinePattern(m_lineStyleAction->currentSelection());
       pStencil->setLineWidth(m_lineWidthAction->currentWidth());
+    } else {
+      pStencil->setTextFont(doc()->defaultFont());
     }
 
     // Unselect everything, then the stencil to the page, and select it

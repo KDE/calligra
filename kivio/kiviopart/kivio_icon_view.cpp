@@ -23,6 +23,8 @@
 #include "kivio_stencil_spawner_info.h"
 #include "kivio_spawner_drag.h"
 #include "kivio_common.h"
+#include "kivioglobal.h"
+#include "kivio_stencil.h"
 
 #include <qbrush.h>
 #include <qcursor.h>
@@ -65,7 +67,9 @@ void KivioIconViewItem::setStencilSpawner( KivioStencilSpawner *pSpawn )
     {
         pInfo = m_pSpawner->info();
         setText( pInfo->title() );
-        setPixmap( *(m_pSpawner->icon()) );
+        KivioStencil* stencil = m_pSpawner->newStencil();
+        setPixmap(Kivio::generatePixmapFromStencil(32, 32, stencil));
+        delete stencil;
     }
 
 }

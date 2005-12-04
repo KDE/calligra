@@ -28,6 +28,7 @@ class QDomElement;
 class QPixmap;
 class QString;
 class KoGenStyle;
+class KivioStencil;
 
 namespace Kivio
 {
@@ -91,6 +92,11 @@ namespace Kivio
    * Get system default unit
    */
   QString systemDefaultUnit();
+
+  /**
+   * Generate a pixmap from a stencil
+   */
+  QPixmap generatePixmapFromStencil(int width, int height, KivioStencil* stencil);
 }
 
 #endif
