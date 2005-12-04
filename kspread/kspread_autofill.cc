@@ -674,7 +674,7 @@ void Sheet::autofill( QRect &src, QRect &dest )
             for ( y = dest.top(); y < src.top(); y++ )
                 destList.append( nonDefaultCell( x, y ) );
             QPtrList<Cell> srcList;
-            for ( y = dest.top(); y <= dest.bottom(); ++y )
+            for ( y = src.top(); y <= src.bottom(); ++y )
             {
                 srcList.append( cellAt( x, y ) );
             }
@@ -1074,8 +1074,15 @@ void Sheet::FillSequenceWithCopy(QPtrList<Cell>& _srcList,
           // FIXME this is a workaround to avoid those nasty one minute off
           //       "dragging down" time is inaccurate overa large lists!
           //       This is the best approximation I could find (raphael)
-//           factor = 1.000002/24.  + 0.000000001;
-          factor = 0.041666751;
+          if (down)
+          {
+//             factor = 1.000002/24.  + 0.000000001;
+            factor = 0.041666751;
+          }
+          else
+          {  //when dragging "up" the error must of course be the other way round
+            factor = 0.0416665;
+          }
         }
 
         if (!down)
