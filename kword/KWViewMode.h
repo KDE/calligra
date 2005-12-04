@@ -122,7 +122,12 @@ public:
     KWCanvas *  canvas() { return m_currentCanvas; }
 
 protected:
-    // Draw the border around one page, and clear up the empty space in that page
+    /**
+     * Draw the border around one page, and clear up the empty space in that page
+     * @param crect the rect we're interested in painting (in view pixels)
+     * @param pageRect the rect for the page, in view pixels
+     * @param emptySpaceRegion the empty space to clear up inside the page (in view pixels)
+     */
     void drawOnePageBorder( QPainter * painter, const QRect & crect, const QRect & pageRect,
                             const QRegion & emptySpaceRegion );
     QRect drawRightShadow( QPainter * painter, const QRect & crect, const QRect & pageRect, int topOffset );
@@ -142,9 +147,8 @@ public:
     KWViewModeNormal( KWDocument * doc, bool drawFrameBorders ) : KWViewMode( doc, drawFrameBorders ) {}
     virtual ~KWViewModeNormal() {}
 
-    // This view mode is very easy to implement ;-P
-    virtual QPoint normalToView( const QPoint & nPoint ) { return nPoint; }
-    virtual QPoint viewToNormal( const QPoint & vPoint ) { return vPoint; }
+    virtual QPoint normalToView( const QPoint & nPoint );
+    virtual QPoint viewToNormal( const QPoint & vPoint );
     virtual QSize contentsSize();
 
     virtual const QString type() {return "ModeNormal";}

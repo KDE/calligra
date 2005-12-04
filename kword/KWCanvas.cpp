@@ -189,11 +189,7 @@ void KWCanvas::repaintAll( bool erase /* = false */ )
 
 void KWCanvas::viewportResizeEvent( QResizeEvent * )
 {
-    // repaint only in preview mode
-    if ( m_viewMode->type() == "ModePreview" )
-    {
-        viewport()->repaint( false );
-    }
+    viewport()->update();
 }
 
 void KWCanvas::print( QPainter *painter, KPrinter *printer )
@@ -1853,6 +1849,8 @@ void KWCanvas::terminateEditing( KWFrameSet *fs )
 
 void KWCanvas::setMouseMode( MouseMode newMouseMode )
 {
+    m_viewMode->setCanvas( this );
+
     if ( m_mouseMode != newMouseMode )
     {
         selectAllFrames( false );
@@ -2522,7 +2520,7 @@ KoPoint KWCanvas::caretPos()
     if (!textEdit) return KoPoint();
     KoTextCursor* cursor = textEdit->cursor();
     if (!cursor) return KoPoint();
-    KWTextFrameSet* textFrameset = 
+    KWTextFrameSet* textFrameset =
         dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->frameSet());
     if (!textFrameset) return KoPoint();
     KWFrame* currentFrame = m_currentFrameSetEdit->currentFrame();

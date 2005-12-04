@@ -33,12 +33,6 @@
 
 const unsigned short KWViewMode::s_shadowOffset = 3;
 
-QSize KWViewModeNormal::contentsSize()
-{
-    return QSize( m_doc->paperWidth(m_doc->startPage()),
-            m_doc->zoomItY( m_doc->pageManager()->bottomOfPage(m_doc->lastPage()) ) );
-}
-
 QSize KWViewMode::availableSizeForText( KWTextFrameSet* textfs )
 {
     KWFrame* frame = textfs->frameIterator().getLast();
@@ -53,7 +47,7 @@ void KWViewMode::drawOnePageBorder( QPainter * painter, const QRect & crect, con
         return;
 
     QRect pageRect( _pageRect );
-    //kdDebug() << "KWViewMode::drawOnePageBorder drawing page rect " << DEBUGRECT( pageRect ) << endl;
+    //kdDebug() << "KWViewMode::drawOnePageBorder drawing page rect " << pageRect << endl;
     painter->drawRect( pageRect );
     // Exclude page border line, to get the page contents rect (avoids flicker)
     pageRect.rLeft() += 1;
@@ -64,11 +58,9 @@ void KWViewMode::drawOnePageBorder( QPainter * painter, const QRect & crect, con
     QRect pagecrect = pageRect.intersect( crect );
     if ( !pagecrect.isEmpty() )
     {
-        //kdDebug() << "KWViewMode::drawOnePageBorder : emptySpaceRegion: " << endl; DEBUGREGION( emptySpaceRegion );
-        //kdDebug() << "KWViewMode::drawOnePageBorder pagecrect=" << DEBUGRECT( pagecrect ) << endl;
-
+        //kdDebug() << "KWViewMode::drawOnePageBorder : pagecrect=" << pagecrect << " emptySpaceRegion: " << emptySpaceRegion << endl;
         QRegion pageEmptyRegion = emptySpaceRegion.intersect( pagecrect );
-        //kdDebug() << "RESULT: pageEmptyRegion: " << endl; DEBUGREGION( pageEmptyRegion );
+        //kdDebug() << "RESULT: pageEmptyRegion: " << pageEmptyRegion << endl;
         if ( !pageEmptyRegion.isEmpty() )
             m_doc->eraseEmptySpace( painter, pageEmptyRegion, QApplication::palette().active().brush( QColorGroup::Base ) );
     }
@@ -188,6 +180,39 @@ KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc )
     }
 }
 
+////
+
+QSize KWViewModeNormal::contentsSize()
+{
+    return QSize( m_doc->paperWidth(m_doc->startPage()),
+            m_doc->zoomItY( m_doc->pageManager()->bottomOfPage(m_doc->lastPage()) ) );
+}
+
+QPoint KWViewModeNormal::normalToView( const QPoint & nPoint )
+{
+    double unzoomedY = m_doc->unzoomItY( nPoint.y() );
+    KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
+    if( !page) {
+        kdWarning(31001) << "KWViewModeNormal::normalToView request for conversion out of the document! Check your input data.. ("<< nPoint << ")" << endl;
+        return QPoint(0,0);
+    }
+    // Center horizontally
+    int xOffset = kMax( 0, ( canvas()->width() - m_doc->zoomItX( page->width() ) ) / 2 );
+    return QPoint( xOffset + nPoint.x(), nPoint.y() );
+}
+
+QPoint KWViewModeNormal::viewToNormal( const QPoint & vPoint )
+{
+    // Opposite of the above; the Y is unchanged by the centering so we can use it to get the page.
+    double unzoomedY = m_doc->unzoomItY( vPoint.y() );
+    KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
+    if( !page) {
+        kdWarning(31001) << "KWViewModeNormal::normalToView request for conversion out of the document! Check your input data.. ("<< vPoint << ")" << endl;
+        return QPoint(0,0);
+    }
+    int xOffset = kMax( 0, ( canvas()->width() - m_doc->zoomItX( page->width() ) ) / 2 );
+    return QPoint( vPoint.x() - xOffset, vPoint.y() );
+}
 
 void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )
 {
@@ -197,6 +222,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
     QRect pageRect;
 
     int lastPage = m_doc->lastPage();
+    const int canvasWidth = canvas()->width();
     double pagePosPt = 0;
     int topOfPage = 0; // in pixels
     for ( int pageNr = m_doc->startPage(); pageNr <= lastPage; pageNr++ )
@@ -205,24 +231,34 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
 
         int pageWidth = m_doc->zoomItX( page->width() );
         int pageHeight = m_doc->zoomItY( pagePosPt + page->height() ) - topOfPage;
-        if(crect.bottom() < topOfPage)
+        if ( crect.bottom() < topOfPage )
             break;
-        pageRect = QRect( 0, topOfPage, pageWidth, pageHeight );
+        // Center horizontally
+        int xOffset = kMax( 0, ( canvasWidth - pageWidth ) / 2 );
+        // Draw page border (and erase empty area inside page)
+        pageRect = QRect( xOffset, topOfPage, pageWidth, pageHeight );
         drawOnePageBorder( painter, crect, pageRect, emptySpaceRegion );
 
-        if ( crect.right() > pageWidth ) { // The area on the right of the page
-            QRect rightArea( pageWidth, topOfPage, crect.right() - pageWidth + 1, pageHeight );
+        // The area on the left of the page
+        QRect leftArea( 0, topOfPage, xOffset, pageHeight );
+        leftArea &= crect;
+        kdDebug() << k_funcinfo << "leftArea=" << leftArea << endl;
+        if ( !leftArea.isEmpty() ) {
+            painter->fillRect( leftArea,
+                               QApplication::palette().active().brush( QColorGroup::Mid ) );
+        }
 
-            QRect repaintRect = rightArea.intersect( crect );
-            if ( !repaintRect.isEmpty() )
-            {
-                painter->fillRect( repaintRect,
-                        QApplication::palette().active().brush( QColorGroup::Mid ) );
+        // The area on the right of the page
+        QRect rightArea( xOffset + pageWidth, topOfPage, crect.right() - pageWidth + 1, pageHeight );
+        rightArea &= crect;
+        if ( !rightArea.isEmpty() )
+        {
+            painter->fillRect( rightArea,
+                               QApplication::palette().active().brush( QColorGroup::Mid ) );
 
-                // Draw a shadow
-                int topOffset = ( page==0 ) ? s_shadowOffset : 0; // leave a few pixels on top, only for first page
-                drawRightShadow( painter, crect, pageRect, topOffset );
-            }
+            // Draw a shadow
+            int topOffset = ( page==0 ) ? s_shadowOffset : 0; // leave a few pixels on top, only for first page
+            drawRightShadow( painter, crect, pageRect, topOffset );
         }
         pagePosPt += page->height(); // for next page already..
         topOfPage += pageHeight;
@@ -293,7 +329,7 @@ QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
     double unzoomedY = m_doc->unzoomItY( nPoint.y() );
     KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
     if( !page) {
-        kdWarning(31001) << "KWViewModePreview::normalToView request for convertion out of te document! Check your input data.. ("<< nPoint << ")" << endl;
+        kdWarning(31001) << "KWViewModePreview::normalToView request for conversion out of the document! Check your input data.. ("<< nPoint << ")" << endl;
         return QPoint(0,0);
     }
     double yInPagePt = unzoomedY - page->offsetInDocument();// and rest
