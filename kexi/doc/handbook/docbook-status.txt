@@ -1,0 +1,91 @@
+-----------------------------------------------------
+Contents:
+  Source HTML view of the manual (as per translation from Polish)
+  Docbook view of the manual as per SVN.
+-----------------------------------------------------
+
+HTML view of the Manual:
+
+The chapter numbers in section headings here refer to
+the Chapters in the HTML manual at
+  http://iidea.pl/~js/kexi/manual/en/
+
+Chapter numbers in each descriptions refers to docbook version.
+
+Chapter 1:
+Has moved to Appendix A.
+Needs writing.
+
+
+Chapter 2:
+Largely irrelevant marketing.
+
+Useful parts are now in Chapter 1
+(some bits missing - I'll sort them).
+
+Last Section (Different datatypes) is now moved to Appendix B.
+(There are some discrepancies between HTML and reality, take 
+care when editting)
+
+Chapter 4:
+Has become Chapter 2.
+
+Chapter 8:
+Has become Chapter 3.
+
+
+-----------------------------------------------------
+
+Docbook version:
+
+The chapter numbers here refer to the Docbooked manual.
+
+The names refer to the person working on that part of the manual.
+Please contact them if you'd like to help.
+
+
+Chapter 1: Introduction (Martin)
+New text based on
+02_00_00_idx_intro_to_kexi.html Done/Removed
+02_01_00_what_is_kexi.html      Done/Removed
+02_02_00_features_of_kexi.html  Done/Removed
+02_03_00_is_kexi_for_me.html    Done/Removed
+Some work still required:
+  Use <email> tag for mailing lists (they currently won't show in a printed doc)
+  Check source text once more for any relevant missing info.
+
+Chapter 2: Kexi Basics (Raphael)
+The Kexi main window stuff is text I've written can be mered with 4.6 in HTML
+
+04_00_00_idx_basics_kexi.html   Removed. (It's empty)
+04_01_00_project_files.html     Done.
+04_02_00_running_kexi.html      Ignoring for now.
+04_03_00_creating_database.html Done.
+04_04_00_project_opening.html   TODO
+04_05_00_help_on_help.html      TODO
+04_06_00_main_application_elements.html
+                                Merge with "Kexi Main Window" section in docbook.
+04_06_01_project_navigator.html TODO
+04_06_02_object_windows.html    TODO
+04_06_03_property_editor.html   TODO
+
+Chapter 3: Configuring Kexi (Martin):
+08_00_00_kexi_tuning.html     Removed. (It's basically a chapter TOC)
+08_01_00_mdi.html             Done.
+08_02_00_dock_undock.html     Done.
+08_03_00_conf_keys.html       TODO
+
+Chapter 4: Command Reference
+Anne-Marie wrote this text, since the Polish version has
+not been translated into English yet.
+
+
+Appendix A (Raphael):
+01_01_00_what_is_db.html     TODO
+01_02_00_db_spreadsheet.html TODO
+01_03_00_design.html         TODO
+01_04_00_who_needs.html      TODO
+01_05_00_db_software.html    TODO
+
+Appendix B:
+02_04_00_differences.html     1/2 Done.  Another table to go.
