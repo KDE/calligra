@@ -1179,8 +1179,9 @@ void KWFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight,
         frame->setMinFrameHeight( newHeight );
 }
 
+// ## this should pass the viewmode as argument, probably.
 bool KWFrameSet::isFrameAtPos( const KWFrame* frame, const QPoint& point, bool borderOfFrameOnly) const {
-    QRect outerRect( frame->outerRect( m_doc->viewMode() ) );
+    QRect outerRect( frame->outerRect( m_doc->layoutViewMode() ) );
     // Give the user a bit of margin for clicking on it :)
     const int margin = 2;
     outerRect.rLeft() -= margin;

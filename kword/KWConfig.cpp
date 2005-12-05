@@ -421,9 +421,10 @@ void ConfigureInterfacePage::apply()
         m_pView->getGUI()->canvasWidget()->viewMode()->setPagesPerRow(nbPageByRow);
         doc->setNbPagePerRow(nbPageByRow);
         //m_pView->getGUI()->canvasWidget()->refreshViewMode();
-        //necessary to recreate new view because in doc->switchViewMode
-        //we delete viewmode that we want to apply
-        doc->switchViewMode( KWViewMode::create( doc->viewMode()->type(), doc ) ); // force a refresh
+        //necessary to recreate new view because in switchViewMode
+        //we delete viewmode that we want to apply (LM)
+        // This needs to be cleaned up .... (DF)
+        doc->switchViewMode( doc->viewModeType() ); // force a refresh
     }
 
     config->setGroup( "Misc" );
@@ -1043,7 +1044,7 @@ ConfigureTTSPage::ConfigureTTSPage( KWView *_view, QVBox *box, char *name )
     QHBox* hbAcceleratorPrefix = new QHBox(m_gbScreenReaderOptions);
     QWidget* spacer = new QWidget(hbAcceleratorPrefix);
     spacer->setMinimumWidth(2 * KDialog::marginHint());
-    m_lblAcceleratorPrefix = 
+    m_lblAcceleratorPrefix =
         new QLabel(i18n("A word spoken before another word", "Pr&efaced by the word:"),
         hbAcceleratorPrefix);
     m_leAcceleratorPrefixWord = new QLineEdit(i18n("Keyboard accelerator, such as Alt+F", "Accelerator"),

@@ -216,7 +216,7 @@ KWFrame * KWTextFrameSet::documentToInternal( const KoPoint &dPoint, QPoint &iPo
 #ifdef DEBUG_DTI
     kdDebug() << "KWTextFrameSet::documentToInternal dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
-    if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
+    if ( !m_doc->layoutViewMode()->hasFrames() ) { // text viewmode
         iPoint = QPoint( m_doc->ptToLayoutUnitPixX( dPoint.x() ),
                          m_doc->ptToLayoutUnitPixY( dPoint.y() ) );
         return m_frames.getFirst();
@@ -254,7 +254,7 @@ KWFrame * KWTextFrameSet::documentToInternalMouseSelection( const KoPoint &dPoin
 #ifdef DEBUG_DTI
     kdDebug() << "KWTextFrameSet::documentToInternalMouseSelection dPoint:" << dPoint.x() << "," << dPoint.y() << endl;
 #endif
-    if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
+    if ( !m_doc->layoutViewMode()->hasFrames() ) { // text viewmode
         relPos = InsideFrame;
         iPoint = QPoint( m_doc->ptToLayoutUnitPixX( dPoint.x() ),
                          m_doc->ptToLayoutUnitPixY( dPoint.y() ) );
@@ -371,7 +371,7 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
 #ifdef DEBUG_ITD
     kdDebug() << "KWTextFrameSet::internalToDocumentWithHint hintDPoint: " << hintDPoint.x() << "," << hintDPoint.y() << endl;
 #endif
-    if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
+    if ( !m_doc->layoutViewMode()->hasFrames() ) { // text viewmode
         dPoint = m_doc->layoutUnitPtToPt( m_doc->pixelToPt( iPoint ) );
         return m_frames.getFirst();
     }
@@ -418,7 +418,7 @@ KWFrame * KWTextFrameSet::internalToDocumentWithHint( const QPoint &iPoint, KoPo
 KoPoint KWTextFrameSet::internalToDocumentKnowingFrame( const KoPoint &relPoint, KWFrame* theFrame ) const
 {
     // It's ok to have theFrame == 0 in the text viewmode, but not in other modes
-    if ( m_doc->viewMode()->hasFrames() )
+    if ( m_doc->layoutViewMode()->hasFrames() )
         Q_ASSERT( theFrame );
     if ( theFrame )
         return KoPoint( relPoint.x() + theFrame->innerRect().x(),
@@ -672,10 +672,6 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
 
 void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorVisible, KWCanvas *canvas, KWFrame *theFrame )
 {
-    // set the viewmode canvas
-    // (all views share the same viewmode instance)
-    canvas->viewMode()->setCanvas( canvas );
-
     // This redraws the paragraph where the cursor is - with a small clip region around the cursor
     KWViewMode *viewMode = canvas->viewMode();
     bool hasFrames = viewMode->hasFrames();
@@ -949,7 +945,7 @@ void KWTextFrameSet::getMargins( int yp, int h, int reqMinWidth,
 #ifdef DEBUG_MARGINS
     kdDebugBody(32002) << "  getMargins: looking for m_frames between " << yp << " and " << yp+h << " (internal coords)" << endl;
 #endif
-    if ( m_doc->viewMode()->shouldAdjustMargins() )
+    if ( m_doc->layoutViewMode()->shouldAdjustMargins() )
     {
         // Principle: for every frame on top at this height, we'll move from and to
         // towards each other. The text flows between 'from' and 'to'
@@ -1161,7 +1157,7 @@ int KWTextFrameSet::formatVertically( KoTextParag * _parag, const QRect& paragRe
 {
     // WARNING: in this whole method parag can be 0. See adjustFlow()
     KWTextParag *parag = static_cast<KWTextParag *>( _parag );
-    if ( !m_doc->viewMode()->shouldFormatVertically() )
+    if ( !m_doc->layoutViewMode()->shouldFormatVertically() )
     {
         return 0;
     }
@@ -1487,7 +1483,7 @@ KWFrame * KWTextFrameSet::internalToDocument( const KoPoint &relPoint, KoPoint &
 #ifdef DEBUG_ITD
     kdDebug() << name() << " ITD called for relPoint=" << relPoint.x() << "," << relPoint.y() << endl;
 #endif
-    if ( !m_doc->viewMode()->hasFrames() ) { // text viewmode
+    if ( !m_doc->layoutViewMode()->hasFrames() ) { // text viewmode
         dPoint = relPoint;
         return m_frames.getFirst();
     }
@@ -3919,7 +3915,7 @@ void KWTextFrameSetEdit::updateUI( bool updateFormat, bool force )
     {
       m_paragLayout.lineSpacingType = parag->paragLayout().lineSpacingType;
       m_canvas->gui()->getView()->showSpacing( m_paragLayout.lineSpacingType );
-    } 
+    }
     // There are more paragraph settings, but those that are not directly
     // visible in the UI don't need to be handled here.
     // For instance parag stuff, borders etc.

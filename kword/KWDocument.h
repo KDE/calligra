@@ -530,12 +530,17 @@ public:
      * the paragraphs and characters), we currently can't have one viewmode per view.
      * It has to be the same for all views.
      */
-    KWViewMode *viewMode() const { return m_viewMode; }
+    QString viewModeType() const { return m_viewModeType; }
+
+    /**
+     * The view mode used for text layouting.
+     */
+    KWViewMode* layoutViewMode() const { return m_layoutViewMode; }
 
     /**
      * Changes m_viewMode, and updates all views to this viewmode
      */
-    void switchViewMode( KWViewMode * newViewMode );
+    void switchViewMode( const QString& newViewMode );
 
 
     /// \todo useless method
@@ -589,7 +594,7 @@ public:
 
     // Also view properties, but stored, loaded and saved here (lacking a more global object).
     bool viewFrameBorders() const { return m_viewFrameBorders; }
-    void setViewFrameBorders( bool b ) { m_viewFrameBorders = b; }
+    void setViewFrameBorders( bool b );
     void setShowRuler(bool ruler){ m_bShowRuler=ruler; }
     bool showRuler() const { return m_bShowRuler; }
 
@@ -621,9 +626,6 @@ public:
 
     int maxRecentFiles() const { return m_maxRecentFiles; }
 
-
-    //void setLastViewMode(const QString &mode){ m_lastViewMode = mode;}
-    //QString lastViewMode() const { return m_lastViewMode; }
 
     // in pt
     double defaultColumnSpacing()const{ return m_defaultColumnSpacing ;}
@@ -871,9 +873,6 @@ private:
     KoCommandHistory * m_commandHistory;
     KoAutoFormat * m_autoFormat;
 
-    /// The viewmode used by all views.
-    KWViewMode *m_viewMode;
-
     // ===== Legacy loading stuff, remove when switching to OASIS =====
     /// \note Shared between loadXML and loadComplete
     QString m_urlIntern;
@@ -933,7 +932,10 @@ private:
     int m_maxRecentFiles;
     int m_recalcFramesPending;
 
-    QString m_lastViewMode;
+    /// The name of the viewmode used by all views.
+    QString m_viewModeType;
+    /// The viewmode used for text layouting
+    KWViewMode* m_layoutViewMode;
     KWVariableCollection *m_varColl;
     KWBgSpellCheck *m_bgSpellCheck;
     KoStyleCollection *m_styleColl;

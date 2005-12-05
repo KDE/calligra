@@ -221,7 +221,7 @@ class TableInfo {
 /******************************************************************/
 /* Class: KWView                                                  */
 /******************************************************************/
-KWView::KWView( KWViewMode* viewMode, QWidget *parent, const char *name, KWDocument* doc )
+KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDocument* doc )
     : KoView( doc, parent, name )
 {
     m_doc = doc;
@@ -521,14 +521,12 @@ void KWView::initGUIButton()
     updateHeaderFooterButton();
     m_actionAllowAutoFormat->setChecked( m_doc->allowAutoFormat() );
 
-    QString mode=m_gui->canvasWidget()->viewMode()->type();
-    if(mode=="ModePreview")
+    QString mode = m_gui->canvasWidget()->viewMode()->type();
+    if (mode=="ModePreview")
         m_actionViewPreviewMode->setChecked(true);
-    else if(mode=="ModeText")
+    else if (mode=="ModeText")
         m_actionViewTextMode->setChecked(true);
-    else if(mode=="ModeNormal")
-        m_actionViewPageMode->setChecked(true);
-    else
+    else //if (mode=="ModeNormal")
         m_actionViewPageMode->setChecked(true);
     switchModeView();
 }
@@ -1624,8 +1622,8 @@ void KWView::updatePageInfo()
 
         QString oldText = m_sbPageLabel->text();
         QString newText;
-
-        newText= (m_gui->canvasWidget()->viewMode()->type()!="ModeText")? ' ' + i18n( "Page %1 of %2" ).arg(m_currentPage).arg(m_doc->pageCount())+' ' : QString::null;
+        if ( m_gui->canvasWidget()->viewMode()->hasPages() )
+            newText = ' ' + i18n( "Page %1 of %2" ).arg(m_currentPage).arg(m_doc->pageCount()) + ' ';
 
         if ( newText != oldText )
         {
@@ -2874,7 +2872,7 @@ void KWView::viewTextMode()
                 m_zoomViewModePreview = m_doc->zoom();
             showZoom( m_zoomViewModeNormal ); // share the same zoom
             setZoom( m_zoomViewModeNormal, false );
-            m_doc->switchViewMode( new KWViewModeText( m_doc, fs ) );
+            m_doc->switchViewMode( "ModeText" );
         } else
             initGUIButton(); // ensure we show the current viewmode
     }
@@ -2890,7 +2888,7 @@ void KWView::viewPageMode()
             m_zoomViewModePreview = m_doc->zoom();
         showZoom( m_zoomViewModeNormal );
         setZoom( m_zoomViewModeNormal, false );
-        m_doc->switchViewMode( new KWViewModeNormal( m_doc, viewFrameBorders() ) );
+        m_doc->switchViewMode( "ModeNormal" );
     }
     else
         m_actionViewPageMode->setChecked( true ); // always one has to be checked !
@@ -2903,7 +2901,7 @@ void KWView::viewPreviewMode()
         m_zoomViewModeNormal = m_doc->zoom();
         showZoom( m_zoomViewModePreview );
         setZoom( m_zoomViewModePreview, false );
-        m_doc->switchViewMode( new KWViewModePreview( m_doc, viewFrameBorders(), m_doc->nbPagePerRow() ) );
+        m_doc->switchViewMode( "ModePreview" );
     }
     else
         m_actionViewPreviewMode->setChecked( true ); // always one has to be checked !
@@ -5849,7 +5847,6 @@ void KWView::setViewFrameBorders(bool b)
     m_viewFrameBorders = b;
     // Store setting in doc, for further views and for saving
     m_doc->setViewFrameBorders( b );
-    m_doc->viewMode()->setDrawFrameBorders( b );
 }
 
 bool KWView::doubleClickActivation() const
@@ -6326,13 +6323,14 @@ void KWView::createStyleFromSelection()
 // Initially called by initGUIButton
 void KWView::switchModeView()
 {
+    KWCanvas* canvas = m_gui->canvasWidget();
     // Apply the same viewmode to all views (due to limitations in the text formatter)
     // So we get the viewmode to use from the document.
-    m_gui->canvasWidget()->switchViewMode( m_doc->viewMode() );
+    canvas->switchViewMode( m_doc->viewModeType() );
     slotUpdateRuler();
 
     // Now update the actions appropriately
-    QString mode = m_gui->canvasWidget()->viewMode()->type();
+    QString mode = canvas->viewMode()->type();
     bool isTextMode = mode == "ModeText";
     bool isNormalMode = mode == "ModeNormal";
     bool state = !isTextMode;
@@ -6400,14 +6398,15 @@ void KWView::switchModeView()
     if ( isTextMode )
     {
         // Make sure we edit the same frameset as the one shown in the textview ;-)
-        m_gui->canvasWidget()->editFrameSet( static_cast<KWViewModeText* >(m_doc->viewMode())->textFrameSet() );
+        canvas->editFrameSet( static_cast<KWViewModeText* >(canvas->viewMode())->textFrameSet() );
 
     }
     //remove/add "zoom to page". Not necessary in text mode view.
     changeZoomMenu( m_doc->zoom() );
     showZoom( m_doc->zoom() );
     updatePageInfo();
-    m_doc->viewMode()->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), m_doc->pageLayout() );
+    // set page layout in rulers
+    canvas->viewMode()->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), m_doc->pageLayout() );
 }
 
 void KWView::configureFootEndNote()
@@ -7406,7 +7405,7 @@ void KWLayoutWidget::resizeEvent( QResizeEvent *e )
 /******************************************************************/
 /* Class: KWGUI                                                */
 /******************************************************************/
-KWGUI::KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *daView )
+KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     : QWidget( parent, "" )
 {
     m_view = daView;

@@ -62,7 +62,7 @@
 
 #include <assert.h>
 
-KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *lGui)
+KWCanvas::KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGUI *lGui)
     : QScrollView( parent, "canvas", /*WNorthWestGravity*/ WStaticContents| WResizeNoErase | WRepaintNoErase ), m_doc( d )
 {
     m_frameViewManager = new KWFrameViewManager(d);
@@ -79,9 +79,9 @@ KWCanvas::KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *
 
 
 
-    m_frameInlineType=FT_TABLE;
-    m_viewMode = viewMode;
-    m_moveFrameCommand=0L;
+    m_frameInlineType = FT_TABLE;
+    m_viewMode = KWViewMode::create( viewMode, m_doc, this );
+    m_moveFrameCommand = 0;
 
     // Default table parameters.
     m_table.rows = 3;
@@ -165,7 +165,9 @@ KWCanvas::~KWCanvas()
 {
     delete m_moveFrameCommand;
     delete m_currentFrameSetEdit;
-    m_currentFrameSetEdit = 0L;
+    m_currentFrameSetEdit = 0;
+    delete m_viewMode;
+    m_viewMode = 0;
 }
 
 void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
@@ -198,7 +200,7 @@ void KWCanvas::print( QPainter *painter, KPrinter *printer )
     if ( m_currentFrameSetEdit )
         m_currentFrameSetEdit->focusOutEvent();
     m_printing = true;
-    KWViewMode *viewMode = new KWViewModePrint( m_doc );
+    KWViewMode *viewMode = new KWViewModePrint( m_doc, this );
     // Use page list specified in kdeprint dialogbox
     QValueList<int> pageList = printer->pageList();
     QProgressDialog progress( i18n( "Printing..." ), i18n( "Cancel" ),
@@ -252,11 +254,7 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 
 void KWCanvas::drawDocument( QPainter *painter, const QRect &crect, KWViewMode* viewMode )
 {
-    //kdDebug(32002) << "KWCanvas::drawDocument crect: " << DEBUGRECT( crect ) << endl;
-
-    // set the viewmode canvas
-    // (all views share the same viewmode instance)
-    viewMode->setCanvas( this );
+    kdDebug(32002) << "KWCanvas::drawDocument crect: " << crect << endl;
 
     // Draw the outside of the pages (shadow, gray area)
     // and the empty area first (in case of transparent frames)
@@ -335,9 +333,10 @@ void KWCanvas::keyPressEvent( QKeyEvent *e )
     // we don't get <Tab> key presses.
 }
 
-void KWCanvas::switchViewMode( KWViewMode * newViewMode )
+void KWCanvas::switchViewMode( const QString& newViewMode )
 {
-    m_viewMode = newViewMode;
+    delete m_viewMode;
+    m_viewMode = KWViewMode::create( newViewMode, m_doc, this );
 }
 
 void KWCanvas::mpEditFrame( const QPoint &nPoint, MouseMeaning meaning, QMouseEvent *event ) // mouse press in edit-frame mode
@@ -619,7 +618,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         switch ( m_mouseMode )
         {
         case MM_EDIT:
-            if ( viewMode()->type()=="ModeText") {
+            if ( !viewMode()->hasFrames() ) { // text view mode
                 KWFrameView *view = m_frameViewManager->view(m_doc->frameSet( 0 )->frame(0));
                 view->showPopup(docPoint, m_gui->getView(), QCursor::pos());
             }
@@ -1735,12 +1734,15 @@ void KWCanvas::editFrameSet( KWFrameSet * frameSet, bool onlyText /*=false*/ )
 void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index )
 {
     selectAllFrames( false );
+
+#if 0
     //active header/footer when it's possible
     // DF: what is this code doing here?
     if ( fs->isAHeader() && !m_doc->isHeaderVisible() && !(viewMode()->type()=="ModeText"))
         m_doc->setHeaderVisible( true );
     if ( fs->isAFooter() && !m_doc->isFooterVisible() && !(viewMode()->type()=="ModeText"))
         m_doc->setFooterVisible( true );
+#endif
 
     if ( !fs->isVisible( viewMode() ) )
         return;
@@ -1849,8 +1851,6 @@ void KWCanvas::terminateEditing( KWFrameSet *fs )
 
 void KWCanvas::setMouseMode( MouseMode newMouseMode )
 {
-    m_viewMode->setCanvas( this );
-
     if ( m_mouseMode != newMouseMode )
     {
         selectAllFrames( false );

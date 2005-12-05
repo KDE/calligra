@@ -197,7 +197,7 @@ KWPgNumVariable::KWPgNumVariable( KoTextDocument *textdoc, int subtype, KoVariab
 
 void KWPgNumVariable::recalc()
 {
-    if ( m_doc->viewMode()->type() == "ModeText")
+    if ( !m_doc->layoutViewMode()->hasPages() ) // ModeText
     {
         //necessary to resize it in this mode because in this mode
         //we don't call KWTextFrameSet::drawFrame()
@@ -221,7 +221,7 @@ QString KWPgNumVariable::text(bool realValue)
     if (m_varColl->variableSetting()->displayFieldCode()&& !realValue)
         return fieldCode();
     // #### ??? What?
-    else if ( m_subtype !=  VST_CURRENT_SECTION && m_doc->viewMode()->type() == "ModeText" && !realValue)
+    else if ( m_subtype !=  VST_CURRENT_SECTION && !m_doc->layoutViewMode()->hasPages() && !realValue)
         return fieldCode();
     else
         return m_varFormat->convert( m_varValue );
@@ -650,13 +650,6 @@ KWStatisticVariable::KWStatisticVariable( KoTextDocument *textdoc,  int subtype,
 
 void KWStatisticVariable::recalc()
 {
-    if ( m_doc->viewMode()->type() == "ModeText")
-    {
-        //necessary to resize it in this mode because in this mode
-        //we don't call KWTextFrameSet::drawFrame()
-        resize();
-        return;
-    }
     int nb = 0;
     ulong charsWithSpace = 0L;
     ulong charsWithoutSpace = 0L;
@@ -676,12 +669,14 @@ void KWStatisticVariable::recalc()
         if ( frameSet->isVisible() )
         {
             if ( m_subtype == VST_STATISTIC_NB_FRAME )
-                ++nb;
-            else if( m_subtype == VST_STATISTIC_NB_PICTURE && frameSet->type() == FT_PICTURE)
             {
                 ++nb;
             }
-            else if( m_subtype == VST_STATISTIC_NB_TABLE && frameSet->type() == FT_TABLE)
+            else if( m_subtype == VST_STATISTIC_NB_PICTURE && frameSet->type() == FT_PICTURE )
+            {
+                ++nb;
+            }
+            else if( m_subtype == VST_STATISTIC_NB_TABLE && frameSet->type() == FT_TABLE )
             {
                 ++nb;
             }
@@ -689,10 +684,12 @@ void KWStatisticVariable::recalc()
             {
                 ++nb;
             }
-            if ( frameInfo )
+            if ( frameInfo
+                 && (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY)
+                 && frameSet->isVisible() )
             {
-            if ( (frameSet->frameSetInfo() == KWFrameSet::FI_FOOTNOTE || frameSet->frameSetInfo() == KWFrameSet::FI_BODY) && frameSet->isVisible() )
-                frameSet->statistics( 0L, charsWithSpace, charsWithoutSpace, words, sentences, syllables, lines, false );
+                frameSet->statistics( 0L, charsWithSpace, charsWithoutSpace,
+                                      words, sentences, syllables, lines, false );
             }
         }
         if ( frameInfo )
@@ -713,15 +710,14 @@ void KWStatisticVariable::recalc()
             {
                 nb = charsWithSpace;
             }
-            else if ( m_subtype ==VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE )
+            else if ( m_subtype == VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE )
             {
                 nb = charsWithoutSpace;
             }
-            else if ( m_subtype ==VST_STATISTIC_NB_SYLLABLE )
+            else if ( m_subtype == VST_STATISTIC_NB_SYLLABLE )
             {
                 nb = syllables;
             }
-
             else
                 nb = 0;
         }
@@ -734,7 +730,7 @@ void KWStatisticVariable::recalc()
 
 QString KWStatisticVariable::text(bool realValue)
 {
-    if (m_varColl->variableSetting()->displayFieldCode()&& !realValue)
+    if ( m_varColl->variableSetting()->displayFieldCode() && !realValue )
         return fieldCode();
     else
         return m_varFormat->convert( m_varValue );

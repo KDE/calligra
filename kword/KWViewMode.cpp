@@ -113,8 +113,6 @@ QPoint KWViewMode::pageCorner( KWCanvas* canvas )
 
 QRect KWViewMode::rulerFrameRect( KWCanvas* canvas )
 {
-    setCanvas( canvas );
-
     // Set the "frame start" in the ruler (tabs are relative to that position)
     KWFrameSetEdit * edit = canvas->currentFrameSetEdit();
     KWFrame * frame = 0L;
@@ -152,12 +150,12 @@ void KWViewMode::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPageLa
 }
 
 // static
-KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc )
+KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc, KWCanvas* canvas )
 {
     Q_ASSERT(doc);
     if(viewModeType=="ModeNormal")
     {
-        return new KWViewModeNormal( doc, doc->viewFrameBorders() );
+        return new KWViewModeNormal( doc, canvas, doc->viewFrameBorders() );
     }
     else if(viewModeType=="ModeEmbedded")
     {
@@ -165,19 +163,19 @@ KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc )
     }
     else if(viewModeType=="ModePreview")
     {
-        return new KWViewModePreview( doc, doc->viewFrameBorders(), doc->nbPagePerRow() );
+        return new KWViewModePreview( doc, canvas, doc->viewFrameBorders(), doc->nbPagePerRow() );
     }
     else if(viewModeType=="ModeText")
     {
         KWTextFrameSet* fs = KWViewModeText::determineTextFrameSet( doc );
         if ( fs )
-            return new KWViewModeText( doc, fs );
-        return new KWViewModeNormal( doc, doc->viewFrameBorders() );
+            return new KWViewModeText( doc, canvas, fs );
+        return new KWViewModeNormal( doc, canvas, doc->viewFrameBorders() );
     }
     else
     {
-        kdDebug()<<viewModeType <<" mode type is unknown\n";
-        return 0L;
+        kdDebug() << viewModeType << " mode type is unknown\n";
+        return 0;
     }
 }
 
@@ -243,7 +241,6 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
         // The area on the left of the page
         QRect leftArea( 0, topOfPage, xOffset, pageHeight );
         leftArea &= crect;
-        kdDebug() << k_funcinfo << "leftArea=" << leftArea << endl;
         if ( !leftArea.isEmpty() ) {
             painter->fillRect( leftArea,
                                QApplication::palette().active().brush( QColorGroup::Mid ) );
@@ -281,6 +278,13 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
 }
 
 //////////////////////// Preview mode ////////////////////////////////
+
+KWViewModePreview::KWViewModePreview( KWDocument * doc, KWCanvas* canvas,
+                                      bool drawFrameBorders, int _nbPagePerRow )
+    : KWViewMode( doc, canvas, drawFrameBorders ),
+      m_pagesPerRow(_nbPagePerRow),
+      m_spacing(10)
+{}
 
 int KWViewModePreview::leftSpacing()
 {
@@ -406,7 +410,8 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
 }
 
 //////////////////
-KWViewModeText::KWViewModeText( KWDocument * doc, KWTextFrameSet* fs ) : KWViewMode( doc, false )
+KWViewModeText::KWViewModeText( KWDocument * doc, KWCanvas* canvas, KWTextFrameSet* fs )
+    : KWViewMode( doc, canvas, false )
 {
     Q_ASSERT( fs );
     m_textFrameSet = fs;

@@ -64,7 +64,8 @@ KWPartFrameSet::KWPartFrameSet( KWDocument* doc, const QDomElement& frameTag,
     KWChild* child = doc->createChildDoc( frame->rect(), 0 );
     setChild( child );
     child->loadOasis( frameTag, objectTag );
-    updateChildGeometry( doc->viewMode() );
+    // ### this won't work well with multiple views
+    updateChildGeometry( doc->layoutViewMode() );
 
     // This is what loads the KoDocument
     (void)child->loadOasisDocument( context.store(), context.manifestDocument() );
@@ -142,7 +143,7 @@ void KWPartFrameSet::slotChildChanged()
         // We need to apply the viewmode conversion correctly (the child is in unzoomed view coords!)
         KoRect childGeom = KoRect::fromQRect( getChild()->geometry() );
         // r is the rect in normal coordinates
-        QRect r(m_doc->viewMode()->viewToNormal( m_doc->zoomRect( childGeom ) ) );
+        QRect r(m_doc->layoutViewMode()->viewToNormal( m_doc->zoomRect( childGeom ) ) );
         frame->setLeft( r.left() / m_doc->zoomedResolutionX() );
         frame->setTop( r.top() / m_doc->zoomedResolutionY() );
         frame->setWidth( r.width() / m_doc->zoomedResolutionX() );

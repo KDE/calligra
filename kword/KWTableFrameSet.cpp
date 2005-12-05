@@ -1635,7 +1635,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
 #endif
 
             // be sure that the right border of the table is drawn even for joined cells
-            if ( !daCell && startRow == -1 && cellColumn == (m_colPositions.count()-2 ) && right )
+            if ( !daCell && startRow == -1 && cellColumn == ((int)m_colPositions.count()-2 ) && right )
             {
               // find the joined cell
               int col = cellColumn;
@@ -1644,7 +1644,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
                 col--;
                 daCell = cell(row, col);
               }
-              if ( daCell && daCell->isJoinedCell() && ( daCell->columnSpan() + col -1 ) == cellColumn )
+              if ( daCell && daCell->isJoinedCell() && ( (int)daCell->columnSpan() + col -1 ) == cellColumn )
               {
                 border = &(daCell->frame(0)->rightBorder());
                 startRow = row;

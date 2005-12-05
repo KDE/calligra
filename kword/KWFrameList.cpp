@@ -67,7 +67,7 @@ QValueList<KWFrame *> KWFrameList::framesOnTop() {
 
 void KWFrameList::setFrames(const QPtrList<KWFrame> &frames) {
     m_frames.clear();
-    if ( m_doc->viewMode() && !m_doc->viewMode()->hasFrames() )
+    if ( m_doc->layoutViewMode() && !m_doc->layoutViewMode()->hasFrames() )
         return;
 
     QPtrList<KWFrameSet> parentFramesets;

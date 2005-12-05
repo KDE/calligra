@@ -221,8 +221,8 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
     m_globalLanguage = KGlobal::locale()->language();
     m_bGlobalHyphenation = false;
     m_bGeneratingPreview = false;
-    m_lastViewMode="ModeNormal";
-    m_viewMode = 0;
+    m_viewModeType="ModeNormal";
+    m_layoutViewMode = 0;
 
     m_commandHistory = new KWCommandHistory( this );
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
@@ -311,7 +311,7 @@ KWDocument::~KWDocument()
     delete m_frameStyleColl;
     delete m_tableStyleColl;
     delete m_tableTemplateColl;
-    delete m_viewMode;
+    delete m_layoutViewMode;
     delete m_bufPixmap;
     delete m_pictureCollection;
     delete m_pageManager;
@@ -359,7 +359,7 @@ void KWDocument::initConfig()
 
       m_zoom = config->readNumEntry( "Zoom", 100 );
       m_bShowDocStruct = config->readBoolEntry( "showDocStruct", true );
-      m_lastViewMode = config->readEntry( "viewmode", "ModeNormal" );
+      m_viewModeType = config->readEntry( "viewmode", "ModeNormal" );
       setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
       setAllowAutoFormat( config->readBoolEntry( "AllowAutoFormat" , true ) );
       setShowScrollBar( config->readBoolEntry( "ShowScrollBar", true ) );
@@ -395,10 +395,10 @@ void KWDocument::initConfig()
   setZoomAndResolution( m_zoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
 
   //text mode view is not a good default for a readonly document...
-  if ( !isReadWrite() && m_lastViewMode =="ModeText" )
-      m_lastViewMode= "ModeNormal";
+  if ( !isReadWrite() && m_viewModeType =="ModeText" )
+      m_viewModeType= "ModeNormal";
 
-  m_viewMode = KWViewMode::create( m_lastViewMode, this );
+  m_layoutViewMode = KWViewMode::create( m_viewModeType, this, 0 /*no canvas*/);
 
   if(config->hasGroup("Kword Path" ) )
   {
@@ -435,9 +435,9 @@ void KWDocument::saveConfig()
         config->writeEntry( "ViewFormattingSpace", m_viewFormattingSpace );
         config->writeEntry( "ViewFrameBorders", m_viewFrameBorders );
         config->writeEntry( "Zoom", m_zoom );
-        config->writeEntry( "showDocStruct", m_bShowDocStruct);
-        config->writeEntry( "Rulers", m_bShowRuler);
-        config->writeEntry( "viewmode", m_lastViewMode);
+        config->writeEntry( "showDocStruct", m_bShowDocStruct );
+        config->writeEntry( "Rulers", m_bShowRuler );
+        config->writeEntry( "viewmode", m_viewModeType) ;
         config->writeEntry( "AllowAutoFormat", m_bAllowAutoFormat );
         config->writeEntry( "ShowGrid" , m_bShowGrid );
         config->writeEntry( "SnapToGrid" , m_bSnapToGrid );
@@ -3652,7 +3652,7 @@ void KWDocument::addShell( KoMainWindow *shell )
 
 KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 {
-    return new KWView( m_viewMode, parent, name, this );
+    return new KWView( m_viewModeType, parent, name, this );
 }
 
 // Paint this document when it's embedded
@@ -3779,7 +3779,7 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& e )
     frame->setZOrder( maxZOrder( frame->pageNumber(this) ) + 1 ); // make sure it's on top
     frameset->addFrame( frame );
     addFrameSet( frameset );
-    frameset->updateChildGeometry( viewMode() ); // set initial coordinates of 'ch' correctly
+    frameset->updateChildGeometry( layoutViewMode() ); // set initial coordinates of 'ch' correctly
 
     KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Create Part Frame"), frame);
     addCommand(cmd);
@@ -4000,7 +4000,7 @@ void KWDocument::afterAppendPage( int pageNum )
 
     recalcVariables( VT_PGNUM );
     emit pageNumChanged();
-    if ( m_viewMode->type() == "ModePreview" )
+    if ( m_viewModeType == "ModePreview" )
         repaintAllViews();
 }
 
@@ -4079,7 +4079,7 @@ void KWDocument::afterRemovePages()
     recalcVariables( VT_PGNUM );
     if ( !m_bGeneratingPreview )
         emit newContentsSize();
-    if ( m_viewMode->type() == "ModePreview" )
+    if ( m_viewModeType == "ModePreview" )
         repaintAllViews();
 }
 
@@ -4198,8 +4198,6 @@ void KWDocument::lowerMainFrames( int pageNum, int lowestZOrder )
     }
 }
 
-// TODO pass viewmode for isVisible? Depends on how framesInPage is being used...
-// -- answer to above question; kwview uses it for alerin z-order and kwdoc uses it a lot. But thats it.
 QPtrList<KWFrame> KWDocument::framesInPage( int pageNum, bool sorted ) const {
 
     ZOrderedFrameList frames;
@@ -5042,21 +5040,26 @@ void KWDocument::setGlobalHyphenation( bool hyphen )
     // In existing documents the hyphenation comes from the existing formats.
 }
 
-void KWDocument::switchViewMode( KWViewMode * newViewMode )
+void KWDocument::setViewFrameBorders( bool b )
 {
-    // Don't compare m_viewMode and newViewMode here, it would break
+    m_viewFrameBorders = b;
+    m_layoutViewMode->setDrawFrameBorders( b );
+    for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
+        (*it)->getGUI()->canvasWidget()->viewMode()->setDrawFrameBorders( b );
+}
+
+void KWDocument::switchViewMode( const QString& newViewModeType )
+{
+    // Don't compare m_viewModeType and newViewMode here, it would break
     // changing the number of pages per row for the preview mode, in kwconfig.
-    delete m_viewMode;
-    m_viewMode = newViewMode;
-    m_lastViewMode = m_viewMode->type(); // remember for saving config
+    m_viewModeType = newViewModeType;
+    delete m_layoutViewMode;
+    m_layoutViewMode = KWViewMode::create( m_viewModeType, this, 0 /*no canvas */ );
 
     //necessary to switchmode view in all canvas in first.
-    //otherwise in multiview kword crash !
-    //perhaps it's not a good idea to store m_modeView into kwcanvas.
-    //but it's necessary for the future when kword will support
-    //different view mode in different view.
+    //otherwise with more than one view kword crashes !
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
-        (*it)->getGUI()->canvasWidget()->switchViewMode( m_viewMode );
+        (*it)->getGUI()->canvasWidget()->switchViewMode( m_viewModeType );
 
     for( QValueList<KWView *>::Iterator it = m_lstViews.begin(); it != m_lstViews.end(); ++it )
         (*it)->switchModeView();

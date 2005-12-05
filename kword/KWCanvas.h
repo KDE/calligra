@@ -56,7 +56,7 @@ class KWCanvas : public QScrollView
     Q_OBJECT
 
 public:
-    KWCanvas(KWViewMode* viewMode, QWidget *parent, KWDocument *d, KWGUI *lGui);
+    KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGUI *lGui);
     virtual ~KWCanvas();
 
     KWDocument * kWordDocument() const { return m_doc; }
@@ -64,7 +64,7 @@ public:
     KWFrameViewManager* frameViewManager() { return m_frameViewManager; }
     KWFrameSetEdit *currentFrameSetEdit() const { return m_currentFrameSetEdit; }
 
-    void switchViewMode( KWViewMode * newViewMode );
+    void switchViewMode( const QString& newViewMode );
     KWViewMode *viewMode() const { return m_viewMode; }
 
     void repaintAll( bool erase = false );

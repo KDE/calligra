@@ -70,7 +70,6 @@ class KWFindReplace;
 class KoTextFormat;
 class KoFontDia;
 class KoParagDia;
-class KWViewMode;
 class KWFrameStyle;
 class KWTableStyle;
 class KoTextIterator;
@@ -93,7 +92,7 @@ class KWView : public KoView
     Q_OBJECT
 
 public:
-    KWView( KWViewMode* viewMode, QWidget *parent, const char *name, KWDocument *doc );
+    KWView( const QString& viewMode, QWidget *parent, const char *name, KWDocument *doc );
     virtual ~KWView();
 
     virtual DCOPObject* dcopObject();
@@ -530,7 +529,7 @@ protected:
 
     void spellCheckerRemoveHighlight();
 
-    void setSpacing( KoParagLayout::SpacingType spacing, const QString &commandName ); 
+    void setSpacing( KoParagLayout::SpacingType spacing, const QString &commandName );
 
 private:  // methods
     void deleteSelectedFrames();
@@ -818,7 +817,7 @@ class KWGUI : public QWidget
     Q_OBJECT
 
 public:
-    KWGUI( KWViewMode* viewMode, QWidget *parent, KWView *view );
+    KWGUI( const QString& viewMode, QWidget *parent, KWView *view );
 
     void showGUI();
 

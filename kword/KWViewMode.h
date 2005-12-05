@@ -46,7 +46,9 @@ class KoPageLayout;
 class KWViewMode
 {
 protected:
-    KWViewMode( KWDocument * doc, bool drawFrameBorders ) : m_doc( doc ), m_drawFrameBorders( drawFrameBorders ), m_currentCanvas( 0 ) {}
+    KWViewMode( KWDocument * doc, KWCanvas* canvas, bool drawFrameBorders )
+        : m_doc( doc ), m_canvas( canvas ), m_drawFrameBorders( drawFrameBorders )
+    {}
 public:
     virtual ~KWViewMode() {}
 
@@ -109,17 +111,19 @@ public:
     /** Does this viewmode know anything about frames? */
     virtual bool hasFrames() { return true; }
 
+    /** Does this viewmode know anything about pages? */
+    virtual bool hasPages() { return true; }
+
     /** Return the name of the viewmode, used for loading/saving. */
-    virtual const QString type() = 0;
+    virtual const QString type() const = 0;
 
     /** Answers the question if argument frameset has to be drawn as a text-mode
      *  text area if true, or if false as a frame with its own contents. */
     virtual bool isTextModeFrameset(KWFrameSet *) const { return false; }
 
-    static KWViewMode *create( const QString & viewModeType, KWDocument * );
+    static KWViewMode *create( const QString& viewModeType, KWDocument* doc, KWCanvas* canvas );
 
-    void        setCanvas( KWCanvas * canvas )  { m_currentCanvas = canvas; }
-    KWCanvas *  canvas() { return m_currentCanvas; }
+    KWCanvas * canvas() const { return m_canvas; }
 
 protected:
     /**
@@ -135,23 +139,23 @@ protected:
     static const unsigned short s_shadowOffset;
 
     KWDocument * m_doc;
+    KWCanvas * m_canvas;
     bool m_drawFrameBorders;
-    KWCanvas * m_currentCanvas;
-
 };
 
 /** The 'normal' view mode (pages below one another) */
 class KWViewModeNormal : public KWViewMode
 {
 public:
-    KWViewModeNormal( KWDocument * doc, bool drawFrameBorders ) : KWViewMode( doc, drawFrameBorders ) {}
+    KWViewModeNormal( KWDocument * doc, KWCanvas* canvas, bool drawFrameBorders )
+        : KWViewMode( doc, canvas, drawFrameBorders ) {}
     virtual ~KWViewModeNormal() {}
 
     virtual QPoint normalToView( const QPoint & nPoint );
     virtual QPoint viewToNormal( const QPoint & vPoint );
     virtual QSize contentsSize();
 
-    virtual const QString type() {return "ModeNormal";}
+    virtual const QString type() const { return "ModeNormal"; }
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 };
@@ -160,7 +164,8 @@ public:
 class KWViewModePrint : public KWViewModeNormal // we inherit the "normal" viewmode
 {
 public:
-    KWViewModePrint( KWDocument * doc ) : KWViewModeNormal( doc, false /*drawFrameBorders*/ ) {}
+    KWViewModePrint( KWDocument * doc, KWCanvas* canvas )
+        : KWViewModeNormal( doc, canvas, false /*drawFrameBorders*/ ) {}
     virtual ~KWViewModePrint() {}
     virtual bool drawSelections() { return false; }
 };
@@ -169,7 +174,8 @@ public:
 class KWViewModeEmbedded : public KWViewMode
 {
 public:
-    KWViewModeEmbedded ( KWDocument * doc ) : KWViewMode( doc, false /*drawFrameBorders*/ ) {}
+    KWViewModeEmbedded ( KWDocument * doc )
+        : KWViewMode( doc, 0 /*no canvas*/, false /*drawFrameBorders*/ ) {}
     virtual ~ KWViewModeEmbedded() {}
 
     // This view mode is very easy to implement ;-P
@@ -180,7 +186,7 @@ public:
     virtual void drawPageBorders( QPainter *, const QRect &, const QRegion & ){}
     virtual bool drawSelections() { return false; }
 
-    virtual const QString type() {return "ModeEmbedded";}
+    virtual const QString type() const { return "ModeEmbedded"; }
 };
 
 
@@ -189,10 +195,7 @@ public:
 class KWViewModePreview : public KWViewMode
 {
 public:
-    KWViewModePreview( KWDocument * doc, bool drawFrameBorders, int _nbPagePerRow=4 ) : KWViewMode( doc, drawFrameBorders ),
-        m_pagesPerRow(_nbPagePerRow),
-        m_spacing(10)
-    {}
+    KWViewModePreview( KWDocument * doc, KWCanvas* canvas, bool drawFrameBorders, int _nbPagePerRow );
     virtual ~KWViewModePreview() {}
 
     virtual QPoint normalToView( const QPoint & nPoint );
@@ -202,7 +205,7 @@ public:
 
     virtual void setPagesPerRow(int _nb) {m_pagesPerRow=_nb;}
     virtual int pagesPerRow() {return m_pagesPerRow;}
-    virtual const QString type() {return "ModePreview";}
+    virtual const QString type() const { return "ModePreview"; }
 
     int numRows() const;
 
@@ -222,7 +225,7 @@ class KWViewModeText : public KWViewMode
 {
 public:
 
-    KWViewModeText( KWDocument * doc, KWTextFrameSet* fs );
+    KWViewModeText( KWDocument * doc, KWCanvas* canvas, KWTextFrameSet* fs );
     virtual ~KWViewModeText() {}
 
     KWTextFrameSet *textFrameSet() const;
@@ -244,10 +247,11 @@ public:
     virtual void setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPageLayout& layout );
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
-    virtual const QString type() {return "ModeText";}
+    virtual const QString type() const { return "ModeText"; }
     virtual bool shouldFormatVertically() { return false; }
     virtual bool shouldAdjustMargins() { return false; }
     virtual bool hasFrames() { return false; }
+    virtual bool hasPages() { return false; }
 
     virtual bool isFrameSetVisible( const KWFrameSet* fs );
 
