@@ -33,7 +33,7 @@
 #include "WUView.h"
 
 
-WUView::WUView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
+WUView::WUView( const QString& viewMode, QWidget *_parent, const char *_name, KWDocument* _doc )
     : KWView( viewMode, _parent, _name, _doc ),
       m_toolBox(0)
 {

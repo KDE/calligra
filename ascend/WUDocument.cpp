@@ -47,7 +47,7 @@ bool WUDocument::initDoc(InitDocFlags /*flags*/, QWidget* /*parentWidget*/)
 
 KoView* WUDocument::createViewInstance( QWidget* parent, const char* name )
 {
-    return new WUView( viewMode(), parent, name, this );
+    return new WUView( viewModeType(), parent, name, this );
 }
 
 

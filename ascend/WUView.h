@@ -47,7 +47,7 @@ class WUView : public KWView
     Q_OBJECT
 
 public:
-    WUView( KWViewMode* viewMode, QWidget *_parent, const char *_name, KWDocument *_doc );
+    WUView( const QString& viewMode, QWidget *_parent, const char *_name, KWDocument *_doc );
     virtual ~WUView();
 
     virtual void guiActivateEvent( KParts::GUIActivateEvent *ev );
