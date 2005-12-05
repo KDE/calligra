@@ -272,8 +272,8 @@ By checking the <guilabel>Use pattern</guilabel> checkbox you can choose to
 fill with the currently selected pattern instead of with the foreground color.
 </para><para>
 Checking the <guilabel>Sample merged</guilabel> checkbox changes the behaviour
-of the fill. 
-<!-- TODO elaborate  -->
+of the fill: the extent to which the fill is done, is determined from the
+entire image instead of the current layer only.
 </para><para>
 If you check the <guilabel>Fill entire selection</guilabel> checkbox, the
 entire selection will be filled instead of only the neighboring area.
@@ -420,8 +420,9 @@ operations</link>.
 The slider and spin box at <guilabel>Fuzziness</guilabel> determine how near
 colors must be to the color at the clicked point to be added to the selection.
 </para><para>
-The <guilabel>Sample merged</guilabel> checkbox (... to be added)
-<!-- TODO elaborate  -->
+When the <guilabel>Sample merged</guilabel> checkbox is checked, the
+bounds of the selection are determined by looking at the entire image instead
+of at the current layer.
 </para>
 <para>
 <screenshot>
