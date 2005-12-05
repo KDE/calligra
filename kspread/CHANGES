@@ -8,7 +8,8 @@ since 1.4.2
 - Add a lot of QWhatsThis help to various dialogs
 - Handbook update for some dialogs
 - Implement move sheets
-- Fix date increment for autofill (#117252)
+- Fix date (and time) increment for autofill (#117252)
+- Always allow date input in ISO 8601 format, regardless of local settings (#50192)
 
 Some important developer visible changes:
 - Decouple KSpread::Cell and KSpread::Format (association instead of inheritance)

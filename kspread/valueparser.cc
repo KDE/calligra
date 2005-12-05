@@ -312,28 +312,11 @@ Value ValueParser::tryParseDate (const QString& str, bool *ok)
   }
   if (!valid)
   {
-    //try to use the standard Qt date parsing
-    tmpDate = QDate::fromString(str);
+    //try to use the standard Qt date parsing, using ISO 8601 format
+    tmpDate = QDate::fromString(str,Qt::ISODate);
     if (tmpDate.isValid())
     {
       valid = true;
-    }
-    else
-    {
-      tmpDate = QDate::fromString(str,Qt::ISODate);
-      if (tmpDate.isValid())
-      {
-        valid = true;
-      }
-      else
-      {
-        QString datestr = str;
-        tmpDate = QDate::fromString(datestr.replace("/","-"),Qt::ISODate);
-        if (tmpDate.isValid())
-        {
-            valid = true;
-        }
-      }
     }
   }
   
