@@ -45,9 +45,9 @@ DONE  4.6. Main application elements
 DONE  4.6.1. Project Navigator pane
 DONE  4.6.2. Database object windows
 DONE  4.6.3. Property pane
-5. Building simple databases
-  5.1. Designing database tables
-    5.1.1. Table Designer window
+DONE  5. Building simple databases
+DONE    5.1. Designing database tables
+DONE      5.1.1. Table Designer window
   5.2. Entering data to tables
   5.3. Designing database queries
   5.4. Designing forms
