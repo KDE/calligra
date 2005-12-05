@@ -113,6 +113,8 @@ QPoint KWViewMode::pageCorner( KWCanvas* canvas )
 
 QRect KWViewMode::rulerFrameRect( KWCanvas* canvas )
 {
+    setCanvas( canvas );
+
     // Set the "frame start" in the ruler (tabs are relative to that position)
     KWFrameSetEdit * edit = canvas->currentFrameSetEdit();
     KWFrame * frame = 0L;
@@ -129,8 +131,7 @@ QRect KWViewMode::rulerFrameRect( KWCanvas* canvas )
     }
     if ( frame )
     {
-        QRect r = m_doc->zoomRect( frame->innerRect() );
-        r = canvas->viewMode()->normalToView( r );
+        QRect r = normalToView( m_doc->zoomRect( frame->innerRect() ) );
 
         // Calculate page corner (see pageCorner above)
         int pageNum = frame->pageNumber();
