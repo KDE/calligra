@@ -254,7 +254,7 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
 
 void KWCanvas::drawDocument( QPainter *painter, const QRect &crect, KWViewMode* viewMode )
 {
-    kdDebug(32002) << "KWCanvas::drawDocument crect: " << crect << endl;
+    //kdDebug(32002) << "KWCanvas::drawDocument crect: " << crect << endl;
 
     // Draw the outside of the pages (shadow, gray area)
     // and the empty area first (in case of transparent frames)
