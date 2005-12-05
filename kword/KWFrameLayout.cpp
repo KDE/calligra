@@ -105,6 +105,7 @@ int KWFrameLayout::HeaderFooterFrameset::lastFrameNumber( int lastPage ) const {
 void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
                             int fromPage, int toPage, uint flags )
 {
+    //kdDebug(32002) << "KWFrameLayout::layout " << kdBacktrace() << endl;
     // Just debug stuff
 #ifdef DEBUG_FRAMELAYOUT
     kdDebug(32002) << "KWFrameLayout::layout " << fromPage << " to " << toPage << endl;
@@ -491,10 +492,12 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
         KWFrame* frame = headerFooter->frame( frameNumber );
         if ( *frame == rect )
             return;
-        frame->setRect( rect );
 #ifdef DEBUG_FRAMELAYOUT
-        kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->name() << " " << frame << " resized to " << rect << " pagenum=" << frame->pageNumber() << endl;
+        kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->name() << " " << frame << " resized from " << frame->rect() << " to " << rect << " pagenum=" << frame->pageNumber() << endl;
 #endif
+        frame->setTop( rect.top() );
+        frame->setLeft( rect.left() );
+        frame->setWidth( rect.width() );
     }
     else
     {
