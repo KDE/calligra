@@ -43,12 +43,12 @@
 
 class KURL;
 class KoTextFormatInterface;
-class KPresenterView;
+class KPrView;
 class KPrDocument;
 class QPainter;
 class KTextEdit;
-class KPTextObject;
-class KPObject;
+class KPrTextObject;
+class KPrObject;
 class KPopupMenu;
 class QResizeEvent;
 class QPaintEvent;
@@ -59,21 +59,21 @@ class QFocusEvent;
 class QMouseEvent;
 class QWheelEvent;
 class QKeyEvent;
-class KPPixmapObject;
-class KPBackGround;
+class KPrPixmapObject;
+class KPrBackGround;
 class QRect;
 class QSize;
 class QPoint;
-class KPresenterSoundPlayer;
+class KPrSoundPlayer;
 class KoTextObject;
 class KoParagCounter;
 class KPrPage;
 class KPrinter;
-class KPTextView;
-class KPPartObject;
+class KPrTextView;
+class KPrPartObject;
 class KCommand;
-class EffectHandler;
-class KPPageEffects;
+class KPrEffectHandler;
+class KPrPageEffects;
 /**
  * Class KPCanvas - There is a single instance of this class for a given view.
  *
@@ -86,11 +86,11 @@ class KPrCanvas : public QWidget
 public:
 
     /// constructor
-    KPrCanvas( QWidget *parent=0,const char *name=0,KPresenterView *_view=0 );
+    KPrCanvas( QWidget *parent=0,const char *name=0,KPrView *_view=0 );
     /// destructor
     ~KPrCanvas();
 
-    KPresenterView * getView()const { return m_view; }
+    KPrView * getView()const { return m_view; }
 
     // The equivalent of contentsX() and contentsY() for a QScrollView
     // The Canvas is a widget, not a scrollview (because we handle the scrollbars ourselves,
@@ -105,8 +105,8 @@ public:
     // public functions
     void selectAllObj();
     void deSelectAllObj();
-    void selectObj( KPObject* );
-    void deSelectObj( KPObject* );
+    void selectObj( KPrObject* );
+    void deSelectObj( KPrObject* );
     void setTextFormat(const KoTextFormat &format, int flags);
 
     void setTextColor( const QColor & );
@@ -130,7 +130,7 @@ public:
     void setTextDefaultFormat( );
     void setIncreaseFontSize();
     void setDecreaseFontSize();
-    KPTextObject* kpTxtObj() const;
+    KPrTextObject* kpTxtObj() const;
 
     /**
      * Start a screen presentation
@@ -160,7 +160,7 @@ public:
     int numPresSteps() const { return m_pageEffectSteps.count(); }
     int numPresPages() const { return m_presentationSlides.count(); }
 
-    bool canAssignEffect( QPtrList<KPObject> &objs ) const;
+    bool canAssignEffect( QPtrList<KPrObject> &objs ) const;
 
     void print( QPainter*, KPrinter*, float, float );
 
@@ -211,7 +211,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
 \endverbatim
      \returns True if the file was written successfully.
 
-     \sa drawPageInPix, KPresenterViewIface::exportPage
+     \sa drawPageInPix, KPrViewIface::exportPage
      */
     bool exportPage( int nPage, int nWidth, int nHeight,
                      const KURL& fileURL,
@@ -232,7 +232,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     bool oneObjectTextSelected() const;
     bool isOneObjectSelected() const;
     /** Returns the list of selected text objects */
-    QPtrList<KPTextObject> selectedTextObjs() const;
+    QPtrList<KPrTextObject> selectedTextObjs() const;
     /**
      * Returns the list of interfaces to use for changing the text format.
      * This can be either the currently edited text object,
@@ -242,7 +242,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     /**
      * Returns the list of text objects, either selected or activated.
      */
-    QPtrList<KPTextObject> applicableTextObjects() const;
+    QPtrList<KPrTextObject> applicableTextObjects() const;
 
     void setMouseSelectedObject(bool b);
 
@@ -250,21 +250,21 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     bool haveASelectedGroupObj() const;
     bool haveASelectedPixmapObj() const;
 
-    KPTextView *currentTextObjectView() const { return m_currentTextObjectView; }
+    KPrTextView *currentTextObjectView() const { return m_currentTextObjectView; }
 
-    QPtrList<KPObject> objectList() const;
+    QPtrList<KPrObject> objectList() const;
 
     // get - set data
-    const QPtrList<KPObject> & getObjectList() const;
+    const QPtrList<KPrObject> & getObjectList() const;
 
     void playSound( const QString &soundFileName );
     void stopSound();
 
-    ///for KPTextView
+    ///for KPrTextView
     void dragStarted() { mousePressed = false; }
 
     void setXimPosition( int x, int y, int w, int h, QFont *f );
-    void createEditing( KPTextObject *textObj );
+    void createEditing( KPrTextObject *textObj );
 
 
     /**
@@ -301,7 +301,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
      *
      * @param rect the size and position of the text object
      */
-    KPTextObject* insertTextObject( const KoRect &rect );
+    KPrTextObject* insertTextObject( const KoRect &rect );
 
     /**
      * @brief Add a picture
@@ -312,8 +312,8 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void changePicture( const KURL & url, QWidget *window );
 
     int numberOfObjectSelected() const;
-    KPObject *getSelectedObj() const;
-    KPPixmapObject *getSelectedImage() const;
+    KPrObject *getSelectedObj() const;
+    KPrPixmapObject *getSelectedImage() const;
 
     bool getEditMode() const { return editMode; }
 
@@ -351,7 +351,7 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void alignObjects( AlignType at );
 
     bool canMoveOneObject()const;
-    QPtrList<KPTextObject> listOfTextObjs() const;
+    QPtrList<KPrTextObject> listOfTextObjs() const;
 
     QPixmap getPicturePixmap() const;
     void closeObject(bool _close);
@@ -437,20 +437,20 @@ protected:
     /**
      * Draw obj to painter.
      */
-    void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj, int pageNum ) const;
+    void drawAllObjectsInPage( QPainter *painter, const QPtrList<KPrObject> & obj, int pageNum ) const;
 
     /**
      * Draw _objects shown at step to painter.
      * This method is used for presentation mode, printing.
      */
-    void drawObjectsPres( QPainter *painter, const QPtrList<KPObject> &_objects, PresStep step ) const;
+    void drawObjectsPres( QPainter *painter, const QPtrList<KPrObject> &_objects, PresStep step ) const;
 
     /**
      * Draw _objects to painter.
      * Only rect is painted.
      * This method is used for edit mode.
      */
-    void drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPObject> &_objects,
+    void drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPrObject> &_objects,
                           SelectionMode selectionMode, int page ) const;
 
     /**
@@ -460,8 +460,8 @@ protected:
      * textView if set print editable textobject (used by drawObjectsEdit)
      * This method is used by drawObjectsPres and drawObjectsEdit.
      */
-    void drawObjects( QPainter *painter, const QPtrList<KPObject> &objects, SelectionMode selectionMode,
-                      bool contour, KPTextView * textView, int pageNum ) const;
+    void drawObjects( QPainter *painter, const QPtrList<KPrObject> &objects, SelectionMode selectionMode,
+                      bool contour, KPrTextView * textView, int pageNum ) const;
 
     /**
      * Draw _objects of page to painter.
@@ -501,7 +501,7 @@ protected:
      * @param withoutProtected if set to true only unprotecred objects are returned
      * @return the object at position pos
      */
-    KPObject *getObjectAt( const KoPoint &pos, bool withoutProtected = false );
+    KPrObject *getObjectAt( const KoPoint &pos, bool withoutProtected = false );
     virtual void focusInEvent( QFocusEvent* ) {}
     virtual void focusOutEvent( QFocusEvent* ) {}
     virtual void enterEvent( QEvent *e );
@@ -530,7 +530,7 @@ protected:
 
     void _repaint( bool erase=true );
     void _repaint( const QRect &r );
-    void _repaint( KPObject *o );
+    void _repaint( KPrObject *o );
 
     /**
      * Draw page defined in step to painter.
@@ -548,7 +548,7 @@ protected:
      *
      * @param rect the size and position of the object
      */
-    KPPartObject *insertObject( const KoRect &rect );
+    KPrPartObject *insertObject( const KoRect &rect );
 
     /**
      * @brief Add a autoform object
@@ -566,9 +566,9 @@ protected:
     void selectPrev();
 
     void scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &pgSize,
-                                const QSize &presSize, KPPixmapObject *obj );
-    bool getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, KoSize *origSize, KoSize *currentSize );
-    void setTextBackground( KPTextObject *obj );
+                                const QSize &presSize, KPrPixmapObject *obj );
+    bool getPixmapOrigAndCurrentSize( KPrPixmapObject *&obj, KoSize *origSize, KoSize *currentSize );
+    void setTextBackground( KPrTextObject *obj );
     virtual bool eventFilter( QObject *o, QEvent *e );
     virtual bool focusNextPrevChild( bool );
 
@@ -616,10 +616,10 @@ private:
     //---- stuff needed for resizing ----
     /// resize the m_resizeObject
     void resizeObject( ModifyType _modType, const KoPoint & point );
-    /// create ResizeCmd
+    /// create KPrResizeCmd
     void finishResizeObject( const QString &name, bool layout = true );
 
-    void raiseObject( KPObject *_kpobject );
+    void raiseObject( KPrObject *_kpobject );
     void lowerObject();
     int selectedObjectPosition;
 
@@ -642,10 +642,10 @@ private:
     /**
      * Return true if object is a header/footer which is hidden.
      */
-    bool objectIsAHeaderFooterHidden(KPObject *obj) const;
+    bool objectIsAHeaderFooterHidden(KPrObject *obj) const;
 
-    KPTextObject* textUnderMouse( const QPoint & point );
-    bool checkCurrentTextEdit( KPTextObject * textObj );
+    KPrTextObject* textUnderMouse( const QPoint & point );
+    bool checkCurrentTextEdit( KPrTextObject * textObj );
 
     /**
      * @brief Snap @p pos to grid and guide lines.
@@ -703,7 +703,7 @@ private slots:
     void setSwitchingMode( bool continueTimer = true );
     void slotGotoPage();
     void slotExitPres();
-    void terminateEditing( KPTextObject * );
+    void terminateEditing( KPrTextObject * );
 
     /**
      * Do the next step of the object effect.
@@ -739,10 +739,10 @@ private:
     bool drawContour;
     ModifyType modType;
 
-    KPObject *editNum;
+    KPrObject *editNum;
 
     bool fillBlack;
-    KPresenterView *m_view;
+    KPrView *m_view;
     bool editMode, goingBack;
     /**
      * True when we are in drawing mode.
@@ -779,10 +779,10 @@ private:
     QValueList<int> m_presentationSlides;
     /// Iterator over the slides of a presentation
     QValueList<int>::Iterator m_presentationSlidesIterator;
-    /// EffectHandler for object effects
-    EffectHandler *m_effectHandler;
+    /// KPrEffectHandler for object effects
+    KPrEffectHandler *m_effectHandler;
 
-    KPPageEffects *m_pageEffect;
+    KPrPageEffects *m_pageEffect;
 
     /// EffectTimer
     QTimer m_effectTimer;
@@ -798,7 +798,7 @@ private:
 
     //---- stuff needed for resizing ----
     /// object which gets resized
-    KPObject *m_resizeObject;
+    KPrObject *m_resizeObject;
     /// size of the object at when resizing is started
     KoRect m_rectBeforeResize;
     /// should the ratio of the object kept during resize
@@ -813,7 +813,7 @@ private:
 
     //---- stuff needed for rotating ----
     /// object which gets rotated
-    KPObject *m_rotateObject;
+    KPrObject *m_rotateObject;
     /// center of the rotated object
     KoPoint m_rotateCenter;
     /// angle of the object at start of rotate
@@ -826,9 +826,9 @@ private:
     QString autoform;
     QPixmap buffer;
 
-    KPTextView *m_currentTextObjectView;
+    KPrTextView *m_currentTextObjectView;
 
-    KPresenterSoundPlayer *soundPlayer;
+    KPrSoundPlayer *soundPlayer;
 
     KoPointArray m_pointArray, m_oldCubicBezierPointArray;
     QPoint m_dragStartPoint, m_dragEndPoint, m_dragSymmetricEndPoint;
@@ -871,7 +871,7 @@ private:
     bool m_paintGuides;
 
     /// Previously spoken text object.
-    KPTextObject *m_prevSpokenTO;
+    KPrTextObject *m_prevSpokenTO;
 };
 
 #endif // __KPRCANVAS__

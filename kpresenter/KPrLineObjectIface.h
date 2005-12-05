@@ -26,13 +26,13 @@
 #include "KPrObjectIface.h"
 #include <qstring.h>
 
-class KPLineObject;
+class KPrLineObject;
 
-class KPLineObjectIface : public KPresenterObjectIface
+class KPrLineObjectIface : public KPrObjectIface
 {
     K_DCOP
 public:
-    KPLineObjectIface( KPLineObject *obj_ );
+    KPrLineObjectIface( KPrLineObject *obj_ );
 
 k_dcop:
 
@@ -43,7 +43,7 @@ k_dcop:
     void horizontalFlip();
     void verticalFlip();
 private:
-    KPLineObject *obj;
+    KPrLineObject *obj;
 };
 
 #endif

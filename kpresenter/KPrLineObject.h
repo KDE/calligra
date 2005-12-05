@@ -29,18 +29,18 @@ class QPainter;
 class DCOPObject;
 class KoXmlWriter;
 
-class KPLineObject : public KPShadowObject, public KPStartEndLine
+class KPrLineObject : public KPrShadowObject, public KPrStartEndLine
 {
 public:
-    KPLineObject();
-    KPLineObject( const KPPen &_pen, LineEnd _lineBegin,
+    KPrLineObject();
+    KPrLineObject( const KPrPen &_pen, LineEnd _lineBegin,
                   LineEnd _lineEnd, LineType _lineType );
-    virtual ~KPLineObject()
+    virtual ~KPrLineObject()
         {}
 
     virtual DCOPObject* dcopObject();
 
-    KPLineObject &operator=( const KPLineObject & );
+    KPrLineObject &operator=( const KPrLineObject & );
 
     virtual void setLineBegin( LineEnd _lineBegin )
         { lineBegin = _lineBegin; }
@@ -62,7 +62,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info);
 
     virtual void flip(bool horizontal );
 

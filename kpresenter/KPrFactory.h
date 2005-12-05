@@ -24,12 +24,12 @@
 #include <koFactory.h>
 class KAboutData;
 
-class KPresenterFactory : public KoFactory
+class KPrFactory : public KoFactory
 {
     Q_OBJECT
 public:
-    KPresenterFactory( QObject* parent = 0, const char* name = 0 );
-    ~KPresenterFactory();
+    KPrFactory( QObject* parent = 0, const char* name = 0 );
+    ~KPrFactory();
 
     virtual KParts::Part *createPartObject( QWidget *parentWidget = 0, const char *widgetName = 0, QObject *parent = 0,
                                             const char *name = 0, const char *classname = "KoDocument",

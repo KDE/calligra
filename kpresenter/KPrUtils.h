@@ -31,7 +31,7 @@ class KoZoomHandler;
 class KoSize;
 class KoPoint;
 class QDomElement;
-class KPObject;
+class KPrObject;
 
 void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const QColor & color,
                  int _w, float angle, KoZoomHandler*_zoomHandler );
@@ -48,7 +48,7 @@ QString lineEndBeginSvg( LineEnd element );
 QString saveOasisTimer( int second );
 int loadOasisTimer( const QString & timer );
 
-class KPresenterUtils
+class KPrUtils
 {
 public:
     static QCursor penCursor(); // pen tool cursors

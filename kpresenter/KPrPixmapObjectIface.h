@@ -26,13 +26,13 @@
 #include "KPrObject2DIface.h"
 #include <qstring.h>
 
-class KPPixmapObject;
+class KPrPixmapObject;
 
-class KPPixmapObjectIface : public KPresenterObject2DIface
+class KPrPixmapObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPPixmapObjectIface( KPPixmapObject *obj_ );
+    KPrPixmapObjectIface( KPrPixmapObject *obj_ );
 
 k_dcop:
     QString fileName() const;
@@ -50,7 +50,7 @@ k_dcop:
     void setPictureMirrorType(const QString & _mirror);
 
 private:
-    KPPixmapObject *obj;
+    KPrPixmapObject *obj;
 };
 
 #endif

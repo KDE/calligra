@@ -25,15 +25,15 @@
 #include <KoTextZoomHandler.h>
 #include "KPrUtils.h"
 
-PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
+KPrPBPreview::KPrPBPreview( QWidget* parent, const char* name, PaintType _paintType )
     : QFrame( parent, name )
 {
     //FIXME zoom
     _zoomHandler=new KoTextZoomHandler();
     paintType = _paintType;
-    pen = KPPen( black, 1, SolidLine );
+    pen = KPrPen( black, 1, SolidLine );
     brush = QBrush( white, SolidPattern );
-    gradient = new KPGradient( Qt::red, Qt::green, BCT_GHORZ, false, 100, 100 );
+    gradient = new KPrGradient( Qt::red, Qt::green, BCT_GHORZ, false, 100, 100 );
     savedGradient = gradient;
 
     setFrameStyle( WinPanel | Sunken );
@@ -48,7 +48,7 @@ PBPreview::PBPreview( QWidget* parent, const char* name, PaintType _paintType )
     }
 }
 
-void PBPreview::resizeEvent( QResizeEvent *e )
+void KPrPBPreview::resizeEvent( QResizeEvent *e )
 {
     QFrame::resizeEvent( e );
     if ( gradient )
@@ -60,7 +60,7 @@ void PBPreview::resizeEvent( QResizeEvent *e )
     }
 }
 
-void PBPreview::drawContents( QPainter *painter )
+void KPrPBPreview::drawContents( QPainter *painter )
 {
     painter->save();
     painter->translate( contentsRect().x(), contentsRect().y() );
@@ -102,14 +102,14 @@ void PBPreview::drawContents( QPainter *painter )
     painter->restore();
 }
 
-PBPreview::~PBPreview()
+KPrPBPreview::~KPrPBPreview()
 {
     delete _zoomHandler;
     delete savedGradient;
 }
 
 
-void PBPreview::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
+void KPrPBPreview::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
                              bool _unbalanced, int _xfactor, int _yfactor )
 {
     gradient->setColor1( _c1 );

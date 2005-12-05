@@ -30,7 +30,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 
-KPPresDurationDia::KPPresDurationDia( QWidget *parent, const char *name,
+KPrPresDurationDia::KPrPresDurationDia( QWidget *parent, const char *name,
                                       KPrDocument *_doc, QStringList _durationListString,
                                       const QString &_durationString )
     : KDialogBase( parent, name, false, "", KDialogBase::Close ),
@@ -56,7 +56,7 @@ KPPresDurationDia::KPPresDurationDia( QWidget *parent, const char *name,
 }
 
 
-void KPPresDurationDia::setupSlideList( QWidget *_page )
+void KPrPresDurationDia::setupSlideList( QWidget *_page )
 {
     slides = new KListView( _page );
     slides->addColumn( i18n( "No." ) );

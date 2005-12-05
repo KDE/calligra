@@ -29,7 +29,7 @@
 #include "global.h"
 
 class KPrDocument;
-class KPresenterView;
+class KPrView;
 class QCheckBox;
 class QSplitter;
 class QLabel;
@@ -38,20 +38,20 @@ class QCheckBox;
 class QSlider;
 class QString;
 class QComboBox;
-class KPBackGround;
-class KPObject;
+class KPrBackGround;
+class KPrObject;
 class KPPresStructObjectItem;
 class KURLRequester;
 class KIntNumInput;
-class KPresenterSoundPlayer;
-class KPPageEffects;
+class KPrSoundPlayer;
+class KPrPageEffects;
 
-class KPEffectPreview : public QLabel
+class KPrEffectPreview : public QLabel
 {
     Q_OBJECT
 
 public:
-    KPEffectPreview( QWidget *parent, KPrDocument *_doc, KPresenterView *_view );
+    KPrEffectPreview( QWidget *parent, KPrDocument *_doc, KPrView *_view );
 
 public slots:
     void setPixmap( const QPixmap& pixmap );
@@ -59,25 +59,25 @@ public slots:
 
 protected:
     KPrDocument *doc;
-    KPresenterView *view;
+    KPrView *view;
     QPixmap m_pixmap;
     QPixmap m_target;
 
     QTimer m_pageEffectTimer;
-    KPPageEffects *m_pageEffect;
+    KPrPageEffects *m_pageEffect;
 
 protected slots:
     void slotDoPageEffect();
 };
 
 
-class KPTransEffectDia: public KDialogBase
+class KPrTransEffectDia: public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KPTransEffectDia( QWidget *parent, const char *name,
-                      KPrDocument *_doc, KPresenterView *_view );
+    KPrTransEffectDia( QWidget *parent, const char *name,
+                      KPrDocument *_doc, KPrView *_view );
 
     PageEffect getPageEffect() const { return pageEffect; }
     EffectSpeed getPageEffectSpeed() const { return speed; }
@@ -94,14 +94,14 @@ protected:
     virtual void slotUser1();
 
     KPrDocument *doc;
-    KPresenterView *view;
+    KPrView *view;
 
     PageEffect pageEffect;
     EffectSpeed speed;
     bool soundEffect;
     QString soundFileName;
 
-    KPEffectPreview *effectPreview;
+    KPrEffectPreview *effectPreview;
 
     QListBox *effectList;
     QComboBox *speedCombo;
@@ -117,7 +117,7 @@ protected:
     KIntNumInput* timeSlider;
     int slideTime;
 
-    KPresenterSoundPlayer *soundPlayer;
+    KPrSoundPlayer *soundPlayer;
 
 protected slots:
 

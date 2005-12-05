@@ -25,23 +25,23 @@
 #include "KPrObject.h"
 #include "global.h"
 
-class KPGradient;
+class KPrGradient;
 class QPainter;
 class DCOPObject;
 
-class KPEllipseObject : public KP2DObject
+class KPrEllipseObject : public KPr2DObject
 {
 public:
-    KPEllipseObject();
-    KPEllipseObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
+    KPrEllipseObject();
+    KPrEllipseObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
                      const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                      bool _unbalanced, int _xfactor, int _yfactor );
-    virtual ~KPEllipseObject() {}
+    virtual ~KPrEllipseObject() {}
 
     virtual DCOPObject* dcopObject();
 
 
-    KPEllipseObject &operator=( const KPEllipseObject & );
+    KPrEllipseObject &operator=( const KPrEllipseObject & );
 
     virtual ObjType getType() const
         { return OT_ELLIPSE; }

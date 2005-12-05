@@ -20,13 +20,13 @@
 
 #include <KoTextZoomHandler.h>
 
-KPPen::KPPen()
+KPrPen::KPrPen()
  : QPen()
 {
   m_pointWidth = 1.0;
 }
 
-KPPen::KPPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style)
+KPrPen::KPrPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style)
  : QPen()
 {
   setColor(_color);
@@ -34,22 +34,22 @@ KPPen::KPPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style)
   setStyle(_style);
 }
 
-KPPen::KPPen(const QColor& _color)
+KPrPen::KPrPen(const QColor& _color)
  : QPen(_color)
 {
   m_pointWidth = 1.0;
 }
 
-KPPen::~KPPen()
+KPrPen::~KPrPen()
 {
 }
 
-void KPPen::setPointWidth(double w)
+void KPrPen::setPointWidth(double w)
 {
   m_pointWidth = w;
 }
 
-QPen KPPen::zoomedPen(KoZoomHandler* zoomHandler)
+QPen KPrPen::zoomedPen(KoZoomHandler* zoomHandler)
 {
   QPen pen = *this;
   pen.setWidth(zoomHandler->zoomItY(m_pointWidth));

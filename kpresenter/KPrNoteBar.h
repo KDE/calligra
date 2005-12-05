@@ -27,17 +27,17 @@ class QPainter;
 class QLabel;
 
 class KPrDocument;
-class KPresenterView;
+class KPrView;
 class KPrinter;
 class KTextEdit;
 
-class NoteBar : public QWidget
+class KPrNoteBar : public QWidget
 {
     Q_OBJECT
 
 public:
-    NoteBar( QWidget *_parent, KPresenterView *_view );
-    ~NoteBar();
+    KPrNoteBar( QWidget *_parent, KPrView *_view );
+    ~KPrNoteBar();
 
     void setCurrentNoteText( const QString &_text );
 
@@ -57,7 +57,7 @@ private:
     ::KTextEdit *textEdit;
     QLabel *label;
 
-    KPresenterView *view;
+    KPrView *view;
 
     bool initialize;
 };

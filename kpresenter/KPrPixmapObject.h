@@ -35,15 +35,15 @@ class QPixmap;
 
 // ### TODO rename the class (and the related files/classes) to a better name (for example KPPictureObject)
 
-class KPPixmapObject : public KP2DObject
+class KPrPixmapObject : public KPr2DObject
 {
 
 public:
-    KPPixmapObject( KoPictureCollection *_imageCollection );
-    KPPixmapObject( KoPictureCollection *_imageCollection, const KoPictureKey & key );
-    virtual ~KPPixmapObject() {}
+    KPrPixmapObject( KoPictureCollection *_imageCollection );
+    KPrPixmapObject( KoPictureCollection *_imageCollection, const KoPictureKey & key );
+    virtual ~KPrPixmapObject() {}
 
-    KPPixmapObject &operator=( const KPPixmapObject & );
+    KPrPixmapObject &operator=( const KPrPixmapObject & );
 
     virtual DCOPObject* dcopObject();
 
@@ -60,7 +60,7 @@ public:
     QSize originalSize() const
         { return image.getOriginalSize(); }
 
-    /// Deprecated, please use KPPixmapObject::setPicture
+    /// Deprecated, please use KPrPixmapObject::setPicture
     void setPixmap( const KoPictureKey & key ) KDE_DEPRECATED;
     void setPicture( const KoPictureKey & key );
 
@@ -74,7 +74,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
 
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info);
 
     virtual void draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                        int /* page */, SelectionMode selectionMode, bool drawContour = FALSE );
@@ -105,7 +105,7 @@ public:
 
     KoPicture picture() const { return image;}
 
-    /// Deprecated, please use KPPixmapObject::loadPicture
+    /// Deprecated, please use KPrPixmapObject::loadPicture
     void loadImage( const QString & fileName ) KDE_DEPRECATED;
     void loadPicture( const QString & fileName );
 
@@ -115,7 +115,7 @@ protected:
     virtual const char * getOasisElementName() const;
     virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
 
-    KPPixmapObject() {}
+    KPrPixmapObject() {}
 
     QPixmap changePictureSettings( QPixmap _tmpPixmap );
     virtual void saveOasisPictureElement( KoGenStyle &styleobjectauto ) const;

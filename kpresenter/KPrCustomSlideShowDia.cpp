@@ -36,7 +36,7 @@
 #include "KPrCustomSlideShowDia.h"
 
 
-CustomSlideShowDia::CustomSlideShowDia( KPresenterView* _view, KPrDocument *_doc, const char* name )
+KPrCustomSlideShowDia::KPrCustomSlideShowDia( KPrView* _view, KPrDocument *_doc, const char* name )
     : KDialogBase( _view, name, true, i18n("Custom Slide Show"), Ok|Cancel ), m_doc( _doc ), m_view( _view )
 {
   QWidget* page = new QWidget( this );
@@ -83,12 +83,12 @@ CustomSlideShowDia::CustomSlideShowDia( KPresenterView* _view, KPrDocument *_doc
 }
 
 
-CustomSlideShowDia::~CustomSlideShowDia()
+KPrCustomSlideShowDia::~KPrCustomSlideShowDia()
 {
-    kdDebug()<<"CustomSlideShowDia::~CustomSlideShowDia()********************\n";
+    kdDebug()<<"KPrCustomSlideShowDia::~KPrCustomSlideShowDia()********************\n";
 }
 
-void CustomSlideShowDia::init()
+void KPrCustomSlideShowDia::init()
 {
     m_customListMap = m_doc->customListSlideShow();
     CustomListMap::Iterator it;
@@ -100,7 +100,7 @@ void CustomSlideShowDia::init()
         listPageName.append( m_doc->pageList().at( i )->pageTitle() );
 }
 
-void CustomSlideShowDia::updateButton()
+void KPrCustomSlideShowDia::updateButton()
 {
     bool state = ( list->currentItem() >= 0 );
     m_pRemove->setEnabled( state );
@@ -109,29 +109,29 @@ void CustomSlideShowDia::updateButton()
     m_pTest->setEnabled( state );
 }
 
-void CustomSlideShowDia::slotTextClicked(QListBoxItem*)
+void KPrCustomSlideShowDia::slotTextClicked(QListBoxItem*)
 {
     updateButton();
 }
 
-void CustomSlideShowDia::slotDoubleClicked(QListBoxItem *)
+void KPrCustomSlideShowDia::slotDoubleClicked(QListBoxItem *)
 {
     updateButton();
     slotModify();
 }
 
-void CustomSlideShowDia::slotPresentationFinished()
+void KPrCustomSlideShowDia::slotPresentationFinished()
 {
-    kdDebug()<<"void CustomSlideShowDia::slotPresentationFinished()*************************\n";
+    kdDebug()<<"void KPrCustomSlideShowDia::slotPresentationFinished()*************************\n";
     show();
 }
 
 
-void CustomSlideShowDia::hideEvent( QHideEvent* )
+void KPrCustomSlideShowDia::hideEvent( QHideEvent* )
 {
 }
 
-void CustomSlideShowDia::slotTest()
+void KPrCustomSlideShowDia::slotTest()
 {
     QListBoxItem *item = list->selectedItem();
     if ( item )
@@ -141,7 +141,7 @@ void CustomSlideShowDia::slotTest()
     }
 }
 
-void CustomSlideShowDia::slotAdd()
+void KPrCustomSlideShowDia::slotAdd()
 {
     QStringList listCustomName;
     CustomListMap::Iterator it;
@@ -150,7 +150,7 @@ void CustomSlideShowDia::slotAdd()
     }
 
 
-    DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, listCustomName, listPageName );
+    KPrDefineCustomSlideShow * dlg = new KPrDefineCustomSlideShow( this, listCustomName, listPageName );
     if ( dlg->exec() )
     {
         //insert new element
@@ -162,7 +162,7 @@ void CustomSlideShowDia::slotAdd()
 
 }
 
-void CustomSlideShowDia::slotRemove()
+void KPrCustomSlideShowDia::slotRemove()
 {
     if (list->selectedItem() )
     {
@@ -172,13 +172,13 @@ void CustomSlideShowDia::slotRemove()
     }
 }
 
-void CustomSlideShowDia::slotOk()
+void KPrCustomSlideShowDia::slotOk()
 {
     m_doc->updateCustomListSlideShow(m_customListMap);
     accept();
 }
 
-void CustomSlideShowDia::slotModify()
+void KPrCustomSlideShowDia::slotModify()
 {
     QListBoxItem *item = list->selectedItem();
     if ( item )
@@ -190,7 +190,7 @@ void CustomSlideShowDia::slotModify()
                 listCustomName.append( it.key() );
         }
 
-        DefineCustomSlideShow * dlg = new DefineCustomSlideShow( this, item->text(), listCustomName, listPageName, m_customListMap[item->text()]);
+        KPrDefineCustomSlideShow * dlg = new KPrDefineCustomSlideShow( this, item->text(), listCustomName, listPageName, m_customListMap[item->text()]);
         if ( dlg->exec() )
         {
             //insert new element
@@ -203,7 +203,7 @@ void CustomSlideShowDia::slotModify()
 
 }
 
-void CustomSlideShowDia::slotCopy()
+void KPrCustomSlideShowDia::slotCopy()
 {
     QListBoxItem *item = list->selectedItem();
     if ( item )
@@ -223,7 +223,7 @@ void CustomSlideShowDia::slotCopy()
     }
 }
 
-bool CustomSlideShowDia::uniqueName( int val, const QString & name ) const
+bool KPrCustomSlideShowDia::uniqueName( int val, const QString & name ) const
 {
     QString str = name.arg( val );
     for ( int i= 0; i < ( int )list->count(); ++i )
@@ -235,7 +235,7 @@ bool CustomSlideShowDia::uniqueName( int val, const QString & name ) const
 }
 
 
-DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, QStringList & _listPage, const char* name )
+KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, QStringList & _listPage, const char* name )
     : KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel ),
       listNameCustomSlideShow( _listNameSlideShow )
 {
@@ -243,7 +243,7 @@ DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, QStringList &_lis
     listSlide->insertStringList( _listPage );
 }
 
-DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow,QStringList& _listPage, QStringList &_customListPage, const char* name )
+KPrDefineCustomSlideShow::KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow,QStringList& _listPage, QStringList &_customListPage, const char* name )
     : KDialogBase( parent, name, true, i18n("Define Custom Slide Show"), Ok|Cancel ),
       listNameCustomSlideShow( _listNameSlideShow )
 {
@@ -253,7 +253,7 @@ DefineCustomSlideShow::DefineCustomSlideShow( QWidget* parent, const QString &_c
     listSlideShow->insertStringList( _customListPage );
 }
 
-void DefineCustomSlideShow::init()
+void KPrDefineCustomSlideShow::init()
 {
   QWidget* page = new QWidget( this );
   setMainWidget( page );
@@ -325,12 +325,12 @@ void DefineCustomSlideShow::init()
 
 }
 
-void DefineCustomSlideShow::slideNameChanged( const QString & _name)
+void KPrDefineCustomSlideShow::slideNameChanged( const QString & _name)
 {
      enableButtonOK( !_name.isEmpty() );
 }
 
-void DefineCustomSlideShow::updateButton()
+void KPrDefineCustomSlideShow::updateButton()
 {
     int pos = listSlideShow->currentItem();
     m_moveUpSlide->setEnabled( pos>0 );
@@ -339,7 +339,7 @@ void DefineCustomSlideShow::updateButton()
     m_insertSlide->setEnabled( listSlide->currentItem()>-1 );
 }
 
-void DefineCustomSlideShow::slotMoveUpSlide()
+void KPrDefineCustomSlideShow::slotMoveUpSlide()
 {
     int c = listSlideShow->currentItem();
     if ( c < 1 ) return;
@@ -351,7 +351,7 @@ void DefineCustomSlideShow::slotMoveUpSlide()
     updateButton();
 }
 
-void DefineCustomSlideShow::slotMoveDownSlide()
+void KPrDefineCustomSlideShow::slotMoveDownSlide()
 {
     int c = listSlideShow->currentItem();
     if ( c < 0 || c == int( listSlideShow->count() ) - 1 ) return;
@@ -362,7 +362,7 @@ void DefineCustomSlideShow::slotMoveDownSlide()
     updateButton();
 }
 
-void DefineCustomSlideShow::slotMoveRemoveSlide()
+void KPrDefineCustomSlideShow::slotMoveRemoveSlide()
 {
     // move all selected items from selected to available listbox
     QListBoxItem *item = listSlideShow->firstItem();
@@ -375,7 +375,7 @@ void DefineCustomSlideShow::slotMoveRemoveSlide()
     updateButton();
 }
 
-void DefineCustomSlideShow::slotMoveInsertSlide()
+void KPrDefineCustomSlideShow::slotMoveInsertSlide()
 {
     QListBoxItem *item = listSlide->firstItem();
     while ( item ) {
@@ -388,7 +388,7 @@ void DefineCustomSlideShow::slotMoveInsertSlide()
     updateButton();
 }
 
-QStringList DefineCustomSlideShow::customListSlideShow()
+QStringList KPrDefineCustomSlideShow::customListSlideShow()
 {
     QStringList lst;
     QListBoxItem *item = listSlideShow->firstItem();
@@ -399,13 +399,13 @@ QStringList DefineCustomSlideShow::customListSlideShow()
     return lst;
 }
 
-QString DefineCustomSlideShow::customSlideShowName() const
+QString KPrDefineCustomSlideShow::customSlideShowName() const
 {
     return m_name->text();
 }
 
 
-void DefineCustomSlideShow::slotOk()
+void KPrDefineCustomSlideShow::slotOk()
 {
     if ( listNameCustomSlideShow.contains( m_name->text() ) )
     {

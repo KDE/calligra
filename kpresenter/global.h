@@ -22,7 +22,7 @@
 
 #include <kiconloader.h>
 #include "KPrFactory.h"
-#define KPBarIcon( x ) BarIcon( x, KPresenterFactory::global() )
+#define KPBarIcon( x ) BarIcon( x, KPrFactory::global() )
 
 #define MAX_UNDO_REDO 100
 

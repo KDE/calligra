@@ -25,186 +25,186 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPresenterObjectIface::KPresenterObjectIface( KPObject *obj_ )
+KPrObjectIface::KPrObjectIface( KPrObject *obj_ )
     : DCOPObject()
 {
     obj = obj_;
 }
 
-int KPresenterObjectIface::getType() const
+int KPrObjectIface::getType() const
 {
     return (int)obj->getType();
 }
 
-bool KPresenterObjectIface::isSelected() const
+bool KPrObjectIface::isSelected() const
 {
     return obj->isSelected();
 }
 
-float KPresenterObjectIface::angle() const
+float KPrObjectIface::angle() const
 {
     return obj->getAngle();
 }
 
-int KPresenterObjectIface::shadowDistance() const
+int KPrObjectIface::shadowDistance() const
 {
     return obj->getShadowDistance();
 }
 
-int KPresenterObjectIface::shadowDirection() const
+int KPrObjectIface::shadowDirection() const
 {
     return (int)obj->getShadowDirection();
 }
 
-QColor KPresenterObjectIface::shadowColor() const
+QColor KPrObjectIface::shadowColor() const
 {
     return obj->getShadowColor();
 }
 
-int KPresenterObjectIface::effect() const
+int KPrObjectIface::effect() const
 {
     return (int)obj->getEffect();
 }
 
-int KPresenterObjectIface::effect2() const
+int KPrObjectIface::effect2() const
 {
     return (int)obj->getEffect2();
 }
 
-int KPresenterObjectIface::appearStep() const
+int KPrObjectIface::appearStep() const
 {
     return obj->getAppearStep();
 }
 
-int KPresenterObjectIface::subPresSteps() const
+int KPrObjectIface::subPresSteps() const
 {
     return obj->getSubPresSteps();
 }
 
-bool KPresenterObjectIface::disappear() const
+bool KPrObjectIface::disappear() const
 {
     return obj->getDisappear();
 }
 
-int KPresenterObjectIface::disappearStep() const
+int KPrObjectIface::disappearStep() const
 {
     return obj->getDisappearStep();
 }
 
-int KPresenterObjectIface::effect3() const
+int KPrObjectIface::effect3() const
 {
     return (int)obj->getEffect3();
 }
 
-void KPresenterObjectIface::setSelected( bool _selected )
+void KPrObjectIface::setSelected( bool _selected )
 {
     obj->setSelected(_selected);
 }
 
-void KPresenterObjectIface::rotate( float _angle )
+void KPrObjectIface::rotate( float _angle )
 {
     obj->rotate(_angle);
 }
 
-void KPresenterObjectIface::setShadowDistance( int _distance )
+void KPrObjectIface::setShadowDistance( int _distance )
 {
     obj->setShadowDistance(_distance);
 }
 
-void KPresenterObjectIface::setSticky( bool b )
+void KPrObjectIface::setSticky( bool b )
 {
     obj->setSticky(b);
 }
 
-bool KPresenterObjectIface::isSticky() const
+bool KPrObjectIface::isSticky() const
 {
     return obj->isSticky();
 }
 
-void KPresenterObjectIface::shadowColor( const QColor & _color )
+void KPrObjectIface::shadowColor( const QColor & _color )
 {
     obj->setShadowColor(_color);
 }
 
-void KPresenterObjectIface::setAppearTimer( int _appearTimer )
+void KPrObjectIface::setAppearTimer( int _appearTimer )
 {
     obj->setAppearTimer(_appearTimer);
 }
 
-void KPresenterObjectIface::setDisappearTimer( int _disappearTimer )
+void KPrObjectIface::setDisappearTimer( int _disappearTimer )
 {
     obj->setDisappearTimer(_disappearTimer);
 }
 
-void KPresenterObjectIface::setAppearSoundEffect( bool b )
+void KPrObjectIface::setAppearSoundEffect( bool b )
 {
     obj->setAppearSoundEffect(b);
 }
 
-void KPresenterObjectIface::setDisappearSoundEffect( bool b )
+void KPrObjectIface::setDisappearSoundEffect( bool b )
 {
     obj->setDisappearSoundEffect(b);
 }
-void KPresenterObjectIface::setAppearSoundEffectFileName( const QString & _a_fileName )
+void KPrObjectIface::setAppearSoundEffectFileName( const QString & _a_fileName )
 {
     obj->setAppearSoundEffectFileName(_a_fileName);
 }
-void KPresenterObjectIface::setDisappearSoundEffectFileName( const QString &_d_fileName )
+void KPrObjectIface::setDisappearSoundEffectFileName( const QString &_d_fileName )
 {
     obj->setDisappearSoundEffectFileName(_d_fileName);
 }
 
-void KPresenterObjectIface::setObjectName( const QString &_objectName )
+void KPrObjectIface::setObjectName( const QString &_objectName )
 {
     obj->setObjectName(_objectName);
 }
 
-void KPresenterObjectIface::setAppearStep( int _appearStep )
+void KPrObjectIface::setAppearStep( int _appearStep )
 {
     obj->setAppearStep(_appearStep);
 }
 
-void KPresenterObjectIface::setDisappear( bool b )
+void KPrObjectIface::setDisappear( bool b )
 {
     obj->setDisappear(b);
 }
 
-int KPresenterObjectIface::appearTimer() const
+int KPrObjectIface::appearTimer() const
 {
     return obj->getAppearTimer();
 }
 
-int KPresenterObjectIface::disappearTimer() const
+int KPrObjectIface::disappearTimer() const
 {
     return obj->getDisappearTimer();
 }
 
-bool KPresenterObjectIface::appearSoundEffect() const
+bool KPrObjectIface::appearSoundEffect() const
 {
     return obj->getAppearSoundEffect();
 }
 
-bool KPresenterObjectIface::disappearSoundEffect() const
+bool KPrObjectIface::disappearSoundEffect() const
 {
     return obj->getDisappearSoundEffect();
 }
 
-QString KPresenterObjectIface::appearSoundEffectFileName() const
+QString KPrObjectIface::appearSoundEffectFileName() const
 {
     return obj->getAppearSoundEffectFileName();
 }
 
-QString KPresenterObjectIface::disappearSoundEffectFileName() const
+QString KPrObjectIface::disappearSoundEffectFileName() const
 {
     return obj->getDisappearSoundEffectFileName();
 }
 
-QString KPresenterObjectIface::typeString() const
+QString KPrObjectIface::typeString() const
 {
     return obj->getTypeString();
 }
 
-void KPresenterObjectIface::setEffect(const QString & effect)
+void KPrObjectIface::setEffect(const QString & effect)
 {
     if(effect=="NONE")
         obj->setEffect(EF_NONE);
@@ -236,7 +236,7 @@ void KPresenterObjectIface::setEffect(const QString & effect)
         kdDebug(33001)<<"Error : setEffect()\n";
 }
 
-void KPresenterObjectIface::setEffect3(const QString & effect)
+void KPrObjectIface::setEffect3(const QString & effect)
 {
     if(effect=="NONE")
         obj->setEffect3(EF3_NONE);
@@ -266,32 +266,32 @@ void KPresenterObjectIface::setEffect3(const QString & effect)
         obj->setEffect3(EF3_WIPE_BOTTOM);
 }
 
-void KPresenterObjectIface::setProtected( bool b )
+void KPrObjectIface::setProtected( bool b )
 {
     obj->setProtect(b);
 }
 
-bool KPresenterObjectIface::isProtected() const
+bool KPrObjectIface::isProtected() const
 {
     return obj->isProtect();
 }
 
-void KPresenterObjectIface::setKeepRatio( bool b )
+void KPrObjectIface::setKeepRatio( bool b )
 {
     obj->setKeepRatio(b);
 }
 
-bool KPresenterObjectIface::isKeepRatio() const
+bool KPrObjectIface::isKeepRatio() const
 {
     return obj->isKeepRatio();
 }
 
-void KPresenterObjectIface::move( double x, double y )
+void KPrObjectIface::move( double x, double y )
 {
     obj->setOrig( x, y );
 }
 
-void KPresenterObjectIface::resize( double width, double height )
+void KPrObjectIface::resize( double width, double height )
 {
     obj->setSize( width, height );
 }

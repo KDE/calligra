@@ -127,7 +127,7 @@
                 <cstring>brightnessInput</cstring>
             </property>
         </widget>
-        <widget class="PicturePreview" row="4" column="0" rowspan="1" colspan="2">
+        <widget class="KPrPicturePreview" row="4" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>picturePreview</cstring>
             </property>
@@ -142,7 +142,7 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>PicturePreview</class>
+        <class>KPrPicturePreview</class>
         <header location="global">KPrPicturePreview.h</header>>
         <sizehint>
             <width>200</width>

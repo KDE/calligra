@@ -42,13 +42,13 @@ the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
   calss KPlayObject;
   }
 */
-class KPresenterSoundPlayer : public QObject
+class KPrSoundPlayer : public QObject
 {
     Q_OBJECT
 public:
-    KPresenterSoundPlayer( const QString &fileName, QObject *parent = 0, const char *name = 0 );
+    KPrSoundPlayer( const QString &fileName, QObject *parent = 0, const char *name = 0 );
 
-    ~KPresenterSoundPlayer();
+    ~KPrSoundPlayer();
 
     void play( const QString &fileName );
     void stop();

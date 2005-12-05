@@ -54,7 +54,7 @@ AFChoose::~AFChoose()
 void AFChoose::getGroups()
 {
     // global autoforms (as we don't have an editor we don't have local ones)
-    QString afDir = locate( "autoforms", ".autoforms", KPresenterFactory::global() );
+    QString afDir = locate( "autoforms", ".autoforms", KPrFactory::global() );
 
     QFile f( afDir );
     if ( f.open(IO_ReadOnly) ) {

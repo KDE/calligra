@@ -31,7 +31,7 @@
 #include "KPrDocument.h"
 #include "KPrPage.h"
 
-KPGotoPage::KPGotoPage( const KPrDocument *doc,
+KPrGotoPage::KPrGotoPage( const KPrDocument *doc,
                         const QValueList<int> &slides, int start,
                         QWidget *parent, const char *name )
     : KDialogBase( parent, name, true, i18n("Goto Slide..."), Ok|Cancel),
@@ -69,23 +69,23 @@ KPGotoPage::KPGotoPage( const KPrDocument *doc,
         parent->setCursor( Qt::forbiddenCursor );
 }
 
-int KPGotoPage::gotoPage( const KPrDocument *doc,
+int KPrGotoPage::gotoPage( const KPrDocument *doc,
                           const QValueList<int> &slides, int start,
                           QWidget *parent)
 {
-    KPGotoPage dia( doc, slides, start,parent, 0L );
+    KPrGotoPage dia( doc, slides, start,parent, 0L );
     dia.exec();
     dia.resetCursor();
     return dia.page();
 }
 
-int KPGotoPage::page() const {
+int KPrGotoPage::page() const {
     if(result()==QDialog::Accepted)
         return spinbox->currentText().left( spinbox->currentText().find( "-" ) - 1 ).toInt();
     return oldPage;
 }
 
-void KPGotoPage::resetCursor() {
+void KPrGotoPage::resetCursor() {
     if ( parentWidget() )
         parentWidget()->setCursor( Qt::blankCursor );
 }

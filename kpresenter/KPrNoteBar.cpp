@@ -37,7 +37,7 @@
 #include "KPrPage.h"
 
 
-NoteBar::NoteBar( QWidget *_parent, KPresenterView *_view )
+KPrNoteBar::KPrNoteBar( QWidget *_parent, KPrView *_view )
     : QWidget( _parent ),
       view( _view ),
       initialize( true )
@@ -76,19 +76,19 @@ NoteBar::NoteBar( QWidget *_parent, KPresenterView *_view )
     topLayout->addWidget( textEdit );
 }
 
-NoteBar::~NoteBar()
+KPrNoteBar::~KPrNoteBar()
 {
     delete textEdit;
 }
 
-void NoteBar::setCurrentNoteText( const QString &_text )
+void KPrNoteBar::setCurrentNoteText( const QString &_text )
 {
     initialize = true;
     textEdit->setText( _text );
     initialize = false;
 }
 
-void NoteBar::slotTextChanged()
+void KPrNoteBar::slotTextChanged()
 {
     int currentPageNum = view->getCurrPgNum(); // 1 base.
     if ( currentPageNum > 0 && !initialize ) {
@@ -100,27 +100,27 @@ void NoteBar::slotTextChanged()
     }
 }
 
-void NoteBar::slotSelectionChanged()
+void KPrNoteBar::slotSelectionChanged()
 {
     kdDebug(33001) << "slotSelectionChanged(): " << textEdit->hasSelectedText() << endl;
 }
 
-void NoteBar::slotCopyAvailable( bool yes )
+void KPrNoteBar::slotCopyAvailable( bool yes )
 {
     kdDebug(33001) << "slotCopyAvailable( " << yes << " )" << endl;
 }
 
-void NoteBar::slotUndoAvailable( bool /*yes*/ )
+void KPrNoteBar::slotUndoAvailable( bool /*yes*/ )
 {
     //kdDebug(33001) << "slotUndoAvailable( " << yes << " )" << endl;
 }
 
-void NoteBar::slotRedoAvailable( bool /*yes*/ )
+void KPrNoteBar::slotRedoAvailable( bool /*yes*/ )
 {
     //kdDebug(33001) << "slotRedoAvailable( " << yes << " )" << endl;
 }
 
-void NoteBar::printNotes( QPainter *_painter, KPrinter *_printer, QValueList<int> _list )
+void KPrNoteBar::printNotes( QPainter *_painter, KPrinter *_printer, QValueList<int> _list )
 {
     // base code from $QTDIR/example/textedit/textedit.cpp
     _painter->save();
@@ -159,7 +159,7 @@ void NoteBar::printNotes( QPainter *_painter, KPrinter *_printer, QValueList<int
     _painter->restore();
 }
 
-QString NoteBar::getNotesTextForPrinting(QValueList<int> _list) const
+QString KPrNoteBar::getNotesTextForPrinting(QValueList<int> _list) const
 {
     QString allText = QString::null;
     bool firstText = true;

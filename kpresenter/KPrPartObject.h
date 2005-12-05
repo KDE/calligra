@@ -24,18 +24,18 @@
 
 #include "KPrObject.h"
 
-class KPresenterChild;
+class KPrChild;
 class KoXmlWriter;
 class KoStore;
 
-class KPPartObject : public QObject, public KP2DObject
+class KPrPartObject : public QObject, public KPr2DObject
 {
     Q_OBJECT
 public:
-    KPPartObject( KPresenterChild *_child );
-    virtual ~KPPartObject() {}
+    KPrPartObject( KPrChild *_child );
+    virtual ~KPrPartObject() {}
 
-    KPPartObject &operator=( const KPPartObject & );
+    KPrPartObject &operator=( const KPrPartObject & );
     virtual void rotate( float _angle );
 
     virtual ObjType getType() const { return OT_PART; }
@@ -47,9 +47,9 @@ public:
     void activate( QWidget *_widget );
     void deactivate();
 
-    KPresenterChild *getChild() const { return child; }
+    KPrChild *getChild() const { return child; }
     void enableDrawing( bool f ) { _enableDrawing = f; }
-    virtual void loadOasis(const QDomElement &element, KoOasisContext &context, KPRLoadingInfo *info);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext &context, KPrLoadingInfo *info);
 
 public slots:
     void slot_changed( KoChild *_koChild );
@@ -63,7 +63,7 @@ protected:
                         int /* pageNum */, bool drawingShadow, bool drawContour = FALSE );
 
     bool _enableDrawing;
-    KPresenterChild *child;
+    KPrChild *child;
 };
 
 #endif

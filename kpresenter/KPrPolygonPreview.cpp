@@ -27,7 +27,7 @@
 
 #include <math.h>
 
-PolygonPreview::PolygonPreview( QWidget* parent, const char* name)
+KPrPolygonPreview::KPrPolygonPreview( QWidget* parent, const char* name)
     : QFrame( parent, name )
 {
     setFrameStyle( WinPanel | Sunken );
@@ -37,7 +37,7 @@ PolygonPreview::PolygonPreview( QWidget* parent, const char* name)
 }
 
 
-void PolygonPreview::drawContents( QPainter *painter )
+void KPrPolygonPreview::drawContents( QPainter *painter )
 {
     double angle = 2 * M_PI / nCorners;
     double diameter = static_cast<double>( QMAX( width(), height() ) - 10 );
@@ -82,35 +82,35 @@ void PolygonPreview::drawContents( QPainter *painter )
 }
 
 
-void PolygonPreview::slotConvexConcave( bool convexConcave )
+void KPrPolygonPreview::slotConvexConcave( bool convexConcave )
 {
     isConcave = convexConcave;
     repaint();
 }
 
 
-void PolygonPreview::slotConvexPolygon()
+void KPrPolygonPreview::slotConvexPolygon()
 {
     isConcave = false;
     repaint();
 }
 
 
-void PolygonPreview::slotConcavePolygon()
+void KPrPolygonPreview::slotConcavePolygon()
 {
     isConcave = true;
     repaint();
 }
 
 
-void PolygonPreview::slotCornersValue( int value )
+void KPrPolygonPreview::slotCornersValue( int value )
 {
     nCorners = value;
     repaint();
 }
 
 
-void PolygonPreview::slotSharpnessValue( int value )
+void KPrPolygonPreview::slotSharpnessValue( int value )
 {
     sharpness = value;
     repaint();

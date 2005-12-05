@@ -24,7 +24,7 @@
 
 #include <kdialogbase.h>
 
-class KPresenterView;
+class KPrView;
 class KPrDocument;
 class KIntNumInput;
 class KColorButton;
@@ -33,11 +33,11 @@ class QCheckBox;
 class KLineEdit;
 class KDoubleNumInput;
 class KoSpellConfigWidget;
-class PenStyleWidget;
-class BrushProperty;
-class RectProperty;
-class PolygonProperty;
-class PieProperty;
+class KPrPenStyleWidget;
+class KPrBrushProperty;
+class KPrRectProperty;
+class KPrPolygonProperty;
+class KPrPieProperty;
 class KoUnitDoubleSpinBox;
 class QVGroupBox;
 
@@ -46,15 +46,15 @@ namespace KSpell2 {
 }
 
 
-class configureInterfacePage : public QWidget
+class KPrConfigureInterfacePage : public QWidget
 {
     Q_OBJECT
 public:
-    configureInterfacePage( KPresenterView *_view, QWidget *parent = 0, char *name = 0 );
+    KPrConfigureInterfacePage( KPrView *_view, QWidget *parent = 0, char *name = 0 );
     void apply();
     void slotDefault();
 private:
-    KPresenterView* m_pView;
+    KPrView* m_pView;
     KConfig* config;
     int oldNbRecentFiles;
     KDoubleNumInput* indent;
@@ -62,15 +62,15 @@ private:
     QCheckBox *showRuler, *showStatusBar;
 };
 
-class configureColorBackground : public QWidget
+class KPrConfigureColorBackground : public QWidget
 {
     Q_OBJECT
 public:
-    configureColorBackground( KPresenterView* _view, QWidget *parent = 0, char *name = 0 );
+    KPrConfigureColorBackground( KPrView* _view, QWidget *parent = 0, char *name = 0 );
     void apply();
     void slotDefault();
 protected:
-    KPresenterView* m_pView;
+    KPrView* m_pView;
     KColorButton* bgColor;
     KColorButton* gridColor;
     KConfig* config;
@@ -78,28 +78,28 @@ protected:
     QColor oldGridColor;
 } ;
 
-class configureSpellPage : public QWidget
+class KPrConfigureSpellPage : public QWidget
 {
     Q_OBJECT
 public:
-    configureSpellPage( KPresenterView *_view, QWidget *parent, char *name = 0 );
+    KPrConfigureSpellPage( KPrView *_view, QWidget *parent, char *name = 0 );
     void apply();
     void slotDefault();
 private:
-    KPresenterView* m_pView;
+    KPrView* m_pView;
     KSpell2::ConfigWidget *m_spellConfigWidget;
     KConfig* config;
 };
 
-class configureMiscPage : public QWidget
+class KPrConfigureMiscPage : public QWidget
 {
     Q_OBJECT
 public:
-    configureMiscPage( KPresenterView  *_view, QWidget *parent, char *name = 0 );
+    KPrConfigureMiscPage( KPrView  *_view, QWidget *parent, char *name = 0 );
     KCommand *apply();
     void slotDefault();
 private:
-    KPresenterView* m_pView;
+    KPrView* m_pView;
     KConfig* config;
     KIntNumInput* m_undoRedoLimit;
     int m_oldNbRedo;
@@ -109,12 +109,12 @@ private:
     KDoubleNumInput *m_rotation;
 };
 
-class configureDefaultDocPage : public QWidget
+class KPrConfigureDefaultDocPage : public QWidget
 {
     Q_OBJECT
 public:
-    configureDefaultDocPage( KPresenterView  *_view, QWidget *parent, char *name = 0 );
-    ~configureDefaultDocPage();
+    KPrConfigureDefaultDocPage( KPrView  *_view, QWidget *parent, char *name = 0 );
+    ~KPrConfigureDefaultDocPage();
     KCommand *apply();
     void slotDefault();
 public slots:
@@ -125,7 +125,7 @@ private:
     double m_oldTabStopWidth;
     bool m_oldBackupFile;
     QString m_oldLanguage;
-    KPresenterView* m_pView;
+    KPrView* m_pView;
     KConfig* config;
     QFont *font;
     QLabel *fontName;
@@ -140,49 +140,49 @@ private:
     bool m_oldHyphenation;
 };
 
-class configureToolsPage : public QWidget
+class KPrConfigureToolsPage : public QWidget
 {
     Q_OBJECT
 public:
-    configureToolsPage( KPresenterView  *_view, QWidget *parent, char *name = 0 );
-    ~configureToolsPage();
+    KPrConfigureToolsPage( KPrView  *_view, QWidget *parent, char *name = 0 );
+    ~KPrConfigureToolsPage();
     void apply();
     void slotDefault();
 public slots:
 
 private:
-    KPresenterView* m_pView;
+    KPrView* m_pView;
     KConfig* config;
 
-    PenStyleWidget *m_confPenDia;
-    BrushProperty *m_brushProperty;
-    RectProperty *m_rectProperty;
-    PolygonProperty *m_polygonProperty;
-    PieProperty *m_pieProperty;
+    KPrPenStyleWidget *m_confPenDia;
+    KPrBrushProperty *m_brushProperty;
+    KPrRectProperty *m_rectProperty;
+    KPrPolygonProperty *m_polygonProperty;
+    KPrPieProperty *m_pieProperty;
 };
 
-class configurePathPage : public QWidget
+class KPrConfigurePathPage : public QWidget
 {
     Q_OBJECT
 public:
-    configurePathPage( KPresenterView *_view, QWidget *parent, char *name = 0 );
+    KPrConfigurePathPage( KPrView *_view, QWidget *parent, char *name = 0 );
     void slotDefault();
     void apply();
 private slots:
     void slotModifyPath();
     void slotSelectionChanged(QListViewItem *);
 private:
-    KPresenterView* m_pView;
+    KPrView* m_pView;
     KConfig* config;
     KListView* m_pPathView;
     QPushButton *m_modifyPath;
 };
 
-class configureTTSPage : public QWidget
+class KPrConfigureTTSPage : public QWidget
 {
   Q_OBJECT
 public:
-  configureTTSPage( KPresenterView *_view, QWidget *parent, char *name = 0 );
+  KPrConfigureTTSPage( KPrView *_view, QWidget *parent, char *name = 0 );
   void slotDefault();
   void apply();
 private slots:
@@ -202,25 +202,25 @@ private:
 };
 
 
-class KPConfig : public KDialogBase
+class KPrConfig : public KDialogBase
 {
     Q_OBJECT
 public:
     enum { KP_INTERFACE = 1, KP_COLOR=2, KP_KSPELL=4,KP_MISC=8, KP_DOC=16, KP_TOOLS=32,KP_PATH = 64 };
-    KPConfig( KPresenterView* parent );
+    KPrConfig( KPrView* parent );
 public slots:
     void slotApply();
     void slotDefault();
     void openPage(int flags);
 private:
-    configureInterfacePage *_interfacePage;
-    configureColorBackground *_colorBackground;
-    configureSpellPage *_spellPage;
-    configureMiscPage *_miscPage;
-    configureDefaultDocPage *_defaultDocPage;
-    configureToolsPage *_toolsPage;
-    configurePathPage *m_pathPage;
-    configureTTSPage *m_ttsPage;
+    KPrConfigureInterfacePage *_interfacePage;
+    KPrConfigureColorBackground *_colorBackground;
+    KPrConfigureSpellPage *_spellPage;
+    KPrConfigureMiscPage *_miscPage;
+    KPrConfigureDefaultDocPage *_defaultDocPage;
+    KPrConfigureToolsPage *_toolsPage;
+    KPrConfigurePathPage *m_pathPage;
+    KPrConfigureTTSPage *m_ttsPage;
     KPrDocument* m_doc;
 
 };

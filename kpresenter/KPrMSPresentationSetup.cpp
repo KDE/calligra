@@ -59,14 +59,14 @@
 #include <kstdguiitem.h>
 #include <kpushbutton.h>
 
-KPMSPresentation::KPMSPresentation( KPrDocument *_doc, KPresenterView *_view )
+KPrMSPresentation::KPrMSPresentation( KPrDocument *_doc, KPrView *_view )
 {
     doc = _doc;
     view = _view;
     init();
 }
 
-KPMSPresentation::KPMSPresentation( const KPMSPresentation &msPres )
+KPrMSPresentation::KPrMSPresentation( const KPrMSPresentation &msPres )
     : title( msPres.title ),
       slideInfos( msPres.slideInfos ), backColour( msPres.backColour ),
       textColour( msPres.textColour ), path( msPres.path )
@@ -75,7 +75,7 @@ KPMSPresentation::KPMSPresentation( const KPMSPresentation &msPres )
     view = msPres.view;
 }
 
-void KPMSPresentation::initCreation( KProgress *progressBar )
+void KPrMSPresentation::initCreation( KProgress *progressBar )
 {
     int p;
 
@@ -153,7 +153,7 @@ void KPMSPresentation::initCreation( KProgress *progressBar )
 
 }
 
-void KPMSPresentation::createSlidesPictures( KProgress *progressBar )
+void KPrMSPresentation::createSlidesPictures( KProgress *progressBar )
 {
     if ( slideInfos.isEmpty() )
         return;
@@ -176,7 +176,7 @@ void KPMSPresentation::createSlidesPictures( KProgress *progressBar )
     }
 }
 
-void KPMSPresentation::createIndexFile( KProgress *progressBar )
+void KPrMSPresentation::createIndexFile( KProgress *progressBar )
 {
     int p;
     KTempFile sppFile;
@@ -269,7 +269,7 @@ void KPMSPresentation::createIndexFile( KProgress *progressBar )
     KIO::NetAccess::file_move( sppFile.name(), filenameStore, -1, true /*overwrite*/);
 }
 
-void KPMSPresentation::init()
+void KPrMSPresentation::init()
 {
     title = i18n("Slideshow");
 
@@ -290,7 +290,7 @@ void KPMSPresentation::init()
     path = KGlobalSettings::documentPath();
 }
 
-KPMSPresentationSetup::KPMSPresentationSetup( KPrDocument *_doc, KPresenterView *_view )
+KPrMSPresentationSetup::KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_view )
     : QDialog( 0, "", false ), msPres(  _doc, _view )
 {
     doc = _doc;
@@ -394,21 +394,21 @@ KPMSPresentationSetup::KPMSPresentationSetup( KPrDocument *_doc, KPresenterView 
     connect( createButton, SIGNAL( clicked() ), this, SLOT( finish() ) );
 }
 
-KPMSPresentationSetup::~KPMSPresentationSetup()
+KPrMSPresentationSetup::~KPrMSPresentationSetup()
 {
     view->enableMSPres();
 }
 
-void KPMSPresentationSetup::createMSPresentation( KPrDocument *_doc, KPresenterView *_view )
+void KPrMSPresentationSetup::createMSPresentation( KPrDocument *_doc, KPrView *_view )
 {
-    KPMSPresentationSetup *dlg = new KPMSPresentationSetup( _doc, _view );
+    KPrMSPresentationSetup *dlg = new KPrMSPresentationSetup( _doc, _view );
 
     dlg->setCaption( i18n( "Create Memory Stick Slideshow" ) );
     dlg->exec();
     delete dlg;
 }
 
-void KPMSPresentationSetup::showColourGroup(bool on)
+void KPrMSPresentationSetup::showColourGroup(bool on)
 {
     if (on) {
         colourGroup->setHidden( false );
@@ -419,12 +419,12 @@ void KPMSPresentationSetup::showColourGroup(bool on)
     }
 }
 
-void KPMSPresentationSetup::helpMe()
+void KPrMSPresentationSetup::helpMe()
 {
     kapp->invokeHelp("ms-export");
 }
 
-void KPMSPresentationSetup::finish()
+void KPrMSPresentationSetup::finish()
 {
     msPres.setTitle( title->text() );
 
@@ -481,11 +481,11 @@ void KPMSPresentationSetup::finish()
 
     close();
 
-    KPMSPresentationCreateDialog::createMSPresentation( doc, view, msPres );
+    KPrMSPresentationCreateDialog::createMSPresentation( doc, view, msPres );
 
 }
 
-void KPMSPresentationSetup::slotChoosePath(const QString &text)
+void KPrMSPresentationSetup::slotChoosePath(const QString &text)
 {
     msPres.setPath(text);
 }
@@ -493,8 +493,8 @@ void KPMSPresentationSetup::slotChoosePath(const QString &text)
 
 
 
-KPMSPresentationCreateDialog::KPMSPresentationCreateDialog( KPrDocument *_doc, KPresenterView *_view,
-                                                            const KPMSPresentation &_msPres )
+KPrMSPresentationCreateDialog::KPrMSPresentationCreateDialog( KPrDocument *_doc, KPrView *_view,
+                                                            const KPrMSPresentation &_msPres )
     : QDialog( 0, "", false ), msPres( _msPres )
 {
     doc = _doc;
@@ -503,15 +503,15 @@ KPMSPresentationCreateDialog::KPMSPresentationCreateDialog( KPrDocument *_doc, K
     setupGUI();
 }
 
-KPMSPresentationCreateDialog::~KPMSPresentationCreateDialog()
+KPrMSPresentationCreateDialog::~KPrMSPresentationCreateDialog()
 {
     view->enableMSPres();
 }
 
-void KPMSPresentationCreateDialog::createMSPresentation( KPrDocument *_doc, KPresenterView *_view,
-                                                         const KPMSPresentation &_msPres )
+void KPrMSPresentationCreateDialog::createMSPresentation( KPrDocument *_doc, KPrView *_view,
+                                                         const KPrMSPresentation &_msPres )
 {
-    KPMSPresentationCreateDialog *dlg = new KPMSPresentationCreateDialog( _doc, _view, _msPres );
+    KPrMSPresentationCreateDialog *dlg = new KPrMSPresentationCreateDialog( _doc, _view, _msPres );
 
     dlg->setCaption( i18n( "Create Memory Stick Slideshow" ) );
     dlg->resize( 400, 250 );
@@ -519,7 +519,7 @@ void KPMSPresentationCreateDialog::createMSPresentation( KPrDocument *_doc, KPre
     dlg->start();
 }
 
-void KPMSPresentationCreateDialog::start()
+void KPrMSPresentationCreateDialog::start()
 {
     setCursor( waitCursor );
     initCreation();
@@ -530,7 +530,7 @@ void KPMSPresentationCreateDialog::start()
     bDone->setEnabled( true );
 }
 
-void KPMSPresentationCreateDialog::initCreation()
+void KPrMSPresentationCreateDialog::initCreation()
 {
     QFont f = step1->font(), f2 = step1->font();
     f.setBold( true );
@@ -545,7 +545,7 @@ void KPMSPresentationCreateDialog::initCreation()
     progressBar->setProgress( progressBar->totalSteps() );
 }
 
-void KPMSPresentationCreateDialog::createSlidesPictures()
+void KPrMSPresentationCreateDialog::createSlidesPictures()
 {
     QFont f = step2->font(), f2 = f;
     f.setBold( true );
@@ -562,7 +562,7 @@ void KPMSPresentationCreateDialog::createSlidesPictures()
     progressBar->setProgress( progressBar->totalSteps() );
 }
 
-void KPMSPresentationCreateDialog::createIndexFile()
+void KPrMSPresentationCreateDialog::createIndexFile()
 {
     QFont f = step3->font(), f2 = f;
     f.setBold( true );
@@ -579,7 +579,7 @@ void KPMSPresentationCreateDialog::createIndexFile()
     progressBar->setProgress( progressBar->totalSteps() );
 }
 
-void KPMSPresentationCreateDialog::setupGUI()
+void KPrMSPresentationCreateDialog::setupGUI()
 {
     back = new QVBox( this );
     back->setMargin( KDialog::marginHint() );
@@ -609,7 +609,7 @@ void KPMSPresentationCreateDialog::setupGUI()
     connect( bDone, SIGNAL( clicked() ), this, SLOT( accept() ) );
 }
 
-void KPMSPresentationCreateDialog::resizeEvent( QResizeEvent *e )
+void KPrMSPresentationCreateDialog::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     back->resize( size() );

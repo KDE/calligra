@@ -26,33 +26,33 @@
 #include <dcopclient.h>
 #include <kdebug.h>
 
-KPPieObjectIface::KPPieObjectIface( KPPieObject *_obj )
-    : KPresenterObject2DIface(_obj)
+KPrPieObjectIface::KPrPieObjectIface( KPrKPPieObject *_obj )
+    : KPrObject2DIface(_obj)
 {
     obj = _obj;
 }
 
-void KPPieObjectIface::setPieAngle( int _p_angle )
+void KPrPieObjectIface::setPieAngle( int _p_angle )
 {
     obj->setPieAngle(_p_angle);
 }
 
-void KPPieObjectIface::setPieLength( int _p_len )
+void KPrPieObjectIface::setPieLength( int _p_len )
 {
     obj->setPieLength(_p_len);
 }
 
-int KPPieObjectIface::pieAngle() const
+int KPrPieObjectIface::pieAngle() const
 {
     return obj->getPieAngle();
 }
 
-int KPPieObjectIface::pieLength() const
+int KPrPieObjectIface::pieLength() const
 {
     return obj->getPieLength();
 }
 
-void KPPieObjectIface::setPieType( const QString & type )
+void KPrPieObjectIface::setPieType( const QString & type )
 {
     if( type =="Pie")
         obj->setPieType(PT_PIE);
@@ -62,22 +62,22 @@ void KPPieObjectIface::setPieType( const QString & type )
         obj->setPieType(PT_CHORD);
 }
 
-void KPPieObjectIface::setLineBegin( const QString & type)
+void KPrPieObjectIface::setLineBegin( const QString & type)
 {
     obj->setLineBegin(lineEndBeginFromString( type ));
 }
 
-void KPPieObjectIface::setLineEnd( const QString & type)
+void KPrPieObjectIface::setLineEnd( const QString & type)
 {
     obj->setLineEnd(lineEndBeginFromString( type ));
 }
 
-void KPPieObjectIface::horizontalFlip()
+void KPrPieObjectIface::horizontalFlip()
 {
     obj->flip( true);
 }
 
-void KPPieObjectIface::verticalFlip()
+void KPrPieObjectIface::verticalFlip()
 {
     obj->flip( false );
 }

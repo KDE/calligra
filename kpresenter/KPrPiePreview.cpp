@@ -24,7 +24,7 @@
 
 #include <qpainter.h>
 
-PiePreview::PiePreview( QWidget* parent, const char* name )
+KPrPiePreview::KPrPiePreview( QWidget* parent, const char* name )
     : QFrame( parent, name )
 {
     setFrameStyle( WinPanel | Sunken );
@@ -38,7 +38,7 @@ PiePreview::PiePreview( QWidget* parent, const char* name )
     setMinimumSize( 200, 100 );
 }
 
-void PiePreview::drawContents( QPainter* painter )
+void KPrPiePreview::drawContents( QPainter* painter )
 {
     int ow = width() - 8;
     int oh = height() - 8;

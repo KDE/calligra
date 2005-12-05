@@ -20,5 +20,5 @@
 
 #include "KPrFactory.h"
 
-K_EXPORT_COMPONENT_FACTORY( libkpresenterpart, KPresenterFactory )
+K_EXPORT_COMPONENT_FACTORY( libkpresenterpart, KPrFactory )
 

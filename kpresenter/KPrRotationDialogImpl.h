@@ -22,22 +22,22 @@
 #include <qlabel.h>
 #include <kdialogbase.h>
 
-class TextPreview;
+class KPrTextPreview;
 class RotationPropertyUI;
 class QObject;
 class QEvent;
-class CircleGroup;
+class KPrCircleGroup;
 
 /**
   * A dialog that lets the user interactively choose an angle for rotation.
   */
-class RotationDialogImpl : public KDialogBase
+class KPrRotationDialogImpl : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    RotationDialogImpl( QWidget *parent, const char* name = 0 );
-    ~RotationDialogImpl() {}
+    KPrRotationDialogImpl( QWidget *parent, const char* name = 0 );
+    ~KPrRotationDialogImpl() {}
 
     void setAngle( double angle );
     double angle();
@@ -48,9 +48,9 @@ protected slots:
     void slotOk();
 
 protected:
-    TextPreview *m_preview;
+    KPrTextPreview *m_preview;
     RotationPropertyUI *m_dialog;
-    CircleGroup *m_angleGroup;
+    KPrCircleGroup *m_angleGroup;
 
 private:
     bool noSignals;
@@ -60,7 +60,7 @@ private:
  * A toggle-button like widget that shows one pixmap when it is checked,
  *  and another when it is unselected.
  */
-class CircleToggle : public QLabel
+class KPrCircleToggle : public QLabel
 {
     Q_OBJECT
 public:
@@ -71,7 +71,7 @@ public:
      *      prepended and "dn" is appended for the checked state.
      * @param id  the id that will be used in the clicked signal
      */
-    CircleToggle(QWidget *parent, const QString &image, int id);
+    KPrCircleToggle(QWidget *parent, const QString &image, int id);
     /// return the id which is passed in the constructor
     int id() { return m_id; }
 
@@ -97,9 +97,9 @@ private:
 };
 
 /**
- * A button-group equivalent for a set of CircleToggle classes.
+ * A button-group equivalent for a set of KPrCircleToggle classes.
  */
-class CircleGroup : public QFrame
+class KPrCircleGroup : public QFrame
 {
     Q_OBJECT;
 public:
@@ -107,7 +107,7 @@ public:
      * Constructor.
      * @param parent the parent widget, as required by Qt.
      */
-    CircleGroup(QWidget *parent);
+    KPrCircleGroup(QWidget *parent);
     /**
      * Set the angle the group is currently representing. If there is a child button
      * that registred itself (using add()) with an ID that matches the argument angle
@@ -116,10 +116,10 @@ public:
      */
     void setAngle(int angle);
     /**
-     * Add a CircleToggle button as one of the representers of this circle.
+     * Add a KPrCircleToggle button as one of the representers of this circle.
      * @param button the button
      */
-    void add(CircleToggle *button);
+    void add(KPrCircleToggle *button);
 
 signals:
     /// clicked will be emitted when one of the child buttons is clicked.
@@ -129,7 +129,7 @@ private slots:
     void selectionChanged(int buttonId);
 
 private:
-    QPtrList<CircleToggle> m_buttons;
+    QPtrList<KPrCircleToggle> m_buttons;
     bool noSignals;
 };
 

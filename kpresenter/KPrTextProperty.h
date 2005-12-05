@@ -29,10 +29,10 @@
 
 #include "KPrCommand.h"
 
-class KPMarginWidget;
+class KPrMarginWidget;
 class QCheckBox;
 
-class TextProperty : public QWidget
+class KPrTextProperty : public QWidget
 {
     Q_OBJECT
 public:
@@ -42,9 +42,9 @@ public:
         Margins = 2
     };
 
-    TextProperty( QWidget *parent, const char *name, const MarginsStruct &marginsStruct,
+    KPrTextProperty( QWidget *parent, const char *name, const MarginsStruct &marginsStruct,
                   const KoUnit::Unit unit, PropValue protectContent );
-    ~TextProperty();
+    ~KPrTextProperty();
 
     int getTextPropertyChange() const;
     MarginsStruct getMarginsStruct() const;
@@ -53,7 +53,7 @@ public:
     void apply();
 
 private:
-    KPMarginWidget *m_margins;
+    KPrMarginWidget *m_margins;
     QCheckBox *m_protectContentCheck;
     KoUnit::Unit m_unit;
 

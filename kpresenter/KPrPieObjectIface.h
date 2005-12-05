@@ -26,13 +26,13 @@
 #include "KPrObject2DIface.h"
 #include <qstring.h>
 
-class KPPieObject;
+class KPrKPPieObject;
 
-class KPPieObjectIface : public KPresenterObject2DIface
+class KPrPieObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPPieObjectIface( KPPieObject *obj_ );
+    KPrPieObjectIface( KPrKPPieObject *obj_ );
 
 k_dcop:
     virtual void setPieAngle( int _p_angle );
@@ -46,7 +46,7 @@ k_dcop:
     void verticalFlip();
 
 private:
-    KPPieObject *obj;
+    KPrKPPieObject *obj;
 };
 
 #endif

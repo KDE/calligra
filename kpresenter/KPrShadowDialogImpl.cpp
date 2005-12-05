@@ -10,10 +10,10 @@
 #include "KPrShadowDialogImpl.h"
 #include "KPrTextPreview.h"
 
-ShadowDialogImpl::ShadowDialogImpl( QWidget *parent, const char* name )
+KPrShadowDialogImpl::KPrShadowDialogImpl( QWidget *parent, const char* name )
     : ShadowDialogBase( parent, name )
 {
-    _preview = new TextPreview( previewPanel );
+    _preview = new KPrTextPreview( previewPanel );
     QHBoxLayout *lay = new QHBoxLayout( previewPanel, previewPanel->lineWidth(), 0 );
     lay->addWidget( _preview );
     distanceSpinBox->setSuffix(i18n("pt"));
@@ -30,61 +30,61 @@ ShadowDialogImpl::ShadowDialogImpl( QWidget *parent, const char* name )
              SLOT( colorChanged( const QColor& ) ) );
 }
 
-void ShadowDialogImpl::setShadowDirection( ShadowDirection d )
+void KPrShadowDialogImpl::setShadowDirection( ShadowDirection d )
 {
     _preview->setShadowDirection( d );
     directionGroup->setButton( d );
 }
 
-void ShadowDialogImpl::setShadowDistance( int d )
+void KPrShadowDialogImpl::setShadowDistance( int d )
 {
     _preview->setShadowDistance( d );
     distanceSpinBox->setValue( d );
 }
 
-void ShadowDialogImpl::setShadowColor( const QColor &c )
+void KPrShadowDialogImpl::setShadowColor( const QColor &c )
 {
     _preview->setShadowColor( c );
     colorButton->setColor( c );
 }
 
-void ShadowDialogImpl::colorChanged( const QColor& c )
+void KPrShadowDialogImpl::colorChanged( const QColor& c )
 {
     _preview->setShadowColor( c );
 }
 
-void ShadowDialogImpl::directionChanged( int d )
+void KPrShadowDialogImpl::directionChanged( int d )
 {
     _preview->setShadowDirection( (ShadowDirection)d );
 }
 
-void ShadowDialogImpl::distanceChanged( int d )
+void KPrShadowDialogImpl::distanceChanged( int d )
 {
     _preview->setShadowDistance( d );
 }
 
-void ShadowDialogImpl::applyClicked()
+void KPrShadowDialogImpl::applyClicked()
 {
     emit apply();
 }
 
-void ShadowDialogImpl::okClicked()
+void KPrShadowDialogImpl::okClicked()
 {
     applyClicked();
     accept();
 }
 
-ShadowDirection ShadowDialogImpl::shadowDirection()
+ShadowDirection KPrShadowDialogImpl::shadowDirection()
 {
     return (ShadowDirection) ( directionGroup->id( directionGroup->selected() ) );
 }
 
-int ShadowDialogImpl::shadowDistance()
+int KPrShadowDialogImpl::shadowDistance()
 {
     return distanceSpinBox->value();
 }
 
-QColor ShadowDialogImpl::shadowColor()
+QColor KPrShadowDialogImpl::shadowColor()
 {
     return colorButton->color();
 }

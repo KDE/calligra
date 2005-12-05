@@ -27,17 +27,17 @@
 class QPainter;
 class DCOPObject;
 
-class KPCubicBezierCurveObject : public KPPointObject
+class KPrCubicBezierCurveObject : public KPrPointObject
 {
 public:
-    KPCubicBezierCurveObject();
-    KPCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
-                              const KPPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
-    virtual ~KPCubicBezierCurveObject() {}
+    KPrCubicBezierCurveObject();
+    KPrCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
+                              const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    virtual ~KPrCubicBezierCurveObject() {}
 
     virtual DCOPObject* dcopObject();
 
-    KPCubicBezierCurveObject &operator=( const KPCubicBezierCurveObject & );
+    KPrCubicBezierCurveObject &operator=( const KPrCubicBezierCurveObject & );
 
     virtual ObjType getType() const { return OT_CUBICBEZIERCURVE; }
     virtual QString getTypeString() const { return i18n("Cubic Bezier Curve"); }
@@ -45,7 +45,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
 
     virtual double load( const QDomElement &element );
-    virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo* info );
+    virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo* info );
 
     virtual void flip(bool horizontal );
     void closeObject(bool _close);

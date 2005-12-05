@@ -24,7 +24,7 @@
 #include <kdialogbase.h>
 #include <qptrlist.h>
 
-class KPresenterView;
+class KPrView;
 class QWidget;
 class QComboBox;
 class QLabel;
@@ -33,21 +33,21 @@ class QCheckBox;
 class QBoxLayout;
 class QResizeEvent;
 class QLineEdit;
-class KPObject;
+class KPrObject;
 class KIntNumInput;
 class KURLRequester;
-class KPresenterSoundPlayer;
+class KPrSoundPlayer;
 class QSpinBox;
 
-class EffectDia : public KDialogBase
+class KPrEffectDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    EffectDia( QWidget* parent, const char*, const QPtrList<KPObject> &_objs,
-               KPresenterView* );
+    KPrEffectDia( QWidget* parent, const char*, const QPtrList<KPrObject> &_objs,
+               KPrView* );
 
-    ~EffectDia();
+    ~KPrEffectDia();
 
 protected:
     void resizeEvent( QResizeEvent *e );
@@ -67,10 +67,10 @@ protected:
     QPushButton *buttonTestPlaySoundEffect1, *buttonTestStopSoundEffect1;
     QPushButton *buttonTestPlaySoundEffect2, *buttonTestStopSoundEffect2;
 
-    KPresenterSoundPlayer *soundPlayer1, *soundPlayer2;
+    KPrSoundPlayer *soundPlayer1, *soundPlayer2;
 
-    KPresenterView *view;
-    QPtrList<KPObject> objs;
+    KPrView *view;
+    QPtrList<KPrObject> objs;
 
 public slots:
     void slotEffectDiaOk();

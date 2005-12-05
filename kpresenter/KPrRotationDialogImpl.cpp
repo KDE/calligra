@@ -33,31 +33,31 @@
 #include "rotationpropertyui.h"
 #include "KPrTextPreview.h"
 
-RotationDialogImpl::RotationDialogImpl( QWidget *parent, const char* name )
+KPrRotationDialogImpl::KPrRotationDialogImpl( QWidget *parent, const char* name )
 : KDialogBase( parent, name, true, i18n( "Rotation"), Ok|Cancel|Apply, Ok, true )
 , m_dialog( new RotationPropertyUI( this, name ) )
 {
     noSignals = false;
-    m_preview = new TextPreview( m_dialog->previewPanel );
+    m_preview = new KPrTextPreview( m_dialog->previewPanel );
     QHBoxLayout *lay = new QHBoxLayout( m_dialog->previewPanel, m_dialog->previewPanel->lineWidth(), 0 );
     lay->addWidget( m_preview );
 
     QHBoxLayout *hbox = new QHBoxLayout(m_dialog->angleFrame);
-    m_angleGroup = new CircleGroup(m_dialog->angleFrame);
+    m_angleGroup = new KPrCircleGroup(m_dialog->angleFrame);
     hbox->addWidget(m_angleGroup);
 
     // Draw the circle of checkboxes.
     QGridLayout *circleLayout = new QGridLayout(m_angleGroup, 4, 5);
     circleLayout->addItem(new QSpacerItem ( 1, 1 , QSizePolicy::MinimumExpanding ), 0, 0);
     circleLayout->addItem(new QSpacerItem ( 1, 1 , QSizePolicy::MinimumExpanding ), 0, 5);
-    CircleToggle *r0 = new CircleToggle(m_angleGroup, "tm", 0);
-    CircleToggle *r45 = new CircleToggle(m_angleGroup, "tr", 45);
-    CircleToggle *r90 = new CircleToggle(m_angleGroup, "mr", 90);
-    CircleToggle *r135 = new CircleToggle(m_angleGroup, "br", 135);
-    CircleToggle *r180 = new CircleToggle(m_angleGroup, "bm", 180);
-    CircleToggle *r225 = new CircleToggle(m_angleGroup, "bl", -135);
-    CircleToggle *r270 = new CircleToggle(m_angleGroup, "ml", -90);
-    CircleToggle *r315 = new CircleToggle(m_angleGroup, "tl", -45);
+    KPrCircleToggle *r0 = new KPrCircleToggle(m_angleGroup, "tm", 0);
+    KPrCircleToggle *r45 = new KPrCircleToggle(m_angleGroup, "tr", 45);
+    KPrCircleToggle *r90 = new KPrCircleToggle(m_angleGroup, "mr", 90);
+    KPrCircleToggle *r135 = new KPrCircleToggle(m_angleGroup, "br", 135);
+    KPrCircleToggle *r180 = new KPrCircleToggle(m_angleGroup, "bm", 180);
+    KPrCircleToggle *r225 = new KPrCircleToggle(m_angleGroup, "bl", -135);
+    KPrCircleToggle *r270 = new KPrCircleToggle(m_angleGroup, "ml", -90);
+    KPrCircleToggle *r315 = new KPrCircleToggle(m_angleGroup, "tl", -45);
     circleLayout->addWidget(r0, 0, 2);
     circleLayout->addWidget(r180, 2, 2);
     circleLayout->addWidget(r45, 0, 3);
@@ -78,13 +78,13 @@ RotationDialogImpl::RotationDialogImpl( QWidget *parent, const char* name )
     setMainWidget( m_dialog );
 }
 
-void RotationDialogImpl::slotOk()
+void KPrRotationDialogImpl::slotOk()
 {
     emit apply();
     accept();
 }
 
-void RotationDialogImpl::setAngle( double angle )
+void KPrRotationDialogImpl::setAngle( double angle )
 {
     if(noSignals) return;
     noSignals = true;
@@ -98,23 +98,23 @@ void RotationDialogImpl::setAngle( double angle )
     noSignals = false;
 }
 
-double RotationDialogImpl::angle()
+double KPrRotationDialogImpl::angle()
 {
     return m_dialog->angleSpinbox->value();
 }
 
-void RotationDialogImpl::angleChanged( double angle )
+void KPrRotationDialogImpl::angleChanged( double angle )
 {
     setAngle( angle );
 }
 
-void RotationDialogImpl::angleMode( int angle )
+void KPrRotationDialogImpl::angleMode( int angle )
 {
     setAngle( angle );
 }
 
 
-CircleToggle::CircleToggle( QWidget *parent, const QString &image, int id )
+KPrCircleToggle::KPrCircleToggle( QWidget *parent, const QString &image, int id )
     : QLabel( parent )
 {
     KIconLoader il("kpresenter");
@@ -125,47 +125,47 @@ CircleToggle::CircleToggle( QWidget *parent, const QString &image, int id )
     m_id = id;
     setMouseTracking(true);
     setPixmap( m_off );
-    CircleGroup *cg = dynamic_cast<CircleGroup*> (parent);
+    KPrCircleGroup *cg = dynamic_cast<KPrCircleGroup*> (parent);
     if(cg != 0)
         cg->add(this);
 }
 
-void CircleToggle::mousePressEvent ( QMouseEvent * e ) {
+void KPrCircleToggle::mousePressEvent ( QMouseEvent * e ) {
     if(e->button() != Qt:: LeftButton)
         return;
     setChecked(!m_selected);
 }
 
-void CircleToggle::setChecked(bool on) {
+void KPrCircleToggle::setChecked(bool on) {
     if(on == m_selected) return;
     m_selected = on;
     setPixmap( m_selected?m_on:m_off );
     emit clicked(m_id);
 }
 
-CircleGroup::CircleGroup(QWidget *parent)
+KPrCircleGroup::KPrCircleGroup(QWidget *parent)
     : QFrame(parent), m_buttons()
 {
     noSignals=false;
 }
 
-void CircleGroup::setAngle(int angle) {
+void KPrCircleGroup::setAngle(int angle) {
     noSignals = true;
-    CircleToggle *button;
+    KPrCircleToggle *button;
     for ( button = m_buttons.first(); button; button = m_buttons.next() )
         button->setChecked(angle == button->id());
     noSignals = false;
 }
 
-void CircleGroup::add(CircleToggle *button) {
+void KPrCircleGroup::add(KPrCircleToggle *button) {
     connect (button, SIGNAL(clicked (int)), this, SLOT (selectionChanged (int)) );
     m_buttons.append(button);
 }
 
-void CircleGroup::selectionChanged(int buttonId) {
+void KPrCircleGroup::selectionChanged(int buttonId) {
     if(noSignals)
         return;
-    CircleToggle *button;
+    KPrCircleToggle *button;
     for ( button = m_buttons.first(); button; button = m_buttons.next() )
         button->setChecked(buttonId == button->id());
     emit clicked(buttonId);

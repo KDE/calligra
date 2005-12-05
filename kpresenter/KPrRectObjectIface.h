@@ -25,20 +25,20 @@
 #include <dcopref.h>
 #include "KPrObject2DIface.h"
 
-class KPRectObject;
+class KPrRectObject;
 
-class KPRectObjectIface : public KPresenterObject2DIface
+class KPrRectObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPRectObjectIface( KPRectObject *obj_ );
+    KPrRectObjectIface( KPrRectObject *obj_ );
 
 k_dcop:
     void setRnds( int _xRnd, int _yRnd );
     int xRnd() const;
     int yRnd() const;
 private:
-    KPRectObject *obj;
+    KPrRectObject *obj;
 };
 
 #endif

@@ -31,7 +31,7 @@
 #include "KPrMarginWidget.h"
 
 
-TextProperty::TextProperty( QWidget *parent, const char *name, const MarginsStruct &marginsStruct,
+KPrTextProperty::KPrTextProperty( QWidget *parent, const char *name, const MarginsStruct &marginsStruct,
                             const KoUnit::Unit unit, PropValue protectContent )
 : QWidget( parent, name )
 , m_unit( unit )
@@ -40,7 +40,7 @@ TextProperty::TextProperty( QWidget *parent, const char *name, const MarginsStru
     QGridLayout *layout = new QGridLayout( this, 1, 1, 11, 6 );
 
     layout->addWidget( m_protectContentCheck = new QCheckBox( i18n( "Protect content" ), this ), 0, 0 );
-    layout->addWidget( m_margins = new KPMarginWidget( this, name, m_unit ), 1, 0 );
+    layout->addWidget( m_margins = new KPrMarginWidget( this, name, m_unit ), 1, 0 );
 
     connect( m_protectContentCheck, SIGNAL( toggled ( bool ) ),
              this, SLOT( slotProtectContentChanged( bool ) ) );
@@ -54,12 +54,12 @@ TextProperty::TextProperty( QWidget *parent, const char *name, const MarginsStru
 }
 
 
-TextProperty::~TextProperty()
+KPrTextProperty::~KPrTextProperty()
 {
 }
 
 
-int TextProperty::getTextPropertyChange() const
+int KPrTextProperty::getTextPropertyChange() const
 {
     int flags = 0;
 
@@ -80,7 +80,7 @@ int TextProperty::getTextPropertyChange() const
 }
 
 
-MarginsStruct TextProperty::getMarginsStruct() const
+MarginsStruct KPrTextProperty::getMarginsStruct() const
 {
     MarginsStruct marginsStruct;
     marginsStruct.leftMargin = m_margins->leftValue();
@@ -91,13 +91,13 @@ MarginsStruct TextProperty::getMarginsStruct() const
 }
 
 
-bool TextProperty::getProtectContent() const
+bool KPrTextProperty::getProtectContent() const
 {
     return m_protectContentCheck->isOn();
 }
 
 
-void TextProperty::apply()
+void KPrTextProperty::apply()
 {
     int flags = getTextPropertyChange();
 
@@ -109,13 +109,13 @@ void TextProperty::apply()
 }
 
 
-void TextProperty::slotProtectContentChanged( bool b )
+void KPrTextProperty::slotProtectContentChanged( bool b )
 {
     m_margins->setEnabled( !b );
 }
 
 
-void TextProperty::slotReset()
+void KPrTextProperty::slotReset()
 {
     switch ( m_protectContent )
     {

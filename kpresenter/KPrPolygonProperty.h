@@ -26,17 +26,17 @@
 
 class PolygonPropertyUI;
 
-class PolygonProperty : public QWidget
+class KPrPolygonProperty : public QWidget
 {
     Q_OBJECT
 public:
-    PolygonProperty( QWidget *parent, const char *name, PolygonSettingCmd::PolygonSettings &polygonSettings );
-    ~PolygonProperty();
+    KPrPolygonProperty( QWidget *parent, const char *name, KPrPolygonSettingCmd::PolygonSettings &polygonSettings );
+    ~KPrPolygonProperty();
 
     int getPolygonPropertyChange() const;
-    PolygonSettingCmd::PolygonSettings getPolygonSettings() const;
+    KPrPolygonSettingCmd::PolygonSettings getPolygonSettings() const;
 
-    void setPolygonSettings( const PolygonSettingCmd::PolygonSettings &polygonSettings );
+    void setPolygonSettings( const KPrPolygonSettingCmd::PolygonSettings &polygonSettings );
     void apply();
 
 protected:
@@ -44,7 +44,7 @@ protected:
 
     PolygonPropertyUI *m_ui;
 
-    PolygonSettingCmd::PolygonSettings m_polygonSettings;
+    KPrPolygonSettingCmd::PolygonSettings m_polygonSettings;
 
 protected slots:
     void slotReset();

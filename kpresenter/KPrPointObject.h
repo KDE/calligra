@@ -24,11 +24,11 @@
 #include "KPrObject.h"
 #include <koStyleStack.h>
 
-class KPPointObject : public KPShadowObject,  public KPStartEndLine
+class KPrPointObject : public KPrShadowObject,  public KPrStartEndLine
 {
 public:
-    KPPointObject();
-    KPPointObject( const KPPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    KPrPointObject();
+    KPrPointObject( const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
 
     virtual KoSize getRealSize() const;
     virtual KoPoint getRealOrig() const;

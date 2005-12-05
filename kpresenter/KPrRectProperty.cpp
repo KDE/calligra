@@ -28,7 +28,7 @@
 #include "rectpropertyui.h"
 #include "KPrRectPreview.h"
 
-RectProperty::RectProperty( QWidget *parent, const char *name, RectValueCmd::RectValues &rectValue )
+KPrRectProperty::KPrRectProperty( QWidget *parent, const char *name, KPrRectValueCmd::RectValues &rectValue )
 : QWidget( parent, name )
 , m_rectValue( rectValue )
 {
@@ -45,28 +45,28 @@ RectProperty::RectProperty( QWidget *parent, const char *name, RectValueCmd::Rec
     slotReset();
 }
 
-RectProperty::~RectProperty()
+KPrRectProperty::~KPrRectProperty()
 {
 }
 
 
-int RectProperty::getRectPropertyChange() const
+int KPrRectProperty::getRectPropertyChange() const
 {
     int flags = 0;
 
     if ( getXRnd() != m_rectValue.xRnd )
-        flags |= RectValueCmd::XRnd;
+        flags |= KPrRectValueCmd::XRnd;
 
     if ( getYRnd() != m_rectValue.yRnd )
-        flags |= RectValueCmd::YRnd;
+        flags |= KPrRectValueCmd::YRnd;
 
     return flags;
 }
 
 
-RectValueCmd::RectValues RectProperty::getRectValues() const
+KPrRectValueCmd::RectValues KPrRectProperty::getRectValues() const
 {
-    RectValueCmd::RectValues rectValue;
+    KPrRectValueCmd::RectValues rectValue;
     rectValue.xRnd = getXRnd();
     rectValue.yRnd = getYRnd();
 
@@ -74,43 +74,43 @@ RectValueCmd::RectValues RectProperty::getRectValues() const
 }
 
 
-void RectProperty::setRectValues( const RectValueCmd::RectValues &rectValues )
+void KPrRectProperty::setRectValues( const KPrRectValueCmd::RectValues &rectValues )
 {
     m_rectValue = rectValues;
     slotReset();
 }
 
 
-void RectProperty::apply()
+void KPrRectProperty::apply()
 {
     int flags = getRectPropertyChange();
 
-    if ( flags & RectValueCmd::XRnd )
+    if ( flags & KPrRectValueCmd::XRnd )
         m_rectValue.xRnd = getXRnd();
 
-    if ( flags & RectValueCmd::YRnd )
+    if ( flags & KPrRectValueCmd::YRnd )
         m_rectValue.yRnd = getYRnd();
 }
 
 
-int RectProperty::getXRnd() const
+int KPrRectProperty::getXRnd() const
 {
     return m_ui->xRndInput->value();
 }
 
 
-int RectProperty::getYRnd() const
+int KPrRectProperty::getYRnd() const
 {
     return m_ui->yRndInput->value();
 }
 
 
-void RectProperty::slotRndChanged()
+void KPrRectProperty::slotRndChanged()
 {
     m_ui->rectPreview->setRnds( getXRnd(), getYRnd() );
 }
 
-void RectProperty::slotReset()
+void KPrRectProperty::slotReset()
 {
     m_ui->xRndInput->setValue( m_rectValue.xRnd );
     m_ui->yRndInput->setValue( m_rectValue.yRnd );
@@ -120,7 +120,7 @@ void RectProperty::slotReset()
     m_ui->rectPreview->setRnds( getXRnd(), getYRnd() );
 }
 
-void RectProperty::combineToggled( bool on)
+void KPrRectProperty::combineToggled( bool on)
 {
     KoImageResource kir;
     if( on ) {

@@ -55,13 +55,13 @@
 #include <kfiledialog.h>
 
 
-KPEffectPreview::KPEffectPreview( QWidget *parent, KPrDocument *_doc, KPresenterView *_view )
+KPrEffectPreview::KPrEffectPreview( QWidget *parent, KPrDocument *_doc, KPrView *_view )
     : QLabel( parent ), doc( _doc ), view( _view ), m_pageEffect( 0 )
 {
     setFrameStyle( StyledPanel | Sunken );
 }
 
-void KPEffectPreview::setPixmap( const QPixmap& pixmap )
+void KPrEffectPreview::setPixmap( const QPixmap& pixmap )
 {
     // find the right size
     QRect rect = pixmap.rect();
@@ -89,7 +89,7 @@ void KPEffectPreview::setPixmap( const QPixmap& pixmap )
     QLabel::setPixmap( m_pixmap );
 }
 
-void KPEffectPreview::run( PageEffect effect, EffectSpeed speed )
+void KPrEffectPreview::run( PageEffect effect, EffectSpeed speed )
 {
     QRect rect = m_pixmap.rect();
     m_target.resize( rect.size() );
@@ -108,7 +108,7 @@ void KPEffectPreview::run( PageEffect effect, EffectSpeed speed )
         QLabel::repaint();
     }
 
-    m_pageEffect = new KPPageEffects( this, m_target, effect, speed );
+    m_pageEffect = new KPrPageEffects( this, m_target, effect, speed );
     if ( m_pageEffect->doEffect() )
     {
         delete m_pageEffect;
@@ -125,7 +125,7 @@ void KPEffectPreview::run( PageEffect effect, EffectSpeed speed )
 }
 
 
-void KPEffectPreview::slotDoPageEffect()
+void KPrEffectPreview::slotDoPageEffect()
 {
     if ( m_pageEffect->doEffect() )
     {
@@ -142,8 +142,8 @@ void KPEffectPreview::slotDoPageEffect()
 }
 
 
-KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
-                                    KPrDocument *_doc, KPresenterView *_view )
+KPrTransEffectDia::KPrTransEffectDia( QWidget *parent, const char *name,
+                                    KPrDocument *_doc, KPrView *_view )
     : KDialogBase( parent, name, true, "", KDialogBase::User1|Ok|Cancel ),
       doc( _doc ), view( _view ), soundPlayer( 0 )
 {
@@ -163,7 +163,7 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     QVBoxLayout *rightlayout = new QVBoxLayout( rightpart, KDialog::marginHint(), KDialog::spacingHint() );
     rightlayout->setAutoAdd( true );
 
-    effectPreview = new KPEffectPreview( rightpart, doc, view );
+    effectPreview = new KPrEffectPreview( rightpart, doc, view );
 
     int pgnum = view->getCurrPgNum() - 1;  // getCurrPgNum() is 1-based
     KPrPage* pg = doc->pageList().at( pgnum );
@@ -322,19 +322,19 @@ KPTransEffectDia::KPTransEffectDia( QWidget *parent, const char *name,
     soundEffectChanged();
 }
 
-void KPTransEffectDia::preview()
+void KPrTransEffectDia::preview()
 {
     if( pageEffect==PEF_NONE)
         return;
     effectPreview->run( pageEffect, speed );
 }
 
-void KPTransEffectDia::effectChanged()
+void KPrTransEffectDia::effectChanged()
 {
     effectChanged( effectList->currentItem() );
 }
 
-void KPTransEffectDia::effectChanged( int index )
+void KPrTransEffectDia::effectChanged( int index )
 {
     if( effectList->currentText() == i18n( "Random Transition" ) )
         pageEffect = PEF_RANDOM;
@@ -344,18 +344,18 @@ void KPTransEffectDia::effectChanged( int index )
     if( automaticPreview->isChecked() ) preview();
 }
 
-void KPTransEffectDia::speedChanged( int value )
+void KPrTransEffectDia::speedChanged( int value )
 {
     speed = static_cast<EffectSpeed>(value);
 }
 
-void KPTransEffectDia::timeChanged( int value )
+void KPrTransEffectDia::timeChanged( int value )
 {
     if( value <= 0 ) value = 1;
     slideTime = value;
 }
 
-void KPTransEffectDia::soundEffectChanged()
+void KPrTransEffectDia::soundEffectChanged()
 {
     soundEffect = checkSoundEffect->isChecked();
 
@@ -397,7 +397,7 @@ static QString getSoundFileFilter()
     return str;
 }
 
-void KPTransEffectDia::slotRequesterClicked( KURLRequester * )
+void KPrTransEffectDia::slotRequesterClicked( KURLRequester * )
 {
     QString filter = getSoundFileFilter();
     requester->fileDialog()->setFilter( filter );
@@ -421,7 +421,7 @@ void KPTransEffectDia::slotRequesterClicked( KURLRequester * )
     }
 }
 
-void KPTransEffectDia::slotSoundFileChanged( const QString& text )
+void KPrTransEffectDia::slotSoundFileChanged( const QString& text )
 {
     soundFileName = text;
 
@@ -429,17 +429,17 @@ void KPTransEffectDia::slotSoundFileChanged( const QString& text )
     buttonTestStopSoundEffect->setEnabled( !text.isEmpty() );
 }
 
-void KPTransEffectDia::playSound()
+void KPrTransEffectDia::playSound()
 {
     delete soundPlayer;
-    soundPlayer = new KPresenterSoundPlayer( requester->url() );
+    soundPlayer = new KPrSoundPlayer( requester->url() );
     soundPlayer->play();
 
     buttonTestPlaySoundEffect->setEnabled( false );
     buttonTestStopSoundEffect->setEnabled( true );
 }
 
-void KPTransEffectDia::stopSound()
+void KPrTransEffectDia::stopSound()
 {
     if ( soundPlayer ) {
         soundPlayer->stop();
@@ -451,13 +451,13 @@ void KPTransEffectDia::stopSound()
     }
 }
 
-void KPTransEffectDia::slotOk()
+void KPrTransEffectDia::slotOk()
 {
     // TODO: only if changed. And pass flags for which settings changed
     emit apply( false );
 }
 
-void KPTransEffectDia::slotUser1()
+void KPrTransEffectDia::slotUser1()
 {
     // TODO: only if changed. And pass flags for which settings changed
     emit apply( true );

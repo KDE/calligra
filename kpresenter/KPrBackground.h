@@ -35,7 +35,7 @@
 class KPrDocument;
 class QPainter;
 class QPixmap;
-class KPGradientCollection;
+class KPrGradientCollection;
 class QDomDocument;
 class QDomElement;
 class KoTextZoomHandler;
@@ -45,7 +45,7 @@ class KoGenStyles;
 class KoGenStyle;
 
 
-class KPBackGround
+class KPrBackGround
 {
 public:
     struct Settings
@@ -77,8 +77,8 @@ public:
         BackView m_backView;
     };
 
-    KPBackGround( KPrPage *_page );
-    ~KPBackGround() {}
+    KPrBackGround( KPrPage *_page );
+    ~KPrBackGround() {}
 
     void setBackType( BackType _backType )
         {
@@ -155,7 +155,7 @@ protected:
     void generateGradient( const QSize& size );
 
     KoPictureCollection *pictureCollection() const;
-    KPGradientCollection *gradientCollection() const;
+    KPrGradientCollection *gradientCollection() const;
 
     QString saveOasisGradientStyle( KoGenStyles& mainStyles );
     QString saveOasisPictureStyle( KoGenStyles& mainStyles );

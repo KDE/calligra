@@ -29,19 +29,19 @@
 #include <KoOasisContext.h>
 #include <koxmlns.h>
 
-KPPointObject::KPPointObject()
-    : KPShadowObject(), KPStartEndLine( L_NORMAL, L_NORMAL )
+KPrPointObject::KPrPointObject()
+    : KPrShadowObject(), KPrStartEndLine( L_NORMAL, L_NORMAL )
 {
 }
 
 
-KPPointObject::KPPointObject( const KPPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
-    : KPShadowObject( _pen ), KPStartEndLine(_lineBegin, _lineEnd)
+KPrPointObject::KPrPointObject( const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
+    : KPrShadowObject( _pen ), KPrStartEndLine(_lineBegin, _lineEnd)
 {
 }
 
 
-KoSize KPPointObject::getRealSize() const
+KoSize KPrPointObject::getRealSize() const
 {
     KoSize size( ext );
     KoPoint realOrig( orig );
@@ -51,7 +51,7 @@ KoSize KPPointObject::getRealSize() const
 }
 
 
-KoPoint KPPointObject::getRealOrig() const
+KoPoint KPrPointObject::getRealOrig() const
 {
     KoSize size( ext );
     KoPoint realOrig( orig );
@@ -61,9 +61,9 @@ KoPoint KPPointObject::getRealOrig() const
 }
 
 
-QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrPointObject::save( QDomDocument& doc, double offset )
 {
-    QDomDocumentFragment fragment = KPShadowObject::save( doc, offset );
+    QDomDocumentFragment fragment = KPrShadowObject::save( doc, offset );
     if ( !points.isNull() ) {
         QDomElement elemPoints = doc.createElement( "POINTS" );
         KoPointArray::ConstIterator it;
@@ -78,32 +78,32 @@ QDomDocumentFragment KPPointObject::save( QDomDocument& doc, double offset )
         fragment.appendChild( elemPoints );
     }
 
-    KPStartEndLine::save( fragment,doc );
+    KPrStartEndLine::save( fragment,doc );
 
     return fragment;
 }
 
-const char * KPPointObject::getOasisElementName() const
+const char * KPrPointObject::getOasisElementName() const
 {
     return "draw:custom-shape";
 }
 
-void KPPointObject::loadOasisMarker( KoOasisContext & context )
+void KPrPointObject::loadOasisMarker( KoOasisContext & context )
 {
     loadOasisMarkerElement( context, "marker-start", lineBegin );
     loadOasisMarkerElement( context, "marker-end", lineEnd );
 }
 
-void KPPointObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+void KPrPointObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    KPShadowObject::fillStyle( styleObjectAuto, mainStyles );
+    KPrShadowObject::fillStyle( styleObjectAuto, mainStyles );
     saveOasisMarkerElement( mainStyles, styleObjectAuto );
 }
 
 
-double KPPointObject::load( const QDomElement &element )
+double KPrPointObject::load( const QDomElement &element )
 {
-    double offset = KPShadowObject::load( element );
+    double offset = KPrShadowObject::load( element );
 
     QDomElement e = element.namedItem( "POINTS" ).toElement();
     if ( !e.isNull() ) {
@@ -124,15 +124,15 @@ double KPPointObject::load( const QDomElement &element )
             ++index;
         }
     }
-    KPStartEndLine::load( element );
+    KPrStartEndLine::load( element );
     return offset;
 }
 
 
-void KPPointObject::setSize( double _width, double _height )
+void KPrPointObject::setSize( double _width, double _height )
 {
     KoSize origSize( ext );
-    KPObject::setSize( _width, _height );
+    KPrObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
     double fy = ext.height() / origSize.height();
@@ -141,9 +141,9 @@ void KPPointObject::setSize( double _width, double _height )
 }
 
 
-void KPPointObject::flip( bool horizontal )
+void KPrPointObject::flip( bool horizontal )
 {
-    KPObject::flip( horizontal );
+    KPrObject::flip( horizontal );
 
     KoPointArray tmpPoints;
     int index = 0;
@@ -178,19 +178,19 @@ void KPPointObject::flip( bool horizontal )
 }
 
 
-void KPPointObject::closeObject( bool close )
+void KPrPointObject::closeObject( bool close )
 {
     points = getCloseObject( points, close, isClosed() );
 }
 
 
-bool KPPointObject::isClosed() const
+bool KPrPointObject::isClosed() const
 {
     return ( points.at(0) == points.at(points.count()-1) );
 }
 
 
-void KPPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
+void KPrPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                            int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
     int _w = pen.pointWidth();
@@ -250,7 +250,7 @@ void KPPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
 }
 
 
-void KPPointObject::updatePoints( double _fx, double _fy )
+void KPrPointObject::updatePoints( double _fx, double _fy )
 {
     int index = 0;
     KoPointArray tmpPoints;
@@ -267,7 +267,7 @@ void KPPointObject::updatePoints( double _fx, double _fy )
 }
 
 
-KoPointArray KPPointObject::getDrawingPoints() const
+KoPointArray KPrPointObject::getDrawingPoints() const
 {
   return points;
 }

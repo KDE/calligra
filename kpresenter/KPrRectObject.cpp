@@ -34,39 +34,39 @@
 #include <qdom.h>
 #include <qpainter.h>
 
-KPRectObject::KPRectObject()
-    : KP2DObject()
+KPrRectObject::KPrRectObject()
+    : KPr2DObject()
 {
     xRnd = 0;
     yRnd = 0;
 }
 
-DCOPObject* KPRectObject::dcopObject()
+DCOPObject* KPrRectObject::dcopObject()
 {
     if ( !dcop )
-        dcop = new KPRectObjectIface( this );
+        dcop = new KPrRectObjectIface( this );
     return dcop;
 }
 
-KPRectObject::KPRectObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
+KPrRectObject::KPrRectObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
                             const QColor &_gColor1, const QColor &_gColor2,
                             BCType _gType, int _xRnd, int _yRnd,
                             bool _unbalanced, int _xfactor, int _yfactor)
-    : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType,
+    : KPr2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType,
                   _unbalanced, _xfactor, _yfactor )
 {
     xRnd = _xRnd;
     yRnd = _yRnd;
 }
 
-KPRectObject &KPRectObject::operator=( const KPRectObject & )
+KPrRectObject &KPrRectObject::operator=( const KPrRectObject & )
 {
     return *this;
 }
 
-QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrRectObject::save( QDomDocument& doc, double offset )
 {
-    QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
+    QDomDocumentFragment fragment=KPr2DObject::save(doc, offset);
     if (xRnd!=0 || yRnd!=0) {
         QDomElement elem=doc.createElement("RNDS");
         elem.setAttribute("x", xRnd);
@@ -76,35 +76,35 @@ QDomDocumentFragment KPRectObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPRectObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrRectObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
     // TODO corner-radius
     return true;
 }
 
 
-const char * KPRectObject::getOasisElementName() const
+const char * KPrRectObject::getOasisElementName() const
 {
     return "draw:rect";
 }
 
 
-void KPRectObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPRLoadingInfo *info)
+void KPrRectObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPrLoadingInfo *info)
 {
-    KP2DObject::loadOasis(element, context, info);
+    KPr2DObject::loadOasis(element, context, info);
     if ( element.hasAttributeNS( KoXmlNS::draw, "corner-radius" ) )
     {
         //todo FIXME, conversion is not good, oo give radius and kpresenter give xRnd and yRnd 0->99
         int radius = static_cast<int>( KoUnit::parseValue( element.attributeNS( KoXmlNS::draw, "corner-radius", QString::null ) ) );
         xRnd = radius;
         yRnd = radius;
-        kdDebug()<<" KPRectObject : radius xRnd :"<<xRnd <<" yRnd :"<<yRnd<<endl;
+        kdDebug()<<" KPrRectObject : radius xRnd :"<<xRnd <<" yRnd :"<<yRnd<<endl;
     }
 }
 
-double KPRectObject::load(const QDomElement &element)
+double KPrRectObject::load(const QDomElement &element)
 {
-    double offset=KP2DObject::load(element);
+    double offset=KPr2DObject::load(element);
     QDomElement e=element.namedItem("RNDS").toElement();
     if(!e.isNull()) {
         int tmp=0;
@@ -119,7 +119,7 @@ double KPRectObject::load(const QDomElement &element)
     return offset;
 }
 
-QPointArray KPRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd, int _yRnd) const
+QPointArray KPrRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd, int _yRnd) const
 {
     w--;
     h--;
@@ -149,7 +149,7 @@ QPointArray KPRectObject::boundingRegion( int x, int y, int w, int h, int _xRnd,
     return aa;
 }
 
-void KPRectObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
+void KPrRectObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                           int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int ow = _zoomHandler->zoomItX( ext.width() );

@@ -32,16 +32,16 @@
 #include <math.h>
 using namespace std;
 
-KPQuadricBezierCurveObject::KPQuadricBezierCurveObject()
-    : KPPointObject()
+KPrQuadricBezierCurveObject::KPrQuadricBezierCurveObject()
+    : KPrPointObject()
 {
 }
 
-KPQuadricBezierCurveObject::KPQuadricBezierCurveObject( const KoPointArray &_controlPoints,
+KPrQuadricBezierCurveObject::KPrQuadricBezierCurveObject( const KoPointArray &_controlPoints,
                                                         const KoPointArray &_allPoints,
-                                                        const KoSize &_size, const KPPen &_pen,
+                                                        const KoSize &_size, const KPrPen &_pen,
                                                         LineEnd _lineBegin, LineEnd _lineEnd )
-    : KPPointObject( _pen, _lineBegin, _lineEnd )
+    : KPrPointObject( _pen, _lineBegin, _lineEnd )
 {
     points = KoPointArray( _controlPoints );
     allPoints = KoPointArray( _allPoints );
@@ -49,31 +49,31 @@ KPQuadricBezierCurveObject::KPQuadricBezierCurveObject( const KoPointArray &_con
     ext = _size;
 }
 
-DCOPObject* KPQuadricBezierCurveObject::dcopObject()
+DCOPObject* KPrQuadricBezierCurveObject::dcopObject()
 {
     if ( !dcop )
-        dcop = new KPQuadricBezierCurveObjectIface( this );
+        dcop = new KPrQuadricBezierCurveObjectIface( this );
     return dcop;
 }
 
-KPQuadricBezierCurveObject &KPQuadricBezierCurveObject::operator=( const KPQuadricBezierCurveObject & )
+KPrQuadricBezierCurveObject &KPrQuadricBezierCurveObject::operator=( const KPrQuadricBezierCurveObject & )
 {
     return *this;
 }
 
-bool KPQuadricBezierCurveObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrQuadricBezierCurveObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug()<<"bool KPQuadricBezierCurveObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
+    kdDebug()<<"bool KPrQuadricBezierCurveObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
     return true;
 }
 
-const char * KPQuadricBezierCurveObject::getOasisElementName() const
+const char * KPrQuadricBezierCurveObject::getOasisElementName() const
 {
     // use draw:path ?
     return "draw:custom-shape";
 }
 
-void KPQuadricBezierCurveObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info )
+void KPrQuadricBezierCurveObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPrLoadingInfo *info )
 {
     //todo
     //we use draw:path
@@ -82,23 +82,23 @@ void KPQuadricBezierCurveObject::loadOasis( const QDomElement &element, KoOasisC
     loadOasisMarker( context );
 }
 
-QDomDocumentFragment KPQuadricBezierCurveObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrQuadricBezierCurveObject::save( QDomDocument& doc, double offset )
 {
-    return KPPointObject::save( doc, offset );
+    return KPrPointObject::save( doc, offset );
 }
 
-double KPQuadricBezierCurveObject::load(const QDomElement &element)
+double KPrQuadricBezierCurveObject::load(const QDomElement &element)
 {
-    double offset = KPPointObject::load( element );
+    double offset = KPrPointObject::load( element );
 
     allPoints = getQuadricBezierPointsFrom( points );
 
     return offset;
 }
 
-void KPQuadricBezierCurveObject::updatePoints( double _fx, double _fy )
+void KPrQuadricBezierCurveObject::updatePoints( double _fx, double _fy )
 {
-    KPPointObject::updatePoints( _fx, _fy );
+    KPrPointObject::updatePoints( _fx, _fy );
 
     int index = 0;
     KoPointArray tmpPoints;
@@ -114,7 +114,7 @@ void KPQuadricBezierCurveObject::updatePoints( double _fx, double _fy )
     allPoints = tmpPoints;
 }
 
-KoPointArray KPQuadricBezierCurveObject::getQuadricBezierPointsFrom( const KoPointArray &_pointArray )
+KoPointArray KPrQuadricBezierCurveObject::getQuadricBezierPointsFrom( const KoPointArray &_pointArray )
 {
     if ( _pointArray.isNull() )
         return _pointArray;
@@ -175,9 +175,9 @@ KoPointArray KPQuadricBezierCurveObject::getQuadricBezierPointsFrom( const KoPoi
     return _allPoints;
 }
 
-void KPQuadricBezierCurveObject::flip( bool horizontal )
+void KPrQuadricBezierCurveObject::flip( bool horizontal )
 {
-    KPPointObject::flip( horizontal );
+    KPrPointObject::flip( horizontal );
 
     KoPointArray tmpPoints;
     int index = 0;
@@ -213,18 +213,18 @@ void KPQuadricBezierCurveObject::flip( bool horizontal )
     allPoints = tmpPoints;
 }
 
-void KPQuadricBezierCurveObject::closeObject(bool _close)
+void KPrQuadricBezierCurveObject::closeObject(bool _close)
 {
     allPoints = getCloseObject( allPoints, _close, isClosed() );
 }
 
-bool KPQuadricBezierCurveObject::isClosed()const
+bool KPrQuadricBezierCurveObject::isClosed()const
 {
     return ( allPoints.at(0) == allPoints.at(allPoints.count()-1) );
 }
 
 
-KoPointArray KPQuadricBezierCurveObject::getDrawingPoints() const
+KoPointArray KPrQuadricBezierCurveObject::getDrawingPoints() const
 {
   return allPoints;
 }

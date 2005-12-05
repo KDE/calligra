@@ -37,17 +37,17 @@
 
 using namespace std;
 
-KPPolygonObject::KPPolygonObject()
-    : KP2DObject()
+KPrPolygonObject::KPrPolygonObject()
+    : KPr2DObject()
 {
 }
 
-KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_size,
-                                  const KPPen &_pen, const QBrush &_brush,
+KPrPolygonObject::KPrPolygonObject( const KoPointArray &_points, const KoSize &_size,
+                                  const KPrPen &_pen, const QBrush &_brush,
                                   FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                   bool _unbalanced, int _xfactor, int _yfactor,
                                   bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue )
-    : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
+    : KPr2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
 {
     points = KoPointArray( _points );
     ext = _size;
@@ -57,19 +57,19 @@ KPPolygonObject::KPPolygonObject( const KoPointArray &_points, const KoSize &_si
     sharpnessValue = _sharpnessValue;
 }
 
-KPPolygonObject &KPPolygonObject::operator=( const KPPolygonObject & )
+KPrPolygonObject &KPrPolygonObject::operator=( const KPrPolygonObject & )
 {
     return *this;
 }
 
-DCOPObject* KPPolygonObject::dcopObject()
+DCOPObject* KPrPolygonObject::dcopObject()
 {
     if ( !dcop )
-        dcop = new KPPolygonObjectIface( this );
+        dcop = new KPrPolygonObjectIface( this );
     return dcop;
 }
 
-bool KPPolygonObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrPolygonObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
     sc.xmlWriter.addAttribute( "draw:corners", cornersValue );
     sc.xmlWriter.addAttribute( "draw:concave", checkConcavePolygon ? "true" : "false" );
@@ -81,15 +81,15 @@ bool KPPolygonObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
     return true;
 }
 
-const char * KPPolygonObject::getOasisElementName() const
+const char * KPrPolygonObject::getOasisElementName() const
 {
     return "draw:regular-polygon";
 }
 
 
-QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrPolygonObject::save( QDomDocument& doc, double offset )
 {
-    QDomDocumentFragment fragment = KP2DObject::save( doc, offset );
+    QDomDocumentFragment fragment = KPr2DObject::save( doc, offset );
 
     QDomElement elemSettings = doc.createElement( "SETTINGS" );
 
@@ -116,10 +116,10 @@ QDomDocumentFragment KPPolygonObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPPolygonObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info )
+void KPrPolygonObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info )
 {
-    kdDebug()<<"void KPPolygonObject::loadOasis( const QDomElement &element )***********\n";
-    KP2DObject::loadOasis( element,context, info );
+    kdDebug()<<"void KPrPolygonObject::loadOasis( const QDomElement &element )***********\n";
+    KPr2DObject::loadOasis( element,context, info );
     cornersValue = element.attributeNS( KoXmlNS::draw, "corners", QString::null ).toInt();
     checkConcavePolygon = element.attributeNS( KoXmlNS::draw, "concave", QString::null ) == "true";
     sharpnessValue = 0;
@@ -130,9 +130,9 @@ void KPPolygonObject::loadOasis( const QDomElement &element, KoOasisContext & co
     drawPolygon();
 }
 
-double KPPolygonObject::load( const QDomElement &element )
+double KPrPolygonObject::load( const QDomElement &element )
 {
-    double offset=KP2DObject::load( element );
+    double offset=KPr2DObject::load( element );
 
     QDomElement e = element.namedItem( "SETTINGS" ).toElement();
     if ( !e.isNull() ) {
@@ -174,10 +174,10 @@ double KPPolygonObject::load( const QDomElement &element )
     return offset;
 }
 
-void KPPolygonObject::setSize( double _width, double _height )
+void KPrPolygonObject::setSize( double _width, double _height )
 {
     KoSize origSize( ext );
-    KPObject::setSize( _width, _height );
+    KPrObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
     double fy = ext.height() / origSize.height();
@@ -185,7 +185,7 @@ void KPPolygonObject::setSize( double _width, double _height )
     updatePoints( fx, fy );
 }
 
-void KPPolygonObject::updatePoints( double _fx, double _fy )
+void KPrPolygonObject::updatePoints( double _fx, double _fy )
 {
     int index = 0;
     KoPointArray tmpPoints;
@@ -201,7 +201,7 @@ void KPPolygonObject::updatePoints( double _fx, double _fy )
     points = tmpPoints;
 }
 
-void KPPolygonObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
+void KPrPolygonObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
                              int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.width();//pen.width();
@@ -252,9 +252,9 @@ void KPPolygonObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
     }
 }
 
-void KPPolygonObject::drawPolygon()
+void KPrPolygonObject::drawPolygon()
 {
-    kdDebug()<<"void KPPolygonObject::drawPolygon()***********\n";
+    kdDebug()<<"void KPrPolygonObject::drawPolygon()***********\n";
     KoRect _rect( 0, 0, ext.width(), ext.height() );
     double angle = 2 * M_PI / cornersValue;
     double diameter = static_cast<double>( QMAX( _rect.width(), _rect.height() ) );
@@ -325,9 +325,9 @@ void KPPolygonObject::drawPolygon()
         m_redrawGradientPix = true;
 }
 
-void KPPolygonObject::flip( bool horizontal )
+void KPrPolygonObject::flip( bool horizontal )
 {
-    KP2DObject::flip( horizontal );
+    KPr2DObject::flip( horizontal );
     // flip the points
     KoPointArray tmpPoints;
     int index = 0;
@@ -360,7 +360,7 @@ void KPPolygonObject::flip( bool horizontal )
     points = tmpPoints;
 }
 
-KoSize KPPolygonObject::getRealSize() const {
+KoSize KPrPolygonObject::getRealSize() const {
     KoSize size( ext );
     KoPoint realOrig( orig );
     KoPointArray p( points );
@@ -368,7 +368,7 @@ KoSize KPPolygonObject::getRealSize() const {
     return size;
 }
 
-KoPoint KPPolygonObject::getRealOrig() const {
+KoPoint KPrPolygonObject::getRealOrig() const {
     KoSize size( ext );
     KoPoint realOrig( orig );
     KoPointArray p( points );

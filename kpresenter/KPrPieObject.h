@@ -24,20 +24,20 @@
 #include "KPrObject.h"
 #include <koStyleStack.h>
 
-class KPGradient;
+class KPrGradient;
 class DCOPObject;
 
-class KPPieObject : public KP2DObject
+class KPrKPPieObject : public KPr2DObject
 {
 public:
-    KPPieObject();
-    KPPieObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
+    KPrKPPieObject();
+    KPrKPPieObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
                  const QColor &_gColor1, const QColor &_gColor2, BCType _gType, PieType _pieType,
                  int _p_angle, int _p_len, LineEnd _lineBegin, LineEnd _lineEnd,
                  bool _unbalanced, int _xfactor, int _yfactor );
-    virtual ~KPPieObject() {}
+    virtual ~KPrKPPieObject() {}
     virtual DCOPObject* dcopObject();
-    KPPieObject &operator=( const KPPieObject & );
+    KPrKPPieObject &operator=( const KPrKPPieObject & );
 
     virtual void setPieType( PieType _pieType )
         { pieType = _pieType; m_redrawGradientPix = true; }
@@ -83,7 +83,7 @@ public:
 
     virtual double load(const QDomElement &element);
     virtual void flip(bool horizontal );
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info);
 
     virtual KoSize getRealSize() const;
     virtual KoPoint getRealOrig() const;

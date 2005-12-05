@@ -31,10 +31,10 @@
 #include <kodom.h>
 #include <koxmlns.h>
 
-KPrTextDocument::KPrTextDocument( KPTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter )
+KPrTextDocument::KPrTextDocument( KPrTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter )
     : KoTextDocument( textobj->kPresenterDocument()->zoomHandler(), fc, formatter, true ), m_textobj( textobj )
 {
-    //kdDebug(33001) << "KPrTextDocument constructed " << this << "  KPTextObject:" << textobj << endl;
+    //kdDebug(33001) << "KPrTextDocument constructed " << this << "  KPrTextObject:" << textobj << endl;
 }
 
 KPrTextDocument::~KPrTextDocument()

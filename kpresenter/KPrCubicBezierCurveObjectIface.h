@@ -26,13 +26,13 @@
 #include "KPrObjectIface.h"
 #include <qstring.h>
 
-class KPCubicBezierCurveObject;
+class KPrCubicBezierCurveObject;
 
-class KPCubicBezierCurveObjectIface : public KPresenterObjectIface
+class KPrCubicBezierCurveObjectIface : public KPrObjectIface
 {
     K_DCOP
 public:
-    KPCubicBezierCurveObjectIface( KPCubicBezierCurveObject *obj_ );
+    KPrCubicBezierCurveObjectIface( KPrCubicBezierCurveObject *obj_ );
 
 k_dcop:
 
@@ -46,7 +46,7 @@ k_dcop:
     bool isClosed()const;
 
 private:
-    KPCubicBezierCurveObject *obj;
+    KPrCubicBezierCurveObject *obj;
 };
 
 #endif

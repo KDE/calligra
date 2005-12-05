@@ -29,19 +29,19 @@ class QPainter;
 class KoTextZoomHandler;
 
 /**
- * Class: KPGradient
+ * Class: KPrGradient
  *
  * Encapsulates all gradient related functionality, to share it between
- * KP2DObject and KPBackGround.
- * KPGradient stores the gradient parameters, and generate the gradient
+ * KPr2DObject and KPrBackGround.
+ * KPrGradient stores the gradient parameters, and generate the gradient
  * on demand, in @ref pixmap().
  */
-class KPGradient
+class KPrGradient
 {
 public:
-    KPGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
+    KPrGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
                 bool _unbalanced, int _xfactor, int _yfactor );
-    ~KPGradient() {}
+    ~KPrGradient() {}
 
     QColor getColor1() const { return color1; }
     QColor getColor2() const { return color2; }
@@ -81,7 +81,7 @@ protected:
     /** Create the pixmap containing the gradient */
     void paint();
 
-    KPGradient() {}
+    KPrGradient() {}
 
     QColor color1, color2;
     BCType bcType;

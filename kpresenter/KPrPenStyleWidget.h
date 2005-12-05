@@ -31,29 +31,29 @@
 class PenStyleUI;
 
 
-class PenStyleWidget : public QWidget
+class KPrPenStyleWidget : public QWidget
 {
     Q_OBJECT
 public:
-    PenStyleWidget( QWidget *parent, const char *name, const PenCmd::Pen &pen, bool configureLineEnds = true );
-    ~PenStyleWidget();
+    KPrPenStyleWidget( QWidget *parent, const char *name, const KPrPenCmd::Pen &pen, bool configureLineEnds = true );
+    ~KPrPenStyleWidget();
 
     int getPenConfigChange() const;
-    PenCmd::Pen getPen() const;
+    KPrPenCmd::Pen getPen() const;
 
-    void setPen( const PenCmd::Pen &pen );
+    void setPen( const KPrPenCmd::Pen &pen );
     void apply();
 
 private:
-    KPPen getKPPen() const;
+    KPrPen getKPPen() const;
     LineEnd getLineBegin() const;
     LineEnd getLineEnd() const;
 
-    void setPen( const KPPen &pen );
+    void setPen( const KPrPen &pen );
     void setLineBegin( LineEnd lb );
     void setLineEnd( LineEnd le );
 
-    PenCmd::Pen m_pen;
+    KPrPenCmd::Pen m_pen;
 
     PenStyleUI *m_ui;
 

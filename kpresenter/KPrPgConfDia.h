@@ -42,15 +42,15 @@ class QSpinBox;
 class KColorButton;
 class QSlider;
 
-class PgConfDia : public KDialogBase
+class KPrPgConfDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
 
     // constructor - destructor
-    PgConfDia( QWidget* parent, KPrDocument* doc );
-    ~PgConfDia();
+    KPrPgConfDia( QWidget* parent, KPrDocument* doc );
+    ~KPrPgConfDia();
     bool getInfiniteLoop() const;
     bool getManualSwitch() const;
     bool getPresentationDuration() const;

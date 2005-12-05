@@ -27,40 +27,40 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPLineObjectIface::KPLineObjectIface( KPLineObject *_obj )
-    : KPresenterObjectIface(_obj)
+KPrLineObjectIface::KPrLineObjectIface( KPrLineObject *_obj )
+    : KPrObjectIface(_obj)
 {
     obj = _obj;
 }
 
-void KPLineObjectIface::setLineBegin( const QString & type)
+void KPrLineObjectIface::setLineBegin( const QString & type)
 {
     obj->setLineBegin(lineEndBeginFromString( type ));
 }
 
-void KPLineObjectIface::setLineEnd( const QString & type)
+void KPrLineObjectIface::setLineEnd( const QString & type)
 {
     obj->setLineEnd(lineEndBeginFromString( type ));
 }
 
-QString KPLineObjectIface::lineBegin()const
+QString KPrLineObjectIface::lineBegin()const
 {
     LineEnd type=obj->getLineBegin();
     return lineEndBeginName( type );
 }
 
-QString KPLineObjectIface::lineEnd() const
+QString KPrLineObjectIface::lineEnd() const
 {
     LineEnd type=obj->getLineEnd();
     return lineEndBeginName( type );
 }
 
-void KPLineObjectIface::horizontalFlip()
+void KPrLineObjectIface::horizontalFlip()
 {
     obj->flip( true);
 }
 
-void KPLineObjectIface::verticalFlip()
+void KPrLineObjectIface::verticalFlip()
 {
     obj->flip( false );
 }

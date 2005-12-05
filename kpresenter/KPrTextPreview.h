@@ -4,13 +4,13 @@
 #include <qframe.h>
 #include "global.h"
 
-class TextPreview : public QFrame
+class KPrTextPreview : public QFrame
 {
     Q_OBJECT
 
 public:
-    TextPreview( QWidget* parent, const char* name = 0 );
-    ~TextPreview() {}
+    KPrTextPreview( QWidget* parent, const char* name = 0 );
+    ~KPrTextPreview() {}
 
     void setShadowDirection( ShadowDirection sd ) { shadowDirection = sd; repaint( true ); }
     void setShadowDistance( int sd ) { shadowDistance = sd; repaint( true ); }

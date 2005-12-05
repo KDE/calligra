@@ -113,23 +113,23 @@ static const int CURRENT_SYNTAX_VERSION = 2;
 // Make sure an appropriate DTD is available in www/koffice/DTD if changing this value
 static const char * CURRENT_DTD_VERSION = "1.2";
 
-KPresenterChild::KPresenterChild( KPrDocument *_kpr, KoDocument* _doc, const QRect& _rect )
+KPrChild::KPrChild( KPrDocument *_kpr, KoDocument* _doc, const QRect& _rect )
     : KoDocumentChild( _kpr, _doc, _rect )
 {
     m_parent = _kpr;
 }
 
-KPresenterChild::KPresenterChild( KPrDocument *_kpr ) :
+KPrChild::KPrChild( KPrDocument *_kpr ) :
     KoDocumentChild( _kpr )
 {
     m_parent = _kpr;
 }
 
-KPresenterChild::~KPresenterChild()
+KPrChild::~KPrChild()
 {
 }
 
-KoDocument *KPresenterChild::hitTest( const QPoint &, const QWMatrix & )
+KoDocument *KPrChild::hitTest( const QPoint &, const QWMatrix & )
 {
     return 0L;
 }
@@ -140,7 +140,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
       _gradientCollection(), m_customListTest( 0L ),
       m_childCountBeforeInsert( 0 )
 {
-    setInstance( KPresenterFactory::global() );
+    setInstance( KPrFactory::global() );
     setTemplateType( "kpresenter_template" );
     //Necessary to define page where we load object otherwise copy-duplicate page doesn't work.
     m_pageWhereLoadObject=0L;
@@ -156,7 +156,7 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
     KoParagStyle* m_standardStyle = new KoParagStyle( "Standard" );
     m_styleColl->addStyle( m_standardStyle );
 
-    KConfig *config = KPresenterFactory::global()->config();
+    KConfig *config = KPrFactory::global()->config();
     config->setGroup("Document defaults" );
     QString defaultFontname=config->readEntry("DefaultFont");
     if ( !defaultFontname.isEmpty() )
@@ -259,11 +259,11 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
 
     m_gridColor=Qt::black;
 
-    _header = new KPTextObject( this );
+    _header = new KPrTextObject( this );
     _header->setDrawEditRect( false );
     _header->setDrawEmpty( false );
 
-    _footer = new KPTextObject( this );
+    _footer = new KPrTextObject( this );
     _footer->setDrawEditRect( false );
     _footer->setDrawEmpty( false );
 
@@ -306,7 +306,7 @@ void KPrDocument::saveConfig()
     group.writeEntry( "PersonalDict", m_spellCheckPersonalDict );
     if ( !isEmbedded() )
     {
-        KConfig *config = KPresenterFactory::global()->config();
+        KConfig *config = KPrFactory::global()->config();
         config->setGroup( "Interface" );
         config->writeEntry( "Zoom", m_zoomHandler->zoom() );
         config->writeEntry( "AllowAutoFormat" , m_bAllowAutoFormat );
@@ -321,7 +321,7 @@ void KPrDocument::saveConfig()
 void KPrDocument::initConfig()
 {
     int zoom;
-    KConfig* config = KPresenterFactory::global()->config();
+    KConfig* config = KPrFactory::global()->config();
     if( config->hasGroup("Interface") ) {
         config->setGroup( "Interface" );
         setAutoSave( config->readNumEntry( "AutoSave", defaultAutoSave()/60 ) * 60 );
@@ -398,7 +398,7 @@ void KPrDocument::initConfig()
 DCOPObject* KPrDocument::dcopObject()
 {
     if ( !dcop )
-        dcop = new KPresenterDocIface( this );
+        dcop = new KPrDocumentIface( this );
 
     return dcop;
 }
@@ -452,11 +452,11 @@ bool KPrDocument::saveChildren( KoStore* _store )
         {
             if ( saveOnlyPage == -1 || pagePos == saveOnlyPage )
             {
-                QPtrListIterator<KPObject> oIt(pageIt.current()->objectList());
+                QPtrListIterator<KPrObject> oIt(pageIt.current()->objectList());
                 for (; oIt.current(); ++oIt )
                 {
                     if ( oIt.current()->getType() == OT_PART &&
-                         dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == it.current() )
+                         dynamic_cast<KPrPartObject*>( oIt.current() )->getChild() == it.current() )
                     {
                         if (((KoDocumentChild*)(it.current()))->document()!=0)
                             if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, QString::number( i++ ) ) )
@@ -467,11 +467,11 @@ bool KPrDocument::saveChildren( KoStore* _store )
         }
         if ( saveOnlyPage == -1 )
         {
-            QPtrListIterator<KPObject> oIt(m_masterPage->objectList());
+            QPtrListIterator<KPrObject> oIt(m_masterPage->objectList());
             for (; oIt.current(); ++oIt )
             {
                 if ( oIt.current()->getType() == OT_PART &&
-                        dynamic_cast<KPPartObject*>( oIt.current() )->getChild() == it.current() )
+                        dynamic_cast<KPrPartObject*>( oIt.current() )->getChild() == it.current() )
                 {
                     if (((KoDocumentChild*)(it.current()))->document()!=0)
                         if ( !((KoDocumentChild*)(it.current()))->document()->saveToStore( _store, QString::number( i++ ) ) )
@@ -717,14 +717,14 @@ void KPrDocument::saveEmbeddedObject(KPrPage *page, const QPtrList<KoDocumentChi
 void KPrDocument::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDomDocument &doc,
                                        QDomElement &presenter, double offset )
 {
-    QPtrListIterator<KPObject> oIt(page->objectList());
+    QPtrListIterator<KPrObject> oIt(page->objectList());
     for ( int pos = 0; oIt.current(); ++oIt, ++pos )
     {
         if ( oIt.current()->getType() == OT_PART &&
-             static_cast<KPPartObject*>( oIt.current() )->getChild() == chl )
+             static_cast<KPrPartObject*>( oIt.current() )->getChild() == chl )
         {
             QDomElement embedded=doc.createElement("EMBEDDED");
-            KPresenterChild* curr = (KPresenterChild*)chl;
+            KPrChild* curr = (KPrChild*)chl;
 
             // geometry is no zoom value !
             QRect _rect = curr->geometry();
@@ -742,11 +742,11 @@ void KPrDocument::saveEmbeddedObject(KPrPage *page, KoDocumentChild *chl, QDomDo
             settings.setAttribute( "z-index", pos );
             if ( page == m_masterPage )
                 settings.setAttribute("sticky", 1 );
-            QPtrListIterator<KPObject> setOIt(page->objectList());
+            QPtrListIterator<KPrObject> setOIt(page->objectList());
             for (; setOIt.current(); ++setOIt )
             {
                 if ( setOIt.current()->getType() == OT_PART &&
-                     dynamic_cast<KPPartObject*>( setOIt.current() )->getChild() == curr )
+                     dynamic_cast<KPrPartObject*>( setOIt.current() )->getChild() == curr )
                     settings.appendChild(setOIt.current()->save( doc,offset ));
             }
             embedded.appendChild(settings);
@@ -1533,7 +1533,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
 {
     QTime dt;
     dt.start();
-    m_loadingInfo = new KPRLoadingInfo;
+    m_loadingInfo = new KPrLoadingInfo;
     ignoreSticky = FALSE;
     emit sigProgress( 0 );
     lastObj = -1;
@@ -1743,7 +1743,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
 }
 
 
-void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context, KPGroupObject *groupObject )
+void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOasisContext & context, KPrGroupObject *groupObject )
 {
     for ( QDomNode object = drawPage.firstChild(); !object.isNull(); object = object.nextSibling() )
     {
@@ -1761,7 +1761,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             kdDebug()<<" imageBox:"<<imageBox.isNull()<<endl;
             if ( !imageBox.isNull() )
             {
-                KPPixmapObject *kppixmapobject = new KPPixmapObject( pictureCollection() );
+                KPrPixmapObject *kppixmapobject = new KPrPixmapObject( pictureCollection() );
                 kppixmapobject->loadOasis( o, context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kppixmapobject );
@@ -1775,9 +1775,9 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                 if ( !object.isNull() )
                 {
                     fillStyleStack( o, context );
-                    KPresenterChild *ch = new KPresenterChild( this );
+                    KPrChild *ch = new KPrChild( this );
                     QRect r;
-                    KPPartObject *kppartobject = new KPPartObject( ch );
+                    KPrPartObject *kppartobject = new KPrPartObject( ch );
                     kppartobject->loadOasis( o, context, m_loadingInfo );
                     r = ch->geometry();
                     if ( groupObject )
@@ -1790,7 +1790,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                 }
                 else
                 {
-                    KPTextObject *kptextobject = new KPTextObject( this );
+                    KPrTextObject *kptextobject = new KPrTextObject( this );
                     kptextobject->loadOasis(o, context, m_loadingInfo);
                     if ( groupObject )
                         groupObject->addObjects( kptextobject );
@@ -1802,7 +1802,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
         else if ( name == "rect" && isDrawNS) // rectangle
         {
             fillStyleStack( o, context );
-            KPRectObject *kprectobject = new KPRectObject();
+            KPrRectObject *kprectobject = new KPrRectObject();
             kprectobject->loadOasis(o, context , m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kprectobject );
@@ -1814,7 +1814,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             fillStyleStack( o, context );
             if ( o.hasAttributeNS( KoXmlNS::draw, "kind" ) ) // pie, chord or arc
             {
-                KPPieObject *kppieobject = new KPPieObject();
+                KPrKPPieObject *kppieobject = new KPrKPPieObject();
                 kppieobject->loadOasis(o, context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kppieobject );
@@ -1823,7 +1823,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             }
             else  // circle or ellipse
             {
-                KPEllipseObject *kpellipseobject = new KPEllipseObject();
+                KPrEllipseObject *kpellipseobject = new KPrEllipseObject();
                 kpellipseobject->loadOasis(o,context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kpellipseobject );
@@ -1834,7 +1834,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
         else if ( name == "line" && isDrawNS) // line
         {
             fillStyleStack( o, context );
-            KPLineObject *kplineobject = new KPLineObject();
+            KPrLineObject *kplineobject = new KPrLineObject();
             kplineobject->loadOasis(o, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kplineobject );
@@ -1843,7 +1843,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
         }
         else if (name=="polyline" && isDrawNS) { // polyline
             fillStyleStack( o, context );
-            KPPolylineObject *kppolylineobject = new KPPolylineObject();
+            KPrPolylineObject *kppolylineobject = new KPrPolylineObject();
             kppolylineobject->loadOasis(o, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kppolylineobject );
@@ -1852,7 +1852,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
         }
         else if (name=="polygon" && isDrawNS) { // plcloseobject
             fillStyleStack( o, context );
-            KPClosedLineObject *kpClosedObject = new KPClosedLineObject();
+            KPrClosedLineObject *kpClosedObject = new KPrClosedLineObject();
             kpClosedObject->loadOasis( o, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kpClosedObject );
@@ -1862,7 +1862,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
         //FIXME wait that it will ok'ed by oo spec
         else if (name=="regular-polygon"&& isDrawNS) { // kppolygone object
             fillStyleStack( o, context );
-            KPPolygonObject *kpPolygoneObject = new KPPolygonObject();
+            KPrPolygonObject *kpPolygoneObject = new KPrPolygonObject();
             kpPolygoneObject->loadOasis( o, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kpPolygoneObject );
@@ -1873,7 +1873,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
         else if ( name == "image" && isDrawNS) // image
         {
             fillStyleStack( o, context );
-            KPPixmapObject *kppixmapobject = new KPPixmapObject( pictureCollection() );
+            KPrPixmapObject *kppixmapobject = new KPrPixmapObject( pictureCollection() );
             kppixmapobject->loadOasis( o, context, m_loadingInfo);
             if ( groupObject )
                 groupObject->addObjects( kppixmapobject );
@@ -1884,7 +1884,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
         else if ( name == "path" && isDrawNS)
         {
             //we have 4 elements to use here.
-            //Cubicbeziercurve/Quadricbeziercurve/closeline/KPFreehandObject
+            //Cubicbeziercurve/Quadricbeziercurve/closeline/KPrFreehandObject
             //we must parse svd:d argument
             // "z" close element
             // "c" cubic element
@@ -1899,7 +1899,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             if ( pathDefinition.contains( "c" ) )
             {
                 kdDebug()<<"Cubicbeziercurve \n";
-                KPCubicBezierCurveObject *kpCurveObject = new KPCubicBezierCurveObject();
+                KPrCubicBezierCurveObject *kpCurveObject = new KPrCubicBezierCurveObject();
                 kpCurveObject->loadOasis( o, context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kpCurveObject );
@@ -1910,7 +1910,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             else if ( pathDefinition.contains( "q" ) )
             {
                 kdDebug()<<"Quadricbeziercurve \n";
-                KPQuadricBezierCurveObject *kpQuadricObject = new KPQuadricBezierCurveObject();
+                KPrQuadricBezierCurveObject *kpQuadricObject = new KPrQuadricBezierCurveObject();
                 kpQuadricObject->loadOasis( o, context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kpQuadricObject );
@@ -1919,8 +1919,8 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             }
             else
             {
-                kdDebug()<<"KPFreehandObject \n";
-                KPFreehandObject *kpFreeHandObject = new KPFreehandObject();
+                kdDebug()<<"KPrFreehandObject \n";
+                KPrFreehandObject *kpFreeHandObject = new KPrFreehandObject();
                 kpFreeHandObject->loadOasis( o, context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kpFreeHandObject );
@@ -1931,7 +1931,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
         else if ( name == "g" && isDrawNS)
         {
             fillStyleStack( o, context );
-            KPGroupObject *kpgroupobject = new KPGroupObject();
+            KPrGroupObject *kpgroupobject = new KPrGroupObject();
             QDomNode nodegroup = object.firstChild();
 
             kpgroupobject->loadOasisGroupObject( this, newpage, object, context, m_loadingInfo);
@@ -2056,7 +2056,7 @@ bool KPrDocument::loadXML( QIODevice * dev, const QDomDocument& doc )
 {
     QTime dt;
     dt.start();
-    m_loadingInfo = new KPRLoadingInfo( true );
+    m_loadingInfo = new KPrLoadingInfo( true );
 
     ignoreSticky = FALSE;
     bool b=false;
@@ -2145,8 +2145,8 @@ void KPrDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCom
     {
         kdDebug(33001) << "Element name: " << elem.tagName() << endl;
         if(elem.tagName()=="EMBEDDED") {
-            KPresenterChild *ch = new KPresenterChild( this );
-            KPPartObject *kppartobject = 0L;
+            KPrChild *ch = new KPrChild( this );
+            KPrPartObject *kppartobject = 0L;
             QRect r;
 
             QDomElement object=elem.namedItem("OBJECT").toElement();
@@ -2155,7 +2155,7 @@ void KPrDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCom
                 r = ch->geometry();
                 ch->loadDocument( store );
                 insertChild( ch );
-                kppartobject = new KPPartObject( ch );
+                kppartobject = new KPrPartObject( ch );
             }
             QDomElement settings=elem.namedItem("SETTINGS").toElement();
             int zIndex = 0;
@@ -2177,20 +2177,20 @@ void KPrDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroCom
             int newPos=(int)((offset+index*__pgLayout.ptHeight)-pageIndex*__pgLayout.ptHeight);
             kppartobject->setOrig(kppartobject->getOrig().x(),newPos);
 
-            InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Part Object" ), kppartobject, this,page );
+            KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Part Object" ), kppartobject, this,page );
             insertCmd->execute();
             if ( !macroCmd )
                 macroCmd = new KMacroCommand( i18n("Insert Part Object"));
             macroCmd->addCommand( insertCmd );
             if ( pos != 0 )
             {
-                const QPtrList<KPObject>& oldList( page->objectList() );
+                const QPtrList<KPrObject>& oldList( page->objectList() );
                 // tz TODO this is not 100% correct
                 if ( static_cast<int>( oldList.count() ) > pos + zIndex )
                 {
                     page->takeObject( kppartobject );
                     page->insertObject( kppartobject, pos + zIndex );
-                    LowerRaiseCmd *lrCmd = new LowerRaiseCmd( i18n("Insert Part Object"),
+                    KPrLowerRaiseCmd *lrCmd = new KPrLowerRaiseCmd( i18n("Insert Part Object"),
                                                               oldList, page->objectList(),
                                                               this, page );
                     macroCmd->addCommand( lrCmd );
@@ -2251,8 +2251,8 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
     while(!elem.isNull()) {
         kdDebug(33001) << "Element name: " << elem.tagName() << endl;
         if(elem.tagName()=="EMBEDDED") {
-            KPresenterChild *ch = new KPresenterChild( this );
-            KPPartObject *kppartobject = 0L;
+            KPrChild *ch = new KPrChild( this );
+            KPrPartObject *kppartobject = 0L;
             QRect r;
 
             QDomElement object=elem.namedItem("OBJECT").toElement();
@@ -2260,7 +2260,7 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
                 ch->load(object, true);  // true == uppercase
                 r = ch->geometry();
                 insertChild( ch );
-                kppartobject = new KPPartObject( ch );
+                kppartobject = new KPrPartObject( ch );
                 //emit sig_insertObject( ch, kppartobject );
             }
             QDomElement settings=elem.namedItem("SETTINGS").toElement();
@@ -2612,7 +2612,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
             double offset=0;
             switch ( t ) {
             case OT_LINE: {
-                KPLineObject *kplineobject = new KPLineObject();
+                KPrLineObject *kplineobject = new KPrLineObject();
                 offset=kplineobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -2622,7 +2622,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if (m_pageWhereLoadObject && paste) {
                     kplineobject->setOrig(kplineobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Line" ), kplineobject, this, m_pageWhereLoadObject );
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Line" ), kplineobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
                     //insertCmd->execute();
@@ -2636,7 +2636,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset, kplineobject);
             } break;
             case OT_RECT: {
-                KPRectObject *kprectobject = new KPRectObject();
+                KPrRectObject *kprectobject = new KPrRectObject();
                 offset=kprectobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -2646,7 +2646,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if (m_pageWhereLoadObject && paste) {
                     kprectobject->setOrig(kprectobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Rectangle" ), kprectobject, this, m_pageWhereLoadObject );
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Rectangle" ), kprectobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
                 }
@@ -2659,7 +2659,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset, kprectobject);
             } break;
             case OT_ELLIPSE: {
-                KPEllipseObject *kpellipseobject = new KPEllipseObject();
+                KPrEllipseObject *kpellipseobject = new KPrEllipseObject();
                 offset=kpellipseobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -2670,7 +2670,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 else if ( m_pageWhereLoadObject && paste)
                 {
                     kpellipseobject->setOrig(kpellipseobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this, m_pageWhereLoadObject );
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Ellipse" ), kpellipseobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
                 }
@@ -2683,7 +2683,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset, kpellipseobject);
             } break;
             case OT_PIE: {
-                KPPieObject *kppieobject = new KPPieObject();
+                KPrKPPieObject *kppieobject = new KPrKPPieObject();
                 offset=kppieobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -2693,7 +2693,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kppieobject->setOrig(kppieobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this, m_pageWhereLoadObject );
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Pie/Arc/Chord" ), kppieobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
                 }
@@ -2706,7 +2706,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset, kppieobject);
             } break;
             case OT_AUTOFORM: {
-                KPAutoformObject *kpautoformobject = new KPAutoformObject();
+                KPrAutoformObject *kpautoformobject = new KPrAutoformObject();
                 offset=kpautoformobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -2716,7 +2716,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject&& paste) {
                     kpautoformobject->setOrig(kpautoformobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this, m_pageWhereLoadObject );
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Autoform" ), kpautoformobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
                 }
@@ -2729,7 +2729,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset, kpautoformobject);
             } break;
             case OT_TEXT: {
-                KPTextObject *kptextobject = new KPTextObject( this );
+                KPrTextObject *kptextobject = new KPrTextObject( this );
                 offset=kptextobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -2739,7 +2739,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kptextobject->setOrig(kptextobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Textbox" ), kptextobject, this, m_pageWhereLoadObject );
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Textbox" ), kptextobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
                 }
@@ -2753,7 +2753,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
             } break;
             case OT_CLIPART:
             case OT_PICTURE: {
-                KPPixmapObject *kppixmapobject = new KPPixmapObject( pictureCollection() );
+                KPrPixmapObject *kppixmapobject = new KPrPixmapObject( pictureCollection() );
                 offset=kppixmapobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -2763,7 +2763,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kppixmapobject->setOrig(kppixmapobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Picture" ), kppixmapobject, this, m_pageWhereLoadObject );
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Picture" ), kppixmapobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     kppixmapobject->reload();
                     createMacro=true;
@@ -2777,7 +2777,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset, kppixmapobject);
             } break;
             case OT_FREEHAND: {
-                KPFreehandObject *kpfreehandobject = new KPFreehandObject();
+                KPrFreehandObject *kpfreehandobject = new KPrFreehandObject();
                 offset=kpfreehandobject->load(obj);
 
                 if ( sticky && !ignoreSticky)
@@ -2788,7 +2788,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpfreehandobject->setOrig(kpfreehandobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, this, m_pageWhereLoadObject );
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Freehand" ), kpfreehandobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
                 }
@@ -2801,7 +2801,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset,kpfreehandobject);
             } break;
             case OT_POLYLINE: {
-                KPPolylineObject *kppolylineobject = new KPPolylineObject();
+                KPrPolylineObject *kppolylineobject = new KPrPolylineObject();
                 offset=kppolylineobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -2811,7 +2811,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if (m_pageWhereLoadObject && paste) {
                     kppolylineobject->setOrig(kppolylineobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polyline" ), kppolylineobject, this, m_pageWhereLoadObject );
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Polyline" ), kppolylineobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
 
@@ -2825,7 +2825,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset, kppolylineobject);
             } break;
             case OT_QUADRICBEZIERCURVE: {
-                KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject();
+                KPrQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPrQuadricBezierCurveObject();
                 offset=kpQuadricBezierCurveObject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -2835,7 +2835,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpQuadricBezierCurveObject->setOrig(kpQuadricBezierCurveObject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject,
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Quadric Bezier Curve" ), kpQuadricBezierCurveObject,
                                                           this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
@@ -2849,7 +2849,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset, kpQuadricBezierCurveObject);
             } break;
             case OT_CUBICBEZIERCURVE: {
-                KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject();
+                KPrCubicBezierCurveObject *kpCubicBezierCurveObject = new KPrCubicBezierCurveObject();
                 offset=kpCubicBezierCurveObject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {
@@ -2859,7 +2859,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpCubicBezierCurveObject->setOrig(kpCubicBezierCurveObject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject,
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Cubic Bezier Curve" ), kpCubicBezierCurveObject,
                                                           this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
@@ -2874,7 +2874,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset, kpCubicBezierCurveObject);
             } break;
             case OT_POLYGON: {
-                KPPolygonObject *kpPolygonObject = new KPPolygonObject();
+                KPrPolygonObject *kpPolygonObject = new KPrPolygonObject();
                 offset=kpPolygonObject->load( obj );
                 if ( sticky && !ignoreSticky)
                 {
@@ -2884,7 +2884,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpPolygonObject->setOrig(kpPolygonObject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, this, m_pageWhereLoadObject);
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Polygon" ), kpPolygonObject, this, m_pageWhereLoadObject);
                     macro->addCommand( insertCmd );
                     createMacro=true;
 
@@ -2898,7 +2898,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset, kpPolygonObject);
             } break;
             case OT_CLOSED_LINE: {
-                KPClosedLineObject *kpClosedLinneObject = new KPClosedLineObject();
+                KPrClosedLineObject *kpClosedLinneObject = new KPrClosedLineObject();
                 offset = kpClosedLinneObject->load( obj );
                 if ( sticky && !ignoreSticky) {
                     m_masterPage->appendObject( kpClosedLinneObject );
@@ -2907,7 +2907,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste ) {
                     kpClosedLinneObject->setOrig( kpClosedLinneObject->getOrig().x(), offset );
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert %1" ).arg(kpClosedLinneObject->getTypeString()),
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert %1" ).arg(kpClosedLinneObject->getTypeString()),
                                                           kpClosedLinneObject, this , m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro = true;
@@ -2922,7 +2922,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage( offset, kpClosedLinneObject );
             } break;
             case OT_GROUP: {
-                KPGroupObject *kpgroupobject = new KPGroupObject();
+                KPrGroupObject *kpgroupobject = new KPrGroupObject();
                 offset=kpgroupobject->load(obj, this);
                 if ( sticky && !ignoreSticky)
                 {
@@ -2932,7 +2932,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpgroupobject->setOrig(kpgroupobject->getOrig().x(),offset);
-                    InsertCmd *insertCmd = new InsertCmd( i18n( "Insert Group Object" ), kpgroupobject, this, m_pageWhereLoadObject );
+                    KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Group Object" ), kpgroupobject, this, m_pageWhereLoadObject );
                     macro->addCommand( insertCmd );
                     createMacro=true;
 
@@ -3130,7 +3130,7 @@ void KPrDocument::loadUsedSoundFileFromStore( KoStore *_store, QStringList _list
                 if ( !_file.isEmpty() && _file == _fileName )
                     it.current()->setPageSoundFileName( tmpFileName );
 
-                QPtrListIterator<KPObject> oIt( it.current()->objectList() );
+                QPtrListIterator<KPrObject> oIt( it.current()->objectList() );
                 for ( ; oIt.current(); ++oIt ) {
                     _file = oIt.current()->getAppearSoundEffectFileName();
                     if ( !_file.isEmpty() && _file == _fileName )
@@ -3189,7 +3189,7 @@ bool KPrDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
     if (flags==KoDocument::InitDocEmpty)
     {
         QString fileName( locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
-                                 KPresenterFactory::global() ) );
+                                 KPrFactory::global() ) );
         objStartY = 0;
         _clean = true;
         bool ok = loadNativeFormat( fileName );
@@ -3208,7 +3208,7 @@ bool KPrDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
     else
             dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
-    ret = KoTemplateChooseDia::choose( KPresenterFactory::global(), file,
+    ret = KoTemplateChooseDia::choose( KPrFactory::global(), file,
                                        dlgtype, "kpresenter_template", parentWidget );
     if ( ret == KoTemplateChooseDia::Template ) {
         _clean = true; //was a parameter called "clean", but unused
@@ -3228,7 +3228,7 @@ bool KPrDocument::initDoc(InitDocFlags flags, QWidget* parentWidget)
         return ok;
     } else if ( ret == KoTemplateChooseDia::Empty ) {
         QString fileName( locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
-                                 KPresenterFactory::global() ) );
+                                 KPrFactory::global() ) );
         objStartY = 0;
         _clean = true;
         bool ok = loadNativeFormat( fileName );
@@ -3258,7 +3258,7 @@ void KPrDocument::openTemplate( const QString& file )
 void KPrDocument::initEmpty()
 {
     QString fileName( locate("kpresenter_template", "Screenpresentations/.source/Plain.kpt",
-                             KPresenterFactory::global() ) );
+                             KPrFactory::global() ) );
     objStartY = 0;
     _clean = true;
     setModified(true);
@@ -3291,7 +3291,7 @@ void KPrDocument::repaint( bool erase )
 {
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
-        KPrCanvas* canvas = ((KPresenterView*)it.current())->getCanvas();
+        KPrCanvas* canvas = ((KPrView*)it.current())->getCanvas();
         canvas->repaint( erase );
     }
 }
@@ -3302,16 +3302,16 @@ void KPrDocument::repaint( const QRect& rect )
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
         r = rect;
-        KPrCanvas* canvas = ((KPresenterView*)it.current())->getCanvas();
+        KPrCanvas* canvas = ((KPrView*)it.current())->getCanvas();
         r.moveTopLeft( QPoint( r.x() - canvas->diffx(),
                                r.y() - canvas->diffy() ) );
         canvas->update( r );
     }
 }
 
-void KPrDocument::layout(KPObject *kpobject)
+void KPrDocument::layout(KPrObject *kpobject)
 {
-    KPTextObject * obj = dynamic_cast<KPTextObject *>( kpobject );
+    KPrTextObject * obj = dynamic_cast<KPrTextObject *>( kpobject );
     if (obj)
         obj->layout();
 }
@@ -3320,12 +3320,12 @@ void KPrDocument::layout()
 {
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it ) {
-        KPrCanvas* canvas = ((KPresenterView*)it.current())->getCanvas();
+        KPrCanvas* canvas = ((KPrView*)it.current())->getCanvas();
         canvas->layout();
     }
 }
 
-void KPrDocument::repaint( KPObject *kpobject )
+void KPrDocument::repaint( KPrObject *kpobject )
 {
     repaint( m_zoomHandler->zoomRect( kpobject->getRepaintRect() ) );
 }
@@ -3402,7 +3402,7 @@ void KPrDocument::insertPage( KPrPage *page, int currentPageNum, int insertPageN
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
-        KPresenterView *view = static_cast<KPresenterView*>( it.current() );
+        KPrView *view = static_cast<KPrView*>( it.current() );
         view->addSideBarItem( insertPageNum );
 
         // change to the new page if the view was on the current page.
@@ -3428,7 +3428,7 @@ void KPrDocument::takePage( KPrPage *page, int pageNum )
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
-        KPresenterView *view = static_cast<KPresenterView*>( it.current() );
+        KPrView *view = static_cast<KPrView*>( it.current() );
         view->removeSideBarItem( pos );
 
         // change to the new page if the view was on the current page.
@@ -3467,7 +3467,7 @@ void KPrDocument::movePageTo( int oldPos, int newPos )
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
-        KPresenterView *view = static_cast<KPresenterView*>( it.current() );
+        KPrView *view = static_cast<KPrView*>( it.current() );
         view->moveSideBarItem( oldPos, newPos );
 
         // change to the new page if the view was on the old pos.
@@ -3494,7 +3494,7 @@ QString KPrDocument::templateFileName( bool chooseTemplate, const QString &theFi
         // TODO: pass parentWidget as parameter to this method
         QWidget* parentWidget = 0;
         QString _template;
-        if ( KoTemplateChooseDia::choose( KPresenterFactory::global(), _template,
+        if ( KoTemplateChooseDia::choose( KPrFactory::global(), _template,
                                           KoTemplateChooseDia::OnlyTemplates,
                                           "kpresenter_template", parentWidget ) == KoTemplateChooseDia::Cancel )
             return QString::null;
@@ -3632,21 +3632,21 @@ void KPrDocument::deSelectAllObj()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->getCanvas()->deSelectAllObj();
+        ((KPrView*)it.current())->getCanvas()->deSelectAllObj();
 }
 
-void KPrDocument::deSelectObj(KPObject *obj)
+void KPrDocument::deSelectObj(KPrObject *obj)
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->getCanvas()->deSelectObj( obj );
+        ((KPrView*)it.current())->getCanvas()->deSelectObj( obj );
 }
 
 void KPrDocument::setDisplayObjectMasterPage( bool b )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->updateDisplayObjectMasterPageButton();
+        ((KPrView*)it.current())->updateDisplayObjectMasterPageButton();
     repaint(b);
 }
 
@@ -3654,7 +3654,7 @@ void KPrDocument::setDisplayBackground( bool b )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->updateDisplayBackgroundButton();
+        ((KPrView*)it.current())->updateDisplayBackgroundButton();
     repaint(b);
 }
 
@@ -3690,7 +3690,7 @@ void KPrDocument::updateHeaderFooterButton()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->updateHeaderFooterButton();
+        ((KPrView*)it.current())->updateHeaderFooterButton();
 }
 
 void KPrDocument::makeUsedPixmapList()
@@ -3721,7 +3721,7 @@ void KPrDocument::makeUsedSoundFileList()
         if ( !_file.isEmpty() && usedSoundFile.findIndex( _file ) == -1 )
             usedSoundFile.append( _file );
 
-        QPtrListIterator<KPObject> oIt( it.current()->objectList() );
+        QPtrListIterator<KPrObject> oIt( it.current()->objectList() );
         for ( ; oIt.current(); ++oIt ) {
             _file = oIt.current()->getAppearSoundEffectFileName();
             if ( !_file.isEmpty() && usedSoundFile.findIndex( _file ) == -1 )
@@ -3737,9 +3737,9 @@ void KPrDocument::makeUsedSoundFileList()
 KoView* KPrDocument::createViewInstance( QWidget* parent, const char* name )
 {
     //the page numbers have to be recalced for the sticky objects
-    //as it could not be done during the constructor of KPresenterView
+    //as it could not be done during the constructor of KPrView
     recalcPageNum();
-    return new KPresenterView( this, parent, name );
+    return new KPrView( this, parent, name );
 }
 
 void KPrDocument::paintContent( QPainter& painter, const QRect& rect,
@@ -3761,7 +3761,7 @@ void KPrDocument::paintContent( QPainter& painter, const QRect& rect,
     if ( page->displayBackground() )
         page->background()->drawBackground( &painter, zoomHandler(), rect, false );
     //for the moment draw first page.
-    QPtrListIterator<KPObject> it( page->objectList() );
+    QPtrListIterator<KPrObject> it( page->objectList() );
     for ( ; it.current() ; ++it )
         it.current()->draw( &painter, zoomHandler(), pageNum, SM_NONE );
     if ( page->displayObjectFromMasterPage() )
@@ -3944,9 +3944,9 @@ void KPrDocument::selectPage( int pgNum /* 0-based */, bool select )
     emit pageNumChanged();
 }
 
-KPrPage * KPrDocument::findPage(KPObject *object)
+KPrPage * KPrDocument::findPage(KPrObject *object)
 {
-    QPtrList<KPObject> masterObjects( m_masterPage->objectList() );
+    QPtrList<KPrObject> masterObjects( m_masterPage->objectList() );
     if ( masterObjects.findRef( object ) != -1 )
     {
         //kdDebug(33001) << "Object is on the master page" << endl;
@@ -3954,7 +3954,7 @@ KPrPage * KPrDocument::findPage(KPObject *object)
     }
     QPtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it ) {
-        QPtrList<KPObject> list( it.current()->objectList() );
+        QPtrList<KPrObject> list( it.current()->objectList() );
         if ( list.findRef( object ) != -1 ) {
             //kdDebug(33001) << "Object is on page " << m_pageList.findRef(it.current()) + 1 << endl;
             return it.current();
@@ -3964,11 +3964,11 @@ KPrPage * KPrDocument::findPage(KPObject *object)
     return 0L;
 }
 
-KPrPage * KPrDocument::findPage(QPtrList<KPObject> &objects)
+KPrPage * KPrDocument::findPage(QPtrList<KPrObject> &objects)
 {
-    KPObject *object;
+    KPrObject *object;
     for ( object = objects.first(); object; object=objects.next() ) {
-        QPtrList<KPObject> list( m_masterPage->objectList() );
+        QPtrList<KPrObject> list( m_masterPage->objectList() );
         if ( list.findRef( object ) != -1 )
         {
             //kdDebug(33001) << "Object is on the master page" << endl;
@@ -3977,7 +3977,7 @@ KPrPage * KPrDocument::findPage(QPtrList<KPObject> &objects)
     }
     object = objects.first();
     for ( KPrPage *page=m_pageList.first(); page; page=m_pageList.next() ) {
-        QPtrList<KPObject> list( page->objectList() );
+        QPtrList<KPrObject> list( page->objectList() );
         if ( list.findRef( object ) != -1 ) {
             //kdDebug(33001) << "The Objects are on page " << m_pageList.findRef(page) + 1 << endl;
             return page;
@@ -3992,7 +3992,7 @@ void KPrDocument::updateSideBarItem( KPrPage * page )
     // Update the views
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>( it.current() )->updateSideBarItem( page );
+        static_cast<KPrView*>( it.current() )->updateSideBarItem( page );
 }
 
 bool KPrDocument::isSlideSelected( int pgNum /* 0-based */ )
@@ -4079,7 +4079,7 @@ QString KPrDocument::selectedForPrinting() {
     return ret;
 }
 
-void KPrDocument::slotRepaintChanged( KPTextObject *kptextobj )
+void KPrDocument::slotRepaintChanged( KPrTextObject *kptextobj )
 {
     //todo
     //use this function for the moment
@@ -4104,13 +4104,13 @@ void KPrDocument::slotRepaintVariable()
 
 void KPrDocument::slotGuideLinesChanged( KoView *view )
 {
-    ( (KPresenterView*)view )->getCanvas()->guideLines().getGuideLines( m_hGuideLines, m_vGuideLines );
+    ( (KPrView*)view )->getCanvas()->guideLines().getGuideLines( m_hGuideLines, m_vGuideLines );
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
         if ( it.current() != view )
         {
-            ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
+            ( (KPrView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
         }
     }
 }
@@ -4125,7 +4125,7 @@ void KPrDocument::reorganizeGUI()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->reorganize();
+        ((KPrView*)it.current())->reorganize();
 }
 
 int KPrDocument::undoRedoLimit() const
@@ -4157,7 +4157,7 @@ KPrPage * KPrDocument::activePage()const
     return m_initialActivePage;
 }
 
-void KPrDocument::insertObjectInPage(double offset, KPObject *_obj, int pos)
+void KPrDocument::insertObjectInPage(double offset, KPrObject *_obj, int pos)
 {
     /// Why does this use __pgLayout instead of m_pageLayout ?
     int page = (int)(offset/__pgLayout.ptHeight)+m_insertFilePage;
@@ -4207,9 +4207,9 @@ void KPrDocument::updateZoomRuler()
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
-        ((KPresenterView*)it.current())->getHRuler()->setZoom( m_zoomHandler->zoomedResolutionX() );
-        ((KPresenterView*)it.current())->getVRuler()->setZoom( m_zoomHandler->zoomedResolutionY() );
-        ((KPresenterView*)it.current())->slotUpdateRuler();
+        ((KPrView*)it.current())->getHRuler()->setZoom( m_zoomHandler->zoomedResolutionX() );
+        ((KPrView*)it.current())->getVRuler()->setZoom( m_zoomHandler->zoomedResolutionY() );
+        ((KPrView*)it.current())->slotUpdateRuler();
     }
 }
 
@@ -4217,10 +4217,10 @@ void KPrDocument::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 {
     QPtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it ) {
-        QPtrListIterator<KPObject> oit(it.current()->objectList());
+        QPtrListIterator<KPrObject> oit(it.current()->objectList());
         for ( ; oit.current(); ++oit ) {
             if ( oit.current()->getType() == OT_TEXT )
-                static_cast<KPTextObject *>( oit.current() )->textDocument()->formatCollection()->zoomChanged();
+                static_cast<KPrTextObject *>( oit.current() )->textDocument()->formatCollection()->zoomChanged();
         }
     }
     if ( updateViews )
@@ -4228,23 +4228,23 @@ void KPrDocument::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
         QPtrListIterator<KoView> it( views() );
         for (; it.current(); ++it )
         {
-            static_cast<KPresenterView *>( it.current() )->getCanvas()->update();
-            static_cast<KPresenterView *>( it.current() )->getCanvas()->layout();
+            static_cast<KPrView *>( it.current() )->getCanvas()->update();
+            static_cast<KPrView *>( it.current() )->getCanvas()->layout();
         }
     }
 }
 
-bool KPrDocument::isHeader(const KPObject *obj) const
+bool KPrDocument::isHeader(const KPrObject *obj) const
 {
     return (obj==_header);
 }
 
-bool KPrDocument::isFooter(const KPObject *obj) const
+bool KPrDocument::isFooter(const KPrObject *obj) const
 {
     return (obj==_footer);
 }
 
-bool KPrDocument::isHeaderFooter(const KPObject *obj) const
+bool KPrDocument::isHeaderFooter(const KPrObject *obj) const
 {
     return (obj==_header)||(obj==_footer);
 }
@@ -4254,31 +4254,31 @@ void KPrDocument::updateRulerPageLayout()
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
-        ((KPresenterView*)it.current())->getHRuler()->setPageLayout(m_pageLayout );
-        ((KPresenterView*)it.current())->getVRuler()->setPageLayout(m_pageLayout );
+        ((KPrView*)it.current())->getHRuler()->setPageLayout(m_pageLayout );
+        ((KPrView*)it.current())->getVRuler()->setPageLayout(m_pageLayout );
 
     }
 }
 
-void KPrDocument::refreshAllNoteBarMasterPage(const QString &text, KPresenterView *exceptView)
+void KPrDocument::refreshAllNoteBarMasterPage(const QString &text, KPrView *exceptView)
 {
     m_masterPage->setNoteText(text );
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
-        KPresenterView* view=(KPresenterView*)it.current();
+        KPrView* view=(KPrView*)it.current();
         if ( view->getNoteBar() && view != exceptView && view->editMaster() )
             view->getNoteBar()->setCurrentNoteText(text );
     }
 }
 
-void KPrDocument::refreshAllNoteBar(int page, const QString &text, KPresenterView *exceptView)
+void KPrDocument::refreshAllNoteBar(int page, const QString &text, KPrView *exceptView)
 {
     m_pageList.at(page)->setNoteText(text );
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
-        KPresenterView* view=(KPresenterView*)it.current();
+        KPrView* view=(KPrView*)it.current();
         if ( view->getNoteBar() && view != exceptView && ((int)(view->getCurrPgNum())-1 == page))
             view->getNoteBar()->setCurrentNoteText(text );
     }
@@ -4304,7 +4304,7 @@ void KPrDocument::loadStyleTemplates( const QDomElement &stylesElem )
 
         QDomElement formatElem = styleElem.namedItem( "FORMAT" ).toElement();
         if ( !formatElem.isNull() )
-            sty->format() = KPTextObject::loadFormat( formatElem, 0L, defaultFont(), globalLanguage(), globalHyphenation() );
+            sty->format() = KPrTextObject::loadFormat( formatElem, 0L, defaultFont(), globalLanguage(), globalHyphenation() );
         else
             kdWarning(33001) << "No FORMAT tag in <STYLE>" << endl; // This leads to problems in applyStyle().
 
@@ -4333,7 +4333,7 @@ void KPrDocument::updateAllStyleLists()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->updateStyleList();
+        ((KPrView*)it.current())->updateStyleList();
 }
 
 void KPrDocument::applyStyleChange( KoStyleChangeDefMap changed )
@@ -4352,7 +4352,7 @@ void KPrDocument::saveStyle( KoParagStyle *sty, QDomElement parentElem )
 
     sty->saveStyle( styleElem );
     QDomElement formatElem = doc.createElement("FORMAT");
-    KPTextObject::saveFormat( formatElem, &sty->format() );
+    KPrTextObject::saveFormat( formatElem, &sty->format() );
     styleElem.appendChild( formatElem );
 }
 
@@ -4374,7 +4374,7 @@ void KPrDocument::enableBackgroundSpellCheck( bool b )
     m_bgSpellCheck->setEnabled(b);
     QPtrListIterator<KoView> it( views() );
     for( ; it.current(); ++it )
-        ((KPresenterView*)it.current())->updateBgSpellCheckingState();
+        ((KPrView*)it.current())->updateBgSpellCheckingState();
 }
 
 bool KPrDocument::backgroundSpellCheckEnabled() const
@@ -4468,7 +4468,7 @@ void KPrDocument::addGuideLine( Qt::Orientation o, double pos )
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
     {
-        ( (KPresenterView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
+        ( (KPrView*)it.current() )->getCanvas()->guideLines().setGuideLines( m_hGuideLines, m_vGuideLines );
     }
 }
 
@@ -4477,7 +4477,7 @@ void KPrDocument::updateGuideLineButton()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->updateGuideLineButton();
+        ((KPrView*)it.current())->updateGuideLineButton();
 }
 
 void KPrDocument::loadGuideLines( const QDomElement &element )
@@ -4521,7 +4521,7 @@ void KPrDocument::updateGridButton()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->updateGridButton();
+        ((KPrView*)it.current())->updateGridButton();
 
 }
 
@@ -4544,14 +4544,14 @@ void KPrDocument::updateObjectStatusBarItem()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->updateObjectStatusBarItem();
+        ((KPrView*)it.current())->updateObjectStatusBarItem();
 }
 
 void KPrDocument::updateObjectSelected()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        ((KPresenterView*)it.current())->objectSelectedChanged();
+        ((KPrView*)it.current())->objectSelectedChanged();
 }
 
 void KPrDocument::setTabStopValue ( double _tabStop )
@@ -4568,7 +4568,7 @@ void KPrDocument::changeBgSpellCheckingState( bool b )
 {
     enableBackgroundSpellCheck( b );
     reactivateBgSpellChecking();
-    KConfig *config = KPresenterFactory::global()->config();
+    KConfig *config = KPrFactory::global()->config();
     config->setGroup("KSpell kpresenter" );
     config->writeEntry( "SpellCheck", (int)b );
 }
@@ -4591,7 +4591,7 @@ void KPrDocument::testAndCloseAllTextObjectProtectedContent()
     {
         QPtrListIterator<KoView> it( views() );
         for (; it.current(); ++it )
-            static_cast<KPresenterView*>(it.current())->testAndCloseAllTextObjectProtectedContent();
+            static_cast<KPrView*>(it.current())->testAndCloseAllTextObjectProtectedContent();
     }
 }
 
@@ -4626,17 +4626,17 @@ void KPrDocument::insertFile(const QString & file )
     int newPos = m_pageList.count()-1;
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->updateSideBar();
+        static_cast<KPrView*>(it.current())->updateSideBar();
     _clean = clean;
     updatePresentationButton();
 
     //activate this page in all views (...)
     QPtrListIterator<KoView>it2( views() );
     for (; it2.current(); ++it2 )
-        static_cast<KPresenterView*>(it2.current())->skipToPage(newPos);
+        static_cast<KPrView*>(it2.current())->skipToPage(newPos);
 }
 
-void KPrDocument::spellCheckParagraphDeleted( KoTextParag * /* _parag */,  KPTextObject * /* frm */ )
+void KPrDocument::spellCheckParagraphDeleted( KoTextParag * /* _parag */,  KPrTextObject * /* frm */ )
 {
     //m_bgSpellCheck->spellCheckParagraphDeleted( _parag, frm->textObject());
 }
@@ -4645,21 +4645,21 @@ void KPrDocument::updateRulerInProtectContentMode()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->updateRulerInProtectContentMode();
+        static_cast<KPrView*>(it.current())->updateRulerInProtectContentMode();
 }
 
 void KPrDocument::updatePresentationButton()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->updatePresentationButton((selectedSlides().count()>0));
+        static_cast<KPrView*>(it.current())->updatePresentationButton((selectedSlides().count()>0));
 }
 
 void KPrDocument::refreshGroupButton()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->refreshGroupButton();
+        static_cast<KPrView*>(it.current())->refreshGroupButton();
 }
 
 void KPrDocument::addView( KoView *_view )
@@ -4667,7 +4667,7 @@ void KPrDocument::addView( KoView *_view )
     KoDocument::addView( _view );
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->closeTextObject();
+        static_cast<KPrView*>(it.current())->closeTextObject();
 }
 
 void KPrDocument::removeView( KoView *_view )
@@ -4675,7 +4675,7 @@ void KPrDocument::removeView( KoView *_view )
     KoDocument::removeView( _view );
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->deSelectAllObjects();
+        static_cast<KPrView*>(it.current())->deSelectAllObjects();
 }
 
 void KPrDocument::updateStyleListOrder( const QStringList &list )
@@ -4687,22 +4687,22 @@ void KPrDocument::updateDirectCursorButton()
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-        static_cast<KPresenterView*>(it.current())->updateDirectCursorButton();
+        static_cast<KPrView*>(it.current())->updateDirectCursorButton();
 }
 
 void KPrDocument::setInsertDirectCursor(bool _b)
 {
     m_bInsertDirectCursor=_b;
-    KConfig *config = KPresenterFactory::global()->config();
+    KConfig *config = KPrFactory::global()->config();
     config->setGroup( "Interface" );
     config->writeEntry( "InsertDirectCursor", _b );
     updateDirectCursorButton();
 }
 
-KPresenterView *KPrDocument::firstView() const
+KPrView *KPrDocument::firstView() const
 {
     if ( views().count()>0)
-        return static_cast<KPresenterView*>(views().getFirst());
+        return static_cast<KPrView*>(views().getFirst());
     else
         return 0L;
 }
@@ -4800,7 +4800,7 @@ QStringList KPrDocument::presentationList()
     return lst;
 }
 
-void KPrDocument::addTestCustomSlideShow( const QStringList &lst, KPresenterView *_view )
+void KPrDocument::addTestCustomSlideShow( const QStringList &lst, KPrView *_view )
 {
     delete m_customListTest;
     m_customListTest = new QValueList<int>( listOfDisplaySelectedSlides( customListPage( lst) ) );

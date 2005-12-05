@@ -43,7 +43,7 @@ using namespace std;
 #include <koGenStyles.h>
 #include <koxmlns.h>
 
-KPBackGround::KPBackGround( KPrPage *_page )
+KPrBackGround::KPrBackGround( KPrPage *_page )
     // : footerHeight( 0 )
 {
     backType = BT_COLOR;
@@ -59,21 +59,21 @@ KPBackGround::KPBackGround( KPrPage *_page )
     m_page=_page;
 }
 
-void KPBackGround::setBackPicture( const KoPicture& picture )
+void KPrBackGround::setBackPicture( const KoPicture& picture )
 {
     if ( backType != BT_PICTURE )
         return;
     backPicture = pictureCollection()->insertPicture(picture);
 }
 
-void KPBackGround::setBackPicture ( const KoPictureKey& key )
+void KPrBackGround::setBackPicture ( const KoPictureKey& key )
 {
     if ( backType != BT_PICTURE )
         return;
     backPicture = pictureCollection()->findOrLoad(key.filename(), key.lastModified() );
 }
 
-void KPBackGround::drawBackground( QPainter *_painter, const KoTextZoomHandler* zoomHandler,
+void KPrBackGround::drawBackground( QPainter *_painter, const KoTextZoomHandler* zoomHandler,
                                    const QRect& _crect, bool _drawBorders )
 {
     QRect pageRect = zoomHandler->zoomRect( m_page->getPageRect() );
@@ -84,7 +84,7 @@ void KPBackGround::drawBackground( QPainter *_painter, const KoTextZoomHandler* 
     drawBackground( _painter, ext, crect, _drawBorders );
 }
 
-void KPBackGround::drawBackground( QPainter *_painter, const QSize& ext, const QRect& crect, bool _drawBorders )
+void KPrBackGround::drawBackground( QPainter *_painter, const QSize& ext, const QRect& crect, bool _drawBorders )
 {
     if ( m_page->displayBackground() )
     {
@@ -113,7 +113,7 @@ void KPBackGround::drawBackground( QPainter *_painter, const QSize& ext, const Q
     }
 }
 
-void KPBackGround::reload()
+void KPrBackGround::reload()
 {
     if ( backType == BT_PICTURE || backType == BT_CLIPART )
         backPicture = pictureCollection()->insertPicture(backPicture);
@@ -122,7 +122,7 @@ void KPBackGround::reload()
 }
 
 
-QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
+QDomElement KPrBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1 )
 {
     QString tag = m_page->masterPage() == 0 ? "MASTERPAGE" : "PAGE";
     QDomElement page=doc.createElement( tag );
@@ -195,7 +195,7 @@ QDomElement KPBackGround::save( QDomDocument &doc, const bool saveAsKOffice1Dot1
 }
 
 
-void KPBackGround::saveOasisBackgroundPageStyle( KoGenStyle& stylepageauto, KoGenStyles& mainStyles )
+void KPrBackGround::saveOasisBackgroundPageStyle( KoGenStyle& stylepageauto, KoGenStyles& mainStyles )
 {
     switch ( backType )
     {
@@ -223,7 +223,7 @@ void KPBackGround::saveOasisBackgroundPageStyle( KoGenStyle& stylepageauto, KoGe
 }
 
 
-QString KPBackGround::saveOasisPictureStyle( KoGenStyles& mainStyles )
+QString KPrBackGround::saveOasisPictureStyle( KoGenStyles& mainStyles )
 {
     //<draw:fill-image draw:name="Pattern" xlink:href="#Pictures/100000000000005E0000005E43C87AF2.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
     KoGenStyle pictureStyle( KPrDocument::STYLE_PICTURE /*no family name*/ );
@@ -234,7 +234,7 @@ QString KPBackGround::saveOasisPictureStyle( KoGenStyles& mainStyles )
     return mainStyles.lookup( pictureStyle, "picture" );
 }
 
-QString KPBackGround::saveOasisGradientStyle( KoGenStyles& mainStyles )
+QString KPrBackGround::saveOasisGradientStyle( KoGenStyles& mainStyles )
 {
     KoGenStyle gradientStyle( KPrDocument::STYLE_GRADIENT /*no family name*/);
     gradientStyle.addAttribute( "draw:start-color", backColor1.name() );
@@ -293,10 +293,10 @@ QString KPBackGround::saveOasisGradientStyle( KoGenStyles& mainStyles )
     return mainStyles.lookup( gradientStyle, "gradient" );
 }
 
-void KPBackGround::loadOasis(KoOasisContext & context )
+void KPrBackGround::loadOasis(KoOasisContext & context )
 {
     KoStyleStack& styleStack = context.styleStack();
-    kdDebug()<<"KPBackGround::loadOasis()\n";
+    kdDebug()<<"KPrBackGround::loadOasis()\n";
     styleStack.setTypeProperties( "drawing-page" );
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
     {
@@ -439,7 +439,7 @@ void KPBackGround::loadOasis(KoOasisContext & context )
     }
 }
 
-void KPBackGround::load( const QDomElement &element )
+void KPrBackGround::load( const QDomElement &element )
 {
     //compatible with old file format kpresenter-1.4
     QDomElement e=element.namedItem("BACKMASTER").toElement();
@@ -620,11 +620,11 @@ void KPBackGround::load( const QDomElement &element )
     }
 }
 
-void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect )
+void KPrBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QRect& crect )
 {
     if ( (backType == BT_COLOR && bcType == BCT_PLAIN) || backColor1 == backColor2 ) //plain color
     {
-        //kdDebug(33001) << "KPBackGround::drawBackColor (filling " << DEBUGRECT(crect) << ")" << endl;
+        //kdDebug(33001) << "KPrBackGround::drawBackColor (filling " << DEBUGRECT(crect) << ")" << endl;
         _painter->fillRect( crect, QBrush( getBackColor1() ) );
     }
     else if (backType == BT_COLOR && bcType != BCT_PLAIN) { //gradient
@@ -637,9 +637,9 @@ void KPBackGround::drawBackColor( QPainter *_painter, const QSize& ext, const QR
     return;
 }
 
-void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRect& /*crect*/ )
+void KPrBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRect& /*crect*/ )
 {
-    /*kdDebug(33001) << "KPBackGround::drawBackPix ext=" << ext.width() << "," << ext.height() << endl;
+    /*kdDebug(33001) << "KPrBackGround::drawBackPix ext=" << ext.width() << "," << ext.height() << endl;
       kdDebug(33001) << "mode=" << (backView==BV_ZOOM?"ZOOM":backView==BV_TILED?"TILED":backView==BV_CENTER?"CENTER":"OTHER")
       << " crect=" << DEBUGRECT(crect) << endl;*/
     if ( !backPicture.isNull() )
@@ -712,7 +712,7 @@ void KPBackGround::drawBackPix( QPainter *_painter, const QSize& ext, const QRec
     }
 }
 
-void KPBackGround::drawBorders( QPainter *_painter, const QSize& /*ext*/, const QRect& /*crect*/ )
+void KPrBackGround::drawBorders( QPainter *_painter, const QSize& /*ext*/, const QRect& /*crect*/ )
 {
     _painter->setPen( QApplication::palette().active().color( QColorGroup::Dark ) );
     _painter->setBrush( Qt::NoBrush );
@@ -722,7 +722,7 @@ void KPBackGround::drawBorders( QPainter *_painter, const QSize& /*ext*/, const 
      _painter->drawRect( rect.x()-1,rect.y()-1,rect.width()+1,rect.height()+1 );
 }
 
-void KPBackGround::generateGradient( const QSize& size )
+void KPrBackGround::generateGradient( const QSize& size )
 {
     if ( backType == BT_COLOR || backType == BT_CLIPART ||
          backType == BT_PICTURE && backView == BV_CENTER ) {
@@ -736,7 +736,7 @@ void KPBackGround::generateGradient( const QSize& size )
         removeGradient();
 }
 
-void KPBackGround::removeGradient()
+void KPrBackGround::removeGradient()
 {
     if ( gradientPixmap ) {
         gradientCollection()->removeRef( backColor1, backColor2, bcType, gradientPixmap->size(),
@@ -745,17 +745,17 @@ void KPBackGround::removeGradient()
     }
 }
 
-KoPictureCollection * KPBackGround::pictureCollection() const
+KoPictureCollection * KPrBackGround::pictureCollection() const
 {
     return m_page->kPresenterDoc()->pictureCollection();
 }
 
-KPGradientCollection * KPBackGround::gradientCollection() const
+KPrGradientCollection * KPrBackGround::gradientCollection() const
 {
     return m_page->kPresenterDoc()->gradientCollection();
 }
 
-void KPBackGround::setBackGround( const struct Settings &settings )
+void KPrBackGround::setBackGround( const struct Settings &settings )
 {
     backType = settings.m_backType;
     backColor1 = settings.m_backColor1;
@@ -770,7 +770,7 @@ void KPBackGround::setBackGround( const struct Settings &settings )
 
 }
 
-struct KPBackGround::Settings KPBackGround::getBackGround() const
+struct KPrBackGround::Settings KPrBackGround::getBackGround() const
 {
     return Settings( backType, backColor1, backColor2,
                      bcType, unbalanced, xfactor, yfactor,

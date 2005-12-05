@@ -26,24 +26,24 @@
 #include "KoPointArray.h"
 #include "KPrObject.h"
 
-class KPGradient;
+class KPrGradient;
 class QPainter;
 class DCOPObject;
-class KPPen;
+class KPrPen;
 
-class KPPolygonObject : public KP2DObject
+class KPrPolygonObject : public KPr2DObject
 {
 public:
-    KPPolygonObject();
-    KPPolygonObject( const KoPointArray &_points, const KoSize &_size, const KPPen &_pen, const QBrush &_brush,
+    KPrPolygonObject();
+    KPrPolygonObject( const KoPointArray &_points, const KoSize &_size, const KPrPen &_pen, const QBrush &_brush,
                      FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                      bool _unbalanced, int _xfactor, int _yfactor,
                      bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
-    virtual ~KPPolygonObject() {}
+    virtual ~KPrPolygonObject() {}
     virtual DCOPObject* dcopObject();
 
-    KPPolygonObject &operator=( const KPPolygonObject & );
+    KPrPolygonObject &operator=( const KPrPolygonObject & );
 
     virtual void setSize( double _width, double _height );
     virtual void setSize( const KoSize & _size )
@@ -62,7 +62,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
 
     virtual double load( const QDomElement &element );
-    virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info );
+    virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info );
 
     virtual void flip( bool horizontal );
     virtual KoSize getRealSize() const;

@@ -31,7 +31,7 @@
 #include "KPrPiePreview.h"
 
 
-PieProperty::PieProperty( QWidget *parent, const char *name, PieValueCmd::PieValues pieValues )
+KPrPieProperty::KPrPieProperty( QWidget *parent, const char *name, KPrPieValueCmd::PieValues pieValues )
 : QWidget( parent, name )
 , m_pieValues( pieValues )
 {
@@ -51,33 +51,33 @@ PieProperty::PieProperty( QWidget *parent, const char *name, PieValueCmd::PieVal
 }
 
 
-PieProperty::~PieProperty()
+KPrPieProperty::~KPrPieProperty()
 {
 }
 
 
-int PieProperty::getPiePropertyChange() const
+int KPrPieProperty::getPiePropertyChange() const
 {
     int flags = 0;
 
-    PieValueCmd::PieValues pieValues = getPieValues();
+    KPrPieValueCmd::PieValues pieValues = getPieValues();
 
     if ( pieValues.pieType != m_pieValues.pieType )
-        flags |= PieValueCmd::Type;
+        flags |= KPrPieValueCmd::Type;
 
     if ( pieValues.pieAngle != m_pieValues.pieAngle )
-        flags |= PieValueCmd::Angle;
+        flags |= KPrPieValueCmd::Angle;
 
     if ( pieValues.pieLength != m_pieValues.pieLength )
-        flags |= PieValueCmd::Length;
+        flags |= KPrPieValueCmd::Length;
 
     return flags;
 }
 
 
-PieValueCmd::PieValues PieProperty::getPieValues() const
+KPrPieValueCmd::PieValues KPrPieProperty::getPieValues() const
 {
-    PieValueCmd::PieValues pieValues;
+    KPrPieValueCmd::PieValues pieValues;
     pieValues.pieType = static_cast<PieType>( m_ui->typeCombo->currentItem() );
     pieValues.pieAngle = m_ui->angleInput->value() * 16;
     pieValues.pieLength = m_ui->lengthInput->value() * 16;
@@ -85,31 +85,31 @@ PieValueCmd::PieValues PieProperty::getPieValues() const
 }
 
 
-void PieProperty::setPieValues( const PieValueCmd::PieValues &pieValues )
+void KPrPieProperty::setPieValues( const KPrPieValueCmd::PieValues &pieValues )
 {
     m_pieValues = pieValues;
     slotReset();
 }
 
 
-void PieProperty::apply()
+void KPrPieProperty::apply()
 {
     int flags = getPiePropertyChange();
 
-    PieValueCmd::PieValues pieValues = getPieValues();
+    KPrPieValueCmd::PieValues pieValues = getPieValues();
 
-    if ( flags & PieValueCmd::Type )
+    if ( flags & KPrPieValueCmd::Type )
         m_pieValues.pieType = pieValues.pieType;
 
-    if ( flags & PieValueCmd::Angle )
+    if ( flags & KPrPieValueCmd::Angle )
         m_pieValues.pieAngle = pieValues.pieAngle;
 
-    if ( flags & PieValueCmd::Length )
+    if ( flags & KPrPieValueCmd::Length )
         m_pieValues.pieLength = pieValues.pieLength;
 }
 
 
-void PieProperty::slotReset()
+void KPrPieProperty::slotReset()
 {
     m_ui->typeCombo->setCurrentItem( ( int ) m_pieValues.pieType );
     m_ui->piePreview->setType( m_pieValues.pieType );
@@ -120,19 +120,19 @@ void PieProperty::slotReset()
 }
 
 
-void PieProperty::slotTypeChanged( int pos )
+void KPrPieProperty::slotTypeChanged( int pos )
 {
     m_ui->piePreview->setType( static_cast<PieType>( pos ) );
 }
 
 
-void PieProperty::slotAngleChanged( int num )
+void KPrPieProperty::slotAngleChanged( int num )
 {
     m_ui->piePreview->setAngle( num * 16 );
 }
 
 
-void PieProperty::slotLengthChanged( int num )
+void KPrPieProperty::slotLengthChanged( int num )
 {
     m_ui->piePreview->setLength( num * 16 );
 }

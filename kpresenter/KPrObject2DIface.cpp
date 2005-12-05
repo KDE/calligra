@@ -26,48 +26,48 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPresenterObject2DIface::KPresenterObject2DIface(KP2DObject *obj_)
-    : KPresenterObjectIface(obj_)
+KPrObject2DIface::KPrObject2DIface(KPr2DObject *obj_)
+    : KPrObjectIface(obj_)
 {
     obj = obj_;
 }
 
-QColor KPresenterObject2DIface::gradientColor1() const
+QColor KPrObject2DIface::gradientColor1() const
 {
     return obj->getGColor1();
 }
 
-QColor KPresenterObject2DIface::gradientColor2() const
+QColor KPrObject2DIface::gradientColor2() const
 {
     return obj->getGColor2();
 }
 
-void KPresenterObject2DIface::setGUnbalanced( bool b )
+void KPrObject2DIface::setGUnbalanced( bool b )
 {
     obj->setGUnbalanced(b);
 }
 
-void KPresenterObject2DIface::setGXFactor( int f )
+void KPrObject2DIface::setGXFactor( int f )
 {
     obj->setGXFactor(f);
 }
 
-void KPresenterObject2DIface::setGYFactor( int f )
+void KPrObject2DIface::setGYFactor( int f )
 {
     obj->setGYFactor(f);
 }
 
-int KPresenterObject2DIface::xGradientFactor() const
+int KPrObject2DIface::xGradientFactor() const
 {
     return obj->getGXFactor();
 }
 
-int KPresenterObject2DIface::yGradientFactor() const
+int KPrObject2DIface::yGradientFactor() const
 {
     return obj->getGYFactor();
 }
 
-QString KPresenterObject2DIface::gradientFillType() const
+QString KPrObject2DIface::gradientFillType() const
 {
     switch(obj->getFillType())
     {
@@ -79,7 +79,7 @@ QString KPresenterObject2DIface::gradientFillType() const
     return QString::null;
 }
 
-void KPresenterObject2DIface::setGradientType( const QString & type)
+void KPrObject2DIface::setGradientType( const QString & type)
 {
     if(type=="PLAIN")
         obj->setGType(BCT_PLAIN);
@@ -100,25 +100,25 @@ void KPresenterObject2DIface::setGradientType( const QString & type)
     else if(type=="GPYRAMID")
         obj->setGType(BCT_GPYRAMID);
     else
-        kdDebug(33001)<<"Error KPresenterObject2DIface::setGradientType\n";
+        kdDebug(33001)<<"Error KPrObject2DIface::setGradientType\n";
 }
 
-void KPresenterObject2DIface::setFillType( const QString & type)
+void KPrObject2DIface::setFillType( const QString & type)
 {
     if(type=="BRUSH")
         obj->setFillType(FT_BRUSH);
     else if(type=="GRADIENT")
         obj->setFillType(FT_GRADIENT);
     else
-        kdDebug(33001)<<"Error KPresenterObject2DIface::setFillType\n";
+        kdDebug(33001)<<"Error KPrObject2DIface::setFillType\n";
 }
 
-void KPresenterObject2DIface::setGradientColor1( const QColor &col )
+void KPrObject2DIface::setGradientColor1( const QColor &col )
 {
     obj->setGColor1( col );
 }
 
-void KPresenterObject2DIface::setGradientColor2( const QColor &col )
+void KPrObject2DIface::setGradientColor2( const QColor &col )
 {
     obj->setGColor2( col );
 }

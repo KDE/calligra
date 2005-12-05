@@ -28,23 +28,23 @@
 class PicturePropertyUI;
 class QPixmap;
 
-class PictureProperty : public QWidget
+class KPrPictureProperty : public QWidget
 {
     Q_OBJECT
 public:
-    PictureProperty( QWidget *parent, const char *name, const QPixmap &pixmap,
-                     PictureSettingCmd::PictureSettings pictureSettings );
-    ~PictureProperty();
+    KPrPictureProperty( QWidget *parent, const char *name, const QPixmap &pixmap,
+                     KPrPictureSettingCmd::PictureSettings pictureSettings );
+    ~KPrPictureProperty();
 
     int getPicturePropertyChange() const;
-    PictureSettingCmd::PictureSettings getPictureSettings() const;
+    KPrPictureSettingCmd::PictureSettings getPictureSettings() const;
 
     void apply();
 
 private:
     PicturePropertyUI *m_ui;
 
-    PictureSettingCmd::PictureSettings m_pictureSettings;
+    KPrPictureSettingCmd::PictureSettings m_pictureSettings;
 
 protected slots:
     void slotReset();

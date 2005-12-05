@@ -29,15 +29,15 @@ class QLineEdit;
 class QPushButton;
 class KPrDocument;
 class QToolButton;
-class KPresenterView;
+class KPrView;
 
-class CustomSlideShowDia : public KDialogBase
+class KPrCustomSlideShowDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    CustomSlideShowDia( KPresenterView* _view, KPrDocument *_doc, const char* name );
-    ~CustomSlideShowDia();
+    KPrCustomSlideShowDia( KPrView* _view, KPrDocument *_doc, const char* name );
+    ~KPrCustomSlideShowDia();
 public slots:
     virtual void slotOk();
     void slotDoubleClicked(QListBoxItem *);
@@ -64,17 +64,17 @@ protected:
     QPushButton* m_pTest;
     bool m_bChanged;
     KPrDocument *m_doc;
-    KPresenterView *m_view;
+    KPrView *m_view;
     CustomListMap m_customListMap;
     QStringList listPageName;
 };
 
-class DefineCustomSlideShow : public KDialogBase
+class KPrDefineCustomSlideShow : public KDialogBase
 {
     Q_OBJECT
 public:
-    DefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, QStringList & _listPage, const char *name = 0L);
-    DefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow, QStringList& _listPage, QStringList &_customListPage, const char* name = 0L );
+    KPrDefineCustomSlideShow( QWidget* parent, QStringList &_listNameSlideShow, QStringList & _listPage, const char *name = 0L);
+    KPrDefineCustomSlideShow( QWidget* parent, const QString &_customName, QStringList &_listNameSlideShow, QStringList& _listPage, QStringList &_customListPage, const char* name = 0L );
 
     QString customSlideShowName() const;
     QStringList customListSlideShow();

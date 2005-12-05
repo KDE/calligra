@@ -30,14 +30,14 @@
 #include "KPrTextDocument.h"
 
 KPrFindReplace::KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoSearchDia * dialog,
-                                const QValueList<KoTextObject *> & lstObjects, KPTextView *textView)
+                                const QValueList<KoTextObject *> & lstObjects, KPrTextView *textView)
     : KoFindReplace( parent, dialog, lstObjects, textView )
 {
     m_canvas = canvas;
 }
 
 KPrFindReplace::KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoReplaceDia * dialog,
-                                const QValueList<KoTextObject *> & lstObjects, KPTextView *textView )
+                                const QValueList<KoTextObject *> & lstObjects, KPrTextView *textView )
     : KoFindReplace( parent, dialog, lstObjects, textView )
 {
     m_canvas = canvas;
@@ -57,7 +57,7 @@ void KPrFindReplace::highlightPortion(KoTextParag * parag, int index, int length
 {
     bool repaint = isReplace() ? options() & KReplaceDialog::PromptOnReplace : true;
     KPrTextDocument *textdoc = static_cast<KPrTextDocument *>(_textdoc);
-    KPTextObject* textobj = textdoc->textObject();
+    KPrTextObject* textobj = textdoc->textObject();
     textobj->highlightPortion( parag, index, length, m_canvas, repaint, dialog );
 }
 

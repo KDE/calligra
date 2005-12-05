@@ -5,7 +5,7 @@
 #include <qpainter.h>
 #include <qfont.h>
 
-TextPreview::TextPreview( QWidget* parent, const char* name )
+KPrTextPreview::KPrTextPreview( QWidget* parent, const char* name )
     : QFrame( parent, name ),
       shadowDirection( SD_LEFT_BOTTOM ),
       shadowDistance( 0 ),
@@ -15,7 +15,7 @@ TextPreview::TextPreview( QWidget* parent, const char* name )
     setFrameStyle( NoFrame );
 }
 
-void TextPreview::drawContents( QPainter* painter )
+void KPrTextPreview::drawContents( QPainter* painter )
 {
     QFont font(KoGlobal::defaultFont().family(), 30, QFont::Bold);
     QFontMetrics fm( font );

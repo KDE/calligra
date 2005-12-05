@@ -25,14 +25,14 @@
 #include <dcopref.h>
 #include <KoTextViewIface.h>
 
-class KPTextView;
+class KPrTextView;
 class QString;
 
-class KPTextViewIface : public KoTextViewIface
+class KPrTextViewIface : public KoTextViewIface
 {
     K_DCOP
 public:
-    KPTextViewIface( KPTextView *_textview );
+    KPrTextViewIface( KPrTextView *_textview );
 
 k_dcop:
     void insertVariable( int type, int subtype = 0 );
@@ -49,7 +49,7 @@ k_dcop:
     void paste();
 
 private:
-    KPTextView *m_textview;
+    KPrTextView *m_textview;
 
 };
 

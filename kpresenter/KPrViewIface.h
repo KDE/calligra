@@ -26,13 +26,13 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
-class KPresenterView;
+class KPrView;
 
-class KPresenterViewIface : public KoViewIface
+class KPrViewIface : public KoViewIface
 {
     K_DCOP
 public:
-    KPresenterViewIface( KPresenterView *view_ );
+    KPrViewIface( KPrView *view_ );
 
 k_dcop:
     // edit menu
@@ -233,7 +233,7 @@ k_dcop:
 
 
 private:
-    KPresenterView *view;
+    KPrView *view;
 
 };
 

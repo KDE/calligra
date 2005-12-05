@@ -27,23 +27,23 @@
 
 class PiePropertyUI;
 
-class PieProperty : public QWidget
+class KPrPieProperty : public QWidget
 {
     Q_OBJECT
 public:
-    PieProperty( QWidget *parent, const char *name, PieValueCmd::PieValues pieValues );
-    ~PieProperty();
+    KPrPieProperty( QWidget *parent, const char *name, KPrPieValueCmd::PieValues pieValues );
+    ~KPrPieProperty();
 
     int getPiePropertyChange() const;
-    PieValueCmd::PieValues getPieValues() const;
+    KPrPieValueCmd::PieValues getPieValues() const;
 
-    void setPieValues( const PieValueCmd::PieValues &pieValues );
+    void setPieValues( const KPrPieValueCmd::PieValues &pieValues );
     void apply();
 
 private:
     PiePropertyUI *m_ui;
 
-    PieValueCmd::PieValues m_pieValues;
+    KPrPieValueCmd::PieValues m_pieValues;
 
 protected slots:
     void slotReset();

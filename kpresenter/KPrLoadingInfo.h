@@ -27,17 +27,17 @@ struct lstAnimation
 };
 
 /// Temporary information used only during loading
-class KPRLoadingInfo
+class KPrLoadingInfo
 {
 public:
-    KPRLoadingInfo( bool oldFormat = false) {
+    KPrLoadingInfo( bool oldFormat = false) {
 	m_oldFormat = oldFormat;
 	presSpeed = -1;
 	m_header = false;
 	m_footer = false;
         m_headerFooterByPage=false;
     }
-    ~KPRLoadingInfo() {}
+    ~KPrLoadingInfo() {}
 
     lstAnimation* animationShowById( const QString& id ) const {
         return m_animationsShowDict[id]; // returns 0 if not found

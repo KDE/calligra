@@ -29,13 +29,13 @@
 
 #include "KPrObjectIface.h"
 
-class KP2DObject;
+class KPr2DObject;
 
-class KPresenterObject2DIface : public KPresenterObjectIface
+class KPrObject2DIface : public KPrObjectIface
 {
     K_DCOP
 public:
-    KPresenterObject2DIface( KP2DObject *obj_ );
+    KPrObject2DIface( KPr2DObject *obj_ );
 
 k_dcop:
     virtual QColor gradientColor1() const;
@@ -52,7 +52,7 @@ k_dcop:
     virtual void setGradientColor2( const QColor &col );
 
 private:
-    KP2DObject *obj;
+    KPr2DObject *obj;
 
 };
 

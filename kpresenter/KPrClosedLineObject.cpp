@@ -34,28 +34,28 @@
 #include <koxmlns.h>
 using namespace std;
 
-KPClosedLineObject::KPClosedLineObject()
-    : KP2DObject()
+KPrClosedLineObject::KPrClosedLineObject()
+    : KPr2DObject()
 {
 }
 
-KPClosedLineObject::KPClosedLineObject( const KoPointArray &_points, const KoSize &_size, const KPPen &_pen, const QBrush &_brush,
+KPrClosedLineObject::KPrClosedLineObject( const KoPointArray &_points, const KoSize &_size, const KPrPen &_pen, const QBrush &_brush,
                                         FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                         bool _unbalanced, int _xfactor, int _yfactor, const QString _typeString )
-    : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
+    : KPr2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
 {
     points = KoPointArray( _points );
     ext = _size;
     typeString = _typeString;
 }
 
-KPClosedLineObject &KPClosedLineObject::operator=( const KPClosedLineObject & )
+KPrClosedLineObject &KPrClosedLineObject::operator=( const KPrClosedLineObject & )
 {
     return *this;
 }
 
 #if 0
-DCOPObject* KPClosedLineObject::dcopObject()
+DCOPObject* KPrClosedLineObject::dcopObject()
 {
     if ( !dcop )
         dcop = new KPClosedLineObjectIface( this );
@@ -63,9 +63,9 @@ DCOPObject* KPClosedLineObject::dcopObject()
 }
 #endif
 
-QDomDocumentFragment KPClosedLineObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrClosedLineObject::save( QDomDocument& doc, double offset )
 {
-    QDomDocumentFragment fragment = KP2DObject::save( doc, offset );
+    QDomDocumentFragment fragment = KPr2DObject::save( doc, offset );
 
     QDomElement elemObjectsName = doc.createElement( "OBJECTSNAME" );
 
@@ -90,21 +90,21 @@ QDomDocumentFragment KPClosedLineObject::save( QDomDocument& doc, double offset 
     return fragment;
 }
 
-bool KPClosedLineObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrClosedLineObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    KPShadowObject::saveOasisDrawPoints( points, sc );
+    KPrShadowObject::saveOasisDrawPoints( points, sc );
     return true;
 }
 
-const char * KPClosedLineObject::getOasisElementName() const
+const char * KPrClosedLineObject::getOasisElementName() const
 {
     return "draw:polygon";
 }
 
 
-double KPClosedLineObject::load( const QDomElement &element )
+double KPrClosedLineObject::load( const QDomElement &element )
 {
-    double offset = KP2DObject::load( element );
+    double offset = KPr2DObject::load( element );
 
     QDomElement e = element.namedItem( "OBJECTSNAME" ).toElement();
     if ( !e.isNull() ) {
@@ -134,10 +134,10 @@ double KPClosedLineObject::load( const QDomElement &element )
     return offset;
 }
 
-void KPClosedLineObject::setSize( double _width, double _height )
+void KPrClosedLineObject::setSize( double _width, double _height )
 {
     KoSize origSize( ext );
-    KPObject::setSize( _width, _height );
+    KPrObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
     double fy = ext.height() / origSize.height();
@@ -145,7 +145,7 @@ void KPClosedLineObject::setSize( double _width, double _height )
     updatePoints( fx, fy );
 }
 
-void KPClosedLineObject::updatePoints( double _fx, double _fy )
+void KPrClosedLineObject::updatePoints( double _fx, double _fy )
 {
     int index = 0;
     KoPointArray tmpPoints;
@@ -161,7 +161,7 @@ void KPClosedLineObject::updatePoints( double _fx, double _fy )
     points = tmpPoints;
 }
 
-void KPClosedLineObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
+void KPrClosedLineObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandler,
                                 int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int _w = ( pen.style() == Qt::NoPen ) ? 1 : pen.pointWidth();
@@ -211,9 +211,9 @@ void KPClosedLineObject::paint( QPainter* _painter,KoTextZoomHandler*_zoomHandle
     }
 }
 
-void KPClosedLineObject::flip( bool horizontal )
+void KPrClosedLineObject::flip( bool horizontal )
 {
-    KP2DObject::flip( horizontal );
+    KPr2DObject::flip( horizontal );
     // flip the points
     KoPointArray tmpPoints;
     int index = 0;
@@ -246,14 +246,14 @@ void KPClosedLineObject::flip( bool horizontal )
     points = tmpPoints;
 }
 
-void KPClosedLineObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info )
+void KPrClosedLineObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info )
 {
-    kdDebug()<<"void KPClosedLineObject::loadOasis( const QDomElement &element )***********\n";
-    KP2DObject::loadOasis( element,context, info );
-    KPShadowObject::loadOasisDrawPoints( points, element, context, info );
+    kdDebug()<<"void KPrClosedLineObject::loadOasis( const QDomElement &element )***********\n";
+    KPr2DObject::loadOasis( element,context, info );
+    KPrShadowObject::loadOasisDrawPoints( points, element, context, info );
 }
 
-KoSize KPClosedLineObject::getRealSize() const {
+KoSize KPrClosedLineObject::getRealSize() const {
     KoSize size( ext );
     KoPoint realOrig( orig );
     KoPointArray p( points );
@@ -261,7 +261,7 @@ KoSize KPClosedLineObject::getRealSize() const {
     return size;
 }
 
-KoPoint KPClosedLineObject::getRealOrig() const {
+KoPoint KPrClosedLineObject::getRealOrig() const {
     KoSize size( ext );
     KoPoint realOrig( orig );
     KoPointArray p( points );

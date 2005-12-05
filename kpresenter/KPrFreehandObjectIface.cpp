@@ -26,52 +26,52 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPFreehandObjectIface::KPFreehandObjectIface( KPFreehandObject *_obj )
-    : KPresenterObjectIface(_obj)
+KPrFreehandObjectIface::KPrFreehandObjectIface( KPrFreehandObject *_obj )
+    : KPrObjectIface(_obj)
 {
     obj = _obj;
 }
 
-void KPFreehandObjectIface::setLineBegin( const QString & type)
+void KPrFreehandObjectIface::setLineBegin( const QString & type)
 {
     obj->setLineBegin(lineEndBeginFromString( type ));
 }
 
-void KPFreehandObjectIface::setLineEnd( const QString & type)
+void KPrFreehandObjectIface::setLineEnd( const QString & type)
 {
     obj->setLineEnd(lineEndBeginFromString( type ));
 }
 
-QString KPFreehandObjectIface::lineBegin()const
+QString KPrFreehandObjectIface::lineBegin()const
 {
     LineEnd type=obj->getLineBegin();
     return lineEndBeginName( type );
 }
 
-QString KPFreehandObjectIface::lineEnd() const
+QString KPrFreehandObjectIface::lineEnd() const
 {
     LineEnd type=obj->getLineEnd();
     return lineEndBeginName( type );
 }
 
-void KPFreehandObjectIface::horizontalFlip()
+void KPrFreehandObjectIface::horizontalFlip()
 {
     //todo repaint it
     obj->flip(true );
 }
 
-void KPFreehandObjectIface::verticalFlip()
+void KPrFreehandObjectIface::verticalFlip()
 {
     //todo repaint it
     obj->flip( false );
 }
 
-void KPFreehandObjectIface::closeObject(bool close)
+void KPrFreehandObjectIface::closeObject(bool close)
 {
     obj->closeObject( close );
 }
 
-bool KPFreehandObjectIface::isClosed()const
+bool KPrFreehandObjectIface::isClosed()const
 {
     return obj->isClosed();
 }

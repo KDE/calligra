@@ -32,7 +32,7 @@
 #include <krandomsequence.h>
 
 
-KPPageEffects::KPPageEffects( QPaintDevice *dst, const QPixmap &pageTo, PageEffect effect, EffectSpeed speed )
+KPrPageEffects::KPrPageEffects( QPaintDevice *dst, const QPixmap &pageTo, PageEffect effect, EffectSpeed speed )
 : m_dst( dst ), m_pageTo( pageTo ), m_pageFrom(m_pageTo.width(),m_pageTo.height()), m_effect(effect), m_speed(speed), m_effectStep(0)
 , m_width(m_pageTo.width()), m_height(m_pageTo.height()), m_finished(false)
 {
@@ -48,12 +48,12 @@ KPPageEffects::KPPageEffects( QPaintDevice *dst, const QPixmap &pageTo, PageEffe
 }
 
 
-KPPageEffects::~KPPageEffects()
+KPrPageEffects::~KPrPageEffects()
 {
 }
 
 
-bool KPPageEffects::doEffect()
+bool KPrPageEffects::doEffect()
 {
     if ( !m_finished )
     {
@@ -193,7 +193,7 @@ bool KPPageEffects::doEffect()
 }
 
 
-void KPPageEffects::finish()
+void KPrPageEffects::finish()
 {
     if ( !m_finished )
     {
@@ -203,14 +203,14 @@ void KPPageEffects::finish()
 }
 
 
-bool KPPageEffects::effectNone() const
+bool KPrPageEffects::effectNone() const
 {
     bitBlt( m_dst, 0, 0, &m_pageTo );
     return true;
 }
 
 
-bool KPPageEffects::effectCloseHorizontal()  const
+bool KPrPageEffects::effectCloseHorizontal()  const
 {
     int h = m_effectStep * m_stepHeight;
 
@@ -228,7 +228,7 @@ bool KPPageEffects::effectCloseHorizontal()  const
 }
 
 
-bool KPPageEffects::effectCloseVertical()  const
+bool KPrPageEffects::effectCloseVertical()  const
 {
     int w = m_effectStep * m_stepWidth;
 
@@ -246,7 +246,7 @@ bool KPPageEffects::effectCloseVertical()  const
 }
 
 
-bool KPPageEffects::effectCloseFromAllDirections()  const
+bool KPrPageEffects::effectCloseFromAllDirections()  const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( m_effectStep * m_stepWidth * fact );
@@ -275,7 +275,7 @@ bool KPPageEffects::effectCloseFromAllDirections()  const
 }
 
 
-bool KPPageEffects::effectOpenHorizontal()  const
+bool KPrPageEffects::effectOpenHorizontal()  const
 {
     int h = m_effectStep * m_stepHeight;
 
@@ -293,7 +293,7 @@ bool KPPageEffects::effectOpenHorizontal()  const
 }
 
 
-bool KPPageEffects::effectOpenVertical()  const
+bool KPrPageEffects::effectOpenVertical()  const
 {
     int w = m_effectStep * m_stepWidth;
 
@@ -311,7 +311,7 @@ bool KPPageEffects::effectOpenVertical()  const
 }
 
 
-bool KPPageEffects::effectOpenFromAllDirections()  const
+bool KPrPageEffects::effectOpenFromAllDirections()  const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( m_effectStep * m_stepWidth * fact );
@@ -340,7 +340,7 @@ bool KPPageEffects::effectOpenFromAllDirections()  const
 }
 
 
-bool KPPageEffects::effectInterlockingHorizontal1() const
+bool KPrPageEffects::effectInterlockingHorizontal1() const
 {
     int w = m_effectStep * m_stepWidth;
 
@@ -362,7 +362,7 @@ bool KPPageEffects::effectInterlockingHorizontal1() const
 }
 
 
-bool KPPageEffects::effectInterlockingHorizontal2() const
+bool KPrPageEffects::effectInterlockingHorizontal2() const
 {
     int w = m_effectStep * m_stepWidth;
 
@@ -384,7 +384,7 @@ bool KPPageEffects::effectInterlockingHorizontal2() const
 }
 
 
-bool KPPageEffects::effectInterlockingVertical1() const
+bool KPrPageEffects::effectInterlockingVertical1() const
 {
     int h = m_effectStep * m_stepHeight;
 
@@ -406,7 +406,7 @@ bool KPPageEffects::effectInterlockingVertical1() const
 }
 
 
-bool KPPageEffects::effectInterlockingVertical2() const
+bool KPrPageEffects::effectInterlockingVertical2() const
 {
     int h = m_effectStep * m_stepHeight;
 
@@ -428,7 +428,7 @@ bool KPPageEffects::effectInterlockingVertical2() const
 }
 
 
-bool KPPageEffects::effectSurround1() const
+bool KPrPageEffects::effectSurround1() const
 {
     int div[] = { 20, 15, 10 };
     int stepSize = m_height / div[m_speed];
@@ -746,7 +746,7 @@ bool KPPageEffects::effectSurround1() const
 }
 
 
-bool KPPageEffects::effectFlyAway1()
+bool KPrPageEffects::effectFlyAway1()
 {
     bool finished = false;
     int steps[] = { 20, 15, 10 };
@@ -856,7 +856,7 @@ bool KPPageEffects::effectFlyAway1()
 }
 
 
-bool KPPageEffects::effectBlindsHorizontal() const
+bool KPrPageEffects::effectBlindsHorizontal() const
 {
     int h = m_effectStep * m_stepHeight;
     int blockSize = m_height / 8;
@@ -875,7 +875,7 @@ bool KPPageEffects::effectBlindsHorizontal() const
 }
 
 
-bool KPPageEffects::effectBlindsVertical() const
+bool KPrPageEffects::effectBlindsVertical() const
 {
     int w = m_effectStep * m_stepWidth;
     int blockSize = m_width / 8;
@@ -894,7 +894,7 @@ bool KPPageEffects::effectBlindsVertical() const
 }
 
 
-bool KPPageEffects::effectBoxIn() const
+bool KPrPageEffects::effectBoxIn() const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( m_effectStep * m_stepWidth * fact );
@@ -928,7 +928,7 @@ bool KPPageEffects::effectBoxIn() const
 }
 
 
-bool KPPageEffects::effectBoxOut() const
+bool KPrPageEffects::effectBoxOut() const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( m_effectStep * m_stepWidth * fact );
@@ -962,7 +962,7 @@ bool KPPageEffects::effectBoxOut() const
 }
 
 
-bool KPPageEffects::effectCheckboardAcross() const
+bool KPrPageEffects::effectCheckboardAcross() const
 {
     int w = m_effectStep * m_stepWidth;
     int blockSize = m_height / 8;
@@ -991,7 +991,7 @@ bool KPPageEffects::effectCheckboardAcross() const
 }
 
 
-bool KPPageEffects::effectCheckboardDown() const
+bool KPrPageEffects::effectCheckboardDown() const
 {
     int h = m_effectStep * m_stepHeight;
     int blockSize = m_height / 8;
@@ -1020,7 +1020,7 @@ bool KPPageEffects::effectCheckboardDown() const
 }
 
 
-bool KPPageEffects::effectCoverDown() const
+bool KPrPageEffects::effectCoverDown() const
 {
     int h = m_effectStep * m_stepHeight;
 
@@ -1037,7 +1037,7 @@ bool KPPageEffects::effectCoverDown() const
 }
 
 
-bool KPPageEffects::effectUncoverDown() const
+bool KPrPageEffects::effectUncoverDown() const
 {
     int h = m_effectStep * m_stepHeight;
 
@@ -1055,7 +1055,7 @@ bool KPPageEffects::effectUncoverDown() const
 }
 
 
-bool KPPageEffects::effectCoverUp() const
+bool KPrPageEffects::effectCoverUp() const
 {
     int h = m_effectStep * m_stepHeight;
 
@@ -1072,7 +1072,7 @@ bool KPPageEffects::effectCoverUp() const
 }
 
 
-bool KPPageEffects::effectUncoverUp()
+bool KPrPageEffects::effectUncoverUp()
 {
     if ( m_effectStep == 0 )
         bitBlt( &m_pageFrom, 0, 0, m_dst );
@@ -1093,7 +1093,7 @@ bool KPPageEffects::effectUncoverUp()
 }
 
 
-bool KPPageEffects::effectCoverLeft() const
+bool KPrPageEffects::effectCoverLeft() const
 {
     int w = m_effectStep * m_stepHeight;
 
@@ -1110,7 +1110,7 @@ bool KPPageEffects::effectCoverLeft() const
 }
 
 
-bool KPPageEffects::effectUncoverLeft()
+bool KPrPageEffects::effectUncoverLeft()
 {
     if ( m_effectStep == 0 )
         bitBlt( &m_pageFrom, 0, 0, m_dst );
@@ -1131,7 +1131,7 @@ bool KPPageEffects::effectUncoverLeft()
 }
 
 
-bool KPPageEffects::effectCoverRight() const
+bool KPrPageEffects::effectCoverRight() const
 {
     int w = m_effectStep * m_stepWidth;
 
@@ -1148,7 +1148,7 @@ bool KPPageEffects::effectCoverRight() const
 }
 
 
-bool KPPageEffects::effectUncoverRight()
+bool KPrPageEffects::effectUncoverRight()
 {
     if ( m_effectStep == 0 )
         bitBlt( &m_pageFrom, 0, 0, m_dst );
@@ -1169,7 +1169,7 @@ bool KPPageEffects::effectUncoverRight()
 }
 
 
-bool KPPageEffects::effectCoverLeftUp() const
+bool KPrPageEffects::effectCoverLeftUp() const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( m_effectStep * m_stepWidth * fact );
@@ -1195,7 +1195,7 @@ bool KPPageEffects::effectCoverLeftUp() const
 }
 
 
-bool KPPageEffects::effectUncoverLeftUp()
+bool KPrPageEffects::effectUncoverLeftUp()
 {
     if ( m_effectStep == 0 )
         bitBlt( &m_pageFrom, 0, 0, m_dst );
@@ -1227,7 +1227,7 @@ bool KPPageEffects::effectUncoverLeftUp()
 }
 
 
-bool KPPageEffects::effectCoverLeftDown() const
+bool KPrPageEffects::effectCoverLeftDown() const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( m_effectStep * m_stepWidth * fact );
@@ -1253,7 +1253,7 @@ bool KPPageEffects::effectCoverLeftDown() const
 }
 
 
-bool KPPageEffects::effectUncoverLeftDown()
+bool KPrPageEffects::effectUncoverLeftDown()
 {
     if ( m_effectStep == 0 )
         bitBlt( &m_pageFrom, 0, 0, m_dst );
@@ -1285,7 +1285,7 @@ bool KPPageEffects::effectUncoverLeftDown()
 }
 
 
-bool KPPageEffects::effectCoverRightUp() const
+bool KPrPageEffects::effectCoverRightUp() const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( m_effectStep * m_stepWidth * fact );
@@ -1311,7 +1311,7 @@ bool KPPageEffects::effectCoverRightUp() const
 }
 
 
-bool KPPageEffects::effectUncoverRightUp()
+bool KPrPageEffects::effectUncoverRightUp()
 {
     if ( m_effectStep == 0 )
         bitBlt( &m_pageFrom, 0, 0, m_dst );
@@ -1342,7 +1342,7 @@ bool KPPageEffects::effectUncoverRightUp()
 }
 
 
-bool KPPageEffects::effectCoverRightDown() const
+bool KPrPageEffects::effectCoverRightDown() const
 {
     double fact = (double) m_height / (double) m_width;
     int h = (int)( m_effectStep * m_stepWidth * fact );
@@ -1368,7 +1368,7 @@ bool KPPageEffects::effectCoverRightDown() const
 }
 
 
-bool KPPageEffects::effectUncoverRightDown()
+bool KPrPageEffects::effectUncoverRightDown()
 {
     if ( m_effectStep == 0 )
         bitBlt( &m_pageFrom, 0, 0, m_dst );
@@ -1399,7 +1399,7 @@ bool KPPageEffects::effectUncoverRightDown()
 }
 
 
-bool KPPageEffects::effectDissolve()
+bool KPrPageEffects::effectDissolve()
 {
     KRandomSequence random;
 
@@ -1435,7 +1435,7 @@ bool KPPageEffects::effectDissolve()
 }
 
 
-bool KPPageEffects::effectStripesLeftUp() const
+bool KPrPageEffects::effectStripesLeftUp() const
 {
     int wSteps = m_width / m_stepWidth + 1;
     int hSteps = m_height / m_stepWidth + 1;
@@ -1462,7 +1462,7 @@ bool KPPageEffects::effectStripesLeftUp() const
 }
 
 
-bool KPPageEffects::effectStripesLeftDown() const
+bool KPrPageEffects::effectStripesLeftDown() const
 {
     int wSteps = m_width / m_stepWidth + 1;
     int hSteps = m_height / m_stepWidth + 1;
@@ -1489,7 +1489,7 @@ bool KPPageEffects::effectStripesLeftDown() const
 }
 
 
-bool KPPageEffects::effectStripesRightUp() const
+bool KPrPageEffects::effectStripesRightUp() const
 {
     int wSteps = m_width / m_stepWidth + 1;
     int hSteps = m_height / m_stepWidth + 1;
@@ -1516,7 +1516,7 @@ bool KPPageEffects::effectStripesRightUp() const
 }
 
 
-bool KPPageEffects::effectStripesRigthDown() const
+bool KPrPageEffects::effectStripesRigthDown() const
 {
     int wSteps = m_width / m_stepWidth + 1;
     int hSteps = m_height / m_stepWidth + 1;
@@ -1543,7 +1543,7 @@ bool KPPageEffects::effectStripesRigthDown() const
 }
 
 
-bool KPPageEffects::effectMelting()
+bool KPrPageEffects::effectMelting()
 {
     int count = 32;
     int max_melt = 2 * m_stepHeight;

@@ -27,7 +27,7 @@
 #include <qpainter.h>
 
 
-PicturePreview::PicturePreview( QWidget* parent, const char* name)
+KPrPicturePreview::KPrPicturePreview( QWidget* parent, const char* name)
 : QFrame( parent, name )
 , mirrorType( PM_NORMAL )
 , depth( 0 )
@@ -40,7 +40,7 @@ PicturePreview::PicturePreview( QWidget* parent, const char* name)
 }
 
 
-void PicturePreview::drawContents( QPainter *painter )
+void KPrPicturePreview::drawContents( QPainter *painter )
 {
     QSize ext = contentsRect().size();
 
@@ -157,7 +157,7 @@ void PicturePreview::drawContents( QPainter *painter )
 }
 
 
-void PicturePreview::slotNormalPicture()
+void KPrPicturePreview::slotNormalPicture()
 {
     if ( mirrorType != PM_NORMAL )
     {
@@ -167,7 +167,7 @@ void PicturePreview::slotNormalPicture()
 }
 
 
-void PicturePreview::slotHorizontalMirrorPicture()
+void KPrPicturePreview::slotHorizontalMirrorPicture()
 {
     if ( mirrorType != PM_HORIZONTAL )
     {
@@ -177,7 +177,7 @@ void PicturePreview::slotHorizontalMirrorPicture()
 }
 
 
-void PicturePreview::slotVerticalMirrorPicture()
+void KPrPicturePreview::slotVerticalMirrorPicture()
 {
     if ( mirrorType != PM_VERTICAL )
     {
@@ -187,7 +187,7 @@ void PicturePreview::slotVerticalMirrorPicture()
 }
 
 
-void PicturePreview::slotHorizontalAndVerticalMirrorPicture()
+void KPrPicturePreview::slotHorizontalAndVerticalMirrorPicture()
 {
     if ( mirrorType != PM_HORIZONTALANDVERTICAL )
     {
@@ -197,7 +197,7 @@ void PicturePreview::slotHorizontalAndVerticalMirrorPicture()
 }
 
 
-void PicturePreview::slotPictureDepth0()
+void KPrPicturePreview::slotPictureDepth0()
 {
     if ( depth !=0 )
     {
@@ -207,7 +207,7 @@ void PicturePreview::slotPictureDepth0()
 }
 
 
-void PicturePreview::slotPictureDepth1()
+void KPrPicturePreview::slotPictureDepth1()
 {
     if ( depth != 1 )
     {
@@ -217,7 +217,7 @@ void PicturePreview::slotPictureDepth1()
 }
 
 
-void PicturePreview::slotPictureDepth8()
+void KPrPicturePreview::slotPictureDepth8()
 {
     if ( depth != 8)
     {
@@ -227,7 +227,7 @@ void PicturePreview::slotPictureDepth8()
 }
 
 
-void PicturePreview::slotPictureDepth16()
+void KPrPicturePreview::slotPictureDepth16()
 {
     if ( depth != 16 )
     {
@@ -237,7 +237,7 @@ void PicturePreview::slotPictureDepth16()
 }
 
 
-void PicturePreview::slotPictureDepth32()
+void KPrPicturePreview::slotPictureDepth32()
 {
     if ( depth !=32 )
     {
@@ -247,7 +247,7 @@ void PicturePreview::slotPictureDepth32()
 }
 
 
-void PicturePreview::slotSwapRGBPicture( bool _on )
+void KPrPicturePreview::slotSwapRGBPicture( bool _on )
 {
     if ( swapRGB != _on )
     {
@@ -257,7 +257,7 @@ void PicturePreview::slotSwapRGBPicture( bool _on )
 }
 
 
-void PicturePreview::slotGrayscalPicture( bool _on )
+void KPrPicturePreview::slotGrayscalPicture( bool _on )
 {
     if ( grayscal != _on )
     {
@@ -267,7 +267,7 @@ void PicturePreview::slotGrayscalPicture( bool _on )
 }
 
 
-void PicturePreview::slotBrightValue( int _value )
+void KPrPicturePreview::slotBrightValue( int _value )
 {
     if ( bright != _value )
     {
@@ -277,7 +277,7 @@ void PicturePreview::slotBrightValue( int _value )
 }
 
 
-void PicturePreview::setDepth( int _depth)
+void KPrPicturePreview::setDepth( int _depth)
 {
     if ( _depth != depth )
     {
@@ -287,7 +287,7 @@ void PicturePreview::setDepth( int _depth)
 }
 
 
-void PicturePreview::setMirrorType (PictureMirrorType _t)
+void KPrPicturePreview::setMirrorType (PictureMirrorType _t)
 {
     if ( mirrorType != _t )
     {
@@ -297,7 +297,7 @@ void PicturePreview::setMirrorType (PictureMirrorType _t)
 }
 
 
-void PicturePreview::setPicturePixmap(const QPixmap &_pixmap)
+void KPrPicturePreview::setPicturePixmap(const QPixmap &_pixmap)
 {
     origPixmap = _pixmap;
     repaint();

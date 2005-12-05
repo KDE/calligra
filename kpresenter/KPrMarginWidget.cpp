@@ -32,7 +32,7 @@
 #include "marginui.h"
 #include <koUnitWidgets.h>//for KoUnitDoubleSpinBox
 
-KPMarginWidget::KPMarginWidget( QWidget *parent, const char *name, const KoUnit::Unit unit )
+KPrMarginWidget::KPrMarginWidget( QWidget *parent, const char *name, const KoUnit::Unit unit )
 : QWidget( parent, name )
 , m_unit( unit )
 , m_changed( false )
@@ -73,12 +73,12 @@ KPMarginWidget::KPMarginWidget( QWidget *parent, const char *name, const KoUnit:
 }
 
 
-KPMarginWidget::~KPMarginWidget()
+KPrMarginWidget::~KPrMarginWidget()
 {
 }
 
 
-void KPMarginWidget::setValues( double left, double right, double top, double bottom )
+void KPrMarginWidget::setValues( double left, double right, double top, double bottom )
 {
     m_ui->leftInput->changeValue( left );
     m_ui->rightInput->changeValue( right );
@@ -87,31 +87,31 @@ void KPMarginWidget::setValues( double left, double right, double top, double bo
 }
 
 
-double KPMarginWidget::leftValue() const
+double KPrMarginWidget::leftValue() const
 {
     return m_ui->leftInput->value();
 }
 
 
-double KPMarginWidget::rightValue() const
+double KPrMarginWidget::rightValue() const
 {
     return m_ui->rightInput->value();
 }
 
 
-double KPMarginWidget::topValue() const
+double KPrMarginWidget::topValue() const
 {
     return m_ui->topInput->value();
 }
 
 
-double KPMarginWidget::bottomValue() const
+double KPrMarginWidget::bottomValue() const
 {
     return m_ui->bottomInput->value();
 }
 
 
-void KPMarginWidget::slotValueChanged( double val )
+void KPrMarginWidget::slotValueChanged( double val )
 {
     m_changed = true;
     if ( m_ui->synchronize->isChecked() && !m_noSignal )

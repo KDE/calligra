@@ -35,24 +35,24 @@
 class KMacroCommand;
 class KoSavingContext;
 class KURL;
-class KPTextView;
-class KPObject;
+class KPrTextView;
+class KPrObject;
 class KPrDocument;
-class KPresenterView;
+class KPrView;
 class KoDocumentEntry;
 class KoPageLayout;
 class KCommand;
 class KoPointArray;
 class DCOPObject;
-class KPTextObject;
+class KPrTextObject;
 class KoTextObject;
-class KPPixmapObject;
-class KPPartObject;
-class KPBackGround;
+class KPrPixmapObject;
+class KPrPartObject;
+class KPrBackGround;
 
 class KoXmlWriter;
 class KoGenStyles;
-class KPPen;
+class KPrPen;
 
 
 class KPrPage
@@ -148,7 +148,7 @@ public:
      *
      * @return object list
      */
-    const QPtrList<KPObject> & objectList() const { return m_objectList; }
+    const QPtrList<KPrObject> & objectList() const { return m_objectList; }
 
     /**
      * @brief Get object at position
@@ -157,7 +157,7 @@ public:
      *
      * @return object at position num
      */
-    KPObject *getObject( int num );
+    KPrObject *getObject( int num );
 
     /**
      * @brief Appends object to page
@@ -167,7 +167,7 @@ public:
      *
      * @param obj object to append
      */
-    void appendObject( KPObject *_obj );
+    void appendObject( KPrObject *_obj );
 
     /**
      * @brief Replaces an object
@@ -177,7 +177,7 @@ public:
      * @param oldObject object which will be removed from the page
      * @param newObject object which will take the place of the oldObject
      */
-    void replaceObject( KPObject *oldObject, KPObject *newObject );
+    void replaceObject( KPrObject *oldObject, KPrObject *newObject );
 
     /**
      * @brief Take object from page
@@ -186,7 +186,7 @@ public:
      *
      * @return the position of the taken object
      */
-    int takeObject( KPObject *object );
+    int takeObject( KPrObject *object );
 
     /**
      * @brief Delete selected objects from page
@@ -207,7 +207,7 @@ public:
      * @param object to insert
      * @param position the object should be insert
      */
-    void insertObject( KPObject *object, int pos );
+    void insertObject( KPrObject *object, int pos );
 
     /**
      * @brief
@@ -223,7 +223,7 @@ public:
      *
      * @param object to work on
      */
-    void unifyObjectName( KPObject *object );
+    void unifyObjectName( KPrObject *object );
 
     /**
      * @brief Get the page rect
@@ -244,7 +244,7 @@ public:
      *
      * @param list of objects
      */
-    void setObjectList( QPtrList<KPObject> objectLlist ) {
+    void setObjectList( QPtrList<KPrObject> objectLlist ) {
         m_objectList.setAutoDelete( false ); m_objectList = objectLlist; m_objectList.setAutoDelete( false );
     }
 
@@ -258,7 +258,7 @@ public:
     /**
      * @brief Get the number of text objects
      *
-     * The functions in only used by KPresenterPageIface.
+     * The functions in only used by KPrPageIface.
      *
      * @return the number os text object on the page
      */
@@ -266,14 +266,14 @@ public:
     /**
      * @brief Get the text object
      *
-     * The functions in only used by KPresenterPageIface.
+     * The functions in only used by KPrPageIface.
      *
      * @param num the number of the text object to get
      *
      * @return the text object with the number
      * @return 0 if no such object exists
      */
-    KPTextObject *textFrameSet( unsigned int _num ) const;
+    KPrTextObject *textFrameSet( unsigned int _num ) const;
 
     /**
      * @brief Get the amount of selected objects
@@ -305,7 +305,7 @@ public:
      * @return the first selected object of this page
      * @return O if none exists
      */
-    KPObject* getSelectedObj() const;
+    KPrObject* getSelectedObj() const;
 
     /**
      * @brief Get a list of all selected objects
@@ -315,7 +315,7 @@ public:
      *
      * @return list of selected objets.
      */
-    QPtrList<KPObject> getSelectedObjects( bool withoutHeaderFooter = false ) const;
+    QPtrList<KPrObject> getSelectedObjects( bool withoutHeaderFooter = false ) const;
 
     /**
      * @brief Get the first selected pictur
@@ -323,7 +323,7 @@ public:
      * @return first selected picture
      * @return 0 if none is selected
      */
-    KPPixmapObject* getSelectedImage() const;
+    KPrPixmapObject* getSelectedImage() const;
 
     /**
      * @brief Set the image effect for all selected pictures
@@ -338,7 +338,7 @@ public:
     /**
      * @brief Group selected objects.
      *
-     * This will create a GroupObjCmd, executes it and adds it to the history.
+     * This will create a KPrGroupObjCmd, executes it and adds it to the history.
      * If less than 2 objects are selected nothing happens.
      */
     void groupObjects();
@@ -360,47 +360,47 @@ public:
      */
     void lowerObjs( bool backward );
 
-    KCommand* setPen( const KPPen &pen, LineEnd lb, LineEnd le, int flags );
+    KCommand* setPen( const KPrPen &pen, LineEnd lb, LineEnd le, int flags );
     KCommand* setBrush( const QBrush &brush, FillType ft, const  QColor& g1, const QColor &g2,
                         BCType gt, bool unbalanced, int xfactor, int yfactor, int flags );
 
     /**
      * Insert an object into the page
      */
-    KCommand * insertObject( const QString &name, KPObject * object, const KoRect &r, bool addCommand = true );
+    KCommand * insertObject( const QString &name, KPrObject * object, const KoRect &r, bool addCommand = true );
 
-    virtual KPPartObject* insertObject( const KoRect&, KoDocumentEntry& );
+    virtual KPrPartObject* insertObject( const KoRect&, KoDocumentEntry& );
 
-    void insertRectangle( const KoRect &r, const KPPen & pen, const QBrush &brush, FillType ft,
+    void insertRectangle( const KoRect &r, const KPrPen & pen, const QBrush &brush, FillType ft,
                           const QColor &g1, const QColor & g2,BCType gt, int rndX, int rndY,
                           bool unbalanced, int xfactor, int yfactor );
 
-    void insertCircleOrEllipse( const KoRect &r, const KPPen &pen, const QBrush &brush, FillType ft,
+    void insertCircleOrEllipse( const KoRect &r, const KPrPen &pen, const QBrush &brush, FillType ft,
                                 const QColor &g1, const QColor &g2, BCType gt, bool unbalanced, int xfactor, int yfactor );
 
-    void insertPie( const KoRect &r, const KPPen &pen, const QBrush &brush, FillType ft,
+    void insertPie( const KoRect &r, const KPrPen &pen, const QBrush &brush, FillType ft,
                     const QColor &g1, const QColor &g2,BCType gt, PieType pt, int _angle, int _len,
                     LineEnd lb,LineEnd le,bool unbalanced, int xfactor, int yfactor );
 
-    KPTextObject*  insertTextObject( const KoRect& r, const QString& text = QString::null, KPresenterView *_view = 0L );
-    void insertLine( const KoRect &r, const KPPen &pen, LineEnd lb, LineEnd le, LineType lt );
+    KPrTextObject*  insertTextObject( const KoRect& r, const QString& text = QString::null, KPrView *_view = 0L );
+    void insertLine( const KoRect &r, const KPrPen &pen, LineEnd lb, LineEnd le, LineType lt );
 
-    void insertAutoform( const KoRect &r, const KPPen &pen, const QBrush &brush, LineEnd lb, LineEnd le,
+    void insertAutoform( const KoRect &r, const KPrPen &pen, const QBrush &brush, LineEnd lb, LineEnd le,
                          FillType ft,const QColor &g1, const QColor &g2, BCType gt, const QString &fileName,
                          bool unbalanced,int xfactor, int yfactor );
 
-    void insertFreehand( const KoPointArray &points, const KoRect &r, const KPPen &pen,LineEnd lb, LineEnd le );
-    void insertPolyline( const KoPointArray &points, const KoRect &r, const KPPen &pen,LineEnd lb, LineEnd le );
+    void insertFreehand( const KoPointArray &points, const KoRect &r, const KPrPen &pen,LineEnd lb, LineEnd le );
+    void insertPolyline( const KoPointArray &points, const KoRect &r, const KPrPen &pen,LineEnd lb, LineEnd le );
     void insertQuadricBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r,
-                                   const KPPen &pen,LineEnd lb, LineEnd le );
+                                   const KPrPen &pen,LineEnd lb, LineEnd le );
     void insertCubicBezierCurve( const KoPointArray &points, const KoPointArray &allPoints, const KoRect &r,
-                                 const KPPen &pen,LineEnd lb, LineEnd le );
+                                 const KPrPen &pen,LineEnd lb, LineEnd le );
 
-    void insertPolygon( const KoPointArray &points, const KoRect &r, const KPPen &pen, const QBrush &brush,
+    void insertPolygon( const KoPointArray &points, const KoRect &r, const KPrPen &pen, const QBrush &brush,
                         FillType ft,const QColor &g1, const QColor &g2, BCType gt, bool unbalanced,
                         int xfactor, int yfactor, bool _checkConcavePolygon, int _cornersValue, int _sharpnessValue );
 
-    void insertClosedLine( const KoPointArray &points, const KoRect &r, const KPPen &pen, const QBrush &brush,
+    void insertClosedLine( const KoPointArray &points, const KoRect &r, const KPrPen &pen, const QBrush &brush,
                            FillType ft,const QColor &g1, const QColor &g2,
                            BCType gt, bool unbalanced, int xfactor, int yfactor, ToolEditMode _mode );
 
@@ -412,7 +412,7 @@ public:
 
     void enableEmbeddedParts( bool f );
 
-    KPBackGround *background() { return m_kpbackground; }
+    KPrBackGround *background() { return m_kpbackground; }
 
     void makeUsedPixmapList();
 
@@ -460,7 +460,7 @@ public:
     QString insPictureFile() const { return m_pictureFile; }
 
     void deSelectAllObj();
-    void deSelectObj( KPObject *kpobject );
+    void deSelectObj( KPrObject *kpobject );
     QDomElement saveObjects( QDomDocument &doc, QDomElement &objects, double yoffset,
                              int saveOnlyPage ) const;
 
@@ -480,11 +480,11 @@ public:
      * @return rect of the objects
      */
     KoRect getRealRect( bool all ) const;
-    bool chPic( KPresenterView *_view);
+    bool chPic( KPrView *_view);
 
     //return command when we move object
-    KCommand *moveObject(KPresenterView *_view, double diffx, double diffy);
-    KCommand *moveObject(KPresenterView *m_view,const KoPoint &_move,bool key);
+    KCommand *moveObject(KPrView *_view, double diffx, double diffy);
+    KCommand *moveObject(KPrView *m_view,const KoPoint &_move,bool key);
 
     KCommand *rotateSelectedObjects(float _newAngle, bool addAngle=false);
     KCommand *shadowObj(ShadowDirection dir,int dist, const QColor &col);
@@ -495,8 +495,8 @@ public:
 
     void repaintObj();
 
-    KPObject * getCursor(const QPoint &pos );
-    KPObject * getCursor(const KoPoint &pos );
+    KPrObject * getCursor(const QPoint &pos );
+    KPrObject * getCursor(const KoPoint &pos );
 
     /**
      * Returns the object at position pos
@@ -504,8 +504,8 @@ public:
      * @param withoutProtected if set to true only unprotecred objects are returned
      * @return the object at position pos
      */
-    KPObject* getObjectAt( const KoPoint &pos, bool withoutProtected = false ) const;
-    KPPixmapObject * picViewOrigHelper() const;
+    KPrObject* getObjectAt( const KoPoint &pos, bool withoutProtected = false ) const;
+    KPrPixmapObject * picViewOrigHelper() const;
     void applyStyleChange( KoStyleChangeDefMap changed );
 
     void reactivateBgSpellChecking(bool refreshTextObj);
@@ -513,11 +513,11 @@ public:
     bool canMoveOneObject() const;
     KCommand *alignVertical( VerticalAlignmentType _type );
     void changeTabStopValue ( double _tabStop );
-    bool savePicture( KPresenterView *_view ) const;
-    bool findTextObject( KPObject *obj );
-    KPObject *nextTextObject(KPTextObject *obj);
+    bool savePicture( KPrView *_view ) const;
+    bool findTextObject( KPrObject *obj );
+    KPrObject *nextTextObject(KPrTextObject *obj);
 
-    void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force = false );
+    void getAllObjectSelectedList(QPtrList<KPrObject> &lst,bool force = false );
     void getAllEmbeddedObjectSelected(QPtrList<KoDocumentChild> &embeddedObjects );
 
     void load( const QDomElement &element );
@@ -545,17 +545,17 @@ public:
     QString oasisNamePage( int posPage ) const;
 
 private:
-    void makeUsedPixmapListForGroupObject( KPObject *_obj );
-    void completeLoadingForGroupObject( KPObject *_obj );
-    bool objectNameExists( KPObject *object, QPtrList<KPObject> &list );
+    void makeUsedPixmapListForGroupObject( KPrObject *_obj );
+    void completeLoadingForGroupObject( KPrObject *_obj );
+    bool objectNameExists( KPrObject *object, QPtrList<KPrObject> &list );
     void saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter, bool stickyObj=false ) const;
 
 
     // list of objects
-    QPtrList<KPObject> m_objectList;
+    QPtrList<KPrObject> m_objectList;
     KPrDocument *m_doc;
     KPrPage *m_masterPage;
-    KPBackGround *m_kpbackground;
+    KPrBackGround *m_kpbackground;
     QString m_manualTitle;
     QString m_noteText;
     DCOPObject *m_dcop;

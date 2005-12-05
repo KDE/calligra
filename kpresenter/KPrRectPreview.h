@@ -27,13 +27,13 @@
 #include <qpen.h>
 #include <qbrush.h>
 
-class RectPreview : public QFrame
+class KPrRectPreview : public QFrame
 {
     Q_OBJECT
 
 public:
-    RectPreview( QWidget* parent, const char* );
-    ~RectPreview() {}
+    KPrRectPreview( QWidget* parent, const char* );
+    ~KPrRectPreview() {}
 
     void setRnds( int _rx, int _ry )
         { xRnd = _rx; yRnd = _ry; repaint( contentsRect(), true ); }

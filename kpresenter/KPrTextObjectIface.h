@@ -27,13 +27,13 @@
 #include <qstring.h>
 #include <qcolor.h>
 #include <qfont.h>
-class KPTextObject;
+class KPrTextObject;
 
-class KPTextObjectIface : public KPresenterObject2DIface
+class KPrTextObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPTextObjectIface( KPTextObject *_textobject );
+    KPrTextObjectIface( KPrTextObject *_textobject );
 
 k_dcop:
     DCOPRef startEditing();
@@ -104,7 +104,7 @@ k_dcop:
 
 
 private:
-    KPTextObject *m_textobject;
+    KPrTextObject *m_textobject;
 };
 
 #endif

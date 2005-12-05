@@ -28,19 +28,19 @@
 #include "global.h"
 #include "autoformEdit/ATFInterpreter.h"
 
-class KPGradient;
+class KPrGradient;
 class DCOPObject;
 
-class KPAutoformObject : public KP2DObject
+class KPrAutoformObject : public KPr2DObject
 {
 public:
-    KPAutoformObject();
-    KPAutoformObject( const KPPen & _pen, const QBrush &_brush, const QString &_filename, LineEnd _lineBegin, LineEnd _lineEnd,
+    KPrAutoformObject();
+    KPrAutoformObject( const KPrPen & _pen, const QBrush &_brush, const QString &_filename, LineEnd _lineBegin, LineEnd _lineEnd,
                       FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                       bool _unbalanced, int _xfactor, int _yfactor);
-    virtual ~KPAutoformObject() {}
+    virtual ~KPrAutoformObject() {}
 
-    KPAutoformObject &operator=( const KPAutoformObject & );
+    KPrAutoformObject &operator=( const KPrAutoformObject & );
 
     virtual DCOPObject* dcopObject();
 

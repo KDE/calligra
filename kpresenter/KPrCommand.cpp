@@ -59,8 +59,8 @@
 #include <qbuffer.h>
 
 
-ShadowCmd::ShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
-                      QPtrList<KPObject> &_objects, KPrDocument *_doc )
+KPrShadowCmd::KPrShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, ShadowValues _newShadow,
+                      QPtrList<KPrObject> &_objects, KPrDocument *_doc )
     : KNamedCommand( _name ), oldShadow( _oldShadow ), objects( _objects )
 {
     objects.setAutoDelete( false );
@@ -70,23 +70,23 @@ ShadowCmd::ShadowCmd( const QString &_name, QPtrList<ShadowValues> &_oldShadow, 
 
     m_page = doc->findPage( objects );
 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
-ShadowCmd::~ShadowCmd()
+KPrShadowCmd::~KPrShadowCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
     oldShadow.setAutoDelete( true );
     oldShadow.clear();
 }
 
-void ShadowCmd::execute()
+void KPrShadowCmd::execute()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setShadowParameter(newShadow.shadowDistance,
                                          newShadow.shadowDirection,
@@ -96,7 +96,7 @@ void ShadowCmd::execute()
     doc->updateSideBarItem( m_page );
 }
 
-void ShadowCmd::unexecute()
+void KPrShadowCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
         objects.at( i )->setShadowParameter(oldShadow.at(i)->shadowDistance,
@@ -108,7 +108,7 @@ void ShadowCmd::unexecute()
 }
 
 
-SetOptionsCmd::SetOptionsCmd( const QString &_name, QValueList<KoPoint> &_diffs, QPtrList<KPObject> &_objects,
+KPrSetOptionsCmd::KPrSetOptionsCmd( const QString &_name, QValueList<KoPoint> &_diffs, QPtrList<KPrObject> &_objects,
                               double _gridX, double _gridY, double _oldGridX, double _oldGridY,
                               const QColor &_txtBackCol, const QColor &_otxtBackCol, KPrDocument *_doc )
     : KNamedCommand( _name ),
@@ -122,19 +122,19 @@ SetOptionsCmd::SetOptionsCmd( const QString &_name, QValueList<KoPoint> &_diffs,
     oldGridX = _oldGridX;
     oldGridY = _oldGridY;
     doc = _doc;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
-SetOptionsCmd::~SetOptionsCmd()
+KPrSetOptionsCmd::~KPrSetOptionsCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
-void SetOptionsCmd::execute()
+void KPrSetOptionsCmd::execute()
 {
     // ## use iterator
     for ( unsigned int i = 0; i < objects.count(); i++ )
@@ -145,7 +145,7 @@ void SetOptionsCmd::execute()
     doc->repaint( false );
 }
 
-void SetOptionsCmd::unexecute()
+void KPrSetOptionsCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ )
         objects.at( i )->moveBy( -(*diffs.at( i )).x(), -(*diffs.at( i )).y() );
@@ -155,8 +155,8 @@ void SetOptionsCmd::unexecute()
     doc->repaint( false );
 }
 
-SetBackCmd::SetBackCmd( const QString &name, const KPBackGround::Settings &settings,
-                        const KPBackGround::Settings &oldSettings,
+KPrSetBackCmd::KPrSetBackCmd( const QString &name, const KPrBackGround::Settings &settings,
+                        const KPrBackGround::Settings &oldSettings,
                         bool useMasterBackground,
                         bool takeGlobal, KPrDocument *doc, KPrPage *page )
 : KNamedCommand( name )
@@ -170,7 +170,7 @@ SetBackCmd::SetBackCmd( const QString &name, const KPBackGround::Settings &setti
 {
 }
 
-void SetBackCmd::execute()
+void KPrSetBackCmd::execute()
 {
     if ( !m_takeGlobal ) {
         m_page->background()->setBackGround( m_settings );
@@ -199,7 +199,7 @@ void SetBackCmd::execute()
     }
 }
 
-void SetBackCmd::unexecute()
+void KPrSetBackCmd::unexecute()
 {
     if ( !m_takeGlobal ) {
         m_page->background()->setBackGround( m_oldSettings );
@@ -227,14 +227,14 @@ void SetBackCmd::unexecute()
     }
 }
 
-RotateCmd::RotateCmd( const QString &_name, float newAngle, QPtrList<KPObject> &objects,
+KPrRotateCmd::KPrRotateCmd( const QString &_name, float newAngle, QPtrList<KPrObject> &objects,
                       KPrDocument *doc, bool addAngle )
     : KNamedCommand( _name ), m_doc( doc ), m_newAngle( newAngle ), m_addAngle( addAngle )
 {
     m_objects.setAutoDelete( false );
     m_oldAngles.setAutoDelete( false );
 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         m_objects.append( it.current() );
@@ -249,18 +249,18 @@ RotateCmd::RotateCmd( const QString &_name, float newAngle, QPtrList<KPObject> &
     m_page = m_doc->findPage( m_objects );
 }
 
-RotateCmd::~RotateCmd()
+KPrRotateCmd::~KPrRotateCmd()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
     m_oldAngles.setAutoDelete( true );
     m_oldAngles.clear();
 }
 
-void RotateCmd::execute()
+void KPrRotateCmd::execute()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         if ( m_addAngle )
@@ -274,7 +274,7 @@ void RotateCmd::execute()
     m_doc->updateSideBarItem( m_page );
 }
 
-void RotateCmd::unexecute()
+void KPrRotateCmd::unexecute()
 {
     for ( unsigned int i = 0; i < m_objects.count(); i++ )
         m_objects.at(i)->rotate( m_oldAngles.at( i )->angle );
@@ -285,7 +285,7 @@ void RotateCmd::unexecute()
 }
 
 
-ChgPixCmd::ChgPixCmd( const QString &_name, KPPixmapObject *_oldObject, KPPixmapObject *_newObject,
+KPrChgPixCmd::KPrChgPixCmd( const QString &_name, KPrPixmapObject *_oldObject, KPrPixmapObject *_newObject,
                       KPrDocument *_doc, KPrPage *_page)
     : KNamedCommand( _name )
 {
@@ -299,13 +299,13 @@ ChgPixCmd::ChgPixCmd( const QString &_name, KPPixmapObject *_oldObject, KPPixmap
     newObject->setOrig( oldObject->getOrig() );
 }
 
-ChgPixCmd::~ChgPixCmd()
+KPrChgPixCmd::~KPrChgPixCmd()
 {
     oldObject->decCmdRef();
     newObject->decCmdRef();
 }
 
-void ChgPixCmd::execute()
+void KPrChgPixCmd::execute()
 {
     m_page->replaceObject( oldObject, newObject );
     doc->repaint( newObject );
@@ -313,7 +313,7 @@ void ChgPixCmd::execute()
     doc->updateSideBarItem( m_page );
 }
 
-void ChgPixCmd::unexecute()
+void KPrChgPixCmd::unexecute()
 {
     m_page->replaceObject( newObject, oldObject );
     doc->repaint( oldObject );
@@ -321,7 +321,7 @@ void ChgPixCmd::unexecute()
     doc->updateSideBarItem( m_page );
 }
 
-DeleteCmd::DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects,
+KPrDeleteCmd::KPrDeleteCmd( const QString &_name, QPtrList<KPrObject> &_objects,
                       KPrDocument *_doc, KPrPage *_page )
 : KNamedCommand( _name )
 , m_oldObjectList( _page->objectList() )
@@ -329,25 +329,25 @@ DeleteCmd::DeleteCmd( const QString &_name, QPtrList<KPObject> &_objects,
 , m_doc( _doc )
 , m_page( _page )
 {
-    QPtrListIterator<KPObject> it( m_oldObjectList );
+    QPtrListIterator<KPrObject> it( m_oldObjectList );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
-DeleteCmd::~DeleteCmd()
+KPrDeleteCmd::~KPrDeleteCmd()
 {
-    QPtrListIterator<KPObject> it( m_oldObjectList );
+    QPtrListIterator<KPrObject> it( m_oldObjectList );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
-void DeleteCmd::execute()
+void KPrDeleteCmd::execute()
 {
     bool textObj=false;
 
-    QPtrListIterator<KPObject> it( m_oldObjectList );
-    QPtrListIterator<KPObject> itDelete( m_objectsToDelete );
-    QPtrList<KPObject> newObjectList;
+    QPtrListIterator<KPrObject> it( m_oldObjectList );
+    QPtrListIterator<KPrObject> itDelete( m_objectsToDelete );
+    QPtrList<KPrObject> newObjectList;
     for ( ; it.current(); ++it )
     {
         if ( it.current() == itDelete.current() )
@@ -357,7 +357,7 @@ void DeleteCmd::execute()
 
             if ( !textObj && it.current()->getType() == OT_TEXT )
             {
-                KPTextObject * tmp = dynamic_cast<KPTextObject *>( it.current() );
+                KPrTextObject * tmp = dynamic_cast<KPrTextObject *>( it.current() );
                 if ( tmp )
                     tmp->setEditingTextObj( false );
                 textObj=true;
@@ -383,10 +383,10 @@ void DeleteCmd::execute()
     m_doc->updateSideBarItem( m_page );
 }
 
-void DeleteCmd::unexecute()
+void KPrDeleteCmd::unexecute()
 {
     m_page->setObjectList( m_oldObjectList );
-    QPtrListIterator<KPObject> it( m_objectsToDelete );
+    QPtrListIterator<KPrObject> it( m_objectsToDelete );
     for ( ; it.current(); ++it )
     {
         it.current()->addToObjList();
@@ -397,26 +397,26 @@ void DeleteCmd::unexecute()
 }
 
 
-EffectCmd::EffectCmd( const QString &_name, const QPtrList<KPObject> &_objs,
+KPrEffectCmd::KPrEffectCmd( const QString &_name, const QPtrList<KPrObject> &_objs,
                       const QValueList<EffectStruct> &_oldEffects, EffectStruct _newEffect )
     : KNamedCommand( _name ), oldEffects( _oldEffects ),
       newEffect( _newEffect ), objs( _objs )
 {
-    QPtrListIterator<KPObject> it( objs );
+    QPtrListIterator<KPrObject> it( objs );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
-EffectCmd::~EffectCmd()
+KPrEffectCmd::~KPrEffectCmd()
 {
-    QPtrListIterator<KPObject> it( objs );
+    QPtrListIterator<KPrObject> it( objs );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
-void EffectCmd::execute()
+void KPrEffectCmd::execute()
 {
-    QPtrListIterator<KPObject> it( objs );
+    QPtrListIterator<KPrObject> it( objs );
     for ( ; it.current() ; ++it )
     {
         it.current()->setAppearStep( newEffect.appearStep );
@@ -436,9 +436,9 @@ void EffectCmd::execute()
     }
 }
 
-void EffectCmd::unexecute()
+void KPrEffectCmd::unexecute()
 {
-    KPObject *object = 0;
+    KPrObject *object = 0;
     for ( unsigned int i = 0; i < objs.count(); ++i ) {
         object = objs.at( i );
 
@@ -459,8 +459,8 @@ void EffectCmd::unexecute()
     }
 }
 
-GroupObjCmd::GroupObjCmd( const QString &_name,
-                          const QPtrList<KPObject> &_objects,
+KPrGroupObjCmd::KPrGroupObjCmd( const QString &_name,
+                          const QPtrList<KPrObject> &_objects,
                           KPrDocument *_doc, KPrPage *_page )
 : KNamedCommand( _name )
 , m_objectsToGroup( _objects )
@@ -468,20 +468,20 @@ GroupObjCmd::GroupObjCmd( const QString &_name,
 , m_doc( _doc )
 , m_page( _page )
 {
-    m_groupObject = new KPGroupObject( m_objectsToGroup );
+    m_groupObject = new KPrGroupObject( m_objectsToGroup );
     m_groupObject->incCmdRef();
 }
 
-GroupObjCmd::~GroupObjCmd()
+KPrGroupObjCmd::~KPrGroupObjCmd()
 {
     m_groupObject->decCmdRef();
 }
 
-void GroupObjCmd::execute()
+void KPrGroupObjCmd::execute()
 {
     KoRect r;
     int position = 0;
-    QPtrListIterator<KPObject> it( m_objectsToGroup );
+    QPtrListIterator<KPrObject> it( m_objectsToGroup );
     for ( ; it.current() ; ++it )
     {
         it.current()->setSelected( false );
@@ -503,14 +503,14 @@ void GroupObjCmd::execute()
     m_doc->updateSideBarItem( m_page );
 }
 
-void GroupObjCmd::unexecute()
+void KPrGroupObjCmd::unexecute()
 {
     m_groupObject->setUpdateObjects( false );
 
     m_page->setObjectList( m_oldObjectList );
     m_groupObject->removeFromObjList();
 
-    QPtrListIterator<KPObject> it( m_objectsToGroup );
+    QPtrListIterator<KPrObject> it( m_objectsToGroup );
     for ( ; it.current() ; ++it )
     {
         it.current()->addToObjList();
@@ -525,7 +525,7 @@ void GroupObjCmd::unexecute()
 }
 
 UnGroupObjCmd::UnGroupObjCmd( const QString &_name,
-                              KPGroupObject *grpObj_,
+                              KPrGroupObject *grpObj_,
                               KPrDocument *_doc, KPrPage *_page )
 : KNamedCommand( _name )
 , m_groupedObjects( grpObj_->getObjects() )
@@ -548,7 +548,7 @@ void UnGroupObjCmd::execute()
     int position = m_page->takeObject( m_groupObject );
     m_groupObject->removeFromObjList();
 
-    QPtrListIterator<KPObject> it( m_groupedObjects );
+    QPtrListIterator<KPrObject> it( m_groupedObjects );
     for ( it.toLast(); it.current() ; --it )
     {
         m_page->insertObject( it.current(), position );
@@ -567,7 +567,7 @@ void UnGroupObjCmd::unexecute()
 {
     KoRect r=KoRect();
     int position = 0;
-    QPtrListIterator<KPObject> it( m_groupedObjects );
+    QPtrListIterator<KPrObject> it( m_groupedObjects );
     for ( ; it.current() ; ++it )
     {
         it.current()->setSelected( false );
@@ -589,7 +589,7 @@ void UnGroupObjCmd::unexecute()
     m_doc->updateSideBarItem( m_page );
 }
 
-InsertCmd::InsertCmd( const QString &_name, KPObject *_object,
+KPrInsertCmd::KPrInsertCmd( const QString &_name, KPrObject *_object,
                       KPrDocument *_doc, KPrPage *_page )
     : KNamedCommand( _name )
 {
@@ -599,12 +599,12 @@ InsertCmd::InsertCmd( const QString &_name, KPObject *_object,
     object->incCmdRef();
 }
 
-InsertCmd::~InsertCmd()
+KPrInsertCmd::~KPrInsertCmd()
 {
     object->decCmdRef();
 }
 
-void InsertCmd::execute()
+void KPrInsertCmd::execute()
 {
     m_page->appendObject( object );
     object->addToObjList();
@@ -615,17 +615,17 @@ void InsertCmd::execute()
     doc->updateSideBarItem( m_page );
 }
 
-void InsertCmd::unexecute()
+void KPrInsertCmd::unexecute()
 {
     QRect oldRect = doc->zoomHandler()->zoomRect( object->getRepaintRect() );
-    QPtrList<KPObject> list(m_page->objectList());
+    QPtrList<KPrObject> list(m_page->objectList());
     if ( list.findRef( object ) != -1 ) {
         m_page->takeObject(  object );
         object->removeFromObjList();
         if ( object->getType() == OT_TEXT )
         {
-            doc->terminateEditing( (KPTextObject*)object );
-            ((KPTextObject*)object)->setEditingTextObj( false );
+            doc->terminateEditing( (KPrTextObject*)object );
+            ((KPrTextObject*)object)->setEditingTextObj( false );
             doc->updateRuler();
         }
     }
@@ -634,8 +634,8 @@ void InsertCmd::unexecute()
     doc->updateSideBarItem( m_page );
 }
 
-LowerRaiseCmd::LowerRaiseCmd( const QString &_name, const QPtrList<KPObject>& _oldList,
-                              const QPtrList<KPObject>& _newList, KPrDocument *_doc,
+KPrLowerRaiseCmd::KPrLowerRaiseCmd( const QString &_name, const QPtrList<KPrObject>& _oldList,
+                              const QPtrList<KPrObject>& _newList, KPrDocument *_doc,
                               KPrPage *_page )
     : KNamedCommand( _name )
 {
@@ -646,19 +646,19 @@ LowerRaiseCmd::LowerRaiseCmd( const QString &_name, const QPtrList<KPObject>& _o
     newList.setAutoDelete( false );
     doc = _doc;
 
-    QPtrListIterator<KPObject> it( oldList );
+    QPtrListIterator<KPrObject> it( oldList );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
-LowerRaiseCmd::~LowerRaiseCmd()
+KPrLowerRaiseCmd::~KPrLowerRaiseCmd()
 {
-    QPtrListIterator<KPObject> it( oldList );
+    QPtrListIterator<KPrObject> it( oldList );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
-void LowerRaiseCmd::execute()
+void KPrLowerRaiseCmd::execute()
 {
     m_page->setObjectList( newList );
     doc->repaint( false );
@@ -666,7 +666,7 @@ void LowerRaiseCmd::execute()
     doc->updateSideBarItem( m_page );
 }
 
-void LowerRaiseCmd::unexecute()
+void KPrLowerRaiseCmd::unexecute()
 {
     m_page->setObjectList( oldList );
     doc->repaint( false );
@@ -675,28 +675,28 @@ void LowerRaiseCmd::unexecute()
 }
 
 
-MoveByCmd::MoveByCmd( const QString &_name, const KoPoint &_diff, QPtrList<KPObject> &_objects,
+KPrMoveByCmd::KPrMoveByCmd( const QString &_name, const KoPoint &_diff, QPtrList<KPrObject> &_objects,
                       KPrDocument *_doc,KPrPage *_page )
     : KNamedCommand( _name ), diff( _diff ), objects( _objects )
 {
     objects.setAutoDelete( false );
     doc = _doc;
     m_page=_page;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         it.current()->incCmdRef();
     }
 }
 
-MoveByCmd::~MoveByCmd()
+KPrMoveByCmd::~KPrMoveByCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
-void MoveByCmd::execute()
+void KPrMoveByCmd::execute()
 {
     QRect oldRect;
 
@@ -716,7 +716,7 @@ void MoveByCmd::execute()
     doc->updateObjectStatusBarItem();
 }
 
-void MoveByCmd::unexecute()
+void KPrMoveByCmd::unexecute()
 {
     QRect oldRect;
 
@@ -736,14 +736,14 @@ void MoveByCmd::unexecute()
     doc->updateObjectStatusBarItem();
 }
 
-AlignCmd::AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignType _at, KPrDocument *_doc )
+KPrAlignCmd::KPrAlignCmd( const QString &_name, QPtrList<KPrObject> &_objects, AlignType _at, KPrDocument *_doc )
     : KNamedCommand( _name ), doc(_doc)
 {
     objects.setAutoDelete( false );
     diffs.setAutoDelete( true );
     m_page = doc->findPage( _objects );
 
-    QPtrListIterator<KPObject> it( _objects );
+    QPtrListIterator<KPrObject> it( _objects );
     KoRect boundingRect;
     for ( ; it.current() ; ++it )
     {
@@ -791,16 +791,16 @@ AlignCmd::AlignCmd( const QString &_name, QPtrList<KPObject> &_objects, AlignTyp
     }
 }
 
-AlignCmd::~AlignCmd()
+KPrAlignCmd::~KPrAlignCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 
     diffs.clear();
 }
 
-void AlignCmd::execute()
+void KPrAlignCmd::execute()
 {
     QRect oldRect;
 
@@ -820,7 +820,7 @@ void AlignCmd::execute()
     doc->updateSideBarItem( m_page );
 }
 
-void AlignCmd::unexecute()
+void KPrAlignCmd::unexecute()
 {
     QRect oldRect;
 
@@ -840,7 +840,7 @@ void AlignCmd::unexecute()
     doc->updateSideBarItem( m_page );
 }
 
-PenCmd::PenCmd( const QString &_name, QPtrList<KPObject> &_objects, Pen _newPen,
+KPrPenCmd::KPrPenCmd( const QString &_name, QPtrList<KPrObject> &_objects, Pen _newPen,
                 KPrDocument *_doc, KPrPage *_page, int _flags )
 : KNamedCommand(_name), doc(_doc), m_page( _page ), newPen(_newPen), flags(_flags)
 {
@@ -850,9 +850,9 @@ PenCmd::PenCmd( const QString &_name, QPtrList<KPObject> &_objects, Pen _newPen,
     addObjects( _objects );
 }
 
-PenCmd::~PenCmd()
+KPrPenCmd::~KPrPenCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 
@@ -860,7 +860,7 @@ PenCmd::~PenCmd()
     oldPen.clear();
 }
 
-void PenCmd::execute()
+void KPrPenCmd::execute()
 {
     for ( int i = 0; i < static_cast<int>( objects.count() ); i++ )
     {
@@ -887,12 +887,12 @@ void PenCmd::execute()
     doc->updateSideBarItem( m_page );
 }
 
-void PenCmd::applyPen( KPObject *object, Pen *tmpPen )
+void KPrPenCmd::applyPen( KPrObject *object, Pen *tmpPen )
 {
     switch (object->getType()) {
         case OT_LINE:
         {
-            KPLineObject* obj=dynamic_cast<KPLineObject*>( object );
+            KPrLineObject* obj=dynamic_cast<KPrLineObject*>( object );
             if( obj )
             {
                 //obj->setPen( tmpPen->pen );
@@ -906,7 +906,7 @@ void PenCmd::applyPen( KPObject *object, Pen *tmpPen )
         case OT_QUADRICBEZIERCURVE:
         case OT_CUBICBEZIERCURVE:
         {
-            KPPointObject *obj = dynamic_cast<KPPointObject*>( object );
+            KPrPointObject *obj = dynamic_cast<KPrPointObject*>( object );
             if ( obj )
             {
                 //obj->setPen( tmpPen->pen );
@@ -917,7 +917,7 @@ void PenCmd::applyPen( KPObject *object, Pen *tmpPen )
         } break;
         case OT_PIE:
         {
-            KPPieObject *obj = dynamic_cast<KPPieObject*>( object );
+            KPrKPPieObject *obj = dynamic_cast<KPrKPPieObject*>( object );
             if ( obj )
             {
                 obj->setLineBegin( tmpPen->lineBegin );
@@ -928,7 +928,7 @@ void PenCmd::applyPen( KPObject *object, Pen *tmpPen )
             break;
     }
 
-    KPShadowObject *obj = dynamic_cast<KPShadowObject*>( object );
+    KPrShadowObject *obj = dynamic_cast<KPrShadowObject*>( object );
     if ( obj )
     {
         obj->setPen( tmpPen->pen );
@@ -936,7 +936,7 @@ void PenCmd::applyPen( KPObject *object, Pen *tmpPen )
     }
 }
 
-void PenCmd::unexecute()
+void KPrPenCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); ++i ) {
         if( oldPen.count() > i )
@@ -946,15 +946,15 @@ void PenCmd::unexecute()
     doc->updateSideBarItem( m_page );
 }
 
-void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
+void KPrPenCmd::addObjects( const QPtrList<KPrObject> &_objects )
 {
-    QPtrListIterator<KPObject> it( _objects );
+    QPtrListIterator<KPrObject> it( _objects );
     for ( ; it.current(); ++it )
     {
-        KPObject * object( it.current() );
+        KPrObject * object( it.current() );
         if ( object->getType() == OT_GROUP )
         {
-            KPGroupObject * obj=dynamic_cast<KPGroupObject*>( object );
+            KPrGroupObject * obj=dynamic_cast<KPrGroupObject*>( object );
             if ( obj )
             {
                 addObjects( obj->objectList() );
@@ -968,7 +968,7 @@ void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
             switch ( it.current()->getType() ) {
                 case OT_LINE:
                 {
-                    KPLineObject *obj=dynamic_cast<KPLineObject*>( object );
+                    KPrLineObject *obj=dynamic_cast<KPrLineObject*>( object );
                     if ( obj )
                     {
                         lineBegin = obj->getLineBegin();
@@ -980,7 +980,7 @@ void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
                 case OT_QUADRICBEZIERCURVE:
                 case OT_CUBICBEZIERCURVE:
                 {
-                    KPPointObject *obj = dynamic_cast<KPPointObject*>( object );
+                    KPrPointObject *obj = dynamic_cast<KPrPointObject*>( object );
                     if ( obj )
                     {
                         lineBegin = obj->getLineBegin();
@@ -989,7 +989,7 @@ void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
                 } break;
                 case OT_PIE:
                 {
-                    KPPieObject *obj = dynamic_cast<KPPieObject*>( object );
+                    KPrKPPieObject *obj = dynamic_cast<KPrKPPieObject*>( object );
                     if ( obj )
                     {
                         lineBegin = obj->getLineBegin();
@@ -1000,13 +1000,13 @@ void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
                    break;
             }
 
-            KPShadowObject *obj = dynamic_cast<KPShadowObject*>( object );
+            KPrShadowObject *obj = dynamic_cast<KPrShadowObject*>( object );
             if ( obj )
             {
                 objects.append( obj );
                 obj->incCmdRef();
 
-                Pen * pen = new PenCmd::Pen( obj->getPen(), lineBegin, lineEnd );
+                Pen * pen = new KPrPenCmd::Pen( obj->getPen(), lineBegin, lineEnd );
 
                 oldPen.append( pen );
             }
@@ -1015,7 +1015,7 @@ void PenCmd::addObjects( const QPtrList<KPObject> &_objects )
 }
 
 
-BrushCmd::BrushCmd( const QString &_name, QPtrList<KPObject> &_objects, Brush _newBrush,
+KPrBrushCmd::KPrBrushCmd( const QString &_name, QPtrList<KPrObject> &_objects, Brush _newBrush,
                     KPrDocument *_doc, KPrPage *_page, int _flags )
 : KNamedCommand(_name), doc(_doc), newBrush(_newBrush), m_page(_page), flags(_flags)
 {
@@ -1025,14 +1025,14 @@ BrushCmd::BrushCmd( const QString &_name, QPtrList<KPObject> &_objects, Brush _n
     addObjects( _objects );
 }
 
-void BrushCmd::addObjects( const QPtrList<KPObject> &_objects )
+void KPrBrushCmd::addObjects( const QPtrList<KPrObject> &_objects )
 {
-    QPtrListIterator<KPObject> it( _objects );
+    QPtrListIterator<KPrObject> it( _objects );
     for ( ; it.current(); ++it )
     {
         if ( it.current()->getType() == OT_GROUP )
         {
-            KPGroupObject * obj=dynamic_cast<KPGroupObject*>( it.current() );
+            KPrGroupObject * obj=dynamic_cast<KPrGroupObject*>( it.current() );
             if ( obj )
             {
                 addObjects( obj->objectList() );
@@ -1040,13 +1040,13 @@ void BrushCmd::addObjects( const QPtrList<KPObject> &_objects )
         }
         else
         {
-            KP2DObject * obj = dynamic_cast<KP2DObject *>( it.current() );
+            KPr2DObject * obj = dynamic_cast<KPr2DObject *>( it.current() );
             if( obj )
             {
                 objects.append( obj );
                 obj->incCmdRef();
 
-                Brush * brush = new BrushCmd::Brush;
+                Brush * brush = new KPrBrushCmd::Brush;
                 brush->brush = obj->getBrush();
                 brush->fillType = obj->getFillType();
                 brush->gColor1 = obj->getGColor1();
@@ -1062,9 +1062,9 @@ void BrushCmd::addObjects( const QPtrList<KPObject> &_objects )
     }
 }
 
-BrushCmd::~BrushCmd()
+KPrBrushCmd::~KPrBrushCmd()
 {
-    QPtrListIterator<KP2DObject> it( objects );
+    QPtrListIterator<KPr2DObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 
@@ -1072,7 +1072,7 @@ BrushCmd::~BrushCmd()
     oldBrush.clear();
 }
 
-void BrushCmd::execute()
+void KPrBrushCmd::execute()
 {
     for ( int i = 0; i < static_cast<int>( objects.count() ); i++ )
     {
@@ -1111,7 +1111,7 @@ void BrushCmd::execute()
     doc->updateSideBarItem( m_page );
 }
 
-void BrushCmd::applyBrush( KP2DObject *object, Brush *tmpBrush )
+void KPrBrushCmd::applyBrush( KPr2DObject *object, Brush *tmpBrush )
 {
     object->setBrush( tmpBrush->brush );
     object->setFillType( tmpBrush->fillType );
@@ -1124,7 +1124,7 @@ void BrushCmd::applyBrush( KP2DObject *object, Brush *tmpBrush )
     doc->repaint( object );
 }
 
-void BrushCmd::unexecute()
+void KPrBrushCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); i++ ) {
         applyBrush( objects.at( i ), oldBrush.at( i ) );
@@ -1134,7 +1134,7 @@ void BrushCmd::unexecute()
 }
 
 
-PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
+KPrPgConfCmd::KPrPgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLoop,
                       bool _showPresentationDuration, QPen _pen,
                       QValueList<bool> _selectedSlides, const QString & _presentationName,
                       bool _oldManualSwitch, bool _oldInfiniteLoop,
@@ -1158,7 +1158,7 @@ PgConfCmd::PgConfCmd( const QString &_name, bool _manualSwitch, bool _infiniteLo
     doc = _doc;
 }
 
-void PgConfCmd::execute()
+void KPrPgConfCmd::execute()
 {
     doc->setManualSwitch( manualSwitch );
     doc->setInfiniteLoop( infiniteLoop );
@@ -1172,7 +1172,7 @@ void PgConfCmd::execute()
         pages.at( i )->slideSelected( selectedSlides[ i ] );
 }
 
-void PgConfCmd::unexecute()
+void KPrPgConfCmd::unexecute()
 {
     doc->setManualSwitch( oldManualSwitch );
     doc->setInfiniteLoop( oldInfiniteLoop );
@@ -1188,7 +1188,7 @@ void PgConfCmd::unexecute()
 }
 
 
-TransEffectCmd::TransEffectCmd( QValueVector<PageEffectSettings> oldSettings,
+KPrTransEffectCmd::KPrTransEffectCmd( QValueVector<PageEffectSettings> oldSettings,
                                 PageEffectSettings newSettings,
                                 KPrPage* page, KPrDocument* doc )
 {
@@ -1199,7 +1199,7 @@ TransEffectCmd::TransEffectCmd( QValueVector<PageEffectSettings> oldSettings,
     m_doc = doc;
 }
 
-void TransEffectCmd::PageEffectSettings::applyTo( KPrPage *page )
+void KPrTransEffectCmd::PageEffectSettings::applyTo( KPrPage *page )
 {
     page->setPageEffect( pageEffect );
     page->setPageEffectSpeed( effectSpeed );
@@ -1209,7 +1209,7 @@ void TransEffectCmd::PageEffectSettings::applyTo( KPrPage *page )
     page->setPageTimer( slideTime );
 }
 
-void TransEffectCmd::execute()
+void KPrTransEffectCmd::execute()
 {
     if ( m_page )
         m_newSettings.applyTo( m_page );
@@ -1218,7 +1218,7 @@ void TransEffectCmd::execute()
             m_newSettings.applyTo( it.current() );
 }
 
-void TransEffectCmd::unexecute()
+void KPrTransEffectCmd::unexecute()
 {
     if ( m_page )
         m_oldSettings[0].applyTo( m_page );
@@ -1229,7 +1229,7 @@ void TransEffectCmd::unexecute()
     }
 }
 
-QString TransEffectCmd::name() const
+QString KPrTransEffectCmd::name() const
 {
     if ( m_page )
         return i18n( "Modify Slide Transition" );
@@ -1237,7 +1237,7 @@ QString TransEffectCmd::name() const
         return i18n( "Modify Slide Transition For All Pages" );
 }
 
-PgLayoutCmd::PgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
+KPrPgLayoutCmd::KPrPgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayout _oldLayout,
                           KoUnit::Unit _oldUnit, KoUnit::Unit _unit,KPrDocument *_doc )
     : KNamedCommand( _name )
 {
@@ -1248,7 +1248,7 @@ PgLayoutCmd::PgLayoutCmd( const QString &_name, KoPageLayout _layout, KoPageLayo
     unit = _unit;
 }
 
-void PgLayoutCmd::execute()
+void KPrPgLayoutCmd::execute()
 {
     m_doc->setUnit( unit );
     m_doc->setPageLayout( layout );
@@ -1257,7 +1257,7 @@ void PgLayoutCmd::execute()
     m_doc->updateRulerPageLayout();
 }
 
-void PgLayoutCmd::unexecute()
+void KPrPgLayoutCmd::unexecute()
 {
     m_doc->setUnit( oldUnit );
     m_doc->setPageLayout( oldLayout );
@@ -1267,8 +1267,8 @@ void PgLayoutCmd::unexecute()
 }
 
 
-PieValueCmd::PieValueCmd( const QString &name, PieValues newValues,
-                          QPtrList<KPObject> &objects, KPrDocument *doc,
+KPrPieValueCmd::KPrPieValueCmd( const QString &name, PieValues newValues,
+                          QPtrList<KPrObject> &objects, KPrDocument *doc,
                           KPrPage *page, int flags )
 : KNamedCommand( name )
 , m_doc( doc )
@@ -1282,8 +1282,8 @@ PieValueCmd::PieValueCmd( const QString &name, PieValues newValues,
     addObjects( objects );
 }
 
-PieValueCmd::PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
-                          QPtrList<KPObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags )
+KPrPieValueCmd::KPrPieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues, PieValues _newValues,
+                          QPtrList<KPrObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags )
     : KNamedCommand( _name ), m_oldValues( _oldValues ), m_objects( _objects ), m_flags(_flags)
 {
     m_objects.setAutoDelete( false );
@@ -1292,28 +1292,28 @@ PieValueCmd::PieValueCmd( const QString &_name, QPtrList<PieValues> &_oldValues,
     m_page = _page;
     m_newValues = _newValues;
 
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
-PieValueCmd::~PieValueCmd()
+KPrPieValueCmd::~KPrPieValueCmd()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
     m_oldValues.setAutoDelete( true );
     m_oldValues.clear();
 }
 
-void PieValueCmd::addObjects( const QPtrList<KPObject> &objects )
+void KPrPieValueCmd::addObjects( const QPtrList<KPrObject> &objects )
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current(); ++it )
     {
         if ( it.current()->getType() == OT_GROUP )
         {
-            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            KPrGroupObject * obj = dynamic_cast<KPrGroupObject*>( it.current() );
             if ( obj )
             {
                 addObjects( obj->objectList() );
@@ -1321,7 +1321,7 @@ void PieValueCmd::addObjects( const QPtrList<KPObject> &objects )
         }
         else
         {
-            KPPieObject *obj = dynamic_cast<KPPieObject*>( it.current() );
+            KPrKPPieObject *obj = dynamic_cast<KPrKPPieObject*>( it.current() );
             if( obj )
             {
                 m_objects.append( obj );
@@ -1337,12 +1337,12 @@ void PieValueCmd::addObjects( const QPtrList<KPObject> &objects )
     }
 }
 
-void PieValueCmd::execute()
+void KPrPieValueCmd::execute()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
-        KPPieObject* obj=dynamic_cast<KPPieObject*>( it.current() );
+        KPrKPPieObject* obj=dynamic_cast<KPrKPPieObject*>( it.current() );
         if(obj)
         {
             if (m_flags & Type)
@@ -1358,11 +1358,11 @@ void PieValueCmd::execute()
     m_doc->updateSideBarItem( m_page );
 }
 
-void PieValueCmd::unexecute()
+void KPrPieValueCmd::unexecute()
 {
     for ( unsigned int i = 0; i < m_objects.count(); i++ )
     {
-        KPPieObject* obj=dynamic_cast<KPPieObject*>( m_objects.at( i ) );
+        KPrKPPieObject* obj=dynamic_cast<KPrKPPieObject*>( m_objects.at( i ) );
         if(obj)
         {
             obj->setPieType( m_oldValues.at( i )->pieType );
@@ -1376,8 +1376,8 @@ void PieValueCmd::unexecute()
 }
 
 
-PolygonSettingCmd::PolygonSettingCmd( const QString &name, PolygonSettings newSettings,
-                                      QPtrList<KPObject> &objects, KPrDocument *doc,
+KPrPolygonSettingCmd::KPrPolygonSettingCmd( const QString &name, PolygonSettings newSettings,
+                                      QPtrList<KPrObject> &objects, KPrDocument *doc,
                                       KPrPage *page, int flags )
 : KNamedCommand( name )
 , m_doc( doc )
@@ -1392,8 +1392,8 @@ PolygonSettingCmd::PolygonSettingCmd( const QString &name, PolygonSettings newSe
 }
 
 
-PolygonSettingCmd::PolygonSettingCmd( const QString &name, QPtrList<PolygonSettings> &oldSettings,
-                                      PolygonSettings newSettings, QPtrList<KPObject> &objects,
+KPrPolygonSettingCmd::KPrPolygonSettingCmd( const QString &name, QPtrList<PolygonSettings> &oldSettings,
+                                      PolygonSettings newSettings, QPtrList<KPrObject> &objects,
                                       KPrDocument *doc, KPrPage *page, int flags )
 : KNamedCommand( name )
 , m_doc( doc )
@@ -1406,28 +1406,28 @@ PolygonSettingCmd::PolygonSettingCmd( const QString &name, QPtrList<PolygonSetti
     m_objects.setAutoDelete( false );
     m_oldSettings.setAutoDelete( false );
 
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
-PolygonSettingCmd::~PolygonSettingCmd()
+KPrPolygonSettingCmd::~KPrPolygonSettingCmd()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
     m_oldSettings.setAutoDelete( true );
     m_oldSettings.clear();
 }
 
-void PolygonSettingCmd::addObjects( const QPtrList<KPObject> &objects )
+void KPrPolygonSettingCmd::addObjects( const QPtrList<KPrObject> &objects )
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current(); ++it )
     {
         if ( it.current()->getType() == OT_GROUP )
         {
-            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            KPrGroupObject * obj = dynamic_cast<KPrGroupObject*>( it.current() );
             if ( obj )
             {
                 addObjects( obj->objectList() );
@@ -1435,7 +1435,7 @@ void PolygonSettingCmd::addObjects( const QPtrList<KPObject> &objects )
         }
         else
         {
-            KPPolygonObject *obj = dynamic_cast<KPPolygonObject*>( it.current() );
+            KPrPolygonObject *obj = dynamic_cast<KPrPolygonObject*>( it.current() );
             if( obj )
             {
                 m_objects.append( obj );
@@ -1453,12 +1453,12 @@ void PolygonSettingCmd::addObjects( const QPtrList<KPObject> &objects )
     }
 }
 
-void PolygonSettingCmd::execute()
+void KPrPolygonSettingCmd::execute()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
-        KPPolygonObject * obj=dynamic_cast<KPPolygonObject*>( it.current() );
+        KPrPolygonObject * obj=dynamic_cast<KPrPolygonObject*>( it.current() );
         if(obj)
         {
             if (m_flags & ConcaveConvex)
@@ -1474,11 +1474,11 @@ void PolygonSettingCmd::execute()
     m_doc->updateSideBarItem( m_page );
 }
 
-void PolygonSettingCmd::unexecute()
+void KPrPolygonSettingCmd::unexecute()
 {
     for ( unsigned int i = 0; i < m_objects.count(); ++i )
     {
-        KPPolygonObject * obj=dynamic_cast<KPPolygonObject*>( m_objects.at(i) );
+        KPrPolygonObject * obj=dynamic_cast<KPrPolygonObject*>( m_objects.at(i) );
         if(obj)
         {
             obj->setCheckConcavePolygon(m_oldSettings.at( i )->checkConcavePolygon);
@@ -1492,8 +1492,8 @@ void PolygonSettingCmd::unexecute()
 }
 
 
-PictureSettingCmd::PictureSettingCmd( const QString &name, PictureSettings newSettings,
-                                      QPtrList<KPObject> &objects, KPrDocument *doc,
+KPrPictureSettingCmd::KPrPictureSettingCmd( const QString &name, PictureSettings newSettings,
+                                      QPtrList<KPrObject> &objects, KPrDocument *doc,
                                       KPrPage *page, int flags )
 : KNamedCommand( name )
 , m_doc( doc )
@@ -1507,8 +1507,8 @@ PictureSettingCmd::PictureSettingCmd( const QString &name, PictureSettings newSe
     addObjects( objects );
 }
 
-PictureSettingCmd::PictureSettingCmd( const QString &_name, QPtrList<PictureSettings> &_oldSettings,
-                                      PictureSettings _newSettings, QPtrList<KPObject> &_objects,
+KPrPictureSettingCmd::KPrPictureSettingCmd( const QString &_name, QPtrList<PictureSettings> &_oldSettings,
+                                      PictureSettings _newSettings, QPtrList<KPrObject> &_objects,
                                       KPrDocument *_doc, int flags )
     : KNamedCommand( _name ), m_oldValues( _oldSettings ), m_objects( _objects ), m_flags( flags )
 {
@@ -1519,28 +1519,28 @@ PictureSettingCmd::PictureSettingCmd( const QString &_name, QPtrList<PictureSett
 
     m_page = m_doc->findPage( m_objects );
 
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
-PictureSettingCmd::~PictureSettingCmd()
+KPrPictureSettingCmd::~KPrPictureSettingCmd()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
     m_oldValues.setAutoDelete( true );
     m_oldValues.clear();
 }
 
-void PictureSettingCmd::addObjects( const QPtrList<KPObject> &objects )
+void KPrPictureSettingCmd::addObjects( const QPtrList<KPrObject> &objects )
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current(); ++it )
     {
         if ( it.current()->getType() == OT_GROUP )
         {
-            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            KPrGroupObject * obj = dynamic_cast<KPrGroupObject*>( it.current() );
             if ( obj )
             {
                 addObjects( obj->objectList() );
@@ -1548,7 +1548,7 @@ void PictureSettingCmd::addObjects( const QPtrList<KPObject> &objects )
         }
         else
         {
-            KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( it.current() );
+            KPrPixmapObject *obj = dynamic_cast<KPrPixmapObject*>( it.current() );
             if( obj )
             {
                 m_objects.append( obj );
@@ -1568,11 +1568,11 @@ void PictureSettingCmd::addObjects( const QPtrList<KPObject> &objects )
     }
 }
 
-void PictureSettingCmd::execute()
+void KPrPictureSettingCmd::execute()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it ) {
-        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( it.current() );
+        KPrPixmapObject * obj = dynamic_cast<KPrPixmapObject*>( it.current() );
         if ( obj ) {
             if ( m_flags & MirrorType )
                 obj->setPictureMirrorType( m_newSettings.mirrorType );
@@ -1591,10 +1591,10 @@ void PictureSettingCmd::execute()
     m_doc->updateSideBarItem( m_page );
 }
 
-void PictureSettingCmd::unexecute()
+void KPrPictureSettingCmd::unexecute()
 {
     for ( unsigned int i = 0; i < m_objects.count(); ++i ) {
-        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( m_objects.at(i) );
+        KPrPixmapObject * obj = dynamic_cast<KPrPixmapObject*>( m_objects.at(i) );
         if ( obj ) {
             PictureSettings *pictureSettings = m_oldValues.at( i );
             obj->setPictureMirrorType( pictureSettings->mirrorType );
@@ -1610,8 +1610,8 @@ void PictureSettingCmd::unexecute()
 }
 
 
-RectValueCmd::RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
-                            QPtrList<KPObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags )
+KPrRectValueCmd::KPrRectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValues, RectValues _newValues,
+                            QPtrList<KPrObject> &_objects, KPrDocument *_doc, KPrPage *_page, int _flags )
     : KNamedCommand( _name ), m_oldValues( _oldValues ), m_objects( _objects ), m_flags(_flags)
 {
     m_objects.setAutoDelete( false );
@@ -1620,13 +1620,13 @@ RectValueCmd::RectValueCmd( const QString &_name, QPtrList<RectValues> &_oldValu
     m_page = _page;
     m_newValues = _newValues;
 
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
 
-RectValueCmd::RectValueCmd( const QString &name, QPtrList<KPObject> &objects, RectValues newValues,
+KPrRectValueCmd::KPrRectValueCmd( const QString &name, QPtrList<KPrObject> &objects, RectValues newValues,
                             KPrDocument *doc, KPrPage *page, int flags )
 : KNamedCommand( name )
 , m_doc( doc )
@@ -1641,9 +1641,9 @@ RectValueCmd::RectValueCmd( const QString &name, QPtrList<KPObject> &objects, Re
 }
 
 
-RectValueCmd::~RectValueCmd()
+KPrRectValueCmd::~KPrRectValueCmd()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 
@@ -1652,14 +1652,14 @@ RectValueCmd::~RectValueCmd()
 }
 
 
-void RectValueCmd::addObjects( const QPtrList<KPObject> &objects )
+void KPrRectValueCmd::addObjects( const QPtrList<KPrObject> &objects )
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current(); ++it )
     {
         if ( it.current()->getType() == OT_GROUP )
         {
-            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            KPrGroupObject * obj = dynamic_cast<KPrGroupObject*>( it.current() );
             if ( obj )
             {
                 addObjects( obj->objectList() );
@@ -1667,7 +1667,7 @@ void RectValueCmd::addObjects( const QPtrList<KPObject> &objects )
         }
         else
         {
-            KPRectObject *obj = dynamic_cast<KPRectObject*>( it.current() );
+            KPrRectObject *obj = dynamic_cast<KPrRectObject*>( it.current() );
             if( obj )
             {
                 m_objects.append( obj );
@@ -1687,12 +1687,12 @@ void RectValueCmd::addObjects( const QPtrList<KPObject> &objects )
 }
 
 
-void RectValueCmd::execute()
+void KPrRectValueCmd::execute()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
-        KPRectObject *obj = dynamic_cast<KPRectObject*>( it.current() );
+        KPrRectObject *obj = dynamic_cast<KPrRectObject*>( it.current() );
         if( obj )
         {
             int xtmp, ytmp;
@@ -1716,11 +1716,11 @@ void RectValueCmd::execute()
     m_doc->updateSideBarItem( m_page );
 }
 
-void RectValueCmd::unexecute()
+void KPrRectValueCmd::unexecute()
 {
     for ( unsigned int i = 0; i < m_objects.count(); i++ )
     {
-        KPRectObject *obj = dynamic_cast<KPRectObject*>( m_objects.at( i ) );
+        KPrRectObject *obj = dynamic_cast<KPrRectObject*>( m_objects.at( i ) );
 
         if( obj )
             obj->setRnds( m_oldValues.at( i )->xRnd, m_oldValues.at( i )->yRnd );
@@ -1731,8 +1731,8 @@ void RectValueCmd::unexecute()
 }
 
 
-ResizeCmd::ResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize &_r_diff,
-                      KPObject *_object, KPrDocument *_doc )
+KPrResizeCmd::KPrResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize &_r_diff,
+                      KPrObject *_object, KPrDocument *_doc )
     : KNamedCommand( _name ), m_diff( _m_diff ), r_diff( _r_diff )
 {
     object = _object;
@@ -1742,12 +1742,12 @@ ResizeCmd::ResizeCmd( const QString &_name, const KoPoint &_m_diff, const KoSize
     object->incCmdRef();
 }
 
-ResizeCmd::~ResizeCmd()
+KPrResizeCmd::~KPrResizeCmd()
 {
     object->decCmdRef();
 }
 
-void ResizeCmd::execute()
+void KPrResizeCmd::execute()
 {
     QRect oldRect;
 
@@ -1768,7 +1768,7 @@ void ResizeCmd::execute()
     doc->updateSideBarItem( m_page );
 }
 
-void ResizeCmd::unexecute()
+void KPrResizeCmd::unexecute()
 {
     QRect oldRect;
 
@@ -2120,7 +2120,7 @@ void KPrChangeLinkVariable::unexecute()
     m_doc->recalcVariables(VT_LINK);
 }
 
-KPrStickyObjCommand::KPrStickyObjCommand( const QString &_name, QPtrList<KPObject> &_objects,
+KPrStickyObjCommand::KPrStickyObjCommand( const QString &_name, QPtrList<KPrObject> &_objects,
                                           bool sticky, KPrPage*_page, KPrDocument *_doc )
     : KNamedCommand( _name ),
       objects( _objects ),
@@ -2129,21 +2129,21 @@ KPrStickyObjCommand::KPrStickyObjCommand( const QString &_name, QPtrList<KPObjec
     objects.setAutoDelete( false );
     m_doc = _doc;
     m_page=_page;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
 KPrStickyObjCommand::~KPrStickyObjCommand()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
 void KPrStickyObjCommand::execute()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         if(m_bSticky)
@@ -2158,7 +2158,7 @@ void KPrStickyObjCommand::execute()
 
 void KPrStickyObjCommand::unexecute()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         if(m_bSticky)
@@ -2171,14 +2171,14 @@ void KPrStickyObjCommand::unexecute()
     m_doc->updateSideBarItem( m_doc->masterPage() );
 }
 
-void KPrStickyObjCommand::stickObj(KPObject *_obj)
+void KPrStickyObjCommand::stickObj(KPrObject *_obj)
 {
     m_page->takeObject(_obj);
     m_doc->masterPage()->appendObject(_obj);
     _obj->setSticky(true);
 }
 
-void KPrStickyObjCommand::unstickObj(KPObject *_obj)
+void KPrStickyObjCommand::unstickObj(KPrObject *_obj)
 {
     m_doc->masterPage()->takeObject(_obj);
     m_page->appendObject(_obj);
@@ -2186,7 +2186,7 @@ void KPrStickyObjCommand::unstickObj(KPObject *_obj)
 }
 
 KPrNameObjectCommand::KPrNameObjectCommand( const QString &_name, const QString &_objectName,
-                                            KPObject *_obj, KPrDocument *_doc ):
+                                            KPrObject *_obj, KPrDocument *_doc ):
     KNamedCommand( _name ),
     newObjectName( _objectName ),
     object( _obj ),
@@ -2259,7 +2259,7 @@ void KPrDisplayBackgroundPage::unexecute()
 
 
 KPrHideShowHeaderFooter::KPrHideShowHeaderFooter( const QString &name, KPrDocument *_doc, KPrPage *_page,
-                                                  bool _newValue, KPTextObject *_textObject):
+                                                  bool _newValue, KPrTextObject *_textObject):
     KNamedCommand(name),
     m_doc( _doc ),
     m_page(_page),
@@ -2294,7 +2294,7 @@ void KPrHideShowHeaderFooter::unexecute()
 }
 
 KPrFlipObjectCommand::KPrFlipObjectCommand( const QString &name, KPrDocument *_doc,
-                                            bool _horizontal, QPtrList<KPObject> &_objects ):
+                                            bool _horizontal, QPtrList<KPrObject> &_objects ):
     KNamedCommand( name ),
     m_doc( _doc ),
     objects( _objects ),
@@ -2304,14 +2304,14 @@ KPrFlipObjectCommand::KPrFlipObjectCommand( const QString &name, KPrDocument *_d
 
     m_page = m_doc->findPage( objects );
 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
 KPrFlipObjectCommand::~KPrFlipObjectCommand()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
@@ -2328,7 +2328,7 @@ void KPrFlipObjectCommand::unexecute()
 
 void KPrFlipObjectCommand::flipObjects()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         it.current()->flip( horizontal );
@@ -2339,7 +2339,7 @@ void KPrFlipObjectCommand::flipObjects()
 }
 
 
-KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name, QPtrList<KPObject> &objects,
+KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name, QPtrList<KPrObject> &objects,
                                                             bool newValue, KgpType type,KPrDocument *_doc )
 : KNamedCommand( name )
 , m_objects( objects )
@@ -2347,7 +2347,7 @@ KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name,
 , m_type( type )
     , m_doc( _doc )
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         it.current()->incCmdRef();
@@ -2359,7 +2359,7 @@ KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name,
 }
 
 KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name, QValueList<bool> &lst,
-                                                            QPtrList<KPObject> &objects, bool newValue,
+                                                            QPtrList<KPrObject> &objects, bool newValue,
                                                             KgpType type, KPrDocument *_doc)
 : KNamedCommand( name )
 , m_oldValue( lst )
@@ -2368,21 +2368,21 @@ KPrGeometryPropertiesCommand::KPrGeometryPropertiesCommand( const QString &name,
 , m_type( type )
 , m_doc ( _doc )
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
 KPrGeometryPropertiesCommand::~KPrGeometryPropertiesCommand()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
 void KPrGeometryPropertiesCommand::execute()
 {
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         if ( m_type == ProtectSize )
@@ -2398,7 +2398,7 @@ void KPrGeometryPropertiesCommand::execute()
 
 void KPrGeometryPropertiesCommand::unexecute()
 {
-    KPObject *obj = 0;
+    KPrObject *obj = 0;
     for ( unsigned int i = 0; i < m_objects.count(); ++i ) {
         obj = m_objects.at( i );
         if ( m_type == ProtectSize )
@@ -2412,7 +2412,7 @@ void KPrGeometryPropertiesCommand::unexecute()
     }
 }
 
-KPrProtectContentCommand::KPrProtectContentCommand( const QString &name, QPtrList<KPObject> &objects,
+KPrProtectContentCommand::KPrProtectContentCommand( const QString &name, QPtrList<KPrObject> &objects,
                                                     bool protectContent, KPrDocument *doc )
 : KNamedCommand( name )
 , m_protectContent( protectContent )
@@ -2424,7 +2424,7 @@ KPrProtectContentCommand::KPrProtectContentCommand( const QString &name, QPtrLis
 }
 
 KPrProtectContentCommand::KPrProtectContentCommand( const QString &name, bool protectContent,
-                                                    KPTextObject *obj, KPrDocument *doc )
+                                                    KPrTextObject *obj, KPrDocument *doc )
 : KNamedCommand( name )
 , m_protectContent( protectContent )
 , m_doc( doc )
@@ -2436,19 +2436,19 @@ KPrProtectContentCommand::KPrProtectContentCommand( const QString &name, bool pr
 
 KPrProtectContentCommand::~KPrProtectContentCommand()
 {
-    QPtrListIterator<KPTextObject> it( m_objects );
+    QPtrListIterator<KPrTextObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
 }
 
-void KPrProtectContentCommand::addObjects( const QPtrList<KPObject> &objects )
+void KPrProtectContentCommand::addObjects( const QPtrList<KPrObject> &objects )
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current(); ++it )
     {
         if ( it.current()->getType() == OT_GROUP )
         {
-            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            KPrGroupObject * obj = dynamic_cast<KPrGroupObject*>( it.current() );
             if ( obj )
             {
                 addObjects( obj->objectList() );
@@ -2456,7 +2456,7 @@ void KPrProtectContentCommand::addObjects( const QPtrList<KPObject> &objects )
         }
         else
         {
-            KPTextObject *obj = dynamic_cast<KPTextObject*>( it.current() );
+            KPrTextObject *obj = dynamic_cast<KPrTextObject*>( it.current() );
             if( obj )
             {
                 m_objects.append( obj );
@@ -2470,7 +2470,7 @@ void KPrProtectContentCommand::addObjects( const QPtrList<KPObject> &objects )
 
 void KPrProtectContentCommand::execute()
 {
-    QPtrListIterator<KPTextObject> it( m_objects );
+    QPtrListIterator<KPrTextObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         it.current()->setProtectContent( m_protectContent );
@@ -2490,7 +2490,7 @@ void KPrProtectContentCommand::unexecute()
     m_doc->updateRulerInProtectContentMode();
 }
 
-KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &_name, KPObject *_obj, KPrDocument *_doc )
+KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &_name, KPrObject *_obj, KPrDocument *_doc )
     : KNamedCommand( _name ),
       objects( _obj ),
       doc(_doc)
@@ -2518,7 +2518,7 @@ void KPrCloseObjectCommand::closeObject(bool close)
 
     if ( tmpType==OT_POLYLINE )
     {
-        KPPolylineObject * obj = dynamic_cast<KPPolylineObject *>(objects);
+        KPrPolylineObject * obj = dynamic_cast<KPrPolylineObject *>(objects);
         if ( obj )
         {
             obj->closeObject( close );
@@ -2527,7 +2527,7 @@ void KPrCloseObjectCommand::closeObject(bool close)
     }
     else if ( tmpType==OT_FREEHAND )
     {
-        KPFreehandObject * obj = dynamic_cast<KPFreehandObject *>(objects);
+        KPrFreehandObject * obj = dynamic_cast<KPrFreehandObject *>(objects);
         if ( obj )
         {
             obj->closeObject( close );
@@ -2536,7 +2536,7 @@ void KPrCloseObjectCommand::closeObject(bool close)
     }
     else if ( tmpType==OT_QUADRICBEZIERCURVE )
     {
-        KPQuadricBezierCurveObject * obj = dynamic_cast<KPQuadricBezierCurveObject *>(objects);
+        KPrQuadricBezierCurveObject * obj = dynamic_cast<KPrQuadricBezierCurveObject *>(objects);
         if ( obj )
         {
             obj->closeObject( close );
@@ -2545,7 +2545,7 @@ void KPrCloseObjectCommand::closeObject(bool close)
     }
     else if ( tmpType==OT_CUBICBEZIERCURVE )
     {
-        KPCubicBezierCurveObject * obj = dynamic_cast<KPCubicBezierCurveObject *>(objects);
+        KPrCubicBezierCurveObject * obj = dynamic_cast<KPrCubicBezierCurveObject *>(objects);
         if ( obj )
         {
             obj->closeObject( close );
@@ -2556,7 +2556,7 @@ void KPrCloseObjectCommand::closeObject(bool close)
     doc->updateSideBarItem( m_page );
 }
 
-MarginsStruct::MarginsStruct( KPTextObject *obj )
+MarginsStruct::MarginsStruct( KPrTextObject *obj )
 {
     topMargin = obj->bTop();
     bottomMargin= obj->bBottom();
@@ -2573,7 +2573,7 @@ MarginsStruct::MarginsStruct( double _left, double _top, double _right, double _
 }
 
 
-KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, QPtrList<KPObject> &objects,
+KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, QPtrList<KPrObject> &objects,
                                                 MarginsStruct newMargins, KPrDocument *doc,
                                                 KPrPage *page )
 : KNamedCommand( name )
@@ -2588,7 +2588,7 @@ KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, QPtrList<KP
 }
 
 
-KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, KPTextObject *_obj, MarginsStruct _MarginsBegin,
+KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, KPrTextObject *_obj, MarginsStruct _MarginsBegin,
                                                 MarginsStruct _MarginsEnd, KPrDocument *_doc ) :
     KNamedCommand(name),
     m_newMargins(_MarginsEnd),
@@ -2603,7 +2603,7 @@ KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, KPTextObjec
 
 KPrChangeMarginCommand::~KPrChangeMarginCommand()
 {
-    QPtrListIterator<KPTextObject> it( m_objects );
+    QPtrListIterator<KPrTextObject> it( m_objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
     m_oldMargins.setAutoDelete( true );
@@ -2611,14 +2611,14 @@ KPrChangeMarginCommand::~KPrChangeMarginCommand()
 }
 
 
-void KPrChangeMarginCommand::addObjects( const QPtrList<KPObject> &objects )
+void KPrChangeMarginCommand::addObjects( const QPtrList<KPrObject> &objects )
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current(); ++it )
     {
         if ( it.current()->getType() == OT_GROUP )
         {
-            KPGroupObject * obj = dynamic_cast<KPGroupObject*>( it.current() );
+            KPrGroupObject * obj = dynamic_cast<KPrGroupObject*>( it.current() );
             if ( obj )
             {
                 addObjects( obj->objectList() );
@@ -2626,7 +2626,7 @@ void KPrChangeMarginCommand::addObjects( const QPtrList<KPObject> &objects )
         }
         else
         {
-            KPTextObject *obj = dynamic_cast<KPTextObject*>( it.current() );
+            KPrTextObject *obj = dynamic_cast<KPrTextObject*>( it.current() );
             if( obj )
             {
                 m_objects.append( obj );
@@ -2641,7 +2641,7 @@ void KPrChangeMarginCommand::addObjects( const QPtrList<KPObject> &objects )
 
 void KPrChangeMarginCommand::execute()
 {
-    QPtrListIterator<KPTextObject> it( m_objects );
+    QPtrListIterator<KPrTextObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
         it.current()->setTextMargins( m_newMargins.leftMargin, m_newMargins.topMargin,
@@ -2658,7 +2658,7 @@ void KPrChangeMarginCommand::unexecute()
 {
     for ( unsigned int i = 0; i < m_objects.count(); i++ )
     {
-        KPTextObject *object = m_objects.at( i );
+        KPrTextObject *object = m_objects.at( i );
         MarginsStruct *marginsStruct = m_oldMargins.at( i );
         object->setTextMargins( marginsStruct->leftMargin, marginsStruct->topMargin,
                                 marginsStruct->rightMargin, marginsStruct->bottomMargin);
@@ -2671,7 +2671,7 @@ void KPrChangeMarginCommand::unexecute()
 }
 
 
-KPrChangeVerticalAlignmentCommand::KPrChangeVerticalAlignmentCommand( const QString &name, KPTextObject *_obj,
+KPrChangeVerticalAlignmentCommand::KPrChangeVerticalAlignmentCommand( const QString &name, KPrTextObject *_obj,
                                                                       VerticalAlignmentType _oldAlign,
                                                                       VerticalAlignmentType _newAlign,
                                                                       KPrDocument *_doc) :
@@ -2722,8 +2722,8 @@ void KPrChangeTabStopValueCommand::unexecute()
     m_doc->setTabStopValue ( m_oldValue );
 }
 
-ImageEffectCmd::ImageEffectCmd(const QString &_name, QPtrList<ImageEffectSettings> &_oldSettings,
-                               ImageEffectSettings _newSettings, QPtrList<KPObject> &_objects,
+KPrImageEffectCmd::KPrImageEffectCmd(const QString &_name, QPtrList<ImageEffectSettings> &_oldSettings,
+                               ImageEffectSettings _newSettings, QPtrList<KPrObject> &_objects,
                                KPrDocument *_doc )
     :KNamedCommand( _name ), oldSettings( _oldSettings ), objects( _objects )
 {
@@ -2734,25 +2734,25 @@ ImageEffectCmd::ImageEffectCmd(const QString &_name, QPtrList<ImageEffectSetting
 
     m_page = doc->findPage( objects );
 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->incCmdRef();
 }
 
-ImageEffectCmd::~ImageEffectCmd()
+KPrImageEffectCmd::~KPrImageEffectCmd()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->decCmdRef();
     oldSettings.setAutoDelete( true );
     oldSettings.clear();
 }
 
-void ImageEffectCmd::execute()
+void KPrImageEffectCmd::execute()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) {
-        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( it.current() );
+        KPrPixmapObject * obj = dynamic_cast<KPrPixmapObject*>( it.current() );
         if ( obj ) {
             obj->setImageEffect(newSettings.effect);
             obj->setIEParams(newSettings.param1, newSettings.param2, newSettings.param3);
@@ -2763,10 +2763,10 @@ void ImageEffectCmd::execute()
     doc->updateSideBarItem( m_page );
 }
 
-void ImageEffectCmd::unexecute()
+void KPrImageEffectCmd::unexecute()
 {
     for ( unsigned int i = 0; i < objects.count(); ++i ) {
-        KPPixmapObject * obj = dynamic_cast<KPPixmapObject*>( objects.at(i) );
+        KPrPixmapObject * obj = dynamic_cast<KPrPixmapObject*>( objects.at(i) );
         if ( obj ) {
             obj->setImageEffect(oldSettings.at( i )->effect);
             obj->setIEParams(oldSettings.at( i )->param1, oldSettings.at( i )->param2,

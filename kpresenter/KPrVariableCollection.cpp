@@ -131,11 +131,11 @@ void KPrStatisticVariable::recalc()
     KPrPage *page = m_doc->activePage();
     if( !page) //When we load activePage is null
 	    return;
-    QPtrListIterator<KPObject> objIt( page->objectList() );
+    QPtrListIterator<KPrObject> objIt( page->objectList() );
 
     for ( objIt.toFirst(); objIt.current(); ++objIt )
     {
-        KPObject *obj = objIt.current();
+        KPrObject *obj = objIt.current();
         if ( m_subtype == VST_STATISTIC_NB_FRAME )
             ++nb;
         else if( m_subtype == VST_STATISTIC_NB_PICTURE && obj->getType() == OT_PICTURE)
@@ -148,7 +148,7 @@ void KPrStatisticVariable::recalc()
         }
         if ( frameInfo )
         {
-            KPTextObject *textObj = dynamic_cast<KPTextObject *>( obj );
+            KPrTextObject *textObj = dynamic_cast<KPrTextObject *>( obj );
             if ( textObj )
                 textObj->textObject()->statistics( 0L, charsWithSpace, charsWithoutSpace, words, sentences, syllables, lines, false );
         }

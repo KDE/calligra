@@ -27,28 +27,28 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPAutoFormObjectIface::KPAutoFormObjectIface( KPAutoformObject *_obj )
-    : KPresenterObject2DIface(_obj)
+KPrAutoFormObjectIface::KPrAutoFormObjectIface( KPrAutoformObject *_obj )
+    : KPrObject2DIface(_obj)
 {
     obj = _obj;
 }
 
-QString KPAutoFormObjectIface::fileName() const
+QString KPrAutoFormObjectIface::fileName() const
 {
     return obj->getFileName();
 }
 
-void KPAutoFormObjectIface::setFileName( const QString &_filename )
+void KPrAutoFormObjectIface::setFileName( const QString &_filename )
 {
     obj->setFileName(_filename);
 }
 
-void KPAutoFormObjectIface::setLineBegin( const QString & type)
+void KPrAutoFormObjectIface::setLineBegin( const QString & type)
 {
     obj->setLineBegin(lineEndBeginFromString( type ));
 }
 
-void KPAutoFormObjectIface::setLineEnd( const QString & type)
+void KPrAutoFormObjectIface::setLineEnd( const QString & type)
 {
     obj->setLineEnd(lineEndBeginFromString( type ));
 }

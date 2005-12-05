@@ -26,24 +26,24 @@
 
 class BrushPropertyUI;
 class GradientPropertyUI;
-class PBPreview;
+class KPrPBPreview;
 
 class QWidgetStack;
 
 class KComboBox;
 
 
-class BrushProperty : public QWidget
+class KPrBrushProperty : public QWidget
 {
     Q_OBJECT
 public:
-    BrushProperty( QWidget *parent, const char *name, const BrushCmd::Brush &brush );
-    ~BrushProperty();
+    KPrBrushProperty( QWidget *parent, const char *name, const KPrBrushCmd::Brush &brush );
+    ~KPrBrushProperty();
 
     int getBrushPropertyChange() const;
-    BrushCmd::Brush getBrush() const;
+    KPrBrushCmd::Brush getBrush() const;
 
-    void setBrush( BrushCmd::Brush &brush );
+    void setBrush( KPrBrushCmd::Brush &brush );
 
     void apply();
 
@@ -67,10 +67,10 @@ protected:
     QWidgetStack *m_stack;
     BrushPropertyUI *m_brushUI;
     GradientPropertyUI *m_gradientUI;
-    PBPreview *m_preview_color;
-    PBPreview *m_preview_gradient;
+    KPrPBPreview *m_preview_color;
+    KPrPBPreview *m_preview_gradient;
 
-    BrushCmd::Brush m_brush;
+    KPrBrushCmd::Brush m_brush;
 
 protected slots:
     void slotReset();

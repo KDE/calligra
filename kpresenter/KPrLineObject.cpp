@@ -39,46 +39,46 @@
 
 using namespace std;
 
-KPLineObject::KPLineObject()
-    : KPShadowObject(), KPStartEndLine( L_NORMAL, L_NORMAL )
+KPrLineObject::KPrLineObject()
+    : KPrShadowObject(), KPrStartEndLine( L_NORMAL, L_NORMAL )
 {
     lineType = LT_HORZ;
 }
 
-KPLineObject::KPLineObject( const KPPen &_pen, LineEnd _lineBegin,
+KPrLineObject::KPrLineObject( const KPrPen &_pen, LineEnd _lineBegin,
                             LineEnd _lineEnd, LineType _lineType )
-    : KPShadowObject( _pen ), KPStartEndLine( _lineBegin, _lineEnd )
+    : KPrShadowObject( _pen ), KPrStartEndLine( _lineBegin, _lineEnd )
 {
     lineType = _lineType;
 }
 
-KPLineObject &KPLineObject::operator=( const KPLineObject & )
+KPrLineObject &KPrLineObject::operator=( const KPrLineObject & )
 {
     return *this;
 }
 
-DCOPObject* KPLineObject::dcopObject()
+DCOPObject* KPrLineObject::dcopObject()
 {
     if ( !dcop )
-        dcop = new KPLineObjectIface( this );
+        dcop = new KPrLineObjectIface( this );
     return dcop;
 }
 
 
-void KPLineObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+void KPrLineObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    KPShadowObject::fillStyle( styleObjectAuto, mainStyles );
+    KPrShadowObject::fillStyle( styleObjectAuto, mainStyles );
     saveOasisMarkerElement( mainStyles, styleObjectAuto );
 }
 
 
-bool KPLineObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrLineObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
     // nothing to do
     return true;
 }
 
-void KPLineObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
+void KPrLineObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
 {
     xmlWriter.addAttribute( "draw:id", "object" + QString::number( indexObj ) );
 
@@ -119,30 +119,30 @@ void KPLineObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) co
     }
 }
 
-const char * KPLineObject::getOasisElementName() const
+const char * KPrLineObject::getOasisElementName() const
 {
     return "draw:line";
 }
 
-QDomDocumentFragment KPLineObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrLineObject::save( QDomDocument& doc, double offset )
 {
-    QDomDocumentFragment fragment=KPShadowObject::save(doc, offset);
+    QDomDocumentFragment fragment=KPrShadowObject::save(doc, offset);
     if (lineType!=LT_HORZ)
-        fragment.appendChild(KPObject::createValueElement("LINETYPE", static_cast<int>(lineType), doc));
-    KPStartEndLine::save( fragment, doc );
+        fragment.appendChild(KPrObject::createValueElement("LINETYPE", static_cast<int>(lineType), doc));
+    KPrStartEndLine::save( fragment, doc );
     return fragment;
 }
 
-void KPLineObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
+void KPrLineObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
-    KPShadowObject::loadOasis(element, context, info);
+    KPrShadowObject::loadOasis(element, context, info);
 
     double x1 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x1", QString::null ) );
     double y1 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y1", QString::null ) );
     double x2 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "x2", QString::null ) );
     double y2 = KoUnit::parseValue( element.attributeNS( KoXmlNS::svg, "y2", QString::null ) );
 
-    kdDebug()<<" KPLineObject::loadOasis(const QDomElement &element) : x1 "<< x1 <<" y1 : "<<y1<<" x2 :"<<x2 <<" y2 "<<y2<<endl;
+    kdDebug()<<" KPrLineObject::loadOasis(const QDomElement &element) : x1 "<< x1 <<" y1 : "<<y1<<" x2 :"<<x2 <<" y2 "<<y2<<endl;
     double x = QMIN( x1, x2 );
     double y = QMIN( y1, y2 );
 
@@ -171,7 +171,7 @@ void KPLineObject::loadOasis(const QDomElement &element, KoOasisContext & contex
     else
         lineType=LT_LD_RU;
 
-    kdDebug()<<"KPLineObject::loadOasis(const QDomElement &element) : real position x :"<<orig.x()<<" y "<<orig.y()<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
+    kdDebug()<<"KPrLineObject::loadOasis(const QDomElement &element) : real position x :"<<orig.x()<<" y "<<orig.y()<< " width :"<<ext.width()<<" height :"<<ext.height()<<endl;
 
     QString attr = (x1 <= x2) ?  "marker-start" : "marker-end";
     loadOasisMarkerElement( context, attr, lineBegin );
@@ -180,9 +180,9 @@ void KPLineObject::loadOasis(const QDomElement &element, KoOasisContext & contex
     loadOasisMarkerElement( context, attr, lineEnd );
 }
 
-double KPLineObject::load(const QDomElement &element)
+double KPrLineObject::load(const QDomElement &element)
 {
-    double offset=KPShadowObject::load(element);
+    double offset=KPrShadowObject::load(element);
     QDomElement e=element.namedItem("LINETYPE").toElement();
     if(!e.isNull()) {
         int tmp=0;
@@ -190,11 +190,11 @@ double KPLineObject::load(const QDomElement &element)
             tmp=e.attribute("value").toInt();
         lineType=static_cast<LineType>(tmp);
     }
-    KPStartEndLine::load( element );
+    KPrStartEndLine::load( element );
     return offset;
 }
 
-void KPLineObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
+void KPrLineObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                           int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
     double ow = ext.width();
@@ -329,9 +329,9 @@ void KPLineObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
     }
 }
 
-void KPLineObject::flip( bool horizontal )
+void KPrLineObject::flip( bool horizontal )
 {
-    KPObject::flip( horizontal );
+    KPrObject::flip( horizontal );
     if ( ! horizontal )
     {
         if ( lineType == LT_LU_RD )
@@ -352,7 +352,7 @@ void KPLineObject::flip( bool horizontal )
     }
 }
 
-KoSize KPLineObject::getRealSize() const {
+KoSize KPrLineObject::getRealSize() const {
     KoPoint realOrig( orig );
     KoSize size( ext );
 
@@ -415,7 +415,7 @@ KoSize KPLineObject::getRealSize() const {
     return size;
 }
 
-KoPoint KPLineObject::getRealOrig() const {
+KoPoint KPrLineObject::getRealOrig() const {
     KoPoint realOrig( orig );
     KoSize size( ext );
 

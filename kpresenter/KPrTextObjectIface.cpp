@@ -30,181 +30,181 @@
 #include <kdebug.h>
 #include <kcommand.h>
 
-KPTextObjectIface::KPTextObjectIface( KPTextObject *_textobject )
-    : KPresenterObject2DIface(_textobject)
+KPrTextObjectIface::KPrTextObjectIface( KPrTextObject *_textobject )
+    : KPrObject2DIface(_textobject)
 {
     m_textobject = _textobject;
 }
 
-DCOPRef KPTextObjectIface::startEditing()
+DCOPRef KPrTextObjectIface::startEditing()
 {
     KPrDocument *doc=m_textobject->kPresenterDocument();
-    KPresenterView *view=doc->firstView();
+    KPrView *view=doc->firstView();
     view->getCanvas()->createEditing( m_textobject);
     return DCOPRef( kapp->dcopClient()->appId(),
                     view->getCanvas()->currentTextObjectView()->dcopObject()->objId() );
 }
 
-bool KPTextObjectIface::hasSelection() const
+bool KPrTextObjectIface::hasSelection() const
 {
     return m_textobject->textObject()->hasSelection();
 }
 
-QString KPTextObjectIface::selectedText() const
+QString KPrTextObjectIface::selectedText() const
 {
     return m_textobject->textObject()->selectedText();
 }
 
-void KPTextObjectIface::selectAll( bool select )
+void KPrTextObjectIface::selectAll( bool select )
 {
     m_textobject->textObject()->selectAll(select);
 }
 
-void KPTextObjectIface::recalcPageNum( )
+void KPrTextObjectIface::recalcPageNum( )
 {
     //FIXME
     //m_textobject->recalcPageNum(m_textobject->kPresenterDocument());
 }
 
-void KPTextObjectIface::setBoldText( bool b )
+void KPrTextObjectIface::setBoldText( bool b )
 {
     KCommand *cmd=m_textobject->textObject()->setBoldCommand( b );
     delete cmd;
 }
 
-void KPTextObjectIface::setItalicText( bool b )
+void KPrTextObjectIface::setItalicText( bool b )
 {
     KCommand *cmd=m_textobject->textObject()->setItalicCommand(b);
     delete cmd;
 }
 
-void KPTextObjectIface::setUnderlineText( bool b )
+void KPrTextObjectIface::setUnderlineText( bool b )
 {
     KCommand *cmd=m_textobject->textObject()->setUnderlineCommand(b);
     delete cmd;
 }
 
-void KPTextObjectIface::setDoubleUnderlineText(bool b)
+void KPrTextObjectIface::setDoubleUnderlineText(bool b)
 {
     KCommand *cmd=m_textobject->textObject()->setDoubleUnderlineCommand(b);
     delete cmd;
 }
 
-void KPTextObjectIface::setUnderlineColor( const QColor & color )
+void KPrTextObjectIface::setUnderlineColor( const QColor & color )
 {
     KCommand *cmd=m_textobject->textObject()->setUnderlineColorCommand( color );
     delete cmd;
 }
 
-void KPTextObjectIface::setStrikeOutText( bool b )
+void KPrTextObjectIface::setStrikeOutText( bool b )
 {
     KCommand *cmd=m_textobject->textObject()->setStrikeOutCommand(b);
     delete cmd;
 }
 
-void KPTextObjectIface::setTextColor( const QColor &col )
+void KPrTextObjectIface::setTextColor( const QColor &col )
 {
     KCommand *cmd=m_textobject->textObject()->setTextColorCommand(col);
     delete cmd;
 }
 
-void KPTextObjectIface::setTextPointSize( int s )
+void KPrTextObjectIface::setTextPointSize( int s )
 {
     KCommand *cmd=m_textobject->textObject()->setPointSizeCommand( s );
     delete cmd;
 }
 
-void KPTextObjectIface::setTextSubScript( bool b )
+void KPrTextObjectIface::setTextSubScript( bool b )
 {
     KCommand *cmd=m_textobject->textObject()->setTextSubScriptCommand( b );
     delete cmd;
 }
 
-void KPTextObjectIface::setTextSuperScript( bool b )
+void KPrTextObjectIface::setTextSuperScript( bool b )
 {
     KCommand *cmd=m_textobject->textObject()->setTextSuperScriptCommand( b );
     delete cmd;
 }
 
-void KPTextObjectIface::setTextDefaultFormat()
+void KPrTextObjectIface::setTextDefaultFormat()
 {
     KCommand *cmd=m_textobject->textObject()->setDefaultFormatCommand();
     delete cmd;
 }
 
-void KPTextObjectIface::setTextBackgroundColor(const QColor & col)
+void KPrTextObjectIface::setTextBackgroundColor(const QColor & col)
 {
     KCommand *cmd=m_textobject->textObject()->setTextBackgroundColorCommand(col);
     delete cmd;
 }
 
-bool KPTextObjectIface::textDoubleUnderline()const
+bool KPrTextObjectIface::textDoubleUnderline()const
 {
     return m_textobject->textObject()->textDoubleUnderline();
 }
 
-QColor KPTextObjectIface::textUnderlineColor() const
+QColor KPrTextObjectIface::textUnderlineColor() const
 {
     return m_textobject->textObject()->textUnderlineColor();
 }
 
-QColor KPTextObjectIface::textColor() const
+QColor KPrTextObjectIface::textColor() const
 {
     return m_textobject->textObject()->textColor();
 }
 
-QFont KPTextObjectIface::textFont() const
+QFont KPrTextObjectIface::textFont() const
 {
     return m_textobject->textObject()->textFont();
 }
 
-QString KPTextObjectIface::textFontFamily()const
+QString KPrTextObjectIface::textFontFamily()const
 {
     return m_textobject->textObject()->textFontFamily();
 }
 
-QColor KPTextObjectIface::textBackgroundColor() const
+QColor KPrTextObjectIface::textBackgroundColor() const
 {
     return m_textobject->textObject()->textBackgroundColor();
 }
 
-bool KPTextObjectIface::textItalic() const
+bool KPrTextObjectIface::textItalic() const
 {
     return m_textobject->textObject()->textItalic();
 }
 
-bool KPTextObjectIface::textBold() const
+bool KPrTextObjectIface::textBold() const
 {
     return m_textobject->textObject()->textBold();
 }
 
-bool KPTextObjectIface::textUnderline()const
+bool KPrTextObjectIface::textUnderline()const
 {
     return m_textobject->textObject()->textUnderline();
 }
 
-bool KPTextObjectIface::textStrikeOut()const
+bool KPrTextObjectIface::textStrikeOut()const
 {
     return m_textobject->textObject()->textStrikeOut();
 }
 
-bool KPTextObjectIface::textSubScript() const
+bool KPrTextObjectIface::textSubScript() const
 {
     return m_textobject->textObject()->textSubScript();
 }
 
-bool KPTextObjectIface::textSuperScript() const
+bool KPrTextObjectIface::textSuperScript() const
 {
     return m_textobject->textObject()->textSuperScript();
 }
 
-void KPTextObjectIface::setTextFamilyFont(const QString &font)
+void KPrTextObjectIface::setTextFamilyFont(const QString &font)
 {
     KCommand *cmd=m_textobject->textObject()->setFamilyCommand(font);
     delete cmd;
 }
 
-void KPTextObjectIface::changeCaseOfText( const QString & caseType)
+void KPrTextObjectIface::changeCaseOfText( const QString & caseType)
 {
     KCommand *cmd = 0L;
     if( caseType.lower() == "uppercase" )
@@ -222,73 +222,73 @@ void KPTextObjectIface::changeCaseOfText( const QString & caseType)
     delete cmd;
 }
 
-void KPTextObjectIface::extendTextContentsToHeight()
+void KPrTextObjectIface::extendTextContentsToHeight()
 {
     KCommand *cmd=m_textobject->textContentsToHeight();
     delete cmd;
 }
 
-void KPTextObjectIface::extendTextObjectToContents()
+void KPrTextObjectIface::extendTextObjectToContents()
 {
     KCommand *cmd= m_textobject->textObjectToContents();
     delete cmd;
 }
 
-void KPTextObjectIface::setProtectContent ( bool _protect )
+void KPrTextObjectIface::setProtectContent ( bool _protect )
 {
     m_textobject->setProtectContent( _protect );
 }
 
-bool KPTextObjectIface::isProtectContent() const
+bool KPrTextObjectIface::isProtectContent() const
 {
     return m_textobject->isProtectContent();
 }
 
-void KPTextObjectIface::setPtMarginLeft(double val)
+void KPrTextObjectIface::setPtMarginLeft(double val)
 {
     m_textobject->setBLeft(val);
     m_textobject->kPresenterDocument()->layout( m_textobject );
 }
 
-void KPTextObjectIface::setPtMarginRight(double val)
+void KPrTextObjectIface::setPtMarginRight(double val)
 {
     m_textobject->setBRight(val);
     m_textobject->kPresenterDocument()->layout( m_textobject );
 }
 
-void KPTextObjectIface::setPtMarginTop(double val)
+void KPrTextObjectIface::setPtMarginTop(double val)
 {
     m_textobject->setBTop(val);
     m_textobject->kPresenterDocument()->layout( m_textobject );
 }
 
-void KPTextObjectIface::setPtMarginBottom(double val)
+void KPrTextObjectIface::setPtMarginBottom(double val)
 {
     m_textobject->setBBottom(val);
     m_textobject->kPresenterDocument()->layout( m_textobject );
 }
 
-double KPTextObjectIface::ptMarginLeft()const
+double KPrTextObjectIface::ptMarginLeft()const
 {
     return m_textobject->bLeft();
 }
 
-double KPTextObjectIface::ptMarginRight()const
+double KPrTextObjectIface::ptMarginRight()const
 {
     return m_textobject->bRight();
 }
 
-double KPTextObjectIface::ptMarginTop()const
+double KPrTextObjectIface::ptMarginTop()const
 {
     return m_textobject->bTop();
 }
 
-double KPTextObjectIface::ptMarginBottom()const
+double KPrTextObjectIface::ptMarginBottom()const
 {
     return m_textobject->bBottom();
 }
 
-void KPTextObjectIface::setVerticalAligment( const QString & type)
+void KPrTextObjectIface::setVerticalAligment( const QString & type)
 {
     if ( type.lower() =="center" )
         m_textobject->setVerticalAligment( KP_CENTER );
@@ -298,7 +298,7 @@ void KPTextObjectIface::setVerticalAligment( const QString & type)
         m_textobject->setVerticalAligment( KP_BOTTOM );
 }
 
-QString KPTextObjectIface::verticalAlignment() const
+QString KPrTextObjectIface::verticalAlignment() const
 {
     switch( m_textobject->verticalAlignment() )
     {
@@ -317,50 +317,50 @@ QString KPTextObjectIface::verticalAlignment() const
     return QString::null;
 }
 
-//bool KPTextObjectIface::textShadow() const
+//bool KPrTextObjectIface::textShadow() const
 //{
     //return m_textobject->textObject()->textShadow();
 //}
 
-//void KPTextObjectIface::setTextShadow( bool b )
+//void KPrTextObjectIface::setTextShadow( bool b )
 //{
     //KCommand *cmd=m_textobject->textObject()->setShadowTextCommand( b );
     //delete cmd;
 //}
 
-double KPTextObjectIface::relativeTextSize() const
+double KPrTextObjectIface::relativeTextSize() const
 {
     return m_textobject->textObject()->relativeTextSize();
 }
 
-void KPTextObjectIface::setRelativeTextSize( double _size )
+void KPrTextObjectIface::setRelativeTextSize( double _size )
 {
     KCommand *cmd=m_textobject->textObject()->setRelativeTextSizeCommand(_size );
     delete cmd;
 }
 
-bool KPTextObjectIface::wordByWord() const
+bool KPrTextObjectIface::wordByWord() const
 {
     return m_textobject->textObject()->wordByWord();
 }
 
-void KPTextObjectIface::setWordByWord( bool _b )
+void KPrTextObjectIface::setWordByWord( bool _b )
 {
     KCommand *cmd=m_textobject->textObject()->setWordByWordCommand(_b );
     delete cmd;
 }
 
-QString KPTextObjectIface::fontAttribute()const
+QString KPrTextObjectIface::fontAttribute()const
 {
     return KoTextFormat::attributeFontToString( m_textobject->textObject()->fontAttribute() );
 }
 
-QString KPTextObjectIface::underlineLineStyle() const
+QString KPrTextObjectIface::underlineLineStyle() const
 {
     return KoTextFormat::underlineStyleToString( m_textobject->textObject()->underlineStyle() );
 }
 
-QString KPTextObjectIface::strikeOutLineStyle()const
+QString KPrTextObjectIface::strikeOutLineStyle()const
 {
     return KoTextFormat::strikeOutStyleToString( m_textobject->textObject()->strikeOutStyle() );
 }

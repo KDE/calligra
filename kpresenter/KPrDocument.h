@@ -28,7 +28,7 @@
 #endif
 
 class KoGenStyles;
-class KPresenterView;
+class KPrView;
 class DCOPObject;
 class KCommand;
 class KMacroCommand;
@@ -43,8 +43,8 @@ class KoParagStyle;
 class KPrBgSpellCheck;
 class KoTextParag;
 class KoTextObject;
-class KPRLoadingInfo;
-class KPGroupObject;
+class KPrLoadingInfo;
+class KPrGroupObject;
 
 class KoOasisContext;
 class KoOasisSettings;
@@ -72,23 +72,23 @@ class KoSavingContext;
 #include <kocommandhistory.h>
 
 class KoDocumentEntry;
-class KPTextObject;
-class KPPartObject;
+class KPrTextObject;
+class KPrPartObject;
 class KPrPage;
-class KPObject;
+class KPrObject;
 class KPrDocument;
 
 class KoParagStyle;
 class KoStyleCollection;
 
-class KPresenterChild : public KoDocumentChild
+class KPrChild : public KoDocumentChild
 {
 public:
 
     // constructor - destructor
-    KPresenterChild( KPrDocument *_kpr, KoDocument* _doc, const QRect& _rect );
-    KPresenterChild( KPrDocument *_kpr );
-    ~KPresenterChild();
+    KPrChild( KPrDocument *_kpr, KoDocument* _doc, const QRect& _rect );
+    KPrChild( KPrDocument *_kpr );
+    ~KPrChild();
 
     // get parent
     KPrDocument* parent()const { return m_parent; }
@@ -148,7 +148,7 @@ class KPrDocument : public KoDocument
      * Load oasis object
      * @param pos: we use -1 for sticky page.
      */
-    void loadOasisObject( KPrPage * page, QDomNode & drawPage, KoOasisContext & context, KPGroupObject *groupObject = 0L);
+    void loadOasisObject( KPrPage * page, QDomNode & drawPage, KoOasisContext & context, KPrGroupObject *groupObject = 0L);
 
     virtual bool loadXML( const QDomDocument& doc );
     virtual bool loadXML( QIODevice *, const QDomDocument & doc );
@@ -184,7 +184,7 @@ class KPrDocument : public KoDocument
 
     void insertPixmapKey( KoPictureKey key );
 
-    void insertObjectInPage(double offset, KPObject *_obj, int pos = -1);
+    void insertObjectInPage(double offset, KPrObject *_obj, int pos = -1);
 
     void setGridValue( double rx, double ry, bool _replace = true );
 
@@ -208,7 +208,7 @@ class KPrDocument : public KoDocument
     // size of page
     QRect getPageRect( bool decBorders = true ) const;
 
-    void insertObject(KPresenterChild* ch ){ insertChild(ch);}
+    void insertObject(KPrChild* ch ){ insertChild(ch);}
 
     void savePage( const QString &file, int pgnum, bool ignore = false );
     void saveOasisPage( const QString &file, int pgnum, bool ignore = false );
@@ -237,7 +237,7 @@ class KPrDocument : public KoDocument
     void repaint( bool );
 
     void repaint( const QRect& );
-    void repaint( KPObject* );
+    void repaint( KPrObject* );
 
     // stuff for screen-presentations
     /**
@@ -253,11 +253,11 @@ class KPrDocument : public KoDocument
     KCommand * loadPastedObjs( const QString &in, KPrPage* _page );
 
     void deSelectAllObj();
-    void deSelectObj(KPObject *obj);
+    void deSelectObj(KPrObject *obj);
     void updateHeaderFooterButton();
 
     KoPictureCollection *pictureCollection(){ return &m_pictureCollection; }
-    KPGradientCollection *gradientCollection() { return &_gradientCollection; }
+    KPrGradientCollection *gradientCollection() { return &_gradientCollection; }
 
     KoAutoFormat * getAutoFormat()const { return m_autoFormat; }
 
@@ -270,8 +270,8 @@ class KPrDocument : public KoDocument
 
     void enableEmbeddedParts( bool f );
 
-    KPTextObject *header()const { return _header; }
-    KPTextObject *footer()const { return _footer; }
+    KPrTextObject *header()const { return _header; }
+    KPrTextObject *footer()const { return _footer; }
 
     void setHeader( bool b );
     void setFooter( bool b );
@@ -279,9 +279,9 @@ class KPrDocument : public KoDocument
     void setDisplayObjectMasterPage( bool b );
     void setDisplayBackground( bool b );
 
-    bool isHeader(const KPObject *obj)const;
-    bool isFooter(const KPObject *obj)const;
-    bool isHeaderFooter(const KPObject *obj)const;
+    bool isHeader(const KPrObject *obj)const;
+    bool isFooter(const KPrObject *obj)const;
+    bool isHeaderFooter(const KPrObject *obj)const;
 
     // Returns true if the slide pgNum (0 based)
     bool isSlideSelected( int pgNum) ;
@@ -353,11 +353,11 @@ class KPrDocument : public KoDocument
     unsigned int getPageNums() const { return m_pageList.count(); }
 
     // Tell all views to stop editing this frameset, if they were doing so
-    void terminateEditing( KPTextObject * textObj )
+    void terminateEditing( KPrTextObject * textObj )
         { emit sig_terminateEditing( textObj ); }
     KPrPage * initialActivePage() const;
 
-    KPresenterView *firstView() const;
+    KPrView *firstView() const;
 
     void displayActivePage(KPrPage * _page);
 
@@ -367,11 +367,11 @@ class KPrDocument : public KoDocument
     void movePageTo( int oldPos, int newPos );
 
     void updateSideBarItem( KPrPage * page );
-    KPrPage * findPage(KPObject *object);
-    KPrPage * findPage(QPtrList<KPObject> &objects);
+    KPrPage * findPage(KPrObject *object);
+    KPrPage * findPage(QPtrList<KPrObject> &objects);
 
-    void refreshAllNoteBar(int page, const QString &text, KPresenterView *exceptView);
-    void refreshAllNoteBarMasterPage(const QString &text, KPresenterView *exceptView);
+    void refreshAllNoteBar(int page, const QString &text, KPrView *exceptView);
+    void refreshAllNoteBarMasterPage(const QString &text, KPrView *exceptView);
 
 
     bool backgroundSpellCheckEnabled() const;
@@ -458,7 +458,7 @@ class KPrDocument : public KoDocument
     KoCommandHistory * commandHistory()const { return m_commandHistory; }
     void updateObjectStatusBarItem();
     void updateObjectSelected();
-    void layout(KPObject *kpobject);
+    void layout(KPrObject *kpobject);
     void layout();
     void changeBgSpellCheckingState( bool b );
 
@@ -467,7 +467,7 @@ class KPrDocument : public KoDocument
 
     void insertFile(const QString & file );
 
-    void spellCheckParagraphDeleted( KoTextParag *_parag,  KPTextObject *frm);
+    void spellCheckParagraphDeleted( KoTextParag *_parag,  KPrTextObject *frm);
 
     void loadPictureMap ( const QDomElement& domElement );
     void updateRulerInProtectContentMode();
@@ -509,7 +509,7 @@ class KPrDocument : public KoDocument
     //otherwise return list of custom slide show
     QValueList<int> displaySelectedSlides();
     QValueList<int> listOfDisplaySelectedSlides( const QValueList<KPrPage*>& lst );
-    void addTestCustomSlideShow( const QStringList &lst, KPresenterView *_view );
+    void addTestCustomSlideShow( const QStringList &lst, KPrView *_view );
     void clearTestCustomSlideShow();
 
 public slots:
@@ -520,7 +520,7 @@ public slots:
     void selectPage( int pgNum, bool select );
     void clipboardDataChanged();
 
-    void slotRepaintChanged( KPTextObject * );
+    void slotRepaintChanged( KPrTextObject * );
 
     void slotRepaintVariable();
 
@@ -533,7 +533,7 @@ signals:
     void sig_refreshMenuCustomVariable();
     void pageNumChanged();
     void sig_updateRuler();
-    void sig_terminateEditing( KPTextObject * );
+    void sig_terminateEditing( KPrTextObject * );
     void sig_updateMenuBar();
 
 protected slots:
@@ -628,9 +628,9 @@ protected:
     QPen _presPen;
 
     KoPictureCollection m_pictureCollection;
-    KPGradientCollection _gradientCollection;
+    KPrGradientCollection _gradientCollection;
 
-    KPTextObject *_header, *_footer;
+    KPrTextObject *_header, *_footer;
 
     QMap<KoPictureKey, QString> m_pictureMap;
 
@@ -697,13 +697,13 @@ private:
     KPrPage *m_masterPage;
     KPrBgSpellCheck *m_bgSpellCheck;
     KoStyleCollection *m_styleColl;
-    KPObject *bgObjSpellChecked;
+    KPrObject *bgObjSpellChecked;
     QString m_picturePath;
     bool  m_bInsertDirectCursor;
     QString m_globalLanguage;
     QString m_presentationName;
     bool m_bGlobalHyphenation;
-    KPRLoadingInfo *m_loadingInfo;
+    KPrLoadingInfo *m_loadingInfo;
     QValueList<int> *m_customListTest;
 
     /// here the amount of existing children before inserting a page/file

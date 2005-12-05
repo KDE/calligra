@@ -30,18 +30,18 @@
 #include "KPrVariableCollection.h"
 #include <KoAutoFormat.h>
 
-KPresenterDocIface::KPresenterDocIface( KPrDocument *doc_ )
+KPrDocumentIface::KPrDocumentIface( KPrDocument *doc_ )
     : KoDocumentIface( doc_ )
 {
     doc = doc_;
 }
 
-int KPresenterDocIface::numPages() const
+int KPrDocumentIface::numPages() const
 {
     return doc->getPageNums();
 }
 
-DCOPRef KPresenterDocIface::page( int num )
+DCOPRef KPrDocumentIface::page( int num )
 {
     if( num>= (int )doc->getPageNums())
         return DCOPRef();
@@ -49,35 +49,35 @@ DCOPRef KPresenterDocIface::page( int num )
                     doc->pageList().at( num )->dcopObject()->objId() );
 }
 
-DCOPRef KPresenterDocIface::masterPage()
+DCOPRef KPrDocumentIface::masterPage()
 {
     return DCOPRef( kapp->dcopClient()->appId(),
                     doc->masterPage()->dcopObject()->objId() );
 }
 
-void KPresenterDocIface::setShowRuler(bool b)
+void KPrDocumentIface::setShowRuler(bool b)
 {
     doc->setShowRuler(b );
     doc->reorganizeGUI();
 }
 
-bool KPresenterDocIface::showRuler() const
+bool KPrDocumentIface::showRuler() const
 {
     return doc->showRuler();
 }
 
-void KPresenterDocIface::recalcAllVariables()
+void KPrDocumentIface::recalcAllVariables()
 {
     //recalc all variable
     doc->recalcVariables(VT_ALL);
 }
 
-void KPresenterDocIface::recalcVariables(int _var)
+void KPrDocumentIface::recalcVariables(int _var)
 {
     doc->recalcVariables(_var);
 }
 
-void KPresenterDocIface::recalcVariables(const QString &varName)
+void KPrDocumentIface::recalcVariables(const QString &varName)
 {
     if(varName=="VT_DATE")
         doc->recalcVariables(0);
@@ -99,29 +99,29 @@ void KPresenterDocIface::recalcVariables(const QString &varName)
         doc->recalcVariables(256);
 }
 
-int KPresenterDocIface::startingPage()
+int KPrDocumentIface::startingPage()
 {
     return doc->getVariableCollection()->variableSetting()->startingPageNumber();
 }
 
-void KPresenterDocIface::setStartingPage(int nb)
+void KPrDocumentIface::setStartingPage(int nb)
 {
     doc->getVariableCollection()->variableSetting()->setStartingPageNumber(nb);
     doc->recalcVariables(VT_PGNUM);
 }
 
-bool KPresenterDocIface::displayLink() const
+bool KPrDocumentIface::displayLink() const
 {
     return doc->getVariableCollection()->variableSetting()->displayLink();
 }
 
-void KPresenterDocIface::setDisplayLink(bool b)
+void KPrDocumentIface::setDisplayLink(bool b)
 {
     doc->getVariableCollection()->variableSetting()->setDisplayLink(b);
     doc->recalcVariables(VT_LINK);
 }
 
-bool KPresenterDocIface::setCustomVariableValue(const QString & varname, const QString & value)
+bool KPrDocumentIface::setCustomVariableValue(const QString & varname, const QString & value)
 {
     bool exist=doc->getVariableCollection()->customVariableExist(varname);
     if(exist)
@@ -134,14 +134,14 @@ bool KPresenterDocIface::setCustomVariableValue(const QString & varname, const Q
     return true;
 }
 
-QString KPresenterDocIface::customVariableValue(const QString & varname)const
+QString KPrDocumentIface::customVariableValue(const QString & varname)const
 {
     if(doc->getVariableCollection()->customVariableExist(varname))
         return doc->getVariableCollection()->getVariableValue( varname );
     return QString::null;
 }
 
-bool KPresenterDocIface::insertNewPage(int pos )
+bool KPrDocumentIface::insertNewPage(int pos )
 {
     if( pos < 0 || pos > (int)(doc->getPageNums())-1 )
         pos=doc->getPageNums()-1;
@@ -151,7 +151,7 @@ bool KPresenterDocIface::insertNewPage(int pos )
 }
 
 //return false if page number doesn't exist
-bool KPresenterDocIface::selectPage( int page,bool select)
+bool KPrDocumentIface::selectPage( int page,bool select)
 {
     if(page <0 || page> (int)(doc->getPageNums())-1 )
         return false;
@@ -160,7 +160,7 @@ bool KPresenterDocIface::selectPage( int page,bool select)
 }
 
 // return false when we can't remove page
-bool KPresenterDocIface::deletePage( int _page )
+bool KPrDocumentIface::deletePage( int _page )
 {
     if( _page < 0 || _page > (int)(doc->getPageNums())-1 )
         return false;
@@ -168,33 +168,33 @@ bool KPresenterDocIface::deletePage( int _page )
     return true;
 }
 
-void KPresenterDocIface::deSelectAllObj()
+void KPrDocumentIface::deSelectAllObj()
 {
     doc->deSelectAllObj();
 }
 
-void KPresenterDocIface::recalcPageNum()
+void KPrDocumentIface::recalcPageNum()
 {
     doc->recalcPageNum();
 }
 
 
-void KPresenterDocIface::initConfig()
+void KPrDocumentIface::initConfig()
 {
     doc->initConfig();
 }
 
-void KPresenterDocIface::saveConfig()
+void KPrDocumentIface::saveConfig()
 {
     doc->saveConfig();
 }
 
-QString KPresenterDocIface::selectedForPrinting()const
+QString KPrDocumentIface::selectedForPrinting()const
 {
     return doc->selectedForPrinting();
 }
 
-bool KPresenterDocIface::isSlideSelected( int pgNum)
+bool KPrDocumentIface::isSlideSelected( int pgNum)
 {
     if( pgNum>= (int)doc->getPageNums())
         return false;
@@ -202,7 +202,7 @@ bool KPresenterDocIface::isSlideSelected( int pgNum)
 }
 
 //Return a reference to header textobj
-DCOPRef KPresenterDocIface::header()
+DCOPRef KPrDocumentIface::header()
 {
     if(doc->header())
         return DCOPRef( kapp->dcopClient()->appId(),
@@ -212,7 +212,7 @@ DCOPRef KPresenterDocIface::header()
 }
 
 //Return a reference to footer textobj
-DCOPRef KPresenterDocIface::footer()
+DCOPRef KPrDocumentIface::footer()
 {
     if(doc->footer())
         return DCOPRef( kapp->dcopClient()->appId(),
@@ -221,351 +221,351 @@ DCOPRef KPresenterDocIface::footer()
         return DCOPRef();
 }
 
-void KPresenterDocIface::startBackgroundSpellCheck()
+void KPrDocumentIface::startBackgroundSpellCheck()
 {
     doc->startBackgroundSpellCheck();
 }
 
-void KPresenterDocIface::reactivateBgSpellChecking()
+void KPrDocumentIface::reactivateBgSpellChecking()
 {
     doc->reactivateBgSpellChecking();
 }
 
-void KPresenterDocIface::setConfigUpperCase( bool _uc )
+void KPrDocumentIface::setConfigUpperCase( bool _uc )
 {
     doc->getAutoFormat()->configUpperCase(_uc);
 }
 
-void KPresenterDocIface::setConfigUpperUpper( bool _uu )
+void KPrDocumentIface::setConfigUpperUpper( bool _uu )
 {
     doc->getAutoFormat()->configUpperUpper(_uu);
 }
 
-void KPresenterDocIface::setConfigAdvancedAutocorrect( bool _aa )
+void KPrDocumentIface::setConfigAdvancedAutocorrect( bool _aa )
 {
     doc->getAutoFormat()->configAdvancedAutocorrect( _aa );
 }
 
-void KPresenterDocIface::setConfigAutoDetectUrl(bool _au)
+void KPrDocumentIface::setConfigAutoDetectUrl(bool _au)
 {
     doc->getAutoFormat()->configAutoDetectUrl(_au);
 }
 
-void KPresenterDocIface::setConfigIgnoreDoubleSpace( bool _ids)
+void KPrDocumentIface::setConfigIgnoreDoubleSpace( bool _ids)
 {
     doc->getAutoFormat()->configIgnoreDoubleSpace(_ids);
 }
 
-void KPresenterDocIface::setConfigRemoveSpaceBeginEndLine( bool _space)
+void KPrDocumentIface::setConfigRemoveSpaceBeginEndLine( bool _space)
 {
     doc->getAutoFormat()->configRemoveSpaceBeginEndLine(_space);
 }
 
-void KPresenterDocIface::setConfigUseBulletStyle( bool _ubs)
+void KPrDocumentIface::setConfigUseBulletStyle( bool _ubs)
 {
     doc->getAutoFormat()->configUseBulletStyle(_ubs);
 }
 
-bool KPresenterDocIface::configUpperCase() const
+bool KPrDocumentIface::configUpperCase() const
 {
     return doc->getAutoFormat()->getConfigUpperCase();
 }
 
-bool KPresenterDocIface::configUpperUpper() const
+bool KPrDocumentIface::configUpperUpper() const
 {
     return doc->getAutoFormat()->getConfigUpperUpper();
 }
 
-bool KPresenterDocIface::configAdvancedAutoCorrect() const
+bool KPrDocumentIface::configAdvancedAutoCorrect() const
 {
     return doc->getAutoFormat()->getConfigAdvancedAutoCorrect();
 }
 
-bool KPresenterDocIface::configAutoDetectUrl() const
+bool KPrDocumentIface::configAutoDetectUrl() const
 {
     return doc->getAutoFormat()->getConfigAutoDetectUrl();
 }
 
-bool KPresenterDocIface::configIgnoreDoubleSpace() const
+bool KPrDocumentIface::configIgnoreDoubleSpace() const
 {
     return doc->getAutoFormat()->getConfigIgnoreDoubleSpace();
 }
 
-bool KPresenterDocIface::configRemoveSpaceBeginEndLine() const
+bool KPrDocumentIface::configRemoveSpaceBeginEndLine() const
 {
     return doc->getAutoFormat()->getConfigIgnoreDoubleSpace();
 }
 
-bool KPresenterDocIface::configUseBulletSyle() const
+bool KPrDocumentIface::configUseBulletSyle() const
 {
     return doc->getAutoFormat()->getConfigUseBulletSyle();
 }
 
-bool KPresenterDocIface::configAutoChangeFormat() const
+bool KPrDocumentIface::configAutoChangeFormat() const
 {
     return doc->getAutoFormat()->getConfigAutoChangeFormat();
 }
 
-void KPresenterDocIface::setConfigAutoChangeFormat( bool _auto)
+void KPrDocumentIface::setConfigAutoChangeFormat( bool _auto)
 {
     doc->getAutoFormat()->configAutoChangeFormat(_auto);
 }
 
-bool KPresenterDocIface::configAutoReplaceNumber() const
+bool KPrDocumentIface::configAutoReplaceNumber() const
 {
     return doc->getAutoFormat()->getConfigAutoReplaceNumber();
 }
 
-void KPresenterDocIface::setConfigAutoReplaceNumber( bool b )
+void KPrDocumentIface::setConfigAutoReplaceNumber( bool b )
 {
     doc->getAutoFormat()->configAutoReplaceNumber(b);
 }
 
-bool KPresenterDocIface::showStatusBar() const
+bool KPrDocumentIface::showStatusBar() const
 {
     return doc->showStatusBar();
 }
 
-void KPresenterDocIface::setShowStatusBar( bool _status )
+void KPrDocumentIface::setShowStatusBar( bool _status )
 {
     doc->setShowStatusBar(_status);
     doc->reorganizeGUI();
 }
 
-void KPresenterDocIface::setConfigAutoNumberStyle( bool b )
+void KPrDocumentIface::setConfigAutoNumberStyle( bool b )
 {
     doc->getAutoFormat()->configAutoNumberStyle(b);
 }
 
-bool KPresenterDocIface::configAutoNumberStyle() const
+bool KPrDocumentIface::configAutoNumberStyle() const
 {
     return doc->getAutoFormat()->getConfigAutoNumberStyle();
 }
 
-void KPresenterDocIface::setConfigCompletion( bool b )
+void KPrDocumentIface::setConfigCompletion( bool b )
 {
     doc->getAutoFormat()->configCompletion( b );
 }
 
-bool KPresenterDocIface::configCompletion() const
+bool KPrDocumentIface::configCompletion() const
 {
     return doc->getAutoFormat()->getConfigCompletion();
 }
 
-void KPresenterDocIface::setConfigAppendSpace( bool b)
+void KPrDocumentIface::setConfigAppendSpace( bool b)
 {
     doc->getAutoFormat()->configAppendSpace( b );
 }
 
-bool KPresenterDocIface::configAppendSpace() const
+bool KPrDocumentIface::configAppendSpace() const
 {
     return doc->getAutoFormat()->getConfigAppendSpace();
 }
 
-void KPresenterDocIface::setConfigMinWordLength( uint val )
+void KPrDocumentIface::setConfigMinWordLength( uint val )
 {
     doc->getAutoFormat()->configMinWordLength( val );
 }
 
-uint KPresenterDocIface::configMinWordLength() const
+uint KPrDocumentIface::configMinWordLength() const
 {
     return doc->getAutoFormat()->getConfigMinWordLength();
 }
 
-void KPresenterDocIface::setConfigNbMaxCompletionWord( uint val )
+void KPrDocumentIface::setConfigNbMaxCompletionWord( uint val )
 {
     doc->getAutoFormat()->configNbMaxCompletionWord( val );
 }
 
-uint KPresenterDocIface::configNbMaxCompletionWord() const
+uint KPrDocumentIface::configNbMaxCompletionWord() const
 {
     return doc->getAutoFormat()->getConfigNbMaxCompletionWord();
 }
 
-void KPresenterDocIface::setConfigAddCompletionWord( bool b )
+void KPrDocumentIface::setConfigAddCompletionWord( bool b )
 {
     doc->getAutoFormat()->configAddCompletionWord( b );
 }
 
-bool KPresenterDocIface::configAddCompletionWord() const
+bool KPrDocumentIface::configAddCompletionWord() const
 {
     return doc->getAutoFormat()->getConfigAddCompletionWord();
 }
 
-bool KPresenterDocIface::configIncludeTwoUpperUpperLetterException() const
+bool KPrDocumentIface::configIncludeTwoUpperUpperLetterException() const
 {
     return doc->getAutoFormat()->getConfigIncludeTwoUpperUpperLetterException();
 }
 
-void KPresenterDocIface::setConfigIncludeTwoUpperUpperLetterException( bool b)
+void KPrDocumentIface::setConfigIncludeTwoUpperUpperLetterException( bool b)
 {
     doc->getAutoFormat()->configIncludeTwoUpperUpperLetterException( b );
 }
 
-bool KPresenterDocIface::configIncludeAbbreviation() const
+bool KPrDocumentIface::configIncludeAbbreviation() const
 {
     return doc->getAutoFormat()->getConfigIncludeAbbreviation();
 }
 
-void KPresenterDocIface::setConfigIncludeAbbreviation( bool b)
+void KPrDocumentIface::setConfigIncludeAbbreviation( bool b)
 {
     doc->getAutoFormat()->configIncludeAbbreviation( b );
 }
 
-bool KPresenterDocIface::displayComment() const
+bool KPrDocumentIface::displayComment() const
 {
     return doc->getVariableCollection()->variableSetting()->displayComment();
 }
 
-void KPresenterDocIface::setDisplayComment( bool b)
+void KPrDocumentIface::setDisplayComment( bool b)
 {
     doc->getVariableCollection()->variableSetting()->setDisplayComment( b );
     doc->recalcVariables(VT_NOTE);
 }
 
-bool KPresenterDocIface::showGuideLines() const
+bool KPrDocumentIface::showGuideLines() const
 {
     return doc->showGuideLines();
 }
 
-void KPresenterDocIface::setShowGuideLines( bool b )
+void KPrDocumentIface::setShowGuideLines( bool b )
 {
     doc->setShowGuideLines( b );
     doc->updateGuideLineButton();
     doc->repaint( false );
 }
 
-void KPresenterDocIface::addGuideLine( bool horizontal, double pos )
+void KPrDocumentIface::addGuideLine( bool horizontal, double pos )
 {
     doc->addGuideLine( horizontal ? Qt::Horizontal: Qt::Vertical, pos );
     doc->repaint( false );
 }
 
-unsigned int KPresenterDocIface::nbHorizontalHelpLine() const
+unsigned int KPrDocumentIface::nbHorizontalHelpLine() const
 {
     return doc->horizontalGuideLines().count();
 }
 
-unsigned int KPresenterDocIface::nbVerticalHelpLine() const
+unsigned int KPrDocumentIface::nbVerticalHelpLine() const
 {
     return doc->verticalGuideLines().count();
 }
 
-bool KPresenterDocIface::showGrid() const
+bool KPrDocumentIface::showGrid() const
 {
     return doc->showGrid();
 }
 
-void KPresenterDocIface::setShowGrid ( bool _grid )
+void KPrDocumentIface::setShowGrid ( bool _grid )
 {
     doc->setShowGrid( _grid);
     doc->updateGridButton();
     doc->repaint( false );
 }
 
-double KPresenterDocIface::gridX() const
+double KPrDocumentIface::gridX() const
 {
     return doc->getGridX();
 }
 
-void KPresenterDocIface::setGridX(double _x)
+void KPrDocumentIface::setGridX(double _x)
 {
     doc->setGridX( _x );
     if( showGrid() )
         doc->repaint( false );
 }
 
-double KPresenterDocIface::gridY() const
+double KPrDocumentIface::gridY() const
 {
     return doc->getGridY();
 }
 
-void KPresenterDocIface::setGridY(double _y)
+void KPrDocumentIface::setGridY(double _y)
 {
     doc->setGridY( _y );
     if( showGrid() )
         doc->repaint( false );
 }
 
-bool KPresenterDocIface::configAutoSuperScript() const
+bool KPrDocumentIface::configAutoSuperScript() const
 {
     return doc->getAutoFormat()->getConfigAutoSuperScript();
 }
 
-void KPresenterDocIface::setConfigAutoSuperScript( bool b)
+void KPrDocumentIface::setConfigAutoSuperScript( bool b)
 {
     doc->getAutoFormat()->configAutoSuperScript( b );
 }
 
-void KPresenterDocIface::addIgnoreWordAll( const QString &word)
+void KPrDocumentIface::addIgnoreWordAll( const QString &word)
 {
     doc->addSpellCheckIgnoreWord( word );
 }
 
-void KPresenterDocIface::clearIgnoreWordAll( )
+void KPrDocumentIface::clearIgnoreWordAll( )
 {
     doc->setSpellCheckIgnoreList( QStringList() );
 }
 
-QStringList KPresenterDocIface::spellListIgnoreAll() const
+QStringList KPrDocumentIface::spellListIgnoreAll() const
 {
     return doc->spellCheckIgnoreList();
 }
 
-bool KPresenterDocIface::displayFieldCode()const
+bool KPrDocumentIface::displayFieldCode()const
 {
     return doc->getVariableCollection()->variableSetting()->displayFieldCode();
 }
 
-void KPresenterDocIface::setDisplayFieldCode( bool b)
+void KPrDocumentIface::setDisplayFieldCode( bool b)
 {
     doc->getVariableCollection()->variableSetting()->setDisplayFieldCode( b );
     doc->recalcVariables(VT_ALL);
 }
 
-QString KPresenterDocIface::configAutoFormatLanguage( )const
+QString KPrDocumentIface::configAutoFormatLanguage( )const
 {
     return doc->getAutoFormat()->getConfigAutoFormatLanguage( );
 }
 
 
-bool KPresenterDocIface::configCapitalizeNameOfDays() const
+bool KPrDocumentIface::configCapitalizeNameOfDays() const
 {
     return doc->getAutoFormat()->getConfigCapitalizeNameOfDays();
 }
 
-void KPresenterDocIface::setConfigCapitalizeNameOfDays( bool b)
+void KPrDocumentIface::setConfigCapitalizeNameOfDays( bool b)
 {
     doc->getAutoFormat()->configCapitalizeNameOfDays( b );
 }
 
-QString KPresenterDocIface::presentationName() const
+QString KPrDocumentIface::presentationName() const
 {
     return doc->presentationName();
 }
 
-void KPresenterDocIface::setPresentationName( const QString &_name )
+void KPrDocumentIface::setPresentationName( const QString &_name )
 {
     doc->setPresentationName( _name );
 }
 
 
-QStringList KPresenterDocIface::presentationList()
+QStringList KPrDocumentIface::presentationList()
 {
     return doc->presentationList();
 }
 
-void KPresenterDocIface::repaint()
+void KPrDocumentIface::repaint()
 {
     doc->repaint( false );
 }
 
-void KPresenterDocIface::setConfigToolTipCompletion( bool b )
+void KPrDocumentIface::setConfigToolTipCompletion( bool b )
 {
     doc->getAutoFormat()->configToolTipCompletion( b );
 }
 
-bool KPresenterDocIface::configToolTipCompletion() const
+bool KPrDocumentIface::configToolTipCompletion() const
 {
     return doc->getAutoFormat()->getConfigToolTipCompletion();
 }

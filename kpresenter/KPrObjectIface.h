@@ -27,13 +27,13 @@
 #include <qstring.h>
 #include <qcolor.h>
 
-class KPObject;
+class KPrObject;
 
-class KPresenterObjectIface : public DCOPObject
+class KPrObjectIface : public DCOPObject
 {
     K_DCOP
 public:
-    KPresenterObjectIface( KPObject *obj_ );
+    KPrObjectIface( KPrObject *obj_ );
 
 k_dcop:
     int getType() const;
@@ -96,7 +96,7 @@ k_dcop:
     bool isKeepRatio() const;
 
 private:
-    KPObject *obj;
+    KPrObject *obj;
 };
 
 #endif

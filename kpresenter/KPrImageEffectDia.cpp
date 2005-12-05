@@ -32,7 +32,7 @@
 
 #include "KPrImageEffectDia.h"
 
-ImageEffectDia::ImageEffectDia(QWidget * parent, const char * name):
+KPrImageEffectDia::KPrImageEffectDia(QWidget * parent, const char * name):
     KDialogBase(parent, name, true, i18n("Image Effect"), Ok|Cancel, Ok)
 {
     m_pix = QPixmap();
@@ -55,12 +55,12 @@ ImageEffectDia::ImageEffectDia(QWidget * parent, const char * name):
             this, SLOT(okClicked()));
 }
 
-ImageEffectDia::~ImageEffectDia()
+KPrImageEffectDia::~KPrImageEffectDia()
 {
     delete base;
 }
 
-void ImageEffectDia::effectChanged(int eff)
+void KPrImageEffectDia::effectChanged(int eff)
 {
     QImage _tmpImage = m_origpix.convertToImage();
 
@@ -200,13 +200,13 @@ void ImageEffectDia::effectChanged(int eff)
     updatePreview();
 }
 
-void ImageEffectDia::okClicked()
+void KPrImageEffectDia::okClicked()
 {
     accept();
 }
 
 
-void ImageEffectDia::setPixmap(QPixmap pix)
+void KPrImageEffectDia::setPixmap(QPixmap pix)
 {
     m_pix = pix;
     m_origpix = pix;
@@ -214,13 +214,13 @@ void ImageEffectDia::setPixmap(QPixmap pix)
     m_origpix.detach();
 }
 
-void ImageEffectDia::updatePreview()
+void KPrImageEffectDia::updatePreview()
 {
     base->m_previewLabel->setPixmap(m_pix);
     base->m_previewLabel->repaint(false);
 }
 
-void ImageEffectDia::setEffect(ImageEffect eff, QVariant p1, QVariant p2, QVariant p3)
+void KPrImageEffectDia::setEffect(ImageEffect eff, QVariant p1, QVariant p2, QVariant p3)
 {
     m_effect = eff;
     m_param1 = p1;
@@ -326,13 +326,13 @@ void ImageEffectDia::setEffect(ImageEffect eff, QVariant p1, QVariant p2, QVaria
     base->m_widgetStack->raiseWidget(static_cast<int>(m_effect)); //bug in Qt? the above doesn't emit this :(
 }
 
-void ImageEffectDia::showEvent(QShowEvent * e)
+void KPrImageEffectDia::showEvent(QShowEvent * e)
 {
     KDialogBase::showEvent(e);
     effectChanged((int)m_effect);
 }
 
-void ImageEffectDia::setupSignals()
+void KPrImageEffectDia::setupSignals()
 {
     connect((QWidget *)base->chanInt_value, SIGNAL(valueChanged(int)),
             this, SLOT(effectParamChanged()));
@@ -404,7 +404,7 @@ void ImageEffectDia::setupSignals()
             this, SLOT(effectParamChanged()));
 }
 
-void ImageEffectDia::effectParamChanged()
+void KPrImageEffectDia::effectParamChanged()
 {
     effectChanged(base->m_effectCombo->currentItem());
 }

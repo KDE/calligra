@@ -26,12 +26,12 @@
 
 class KPrCanvas;
 class KMacroCommand;
-class KPTextView;
+class KPrTextView;
 class KoTextObject;
 class KoFindReplace;
 class KoReplaceDia;
 class KoSearchDia;
-class KPTextView;
+class KPrTextView;
 class KPrFindReplace;
 class KCommand;
 /**
@@ -48,9 +48,9 @@ public:
      * scrolls up/down when using the scrollbars (hehe, cool effect).
      */
     KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoSearchDia * dialog,
-                    const QValueList<KoTextObject *> & lstObjects, KPTextView *textView );
+                    const QValueList<KoTextObject *> & lstObjects, KPrTextView *textView );
     KPrFindReplace( QWidget* parent, KPrCanvas * canvas, KoReplaceDia * dialog,
-                    const QValueList<KoTextObject *> & lstObjects, KPTextView *textView );
+                    const QValueList<KoTextObject *> & lstObjects, KPrTextView *textView );
     ~KPrFindReplace();
 
     virtual void emitNewCommand(KCommand *);

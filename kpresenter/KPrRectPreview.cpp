@@ -23,7 +23,7 @@
 
 #include <qpainter.h>
 
-RectPreview::RectPreview( QWidget* parent, const char* name )
+KPrRectPreview::KPrRectPreview( QWidget* parent, const char* name )
     : QFrame( parent, name )
 {
     setFrameStyle( WinPanel | Sunken );
@@ -34,7 +34,7 @@ RectPreview::RectPreview( QWidget* parent, const char* name )
     setMinimumSize( 200, 100 );
 }
 
-void RectPreview::drawContents( QPainter* painter )
+void KPrRectPreview::drawContents( QPainter* painter )
 {
     int ow = width();
     int oh = height();

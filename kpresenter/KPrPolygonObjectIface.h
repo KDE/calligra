@@ -25,13 +25,13 @@
 #include <dcopref.h>
 #include "KPrObject2DIface.h"
 
-class KPPolygonObject;
+class KPrPolygonObject;
 
-class KPPolygonObjectIface : public KPresenterObject2DIface
+class KPrPolygonObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPPolygonObjectIface( KPPolygonObject *obj_ );
+    KPrPolygonObjectIface( KPrPolygonObject *obj_ );
 
 k_dcop:
     void setCheckConcavePolygon(bool _concavePolygon);
@@ -43,7 +43,7 @@ k_dcop:
     bool checkConcavePolygon()const;
 
 private:
-    KPPolygonObject *obj;
+    KPrPolygonObject *obj;
 };
 
 #endif

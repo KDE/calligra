@@ -31,20 +31,20 @@
 
 class QListViewItem;
 class KPrDocument;
-class KPresenterView;
+class KPrView;
 class QDropEvent;
 class QPopupMenu;
-class Outline;
+class KPrOutline;
 class OutlineSlideItem;
-class ThumbBar;
+class KPrThumbBar;
 class ThumbToolTip;
 class KPrPage;
 
 
-class RenamePageValidator : public QValidator
+class KPrRenamePageValidator : public QValidator
 {
   public:
-    RenamePageValidator( const QStringList & list=QStringList() )
+    KPrRenamePageValidator( const QStringList & list=QStringList() )
         : QValidator( 0, 0 ), mStringList( list ) {}
     virtual State validate( QString & input, int & pos ) const;
 
@@ -52,24 +52,24 @@ class RenamePageValidator : public QValidator
     QStringList mStringList;
 };
 
-class SideBarBase
+class KPrSideBarBase
 {
 public:
-    SideBarBase(KPrDocument *_doc, KPresenterView *_view);
+    KPrSideBarBase(KPrDocument *_doc, KPrView *_view);
     void setViewMasterPage( bool _b );
 protected:
     KPrDocument *m_doc;
-    KPresenterView *m_view;
+    KPrView *m_view;
     bool m_viewMasterPage;
 };
 
-class ThumbBar : public KIconView, public SideBarBase
+class KPrThumbBar : public KIconView, public KPrSideBarBase
 {
     Q_OBJECT
 
 public:
-    ThumbBar(QWidget *parent, KPrDocument *d, KPresenterView *v);
-    ~ThumbBar();
+    KPrThumbBar(QWidget *parent, KPrDocument *d, KPrView *v);
+    ~KPrThumbBar();
     void setCurrentPage( int pg );
     void updateItem( int pagenr, bool sticky = false );
     void addItem( int pos );
@@ -99,13 +99,13 @@ private:
     int m_offsetY;
 };
 
-class Outline: public KListView, public SideBarBase
+class KPrOutline: public KListView, public KPrSideBarBase
 {
     Q_OBJECT
 
 public:
-    Outline( QWidget *parent, KPrDocument *d, KPresenterView *v );
-    ~Outline();
+    KPrOutline( QWidget *parent, KPrDocument *d, KPrView *v );
+    ~KPrOutline();
     void setCurrentPage( int pg );
     QSize sizeHint() const { return QSize( 145, KListView::sizeHint().height() ); }
     void updateItem( int pagenr, bool sticky = false);
@@ -140,12 +140,12 @@ private:
     QListViewItem *m_movedItem, *m_movedAfter;
 };
 
-class SideBar: public QTabWidget
+class KPrSideBar: public QTabWidget
 {
     Q_OBJECT
 
 public:
-    SideBar(QWidget *parent, KPrDocument *d, KPresenterView *v);
+    KPrSideBar(QWidget *parent, KPrDocument *d, KPrView *v);
     void setCurrentPage( int pg ) {
         m_outline->setCurrentPage(pg);
         m_thb->setCurrentPage(pg);
@@ -157,8 +157,8 @@ public:
     void moveItem( int oldPos, int newPos );
     void removeItem( int pos );
 
-    Outline *outline() const { return m_outline; };
-    ThumbBar *thumbBar() const { return m_thb; };
+    KPrOutline *outline() const { return m_outline; };
+    KPrThumbBar *thumbBar() const { return m_thb; };
 
     void setViewMasterPage( bool _masterPage );
 signals: // all page numbers 0-based
@@ -172,11 +172,11 @@ public slots:
     void currentChanged(QWidget *tab);
 
 private:
-    Outline *m_outline;
-    ThumbBar *m_thb;
+    KPrOutline *m_outline;
+    KPrThumbBar *m_thb;
 
     KPrDocument *m_doc;
-    KPresenterView *m_view;
+    KPrView *m_view;
 };
 
 #endif

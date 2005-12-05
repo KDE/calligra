@@ -79,7 +79,7 @@
 #include <kspell2/broker.h>
 using namespace KSpell2;
 
-KPConfig::KPConfig( KPresenterView* parent )
+KPrConfig::KPrConfig( KPrView* parent )
     : KDialogBase(KDialogBase::IconList,i18n("Configure KPresenter") ,
                   KDialogBase::Ok | KDialogBase::Apply | KDialogBase::Cancel| KDialogBase::Default,
                   KDialogBase::Ok, parent)
@@ -88,44 +88,44 @@ KPConfig::KPConfig( KPresenterView* parent )
     m_doc = parent->kPresenterDoc();
     QVBox *page = addVBoxPage( i18n("Interface"), i18n("Interface"),
                                BarIcon("misc", KIcon::SizeMedium) );
-    _interfacePage=new configureInterfacePage( parent, page );
+    _interfacePage=new KPrConfigureInterfacePage( parent, page );
     page = addVBoxPage( i18n("Color"), i18n("Color"),
                         BarIcon("colorize", KIcon::SizeMedium) );
-    _colorBackground = new configureColorBackground( parent, page );
+    _colorBackground = new KPrConfigureColorBackground( parent, page );
 
     page = addVBoxPage( i18n("Spelling"), i18n("Spellchecker Behavior"),
                         BarIcon("spellcheck", KIcon::SizeMedium) );
-    _spellPage=new configureSpellPage(parent, page);
+    _spellPage=new KPrConfigureSpellPage(parent, page);
 
     page = addVBoxPage( i18n("Misc"), i18n("Misc"),
                         BarIcon("misc", KIcon::SizeMedium) );
-    _miscPage=new configureMiscPage(parent, page);
+    _miscPage=new KPrConfigureMiscPage(parent, page);
 
     page = addVBoxPage( i18n("Document"), i18n("Document Settings"),
                         BarIcon("kpresenter_kpr", KIcon::SizeMedium) );
 
-    _defaultDocPage=new configureDefaultDocPage(parent, page);
+    _defaultDocPage=new KPrConfigureDefaultDocPage(parent, page);
 
     page = addVBoxPage( i18n("Tools"), i18n("Default Tools Settings"),
                         BarIcon("configure", KIcon::SizeMedium) );
 
-    _toolsPage=new configureToolsPage(parent, page);
+    _toolsPage=new KPrConfigureToolsPage(parent, page);
 
     page = addVBoxPage( i18n("Paths"), i18n("Path Settings"),
                         BarIcon("path") );
 
-    m_pathPage=new configurePathPage(parent, page);
+    m_pathPage=new KPrConfigurePathPage(parent, page);
 
     if (KoSpeaker::isKttsdInstalled()) {
         page = addVBoxPage( i18n("Abbreviation for Text-to-Speech", "TTS"), i18n("Text-to-Speech Settings"),
                             BarIcon("access", KIcon::SizeMedium) );
-        m_ttsPage=new configureTTSPage(parent, page);
+        m_ttsPage=new KPrConfigureTTSPage(parent, page);
     } else m_ttsPage = 0;
 
     connect( this, SIGNAL( okClicked() ),this, SLOT( slotApply() ) );
 }
 
-void KPConfig::openPage(int flags)
+void KPrConfig::openPage(int flags)
 {
     if(flags & KP_INTERFACE)
         showPage( 0 );
@@ -143,7 +143,7 @@ void KPConfig::openPage(int flags)
         showPage(6);
 }
 
-void KPConfig::slotApply()
+void KPrConfig::slotApply()
 {
     KMacroCommand *macro = 0L;
     _interfacePage->apply();
@@ -172,7 +172,7 @@ void KPConfig::slotApply()
         m_doc->addCommand( macro);
 }
 
-void KPConfig::slotDefault()
+void KPrConfig::slotDefault()
 {
     switch( activePageIndex() ) {
     case 0:
@@ -203,13 +203,13 @@ void KPConfig::slotDefault()
     }
 }
 
-configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *parent , char *name )
+KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *parent , char *name )
     :QWidget ( parent,name )
 {
     QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
 
     m_pView=_view;
-    config = KPresenterFactory::global()->config();
+    config = KPrFactory::global()->config();
 
     KoUnit::Unit unit = m_pView->kPresenterDoc()->unit();
 
@@ -261,7 +261,7 @@ configureInterfacePage::configureInterfacePage( KPresenterView *_view, QWidget *
     box->addItem( spacer);
 }
 
-void configureInterfacePage::apply()
+void KPrConfigureInterfacePage::apply()
 {
     bool ruler=showRuler->isChecked();
     bool statusBar=showStatusBar->isChecked();
@@ -303,7 +303,7 @@ void configureInterfacePage::apply()
 
 }
 
-void configureInterfacePage::slotDefault()
+void KPrConfigureInterfacePage::slotDefault()
 {
     double newIndent = KoUnit::toUserValue( MM_TO_POINT( 10 ), m_pView->kPresenterDoc()->unit() );
     indent->setValue( newIndent );
@@ -312,11 +312,11 @@ void configureInterfacePage::slotDefault()
     showStatusBar->setChecked(true);
 }
 
-configureColorBackground::configureColorBackground( KPresenterView* _view, QWidget *parent , char *name )
+KPrConfigureColorBackground::KPrConfigureColorBackground( KPrView* _view, QWidget *parent , char *name )
     :QWidget ( parent,name )
 {
     m_pView = _view;
-    config = KPresenterFactory::global()->config();
+    config = KPrFactory::global()->config();
 
     oldBgColor = m_pView->kPresenterDoc()->txtBackCol();
     oldGridColor = m_pView->kPresenterDoc()->gridColor();
@@ -348,7 +348,7 @@ configureColorBackground::configureColorBackground( KPresenterView* _view, QWidg
 
 }
 
-void configureColorBackground::apply()
+void KPrConfigureColorBackground::apply()
 {
     KPrDocument * doc = m_pView->kPresenterDoc();
     bool repaintNeeded = false;
@@ -374,7 +374,7 @@ void configureColorBackground::apply()
         doc->repaint( false );
 }
 
-void configureColorBackground::slotDefault()
+void KPrConfigureColorBackground::slotDefault()
 {
     bgColor->setColor( Qt::white );
     gridColor->setColor( Qt::black );
@@ -382,16 +382,16 @@ void configureColorBackground::slotDefault()
 
 
 
-configureSpellPage::configureSpellPage( KPresenterView *_view, QWidget *parent, char *name )
+KPrConfigureSpellPage::KPrConfigureSpellPage( KPrView *_view, QWidget *parent, char *name )
     : QWidget( parent, name )
 {
     m_pView=_view;
-    config = KPresenterFactory::global()->config();
+    config = KPrFactory::global()->config();
     m_spellConfigWidget = new ConfigWidget( _view->broker(), parent );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
 }
 
-void configureSpellPage::apply()
+void KPrConfigureSpellPage::apply()
 {
 
     KPrDocument* doc = m_pView->kPresenterDoc();
@@ -405,18 +405,18 @@ void configureSpellPage::apply()
     doc->reactivateBgSpellChecking();
 }
 
-void configureSpellPage::slotDefault()
+void KPrConfigureSpellPage::slotDefault()
 {
     m_spellConfigWidget->slotDefault();
 }
 
-configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, char *name )
+KPrConfigureMiscPage::KPrConfigureMiscPage( KPrView *_view, QWidget *parent, char *name )
     : QWidget( parent, name )
 {
     QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
 
     m_pView=_view;
-    config = KPresenterFactory::global()->config();
+    config = KPrFactory::global()->config();
 
     QGroupBox* tmpQGroupBox = new QGroupBox( 0, Qt::Vertical, i18n("Misc"), this, "GroupBox" );
     tmpQGroupBox->layout()->setSpacing(KDialog::spacingHint());
@@ -499,7 +499,7 @@ configureMiscPage::configureMiscPage( KPresenterView *_view, QWidget *parent, ch
 
 }
 
-KCommand * configureMiscPage::apply()
+KCommand * KPrConfigureMiscPage::apply()
 {
     config->setGroup( "Misc" );
     int newUndo=m_undoRedoLimit->value();
@@ -574,7 +574,7 @@ KCommand * configureMiscPage::apply()
     return macroCmd;
 }
 
-void configureMiscPage::slotDefault()
+void KPrConfigureMiscPage::slotDefault()
 {
     m_undoRedoLimit->setValue(30);
     m_displayLink->setChecked(true);
@@ -588,13 +588,13 @@ void configureMiscPage::slotDefault()
     resolutionX->setValue( MM_TO_POINT( 5.0 ));
 }
 
-configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget *parent, char *name )
+KPrConfigureDefaultDocPage::KPrConfigureDefaultDocPage(KPrView *_view, QWidget *parent, char *name )
     : QWidget( parent, name )
 {
     QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
 
     m_pView=_view;
-    config = KPresenterFactory::global()->config();
+    config = KPrFactory::global()->config();
     KPrDocument *doc = m_pView->kPresenterDoc();
     oldAutoSaveValue =  doc->defaultAutoSave()/60;
     m_oldBackupFile = true;
@@ -709,12 +709,12 @@ configureDefaultDocPage::configureDefaultDocPage(KPresenterView *_view, QWidget 
 
 }
 
-configureDefaultDocPage::~configureDefaultDocPage()
+KPrConfigureDefaultDocPage::~KPrConfigureDefaultDocPage()
 {
     delete font;
 }
 
-KCommand *configureDefaultDocPage::apply()
+KCommand *KPrConfigureDefaultDocPage::apply()
 {
     config->setGroup( "Document defaults" );
     KPrDocument* doc = m_pView->kPresenterDoc();
@@ -784,7 +784,7 @@ KCommand *configureDefaultDocPage::apply()
     return macro;
 }
 
-void configureDefaultDocPage::slotDefault()
+void KPrConfigureDefaultDocPage::slotDefault()
 {
     autoSave->setValue( m_pView->kPresenterDoc()->defaultAutoSave()/60 );
     m_variableNumberOffset->setValue(1);
@@ -796,7 +796,7 @@ void configureDefaultDocPage::slotDefault()
     m_autoHyphenation->setChecked( false );
 }
 
-void configureDefaultDocPage::selectNewDefaultFont() {
+void KPrConfigureDefaultDocPage::selectNewDefaultFont() {
     QStringList list;
     KFontChooser::getFontList(list, KFontChooser::SmoothScalableFonts);
     KFontDialog dlg( this, "Font Selector", false, true, list, true );
@@ -811,22 +811,22 @@ void configureDefaultDocPage::selectNewDefaultFont() {
     }
 }
 
-configureToolsPage::configureToolsPage( KPresenterView *_view, QWidget *parent, char *name )
+KPrConfigureToolsPage::KPrConfigureToolsPage( KPrView *_view, QWidget *parent, char *name )
     : QWidget( parent, name )
 {
     QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
 
     m_pView = _view;
-    config = KPresenterFactory::global()->config();
+    config = KPrFactory::global()->config();
     m_pView->getCanvas()->deSelectAllObj();
 
     QTabWidget *tab = new QTabWidget(this);
 
-    PenCmd::Pen pen( m_pView->getPen(), m_pView->getLineBegin(), m_pView->getLineEnd() );
-    m_confPenDia = new PenStyleWidget(tab, 0, pen, true );
+    KPrPenCmd::Pen pen( m_pView->getPen(), m_pView->getLineBegin(), m_pView->getLineEnd() );
+    m_confPenDia = new KPrPenStyleWidget(tab, 0, pen, true );
     tab->addTab( m_confPenDia, i18n( "Outl&ine" ) );
 
-    BrushCmd::Brush brush( m_pView->getBrush(),
+    KPrBrushCmd::Brush brush( m_pView->getBrush(),
                            m_pView->getGColor1(),
                            m_pView->getGColor2(),
                            m_pView->getGType(),
@@ -834,45 +834,45 @@ configureToolsPage::configureToolsPage( KPresenterView *_view, QWidget *parent, 
                            m_pView->getGUnbalanced(),
                            m_pView->getGXFactor(),
                            m_pView->getGYFactor() );
-    m_brushProperty = new BrushProperty( this, 0, brush );
+    m_brushProperty = new KPrBrushProperty( this, 0, brush );
     tab->addTab( m_brushProperty, i18n( "&Fill" ) );
 
-    RectValueCmd::RectValues rectValues;
+    KPrRectValueCmd::RectValues rectValues;
     rectValues.xRnd = m_pView->getRndX();
     rectValues.yRnd = m_pView->getRndY();
-    m_rectProperty = new RectProperty( this, 0, rectValues );
+    m_rectProperty = new KPrRectProperty( this, 0, rectValues );
     tab->addTab( m_rectProperty, i18n( "&Rectangle" ) );
 
-    PolygonSettingCmd::PolygonSettings polygonSettings;
+    KPrPolygonSettingCmd::PolygonSettings polygonSettings;
     polygonSettings.checkConcavePolygon = m_pView->getCheckConcavePolygon();
     polygonSettings.cornersValue = m_pView->getCornersValue();
     polygonSettings.sharpnessValue = m_pView->getSharpnessValue();
-    m_polygonProperty = new PolygonProperty( this, 0, polygonSettings );
+    m_polygonProperty = new KPrPolygonProperty( this, 0, polygonSettings );
     tab->addTab( m_polygonProperty, i18n( "Polygo&n" ) );
 
-    PieValueCmd::PieValues pieValues;
+    KPrPieValueCmd::PieValues pieValues;
     pieValues.pieType = m_pView->getPieType();
     pieValues.pieAngle = m_pView->getPieAngle();
     pieValues.pieLength = m_pView->getPieLength();
-    m_pieProperty = new PieProperty( this, 0, pieValues );
+    m_pieProperty = new KPrPieProperty( this, 0, pieValues );
     tab->addTab( m_pieProperty, i18n( "&Pie" ) );
 
     box->addWidget(tab);
 }
 
-configureToolsPage::~configureToolsPage()
+KPrConfigureToolsPage::~KPrConfigureToolsPage()
 {
 }
 
-void configureToolsPage::apply()
+void KPrConfigureToolsPage::apply()
 {
-    PenCmd::Pen pen = m_confPenDia->getPen();
+    KPrPenCmd::Pen pen = m_confPenDia->getPen();
     m_pView->setPen( pen.pen );
     m_pView->setLineBegin( pen.lineBegin );
     m_pView->setLineEnd( pen.lineEnd );
     m_pView->getActionPenColor()->setCurrentColor( pen.pen.color() );
 
-    BrushCmd::Brush brush = m_brushProperty->getBrush();
+    KPrBrushCmd::Brush brush = m_brushProperty->getBrush();
     m_pView->setBrush( brush.brush );
     m_pView->setFillType( brush.fillType );
     m_pView->setGColor1( brush.gColor1 );
@@ -883,16 +883,16 @@ void configureToolsPage::apply()
     m_pView->setGYFactor( brush.yfactor );
     m_pView->getActionBrushColor()->setCurrentColor( brush.brush.color() );
 
-    RectValueCmd::RectValues rectValues = m_rectProperty->getRectValues();
+    KPrRectValueCmd::RectValues rectValues = m_rectProperty->getRectValues();
     m_pView->setRndX( rectValues.xRnd );
     m_pView->setRndY( rectValues.yRnd );
 
-    PolygonSettingCmd::PolygonSettings polygonSettings = m_polygonProperty->getPolygonSettings();
+    KPrPolygonSettingCmd::PolygonSettings polygonSettings = m_polygonProperty->getPolygonSettings();
     m_pView->setCheckConcavePolygon( polygonSettings.checkConcavePolygon );
     m_pView->setCornersValue( polygonSettings.cornersValue );
     m_pView->setSharpnessValue( polygonSettings.sharpnessValue );
 
-    PieValueCmd::PieValues pieValues = m_pieProperty->getPieValues();
+    KPrPieValueCmd::PieValues pieValues = m_pieProperty->getPieValues();
     m_pView->setPieType( pieValues.pieType );
     m_pView->setPieAngle( pieValues.pieAngle );
     m_pView->setPieLength( pieValues.pieLength );
@@ -902,42 +902,42 @@ void configureToolsPage::apply()
     //TODO set pen brush in m_pieProperty
 }
 
-void configureToolsPage::slotDefault()
+void KPrConfigureToolsPage::slotDefault()
 {
-    PenCmd::Pen pen( KPPen(black, 1.0, SolidLine), L_NORMAL, L_NORMAL );
+    KPrPenCmd::Pen pen( KPrPen(black, 1.0, SolidLine), L_NORMAL, L_NORMAL );
     m_confPenDia->setPen( pen );
     m_pView->getActionPenColor()->setCurrentColor( pen.pen.color() );
 
-    BrushCmd::Brush brush( QBrush( white, SolidPattern ), red, green,
+    KPrBrushCmd::Brush brush( QBrush( white, SolidPattern ), red, green,
                            BCT_GHORZ, FT_BRUSH, false, 100, 100 );
     m_brushProperty->setBrush( brush );
     m_pView->getActionBrushColor()->setCurrentColor( brush.brush.color() );
 
-    RectValueCmd::RectValues rectValues;
+    KPrRectValueCmd::RectValues rectValues;
     rectValues.xRnd = 0;
     rectValues.yRnd = 0;
     m_rectProperty->setRectValues( rectValues );
 
-    PolygonSettingCmd::PolygonSettings polygonSettings;
+    KPrPolygonSettingCmd::PolygonSettings polygonSettings;
     polygonSettings.checkConcavePolygon = false;
     polygonSettings.cornersValue = 3;
     polygonSettings.sharpnessValue = 0;
     m_polygonProperty->setPolygonSettings( polygonSettings );
 
-    PieValueCmd::PieValues pieValues;
+    KPrPieValueCmd::PieValues pieValues;
     pieValues.pieType = PT_PIE;
     pieValues.pieAngle = 45 * 16;
     pieValues.pieLength = 270 * 16;
 }
 
-configurePathPage::configurePathPage( KPresenterView *_view, QWidget *parent, char *name )
+KPrConfigurePathPage::KPrConfigurePathPage( KPrView *_view, QWidget *parent, char *name )
     : QWidget( parent, name )
 {
     QVBoxLayout *box = new QVBoxLayout( this, 0, 0 );
 
     m_pView=_view;
     KPrDocument* doc = m_pView->kPresenterDoc();
-    config = KPresenterFactory::global()->config();
+    config = KPrFactory::global()->config();
 
     m_pPathView = new KListView( this );
     m_pPathView->setResizeMode(QListView::NoColumn);
@@ -960,12 +960,12 @@ configurePathPage::configurePathPage( KPresenterView *_view, QWidget *parent, ch
 
 }
 
-void configurePathPage::slotSelectionChanged(QListViewItem * item)
+void KPrConfigurePathPage::slotSelectionChanged(QListViewItem * item)
 {
     m_modifyPath->setEnabled( item );
 }
 
-void configurePathPage::slotModifyPath()
+void KPrConfigurePathPage::slotModifyPath()
 {
     QListViewItem *item = m_pPathView->currentItem ();
     if ( item )
@@ -990,7 +990,7 @@ void configurePathPage::slotModifyPath()
     }
 }
 
-void configurePathPage::slotDefault()
+void KPrConfigurePathPage::slotDefault()
 {
     QListViewItem * item = m_pPathView->findItem(i18n("Picture Path"), 0);
     if ( item )
@@ -1000,7 +1000,7 @@ void configurePathPage::slotDefault()
         item->setText(1, QString::null );
 }
 
-void configurePathPage::apply()
+void KPrConfigurePathPage::apply()
 {
     QListViewItem *item = m_pPathView->findItem(i18n("Backup Path"), 0);
     if ( item )
@@ -1036,7 +1036,7 @@ void configurePathPage::apply()
 
 ////
 
-configureTTSPage::configureTTSPage( KPresenterView *_view, QWidget *parent, char *name )
+KPrConfigureTTSPage::KPrConfigureTTSPage( KPrView *_view, QWidget *parent, char *name )
     : QWidget( parent, name )
 {
     Q_UNUSED(_view);
@@ -1073,7 +1073,7 @@ configureTTSPage::configureTTSPage( KPresenterView *_view, QWidget *parent, char
     m_iniPollingInterval->setRange(100, 5000, 100, true);
     lblPollingInterval->setBuddy(m_iniPollingInterval);
 
-    config = KPresenterFactory::global()->config();
+    config = KPrFactory::global()->config();
     config->setGroup("TTS");
     m_cbSpeakPointerWidget->setChecked(config->readBoolEntry("SpeakPointerWidget", false));
     m_cbSpeakFocusWidget->setChecked(config->readBoolEntry("SpeakFocusWidget", false));
@@ -1091,7 +1091,7 @@ configureTTSPage::configureTTSPage( KPresenterView *_view, QWidget *parent, char
     connect(m_cbSpeakAccelerators, SIGNAL(toggled(bool)), this, SLOT(screenReaderOptionChanged()));
 }
 
-void configureTTSPage::slotDefault()
+void KPrConfigureTTSPage::slotDefault()
 {
     m_cbSpeakPointerWidget->setChecked(false);
     m_cbSpeakFocusWidget->setChecked(false);
@@ -1103,7 +1103,7 @@ void configureTTSPage::slotDefault()
     m_iniPollingInterval->setValue(600);
 }
 
-void configureTTSPage::apply()
+void KPrConfigureTTSPage::apply()
 {
     config->setGroup("TTS");
     config->writeEntry("SpeakPointerWidget", m_cbSpeakPointerWidget->isChecked());
@@ -1117,7 +1117,7 @@ void configureTTSPage::apply()
     if (kospeaker) kospeaker->readConfig(config);
 }
 
-void configureTTSPage::screenReaderOptionChanged()
+void KPrConfigureTTSPage::screenReaderOptionChanged()
 {
     m_gbScreenReaderOptions->setEnabled(
         m_cbSpeakPointerWidget->isChecked() | m_cbSpeakFocusWidget->isChecked());

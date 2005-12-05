@@ -23,7 +23,7 @@
 #define kprbgspellcheck_h
 
 class KPrDocument;
-class KPTextObject;
+class KPrTextObject;
 #include "KoBgSpellCheck.h"
 
 
@@ -37,6 +37,6 @@ public:
 
 private:
     KPrDocument *m_doc;
-    KPTextObject *m_currentObj;
+    KPrTextObject *m_currentObj;
 };
 #endif

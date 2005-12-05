@@ -26,16 +26,16 @@
 #include <kinstance.h>
 
 
-KInstance* KPresenterFactory::s_global = 0;
-KAboutData* KPresenterFactory::s_aboutData = 0;
+KInstance* KPrFactory::s_global = 0;
+KAboutData* KPrFactory::s_aboutData = 0;
 
-KPresenterFactory::KPresenterFactory( QObject* parent, const char* name )
+KPrFactory::KPrFactory( QObject* parent, const char* name )
     : KoFactory( parent, name )
 {
     (void)global();
 }
 
-KPresenterFactory::~KPresenterFactory()
+KPrFactory::~KPrFactory()
 {
     delete s_aboutData;
     s_aboutData=0;
@@ -43,7 +43,7 @@ KPresenterFactory::~KPresenterFactory()
     s_global=0;
 }
 
-KParts::Part* KPresenterFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent,
+KParts::Part* KPrFactory::createPartObject( QWidget *parentWidget, const char *widgetName, QObject* parent,
                                                    const char* name, const char* classname, const QStringList & )
 {
     bool bWantKoDocument = ( strcmp( classname, "KoDocument" ) == 0 );
@@ -56,14 +56,14 @@ KParts::Part* KPresenterFactory::createPartObject( QWidget *parentWidget, const 
     return doc;
 }
 
-KAboutData* KPresenterFactory::aboutData()
+KAboutData* KPrFactory::aboutData()
 {
     if( !s_aboutData )
         s_aboutData=newKPresenterAboutData();
     return s_aboutData;
 }
 
-KInstance* KPresenterFactory::global()
+KInstance* KPrFactory::global()
 {
     if ( !s_global )
     {

@@ -165,7 +165,7 @@ static QString EscapeEncodingOnly(const QTextCodec* codec, const QString& strIn)
     return strReturn;
 }
 
-KPWebPresentation::KPWebPresentation( KPrDocument *_doc, KPresenterView *_view )
+KPrWebPresentation::KPrWebPresentation( KPrDocument *_doc, KPrView *_view )
     : config( QString::null ), xml( false )
 {
     doc = _doc;
@@ -173,7 +173,7 @@ KPWebPresentation::KPWebPresentation( KPrDocument *_doc, KPresenterView *_view )
     init();
 }
 
-KPWebPresentation::KPWebPresentation( const QString &_config, KPrDocument *_doc, KPresenterView *_view )
+KPrWebPresentation::KPrWebPresentation( const QString &_config, KPrDocument *_doc, KPrView *_view )
     : config( _config ), xml( false ), m_bWriteHeader( true ), m_bWriteFooter( true ), m_bLoopSlides( false )
 {
     doc = _doc;
@@ -182,7 +182,7 @@ KPWebPresentation::KPWebPresentation( const QString &_config, KPrDocument *_doc,
     loadConfig();
 }
 
-KPWebPresentation::KPWebPresentation( const KPWebPresentation &webPres )
+KPrWebPresentation::KPrWebPresentation( const KPrWebPresentation &webPres )
     : config( webPres.config ), author( webPres.author ), title( webPres.title ), email( webPres.email ),
       slideInfos( webPres.slideInfos ), backColor( webPres.backColor ), titleColor( webPres.titleColor ),
       textColor( webPres.textColor ), path( webPres.path ), xml( webPres.xml),
@@ -194,7 +194,7 @@ KPWebPresentation::KPWebPresentation( const KPWebPresentation &webPres )
     view = webPres.view;
 }
 
-void KPWebPresentation::loadConfig()
+void KPrWebPresentation::loadConfig()
 {
     if ( config.isEmpty() )
         return;
@@ -206,7 +206,7 @@ void KPWebPresentation::loadConfig()
     title = cfg.readEntry( "Title", title );
     email = cfg.readEntry( "EMail", email );
     unsigned int num = cfg.readNumEntry( "Slides", slideInfos.count() );
-    //kdDebug(33001) << "KPWebPresentation::loadConfig num=" << num << endl;
+    //kdDebug(33001) << "KPrWebPresentation::loadConfig num=" << num << endl;
 
     if ( num <= slideInfos.count() ) {
         for ( unsigned int i = 0; i < num; i++ )
@@ -216,7 +216,7 @@ void KPWebPresentation::loadConfig()
             {
                 // We'll assume that the selected pages haven't changed... Hmm.
                 slideInfos[ i ].slideTitle = cfg.readEntry( key );
-                kdDebug(33001) << "KPWebPresentation::loadConfig key=" << key << " data=" << slideInfos[i].slideTitle << endl;
+                kdDebug(33001) << "KPrWebPresentation::loadConfig key=" << key << " data=" << slideInfos[i].slideTitle << endl;
             } else kdDebug(33001) << " key not found " << key << endl;
         }
     }
@@ -234,7 +234,7 @@ void KPWebPresentation::loadConfig()
     m_encoding = cfg.readEntry( "Encoding", m_encoding );
 }
 
-void KPWebPresentation::saveConfig()
+void KPrWebPresentation::saveConfig()
 {
     KSimpleConfig cfg( config );
     cfg.setGroup( "General" );
@@ -264,7 +264,7 @@ void KPWebPresentation::saveConfig()
     cfg.writeEntry( "Encoding", m_encoding );
 }
 
-void KPWebPresentation::initCreation( KProgress *progressBar )
+void KPrWebPresentation::initCreation( KProgress *progressBar )
 {
     QString cmd;
     int p;
@@ -290,7 +290,7 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
     {
         QString filename = pics[ index ];
         filename += ".png";
-        srcurl.setPath( locate( "slideshow", filename, KPresenterFactory::global() ) );
+        srcurl.setPath( locate( "slideshow", filename, KPrFactory::global() ) );
         desturl = path;
         desturl.addPath( "/pics/" + filename );
         KIO::NetAccess::file_copy( srcurl, desturl, -1, true /*overwrite*/);
@@ -300,7 +300,7 @@ void KPWebPresentation::initCreation( KProgress *progressBar )
     }
 }
 
-void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
+void KPrWebPresentation::createSlidesPictures( KProgress *progressBar )
 {
     if ( slideInfos.isEmpty() )
         return;
@@ -323,14 +323,14 @@ void KPWebPresentation::createSlidesPictures( KProgress *progressBar )
     }
 }
 
-QString KPWebPresentation::escapeHtmlText( QTextCodec *codec, const QString& strText ) const
+QString KPrWebPresentation::escapeHtmlText( QTextCodec *codec, const QString& strText ) const
 {
     // Escape quotes (needed in attributes)
     // Do not escape apostrophs (only allowed in XHTML!)
     return EscapeSgmlText( codec, strText, true, false );
 }
 
-void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const QString& subtitle, const QString& next)
+void KPrWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *codec, const QString& subtitle, const QString& next)
 {
     QString mimeName ( codec->mimeName() );
     if ( isXML() )
@@ -385,7 +385,7 @@ void KPWebPresentation::writeStartOfHeader(QTextStream& streamOut, QTextCodec *c
     // ### TODO: transform documentinfo.xml into many <META> elements (at least the author!)
 }
 
-void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
+void KPrWebPresentation::createSlidesHTML( KProgress *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
 
@@ -528,7 +528,7 @@ void KPWebPresentation::createSlidesHTML( KProgress *progressBar )
     }
 }
 
-void KPWebPresentation::createMainPage( KProgress *progressBar )
+void KPrWebPresentation::createMainPage( KProgress *progressBar )
 {
     QTextCodec *codec = KGlobal::charsets()->codecForName( m_encoding );
     KTempFile tmp;
@@ -574,7 +574,7 @@ void KPWebPresentation::createMainPage( KProgress *progressBar )
     kapp->processEvents();
 }
 
-void KPWebPresentation::init()
+void KPrWebPresentation::init()
 {
 
     KoDocumentInfo * info = doc->documentInfo();
@@ -588,7 +588,7 @@ void KPWebPresentation::init()
     }
 
     title = i18n("Slideshow");
-    kdDebug(33001) << "KPWebPresentation::init : " << doc->getPageNums() << " pages." << endl;
+    kdDebug(33001) << "KPrWebPresentation::init : " << doc->getPageNums() << " pages." << endl;
     for ( unsigned int i = 0; i < doc->getPageNums(); i++ )
     {
         if ( doc->isSlideSelected( i ) )
@@ -614,8 +614,8 @@ void KPWebPresentation::init()
     m_encoding = QTextCodec::codecForLocale()->name();
 }
 
-KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPrDocument *_doc,
-                                                  KPresenterView *_view )
+KPrWebPresentationWizard::KPrWebPresentationWizard( const QString &_config, KPrDocument *_doc,
+                                                  KPrView *_view )
     : KWizard( 0, "", false ), config( _config ), webPres( config, _doc, _view )
 {
     doc = _doc;
@@ -632,21 +632,21 @@ KPWebPresentationWizard::KPWebPresentationWizard( const QString &_config, KPrDoc
     connect( finishButton(), SIGNAL( clicked() ), this, SLOT( finish() ) );
 }
 
-KPWebPresentationWizard::~KPWebPresentationWizard()
+KPrWebPresentationWizard::~KPrWebPresentationWizard()
 {
     view->enableWebPres();
 }
 
-void KPWebPresentationWizard::createWebPresentation( const QString &_config, KPrDocument *_doc,
-                                                     KPresenterView *_view )
+void KPrWebPresentationWizard::createWebPresentation( const QString &_config, KPrDocument *_doc,
+                                                     KPrView *_view )
 {
-    KPWebPresentationWizard *dlg = new KPWebPresentationWizard( _config, _doc, _view );
+    KPrWebPresentationWizard *dlg = new KPrWebPresentationWizard( _config, _doc, _view );
 
     dlg->setCaption( i18n( "Create HTML Slideshow Wizard" ) );
     dlg->show();
 }
 
-void KPWebPresentationWizard::setupPage1()
+void KPrWebPresentationWizard::setupPage1()
 {
     page1 = new QHBox( this );
     QWhatsThis::add( page1, i18n("This page allows you to specify some of the key"
@@ -745,7 +745,7 @@ void KPWebPresentationWizard::setupPage1()
     setHelpEnabled(page1, false);  //doesn't do anything currently
 }
 
-void KPWebPresentationWizard::setupPage2()
+void KPrWebPresentationWizard::setupPage2()
 {
     page2 = new QHBox( this );
     QWhatsThis::add( page2, i18n("This page allows you to specify how the HTML "
@@ -834,7 +834,7 @@ void KPWebPresentationWizard::setupPage2()
     setHelpEnabled(page2, false);  //doesn't do anything currently
 }
 
-void KPWebPresentationWizard::setupPage3()
+void KPrWebPresentationWizard::setupPage3()
 {
     page3 = new QHBox( this );
     QWhatsThis::add( page3, i18n("This page allows you to specify the colors for "
@@ -892,7 +892,7 @@ void KPWebPresentationWizard::setupPage3()
     setHelpEnabled(page3, false);  //doesn't do anything currently
 }
 
-void KPWebPresentationWizard::setupPage4()
+void KPrWebPresentationWizard::setupPage4()
 {
     page4 = new QHBox( this );
     QWhatsThis::add( page4, i18n("This page allows you to modify the titles of "
@@ -943,11 +943,11 @@ void KPWebPresentationWizard::setupPage4()
     slideTitles->setResizeMode( QListView::LastColumn );
     slideTitles->header()->setMovingEnabled( false );
 
-    QValueList<KPWebPresentation::SlideInfo> infos = webPres.getSlideInfos();
+    QValueList<KPrWebPresentation::SlideInfo> infos = webPres.getSlideInfos();
     for ( int i = infos.count() - 1; i >= 0; --i ) {
         KListViewItem *item = new KListViewItem( slideTitles );
         item->setText( 0, QString::number( i + 1 ) );
-        //kdDebug(33001) << "KPWebPresentationWizard::setupPage3 " << infos[ i ].slideTitle << endl;
+        //kdDebug(33001) << "KPrWebPresentationWizard::setupPage3 " << infos[ i ].slideTitle << endl;
         item->setText( 1, infos[ i ].slideTitle );
     }
 
@@ -958,7 +958,7 @@ void KPWebPresentationWizard::setupPage4()
     setHelpEnabled(page4, false);  //doesn't do anything currently
 }
 
-void KPWebPresentationWizard::setupPage5()
+void KPrWebPresentationWizard::setupPage5()
 {
     page5 = new QHBox( this );
     QWhatsThis::add( page5, i18n("This page allows you to specify some options for "
@@ -1039,7 +1039,7 @@ void KPWebPresentationWizard::setupPage5()
     setFinish( page5, true );
 }
 
-void KPWebPresentationWizard::finish()
+void KPrWebPresentationWizard::finish()
 {
     webPres.setAuthor( author->text() );
     webPres.setEMail( email->text() );
@@ -1067,10 +1067,10 @@ void KPWebPresentationWizard::finish()
     }
 
     close();
-    KPWebPresentationCreateDialog::createWebPresentation( doc, view, webPres );
+    KPrWebPresentationCreateDialog::createWebPresentation( doc, view, webPres );
 }
 
-void KPWebPresentationWizard::pageChanged()
+void KPrWebPresentationWizard::pageChanged()
 {
     if ( currentPage() != page5 )
     {
@@ -1107,13 +1107,13 @@ void KPWebPresentationWizard::pageChanged()
         finishButton()->setEnabled( true );
 }
 
-void KPWebPresentationWizard::slideTitleChanged( const QString &s )
+void KPrWebPresentationWizard::slideTitleChanged( const QString &s )
 {
     if ( slideTitles->currentItem() )
         slideTitles->currentItem()->setText( 1, s );
 }
 
-void KPWebPresentationWizard::slideTitleChanged( QListViewItem *i )
+void KPrWebPresentationWizard::slideTitleChanged( QListViewItem *i )
 {
     if ( !i ) return;
 
@@ -1121,19 +1121,19 @@ void KPWebPresentationWizard::slideTitleChanged( QListViewItem *i )
     view->skipToPage( i->text( 0 ).toInt() - 1 );
 }
 
-void KPWebPresentationWizard::closeEvent( QCloseEvent *e )
+void KPrWebPresentationWizard::closeEvent( QCloseEvent *e )
 {
     view->enableWebPres();
     KWizard::closeEvent( e );
 }
 
-void KPWebPresentationWizard::slotChoosePath(const QString &text)
+void KPrWebPresentationWizard::slotChoosePath(const QString &text)
 {
     webPres.setPath(text);
 }
 
-KPWebPresentationCreateDialog::KPWebPresentationCreateDialog( KPrDocument *_doc, KPresenterView *_view,
-                                                              const KPWebPresentation &_webPres )
+KPrWebPresentationCreateDialog::KPrWebPresentationCreateDialog( KPrDocument *_doc, KPrView *_view,
+                                                              const KPrWebPresentation &_webPres )
     : QDialog( 0, "", false ), webPres( _webPres )
 {
     doc = _doc;
@@ -1142,15 +1142,15 @@ KPWebPresentationCreateDialog::KPWebPresentationCreateDialog( KPrDocument *_doc,
     setupGUI();
 }
 
-KPWebPresentationCreateDialog::~KPWebPresentationCreateDialog()
+KPrWebPresentationCreateDialog::~KPrWebPresentationCreateDialog()
 {
     view->enableWebPres();
 }
 
-void KPWebPresentationCreateDialog::createWebPresentation( KPrDocument *_doc, KPresenterView *_view,
-                                                           const KPWebPresentation &_webPres )
+void KPrWebPresentationCreateDialog::createWebPresentation( KPrDocument *_doc, KPrView *_view,
+                                                           const KPrWebPresentation &_webPres )
 {
-    KPWebPresentationCreateDialog *dlg = new KPWebPresentationCreateDialog( _doc, _view, _webPres );
+    KPrWebPresentationCreateDialog *dlg = new KPrWebPresentationCreateDialog( _doc, _view, _webPres );
 
     dlg->setCaption( i18n( "Create HTML Slideshow" ) );
     dlg->resize( 400, 300 );
@@ -1158,7 +1158,7 @@ void KPWebPresentationCreateDialog::createWebPresentation( KPrDocument *_doc, KP
     dlg->start();
 }
 
-void KPWebPresentationCreateDialog::start()
+void KPrWebPresentationCreateDialog::start()
 {
     setCursor( waitCursor );
     initCreation();
@@ -1171,7 +1171,7 @@ void KPWebPresentationCreateDialog::start()
     bSave->setEnabled( true );
 }
 
-void KPWebPresentationCreateDialog::initCreation()
+void KPrWebPresentationCreateDialog::initCreation()
 {
     QFont f = step1->font(), f2 = step1->font();
     f.setBold( true );
@@ -1186,7 +1186,7 @@ void KPWebPresentationCreateDialog::initCreation()
     progressBar->setProgress( progressBar->totalSteps() );
 }
 
-void KPWebPresentationCreateDialog::createSlidesPictures()
+void KPrWebPresentationCreateDialog::createSlidesPictures()
 {
     QFont f = step2->font(), f2 = f;
     f.setBold( true );
@@ -1203,7 +1203,7 @@ void KPWebPresentationCreateDialog::createSlidesPictures()
     progressBar->setProgress( progressBar->totalSteps() );
 }
 
-void KPWebPresentationCreateDialog::createSlidesHTML()
+void KPrWebPresentationCreateDialog::createSlidesHTML()
 {
     QFont f = step3->font(), f2 = step3->font();
     f.setBold( true );
@@ -1220,7 +1220,7 @@ void KPWebPresentationCreateDialog::createSlidesHTML()
     progressBar->setProgress( progressBar->totalSteps() );
 }
 
-void KPWebPresentationCreateDialog::createMainPage()
+void KPrWebPresentationCreateDialog::createMainPage()
 {
     QFont f = step4->font(), f2 = step4->font();
     f.setBold( true );
@@ -1235,7 +1235,7 @@ void KPWebPresentationCreateDialog::createMainPage()
     progressBar->setProgress( progressBar->totalSteps() );
 }
 
-void KPWebPresentationCreateDialog::setupGUI()
+void KPrWebPresentationCreateDialog::setupGUI()
 {
     back = new QVBox( this );
     back->setMargin( KDialog::marginHint() );
@@ -1274,13 +1274,13 @@ void KPWebPresentationCreateDialog::setupGUI()
     connect( bSave, SIGNAL( clicked() ), this, SLOT( saveConfig() ) );
 }
 
-void KPWebPresentationCreateDialog::resizeEvent( QResizeEvent *e )
+void KPrWebPresentationCreateDialog::resizeEvent( QResizeEvent *e )
 {
     QDialog::resizeEvent( e );
     back->resize( size() );
 }
 
-void KPWebPresentationCreateDialog::saveConfig()
+void KPrWebPresentationCreateDialog::saveConfig()
 {
     QString filename = webPres.getConfig();
     if ( QFileInfo( filename ).exists() )

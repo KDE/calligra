@@ -28,12 +28,12 @@
 #include "imageEffectBase.h"
 #include "global.h"
 
-class ImageEffectDia: public KDialogBase {
+class KPrImageEffectDia: public KDialogBase {
     Q_OBJECT
 
 public:
-    ImageEffectDia(QWidget * parent = 0, const char * name = 0);
-    ~ImageEffectDia();
+    KPrImageEffectDia(QWidget * parent = 0, const char * name = 0);
+    ~KPrImageEffectDia();
 
     /**
      * Set the initial preview pixmap

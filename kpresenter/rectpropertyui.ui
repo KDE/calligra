@@ -138,7 +138,7 @@
                 </widget>
             </hbox>
         </widget>
-        <widget class="RectPreview">
+        <widget class="KPrRectPreview">
             <property name="name">
                 <cstring>rectPreview</cstring>
             </property>
@@ -156,7 +156,7 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>RectPreview</class>
+        <class>KPrRectPreview</class>
         <header location="global">KPrRectPreview.h</header>>
         <sizehint>
             <width>100</width>

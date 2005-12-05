@@ -5,15 +5,15 @@
 #include "shadowdialog.h"
 #include "global.h"
 
-class TextPreview;
+class KPrTextPreview;
 
-class ShadowDialogImpl : public ShadowDialogBase
+class KPrShadowDialogImpl : public ShadowDialogBase
 {
     Q_OBJECT
 
 public:
-    ShadowDialogImpl( QWidget *parent, const char* name = 0 );
-    ~ShadowDialogImpl() {}
+    KPrShadowDialogImpl( QWidget *parent, const char* name = 0 );
+    ~KPrShadowDialogImpl() {}
 
     void setShadowDirection( ShadowDirection sd );
     void setShadowDistance( int sd );
@@ -34,7 +34,7 @@ protected slots:
     void okClicked();
 
 protected:
-    TextPreview *_preview;
+    KPrTextPreview *_preview;
 };
 
 

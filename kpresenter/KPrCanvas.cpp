@@ -93,7 +93,7 @@
 const int KPrCanvas::MOUSE_SNAP_DISTANCE = 4;
 const int KPrCanvas::KEY_SNAP_DISTANCE = 2;
 
-KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
+KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPrView *_view )
 : QWidget( parent, name, WStaticContents|WResizeNoErase|WRepaintNoErase )
 , buffer( size() )
 , m_gl( _view, _view->zoomHandler() )
@@ -165,8 +165,8 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPresenterView *_view )
     if( m_view)
     {
         m_activePage=m_view->kPresenterDoc()->pageList().getFirst();
-        connect( m_view->kPresenterDoc(), SIGNAL( sig_terminateEditing( KPTextObject * ) ),
-                 this, SLOT( terminateEditing( KPTextObject * ) ) );
+        connect( m_view->kPresenterDoc(), SIGNAL( sig_terminateEditing( KPrTextObject * ) ),
+                 this, SLOT( terminateEditing( KPrTextObject * ) ) );
         connect( m_view, SIGNAL( autoScroll( const QPoint & )), this, SLOT( slotAutoScroll( const QPoint &)));
     }
 
@@ -181,7 +181,7 @@ KPrCanvas::~KPrCanvas()
     // (exitEditMode) emits signals
     blockSignals(true);
 
-    // deactivate possible opened textobject to avoid double deletion, KPTextObject deletes this already
+    // deactivate possible opened textobject to avoid double deletion, KPrTextObject deletes this already
     delete m_currentTextObjectView;
     m_currentTextObjectView = 0;
     if ( editNum )
@@ -444,10 +444,10 @@ void KPrCanvas::eraseEmptySpace( QPainter * painter, const QRegion & emptySpaceR
 }
 
 
-void KPrCanvas::drawObjects( QPainter *painter, const QPtrList<KPObject> &objects, SelectionMode selectionMode,
-                             bool contour, KPTextView * textView, int pageNum ) const
+void KPrCanvas::drawObjects( QPainter *painter, const QPtrList<KPrObject> &objects, SelectionMode selectionMode,
+                             bool contour, KPrTextView * textView, int pageNum ) const
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current(); ++it )
     {
         SelectionMode selMode = selectionMode;
@@ -471,11 +471,11 @@ void KPrCanvas::drawObjects( QPainter *painter, const QPtrList<KPObject> &object
 }
 
 
-void KPrCanvas::drawObjectsPres( QPainter *painter, const QPtrList<KPObject> &_objects, PresStep step ) const
+void KPrCanvas::drawObjectsPres( QPainter *painter, const QPtrList<KPrObject> &_objects, PresStep step ) const
 {
-    QPtrList<KPObject> objects;
+    QPtrList<KPrObject> objects;
 
-    QPtrListIterator<KPObject> it( _objects );
+    QPtrListIterator<KPrObject> it( _objects );
     for ( ; it.current(); ++it )
     {
         if ( objectIsAHeaderFooterHidden(it.current()) )
@@ -501,13 +501,13 @@ void KPrCanvas::drawObjectsPres( QPainter *painter, const QPtrList<KPObject> &_o
 }
 
 
-void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPObject> &_objects,
+void KPrCanvas::drawObjectsEdit( QPainter *painter, const KoRect &rect, const QPtrList<KPrObject> &_objects,
                                  SelectionMode selectionMode, int pageNum ) const
 {
-    QPtrList<KPObject> objects;
+    QPtrList<KPrObject> objects;
 
-    KPTextView * textView = NULL;
-    QPtrListIterator<KPObject> it( _objects );
+    KPrTextView * textView = NULL;
+    QPtrListIterator<KPrObject> it( _objects );
     for ( ; it.current(); ++it )
     {
         if ( objectIsAHeaderFooterHidden(it.current()) )
@@ -580,9 +580,9 @@ void KPrCanvas::drawGrid(QPainter *painter, const QRect &rect2) const
 
 // This one is used to generate the pixmaps for the HTML presentation,
 // for the pres-structure-dialog, for the sidebar previews, for template icons.
-void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPObject> & obj, int pageNum ) const
+void KPrCanvas::drawAllObjectsInPage( QPainter *painter, const QPtrList<KPrObject> & obj, int pageNum ) const
 {
-    QPtrListIterator<KPObject> it( obj );
+    QPtrListIterator<KPrObject> it( obj );
     for ( ; it.current(); ++it ) {
         if ( objectIsAHeaderFooterHidden( it.current() ) )
             continue;
@@ -594,7 +594,7 @@ void KPrCanvas::recalcAutoGuides( )
 {
     QValueList<double> horizontalPos;
     QValueList<double> verticalPos;
-    QPtrListIterator<KPObject> it( m_activePage->objectList() );
+    QPtrListIterator<KPrObject> it( m_activePage->objectList() );
     for ( ; it.current(); ++it )
     {
         if( ! it.current()->isSelected() )
@@ -620,7 +620,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     m_moveStartPosMouse = objectRect( false ).topLeft();
     if(m_currentTextObjectView)
     {
-        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
+        KPrTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
         if(txtObj->contains( docPoint ))
         {
@@ -644,7 +644,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     }
 
 
-    KPObject *kpobject = 0;
+    KPrObject *kpobject = 0;
 
     m_disableSnapping = e->state() & ShiftButton;
     
@@ -738,7 +738,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             case TEM_MOUSE: {
                 firstX = contentsPoint.x();
                 firstY = contentsPoint.y();
-                KPObject *kpobject = getObjectAt( docPoint, true );
+                KPrObject *kpobject = getObjectAt( docPoint, true );
 
                 if ( kpobject ) {
                     // use ctrl + Button to select / deselect object
@@ -834,7 +834,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 firstX = contentsPoint.x();
                 firstY = contentsPoint.y();
 
-                KPObject *kpobject = getObjectAt( docPoint );
+                KPrObject *kpobject = getObjectAt( docPoint );
 
                 // clear old selections even if shift or control are pressed
                 // we don't support rotating multiple objects yet
@@ -981,7 +981,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         }
 
         if ( e->button() == RightButton && toolEditMode == TEM_MOUSE ) {
-            KPObject * obj = getObjectAt( docPoint );
+            KPrObject * obj = getObjectAt( docPoint );
             if ( obj ) {
                 kpobject = obj;
                 QPoint pnt = QCursor::pos();
@@ -996,7 +996,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 } else if ( objectType == OT_TEXT ) {
                     if ( state )
                         deSelectAllObj();
-                    KPTextObject *obj=dynamic_cast<KPTextObject *>(kpobject);
+                    KPrTextObject *obj=dynamic_cast<KPrTextObject *>(kpobject);
                     selectObj( kpobject );
                     if ( obj )
                         m_view->changeVerticalAlignmentStatus( obj->verticalAlignment() );
@@ -1026,7 +1026,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    KPPolylineObject *tmpObj=dynamic_cast<KPPolylineObject *>(kpobject);
+                    KPrPolylineObject *tmpObj=dynamic_cast<KPrPolylineObject *>(kpobject);
                     if ( tmpObj )
                     {
                         if (!tmpObj->isClosed())
@@ -1038,7 +1038,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    KPCubicBezierCurveObject *tmpObj=dynamic_cast<KPCubicBezierCurveObject *>(kpobject);
+                    KPrCubicBezierCurveObject *tmpObj=dynamic_cast<KPrCubicBezierCurveObject *>(kpobject);
                     if ( tmpObj )
                     {
                         if (!tmpObj->isClosed())
@@ -1050,7 +1050,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    KPQuadricBezierCurveObject *tmpObj=dynamic_cast<KPQuadricBezierCurveObject *>(kpobject);
+                    KPrQuadricBezierCurveObject *tmpObj=dynamic_cast<KPrQuadricBezierCurveObject *>(kpobject);
                     if ( tmpObj )
                     {
                         if (!tmpObj->isClosed())
@@ -1062,7 +1062,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    KPFreehandObject *tmpObj=dynamic_cast<KPFreehandObject *>(kpobject);
+                    KPrFreehandObject *tmpObj=dynamic_cast<KPrFreehandObject *>(kpobject);
                     if ( tmpObj )
                     {
                         if (!tmpObj->isClosed())
@@ -1079,11 +1079,11 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
-                    KPClosedLineObject *tmpObj=dynamic_cast<KPClosedLineObject *>(kpobject);
+                    KPrClosedLineObject *tmpObj=dynamic_cast<KPrClosedLineObject *>(kpobject);
                     if ( tmpObj )
                         m_view->openPopupMenuObject( "flip_popup", pnt );
                 } else if ( objectType == OT_GROUP ) {
-                    KPGroupObject *obj=dynamic_cast<KPGroupObject *>(kpobject);
+                    KPrGroupObject *obj=dynamic_cast<KPrGroupObject *>(kpobject);
                     if ( state )
                         deSelectAllObj();
                     selectObj( kpobject );
@@ -1118,7 +1118,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     } else {
         if ( e->button() == LeftButton ) {
             if ( m_drawMode ) {
-                setCursor( KPresenterUtils::penCursor() );
+                setCursor( KPrUtils::penCursor() );
                 m_drawLineInDrawMode = true;
                 m_drawModeLineIndex = 0;
                 m_drawModeLines.append( QPointArray() );
@@ -1157,7 +1157,7 @@ KoRect KPrCanvas::getAlignBoundingRect() const
 {
     KoRect boundingRect;
 
-    QPtrListIterator<KPObject> it( m_activePage->objectList() );
+    QPtrListIterator<KPrObject> it( m_activePage->objectList() );
     for ( ; it.current() ; ++it )
     {
         if ( it.current() == m_view->kPresenterDoc()->header() ||
@@ -1196,7 +1196,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         return;
     }
 
-    QPtrList<KPObject> _objects;
+    QPtrList<KPrObject> _objects;
     _objects.setAutoDelete( false );
 
     if ( ( m_drawPolyline && ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) )
@@ -1226,7 +1226,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 rubber.moveBy(diffx(),diffy());
 
                 KoRect selectedRect = m_view->zoomHandler()->unzoomRect( rubber );
-                QPtrListIterator<KPObject> it( getObjectList() );
+                QPtrListIterator<KPrObject> it( getObjectList() );
                 for ( ; it.current() ; ++it )
                 {
                     if ( it.current()->intersects( selectedRect ) )
@@ -1287,7 +1287,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     case INS_TEXT:
         if ( !m_insertRect.isNull() ) 
         {
-            KPTextObject* kptextobject = insertTextObject( m_insertRect );
+            KPrTextObject* kptextobject = insertTextObject( m_insertRect );
             setToolEditMode( TEM_MOUSE );
 
             // User-friendlyness: automatically start editing this textobject
@@ -1325,7 +1325,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         if ( !m_rotateObject )
             break;
         if ( m_angleBeforeRotate != m_rotateObject->getAngle() ) {
-            QPtrList<KPObject> objects;
+            QPtrList<KPrObject> objects;
             objects.append( m_rotateObject );
 
             /* As the object is allready rotated set the angle to
@@ -1334,7 +1334,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             float newAngle = m_rotateObject->getAngle();
             m_rotateObject->rotate( m_angleBeforeRotate );
 
-            RotateCmd *rotateCmd = new RotateCmd( i18n( "Change Rotation" ), newAngle,
+            KPrRotateCmd *rotateCmd = new KPrRotateCmd( i18n( "Change Rotation" ), newAngle,
                                                   objects, m_view->kPresenterDoc() );
             m_view->kPresenterDoc()->addCommand( rotateCmd );
 
@@ -1372,7 +1372,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     case INS_FORMULA:
         if ( !m_insertRect.isNull() ) 
         {
-            KPPartObject *kpPartObject = insertObject( m_insertRect );
+            KPrPartObject *kpPartObject = insertObject( m_insertRect );
             setToolEditMode( TEM_MOUSE );
 
             if ( kpPartObject ) 
@@ -1437,7 +1437,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
         }
         setCursor( arrowCursor );
 
-        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
+        KPrTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
         if(txtObj->contains( docPoint )&&mousePressed)
         {
@@ -1449,10 +1449,10 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
     if (m_view->kPresenterDoc()->getVariableCollection()->variableSetting()->displayLink())
     {
-        KPObject *tmp_kpobject = getObjectAt( docPoint );
+        KPrObject *tmp_kpobject = getObjectAt( docPoint );
         if(tmp_kpobject && tmp_kpobject->getType() == OT_TEXT)
         {
-            KPTextObject *kptextobject = static_cast<KPTextObject*>( tmp_kpobject );
+            KPrTextObject *kptextobject = static_cast<KPrTextObject*>( tmp_kpobject );
             QPoint iPoint = kptextobject->viewToInternal( e->pos(), this );
             KoLinkVariable* linkVar = dynamic_cast<KoLinkVariable *>( kptextobject->textObject()->variableAtPoint( iPoint ) );
 
@@ -1471,11 +1471,11 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
 
         if ( toolEditMode == TEM_ROTATE )
         {
-            setCursor( KPresenterUtils::rotateCursor() );
+            setCursor( KPrUtils::rotateCursor() );
             if ( !mousePressed )
                 return;
         }
-        KPObject *kpobject;
+        KPrObject *kpobject;
         if ( ( !mousePressed || ( !drawRubber && modType == MT_NONE ) ) &&
              toolEditMode == TEM_MOUSE  )
         {
@@ -1747,7 +1747,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     if(m_currentTextObjectView)
     {
-        KPTextObject *txtObj=m_currentTextObjectView->kpTextObject();
+        KPrTextObject *txtObj=m_currentTextObjectView->kpTextObject();
         Q_ASSERT(txtObj);
         if(txtObj->contains( docPoint ))
         {
@@ -1778,13 +1778,13 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 
     if ( toolEditMode != TEM_MOUSE || !editMode ) return;
 
-    KPObject *kpobject = getObjectAt( docPoint );
+    KPrObject *kpobject = getObjectAt( docPoint );
     if(kpobject)
     {
         if ( kpobject->getType() == OT_TEXT )
         {
             deSelectAllObj();
-            KPTextObject *kptextobject = dynamic_cast<KPTextObject*>( kpobject );
+            KPrTextObject *kptextobject = dynamic_cast<KPrTextObject*>( kpobject );
             if(kptextobject && (!kptextobject->isProtectContent() || kptextobject->isProtectContent()
                                 && m_view->kPresenterDoc()->cursorInProtectedArea()))
             {
@@ -1803,7 +1803,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
         else if ( kpobject->getType() == OT_PART )
         {
             deSelectAllObj();
-            KPPartObject * obj=dynamic_cast<KPPartObject *>(kpobject);
+            KPrPartObject * obj=dynamic_cast<KPrPartObject *>(kpobject);
             if(obj)
             {
                 obj->activate( m_view );
@@ -2142,16 +2142,16 @@ void KPrCanvas::resizeEvent( QResizeEvent *e )
     buffer.resize( size() );
 }
 
-KPObject * KPrCanvas::getObjectAt( const KoPoint &pos, bool withoutProtected )
+KPrObject * KPrCanvas::getObjectAt( const KoPoint &pos, bool withoutProtected )
 {
-    KPObject *object = m_activePage->getObjectAt( pos, withoutProtected );
+    KPrObject *object = m_activePage->getObjectAt( pos, withoutProtected );
     if ( objectIsAHeaderFooterHidden( object ) )
         object = 0;
 
     return object;
 }
 
-void KPrCanvas::selectObj( KPObject *kpobject )
+void KPrCanvas::selectObj( KPrObject *kpobject )
 {
     kpobject->setSelected( true );
     _repaint( kpobject );
@@ -2160,7 +2160,7 @@ void KPrCanvas::selectObj( KPObject *kpobject )
     mouseSelectedObject = true;
 }
 
-void KPrCanvas::deSelectObj( KPObject *kpobject )
+void KPrCanvas::deSelectObj( KPrObject *kpobject )
 {
     kpobject->setSelected( false );
     _repaint( kpobject );
@@ -2174,7 +2174,7 @@ void KPrCanvas::deSelectObj( KPObject *kpobject )
 
 void KPrCanvas::selectAllObj()
 {
-    QPtrListIterator<KPObject> it( m_activePage->objectList() );
+    QPtrListIterator<KPrObject> it( m_activePage->objectList() );
     for ( ; it.current() ; ++it )
     {
         if ( !objectIsAHeaderFooterHidden(it.current()) )
@@ -2749,7 +2749,7 @@ void KPrCanvas::setNewRightIndent(double _rightIndent)
 #ifndef NDEBUG
 void KPrCanvas::printRTDebug( int info )
 {
-    KPTextObject *kpTxtObj = 0;
+    KPrTextObject *kpTxtObj = 0;
     if ( m_currentTextObjectView )
         kpTxtObj = m_currentTextObjectView->kpTextObject();
     else
@@ -2774,9 +2774,9 @@ bool KPrCanvas::haveASelectedPixmapObj() const
     return m_activePage->haveASelectedPixmapObj();
 }
 
-QPtrList<KPTextObject> KPrCanvas::applicableTextObjects() const
+QPtrList<KPrTextObject> KPrCanvas::applicableTextObjects() const
 {
-    QPtrList<KPTextObject> lst;
+    QPtrList<KPrTextObject> lst;
     // If we're editing a text object, then that's the one we return
     if ( m_currentTextObjectView )
         lst.append( m_currentTextObjectView->kpTextObject() );
@@ -2788,7 +2788,7 @@ QPtrList<KPTextObject> KPrCanvas::applicableTextObjects() const
 QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
 {
     QPtrList<KoTextFormatInterface> lst;
-    QPtrList<KPObject> lstObj;
+    QPtrList<KPrObject> lstObj;
     // If we're editing a text object, then that's the one we return
     if ( m_currentTextObjectView )
     {
@@ -2798,11 +2798,11 @@ QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
     else
     {
         m_activePage->getAllObjectSelectedList(lstObj);
-        QPtrListIterator<KPObject> it(lstObj);
+        QPtrListIterator<KPrObject> it(lstObj);
         for ( ; it.current(); ++it ) {
             if ( it.current()->getType() == OT_TEXT )
             {
-                KPTextObject * obj = static_cast<KPTextObject*>( it.current() );
+                KPrTextObject * obj = static_cast<KPrTextObject*>( it.current() );
                 if ( !obj->isProtectContent() )
                     lst.append( obj->textObject() );
             }
@@ -2811,13 +2811,13 @@ QPtrList<KoTextFormatInterface> KPrCanvas::applicableTextInterfaces() const
     return lst;
 }
 
-QPtrList<KPTextObject> KPrCanvas::selectedTextObjs() const
+QPtrList<KPrTextObject> KPrCanvas::selectedTextObjs() const
 {
-    QPtrList<KPTextObject> lst;
-    QPtrListIterator<KPObject> it(getObjectList());
+    QPtrList<KPrTextObject> lst;
+    QPtrListIterator<KPrObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() && it.current()->getType() == OT_TEXT )
-            lst.append( static_cast<KPTextObject*>( it.current() ) );
+            lst.append( static_cast<KPrTextObject*>( it.current() ) );
     }
     return lst;
 }
@@ -2928,10 +2928,10 @@ bool KPrCanvas::pNext( bool gotoNextPage )
 
         // First try to go one sub-step further, if any object requires it
         // ### should we also objects on the sticky page be checked for sub steps?
-        QPtrListIterator<KPObject> oit( doc->pageList().at( m_step.m_pageNumber )->objectList() );
+        QPtrListIterator<KPrObject> oit( doc->pageList().at( m_step.m_pageNumber )->objectList() );
         for ( int i = 0 ; oit.current(); ++oit, ++i )
         {
-            KPObject *kpobject = oit.current();
+            KPrObject *kpobject = oit.current();
             if ( kpobject->getAppearStep() == static_cast<int>( m_step.m_step )
                  && kpobject->getType() == OT_TEXT && kpobject->getEffect2() != EF2_NONE )
             {
@@ -3021,7 +3021,7 @@ bool KPrCanvas::pNext( bool gotoNextPage )
         if ( m_pageEffect )
             finishPageEffect();
 
-        m_pageEffect = new KPPageEffects( this, _pix2, _pageEffect, page->getPageEffectSpeed() );
+        m_pageEffect = new KPrPageEffects( this, _pix2, _pageEffect, page->getPageEffectSpeed() );
         if ( m_pageEffect->doEffect() )
         {
             delete m_pageEffect;
@@ -3124,9 +3124,9 @@ bool KPrCanvas::pPrev( bool gotoPreviousPage )
     return false;
 }
 
-bool KPrCanvas::canAssignEffect( QPtrList<KPObject> &objs ) const
+bool KPrCanvas::canAssignEffect( QPtrList<KPrObject> &objs ) const
 {
-    QPtrListIterator<KPObject> oIt( m_activePage->objectList() );
+    QPtrListIterator<KPrObject> oIt( m_activePage->objectList() );
     for (; oIt.current(); ++oIt )
     {
         //can't assign a effect to header/footer
@@ -3209,12 +3209,12 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
     drawBackground( &p, _pix.rect(), page, true );
 
     //objects in current page
-    QPtrList<KPObject> _list = page->objectList();
+    QPtrList<KPrObject> _list = page->objectList();
 
     // check if object is selected, if so put it on the right place for the output
     if( _list.count() > 1 && (int)_list.count() > selectedObjectPosition && selectedObjectPosition >= 0) {
         _list.setAutoDelete( false );
-        KPObject *kpobject = _list.last();
+        KPrObject *kpobject = _list.last();
         if ( kpobject->isSelected() ) {
             _list.take( _list.count() - 1 );
             _list.insert( selectedObjectPosition, kpobject );
@@ -3342,11 +3342,11 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
         bitBlt( &screen_orig, 0, 0, this );
     }
 
-    QPtrList<KPObject> allObjects( page->objectList() );
+    QPtrList<KPrObject> allObjects( page->objectList() );
 
     if ( page->displayObjectFromMasterPage() )
     {
-        QPtrListIterator<KPObject> it( page->masterPage()->objectList() );
+        QPtrListIterator<KPrObject> it( page->masterPage()->objectList() );
         for ( ; it.current(); ++it ) {
             if ( objectIsAHeaderFooterHidden( it.current() ) )
                 continue;
@@ -3355,7 +3355,7 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
         }
     }
     //TODO add global presentation speed
-    m_effectHandler = new EffectHandler( m_step, goingBack, this, &screen_orig, allObjects, m_view, 1 );
+    m_effectHandler = new KPrEffectHandler( m_step, goingBack, this, &screen_orig, allObjects, m_view, 1 );
     if ( m_effectHandler->doEffect() )
     {
         delete m_effectHandler;
@@ -3455,7 +3455,7 @@ bool KPrCanvas::finishPageEffect( bool cancel )
 void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin*/, float /*top_margin*/ )
 {
     PresStep step( 0, 1000, 1000 );
-    //deSelectAllObj(); // already done in KPresenterView::setupPrinter
+    //deSelectAllObj(); // already done in KPrView::setupPrinter
     printer->setFullPage( true );
     int i = 0;
 
@@ -3525,11 +3525,11 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
           - static_cast<int>( MM_TO_POINT( top_margin ) ) );*/
     }
 
-    KConfig *config=KPresenterFactory::global()->config();
+    KConfig *config=KPrFactory::global()->config();
     config->setGroup("Misc");
     bool printNotes = config->readBoolEntry("PrintNotes", true);
 
-    NoteBar *noteBar = m_view->getNoteBar();
+    KPrNoteBar *noteBar = m_view->getNoteBar();
     //don't print notes when there is no note to print or it's disabled
     if ( noteBar && !noteBar->getNotesTextForPrinting(list).isEmpty()
          && !progress.wasCancelled() && printNotes )
@@ -3551,9 +3551,9 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
     repaint( false );
 }
 
-KPTextObject* KPrCanvas::insertTextObject( const KoRect &rect )
+KPrTextObject* KPrCanvas::insertTextObject( const KoRect &rect )
 {
-    KPTextObject* obj = m_activePage->insertTextObject( rect );
+    KPrTextObject* obj = m_activePage->insertTextObject( rect );
     selectObj( obj );
     return obj;
 }
@@ -3618,9 +3618,9 @@ void KPrCanvas::insertAutoform( const KoRect &rect )
                                   autoform, m_view->getGUnbalanced(), m_view->getGXFactor(), m_view->getGYFactor() );
 }
 
-KPPartObject* KPrCanvas::insertObject( const KoRect &rect )
+KPrPartObject* KPrCanvas::insertObject( const KoRect &rect )
 {
-    KPPartObject *kpPartObject = m_activePage->insertObject( rect, partEntry );
+    KPrPartObject *kpPartObject = m_activePage->insertObject( rect, partEntry );
     return kpPartObject;
 }
 
@@ -3813,14 +3813,14 @@ void KPrCanvas::setToolEditMode( ToolEditMode _m, bool updateView )
     {
         setCursor( arrowCursor );
         QPoint pos=QCursor::pos();
-        KPObject *obj=m_activePage->getCursor( pos);
+        KPrObject *obj=m_activePage->getCursor( pos);
         if(obj)
             setCursor( obj->getCursor( pos, modType,m_view->kPresenterDoc() ) );
     }
     else if ( toolEditMode == INS_FREEHAND || toolEditMode == INS_CLOSED_FREEHAND )
-        setCursor( KPresenterUtils::penCursor() );
+        setCursor( KPrUtils::penCursor() );
     else if ( toolEditMode == TEM_ROTATE )
-        setCursor( KPresenterUtils::rotateCursor() );
+        setCursor( KPrUtils::rotateCursor() );
     else
         setCursor( crossCursor );
 
@@ -3913,7 +3913,7 @@ void KPrCanvas::dragMoveEvent( QDragMoveEvent *e )
 {
     if( m_currentTextObjectView)
     {
-        KPTextObject * obj = textUnderMouse( e->pos());
+        KPrTextObject * obj = textUnderMouse( e->pos());
         bool emitChanged = false;
         if ( obj )
             emitChanged = checkCurrentTextEdit( obj );
@@ -4053,7 +4053,7 @@ void KPrCanvas::slotGotoPage()
 
     m_view->setPageDuration( m_step.m_pageNumber );
 
-    pg = KPGotoPage::gotoPage( m_view->kPresenterDoc(), m_presentationSlides, pg, this );
+    pg = KPrGotoPage::gotoPage( m_view->kPresenterDoc(), m_presentationSlides, pg, this );
     gotoPage( pg );
 
     if ( !spManualSwitch() ) {
@@ -4093,10 +4093,10 @@ void KPrCanvas::presGotoFirstPage()
     gotoPage( *m_presentationSlides.begin() );
 }
 
-KPTextObject* KPrCanvas::kpTxtObj() const
+KPrTextObject* KPrCanvas::kpTxtObj() const
 {
     return ( ( editNum && editNum->getType() == OT_TEXT ) ?
-             dynamic_cast<KPTextObject*>( editNum ) : 0 );
+             dynamic_cast<KPrTextObject*>( editNum ) : 0 );
     // ### return m_currentTextObjectView->kpTextObject()
 }
 
@@ -4206,12 +4206,12 @@ void KPrCanvas::leaveEvent( QEvent * /*e*/ )
     m_view->setRulerMouseShow( false );
 }
 
-QPtrList<KPObject> KPrCanvas::objectList() const
+QPtrList<KPrObject> KPrCanvas::objectList() const
 {
     return m_activePage->objectList();
 }
 
-const QPtrList<KPObject> &KPrCanvas::getObjectList() const
+const QPtrList<KPrObject> &KPrCanvas::getObjectList() const
 {
     return m_activePage->objectList();
 }
@@ -4256,7 +4256,7 @@ void KPrCanvas::_repaint( const QRect &r )
     m_view->kPresenterDoc()->repaint( r );
 }
 
-void KPrCanvas::_repaint( KPObject *o )
+void KPrCanvas::_repaint( KPrObject *o )
 {
     m_view->kPresenterDoc()->repaint( o );
 }
@@ -4271,7 +4271,7 @@ void KPrCanvas::setDrawingMode()
     m_presMenu->setItemChecked( PM_DM, true );
     m_drawMode = true;
 
-    setCursor( KPresenterUtils::penCursor() );
+    setCursor( KPrUtils::penCursor() );
 }
 
 void KPrCanvas::setSwitchingMode( bool continueTimer )
@@ -4318,12 +4318,12 @@ void KPrCanvas::exitEditMode()
                 //hide cursor when we desactivate textObjectView
                 m_currentTextObjectView->drawCursor( false );
                 m_currentTextObjectView->terminate();
-                KPTextObject *kpTextObj = m_currentTextObjectView->kpTextObject();
+                KPrTextObject *kpTextObj = m_currentTextObjectView->kpTextObject();
                 kpTextObj->setEditingTextObj( false );
                 delete m_currentTextObjectView;
                 m_currentTextObjectView=0L;
 
-                _repaint( static_cast<KPObject*>( kpTextObj ) );
+                _repaint( static_cast<KPrObject*>( kpTextObj ) );
             }
             // Title of slide may have changed
             m_view->kPresenterDoc()->updateSideBarItem( m_activePage );
@@ -4332,7 +4332,7 @@ void KPrCanvas::exitEditMode()
         }
         else if (editNum->getType() == OT_PART )
         {
-            static_cast<KPPartObject *>(editNum)->deactivate();
+            static_cast<KPrPartObject *>(editNum)->deactivate();
             _repaint( editNum );
             editNum=0L;
             return;
@@ -4340,7 +4340,7 @@ void KPrCanvas::exitEditMode()
     }
 }
 
-bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, KoSize *origSize, KoSize *currentSize )
+bool KPrCanvas::getPixmapOrigAndCurrentSize( KPrPixmapObject *&obj, KoSize *origSize, KoSize *currentSize )
 {
     *origSize = KoSize(obj->originalSize().width(),obj->originalSize().height());
     *currentSize = obj->getSize();
@@ -4350,7 +4350,7 @@ bool KPrCanvas::getPixmapOrigAndCurrentSize( KPPixmapObject *&obj, KoSize *origS
 void KPrCanvas::picViewOriginalSize()
 {
     KPrDocument *doc = m_view->kPresenterDoc();
-    KPPixmapObject *object = m_activePage->picViewOrigHelper();
+    KPrPixmapObject *object = m_activePage->picViewOrigHelper();
 
     KoSize newSize( doc->zoomHandler()->pixelXToPt( object->originalSize().width() ),
                     doc->zoomHandler()->pixelYToPt( object->originalSize().height() ) );
@@ -4367,7 +4367,7 @@ void KPrCanvas::picViewOriginalSize()
                  newSize.height() * fakt - object->getSize().height() );
 
     // TODO after 1.4 change text to "Scale to Original Size"
-    ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to Be Shown 1:1 in Presentation Mode" ),
+    KPrResizeCmd *resizeCmd = new KPrResizeCmd( i18n( "Scale Picture to Be Shown 1:1 in Presentation Mode" ),
                                           KoPoint( 0, 0 ), diff, object, doc );
     resizeCmd->execute();
     doc->addCommand( resizeCmd );
@@ -4400,7 +4400,7 @@ void KPrCanvas::picViewOrig1600x1200()
 
 void KPrCanvas::picViewOrigHelper(int x, int y)
 {
-    KPPixmapObject *obj = 0;
+    KPrPixmapObject *obj = 0;
     KoSize origSize;
     KoSize currentSize;
 
@@ -4425,7 +4425,7 @@ void KPrCanvas::picViewOrigFactor()
 }
 
 void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &pgSize,
-                                       const QSize &presSize, KPPixmapObject *obj )
+                                       const QSize &presSize, KPrPixmapObject *obj )
 {
     QRect desk = KGlobalSettings::desktopGeometry(this);
     double faktX = (double)presSize.width() / (double)desk.width();
@@ -4433,14 +4433,14 @@ void KPrCanvas::scalePixmapToBeOrigIn( const KoSize &currentSize, const KoSize &
     double w = pgSize.width() * faktX;
     double h = pgSize.height() * faktY;
 
-    ResizeCmd *resizeCmd = new ResizeCmd( i18n( "Scale Picture to Be Shown 1:1 in Presentation Mode" ),
+    KPrResizeCmd *resizeCmd = new KPrResizeCmd( i18n( "Scale Picture to Be Shown 1:1 in Presentation Mode" ),
                                           KoPoint( 0, 0 ), KoSize( w - currentSize.width(), h - currentSize.height() ),
                                           obj, m_view->kPresenterDoc() );
     resizeCmd->execute();
     m_view->kPresenterDoc()->addCommand( resizeCmd );
 }
 
-void KPrCanvas::setTextBackground( KPTextObject */*obj*/ )
+void KPrCanvas::setTextBackground( KPrTextObject */*obj*/ )
 {
     // This is called when double-clicking on a text object.
     // What should happen exactly ? (DF)
@@ -4698,7 +4698,7 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
 
 void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
 {
-    KPObject *kpobject = m_resizeObject;
+    KPrObject *kpobject = m_resizeObject;
 
     QRect oldBoundingRect( m_view->zoomHandler()->zoomRect( kpobject->getRepaintRect() ) );
 
@@ -4855,7 +4855,7 @@ void KPrCanvas::finishResizeObject( const QString &name, bool layout )
 
         if ( ( m_resizeObject->getRect() ) != m_rectBeforeResize ) 
         {
-            ResizeCmd *resizeCmd = new ResizeCmd( name, move, size, m_resizeObject,
+            KPrResizeCmd *resizeCmd = new KPrResizeCmd( name, move, size, m_resizeObject,
                                                   m_view->kPresenterDoc() );
             // the command is not executed as the object is allready resized.
             m_view->kPresenterDoc()->addCommand( resizeCmd );
@@ -4872,13 +4872,13 @@ void KPrCanvas::finishResizeObject( const QString &name, bool layout )
     }
 }
 
-void KPrCanvas::raiseObject( KPObject *_kpobject )
+void KPrCanvas::raiseObject( KPrObject *_kpobject )
 {
     if( objectList().count() <= 1 )
         return;
     if ( selectedObjectPosition == -1 ) {
         if ( m_activePage->numSelected() == 1 ) { // execute this if user selected is one object.
-            QPtrList<KPObject> _list = objectList();
+            QPtrList<KPrObject> _list = objectList();
             _list.setAutoDelete( false );
 
             if ( _kpobject->isSelected() ) {
@@ -4901,8 +4901,8 @@ void KPrCanvas::lowerObject()
     {
         if( objectList().count() <= 1 || (int)objectList().count() <= selectedObjectPosition )
             return;
-        KPObject *kpobject = objectList().last();
-        QPtrList<KPObject> _list = objectList();
+        KPrObject *kpobject = objectList().last();
+        QPtrList<KPrObject> _list = objectList();
         _list.setAutoDelete( false );
 
         if ( kpobject->isSelected() ) {
@@ -4919,7 +4919,7 @@ void KPrCanvas::playSound( const QString &soundFileName )
 {
     if(soundPlayer)
         delete soundPlayer;
-    soundPlayer = new KPresenterSoundPlayer( soundFileName );
+    soundPlayer = new KPrSoundPlayer( soundFileName );
     soundPlayer->play();
 }
 
@@ -4937,7 +4937,7 @@ void KPrCanvas::setXimPosition( int x, int y, int w, int h, QFont *f )
     QWidget::setMicroFocusHint( x - diffx(), y - diffy(), w, h, true, f );
 }
 
-void KPrCanvas::createEditing( KPTextObject *textObj )
+void KPrCanvas::createEditing( KPrTextObject *textObj )
 {
     if( m_currentTextObjectView)
     {
@@ -4950,7 +4950,7 @@ void KPrCanvas::createEditing( KPTextObject *textObj )
     editNum=textObj;
 }
 
-void KPrCanvas::terminateEditing( KPTextObject *textObj )
+void KPrCanvas::terminateEditing( KPrTextObject *textObj )
 {
     if ( m_currentTextObjectView && m_currentTextObjectView->kpTextObject() == textObj )
     {
@@ -5181,7 +5181,7 @@ void KPrCanvas::setPaintGuides( bool state )
     m_paintGuides = state;
 }
 
-bool KPrCanvas::objectIsAHeaderFooterHidden(KPObject *obj) const
+bool KPrCanvas::objectIsAHeaderFooterHidden(KPrObject *obj) const
 {
     if (( m_view->kPresenterDoc()->isHeader(obj) && !m_activePage->hasHeader() )
         || ( m_view->kPresenterDoc()->isFooter(obj) && !m_activePage->hasFooter() ) )
@@ -5195,9 +5195,9 @@ int KPrCanvas::numberOfObjectSelected() const
     return nb;
 }
 
-KPObject *KPrCanvas::getSelectedObj() const
+KPrObject *KPrCanvas::getSelectedObj() const
 {
-    KPObject *obj = m_activePage->getSelectedObj();
+    KPrObject *obj = m_activePage->getSelectedObj();
     return obj;
 }
 
@@ -5280,10 +5280,10 @@ void KPrCanvas::ensureVisible( int x, int y, int xmargin, int ymargin )
 // "Extend Contents to Object Height"
 void KPrCanvas::textContentsToHeight()
 {
-    QPtrList<KPTextObject> lst = applicableTextObjects();
+    QPtrList<KPrTextObject> lst = applicableTextObjects();
     if ( lst.isEmpty() )
         return;
-    QPtrListIterator<KPTextObject> it( lst );
+    QPtrListIterator<KPrTextObject> it( lst );
     KMacroCommand * macro = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand *cmd= it.current()->textContentsToHeight();
@@ -5306,10 +5306,10 @@ void KPrCanvas::textContentsToHeight()
 // "Resize Object to fit Contents"
 void KPrCanvas::textObjectToContents()
 {
-    QPtrList<KPTextObject> lst = applicableTextObjects();
+    QPtrList<KPrTextObject> lst = applicableTextObjects();
     if ( lst.isEmpty() )
         return;
-    QPtrListIterator<KPTextObject> it( lst );
+    QPtrListIterator<KPrTextObject> it( lst );
     KMacroCommand * macro = 0L;
     for ( ; it.current() ; ++it ) {
         KCommand *cmd= it.current()->textObjectToContents();
@@ -5332,8 +5332,8 @@ void KPrCanvas::textObjectToContents()
 
 void KPrCanvas::flipObject( bool _horizontal )
 {
-    QPtrList<KPObject> lst;
-    QPtrListIterator<KPObject> it(getObjectList());
+    QPtrList<KPrObject> lst;
+    QPtrListIterator<KPrObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected() &&
              it.current()->getType() != OT_AUTOFORM &&
@@ -5365,26 +5365,26 @@ void KPrCanvas::raiseObjs( bool forward )
     m_activePage->raiseObjs( forward );
 }
 
-QPtrList<KPTextObject> KPrCanvas::listOfTextObjs() const
+QPtrList<KPrTextObject> KPrCanvas::listOfTextObjs() const
 {
-    QPtrList<KPTextObject> lst;
-    QPtrListIterator<KPObject> it(getObjectList());
+    QPtrList<KPrTextObject> lst;
+    QPtrListIterator<KPrObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_TEXT )
         {
             if ( objectIsAHeaderFooterHidden(it.current()))
                 continue;
             else
-                lst.append( static_cast<KPTextObject*>( it.current() ));
+                lst.append( static_cast<KPrTextObject*>( it.current() ));
         }
     }
     return lst;
 }
 
-KPTextObject* KPrCanvas::textUnderMouse( const QPoint & point )
+KPrTextObject* KPrCanvas::textUnderMouse( const QPoint & point )
 {
-    QPtrList<KPTextObject> obj = listOfTextObjs();
-    QPtrListIterator<KPTextObject> it2(obj );
+    QPtrList<KPrTextObject> obj = listOfTextObjs();
+    QPtrListIterator<KPrTextObject> it2(obj );
     for ( ; it2.current() ; ++it2 ) {
         QRect outerRect( m_view->kPresenterDoc()->zoomHandler()->zoomRect( it2.current()->getRect()) );
         if ( !it2.current()->isProtectContent() && outerRect.contains( point) )
@@ -5400,7 +5400,7 @@ void KPrCanvas::speakTextUnderMouse(QWidget* w, const QPoint& p, uint flags)
     // Since text objects can't get focus without clicking with the mouse,
     // no point in supporting focus speaking.
     if ( p == QPoint() ) return;
-    KPTextObject *to = textUnderMouse( w->mapFromGlobal( p ) );
+    KPrTextObject *to = textUnderMouse( w->mapFromGlobal( p ) );
     if ( to == m_prevSpokenTO ) return;
     m_prevSpokenTO = to;
     if ( to ) {
@@ -5409,7 +5409,7 @@ void KPrCanvas::speakTextUnderMouse(QWidget* w, const QPoint& p, uint flags)
     }
 }
 
-bool KPrCanvas::checkCurrentTextEdit( KPTextObject * textObj )
+bool KPrCanvas::checkCurrentTextEdit( KPrTextObject * textObj )
 {
     bool emitChanged = false;
     if ( textObj && m_currentTextObjectView && m_currentTextObjectView->kpTextObject() != textObj )
@@ -5460,9 +5460,9 @@ void KPrCanvas::alignObjects( AlignType at )
             break;
     }
 
-    QPtrList<KPObject> objects;
+    QPtrList<KPrObject> objects;
 
-    QPtrListIterator<KPObject> it( m_activePage->objectList() );
+    QPtrListIterator<KPrObject> it( m_activePage->objectList() );
     for ( ; it.current() ; ++it )
     {
         if ( it.current() == m_view->kPresenterDoc()->header() ||
@@ -5476,7 +5476,7 @@ void KPrCanvas::alignObjects( AlignType at )
 
     if ( objects.count() )
     {
-        KCommand * cmd = new AlignCmd( name, objects, at, doc );
+        KCommand * cmd = new KPrAlignCmd( name, objects, at, doc );
         cmd->execute();
         doc->addCommand( cmd );
     }
@@ -5489,8 +5489,8 @@ bool KPrCanvas::canMoveOneObject() const
 
 void KPrCanvas::closeObject(bool /*close*/)
 {
-    QPtrList<KPObject> lst;
-    QPtrListIterator<KPObject> it(getObjectList());
+    QPtrList<KPrObject> lst;
+    QPtrListIterator<KPrObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->isSelected()
              && (it.current()->getType() == OT_POLYLINE || it.current()->getType() == OT_FREEHAND
@@ -5502,7 +5502,7 @@ void KPrCanvas::closeObject(bool /*close*/)
         return;
 
     KMacroCommand *macro = new KMacroCommand( i18n("Close Object"));
-    QPtrListIterator<KPObject> it2( lst );
+    QPtrListIterator<KPrObject> it2( lst );
     for ( ; it2.current() ; ++it2 ) {
         KCommand * cmd= new KPrCloseObjectCommand(i18n("Close Object"), it2.current(), m_view->kPresenterDoc());
         macro->addCommand(cmd);
@@ -5513,10 +5513,10 @@ void KPrCanvas::closeObject(bool /*close*/)
 
 void KPrCanvas::layout()
 {
-    QPtrListIterator<KPObject> it(getObjectList());
+    QPtrListIterator<KPrObject> it(getObjectList());
     for ( ; it.current(); ++it ) {
         if ( it.current()->getType() == OT_TEXT )
-            static_cast<KPTextObject *>( it.current() )->layout();
+            static_cast<KPrTextObject *>( it.current() )->layout();
     }
 }
 
@@ -5574,7 +5574,7 @@ void KPrCanvas::alignVertical( VerticalAlignmentType _type )
         m_view->kPresenterDoc()->addCommand( cmd );
 }
 
-KPPixmapObject * KPrCanvas::getSelectedImage() const
+KPrPixmapObject * KPrCanvas::getSelectedImage() const
 {
     return m_activePage->getSelectedImage();
 }

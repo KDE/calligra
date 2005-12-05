@@ -55,7 +55,7 @@ public:
 #endif
 };
 
-KPresenterSoundPlayer::KPresenterSoundPlayer( const QString &fileName, QObject *parent, const char *name )
+KPrSoundPlayer::KPrSoundPlayer( const QString &fileName, QObject *parent, const char *name )
     : QObject( parent, name )
 {
     d = new KPresenterSoundPlayerPrivate( fileName );
@@ -67,7 +67,7 @@ KPresenterSoundPlayer::KPresenterSoundPlayer( const QString &fileName, QObject *
 #endif
 }
 
-KPresenterSoundPlayer::~KPresenterSoundPlayer()
+KPrSoundPlayer::~KPrSoundPlayer()
 {
 #ifndef WITHOUT_ARTS
     delete d->m_player;
@@ -76,13 +76,13 @@ KPresenterSoundPlayer::~KPresenterSoundPlayer()
     delete d;
 }
 
-void KPresenterSoundPlayer::play( const QString &fileName )
+void KPrSoundPlayer::play( const QString &fileName )
 {
-    KPresenterSoundPlayer sp( fileName );
+    KPrSoundPlayer sp( fileName );
     sp.play();
 }
 
-void KPresenterSoundPlayer::stop()
+void KPrSoundPlayer::stop()
 {
 #ifndef WITHOUT_ARTS
     delete d->m_player;
@@ -90,7 +90,7 @@ void KPresenterSoundPlayer::stop()
 #endif
 }
 
-void KPresenterSoundPlayer::play()
+void KPrSoundPlayer::play()
 {
 #ifndef WITHOUT_ARTS
     if ( d->m_soundServer.isNull() )

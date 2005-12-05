@@ -25,13 +25,13 @@
 #include <dcopref.h>
 #include "KPrObjectIface.h"
 
-class KPPolylineObject;
+class KPrPolylineObject;
 
-class KPPolyLineObjectIface : public KPresenterObjectIface
+class KPrPolyLineObjectIface : public KPrObjectIface
 {
     K_DCOP
 public:
-    KPPolyLineObjectIface( KPPolylineObject *obj_ );
+    KPrPolyLineObjectIface( KPrPolylineObject *obj_ );
 
 k_dcop:
     void horizontalFlip();
@@ -39,7 +39,7 @@ k_dcop:
     void closeObject();
     bool isClosed()const;
 private:
-    KPPolylineObject *obj;
+    KPrPolylineObject *obj;
 };
 
 #endif

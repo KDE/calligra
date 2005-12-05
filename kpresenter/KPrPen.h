@@ -26,17 +26,17 @@ class KoZoomHandler;
 /**
  * Pen that handles line widths in points
  */
-class KPPen : public QPen
+class KPrPen : public QPen
 {
   public:
-    KPPen();
-    KPPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style);
-    KPPen(const QColor& _color);
-    ~KPPen();
+    KPrPen();
+    KPrPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style);
+    KPrPen(const QColor& _color);
+    ~KPrPen();
 
     /// Set the pen width in points
     void setPointWidth(double width);
-    /// KPPen width in points
+    /// KPrPen width in points
     double pointWidth() const { return m_pointWidth; }
 
     /// Returns a zoomed QPen

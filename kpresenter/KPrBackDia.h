@@ -34,22 +34,22 @@ class QLabel;
 class QComboBox;
 class KColorButton;
 class QSlider;
-class KPBackGround;
+class KPrBackGround;
 class QCheckBox;
 class QTabWidget;
 class KPrPage;
 class KURLRequester;
 
 
-class BackPreview : public QFrame
+class KPrBackPreview : public QFrame
 {
     Q_OBJECT
 
 public:
-    BackPreview( QWidget *parent, KPrPage *page );
-    virtual ~BackPreview();
+    KPrBackPreview( QWidget *parent, KPrPage *page );
+    virtual ~KPrBackPreview();
 
-    KPBackGround *backGround() const {
+    KPrBackGround *backGround() const {
         return back;
     }
 
@@ -57,23 +57,23 @@ protected:
     virtual void drawContents( QPainter *p );
 
 private:
-    KPBackGround *back;
+    KPrBackGround *back;
 
 };
 
-class BackDia : public KDialogBase
+class KPrBackDialog : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    BackDia( QWidget* parent, const char* name,
+    KPrBackDialog( QWidget* parent, const char* name,
              BackType backType, const QColor &backColor1,
              const QColor &backColor2, BCType _bcType,
              const KoPicture &backPic,
              BackView backPicView, bool _unbalanced,
              int _xfactor, int _yfactor, KPrPage *m_page  );
 
-    KPBackGround::Settings getBackGround() const;
+    KPrBackGround::Settings getBackGround() const;
     bool useMasterBackground() const;
 
 protected:
@@ -95,7 +95,7 @@ private:
     KURLRequester *picChoose;
     KColorButton *color1Choose, *color2Choose;
     QSlider *xfactor, *yfactor;
-    BackPreview *preview;
+    KPrBackPreview *preview;
     bool picChanged, lockUpdate;
     QLabel *labXFactor, *labYFactor;
     QTabWidget *tabWidget;
@@ -126,7 +126,7 @@ private slots:
     void slotReset();
 
 signals:
-    void backOk( BackDia*, bool );
+    void backOk( KPrBackDialog*, bool );
 
 };
 #endif //BACKDIA_H

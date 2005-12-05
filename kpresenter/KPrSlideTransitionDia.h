@@ -29,18 +29,18 @@
 
 #include "global.h"
 
-class KPPageEffects;
-class KPresenterView;
-class KPresenterSoundPlayer;
+class KPrPageEffects;
+class KPrView;
+class KPrSoundPlayer;
 class KURLRequester;
 class SlideTransitionWidget;
 
-class SlideTransitionDia : public KDialogBase
+class KPrSlideTransitionDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    SlideTransitionDia( QWidget *parent, const char *name, KPresenterView *view );
-    ~SlideTransitionDia();
+    KPrSlideTransitionDia( QWidget *parent, const char *name, KPrView *view );
+    ~KPrSlideTransitionDia();
 
 protected:
     void apply( bool global );
@@ -48,8 +48,8 @@ protected:
     QString getSoundFileFilter();
     
     SlideTransitionWidget *m_dialog;      
-    KPresenterView *m_view;
-    KPresenterSoundPlayer *m_soundPlayer;
+    KPrView *m_view;
+    KPrSoundPlayer *m_soundPlayer;
     
     PageEffect m_effect;
     EffectSpeed m_effectSpeed;
@@ -57,7 +57,7 @@ protected:
     QString m_soundFileName;
     int m_slideTime;
 
-    KPPageEffects *m_pageEffect;
+    KPrPageEffects *m_pageEffect;
     QTimer m_pageEffectTimer;
     QPixmap m_pixmap;
     QPixmap m_target;

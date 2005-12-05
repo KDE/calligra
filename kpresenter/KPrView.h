@@ -38,25 +38,25 @@ class QPopupMenu;
 class QSplitter;
 class QLabel;
 class DCOPObject;
-class KPresenterView;
-class BackDia;
+class KPrView;
+class KPrBackDialog;
 class KoRuler;
 class QScrollBar;
 class AFChoose;
-class PropertyEditor;
-class PgConfDia;
-class SlideTransitionDia;
-class RotationDialogImpl;
-class ShadowDialogImpl;
-class ImageEffectDia;
+class KPrPropertyEditor;
+class KPrPgConfDia;
+class KPrSlideTransitionDia;
+class KPrRotationDialogImpl;
+class KPrShadowDialogImpl;
+class KPrImageEffectDia;
 class ConfPieDia;
 class ConfRectDia;
 class ConfPolygonDia;
 class ConfPictureDia;
-class KPPresDurationDia;
+class KPrPresDurationDia;
 class QToolButton;
-class SideBar;
-class NoteBar;
+class KPrSideBar;
+class KPrNoteBar;
 
 class KAction;
 class KActionMenu;
@@ -87,11 +87,11 @@ class KPrFindReplace;
 class KPrCanvas;
 class KoFontDia;
 class KoParagDia;
-class KPObject;
-class KPPixmapObject;
+class KPrObject;
+class KPrPixmapObject;
 class KPrDocument;
 class KPrPage;
-class KPTextObject;
+class KPrTextObject;
 class KoTextIterator;
 class KStatusBarLabel;
 
@@ -104,23 +104,23 @@ namespace KSpell2 {
 class PageBase : public QWidget
 {
 public:
-    PageBase( QWidget *parent, KPresenterView *v ) : QWidget( parent ), view( v ) {}
+    PageBase( QWidget *parent, KPrView *v ) : QWidget( parent ), view( v ) {}
     void resizeEvent( QResizeEvent *e );
 
 private:
-    KPresenterView *view;
+    KPrView *view;
 
 };
 
 
-class KPresenterView : public KoView
+class KPrView : public KoView
 {
     friend class PageBase;
     Q_OBJECT
 
 public:
-    KPresenterView( KPrDocument* _doc, QWidget *_parent = 0, const char *_name = 0 );
-    ~KPresenterView();
+    KPrView( KPrDocument* _doc, QWidget *_parent = 0, const char *_name = 0 );
+    ~KPrView();
 
     void initGui();
     virtual DCOPObject* dcopObject();
@@ -155,16 +155,16 @@ public:
     void updateDisplayObjectMasterPageButton();
 
     void updateDisplayBackgroundButton();
-    virtual int leftBorder() const { return canvas()->mapTo(const_cast<KPresenterView *>(this), QPoint(0,0)).x(); };
-    virtual int rightBorder() const { return width() - canvas()->mapTo(const_cast<KPresenterView *>(this), QPoint(canvas()->width(), 0)).x(); };
-    virtual int topBorder() const { return canvas()->mapTo(const_cast<KPresenterView *>(this), QPoint(0,0)).y(); };
-    virtual int bottomBorder() const { return height() - canvas()->mapTo(const_cast<KPresenterView *>(this), QPoint(0, canvas()->height())).y(); };
+    virtual int leftBorder() const { return canvas()->mapTo(const_cast<KPrView *>(this), QPoint(0,0)).x(); };
+    virtual int rightBorder() const { return width() - canvas()->mapTo(const_cast<KPrView *>(this), QPoint(canvas()->width(), 0)).x(); };
+    virtual int topBorder() const { return canvas()->mapTo(const_cast<KPrView *>(this), QPoint(0,0)).y(); };
+    virtual int bottomBorder() const { return height() - canvas()->mapTo(const_cast<KPrView *>(this), QPoint(0, canvas()->height())).y(); };
 
     void updateGuideLineButton();
 
     void updateGridButton();
     void savePicture( const QString& oldName, KoPicture& picture);
-    void savePicture( KPPixmapObject* obj );
+    void savePicture( KPrPixmapObject* obj );
 
     void insertFile(const QString &path);
     void testAndCloseAllTextObjectProtectedContent();
@@ -513,12 +513,12 @@ public:
      *
      * @param object which should be shown
      */
-    void showObjectRect( const KPObject * object );
+    void showObjectRect( const KPrObject * object );
 
     PieType getPieType() const { return pieType; }
     int getPieAngle() const { return pieAngle; }
     int getPieLength() const { return pieLength; }
-    KPPen getPen() const { return pen; }
+    KPrPen getPen() const { return pen; }
     QBrush getBrush() const { return brush; }
     LineEnd getLineBegin() const { return lineBegin; }
     LineEnd getLineEnd() const{ return lineEnd; }
@@ -535,7 +535,7 @@ public:
     void setPieType(PieType _pieType) { pieType = _pieType; }
     void setPieAngle(int _pieAngle) { pieAngle = _pieAngle; }
     void setPieLength(int _pieLength) { pieLength = _pieLength; }
-    void setPen(KPPen _pen) { pen = _pen; }
+    void setPen(KPrPen _pen) { pen = _pen; }
     void setBrush(QBrush _brush) { brush = _brush; }
     void setLineBegin(LineEnd _lineBegin) { lineBegin = _lineBegin; }
     void setLineEnd(LineEnd _lineEnd){ lineEnd = _lineEnd; }
@@ -594,7 +594,7 @@ public:
 
     void openPopupMenuZoom( const QPoint & _point );
 
-    void penColorChanged( const KPPen & _pen );
+    void penColorChanged( const KPrPen & _pen );
     void brushColorChanged( const QBrush & _brush );
 
     /**
@@ -629,8 +629,8 @@ public:
 
     void reorganize();
 
-    // For NoteBar
-    NoteBar *getNoteBar() const { return notebar; }
+    // For KPrNoteBar
+    KPrNoteBar *getNoteBar() const { return notebar; }
 
     // Used by Page to plug/unplug the datatool actions
     QPtrList<KAction>& actionList() { return m_actionList; }
@@ -678,7 +678,7 @@ public:
 
 protected slots:
     // dialog slots
-    void backOk( BackDia*, bool );
+    void backOk( KPrBackDialog*, bool );
     void afChooseOk( const QString & );
     void slotAfchooseCanceled();
     void propertiesOk();
@@ -800,7 +800,7 @@ protected:
      * create a command which sets the pen according to the flags
      * for the selected objects on the active and sticky page
      */
-    KCommand * getPenCmd( const QString &name, KPPen pen, LineEnd lb, LineEnd le, int flags );
+    KCommand * getPenCmd( const QString &name, KPrPen pen, LineEnd lb, LineEnd le, int flags );
 
     void spellCheckerRemoveHighlight();
 
@@ -838,15 +838,15 @@ private:
 
     // dialogs
     AFChoose *afChoose;
-    PropertyEditor *m_propertyEditor;
-    PgConfDia *pgConfDia;
-    RotationDialogImpl *rotateDia;
-    ShadowDialogImpl *shadowDia;
-    ImageEffectDia *imageEffectDia;
-    KPPresDurationDia *presDurationDia;
+    KPrPropertyEditor *m_propertyEditor;
+    KPrPgConfDia *pgConfDia;
+    KPrRotationDialogImpl *rotateDia;
+    KPrShadowDialogImpl *shadowDia;
+    KPrImageEffectDia *imageEffectDia;
+    KPrPresDurationDia *presDurationDia;
 
     // default pen and brush
-    KPPen pen;
+    KPrPen pen;
     QBrush brush;
     LineEnd lineBegin;
     LineEnd lineEnd;
@@ -1062,8 +1062,8 @@ private:
     DCOPObject *dcop;
 
     QToolButton *pgNext, *pgPrev;
-    SideBar *sidebar;
-    NoteBar *notebar;
+    KPrSideBar *sidebar;
+    KPrNoteBar *notebar;
     QSplitter *splitter;
     PageBase *pageBase;
 

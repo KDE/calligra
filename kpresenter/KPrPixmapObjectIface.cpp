@@ -25,68 +25,68 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPPixmapObjectIface::KPPixmapObjectIface( KPPixmapObject *_obj )
-    : KPresenterObject2DIface(_obj)
+KPrPixmapObjectIface::KPrPixmapObjectIface( KPrPixmapObject *_obj )
+    : KPrObject2DIface(_obj)
 {
     obj = _obj;
 }
 
-QString KPPixmapObjectIface::fileName() const
+QString KPrPixmapObjectIface::fileName() const
 {
     return obj->getFileName();
 }
 
-bool KPPixmapObjectIface::swapRGB() const
+bool KPrPixmapObjectIface::swapRGB() const
 {
     return obj->getPictureSwapRGB();
 }
 
-bool KPPixmapObjectIface::grayscale() const
+bool KPrPixmapObjectIface::grayscale() const
 {
     return obj->getPictureGrayscal();
 }
 
-int KPPixmapObjectIface::depth() const
+int KPrPixmapObjectIface::depth() const
 {
     return obj->getPictureDepth();
 }
 
-int KPPixmapObjectIface::pictureMirrorType() const
+int KPrPixmapObjectIface::pictureMirrorType() const
 {
     return obj->getPictureMirrorType();
 }
 
-int KPPixmapObjectIface::brightness() const
+int KPrPixmapObjectIface::brightness() const
 {
     return obj->getPictureBright();
 }
 
-void KPPixmapObjectIface::setDepth(int depth )
+void KPrPixmapObjectIface::setDepth(int depth )
 {
     obj->setPictureDepth(depth);
 }
 
-void KPPixmapObjectIface::setBrightness(int bright )
+void KPrPixmapObjectIface::setBrightness(int bright )
 {
     obj->setPictureBright(bright);
 }
 
-void KPPixmapObjectIface::setSwapRGB(bool swapRGB )
+void KPrPixmapObjectIface::setSwapRGB(bool swapRGB )
 {
     obj->setPictureSwapRGB(swapRGB);
 }
 
-void KPPixmapObjectIface::setGrayscale( bool grayscal )
+void KPrPixmapObjectIface::setGrayscale( bool grayscal )
 {
     obj->setPictureGrayscal(grayscal);
 }
 
-void KPPixmapObjectIface::loadImage( const QString & fileName )
+void KPrPixmapObjectIface::loadImage( const QString & fileName )
 {
     obj->loadPicture(fileName);
 }
 
-void KPPixmapObjectIface::setPictureMirrorType(const QString & _mirror)
+void KPrPixmapObjectIface::setPictureMirrorType(const QString & _mirror)
 {
     if ( _mirror.lower()=="normal")
         obj->setPictureMirrorType( PM_NORMAL);

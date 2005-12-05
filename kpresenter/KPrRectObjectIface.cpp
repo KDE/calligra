@@ -25,26 +25,26 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPRectObjectIface::KPRectObjectIface( KPRectObject *_obj )
-    : KPresenterObject2DIface(_obj)
+KPrRectObjectIface::KPrRectObjectIface( KPrRectObject *_obj )
+    : KPrObject2DIface(_obj)
 
 {
     obj = _obj;
 }
 
-void KPRectObjectIface::setRnds( int _xRnd, int _yRnd )
+void KPrRectObjectIface::setRnds( int _xRnd, int _yRnd )
 {
     obj->setRnds( _xRnd, _yRnd );
 }
 
-int KPRectObjectIface::xRnd() const
+int KPrRectObjectIface::xRnd() const
 {
     int _xRnd,_yRnd;
     obj->getRnds( _xRnd, _yRnd );
     return _xRnd;
 }
 
-int KPRectObjectIface::yRnd() const
+int KPrRectObjectIface::yRnd() const
 {
     int _xRnd,_yRnd;
     obj->getRnds( _xRnd, _yRnd );

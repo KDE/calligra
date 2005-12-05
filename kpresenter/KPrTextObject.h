@@ -29,15 +29,15 @@
 #include <koStyleStack.h>
 
 class KoSavingContext;
-class KPresenterView;
+class KPrView;
 class KPrDocument;
 class QDomElement;
 class TextCmd;
-class KPGradient;
+class KPrGradient;
 
 class KoTextView;
 class KoTextObject;
-class KPTextView;
+class KPrTextView;
 class KCommand;
 class KPrCanvas;
 class KoPoint;
@@ -48,12 +48,12 @@ class DCOPObject;
 class KPrPage;
 class KoParagStyle;
 
-class KPTextObject :  public QObject, public KP2DObject, public KoTextFlow
+class KPrTextObject :  public QObject, public KPr2DObject, public KoTextFlow
 {
     Q_OBJECT
 public:
-    KPTextObject( KPrDocument *doc );
-    virtual ~KPTextObject();
+    KPrTextObject( KPrDocument *doc );
+    virtual ~KPrTextObject();
 
     virtual DCOPObject* dcopObject();
 
@@ -81,7 +81,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, KoOasisContext& context, KPRLoadingInfo *info);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext& context, KPrLoadingInfo *info);
     virtual void saveOasisMarginElement( KoGenStyle &styleobjectauto ) const;
 
     virtual void paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
@@ -109,7 +109,7 @@ public:
 
     KPrDocument* kPresenterDocument() const { return m_doc; }
 
-    KPTextView * createKPTextView( KPrCanvas *,bool temp=false );
+    KPrTextView * createKPTextView( KPrCanvas *,bool temp=false );
     void applyStyleChange( KoStyleChangeDefMap changed );
 
     void removeHighlight();
@@ -168,13 +168,13 @@ public:
     VerticalAlignmentType verticalAlignment() const { return m_textVertAlign; }
     void setVerticalAligment( VerticalAlignmentType _type) ;
     double alignmentValue() const {  return alignVertical; }
-    virtual KPTextObject *nextTextObject() { return this;}
+    virtual KPrTextObject *nextTextObject() { return this;}
     static void saveFormat( QDomElement & element, KoTextFormat*lastFormat );
 
     QPoint viewToInternal( const QPoint & pos, KPrCanvas* canvas ) const;
 
 signals:
-    void repaintChanged( KPTextObject* );
+    void repaintChanged( KPrTextObject* );
 
 protected slots:
     void slotFormatChanged(const KoTextFormat &);
@@ -195,13 +195,13 @@ protected:
     void saveParagLayout( const KoParagLayout& layout, QDomElement & parentElem );
     void invalidate();
     void recalcVerticalAlignment();
-    virtual KPPen defaultPen() const;
+    virtual KPrPen defaultPen() const;
 protected slots:
     void slotNewCommand( KCommand *cmd );
     void slotAvailableHeightNeeded();
     void slotRepaintChanged();
 private:
-    KPTextObject &operator=( const KPTextObject & );
+    KPrTextObject &operator=( const KPrTextObject & );
     void shadowCompatibility();
     static const QString &tagTEXTOBJ, &attrLineSpacing, &attrParagSpacing,
         &attrMargin, &attrBulletType1, &attrBulletType2,
@@ -225,17 +225,17 @@ private:
 };
 
 
-class KPTextView : public KoTextView
+class KPrTextView : public KoTextView
 {
     Q_OBJECT
 public:
-    KPTextView( KPTextObject * txtObj, KPrCanvas *_canvas, bool temp=false );
-    virtual ~KPTextView();
+    KPrTextView( KPrTextObject * txtObj, KPrCanvas *_canvas, bool temp=false );
+    virtual ~KPrTextView();
 
     virtual KoTextViewIface* dcopObject();
 
     KoTextView * textView() { return this; }
-    KPTextObject * kpTextObject() const { return m_kptextobj; }
+    KPrTextObject * kpTextObject() const { return m_kptextobj; }
 
     void keyPressEvent( QKeyEvent * );
     void keyReleaseEvent( QKeyEvent * );
@@ -255,7 +255,7 @@ public:
     virtual void drawCursor( bool b );
 
     const KoParagLayout & currentParagLayout() const { return m_paragLayout; }
-    void showPopup( KPresenterView *view, const QPoint &point, QPtrList<KAction> &actionList );
+    void showPopup( KPrView *view, const QPoint &point, QPtrList<KAction> &actionList );
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
     void insertLink(const QString &_linkName, const QString & hrefName);
@@ -301,7 +301,7 @@ protected:
     virtual bool pgUpKeyPressed();
     virtual bool pgDownKeyPressed();
 
-    KPTextObject *m_kptextobj;
+    KPrTextObject *m_kptextobj;
     KPrCanvas *m_canvas;
     KoParagLayout m_paragLayout;
     QPtrList<KAction> m_actionList; // for the kodatatools

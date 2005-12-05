@@ -35,57 +35,57 @@
 #include <math.h>
 using namespace std;
 
-KPPolylineObject::KPPolylineObject()
-    : KPPointObject()
+KPrPolylineObject::KPrPolylineObject()
+    : KPrPointObject()
 {
 }
 
-DCOPObject* KPPolylineObject::dcopObject()
+DCOPObject* KPrPolylineObject::dcopObject()
 {
     if ( !dcop )
-        dcop = new KPPolyLineObjectIface( this );
+        dcop = new KPrPolyLineObjectIface( this );
     return dcop;
 }
 
-KPPolylineObject::KPPolylineObject(  const KoPointArray &_points, const KoSize &_size,
-                                     const KPPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
-    : KPPointObject( _pen, _lineBegin, _lineEnd )
+KPrPolylineObject::KPrPolylineObject(  const KoPointArray &_points, const KoSize &_size,
+                                     const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
+    : KPrPointObject( _pen, _lineBegin, _lineEnd )
 {
     points = KoPointArray( _points );
     ext = _size;
 }
 
-KPPolylineObject &KPPolylineObject::operator=( const KPPolylineObject & )
+KPrPolylineObject &KPrPolylineObject::operator=( const KPrPolylineObject & )
 {
     return *this;
 }
 
-QDomDocumentFragment KPPolylineObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrPolylineObject::save( QDomDocument& doc, double offset )
 {
-    return KPPointObject::save( doc, offset );
+    return KPrPointObject::save( doc, offset );
 }
 
-double KPPolylineObject::load(const QDomElement &element)
+double KPrPolylineObject::load(const QDomElement &element)
 {
-    return KPPointObject::load( element );
+    return KPrPointObject::load( element );
 }
 
-bool KPPolylineObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrPolylineObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    KPShadowObject::saveOasisDrawPoints( points, sc );
+    KPrShadowObject::saveOasisDrawPoints( points, sc );
     return true;
 }
 
-const char * KPPolylineObject::getOasisElementName() const
+const char * KPrPolylineObject::getOasisElementName() const
 {
     return "draw:polyline";
 }
 
 
-void KPPolylineObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
+void KPrPolylineObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
-    kdDebug()<<"void KPPolylineObject::loadOasis(const QDomElement &element)************\n";
-    KPShadowObject::loadOasis( element, context, info );
-    KPShadowObject::loadOasisDrawPoints( points, element, context, info );
+    kdDebug()<<"void KPrPolylineObject::loadOasis(const QDomElement &element)************\n";
+    KPrShadowObject::loadOasis( element, context, info );
+    KPrShadowObject::loadOasisDrawPoints( points, element, context, info );
     loadOasisMarker( context );
 }

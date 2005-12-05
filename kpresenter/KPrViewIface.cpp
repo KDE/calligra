@@ -28,511 +28,511 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPresenterViewIface::KPresenterViewIface( KPresenterView *view_ )
+KPrViewIface::KPrViewIface( KPrView *view_ )
     : KoViewIface( view_ )
 {
     view = view_;
 }
 
-void KPresenterViewIface::editCut()
+void KPrViewIface::editCut()
 {
     view->editCut();
 }
 
-void KPresenterViewIface::editCopy()
+void KPrViewIface::editCopy()
 {
     view->editCopy();
 }
 
-void KPresenterViewIface::editPaste()
+void KPrViewIface::editPaste()
 {
     view->editPaste();
 }
 
-void KPresenterViewIface::editDelete()
+void KPrViewIface::editDelete()
 {
     view->editDelete();
 }
 
-void KPresenterViewIface::editSelectAll()
+void KPrViewIface::editSelectAll()
 {
     view->editSelectAll();
 }
 
-void KPresenterViewIface::editDuplicatePage()
+void KPrViewIface::editDuplicatePage()
 {
     view->editDuplicatePage();
 }
 
-void KPresenterViewIface::editDelPage()
+void KPrViewIface::editDelPage()
 {
     view->editDelPage();
 }
 
-void KPresenterViewIface::editFind()
+void KPrViewIface::editFind()
 {
     view->editFind();
 }
 
-void KPresenterViewIface::editReplace()
+void KPrViewIface::editReplace()
 {
     view->editReplace();
 }
 
-void KPresenterViewIface::newView()
+void KPrViewIface::newView()
 {
     view->newView();
 }
 
-void KPresenterViewIface::insertPage()
+void KPrViewIface::insertPage()
 {
     view->insertPage();
 }
 
-void KPresenterViewIface::insertPicture()
+void KPrViewIface::insertPicture()
 {
     view->insertPicture();
 }
 
-void KPresenterViewIface::toolsMouse()
+void KPrViewIface::toolsMouse()
 {
     view->toolsMouse();
 }
 
-void KPresenterViewIface::toolsLine()
+void KPrViewIface::toolsLine()
 {
     view->toolsLine();
 }
 
-void KPresenterViewIface::toolsRectangle()
+void KPrViewIface::toolsRectangle()
 {
     view->toolsRectangle();
 }
 
-void KPresenterViewIface::toolsCircleOrEllipse()
+void KPrViewIface::toolsCircleOrEllipse()
 {
     view->toolsCircleOrEllipse();
 }
 
-void KPresenterViewIface::toolsPie()
+void KPrViewIface::toolsPie()
 {
     view->toolsPie();
 }
 
-void KPresenterViewIface::toolsText()
+void KPrViewIface::toolsText()
 {
     view->toolsText();
 }
 
-void KPresenterViewIface::toolsAutoform()
+void KPrViewIface::toolsAutoform()
 {
     view->toolsAutoform();
 }
 
-void KPresenterViewIface::toolsDiagramm()
+void KPrViewIface::toolsDiagramm()
 {
     view->toolsDiagramm();
 }
 
-void KPresenterViewIface::toolsTable()
+void KPrViewIface::toolsTable()
 {
     view->toolsTable();
 }
 
-void KPresenterViewIface::toolsFormula()
+void KPrViewIface::toolsFormula()
 {
     view->toolsFormula();
 }
 
-void KPresenterViewIface::toolsObject()
+void KPrViewIface::toolsObject()
 {
     view->toolsObject();
 }
 
-void KPresenterViewIface::toolsFreehand()
+void KPrViewIface::toolsFreehand()
 {
     view->toolsFreehand();
 }
 
-void KPresenterViewIface::toolsPolyline()
+void KPrViewIface::toolsPolyline()
 {
     view->toolsPolyline();
 }
 
-void KPresenterViewIface::toolsQuadricBezierCurve()
+void KPrViewIface::toolsQuadricBezierCurve()
 {
     view->toolsQuadricBezierCurve();
 }
 
-void KPresenterViewIface::toolsCubicBezierCurve()
+void KPrViewIface::toolsCubicBezierCurve()
 {
     view->toolsCubicBezierCurve();
 }
 
-void KPresenterViewIface::toolsConvexOrConcavePolygon()
+void KPrViewIface::toolsConvexOrConcavePolygon()
 {
     view->toolsConvexOrConcavePolygon();
 }
 
-void KPresenterViewIface::extraPenBrush()
+void KPrViewIface::extraPenBrush()
 {
     view->extraProperties();
 }
 
-void KPresenterViewIface::extraProperties()
+void KPrViewIface::extraProperties()
 {
     view->extraProperties();
 }
 
-void KPresenterViewIface::extraRaise()
+void KPrViewIface::extraRaise()
 {
     view->extraRaise();
 }
 
-void KPresenterViewIface::extraLower()
+void KPrViewIface::extraLower()
 {
     view->extraLower();
 }
 
-void KPresenterViewIface::extraRotate()
+void KPrViewIface::extraRotate()
 {
     view->extraRotate();
 }
 
-void KPresenterViewIface::extraShadow()
+void KPrViewIface::extraShadow()
 {
     view->extraShadow();
 }
 
-void KPresenterViewIface::extraBackground()
+void KPrViewIface::extraBackground()
 {
     view->extraBackground();
 }
 
-void KPresenterViewIface::extraLayout()
+void KPrViewIface::extraLayout()
 {
     view->extraLayout();
 }
 
-void KPresenterViewIface::extraConfigure()
+void KPrViewIface::extraConfigure()
 {
     view->extraConfigure();
 }
 
-void KPresenterViewIface::extraLineBegin()
+void KPrViewIface::extraLineBegin()
 {
     view->extraLineBegin();
 }
 
-void KPresenterViewIface::extraLineEnd()
+void KPrViewIface::extraLineEnd()
 {
     view->extraLineEnd();
 }
 
-void KPresenterViewIface::extraWebPres()
+void KPrViewIface::extraWebPres()
 {
     view->extraWebPres();
 }
 
-void KPresenterViewIface::extraMSPres()
+void KPrViewIface::extraMSPres()
 {
     view->extraMSPres();
 }
 
-void KPresenterViewIface::extraAlignObjLeft()
+void KPrViewIface::extraAlignObjLeft()
 {
     view->extraAlignObjLeft();
 }
 
-void KPresenterViewIface::extraAlignObjCenterH()
+void KPrViewIface::extraAlignObjCenterH()
 {
     view->extraAlignObjCenterH();
 }
 
-void KPresenterViewIface::extraAlignObjRight()
+void KPrViewIface::extraAlignObjRight()
 {
     view->extraAlignObjRight();
 }
 
-void KPresenterViewIface::extraAlignObjTop()
+void KPrViewIface::extraAlignObjTop()
 {
     view->extraAlignObjTop();
 }
 
-void KPresenterViewIface::extraAlignObjCenterV()
+void KPrViewIface::extraAlignObjCenterV()
 {
     view->extraAlignObjCenterV();
 }
 
-void KPresenterViewIface::extraAlignObjBottom()
+void KPrViewIface::extraAlignObjBottom()
 {
     view->extraAlignObjBottom();
 }
 
-void KPresenterViewIface::extraAlignObjs()
+void KPrViewIface::extraAlignObjs()
 {
     view->extraAlignObjs();
 }
 
-void KPresenterViewIface::extraGroup()
+void KPrViewIface::extraGroup()
 {
     view->extraGroup();
 }
 
-void KPresenterViewIface::extraUnGroup()
+void KPrViewIface::extraUnGroup()
 {
     view->extraUnGroup();
 }
 
-void KPresenterViewIface::extraPenStyle()
+void KPrViewIface::extraPenStyle()
 {
 // FIXME
 //     view->extraPenStyle();
 }
 
-void KPresenterViewIface::extraPenWidth()
+void KPrViewIface::extraPenWidth()
 {
 // FIXME
 //     view->extraPenWidth();
 }
 
-void KPresenterViewIface::screenTransEffect()
+void KPrViewIface::screenTransEffect()
 {
     view->screenTransEffect();
 }
 
-void KPresenterViewIface::screenConfigPages()
+void KPrViewIface::screenConfigPages()
 {
     view->screenConfigPages();
 }
 
-void KPresenterViewIface::screenAssignEffect()
+void KPrViewIface::screenAssignEffect()
 {
     view->screenAssignEffect();
 }
 
-void KPresenterViewIface::screenStart()
+void KPrViewIface::screenStart()
 {
     view->screenStart();
 }
 
-void KPresenterViewIface::screenStartFromFirst()
+void KPrViewIface::screenStartFromFirst()
 {
     view->screenStartFromFirst();
 }
 
-void KPresenterViewIface::screenStop()
+void KPrViewIface::screenStop()
 {
     view->screenStop();
 }
 
-void KPresenterViewIface::screenPause()
+void KPrViewIface::screenPause()
 {
     view->screenPause();
 }
 
-void KPresenterViewIface::screenFirst()
+void KPrViewIface::screenFirst()
 {
     view->screenFirst();
 }
 
-void KPresenterViewIface::screenPrev()
+void KPrViewIface::screenPrev()
 {
     view->screenPrev();
 }
 
-void KPresenterViewIface::screenNext()
+void KPrViewIface::screenNext()
 {
     view->screenNext();
 }
 
-void KPresenterViewIface::screenLast()
+void KPrViewIface::screenLast()
 {
     view->screenLast();
 }
 
-void KPresenterViewIface::screenSkip()
+void KPrViewIface::screenSkip()
 {
     view->screenSkip();
 }
 
-void KPresenterViewIface::sizeSelected( int size )
+void KPrViewIface::sizeSelected( int size )
 {
     view->sizeSelected( size );
 }
 
-void KPresenterViewIface::fontSelected( const QString &fontFamily )
+void KPrViewIface::fontSelected( const QString &fontFamily )
 {
     view->fontSelected( fontFamily );
 }
 
-void KPresenterViewIface::textBold()
+void KPrViewIface::textBold()
 {
     view->textBold();
 }
 
-void KPresenterViewIface::textItalic()
+void KPrViewIface::textItalic()
 {
     view->textItalic();
 }
 
-void KPresenterViewIface::textUnderline()
+void KPrViewIface::textUnderline()
 {
     view->textUnderline();
 }
 
-void KPresenterViewIface::textColor()
+void KPrViewIface::textColor()
 {
     view->textColor();
 }
 
-void KPresenterViewIface::textAlignLeft()
+void KPrViewIface::textAlignLeft()
 {
     view->textAlignLeft();
 }
 
-void KPresenterViewIface::textAlignCenter()
+void KPrViewIface::textAlignCenter()
 {
     view->textAlignCenter();
 }
 
-void KPresenterViewIface::textAlignRight()
+void KPrViewIface::textAlignRight()
 {
     view->textAlignRight();
 }
 
-void KPresenterViewIface::mtextFont()
+void KPrViewIface::mtextFont()
 {
     view->mtextFont();
 }
 
-void KPresenterViewIface::textDepthPlus()
+void KPrViewIface::textDepthPlus()
 {
     view->textDepthPlus();
 }
 
-void KPresenterViewIface::textDepthMinus()
+void KPrViewIface::textDepthMinus()
 {
     view->textDepthMinus();
 }
 
-void KPresenterViewIface::textContentsToHeight()
+void KPrViewIface::textContentsToHeight()
 {
     view->textContentsToHeight();
 }
 
-void KPresenterViewIface::textObjectToContents()
+void KPrViewIface::textObjectToContents()
 {
     view->textObjectToContents();
 }
 
-void KPresenterViewIface::penChosen()
+void KPrViewIface::penChosen()
 {
     view->penChosen();
 }
 
-void KPresenterViewIface::brushChosen()
+void KPrViewIface::brushChosen()
 {
     view->brushChosen();
 }
 
-int KPresenterViewIface::getCurrentPresPage() const
+int KPrViewIface::getCurrentPresPage() const
 {
     return view->getCurrentPresPage();
 }
 
-int KPresenterViewIface::getCurrentPresStep() const
+int KPrViewIface::getCurrentPresStep() const
 {
     return view->getCurrentPresStep();
 }
 
-int KPresenterViewIface::getPresStepsOfPage() const
+int KPrViewIface::getPresStepsOfPage() const
 {
     return view->getPresStepsOfPage();
 }
 
-int KPresenterViewIface::getNumPresPages() const
+int KPrViewIface::getNumPresPages() const
 {
     return view->getNumPresPages();
 }
 
-bool KPresenterViewIface::gotoPresPage( int pg ) const
+bool KPrViewIface::gotoPresPage( int pg ) const
 {
     return view->gotoPresPage( pg );
 }
 
-int KPresenterViewIface::getCurrentPageNum() const
+int KPrViewIface::getCurrentPageNum() const
 {
     return view->getCurrPgNum();
 }
 
-void KPresenterViewIface::insertSpecialChar()
+void KPrViewIface::insertSpecialChar()
 {
     view->insertSpecialChar();
 }
 
-void KPresenterViewIface::insertLink()
+void KPrViewIface::insertLink()
 {
     view->insertLink();
 }
 
-void KPresenterViewIface::editCustomVars()
+void KPrViewIface::editCustomVars()
 {
     view->editCustomVars();
 }
 
-void KPresenterViewIface::insertVariable()
+void KPrViewIface::insertVariable()
 {
     view->insertVariable();
 }
 
-void KPresenterViewIface::insertCustomVariable()
+void KPrViewIface::insertCustomVariable()
 {
     view->insertCustomVariable();
 }
 
-void KPresenterViewIface::insertNewCustomVariable()
+void KPrViewIface::insertNewCustomVariable()
 {
     view->insertNewCustomVariable();
 }
 
-void KPresenterViewIface::changeCaseOfText()
+void KPrViewIface::changeCaseOfText()
 {
     view->changeCaseOfText();
 }
 
-void KPresenterViewIface::viewShowSideBar()
+void KPrViewIface::viewShowSideBar()
 {
     view->viewShowSideBar();
 }
 
-void KPresenterViewIface::viewShowNoteBar()
+void KPrViewIface::viewShowNoteBar()
 {
     view->viewShowNoteBar();
 }
 
-void KPresenterViewIface::viewSlideMaster()
+void KPrViewIface::viewSlideMaster()
 {
     view->viewSlideMaster();
 }
 
 
-void KPresenterViewIface::formatParagraph()
+void KPrViewIface::formatParagraph()
 {
     view->formatParagraph();
 }
 
-void KPresenterViewIface::extraAutoFormat()
+void KPrViewIface::extraAutoFormat()
 {
     view->extraAutoFormat();
 }
 
-void KPresenterViewIface::refreshAllVariable()
+void KPrViewIface::refreshAllVariable()
 {
     view->extraAutoFormat();
 }
 
-bool KPresenterViewIface::skipToPage( int _num )
+bool KPrViewIface::skipToPage( int _num )
 {
     //don't try to skip to a not exist page
     if(_num>(int)view->kPresenterDoc()->getPageNums()-1)
@@ -541,72 +541,72 @@ bool KPresenterViewIface::skipToPage( int _num )
     return true;
 }
 
-void KPresenterViewIface::toolsRotate()
+void KPrViewIface::toolsRotate()
 {
     view->toolsRotate();
 }
 
-void KPresenterViewIface::toolsZoom()
+void KPrViewIface::toolsZoom()
 {
     view->toolsZoom();
 }
 
-void KPresenterViewIface::insertComment()
+void KPrViewIface::insertComment()
 {
     view->insertComment();
 }
 
-void KPresenterViewIface::configureCompletion()
+void KPrViewIface::configureCompletion()
 {
     view->configureCompletion();
 }
 
-void KPresenterViewIface::duplicateObj()
+void KPrViewIface::duplicateObj()
 {
     view->duplicateObj();
 }
 
-void KPresenterViewIface::extraSendBackward()
+void KPrViewIface::extraSendBackward()
 {
     view->extraSendBackward();
 }
 
-void KPresenterViewIface::extraBringForward()
+void KPrViewIface::extraBringForward()
 {
     view->extraBringForward();
 }
 
-void KPresenterViewIface::applyAutoFormat()
+void KPrViewIface::applyAutoFormat()
 {
     view->applyAutoFormat();
 }
 
-void KPresenterViewIface::editDeSelectAll()
+void KPrViewIface::editDeSelectAll()
 {
     view->editDeSelectAll();
 }
 
-void KPresenterViewIface::createStyleFromSelection()
+void KPrViewIface::createStyleFromSelection()
 {
     view->createStyleFromSelection();
 }
 
-void KPresenterViewIface::closeObject()
+void KPrViewIface::closeObject()
 {
     view->closeObject();
 }
 
-void KPresenterViewIface::savePicture()
+void KPrViewIface::savePicture()
 {
     view->savePicture();
 }
 
-void KPresenterViewIface::viewFooter()
+void KPrViewIface::viewFooter()
 {
     view->viewFooter();
 }
 
-void KPresenterViewIface::viewHeader()
+void KPrViewIface::viewHeader()
 {
     view->viewHeader();
 }
@@ -615,7 +615,7 @@ void KPresenterViewIface::viewHeader()
 // note: _nPage is the user visible 1-based page number
 // if 0 < _verbose exportPage() returns the title and notes of the page
 // if not verbose it returns an empty string
-QStringList KPresenterViewIface::exportPage( int _nPage,
+QStringList KPrViewIface::exportPage( int _nPage,
                                              int _nWidth,
                                              int _nHeight,
                                              const QString & _fileName,
@@ -658,67 +658,67 @@ QStringList KPresenterViewIface::exportPage( int _nPage,
     return res;
 }
 
-void KPresenterViewIface::insertFile()
+void KPrViewIface::insertFile()
 {
     view->insertFile();
 }
 
-void KPresenterViewIface::importStyle()
+void KPrViewIface::importStyle()
 {
     view->importStyle();
 }
 
-void KPresenterViewIface::backgroundPicture()
+void KPrViewIface::backgroundPicture()
 {
     view->backgroundPicture();
 }
 
-void KPresenterViewIface::insertFile( const QString & file )
+void KPrViewIface::insertFile( const QString & file )
 {
     view->insertFile( file );
 }
 
-void KPresenterViewIface::addWordToDictionary()
+void KPrViewIface::addWordToDictionary()
 {
     view->addWordToDictionary();
 }
 
-void KPresenterViewIface::customSlideShow()
+void KPrViewIface::customSlideShow()
 {
     view->customSlideShow();
 }
 
-void KPresenterViewIface::insertLineBreak()
+void KPrViewIface::insertLineBreak()
 {
     view->slotLineBreak();
 }
 
-void KPresenterViewIface::increaseNumberingLevel()
+void KPrViewIface::increaseNumberingLevel()
 {
     view->slotIncreaseNumberingLevel();
 }
 
-void KPresenterViewIface::decreaseNumberingLevel()
+void KPrViewIface::decreaseNumberingLevel()
 {
     view->slotDecreaseNumberingLevel();
 }
 
-void KPresenterViewIface::increaseFontSize()
+void KPrViewIface::increaseFontSize()
 {
     view->increaseFontSize();
 }
 
-void KPresenterViewIface::decreaseFontSize()
+void KPrViewIface::decreaseFontSize()
 {
     view->decreaseFontSize();
 }
 
-void KPresenterViewIface::flipHorizontal()
+void KPrViewIface::flipHorizontal()
 {
     view->flipHorizontal();
 }
 
-void KPresenterViewIface::flipVertical()
+void KPrViewIface::flipVertical()
 {
     view->flipVertical();
 }

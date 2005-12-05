@@ -30,10 +30,10 @@ class QResizeEvent;
 class QListBox;
 class KPrDocument;
 
-class KPGotoPage : public KDialogBase
+class KPrGotoPage : public KDialogBase
 {
 public:
-    KPGotoPage( const KPrDocument *doc,
+    KPrGotoPage( const KPrDocument *doc,
                 const QValueList<int> &slides, int start,
                 QWidget *parent = 0L, const char *name = 0L );
 

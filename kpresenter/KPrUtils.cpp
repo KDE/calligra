@@ -349,7 +349,7 @@ KoPointArray getCloseObject( KoPointArray points, bool close, bool objClosed )
     return tmpPoints;
 }
 
-QCursor KPresenterUtils::penCursor()
+QCursor KPrUtils::penCursor()
 {
     static unsigned char pen_bits[] = {
         0x00, 0x00, 0x00, 0x00, 0x00, 0x1c, 0x00, 0x00, 0x3a, 0x00, 0x00, 0x7d,
@@ -368,7 +368,7 @@ QCursor KPresenterUtils::penCursor()
     return QCursor( pix, 1, 22 );
 }
 
-QCursor KPresenterUtils::rotateCursor()
+QCursor KPrUtils::rotateCursor()
 {
     static unsigned char rotate_bits[] = {
         0x00, 0x00, 0x00, 0x00, 0x0c, 0x00, 0xc0, 0xf3, 0x00, 0xe0, 0xff, 0x01,

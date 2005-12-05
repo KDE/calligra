@@ -28,23 +28,23 @@ class QPainter;
 class DCOPObject;
 class KoXmlWriter;
 
-class KPFreehandObject : public KPPointObject
+class KPrFreehandObject : public KPrPointObject
 {
 public:
-    KPFreehandObject();
-    KPFreehandObject( const KoPointArray &_points, const KoSize &_size, const KPPen &_pen,
+    KPrFreehandObject();
+    KPrFreehandObject( const KoPointArray &_points, const KoSize &_size, const KPrPen &_pen,
                       LineEnd _lineBegin, LineEnd _lineEnd );
-    virtual ~KPFreehandObject() {}
+    virtual ~KPrFreehandObject() {}
     virtual DCOPObject* dcopObject();
 
-    KPFreehandObject &operator=( const KPFreehandObject & );
+    KPrFreehandObject &operator=( const KPrFreehandObject & );
 
     virtual ObjType getType() const { return OT_FREEHAND; }
     virtual QString getTypeString() const { return i18n("Freehand"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
     virtual double load( const QDomElement &element );
-    virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo* info );
+    virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo* info );
 
 protected:    
     virtual const char * getOasisElementName() const;

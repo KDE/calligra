@@ -78,7 +78,7 @@
                 </widget>
             </grid>
         </widget>
-        <widget class="PBPreview" row="4" column="0" rowspan="1" colspan="2">
+        <widget class="KPrPBPreview" row="4" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>pbPreview</cstring>
             </property>
@@ -159,7 +159,7 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>PBPreview</class>
+        <class>KPrPBPreview</class>
         <header location="global">KPrPBPreview.h</header>
         <sizehint>
             <width>80</width>

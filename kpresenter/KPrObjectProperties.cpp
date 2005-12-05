@@ -32,24 +32,24 @@
 #include "KPrQuadricBezierCurveObject.h"
 #include "KPrTextObject.h"
 
-KPObjectProperties::KPObjectProperties( const QPtrList<KPObject> &objects )
+KPrObjectProperties::KPrObjectProperties( const QPtrList<KPrObject> &objects )
 : m_objects( objects )
 , m_flags( 0 )
-, m_pen( KPPen( Qt::black, 1.0, Qt::SolidLine ), L_NORMAL, L_NORMAL )
+, m_pen( KPrPen( Qt::black, 1.0, Qt::SolidLine ), L_NORMAL, L_NORMAL )
 , m_protectContent( STATE_UNDEF )
 {
     getProperties( m_objects );
 }
 
 
-KPObjectProperties::~KPObjectProperties()
+KPrObjectProperties::~KPrObjectProperties()
 {
 }
 
 
-void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
+void KPrObjectProperties::getProperties( const QPtrList<KPrObject> &objects )
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         switch ( it.current()->getType() )
@@ -62,19 +62,19 @@ void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
             case OT_FREEHAND:
             case OT_POLYLINE:
                 getPenProperties( it.current() );
-                if( !static_cast<KPPointObject*>( it.current() )->isClosed() )
+                if( !static_cast<KPrPointObject*>( it.current() )->isClosed() )
                     getLineEndsProperties( it.current() );
                 m_flags |= PtOther;
                 break;
             case OT_QUADRICBEZIERCURVE:
                 getPenProperties( it.current() );
-                if ( !static_cast<KPQuadricBezierCurveObject*>( it.current() )->isClosed() )
+                if ( !static_cast<KPrQuadricBezierCurveObject*>( it.current() )->isClosed() )
                     getLineEndsProperties( it.current() );
                 m_flags |= PtOther;
                 break;
             case OT_CUBICBEZIERCURVE:
                 getPenProperties( it.current() );
-                if ( !static_cast<KPCubicBezierCurveObject*>( it.current() )->isClosed() )
+                if ( !static_cast<KPrCubicBezierCurveObject*>( it.current() )->isClosed() )
                     getLineEndsProperties( it.current() );
                 m_flags |= PtOther;
                 break;
@@ -104,7 +104,7 @@ void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
                 break;
             case OT_GROUP:
                 {
-                    KPGroupObject *obj = dynamic_cast<KPGroupObject*>( it.current() );
+                    KPrGroupObject *obj = dynamic_cast<KPrGroupObject*>( it.current() );
                     if ( obj )
                     {
                         getProperties( obj->objectList() );
@@ -118,11 +118,11 @@ void KPObjectProperties::getProperties( const QPtrList<KPObject> &objects )
 }
 
 
-void KPObjectProperties::getPenProperties( KPObject *object )
+void KPrObjectProperties::getPenProperties( KPrObject *object )
 {
     if ( !( m_flags & PtPen ) )
     {
-        KPShadowObject *obj = dynamic_cast<KPShadowObject*>( object );
+        KPrShadowObject *obj = dynamic_cast<KPrShadowObject*>( object );
         if ( obj )
         {
             m_pen.pen = obj->getPen();
@@ -133,7 +133,7 @@ void KPObjectProperties::getPenProperties( KPObject *object )
 }
 
 
-void KPObjectProperties::getLineEndsProperties( KPObject *object )
+void KPrObjectProperties::getLineEndsProperties( KPrObject *object )
 {
     if ( !( m_flags & PtLineEnds ) )
     {
@@ -141,7 +141,7 @@ void KPObjectProperties::getLineEndsProperties( KPObject *object )
         {
             case OT_LINE:
                 {
-                    KPLineObject *obj = dynamic_cast<KPLineObject*>( object );
+                    KPrLineObject *obj = dynamic_cast<KPrLineObject*>( object );
                     if ( obj )
                     {
                         m_pen.lineBegin = obj->getLineBegin();
@@ -156,7 +156,7 @@ void KPObjectProperties::getLineEndsProperties( KPObject *object )
             case OT_QUADRICBEZIERCURVE:
             case OT_CUBICBEZIERCURVE:
                 {
-                    KPPointObject *obj = dynamic_cast<KPPointObject*>( object );
+                    KPrPointObject *obj = dynamic_cast<KPrPointObject*>( object );
                     if ( obj )
                     {
                         m_pen.lineBegin = obj->getLineBegin();
@@ -168,7 +168,7 @@ void KPObjectProperties::getLineEndsProperties( KPObject *object )
                 }
             case OT_PIE:
                 {
-                    KPPieObject *obj = dynamic_cast<KPPieObject*>( object );
+                    KPrKPPieObject *obj = dynamic_cast<KPrKPPieObject*>( object );
                     if ( obj )
                     {
                         m_pen.lineBegin = obj->getLineBegin();
@@ -185,11 +185,11 @@ void KPObjectProperties::getLineEndsProperties( KPObject *object )
 }
 
 
-void KPObjectProperties::getBrushProperties( KPObject *object )
+void KPrObjectProperties::getBrushProperties( KPrObject *object )
 {
     if ( !( m_flags & PtBrush ) )
     {
-        KP2DObject * obj = dynamic_cast<KP2DObject*>( object );
+        KPr2DObject * obj = dynamic_cast<KPr2DObject*>( object );
         if ( obj )
         {
             m_brush.brush = obj->getBrush();
@@ -207,11 +207,11 @@ void KPObjectProperties::getBrushProperties( KPObject *object )
 }
 
 
-void KPObjectProperties::getRectProperties( KPObject *object )
+void KPrObjectProperties::getRectProperties( KPrObject *object )
 {
     if ( !( m_flags & PtRectangle ) )
     {
-        KPRectObject *obj = dynamic_cast<KPRectObject*>( object );
+        KPrRectObject *obj = dynamic_cast<KPrRectObject*>( object );
         if ( obj )
         {
             obj->getRnds( m_rectValues.xRnd, m_rectValues.yRnd );
@@ -224,11 +224,11 @@ void KPObjectProperties::getRectProperties( KPObject *object )
 }
 
 
-void KPObjectProperties::getPolygonSettings( KPObject *object )
+void KPrObjectProperties::getPolygonSettings( KPrObject *object )
 {
     if ( !( m_flags & PtPolygon ) )
     {
-        KPPolygonObject *obj = dynamic_cast<KPPolygonObject*>( object );
+        KPrPolygonObject *obj = dynamic_cast<KPrPolygonObject*>( object );
         if ( obj )
         {
             m_polygonSettings.checkConcavePolygon = obj->getCheckConcavePolygon();
@@ -243,11 +243,11 @@ void KPObjectProperties::getPolygonSettings( KPObject *object )
 }
 
 
-void KPObjectProperties::getPieProperties( KPObject *object )
+void KPrObjectProperties::getPieProperties( KPrObject *object )
 {
     if ( !( m_flags & PtPie ) )
     {
-        KPPieObject *obj = dynamic_cast<KPPieObject*>( object );
+        KPrKPPieObject *obj = dynamic_cast<KPrKPPieObject*>( object );
         if ( obj )
         {
             m_pieValues.pieType = obj->getPieType();
@@ -270,11 +270,11 @@ void KPObjectProperties::getPieProperties( KPObject *object )
 }
 
 
-void KPObjectProperties::getPictureProperties( KPObject *object )
+void KPrObjectProperties::getPictureProperties( KPrObject *object )
 {
     if ( !( m_flags & PtPicture ) )
     {
-        KPPixmapObject *obj = dynamic_cast<KPPixmapObject*>( object );
+        KPrPixmapObject *obj = dynamic_cast<KPrPixmapObject*>( object );
         if ( obj )
         {
             m_pictureSettings.mirrorType = obj->getPictureMirrorType();
@@ -292,9 +292,9 @@ void KPObjectProperties::getPictureProperties( KPObject *object )
 }
 
 
-void KPObjectProperties::getTextProperties( KPObject *object )
+void KPrObjectProperties::getTextProperties( KPrObject *object )
 {
-    KPTextObject *obj = dynamic_cast<KPTextObject*>( object );
+    KPrTextObject *obj = dynamic_cast<KPrTextObject*>( object );
     if ( obj )
     {
         if ( !( m_flags & PtText ) )

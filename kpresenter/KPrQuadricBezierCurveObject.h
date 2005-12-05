@@ -28,23 +28,23 @@ class QPainter;
 class KoTextZoomHandler;
 class DCOPObject;
 
-class KPQuadricBezierCurveObject : public KPPointObject
+class KPrQuadricBezierCurveObject : public KPrPointObject
 {
 public:
-    KPQuadricBezierCurveObject();
-    KPQuadricBezierCurveObject( const KoPointArray &_controlPoints,
+    KPrQuadricBezierCurveObject();
+    KPrQuadricBezierCurveObject( const KoPointArray &_controlPoints,
                                 const KoPointArray &_allPoints, const KoSize &_size,
-                                const KPPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
-    virtual ~KPQuadricBezierCurveObject() {}
+                                const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    virtual ~KPrQuadricBezierCurveObject() {}
 
-    KPQuadricBezierCurveObject &operator=( const KPQuadricBezierCurveObject & );
+    KPrQuadricBezierCurveObject &operator=( const KPrQuadricBezierCurveObject & );
     virtual DCOPObject* dcopObject();
 
     virtual ObjType getType() const { return OT_QUADRICBEZIERCURVE; }
     virtual QString getTypeString() const { return i18n("Quadric Bezier Curve"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
-    virtual void loadOasis( const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info );
+    virtual void loadOasis( const QDomElement &element, KoOasisContext & context,  KPrLoadingInfo *info );
 
     virtual double load( const QDomElement &element );
 

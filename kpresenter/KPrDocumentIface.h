@@ -29,11 +29,11 @@
 #include <qcolor.h>
 class KPrDocument;
 
-class KPresenterDocIface : public KoDocumentIface
+class KPrDocumentIface : public KoDocumentIface
 {
     K_DCOP
 public:
-    KPresenterDocIface( KPrDocument *doc_ );
+    KPrDocumentIface( KPrDocument *doc_ );
 
 k_dcop:
     virtual int numPages() const;

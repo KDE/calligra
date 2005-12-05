@@ -49,11 +49,11 @@
 #include "KPrPixmapObjectIface.h"
 
 
-KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
-    : KP2DObject()
+KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection )
+    : KPr2DObject()
 {
     imageCollection = _imageCollection;
-    pen = KPPen( Qt::black, 1.0, Qt::NoPen );
+    pen = KPrPen( Qt::black, 1.0, Qt::NoPen );
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
@@ -68,13 +68,13 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection )
     keepRatio = true;
 }
 
-KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoPictureKey & key )
-    : KP2DObject()
+KPrPixmapObject::KPrPixmapObject( KoPictureCollection *_imageCollection, const KoPictureKey & key )
+    : KPr2DObject()
 {
     imageCollection = _imageCollection;
 
     ext = KoSize(); // invalid size means unset
-    pen = KPPen( Qt::black, 1.0, Qt::NoPen );
+    pen = KPrPen( Qt::black, 1.0, Qt::NoPen );
     mirrorType = PM_NORMAL;
     depth = 0;
     swapRGB = false;
@@ -90,19 +90,19 @@ KPPixmapObject::KPPixmapObject( KoPictureCollection *_imageCollection, const KoP
     setPicture( key );
 }
 
-DCOPObject* KPPixmapObject::dcopObject()
+DCOPObject* KPrPixmapObject::dcopObject()
 {
     if ( !dcop )
-        dcop = new KPPixmapObjectIface( this );
+        dcop = new KPrPixmapObjectIface( this );
     return dcop;
 }
 
-QString KPPixmapObject::convertValueToPercent( int val ) const
+QString KPrPixmapObject::convertValueToPercent( int val ) const
 {
    return QString::number( val )+"%";
 }
 
-void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto ) const
+void KPrPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto ) const
 {
 
     if ( bright != 0 )
@@ -202,7 +202,7 @@ void KPPixmapObject::saveOasisPictureElement( KoGenStyle &styleobjectauto ) cons
     }
 }
 
-bool KPPixmapObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrPixmapObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
     sc.xmlWriter.startElement( "draw:image" );
     sc.xmlWriter.addAttribute( "xlink:type", "simple" );
@@ -214,48 +214,48 @@ bool KPPixmapObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
     return true;
 }
 
-const char * KPPixmapObject::getOasisElementName() const
+const char * KPrPixmapObject::getOasisElementName() const
 {
     return "draw:frame";
 }
 
 
-// Deprecated, same as KPPixmapObject::loadPicture
-void KPPixmapObject::loadImage( const QString & fileName )
+// Deprecated, same as KPrPixmapObject::loadPicture
+void KPrPixmapObject::loadImage( const QString & fileName )
 {
     loadPicture( fileName );
 }
 
-void KPPixmapObject::loadPicture( const QString & fileName )
+void KPrPixmapObject::loadPicture( const QString & fileName )
 {
     image = imageCollection->loadPicture( fileName );
 }
 
-KPPixmapObject &KPPixmapObject::operator=( const KPPixmapObject & )
+KPrPixmapObject &KPrPixmapObject::operator=( const KPrPixmapObject & )
 {
     return *this;
 }
 
-// Deprecated, same as KPPixmapObject::setPicture
-void KPPixmapObject::setPixmap( const KoPictureKey & key )
+// Deprecated, same as KPrPixmapObject::setPicture
+void KPrPixmapObject::setPixmap( const KoPictureKey & key )
 {
     setPicture( key );
 }
 
-void KPPixmapObject::setPicture( const KoPictureKey & key )
+void KPrPixmapObject::setPicture( const KoPictureKey & key )
 {
     image = imageCollection->findPicture( key );
 }
 
-void KPPixmapObject::reload( void )
+void KPrPixmapObject::reload( void )
 {
     // ### FIXME: this seems wrong, KoPictureCollection will never reload it (or perhaps it is the function name that is wrong)
     setPicture( image.getKey() );
 }
 
-QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrPixmapObject::save( QDomDocument& doc, double offset )
 {
-    QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
+    QDomDocumentFragment fragment=KPr2DObject::save(doc, offset);
     QDomElement elem=doc.createElement("KEY");
     image.getKey().saveAttributes(elem);
     fragment.appendChild(elem);
@@ -284,7 +284,7 @@ QDomDocumentFragment KPPixmapObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
+void KPrPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
 {
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
@@ -338,16 +338,16 @@ void KPPixmapObject::loadOasisPictureEffect(KoOasisContext & context )
 
 }
 
-void KPPixmapObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+void KPrPixmapObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    KP2DObject::fillStyle( styleObjectAuto, mainStyles );
+    KPr2DObject::fillStyle( styleObjectAuto, mainStyles );
     saveOasisPictureElement( styleObjectAuto );
 }
 
-void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
+void KPrPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
     //load it into kpresenter_doc
-    KP2DObject::loadOasis( element, context, info );
+    KPr2DObject::loadOasis( element, context, info );
     loadOasisPictureEffect( context );
     QDomNode imageBox = KoDom::namedItemNS( element, KoXmlNS::draw, "image" );
     const QString href( imageBox.toElement().attributeNS( KoXmlNS::xlink, "href", QString::null) );
@@ -378,9 +378,9 @@ void KPPixmapObject::loadOasis(const QDomElement &element, KoOasisContext & cont
 }
 
 
-double KPPixmapObject::load(const QDomElement &element)
+double KPrPixmapObject::load(const QDomElement &element)
 {
-    double offset=KP2DObject::load(element);
+    double offset=KPr2DObject::load(element);
     QDomElement e=element.namedItem("KEY").toElement();
     if(!e.isNull()) {
         KoPictureKey key;
@@ -493,7 +493,7 @@ double KPPixmapObject::load(const QDomElement &element)
     return offset;
 }
 
-void KPPixmapObject::drawShadow( QPainter* _painter, KoZoomHandler* _zoomHandler)
+void KPrPixmapObject::drawShadow( QPainter* _painter, KoZoomHandler* _zoomHandler)
 {
     const double ox = orig.x();
     const double oy = orig.y();
@@ -543,12 +543,12 @@ void KPPixmapObject::drawShadow( QPainter* _painter, KoZoomHandler* _zoomHandler
     _painter->restore();
 }
 
-QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
+QPixmap KPrPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
 {
     const double penw = _zoomHandler->zoomItX( ( ( pen.style() == Qt::NoPen ) ? 1 : pen.width() ) / 2.0 );
 
     QSize size( _zoomHandler->zoomSize( ext ) );
-    //kdDebug(33001) << "KPPixmapObject::generatePixmap size= " << size << endl;
+    //kdDebug(33001) << "KPrPixmapObject::generatePixmap size= " << size << endl;
     QPixmap pixmap(size);
     QPainter paint;
 
@@ -587,7 +587,7 @@ QPixmap KPPixmapObject::generatePixmap(KoZoomHandler*_zoomHandler)
     return pixmap;
 }
 
-void KPPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
+void KPrPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                            int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     if ( image.isNull() ) return;
@@ -645,7 +645,7 @@ void KPPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
             variants3=(m_ie_par3 == m_cachedPar3);
 
         if (m_cachedRect == rect
-            // All what KPPixmapObject::changePictureSettings needs
+            // All what KPrPixmapObject::changePictureSettings needs
             && m_cachedMirrorType == mirrorType && m_cachedSwapRGB == swapRGB && m_cachedGrayscal == grayscal
             && m_cachedBright == bright && m_cachedEffect == m_effect
             // Who needs it?
@@ -699,20 +699,20 @@ void KPPixmapObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
+    KPrObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
 }
 
-QPixmap KPPixmapObject::getOriginalPixmap()
+QPixmap KPrPixmapObject::getOriginalPixmap()
 {
     QSize _pixSize = image.getOriginalSize();
-    kdDebug(33001) << "KPPixmapObject::getOriginalPixmap size= " << _pixSize << endl;
+    kdDebug(33001) << "KPrPixmapObject::getOriginalPixmap size= " << _pixSize << endl;
     QPixmap _pixmap = image.generatePixmap( _pixSize, true );
     image.clearCache(); // Release the memoy of the picture cache
 
     return _pixmap;
 }
 
-QPixmap KPPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
+QPixmap KPrPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
 {
     QImage _tmpImage = _tmpPixmap.convertToImage();
 
@@ -911,9 +911,9 @@ QPixmap KPPixmapObject::changePictureSettings( QPixmap _tmpPixmap )
     return _tmpPixmap;
 }
 
-void KPPixmapObject::flip( bool horizontal )
+void KPrPixmapObject::flip( bool horizontal )
 {
-    KP2DObject::flip( horizontal );
+    KPr2DObject::flip( horizontal );
     if ( horizontal )
     {
         switch ( mirrorType )

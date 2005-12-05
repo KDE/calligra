@@ -28,20 +28,20 @@
 class QPixmap;
 
 /**
- * Class: KPGradientCollection
+ * Class: KPrGradientCollection
  * Holds a collection of gradients, and is able to provide a gradient
  * for a given set of gradient parameters.
  * The idea is to be able to share gradients among pages which need the same one.
  * This class is currently only used for KPBackground, not for objects with gradients
  * (those having much less chances of sharing).
  */
-class KPGradientCollection
+class KPrGradientCollection
 {
 public:
-    KPGradientCollection()
+    KPrGradientCollection()
         { gradientList.setAutoDelete( true ); }
 
-    ~KPGradientCollection()
+    ~KPrGradientCollection()
         { gradientList.clear(); }
 
     /** Retrieve or create gradient for the given parameters */
@@ -53,11 +53,11 @@ public:
                     bool _unbalanced, int _xfactor, int _yfactor );
 
 protected:
-    KPGradient* inGradientList( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
+    KPrGradient* inGradientList( const QColor &_color1, const QColor &_color2, BCType _bcType, const QSize &_size,
                                 bool _unbalanced, int _xfactor, int _yfactor ) const;
 
 private:
-    QPtrList<KPGradient> gradientList;
+    QPtrList<KPrGradient> gradientList;
 };
 
 #endif

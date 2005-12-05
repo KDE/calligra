@@ -23,7 +23,7 @@
 
 #include "KPrCommand.h"
 
-class KPObjectProperties
+class KPrObjectProperties
 {
 public:
     enum PropertyType {
@@ -38,56 +38,56 @@ public:
         PtOther = 256
     };
 
-    KPObjectProperties( const QPtrList<KPObject> &objects );
-    ~KPObjectProperties();
+    KPrObjectProperties( const QPtrList<KPrObject> &objects );
+    ~KPrObjectProperties();
 
     int getPropertyFlags() { return m_flags; }
 
     /// get pen properties
-    PenCmd::Pen getPen() const { return m_pen; }
+    KPrPenCmd::Pen getPen() const { return m_pen; }
     /// get brush properties
-    BrushCmd::Brush getBrush() const { return m_brush; }
+    KPrBrushCmd::Brush getBrush() const { return m_brush; }
     /// get rectangle properties
-    RectValueCmd::RectValues getRectValues() const { return m_rectValues; }
+    KPrRectValueCmd::RectValues getRectValues() const { return m_rectValues; }
     /// get polygon properties
-    PolygonSettingCmd::PolygonSettings getPolygonSettings() const { return m_polygonSettings; }
+    KPrPolygonSettingCmd::PolygonSettings getPolygonSettings() const { return m_polygonSettings; }
     /// get pie properties
-    PieValueCmd::PieValues getPieValues() const { return m_pieValues; }
+    KPrPieValueCmd::PieValues getPieValues() const { return m_pieValues; }
     // get picture properties
-    PictureSettingCmd::PictureSettings getPictureSettings() const { return m_pictureSettings; }
+    KPrPictureSettingCmd::PictureSettings getPictureSettings() const { return m_pictureSettings; }
     const QPixmap &getPixmap() const { return m_pixmap; }
     /// get text properties
     MarginsStruct getMarginsStruct() { return m_marginsStruct; }
     PropValue getProtectContent() { return m_protectContent; }
 
 protected:
-    void getProperties( const QPtrList<KPObject> &objects );
+    void getProperties( const QPtrList<KPrObject> &objects );
 
-    void getPenProperties( KPObject *object );
-    void getLineEndsProperties( KPObject *object );
-    void getBrushProperties( KPObject *object );
-    void getRectProperties( KPObject *object );
-    void getPolygonSettings( KPObject *object );
-    void getPieProperties( KPObject *object );
-    void getPictureProperties( KPObject *object );
-    void getTextProperties( KPObject *object );
+    void getPenProperties( KPrObject *object );
+    void getLineEndsProperties( KPrObject *object );
+    void getBrushProperties( KPrObject *object );
+    void getRectProperties( KPrObject *object );
+    void getPolygonSettings( KPrObject *object );
+    void getPieProperties( KPrObject *object );
+    void getPictureProperties( KPrObject *object );
+    void getTextProperties( KPrObject *object );
 
 private:
-    QPtrList<KPObject> m_objects;
+    QPtrList<KPrObject> m_objects;
     int m_flags;
 
     /// pen properties
-    PenCmd::Pen m_pen;
+    KPrPenCmd::Pen m_pen;
     /// brush properties
-    BrushCmd::Brush m_brush;
+    KPrBrushCmd::Brush m_brush;
     /// rect properties
-    RectValueCmd::RectValues m_rectValues;
+    KPrRectValueCmd::RectValues m_rectValues;
     /// polygon properties
-    PolygonSettingCmd::PolygonSettings m_polygonSettings;
+    KPrPolygonSettingCmd::PolygonSettings m_polygonSettings;
     /// pie properties
-    PieValueCmd::PieValues m_pieValues;
+    KPrPieValueCmd::PieValues m_pieValues;
     /// picture properties
-    PictureSettingCmd::PictureSettings m_pictureSettings;
+    KPrPictureSettingCmd::PictureSettings m_pictureSettings;
     QPixmap m_pixmap;
     /// text properties
     MarginsStruct m_marginsStruct;

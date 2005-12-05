@@ -27,8 +27,8 @@
 #include "picturepropertyui.h"
 #include "KPrPicturePreview.h"
 
-PictureProperty::PictureProperty( QWidget *parent, const char *name, const QPixmap &pixmap,
-                                  PictureSettingCmd::PictureSettings pictureSettings )
+KPrPictureProperty::KPrPictureProperty( QWidget *parent, const char *name, const QPixmap &pixmap,
+                                  KPrPictureSettingCmd::PictureSettings pictureSettings )
 : QWidget( parent, name )
 , m_pictureSettings( pictureSettings )
 {
@@ -53,36 +53,36 @@ PictureProperty::PictureProperty( QWidget *parent, const char *name, const QPixm
 }
 
 
-PictureProperty::~PictureProperty()
+KPrPictureProperty::~KPrPictureProperty()
 {
 }
 
 
-int PictureProperty::getPicturePropertyChange() const
+int KPrPictureProperty::getPicturePropertyChange() const
 {
     int flags = 0;
 
-    PictureSettingCmd::PictureSettings pictureSettings = getPictureSettings();
+    KPrPictureSettingCmd::PictureSettings pictureSettings = getPictureSettings();
 
     if ( pictureSettings.depth != m_pictureSettings.depth )
-        flags |= PictureSettingCmd::Depth;
+        flags |= KPrPictureSettingCmd::Depth;
 
     if ( pictureSettings.swapRGB != m_pictureSettings.swapRGB )
-        flags |= PictureSettingCmd::SwapRGB;
+        flags |= KPrPictureSettingCmd::SwapRGB;
 
     if ( pictureSettings.grayscal != m_pictureSettings.grayscal )
-        flags |= PictureSettingCmd::Grayscal;
+        flags |= KPrPictureSettingCmd::Grayscal;
 
     if ( pictureSettings.bright != m_pictureSettings.bright )
-        flags |= PictureSettingCmd::Bright;
+        flags |= KPrPictureSettingCmd::Bright;
 
     return flags;
 }
 
 
-PictureSettingCmd::PictureSettings PictureProperty::getPictureSettings() const
+KPrPictureSettingCmd::PictureSettings KPrPictureProperty::getPictureSettings() const
 {
-    PictureSettingCmd::PictureSettings pictureSettings;
+    KPrPictureSettingCmd::PictureSettings pictureSettings;
     pictureSettings.mirrorType = m_pictureSettings.mirrorType;
     pictureSettings.depth = m_ui->picturePreview->getDepth();
     pictureSettings.swapRGB = m_ui->swapRGB->isOn();
@@ -92,27 +92,27 @@ PictureSettingCmd::PictureSettings PictureProperty::getPictureSettings() const
 }
 
 
-void PictureProperty::apply()
+void KPrPictureProperty::apply()
 {
     int flags = getPicturePropertyChange();
 
-    PictureSettingCmd::PictureSettings pictureSettings = getPictureSettings();
+    KPrPictureSettingCmd::PictureSettings pictureSettings = getPictureSettings();
 
-    if ( flags & PictureSettingCmd::Depth )
+    if ( flags & KPrPictureSettingCmd::Depth )
         m_pictureSettings.depth = pictureSettings.depth;
 
-    if ( flags & PictureSettingCmd::SwapRGB )
+    if ( flags & KPrPictureSettingCmd::SwapRGB )
         m_pictureSettings.swapRGB = pictureSettings.swapRGB;
 
-    if ( flags & PictureSettingCmd::Grayscal )
+    if ( flags & KPrPictureSettingCmd::Grayscal )
         m_pictureSettings.grayscal = pictureSettings.grayscal;
 
-    if ( flags & PictureSettingCmd::Bright )
+    if ( flags & KPrPictureSettingCmd::Bright )
         m_pictureSettings.bright = pictureSettings.bright;
 }
 
 
-void PictureProperty::slotReset()
+void KPrPictureProperty::slotReset()
 {
     m_ui->depth0->setChecked( m_pictureSettings.depth == 0 );
     m_ui->depth1->setChecked( m_pictureSettings.depth == 1 );

@@ -24,53 +24,53 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPTextViewIface::KPTextViewIface( KPTextView *_textview )
+KPrTextViewIface::KPrTextViewIface( KPrTextView *_textview )
     :KoTextViewIface(_textview)
 {
     m_textview = _textview;
 }
 
-void KPTextViewIface::insertVariable( int type, int subtype )
+void KPrTextViewIface::insertVariable( int type, int subtype )
 {
     m_textview->insertVariable(type,subtype);
 }
 
-void KPTextViewIface::insertCustomVariable( const QString &name)
+void KPrTextViewIface::insertCustomVariable( const QString &name)
 {
     m_textview->insertCustomVariable(name);
 }
 
-void KPTextViewIface::insertLink(const QString &_linkName, const QString & hrefName)
+void KPrTextViewIface::insertLink(const QString &_linkName, const QString & hrefName)
 {
     m_textview->insertLink(_linkName,hrefName);
 }
 
-void KPTextViewIface::clearSelection()
+void KPrTextViewIface::clearSelection()
 {
     m_textview->clearSelection();
 }
 
-void KPTextViewIface::selectAll()
+void KPrTextViewIface::selectAll()
 {
     m_textview->selectAll();
 }
 
-void KPTextViewIface::cut()
+void KPrTextViewIface::cut()
 {
     m_textview->cut();
 }
 
-void KPTextViewIface::copy()
+void KPrTextViewIface::copy()
 {
     m_textview->copy();
 }
 
-void KPTextViewIface::paste()
+void KPrTextViewIface::paste()
 {
     m_textview->paste();
 }
 
-void KPTextViewIface::insertVariable( const QString & var)
+void KPrTextViewIface::insertVariable( const QString & var)
 {
     if( var=="DATE")
         m_textview->insertVariable(0,1);
@@ -116,7 +116,7 @@ void KPTextViewIface::insertVariable( const QString & var)
         m_textview->insertVariable(8,14);
 }
 
-void KPTextViewIface::insertNote(const QString &_note)
+void KPrTextViewIface::insertNote(const QString &_note)
 {
     m_textview->insertComment(_note);
 }

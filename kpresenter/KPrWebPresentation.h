@@ -28,7 +28,7 @@
 
 
 class KPrDocument;
-class KPresenterView;
+class KPrView;
 
 class KURLRequester;
 class KColorButton;
@@ -47,13 +47,13 @@ class QLabel;
 
 class QCheckBox;
 
-class KPWebPresentation
+class KPrWebPresentation
 {
 public:
 
-    KPWebPresentation( KPrDocument *_doc, KPresenterView *_view );
-    KPWebPresentation( const QString &_config, KPrDocument *_doc, KPresenterView *_view );
-    KPWebPresentation( const KPWebPresentation &webPres );
+    KPrWebPresentation( KPrDocument *_doc, KPrView *_view );
+    KPrWebPresentation( const QString &_config, KPrDocument *_doc, KPrView *_view );
+    KPrWebPresentation( const KPrWebPresentation &webPres );
 
     void setAuthor( const QString &_author )
         { author = _author; }
@@ -133,7 +133,7 @@ protected:
                             const QString& subtitle, const QString& dest );
 
     KPrDocument *doc;
-    KPresenterView *view;
+    KPrView *view;
     QString config;
     QString author, title, email;
     QValueList<SlideInfo> slideInfos;
@@ -146,15 +146,15 @@ protected:
     QString m_encoding;
 };
 
-class KPWebPresentationWizard : public KWizard
+class KPrWebPresentationWizard : public KWizard
 {
     Q_OBJECT
 
 public:
-    KPWebPresentationWizard( const QString &_config, KPrDocument *_doc, KPresenterView *_view );
-    ~KPWebPresentationWizard();
+    KPrWebPresentationWizard( const QString &_config, KPrDocument *_doc, KPrView *_view );
+    ~KPrWebPresentationWizard();
 
-    static void createWebPresentation( const QString &_config, KPrDocument *_doc, KPresenterView *_view );
+    static void createWebPresentation( const QString &_config, KPrDocument *_doc, KPrView *_view );
 
 protected:
 
@@ -168,8 +168,8 @@ protected:
 
     QString config;
     KPrDocument *doc;
-    KPresenterView *view;
-    KPWebPresentation webPres;
+    KPrView *view;
+    KPrWebPresentation webPres;
 
     QHBox *page1, *page2, *page3, *page4, *page5; // PAU
     QCheckBox *writeHeader, *writeFooter, *loopSlides; // PAU
@@ -190,15 +190,15 @@ protected slots:
 
 };
 
-class KPWebPresentationCreateDialog : public QDialog
+class KPrWebPresentationCreateDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    KPWebPresentationCreateDialog( KPrDocument *_doc, KPresenterView *_view, const KPWebPresentation &_webPres );
-    ~KPWebPresentationCreateDialog();
+    KPrWebPresentationCreateDialog( KPrDocument *_doc, KPrView *_view, const KPrWebPresentation &_webPres );
+    ~KPrWebPresentationCreateDialog();
 
-    static void createWebPresentation( KPrDocument *_doc, KPresenterView *_view, const KPWebPresentation &_webPres );
+    static void createWebPresentation( KPrDocument *_doc, KPrView *_view, const KPrWebPresentation &_webPres );
 
     void start();
 
@@ -211,9 +211,9 @@ protected:
     void setupGUI();
     void resizeEvent( QResizeEvent *e );
 
-    KPresenterView *view;
+    KPrView *view;
     KPrDocument *doc;
-    KPWebPresentation webPres;
+    KPrWebPresentation webPres;
 
     KProgress *progressBar;
     QLabel *step1, *step2, *step3, *step4, *step5;    

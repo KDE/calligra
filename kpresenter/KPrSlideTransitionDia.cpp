@@ -43,7 +43,7 @@
 #include "KPrPageEffects.h"
 #include "slidetransitionwidget.h"
 
-SlideTransitionDia::SlideTransitionDia( QWidget *parent, const char *name, KPresenterView *view )
+KPrSlideTransitionDia::KPrSlideTransitionDia( QWidget *parent, const char *name, KPrView *view )
 : KDialogBase( parent, name, true, i18n( "Slide Transition" ), User1|Ok|Cancel, Ok, true )
 , m_dialog( new SlideTransitionWidget( this ) ), m_view( view ), m_soundPlayer(0), m_pageEffect( 0 )
 {
@@ -168,19 +168,19 @@ SlideTransitionDia::SlideTransitionDia( QWidget *parent, const char *name, KPres
 }
 
 
-SlideTransitionDia::~SlideTransitionDia()
+KPrSlideTransitionDia::~KPrSlideTransitionDia()
 {
     delete m_dialog;
 }
 
 
-void SlideTransitionDia::effectChanged( int )
+void KPrSlideTransitionDia::effectChanged( int )
 {
     preview();
 }
 
 
-void SlideTransitionDia::preview()
+void KPrSlideTransitionDia::preview()
 {
     PageEffect effect = static_cast<PageEffect>( m_dialog->effectCombo->currentItem() );
     if ( m_dialog->effectCombo->currentText() == i18n( "Random Transition" ) )
@@ -200,7 +200,7 @@ void SlideTransitionDia::preview()
         m_dialog->previewPixmap->repaint();
     }
 
-    m_pageEffect = new KPPageEffects( m_dialog->previewPixmap, m_target, effect, effectSpeed );
+    m_pageEffect = new KPrPageEffects( m_dialog->previewPixmap, m_target, effect, effectSpeed );
     if ( m_pageEffect->doEffect() )
     {
         delete m_pageEffect;
@@ -215,7 +215,7 @@ void SlideTransitionDia::preview()
 }
 
 
-void SlideTransitionDia::slotDoPageEffect()
+void KPrSlideTransitionDia::slotDoPageEffect()
 {
     if ( m_pageEffect->doEffect() )
     {
@@ -232,7 +232,7 @@ void SlideTransitionDia::slotDoPageEffect()
 }
 
 
-void SlideTransitionDia::slotRequesterClicked( KURLRequester * )
+void KPrSlideTransitionDia::slotRequesterClicked( KURLRequester * )
 {
     QString filter( getSoundFileFilter() );
     m_dialog->soundRequester->fileDialog()->setFilter( filter );
@@ -257,7 +257,7 @@ void SlideTransitionDia::slotRequesterClicked( KURLRequester * )
 }
 
 
-QString SlideTransitionDia::getSoundFileFilter()
+QString KPrSlideTransitionDia::getSoundFileFilter()
 {
     QStringList fileList;
     fileList << "wav" << "au" << "mp3" << "mp1" << "mp2" << "mpg" << "dat"
@@ -282,7 +282,7 @@ QString SlideTransitionDia::getSoundFileFilter()
 }
 
 
-void SlideTransitionDia::soundEffectChanged()
+void KPrSlideTransitionDia::soundEffectChanged()
 {
     bool soundEffect = m_dialog->soundCheckBox->isChecked();
 
@@ -300,26 +300,26 @@ void SlideTransitionDia::soundEffectChanged()
 }
 
 
-void SlideTransitionDia::slotSoundFileChanged( const QString& text )
+void KPrSlideTransitionDia::slotSoundFileChanged( const QString& text )
 {
     m_dialog->playButton->setEnabled( !text.isEmpty() );
     m_dialog->stopButton->setEnabled( !text.isEmpty() );
 }
 
 
-void SlideTransitionDia::slotOk()
+void KPrSlideTransitionDia::slotOk()
 {
     apply( false );
 }
 
 
-void SlideTransitionDia::slotUser1()
+void KPrSlideTransitionDia::slotUser1()
 {
     apply( true );
 }
 
 
-void SlideTransitionDia::apply( bool global )
+void KPrSlideTransitionDia::apply( bool global )
 {
     PageEffect effect = static_cast<PageEffect>( m_dialog->effectCombo->currentItem() );
     if ( m_dialog->effectCombo->currentText() == i18n( "Random Transition" ) )
@@ -336,7 +336,7 @@ void SlideTransitionDia::apply( bool global )
          soundFileName != m_soundFileName ||
          slideTime != m_slideTime )
     {
-        TransEffectCmd::PageEffectSettings newSettings;
+        KPrTransEffectCmd::PageEffectSettings newSettings;
     
         newSettings.pageEffect = effect;
         newSettings.effectSpeed = effectSpeed;
@@ -346,7 +346,7 @@ void SlideTransitionDia::apply( bool global )
         newSettings.slideTime = slideTime;
 
         // Collect info about current settings
-        QValueVector<TransEffectCmd::PageEffectSettings> oldSettings;
+        QValueVector<KPrTransEffectCmd::PageEffectSettings> oldSettings;
         KPrPage *page = 0;
         if ( global )
         {
@@ -374,7 +374,7 @@ void SlideTransitionDia::apply( bool global )
             oldSettings[0].autoAdvance = /*TODO page->getAutoAdvance() */ false;
             oldSettings[0].slideTime = page->getPageTimer();
         }
-        TransEffectCmd *transEffectCmd = new TransEffectCmd( oldSettings, newSettings,
+        KPrTransEffectCmd *transEffectCmd = new KPrTransEffectCmd( oldSettings, newSettings,
                                                              global ? 0 : page, m_view->kPresenterDoc() );
         transEffectCmd->execute();
         m_view->kPresenterDoc()->addCommand( transEffectCmd );
@@ -384,11 +384,11 @@ void SlideTransitionDia::apply( bool global )
 }
 
 
-void SlideTransitionDia::playSound()
+void KPrSlideTransitionDia::playSound()
 {
     delete m_soundPlayer;
 
-    m_soundPlayer = new KPresenterSoundPlayer( m_dialog->soundRequester->url() );
+    m_soundPlayer = new KPrSoundPlayer( m_dialog->soundRequester->url() );
     m_soundPlayer->play();
 
     m_dialog->playButton->setEnabled( false );
@@ -396,7 +396,7 @@ void SlideTransitionDia::playSound()
 }
 
 
-void SlideTransitionDia::stopSound()
+void KPrSlideTransitionDia::stopSound()
 {
     if ( m_soundPlayer ) {
         m_soundPlayer->stop();

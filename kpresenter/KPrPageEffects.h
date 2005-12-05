@@ -32,7 +32,7 @@ class QPaintDevice;
 class QPixmap;
 
 
-class KPPageEffects
+class KPrPageEffects
 {
 public:
     /**
@@ -46,9 +46,9 @@ public:
      * effect The effect which sould be used.
      * speed  The speed which should be used.
      */
-    KPPageEffects( QPaintDevice *dst, const QPixmap &pageTo, PageEffect effect, EffectSpeed speed );
+    KPrPageEffects( QPaintDevice *dst, const QPixmap &pageTo, PageEffect effect, EffectSpeed speed );
 
-    ~KPPageEffects();
+    ~KPrPageEffects();
 
     /**
      * doEffect handles the next step of the page effect.

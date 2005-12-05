@@ -33,31 +33,31 @@
 
 using namespace std;
 
-KPEllipseObject::KPEllipseObject()
-    : KP2DObject()
+KPrEllipseObject::KPrEllipseObject()
+    : KPr2DObject()
 {
 }
 
-KPEllipseObject::KPEllipseObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
+KPrEllipseObject::KPrEllipseObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
                                   const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                                   bool _unbalanced, int _xfactor, int _yfactor)
-    : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
+    : KPr2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
 {
 }
 
-KPEllipseObject &KPEllipseObject::operator=( const KPEllipseObject & )
+KPrEllipseObject &KPrEllipseObject::operator=( const KPrEllipseObject & )
 {
     return *this;
 }
 
-DCOPObject* KPEllipseObject::dcopObject()
+DCOPObject* KPrEllipseObject::dcopObject()
 {
     if ( !dcop )
-        dcop = new KPresenterObject2DIface( this );
+        dcop = new KPrObject2DIface( this );
     return dcop;
 }
 
-void KPEllipseObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandler,
+void KPrEllipseObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandler,
                              int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     int ow = _zoomHandler->zoomItX( ext.width() );
@@ -101,7 +101,7 @@ void KPEllipseObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandler
     _painter->drawEllipse( pw / 2, pw / 2, ow - pw + 1, oh - pw + 1 );
 }
 
-KoSize KPEllipseObject::getRealSize() const {
+KoSize KPrEllipseObject::getRealSize() const {
     KoSize size = ext;
 
     if ( angle != 0.0 ) {
@@ -115,13 +115,13 @@ KoSize KPEllipseObject::getRealSize() const {
     return size;
 }
 
-bool KPEllipseObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrEllipseObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
     // nothing to do
     return true;
 }
 
-const char * KPEllipseObject::getOasisElementName() const
+const char * KPrEllipseObject::getOasisElementName() const
 {
     return ext.width() == ext.height() ? "draw:circle" : "draw:ellipse";
 }

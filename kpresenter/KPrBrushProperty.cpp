@@ -33,7 +33,7 @@
 #include <kcolorbutton.h>
 #include <kcombobox.h>
 
-BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd::Brush &brush )
+KPrBrushProperty::KPrBrushProperty( QWidget *parent, const char *name, const KPrBrushCmd::Brush &brush )
     : QWidget( parent, name )
     , m_brush( brush )
 {
@@ -72,7 +72,7 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
     m_brushUI->styleCombo->insertItem( i18n( "Diagonal Lines ( \\ )" ) );
     m_brushUI->styleCombo->insertItem( i18n( "Diagonal Crossing Lines" ) );
 
-    m_preview_color = new PBPreview( m_brushUI->previewPanel, 0, PBPreview::Brush );
+    m_preview_color = new KPrPBPreview( m_brushUI->previewPanel, 0, KPrPBPreview::Brush );
     QHBoxLayout *hbox = new QHBoxLayout( m_brushUI->previewPanel );
     QWhatsThis::add(m_preview_color, i18n( "This displays a preview of your choices." ) );
     hbox->addWidget(m_preview_color);
@@ -94,7 +94,7 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
     m_gradientUI->styleCombo->insertItem( i18n( "PipeCross" ) );
     m_gradientUI->styleCombo->insertItem( i18n( "Pyramid" ) );
 
-    m_preview_gradient = new PBPreview( m_gradientUI->previewPanel, 0, PBPreview::Gradient );
+    m_preview_gradient = new KPrPBPreview( m_gradientUI->previewPanel, 0, KPrPBPreview::Gradient );
     hbox = new QHBoxLayout( m_gradientUI->previewPanel );
     hbox->addWidget(m_preview_gradient);
 
@@ -118,12 +118,12 @@ BrushProperty::BrushProperty( QWidget *parent, const char *name, const BrushCmd:
 }
 
 
-BrushProperty::~BrushProperty()
+KPrBrushProperty::~KPrBrushProperty()
 {
 }
 
 
-FillType BrushProperty::getFillType() const
+FillType KPrBrushProperty::getFillType() const
 {
     int selected = m_typeCombo->currentItem();
     if(selected == 2)
@@ -132,7 +132,7 @@ FillType BrushProperty::getFillType() const
 }
 
 
-QBrush BrushProperty::getQBrush() const
+QBrush KPrBrushProperty::getQBrush() const
 {
     QBrush brush;
 
@@ -190,43 +190,43 @@ QBrush BrushProperty::getQBrush() const
 }
 
 
-QColor BrushProperty::getGColor1()const
+QColor KPrBrushProperty::getGColor1()const
 {
     return m_gradientUI->color1Chooser->color();
 }
 
 
-QColor BrushProperty::getGColor2()const
+QColor KPrBrushProperty::getGColor2()const
 {
     return m_gradientUI->color2Chooser->color();
 }
 
 
-BCType BrushProperty::getGType()const
+BCType KPrBrushProperty::getGType()const
 {
     return (BCType)( m_gradientUI->styleCombo->currentItem() +1 );
 }
 
 
-bool BrushProperty::getGUnbalanced()const
+bool KPrBrushProperty::getGUnbalanced()const
 {
     return m_gradientUI->unbalancedCheckBox->isChecked();
 }
 
 
-int BrushProperty::getGXFactor() const
+int KPrBrushProperty::getGXFactor() const
 {
     return m_gradientUI->xSlider->value();
 }
 
 
-int BrushProperty::getGYFactor() const
+int KPrBrushProperty::getGYFactor() const
 {
     return m_gradientUI->ySlider->value();
 }
 
 
-int BrushProperty::getBrushPropertyChange() const
+int KPrBrushProperty::getBrushPropertyChange() const
 {
     int flags = 0;
     bool fillTypeChanged = getFillType() != m_brush.fillType;
@@ -236,55 +236,55 @@ int BrushProperty::getBrushPropertyChange() const
         QBrush brush = getQBrush();
         if ( fillTypeChanged || brush.color() != m_brush.brush.color() )
         {
-            flags |= BrushCmd::BrushColor;
+            flags |= KPrBrushCmd::BrushColor;
         }
         if ( fillTypeChanged || brush.style() != m_brush.brush.style() )
         {
-            flags |= BrushCmd::BrushStyle;
+            flags |= KPrBrushCmd::BrushStyle;
         }
         if ( fillTypeChanged )
         {
-            flags |= BrushCmd::BrushGradientSelect;
+            flags |= KPrBrushCmd::BrushGradientSelect;
         }
     }
     else
     {
         if ( fillTypeChanged || getGColor1() != m_brush.gColor1 )
         {
-            flags |= BrushCmd::GradientColor1;
+            flags |= KPrBrushCmd::GradientColor1;
         }
         if ( fillTypeChanged || getGColor2() != m_brush.gColor2 )
         {
-            flags |= BrushCmd::GradientColor2;
+            flags |= KPrBrushCmd::GradientColor2;
         }
         if ( fillTypeChanged || getGType() != m_brush.gType )
         {
-            flags |= BrushCmd::GradientType;
+            flags |= KPrBrushCmd::GradientType;
         }
         if ( fillTypeChanged || getGUnbalanced() != m_brush.unbalanced )
         {
-            flags |= BrushCmd::GradientBalanced;
+            flags |= KPrBrushCmd::GradientBalanced;
         }
         if ( fillTypeChanged || getGXFactor() != m_brush.xfactor )
         {
-            flags |= BrushCmd::GradientXFactor;
+            flags |= KPrBrushCmd::GradientXFactor;
         }
         if ( fillTypeChanged || getGYFactor() != m_brush.yfactor )
         {
-            flags |= BrushCmd::GradientYFactor;
+            flags |= KPrBrushCmd::GradientYFactor;
         }
         if ( fillTypeChanged )
         {
-            flags |= BrushCmd::BrushGradientSelect;
+            flags |= KPrBrushCmd::BrushGradientSelect;
         }
     }
     return flags;
 }
 
 
-BrushCmd::Brush BrushProperty::getBrush() const
+KPrBrushCmd::Brush KPrBrushProperty::getBrush() const
 {
-    BrushCmd::Brush brush( getQBrush(),
+    KPrBrushCmd::Brush brush( getQBrush(),
                            getGColor1(),
                            getGColor2(),
                            getGType(),
@@ -296,47 +296,47 @@ BrushCmd::Brush BrushProperty::getBrush() const
 }
 
 
-void BrushProperty::setBrush( BrushCmd::Brush &brush )
+void KPrBrushProperty::setBrush( KPrBrushCmd::Brush &brush )
 {
     m_brush = brush;
     slotReset();
 }
 
 
-void BrushProperty::apply()
+void KPrBrushProperty::apply()
 {
     int flags = getBrushPropertyChange();
 
-    if ( flags & BrushCmd::BrushGradientSelect )
+    if ( flags & KPrBrushCmd::BrushGradientSelect )
         m_brush.fillType = getFillType();
 
-    if ( flags & BrushCmd::BrushColor )
+    if ( flags & KPrBrushCmd::BrushColor )
         m_brush.brush.setColor( getQBrush().color() );
 
-    if ( flags & BrushCmd::BrushStyle )
+    if ( flags & KPrBrushCmd::BrushStyle )
         m_brush.brush.setStyle( getQBrush().style() );
 
-    if ( flags & BrushCmd::GradientColor1 )
+    if ( flags & KPrBrushCmd::GradientColor1 )
         m_brush.gColor1 = getGColor1();
 
-    if ( flags & BrushCmd::GradientColor2 )
+    if ( flags & KPrBrushCmd::GradientColor2 )
         m_brush.gColor2 = getGColor2();
 
-    if ( flags & BrushCmd::GradientType )
+    if ( flags & KPrBrushCmd::GradientType )
         m_brush.gType = getGType() ;
 
-    if ( flags & BrushCmd::GradientBalanced )
+    if ( flags & KPrBrushCmd::GradientBalanced )
         m_brush.unbalanced = getGUnbalanced() ;
 
-    if ( flags & BrushCmd::GradientXFactor )
+    if ( flags & KPrBrushCmd::GradientXFactor )
         m_brush.xfactor = getGXFactor() ;
 
-    if ( flags & BrushCmd::GradientYFactor )
+    if ( flags & KPrBrushCmd::GradientYFactor )
         m_brush.yfactor = getGYFactor() ;
 }
 
 
-void BrushProperty::setQBrush( const QBrush &brush )
+void KPrBrushProperty::setQBrush( const QBrush &brush )
 {
     switch ( brush.style() )
     {
@@ -394,7 +394,7 @@ void BrushProperty::setQBrush( const QBrush &brush )
 }
 
 
-void BrushProperty::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
+void KPrBrushProperty::setGradient( const QColor &_c1, const QColor &_c2, BCType _t,
                                     bool _unbalanced, int _xfactor, int _yfactor )
 {
     m_gradientUI->styleCombo->setCurrentItem( (int) _t - 1 );
@@ -408,7 +408,7 @@ void BrushProperty::setGradient( const QColor &_c1, const QColor &_c2, BCType _t
 }
 
 
-void BrushProperty::setUnbalancedEnabled( bool state )
+void KPrBrushProperty::setUnbalancedEnabled( bool state )
 {
     m_gradientUI->xFactorLabel->setEnabled( state );
     m_gradientUI->xSlider->setEnabled( state );
@@ -417,7 +417,7 @@ void BrushProperty::setUnbalancedEnabled( bool state )
 }
 
 
-void BrushProperty::slotReset()
+void KPrBrushProperty::slotReset()
 {
     if ( m_brush.gType == BCT_PLAIN )
         m_brush.gType = BCT_GHORZ;
@@ -440,32 +440,32 @@ void BrushProperty::slotReset()
 }
 
 
-void BrushProperty::slotTypeChanged( int pos )
+void KPrBrushProperty::slotTypeChanged( int pos )
 {
     m_stack->raiseWidget( pos );
     slotBrushChanged();
 }
 
 
-void BrushProperty::slotBrushChanged()
+void KPrBrushProperty::slotBrushChanged()
 {
     m_preview_color->setBrush( getQBrush() );
 }
 
 
-void BrushProperty::slotColor1Changed()
+void KPrBrushProperty::slotColor1Changed()
 {
     m_preview_gradient->setColor1( getGColor1() );
 }
 
 
-void BrushProperty::slotColor2Changed()
+void KPrBrushProperty::slotColor2Changed()
 {
     m_preview_gradient->setColor2( getGColor2() );
 }
 
 
-void BrushProperty::slotBackColorTypeChanged()
+void KPrBrushProperty::slotBackColorTypeChanged()
 {
     BCType type = getGType();
     m_preview_gradient->setBackColorType( type );
@@ -474,7 +474,7 @@ void BrushProperty::slotBackColorTypeChanged()
 }
 
 
-void BrushProperty::slotUnbalancedChanged()
+void KPrBrushProperty::slotUnbalancedChanged()
 {
     bool state = getGUnbalanced();
     setUnbalancedEnabled( state );
@@ -484,13 +484,13 @@ void BrushProperty::slotUnbalancedChanged()
 }
 
 
-void BrushProperty::slotXFactorChanged()
+void KPrBrushProperty::slotXFactorChanged()
 {
     m_preview_gradient->setXFactor( getGXFactor() );
 }
 
 
-void BrushProperty::slotYFactorChanged()
+void KPrBrushProperty::slotYFactorChanged()
 {
     m_preview_gradient->setYFactor( getGYFactor() );
 }

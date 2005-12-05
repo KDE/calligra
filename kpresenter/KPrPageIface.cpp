@@ -34,7 +34,7 @@
 #include <koPoint.h>
 #include <koRect.h>
 
-KPresenterPageIface::KPresenterPageIface( KPrPage *_page, int pgnum )
+KPrPageIface::KPrPageIface( KPrPage *_page, int pgnum )
     // Make up a nice DCOPObject name like "Document-0 Page-1".
     // ### But the page number will be stale if pages are added/removed/moved around....
     : DCOPObject( QCString( _page->kPresenterDoc()->dcopObject()->objId() ) + " Page-" + QString::number( pgnum ).latin1() )
@@ -42,9 +42,9 @@ KPresenterPageIface::KPresenterPageIface( KPrPage *_page, int pgnum )
     m_page = _page;
 }
 
-DCOPRef KPresenterPageIface::textObject( int num )
+DCOPRef KPrPageIface::textObject( int num )
 {
-    KPTextObject * textObj=m_page->textFrameSet(num);
+    KPrTextObject * textObj=m_page->textFrameSet(num);
     if(textObj)
         return DCOPRef( kapp->dcopClient()->appId(),
                         textObj->dcopObject()->objId() );
@@ -52,9 +52,9 @@ DCOPRef KPresenterPageIface::textObject( int num )
 }
 
 //return a reference to selected object
-DCOPRef KPresenterPageIface::selectedObject( )
+DCOPRef KPrPageIface::selectedObject( )
 {
-    KPObject * obj=m_page->getSelectedObj();
+    KPrObject * obj=m_page->getSelectedObj();
     if(obj)
         return DCOPRef( kapp->dcopClient()->appId(),
                         obj->dcopObject()->objId() );
@@ -62,12 +62,12 @@ DCOPRef KPresenterPageIface::selectedObject( )
 }
 
 
-int KPresenterPageIface::numTextObject() const
+int KPrPageIface::numTextObject() const
 {
     return m_page->numTextObject();
 }
 
-DCOPRef KPresenterPageIface::object( int num )
+DCOPRef KPrPageIface::object( int num )
 {
     if( num >= (int)m_page->objNums())
         return DCOPRef();
@@ -75,166 +75,166 @@ DCOPRef KPresenterPageIface::object( int num )
                     m_page->getObject(num)->dcopObject()->objId() );
 }
 
-QString KPresenterPageIface::manualTitle()const
+QString KPrPageIface::manualTitle()const
 {
     return m_page->manualTitle();
 }
 
-void KPresenterPageIface::insertManualTitle(const QString & title)
+void KPrPageIface::insertManualTitle(const QString & title)
 {
     m_page->insertManualTitle(title);
     m_page->kPresenterDoc()->updateSideBarItem( m_page );
 }
 
-QString KPresenterPageIface::pageTitle( const QString &_title ) const
+QString KPrPageIface::pageTitle( const QString &_title ) const
 {
     return m_page->pageTitle(_title);
 }
 
-void KPresenterPageIface::setNoteText( const QString &_text )
+void KPrPageIface::setNoteText( const QString &_text )
 {
     m_page->setNoteText(_text);
 }
 
-QString KPresenterPageIface::noteText( )const
+QString KPrPageIface::noteText( )const
 {
     return m_page->noteText();
 }
 
-unsigned int KPresenterPageIface::objNums() const
+unsigned int KPrPageIface::objNums() const
 {
     return m_page->objNums();
 }
 
-int KPresenterPageIface::numSelected() const
+int KPrPageIface::numSelected() const
 {
     return m_page->numSelected();
 }
 
-DCOPRef KPresenterPageIface::groupObjects()
+DCOPRef KPrPageIface::groupObjects()
 {
     m_page->groupObjects();
     return selectedObject();
 }
 
-void KPresenterPageIface::ungroupObjects()
+void KPrPageIface::ungroupObjects()
 {
     //FIXME
     //m_page->ungroupObjects();
 }
 
-void KPresenterPageIface::raiseObjs()
+void KPrPageIface::raiseObjs()
 {
     m_page->raiseObjs(false);
 }
 
-void KPresenterPageIface::lowerObjs()
+void KPrPageIface::lowerObjs()
 {
     m_page->lowerObjs(false);
 }
 
-void KPresenterPageIface::sendBackward()
+void KPrPageIface::sendBackward()
 {
     m_page->lowerObjs(true);
 }
 
-void KPresenterPageIface::bringForward()
+void KPrPageIface::bringForward()
 {
     m_page->raiseObjs(true);
 }
 
-void KPresenterPageIface::copyObjs()
+void KPrPageIface::copyObjs()
 {
     //FIXME
     //m_page->copyObjs();
 }
 
-void KPresenterPageIface::slotRepaintVariable()
+void KPrPageIface::slotRepaintVariable()
 {
     m_page->slotRepaintVariable();
 }
 
-void KPresenterPageIface::recalcPageNum()
+void KPrPageIface::recalcPageNum()
 {
     m_page->recalcPageNum();
 }
 
-void KPresenterPageIface::setPageTimer( int pageTimer )
+void KPrPageIface::setPageTimer( int pageTimer )
 {
     m_page->setPageTimer(pageTimer);
 }
 
-void KPresenterPageIface::setPageSoundEffect( bool soundEffect )
+void KPrPageIface::setPageSoundEffect( bool soundEffect )
 {
     m_page->setPageSoundEffect(soundEffect);
 }
 
-void KPresenterPageIface::setPageSoundFileName( const QString &fileName )
+void KPrPageIface::setPageSoundFileName( const QString &fileName )
 {
     m_page->setPageSoundFileName(fileName);
 }
 
-int KPresenterPageIface::backXFactor() const
+int KPrPageIface::backXFactor() const
 {
     return m_page->getBackXFactor();
 }
 
-int KPresenterPageIface::backYFactor( ) const
+int KPrPageIface::backYFactor( ) const
 {
     return m_page->getBackYFactor();
 }
 
-int KPresenterPageIface::pageTimer(  ) const
+int KPrPageIface::pageTimer(  ) const
 {
     return m_page->getPageTimer();
 }
 
-bool KPresenterPageIface::pageSoundEffect( ) const
+bool KPrPageIface::pageSoundEffect( ) const
 {
     return m_page->getPageSoundEffect();
 }
 
-int KPresenterPageIface::backType() const
+int KPrPageIface::backType() const
 {
     return (int)m_page->getBackType();
 }
 
-int KPresenterPageIface::backView() const
+int KPrPageIface::backView() const
 {
     return (int)m_page->getBackView();
 }
 
-QColor KPresenterPageIface::backColor1() const
+QColor KPrPageIface::backColor1() const
 {
     return m_page->getBackColor1();
 }
 
-QColor KPresenterPageIface::backColor2() const
+QColor KPrPageIface::backColor2() const
 {
     return m_page->getBackColor2();
 }
 
-int KPresenterPageIface::backColorType() const
+int KPrPageIface::backColorType() const
 {
     return  (int)m_page->getBackColorType();
 }
 
-QString KPresenterPageIface::backPixFilename() const
+QString KPrPageIface::backPixFilename() const
 {
     return m_page->getBackPictureKey().filename();
 }
 
-QString KPresenterPageIface::backClipFilename() const
+QString KPrPageIface::backClipFilename() const
 {
     return m_page->getBackPictureKey().filename();
 }
 
-int KPresenterPageIface::pageEffect() const
+int KPrPageIface::pageEffect() const
 {
     return (int)m_page->getPageEffect();
 }
 
-void KPresenterPageIface::setPageEffect(const QString &effect )
+void KPrPageIface::setPageEffect(const QString &effect )
 {
     if(effect=="NONE")
         m_page->setPageEffect(PEF_NONE);
@@ -324,7 +324,7 @@ void KPresenterPageIface::setPageEffect(const QString &effect )
         kdDebug(33001) << "Error in setPageEffect" << endl;
 }
 
-QString KPresenterPageIface::pageEffectString( )const
+QString KPrPageIface::pageEffectString( )const
 {
     switch(m_page->getPageEffect( ))
     {
@@ -455,43 +455,43 @@ QString KPresenterPageIface::pageEffectString( )const
     return QString("");
 }
 
-bool KPresenterPageIface::backUnbalanced() const
+bool KPrPageIface::backUnbalanced() const
 {
     return (int)m_page->getBackUnbalanced();
 }
 
-QString KPresenterPageIface::pageSoundFileName() const
+QString KPrPageIface::pageSoundFileName() const
 {
     return m_page->getPageSoundFileName();
 }
 
-QRect KPresenterPageIface::pageRect() const
+QRect KPrPageIface::pageRect() const
 {
     return m_page->getZoomPageRect();
 }
 
-bool KPresenterPageIface::isSlideSelected()
+bool KPrPageIface::isSlideSelected()
 {
     return m_page->isSlideSelected();
 }
 
-void KPresenterPageIface::slideSelected(bool _b)
+void KPrPageIface::slideSelected(bool _b)
 {
     m_page->slideSelected(_b);
     m_page->kPresenterDoc()->updateSideBarItem( m_page );
     m_page->kPresenterDoc()->updatePresentationButton();
 }
 
-void KPresenterPageIface::changePicture( const QString & filename )
+void KPrPageIface::changePicture( const QString & filename )
 {
     // TODO: find a better parent
     m_page->changePicture(filename, 0);
 }
 
 //create a rectangle and return a dcop reference!
-DCOPRef KPresenterPageIface::insertRectangle(double x, double y, double h, double w)
+DCOPRef KPrPageIface::insertRectangle(double x, double y, double h, double w)
 {
-    KPresenterView *view=m_page->kPresenterDoc()->firstView();
+    KPrView *view=m_page->kPresenterDoc()->firstView();
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return DCOPRef();
@@ -499,9 +499,9 @@ DCOPRef KPresenterPageIface::insertRectangle(double x, double y, double h, doubl
     return selectedObject();
 }
 
-DCOPRef KPresenterPageIface::insertEllipse( double x, double y, double h, double w )
+DCOPRef KPrPageIface::insertEllipse( double x, double y, double h, double w )
 {
-    KPresenterView *view=m_page->kPresenterDoc()->firstView();
+    KPrView *view=m_page->kPresenterDoc()->firstView();
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return DCOPRef();
@@ -510,9 +510,9 @@ DCOPRef KPresenterPageIface::insertEllipse( double x, double y, double h, double
     return selectedObject();
 }
 
-DCOPRef KPresenterPageIface::insertPie( double x, double y, double h, double w )
+DCOPRef KPrPageIface::insertPie( double x, double y, double h, double w )
 {
-    KPresenterView *view=m_page->kPresenterDoc()->firstView();
+    KPrView *view=m_page->kPresenterDoc()->firstView();
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return DCOPRef();
@@ -521,9 +521,9 @@ DCOPRef KPresenterPageIface::insertPie( double x, double y, double h, double w )
     return selectedObject();
 }
 
-DCOPRef KPresenterPageIface::insertLine( double x1, double y1, double x2, double y2 )
+DCOPRef KPrPageIface::insertLine( double x1, double y1, double x2, double y2 )
 {
-    KPresenterView *view=m_page->kPresenterDoc()->firstView();
+    KPrView *view=m_page->kPresenterDoc()->firstView();
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return DCOPRef();
@@ -532,9 +532,9 @@ DCOPRef KPresenterPageIface::insertLine( double x1, double y1, double x2, double
     return selectedObject();
 }
 
-DCOPRef KPresenterPageIface::insertTextObject( double x, double y, double h, double w )
+DCOPRef KPrPageIface::insertTextObject( double x, double y, double h, double w )
 {
-    KPresenterView *view=m_page->kPresenterDoc()->firstView();
+    KPrView *view=m_page->kPresenterDoc()->firstView();
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return DCOPRef();
@@ -543,10 +543,10 @@ DCOPRef KPresenterPageIface::insertTextObject( double x, double y, double h, dou
     return selectedObject();
 }
 
-DCOPRef KPresenterPageIface::insertPicture( const QString & file, double x, double y, double h, double w )
+DCOPRef KPrPageIface::insertPicture( const QString & file, double x, double y, double h, double w )
 {
     m_page->setInsPictureFile(file);
-    KPresenterView *view=m_page->kPresenterDoc()->firstView();
+    KPrView *view=m_page->kPresenterDoc()->firstView();
     m_page->kPresenterDoc()->deSelectAllObj();
     if ( !view  )
         return DCOPRef();
@@ -555,21 +555,21 @@ DCOPRef KPresenterPageIface::insertPicture( const QString & file, double x, doub
     return selectedObject();
 }
 
-void KPresenterPageIface::setBackGroundColor1(const QColor &col)
+void KPrPageIface::setBackGroundColor1(const QColor &col)
 {
     const QColor col2=backColor2();
     m_page->setBackColor( col, col2, m_page->getBackColorType(),
                           m_page->getBackUnbalanced(), backXFactor(), backYFactor() );
 }
 
-void KPresenterPageIface::setBackGroundColor2(const QColor &col)
+void KPrPageIface::setBackGroundColor2(const QColor &col)
 {
     const QColor col1=backColor1();
     m_page->setBackColor( col1, col, m_page->getBackColorType(),
                           m_page->getBackUnbalanced(), backXFactor(), backYFactor() );
 }
 
-void KPresenterPageIface::setBackGroundColorType(const QString &type)
+void KPrPageIface::setBackGroundColorType(const QString &type)
 {
     BCType bctype;
     if(type=="PLAIN")
@@ -592,7 +592,7 @@ void KPresenterPageIface::setBackGroundColorType(const QString &type)
         bctype=BCT_GPYRAMID;
     else
     {
-        kdDebug(33001)<<"Error KPresenterPageIface::setBackGroundColorType" << endl;
+        kdDebug(33001)<<"Error KPrPageIface::setBackGroundColorType" << endl;
         return;
     }
 
@@ -600,46 +600,46 @@ void KPresenterPageIface::setBackGroundColorType(const QString &type)
                           backXFactor(), backYFactor() );
 }
 
-void KPresenterPageIface::deSelectAllObj()
+void KPrPageIface::deSelectAllObj()
 {
     m_page->deSelectAllObj();
 }
 
-bool KPresenterPageIface::oneObjectTextExist() const
+bool KPrPageIface::oneObjectTextExist() const
 {
     return m_page->oneObjectTextExist();
 }
 
-bool KPresenterPageIface::isOneObjectSelected() const
+bool KPrPageIface::isOneObjectSelected() const
 {
     return m_page->isOneObjectSelected();
 }
 
-bool KPresenterPageIface::haveASelectedPartObj() const
+bool KPrPageIface::haveASelectedPartObj() const
 {
     return m_page->haveASelectedPartObj();
 }
 
-bool KPresenterPageIface::haveASelectedGroupObj() const
+bool KPrPageIface::haveASelectedGroupObj() const
 {
     return m_page->haveASelectedGroupObj();
 }
 
-void KPresenterPageIface::rotateAllObjSelected(float _newAngle)
+void KPrPageIface::rotateAllObjSelected(float _newAngle)
 {
     KCommand *cmd= m_page->rotateSelectedObjects( _newAngle);
     delete cmd;
 }
 
-void KPresenterPageIface::stickyAllObjSelected(bool sticky)
+void KPrPageIface::stickyAllObjSelected(bool sticky)
 {
     KCommand *cmd=m_page->stickyObj(sticky, m_page);
     delete cmd;
 }
 
-void KPresenterPageIface::moveAllObjectSelected( int diffx,int diffy)
+void KPrPageIface::moveAllObjectSelected( int diffx,int diffy)
 {
-    KPresenterView *_view=m_page->kPresenterDoc()->firstView();
+    KPrView *_view=m_page->kPresenterDoc()->firstView();
     if(_view)
     {
         KCommand *cmd=m_page->moveObject(_view, diffx,diffy);
@@ -647,59 +647,59 @@ void KPresenterPageIface::moveAllObjectSelected( int diffx,int diffy)
     }
 }
 
-void KPresenterPageIface::deleteAllObjectSelected()
+void KPrPageIface::deleteAllObjectSelected()
 {
     KCommand * cmd=m_page->deleteSelectedObjects();
     delete cmd;
 }
 
-bool KPresenterPageIface::hasHeader()const
+bool KPrPageIface::hasHeader()const
 {
     return m_page->hasHeader();
 }
 
-bool KPresenterPageIface::hasFooter()const
+bool KPrPageIface::hasFooter()const
 {
     return m_page->hasFooter();
 }
 
-void KPresenterPageIface::setHeader( bool b )
+void KPrPageIface::setHeader( bool b )
 {
     m_page->setHeader( b );
 }
 
-void KPresenterPageIface::setFooter( bool b )
+void KPrPageIface::setFooter( bool b )
 {
     m_page->setFooter( b );
 }
 
 
-void KPresenterPageIface::setUseMasterBackground( bool useMasterBackground )
+void KPrPageIface::setUseMasterBackground( bool useMasterBackground )
 {
     m_page->setUseMasterBackground( useMasterBackground );
 }
 
-bool KPresenterPageIface::useMasterBackground() const
+bool KPrPageIface::useMasterBackground() const
 {
     return m_page->useMasterBackground();
 }
 
-void KPresenterPageIface::setDisplayObjectFromMasterPage( bool _b )
+void KPrPageIface::setDisplayObjectFromMasterPage( bool _b )
 {
     m_page->setDisplayObjectFromMasterPage( _b );
 }
 
-bool KPresenterPageIface::displayObjectFromMasterPage() const
+bool KPrPageIface::displayObjectFromMasterPage() const
 {
     return m_page->displayObjectFromMasterPage();
 }
 
-void KPresenterPageIface::setDisplayBackground( bool _b )
+void KPrPageIface::setDisplayBackground( bool _b )
 {
     m_page->setDisplayBackground( _b );
 }
 
-bool KPresenterPageIface::displayBackground() const
+bool KPrPageIface::displayBackground() const
 {
     return m_page->displayBackground();
 }

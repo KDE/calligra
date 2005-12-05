@@ -26,13 +26,13 @@
 #include "KPrObject2DIface.h"
 #include <qstring.h>
 
-class KPAutoformObject;
+class KPrAutoformObject;
 
-class KPAutoFormObjectIface : public KPresenterObject2DIface
+class KPrAutoFormObjectIface : public KPrObject2DIface
 {
     K_DCOP
 public:
-    KPAutoFormObjectIface( KPAutoformObject *obj_ );
+    KPrAutoFormObjectIface( KPrAutoformObject *obj_ );
 
 k_dcop:
     QString fileName() const;
@@ -42,7 +42,7 @@ k_dcop:
     virtual void setLineEnd( const QString & );
 
 private:
-    KPAutoformObject *obj;
+    KPrAutoformObject *obj;
 };
 
 #endif

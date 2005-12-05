@@ -32,7 +32,7 @@
 // local includes
 #include "KPrPrinterDlg.h"
 
- KPresenterPrinterDlg::KPresenterPrinterDlg( QWidget *parent, const char *name )
+ KPrPrinterDlg::KPrPrinterDlg( QWidget *parent, const char *name )
   : KPrintDialogPage( parent, name )
 {
   setTitle( i18n( "KPresenter Options" ) );
@@ -67,14 +67,14 @@
   layout->addMultiCellWidget( drawBorder, 2, 2, 0, 1 );
 }
 
-void KPresenterPrinterDlg::getOptions( QMap<QString, QString>& opts, bool )
+void KPrPrinterDlg::getOptions( QMap<QString, QString>& opts, bool )
 {
   opts["kde-kpresenter-printrows"] = QString::number(txtRows->value());
   opts["kde-kpresenter-printcolumns"] = QString::number(txtColumns->value());
   opts["kde-kpresenter-printslideborders"] = QString::number(drawBorder->isEnabled() && drawBorder->isChecked());
 }
 
-void KPresenterPrinterDlg::setOptions( const QMap<QString, QString>& opts )
+void KPrPrinterDlg::setOptions( const QMap<QString, QString>& opts )
 {
   if ( opts["kde-kpresenter-printrows"].isEmpty() )
     txtRows->setValue(1);
@@ -91,19 +91,19 @@ void KPresenterPrinterDlg::setOptions( const QMap<QString, QString>& opts )
     drawBorder->setChecked((opts["kde-kpresenter-printslideborders"]).toInt());
 }
 
-bool KPresenterPrinterDlg::isValid( const QString& )
+bool KPrPrinterDlg::isValid( const QString& )
 {
   return true;
 }
 
-void KPresenterPrinterDlg::txtRows_valueChanged( int new_value)
+void KPrPrinterDlg::txtRows_valueChanged( int new_value)
 {
   if ( new_value == 1 && txtColumns->value() == 1 )
     drawBorder->setEnabled( false );
   else
     drawBorder->setEnabled( true );
 }
-void KPresenterPrinterDlg::txtColumns_valueChanged( int new_value )
+void KPrPrinterDlg::txtColumns_valueChanged( int new_value )
 {
   if ( new_value == 1 && txtRows->value() == 1 )
     drawBorder->setEnabled( false );

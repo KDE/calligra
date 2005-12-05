@@ -27,17 +27,17 @@
 
 class RectPropertyUI;
 
-class RectProperty : public QWidget
+class KPrRectProperty : public QWidget
 {
     Q_OBJECT
 public:
-    RectProperty( QWidget *parent, const char *name, RectValueCmd::RectValues &rectValue );
-    ~RectProperty();
+    KPrRectProperty( QWidget *parent, const char *name, KPrRectValueCmd::RectValues &rectValue );
+    ~KPrRectProperty();
 
     int getRectPropertyChange() const;
-    RectValueCmd::RectValues getRectValues() const;
+    KPrRectValueCmd::RectValues getRectValues() const;
 
-    void setRectValues( const RectValueCmd::RectValues &rectValues );
+    void setRectValues( const KPrRectValueCmd::RectValues &rectValues );
     void apply();
 
 protected:
@@ -46,7 +46,7 @@ protected:
 
     RectPropertyUI *m_ui;
 
-    RectValueCmd::RectValues m_rectValue;
+    KPrRectValueCmd::RectValues m_rectValue;
 
 protected slots:
     void slotReset();

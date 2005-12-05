@@ -29,13 +29,13 @@
 
 #include "global.h"
 
-class PiePreview : public QFrame
+class KPrPiePreview : public QFrame
 {
     Q_OBJECT
 
 public:
-    PiePreview( QWidget* parent, const char* );
-    ~PiePreview() {}
+    KPrPiePreview( QWidget* parent, const char* );
+    ~KPrPiePreview() {}
 
     void setAngle( int _angle )
         { angle = _angle; repaint( true ); }

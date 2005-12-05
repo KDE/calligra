@@ -29,12 +29,12 @@
 #include <qcheckbox.h>
 #include <qlabel.h>
 
-class KPresenterPrinterDlg : public KPrintDialogPage
+class KPrPrinterDlg : public KPrintDialogPage
 {
   Q_OBJECT
   public:
     /// Getting the common arguments.
-    KPresenterPrinterDlg( QWidget *parent = 0, const char *name = 0 );
+    KPrPrinterDlg( QWidget *parent = 0, const char *name = 0 );
 
     /// Reimplemented.
     void getOptions( QMap<QString, QString>& opts, bool include_def = false );

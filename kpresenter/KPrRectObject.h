@@ -24,21 +24,21 @@
 
 #include "KPrObject.h"
 
-class KPGradient;
+class KPrGradient;
 class DCOPObject;
 
-class KPRectObject : public KP2DObject
+class KPrRectObject : public KPr2DObject
 {
 public:
-    KPRectObject();
-    KPRectObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
+    KPrRectObject();
+    KPrRectObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
                   const QColor &_gColor1, const QColor &_gColor2,
                   BCType _gType, int _xRnd, int _yRnd,
                   bool _unbalanced, int _xfactor, int _yfactor );
-    virtual ~KPRectObject() {}
+    virtual ~KPrRectObject() {}
     virtual DCOPObject* dcopObject();
 
-    KPRectObject &operator=( const KPRectObject & );
+    KPrRectObject &operator=( const KPrRectObject & );
 
     virtual void setRnds( int _xRnd, int _yRnd )
         { xRnd = _xRnd; yRnd = _yRnd; m_redrawGradientPix = true; }
@@ -52,7 +52,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, KoOasisContext &context, KPRLoadingInfo *info);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext &context, KPrLoadingInfo *info);
 
 protected:
     virtual const char * getOasisElementName() const;

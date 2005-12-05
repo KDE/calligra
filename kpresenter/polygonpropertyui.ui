@@ -38,7 +38,7 @@
                         <string>You can choose Polygon or Convex/Concave as a type.</string>
                     </property>
                 </widget>
-                <widget class="PolygonPreview" row="3" column="0" rowspan="1" colspan="2">
+                <widget class="KPrPolygonPreview" row="3" column="0" rowspan="1" colspan="2">
                     <property name="name">
                         <cstring>polygonPreview</cstring>
                     </property>
@@ -119,7 +119,7 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>PolygonPreview</class>
+        <class>KPrPolygonPreview</class>
         <header location="global">KPrPolygonPreview.h</header>>
         <sizehint>
             <width>200</width>

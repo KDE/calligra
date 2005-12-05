@@ -25,38 +25,38 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPPolygonObjectIface::KPPolygonObjectIface( KPPolygonObject *_obj )
-    : KPresenterObject2DIface(_obj)
+KPrPolygonObjectIface::KPrPolygonObjectIface( KPrPolygonObject *_obj )
+    : KPrObject2DIface(_obj)
 {
     obj = _obj;
 }
 
-void KPPolygonObjectIface::setCheckConcavePolygon(bool _concavePolygon)
+void KPrPolygonObjectIface::setCheckConcavePolygon(bool _concavePolygon)
 {
     obj->setCheckConcavePolygon(_concavePolygon);
 }
 
-void KPPolygonObjectIface::setCornersValue(int _cornersValue)
+void KPrPolygonObjectIface::setCornersValue(int _cornersValue)
 {
     obj->setCheckConcavePolygon(_cornersValue);
 }
 
-void KPPolygonObjectIface::setSharpnessValue(int _sharpnessValue)
+void KPrPolygonObjectIface::setSharpnessValue(int _sharpnessValue)
 {
     obj->setSharpnessValue(_sharpnessValue);
 }
 
-int KPPolygonObjectIface::cornersValue()const
+int KPrPolygonObjectIface::cornersValue()const
 {
     return obj->getCornersValue();
 }
 
-int KPPolygonObjectIface::sharpnessValue()const
+int KPrPolygonObjectIface::sharpnessValue()const
 {
     return obj->getSharpnessValue();
 }
 
-bool KPPolygonObjectIface::checkConcavePolygon()const
+bool KPrPolygonObjectIface::checkConcavePolygon()const
 {
     return obj->getCheckConcavePolygon();
 }

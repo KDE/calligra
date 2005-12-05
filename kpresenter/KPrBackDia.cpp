@@ -43,20 +43,20 @@
 
 #include <koPicture.h>
 
-BackPreview::BackPreview( QWidget *parent, KPrPage *page )
+KPrBackPreview::KPrBackPreview( QWidget *parent, KPrPage *page )
     : QFrame( parent )
 {
     setFrameStyle( WinPanel | Sunken );
-    back = new KPBackGround( page );
+    back = new KPrBackGround( page );
     setMinimumSize( 300, 200 );
 }
 
-BackPreview::~BackPreview()
+KPrBackPreview::~KPrBackPreview()
 {
     delete back;
 }
 
-void BackPreview::drawContents( QPainter *p )
+void KPrBackPreview::drawContents( QPainter *p )
 {
     QFrame::drawContents( p );
     p->save();
@@ -65,7 +65,7 @@ void BackPreview::drawContents( QPainter *p )
     p->restore();
 }
 
-BackDia::BackDia( QWidget* parent, const char* name,
+KPrBackDialog::KPrBackDialog( QWidget* parent, const char* name,
                   BackType backType, const QColor &backColor1,
                   const QColor &backColor2, BCType _bcType,
                   const KoPicture &backPic,
@@ -204,7 +204,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
 
     // ------------------------ preview
 
-    preview = new BackPreview( page, m_page );
+    preview = new KPrBackPreview( page, m_page );
     hbox->addWidget( preview );
 
     // ------------------------ buttons
@@ -228,7 +228,7 @@ BackDia::BackDia( QWidget* parent, const char* name,
     updateConfiguration();
 }
 
-void BackDia::slotReset()
+void KPrBackDialog::slotReset()
 {
     if ( m_useMasterBackground )
         m_useMasterBackground->setChecked( oldUseMasterBackground );
@@ -251,21 +251,21 @@ void BackDia::slotReset()
     updateConfiguration();
 }
 
-void BackDia::changeComboText(int _p)
+void KPrBackDialog::changeComboText(int _p)
 {
     if(_p!=tabWidget->currentPageIndex ())
         tabWidget->setCurrentPage(_p);
     updateConfiguration();
 }
 
-void BackDia::showEvent( QShowEvent *e )
+void KPrBackDialog::showEvent( QShowEvent *e )
 {
     QDialog::showEvent( e );
     lockUpdate = false;
     updateConfiguration();
 }
 
-void BackDia::updateConfiguration()
+void KPrBackDialog::updateConfiguration()
 {
     if ( lockUpdate )
         return;
@@ -329,61 +329,61 @@ void BackDia::updateConfiguration()
     picChanged  = false;
 }
 
-BackType BackDia::getBackType() const
+BackType KPrBackDialog::getBackType() const
 {
     return (BackType)backCombo->currentItem();
 }
 
-BackView BackDia::getBackView() const
+BackView KPrBackDialog::getBackView() const
 {
     return (BackView)picView->currentItem();
 }
 
-QColor BackDia::getBackColor1() const
+QColor KPrBackDialog::getBackColor1() const
 {
     return color1Choose->color();
 }
 
-QColor BackDia::getBackColor2() const
+QColor KPrBackDialog::getBackColor2() const
 {
     return color2Choose->color();
 }
 
-BCType BackDia::getBackColorType() const
+BCType KPrBackDialog::getBackColorType() const
 {
     return (BCType)cType->currentItem();
 }
 
-bool BackDia::getBackUnbalanced() const
+bool KPrBackDialog::getBackUnbalanced() const
 {
     return unbalanced->isChecked();
 }
 
-int BackDia::getBackXFactor() const
+int KPrBackDialog::getBackXFactor() const
 {
     return xfactor->value();
 }
 
-int BackDia::getBackYFactor() const
+int KPrBackDialog::getBackYFactor() const
 {
     return yfactor->value();
 }
 
-KPBackGround::Settings BackDia::getBackGround() const
+KPrBackGround::Settings KPrBackDialog::getBackGround() const
 {
-    return KPBackGround::Settings( getBackType(), getBackColor1(),
+    return KPrBackGround::Settings( getBackType(), getBackColor1(),
                                    getBackColor2(), getBackColorType(),
                                    getBackUnbalanced(), getBackXFactor(),
                                    getBackYFactor(), getBackPicture().getKey(),
                                    getBackView() );
 }
 
-bool BackDia::useMasterBackground() const
+bool KPrBackDialog::useMasterBackground() const
 {
     return m_useMasterBackground ? m_useMasterBackground->isChecked():false;
 }
 
-void BackDia::aboutToSelectPic()
+void KPrBackDialog::aboutToSelectPic()
 {
     QStringList mimetypes;
     mimetypes += KImageIO::mimeTypes( KImageIO::Reading );
@@ -393,7 +393,7 @@ void BackDia::aboutToSelectPic()
     picChoose->fileDialog()->setPreviewWidget( new KoPictureFilePreview( picChoose->fileDialog() ) );
 }
 
-void BackDia::afterSelectPic( const QString &url )
+void KPrBackDialog::afterSelectPic( const QString &url )
 {
     KoPicture picture;
     picture.setKeyAndDownloadPicture(url, tabWidget);

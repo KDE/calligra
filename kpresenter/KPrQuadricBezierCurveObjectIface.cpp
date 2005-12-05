@@ -27,50 +27,50 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPQuadricBezierCurveObjectIface::KPQuadricBezierCurveObjectIface( KPQuadricBezierCurveObject *_obj )
-    : KPresenterObjectIface(_obj)
+KPrQuadricBezierCurveObjectIface::KPrQuadricBezierCurveObjectIface( KPrQuadricBezierCurveObject *_obj )
+    : KPrObjectIface(_obj)
 {
     obj = _obj;
 }
 
-void KPQuadricBezierCurveObjectIface::setLineBegin( const QString & type)
+void KPrQuadricBezierCurveObjectIface::setLineBegin( const QString & type)
 {
     obj->setLineBegin(lineEndBeginFromString( type ));
 }
 
-void KPQuadricBezierCurveObjectIface::setLineEnd( const QString & type)
+void KPrQuadricBezierCurveObjectIface::setLineEnd( const QString & type)
 {
     obj->setLineEnd(lineEndBeginFromString( type ));
 }
 
-QString KPQuadricBezierCurveObjectIface::lineBegin()const
+QString KPrQuadricBezierCurveObjectIface::lineBegin()const
 {
     LineEnd type=obj->getLineBegin();
     return lineEndBeginName( type );
 }
 
-QString KPQuadricBezierCurveObjectIface::lineEnd() const
+QString KPrQuadricBezierCurveObjectIface::lineEnd() const
 {
     LineEnd type=obj->getLineEnd();
     return lineEndBeginName( type );
 }
 
-void KPQuadricBezierCurveObjectIface::horizontalFlip()
+void KPrQuadricBezierCurveObjectIface::horizontalFlip()
 {
     obj->flip( true );
 }
 
-void KPQuadricBezierCurveObjectIface::verticalFlip()
+void KPrQuadricBezierCurveObjectIface::verticalFlip()
 {
     obj->flip( false );
 }
 
-void KPQuadricBezierCurveObjectIface::closeObject(bool close)
+void KPrQuadricBezierCurveObjectIface::closeObject(bool close)
 {
     obj->closeObject( close );
 }
 
-bool KPQuadricBezierCurveObjectIface::isClosed()const
+bool KPrQuadricBezierCurveObjectIface::isClosed()const
 {
     return obj->isClosed();
 }

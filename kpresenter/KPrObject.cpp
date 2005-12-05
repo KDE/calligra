@@ -49,51 +49,51 @@
 #include <kodom.h>
 #include <kdebug.h>
 
-const QString &KPObject::tagORIG=KGlobal::staticQString("ORIG");
-const QString &KPObject::attrX=KGlobal::staticQString("x");
-const QString &KPObject::attrY=KGlobal::staticQString("y");
-const QString &KPObject::tagSIZE=KGlobal::staticQString("SIZE");
-const QString &KPObject::attrWidth=KGlobal::staticQString("width");
-const QString &KPObject::attrHeight=KGlobal::staticQString("height");
-const QString &KPObject::tagSHADOW=KGlobal::staticQString("SHADOW");
-const QString &KPObject::attrDistance=KGlobal::staticQString("distance");
-const QString &KPObject::attrDirection=KGlobal::staticQString("direction");
-const QString &KPObject::attrColor=KGlobal::staticQString("color");
-const QString &KPObject::tagEFFECTS=KGlobal::staticQString("EFFECTS");
-const QString &KPObject::attrEffect=KGlobal::staticQString("effect");
-const QString &KPObject::attrEffect2=KGlobal::staticQString("effect2");
-const QString &KPObject::tagPRESNUM=KGlobal::staticQString("PRESNUM");
-const QString &KPObject::tagANGLE=KGlobal::staticQString("ANGLE");
-const QString &KPObject::tagDISAPPEAR=KGlobal::staticQString("DISAPPEAR");
-const QString &KPObject::attrDoit=KGlobal::staticQString("doit");
-const QString &KPObject::attrNum=KGlobal::staticQString("num");
-const QString &KPObject::tagFILLTYPE=KGlobal::staticQString("FILLTYPE");
-const QString &KPObject::tagGRADIENT=KGlobal::staticQString("GRADIENT");
-const QString &KPObject::tagPEN=KGlobal::staticQString("PEN");
-const QString &KPObject::tagBRUSH=KGlobal::staticQString("BRUSH");
-const QString &KPObject::attrValue=KGlobal::staticQString("value");
-const QString &KPObject::attrC1=KGlobal::staticQString("color1");
-const QString &KPObject::attrC2=KGlobal::staticQString("color2");
-const QString &KPObject::attrType=KGlobal::staticQString("type");
-const QString &KPObject::attrUnbalanced=KGlobal::staticQString("unbalanced");
-const QString &KPObject::attrXFactor=KGlobal::staticQString("xfactor");
-const QString &KPObject::attrYFactor=KGlobal::staticQString("yfactor");
-const QString &KPObject::attrStyle=KGlobal::staticQString("style");
+const QString &KPrObject::tagORIG=KGlobal::staticQString("ORIG");
+const QString &KPrObject::attrX=KGlobal::staticQString("x");
+const QString &KPrObject::attrY=KGlobal::staticQString("y");
+const QString &KPrObject::tagSIZE=KGlobal::staticQString("SIZE");
+const QString &KPrObject::attrWidth=KGlobal::staticQString("width");
+const QString &KPrObject::attrHeight=KGlobal::staticQString("height");
+const QString &KPrObject::tagSHADOW=KGlobal::staticQString("SHADOW");
+const QString &KPrObject::attrDistance=KGlobal::staticQString("distance");
+const QString &KPrObject::attrDirection=KGlobal::staticQString("direction");
+const QString &KPrObject::attrColor=KGlobal::staticQString("color");
+const QString &KPrObject::tagEFFECTS=KGlobal::staticQString("EFFECTS");
+const QString &KPrObject::attrEffect=KGlobal::staticQString("effect");
+const QString &KPrObject::attrEffect2=KGlobal::staticQString("effect2");
+const QString &KPrObject::tagPRESNUM=KGlobal::staticQString("PRESNUM");
+const QString &KPrObject::tagANGLE=KGlobal::staticQString("ANGLE");
+const QString &KPrObject::tagDISAPPEAR=KGlobal::staticQString("DISAPPEAR");
+const QString &KPrObject::attrDoit=KGlobal::staticQString("doit");
+const QString &KPrObject::attrNum=KGlobal::staticQString("num");
+const QString &KPrObject::tagFILLTYPE=KGlobal::staticQString("FILLTYPE");
+const QString &KPrObject::tagGRADIENT=KGlobal::staticQString("GRADIENT");
+const QString &KPrObject::tagPEN=KGlobal::staticQString("PEN");
+const QString &KPrObject::tagBRUSH=KGlobal::staticQString("BRUSH");
+const QString &KPrObject::attrValue=KGlobal::staticQString("value");
+const QString &KPrObject::attrC1=KGlobal::staticQString("color1");
+const QString &KPrObject::attrC2=KGlobal::staticQString("color2");
+const QString &KPrObject::attrType=KGlobal::staticQString("type");
+const QString &KPrObject::attrUnbalanced=KGlobal::staticQString("unbalanced");
+const QString &KPrObject::attrXFactor=KGlobal::staticQString("xfactor");
+const QString &KPrObject::attrYFactor=KGlobal::staticQString("yfactor");
+const QString &KPrObject::attrStyle=KGlobal::staticQString("style");
 
-KPStartEndLine::KPStartEndLine( LineEnd _start, LineEnd _end )
+KPrStartEndLine::KPrStartEndLine( LineEnd _start, LineEnd _end )
     : lineBegin( _start ), lineEnd( _end )
 {
 }
 
-void KPStartEndLine::save( QDomDocumentFragment &fragment, QDomDocument& doc )
+void KPrStartEndLine::save( QDomDocumentFragment &fragment, QDomDocument& doc )
 {
     if (lineBegin!=L_NORMAL)
-        fragment.appendChild(KPStartEndLine::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
+        fragment.appendChild(KPrStartEndLine::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
     if (lineEnd!=L_NORMAL)
-        fragment.appendChild(KPStartEndLine::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
+        fragment.appendChild(KPrStartEndLine::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
 }
 
-QDomElement KPStartEndLine::createValueElement(const QString &tag, int value, QDomDocument &doc)
+QDomElement KPrStartEndLine::createValueElement(const QString &tag, int value, QDomDocument &doc)
 {
     QDomElement elem=doc.createElement(tag);
     elem.setAttribute("value", value);
@@ -101,7 +101,7 @@ QDomElement KPStartEndLine::createValueElement(const QString &tag, int value, QD
 }
 
 
-void KPStartEndLine::load( const QDomElement &element )
+void KPrStartEndLine::load( const QDomElement &element )
 {
     QDomElement e=element.namedItem("LINEBEGIN").toElement();
     if(!e.isNull()) {
@@ -119,9 +119,9 @@ void KPStartEndLine::load( const QDomElement &element )
     }
 }
 
-void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element )
+void KPrStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element )
 {
-    //kdDebug()<<"void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element ) :"<<attr<<endl;
+    //kdDebug()<<"void KPrStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QString & attr, LineEnd &_element ) :"<<attr<<endl;
 
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
@@ -164,7 +164,7 @@ void KPStartEndLine::loadOasisMarkerElement( KoOasisContext & context, const QSt
     }
 }
 
-void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto ) const
+void KPrStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyle &styleobjectauto ) const
 {
     if ( lineBegin != L_NORMAL )
     {
@@ -178,7 +178,7 @@ void KPStartEndLine::saveOasisMarkerElement( KoGenStyles& mainStyles,  KoGenStyl
     }
 }
 
-QString KPStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, const LineEnd &_element ) const
+QString KPrStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, const LineEnd &_element ) const
 {
     KoGenStyle marker( KPrDocument::STYLE_MARKER /*, "graphic"*/ /*no name*/ );
     // value used from ooimpress filter I don't know if it's good
@@ -217,7 +217,7 @@ QString KPStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, const Lin
     return mainStyles.lookup( marker, "marker" );
 }
 
-KPObject::KPObject()
+KPrObject::KPrObject()
     : orig(), ext(), shadowColor( Qt::gray ), sticky( FALSE )
 {
     appearStep = 0;
@@ -252,12 +252,12 @@ KPObject::KPObject()
     dcop = 0;
 }
 
-KPObject::~KPObject()
+KPrObject::~KPrObject()
 {
     delete dcop;
 }
 
-QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=doc.createDocumentFragment();
     QDomElement elem=doc.createElement(tagORIG);
@@ -283,7 +283,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
         fragment.appendChild(elem);
     }
     if(appearStep!=0)
-        fragment.appendChild(KPObject::createValueElement(tagPRESNUM, appearStep, doc));
+        fragment.appendChild(KPrObject::createValueElement(tagPRESNUM, appearStep, doc));
     if(angle!=0.0) {
         elem=doc.createElement(tagANGLE);
         elem.setAttribute(attrValue, angle);
@@ -335,7 +335,7 @@ QDomDocumentFragment KPObject::save( QDomDocument& doc, double offset )
 }
 
 
-void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
+void KPrObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
 {
     xmlWriter.addAttribute( "draw:id", "object" + QString::number( indexObj ) );
     //save all into pt
@@ -353,7 +353,7 @@ void KPObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
     }
 }
 
-void KPObject::saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto ) const
+void KPrObject::saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto ) const
 {
     if ( protect )
     {
@@ -362,9 +362,9 @@ void KPObject::saveOasisObjectProtectStyle( KoGenStyle &styleobjectauto ) const
     }
 }
 
-QString KPObject::getStyle( KPOasisSaveContext &sc ) const
+QString KPrObject::getStyle( KPOasisSaveContext &sc ) const
 {
-    kdDebug(33001) << "KPObject::getStyle" << endl;
+    kdDebug(33001) << "KPrObject::getStyle" << endl;
     KoGenStyle styleObjectAuto;
     KoGenStyles &mainStyles( sc.context.mainStyles() );
     if ( sc.onMaster )
@@ -383,20 +383,20 @@ QString KPObject::getStyle( KPOasisSaveContext &sc ) const
     return mainStyles.lookup( styleObjectAuto, "gr" );
 }
 
-void KPObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& /* mainStyles */ ) const
+void KPrObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& /* mainStyles */ ) const
 {
-    kdDebug(33001) << "KPObject::fillStyle" << endl;
+    kdDebug(33001) << "KPrObject::fillStyle" << endl;
     saveOasisObjectProtectStyle( styleObjectAuto );
     saveOasisShadowElement( styleObjectAuto );
 }
 
-bool KPObject::saveOasisObjectAttributes( KPOasisSaveContext &/* sc */ ) const
+bool KPrObject::saveOasisObjectAttributes( KPOasisSaveContext &/* sc */ ) const
 {
     kdDebug()<<"bool saveOasisObjectAttributes not implemented";
     return true;
 }
 
-bool KPObject::haveAnimation() const
+bool KPrObject::haveAnimation() const
 {
     //kdDebug()<<" effect :"<<effect<<" effect3 :"<<effect3<<" a_fileName :"<<a_fileName<<" d_fileName :"<<d_fileName<<" appearTimer :"<<appearTimer<<" disappearTimer :"<<disappearTimer<<endl;
     if ( effect == EF_NONE && effect3==EF3_NONE && a_fileName.isEmpty() && d_fileName.isEmpty() && ( appearTimer==1 ) && ( disappearTimer==1 ))
@@ -405,7 +405,7 @@ bool KPObject::haveAnimation() const
         return true;
 }
 
-bool KPObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int objectId )
+bool KPrObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int objectId )
 {
     if ( effect != EF_NONE || !a_fileName.isEmpty() )
     {
@@ -495,7 +495,7 @@ bool KPObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int ob
     return true;
 }
 
-bool KPObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int objectId )
+bool KPrObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int objectId )
 {
 
     //FIXME oo doesn't support hide animation object
@@ -588,7 +588,7 @@ bool KPObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int ob
     return true;
 }
 
-void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
+void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
     if(element.hasAttributeNS( KoXmlNS::draw, "name" ))
        objectName = element.attributeNS( KoXmlNS::draw, "name", QString::null);
@@ -883,7 +883,7 @@ void KPObject::loadOasis(const QDomElement &element, KoOasisContext & context, K
     }
 }
 
-bool KPObject::saveOasisObject( KPOasisSaveContext &sc ) const
+bool KPrObject::saveOasisObject( KPOasisSaveContext &sc ) const
 {
     sc.xmlWriter.startElement( getOasisElementName() );
     sc.xmlWriter.addAttribute( "draw:style-name", getStyle( sc ) );
@@ -897,7 +897,7 @@ bool KPObject::saveOasisObject( KPOasisSaveContext &sc ) const
     return true;
 }
 
-void KPObject::saveOasisShadowElement( KoGenStyle &styleobjectauto ) const
+void KPrObject::saveOasisShadowElement( KoGenStyle &styleobjectauto ) const
 {
     //FIXME default value
     if(shadowDistance!=0 || shadowDirection!=SD_RIGHT_BOTTOM || shadowColor!=Qt::gray) {
@@ -941,7 +941,7 @@ void KPObject::saveOasisShadowElement( KoGenStyle &styleobjectauto ) const
     }
 }
 
-double KPObject::load(const QDomElement &element) {
+double KPrObject::load(const QDomElement &element) {
 
     double offset=-1.0;
     QDomElement e=element.namedItem(tagORIG).toElement();
@@ -1083,7 +1083,7 @@ double KPObject::load(const QDomElement &element) {
     return offset;
 }
 
-KoSize KPObject::getRealSize() const {
+KoSize KPrObject::getRealSize() const {
     KoSize size = ext;
 
     if ( angle != 0.0 ) {
@@ -1095,7 +1095,7 @@ KoSize KPObject::getRealSize() const {
     return size;
 }
 
-KoPoint KPObject::getRealOrig() const {
+KoPoint KPrObject::getRealOrig() const {
     KoPoint origin = orig;
 
     if ( angle != 0.0 ) {
@@ -1107,11 +1107,11 @@ KoPoint KPObject::getRealOrig() const {
     return origin;
 }
 
-KoRect KPObject::getRealRect() const {
+KoRect KPrObject::getRealRect() const {
     return KoRect( getRealOrig(), getRealSize() );
 }
 
-KoRect KPObject::getRepaintRect() const
+KoRect KPrObject::getRepaintRect() const
 {
     KoRect rect( getRealOrig(), getRealSize() );
 
@@ -1152,14 +1152,14 @@ KoRect KPObject::getRepaintRect() const
     return rect;
 }
 
-void KPObject::flip( bool /*horizontal*/ ) {
+void KPrObject::flip( bool /*horizontal*/ ) {
     // flip the angle
     if ( angle ) {
         angle = 360.0 - angle;
     }
 }
 
-KoRect KPObject::rotateRectObject() const
+KoRect KPrObject::rotateRectObject() const
 {
     KoRect br = KoRect( 0,0, ext.width(), ext.height() );
     double pw = br.width();
@@ -1177,7 +1177,7 @@ KoRect KPObject::rotateRectObject() const
     return r;
 }
 
-void KPObject::rotateObject(QPainter *paint,KoTextZoomHandler *_zoomHandler)
+void KPrObject::rotateObject(QPainter *paint,KoTextZoomHandler *_zoomHandler)
 {
     KoRect rr = KoRect( 0, 0, ext.width(), ext.height() );
     rr.moveTopLeft( KoPoint( -ext.width() / 2.0, -ext.height() / 2.0 ) );
@@ -1189,17 +1189,17 @@ void KPObject::rotateObject(QPainter *paint,KoTextZoomHandler *_zoomHandler)
     paint->setWorldMatrix( m, true );
 }
 
-bool KPObject::contains( const KoPoint &point ) const
+bool KPrObject::contains( const KoPoint &point ) const
 {
     return getRealRect().contains( point );
 }
 
-bool KPObject::intersects( const KoRect &rect ) const
+bool KPrObject::intersects( const KoRect &rect ) const
 {
     return getRealRect().intersects( rect );
 }
 
-QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType,
+QCursor KPrObject::getCursor( const KoPoint &_point, ModifyType &_modType,
                              KPrDocument *doc ) const
 {
     KoTextZoomHandler * zh = doc->zoomHandler();
@@ -1295,7 +1295,7 @@ QCursor KPObject::getCursor( const KoPoint &_point, ModifyType &_modType,
         return Qt::sizeAllCursor;
 }
 
-void KPObject::getShadowCoords( double& _x, double& _y ) const
+void KPrObject::getShadowCoords( double& _x, double& _y ) const
 {
     double sx = 0, sy = 0;
 
@@ -1346,7 +1346,7 @@ void KPObject::getShadowCoords( double& _x, double& _y ) const
     _x = sx; _y = sy;
 }
 
-void KPObject::paintSelection( QPainter *_painter, KoTextZoomHandler *_zoomHandler, SelectionMode mode )
+void KPrObject::paintSelection( QPainter *_painter, KoTextZoomHandler *_zoomHandler, SelectionMode mode )
 {
     if ( !selected || mode == SM_NONE )
         return;
@@ -1410,21 +1410,21 @@ void KPObject::paintSelection( QPainter *_painter, KoTextZoomHandler *_zoomHandl
     _painter->restore();
 }
 
-void KPObject::doDelete()
+void KPrObject::doDelete()
 {
     if ( cmds == 0 && !inObjList )
         delete this;
 }
 
-DCOPObject* KPObject::dcopObject()
+DCOPObject* KPrObject::dcopObject()
 {
     if ( !dcop )
-        dcop = new KPresenterObjectIface( this );
+        dcop = new KPrObjectIface( this );
 
     return dcop;
 }
 
-void KPObject::setupClipRegion( QPainter *painter, const QRegion &clipRegion )
+void KPrObject::setupClipRegion( QPainter *painter, const QRegion &clipRegion )
 {
     QRegion region = painter->clipRegion( QPainter::CoordPainter );
     if ( region.isEmpty() )
@@ -1435,13 +1435,13 @@ void KPObject::setupClipRegion( QPainter *painter, const QRegion &clipRegion )
     painter->setClipRegion( region, QPainter::CoordPainter );
 }
 
-QDomElement KPObject::createValueElement(const QString &tag, int value, QDomDocument &doc) {
+QDomElement KPrObject::createValueElement(const QString &tag, int value, QDomDocument &doc) {
     QDomElement elem=doc.createElement(tag);
     elem.setAttribute(attrValue, value);
     return elem;
 }
 
-QDomElement KPObject::createGradientElement(const QString &tag, const QColor &c1, const QColor &c2,
+QDomElement KPrObject::createGradientElement(const QString &tag, const QColor &c1, const QColor &c2,
                                             int type, bool unbalanced, int xfactor,
                                             int yfactor, QDomDocument &doc) {
     QDomElement elem=doc.createElement(tag);
@@ -1454,7 +1454,7 @@ QDomElement KPObject::createGradientElement(const QString &tag, const QColor &c1
     return elem;
 }
 
-QDomElement KPObject::createPenElement(const QString &tag, const KPPen &pen, QDomDocument &doc) {
+QDomElement KPrObject::createPenElement(const QString &tag, const KPrPen &pen, QDomDocument &doc) {
 
     QDomElement elem=doc.createElement(tag);
     elem.setAttribute(attrColor, pen.color().name());
@@ -1463,9 +1463,9 @@ QDomElement KPObject::createPenElement(const QString &tag, const KPPen &pen, QDo
     return elem;
 }
 
-KPPen KPObject::toPen(const QDomElement &element) const {
+KPrPen KPrObject::toPen(const QDomElement &element) const {
 
-    KPPen pen;
+    KPrPen pen;
     pen.setColor(retrieveColor(element));
     if(element.hasAttribute(attrStyle))
         pen.setStyle(static_cast<Qt::PenStyle>(element.attribute(attrStyle).toInt()));
@@ -1474,7 +1474,7 @@ KPPen KPObject::toPen(const QDomElement &element) const {
     return pen;
 }
 
-QDomElement KPObject::createBrushElement(const QString &tag, const QBrush &brush, QDomDocument &doc) {
+QDomElement KPrObject::createBrushElement(const QString &tag, const QBrush &brush, QDomDocument &doc) {
 
     QDomElement elem=doc.createElement(tag);
     elem.setAttribute(attrColor, brush.color().name());
@@ -1482,7 +1482,7 @@ QDomElement KPObject::createBrushElement(const QString &tag, const QBrush &brush
     return elem;
 }
 
-QBrush KPObject::toBrush(const QDomElement &element) const {
+QBrush KPrObject::toBrush(const QDomElement &element) const {
 
     QBrush brush;
     brush.setColor(retrieveColor(element));
@@ -1491,7 +1491,7 @@ QBrush KPObject::toBrush(const QDomElement &element) const {
     return brush;
 }
 
-QColor KPObject::retrieveColor(const QDomElement &element, const QString &cattr,
+QColor KPrObject::retrieveColor(const QDomElement &element, const QString &cattr,
                                const QString &rattr, const QString &gattr, const QString &battr) const {
     QColor ret;
     if(element.hasAttribute(cattr))
@@ -1509,20 +1509,20 @@ QColor KPObject::retrieveColor(const QDomElement &element, const QString &cattr,
     return ret;
 }
 
-void KPObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
+void KPrObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                      int /*pageNum*/, SelectionMode selectionMode, bool drawContour )
 {
     if ( selectionMode != SM_NONE && !drawContour )
         paintSelection( _painter, _zoomHandler, selectionMode );
 }
 
-KPPen KPObject::getPen() const
+KPrPen KPrObject::getPen() const
 {
     // Return the default pen
-    return KPPen();
+    return KPrPen();
 }
 
-void KPObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
+void KPrObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
                                             KoSize &size, KoPoint &orig )
 {
     if ( angle == 0 )
@@ -1567,7 +1567,7 @@ void KPObject::getRealSizeAndOrigFromPoints( KoPointArray &points, float angle,
     orig.setY( orig.y() + mid_y + min_y );
 }
 
-void KPObject::addSelfToGuides(QValueList<double> &horizontalPos, QValueList<double> &verticalPos )
+void KPrObject::addSelfToGuides(QValueList<double> &horizontalPos, QValueList<double> &verticalPos )
 {
     KoRect bounds = getRealRect();
 
@@ -1577,31 +1577,31 @@ void KPObject::addSelfToGuides(QValueList<double> &horizontalPos, QValueList<dou
     verticalPos.append( bounds.right() );
 }
 
-KPShadowObject::KPShadowObject()
-    : KPObject()
+KPrShadowObject::KPrShadowObject()
+    : KPrObject()
 {
 }
 
-KPShadowObject::KPShadowObject( const KPPen &_pen )
-    : KPObject(), pen( _pen )
+KPrShadowObject::KPrShadowObject( const KPrPen &_pen )
+    : KPrObject(), pen( _pen )
 {
 }
 
-KPShadowObject &KPShadowObject::operator=( const KPShadowObject & )
+KPrShadowObject &KPrShadowObject::operator=( const KPrShadowObject & )
 {
     return *this;
 }
 
-QDomDocumentFragment KPShadowObject::save( QDomDocument& doc,double offset )
+QDomDocumentFragment KPrShadowObject::save( QDomDocument& doc,double offset )
 {
-    QDomDocumentFragment fragment=KPObject::save(doc, offset);
+    QDomDocumentFragment fragment=KPrObject::save(doc, offset);
 
     if(pen!=defaultPen())
-        fragment.appendChild(KPObject::createPenElement(tagPEN, pen, doc));
+        fragment.appendChild(KPrObject::createPenElement(tagPEN, pen, doc));
     return fragment;
 }
 
-void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto ) const
+void KPrShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto ) const
 {
     if ( pen!=defaultPen() )
     {
@@ -1627,7 +1627,7 @@ void KPShadowObject::saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle
     }
 }
 
-QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles ) const
+QString KPrShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles ) const
 {
     KoGenStyle stroke( KPrDocument::STYLE_STROKE /*, "graphic"*/ /*no name*/ );
     switch( pen.style() )
@@ -1671,7 +1671,7 @@ QString KPShadowObject::saveOasisStrokeStyle( KoGenStyles& mainStyles ) const
     //    <draw:stroke-dash draw:name="Fine Dotted" draw:style="rect" draw:dots1="1" draw:distance="0.457cm"/>
 }
 
-bool KPShadowObject::saveOasisDrawPoints( const KoPointArray &points, KPOasisSaveContext &sc )
+bool KPrShadowObject::saveOasisDrawPoints( const KoPointArray &points, KPOasisSaveContext &sc )
 {
     QString listOfPoint;
     int maxX=0;
@@ -1695,8 +1695,8 @@ bool KPShadowObject::saveOasisDrawPoints( const KoPointArray &points, KPOasisSav
     return true;
 }
 
-bool KPShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomElement &element,
-                                          KoOasisContext & context, KPRLoadingInfo *info )
+bool KPrShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomElement &element,
+                                          KoOasisContext & context, KPrLoadingInfo *info )
 {
     QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
     QStringList viewBox = QStringList::split( ' ', element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
@@ -1760,17 +1760,17 @@ bool KPShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomElemen
     return true;
 }
 
-void KPShadowObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+void KPrShadowObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    kdDebug(33001) << "KPShadowObject::fillStyle" << endl;
-    KPObject::fillStyle( styleObjectAuto, mainStyles );
+    kdDebug(33001) << "KPrShadowObject::fillStyle" << endl;
+    KPrObject::fillStyle( styleObjectAuto, mainStyles );
     saveOasisStrokeElement( mainStyles, styleObjectAuto );
 }
 
-void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
+void KPrShadowObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
-    //kdDebug()<<"void KPShadowObject::loadOasis(const QDomElement &element)**********************\n";
-    KPObject::loadOasis(element, context, info);
+    //kdDebug()<<"void KPrShadowObject::loadOasis(const QDomElement &element)**********************\n";
+    KPrObject::loadOasis(element, context, info);
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "stroke" ))
@@ -1833,18 +1833,18 @@ void KPShadowObject::loadOasis(const QDomElement &element, KoOasisContext & cont
     kdDebug()<<"pen style :"<<pen<<endl;
 }
 
-double KPShadowObject::load(const QDomElement &element)
+double KPrShadowObject::load(const QDomElement &element)
 {
-    double offset=KPObject::load(element);
+    double offset=KPrObject::load(element);
     QDomElement e=element.namedItem(tagPEN).toElement();
     if(!e.isNull())
-        setPen(KPObject::toPen(e));
+        setPen(KPrObject::toPen(e));
     else
         pen = defaultPen();
     return offset;
 }
 
-void KPShadowObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
+void KPrShadowObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                            int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     double ox = orig.x();
@@ -1856,7 +1856,7 @@ void KPShadowObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
     {
         _painter->save();
         // tz TODO fix tmpPen usage
-        KPPen tmpPen( pen );
+        KPrPen tmpPen( pen );
         pen.setColor( shadowColor );
         QBrush brush;
         brush.setColor( shadowColor );
@@ -1886,39 +1886,39 @@ void KPShadowObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
+    KPrObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
 }
 
-KPPen KPShadowObject::defaultPen() const
+KPrPen KPrShadowObject::defaultPen() const
 {
-    return KPPen();
+    return KPrPen();
 }
 
-KP2DObject::KP2DObject()
-    : KPShadowObject()
+KPr2DObject::KPr2DObject()
+    : KPrShadowObject()
     , gradient( 0 )
     , m_redrawGradientPix( false )
 {
 }
 
-KP2DObject::KP2DObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
+KPr2DObject::KPr2DObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
                         const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                         bool _unbalanced, int _xfactor, int _yfactor )
-    : KPShadowObject( _pen )
+    : KPrShadowObject( _pen )
     , m_brush( _brush, _gColor1, _gColor2, _gType, _fillType, _unbalanced, _xfactor, _yfactor )
     , gradient( 0 )
     , m_redrawGradientPix( false )
 {
     if ( getFillType() == FT_GRADIENT )
     {
-        gradient = new KPGradient( getGColor1(), getGColor2(),
+        gradient = new KPrGradient( getGColor1(), getGColor2(),
                                    getGType(), getGUnbalanced(),
                                    getGXFactor(), getGYFactor() );
         m_redrawGradientPix = true;
     }
 }
 
-void KP2DObject::setFillType( FillType _fillType )
+void KPr2DObject::setFillType( FillType _fillType )
 {
     m_brush.setFillType( _fillType );
 
@@ -1929,23 +1929,23 @@ void KP2DObject::setFillType( FillType _fillType )
     }
     if ( _fillType == FT_GRADIENT && !gradient )
     {
-        gradient = new KPGradient( getGColor1(), getGColor2(),
+        gradient = new KPrGradient( getGColor1(), getGColor2(),
                                    getGType(), getGUnbalanced(),
                                    getGXFactor(), getGYFactor() );
         m_redrawGradientPix = true;
     }
 }
 
-QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
+QDomDocumentFragment KPr2DObject::save( QDomDocument& doc,double offset )
 {
-    QDomDocumentFragment fragment=KPShadowObject::save(doc, offset);
+    QDomDocumentFragment fragment=KPrShadowObject::save(doc, offset);
     QBrush brush = getBrush();
     if ( brush != QBrush() )
-        fragment.appendChild( KPObject::createBrushElement( tagBRUSH, brush, doc ) );
+        fragment.appendChild( KPrObject::createBrushElement( tagBRUSH, brush, doc ) );
 
     FillType fillType = getFillType();
     if ( fillType != FT_BRUSH )
-        fragment.appendChild( KPObject::createValueElement( tagFILLTYPE, static_cast<int>(fillType), doc ) );
+        fragment.appendChild( KPrObject::createValueElement( tagFILLTYPE, static_cast<int>(fillType), doc ) );
     QColor gColor1 = getGColor1();
     QColor gColor2 = getGColor2();
     BCType gType = getGType();
@@ -1953,19 +1953,19 @@ QDomDocumentFragment KP2DObject::save( QDomDocument& doc,double offset )
     int xfactor = getGXFactor();
     int yfactor = getGYFactor();
     if ( gColor1!=Qt::red || gColor2!=Qt::green || gType!=BCT_GHORZ || unbalanced || xfactor != 100 || yfactor != 100 )
-        fragment.appendChild( KPObject::createGradientElement( tagGRADIENT, gColor1, gColor2, static_cast<int>(gType),
+        fragment.appendChild( KPrObject::createGradientElement( tagGRADIENT, gColor1, gColor2, static_cast<int>(gType),
                                                                unbalanced, xfactor, yfactor, doc));
     return fragment;
 }
 
-void KP2DObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+void KPr2DObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
-    kdDebug(33001) << "KP2DObject::fillStyle" << endl;
-    KPShadowObject::fillStyle( styleObjectAuto, mainStyles );
+    kdDebug(33001) << "KPr2DObject::fillStyle" << endl;
+    KPrShadowObject::fillStyle( styleObjectAuto, mainStyles );
     saveOasisBackgroundElement( styleObjectAuto, mainStyles );
 }
 
-void KP2DObject::saveOasisBackgroundElement( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+void KPr2DObject::saveOasisBackgroundElement( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
     switch ( getFillType() )
     {
@@ -1991,7 +1991,7 @@ void KP2DObject::saveOasisBackgroundElement( KoGenStyle& styleObjectAuto, KoGenS
 }
 
 
-QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
+QString KPr2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
 {
     KoGenStyle gradientStyle( KPrDocument::STYLE_GRADIENT /*no family name*/);
     gradientStyle.addAttribute( "draw:start-color", getGColor1().name() );
@@ -2126,16 +2126,16 @@ QString KP2DObject::saveOasisGradientStyle( KoGenStyles& mainStyles ) const
 }
 
 
-void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)
+void KPr2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
-    kdDebug()<<"void KP2DObject::loadOasis(const QDomElement &element)\n";
+    kdDebug()<<"void KPr2DObject::loadOasis(const QDomElement &element)\n";
     QBrush tmpBrush;
 
-    KPShadowObject::loadOasis(element, context, info);
+    KPrShadowObject::loadOasis(element, context, info);
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "graphic" );
 
-    kdDebug()<<" void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info)\n";
+    kdDebug()<<" void KPr2DObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)\n";
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
     {
         const QString fill = styleStack.attributeNS( KoXmlNS::draw, "fill" );
@@ -2251,9 +2251,9 @@ void KP2DObject::loadOasis(const QDomElement &element, KoOasisContext & context,
 
 }
 
-double KP2DObject::load(const QDomElement &element)
+double KPr2DObject::load(const QDomElement &element)
 {
-    double offset=KPShadowObject::load(element);
+    double offset=KPrShadowObject::load(element);
 
     QDomElement e=element.namedItem(tagFILLTYPE).toElement();
     if(!e.isNull()) {
@@ -2265,7 +2265,7 @@ double KP2DObject::load(const QDomElement &element)
 
     e=element.namedItem(tagBRUSH).toElement();
     if(!e.isNull())
-        setBrush(KPObject::toBrush(e));
+        setBrush(KPrObject::toBrush(e));
     else
         setBrush( QBrush() );
 
@@ -2295,7 +2295,7 @@ double KP2DObject::load(const QDomElement &element)
     return offset;
 }
 
-void KP2DObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
+void KPr2DObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                            int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     double ox = orig.x();
@@ -2306,7 +2306,7 @@ void KP2DObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
     if ( shadowDistance > 0 && !drawContour )
     {
         _painter->save();
-        KPPen tmpPen( pen );
+        KPrPen tmpPen( pen );
         pen.setColor( shadowColor );
         QBrush tmpBrush( m_brush.getBrush() );
         QBrush shadowBrush( tmpBrush );
@@ -2339,11 +2339,11 @@ void KP2DObject::draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
 
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
+    KPrObject::draw( _painter, _zoomHandler, pageNum, selectionMode, drawContour );
 }
 
-void KP2DObject::flip( bool horizontal ) {
-    KPObject::flip( horizontal );
+void KPr2DObject::flip( bool horizontal ) {
+    KPrObject::flip( horizontal );
 
     // flip the gradient
     if ( getFillType() == FT_GRADIENT ) {
@@ -2364,6 +2364,6 @@ void KP2DObject::flip( bool horizontal ) {
             setGColor2( gColorTemp );
         }
         delete gradient;
-        gradient = new KPGradient( getGColor1(), getGColor2(), gType, getGUnbalanced(), getGXFactor(), getGYFactor() );
+        gradient = new KPrGradient( getGColor1(), getGColor2(), gType, getGUnbalanced(), getGXFactor(), getGYFactor() );
     }
 }

@@ -30,43 +30,43 @@
 #include <math.h>
 using namespace std;
 
-KPFreehandObject::KPFreehandObject()
-    : KPPointObject()
+KPrFreehandObject::KPrFreehandObject()
+    : KPrPointObject()
 {
 }
 
-KPFreehandObject::KPFreehandObject( const KoPointArray &_points, const KoSize &_size,
-                                    const KPPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
-    : KPPointObject( _pen, _lineBegin, _lineEnd )
+KPrFreehandObject::KPrFreehandObject( const KoPointArray &_points, const KoSize &_size,
+                                    const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd )
+    : KPrPointObject( _pen, _lineBegin, _lineEnd )
 {
     points = KoPointArray( _points );
     ext = _size;
 }
 
-KPFreehandObject &KPFreehandObject::operator=( const KPFreehandObject & )
+KPrFreehandObject &KPrFreehandObject::operator=( const KPrFreehandObject & )
 {
     return *this;
 }
 
-DCOPObject* KPFreehandObject::dcopObject()
+DCOPObject* KPrFreehandObject::dcopObject()
 {
     if ( !dcop )
-        dcop = new KPFreehandObjectIface( this );
+        dcop = new KPrFreehandObjectIface( this );
     return dcop;
 }
 
-bool KPFreehandObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrFreehandObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug()<<"bool KPFreehandObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
+    kdDebug()<<"bool KPrFreehandObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
     return true;
 }
 
-const char * KPFreehandObject::getOasisElementName() const
+const char * KPrFreehandObject::getOasisElementName() const
 {
     return "draw:path";
 }
 
-void KPFreehandObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPRLoadingInfo* info )
+void KPrFreehandObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo* info )
 {
     //todo
     //we use draw:path
@@ -75,12 +75,12 @@ void KPFreehandObject::loadOasis( const QDomElement &element, KoOasisContext & c
     loadOasisMarker( context );
 }
 
-QDomDocumentFragment KPFreehandObject::save( QDomDocument& doc,double offset )
+QDomDocumentFragment KPrFreehandObject::save( QDomDocument& doc,double offset )
 {
-    return KPPointObject::save( doc, offset );
+    return KPrPointObject::save( doc, offset );
 }
 
-double KPFreehandObject::load( const QDomElement &element )
+double KPrFreehandObject::load( const QDomElement &element )
 {
-    return KPPointObject::load( element );
+    return KPrPointObject::load( element );
 }

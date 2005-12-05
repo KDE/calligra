@@ -30,7 +30,7 @@
 
 
 class KPrDocument;
-class KPresenterView;
+class KPrView;
 
 class KURLRequester;
 class KColorButton;
@@ -49,12 +49,12 @@ class QLabel;
 class QGroupBox;
 class QVBoxLayout;
 
-class KPMSPresentation
+class KPrMSPresentation
 {
 public:
 
-    KPMSPresentation( KPrDocument *_doc, KPresenterView *_view );
-    KPMSPresentation( const KPMSPresentation &msPres );
+    KPrMSPresentation( KPrDocument *_doc, KPrView *_view );
+    KPrMSPresentation( const KPrMSPresentation &msPres );
 
     void setTitle( const QString &_title )
         { title = _title; }
@@ -87,7 +87,7 @@ protected:
     void init();
 
     KPrDocument *doc;
-    KPresenterView *view;
+    KPrView *view;
 
     QString title;
     QValueList<SlideInfo> slideInfos;
@@ -97,20 +97,20 @@ protected:
 
 };
 
-class KPMSPresentationSetup : public QDialog
+class KPrMSPresentationSetup : public QDialog
 {
     Q_OBJECT
 
 public:
-    KPMSPresentationSetup( KPrDocument *_doc, KPresenterView *_view );
-    ~KPMSPresentationSetup();
+    KPrMSPresentationSetup( KPrDocument *_doc, KPrView *_view );
+    ~KPrMSPresentationSetup();
 
-    static void createMSPresentation( KPrDocument *_doc, KPresenterView *_view );
+    static void createMSPresentation( KPrDocument *_doc, KPrView *_view );
 
 protected:
     KPrDocument *doc;
-    KPresenterView *view;
-    KPMSPresentation msPres;
+    KPrView *view;
+    KPrMSPresentation msPres;
 
     KLineEdit *title;
     KColorButton *textColour, *backColour;
@@ -125,15 +125,15 @@ protected slots:
     void showColourGroup(bool on);
 };
 
-class KPMSPresentationCreateDialog : public QDialog
+class KPrMSPresentationCreateDialog : public QDialog
 {
     Q_OBJECT
 
 public:
-    KPMSPresentationCreateDialog( KPrDocument *_doc, KPresenterView *_view, const KPMSPresentation &_msPres );
-    ~KPMSPresentationCreateDialog();
+    KPrMSPresentationCreateDialog( KPrDocument *_doc, KPrView *_view, const KPrMSPresentation &_msPres );
+    ~KPrMSPresentationCreateDialog();
 
-    static void createMSPresentation( KPrDocument *_doc, KPresenterView *_view, const KPMSPresentation &_msPres );
+    static void createMSPresentation( KPrDocument *_doc, KPrView *_view, const KPrMSPresentation &_msPres );
 
     void start();
 
@@ -145,9 +145,9 @@ protected:
     void setupGUI();
     void resizeEvent( QResizeEvent *e );
 
-    KPresenterView *view;
+    KPrView *view;
     KPrDocument *doc;
-    KPMSPresentation msPres;
+    KPrMSPresentation msPres;
 
     KProgress *progressBar;
     QLabel *step1, *step2, *step3;

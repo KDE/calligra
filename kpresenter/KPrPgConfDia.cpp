@@ -47,7 +47,7 @@
 #include <knuminput.h>
 #include <qslider.h>
 
-PgConfDia::PgConfDia( QWidget* parent, KPrDocument* doc )
+KPrPgConfDia::KPrPgConfDia( QWidget* parent, KPrDocument* doc )
     : KDialogBase( KDialogBase::Tabbed, i18n("Configure Slide Show"),
                    Ok|Cancel, Ok, parent, "pgConfDia", true ),
       m_doc( doc )
@@ -59,7 +59,7 @@ PgConfDia::PgConfDia( QWidget* parent, KPrDocument* doc )
     connect( this, SIGNAL( okClicked() ), this, SLOT( accept() ) );
 }
 
-void PgConfDia::setupPageGeneral()
+void KPrPgConfDia::setupPageGeneral()
 {
     QFrame* generalPage = addPage( i18n("&General") );
     QWhatsThis::add( generalPage, i18n("<p>This dialog allows you to configure how the slideshow "
@@ -137,7 +137,7 @@ void PgConfDia::setupPageGeneral()
     spacer->setSizePolicy( QSizePolicy( QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 }
 
-void PgConfDia::setupPageSlides()
+void KPrPgConfDia::setupPageSlides()
 {
     QFrame* slidesPage = addPage( i18n("&Slides") );
     QWhatsThis::add( slidesPage, i18n("<p>This dialog allows you to configure which slides "
@@ -211,11 +211,11 @@ void PgConfDia::setupPageSlides()
     radioButtonClicked();
 }
 
-PgConfDia::~PgConfDia()
+KPrPgConfDia::~KPrPgConfDia()
 {
 }
 
-void PgConfDia::radioButtonClicked()
+void KPrPgConfDia::radioButtonClicked()
 {
     if ( m_customSlide->isChecked() )
     {
@@ -231,27 +231,27 @@ void PgConfDia::radioButtonClicked()
     }
 }
 
-bool PgConfDia::getInfiniteLoop() const
+bool KPrPgConfDia::getInfiniteLoop() const
 {
     return infiniteLoop->isChecked();
 }
 
-bool PgConfDia::getManualSwitch() const
+bool KPrPgConfDia::getManualSwitch() const
 {
     return m_manualButton->isChecked();
 }
 
-bool PgConfDia::getPresentationDuration() const
+bool KPrPgConfDia::getPresentationDuration() const
 {
     return presentationDuration->isChecked();
 }
 
-QPen PgConfDia::getPen() const
+QPen KPrPgConfDia::getPen() const
 {
     return QPen( penColor->color(), penWidth->value() );
 }
 
-QValueList<bool> PgConfDia::getSelectedSlides() const
+QValueList<bool> KPrPgConfDia::getSelectedSlides() const
 {
     QValueList<bool> selectedSlides;
 
@@ -267,7 +267,7 @@ QValueList<bool> PgConfDia::getSelectedSlides() const
     return selectedSlides;
 }
 
-void PgConfDia::selectAllSlides()
+void KPrPgConfDia::selectAllSlides()
 {
     QListViewItem *item = slides->firstChild();
     while( item )
@@ -278,7 +278,7 @@ void PgConfDia::selectAllSlides()
     }
 }
 
-void PgConfDia::deselectAllSlides()
+void KPrPgConfDia::deselectAllSlides()
 {
     QListViewItem *item = slides->firstChild();
     while( item )
@@ -289,7 +289,7 @@ void PgConfDia::deselectAllSlides()
     }
 }
 
-QString PgConfDia::presentationName() const
+QString KPrPgConfDia::presentationName() const
 {
     if ( m_customSlide->isChecked() )
         return m_customSlideCombobox->currentText();

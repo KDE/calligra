@@ -29,7 +29,7 @@
 #include "polygonpropertyui.h"
 #include "KPrPolygonPreview.h"
 
-PolygonProperty::PolygonProperty( QWidget *parent, const char *name, PolygonSettingCmd::PolygonSettings &polygonSettings )
+KPrPolygonProperty::KPrPolygonProperty( QWidget *parent, const char *name, KPrPolygonSettingCmd::PolygonSettings &polygonSettings )
 : QWidget( parent, name )
 , m_polygonSettings( polygonSettings )
 {
@@ -51,31 +51,31 @@ PolygonProperty::PolygonProperty( QWidget *parent, const char *name, PolygonSett
 }
 
 
-PolygonProperty::~PolygonProperty()
+KPrPolygonProperty::~KPrPolygonProperty()
 {
 }
 
 
-int PolygonProperty::getPolygonPropertyChange() const
+int KPrPolygonProperty::getPolygonPropertyChange() const
 {
     int flags = 0;
 
     if ( isConvexConcave() != m_polygonSettings.checkConcavePolygon )
-        flags |= PolygonSettingCmd::ConcaveConvex;
+        flags |= KPrPolygonSettingCmd::ConcaveConvex;
 
     if ( m_ui->cornersInput->value() != m_polygonSettings.cornersValue )
-        flags |= PolygonSettingCmd::Corners;
+        flags |= KPrPolygonSettingCmd::Corners;
 
     if ( m_ui->sharpnessInput->value() != m_polygonSettings.sharpnessValue )
-        flags |= PolygonSettingCmd::Sharpness;
+        flags |= KPrPolygonSettingCmd::Sharpness;
 
     return flags;
 }
 
 
-PolygonSettingCmd::PolygonSettings PolygonProperty::getPolygonSettings() const
+KPrPolygonSettingCmd::PolygonSettings KPrPolygonProperty::getPolygonSettings() const
 {
-    PolygonSettingCmd::PolygonSettings polygonSettings;
+    KPrPolygonSettingCmd::PolygonSettings polygonSettings;
     polygonSettings.checkConcavePolygon = isConvexConcave();
     polygonSettings.cornersValue = m_ui->cornersInput->value();;
     polygonSettings.sharpnessValue = m_ui->sharpnessInput->value();;
@@ -83,35 +83,35 @@ PolygonSettingCmd::PolygonSettings PolygonProperty::getPolygonSettings() const
 }
 
 
-void PolygonProperty::setPolygonSettings( const PolygonSettingCmd::PolygonSettings &polygonSettings )
+void KPrPolygonProperty::setPolygonSettings( const KPrPolygonSettingCmd::PolygonSettings &polygonSettings )
 {
     m_polygonSettings = polygonSettings;
     slotReset();
 }
 
 
-void PolygonProperty::apply()
+void KPrPolygonProperty::apply()
 {
     int flags = getPolygonPropertyChange();
 
-    if ( flags & PolygonSettingCmd::ConcaveConvex )
+    if ( flags & KPrPolygonSettingCmd::ConcaveConvex )
         m_polygonSettings.checkConcavePolygon = isConvexConcave();
 
-    if ( flags & PolygonSettingCmd::Corners )
+    if ( flags & KPrPolygonSettingCmd::Corners )
         m_polygonSettings.cornersValue = m_ui->cornersInput->value();
 
-    if ( flags & PolygonSettingCmd::Sharpness )
+    if ( flags & KPrPolygonSettingCmd::Sharpness )
         m_polygonSettings.sharpnessValue = m_ui->sharpnessInput->value();
 }
 
 
-bool PolygonProperty::isConvexConcave() const
+bool KPrPolygonProperty::isConvexConcave() const
 {
     return m_ui->typeCombo->currentItem() == 1;
 }
 
 
-void PolygonProperty::slotTypeChanged( int pos )
+void KPrPolygonProperty::slotTypeChanged( int pos )
 {
     m_ui->polygonPreview->slotConvexConcave( pos == 1 );
 
@@ -119,7 +119,7 @@ void PolygonProperty::slotTypeChanged( int pos )
 }
 
 
-void PolygonProperty::slotReset()
+void KPrPolygonProperty::slotReset()
 {
     m_ui->typeCombo->setCurrentItem( m_polygonSettings.checkConcavePolygon ? 1 : 0 );
     m_ui->polygonPreview->slotConvexConcave( m_polygonSettings.checkConcavePolygon );

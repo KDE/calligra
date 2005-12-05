@@ -31,7 +31,7 @@
 
 #include "generalpropertyui.h"
 
-GeneralProperty::GeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit )
+KPrGeneralProperty::KPrGeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit )
 : QWidget( parent, name )
 , m_ratio( 1.0 )
 , m_generalValue( generalValue )
@@ -77,12 +77,12 @@ GeneralProperty::GeneralProperty( QWidget *parent, const char *name, GeneralValu
 }
 
 
-GeneralProperty::~GeneralProperty()
+KPrGeneralProperty::~KPrGeneralProperty()
 {
 }
 
 
-int GeneralProperty::getGeneralPropertyChange() const
+int KPrGeneralProperty::getGeneralPropertyChange() const
 {
     int flags = 0;
 
@@ -119,7 +119,7 @@ int GeneralProperty::getGeneralPropertyChange() const
 }
 
 
-GeneralProperty::GeneralValue GeneralProperty::getGeneralValue() const
+KPrGeneralProperty::GeneralValue KPrGeneralProperty::getGeneralValue() const
 {
     GeneralValue generalValue;
     generalValue.m_name = m_ui->nameInput->isEnabled() ? m_ui->nameInput->text() : QString();
@@ -130,7 +130,7 @@ GeneralProperty::GeneralValue GeneralProperty::getGeneralValue() const
 }
 
 
-void GeneralProperty::apply()
+void KPrGeneralProperty::apply()
 {
     int flags = getGeneralPropertyChange();
 
@@ -148,7 +148,7 @@ void GeneralProperty::apply()
 }
 
 
-KoRect GeneralProperty::getRect() const
+KoRect KPrGeneralProperty::getRect() const
 {
     double x = QMAX( 0, m_ui->xInput->value() );
     double y = QMAX( 0, m_ui->yInput->value() );
@@ -160,7 +160,7 @@ KoRect GeneralProperty::getRect() const
 }
 
 
-void GeneralProperty::setRect( KoRect &rect )
+void KPrGeneralProperty::setRect( KoRect &rect )
 {
     m_ui->xInput->changeValue( QMAX( 0.00, rect.left() ) );
     m_ui->yInput->changeValue( QMAX( 0.00, rect.top() ) );
@@ -169,7 +169,7 @@ void GeneralProperty::setRect( KoRect &rect )
 }
 
 
-void GeneralProperty::slotReset()
+void KPrGeneralProperty::slotReset()
 {
     switch ( m_generalValue.m_protect )
     {
@@ -211,13 +211,13 @@ void GeneralProperty::slotReset()
 }
 
 
-void GeneralProperty::slotProtectToggled( bool state )
+void KPrGeneralProperty::slotProtectToggled( bool state )
 {
     m_ui->positionGroup->setEnabled( !state );
 }
 
 
-void GeneralProperty::slotKeepRatioToggled( bool state )
+void KPrGeneralProperty::slotKeepRatioToggled( bool state )
 {
     if ( state )
     {
@@ -233,7 +233,7 @@ void GeneralProperty::slotKeepRatioToggled( bool state )
 }
 
 
-void GeneralProperty::slotWidthChanged( double value )
+void KPrGeneralProperty::slotWidthChanged( double value )
 {
     if ( m_ui->keepRatio->isChecked() )
     {
@@ -242,7 +242,7 @@ void GeneralProperty::slotWidthChanged( double value )
 }
 
 
-void GeneralProperty::slotHeightChanged( double value )
+void KPrGeneralProperty::slotHeightChanged( double value )
 {
     if ( m_ui->keepRatio->isChecked() && m_ratio != 0 )
     {

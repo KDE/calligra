@@ -25,31 +25,31 @@
 #include <kapplication.h>
 #include <dcopclient.h>
 
-KPPolyLineObjectIface::KPPolyLineObjectIface( KPPolylineObject *_obj )
-    : KPresenterObjectIface(_obj)
+KPrPolyLineObjectIface::KPrPolyLineObjectIface( KPrPolylineObject *_obj )
+    : KPrObjectIface(_obj)
 
 {
     obj = _obj;
 }
 
-void KPPolyLineObjectIface::horizontalFlip()
+void KPrPolyLineObjectIface::horizontalFlip()
 {
     //todo repaint it
     obj->flip(true );
 }
 
-void KPPolyLineObjectIface::verticalFlip()
+void KPrPolyLineObjectIface::verticalFlip()
 {
     //todo repaint it
     obj->flip( false );
 }
 
-void KPPolyLineObjectIface::closeObject()
+void KPrPolyLineObjectIface::closeObject()
 {
     obj->closeObject(true);
 }
 
-bool KPPolyLineObjectIface::isClosed()const
+bool KPrPolyLineObjectIface::isClosed()const
 {
     return obj->isClosed();
 }

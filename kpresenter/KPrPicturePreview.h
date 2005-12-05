@@ -28,13 +28,13 @@
 
 #include "global.h"
 
-class PicturePreview : public QFrame
+class KPrPicturePreview : public QFrame
 {
     Q_OBJECT
 
 public:
-    PicturePreview( QWidget* parent, const char* name);
-    ~PicturePreview() {}
+    KPrPicturePreview( QWidget* parent, const char* name);
+    ~KPrPicturePreview() {}
 
     void setDepth( int depth);
     void setMirrorType (PictureMirrorType _t);

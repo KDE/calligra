@@ -29,24 +29,24 @@
 class QPainter;
 class DCOPObject;
 
-class KPPolylineObject : public KPPointObject
+class KPrPolylineObject : public KPrPointObject
 {
 public:
-    KPPolylineObject();
-    KPPolylineObject( const KoPointArray &_points, const KoSize &_size,
-                      const KPPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
-    virtual ~KPPolylineObject() {}
+    KPrPolylineObject();
+    KPrPolylineObject( const KoPointArray &_points, const KoSize &_size,
+                      const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    virtual ~KPrPolylineObject() {}
 
     virtual DCOPObject* dcopObject();
 
-    KPPolylineObject &operator=( const KPPolylineObject & );
+    KPrPolylineObject &operator=( const KPrPolylineObject & );
 
     virtual ObjType getType() const { return OT_POLYLINE; }
     virtual QString getTypeString() const { return i18n("Polyline"); }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load( const QDomElement &element );
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info);
 
 protected:
     virtual const char * getOasisElementName() const;

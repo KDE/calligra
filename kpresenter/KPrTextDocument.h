@@ -24,7 +24,7 @@
 #include <KoRichText.h>
 #include "KoTextDocument.h"
 
-class KPTextObject;
+class KPrTextObject;
 class KoTextFormatCollection;
 
 /**
@@ -36,20 +36,20 @@ class KPrTextDocument : public KoTextDocument
     Q_OBJECT
 public:
     /** A text document inside a kptextobject */
-    KPrTextDocument( KPTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter = 0L );
+    KPrTextDocument( KPrTextObject * textobj, KoTextFormatCollection *fc, KoTextFormatter *formatter = 0L );
 
     ~KPrTextDocument();
 
     /** Return the text object in which this document is.
      * Note that this can be 0L (e.g. for paragraphs in the paragdia preview) */
-    KPTextObject * textObject() const { return m_textobj; }
+    KPrTextObject * textObject() const { return m_textobj; }
     /// Extensions to KoTextParag::loadOasisSpan
     bool loadSpanTag( const QDomElement& tag, KoOasisContext& context,
                       KoTextParag* parag, uint pos,
                       QString& textData, KoTextCustomItem* & customItem );
 
 private:
-    KPTextObject * m_textobj;
+    KPrTextObject * m_textobj;
 };
 
 #endif

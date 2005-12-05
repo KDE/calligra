@@ -36,7 +36,7 @@
 #include <klocale.h>
 #include <kstdguiitem.h>
 
-PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page, KPrDocument *doc )
+KPrPropertyEditor::KPrPropertyEditor( QWidget *parent, const char *name, KPrPage *page, KPrDocument *doc )
     : QTabDialog( parent, name, true )
     , m_page( page )
     , m_doc( doc )
@@ -57,19 +57,19 @@ PropertyEditor::PropertyEditor( QWidget *parent, const char *name, KPrPage *page
 
     connect( this, SIGNAL( applyButtonPressed() ), this, SLOT( slotDone() ) );
 
-    m_objectProperties = new KPObjectProperties( m_objects );
+    m_objectProperties = new KPrObjectProperties( m_objects );
 
     setupTabs();
 }
 
 
-PropertyEditor::~PropertyEditor()
+KPrPropertyEditor::~KPrPropertyEditor()
 {
     delete m_objectProperties;
 }
 
 
-KCommand * PropertyEditor::getCommand()
+KCommand * KPrPropertyEditor::getCommand()
 {
     KMacroCommand *macro = 0;
 
@@ -78,9 +78,9 @@ KCommand * PropertyEditor::getCommand()
         int change = m_penProperty->getPenConfigChange();
         if ( change )
         {
-            PenCmd::Pen pen( m_penProperty->getPen() );
+            KPrPenCmd::Pen pen( m_penProperty->getPen() );
 
-            PenCmd *cmd = new PenCmd( i18n( "Apply Styles" ), m_objects, pen, m_doc, m_page, change );
+            KPrPenCmd *cmd = new KPrPenCmd( i18n( "Apply Styles" ), m_objects, pen, m_doc, m_page, change );
 
             if ( !macro )
             {
@@ -96,9 +96,9 @@ KCommand * PropertyEditor::getCommand()
         int change = m_brushProperty->getBrushPropertyChange();
         if ( change )
         {
-            BrushCmd::Brush brush( m_brushProperty->getBrush() );
+            KPrBrushCmd::Brush brush( m_brushProperty->getBrush() );
 
-            BrushCmd *cmd = new BrushCmd( i18n( "Apply Styles" ), m_objects, brush, m_doc, m_page, change );
+            KPrBrushCmd *cmd = new KPrBrushCmd( i18n( "Apply Styles" ), m_objects, brush, m_doc, m_page, change );
 
             if ( !macro )
             {
@@ -115,9 +115,9 @@ KCommand * PropertyEditor::getCommand()
 
         if ( change )
         {
-            RectValueCmd::RectValues rectValue( m_rectProperty->getRectValues() );
+            KPrRectValueCmd::RectValues rectValue( m_rectProperty->getRectValues() );
 
-            RectValueCmd *cmd = new RectValueCmd( i18n( "Apply Styles" ), m_objects, rectValue, m_doc, m_page, change );
+            KPrRectValueCmd *cmd = new KPrRectValueCmd( i18n( "Apply Styles" ), m_objects, rectValue, m_doc, m_page, change );
 
             if ( !macro )
             {
@@ -134,9 +134,9 @@ KCommand * PropertyEditor::getCommand()
 
         if ( change )
         {
-            PolygonSettingCmd::PolygonSettings polygonSettings( m_polygonProperty->getPolygonSettings() );
+            KPrPolygonSettingCmd::PolygonSettings polygonSettings( m_polygonProperty->getPolygonSettings() );
 
-            PolygonSettingCmd *cmd = new PolygonSettingCmd( i18n("Apply Styles"), polygonSettings,
+            KPrPolygonSettingCmd *cmd = new KPrPolygonSettingCmd( i18n("Apply Styles"), polygonSettings,
                                                             m_objects, m_doc, m_page, change );
 
             if ( !macro )
@@ -154,7 +154,7 @@ KCommand * PropertyEditor::getCommand()
 
         if ( change )
         {
-            PieValueCmd *cmd = new PieValueCmd( i18n("Apply Styles"), m_pieProperty->getPieValues(),
+            KPrPieValueCmd *cmd = new KPrPieValueCmd( i18n("Apply Styles"), m_pieProperty->getPieValues(),
                                                 m_objects, m_doc, m_page, change );
             if ( !macro )
             {
@@ -171,7 +171,7 @@ KCommand * PropertyEditor::getCommand()
 
         if ( change )
         {
-            PictureSettingCmd *cmd = new PictureSettingCmd( i18n("Apply Styles"), m_pictureProperty->getPictureSettings(),
+            KPrPictureSettingCmd *cmd = new KPrPictureSettingCmd( i18n("Apply Styles"), m_pictureProperty->getPictureSettings(),
                                                             m_objects, m_doc, m_page, change );
             if ( !macro )
             {
@@ -188,7 +188,7 @@ KCommand * PropertyEditor::getCommand()
 
         if ( change )
         {
-            if ( change & TextProperty::ProtectContent )
+            if ( change & KPrTextProperty::ProtectContent )
             {
                 KPrProtectContentCommand * cmd = new KPrProtectContentCommand( i18n( "Apply Styles" ), m_objects,
                                                                                m_textProperty->getProtectContent(),
@@ -201,7 +201,7 @@ KCommand * PropertyEditor::getCommand()
                 macro->addCommand( cmd );
             }
 
-            if ( change & TextProperty::Margins )
+            if ( change & KPrTextProperty::Margins )
             {
                 KPrChangeMarginCommand *cmd = new KPrChangeMarginCommand( i18n( "Apply Styles" ), m_objects,
                                                                           m_textProperty->getMarginsStruct(),
@@ -223,9 +223,9 @@ KCommand * PropertyEditor::getCommand()
 
         if ( change )
         {
-            GeneralProperty::GeneralValue generalValue( m_generalProperty->getGeneralValue() );
+            KPrGeneralProperty::GeneralValue generalValue( m_generalProperty->getGeneralValue() );
 
-            if ( change & GeneralProperty::Name )
+            if ( change & KPrGeneralProperty::Name )
             {
                 KCommand *cmd = new KPrNameObjectCommand( i18n( "Name Object" ), generalValue.m_name,
                                                           m_objects.at( 0 ), m_doc );
@@ -238,7 +238,7 @@ KCommand * PropertyEditor::getCommand()
                 macro->addCommand( cmd );
             }
 
-            if ( change & GeneralProperty::Protect )
+            if ( change & KPrGeneralProperty::Protect )
             {
                 KCommand *cmd= new KPrGeometryPropertiesCommand( i18n( "Protect Object" ), m_objects,
                                                                  generalValue.m_protect == STATE_ON,
@@ -252,7 +252,7 @@ KCommand * PropertyEditor::getCommand()
                 macro->addCommand( cmd );
             }
 
-            if ( change & GeneralProperty::KeepRatio )
+            if ( change & KPrGeneralProperty::KeepRatio )
             {
                 KCommand *cmd= new KPrGeometryPropertiesCommand( i18n( "Keep Ratio" ), m_objects,
                                                                  generalValue.m_keepRatio == STATE_ON,
@@ -265,34 +265,34 @@ KCommand * PropertyEditor::getCommand()
                 macro->addCommand( cmd );
             }
 
-            if ( change & GeneralProperty::Left
-                 || change & GeneralProperty::Top
-                 || change & GeneralProperty::Width
-                 || change & GeneralProperty::Height )
+            if ( change & KPrGeneralProperty::Left
+                 || change & KPrGeneralProperty::Top
+                 || change & KPrGeneralProperty::Width
+                 || change & KPrGeneralProperty::Height )
             {
                 if ( !macro )
                 {
                     macro = new KMacroCommand( i18n( "Apply Properties" ) );
                 }
 
-                QPtrListIterator<KPObject> it( m_objects );
+                QPtrListIterator<KPrObject> it( m_objects );
                 for ( ; it.current(); ++it )
                 {
                     KoRect oldRect = it.current()->getRect();
                     KoRect newRect = oldRect;
-                    if ( change & GeneralProperty::Left )
+                    if ( change & KPrGeneralProperty::Left )
                         newRect.moveTopLeft( KoPoint( generalValue.m_rect.left(), newRect.top() ) );
 
-                    if ( change & GeneralProperty::Top )
+                    if ( change & KPrGeneralProperty::Top )
                         newRect.moveTopLeft( KoPoint( newRect.left(), generalValue.m_rect.top() ) );
 
-                    if ( change & GeneralProperty::Width )
+                    if ( change & KPrGeneralProperty::Width )
                         newRect.setWidth( generalValue.m_rect.width() );
 
-                    if ( change & GeneralProperty::Height )
+                    if ( change & KPrGeneralProperty::Height )
                         newRect.setHeight( generalValue.m_rect.height() );
 
-                    KCommand *cmd = new ResizeCmd( i18n( "Change Size" ),
+                    KCommand *cmd = new KPrResizeCmd( i18n( "Change Size" ),
                                                    newRect.topLeft() - oldRect.topLeft(),
                                                    newRect.size() - oldRect.size(),
                                                    it.current(), m_doc );
@@ -307,126 +307,126 @@ KCommand * PropertyEditor::getCommand()
 }
 
 
-void PropertyEditor::setupTabs()
+void KPrPropertyEditor::setupTabs()
 {
     setupTabGeneral();
 
     int flags = m_objectProperties->getPropertyFlags();
 
-    if ( flags & KPObjectProperties::PtPen )
-        setupTabPen( flags & KPObjectProperties::PtLineEnds );
+    if ( flags & KPrObjectProperties::PtPen )
+        setupTabPen( flags & KPrObjectProperties::PtLineEnds );
 
-    if ( flags & KPObjectProperties::PtBrush )
+    if ( flags & KPrObjectProperties::PtBrush )
         setupTabBrush();
 
-    if ( flags & KPObjectProperties::PtRectangle )
+    if ( flags & KPrObjectProperties::PtRectangle )
         setupTabRect();
 
-    if ( flags & KPObjectProperties::PtPolygon )
+    if ( flags & KPrObjectProperties::PtPolygon )
         setupTabPolygon();
 
-    if ( flags & KPObjectProperties::PtPie )
+    if ( flags & KPrObjectProperties::PtPie )
         setupTabPie();
 
-    if ( flags & KPObjectProperties::PtPicture )
+    if ( flags & KPrObjectProperties::PtPicture )
         setupTabPicture();
 
-    if ( flags & KPObjectProperties::PtText )
+    if ( flags & KPrObjectProperties::PtText )
         setupTabText();
 }
 
 
-void PropertyEditor::setupTabPen( bool configureLineEnds )
+void KPrPropertyEditor::setupTabPen( bool configureLineEnds )
 {
     if ( m_penProperty == 0 )
     {
-        PenCmd::Pen pen( m_objectProperties->getPen() );
+        KPrPenCmd::Pen pen( m_objectProperties->getPen() );
 
-        m_penProperty = new PenStyleWidget( this, 0, pen, configureLineEnds );
+        m_penProperty = new KPrPenStyleWidget( this, 0, pen, configureLineEnds );
         addTab( m_penProperty, i18n( "Outl&ine" ) );
     }
 }
 
 
-void PropertyEditor::setupTabBrush()
+void KPrPropertyEditor::setupTabBrush()
 {
     if ( m_brushProperty == 0 )
     {
-        BrushCmd::Brush brush( m_objectProperties->getBrush() );
+        KPrBrushCmd::Brush brush( m_objectProperties->getBrush() );
 
-        m_brushProperty = new BrushProperty( this, 0, brush );
+        m_brushProperty = new KPrBrushProperty( this, 0, brush );
         addTab( m_brushProperty, i18n( "&Fill" ) );
     }
 }
 
 
-void PropertyEditor::setupTabRect()
+void KPrPropertyEditor::setupTabRect()
 {
     if ( m_rectProperty == 0 )
     {
-        RectValueCmd::RectValues rectValues = m_objectProperties->getRectValues();
-        m_rectProperty = new RectProperty( this, 0, rectValues );
+        KPrRectValueCmd::RectValues rectValues = m_objectProperties->getRectValues();
+        m_rectProperty = new KPrRectProperty( this, 0, rectValues );
         addTab( m_rectProperty, i18n( "&Rectangle" ) );
     }
 }
 
 
-void PropertyEditor::setupTabPolygon()
+void KPrPropertyEditor::setupTabPolygon()
 {
     if ( m_polygonProperty == 0 )
     {
-        PolygonSettingCmd::PolygonSettings polygonSettings = m_objectProperties->getPolygonSettings();
-        m_polygonProperty = new PolygonProperty( this, 0, polygonSettings );
+        KPrPolygonSettingCmd::PolygonSettings polygonSettings = m_objectProperties->getPolygonSettings();
+        m_polygonProperty = new KPrPolygonProperty( this, 0, polygonSettings );
         addTab( m_polygonProperty, i18n("Polygo&n" ) );
     }
 }
 
 
-void PropertyEditor::setupTabPie()
+void KPrPropertyEditor::setupTabPie()
 {
     if ( m_pieProperty == 0 )
     {
-        m_pieProperty = new PieProperty( this, 0, m_objectProperties->getPieValues() );
+        m_pieProperty = new KPrPieProperty( this, 0, m_objectProperties->getPieValues() );
         addTab( m_pieProperty, i18n("&Pie" ) );
     }
 }
 
 
-void PropertyEditor::setupTabPicture()
+void KPrPropertyEditor::setupTabPicture()
 {
     if ( m_pictureProperty == 0 )
     {
-        m_pictureProperty = new PictureProperty( this, 0, m_objectProperties->getPixmap(), m_objectProperties->getPictureSettings() );
+        m_pictureProperty = new KPrPictureProperty( this, 0, m_objectProperties->getPixmap(), m_objectProperties->getPictureSettings() );
         addTab( m_pictureProperty, i18n("Pict&ure" ) );
     }
 }
 
 
-void PropertyEditor::setupTabText()
+void KPrPropertyEditor::setupTabText()
 {
     if ( m_textProperty == 0 )
     {
-        m_textProperty = new TextProperty( this, 0, m_objectProperties->getMarginsStruct(),
+        m_textProperty = new KPrTextProperty( this, 0, m_objectProperties->getMarginsStruct(),
                                            m_doc->unit(), m_objectProperties->getProtectContent() );
         addTab( m_textProperty, i18n("Te&xt" ) );
     }
 }
 
 
-void PropertyEditor::setupTabGeneral()
+void KPrPropertyEditor::setupTabGeneral()
 {
     if ( m_generalProperty == 0 )
     {
-        GeneralProperty::GeneralValue generalValue = getGeneralValue();
-        m_generalProperty = new GeneralProperty( this, 0, generalValue, m_doc->unit() );
+        KPrGeneralProperty::GeneralValue generalValue = getGeneralValue();
+        m_generalProperty = new KPrGeneralProperty( this, 0, generalValue, m_doc->unit() );
         addTab( m_generalProperty, i18n( "&General" ) );
     }
 }
 
 
-GeneralProperty::GeneralValue PropertyEditor::getGeneralValue()
+KPrGeneralProperty::GeneralValue KPrPropertyEditor::getGeneralValue()
 {
-    GeneralProperty::GeneralValue generalValue;
+    KPrGeneralProperty::GeneralValue generalValue;
 
     if ( m_objects.count() == 1 )
     {
@@ -438,7 +438,7 @@ GeneralProperty::GeneralValue PropertyEditor::getGeneralValue()
     bool keepRatio = false;
     generalValue.m_keepRatio = STATE_OFF;
 
-    QPtrListIterator<KPObject> it( m_objects );
+    QPtrListIterator<KPrObject> it( m_objects );
     if ( it.current() )
     {
         protect = it.current()->isProtect();
@@ -474,7 +474,7 @@ GeneralProperty::GeneralValue PropertyEditor::getGeneralValue()
 }
 
 
-void PropertyEditor::slotDone()
+void KPrPropertyEditor::slotDone()
 {
     emit propertiesOk();
 

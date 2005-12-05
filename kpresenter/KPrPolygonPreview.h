@@ -30,13 +30,13 @@
 
 class QPainter;
 
-class PolygonPreview : public QFrame
+class KPrPolygonPreview : public QFrame
 {
     Q_OBJECT
 
 public:
-    PolygonPreview( QWidget* parent, const char*);
-    ~PolygonPreview() {}
+    KPrPolygonPreview( QWidget* parent, const char*);
+    ~KPrPolygonPreview() {}
 
     void setPenBrush( const QPen &_pen, const QBrush &_brush )
         { pen = _pen; brush = _brush; repaint( true ); }

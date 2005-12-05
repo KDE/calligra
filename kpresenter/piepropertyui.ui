@@ -52,7 +52,7 @@
                 <cstring>lengthInput</cstring>
             </property>
         </widget>
-        <widget class="PiePreview" row="3" column="0" rowspan="1" colspan="2">
+        <widget class="KPrPiePreview" row="3" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>piePreview</cstring>
             </property>
@@ -115,7 +115,7 @@
 </widget>
 <customwidgets>
     <customwidget>
-        <class>PiePreview</class>
+        <class>KPrPiePreview</class>
         <header location="global">KPrPiePreview.h</header>>
         <sizehint>
             <width>200</width>

@@ -26,13 +26,13 @@
 #include "KPrObjectIface.h"
 #include <qstring.h>
 
-class KPFreehandObject;
+class KPrFreehandObject;
 
-class KPFreehandObjectIface : public KPresenterObjectIface
+class KPrFreehandObjectIface : public KPrObjectIface
 {
     K_DCOP
 public:
-    KPFreehandObjectIface( KPFreehandObject *obj_ );
+    KPrFreehandObjectIface( KPrFreehandObject *obj_ );
 
 k_dcop:
 
@@ -46,7 +46,7 @@ k_dcop:
     bool isClosed()const;
 
 private:
-    KPFreehandObject *obj;
+    KPrFreehandObject *obj;
 };
 
 #endif

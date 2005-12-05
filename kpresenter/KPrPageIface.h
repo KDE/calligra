@@ -29,11 +29,11 @@
 #include "global.h"
 class KPrPage;
 
-class KPresenterPageIface :public DCOPObject
+class KPrPageIface :public DCOPObject
 {
     K_DCOP
 public:
-    KPresenterPageIface( KPrPage *_page, int pgnum );
+    KPrPageIface( KPrPage *_page, int pgnum );
 
 k_dcop:
     virtual DCOPRef object( int num );

@@ -32,20 +32,20 @@
 #include <kdebug.h>
 using namespace std;
 
-KPPartObject::KPPartObject( KPresenterChild *_child )
-    : KP2DObject()
+KPrPartObject::KPrPartObject( KPrChild *_child )
+    : KPr2DObject()
 {
     child = _child;
-    pen = KPPen( Qt::black, 1.0, Qt::NoPen );
+    pen = KPrPen( Qt::black, 1.0, Qt::NoPen );
     _enableDrawing = true;
 }
 
-KPPartObject &KPPartObject::operator=( const KPPartObject & )
+KPrPartObject &KPrPartObject::operator=( const KPrPartObject & )
 {
     return *this;
 }
 
-void KPPartObject::updateChildGeometry()
+void KPrPartObject::updateChildGeometry()
 {
     KoTextZoomHandler* zh = child->parent()->zoomHandler();
     child->setGeometry( zh->zoomRect( getRect() ), true );
@@ -53,9 +53,9 @@ void KPPartObject::updateChildGeometry()
                                      zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
 
-void KPPartObject::rotate( float _angle )
+void KPrPartObject::rotate( float _angle )
 {
-    KPObject::rotate( _angle );
+    KPrObject::rotate( _angle );
 
     child->setRotation( _angle );
     KoTextZoomHandler* zh = child->parent()->zoomHandler();
@@ -63,9 +63,9 @@ void KPPartObject::rotate( float _angle )
                                      zh->zoomItY( getOrig().y() + getSize().height() / 2 ) ) );
 }
 
-bool KPPartObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrPartObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug() << "KPPartObject::saveOasisPart " << sc.partIndexObj << endl;
+    kdDebug() << "KPrPartObject::saveOasisPart " << sc.partIndexObj << endl;
 
     sc.xmlWriter.startElement( "draw:object" );
     const QString name = QString( "Object_%1" ).arg( sc.partIndexObj + 1 );
@@ -76,15 +76,15 @@ bool KPPartObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
     return true;
 }
 
-const char * KPPartObject::getOasisElementName() const
+const char * KPrPartObject::getOasisElementName() const
 {
     return "draw:frame";
 }
 
 
-void KPPartObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPRLoadingInfo *info)
+void KPrPartObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPrLoadingInfo *info)
 {
-    kdDebug()<<"void KPPartObject::loadOasis(const QDomElement &element)******************\n";
+    kdDebug()<<"void KPrPartObject::loadOasis(const QDomElement &element)******************\n";
     
     QDomElement objectElement = KoDom::namedItemNS( element, KoXmlNS::draw, "object" );
     child->loadOasis( element, objectElement );
@@ -93,7 +93,7 @@ void KPPartObject::loadOasis(const QDomElement &element, KoOasisContext&context,
     (void)child->loadOasisDocument( context.store(), context.manifestDocument() );
 }
 
-void KPPartObject::draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
+void KPrPartObject::draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
                          int pageNum, SelectionMode selectionMode, bool drawContour )
 {
     updateChildGeometry();
@@ -146,18 +146,18 @@ void KPPartObject::draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
     paint( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
     _painter->restore();
 
-    KPObject::draw( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
+    KPrObject::draw( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
 }
 
-void KPPartObject::slot_changed( KoChild *_koChild )
+void KPrPartObject::slot_changed( KoChild *_koChild )
 {
     KoTextZoomHandler* zh = child->parent()->zoomHandler();
     KoRect g = zh->unzoomRect( _koChild->geometry() );
-    KPObject::setOrig( g.x(), g.y() );
-    KPObject::setSize( g.width(), g.height() );
+    KPrObject::setOrig( g.x(), g.y() );
+    KPrObject::setSize( g.width(), g.height() );
 }
 
-void KPPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
+void KPrPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
                           int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
     if ( !_enableDrawing ) return;
@@ -184,9 +184,9 @@ void KPPartObject::paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
                                         _zoomHandler->zoomedResolutionY() );
 }
 
-void KPPartObject::activate( QWidget *_widget )
+void KPrPartObject::activate( QWidget *_widget )
 {
-    KPresenterView *view = dynamic_cast<KPresenterView*>( _widget );
+    KPrView *view = dynamic_cast<KPrView*>( _widget );
     KoDocument* part = child->document();
     if ( !part )
         return;
@@ -194,7 +194,7 @@ void KPPartObject::activate( QWidget *_widget )
     view->partManager()->setActivePart( part, view );
 }
 
-void KPPartObject::deactivate()
+void KPrPartObject::deactivate()
 {
 }
 

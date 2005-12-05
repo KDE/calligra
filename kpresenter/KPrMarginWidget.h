@@ -28,12 +28,12 @@
 
 class MarginUI;
 
-class KPMarginWidget : public QWidget
+class KPrMarginWidget : public QWidget
 {
     Q_OBJECT
 public:
-    KPMarginWidget( QWidget *parent, const char *name, const KoUnit::Unit unit );
-    ~KPMarginWidget();
+    KPrMarginWidget( QWidget *parent, const char *name, const KoUnit::Unit unit );
+    ~KPrMarginWidget();
 
     bool changed() const { return m_changed; }
     void resetChanged() { m_changed = false; }

@@ -33,7 +33,7 @@
 #include <knuminput.h>
 
 
-PenStyleWidget::PenStyleWidget( QWidget *parent, const char *name, const PenCmd::Pen &pen, bool configureLineEnds )
+KPrPenStyleWidget::KPrPenStyleWidget( QWidget *parent, const char *name, const KPrPenCmd::Pen &pen, bool configureLineEnds )
 : QWidget( parent, name )
 , m_pen( pen )
 {
@@ -46,7 +46,7 @@ PenStyleWidget::PenStyleWidget( QWidget *parent, const char *name, const PenCmd:
     connect( m_ui->colorChooser, SIGNAL( changed( const QColor& ) ),
              this, SLOT( slotPenChanged() ) );
 
-    m_ui->styleCombo->insertItem( i18n( "No Outline" ) );
+    m_ui->styleCombo->insertItem( i18n( "No KPrOutline" ) );
     m_ui->styleCombo->insertItem( "__________" );
     m_ui->styleCombo->insertItem( "__ __ __ __" );
     m_ui->styleCombo->insertItem( "_ _ _ _ _ _" );
@@ -93,13 +93,13 @@ PenStyleWidget::PenStyleWidget( QWidget *parent, const char *name, const PenCmd:
 }
 
 
-PenStyleWidget::~PenStyleWidget()
+KPrPenStyleWidget::~KPrPenStyleWidget()
 {
     delete m_ui;
 }
 
 
-void PenStyleWidget::setPen( const KPPen &pen )
+void KPrPenStyleWidget::setPen( const KPrPen &pen )
 {
     m_ui->colorChooser->setColor( pen.color() );
 
@@ -132,23 +132,23 @@ void PenStyleWidget::setPen( const KPPen &pen )
 }
 
 
-void PenStyleWidget::setLineBegin( LineEnd lb )
+void KPrPenStyleWidget::setLineBegin( LineEnd lb )
 {
     m_ui->lineBeginCombo->setCurrentItem( (int)lb );
     m_ui->pbPreview->setLineBegin( lb );
 }
 
 
-void PenStyleWidget::setLineEnd( LineEnd le )
+void KPrPenStyleWidget::setLineEnd( LineEnd le )
 {
     m_ui->lineEndCombo->setCurrentItem( (int)le );
     m_ui->pbPreview->setLineEnd( le );
 }
 
 
-KPPen PenStyleWidget::getKPPen() const
+KPrPen KPrPenStyleWidget::getKPPen() const
 {
-    KPPen pen;
+    KPrPen pen;
 
     switch ( m_ui->styleCombo->currentItem() )
     {
@@ -179,73 +179,73 @@ KPPen PenStyleWidget::getKPPen() const
 }
 
 
-LineEnd PenStyleWidget::getLineBegin() const
+LineEnd KPrPenStyleWidget::getLineBegin() const
 {
     return (LineEnd) m_ui->lineBeginCombo->currentItem();
 }
 
 
-LineEnd PenStyleWidget::getLineEnd() const
+LineEnd KPrPenStyleWidget::getLineEnd() const
 {
     return (LineEnd) m_ui->lineEndCombo->currentItem();
 }
 
 
-int PenStyleWidget::getPenConfigChange() const
+int KPrPenStyleWidget::getPenConfigChange() const
 {
     int flags = 0;
 
     if ( getLineEnd() != m_pen.lineEnd )
-        flags = flags | PenCmd::LineEnd;
+        flags = flags | KPrPenCmd::LineEnd;
     if ( getLineBegin() != m_pen.lineBegin )
-        flags = flags | PenCmd::LineBegin;
+        flags = flags | KPrPenCmd::LineBegin;
     if ( getKPPen().color() != m_pen.pen.color() )
-        flags = flags | PenCmd::Color;
+        flags = flags | KPrPenCmd::Color;
     if ( getKPPen().style() != m_pen.pen.style() )
-        flags = flags | PenCmd::Style;
+        flags = flags | KPrPenCmd::Style;
     if ( getKPPen().pointWidth() != m_pen.pen.pointWidth() )
-        flags = flags | PenCmd::Width;
+        flags = flags | KPrPenCmd::Width;
 
     return flags;
 }
 
 
-PenCmd::Pen PenStyleWidget::getPen() const
+KPrPenCmd::Pen KPrPenStyleWidget::getPen() const
 {
-    PenCmd::Pen pen( getKPPen(), getLineBegin(), getLineEnd() );
+    KPrPenCmd::Pen pen( getKPPen(), getLineBegin(), getLineEnd() );
     return pen;
 }
 
 
-void PenStyleWidget::setPen( const PenCmd::Pen &pen )
+void KPrPenStyleWidget::setPen( const KPrPenCmd::Pen &pen )
 {
     m_pen = pen;
     slotReset();
 }
 
 
-void PenStyleWidget::apply()
+void KPrPenStyleWidget::apply()
 {
     int flags = getPenConfigChange();
 
-    if ( flags & PenCmd::LineEnd )
+    if ( flags & KPrPenCmd::LineEnd )
         m_pen.lineEnd = getLineEnd();
 
-    if ( flags & PenCmd::LineBegin )
+    if ( flags & KPrPenCmd::LineBegin )
         m_pen.lineBegin = getLineBegin();
 
-    if ( flags & PenCmd::Color )
+    if ( flags & KPrPenCmd::Color )
         m_pen.pen.setColor( getKPPen().color() );
 
-    if ( flags & PenCmd::Style )
+    if ( flags & KPrPenCmd::Style )
         m_pen.pen.setStyle( getKPPen().style() );
 
-    if ( flags & PenCmd::Width )
+    if ( flags & KPrPenCmd::Width )
         m_pen.pen.setPointWidth( getKPPen().pointWidth() );
 }
 
 
-void PenStyleWidget::slotReset()
+void KPrPenStyleWidget::slotReset()
 {
     setPen( m_pen.pen );
     m_ui->widthLabel->setEnabled( m_pen.pen.style() != NoPen );
@@ -256,22 +256,22 @@ void PenStyleWidget::slotReset()
 }
 
 
-void PenStyleWidget::slotPenChanged()
+void KPrPenStyleWidget::slotPenChanged()
 {
-    KPPen pen = getKPPen();
+    KPrPen pen = getKPPen();
     m_ui->widthLabel->setEnabled( pen.style() != NoPen );
     m_ui->widthInput->setEnabled( pen.style() != NoPen );
     m_ui->pbPreview->setPen( pen );
 }
 
 
-void PenStyleWidget::slotLineBeginChanged()
+void KPrPenStyleWidget::slotLineBeginChanged()
 {
     m_ui->pbPreview->setLineBegin( getLineBegin() );
 }
 
 
-void PenStyleWidget::slotLineEndChanged()
+void KPrPenStyleWidget::slotLineEndChanged()
 {
     m_ui->pbPreview->setLineEnd( getLineEnd() );
 }

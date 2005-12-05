@@ -24,7 +24,7 @@
 #include <kdebug.h>
 #include <KoTextZoomHandler.h>
 
-KPGradient::KPGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
+KPrGradient::KPrGradient( const QColor &_color1, const QColor &_color2, BCType _bcType,
                         bool _unbalanced, int _xfactor, int _yfactor )
     : color1( _color1 ), color2( _color2 ), bcType( _bcType ),
       m_pixmap(), refCount( 0 ),
@@ -34,7 +34,7 @@ KPGradient::KPGradient( const QColor &_color1, const QColor &_color2, BCType _bc
     //m_pixmap.resize( _size );
 }
 
-void KPGradient::setParameters(const QColor &c1, const QColor &c2, BCType _type,
+void KPrGradient::setParameters(const QColor &c1, const QColor &c2, BCType _type,
                                bool _unbalanced, int xf, int yf) {
     color1=c1;
     color2=c2;
@@ -45,17 +45,17 @@ void KPGradient::setParameters(const QColor &c1, const QColor &c2, BCType _type,
     m_bDirty = true;
 }
 
-void KPGradient::addRef()
+void KPrGradient::addRef()
 {
     ++refCount;
 }
 
-bool KPGradient::removeRef()
+bool KPrGradient::removeRef()
 {
     return ( --refCount == 0 );
 }
 
-void KPGradient::paint()
+void KPrGradient::paint()
 {
     QPainter painter;
     switch ( bcType ) {
@@ -128,9 +128,9 @@ void KPGradient::paint()
     m_bDirty = false;
 }
 
-const QPixmap& KPGradient::pixmap() const
+const QPixmap& KPrGradient::pixmap() const
 {
     if ( m_bDirty )
-        const_cast<KPGradient *>(this)->paint();
+        const_cast<KPrGradient *>(this)->paint();
     return m_pixmap;
 }

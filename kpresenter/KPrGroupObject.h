@@ -29,14 +29,14 @@ class KoXmlWriter;
 
 #include "KPrObject.h"
 
-class KPGroupObject : public KPObject
+class KPrGroupObject : public KPrObject
 {
 public:
-    KPGroupObject();
-    KPGroupObject( const QPtrList<KPObject> &objs );
-    virtual ~KPGroupObject() {}
+    KPrGroupObject();
+    KPrGroupObject( const QPtrList<KPrObject> &objs );
+    virtual ~KPrGroupObject() {}
 
-    KPGroupObject &operator=( const KPGroupObject & );
+    KPrGroupObject &operator=( const KPrGroupObject & );
 
     virtual void setSize( double _width, double _height );
     virtual void setOrig( const KoPoint &_point );
@@ -70,19 +70,19 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element, KPrDocument *doc);
-    virtual void loadOasisGroupObject( KPrDocument *doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPRLoadingInfo *info);
+    virtual void loadOasisGroupObject( KPrDocument *doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPrLoadingInfo *info);
 
     virtual void draw( QPainter *_painter, KoTextZoomHandler *_zoomhandler,
                        int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
 
-    void addObjects( KPObject * obj );
+    void addObjects( KPrObject * obj );
 
     void setUpdateObjects( bool b )
         { updateObjs = b; }
 
-    QPtrList<KPObject> getObjects()
+    QPtrList<KPrObject> getObjects()
         { return objects; }
-    const QPtrList<KPObject> &objectList() const
+    const QPtrList<KPrObject> &objectList() const
         { return objects; }
     virtual void addTextObjects( QPtrList<KoTextObject> & ) const;
 
@@ -92,7 +92,7 @@ public:
     virtual void setOwnClipping( bool _ownClipping );
     virtual void setSubPresStep( int _subPresStep );
     virtual void doSpecificEffects( bool _specEffects, bool _onlyCurrStep = true );
-    virtual void getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force=false );
+    virtual void getAllObjectSelectedList(QPtrList<KPrObject> &lst,bool force=false );
 
     virtual void flip( bool horizontal );
     virtual void removeFromObjList();
@@ -108,7 +108,7 @@ protected:
     void updateSizes( double fx, double fy );
     void updateCoords( double dx, double dy );
 
-    QPtrList<KPObject> objects;
+    QPtrList<KPrObject> objects;
     bool updateObjs;
 
 };

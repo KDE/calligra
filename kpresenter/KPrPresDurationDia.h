@@ -27,12 +27,12 @@ class KPrDocument;
 class KListView;
 class QLabel;
 
-class KPPresDurationDia : public KDialogBase
+class KPrPresDurationDia : public KDialogBase
 {
     Q_OBJECT
 
 public:
-    KPPresDurationDia( QWidget *parent, const char *name,
+    KPrPresDurationDia( QWidget *parent, const char *name,
                        KPrDocument *_doc,
                        QStringList _durationListString,
                        const QString &_durationString );

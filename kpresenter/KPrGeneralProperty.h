@@ -28,7 +28,7 @@
 
 class GeneralPropertyUI;
 
-class GeneralProperty : public QWidget
+class KPrGeneralProperty : public QWidget
 {
     Q_OBJECT
 public:
@@ -53,8 +53,8 @@ public:
         Height = 64
     };
 
-    GeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit );
-    ~GeneralProperty();
+    KPrGeneralProperty( QWidget *parent, const char *name, GeneralValue &generalValue, KoUnit::Unit unit );
+    ~KPrGeneralProperty();
 
     int getGeneralPropertyChange() const;
     GeneralValue getGeneralValue() const;

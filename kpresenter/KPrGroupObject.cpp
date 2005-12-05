@@ -41,41 +41,41 @@
 #include <qpainter.h>
 using namespace std;
 
-KPGroupObject::KPGroupObject()
-    : KPObject(), objects( QPtrList<KPObject>() ), updateObjs( false )
+KPrGroupObject::KPrGroupObject()
+    : KPrObject(), objects( QPtrList<KPrObject>() ), updateObjs( false )
 {
     objects.setAutoDelete( false );
 }
 
-KPGroupObject::KPGroupObject( const QPtrList<KPObject> &objs )
-    : KPObject(), objects( objs ), updateObjs( false )
+KPrGroupObject::KPrGroupObject( const QPtrList<KPrObject> &objs )
+    : KPrObject(), objects( objs ), updateObjs( false )
 {
     objects.setAutoDelete( false );
 }
 
-KPGroupObject &KPGroupObject::operator=( const KPGroupObject & )
+KPrGroupObject &KPrGroupObject::operator=( const KPrGroupObject & )
 {
     return *this;
 }
 
-void KPGroupObject::selectAllObj()
+void KPrGroupObject::selectAllObj()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setSelected(true);
 }
 
-void KPGroupObject::deSelectAllObj()
+void KPrGroupObject::deSelectAllObj()
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setSelected(false);
 }
 
-void KPGroupObject::setSize( double _width, double _height )
+void KPrGroupObject::setSize( double _width, double _height )
 {
     KoSize origSize( ext );
-    KPObject::setSize( _width, _height );
+    KPrObject::setSize( _width, _height );
 
     double fx = ext.width() / origSize.width();
     double fy = ext.height() / origSize.height();
@@ -83,12 +83,12 @@ void KPGroupObject::setSize( double _width, double _height )
     updateSizes( fx, fy );
 }
 
-void KPGroupObject::setOrig( const KoPoint &_point )
+void KPrGroupObject::setOrig( const KoPoint &_point )
 {
     setOrig( _point.x(), _point.y() );
 }
 
-void KPGroupObject::setOrig( double _x, double _y )
+void KPrGroupObject::setOrig( double _x, double _y )
 {
     double dx = 0;
     double dy = 0;
@@ -97,29 +97,29 @@ void KPGroupObject::setOrig( double _x, double _y )
         dy = _y - orig.y();
     }
 
-    KPObject::setOrig( _x, _y );
+    KPrObject::setOrig( _x, _y );
 
     if ( dx != 0 || dy != 0 )
         updateCoords( dx, dy );
 }
 
-void KPGroupObject::moveBy( const KoPoint &_point )
+void KPrGroupObject::moveBy( const KoPoint &_point )
 {
     moveBy( _point.x(), _point.y() );
 }
 
-void KPGroupObject::moveBy( double _dx, double _dy )
+void KPrGroupObject::moveBy( double _dx, double _dy )
 {
-    KPObject::moveBy( _dx, _dy );
+    KPrObject::moveBy( _dx, _dy );
     updateCoords( _dx, _dy );
 }
 
-QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrGroupObject::save( QDomDocument& doc, double offset )
 {
-    QDomDocumentFragment fragment=KPObject::save(doc, offset);
+    QDomDocumentFragment fragment=KPrObject::save(doc, offset);
     QDomElement objs=doc.createElement("OBJECTS");
     fragment.appendChild(objs);
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->getType() == OT_PART )
@@ -133,9 +133,9 @@ QDomDocumentFragment KPGroupObject::save( QDomDocument& doc, double offset )
 }
 
 
-bool KPGroupObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrGroupObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         //TODO what to do with parts?
@@ -144,7 +144,7 @@ bool KPGroupObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
     return true;
 }
 
-void KPGroupObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
+void KPrGroupObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
 {
     xmlWriter.addAttribute( "draw:id", "object" + QString::number( indexObj ) );
 
@@ -159,18 +159,18 @@ void KPGroupObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) c
 }
 
 
-const char * KPGroupObject::getOasisElementName() const
+const char * KPrGroupObject::getOasisElementName() const
 {
     return "draw:g";
 }
 
 
-void KPGroupObject::loadOasisGroupObject( KPrDocument *_doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPRLoadingInfo *info)
+void KPrGroupObject::loadOasisGroupObject( KPrDocument *_doc, KPrPage * newpage, QDomNode &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
-    //KPObject::loadOasis( element, context, info );
+    //KPrObject::loadOasis( element, context, info );
     updateObjs = false;
     _doc->loadOasisObject( newpage,element, context, this);
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     KoRect r=KoRect();
     for ( ; it.current() ; ++it )
     {
@@ -181,16 +181,16 @@ void KPGroupObject::loadOasisGroupObject( KPrDocument *_doc, KPrPage * newpage, 
     updateObjs = true;
 }
 
-void KPGroupObject::addObjects( KPObject * obj )
+void KPrGroupObject::addObjects( KPrObject * obj )
 {
     kdDebug()<<"add object to group object:"<<obj<<endl;
     objects.append( obj );
 }
 
-double KPGroupObject::load( const QDomElement &element, KPrDocument *doc)
+double KPrGroupObject::load( const QDomElement &element, KPrDocument *doc)
 {
     //FIXME
-    double offset=KPObject::load(element);
+    double offset=KPrObject::load(element);
     updateObjs = false;
     QDomElement group=element.namedItem("OBJECTS").toElement();
     if(!group.isNull()) {
@@ -203,87 +203,87 @@ double KPGroupObject::load( const QDomElement &element, KPrDocument *doc)
                 double objOffset;
                 switch ( t ) {
                 case OT_LINE: {
-                    KPLineObject *kplineobject = new KPLineObject();
+                    KPrLineObject *kplineobject = new KPrLineObject();
                     objOffset = kplineobject->load(current);
                     kplineobject->setOrig(kplineobject->getOrig().x(),objOffset - offset);
                     objects.append( kplineobject );
                 } break;
                 case OT_RECT: {
-                    KPRectObject *kprectobject = new KPRectObject();
+                    KPrRectObject *kprectobject = new KPrRectObject();
                     objOffset = kprectobject->load(current);
                     kprectobject->setOrig(kprectobject->getOrig().x(),objOffset - offset);
                     objects.append( kprectobject );
                 } break;
                 case OT_ELLIPSE: {
-                    KPEllipseObject *kpellipseobject = new KPEllipseObject();
+                    KPrEllipseObject *kpellipseobject = new KPrEllipseObject();
                     objOffset = kpellipseobject->load(current);
                     kpellipseobject->setOrig(kpellipseobject->getOrig().x(),objOffset - offset);
                     objects.append( kpellipseobject );
                 } break;
                 case OT_PIE: {
-                    KPPieObject *kppieobject = new KPPieObject();
+                    KPrKPPieObject *kppieobject = new KPrKPPieObject();
                     objOffset = kppieobject->load(current);
                     kppieobject->setOrig(kppieobject->getOrig().x(),objOffset - offset);
                     objects.append( kppieobject );
                 } break;
                 case OT_AUTOFORM: {
-                    KPAutoformObject *kpautoformobject = new KPAutoformObject();
+                    KPrAutoformObject *kpautoformobject = new KPrAutoformObject();
                     objOffset = kpautoformobject->load(current);
                     kpautoformobject->setOrig(kpautoformobject->getOrig().x(),objOffset - offset);
                     objects.append( kpautoformobject );
                 } break;
                 case OT_TEXT: {
-                    KPTextObject *kptextobject = new KPTextObject( doc );
+                    KPrTextObject *kptextobject = new KPrTextObject( doc );
                     objOffset = kptextobject->load(current);
                     kptextobject->setOrig(kptextobject->getOrig().x(),objOffset - offset);
                     objects.append( kptextobject );
                 } break;
                 case OT_CLIPART:
                 case OT_PICTURE: {
-                    KPPixmapObject *kppixmapobject = new KPPixmapObject( doc->pictureCollection() );
+                    KPrPixmapObject *kppixmapobject = new KPrPixmapObject( doc->pictureCollection() );
                     objOffset = kppixmapobject->load(current);
                     kppixmapobject->setOrig(kppixmapobject->getOrig().x(),objOffset - offset);
                     kppixmapobject->reload();
                     objects.append( kppixmapobject );
                 } break;
                 case OT_FREEHAND: {
-                    KPFreehandObject *kpfreehandobject = new KPFreehandObject();
+                    KPrFreehandObject *kpfreehandobject = new KPrFreehandObject();
                     objOffset = kpfreehandobject->load( current );
                     kpfreehandobject->setOrig(kpfreehandobject->getOrig().x(),objOffset - offset);
                     objects.append( kpfreehandobject );
                 } break;
                 case OT_POLYLINE: {
-                    KPPolylineObject *kppolylineobject = new KPPolylineObject();
+                    KPrPolylineObject *kppolylineobject = new KPrPolylineObject();
                     objOffset = kppolylineobject->load( current );
                     kppolylineobject->setOrig(kppolylineobject->getOrig().x(),objOffset - offset);
                     objects.append( kppolylineobject );
                 } break;
                 case OT_QUADRICBEZIERCURVE: {
-                    KPQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPQuadricBezierCurveObject();
+                    KPrQuadricBezierCurveObject *kpQuadricBezierCurveObject = new KPrQuadricBezierCurveObject();
                     objOffset = kpQuadricBezierCurveObject->load( current );
                     kpQuadricBezierCurveObject->setOrig(kpQuadricBezierCurveObject->getOrig().x(),objOffset - offset);
                     objects.append( kpQuadricBezierCurveObject );
                 } break;
                 case OT_CUBICBEZIERCURVE: {
-                    KPCubicBezierCurveObject *kpCubicBezierCurveObject = new KPCubicBezierCurveObject();
+                    KPrCubicBezierCurveObject *kpCubicBezierCurveObject = new KPrCubicBezierCurveObject();
                     objOffset = kpCubicBezierCurveObject->load( current );
                     kpCubicBezierCurveObject->setOrig(kpCubicBezierCurveObject->getOrig().x(),objOffset - offset);
                     objects.append( kpCubicBezierCurveObject );
                 } break;
                 case OT_POLYGON: {
-                    KPPolygonObject *kpPolygonObject = new KPPolygonObject();
+                    KPrPolygonObject *kpPolygonObject = new KPrPolygonObject();
                     objOffset = kpPolygonObject->load( current );
                     kpPolygonObject->setOrig(kpPolygonObject->getOrig().x(),objOffset - offset);
                     objects.append( kpPolygonObject );
                 } break;
                 case OT_GROUP: {
-                    KPGroupObject *kpgroupobject = new KPGroupObject();
+                    KPrGroupObject *kpgroupobject = new KPrGroupObject();
                     objOffset = kpgroupobject->load(current, doc);
                     kpgroupobject->setOrig(kpgroupobject->getOrig().x(),objOffset - offset);
                     objects.append( kpgroupobject );
                 } break;
                 case OT_CLOSED_LINE: {
-                    KPClosedLineObject *kpClosedLinneObject = new KPClosedLineObject();
+                    KPrClosedLineObject *kpClosedLinneObject = new KPrClosedLineObject();
                     objOffset = kpClosedLinneObject->load( current );
                     kpClosedLinneObject->setOrig(kpClosedLinneObject->getOrig().x(),objOffset - offset);
                     objects.append( kpClosedLinneObject );
@@ -298,22 +298,22 @@ double KPGroupObject::load( const QDomElement &element, KPrDocument *doc)
     return offset;
 }
 
-void KPGroupObject::draw( QPainter *_painter,KoTextZoomHandler *_zoomhandler,
+void KPrGroupObject::draw( QPainter *_painter,KoTextZoomHandler *_zoomhandler,
                           int pageNum, SelectionMode selectionMode, bool drawContour )
 {
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->draw( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
 
-    KPObject::draw( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
+    KPrObject::draw( _painter, _zoomhandler, pageNum, selectionMode, drawContour );
 }
 
-void KPGroupObject::updateSizes( double fx, double fy )
+void KPrGroupObject::updateSizes( double fx, double fy )
 {
     if ( !updateObjs )
         return;
     KoRect r = KoRect();
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
     {
         double _x = ( it.current()->getOrig().x() - orig.x() ) * fx + orig.x();
@@ -326,22 +326,22 @@ void KPGroupObject::updateSizes( double fx, double fy )
     }
 }
 
-void KPGroupObject::updateCoords( double dx, double dy )
+void KPrGroupObject::updateCoords( double dx, double dy )
 {
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->moveBy( dx, dy );
 }
 
-void KPGroupObject::rotate( float _angle )
+void KPrGroupObject::rotate( float _angle )
 {
     float oldAngle = angle;
     float diffAngle = _angle - angle;
     float angInRad = diffAngle * M_PI / 180;
 
-    KPObject::rotate( _angle );
+    KPrObject::rotate( _angle );
 
     // find center of the group
     double centerx = orig.x() + ext.width() / 2.0;
@@ -349,7 +349,7 @@ void KPGroupObject::rotate( float _angle )
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) {
         // find distance of object center to group center
         double px = it.current()->getOrig().x() + it.current()->getSize().width() / 2.0 - centerx;
@@ -368,234 +368,234 @@ void KPGroupObject::rotate( float _angle )
     }
 }
 
-void KPGroupObject::setShadowParameter( int _distance, ShadowDirection _direction, const QColor &_color )
+void KPrGroupObject::setShadowParameter( int _distance, ShadowDirection _direction, const QColor &_color )
 {
-    KPObject::setShadowParameter( _distance, _direction, _color );
+    KPrObject::setShadowParameter( _distance, _direction, _color );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setShadowParameter( _distance, _direction, _color );
 }
 
-void KPGroupObject::setShadowDistance( int _distance )
+void KPrGroupObject::setShadowDistance( int _distance )
 {
-    KPObject::setShadowDistance( _distance );
+    KPrObject::setShadowDistance( _distance );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setShadowDistance( _distance );
 }
 
-void KPGroupObject::setShadowDirection( ShadowDirection _direction )
+void KPrGroupObject::setShadowDirection( ShadowDirection _direction )
 {
-    KPObject::setShadowDirection( _direction );
+    KPrObject::setShadowDirection( _direction );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setShadowDirection( _direction );
 }
 
-void KPGroupObject::setShadowColor( const QColor &_color )
+void KPrGroupObject::setShadowColor( const QColor &_color )
 {
-    KPObject::setShadowColor( _color );
-    kdDebug(33001) << "KPGroupObject::setShadowColor"<<updateObjs << endl;
+    KPrObject::setShadowColor( _color );
+    kdDebug(33001) << "KPrGroupObject::setShadowColor"<<updateObjs << endl;
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setShadowColor( _color );
 }
 
-void KPGroupObject::setEffect( Effect _effect )
+void KPrGroupObject::setEffect( Effect _effect )
 {
-    KPObject::setEffect( _effect );
+    KPrObject::setEffect( _effect );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setEffect( _effect );
 }
 
-void KPGroupObject::setEffect2( Effect2 _effect2 )
+void KPrGroupObject::setEffect2( Effect2 _effect2 )
 {
-    KPObject::setEffect2( _effect2 );
+    KPrObject::setEffect2( _effect2 );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setEffect2( _effect2 );
 }
 
-void KPGroupObject::setAppearStep( int _appearStep )
+void KPrGroupObject::setAppearStep( int _appearStep )
 {
-    KPObject::setAppearStep( _appearStep );
+    KPrObject::setAppearStep( _appearStep );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setAppearStep( _appearStep );
 }
 
-void KPGroupObject::setDisappear( bool b )
+void KPrGroupObject::setDisappear( bool b )
 {
-    KPObject::setDisappear( b );
+    KPrObject::setDisappear( b );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setDisappear( b );
 }
 
-void KPGroupObject::setDisappearStep( int _disappearStep )
+void KPrGroupObject::setDisappearStep( int _disappearStep )
 {
-    KPObject::setDisappearStep( _disappearStep );
+    KPrObject::setDisappearStep( _disappearStep );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setDisappearStep( _disappearStep );
 }
 
-void KPGroupObject::setEffect3( Effect3 _effect3)
+void KPrGroupObject::setEffect3( Effect3 _effect3)
 {
-    KPObject::setEffect3( _effect3 );
+    KPrObject::setEffect3( _effect3 );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setEffect3( _effect3 );
 }
 
-void KPGroupObject::setAppearTimer( int _appearTimer )
+void KPrGroupObject::setAppearTimer( int _appearTimer )
 {
-    KPObject::setAppearTimer( _appearTimer );
+    KPrObject::setAppearTimer( _appearTimer );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setAppearTimer( _appearTimer );
 }
 
-void KPGroupObject::setDisappearTimer( int _disappearTimer )
+void KPrGroupObject::setDisappearTimer( int _disappearTimer )
 {
-    KPObject::setDisappearTimer( _disappearTimer );
+    KPrObject::setDisappearTimer( _disappearTimer );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setDisappearTimer( _disappearTimer );
 }
 
-void KPGroupObject::setOwnClipping( bool _ownClipping )
+void KPrGroupObject::setOwnClipping( bool _ownClipping )
 {
-    KPObject::setOwnClipping( _ownClipping );
+    KPrObject::setOwnClipping( _ownClipping );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setOwnClipping( _ownClipping );
 }
 
-void KPGroupObject::setSubPresStep( int _subPresStep )
+void KPrGroupObject::setSubPresStep( int _subPresStep )
 {
-    KPObject::setSubPresStep( _subPresStep );
+    KPrObject::setSubPresStep( _subPresStep );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setSubPresStep( _subPresStep );
 }
 
-void KPGroupObject::doSpecificEffects( bool _specEffects, bool _onlyCurrStep )
+void KPrGroupObject::doSpecificEffects( bool _specEffects, bool _onlyCurrStep )
 {
-    KPObject::doSpecificEffects( _specEffects, _onlyCurrStep );
+    KPrObject::doSpecificEffects( _specEffects, _onlyCurrStep );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->doSpecificEffects( _specEffects, _onlyCurrStep );
 }
 
-void KPGroupObject::setAppearSoundEffect( bool b )
+void KPrGroupObject::setAppearSoundEffect( bool b )
 {
-    KPObject::setAppearSoundEffect( b );
+    KPrObject::setAppearSoundEffect( b );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it )
         it.current()->setAppearSoundEffect( b );
 }
 
-void KPGroupObject::setDisappearSoundEffect( bool b )
+void KPrGroupObject::setDisappearSoundEffect( bool b )
 {
-    KPObject::setDisappearSoundEffect( b );
+    KPrObject::setDisappearSoundEffect( b );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects);
+    QPtrListIterator<KPrObject> it( objects);
     for ( ; it.current() ; ++it )
         it.current()->setDisappearSoundEffect( b );
 }
 
-void KPGroupObject::setAppearSoundEffectFileName( const QString &_a_fileName )
+void KPrGroupObject::setAppearSoundEffectFileName( const QString &_a_fileName )
 {
-    KPObject::setAppearSoundEffectFileName( _a_fileName );
+    KPrObject::setAppearSoundEffectFileName( _a_fileName );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects);
+    QPtrListIterator<KPrObject> it( objects);
     for ( ; it.current() ; ++it )
         it.current()->setAppearSoundEffectFileName( _a_fileName );
 }
 
-void KPGroupObject::setDisappearSoundEffectFileName( const QString &_d_fileName )
+void KPrGroupObject::setDisappearSoundEffectFileName( const QString &_d_fileName )
 {
-    KPObject::setDisappearSoundEffectFileName( _d_fileName );
+    KPrObject::setDisappearSoundEffectFileName( _d_fileName );
 
     if ( !updateObjs )
         return;
-    QPtrListIterator<KPObject> it( objects);
+    QPtrListIterator<KPrObject> it( objects);
     for ( ; it.current() ; ++it )
         it.current()->setDisappearSoundEffectFileName( _d_fileName );
 }
 
-void KPGroupObject::getAllObjectSelectedList(QPtrList<KPObject> &lst,bool force )
+void KPrGroupObject::getAllObjectSelectedList(QPtrList<KPrObject> &lst,bool force )
 {
     if ( selected || force)
     {
-        QPtrListIterator<KPObject> it( objects);
+        QPtrListIterator<KPrObject> it( objects);
         for ( ; it.current() ; ++it )
             it.current()->getAllObjectSelectedList( lst, true );
     }
 }
 
-void KPGroupObject::addTextObjects( QPtrList<KoTextObject> &lst ) const
+void KPrGroupObject::addTextObjects( QPtrList<KoTextObject> &lst ) const
 {
-    QPtrListIterator<KPObject> it( objects);
+    QPtrListIterator<KPrObject> it( objects);
     for ( ; it.current() ; ++it )
         it.current()->addTextObjects( lst );
 }
 
-void KPGroupObject::flip( bool horizontal ) {
-    QPtrListIterator<KPObject> it( objects );
+void KPrGroupObject::flip( bool horizontal ) {
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) {
         it.current()->flip( horizontal );
         double mx = 0;
@@ -616,34 +616,34 @@ void KPGroupObject::flip( bool horizontal ) {
     }
 }
 
-void KPGroupObject::removeFromObjList()
+void KPrGroupObject::removeFromObjList()
 {
     inObjList = false; 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) 
         it.current()->removeFromObjList();
 }
 
-void KPGroupObject::addToObjList()
+void KPrGroupObject::addToObjList()
 { 
     inObjList = true; 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) 
         it.current()->addToObjList();
 }
 
-void KPGroupObject::incCmdRef()
+void KPrGroupObject::incCmdRef()
 { 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) 
         it.current()->incCmdRef();
 
     cmds++; 
 }
 
-void KPGroupObject::decCmdRef()
+void KPrGroupObject::decCmdRef()
 { 
-    QPtrListIterator<KPObject> it( objects );
+    QPtrListIterator<KPrObject> it( objects );
     for ( ; it.current() ; ++it ) 
         it.current()->decCmdRef();
 

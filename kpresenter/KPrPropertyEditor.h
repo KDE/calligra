@@ -24,25 +24,25 @@
 #include <KPrGeneralProperty.h>
 
 class KCommand;
-class KPObject;
+class KPrObject;
 class KPrPage;
 class KPrDocument;
-class PenStyleWidget;
-class BrushProperty;
-class RectProperty;
-class PolygonProperty;
-class PieProperty;
-class PictureProperty;
-class TextProperty;
-class KPObjectProperties;
+class KPrPenStyleWidget;
+class KPrBrushProperty;
+class KPrRectProperty;
+class KPrPolygonProperty;
+class KPrPieProperty;
+class KPrPictureProperty;
+class KPrTextProperty;
+class KPrObjectProperties;
 
-class PropertyEditor : public QTabDialog
+class KPrPropertyEditor : public QTabDialog
 {
     Q_OBJECT
 
 public:
-    PropertyEditor( QWidget *parent = 0, const char *name = 0, KPrPage *page = 0, KPrDocument *doc = 0 );
-    ~PropertyEditor();
+    KPrPropertyEditor( QWidget *parent = 0, const char *name = 0, KPrPage *page = 0, KPrDocument *doc = 0 );
+    ~KPrPropertyEditor();
 
     KCommand * getCommand();
 
@@ -60,22 +60,22 @@ private:
     void setupTabText();
     void setupTabGeneral();
 
-    GeneralProperty::GeneralValue getGeneralValue();
+    KPrGeneralProperty::GeneralValue getGeneralValue();
 
     KPrPage *m_page;
     KPrDocument *m_doc;
-    QPtrList<KPObject> m_objects;
+    QPtrList<KPrObject> m_objects;
 
-    PenStyleWidget *m_penProperty;
-    BrushProperty *m_brushProperty;
-    RectProperty *m_rectProperty;
-    PolygonProperty *m_polygonProperty;
-    PieProperty *m_pieProperty;
-    PictureProperty *m_pictureProperty;
-    TextProperty *m_textProperty;
-    GeneralProperty *m_generalProperty;
+    KPrPenStyleWidget *m_penProperty;
+    KPrBrushProperty *m_brushProperty;
+    KPrRectProperty *m_rectProperty;
+    KPrPolygonProperty *m_polygonProperty;
+    KPrPieProperty *m_pieProperty;
+    KPrPictureProperty *m_pictureProperty;
+    KPrTextProperty *m_textProperty;
+    KPrGeneralProperty *m_generalProperty;
 
-    KPObjectProperties *m_objectProperties;
+    KPrObjectProperties *m_objectProperties;
 
 signals:
     void propertiesOk();

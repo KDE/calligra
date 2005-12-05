@@ -37,19 +37,19 @@
 #include <math.h>
 using namespace std;
 
-KPAutoformObject::KPAutoformObject()
-    : KP2DObject(), atfInterp()
+KPrAutoformObject::KPrAutoformObject()
+    : KPr2DObject(), atfInterp()
 {
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
 }
 
-KPAutoformObject::KPAutoformObject( const KPPen & _pen, const QBrush &_brush, const QString & _filename,
+KPrAutoformObject::KPrAutoformObject( const KPrPen & _pen, const QBrush &_brush, const QString & _filename,
                                     LineEnd _lineBegin, LineEnd _lineEnd,
                                     FillType _fillType, const QColor &_gColor1,
                                     const QColor &_gColor2, BCType _gType,
                                     bool _unbalanced, int _xfactor, int _yfactor)
-    : KP2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor ),
+    : KPr2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor ),
       filename( _filename ), atfInterp()
 {
     atfInterp.load( filename );
@@ -57,48 +57,48 @@ KPAutoformObject::KPAutoformObject( const KPPen & _pen, const QBrush &_brush, co
     lineEnd = _lineEnd;
 }
 
-KPAutoformObject &KPAutoformObject::operator=( const KPAutoformObject & )
+KPrAutoformObject &KPrAutoformObject::operator=( const KPrAutoformObject & )
 {
     return *this;
 }
 
-DCOPObject* KPAutoformObject::dcopObject()
+DCOPObject* KPrAutoformObject::dcopObject()
 {
     if ( !dcop )
-        dcop = new KPAutoFormObjectIface( this );
+        dcop = new KPrAutoFormObjectIface( this );
     return dcop;
 }
 
-void KPAutoformObject::setFileName( const QString & _filename )
+void KPrAutoformObject::setFileName( const QString & _filename )
 {
     filename = _filename;
     atfInterp.load( filename );
 }
 
 
-bool KPAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug()<<"bool KPAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
+    kdDebug()<<"bool KPrAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
     return true;
 }
 
-const char * KPAutoformObject::getOasisElementName() const
+const char * KPrAutoformObject::getOasisElementName() const
 {
     return "draw:custom-shape";
 }
 
-QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrAutoformObject::save( QDomDocument& doc, double offset )
 {
-    QDomDocumentFragment fragment=KP2DObject::save(doc, offset);
+    QDomDocumentFragment fragment=KPr2DObject::save(doc, offset);
     if (lineBegin!=L_NORMAL)
-        fragment.appendChild(KPObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
+        fragment.appendChild(KPrObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
     if (lineEnd!=L_NORMAL)
-        fragment.appendChild(KPObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
+        fragment.appendChild(KPrObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
 
     // The filename contains the absolute path to the autoform. This is
     // bad, so we simply remove everything but the last dir and the name.
     // e.g. /my/local/path/to/kpresenter/Arrow/.source/Arrow1.atf -> Arrow/.source/Arrow1.atf
-    QStringList afDirs = KPresenterFactory::global()->dirs()->resourceDirs("autoforms");
+    QStringList afDirs = KPrFactory::global()->dirs()->resourceDirs("autoforms");
     QValueList<QString>::ConstIterator it=afDirs.begin();
     QString str;
     for( ; it!=afDirs.end(); ++it) {
@@ -113,9 +113,9 @@ QDomDocumentFragment KPAutoformObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-double KPAutoformObject::load(const QDomElement &element)
+double KPrAutoformObject::load(const QDomElement &element)
 {
-    double offset=KP2DObject::load(element);
+    double offset=KPr2DObject::load(element);
     QDomElement e=element.namedItem("LINEBEGIN").toElement();
     if(!e.isNull()) {
         int tmp=0;
@@ -151,13 +151,13 @@ double KPAutoformObject::load(const QDomElement &element)
             // okay, old file -- add the .source dir
             filename=filename.insert(filename.find('/'), "/.source");
         }
-        filename = locate("autoforms", filename, KPresenterFactory::global());
+        filename = locate("autoforms", filename, KPrFactory::global());
         atfInterp.load( filename );
     }
     return offset;
 }
 
-void KPAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandler,
+void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandler,
                               int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     unsigned int pw = 0, pwOrig = 0, px, py;
@@ -227,7 +227,7 @@ void KPAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandle
                 {
                     if ( m_redrawGradientPix || gradient->size() != size )
                     {
-                        kdDebug(33001) << "KPAutoformObject::draw redrawPix" << endl;
+                        kdDebug(33001) << "KPrAutoformObject::draw redrawPix" << endl;
                         gradient->setSize( size );
                         m_redrawGradientPix = false;
                         QRegion clipregion( pntArray2 );

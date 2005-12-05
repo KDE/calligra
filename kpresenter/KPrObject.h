@@ -49,17 +49,17 @@ class QDomDocument;
 class QDomElement;
 class KoTextZoomHandler;
 class KPrDocument;
-class KPTextObject;
+class KPrTextObject;
 class KoTextObject;
 class KoOasisContext;
 
 #define RAD_FACTOR 180.0 / M_PI
 
-class KPObject
+class KPrObject
 {
 public:
-    KPObject();
-    virtual ~KPObject();
+    KPrObject();
+    virtual ~KPrObject();
 
 
     virtual DCOPObject* dcopObject();
@@ -134,7 +134,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context,  KPRLoadingInfo *info);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context,  KPrLoadingInfo *info);
 
     struct KPOasisSaveContext
     {
@@ -291,15 +291,15 @@ public:
 
     /**
      * Collect all textobjects.
-     * (KPTextObject returns the object it contains,
-     * a KPGroupObject returns all the text objects it contains)
+     * (KPrTextObject returns the object it contains,
+     * a KPrGroupObject returns all the text objects it contains)
      */
     virtual void addTextObjects( QPtrList<KoTextObject> & ) const {}
 
-    virtual KPTextObject *nextTextObject() { return 0L;} // deprecated
-    virtual void getAllObjectSelectedList(QPtrList<KPObject> &lst, bool force = false )
+    virtual KPrTextObject *nextTextObject() { return 0L;} // deprecated
+    virtual void getAllObjectSelectedList(QPtrList<KPrObject> &lst, bool force = false )
         { if (selected || force ) lst.append( this );}
-    virtual KPPen getPen() const;
+    virtual KPrPen getPen() const;
 
     bool haveAnimation() const;
 
@@ -328,8 +328,8 @@ protected:
     QDomElement createValueElement(const QString &tag, int value, QDomDocument &doc);
     QDomElement createGradientElement(const QString &tag, const QColor &c1, const QColor &c2,
                                       int type, bool unbalanced, int xfactor, int yfactor, QDomDocument &doc);
-    QDomElement createPenElement(const QString &tag, const KPPen &pen, QDomDocument &doc);
-    KPPen toPen(const QDomElement &element) const;
+    QDomElement createPenElement(const QString &tag, const KPrPen &pen, QDomDocument &doc);
+    KPrPen toPen(const QDomElement &element) const;
 
     QDomElement createBrushElement(const QString &tag, const QBrush &brush, QDomDocument &doc);
     QBrush toBrush(const QDomElement &element) const;
@@ -397,8 +397,8 @@ protected:
 
 private:
     // Don't copy or assign it
-    KPObject(const KPObject &rhs);
-    KPObject &operator=(const KPObject &rhs);
+    KPrObject(const KPrObject &rhs);
+    KPrObject &operator=(const KPrObject &rhs);
 };
 
 /**
@@ -406,23 +406,23 @@ private:
  * and which takes care of painting the shadow in @ref draw
  * (by calling @ref paint twice)
  */
-class KPShadowObject : public KPObject
+class KPrShadowObject : public KPrObject
 {
 public:
-    KPShadowObject();
-    KPShadowObject( const KPPen &_pen );
+    KPrShadowObject();
+    KPrShadowObject( const KPrPen &_pen );
 
-    KPShadowObject &operator=( const KPShadowObject & );
+    KPrShadowObject &operator=( const KPrShadowObject & );
 
-    virtual void setPen( const KPPen &_pen )
+    virtual void setPen( const KPrPen &_pen )
         { pen = _pen; }
 
-    virtual KPPen getPen() const
+    virtual KPrPen getPen() const
         { return pen; }
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info);
     virtual void draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                        int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
     virtual void saveOasisStrokeElement( KoGenStyles& mainStyles, KoGenStyle &styleobjectauto ) const;
@@ -438,17 +438,17 @@ protected:
      * Helper method for loading draw:points. The svg:viewBox is taken into account.
      */
     bool loadOasisDrawPoints( KoPointArray &points, const QDomElement &element,
-                              KoOasisContext & context, KPRLoadingInfo *info );
+                              KoOasisContext & context, KPrLoadingInfo *info );
 
     virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     /**
      * @ref save() only saves if the pen is different from the default pen.
-     * The default pen can vary depending on the subclass of KPShadowObject
+     * The default pen can vary depending on the subclass of KPrShadowObject
      * (e.g. it's a black solidline for lines and rects, but it's NoPen
      * for text objects
      */
-    virtual KPPen defaultPen() const;
+    virtual KPrPen defaultPen() const;
 
     /**
      * This method is to be implemented by all KPShadowObjects, to draw themselves.
@@ -462,17 +462,17 @@ protected:
      */
     virtual void paint( QPainter* /* painter */, KoTextZoomHandler* /* zoomHandler */,
                         int /* pageNum */, bool /* drawingShadow */, bool /* drawContour */ =  FALSE ) {}
-    KPPen pen;
+    KPrPen pen;
 };
 
-class KP2DObject : public KPShadowObject
+class KPr2DObject : public KPrShadowObject
 {
 public:
-    KP2DObject();
-    KP2DObject( const KPPen &_pen, const QBrush &_brush, FillType _fillType,
+    KPr2DObject();
+    KPr2DObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
                 const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                 bool _unbalanced, int _xfactor, int _yfactor );
-    virtual ~KP2DObject() { delete gradient; }
+    virtual ~KPr2DObject() { delete gradient; }
 
     virtual void setFillType( FillType fillType );
     virtual void setBrush( const QBrush &brush )
@@ -509,7 +509,7 @@ public:
 
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
     virtual double load(const QDomElement &element);
-    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPRLoadingInfo *info);
+    virtual void loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info);
     virtual void draw( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                        int pageNum, SelectionMode selectionMode, bool drawContour = FALSE );
 
@@ -522,16 +522,16 @@ protected:
     void saveOasisBackgroundElement( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     KPrBrush m_brush;
-    KPGradient *gradient;
+    KPrGradient *gradient;
     /// holds the painted gradient
     QPixmap m_gradientPix;
     bool m_redrawGradientPix;
 };
 
-class KPStartEndLine
+class KPrStartEndLine
 {
 public:
-    KPStartEndLine( LineEnd _start, LineEnd _end );
+    KPrStartEndLine( LineEnd _start, LineEnd _end );
     void save( QDomDocumentFragment &fragment, QDomDocument& doc );
     void load( const QDomElement &element );
 
