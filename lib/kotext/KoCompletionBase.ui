@@ -23,6 +23,9 @@
             <property name="text">
                 <string>Enable word completion</string>
             </property>
+            <property name="whatsThis" stdset="0">
+                <string>Toggle autocompletion on and off: if this is checked then autocompletion will be enabled.</string>
+            </property>
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
@@ -37,7 +40,7 @@
                         <cstring>m_lbListCompletion</cstring>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Suggestion list for autocompletion</string>
+                        <string>Suggestion list for autocompletion: contains all the words that will be autocompleted.</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -152,7 +155,8 @@
                                 <number>50</number>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>This sets the maximum number of words in the completion list. All additional words will not be included in the list. You can select any value from 1 to 500. This option keeps the list from becoming too cumbersome.</string>
+                                <string>This sets the maximum number of words in the completion list. All additional words will not be included in the list. You can select any value from 1 to 500. This option keeps the list from becoming too cumbersome.
+This option is most important when Automatically add words to completion list is enabled.</string>
                             </property>
                         </widget>
                         <widget class="QLabel" row="0" column="0">
@@ -190,6 +194,10 @@
                             <property name="value">
                                 <number>100</number>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This sets the maximum number of words in the completion list. All additional words will not be included in the list. You can select any value from 1 to 500. This option keeps the list from becoming too cumbersome.
+This option is most important when Automatically add words to completion list is enabled.</string>
+                            </property>
                         </widget>
                         <widget class="QSlider" row="0" column="1">
                             <property name="name">
@@ -220,6 +228,9 @@
                             </property>
                             <property name="minValue">
                                 <number>5</number>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Use this spinbox/slider combination to prevent from automatically adding short words to the completion list.   You can select any value from 5-100 and the words will need to be at least the number of characters set here to be added in the list.</string>
                             </property>
                         </widget>
                     </grid>
@@ -296,7 +307,7 @@
                         <string>Make Default</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Completion is configured per document, making this list the default will allow you to use this list for new documents automatically. A dialog appears to tell you the list wil be used for all documents from now.</string>
+                        <string>Completion is configured per document, making this list the default will allow you to use it list for new documents automatically. A dialog appears to tell you the list wil be used for all documents from now.</string>
                     </property>
                 </widget>
                 <spacer>
