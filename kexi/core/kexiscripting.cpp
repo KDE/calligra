@@ -253,8 +253,11 @@ class KexiScriptManagerPrivate
 		KexiMainWindow* mainwindow;
 		/// Map of \a KexiScriptContainer children this \a KexiScriptManager
 		QMap<QString, KexiScriptContainer*> scriptcontainers;
+
 		/// An collection of actions. Each action points to a scriptextension.
 		KActionCollection* actioncollection;
+		/// A list of actions. Same content as in the actioncollection, but sorted.
+		QValueList<KexiScriptExtension*> actionlist;
 };
 
 KexiScriptManager* KexiScriptManager::self(KexiMainWindow* mainwin)
@@ -344,6 +347,7 @@ KActionCollection* KexiScriptManager::getExtensions()
 			files.sort();
 			for(QStringList::Iterator fileit = files.begin(); fileit != files.end(); ++fileit) {
 				KexiScriptExtension* extension = new KexiScriptExtension((*infoit)->getInterpretername(), *fileit, d->actioncollection);
+				d->actionlist.append(extension);
 				connect(extension, SIGNAL(activated()), this, SLOT(executeExtension()));
 			}
 		}
@@ -354,12 +358,12 @@ KActionCollection* KexiScriptManager::getExtensions()
 
 void KexiScriptManager::plugExtensions(QWidget* widget)
 {
-	KActionCollection* actioncollection = getExtensions();
-	if(actioncollection) {
-		KActionPtrList list = actioncollection->actions();
-		for(KActionPtrList::Iterator it = list.begin(); it != list.end(); ++it)
+	if( getExtensions() ) {
+		QValueList<KexiScriptExtension*>::Iterator it( d->actionlist.begin() );
+		for(; it != d->actionlist.end(); ++it) {
 			if(! (*it)->isPlugged(widget))
 				(*it)->plug(widget);
+		}
 	}
 }
 

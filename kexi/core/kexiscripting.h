@@ -41,126 +41,126 @@ class KexiMainWindow;
  */
 class KEXICORE_EXPORT KexiScriptContainer : public QObject
 {
-        Q_OBJECT
-    public:
+		Q_OBJECT
+	public:
 
-        /**
-        * Constructor.
-        *
-        * \param manager The \a KexiScriptManager this
-        *       \a KexiScriptContainer belongs to.
-        * \param name The unique name this \a KexiScriptContainer
-        *       is reachable as.
-        */
-        KexiScriptContainer(KexiScriptManager* manager, const QString& name);
+		/**
+		* Constructor.
+		*
+		* \param manager The \a KexiScriptManager this
+		*	   \a KexiScriptContainer belongs to.
+		* \param name The unique name this \a KexiScriptContainer
+		*	   is reachable as.
+		*/
+		KexiScriptContainer(KexiScriptManager* manager, const QString& name);
 
-        /**
-        * Destructor.
-        */
-        virtual ~KexiScriptContainer();
+		/**
+		* Destructor.
+		*/
+		virtual ~KexiScriptContainer();
 
-        /**
-        * \return the name of the used scripting language.
-        */
-        QString getInterpreterName();
+		/**
+		* \return the name of the used scripting language.
+		*/
+		QString getInterpreterName();
 
-        /**
-        * Set the name of the used scripting language.
-        *
-        * \param interpretername The name of the used interpreter. This
-        *       could be something like "python" for the python
-        *       interpreter.
-        */
-        void setInterpreterName(const QString& interpretername);
+		/**
+		* Set the name of the used scripting language.
+		*
+		* \param interpretername The name of the used interpreter. This
+		*	   could be something like "python" for the python
+		*	   interpreter.
+		*/
+		void setInterpreterName(const QString& interpretername);
 
-        /**
-        * \return the scripting code.
-        */
-        QString getCode();
+		/**
+		* \return the scripting code.
+		*/
+		QString getCode();
 
-        /**
-        * Set the scripting code.
-        *
-        * \param code The scripting code.
-        */
-        void setCode(const QString& code);
+		/**
+		* Set the scripting code.
+		*
+		* \param code The scripting code.
+		*/
+		void setCode(const QString& code);
 
-        /**
-        * This class is used as configurable option the
-        * \a KexiScriptContainer instance provides.
-        */
-        class Option
-        {
-            public:
-                /// The short name of the option.
-                QString name;
-                /// A description of the option.
-                QString comment;
-                /// The value the option has.
-                QVariant value;
-        };
+		/**
+		* This class is used as configurable option the
+		* \a KexiScriptContainer instance provides.
+		*/
+		class Option
+		{
+			public:
+				/// The short name of the option.
+				QString name;
+				/// A description of the option.
+				QString comment;
+				/// The value the option has.
+				QVariant value;
+		};
 
-        /**
-        * \return a map of all \a Option instances this 
-        * \a KexiScriptContainer instance provides.
-        */
-        QMap<QString, Option*> getOptions();
+		/**
+		* \return a map of all \a Option instances this 
+		* \a KexiScriptContainer instance provides.
+		*/
+		QMap<QString, Option*> getOptions();
 
-        /**
-        * Set the option defined with \p key to the QVariant \p value .
-        */
-        bool setOption(const QString& key, QVariant value);
+		/**
+		* Set the option defined with \p key to the QVariant \p value .
+		*/
+		bool setOption(const QString& key, QVariant value);
 
-        /**
-        * \return the last error or QString::null if there was no error.
-        */
-        QString getLastError();
+		/**
+		* \return the last error or QString::null if there was no error.
+		*/
+		QString getLastError();
 
-        /**
-        * \return the stdout and stderr output.
-        */
-        QStringList getOutput();
+		/**
+		* \return the stdout and stderr output.
+		*/
+		QStringList getOutput();
 
-    signals:
+	signals:
 
-        /**
-        * Emitted if the output got cleared.
-        */
-        void clearOutput();
+		/**
+		* Emitted if the output got cleared.
+		*/
+		void clearOutput();
 
-        /**
-        * Emitted if a new logmessage got added to the output.
-        */
-        void addOutput(const QString&);
+		/**
+		* Emitted if a new logmessage got added to the output.
+		*/
+		void addOutput(const QString&);
 
-        /**
-        * Emitted on error if we know the line number where the
-        * error happened.
-        */
-        void lineNo(long);
+		/**
+		* Emitted on error if we know the line number where the
+		* error happened.
+		*/
+		void lineNo(long);
 
-    public slots:
+	public slots:
 
-        /**
-        * Try to execute the scripting code.
-        */
-        bool execute();
+		/**
+		* Try to execute the scripting code.
+		*/
+		bool execute();
 
-    private slots:
+	private slots:
 
-        /**
-        * Add a new logmessage to stdout.
-        */
-        void addStdOut(const QString&);
+		/**
+		* Add a new logmessage to stdout.
+		*/
+		void addStdOut(const QString&);
 
-        /**
-        * Add a new logmessage to stderr.
-        */
-        void addStdErr(const QString&);
+		/**
+		* Add a new logmessage to stderr.
+		*/
+		void addStdErr(const QString&);
 
-    private:
-        /// Private d-pointer class.
-        KexiScriptContainerPrivate* d;
+	private:
+		/// Private d-pointer class.
+		KexiScriptContainerPrivate* d;
 };
 
 /**
@@ -169,78 +169,83 @@ class KEXICORE_EXPORT KexiScriptContainer : public QObject
  */
 class KEXICORE_EXPORT KexiScriptManager : public QObject
 {
-        Q_OBJECT
-    protected:
+		Q_OBJECT
+	protected:
 
-        /**
-         * Constructor.
-         *
-         * \param mainwindow The \a KexiMainWindow this
-         *       \a KexiScriptManager belongs to.
-         */
-        KexiScriptManager(KexiMainWindow* mainwindow);
+		/**
+		 * Constructor.
+		 *
+		 * \param mainwindow The \a KexiMainWindow this
+		 *	   \a KexiScriptManager belongs to.
+		 */
+		KexiScriptManager(KexiMainWindow* mainwindow);
 
-    public:
+	public:
 
-        /**
-         * \return the \a KexiScriptManager singelton instance. Always
-         * use this method to access the scriptmanager.
-         */
-        static KexiScriptManager* self(KexiMainWindow* mainwin);
+		/**
+		 * \return the \a KexiScriptManager singelton instance. Always
+		 * use this method to access the scriptmanager.
+		 */
+		static KexiScriptManager* self(KexiMainWindow* mainwin);
 
-        /**
-         * Destructor.
-         */
-        virtual ~KexiScriptManager();
+		/**
+		 * Destructor.
+		 */
+		virtual ~KexiScriptManager();
 
-        /**
-         * \return true if there exists already a
-         * \a KexiScriptContainer instance defined with \p name .
-         */
-        bool hasScriptContainer(const QString& name);
+		/**
+		 * \return true if there exists already a
+		 * \a KexiScriptContainer instance defined with \p name .
+		 */
+		bool hasScriptContainer(const QString& name);
 
-        /**
-         * \return the \a KexiScriptContainer defined with \p name .
-         * If there exists no such \a KexiScriptContainer instance
-         * with that name and \p create is false return NULL. If
-         * \p create is true create a new instance if it doesn't
-         * exists already and return this one.
-         */
-        KexiScriptContainer* getScriptContainer(const QString& name, bool create);
+		/**
+		 * \return the \a KexiScriptContainer defined with \p name .
+		 * If there exists no such \a KexiScriptContainer instance
+		 * with that name and \p create is false return NULL. If
+		 * \p create is true create a new instance if it doesn't
+		 * exists already and return this one.
+		 */
+		KexiScriptContainer* getScriptContainer(const QString& name, bool create);
 
-        /**
-         * \return a list of interpreter names.
-         */
-        const QStringList getInterpreters();
+		/**
+		 * \return a list of interpreter names.
+		 */
+		const QStringList getInterpreters();
 
-        /**
-         * Try to execute a scriptingfile.
-         * 
-         * \param interpretername The name of the used interpreter.
-         * \param file The full filename of the scriptfile to execute.
-         * \param error If execution fails this string contains the
-         *        errormessage.
-         * \return true on success else false.
-         */
-        bool executeFile(const QString& interpretername, const QString& file, QString& error);
+		/**
+		 * Try to execute a scriptingfile.
+		 * 
+		 * \param interpretername The name of the used interpreter.
+		 * \param file The full filename of the scriptfile to execute.
+		 * \param error If execution fails this string contains the
+		 *		errormessage.
+		 * \return true on success else false.
+		 */
+		bool executeFile(const QString& interpretername, const QString& file, QString& error);
 
-        /**
-         * \return a collection of KAction's. Each KAction points to
-         * a scripting extension provided to the application.
-         */
-        KActionCollection* getExtensions();
+		/**
+		 * \return a collection of KAction's. Each KAction points to
+		 * a scripting extension provided to the application.
+		 */
+		KActionCollection* getExtensions();
 
-        /**
-         * Plug all extensions to the QWidget \p widget .
-         */
-        void plugExtensions(QWidget* widget);
+		/**
+		 * Plug all extensions to the QWidget \p widget .
+		 */
+		void plugExtensions(QWidget* widget);
 
-    private slots:
-        void executeExtension();
+	private slots:
 
-    private:
-        /// Private d-pointer class.
-        KexiScriptManagerPrivate* d;
+		/**
+		 * This slot got called if a scripting-execution should be
+		 * executed.
+		 */
+		void executeExtension();
+
+	private:
+		/// Private d-pointer class.
+		KexiScriptManagerPrivate* d;
 };
 
 #endif
