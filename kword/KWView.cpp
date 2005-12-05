@@ -3083,6 +3083,10 @@ void KWView::updateFooter()
 
 }
 
+void KWView::updateZoom( ) {
+    viewZoom(m_actionViewZoom->currentText());
+}
+
 void KWView::viewZoom( const QString &s )
 {
     bool ok=false;
@@ -3092,6 +3096,11 @@ void KWView::viewZoom( const QString &s )
     if ( s == i18n("Fit to Width") )
     {
         zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->pageManager()->page(m_currentPage)->width() ) ) - 1;
+        if(zoom != m_doc->zoom() && !canvas->verticalScrollBar() ||
+                !canvas->verticalScrollBar()->isVisible()) { // has no vertical scrollbar
+            // we have to do this twice to take into account a possibly appearing vertical scrollbar
+            QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
+        }
         ok = true;
     }
     else if ( s == i18n("Fit to Page") )

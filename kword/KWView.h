@@ -248,6 +248,7 @@ public slots:
     void viewHeader();
     void viewFooter();
     void viewZoom( const QString &s );
+    void updateZoom();
 
     void insertTable();
     void insertPicture();
