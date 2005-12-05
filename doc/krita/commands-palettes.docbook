@@ -2,48 +2,474 @@
 <title>Palettes</title>
 
 <para>
-This section will describe &krita;'s palettes.
+This section describes &krita;'s palettes. The palettes are usually found at
+the right hand side of &krita;'s main window. There are three palettes which
+help you in customizing your drawing experience:
 </para>
 
 <sect2 id="commands-palettes-controlbox">
 <title>The <guilabel>Control box</guilabel> palette</title>
-<para></para>
+<para>The <guilabel>Control box</guilabel> contains three tabs. You can get an
+overview of the drawing, view a color histogram, and modify options for the
+current tool.</para>
 
 <sect3 id="commands-palettes-controlbox-overview">
 <title><guilabel>Overview</guilabel></title>
-<para></para>
+
+<para>This tab offers you two settings. In the <guilabel>Zoom</guilabel>
+slider and textbox, you can set the zoom level for the document. The
+<guilabel>Exposure</guilabel> slider and textbox can be used to choose the
+exposure level for OpenEXR images.</para>
+<para>
+<screenshot>
+<screeninfo>The Overview tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-overview.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Overview tab</phrase>
+</textobject>
+<caption><para>The Overview tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
 </sect3>
 
 <sect3 id="commands-palettes-controlbox-histogram">
 <title><guilabel>Histogram</guilabel></title>
-<para></para>
+
+<para>This tab displays a color histogram showing the distribution of
+colors over the image. The histogram is split up in red, green and blue
+levels.</para>
+<para>
+<screenshot>
+<screeninfo>The Histogram tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-histogram.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Histogram tab</phrase>
+</textobject>
+<caption><para>The Histogram tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
 </sect3>
 
-<!-- And one for each tool! -->
+<sect3 id="commands-palettes-controlbox-tool">
+<title><guilabel>Tool</guilabel></title>
 
-<sect3 id="commands-palettes-controlbox-star">
+<para>Actually, there is no tab named like this, since the tab name changes to
+reflect the name of the currently selected tool. This tab shows the
+customization options available for some specific tools. Pan, Move and
+Zoom have no options, the others are discussed below.</para>
+
+<sect4 id="commands-palettes-controlbox-tool-drawfreehand">
+<title><guilabel>Draw Freehand</guilabel></title>
+<para>There are two options available on this tab.
+</para><para>
+The <guilabel>Opacity</guilabel> slider and spin box are used to set the 
+opacity when drawing (opacity is the opposite of transparency, i.e. 100%
+opaque is 0% transparent, and vice versa).
+</para><para>
+In the <guilabel>Mode</guilabel> drop down box, you can choose a drawing
+mode. This changes the actual effect that drawing has on the image (normal
+painting, only changing the color, etcetera).</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Draw Freehand</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-drawfreehand.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Draw Freehand</phrase>
+</textobject>
+<caption><para>The Tool tab for Draw Freehand</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-ellipse">
+<title><guilabel>Ellipse</guilabel></title>
+<para>See <link
+linkend="commands-palettes-controlbox-tool-drawfreehand">Draw
+Freehand</link> for a description of <guilabel>Opacity</guilabel> and
+<guilabel>Mode</guilabel>.
+</para><para>
+The <guilabel>Fill</guilabel> drop down box is used to specify whether the
+inside of the ellipse should be filled. You can choose between three fill
+options: the current foreground color, background color or pattern is
+used.</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Ellipse</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-ellipse.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Ellipse</phrase>
+</textobject>
+<caption><para>The Tool tab for Ellipse</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-paintwithfilters">
+<title><guilabel>Paint with Filters</guilabel></title>
+<para>Depending on the filter, you can set different options here. The
+options you can set are the same as those available in the
+<quote>normal</quote> settings dialog for the chosen filter. See the respective
+section for more information.</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Paint with Filters</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-paintwithfilters.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Paint with Filters</phrase>
+</textobject>
+<caption><para>The Tool tab for Paint with Filters</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-line">
+<title><guilabel>Line</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
+are available here.</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-polygon">
+<title><guilabel>Polygon</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-ellipse">Ellipse</link> are
+available here.</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-polyline">
+<title><guilabel>Polyline</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
+are available here.</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-rectangle">
+<title><guilabel>Rectangle</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-ellipse">Ellipse</link> are
+available here.</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-star">
 <title><guilabel>Star</guilabel></title>
-<para></para>
+<para>The options for <link
+linkend="commands-palettes-controlbox-tool-ellipse">Ellipse</link> are
+available here, as well as two options specific to this tool.
+</para><para>
+The <guilabel>Vertices</guilabel> drop down box is used to set the amount
+of vertices (points) in the star.
+</para><para>
+The <guilabel>Ratio</guilabel> setting defines the shape of the
+star. A ratio of 0% will create a star with no inner area (when drawing the
+star, the two lines that make up a star point, overlap). Increasing the ratio
+will slowly make the star more outlined (the two lines are <quote>pulled
+apart</quote>). A star with a ratio of 100% is a regular polygon.
+</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Star</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-star.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Star</phrase>
+</textobject>
+<caption><para>The Tool tab for Star</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-duplicate">
+<title><guilabel>Duplicate</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
+are available here.</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-transform">
+<title><guilabel>Transform</guilabel></title>
+<para>The <guilabel>Move X</guilabel> and <guilabel>Move Y</guilabel>
+spin boxes show, and can be used to set, the displacement of the layer or
+selection. The same applies to <guilabel>Scale X</guilabel> and <guilabel>Scale
+Y</guilabel> for the scaling of the current layer or selection. Finally, 
+you can decide upon a transformation algorithm in the
+<guilabel>Filter</guilabel> drop down box.</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Transform</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-transform.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Transform</phrase>
+</textobject>
+<caption><para>The Tool tab for Transform</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-crop">
+<title><guilabel>Crop</guilabel></title>
+<para>Set the corner coordinates of the area that should remain with the
+four spin boxes <guilabel>Start X</guilabel>, <guilabel>Start Y</guilabel>,
+<guilabel>End X</guilabel> and <guilabel>End Y</guilabel>. The drop down
+box can be used to select whether the entire image or only the current layer
+should be cropped. Clicking the <guibutton>Crop</guibutton> button has
+the same effect as double-clicking outside the area in the image.</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Crop</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-crop.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Crop</phrase>
+</textobject>
+<caption><para>The Tool tab for Crop</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-contiguousfill">
+<title><guilabel>Contiguous Fill</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
+are available here, as are a couple of other options.
+</para><para>
+The setting in the <guilabel>Threshold</guilabel> slider and spin box
+determines how near to the color of the point the fill starts from, the color of
+a point should be for the fill to spread out over that point. A higher threshold
+will also fill areas that have less similar colors, a lower threshold limits
+the spread.
+</para><para>
+By checking the <guilabel>Use pattern</guilabel> checkbox you can choose to
+fill with the currently selected pattern instead of with the foreground color.
+</para><para>
+Checking the <guilabel>Sample merged</guilabel> checkbox changes the behaviour
+of the fill. 
+<!-- TODO elaborate  -->
+</para><para>
+If you check the <guilabel>Fill entire selection</guilabel> checkbox, the
+entire selection will be filled instead of only the neighboring area.
+</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Contiguous Fill</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-contiguousfill.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Contiguous Fill</phrase>
+</textobject>
+<caption><para>The Tool tab for Contiguous Fill</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-gradient">
+<title><guilabel>Gradient</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
+are available here, as are a couple of other options.
+</para><para>
+The <guilabel>Shape</guilabel> drop down box can be used to select the gradient
+type: linear, radial, conical, etcetera.
+</para><para>
+The <guilabel>Repeat</guilabel> option determines whether the gradient is
+repeated if it does not fill the entire image. With None, the colors on the
+ends of the gradient are used to fill the remaining space. With Forwards, the
+gradient is normally repeated (connecting the back end of one occurrence with
+the front end of the next). With Alternating, the gradient is repeated with
+every second occurrence being drawn from back to front (linking front to front
+and back to back).
+</para><para>
+Check the <guilabel>Reverse</guilabel> checkbox to have the gradient drawn
+reversed (from back to front).
+</para><para>
+The final setting is <guilabel>Anti-alias treshold</guilabel>.
+<!-- TODO elaborate  -->
+</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Gradient</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-gradient.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Gradient</phrase>
+</textobject>
+<caption><para>The Tool tab for Gradient</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-text">
+<title><guilabel>Text</guilabel></title>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
+are available here. Furthermore there is an option <guilabel>Font</guilabel>,
+which shows the font that will be used for the text. Click the
+<guibutton>...</guibutton> button to change the font.
+</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Text</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-text.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Text</phrase>
+</textobject>
+<caption><para>The Tool tab for Text</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-colorpicker">
+<title><guilabel>Color picker</guilabel></title>
+<para>The first option is a dropdown box in which you can choose which
+layer to pick the color from. If you choose a specific layer,
+the color of the point in that layer will be retrieved. With <guilabel>Sample
+all visible layers</guilabel>, the topmost visible layer which is not
+transparent at that point is used.
+</para><para>
+If the <guilabel>Update current color</guilabel> checkbox is checked, then the
+current foreground color (when clicking with the &LMB;) or background color
+(when clicking with the &RMB;) is set to the picked color.
+</para><para>
+The checkbox <guilabel>Normalize integer values</guilabel> switches the
+range of color values displayed from the <quote>normal</quote> range (e.g. 0 to
+255) to a scaled value between 0 and 1.
+</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Color picker</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-colorpicker.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Color picker</phrase>
+</textobject>
+<caption><para>The Tool tab for Color picker</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-select">
+<title><guilabel>Select</guilabel> operations</title>
+<para>The Paint selection, Erase selection, Select rectangular, Select
+elliptical, Select polygonal and Select outline tools have one option:
+the <guilabel>Action</guilabel> to perform. You can choose between adding to, or
+subtracting from the selection.</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Select operations</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-select.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Select operations</phrase>
+</textobject>
+<caption><para>The Tool tab for Select operations</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-selectcontiguous">
+<title><guilabel>Select contiguous</guilabel></title>
+<para>The <guilabel>Action</guilabel> is the same as discussed with the
+<link linkend="commands-palettes-controlbox-tool-select">Select
+operations</link>.
+</para><para>
+The slider and spin box at <guilabel>Fuzziness</guilabel> determine how near
+colors must be to the color at the clicked point to be added to the selection.
+</para><para>
+The <guilabel>Sample merged</guilabel> checkbox (... to be added)
+<!-- TODO elaborate  -->
+</para>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Select contiguous</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-selectcontiguous.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Select contiguous</phrase>
+</textobject>
+<caption><para>The Tool tab for Select contiguous</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+</sect4>
+
+<sect4 id="commands-palettes-controlbox-tool-selectsimilar">
+<title><guilabel></guilabel></title>
+<para>The <guilabel>Action</guilabel> and <guilabel>Fuzziness</guilabel> 
+options are the same as with <link
+linkend="commands-palettes-controlbox-tool-selectcontiguous">Select
+contiguous</link>. </para>
+</sect4>
+
 </sect3>
 
 </sect2>
 
 <sect2 id="commands-palettes-colors">
-<title>The <guilabel>Layers</guilabel> palette</title>
+<title>The <guilabel>Colors</guilabel> palette</title>
 <para></para>
 
 <sect3 id="commands-palettes-colors-hsv">
 <title><guilabel>HSV</guilabel></title>
 <para></para>
 </sect3>
+
 <sect3 id="commands-palettes-colors-rgb">
 <title><guilabel>RGB</guilabel></title>
 <para></para>
 </sect3>
+
 <sect3 id="commands-palettes-colors-gray">
 <title><guilabel>Gray</guilabel></title>
 <para></para>
 </sect3>
+
 <sect3 id="commands-palettes-colors-palettes">
 <title><guilabel>Palettes</guilabel></title>
 <para></para>
