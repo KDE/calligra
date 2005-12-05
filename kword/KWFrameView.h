@@ -23,6 +23,7 @@ class KWFrameView;
 class KWFrameViewManager;
 class KWFrame;
 class KWView;
+class KWViewMode;
 class KoZoomHandler;
 class KoPoint;
 class KActionSeparator;
@@ -132,7 +133,7 @@ public:
      * @param crect the clip rect; nothing outside this rect is important
      * @param zh the zoomHandler to convert from internal coordinates to view coordinates
      */
-    void paintFrameAttributes(QPainter *painter, const QRect &crect, KoZoomHandler *zh);
+    void paintFrameAttributes(QPainter *painter, const QRect &crect, KWViewMode *vm, KoZoomHandler *zh);
 
 private:
     /**

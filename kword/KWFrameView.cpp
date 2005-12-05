@@ -24,6 +24,7 @@
 #include "KWPartFrameSet.h"
 #include "KWVariable.h"
 #include "KWPictureFrameSet.h"
+#include "KWViewMode.h"
 #include "KWDocument.h"
 #include "KWCanvas.h"
 
@@ -128,7 +129,7 @@ void KWFrameView::showPopup( const KoPoint &point, KWView *view, const QPoint &p
     popup->popup(popupPoint);
 }
 
-void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, KoZoomHandler *zh) {
+void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, KWViewMode *vm, KoZoomHandler *zh) {
     if( !m_selected )
         return;
 
@@ -152,8 +153,8 @@ void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, Ko
         }
     };
 
-    QPoint topLeft = zh->zoomPoint( frame()->topLeft() );
-    QPoint bottomRight = zh->zoomPoint( frame()->bottomRight() );
+    QPoint topLeft = vm->normalToView( zh->zoomPoint(frame()->topLeft()) );
+    QPoint bottomRight = vm->normalToView( zh->zoomPoint(frame()->bottomRight()) );
     ResizeHandle handle(this);
 
     int width = bottomRight.x() - topLeft.x();
