@@ -13,11 +13,8 @@ Published as-is without any warranties.
 
 class Datasource:
 	def __init__(self):
-		try:
-			import krosskexiapp
-			keximainwindow = krosskexiapp.get("KexiAppMainWindow")
-		except:
-			raise "Import of the Kross KexiApp module failed."
+		import kexiapp
+		keximainwindow = kexiapp.get("KexiAppMainWindow")
 
 		try:
 			self.connection = keximainwindow.getConnection()

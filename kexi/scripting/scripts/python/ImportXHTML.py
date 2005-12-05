@@ -178,12 +178,10 @@ class KexiDBOutput:
 
 	def __init__(self):
 		""" Constructor. """
-		try:
-			import krosskexiapp
-			keximainwindow = krosskexiapp.get("KexiAppMainWindow")
-		except:
-			raise "Import of the Kross KexiApp module failed."
-		try:
+		import kexiapp
+		keximainwindow = kexiapp.get("KexiAppMainWindow")
+		
+                try:
 			self.connection = keximainwindow.getConnection()
 		except:
 			raise "No connection established. Please open a project before."

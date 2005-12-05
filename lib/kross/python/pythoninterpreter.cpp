@@ -110,9 +110,14 @@ PythonInterpreter::PythonInterpreter(Kross::Api::InterpreterInfo* info)
         path = Py_GetPath();
 
     // Determinate additional module-paths we like to add.
-    QStringList dirs = KGlobal::dirs()->findDirs("data", "kross/python");
-    for(QStringList::Iterator it = dirs.begin(); it != dirs.end(); ++it)
-        path.append(*it + PYPATHDELIMITER);
+    // First add the global Kross modules-path.
+    QStringList krossdirs = KGlobal::dirs()->findDirs("data", "kross/python");
+    for(QStringList::Iterator krossit = krossdirs.begin(); krossit != krossdirs.end(); ++krossit)
+        path.append(*krossit + PYPATHDELIMITER);
+    // Then add the application modules-path.
+    QStringList appdirs = KGlobal::dirs()->findDirs("appdata", "kross/python");
+    for(QStringList::Iterator appit = appdirs.begin(); appit != appdirs.end(); ++appit)
+        path.append(*appit + PYPATHDELIMITER);
 
     // Set the extended sys.path.
     PySys_SetPath( (char*) path.latin1() );
