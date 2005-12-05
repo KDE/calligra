@@ -85,15 +85,16 @@ class Style
       SPrecision       = 0x80000,
       SFormatType      = 0x100000,
       SAngle           = 0x200000,
-      SIndent          = 0x400000,
-      SDontPrintText   = 0x800000,
-      SCustomFormat    = 0x1000000,
-      SNotProtected    = 0x2000000,
-      SHideAll         = 0x4000000,
-      SHideFormula     = 0x8000000,
-      SFontSize        = 0x10000000,
-      SFontFlag        = 0x20000000,
-      SFontFamily      = 0x40000000
+      SComment         = 0x400000,
+      SIndent          = 0x800000,
+      SDontPrintText   = 0x1000000,
+      SCustomFormat    = 0x2000000,
+      SNotProtected    = 0x4000000,
+      SHideAll         = 0x8000000,
+      SHideFormula     = 0x10000000,
+      SFontSize        = 0x20000000,
+      SFontFlag        = 0x40000000,
+      SFontFamily      = 0x80000000
     };
 
   Style();
