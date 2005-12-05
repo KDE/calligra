@@ -69,12 +69,12 @@ public:
 
     /** Speech Options */
     enum SpeakFlags {
-        SpeakFocusWidget = 1    /**< Speak widget with focus */,
-        SpeakPointerWidget = 2  /**< Speak widget under mouse pointer */,
-        SpeakWhatsThis = 4      /**< Speak Whats This if available */,
-        SpeakTooltip = 8        /**< Speak tooltip if available */,
-        SpeakAccelerator = 16   /**< Speak accelerator */,
-        SpeakDisabled = 32      /**< Say 'disabled' if not enabled */
+        SpeakFocusWidget =      0x0001  /**< Speak widget with focus */,
+        SpeakPointerWidget =    0x0002  /**< Speak widget under mouse pointer */,
+        SpeakWhatsThis =        0x0004  /**< Speak Whats This if available */,
+        SpeakTooltip =          0x0008  /**< Speak tooltip if available */,
+        SpeakAccelerator =      0x0010  /**< Speak accelerator */,
+        SpeakDisabled =         0x0020  /**< Say 'disabled' if not enabled */
     };
 
     /**
