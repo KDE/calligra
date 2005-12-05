@@ -9,11 +9,8 @@
             <x>0</x>
             <y>0</y>
             <width>462</width>
-            <height>339</height>
+            <height>346</height>
         </rect>
-    </property>
-    <property name="caption">
-        <string>KoCompletionBase</string>
     </property>
     <vbox>
         <property name="name">
@@ -38,6 +35,9 @@
                 <widget class="QListBox">
                     <property name="name">
                         <cstring>m_lbListCompletion</cstring>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>Suggestion list for autocompletion</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -90,10 +90,10 @@
                 <cstring>cbAddCompletionWord</cstring>
             </property>
             <property name="text">
-                <string>Automatically add new words to suggestions list list</string>
+                <string>Automatically add new words to suggestion list</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>If this option is enabled, any word typed in this document will automatically be added to the list of words used by the completion.</string>
+                <string>If this option is enabled, any word equal to or longer than the "Characters needed" typed in this document will automatically be added to the list of words used by the completion.</string>
             </property>
         </widget>
         <widget class="QGroupBox">
@@ -115,7 +115,7 @@
                         <string>Show words in tooltip</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>If this option is enabled, a tool tip box will appear when you type the beginning of a word that exists in the completion list. To complete the word, press the TAB or ENTER key.</string>
+                        <string>If this option is enabled, a tool tip box will appear when you type the beginning of a word that exists in the completion list. To complete the word, press the key you set to accept suggstions in the "Key to accept suggestion" drop-down list.</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -150,6 +150,9 @@
                             </property>
                             <property name="tickInterval">
                                 <number>50</number>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This sets the maximum number of words in the completion list. All additional words will not be included in the list. You can select any value from 1 to 500. This option keeps the list from becoming too cumbersome.</string>
                             </property>
                         </widget>
                         <widget class="QLabel" row="0" column="0">
@@ -204,6 +207,9 @@
                             <property name="tickmarks">
                                 <enum>Below</enum>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Use this spinbox/slider combination to prevent from automatically adding short words to the completion list.   You can select any value from 5-100 and the words will need to be at least the number of characters set here to be added in the list.</string>
+                            </property>
                         </widget>
                         <widget class="QSpinBox" row="0" column="2">
                             <property name="name">
@@ -224,6 +230,9 @@
                     </property>
                     <property name="text">
                         <string>Append space</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>If checked, it adds a single space to the end of a word after autocompletion, this means it is not necessary to add the space manually for the next word.</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -287,7 +296,7 @@
                         <string>Make Default</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Completion is configured per document, making this list the default will allow you to use this list for new documents automatically.</string>
+                        <string>Completion is configured per document, making this list the default will allow you to use this list for new documents automatically. A dialog appears to tell you the list wil be used for all documents from now.</string>
                     </property>
                 </widget>
                 <spacer>
