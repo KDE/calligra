@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001 Thomas zander <zander@kde.org>
-   Copyright (C) 2004 Dag Andersen <danders@get2net.dk>
+   Copyright (C) 2004, 2005 Dag Andersen <danders@get2net.dk>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -18,6 +18,8 @@
  * Boston, MA 02110-1301, USA.
 */
 #include "kptnode.h"
+
+#include "kptaccount.h"
 #include "kptwbsdefinition.h"
 #include "kptresource.h"
 
@@ -75,6 +77,12 @@ Node::~Node() {
     while ((a = m_appointments.getFirst())) {
         delete a;
     }
+    if (m_runningAccount)
+        m_runningAccount->removeRunning(*this);
+    if (m_startupAccount)
+        m_startupAccount->removeStartup(*this);
+    if (m_shutdownAccount)
+        m_shutdownAccount->removeShutdown(*this);
 }
 
 void Node::init() {

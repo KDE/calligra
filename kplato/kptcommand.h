@@ -32,6 +32,7 @@ namespace KPlato
 {
 
 class Account;
+class Accounts;
 class Project;
 class Task;
 class Calendar;
@@ -639,6 +640,7 @@ public:
 private:
     Project &m_project;
     Account *m_account;
+    bool m_isDefault;
     bool m_mine;
 
 };
@@ -730,6 +732,19 @@ public:
 
 private:
     Node &m_node;
+    Account *m_oldvalue;
+    Account *m_newvalue;
+};
+
+class ModifyDefaultAccountCmd : public NamedCommand
+{
+public:
+    ModifyDefaultAccountCmd(Part *part, Accounts &acc, Account *oldvalue, Account *newvalue, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Accounts &m_accounts;
     Account *m_oldvalue;
     Account *m_newvalue;
 };

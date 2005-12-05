@@ -1034,6 +1034,7 @@ RemoveAccountCmd::RemoveAccountCmd(Part *part, Project &project, Account *accoun
       m_project(project),
       m_account(account) {
     m_mine = false;
+    m_isDefault = account == project.accounts().defaultAccount();
 }
 
 RemoveAccountCmd::~RemoveAccountCmd() {
@@ -1042,6 +1043,9 @@ RemoveAccountCmd::~RemoveAccountCmd() {
 }
 
 void RemoveAccountCmd::execute() {
+    if (m_isDefault) {
+        m_project.accounts().setDefaultAccount(0);
+    }
     if (m_account->parent())
         m_account->parent()->take(m_account);
     else
@@ -1055,6 +1059,9 @@ void RemoveAccountCmd::unexecute() {
         m_account->parent()->append(m_account);
     else
         m_project.accounts().append(m_account);
+    
+    if (m_isDefault)
+        m_project.accounts().setDefaultAccount(m_account);
     
     setCommandType(0);
     m_mine = false;
@@ -1130,10 +1137,10 @@ NodeModifyRunningAccountCmd::NodeModifyRunningAccountCmd(Part *part, Node &node,
       m_node(node) {
     m_oldvalue = oldvalue;
     m_newvalue = newvalue;
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 }
 void NodeModifyRunningAccountCmd::execute() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (m_oldvalue) {
         m_oldvalue->removeRunning(m_node);
     }
@@ -1143,7 +1150,7 @@ void NodeModifyRunningAccountCmd::execute() {
     setCommandType(0);
 }
 void NodeModifyRunningAccountCmd::unexecute() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (m_newvalue) {
         m_newvalue->removeRunning(m_node);        
     }
@@ -1158,11 +1165,11 @@ NodeModifyStartupAccountCmd::NodeModifyStartupAccountCmd(Part *part, Node &node,
       m_node(node) {
     m_oldvalue = oldvalue;
     m_newvalue = newvalue;
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 }
 
 void NodeModifyStartupAccountCmd::execute() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (m_oldvalue) {
         m_oldvalue->removeStartup(m_node);
     }
@@ -1172,7 +1179,7 @@ void NodeModifyStartupAccountCmd::execute() {
     setCommandType(0);
 }
 void NodeModifyStartupAccountCmd::unexecute() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (m_newvalue) {
         m_newvalue->removeStartup(m_node);
     }
@@ -1187,11 +1194,11 @@ NodeModifyShutdownAccountCmd::NodeModifyShutdownAccountCmd(Part *part, Node &nod
       m_node(node) {
     m_oldvalue = oldvalue;
     m_newvalue = newvalue;
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 }
 
 void NodeModifyShutdownAccountCmd::execute() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (m_oldvalue) {
         m_oldvalue->removeShutdown(m_node);
     }
@@ -1201,13 +1208,32 @@ void NodeModifyShutdownAccountCmd::execute() {
     setCommandType(0);
 }
 void NodeModifyShutdownAccountCmd::unexecute() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (m_newvalue) {
         m_newvalue->removeShutdown(m_node);
     }
     if (m_oldvalue) {
-        m_oldvalue->addShutdown(m_node);        
+        m_oldvalue->addShutdown(m_node);
     }
+    setCommandType(0);
+}
+
+ModifyDefaultAccountCmd::ModifyDefaultAccountCmd(Part *part, Accounts &acc, Account *oldvalue, Account *newvalue, QString name)
+    : NamedCommand(part, name),
+      m_accounts(acc) {
+    m_oldvalue = oldvalue;
+    m_newvalue = newvalue;
+    //kdDebug()<<k_funcinfo<<endl;
+}
+
+void ModifyDefaultAccountCmd::execute() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_accounts.setDefaultAccount(m_newvalue);
+    setCommandType(0);
+}
+void ModifyDefaultAccountCmd::unexecute() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_accounts.setDefaultAccount(m_oldvalue);
     setCommandType(0);
 }
 

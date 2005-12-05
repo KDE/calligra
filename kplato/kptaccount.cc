@@ -31,7 +31,6 @@
 namespace KPlato
 {
 
-
 Account::Account()
     : m_name(),
       m_description(),
@@ -59,6 +58,8 @@ Account::Account(QString name, QString description)
 Account::~Account() {
     m_accountList.clear();
     removeId();
+    if (m_list)
+        m_list->accountDeleted(this);
 }
     
 
@@ -94,8 +95,10 @@ void Account::take(Account *account) {
     }
     if (account->parent() == this) {
         m_accountList.take(m_accountList.findRef(account));
-    } else {
+    } else if (account->parent()) {
         account->parent()->take(account);
+    } else {
+        m_list->take(account);
     }
     //kdDebug()<<k_funcinfo<<account->name()<<endl;
 }
@@ -108,7 +111,7 @@ bool Account::load(QDomElement &element, const Project &project) {
         if (list.item(i).isElement()) {
             QDomElement e = list.item(i).toElement();
             if (e.tagName() == "costplace") {
-                Account::CostPlace *child = new Account::CostPlace();
+                Account::CostPlace *child = new Account::CostPlace(this);
                 if (child->load(e, project)) {
                     append(child);
                 } else {
@@ -175,7 +178,7 @@ void Account::addRunning(Node &node) {
         cp->setRunning(true);
         return;
     }
-    append(new CostPlace(&node, true));
+    append(new CostPlace(this, &node, true));
 }
 
 Account::CostPlace *Account::findStartup(const Node &node) const {
@@ -199,7 +202,7 @@ void Account::addStartup(Node &node) {
         cp->setStartup(true);
         return;
     }
-    append(new CostPlace(&node, false, true));
+    append(new CostPlace(this, &node, false, true));
 
 }
 
@@ -224,7 +227,7 @@ void Account::addShutdown(Node &node) {
         cp->setShutdown(true);
         return;
     }
-    append(new CostPlace(&node, false, false, true));
+    append(new CostPlace(this, &node, false, false, true));
 }
 
 Account *Account::findAccount(const QString &id) const {
@@ -246,6 +249,35 @@ bool Account::insertId(const Account *account) {
 }
 
 //------------------------------------
+Account::CostPlace::~CostPlace() {
+    if (m_node) {
+        if (m_running)
+            m_node->setRunningAccount(0);
+        if (m_startup)
+            m_node->setStartupAccount(0);
+        if (m_shutdown)
+            m_node->setShutdownAccount(0);
+    }
+}
+
+void Account::CostPlace::setRunning(bool on ) { 
+    m_running = on;
+    if (m_node)
+        m_node->setRunningAccount(on ? m_account : 0);
+}
+
+void Account::CostPlace::setStartup(bool on ) { 
+    m_startup = on;
+    if (m_node)
+        m_node->setStartupAccount(on ? m_account : 0);
+}
+
+void Account::CostPlace::setShutdown(bool on ) { 
+    m_shutdown = on;
+    if (m_node)
+        m_node->setShutdownAccount(on ? m_account : 0);
+}
+
 bool Account::CostPlace::load(QDomElement &element, const Project &project) {
     //kdDebug()<<k_funcinfo<<endl;
     m_nodeId = element.attribute("node-id");
@@ -258,9 +290,9 @@ bool Account::CostPlace::load(QDomElement &element, const Project &project) {
         kdError()<<k_funcinfo<<"Cannot not find node with id: "<<m_nodeId<<endl;
         return false;
     }
-    m_running = element.attribute("running-cost").toInt();
-    m_startup = element.attribute("startup-cost").toInt();
-    m_shutdown = element.attribute("shutdown-cost").toInt();
+    setRunning(element.attribute("running-cost").toInt());
+    setStartup(element.attribute("startup-cost").toInt());
+    setShutdown(element.attribute("shutdown-cost").toInt());
     return true;
 }
 
@@ -276,8 +308,9 @@ void Account::CostPlace::save(QDomElement &element) const {
 }
 
 //---------------------------------
-Accounts::Accounts()
-    : m_accountList(),
+Accounts::Accounts(Project &project)
+    : m_project(project),
+      m_accountList(),
       m_idDict(),
       m_defaultAccount(0) {
       
@@ -309,6 +342,25 @@ EffortCostMap Accounts::plannedCost(const Account &account, const QDate &start, 
             if (n->endTime().date() >= start &&
                 n->endTime().date() <= end)
                 ec.add(n->endTime().date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+        }
+    }
+    if (&account == m_defaultAccount) {
+        QDictIterator<Node> nit = m_project.nodeDict();
+        for (; nit.current(); ++nit) {
+            Node *n = nit.current();
+            if (n->runningAccount() == 0) {
+                ec += n->plannedEffortCostPrDay(start, end);
+            }
+            if (n->startupAccount() == 0) {
+                if (n->startTime().date() >= start &&
+                    n->startTime().date() <= end)
+                    ec.add(n->startTime().date(), EffortCost(Duration::zeroDuration, n->startupCost()));
+            }
+            if (n->shutdownAccount() == 0) {
+                if (n->endTime().date() >= start &&
+                    n->endTime().date() <= end)
+                    ec.add(n->endTime().date(), EffortCost(Duration::zeroDuration, n->shutdownCost()));
+            }
         }
     }
     return ec;
@@ -354,10 +406,16 @@ bool Accounts::load(QDomElement &element, const Project &project) {
             }
         }
     }
+    if (element.hasAttribute("default-account")) {
+        m_defaultAccount = findAccount(element.attribute("default-account"));
+    }
     return true;
 }
 
 void Accounts::save(QDomElement &element) const {
+    if (m_defaultAccount) {
+        element.setAttribute("default-account", m_defaultAccount->name());
+    }
     QDomElement me = element.ownerDocument().createElement("accounts");
     element.appendChild(me);
     AccountListIterator it = m_accountList;

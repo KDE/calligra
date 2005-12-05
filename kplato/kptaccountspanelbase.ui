@@ -10,7 +10,7 @@
             <x>0</x>
             <y>0</y>
             <width>350</width>
-            <height>220</height>
+            <height>234</height>
         </rect>
     </property>
     <property name="minimumSize">
@@ -28,17 +28,40 @@
     <property name="caption">
         <string>AccountsPanelBase</string>
     </property>
-    <grid>
+    <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QListView" row="0" column="0" rowspan="1" colspan="3">
+        <widget class="QLayoutWidget">
+            <property name="name">
+                <cstring>layout1</cstring>
+            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QLabel">
+                    <property name="name">
+                        <cstring>textLabel1</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Default account:</string>
+                    </property>
+                </widget>
+                <widget class="QComboBox">
+                    <property name="name">
+                        <cstring>accountsComboBox</cstring>
+                    </property>
+                </widget>
+            </hbox>
+        </widget>
+        <widget class="KListView">
             <column>
                 <property name="text">
-                    <string>Accounts</string>
+                    <string>Account</string>
                 </property>
                 <property name="clickable">
                     <bool>true</bool>
@@ -61,35 +84,47 @@
             <property name="name">
                 <cstring>accountList</cstring>
             </property>
-            <property name="defaultRenameAction">
-                <enum>Accept</enum>
-            </property>
         </widget>
-        <widget class="QPushButton" row="1" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>removeBtn</cstring>
+                <cstring>layout3</cstring>
             </property>
-            <property name="text">
-                <string>Remove</string>
-            </property>
+            <hbox>
+                <property name="name">
+                    <cstring>unnamed</cstring>
+                </property>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>removeBtn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Remove</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>newBtn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>New</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>subBtn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>New Subaccount</string>
+                    </property>
+                </widget>
+            </hbox>
         </widget>
-        <widget class="QPushButton" row="1" column="1">
-            <property name="name">
-                <cstring>newBtn</cstring>
-            </property>
-            <property name="text">
-                <string>New</string>
-            </property>
-        </widget>
-        <widget class="QPushButton" row="1" column="2">
-            <property name="name">
-                <cstring>subBtn</cstring>
-            </property>
-            <property name="text">
-                <string>New Subaccount</string>
-            </property>
-        </widget>
-    </grid>
+    </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+</includehints>
 </UI>

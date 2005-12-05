@@ -42,7 +42,7 @@ namespace KPlato
 /// Use for main projects
 Project::Project(Node *parent)
     : Node(parent),
-      m_accounts(),
+      m_accounts(*this),
       m_baselined(false) {
     m_constraint = Node::MustStartOn;
     m_standardWorktime = new StandardWorktime();

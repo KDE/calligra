@@ -84,34 +84,44 @@ public:
     class CostPlace {
     public:
         CostPlace() 
-            : m_nodeId(), m_node(0), m_running(false), m_startup(false), m_shutdown(false)
+            : m_account(0), m_nodeId(), m_node(0), m_running(false), m_startup(false), m_shutdown(false)
         {}
-        CostPlace(Node *node, bool running=false, bool strtup=false, bool shutdown=false)
-            : m_nodeId(node->id()), m_node(node), m_running(running), m_startup(strtup), m_shutdown(shutdown)
+        CostPlace(Account *acc) 
+            : m_account(acc), m_nodeId(), m_node(0), m_running(false), m_startup(false), m_shutdown(false)
         {}
+        CostPlace(Account *acc, Node *node, bool running=false, bool strtup=false, bool shutdown=false)
+            : m_account(acc), m_nodeId(node->id()), m_node(node) {
+            if (node) {
+                setRunning(running);
+                setStartup(strtup);
+                setShutdown(shutdown);
+            }
+        }
         CostPlace(CostPlace *cp) {
+            m_account = cp->m_account;
             m_nodeId = cp->m_nodeId;
             m_node = cp->m_node;
             m_running = cp->m_running;
             m_startup = cp->m_startup;
             m_shutdown = cp->m_shutdown;
         }
-        ~CostPlace()
-        {}
+        ~CostPlace();
+        
         bool isEmpty() { return !(m_running || m_startup || m_shutdown); }
         Node *node() const { return m_node; }
         
         bool running() const { return m_running; }
-        void setRunning(bool on ) { m_running = on; }
+        void setRunning(bool on );
         bool startup() const  { return m_startup; }
-        void setStartup(bool on) { kdDebug()<<k_funcinfo<<endl;m_startup = on; }
+        void setStartup(bool on);
         bool shutdown() const  { return m_shutdown; }
-        void setShutdown(bool on) { m_shutdown = on; }
+        void setShutdown(bool on);
     
         bool load(QDomElement &element, const Project &project);
         void save(QDomElement &element) const;
     
     private:
+        Account *m_account;
         QString m_nodeId;
         Node *m_node;
         bool m_running;
@@ -156,10 +166,13 @@ typedef QPtrListIterator<Account> AccountListIterator;
 class Accounts
 {
 public:
-    Accounts();
+    Accounts(Project &project);
     ~Accounts();
     
-    static EffortCostMap plannedCost(const Account &account, const QDate &start, const QDate &end);
+    Account *defaultAccount() const { return m_defaultAccount; }
+    void setDefaultAccount(Account *account) { m_defaultAccount = account; }
+    
+    EffortCostMap plannedCost(const Account &account, const QDate &start, const QDate &end);
     
     void clear() { m_accountList.clear(); m_idDict.clear(); }
     void append(Account *account);
@@ -180,7 +193,10 @@ public:
     bool insertId(const Account *account);
     bool removeId(const QString &id);
     
+    void accountDeleted(Account *account) 
+        { if (account == m_defaultAccount) m_defaultAccount = 0; }
 private:
+    Project &m_project;
     AccountList m_accountList;
     QDict<Account> m_idDict;
 

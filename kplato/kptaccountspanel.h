@@ -23,6 +23,7 @@
 #include "kptaccountspanelbase.h"
 
 #include <qptrlist.h>
+#include <qdict.h>
 
 class QListView;
 class QListViewItem;
@@ -34,6 +35,7 @@ class KMacroCommand;
 namespace KPlato
 {
 
+class AccountItem;
 class Account;
 class Accounts;
 class Part;
@@ -46,8 +48,16 @@ public:
     
     KCommand *buildCommand(Part *part);
     
+    bool isUnique(QListViewItem *item);
+    void renameStopped(QListViewItem *item);
+    
 signals:
     void changed(bool);
+    
+    // Internal
+    void renameStarted(QListViewItem *, int);
+    void startRename(QListViewItem *item, int col);
+    void selectionChanged();
     
 public slots:
     void slotOk();
@@ -59,10 +69,17 @@ protected slots:
     void slotRemoveBtn();
     void slotNewBtn();
     void slotSubBtn();
-    
+    void slotActivated(int);
+    void slotListDoubleClicked(QListViewItem* item, const QPoint&, int col);
+    void slotRenameStarted(QListViewItem *item, int col);
+    void slotStartRename(QListViewItem *item, int col);
+    void slotRemoveItem(QListViewItem *i);
 protected:
     void addItems(QListView *lv, Accounts &acc);
     void addItems(QListViewItem *item, Account *acc);
+    void addElement(const QListViewItem *item);
+    void removeElement(QListViewItem *item);
+    void refreshDefaultAccount();
     KCommand *save(Part *part, Project &project);
     KCommand *save(Part *part, Project &project, QListViewItem *item);
     
@@ -70,6 +87,11 @@ private:
     Accounts &m_accounts;
     
     QPtrList<QListViewItem> m_removedItems;
+    Account *m_oldDefaultAccount;
+    QDict<QListViewItem> m_elements;
+    int m_currentIndex;
+    QString m_renameText;
+    QListViewItem *m_renameItem;
 };
 
 } //namespace KPlato
