@@ -42,14 +42,31 @@ class KARBONBASE_EXPORT VColor
 public:
 	enum VColorSpace
 	{
-		rgb  = 0,
-		cmyk = 1,
-		hsb  = 2,
-		gray = 3
+		rgb  = 0,	/**< the RGB colorspace (red, green and blue components) */
+		cmyk = 1,	/**< the CMYK colorspace (cyan, magenta, yellow and black components) */
+		hsb  = 2,	/**< the HSB colorspace (hue, saturation and brightnes components) */
+		gray = 3	/**< the Gray colorspace (gray from black to white) */
 	};
 
+	/**
+	 * Constructs a new VColor with the specified colorspace.
+	 *
+	 * @param colorSpace the colorspace of the new color
+	 */
 	VColor( VColorSpace colorSpace = rgb );
+
+	/**
+	 * Constructs a new VColor by copying data from the specified VColor
+	 *
+	 * @param color the color to copy from 
+	 */
 	VColor( const VColor& color );
+
+	/**
+	 * Constructs a new VColor by copying data from the specified QColor
+	 *
+	 * @param color the color to copy from 
+	 */
 	VColor( const QColor& color );
 
 	/**
@@ -57,28 +74,98 @@ public:
 	 */
 	operator QColor() const;
 
+	/**
+	 * Index operator to access color components.
+	 *
+	 * @param i the index of the color component to access
+	 * @return the requested color component
+	 */
 	float operator[]( unsigned i ) const
 		{ return m_value[i]; }
 
+	/**
+	 * Sets the first color component.
+	 *
+	 * @param v1 the new value of the first color component
+	 */
 	void set( float v1 )
 		{ m_value[0] = v1; }
+
+	/**
+	 * Sets the first and second color component.
+	 *
+	 * @param v1 the new value of the first color component
+	 * @param v2 the new value of the second color component
+	 */
 	void set( float v1, float v2 )
 		{ m_value[0] = v1; m_value[1] = v2; }
+
+	/**
+	 * Sets the first, second and third color component.
+	 *
+	 * @param v1 the new value of the first color component
+	 * @param v2 the new value of the second color component
+	 * @param v3 the new value of the third color component
+	 */
 	void set( float v1, float v2, float v3 )
 		{ m_value[0] = v1; m_value[1] = v2; m_value[2] = v3; }
+
+	/**
+	 * Sets the first, second, third and fourth color component.
+	 *
+	 * @param v1 the new value of the first color component
+	 * @param v2 the new value of the second color component
+	 * @param v3 the new value of the third color component
+	 * @param v3 the new value of the fourth color component
+	 */
 	void set( float v1, float v2, float v3, float v4 )
 		{ m_value[0] = v1; m_value[1] = v2; m_value[2] = v3; m_value[3] = v4; }
 
 	/**
+	 * Returns the color opacity.
+	 *
 	 * Opacity is a value ranging from 0.0 (fully transparent) to 1.0 (opaque).
+	 *
+	 * @return the color opacity
 	 */
 	float opacity() const { return m_opacity; }
+
+	/**
+	 * Sets the color opacity.
+	 *
+	 * @param opacity the new color opacity.
+	 */
 	void setOpacity( float opacity ) { m_opacity = opacity; }
 
+	/**
+	 * Returns the color's colorspace.
+	 *
+	 * @return the color's colorspace
+	 */
 	VColorSpace colorSpace() const { return m_colorSpace; }
+
+	/**
+	 * Sets the color's colorspace.
+	 *
+	 * The color is converted into the new colorspace by setting convert = true.
+	 * 
+	 * @param colorSpace the new colorspace
+	 * @param convert controls if color is converted into new colorspace
+	 */
 	void setColorSpace( const VColorSpace colorSpace, bool convert = true );
 
+	/**
+	 * Save this color's state to xml.
+	 * 
+	 * @param element the DOM element to which the attributes are saved
+	 */
 	void save( QDomElement& element ) const;
+
+	/**
+	 * Load this color's state from xml and initialize it accordingly.
+	 *
+	 * @param element the DOM element from which the attributes are read
+	 */
 	void load( const QDomElement& element );
 
 private:
