@@ -113,7 +113,7 @@ public:
     bool sayWidget(const QString& msg);
 
     /**
-     * Cancels speaking of widget.  Usually called by slots that receive @ref customSpeakWidget
+     * Cancels speaking of widget.  Usually called by slots that receive @ref customSpeakNewWidget
      * signal when they wish to speak the widget themselves.
      */
     void cancelSpeakWidget();
