@@ -136,14 +136,9 @@ namespace {
                 rawdata.resize(profile->length);
                 memcpy(rawdata.data(), profile->datum, profile->length);
 
-                cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile -> datum, (DWORD)profile -> length);
-
-                if (hProfile == (cmsHPROFILE) NULL) {
+                p = new KisProfile(rawdata);
+                if (p == 0)
                     return 0;
-                }
-
-                p = new KisProfile(hProfile, rawdata);
-                Q_CHECK_PTR(p);
             }
             name = GetNextImageProfile(image);
         }

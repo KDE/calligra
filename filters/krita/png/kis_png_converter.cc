@@ -186,12 +186,8 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
         profile_rawdata.resize(proflen);
         memcpy(profile_rawdata.data(), profile_data, proflen);
 
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, (DWORD)proflen);
-
-        if (hProfile != (cmsHPROFILE) NULL) {
-            profile = new KisProfile(hProfile, profile_rawdata);
-            Q_CHECK_PTR(profile);
-        }
+        profile = new KisProfile(profile_rawdata);
+        Q_CHECK_PTR(profile);
     }
 
     // Retrieve a pointer to the colorspace
