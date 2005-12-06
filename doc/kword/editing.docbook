@@ -1688,7 +1688,8 @@ to use shadow text and/or word by word underlining and strikethrough in the repl
 </sect3>
 <sect3 id="autocorrection-exceptions">
 <title>Autocorrection Exceptions</title>
-<indexterm><primary>autocorrection</primary><secondary>exceptions</secondary></indexterm>
+<indexterm><primary>autocorrection</primary>
+<secondary>exceptions</secondary></indexterm>
 
 <para>There are instances where &kword; will make autocorrection changes
 that are inappropriate.  You can use the fourth tab of this dialog to define
@@ -1701,7 +1702,7 @@ that are inappropriate.  You can use the fourth tab of this dialog to define
 </screenshot>
 <para>To prevent &kword; from deciding an abbreviation or other text is
 the end of a sentence, simply enter the text fragment in the text box below
-<guilabel>Do not treat as the end of a sentence</guilabel>.  Then click
+<guilabel>Do not treat as the end of a sentence</guilabel>. Then click
 <guibutton>Add</guibutton>.</para>
 <para>As an example:  Adding <quote>Jr.</quote> to this dialog prevents</para>
 <para><quote>Robert Jones Jr. is a friend of the family.</quote></para>
@@ -1709,7 +1710,8 @@ the end of a sentence, simply enter the text fragment in the text box below
 <para><quote>Robert Jones Jr. Is a friend of the family.</quote></para>
 <para>To remove an erroneous entry, simply click once on the wrong entry with the &LMB;
 and click on the <guibutton>Remove</guibutton> button.</para>
-<para>The second set of boxes performs a similar function to the first except text entered in these boxes will allow two capital letters in a word if it 
+<para>The second set of boxes performs a similar function to the first except
+text entered in these boxes will allow two capital letters in a word if it 
 is entered in this text box.</para>
 <para>Simply enter the word in the text box below
 <guilabel>Accept two uppercase letters in</guilabel>.  Then click
@@ -1718,22 +1720,25 @@ is entered in this text box.</para>
 <para><quote>CD</quote></para>
 <para>from being changed to:</para>
 <para><quote>Cd</quote></para>
-<para>To remove an erroneous entry, simply click once on the wrong entry with the &LMB;
-and click on the <guibutton>Remove</guibutton> button.</para>
+<para>To remove an erroneous entry, simply click once on the wrong entry with
+the &LMB; and click on the <guibutton>Remove</guibutton> button.</para>
 </sect3>
 </sect2>
 
 <sect2 id="autoformat">
 <title>Manually applying autocorrection</title>
-<indexterm><primary>autocorrection</primary><secondary>manually applying</secondary></indexterm>
+<indexterm><primary>autocorrection</primary><secondary>manually
+applying</secondary></indexterm>
 
 <para>If autocorrection is turned off in your document, you can manually enable <link linkend="autocorrect">autocorrection</link>.</para>
 <para>To manually apply autocorrection, first configure your options by using the
 <link linkend="configure-autocorrection">autocorrection dialogs</link>.</para>
 <para>Then select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Autocorrection</guimenuitem>
+<guimenuitem>Apply Autocorrection</guimenuitem></menuchoice>
 from the menubar.</para>
-<para>&kword; will start at the beginning of the document and apply all selected autocorrection options to the entire document.</para>
+<para>&kword; will start at the beginning of the document and apply all selected
+autocorrection options to the entire document.</para>
 <para>When &kword; is finished, it will return you to your document for further editing.</para>
 <para>For more information on enabling and disabling autocorrection,
 see <link linkend="autocorrection-enable">Enabling/Disabling Autocorrection</link>.</para>
@@ -1747,7 +1752,8 @@ see <link linkend="autocorrection-enable">Enabling/Disabling Autocorrection</lin
 
 <para>Autocompletion allows you to type the first few letters of a commonly
 used word (often technical or job specific), and tell &kword; to
-finish typing the word for you.  This is often very useful when you have lengthy technical words.</para>
+finish typing the word for you.  This is often very useful when you have lengthy
+technical words.</para>
 <sect2 id="autocomplete-using">
 <title>Using autocompletion</title>
 <para>Using autocompletion could not be easier.  Simply type the first few
@@ -1757,11 +1763,14 @@ through the list of autocompletion words and if it finds a word which begins
 with those letters, it will finish entering the remainder of the word.</para>
 <sect3 id="autocomplete-using-add">
 <title>Adding words to autocompletion</title>
-<para>&kword; maintains a list of words for each user that will be used for autocompletion.</para>
+<para>&kword; maintains a list of words for each user that will be used for
+autocompletion.</para>
 <para>You can add words to this list one of two ways:</para>
 <itemizedlist>
-<listitem><para>&kword; can automatically add new words to the completion list for later approval.
-This is selected using <link linkend="autocomplete-dialog">the dialog</link>.</para></listitem>
+<listitem><para>&kword; can automatically add new words to the completion list
+for later approval.
+This is selected using <link
+linkend="autocomplete-dialog">the dialog</link>.</para></listitem>
 <listitem><para>Individual words can be added to the list by using 
 <link linkend="autocomplete-dialog">the dialog</link>.</para></listitem>
 </itemizedlist>
@@ -1770,7 +1779,8 @@ This is selected using <link linkend="autocomplete-dialog">the dialog</link>.</p
 <sect2 id="autocomplete-dialog">
 <title>Configuring autocomplete</title>
 <para>To configure autocompletion, select <menuchoice>
-<guimenu>Settings</guimenu><guimenuitem>Configure Completion...</guimenuitem></menuchoice>
+<guimenu>Settings</guimenu><guimenuitem>Configure
+Completion...</guimenuitem></menuchoice>
 from the menubar.  This will bring up a dialog.</para>
 
 <screenshot>
@@ -1780,29 +1790,110 @@ from the menubar.  This will bring up a dialog.</para>
 </mediaobject>
 </screenshot>
 
-<para>The first check box labeled <guilabel>Enable completion</guilabel> is used to toggle autocompletion on and off.</para>
-<para>The second check box, labeled <guilabel>Automatically add new words to completion list</guilabel> will add any word equal to or longer
-than the <guilabel>Minimum word length</guilabel> to the list of proposed autocompletion words.</para>
-<para>The large listbox in the center of the dialog contains the current proposed list of autocompletion words.</para>
-<note><para>Not all words listed in the list box will be immediatly affected by autocompletion when entered into this dialog.</para>
-<para>A word is not part of autocompletion until the list is <emphasis>saved</emphasis> to disk.  At that moment, &kword; 
-will use that saved list for all autocompletion, until the list is replaced with another saved list.</para>
-<para>Some of the words in the autocompletion list may not have been saved yet.</para></note>
-<para>By clicking the <guibutton>Add Completion Entry...</guibutton> button you can add 
+<variablelist>
+<varlistentry>
+<term><guilabel>Enable word completion</guilabel></term>
+<listitem><para>It is used to toggle autocompletion on and off.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Add</guilabel></term>
+<listitem>
+<para>By clicking this button you can manually add 
 an individual word to the completion list.</para>
-<para>To remove words from the completion list, select the word with the &LMB; from the list, then
-click <guibutton>Remove Completion Entry</guibutton>.</para>
-<para>To save the current list to disk and have &kword; begin using this new list for autocompletion, 
-click <guibutton>Save Completion List</guibutton>.</para>
-<para>Use the spinbox/slider combination labeled <guilabel>Minimum word length:</guilabel> to prevent &kword; 
-from automatically adding short words to the completion list.   You can select any value from 5-100.</para>
-<para>The spinbox/slider combination labeled <guilabel>Maximum number of completion words:</guilabel> can be adjusted to allow more or less
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Remove</guilabel></term>
+<listitem>
+<para>To remove words from the completion list, select the word with the &LMB;
+from the list, then click this button.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Automatically add new words to suggestio  list</guilabel></term>
+<listitem>
+<para>This option will add any word equal to or longer than
+the <guilabel>Characters needed</guilabel> to the list of proposed
+autocompletion words.</para>
+<para>The large listbox in the center of the dialog contains the current
+proposed list of autocompletion words.</para>
+<note><para>Not all words listed in the list box will be immediatly affected by
+autocompletion when entered into this dialog.</para></note>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show words in tootip</guilabel></term>
+<listitem>
+<para>If this option is enabled, a tool tip box will appear when you type the
+beginning of a word that exists in the completion list. To complete the word,
+press the key you set to accept suggestions in the <guilabel>Key to accept
+suggestion</guilabel> drop-down list.</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><guilabel>Characters needed</guilabel></term>
+<listitem>
+<para>Use this spinbox/slider combination to prevent &kword; 
+from automatically adding short words to the completion list.   You can select
+any value from 5-100 and the words will need to be at least the number of
+characters set here to be added in the list.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Suggest words</guilabel></term>
+<listitem>
+<para>This spinbox/slider combination can be adjusted to allow more or less
 words into the autocompletion list.  This option is most important when
-<guilabel>Automatically add words to completion list</guilabel> is enabled.
-This option keeps the list from becoming too cumbersome. You can select any value from 1 to 500.</para>
-<para>If a mark is placed in the check box labeled <guilabel>Append space</guilabel>, then &kword; adds a single space to the 
-end of a word after autocompletion, this means it is not necessary to add the space manually for the next word.</para>
-<para>Click <guibutton>OK</guibutton> to save your options.  Click <guibutton>Cancel</guibutton> to abort all changes.</para>
+<guilabel>Automatically add new words to suggestion list</guilabel> is enabled.
+This option keeps the list from becoming too cumbersome. You can select any
+value from 1 to 500.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Append space</guilabel></term>
+<listitem>
+<para>If checked, it adds a single space to the end of a word after
+autocompletion, this means it is not necessary to add the space manually for the
+next word.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Key to accept suggestion</guilabel></term>
+<listitem>
+<para>Set the key you want to use when an autocompleted word is suggested to you
+and you want to accept it. You can choose Enter, Tab, Space, End or
+Right.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Make Default</guilabel></term>
+<listitem>
+<para>A word is not part of autocompletion until the list is
+<emphasis>saved</emphasis> to disk.  At that moment, &kword; 
+will use that saved list for all autocompletion, until the list is replaced with
+another saved list.</para>
+<para>Some of the words in the autocompletion list may not have been saved
+yet.</para><para>To save the current list to disk and have &kword; begin using
+this new list for autocompletion, 
+click this button.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Click <guibutton>OK</guibutton> to save your options. Click
+<guibutton>Cancel</guibutton> to abort all changes. Click 
+<guibutton>Reset</guibutton> to reset to the state after you clicked on the 
+Make Default button.</para>
 
 </sect2>
 </sect1>
