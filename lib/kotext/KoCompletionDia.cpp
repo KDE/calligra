@@ -32,6 +32,7 @@
 #include <qspinbox.h>
 #include <qcombobox.h>
 #include <qgroupbox.h>
+#include <qwhatsthis.h>
 
 KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoFormat * autoFormat )
     : KDialogBase( parent, name , true, i18n( "Completion" ), Ok|Cancel|User1,
@@ -41,6 +42,7 @@ KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoForma
     m_widget = new KoCompletion(page, autoFormat);
     m_widget->layout()->setMargin(0);
     connect( this, SIGNAL( user1Clicked() ), m_widget, SLOT(slotResetConf()));
+    setButtonWhatsThis(User1,i18n("This will reset to the state after you clicked on the Make Default button."));
 }
 
 void KoCompletionDia::slotOk()

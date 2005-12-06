@@ -58,6 +58,9 @@
                             <property name="text">
                                 <string>Add</string>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>By clicking this button you can add manually an individual word to the completion list.</string>
+                            </property>
                         </widget>
                         <widget class="QPushButton">
                             <property name="name">
@@ -65,6 +68,9 @@
                             </property>
                             <property name="text">
                                 <string>Remove</string>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>To remove words from the completion list, select the word with the left mouse button from the list, then click this button.</string>
                             </property>
                         </widget>
                         <spacer>
@@ -118,7 +124,7 @@
                         <string>Show words in tooltip</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>If this option is enabled, a tool tip box will appear when you type the beginning of a word that exists in the completion list. To complete the word, press the key you set to accept suggstions in the "Key to accept suggestion" drop-down list.</string>
+                        <string>If this option is enabled, a tool tip box will appear when you type the beginning of a word that exists in the completion list. To complete the word, press the key you set to accept suggestions in the "Key to accept suggestion" drop-down list.</string>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -268,6 +274,9 @@ This option is most important when Automatically add words to completion list is
                         <widget class="QComboBox">
                             <property name="name">
                                 <cstring>m_completionKeyAction</cstring>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>Set the key you want to use when an autocompleted word is suggested to you and you want to accept it. You can choose Enter, Tab, Space, End or Right.</string>
                             </property>
                         </widget>
                         <spacer>
