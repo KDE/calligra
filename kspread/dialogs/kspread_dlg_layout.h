@@ -199,33 +199,6 @@ private:
     CellFormatDialog *dlg;
 };
 
-class CellFormatPageMisc : public QWidget
-{
-    Q_OBJECT
-public:
-    CellFormatPageMisc( QWidget *parent, CellFormatDialog *_dlg );
-
-    void apply( CustomStyle * style );
-    void apply( Cell *_cell );
-    void applyColumn();
-    void applyRow();
-    void applyFormat( Cell *_obj );
-    bool getDontPrintTextValue(){return dontPrintText->isChecked();}
-
-public slots:
-    void slotStyle( int );
-protected:
-    QComboBox* styleButton;
-    int idStyleNormal;
-    int idStyleUndef;
-    int idStyleButton;
-    int idStyleSelect;
-
-    QLineEdit* actionText;
-    QCheckBox *dontPrintText;
-    CellFormatDialog *dlg;
-};
-
 /**
  * Format of numbers.
  * This widget is part of the format dialog.
@@ -236,7 +209,6 @@ class CellFormatPageFloat : public QWidget
     Q_OBJECT
 public:
     CellFormatPageFloat( QWidget *parent, CellFormatDialog *_dlg );
-
     void apply( CustomStyle * style );
     void apply( Cell *_cell );
     void apply( ColumnFormat *_col );
@@ -493,7 +465,7 @@ class CellFormatPageProtection : public ProtectionTab
  public:
   CellFormatPageProtection( QWidget * parent, CellFormatDialog * _dlg );
   ~CellFormatPageProtection();
-
+  ///when protection is set through Style Manager
   void apply( CustomStyle * style );
   void apply( Cell  * _cell );
   void apply( ColumnFormat * _col );
@@ -656,7 +628,6 @@ protected:
     GeneralTab * generalPage;
     CellFormatPageFloat *floatPage;
     CellFormatPageBorder *borderPage;
-    CellFormatPageMisc *miscPage;
     CellFormatPageFont *fontPage;
     CellFormatPagePosition *positionPage;
     CellFormatPagePattern *patternPage;

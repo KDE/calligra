@@ -12,9 +12,6 @@
             <height>187</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>ProtectionTab</string>
-    </property>
     <property name="whatsThis" stdset="0">
         <string>This tab enables you to set Cell Protection. All cells are protected by default (that means cell content cannot be changed) and for the cell protection to be active you also need to protect the sheet using the Tools -&gt; Protect Document -&gt; Protect Sheet... menu and to provide a password.
 You can also hide the cell formula in order to protect the way you calculate the formula. This also needs to enable shet protection to work.
@@ -76,9 +73,6 @@ Note that you can print it even if the cell is protected</string>
                             <property name="text">
                                 <string>Hide &amp;all</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+A</string>
-                            </property>
                             <property name="whatsThis" stdset="0">
                                 <string>This hides the cell content and works only when the sheet is protected. Whether the cell itself is protected or not does not matter.</string>
                             </property>
@@ -114,9 +108,6 @@ Note that you can print it even if the cell is protected</string>
                                     </property>
                                     <property name="text">
                                         <string>&amp;Protected</string>
-                                    </property>
-                                    <property name="accel">
-                                        <string>Alt+P</string>
                                     </property>
                                     <property name="checked">
                                         <bool>true</bool>
@@ -158,9 +149,6 @@ Note that you can print it even if the cell is protected</string>
                                     </property>
                                     <property name="text">
                                         <string>&amp;Hide formula</string>
-                                    </property>
-                                    <property name="accel">
-                                        <string>Alt+H</string>
                                     </property>
                                     <property name="whatsThis" stdset="0">
                                         <string>When this is checked, the cell is still visible. However, its contents do not appear in the Formula bar. Hiding formula is only working for cells that contain formulae so the user cannot view the formula. And the sheet must be protected for this to work.</string>
