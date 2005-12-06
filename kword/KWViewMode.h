@@ -131,6 +131,7 @@ protected:
      * @param crect the rect we're interested in painting (in view pixels)
      * @param pageRect the rect for the page, in view pixels
      * @param emptySpaceRegion the empty space to clear up inside the page (in view pixels)
+     * @param painter the painter to paint the border on.
      */
     void drawOnePageBorder( QPainter * painter, const QRect & crect, const QRect & pageRect,
                             const QRegion & emptySpaceRegion );

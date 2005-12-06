@@ -132,6 +132,7 @@ public:
      * @param painter the painter to paint to
      * @param crect the clip rect; nothing outside this rect is important
      * @param zh the zoomHandler to convert from internal coordinates to view coordinates
+     * @param vm the current Viewmode.
      */
     void paintFrameAttributes(QPainter *painter, const QRect &crect, KWViewMode *vm, KoZoomHandler *zh);
 
