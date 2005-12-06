@@ -37,10 +37,21 @@ namespace KIO {
 
 class KoTemplatesPanePrivate;
 
+/**
+ * This widget is the right-side part of the template opening widget.
+ * The parent widget is initial widget in the document space of each KOffice component.
+ * This widget shows a list of templates and can show their details or open it.
+ */
 class KoTemplatesPane : public KoDetailsPaneBase
 {
   Q_OBJECT
   public:
+    /**
+     * Constructor.
+     * @param parent the parent widget
+     * @param instance the instance object for the app
+     * @param group the group of templates this widget will show.
+     */
     KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplateGroup* group);
     ~KoTemplatesPane();
 
@@ -66,10 +77,20 @@ class KoTemplatesPane : public KoDetailsPaneBase
 };
 
 
+/**
+ * This widget is the recent doc part of the template opening widget.
+ * The parent widget is initial widget in the document space of each KOffice component.
+ * This widget shows a list of recent documents and can show their details or open it.
+ */
 class KoRecentDocumentsPane : public KoDetailsPaneBase
 {
   Q_OBJECT
   public:
+    /**
+     * Constructor.
+     * @param parent the parent widget
+     * @param instance the instance object for the app
+     */
     KoRecentDocumentsPane(QWidget* parent, KInstance* instance);
     ~KoRecentDocumentsPane();
 
