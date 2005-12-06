@@ -42,6 +42,8 @@ KoCompletionDia::KoCompletionDia( QWidget *parent, const char *name, KoAutoForma
     m_widget = new KoCompletion(page, autoFormat);
     m_widget->layout()->setMargin(0);
     connect( this, SIGNAL( user1Clicked() ), m_widget, SLOT(slotResetConf()));
+    setButtonWhatsThis(Ok,i18n("This will save your options."));
+    setButtonWhatsThis(Cancel,i18n("This will abort all changes."));
     setButtonWhatsThis(User1,i18n("This will reset to the state after you clicked on the Make Default button."));
 }
 
