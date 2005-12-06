@@ -116,7 +116,7 @@ public:
 	 * @param v1 the new value of the first color component
 	 * @param v2 the new value of the second color component
 	 * @param v3 the new value of the third color component
-	 * @param v3 the new value of the fourth color component
+	 * @param v4 the new value of the fourth color component
 	 */
 	void set( float v1, float v2, float v3, float v4 )
 		{ m_value[0] = v1; m_value[1] = v2; m_value[2] = v3; m_value[3] = v4; }
