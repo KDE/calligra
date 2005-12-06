@@ -7,7 +7,7 @@ kexi_la_SOURCES = main.cpp
 kexi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO)
 kexi_la_LIBADD = ./core/libkexicore.la ./main/libkeximain.la
 
-if compile_kross_plugin
+if compile_kross
   SCRIPTINGSUBDIR=scripting
 endif
 

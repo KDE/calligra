@@ -17,7 +17,7 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp \
 
 #kexipartdatasource.cpp
 
-if compile_kross_plugin
+if compile_kross
   KROSSDEFINES=-DKEXI_KROSS_SUPPORT
   KROSSINCLUDE=-I$(top_srcdir)/lib/kross
   KROSSLIB=$(top_builddir)/lib/kross/main/libkrossmain.la
