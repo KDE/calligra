@@ -16,10 +16,6 @@ current tool.</para>
 <sect3 id="commands-palettes-controlbox-overview">
 <title><guilabel>Overview</guilabel></title>
 
-<para>This tab offers you two settings. In the <guilabel>Zoom</guilabel>
-slider and textbox, you can set the zoom level for the document. The
-<guilabel>Exposure</guilabel> slider and textbox can be used to choose the
-exposure level for OpenEXR images.</para>
 <para>
 <screenshot>
 <screeninfo>The Overview tab</screeninfo>
@@ -34,14 +30,15 @@ exposure level for OpenEXR images.</para>
 </mediaobject>
 </screenshot>
 </para>
+<para>This tab offers you two settings. In the <guilabel>Zoom</guilabel>
+slider and textbox, you can set the zoom level for the document. The
+<guilabel>Exposure</guilabel> slider and textbox can be used to choose the
+exposure level for OpenEXR images.</para>
 </sect3>
 
 <sect3 id="commands-palettes-controlbox-histogram">
 <title><guilabel>Histogram</guilabel></title>
 
-<para>This tab displays a color histogram showing the distribution of
-colors over the image. The histogram is split up in red, green and blue
-levels.</para>
 <para>
 <screenshot>
 <screeninfo>The Histogram tab</screeninfo>
@@ -56,6 +53,9 @@ levels.</para>
 </mediaobject>
 </screenshot>
 </para>
+<para>This tab displays a color histogram showing the distribution of
+colors over the image. The histogram is split up in red, green and blue
+levels.</para>
 </sect3>
 
 <sect3 id="commands-palettes-controlbox-tool">
@@ -68,15 +68,6 @@ Zoom have no options, the others are discussed below.</para>
 
 <sect4 id="commands-palettes-controlbox-tool-drawfreehand">
 <title><guilabel>Draw Freehand</guilabel></title>
-<para>There are two options available on this tab.
-</para><para>
-The <guilabel>Opacity</guilabel> slider and spin box are used to set the 
-opacity when drawing (opacity is the opposite of transparency, i.e. 100%
-opaque is 0% transparent, and vice versa).
-</para><para>
-In the <guilabel>Mode</guilabel> drop down box, you can choose a drawing
-mode. This changes the actual effect that drawing has on the image (normal
-painting, only changing the color, etcetera).</para>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Draw Freehand</screeninfo>
@@ -91,19 +82,19 @@ painting, only changing the color, etcetera).</para>
 </mediaobject>
 </screenshot>
 </para>
+<para>There are two options available on this tab.
+</para><para>
+The <guilabel>Opacity</guilabel> slider and spin box are used to set the 
+opacity when drawing (opacity is the opposite of transparency, i.e. 100%
+opaque is 0% transparent, and vice versa).
+</para><para>
+In the <guilabel>Mode</guilabel> drop down box, you can choose a drawing
+mode. This changes the actual effect that drawing has on the image (normal
+painting, only changing the color, etcetera).</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-ellipse">
 <title><guilabel>Ellipse</guilabel></title>
-<para>See <link
-linkend="commands-palettes-controlbox-tool-drawfreehand">Draw
-Freehand</link> for a description of <guilabel>Opacity</guilabel> and
-<guilabel>Mode</guilabel>.
-</para><para>
-The <guilabel>Fill</guilabel> drop down box is used to specify whether the
-inside of the ellipse should be filled. You can choose between three fill
-options: the current foreground color, background color or pattern is
-used.</para>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Ellipse</screeninfo>
@@ -118,14 +109,19 @@ used.</para>
 </mediaobject>
 </screenshot>
 </para>
+<para>See <link
+linkend="commands-palettes-controlbox-tool-drawfreehand">Draw
+Freehand</link> for a description of <guilabel>Opacity</guilabel> and
+<guilabel>Mode</guilabel>.
+</para><para>
+The <guilabel>Fill</guilabel> drop down box is used to specify whether the
+inside of the ellipse should be filled. You can choose between three fill
+options: the current foreground color, background color or pattern is
+used.</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-paintwithfilters">
 <title><guilabel>Paint with Filters</guilabel></title>
-<para>Depending on the filter, you can set different options here. The
-options you can set are the same as those available in the
-<quote>normal</quote> settings dialog for the chosen filter. See the respective
-section for more information.</para>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Paint with Filters</screeninfo>
@@ -140,6 +136,10 @@ section for more information.</para>
 </mediaobject>
 </screenshot>
 </para>
+<para>Depending on the filter, you can set different options here. The
+options you can set are the same as those available in the
+<quote>normal</quote> settings dialog for the chosen filter. See the respective
+section for more information.</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-line">
@@ -172,19 +172,6 @@ available here.</para>
 
 <sect4 id="commands-palettes-controlbox-tool-star">
 <title><guilabel>Star</guilabel></title>
-<para>The options for <link
-linkend="commands-palettes-controlbox-tool-ellipse">Ellipse</link> are
-available here, as well as two options specific to this tool.
-</para><para>
-The <guilabel>Vertices</guilabel> drop down box is used to set the amount
-of vertices (points) in the star.
-</para><para>
-The <guilabel>Ratio</guilabel> setting defines the shape of the
-star. A ratio of 0% will create a star with no inner area (when drawing the
-star, the two lines that make up a star point, overlap). Increasing the ratio
-will slowly make the star more outlined (the two lines are <quote>pulled
-apart</quote>). A star with a ratio of 100% is a regular polygon.
-</para>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Star</screeninfo>
@@ -199,6 +186,19 @@ apart</quote>). A star with a ratio of 100% is a regular polygon.
 </mediaobject>
 </screenshot>
 </para>
+<para>The options for <link
+linkend="commands-palettes-controlbox-tool-ellipse">Ellipse</link> are
+available here, as well as two options specific to this tool.
+</para><para>
+The <guilabel>Vertices</guilabel> drop down box is used to set the amount
+of vertices (points) in the star.
+</para><para>
+The <guilabel>Ratio</guilabel> setting defines the shape of the
+star. A ratio of 0% will create a star with no inner area (when drawing the
+star, the two lines that make up a star point, overlap). Increasing the ratio
+will slowly make the star more outlined (the two lines are <quote>pulled
+apart</quote>). A star with a ratio of 100% is a regular polygon.
+</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-duplicate">
@@ -210,12 +210,6 @@ are available here.</para>
 
 <sect4 id="commands-palettes-controlbox-tool-transform">
 <title><guilabel>Transform</guilabel></title>
-<para>The <guilabel>Move X</guilabel> and <guilabel>Move Y</guilabel>
-spin boxes show, and can be used to set, the displacement of the layer or
-selection. The same applies to <guilabel>Scale X</guilabel> and <guilabel>Scale
-Y</guilabel> for the scaling of the current layer or selection. Finally, 
-you can decide upon a transformation algorithm in the
-<guilabel>Filter</guilabel> drop down box.</para>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Transform</screeninfo>
@@ -230,16 +224,16 @@ you can decide upon a transformation algorithm in the
 </mediaobject>
 </screenshot>
 </para>
+<para>The <guilabel>Move X</guilabel> and <guilabel>Move Y</guilabel>
+spin boxes show, and can be used to set, the displacement of the layer or
+selection. The same applies to <guilabel>Scale X</guilabel> and <guilabel>Scale
+Y</guilabel> for the scaling of the current layer or selection. Finally, 
+you can decide upon a transformation algorithm in the
+<guilabel>Filter</guilabel> drop down box.</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-crop">
 <title><guilabel>Crop</guilabel></title>
-<para>Set the corner coordinates of the area that should remain with the
-four spin boxes <guilabel>Start X</guilabel>, <guilabel>Start Y</guilabel>,
-<guilabel>End X</guilabel> and <guilabel>End Y</guilabel>. The drop down
-box can be used to select whether the entire image or only the current layer
-should be cropped. Clicking the <guibutton>Crop</guibutton> button has
-the same effect as double-clicking outside the area in the image.</para>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Crop</screeninfo>
@@ -254,10 +248,30 @@ the same effect as double-clicking outside the area in the image.</para>
 </mediaobject>
 </screenshot>
 </para>
+<para>Set the corner coordinates of the area that should remain with the
+four spin boxes <guilabel>Start X</guilabel>, <guilabel>Start Y</guilabel>,
+<guilabel>End X</guilabel> and <guilabel>End Y</guilabel>. The drop down
+box can be used to select whether the entire image or only the current layer
+should be cropped. Clicking the <guibutton>Crop</guibutton> button has
+the same effect as double-clicking outside the area in the image.</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-contiguousfill">
 <title><guilabel>Contiguous Fill</guilabel></title>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Contiguous Fill</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-contiguousfill.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Contiguous Fill</phrase>
+</textobject>
+<caption><para>The Tool tab for Contiguous Fill</para></caption>
+</mediaobject>
+</screenshot>
+</para>
 <para>The same options as for <link
 linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
 are available here, as are a couple of other options.
@@ -278,24 +292,24 @@ entire image instead of the current layer only.
 If you check the <guilabel>Fill entire selection</guilabel> checkbox, the
 entire selection will be filled instead of only the neighboring area.
 </para>
-<para>
-<screenshot>
-<screeninfo>The Tool tab for Contiguous Fill</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="palettes-controlbox-contiguousfill.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>The Tool tab for Contiguous Fill</phrase>
-</textobject>
-<caption><para>The Tool tab for Contiguous Fill</para></caption>
-</mediaobject>
-</screenshot>
-</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-gradient">
 <title><guilabel>Gradient</guilabel></title>
+<para>
+<screenshot>
+<screeninfo>The Tool tab for Gradient</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-controlbox-gradient.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Tool tab for Gradient</phrase>
+</textobject>
+<caption><para>The Tool tab for Gradient</para></caption>
+</mediaobject>
+</screenshot>
+</para>
 <para>The same options as for <link
 linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
 are available here, as are a couple of other options.
@@ -317,30 +331,10 @@ reversed (from back to front).
 The final setting is <guilabel>Anti-alias treshold</guilabel>.
 <!-- TODO elaborate  -->
 </para>
-<para>
-<screenshot>
-<screeninfo>The Tool tab for Gradient</screeninfo>
-<mediaobject>
-<imageobject>
-<imagedata fileref="palettes-controlbox-gradient.png" format="PNG" />
-</imageobject>
-<textobject>
-<phrase>The Tool tab for Gradient</phrase>
-</textobject>
-<caption><para>The Tool tab for Gradient</para></caption>
-</mediaobject>
-</screenshot>
-</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-text">
 <title><guilabel>Text</guilabel></title>
-<para>The same options as for <link
-linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
-are available here. Furthermore there is an option <guilabel>Font</guilabel>,
-which shows the font that will be used for the text. Click the
-<guibutton>...</guibutton> button to change the font.
-</para>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Text</screeninfo>
@@ -355,24 +349,16 @@ which shows the font that will be used for the text. Click the
 </mediaobject>
 </screenshot>
 </para>
+<para>The same options as for <link
+linkend="commands-palettes-controlbox-tool-drawfreehand">Draw Freehand</link>
+are available here. Furthermore there is an option <guilabel>Font</guilabel>,
+which shows the font that will be used for the text. Click the
+<guibutton>...</guibutton> button to change the font.
+</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-colorpicker">
 <title><guilabel>Color picker</guilabel></title>
-<para>The first option is a dropdown box in which you can choose which
-layer to pick the color from. If you choose a specific layer,
-the color of the point in that layer will be retrieved. With <guilabel>Sample
-all visible layers</guilabel>, the topmost visible layer which is not
-transparent at that point is used.
-</para><para>
-If the <guilabel>Update current color</guilabel> checkbox is checked, then the
-current foreground color (when clicking with the &LMB;) or background color
-(when clicking with the &RMB;) is set to the picked color.
-</para><para>
-The checkbox <guilabel>Normalize integer values</guilabel> switches the
-range of color values displayed from the <quote>normal</quote> range (e.g. 0 to
-255) to a scaled value between 0 and 1.
-</para>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Color picker</screeninfo>
@@ -387,14 +373,24 @@ range of color values displayed from the <quote>normal</quote> range (e.g. 0 to
 </mediaobject>
 </screenshot>
 </para>
+<para>The first option is a dropdown box in which you can choose which
+layer to pick the color from. If you choose a specific layer,
+the color of the point in that layer will be retrieved. With <guilabel>Sample
+all visible layers</guilabel>, the topmost visible layer which is not
+transparent at that point is used.
+</para><para>
+If the <guilabel>Update current color</guilabel> checkbox is checked, then the
+current foreground color (when clicking with the &LMB;) or background color
+(when clicking with the &RMB;) is set to the picked color.
+</para><para>
+The checkbox <guilabel>Normalize integer values</guilabel> switches the
+range of color values displayed from the <quote>normal</quote> range (e.g. 0 to
+255) to a scaled value between 0 and 1.
+</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-select">
 <title><guilabel>Select</guilabel> operations</title>
-<para>The Paint selection, Erase selection, Select rectangular, Select
-elliptical, Select polygonal and Select outline tools have one option:
-the <guilabel>Action</guilabel> to perform. You can choose between adding to, or
-subtracting from the selection.</para>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Select operations</screeninfo>
@@ -409,21 +405,14 @@ subtracting from the selection.</para>
 </mediaobject>
 </screenshot>
 </para>
+<para>The Paint selection, Erase selection, Select rectangular, Select
+elliptical, Select polygonal and Select outline tools have one option:
+the <guilabel>Action</guilabel> to perform. You can choose between adding to, or
+subtracting from the selection.</para>
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-selectcontiguous">
 <title><guilabel>Select contiguous</guilabel></title>
-<para>The <guilabel>Action</guilabel> is the same as discussed with the
-<link linkend="commands-palettes-controlbox-tool-select">Select
-operations</link>.
-</para><para>
-The slider and spin box at <guilabel>Fuzziness</guilabel> determine how near
-colors must be to the color at the clicked point to be added to the selection.
-</para><para>
-When the <guilabel>Sample merged</guilabel> checkbox is checked, the
-bounds of the selection are determined by looking at the entire image instead
-of at the current layer.
-</para>
 <para>
 <screenshot>
 <screeninfo>The Tool tab for Select contiguous</screeninfo>
@@ -437,6 +426,17 @@ of at the current layer.
 <caption><para>The Tool tab for Select contiguous</para></caption>
 </mediaobject>
 </screenshot>
+</para>
+<para>The <guilabel>Action</guilabel> is the same as discussed with the
+<link linkend="commands-palettes-controlbox-tool-select">Select
+operations</link>.
+</para><para>
+The slider and spin box at <guilabel>Fuzziness</guilabel> determine how near
+colors must be to the color at the clicked point to be added to the selection.
+</para><para>
+When the <guilabel>Sample merged</guilabel> checkbox is checked, the
+bounds of the selection are determined by looking at the entire image instead
+of at the current layer.
 </para>
 </sect4>
 
@@ -454,37 +454,161 @@ contiguous</link>. </para>
 
 <sect2 id="commands-palettes-colors">
 <title>The <guilabel>Colors</guilabel> palette</title>
-<para></para>
+<para>In this palette you can choose the foreground and background colors
+that should be used for painting. You can choose these in four different
+ways. Each of these has its own tab on this palette.</para>
+<para>You can choose which color to set by clicking the corresponding
+buttons at the top left. The topmost color is the foreground color, the
+bottom one is the background color. You can click the double-headed arrow
+to swap the colors: foreground color becomes background color and vice
+versa.</para>
 
 <sect3 id="commands-palettes-colors-hsv">
 <title><guilabel>HSV</guilabel></title>
-<para></para>
+<para>
+<screenshot>
+<screeninfo>The HSV tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-colors-hsv.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The HSV tab</phrase>
+</textobject>
+<caption><para>The HSV tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>On this tab, you can select a color via the Hue / Saturation / Value
+system.
+</para><para>
+The hue determines the major color and starts at red with 0, then increases
+along the color spectrum (that is, along the <quote>line</quote> yellow, green,
+blue, violet) to a maximum of 359. This is represented in the circle on the tab
+as the angle component (starting at the top, rotate along the circle
+in clockwise direction to increase the hue).
+</para><para>
+The saturation determines the pureness of the color. A saturation of 255
+yields the pure color, while a saturation of 0 yields a gray. This is the
+radius component of the color circle on the tab: the center corresponds to
+no saturation, the circle boundary corresponds to fully saturated.
+</para><para>
+The value determines the lightness of the color. This darkens or lightens the
+color, as can be set using the vertical slider on the tab. A value of 0 gives
+black, a value of 255 gives the pure color.
+</para>
 </sect3>
 
 <sect3 id="commands-palettes-colors-rgb">
 <title><guilabel>RGB</guilabel></title>
-<para></para>
+<para>
+<screenshot>
+<screeninfo>The RGB tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-colors-rgb.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The RGB tab</phrase>
+</textobject>
+<caption><para>The RGB tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>On this tab, colors can be selected using their Red / Green / Blue
+components.
+</para><para>
+You can set red, green and blue components on a scale of 0 to 255. At 0 that
+color component is absent, at 255 it is used at maximum intensity. The sliders
+will change color to give you a hint about which color you will produce by
+altering the corresponding value.
+</para>
 </sect3>
 
 <sect3 id="commands-palettes-colors-gray">
 <title><guilabel>Gray</guilabel></title>
-<para></para>
+<para>
+<screenshot>
+<screeninfo>The Gray tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-colors-gray.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Gray tab</phrase>
+</textobject>
+<caption><para>The Gray tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>On this tab, you can choose a gray value (indicated with a K, the usual
+letter for blacK).</para>
+<para>The gray value can be chosen on a scale from 0 (black) to 255
+(white).</para>
 </sect3>
 
 <sect3 id="commands-palettes-colors-palettes">
 <title><guilabel>Palettes</guilabel></title>
-<para></para>
+<para>
+<screenshot>
+<screeninfo>The Palettes tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-colors-palettes.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Palettes tab</phrase>
+</textobject>
+<caption><para>The Palettes tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>On this tab, you can select a color from one of several predefined
+color palettes.</para>
+<para>You can choose which color palette to pick from in the drop down
+box at the top.</para>
 </sect3>
 
 </sect2>
 
 <sect2 id="commands-palettes-layers">
 <title>The <guilabel>Layers</guilabel> palette</title>
-<para></para>
+<para>This palette offers one tab, also called Layers.</para>
 
 <sect3 id="commands-palettes-layers-layers">
 <title><guilabel>Layers</guilabel></title>
-<para></para>
+<para>
+<screenshot>
+<screeninfo>The Layers tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="palettes-layers-layers.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Layers tab</phrase>
+</textobject>
+<caption><para>The Layers tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+<para>This tab offers you access to various operations on layers.
+</para><para>
+On the top left, you can select what blending mode should be used for the
+selected layer. These are the same possibilities as you can choose from for
+drawing modes.
+</para><para>
+The spin box at the top right determines the opacity of the selected layer. 0%
+opacity corresponds to 100% transparency.
+</para><para>
+The list shows all layers and their names, and offers various controls for each
+layer. The eye icon toggles whether the layer is visible or not. The link icon
+is used to link layers together. The lock icon determines if the layer can be
+edited or not.
+</para><para>
+Below the layer list, there are some other controls. You can create a new
+layer, move the current layer up or down, show the layer's properties and
+delete it.
+</para>
 </sect3>
 
 </sect2>

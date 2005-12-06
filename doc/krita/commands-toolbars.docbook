@@ -415,7 +415,7 @@ straight line between the current position and the start position.
 fileref="tool-selectcontiguous.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> Select contiguous</term>
 <listitem><para>
-With this tool you can select contiguous areas of one color. Click with the
+With this tool you can select contiguous areas of a color. Click with the
 &LMB; to select an area.
 </para></listitem></varlistentry>
 
@@ -424,7 +424,9 @@ With this tool you can select contiguous areas of one color. Click with the
 fileref="tool-selectsimilar.png" format="PNG"></imagedata>
 </imageobject></inlinemediaobject> Select similar</term>
 <listitem><para>
-(To be written.)
+With this tool you can select multiple areas with the same color. Detection is
+done the same as with the contiguous fill, but the areas do not need to be
+adjacent.
 </para></listitem></varlistentry>
 </variablelist>
 
