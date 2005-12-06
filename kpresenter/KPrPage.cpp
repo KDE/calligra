@@ -1451,6 +1451,7 @@ void KPrPage::insertPicture( const QString &filename, const KoPoint &pos )
 
     kppixmapobject->setSize( m_doc->zoomHandler()->pixelXToPt( kppixmapobject->originalSize().width() ),
                              m_doc->zoomHandler()->pixelYToPt( kppixmapobject->originalSize().height() ) );
+    kppixmapobject->setKeepRatio( true ); // pics have keep-aspect-ratio on by default.
 
     KPrInsertCmd *insertCmd = new KPrInsertCmd( i18n( "Insert Picture" ), kppixmapobject, m_doc, this );
     insertCmd->execute();
@@ -1479,6 +1480,7 @@ void KPrPage::insertPicture( const QString &_file, const KoRect &_rect )
 {
     KoPictureKey key = m_doc->pictureCollection()->loadPicture( _file ).getKey();
     KPrPixmapObject *kppixmapobject = new KPrPixmapObject( m_doc->pictureCollection(), key );
+    kppixmapobject->setKeepRatio( true ); // pics have keep-aspect-ratio on by default.
     insertObject( i18n( "Insert Picture" ), kppixmapobject, _rect );
 }
 
