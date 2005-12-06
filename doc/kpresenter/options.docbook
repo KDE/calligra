@@ -443,29 +443,113 @@ from the menubar.  This will bring up a dialog.</para>
 </mediaobject>
 </screenshot>
 
-<para>The first check box labeled <guilabel>Enable completion</guilabel> is used to toggle autocompletion on and off.</para>
-<para>The second check box labeled <guilabel>Enable tool tip completion</guilabel> is used to toggle tooltip completion on and off.</para>
-<para>The third check box, labeled <guilabel>Automatically add new words to completion list</guilabel> will add any word equal to or longer
-than the <guilabel>Minimum word length</guilabel> to the list of proposed autocompletion words.</para>
-<para>The large listbox in the center of the dialog contains the current proposed list of autocompletion words.</para>
-<note><para>Not all words listed in the list box will be immediatly affected by autocompletion when entered into this dialog.</para>
-<para>A word is not part of autocompletion until the list is <emphasis>saved</emphasis> to disk.  At that moment, &kpresenter; 
-will use that saved list for all autocompletion, until the list is replaced with another saved list.</para>
-<para>Some of the words in the autocompletion list may not have been saved yet.</para></note>
-<para>By clicking the <guibutton>Add Completion Entry...</guibutton> button you can add 
+<variablelist>
+<varlistentry>
+<term><guilabel>Enable word completion</guilabel></term>
+<listitem><para>It is used to toggle autocompletion on and off.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
+<term><guilabel>Add</guilabel></term>
+<listitem>
+<para>By clicking this button you can manually add 
 an individual word to the completion list.</para>
-<para>To remove words from the completion list, select the word with the &LMB; from the list, then
-click <guibutton>Remove Completion Entry</guibutton>.</para>
-<para>To save the current list to disk and have &kpresenter; begin using this new list for autocompletion, 
-click <guibutton>Save Completion List</guibutton>.</para>
-<para>Use the spinbox/slider combination labeled <guilabel>Minimum word length:</guilabel> to prevent &kpresenter; 
-from automatically adding short words to the completion list.   You can select any value from 5-100.</para>
-<para>The spinbox/slider combination labeled <guilabel>Maximum number of completion words:</guilabel> can be adjusted to allow more or less words into the autocompletion list.  This option is most important when
-<guilabel>Automatically add words to completion list</guilabel> is enabled.
-This option keeps the list from becoming too cumbersome. You can select any value from 1 to 500.</para>
-<para>If a mark is placed in the check box labeled <guilabel>Append space</guilabel>, then &kpresenter; adds a single space to the 
-end of a word after autocompletion, this means it is not necessary to add the space manually for the next word.</para>
-<para>Click <guibutton>OK</guibutton> to save your options.  Click <guibutton>Cancel</guibutton> to abort all changes.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Remove</guilabel></term>
+<listitem>
+<para>To remove words from the completion list, select the word with the &LMB;
+from the list, then click this button.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Automatically add new words to suggestio  list</guilabel></term>
+<listitem>
+<para>This option will add any word equal to or longer than
+the <guilabel>Characters needed</guilabel> to the list of proposed
+autocompletion words.</para>
+<para>The large listbox in the center of the dialog contains the current
+proposed list of autocompletion words.</para>
+<note><para>Not all words listed in the list box will be immediatly affected by
+autocompletion when entered into this dialog.</para></note>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Show words in tootip</guilabel></term>
+<listitem>
+<para>If this option is enabled, a tool tip box will appear when you type the
+beginning of a word that exists in the completion list. To complete the word,
+press the key you set to accept suggestions in the <guilabel>Key to accept
+suggestion</guilabel> drop-down list.</para>
+</listitem>
+</varlistentry>
+
+
+<varlistentry>
+<term><guilabel>Characters needed</guilabel></term>
+<listitem>
+<para>Use this spinbox/slider combination to prevent &kpresenter; 
+from automatically adding short words to the completion list.   You can select
+any value from 5-100 and the words will need to be at least the number of
+characters set here to be added in the list.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Suggest words</guilabel></term>
+<listitem>
+<para>This spinbox/slider combination can be adjusted to allow more or less
+words into the autocompletion list.  This option is most important when
+<guilabel>Automatically add new words to suggestion list</guilabel> is enabled.
+This option keeps the list from becoming too cumbersome. You can select any
+value from 1 to 500.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Append space</guilabel></term>
+<listitem>
+<para>If checked, it adds a single space to the end of a word after
+autocompletion, this means it is not necessary to add the space manually for the
+next word.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Key to accept suggestion</guilabel></term>
+<listitem>
+<para>Set the key you want to use when an autocompleted word is suggested to you
+and you want to accept it. You can choose
+<keycap>Enter</keycap>, <keycap>Tab</keycap>, <keycap>Space</keycap>,
+<keycap>End</keycap> or <keycap>Right</keycap>.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term><guilabel>Make Default</guilabel></term>
+<listitem>
+<para>A word is not part of autocompletion until the list is
+<emphasis>saved</emphasis> to disk.  At that moment, &kpresenter; 
+will use that saved list for all autocompletion, until the list is replaced with
+another saved list.</para>
+<para>Some of the words in the autocompletion list may not have been saved
+yet.</para><para>To save the current list to disk and have &kpresenter; begin
+using
+this new list for autocompletion, 
+click this button.</para>
+</listitem>
+</varlistentry>
+</variablelist>
+
+<para>Click <guibutton>OK</guibutton> to save your options. Click
+<guibutton>Cancel</guibutton> to abort all changes. Click 
+<guibutton>Reset</guibutton> to reset to the state after you clicked on the 
+<guibutton>Make Default</guibutton> button.</para>
+
 </sect2>
 
 </sect1>
@@ -489,7 +573,9 @@ end of a word after autocompletion, this means it is not necessary to add the sp
 <variablelist>
 <varlistentry>
 <term><guilabel>Show rulers</guilabel></term>
-<listitem><para>This is checked by default and both a vertical and horizontal ruler are shown on &kpresenter; slides. When unchecked, the rulers are not shown anymore on any slide.</para></listitem>
+<listitem><para>This is checked by default and both a vertical and horizontal
+ruler are shown on &kpresenter;slides. When unchecked, the rulers are not shown
+anymore on any slide.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -499,7 +585,10 @@ end of a word after autocompletion, this means it is not necessary to add the sp
 
 <varlistentry>
 <term><guilabel>Number of recent files:</guilabel></term>
-<listitem><para>Set the number of recent files which will be opened using the <menuchoice><guimenu>File</guimenu><guimenuitem>Open Recent</guimenuitem></menuchoice> menu. Default is to remember 10 filenames. The maximum you can set is 20 and the minimum is 1.</para></listitem>
+<listitem><para>Set the number of recent files which will be opened using the
+<menuchoice><guimenu>File</guimenu><guimenuitem>Open
+Recent</guimenuitem></menuchoice> menu. Default is to remember 10 filenames. The
+maximum you can set is 20 and the minimum is 1.</para></listitem>
 </varlistentry>
 
 <varlistentry>
