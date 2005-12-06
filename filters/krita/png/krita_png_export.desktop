@@ -11,6 +11,7 @@ Name[sr]=Krita-ин филтер за извоз у PNG
 Name[sr@Latn]=Krita-ин филтер за извоз у PNG
 Name[sv]=Krita PNG-exportfilter
 Name[xx]=xxKrita PNG Export Filterxx
+Name[zh_CN]=Krita PNG 导出过滤器
 X-KDE-Export=image/png
 ServiceTypes=KOfficeFilter
 Type=Service

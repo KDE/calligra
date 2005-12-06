@@ -13,6 +13,7 @@ Name[sr]=KChart-ов филтер за извоз у XBM
 Name[sr@Latn]=KChart-ов филтер за извоз у XBM
 Name[sv]=Kchart XBM-exportfilter
 Name[xx]=xxKChart XBM Export Filterxx
+Name[zh_CN]=KChart XBM 导出过滤器
 X-KDE-Import=application/x-kchart
 X-KDE-Export=image/x-xbm
 X-KDE-Weight=1

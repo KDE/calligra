@@ -21,6 +21,7 @@ Name[sr@Latn]=Информације Gnumeric-а
 Name[sv]=Gnumeric-information
 Name[tr]=Gnumeric Bilgisi
 Name[xx]=xxGnumeric Infoxx
+Name[zh_CN]=Gnumeric 信息
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_gnumeric
 MimeType=application/x-gnumeric

@@ -16,6 +16,7 @@ Name[sr]=KChart-ов филтер за извоз у BMP
 Name[sr@Latn]=KChart-ов филтер за извоз у BMP
 Name[sv]=Kpresenter BMP-exportfilter
 Name[xx]=xxKPresenter BMP Export Filterxx
+Name[zh_CN]=KPresenter BMP 导出过滤器
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/x-bmp
 X-KDE-Weight=1

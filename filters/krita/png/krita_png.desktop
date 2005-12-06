@@ -24,6 +24,7 @@ GenericName[sr@Latn]=Програм за цртање и уређивање сл
 GenericName[sv]=Målnings- och bildredigeringsprogram
 GenericName[tr]=Boyama ve Resim Düzenleme Programı
 GenericName[xx]=xxPainting and Image Editing Applicationxx
+GenericName[zh_CN]=绘图和图像编辑应用程序
 MimeType=image/png
 Type=Application
 Icon=krita

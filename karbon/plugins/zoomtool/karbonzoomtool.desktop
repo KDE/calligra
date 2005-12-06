@@ -16,6 +16,7 @@ Name[sr]=Алат за увећање
 Name[sr@Latn]=Алат за увећање
 Name[sv]=Zoomverktyg
 Name[xx]=xxZoom Toolxx
+Name[zh_CN]=缩放工具
 ServiceTypes=Karbon/CoreModule
 Type=Service
 X-KDE-Library=karbon_zoomtoolplugin

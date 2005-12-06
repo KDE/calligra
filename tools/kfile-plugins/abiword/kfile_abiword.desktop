@@ -21,6 +21,7 @@ Name[sr@Latn]=Информације Abiword-а
 Name[sv]=Abiword-information
 Name[tr]=Abiword Bilgisi
 Name[xx]=xxAbiword Infoxx
+Name[zh_CN]=Abiword 信息
 ServiceTypes=KFilePlugin
 X-KDE-Library=kfile_abiword
 MimeType=application/x-abiword

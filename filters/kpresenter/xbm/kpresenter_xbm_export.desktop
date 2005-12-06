@@ -13,6 +13,7 @@ Name[sr]=KPresenter-ов филтер за извоз у XBM
 Name[sr@Latn]=KPresenter-ов филтер за извоз у XBM
 Name[sv]=Kpresenter XBM-exportfilter
 Name[xx]=xxKPresenter XBM Export Filterxx
+Name[zh_CN]=KPresenter XBM 导出过滤器
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=image/x-xbm
 X-KDE-Weight=1

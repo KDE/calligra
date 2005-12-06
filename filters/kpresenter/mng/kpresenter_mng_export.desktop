@@ -13,6 +13,7 @@ Name[sr]=KChart-ов филтер за извоз у MNG
 Name[sr@Latn]=KChart-ов филтер за извоз у MNG
 Name[sv]=Kpresenter MNG-exportfilter
 Name[xx]=xxKPresenter MNG Export Filterxx
+Name[zh_CN]=KPresenter MNG 导出过滤器
 X-KDE-Import=application/x-kpresenter
 X-KDE-Export=video/x-mng
 X-KDE-Weight=1

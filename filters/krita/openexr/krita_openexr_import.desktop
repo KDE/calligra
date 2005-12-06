@@ -21,6 +21,7 @@ Name[sr@Latn]=Krita-ин филтер за увоз из OpenEXR-а
 Name[sv]=Krita OpenEXR-importfilter
 Name[tr]=Krita OpenEXR Alma Filtresi
 Name[xx]=xxKrita OpenEXR Import Filterxx
+Name[zh_CN]=Krita OpenEXR 导入过滤器
 X-KDE-Export=application/x-krita
 X-KDE-Import=image/x-exr
 X-KDE-Weight=1

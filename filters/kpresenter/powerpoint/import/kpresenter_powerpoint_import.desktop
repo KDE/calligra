@@ -17,6 +17,7 @@ Name[sr]=KPresenter-ов филтер за увоз из Microsoft-овог Powe
 Name[sr@Latn]=KPresenter-ов филтер за увоз из Microsoft-овог PowerPoint-а
 Name[sv]=Microsoft PowerPoint-importfilter för Kpresenter
 Name[xx]=xxMicrosoft PowerPoint Import Filter for KPresenterxx
+Name[zh_CN]=KPresenter 的 Microsoft PowerPoint 导入过滤器
 X-KDE-Export=application/vnd.oasis.opendocument.presentation
 X-KDE-Import=application/mspowerpoint
 X-KDE-Weight=1
