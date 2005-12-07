@@ -768,7 +768,54 @@ void TextEditor::resizeEvent( QResizeEvent* )
 
 void TextEditor::handleKeyPressEvent( QKeyEvent * _ev )
 {
-  if (_ev->key() == Qt::Key_F4)
+  /* Qt 4 code:
+  if (_ev->key() == Qt::Key_Enter && _ev->modifiers() == Qt::ShiftModifier)
+  {
+    if (m_pEdit == 0)
+    {
+      QApplication::sendEvent( m_pEdit, _ev );
+      return;
+    }
+    
+    int cursor_pos = m_pEdit->cursorPosition();
+    QString left = m_pEdit->text().left(cursor_pos);
+    QString right = m_pEdit->text().right(cursor_pos+1);
+    
+    if (!right.isEmpty())
+    {
+      m_pEdit->setText(left + "\n" + right);
+      m_pEdit->setCursorPosition(cursor_pos+1);
+    }
+    
+    return;
+  }
+  */
+  
+  if (_ev->key() == Qt::Key_Enter && _ev->state() & ShiftButton == ShiftButton)
+  {
+    kdDebug() << "Detected desire for a manual LF character" << endl;
+    if (m_pEdit == 0)
+    {
+      QApplication::sendEvent( m_pEdit, _ev );
+      return;
+    }
+    
+    int para, cur;
+    m_pEdit->getCursorPosition(&para,&cur);
+    QString left = m_pEdit->text().left(cur);
+    QString right = m_pEdit->text().right(cur+1);
+    
+    if (!right.isEmpty())
+    {
+      kdDebug() << "Inserting a LF character at paragraph " << para << " and index " << cur << endl;
+      m_pEdit->setText(left + "\n" + right);
+      m_pEdit->setCursorPosition(para+1,0);
+    }
+    
+    return;
+  }
+  
+  else if (_ev->key() == Qt::Key_F4)
   {
     if (m_pEdit == 0)
     {
@@ -778,8 +825,8 @@ void TextEditor::handleKeyPressEvent( QKeyEvent * _ev )
 
     QRegExp exp("(\\$?)([a-zA-Z]+)(\\$?)([0-9]+)$");
 
-  int para,cur;
-  m_pEdit->getCursorPosition(&para,&cur);
+    int para,cur;
+    m_pEdit->getCursorPosition(&para,&cur);
    // int cur = m_pEdit->cursorPosition();
     QString tmp, tmp2;
     int n = -1;
