@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-// Description: Page Layout Dialog (header)
+// Description: Page Layout Dialog (sources)
 
 #ifndef __KOPGLAYOUTDIA_H__
 #define __KOPGLAYOUTDIA_H__
@@ -73,15 +73,56 @@ protected:
     // paint page
     void drawContents( QPainter* );
 
-    double pgWidth;
-    double pgHeight;
-    double pgX;
-    double pgY;
-    double pgW;
-    double pgH;
+    double m_pageHeight, m_pageWidth, m_textFrameX, m_textFrameY, m_textFrameWidth, m_textFrameHeight;
     int columns;
 };
 
+
+class KoPageLayoutSize : public QWidget {
+    Q_OBJECT
+
+public:
+    KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,
+            const KoColumns& columns, bool unitChooser, bool enableBorders);
+
+    bool queryClose();
+
+public slots:
+    void setUnit( KoUnit::Unit unit );
+
+signals:
+    void propertyChange(KoPageLayout &layout);
+
+protected:
+    QComboBox *cpgUnit;
+    QComboBox *cpgFormat;
+    KoUnitDoubleSpinBox *epgWidth;
+    KoUnitDoubleSpinBox *epgHeight;
+    KoUnitDoubleSpinBox *ebrLeft;
+    KoUnitDoubleSpinBox *ebrRight;
+    KoUnitDoubleSpinBox *ebrTop;
+    KoUnitDoubleSpinBox *ebrBottom;
+    KoPagePreview *pgPreview;
+    QButtonGroup *m_orientGroup;
+
+protected slots:
+    void formatChanged( int );
+    void widthChanged( double );
+    void heightChanged( double );
+    void leftChanged( double );
+    void rightChanged( double );
+    void topChanged( double );
+    void bottomChanged( double );
+    void orientationChanged( int );
+
+private:
+    void updatePreview();
+    void setValues();
+
+    KoUnit::Unit m_unit;
+    KoColumns m_columns;
+    KoPageLayout m_layout;
+};
 
 class KoPageLayoutDiaPrivate;
 
@@ -101,14 +142,14 @@ public:
      *  @param name     The name of the dialog.
      *  @param layout   The layout.
      *  @param headfoot The header and the footer.
-     *  @param tabs     The number of tabs.
+     *  @param flags     a variable with all features this dialog should show.
      *  @param unit     The unit to use for displaying the values to the user.
      *  @param modal    Whether the dialog is modal or not.
      */
     KoPageLayoutDia( QWidget* parent, const char* name,
 		     const KoPageLayout& layout,
 		     const KoHeadFoot& headfoot,
-		     int tabs, KoUnit::Unit unit, bool modal=true );
+		     int flags, KoUnit::Unit unit, bool modal=true );
 
     /**
      *  Constructor.
@@ -173,26 +214,14 @@ private:
     // setup tabs
     void setupTab1();
     void setValuesTab1();
-    void setValuesTab1Helper();
     void setupTab2( const KoHeadFoot& hf );
     void setupTab3();
     void setupTab4();
 
     // update preview
-    void updatePreview( const KoPageLayout& );
+    void updatePreview( );
 
     // dialog objects
-    QComboBox *cpgFormat;
-    QComboBox *cpgUnit;
-    QRadioButton *rbPortrait;
-    QRadioButton *rbLandscape;
-    KoUnitDoubleSpinBox *epgWidth;
-    KoUnitDoubleSpinBox *epgHeight;
-    KoUnitDoubleSpinBox *ebrLeft;
-    KoUnitDoubleSpinBox *ebrRight;
-    KoUnitDoubleSpinBox *ebrTop;
-    KoUnitDoubleSpinBox *ebrBottom;
-    KoPagePreview *pgPreview;
     KoPagePreview *pgPreview2;
     QLineEdit *eHeadLeft;
     QLineEdit *eHeadMid;
@@ -218,38 +247,20 @@ private:
 
     KoUnit::Unit m_unit;
 
-    bool retPressed;
     bool enableBorders;
     int flags;
-
-public slots:
-
-    // linedits
-    void widthChanged();
-    void heightChanged();
-    void leftChanged();
-    void rightChanged();
-    void topChanged();
-    void bottomChanged();
 
 protected slots:
     virtual void slotOk();
 
 private slots:
-    // combos and radios
-    void unitChanged( int );
-    void formatChanged( int );
-    void orientationChanged();
-
-    void rPressed() {retPressed = true;}
-
     // spinboxes
     void nColChanged( int );
     void nSpaceChanged( double );
+    void sizeUpdated(KoPageLayout &layout);
 
 private:
-    void changed(KoUnitDoubleSpinBox *line, double &pt);
-
+    KoPageLayoutSize *m_sizeWidget;
     KoPageLayoutDiaPrivate *d;
 };
 
