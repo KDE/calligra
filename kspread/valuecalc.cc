@@ -475,7 +475,7 @@ Value ValueCalc::round (const Value &a, int digits)
     for (int i = 0; i < digits; ++i)
       val = div (val, 10);
   
-  val = Value (round (converter->asFloat (val).asFloat()));
+  val = Value (::round (converter->asFloat (val).asFloat()));
   
   if (digits > 0)
     for (int i = 0; i < digits; ++i)

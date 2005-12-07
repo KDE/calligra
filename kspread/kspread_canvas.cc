@@ -507,7 +507,7 @@ bool Canvas::gotoLocation( const Point& _cell )
 void Canvas::gotoLocation( QPoint const & location, Sheet* sheet,
                                   bool extendSelection)
 {
-    //  kdDebug() << "GotoLocation: " << location.x() << ", " << location.x() << endl;
+    kdDebug(36001) << "GotoLocation: " << location.x() << ", " << location.x() << endl;
 
     if ( sheet && (sheet != activeSheet() ))
         d->view->setActiveSheet(sheet);
@@ -1983,6 +1983,8 @@ QPoint Canvas::cursorPos ()
 
 QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
 {
+  kdDebug(36001) << "Canvas::moveDirection" << endl;
+
   QPoint destination;
   QPoint cursor = cursorPos ();
 
