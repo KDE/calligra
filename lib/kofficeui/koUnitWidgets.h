@@ -133,10 +133,20 @@ public:
 
     /// Set minimum, maximum value and the step size (all in points) (by Tymoteusz Majewski, maju7@o2.pl)
     void setMinMaxStep( double min, double max, double step );
+
+signals:
+    /// emitted like valueChanged in the parent, but this one emits the point value
+    void valueChangedPt( double );
+
+
 private:
     double m_lowerInPoints; ///< lowest value in points
     double m_upperInPoints; ///< highest value in points
     double m_stepInPoints;  ///< step in points
+
+private slots:
+    // exists to do emits for valueChangedPt
+    void privateValueChanged();
 };
 
 

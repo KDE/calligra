@@ -127,6 +127,8 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent, const char *name )
     QSpinBox::setValidator( m_validator );
     setAcceptLocalizedNumbers( true );
     setUnit( KoUnit::U_PT );
+
+    connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
 }
 
 
@@ -148,6 +150,8 @@ KoUnitDoubleSpinBox::KoUnitDoubleSpinBox( QWidget *parent,
     setUnit( unit );
     changeValue( value );
     setLineStep( 0.5 );
+
+    connect(this, SIGNAL(valueChanged( double )), SLOT(privateValueChanged()));
 }
 
 void
@@ -157,6 +161,10 @@ KoUnitDoubleSpinBox::changeValue( double val )
     // TODO: emit valueChanged ONLY if the value was out-of-bounds
     // This will allow the 'user' dialog to set a dirty bool and ensure
     // a proper value is getting saved.
+}
+
+void KoUnitDoubleSpinBox::privateValueChanged() {
+    emit valueChangedPt( value () );
 }
 
 void
