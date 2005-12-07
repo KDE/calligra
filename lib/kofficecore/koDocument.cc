@@ -2512,6 +2512,7 @@ KoOpenPane* KoDocument::createOpenPane( KoMainWindow* parent, KInstance* instanc
     }
 
     d->m_startUpWidget = new KoOpenPane( parent->centralWidget(), instance, templateType );
+    d->m_startUpWidget->setCustomDocumentWidget( createCustomDocumentWidget(d->m_startUpWidget) );
     d->m_startUpWidget->show();
 
     connect( d->m_startUpWidget, SIGNAL( openExistingFile( const QString& ) ),
@@ -2547,6 +2548,10 @@ void KoDocument::deleteOpenPaneDelayed()
 {
     delete d->m_startUpWidget;
     d->m_startUpWidget = 0;
+}
+
+QWidget* KoDocument::createCustomDocumentWidget(QWidget *parent) {
+    return 0;
 }
 
 #include "koDocument_p.moc"

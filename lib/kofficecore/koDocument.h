@@ -987,20 +987,9 @@ protected:
     virtual bool saveFile();
 
     /**
-     *  Returns whether or not the current openURL() or openFile() call is
-     *  actually an import operation (like File --> Import).
-     *  This is for informational purposes only.
+     * TODO
      */
-    bool isImporting() const;
-
-    /**
-     *  Returns whether or not the current saveFile() call is actually an export
-     *  operation (like File --> Export).
-     *  If this function returns true during saveFile() and you are changing
-     *  some sort of state, you _must_ restore it before the end of saveFile();
-     *  otherwise, File --> Export will not work properly.
-     */
-    bool isExporting() const;
+    virtual QWidget* createCustomDocumentWidget(QWidget *parent);
 
     /**
      *  OLD XML method. For OASIS just call KoDocumentChild::loadOasisDocument
@@ -1085,6 +1074,22 @@ protected:
      * @see #saveChildren for internal children
      */
     virtual bool saveExternalChildren();
+
+    /**
+     *  Returns whether or not the current openURL() or openFile() call is
+     *  actually an import operation (like File --> Import).
+     *  This is for informational purposes only.
+     */
+    bool isImporting() const;
+
+    /**
+     *  Returns whether or not the current saveFile() call is actually an export
+     *  operation (like File --> Export).
+     *  If this function returns true during saveFile() and you are changing
+     *  some sort of state, you _must_ restore it before the end of saveFile();
+     *  otherwise, File --> Export will not work properly.
+     */
+    bool isExporting() const;
 
     /**
      * Creates the open widget showed at application start up.

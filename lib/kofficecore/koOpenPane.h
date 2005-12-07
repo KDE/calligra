@@ -41,6 +41,13 @@ class KoOpenPane : public KoOpenPaneBase
     QListViewItem* addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight);
     QListViewItem* addPane(const QString& title, const QPixmap& icon, QWidget* widget, int sortWeight);
 
+    /**
+     * If the application has a way to create a document not based on a template, but on user
+     * provided settings, the widget showing these gets set here.
+     * @param widget the widget.
+     */
+    void setCustomDocumentWidget(QWidget *widget);
+
   protected slots:
     void showOpenFileDialog();
 

@@ -180,6 +180,13 @@ void KoOpenPane::initTemplates(const QString& templateType)
   }
 }
 
+void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
+    // TODO remove former
+
+    if(widget)
+        addPane(i18n("Custom Document"), QString::null, widget, 9999);
+}
+
 QListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight)
 {
   return addPane(title, SmallIcon(icon, KIcon::SizeLarge, KIcon::DefaultState, d->m_instance),
