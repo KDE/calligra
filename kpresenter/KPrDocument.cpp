@@ -1302,7 +1302,7 @@ void KPrDocument::saveOasisSettings( KoXmlWriter &settingsWriter )
 
 void KPrDocument::loadOasisSettings(const QDomDocument&settingsDoc)
 {
-    kdDebug()<<"void KPrDocument::loadOasisSettings(const QDomDocument&settingsDoc)**********\n";
+    kdDebug(33001)<<"void KPrDocument::loadOasisSettings(const QDomDocument&settingsDoc)**********\n";
     KoOasisSettings settings( settingsDoc );
     KoOasisSettings::Items viewSettings = settings.itemSet( "view-settings" );
     setUnit(KoUnit::unit(viewSettings.parseConfigItemString("unit")));
@@ -1320,10 +1320,9 @@ void KPrDocument::loadOasisSettings(const QDomDocument&settingsDoc)
         m_bSnapToGrid = firstView.parseConfigItemBool( "IsSnapToGrid" );
 
         int activePage = firstView.parseConfigItemInt( "SelectedPage" );
-        kdDebug()<<" activePage :"<<activePage<<endl;
+        kdDebug(33001)<<" activePage :"<<activePage<<endl;
         if(activePage!=-1)
             m_initialActivePage=m_pageList.at(activePage);
-
     }
     loadOasisIgnoreList( settings );
     m_varColl->variableSetting()->loadOasis( settings );
@@ -1340,7 +1339,7 @@ void KPrDocument::parseOasisGuideLines( const QString &text )
             //vertical element
             str = text.mid( pos+1, ( newPos-pos ) );
             //kdDebug()<<" vertical  :"<< str <<endl;
-            int posX = ( str.toInt()/100 );
+            double posX = ( str.toInt() / 100.0 );
             m_vGuideLines.append( MM_TO_POINT( posX ) );
             newPos = pos-1;
         }
@@ -1349,7 +1348,7 @@ void KPrDocument::parseOasisGuideLines( const QString &text )
             //horizontal element
             str = text.mid( pos+1, ( newPos-pos ) );
             //kdDebug()<<" horizontal  :"<< str <<endl;
-            int posY = ( str.toInt()/100 );
+            double posY = ( str.toInt() / 100.0 );
             m_hGuideLines.append( MM_TO_POINT( posY ) );
             newPos = pos-1;
         }
@@ -1734,6 +1733,13 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
     {
         loadOasisSettings( settingsDoc );
     }
+
+    // set the initial active page
+    if ( m_initialActivePage == 0 )
+    {
+        m_initialActivePage = m_pageList.at( 0 );
+    }
+
     emit sigProgress( 100 );
     recalcVariables( VT_FIELD );
     emit sigProgress( -1 );
