@@ -24,6 +24,7 @@
 #include "koDetailsPaneBase.h"
 
 class KoTemplateGroup;
+class KoTemplate;
 class KInstance;
 class QListViewItem;
 class KoRecentDocumentsPanePrivate;
@@ -51,8 +52,11 @@ class KoTemplatesPane : public KoDetailsPaneBase
      * @param parent the parent widget
      * @param instance the instance object for the app
      * @param group the group of templates this widget will show.
+     * @param defaultTemplate pointer to the default template. Used to select a
+     * template when none has been selected before.
      */
-    KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplateGroup* group);
+    KoTemplatesPane(QWidget* parent, KInstance* instance,
+                    KoTemplateGroup* group, KoTemplate* defaultTemplate);
     ~KoTemplatesPane();
 
     /// Returns true if a template in this group was the last one selected

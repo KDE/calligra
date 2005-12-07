@@ -12,6 +12,9 @@
             <height>482</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>KoOpenPaneBase</string>
+    </property>
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -37,10 +40,32 @@
                     <widget class="KListView">
                         <column>
                             <property name="text">
-                                <string></string>
+                                <string>1</string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>false</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>false</bool>
+                            </property>
+                            <property name="resizable">
+                                <bool>false</bool>
+                            </property>
+                        </column>
+                        <column>
+                            <property name="text">
+                                <string></string>
+                            </property>
+                            <property name="clickable">
+                                <bool>false</bool>
                             </property>
                             <property name="resizable">
                                 <bool>false</bool>
@@ -57,6 +82,9 @@
                         </property>
                         <property name="resizeMode">
                             <enum>LastColumn</enum>
+                        </property>
+                        <property name="fullWidth">
+                            <bool>true</bool>
                         </property>
                         <property name="shadeSortColumn">
                             <bool>false</bool>

@@ -79,7 +79,8 @@ class KoTemplatesPanePrivate
 };
 
 
-KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplateGroup *group)
+KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
+                                 KoTemplateGroup *group, KoTemplate* defaultTemplate)
   : KoDetailsPaneBase(parent, "TemplatesPane")
 {
   d = new KoTemplatesPanePrivate;
@@ -114,7 +115,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance, KoTemplat
 
     if(d->m_alwaysUseTemplate == t->file()) {
       selectItem = item;
-    } else if(!selectItem && (t->file() == fullTemplateName)) {
+    } else if(!selectItem && ((t->file() == fullTemplateName) || (t == defaultTemplate))) {
       selectItem = item;
     }
   }

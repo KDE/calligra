@@ -57,7 +57,9 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   d->m_instance = instance;
 
   m_sectionList->header()->hide();
-  m_sectionList->setSorting(-1); // Disable sorting
+  m_sectionList->setSorting(2);
+  m_sectionList->hideColumn(1);
+  m_sectionList->hideColumn(2);
   connect(m_sectionList, SIGNAL(selectionChanged(QListViewItem*)),
           this, SLOT(selectionChanged(QListViewItem*)));
 
@@ -66,15 +68,12 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   connect(m_openExistingButton, SIGNAL(clicked()), this, SLOT(showOpenFileDialog()));
 
   initRecentDocs();
-
-  QListViewItem* separator = new QListViewItem(m_sectionList, m_sectionList->lastItem(), "");
-  separator->setEnabled(false);
-
   initTemplates(templateType);
 
   QValueList<int> sizes;
   sizes << 20 << width() - 20;
   m_splitter->setSizes(sizes);
+  m_sectionList->sort();
 }
 
 KoOpenPane::~KoOpenPane()
@@ -101,6 +100,11 @@ void KoOpenPane::initRecentDocs()
   KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(this, d->m_instance);
   connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
   KListViewItem* item = addPane(i18n("Recent Documents"), "fileopen", recentDocPane);
+  item->setText(2, "0"); // Set sorting weight
+
+  QListViewItem* separator = new QListViewItem(m_sectionList/*, m_sectionList->lastItem()*/, "");
+  separator->setEnabled(false);
+  separator->setText(2, "1");
 
   if(d->m_instance->config()->hasGroup("RecentFiles")) {
     m_sectionList->setSelected(item, true);
@@ -111,6 +115,7 @@ void KoOpenPane::initTemplates(const QString& templateType)
 {
   KListViewItem* selectItem = 0;
   KListViewItem* firstItem = 0;
+  int templateOffset = 1000;
 
   if(!templateType.isEmpty())
   {
@@ -121,16 +126,23 @@ void KoOpenPane::initTemplates(const QString& templateType)
         continue;
       }
 
-      KoTemplatesPane* pane = new KoTemplatesPane(this, d->m_instance, group);
+      KoTemplatesPane* pane = new KoTemplatesPane(this, d->m_instance,
+          group, templateTree.defaultTemplate());
       connect(pane, SIGNAL(openTemplate(const QString&)), this, SIGNAL(openTemplate(const QString&)));
       connect(pane, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
               this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)));
       connect(this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
               pane, SLOT(changeAlwaysUseTemplate(KoTemplatesPane*, const QString&)));
       KListViewItem* item = addPane(group->name(), group->first()->loadPicture(d->m_instance), pane);
+      item->setText(2, QString::number(group->sortingWeight() + templateOffset)); // Set sorting weight
 
-      if(!firstItem)
+      if(!firstItem) {
         firstItem = item;
+      }
+
+      if(group == templateTree.defaultGroup()) {
+        firstItem = item;
+      }
 
       if(pane->isSelected()) {
         selectItem = item;
@@ -158,7 +170,8 @@ KListViewItem* KoOpenPane::addPane(const QString& title, const QPixmap& icon, QW
     return 0;
   }
 
-  KListViewItem* listItem = new KListViewItem(m_sectionList, m_sectionList->lastItem(), title);
+  KListViewItem* listItem = new KListViewItem(m_sectionList/*, m_sectionList->lastItem()*/, title);
+  listItem->setText(2, "10000"); // Use a high sorting weight by default
 
   if(!icon.isNull()) {
     listItem->setPixmap(0, icon);

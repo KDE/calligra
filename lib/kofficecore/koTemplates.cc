@@ -70,8 +70,8 @@ const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
 
 
 KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
-                                 bool touched) :
-    m_name(name), m_touched(touched) {
+                                 int _sortingWeight, bool touched) :
+    m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight) {
     m_dirs.append(dir);
     m_templates.setAutoDelete(true);
 }
@@ -220,14 +220,16 @@ void KoTemplateTree::readGroups() {
             QDir templateDir(*it+*tdirIt);
             QString name=*tdirIt;
             QString defaultTab;
+            int sortingWeight;
             if(templateDir.exists(".directory")) {
                 KSimpleConfig config(templateDir.absPath()+"/.directory", true);
                 config.setDesktopGroup();
                 name=config.readEntry("Name");
                 defaultTab=config.readEntry("X-KDE-DefaultTab");
+                sortingWeight=config.readNumEntry("X-KDE-SortingWeight", 1000);
                 //kdDebug() << "name: " << name <<endl;
             }
-            KoTemplateGroup *g=new KoTemplateGroup(name, *it+*tdirIt+QChar('/'));
+            KoTemplateGroup *g=new KoTemplateGroup(name, *it+*tdirIt+QChar('/'), sortingWeight);
             add(g);
             if(defaultTab=="true")
                 m_defaultGroup=g;
