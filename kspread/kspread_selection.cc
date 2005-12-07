@@ -59,8 +59,8 @@ void Selection::unselect()
     // Discard the selection
     Cell *cell = cellAt(marker());
     m_rctSelection.setCoords( m_marker.x(), m_marker.y(),
-                              m_marker.x() + cell->extraXCells(),
-                              m_marker.y() + cell->extraYCells() );
+                              m_marker.x() + cell->mergedXCells(),
+                              m_marker.y() + cell->mergedYCells() );
 
     // Emit signal so that the views can update.
 //    emit sig_unselect( this, r );
@@ -93,8 +93,8 @@ bool Selection::singleCellSelection() const
 
   QRect currentSelection = selection();
   return ((currentSelection.topLeft() == m_marker) &&
-          (currentSelection.width() - 1 == cell->extraXCells()) &&
-          (currentSelection.height() - 1 == cell->extraYCells()));
+          (currentSelection.width() - 1 == cell->mergedXCells()) &&
+          (currentSelection.height() - 1 == cell->mergedYCells()));
 }
 
 QRect Selection::selectionHandleArea() const
@@ -182,8 +182,8 @@ void Selection::setMarker( const QPoint &point,
     topLeft = QPoint(cell->column(), cell->row());
   }
 
-  QPoint botRight(topLeft.x() + cell->extraXCells(),
-                  topLeft.y() + cell->extraYCells());
+  QPoint botRight(topLeft.x() + cell->mergedXCells(),
+                  topLeft.y() + cell->mergedYCells());
   setSelection( topLeft, botRight, sheet );
 }
 
@@ -265,16 +265,16 @@ QRect Selection::extendToMergedAreas(QRect area) const
     return area;
 
   else if ( !(cell->isObscured() && cell->isObscuringForced()) &&
-            (cell->extraXCells() + 1) >= area.width() &&
-            (cell->extraYCells() + 1) >= area.height())
+            (cell->mergedXCells() + 1) >= area.width() &&
+            (cell->mergedYCells() + 1) >= area.height())
   {
     /* if just a single cell is selected, we need to merge even when
        the obscuring isn't forced.  But only if this is the cell that
        is doing the obscuring -- we still want to be able to click on a cell
        that is being obscured.
     */
-    area.setWidth(cell->extraXCells() + 1);
-    area.setHeight(cell->extraYCells() + 1);
+    area.setWidth(cell->mergedXCells() + 1);
+    area.setHeight(cell->mergedYCells() + 1);
   }
   else
   {
@@ -288,16 +288,16 @@ QRect Selection::extendToMergedAreas(QRect area) const
         cell = m_pView->activeSheet()->cellAt( x, y );
         if( cell->isForceExtraCells())
         {
-          right=QMAX(right,cell->extraXCells()+x);
-          bottom=QMAX(bottom,cell->extraYCells()+y);
+          right=QMAX(right,cell->mergedXCells()+x);
+          bottom=QMAX(bottom,cell->mergedYCells()+y);
         }
         else if ( cell->isObscured() && cell->isObscuringForced() )
         {
           cell = cell->obscuringCells().first();
           left=QMIN(left,cell->column());
           top=QMIN(top,cell->row());
-          bottom=QMAX(bottom,cell->row() + cell->extraYCells());
-          right=QMAX(right,cell->column() + cell->extraXCells());
+          bottom=QMAX(bottom,cell->row() + cell->mergedYCells());
+          right=QMAX(right,cell->column() + cell->mergedXCells());
         }
       }
 
