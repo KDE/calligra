@@ -185,15 +185,56 @@ QByteArray PowerPointImport::createStyles()
   stylesWriter->addAttribute( "fo:page-height", pageHeight );
   stylesWriter->addAttribute( "fo:page-width", pageWidth );
   stylesWriter->addAttribute( "style:print-orientation","landscape" );
-  stylesWriter->endElement();
-  stylesWriter->endElement();
-  stylesWriter->endElement();
+  stylesWriter->endElement(); // style:page-layout-properties
+  stylesWriter->endElement(); // style:page-layout
 
-  // office:master-styles
+  stylesWriter->startElement( "style:style" );
+  stylesWriter->addAttribute( "style:name","dp1" );
+  stylesWriter->addAttribute( "style:family","drawing-page" );
+  stylesWriter->startElement( "style:drawing-page-properties" );
+  stylesWriter->addAttribute( "draw:background-size","border" );
+  stylesWriter->addAttribute( "draw:fill","solid" );
+  stylesWriter->addAttribute( "draw:fill-color","#ffffff" );
+  stylesWriter->endElement(); // style:drawing-page-properties
+  stylesWriter->endElement(); // style:style
+
+  stylesWriter->startElement( "style:style" );
+  stylesWriter->addAttribute( "style:name","P1" );
+  stylesWriter->addAttribute( "style:family","paragraph" );
+  stylesWriter->startElement( "style:paragraph-properties" );
+  stylesWriter->addAttribute( "fo:margin-left","0cm" );
+  stylesWriter->addAttribute( "fo:margin-right","0cm" );
+  stylesWriter->addAttribute( "fo:text-indent","0cm" );
+  stylesWriter->endElement(); // style:paragraph-properties
+  stylesWriter->startElement( "style:text-properties" );
+  stylesWriter->addAttribute( "fo:font-size","14pt" );
+  stylesWriter->addAttribute( "style:font-size-asian","14pt" );
+  stylesWriter->addAttribute( "style:font-size-complex","14pt" );
+  stylesWriter->endElement(); // style:text-properties
+  stylesWriter->endElement(); // style:style
+
+  stylesWriter->startElement( "text:list-style" ); 
+  stylesWriter->addAttribute( "style:name","L2" );
+  stylesWriter->startElement( "text:list-level-style-bullet" ); 
+  stylesWriter->addAttribute( "text:level","1" );
+  stylesWriter->addAttribute( "text:bullet-char","●" );
+  stylesWriter->startElement( "style:text-properties" ); 
+  stylesWriter->addAttribute( "fo:font-family","StarSymbol" );
+  stylesWriter->addAttribute( "font-pitch","variable" );
+  stylesWriter->addAttribute( "fo:color","#000000" );
+  stylesWriter->addAttribute( "fo:font-size","45%" );
+  stylesWriter->endElement(); // style:text-properties
+  stylesWriter->endElement(); // text:list-level-style-bullet
+  stylesWriter->endElement(); // text:list-style
+
+  stylesWriter->endElement(); // office:automatic-styles
+
+  // office:master-stylesborder
   stylesWriter->startElement( "office:master-styles" );
   stylesWriter->startElement( "style:master-page" );
   stylesWriter->addAttribute( "style:name", "Standard" );
   stylesWriter->addAttribute( "style:page-layout-name", "pm1" );
+  stylesWriter->addAttribute( "draw:style-name", "dp1" );
   stylesWriter->endElement();
   stylesWriter->endElement();
 
@@ -419,27 +460,27 @@ void PowerPointImport::processRoundRectangle (DrawObject* drawObject, KoXmlWrite
   
   xmlWriter->addAttribute( "draw:layer", "layout" );
     xmlWriter->startElement( "draw:enhanced-geometry" );
-    xmlWriter->addAttribute( "draw:type", "round-rectangle");	
+    xmlWriter->addAttribute( "draw:type", "round-rectangle"); 
       xmlWriter->startElement( "draw:equation" );
       xmlWriter->addAttribute( "draw:formula", "$0 /3" );
-      xmlWriter->addAttribute( "draw:name", "f0" );	
+      xmlWriter->addAttribute( "draw:name", "f0" ); 
       xmlWriter->endElement(); // draw:equation
       xmlWriter->startElement( "draw:equation" );
       xmlWriter->addAttribute( "draw:formula", "right-?f0 " );
-      xmlWriter->addAttribute( "draw:name", "f1" );	
+      xmlWriter->addAttribute( "draw:name", "f1" ); 
       xmlWriter->endElement(); // draw:equation
       xmlWriter->startElement( "draw:equation" );
       xmlWriter->addAttribute( "draw:formula", "bottom-?f0 " );
-      xmlWriter->addAttribute( "draw:name", "f2" );	
+      xmlWriter->addAttribute( "draw:name", "f2" ); 
       xmlWriter->endElement(); // draw:equation
       xmlWriter->startElement( "draw:equation" );
       xmlWriter->addAttribute( "draw:formula", "left+?f0 " );
-      xmlWriter->addAttribute( "draw:name", "f3" );	
+      xmlWriter->addAttribute( "draw:name", "f3" ); 
       xmlWriter->endElement(); // draw:equation
       xmlWriter->startElement( "draw:equation" );
       xmlWriter->addAttribute( "draw:formula", "top+?f0 " );
-      xmlWriter->addAttribute( "draw:name", "f4" );	
-      xmlWriter->endElement(); // draw:equation	
+      xmlWriter->addAttribute( "draw:name", "f4" ); 
+      xmlWriter->endElement(); // draw:equation 
     xmlWriter->endElement(); // draw:enhanced-geometry
   xmlWriter->endElement(); // draw:custom-shape
 }
@@ -531,7 +572,7 @@ void PowerPointImport::processTriangle (DrawObject* drawObject, KoXmlWriter* xml
     if  (drawObject->hasProperty("draw:mirror-vertical"))
     { 
       xmlWriter->addAttribute("draw:mirror-vertical","true");         
-    }	
+    } 
     if ( drawObject->hasProperty("draw:mirror-horizontal"))
     { 
       xmlWriter->addAttribute("draw:mirror-horizontal","true");         
@@ -554,40 +595,40 @@ void PowerPointImport::processTriangle (DrawObject* drawObject, KoXmlWriter* xml
     xmlWriter->addAttribute( "draw:type", "isosceles-triangle");
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0 " );
-          xmlWriter->addAttribute( "draw:name", "f0" );	
+          xmlWriter->addAttribute( "draw:name", "f0" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0 /2" );
-          xmlWriter->addAttribute( "draw:name", "f1" );	
+          xmlWriter->addAttribute( "draw:name", "f1" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "?f1 +10800" );
-          xmlWriter->addAttribute( "draw:name", "f2" );	
+          xmlWriter->addAttribute( "draw:name", "f2" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0 *2/3" );
-          xmlWriter->addAttribute( "draw:name", "f3" );	
+          xmlWriter->addAttribute( "draw:name", "f3" ); 
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "?f3 +7200" );
-          xmlWriter->addAttribute( "draw:name", "f4" );	
+          xmlWriter->addAttribute( "draw:name", "f4" ); 
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600-?f0 " );
-          xmlWriter->addAttribute( "draw:name", "f5" );	
+          xmlWriter->addAttribute( "draw:name", "f5" ); 
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "?f5 /2" );
-          xmlWriter->addAttribute( "draw:name", "f6" );	
+          xmlWriter->addAttribute( "draw:name", "f6" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600-?f6 " );
-          xmlWriter->addAttribute( "draw:name", "f7" );	
+          xmlWriter->addAttribute( "draw:name", "f7" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:handle" );
-	  xmlWriter->addAttribute( "draw:handle-range-x-maximum", 21600);  
-	  xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
-  	  xmlWriter->addAttribute( "draw:handle-position","$0 top");         
+      xmlWriter->startElement( "draw:handle" );
+    xmlWriter->addAttribute( "draw:handle-range-x-maximum", 21600);  
+    xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
+      xmlWriter->addAttribute( "draw:handle-position","$0 top");         
           xmlWriter->endElement();    
     }
    
@@ -614,65 +655,65 @@ void PowerPointImport::processTrapezoid (DrawObject* drawObject, KoXmlWriter* xm
   xmlWriter->addAttribute( "draw:layer", "layout" );
   
         xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 5 );
-	xmlWriter->addAttribute( "svg:y", 0 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 2.5 );
-	xmlWriter->addAttribute( "svg:y", 5 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 0 );
-	xmlWriter->addAttribute( "svg:y", 10 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 5 );
-	xmlWriter->addAttribute( "svg:y", 10 );
-	xmlWriter->endElement();
+  xmlWriter->addAttribute( "svg:x", 5 );
+  xmlWriter->addAttribute( "svg:y", 0 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 2.5 );
+  xmlWriter->addAttribute( "svg:y", 5 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 0 );
+  xmlWriter->addAttribute( "svg:y", 10 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 5 );
+  xmlWriter->addAttribute( "svg:y", 10 );
+  xmlWriter->endElement();
         xmlWriter->startElement( "draw:enhanced-geometry" );
         if ( drawObject->hasProperty("draw:mirror-vertical") ) 
         { 
           xmlWriter->addAttribute("draw:mirror-vertical","true");         
-        }	
+        } 
         if ( drawObject->hasProperty("draw:mirror-horizontal")) 
         { 
           xmlWriter->addAttribute("draw:mirror-horizontal","true");         
         }
-	xmlWriter->addAttribute( "draw:type", "trapezoid" );
+  xmlWriter->addAttribute( "draw:type", "trapezoid" );
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600-$0 " );
-          xmlWriter->addAttribute( "draw:name", "f0" );	
+          xmlWriter->addAttribute( "draw:name", "f0" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0" );
-          xmlWriter->addAttribute( "draw:name", "f1" );	
+          xmlWriter->addAttribute( "draw:name", "f1" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0 *10/18" );
-          xmlWriter->addAttribute( "draw:name", "f2" );	
+          xmlWriter->addAttribute( "draw:name", "f2" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "?f2 +1750");
-          xmlWriter->addAttribute( "draw:name", "f3" );	
+          xmlWriter->addAttribute( "draw:name", "f3" ); 
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600-?f3" );
-          xmlWriter->addAttribute( "draw:name", "f4" );	
+          xmlWriter->addAttribute( "draw:name", "f4" ); 
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0 /2" );
-          xmlWriter->addAttribute( "draw:name", "f5" );	
+          xmlWriter->addAttribute( "draw:name", "f5" ); 
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600-?f5" );
-          xmlWriter->addAttribute( "draw:name", "f6" );	
+          xmlWriter->addAttribute( "draw:name", "f6" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:handle" );
-	  xmlWriter->addAttribute( "draw:handle-range-x-maximum", 10800);  
-	  xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
-  	  xmlWriter->addAttribute("draw:handle-position","$0 bottom");         
+      xmlWriter->startElement( "draw:handle" );
+    xmlWriter->addAttribute( "draw:handle-range-x-maximum", 10800);  
+    xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
+      xmlWriter->addAttribute("draw:handle-position","$0 bottom");         
           xmlWriter->endElement();    
- 	xmlWriter->endElement(); // enhanced-geometry
+  xmlWriter->endElement(); // enhanced-geometry
     xmlWriter->endElement(); // custom-shape  
 }
 
@@ -694,101 +735,101 @@ void PowerPointImport::processParallelogram (DrawObject* drawObject, KoXmlWriter
   xmlWriter->addAttribute( "svg:y", yStr );
   xmlWriter->addAttribute( "draw:layer", "layout" );
         xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 6.25 );
-	xmlWriter->addAttribute( "svg:y", 0 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 4.5 );
-	xmlWriter->addAttribute( "svg:y", 0 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 8.75 );
-	xmlWriter->addAttribute( "svg:y", 5 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 3.75 );
-	xmlWriter->addAttribute( "svg:y", 10 );
-	xmlWriter->endElement();
+  xmlWriter->addAttribute( "svg:x", 6.25 );
+  xmlWriter->addAttribute( "svg:y", 0 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 4.5 );
+  xmlWriter->addAttribute( "svg:y", 0 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 8.75 );
+  xmlWriter->addAttribute( "svg:y", 5 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 3.75 );
+  xmlWriter->addAttribute( "svg:y", 10 );
+  xmlWriter->endElement();
         xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 5 );
-	xmlWriter->addAttribute( "svg:y", 10 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 1.25 );
-	xmlWriter->addAttribute( "svg:y", 5 );
-	xmlWriter->endElement();
+  xmlWriter->addAttribute( "svg:x", 5 );
+  xmlWriter->addAttribute( "svg:y", 10 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 1.25 );
+  xmlWriter->addAttribute( "svg:y", 5 );
+  xmlWriter->endElement();
         xmlWriter->startElement( "draw:enhanced-geometry" );
         if  (drawObject->hasProperty("draw:mirror-vertical"))
         { 
           xmlWriter->addAttribute("draw:mirror-vertical","true");         
-        }	
+        } 
         if ( drawObject->hasProperty("draw:mirror-horizontal"))
         { 
           xmlWriter->addAttribute("draw:mirror-horizontal","true");         
         }
-	xmlWriter->addAttribute( "draw:type", "parallelogram" );
+  xmlWriter->addAttribute( "draw:type", "parallelogram" );
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0 " );
-          xmlWriter->addAttribute( "draw:name", "f0" );	
+          xmlWriter->addAttribute( "draw:name", "f0" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600-$0" );
-          xmlWriter->addAttribute( "draw:name", "f1" );	
+          xmlWriter->addAttribute( "draw:name", "f1" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0 *10/24" );
-          xmlWriter->addAttribute( "draw:name", "f2" );	
+          xmlWriter->addAttribute( "draw:name", "f2" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "?f2 +1750");
-          xmlWriter->addAttribute( "draw:name", "f3" );	
+          xmlWriter->addAttribute( "draw:name", "f3" ); 
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600-?f3" );
-          xmlWriter->addAttribute( "draw:name", "f4" );	
+          xmlWriter->addAttribute( "draw:name", "f4" ); 
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "?f0 /2" );
-          xmlWriter->addAttribute( "draw:name", "f5" );	
+          xmlWriter->addAttribute( "draw:name", "f5" ); 
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "10800+?f5" );
-          xmlWriter->addAttribute( "draw:name", "f6" );	
+          xmlWriter->addAttribute( "draw:name", "f6" ); 
           xmlWriter->endElement();    
-	  xmlWriter->startElement( "draw:equation" );
+    xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "?f0-10800 " );
-          xmlWriter->addAttribute( "draw:name", "f7" );	
+          xmlWriter->addAttribute( "draw:name", "f7" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "if(?f7,?f12,0" );
-          xmlWriter->addAttribute( "draw:name", "f8" );	
+          xmlWriter->addAttribute( "draw:name", "f8" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "10800-?f5" );
-          xmlWriter->addAttribute( "draw:name", "f9" );	
+          xmlWriter->addAttribute( "draw:name", "f9" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "if(?f7, ?f12, 21600");
-          xmlWriter->addAttribute( "draw:name", "f10" );	
+          xmlWriter->addAttribute( "draw:name", "f10" );  
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600-?f5" );
-          xmlWriter->addAttribute( "draw:name", "f11" );	
+          xmlWriter->addAttribute( "draw:name", "f11" );  
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600*10800/?f0" );
-          xmlWriter->addAttribute( "draw:name", "f12" );	
+          xmlWriter->addAttribute( "draw:name", "f12" );  
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600-?f12" );
-          xmlWriter->addAttribute( "draw:name", "f13" );	
+          xmlWriter->addAttribute( "draw:name", "f13" );  
           xmlWriter->endElement();    
-	  xmlWriter->startElement( "draw:handle" );
-	  xmlWriter->addAttribute( "draw:handle-range-x-maximum", 21600);  
-	  xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
-  	  xmlWriter->addAttribute("draw:handle-position","$0 top");         
+    xmlWriter->startElement( "draw:handle" );
+    xmlWriter->addAttribute( "draw:handle-range-x-maximum", 21600);  
+    xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
+      xmlWriter->addAttribute("draw:handle-position","$0 top");         
           xmlWriter->endElement();    
- 	xmlWriter->endElement(); // enhanced-geometry
+  xmlWriter->endElement(); // enhanced-geometry
     xmlWriter->endElement(); // custom-shape  
 }
 
@@ -809,50 +850,50 @@ void PowerPointImport::processHexagon (DrawObject* drawObject, KoXmlWriter* xmlW
     xmlWriter->addAttribute( "svg:x", xStr );
     xmlWriter->addAttribute( "svg:y", yStr );
     xmlWriter->addAttribute( "draw:layer", "layout" );
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 5 );
-	xmlWriter->addAttribute( "svg:y", 0 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 0 );
-	xmlWriter->addAttribute( "svg:y", 5 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 5 );
-	xmlWriter->addAttribute( "svg:y", 10 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 10 );
-	xmlWriter->addAttribute( "svg:y", 5 );
-	xmlWriter->endElement();
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 5 );
+  xmlWriter->addAttribute( "svg:y", 0 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 0 );
+  xmlWriter->addAttribute( "svg:y", 5 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 5 );
+  xmlWriter->addAttribute( "svg:y", 10 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 10 );
+  xmlWriter->addAttribute( "svg:y", 5 );
+  xmlWriter->endElement();
         xmlWriter->startElement( "draw:enhanced-geometry" );
-	xmlWriter->addAttribute( "draw:type", "hexagon" );
+  xmlWriter->addAttribute( "draw:type", "hexagon" );
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0 " );
-          xmlWriter->addAttribute( "draw:name", "f0" );	
+          xmlWriter->addAttribute( "draw:name", "f0" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600-$0" );
-          xmlWriter->addAttribute( "draw:name", "f1" );	
+          xmlWriter->addAttribute( "draw:name", "f1" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0 *100/234" );
-          xmlWriter->addAttribute( "draw:name", "f2" );	
+          xmlWriter->addAttribute( "draw:name", "f2" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "?f2 +1700");
-          xmlWriter->addAttribute( "draw:name", "f3" );	
+          xmlWriter->addAttribute( "draw:name", "f3" ); 
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "21600-?f3" );
-          xmlWriter->addAttribute( "draw:name", "f4" );	
+          xmlWriter->addAttribute( "draw:name", "f4" ); 
           xmlWriter->endElement();     
-   	  xmlWriter->startElement( "draw:handle" );
-	  xmlWriter->addAttribute( "draw:handle-range-x-maximum", 10800);  
-	  xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
-  	  xmlWriter->addAttribute("draw:handle-position","$0 top");         
+      xmlWriter->startElement( "draw:handle" );
+    xmlWriter->addAttribute( "draw:handle-range-x-maximum", 10800);  
+    xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
+      xmlWriter->addAttribute("draw:handle-position","$0 top");         
           xmlWriter->endElement();    
- 	xmlWriter->endElement(); // enhanced-geometry
+  xmlWriter->endElement(); // enhanced-geometry
     xmlWriter->endElement(); // custom-shape
 }
 
@@ -873,66 +914,66 @@ void PowerPointImport::processOctagon (DrawObject* drawObject, KoXmlWriter* xmlW
   xmlWriter->addAttribute( "svg:x", xStr );
   xmlWriter->addAttribute( "svg:y", yStr );
   xmlWriter->addAttribute( "draw:layer", "layout" );
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 5 );
-	xmlWriter->addAttribute( "svg:y", 0 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 0 );
-	xmlWriter->addAttribute( "svg:y", 4.782 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 5 );
-	xmlWriter->addAttribute( "svg:y", 10 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 10 );
-	xmlWriter->addAttribute( "svg:y", 4.782 );
-	xmlWriter->endElement();
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 5 );
+  xmlWriter->addAttribute( "svg:y", 0 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 0 );
+  xmlWriter->addAttribute( "svg:y", 4.782 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 5 );
+  xmlWriter->addAttribute( "svg:y", 10 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 10 );
+  xmlWriter->addAttribute( "svg:y", 4.782 );
+  xmlWriter->endElement();
         xmlWriter->startElement( "draw:enhanced-geometry" );
-	xmlWriter->addAttribute( "draw:type", "octagon" );
+  xmlWriter->addAttribute( "draw:type", "octagon" );
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "left+$0 " );
-          xmlWriter->addAttribute( "draw:name", "f0" );	
+          xmlWriter->addAttribute( "draw:name", "f0" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "top+$0 " );
-          xmlWriter->addAttribute( "draw:name", "f1" );	
+          xmlWriter->addAttribute( "draw:name", "f1" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "right-$0 " );
-          xmlWriter->addAttribute( "draw:name", "f2" );	
+          xmlWriter->addAttribute( "draw:name", "f2" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "bottom-$0 ");
-          xmlWriter->addAttribute( "draw:name", "f3" );	
+          xmlWriter->addAttribute( "draw:name", "f3" ); 
           xmlWriter->endElement();    
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0 /2" );
-          xmlWriter->addAttribute( "draw:name", "f4" );	
+          xmlWriter->addAttribute( "draw:name", "f4" ); 
           xmlWriter->endElement();     
-	  xmlWriter->startElement( "draw:equation" );
+    xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "left+?f4 " );
-          xmlWriter->addAttribute( "draw:name", "f5" );	
+          xmlWriter->addAttribute( "draw:name", "f5" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "top+?f4 " );
-          xmlWriter->addAttribute( "draw:name", "f6" );	
+          xmlWriter->addAttribute( "draw:name", "f6" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "right-?f4 " );
-          xmlWriter->addAttribute( "draw:name", "f7" );	
+          xmlWriter->addAttribute( "draw:name", "f7" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "bottom-?f4 ");
-          xmlWriter->addAttribute( "draw:name", "f8" );	
+          xmlWriter->addAttribute( "draw:name", "f8" ); 
           xmlWriter->endElement();    
-      	  xmlWriter->startElement( "draw:handle" );
-	  xmlWriter->addAttribute( "draw:handle-range-x-maximum", 10800);  
-	  xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
-  	  xmlWriter->addAttribute("draw:handle-position","$0 top");         
+          xmlWriter->startElement( "draw:handle" );
+    xmlWriter->addAttribute( "draw:handle-range-x-maximum", 10800);  
+    xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
+      xmlWriter->addAttribute("draw:handle-position","$0 top");         
           xmlWriter->endElement();    
- 	xmlWriter->endElement(); // enhanced-geometry
+  xmlWriter->endElement(); // enhanced-geometry
     xmlWriter->endElement(); // custom-shape  
 }
 
@@ -954,66 +995,66 @@ void PowerPointImport::processArrow (DrawObject* drawObject, KoXmlWriter* xmlWri
   xmlWriter->addAttribute( "svg:y", yStr );
   xmlWriter->addAttribute( "draw:layer", "layout" );
     xmlWriter->startElement( "draw:enhanced-geometry" );
-		
+    
                 if (drawObject->shape() == DrawObject::RightArrow)
-     	        	xmlWriter->addAttribute( "draw:type", "right-arrow" );
-  		else if (drawObject->shape() == DrawObject::LeftArrow)
-			xmlWriter->addAttribute( "draw:type", "left-arrow" );
-		else if (drawObject->shape() == DrawObject::UpArrow)
-			xmlWriter->addAttribute( "draw:type", "up-arrow" );
-		else if (drawObject->shape() == DrawObject::DownArrow)
-			xmlWriter->addAttribute( "draw:type", "down-arrow" );		
-		xmlWriter->startElement( "draw:equation" ); 
+                xmlWriter->addAttribute( "draw:type", "right-arrow" );
+      else if (drawObject->shape() == DrawObject::LeftArrow)
+      xmlWriter->addAttribute( "draw:type", "left-arrow" );
+    else if (drawObject->shape() == DrawObject::UpArrow)
+      xmlWriter->addAttribute( "draw:type", "up-arrow" );
+    else if (drawObject->shape() == DrawObject::DownArrow)
+      xmlWriter->addAttribute( "draw:type", "down-arrow" );   
+    xmlWriter->startElement( "draw:equation" ); 
                 xmlWriter->addAttribute( "draw:formula","$1");  
-		xmlWriter->addAttribute( "draw:name","f0");  
+    xmlWriter->addAttribute( "draw:name","f0");  
                 xmlWriter->endElement(); // draw:equation
-  		xmlWriter->startElement( "draw:equation" ); 
+      xmlWriter->startElement( "draw:equation" ); 
                 xmlWriter->addAttribute( "draw:formula","$0");  
                 xmlWriter->addAttribute( "draw:name","f1");  
-		xmlWriter->endElement(); // draw:equation
-  		xmlWriter->startElement( "draw:equation" ); 
+    xmlWriter->endElement(); // draw:equation
+      xmlWriter->startElement( "draw:equation" ); 
                 xmlWriter->addAttribute( "draw:formula","21600-$1");  
                 xmlWriter->addAttribute( "draw:name","f2");  
-		xmlWriter->endElement(); // draw:equation
-  		xmlWriter->startElement( "draw:equation" ); 
+    xmlWriter->endElement(); // draw:equation
+      xmlWriter->startElement( "draw:equation" ); 
                 xmlWriter->addAttribute( "draw:formula","21600-?f1");  
                 xmlWriter->addAttribute( "draw:name","f3");  
-		xmlWriter->endElement(); // draw:equation
-  		xmlWriter->startElement( "draw:equation" ); 
+    xmlWriter->endElement(); // draw:equation
+      xmlWriter->startElement( "draw:equation" ); 
                 xmlWriter->addAttribute( "draw:formula","?f3 *?f0 /10800");  
-		xmlWriter->addAttribute( "draw:name","f4");  
+    xmlWriter->addAttribute( "draw:name","f4");  
                 xmlWriter->endElement(); // draw:equation
-  		xmlWriter->startElement( "draw:equation" ); 
+      xmlWriter->startElement( "draw:equation" ); 
                 xmlWriter->addAttribute( "draw:formula","?f1 +?f4 " );
-		xmlWriter->addAttribute( "draw:name","f5");    
+    xmlWriter->addAttribute( "draw:name","f5");    
                 xmlWriter->endElement(); // draw:equation
-  		xmlWriter->startElement( "draw:equation" ); 
+      xmlWriter->startElement( "draw:equation" ); 
                 xmlWriter->addAttribute( "draw:formula","?f1 *?f0 /10800");  
-		xmlWriter->addAttribute( "draw:name","f6");  
+    xmlWriter->addAttribute( "draw:name","f6");  
                 xmlWriter->endElement(); // draw:equation
-		xmlWriter->startElement( "draw:equation" ); 
+    xmlWriter->startElement( "draw:equation" ); 
                 xmlWriter->addAttribute( "draw:formula","?f1 -?f6 ");  
-		xmlWriter->addAttribute( "draw:name","f7");  
+    xmlWriter->addAttribute( "draw:name","f7");  
                 xmlWriter->endElement(); // draw:equation
-		xmlWriter->startElement( "draw:handle" );
+    xmlWriter->startElement( "draw:handle" );
                 if ( drawObject->shape() == DrawObject::RightArrow | drawObject->shape() == DrawObject::LeftArrow ) 
                 {
-		  xmlWriter->addAttribute( "draw:handle-range-x-maximum", 21600);  
-		  xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
-  		  xmlWriter->addAttribute("draw:handle-position","$0 $1"); 
-		  xmlWriter->addAttribute("draw:handle-range-y-maximum",10800);
-		  xmlWriter->addAttribute("draw:handle-range-y-minimum",0);
-		}
-		else if ( drawObject->shape() == DrawObject::UpArrow | drawObject->shape() == DrawObject::DownArrow )
+      xmlWriter->addAttribute( "draw:handle-range-x-maximum", 21600);  
+      xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
+        xmlWriter->addAttribute("draw:handle-position","$0 $1"); 
+      xmlWriter->addAttribute("draw:handle-range-y-maximum",10800);
+      xmlWriter->addAttribute("draw:handle-range-y-minimum",0);
+    }
+    else if ( drawObject->shape() == DrawObject::UpArrow | drawObject->shape() == DrawObject::DownArrow )
                 {
                   xmlWriter->addAttribute( "draw:handle-range-x-maximum", 10800);  
-		  xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
-  		  xmlWriter->addAttribute("draw:handle-position","$1 $0"); 
-		  xmlWriter->addAttribute("draw:handle-range-y-maximum",21600);
-		  xmlWriter->addAttribute("draw:handle-range-y-minimum",0);            
-		}
+      xmlWriter->addAttribute( "draw:handle-range-x-minimum", 0);
+        xmlWriter->addAttribute("draw:handle-position","$1 $0"); 
+      xmlWriter->addAttribute("draw:handle-range-y-maximum",21600);
+      xmlWriter->addAttribute("draw:handle-range-y-minimum",0);            
+    }
                 xmlWriter->endElement(); // draw:handle
-  	  xmlWriter->endElement(); // draw:enhanced-geometry  
+      xmlWriter->endElement(); // draw:enhanced-geometry  
     xmlWriter->endElement(); // draw:custom-shape
 }
 
@@ -1066,51 +1107,51 @@ void PowerPointImport::processSmiley (DrawObject* drawObject, KoXmlWriter* xmlWr
     xmlWriter->addAttribute( "svg:x", xStr );
     xmlWriter->addAttribute( "svg:y", yStr );
     xmlWriter->addAttribute( "draw:layer", "layout" );
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 5 );
-	xmlWriter->addAttribute( "svg:y", 0 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 1.461 );
-	xmlWriter->addAttribute( "svg:y", 1.461 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 0 );
-	xmlWriter->addAttribute( "svg:y", 5 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 1.461 );
-	xmlWriter->addAttribute( "svg:y", 8.536 );
-	xmlWriter->endElement();
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 10 );
-	xmlWriter->addAttribute( "svg:y", 5 );
-	xmlWriter->endElement();
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 8.536 );
-	xmlWriter->addAttribute( "svg:y", 1.461 );
-	xmlWriter->endElement();
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 5 );
+  xmlWriter->addAttribute( "svg:y", 0 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 1.461 );
+  xmlWriter->addAttribute( "svg:y", 1.461 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 0 );
+  xmlWriter->addAttribute( "svg:y", 5 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 1.461 );
+  xmlWriter->addAttribute( "svg:y", 8.536 );
+  xmlWriter->endElement();
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 10 );
+  xmlWriter->addAttribute( "svg:y", 5 );
+  xmlWriter->endElement();
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 8.536 );
+  xmlWriter->addAttribute( "svg:y", 1.461 );
+  xmlWriter->endElement();
         xmlWriter->startElement( "draw:enhanced-geometry" );
-	xmlWriter->addAttribute( "draw:type", "smiley" );
+  xmlWriter->addAttribute( "draw:type", "smiley" );
           xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "$0-15510 " );
-          xmlWriter->addAttribute( "draw:name", "f0" );	
+          xmlWriter->addAttribute( "draw:name", "f0" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "17520-?f0" );
-          xmlWriter->addAttribute( "draw:name", "f1" );	
+          xmlWriter->addAttribute( "draw:name", "f1" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:equation" );
+      xmlWriter->startElement( "draw:equation" );
           xmlWriter->addAttribute( "draw:formula", "15510+?f0" );
-          xmlWriter->addAttribute( "draw:name", "f2" );	
+          xmlWriter->addAttribute( "draw:name", "f2" ); 
           xmlWriter->endElement();    
-   	  xmlWriter->startElement( "draw:handle" );
+      xmlWriter->startElement( "draw:handle" );
           xmlWriter->addAttribute( "draw:position", 10800);  
-	  xmlWriter->addAttribute( "draw:handle-range-y-maximum", 17520);  
-	  xmlWriter->addAttribute( "draw:handle-range-y-minimum", 15510);
-  	  xmlWriter->addAttribute("draw:handle-position","$0 top");         
+    xmlWriter->addAttribute( "draw:handle-range-y-maximum", 17520);  
+    xmlWriter->addAttribute( "draw:handle-range-y-minimum", 15510);
+      xmlWriter->addAttribute("draw:handle-position","$0 top");         
           xmlWriter->endElement();    
- 	xmlWriter->endElement(); // enhanced-geometry
+  xmlWriter->endElement(); // enhanced-geometry
     xmlWriter->endElement(); // custom-shape
 }
 
@@ -1131,24 +1172,24 @@ void PowerPointImport::processHeart (DrawObject* drawObject, KoXmlWriter* xmlWri
     xmlWriter->addAttribute( "svg:x", xStr );
     xmlWriter->addAttribute( "svg:y", yStr );
     xmlWriter->addAttribute( "draw:layer", "layout" );
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 5 );
-	xmlWriter->addAttribute( "svg:y", 1 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 1.43 );
-	xmlWriter->addAttribute( "svg:y", 5 );
-	xmlWriter->endElement(); 
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 5 );
-	xmlWriter->addAttribute( "svg:y", 10 );
-	xmlWriter->endElement();
-	xmlWriter->startElement( "draw:glue-point" );
-	xmlWriter->addAttribute( "svg:x", 8.553 );
-	xmlWriter->addAttribute( "svg:y", 5 );
-	xmlWriter->endElement();
-	xmlWriter->startElement( "draw:enhanced-geometry" );
-	xmlWriter->addAttribute( "draw:type", "heart" );
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 5 );
+  xmlWriter->addAttribute( "svg:y", 1 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 1.43 );
+  xmlWriter->addAttribute( "svg:y", 5 );
+  xmlWriter->endElement(); 
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 5 );
+  xmlWriter->addAttribute( "svg:y", 10 );
+  xmlWriter->endElement();
+  xmlWriter->startElement( "draw:glue-point" );
+  xmlWriter->addAttribute( "svg:x", 8.553 );
+  xmlWriter->addAttribute( "svg:y", 5 );
+  xmlWriter->endElement();
+  xmlWriter->startElement( "draw:enhanced-geometry" );
+  xmlWriter->addAttribute( "draw:type", "heart" );
         
         xmlWriter->endElement(); // enhanced-geometry
     xmlWriter->endElement(); // custom-shape
@@ -1220,9 +1261,9 @@ void PowerPointImport::processDrawingObjectForBody( DrawObject* drawObject, KoXm
     processOctagon ( drawObject, xmlWriter );
   }
   else if (drawObject->shape() == DrawObject::RightArrow | 
-	   drawObject->shape() == DrawObject::LeftArrow | 
-	   drawObject->shape() == DrawObject::UpArrow | 
-	   drawObject->shape() == DrawObject::DownArrow )
+     drawObject->shape() == DrawObject::LeftArrow | 
+     drawObject->shape() == DrawObject::UpArrow | 
+     drawObject->shape() == DrawObject::DownArrow )
   { 
     processArrow ( drawObject, xmlWriter );
   }
@@ -1268,7 +1309,9 @@ void PowerPointImport::processTextObjectForBody( TextObject* textObject, KoXmlWr
   QString classStr = "subtitle";
   if( textObject->type() == TextObject::Title )
     classStr = "title";
-  QString pStr = string( textObject->text() ).string();
+//  QString pStr = string( textObject->text() ).string();
+  QString pStr;
+ 
   QString widthStr = QString("%1mm").arg( textObject->width() );
   QString heightStr = QString("%1mm").arg( textObject->height() );
   QString xStr = QString("%1mm").arg( textObject->left() );
@@ -1283,12 +1326,36 @@ void PowerPointImport::processTextObjectForBody( TextObject* textObject, KoXmlWr
   xmlWriter->addAttribute( "svg:y", yStr );
   xmlWriter->addAttribute( "presentation:class", classStr );
     xmlWriter->startElement( "draw:text-box" );
-      xmlWriter->startElement( "text:p" );
+  
+  // count error if i begins with 0
+    for (unsigned i=0; i<textObject->listSize(); i++)
+    {
+      pStr = string(textObject->text(i)).string();
+      if (textObject->bulletFlag(i) == 1 )
+      {
+        xmlWriter->startElement( "text:list" ); 
+        xmlWriter->addAttribute( "text:style-name","L2"); 
+        xmlWriter->startElement( "text:list-item" );          
+        xmlWriter->startElement( "text:p" ); 
         xmlWriter->addAttribute( "text:style-name", "P1" );
         xmlWriter->addTextSpan( pStr ); 
-      xmlWriter->endElement(); // text:p
+        xmlWriter->endElement(); // text:p
+        xmlWriter->endElement();  // text:list-item
+        xmlWriter->endElement();  // text:list
+      }
+      else 
+      {
+        xmlWriter->startElement( "text:p" );
+        xmlWriter->addAttribute( "text:style-name", "P1" );
+        xmlWriter->addTextSpan( pStr ); 
+        xmlWriter->endElement(); // text:p
+      } 
+    }
+
     xmlWriter->endElement(); // draw:text-box
   xmlWriter->endElement(); // draw:frame
+
+
 }
 
 void PowerPointImport::processObjectForBody( Object* object, KoXmlWriter* xmlWriter )
@@ -1331,7 +1398,7 @@ void PowerPointImport::processSlideForBody( unsigned slideNo, Slide* slide, KoXm
   xmlWriter->endElement(); // draw:page
 }
 
-void PowerPointImport::processSlideForStyle( unsigned slideNo, Slide* slide, KoXmlWriter* xmlWriter )
+void PowerPointImport::processSlideForStyle( unsigned , Slide* slide, KoXmlWriter* xmlWriter )
 {
   if( !slide || !xmlWriter ) return;
 

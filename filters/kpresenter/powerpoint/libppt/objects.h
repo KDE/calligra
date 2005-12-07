@@ -116,9 +116,11 @@ public:
   unsigned type() const;
   void setType( unsigned type );
   const char* typeAsString() const;
-  UString text() const;
+  UString text(unsigned index) const;
   void setText( const UString& text );
-
+  unsigned listSize() const;
+  bool bulletFlag(unsigned index) const;
+  void setBulletFlag( bool flag ) ;
   void convertFrom( Object* object );
 
 private:

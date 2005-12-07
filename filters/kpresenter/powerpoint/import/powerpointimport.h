@@ -21,7 +21,7 @@
 #define POWERPOINTIMPORT_H
 
 #include <koFilter.h>
-#include <KoStore.h>
+#include <koStore.h>
 
 #include <qcstring.h>
 

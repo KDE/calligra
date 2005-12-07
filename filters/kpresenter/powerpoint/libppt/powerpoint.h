@@ -71,7 +71,8 @@ public:
     Sets the data for this record.
    */
   virtual void setData( unsigned size, const unsigned char* data );
-  
+  virtual void setData( unsigned size, const unsigned char* data, unsigned lastSize );
+
   /**
     Sets the position of the record in the OLE stream.
    */
@@ -123,8 +124,6 @@ private:
    Container( const Container& );
    Container& operator=( const Container& );   
 };
-
-
 
 
 class BookmarkCollectionContainer: public Container
@@ -223,6 +222,7 @@ class RunArrayContainer: public Container
 public:
   static const unsigned int id;
   RunArrayContainer();
+  
   const char* name(){ return "RunArrayContainer"; }
 
 private:
@@ -282,7 +282,6 @@ private:
   HeadersFootersContainer( const DocumentContainer& );
   HeadersFootersContainer& operator=( const DocumentContainer& );   
 };
-
 
 class ListContainer: public Container
 {
@@ -595,8 +594,6 @@ private:
   msofbtSolverContainer( const msofbtSolverContainer& );
   msofbtSolverContainer& operator=( const msofbtSolverContainer& );   
 };
-
-
 
 class BookmarkEntityAtom : public Record
 {
@@ -1218,54 +1215,52 @@ public:
   ~StyleTextPropAtom (); 
   
   // paragraph properties 
-  int charCount() const;
+  int charCount( unsigned index ) const;
   void setCharCount( int charCount );
-  int depth() const;
+  int depth( unsigned index ) const;
   void setDepth( int depth);
-  int mask() const; 
-  void setMask ( int mask );
-  int bulletFlag() const;
-  void setBulletFlag( int bulletFlag );
-  int bulletOn() const;
-  void setBulletOn( int bulletOn );
-  int bulletHardFont() const;
-  void setBulletHardFont( int bulletHardFont );
-  int bulletHardColor() const;
-  void setBulletHardColor( int bulletHardColor );
-  int bulletChar() const;
-  void setBulletChar( int bulletChar );
-  int bulletFont() const;
-  void setBulletFont( int bulletFont );
-  int bulletHeight() const; 
-  void setBulletHeight (int bulletHeight );
-  int bulletColor() const;
-  void setBulletColor( int bulletColor ) ;
-  int adjust() const;
-  void setAdjust( int adjust ) ;
-  int lineFeed() const; 
-  void setLineFeed ( int lineFeed );
-  int upperDist() const; 
+  int bulletOn ( unsigned index ) const;
+  void setBulletOn ( unsigned bulletOn );
+  int bulletHardFont( unsigned index ) const;
+  void setBulletHardFont( unsigned bulletHardFont );
+  int bulletHardColor( unsigned index ) const;
+  void setBulletHardColor( unsigned bulletHardColor );
+  int bulletChar ( unsigned index ) const;
+  void setBulletChar( unsigned bulletChar );
+  int bulletFont( unsigned index ) const;
+  void setBulletFont( unsigned bulletFont );
+  int bulletHeight( unsigned index ) const; 
+  void setBulletHeight (unsigned bulletHeight );
+  int bulletColor( unsigned index ) const;
+  void setBulletColor( unsigned bulletColor ) ;
+  int align( unsigned index ) const;
+  void setAlign( unsigned align ) ;
+  int lineFeed( unsigned index ) const; 
+  void setLineFeed ( unsigned lineFeed );
+  int upperDist( unsigned index ) const; 
   void setUpperDist( int upperDist );
-  int lowerDist() const; 
+  int lowerDist( unsigned index ) const; 
   void setLowerDist( int lowerDist);
-  int asianLB1() const; 
+  int asianLB1( unsigned index ) const; 
   void setAsianLB1 ( int asianLB1 );
-  int asianLB2() const; 
+  int asianLB2( unsigned index ) const; 
   void setAsianLB2 ( int asianLB2 );
-  int asianLB3() const; 
+  int asianLB3( unsigned index ) const; 
   void setAsianLB3 ( int asianLB3 );
-  int biDi() const;
-  void setBiDi( int biDi );
+  int biDi( unsigned index ) const;
+  void setBiDi( unsigned biDi );
+
 // character properties
   int charMask() const; 
   void setCharMask ( int charMask );
-  void setData( unsigned size, const unsigned char* data );  
-  const char* name(){ return "StyleTextPropAtom   "; }
-  void dump( std::ostream& out ) const; 
-  int charCount2() const;
-  void setCharCount2( int charCount2 );
   int charFlags() const;
   void setCharFlags( int charFlags );
+
+  unsigned listSize() const;
+
+  void setData( unsigned size, const unsigned char* data, unsigned lastSize );  
+  const char* name(){ return "StyleTextPropAtom   "; }
+  void dump( std::ostream& out ) const; 
 private:  
   // no copy or assign
   StyleTextPropAtom   ( const StyleTextPropAtom   & );
@@ -1274,7 +1269,6 @@ private:
   class Private;
   Private *d;  
 };
-
 
 class SlideAtom: public Record
 {
@@ -1414,18 +1408,20 @@ private:
   Private *d;  
 };
 
-class TextCharsAtom : public Record
+
+class TextCharsAtom   : public Record
 {
 public:
   static const unsigned int id;
   TextCharsAtom ();
   ~TextCharsAtom (); 
   
-  UString ustring() const;
-  void setUString( const UString& ustr );
-  
+  unsigned listSize() const;
+  UString strValue( unsigned index ) const;
+  void setText( UString ustring );
+   
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "TextCharsAtom"; }
+  const char* name(){ return "TextCharsAtom   "; }
   void dump( std::ostream& out ) const; 
   
 private:  
@@ -1436,7 +1432,6 @@ private:
   class Private;
   Private *d;  
 };
-
 
 class TxPFStyleAtom   : public Record
 {
@@ -1552,30 +1547,31 @@ private:
   Private *d;  
 };
 
-class TextBytesAtom  : public Record
+class TextBytesAtom : public Record
 {
 public:
   static const unsigned int id;
-  TextBytesAtom  ();
-  ~TextBytesAtom  ();
+  TextBytesAtom ();
+  ~TextBytesAtom (); 
+  
+  unsigned listSize() const;
+  unsigned stringLength() const;
+  void setStringLength( unsigned stringLength );
 
-  //int txSpecInfo() const;
-  //void setTxSpecInfo( int txSpecInfo );
-
-  UString ustring() const;
-  void setUString( const UString& ustr );
-
+  UString strValue( unsigned index ) const;
+  void setText( UString ustring );
+   
   void setData( unsigned size, const unsigned char* data );
-  const char* name(){ return "TextBytesAtom  "; }
-  void dump( std::ostream& out ) const;
-
-private:
+  const char* name(){ return "TextBytesAtom   "; }
+  void dump( std::ostream& out ) const; 
+  
+private:  
   // no copy or assign
-  TextBytesAtom ( const TextBytesAtom & );
-  TextBytesAtom & operator=( const TextBytesAtom & );
-
+  TextBytesAtom   ( const TextBytesAtom   & );
+  TextBytesAtom   & operator=( const TextBytesAtom   & );   
+  
   class Private;
-  Private *d;
+  Private *d;  
 };
 
 class UserEditAtom: public Record
@@ -2148,7 +2144,6 @@ private:
   Private *d;
 };
 
-
 class msofbtClientTextboxAtom : public Record
 {
 public:
@@ -2188,7 +2183,6 @@ private:
   Private *d;
 };
 
-
 class msofbtDeletedPsplAtom : public Record
 {
 public:
@@ -2226,7 +2220,6 @@ private:
   class Private;
   Private *d;
 };
-
 
 class msofbtColorMRUAtom : public Record
 {
@@ -2276,7 +2269,6 @@ private:
   Private *d;  
 };
 
-
 class msofbtBSEAtom : public Record
 {
 public:
@@ -2296,7 +2288,6 @@ private:
   class Private;
   Private *d;  
 };
-
 
 class msofbtCLSIDAtom : public Record
 {
@@ -2318,7 +2309,6 @@ private:
   class Private;
   Private *d;  
 };
-
 
 class msofbtRegroupItemsAtom : public Record
 {
@@ -2379,7 +2369,6 @@ private:
   class Private;
   Private *d;  
 };
-
 
 class msofbtConnectorRuleAtom : public Record
 {
@@ -2508,7 +2497,6 @@ private:
   Private *d;  
 };
 
-
 class PPTReader
 {
 public:
@@ -2533,6 +2521,8 @@ protected:
   void handleTextHeaderAtom( TextHeaderAtom* r );
   void handleTextCharsAtom( TextCharsAtom* r );
   void handleTextBytesAtom( TextBytesAtom* r ); 
+  void handleStyleTextPropAtom ( StyleTextPropAtom* r );
+  void handleColorSchemeAtom( ColorSchemeAtom* r );
 
   void handleDrawingContainer( msofbtDgContainer* r, unsigned size ); 
   void handleEscherGroupContainer( msofbtSpgrContainer* r, unsigned size ); 

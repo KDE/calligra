@@ -429,6 +429,10 @@ void Record::setData( unsigned, const unsigned char* )
 {
 }
 
+void Record::setData( unsigned, const unsigned char*, unsigned )
+{
+}
+
 void Record::dump( std::ostream& ) const
 {
   // nothing to dump
@@ -1130,15 +1134,17 @@ void FontEntityAtom::dump( std::ostream& out ) const
 
 const unsigned int TextCharsAtom::id = 4000;
 
+
 class TextCharsAtom::Private
 {
 public:
-  UString ustring;
+  std::vector<unsigned> index;
+  std::vector<UString> ustring;  
 };
 
 TextCharsAtom::TextCharsAtom()
 {
-  d = new Private;
+  d = new Private;  
 }
 
 TextCharsAtom::~TextCharsAtom()
@@ -1146,41 +1152,58 @@ TextCharsAtom::~TextCharsAtom()
   delete d;
 }
   
-UString TextCharsAtom::ustring() const
+unsigned TextCharsAtom::listSize() const
 {
-  return d->ustring;
+  return d->ustring.size();
 }
 
-void TextCharsAtom::setUString( const UString& ustr )
+UString TextCharsAtom::strValue( unsigned index ) const
 {
-  d->ustring = ustr;
+  return d->ustring[index];
+}
+
+void TextCharsAtom::setText( UString ustring )
+{
+  d->ustring.push_back( ustring );
 }
 
 void TextCharsAtom::setData( unsigned size, const unsigned char* data )
 {
-  UString str;
+  UString tempStr;
+  int index = 0; 
+
   for( unsigned k=0; k<((0.5*size) + 1); k++ )
-  {
+  { 
     unsigned uchar = readU16( data + k*2 );
-    if ( uchar == 0x0d ) 
-      { // handle later    
-        std::cout << "got a carriage return " << std::endl; 
-      }
-    if ( ( uchar &  0xff00 ) == 0xf000 )
-      { // handle later
-        std::cout << "got a symbol " << std::endl; 
-      }
-    
-    str.append( UString(uchar) );
-  }
-  setUString( str );
+    if ( (uchar == 0x0b) | (uchar == 0x0d) | (k == 0.5*size) ) 
+    {
+     setText(tempStr);
+     index++;
+     tempStr = "";
+    }
+    else 
+     tempStr.append( UString(uchar) );    
+ 
+   if ( ( uchar & 0xff00 ) == 0xf000 )
+   { // handle later      
+     std::cout << "got a symbol at " << k << "th character" << std::endl;
+   }  
+
+  }  
 }
   
 void TextCharsAtom::dump( std::ostream& out ) const
 {
   out << "TextCharsAtom" << std::endl;
-  out << "String : [" << ustring() << "]" << std::endl;
+  out << "listSize " << listSize() << std::endl;
+ 
+  for (int i=0; i<listSize() ; i++)
+  {
+    out << "String " << i << " [" << strValue(i) << "]" << std::endl;
+  }
+  
 }
+
 
 // ========== GuideAtom  ==========
 
@@ -1753,14 +1776,14 @@ void PersistIncrementalBlockAtom ::setData( unsigned size, const unsigned char* 
   d->references.clear();
   d->offsets.clear();
 
-  int ofs = 0;
+  unsigned ofs = 0;
   while( ofs < size )
   {
     long k = readU32( data+ ofs );
     unsigned count = k>>20;
     unsigned start = k&0xfffff;
     ofs += 4;
-    for( int c=0; c < count; c++, ofs+=4 )
+    for( unsigned c=0; c < count; c++, ofs+=4 )
     {
       if( ofs >= size ) break;
       long of = readU32( data + ofs );
@@ -1969,13 +1992,47 @@ void ColorSchemeAtom ::dump( std::ostream& out ) const
 {
   out << "ColorSchemeAtom" << std::endl;
   out << "background " << background() << std::endl;
+  out << "  R " << ( (background() >> 0 ) & 0xff ) ;
+  out << "  G " << ( (background() >> 8 ) & 0xff ) ;
+  out << "  B " << ( (background() >> 16 ) & 0xff ) ;
+  out << "  I " << ( (background() >> 24 ) & 0xff ) << std::endl;
+  out << "text and Lines " << textAndLines() << std::endl;
+  out << "  R " << ( ( textAndLines()  >> 0 ) & 0xff ) ;
+  out << "  G " << ( ( textAndLines()  >> 8 ) & 0xff ) ;
+  out << "  B " << ( ( textAndLines()  >> 16 ) & 0xff ) ;
+  out << "  I " << ( ( textAndLines()  >> 24 ) & 0xff ) << std::endl;
   out << "shadows " << shadows() << std::endl;
+  out << "  R " << ( ( shadows()  >> 0 ) & 0xff ) ;
+  out << "  G " << ( ( shadows()  >> 8 ) & 0xff ) ;
+  out << "  B " << ( ( shadows()  >> 16 ) & 0xff ) ;
+  out << "  I " << ( ( shadows()  >> 24 ) & 0xff ) << std::endl;
   out << "titleText " << titleText() << std::endl;
+  out << "  R " << ( ( titleText()  >> 0 ) & 0xff ) ;
+  out << "  G " << ( ( titleText()  >> 8 ) & 0xff ) ;
+  out << "  B " << ( ( titleText()  >> 16 ) & 0xff ) ;
+  out << "  I " << ( ( titleText()  >> 24 ) & 0xff ) << std::endl;
   out << "fills " << fills() << std::endl;
+  out << "  R " << ( ( fills()  >> 0 ) & 0xff ) ;
+  out << "  G " << ( ( fills()  >> 8 ) & 0xff ) ;
+  out << "  B " << ( ( fills()  >> 16 ) & 0xff ) ;
+  out << "  I " << ( ( fills()  >> 24 ) & 0xff ) << std::endl;
   out << "accent " << accent() << std::endl;
+  out << "  R " << ( ( accent()  >> 0 ) & 0xff ) ;
+  out << "  G " << ( ( accent()  >> 8 ) & 0xff ) ;
+  out << "  B " << ( ( accent()  >> 16 ) & 0xff ) ;
+  out << "  I " << ( ( accent()  >> 24 ) & 0xff ) << std::endl;
   out << "accentAndHyperlink " << accentAndHyperlink() << std::endl;
+  out << "  R " << ( ( accentAndHyperlink()  >> 0 ) & 0xff ) ;
+  out << "  G " << ( ( accentAndHyperlink()  >> 8 ) & 0xff ) ;
+  out << "  B " << ( ( accentAndHyperlink()  >> 16 ) & 0xff ) ;
+  out << "  I " << ( ( accentAndHyperlink()  >> 24 ) & 0xff ) << std::endl;
   out << "accentAndFollowedHyperlink " << accentAndFollowedHyperlink() << std::endl;
+  out << "  R " << ( ( accentAndFollowedHyperlink()  >> 0 ) & 0xff ) ;
+  out << "  G " << ( ( accentAndFollowedHyperlink()  >> 8 ) & 0xff ) ;
+  out << "  B " << ( ( accentAndFollowedHyperlink()  >> 16 ) & 0xff ) ;
+  out << "  I " << ( ( accentAndFollowedHyperlink()  >> 24 ) & 0xff ) << std::endl;
 }
+
 
 // ========== CurrentUserAtom  ==========
 
@@ -2842,25 +2899,25 @@ const unsigned int StyleTextPropAtom ::id = 4001;
 class StyleTextPropAtom::Private
 {
 public:
-  int charCount;
-  int depth;
-  int mask;  
-  int bulletFlag;
-  int bulletOn;
-  int bulletHardFont;
-  int bulletHardColor;
-  int bulletChar;
-  int bulletFont;
-  int bulletHeight; 
-  int bulletColor;
-  int adjust;  
-  int lineFeed; 
-  int upperDist; 
-  int lowerDist; 
-  int asianLB1;
-  int asianLB2;
-  int asianLB3;
-  int biDi;
+  unsigned stringLength;
+  std::vector<int> charCount;
+  std::vector<int> depth;
+  std::vector<unsigned> bulletOn;
+  std::vector<unsigned> bulletHardFont;
+  std::vector<unsigned> bulletHardColor;
+  std::vector<unsigned> bulletChar;
+  std::vector<unsigned> bulletFont;
+  std::vector<unsigned> bulletHeight; 
+  std::vector<unsigned> bulletColor;
+  std::vector<unsigned> align;  
+  std::vector<unsigned> lineFeed; 
+  std::vector<int> upperDist; 
+  std::vector<int> lowerDist; 
+  std::vector<int> asianLB1;
+  std::vector<int> asianLB2;
+  std::vector<int> asianLB3;
+  std::vector<unsigned> biDi;
+
   int charMask;
   int charCount2;
   int charFlags;
@@ -2868,26 +2925,7 @@ public:
 
 StyleTextPropAtom::StyleTextPropAtom()
 {
-  d = new Private;
-  d->charCount = 0;
-  d->depth = 0; 
-  d->mask = 0;   
-  d->bulletFlag = 0; 
-  d->bulletOn = 0;
-  d->bulletHardFont = 0;
-  d->bulletHardColor = 0;  
-  d->bulletChar = 0;  
-  d->bulletFont = 0; 
-  d->bulletHeight = 0;  
-  d->bulletColor = 0; 
-  d->adjust = 0;  
-  d->lineFeed = 0; 
-  d->upperDist = 0; 
-  d->lowerDist = 0; 
-  d->asianLB1 = 0;
-  d->asianLB2 = 0;
-  d->asianLB3 = 0;
-  d->biDi = 0;
+  d = new Private;  
   d->charMask = 0;
   d->charCount2 = 0;
   d->charFlags = 0;
@@ -2897,197 +2935,180 @@ StyleTextPropAtom::~StyleTextPropAtom()
 {
   delete d;
 }
-  
-int StyleTextPropAtom::charCount() const
+
+unsigned StyleTextPropAtom::listSize() const
 {
-  return d->charCount;
+  return d->charCount.size();
+}
+  
+int StyleTextPropAtom::charCount( unsigned index ) const
+{
+  return d->charCount[index];
 }
 
 void StyleTextPropAtom::setCharCount( int charCount )
 {
-  d->charCount = charCount;
+  d->charCount.push_back( charCount );
 }
 
-int StyleTextPropAtom::depth() const
+int StyleTextPropAtom::depth( unsigned index ) const
 {
-  return d->depth;
+  return d->depth[index];
 }
 
 void StyleTextPropAtom::setDepth( int depth )
 {
-  d->depth = depth;
+  d->depth.push_back( depth );
 }
 
-int StyleTextPropAtom::mask() const
+int StyleTextPropAtom::bulletOn( unsigned index ) const
 {
-  return d->mask;
+  return d->bulletOn[index];
+} 
+
+void StyleTextPropAtom::setBulletOn( unsigned bulletOn )
+{
+  d->bulletOn.push_back( bulletOn );
 }
 
-void StyleTextPropAtom::setMask( int mask )
-
+int StyleTextPropAtom::bulletHardFont( unsigned index ) const
 {
-  d->mask = mask;
+  return d->bulletHardFont[index];
 }
 
-
-int StyleTextPropAtom::bulletFlag() const
+void StyleTextPropAtom::setBulletHardFont( unsigned bulletHardFont )
 {
-  return d->bulletFlag;
+  d->bulletHardFont.push_back( bulletHardFont );
 }
 
-void StyleTextPropAtom::setBulletFlag( int bulletFlag )
+int StyleTextPropAtom::bulletHardColor( unsigned index ) const
 {
-  d->bulletFlag = bulletFlag;
+  return d->bulletHardColor[index];
 }
 
-int StyleTextPropAtom::bulletOn() const
+void StyleTextPropAtom::setBulletHardColor( unsigned bulletHardColor )
 {
-  return d->bulletOn;
+  d->bulletHardColor.push_back( bulletHardColor );
 }
 
-void StyleTextPropAtom::setBulletOn( int bulletOn )
+int StyleTextPropAtom::bulletChar( unsigned index ) const
 {
-  d->bulletOn = bulletOn;
+  return d->bulletChar[index];
 }
 
-int StyleTextPropAtom::bulletHardFont() const
+void StyleTextPropAtom::setBulletChar( unsigned bulletChar )
 {
-  return d->bulletHardFont;
+  d->bulletChar.push_back( bulletChar );
 }
 
-void StyleTextPropAtom::setBulletHardFont( int bulletHardFont )
+int StyleTextPropAtom::bulletFont( unsigned index ) const
 {
-  d->bulletHardFont = bulletHardFont;
+  return d->bulletFont[index];
 }
 
-int StyleTextPropAtom::bulletHardColor() const
+void StyleTextPropAtom::setBulletFont( unsigned bulletFont )
 {
-  return d->bulletHardColor;
+  d->bulletFont.push_back( bulletFont );
 }
 
-void StyleTextPropAtom::setBulletHardColor( int bulletHardColor )
+int StyleTextPropAtom::bulletHeight( unsigned index ) const
 {
-  d->bulletHardColor = bulletHardColor;
+  return d->bulletHeight[index];
 }
 
-int StyleTextPropAtom::bulletChar() const
+void StyleTextPropAtom::setBulletHeight( unsigned bulletHeight )
 {
-  return d->bulletChar;
+  d->bulletHeight.push_back( bulletHeight );
 }
 
-void StyleTextPropAtom::setBulletChar( int bulletChar )
+int StyleTextPropAtom::bulletColor( unsigned index ) const
 {
-  d->bulletChar = bulletChar;
+  return d->bulletColor[index];
 }
 
-int StyleTextPropAtom::bulletFont() const
+void StyleTextPropAtom::setBulletColor( unsigned bulletColor )
 {
-  return d->bulletFont;
+  d->bulletColor.push_back( bulletColor );
 }
 
-void StyleTextPropAtom::setBulletFont( int bulletFont )
+int StyleTextPropAtom::lineFeed( unsigned index ) const
 {
-  d->bulletFont = bulletFont;
+  return d->lineFeed[index];
 }
 
-int StyleTextPropAtom::bulletHeight() const
+void StyleTextPropAtom::setLineFeed( unsigned lineFeed )
 {
-  return d->bulletHeight;
+  d->lineFeed.push_back( lineFeed );
 }
 
-void StyleTextPropAtom::setBulletHeight( int bulletHeight )
+int StyleTextPropAtom::upperDist( unsigned index ) const
 {
-  d->bulletHeight = bulletHeight;
-}
-
-int StyleTextPropAtom::bulletColor() const
-{
-  return d->bulletColor;
-}
-
-void StyleTextPropAtom::setBulletColor( int bulletColor )
-{
-  d->bulletColor = bulletColor;
-}
-
-int StyleTextPropAtom::lineFeed() const
-{
-  return d->lineFeed;
-}
-
-void StyleTextPropAtom::setLineFeed( int lineFeed )
-{
-  d->lineFeed = lineFeed;
-}
-
-int StyleTextPropAtom::upperDist() const
-{
-  return d->upperDist;
+  return d->upperDist[index];
 }
 
 void StyleTextPropAtom::setLowerDist( int lowerDist )
 {
-  d->lowerDist = lowerDist;
+  d->lowerDist.push_back( lowerDist );
 }
 
-int StyleTextPropAtom::lowerDist() const
+int StyleTextPropAtom::lowerDist( unsigned index ) const
 {
-  return d->lowerDist;
+  return d->lowerDist[index];
 }
 
 void StyleTextPropAtom::setUpperDist( int upperDist )
 {
-  d->upperDist = upperDist;
+  d->upperDist.push_back( upperDist );
 }
 
-int StyleTextPropAtom::adjust() const
+int StyleTextPropAtom::align( unsigned index ) const
 {
-  return d->adjust;
+  return d->align[index];
 }
 
-void StyleTextPropAtom::setAdjust (int adjust)
+void StyleTextPropAtom::setAlign (unsigned align)
 {
-  d->adjust = adjust;
+  d->align.push_back( align );
 }
 
-int StyleTextPropAtom::asianLB1() const
+int StyleTextPropAtom::asianLB1( unsigned index ) const
 {
-  return d->asianLB1;
+  return d->asianLB1[index];
 }
 
 void StyleTextPropAtom::setAsianLB1 (int asianLB1)
 {
-  d->asianLB1 = asianLB1;
+  d->asianLB1.push_back( asianLB1);
 }
 
-int StyleTextPropAtom::asianLB2() const
+int StyleTextPropAtom::asianLB2( unsigned index ) const
 {
-  return d->asianLB2;
+  return d->asianLB2[index];
 }
 
 void StyleTextPropAtom::setAsianLB2 (int asianLB2)
 {
-  d->asianLB2 = asianLB2;
+  d->asianLB2.push_back( asianLB2 );
 }
 
-int StyleTextPropAtom::asianLB3() const
+int StyleTextPropAtom::asianLB3( unsigned index ) const
 {
-  return d->asianLB3;
+  return d->asianLB3[index];
 }
 
 void StyleTextPropAtom::setAsianLB3 (int asianLB3)
 {
-  d->asianLB3 = asianLB3;
+  d->asianLB3.push_back( asianLB3 );
 }
 
-int StyleTextPropAtom::biDi() const
+int StyleTextPropAtom::biDi( unsigned index ) const
 {
-  return d->biDi;
+  return d->biDi[index];
 }
 
-void StyleTextPropAtom::setBiDi( int biDi )
+void StyleTextPropAtom::setBiDi( unsigned biDi )
 {
-  d->biDi = biDi;
+  d->biDi.push_back( biDi );
 }
 
 int StyleTextPropAtom::charMask() const
@@ -3100,16 +3121,6 @@ void StyleTextPropAtom::setCharMask( int charMask )
   d->charMask = charMask;
 }
 
-int StyleTextPropAtom::charCount2() const
-{
-  return d->charCount2;
-}
-
-void StyleTextPropAtom::setCharCount2( int charCount2 )
-{
-  d->charCount2 = charCount2;
-}
-
 int StyleTextPropAtom::charFlags() const
 {
   return d->charFlags;
@@ -3119,220 +3130,322 @@ void StyleTextPropAtom::setCharFlags( int charFlags )
 {
   d->charFlags = charFlags;
 }
-
-void StyleTextPropAtom::setData( unsigned size, const unsigned char* data )
+ 
+void StyleTextPropAtom::setData( unsigned size, const unsigned char* data, unsigned lastSize )
 { 
-    unsigned k = 0;    
-    setCharCount( readU32(data+0) - 1); 
-    setDepth( readU16(data+4) ); 
-    unsigned mask = readU32(data+6); 
-    // to do later : setAttrSet (mask & 0x207df7)   
-    setMask ( mask ); 
-    k = 10;   
-    if ( mask & 0xF )
-    { int bulletFlag = readU16(data+k);
-      setBulletFlag( bulletFlag ); 
-      setBulletOn( ( bulletFlag & 1 ) ? 1 : 0 );
-      setBulletHardFont( ( bulletFlag & 2 ) ? 1 : 0 );  
-      setBulletHardColor( ( bulletFlag & 4 ) ? 1 : 0 );  
-      k += 2;
-    }    
-    if ( mask & 0x0080 )
-    {
-      setBulletChar( readU16(data+k) );
+  unsigned charRead = 0;
+  unsigned charCount = 0;
+  unsigned stringLength = (0.5*lastSize) + 1;
+  
+  bool isTextPropAtom = true; 
+  unsigned k=0;    
+   
+  while ( charRead < stringLength )
+  { 
+    if ( isTextPropAtom == true )
+    {  
+     // there is still a problem when outline's align changes in a text
+      charCount = readU32(data+k) - 1;
+      k += 4;
+      //std::cout << "charCount " << charCount << std::endl;
+      setCharCount( charCount ); 
+      setDepth( readU16(data+k) );
       k += 2; 
-    }
-    if ( mask & 0x0010 )
-    {
-      setBulletFont ( readU16(data+k) );
-      k += 2; 
-    }
-    if ( mask & 0x0040 )
-    {
-      setBulletHeight( readU16(data+k) );
-      // to do later : 
-      // if ( ! ( (mask & (1 << 3)) && (BulletFlag && (1 << 3)) ) )  setAttrSet(attrSet ^= 0x40);
-      k += 2; 
-    }
-    if ( mask & 0x0020 )
-    { 
-      setBulletColor( readU32(data+k) );
-      k += 4; 
-    }
-    if ( mask & 0x0F00 )
-    {
-      if ( mask & 0x800 )
-      {
-        unsigned dummy = readU16(data+k);
-        setAdjust( dummy & 3 );
+      unsigned mask = readU32(data+6); 
+      k += 4;        
+      if ( mask & 0xF )
+      { 
+        int bulletFlag = readU16(data+k);
         k += 2;
+        setBulletOn( ( bulletFlag & 1 ) ? 1 : 0 );      
+        setBulletHardFont( ( bulletFlag & 2 ) ? 1 : 0 );  
+        setBulletHardColor( ( bulletFlag & 4 ) ? 1 : 0 );  
+      }    
+      if ( mask & 0x0080 )
+      {
+        unsigned bulletChar = readU16(data+k);
+        setBulletChar( bulletChar );
+        k += 2; 
+        //std::cout << "bulletChar " << bulletChar << std::endl;
+      } 
+      else setBulletChar( 0 );
+      
+      if ( mask & 0x0010 )
+      { 
+        unsigned bulletFont = readU16(data+k);
+        setBulletFont ( bulletFont );
+        k += 2; 
+        //std::cout << "bulletFont " << bulletFont << std::endl;
       }
-      if ( mask & 0x400 )
+      else setBulletFont ( 0 );
+
+      if ( mask & 0x0040 )
       {
-        unsigned dummy = readU16(data+k);
-        k += 2;
+        int bulletHeight = readU16(data+k); 
+        setBulletHeight( bulletHeight );
+        k += 2; 
+        //std::cout << "bulletHeight " << bulletHeight << std::endl;        
       }
-      if ( mask & 0x200 )
+      else setBulletHeight ( 0 );
+
+      if ( mask & 0x0020 )
+      { 
+        unsigned bulletColor =   readU32(data+k);
+        k += 4; 
+        setBulletColor( bulletColor );       
+      }
+
+      if ( mask & 0x0F00 )
+      { 
+        if ( mask & 0x800 )
+        {
+          unsigned dummy = readU16(data+k);
+          k += 2;
+          setAlign( dummy & 3 );
+          // std::cout << "align " << (dummy & 3) << std::endl;          
+        }                                             
+        if ( mask & 0x400 )
+        {
+          unsigned dummy = readU16(data+k);
+          k += 2;
+        }
+        if ( mask & 0x200 )
+        {
+          unsigned dummy = readU16(data+k);
+          k += 2;
+        }      
+        if ( mask & 0x100 )
+        {
+          unsigned dummy = readU16(data+k);
+          k += 2;
+        }      
+      }
+      else setAlign(0);
+
+      if ( mask & 0x1000 ) 
+      { unsigned lineFeed = readU16(data+k);
+        setLineFeed( lineFeed );
+        //std::cout << "lineFeed " << lineFeed << std::endl;
+        k += 2; 
+      }    
+      else setLineFeed (0);
+ 
+      if ( mask & 0x2000 ) 
+      {
+        setUpperDist( readU16(data+k) );
+        k += 2; 
+      }   
+      else setUpperDist (0);
+
+      if ( mask & 0x4000 ) 
+      {
+        setLowerDist( readU16(data+k) );
+        k += 2; 
+      }  
+      else setLowerDist (0); 
+
+      if ( mask & 0x8000 ) 
       {
         unsigned dummy = readU16(data+k);
-        k += 2;
-      }      
-      if ( mask & 0x100 )
+        k += 2; 
+      }   
+      if ( mask & 0x10000 ) 
       {
         unsigned dummy = readU16(data+k);
-        k += 2;
-      }      
-    }
-    if ( mask & 0x1000 ) 
+        k += 2; 
+      }   
+      if ( mask & 0xe0000 )
+      {
+        unsigned dummy = readU16(data+k);
+        if ( mask & 0x20000 )
+          setAsianLB1( dummy & 1);
+        if ( mask & 0x40000 )
+          setAsianLB2( (dummy >> 1) & 1);
+        if ( mask & 0x80000 )
+          setAsianLB3( (dummy >> 2) & 1);
+
+        k += 2; 
+      }    
+
+      if ( mask & 0x200000 ) 
+      {
+        unsigned biDi = readU16(data+k);
+        setBiDi( biDi );
+        //std::cout << "biDi " << biDi << std::endl;
+        k += 2;       
+      }         
+
+      else setBiDi(0);
+    } 
+    else            
     {
-      setLineFeed( readU16(data+k) );
-      k += 2; 
-    }    
-    if ( mask & 0x2000 ) 
-    {
-      setUpperDist( readU16(data+k) );
-      k += 2; 
-    }   
-    if ( mask & 0x4000 ) 
-    {
-      setLowerDist( readU16(data+k) );
-      k += 2; 
-    }   
-    if ( mask & 0x8000 ) 
-    {
-      unsigned dummy = readU16(data+k);
-      k += 2; 
-    }   
-    if ( mask & 0x10000 ) 
-    {
-      unsigned dummy = readU16(data+k);
-      k += 2; 
-    }   
-    if ( mask & 0xe0000 )
-    {
-      unsigned dummy = readU16(data+k);
-      if ( mask & 0x20000 )
-        setAsianLB1( dummy & 1);
-      if ( mask & 0x40000 )
-        setAsianLB2( (dummy >> 1) & 1);
-      if ( mask & 0x80000 )
-        setAsianLB3( (dummy >> 2) & 1);
-      k += 2; 
-    }    
-    if ( mask & 0x200000 ) 
-    {
-      setBiDi( readU16(data+k) );
-      k += 2;       
-    }
+      std::cout << "isTextPropAtom == false " << std::endl;      
+      charCount = stringLength;        
+      setCharCount(charCount);
+      setDepth(0);
+      setBulletOn(0);
+      setBulletHardFont(0);
+      setBulletHardColor(0);  
+      setBulletChar(0); 
+      setBulletFont(0); 
+      setBulletHeight(0);  
+      setBulletColor(0);
+      setAlign(0);  
+      setLineFeed(0); 
+      setUpperDist(0); 
+      setLowerDist(0); 
+      setAsianLB1(0);
+      setAsianLB2(0);
+      setAsianLB3(0);
+      setBiDi(0);  
+    } 
+
+    if ( ( charCount > stringLength ) || ( stringLength - ( charRead + charCount ) < 0 ) )
+      {             
+        isTextPropAtom = false;
+        charCount = stringLength - charRead;
+        setCharCount(charCount);
+        
+       }
+
+    charRead += charCount + 1;
+ 
     // std::cout << "k = " << k << std::endl; 
+  }
     
-    // character properties
-    unsigned charCount2 = readU16(data+k) ;  
-    setCharCount2 (charCount2);
-    k += 2;   
-    unsigned dummy = readU16(data+k);   
-    k += 2;
-    unsigned charsToRead = size - charCount2 ;  
-    std::cout << "charToRead = " << charsToRead << std::endl; 
-    unsigned charMask = readU16(data+k) ;
-    setCharMask ( charMask );
-    if ( charMask )
+  
+  /* charRead = 0;
+  while ( charRead < stringLength )
+  {     
+    std::cout << "in second while-loop " << std::endl; 
+    if ( (isTextPropAtom == false)  &&  (k < size) ) 
+    {
+      unsigned charCount = readU16(data+k) ;  
+      setCharCount (charCount);
+      k += 2;   
+      unsigned dummy = readU16(data+k);   
+      k += 2;else setAlign( dummy & 3 );
+      int charToRead = size - (charRead + charCount);         
+      // std::cout << "charToRead = " << charToRead << std::endl; 
+      if (charToRead < 0)
+      {
+        charCount = size - charRead;
+        if ( charToRead < -1 )
+        {
+            isTextPropAtom = false;
+        }
+      }
+      unsigned charMask = readU16(data+k) ;
+      k += 2;
+      setCharMask ( charMask );
+      if ( charMask )
       {
         setCharFlags( readU16(data+k) );
         k += 2;
       }
-     std::cout << "k = " << k << std::endl; 
+    //  std::cout << "k = " << k << std::endl; 
     
-    static unsigned charAttrTable[16] =
+      static unsigned charAttrTable[16] =
       { 16, 21, 22, 23, 17, 18, 19, 20, 24, 25, 26, 27, 28, 29, 30, 31 };
-    for ( int i = 0; i < 16; i++ )
-    {
-      int j = charAttrTable[ i ];
-      if ( charMask & ( 1 << j ) )
+      
+      for ( int i = 0; i < 16; i++ )
       {
-        switch ( j )
+        int j = charAttrTable[ i ];
+        if ( charMask & ( 1 << j ) )
         {
-          case 23:    //PPT_CharAttr_Symbol 
-          { 
-            unsigned setSymbolFont= (readU16(data+k));
-            std::cout << "setSymbolFont = " << setSymbolFont << std::endl; 
-            //setSymbolFont(readU16(data+k));           
-          }  
-          break;
-          case 16:   //PPT_CharAttr_Font 
+          switch ( j )
           {
-            unsigned setFont= (readU16(data+k));
-            std::cout << "setFont = " << setFont << std::endl; 
-            //setFont(readU16(data+k));           
-          }  
-          break;
-          case 21:   //PPT_CharAttr_AsianOrComplexFont 
-          {
+            case 23:    //PPT_CharAttr_Symbol 
+            { else setAlign( dummy & 3 );
+              unsigned setSymbolFont= (readU16(data+k));
+              std::cout << "setSymbolFont = " << setSymbolFont << std::endl; 
+              //setSymbolFont(readU16(data+k));           
+            } break;
+            case 16:   //PPT_CharAttr_Font 
+            {
+              unsigned setFont= (readU16(data+k));
+              std::cout << "setFont = " << setFont << std::endl; 
+              //setFont(readU16(data+k));           
+            } break;
+            case 21:   //PPT_CharAttr_AsianOrComplexFont 
+            {
               unsigned setAsianOrComplexFont= (readU16(data+k));
               std::cout << "setAsianOrComplexFont = " << setAsianOrComplexFont << std::endl; 
              //setAsianOrComplexFont(readU16(data+k));
-          }
-          break;
-          case 22:   // PPT_CharAttr_Unknown2 
-          {  unsigned setUnknown= (readU16(data+k));
-              std::cout << "setUnknown = " << setUnknown << std::endl; 
-            //setUnknown(readU16(data+k));
-          }
-          break;            
-          case 17:    //PPT_CharAttr_FontHeight 
-          {  unsigned setFontHeight= (readU16(data+k));
-              std::cout << "setFontHeight = " << setFontHeight << std::endl; 
-            //setFontHeight(readU16(data+k));
-          }  
-          break;              
-          case 18:    //PPT_CharAttr_FontColor 
-          {  unsigned setFontColor= (readU16(data+k));
-              std::cout << "setFontColor = " << setFontColor << std::endl; 
-            //setFontColor(readU32(data+k));
-            k +=2;
-          }  
-          break;              
-          case 19://PPT_CharAttr_Escapement 
-          {  unsigned setEscapement= (readU16(data+k));
-            std::cout << "setEscapement = " << setEscapement << std::endl; 
-             //setEscapement(readU32(data+k));
-          }  
-          break;              
-          default:
-              {  unsigned dummy = readU16(data+k);
+            } break;
+            case 22:   // PPT_CharAttr_Unknown2 
+            {  unsigned setUnknown= (readU16(data+k));
+               std::cout << "setUnknown = " << setUnknown << std::endl; 
+              //setUnknown(readU16(data+k));
+            } break;            
+            case 17:    //PPT_CharAttr_Fontvoid Record::setData( unsigned, const unsigned char* )
+            {  unsigned setFonttPropAtomHeight= (readU16(data+k));
+               std::cout << "setFontHeight = " << setFontHeight << std::endl; 
+               //setFontHeight(readU16(data+k));
+            } break;              
+            case 18:    //PPT_CharAttr_FontColor 
+            {  unsigned setFontColor= (readU32(data+k));
+               std::cout << "setFontColor = " << setFontColor << std::endl; 
+               //setFontColor(readU32(data+k));
+               k +=2;
+            } break;              
+            case 19://PPT_CharAttr_Escapement 
+            {  unsigned setEscapement= (readU16(data+k));
+               std::cout << "setEscapement = " << setEscapement << std::endl; 
+               //setEscapement(readU32(data+k));
+            } break;              
+            default:
+            {  unsigned dummy = readU16(data+k);
                 std::cout << "default " << dummy << std::endl;
-              }
-        }                               
-        k +=2;
-      } 
-    }      
-    std::cout << "k = " << k << std::endl; 
-    
+            }
+          }                               
+          k +=2;
+        } 
+      }      
+powerpoint.cpp:3370: warning: convert
+      std::cout << "k = " << k << std::endl; 
+     }
+    else 
+    {  
+      charRead = stringLength;      
+    }
+  } */
+
 }
   
+
 void StyleTextPropAtom::dump( std::ostream& out ) const
 {
   out << "StyleTextPropAtom" << std::endl;
-  out << "charCount " << charCount() << std::endl;
-  out << "depth " << depth() << std::endl;
-  out << "mask " << mask() << std::endl;
-  out << "bulletFlag " << bulletFlag() << std::endl;
-  out << "bulletOn " << bulletOn() << std::endl;
-  out << "bulletHardFont " << bulletHardFont() << std::endl;
-  out << "bulletHardColor " << bulletHardColor() << std::endl;
-  out << "bulletChar " << bulletChar() << std::endl;
-  out << "bulletFont " << bulletFont() << std::endl;
-  out << "bulletHeight " << bulletHeight() << std::endl; 
-  out << "bulletColor " << bulletColor() << std::endl;
-  out << "adjust " << adjust() << std::endl;
-  out << "lineFeed " << lineFeed() << std::endl;
-  out << "upperDist " << upperDist() << std::endl;
-  out << "lowerDist " << lowerDist() << std::endl;
-  out << "biDi " << biDi() << std::endl;
-  out << "charCount2 " << charCount2() << std::endl;
-  out << "charMask " << charMask() << std::endl;
-  out << "charFlags " << charFlags() << std::endl;
+  out << "listSize " << listSize() << std::endl << std::endl;
+  for ( unsigned i = 0; i < listSize(); i++)
+  { 
+    out << "charCount " << charCount(i) << std::endl;
+    out << "depth " << depth(i) << std::endl;
+    out << "isBulletOn " << bulletOn(i) << std::endl;
+    out << "isbulletHardFont " << bulletHardFont(i) << std::endl;
+    out << "isbulletHardColor " << bulletHardColor(i) << std::endl;    
+    out << "bulletChar " << bulletChar(i) << std::endl;
+    out << "bulletFont " << bulletFont(i) << std::endl;
+    out << "bulletHeight " << bulletHeight(i) << std::endl; 
+    out << "bulletColor " <<  std::endl;
+    out << "  R " << ((bulletColor(i) >>0) & 0xff) << std::endl;
+    out << "  G " << ((bulletColor(i) >>8) & 0xff) << std::endl;
+    out << "  B " << ((bulletColor(i) >>16) & 0xff) << std::endl;
+    out << "  I " << ((bulletColor(i) >>24) & 0xff) << std::endl;
+    out << "align " << align(i) << std::endl;
+    out << "lineFeed " << lineFeed(i) << std::endl;
+    out << "upperDist " << upperDist(i) << std::endl;
+    out << "lowerDist " << lowerDist(i) << std::endl;
+    out << "biDi " << biDi(i) << std::endl;
+    
+    out << std::endl;
+  }
+//  out << "charMask " << charMask() << std::endl;
+//  out << "charFlags " << charFlags() << std::endl;
+  
 }
+
 
 
 // ========== TxCFStyleAtom  ==========
@@ -3540,7 +3653,7 @@ SlideAtom::SlideAtom()
   d->layoutPlaceholderId5 = 0; 
   d->layoutPlaceholderId6 = 0; 
   d->layoutPlaceholderId7 = 0; 
-  d->layoutPlaceholderId8 = 0;     
+  d->layoutPlaceholderId8 = 0;       
   d->masterId = 0;
   d->notesId = 0;
   d->flags = 0;
@@ -3798,59 +3911,90 @@ void TextHeaderAtom ::dump( std::ostream& out ) const
   out << " textType " << textType() << std::endl;
 }
 
-// ==========  TextBytesAtom   ==========
+// ========== TextBytesAtom ==========
 
-const unsigned int TextBytesAtom ::id = 4008;
-  
+const unsigned int TextBytesAtom::id = 4008;
+
 class TextBytesAtom::Private
 {
-public:   
-  UString ustring; 
+public:
+  std::vector<unsigned> index;
+  std::vector<UString> ustring;  
+  unsigned stringLength;
 };
 
-
-UString TextBytesAtom::ustring() const
+TextBytesAtom::TextBytesAtom()
 {
-  return d->ustring;
+  d = new Private;  
 }
 
-void TextBytesAtom::setUString( const UString& ustr )
-{
-  d->ustring = ustr;
-}
-
-TextBytesAtom::TextBytesAtom ()
-{
-  d = new Private;
-  d->ustring = 0;
-}
-
-TextBytesAtom::~TextBytesAtom ()
+TextBytesAtom::~TextBytesAtom()
 {
   delete d;
+}
+  
+unsigned TextBytesAtom::listSize() const
+{
+  return d->ustring.size();
+}
+
+unsigned TextBytesAtom::stringLength() const
+{
+  return d->stringLength;
+}
+
+void TextBytesAtom::setStringLength( unsigned stringLength )
+{
+  d->stringLength = stringLength;
+}
+
+UString TextBytesAtom::strValue( unsigned index ) const
+{
+  return d->ustring[index];
+}
+
+void TextBytesAtom::setText( UString ustring )
+{
+  d->ustring.push_back( ustring );
 }
 
 void TextBytesAtom::setData( unsigned size, const unsigned char* data )
 {
-  UString str;
-  for( unsigned k=0; k<size+1; k++ )
-  {
-    unsigned uchar = ( readU32( data + k ) );
-    if (uchar == 0x0d) 
-      { uchar = 0x0b;    
-        std::cout << "found 0x0d in text bytes atom" << std::endl; 
-      }
-    // if (uchar == 0x0B) uchar = ' '; 
-    if (uchar == 0x22) uchar = 0x20; 
-    str.append( UString(uchar) );
-  }
-  setUString( str );
-}
+  UString tempStr;
+  int index = 0; 
+  unsigned length = 0;
+  for( unsigned k=0; k<(size + 1); k++ )
+  { 
+    unsigned uchar =  data[k];
+    if ( (uchar == 0x0b) | (uchar == 0x0d) | (k == size) ) 
+    {
+     setText(tempStr);
+     index++;
+     tempStr = "";
+    }
+    else 
+     tempStr.append( UString(uchar) );    
+ 
+    if ( ( uchar & 0xff00 ) == 0xf000 )
+    { // handle later      
+      std::cout << "got a symbol at " << k << "th character" << std::endl;
+    }  
+    length++;
+  }  
 
-void TextBytesAtom ::dump( std::ostream& out ) const
+  setStringLength(length);
+}
+  
+void TextBytesAtom::dump( std::ostream& out ) const
 {
   out << "TextBytesAtom" << std::endl;
-  out << "String : [" << ustring() << "]" << std::endl;
+  out << "stringLength " << stringLength() << std::endl;
+  out << "listSize " << listSize() << std::endl;  
+  for (int i=0; i<listSize() ; i++)
+  {
+    out << "String " << i << " [" << strValue(i) << "]" << std::endl;
+  }
+  
 }
 
 
@@ -3897,7 +4041,7 @@ void TextSpecInfoAtom::setFlags(int flags)
   d->flags = flags;
 }
 
-void TextSpecInfoAtom::setData( unsigned size, const unsigned char* data )
+void TextSpecInfoAtom::setData( unsigned , const unsigned char* data )
 {
   setCharCount( readU32( data + 0 ) );
   setFlags( readU32( data + 4 ) );
@@ -5414,7 +5558,7 @@ void PPTReader::loadRecord( Record* parent )
   unsigned long type = readU16( buffer + 2 );
   unsigned long size = readU32( buffer + 4 );
   unsigned long nextpos = d->docStream->tell() + size;
-
+  unsigned lastSize;
   // create the record using the factory
   Record* record = Record::create( type );
   if( record )
@@ -5426,7 +5570,11 @@ void PPTReader::loadRecord( Record* parent )
     if( !record->isContainer() )
     {
       d->docStream->read( buffer, size );
-      record->setData( size, buffer );
+      // special treatment for StyleTextPropAtom
+      if ( type == StyleTextPropAtom::id )
+        record->setData(size, buffer, lastSize);
+      else
+        record->setData( size, buffer );
       handleRecord( record, type );
     }
     else
@@ -5434,7 +5582,7 @@ void PPTReader::loadRecord( Record* parent )
 
     delete record;
   }
-  
+  lastSize = size; 
   d->docStream->seek( nextpos );
 }
 
@@ -5454,14 +5602,18 @@ void PPTReader::handleRecord( Record* record, int type )
       handleTextCharsAtom( static_cast<TextCharsAtom*>(record) ); break;
     case TextBytesAtom::id:
       handleTextBytesAtom( static_cast<TextBytesAtom*>(record) ); break;
+    case StyleTextPropAtom::id:
+      handleStyleTextPropAtom( static_cast<StyleTextPropAtom*>(record) ); break;
+    case ColorSchemeAtom::id:
+      handleColorSchemeAtom( static_cast<ColorSchemeAtom*>(record) ); break;
 
     case msofbtSpgrAtom::id:
       handleEscherGroupAtom( static_cast<msofbtSpgrAtom*>(record) ); break;
     case msofbtSpAtom::id:
       handleEscherSpAtom( static_cast<msofbtSpAtom*>(record) ); break;
-   case msofbtOPTAtom::id:
+    case msofbtOPTAtom::id:
       handleEscherPropertiesAtom( static_cast<msofbtOPTAtom*>(record) ); break; 
-   case msofbtClientDataAtom::id:
+    case msofbtClientDataAtom::id:
       handleEscherClientDataAtom( static_cast<msofbtClientDataAtom*>(record) ); break;
     case msofbtClientAnchorAtom::id:
       handleEscherClientAnchorAtom( static_cast<msofbtClientAnchorAtom*>(record) ); break;
@@ -5492,7 +5644,6 @@ void PPTReader::handleContainer( Container* container, int type, unsigned size )
   }
 }
 
-
 void PPTReader::handleDocumentAtom( DocumentAtom* atom )
 {
   if( !atom ) return;
@@ -5509,8 +5660,6 @@ void PPTReader::handleDocumentAtom( DocumentAtom* atom )
   std::cout << std::endl<< "page height = " << pageHeight << std::endl;
 #endif
 }
-
-
 
 void PPTReader::handleSlidePersistAtom( SlidePersistAtom* atom )
 {
@@ -5555,12 +5704,18 @@ void PPTReader::handleTextCharsAtom( TextCharsAtom* atom )
   }
 
   text->setType( d->currentTextType );
-  text->setText( atom->ustring() );
+  
+  for (int i=0; i<atom->listSize(); i++)
+  { 
+     text->setText(atom->strValue(i));
+     // qDebug("=====================text list ================"); 
+  }
 
-  if( d->currentTextType == TextObject::Title )
-    d->currentSlide->setTitle( atom->ustring() );
-  if( d->currentTextType == TextObject::CenterTitle )
-    d->currentSlide->setTitle( atom->ustring() );
+  if( (d->currentTextType == TextObject::Title) | (d->currentTextType == TextObject::CenterTitle) )
+    for (unsigned i=0; i<atom->listSize(); i++)  
+      d->currentSlide->setTitle( atom->strValue(i) );
+  
+  
 
 #ifdef LIBPPT_DEBUG
   std::cout << "  Text Object " << atom->ustring().ascii();
@@ -5585,17 +5740,49 @@ void PPTReader::handleTextBytesAtom( TextBytesAtom* atom )
   }
 
   text->setType( d->currentTextType );
-  text->setText( atom->ustring() );
+  
+  for (int i=0; i<atom->listSize(); i++)
+  { 
+     text->setText(atom->strValue(i));
+     // qDebug("=====================text list ================"); 
+  }
 
-  if( d->currentTextType == TextObject::Title )
-    d->currentSlide->setTitle( atom->ustring() );
-  if( d->currentTextType == TextObject::CenterTitle )
-    d->currentSlide->setTitle( atom->ustring() );
+  if( (d->currentTextType == TextObject::Title) | (d->currentTextType == TextObject::CenterTitle) )
+    for (unsigned i=0; i<atom->listSize(); i++)  
+      d->currentSlide->setTitle( atom->strValue(i) );
+  
+  
 
 #ifdef LIBPPT_DEBUG
   std::cout << "  Text Object " << atom->ustring().ascii();
   std::cout << " placed at " << placeId << std::endl;
 #endif
+}
+
+void PPTReader::handleStyleTextPropAtom ( StyleTextPropAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
+  if( !d->currentSlide )  return;
+  if( !d->currentTextId ) return;
+
+  int placeId = d->currentTextId-1;
+  TextObject* text = d->currentSlide->textObject( placeId );
+
+  for (int i=0; i<atom->listSize(); i++)
+  { 
+    if (atom->bulletOn(i) == 1)
+      text->setBulletFlag(true); 
+    else if (atom->bulletOn(i) == 0)
+      text->setBulletFlag(false);  
+  }
+  
+}
+
+void PPTReader::handleColorSchemeAtom( ColorSchemeAtom* atom )
+{
+  if( !atom ) return;
+  if( !d->presentation ) return;
 
 }
 
@@ -5870,6 +6057,7 @@ Color convertFromLong( unsigned long i )
   unsigned r = (i & 0xff);
   unsigned g = (i>>8) & 0xff;
   unsigned b = (i>>16) & 0xff;
+  unsigned index = (i>>24) & 0xff;
   return Color( r, g, b );
 }
 
@@ -5976,6 +6164,7 @@ void PPTReader::handleEscherPropertiesAtom( msofbtOPTAtom* atom )
           default:
              d->currentObject->setProperty( "draw:stroke", "solid"); break;
         } break;
+
       case msofbtOPTAtom::FlagNoLineDrawDash:   
         {   if (pvalue == 589824 ) 
           d->currentObject->setProperty( "libppt:invisibleLine", true ); 

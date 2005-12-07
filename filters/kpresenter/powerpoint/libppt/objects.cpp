@@ -242,7 +242,9 @@ class TextObject::Private
 {
 public:
   unsigned type;
-  UString text;
+  std::vector<UString> text;  
+  unsigned listSize; 
+  std::vector<bool> bulletFlag; 
 };
 
 TextObject::TextObject(): Object()
@@ -258,6 +260,11 @@ TextObject::~TextObject()
 unsigned TextObject::type() const
 {
   return d->type;
+}
+
+unsigned TextObject::listSize() const
+{
+  return d->text.size();
 }
 
 const char* TextObject::typeAsString() const
@@ -279,19 +286,30 @@ const char* TextObject::typeAsString() const
   return "Unknown";
 }
 
+bool TextObject::bulletFlag( unsigned index ) const
+{
+  return d->bulletFlag[index];
+}
+
+void TextObject::setBulletFlag( bool flag )
+{
+  d->bulletFlag.push_back( flag );
+}
+
+
 void TextObject::setType( unsigned type )
 {
   d->type = type;
 }
 
-UString TextObject::text() const
+UString TextObject::text( unsigned index) const
 {
-  return d->text;
+  return d->text[index];
 }
 
 void TextObject::setText( const UString& text )
 {
-  d->text = text;
+  d->text.push_back( text );
 }
 
 void TextObject::convertFrom( Object* object )
@@ -306,7 +324,7 @@ void TextObject::convertFrom( Object* object )
   {
     TextObject* textObj = static_cast<TextObject*>( object );
     setType( textObj->type() );
-    setText( textObj->text() );
+  // jgn lupa diganti :  setText( textObj->text() );
   }
 }
 
