@@ -277,10 +277,12 @@ void PaperLayout::slotOk()
     }
 
     // get new values for borders
+#if 0
     leftChanged();
     rightChanged();
     topChanged();
     bottomChanged();
+#endif
 
     Map   * map   = 0;
     Sheet * sheet = 0;
