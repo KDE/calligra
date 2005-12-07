@@ -1836,7 +1836,7 @@ void KPrView::penChosen()
     QColor c = actionPenColor->color();
     if ( !m_canvas->currentTextObjectView() )
     {
-        KCommand * cmd( getPenCmd( i18n( "Change KPrOutline Color" ), KPrPen(c),
+        KCommand * cmd( getPenCmd( i18n( "Change Outline Color" ), KPrPen(c),
                                    L_NORMAL, L_NORMAL, KPrPenCmd::Color ) );
         if( cmd )
             m_pKPresenterDoc->addCommand( cmd );
@@ -2019,7 +2019,7 @@ void KPrView::setExtraPenStyle( Qt::PenStyle style )
     KPrPen tmpPen;
     tmpPen.setStyle( style );
 
-    KCommand * cmd( getPenCmd( i18n("Change KPrOutline Style"), tmpPen,
+    KCommand * cmd( getPenCmd( i18n("Change Outline Style"), tmpPen,
                                L_NORMAL, L_NORMAL, KPrPenCmd::Style ) );
     if( cmd )
         kPresenterDoc()->addCommand( cmd );
@@ -2031,7 +2031,7 @@ void KPrView::setExtraPenWidth( double width )
 {
     KPrPen tmpPen;
     tmpPen.setPointWidth( width );
-    KCommand * cmd( getPenCmd( i18n("Change KPrOutline Width"), tmpPen,
+    KCommand * cmd( getPenCmd( i18n("Change Outline Width"), tmpPen,
                                L_NORMAL, L_NORMAL, KPrPenCmd::Width ) );
 
     if( cmd )
@@ -2649,12 +2649,12 @@ void KPrView::setupActions()
                                       this, SLOT( extraLineEnd() ),
                                       actionCollection(), "extra_lineend" );
 
-    actionExtraPenStyle = new KoLineStyleAction( i18n("KPrOutline Style"), "pen_style",
+    actionExtraPenStyle = new KoLineStyleAction( i18n("Outline Style"), "pen_style",
                                        this, SLOT( extraPenStyle(int) ),
                                        actionCollection(), "extra_penstyle" );
     actionExtraPenStyle->setShowCurrentSelection(false);
 
-    actionExtraPenWidth = new KoLineWidthAction( i18n("KPrOutline Width"), "pen_width",
+    actionExtraPenWidth = new KoLineWidthAction( i18n("Outline Width"), "pen_width",
                                        this, SLOT( extraPenWidth(double) ),
                                        actionCollection(), "extra_penwidth" );
     actionExtraPenWidth->setUnit( kPresenterDoc()->unit() );
@@ -2730,7 +2730,7 @@ void KPrView::setupActions()
     connect( actionBrushColor, SIGNAL( activated() ), SLOT( brushChosen() ) );
     actionBrushColor->setDefaultColor(QColor());
 
-    actionPenColor = new TKSelectColorAction( i18n( "KPrOutline Color..." ), TKSelectColorAction::LineColor,
+    actionPenColor = new TKSelectColorAction( i18n( "Outline Color..." ), TKSelectColorAction::LineColor,
                                               actionCollection(), "pen_color" );
     connect( actionPenColor, SIGNAL( activated() ), SLOT( penChosen() ) );
     actionPenColor->setDefaultColor(QColor());

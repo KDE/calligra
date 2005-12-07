@@ -46,7 +46,7 @@ KPrPenStyleWidget::KPrPenStyleWidget( QWidget *parent, const char *name, const K
     connect( m_ui->colorChooser, SIGNAL( changed( const QColor& ) ),
              this, SLOT( slotPenChanged() ) );
 
-    m_ui->styleCombo->insertItem( i18n( "No KPrOutline" ) );
+    m_ui->styleCombo->insertItem( i18n( "No Outline" ) );
     m_ui->styleCombo->insertItem( "__________" );
     m_ui->styleCombo->insertItem( "__ __ __ __" );
     m_ui->styleCombo->insertItem( "_ _ _ _ _ _" );
