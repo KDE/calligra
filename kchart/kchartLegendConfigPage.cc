@@ -31,6 +31,7 @@
 #include <qradiobutton.h>
 #include <qlineedit.h>
 #include <qtooltip.h> 
+#include <qwhatsthis.h>
 
 #include "kchart_params.h"
 #include "kchart_factory.h"
