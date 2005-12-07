@@ -47,3 +47,4 @@ Name[xx]=xxText Orientedxx
 Name[zh_CN]=导向式文本
 Name[zh_TW]=文字導向的
 X-KDE-DefaultTab=true
+X-KDE-SortingWeight=10
