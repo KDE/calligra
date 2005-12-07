@@ -40,32 +40,10 @@
                     <widget class="KListView">
                         <column>
                             <property name="text">
-                                <string>1</string>
+                                <string></string>
                             </property>
                             <property name="clickable">
                                 <bool>true</bool>
-                            </property>
-                            <property name="resizable">
-                                <bool>false</bool>
-                            </property>
-                        </column>
-                        <column>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="clickable">
-                                <bool>false</bool>
-                            </property>
-                            <property name="resizable">
-                                <bool>false</bool>
-                            </property>
-                        </column>
-                        <column>
-                            <property name="text">
-                                <string></string>
-                            </property>
-                            <property name="clickable">
-                                <bool>false</bool>
                             </property>
                             <property name="resizable">
                                 <bool>false</bool>
@@ -82,9 +60,6 @@
                         </property>
                         <property name="resizeMode">
                             <enum>LastColumn</enum>
-                        </property>
-                        <property name="fullWidth">
-                            <bool>true</bool>
                         </property>
                         <property name="shadeSortColumn">
                             <bool>false</bool>

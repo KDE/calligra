@@ -33,10 +33,11 @@ class KoTemplate {
 public:
     KoTemplate(const QString &name,
                const QString &description=QString::null,
-	       const QString &file=QString::null,
-	       const QString &picture=QString::null,
-           const QString &fileName=QString::null,
-	       bool hidden=false, bool touched=false);
+               const QString &file=QString::null,
+               const QString &picture=QString::null,
+               const QString &fileName=QString::null,
+               const QString &_measureSystem=QString::null,
+               bool hidden=false, bool touched=false);
     ~KoTemplate() {}
 
     QString name() const { return m_name; }
@@ -51,12 +52,16 @@ public:
 
     bool touched() const { return m_touched; }
 
+    QString measureSystem() const { return m_measureSystem; }
+    void setMeasureSystem(const QString& system) { m_measureSystem = system; }
+
 private:
     QString m_name, m_descr, m_file, m_picture, m_fileName;
     bool m_hidden;
     mutable bool m_touched;
     bool m_cached;
     QPixmap m_pixmap;
+    QString m_measureSystem;
 };
 
 
@@ -74,7 +79,6 @@ public:
     void addDir(const QString &dir) { m_dirs.append(dir); m_touched=true; }
     int sortingWeight() const { return m_sortingWeight; }
     void setSortingWeight(int weight) { m_sortingWeight = weight; }
-
     /// If all children are hidden, we are hidden too
     bool isHidden() const;
     /// if we should hide, we hide all the children

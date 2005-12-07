@@ -85,6 +85,9 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
 {
   d = new KoTemplatesPanePrivate;
   d->m_instance = instance;
+  KGuiItem openGItem(i18n("Use This Template"));
+  m_openButton->setGuiItem(openGItem);
+  m_documentList->header()->hide();
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName");
   d->m_alwaysUseTemplate = cfgGrp.readEntry("AlwaysUseTemplate");
@@ -95,13 +98,16 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
     connect(kapp, SIGNAL(kdisplayPaletteChanged()), this, SLOT(changePalette()));
   }
 
-  KGuiItem openGItem(i18n("Use This Template"));
-  m_openButton->setGuiItem(openGItem);
-  m_documentList->header()->hide();
+  QString dontShow = "imperial";
+
+  if(KGlobal::locale()->measureSystem() == KLocale::Imperial) {
+    dontShow = "metric";
+  }
+
   KListViewItem* selectItem = 0;
 
   for (KoTemplate* t = group->first(); t != 0L; t = group->next()) {
-    if(t->isHidden())
+    if(t->isHidden() || (t->measureSystem() == dontShow))
       continue;
 
     QString listText = "<b>" + t->name() + "</b>";

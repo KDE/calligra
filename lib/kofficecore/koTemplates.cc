@@ -36,10 +36,11 @@
 
 
 KoTemplate::KoTemplate(const QString &name, const QString &description, const QString &file,
-                       const QString &picture, const QString &fileName, bool hidden,
-                       bool touched) :
+                       const QString &picture, const QString &fileName, const QString &_measureSystem,
+                       bool hidden, bool touched) :
     m_name(name), m_descr(description), m_file(file), m_picture(picture), m_fileName(fileName),
-    m_hidden(hidden), m_touched(touched), m_cached(false) {
+    m_hidden(hidden), m_touched(touched), m_cached(false), m_measureSystem(_measureSystem)
+{
 }
 
 const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
@@ -71,7 +72,8 @@ const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
 
 KoTemplateGroup::KoTemplateGroup(const QString &name, const QString &dir,
                                  int _sortingWeight, bool touched) :
-    m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight) {
+    m_name(name), m_touched(touched), m_sortingWeight(_sortingWeight)
+{
     m_dirs.append(dir);
     m_templates.setAutoDelete(true);
 }
@@ -258,6 +260,7 @@ void KoTemplateTree::readTemplates() {
                 bool hidden=false;
                 bool defaultTemplate = false;
                 QString templatePath;
+                QString measureSystem;
                 // If a desktop file, then read the name from it.
                 // Otherwise (or if no name in it?) use file name
                 if (KDesktopFile::isDesktopFile(filePath)) {
@@ -265,7 +268,6 @@ void KoTemplateTree::readTemplates() {
                     config.setDesktopGroup();
                     if (config.readEntry("Type")=="Link") {
                         text=config.readEntry("Name");
-                        hidden=config.readBoolEntry("X-KDE-Hidden", false);
                         fileName=filePath;
                         description=config.readEntry("Comment");
                         //kdDebug() << "name: " << text << endl;
@@ -276,6 +278,7 @@ void KoTemplateTree::readTemplates() {
                         //kdDebug() << "icon2: " << icon << endl;
                         hidden=config.readBoolEntry("X-KDE-Hidden", false);
                         defaultTemplate = config.readBoolEntry("X-KDE-DefaultTemplate", false);
+                        measureSystem=config.readEntry("X-KDE-MeasureSystem").lower();
                         //kdDebug() << "hidden: " << hidden_str << endl;
                         templatePath=config.readPathEntry("URL");
                         //kdDebug() << "Link to : " << templatePath << endl;
@@ -302,7 +305,8 @@ void KoTemplateTree::readTemplates() {
                     templatePath = filePath; // Note that we store the .png file as the template !
                     // That's the way it's always been done. Then the app replaces the extension...
                 }
-                KoTemplate *t=new KoTemplate(text, description, templatePath, icon, fileName, hidden);
+                KoTemplate *t=new KoTemplate(text, description, templatePath, icon, fileName,
+                                             measureSystem, hidden);
                 groupIt.current()->add(t, false, false); // false -> we aren't a "user", false -> don't
                                                          // "touch" the group to avoid useless
                                                          // creation of dirs in .kde/blah/...

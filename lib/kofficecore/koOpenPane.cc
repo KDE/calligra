@@ -39,6 +39,32 @@
 #include "koDocument.h"
 #include "koDetailsPane.h"
 
+class KoSectionListItem : public QListViewItem
+{
+  public:
+    KoSectionListItem(KListView* listView, const QString& name, int sortWeight, int widgetIndex = -1)
+      : QListViewItem(listView, name), m_sortWeight(sortWeight), m_widgetIndex(widgetIndex)
+    {
+    }
+
+    virtual int compare(QListViewItem* i, int, bool) const
+    {
+      KoSectionListItem* item = dynamic_cast<KoSectionListItem*>(i);
+
+      if(!item)
+        return 0;
+
+      return sortWeight() - item->sortWeight();
+    }
+
+    int sortWeight() const { return m_sortWeight; }
+    int widgetIndex() const { return m_widgetIndex; }
+
+  private:
+    int m_sortWeight;
+    int m_widgetIndex;
+};
+
 class KoOpenPanePrivate
 {
   public:
@@ -57,9 +83,7 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   d->m_instance = instance;
 
   m_sectionList->header()->hide();
-  m_sectionList->setSorting(2);
-  m_sectionList->hideColumn(1);
-  m_sectionList->hideColumn(2);
+  m_sectionList->setSorting(0);
   connect(m_sectionList, SIGNAL(selectionChanged(QListViewItem*)),
           this, SLOT(selectionChanged(QListViewItem*)));
 
@@ -73,7 +97,6 @@ KoOpenPane::KoOpenPane(QWidget *parent, KInstance* instance, const QString& temp
   QValueList<int> sizes;
   sizes << 20 << width() - 20;
   m_splitter->setSizes(sizes);
-  m_sectionList->sort();
 }
 
 KoOpenPane::~KoOpenPane()
@@ -99,12 +122,10 @@ void KoOpenPane::initRecentDocs()
 {
   KoRecentDocumentsPane* recentDocPane = new KoRecentDocumentsPane(this, d->m_instance);
   connect(recentDocPane, SIGNAL(openFile(const QString&)), this, SIGNAL(openExistingFile(const QString&)));
-  KListViewItem* item = addPane(i18n("Recent Documents"), "fileopen", recentDocPane);
-  item->setText(2, "0"); // Set sorting weight
+  QListViewItem* item = addPane(i18n("Recent Documents"), "fileopen", recentDocPane, 0);
 
-  QListViewItem* separator = new QListViewItem(m_sectionList/*, m_sectionList->lastItem()*/, "");
+  KoSectionListItem* separator = new KoSectionListItem(m_sectionList, "", 1);
   separator->setEnabled(false);
-  separator->setText(2, "1");
 
   if(d->m_instance->config()->hasGroup("RecentFiles")) {
     m_sectionList->setSelected(item, true);
@@ -113,8 +134,8 @@ void KoOpenPane::initRecentDocs()
 
 void KoOpenPane::initTemplates(const QString& templateType)
 {
-  KListViewItem* selectItem = 0;
-  KListViewItem* firstItem = 0;
+  QListViewItem* selectItem = 0;
+  QListViewItem* firstItem = 0;
   int templateOffset = 1000;
 
   if(!templateType.isEmpty())
@@ -133,8 +154,8 @@ void KoOpenPane::initTemplates(const QString& templateType)
               this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)));
       connect(this, SIGNAL(alwaysUseChanged(KoTemplatesPane*, const QString&)),
               pane, SLOT(changeAlwaysUseTemplate(KoTemplatesPane*, const QString&)));
-      KListViewItem* item = addPane(group->name(), group->first()->loadPicture(d->m_instance), pane);
-      item->setText(2, QString::number(group->sortingWeight() + templateOffset)); // Set sorting weight
+      QListViewItem* item = addPane(group->name(), group->first()->loadPicture(d->m_instance),
+                                    pane, group->sortingWeight() + templateOffset);
 
       if(!firstItem) {
         firstItem = item;
@@ -159,34 +180,37 @@ void KoOpenPane::initTemplates(const QString& templateType)
   }
 }
 
-KListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget)
+QListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight)
 {
-  return addPane(title, SmallIcon(icon, KIcon::SizeLarge, KIcon::DefaultState, d->m_instance), widget);
+  return addPane(title, SmallIcon(icon, KIcon::SizeLarge, KIcon::DefaultState, d->m_instance),
+                 widget, sortWeight);
 }
 
-KListViewItem* KoOpenPane::addPane(const QString& title, const QPixmap& icon, QWidget* widget)
+QListViewItem* KoOpenPane::addPane(const QString& title, const QPixmap& icon, QWidget* widget, int sortWeight)
 {
   if(!widget) {
     return 0;
   }
 
-  KListViewItem* listItem = new KListViewItem(m_sectionList/*, m_sectionList->lastItem()*/, title);
-  listItem->setText(2, "10000"); // Use a high sorting weight by default
+  int id = m_widgetStack->addWidget(widget);
+  KoSectionListItem* listItem = new KoSectionListItem(m_sectionList, title, sortWeight, id);
 
   if(!icon.isNull()) {
     listItem->setPixmap(0, icon);
   }
-
-  int id = m_widgetStack->addWidget(widget);
-  listItem->setText(1, QString::number(id));
 
   return listItem;
 }
 
 void KoOpenPane::selectionChanged(QListViewItem* item)
 {
-  m_headerLabel->setText(item->text(0));
-  m_widgetStack->raiseWidget(item->text(1).toInt());
+  KoSectionListItem* section = dynamic_cast<KoSectionListItem*>(item);
+
+  if(!item)
+    return;
+
+  m_headerLabel->setText(section->text(0));
+  m_widgetStack->raiseWidget(section->widgetIndex());
 }
 
 
