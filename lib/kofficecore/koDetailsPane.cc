@@ -87,6 +87,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
   d->m_instance = instance;
   KGuiItem openGItem(i18n("Use This Template"));
   m_openButton->setGuiItem(openGItem);
+  setFocusProxy(m_openButton);
   m_documentList->header()->hide();
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName");
@@ -252,6 +253,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
   d->m_instance = instance;
   KGuiItem openGItem(i18n("Open This Document"), "fileopen");
   m_openButton->setGuiItem(openGItem);
+  setFocusProxy(m_openButton);
   m_alwaysUseCheckBox->hide();
   m_documentList->header()->hide();
   m_documentList->setSorting(-1); // Disable sorting

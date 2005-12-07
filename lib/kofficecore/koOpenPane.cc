@@ -211,6 +211,7 @@ void KoOpenPane::selectionChanged(QListViewItem* item)
 
   m_headerLabel->setText(section->text(0));
   m_widgetStack->raiseWidget(section->widgetIndex());
+  m_widgetStack->widget(section->widgetIndex())->setFocus();
 }
 
 
