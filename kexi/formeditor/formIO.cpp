@@ -1150,7 +1150,7 @@ FormIO::loadWidget(Container *container, const QDomElement &el, QWidget *parent)
 	// We check if this classname is an alternate one, and replace it if necessary
 	{
 		classname = el.attribute("class").local8Bit();
-		alternate = container->form()->library()->checkAlternateName(classname);
+		alternate = container->form()->library()->classNameForAlternate(classname);
 	}
 
 	if(alternate == "CustomWidget")

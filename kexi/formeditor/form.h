@@ -371,7 +371,8 @@ class KFORMEDITOR_EXPORT Form : public QObject
 		 */
 		void childRemoved(ObjectTreeItem *it);
 
-		void designModeChanged();
+		//! This signal emitted when Form is about to be destroyed
+		void destroying();
 
 	protected:
 		void setConnectionBuffer(ConnectionBuffer *b) { d->connBuffer = b; }

@@ -62,7 +62,7 @@ class WidgetPropertySetPrivate
 			delete origActiveColors;
 		}
 
-		Set  set;
+		KoProperty::Set  set;
 		// list of properties (not) to show in editor
 		QStringList  properties;
 		// list of widgets
@@ -110,13 +110,13 @@ WidgetPropertySet::manager()
 	return d->manager;
 }*/
 
-Property&
+KoProperty::Property&
 WidgetPropertySet::operator[](const QCString &name)
 {
 	return d->set[name];
 }
 
-Property&
+KoProperty::Property&
 WidgetPropertySet::property(const QCString &name)
 {
 	return d->set[name];
@@ -163,7 +163,7 @@ WidgetPropertySet::saveModifiedProperties()
 	if(!tree)
 		return;
 
-	for(Set::Iterator it(d->set); it.current(); ++it) {
+	for(KoProperty::Set::Iterator it(d->set); it.current(); ++it) {
 		if(it.current()->isModified())
 			tree->addModifiedProperty(it.current()->name(), it.current()->oldValue());
 	}
@@ -230,7 +230,7 @@ WidgetPropertySet::addWidget(QWidget *w)
 
 	// show only properties shared by widget (properties chosed by factory)
 	bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(w);
-	for(Set::Iterator it(d->set); it.current(); ++it) {
+	for(KoProperty::Set::Iterator it(d->set); it.current(); ++it) {
 		if(!isPropertyVisible(it.currentKey(), isTopLevel, classname))
 			d->set[it.currentKey()].setVisible(false);
 	}
@@ -264,7 +264,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 	QVariantMapConstIterator modifiedPropertiesIt;
 	bool isTopLevel = KFormDesigner::FormManager::self()->isTopLevel(w);
 	int count = 0;
-	Property *newProp = 0;
+	KoProperty::Property *newProp = 0;
 	WidgetInfo *winfo = form->library()->widgetInfoForClassName(w->className());
 
 	QStrList pList = w->metaObject()->propertyNames(true);
@@ -293,7 +293,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 				}
 
 				QStringList keys = QStringList::fromStrList( meta->enumKeys() );
-				newProp = new Property(propertyName, createValueList(winfo, keys),
+				newProp = new KoProperty::Property(propertyName, createValueList(winfo, keys),
 					/* assign current or older value */
 					oldValueExists ? modifiedPropertiesIt.data() : 
 						meta->valueToKey( w->property(propertyName).toInt() ), 
@@ -304,7 +304,7 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 				}
 			}
 			else {
-				newProp = new Property(propertyName, 
+				newProp = new KoProperty::Property(propertyName, 
 					/* assign current or older value */
 					oldValueExists ? modifiedPropertiesIt.data() : w->property(propertyName), 
 					desc, desc, winfo->customTypeForProperty(propertyName));
@@ -342,14 +342,14 @@ WidgetPropertySet::createPropertiesForWidget(QWidget *w)
 	if (winfo) {
 		form->library()->setPropertyOptions(*this, *winfo, w);
 		//add meta-information
-		d->set.addProperty( newProp = new Property("this:classString", winfo->name()) );
+		d->set.addProperty( newProp = new KoProperty::Property("this:classString", winfo->name()) );
 		newProp->setVisible(false);
-		d->set.addProperty( newProp = new Property("this:iconName", winfo->pixmap()) );
+		d->set.addProperty( newProp = new KoProperty::Property("this:iconName", winfo->pixmap()) );
 		newProp->setVisible(false);
-		d->set.addProperty( newProp = new Property("this:iconName", winfo->pixmap()) );
+		d->set.addProperty( newProp = new KoProperty::Property("this:iconName", winfo->pixmap()) );
 		newProp->setVisible(false);
 	}
-	d->set.addProperty( newProp = new Property("this:className", w->className()) ); 
+	d->set.addProperty( newProp = new KoProperty::Property("this:className", w->className()) ); 
 	newProp->setVisible(false);
 
 	/*!  let's forget it for now, until we have new complete events editor
@@ -374,7 +374,7 @@ WidgetPropertySet::updatePropertyValue(ObjectTreeItem *tree, const char *propert
 {
 	if (!d->set.contains(property))
 		return;
-	Property p = d->set[property];
+	KoProperty::Property p = d->set[property];
 
 //! \todo what about set properties, and lists properties
 	QMap<QString, QVariant>::ConstIterator it( tree->modifiedProperties()->find(property) );
@@ -728,7 +728,7 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 			value = "AlignAuto";
 
 		list << "AlignAuto" << "AlignLeft" << "AlignRight" << "AlignHCenter" << "AlignJustify";
-		Property *p = new Property("hAlign", createValueList(0, list), value,
+		KoProperty::Property *p = new KoProperty::Property("hAlign", createValueList(0, list), value,
 			i18n("Translators: please keep this string short (less than 20 chars)", "Hor. Alignment"),
 			i18n("Horizontal Alignment"));
 		d->set.addProperty(p);
@@ -750,7 +750,7 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 			value = "AlignVCenter";
 
 		list << "AlignTop" << "AlignVCenter" << "AlignBottom";
-		Property *p = new Property("vAlign", createValueList(0, list), value,
+		KoProperty::Property *p = new KoProperty::Property("vAlign", createValueList(0, list), value,
 			i18n("Translators: please keep this string short (less than 20 chars)", "Ver. Alignment"),
 			i18n("Vertical Alignment"));
 		d->set.addProperty(p);
@@ -764,7 +764,7 @@ WidgetPropertySet::createAlignProperty(const QMetaProperty *meta, QWidget *obj)
 	  && !obj->inherits("QLineEdit") /* QLineEdit doesn't support 'word break' is this generic enough?*/
 	) {
 		// Create the wordbreak property
-		Property *p = new Property("wordbreak", QVariant(false, 3), i18n("Word Break"), i18n("Word Break") );
+		KoProperty::Property *p = new KoProperty::Property("wordbreak", QVariant(false, 3), i18n("Word Break"), i18n("Word Break") );
 		d->set.addProperty(p);
 		updatePropertyValue(tree, "wordbreak");
 		if(!isPropertyVisible(p->name(), isTopLevel)) {
@@ -827,20 +827,21 @@ WidgetPropertySet::createLayoutProperty(ObjectTreeItem *item)
 
 	list << "NoLayout" << "HBox" << "VBox" << "Grid" << "HFlow" << "VFlow";
 
-	Property *p = new Property("layout", createValueList(0, list), value,
+	KoProperty::Property *p = new KoProperty::Property("layout", createValueList(0, list), value,
 		i18n("Container's Layout"), i18n("Container's Layout"));
 	p->setVisible( container->form()->library()->advancedPropertiesVisible() );
 	d->set.addProperty(p);
 
 	updatePropertyValue(item, "layout");
 
-	p = new Property("layoutMargin", container->layoutMargin(), i18n("Layout Margin"), i18n("Layout Margin"));
+	p = new KoProperty::Property("layoutMargin", container->layoutMargin(), i18n("Layout Margin"), i18n("Layout Margin"));
 	d->set.addProperty(p);
 	updatePropertyValue(item, "layoutMargin");
 	if(container->layoutType() == Container::NoLayout)
 		p->setVisible(false);
 
-	p = new Property("layoutSpacing", container->layoutSpacing(), i18n("Layout Spacing"), i18n("Layout Spacing"));
+	p = new KoProperty::Property("layoutSpacing", container->layoutSpacing(), 
+		i18n("Layout Spacing"), i18n("Layout Spacing"));
 	d->set.addProperty(p);
 	updatePropertyValue(item, "layoutSpacing");
 	if(container->layoutType() == Container::NoLayout)

@@ -451,16 +451,14 @@ WidgetLibrary::textForWidgetName(const QCString &name, const QCString &className
 }
 
 QCString
-WidgetLibrary::checkAlternateName(const QCString &classname)
+WidgetLibrary::classNameForAlternate(const QCString &classname)
 {
 	loadFactories();
 	if(d->widgets.find(classname))
 		return classname;
 
-//	WidgetInfo *wi =  d->alternateWidgets[classname];
 	WidgetInfo *wi =  d->widgets[classname];
 	if (wi) {
-//		kdDebug() << "WidgetLibrary::alternateName() : The name " << classname << " will be replaced with " << wi->className() << endl;
 		return wi->className();
 	}
 
@@ -480,14 +478,14 @@ WidgetLibrary::includeFileName(const QCString &classname)
 }
 
 QString
-WidgetLibrary::icon(const QCString &classname)
+WidgetLibrary::iconName(const QCString &classname)
 {
 	loadFactories();
 	WidgetInfo *wi = d->widgets.find(classname);
 	if(wi)
 		return wi->pixmap();
 
-	return QString("form");
+	return QString::fromLatin1("form");
 }
 
 bool

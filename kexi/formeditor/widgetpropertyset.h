@@ -30,8 +30,6 @@
 class QMetaObject;
 class QWidget;
 
-using namespace KoProperty;
-
 namespace KFormDesigner {
 
 class FormManager;
@@ -50,9 +48,9 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 
 //		FormManager* manager();
 
-		Property&  operator[](const QCString &name);
+		KoProperty::Property&  operator[](const QCString &name);
 
-		Property&  property(const QCString &name);
+		KoProperty::Property&  property(const QCString &name);
 
 		bool  contains(const QCString &property);
 
@@ -104,7 +102,7 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 
 		/*! Creates a map property description->prop. value from
 		 the list of keys \a list. */
-		Property::ListData* createValueList(WidgetInfo *winfo, const QStringList &list);
+		KoProperty::Property::ListData* createValueList(WidgetInfo *winfo, const QStringList &list);
 
 		/*! Changes \a property old value and changed state, using the value
 		stored in \a tree. */
@@ -119,7 +117,7 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 
 		/*! Saves old values of modified properties in ObjectTreeItem, so
 		 that we can restore them later.*/
-		void  saveModifiedProperties();
+		void saveModifiedProperties();
 
 		/*! Checks if the name entered by user is valid, ie that it is
 		 a valid identifier, and that there is no name conflict.  */
@@ -142,7 +140,8 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 		/*! This function is used to filter the properties to be shown
 		   (ie not show "caption" if the widget isn't toplevel).
 		   \return true if the property should be shown. False otherwise.*/
-		bool isPropertyVisible(const QCString &property, bool isTopLevel, const QCString &classname=QCString());
+		bool isPropertyVisible(const QCString &property, bool isTopLevel, 
+			const QCString &classname=QCString());
 
 		// Following functions are used to create special types of properties, different
 		// from Q_PROPERTY
@@ -163,7 +162,7 @@ class KFORMEDITOR_EXPORT WidgetPropertySet : public QObject
 
 		// Some i18n functions
 		//! Adds translations for general properties, by adding items in d->propDesc
-		void  initPropertiesDescription();
+		void initPropertiesDescription();
 
 		/*! \return The i18n'ed name of the property whose name is \a name, that will be
 		displayed in PropertyEditor. */

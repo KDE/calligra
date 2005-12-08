@@ -50,7 +50,7 @@ ObjectTreeViewItem::~ObjectTreeViewItem()
 {
 }
 
-const QString
+QString
 ObjectTreeViewItem::name() const
 {
 	if(m_item)
@@ -89,9 +89,12 @@ ObjectTreeViewItem::paintCell(QPainter *p, const QColorGroup & cg, int column, i
 		p->setFont(f);
 		if(depth() == 0) // for edit tab order dialog
 		{
-			QString iconName = ((ObjectTreeView*)listView())->pixmapForClass(m_item->widget()->className());
+			QString iconName 
+				= ((ObjectTreeView*)listView())->iconNameForClass(m_item->widget()->className());
 			p->drawPixmap(margin, (height() - IconSize(KIcon::Small))/2 , SmallIcon(iconName));
-			p->drawText(QRect(2*margin + IconSize(KIcon::Small),0,width, height()-1), Qt::AlignVCenter, m_item->name());
+			p->drawText(
+				QRect(2*margin + IconSize(KIcon::Small),0,width, height()-1), 
+				Qt::AlignVCenter, m_item->name());
 		}
 		else
 			p->drawText(QRect(margin,0,width, height()-1), Qt::AlignVCenter, m_item->name());
@@ -130,8 +133,11 @@ ObjectTreeViewItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int
 			p->fillRect(-150,0,150, item->height(), QBrush(cg.highlight()));
 		}
 
-		QString iconName = ((ObjectTreeView*)listView())->pixmapForClass(item->m_item->widget()->className());
-		p->drawPixmap((w - IconSize(KIcon::Small))/2, (item->height() - IconSize(KIcon::Small))/2 , SmallIcon(iconName));
+		QString iconName 
+			= ((ObjectTreeView*)listView())->iconNameForClass(item->m_item->widget()->className());
+		p->drawPixmap(
+			(w - IconSize(KIcon::Small))/2, (item->height() - IconSize(KIcon::Small))/2 , 
+			SmallIcon(iconName));
 
 		p->translate(0, item->totalHeight());
 		item = (ObjectTreeViewItem*)item->nextSibling();
@@ -159,10 +165,9 @@ ObjectTreeViewItem::setOpen( bool o )
 
 ObjectTreeView::ObjectTreeView(QWidget *parent, const char *name, bool tabStop)
  : KListView(parent, name)
+ , m_form(0)
 {
-	m_form = 0;
 	addColumn(i18n("Name"), 130);
-//	addColumn(i18n("Class"), 100);
 	addColumn(i18n("Widget's type", "Type"), 100);
 
 	installEventFilter(this);
@@ -193,9 +198,9 @@ ObjectTreeView::sizeHint() const
 }
 
 QString
-ObjectTreeView::pixmapForClass(const QCString &classname)
+ObjectTreeView::iconNameForClass(const QCString &classname)
 {
-	return m_form->library()->icon(classname);
+	return m_form->library()->iconName(classname);
 }
 
 void
@@ -317,13 +322,16 @@ ObjectTreeView::renameItem(const QCString &oldname, const QCString &newname)
 void
 ObjectTreeView::setForm(Form *form)
 {
-	//if(m_form == form)
-	//	return;
+	if (m_form)
+		disconnect(m_form, SIGNAL(destroying()), this, SLOT(slotBeforeFormDestroyed()));
 	m_form = form;
+	m_topItem = 0;
 	clear();
 
-	if(!form)
+	if(!m_form)
 		return;
+
+	connect(m_form, SIGNAL(destroying()), this, SLOT(slotBeforeFormDestroyed()));
 
 	// Creates the hidden top Item
 	m_topItem = new ObjectTreeViewItem(this);
@@ -337,6 +345,12 @@ ObjectTreeView::setForm(Form *form)
 		setSelectedWidget(form->selectedWidgets()->first());
 	else
 		setSelectedWidget(form->widget());
+}
+
+void
+ObjectTreeView::slotBeforeFormDestroyed()
+{
+	setForm(0);
 }
 
 ObjectTreeViewItem*

@@ -104,6 +104,7 @@ Form::Form(WidgetLibrary* library, const char *name, bool designMode)
 
 Form::~Form()
 {
+	emit destroying();
 	delete d;
 }
 

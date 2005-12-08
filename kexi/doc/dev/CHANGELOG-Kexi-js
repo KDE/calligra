@@ -12,6 +12,27 @@
 
 CCMAIL: kexi@kde.org
 
+2005-12-05..08
+Property Editor
+- repaint fixes when column width changes or when persistent selection is set
+- Property::captionForDisplaying() added: beter support for multiline property captions
+- method names improved in Factory
+- do not steal focus when selection is preserved
+- possible crashes fixed when property values are changed in an instant reaction 
+  on changing a property value in the editor; this is the case e.g. in Kexi Table Designer
+- API docs updated
+General
+- custom "Identifier" property type and editor added (allows only entering identifiers); 
+  used in Table/Form/Report Designers
+Table Designer
+- Field captions can be now entered by users instead of names. 
+  Field names are then automatically generated.
+- fixed problem with undo button for subtype combo box
+- support for BLOB (Object) type; "Image" is now the only subtype of this type
+- "unique" and "indexed" properties hidden for BLOB type
+Table View
+- clearing text removes value in combo box field for "enum" mode
+
 2005-12-02
 Main Window
 - usability: for IDEAl mode tabs are also visible when one window is opened

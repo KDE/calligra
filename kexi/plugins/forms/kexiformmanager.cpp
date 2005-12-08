@@ -45,10 +45,7 @@ KexiFormManager::KexiFormManager(KexiPart::Part *parent, const char* name)
 {
 //moved to KexiFormPart	lib()->setAdvancedPropertiesVisible(false);
 
-	// register custom editors and properties
-	KexiCustomPropertyFactory *factory = new KexiCustomPropertyFactory(Factory::self());
-	Factory::self()->registerCustomProperty(KexiCustomPropertyFactory::PixmapId, factory);
-	Factory::self()->registerEditor(KexiCustomPropertyFactory::PixmapId, factory);
+	KexiCustomPropertyFactory::init();
 }
 
 KexiFormManager::~KexiFormManager()

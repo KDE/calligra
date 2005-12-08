@@ -785,3 +785,15 @@ KexiDB TODO:
 TableView TODO (before 1.0)
 - fix repainting cells when moving down/up arrow at the window boundaries 
   (weird, win32 is not affected)
+
+Table Designer TODO
+- i18n("Lookup") == Odnosnik (Ks. eksperta, s. 53)
+
+
+Table Column Lookup XML Format:
+<rowsource>
+  empty
+  | <name>string</name>
+    <type>table|query</type>
+  |<sql>string</sql> #must be valid KEXISQL
+</rowsource>

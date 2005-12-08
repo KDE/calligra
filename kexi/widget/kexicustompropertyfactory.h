@@ -28,17 +28,18 @@ class KEXIEXTWIDGETS_EXPORT KexiCustomPropertyFactory : public KoProperty::Custo
 {
 	public:
 		enum PropertyType {
-			PixmapId = KoProperty::UserDefined+0
+			PixmapId = KoProperty::UserDefined+0, //!< Shared Kexi pixmap
+			Identifier = KoProperty::UserDefined+1 //!< string allowing nonempty identifiers
 		};
+
+		//! Called once to register all propert and editor types provided by this factory.
+		static void init();
 
 		KexiCustomPropertyFactory(QObject* parent);
 		virtual ~KexiCustomPropertyFactory();
 
 		virtual KoProperty::CustomProperty* createCustomProperty(KoProperty::Property *parent);
 		virtual KoProperty::Widget* createCustomWidget(KoProperty::Property *prop);
-
-	private:
-//		FormManager  *m_manager;
 };
 
 #endif

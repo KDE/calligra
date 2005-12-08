@@ -551,22 +551,22 @@ void KexiMainWindowImpl::initActions()
 		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
 	d->actions_for_view_modes.insert( Kexi::DataViewMode, d->action_view_data_mode );
 	d->action_view_data_mode->setExclusiveGroup("view_mode");
-	d->action_view_data_mode->setToolTip(i18n("Switch to Data View mode"));
-	d->action_view_data_mode->setWhatsThis(i18n("Switches to Data View mode."));
+	d->action_view_data_mode->setToolTip(i18n("Switch to Data View"));
+	d->action_view_data_mode->setWhatsThis(i18n("Switches to Data View."));
 
 	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", Key_F7,
 		this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
 	d->actions_for_view_modes.insert( Kexi::DesignViewMode, d->action_view_design_mode );
 	d->action_view_design_mode->setExclusiveGroup("view_mode");
-	d->action_view_design_mode->setToolTip(i18n("Switch to Design View mode"));
-	d->action_view_design_mode->setWhatsThis(i18n("Switches to Design View mode."));
+	d->action_view_design_mode->setToolTip(i18n("Switch to Design View"));
+	d->action_view_design_mode->setWhatsThis(i18n("Switches to Design View."));
 
 	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", Key_F8,
 		this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
 	d->actions_for_view_modes.insert( Kexi::TextViewMode, d->action_view_text_mode );
 	d->action_view_text_mode->setExclusiveGroup("view_mode");
-	d->action_view_text_mode->setToolTip(i18n("Switch to Text View mode"));
-	d->action_view_text_mode->setWhatsThis(i18n("Switches to Text View mode."));
+	d->action_view_text_mode->setToolTip(i18n("Switch to Text View"));
+	d->action_view_text_mode->setWhatsThis(i18n("Switches to Text View."));
 
 	d->action_view_nav = new KAction(i18n("Project Navigator"), "", ALT + Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
@@ -2344,9 +2344,9 @@ bool KexiMainWindowImpl::switchToViewMode(int viewMode)
 		return false;
 	}
 	if (!d->curDialog->supportsViewMode( viewMode )) {
-		showErrorMessage(i18n("Selected view mode is not supported for \"%1\" object.")
+		showErrorMessage(i18n("Selected view is not supported for \"%1\" object.")
 			.arg(d->curDialog->partItem()->name()),
-		i18n("Selected view mode (%1) is not supported by this object type (%2)")
+		i18n("Selected view (%1) is not supported by this object type (%2)")
 			.arg(Kexi::nameForViewMode(viewMode))
 			.arg(d->curDialog->part()->instanceCaption()) );
 		d->toggleLastCheckedMode();

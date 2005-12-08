@@ -357,7 +357,7 @@ bool KexiComboBoxTableEdit::valueChanged()
 	else {
 		//use 'enum hints' model
 		const int row = d->popup ? d->popup->tableView()->currentRow() : -1;
-		if (row<0)
+		if (row<0 && !d->userEnteredTextChanged/*true if text box is cleared*/)
 			return false;
 	}
 

@@ -27,7 +27,7 @@ namespace KFormDesigner {
 class ObjectTreeItem;
 class Form;
 
-//! An item in ObjectTreeView associated to an ObjectTreeItem.
+//! @short An item in ObjectTreeView associated with an ObjectTreeItem.
 class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 {
 	public:
@@ -36,7 +36,7 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 		virtual ~ObjectTreeViewItem();
 
 		//! \return the item name, ie the ObjectTreeItem name
-		const QString name() const;
+		QString name() const;
 
 		//! \return the ObjectTreeItem associated to this item.
 		ObjectTreeItem* objectTree() const { return m_item; }
@@ -59,9 +59,9 @@ class KFORMEDITOR_EXPORT ObjectTreeViewItem : public KListViewItem
 	friend class ObjectTreeView;
 };
 
-//! A graphical view of the ObjectTree of a Form.
-/*! This is a KListView which represents an item for each widget in the form. The actually selected widget is written bold
-    and selected. Clicking on a list item selects the corresponding widget in the Form.
+/*! @short A graphical view of Form's ObjectTree.
+ This is a KListView which represents an item for each widget in the form. The actually selected widget is written bold
+ and selected. Clicking on a list item selects the corresponding widget in the Form.
  */
 class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 {
@@ -78,12 +78,12 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 		 */
 		void setForm(Form *form);
 
-		//! Return the pixmap for a given class, to be shown next to the widget name.
-		QString pixmapForClass(const QCString &classname);
+		//! \return the pixmap name for a given class, to be shown next to the widget name.
+		QString iconNameForClass(const QCString &classname);
 
 	public slots:
 		/*! Sets the widget \a w as selected item, so it will be written bold. It is added to current selection if \a add is true. */
-		void  setSelectedWidget(QWidget *w, bool add=false);
+		void setSelectedWidget(QWidget *w, bool add=false);
 
 		/*! Adds the ObjectTreeItem \a item in the list, with the appropriate parent. */
 		void addItem(ObjectTreeItem *item);
@@ -102,6 +102,9 @@ class KFORMEDITOR_EXPORT ObjectTreeView : public KListView
 
 		/*! The selected list item has changed, so we emit a signal to update the Form. */
 		void slotSelectionChanged();
+
+		/*! Called before Form object is destroyed. */
+		void slotBeforeFormDestroyed();
 
 	protected:
 		//! Internal function to fill the list.

@@ -19,9 +19,10 @@
 
 #include "kexicustompropertyfactory_p.h"
 
+#include <qlineedit.h>
 #include <kdebug.h>
-
 #include <koproperty/property.h>
+#include <kexiutils/identifier.h>
 
 using namespace KoProperty;
 
@@ -73,6 +74,35 @@ void KexiImagePropertyEdit::drawViewer(QPainter *p, const QColorGroup &cg, const
 {
 	KexiBLOBBuffer::Handle h( KexiBLOBBuffer::self()->objectForId(value.toInt()) );
 	PixmapEdit::drawViewer(p, cg, r, h.pixmap());
+}
+
+//----------------------------------------------------------------
+
+KexiIdentifierPropertyEdit::KexiIdentifierPropertyEdit(
+	Property *property, QWidget *parent, const char *name)
+ : StringEdit(property, parent, name)
+{
+	m_edit->setValidator( 
+		new KexiUtils::IdentifierValidator(m_edit, "KexiIdentifierPropertyEdit Validator") );
+}
+
+KexiIdentifierPropertyEdit::~KexiIdentifierPropertyEdit()
+{
+}
+
+void KexiIdentifierPropertyEdit::setValue(const QVariant &value, bool emitChange)
+{
+	QString string(value.toString());
+	if (string.isEmpty()) {
+		kdWarning() << "KexiIdentifierPropertyEdit::setValue(): "
+			"Value cannot be empty. This call has no effect." << endl;
+		return;
+	}
+	QString identifier( KexiUtils::string2Identifier(string) );
+	if (identifier!=string)
+		kdDebug() << QString("KexiIdentifierPropertyEdit::setValue(): "
+			"String \"%1\" converted to identifier \"%2\".").arg(string).arg(identifier) << endl;
+	StringEdit::setValue( identifier, emitChange );
 }
 
 #include "kexicustompropertyfactory_p.moc"

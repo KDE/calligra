@@ -114,7 +114,7 @@ void KexiFieldComboBox::setTableOrQuery(const QCString& name, bool table)
 	if (!tableOrQuery.table() && !tableOrQuery.query())
 		return;
 
-	bool hasPKeys = true; //t->hasPrimaryKeys();
+//	bool hasPKeys = true; //t->hasPrimaryKeys();
 	KexiDB::QueryColumnInfo::Vector columns = tableOrQuery.columns();
 	const int count = columns.count();
 	for(int i=0; i < count; i++)

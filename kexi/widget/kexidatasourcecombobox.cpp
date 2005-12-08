@@ -33,6 +33,10 @@
 
 #include <kexidb/connection.h>
 
+#ifdef KEXI_SHOW_UNIMPLEMENTED
+#define ADD_DEFINEQUERY_ROW
+#endif
+
 //! @internal
 class KexiDataSourceComboBox::Private
 {
@@ -41,11 +45,20 @@ class KexiDataSourceComboBox::Private
 		 : tablesCount(0)
 		{
 		}
-		uint firstQueryIndex() const { return tablesCount+2; }
+		int firstTableIndex() const {
+			int index = 1; //skip empty row
+#ifdef ADD_DEFINEQUERY_ROW
+			index++; /*skip 'define query' row*/
+#endif
+			return index;
+		}
+		int firstQueryIndex() const {
+			return firstTableIndex() + tablesCount;
+		}
 
 		QGuardedPtr<KexiProject> prj;
 		QPixmap tableIcon, queryIcon;
-		uint tablesCount;
+		int tablesCount;
 };
 
 //------------------------
@@ -101,9 +114,11 @@ void KexiDataSourceComboBox::setProject(KexiProject *prj)
 
 	//special item: empty
 	insertItem("");
-
+#ifdef ADD_DEFINEQUERY_ROW
 	//special item: define query
 	insertItem(i18n("Define Query..."));
+#endif
+
 	KCompletion *comp = completionObject();
 
 	//tables
@@ -161,7 +176,10 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
 	QString name(item.name());
 	//insert a new item, maintaining sort order and splitting to tables and queries
 	if (item.mimeType()=="kexi/table") {
-		uint i = 2; /*skip empty and 'define query' row*/
+		int i = 1; /*skip empty row*/
+#ifdef ADD_DEFINEQUERY_ROW
+		i++; /*skip 'define query' row*/
+#endif
 		for (; i < d->firstQueryIndex() && name>=text(i); i++)
 			;
 		insertItem(d->tableIcon, name, i);
@@ -179,9 +197,12 @@ void KexiDataSourceComboBox::slotNewItemStored(KexiPart::Item& item)
 
 int KexiDataSourceComboBox::findItem(const QCString& mimeType, const QCString& name)
 {
-	uint i, end;
+	int i, end;
 	if (mimeType=="kexi/table") {
-		i = 1; //skip 'define query'
+		i = 0;
+#ifdef ADD_DEFINEQUERY_ROW
+		i++; //skip 'define query'
+#endif
 		end = d->firstQueryIndex();
 	}
 	else if (mimeType=="kexi/query") {
@@ -276,16 +297,16 @@ void KexiDataSourceComboBox::slotItemRenamed(const KexiPart::Item& item, const Q
 
 void KexiDataSourceComboBox::slotActivated( int index )
 {
-	if (index>=2 && index<count())
+	if (index >= d->firstTableIndex() && index < count())
 		emit dataSourceSelected();
 }
 
 QCString KexiDataSourceComboBox::selectedMimeType() const
 {
 	const int index = currentItem();
-	if (index>=2 && index<(int)d->firstQueryIndex())
+	if (index >= d->firstTableIndex() && index < (int)d->firstQueryIndex())
 		return "kexi/table";
-	else if (index>=(int)d->firstQueryIndex() && index<count())
+	else if (index >= (int)d->firstQueryIndex() && index < count())
 		return "kexi/query";
 	return 0;
 }
@@ -293,7 +314,7 @@ QCString KexiDataSourceComboBox::selectedMimeType() const
 QCString KexiDataSourceComboBox::selectedName() const
 {
 	const int index = currentItem();
-	if (index>=2 && index<count())
+	if (index >= d->firstTableIndex() && index < count())
 		return text(index).latin1();
 	return 0;
 }

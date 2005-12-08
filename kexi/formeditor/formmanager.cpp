@@ -90,15 +90,12 @@ class PropertyFactory : public KoProperty::CustomPropertyFactory
 		}
 		virtual ~PropertyFactory() {}
 
-		CustomProperty* createCustomProperty(Property *) { return 0;}
+		KoProperty::CustomProperty* createCustomProperty(KoProperty::Property *) { return 0;}
 
-		Widget* createCustomWidget(Property *prop)
+		KoProperty::Widget* createCustomWidget(KoProperty::Property *prop)
 		{
 			return new KFDPixmapEdit(prop);
 		}
-
-	private:
-//		FormManager  *m_manager;
 };
 
 }
@@ -147,7 +144,8 @@ FormManager::FormManager(QObject *parent, int options, const char *name)
 		this, SLOT(slotConnectionCreated(KFormDesigner::Form*, KFormDesigner::Connection&)));
 
 	// register kfd custom editors
-	Factory::self()->registerEditor(KoProperty::Pixmap, new PropertyFactory(Factory::self()));
+	KoProperty::FactoryManager::self()->registerFactoryForEditor(KoProperty::Pixmap, 
+		new PropertyFactory(KoProperty::FactoryManager::self()));
 }
 
 FormManager::~FormManager()
@@ -856,7 +854,8 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		if(w == container->form()->widget())
 			m_popup->insertTitle(SmallIcon("form"), i18n("Form: ") + w->name());
 		else
-			m_popup->insertTitle(SmallIcon(container->form()->library()->icon(w->className())), n + ": " + w->name() );
+			m_popup->insertTitle( SmallIcon(
+				container->form()->library()->iconName(w->className())), n + ": " + w->name() );
 	}
 	else
 		m_popup->insertTitle(SmallIcon("multiple_obj"), i18n("Multiple Widgets")
@@ -904,7 +903,8 @@ FormManager::createContextMenu(QWidget *w, Container *container, bool popupAtCur
 		// add all the widgets that can have focus
 		for(ObjectTreeListIterator it( container->form()->tabStopsIterator() ); it.current(); ++it)
 		{
-			int index = sub->insertItem( SmallIcon(container->form()->library()->icon(it.current()->className().latin1())),
+			int index = sub->insertItem( 
+				SmallIcon(container->form()->library()->iconName(it.current()->className().latin1())),
 				it.current()->name());
 			if(it.current()->widget() == buddy)
 				sub->setItemChecked(index, true);

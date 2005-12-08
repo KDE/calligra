@@ -108,10 +108,10 @@ class KFORMEDITOR_EXPORT WidgetLibrary : public QObject
 		QString textForWidgetName(const QCString &name, const QCString &className);
 
 		/*! Checks if the \a classname is an alternate classname,
-		 and returns the good classname.
-		 If \a classname is not alternate, it is returned. */
-		QCString checkAlternateName(const QCString &classname);
-		QString icon(const QCString &classname);
+		 and returns the good classname. 
+		 If \a classname is not alternate, \a classname is returned. */
+		QCString classNameForAlternate(const QCString &classname);
+		QString iconName(const QCString &classname);
 		QString includeFileName(const QCString &classname);
 		QString savingName(const QCString &classname);
 

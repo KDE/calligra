@@ -50,6 +50,37 @@ class KexiAlterTableDialog : public KexiDataTable
 //		virtual QSize minimumSizeHint() const;
 //		virtual QSize sizeHint() const;
 
+	protected slots:
+		/*! Equivalent to updateActions(false). Called on row insert/delete
+		 in a KexiDataAwarePropertySet. */
+		void updateActions();
+
+//		void slotCellSelected(int col, int row);
+		virtual void slotUpdateRowActions(int row);
+
+		//! Called before cell change in tableview.
+		void slotBeforeCellChanged(KexiTableItem *item, int colnum,
+			QVariant& newValue, KexiDB::ResultInfo* result);
+
+		//! Called on row change in a tableview.
+		void slotRowUpdated(KexiTableItem *item);
+
+		//! Called before row inserting in tableview.
+		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result, bool repaint);
+
+		/*! Called after any property has been changed in the current property set,
+		 to perform some actions (like updating other dependent properties) */
+		void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
+
+		/*! Toggles primary key for currently selected field.
+		 Does nothing for empty row. */
+		void slotTogglePrimaryKey();
+
+/*		//! Called before row updating in tableview.
+		void slotAboutToUpdateRow(KexiTableItem* item,
+			KexiDB::RowEditBuffer* buffer, KexiDB::ResultInfo* result);
+*/
+//		void slotEmptyRowInserted(KexiTableItem*, uint index);
 
 	protected:
 		virtual void updateActions(bool activated);
@@ -87,40 +118,9 @@ class KexiAlterTableDialog : public KexiDataTable
 		 and deselects it from previous pkey's row. */
 		void setPrimaryKey(KoProperty::Set &propertySet, bool set);
 
-		//! helper
-		KexiTableView *m_view;
-
-	protected slots:
-		/*! Equivalent to updateActions(false). Called on row insert/delete
-		 in a KexiDataAwarePropertySet. */
-		void updateActions();
-
-//		void slotCellSelected(int col, int row);
-		virtual void slotUpdateRowActions(int row);
-
-		//! Called before cell change in tableview.
-		void slotBeforeCellChanged(KexiTableItem *item, int colnum,
-			QVariant& newValue, KexiDB::ResultInfo* result);
-
-		//! Called on row change in a tableview.
-		void slotRowUpdated(KexiTableItem *item);
-
-		//! Called before row inserting in tableview.
-		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result, bool repaint);
-
-		/*! Called after any property has been changed in the current property set,
-		 to perform some actions (like updating other dependent properties) */
-		void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
-
-		/*! Toggles primary key for currently selected field.
-		 Does nothing for empty row. */
-		void slotTogglePrimaryKey();
-
-/*		//! Called before row updating in tableview.
-		void slotAboutToUpdateRow(KexiTableItem* item,
-			KexiDB::RowEditBuffer* buffer, KexiDB::ResultInfo* result);
-*/
-//		void slotEmptyRowInserted(KexiTableItem*, uint index);
+		//! Gets subtype strings and names for type \a fieldType.
+		void getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup, 
+			QStringList& stringsList, QStringList& namesList);
 
 	private:
 		KexiAlterTableDialogPrivate *d;
