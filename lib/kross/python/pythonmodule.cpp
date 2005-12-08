@@ -82,15 +82,15 @@ Py::Object PythonModule::import(const Py::Tuple& args)
     if(args.size() > 0) {
         QString modname = args[0].as_string().c_str();
         if(modname.startsWith("kross")) {
-            kdDebug() << QString("PythonModule::import() module=%1").arg(modname) << endl;
+            kdDebug() << QString("Kross::Python::PythonModule::import() module=%1").arg(modname) << endl;
 
             if( modname.find( QRegExp("[^a-zA-Z0-9\\_\\-]") ) >= 0 ) {
                 kdWarning() << QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) << endl;
             }
             else {
-                Kross::Api::Module* module = Kross::Api::Manager::scriptManager()->loadModule(modname);
+                Kross::Api::Module::Ptr module = Kross::Api::Manager::scriptManager()->loadModule(modname);
                 if(module)
-                    return PythonExtension::toPyObject(module);
+                    return PythonExtension::toPyObject( Kross::Api::Object::Ptr(module) );
                 kdWarning() << QString("Loading of Kross module '%1' failed.").arg(modname) << endl;
             }
 

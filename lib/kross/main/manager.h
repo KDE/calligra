@@ -127,7 +127,7 @@ namespace Kross { namespace Api {
              * @return true if the module was added successfully else
              *         false.
              */
-            bool addModule(Module* module);
+            bool addModule(Module::Ptr module);
 
             /**
              * Load an external module and add it as child to
@@ -139,7 +139,7 @@ namespace Kross { namespace Api {
              * \return The loaded \a Object or NULL if loading
              *        failed.
              */
-            Module* loadModule(const QString& modulename);
+            Module::Ptr loadModule(const QString& modulename);
 
         private:
             /// Private d-pointer class.

@@ -123,8 +123,10 @@ InterpreterInfo* Manager::getInterpreterInfo(const QString& interpretername)
 
 ScriptContainer::Ptr Manager::getScriptContainer(const QString& scriptname)
 {
-    if(hadException())
+    if(hadException()) {
+        kdDebug() << QString("Kross::Api::Manager::getScriptContainer(%1)").arg(scriptname) << endl;
         return 0;
+    }
 
     //TODO at the moment we don't share ScriptContainer instances.
 
@@ -162,18 +164,18 @@ const QStringList Manager::getInterpreters()
     return  list;
 }
 
-bool Manager::addModule(Module* module)
+bool Manager::addModule(Module::Ptr module)
 {
     QString name = module->getName();
-    if( d->modules.contains(name) )
-        return false;
-    d->modules.replace(name, module);
+    //if( d->modules.contains(name) ) return false;
+//d->modules.replace(name, module);
     return true;
 }
 
-Module* Manager::loadModule(const QString& modulename)
+Module::Ptr Manager::loadModule(const QString& modulename)
 {
-    Module* module = 0;
+    Module::Ptr module = 0;
+
     if(d->modules.contains(modulename)) {
         module = d->modules[modulename];
         if(module)
@@ -206,8 +208,10 @@ Module* Manager::loadModule(const QString& modulename)
         return 0;
     }
 
-    //kdDebug() << "Kross::Api::Manager::loadModule " << module->toString() << endl;
-    d->modules.replace(modulename, module);
+    // Don't remember module cause we like to have freeing it handled by the caller.
+    //d->modules.replace(modulename, module);
+
+    //kdDebug() << QString("Kross::Api::Manager::loadModule modulename='%1' module='%2'").arg(modulename).arg(module->toString()) << endl;
     return module;
 }
 

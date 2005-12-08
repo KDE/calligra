@@ -93,7 +93,9 @@ void PythonSecurity::initRestrictedPython()
         kdDebug()<<"!!!!!!!!!!!!!! PythonSecurity::PythonSecurity SUCCESS !!!!!!!!!!!!!!!!!"<<endl;
     }
     catch(Py::Exception& e) {
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to initialize PythonSecurity module: %1").arg(Py::value(e).as_string().c_str())) );
+        QString err = Py::value(e).as_string().c_str();
+        e.clear();
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to initialize PythonSecurity module: %1").arg(err) ) );
     }
 }
 
@@ -167,9 +169,10 @@ kdDebug()<<"PythonSecurity::compile_restricted 6"<<endl;
 
         return pycode;
     }
-    catch(Py::Exception& e) {
-        Py::Object errobj = Py::value(e);
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Function '%1' failed with python exception: %2").arg("compile_restricted").arg(errobj.as_string().c_str())) );
+    catch(Py::Exception& e) { 
+        QString err = Py::value(e).as_string().c_str();
+        e.clear();
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Function '%1' failed with python exception: %2").arg("compile_restricted").arg(err) ) );
     }
 }
 

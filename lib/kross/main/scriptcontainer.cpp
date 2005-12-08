@@ -74,7 +74,7 @@ ScriptContainer::ScriptContainer(const QString& name)
     : MainModule(name)
     , d( new ScriptContainerPrivate() ) // initialize d-pointer class
 {
-    kdDebug() << QString("ScriptContainer::ScriptContainer() name='%1'").arg(name) << endl;
+    kdDebug() << QString("ScriptContainer::ScriptContainer() Ctor name='%1'").arg(name) << endl;
 
     d->m_script = 0;
     d->m_name = name;
@@ -82,6 +82,8 @@ ScriptContainer::ScriptContainer(const QString& name)
 
 ScriptContainer::~ScriptContainer()
 {
+    kdDebug() << QString("ScriptContainer::~ScriptContainer() Dtor name='%1'").arg(d->m_name) << endl;
+
     finalize();
     delete d;
 }
