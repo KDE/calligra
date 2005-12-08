@@ -49,6 +49,15 @@ namespace KexiDB {
 /** This interface is implemented by KexiTableView and KexiFormView 
  and used by KexiDataAwareView. If yu're implementing this interface, 
  add KEXI_DATAAWAREOBJECTINTERFACE convenience macro just after Q_OBJECT.
+
+ You should add following code to your destructor so data is deleted:
+ \code
+ 	if (m_owner)
+		delete m_data;
+	m_data = 0;
+ \endcode
+ This is not performed in KexiDataAwareObjectInterface because you may need 
+ to access m_data in your desctructor.
 */
 class KEXIDATATABLE_EXPORT KexiDataAwareObjectInterface
 {

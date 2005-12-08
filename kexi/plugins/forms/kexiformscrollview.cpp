@@ -57,6 +57,9 @@ KexiFormScrollView::KexiFormScrollView(QWidget *parent, bool preview)
 
 KexiFormScrollView::~KexiFormScrollView()
 {
+	if (m_owner)
+		delete m_data;
+	m_data = 0;
 }
 
 void

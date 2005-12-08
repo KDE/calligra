@@ -12,6 +12,10 @@
 
 CCMAIL: kexi@kde.org
 
+2005-12-09
+Forms
+- memory for data is now properly freed before closing a form
+
 2005-12-05..08
 Property Editor
 - repaint fixes when column width changes or when persistent selection is set
