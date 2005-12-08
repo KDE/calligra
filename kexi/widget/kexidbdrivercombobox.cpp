@@ -34,7 +34,8 @@ KexiDBDriverComboBox::KexiDBDriverComboBox(const KexiDB::Driver::InfoMap& driver
 		insertItem( SmallIcon("gear"), it.data().caption );
 		m_driversMap.insert(it.data().caption, it.data().name.lower());
 	}
-	listBox()->sort();
+	if (listBox())
+		listBox()->sort();
 
 	// Build the names list after sorting
 	for (int i=0; i<count(); i++)
