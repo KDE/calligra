@@ -82,11 +82,11 @@
                                 <number>10</number>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string>This settings determine how much information is lost during compression</string>
+                                <string>These settings determine how much information is lost during compression</string>
                             </property>
                             <property name="whatsThis" stdset="0">
                                 <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+&lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
                             </property>
                         </widget>
                         <widget class="QLayoutWidget">
@@ -141,11 +141,11 @@
                 <string>Alt+O</string>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Use progressive when publishing on the internet</string>
+                <string>Use progressive when publishing on the Internet</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>&lt;p&gt;Interlacing is useful if you intend to publish your image on internet.&lt;br&gt;
-Enabling interlacing will make the image be displayed by the browser even while downloading.&lt;/p&gt;</string>
+                <string>&lt;p&gt;Interlacing is useful if you intend to publish your image on the Internet.&lt;br&gt;
+Enabling interlacing will cause the image to be displayed by the browser even while downloading.&lt;/p&gt;</string>
             </property>
         </widget>
     </vbox>
