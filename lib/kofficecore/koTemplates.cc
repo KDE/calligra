@@ -222,7 +222,7 @@ void KoTemplateTree::readGroups() {
             QDir templateDir(*it+*tdirIt);
             QString name=*tdirIt;
             QString defaultTab;
-            int sortingWeight;
+            int sortingWeight = 1000;
             if(templateDir.exists(".directory")) {
                 KSimpleConfig config(templateDir.absPath()+"/.directory", true);
                 config.setDesktopGroup();
