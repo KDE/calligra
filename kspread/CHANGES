@@ -11,6 +11,7 @@ since 1.4.2
 - Implement move sheets
 - Fix date (and time) increment for autofill (#117252)
 - Always allow date input in ISO 8601 format, regardless of local settings (#50192)
+- Fix cell protection (#116444)
 
 Some important developer visible changes:
 - Decouple KSpread::Cell and KSpread::Format (association instead of inheritance)
