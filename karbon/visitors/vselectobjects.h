@@ -29,7 +29,7 @@
 #include "vimage.h"
 #include "vvisitor.h"
 
-/***
+/**
  * This visitor visits a selection and selects objects that are contained
  * in a paramater selection rectangle. For composites it makes a more accurate test, if the
  * selection rectangle intersects with any part of the composite, it is selected.
@@ -42,7 +42,10 @@ public:
 		: m_selection( selection ), m_select( select ) {}
 
 	VSelectObjects( VObjectList& selection, const KoRect& rect, bool select = true )
-		: m_selection( selection ), m_select( select ), m_rect( rect ) {}
+		: m_selection( selection ), m_select( select ), m_rect( rect ), m_rectMode( true ) { }
+
+	VSelectObjects( VObjectList& selection, const KoPoint& point, bool select = true )
+		: m_selection( selection ), m_select( select ), m_point( point ), m_rectMode( false ) {}
 
 	virtual void visitVGroup( VGroup& group )
 		{ visitVObject( group ); }
@@ -61,6 +64,8 @@ private:
 	bool m_select;
 
 	KoRect m_rect;
+	KoPoint m_point;
+	bool m_rectMode;
 };
 
 #endif

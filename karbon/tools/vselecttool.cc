@@ -37,6 +37,7 @@
 #include "vselecttool.h"
 #include <commands/vtransformcmd.h>
 #include <visitors/vselectiondesc.h>
+#include <visitors/vselectobjects.h>
 #include <widgets/vcanvas.h>
 
 VSelectOptionsWidget::VSelectOptionsWidget( KarbonPart *part )
@@ -177,11 +178,10 @@ VSelectTool::mouseButtonPress()
 	m_activeNode = view()->part()->document().selection()->handleNode( first() );
 	KoRect rect = view()->part()->document().selection()->boundingBox();
 
-	if( ! ctrlPressed() ) 
-		if( rect.contains( m_current ) && m_state == normal )
-			m_state = moving;
-		else if( m_activeNode != node_none ) 
-			m_state = scaling;
+	if( rect.contains( m_current ) && m_state == normal )
+		m_state = moving;
+	else if( m_activeNode != node_none ) 
+		m_state = scaling;
 
 	recalc();
 
@@ -224,68 +224,83 @@ VSelectTool::mouseDrag()
 void
 VSelectTool::rightMouseButtonRelease()
 {
+	m_state = normal;
+	m_add = true;
+
 	if( ctrlPressed() )
 	{
-		if( m_state == normal )
-		{
-			KoPoint fp = first();
-			KoPoint lp = last();
-	
-			if( (fabs( lp.x() - fp.x() ) + fabs( lp.y() - fp.y() ) ) < 3.0 )
-			{
-				// AK - should take the middle point here
-				fp = lp - KoPoint( 8.0, 8.0 );
-				lp = lp + KoPoint( 8.0, 8.0 );
-			}
-	
-			KoRect selRect = KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize();
-			
-			// unselect all object intersecting the selection rectangle
-			view()->part()->document().selection()->take( selRect.normalize() );
-			view()->part()->repaintAllViews( selRect );
-			view()->selectionChanged();
-		}
-	
+		// unselect the topmost object under the mouse cursor
+		VObjectList newSelection;
+		VSelectObjects selector( newSelection, first() );
+		if( selector.visit( view()->part()->document() ) )
+			view()->part()->document().selection()->take( *newSelection.last() );
+
+		view()->part()->repaintAllViews( view()->part()->document().selection()->boundingBox() );
+		view()->selectionChanged();
+
 		updateStatusBar();
 	}
 	else if( part()->document().selection()->objects().count() > 0 )
 	{
 		view()->showSelectionPopupMenu( QCursor::pos() );
 	}
-
-	m_state = normal;
-	// switch back to add-to-selection-mode
-	m_add = true;
 }
 
 void
 VSelectTool::mouseButtonRelease()
 {
-	if( m_state == normal )
+	m_state = normal;
+	m_add = true;
+
+	// selection of next underlying object
+	if( shiftPressed() ) 
 	{
-		KoPoint fp = first();
-		KoPoint lp = last();
+		VObjectList newSelection;
+		VObjectList oldSelection = view()->part()->document().selection()->objects();
 
-		if( (fabs( lp.x() - fp.x() ) + fabs( lp.y() - fp.y() ) ) < 3.0 )
-		{
-			// AK - should take the middle point here
-			fp = lp - KoPoint( 8.0, 8.0 );
-			lp = lp + KoPoint( 8.0, 8.0 );
-		}
-
-		KoRect selRect = KoRect( fp.x(), fp.y(), lp.x() - fp.x(), lp.y() - fp.y() ).normalize();
-
+		// clear selection if not in multi-slection-mode
 		if( ! ctrlPressed() )
 			view()->part()->document().selection()->clear();
-		view()->part()->document().selection()->append( selRect );
-		view()->part()->repaintAllViews( selRect );
-		view()->selectionChanged();
+
+		// get a list of all object under the mouse cursor
+		VSelectObjects selector( newSelection, first() );
+		if( selector.visit( view()->part()->document() ) )
+		{
+			// determine the last selected object of the object stack
+			VObject *lastMatched = 0L;
+			VObjectListIterator it( newSelection );
+			for( ; it.current(); ++it )
+			{
+				if( oldSelection.contains( it.current() ) )
+					lastMatched = it.current();
+			}
+			
+			// select the next underlying object or the first if:
+			// - none is selected
+			// - the stack's bottom object was the last selected object
+			if( lastMatched && lastMatched != newSelection.first() )
+				view()->part()->document().selection()->append( newSelection.at( newSelection.find( lastMatched )-1 ) );
+			else
+				view()->part()->document().selection()->append( newSelection.last() );
+		}
 	}
-	else
-		m_state = normal;
+	else	
+	{
+		// clear selection if not in multi-slection-mode
+		if( ! ctrlPressed() )
+			view()->part()->document().selection()->clear();
+
+		// append the topmost object under the mouse cursor to the selection
+		VObjectList newSelection;
+		VSelectObjects selector( newSelection, first() );
+		if( selector.visit( view()->part()->document() ) )
+			view()->part()->document().selection()->append( newSelection.last() );
+	}
+
+	view()->part()->repaintAllViews( view()->part()->document().selection()->boundingBox() );
+	view()->selectionChanged();
 
 	updateStatusBar();
-	m_add = true;
 }
 
 void

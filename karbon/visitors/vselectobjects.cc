@@ -32,7 +32,7 @@ VSelectObjects::visitVPath( VPath& composite )
 		composite.state() < VObject::selected )
 		return;
 
-	if( m_rect.isEmpty() ) // in this mode everything is selected
+	if( m_rectMode && m_rect.isEmpty() ) // in this mode everything is selected
 	{
 		visitVObject( composite );
 		return;
@@ -40,69 +40,76 @@ VSelectObjects::visitVPath( VPath& composite )
 
 	bool selected = false;
 
-
-	// Check if composite is completely inside the selection rectangle.
-	// This test should be the first test since it's the less expensive one.
-	if( m_rect.contains( composite.boundingBox() ) )
+	if( m_rectMode )
 	{
-		selected = true;
-	}
-
-	// Check if any of the rectangle corners is inside the composite.
-	// This test should be done before the intersect test since it covers many
-	// intersection cases.
-	if( !selected )
-	{
-		if(
-			composite.pointIsInside( m_rect.topLeft() ) ||
-			composite.pointIsInside( m_rect.topRight() ) ||
-			composite.pointIsInside( m_rect.bottomRight() ) ||
-			composite.pointIsInside( m_rect.bottomLeft() ) )
+		// Check if composite is completely inside the selection rectangle.
+		// This test should be the first test since it's the less expensive one.
+		if( m_rect.contains( composite.boundingBox() ) )
 		{
 			selected = true;
 		}
-	}
-
-	// Check if selection rectangle intersects the composite.
-	if( !selected )
-	{
-		// Path for holding a helper segment.
-		VSubpath path( 0L );
-
-		path.moveTo( m_rect.topLeft() );
-		path.lineTo( m_rect.topRight() );
-
-		if( composite.intersects( *path.getLast() ) )
+	
+		// Check if any of the rectangle corners is inside the composite.
+		// This test should be done before the intersect test since it covers many
+		// intersection cases.
+		if( !selected )
 		{
-			selected = true;
+			if(
+				composite.pointIsInside( m_rect.topLeft() ) ||
+				composite.pointIsInside( m_rect.topRight() ) ||
+				composite.pointIsInside( m_rect.bottomRight() ) ||
+				composite.pointIsInside( m_rect.bottomLeft() ) )
+			{
+				selected = true;
+			}
 		}
-		else
+	
+		// Check if selection rectangle intersects the composite.
+		if( !selected )
 		{
-			path.getFirst()->setKnot( m_rect.bottomRight() );
-
+			// Path for holding a helper segment.
+			VSubpath path( 0L );
+	
+			path.moveTo( m_rect.topLeft() );
+			path.lineTo( m_rect.topRight() );
+	
 			if( composite.intersects( *path.getLast() ) )
 			{
 				selected = true;
 			}
 			else
 			{
-				path.getLast()->setKnot( m_rect.bottomLeft() );
-
+				path.getFirst()->setKnot( m_rect.bottomRight() );
+	
 				if( composite.intersects( *path.getLast() ) )
 				{
 					selected = true;
 				}
 				else
 				{
-					path.getFirst()->setKnot( m_rect.topLeft() );
-
+					path.getLast()->setKnot( m_rect.bottomLeft() );
+	
 					if( composite.intersects( *path.getLast() ) )
 					{
 						selected = true;
 					}
+					else
+					{
+						path.getFirst()->setKnot( m_rect.topLeft() );
+	
+						if( composite.intersects( *path.getLast() ) )
+						{
+							selected = true;
+						}
+					}
 				}
 			}
 		}
+	}
+	else
+	{
+		if( composite.pointIsInside( m_point ) )
+			selected = true;
 	}
 
 	if( selected )
@@ -131,21 +138,41 @@ VSelectObjects::visitVObject( VObject& object )
 		object.state() < VObject::selected )
 		return;
 
-	if( !m_rect.isEmpty() )
+	// selection by selection rectangle
+	if( m_rectMode )
 	{
-		if( m_select )
+		if( !m_rect.isEmpty() )
 		{
-			if( m_rect.intersects( object.boundingBox() ) )
+			if( m_select )
+			{
+				if( m_rect.intersects( object.boundingBox() ) )
+				{
+					object.setState( VObject::selected );
+					if( ! m_selection.containsRef( &object ) )
+						m_selection.append( &object );
+					setSuccess();
+				}
+			}
+			else
+			{
+				if( m_rect.intersects( object.boundingBox() ) )
+				{
+					object.setState( VObject::normal );
+					m_selection.remove( &object );
+					setSuccess();
+				}
+			}
+		}
+		else
+		{
+			if( m_select )
 			{
 				object.setState( VObject::selected );
 				if( ! m_selection.containsRef( &object ) )
 					m_selection.append( &object );
 				setSuccess();
 			}
-		}
-		else
-		{
-			if( m_rect.intersects( object.boundingBox() ) )
+			else
 			{
 				object.setState( VObject::normal );
 				m_selection.remove( &object );
@@ -153,22 +180,26 @@ VSelectObjects::visitVObject( VObject& object )
 			}
 		}
 	}
+	// selection by point
 	else
 	{
-		if( m_select )
+		if( object.boundingBox().contains( m_point ) )
 		{
-			object.setState( VObject::selected );
-			if( ! m_selection.containsRef( &object ) )
-				m_selection.append( &object );
-			setSuccess();
-		}
-		else
-		{
-			object.setState( VObject::normal );
-			m_selection.remove( &object );
+			if( m_select )
+			{
+				object.setState( VObject::selected );
+				if( ! m_selection.containsRef( &object ) )
+					m_selection.append( &object );
+			}
+			else
+			{
+				object.setState( VObject::normal );
+				m_selection.remove( &object );
+			}
 			setSuccess();
 		}
 	}
+
 }
 
 void
