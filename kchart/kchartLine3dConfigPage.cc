@@ -27,6 +27,7 @@
 #include <qlabel.h>
 #include <qcheckbox.h>
 #include <qbuttongroup.h>
+#include <qwhatsthis.h>
 
 #include "kchart_params.h"
 
@@ -52,9 +53,11 @@ KChartLine3dConfigPage::KChartLine3dConfigPage( KChartParams* params,
   QLabel *tmpLabel = new QLabel( i18n( "Line width:" ), this );
   grid1->addWidget(tmpLabel,2,0);
   lineWidth=new KIntNumInput(0, this, 10);
+  QWhatsThis::add(lineWidth, i18n("You can set here the line width for your chart. Default is 1."));
   grid1->addWidget(lineWidth,2,1);
 
   lineMarkers = new QCheckBox( i18n( "Line markers" ), this );
+  QWhatsThis::add(lineMarkers, i18n("Check this option if you want to add dots on your chart as markers."));
   grid1->addWidget(lineMarkers, 3, 0);
 
 #if 0

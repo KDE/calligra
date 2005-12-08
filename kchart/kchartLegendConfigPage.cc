@@ -56,6 +56,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   QGridLayout *grid2 = new QGridLayout( gb->layout(), 4, 2 );
 
   QLabel* lab = new QLabel( i18n("Title:"), gb );
+  QWhatsThis::add(lab, i18n("Write here the title of the legend, which is displayed at the top of the legend box."));
   grid2->addWidget( lab, 0, 0 );
 
   title = new QLineEdit( gb );
@@ -63,6 +64,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
 
   // 2. Block: Legend position
   gb = new QButtonGroup( 0, Qt::Vertical, i18n("Legend Position"), this );
+  QWhatsThis::add(gb, i18n("<qt>Choose the location of the legend on the chart by clicking a location button.\nUse the central button to <b>hide</b> the legend.</qt>"));
   gb->layout()->setSpacing(KDialog::spacingHint());
   gb->layout()->setMargin(KDialog::marginHint());
   gb->setExclusive( true );
@@ -86,6 +88,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
 
   // 3. Block: Font
   gb = new QButtonGroup( 0, Qt::Vertical, i18n("Font"), this );
+  QWhatsThis::add(gb, i18n("This Font box can be used to set different fonts for the legend title and the individual entries."));
   gb->layout()->setSpacing(KDialog::spacingHint());
   gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 0, 1 );
@@ -97,12 +100,14 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   grid4->addWidget( lab, 0 ,0 );
 
   titleLegendFontButton->setText( i18n("Select Font...") );
+  QWhatsThis::add(titleLegendFontButton, i18n("Click here to display the KDE font chooser dialog. You will be able to change the font family, style and size for the legend title."));
   grid4->addWidget( titleLegendFontButton, 1, 0 );
 
   lab = new QLabel( i18n("Legend text font:"), gb );
   grid4->addWidget( lab, 2, 0 );
   textLegendFontButton = new QPushButton( gb );
   textLegendFontButton->setText( i18n("Select Font...") );
+  QWhatsThis::add(textLegendFontButton, i18n("Click here to display the KDE font chooser dialog. You will be able to change the font family, style and size for the legend text."));
   grid4->addWidget( textLegendFontButton, 3, 0 );
 
   connect( titleLegendFontButton, SIGNAL(clicked()), 
@@ -112,6 +117,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
 
   // 4. Block: Text Colors
   gb = new QButtonGroup( 0, Qt::Vertical, i18n("Color"), this );
+  QWhatsThis::add(gb, i18n("This Color box can be used to set different colors for the legend title and text."));
   gb->layout()->setSpacing(KDialog::spacingHint());
   gb->layout()->setMargin(KDialog::marginHint());
   layout->addWidget( gb, 1, 1 );
@@ -122,6 +128,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   grid3->addWidget( lab, 0, 0 );
 
   legendTitleColor = new KColorButton( gb );
+  QWhatsThis::add(legendTitleColor, i18n("Click here to display the KDE Select Color dialog. You will be able to change the color for the legend title."));
   grid3->addWidget( legendTitleColor, 1, 0 );
 
 
@@ -129,6 +136,7 @@ KChartLegendConfigPage::KChartLegendConfigPage( KChartParams* params,
   grid3->addWidget( lab, 2, 0 );
 
   legendTextColor = new KColorButton( gb );
+  QWhatsThis::add(legendTextColor, i18n("Click here to display the KDE Select Color dialog. You will be able to change the color for the legend text."));
 
   grid3->addWidget( legendTextColor, 3, 0 );
 
