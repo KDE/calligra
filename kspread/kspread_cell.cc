@@ -140,7 +140,7 @@ public:
   Conditions  *conditions;
   Validity    *validity;
 
-  // Store the number of line when you multirow is used (default is 0)
+  // Store the number of line when multirow is used (default is 0)
   int nbLines;
 
 private:
@@ -1301,12 +1301,16 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
        && format()->multiRow( _col, _row ) )
   {
     // Copy of d->strOutText but without the newlines.
-    QString  o = d->strOutText.replace( QChar('\n'), " " );
+//     QString  o = d->strOutText.replace( QChar('\n'), " " );
+
+    // don't remove the existing LF, these are intended line wraps (whishlist #9881)
+    QString  o = d->strOutText;
 
     // Break the line at appropriate places, i.e. spaces, if
     // necessary.  This means to change the spaces where breaks occur
     // into newlines.
-    if ( o.find(' ') != -1 ) {
+    if ( o.find(' ') != -1 ) 
+    {
       d->strOutText = "";
 
       // Make sure that we have a space at the end.
@@ -1320,34 +1324,56 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
           - format()->rightBorderWidth( _col, _row ) );
 
       do {
-  breakpos = o.find( ' ', breakpos );
-  double lineWidth = format()->sheet()->doc()
-    ->unzoomItX( fm.width( d->strOutText.mid( start, (pos1 - start) )
-         + o.mid( pos1, breakpos - pos1 ) ) );
 
-  if ( lineWidth <= availableWidth ) {
-    // We have room for the rest of the line.  End it here.
-    d->strOutText += o.mid( pos1, breakpos - pos1 );
-    pos1 = breakpos;
-  }
-  else {
-    // Still not enough room.  Try to split further.
-    if ( o.at( pos1 ) == ' ' )
-      pos1++;
+        breakpos = o.find( ' ', breakpos );
+        int linefeed = o.find( '\n', pos1 );
 
-    if ( pos1 != 0 && breakpos != -1 ) {
-      d->strOutText += "\n" + o.mid( pos1, breakpos - pos1 );
-      lines++;
+//         kdDebug() << "start: " << start << "; breakpos: " << breakpos << "; pos1: " << pos1 << "; linefeed: " << linefeed << endl;
+
+        //don't miss LF as a position to calculate current lineWidth
+        int work_breakpos = breakpos;
+        if (pos1 < linefeed && linefeed < breakpos)
+          work_breakpos = linefeed;
+
+        double lineWidth = format()->sheet()->doc()
+            ->unzoomItX( fm.width( d->strOutText.mid( start, (pos1 - start) )
+                + o.mid( pos1, work_breakpos - pos1 ) ) );
+
+        //linefeed could be -1 when no linefeed is found!
+        if (breakpos > linefeed && linefeed > 0)
+        {
+//           kdDebug() << "applying linefeed to start;" << endl;
+          start = linefeed;
+          lines++;
+        }
+
+        if ( lineWidth <= availableWidth ) {
+            // We have room for the rest of the line.  End it here.
+            d->strOutText += o.mid( pos1, breakpos - pos1 );
+            pos1 = breakpos;
+        }
+        else {
+            // Still not enough room.  Try to split further.
+            if ( o.at( pos1 ) == ' ' )
+            pos1++;
+
+            if ( pos1 != 0 && breakpos != -1 ) {
+            d->strOutText += "\n" + o.mid( pos1, breakpos - pos1 );
+            lines++;
+            }
+            else
+            d->strOutText += o.mid( pos1, breakpos - pos1 );
+
+            start = pos1;
+            pos1 = breakpos;
+        }
+
+        breakpos++;
+      } while( o.find( ' ', breakpos ) != -1 );
     }
     else
-      d->strOutText += o.mid( pos1, breakpos - pos1 );
-
-    start = pos1;
-    pos1 = breakpos;
-  }
-
-  breakpos++;
-      } while( o.find( ' ', breakpos ) != -1 );
+    {
+      lines = o.contains('\n');
     }
 
     d->textHeight *= lines;
