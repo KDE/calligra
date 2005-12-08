@@ -583,16 +583,6 @@ protected:
     void printRTDebug( int info );
 #endif
 
-    /** 
-     * @brief Scroll the canvas by diff
-     *
-     * This causes a processing of all posted events before the scrolling
-     * happens.
-     *
-     * @param diff the distance the canvas should be scrolled
-     */
-    void scrollCanvas( const KoPoint & diff );
-
     KoRect getAlignBoundingRect() const;
 
 private:

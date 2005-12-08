@@ -3404,7 +3404,10 @@ void KPrCanvas::slotDoPageEffect()
 
 void KPrCanvas::slotAutoScroll(const QPoint &scrollDistance)
 {
-    scrollCanvas( scrollDistance );
+     //QPoint d = m_view->zoomHandler()->zoomPoint( scrollDistance );
+     QPoint d = scrollDistance;
+     m_view->getHScrollBar()->setValue( m_view->getHScrollBar()->value() + d.x() );
+     m_view->getVScrollBar()->setValue( m_view->getVScrollBar()->value() + d.y() );
 }
 
 
@@ -5223,22 +5226,6 @@ void KPrCanvas::scrollTopLeftPoint( const QPoint & pos )
 {
     m_view->getHScrollBar()->setValue( pos.x() );
     m_view->getVScrollBar()->setValue( pos.y() );
-}
-
-void KPrCanvas::scrollCanvas( const KoPoint & diff )
-{
-    QApplication::sendPostedEvents();
-    QRect pageRect = visibleRect();
-    pageRect.moveBy( diffx(), diffy() );
-    KoRect visiblePageRect = m_view->zoomHandler()->unzoomRect( pageRect );
-    KoRect objRect = objectRect( false );
-
-    if ( ! visiblePageRect.contains( objRect ) )
-    {
-        QPoint d = m_view->zoomHandler()->zoomPoint( diff );
-        m_view->getHScrollBar()->setValue( m_view->getHScrollBar()->value() + d.x() );
-        m_view->getVScrollBar()->setValue( m_view->getVScrollBar()->value() + d.y() );
-    }
 }
 
 void KPrCanvas::changePicture( const KURL & url, QWidget *window )
