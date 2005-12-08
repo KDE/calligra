@@ -24,11 +24,12 @@
 #include <qptrlist.h>
 #include <qstringlist.h>
 #include <qpixmap.h>
+#include <koffice_export.h>
 
 class KInstance;
 
 /** @internal */
-class KoTemplate {
+class KOFFICECORE_EXPORT KoTemplate {
 
 public:
     KoTemplate(const QString &name,
@@ -65,7 +66,7 @@ private:
 };
 
 
-class KoTemplateGroup {
+class KOFFICECORE_EXPORT KoTemplateGroup {
 
 public:
     KoTemplateGroup(const QString &name,

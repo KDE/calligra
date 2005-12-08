@@ -405,7 +405,7 @@ void KoTemplateCreateDia::slotAddGroup() {
     }
     QString dir=d->m_tree->instance()->dirs()->saveLocation(d->m_tree->templateType());
     dir+=name;
-    KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir, true);
+    KoTemplateGroup *newGroup=new KoTemplateGroup(name, dir, 0, true);
     d->m_tree->add(newGroup);
     QListViewItem *item=new QListViewItem(d->m_groups, name);
     d->m_groups->setCurrentItem(item);
