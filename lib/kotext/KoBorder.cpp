@@ -105,8 +105,10 @@ void KoBorder::loadFoBorder( const QString& border )
 {
     //string like "0.088cm solid #800000"
 
-    if (border.isEmpty() || border=="none" || border=="hidden") // in fact no border
+    if (border.isEmpty() || border=="none" || border=="hidden") { // in fact no border
+        setPenWidth( 0 );
         return;
+    }
 
     // ## isn't it faster to use QStringList::split than parse it 3 times?
     QString _width = border.section(' ', 0, 0);

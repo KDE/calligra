@@ -96,11 +96,8 @@ KoStyleManager::KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
     newTab->setWidget( new KoParagTabulatorsWidget( unit, -1, newTab ) );
     addTab( newTab );
 
-    QListBoxItem * item = m_stylesList->findItem (activeStyleName);
-    if ( item )
-        m_stylesList->setCurrentItem( m_stylesList->index(item) );
-    else
-        m_stylesList->setCurrentItem( 0 );
+    QListBoxItem * item = m_stylesList->findItem( activeStyleName );
+    m_stylesList->setCurrentItem( item ? m_stylesList->index(item) : 0 );
 
     noSignals=false;
     switchStyle();
