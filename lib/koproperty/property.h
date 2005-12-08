@@ -28,8 +28,8 @@
 template<class U> class QAsciiDict;
 template<class U> class QAsciiDictIterator;
 
-//! Namespace for a set of classes implementing generic properties framework.
-/*!
+/*! \brief Namespace for a set of classes implementing generic properties framework.
+
  Main classes of this framework:
   - Property, representing a single property with it's own type and value
   - Set, a set of properties
@@ -122,10 +122,11 @@ enum PropertyType {
 	UserDefined = 4000		 /**<plugin defined properties should start here*/
 };
 
-//! The base class representing a single property
-/*!  It can hold a property of any type supported by QVariant. You can also create you own property
-   types (see Using Custom Properties in Factory doc). As a consequence, do not subclass Property,
-   use \ref CustomProperty instead. \n
+/*! \brief The base class representing a single property
+
+  It can hold a property of any type supported by QVariant. You can also create you own property
+  types (see Using Custom Properties in Factory doc). As a consequence, do not subclass Property,
+  use \ref CustomProperty instead. \n
   Each property stores old value to allow undo. It has a name (a QCString), a caption (i18n'ed name
   shown in Editor) and a description (also i18n'ed). \n
   It also supports setting arbitrary number of options (of type option=value).
@@ -146,6 +147,13 @@ enum PropertyType {
 	Note that you need to use QVariant(bool, int) to create a boolean property value.
 	See QVariant docs for more details.
 
+	Sometimes, for longer property captions or these with more words, e.g. "Allow Zero Size",
+	it's usable to provide newline characters, e.g. "Allow Zero\nSize".
+	If caption argument of the constructors contains newline characters, 
+	caption() will return this text with substituted these characters with spaces.
+	In such cases, captionForDisplaying() is used to get the original caption text usable 
+	(with newline, if any) for displaying within a property editor.
+
 	\author Cedric Pasteur <cedric.pasteur@free.fr>
 	\author Alexander Dymo <cloudtemple@mskat.net>
 	\author Jaroslaw Staniek <js@iidea.pl>
@@ -153,12 +161,13 @@ enum PropertyType {
 class KOPROPERTY_EXPORT Property
 {
 	public:
+		//! A contant for null property
 		QT_STATIC_CONST Property null;
 
 		typedef QAsciiDict<Property> Dict;
 		typedef QAsciiDictIterator<Property> DictIterator;
 
-		/*! Data container for list type. */
+		/*! Data container for properties of list type. */
 		class KOPROPERTY_EXPORT ListData
 		{
 		public:
@@ -192,26 +201,28 @@ class KOPROPERTY_EXPORT Property
 		/*! Constructs a null property. */
 		Property();
 
-		/*! Constructs property of simple type. */
+		/*! Constructs property of simple type. 
+		 If \a caption contains newline characters, caption() will return \a caption with substituted 
+		 these with spaces. captionForDisplaying() is used to get original caption text usable 
+		 (with newline, if any) for displaying within a property editor. */
 		Property(const QCString &name, const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
-			int type = Auto);
+			int type = Auto, Property* parent = 0);
 
 		/*! Constructs property of \ref ValueFromList type. */
 		Property(const QCString &name, const QStringList &keys, const QStringList &strings, 
 			const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
-			int type = ValueFromList);
+			int type = ValueFromList, Property* parent = 0);
 
 		/*! Constructs property of \ref ValueFromList type.
 		 This is overload of the above ctor added for convenience. */
 		Property(const QCString &name, ListData* listData,
-//		Property(const QCString &name, const QMap<QString, QVariant> &v_valueList, 
 			const QVariant &value = QVariant(),
 			const QString &caption = QString::null, const QString &description = QString::null,
-			int type = ValueFromList);
+			int type = ValueFromList, Property* parent = 0);
 
-		/*! Constructs a copy of \a prop property. */
+		/*! Constructs a deep copy of \a prop property. */
 		Property(const Property &prop);
 
 		~Property();
@@ -225,7 +236,14 @@ class KOPROPERTY_EXPORT Property
 		/*! \return the caption of the property.*/
 		QString caption() const;
 
-		/*! Sets the name of the property.*/
+		/*! \return the caption text of the property for displaying. 
+		 It is similar to caption() but if the property caption contains newline characters, 
+		 these are not substituted with spaces. */
+		QString captionForDisplaying() const;
+
+		/*! Sets the name of the property. If the caption contains newline characters, 
+		 these are replaced by spaces. You can use captionForDisplaying() 
+		 to access the original caption text you passed here.*/
 		void setCaption(const QString &caption);
 
 		/*! \return the description of the property.*/
@@ -249,42 +267,42 @@ class KOPROPERTY_EXPORT Property
 		/*! Sets the value of the property.*/
 		void setValue(const QVariant &value, bool rememberOldValue = true, bool useCustomProperty=true);
 
+		/*! Resets the value of the property to the old value. 
+		 @see oldValue() */
 		void resetValue();
 
-//		const QMap<QString, QVariant>* valueList() const;
+		/*! \return the qstring-to-value correspondence list of the property. 
+		 used to create comboboxes-like property editors.*/
 		ListData* listData() const;
 
-		/*! Sets the kstring-to-value correspondence list of the property.
+		/*! Sets the qstring-to-value correspondence list of the property.
 		This is used to create comboboxes-like property editors.*/
 		void setListData(ListData* list);
-//		void setValueList(const QMap<QString, QVariant> &list);
 
 		/*! Sets the string-to-value correspondence list of the property.
 		 This is used to create comboboxes-like property editors.
 		 This is overload of the above ctor added for convenience. */
 		void setListData(const QStringList &keys, const QStringList &names);
 
-
 		/*! Sets icon by \a name for this property. Icons are optional and are used e.g.
 		 in property editor - displayed at the left hand. */
 		void setIcon(const QString &icon);
 
-		/*! \return property icon. Can be empty. */
+		/*! \return property icon's string. Can be empty. */
 		QString icon() const;
-
-		/*! Adds \a prop as a child of this property.
-		 The children will be owned by this property */
-		void addChild(Property *prop);
 
 		/*! \return a list of all children for this property, or NULL of there
 		 is no children for this property */
 		const QValueList<Property*>*  children() const;
 
-		/*! \return a child property for \a name, or NULL if there is not property with that name. */
+		/*! \return a child property for \a name, or NULL if there is no property with that name. */
 		Property* child(const QCString &name);
 
+		/*! \return parent property for this property, or NULL if there is no parent property. */
 		Property* parent() const;
 
+		/*! Sets custom property \a prop for this property. 
+		 @see CustomPropertyFactory */
 		void setCustomProperty(CustomProperty *prop);
 
 		/*! \return true if this property is null. Null properties have empty names. */
@@ -299,6 +317,7 @@ class KOPROPERTY_EXPORT Property
 		/*! \return true if the property is read only.*/
 		bool isReadOnly() const;
 
+		/*! Sets this property to be read-only. */
 		void setReadOnly(bool visible);
 
 		/*! \return true if the property is visible.*/
@@ -312,6 +331,7 @@ class KOPROPERTY_EXPORT Property
 		stored but used only in a GUI.*/
 		bool isStorable() const;
 
+		/*! Sets "storable" flag for this property. @see isStorable() */
 		void setStorable(bool storable);
 
 		/*! \return 1 if the property should be synced automatically in Property Editor
@@ -346,6 +366,7 @@ class KOPROPERTY_EXPORT Property
 		/*! Equivalent to setValue(const QVariant &) */
 		const Property& operator= (const QVariant& val);
 
+		/*! Assigns a deep copy of all attributes of \a property to this property. */
 		const Property& operator= (const Property &property);
 
 		/*! Compares two properties.*/
@@ -358,18 +379,26 @@ class KOPROPERTY_EXPORT Property
 		int sortingKey() const;
 
 	protected:
-//unused?		QValueList<Set*> sets() const;
+		/*! Adds \a prop as a child of this property.
+		 The children will be owned by this property. */
+		void addChild(Property *prop);
 
+		/*! Adds \a set to this property. */
 		void addSet(Set *set);
 
 		/*! Sets a key used for sorting. */
 		void setSortingKey(int key);
 
-		const QValueList<Property*>*  related() const;
+		/*! \return a list of related properties for this property. */
+		const QValueList<Property*>* related() const;
+
+		/*! Adds related property for this property. */
 		void addRelatedProperty(Property *property);
 
+		/*! Outputs debug string for this property. */
 		void debug();
 
+		//! @internal
 		PropertyPrivate *d;
 
 	friend class Set;

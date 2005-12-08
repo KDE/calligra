@@ -131,7 +131,6 @@ PixmapEdit::drawViewer(QPainter *p, const QColorGroup &, const QRect &r, const Q
 	if (value.toPixmap().isNull())
 		return;
 	if (m_recentlyPainted!=value) {
-		kdDebug() << "___" << r << endl;
 		m_recentlyPainted = value;
 		m_scaledPixmap = value.toPixmap();
 		QImage img(m_scaledPixmap.convertToImage());

@@ -42,15 +42,28 @@ class PropertyPrivate
 {
 	public:
 		PropertyPrivate()
-		:  listData(0), changed(false), storable(true), readOnly(false), visible(true),
+		: caption(0), listData(0), changed(false), storable(true), 
+		 readOnly(false), visible(true),
 		 autosync(-1), custom(0), useCustomProperty(true),
 		 sets(0), parent(0), children(0), relatedProperties(0),
 		 sortingKey(0)
 		{
 		}
 
+		inline void setCaptionForDisplaying(const QString& captionForDisplaying)
+		{
+			delete caption;
+			if (captionForDisplaying.simplifyWhiteSpace()!=captionForDisplaying)
+				caption = new QString(captionForDisplaying.simplifyWhiteSpace());
+			else
+				caption = 0;
+			this->captionForDisplaying = captionForDisplaying;
+		}
+
 		~PropertyPrivate()
 		{
+			delete caption;
+			caption = 0;
 			delete children;
 			delete relatedProperties;
 			delete custom;
@@ -59,7 +72,8 @@ class PropertyPrivate
 
 	int type;
 	QCString name;
-	QString caption;
+	QString captionForDisplaying;
+	QString* caption;
 	QString description;
 	QVariant value;
 	QVariant oldValue;
@@ -159,52 +173,59 @@ KoProperty::createValueListFromStringLists(const QStringList &keys, const QStrin
 
 Property::Property(const QCString &name, const QVariant &value,
 	const QString &caption, const QString &description,
-	int type)
+	int type, Property* parent)
  : d( new PropertyPrivate() )
 {
 	d->name = name;
-	d->caption = caption;
+	d->setCaptionForDisplaying(caption);
 	d->description = description;
-	d->value = value;
 
 	if(type == Auto)
 		d->type = value.type();
 	else
 		d->type = type;
 
-	d->custom = Factory::self()->customPropertyForProperty(this);
+	d->custom = FactoryManager::self()->createCustomProperty(this);
+
+	if (parent)
+		parent->addChild(this);
+	setValue(value, false);
 }
 
 Property::Property(const QCString &name, const QStringList &keys, const QStringList &strings,
-	const QVariant &value, const QString &caption, const QString &description, int type)
+	const QVariant &value, const QString &caption, const QString &description, 
+	int type, Property* parent)
  : d( new PropertyPrivate() )
 {
 	d->name = name;
-	d->caption = caption;
+	d->setCaptionForDisplaying(caption);
 	d->description = description;
-	d->value = value;
 	d->type = type;
 	setListData(keys, strings);
-//	d->valueList = new QMap<QString, QVariant>();
-//	*(d->valueList) = createValueListFromStringLists(keys, values);
 
-	d->custom = Factory::self()->customPropertyForProperty(this);
+	d->custom = FactoryManager::self()->createCustomProperty(this);
+
+	if (parent)
+		parent->addChild(this);
+	setValue(value, false);
 }
 
-Property::Property(const QCString &name, ListData* listData, //const QMap<QString, QVariant> &v_valueList,
-	const QVariant &value, const QString &caption, const QString &description, int type)
+Property::Property(const QCString &name, ListData* listData, 
+	const QVariant &value, const QString &caption, const QString &description, 
+	int type, Property* parent)
  : d( new PropertyPrivate() )
 {
 	d->name = name;
-	d->caption = caption;
+	d->setCaptionForDisplaying(caption);
 	d->description = description;
-	d->value = value;
 	d->type = type;
 	d->listData = listData;
-//	d->valueList = new QMap<QString, QVariant>();
-//	*(d->valueList) = v_valueList;
 
-	d->custom = Factory::self()->customPropertyForProperty(this);
+	d->custom = FactoryManager::self()->createCustomProperty(this);
+
+	if (parent)
+		parent->addChild(this);
+	setValue(value, false);
 }
 
 Property::Property()
@@ -239,13 +260,19 @@ Property::setName(const QCString &name)
 QString
 Property::caption() const
 {
-	return d->caption;
+	return d->caption ? *d->caption : d->captionForDisplaying;
+}
+
+QString
+Property::captionForDisplaying() const
+{
+	return d->captionForDisplaying;
 }
 
 void
 Property::setCaption(const QString &caption)
 {
-	d->caption = caption;
+	d->setCaptionForDisplaying(caption);
 }
 
 QString
@@ -296,7 +323,7 @@ QVariant
 Property::oldValue() const
 {
 	if(d->oldValue.isNull())
-		return d->value;
+		return value();
 	else
 		return d->oldValue;
 }
@@ -308,16 +335,18 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 		kopropertywarn << "Property::setValue(): COULD NOT SET value to a null property" << endl;
 		return;
 	}
-	const QVariant::Type t = d->value.type();
+	QVariant currentValue = this->value();
+	const QVariant::Type t = currentValue.type();
 	const QVariant::Type newt = value.type();
 //	kopropertydbg << d->name << " : setValue('" << value.toString() << "' type=" << type() << ")" << endl;
-	if (t != newt && !d->value.isNull() && !value.isNull()
+	if (t != newt && !currentValue.isNull() && !value.isNull()
 		 && !( (t==QVariant::Int && newt==QVariant::UInt)
 			   || (t==QVariant::UInt && newt==QVariant::Int)
 			   || (t==QVariant::CString && newt==QVariant::String)
 			   || (t==QVariant::String && newt==QVariant::CString)
 		 )) {
-		kopropertywarn << "Property::setValue(): INCOMPAT TYPES! " << d->value.typeName() << " and " << value.typeName() << endl;
+		kopropertywarn << "Property::setValue(): INCOMPAT TYPES! " << currentValue.typeName() 
+			<< " and " << value.typeName() << endl;
 	}
 
 	//1. Check if the value should be changed
@@ -326,17 +355,17 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 		|| t == QVariant::Time) {
 		//for date and datetime types: compare with strings, because there
 		//can be miliseconds difference
-		ch = (d->value.toString() != value.toString());
+		ch = (currentValue.toString() != value.toString());
 	}
 	else if (t == QVariant::String || t==QVariant::CString) {
 		//property is changed for string type,
 		//if one of value is empty and other isn't..
-		ch = ( (d->value.toString().isEmpty() != value.toString().isEmpty())
+		ch = ( (currentValue.toString().isEmpty() != value.toString().isEmpty())
 		//..or both are not empty and values differ
-			|| (!d->value.toString().isEmpty() && !value.toString().isEmpty() && d->value != value) );
+			|| (!currentValue.toString().isEmpty() && !value.toString().isEmpty() && currentValue != value) );
 	}
 	else
-		ch = (d->value != value);
+		ch = (currentValue != value);
 
 	if (!ch)
 		return;
@@ -344,7 +373,7 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 	//2. Then change it, and store old value if necessary
 	if(rememberOldValue) {
 		if(!d->changed)
-			d->oldValue = d->value;
+			d->oldValue = currentValue;
 		d->changed = true;
 	}
 	else {
@@ -357,8 +386,10 @@ Property::setValue(const QVariant &value, bool rememberOldValue, bool useCustomP
 		prevValue = d->custom->value();
 	}
 	else
-		prevValue = d->value;
-	d->value = value;
+		prevValue = currentValue;
+
+	if (!d->custom || !useCustomProperty || !d->custom->handleValue())
+		d->value = value;
 
 	if (d->sets) {
 		for (QPtrDictIterator< QGuardedPtr<Set> > it(*d->sets); it.current(); ++it) {
@@ -545,7 +576,7 @@ Property::operator= (const Property &property)
 	}
 
 	d->name = property.d->name;
-	d->caption = property.d->caption;
+	d->setCaptionForDisplaying(property.captionForDisplaying());
 	d->description = property.d->description;
 	d->type = property.d->type;
 	d->value = property.d->value;
@@ -562,7 +593,7 @@ Property::operator= (const Property &property)
 	}
 	if(property.d->children) {
 		if(property.d->custom) {
-			d->custom = Factory::self()->customPropertyForProperty(this);
+			d->custom = FactoryManager::self()->createCustomProperty(this);
 			// updates all children value, using CustomProperty
 			setValue(property.d->value);
 		}
@@ -590,7 +621,7 @@ Property::operator= (const Property &property)
 bool
 Property::operator ==(const Property &prop) const
 {
-	return ((d->name == prop.d->name) && (d->value == prop.d->value));
+	return ((d->name == prop.d->name) && (value() == prop.value()));
 }
 
 /////////////////////////////////////////////////////////////////
@@ -609,7 +640,6 @@ Property::child(const QCString &name)
 		if((*it)->name() == name)
 			return *it;
 	}
-
 	return 0;
 }
 
@@ -622,24 +652,22 @@ Property::parent() const
 void
 Property::addChild(Property *prop)
 {
-	if(!d->children)
-		d->children = new QValueList<Property*>();
+	if (!prop)
+		return;
 
-	QValueList<Property*>::ConstIterator it = qFind( d->children->begin(), d->children->end(), prop);
-	if(it == d->children->end()) { // not in our list
+	if(!d->children || qFind( d->children->begin(), d->children->end(), prop) == d->children->end()) { // not in our list
+		if(!d->children)
+			d->children = new QValueList<Property*>();
 		d->children->append(prop);
 		prop->setSortingKey(d->children->count());
+		prop->d->parent = this;
 	}
-	prop->d->parent = this;
+	else {
+		kopropertywarn << "Property::addChild(): property \"" << name() 
+			<< "\": child property \"" << prop->name() << "\" already added" << endl;
+		return;
+	}
 }
-
-/*unused?
-QValueList<Set*>
-Property::sets() const
-{
-	return d->sets;
-}
-*/
 
 void
 Property::addSet(Set *set)
@@ -707,7 +735,7 @@ void
 Property::debug()
 {
 	QString dbg = "Property( name='" + QString(d->name) + "' desc='" + d->description
-		+ "' val=" + (d->value.isValid() ? d->value.toString() : "<INVALID>");
+		+ "' val=" + (value().isValid() ? value().toString() : "<INVALID>");
 	if (!d->oldValue.isValid())
 		dbg += (", oldVal='" + d->oldValue.toString() + "'");
 	dbg += (QString(d->changed ? " " : " un") + "changed");

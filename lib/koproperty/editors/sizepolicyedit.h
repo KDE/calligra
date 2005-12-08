@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_SIZEPOLICYEDIT_H
 #define KPROPERTY_SIZEPOLICYEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 #include <qvariant.h>
 
@@ -37,7 +37,7 @@ class KOPROPERTY_EXPORT SizePolicyEdit : public Widget
 
 	public:
 		SizePolicyEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~SizePolicyEdit();
+		virtual ~SizePolicyEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

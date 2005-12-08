@@ -26,18 +26,11 @@
 #include <qobject.h>
 #include <qasciidict.h>
 
-/*! \brief
-   \author Cedric Pasteur <cedric.pasteur@free.fr>
-   \author Alexander Dymo <cloudtemple@mskat.net>
-   \author Jaroslaw Staniek <js@iidea.pl>
- */
 namespace KoProperty {
 
 class Property;
 class SetPrivate;
 
-//typedef QValueList<Property*> PropertyList;
-//typedef QValueListIterator<Property*> PropertyListIterator;
 typedef QMap<QCString, QValueList<QCString> > StringListMap ;
 typedef QMapIterator<QCString, QStringList> StringListMapIterator;
 

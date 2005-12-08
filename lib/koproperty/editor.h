@@ -42,7 +42,7 @@ class Set;
 class Widget;
 class EditorItem;
 
-//! A listview to edit properties
+//! \brief A listview to edit properties
 /*! Editor uses property options using Property::option(const char *)
     to override default behaviour of editor items.
     Currently supported options are:
@@ -121,23 +121,23 @@ class KOPROPERTY_EXPORT Editor : public KListView
 		/*! This slot is called when the user clicks the list view.
 		   It takes care of deleting current editor and
 		   creating a new editor for the newly selected item. */
-		void  slotClicked(QListViewItem *item);
+		void slotClicked(QListViewItem *item);
 
 		/*! Undoes the last change in property editor.*/
-		void  undo();
+		void undo();
 
-		void  updateEditorGeometry(bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
-		void  updateEditorGeometry(EditorItem *item, Widget* widget, bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
+		void updateEditorGeometry(bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
+		void updateEditorGeometry(EditorItem *item, Widget* widget, bool forceUndoButtonSettings = false, bool undoButtonVisible = false);
 
-		void  hideEditor();
+		void hideEditor();
 
-		void  slotCollapsed(QListViewItem *item);
-		void  slotExpanded(QListViewItem *item);
-		void  slotColumnSizeChanged(int section);
-		void  slotColumnSizeChanged(int section, int, int newS);
-		void  slotCurrentChanged(QListViewItem *item);
-		void  changeSetLater();
-
+		void slotCollapsed(QListViewItem *item);
+		void slotExpanded(QListViewItem *item);
+		void slotColumnSizeChanged(int section);
+		void slotColumnSizeChanged(int section, int oldSize, int newSize);
+		void slotCurrentChanged(QListViewItem *item);
+		void changeSetLater();
+		void selectItemLater();
 	protected:
 		/*! \return \ref Widget for given property.
 		Uses cache to store created widgets.
@@ -158,7 +158,6 @@ class KOPROPERTY_EXPORT Editor : public KListView
 
 		virtual bool event( QEvent * e );
 		void updateFont();
-		bool insideFill() const;
 
 		virtual void contentsMousePressEvent( QMouseEvent * e );
 

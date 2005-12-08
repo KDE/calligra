@@ -37,7 +37,7 @@ class KOPROPERTY_EXPORT PixmapEdit : public Widget
 
 	public:
 		PixmapEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~PixmapEdit();
+		virtual ~PixmapEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

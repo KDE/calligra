@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_TIMEEDIT_H
 #define KPROPERTY_TIMEEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 class QTimeEdit;
 
@@ -33,7 +33,7 @@ class KOPROPERTY_EXPORT TimeEdit : public Widget
 
 	public:
 		TimeEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~TimeEdit();
+		virtual ~TimeEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

@@ -44,14 +44,15 @@
 #include "urledit.h"
 
 #include <qvaluelist.h>
+#include <qintdict.h>
 
 #ifdef QT_ONLY
 #else
 #include <kdebug.h>
 #endif
 
-static KStaticDeleter<KoProperty::Factory> m_factoryDeleter;
-static KoProperty::Factory* m_factory = 0;
+static KStaticDeleter<KoProperty::FactoryManager> m_managerDeleter;
+static KoProperty::FactoryManager* m_manager = 0;
 
 namespace KoProperty {
 
@@ -66,67 +67,77 @@ CustomPropertyFactory::~CustomPropertyFactory()
 
 
 //! @internal
-class FactoryPrivate
+class FactoryManagerPrivate
 {
 	public:
-		FactoryPrivate() {}
-		~FactoryPrivate() {}
+		FactoryManagerPrivate() {}
+		~FactoryManagerPrivate() {}
 
 		//registered widgets for property types
-		QMap<int, CustomPropertyFactory* > registeredWidgets;
-		QMap<int, CustomPropertyFactory* > registeredCustomProperties;
+		QIntDict<CustomPropertyFactory> registeredWidgets;
+		QIntDict<CustomPropertyFactory> registeredCustomProperties;
 };
 }
 
 using namespace KoProperty;
 
-Factory::Factory()
-: QObject(0, "KoProperty Factory")
+FactoryManager::FactoryManager()
+: QObject(0, "KoProperty::FactoryManager")
 {
-	d = new FactoryPrivate();
+	d = new FactoryManagerPrivate();
 }
 
-Factory::~Factory()
+FactoryManager::~FactoryManager()
 {
 	delete d;
 }
 
-Factory*
-Factory::self()
+FactoryManager*
+FactoryManager::self()
 {
-	if(!m_factory)
-		m_factoryDeleter.setObject( m_factory, new Factory() );
-	return m_factory;
+	if(!m_manager)
+		m_managerDeleter.setObject( m_manager, new FactoryManager() );
+	return m_manager;
 }
 
 ///////////////////  Functions related to widgets /////////////////////////////////////
 
 void
-Factory::registerEditor(int type, CustomPropertyFactory *creator)
+FactoryManager::registerFactoryForEditor(int editorType, CustomPropertyFactory *widgetFactory)
 {
-	if(d->registeredWidgets.contains(type))
-		kopropertydbg << "Type (" << type << ") already registered. Overriding actual createWidget function." << endl;
-	d->registeredWidgets.replace(type, creator);
+	if(!widgetFactory)
+		return;
+	if(d->registeredWidgets.find(editorType))
+		kopropertywarn << "FactoryManager::registerFactoryForEditor(): "
+		"Overriding already registered custom widget type \"" << editorType << "\"" << endl;
+	d->registeredWidgets.replace(editorType, widgetFactory);
 }
 
 void
-Factory::registerEditors(const QValueList<int> &types, CustomPropertyFactory *creator)
+FactoryManager::registerFactoryForEditors(const QValueList<int> &editorTypes, CustomPropertyFactory *factory)
 {
-	QValueList<int>::ConstIterator endIt = types.constEnd();
-	for(QValueList<int>::ConstIterator it = types.constBegin(); it != endIt; ++it)
-		registerEditor(*it, creator);
+	QValueList<int>::ConstIterator endIt = editorTypes.constEnd();
+	for(QValueList<int>::ConstIterator it = editorTypes.constBegin(); it != endIt; ++it)
+		registerFactoryForEditor(*it, factory);
+}
+
+CustomPropertyFactory *
+FactoryManager::factoryForEditorType(int type)
+{
+	return d->registeredWidgets.find(type);
 }
 
 Widget*
-Factory::widgetForProperty(Property *property)
+FactoryManager::createWidgetForProperty(Property *property)
 {
 	if(!property)
 		return 0;
 
 	const int type = property->type();
 
-	if (d->registeredWidgets.contains(type))
-		return d->registeredWidgets[type]->createCustomWidget(property);
+	CustomPropertyFactory *factory = d->registeredWidgets.find(type);
+	if (factory)
+		return factory->createCustomWidget(property);
 
 	//handle combobox-based widgets:
 	if (type==Cursor)
@@ -201,35 +212,38 @@ Factory::widgetForProperty(Property *property)
 			kopropertywarn << "No editor for property " << property->name() << " of type " << property->type() << endl;
 			return new DummyWidget(property);
 	}
-
 }
 
 ///////////////////  Functions related to custom properties /////////////////////////////////////
 
 void
-Factory::registerCustomProperty(int type, CustomPropertyFactory *creator)
+FactoryManager::registerFactoryForProperty(int propertyType, CustomPropertyFactory *factory)
 {
-	if(!creator)
+	if(!factory)
 		return;
-	if(d->registeredCustomProperties.contains(type))
-		kopropertywarn << "Type (" << type << ") already registered. Overriding actual createCustomProperty function." << endl;
-	d->registeredCustomProperties.insert(type, creator);
+	if(d->registeredCustomProperties.find(propertyType))
+		kopropertywarn << "FactoryManager::registerFactoryForProperty(): "
+		"Overriding already registered custom property type \"" << propertyType << "\"" << endl;
+
+	d->registeredCustomProperties.replace(propertyType, factory);
 }
 
 void
-Factory::registerCustomProperties(const QValueList<int> &types, CustomPropertyFactory *creator)
+FactoryManager::registerFactoryForProperties(const QValueList<int> &propertyTypes, 
+	CustomPropertyFactory *factory)
 {
-	QValueList<int>::ConstIterator endIt = types.constEnd();
-	for(QValueList<int>::ConstIterator it = types.constBegin(); it != endIt; ++it)
-		registerCustomProperty(*it, creator);
+	QValueList<int>::ConstIterator endIt = propertyTypes.constEnd();
+	for(QValueList<int>::ConstIterator it = propertyTypes.constBegin(); it != endIt; ++it)
+		registerFactoryForProperty(*it, factory);
 }
 
 CustomProperty*
-Factory::customPropertyForProperty(Property *parent)
+FactoryManager::createCustomProperty(Property *parent)
 {
 	const int type = parent->type();
-	if (d->registeredCustomProperties.contains(type))
-		return d->registeredCustomProperties[type]->createCustomProperty(parent);
+	CustomPropertyFactory *factory = d->registeredWidgets.find(type);
+	if (factory)
+		return factory->createCustomProperty(parent);
 
 	switch(type) {
 		case Size: case Size_Width: case Size_Height:

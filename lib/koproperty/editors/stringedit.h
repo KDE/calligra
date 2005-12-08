@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_STRINGEDIT_H
 #define KPROPERTY_STRINGEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 class QLineEdit;
 
@@ -33,7 +33,7 @@ class KOPROPERTY_EXPORT StringEdit : public Widget
 
 	public:
 		StringEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~StringEdit();
+		virtual ~StringEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);
@@ -41,8 +41,8 @@ class KOPROPERTY_EXPORT StringEdit : public Widget
 	protected slots:
 		void slotValueChanged(const QString&);
 
-	private:
-		QLineEdit   *m_edit;
+	protected:
+		QLineEdit *m_edit;
 };
 
 }

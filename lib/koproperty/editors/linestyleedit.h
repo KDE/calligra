@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_LINESTYLEEDIT_H
 #define KPROPERTY_LINESTYLEEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 class QComboBox;
 
@@ -33,7 +33,7 @@ class KOPROPERTY_EXPORT LineStyleEdit : public Widget
 
 	public:
 		LineStyleEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~LineStyleEdit();
+		virtual ~LineStyleEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

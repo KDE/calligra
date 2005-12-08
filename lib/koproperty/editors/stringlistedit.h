@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_STRINGLISTEDIT_H
 #define KPROPERTY_STRINGLISTEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 #include <qstringlist.h>
 
@@ -35,7 +35,7 @@ class KOPROPERTY_EXPORT StringListEdit : public Widget
 
 	public:
 		StringListEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~StringListEdit();
+		virtual ~StringListEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

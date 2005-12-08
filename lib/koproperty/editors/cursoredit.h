@@ -33,7 +33,7 @@ class KOPROPERTY_EXPORT CursorEdit : public ComboBox
 
 	public:
 		CursorEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~CursorEdit();
+		virtual ~CursorEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

@@ -48,11 +48,7 @@ class Editor;
    \author Jaroslaw Staniek <js@iidea.pl>
    @internal
  */
-#ifdef QT_ONLY
-class EditorItem : public QListViewItem
-#else
 class EditorItem : public KListViewItem
-#endif
 {
 	public:
 		typedef QAsciiDict<EditorItem> Dict;
@@ -86,6 +82,8 @@ class EditorItem : public KListViewItem
 		virtual void paintFocus(QPainter * p, const QColorGroup & cg, const QRect & r);
 
 		virtual int compare( QListViewItem *i, int col, bool ascending ) const;
+
+		virtual void setHeight( int height );
 
 	protected:
 		EditorItemPrivate *d;

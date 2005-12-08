@@ -28,7 +28,7 @@ namespace KoProperty {
 
 class Property;
 
-//!  Base class for custom properties
+//! \brief Base class for custom properties
 /*! You will need to subclass CustomProperty to override the behaviour of a property type.\n
   In the constructor, you should create the child properties (if needed).
   Then, you need to implement the functions concerning values.\n
@@ -46,8 +46,8 @@ class KOPROPERTY_EXPORT CustomProperty
 		/*! This function is called by \ref Property::setValue() when
 		a custom property is set.
 		You don't have to modify the property value, it is done by Property class.
-		You just have to update child or parent properties value, using \ref Property::setValue().
-		Please notice that, when calling Property::setValue, you <b>need</b> to set
+		You just have to update child or parent properties value (m_property->parent()->setValue()).
+		Note that, when calling Property::setValue, you <b>need</b> to set
 		useCustomProperty (3rd parameter) to false, or there will be infinite recursion. */
 		virtual void setValue(const QVariant &value, bool rememberOldValue) = 0;
 
@@ -64,6 +64,7 @@ class KOPROPERTY_EXPORT CustomProperty
 		Property  *m_property;
 };
 
+//! \brief Custom property implementation for QSize type
 class KOPROPERTY_EXPORT SizeCustomProperty : public CustomProperty
 {
 	public:
@@ -75,6 +76,7 @@ class KOPROPERTY_EXPORT SizeCustomProperty : public CustomProperty
 		bool handleValue() const;
 };
 
+//! \brief Custom property implementation for QPoint type
 class KOPROPERTY_EXPORT PointCustomProperty : public CustomProperty
 {
 	public:
@@ -86,6 +88,7 @@ class KOPROPERTY_EXPORT PointCustomProperty : public CustomProperty
 		bool handleValue() const;
 };
 
+//! \brief Custom property implementation for QRect type
 class KOPROPERTY_EXPORT RectCustomProperty : public CustomProperty
 {
 	public:
@@ -97,6 +100,7 @@ class KOPROPERTY_EXPORT RectCustomProperty : public CustomProperty
 		bool handleValue() const;
 };
 
+//! \brief Custom property implementation for QSizePolicy type
 class KOPROPERTY_EXPORT SizePolicyCustomProperty : public CustomProperty
 {
 	public:

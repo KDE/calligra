@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_DATEEDIT_H
 #define KPROPERTY_DATEEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 class QDateEdit;
 class QDate;
@@ -34,7 +34,7 @@ class KOPROPERTY_EXPORT DateEdit : public Widget
 
 	public:
 		DateEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~DateEdit();
+		virtual ~DateEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

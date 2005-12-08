@@ -50,8 +50,8 @@ SizeCustomProperty::SizeCustomProperty(Property *property)
 {
 	if(property && (property->type() == Size) ) {
 		QSize s = property->value().toSize();
-		property->addChild(new Property("width", s.width(), i18n("Width"), i18n("Width"), Size_Width));
-		property->addChild(new Property("height", s.height(), i18n("Height"), i18n("Height"), Size_Height));
+		new Property("width", s.width(), i18n("Width"), i18n("Width"), Size_Width, property);
+		new Property("height", s.height(), i18n("Height"), i18n("Height"), Size_Height, property);
 	}
 }
 
@@ -116,8 +116,8 @@ PointCustomProperty::PointCustomProperty(Property *property)
 {
 	if(property && (property->type() == Point) ) {
 		QPoint p = property->value().toPoint();
-		property->addChild(new Property("x", p.x(), i18n("X"), i18n("X"), Point_X));
-		property->addChild(new Property("y", p.y(), i18n("Y"), i18n("Y"), Point_Y));
+		new Property("x", p.x(), i18n("X"), i18n("X"), Point_X, property);
+		new Property("y", p.y(), i18n("Y"), i18n("Y"), Point_Y, property);
 	}
 }
 
@@ -182,10 +182,10 @@ RectCustomProperty::RectCustomProperty(Property *property)
 {
 	if(property && (property->type() == Rect) ) {
 		QRect r = property->value().toRect();
-		property->addChild(new Property("x", r.x(), i18n("X"), i18n("X"), Rect_X));
-		property->addChild(new Property("y", r.y(), i18n("Y"), i18n("Y"), Rect_Y));
-		property->addChild(new Property("width", r.width(), i18n("Width"), i18n("Width"), Rect_Width));
-		property->addChild(new Property("height", r.height(), i18n("Height"), i18n("Height"), Rect_Height));
+		new Property("x", r.x(), i18n("X"), i18n("X"), Rect_X, property);
+		new Property("y", r.y(), i18n("Y"), i18n("Y"), Rect_Y, property);
+		new Property("width", r.width(), i18n("Width"), i18n("Width"), Rect_Width, property);
+		new Property("height", r.height(), i18n("Height"), i18n("Height"), Rect_Height, property);
 	}
 }
 
@@ -225,7 +225,7 @@ RectCustomProperty::setValue(const QVariant &value, bool rememberOldValue)
 			//changing y component of Rect shouldn't change height
 			const int delta = value.toInt() - r.y();
 			r.setY(value.toInt());
-			r.setHeight(r.width()+delta);
+			r.setHeight(r.height()+delta);
 		}
 		else if(m_property->type() == Rect_Width)
 			r.setWidth(value.toInt());
@@ -286,29 +286,28 @@ SizePolicyCustomProperty::SizePolicyCustomProperty(Property *property)
 			<< i18n("Size Policy", "Minimum Expanding")
 			<< i18n("Size Policy", "Ignored");
 
-		property->addChild(new Property("hSizeType", new Property::ListData(keys, strings),
-//			spValues, 
+		new Property("hSizeType", new Property::ListData(keys, strings),
 			(int)property->value().toSizePolicy().horData(), 
 			i18n("Hor. Size Type"),i18n("Horizontal Size Type"),
-			SizePolicy_HorData));
-		property->addChild(new Property("vSizeType", new Property::ListData(keys, strings),
-//			spValues, 
+			SizePolicy_HorData, property);
+		new Property("vSizeType", new Property::ListData(keys, strings),
 			(int)property->value().toSizePolicy().verData(), 
 			i18n("Ver. Size Type"), i18n("Vertical Size Type"),
-			SizePolicy_VerData));
-		property->addChild(new Property("hStretch", 
+			SizePolicy_VerData, property);
+		new Property("hStretch", 
 			property->value().toSizePolicy().horStretch(), 
 			i18n("Hor. Stretch"), i18n("Horizontal Stretch"),
-			SizePolicy_HorStretch));
-		property->addChild(new Property("vStretch", 
+			SizePolicy_HorStretch, property);
+		new Property("vStretch", 
 			property->value().toSizePolicy().verStretch(), 
 			i18n("Ver. Stretch"), i18n("Vertical Stretch"),
-			SizePolicy_VerStretch));
+			SizePolicy_VerStretch, property);
 	}
 }
 
 SizePolicyCustomProperty::~SizePolicyCustomProperty()
-{}
+{
+}
 
 bool
 SizePolicyCustomProperty::handleValue() const
@@ -317,7 +316,10 @@ SizePolicyCustomProperty::handleValue() const
 		return false;
 
 	switch(m_property->type()) {
-		case SizePolicy_HorData: case SizePolicy_VerData: case SizePolicy_HorStretch: case SizePolicy_VerStretch:
+		case SizePolicy_HorData:
+		case SizePolicy_VerData:
+		case SizePolicy_HorStretch:
+		case SizePolicy_VerStretch:
 			return true;
 		default:
 			return false;

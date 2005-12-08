@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_URLEDIT_H
 #define KPROPERTY_URLEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 #ifndef QT_ONLY
 class KURLRequester;
@@ -38,7 +38,7 @@ class KOPROPERTY_EXPORT URLEdit : public Widget
 
 	public:
 		URLEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~URLEdit();
+		virtual ~URLEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

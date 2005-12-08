@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_POINTEDIT_H
 #define KPROPERTY_POINTEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 #include <qvariant.h>
 
@@ -35,7 +35,7 @@ class KOPROPERTY_EXPORT PointEdit : public Widget
 
 	public:
 		PointEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~PointEdit();
+		virtual ~PointEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

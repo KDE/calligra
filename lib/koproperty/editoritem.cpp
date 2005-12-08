@@ -55,7 +55,8 @@ class EditorItemPrivate
 using namespace KoProperty;
 
 EditorItem::EditorItem(Editor *editor, EditorItem *parent, Property *property, QListViewItem *after)
- : KListViewItem(parent, after, property->caption().isEmpty() ? property->name() : property->caption())
+ : KListViewItem(parent, after, 
+	property->captionForDisplaying().isEmpty() ? property->name() : property->captionForDisplaying())
 {
 	d = new EditorItemPrivate();
 	d->property = property;
@@ -63,6 +64,20 @@ EditorItem::EditorItem(Editor *editor, EditorItem *parent, Property *property, Q
 
 	setMultiLinesEnabled(true);
 	//setHeight(static_cast<Editor*>(listView())->baseRowHeight()*3);
+/*
+	if (property && !property->caption().isEmpty()) {
+			QSimpleRichText srt(property->caption(), font());
+			srt.setWidth(columnWidth(0)-KPROPEDITOR_ITEM_MARGIN*2-20+1);
+			int oldHeight = it.current()->height();
+			int textHeight = srt.height()+KPROPEDITOR_ITEM_MARGIN;
+			int textLines = textHeight / d->baseRowHeight + (((textHeight % d->baseRowHeight) > 0) ? 1 : 0);
+			kdDebug() << " textLines: " << textLines << endl;
+			if (textLines != newNumLines) {
+				dynamic_cast<EditorItem*>(it.current())->setHeight(newNumLines * d->baseRowHeight);
+			}
+			kdDebug() << it.current()->text(0) << ":  "  << oldHeight << " -> " << newHeight << endl;
+		}
+*/
 }
 
 EditorItem::EditorItem(KListView *parent)
@@ -71,6 +86,7 @@ EditorItem::EditorItem(KListView *parent)
 	d = new EditorItemPrivate();
 	d->property = 0;
 	d->editor = 0;
+	setMultiLinesEnabled(true);
 }
 
 EditorItem::EditorItem(EditorItem *parent, const QString &text)
@@ -79,6 +95,7 @@ EditorItem::EditorItem(EditorItem *parent, const QString &text)
 	d = new EditorItemPrivate();
 	d->property = 0;
 	d->editor = 0;
+	setMultiLinesEnabled(true);
 }
 
 EditorItem::~EditorItem()
@@ -95,12 +112,9 @@ EditorItem::property()
 void
 EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width, int align)
 {
-	if (static_cast<Editor*>(listView())->insideFill())
-		return;
-
 	//int margin = static_cast<Editor*>(listView())->itemMargin();
 	if(!d->property)
-			return;
+		return;
 
 	if(column == 0)
 	{
@@ -131,8 +145,9 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 			else
 				delta += KPROPEDITOR_ITEM_MARGIN*5;
 		}
-		p->drawText(QRect(delta,0, width+listView()->columnWidth(1), height()), 
-			Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, text(0)); 
+		p->drawText(
+			QRect(delta,2, width+listView()->columnWidth(1)-KPROPEDITOR_ITEM_MARGIN*2, height()), 
+			Qt::AlignLeft | Qt::AlignTop /*| Qt::SingleLine*/, text(0)); 
 
 		p->setPen( KPROPEDITOR_ITEM_BORDER_COLOR );
 		p->drawLine(width-1, 0, width-1, height()-1);
@@ -166,9 +181,6 @@ EditorItem::paintCell(QPainter *p, const QColorGroup & cg, int column, int width
 void
 EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int h)
 {
-	if (static_cast<Editor*>(listView())->insideFill())
-		return;
-
 	p->eraseRect(0,0,w,h);
 #ifdef QT_ONLY
 	QListViewItem *item = firstChild();
@@ -250,8 +262,9 @@ EditorItem::paintBranches(QPainter *p, const QColorGroup &cg, int w, int y, int 
 				delta += KPROPEDITOR_ITEM_MARGIN*5;
 		}
 
-		p->drawText(QRect(delta+1,0, w+listView()->columnWidth(1), item->height()), 
-			Qt::AlignLeft | Qt::AlignVCenter | Qt::SingleLine, item->text(0)); 
+		if (!dynamic_cast<EditorDummyItem*>(item->parent()))
+			p->drawText(QRect(delta+1,0, w+listView()->columnWidth(1), item->height()), 
+			Qt::AlignLeft | Qt::AlignVCenter /*| Qt::SingleLine*/, item->text(0)); 
 
 		if(item->firstChild())  {
 			//! \todo make BRANCHBOX_SIZE configurable?
@@ -319,6 +332,12 @@ EditorItem::compare( QListViewItem *i, int col, bool ascending ) const
 
 	return 0;
 //	return d->order - static_cast<EditorItem*>(i)->d->order;
+}
+
+void
+EditorItem::setHeight( int height )
+{
+	KListViewItem::setHeight(height);
 }
 
 //////////////////////////////////////////////////////

@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_BOOLEDIT_H
 #define KPROPERTY_BOOLEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 class QToolButton;
 
@@ -33,7 +33,7 @@ class KOPROPERTY_EXPORT BoolEdit : public Widget
 
 	public:
 		BoolEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~BoolEdit();
+		virtual ~BoolEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

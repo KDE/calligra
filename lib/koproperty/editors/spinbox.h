@@ -23,7 +23,7 @@
 
 #include <knuminput.h>
 
-#include "widget.h"
+#include "../widget.h"
 
 namespace KoProperty {
 
@@ -47,7 +47,7 @@ class KOPROPERTY_EXPORT IntEdit : public Widget
 
 	public:
 		IntEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~IntEdit();
+		virtual ~IntEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);
@@ -81,7 +81,7 @@ class KOPROPERTY_EXPORT DoubleEdit : public Widget
 
 	public:
 		DoubleEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~DoubleEdit();
+		virtual ~DoubleEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

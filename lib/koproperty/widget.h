@@ -43,11 +43,14 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 
 		/*! \return the value currently entered in the item editor widget.*/
 		virtual QVariant value() const = 0;
+
 		/*! Sets the value shown in the item editor widget. Set emitChange to false
 		if you don't want to emit propertyChanged signal.*/
 		virtual void setValue(const QVariant &value, bool emitChange=true) = 0;
 
+		/*! \retrun edited property. */
 		virtual Property* property() const;
+
 		/*! Sets the name of edited property.*/
 		virtual void setProperty(Property *property);
 
@@ -62,6 +65,9 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 
 		//! \sa d->leaveTheSpaceForRevertButton description
 		bool leavesTheSpaceForRevertButton() const;
+
+		/*! \return true if this editor has borders. 
+		 Editors with borders have slightly larger height and width set by property editor widget. */
 		bool hasBorders() const;
 
 	signals:
@@ -74,6 +80,7 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 
 		/*! Filters some event for main widget, eg Enter or Esc key presses. */
 		virtual bool eventFilter(QObject* watched, QEvent* e);
+
 		virtual void resizeEvent(QResizeEvent *e);
 
 		void setLeavesTheSpaceForRevertButton(bool set);

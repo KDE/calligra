@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_RECTEDIT_H
 #define KPROPERTY_RECTEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 #include <qvariant.h>
 
@@ -35,7 +35,7 @@ class KOPROPERTY_EXPORT RectEdit : public Widget
 
 	public:
 		RectEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~RectEdit();
+		virtual ~RectEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

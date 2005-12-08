@@ -22,7 +22,7 @@
 #ifndef KPROPERTY_FONTEDIT_H
 #define KPROPERTY_FONTEDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 class FontEditRequester;
 
@@ -34,7 +34,7 @@ class KOPROPERTY_EXPORT FontEdit : public Widget
 
 	public:
 		FontEdit(Property *property, QWidget *parent=0, const char *name=0);
-		~FontEdit();
+		virtual ~FontEdit();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

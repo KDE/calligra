@@ -453,6 +453,7 @@ void Buffer::intersect(const Set *set)
 
 void Buffer::intersectedChanged(KoProperty::Set& set, KoProperty::Property& prop)
 {
+	Q_UNUSED(set);
 	QCString propertyName = prop.name();
 	if ( !contains( propertyName ) )
 		return;
@@ -466,6 +467,7 @@ void Buffer::intersectedChanged(KoProperty::Set& set, KoProperty::Property& prop
 
 void Buffer::intersectedReset(KoProperty::Set& set, KoProperty::Property& prop)
 {
+	Q_UNUSED(set);
 	QCString propertyName = prop.name();
 	if ( !contains( propertyName ) )
 		return;

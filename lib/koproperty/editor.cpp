@@ -43,6 +43,7 @@
 #include <kiconloader.h>
 #include <klocale.h>
 #include <kdeversion.h>
+#include <kapplication.h>
 #endif
 
 namespace KoProperty {
@@ -54,15 +55,17 @@ static bool kofficeAppDirAdded = false;
 //! @internal
 inline bool hasParent(QObject* par, QObject* o)
 {
-    while (o && o != par)
-        o = o->parent();
-    return o == par;
+	if (!o || !par)
+		return false;
+	while (o && o != par)
+		o = o->parent();
+	return o == par;
 }
 
 class EditorPrivate
 {
 	public:
-		EditorPrivate()
+		EditorPrivate(Editor *editor)
 		: itemDict(101, false), justClickedItem(false)
 		{
 			currentItem = 0;
@@ -72,10 +75,11 @@ class EditorPrivate
 				kofficeAppDirAdded = true;
 				KGlobal::iconLoader()->addAppDir("koffice");
 			}
-			insideFill = false;
 			previouslyCollapsedGroupItem = 0;
 			childFormPreviouslyCollapsedGroupItem = 0;
 			slotPropertyChanged_enabled = true;
+			QObject::connect(&changeSetLaterTimer, SIGNAL(timeout()), 
+				editor, SLOT(changeSetLater()));
 		}
 		~EditorPrivate()
 		{
@@ -95,17 +99,18 @@ class EditorPrivate
 		bool insideSlotValueChanged : 1;
 
 		//! Helpers for changeSetLater()
+		QTimer changeSetLaterTimer;
 		bool setListLater_set : 1;
 		bool preservePrevSelection_preservePrevSelection : 1;
-		bool doNotSetFocusOnSelection : 1;
+		//bool doNotSetFocusOnSelection : 1;
 		//! Used in setFocus() to prevent scrolling to previously selected item on mouse click
 		bool justClickedItem : 1;
-		//! Paint optimization
-		bool insideFill : 1;
 		//! Helper for slotWidgetValueChanged()
 		bool slotPropertyChanged_enabled : 1;
 		//! Helper for changeSet()
 		Set* setListLater_list;
+		//! used by selectItemLater()
+		EditorItem *itemToSelectLater;
 
 		QListViewItem *previouslyCollapsedGroupItem;
 		QListViewItem *childFormPreviouslyCollapsedGroupItem;
@@ -117,7 +122,7 @@ using namespace KoProperty;
 Editor::Editor(QWidget *parent, bool autoSync, const char *name)
  : KListView(parent, name)
 {
-	d = new EditorPrivate();
+	d = new EditorPrivate(this);
 	d->itemDict.setAutoDelete(false);
 
 	d->set = 0;
@@ -177,13 +182,16 @@ Editor::~Editor()
 void
 Editor::fill()
 {
-	d->insideFill = true;
+	setUpdatesEnabled(false);
+	qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
 	hideEditor();
 	KListView::clear();
 	d->itemDict.clear();
 	clearWidgetCache();
 	if(!d->set) {
-		d->insideFill = false;
+		d->topItem = 0;
+		setUpdatesEnabled(true);
+		update();
 		return;
 	}
 
@@ -214,13 +222,16 @@ Editor::fill()
 
 	}
 
+//	repaint();
+
 	if (firstChild())
 	{
 		setCurrentItem(firstChild());
 		setSelected(firstChild(), true);
 		slotClicked(firstChild());
 	}
-	d->insideFill = false;
+	setUpdatesEnabled(true);
+	repaint();
 }
 
 void
@@ -271,7 +282,7 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 		qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
 		if (!d->setListLater_set) {
 			d->setListLater_set = true;
-			QTimer::singleShot(10, this, SLOT(changeSetLater()));
+			d->changeSetLaterTimer.start(10, true);
 		}
 		return;
 	}
@@ -314,11 +325,14 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 			item = d->itemDict[selectedPropertyName2];
 		if (!item && !selectedPropertyName1.isEmpty()) //try old one for current prop set
 			item = d->itemDict[selectedPropertyName1];
+
 		if (item) {
-			d->doNotSetFocusOnSelection = !hasParent(this, focusWidget());
-			setSelected(item, true);
-			d->doNotSetFocusOnSelection = false;
-			ensureItemVisible(item);
+			d->itemToSelectLater = item;
+			QTimer::singleShot(10, this, SLOT(selectItemLater()));
+			//d->doNotSetFocusOnSelection = !hasParent(this, focusWidget());
+			//setSelected(item, true);
+			//d->doNotSetFocusOnSelection = false;
+//			ensureItemVisible(item);
 		}
 	}
 
@@ -326,9 +340,23 @@ Editor::changeSet(Set *set, bool preservePrevSelection)
 }
 
 //! @internal
+void Editor::selectItemLater()
+{
+	if (!d->itemToSelectLater)
+		return;
+	EditorItem *item = d->itemToSelectLater;
+	d->itemToSelectLater = 0;
+	setSelected(item, true);
+	ensureItemVisible(item);
+}
+
+//! @internal
 void
 Editor::changeSetLater()
 {
+	qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
+	if (kapp->hasPendingEvents())
+		return;
 	d->setListLater_set = false;
 	if (!d->setListLater_list)
 		return;
@@ -343,8 +371,10 @@ void
 Editor::clear(bool editorOnly)
 {
 	hideEditor();
+	d->itemToSelectLater = 0;
 
 	if(!editorOnly) {
+		qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
 		clearWidgetCache();
 		KListView::clear();
 		d->itemDict.clear();
@@ -366,8 +396,10 @@ Editor::undo()
 
 	if(sync)
 		d->currentItem->property()->resetValue();
-	d->currentWidget->setValue( d->currentItem->property()->value());
-	repaintItem(d->currentItem);
+	if (d->currentWidget && d->currentItem) {//(check because current widget could be removed by resetValue())
+		d->currentWidget->setValue( d->currentItem->property()->value());
+		repaintItem(d->currentItem);
+	}
 }
 
 void
@@ -513,8 +545,11 @@ Editor::slotClicked(QListViewItem *it)
 
 	//moved up updateEditorGeometry();
 	showUndoButton( p->isModified() );
-	d->currentWidget->show();
-	d->currentWidget->setFocus();
+	if (d->currentWidget) {
+		d->currentWidget->show();
+		if (hasParent( this, kapp->focusWidget() ))
+			d->currentWidget->setFocus();
+	}
 
 	d->justClickedItem = true;
 }
@@ -554,10 +589,12 @@ Widget*
 Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
 {
 //	int type = property->type();
-	Widget *widget = d->widgetCache[property];
+	QGuardedPtr<Widget> widget = d->widgetCache[property];
 
 	if(!widget) {
-		widget = Factory::self()->widgetForProperty(property);
+		widget = FactoryManager::self()->createWidgetForProperty(property);
+		if (!widget)
+			return 0;
 		d->widgetCache[property] = widget;
 		widget->setProperty(0); // to force reloading property later
 		widget->hide();
@@ -572,7 +609,7 @@ Editor::createWidgetForProperty(Property *property, bool changeWidgetProperty)
 	//update geometry earlier, because Widget::setValue() can depend on widget's geometry
 	updateEditorGeometry(d->currentItem, widget);
 
-	if(!widget->property() || changeWidgetProperty)
+	if(widget && !widget->property() || changeWidgetProperty)
 		widget->setProperty(property);
 
 //	if (!d->doNotSetFocusOnSelection) {
@@ -625,7 +662,7 @@ Editor::updateEditorGeometry(EditorItem *item, Widget* widget,
 
 	moveChild(widget, r.x(), r.y());
 	widget->resize(r.size());
-	qApp->processEvents();
+	qApp->eventLoop()->processEvents(QEventLoop::AllEvents);
 }
 
 void
@@ -712,13 +749,16 @@ Editor::slotCollapsed(QListViewItem *item)
 }
 
 void
-Editor::slotColumnSizeChanged(int /*section*/, int, int /*newS*/)
+Editor::slotColumnSizeChanged(int section, int oldSize, int newSize)
 {
+	Q_UNUSED(section);
+	Q_UNUSED(oldSize);
+	Q_UNUSED(newSize);
 	updateEditorGeometry();
 	for (QListViewItemIterator it(this); it.current(); ++it) {
-		if (dynamic_cast<EditorGroupItem*>(it.current())) {
+//		if (section == 0 && dynamic_cast<EditorGroupItem*>(it.current())) {
 //			it.current()->repaint();
-		}
+//	}
 	}
 /*
 	if(d->currentWidget) {
@@ -733,6 +773,7 @@ Editor::slotColumnSizeChanged(int /*section*/, int, int /*newS*/)
 					d->currentWidget->height());
 		}
 	}*/
+	update();
 }
 
 void
@@ -795,6 +836,7 @@ Editor::resizeEvent(QResizeEvent *ev)
 	KListView::resizeEvent(ev);
 	if(d->undoButton->isVisible())
 		showUndoButton(true);
+	update();
 }
 
 bool
@@ -883,12 +925,6 @@ Editor::event( QEvent * e )
 		updateFont();
 	}
 	return QListView::event(e);
-}
-
-bool
-Editor::insideFill() const
-{
-	return d->insideFill;
 }
 
 void

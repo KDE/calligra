@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_DUMMYWIDGET_H
 #define KPROPERTY_DUMMYWIDGET_H
 
-#include "widget.h"
+#include "../widget.h"
 
 #include <qvariant.h>
 
@@ -33,7 +33,7 @@ class KOPROPERTY_EXPORT DummyWidget: public Widget
 
 	public:
 		DummyWidget(Property *property, QWidget *parent=0, const char *name=0);
-		~DummyWidget();
+		virtual ~DummyWidget();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);

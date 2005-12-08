@@ -21,7 +21,7 @@
 #ifndef KPROPERTY_COLOREDIT_H
 #define KPROPERTY_COLOREDIT_H
 
-#include "widget.h"
+#include "../widget.h"
 
 #ifdef QT_ONLY
 class QPushButton;
@@ -37,7 +37,7 @@ class KOPROPERTY_EXPORT ColorButton : public Widget
 
 	public:
 		ColorButton(Property *property, QWidget *parent=0, const char *name=0);
-		~ColorButton();
+		virtual ~ColorButton();
 
 		virtual QVariant value() const;
 		virtual void setValue(const QVariant &value, bool emitChange=true);
