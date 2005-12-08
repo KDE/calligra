@@ -47,12 +47,12 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, const char* name, WFlags fl
 {
     if ( !name )
 	setName( "CalendarEditBase" );
-    CalendarEditBaseLayout = new QHBoxLayout( this, 11, 6, "CalendarEditBaseLayout");
+    CalendarEditBaseLayout = new QHBoxLayout( this, 0, 0, "CalendarEditBaseLayout");
 
     groupBox2 = new QGroupBox( this, "groupBox2" );
     groupBox2->setColumnLayout(0, Qt::Vertical );
     groupBox2->layout()->setSpacing( 6 );
-    groupBox2->layout()->setMargin( 11 );
+    groupBox2->layout()->setMargin( 6 );
     groupBox2Layout = new QGridLayout( groupBox2->layout() );
     groupBox2Layout->setAlignment( Qt::AlignTop );
 
@@ -63,7 +63,7 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, const char* name, WFlags fl
     day = new QButtonGroup( groupBox2, "day" );
     day->setColumnLayout(0, Qt::Vertical );
     day->layout()->setSpacing( 6 );
-    day->layout()->setMargin( 11 );
+    day->layout()->setMargin( 6 );
     dayLayout = new QVBoxLayout( day->layout() );
     dayLayout->setAlignment( Qt::AlignTop );
 
@@ -79,7 +79,7 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, const char* name, WFlags fl
     groupBox4 = new QGroupBox( day, "groupBox4" );
     groupBox4->setColumnLayout(0, Qt::Vertical );
     groupBox4->layout()->setSpacing( 6 );
-    groupBox4->layout()->setMargin( 11 );
+    groupBox4->layout()->setMargin( 6 );
     groupBox4Layout = new QVBoxLayout( groupBox4->layout() );
     groupBox4Layout->setAlignment( Qt::AlignTop );
 
@@ -109,7 +109,7 @@ CalendarEditBase::CalendarEditBase( QWidget* parent, const char* name, WFlags fl
     groupBox2Layout->addWidget( day, 1, 1 );
     CalendarEditBaseLayout->addWidget( groupBox2 );
     languageChange();
-    resize( QSize(540, 326).expandedTo(minimumSizeHint()) );
+    resize( QSize(540, 340).expandedTo(minimumSizeHint()) );
     clearWState( WState_Polished );
 }
 

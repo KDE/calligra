@@ -21,6 +21,8 @@
 #ifndef KPTCALENDARLISTDIALOGBASE_H
 #define KPTCALENDARLISTDIALOGBASE_H
 
+#include "kptcalendarlistpanel.h"
+
 #include <qvariant.h>
 #include <qwidget.h>
 
@@ -39,31 +41,14 @@ namespace KPlato
 
 class CalendarEdit;
 
-class CalendarListDialogBase : public QWidget
+class CalendarListDialogBase : public CalendarListPanel
 {
     Q_OBJECT
-
 public:
     CalendarListDialogBase( QWidget* parent = 0, const char* name = 0, WFlags fl = 0 );
-    ~CalendarListDialogBase();
 
-    QListView* calendarList;
-    QLineEdit* editName;
-    QPushButton* bDelete;
-    QPushButton* bAdd;
-    QLabel* textLabel2;
-    QComboBox* baseCalendar;
-   
     CalendarEdit* calendar;
 
-protected:
-    QHBoxLayout* CalendarListDialogBaseLayout;
-    QGridLayout* layout6;
-    QHBoxLayout* layout10;
-    QVBoxLayout* layout1;
-
-protected slots:
-    virtual void languageChange();
 
 };
 

@@ -28,7 +28,7 @@
 
 #include <qstring.h>
 
-class KMacroCommand;
+class KCommand;
 
 namespace KPlato
 {
@@ -49,22 +49,33 @@ public:
 
     QPtrList<CalendarListViewItem> &deletedItems();
 
-public slots:    
+    void renameStopped(QListViewItem *item);
+
+public slots:
+    void slotSelectionChanged();
     void slotSelectionChanged(QListViewItem *listItem);
 
 private slots:
-    void slotCheckAllFieldsFilled();
     void slotBaseCalendarActivated(int id);
     void slotCalendarModified();
     void slotDeleteClicked();
     void slotAddClicked();
     void slotEnableButtonOk(bool on);
+    void slotItemRenamed(QListViewItem *item, int col);
+    void slotListDoubleClicked(QListViewItem *item, const QPoint&, int col);
+    void slotStartRename(QListViewItem *item, int col);
+    void slotRenameStarted(QListViewItem *item, int col);
 
 signals:
     void obligatedFieldsFilled(bool yes);
     void calendarModified();
     void calendarChanged();
     void enableButtonOk(bool on);
+
+    //internal
+    void renameStarted(QListViewItem *, int);
+    void startRename(QListViewItem *item, int col);
+    void selectionChanged();
 
 protected:
     CalendarListViewItem *findItem(Calendar *cal);
@@ -73,6 +84,7 @@ private:
     Project &project;
     QPtrList<CalendarListViewItem> m_deletedItems;
     QPtrList<CalendarListViewItem> baseCalendarList;
+    QListViewItem *m_renameItem;
 };
 
 class CalendarListDialog : public KDialogBase {
@@ -80,7 +92,7 @@ class CalendarListDialog : public KDialogBase {
 public:
     CalendarListDialog(Project &project, QWidget *parent=0, const char *name=0);
     
-    KMacroCommand *buildCommand(Part *part);
+    KCommand *buildCommand(Part *part);
 
 protected slots:
     void slotOk();

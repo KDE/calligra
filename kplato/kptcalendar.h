@@ -69,7 +69,9 @@ public:
     void setState(int state) { m_state = state; }
 
     bool operator==(const CalendarDay *day) const;
+    bool operator==(const CalendarDay &day) const;
     bool operator!=(const CalendarDay *day) const;
+    bool operator!=(const CalendarDay &day) const;
 
     /**
      * Returns the amount of 'worktime' that can be done on
@@ -128,7 +130,11 @@ public:
      */
     CalendarDay *weekday(int day) const;
     CalendarDay *weekday(const QDate &date) const { return weekday(date.dayOfWeek()-1); }
-
+    CalendarDay *replace(int weekday, CalendarDay *day) {
+        CalendarDay *d = m_weekdays.at(weekday);
+        m_weekdays.replace(weekday, day);
+        return d;
+    }
     IntMap map();
     
     void setWeekday(IntMap::iterator it, int state) { m_weekdays.at(it.key())->setState(state); }
@@ -279,6 +285,7 @@ public:
     CalendarDay *findDay(const QDate &date, bool skipNone=false) const;
     bool addDay(CalendarDay *day) { return m_days.insert(0, day); }
     bool removeDay(CalendarDay *day) { return m_days.removeRef(day); }
+    CalendarDay *takeDay(CalendarDay *day) { return m_days.take(m_days.find(day)); }
     const QPtrList<CalendarDay> &days() const { return m_days; }
     
     /**

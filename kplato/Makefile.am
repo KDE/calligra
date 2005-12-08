@@ -4,6 +4,7 @@ INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/kdgantt -I$(top_srcdir)/kugar/lib
            $(all_includes)
 
 libkplatopart_la_SOURCES = \
+    kptcalendarlistpanel.ui \
     kptresourceappointmentsview.cc \
     kpttaskappointmentsview.cc \
     kptdoublelistviewbase.cc \

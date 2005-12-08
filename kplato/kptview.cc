@@ -244,6 +244,7 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 #ifndef NDEBUG
     Q_UNUSED( actPrintDebug );
     Q_UNUSED( actPrintCalendarDebug );
+    Q_UNUSED( actExportGantt );
 #endif
 
 }
@@ -273,8 +274,8 @@ void View::setZoom(double zoom) {
 }
 
 void View::setupPrinter(KPrinter &printer) {
+    Q_UNUSED(printer);
     kdDebug()<<k_funcinfo<<endl;
-
 }
 
 void View::print(KPrinter &printer) {

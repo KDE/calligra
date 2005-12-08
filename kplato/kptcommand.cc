@@ -48,14 +48,14 @@ void CalendarAddCmd::execute() {
     }
     m_cal->setDeleted(false);
     
-    setCommandType(0);
+    setCommandType(1);
     //kdDebug()<<k_funcinfo<<m_cal->name()<<" added to: "<<m_project->name()<<endl;
 }
 
 void CalendarAddCmd::unexecute() {
     m_cal->setDeleted(true);
     
-    setCommandType(0);
+    setCommandType(1);
     //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
 }
 
@@ -67,13 +67,143 @@ CalendarDeleteCmd::CalendarDeleteCmd(Part *part, Calendar *cal, QString name)
 void CalendarDeleteCmd::execute() {
     m_cal->setDeleted(true);
     
-    setCommandType(0);
+    setCommandType(1);
 }
 
 void CalendarDeleteCmd::unexecute() {
     m_cal->setDeleted(false);
     
+    setCommandType(1);
+}
+
+CalendarModifyNameCmd::CalendarModifyNameCmd(Part *part, Calendar *cal, QString newvalue, QString name)
+    : NamedCommand(part, name),
+      m_cal(cal) {
+      
+    m_oldvalue = cal->name();
+    m_newvalue = newvalue;
+    //kdDebug()<<k_funcinfo<<cal->name()<<endl;
+}
+void CalendarModifyNameCmd::execute() {
+    m_cal->setName(m_newvalue);
     setCommandType(0);
+    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+}
+void CalendarModifyNameCmd::unexecute() {
+    m_cal->setName(m_oldvalue);
+    setCommandType(0);
+    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+}
+
+CalendarModifyParentCmd::CalendarModifyParentCmd(Part *part, Calendar *cal, Calendar *newvalue, QString name)
+    : NamedCommand(part, name),
+      m_cal(cal) {
+      
+    m_oldvalue = cal->parent();
+    m_newvalue = newvalue;
+    //kdDebug()<<k_funcinfo<<cal->name()<<endl;
+}
+void CalendarModifyParentCmd::execute() {
+    m_cal->setParent(m_newvalue);
+    setCommandType(1);
+}
+void CalendarModifyParentCmd::unexecute() {
+    m_cal->setParent(m_oldvalue);
+    setCommandType(1);
+}
+
+CalendarAddDayCmd::CalendarAddDayCmd(Part *part, Calendar *cal, CalendarDay *newvalue, QString name)
+    : NamedCommand(part, name),
+      m_cal(cal),
+      m_mine(true) {
+      
+    m_newvalue = newvalue;
+    //kdDebug()<<k_funcinfo<<cal->name()<<endl;
+}
+CalendarAddDayCmd::~CalendarAddDayCmd() {
+    //kdDebug()<<k_funcinfo<<endl;
+    if (m_mine)
+        delete m_newvalue;
+}
+void CalendarAddDayCmd::execute() {
+    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    m_cal->addDay(m_newvalue);
+    m_mine = false;
+    setCommandType(1);
+}
+void CalendarAddDayCmd::unexecute() {
+    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    m_cal->takeDay(m_newvalue);
+    m_mine = true;
+    setCommandType(1);
+}
+
+CalendarRemoveDayCmd::CalendarRemoveDayCmd(Part *part, Calendar *cal, const QDate &day, QString name)
+    : CalendarAddDayCmd(part, cal, cal->findDay(day), name) {
+    //kdDebug()<<k_funcinfo<<cal->name()<<endl;
+}
+void CalendarRemoveDayCmd::execute() {
+    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    CalendarAddDayCmd::unexecute();
+}
+void CalendarRemoveDayCmd::unexecute() {
+    //kdDebug()<<k_funcinfo<<m_cal->name()<<endl;
+    CalendarAddDayCmd::execute();
+}
+
+CalendarModifyDayCmd::CalendarModifyDayCmd(Part *part, Calendar *cal, CalendarDay *value, QString name)
+    : NamedCommand(part, name),
+      m_cal(cal),
+      m_mine(true) {
+      
+    m_newvalue = value;
+    m_oldvalue = cal->findDay(value->date());
+    //kdDebug()<<k_funcinfo<<cal->name()<<" old:("<<m_oldvalue<<") new:("<<m_newvalue<<")"<<endl;
+}
+CalendarModifyDayCmd::~CalendarModifyDayCmd() {
+    //kdDebug()<<k_funcinfo<<endl;
+    if (m_mine) {
+        delete m_newvalue;
+    } else {
+        delete m_oldvalue;
+    }
+}
+void CalendarModifyDayCmd::execute() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_cal->takeDay(m_oldvalue);
+    m_cal->addDay(m_newvalue);
+    m_mine = false;
+    setCommandType(1);
+}
+void CalendarModifyDayCmd::unexecute() {
+    //kdDebug()<<k_funcinfo<<endl;
+    m_cal->takeDay(m_newvalue);
+    m_cal->addDay(m_oldvalue);
+    m_mine = true;
+    setCommandType(1);
+}
+
+CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd(Part *part, Calendar *cal, int weekday, CalendarDay *value, QString name)
+    : NamedCommand(part, name),
+      m_weekday(weekday),
+      m_cal(cal),
+      m_mine(true) {
+      
+    m_value = value;
+    //kdDebug()<<k_funcinfo<<cal->name()<<" ("<<value<<")"<<endl;
+}
+CalendarModifyWeekdayCmd::~CalendarModifyWeekdayCmd() {
+    //kdDebug()<<k_funcinfo<<m_value<<endl;
+    delete m_value;
+    
+}
+void CalendarModifyWeekdayCmd::execute() {
+    m_value = m_cal->weekdays()->replace(m_weekday, m_value);
+    //kdDebug()<<k_funcinfo<<m_value<<endl;
+    setCommandType(1);
+}
+void CalendarModifyWeekdayCmd::unexecute() {
+    execute();
 }
 
 NodeDeleteCmd::NodeDeleteCmd(Part *part, Node *node, QString name)

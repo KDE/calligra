@@ -36,6 +36,7 @@ class Accounts;
 class Project;
 class Task;
 class Calendar;
+class CalendarDay;
 class Relation;
 class ResourceGroupRequest;
 class ResourceRequest;
@@ -81,6 +82,85 @@ public:
 private:
     Calendar *m_cal;
 };
+
+class CalendarModifyNameCmd : public NamedCommand
+{
+public:
+    CalendarModifyNameCmd(Part *part, Calendar *cal, QString newvalue, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_cal;
+    QString m_newvalue;
+    QString m_oldvalue;
+};
+
+class CalendarModifyParentCmd : public NamedCommand
+{
+public:
+    CalendarModifyParentCmd(Part *part, Calendar *cal, Calendar *newvalue, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_cal;
+    Calendar *m_newvalue;
+    Calendar *m_oldvalue;
+};
+
+class CalendarAddDayCmd : public NamedCommand
+{
+public:
+    CalendarAddDayCmd(Part *part, Calendar *cal, CalendarDay *newvalue, QString name=0);
+    ~CalendarAddDayCmd();
+    void execute();
+    void unexecute();
+
+protected:
+    Calendar *m_cal;
+    CalendarDay *m_newvalue;
+    bool m_mine;
+};
+
+class CalendarRemoveDayCmd : public CalendarAddDayCmd
+{
+public:
+    CalendarRemoveDayCmd(Part *part, Calendar *cal, const QDate &day, QString name=0);
+    void execute();
+    void unexecute();
+};
+
+class CalendarModifyDayCmd : public NamedCommand
+{
+public:
+    CalendarModifyDayCmd(Part *part, Calendar *cal, CalendarDay *value, QString name=0);
+    ~CalendarModifyDayCmd();
+    void execute();
+    void unexecute();
+
+private:
+    Calendar *m_cal;
+    CalendarDay *m_newvalue;
+    CalendarDay *m_oldvalue;
+    bool m_mine;
+};
+
+class CalendarModifyWeekdayCmd : public NamedCommand
+{
+public:
+    CalendarModifyWeekdayCmd(Part *part, Calendar *cal, int weekday, CalendarDay *value, QString name=0);
+    ~CalendarModifyWeekdayCmd();
+    void execute();
+    void unexecute();
+
+private:
+    int m_weekday;
+    Calendar *m_cal;
+    CalendarDay *m_value;
+    bool m_mine;
+};
+
 
 class NodeDeleteCmd : public NamedCommand
 {

@@ -25,6 +25,7 @@
 #include "intervalitem.h"
 
 #include <qbuttongroup.h>
+#include <qheader.h>
 #include <qpushbutton.h>
 #include <qradiobutton.h>
 #include <qcombobox.h>
@@ -54,6 +55,8 @@ CalendarEdit::CalendarEdit (QWidget *parent, const char *name)
  {
 
     clear();
+    intervalList->header()->setStretchEnabled(true, 0);
+    intervalList->setShowSortIndicator(true);
     intervalList->setSorting(0);
 
     connect (calendarPanel, SIGNAL(dateChanged(QDate)), SLOT(slotDateSelected(QDate)));

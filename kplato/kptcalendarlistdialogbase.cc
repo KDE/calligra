@@ -17,11 +17,12 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include <klocale.h>
 #include "kptcalendarlistdialogbase.h"
 #include "kptcalendaredit.h"
 
 #include <qvariant.h>
+#include <qframe.h>
+#include <qgroupbox.h>
 #include <qheader.h>
 #include <qlistview.h>
 #include <qlineedit.h>
@@ -33,88 +34,23 @@
 #include <qlabel.h>
 #include <qcombobox.h>
 
+#include <klocale.h>
 #include <kdebug.h>
 
 namespace KPlato
 {
 
-/*
- *  Constructs a CalendarListDialogBase as a child of 'parent', with the
- *  name 'name' and widget flags set to 'f'.
- */
 CalendarListDialogBase::CalendarListDialogBase( QWidget* parent, const char* name, WFlags fl )
-    : QWidget( parent, name, fl )
+    : CalendarListPanel( parent, name, fl )
 {
     if ( !name )
-	setName( "CalendarListDialogBase" );
-    CalendarListDialogBaseLayout = new QHBoxLayout( this, 11, 6, "CalendarListDialogBaseLayout");
-
-    layout6 = new QGridLayout( 0, 1, 1, 0, 6, "layout6");
-
-    calendarList = new QListView( this, "calendarList" );
-    calendarList->setMaximumWidth(150);
-    calendarList->addColumn( tr2i18n( "Calendar Name" ) );
-
-    layout6->addMultiCellWidget( calendarList, 0, 0, 0, 1 );
-
-    editName = new QLineEdit( this, "editName" );
-    editName->setMaximumWidth(150);
-
-    layout6->addMultiCellWidget( editName, 1, 1, 0, 1 );
-
-    bDelete = new QPushButton( this, "bDelete" );
-    bDelete->setMaximumWidth(75);
-
-    layout6->addWidget( bDelete, 2, 1 );
-
-    bAdd = new QPushButton( this, "bAdd" );
-    bAdd->setMaximumWidth(75);
-
-    layout6->addWidget( bAdd, 2, 0 );
-    CalendarListDialogBaseLayout->addLayout( layout6 );
-    
-    layout1 = new QVBoxLayout( 0, 0, 6, "layout1"); // 
-    layout10 = new QHBoxLayout( 0, 0, 6, "layout10"); // label+basecalendar
-    layout1->addLayout(layout10);
-    
-    textLabel2 = new QLabel( this, "textLabel2" );
-    layout10->addWidget( textLabel2 );
-
-    baseCalendar = new QComboBox( FALSE, this, "baseCalendar" );
-    layout10->addWidget( baseCalendar );
-    
-    CalendarListDialogBaseLayout->addLayout( layout1 );
-
-    calendar = new CalendarEdit( this, "calendar" );
-    layout1->addWidget( calendar );
-    CalendarListDialogBaseLayout->setStretchFactor(layout1, 1);
-    CalendarListDialogBaseLayout->setStretchFactor(calendar, 2);
-    languageChange();
-    resize( QSize(598, 350).expandedTo(minimumSizeHint()) );
-    clearWState( WState_Polished );
-
+        setName( "CalendarListDialogBase" );
+        
+    QVBoxLayout *l = new QVBoxLayout(calendarBox);
+    calendar = new CalendarEdit(calendarBox);
+    l->addWidget(calendar);
 }
 
-/*
- *  Destroys the object and frees any allocated resources
- */
-CalendarListDialogBase::~CalendarListDialogBase()
-{
-    // no need to delete child widgets, Qt does it all for us
-}
-
-/*
- *  Sets the strings of the subwidgets using the current
- *  language.
- */
-void CalendarListDialogBase::languageChange()
-{
-    setCaption( tr2i18n( "CalendarListDialogBase" ) );
-    calendarList->header()->setLabel( 0, tr2i18n( "Calendar name" ) );
-    bDelete->setText( tr2i18n( "Remove" ) );
-    bAdd->setText( tr2i18n( "Add" ) );
-    textLabel2->setText( tr2i18n( "Parent calendar:" ) );
-}
 
 } //Kplato namespace
 #include "kptcalendarlistdialogbase.moc"
