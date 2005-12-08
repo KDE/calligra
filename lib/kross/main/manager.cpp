@@ -124,7 +124,7 @@ InterpreterInfo* Manager::getInterpreterInfo(const QString& interpretername)
 ScriptContainer::Ptr Manager::getScriptContainer(const QString& scriptname)
 {
     if(hadException()) {
-        kdDebug() << QString("Kross::Api::Manager::getScriptContainer(%1)").arg(scriptname) << endl;
+        kdDebug() << QString("Kross::Api::Manager::getScriptContainer(%1) hadException: %2").arg(scriptname).arg(getException()->toString()) << endl;
         return 0;
     }
 
@@ -168,7 +168,7 @@ bool Manager::addModule(Module::Ptr module)
 {
     QString name = module->getName();
     //if( d->modules.contains(name) ) return false;
-//d->modules.replace(name, module);
+    d->modules.replace(name, module);
     return true;
 }
 

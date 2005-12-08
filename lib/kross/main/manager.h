@@ -120,8 +120,8 @@ namespace Kross { namespace Api {
             const QStringList getInterpreters();
 
             /**
-             * Add the an external module to the list of loaded
-             * modules.
+             * Add the an external module to the global shared list of 
+             * loaded modules.
              * 
              * @param module The @a Module instace to add.
              * @return true if the module was added successfully else
@@ -130,14 +130,13 @@ namespace Kross { namespace Api {
             bool addModule(Module::Ptr module);
 
             /**
-             * Load an external module and add it as child to
-             * the manager. The given \p modulename is the
-             * name of the library we should try to load. Those
-             * library needs to be a valid kross module.
+             * Load an external module and return it.
              *
-             * \param modulename The name of the module to load.
+             * \param modulename The name of the library we should try to 
+             *        load. Those library needs to be a valid kross module.
              * \return The loaded \a Object or NULL if loading
-             *        failed.
+             *        failed. The loaded Module isn't added to the global
+             *        shared list of modules.
              */
             Module::Ptr loadModule(const QString& modulename);
 
