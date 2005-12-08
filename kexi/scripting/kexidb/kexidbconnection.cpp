@@ -144,7 +144,9 @@ const QString KexiDBConnection::getClassName() const
 
 Kross::Api::Object::Ptr KexiDBConnection::lastError(Kross::Api::List::Ptr)
 {
-    return new Kross::Api::Variant( connection()->errorMsg() );
+    if(! m_connection)
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Connection is NULL.")) );
+    return new Kross::Api::Variant( m_connection->errorMsg() );
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::data(Kross::Api::List::Ptr)

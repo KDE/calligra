@@ -227,11 +227,15 @@ class KexiDBOutput:
 		for field in record.fields:
 			values.append( str(field) )
 		
-		if self.connection.insertRecord(self.tableschema, values):
-			self.result.success(record)
-		else:
-			self.result.failed(record)
-			#raise Exception("Failed to insert into table \"%s\" the record:\n%s\n%s" % (self.tableschema.name(),values,self.connection.lastError()))
+		try:
+			if self.connection.insertRecord(self.tableschema, values):
+				self.result.success(record)
+			else:
+				self.result.failed(record)
+		except:
+			err = self.connection.lastError()
+			raise Exception( "Failed to insert into table \"%s\" the record:\n%s\n\n%s" % (self.tableschema.name(),values,err) )
+			#raise Exception( "Failed to insert into table \"%s\" the record:\n%s\n%s" % (self.tableschema.name(),values,self.connection.lastError()) )
 
 class GuiApp:
 	""" The GUI-dialog displayed to let the user define the source
