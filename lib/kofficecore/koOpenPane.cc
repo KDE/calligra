@@ -114,7 +114,7 @@ void KoOpenPane::showOpenFileDialog()
   if(!url.isEmpty()) {
     KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
     cfgGrp.writeEntry("LastReturnType", "File");
-    emit openExistingFile(url.path());
+    emit openExistingFile(url.url());
   }
 }
 

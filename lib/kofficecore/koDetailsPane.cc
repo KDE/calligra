@@ -294,9 +294,8 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
       if(!url.isLocalFile() || QFile::exists(url.path())) {
         KFileItem* fileItem = new KFileItem(KFileItem::Unknown, KFileItem::Unknown, url);
         fileList.append(fileItem);
-        QString listText = "<b>" + name + "</b><br>" + url.path();
         KoFileListItem* item = new KoFileListItem(m_documentList,
-            m_documentList->lastItem(), name, url.path(), fileItem);
+            m_documentList->lastItem(), name, url.url(), fileItem);
         //center all icons in 64x64 area
         QImage icon = fileItem->pixmap(64).convertToImage();
         icon.setAlphaBuffer(true);

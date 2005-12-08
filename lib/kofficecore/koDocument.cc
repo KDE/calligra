@@ -2474,7 +2474,11 @@ void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
         }
     }
 
-    createOpenPane( parent, instance(), templateType() );
+    if(d->m_startUpWidget){
+      d->m_startUpWidget->show();
+    }
+
+    d->m_startUpWidget = createOpenPane( parent->centralWidget(), instance(), templateType() );
     parent->setDocToOpen( this );
 }
 
@@ -2503,24 +2507,19 @@ void KoDocument::openTemplate( const QString& file )
     }
 }
 
-KoOpenPane* KoDocument::createOpenPane( KoMainWindow* parent, KInstance* instance,
+KoOpenPane* KoDocument::createOpenPane( QWidget* parent, KInstance* instance,
                                         const QString& templateType )
 {
-    if(d->m_startUpWidget){
-        d->m_startUpWidget->show();
-        return d->m_startUpWidget;
-    }
+    KoOpenPane* openPane = new KoOpenPane( parent, instance, templateType );
+    openPane->setCustomDocumentWidget( createCustomDocumentWidget(openPane) );
+    openPane->show();
 
-    d->m_startUpWidget = new KoOpenPane( parent->centralWidget(), instance, templateType );
-    d->m_startUpWidget->setCustomDocumentWidget( createCustomDocumentWidget(d->m_startUpWidget) );
-    d->m_startUpWidget->show();
+    connect( openPane, SIGNAL( openExistingFile( const QString& ) ),
+             this, SLOT( openExistingFile( const QString& ) ) );
+    connect( openPane, SIGNAL( openTemplate( const QString& ) ),
+             this, SLOT( openTemplate( const QString& ) ) );
 
-    connect( d->m_startUpWidget, SIGNAL( openExistingFile( const QString& ) ),
-            this, SLOT( openExistingFile( const QString& ) ) );
-    connect( d->m_startUpWidget, SIGNAL( openTemplate( const QString& ) ),
-            this, SLOT( openTemplate( const QString& ) ) );
-
-    return d->m_startUpWidget;
+    return openPane;
 }
 
 void KoDocument::setTemplateType( const QString& _templateType )
@@ -2539,8 +2538,9 @@ void KoDocument::deleteOpenPane()
         d->m_startUpWidget->hide();
         QTimer::singleShot(1000, this, SLOT(deleteOpenPaneDelayed()));
 
-        kdDebug() << "Shell: " << shells().getFirst() << endl;
         shells().getFirst()->setRootDocument( this );
+    } else {
+      emit closeEmbedInitDialog();
     }
 }
 
@@ -2550,8 +2550,18 @@ void KoDocument::deleteOpenPaneDelayed()
     d->m_startUpWidget = 0;
 }
 
-QWidget* KoDocument::createCustomDocumentWidget(QWidget *parent) {
+QWidget* KoDocument::createCustomDocumentWidget(QWidget */*parent*/) {
     return 0;
+}
+
+bool KoDocument::showEmbedInitDialog(QWidget* parent)
+{
+    KDialogBase dlg(parent, "EmbedInitDialog", true, i18n("Embeded"), 0, KDialogBase::NoDefault);
+    dlg.setMainWidget(createOpenPane(&dlg, instance(), templateType()));
+    connect(this, SIGNAL(closeEmbedInitDialog()), &dlg, SLOT(slotOk()));
+    bool ok = dlg.exec() == QDialog::Accepted;
+
+    return ok;
 }
 
 #include "koDocument_p.moc"

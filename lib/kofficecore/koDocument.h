@@ -459,9 +459,9 @@ public:
 
     /**
      * Creates and shows the start up widget.
-     * You have to overload this method if you want to add a custom pane.
      * @param parent the KoMainWindow used as parent for the widget.
      * @param alwaysShow always show the widget even if the user has configured it to not show.
+     * @since 1.5
      */
     virtual void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
 
@@ -900,6 +900,13 @@ public:
      */
     QString templateType() const;
 
+    /**
+     * Shows the init dialog when embeding
+     * @param parent the parent widget
+     * @since 1.5
+     */
+    virtual bool showEmbedInitDialog(QWidget* parent);
+
 signals:
 
     /**
@@ -945,6 +952,8 @@ signals:
     * Emitted when the document is modified
     */
     void modified( bool );
+
+    void closeEmbedInitDialog();
 
 protected slots:
     /**
@@ -1093,12 +1102,14 @@ protected:
 
     /**
      * Creates the open widget showed at application start up.
+     * @since 1.5
      */
-    KoOpenPane* createOpenPane( KoMainWindow* parent, KInstance* instance,
+    KoOpenPane* createOpenPane( QWidget* parent, KInstance* instance,
                                 const QString& templateType = QString::null);
 
     /**
      * Removes the open widget showed at application start up.
+     * @since 1.5
      */
     void deleteOpenPane();
 
