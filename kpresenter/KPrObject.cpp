@@ -31,6 +31,7 @@
 #include <qregion.h>
 #include <qdom.h>
 #include <qbuffer.h>
+#include <qregexp.h>
 
 #include <kapplication.h>
 #include <KoOasisContext.h>
@@ -339,17 +340,31 @@ void KPrObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
 {
     xmlWriter.addAttribute( "draw:id", "object" + QString::number( indexObj ) );
     //save all into pt
-    xmlWriter.addAttributePt( "svg:x", orig.x() );
-    xmlWriter.addAttributePt( "svg:y", orig.y() );
     xmlWriter.addAttributePt( "svg:width", ext.width() );
     xmlWriter.addAttributePt( "svg:height", ext.height() );
 
     if ( kAbs( angle ) > 1E-6 )
     {
-        double value = -1 * ( ( double )angle* M_PI )/180.0;
-        QString str=QString( "rotate (%1)" ).arg( value );
-        xmlWriter.addAttribute( "draw:transform", str );
+        double angInRad = -angle * M_PI / 180.0;
+        QWMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
+        KoPoint center( ext.width() / 2, ext.height() / 2 );
+        double rotX = 0.0;
+        double rotY = 0.0;
+        m.map( center.x(), center.y(), &rotX, &rotY );
+        KoPoint rot( rotX, rotY );
+        KoPoint trans( center - rot + orig );
 
+        QCString transX;
+        transX.setNum( trans.x(), 'g', DBL_DIG );
+        QCString transY;
+        transY.setNum( trans.y(), 'g', DBL_DIG );
+        QString str = QString( "rotate(%1) translate(%2pt %3pt)" ).arg( angInRad ).arg( transX ).arg( transY );
+        xmlWriter.addAttribute( "draw:transform", str );
+    }
+    else
+    {
+        xmlWriter.addAttributePt( "svg:x", orig.x() );
+        xmlWriter.addAttributePt( "svg:y", orig.y() );
     }
 }
 
@@ -599,26 +614,37 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
     //kdDebug()<<" orig.x() :"<<orig.x() <<" orig.y() :"<<orig.y() <<"ext.width() :"<<ext.width()<<" ext.height(): "<<ext.height()<<endl;
     KoStyleStack &styleStack = context.styleStack();
     styleStack.setTypeProperties( "" ); //no type default type
-    if( element.hasAttributeNS( KoXmlNS::draw, "transform" ))
+    if ( element.hasAttributeNS( KoXmlNS::draw, "transform" ) )
+    {
+        // there is some more stuff in the spezification
+        // TODO make it work for all cases
+        QString transform = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
+        kdDebug()<<" transform action :"<<transform<<endl;
+        QRegExp rx( "rotate ?\\(([^)]+)\\) translate ?\\(([^ ]+) ([^)]+)\\)" );
+        if ( rx.search( transform ) != - 1 && rx.numCaptures() == 3 )
         {
-            QString transform = element.attributeNS( KoXmlNS::draw, "transform", QString::null );
-            kdDebug()<<" transform action :"<<transform<<endl;
-            if( transform.contains("rotate ("))
-                {
-                    //kdDebug()<<" rotate object \n";
-                    transform = transform.remove("rotate (" );
-                    transform = transform.left(transform.find(")"));
-                    //kdDebug()<<" transform :"<<transform<<endl;
-                    bool ok;
-                    double radian = transform.toDouble(&ok);
-                    if( ok )
-                        {
-                            angle = (-1 * ((radian*180)/M_PI));
-                        }
-                    else
-                        angle = 0.0;
-                }
+            bool ok = false;
+            double angInRad = rx.cap( 1 ).toDouble( &ok );
+            if( ok )
+            {
+                angle = -angInRad * 180.0 / M_PI;
+            }
+            else
+            {
+                angle = 0.0;
+                angInRad = 0.0;
+            }
+            QWMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
+            KoPoint center( ext.width() / 2, ext.height() / 2 );
+            double transX = 0.0;
+            double transY = 0.0;
+            m.map( center.x(), center.y(), &transX, &transY );
+            KoPoint diff( transX, transY );
+            KoPoint trans( KoUnit::parseValue( rx.cap( 2 ) ), KoUnit::parseValue( rx.cap( 3 ) ) );
+            orig = trans - center + diff;
+            kdDebug(33001) << "trans = " << trans << ", center = " << center << ", diff = " << diff << ", orig = " << orig << endl;
         }
+    }
     QDomElement *animation = 0L;
     lstAnimation *tmp = 0L;
     if( element.hasAttributeNS( KoXmlNS::draw, "id"))

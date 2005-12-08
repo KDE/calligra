@@ -82,41 +82,61 @@ void KPrLineObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) c
 {
     xmlWriter.addAttribute( "draw:id", "object" + QString::number( indexObj ) );
 
-    float x1 = orig.x();
-    float y1 = orig.y();
-    float x2 = x1 + ext.width();
-    float y2 = y1;
+    double x1 = 0.0;
+    double y1 = 0.0;
+    double x2 = 0.0;
+    double y2 = 0.0;
+    KoPoint center( ext.width() / 2, ext.height() / 2 );
 
-    switch( lineType )
+    switch ( lineType )
     {
-    case LT_LD_RU:
-        y1 += ext.height();
-        break;
-    case LT_HORZ:
-        y1 += ext.height() / 2.0;
-        y2 = y1;
-        break;
-    case LT_VERT:
-        x1 += ext.width() / 2.0;
-        x2 = x1;
-        // no break
-    case LT_LU_RD:
-        y2 += ext.height();
-        break;
+        case LT_LD_RU:
+            x1 = -center.x() / 2.0;
+            y1 = center.y() / 2.0;
+            x2 = -x1;
+            y2 = -y1;
+            break;
+        case LT_HORZ:
+            x1 = -center.x() / 2.0;
+            x2 = -x1;
+            break;
+        case LT_VERT:
+            y1 = -center.y() / 2.0;
+            y2 = -y1;
+            break;
+        case LT_LU_RD:
+            x1 = -center.x() / 2.0;
+            y1 = -center.y() / 2.0;
+            x2 = -x1;
+            y2 = -y1;
+            break;
     }
+    if ( kAbs( angle ) > 1E-6 )
+    {
+        double angInRad = -angle * M_PI / 180.0;
+        QWMatrix m( cos( angInRad ), -sin( angInRad ), sin( angInRad ), cos( angInRad ), 0, 0 );
+        double transX1 = 0.0;
+        double transY1 = 0.0;
+        double transX2 = 0.0;
+        double transY2 = 0.0;
+        m.map( x1, y1, &transX1, &transY1 );
+        m.map( x2, y2, &transX2, &transY2 );
+        x1 = transX1;
+        y1 = transY1;
+        x2 = transX2;
+        y2 = transY2;
+    }
+    
+    x1 += orig.x() + center.x();
+    y1 += orig.y() + center.y();
+    x2 += orig.x() + center.x();
+    y2 += orig.y() + center.y();
 
     //save all into pt
     xmlWriter.addAttributePt( "svg:x1", x1 );
     xmlWriter.addAttributePt( "svg:y1", y1 );
     xmlWriter.addAttributePt( "svg:x2", x2 );
     xmlWriter.addAttributePt( "svg:y2", y2 );
-
-    if ( kAbs( angle ) > 1E-6 )
-    {
-        double value = -1 * ( ( double )angle* M_PI )/180.0;
-        QString str=QString( "rotate (%1)" ).arg( value );
-        xmlWriter.addAttribute( "draw:transform", str );
-    }
 }
 
 const char * KPrLineObject::getOasisElementName() const

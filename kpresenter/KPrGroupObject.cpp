@@ -147,15 +147,6 @@ bool KPrGroupObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 void KPrGroupObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) const
 {
     xmlWriter.addAttribute( "draw:id", "object" + QString::number( indexObj ) );
-
-#if 0
-    if ( kAbs( angle ) > 1E-6 )
-    {
-        double value = -1 * ( ( double )angle* M_PI )/180.0;
-        QString str = QString( "rotate (%1)" ).arg( value );
-        xmlWriter.addAttribute( "draw:transform", str );
-    }
-#endif
 }
 
 
