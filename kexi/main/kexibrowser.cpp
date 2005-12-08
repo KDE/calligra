@@ -285,7 +285,15 @@ void
 KexiBrowser::slotSelectionChanged(QListViewItem* i)
 {
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(i);
-	bool gotitem = it && it->item();
+	KexiPart::Part* part = Kexi::partManager().part(it->info());
+	if (!part) {
+		it = static_cast<KexiBrowserItem*>(it->parent());
+		if (it) {
+			part = Kexi::partManager().part(it->info());
+		}
+	}
+
+	const bool gotitem = it && it->item();
 	//bool gotgroup = it && !it->item();
  //TODO: also check if the item is not read only
 	setAvailable("edit_delete",gotitem);
@@ -296,13 +304,6 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 //	m_renameObjectAction->setEnabled(gotitem);
 	setAvailable("edit_edititem",gotitem);
 
-	KexiPart::Part* part = Kexi::partManager().part(it->info());
-	if (!part) {
-		it = static_cast<KexiBrowserItem*>(it->parent());
-		if (it) {
-			part = Kexi::partManager().part(it->info());
-		}
-	}
 	m_openAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DataViewMode));
 	m_designAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::DesignViewMode));
 	m_editTextAction->setEnabled(gotitem && part && (part->supportedViewModes() & Kexi::TextViewMode));
@@ -310,7 +311,7 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	m_itemPopup->setItemVisible(m_openAction_id, m_openAction->isEnabled());
 	m_itemPopup->setItemVisible(m_designAction_id, m_designAction->isEnabled());
 	m_itemPopup->setItemVisible(m_editTextAction_id, part && m_editTextAction->isEnabled());
-	m_itemPopup->setItemVisible(m_exportActionMenu_id, it->info() && it->info()->isDataExportSuppored());
+	m_itemPopup->setItemVisible(m_exportActionMenu_id, gotitem && it->info()->isDataExportSuppored());
 
 	if (m_prevSelectedPart != part) {
 		m_prevSelectedPart = part;
