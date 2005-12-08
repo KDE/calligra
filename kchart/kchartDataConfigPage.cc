@@ -62,14 +62,14 @@ KChartDataConfigPage::KChartDataConfigPage( KChartParams* params,
     QButtonGroup* gb = new QVButtonGroup( i18n( "Data Format" ), this );
     QGridLayout *grid2 = new QGridLayout(gb, 2, 1, KDialog::marginHint(),
 					 KDialog::spacingHint());
-    QWhatsThis::add(gb, i18n("This configuration page can be used to swap the interpretation of rows and columns."));
+    QWhatsThis::add(this, i18n("This configuration page can be used to swap the interpretation of rows and columns."));
     m_rowMajor = new QRadioButton( i18n( "Data in rows" ), gb );
-    QWhatsThis::add(m_rowMajor, i18n("By default one row is considered to be a data set and each column holds the individual values of the data series."));
+    QWhatsThis::add(m_rowMajor, i18n("By default one row is considered to be a data set and each column holds the individual values of the data series. This sets the data in rows on your chart."));
     m_rowMajor->resize( m_rowMajor->sizeHint() );
     grid2->addWidget( m_rowMajor, 0, 0);
 
     m_colMajor = new QRadioButton( i18n( "Data in columns" ), gb );
-    QWhatsThis::add(m_colMajor, i18n("Here you can choose to have a each column hold one data set. Note that the values are not really swapped but only their interpretation."));
+    QWhatsThis::add(m_colMajor, i18n("Here you can choose to have each column hold one data set. Note that the values are not really swapped but only their interpretation."));
     m_colMajor->resize( m_colMajor->sizeHint() );
     grid2->addWidget( m_colMajor, 1, 0);
     grid2->setColStretch(1, 0);

@@ -158,7 +158,8 @@ KChartColorConfigPage::KChartColorConfigPage( KChartParams* params,
     grid->addMultiCellWidget( dataColorHB,  0, 7, 2, 2 );
     _dataColorLB = new KListBox(dataColorHB);
     _dataColorCB = new KColorButton( dataColorHB);
-
+    wtstr = i18n( "Choose a row/column in the list on the left and change its color using this button.");
+    QWhatsThis::add( _dataColorCB, wtstr );
     initDataColorList();
     connect( _dataColorLB, SIGNAL(highlighted(int )), this, SLOT(changeIndex(int)));
     connect( _dataColorLB, SIGNAL(doubleClicked ( QListBoxItem * )), this, SLOT(activeColorButton()));
