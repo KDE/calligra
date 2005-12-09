@@ -515,12 +515,12 @@ protected:
     // Helper stuff for the frame adjustment;
     enum moveFrameType  { RaiseFrame, LowerFrame, BringToFront, SendToBack };
     void adjustZOrderOfSelectedFrames(moveFrameType moveType);
-    void increaseAllZOrdersAbove(int refZOrder, int pageNum, const QPtrList<KWFrame> frameSelection);
-    void decreaseAllZOrdersUnder(int refZOrder, int pageNum, const QPtrList<KWFrame> frameSelection);
-    int raiseFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
-    int lowerFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
-    int bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
-    int sendToBack(const QPtrList<KWFrame> frameSelection, const KWFrame *frame);
+    void increaseAllZOrdersAbove(int refZOrder, int pageNum, const QPtrList<KWFrame>& frameSelection);
+    void decreaseAllZOrdersUnder(int refZOrder, int pageNum, const QPtrList<KWFrame>& frameSelection);
+    int raiseFrame(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame);
+    int lowerFrame(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame);
+    int bringToFront(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame);
+    int sendToBack(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame);
     void textStyleSelected( KoParagStyle *sty );
     void frameStyleSelected( KWFrameStyle *sty );
     void tableStyleSelected( KWTableStyle *sty );

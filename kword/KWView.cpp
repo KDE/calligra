@@ -2581,7 +2581,7 @@ void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
 }
 
 // Make room for refZOrder, by raising all z-orders above it by 1
-void KWView::increaseAllZOrdersAbove(int refZOrder, int pageNum, const QPtrList<KWFrame> frameSelection) {
+void KWView::increaseAllZOrdersAbove(int refZOrder, int pageNum, const QPtrList<KWFrame>& frameSelection) {
     QPtrList<KWFrame> framesInPage = m_doc->framesInPage( pageNum, false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore frames we selected.
@@ -2592,7 +2592,7 @@ void KWView::increaseAllZOrdersAbove(int refZOrder, int pageNum, const QPtrList<
 }
 
 // Make room for refZOrder, by lowering all z-orders below it by 1
-void KWView::decreaseAllZOrdersUnder(int refZOrder, int pageNum, const QPtrList<KWFrame> frameSelection) {
+void KWView::decreaseAllZOrdersUnder(int refZOrder, int pageNum, const QPtrList<KWFrame>& frameSelection) {
     QPtrList<KWFrame> framesInPage = m_doc->framesInPage( pageNum, false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
         if(frameSelection.contains(frameIt.current()) > 0) continue; // ignore frames we selected.
@@ -2602,7 +2602,7 @@ void KWView::decreaseAllZOrdersUnder(int refZOrder, int pageNum, const QPtrList<
     }
 }
 
-int KWView::raiseFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
+int KWView::raiseFrame(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame) {
     int newZOrder = 10000;
     QValueList<int> zorders;
     QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNumber(), false );
@@ -2622,7 +2622,7 @@ int KWView::raiseFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *fr
     return newZOrder;
 }
 
-int KWView::lowerFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
+int KWView::lowerFrame(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame) {
     int newZOrder = -10000;
     QValueList<int> zorders;
     QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNumber(), false );
@@ -2643,7 +2643,7 @@ int KWView::lowerFrame(const QPtrList<KWFrame> frameSelection, const KWFrame *fr
     return newZOrder;
 }
 
-int KWView::bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
+int KWView::bringToFront(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame) {
     int newZOrder = frame->zOrder();
     QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNumber(), false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
@@ -2654,7 +2654,7 @@ int KWView::bringToFront(const QPtrList<KWFrame> frameSelection, const KWFrame *
     return newZOrder;
 }
 
-int KWView::sendToBack(const QPtrList<KWFrame> frameSelection, const KWFrame *frame) {
+int KWView::sendToBack(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame) {
     int newZOrder = frame->zOrder();
     QPtrList<KWFrame> framesInPage = m_doc->framesInPage( frame->pageNumber(), false );
     for ( QPtrListIterator<KWFrame> frameIt( framesInPage ); frameIt.current(); ++frameIt ) {
