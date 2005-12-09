@@ -222,7 +222,7 @@ This option is most important when Automatically add words to completion list is
                                 <enum>Below</enum>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Use this spinbox/slider combination to prevent from automatically adding short words to the completion list.   You can select any value from 5-100 and the words will need to be at least the number of characters set here to be added in the list.</string>
+                                <string>Use this spinbox/slider combination to prevent automatically adding short words to the completion list. You can select any value from 5-100 and the words will need to be at least the number of characters set here to be added to the list.</string>
                             </property>
                         </widget>
                         <widget class="QSpinBox" row="0" column="2">
@@ -236,7 +236,7 @@ This option is most important when Automatically add words to completion list is
                                 <number>5</number>
                             </property>
                             <property name="whatsThis" stdset="0">
-                                <string>Use this spinbox/slider combination to prevent from automatically adding short words to the completion list.   You can select any value from 5-100 and the words will need to be at least the number of characters set here to be added in the list.</string>
+                                <string>Use this spinbox/slider combination to prevent automatically adding short words to the completion list. You can select any value from 5-100 and the words will need to be at least the number of characters set here to be added to the list.</string>
                             </property>
                         </widget>
                     </grid>
@@ -316,7 +316,7 @@ This option is most important when Automatically add words to completion list is
                         <string>Make Default</string>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>Completion is configured per document, making this list the default will allow you to use it list for new documents automatically. A dialog appears to tell you the list wil be used for all documents from now.</string>
+                        <string>Completion is configured per document. Making this list the default will allow you to use it for new documents automatically. A dialog will appear to inform you that the list will be used for all documents from now on.</string>
                     </property>
                 </widget>
                 <spacer>
