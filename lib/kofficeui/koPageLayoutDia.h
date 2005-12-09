@@ -8,7 +8,7 @@
 
    This library is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	 See the GNU
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
    Library General Public License for more details.
 
    You should have received a copy of the GNU Library General Public License
@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-// Description: Page Layout Dialog (sources)
+// Description: Page Layout Dialog (header)
 
 #ifndef __KOPGLAYOUTDIA_H__
 #define __KOPGLAYOUTDIA_H__
@@ -29,16 +29,13 @@
 #include <koPageLayout.h>
 
 class QButtonGroup;
-class QWidget;
-class QGridLayout;
-class QLabel;
 class QComboBox;
 class QLineEdit;
-class QSpinBox;
-class QRadioButton;
 class QCheckBox;
-class KDoubleNumInput;
 class KoUnitDoubleSpinBox;
+class KoPageLayoutColumns;
+class KoPageLayoutSize;
+class KoPageLayoutHeader;
 
 enum { FORMAT_AND_BORDERS = 1, HEADER_AND_FOOTER = 2, COLUMNS = 4, DISABLE_BORDERS = 8,
        KW_HEADER_AND_FOOTER = 16, DISABLE_UNIT = 32 };
@@ -77,53 +74,6 @@ protected:
     int columns;
 };
 
-
-class KoPageLayoutSize : public QWidget {
-    Q_OBJECT
-
-public:
-    KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,
-            const KoColumns& columns, bool unitChooser, bool enableBorders);
-
-    bool queryClose();
-
-public slots:
-    void setUnit( KoUnit::Unit unit );
-
-signals:
-    void propertyChange(KoPageLayout &layout);
-
-protected:
-    QComboBox *cpgUnit;
-    QComboBox *cpgFormat;
-    KoUnitDoubleSpinBox *epgWidth;
-    KoUnitDoubleSpinBox *epgHeight;
-    KoUnitDoubleSpinBox *ebrLeft;
-    KoUnitDoubleSpinBox *ebrRight;
-    KoUnitDoubleSpinBox *ebrTop;
-    KoUnitDoubleSpinBox *ebrBottom;
-    KoPagePreview *pgPreview;
-    QButtonGroup *m_orientGroup;
-
-protected slots:
-    void formatChanged( int );
-    void widthChanged( double );
-    void heightChanged( double );
-    void leftChanged( double );
-    void rightChanged( double );
-    void topChanged( double );
-    void bottomChanged( double );
-    void orientationChanged( int );
-
-private:
-    void updatePreview();
-    void setValues();
-
-    KoUnit::Unit m_unit;
-    KoColumns m_columns;
-    KoPageLayout m_layout;
-};
-
 class KoPageLayoutDiaPrivate;
 
 /**
@@ -147,9 +97,9 @@ public:
      *  @param modal    Whether the dialog is modal or not.
      */
     KoPageLayoutDia( QWidget* parent, const char* name,
-		     const KoPageLayout& layout,
-		     const KoHeadFoot& headfoot,
-		     int flags, KoUnit::Unit unit, bool modal=true );
+             const KoPageLayout& layout,
+             const KoHeadFoot& headfoot,
+             int flags, KoUnit::Unit unit, bool modal=true );
 
     /**
      *  Constructor.
@@ -164,11 +114,11 @@ public:
      *  @param unit       The unit to use for displaying the values to the user
      */
     KoPageLayoutDia( QWidget* parent, const char* name,
-		     const KoPageLayout& layout,
-		     const KoHeadFoot& headfoot,
-		     const KoColumns& columns,
-		     const KoKWHeaderFooter& kwheadfoot,
-		     int tabs, KoUnit::Unit unit );
+             const KoPageLayout& layout,
+             const KoHeadFoot& headfoot,
+             const KoColumns& columns,
+             const KoKWHeaderFooter& kwheadfoot,
+             int tabs, KoUnit::Unit unit );
 
     /**
      *  Destructor.
@@ -208,59 +158,42 @@ public:
     KoUnit::Unit unit() const { return m_unit; }
 
 private:
-    const KoColumns& columns();
-    const KoKWHeaderFooter& getKWHeaderFooter();
+    const KoColumns& columns() { return m_column; }
+    const KoKWHeaderFooter& headerFooter();
 
     // setup tabs
-    void setupTab1();
-    void setValuesTab1();
+    void setupTab1( bool enableBorders );
     void setupTab2( const KoHeadFoot& hf );
     void setupTab3();
-    void setupTab4();
-
-    // update preview
-    void updatePreview( );
+    void setupTab4( const KoKWHeaderFooter kwhf );
 
     // dialog objects
-    KoPagePreview *pgPreview2;
     QLineEdit *eHeadLeft;
     QLineEdit *eHeadMid;
     QLineEdit *eHeadRight;
     QLineEdit *eFootLeft;
     QLineEdit *eFootMid;
     QLineEdit *eFootRight;
-    QSpinBox *nColumns;
-    KoUnitDoubleSpinBox *nCSpacing;
-
-    KoUnitDoubleSpinBox *nHSpacing;
-    KoUnitDoubleSpinBox *nFSpacing;
-    KoUnitDoubleSpinBox *nFNSpacing;
-    QCheckBox *rhFirst;
-    QCheckBox *rhEvenOdd;
-    QCheckBox *rfFirst;
-    QCheckBox *rfEvenOdd;
 
     // layout
     KoPageLayout m_layout;
-    KoColumns m_cl;
-    KoKWHeaderFooter kwhf;
+    KoColumns m_column;
 
     KoUnit::Unit m_unit;
 
-    bool enableBorders;
     int flags;
 
 protected slots:
     virtual void slotOk();
 
 private slots:
-    // spinboxes
-    void nColChanged( int );
-    void nSpaceChanged( double );
     void sizeUpdated(KoPageLayout &layout);
+    void columnsUpdated(KoColumns &columns);
 
 private:
-    KoPageLayoutSize *m_sizeWidget;
+    KoPageLayoutSize *m_pageSizeTab;
+    KoPageLayoutColumns *m_columnsTab;
+    KoPageLayoutHeader *m_headerTab;
     KoPageLayoutDiaPrivate *d;
 };
 
