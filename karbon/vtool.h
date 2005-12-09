@@ -29,14 +29,36 @@ class QEvent;
 class QWidget;
 class VPainter;
 
-
+/**
+ * The base class for all karbon tools.
+ *
+ * Each tool has an icon, name and category. Basic mouse event and key handling is
+ * implemented here.
+ */
 class KARBONBASE_EXPORT VTool
 {
 public:
+	/**
+	 * Constructs a new tool connected to the specified karbon part.
+	 * 
+	 * @param part the karbon part the tool is connected to
+	 * @param name unused
+	 */
 	VTool( KarbonPart *part, const char* name );
 	// Make VTool "abstract":
+	
+	/**
+	 * Destroys the tool and unregisters it from the connected part.
+	 */
 	virtual ~VTool();
 
+	/**
+	 * Registers the specified tool at the connected part.
+	 *
+	 * Tools should register themselves by calling this function.
+	 *
+	 * @param tool the tool to register
+	 */
 	virtual void registerTool( VTool *tool );
 
 	/**
@@ -56,6 +78,9 @@ public:
 	 */
 	virtual void deactivate() {}
 
+	/**
+	 * Shows the tools option dialog.
+	 */
 	virtual bool showDialog() const { return false; }
 
 	/**
@@ -73,8 +98,14 @@ public:
 	 */
 	virtual QString icon() { return "help"; }
 
+	/**
+	 * The tool category.
+	 */
 	virtual QString category() { return "misc"; }
 
+	/**
+	 * The tool status text.
+	 */
 	virtual QString statusText() { return ""; }
 
 	/**
@@ -84,32 +115,57 @@ public:
 	virtual uint priority() { return 0; }
 
 	/**
-	 * This function processes every important mouse or keyboard event.
+	 * This function processes every important mouse event.
 	 * It then calls suiting functions like mouseMoved() so deriving tools
 	 * don't need to directly deal with events themselves.
 	 */
 	bool mouseEvent( QMouseEvent* event, const KoPoint& );
+
+	/**
+	 * This function processes every important key event.
+	 * It then calls suiting functions like mouseButtonPress() so deriving tools
+	 * don't need to directly deal with events themselves.
+	 */
 	bool keyEvent( QEvent* event );
 
+	/**
+	 * This function is called when the documents unit setting were changed.
+	 */
 	virtual void refreshUnit() {}
 
 protected:
+	/**
+	 * Returns the current dagging state.
+	 *
+	 * @return true if the mouse is currently dragged, else false
+	 */
 	bool isDragging() const { return m_isDragging; }
 
 	virtual void draw( /*VPainter* painter*/ ) {}
 
+	/**
+	 * This function is called on each mouse event the tool receives.
+	 */
 	virtual void setCursor() const {}
 
 	/**
-	 * Mouse button press.
+	 * Left mouse button press.
 	 */
 	virtual void mouseButtonPress() {}
+
+	/**
+	 * Right mouse button press.
+	 */
 	virtual void rightMouseButtonPress() {}
 
 	/**
-	 * Mouse button release. The mouse wasn't moved.
+	 * Left mouse button release. The mouse wasn't moved.
 	 */
 	virtual void mouseButtonRelease() {}
+
+	/**
+	 * Right mouse button release. The mouse wasn't moved.
+	 */
 	virtual void rightMouseButtonRelease() {}
 
 	/**
@@ -157,6 +213,9 @@ protected:
 	 */
 	virtual void arrowKeyReleased( Qt::Key ) {}
 
+	/**
+	 * Specified key released.
+	 */
 	virtual bool keyReleased( Qt::Key ) { return false; }
 
 	/**
@@ -174,7 +233,14 @@ protected:
 	 */
 	virtual void accept() {}
 
+	/**
+	 * Returns the connected karbon part.
+	 */
 	KarbonPart* part() const { return m_part; }
+
+	/**
+	 * Returns the connected karbon view.
+	 */
 	KarbonView* view() const;
 
 	/**
@@ -182,12 +248,30 @@ protected:
 	 */
 	const KoPoint& first() const { return m_firstPoint; }
 
+	/**
+	 * The last mouse coordinate.
+	 */
 	const KoPoint& last() const { return m_lastPoint; }
 
+	/**
+	 * The status of the shift key.
+	 *
+	 * @return true if key is pressed, else false
+	 */
 	bool shiftPressed() const { return m_shiftPressed; }
 
+	/**
+	 * The status of the ctrl key.
+	 *
+	 * @return true if key is pressed, else false
+	 */
 	bool ctrlPressed() const { return m_ctrlPressed; }
 
+	/**
+	 * The status of the alt key.
+	 *
+	 * @return true if key is pressed, else false
+	 */
 	bool altPressed() const { return m_altPressed; }
 
 private:
