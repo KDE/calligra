@@ -47,6 +47,7 @@
 #include "KWPage.h"
 #include "KWFrameView.h"
 #include "KWFrameViewManager.h"
+#include "KWStartupWidget.h"
 
 #include <koPictureCollection.h>
 #include <koTemplateChooseDia.h>
@@ -189,7 +190,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
 
     m_iNbPagePerRow = 4;
     m_maxRecentFiles = 10;
-    m_defaultColumnSpacing=3;
     m_bShowRuler = true;
 
     m_footNoteSeparatorLinePos=SLP_LEFT;
@@ -5396,6 +5396,13 @@ int KWDocument::startPage() const {
 }
 int KWDocument::lastPage() const {
     return pageManager()->lastPageNumber();
+}
+
+QWidget* KWDocument::createCustomDocumentWidget(QWidget *parent) {
+    KoColumns columns;
+    columns.columns = 1;
+    columns.ptColumnSpacing = m_defaultColumnSpacing;
+    return new KWStartupWidget(parent, columns);
 }
 
 #include "KWDocument.moc"

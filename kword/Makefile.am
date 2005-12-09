@@ -49,7 +49,7 @@ libkwordprivate_la_SOURCES = KWTableFrameSet.cpp KWCanvas.cpp KWFrame.cpp KWForm
 		KWSortDia.cpp KWInsertPageDia.cpp KWBookMark.cpp KWCollectFramesetsVisitor.cpp \
 		KWOasisLoader.cpp KWOasisSaver.cpp KWFrameList.cpp KWPage.cpp \
 		KWPageManager.cpp KWFrameSet.cpp KWFrameSetEdit.cpp KWPictureFrameSet.cpp \
-		KWFrameViewManager.cpp KWFrameView.cpp
+		KWFrameViewManager.cpp KWFrameView.cpp KWStartupWidgetBase.ui KWStartupWidget.cpp
 libkwordprivate_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefined
 libkwordprivate_la_LIBADD = $(LIB_KOFFICEUI) $(LIB_KOTEXT) ../lib/kformula/libkformulalib.la ./libkwmailmerge_interface.la 
 

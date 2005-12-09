@@ -338,7 +338,7 @@ public:
     int startPage() const;
     /**
      * Returns the last page number in this document.
-     * This is effectively the same as startPage() + pageCount().
+     * With a higher startPage and a constante pagecount this number will also get higher.
      */
     int lastPage() const;
 
@@ -847,6 +847,9 @@ protected:
     void saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoXmlWriter* manifestWriter,
                              KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList,
                              QString* plainText ) const;
+
+    // inherited from KoDocument
+    QWidget* createCustomDocumentWidget(QWidget *parent);
 
 private:
     void clear();
