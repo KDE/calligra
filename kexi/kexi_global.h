@@ -22,8 +22,10 @@
 
 /*! Only defined for standalone releases, 
  should be commented out for releases bundled with KOffice. *
- Affects transaltion file names, e.g. "kexi.po" becomes "standalone_kexi.po". */
-#define KEXI_STANDALONE 1
+ Affects translation file names: "kexi.po" becomes "standalone_kexi.po" (used in main.cpp)
+ and "kformdesigner.po" becomes "standalone_kformdesigner.po" (used in FormManager)
+ */
+//#define KEXI_STANDALONE 1
 
 #include <kexi_export.h>
 #include <config.h>
