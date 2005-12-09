@@ -48,4 +48,5 @@ Name[wa]=Pådje vude
 Name[xx]=xxEmpty Pagexx
 Name[zh_CN]=空页面
 Comment=Empty layout without frames. You need to add frames before you can add text. Use Text Oriented/Plain Text if you want to just type text in an empty document.
+Comment[sv]=Tom layout utan ramar. Du måste lägga till ramar innan du kan lägga till text. Använd Textorienterad/Vanlig text om du bara vill skriva in text i ett tomt dokument.
 Icon=template_empty
