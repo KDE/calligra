@@ -114,7 +114,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	d->lvi_file->setMultiLinesEnabled( true );
 	d->lvi_server = new KListViewItem( m_prjtype_sel->lv_types, d->lvi_file, 
 		i18n("New Project Stored on a Database Server") );
-	d->lvi_server->setPixmap(0, DesktopIcon("socket") );
+	d->lvi_server->setPixmap(0, DesktopIcon("network") );
 	d->lvi_server->setMultiLinesEnabled( true );
 //	m_prjtype_sel->lv_types->resize(d->m_prjtype_sel->lv_types->width(), d->lvi_file->height()*3);
 	m_prjtype_sel->lv_types->setFocus();

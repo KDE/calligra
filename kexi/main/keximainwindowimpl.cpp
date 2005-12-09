@@ -483,14 +483,14 @@ void KexiMainWindowImpl::initActions()
 
 #ifndef KEXI_NO_CSV_IMPORT
 	d->action_project_import_data_table = new KAction(i18n("Import->Data Table...", "Data &Table..."),
-		"download_manager"/*! @todo: change to "file_import" or so*/,
+		"table"/*! @todo: change to "file_import" or so*/,
 		0, this, SLOT(slotProjectImportDataTable()), actionCollection(), "project_import_data_table");
 #else
 	d->action_project_import_data_table = d->dummy_action;
 #endif
 	d->action_project_export_data_table = new KAction(i18n("Export->Table or Query As Data Table...", 
 		"Table or Query As Data &Table..."),
-		""/*! @todo: change to "file_export" or so*/,
+		"table"/*! @todo: change to "file_export" or so*/,
 		0, this, SLOT(slotProjectExportDataTable()), actionCollection(), "project_export_data_table");
 
 //TODO	new KAction(i18n("From File..."), "fileopen", 0,
