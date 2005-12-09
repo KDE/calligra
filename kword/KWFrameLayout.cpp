@@ -24,7 +24,7 @@
 #include "KWDocument.h"
 #include <qtimer.h>
 
-#define DEBUG_FRAMELAYOUT
+// #define DEBUG_FRAMELAYOUT
 
 #ifdef NDEBUG
 #undef DEBUG_FRAMELAYOUT
@@ -520,7 +520,7 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
             return;
         frame->setRect( rect );
 #ifdef DEBUG_FRAMELAYOUT
-        kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->name() << " " << frame << " resized from " << frame->rect() << " to " << rect << " pagenum=" << frame->pageNumber() << endl;
+        kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->name() << " " << frame << " resized to " << rect << " pagenum=" << frame->pageNumber() << endl;
 #endif
     }
     else
