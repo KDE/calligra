@@ -802,6 +802,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         QString msg( i18n( "The object you are trying to select belongs to the master slide. "
                                            "Editing the object can only be done on the master slide.\n"
                                            "Go there now?" ) );
+                        m_view->disableAutoScroll(); // needed because the messagebox 'eats' the mouseRelease
                         if ( KMessageBox::questionYesNo( this, msg ) == KMessageBox::Yes )
                         {
                             getView()->setEditMaster( true );
