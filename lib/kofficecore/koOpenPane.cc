@@ -39,7 +39,7 @@
 #include "koDocument.h"
 #include "koDetailsPane.h"
 
-#include <values.h>
+#include <limits.h>
 
 class KoSectionListItem : public QListViewItem
 {
@@ -186,7 +186,7 @@ void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
     // TODO remove former
 
     if(widget)
-        addPane(i18n("Custom Document"), QString::null, widget, MAXINT);
+        addPane(i18n("Custom Document"), QString::null, widget, INT_MAX);
 }
 
 QListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight)
