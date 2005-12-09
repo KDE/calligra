@@ -79,7 +79,7 @@
 #include <kspread_view.h>
 #endif
 
-#define _IMPORT_ICON "download_manager" /*todo: change to "file_import" or so*/
+#define _IMPORT_ICON "table" /*todo: change to "file_import" or so*/
 #define _TEXT_TYPE 0
 #define _NUMBER_TYPE 1
 #define _DATE_TYPE 2
@@ -152,7 +152,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 
 	m_uniquenessTest.setAutoDelete(true);
 
-	setIcon(SmallIcon(_IMPORT_ICON));
+	setIcon(DesktopIcon(_IMPORT_ICON));
 	setSizeGripEnabled( TRUE );
 
 	m_encoding = QString::fromLatin1(KGlobal::locale()->encoding());
@@ -344,7 +344,7 @@ if ( m_mode == Clipboard )
 
 	//try to detect delimiter
 	QString detectedDelimiter = mode==File ? "," : "\t"; //<-- defaults
-	for (uint i=0; i < QMIN(128, m_data.length()); i++) {
+	for (uint i=0; i < QMIN(4096, m_data.length()); i++) {
 		const QChar c(m_data[i]);
 		if (c=='\t') {
 			detectedDelimiter = "\t";
@@ -468,6 +468,7 @@ void KexiCSVImportDialog::fillTable()
 		 S_MAYBE_NORMAL_FIELD, S_NORMAL_FIELD } state = S_START;
 
 	QChar x;
+	const QChar delimiter(m_delimiterWidget->delimiter()[0]);
 	QString field = "";
 
 	for (row = 0; row < m_table->numRows(); ++row)
@@ -489,7 +490,7 @@ void KexiCSVImportDialog::fillTable()
 		inputStream >> x; // read one char
 
 		if (x == '\r')
-			inputStream >> x; // eat '\r', to handle DOS/LOSEDOWS files correctly
+			continue; // eat '\r', to handle RFC-compliant files
 
 		switch (state)
 		{
@@ -498,7 +499,7 @@ void KexiCSVImportDialog::fillTable()
 			{
 				state = S_QUOTED_FIELD;
 			}
-			else if (x == m_delimiterWidget->delimiter())
+			else if (x == delimiter)
 			{
 				setText(row - m_startline, column, field);
 				field = "";
@@ -523,6 +524,7 @@ void KexiCSVImportDialog::fillTable()
 			{
 				state = S_MAYBE_END_OF_QUOTED_FIELD;
 			}
+/*allow \n inside quoted fields
 			else if (x == '\n')
 			{
 				setText(row - m_startline, column, field);
@@ -540,7 +542,7 @@ void KexiCSVImportDialog::fillTable()
 					lastCharDelimiter = true;
 				}
 				state = S_START;
-			}
+			}*/
 			else
 			{
 				field += x;
@@ -549,10 +551,10 @@ void KexiCSVImportDialog::fillTable()
 		case S_MAYBE_END_OF_QUOTED_FIELD :
 			if (x == m_textquote)
 			{
-				field += x;
+				field += x; //no, this was just escaped quote character
 				state = S_QUOTED_FIELD;
 			}
-			else if (x == m_delimiterWidget->delimiter() || x == '\n')
+			else if (x == delimiter || x == '\n')
 			{
 				setText(row - m_startline, column, field);
 				field = "";
@@ -576,7 +578,7 @@ void KexiCSVImportDialog::fillTable()
 			}
 			break;
 		case S_END_OF_QUOTED_FIELD :
-			if (x == m_delimiterWidget->delimiter() || x == '\n')
+			if (x == delimiter || x == '\n')
 			{
 				setText(row - m_startline, column, field);
 				field = "";
@@ -607,7 +609,7 @@ void KexiCSVImportDialog::fillTable()
 				break;
 			}
 		case S_NORMAL_FIELD :
-			if (x == m_delimiterWidget->delimiter() || x == '\n')
+			if (x == delimiter || x == '\n')
 			{
 				setText(row - m_startline, column, field);
 				field = "";
@@ -630,7 +632,7 @@ void KexiCSVImportDialog::fillTable()
 				field += x;
 			}
 		}
-		if (x != m_delimiterWidget->delimiter())
+		if (x != delimiter)
 			lastCharDelimiter = false;
 
 		if (m_firstFillTableCall && row==2 && !m_1stRowForFieldNames->isChecked() && m_1stRowForFieldNamesDetected) {

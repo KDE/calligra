@@ -33,6 +33,7 @@
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <qclipboard.h>
+#include <kapplication.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kactivelabel.h>
@@ -102,6 +103,7 @@ KexiCSVExportWizard::KexiCSVExportWizard( Mode mode, int itemId,
 			":CSVImportExport", //startDir
 			KexiStartupFileDialog::Custom | KexiStartupFileDialog::SavingFileBasedDB,
 			this, "m_fileSavePage");
+		m_fileSavePage->setMinimumHeight(kapp->desktop()->height()/2);
 		m_fileSavePage->setAdditionalFilters( csvMimeTypes() );
 		m_fileSavePage->setDefaultExtension("csv");
 		m_fileSavePage->setLocationText( KexiUtils::stringToFileName(m_tableOrQuery->captionOrName()) );
@@ -421,16 +423,23 @@ bool KexiCSVExportWizard::exportData()
 #define APPEND(what) \
 		if (copyToClipboard) buffer.append(what); else (*stream) << (what)
 
+// line endings should be as in RFC 4180
+#define CSV_EOLN "\r\n"
+
 	// 0. Cache information
 	const uint fieldsCount = fields.count();
-	const QCharRef delimiter( m_delimiterWidget->delimiter()[0] );
+	const QCString delimiter( m_delimiterWidget->delimiter().left(1).latin1() );
 	const bool hasTextQuote = !m_textQuote->textQuote().isEmpty();
-	const QCharRef textQuote( m_textQuote->textQuote()[0] );
-	bool *isText = new bool[fieldsCount]; //cache for faster checks
+	const QCString textQuote( m_textQuote->textQuote().left(1).latin1() );
+	const QCString escapedTextQuote( textQuote + textQuote );
+	//cache for faster checks
+	bool *isText = new bool[fieldsCount]; 
+	bool *isDateTime = new bool[fieldsCount]; 
 //	bool isInteger[fieldsCount]; //cache for faster checks
 //	bool isFloatingPoint[fieldsCount]; //cache for faster checks
 	for (uint i=0; i<fieldsCount; i++) {
 		isText[i] = fields[i]->field->isTextType();
+		isDateTime[i] = fields[i]->field->type()==KexiDB::Field::DateTime;
 //		isInteger[i] = fields[i]->field->isIntegerType() 
 //			|| fields[i]->field->type()==KexiDB::Field::Boolean;
 //		isFloatingPoint[i] = fields[i]->field->isFPNumericType();
@@ -441,14 +450,16 @@ bool KexiCSVExportWizard::exportData()
 		for (uint i=0; i<fieldsCount; i++) {
 			if (i>0)
 				APPEND( delimiter );
-			if (hasTextQuote)
+			if (hasTextQuote){
 				APPEND( textQuote );
-			APPEND( fields[i]->captionOrAliasOrName() );
-			if (hasTextQuote)
+				APPEND( fields[i]->captionOrAliasOrName().replace(textQuote, escapedTextQuote) );
 				APPEND( textQuote );
+			}
+			else {
+				APPEND( fields[i]->captionOrAliasOrName() );
+			}
 		}
-//! @todo or \r\n ?
-		APPEND("\n");
+		APPEND(CSV_EOLN);
 	}
 	
 	KexiGUIMessageHandler handler;
@@ -464,19 +475,20 @@ bool KexiCSVExportWizard::exportData()
 				APPEND( delimiter );
 			if (cursor->value(i).isNull())
 				continue;
-			if (isText[i]) {
-				if (hasTextQuote)
-					APPEND( textQuote );
-				APPEND( cursor->value(i).toString() );
-				if (hasTextQuote)
-					APPEND( textQuote );
+			if (hasTextQuote && isText[i]) {
+				APPEND( textQuote );
+				APPEND( QString(cursor->value(i).toString()).replace(textQuote, escapedTextQuote) );
+				APPEND( textQuote );
+			}
+			else if (isDateTime[i]) { //avoid "T" in ISO DateTime
+				APPEND( cursor->value(i).toDateTime().date().toString(Qt::ISODate)+" "
+					+ cursor->value(i).toDateTime().time().toString(Qt::ISODate) );
 			}
 			else {
 				APPEND( cursor->value(i).toString() );
 			}
 		}
-//! @todo or \r\n ?
-		APPEND("\n");
+		APPEND(CSV_EOLN);
 	}
 
 	if (copyToClipboard)
