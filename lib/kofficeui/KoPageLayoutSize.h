@@ -25,6 +25,7 @@
 #include <koUnit.h>
 #include <kdialogbase.h>
 #include <koPageLayout.h>
+#include <koPageLayoutDia.h>
 
 class QComboBox;
 class KoUnitDoubleSpinBox;
