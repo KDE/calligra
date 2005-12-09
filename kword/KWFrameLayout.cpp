@@ -68,8 +68,10 @@ bool KWFrameLayout::HeaderFooterFrameset::deleteFramesAfterLast( int lastPage )
 
     // Special case for odd/even headers: keep at least one frame even if it doesn't appear,
     // otherwise the frame properties are lost.
-    if ( fs->isHeaderOrFooter() && lastFrame == -1 )
+    if ( fs->isHeaderOrFooter() && lastFrame == -1 ) {
+        fs->setVisible( false );
         lastFrame = 0;
+    }
 
     bool deleted = false;
     while ( (int)fs->frameCount() - 1 > lastFrame ) {
@@ -106,17 +108,16 @@ int KWFrameLayout::HeaderFooterFrameset::frameNumberForPage( int page ) const
     if ( page < m_startAtPage || ( m_endAtPage != -1 && page > m_endAtPage ) )
         return -1;
     int pg = page - m_startAtPage; // always >=0
-    // Note that 'pg' is 0-based. This is why "Odd" looks for even numbers, and "Even" looks for odd numbers :}
     switch (m_oddEvenAll) {
     case Odd:
-        // we test page, not bg: even/odd is for the absolute page number, too confusing otherwise
-        if ( page % 2 == 0 )
-            return pg / 2; // page 0[+start] -> frame 0, page 2[+start] -> frame 1
+        // we test the absolute page number for odd/even, not pg!
+        if ( page % 2 )
+            return pg / 2; // page start+(0 or 1) -> frame 0, page start+(2 or 3) -> frame 1
         else
             return -1;
     case Even:
-        if ( page % 2 )
-            return pg / 2; // page 1[+start] -> 0, page 3 -> 1
+        if ( page % 2 == 0 )
+            return pg / 2; // page start+(0 or 1) -> frame 0, page start+(2 or 3) -> frame 1
         else
             return -1;
     case All:
@@ -436,15 +437,15 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         (void)m_doc->tryRemovingPages();
     }
 
-    int pages = m_doc->pageCount();
+    const int lastPage = m_doc->lastPage();
     // Final cleanup: delete all frames after lastFrameNumber in each frameset
     QPtrListIterator<HeaderFooterFrameset> it( m_headersFooters );
     for ( ; it.current() ; ++it )
-        if ( it.current()->deleteFramesAfterLast( pages ) )
+        if ( it.current()->deleteFramesAfterLast( lastPage ) )
             m_framesetsToUpdate.insert( it.current()->m_frameset, true );
     QPtrListIterator<HeaderFooterFrameset> it2( m_footnotes );
     for ( ; it2.current() ; ++it2 )
-        if ( it2.current()->deleteFramesAfterLast( pages ) )
+        if ( it2.current()->deleteFramesAfterLast( lastPage ) )
             m_framesetsToUpdate.insert( it2.current()->m_frameset, true );
     if ( mainTextFrameSet ) {
         // For the last main text frameset, we use m_lastMainFramePage, so that
