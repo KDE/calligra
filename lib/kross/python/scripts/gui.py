@@ -312,8 +312,8 @@ class QtDialog:
 					return True
 				return False
 
-		app = qt.qApp
-		self.dialog = Dialog(app.mainWidget(), "Dialog", 1)
+		self.app = qt.qApp
+		self.dialog = Dialog(self.app.mainWidget(), "Dialog", 1, qt.Qt.WDestructiveClose)
 		self.dialog.setCaption(title)
 
 		self.widget = qt.QVBox(self.dialog)
@@ -330,11 +330,15 @@ class QtDialog:
 		self.MessageBox = MessageBox
 		
 	def show(self):
-		self.dialog.show()
+		import qt
+		qt.QApplication.setOverrideCursor(qt.Qt.arrowCursor)
+		self.dialog.exec_loop()
+		qt.QApplication.restoreOverrideCursor()
 
 	def close(self):
 		print "QtDialog.close()"
 		self.dialog.close()
+		#self.dialog.deleteLater()
 
 class Dialog:
 	""" Central class that provides abstract GUI-access to the outer world. """

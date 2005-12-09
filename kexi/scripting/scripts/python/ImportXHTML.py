@@ -265,8 +265,13 @@ class GuiApp:
 
 		btnframe = self.dialog.addFrame(self.dialog)
 		self.dialog.addButton(btnframe, "Import", self.doImport)
-		self.dialog.addButton(btnframe, "Cancel", self.dialog.close)
+		self.dialog.addButton(btnframe, "Cancel", self.doClose)
 		self.dialog.show()
+
+	def doClose(self):
+		self.inputreader = None
+		self.outputwriter = None
+		self.dialog.close()
 
 	def doImport(self):
 		""" Start to import the XML-file into the KexiDB table. """

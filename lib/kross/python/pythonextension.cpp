@@ -58,7 +58,7 @@ PythonExtension::PythonExtension(Kross::Api::Object::Ptr object)
 PythonExtension::~PythonExtension()
 {
 #ifdef KROSS_PYTHON_EXTENSION_DTOR_DEBUG
-    kdDebug() << "Kross::Python::PythonExtension::Destructor" << endl;
+    kdDebug() << QString("Kross::Python::PythonExtension::Destructor objectname='%1' objectclass='%2'").arg(m_object->getName()).arg(m_object->getClassName()) << endl;
 #endif
 }
 
