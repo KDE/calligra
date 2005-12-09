@@ -953,6 +953,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 m_indexPointArray = 0;
 
                 m_drawPolyline = false;
+                m_view->disableAutoScroll();
                 mousePressed = false;
             }
             return;
@@ -987,6 +988,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 kpobject = obj;
                 QPoint pnt = QCursor::pos();
                 mousePressed = false;
+                m_view->disableAutoScroll();
                 bool state=!( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected();
                 ObjType objectType = kpobject->getType();
 
@@ -1102,6 +1104,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             } else {
                 QPoint pnt = QCursor::pos();
                 m_view->openPopupMenuMenuPage( pnt );
+                m_view->disableAutoScroll();
                 mousePressed = false;
             }
             modType = MT_NONE;
@@ -1110,6 +1113,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
         else if( e->button() == RightButton && toolEditMode == TEM_ZOOM ) {
             QPoint pnt = QCursor::pos();
             mousePressed = false;
+            m_view->disableAutoScroll();
             m_view->openPopupMenuZoom( pnt );
         }
         else if( e->button() == RightButton && toolEditMode != TEM_MOUSE ) {
@@ -1174,8 +1178,6 @@ KoRect KPrCanvas::getAlignBoundingRect() const
 
 void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
 {
-    m_view->disableAutoScroll();
-
     if ( editMode && m_view->kPresenterDoc()->showGuideLines() && toolEditMode == TEM_MOUSE && m_gl.mouseReleaseEvent( e ) )
         return;
 
@@ -1417,6 +1419,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     if ( toolEditMode != TEM_MOUSE && editMode )
         repaint( false );
 
+    m_view->disableAutoScroll();
     mousePressed = false;
     modType = MT_NONE;
     mouseMoveEvent( e );
@@ -2004,6 +2007,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                         m_keepRatio = false;
                         m_resizeObject = 0;
                         m_isResizing = false;
+                        m_view->disableAutoScroll();
                         mousePressed = false;
                         modType = MT_NONE;
                         return;
@@ -2015,6 +2019,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                           drawContour = false;
                           KoPoint move( m_moveStartPoint - objectRect( false ).topLeft() );
                           m_activePage->moveObject( m_view, move, false );
+                          m_view->disableAutoScroll();
                           mousePressed = false;
                           modType = MT_NONE;
                           m_isMoving = false;
@@ -3845,6 +3850,7 @@ void KPrCanvas::endDrawPolyline()
     emit objectSelectedChanged();
     if ( toolEditMode != TEM_MOUSE && editMode )
         repaint( false );
+    m_view->disableAutoScroll();
     mousePressed = false;
     modType = MT_NONE;
 }
@@ -3857,6 +3863,7 @@ void KPrCanvas::endDrawCubicBezierCurve()
     emit objectSelectedChanged();
     if ( toolEditMode != TEM_MOUSE && editMode )
         repaint( false );
+    m_view->disableAutoScroll();
     mousePressed = false;
     modType = MT_NONE;
 }
