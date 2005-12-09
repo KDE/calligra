@@ -138,7 +138,7 @@ public:
     KWFrameSet *frameSet() const { return m_frameSet; }
     void setFrameSet( KWFrameSet *fs ) { m_frameSet = fs; }
 
-    /** The page on which this frame is (0 based)
+    /** The page on which this frame is
      */
     int pageNumber() const;
     /** Same as pageNumber(), but works if the frame hasn't been added to a frameset yet

@@ -540,12 +540,12 @@ void KWFrame::startOasisFrame( KoXmlWriter &writer, KoGenStyles& mainStyles, con
 
     if ( !frameSet()->isFloating() )
     { // non-inline frame, anchored to page
-        int pgNum = pageNumber();
-        double yInPage = top() - frameSet()->pageManager()->topOfPage(pgNum);
+        const int pgNum = pageNumber();
+        const double yInPage = top() - frameSet()->pageManager()->topOfPage(pgNum);
         writer.addAttributePt( "svg:x", left() );
         writer.addAttributePt( "svg:y", yInPage );
         writer.addAttribute( "text:anchor-type", "page" );
-        writer.addAttribute( "text:anchor-page-number", pgNum + 1); // OASIS starts at 1
+        writer.addAttribute( "text:anchor-page-number", pgNum );
         writer.addAttribute( "draw:z-index", zOrder() );
     }
     writer.addAttributePt( "svg:width", width() );

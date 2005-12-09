@@ -490,6 +490,7 @@ void KWFrameStyleManager::slotApply()
 
 void KWFrameStyleManager::apply()
 {
+    // ##### missing: undo/redo support
     noSignals=true;
     for (unsigned int i =0 ; i < m_frameStyles.count() ; i++) {
         if(m_frameStyles.at(i)->origFrameStyle() == 0) {           // newly added style
@@ -509,11 +510,13 @@ void KWFrameStyleManager::apply()
         } else {
 
             kdDebug() << "update style " << m_frameStyles.at(i)->changedFrameStyle()->name() << " (" << i << ")" << endl;
+            // TODO check if modified, so that we can do m_doc->setModified(true) only if a style was changed
             m_frameStyles.at(i)->apply();
         }
     }
     m_doc->frameStyleCollection()->updateStyleListOrder( m_styleOrder );
     m_doc->updateAllFrameStyleLists();
+    m_doc->setModified( true );
     noSignals=false;
 }
 
