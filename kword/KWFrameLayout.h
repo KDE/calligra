@@ -66,32 +66,9 @@ public:
         bool m_positioned;
 
         // frame number for the given page.... -1 if no frame on that page
-        int frameNumberForPage( int page /* 0-based! */ ) const
-            {
-                if ( page < m_startAtPage || ( m_endAtPage != -1 && page > m_endAtPage ) )
-                    return -1;
-                int pg = page - m_startAtPage; // always >=0
-                // Note that 'page' is 0-based. This is why "Odd" looks for even numbers, and "Even" looks for odd numbers :}
-                switch (m_oddEvenAll) {
-                case Odd:
-                    // we test page, not bg: even/odd is for the absolute page number, too confusing otherwise
-                    if ( page % 2 == 0 )
-                        return pg / 2; // page 0[+start] -> frame 0, page 2[+start] -> frame 1
-                    else
-                        return -1;
-                case Even:
-                    if ( page % 2 )
-                        return pg / 2; // page 1 -> 0, page 3 -> 1
-                    else
-                        return -1;
-                case All:
-                    return pg; // page 0[+start] -> frame 0, etc.
-                default:
-                    return -1;
-                }
-            }
-
-        // the last frame we need, layout() will delete any frame after that
+        // The first frame is number 0.
+        int frameNumberForPage( int page ) const;
+        // The last frame we need (0-based), layout() will delete any frame after that
         int lastFrameNumber( int lastPage ) const;
 
         void debug();

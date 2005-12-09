@@ -786,6 +786,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
         // ... hmm, and then KWFootNoteFrameSet needs to inherit KWHeaderFooterFrameSet
         QPtrList<KWFrameLayout::HeaderFooterFrameset> headerFooterList;
         headerFooterList.setAutoDelete( true );
+        const int firstPageNum = startPage();
 
         // Now hide & forget the unused header/footer framesets (e.g. 'odd pages' if we are in 'all the same' mode etc.)
         if ( isHeaderVisible() ) {
@@ -801,7 +802,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 firstHeader->deleteAllCopies();
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
+                                             oddHeader, firstPageNum, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
                 break;
             case HF_FIRST_EO_DIFF: // added for koffice-1.2-beta2
                 firstHeader->setVisible( true );
@@ -809,12 +810,12 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 evenHeader->setVisible( true );
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             firstHeader, 0, 0, m_pageHeaderFooter.ptHeaderBodySpacing ) );
+                                             firstHeader, firstPageNum, firstPageNum, m_pageHeaderFooter.ptHeaderBodySpacing ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddHeader, 2, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+                                             oddHeader, firstPageNum + 2, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
                                              KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             evenHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+                                             evenHeader, firstPageNum + 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
                                              KWFrameLayout::HeaderFooterFrameset::Even ) );
                 break;
             case HF_FIRST_DIFF:
@@ -824,9 +825,9 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 firstHeader->setVisible( true );
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             firstHeader, 0, 0, m_pageHeaderFooter.ptHeaderBodySpacing ) );
+                                             firstHeader, firstPageNum, firstPageNum, m_pageHeaderFooter.ptHeaderBodySpacing ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
+                                             oddHeader, firstPageNum + 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing ) );
                 break;
             case HF_EO_DIFF:
                 oddHeader->setVisible( true );
@@ -835,10 +836,10 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 firstHeader->deleteAllCopies();
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddHeader, 0, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+                                             oddHeader, firstPageNum, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
                                              KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             evenHeader, 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
+                                             evenHeader, firstPageNum + 1, -1, m_pageHeaderFooter.ptHeaderBodySpacing,
                                              KWFrameLayout::HeaderFooterFrameset::Even ) );
                 break;
             }
@@ -856,7 +857,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 firstFooter->deleteAllCopies();
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                                             oddFooter, firstPageNum, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
                 break;
             case HF_FIRST_EO_DIFF: // added for koffice-1.2-beta2
                 firstFooter->setVisible( true );
@@ -864,12 +865,12 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 evenFooter->setVisible( true );
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             firstFooter, 0, 0, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                                             firstFooter, firstPageNum, firstPageNum, m_pageHeaderFooter.ptFooterBodySpacing ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddFooter, 2, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             oddFooter, firstPageNum + 2, -1, m_pageHeaderFooter.ptFooterBodySpacing,
                                              KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             evenFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             evenFooter, firstPageNum + 1, -1, m_pageHeaderFooter.ptFooterBodySpacing,
                                              KWFrameLayout::HeaderFooterFrameset::Even ) );
                 break;
             case HF_FIRST_DIFF:
@@ -879,9 +880,9 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 firstFooter->setVisible( true );
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             firstFooter, 0, 0, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                                             firstFooter, firstPageNum, firstPageNum, m_pageHeaderFooter.ptFooterBodySpacing ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
+                                             oddFooter, firstPageNum + 1, -1, m_pageHeaderFooter.ptFooterBodySpacing ) );
                 break;
             case HF_EO_DIFF:
                 oddFooter->setVisible( true );
@@ -890,10 +891,10 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
                 firstFooter->deleteAllCopies();
 
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             oddFooter, 0, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             oddFooter, firstPageNum, -1, m_pageHeaderFooter.ptFooterBodySpacing,
                                              KWFrameLayout::HeaderFooterFrameset::Odd ) );
                 headerFooterList.append( new KWFrameLayout::HeaderFooterFrameset(
-                                             evenFooter, 1, -1, m_pageHeaderFooter.ptFooterBodySpacing,
+                                             evenFooter, firstPageNum + 1, -1, m_pageHeaderFooter.ptFooterBodySpacing,
                                              KWFrameLayout::HeaderFooterFrameset::Even ) );
                 break;
             }

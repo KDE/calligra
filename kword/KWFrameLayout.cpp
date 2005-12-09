@@ -1,5 +1,5 @@
 /* This file is part of the KOffice project
- * Copyright (C) 2002 David Faure <faure@kde.org>
+ * Copyright (C) 2002-2005 David Faure <faure@kde.org>
  * Copyright (C) 2005 Thomas Zander <zander@kde.org>
  *
  * This library is free software; you can redistribute it and/or
@@ -39,6 +39,7 @@ KWFrameLayout::HeaderFooterFrameset::HeaderFooterFrameset( KWTextFrameSet* fs, i
         m_height = fs->frame(0)->height();
     else
         m_height = 20; // whatever. The text layout will resize it.
+    Q_ASSERT( m_height > 0 );
 }
 
 
@@ -97,6 +98,31 @@ int KWFrameLayout::HeaderFooterFrameset::lastFrameNumber( int lastPage ) const {
             return pg; // page 0 -> 0 etc. ;)
         default:
             return -1;
+    }
+}
+
+int KWFrameLayout::HeaderFooterFrameset::frameNumberForPage( int page ) const
+{
+    if ( page < m_startAtPage || ( m_endAtPage != -1 && page > m_endAtPage ) )
+        return -1;
+    int pg = page - m_startAtPage; // always >=0
+    // Note that 'pg' is 0-based. This is why "Odd" looks for even numbers, and "Even" looks for odd numbers :}
+    switch (m_oddEvenAll) {
+    case Odd:
+        // we test page, not bg: even/odd is for the absolute page number, too confusing otherwise
+        if ( page % 2 == 0 )
+            return pg / 2; // page 0[+start] -> frame 0, page 2[+start] -> frame 1
+        else
+            return -1;
+    case Even:
+        if ( page % 2 )
+            return pg / 2; // page 1[+start] -> 0, page 3 -> 1
+        else
+            return -1;
+    case All:
+        return pg; // page 0[+start] -> frame 0, etc.
+    default:
+        return -1;
     }
 }
 
@@ -492,12 +518,10 @@ void KWFrameLayout::resizeOrCreateHeaderFooter( KWTextFrameSet* headerFooter, ui
         KWFrame* frame = headerFooter->frame( frameNumber );
         if ( *frame == rect )
             return;
+        frame->setRect( rect );
 #ifdef DEBUG_FRAMELAYOUT
         kdDebug(32002) << "KWFrameLayout::resizeOrCreateHeaderFooter frame " << headerFooter->name() << " " << frame << " resized from " << frame->rect() << " to " << rect << " pagenum=" << frame->pageNumber() << endl;
 #endif
-        frame->setTop( rect.top() );
-        frame->setLeft( rect.left() );
-        frame->setWidth( rect.width() );
     }
     else
     {

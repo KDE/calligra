@@ -2304,6 +2304,9 @@ double KWTextFrameSet::footNoteSize( KWFrame *theFrame )
 double KWTextFrameSet::footerHeaderSizeMax( KWFrame *theFrame )
 {
     KWPage *page = m_doc->pageManager()->page(theFrame);
+    Q_ASSERT( page );
+    if ( !page )
+        return 0;
     double tmp = page->height() - page->bottomMargin() - page->topMargin() - 40;//default min 40 for page size
     bool header=theFrame->frameSet()->isAHeader();
     if( header ? m_doc->isHeaderVisible():m_doc->isFooterVisible() )
