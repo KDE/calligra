@@ -278,7 +278,7 @@ KWFrame* KWOasisLoader::loadFrame( const QDomElement& frameTag, KoOasisContext& 
         if ( anchorType == "page" ) {
             double x = KoUnit::parseValue( frameTag.attributeNS( KoXmlNS::svg, "x", QString::null ) );
             double y = KoUnit::parseValue( frameTag.attributeNS( KoXmlNS::svg, "y", QString::null ) );
-            int pageNum = frameTag.attributeNS( KoXmlNS::text, "anchor-page-number", QString::null ).toInt() - 1;
+            int pageNum = frameTag.attributeNS( KoXmlNS::text, "anchor-page-number", QString::null ).toInt();
             frame->moveTopLeft( KoPoint( x, y + m_doc->pageManager()->topOfPage(pageNum) ) );
         }
     }
