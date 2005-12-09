@@ -971,7 +971,7 @@ KWFrame* KWFrameSet::loadOasisFrame( const QDomElement& tag, KoOasisContext& con
     // We currently ignore the value of the copy-of attribute. It probably needs to
     // be handled like chain-next-name (kwtextframeset.cc) but for all types of frameset.
     frame->setCopy( tag.hasAttributeNS( KoXmlNS::draw, "copy-of" ) );
-    frame->loadCommonOasisProperties( context, this );
+    frame->loadCommonOasisProperties( context, this, "graphic" );
 
     addFrame( frame, false );
 

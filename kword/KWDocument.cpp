@@ -1123,10 +1123,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         pageManager()->setDefaultPageMargins(m_pageLayout.ptTop, m_pageLayout.ptLeft,
                 m_pageLayout.ptBottom, m_pageLayout.ptRight);
 
-        //hf.ptHeaderBodySpacing = getAttribute( paper, "spHeadBody", 0.0 );
-        //hf.ptFooterBodySpacing  = getAttribute( paper, "spFootBody", 0.0 );
-        //hf.ptFootNoteBodySpacing  = getAttribute( paper, "spFootNoteBody", 10.0 );
-
         const QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
         const QDomElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
         if ( !footnoteSep.isNull() ) {
@@ -1241,8 +1237,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     static_cast<KWVariableSettings *>( m_varColl->variableSetting() )
         ->loadNoteConfiguration( oasisStyles.officeStyle() );
 
-    // TODO framestyles and tablestyles
-
     loadDefaultTableTemplates();
 
     if ( m_processingType == WP ) {
@@ -1283,7 +1277,6 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     }
 
     // Header/Footer
-    // TODO support for first-page
     bool hasEvenOddHeader = false;
     bool hasEvenOddFooter = false;
     if ( masterPageStyle )
@@ -1331,13 +1324,31 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         }
         if ( hasFirstFooter )
         {
-            oasisLoader.loadOasisHeaderFooter( footerFirstElem, hasEvenOddHeader, headerStyle, context );
+            oasisLoader.loadOasisHeaderFooter( footerFirstElem, hasEvenOddFooter, footerStyle, context );
         }
         QDomElement footerElem = KoDom::namedItemNS( *masterPage, KoXmlNS::style, "footer" );
         if ( !footerElem.isNull() )
         {
             oasisLoader.loadOasisHeaderFooter( footerElem, hasEvenOddFooter, footerStyle, context );
         }
+
+        // The bottom margin of headers is what we call headerBodySpacing
+        // (TODO support the 3 other margins)
+        if ( !headerStyle.isNull() ) {
+            context.styleStack().push( headerStyle );
+            context.styleStack().setTypeProperties( "header-footer" );
+            hf.ptHeaderBodySpacing = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-bottom" ) );
+            context.styleStack().pop();
+        }
+        // The top margin of footers is what we call footerBodySpacing
+        // (TODO support the 3 other margins)
+        if ( !footerStyle.isNull() ) {
+            context.styleStack().push( footerStyle );
+            context.styleStack().setTypeProperties( "header-footer" );
+            hf.ptFooterBodySpacing = KoUnit::parseValue( context.styleStack().attributeNS( KoXmlNS::fo, "margin-top" ) );
+            context.styleStack().pop();
+        }
+        // TODO ptFootNoteBodySpacing
     }
 
     if ( context.cursorTextParagraph() ) {
@@ -3194,8 +3205,13 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
 #endif
                 stylesWriter->startElement( "style:header-footer-properties" );
                 stylesWriter->addAttributePt( "fo:min-height", frame->minFrameHeight() );
+                if ( fs->isAHeader() )
+                    stylesWriter->addAttributePt( "fo:margin-bottom", m_pageHeaderFooter.ptHeaderBodySpacing );
+                else
+                    stylesWriter->addAttributePt( "fo:margin-top", m_pageHeaderFooter.ptFooterBodySpacing );
                 // TODO frame->saveBorderAttributes( *stylesWriter );
-                frame->saveMarginAttributes( *stylesWriter );
+                // Interesting idea, but we can't set margins (runaround) on
+                //frame->saveMarginAttributes( *stylesWriter );
                 stylesWriter->endElement(); // header-footer-properties
                 stylesWriter->endElement(); // header-style
             }

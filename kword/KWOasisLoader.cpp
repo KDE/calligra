@@ -218,7 +218,7 @@ void KWOasisLoader::loadOasisHeaderFooter( const QDomElement& headerFooter, bool
     if ( !style.isNull() )
         context.styleStack().push( style );
     KWFrame* frame = new KWFrame( fs, 29, isHeader?0:567, 798-29, 41 );
-    frame->loadCommonOasisProperties( context, fs );
+    frame->loadCommonOasisProperties( context, fs, "header-footer" );
     frame->setFrameBehavior( KWFrame::AutoExtendFrame );
     frame->setNewFrameBehavior( KWFrame::Copy );
     fs->addFrame( frame );

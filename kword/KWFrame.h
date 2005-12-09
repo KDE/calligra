@@ -242,7 +242,7 @@ public:
     /** read attributes from XML. @p headerOrFooter if true some defaults are different
      */
     void load( QDomElement &frameElem, KWFrameSet* frameSet, int syntaxVersion );
-    void loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet );
+    void loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet, const char* typeProperties );
     void loadBorderProperties( KoStyleStack& styleStack );
 
     QString saveOasisFrameStyle( KoGenStyles& mainStyles ) const;

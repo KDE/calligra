@@ -474,10 +474,10 @@ void KWFrame::loadBorderProperties( KoStyleStack& styleStack )
     // TODO more refined border spec for double borders (3.11.28)
 }
 
-void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet )
+void KWFrame::loadCommonOasisProperties( KoOasisContext& context, KWFrameSet* frameSet, const char* typeProperties )
 {
     KoStyleStack& styleStack = context.styleStack();
-    styleStack.setTypeProperties( "graphic" );
+    styleStack.setTypeProperties( typeProperties );
 
     loadBorderProperties( styleStack );
 
