@@ -105,7 +105,8 @@ MouseMeaning KWFrameView::mouseMeaning( const KoPoint &point, int keyState ) {
     if(isBorderHit(point)) {
         MouseMeaning mm = m_policy->mouseMeaningOnBorder(point, keyState);
         if(mm != MEANING_NONE && frame()->frameSet()->isProtectSize() ||
-                frame()->frameSet()->isMainFrameset())
+                frame()->frameSet()->isMainFrameset() || frame()->frameSet()->isAHeader() ||
+                frame()->frameSet()->isAFooter() || frame()->frameSet()->isFloating())
             mm = MEANING_FORBIDDEN;
         return mm;
     }
@@ -139,8 +140,9 @@ void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, KW
         bool readOnly;
       public:
         ResizeHandle(KWFrameView *fv) : GRIP_SIZE(6) {
-            readOnly = fv->frame()->frameSet()->isProtectSize() ||
-                fv->frame()->frameSet()->isMainFrameset();
+            KWFrameSet *fs = fv->frame()->frameSet();
+            readOnly = fs->isProtectSize() || fs->isMainFrameset() ||
+                fs->isAHeader() || fs->isAFooter() || fs->isFloating();
         }
         void paint(QPainter *p, int x, int y) {
             p->setPen( QPen( Qt::black, 1, QPen::SolidLine ) );
