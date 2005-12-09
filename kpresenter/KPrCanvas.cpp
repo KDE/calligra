@@ -631,6 +631,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             if(e->button() == RightButton)
             {
                 m_currentTextObjectView->showPopup( m_view, QCursor::pos(), m_view->actionList() );
+                m_view->disableAutoScroll();
                 mousePressed=false;
             }
             else if( e->button() == MidButton )
@@ -1186,6 +1187,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     {
         m_currentTextObjectView->mouseReleaseEvent( e, contentsPoint );
         emit objectSelectedChanged();
+        m_view->disableAutoScroll();
         mousePressed=false;
         return;
     }
