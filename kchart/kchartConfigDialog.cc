@@ -393,7 +393,7 @@ void KChartConfigDialog::subtypePage()
 	return;
         ; 
     }
-    addTab( m_subTypePage, i18n( "Chart &Subtype" ) );
+    addTab( m_subTypePage, i18n( "Chart &Sub-type" ) );
 }
 
 

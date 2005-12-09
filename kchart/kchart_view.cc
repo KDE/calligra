@@ -141,7 +141,7 @@ KChartView::KChartView( KChartPart* part, QWidget* parent, const char* name )
                             this, SLOT( slotConfigLegend() ),
                             actionCollection(), "legend_config" );
 
-    m_subTypeChartConfig = new KAction( i18n( "Chart &Subtype..." ), 0,
+    m_subTypeChartConfig = new KAction( i18n( "Chart &Sub-type..." ), 0,
                             this, SLOT( slotConfigSubTypeChart() ),
                             actionCollection(), "legend_subtype" );
 

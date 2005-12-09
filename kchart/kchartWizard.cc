@@ -45,7 +45,7 @@ KChartWizard::KChartWizard ( KChartPart* _chart, QWidget *parent, const char* na
 
     // Third page: select the minor chart type
     m_selectchartsubtypepage = new KChartWizardSelectChartSubTypePage( this, m_chart );
-    addPage( m_selectchartsubtypepage, i18n( "Select Chart Subtype" ) );
+    addPage( m_selectchartsubtypepage, i18n( "Select Chart Sub-type" ) );
     setFinishEnabled(m_selectchartsubtypepage, true);
     setHelpEnabled(m_selectchartsubtypepage, false);
 

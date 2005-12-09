@@ -78,7 +78,7 @@ KChartHeaderFooterConfigPage::KChartHeaderFooterConfigPage( KChartParams* params
     connect( subtitleFontButton, SIGNAL(clicked()), this, SLOT(changeSubtitleFont()));
 
     lab=new QLabel(i18n("Footer:"),this);
-    QWhatsThis::add(lab, i18n("Write here the footer of your chart if you want one. The footer will be centered on bottom just below your chart."));
+    QWhatsThis::add(lab, i18n("Write here the footer of your chart if you want one. The footer will be centered at the bottom just below your chart."));
     layout->addWidget(lab,2,0);
 
     footerEdit=new QLineEdit(this);
