@@ -607,9 +607,9 @@ WidgetPropertySet::isNameValid(const QString &name)
 	//also update widget's name in QObject member
 	if (!KexiUtils::isIdentifier(name)) {
 		KMessageBox::sorry(KFormDesigner::FormManager::self()->activeForm()->widget(),
-			i18n("Could not rename widget. ")
-			+i18n("\"%1\" is not a valid name for a widget.\n").arg(name)
-			+i18n("Its name will be reverted to \"%1\"").arg(w->name()));
+			i18n("Could not rename widget. "
+			"\"%1\" is not a valid name for a widget.\n"
+			"Its name will be reverted to \"%2\"").arg(name).arg(w->name()));
 		d->slotPropertyChangedEnabled = false;
 		d->set["name"].resetValue();
 		d->slotPropertyChangedEnabled = true;
@@ -618,9 +618,9 @@ WidgetPropertySet::isNameValid(const QString &name)
 
 	if (KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(name)) {
 		KMessageBox::sorry( KFormDesigner::FormManager::self()->activeForm()->widget(),
-			i18n("Could not rename widget. ")
-			+i18n("A widget with name \"%1\" already exists.\n").arg(name)
-			+i18n("Its name will be reverted to \"%1\"").arg(w->name()));
+			i18n("Could not rename widget. "
+			"A widget with name \"%1\" already exists.\n"
+			"Its name will be reverted to \"%1\"").arg(name).arg(w->name()));
 		d->slotPropertyChangedEnabled = false;
 		d->set["name"].resetValue();
 		d->slotPropertyChangedEnabled = true;
