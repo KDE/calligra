@@ -83,9 +83,9 @@ KexiScriptContainer::KexiScriptContainer(KexiScriptManager* manager, const QStri
 KexiScriptContainer::~KexiScriptContainer()
 {
 #ifdef KEXI_KROSS_SUPPORT
-	//TODO Don't redirect stdout and stderr any longer.
-	//d->scriptcontainer->removeSignal("stdout");
-	//d->scriptcontainer->removeSignal("stderr");
+	// We don't need the ScriptContainer any longer. Rather then removing
+	// it direct we just deligate the cleanup to the ScriptContainer.
+	d->scriptcontainer->finalize();
 #endif
 	delete d;
 }

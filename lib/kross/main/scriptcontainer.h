@@ -154,19 +154,25 @@ namespace Kross { namespace Api {
              */
             KSharedPtr<Object> classInstance(const QString& name);
 
-        private:
-            /// Internaly used private d-pointer.
-            ScriptContainerPrivate* d;
-
             /**
              * Initialize the \a Script instance.
+             *
+             * Normaly it's not needed to call this function direct cause
+             * if will be internaly called if needed (e.g. on \a execute ).
              */
             bool initialize();
 
             /**
-             * Finalize the \a Script instance.
+             * Finalize the \a Script instance and free's any cached or still
+             * running executions. Normaly it's not needed to call this
+             * function direct cause the \a ScriptContainer will take care
+             * of calling it if needed.
              */
             void finalize();
+
+        private:
+            /// Internaly used private d-pointer.
+            ScriptContainerPrivate* d;
     };
 
 }}
