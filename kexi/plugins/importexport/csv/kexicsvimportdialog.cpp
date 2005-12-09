@@ -83,7 +83,9 @@
 #define _TEXT_TYPE 0
 #define _NUMBER_TYPE 1
 #define _DATE_TYPE 2
-#define _PK_FLAG 3
+#define _TIME_TYPE 3
+#define _DATETIME_TYPE 4
+#define _PK_FLAG 5
 
 //extra:
 #define _NO_TYPE_YET -1 //allows to accept a number of empty cells, before something non-empty
@@ -143,10 +145,12 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 {
 	setButtonOK(KGuiItem( i18n("&Import..."), _IMPORT_ICON));
 
-	m_typeNames.resize(3);
+	m_typeNames.resize(5);
 	m_typeNames[0] = i18n("text");
 	m_typeNames[1] = i18n("number");
 	m_typeNames[2] = i18n("date");
+	m_typeNames[3] = i18n("time");
+	m_typeNames[4] = i18n("date/time");
 
 	m_pkIcon = SmallIcon("key");
 
@@ -222,6 +226,8 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 	m_formatCombo->insertItem(i18n("Text"));
 	m_formatCombo->insertItem(i18n("Number"));
 	m_formatCombo->insertItem(i18n("Date"));
+	m_formatCombo->insertItem(i18n("Time"));
+	m_formatCombo->insertItem(i18n("Date/Time"));
 //	m_formatCombo->setSizePolicy( QSizePolicy::Minimum, QSizePolicy::Preferred );
 	MyDialogLayout->addWidget( m_formatCombo, 3, 1 );
 
@@ -231,6 +237,7 @@ KexiCSVImportDialog::KexiCSVImportDialog( Mode mode, KexiMainWindow* mainWin,
 
 	m_primaryKeyField = new QCheckBox( i18n( "Primary key" ), plainPage(), "m_primaryKeyField" );
 	MyDialogLayout->addWidget( m_primaryKeyField, 4, 1 );
+	connect(m_primaryKeyField, SIGNAL(toggled(bool)), this, SLOT(slotPrimaryKeyFieldToggled(bool)));
 
   m_comboQuote = new KexiCSVTextQuoteComboBox( plainPage() );
 //  m_comboQuote->setSizePolicy( QSizePolicy::Preferred, QSizePolicy::Preferred );
@@ -304,6 +311,8 @@ if ( m_mode == Clipboard )
   {*/
 	m_dateRegExp1 = QRegExp("\\d{1,4}[/\\-\\.]\\d{1,2}[/\\-\\.]\\d{1,2}");
 	m_dateRegExp2 = QRegExp("\\d{1,2}[/\\-\\.]\\d{1,2}[/\\-\\.]\\d{1,4}");
+	m_timeRegExp1 = QRegExp("\\d{1,2}:\\d{1,2}:\\d{1,2}");
+	m_timeRegExp2 = QRegExp("\\d{1,2}:\\d{1,2}");
 	m_fpNumberRegExp = QRegExp("\\d*[,\\.]\\d+");
 
 	if (mode == File) {
@@ -484,6 +493,7 @@ void KexiCSVImportDialog::fillTable()
 	m_uniquenessTest.clear();
 	m_uniquenessTest.resize(1024);
 	m_1stRowForFieldNamesDetected = true;
+	bool nextRow = false;
 
 	while (!inputStream.atEnd())
 	{
@@ -509,7 +519,7 @@ void KexiCSVImportDialog::fillTable()
 			}
 			else if (x == '\n')
 			{
-				++row;
+				nextRow = true;
 				maxColumn = QMAX( maxColumn, column );
 				column = 1;
 			}
@@ -531,7 +541,7 @@ void KexiCSVImportDialog::fillTable()
 				field = "";
 				if (x == '\n')
 				{
-					++row;
+					nextRow = true;
 					maxColumn = QMAX( maxColumn, column );
 					column = 1;
 				}
@@ -560,7 +570,7 @@ void KexiCSVImportDialog::fillTable()
 				field = "";
 				if (x == '\n')
 				{
-					++row;
+					nextRow = true;
 					maxColumn = QMAX( maxColumn, column );
 					column = 1;
 				}
@@ -584,7 +594,7 @@ void KexiCSVImportDialog::fillTable()
 				field = "";
 				if (x == '\n')
 				{
-					++row;
+					nextRow = true;
 					maxColumn = QMAX( maxColumn, column );
 					column = 1;
 				}
@@ -615,7 +625,7 @@ void KexiCSVImportDialog::fillTable()
 				field = "";
 				if (x == '\n')
 				{
-					++row;
+					nextRow = true;
 					maxColumn = QMAX( maxColumn, column );
 					column = 1;
 				}
@@ -635,7 +645,14 @@ void KexiCSVImportDialog::fillTable()
 		if (x != delimiter)
 			lastCharDelimiter = false;
 
-		if (m_firstFillTableCall && row==2 && !m_1stRowForFieldNames->isChecked() && m_1stRowForFieldNamesDetected) {
+		if (nextRow) {
+			nextRow = false;
+			++row;
+		}
+
+		if (m_firstFillTableCall && row==2 
+			&& !m_1stRowForFieldNames->isChecked() && m_1stRowForFieldNamesDetected) 
+		{
 			//'1st row for field name' flag detected: reload table
 			m_1stRowForFieldNamesDetected = false;
 			m_table->setNumRows( 0 );
@@ -787,6 +804,39 @@ void KexiCSVImportDialog::detectTypeAndUniqueness(int row, int col, const QStrin
 				found = true; //yes
 			}
 		}
+		//-time?
+		if (!found && (row==1 || type==_TIME_TYPE || type==_NO_TYPE_YET)) {
+			if ((row==1 || type==_NO_TYPE_YET)
+				&& (text.isEmpty() || m_timeRegExp1.exactMatch(text) || m_timeRegExp2.exactMatch(text)))
+			{
+				m_detectedTypes[col]=_TIME_TYPE;
+				found = true; //yes
+			}
+		}
+		//-date/time?
+		if (!found && (row==1 || type==_TIME_TYPE || type==_NO_TYPE_YET)) {
+			if (row==1 || type==_NO_TYPE_YET) {
+				bool detected = text.isEmpty();
+				if (!detected) {
+					const QStringList dateTimeList( QStringList::split(" ", text) );
+					bool ok = dateTimeList.count()>=2;
+//! @todo also support ISODateTime's "T" separator?
+//! @todo also support timezones?
+					if (ok) {
+						//try all combinations
+						QString datePart( dateTimeList[0].stripWhiteSpace() );
+						QString timePart( dateTimeList[1].stripWhiteSpace() );
+						ok = (m_dateRegExp1.exactMatch(datePart) || m_dateRegExp2.exactMatch(datePart))
+							&& (m_timeRegExp1.exactMatch(timePart) || m_timeRegExp2.exactMatch(timePart));
+					}
+					detected = ok;
+				}
+				if (detected) {
+					m_detectedTypes[col]=_DATETIME_TYPE;
+					found = true; //yes
+				}
+			}
+		}
 		if (!found && type==_NO_TYPE_YET && !text.isEmpty()) {
 			//eventually, a non-emptytext after a while
 			m_detectedTypes[col]=_TEXT_TYPE;
@@ -862,7 +912,7 @@ void KexiCSVImportDialog::setText(int row, int col, const QString& text)
 }
 
 /*
- * Called after the first fillTable() when number of rows are unknown.
+ * Called after the first fillTable() when number of rows is unknown.
  */
 void KexiCSVImportDialog::adjustRows(int iRows)
 {
@@ -870,6 +920,8 @@ void KexiCSVImportDialog::adjustRows(int iRows)
 	{
 		m_table->setNumRows( iRows );
 		m_adjustRows=0;
+		for (int i = 0; i<iRows; i++)
+			m_table->adjustRow(i);
 	}
 }
 
@@ -1103,7 +1155,10 @@ void KexiCSVImportDialog::accept()
 		KexiDB::Field::Type fieldType;
 		if (detectedType==_DATE_TYPE)
 			fieldType = KexiDB::Field::Date;
-//! @todo what about time and date/time?
+		if (detectedType==_TIME_TYPE)
+			fieldType = KexiDB::Field::Time;
+		if (detectedType==_DATETIME_TYPE)
+			fieldType = KexiDB::Field::DateTime;
 		else if (detectedType==_NUMBER_TYPE)
 			fieldType = KexiDB::Field::Integer;
 		else if (detectedType==_FP_NUMBER_TYPE)
@@ -1164,15 +1219,45 @@ void KexiCSVImportDialog::accept()
 		for (uint col = 0; col < numCols; col++) {
 			const int detectedType = m_detectedTypes[col];
 			QString t( m_table->text(row,col) );
-			if (detectedType==_NUMBER_TYPE)
+			if (detectedType==_NUMBER_TYPE) {
 				values.append( t.isEmpty() ? QVariant() : t.toInt() );
 //! @todo what about time and float/double types and different integer subtypes?
-			else if (detectedType==_FP_NUMBER_TYPE)
+			}
+			else if (detectedType==_FP_NUMBER_TYPE) {
 				values.append( t.isEmpty() ? QVariant() : t.toDouble() );
-			else if (detectedType==_DATE_TYPE)
-				//todo
-				values.append( t.isEmpty() ? QVariant() : QDate::fromString(t, Qt::ISODate) );
-//! @todo what about time and date/time?
+			}
+			else if (detectedType==_DATE_TYPE) {
+				QDate date( QDate::fromString(t, Qt::ISODate) ); //same as m_dateRegExp1
+				if (!date.isValid() && m_dateRegExp2.exactMatch(t)) //dd-mm-yyyy
+					date = QDate(t.mid(6,4).toInt(), t.mid(3,2).toInt(), t.left(2).toInt());
+				values.append( date );
+			}
+			else if (detectedType==_TIME_TYPE) {
+				QTime time( QTime::fromString(t, Qt::ISODate) ); //same as m_timeRegExp1
+				if (!time.isValid() && m_timeRegExp2.exactMatch(t)) //hh:mm:ss
+					time = QTime(t.left(2).toInt(), t.mid(3,2).toInt(), t.mid(6,2).toInt());
+				values.append( time );
+			}
+			else if (detectedType==_DATETIME_TYPE) {
+				const QStringList dateTimeList( QStringList::split(" ", t) );
+//! @todo also support ISODateTime's "T" separator?
+//! @todo also support timezones?
+				if (dateTimeList.count()>=2) {
+					//try all combinations
+					QString datePart( dateTimeList[0].stripWhiteSpace() );
+					QString timePart( dateTimeList[1].stripWhiteSpace() );
+					QDateTime dateTime;
+					dateTime.setDate( QDate::fromString(datePart, Qt::ISODate) ); //same as m_dateRegExp1
+					if (!dateTime.date().isValid() && m_dateRegExp2.exactMatch(datePart)) //dd-mm-yyyy
+						dateTime.setDate( QDate(datePart.mid(6,4).toInt(), 
+							datePart.mid(3,2).toInt(), datePart.left(2).toInt()) );
+          dateTime.setTime( QTime::fromString(timePart, Qt::ISODate) ); //same as m_timeRegExp1
+					if (!dateTime.time().isValid() && m_timeRegExp2.exactMatch(timePart)) //hh:mm:ss
+						dateTime.setTime( QTime(timePart.left(2).toInt(), 
+							timePart.mid(3,2).toInt(), timePart.mid(6,2).toInt()) );
+					values.append( dateTime );
+				}
+			}
 			else //_TEXT_TYPE and the rest
 				values.append( t );
 		}
@@ -1257,6 +1342,12 @@ bool KexiCSVImportDialog::eventFilter ( QObject * watched, QEvent * e )
 		}
 	}
 	return KDialogBase::eventFilter( watched, e );
+}
+
+void KexiCSVImportDialog::slotPrimaryKeyFieldToggled(bool on)
+{
+	Q_UNUSED(on);
+	formatChanged(_PK_FLAG);
 }
 
 #include "kexicsvimportdialog.moc"

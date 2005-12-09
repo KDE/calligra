@@ -153,7 +153,7 @@ class KexiCSVImportDialog : public KDialogBase
 //	QBitArray m_detectedUniqueColumns;
 	QPtrVector< QValueList<int> > m_uniquenessTest;
 //! @todo tmp
-	QRegExp m_dateRegExp1, m_dateRegExp2, m_fpNumberRegExp;
+	QRegExp m_dateRegExp1, m_dateRegExp2, m_timeRegExp1, m_timeRegExp2, m_fpNumberRegExp;
 	QValueVector<QString> m_typeNames, m_columnNames;
 	QBitArray m_changedColumnNames;
 	bool m_columnsAdjusted : 1; //only once
@@ -177,6 +177,7 @@ class KexiCSVImportDialog : public KDialogBase
   void slot1stRowForFieldNamesChanged(int);
   void cellValueChanged(int row,int col);
   void optionsButtonClicked();
+  void slotPrimaryKeyFieldToggled(bool on);
 };
 
 #endif
