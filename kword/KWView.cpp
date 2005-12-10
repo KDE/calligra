@@ -6493,18 +6493,19 @@ void KWView::goToFootEndNote()
 
 void KWView::openDocStructurePopupMenu( const QPoint &p, KWFrameSet *frameset)
 {
-    if(!koDocument()->isReadWrite() )
+    bool rw = koDocument()->isReadWrite();
+    bool kttsdInstalled = KoSpeaker::isKttsdInstalled();
+    if (!rw && !kttsdInstalled)
         return;
-    QPtrList<KAction> actionList;
 
-    bool state = (frameset->type()==FT_TEXT || frameset->type()==FT_TABLE || frameset->type()==FT_FORMULA );
-    if ( state )
+    QPtrList<KAction> actionList;
+    bool hasText = (frameset->type()==FT_TEXT || frameset->type()==FT_TABLE || frameset->type()==FT_FORMULA );
+    if ( rw && hasText )
         actionList.append(m_actionEditFrameSet);
-    m_actionDeleteFrameSet->setEnabled( (!frameset->isMainFrameset() && !frameset->isFootEndNote() && !frameset->isHeaderOrFooter()) );
-    m_actionSpeakFrameSet->setEnabled( KoSpeaker::isKttsdInstalled() );
+    m_actionDeleteFrameSet->setEnabled( (rw && !frameset->isMainFrameset() && !frameset->isFootEndNote() && !frameset->isHeaderOrFooter()) );
+    m_actionSpeakFrameSet->setEnabled( hasText && kttsdInstalled );
 
     plugActionList( "edit_action", actionList );
-
     QPopupMenu* popup = static_cast<QPopupMenu *>(factory()->container("docstruct_popup",this));
     if ( popup )
         popup->exec(p);
