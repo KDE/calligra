@@ -11,6 +11,7 @@
   <!ENTITY tutorial-quick-starts SYSTEM "tutorial-quick-starts.docbook">
   <!ENTITY using SYSTEM "using.docbook">
   <!ENTITY using-selections SYSTEM "using-selections.docbook">
+  <!ENTITY using-filters SYSTEM "using-filters.docbook">
   <!ENTITY commands SYSTEM "commands.docbook">
   <!ENTITY commands-toolbars SYSTEM "commands-toolbars.docbook">
   <!ENTITY commands-palettes SYSTEM "commands-palettes.docbook">
@@ -55,8 +56,8 @@
 
 <!-- Date and version information of the documentation -->
 
-<date>2005-11-27</date>
-<releaseinfo>0.02.00</releaseinfo>
+<date>2005-12-08</date>
+<releaseinfo>0.03.00</releaseinfo>
 
 <!-- Abstract about this handbook -->
 

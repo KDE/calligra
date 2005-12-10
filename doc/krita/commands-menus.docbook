@@ -1305,6 +1305,9 @@ dialog.</action></para></listitem>
 
 <sect2 id="commands-menus-filter">
 <title>The <guimenu>Filter</guimenu> Menu</title>
+
+<para>See the section on <link linkend="using-filters">Using
+Filters</link> for more information on filters.</para>
 <para>
 <variablelist>
 
@@ -1378,8 +1381,7 @@ filters.</para></listitem>
 <guimenu>Filter</guimenu>
 <guisubmenu>Colors</guisubmenu>
 </menuchoice></term>
-<listitem><para>Contains filters that change
-the image colors.</para></listitem>
+<listitem><para>Contains filters that change the image colors.</para></listitem>
 </varlistentry>
 
 <varlistentry>
