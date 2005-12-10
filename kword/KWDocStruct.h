@@ -97,6 +97,7 @@ public:
     virtual void selectItem();
     virtual void editItem();
     virtual void deleteItem();
+    virtual void editProperties();
     virtual void speakItem();
     virtual void contextMenu(QListViewItem* item, const QPoint& p, int);
 

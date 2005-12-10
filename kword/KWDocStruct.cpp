@@ -159,6 +159,12 @@ void KWDocStructParagItem::deleteItem()
     // TODO
 }
 
+void KWDocStructParagItem::editProperties()
+{
+    gui()->canvasWidget()->editTextFrameSet(m_parag->kwTextDocument()->textFrameSet(), m_parag, 0);
+    gui()->getView()->formatParagraph();
+}
+
 void KWDocStructParagItem::speakItem()
 {
     QString text;
