@@ -40,6 +40,7 @@ KexiDBConnection::KexiDBConnection(::KexiDB::Connection* connection, KexiDBDrive
     , m_connection(connection)
     , m_connectiondata(connectiondata ? connectiondata : new KexiDBConnectionData(connection->data()))
 {
+    addFunction("hadError", &KexiDBConnection::hadError);
     addFunction("lastError", &KexiDBConnection::lastError);
 
     addFunction("data", &KexiDBConnection::data);
@@ -137,16 +138,19 @@ const QString KexiDBConnection::getClassName() const
 {
     if(! m_connection)
         throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Connection is NULL.")) );
-    if(m_connection->error())
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Connection error: %1").arg(m_connection->errorMsg())) );
+    //if(m_connection->error())
+    //    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Connection error: %1").arg(m_connection->errorMsg())) );
     return m_connection;
+}
+
+Kross::Api::Object::Ptr KexiDBConnection::hadError(Kross::Api::List::Ptr)
+{
+    return new Kross::Api::Variant( connection()->error() );
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::lastError(Kross::Api::List::Ptr)
 {
-    if(! m_connection)
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Connection is NULL.")) );
-    return new Kross::Api::Variant( m_connection->errorMsg() );
+    return new Kross::Api::Variant( connection()->errorMsg() );
 }
 
 Kross::Api::Object::Ptr KexiDBConnection::data(Kross::Api::List::Ptr)

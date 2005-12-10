@@ -76,6 +76,13 @@ namespace Kross { namespace KexiDB {
             void initialize();
 
             /**
+             * Return true if there was an error during last operation on
+             * the database.
+             * Wrapper for \a ::KexiDB::Object::error
+             */
+            Kross::Api::Object::Ptr hadError(Kross::Api::List::Ptr);
+
+            /**
              * Return the last errormessage.
              * Wrapper for \a ::KexiDB::Object::errorMsg
              */
