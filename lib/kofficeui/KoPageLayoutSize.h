@@ -74,7 +74,6 @@ private:
     void setValues();
 
     KoUnit::Unit m_unit;
-    KoColumns m_columns;
     KoPageLayout m_layout;
 };
 

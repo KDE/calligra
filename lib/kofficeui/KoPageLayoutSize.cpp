@@ -35,7 +35,6 @@
 
 KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,const KoColumns& columns,  bool unitChooser, bool enableBorders)
     : QWidget(parent) {
-    m_columns = columns;
     m_layout = layout;
     m_unit = unit;
 
@@ -172,11 +171,11 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
 
     setValues();
     updatePreview();
+    pgPreview->setPageColumns( columns );
 }
 
 void KoPageLayoutSize::updatePreview() {
     pgPreview->setPageLayout( m_layout );
-    pgPreview->setPageColumns( m_columns );
 }
 
 void KoPageLayoutSize::setValues() {
