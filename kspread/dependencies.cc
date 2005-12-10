@@ -129,10 +129,6 @@ void DependencyManager::cellChanged (const Point &cell)
   deps->cellChanged (cell);
   Cell *c = cell.cell();
 
-  // empty or default cell? do nothing
-  if( c->isDefault() )
-    return;
-  
   //if the cell contains the circle error, we mustn't do anything
   if (c->testFlag (Cell::Flag_CircularCalculation))
     return;
