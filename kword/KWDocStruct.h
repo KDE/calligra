@@ -39,16 +39,16 @@ class KWTextParag;
 /******************************************************************/
 
 /** Provides a way to sort framesets using a QValueList based on their top left corner. */
-class KWOrderedTextFrameSet
+class KWOrderedFrameSet
 {
 public:
-    KWOrderedTextFrameSet(KWTextFrameSet* fs);
-    KWOrderedTextFrameSet();    // default constructor
-    bool operator<( KWOrderedTextFrameSet ofs);
-    KWTextFrameSet* frameSet() { return m_frameset; }
+    KWOrderedFrameSet(KWFrameSet* fs);
+    KWOrderedFrameSet();    // default constructor
+    bool operator<( KWOrderedFrameSet ofs);
+    KWFrameSet* frameSet() { return m_frameset; }
 
 private:
-    KWTextFrameSet* m_frameset;
+    KWFrameSet* m_frameset;
 };
 
 class KWDocListViewItem : public KListViewItem
@@ -100,9 +100,41 @@ public:
     virtual void speakItem();
     virtual void contextMenu(QListViewItem* item, const QPoint& p, int);
 
+    KWTextParag* parag() const { return m_parag; }
+
 protected:
     KWTextParag* m_parag;
 };
+
+/******************************************************************/
+/* Class: KWDocStructTextFrameItem                                */
+/******************************************************************/
+
+class KWDocStructTextFrameItem : public KWDocListViewItem
+{
+public:
+    KWDocStructTextFrameItem(QListViewItem* parent, const QString& text,
+        KWTextFrameSet* frameset, KWFrame* frame );
+    KWDocStructTextFrameItem(QListViewItem* parent, QListViewItem* after, const QString& text,
+        KWTextFrameSet* frameset, KWFrame* frame );
+    virtual int ItemType() { return IT_TEXTFRAME; }
+    virtual void selectItem();
+    virtual void editItem();
+    virtual void deleteItem();
+    virtual void editProperties();
+    virtual void speakItem();
+    virtual void contextMenu(QListViewItem* item, const QPoint& p, int);
+
+    KWFrame* frame() const { return m_frame; }
+    KWTextFrameSet* frameSet() const { return m_frameset; };
+    void setupTextParags();
+    KWDocStructParagItem* findTextParagItem(const KWTextParag* parag);
+
+protected:
+    KWFrame* m_frame;
+    KWTextFrameSet* m_frameset;
+};
+
 
 /******************************************************************/
 /* Class: KWDocStructTextFrameSetItem                                 */
@@ -122,34 +154,13 @@ public:
     virtual void speakItem();
     virtual void contextMenu(QListViewItem* item, const QPoint& p, int);
 
-    KWTextFrameSet* frameSet() { return m_frameset; };
+    KWTextFrameSet* frameSet() const { return m_frameset; };
     void setupTextFrames();
+    KWDocStructTextFrameItem* findTextFrameItem(const KWFrame* frame);
 
 protected:
     KWTextFrameSet* m_frameset;
 
-};
-
-/******************************************************************/
-/* Class: KWDocStructTextFrameItem                                    */
-/******************************************************************/
-
-class KWDocStructTextFrameItem : public KWDocListViewItem
-{
-public:
-    KWDocStructTextFrameItem(QListViewItem* parent, const QString& text,
-        KWTextFrameSet* frameset, KWFrame* frame );
-    virtual int ItemType() { return IT_TEXTFRAME; }
-    virtual void selectItem();
-    virtual void editItem();
-    virtual void deleteItem();
-    virtual void editProperties();
-    virtual void speakItem();
-    virtual void contextMenu(QListViewItem* item, const QPoint& p, int);
-
-protected:
-    KWFrame* m_frame;
-    KWTextFrameSet* m_frameset;
 };
 
 /******************************************************************/
@@ -160,6 +171,8 @@ class KWDocStructTableItem : public KWDocListViewItem
 {
 public:
     KWDocStructTableItem(QListViewItem* parent, const QString& text, KWTableFrameSet* table );
+    KWDocStructTableItem(QListViewItem* parent, QListViewItem* after, const QString& text,
+        KWTableFrameSet* table );
     virtual int ItemType() { return IT_TABLE; }
     virtual void selectItem();
     virtual void editItem();
@@ -167,6 +180,10 @@ public:
     virtual void editProperties();
     virtual void speakItem();
     virtual void contextMenu(QListViewItem* item, const QPoint& p, int);
+
+    KWTableFrameSet* table() const { return m_table; };
+    void setupCells();
+    KWDocStructTextFrameItem* findCellItem(const KWTextFrameSet* cell);
 
 protected:
     KWTableFrameSet* m_table;
@@ -251,6 +268,7 @@ public:
 
 protected:
     KWDocStructTextFrameSetItem* findTextFrameSetItem(const KWFrameSet* frameset);
+    KWDocStructTableItem* findTableItem(const KWFrameSet* frameset);
 
     TypeStructDocItem m_type;
 
