@@ -356,6 +356,7 @@ void KoPageLayoutDia::setupTab3()
     QWidget *tab3 = addPage(i18n( "Col&umns" ));
     QHBoxLayout *lay = new QHBoxLayout(tab3);
     m_columnsTab = new KoPageLayoutColumns(tab3, m_layout, m_unit, m_column);
+    m_columnsTab->layout()->setMargin(0);
     lay->addWidget(m_columnsTab);
     m_columnsTab->show();
     connect (m_columnsTab, SIGNAL( propertyChange(KoColumns&)),
@@ -375,6 +376,7 @@ void KoPageLayoutDia::setupTab4(const KoKWHeaderFooter kwhf )
     QWidget *tab4 = addPage(i18n( "H&eader && Footer" ));
     QHBoxLayout *lay = new QHBoxLayout(tab4);
     m_headerTab = new KoPageLayoutHeader(tab4, m_unit, kwhf);
+    m_headerTab->layout()->setMargin(0);
     lay->addWidget(m_headerTab);
     m_headerTab->show();
 
