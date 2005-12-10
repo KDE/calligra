@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Krita RAW Import Filter
+Name[br]=Sil enporzh RAW evit Krita
 Name[da]=Krita RAW-importfilter
 Name[es]=Filtro de importación a RAW de Krita
 Name[ga]=Scagaire Iompórtála RAW Krita

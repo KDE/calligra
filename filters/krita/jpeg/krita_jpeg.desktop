@@ -4,6 +4,7 @@ Comment=
 Encoding=UTF-8
 Exec=krita %u
 GenericName=Application for drawing and handling of images
+GenericName[sv]=Rit- och bildbehandlingsprogram
 Icon=krita
 MimeType=image/jpeg
 Name=Krita

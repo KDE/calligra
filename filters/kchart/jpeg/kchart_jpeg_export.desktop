@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=KChart JPEG Export Filter
+Name[br]=Sil ezporzh JPEG evit KChart
 Name[da]=KChart JPEG-eksportfilter
 Name[es]=Filtro de exportación a JPEG para KChart
 Name[ga]=Scagaire Easpórtála JPEG KChart
