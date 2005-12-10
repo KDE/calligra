@@ -49,6 +49,7 @@
 <copyright>
 <year>2005</year>
 <holder>Boudewijn Rempt</holder>
+<holder>Casper Boemann</holder>
 <holder>Sander Koning</holder>
 </copyright>
 
@@ -56,8 +57,8 @@
 
 <!-- Date and version information of the documentation -->
 
-<date>2005-12-08</date>
-<releaseinfo>0.03.00</releaseinfo>
+<date>2005-12-10</date>
+<releaseinfo>1.4.88</releaseinfo>
 
 <!-- Abstract about this handbook -->
 
