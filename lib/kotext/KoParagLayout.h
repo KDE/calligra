@@ -29,6 +29,7 @@ class KoGenStyle;
 class KoParagCounter;
 class KoParagStyle;
 class KoOasisContext;
+class QColor;
 
 /**
  * This class holds the paragraph-specific formatting information
@@ -52,8 +53,10 @@ public:
            Borders = 16,
            Tabulator = 32,
            PageBreaking = 64,
+           BackgroundColor = 128,
            /* Style is maybe missing */
-           All = Alignment | BulletNumber | Margins | LineSpacing | Borders | Tabulator | PageBreaking
+           All = Alignment | BulletNumber | Margins | LineSpacing |
+                 Borders | Tabulator | PageBreaking | BackgroundColor
     } Flags;
 
     /** Page breaking flags */
@@ -95,6 +98,16 @@ public:
     /// Alignment flag (AlignAuto/AlignLeft/AlignRight/AlignJustify)
     char alignment; // Qt::AlignmentFlags
     KoBorder leftBorder, rightBorder, topBorder, bottomBorder;
+
+    /// The background color of the paragraph
+    /**
+     *  The background color is used for text that has no background color set,
+     *  and for parts of the paragraph that are not covered by text.
+     *  In theory anyway: the background colour isn't used in rendering text
+     *  yet, but it's nice to preserve the value.
+     */
+    QColor backgroundColor;
+
     /** can be 0 if no counter set */
     KoParagCounter* counter;
 
@@ -108,6 +121,12 @@ public:
     void setTabList( const KoTabulatorList & tabList ) { m_tabList = tabList; }
     const KoTabulatorList& tabList() const { return m_tabList; }
 
+    //! Assignment operator for KoParagLayout
+    /** Copy a paragraph layout.
+     *
+     *  If you're modifying this, you might also need to modify
+     * KoTextParag::setParagLayout
+     */
     void operator=( const KoParagLayout & );
 
     /** Return a set of flags showing the differences between this and 'layout' */

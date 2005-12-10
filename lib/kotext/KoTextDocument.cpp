@@ -1191,50 +1191,68 @@ floating:
     return lastFormatted;
 }
 
+
+// Used for printing
 void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, const QColorGroup &cg,
                                               KoTextZoomHandler* zoomHandler, const QBrush *paper )
 {
     if ( !firstParag() )
-	return;
+        return;
 
     Q_ASSERT( (m_drawingFlags & DrawSelections) == 0 );
     if (m_drawingFlags & DrawSelections)
            kdDebug() << kdBacktrace();
     if ( paper ) {
-	p->setBrushOrigin( -(int)p->translationX(),
-			   -(int)p->translationY() );
-	p->fillRect( cr, *paper );
+        p->setBrushOrigin(  -(int)p->translationX(),  -(int)p->translationY() );
+        p->fillRect( cr, *paper );
     }
 
     KoTextParag *parag = firstParag();
     while ( parag ) {
-	if ( !parag->isValid() )
-	    parag->format();
+        if ( !parag->isValid() )
+            parag->format();
 
-	QRect pr( parag->pixelRect( zoomHandler ) );
-        pr.setLeft( 0 );
-        pr.setWidth( QWIDGETSIZE_MAX );
-        // The cliprect is checked in layout units, in KoTextParag::paint
-        QRect crect_lu( parag->rect() );
+            QRect pr( parag->pixelRect( zoomHandler ) );
+            pr.setLeft( 0 );
+            pr.setWidth( QWIDGETSIZE_MAX );
+            // The cliprect is checked in layout units, in KoTextParag::paint
+            QRect crect_lu( parag->rect() );
 
-	if ( !cr.isNull() && !cr.intersects( pr ) ) {
-	    parag = parag->next();
-	    continue;
-	}
-	p->translate( 0, pr.y() );
-        QBrush brush = /*parag->backgroundColor() ? *parag->backgroundColor() :*/
-            cg.brush( QColorGroup::Base );
-        if ( brush != Qt::NoBrush )
-	    p->fillRect( QRect( 0, 0, pr.width(), pr.height() ), brush );
+        if ( !cr.isNull() && !cr.intersects( pr ) ) {
+            parag = parag->next();
+            continue;
+        }
+
+        p->translate( 0, pr.y() );
+
+        QBrush brush;
+        if ( parag->backgroundColor().isValid() ) {
+          brush.setColor( parag->backgroundColor() );
+          brush.setStyle( SolidPattern );
+        }
+        else {
+            brush = cg.brush( QColorGroup::Base );
+        }
+        // No need to brush plain white on a printer. Brush all
+        // other cases (except "full transparent" case).
+        bool needBrush = brush.style() != Qt::NoBrush &&
+                         !(brush.style() == Qt::SolidPattern &&
+                           brush.color() == Qt::white &&
+                           is_printer(p));
+        if ( needBrush )
+            p->fillRect( QRect( 0, 0, pr.width(), pr.height() ), brush );
+
         //p->setBrushOrigin( p->brushOrigin() + QPoint( 0, pr.y() ) );
-	parag->paint( *p, cg, 0, FALSE,
-                      crect_lu.x(), crect_lu.y(), crect_lu.width(), crect_lu.height() );
-	p->translate( 0, -pr.y() );
+        parag->paint( *p, cg, 0, FALSE,
+                      crect_lu.x(), crect_lu.y(),
+                      crect_lu.width(), crect_lu.height() );
+        p->translate( 0, -pr.y() );
         //p->setBrushOrigin( p->brushOrigin() - QPoint( 0, pr.y() ) );
-	parag = parag->next();
+        parag = parag->next();
     }
 }
 
+// Used for screen display (and also printing?)
 // Called by drawWYSIWYG and the app's drawCursor
 void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, int cy, int cw, int ch,
                                        QPixmap *&doubleBuffer, const QColorGroup &cg,
@@ -1264,15 +1282,26 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
 
     QRect crect( cx, cy, cw, ch ); // the overall crect
     QRect ir( rect ); // will be the rect to be repainted
-    QBrush brush = /*parag->backgroundColor() ? *parag->backgroundColor() :*/
-        cg.brush( QColorGroup::Base );
-    // No need to brush plain white on a printer. Brush all other cases (except "full transparent" case).
+
+    QBrush brush;
+    if ( parag->backgroundColor().isValid() ) {
+        brush.setColor( parag->backgroundColor() );
+        brush.setStyle( SolidPattern );
+    }
+    else {
+        brush = cg.brush( QColorGroup::Base );
+    }
+
+    // No need to brush plain white on a printer. Brush all
+    // other cases (except "full transparent" case).
     bool needBrush = brush.style() != Qt::NoBrush &&
-                     !(brush.style() == Qt::SolidPattern && brush.color() == Qt::white && is_printer(p));
+                     !(brush.style() == Qt::SolidPattern &&
+                       brush.color() == Qt::white &&
+                       is_printer(p));
 
     bool useDoubleBuffer = !parag->document()->parent();
     if ( is_printer(p) )
-	useDoubleBuffer = FALSE;
+        useDoubleBuffer = FALSE;
     // Can't handle transparency using double-buffering, in case of rotation/scaling (due to bitBlt)
     // The test on mat is almost like isIdentity(), but allows for translation.
     //// ##### The way to fix this: initialize the pixmap to be fully transparent instead

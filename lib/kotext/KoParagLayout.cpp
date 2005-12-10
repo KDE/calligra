@@ -32,6 +32,7 @@
 #include <kdebug.h>
 #include <qdom.h>
 #include <qbuffer.h>
+#include <qcolor.h>
 
 #include <float.h>
 
@@ -54,6 +55,7 @@ void KoParagLayout::operator=( const KoParagLayout &layout )
     topBorder = layout.topBorder;
     bottomBorder = layout.bottomBorder;
     joinBorder = layout.joinBorder;
+    backgroundColor = layout.backgroundColor;
     if ( layout.counter )
         counter = new KoParagCounter( *layout.counter );
     else
@@ -106,6 +108,9 @@ int KoParagLayout::compare( const KoParagLayout & layout ) const
     //    flags |= Style;
     if ( m_tabList != layout.m_tabList )
         flags |= Tabulator;
+
+    if ( backgroundColor != layout.backgroundColor)
+        flags |= BackgroundColor;
 
     // This method is used for the GUI stuff only, so we don't have a flag
     // for the Direction value.
@@ -636,7 +641,13 @@ void KoParagLayout::loadOasisParagLayout( KoParagLayout& layout, KoOasisContext&
     }
     layout.pageBreaking = pageBreaking;
 
-    // TODO (new feature) fo:background-color (3.11.25)
+    // Paragraph background color -  fo:background-color
+    // The background color for parts of a paragraph that have no text underneath
+    if ( context.styleStack().hasAttributeNS( KoXmlNS::fo, "background-color" ) ) {
+        QString bgColor = context.styleStack().attributeNS( KoXmlNS::fo, "background-color");
+        if (bgColor != "transparent")
+            layout.backgroundColor.setNamedColor( bgColor );
+    }
 }
 
 void KoParagLayout::saveParagLayout( QDomElement & parentElem, int alignment ) const
@@ -895,7 +906,7 @@ void KoParagLayout::saveOasis( KoGenStyle& gs, KoSavingContext& context, bool sa
     QString elementContents = QString::fromUtf8( buffer.buffer(), buffer.buffer().size() );
     gs.addChildElement( "style:tab-stops", elementContents );
 
-     if ( !joinBorder )
+    if ( !joinBorder )
         gs.addProperty( "style:join-border", "false" );
     bool fourBordersEqual = leftBorder.penWidth() > 0 &&
                leftBorder == rightBorder && rightBorder == topBorder && topBorder == bottomBorder;
@@ -920,4 +931,8 @@ void KoParagLayout::saveOasis( KoGenStyle& gs, KoSavingContext& context, bool sa
         gs.addProperty( "fo:keep-together", "always" );
     if ( pageBreaking & KoParagLayout::KeepWithNext )
         gs.addProperty( "fo:keep-with-next", "always" );
+
+    gs.addProperty( "fo:background-color",
+                    backgroundColor.isValid() ?
+                        backgroundColor.name() : "transparent");
 }

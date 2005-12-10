@@ -2197,6 +2197,10 @@ void KoTextParag::setParagLayout( const KoParagLayout & layout, int flags, int m
         setBottomBorder( layout.bottomBorder );
         setJoinBorder( layout.joinBorder );
     }
+    if ( flags & KoParagLayout::BackgroundColor )
+    {
+        setBackgroundColor( layout.backgroundColor );
+    }
     if ( flags & KoParagLayout::BulletNumber )
         setCounter( layout.counter );
     if ( flags & KoParagLayout::Tabulator )
@@ -2744,7 +2748,7 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
 {
     // First load layout from style
     KoParagLayout paragLayout = loadParagLayout( context, styleCollection, true );
-    setParagLayout( paragLayout );
+    m_layout = paragLayout;
 
     // Load paragraph format
     KoTextFormat defaultFormat;

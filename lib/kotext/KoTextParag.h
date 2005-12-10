@@ -211,9 +211,10 @@ public:
     KoTextFormat * paragraphFormat() const
     { return static_cast<KoTextFormat *>( paragFormat() ); }
 
-    /** Sets all or some parameters from a paraglayout struct.
+    /** Sets all or some parameters from a paragLayout struct.
      * @param flags selects which settings to apply, see KoParagLayout's enum. */
-    virtual void setParagLayout( const KoParagLayout &layout, int flags = KoParagLayout::All, int marginIndex = -1 );
+    virtual void setParagLayout( const KoParagLayout &layout, int flags = KoParagLayout::All,
+                                 int marginIndex = -1 );
 
     const KoParagLayout & paragLayout() { return m_layout; }
 
@@ -255,6 +256,10 @@ public:
     void setTopBorder( const KoBorder & _brd );
     void setBottomBorder( const KoBorder & _brd );
     void setJoinBorder( bool join );
+
+    // Paragraph background
+    QColor backgroundColor() { return m_layout.backgroundColor; }
+    void setBackgroundColor( const QColor& _color) { m_layout.backgroundColor = _color; }
 
     // Counters are used to implement list and heading numbering/bullets.
     void setCounter( const KoParagCounter & counter );
