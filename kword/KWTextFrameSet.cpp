@@ -1711,10 +1711,51 @@ KWFrame* KWTextFrameSet::loadOasis( const QDomElement& frameTag, const QDomEleme
     return frame;
 }
 
+static void finishTOC( KoXmlWriter& writer )
+{
+    writer.endElement(); // text:table-of-content
+    writer.endElement(); // text:index-body
+}
+
 void KWTextFrameSet::saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const
 {
     // TODO save protectContent
-    m_textobj->saveOasisContent( writer, context );
+
+    // Basically just call saveOasis on every paragraph.
+    // But we do table-of-contents-handling (for kword) in addition.
+    KoTextParag* parag = textDocument()->firstParag();
+    bool inTOC = false;
+    while ( parag ) {
+        bool tocParag = parag->partOfTableOfContents();
+        if ( tocParag != inTOC ) {
+            if ( tocParag ) { // first TOC paragraph
+                writer.startElement( "text:table-of-content" );
+                writer.addAttribute( "text:name", "Table Of Contents" );
+                writer.addAttribute( "text:protected", "false" ); // true by default in OO, but we don't support that yet anyway
+                writer.startElement( "text:table-of-content-source" );
+                // TODO writer.addAttribute( "text:outline-level", ... );
+                // TODO for each level writer.startElement( "text:table-of-content-entry-template" );
+                // TODO writer.endElement(); // text:table-of-content-entry-template
+                writer.endElement(); // text:table-of-content-source
+                writer.startElement( "text:index-body" );
+                writer.startElement( "text:index-title" );
+                writer.addAttribute( "text:name", "Table Of Contents Heading" );
+            } else {
+                finishTOC( writer );
+            }
+        }
+
+        // Save the whole parag, without the trailing space.
+        parag->saveOasis( writer, context, 0, parag->lastCharPos() );
+
+        if ( tocParag && !inTOC )
+            writer.endElement(); // text:index-title
+        inTOC = tocParag;
+
+        parag = parag->next();
+    }
+    if ( inTOC )
+        finishTOC( writer );
 }
 
 void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const

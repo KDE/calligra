@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2001-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include "KoTextCommand.h"
 #include "KoOasisContext.h"
 #include "KoVariable.h"
+#include <KoXmlWriter.h>
 #include <koxmlns.h>
 #include <kodom.h>
 #include <kdebug.h>
@@ -186,26 +187,6 @@ KoTextParag *KoTextDocument::createParag( KoTextDocument *d, KoTextParag *pr, Ko
     return new KoTextParag( d, pr, nx, updateIds );
 }
 
-#if 0
-bool KoTextDocument::setMinimumWidth( int w, KoTextParag *p )
-{
-    if ( w == -1 ) {
-	minw = 0;
-	p = 0;
-    }
-    if ( p == minwParag ) {
-	minw = w;
-	emit minimumWidthChanged( minw );
-    } else if ( w > minw ) {
-	minw = w;
-	minwParag = p;
-	emit minimumWidthChanged( minw );
-    }
-    cw = QMAX( minw, cw );
-    return TRUE;
-}
-#endif
-
 void KoTextDocument::setPlainText( const QString &text )
 {
     clear();
@@ -250,15 +231,8 @@ void KoTextDocument::setPlainText( const QString &text )
 
 void KoTextDocument::setText( const QString &text, const QString & /*context*/ )
 {
-    //focusIndicator.parag = 0;
     selections.clear();
-#if 0
-    if ( txtFormat == Qt::AutoText && QStyleSheet::mightBeRichText( text ) ||
-	 txtFormat == Qt::RichText )
-	setRichText( text, context );
-    else
-#endif
-	setPlainText( text );
+    setPlainText( text );
 }
 
 QString KoTextDocument::plainText() const
@@ -276,41 +250,6 @@ QString KoTextDocument::plainText() const
     }
     return buffer;
 }
-
-#if 0
-QString KoTextDocument::richText( KoTextParag * ) const
-{
-    QString s;
-    // TODO update from QRT if this code is needed
-    return s;
-}
-#endif
-
-#if 0
-QString KoTextDocument::text() const
-{
-    // SLLOOOWWW - factorize!
-    if ( plainText().simplifyWhiteSpace().isEmpty() )
-	return QString("");
-    //if ( txtFormat == Qt::AutoText && preferRichText || txtFormat == Qt::RichText )
-    //    return richText();
-    return plainText();
-}
-#endif
-
-#if 0
-QString KoTextDocument::text( int parag ) const
-{
-    KoTextParag *p = paragAt( parag );
-    if ( !p )
-	return QString::null;
-
-    //if ( txtFormat == Qt::AutoText && preferRichText || txtFormat == Qt::RichText )
-    //    return richText( p );
-    //else
-	return p->string()->toString();
-}
-#endif
 
 void KoTextDocument::invalidate()
 {
@@ -1156,6 +1095,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
     QPainter painter;
     // All the coordinates in this method are in view pixels
     QRect crect( cx, cy, cw, ch );
+    Q_ASSERT( ch > 0 );
 #ifdef DEBUG_PAINTING
     kdDebug(32500) << "\nKoTextDocument::drawWYSIWYG crect=" << crect << endl;
 #endif
@@ -1610,10 +1550,12 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
 
 void KoTextDocument::saveOasisContent( KoXmlWriter& writer, KoSavingContext& context ) const
 {
+    // Basically just call saveOasis on every paragraph.
+    // KWord doesn't use this method because it does table-of-contents-handling in addition.
     KoTextParag* parag = firstParag();
     while ( parag ) {
         // Save the whole parag, without the trailing space.
-        parag->saveOasis( writer, context, 0, parag->length() - 2 );
+        parag->saveOasis( writer, context, 0, parag->lastCharPos() );
         parag = parag->next();
     }
 }

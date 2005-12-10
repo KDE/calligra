@@ -37,12 +37,14 @@
 //#define DEBUG_PAINT
 
 KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, bool updateIds )
-    : invalid( 0 ), p( pr ), n( nx ), doc( d ),
+    : p( pr ), n( nx ), doc( d ),
+      m_invalid( true ),
       changed( FALSE ),
       fullWidth( TRUE ),
       newLinesAllowed( TRUE ), // default in kotext
       visible( TRUE ), //breakable( TRUE ),
       movedDown( FALSE ),
+      m_toc( false ),
       align( 0 ),
       m_lineChanged( -1 ),
       m_wused( 0 ),
@@ -61,23 +63,10 @@ KoTextParag::KoTextParag( KoTextDocument *d, KoTextParag *pr, KoTextParag *nx, b
 
     if ( p ) {
 	p->n = this;
-#ifdef QTEXTTABLE_AVAILABLE
-	if ( p->tc )
-	    tc = p->tc;
-#endif
     }
     if ( n ) {
 	n->p = this;
-#ifdef QTEXTTABLE_AVAILABLE
-	if ( n->tc )
-	    tc = n->tc;
-#endif
     }
-
-#ifdef QTEXTTABLE_AVAILABLE
-    if ( !tc && d && d->tableCell() )
-	tc = d->tableCell();
-#endif
 
     if ( !p && doc )
 	doc->setFirstParag( this );
@@ -167,29 +156,21 @@ void KoTextParag::setPrev( KoTextParag *s )
 	doc->setFirstParag( this );
 }
 
-void KoTextParag::invalidate( int chr )
+void KoTextParag::invalidate( int /*chr, ignored*/ )
 {
+    m_invalid = true;
+#if 0
     if ( invalid < 0 )
 	invalid = chr;
     else
 	invalid = QMIN( invalid, chr );
-#if 0 /// strange code!
-    if ( mFloatingItems ) {
-	for ( KoTextCustomItem *i = mFloatingItems->first(); i; i = mFloatingItems->next() )
-	    i->move( 0, -1 );
-    }
 #endif
-    //lm = rm = bm = tm = flm = -1;
 }
 
 void KoTextParag::setChanged( bool b, bool /*recursive*/ )
 {
     changed = b;
     m_lineChanged = -1; // all
-    //if ( recursive ) {
-//	if ( doc && doc->parentParag() )
-//	    doc->parentParag()->setChanged( b, recursive );
-//    }
 }
 
 void KoTextParag::setLineChanged( short int line )
@@ -326,7 +307,7 @@ void KoTextParag::format( int start, bool doMove )
     if ( !str || str->length() == 0 || !formatter() )
 	return;
 
-    if ( invalid == -1 )
+    if ( isValid() )
 	return;
 
     //kdDebug(32500) << "KoTextParag::format " << this << " id:" << paragId() << endl;
@@ -417,7 +398,7 @@ void KoTextParag::format( int start, bool doMove )
     if ( doc )
         doc->formatter()->postFormat( this );
 
-    if ( n && doMove && n->invalid == -1 && r.y() + r.height() != n->r.y() ) {
+    if ( n && doMove && n->isValid() && r.y() + r.height() != n->r.y() ) {
         //kdDebug(32500) << "r=" << r << " n->r=" << n->r << endl;
 	int dy = ( r.y() + r.height() ) - n->r.y();
 	KoTextParag *s = n;
@@ -479,7 +460,7 @@ void KoTextParag::format( int start, bool doMove )
     //firstFormat = FALSE; //// unused
     if ( formatterWorked > 0 ) // only if it worked, i.e. we had some width to format it
     {
-        invalid = -1;
+        m_invalid = false;
     }
     changed = TRUE;
     //####   string()->setTextChanged( FALSE );
@@ -606,7 +587,7 @@ void KoTextParag::setFormat( int index, int len, const KoTextFormat *_f, bool us
         // Check things that need the textformatter to run
         // (e.g. not color changes)
         // ######## Is this test exhaustive?
-	if ( invalid == -1 &&
+	if ( m_invalid == false &&
 	     ( _f->font().family() != of->font().family() ||
 	       _f->pointSize() != of->pointSize() ||
 	       _f->font().weight() != of->font().weight() ||
@@ -2068,7 +2049,7 @@ void KoTextParag::setTabList( const KoTabulatorList &tabList )
     invalidate( 0 );
 }
 
-/** "Reimplemented" from KoTextParag to implement non-left-aligned tabs */
+/** "Reimplemented" (compared to nextTabDefault) to implement non-left-aligned tabs */
 int KoTextParag::nextTab( int chnum, int x )
 {
     if ( !m_layout.tabList().isEmpty() )
@@ -2269,11 +2250,16 @@ int KoTextParag::findCustomItem( const KoTextCustomItem * custom ) const
 #ifndef NDEBUG
 void KoTextParag::printRTDebug( int info )
 {
+    QString specialFlags;
+    if ( string()->needsSpellCheck() )
+        specialFlags += " needsSpellCheck=true";
+    if ( wasMovedDown() )
+        specialFlags += " wasMovedDown=true";
+    if ( partOfTableOfContents() )
+        specialFlags += " part-of-TOC=true";
     kdDebug(32500) << "Paragraph " << this << " (" << paragId() << ") [changed="
               << hasChanged() << ", valid=" << isValid()
-              << ", needsSpellCheck=" << string()->needsSpellCheck()
-              << ", wasMovedDown=" << wasMovedDown()
-              // not used << ", lastInFrame=" << isLastInFrame()
+              << specialFlags
               << "] ------------------ " << endl;
     if ( prev() && prev()->paragId() + 1 != paragId() )
         kdWarning() << "  Previous paragraph " << prev() << " has ID " << prev()->paragId() << endl;

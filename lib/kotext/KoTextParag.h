@@ -89,12 +89,15 @@ public:
     void truncate( int index );
     void remove( int index, int len );
 
-    void invalidate( int chr );
-
     void move( int &dy );
     void format( int start = -1, bool doMove = TRUE );
 
+    /// Call this to ensure that format() will be called on this paragraph later on
+    void invalidate( int chr /*ignored*/ = 0 );
+    /// Returns false if format() needs to be called on this paragraph
     bool isValid() const;
+
+    /// 'changed' tells the painting code what it needs to paint
     bool hasChanged() const;
     void setChanged( bool b, bool recursive = FALSE );
     short int lineChanged(); // first line that has been changed.
@@ -142,7 +145,6 @@ public:
     int rightMargin() const;
     int lineSpacing( int line ) const;
 
-    int numberOfSubParagraph() const;
     void registerFloatingItem( KoTextCustomItem *i );
     void unregisterFloatingItem( KoTextCustomItem *i );
 
@@ -150,8 +152,6 @@ public:
     bool isFullWidth() const { return fullWidth; }
 
     int customItems() const;
-
-    QBrush *background() const;
 
     void setDocumentRect( const QRect &r );
     int documentWidth() const;
@@ -165,12 +165,15 @@ public:
     int widthUsed() const;
 
     int nextTabDefault( int i, int x );
-    int nextTab( int i, int x ); // kotextparag.cc
+    int nextTab( int i, int x );
     int *tabArray() const;
     void setTabArray( int *a );
     void setTabStops( int tw );
 
+    /// Set whether '\n' should break the paragraph into multiple lines
+    /// Not used
     void setNewLinesAllowed( bool b );
+    /// Return whether '\n' should break the paragraph into multiple lines
     bool isNewLinesAllowed() const;
 
     virtual void join( KoTextParag *s );
@@ -184,6 +187,10 @@ public:
 
     void setDirection( QChar::Direction d );
     QChar::Direction direction() const;
+
+    /// Mark a paragraph as being part of the table of contents (kword only)
+    void setPartOfTableOfContents( bool b ) { m_toc = b; }
+    bool partOfTableOfContents() const { return m_toc; }
 
     // For KoTextFormatter only
     void insertLineStart( int index, KoTextParagLineStart *ls );
@@ -371,16 +378,16 @@ private:
     QPtrList<KoTextCustomItem> &floatingItems() const;
 
     QMap<int, KoTextParagLineStart*> lineStarts;
-    int invalid;
     QRect r;
     KoTextParag *p, *n;
     KoTextDocument *doc;
-    uint changed : 1;
-    uint fullWidth : 1;
-    uint newLinesAllowed : 1;
-    uint visible : 1;
-    //uint breakable : 1;
-    uint movedDown : 1;
+    bool m_invalid : 1;
+    bool changed : 1;
+    bool fullWidth : 1;
+    bool newLinesAllowed : 1;
+    bool visible : 1;
+    bool movedDown : 1;
+    bool m_toc : 1;
     uint align : 4;
     short int m_lineChanged;
     int id;
@@ -418,7 +425,7 @@ inline KoTextStringChar *KoTextParag::at( int i ) const
 
 inline bool KoTextParag::isValid() const
 {
-    return invalid == -1;
+    return !m_invalid;
 }
 
 inline bool KoTextParag::hasChanged() const
@@ -541,14 +548,6 @@ inline int KoTextParag::customItems() const
 {
     return mFloatingItems ? mFloatingItems->count() : 0;
     // was numCustomItems, but no need for a separate count
-}
-
-inline QBrush *KoTextParag::background() const
-{
-#ifdef QTEXTTABLE_AVAILABLE
-    return tc ? tc->backGround() : 0;
-#endif
-    return 0;
 }
 
 inline void KoTextParag::setNewLinesAllowed( bool b )

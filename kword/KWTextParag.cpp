@@ -297,6 +297,8 @@ void KWTextParag::save( QDomElement &parentElem, int from /* default 0 */,
     QDomElement textElem = doc.createElement( "TEXT" );
     textElem.setAttribute("xml:space", "preserve");
     paragElem.appendChild( textElem );
+    if ( partOfTableOfContents() )
+        paragElem.setAttribute( "toc", "true" );
     QString text = string()->toString();
     Q_ASSERT( text.right(1)[0] == ' ' );
     textElem.appendChild( doc.createTextNode( text.mid( from, to - from + 1 ) ) );
@@ -592,6 +594,9 @@ void KWTextParag::load( QDomElement &attributes )
         // Apply default format - this should be automatic !!
         setFormat( 0, string()->length(), paragFormat(), TRUE );
     }
+
+    if ( attributes.attribute( "toc" ) == "true" )
+        setPartOfTableOfContents( true );
 
     loadFormatting( attributes );
 

@@ -52,6 +52,7 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
     KoParagStyle * style = findOrCreateTOCStyle( fs, -1 ); // "Contents Title"
     parag->setParagLayout( style->paragLayout() );
     parag->setFormat( 0, parag->string()->length(), textdoc->formatCollection()->format( &style->format() ) );
+    parag->setPartOfTableOfContents( true );
 
     // Insert table and THEN set page numbers
     // Otherwise the page numbers are incorrect
@@ -65,6 +66,7 @@ KoTextCursor * KWInsertTOCCommand::execute( KoTextCursor *c )
         if ( p->style() && p->style()->isOutline() )
         {
             parag = static_cast<KWTextParag *>(textdoc->createParag( textdoc, prevTOCParag /*prev*/, body /*next*/, true ));
+            parag->setPartOfTableOfContents( true );
             QString txt = p->string()->toString();
             txt = txt.left( txt.length() - 1 ); // remove trailing space
             if ( p->counter() )
@@ -137,9 +139,7 @@ KoTextCursor * KWInsertTOCCommand::removeTOC( KWTextFrameSet *fs, KoTextCursor *
     while ( p )
     {
         KWTextParag * parag = static_cast<KWTextParag *>(p);
-        if ( parag->style() && (
-                 parag->style()->name().startsWith( "Contents Head" ) ||
-                 parag->style()->name() == "Contents Title" ) )
+        if ( parag->partOfTableOfContents() )
         {
             kdDebug() << "KWContents::createContents Deleting paragraph " << p << " " << p->paragId() << endl;
             // This paragraph is part of the TOC -> remove

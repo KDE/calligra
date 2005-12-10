@@ -91,11 +91,13 @@ void KWTextDocument::loadOasisTOC( const QDomElement& tag, KoOasisContext& conte
         bool isTextNS = tag.namespaceURI() == KoXmlNS::text;
         if ( isTextNS && localName == "index-title" ) {
             lastParagraph = loadOasisText( t, context, lastParagraph, styleColl, nextParagraph ); // recurse again
+            lastParagraph->setPartOfTableOfContents( true );
         } else if ( isTextNS && localName == "p" ) {
             context.fillStyleStack( t, KoXmlNS::text, "style-name" );
             lastParagraph = createParag( this, lastParagraph, nextParagraph );
             uint pos = 0;
             lastParagraph->loadOasis( t, context, styleColl, pos );
+            lastParagraph->setPartOfTableOfContents( true );
         } else
             kdWarning() << "OASIS TOC loading: unknown tag " << t.tagName() << " found in index-body" << endl;
         context.styleStack().restore();
