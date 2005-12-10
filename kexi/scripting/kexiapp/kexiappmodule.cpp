@@ -22,7 +22,7 @@
 
 #include "core/keximainwindow.h"
 
-//#include <api/variant.h>
+#include <api/object.h>
 #include <api/qtobject.h>
 #include <main/manager.h>
 
@@ -61,11 +61,11 @@ KexiAppModule::KexiAppModule(Kross::Api::Manager* manager)
 
     d->manager = manager;
 
-    Kross::Api::Object::Ptr mainwinobject = ((Kross::Api::Object*)manager)->getChild("KexiMainWindow");
+    Kross::Api::Object::Ptr mainwinobject = dynamic_cast< Kross::Api::Object* >(manager)->getChild("KexiMainWindow");
     if(mainwinobject) {
-        Kross::Api::QtObject* mainwinqtobject = (Kross::Api::QtObject*)( mainwinobject.data() );
+        Kross::Api::QtObject* mainwinqtobject = dynamic_cast< Kross::Api::QtObject* >( mainwinobject.data() );
         if(mainwinqtobject) {
-            ::KexiMainWindow* mainwin = (::KexiMainWindow*)( mainwinqtobject->getObject() );
+            ::KexiMainWindow* mainwin = dynamic_cast< ::KexiMainWindow* >( mainwinqtobject->getObject() );
             if(mainwin) {
                 addChild( new KexiAppMainWindow(mainwin) );
                 return;
