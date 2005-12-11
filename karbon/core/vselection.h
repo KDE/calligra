@@ -56,17 +56,28 @@ enum VHandleNode
 
 
 /**
- * VSelection manages a set of vobjects. It keeps the objects from bottom to top
- * in a list, ie. objects higher in the list are drawn above lower objects.
- * Objects in a layer can be manipulated and worked on independant of objects
- * in other layers.
+ * VSelection manages a set of selected vobjects.
  */
 class KARBONBASE_EXPORT VSelection : public VObject, public VVisitor
 {
 public:
+	/** 
+	 * Constructs a vselection with the specified parent.
+	 * 
+	 * @param parent the selection's parent
+	 */
 	VSelection( VObject* parent = 0L );
+
+	/**
+	 * Constructs a vselection by copying the specified selection.
+	 *
+	 * @param selection the selection to copy from
+	 */
 	VSelection( const VSelection& selection );
 
+	/**
+	 * Destroys the selection.
+	 */
 	virtual ~VSelection();
 
 	/**
@@ -90,6 +101,11 @@ public:
 	 */
 	void append( VObject* object );
 
+	/**
+	 * Adds all objects of the specified object list to the selection.
+	 *
+	 * @param objects the list of objects to add
+	 */
 	void append( const VObjectList &objects );
 
 	/**
@@ -119,21 +135,41 @@ public:
 	 */
 	const VObjectList& objects() const { return m_objects; }
 
-
+	/**
+	 * Returns a list of segments that have at least one control point inside the specified rect.
+	 *
+	 * @param rect the selection rect
+	 * @return the list of segments
+	 */
 	QPtrList<VSegment> getSegments( const KoRect& rect );
 
 	/**
-	 * Deselects all nodes.
+	 * Selects or deselects all nodes.
+	 *
+	 * @param select controls if nodes are selected or deselected
 	 */
 	void selectNodes( bool select = true );
 
 	/**
 	 * Returns the handle node id, the KoPoint is inside.
+	 *
+	 * @param point the selection point 
+	 * @return the handle the point is inside or node_none if point is not inside any node
 	 */
 	VHandleNode handleNode( const KoPoint &point ) const;
 
+	/**
+	 * Toggle selection handles on/off.
+	 *
+	 * @param handle controls if handle are shown or not
+	 */
 	void showHandle( bool handle = true ) { m_showhandle = handle; }
 
+	/**
+	 * Toggles selection of objects/nodes.
+	 *
+	 * @param selectObjects controls if objects or nodes are selected
+	 */
 	virtual void setSelectObjects( bool selectObjects = true ) { m_selectObjects = selectObjects; }
 
 private:
