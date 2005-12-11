@@ -320,7 +320,6 @@ VSelectTool::mouseDragRelease()
 		else
 			view()->part()->document().selection()->take( selRect );
 		view()->part()->repaintAllViews( selRect );
-		view()->selectionChanged();
 	}
 	else if( m_state == moving )
 	{
@@ -346,6 +345,8 @@ VSelectTool::mouseDragRelease()
 			true );
 		m_s1 = m_s2 = 1;
 	}
+
+	view()->selectionChanged();
 	m_lock = false;
 	updateStatusBar();
 }
@@ -369,6 +370,7 @@ VSelectTool::arrowKeyReleased( Qt::Key key )
 			&view()->part()->document(),
 			dx, dy ),
 		true );
+	view()->selectionChanged();
 	updateStatusBar();
 }
 
