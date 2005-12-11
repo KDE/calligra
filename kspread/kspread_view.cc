@@ -2847,22 +2847,7 @@ void View::showSelRows()
   if ( hiddenRows.count() > 0 )
     d->activeSheet->showRow( 0, -1, hiddenRows );
 
-  endOperation( rect );
-}
-
-void View::endOperation( QRect const & rect )
-{
-  QRect vr( d->activeSheet->visibleRect( d->canvas ) );
-  if ( rect.left() > vr.left() )
-    vr.setLeft( rect.left() );
-  if ( rect.top() > vr.top() )
-    vr.setTop( rect.top() );
-  if ( rect.right() < vr.right() )
-    vr.setRight( rect.right() );
-  if ( rect.bottom() < vr.bottom() )
-    vr.setBottom( rect.bottom() );
-
-  doc()->emitEndOperation( vr );
+  doc()->emitEndOperation( rect );
 }
 
 void View::fontSelected( const QString & _font )
@@ -2884,7 +2869,7 @@ void View::fontSelected( const QString & _font )
   else
     d->canvas->setFocus();
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::decreaseFontSize()
@@ -2903,7 +2888,7 @@ void View::setSelectionFontSize( int size )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->setSelectionSize( selectionInfo(), size );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -2917,7 +2902,7 @@ void View::lower()
   d->activeSheet->setSelectionUpperLower( selectionInfo(), -1 );
   updateEditWidget();
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::upper()
@@ -2930,7 +2915,7 @@ void View::upper()
   d->activeSheet->setSelectionUpperLower( selectionInfo(), 1 );
   updateEditWidget();
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::firstLetterUpper()
@@ -2940,7 +2925,7 @@ void View::firstLetterUpper()
   doc()->emitBeginOperation( false );
   d->activeSheet->setSelectionfirstLetterUpper( selectionInfo() );
   updateEditWidget();
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::verticalText(bool b)
@@ -2955,7 +2940,7 @@ void View::verticalText(bool b)
   {
     d->canvas->adjustArea( false );
     updateEditWidget();
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
     return;
   }
 
@@ -3056,7 +3041,7 @@ void View::fontSizeSelected( int _size )
   else
     d->canvas->setFocus();
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::bold( bool b )
@@ -3078,7 +3063,7 @@ void View::bold( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::underline( bool b )
@@ -3100,7 +3085,7 @@ void View::underline( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::strikeOut( bool b )
@@ -3122,7 +3107,7 @@ void View::strikeOut( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 
@@ -3145,7 +3130,7 @@ void View::italic( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::sortInc()
@@ -3166,7 +3151,7 @@ void View::sortInc()
     activeSheet()->sortByColumn( selection(), r.left(), Sheet::Increase );
   updateEditWidget();
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::sortDec()
@@ -3187,7 +3172,7 @@ void View::sortDec()
     activeSheet()->sortByColumn( selection(), r.left(), Sheet::Decrease );
   updateEditWidget();
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 
@@ -3199,7 +3184,7 @@ void View::borderBottom()
 
     d->activeSheet->borderBottom( d->selectionInfo, d->actions->borderColor->color() );
 
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3209,7 +3194,7 @@ void View::setSelectionBottomBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderBottom( selectionInfo(), color );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3222,7 +3207,7 @@ void View::borderRight()
       d->activeSheet->borderLeft( d->selectionInfo, d->actions->borderColor->color() );
     else
       d->activeSheet->borderRight( d->selectionInfo, d->actions->borderColor->color() );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3235,7 +3220,7 @@ void View::setSelectionRightBorderColor( const QColor & color )
       d->activeSheet->borderLeft( selectionInfo(), color );
     else
       d->activeSheet->borderRight( selectionInfo(), color );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3248,7 +3233,7 @@ void View::borderLeft()
       d->activeSheet->borderRight( d->selectionInfo, d->actions->borderColor->color() );
     else
       d->activeSheet->borderLeft( d->selectionInfo, d->actions->borderColor->color() );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3261,7 +3246,7 @@ void View::setSelectionLeftBorderColor( const QColor & color )
       d->activeSheet->borderRight( selectionInfo(), color );
     else
       d->activeSheet->borderLeft( selectionInfo(), color );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3271,7 +3256,7 @@ void View::borderTop()
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderTop( d->selectionInfo, d->actions->borderColor->color() );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3281,7 +3266,7 @@ void View::setSelectionTopBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderTop( selectionInfo(), color );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3291,7 +3276,7 @@ void View::borderOutline()
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderOutline( d->selectionInfo, d->actions->borderColor->color() );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3301,7 +3286,7 @@ void View::setSelectionOutlineBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderOutline( selectionInfo(), color );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3311,7 +3296,7 @@ void View::borderAll()
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderAll( d->selectionInfo, d->actions->borderColor->color() );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3321,7 +3306,7 @@ void View::setSelectionAllBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderAll( selectionInfo(), color );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3331,7 +3316,7 @@ void View::borderRemove()
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->borderRemove( d->selectionInfo );
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -3375,7 +3360,7 @@ void View::addSheet( Sheet * _t )
     doc()->emitEndOperation();
     return;
   }
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::slotSheetRemoved( Sheet *_t )
@@ -3408,7 +3393,7 @@ void View::slotSheetRemoved( Sheet *_t )
     }
   }
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::removeAllSheets()
@@ -3695,7 +3680,7 @@ void View::cutSelection()
   else
     d->canvas->editor()->cut();
 
-  endOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
 void View::paste()
@@ -3749,7 +3734,7 @@ void View::removeComment()
   doc()->emitBeginOperation(false);
   d->activeSheet->setSelectionRemoveComment( selectionInfo() );
   updateEditWidget();
-  endOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
 
@@ -3767,7 +3752,7 @@ void View::changeAngle()
     {
       doc()->emitBeginOperation( false );
       d->canvas->adjustArea( false );
-      endOperation( selectionInfo()->selection() );
+      doc()->emitEndOperation( selectionInfo()->selection() );
     }
   }
 }
@@ -3787,7 +3772,7 @@ void View::setSelectionAngle( int angle )
     }
   }
 
-  endOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
 void View::mergeCell()
@@ -3841,7 +3826,7 @@ void View::increaseIndent()
   doc()->emitBeginOperation( false );
   d->activeSheet->increaseIndent( d->selectionInfo );
   updateEditWidget();
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::decreaseIndent()
@@ -3859,7 +3844,7 @@ void View::decreaseIndent()
     if ( !d->activeSheet->isProtected() )
       d->actions->decreaseIndent->setEnabled( cell->format()->getIndent( column, row ) > 0.0 );
 
-  endOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( d->selectionInfo->selection() );
 }
 
 void View::goalSeek()
@@ -3894,7 +3879,7 @@ void View::subtotals()
     d->selectionInfo->setSelection( dlg.selection().topLeft(),
                                    dlg.selection().bottomRight(),
                                    dlg.sheet() );
-    endOperation( selection );
+    doc()->emitEndOperation( selection );
   }
 }
 
@@ -4771,7 +4756,7 @@ void View::setSelectionComment( QString comment )
     d->activeSheet->setSelectionComment( selectionInfo(), comment.stripWhiteSpace() );
     updateEditWidget();
 
-    endOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -5463,7 +5448,7 @@ void View::deleteSelection()
     d->activeSheet->deleteSelection( selectionInfo() );
     resultOfCalc();
     updateEditWidget();
-    endOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
 void View::adjust()
@@ -5476,7 +5461,7 @@ void View::adjust()
     {
       doc()->emitBeginOperation( false );
       canvasWidget()->adjustArea();
-      endOperation( selection() );
+      doc()->emitEndOperation( selection() );
     }
 }
 
@@ -5764,7 +5749,7 @@ void View::alignLeft( bool b )
     else
       d->activeSheet->setSelectionAlign( selectionInfo(),
                                    Format::Left );
-    endOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( selectionInfo()->selection() );
   }
 }
 
@@ -5781,7 +5766,7 @@ void View::alignRight( bool b )
     else
       d->activeSheet->setSelectionAlign( selectionInfo(), Format::Right );
 
-    endOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( selectionInfo()->selection() );
   }
 }
 
@@ -5798,7 +5783,7 @@ void View::alignCenter( bool b )
     else
       d->activeSheet->setSelectionAlign( selectionInfo(), Format::Center );
 
-    endOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( selectionInfo()->selection() );
   }
 }
 
@@ -5815,7 +5800,7 @@ void View::alignTop( bool b )
     else
       d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Top );
 
-    endOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( selectionInfo()->selection() );
   }
 }
 
@@ -5832,7 +5817,7 @@ void View::alignBottom( bool b )
     else
       d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Bottom );
 
-    endOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( selectionInfo()->selection() );
   }
 }
 
@@ -5849,7 +5834,7 @@ void View::alignMiddle( bool b )
     else
       d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Middle );
 
-    endOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( selectionInfo()->selection() );
   }
 }
 
@@ -5862,7 +5847,7 @@ void View::moneyFormat(bool b)
   if ( d->activeSheet != 0L )
     d->activeSheet->setSelectionMoneyFormat( selectionInfo(), b );
   updateEditWidget();
-  endOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
 void View::createStyleFromCell()
@@ -5921,7 +5906,7 @@ void View::styleSelected( const QString & style )
     {
       doc()->emitBeginOperation(false);
       d->activeSheet->setSelectionStyle( selectionInfo(), s );
-      endOperation( selectionInfo()->selection() );
+      doc()->emitEndOperation( selectionInfo()->selection() );
     }
   }
 }
@@ -5942,7 +5927,7 @@ void View::setSelectionPrecision( int delta )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->setSelectionPrecision( selectionInfo(), delta );
-    endOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( selectionInfo()->selection() );
   }
 }
 
@@ -5956,7 +5941,7 @@ void View::percent( bool b )
     d->activeSheet->setSelectionPercent( selectionInfo() ,b );
   updateEditWidget();
 
-  endOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( selectionInfo()->selection() );
 }
 
 void View::insertObject()
@@ -6214,7 +6199,7 @@ void View::slotUpdateView( Sheet * _sheet, const QRect & _rect )
 
   // doc()->emitBeginOperation( false );
   d->activeSheet->setRegionPaintDirty( _rect );
-  endOperation( _rect );
+  doc()->emitEndOperation( _rect );
 }
 
 void View::slotUpdateHBorder( Sheet * _sheet )

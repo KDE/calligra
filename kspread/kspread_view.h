@@ -606,7 +606,6 @@ private:
     bool spellSwitchToOtherSheet();
     void spellCleanup();
 
-    void endOperation( QRect const & rect );
     Cell* nextFindValidCell( int col, int row );
 };
 

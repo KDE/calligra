@@ -71,6 +71,7 @@
 #include "kspread_style_manager.h"
 #include "ksploadinginfo.h"
 #include "KSpreadTableIface.h"
+#include "region.h"
 
 #include <kdebug.h>
 #include <kmdcodec.h>
@@ -270,7 +271,7 @@ public:
   SheetPrint* print;
 
   // cells that need painting
-  QValueList<QRect> paintDirtyList;
+  Region paintDirtyList;
 
   // to get font metrics
   QPainter *painter;
@@ -8726,20 +8727,9 @@ void Sheet::convertObscuringBorders()
  * Printout Functions *
  **********************/
 
-void Sheet::setRegionPaintDirty( QRect const & region )
+void Sheet::setRegionPaintDirty( QRect const & range )
 {
-  QValueList<QRect>::iterator it  = d->paintDirtyList.begin();
-  QValueList<QRect>::iterator end = d->paintDirtyList.end();
-
-  while ( it != end )
-  {
-    if ( (*it).contains( region ) )
-      return;
-
-    ++it;
-  }
-
-  d->paintDirtyList.append( region );
+  d->paintDirtyList.add( range );
 }
 
 void Sheet::clearPaintDirtyData()
@@ -8749,20 +8739,7 @@ void Sheet::clearPaintDirtyData()
 
 bool Sheet::cellIsPaintDirty( QPoint const & cell )
 {
-  QValueList<QRect>::iterator it;
-  QValueList<QRect>::iterator end = d->paintDirtyList.end();
-  bool found = false;
-
-  /* Yes, this seems an inefficient method....I just want to get it working
-     now then worry about optimization later (hash sheet?).
-     And it might not matter -- this is going to be cleared every repaint
-     of the screen, so it will never grow large
-  */
-  for ( it = d->paintDirtyList.begin(); it != end && !found; ++it )
-  {
-    found = (*it).contains( cell );
-  }
-  return found;
+  return d->paintDirtyList.contains(cell);
 }
 
 #ifndef NDEBUG
