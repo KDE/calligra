@@ -138,15 +138,7 @@ inside the preview box with the &LMB;.  A text cursor will appear. You can edit 
 open this dialog.</para>
 </tip>
 
-<para>Clicking the button labeled <guibutton>Change Color...</guibutton>
-will allow you to change the color of the text using the
-<link linkend="select-colors">color selection dialog box</link>.</para>
-
-<para>Clicking the button labeled <guibutton>Change Background Color...</guibutton>
-will allow you to change the color of the background using the
-<link linkend="select-colors">color selection dialog box</link>.</para>
-
-<para>If you click the tab labeled <guilabel>Font Effects</guilabel>, the dialog changes to:</para>
+<para>If you click the tab labeled <guilabel>Highlighting</guilabel>, the dialog changes to:</para>
 
 <screenshot>
 <mediaobject>
@@ -191,13 +183,8 @@ no strikethrough (Without), Single or Double strikethrough.  Use the right combo
 </mediaobject>
 </screenshot>
 
-<para>The section labeled <guilabel>Position</guilabel> is used to create superscripted and subscripted characters.  Simply select 
-the checkbox labeled <guilabel>Superscript</guilabel> or <guilabel>Subscript</guilabel>.  You can adjust the size of the superscripted 
-or subscripted character by using the spin box labeled <guilabel>Relative Size</guilabel>.  You can move the superscripted or subscripted 
-character up or down relative to the normal characters by raising or lowering the value in the spin box labeled <guilabel>Offset from baseline</guilabel>.
-</para>
-
-<para>The section labeled <guilabel>Capitalization</guilabel> lets you select one of four special capitalization options.</para>
+<para>The section labeled <guilabel>Capitalization</guilabel> lets you select one of four special capitalization options.  
+This will change the capitalization of the selected text.  Examples of each scheme are shown below.</para>
 
 <screenshot>
 <mediaobject>
@@ -206,10 +193,9 @@ character up or down relative to the normal characters by raising or lowering th
 </mediaobject>
 </screenshot>
 
-<para>You can select the language to use with the drop down box.  If the checkbox labeled <guilabel>Auto hyphenation</guilabel> is 
-selected, &kword; will use general rules of spelling to automatically hyphenate the document.</para>
+<note><para>The changes to capilalization will only affect the selected text at the current moment.  This formatting is not enforced after closing the dialog box.</para></note>
 
-<para>The third tab labeled <guilabel>Shadowing</guilabel> allows you to create artificial shadows for your characters.  Click on the tab:</para>
+<para>The third tab labeled <guilabel>Decoration</guilabel> allows you to change the color of the font, change the background color and create artificial shadows for your characters.  Click on the tab:</para>
 
 <screenshot>
 <mediaobject>
@@ -218,12 +204,55 @@ selected, &kword; will use general rules of spelling to automatically hyphenate 
 </mediaobject>
 </screenshot>
 
-<para>First, select the color you want your shadow by clicking the button labeled <guilabel>Color</guilabel>.  Then select the distance between the shadow and 
-the text using  the spin box labeld <guilabel>Distance</guilabel>.  Finally, select the direction by 
-selecting one of the eight red squares.  A preview of your shadow appears in the pane on the right.</para>
+<para>Using the buttons labeled <guilabel>Text color:</guilabel> and <guilabel>Background color:</guilabel> you can change the color of the text or the background behind the text.</para>
+
+<para>To create the illusion of a shadow behind your text, select the color you want your shadow by clicking the button labeled <guilabel>Color</guilabel>.  Then select the distance between the shadow and 
+the text using  the spin box labeld <guilabel>Shadow &amp; Distance</guilabel>.  Finally, select the direction of your shadow by 
+selecting one of the eight red squares.  A preview of your shadow appears at the bottom of the dialog box.</para>
+
+<para>The fourth tab labeled <guilabel>Layout</guilabel> allows you to create superscripts and subscripts.  It also lets you select automatic hyphenation on a character by character basis.</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="fchardlg4.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>The section labeled <guilabel>Position</guilabel> has 4 radio buttions and two spin boxes.  Selecting <guilabel>Normal</guilabel>, produces text of normal height and at the normal vertical position.  Selecting <guilabel>Superscript</guilabel> or <guilabel>Subscript</guilabel> will convert the currently selected text.  If you select <guilabel>Custom</guilabel>, you can use the spin box labeled <guilabel>Offset:</guilabel> to move the selected text up or down relative to normal text alignment.  Look at the example below:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="exoffset.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>Notice how a positive offset raises the text, and a negative offset lowers the text.</para>
+
+<para>You can also use the spinbox labeled <guilabel>Relative size:</guilabel> to make the selected font larger or smaller.</para>
+
+<para>The checkbox labeld <guilabel>Auto hyphenation</guilabel> is used to toggle automatic hyphenation on or off for the selected text.</para>
+
+<para>The fifth tab labeled <guilabel>Language</guilabel> allows you to change the color of the font, change the background color and create artificial shadows for your characters.  Click on the tab:</para>
+
+<screenshot>
+<mediaobject>
+<imageobject>
+<imagedata fileref="fchardlg5.png" format="PNG"/></imageobject>
+</mediaobject>
+</screenshot>
+
+<para>You can select the language to use on the selected text with the drop down box.  If the selected text allows for automatic hyphenation, 
+&kword; will use general rules of spelling for the selected language to automatically hyphenate the selected text.</para>
 
 <para>Clicking <guibutton>OK</guibutton> will commit your changes to the
-document.</para>
+document and close the dialog box.</para>
+
+<para>Clicking <guibutton>Apply</guibutton> will commit your changes to the
+document but keep the dialog box open.</para>
+
+<para>Clicking <guibutton>Reset</guibutton> will restore the default settings to the selected text.</para>
 
 <para>Clicking <guibutton>Cancel</guibutton> will abort all changes
 made.</para>
