@@ -62,6 +62,8 @@ class KoTemplatesPane : public KoDetailsPaneBase
     /// Returns true if a template in this group was the last one selected
     bool isSelected();
 
+    virtual bool eventFilter(QObject* watched, QEvent* e);
+
   signals:
     void openTemplate(const QString&);
     /// Emited when the always use checkbox is selected
@@ -97,6 +99,8 @@ class KoRecentDocumentsPane : public KoDetailsPaneBase
      */
     KoRecentDocumentsPane(QWidget* parent, KInstance* instance);
     ~KoRecentDocumentsPane();
+
+    virtual bool eventFilter(QObject* watched, QEvent* e);
 
   signals:
     void openFile(const QString&);

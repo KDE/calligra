@@ -27,6 +27,7 @@
 #include <qbrush.h>
 #include <qpainter.h>
 #include <qsimplerichtext.h>
+#include <qevent.h>
 
 #include <kinstance.h>
 #include <klocale.h>
@@ -85,6 +86,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
 {
   d = new KoTemplatesPanePrivate;
   d->m_instance = instance;
+  m_previewLabel->installEventFilter(this);
   KGuiItem openGItem(i18n("Use This Template"));
   m_openButton->setGuiItem(openGItem);
   setFocusProxy(m_openButton);
@@ -227,6 +229,17 @@ void KoTemplatesPane::changeAlwaysUseTemplate(KoTemplatesPane* sender, const QSt
   d->m_alwaysUseTemplate = alwaysUse;
 }
 
+bool KoTemplatesPane::eventFilter(QObject* watched, QEvent* e)
+{
+  if(watched == m_previewLabel) {
+    if(e->type() == QEvent::MouseButtonDblClick) {
+      openTemplate();
+    }
+  }
+
+  return false;
+}
+
 
 class KoRecentDocumentsPanePrivate
 {
@@ -251,6 +264,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
 {
   d = new KoRecentDocumentsPanePrivate;
   d->m_instance = instance;
+  m_previewLabel->installEventFilter(this);
   KGuiItem openGItem(i18n("Open This Document"), "fileopen");
   m_openButton->setGuiItem(openGItem);
   setFocusProxy(m_openButton);
@@ -389,7 +403,7 @@ void KoRecentDocumentsPane::updatePreview(const KFileItem* fileItem, const QPixm
   QListViewItemIterator it(m_documentList);
 
   while(it.current()) {
-    if(it.current()->text(1) == fileItem->url().path()) {
+    if(it.current()->text(1) == fileItem->url().url()) {
       it.current()->setPixmap(2, preview);
       QImage icon = preview.convertToImage();
       icon = icon.smoothScale(64, 64, QImage::ScaleMin);
@@ -414,6 +428,17 @@ void KoRecentDocumentsPane::changePalette()
   p.setBrush(QColorGroup::Base, p.brush(QPalette::Normal, QColorGroup::Background));
   p.setColor(QColorGroup::Text, p.color(QPalette::Normal, QColorGroup::Foreground));
   m_detailsLabel->setPalette(p);
+}
+
+bool KoRecentDocumentsPane::eventFilter(QObject* watched, QEvent* e)
+{
+  if(watched == m_previewLabel) {
+    if(e->type() == QEvent::MouseButtonDblClick) {
+      openFile();
+    }
+  }
+
+  return false;
 }
 
 #include "koDetailsPane.moc"
