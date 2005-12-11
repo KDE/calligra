@@ -7,6 +7,7 @@ Patterns=*.kexic
 Comment=Data for Database Server Connection
 Comment[bg]=Данни за връзка към СУБД
 Comment[cy]=Data ar gyfer Cysylltiad Gweinydd Cronfa Ddata
+Comment[de]=Daten für Verbindung mit Datenbankserver
 Comment[eo]=Datumo por konekto al datumbaza servilo
 Comment[es]=Datos para la conexión con el servidor de bases de datos
 Comment[fr]=Données de connexion au serveur de bases de données

@@ -10,6 +10,7 @@ Exec=writeup %u
 GenericName=Simplified Word Processing
 GenericName[cs]=Jednoduché zpracování textu
 GenericName[da]=Simplificeret tekstbehandling
+GenericName[de]=Vereinfachte Textverarbeitung
 GenericName[es]=Procesamiento de texto simplificado
 GenericName[ga]=Próiseáil Focal Simplí
 GenericName[it]=Elaborazione di testi semplificata

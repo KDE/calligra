@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=template_classroom
 Name=Classroom
+Name[de]=Klassenraum
 Name[ga]=Seomra Ranga
 Name[it]=Classe
 Name[pt]=Sala de Aulas
@@ -12,6 +13,7 @@ Name[sv]=Klassrum
 Name[xx]=xxClassroomxx
 Name[zh_CN]=教室
 Comment=Classroom by dannya
+Comment[de]=Klassenraum by dannya
 Comment[es]=Classroom por dannya
 Comment[it]=Classe di dannya
 Comment[pt]=Sala de aula por dannya

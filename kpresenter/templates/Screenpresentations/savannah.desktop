@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Icon=template_savannah
 Name=Savannah
+Name[de]=Savanne
 Name[ga]=Sabhána
 Name[it]=Savana
 Name[pt]=Savana
@@ -11,6 +12,7 @@ Name[sr@Latn]=Савана
 Name[sv]=Savann
 Name[xx]=xxSavannahxx
 Comment=Savannah by dannya
+Comment[de]=Savanne by dannya
 Comment[es]=Savannah por dannya
 Comment[ga]=Sabhána le dannya
 Comment[it]=Savana di dannya
