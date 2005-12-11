@@ -2481,6 +2481,50 @@ void View::autoSum()
     else
     {
       sel=QRect();
+
+      // only 1 cell selected
+      // try to automagically find cells the user wants to sum up
+
+      int start = -1, end = -1;
+
+      if ( (marker().y() > 1) && activeSheet()->cellAt(marker().x(), marker().y()-1)->value().isNumber() )
+      {
+        // check cells above the current one
+        start = end = marker().y()-1;
+        for (start--; (start > 0) && activeSheet()->cellAt(marker().x(), start)->value().isNumber(); start--) ;
+
+        Point startPoint, endPoint;
+        startPoint.setRow(start+1);
+        startPoint.setColumn(marker().x());
+        endPoint.setRow(end);
+        endPoint.setColumn(marker().x());
+
+        QString str = Range(startPoint, endPoint).toString();
+
+        d->canvas->createEditor( Canvas::CellEditor , true , true );
+        d->canvas->editor()->setText("=SUM(" + str + ")");
+        d->canvas->editor()->setCursorPosition(5 + str.length());
+        return;
+      }
+      else if ( (marker().x() > 1) && activeSheet()->cellAt(marker().x()-1, marker().y())->value().isNumber() )
+      {
+        // check cells to the left of the current one
+        start = end = marker().x()-1;
+        for (start--; (start > 0) && activeSheet()->cellAt(start, marker().y())->value().isNumber(); start--) ;
+
+        Point startPoint, endPoint;
+        startPoint.setColumn(start+1);
+        startPoint.setRow(marker().y());
+        endPoint.setColumn(end);
+        endPoint.setRow(marker().y());
+
+        QString str = Range(startPoint, endPoint).toString();
+
+        d->canvas->createEditor( Canvas::CellEditor , true , true );
+        d->canvas->editor()->setText("=SUM(" + str + ")");
+        d->canvas->editor()->setCursorPosition(5 + str.length());
+        return;
+      }
     }
   }
 
@@ -2494,13 +2538,13 @@ void View::autoSum()
 
   if ( (rg.range().isValid() ) && (!rg.range().isEmpty()) )
   {
-        d->canvas->editor()->setText( "=SUM("+rg.toString()+")" );
+    d->canvas->editor()->setText( "=SUM("+rg.toString()+")" );
     d->canvas->deleteEditor(true);
   }
   else
   {
-    d->canvas->editor()->setText( "=SUM( )" );
-        d->canvas->editor()->setCursorPosition( 5 );
+    d->canvas->editor()->setText( "=SUM()" );
+    d->canvas->editor()->setCursorPosition( 5 );
   }
 }
 
