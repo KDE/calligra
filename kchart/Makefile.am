@@ -95,3 +95,5 @@ messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kchart_aboutdata.h kdchart/*.cpp -o $(podir)/kchart.pot
 
 kde_services_DATA = kchartpart.desktop
+
+include $(top_srcdir)/admin/Doxyfile.am
