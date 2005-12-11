@@ -677,12 +677,13 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     kdDebug() << "IM Image thinks it has depth: " << image->depth << "\n";
 
 #ifdef HAVE_MAGICK6
-    if ( layer-> hasAlpha() )
+//    if ( layer-> hasAlpha() )
         image -> matte = MagickTrue;
-    else
-        image -> matte = MagickFalse;
+//    else
+//        image -> matte = MagickFalse;
 #else
-    image -> matte = layer -> hasAlpha();
+//    image -> matte = layer -> hasAlpha();
+    image -> matte = true;
 #endif
 
 
@@ -691,7 +692,7 @@ KisImageBuilder_Result KisImageMagickConverter::buildFile(const KURL& uri, KisLa
     height = img -> height();
     width = img -> width();
 
-    bool alpha = layer -> hasAlpha();
+    bool alpha = true;//layer -> hasAlpha();
 
     for (y = 0; y < height; y++) {
 
