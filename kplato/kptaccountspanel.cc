@@ -29,6 +29,7 @@
 #include <qstring.h>
 #include <qstringlist.h>
 
+#include <klistview.h>
 #include <klocale.h>
 
 #include <kdebug.h>
@@ -36,25 +37,25 @@
 namespace KPlato
 {
 
-class AccountItem : public QListViewItem {
+class AccountItem : public KListViewItem {
 public:
     AccountItem(AccountsPanel &pan, QListView *parent)
-    : QListViewItem(parent), account(0), panel(pan)
+    : KListViewItem(parent), account(0), panel(pan)
     { init(); }
     AccountItem(AccountsPanel &pan, QListViewItem *parent)
-    : QListViewItem(parent), account(0), panel(pan)
+    : KListViewItem(parent), account(0), panel(pan)
     { init(); }
     AccountItem(AccountsPanel &pan, QListView *parent, QString label1, QString label2 = QString::null)
-    : QListViewItem(parent, label1, label2), account(0), panel(pan)
+    : KListViewItem(parent, label1, label2), account(0), panel(pan)
     { init(); }
     AccountItem(AccountsPanel &pan, QListViewItem *parent, QString label1, QString label2 = QString::null)
-    : QListViewItem(parent, label1, label2), account(0), panel(pan)
+    : KListViewItem(parent, label1, label2), account(0), panel(pan)
     { init(); }
     AccountItem(AccountsPanel &pan, QListView *parent, QListViewItem *after)
-    : QListViewItem(parent, after), account(0), panel(pan)
+    : KListViewItem(parent, after), account(0), panel(pan)
     { init(); }
     AccountItem(AccountsPanel &pan, QListViewItem *parent, QListViewItem *after)
-    : QListViewItem(parent, after), account(0), panel(pan)
+    : KListViewItem(parent, after), account(0), panel(pan)
     { init(); }
 
     Account *account;
