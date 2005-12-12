@@ -57,6 +57,7 @@ void SheetPropertiesDialog::slotDefault()
   setHideZero( false );
   setShowFormulaIndicator( true );
   setShowCommentIndicator( true );
+  setShowPageBorders( false );
   setColumnAsNumber( false );
   setLcMode( false );
   setCapitalizeFirstLetter( false );
