@@ -792,7 +792,7 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
 
             // Transparency handling
 #ifdef DEBUG_DRAW
-            kdDebug(32001) << "  frame->framesBelow(): " << frame->framesBelow().count() << endl;
+            kdDebug(32001) << "  below: " << below.count() << endl;
 #endif
             for (QValueListIterator<KWFrame*> it = below.begin(); it != below.end(); ++it )
             {
@@ -807,8 +807,8 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
 #ifdef DEBUG_DRAW
                     kdDebug(32001) << "  viewFrameRect=" << viewFrameCRect << " calling drawFrameAndBorders." << endl;
 #endif
-                    f->frameSet()->drawFrameAndBorders( f, doubleBufPainter, viewFrameCRect, cg, false, resetChanged,
-                                                        edit, viewMode, 0L, false );
+                    f->frameSet()->drawFrameAndBorders( f, doubleBufPainter, viewFrameCRect, cg,
+                            false, resetChanged, edit, viewMode, 0L, false );
                 }
             }
 
@@ -832,19 +832,17 @@ void KWFrameSet::drawFrame( KWFrame *frame, QPainter *painter, const QRect &fcre
                 painter->drawPixmap( outerCRect.topLeft(), *pix );
                 delete doubleBufPainter;
             }
+            return; // done! :)
         }
     }
-    else
-    {
-        if ( frame && (frame->paddingLeft() || frame->paddingTop() || frame->paddingRight() || frame->paddingBottom()) )
-            drawPadding( frame, painter, outerCRect, cg, viewMode );
-        painter->save();
-        painter->translate( translationOffset.x(), translationOffset.y() );
-        //painter->setBrushOrigin( painter->brushOrigin() + translationOffset );
+    if ( frame && (frame->paddingLeft() || frame->paddingTop() ||
+                frame->paddingRight() || frame->paddingBottom()) )
+        drawPadding( frame, painter, outerCRect, cg, viewMode );
+    painter->save();
+    painter->translate( translationOffset.x(), translationOffset.y() );
 
-        drawFrameContents( frame, painter, fcrect, frameColorGroup, onlyChanged, resetChanged, edit, viewMode );
-        painter->restore();
-    }
+    drawFrameContents( frame, painter, fcrect, frameColorGroup, onlyChanged, resetChanged, edit, viewMode );
+    painter->restore();
 }
 
 void KWFrameSet::drawFrameContents( KWFrame *, QPainter *, const QRect &,
@@ -1091,7 +1089,6 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
 {
     KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( crect );
-    KoRect clipKoRect = doc->unzoomRect(viewMode->viewToNormal(crect));
 #ifdef DEBUG_DRAW
     //kdDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << rc << endl;
 #endif
@@ -1132,7 +1129,8 @@ QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const Q
         //kdDebug(32002) << "KWFrameSet::frameClipRegion result:" << reg << endl;
 #endif
         return reg;
-    } else return QRegion();
+    }
+    return QRegion();
 }
 
 bool KWFrameSet::canRemovePage( int num )
