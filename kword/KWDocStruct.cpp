@@ -171,7 +171,7 @@ void KWDocStructParagItem::speakItem()
     KoParagCounter* tmpCounter = m_parag->counter();
     if (tmpCounter)
         text = tmpCounter->text(m_parag) + " ";
-    text += m_parag->string()->toString();
+    text += m_parag->toString();
     if (!text.isEmpty()) {
         kospeaker->queueSpeech(text, m_parag->paragraphFormat()->language(), true);
         kospeaker->startSpeech();
@@ -216,7 +216,7 @@ void KWDocStructTextFrameItem::setupTextParags()
             KWTextParag* parag = dynamic_cast<KWTextParag *>(textParag);
             if (parag) {
                 // Don't display an empty paragraph.
-                QString text = parag->string()->toString().stripWhiteSpace();
+                QString text = parag->toString().stripWhiteSpace();
                 if ( text.length() > 0)
                     paragPtrs.append(parag);
             }
@@ -240,7 +240,7 @@ void KWDocStructTextFrameItem::setupTextParags()
     KWDocStructParagItem* after = 0;
     for (uint j = 0; j < paragPtrs.count(); j++) {
         KWTextParag* parag = paragPtrs.at(j);
-        QString text = parag->string()->toString().stripWhiteSpace();
+        QString text = parag->toString().stripWhiteSpace();
         QString name = text.left(20);
         KoParagCounter* tmpCounter = parag->counter();
         if (tmpCounter)
@@ -308,7 +308,7 @@ void KWDocStructTextFrameItem::speakItem()
             KWTextParag* parag = dynamic_cast<KWTextParag *>(textParag);
             if (parag) {
                 // Don't speak an empty paragraph.
-                QString text = parag->string()->toString().stripWhiteSpace();
+                QString text = parag->toString().stripWhiteSpace();
                 if ( text.length() > 0) {
                     kospeaker->queueSpeech(text, parag->paragraphFormat()->language(), first);
                     first = false;
@@ -434,10 +434,10 @@ void KWDocStructTextFrameSetItem::editProperties()
 void KWDocStructTextFrameSetItem::speakItem()
 {
     KoTextParag* parag = m_frameset->textDocument()->firstParag();
-    kospeaker->queueSpeech(parag->string()->toString(), parag->paragraphFormat()->language(), true);
+    kospeaker->queueSpeech(parag->toString(), parag->paragraphFormat()->language(), true);
     parag = parag->next();
     for ( ; parag ; parag = parag->next() )
-        kospeaker->queueSpeech(parag->string()->toString(), parag->paragraphFormat()->language(), false);
+        kospeaker->queueSpeech(parag->toString(), parag->paragraphFormat()->language(), false);
     kospeaker->startSpeech();
 }
 
@@ -552,11 +552,11 @@ void KWDocStructTableItem::speakItem()
     for (uint row = 0; row < m_table->getRows(); ++row) {
         for (uint col = 0; col < m_table->getColumns(); ++ col) {
             KoTextParag* parag = m_table->cell(row, col)->textDocument()->firstParag();
-            kospeaker->queueSpeech(parag->string()->toString(), parag->paragraphFormat()->language(), first);
+            kospeaker->queueSpeech(parag->toString(), parag->paragraphFormat()->language(), first);
             first = false;
             parag = parag->next();
             for ( ; parag ; parag = parag->next() )
-                kospeaker->queueSpeech(parag->string()->toString(), parag->paragraphFormat()->language(), false);
+                kospeaker->queueSpeech(parag->toString(), parag->paragraphFormat()->language(), false);
         }
     }
     kospeaker->startSpeech();
