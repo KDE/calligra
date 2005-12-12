@@ -217,7 +217,7 @@ public:
 
     virtual void addShell( KoMainWindow *shell );
 
-    void insertObject( const KoRect& rect, KoDocumentEntry& e );
+    void insertObject( const KoRect& rect, KoDocumentEntry& e, QWidget* parentWidget );
 
     // Create an embedded document; used by KWPartFrameSet but here because
     // insertChild is protected.

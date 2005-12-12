@@ -3780,12 +3780,12 @@ KWChild* KWDocument::createChildDoc( const KoRect& rect, KoDocument* childDoc )
     return ch;
 }
 
-void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& e )
+void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& e, QWidget* parentWidget )
 {
     KoDocument* doc = e.createDoc( this );
     if ( !doc )
         return;
-    if ( !doc->showEmbedInitDialog( 0 )  ) // TODO should really have a parent
+    if ( !doc->showEmbedInitDialog( parentWidget )  )
         return;
 
     KWChild* ch = createChildDoc( rect, doc );

@@ -1451,7 +1451,7 @@ void KWCanvas::mrCreatePart() // mouse release, when creating part
 {
     m_insRect = m_insRect.normalize();
     if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
-        m_doc->insertObject( m_insRect, m_partEntry );
+        m_doc->insertObject( m_insRect, m_partEntry, this );
     }
     setMouseMode( MM_EDIT );
     emit docStructChanged(Embedded);
