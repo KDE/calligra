@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KPlato::ResourcesPanelBase</class>
 <author>Dag Andersen &lt;danders@get2net.dk&gt;</author>
 <widget class="QWidget">
@@ -9,41 +9,39 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>679</width>
-            <height>445</height>
+            <width>510</width>
+            <height>373</height>
         </rect>
     </property>
     <property name="caption">
         <string>ResourcesPanelBase</string>
     </property>
-    <grid>
+    <hbox>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
-        <widget class="QLayoutWidget" row="0" column="0">
+        <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout11</cstring>
+                <cstring>layout5</cstring>
             </property>
             <vbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QLabel">
-                    <property name="name">
-                        <cstring>textLabel1</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Groups:</string>
-                    </property>
-                </widget>
-                <widget class="QListBox">
+                <widget class="KListView">
+                    <column>
+                        <property name="text">
+                            <string>Resourcegroup</string>
+                        </property>
+                        <property name="clickable">
+                            <bool>true</bool>
+                        </property>
+                        <property name="resizable">
+                            <bool>true</bool>
+                        </property>
+                    </column>
                     <property name="name">
                         <cstring>listOfGroups</cstring>
-                    </property>
-                </widget>
-                <widget class="QLineEdit">
-                    <property name="name">
-                        <cstring>groupName</cstring>
                     </property>
                 </widget>
                 <widget class="QLayoutWidget">
@@ -59,7 +57,10 @@
                                 <cstring>bAdd</cstring>
                             </property>
                             <property name="text">
-                                <string>&amp;Add</string>
+                                <string>&amp;New</string>
+                            </property>
+                            <property name="accel">
+                                <string>Alt+N</string>
                             </property>
                         </widget>
                         <widget class="QPushButton">
@@ -69,12 +70,15 @@
                             <property name="text">
                                 <string>&amp;Remove</string>
                             </property>
+                            <property name="accel">
+                                <string>Alt+R</string>
+                            </property>
                         </widget>
                     </hbox>
                 </widget>
             </vbox>
         </widget>
-        <widget class="QGroupBox" row="0" column="1">
+        <widget class="QGroupBox">
             <property name="name">
                 <cstring>groupBox3</cstring>
             </property>
@@ -144,6 +148,9 @@
                             <property name="text">
                                 <string>Edit...</string>
                             </property>
+                            <property name="accel">
+                                <string></string>
+                            </property>
                         </widget>
                         <widget class="QPushButton">
                             <property name="name">
@@ -151,6 +158,9 @@
                             </property>
                             <property name="text">
                                 <string>Remove</string>
+                            </property>
+                            <property name="accel">
+                                <string></string>
                             </property>
                         </widget>
                         <spacer>
@@ -174,7 +184,12 @@
                 </widget>
             </hbox>
         </widget>
-    </grid>
+    </hbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <layoutdefaults spacing="6" margin="11"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+</includehints>
 </UI>

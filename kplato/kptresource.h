@@ -183,7 +183,7 @@ class Resource {
 public:
 
     Resource(Project *project);
-    Resource(Resource *resource) { copy(resource); }
+    Resource(Resource *resource);
     virtual ~Resource();
 
     QString id() const { return m_id; }

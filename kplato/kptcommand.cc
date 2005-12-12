@@ -878,7 +878,7 @@ void AddResourceCmd::unexecute() {
 
 RemoveResourceCmd::RemoveResourceCmd(Part *part, ResourceGroup *group, Resource *resource, QString name)
     : AddResourceCmd(part, group, resource, name) {
-
+    //kdDebug()<<k_funcinfo<<resource<<endl;
     m_mine = false;
     m_requests = m_resource->requests();
     

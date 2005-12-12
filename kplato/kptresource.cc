@@ -35,10 +35,12 @@ ResourceGroup::ResourceGroup(Project *project) {
     m_type = Type_Work;
     m_resources.setAutoDelete(true);
     generateId();
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
 ResourceGroup::~ResourceGroup() {
     removeId();
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
 bool ResourceGroup::setId(QString id) {
@@ -209,9 +211,16 @@ Resource::Resource(Project *project) : m_project(project), m_appointments(), m_w
     m_calendar = 0;
 
     generateId();
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+}
+
+Resource::Resource(Resource *resource) { 
+    //kdDebug()<<k_funcinfo<<"("<<this<<") from ("<<resource<<")"<<endl;
+    copy(resource); 
 }
 
 Resource::~Resource() {
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     removeId();
     QPtrListIterator<ResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
