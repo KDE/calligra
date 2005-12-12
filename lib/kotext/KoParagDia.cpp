@@ -1208,14 +1208,12 @@ void KoParagAlignWidget::display( const KoParagLayout & lay )
             break;
         case Qt::AlignJustify:
             rJustify->setChecked( true );
-            break;
+    }
 
     cKeepLinesTogether->setChecked( lay.pageBreaking & KoParagLayout::KeepLinesTogether );
     cHardBreakBefore->setChecked( lay.pageBreaking & KoParagLayout::HardFrameBreakBefore );
     cHardBreakAfter->setChecked( lay.pageBreaking & KoParagLayout::HardFrameBreakAfter );
     // ## preview support for end-of-frame ?
-
-    }
 }
 
 void KoParagAlignWidget::save( KoParagLayout & lay )
