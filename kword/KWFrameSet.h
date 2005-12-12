@@ -418,11 +418,6 @@ public:
     /** returns the groupManager this frameset belongs to. A Groupmanager is better known as a table */
     KWTableFrameSet *groupmanager()const { return m_groupmanager; }
 
-    /** table headers can created by the groupmanager, we store the fact that
-     this is one in here. */
-    void setIsRemoveableHeader( bool h ) { m_removeableHeader = h; }
-    bool isRemoveableHeader()const { return m_removeableHeader; }
-
     bool isProtectSize()const { return m_protectSize; }
     void setProtectSize( bool _b);
 
@@ -510,7 +505,7 @@ protected:
 
     Info m_info;
     KWTableFrameSet *m_groupmanager;
-    bool m_removeableHeader, m_visible;
+    bool m_visible;
     bool m_protectSize;
     QString m_name;
     KWTextFrameSet * m_anchorTextFs;

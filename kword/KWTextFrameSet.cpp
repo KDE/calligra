@@ -1647,7 +1647,6 @@ QDomElement KWTextFrameSet::saveInternal( QDomElement &parentElem, bool saveFram
         framesetElem.setAttribute( "col", cell->firstColumn() );
         framesetElem.setAttribute( "rows", cell->rowSpan() );
         framesetElem.setAttribute( "cols", cell->columnSpan() );
-        framesetElem.setAttribute( "removable", static_cast<int>( m_removeableHeader ) );
     }
     if ( protectContent() )
         framesetElem.setAttribute( "protectContent", static_cast<int>(protectContent()));

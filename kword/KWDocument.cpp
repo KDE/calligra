@@ -4217,7 +4217,7 @@ QPtrList<KWFrame> KWDocument::framesInPage( int pageNum, bool sorted ) const {
     for ( ; fit.current() ; ++fit )
     {
         KWFrameSet *frameSet = fit.current();
-        if ( !frameSet->isVisible() || frameSet->isRemoveableHeader() )
+        if ( !frameSet->isVisible() )
             continue;
         // Append all frames from frameSet in page pageNum
         QPtrListIterator<KWFrame> it( frameSet->framesInPage( pageNum ) );

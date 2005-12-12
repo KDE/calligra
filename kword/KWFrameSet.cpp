@@ -44,7 +44,7 @@
 KWFrameSet::KWFrameSet( KWDocument *doc )
     : m_doc( doc ), m_frames(), m_framesInPage(), m_firstPage( 0 ), m_emptyList(),
       m_info( FI_BODY ),
-      m_groupmanager( 0L ), m_removeableHeader( false ), m_visible( true ),
+      m_groupmanager( 0L ), m_visible( true ),
       m_protectSize( false ),
       m_anchorTextFs( 0L ), m_dcop( 0L ), m_pageManager( 0 )
 {
@@ -913,10 +913,6 @@ void KWFrameSet::load( QDomElement &framesetElem, bool loadFrames )
 {
     m_info = static_cast<KWFrameSet::Info>( KWDocument::getAttribute( framesetElem, "frameInfo", KWFrameSet::FI_BODY ) );
     m_visible = static_cast<bool>( KWDocument::getAttribute( framesetElem, "visible", true ) );
-    if ( framesetElem.hasAttribute( "removeable" ) )
-        m_removeableHeader = static_cast<bool>( KWDocument::getAttribute( framesetElem, "removeable", false ) );
-    else
-        m_removeableHeader = static_cast<bool>( KWDocument::getAttribute( framesetElem, "removable", false ) );
     m_protectSize=static_cast<bool>( KWDocument::getAttribute( framesetElem, "protectSize", false ) );
     if ( loadFrames )
     {
