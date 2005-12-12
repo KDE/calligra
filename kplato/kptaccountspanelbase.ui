@@ -87,7 +87,7 @@
         </widget>
         <widget class="QLayoutWidget">
             <property name="name">
-                <cstring>layout3</cstring>
+                <cstring>layout7</cstring>
             </property>
             <hbox>
                 <property name="name">
@@ -95,18 +95,13 @@
                 </property>
                 <widget class="QPushButton">
                     <property name="name">
-                        <cstring>removeBtn</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Remove</string>
-                    </property>
-                </widget>
-                <widget class="QPushButton">
-                    <property name="name">
                         <cstring>newBtn</cstring>
                     </property>
                     <property name="text">
-                        <string>New</string>
+                        <string>&amp;New</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+N</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">
@@ -114,7 +109,21 @@
                         <cstring>subBtn</cstring>
                     </property>
                     <property name="text">
-                        <string>New Subaccount</string>
+                        <string>New &amp;Subaccount</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+S</string>
+                    </property>
+                </widget>
+                <widget class="QPushButton">
+                    <property name="name">
+                        <cstring>removeBtn</cstring>
+                    </property>
+                    <property name="text">
+                        <string>&amp;Remove</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+R</string>
                     </property>
                 </widget>
             </hbox>
