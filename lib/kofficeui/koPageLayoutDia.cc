@@ -355,7 +355,7 @@ void KoPageLayoutDia::setupTab3()
 {
     QWidget *tab3 = addPage(i18n( "Col&umns" ));
     QHBoxLayout *lay = new QHBoxLayout(tab3);
-    m_columnsTab = new KoPageLayoutColumns(tab3, m_layout, m_unit, m_column);
+    m_columnsTab = new KoPageLayoutColumns(tab3, m_column, m_unit, m_layout);
     m_columnsTab->layout()->setMargin(0);
     lay->addWidget(m_columnsTab);
     m_columnsTab->show();

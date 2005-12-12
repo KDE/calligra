@@ -135,25 +135,21 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     ebrLeft = new KoUnitDoubleSpinBox( marginsFrame, "Left" );
     marginsLayout->addWidget( ebrLeft, 1, 0 );
     connect( ebrLeft, SIGNAL( valueChangedPt( double ) ), this, SLOT( leftChanged( double ) ) );
-    if ( !enableBorders ) ebrLeft->setEnabled( false );
 
     // right margin
     ebrRight = new KoUnitDoubleSpinBox( marginsFrame, "Right" );
     marginsLayout->addWidget( ebrRight, 1, 2 );
     connect( ebrRight, SIGNAL( valueChangedPt( double ) ), this, SLOT( rightChanged( double ) ) );
-    if ( !enableBorders ) ebrRight->setEnabled( false );
 
     // top margin
     ebrTop = new KoUnitDoubleSpinBox( marginsFrame, "Top" );
     marginsLayout->addWidget( ebrTop, 0, 1 , Qt::AlignCenter );
     connect( ebrTop, SIGNAL( valueChangedPt( double ) ), this, SLOT( topChanged( double ) ) );
-    if ( !enableBorders ) ebrTop->setEnabled( false );
 
     // bottom margin
     ebrBottom = new KoUnitDoubleSpinBox( marginsFrame, "Bottom" );
     marginsLayout->addWidget( ebrBottom, 2, 1, Qt::AlignCenter );
     connect( ebrBottom, SIGNAL( valueChangedPt( double ) ), this, SLOT( bottomChanged( double ) ) );
-    if ( !enableBorders ) ebrBottom->setEnabled( false );
 
     // ------------- preview -----------
     pgPreview = new KoPagePreview( this, "Preview", m_layout );
@@ -172,6 +168,24 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
     setValues();
     updatePreview();
     pgPreview->setPageColumns( columns );
+    setEnableBorders(enableBorders);
+}
+
+void KoPageLayoutSize::setEnableBorders(bool on) {
+    ebrLeft->setEnabled( on );
+    ebrRight->setEnabled( on );
+    ebrTop->setEnabled( on );
+    ebrBottom->setEnabled( on );
+
+    // update m_layout
+    m_layout.ptLeft = on?ebrLeft->value():0;
+    m_layout.ptRight = on?ebrRight->value():0;
+    m_layout.ptTop = on?ebrTop->value():0;
+    m_layout.ptBottom = on?ebrBottom->value():0;
+
+    // use updated m_layout
+    updatePreview();
+    emit propertyChange(m_layout);
 }
 
 void KoPageLayoutSize::updatePreview() {

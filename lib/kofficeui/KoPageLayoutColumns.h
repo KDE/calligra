@@ -30,13 +30,34 @@ class QWidget;
 class KoUnitDoubleSpinBox;
 class KoPagePreview;
 
+/**
+ * This class is a widget that shows the KoColumns data structure and allows the user to change it.
+ */
 class KoPageLayoutColumns : public KoPageLayoutColumnsBase {
     Q_OBJECT
 
 public:
-    KoPageLayoutColumns(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,const KoColumns& columns);
+    /**
+     * Contructor
+     * @param parent the parent widget
+     * @param columns the KoColumns data structure that this dialog should be initialzed with
+     * @param unit the unit-type (mm/cm/inch) that the dialog should show
+     * @param layout the page layout that the preview should be initialzed with.
+     */
+    KoPageLayoutColumns(QWidget *parent, const KoColumns& columns, KoUnit::Unit unit, const KoPageLayout& layout);
 
+    /**
+     * Update the page preview widget with the param layout.
+     * @param layout the new layout
+     */
     void setLayout(KoPageLayout &layout);
+public slots:
+
+    /**
+     * Enable the user to edit the columns
+     * @param on if true enable the user to change the columns count
+     */
+    void setEnableColumns(bool on);
 
 signals:
     void propertyChange(KoColumns &columns);

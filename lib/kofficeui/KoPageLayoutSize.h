@@ -31,20 +31,54 @@ class QComboBox;
 class KoUnitDoubleSpinBox;
 class KoPageLayoutColumns;
 
+/**
+ * This class is a widget that shows the KoPageLayout data structure and allows the user to change it.
+ */
 class KoPageLayoutSize : public QWidget {
     Q_OBJECT
 
 public:
+    /**
+     * Contructor
+     * @param parent the parent widget
+     * @param layout the page layout that this widget should be initialzed with.
+     * @param unit the unit-type (mm/cm/inch) that the dialog should show
+     * @param columns the KoColumns (amout of columns) that the preview should be initialized with
+     * @param unitChooser if true a combobox with the unit-type is shown for the user to change
+     * @param enableBorders if true enable the user to change the margins (aka borders) of the page
+     */
     KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,
             const KoColumns& columns, bool unitChooser, bool enableBorders);
 
+    /**
+     * @return if the dialog is in a sane state and the values can be used.
+     */
     bool queryClose();
+    /**
+     * Update the page preview widget with the param columns.
+     * @param columns the new columns
+     */
     void setColumns(KoColumns &columns);
 
 public slots:
+    /**
+     * Set a new unit for the widget updating the widgets.
+     * @param unit the new unit
+     */
     void setUnit( KoUnit::Unit unit );
+    /**
+     * Enable the user to edit the page border size
+     * @param on if true enable the user to change the margins (aka borders) of the page
+     */
+    void setEnableBorders(bool on);
 
 signals:
+    /**
+     * Emitted whenever the user changed something in the dialog.
+     * @param layout the update layout structure with currently displayed info.
+     * Note that the info may not be fully correct and physically possible (in which
+     * case queryClose will return false)
+     */
     void propertyChange(KoPageLayout &layout);
 
 protected:

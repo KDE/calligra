@@ -25,7 +25,7 @@
 #include <qlabel.h>
 #include <qlayout.h>
 
-KoPageLayoutColumns::KoPageLayoutColumns(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,const KoColumns& columns)
+KoPageLayoutColumns::KoPageLayoutColumns(QWidget *parent, const KoColumns& columns, KoUnit::Unit unit, const KoPageLayout& layout)
     : KoPageLayoutColumnsBase(parent) {
     m_columns = columns;
     QHBoxLayout *lay = new QHBoxLayout(previewPane);
@@ -44,6 +44,12 @@ KoPageLayoutColumns::KoPageLayoutColumns(QWidget *parent, const KoPageLayout& la
 
     connect( nColumns, SIGNAL( valueChanged( int ) ), this, SLOT( nColChanged( int ) ) );
     connect( m_spacing, SIGNAL( valueChangedPt(double) ), this, SLOT( nSpaceChanged( double ) ) );
+}
+
+void KoPageLayoutColumns::setEnableColumns(bool on) {
+    nColumns->setEnabled(on);
+    m_spacing->setEnabled(on);
+    nColChanged(on ? nColumns->value(): 1 );
 }
 
 void KoPageLayoutColumns::nColChanged( int columns ) {
