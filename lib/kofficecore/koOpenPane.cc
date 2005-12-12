@@ -184,6 +184,9 @@ void KoOpenPane::initTemplates(const QString& templateType)
 
 void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
     Q_ASSERT(widget);
+    KoSectionListItem* separator = new KoSectionListItem(m_sectionList, "", INT_MAX-1);
+    separator->setEnabled(false);
+
     addPane(i18n("Custom Document"), QString::null, widget, INT_MAX);
 }
 
