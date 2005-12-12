@@ -3780,13 +3780,13 @@ KWChild* KWDocument::createChildDoc( const KoRect& rect, KoDocument* childDoc )
     return ch;
 }
 
-void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& e, QWidget* parentWidget )
+KWPartFrameSet* KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& e, QWidget* parentWidget )
 {
     KoDocument* doc = e.createDoc( this );
     if ( !doc )
-        return;
+        return 0;
     if ( !doc->showEmbedInitDialog( parentWidget )  )
-        return;
+        return 0;
 
     KWChild* ch = createChildDoc( rect, doc );
     setModified( TRUE );
@@ -3796,12 +3796,13 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& e, QWidget* 
     frame->setZOrder( maxZOrder( frame->pageNumber(this) ) + 1 ); // make sure it's on top
     frameset->addFrame( frame );
     addFrameSet( frameset );
-    frameset->updateChildGeometry( layoutViewMode() ); // set initial coordinates of 'ch' correctly
 
     KWCreateFrameCommand *cmd = new KWCreateFrameCommand( i18n("Create Part Frame"), frame);
     addCommand(cmd);
 
     frameChanged( frame ); // repaint etc.
+
+    return frameset;
 }
 
 
