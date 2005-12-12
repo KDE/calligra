@@ -2748,7 +2748,7 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
 {
     // First load layout from style
     KoParagLayout paragLayout = loadParagLayout( context, styleCollection, true );
-    m_layout = paragLayout;
+    setParagLayout( paragLayout );
 
     // Load paragraph format
     KoTextFormat defaultFormat;
