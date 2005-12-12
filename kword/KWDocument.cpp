@@ -3785,7 +3785,7 @@ void KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& e )
     KoDocument* doc = e.createDoc( this );
     if ( !doc )
         return;
-    if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
+    if ( !doc->showEmbedInitDialog( 0 )  ) // TODO should really have a parent
         return;
 
     KWChild* ch = createChildDoc( rect, doc );

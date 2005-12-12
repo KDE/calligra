@@ -59,6 +59,7 @@
 #include <qpainter.h>
 #include <qtimer.h>
 #include <qxml.h>
+#include <qlayout.h>
 
 #include <config.h>
 #include <assert.h>
@@ -2565,7 +2566,9 @@ QWidget* KoDocument::createCustomDocumentWidget(QWidget */*parent*/) {
 bool KoDocument::showEmbedInitDialog(QWidget* parent)
 {
     KDialogBase dlg(parent, "EmbedInitDialog", true, i18n("Embedded"), 0, KDialogBase::NoDefault);
-    dlg.setMainWidget(createOpenPane(&dlg, instance(), templateType()));
+    KoOpenPane* pane = createOpenPane(&dlg, instance(), templateType());
+    pane->layout()->setMargin(0);
+    dlg.setMainWidget(pane);
     connect(this, SIGNAL(closeEmbedInitDialog()), &dlg, SLOT(slotOk()));
     bool ok = dlg.exec() == QDialog::Accepted;
 

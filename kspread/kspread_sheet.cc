@@ -8463,7 +8463,7 @@ void Sheet::insertChild( const QRect& _rect, KoDocumentEntry& _e )
         kdDebug() << "Error inserting child!" << endl;
         return;
     }
-    if ( !d->initDoc(KoDocument::InitDocEmbedded) )
+    if ( !d->showEmbedInitDialog( 0 ) ) //TODO should really have parent
         return;
 
     Child* ch = new Child( doc(), this, d, _rect );

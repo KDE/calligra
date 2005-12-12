@@ -1316,7 +1316,7 @@ KPrPartObject* KPrPage::insertObject( const KoRect& _rect, KoDocumentEntry& _e )
     if ( !doc )
         return NULL;
 
-    if ( !doc->initDoc(KoDocument::InitDocEmbedded) )
+    if ( !doc->showEmbedInitDialog( 0 ) ) //TODO should really have parent
         return NULL;
 
     QRect r = QRect( (int)_rect.left(), (int)_rect.top(),
