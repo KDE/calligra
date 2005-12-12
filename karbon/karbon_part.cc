@@ -541,9 +541,13 @@ KarbonPart::initConfig()
 	{
 		config->setGroup( "Misc" );
 		undos = config->readNumEntry( "UndoRedo", -1 );
-		if ( config->hasKey( "Units" ) ) {
-                    setUnit( KoUnit::unit( config->readEntry("Units") ) );
-		}
+		QString defaultUnit = "cm";
+
+		if( KGlobal::locale()->measureSystem() == KLocale::Imperial )
+			defaultUnit = "in";
+
+		setUnit( KoUnit::unit( config->readEntry( "Units", defaultUnit ) ) );
+		m_doc.setUnit( unit() );
 	}
 	if( undos != -1 )
 		setUndoRedoLimit( undos );

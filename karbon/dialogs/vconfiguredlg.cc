@@ -238,45 +238,9 @@ void VConfigMiscPage::apply()
 
     if( m_oldUnit != m_unit->currentItem() )
     {
-        QString unitName;
         m_oldUnit = m_unit->currentItem();
-
-        switch( m_oldUnit )
-        {
-
-        case 0:
-            unitName = KoUnit::unitName( KoUnit::U_MM );
-            break;
-
-        case 1:
-            unitName = KoUnit::unitName( KoUnit::U_CM );
-            break;
-
-        case 2:
-            unitName = KoUnit::unitName( KoUnit::U_DM );
-            break;
-
-        case 3:
-            unitName = KoUnit::unitName( KoUnit::U_INCH );
-            break;
-
-        case 4:
-            unitName = KoUnit::unitName( KoUnit::U_PT );
-            break;
-        case 5:
-            unitName = KoUnit::unitName( KoUnit::U_PI );
-            break;
-        case 6:
-            unitName = KoUnit::unitName( KoUnit::U_DD );
-            break;
-        case 7:
-        default:
-            unitName = KoUnit::unitName( KoUnit::U_CC );
-            break;
-        }
-
 	part->setUnit( static_cast<KoUnit::Unit>( m_oldUnit ) );
-        m_config->writeEntry( "Units", unitName );
+        m_config->writeEntry( "Units", KoUnit::unitName( part->unit() ) );
     }
 
     int newUndo = m_undoRedo->value();

@@ -264,7 +264,7 @@ VDocument::loadXML( const QDomElement& doc )
 	m_width  = doc.attribute( "width", "800.0" ).toDouble();
 	m_height = doc.attribute( "height", "550.0" ).toDouble();
 
-	m_unit = KoUnit::unit( doc.attribute( "unit", "mm" ) );
+	m_unit = KoUnit::unit( doc.attribute( "unit", KoUnit::unitName( m_unit ) ) );
 
 	loadDocumentContent( doc );
 	return true;
