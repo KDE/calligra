@@ -1706,13 +1706,18 @@ void UndoDragDrop::redo()
     //because I must know what is the real rect
     //that I must refresh, when there is cell Merged
 
+    sheet->deleteCells( m_selectionTarget );
     sheet->paste( m_dataRedoTarget, m_selectionTarget );
     if ( m_selectionSource.left() > 0 )
+    {
+	sheet->deleteCells( m_selectionSource );
       sheet->paste( m_dataRedoSource, m_selectionSource );
+    }
 
     sheet->updateView();
-    sheet->refreshView( m_selectionSource );
-    sheet->refreshView( m_selectionTarget );
+    if ( sheet->getAutoCalc() )
+          sheet->recalc();
+    
     doc()->undoUnlock();
 }
 
