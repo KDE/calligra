@@ -288,7 +288,7 @@ public slots:
     void tableJoinCells();
     void tableSplitCells();
     void tableSplitCells(int col, int row);
-    void tableProtectCells();
+    void tableProtectCells(bool);
     void tableUngroupTable();
     void tableDelete();
     void tableStylist();

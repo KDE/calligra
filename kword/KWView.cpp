@@ -1076,10 +1076,12 @@ void KWView::setupActions()
     m_actionTableSplitCells->setToolTip( i18n( "Split one cell into two or more cells." ) );
     m_actionTableSplitCells->setWhatsThis( i18n( "Split one cell into two or more cells.<p>Cells can be split horizontally, vertically or both directions at once." ) );
 
-    m_actionTableProtectCells= new KToggleAction( i18n( "Protect Cells" ), 0,
-                                         this, SLOT( tableProtectCells() ),
+    m_actionTableProtectCells= new KToggleAction( i18n( "Protect Cells" ), 0, 0, 0,
                                          actionCollection(), "table_protectcells" );
     m_actionTableProtectCells->setToolTip( i18n( "Prevent changes to content of selected cells." ) );
+    connect (m_actionTableProtectCells, SIGNAL( toggled(bool) ), this,
+            SLOT( tableProtectCells(bool) ));
+
     m_actionTableProtectCells->setWhatsThis( i18n( "Toggles cell protection on and off.<br><br>When cell protection is on, the user can not alter the content or formatting of the text within the cell." ) );
 
     m_actionTableUngroup = new KAction( i18n( "&Ungroup Table" ), 0,
@@ -4295,7 +4297,7 @@ void KWView::tableStylist()
         edit->showCursor();
 }
 
-void KWView::tableProtectCells()
+void KWView::tableProtectCells(bool on)
 {
     KMacroCommand *macro = 0;
     QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
@@ -4306,8 +4308,8 @@ void KWView::tableProtectCells()
         Q_ASSERT(fs);
         KWTableFrameSet::Cell *cell = dynamic_cast<KWTableFrameSet::Cell*>(fs);
         if(cell == 0) continue;
-        if(!cell->protectContent() ) {
-            KWProtectContentCommand *cmd = new KWProtectContentCommand( i18n("Protect Content"), cell , true);
+        if(cell->protectContent() != on) {
+            KWProtectContentCommand *cmd = new KWProtectContentCommand( i18n("Protect Content"), cell , on);
             if ( !macro )
                 macro = new KMacroCommand( i18n("Protect Content"));
             macro->addCommand( cmd );
