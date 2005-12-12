@@ -52,9 +52,9 @@ void KWFindReplace::emitNewCommand(KCommand *cmd)
     m_canvas->kWordDocument()->addCommand(cmd);
 }
 
-void KWFindReplace::highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *_textdoc, KDialogBase* dialog)
+void KWFindReplace::highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdocument, KDialogBase* dialog)
 {
-    KWTextDocument *textdoc=static_cast<KWTextDocument *>(_textdoc);
+    KWTextDocument *textdoc=static_cast<KWTextDocument *>(textdocument);
     bool repaint = isReplace() ? options() & KReplaceDialog::PromptOnReplace : true;
     textdoc->textFrameSet()->highlightPortion( parag, index, length, m_canvas, repaint, dialog );
 }

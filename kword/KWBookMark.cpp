@@ -20,8 +20,8 @@
 #include <qstring.h> // TODO move to .h (no time to recompile right now :)
 #include "KWBookMark.h"
 
-KWBookMark::KWBookMark(const QString &_name)
-    : m_name(_name),
+KWBookMark::KWBookMark(const QString &name)
+    : m_name(name),
       m_startParag(0L),
       m_endParag(0L),
       m_frameSet(0L),
@@ -30,13 +30,13 @@ KWBookMark::KWBookMark(const QString &_name)
 {
 }
 
-KWBookMark::KWBookMark(const QString &_name, KoTextParag *_startParag, KoTextParag *_endParag,KWFrameSet *_frameSet, int _pos, int _end)
-    : m_name(_name),
-      m_startParag(_startParag),
-      m_endParag(_endParag),
-      m_frameSet(_frameSet),
-      m_startIndex( _pos ),
-      m_endIndex( _end )
+KWBookMark::KWBookMark(const QString &name, KoTextParag *startParag, KoTextParag *endParag,KWFrameSet *frameSet, int pos, int end)
+    : m_name(name),
+      m_startParag(startParag),
+      m_endParag(endParag),
+      m_frameSet(frameSet),
+      m_startIndex( pos ),
+      m_endIndex( end )
 {
 }
 

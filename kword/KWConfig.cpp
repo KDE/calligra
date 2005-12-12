@@ -208,12 +208,12 @@ void KWConfig::slotDefault()
 
 ////
 
-ConfigureSpellPage::ConfigureSpellPage( KWView *_view, QVBox *box, char *name )
+ConfigureSpellPage::ConfigureSpellPage( KWView *view, QVBox *box, char *name )
     : QObject( box->parent(), name )
 {
-    m_pView=_view;
+    m_pView=view;
     config = KWFactory::instance()->config();
-    m_spellConfigWidget = new ConfigWidget( _view->broker(), box );
+    m_spellConfigWidget = new ConfigWidget( view->broker(), box );
     m_spellConfigWidget->setBackgroundCheckingButtonShown( true );
     m_spellConfigWidget->layout()->setMargin( 0 );
 }
@@ -236,10 +236,10 @@ void ConfigureSpellPage::slotDefault()
     m_spellConfigWidget->slotDefault();
 }
 
-ConfigureInterfacePage::ConfigureInterfacePage( KWView *_view, QVBox *box, char *name )
+ConfigureInterfacePage::ConfigureInterfacePage( KWView *view, QVBox *box, char *name )
  : QObject( box->parent(), name )
 {
-    m_pView=_view;
+    m_pView=view;
     config = KWFactory::instance()->config();
     QVGroupBox* gbInterfaceGroup = new QVGroupBox( i18n("Interface"), box, "GroupBox" );
     gbInterfaceGroup->setMargin( KDialog::marginHint() );
@@ -466,10 +466,10 @@ void ConfigureInterfacePage::slotDefault()
 
 ////
 
-ConfigureMiscPage::ConfigureMiscPage( KWView *_view, QVBox *box, char *name )
+ConfigureMiscPage::ConfigureMiscPage( KWView *view, QVBox *box, char *name )
  : QObject( box->parent(), name )
 {
-    m_pView=_view;
+    m_pView=view;
     config = KWFactory::instance()->config();
     QVGroupBox* gbMiscGroup = new QVGroupBox( i18n("Misc"), box, "GroupBox" );
     gbMiscGroup->setMargin( KDialog::marginHint() );
@@ -650,10 +650,10 @@ void ConfigureMiscPage::setUnit( KoUnit::Unit )
 
 ////
 
-ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name )
+ConfigureDefaultDocPage::ConfigureDefaultDocPage( KWView *view, QVBox *box, char *name )
  : QObject( box->parent(), name )
 {
-    m_pView=_view;
+    m_pView=view;
     KWDocument * doc = m_pView->kWordDocument();
     config = KWFactory::instance()->config();
     QVGroupBox* gbDocumentDefaults = new QVGroupBox( i18n("Document Defaults"), box, "GroupBox" );
@@ -909,10 +909,10 @@ void ConfigureDefaultDocPage::setUnit( KoUnit::Unit unit )
 
 ////
 
-ConfigurePathPage::ConfigurePathPage( KWView *_view, QVBox *box, char *name )
+ConfigurePathPage::ConfigurePathPage( KWView *view, QVBox *box, char *name )
  : QObject( box->parent(), name )
 {
-    m_pView=_view;
+    m_pView=view;
     KWDocument * doc = m_pView->kWordDocument();
     config = KWFactory::instance()->config();
     QVGroupBox* gbPathGroup = new QVGroupBox( i18n("Path"), box, "GroupBox" );
@@ -1024,10 +1024,10 @@ void ConfigurePathPage::apply()
 
 ////
 
-ConfigureTTSPage::ConfigureTTSPage( KWView *_view, QVBox *box, char *name )
+ConfigureTTSPage::ConfigureTTSPage( KWView *view, QVBox *box, char *name )
  : QObject( box->parent(), name )
 {
-    Q_UNUSED(_view);
+    Q_UNUSED(view);
     // m_pView=_view;
     // KWDocument * doc = m_pView->kWordDocument();
 

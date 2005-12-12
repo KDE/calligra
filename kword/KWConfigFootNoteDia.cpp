@@ -37,11 +37,11 @@
 #include <KoParagDia.h>
 
 
-KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc )
+KWConfigFootNoteDia::KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *doc )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel , Ok, parent, name, true)
 {
     setCaption( i18n("Configure Endnote/Footnote") );
-    m_doc = _doc;
+    m_doc = doc;
 
     resize( 510, 310 );
     setupTab1();

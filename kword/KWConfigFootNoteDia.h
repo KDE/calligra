@@ -34,7 +34,7 @@ class KWConfigFootNoteDia : public KDialogBase
 {
     Q_OBJECT
 public:
-    KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *_doc );
+    KWConfigFootNoteDia( QWidget *parent, const char *name, KWDocument *doc );
 protected:
     void setupTab1();
     void setupTab2();

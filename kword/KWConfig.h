@@ -47,7 +47,7 @@ class ConfigureSpellPage : public QObject
 {
     Q_OBJECT
 public:
-    ConfigureSpellPage( KWView *_view, QVBox *box, char *name = 0 );
+    ConfigureSpellPage( KWView *view, QVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
 private:
@@ -60,7 +60,7 @@ class ConfigureInterfacePage : public QObject
 {
     Q_OBJECT
 public:
-    ConfigureInterfacePage( KWView *_view, QVBox *box, char *name = 0 );
+    ConfigureInterfacePage( KWView *view, QVBox *box, char *name = 0 );
     void apply();
     void slotDefault();
     void setUnit( KoUnit::Unit unit );
@@ -84,7 +84,7 @@ class ConfigureMiscPage : public QObject
 {
     Q_OBJECT
 public:
-    ConfigureMiscPage( KWView *_view, QVBox *box, char *name = 0 );
+    ConfigureMiscPage( KWView *view, QVBox *box, char *name = 0 );
     KCommand* apply();
     void slotDefault();
     void setUnit( KoUnit::Unit unit );
@@ -103,7 +103,7 @@ class ConfigureDefaultDocPage : public QObject
 {
     Q_OBJECT
 public:
-    ConfigureDefaultDocPage( KWView *_view, QVBox *box, char *name = 0 );
+    ConfigureDefaultDocPage( KWView *view, QVBox *box, char *name = 0 );
     ~ConfigureDefaultDocPage();
     KCommand* apply();
     void slotDefault();
@@ -140,7 +140,7 @@ class ConfigurePathPage : public QObject
 {
     Q_OBJECT
 public:
-    ConfigurePathPage( KWView *_view, QVBox *box, char *name = 0 );
+    ConfigurePathPage( KWView *view, QVBox *box, char *name = 0 );
     void slotDefault();
     void apply();
 private slots:
@@ -157,7 +157,7 @@ class ConfigureTTSPage : public QObject
 {
     Q_OBJECT
 public:
-    ConfigureTTSPage( KWView *_view, QVBox *box, char *name = 0 );
+    ConfigureTTSPage( KWView *view, QVBox *box, char *name = 0 );
     void slotDefault();
     void apply();
 private slots:

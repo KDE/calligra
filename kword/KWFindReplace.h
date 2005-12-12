@@ -47,7 +47,7 @@ public:
     ~KWFindReplace();
 
     virtual void emitNewCommand(KCommand *);
-    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdoc, KDialogBase* dialog);
+    virtual void highlightPortion(KoTextParag * parag, int index, int length, KoTextDocument *textdocument, KDialogBase* dialog);
 
 private:
     KWCanvas *m_canvas;
