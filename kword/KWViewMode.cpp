@@ -196,6 +196,7 @@ QPoint KWViewModeNormal::normalToView( const QPoint & nPoint )
         return QPoint(0,0);
     }
     // Center horizontally
+    Q_ASSERT(canvas());
     int xOffset = kMax( 0, ( canvas()->visibleWidth() - m_doc->zoomItX( page->width() ) ) / 2 );
     return QPoint( xOffset + nPoint.x(), nPoint.y() );
 }
@@ -209,6 +210,7 @@ QPoint KWViewModeNormal::viewToNormal( const QPoint & vPoint )
         kdWarning(31001) << "KWViewModeNormal::normalToView request for conversion out of the document! Check your input data.. ("<< vPoint << ")" << endl;
         return QPoint(0,0);
     }
+    Q_ASSERT(canvas());
     int xOffset = kMax( 0, ( canvas()->visibleWidth() - m_doc->zoomItX( page->width() ) ) / 2 );
     return QPoint( vPoint.x() - xOffset, vPoint.y() );
 }
@@ -221,6 +223,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
     QRect pageRect;
 
     int lastPage = m_doc->lastPage();
+    Q_ASSERT(canvas());
     const int canvasWidth = canvas()->visibleWidth();
     double pagePosPt = 0;
     int topOfPage = 0; // in pixels
