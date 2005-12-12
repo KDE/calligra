@@ -360,7 +360,7 @@ public slots:
     void slotHRulerDoubleClicked( double );
     void slotUnitChanged(KoUnit::Unit);
 
-    void pageNumChanged();
+    void numPagesChanged();
 
     void insertExpression();
 

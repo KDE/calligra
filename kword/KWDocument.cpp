@@ -983,7 +983,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
         {
             // Very much like the end of appendPage, but we don't want to call recalcFrames ;)
             emit newContentsSize();
-            emit pageNumChanged();
+            emit numPagesChanged();
             recalcVariables( VT_PGNUM );
         }
 
@@ -4011,7 +4011,7 @@ void KWDocument::afterAppendPage( int pageNum )
     }
 
     recalcVariables( VT_PGNUM );
-    emit pageNumChanged();
+    emit numPagesChanged();
     if ( m_viewModeType == "ModePreview" )
         repaintAllViews();
 }
@@ -4074,7 +4074,7 @@ void KWDocument::removePage( int pageNum )
     kdDebug(32002) << "KWDocument::removePage -- -> " << pageCount() << endl;
 #endif
     // Emitting this one for each page being removed helps giving the user some feedback
-    emit pageNumChanged();
+    emit numPagesChanged();
 }
 
 void KWDocument::afterRemovePages()

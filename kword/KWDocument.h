@@ -788,7 +788,7 @@ signals:
     void mainTextHeightChanged();
 
     /// This is emitted when the number of pages changes.
-    void pageNumChanged();
+    void numPagesChanged();
 
     void docStructureChanged(int);
     void sig_terminateEditing( KWFrameSet * fs );

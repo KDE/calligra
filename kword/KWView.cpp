@@ -304,8 +304,8 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     connect( m_doc, SIGNAL( modified( bool ) ),
              this, SLOT( documentModified( bool )) );
 
-    connect( m_doc, SIGNAL( pageNumChanged() ),
-             this, SLOT( pageNumChanged()) );
+    connect( m_doc, SIGNAL( numPagesChanged() ),
+             this, SLOT( numPagesChanged()) );
 
     connect( m_doc, SIGNAL( pageLayoutChanged( const KoPageLayout& ) ),
              this, SLOT( slotPageLayoutChanged( const KoPageLayout& )) );
@@ -1638,7 +1638,7 @@ void KWView::updatePageInfo()
     slotUpdateRuler();
 }
 
-void KWView::pageNumChanged()
+void KWView::numPagesChanged()
 {
      docStructChanged(TextFrames);
      updatePageInfo();
