@@ -1463,7 +1463,7 @@ void KWCanvas::mrCreatePart() // mouse release, when creating part
         KWPartFrameSet *fs = m_doc->insertObject( m_insRect, m_partEntry, this );
 Q_ASSERT(viewMode()->canvas());
         if(fs)
-            fs->updateChildGeometry( viewMode() ); // set initial coordinates of 'ch' correctly
+            fs->updateChildGeometry(); // set initial coordinates of 'ch' correctly
     }
     setMouseMode( MM_EDIT );
     emit docStructChanged(Embedded);
