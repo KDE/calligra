@@ -19,7 +19,6 @@
 #include <KoPageLayoutHeader.h>
 #include <KoPageLayoutHeader.moc>
 #include <koUnitWidgets.h>
-#include <koUnit.h>
 
 #include <qlayout.h>
 #include <qcheckbox.h>
