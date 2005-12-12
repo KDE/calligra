@@ -183,10 +183,8 @@ void KoOpenPane::initTemplates(const QString& templateType)
 }
 
 void KoOpenPane::setCustomDocumentWidget(QWidget *widget) {
-    // TODO remove former
-
-    if(widget)
-        addPane(i18n("Custom Document"), QString::null, widget, INT_MAX);
+    Q_ASSERT(widget);
+    addPane(i18n("Custom Document"), QString::null, widget, INT_MAX);
 }
 
 QListViewItem* KoOpenPane::addPane(const QString& title, const QString& icon, QWidget* widget, int sortWeight)

@@ -996,7 +996,14 @@ protected:
     virtual bool saveFile();
 
     /**
-     * TODO
+     * Override this method in your derived class to show a widget in the startup 'dialog'.
+     * This widget should allow the user to set settings for a custom document (i.e. one
+     * not based on a template).
+     * The returned widget should provide its own button (preferrably 'Create') and
+     * implement the logic to implement the document instance correctly.
+     * After initializing the widget should emit a signal called 'documentSelected()' which
+     * will remove the startupWidget and show the document.
+     * @param parent the parent of the to be created widget.
      */
     virtual QWidget* createCustomDocumentWidget(QWidget *parent);
 
@@ -1118,6 +1125,7 @@ private slots:
     void slotChildDestroyed();
     void slotAutoSave();
     void slotStarted( KIO::Job* );
+    void startCustomDocument();
 
 private:
     KService::Ptr nativeService();

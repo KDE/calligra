@@ -2507,11 +2507,19 @@ void KoDocument::openTemplate( const QString& file )
     }
 }
 
+void KoDocument::startCustomDocument() {
+    deleteOpenPane();
+}
+
 KoOpenPane* KoDocument::createOpenPane( QWidget* parent, KInstance* instance,
                                         const QString& templateType )
 {
     KoOpenPane* openPane = new KoOpenPane( parent, instance, templateType );
-    openPane->setCustomDocumentWidget( createCustomDocumentWidget(openPane) );
+    QWidget *customDoc = createCustomDocumentWidget(openPane);
+    if(customDoc) {
+        openPane->setCustomDocumentWidget( customDoc );
+        connect( customDoc, SIGNAL( documentSelected() ), this, SLOT( startCustomDocument() ) );
+    }
     openPane->show();
 
     connect( openPane, SIGNAL( openExistingFile( const QString& ) ),
