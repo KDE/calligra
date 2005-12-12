@@ -106,7 +106,7 @@ MouseMeaning KWFrameView::mouseMeaning( const KoPoint &point, int keyState ) {
         MouseMeaning mm = m_policy->mouseMeaningOnBorder(point, keyState);
         if(mm != MEANING_NONE && frame()->frameSet()->isProtectSize() ||
                 frame()->frameSet()->isMainFrameset() || frame()->frameSet()->isAHeader() ||
-                frame()->frameSet()->isAFooter() || frame()->frameSet()->isFloating())
+                frame()->frameSet()->isAFooter())
             mm = MEANING_FORBIDDEN;
         return mm;
     }
