@@ -22,7 +22,7 @@
 #include <kdebug.h>
 
 #include <kozoomhandler.h>
-#include <koSize.h>
+#include <KoSize.h>
 
 #include "kivio_line_style.h"
 #include "kivio_painter.h"

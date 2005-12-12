@@ -21,7 +21,7 @@
 
 #include <qdom.h>
 
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <koffice_export.h>
 class KivioConnectorTarget;
 class KivioStencil;

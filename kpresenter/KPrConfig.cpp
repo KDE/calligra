@@ -66,7 +66,7 @@
 #include <qvgroupbox.h>
 #include <kfontdialog.h>
 #include <klineedit.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <kmessagebox.h>
 #include <kdeversion.h>
 #include <kurlrequesterdlg.h>

@@ -21,8 +21,8 @@
 #include <kdebug.h>
 #include <qstringlist.h>
 #include <math.h>
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 
 /**
  * Read a floating point value from a @ref QDomElement.

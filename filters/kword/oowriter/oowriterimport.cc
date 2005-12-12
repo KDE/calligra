@@ -43,7 +43,7 @@
 #include <koPageLayout.h>
 #include <koPicture.h>
 #include "conversion.h"
-#include <koRect.h>
+#include <KoRect.h>
 #include <kodom.h>
 
 #if ! KDE_IS_VERSION(3,1,90)

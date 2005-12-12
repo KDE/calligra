@@ -17,7 +17,7 @@
 */
 
 #include <koGenStyles.h>
-#include <koxmlwriter.h>
+#include <KoXmlWriter.h>
 #include "../../store/tests/xmlwritertest.h"
 #include <kdebug.h>
 #include <assert.h>

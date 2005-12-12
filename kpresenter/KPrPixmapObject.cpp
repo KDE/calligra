@@ -36,7 +36,7 @@
 
 #include <kdebug.h>
 #include <kimageeffect.h>
-#include <koSize.h>
+#include <KoSize.h>
 #include <KoTextZoomHandler.h>
 #include <KoStore.h>
 #include <KoStoreDevice.h>

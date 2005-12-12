@@ -48,9 +48,9 @@
 #include "KPrTextDocument.h"
 #include <kdebug.h>
 #include "KPrVariableCollection.h"
-#include <koRect.h>
-#include <koSize.h>
-#include <koPoint.h>
+#include <KoRect.h>
+#include <KoSize.h>
+#include <KoPoint.h>
 #include <kodom.h>
 #include <KoTextParag.h>
 #include <koxmlns.h>

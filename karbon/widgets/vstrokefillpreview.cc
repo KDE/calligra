@@ -20,7 +20,7 @@
 #include <qcolor.h>
 
 #include <kdebug.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 
 #include "karbon_part.h"
 #include "vcolordlg.h"

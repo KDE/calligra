@@ -21,7 +21,7 @@
 #define __VTOOL_H__
 
 #include <klocale.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <koffice_export.h>
 class KarbonPart;
 class KarbonView;

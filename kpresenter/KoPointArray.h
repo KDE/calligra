@@ -21,8 +21,8 @@
 #define KOPOINTARRAY_H
 
 #include <qmemarray.h>
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 
 class KoZoomHandler;
 class KoPointArray : public QMemArray<KoPoint>

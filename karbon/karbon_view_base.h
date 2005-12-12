@@ -26,7 +26,7 @@
 #endif
 
 #include <koView.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <koffice_export.h>
 
 class KarbonPartBase;

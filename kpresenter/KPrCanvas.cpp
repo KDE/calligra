@@ -56,7 +56,7 @@
 #include <kio/netaccess.h>
 
 #include <KoParagCounter.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <KoTextZoomHandler.h>
 #include <KoStore.h>
 #include <KoStoreDrag.h>

@@ -22,7 +22,7 @@
 #include <wv2/word97_generated.h>
 
 #include <kdebug.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <qtl.h>
 
 KWordTableHandler::KWordTableHandler()

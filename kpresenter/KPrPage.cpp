@@ -55,7 +55,7 @@
 #include "KPrTextDocument.h"
 #include <KoTextObject.h>
 #include <KoTextParag.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <qapplication.h>
 #include <KoStyleCollection.h>
 #include <KoVariable.h>

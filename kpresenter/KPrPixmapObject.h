@@ -29,7 +29,7 @@
 
 #include "KPrObject.h"
 #include <koPictureCollection.h>
-#include <koSize.h>
+#include <KoSize.h>
 
 class QPixmap;
 

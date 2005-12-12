@@ -34,7 +34,7 @@
 
 #include <assert.h>
 
-KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name )
+KWPartFrameSet::KWPartFrameSet( KWDocument *_doc, KWDocumentChild *_child, const QString & name )
     : KWFrameSet( _doc ), m_child( 0 ), m_cmdMoveChild( 0 ), m_protectContent( false )
 {
     if ( _child )
@@ -60,18 +60,17 @@ KWPartFrameSet::KWPartFrameSet( KWDocument* doc, const QDomElement& frameTag,
     KWFrame* frame = loadOasisFrame( frameTag, context );
     context.styleStack().restore();
 
-    // Create a KWChild, without KoDocument inside
-    KWChild* child = doc->createChildDoc( frame->rect(), 0 );
+    // Create a KWDocumentChild, without KoDocument inside
+    KWDocumentChild* child = doc->createChildDoc( frame->rect(), 0 );
     setChild( child );
     child->loadOasis( frameTag, objectTag );
-    // ### this won't work well with multiple views
-    updateChildGeometry( doc->layoutViewMode() );
+    updateChildGeometry();
 
     // This is what loads the KoDocument
     (void)child->loadOasisDocument( context.store(), context.manifestDocument() );
 }
 
-void KWPartFrameSet::setChild( KWChild* child )
+void KWPartFrameSet::setChild( KWDocumentChild* child )
 {
     assert( !m_child );
     m_child = child;
@@ -117,31 +116,29 @@ void KWPartFrameSet::drawFrameContents( KWFrame* frame, QPainter * painter, cons
     } //else kdDebug(32001) << "KWPartFrameSet::drawFrameContents " << this << " onlychanged=true!" << endl;
 }
 
-void KWPartFrameSet::updateChildGeometry( KWViewMode* viewMode )
+void KWPartFrameSet::updateChildGeometry()
 {
     if( m_frames.isEmpty() ) // Deleted frameset
         return;
+#if 0 // wrong; the document-child shouldn't depend on the viewmode
     if ( viewMode ) {
         // We need to apply the viewmode conversion correctly (the child is in unzoomed view coords!)
         QRect r = m_doc->zoomRect( *m_frames.first() ); // in normal coordinates.
         KoRect childGeom = m_doc->unzoomRect( viewMode->normalToView( r ) );
         m_child->setGeometry( childGeom.toQRect() ); // rounding problems. TODO: port KoChild to KoRect.
     } else
+#endif
         m_child->setGeometry( m_frames.first()->toQRect() );
 }
 
 void KWPartFrameSet::slotChildChanged()
 {
-// TODO: This method is going to crash since it should not use layoutViewMode() for zooming (can't work)
-// uncommenting until I figure out what its suppost to do so we can refactor it to work properly.
-#if 0
     // This is called when the KoDocumentChild is resized (using the KoFrame)
-    // We need to react on it in KWPartFrameSetEdit because the view-mode has to be taken into account
-    // (Currently not true, since the viewmode is the same in all views, but...)
     QPtrListIterator<KWFrame> listFrame = frameIterator();
     KWFrame *frame = listFrame.current();
     if ( frame )
     {
+#if 0
         // We need to apply the viewmode conversion correctly (the child is in unzoomed view coords!)
         KoRect childGeom = KoRect::fromQRect( getChild()->geometry() );
         // r is the rect in normal coordinates
@@ -151,6 +148,8 @@ void KWPartFrameSet::slotChildChanged()
         frame->setWidth( r.width() / m_doc->zoomedResolutionX() );
         frame->setHeight( r.height() / m_doc->zoomedResolutionY() );
         // ## TODO an undo/redo command (move frame)
+#endif
+        frame->setRect( KoRect::fromQRect( getChild()->geometry() ) );
 
         //kdDebug(32001) << "KWPartFrameSet::slotChildChanged child's geometry " << getChild()->geometry()
         //               << " frame set to " << *frame << endl;
@@ -161,7 +160,6 @@ void KWPartFrameSet::slotChildChanged()
     }
     else
         kdDebug(32001) << "Frame not found!" << endl;
-#endif
 }
 
 QDomElement KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
@@ -332,25 +330,25 @@ void KWPartFrameSet::storeInternal()
 
 
 /******************************************************************/
-/* Class: KWChild                                              */
+/* Class: KWDocumentChild                                              */
 /******************************************************************/
 
-KWChild::KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc )
+KWDocumentChild::KWDocumentChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc )
     : KoDocumentChild( _wdoc, _doc, _rect ), m_partFrameSet( 0L )
 {
 }
 
-KWChild::KWChild( KWDocument *_wdoc )
+KWDocumentChild::KWDocumentChild( KWDocument *_wdoc )
     : KoDocumentChild( _wdoc ), m_partFrameSet( 0L )
 {
 }
 
-KWChild::~KWChild()
+KWDocumentChild::~KWDocumentChild()
 {
 }
 
 #if 0
-KoDocument* KWChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
+KoDocument* KWDocumentChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
 {
     Q_ASSERT( m_partFrameSet );
     if ( isDeleted() ) {

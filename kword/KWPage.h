@@ -18,7 +18,7 @@
 #ifndef kw_page_h
 #define kw_page_h
 
-#include <koRect.h>
+#include <KoRect.h>
 #include "KWPageManager.h"
 #include "koPageLayout.h"
 

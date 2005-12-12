@@ -44,7 +44,7 @@ class DCOPObject;
 #include <qrect.h>
 #include <qpalette.h>
 #include <qwidget.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 
 #include "kivio_stencil.h"
 #include <koffice_export.h>

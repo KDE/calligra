@@ -17,7 +17,7 @@
  */
 #include "KWPageManager.h"
 #include "KWPage.h"
-#include "koRect.h"
+#include "KoRect.h"
 
 //#define DEBUG_PAGES
 

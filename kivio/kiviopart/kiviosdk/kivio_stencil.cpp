@@ -23,7 +23,7 @@
 #include "kivio_stencil.h"
 
 #include <kozoomhandler.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <KIvioStencilIface.h>
 
 KivioStencil::KivioStencil()

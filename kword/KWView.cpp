@@ -7296,7 +7296,7 @@ void KWView::slotChildActivated( bool a )
   KoViewChild* ch = child( (KoView*)sender() );
   if ( !ch )
     return;
-  KWChild* kwchild = static_cast<KWChild *>( ch->documentChild() );
+  KWDocumentChild* kwchild = static_cast<KWDocumentChild *>( ch->documentChild() );
   KWPartFrameSet* fs = kwchild->partFrameSet();
   //kdDebug() << "KWView::slotChildActivated fs=" << fs << endl;
   Q_ASSERT( fs );

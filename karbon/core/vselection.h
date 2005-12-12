@@ -24,7 +24,7 @@
 
 #include <qptrlist.h>
 
-#include <koRect.h>
+#include <KoRect.h>
 
 #include "vobject.h"
 #include "vvisitor.h"

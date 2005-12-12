@@ -19,7 +19,7 @@
 */
 
 #include "KoPointArray.h"
-#include <koRect.h>
+#include <KoRect.h>
 #include <stdarg.h>
 #include <kozoomhandler.h>
 

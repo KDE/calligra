@@ -37,7 +37,7 @@
 #include <koQueryTrader.h>
 #include "KoPointArray.h"
 #include "global.h"
-#include <koRect.h>
+#include <KoRect.h>
 #include <KoTextFormat.h>
 #include "presstep.h"
 

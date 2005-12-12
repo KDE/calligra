@@ -30,9 +30,9 @@
 #include "KPrGradient.h"
 #include "KoPointArray.h"
 #include <klocale.h>
-#include <koPoint.h>
-#include <koSize.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoSize.h>
+#include <KoRect.h>
 #include <koStyleStack.h>
 #include <koOasisStyles.h>
 #include <KoXmlWriter.h>

@@ -22,7 +22,7 @@
 #define frame_h
 
 #include "defs.h"
-#include <koRect.h>
+#include <KoRect.h>
 #include <qbrush.h>
 #include "KoBorder.h"
 #include <qptrlist.h>

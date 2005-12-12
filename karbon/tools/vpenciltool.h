@@ -27,7 +27,7 @@
 
 #include <klocale.h>
 #include <kdialogbase.h>
-#include "koPoint.h"
+#include "KoPoint.h"
 
 #include "vtool.h"
 

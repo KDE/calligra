@@ -22,8 +22,8 @@
 #include <qwmatrix.h>
 #include <qregexp.h>
 
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 #include <KoStore.h>
 #include <KoXmlWriter.h>
 #include <koxmlns.h>

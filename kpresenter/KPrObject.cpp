@@ -43,9 +43,9 @@
 #include <float.h>
 
 #include <KoTextZoomHandler.h>
-#include <koRect.h>
-#include <koSize.h>
-#include <koPoint.h>
+#include <KoRect.h>
+#include <KoSize.h>
+#include <KoPoint.h>
 #include <koxmlns.h>
 #include <kodom.h>
 #include <kdebug.h>

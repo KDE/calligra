@@ -22,7 +22,7 @@
 
 #include <qstring.h>
 
-#include <koPoint.h>
+#include <KoPoint.h>
 
 #include "vtool.h"
 

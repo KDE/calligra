@@ -759,6 +759,9 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
    Notes: active_frame_border is m_frame->border() (0 when inactive, 5 when active).
           {left|right|top|bottom}Border are the borders used in kspread (0 when inactive, big when active).
           "+" border means we add a border, si it's a subtraction on x, y and an addition on width, height.
+
+   TODO :  the apps should take care of the docchild<->viewchild conversions,
+           it's not only about zooming; so this should be completely removed.
    */
 
   // Set frameGeometry from childGeometry
@@ -771,11 +774,13 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
                         static_cast<int>((double)geom.width() * zoom + 0.5),
                         static_cast<int>((double)geom.height() * zoom + 0.5) );*/
 
-   m_frame->setGeometry( (geom.x() * zoom) - parentView()->canvasXOffset(), (geom.y() * zoom) - parentView()->canvasYOffset(), geom.width() * zoom,
-			geom.height() * zoom);
+   m_frame->setGeometry( (geom.x() * zoom) - parentView()->canvasXOffset(),
+                         (geom.y() * zoom) - parentView()->canvasYOffset(),
+                         geom.width() * zoom,
+                         geom.height() * zoom);
   //m_frame->setGeometry(parentView()->matrix().mapRect(geom));
 
-  
+
 
   m_frame->show();
   m_frame->raise();
@@ -795,7 +800,7 @@ KoViewChild::~KoViewChild()
   if ( m_frame )
   {
     slotFrameGeometryChanged();
-    delete (KoFrame *)m_frame;
+    delete static_cast<KoFrame *>( m_frame );
   }
   delete d;
 }
@@ -823,13 +828,14 @@ void KoViewChild::slotFrameGeometryChanged()
                         static_cast<int>( (double)borderLessRect.y() / zoom + 0.5 ),
                         static_cast<int>( (double)borderLessRect.width() / zoom + 0.5 ),
                         static_cast<int>( (double)borderLessRect.height() / zoom + 0.5 ) );
-    kdDebug() << "KoViewChild::slotFrameGeometryChanged child geometry "
-              << ( m_child->geometry() == unzoomedRect ? "already " : "set to " )
-              << unzoomedRect << endl;
 
     // We don't want to trigger slotDocGeometryChanged again
     lock();
-    m_child->setGeometry( unzoomedRect );
+    QRect docChildGeom = documentChildGeometry( unzoomedRect );
+    kdDebug() << "KoViewChild::setChildGeometry child geometry "
+              << ( m_child->geometry() == unzoomedRect ? "already " : "set to " )
+              << docChildGeom << endl;
+    m_child->setGeometry( docChildGeom );
     unlock();
   }
 }
@@ -841,7 +847,7 @@ void KoViewChild::slotDocGeometryChanged()
   // Set frame geometry from child geometry (R1)
   // The frame's resizeEvent will call slotFrameGeometryChanged.
   double zoom = parentView()->zoom();
-  QRect geom = m_child->geometry();
+  QRect geom = viewChildGeometry( m_child->geometry() );
   QRect borderRect( static_cast<int>( (double)geom.x() * zoom + 0.5 ) - m_frame->leftBorder() - parentView()->canvasXOffset(),
                     static_cast<int>( (double)geom.y() * zoom + 0.5 ) - m_frame->topBorder() - parentView()->canvasYOffset(),
                     static_cast<int>( (double)geom.width() * zoom + 0.5 ) + m_frame->leftBorder() + m_frame->rightBorder(),
@@ -851,6 +857,16 @@ void KoViewChild::slotDocGeometryChanged()
             << borderRect << endl;
 
   m_frame->setGeometry( borderRect );
+}
+
+QRect KoViewChild::documentChildGeometry( const QRect& unzoomedViewGeometry ) const
+{
+    return unzoomedViewGeometry;
+}
+
+QRect KoViewChild::viewChildGeometry( const QRect& childGeometry ) const
+{
+    return childGeometry;
 }
 
 #include "koView.moc"

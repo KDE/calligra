@@ -27,7 +27,7 @@
 
 #include "aicolor.h"
 
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <core/vcomposite.h>
 #include <core/vdocument.h>
 #include <core/vlayer.h>

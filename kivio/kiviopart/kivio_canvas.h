@@ -29,8 +29,8 @@
 #include <qptrlist.h>
 
 #include <koQueryTrader.h>
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 #include <koffice_export.h>
 #include "kivio_intra_stencil_data.h"
 

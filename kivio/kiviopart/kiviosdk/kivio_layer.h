@@ -22,7 +22,7 @@
 #include <qdom.h>
 #include <qptrlist.h>
 #include <qobject.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 class KivioConnectorPoint;
 class KivioConnectorTarget;
 class KivioPage;

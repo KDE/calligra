@@ -23,8 +23,8 @@
 #include <qptrlist.h>
 #include <qvaluelist.h>
 
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 
 #include "vglobal.h"
 #include <koffice_export.h>

@@ -21,7 +21,7 @@
 #ifndef __VZOOMTOOL_H__
 #define __VZOOMTOOL_H__
 
-#include "koPoint.h"
+#include "KoPoint.h"
 #include <qstring.h>
 
 #include "vtool.h"

@@ -21,7 +21,7 @@
 #define KWCANVAS_H
 
 #include <kprinter.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <qscrollview.h>
 #include <qstylesheet.h>
 #include <KoRichText.h>

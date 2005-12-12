@@ -23,7 +23,7 @@
 
 #include <qptrlist.h>
 
-#include <koPoint.h>
+#include <KoPoint.h>
 
 #include "vobject.h"
 #include "svgpathparser.h"

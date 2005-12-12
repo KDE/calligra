@@ -21,8 +21,8 @@
 #include <qfile.h>
 
 #include <kdebug.h>
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 
 #include "vpath.h"
 #include "vtext.h"

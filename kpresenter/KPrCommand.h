@@ -35,8 +35,8 @@
 #include <koPageLayoutDia.h>
 #include <KoParagLayout.h>
 #include <KoTextCommand.h>
-#include <koPoint.h>
-#include <koSize.h>
+#include <KoPoint.h>
+#include <KoSize.h>
 #include <qvariant.h>
 #include <qvaluevector.h>
 #include "KPrBackground.h"

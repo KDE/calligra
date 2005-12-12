@@ -20,7 +20,7 @@
 #ifndef __VPATTERN_H__
 #define __VPATTERN_H__
 
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <koIconChooser.h>
 #include <qimage.h>
 #include <qpixmap.h>

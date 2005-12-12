@@ -24,8 +24,8 @@
 
 #include <kdialogbase.h>
 #include <koUnit.h>
-#include "koRect.h"
-#include "koPoint.h"
+#include "KoRect.h"
+#include "KoPoint.h"
 
 
 class KoUnitDoubleSpinBox;

@@ -27,8 +27,8 @@
 #include <qrect.h>
 #include <qstring.h>
 
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 
 
 #define KFORMULA_NAMESPACE_BEGIN namespace KFormula {

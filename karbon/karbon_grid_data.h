@@ -20,7 +20,7 @@
 #ifndef KARBON_GRID_DATA_H
 #define KARBON_GRID_DATA_H
 
-#include <koSize.h>
+#include <KoSize.h>
 #include <qcolor.h>
 
 class QDomElement;

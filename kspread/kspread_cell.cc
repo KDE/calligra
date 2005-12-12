@@ -69,7 +69,7 @@
 #include "valueparser.h"
 
 #include <koStyleStack.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <koxmlns.h>
 #include <kodom.h>
 #include <KoXmlWriter.h>

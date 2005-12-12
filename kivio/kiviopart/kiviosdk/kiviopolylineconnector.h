@@ -22,8 +22,8 @@
 
 #include <qvaluelist.h>
 
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 
 #include "kivio_1d_stencil.h"
 #include "kivio_arrowhead.h"

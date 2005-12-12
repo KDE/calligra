@@ -58,8 +58,8 @@
 #include <kiconloader.h>
 #include <math.h>
 
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 #include <karbon_factory.h>
 #include <karbon_resourceserver.h>
 

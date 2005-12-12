@@ -22,7 +22,7 @@
 #define __kprhelplinedia__
 
 #include <kdialogbase.h>
-#include <koRect.h>
+#include <KoRect.h>
 
 class QRadioButton;
 class KPrDocument;

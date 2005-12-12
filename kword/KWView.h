@@ -34,7 +34,7 @@
 
 #include <koPageLayoutDia.h>
 #include <koView.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <kshortcut.h>
 class DCOPObject;
 class KURL;

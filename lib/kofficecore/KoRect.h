@@ -19,8 +19,8 @@
 #ifndef koRect_h
 #define koRect_h
 
-#include "koPoint.h"
-#include "koSize.h"
+#include "KoPoint.h"
+#include "KoSize.h"
 #include <qrect.h>
 #include "koffice_export.h"
 

@@ -16,7 +16,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "koRect.h"
+#include "KoRect.h"
 
 KoRect KoRect::normalize() const
 {

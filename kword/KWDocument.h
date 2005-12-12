@@ -65,7 +65,7 @@ class DCOPObject;
 class KWLoadingInfo;
 class KoPicture;
 class KoPictureCollection;
-class KWChild;
+class KWDocumentChild;
 class KWPageManager;
 class KWPage;
 
@@ -219,9 +219,9 @@ public:
 
     KWPartFrameSet* insertObject( const KoRect& rect, KoDocumentEntry& e, QWidget* parentWidget );
 
-    // Create an embedded document; used by KWPartFrameSet but here because
-    // insertChild is protected.
-    KWChild* createChildDoc( const KoRect& rect, KoDocument* childDoc );
+    /// Create an embedded document; used by KWPartFrameSet but is defined here
+    /// because KoDocument:insertChild is protected.
+    KWDocumentChild* createChildDoc( const KoRect& rect, KoDocument* childDoc );
 
     void setPageLayout( const KoPageLayout& layout, const KoColumns& cl, const KoKWHeaderFooter& hf, bool updateViews = true );
 

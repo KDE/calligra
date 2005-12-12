@@ -23,7 +23,7 @@
 #include <kcommand.h>
 #include <qfont.h>
 #include <qcolor.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <koPageLayout.h>
 #include <koffice_export.h>
 class KivioPage;

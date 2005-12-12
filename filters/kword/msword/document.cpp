@@ -23,7 +23,7 @@
 #include "graphicshandler.h"
 #include "versionmagic.h"
 
-#include <koRect.h>
+#include <KoRect.h>
 #include <koUnit.h>
 #include <koPageLayout.h>
 #include <kdebug.h>

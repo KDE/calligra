@@ -39,9 +39,9 @@
 #include <kcursor.h>
 #include <koGlobal.h>
 #include <kozoomhandler.h>
-#include <koSize.h>
+#include <KoSize.h>
 #include <koRuler.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <kotabbar.h>
 #include <kapplication.h>
 

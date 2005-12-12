@@ -22,8 +22,8 @@
 #define frame_set_edit_h
 
 #include <qrect.h>
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 
 class KWCanvas;
 class KWFrame;

@@ -1307,7 +1307,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
                     // Especially useful for EPS images: set final size
                     fs->resizeFrame( frame, frame->width(), frame->height(), true );
                     if ( frame && fs->type() == FT_PART )
-                        static_cast<KWPartFrameSet *>( fs )->updateChildGeometry( viewMode() );
+                        static_cast<KWPartFrameSet *>( fs )->updateChildGeometry();
             }
             delete m_moveFrameCommand; // Unused after all
             m_moveFrameCommand = 0L;
@@ -1334,7 +1334,7 @@ void KWCanvas::mrEditFrame( QMouseEvent *e, const QPoint &nPoint ) // Can be cal
                     // Needed for evaluatable formulas
                     fs->moveFrame( frame );
                     if ( frame && fs->type() == FT_PART )
-                        static_cast<KWPartFrameSet *>( fs )->updateChildGeometry( viewMode() );
+                        static_cast<KWPartFrameSet *>( fs )->updateChildGeometry();
                 }
                 m_doc->addCommand(m_moveFrameCommand);
 
@@ -1633,7 +1633,7 @@ void KWCanvas::contentsMouseDoubleClickEvent( QMouseEvent * e )
                 bool isPartFrameSet = view && dynamic_cast<KWPartFrameSet*>(view->frame()->frameSet());
                 if ( !isPartFrameSet )
                     editFrameProperties();
-                // KWChild::hitTest and KWView::slotChildActivated take care of embedded objects
+                // KWDocumentChild::hitTest and KWView::slotChildActivated take care of embedded objects
                 m_mousePressed = false;
             }
             break;

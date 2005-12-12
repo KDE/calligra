@@ -21,7 +21,7 @@
 #define __VTOOLCONTROLLER_H__
 
 #include <qdict.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 
 class QEvent;
 

@@ -451,6 +451,18 @@ public:
   KoView *parentView() const { return m_parentView; }
   KoFrame *frame() const { return m_frame; }
 
+protected:
+  /// Return the geometry to give the documentChild based on the given unzoomed view rect.
+  /// Reimplement if the position of the viewChild doesn't match the position
+  /// of the documentChild.
+  /// TODO: use KoRect for everything in KoDocumentChild, pass the zoomed view geometry and return a KoRect
+  virtual QRect documentChildGeometry( const QRect& unzoomedViewGeometry ) const;
+
+  /// Return the geometry to give the viewChild based on the given documentChild geometry.
+  /// This is the opposite of documentChildGeometry().
+  /// TODO: use KoRect for everything in KoDocumentChild, and turn the arg into KoRect
+  virtual QRect viewChildGeometry( const QRect& childGeometry ) const;
+
 private slots:
   void slotFrameGeometryChanged();
   void slotDocGeometryChanged();

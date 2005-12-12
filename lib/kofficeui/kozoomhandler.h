@@ -20,7 +20,7 @@
 #ifndef kozoomhandler_h
 #define kozoomhandler_h
 
-#include <koRect.h>
+#include <KoRect.h>
 #include <koffice_export.h>
 
 /**

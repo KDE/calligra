@@ -22,7 +22,7 @@
 #include <qdom.h>
 #include <qptrlist.h>
 
-#include <koPoint.h>
+#include <KoPoint.h>
 
 class KivioIntraStencilData;
 class KivioPainter;

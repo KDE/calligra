@@ -21,7 +21,7 @@
 #define __VSELECTOBJECTS_H__
 
 
-#include "koRect.h"
+#include "KoRect.h"
 
 #include "vcomposite.h"
 #include "vgroup.h"

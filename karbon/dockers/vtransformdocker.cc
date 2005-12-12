@@ -26,7 +26,7 @@
 
 #include <klocale.h>
 #include <koMainWindow.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <koUnitWidgets.h>
 
 #include "karbon_part.h"

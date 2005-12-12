@@ -22,7 +22,7 @@
 #define __VOBJECT_H__
 
 
-#include <koRect.h>
+#include <KoRect.h>
 #include <dcopobject.h>
 #include <koffice_export.h>
 

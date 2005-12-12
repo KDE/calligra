@@ -19,7 +19,7 @@
 #ifndef KIVIO_GRID_DATA_H
 #define KIVIO_GRID_DATA_H
 
-#include <koSize.h>
+#include <KoSize.h>
 #include <qcolor.h>
 #include <koffice_export.h>
 

@@ -1929,7 +1929,7 @@ void KWDocument::loadEmbedded( const QDomElement &embedded )
     QDomElement object = embedded.namedItem( "OBJECT" ).toElement();
     if ( !object.isNull() )
     {
-        KWChild *ch = new KWChild( this );
+        KWDocumentChild *ch = new KWDocumentChild( this );
         ch->load( object, true );
         insertChild( ch );
         QDomElement settings = embedded.namedItem( "SETTINGS" ).toElement();
@@ -2701,7 +2701,7 @@ void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroComm
             }
             else
             {
-                KWChild *ch = new KWChild( this );
+                KWDocumentChild *ch = new KWDocumentChild( this );
                 kdDebug()<<"KWDocument::insertEmbedded() loading document"<<endl;
                 if ( ch->load( object, true ) )
                 {
@@ -3438,12 +3438,6 @@ QDomDocument KWDocument::saveXML()
         // Save non-part framesets ( part are saved further down )
         if ( frameSet->type() != FT_PART )
             frameSet->save( framesets );
-        else
-        {
-            // Set the child geometry from the frame geometry, with no viewmode applied
-            // to prepare saving below with the correct geometry
-            static_cast<KWPartFrameSet *>(frameSet)->updateChildGeometry( 0L );
-        }
 
         // If picture frameset, make a note of the image it needs.
         if ( !frameSet->isDeleted() && ( frameSet->type() == FT_PICTURE ) )
@@ -3537,7 +3531,7 @@ void KWDocument::saveEmbeddedObjects( QDomElement& parentElem, const QPtrList<Ko
     QPtrListIterator<KoDocumentChild> chl( childList );
     QDomDocument doc = parentElem.ownerDocument();
     for( ; chl.current(); ++chl ) {
-        KWChild* curr = static_cast<KWChild*>(chl.current());
+        KWDocumentChild* curr = static_cast<KWDocumentChild*>(chl.current());
         if ( !curr->isDeleted() )
         {
             QDomElement embeddedElem = doc.createElement( "EMBEDDED" );
@@ -3773,9 +3767,9 @@ void KWDocument::eraseEmptySpace( QPainter * painter, const QRegion & emptySpace
     painter->restore();
 }
 
-KWChild* KWDocument::createChildDoc( const KoRect& rect, KoDocument* childDoc )
+KWDocumentChild* KWDocument::createChildDoc( const KoRect& rect, KoDocument* childDoc )
 {
-    KWChild* ch = new KWChild( this, rect.toQRect(), childDoc );
+    KWDocumentChild* ch = new KWDocumentChild( this, rect.toQRect(), childDoc );
     insertChild( ch );
     return ch;
 }
@@ -3788,7 +3782,7 @@ KWPartFrameSet* KWDocument::insertObject( const KoRect& rect, KoDocumentEntry& e
     if ( !doc->showEmbedInitDialog( parentWidget )  )
         return 0;
 
-    KWChild* ch = createChildDoc( rect, doc );
+    KWDocumentChild* ch = createChildDoc( rect, doc );
     setModified( TRUE );
 
     KWPartFrameSet *frameset = new KWPartFrameSet( this, ch, QString::null );

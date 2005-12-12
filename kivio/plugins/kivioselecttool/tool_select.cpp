@@ -39,7 +39,7 @@
 #include <kpopupmenu.h>
 #include <kdebug.h>
 #include <kozoomhandler.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <klocale.h>
 #include "kivio_command.h"
 

@@ -25,9 +25,9 @@
 #include <qdom.h>
 #include <qptrlist.h>
 #include <qbitarray.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <kglobalsettings.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <koffice_export.h>
 
 #include "kivio_line_style.h"

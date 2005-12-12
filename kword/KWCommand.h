@@ -23,14 +23,14 @@
 #include <kurl.h>
 #include <kocommandhistory.h>
 #include <koPageLayout.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <KoBorder.h>
 #include <KoParagLayout.h>
 #include <KoParagCounter.h>
 #include "KWFrameStyle.h"
 #include <KoTextCommand.h>
 #include "KWVariable.h"
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <koPictureKey.h>
 
 class KWFrameSet;

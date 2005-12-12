@@ -37,14 +37,14 @@ class KOFFICECORE_EXPORT KoChild : public QObject
 {
   Q_OBJECT
 public:
-  
+
   /**
    * The gadget generally identifies where a child has been hit (generally
    * by the mouse pointer).
    * Based on this information different actions can be taken, for example
    * moving the child or opening a context menu. NoGadget means that
    * this child has not been hit.
-   * 
+   *
    * @see #gadgetHitTest
    */
   enum Gadget { NoGadget, TopLeft, TopMid, TopRight, MidLeft, MidRight,
@@ -205,7 +205,7 @@ public:
   /**
    * @return the current transformation of this child as matrix.
    *         This includes translation, scale, rotation, shearing.
-   * 
+   *
    * @see #updateMatrix
    */
   virtual QWMatrix matrix() const;
@@ -213,31 +213,31 @@ public:
   /**
    * Locks this child and stores the current transformation.
    * A locked child does not emit changed signals.
-   * 
+   *
    * This is useful if a series of changes are done on this
    * child and only the final result is of interest (GUI updating,...).
-   * 
+   *
    * @see #locked #unlock
    */
-  virtual void lock();
+  void lock();
 
   /**
    * Unlocks this child and emits a changed signal.
    */
-  virtual void unlock();
+  void unlock();
 
   /**
    * If the child is locked, geometry changes
    * (including scaling, rotation, ...) are not backed up.
-   * 
+   *
    * As long as this child is locked, the backed up
    * geometry state can be recovered with oldPointArray.
-   * 
+   *
    * @return true when this child is locked.
-   * 
+   *
    * @see #locked #unlock #oldPointArray
    */
-  bool locked() const;  //TODO should this be made virtual?
+  bool locked() const;
 
   /**
    * @return the backed up geometry transformed by given matrix.
@@ -248,7 +248,7 @@ public:
    * Marks this child as either transparent or not.
    * @param transparent set this child to transparent (true)
    *           or opaque (false).
-   * 
+   *
    * @see #isTransparent
    */
   virtual void setTransparent( bool transparent );
@@ -286,7 +286,7 @@ protected:
   /**
    * @return point array with the 4 corners of given rectangle, which is
    *         transformed by given matrix.
-   * 
+   *
    *  @param matrix the transformation of r.
    *  @param r the rectangle for which the point array should be created.
    */
@@ -294,7 +294,7 @@ protected:
 
   /**
    * Stores the current transformation of this child into a matrix.
-   * 
+   *
    * @see #matrix
    */
   virtual void updateMatrix();

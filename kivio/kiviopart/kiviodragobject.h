@@ -24,7 +24,7 @@
 #include <qptrlist.h>
 
 #include "kivio_stencil.h"
-#include <koRect.h>
+#include <KoRect.h>
 
 class KivioPage;
 

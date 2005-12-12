@@ -44,8 +44,8 @@
 #include <kglobal.h>
 #include <kmessagebox.h>
 #include <koUnit.h>
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 #include <kozoomhandler.h>
 #include <kapplication.h>
 #include <KoXmlWriter.h>

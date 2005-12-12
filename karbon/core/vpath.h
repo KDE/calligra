@@ -21,7 +21,7 @@
 #define __VPATH_H__
 
 
-#include <koPoint.h>
+#include <KoPoint.h>
 
 #include "vobject.h"
 #include <koffice_export.h>

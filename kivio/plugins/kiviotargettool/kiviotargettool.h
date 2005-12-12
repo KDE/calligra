@@ -19,7 +19,7 @@
 #ifndef KIVIOKIVIOTARGETTOOL_H
 #define KIVIOKIVIOTARGETTOOL_H
 
-#include <koPoint.h>
+#include <KoPoint.h>
 
 #include "kivio_mousetool.h"
 

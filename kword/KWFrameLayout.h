@@ -21,7 +21,7 @@
 
 #include <qptrlist.h>
 #include <kdebug.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <qmap.h>
 
 class KWDocument;

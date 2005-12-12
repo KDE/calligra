@@ -31,7 +31,7 @@
 #include "karbon_part.h"
 #include "vselection.h"
 #include "vtransformcmd.h"
-#include <koRect.h>
+#include <KoRect.h>
 
 VSelectToolBar::VSelectToolBar( KarbonView *view, const char* name ) : KToolBar( view, name ), m_view( view )
 {

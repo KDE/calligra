@@ -21,16 +21,16 @@
 #define KWPARTFRAMESET_H
 
 #include "KWFrameSet.h"
-class KWChild;
+class KWDocumentChild;
 class KWFramePartMoveCommand;
 /**
- * @short A frameset that contains an embedded object (a KWChild)
+ * @short A frameset that contains an embedded object (a KWDocumentChild)
  */
 class KWPartFrameSet : public KWFrameSet
 {
     Q_OBJECT
 public:
-    KWPartFrameSet( KWDocument *_doc, KWChild *_child, const QString & name );
+    KWPartFrameSet( KWDocument *_doc, KWDocumentChild *_child, const QString & name );
 
     /// Used for OASIS loading
     KWPartFrameSet( KWDocument* doc, const QDomElement& frame,
@@ -48,10 +48,13 @@ public:
 
     virtual KWFrameSetEdit * createFrameSetEdit( KWCanvas * );
 
-    KWChild *getChild() const { return m_child; }
-    void setChild( KWChild* child );
+    KWDocumentChild *getChild() const { return m_child; }
+    void setChild( KWDocumentChild* child );
 
-    void updateChildGeometry( KWViewMode* viewMode );
+    /**
+     * Update the geometry of m_child based on the geometry of the frame.
+     */
+    void updateChildGeometry();
 
     virtual void drawFrameContents( KWFrame * frame, QPainter *painter, const QRect & fcrect,
                                     const QColorGroup &cg, bool onlyChanged, bool resetChanged,
@@ -105,7 +108,7 @@ private slots:
     void slotChildChanged();
 
 private:
-    KWChild *m_child;
+    KWDocumentChild *m_child;
     KWFramePartMoveCommand *m_cmdMoveChild;
     bool m_protectContent;
 };
@@ -140,14 +143,14 @@ private:
 class KWDocument;
 
 /******************************************************************/
-/* Class: KWChild                                              */
+/* Class: KWDocumentChild                                              */
 /******************************************************************/
-class KWChild : public KoDocumentChild
+class KWDocumentChild : public KoDocumentChild
 {
 public:
-    KWChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc );
-    KWChild( KWDocument *_wdoc );
-    ~KWChild();
+    KWDocumentChild( KWDocument *_wdoc, const QRect& _rect, KoDocument *_doc );
+    KWDocumentChild( KWDocument *_wdoc );
+    ~KWDocumentChild();
 
     KWDocument* parent()const
     { return m_pKWordDoc; }

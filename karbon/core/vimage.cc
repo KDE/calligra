@@ -11,7 +11,7 @@
 
 #include <qdom.h>
 #include <qimage.h>
-#include <koRect.h>
+#include <KoRect.h>
 
 #include <render/vqpainter.h>
 

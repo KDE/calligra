@@ -1,4 +1,4 @@
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <kdebug.h>
 #include <kglobal.h>
 #include <stdlib.h>

@@ -26,7 +26,7 @@
 #include <qpixmap.h>
 
 #include <klocale.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 
 #include "vcolor.h"
 #include "vfill.h"

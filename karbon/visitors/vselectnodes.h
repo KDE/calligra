@@ -21,7 +21,7 @@
 #define __VSELECTNODES_H__
 
 
-#include "koRect.h"
+#include "KoRect.h"
 
 #include "vvisitor.h"
 #include "vsegment.h"

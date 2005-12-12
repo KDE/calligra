@@ -20,7 +20,7 @@
 #include <qdom.h>
 
 #include <klocale.h>
-#include <koRect.h>
+#include <KoRect.h>
 
 #include "vcomposite.h"
 #include "vdocument.h"

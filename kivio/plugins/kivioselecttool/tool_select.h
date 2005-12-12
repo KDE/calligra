@@ -20,8 +20,8 @@
 #define TOOL_SELECT_H
 
 #include <qptrlist.h>
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 #include "kivio_mousetool.h"
 
 class KivioView;

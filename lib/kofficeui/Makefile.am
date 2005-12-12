@@ -15,7 +15,7 @@ libkofficeui_la_SOURCES = \
 	koRuler.cc koTemplateChooseDia.cc koTabChooser.cc \
 	koKoolBar.cc koTemplateCreateDia.cc kocontexthelp.cc\
 	kcoloractions.cpp \
-	koRect.cpp koPictureFilePreview.cc koUnitWidgets.cc \
+	koPictureFilePreview.cc koUnitWidgets.cc \
 	tkaction.cpp tkcoloractions.cpp tkcombobox.cpp tktoolbarbutton.cpp \
 	koCharSelectDia.cc koInsertLink.cc koeditpath.cc kocommandhistory.cpp \
 	koselectaction.cpp kolinewidthaction.cpp kolinestyleaction.cpp \
@@ -34,7 +34,7 @@ include_HEADERS = \
 	koRuler.h koTemplateChooseDia.h koTabChooser.h \
 	koKoolBar.h koTemplateCreateDia.h kocontexthelp.h \
 	kcoloractions.h \
-	koRect.h koPoint.h koSize.h koPictureFilePreview.h koUnitWidgets.h \
+	koPictureFilePreview.h koUnitWidgets.h \
 	tkaction.h tkcoloractions.h tktoolbarbutton.h tkcombobox.h \
 	koCharSelectDia.h koInsertLink.h kotoolbutton.h koeditpath.h \
 	kocommandhistory.h  koImageResource.h \

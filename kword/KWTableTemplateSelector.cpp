@@ -25,7 +25,7 @@
 #include "KWDocument.h"
 #include "KWTextDocument.h"
 
-#include <koRect.h>
+#include <KoRect.h>
 
 #include <qlabel.h>
 #include <qbuttongroup.h>

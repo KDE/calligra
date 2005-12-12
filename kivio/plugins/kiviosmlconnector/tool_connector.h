@@ -20,7 +20,7 @@
 #define SML_TOOL_CONNECTOR_H
 
 #include "kivio_mousetool.h"
-#include <koPoint.h>
+#include <KoPoint.h>
 
 class QMouseEvent;
 class QCursor;

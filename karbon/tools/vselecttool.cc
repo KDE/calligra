@@ -25,8 +25,8 @@
 #include <qradiobutton.h>
 #include <qbuttongroup.h>
 
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 #include <kdebug.h>
 
 #include <karbon_part.h>

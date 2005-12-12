@@ -25,7 +25,7 @@
 // painter abstraction
 
 #include <qnamespace.h>
-#include <koRect.h>
+#include <KoRect.h>
 #include <vfillrule.h>
 
 class QWMatrix;

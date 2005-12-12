@@ -31,7 +31,8 @@ libkofficecore_la_SOURCES = koDocument.cc \
 	kofiledialog.cpp koxmlns.cpp kodom.cpp koversiondialog.cc koOasisStore.cpp \
 	kkbdaccessextensions.cpp koDetailsPaneBase.ui koOpenPaneBase.ui koOpenPane.cc \
 	koTemplates.cc koDetailsPane.cc \
-	KoSpeaker.cpp KoOasisLoadingContext.cpp
+	KoSpeaker.cpp KoOasisLoadingContext.cpp \
+	KoRect.cpp
 
 libkofficecore_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
 

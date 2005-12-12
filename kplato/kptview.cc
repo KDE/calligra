@@ -22,7 +22,7 @@
 #include <kmessagebox.h>
 
 #include <koKoolBar.h>
-#include <koRect.h>
+#include <KoRect.h>
 
 #include <qapplication.h>
 #include <qpainter.h>

@@ -3,7 +3,7 @@
 
 #include <qstring.h>
 #include <qptrlist.h>
-#include "koPoint.h"
+#include "KoPoint.h"
 
 VPath *bezierFit(QPtrList<KoPoint> &points,float error);
 

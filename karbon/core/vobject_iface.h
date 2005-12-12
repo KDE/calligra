@@ -20,7 +20,7 @@
 #ifndef __VOBJECT_IFACE_H__
 #define __VOBJECT_IFACE_H__
 
-#include <koRect.h>
+#include <KoRect.h>
 
 class VObject;
 class QDomElement;

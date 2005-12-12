@@ -24,7 +24,7 @@
 #include <qptrvector.h>
 
 #include <koffice_export.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 
 #include "vcolor.h"
 

@@ -1,4 +1,4 @@
-#include <koRect.h>
+#include <KoRect.h>
 #include <stdio.h>
 #include <kapplication.h>
 #include <stdlib.h>

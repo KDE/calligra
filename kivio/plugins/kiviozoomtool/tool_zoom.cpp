@@ -31,7 +31,7 @@
 #include <koMainWindow.h>
 #include <kdebug.h>
 #include <kozoomhandler.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <kstdaction.h>
 #include <kozoomaction.h>
 

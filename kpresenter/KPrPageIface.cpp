@@ -31,8 +31,8 @@
 #include <kdebug.h>
 #include <kcommand.h>
 #include "KPrCommand.h"
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 
 KPrPageIface::KPrPageIface( KPrPage *_page, int pgnum )
     // Make up a nice DCOPObject name like "Document-0 Page-1".

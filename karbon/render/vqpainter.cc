@@ -29,7 +29,7 @@
 #include <qpaintdevice.h>
 #include <qpen.h>
 
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <kdebug.h>
 
 VQPainter::VQPainter( QPaintDevice *target, unsigned int w, unsigned int h ) : VPainter( target, w, h ), m_painter( 0L ), m_target( target ), m_width( w ), m_height( h )

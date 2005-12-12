@@ -25,8 +25,8 @@
 #include <qwidget.h>
 #include <qptrlist.h>
 #include "global.h"
-#include <koPoint.h>
-#include <koRect.h>
+#include <KoPoint.h>
+#include <KoRect.h>
 #include <KoStyleCollection.h> // for KoStyleChangeDefMap
 #include <qvariant.h>
 #include <koDocumentChild.h>

@@ -22,7 +22,7 @@
 
 #include <koUnit.h>
 #include <koPageLayout.h>
-#include <koSize.h>
+#include <KoSize.h>
 
 class QDomElement;
 class QPixmap;

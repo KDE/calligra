@@ -30,7 +30,7 @@
 
 #include <koxmlns.h>
 #include <KoTextZoomHandler.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 
 #include <qpainter.h>
 #include <qpointarray.h>

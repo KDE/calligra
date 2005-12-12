@@ -23,7 +23,7 @@
 #include <qwidget.h>
 #include <global.h>
 
-#include <koRect.h>
+#include <KoRect.h>
 #include <koUnit.h>
 
 class GeneralPropertyUI;

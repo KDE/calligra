@@ -23,7 +23,7 @@
 #include <kiconloader.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 #include <klocale.h>
 #include <kozoomhandler.h>
 #include <kinputdialog.h>

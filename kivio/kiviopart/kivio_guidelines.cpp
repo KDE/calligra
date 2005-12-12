@@ -8,7 +8,7 @@
 #include <qpainter.h>
 #include <qwmatrix.h>
 #include <kdebug.h>
-#include <koPoint.h>
+#include <KoPoint.h>
 
 QPixmap* KivioGuideLines::vGuideLines = 0;
 QPixmap* KivioGuideLines::hGuideLines = 0;
