@@ -860,17 +860,20 @@ AddResourceCmd::AddResourceCmd(Part *part, ResourceGroup *group, Resource *resou
     m_mine = true;
 }
 AddResourceCmd::~AddResourceCmd() {
-    if (m_mine)
+    if (m_mine) {
+        //kdDebug()<<k_funcinfo<<"delete: "<<m_resource<<endl;
         delete m_resource;
+    }
 }
 void AddResourceCmd::execute() {
     m_group->addResource(m_resource, 0/*risk*/); 
     m_mine = false;
-    
+    //kdDebug()<<k_funcinfo<<"added: "<<m_resource<<endl;
     setCommandType(0);
 }
 void AddResourceCmd::unexecute() {
     m_group->takeResource(m_resource);
+    //kdDebug()<<k_funcinfo<<"removed: "<<m_resource<<endl;
     m_mine = true;
     
     setCommandType(0);
@@ -882,6 +885,9 @@ RemoveResourceCmd::RemoveResourceCmd(Part *part, ResourceGroup *group, Resource 
     m_mine = false;
     m_requests = m_resource->requests();
     
+    
+}
+RemoveResourceCmd::~RemoveResourceCmd() {
     m_appointments.setAutoDelete(true);
 }
 void RemoveResourceCmd::execute() {
@@ -892,15 +898,20 @@ void RemoveResourceCmd::execute() {
     }
     QPtrListIterator<Appointment> ait = m_resource->appointments();
     for (; ait.current(); ++ait) {
-        ait.current()->detach();
         m_appointments.append(ait.current());
+    }
+    QPtrListIterator<Appointment> mit = m_appointments;
+    for (; mit.current(); ++mit) {
+        mit.current()->detach(); //NOTE: removes from m_resource->appointments()
+        //kdDebug()<<k_funcinfo<<"detached: "<<mit.current()<<endl;
     }
     AddResourceCmd::unexecute();
 }
 void RemoveResourceCmd::unexecute() {
-    Appointment *a;
-    for (a = m_appointments.first(); a != 0; m_appointments.take()) {
-        a->attach();
+    m_appointments.first();
+    while (m_appointments.current()) {
+        //kdDebug()<<k_funcinfo<<"attach: "<<m_appointments.current()<<endl;
+        m_appointments.take()->attach();
     }
     QPtrListIterator<ResourceRequest> it = m_requests;
     for (; it.current(); ++it) {

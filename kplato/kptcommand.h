@@ -546,6 +546,7 @@ class RemoveResourceCmd : public AddResourceCmd
 {
 public:
     RemoveResourceCmd(Part *part, ResourceGroup *group, Resource *resource, QString name=0);
+    ~RemoveResourceCmd();
     void execute();
     void unexecute();
 

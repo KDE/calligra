@@ -661,7 +661,11 @@ void Node::takeAppointment(Appointment *appointment) {
     int i = m_appointments.findRef(appointment);
     if (i != -1) {
         m_appointments.take(i);
-        appointment->resource()->takeAppointment(appointment);
+        //kdDebug()<<k_funcinfo<<"Taken: "<<appointment<<endl;
+        if (appointment->resource())
+            appointment->resource()->takeAppointment(appointment);
+    } else {
+        //kdDebug()<<k_funcinfo<<"Couldn't find appointment: "<<appointment<<endl;
     }
 }
 

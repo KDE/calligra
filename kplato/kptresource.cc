@@ -225,7 +225,10 @@ Resource::~Resource() {
     QPtrListIterator<ResourceRequest> it = m_requests;
     for (; it.current(); ++it) {
         it.current()->setResource(0); // avoid the request to mess with my list
-        it.current()->parent()->removeResourceRequest(it.current()); // deletes the request
+    }
+    m_requests.first();
+    for (; m_requests.current(); m_requests.next()) {
+        m_requests.current()->parent()->removeResourceRequest(m_requests.current()); // deletes the request
     }
     clearAppointments();
 }
@@ -414,8 +417,11 @@ void Resource::takeAppointment(Appointment *appointment) {
     int i = m_appointments.findRef(appointment);
     if (i != -1) {
         m_appointments.take(i);
+        //kdDebug()<<k_funcinfo<<"Taken: "<<appointment<<endl;
         if (appointment->node())
             appointment->node()->takeAppointment(appointment);
+    } else {
+        //kdDebug()<<k_funcinfo<<"Couldn't find appointment: "<<appointment<<endl;
     }
 }
 
@@ -1065,6 +1071,7 @@ void Appointment::addActualEffort(QDate date, Duration effort, bool overtime) {
 }
 
 bool Appointment::attach() { 
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     if (m_resource && m_node) {
         m_resource->addAppointment(this);
         m_node->addAppointment(this);
@@ -1076,6 +1083,7 @@ bool Appointment::attach() {
 }
 
 void Appointment::detach() {
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     if (m_resource) {
         m_resource->takeAppointment(this); // takes from node also
     }
@@ -1188,11 +1196,11 @@ ResourceRequest::ResourceRequest(Resource *resource, int units)
     : m_resource(resource),
       m_units(units),
       m_parent(0) {
-    //kdDebug()<<k_funcinfo<<"Request to: "<<(resource ? resource->name() : QString("None"))<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<") Request to: "<<(resource ? resource->name() : QString("None"))<<endl;
 }
 
 ResourceRequest::~ResourceRequest() {
-    //kdDebug()<<k_funcinfo<<"resource: "<<m_resource->name()<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<") resource: "<<(m_resource ? m_resource->name() : QString("None"))<<endl;
     if (m_resource)
         m_resource->unregisterRequest(this);
     m_resource = 0;
@@ -1247,7 +1255,7 @@ ResourceGroupRequest::~ResourceGroupRequest() {
 }
 
 void ResourceGroupRequest::addResourceRequest(ResourceRequest *request) {
-    //kdDebug()<<k_funcinfo<<"Group: "<<m_group->name()<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<request<<") to Group: "<<m_group->name()<<endl;
     request->setParent(this);
     m_resourceRequests.append(request);
     request->registerRequest();
@@ -1272,7 +1280,7 @@ bool ResourceGroupRequest::load(QDomElement &element, Project &project) {
     //kdDebug()<<k_funcinfo<<endl;
     m_group = project.findResourceGroup(element.attribute("group-id"));
     if (m_group == 0) {
-        kdDebug()<<k_funcinfo<<"The referenced resource group does not exist: group id="<<element.attribute("group-id")<<endl;
+        //kdDebug()<<k_funcinfo<<"The referenced resource group does not exist: group id="<<element.attribute("group-id")<<endl;
         return false;
     }
     m_group->registerRequest(this);
