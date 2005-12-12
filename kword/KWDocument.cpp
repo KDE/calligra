@@ -1496,15 +1496,15 @@ bool KWDocument::loadXML( QIODevice *, const QDomDocument & doc )
         pgLayout.orientation = static_cast<KoOrientation>( KWDocument::getAttribute( paper, "orientation", 0 ) );
         pgLayout.ptWidth = getAttribute( paper, "width", 0.0 );
         pgLayout.ptHeight = getAttribute( paper, "height", 0.0 );
-	kdDebug() << " ptWidth=" << pgLayout.ptWidth << endl;
-	kdDebug() << " ptHeight=" << pgLayout.ptHeight << endl;
+        kdDebug() << " ptWidth=" << pgLayout.ptWidth << endl;
+        kdDebug() << " ptHeight=" << pgLayout.ptHeight << endl;
         if ( pgLayout.ptWidth <= 0 || pgLayout.ptHeight <= 0 )
         {
             // Old document?
             pgLayout.ptWidth = getAttribute( paper, "ptWidth", 0.0 );
             pgLayout.ptHeight = getAttribute( paper, "ptHeight", 0.0 );
-		kdDebug() << " ptWidth=" << pgLayout.ptWidth << endl;
-		kdDebug() << " ptHeight=" << pgLayout.ptHeight << endl;
+            kdDebug() << " ptWidth=" << pgLayout.ptWidth << endl;
+            kdDebug() << " ptHeight=" << pgLayout.ptHeight << endl;
 
             // Still wrong?
             if ( pgLayout.ptWidth <= 0 || pgLayout.ptHeight <= 0 )
@@ -5285,15 +5285,15 @@ void KWDocument::initBookmarkList()
 QPixmap* KWDocument::doubleBufferPixmap( const QSize& s )
 {
     if ( !m_bufPixmap ) {
-	int w = QABS( s.width() );
-	int h = QABS( s.height() );
-	m_bufPixmap = new QPixmap( w, h );
+        int w = QABS( s.width() );
+        int h = QABS( s.height() );
+        m_bufPixmap = new QPixmap( w, h );
     } else {
-	if ( m_bufPixmap->width() < s.width() ||
-	     m_bufPixmap->height() < s.height() ) {
-	    m_bufPixmap->resize( QMAX( s.width(), m_bufPixmap->width() ),
-				QMAX( s.height(), m_bufPixmap->height() ) );
-	}
+        if ( m_bufPixmap->width() < s.width() ||
+                m_bufPixmap->height() < s.height() ) {
+            m_bufPixmap->resize( QMAX( s.width(), m_bufPixmap->width() ),
+                    QMAX( s.height(), m_bufPixmap->height() ) );
+        }
     }
 
     return m_bufPixmap;
@@ -5418,7 +5418,7 @@ QWidget* KWDocument::createCustomDocumentWidget(QWidget *parent) {
     KoColumns columns;
     columns.columns = 1;
     columns.ptColumnSpacing = m_defaultColumnSpacing;
-    return new KWStartupWidget(parent, columns);
+    return new KWStartupWidget(parent, this, columns);
 }
 
 #include "KWDocument.moc"

@@ -127,6 +127,7 @@ class KWDocument : public KoDocument, public KoTextZoomHandler
 
 public:
     friend class KWOasisLoader;
+    friend class KWStartupWidget;
 
     KWDocument( QWidget *parentWidget = 0, const char *widname = 0, QObject* parent = 0, const char* name = 0, bool singleViewMode = false );
     ~KWDocument();

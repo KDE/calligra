@@ -23,15 +23,20 @@
 
 class KoPageLayoutSize;
 class KoPageLayoutColumns;
+class KWDocument;
 
 class KWStartupWidget : public KWStartupWidgetBase {
     Q_OBJECT;
 public:
-    KWStartupWidget(QWidget *parent, const KoColumns &columns);
+    KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns);
 
 private slots:
     void sizeUpdated(KoPageLayout &layout);
     void columnsUpdated(KoColumns &columns);
+    void buttonClicked();
+
+signals:
+    void documentSelected();
 
 private:
     KoPageLayoutSize *m_sizeWidget;
@@ -39,6 +44,7 @@ private:
 
     KoPageLayout m_layout;
     KoColumns m_columns;
+    KWDocument *m_doc;
 };
 
 #endif

@@ -18,24 +18,27 @@
 
 #include <KWStartupWidget.h>
 #include <KWStartupWidgetBase.h>
+#include <KWDocument.h>
 #include <KoPageLayoutSize.h>
 #include <KoPageLayoutColumns.h>
 
+#include <kdebug.h>
+#include <qpushbutton.h>
+#include <qcheckbox.h>
 #include <qlayout.h>
 
-KWStartupWidget::KWStartupWidget(QWidget *parent, const KoColumns &columns)
+KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns)
     : KWStartupWidgetBase(parent) {
     m_columns = columns;
     m_layout = KoPageLayout::standardLayout();
+    m_doc = doc;
 
-    // QPushButton* m_createButton;
-    // QCheckBox* m_WpStyleCheckbox;
     QVBoxLayout *lay = new QVBoxLayout(m_sizeTab, KDialog::marginHint());
     m_sizeWidget = new KoPageLayoutSize(m_sizeTab, m_layout, KoUnit::U_MM, m_columns , false, true);
     lay->addWidget(m_sizeWidget);
 
     lay = new QVBoxLayout(m_columnsTab, KDialog::marginHint());
-    m_columnsWidget = new KoPageLayoutColumns(m_columnsTab, m_layout, KoUnit::U_MM, m_columns);
+    m_columnsWidget = new KoPageLayoutColumns(m_columnsTab, m_columns, KoUnit::U_MM, m_layout);
     lay->addWidget(m_columnsTab);
 
     connect (m_columnsWidget, SIGNAL( propertyChange(KoColumns&)),
@@ -43,6 +46,11 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, const KoColumns &columns)
 
     connect (m_sizeWidget, SIGNAL( propertyChange(KoPageLayout&)),
             this, SLOT (sizeUpdated( KoPageLayout&)));
+
+    connect (m_createButton, SIGNAL( clicked() ), this, SLOT (buttonClicked()) );
+
+    connect (m_WpStyleCheckbox, SIGNAL(toggled(bool)), m_sizeWidget, SLOT(setEnableBorders(bool)));
+    connect (m_WpStyleCheckbox, SIGNAL(toggled(bool)), m_columnsWidget, SLOT(setEnableColumns(bool)));
 }
 
 void KWStartupWidget::sizeUpdated(KoPageLayout &layout) {
@@ -54,6 +62,23 @@ void KWStartupWidget::columnsUpdated(KoColumns &columns) {
     m_columns.columns = columns.columns;
     m_columns.ptColumnSpacing = columns.ptColumnSpacing;
     m_sizeWidget->setColumns(columns);
+}
+
+void KWStartupWidget::buttonClicked() {
+    if(m_WpStyleCheckbox->isChecked())
+        m_doc->initEmpty();
+    else
+        m_doc->m_processingType = KWDocument::DTP;
+    KoKWHeaderFooter hf;
+    hf.header = HF_SAME;
+    hf.footer = HF_SAME;
+    hf.ptHeaderBodySpacing = 10.0;
+    hf.ptFooterBodySpacing = 10.0;
+    hf.ptFootNoteBodySpacing = 10.0;
+    m_doc->setPageLayout( m_layout, m_columns, hf, false );
+    m_doc->delayedRecalcFrames(1);
+
+    emit documentSelected();
 }
 
 #include "KWStartupWidget.moc"

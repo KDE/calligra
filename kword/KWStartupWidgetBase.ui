@@ -9,28 +9,31 @@
             <x>0</x>
             <y>0</y>
             <width>367</width>
-            <height>291</height>
+            <height>280</height>
         </rect>
     </property>
     <property name="caption">
         <string>KWStartupWidgetBase</string>
     </property>
-    <vbox>
+    <grid>
         <property name="name">
             <cstring>unnamed</cstring>
         </property>
         <property name="margin">
             <number>0</number>
         </property>
-        <widget class="QCheckBox">
+        <widget class="QCheckBox" row="0" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>m_WpStyleCheckbox</cstring>
             </property>
             <property name="text">
                 <string>Provide main text area</string>
             </property>
+            <property name="checked">
+                <bool>true</bool>
+            </property>
         </widget>
-        <widget class="QTabWidget">
+        <widget class="QTabWidget" row="1" column="0" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>tabs</cstring>
             </property>
@@ -51,42 +54,49 @@
                 </attribute>
             </widget>
         </widget>
-        <widget class="QLayoutWidget">
+        <spacer row="2" column="0">
             <property name="name">
-                <cstring>layout1</cstring>
+                <cstring>spacer1</cstring>
             </property>
-            <hbox>
-                <property name="name">
-                    <cstring>unnamed</cstring>
-                </property>
-                <spacer>
-                    <property name="name">
-                        <cstring>spacer1</cstring>
-                    </property>
-                    <property name="orientation">
-                        <enum>Horizontal</enum>
-                    </property>
-                    <property name="sizeType">
-                        <enum>Expanding</enum>
-                    </property>
-                    <property name="sizeHint">
-                        <size>
-                            <width>71</width>
-                            <height>20</height>
-                        </size>
-                    </property>
-                </spacer>
-                <widget class="QPushButton">
-                    <property name="name">
-                        <cstring>m_createButton</cstring>
-                    </property>
-                    <property name="text">
-                        <string>Create</string>
-                    </property>
-                </widget>
-            </hbox>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QPushButton" row="2" column="1">
+            <property name="name">
+                <cstring>m_createButton</cstring>
+            </property>
+            <property name="text">
+                <string>Create</string>
+            </property>
         </widget>
-    </vbox>
+        <spacer row="3" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+    </grid>
 </widget>
 <layoutdefaults spacing="6" margin="11"/>
 </UI>
