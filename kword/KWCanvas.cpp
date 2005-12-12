@@ -481,7 +481,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     {
         // See if we clicked on a frame's border
         m_mouseMeaning = m_frameViewManager->mouseMeaning( docPoint, e->state());
-        if (! (viewMode()->hasFrames() && m_mouseMeaning == MEANING_MOUSE_INSIDE ||
+        if (! (viewMode()->hasFrames() || m_mouseMeaning == MEANING_MOUSE_INSIDE ||
                     m_mouseMeaning == MEANING_MOUSE_OVER_LINK ||
                     m_mouseMeaning == MEANING_MOUSE_OVER_FOOTNOTE ||
                     m_mouseMeaning == MEANING_MOUSE_INSIDE_TEXT) )
