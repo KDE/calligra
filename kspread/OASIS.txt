@@ -231,4 +231,10 @@ Repeate header columns
           <table:table-column table:style-name="co1" table:number-columns-repeated="2" table:default-cell-style-name="ce5"/>
           <table:table-column table:style-name="co1" table:default-cell-style-name="Default"/>
         </table:table-header-columns>
+
+Bug found:
+----------
+- duplicate cell area is not good.
+- Style is not save/load correctly
+- Cell format is not saving/loading
  
