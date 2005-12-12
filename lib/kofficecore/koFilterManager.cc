@@ -245,8 +245,21 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
     m_direction = Export; // vital information!
     m_exportUrl = url;
 
-    if ( m_document )
-        m_graph.setSourceMimeType( m_document->nativeFormatMimeType() );
+    KoFilterChain::Ptr chain = 0;
+    if ( m_document ) {
+        // We have to pick the right native mimetype as source.
+        QStringList nativeMimeTypes;
+        nativeMimeTypes.append( m_document->nativeFormatMimeType() );
+        nativeMimeTypes += m_document->extraNativeMimeTypes();
+        QStringList::ConstIterator it = nativeMimeTypes.begin();
+        const QStringList::ConstIterator end = nativeMimeTypes.end();
+        for ( ; !chain && it != end; ++it )
+        {
+            m_graph.setSourceMimeType( (*it).latin1() );
+            if ( m_graph.isValid() )
+                chain = m_graph.chain( this, mimeType );
+        }
+    }
     else if ( !m_importUrlMimetypeHint.isEmpty() ) {
         kdDebug(s_area) << "Using the mimetype hint: '" << m_importUrlMimetypeHint << "'" << endl;
         m_graph.setSourceMimeType( m_importUrlMimetypeHint );
@@ -282,10 +295,11 @@ KoFilter::ConversionStatus KoFilterManager::exp0rt( const QString& url, QCString
         return KoFilter::BadConversionGraph;
     }
 
-    KoFilterChain::Ptr chain = m_graph.chain( this, mimeType );
+    if ( !chain ) // already set when coming from the m_document case
+        chain = m_graph.chain( this, mimeType );
 
     if ( !chain ) {
-        kdError(s_area) << "Couldn't create a valid filter chain!" << endl;
+        kdError(s_area) << "Couldn't create a valid filter chain to " << mimeType << " !" << endl;
         KMessageBox::error( 0L, i18n("Could not export file."), i18n("Missing Export Filter") );
         return KoFilter::BadConversionGraph;
     }
@@ -338,7 +352,7 @@ namespace  // in order not to mess with the global namespace ;)
             QStringList nativeMimeTypes = ( *partIt ).service()->property( "X-KDE-ExtraNativeMimeTypes" ).toStringList();
             nativeMimeTypes += ( *partIt ).service()->property( "X-KDE-NativeMimeType" ).toString();
             QStringList::ConstIterator it = nativeMimeTypes.begin();
-            QStringList::ConstIterator end = nativeMimeTypes.end();
+            const QStringList::ConstIterator end = nativeMimeTypes.end();
             for ( ; it != end; ++it )
                 if ( !(*it).isEmpty() )
                     vertices.insert( (*it).latin1(), new Vertex( (*it).latin1() ) );
@@ -347,14 +361,14 @@ namespace  // in order not to mess with the global namespace ;)
 
         QValueList<KoFilterEntry::Ptr> filters = KoFilterEntry::query(); // no constraint here - we want *all* :)
         QValueList<KoFilterEntry::Ptr>::ConstIterator it = filters.begin();
-        QValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
+        const QValueList<KoFilterEntry::Ptr>::ConstIterator end = filters.end();
 
         for ( ; it != end; ++it ) {
 
             QStringList impList; // Import list
             QStringList expList; // Export list
 
-            QStringList::Iterator stopEnd = stopList.end();
+            const QStringList::Iterator stopEnd = stopList.end();
             // Now we have to exclude the "stop" mimetypes (in the right direction!)
             if ( direction == KoFilterManager::Import ) {
                 // Import: "stop" mime type should not appear in export
@@ -370,7 +384,7 @@ namespace  // in order not to mess with the global namespace ;)
             else {
                 // Export: "stop" mime type should not appear in import
                 QStringList::ConstIterator testIt = ( *it )->import.begin();
-                QStringList::ConstIterator testEnd = ( *it )->import.end();
+                const QStringList::ConstIterator testEnd = ( *it )->import.end();
                 for ( ; testIt != testEnd ; ++testIt ) {
                     if ( stopList.find( *testIt ) == stopEnd ) {
                         impList.append( *testIt );
@@ -388,7 +402,7 @@ namespace  // in order not to mess with the global namespace ;)
 
             // First add the "starting points" to the dict
             QStringList::ConstIterator importIt = impList.begin();
-            QStringList::ConstIterator importEnd = impList.end();
+            const QStringList::ConstIterator importEnd = impList.end();
             for ( ; importIt != importEnd; ++importIt ) {
                 const QCString key = ( *importIt ).latin1();  // latin1 is okay here (werner)
                 // already there?
@@ -399,7 +413,7 @@ namespace  // in order not to mess with the global namespace ;)
             // Are we allowed to use this filter at all?
             if ( KoFilterManager::filterAvailable( *it ) ) {
                 QStringList::ConstIterator exportIt = expList.begin();
-                QStringList::ConstIterator exportEnd = expList.end();
+                const QStringList::ConstIterator exportEnd = expList.end();
 
                 for ( ; exportIt != exportEnd; ++exportIt ) {
                     // First make sure the export vertex is in place
