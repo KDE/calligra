@@ -50,7 +50,7 @@ KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* pa
     grid1->addWidget(gb);
 
     polarMarker=new QCheckBox(i18n("Polar marker"), gb);
-    QWhatsThis::add(polarMarker, i18n("If this is checked, the polar markers are shown other wise they are not."));
+    QWhatsThis::add(polarMarker, i18n("If this is checked, the polar markers are shown; otherwise they are not."));
     showCircularLabel = new QCheckBox(i18n("Show circular label"), gb);
     QWhatsThis::add(showCircularLabel, i18n("Toggle the circular label display."));
 
@@ -60,7 +60,7 @@ KChartParameterPolarConfigPage::KChartParameterPolarConfigPage( KChartParams* pa
 
     label=new QLabel(i18n("Line width:"), gb);
     lineWidth=new QSpinBox(gb);
-    QWhatsThis::add(lineWidth, i18n("Set the width for the chart lines. 0 is default and is the thinner."));
+    QWhatsThis::add(lineWidth, i18n("Set the width for the chart lines. 0 is default and is the thinnest."));
 
     grid1->activate();
 }

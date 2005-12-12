@@ -101,11 +101,11 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
 
     QHBoxLayout * bottom = new QHBoxLayout( this );
     xtitle= new QLineEdit( gb2 );
-    QWhatsThis::add(xtitle, i18n("Write here the title for the X-axis if you want a title. The color for this title is set in the Colors tab in the same dialog and the font is set in the Font tab."));
+    QWhatsThis::add(xtitle, i18n("Write the title for the X-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
     bottom->addWidget(xtitle);
     QBoxLayout * l = new QVBoxLayout( this );
     ytitle= new QLineEdit( gb2 );
-    QWhatsThis::add(ytitle, i18n("Write here the title for the Y-axis if you want a title. The color for this title is set in the Colors tab in the same dialog and the font is set in the Font tab."));
+    QWhatsThis::add(ytitle, i18n("Write the title for the Y-axis here, if you want a title. The color for this title is set in the Colors tab, in the same dialog, and the font is set in the Font tab."));
     bottom->addWidget(ytitle);
 
     l->addLayout(top);
@@ -127,11 +127,11 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     QWhatsThis::add(automatic_precision, i18n("This sets the precision as automatic which means."));
     automatic_precision->setChecked(true);
     max = new QRadioButton( i18n("Decimal precision:"), precision);
-    QWhatsThis::add(max, i18n("This sets the Y-axis precision For example, if you choose 2 as precision, instead of 5, 5.00 will be displayed aside the Y-axis."));
+    QWhatsThis::add(max, i18n("This sets the Y-axis precision. For example, if you choose a precision of 2, the value 5 will be displayed as 5.00 alongside the Y-axis."));
     connect(automatic_precision, SIGNAL(toggled(bool)), this,
             SLOT(automatic_precision_toggled(bool)) );
     maximum_length = new QSpinBox(0, 15, 1, precision );
-    QWhatsThis::add(maximum_length, i18n("Set the precision you want to display for the Y-axis if you choose Decimal precision. It ranges from 0 to 15 and default is 2."));
+    QWhatsThis::add(maximum_length, i18n("Set the precision you want to display for the Y-axis, if you choose Decimal precision. The range is 0 to 15; 2 being the default."));
     maximum_length->setValue(2);
 
 #if 0

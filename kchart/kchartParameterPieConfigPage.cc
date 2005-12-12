@@ -53,13 +53,13 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
     grid1->addWidget(gb);
 
     pie3d = new QCheckBox(i18n("Pie 3D"), gb);
-    QWhatsThis::add(pie3d, i18n("Uncheck that option if you don't want a 3D effect for your pie."));
+    QWhatsThis::add(pie3d, i18n("Uncheck this option if you do not want a 3D effect for your pie."));
     drawShadowColor=new QCheckBox(i18n("Draw shadow color"), gb);
-    QWhatsThis::add(drawShadowColor, i18n("Uncheck that option if you don't want a shadow color on a 3D pie."));
+    QWhatsThis::add(drawShadowColor, i18n("Uncheck this option if you do not want a shadow color on a 3D pie."));
 
     QLabel *label = new QLabel( i18n( "Explode factor (%):" ), gb );
     explode = new QSpinBox(0, 100, 1, gb);
-    QWhatsThis::add(explode, i18n("This will break the parts of your pie by separating them. Default is 0 which means the pie is whole."));
+    QWhatsThis::add(explode, i18n("This will place gaps between the segments of your pie. Default is 0 which means the pie is a whole."));
 
     label = new QLabel( i18n( "Start angle:" ), gb );
     angle = new QSpinBox(0, 90, 1, gb);
@@ -67,7 +67,7 @@ KChartParameterPieConfigPage::KChartParameterPieConfigPage( KChartParams* params
 
     label = new QLabel( i18n( "3D-depth:" ), gb );
     depth = new QSpinBox(0, 40, 1, gb);
-    QWhatsThis::add(depth, i18n("Set the depth from 0 to 40 of the 3D effect if you have checked Pie 3D. Default is 20."));
+    QWhatsThis::add(depth, i18n("Set the depth from 0 to 40 of the 3D effect, if you have checked Pie 3D. Default is 20."));
 
     grid1->activate();
 
