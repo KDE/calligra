@@ -481,6 +481,12 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
     {
         // See if we clicked on a frame's border
         m_mouseMeaning = m_frameViewManager->mouseMeaning( docPoint, e->state());
+        if (! (viewMode()->hasFrames() && m_mouseMeaning == MEANING_MOUSE_INSIDE ||
+                    m_mouseMeaning == MEANING_MOUSE_OVER_LINK ||
+                    m_mouseMeaning == MEANING_MOUSE_OVER_FOOTNOTE ||
+                    m_mouseMeaning == MEANING_MOUSE_INSIDE_TEXT) )
+            break; // limited functionality when no frames allowed.
+
         //kdDebug(32001) << "contentsMousePressEvent meaning=" << m_mouseMeaning << endl;
         switch ( m_mouseMeaning )  {
         case MEANING_MOUSE_MOVE:
@@ -1249,7 +1255,10 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                 resetStatusBarText();
                 break;
             }
-            viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, e->state() ) );
+            if(viewMode()->hasFrames())
+                viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, e->state() ) );
+            else
+                viewport()->setCursor( Qt::ibeamCursor );
         }
     }
 }
