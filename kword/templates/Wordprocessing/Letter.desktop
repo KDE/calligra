@@ -66,3 +66,4 @@ Comment[wa]=Fé on documint US Letter vude.
 Comment[xx]=xxCreates an empty US Letter document.xx
 Comment[zh_CN]=创建空的美式信函文档。
 Icon=template_letter
+X-KDE-MeasureSystem=imperial
