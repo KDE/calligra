@@ -126,13 +126,15 @@ void KWPartFrameSet::updateChildGeometry( KWViewMode* viewMode )
         QRect r = m_doc->zoomRect( *m_frames.first() ); // in normal coordinates.
         KoRect childGeom = m_doc->unzoomRect( viewMode->normalToView( r ) );
         m_child->setGeometry( childGeom.toQRect() ); // rounding problems. TODO: port KoChild to KoRect.
-        //m_child->setGeometry( viewMode->normalToView( m_doc->zoomRect( *m_frames.first() ) ) );
     } else
         m_child->setGeometry( m_frames.first()->toQRect() );
 }
 
 void KWPartFrameSet::slotChildChanged()
 {
+// TODO: This method is going to crash since it should not use layoutViewMode() for zooming (can't work)
+// uncommenting until I figure out what its suppost to do so we can refactor it to work properly.
+#if 0
     // This is called when the KoDocumentChild is resized (using the KoFrame)
     // We need to react on it in KWPartFrameSetEdit because the view-mode has to be taken into account
     // (Currently not true, since the viewmode is the same in all views, but...)
@@ -159,6 +161,7 @@ void KWPartFrameSet::slotChildChanged()
     }
     else
         kdDebug(32001) << "Frame not found!" << endl;
+#endif
 }
 
 QDomElement KWPartFrameSet::save( QDomElement &parentElem, bool saveFrames )
