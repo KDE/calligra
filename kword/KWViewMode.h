@@ -29,6 +29,7 @@ class KWFrameSet;
 class KWCanvas;
 class KoRuler;
 class KoPageLayout;
+class KWPage;
 
 /**
  * Abstract base class for KWCanvas's view modes.
@@ -159,6 +160,9 @@ public:
     virtual const QString type() const { return "ModeNormal"; }
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
+
+protected:
+    virtual int xOffset(KWPage *page, int canvasWidth = -1);
 };
 
 /** The view mode used when printing (pages under one another, no selections) */
@@ -169,6 +173,8 @@ public:
         : KWViewModeNormal( doc, canvas, false /*drawFrameBorders*/ ) {}
     virtual ~KWViewModePrint() {}
     virtual bool drawSelections() { return false; }
+protected:
+    int xOffset(KWPage *page, int canvasWidth = -1);
 };
 
 /** The 'embedded' view mode (usually a single page, no selections) */

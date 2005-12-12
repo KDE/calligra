@@ -197,8 +197,7 @@ QPoint KWViewModeNormal::normalToView( const QPoint & nPoint )
     }
     // Center horizontally
     Q_ASSERT(canvas());
-    int xOffset = kMax( 0, ( canvas()->visibleWidth() - m_doc->zoomItX( page->width() ) ) / 2 );
-    return QPoint( xOffset + nPoint.x(), nPoint.y() );
+    return QPoint( xOffset(page) + nPoint.x(), nPoint.y() );
 }
 
 QPoint KWViewModeNormal::viewToNormal( const QPoint & vPoint )
@@ -211,8 +210,13 @@ QPoint KWViewModeNormal::viewToNormal( const QPoint & vPoint )
         return QPoint(0,0);
     }
     Q_ASSERT(canvas());
-    int xOffset = kMax( 0, ( canvas()->visibleWidth() - m_doc->zoomItX( page->width() ) ) / 2 );
-    return QPoint( vPoint.x() - xOffset, vPoint.y() );
+    return QPoint( vPoint.x() - xOffset(page), vPoint.y() );
+}
+
+int KWViewModeNormal::xOffset(KWPage *page, int canvasWidth /* = -1 */) {
+    if(canvasWidth < 0)
+        canvasWidth = canvas()->visibleWidth();
+    return kMax( 0, ( canvasWidth - m_doc->zoomItX( page->width() ) ) / 2 );
 }
 
 void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion )
@@ -236,13 +240,13 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
         if ( crect.bottom() < topOfPage )
             break;
         // Center horizontally
-        int xOffset = kMax( 0, ( canvasWidth - pageWidth ) / 2 );
+        int x = xOffset(page, canvasWidth);
         // Draw page border (and erase empty area inside page)
-        pageRect = QRect( xOffset, topOfPage, pageWidth, pageHeight );
+        pageRect = QRect( x, topOfPage, pageWidth, pageHeight );
         drawOnePageBorder( painter, crect, pageRect, emptySpaceRegion );
 
         // The area on the left of the page
-        QRect leftArea( 0, topOfPage, xOffset, pageHeight );
+        QRect leftArea( 0, topOfPage, x, pageHeight );
         leftArea &= crect;
         if ( !leftArea.isEmpty() ) {
             painter->fillRect( leftArea,
@@ -250,7 +254,7 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
         }
 
         // The area on the right of the page
-        QRect rightArea( xOffset + pageWidth, topOfPage, crect.right() - pageWidth + 1, pageHeight );
+        QRect rightArea( x + pageWidth, topOfPage, crect.right() - pageWidth + 1, pageHeight );
         rightArea &= crect;
         if ( !rightArea.isEmpty() )
         {
@@ -559,4 +563,11 @@ void KWViewModeText::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPa
 
 bool KWViewModeText::isTextModeFrameset(KWFrameSet *fs) const {
     return fs==m_textFrameSet;
+}
+
+
+int KWViewModePrint::xOffset(KWPage *page, int canvasWidth) {
+    Q_UNUSED(page);
+    Q_UNUSED(canvasWidth);
+    return 0;
 }
