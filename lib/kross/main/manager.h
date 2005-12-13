@@ -89,6 +89,18 @@ namespace Kross { namespace Api {
             InterpreterInfo* getInterpreterInfo(const QString& interpretername);
 
             /**
+             * \return the name of the \a Interpreter that feels responsible
+             * for the defined \p file .
+             *
+             * \param file The filename we should try to determinate the
+             *        interpretername for.
+             * \return The name of the \a Interpreter which will be used
+             *        to execute the file or QString::null if we failed
+             *        to determinate a matching interpreter for the file.
+             */
+            const QString& getInterpreternameForFile(const QString& file);
+
+            /**
              * Return the existing \a ScriptContainer with scriptname
              * or create a new \a ScriptContainer instance and associate
              * the passed scriptname with it.

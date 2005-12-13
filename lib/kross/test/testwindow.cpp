@@ -27,9 +27,13 @@
 #include <qcombobox.h>
 #include <ktextedit.h>
 #include <kpushbutton.h>
+#include <kpopupmenu.h>
+#include <kmenubar.h>
+#include <kstandarddirs.h>
 
 #include <kdebug.h>
 
+#include <qpopupmenu.h>
 TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode)
     : KMainWindow()
     , m_interpretername(interpretername)
@@ -38,6 +42,18 @@ TestWindow::TestWindow(const QString& interpretername, const QString& scriptcode
     Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
     manager->addModule( new TestPluginModule("krosstestpluginmodule") );
     m_scriptcontainer = manager->getScriptContainer("test");
+
+    KPopupMenu *menuFile = new KPopupMenu( this );
+    menuBar()->insertItem( "&File", menuFile );
+
+    m_scriptextension = new Kross::Api::ScriptGUIClient(this, this);
+    m_scriptextension->setXMLFile( KGlobal::dirs()->findResource("appdata", "testscripting.rc") );
+
+    m_scriptextension->action("executescriptfile")->plug(menuFile);
+    //m_scriptextension->action("configurescripts")->plug(menuFile);
+    //menuFile->insertSeparator();
+    m_scriptextension->action("scripts")->plug(menuFile);
+    //menuFile->insertItem( ( (KActionMenu*)m_scriptextension->action("scripts") )->popupMenu() );
 
     QVBox* mainbox = new QVBox(this);
 

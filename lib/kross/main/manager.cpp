@@ -30,6 +30,7 @@
 
 #include <qobject.h>
 #include <qfile.h>
+#include <qregexp.h>
 #include <kdebug.h>
 #include <kstaticdeleter.h>
 #include <klibloader.h>
@@ -121,13 +122,20 @@ InterpreterInfo* Manager::getInterpreterInfo(const QString& interpretername)
     return d->interpreterinfos[interpretername];
 }
 
+const QString& Manager::getInterpreternameForFile(const QString& file)
+{
+    QRegExp rx;
+    rx.setWildcard(true);
+    for(QMap<QString, InterpreterInfo*>::Iterator it = d->interpreterinfos.begin(); it != d->interpreterinfos.end(); ++it) {
+        rx.setPattern((*it)->getWildcard());
+        if( file.find(rx) >= 0 )
+            return (*it)->getInterpretername();
+    }
+    return QString::null;
+}
+
 ScriptContainer::Ptr Manager::getScriptContainer(const QString& scriptname)
 {
-    if(hadException()) {
-        kdDebug() << QString("Kross::Api::Manager::getScriptContainer(%1) hadException: %2").arg(scriptname).arg(getException()->toString()) << endl;
-        return 0;
-    }
-
     //TODO at the moment we don't share ScriptContainer instances.
 
     //if(d->m_scriptcontainers.contains(scriptname))

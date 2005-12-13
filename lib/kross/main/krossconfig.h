@@ -77,6 +77,7 @@ namespace Kross {
         #define KROSS_API_EVENTSIGNAL_CALL_DEBUG
     }
 
+    //TODO move to kexi/scripting/*
     /**
      * Wrapper around the Kexi::KexiDB classes.
      *

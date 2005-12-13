@@ -49,12 +49,17 @@ const QString Exception::toString()
         : QString("Exception: %1").arg(m_error);
 }
 
-const QString& Exception::getError()
+const QString& Exception::getError() const
 {
     return m_error;
 }
 
-long Exception::getLineNo()
+const QString& Exception::getTrace() const
+{
+    return m_trace;
+}
+
+long Exception::getLineNo() const
 {
     return m_lineno;
 }

@@ -44,6 +44,9 @@ namespace Kross { namespace Api {
      * scripting code. The \a Manager takes care of
      * handling the ScriptContainer instances application
      * width.
+     *
+     * The class \a ScriptAction provides a higher level class
+     * to work with a \a ScriptContainer instances.
      */
     class ScriptContainer : public MainModule
     {
@@ -65,7 +68,7 @@ namespace Kross { namespace Api {
              *       has. It's used e.g. at the \a Manager to
              *       identify the ScriptContainer.
              */
-            ScriptContainer(const QString& name);
+            explicit ScriptContainer(const QString& name);
 
         public:
 
@@ -81,29 +84,44 @@ namespace Kross { namespace Api {
              * Return the unique name this ScriptContainer is
              * reachable as.
              */
-            const QString& getName();
+            const QString& getName() const;
 
             /**
              * Return the scriptcode this ScriptContainer holds.
              */
-            const QString& getCode();
+            const QString& getCode() const;
 
             /**
              * Set the scriptcode this ScriptContainer holds.
              */
-            void setCode(const QString&);
+            void setCode(const QString& code);
 
             /**
              * \return the name of the interpreter used
              * on \a execute.
              */
-            const QString& getInterpreterName();
+            const QString& getInterpreterName() const;
 
             /**
              * Set the name of the interpreter used
              * on \a execute.
              */
-            void setInterpreterName(const QString&);
+            void setInterpreterName(const QString& interpretername);
+
+            /**
+             * \return the filename which will be executed
+             * on \a execute.
+             */
+            const QString& getFile() const;
+
+            /**
+             * Set the filename which will be executed
+             * on \a execute. The \p scriptfile needs to
+             * be a valid local file or QString::null if
+             * you don't like to use a file rather then
+             * the with \a setCode() defined scripting code.
+             */
+            void setFile(const QString& scriptfile);
 
             /**
              * \return the value of the option defined with \p name .
@@ -152,7 +170,7 @@ namespace Kross { namespace Api {
             /**
              * Create and return a new class instance.
              */
-            KSharedPtr<Object> classInstance(const QString& name);
+            KSharedPtr<Object> classInstance(const QString& classname);
 
             /**
              * Initialize the \a Script instance.

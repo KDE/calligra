@@ -42,6 +42,9 @@ namespace Kross { namespace Api {
             /// The error message.
             QString m_error;
 
+            /// The trace message.
+            QString m_trace;
+
             /// The line number where the exception got thrown
             long m_lineno;
 
@@ -78,14 +81,20 @@ namespace Kross { namespace Api {
             /**
              * \return the error message.
              */
-            const QString& getError();
+            const QString& getError() const;
+
+            /**
+             * \return a more detailed tracemessage or QString::null if
+             * there is no trace avaiable.
+             */
+            const QString& getTrace() const;
 
             /**
              * \return the line number in the scripting code
              * where the exception got thrown or -1 if there
              * was no line number defined.
              */
-            long getLineNo();
+            long getLineNo() const;
     };
 
 }}

@@ -22,6 +22,7 @@
 
 #include "../main/manager.h"
 #include "../main/scriptcontainer.h"
+#include "../main/scriptguiclient.h"
 #include "../api/object.h"
 
 //#include <qobject.h>
@@ -45,6 +46,7 @@ class TestWindow : public KMainWindow
         QString m_scriptcode;
 
         Kross::Api::ScriptContainer::Ptr m_scriptcontainer;
+        Kross::Api::ScriptGUIClient* m_scriptextension;
 
         QComboBox* m_interpretercombo;
         KTextEdit* m_codeedit;

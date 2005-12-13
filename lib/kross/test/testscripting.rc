@@ -1,0 +1,34 @@
+<KrossScripting>
+  <Scripts>
+
+    <ScriptAction name="sa1name" text="ScriptAction1Text" interpreter="python" icon="exec">
+print "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+print "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    </ScriptAction>
+
+    <ScriptAction
+      name="importxhtml"
+      text="Import Data from XHTML File"
+      icon="fileimport"
+      interpreter="python"
+      resource="appdata"
+      file="kross/python/ImportXHTML.py" />
+
+    <ScriptAction
+      name="exportxhtml"
+      text="Export Data to XHTML File"
+      icon="fileexport"
+      interpreter="python"
+      resource="appdata"
+      file="kross/python/ExportXHTML.py" />
+
+    <ScriptAction
+      name="projectdocumentator"
+      text="Project Documentator"
+      icon="contents"
+      interpreter="python"
+      resource="appdata"
+      file="kross/python/ProjectDocumentator.py" />
+
+  </Scripts>
+</KrossScripting>
