@@ -390,12 +390,12 @@ Sheet::Sheet (Map* map,
 
   // initialize dependencies
   d->dependencies = new KSpread::DependencyManager (this);
-  
+
   // connect to named area slots
   QObject::connect( doc(), SIGNAL( sig_addAreaName( const QString & ) ),
     this, SLOT( slotAreaModified( const QString & ) ) );
 
-  QObject::connect( doc(), SIGNAL( sig_removeAreaName( const QString & ) ), 
+  QObject::connect( doc(), SIGNAL( sig_removeAreaName( const QString & ) ),
     this, SLOT( slotAreaModified( const QString & ) ) );
 
 
@@ -7809,7 +7809,7 @@ void Sheet::saveOasisPrintStyleLayout( KoGenStyle &style ) const
     if ( d->print->printGrid() )
         printParameter="grid ";
     if ( d->showFormula )
-        printParameter="formulas ";
+        printParameter+="formulas ";
     if ( !printParameter.isEmpty() )
         style.addProperty( "style:print", printParameter );
 }
