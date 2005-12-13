@@ -268,14 +268,14 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
 
   connect( m_pDoc, SIGNAL( sig_selectionChanged() ), SLOT( updateToolBars() ) );
-  connect( m_pDoc, SIGNAL( sig_addPage(KivioPage*) ), SLOT( slotAddPage(KivioPage*) ) );
+  connect( m_pDoc, SIGNAL( sig_addPage(KivioPage*) ), SLOT( addPage(KivioPage*) ) );
   connect( m_pDoc, SIGNAL( sig_addSpawnerSet(KivioStencilSpawnerSet*) ), SLOT(addSpawnerToStackBar(KivioStencilSpawnerSet*)) );
   connect( m_pDoc, SIGNAL( sig_updateView(KivioPage*) ), SLOT(slotUpdateView(KivioPage*)) );
   connect( m_pDoc, SIGNAL( sig_pageNameChanged(KivioPage*,const QString&)), SLOT(slotPageRenamed(KivioPage*,const QString&)) );
 
   connect( m_pDoc, SIGNAL( sig_updateGrid()),SLOT(slotUpdateGrid()));
 
-  connect(m_pDoc, SIGNAL(updateActivePage(KivioPage*)), this, SLOT(setActivePage(KivioPage*)));
+  connect(m_pDoc, SIGNAL(loadingFinished()), this, SLOT(loadingFinished()));
 
   initActions();
 
@@ -779,11 +779,6 @@ void KivioView::removePage()
       cmd->execute();
       doc()->addCommand( cmd );
   }
-}
-
-void KivioView::slotAddPage( KivioPage* page )
-{
-  addPage(page);
 }
 
 void KivioView::slotUpdateView( KivioPage* page )
@@ -2211,6 +2206,33 @@ void KivioView::updatePageStatusLabel()
 void KivioView::setStatusBarInfo(const QString& text)
 {
   m_infoSLbl->setText(text);
+}
+
+void KivioView::loadingFinished()
+{
+  m_pTabBar->clear();
+  QPtrList<KivioPage> pages = m_pDoc->map()->pageList();
+  QPtrListIterator<KivioPage> it(pages);
+  KivioPage* page;
+
+  while((page = it.current()) != 0) {
+    ++it;
+    addPage(page);
+  }
+
+  setActivePage(m_pDoc->map()->firstPage());
+  m_pTabBar->setActiveTab(activePage()->pageName());
+
+  if( m_pDoc->isReadWrite() ) // only if not embedded in Konqueror
+  {
+    KivioStencilSpawnerSet *pSet;
+    pSet = m_pDoc->spawnerSets()->first();
+    while( pSet )
+    {
+      addSpawnerToStackBar( pSet );
+      pSet = m_pDoc->spawnerSets()->next();
+    }
+  }
 }
 
 #include "kivio_view.moc"

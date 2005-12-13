@@ -93,8 +93,6 @@ class KIVIO_EXPORT KivioView : public KoView
     KivioCanvas* canvasWidget() const { return m_pCanvas; }
     KivioDoc* doc()const { return m_pDoc; }
 
-    void addPage( KivioPage* );
-    void removePage( KivioPage* );
     KivioPage* activePage() const;
 
     void setActiveSpawnerSet( KivioStencilSpawnerSet* );
@@ -168,6 +166,8 @@ class KIVIO_EXPORT KivioView : public KoView
     void toggleStencilGeometry(bool);
     void toggleViewManager(bool);
 
+    void addPage( KivioPage* );
+    void removePage( KivioPage* );
     void insertPage();
     void removePage();
     void renamePage();
@@ -214,7 +214,6 @@ class KIVIO_EXPORT KivioView : public KoView
     void setStatusBarInfo(const QString& text);
 
   protected slots:
-    void slotAddPage( KivioPage *_page );
     void slotPageRenamed( KivioPage* page, const QString& old_name );
     void slotUpdateView( KivioPage *_page );
     void slotUpdateGrid();
@@ -271,6 +270,9 @@ class KIVIO_EXPORT KivioView : public KoView
     void clipboardDataChanged();
 
     void installStencilSet();
+
+    /// This slot gets called when the loading has finished (doh!)
+    void loadingFinished();
 
   protected:
     void setupActions();

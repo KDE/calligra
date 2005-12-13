@@ -448,7 +448,7 @@ bool KivioDoc::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, c
 
   loadOasisSettings( settings );
 
-  emit updateActivePage(m_pMap->firstPage());
+  emit loadingFinished();
   return true;
 }
 
@@ -535,7 +535,7 @@ bool KivioDoc::loadXML( QIODevice *, const QDomDocument& doc )
     gridData.load(kivio,"grid");
   }
 
-  emit updateActivePage(m_pMap->firstPage());
+  emit loadingFinished();
   return true;
 }
 
