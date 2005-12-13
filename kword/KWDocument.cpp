@@ -3670,11 +3670,12 @@ KoView* KWDocument::createViewInstance( QWidget* parent, const char* name )
 // This is also used to paint the preview.png that goes into the ZIP file
 void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool transparent, double zoomX, double zoomY )
 {
-    //kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
+    kdDebug(32001) << "KWDocument::paintContent m_zoom=" << m_zoom << " zoomX=" << zoomX << " zoomY=" << zoomY << " transparent=" << transparent << endl;
 
     setZoom( 100 );
     if ( m_zoomedResolutionX != zoomX || m_zoomedResolutionY != zoomY )
     {
+        kdDebug() << "m_zoomedResolutionX=" << m_zoomedResolutionX << " != " << zoomX << " -> calling setResolution(" << zoomX << ")" << endl;
         setResolution( zoomX, zoomY );
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
         newZoomAndResolution( false, forPrint );
@@ -3703,7 +3704,8 @@ void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool t
     {
         KWFrameSet * frameset = fit.current();
         if ( frameset->isVisible( viewMode ) && !frameset->isFloating() )
-            frameset->drawContents( &painter, rect, cg, false /*onlyChanged*/, true /*resetChanged*/,
+            frameset->drawContents( &painter, rect, cg,
+                                    false /*onlyChanged*/, true /*resetChanged*/,
                                     0L, viewMode, 0 );
     }
     delete viewMode;

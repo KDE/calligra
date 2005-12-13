@@ -32,7 +32,7 @@ class KoPoint {
 public:
     KoPoint() { m_x = 0; m_y = 0; }
     KoPoint(const double &x, const double &y) : m_x(x), m_y(y) {}
-    KoPoint(const QPoint & p) : m_x(p.x()), m_y(p.y()) {}
+    explicit KoPoint(const QPoint & p) : m_x(p.x()), m_y(p.y()) {}
     ~KoPoint() {}
 
     bool operator==(const KoPoint &rhs) const { return QABS(m_x-rhs.x()) < 1E-10 && QABS(m_y-rhs.y()) < 1E-10; }
@@ -81,6 +81,12 @@ public:
     double manhattanLength() const
     {
       return QABS( m_x ) + QABS( m_y );
+    }
+
+    /// Convert to a QPoint - with precision loss!
+    QPoint toQPoint() const
+    {
+      return QPoint( qRound( m_x ), qRound( m_y ) );
     }
 
 private:

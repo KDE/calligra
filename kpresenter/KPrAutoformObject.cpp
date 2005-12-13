@@ -267,8 +267,9 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
             {
                 if ( lineBegin != L_NORMAL && !drawContour )
                 {
-                    QPoint pnt1( pntArray2.at( 0 ) ), pnt2( pntArray2.at( 1 ) ), pnt3, pnt4( pntArray.at( 0 ) );
-                    float _angle = KoPoint::getAngle( pnt1, pnt2 );
+                    QPoint pnt1( pntArray2.at( 0 ) ), pnt2( pntArray2.at( 1 ) );
+                    QPoint pnt3, pnt4( pntArray.at( 0 ) );
+                    float _angle = KoPoint::getAngle( KoPoint( pnt1 ), KoPoint( pnt2 ) );
 
                     switch ( static_cast<int>( _angle ) )
                     {
@@ -304,7 +305,7 @@ void KPrAutoformObject::paint( QPainter* _painter, KoTextZoomHandler *_zoomHandl
                 {
                     QPoint pnt1( pntArray2.at( pntArray2.size() - 1 ) ), pnt2( pntArray2.at( pntArray2.size() - 2 ) );
                     QPoint  pnt3, pnt4( pntArray.at( pntArray.size() - 1 ) );
-                    float _angle = KoPoint::getAngle( pnt1, pnt2 );
+                    float _angle = KoPoint::getAngle( KoPoint( pnt1 ), KoPoint( pnt2 ) );
 
                     switch ( ( int )_angle )
                     {

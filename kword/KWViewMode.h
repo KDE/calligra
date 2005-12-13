@@ -174,7 +174,7 @@ public:
     virtual ~KWViewModePrint() {}
     virtual bool drawSelections() { return false; }
 protected:
-    int xOffset(KWPage *page, int canvasWidth = -1);
+    virtual int xOffset(KWPage *page, int canvasWidth = -1);
 };
 
 /** The 'embedded' view mode (usually a single page, no selections) */

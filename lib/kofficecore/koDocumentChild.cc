@@ -102,12 +102,12 @@ KoDocument *KoDocumentChild::document() const
   return d->m_doc;
 }
 
-KoDocument *KoDocumentChild::parentDocument() const
+KoDocument* KoDocumentChild::parentDocument() const
 {
   return d->m_parent;
 }
 
-KoDocument *KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
+KoDocument* KoDocumentChild::hitTest( const QPoint &p, const QWMatrix &_matrix )
 {
   if ( !region( _matrix ).contains( p ) || !document() )
     return 0L;

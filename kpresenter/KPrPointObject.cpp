@@ -220,7 +220,7 @@ void KPrPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
 
             QPoint point = (*it1);
             if ( startPoint != point ) {
-                float angle = KoPoint::getAngle( startPoint, point );
+                float angle = KoPoint::getAngle( KoPoint( startPoint ), KoPoint( point ) );
                 drawFigureWithOffset( lineBegin, _painter, startPoint, pen2.color(), _w, angle,_zoomHandler );
 
                 break;
@@ -240,7 +240,7 @@ void KPrPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
 
             QPoint point = (*it2);
             if ( endPoint != point ) {
-                float angle = KoPoint::getAngle( endPoint, point );
+                float angle = KoPoint::getAngle( KoPoint( endPoint ), KoPoint( point ) );
                 drawFigureWithOffset( lineEnd, _painter, endPoint, pen2.color(), _w, angle,_zoomHandler );
 
                 break;

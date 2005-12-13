@@ -22,16 +22,21 @@
 #include <qobject.h>
 #include <qwmatrix.h>
 #include <koffice_export.h>
+
 /**
  * KoChild is an abstract base class that represents the geometry
  * associated with an embedded document. In general it handles its position
- * relative to the embedded documents parent.
+ * relative to the embedded document's parent.
  *
  * In detail it handles size, matrix operations and can give you
  * a clip region. It can deal with scaling, rotation etc. because it
  * makes heavy usage of QWMatrix.
  *
- * @see KoDocumentChild
+ * After applying the matrix, viewGeometry() applies zooming, but can be
+ * reimplemented to also apply e.g. some translation by the application
+ * (e.g. for centering the page).
+ *
+ * @see KoDocumentChild KoViewChild
  */
 class KOFFICECORE_EXPORT KoChild : public QObject
 {
@@ -57,17 +62,18 @@ public:
    *  Sets a new geometry for this child document.
    *  Use noEmit = true if you do not want the 'changed'-signal to be emitted
    */
-  virtual void setGeometry( const QRect &rect, bool noEmit = false );
+  void setGeometry( const QRect &rect, bool noEmit = false );
 
   /**
    * @return the rectangle that would be used to display this
    *         child document if the child is not rotated or
    *         subject to some other geometric transformation.
-   *         The rectangle is in the coordinate system of the parent.
+   *         The rectangle is in the coordinate system of the parent,
+   *         using unzoomed coordinates in points.
    *
    * @see #setGeometry
    */
-  virtual QRect geometry() const;
+  QRect geometry() const;
 
   /**
    * @return the region of this child part relative to the
@@ -89,14 +95,14 @@ public:
    * Tests whether the part contains a certain point. The point is
    * in the coordinate system of the parent.
    */
-  virtual bool contains( const QPoint& ) const;
+  //virtual bool contains( const QPoint& ) const;
 
   /**
    * @return the effective bounding rect after all transformations.
    *         The coordinates of the rectangle are in the coordinate system
    *         of the parent.
    */
-  virtual QRect boundingRect( const QWMatrix &matrix = QWMatrix() ) const;
+  QRect boundingRect() const;
 
   /**
    * Scales the content of the child part. However, that does not
@@ -153,7 +159,7 @@ public:
    * @return true if the child part is an orthogonal rectangle relative
    *         to its parents coordinate system.
    */
-  virtual bool isRectangle() const;
+  bool isRectangle() const;
 
   /**
    * Sets the clip region of the painter, so that only pixels of the
@@ -182,8 +188,8 @@ public:
 
   /**
    * @return the contents rectangle that is visible.
-   *         This value depends on the scaling and the
-   *         geometry.
+   *         This value depends on the scaling and the geometry.
+   *         This is the value that is passed to KoDocument::paintContent.
    *
    * @see #xScaling #geometry
    */
@@ -194,7 +200,7 @@ public:
    *         If solid is set to true the complete area of the child region
    *         is returned, otherwise only the child border is returned.
    */
-  virtual QRegion frameRegion( const QWMatrix& matrix, bool solid = false ) const;
+  virtual QRegion frameRegion( const QWMatrix& matrix = QWMatrix(), bool solid = false ) const;
 
   /**
    * @return the frame geometry including a border (6 pixels) as a point
@@ -266,11 +272,10 @@ public:
    * for the inner area.
    * @return the gadget identification for the hit area.
    * @param p the hit position.
-   * @param matrix the transformation for p.
    *
    * @see #Gadget
    */
-  virtual Gadget gadgetHitTest( const QPoint& p, const QWMatrix& matrix );
+  virtual Gadget gadgetHitTest( const QPoint& p );
 
 signals:
 
@@ -290,7 +295,7 @@ protected:
    *  @param matrix the transformation of r.
    *  @param r the rectangle for which the point array should be created.
    */
-  virtual QPointArray pointArray( const QRect& r, const QWMatrix& matrix ) const;
+  virtual QPointArray pointArray( const QRect& r, const QWMatrix& matrix = QWMatrix() ) const;
 
   /**
    * Stores the current transformation of this child into a matrix.

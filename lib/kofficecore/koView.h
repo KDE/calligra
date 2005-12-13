@@ -248,8 +248,37 @@ public:
    * Currently only scaling is supported.
    *
    * The matrix changes when calling @ref #setZoom.
+   *
+   * @deprecated, use applyViewTransformations / reverseViewTransformations instead.
    */
-  virtual QWMatrix matrix() const;
+  virtual QWMatrix matrix() const KDE_DEPRECATED;
+
+  /**
+   * Apply the transformations that the view makes to its contents.
+   * This is used for embedded objects.
+   * By default this simply applies the zoom().
+   * Reimplement to add some translation if needed (e.g. to center the page)
+   */
+  virtual QPoint applyViewTransformations( const QPoint& ) const;
+
+  /**
+   * Reverse the transformations that the view makes to its contents,
+   * i.e. undo the transformations done by applyViewTransformations().
+   * This is used for embedded objects.
+   * By default this simply unzooms the point.
+   * Reimplement to add some translation if needed (e.g. to center the page)
+   */
+  virtual QPoint reverseViewTransformations( const QPoint& ) const;
+
+  /**
+   * Overload for QRect, usually it's not needed to reimplement this one.
+   */
+  virtual QRect applyViewTransformations( const QRect& ) const;
+
+  /**
+   * Overload for QRect, usually it's not needed to reimplement this one.
+   */
+  virtual QRect reverseViewTransformations( const QRect& ) const;
 
   /**
    * @return the KoViewChild which is responsible for the @p view or 0.
@@ -438,7 +467,7 @@ private:
 };
 
 /**
- * This class aggregates information about an embedded document.
+ * This class represents an active embedded document.
  */
 class KoViewChild : public KoChild
 {
@@ -451,21 +480,10 @@ public:
   KoView *parentView() const { return m_parentView; }
   KoFrame *frame() const { return m_frame; }
 
-protected:
-  /// Return the geometry to give the documentChild based on the given unzoomed view rect.
-  /// Reimplement if the position of the viewChild doesn't match the position
-  /// of the documentChild.
-  /// TODO: use KoRect for everything in KoDocumentChild, pass the zoomed view geometry and return a KoRect
-  virtual QRect documentChildGeometry( const QRect& unzoomedViewGeometry ) const;
-
-  /// Return the geometry to give the viewChild based on the given documentChild geometry.
-  /// This is the opposite of documentChildGeometry().
-  /// TODO: use KoRect for everything in KoDocumentChild, and turn the arg into KoRect
-  virtual QRect viewChildGeometry( const QRect& childGeometry ) const;
-
 private slots:
   void slotFrameGeometryChanged();
   void slotDocGeometryChanged();
+
 private:
   QGuardedPtr<KoDocumentChild> m_child;
   QGuardedPtr<KoFrame> m_frame;

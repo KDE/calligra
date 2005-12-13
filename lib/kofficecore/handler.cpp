@@ -284,7 +284,7 @@ ContainerHandler::~ContainerHandler()
 }
 
 bool ContainerHandler::eventFilter( QObject*, QEvent* ev )
-{ 
+{
     if ( ev->type() == QEvent::KeyPress )
     {
 	QKeyEvent* keyEvent=(QKeyEvent*)ev;
@@ -358,6 +358,8 @@ KoChild *ContainerHandler::child(KoChild::Gadget &gadget, QPoint &pos, const QMo
 
     pos = ev->pos(); //+ QPoint(m_view->canvasXOffset(), m_view->canvasYOffset());
 
+    pos = m_view->reverseViewTransformations( pos );
+
     KoChild *child = 0;
     KoDocumentChild* docChild = m_view->selectedChild();
     gadget = KoChild::NoGadget;
@@ -370,7 +372,7 @@ KoChild *ContainerHandler::child(KoChild::Gadget &gadget, QPoint &pos, const QMo
         else
             child = docChild;
 
-        gadget = child->gadgetHitTest( pos, m_view->matrix() );
+        gadget = child->gadgetHitTest( pos );
     }
     if ( gadget == KoChild::NoGadget )
     {
@@ -384,7 +386,7 @@ KoChild *ContainerHandler::child(KoChild::Gadget &gadget, QPoint &pos, const QMo
             else
                 child = docChild;
 
-            gadget = child->gadgetHitTest( pos, m_view->matrix() );
+            gadget = child->gadgetHitTest( pos );
         }
     }
     return child;

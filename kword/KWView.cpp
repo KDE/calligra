@@ -139,14 +139,14 @@ using namespace KSpell2;
 /******************************************************************/
 class TableInfo {
     public:
-        TableInfo( QValueList<KWFrameView*> selectedFrames ) {
+        TableInfo( const QValueList<KWFrameView*>& selectedFrames ) {
             m_protectContent = false;
-            m_views = selectedFrames;
+            //m_views = selectedFrames;
             int amountSelected = 0;
             m_cell = 0;
             QMap<KWTableFrameSet*, QValueList<unsigned int> > tableRows, tableCols;
 
-            QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+            QValueList<KWFrameView*>::const_iterator framesIterator = selectedFrames.begin();
             for(;framesIterator != selectedFrames.end(); ++framesIterator) {
                 KWFrameView *view = *framesIterator;
                 if(!view->selected()) continue;
@@ -212,7 +212,7 @@ class TableInfo {
         QValueList<uint> selectedColumns() { return m_columns; }
         KWTableFrameSet::Cell *firstSelectedCell() { return m_cell; }
     private:
-        QValueList<KWFrameView*> m_views;
+        //QValueList<KWFrameView*> m_views;
         bool m_oneCellSelected, m_selected, m_protectContent;
         QValueList<uint> m_rows, m_columns;
         KWTableFrameSet::Cell *m_cell;
@@ -456,6 +456,11 @@ void KWView::changeNbOfRecentFiles(int nb)
         shell()->setMaxRecentItems( nb );
 }
 
+KWViewMode* KWView::viewMode() const
+{
+    return m_gui->canvasWidget()->viewMode();
+}
+
 void KWView::initGui()
 {
     clipboardDataChanged();
@@ -521,7 +526,7 @@ void KWView::initGUIButton()
     updateHeaderFooterButton();
     m_actionAllowAutoFormat->setChecked( m_doc->allowAutoFormat() );
 
-    QString mode = m_gui->canvasWidget()->viewMode()->type();
+    QString mode = viewMode()->type();
     if (mode=="ModePreview")
         m_actionViewPreviewMode->setChecked(true);
     else if (mode=="ModeText")
@@ -1624,7 +1629,7 @@ void KWView::updatePageInfo()
 
         QString oldText = m_sbPageLabel->text();
         QString newText;
-        if ( m_gui->canvasWidget()->viewMode()->hasPages() )
+        if ( viewMode()->hasPages() )
             newText = ' ' + i18n( "Page %1 of %2" ).arg(m_currentPage).arg(m_doc->pageCount()) + ' ';
 
         if ( newText != oldText )
@@ -2451,7 +2456,7 @@ void KWView::editFind()
     if ( dialog.exec() == QDialog::Accepted )
     {
         delete m_findReplace;
-        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog, m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(m_gui->canvasWidget()->viewMode()), edit);
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog, m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(viewMode()), edit);
         editFindNext();
     }
 }
@@ -2471,7 +2476,7 @@ void KWView::editReplace()
     if ( dialog.exec() == QDialog::Accepted )
     {
         delete m_findReplace;
-        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog, m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(m_gui->canvasWidget()->viewMode()), edit);
+        m_findReplace = new KWFindReplace( m_gui->canvasWidget(), &dialog, m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(viewMode()), edit);
         editFindNext();
     }
 }
@@ -2870,7 +2875,7 @@ void KWView::viewTextMode()
     {
         KWTextFrameSet* fs = KWViewModeText::determineTextFrameSet( m_doc );
         if ( fs ) { // TODO: disable the action when there is no text frameset available
-            if ( dynamic_cast<KWViewModePreview *>(m_gui->canvasWidget()->viewMode()) )
+            if ( dynamic_cast<KWViewModePreview *>(viewMode()) )
                 m_zoomViewModePreview = m_doc->zoom();
             showZoom( m_zoomViewModeNormal ); // share the same zoom
             setZoom( m_zoomViewModeNormal, false );
@@ -2886,7 +2891,7 @@ void KWView::viewPageMode()
 {
     if ( m_actionViewPageMode->isChecked() )
     {
-        if ( dynamic_cast<KWViewModePreview *>(m_gui->canvasWidget()->viewMode()) )
+        if ( dynamic_cast<KWViewModePreview *>(viewMode()) )
             m_zoomViewModePreview = m_doc->zoom();
         showZoom( m_zoomViewModeNormal );
         setZoom( m_zoomViewModeNormal, false );
@@ -2912,8 +2917,8 @@ void KWView::viewPreviewMode()
 void KWView::changeZoomMenu( int zoom )
 {
     QString mode;
-    if ( m_gui && m_gui->canvasWidget() && m_gui->canvasWidget()->viewMode())
-        mode = m_gui->canvasWidget()->viewMode()->type();
+    if ( m_gui && m_gui->canvasWidget() && viewMode())
+        mode = viewMode()->type();
 
     QStringList lst;
     lst << i18n( "Fit to Width" );
@@ -3742,7 +3747,7 @@ void KWView::slotHRulerDoubleClicked( double ptpos )
 // This does _not_ handle Tabulators!
 void KWView::slotHRulerDoubleClicked()
 {
-    QString mode = m_gui->canvasWidget()->viewMode()->type();
+    QString mode = viewMode()->type();
     bool state = (mode!="ModeText");
     if ( !state )
         return;
@@ -3762,7 +3767,7 @@ void KWView::formatPage()
 {
     if( !m_doc->isReadWrite())
         return;
-    QString mode = m_gui->canvasWidget()->viewMode()->type();
+    QString mode = viewMode()->type();
     bool state = (mode!="ModeText");
     if ( !state )
         return;
@@ -3836,7 +3841,7 @@ void KWView::slotSpellCheck()
     }
     else
     {
-        objects = m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(m_gui->canvasWidget()->viewMode());
+        objects = m_gui->canvasWidget()->kWordDocument()->visibleTextObjects(viewMode());
     }
     m_spell.textIterator = new KoTextIterator( objects, edit, options );
     kdDebug()<<"Created iterator with "<< objects.count() <<endl;
@@ -5286,7 +5291,7 @@ void KWView::tabListChanged( const KoTabulatorList & tabList )
 
 void KWView::newPageLayout( const KoPageLayout &layout )
 {
-    QString mode = m_gui->canvasWidget()->viewMode()->type();
+    QString mode = viewMode()->type();
     bool state = (mode!="ModeText");
     if ( !state )
         return;
@@ -5317,7 +5322,7 @@ void KWView::slotPageLayoutChanged( const KoPageLayout& layout )
     // This is connected to a signal of KWDocument, so that when the
     // above method, or any other way of changing the page layout happens,
     // the rulers are updated in all views.
-    m_gui->canvasWidget()->viewMode()->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), layout );
+    viewMode()->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), layout );
     m_gui->canvasWidget()->repaintAll();
 }
 
@@ -5626,7 +5631,7 @@ void KWView::slotFrameSetEditChanged()
 
     updateTableActions( frameViewManager()->selectedFrames() ) ;
 
-    m_actionInsertFormula->setEnabled(state && (m_gui->canvasWidget()->viewMode()->type()!="ModeText"));
+    m_actionInsertFormula->setEnabled(state && (viewMode()->type()!="ModeText"));
     actionInsertVariable->setEnabled(state);
     m_actionInsertExpression->setEnabled(state);
 
@@ -5642,7 +5647,7 @@ void KWView::changeFootEndNoteState()
 {
     bool rw = koDocument()->isReadWrite();
     KWTextFrameSetEdit * edit = currentTextEdit();
-    QString mode = m_gui->canvasWidget()->viewMode()->type();
+    QString mode = viewMode()->type();
 
     bool isEditableFrameset = edit && edit->frameSet() && edit->frameSet()->isMainFrameset();
     bool ok = rw && isEditableFrameset && (mode!="ModeText");
@@ -6278,7 +6283,7 @@ void KWView::applyAutoFormat()
 {
     m_doc->autoFormat()->readConfig();
     KMacroCommand *macro = 0L;
-    QValueList<KoTextObject *> list(m_doc->visibleTextObjects(m_gui->canvasWidget()->viewMode()));
+    QValueList<KoTextObject *> list(m_doc->visibleTextObjects(viewMode()));
     QValueList<KoTextObject *>::Iterator fit = list.begin();
     for ( ; fit != list.end() ; ++fit )
     {
@@ -6933,7 +6938,7 @@ void KWView::addBookmark()
 
 void KWView::selectBookmark()
 {
-    KWSelectBookmarkDia dia( m_doc->listOfBookmarkName(m_gui->canvasWidget()->viewMode()), m_doc, this, 0 );
+    KWSelectBookmarkDia dia( m_doc->listOfBookmarkName(viewMode()), m_doc, this, 0 );
     if ( dia.exec() ) {
         QString bookName = dia.bookmarkSelected();
         KWBookMark * book = m_doc->bookMarkByName( bookName );
@@ -7546,5 +7551,14 @@ void KWGUI::unitChanged( KoUnit::Unit u )
     m_view->kWordDocument()->setUnit( u );
 }
 
+QPoint KWView::applyViewTransformations( const QPoint& p ) const
+{
+    return viewMode()->normalToView( m_doc->zoomPoint( KoPoint( p ) ) );
+}
+
+QPoint KWView::reverseViewTransformations( const QPoint& p ) const
+{
+    return m_doc->unzoomPoint( viewMode()->viewToNormal( p ) ).toQPoint();
+}
 
 #include "KWView.moc"

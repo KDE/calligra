@@ -195,14 +195,14 @@ QPoint KWViewModeNormal::normalToView( const QPoint & nPoint )
         kdWarning(31001) << "KWViewModeNormal::normalToView request for conversion out of the document! Check your input data.. ("<< nPoint << ")" << endl;
         return QPoint(0,0);
     }
-    // Center horizontally
     Q_ASSERT(canvas());
     return QPoint( xOffset(page) + nPoint.x(), nPoint.y() );
 }
 
 QPoint KWViewModeNormal::viewToNormal( const QPoint & vPoint )
 {
-    // Opposite of the above; the Y is unchanged by the centering so we can use it to get the page.
+    // Opposite of the above
+    // The Y is unchanged by the centering so we can use it to get the page.
     double unzoomedY = m_doc->unzoomItY( vPoint.y() );
     KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
     if( !page) {
@@ -214,6 +214,7 @@ QPoint KWViewModeNormal::viewToNormal( const QPoint & vPoint )
 }
 
 int KWViewModeNormal::xOffset(KWPage *page, int canvasWidth /* = -1 */) {
+    // Center horizontally
     if(canvasWidth < 0)
         canvasWidth = canvas()->visibleWidth();
     return kMax( 0, ( canvasWidth - m_doc->zoomItX( page->width() ) ) / 2 );

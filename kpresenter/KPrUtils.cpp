@@ -75,9 +75,9 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
     } break;
     case L_ARROW:
     {
-        QPoint p1( -10 - _w, -3 - _w / 2 );
-        QPoint p2( 0 , 0 );
-        QPoint p3( -10 - _w, 3 + _w / 2 );
+        KoPoint p1( -10 - _w, -3 - _w / 2 );
+        KoPoint p2( 0 , 0 );
+        KoPoint p3( -10 - _w, 3 + _w / 2 );
         QPointArray pArray( 3 );
         pArray.setPoint( 0, _zoomHandler->zoomPoint(p1) );
         pArray.setPoint( 1, _zoomHandler->zoomPoint(p2) );
@@ -118,13 +118,13 @@ void drawFigure( LineEnd figure, QPainter* painter, const KoPoint &coord, const 
         painter->scale( 1, 1 );
         painter->setBrush( color );
 
-        QPoint p1( -10 - _w , -3 - _w / 2 );
-        QPoint p2( 0, 0 );
-        QPoint p3( -10 - _w, 3 + _w / 2 );
+        KoPoint p1( -10 - _w , -3 - _w / 2 );
+        KoPoint p2( 0, 0 );
+        KoPoint p3( -10 - _w, 3 + _w / 2 );
 
-        QPoint p4( -20 - _w, -3 - _w / 2 );
-        QPoint p5( -10, 0 );
-        QPoint p6( -20 - _w, 3 + _w / 2 );
+        KoPoint p4( -20 - _w, -3 - _w / 2 );
+        KoPoint p5( -10, 0 );
+        KoPoint p6( -20 - _w, 3 + _w / 2 );
 
         QPointArray pArray( 3 );
         pArray.setPoint( 0, _zoomHandler->zoomPoint(p1) );

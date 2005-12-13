@@ -681,7 +681,7 @@ KParts::Part *KoDocument::hitTest( QWidget *widget, const QPoint &globalPos )
 {
     QPtrListIterator<KoView> it( d->m_views );
     for (; it.current(); ++it )
-        if ( (QWidget *)it.current() == widget )
+        if ( static_cast<QWidget *>(it.current()) == widget )
         {
             QPoint canvasPos( it.current()->canvas()->mapFromGlobal( globalPos ) );
             canvasPos.rx() += it.current()->canvasXOffset();
@@ -695,8 +695,9 @@ KParts::Part *KoDocument::hitTest( QWidget *widget, const QPoint &globalPos )
     return 0L;
 }
 
-KoDocument *KoDocument::hitTest( const QPoint &pos, const QWMatrix &matrix )
+KoDocument* KoDocument::hitTest( const QPoint &pos, const QWMatrix &matrix )
 {
+    // Call KoDocumentChild::hitTest for any child document
     QPtrListIterator<KoDocumentChild> it( d->m_children );
     for (; it.current(); ++it )
     {
@@ -705,6 +706,7 @@ KoDocument *KoDocument::hitTest( const QPoint &pos, const QWMatrix &matrix )
             return doc;
     }
 
+    // Unless we hit an embedded document, the hit is on this document itself.
     return this;
 }
 

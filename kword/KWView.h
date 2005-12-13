@@ -36,6 +36,8 @@
 #include <koView.h>
 #include <KoPoint.h>
 #include <kshortcut.h>
+
+class KWViewMode;
 class DCOPObject;
 class KURL;
 
@@ -131,6 +133,8 @@ public:
 
     KWDocument *kWordDocument()const { return m_doc; }
     KWGUI *getGUI()const { return m_gui; }
+    KWViewMode* viewMode() const;
+
     void updateStyleList();
     void updateFrameStyleList();
     void updateTableStyleList();
@@ -162,6 +166,9 @@ public:
 
     virtual void setupPrinter( KPrinter &printer );
     virtual void print( KPrinter &printer );
+
+    virtual QPoint applyViewTransformations( const QPoint& ) const;
+    virtual QPoint reverseViewTransformations( const QPoint& ) const;
 
     void changeNbOfRecentFiles(int nb);
 

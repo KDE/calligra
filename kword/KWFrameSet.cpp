@@ -1083,7 +1083,7 @@ void KWFrameSet::finalize()
 QRegion KWFrameSet::frameClipRegion( QPainter * painter, KWFrame *frame, const QRect & crect,
                                      KWViewMode * viewMode )
 {
-    KWDocument * doc = kWordDocument();
+//    KWDocument * doc = kWordDocument();
     QRect rc = painter->xForm( crect );
 #ifdef DEBUG_DRAW
     //kdDebug(32002) << "KWFrameSet::frameClipRegion rc initially " << rc << endl;

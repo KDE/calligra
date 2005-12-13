@@ -76,7 +76,7 @@ void KoChild::setGeometry( const QRect &rect, bool noEmit )
 
   d->m_geometry = rect;
 
-  //Childs should have a minimum size of 3, so they can be selected
+  // Embedded objects should have a minimum size of 3, so they can be selected
   if( d->m_geometry.width() < 3 )
     d->m_geometry.setWidth( 3 );
 
@@ -104,14 +104,14 @@ QPointArray KoChild::pointArray( const QWMatrix &matrix ) const
   return pointArray( QRect( 0, 0, d->m_geometry.width(), d->m_geometry.height() ), matrix );
 }
 
-bool KoChild::contains( const QPoint &point ) const
-{
-  return region().contains( point );
-}
+//bool KoChild::contains( const QPoint &point ) const
+//{
+//  return region().contains( point );
+//}
 
-QRect KoChild::boundingRect( const QWMatrix &matrix ) const
+QRect KoChild::boundingRect() const
 {
-  return pointArray( matrix ).boundingRect();
+  return pointArray().boundingRect();
 }
 
 bool KoChild::isRectangle() const
@@ -138,7 +138,7 @@ void KoChild::setScaling( double x, double y )
 
   // why is that commented out? (Simon)
   // This is commented out, because KoChild::transform() scales
-  // the world martix explicitly and updateMartix() doesn't even
+  // the world matrix explicitly and updateMatrix() doesn't even
   // handle scaling (Werner)
   //updateMatrix()
 
@@ -243,12 +243,14 @@ QPointArray KoChild::framePointArray( const QWMatrix &matrix ) const
 
 QRegion KoChild::frameRegion( const QWMatrix &matrix, bool solid ) const
 {
-  QPointArray arr = framePointArray( matrix );
+  const QPointArray arr = framePointArray( matrix );
+  const QRegion frameReg( arr );
 
   if ( solid )
-    return QRegion( arr );
+    return frameReg;
 
-  return QRegion( arr ).subtract( region( matrix ) );
+  const QRegion reg = region( matrix );
+  return frameReg.subtract( reg );
 }
 
 QPointArray KoChild::pointArray( const QRect &r, const QWMatrix &matrix ) const
@@ -334,28 +336,28 @@ bool KoChild::isTransparent() const
   return d->m_transparent;
 }
 
-KoChild::Gadget KoChild::gadgetHitTest( const QPoint &p, const QWMatrix &matrix )
+KoChild::Gadget KoChild::gadgetHitTest( const QPoint &p )
 {
-  if ( !frameRegion( matrix ).contains( p ) )
+  if ( !frameRegion().contains( p ) )
     return NoGadget;
 
-  if ( QRegion( pointArray( QRect( -5, -5, 5, 5 ), matrix ) ).contains( p ) )
+  if ( QRegion( pointArray( QRect( -5, -5, 5, 5 ) ) ).contains( p ) )
       return TopLeft;
-  if ( QRegion( pointArray( QRect( d->m_geometry.width() / 2 - 3, -5, 5, 5 ), matrix ) ).contains( p ) )
+  if ( QRegion( pointArray( QRect( d->m_geometry.width() / 2 - 3, -5, 5, 5 ) ) ).contains( p ) )
       return TopMid;
-  if ( QRegion( pointArray( QRect( d->m_geometry.width(), -5, 5, 5 ), matrix ) ).contains( p ) )
+  if ( QRegion( pointArray( QRect( d->m_geometry.width(), -5, 5, 5 ) ) ).contains( p ) )
       return TopRight;
-  if ( QRegion( pointArray( QRect( -5, d->m_geometry.height() / 2 - 3, 5, 5 ), matrix ) ).contains( p ) )
+  if ( QRegion( pointArray( QRect( -5, d->m_geometry.height() / 2 - 3, 5, 5 ) ) ).contains( p ) )
       return MidLeft;
-  if ( QRegion( pointArray( QRect( -5, d->m_geometry.height(), 5, 5 ), matrix ) ).contains( p ) )
+  if ( QRegion( pointArray( QRect( -5, d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
       return BottomLeft;
   if ( QRegion( pointArray( QRect( d->m_geometry.width() / 2 - 3,
-				   d->m_geometry.height(), 5, 5 ), matrix ) ).contains( p ) )
+				   d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
     return BottomMid;
-  if ( QRegion( pointArray( QRect( d->m_geometry.width(), d->m_geometry.height(), 5, 5 ), matrix ) ).contains( p ) )
+  if ( QRegion( pointArray( QRect( d->m_geometry.width(), d->m_geometry.height(), 5, 5 ) ) ).contains( p ) )
       return BottomRight;
   if ( QRegion( pointArray( QRect( d->m_geometry.width(),
-				   d->m_geometry.height() / 2 - 3, 5, 5 ), matrix ) ).contains( p ) )
+				   d->m_geometry.height() / 2 - 3, 5, 5 ) ) ).contains( p ) )
     return MidRight;
 
   return Move;

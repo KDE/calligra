@@ -230,28 +230,22 @@ KAction *KoView::action( const QDomElement &element ) const
   return act;
 }
 
-KoDocument *KoView::hitTest( const QPoint &pos )
+KoDocument *KoView::hitTest( const QPoint &viewPos )
 {
-/*
-  if ( selectedChild() && selectedChild()->frameRegion( matrix() ).contains( pos ) )
-    return 0L;
-
-  if ( activeChild() && activeChild()->frameRegion( matrix() ).contains( pos ) )
-    return 0L;
-*/
-
   KoViewChild *viewChild;
+
+  QPoint pos = reverseViewTransformations( viewPos );
 
   KoDocumentChild *docChild = selectedChild();
   if ( docChild )
   {
     if ( ( viewChild = child( docChild->document() ) ) )
     {
-      if ( viewChild->frameRegion( matrix() ).contains( pos ) )
+      if ( viewChild->frameRegion().contains( pos ) )
         return 0;
     }
     else
-      if ( docChild->frameRegion( matrix() ).contains( pos ) )
+      if ( docChild->frameRegion().contains( pos ) )
         return 0;
   }
 
@@ -260,16 +254,15 @@ KoDocument *KoView::hitTest( const QPoint &pos )
   {
     if ( ( viewChild = child( docChild->document() ) ) )
     {
-      if ( viewChild->frameRegion( matrix() ).contains( pos ) )
+      if ( viewChild->frameRegion().contains( pos ) )
         return 0;
     }
     else
-      if ( docChild->frameRegion( matrix() ).contains( pos ) )
+      if ( docChild->frameRegion().contains( pos ) )
         return 0;
   }
 
-  return koDocument()->hitTest( QPoint( int(pos.x() / zoom()),
-                                        int(pos.y() / zoom()) ) );
+  return koDocument()->hitTest( pos );
 }
 
 int KoView::leftBorder() const
@@ -719,13 +712,11 @@ public:
   ~KoViewChildPrivate()
   {
   }
-  bool m_bLock;
 };
 
 KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
 {
   d = new KoViewChildPrivate;
-  d->m_bLock = false;
   m_parentView = _parentView;
   m_child = child;
 
@@ -751,36 +742,24 @@ KoViewChild::KoViewChild( KoDocumentChild *child, KoView *_parentView )
    So we need to subtract the scrollview's offset for the frame geometry, since it's a widget.
 
    The rules are
-   (R1) frameGeometry = childGeometry * zoom "+" m_frame->{left|right|top|bottom}Border() - scrollview offset,
+   (R1) frameGeometry = viewGeometry(childGeometry) "+" m_frame->{left|right|top|bottom}Border() - scrollview offset,
    (R2) frameGeometry = myGeometry "+" active_frame_border - scrollview offset.
 
-   So: (R3, unused) myGeometry = childGeometry * zoom "+" m_frame->{left|right|top|bottom}Border() "-" active_frame_border
+   So: (R3, unused) myGeometry = viewGeometry(childGeometry) "+" m_frame->{left|right|top|bottom}Border() "-" active_frame_border
 
    Notes: active_frame_border is m_frame->border() (0 when inactive, 5 when active).
           {left|right|top|bottom}Border are the borders used in kspread (0 when inactive, big when active).
-          "+" border means we add a border, si it's a subtraction on x, y and an addition on width, height.
+          "+" border means we add a border, so it's a subtraction on x, y and an addition on width, height.
 
-   TODO :  the apps should take care of the docchild<->viewchild conversions,
-           it's not only about zooming; so this should be completely removed.
+          viewGeometry() applies the zoom as well as any other translation the app might want to do
    */
 
   // Set frameGeometry from childGeometry
   // This initial calculation uses R1 but omits borders because the frame is currently inactive (-> 0)
-  QRect geom = child->geometry();
-  double zoom = parentView()->zoom();
-  // cast to int gives rounding probs, so we add 0.5 to fix it.
- /* m_frame->setGeometry( static_cast<int>( (double)geom.x() * zoom + 0.5 ) - parentView()->canvasXOffset() ,
-                        static_cast<int>((double)geom.y() * zoom + 0.5) - //parentView()->canvasYOffset() ,
-                        static_cast<int>((double)geom.width() * zoom + 0.5),
-                        static_cast<int>((double)geom.height() * zoom + 0.5) );*/
 
-   m_frame->setGeometry( (geom.x() * zoom) - parentView()->canvasXOffset(),
-                         (geom.y() * zoom) - parentView()->canvasYOffset(),
-                         geom.width() * zoom,
-                         geom.height() * zoom);
-  //m_frame->setGeometry(parentView()->matrix().mapRect(geom));
-
-
+  QRect frameGeom = parentView()->applyViewTransformations( child->geometry() );
+  frameGeom.moveBy( -parentView()->canvasXOffset(), -parentView()->canvasYOffset() );
+  m_frame->setGeometry( frameGeom );
 
   m_frame->show();
   m_frame->raise();
@@ -823,19 +802,14 @@ void KoViewChild::slotFrameGeometryChanged()
                           geom.y() + m_frame->topBorder() + parentView()->canvasYOffset(),
                           geom.width() - m_frame->leftBorder() - m_frame->rightBorder(),
                           geom.height() - m_frame->topBorder() - m_frame->bottomBorder() );
-    double zoom = parentView()->zoom();
-    QRect unzoomedRect( static_cast<int>( (double)borderLessRect.x() / zoom + 0.5 ),
-                        static_cast<int>( (double)borderLessRect.y() / zoom + 0.5 ),
-                        static_cast<int>( (double)borderLessRect.width() / zoom + 0.5 ),
-                        static_cast<int>( (double)borderLessRect.height() / zoom + 0.5 ) );
 
     // We don't want to trigger slotDocGeometryChanged again
     lock();
-    QRect docChildGeom = documentChildGeometry( unzoomedRect );
-    kdDebug() << "KoViewChild::setChildGeometry child geometry "
-              << ( m_child->geometry() == unzoomedRect ? "already " : "set to " )
-              << docChildGeom << endl;
-    m_child->setGeometry( docChildGeom );
+    QRect childGeom = parentView()->reverseViewTransformations( borderLessRect );
+    kdDebug() << "KoChild::slotFrameGeometryChanged child geometry "
+              << ( geometry() == childGeom ? "already " : "set to " )
+              << childGeom << endl;
+    m_child->setGeometry( childGeom );
     unlock();
   }
 }
@@ -846,12 +820,11 @@ void KoViewChild::slotDocGeometryChanged()
       return;
   // Set frame geometry from child geometry (R1)
   // The frame's resizeEvent will call slotFrameGeometryChanged.
-  double zoom = parentView()->zoom();
-  QRect geom = viewChildGeometry( m_child->geometry() );
-  QRect borderRect( static_cast<int>( (double)geom.x() * zoom + 0.5 ) - m_frame->leftBorder() - parentView()->canvasXOffset(),
-                    static_cast<int>( (double)geom.y() * zoom + 0.5 ) - m_frame->topBorder() - parentView()->canvasYOffset(),
-                    static_cast<int>( (double)geom.width() * zoom + 0.5 ) + m_frame->leftBorder() + m_frame->rightBorder(),
-                    static_cast<int>( (double)geom.height() * zoom + 0.5 ) + m_frame->topBorder() + m_frame->bottomBorder() );
+  QRect geom = parentView()->applyViewTransformations( m_child->geometry() );
+  QRect borderRect( geom.x() - m_frame->leftBorder() - parentView()->canvasXOffset(),
+                    geom.y() - m_frame->topBorder() - parentView()->canvasYOffset(),
+                    geom.width() + m_frame->leftBorder() + m_frame->rightBorder(),
+                    geom.height() + m_frame->topBorder() + m_frame->bottomBorder() );
   kdDebug() << "KoViewChild::slotDocGeometryChanged frame geometry "
             << ( m_frame->geometry() == borderRect ? "already " : "set to " )
             << borderRect << endl;
@@ -859,14 +832,26 @@ void KoViewChild::slotDocGeometryChanged()
   m_frame->setGeometry( borderRect );
 }
 
-QRect KoViewChild::documentChildGeometry( const QRect& unzoomedViewGeometry ) const
+QPoint KoView::applyViewTransformations( const QPoint& p ) const
 {
-    return unzoomedViewGeometry;
+  return QPoint( qRound( p.x() * zoom() ), qRound( p.y() * zoom() ) );
 }
 
-QRect KoViewChild::viewChildGeometry( const QRect& childGeometry ) const
+QPoint KoView::reverseViewTransformations( const QPoint& v ) const
 {
-    return childGeometry;
+  return QPoint( qRound( v.x() / zoom() ), qRound( v.y() / zoom() ) );
+}
+
+QRect KoView::applyViewTransformations( const QRect& r ) const
+{
+  return QRect( applyViewTransformations( r.topLeft() ),
+                applyViewTransformations( r.bottomRight() ) );
+}
+
+QRect KoView::reverseViewTransformations( const QRect& r ) const
+{
+  return QRect( reverseViewTransformations( r.topLeft() ),
+                reverseViewTransformations( r.bottomRight() ) );
 }
 
 #include "koView.moc"

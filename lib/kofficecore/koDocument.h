@@ -363,15 +363,14 @@ public:
      *
      *  This function has to be overloaded if the document features child documents.
      *
+     *  @param pos is in (unzoomed) document coordinates
      *  @param matrix transforms points from the documents coordinate system
-     *         to the coordinate system of the requested point.
-     *  @param pos is in some unknown coordinate system, but the matrix can
-     *         be used to transform a point of this parts coordinate system
-     *         to the coordinate system of p.
+     *         to the coordinate system of the requested point. This is used by
+     *         transformed child documents, see KoDocumentChild/KoChild.
      *
-     *  @return Pointer to the document which was hit.
+     *  @return Pointer to the document under the mouse at that position
      */
-    virtual KoDocument *hitTest( const QPoint &pos, const QWMatrix &matrix = QWMatrix() );
+    virtual KoDocument *hitTest( const QPoint &pos, const QWMatrix& matrix = QWMatrix() );
 
     /**
      *  Paints the whole document into the given painter object.
@@ -420,7 +419,7 @@ public:
                              double zoomX = 1.0, double zoomY = 1.0 );
 
     /**
-     *  Paints the data itself. Normally called by paintEverthing(). It does not
+     *  Paints the data itself. Normally called by paintEverything(). It does not
      *  paint the children.
      *  It's this method that %KOffice Parts have to implement.
      *

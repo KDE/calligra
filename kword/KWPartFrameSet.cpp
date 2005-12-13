@@ -20,7 +20,6 @@
 
 #include "KWPartFrameSet.h"
 #include "KWDocument.h"
-#include "KWViewMode.h"
 #include "KWCommand.h"
 #include "KWordPartFrameSetIface.h"
 //#include "KWordPartFrameSetEditIface.h"
@@ -120,14 +119,6 @@ void KWPartFrameSet::updateChildGeometry()
 {
     if( m_frames.isEmpty() ) // Deleted frameset
         return;
-#if 0 // wrong; the document-child shouldn't depend on the viewmode
-    if ( viewMode ) {
-        // We need to apply the viewmode conversion correctly (the child is in unzoomed view coords!)
-        QRect r = m_doc->zoomRect( *m_frames.first() ); // in normal coordinates.
-        KoRect childGeom = m_doc->unzoomRect( viewMode->normalToView( r ) );
-        m_child->setGeometry( childGeom.toQRect() ); // rounding problems. TODO: port KoChild to KoRect.
-    } else
-#endif
         m_child->setGeometry( m_frames.first()->toQRect() );
 }
 
@@ -138,17 +129,6 @@ void KWPartFrameSet::slotChildChanged()
     KWFrame *frame = listFrame.current();
     if ( frame )
     {
-#if 0
-        // We need to apply the viewmode conversion correctly (the child is in unzoomed view coords!)
-        KoRect childGeom = KoRect::fromQRect( getChild()->geometry() );
-        // r is the rect in normal coordinates
-        QRect r(m_doc->layoutViewMode()->viewToNormal( m_doc->zoomRect( childGeom ) ) );
-        frame->setLeft( r.left() / m_doc->zoomedResolutionX() );
-        frame->setTop( r.top() / m_doc->zoomedResolutionY() );
-        frame->setWidth( r.width() / m_doc->zoomedResolutionX() );
-        frame->setHeight( r.height() / m_doc->zoomedResolutionY() );
-        // ## TODO an undo/redo command (move frame)
-#endif
         frame->setRect( KoRect::fromQRect( getChild()->geometry() ) );
 
         //kdDebug(32001) << "KWPartFrameSet::slotChildChanged child's geometry " << getChild()->geometry()
@@ -347,6 +327,7 @@ KWDocumentChild::~KWDocumentChild()
 {
 }
 
+// DF: why was this commented out?
 #if 0
 KoDocument* KWDocumentChild::hitTest( const QPoint& p, const QWMatrix& _matrix )
 {
