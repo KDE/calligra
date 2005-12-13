@@ -18,6 +18,7 @@
 #include "KWFrameList.h"
 #include "KWFrame.h"
 #include "KWFrameSet.h"
+#include "KWTextFrameSet.h"
 #include "KWDocument.h"
 #include "KWViewMode.h"
 #include "KWPageManager.h"
@@ -95,7 +96,8 @@ void KWFrameList::setFrames(const QPtrList<KWFrame> &frames) {
         // Skip all frames from the parent frameset, if 'm_frame' is floating
         // ## might need a for loop for the case of inline-inside-inline,
         // or maybe calling isPaintedBy instead [depending on what should happen for tables]
-        if ( daFrame->frameSet()->isFloating() && parentFramesets.contains(daFrame->frameSet()) )
+        if ( daFrame->frameSet()->isFloating() &&
+                parentFramesets.contains(daFrame->frameSet()->anchorFrameset()) )
             continue;
         // Floating frames are not "on top", they are "inside".
         // They are not "below" anything either - the parent frameset is.
