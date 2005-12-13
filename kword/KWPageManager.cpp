@@ -135,8 +135,8 @@ KWPage* KWPageManager::appendPage() {
 
 const KoPageLayout KWPageManager::pageLayout(int pageNumber) const {
     KoPageLayout lay = m_defaultPageLayout;
-    KWPage *page = this->page(pageNumber);
-    if(page) {
+    if(pageNumber >= m_firstPage && pageNumber <= lastPageNumber()) {
+        KWPage *page = this->page(pageNumber);
         lay.ptHeight = page->height();
         lay.ptWidth = page->width();
         lay.ptTop = page->topMargin();
