@@ -4146,7 +4146,7 @@ QString KWDocument::generateFramesetName( const QString & templateName )
 
 void KWDocument::fixZOrders() {
     KWFrame *frameFixed = 0;
-    for (int pgnum = 0 ; pgnum < pageCount() ; pgnum++) {
+    for (int pgnum = startPage() ; pgnum <= lastPage() ; pgnum++) {
         QPtrList<KWFrame> frames = framesInPage(pgnum);
         // scan this page to see if we need to fixup:
         // fix up if two frames have the same zOrder,
