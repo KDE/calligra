@@ -238,7 +238,7 @@ void KoPageLayoutSize::formatChanged( int format ) {
     if ( ( KoFormat )format == m_layout.format )
         return;
     m_layout.format = ( KoFormat )format;
-    bool enable =  (KoFormat) format != PG_CUSTOM;
+    bool enable =  (KoFormat) format == PG_CUSTOM;
     epgWidth->setEnabled( enable );
     epgHeight->setEnabled( enable );
 
