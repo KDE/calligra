@@ -109,7 +109,7 @@
                         <cstring>subBtn</cstring>
                     </property>
                     <property name="text">
-                        <string>New &amp;Subaccount</string>
+                        <string>New &amp;Sub-account</string>
                     </property>
                     <property name="accel">
                         <string>Alt+S</string>
