@@ -66,7 +66,6 @@ uint List::count()
 
 void List::append(Object::Ptr object)
 {
-    QValueList<Object::Ptr> list = getValue();
-    list.append(object);
+    getValue().append(object);
 }
 

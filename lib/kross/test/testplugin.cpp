@@ -51,6 +51,10 @@ TestPluginObject::TestPluginObject(const QString& name)
             << Kross::Api::Argument("Kross::Api::Variant::String", new Kross::Api::Variant("func5string2_default"))
             << Kross::Api::Argument("Kross::Api::Variant::String", new Kross::Api::Variant("func5string3_default"))
     );
+    addFunction("func6", &TestPluginObject::func6,
+        Kross::Api::ArgumentList()
+            << Kross::Api::Argument("Kross::Api::List", new Kross::Api::List( QValueList<Object::Ptr>() << new Kross::Api::Variant("FirstItem") ) )
+    );
 
     addFunction("overloadedFunc", &TestPluginObject::overloadedFunc2,
         Kross::Api::ArgumentList() 
@@ -125,6 +129,13 @@ Kross::Api::Object::Ptr TestPluginObject::func4(Kross::Api::List::Ptr args)
 Kross::Api::Object::Ptr TestPluginObject::func5(Kross::Api::List::Ptr args)
 {
     kdDebug() << "CALLED => TestPluginObject::func5 args=" << args->toString() << endl;
+    return 0;
+}
+
+Kross::Api::Object::Ptr TestPluginObject::func6(Kross::Api::List::Ptr args)
+{
+    Kross::Api::List* list = Kross::Api::Object::fromObject< Kross::Api::List >( args->item(0) );
+    kdDebug() << "CALLED => TestPluginObject::func6 args=" << list->toString() << endl;
     return 0;
 }
 

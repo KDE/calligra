@@ -114,6 +114,8 @@ def testPluginModule():
     print "-------------------------------------"
     print testobject1.func5("func5string1","func5string2")
     print "-------------------------------------"
+    print testobject1.func6( ("One","Two") )
+    print "-------------------------------------"
 
     #print "-------------------------------------"
     #print testobject1.overloadedFunc()

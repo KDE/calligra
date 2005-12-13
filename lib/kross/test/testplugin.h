@@ -41,6 +41,7 @@ class TestPluginObject : public Kross::Api::Class<TestPluginObject>
         Kross::Api::Object::Ptr func3(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr func4(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr func5(Kross::Api::List::Ptr);
+        Kross::Api::Object::Ptr func6(Kross::Api::List::Ptr);
 
         Kross::Api::Object::Ptr overloadedFunc1(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr overloadedFunc2(Kross::Api::List::Ptr);
