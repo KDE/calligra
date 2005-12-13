@@ -692,8 +692,6 @@ void KPrCanvas::recalcAutoGuides( )
 
 void KPrCanvas::mousePressEvent( QMouseEvent *e )
 {
-    m_view->enableAutoScroll();
-
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
     m_insertRect = KoRect();
@@ -715,6 +713,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
             // This is common to all mouse buttons, so that RMB and MMB place the cursor too
             m_currentTextObjectView->mousePressEvent(e, m_view->zoomHandler()->ptToLayoutUnitPix( pos ) ); // in LU pixels
             mousePressed = true;
+            m_view->enableAutoScroll();
             if(e->button() == RightButton)
             {
                 m_currentTextObjectView->showPopup( m_view, QCursor::pos(), m_view->actionList() );
@@ -741,6 +740,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
     if ( editMode ) {
         if ( e->button() == LeftButton ) {
             mousePressed = true;
+            m_view->enableAutoScroll();
 
             if ( m_drawPolyline && ( toolEditMode == INS_POLYLINE || toolEditMode == INS_CLOSED_POLYLINE ) )
             {
