@@ -14,7 +14,7 @@ example author wants to have one frame per page.  This means that there is one
 text, and the frames define where on the pages this text is displayed.
 
 * About text framesets: they hold a text document (KWTextDocument, which is
-a QTextDocument from the QRichText classes - more on QRT later).
+a QTextDocument from the KoText classes - more on KoText later).
 
 * About Tables; one table is a KWTableFrameset. This tableframeset contains
 all the cells as its frames. But because the cells have a different text per
@@ -23,16 +23,16 @@ cell, we contain the cells in their own KWTextFrameset.
    KWTableFrameSet
     |           |
     |        TextFrames
-  Cells               +----------+
-     +--+                        |
-        | ---> KWTextFrameSet    |
-        |          +-> KWFrame <-+
-        |                        |
-        | ---> KWTextFrameSet    |
-        |          +-> KWFrame <-+
-        |                        |
-        + ---> KWTextFrameSet    |
-                   +-> KWFrame <-+
+  Cells               +--------+
+      |                        |
+      + ---> KWTextFrameSet    |
+      |          +-> KWFrame <-+
+      |                        |
+      + ---> KWTextFrameSet    |
+      |          +-> KWFrame <-+
+      |                        |
+      + ---> KWTextFrameSet    |
+                 +-> KWFrame <-+
 
 * The z-order of the frames (i.e. which one is on top of which)
 is defined by m_zOrder in KWFrame. This number is relative to the other
