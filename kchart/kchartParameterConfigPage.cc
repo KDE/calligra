@@ -124,7 +124,7 @@ KChartParameterConfigPage::KChartParameterConfigPage( KChartParams* params,
     QVButtonGroup *precision = new QVButtonGroup(i18n("Precision for Numerical Left Axis"), gb2);
     grid2->addWidget(precision, 2, 0);
     QRadioButton * automatic_precision = new QRadioButton( i18n("Automatic precision"), precision);
-    QWhatsThis::add(automatic_precision, i18n("This sets the precision as automatic which means."));
+    QWhatsThis::add(automatic_precision, i18n("This sets the precision as automatic which means that KChart decides what precision to apply."));
     automatic_precision->setChecked(true);
     max = new QRadioButton( i18n("Decimal precision:"), precision);
     QWhatsThis::add(max, i18n("This sets the Y-axis precision. For example, if you choose a precision of 2, the value 5 will be displayed as 5.00 alongside the Y-axis."));
