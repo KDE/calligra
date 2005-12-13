@@ -28,7 +28,7 @@
 <title>Configuring &kpresenter;</title>
 
 <sect1  id="configure-autocorrection">
-<title>The <guilabel>Configure Autocorrection</guilabel> Dialog</title>
+<title>The <guilabel>Configure Autocorrection...</guilabel> Dialog</title>
 <para>Auto correction is a system for correcting common typing errors, converting abbreviations to their full spelling and adjusting capitalization. As you could guess from its name, this all occurs automatically, while you are editing your document.</para>
 
 <sect2 id="enabling-autocorrection">
@@ -466,7 +466,7 @@ from the list, then click this button.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Automatically add new words to suggestio  list</guilabel></term>
+<term><guilabel>Automatically add new words to suggestion  list</guilabel></term>
 <listitem>
 <para>This option will add any word equal to or longer than
 the <guilabel>Characters needed</guilabel> to the list of proposed
@@ -479,7 +479,7 @@ autocompletion when entered into this dialog.</para></note>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show words in tootip</guilabel></term>
+<term><guilabel>Show words in tooltip</guilabel></term>
 <listitem>
 <para>If this option is enabled, a tool tip box will appear when you type the
 beginning of a word that exists in the completion list. To complete the word,
@@ -490,7 +490,7 @@ suggestion</guilabel> drop-down list.</para>
 
 
 <varlistentry>
-<term><guilabel>Characters needed</guilabel></term>
+<term><guilabel>Characters needed:</guilabel></term>
 <listitem>
 <para>Use this spinbox/slider combination to prevent &kpresenter; 
 from automatically adding short words to the completion list.   You can select
@@ -500,7 +500,7 @@ characters set here to be added in the list.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Suggest words</guilabel></term>
+<term><guilabel>Suggest words:</guilabel></term>
 <listitem>
 <para>This spinbox/slider combination can be adjusted to allow more or less
 words into the autocompletion list.  This option is most important when
@@ -520,7 +520,7 @@ next word.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Key to accept suggestion</guilabel></term>
+<term><guilabel>Key to accept suggestion:</guilabel></term>
 <listitem>
 <para>Set the key you want to use when an autocompleted word is suggested to you
 and you want to accept it. You can choose
@@ -538,9 +538,7 @@ will use that saved list for all autocompletion, until the list is replaced with
 another saved list.</para>
 <para>Some of the words in the autocompletion list may not have been saved
 yet.</para><para>To save the current list to disk and have &kpresenter; begin
-using
-this new list for autocompletion, 
-click this button.</para>
+using this new list for autocompletion, click this button.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -555,7 +553,7 @@ click this button.</para>
 </sect1>
 
 <sect1 id="configure-dialog">
-<title>The <guilabel>Configure &kpresenter;</guilabel> Dialog</title>
+<title>The <guilabel>Configure &kpresenter;...</guilabel> Dialog</title>
 
 <sect2 id="configure-interface">
 <title><guilabel>Interface</guilabel></title>
@@ -718,7 +716,7 @@ addresses often contain words run together.</para>
 
 <varlistentry>
 <term><guilabel>Display links</guilabel></term>
-<listitem><para>When you want to include a link in your slide, you will use the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Link...</guimenuitem></menuchoice> menu which allows you to insert URL, mail or file links. If the option <guilabel>Display links</guilabel> is checked, all links will be displayed in a different color. This makes document links visible. This is the default behavior. If the option is unchecked, the link will be the same color as the text color. The links are visible(or not) both in the edited slides and in the slide show. A displayed link: <inlinemediaobject><imageobject>
+<listitem><para>When you want to include a link in your slide, you will use the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Link...</guimenuitem></menuchoice> menu which allows you to insert URL, mail or file links. If the option <guilabel>Display links</guilabel> is checked, all links will be displayed in a different color. This makes document links visible. This is the default behavior. If the option is unchecked, the link will be the same color as the text color. The links are visible (or not) both in the edited slides and in the slide show. A displayed link: <inlinemediaobject><imageobject>
 <imagedata fileref="configure4a.png" format="PNG"/></imageobject></inlinemediaobject> A non displayed link: <inlinemediaobject><imageobject>
 <imagedata fileref="configure4a1.png" format="PNG"/></imageobject></inlinemediaobject></para></listitem>
 </varlistentry>
@@ -739,12 +737,12 @@ addresses often contain words run together.</para>
 
 <varlistentry>
 <term><guilabel>Display field code</guilabel></term>
-<listitem><para>In editor mode (not in slide show) this option will display all the variable codes as well as Link at links location. This is very useful to see what variable is displayed. Variables are inserted using the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem></menuchoice> menu.</para></listitem>
+<listitem><para>In editor mode (not in slide show) this option will display all the variable codes. This is very useful to see what variable is displayed. Variables are inserted using the <menuchoice><guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem></menuchoice> menu.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Print slide notes</guilabel></term>
-<listitem><para>If checked, all notes will be printed on paper. The notes will all be printed on a separate last page, from slide one to the last slide and fifnishing with the Master Page Note. You can see the notes for each slide using the <menuchoice><guimenu>View</guimenu><guimenuitem>Show notebar</guimenuitem></menuchoice> menu.</para></listitem>
+<listitem><para>If checked, all notes will be printed on paper. The notes will all be printed on a separate last page, from slide one to the last slide and finishing with the Master Page Note. You can see the notes for each slide using the <menuchoice><guimenu>View</guimenu><guimenuitem>Show notebar</guimenuitem></menuchoice> menu.</para></listitem>
 </varlistentry>
 </variablelist>
 
@@ -752,12 +750,12 @@ addresses often contain words run together.</para>
 <title><guilabel>Grid</guilabel></title>
 <varlistentry>
 <term><guilabel>Resolution X (mm):</guilabel></term>
-<listitem><para>Set the space in millimeters between two horizontal points on the grid. Default is 5 millimeters.</para></listitem>
+<listitem><para>Set the space in millimeters between two points on an horizontal line on the grid. Default is 5 millimeters.</para></listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Resolution Y (mm):</guilabel></term>
-<listitem><para>Set the space in millimeters between two vertical points on the grid. Default is 5 millimeters.</para></listitem>
+<listitem><para>Set the space in millimeters between two points on a vertical line on the grid. Default is 5 millimeters.</para></listitem>
 </varlistentry>
 </variablelist>
 </sect2>
@@ -859,15 +857,15 @@ two names? -->
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Color</guilabel></term>
+<term><guilabel>Color:</guilabel></term>
 <listitem><para>Set the color of the line. Clicking on the color will bring the standard KDE Select Color dialog.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Style</guilabel></term>
+<term><guilabel>Style:</guilabel></term>
 <listitem><para>Choose the line style from No Outline which will not draw any line to dotted lines and plain line.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Width</guilabel></term>
+<term><guilabel>Width:</guilabel></term>
 <listitem><para>Set the width of the line.</para></listitem>
 </varlistentry>
 <varlistentry>
@@ -893,19 +891,19 @@ two names? -->
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Type</guilabel></term>
+<term><guilabel>Type:</guilabel></term>
 <listitem><para>You can choose between <guilabel>Single Color</guilabel>, <guilabel>Gradient</guilabel> or <guilabel>Transparent</guilabel> as the type.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Style</guilabel></term>
+<term><guilabel>Style:</guilabel></term>
 <listitem><para>Choose the style or the pattern.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Color</guilabel></term>
+<term><guilabel>Color:</guilabel></term>
 <listitem><para>Choose the color. White is the default one. Clicking on the color will bring you the standard KDE color chooser dialog.</para></listitem>
 </varlistentry>
 </variablelist>
-<para>The last field displays a preview of your settings, provided the color is not white!.</para>
+<para>The last field displays a preview of your settings, provided the color is not white!</para>
 </sect3>
 
 <sect3 id="rectangle">
@@ -924,15 +922,15 @@ two names? -->
 </screenshot>
 
 <para>You can choose to keep the same ratio for the two settings below by having the <inlinemediaobject><imageobject>
-<imagedata fileref="link.png" format="PNG"/></imageobject></inlinemediaobject> icon or to separate the two settiings by using the <inlinemediaobject><imageobject>
+<imagedata fileref="link.png" format="PNG"/></imageobject></inlinemediaobject> icon or to separate the two settings by using the <inlinemediaobject><imageobject>
 <imagedata fileref="break.png" format="PNG"/></imageobject></inlinemediaobject> icon.</para>
 <variablelist>
 <varlistentry>
-<term><guilabel>Vertical declination</guilabel></term>
+<term><guilabel>Vertical declination:</guilabel></term>
 <listitem><para>Set the vertical declination.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Horizontal declination</guilabel></term>
+<term><guilabel>Horizontal declination:</guilabel></term>
 <listitem><para>Set the horizontal declination.</para></listitem>
 </varlistentry>
 </variablelist>
@@ -956,15 +954,15 @@ two names? -->
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Type</guilabel></term>
+<term><guilabel>Type:</guilabel></term>
 <listitem><para>You can choose <guilabel>Polygon</guilabel> or <guilabel>Convex/Concave</guilabel>.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Corner</guilabel></term>
+<term><guilabel>Corners:</guilabel></term>
 <listitem><para>Set here the number of corners of the polygon.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Sharpness</guilabel></term>
+<term><guilabel>Sharpness:</guilabel></term>
 <listitem><para>Increase or decrease the sharpness of the polygon.</para></listitem>
 </varlistentry>
 </variablelist>
@@ -988,15 +986,15 @@ two names? -->
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Type</guilabel></term>
+<term><guilabel>Type:</guilabel></term>
 <listitem><para>You can choose among three options in the dropdown box: Pie, Arc or Chord.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Start Position</guilabel></term>
+<term><guilabel>Start Position:</guilabel></term>
 <listitem><para>Set here the start position.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Length</guilabel></term>
+<term><guilabel>Length:</guilabel></term>
 <listitem><para>Set the length of your pie.</para></listitem>
 </varlistentry>
 </variablelist>
