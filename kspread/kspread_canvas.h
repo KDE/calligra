@@ -38,6 +38,8 @@
 #include <qtooltip.h>
 #include <qpen.h>
 
+#include <ksharedptr.h>
+
 #include <koffice_export.h>
 
 #include "kspread_util.h"
@@ -286,7 +288,7 @@ public:
     * This is used to highlight cells referenced in the formula currently being edited for example
     *
     */
-    void setHighlightedRanges(std::vector<HighlightRange>* ranges);
+    void setHighlightedRanges(std::vector< KSharedPtr<HighlightRange> >* ranges);
     
     
     //Moved this functionality elsewhere --

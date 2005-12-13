@@ -174,43 +174,27 @@ Cell* TextEditorHighlighter::cellRefAt(int position, QColor& outCellColor)
   return 0;
 }*/
 
-void FormulaEditorHighlighter::getReferences(std::vector<KSpread::HighlightRange>* cellRefs)
+void FormulaEditorHighlighter::getReferences(std::vector< KSharedPtr<HighlightRange> >* cellRefs)
 {
   if (!cellRefs)
     return;
 
   for (unsigned int i=0;i<_refs.size();i++)
   {
-    KSpread::HighlightRange hc;
-
-    //Is this a single point or a range of cells?
+    QString rangeReference=_refs[i];
+    
+    //If this reference is given as a single point (eg. A1 or Sheet1!A1) it must be transformed
+    //into a range reference (ie. A1 -> A1:A1)
     if (_refs[i].find(':') == -1)
     {
-
-      Point* pt=new Point(_refs[i],_sheet->workbook(),_sheet);
-
-      hc.setFirstCell(pt);
-      hc.setLastCell(0);
-
-
+        int sheetNameSeparator=_refs[i].find('!') + 1;
+        
+        rangeReference += ":"+_refs[i].mid(sheetNameSeparator);
     }
-    else
-    {
-
-      Range rg(_refs[i],_sheet->workbook(),_sheet);
-
-      //kdDebug() << "Range from ref " << _refs[i] << endl;
-      hc.setFirstCell(new Point());//rg.sheet->nonDefaultCell(rg.startCol(),rg.startRow(),false,0);
-      hc.setLastCell(new Point());//rg.sheet->nonDefaultCell(rg.endCol(),rg.endRow(),false,0);
-
-      rg.getStartPoint(hc.firstCell());
-      rg.getEndPoint(hc.lastCell());
-    }
-
-
-
-    hc.setColor(_colors[i%_colors.size()]);
-    cellRefs->push_back(hc);
+      
+    HighlightRange* hr=new EditorHighlightRange(rangeReference,_sheet->workbook(),_sheet,textEdit());
+    hr->setColor(_colors[i%_colors.size()]);
+    cellRefs->push_back(KSharedPtr<HighlightRange>(hr));
   }
 }
 
@@ -298,6 +282,61 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
 
   return 0;
 }
+}
+
+/********************************************
+ *
+ * EditorHighlightRange
+ *
+ ********************************************/
+
+EditorHighlightRange::EditorHighlightRange(const QString& rangeReference, Map* workbook, Sheet* sheet, QTextEdit* editor)
+: HighlightRange(rangeReference,workbook,sheet) , _editor(editor) {}
+
+void EditorHighlightRange::setRange(QRect& newArea)
+{
+    QRect oldArea=range();
+    
+    if (oldArea == newArea)
+        return;
+        
+    QString firstCellName = Cell::name(range().left(),range().top());
+    QString lastCellName = Cell::name(range().right(),range().bottom());
+    
+    
+    Range::setRange( newArea );
+    
+    //Replace references in associated KTextEdit
+    QRegExp searchExpression;
+    
+    QString expr;
+    
+    //Does this old range represent a single cell or multiple cells?
+    if ( (oldArea.width() == 1) && (oldArea.height() == 1) )
+    { 
+        expr=QString("\\b(%1!|)(%2:%3|%2)\\b")
+                                        .arg(sheet()->sheetName())
+                                        .arg(firstCellName)
+                                        .arg(lastCellName);
+        searchExpression=QRegExp( expr
+                                        ,false);
+    }
+    else
+    {
+        expr=QString("\\b(%1!|)(%2:%3)\\b")
+                                        .arg(sheet()->sheetName())
+                                        .arg(firstCellName)
+                                        .arg(lastCellName);
+        searchExpression=QRegExp( expr
+                                        ,false);
+    }
+        
+    QString replacementText=toString();
+    
+    QString newText=_editor->text();
+    newText=newText.replace(searchExpression,replacementText);
+    
+    _editor->setText(newText);
 }
 
 /********************************************
@@ -425,8 +464,9 @@ TextEditor::TextEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
   
     m_sizeUpdate(false),
     m_length(0),
-    m_fontLength(0),
-    m_captureAllKeyEvents(captureAllKeyEvents)
+    m_captureAllKeyEvents(captureAllKeyEvents),
+    m_fontLength(0)
+    
 
 {
  // m_pEdit = new KLineEdit( this );
@@ -574,8 +614,8 @@ void TextEditor::slotCursorPositionChanged(int /* para */,int /* pos */)
 
   if (m_highlighter->referencesChanged())
   {
-    std::vector<HighlightRange>* highlightedCells=
-        new std::vector<HighlightRange>;
+    std::vector< KSharedPtr<HighlightRange> >* highlightedCells=
+        new std::vector< KSharedPtr<HighlightRange> >;
 
     m_highlighter->getReferences(highlightedCells);
 

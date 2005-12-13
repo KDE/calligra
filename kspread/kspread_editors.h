@@ -29,7 +29,9 @@
 
 #include <kcombobox.h>
 #include <klineedit.h>
+#include <ksharedptr.h>
 
+#include "highlight_range.h"
 
 class KTextEdit;
 class QFont;
@@ -39,7 +41,6 @@ class QTextCursor;
 namespace KSpread
 {
 class Cell;
-class HighlightRange;
 class Sheet;
 class Canvas;
 class View;
@@ -103,7 +104,7 @@ class FormulaEditorHighlighter : public QSyntaxHighlighter
 	*
 	*
 	*/
-		void getReferences(std::vector<KSpread::HighlightRange>* ranges);
+		void getReferences(std::vector<KSharedPtr<HighlightRange> >* ranges);
 
 
 	/**	Set spread sheet used for cell reference checking
@@ -135,6 +136,36 @@ class FormulaEditorHighlighter : public QSyntaxHighlighter
 	//Have cell references changed since last call to referencesChanged()?
 		bool _refsChanged;
 };
+
+/**
+* Represents a highlighted range which is associated with a QTextEdit widget.  
+* When the @ref EditorHighlightRange::setRange() method is called any references to the old
+* area in the edit widget's text are replaced with references to the new area.
+*/
+class EditorHighlightRange : public HighlightRange
+{
+public:
+
+    /**
+    * Constructs a new highlighted range and associates it with a QTextEdit widget.
+    * @param rangeReference The string reference for the range (eg. "A1" or "Sheet2!B2:B12")
+    * @param workbook The workbook which this range's sheet is in
+    * @param sheet The sheet which this range is in
+    * @param editor The KTextEdit widget to associate this this highlighted range.  When the area of the range is changed via 
+    * @ref EditorHighlightRange::setRange() , any references to the old area in the edit widget's text will be updated.
+    */
+    EditorHighlightRange(const QString& rangeReference, Map* workbook, Sheet* sheet, QTextEdit* editor);
+    
+    
+    /**
+    * Changes the area of this range and replaces references in the associated KTextEdit widget
+    */
+    virtual void setRange(QRect& newRange);
+    
+protected:
+    QTextEdit* _editor;
+};
+
 
 
 /**

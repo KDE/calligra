@@ -126,6 +126,7 @@ class KSPREAD_EXPORT Range
 {
 public:
   Range();
+  
   Range( const QString& );
   Range( const QString&, Map*, Sheet* default_sheet = 0 );
   Range( const Range& r );
@@ -154,7 +155,12 @@ public:
   int endRow () const { return range().bottom(); };
   int endCol () const { return range().right(); };
 
-  void setRange(QRect& newRange) {_range=newRange;}
+  /**
+  * Changes the area on the spreadsheet represented by this range
+  * @param newRange The new area for this range.
+  */
+  virtual void setRange(QRect& newRange) {_range=newRange;}
+  
   void setRange(int newStartCol, int newStartRow, int newEndCol, int newEndRow)
   { _range=QRect(newStartCol,newStartRow,newEndCol-newStartCol,newEndRow-newStartRow); }
   

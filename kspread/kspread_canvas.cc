@@ -55,6 +55,7 @@
 #include <kmessagebox.h>
 #include <krun.h>
 #include <kmimetype.h>
+#include <ksharedptr.h>
 
 #include <KoSpeaker.h>
 
@@ -144,11 +145,11 @@ class Canvas::Private
 
     //Stores information about cells referenced in the formula currently being edited,
     //Used to highlight relevant cells
-    std::vector<HighlightRange>* highlightedRanges;
+    std::vector< KSharedPtr<HighlightRange> >* highlightedRanges;
 
     //The highlighted range being resized by the user (using the size grip, or null if the user
     //is not resizing a range.
-    HighlightRange* sizingHighlightRange;
+    KSharedPtr<HighlightRange> sizingHighlightRange;
 
    // bool mouseOverHighlightRangeSizeGrip;
 
@@ -907,27 +908,25 @@ void Canvas::slotMaxRow( int _max_row )
   vertScrollBar()->setRange( 0, d->view->doc()->zoomItY( ypos + yOffset() ) );
 }
 
-bool Canvas::getHighlightedRangesAt(const int col, const int row, std::vector<HighlightRange*>& ranges)
+bool Canvas::getHighlightedRangesAt(const int col, const int row, std::vector< HighlightRange* >& ranges)
 {
 	if (!d->highlightedRanges)
 		return false;
 
 	bool result=false;
 
-	std::vector<HighlightRange>::iterator iter;
+	std::vector< KSharedPtr<HighlightRange> >::iterator iter;
 
 	for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
 	{
-		Range rg;
-		iter->getRange(rg);
 		Point pt;
 		pt.setRow(row);
 		pt.setColumn(col);
 		pt.setSheet( activeSheet() );
 
-		if (rg.contains(pt))
+		if ( (*iter)->contains(pt))
 		{
-			ranges.push_back( &(*iter) );
+			ranges.push_back( *iter );
 			result=true;
 		}
 	}
@@ -1090,34 +1089,33 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   int row  = sheet->topRow( ev_PosY, ypos );
 
 
-  if ( !(_ev->state() & Qt::LeftButton) )
+  //*** Highlighted Range Resize Handling ***
+  
+    //End range resizing if the user releases the mouse
+    if ( !(_ev->state() & Qt::LeftButton) )
 	  d->sizingHighlightRange=0;
 
-  if (d->sizingHighlightRange)
-  {
-	  Range rg;
-	  d->sizingHighlightRange->getRange(rg);
-	  QRect newRange;
-	  newRange.setCoords(rg.range().left(),rg.range().top(),col,row);
+    if (d->sizingHighlightRange)
+    {
+          QRect area=d->sizingHighlightRange->range();
+	  QRect newArea;
+	  newArea.setCoords(area.left(),area.top(),col,row);
 
-//	  resizeHighlightedRange(d->sizingHighlightRange,newRange);
+          d->sizingHighlightRange->setRange(newArea);
+    //	  resizeHighlightedRange(d->sizingHighlightRange,newRange);
 
 	  setCursor(Qt::SizeFDiagCursor);
 
 	  return;
-  }
+    }
 
- /* kdDebug() << "ev_PosX " << ev_PosX << endl;
-  kdDebug() << "ev_PosY " << ev_PosY << endl;
-  kdDebug() << "xOffset " << xOffset() << endl;
-  kdDebug() << "yOffset " << yOffset() << endl;*/
-
-  //Check for a highlight range size grip and show the user a visual cue if found.
-  if (highlightRangeSizeGripAt(ev_PosX,ev_PosY))
-  {
-	  setCursor(Qt::SizeFDiagCursor);
-	  return;
-  }
+    //Check to see if the mouse is over a highlight range size grip and if it is, change the cursor
+    //shape to a resize arrow
+    if (highlightRangeSizeGripAt(ev_PosX,ev_PosY))
+    {
+	   setCursor(Qt::SizeFDiagCursor);
+	   return;
+    }
 
    // Special handling for choose mode.
   if ( d->chooseCell )
@@ -1376,12 +1374,11 @@ HighlightRange* Canvas::highlightRangeSizeGripAt(double x, double y)
 			HighlightRange* highlight=*iter;
 
 	  	//Is the mouse over the size grip at the bottom-right hand corner of the range?
-			Range rg;
-			highlight->getRange(rg);
-
+  
 			KoRect visibleRect;
-			sheetAreaToRect(QRect(rg.startCol(),rg.startRow(),
-					       rg.endCol()-rg.startCol()+1,rg.endRow()-rg.startRow()+1),visibleRect);
+			sheetAreaToRect(QRect(highlight->startCol(),highlight->startRow(),
+					       highlight->endCol()-highlight->startCol()+1,
+					       highlight->endRow()-highlight->startRow()+1),visibleRect);
 
 			double distFromSizeGripCorner=( sqrt( (visibleRect.right()-x) +
 						(visibleRect.bottom()-y) ) );
@@ -1432,7 +1429,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 
   //Check region to see if we are over a highlight range size grip
 
-  d->sizingHighlightRange=highlightRangeSizeGripAt(ev_PosX,ev_PosY);
+  d->sizingHighlightRange=KSharedPtr<HighlightRange>(highlightRangeSizeGripAt(ev_PosX,ev_PosY));
 
   if (d->sizingHighlightRange)
 		  return;
@@ -4082,18 +4079,19 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 	if (!d->highlightedRanges)
 		return;
 
-	std::vector<HighlightRange>::iterator iter;
+	std::vector< KSharedPtr<HighlightRange> >::iterator iter;
 
 	QBrush nullBrush;
 
 	for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
 	{
 		//Only paint ranges or cells on the current sheet
-		if (iter->firstCell()->sheet() != activeSheet())
+		if ( (*iter)->sheet() != activeSheet())
 			continue;
 
-		QRect region;
+		QRect region= (*iter)->range();
 
+                /*
 		region.setTop(iter->firstCell()->row());
 		region.setLeft(iter->firstCell()->column());
 
@@ -4106,7 +4104,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 		{
 			region.setBottom(region.top());
 			region.setRight(region.left());
-		}
+		}*/
 
 		//Sanity-check: If the top-left corner is lower and/or further right than the bottom-right corner,
 		//the user has entered an invalid region and we should go to the next range.
@@ -4121,7 +4119,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 		//Convert region from sheet coordinates to canvas coordinates for use with the painter
 		//retrieveMarkerInfo(region,viewRect,positions,paintSides);
 
-		QPen highlightPen(iter->color());
+		QPen highlightPen( (*iter)->color() );
 		painter.setPen(highlightPen);
 
 		//Adjust the canvas coordinate - rect to take account of zoom level
@@ -4148,7 +4146,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 		//click and drag to resize the region)
 
 
-		QBrush sizeGripBrush(iter->color());
+		QBrush sizeGripBrush( (*iter)->color());
 		QPen   sizeGripPen(Qt::white);
 
 		painter.setPen(sizeGripPen);
@@ -6082,17 +6080,18 @@ void ToolTip::maybeTip( const QPoint& p )
     }
 }
 
-void Canvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
+void Canvas::setHighlightedRanges(std::vector< KSharedPtr<HighlightRange> >* cells)
 {
 	//Clear existing highlighted ranges
 
 	if (d->highlightedRanges)
 	{
-		std::vector<HighlightRange>::iterator iter;
+		std::vector< KSharedPtr<HighlightRange> >::iterator iter;
 
 		for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
 		{
-			if (iter->lastCell())
+		      (*iter)->sheet()->setRegionPaintDirty( (*iter)->range());
+			/*if (iter->lastCell())
 			{
 				Range rg(*(iter->firstCell()),*(iter->lastCell()));
 
@@ -6105,7 +6104,7 @@ void Canvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 				       1,1);
 
 				iter->firstCell()->sheet()->setRegionPaintDirty(cellRect);
-			}
+			}*/
 		}
 
 		delete d->highlightedRanges;
@@ -6117,7 +6116,7 @@ void Canvas::setHighlightedRanges(std::vector<HighlightRange>* cells)
 	{
 		//Set the highlight flag for the specified cells, set the highlight color and add them to the dirty list for
 		//later repainting
-		d->highlightedRanges=new std::vector<HighlightRange>(*cells);
+		d->highlightedRanges=new std::vector< KSharedPtr<HighlightRange> >(*cells);
 
 #if 0
 		std::vector<HighlightRange>::iterator iter;

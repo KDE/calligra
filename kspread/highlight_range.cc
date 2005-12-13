@@ -23,37 +23,16 @@
 
 using namespace KSpread;
 
-HighlightRange::HighlightRange(const HighlightRange& rhs)
-{
-    rhs._firstCell ? _firstCell=new Point(*(rhs._firstCell )) : _firstCell=0;
-    rhs._lastCell  ? _lastCell=new Point(*(rhs._lastCell )) : _lastCell=0;
-    _color=QColor(rhs._color);
-}
 
-void HighlightRange::getRange(Range& rg)
-{
-    if (!_firstCell)
-    {
-        rg=Range();
-        return;
-    }
+HighlightRange::HighlightRange() : Range() , _color(Qt::black) {}
+HighlightRange::HighlightRange(const QString& rangeReference) : Range(rangeReference) , _color(Qt::black) {}
+HighlightRange::HighlightRange(const QString& rangeReference, Map* workbook, Sheet* sheet)
+: Range(rangeReference,workbook,sheet) , _color(Qt::black) {}
+HighlightRange::HighlightRange(const Point& upperLeft, const Point& lowerRight) 
+: Range(upperLeft,lowerRight) , _color(Qt::black) {}
 
-    if (_lastCell)
-    {
-        rg=Range(*_firstCell,*_lastCell); 	
-    }
-    else
-    {
-        rg=Range(*_firstCell,*_firstCell);
-    }
-}
+HighlightRange::HighlightRange(const HighlightRange& rhs) 
+: Range(rhs) , KShared() , _color(rhs.color()) {}
 
-void HighlightRange::setArea(const QRect& newArea)
-{
-    Range rg;
-    getRange(rg);
-    
-   // emit areaChanged(firstCell()->sheet,rg.range,newArea);
-}
 
 

@@ -23,6 +23,8 @@
 
 #include <qcolor.h>
 
+#include "ksharedptr.h"
+
 #include "kspread_util.h"
 
 
@@ -36,70 +38,32 @@ namespace KSpread
  *
  * The drawing of highlighted ranges is performed by the @ref Canvas class.
  */
-class HighlightRange
+class HighlightRange : public Range , public KShared
 {
     public:
         /**
         * Constructs a new HighlightRange object.  The new HighlightRange will
         * have no area associated with it and its color will be set to black.
         */
-        HighlightRange() : _firstCell(0),_lastCell(0),_color(QColor(0,0,0)) {}
-
+        HighlightRange();
+        HighlightRange(const QString& rangeReference);
+        HighlightRange(const QString& rangeReference, Map* workbook, Sheet* sheet);
+        HighlightRange(const Point& upperLeft, const Point& lowerRight);
+       
 	/**
 	* Creates a copy of a HighlightRange.  The new object will have the same range and
 	* colour as the existing HighlightRange.
 	*/
         HighlightRange(const HighlightRange& rhs);
-
-        virtual ~HighlightRange() {delete _firstCell; delete _lastCell;
-            _firstCell=0;_lastCell=0;}
-
-
-        /**
-        * Returns the range which should be highlighted.
-        *
-        * @param rg A Range object which receives the range to be highlighted.
-        */
-        void getRange(Range& rg);
-
-        /**
-        * Sets the first cell in the range
-	*
-	* @param fc A KSpreadPoint object containing the co-ordinates (in rows and columns)
-	* of the first cell in the highlighted range.
-        */
-        void setFirstCell(Point* fc) {_firstCell=fc;}
-        Point* firstCell() {return _firstCell;}
-
-        /**
-        * Sets the last cell in the range.
-	*
-	* @param lc A KSpreadPoint object containing the co-ordinates (in rows and columns) of 
-	* the last cell in the highlighted range.  This pointer can be null, in which case
-	* only the first cell (set with @ref setFirstCell ) will be highlighted
-        */
-        void setLastCell(Point* lc) {_lastCell=lc;}
-        Point* lastCell() {return _lastCell;}
+        
 
         /**
         * Sets the colour which should be used to highlight the range.
         */
         void setColor(QColor& clr) {_color=clr;}
-        QColor color() {return _color;}
-
-	/**
-	* Convenience function to change the area of a highlighted range.  This will cause an areaChanged() signal to be emitted.
-	* @param newArea The area in rows and columns that the range should occupy.  
-	*/
-	void setArea(const QRect& newArea);
-
-    signals:
-	/** Emitted when the area of the range has been changed via a call to @ref setArea.*/
-	void areaChanged(Sheet* sheet, QRect& oldArea, QRect& newArea);
+        QColor color() const {return _color;}
 
     protected:
-        Point* _firstCell; //First cell in range, will either be in same row or same col as last cell
-        Point* _lastCell; //Last cell in range, will either be in same row or same col as first cell, Will be 0 for single-cells
         QColor   _color; //Colour to highlight this range with
 };
 
