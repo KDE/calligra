@@ -108,6 +108,8 @@ void KWAnchor::draw( QPainter* p, int x, int y, int cx, int cy, int cw, int ch, 
     QPoint topLeftLU = crectLU.topLeft();
     QPoint bottomRightLU = crectLU.bottomRight();
     KWFrame* containingFrame = fs->currentDrawnFrame(); // always set, except in the textviewmode
+    while(containingFrame->isCopy())
+        containingFrame = fs->frame( fs->frameFromPtr(containingFrame) -1 );
     KoPoint topLeftPt = fs->internalToDocumentKnowingFrame( topLeftLU, containingFrame );
 
     // Now we can convert the bottomright
