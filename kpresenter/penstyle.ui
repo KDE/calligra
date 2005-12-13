@@ -38,7 +38,7 @@
                 <string>Arrow Style</string>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Set the styles of the beginning and the end of your line for example you can choose an arrow at the end and a square dot at the beginning.</string>
+                <string>Set the styles of the beginning and end of your line. For example, you can choose a square dot at the beginning and an arrow at the end.</string>
             </property>
             <grid>
                 <property name="name">
@@ -97,7 +97,7 @@
                 <cstring>styleCombo</cstring>
             </property>
             <property name="whatsThis" stdset="0">
-                <string>Choose the line style from No Outline which will not draw any line to dotted lines and plain line.</string>
+                <string>Choose the line style. This can range from No Outline, which will not draw any lines, to dotted and plain lines.</string>
             </property>
         </widget>
         <widget class="QLabel" row="2" column="0">
