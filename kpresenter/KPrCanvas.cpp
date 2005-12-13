@@ -365,20 +365,106 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         }
 
 
+        QPixmap topBuffer( buffer );
+        QPainter topPainter( &topBuffer, &buffer );
+        topPainter.translate( -diffx(), -diffy() );
+        topPainter.setBrushOrigin( -diffx(), -diffy() );
+
         if ( editMode && doc->showGuideLines() ) 
         {
-            QPixmap m_guideBuffer( buffer );
-            QPainter guidePainter( &m_guideBuffer, &buffer );
-            guidePainter.translate( -diffx(), -diffy() );
-            guidePainter.setBrushOrigin( -diffx(), -diffy() );
-            m_gl.paintGuides( guidePainter );
-            guidePainter.end();
-            bitBlt( this, paintEvent->rect().topLeft(), &m_guideBuffer, paintEvent->rect() );
+            m_gl.paintGuides( topPainter );
         }
-        else
+            
+        topPainter.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
+        topPainter.setRasterOp( NotROP );
+        switch ( toolEditMode )
         {
-            bitBlt( this, paintEvent->rect().topLeft(), &buffer, paintEvent->rect() );
+            case INS_RECT:
+                if ( !m_insertRect.isNull() )
+                {
+                    topPainter.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), 
+                            m_view->getRndX(), m_view->getRndY() );
+                }
+                break;
+            case INS_ELLIPSE:
+                if ( !m_insertRect.isNull() )
+                {
+                    topPainter.drawEllipse( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
+                }
+                break;
+            case INS_AUTOFORM:
+            case INS_DIAGRAMM:
+            case INS_FORMULA:
+            case INS_CLIPART:
+            case INS_PICTURE:
+            case INS_OBJECT:
+            case INS_TABLE:
+            case INS_TEXT:
+                if ( !m_insertRect.isNull() )
+                {
+                    topPainter.drawRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
+                }
+                break;
+            case INS_PIE:
+                if ( !m_insertRect.isNull() )
+                {
+                    drawPieObject( &topPainter, m_insertRect );
+                }
+                break;
+            case INS_LINE:
+                topPainter.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
+                        m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+                break;
+            case INS_FREEHAND:
+            case INS_CLOSED_FREEHAND:
+            case INS_POLYLINE:
+            case INS_CLOSED_POLYLINE:
+                {
+                    QPointArray pointArray = m_pointArray.zoomPointArray( m_view->zoomHandler() );
+                    topPainter.drawPolyline( pointArray );
+                    topPainter.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
+                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+                } break;
+            case INS_QUADRICBEZIERCURVE:
+            case INS_CUBICBEZIERCURVE:
+            case INS_CLOSED_QUADRICBEZIERCURVE:
+            case INS_CLOSED_CUBICBEZIERCURVE:
+                if ( m_drawCubicBezierCurve )
+                {
+                    if ( m_indexPointArray > 4 )
+                    {
+                        for ( int count = 0; count < m_indexPointArray - 4; count += 4 )
+                        {
+
+                            double _firstX = m_pointArray.at( count ).x();
+                            double _firstY = m_pointArray.at( count ).y();
+
+                            double _fourthX = m_pointArray.at( count + 1 ).x();
+                            double _fourthY = m_pointArray.at( count + 1 ).y();
+
+                            double _secondX = m_pointArray.at( count + 2 ).x();
+                            double _secondY = m_pointArray.at( count + 2 ).y();
+
+                            double _thirdX = m_pointArray.at( count + 3 ).x();
+                            double _thirdY = m_pointArray.at( count + 3 ).y();
+
+                            KoPointArray points;
+                            points.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
+
+                            topPainter.drawCubicBezier( points.zoomPointArray( m_view->zoomHandler() ) );
+                        }
+                    }
+                    drawCubicBezierCurve( topPainter, m_oldCubicBezierPointArray );
+                }
+                break;
+            case INS_POLYGON:
+                drawPolygon( m_insertRect );
+                break;
+            default:
+                break;
         }
+        topPainter.end();
+        bitBlt( this, paintEvent->rect().topLeft(), &topBuffer, paintEvent->rect() );
     }
     //else kdDebug(33001) << "KPrCanvas::paintEvent with updates disabled" << endl;
 }
@@ -610,6 +696,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
     QPoint contentsPoint( e->pos().x()+diffx(), e->pos().y()+diffy() );
     KoPoint docPoint = m_view->zoomHandler()->unzoomPoint( contentsPoint );
+    m_insertRect = KoRect();
 
     if(!m_view->koDocument()->isReadWrite())
         return;
@@ -919,9 +1006,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 QPainter p( this );
                 p.setPen( QPen( black, 1, SolidLine ) );
                 p.setBrush( NoBrush );
+                p.translate( -diffx(), -diffy() );
                 p.save();
                 p.setRasterOp( NotROP );
-                p.translate( -diffx(), -diffy() );
 
                 // remove old line
                 p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
@@ -1287,7 +1374,6 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             finishResizeObject( i18n( "Resize Object Right && Down" ) );
             break;
         }
-        m_gl.repaintAfterSnapping();
     } break;
     case INS_TEXT:
         if ( !m_insertRect.isNull() ) 
@@ -1351,6 +1437,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
         if ( m_startPoint != m_endPoint )
         {
             insertLine( m_startPoint, m_endPoint );
+            m_endPoint = m_startPoint;
         }
         break;
     case INS_RECT:
@@ -1416,6 +1503,8 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     default: break;
     }
 
+    m_gl.repaintAfterSnapping();
+
     emit objectSelectedChanged();
 
     if ( toolEditMode != TEM_MOUSE && editMode )
@@ -1424,6 +1513,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
     m_view->disableAutoScroll();
     mousePressed = false;
     modType = MT_NONE;
+    m_insertRect = KoRect();
     mouseMoveEvent( e );
 }
 
@@ -1585,9 +1675,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setBrush( NoBrush );
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
-                p.drawRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
 
                 KoPoint sp( snapPoint( docPoint ) );
+                p.drawRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
                 m_insertRect.setRight( sp.x() );
                 m_insertRect.setBottom( sp.y() );
 
@@ -1603,8 +1693,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
-                p.drawEllipse( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
                 KoPoint sp( snapPoint( docPoint ) );
+                p.drawEllipse( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
                 m_insertRect.setRight( sp.x() );
                 m_insertRect.setBottom( sp.y() );
                 p.drawEllipse( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ) );
@@ -1620,9 +1710,9 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
-                p.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
 
                 KoPoint sp( snapPoint( docPoint ) );
+                p.drawRoundRect( m_view->zoomHandler()->zoomRect( m_insertRect.normalize() ), m_view->getRndX(), m_view->getRndY() );
                 m_insertRect.setRight( sp.x() );
                 m_insertRect.setBottom( sp.y() );
 
@@ -1639,12 +1729,12 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
+                KoPoint oldEndPoint( m_endPoint );
+                m_endPoint = snapPoint( docPoint );
                 //remove the old line
                 p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
-                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
+                            m_view->zoomHandler()->zoomPoint( oldEndPoint ) );
 
-                m_endPoint = snapPoint( docPoint );
-                
                 // print the new line
                 p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
                             m_view->zoomHandler()->zoomPoint( m_endPoint ) );
@@ -1659,8 +1749,8 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
-                drawPieObject( &p, m_insertRect );
                 KoPoint sp( snapPoint( docPoint ) );
+                drawPieObject( &p, m_insertRect );
                 m_insertRect.setRight( sp.x() );
                 m_insertRect.setBottom( sp.y() );
                 drawPieObject( &p, m_insertRect );
@@ -1699,11 +1789,11 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                 p.setRasterOp( NotROP );
                 p.translate( -diffx(), -diffy() );
 
+                KoPoint oldEndPoint( m_endPoint );
+                m_endPoint = snapPoint( docPoint );
                 //remove the old line
                 p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
-                            m_view->zoomHandler()->zoomPoint( m_endPoint ) );
-
-                m_endPoint = snapPoint( docPoint );
+                            m_view->zoomHandler()->zoomPoint( oldEndPoint ) );
                 
                 // print the new line
                 p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
@@ -1714,17 +1804,67 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
             } break;
             case INS_CUBICBEZIERCURVE: case INS_QUADRICBEZIERCURVE:
             case INS_CLOSED_CUBICBEZIERCURVE: case INS_CLOSED_QUADRICBEZIERCURVE:{
-                drawCubicBezierCurve( docPoint );
+                QPainter p( this );
+                p.setPen( QPen( black, 1, SolidLine ) );
+                p.setBrush( NoBrush );
+                p.setRasterOp( NotROP );
+                p.translate( -diffx(), -diffy() );
+
+                KoPoint newEndPoint( snapPoint( docPoint ) );
+
+                drawCubicBezierCurve( p, m_oldCubicBezierPointArray );  
+
+                m_endPoint = newEndPoint;
+
+                KoPointArray points;
+                if ( !m_drawLineWithCubicBezierCurve )
+                {
+                    double _firstX = m_pointArray.at( m_indexPointArray - 2 ).x();
+                    double _firstY = m_pointArray.at( m_indexPointArray - 2 ).y();
+
+                    double _fourthX = m_pointArray.at( m_indexPointArray - 1 ).x();
+                    double _fourthY = m_pointArray.at( m_indexPointArray - 1 ).y();
+
+                    double _midpointX = (_firstX + _fourthX ) / 2;
+                    double _midpointY = (_firstY + _fourthY ) / 2;
+                    double _diffX = _fourthX - _midpointX;
+                    double _diffY = _fourthY - _midpointY;
+
+                    double _secondX = m_endPoint.x() - _diffX;
+                    double _secondY = m_endPoint.y() - _diffY;
+                    m_CubicBezierSecondPoint = KoPoint( _secondX, _secondY );
+
+                    m_symmetricEndPoint = m_startPoint * 2 - m_endPoint;
+
+                    double _thirdX = m_symmetricEndPoint.x() - _diffX;
+                    double _thirdY = m_symmetricEndPoint.y() - _diffY;
+                    m_CubicBezierThirdPoint = KoPoint( _thirdX, _thirdY );
+
+                    if ( toolEditMode == INS_QUADRICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE ) {
+                        _secondX = _thirdX;
+                        _secondY = _thirdY;
+                        m_CubicBezierSecondPoint = KoPoint( _secondX, _secondY );
+                    }
+                    points.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
+                }
+
+                drawCubicBezierCurve( p, points );
+                if ( points.size() > 0 )
+                {
+                    m_oldCubicBezierPointArray = points;
+                }
 
                 mouseSelectedObject = true;
             } break;
             case INS_POLYGON: {
+                KoPoint sp( snapPoint( docPoint ) );
+                // erase old
                 drawPolygon( m_insertRect );
 
-                KoPoint sp( snapPoint( docPoint ) );
                 m_insertRect.setRight( sp.x() );
                 m_insertRect.setBottom( sp.y() );
 
+                // print new
                 drawPolygon( m_insertRect );
 
                 mouseSelectedObject = true;
@@ -3412,10 +3552,10 @@ void KPrCanvas::slotDoPageEffect()
 
 void KPrCanvas::slotAutoScroll(const QPoint &scrollDistance)
 {
-     //QPoint d = m_view->zoomHandler()->zoomPoint( scrollDistance );
-     QPoint d = scrollDistance;
-     m_view->getHScrollBar()->setValue( m_view->getHScrollBar()->value() + d.x() );
-     m_view->getVScrollBar()->setValue( m_view->getVScrollBar()->value() + d.y() );
+    //QPoint d = m_view->zoomHandler()->zoomPoint( scrollDistance );
+    QPoint d = scrollDistance;
+    m_view->getHScrollBar()->setValue( m_view->getHScrollBar()->value() + d.x() );
+    m_view->getVScrollBar()->setValue( m_view->getVScrollBar()->value() + d.y() );
 }
 
 
@@ -4379,8 +4519,7 @@ void KPrCanvas::picViewOriginalSize()
     KoSize diff( newSize.width() * fakt - object->getSize().width(),
                  newSize.height() * fakt - object->getSize().height() );
 
-    // TODO after 1.4 change text to "Scale to Original Size"
-    KPrResizeCmd *resizeCmd = new KPrResizeCmd( i18n( "Scale Picture to Be Shown 1:1 in Presentation Mode" ),
+    KPrResizeCmd *resizeCmd = new KPrResizeCmd( i18n( "Scale to Original Size" ),
                                           KoPoint( 0, 0 ), diff, object, doc );
     resizeCmd->execute();
     doc->addCommand( resizeCmd );
@@ -4974,115 +5113,43 @@ void KPrCanvas::terminateEditing( KPrTextObject *textObj )
     }
 }
 
-void KPrCanvas::drawCubicBezierCurve( KoPoint &point )
+void KPrCanvas::drawCubicBezierCurve( QPainter &p, KoPointArray &points )
 {
-    KoPoint oldEndPoint( m_endPoint );
-
-    unsigned int pointCount = m_pointArray.count();
-
-    QPainter p( this );
-    p.translate( -diffx(), -diffy() );
-
+    p.save();
     if ( !m_drawLineWithCubicBezierCurve )
     {
-        QPen _pen = QPen( Qt::black, 1, Qt::DashLine );
-        p.setPen( _pen );
-        p.setBrush( Qt::NoBrush );
-        p.setRasterOp( Qt::NotROP );
-
-        double _angle = KoPoint::getAngle( oldEndPoint, m_startPoint );
-        drawFigure( L_SQUARE, &p, oldEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // erase old figure
+        QPen pen = QPen( Qt::black, 1, Qt::DashLine );
+        p.setPen( pen );
+        double angle = KoPoint::getAngle( m_endPoint, m_startPoint );
+        drawFigure( L_SQUARE, &p, m_endPoint, pen.color(), pen.width(), angle,m_view->zoomHandler() );
 
         p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
-                    m_view->zoomHandler()->zoomPoint( oldEndPoint ) );// erase old line
+                    m_view->zoomHandler()->zoomPoint( m_endPoint ) );
 
-        m_symmetricEndPoint = m_startPoint * 2 - oldEndPoint;
+        KoPoint symmetricEndPoint = m_startPoint * 2 - m_endPoint;
 
-        _angle = KoPoint::getAngle( m_symmetricEndPoint, m_startPoint );
-        drawFigure( L_SQUARE, &p, m_symmetricEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() );  // erase old figure
+        angle = KoPoint::getAngle( symmetricEndPoint, m_startPoint );
+        drawFigure( L_SQUARE, &p, symmetricEndPoint, pen.color(), pen.width(), angle,m_view->zoomHandler() );
 
+        // TODO only 1 draw line
         p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
-                    m_view->zoomHandler()->zoomPoint( m_symmetricEndPoint ) );// erase old line
+                    m_view->zoomHandler()->zoomPoint( symmetricEndPoint ) );
 
         p.save();
         p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
-        p.drawCubicBezier( m_oldCubicBezierPointArray.zoomPointArray( m_view->zoomHandler() ) );
-        p.restore();
-
-        m_endPoint = snapPoint( point );
-
-        _angle = KoPoint::getAngle( m_endPoint, m_startPoint );
-        drawFigure( L_SQUARE, &p, m_endPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // draw new figure
-
-        p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
-                    m_view->zoomHandler()->zoomPoint( m_endPoint ) );// draw new line
-
-        m_symmetricEndPoint = m_startPoint * 2 - m_endPoint;
-
-        _angle = KoPoint::getAngle( m_symmetricEndPoint, m_startPoint );
-        drawFigure( L_SQUARE, &p, m_symmetricEndPoint, _pen.color(), _pen.width(), _angle,m_view->zoomHandler() ); // draw new figure
-
-        p.drawLine( m_view->zoomHandler()->zoomPoint( m_startPoint ), 
-                    m_view->zoomHandler()->zoomPoint( m_symmetricEndPoint ) );// draw new line
-
-        p.save();
-
-        p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
-        p.setBrush( Qt::NoBrush );
-        p.setRasterOp( Qt::NotROP );
-
-        double _firstX = m_pointArray.at( m_indexPointArray - 2 ).x();
-        double _firstY = m_pointArray.at( m_indexPointArray - 2 ).y();
-
-        double _fourthX = m_pointArray.at( m_indexPointArray - 1 ).x();
-        double _fourthY = m_pointArray.at( m_indexPointArray - 1 ).y();
-
-        double _midpointX = (_firstX + _fourthX ) / 2;
-        double _midpointY = (_firstY + _fourthY ) / 2;
-        double _diffX = _fourthX - _midpointX;
-        double _diffY = _fourthY - _midpointY;
-
-        double _secondX = m_endPoint.x() - _diffX;
-        double _secondY = m_endPoint.y() - _diffY;
-        m_CubicBezierSecondPoint = KoPoint( _secondX, _secondY );
-
-        double _thirdX = m_symmetricEndPoint.x() - _diffX;
-        double _thirdY = m_symmetricEndPoint.y() - _diffY;
-        m_CubicBezierThirdPoint = KoPoint( _thirdX, _thirdY );
-
-        if ( toolEditMode == INS_QUADRICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE ) {
-            _secondX = _thirdX;
-            _secondY = _thirdY;
-            m_CubicBezierSecondPoint = KoPoint( _secondX, _secondY );
-        }
-
-        KoPointArray points;
-        points.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
-        // draw new cubic bezier curve
         p.drawCubicBezier( points.zoomPointArray( m_view->zoomHandler() ) );
-
-        m_oldCubicBezierPointArray = points;
-
         p.restore();
     }
-    else if ( m_drawLineWithCubicBezierCurve ) {
-        p.setPen( QPen( Qt::black, 1, Qt::SolidLine ) );
-        p.setBrush( Qt::NoBrush );
-        p.setRasterOp( Qt::NotROP );
-
+    else
+    {
         KoPoint startPoint( m_pointArray.at( m_indexPointArray - 1 ) );
 
         p.drawLine( m_view->zoomHandler()->zoomPoint( startPoint ), 
-                    m_view->zoomHandler()->zoomPoint( oldEndPoint ) );// erase old line
-
-        m_endPoint = snapPoint( point );
-
-        p.drawLine( m_view->zoomHandler()->zoomPoint( startPoint ), 
-                    m_view->zoomHandler()->zoomPoint( m_endPoint ) );// draw new line
+                    m_view->zoomHandler()->zoomPoint( m_endPoint ) );
     }
-
-    p.end();
+    p.restore();
 }
+
 
 void KPrCanvas::drawPolygon( const KoRect &rect )
 {

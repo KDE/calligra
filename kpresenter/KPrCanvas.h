@@ -574,7 +574,10 @@ protected:
 
     void endDrawPolyline();
 
-    void drawCubicBezierCurve( KoPoint &point );
+    /**
+     * @brief Draw a cubic bezier curve.
+     */ 
+    void drawCubicBezierCurve( QPainter &p, KoPointArray &points );
     //void drawCubicBezierCurve( int _dx, int _dy );
     void endDrawCubicBezierCurve();
 
