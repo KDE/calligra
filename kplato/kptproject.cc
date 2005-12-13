@@ -654,6 +654,26 @@ bool Project::moveTaskDown( Node* node )
     return false;
 }
 
+Task *Project::createTask(Node* parent) {
+    Task* node = new Task(parent);
+    node->setId(uniqueNodeId());
+    return node;
+}
+
+Task *Project::createTask(Task &def, Node* parent) {
+    Task* node = new Task(def, parent);
+    node->setId(uniqueNodeId());
+    return node;
+}
+
+QString Project::uniqueNodeId(int seed) {
+    int i = seed;
+    while (findNode(QString("%1").arg(i))) {
+        ++i;
+    }
+    return QString("%1").arg(i);
+}
+
 ResourceGroup *Project::group(QString id) {
     return findResourceGroup(id);
 }

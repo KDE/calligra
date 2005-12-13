@@ -22,7 +22,6 @@
 #include <kmessagebox.h>
 
 #include <koKoolBar.h>
-#include <KoRect.h>
 
 #include <qapplication.h>
 #include <qpainter.h>
@@ -475,7 +474,7 @@ void View::slotAddSubTask() {
 	// If we are positionend on the root project, then what we really want to
 	// do is to add a first project. We will silently accept the challenge
 	// and will not complain.
-    Task* node = new Task(getPart()->config().taskDefaults(), currentTask());
+    Task* node = getProject().createTask(getPart()->config().taskDefaults(), currentTask());
     TaskDialog *dia = new TaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
     if (dia->exec()) {
 		Node *currNode = currentTask();
@@ -497,7 +496,7 @@ void View::slotAddSubTask() {
 
 
 void View::slotAddTask() {
-    Task *node = new Task(getPart()->config().taskDefaults(), currentTask());
+    Task* node = getProject().createTask(getPart()->config().taskDefaults(), currentTask());
     TaskDialog *dia = new TaskDialog(*node, getProject().accounts(), getProject().standardWorktime(), getProject().isBaselined());
     if (dia->exec()) {
 		Node* currNode = currentTask();
@@ -519,7 +518,7 @@ void View::slotAddTask() {
 
 void View::slotAddMilestone() {
 	Duration zeroDuration(0);
-    Task* node = new Task(currentTask());
+    Task* node = getProject().createTask(currentTask());
 	node->effort()->set( zeroDuration );
 
     //Milestone *node = new Milestone(currentTask());

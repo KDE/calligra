@@ -29,7 +29,6 @@
 #include <qpoint.h>
 
 #include <kdebug.h>
-#include <KoRect.h> //DEBUGRECT
 
 namespace KPlato
 {

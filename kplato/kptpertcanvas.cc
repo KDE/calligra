@@ -45,8 +45,6 @@
 #include <kmultipledrag.h>
 #include <klistview.h>
 
-#include <KoRect.h> //DEBUGRECT
-
 namespace KPlato
 {
 

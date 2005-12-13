@@ -97,7 +97,9 @@ public:
     bool moveTaskUp( Node* node );
     bool canMoveTaskDown( Node* node );
     bool moveTaskDown( Node* node );
-
+    Task *createTask(Node* parent);
+    Task *createTask(Task &def, Node* parent);
+    
     /// Returns the resourcegroup with identity id.
     ResourceGroup *group(QString id);
     /// Returns the resource with identity id.
@@ -165,6 +167,7 @@ public:
     /// Insert the node with identity id
     virtual void insertId(const QString &id, const Node *node)
         { m_parent ? m_parent->insertId(id, node) : nodeIdDict.insert(id, node); }
+    QString uniqueNodeId(int seed=1);
     
     ResourceGroup *findResourceGroup(const QString &id) const 
         { return resourceGroupIdDict.find(id); }

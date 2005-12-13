@@ -66,6 +66,7 @@ Node::Node(Node &node, Node *parent)
 }
 
 Node::~Node() {
+    removeId();
     Relation *rel = 0;
     while ((rel = m_dependParentNodes.getFirst())) {
         delete rel;

@@ -30,7 +30,6 @@
 #include <qdom.h>
 #include <qbrush.h>
 #include <kdebug.h>
-#include <KoRect.h> //DEBUGRECT
 
 namespace KPlato
 {
