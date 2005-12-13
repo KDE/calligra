@@ -25,9 +25,20 @@ class KoPageLayoutSize;
 class KoPageLayoutColumns;
 class KWDocument;
 
+/**
+ * The 'Custom Document' widget in the KWord startup widget.
+ * This class embeds the page size/columns tabs to allow the user to select the document
+ * markup for his new empty document.
+ */
 class KWStartupWidget : public KWStartupWidgetBase {
     Q_OBJECT;
 public:
+    /**
+     * Constructor. Please note that this class is being used/created by KWDocument.
+     * @param parent the parent widget
+     * @param doc the document that wants to be altered
+     * @param columns the suggested columns to be shown initially
+     */
     KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColumns &columns);
 
 private slots:
@@ -36,6 +47,7 @@ private slots:
     void buttonClicked();
 
 signals:
+    /// this signal is emitted (as defined by KoDocument) the moment the document is 'ready'
     void documentSelected();
 
 private:
