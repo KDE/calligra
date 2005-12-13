@@ -5,10 +5,10 @@
             <Action name="koffice_undo"/>
             <Action name="koffice_redo"/>
             <Separator/>
-            <Action name="edit_cut"/>
+<!--            <Action name="edit_cut"/>
             <Action name="edit_copy"/>
             <Action name="edit_paste"/>
-            <Separator/>
+            <Separator/> -->
             <Action name="delete_task"/>
             <Action name="indent_task"/>
             <Action name="unindent_task"/>
@@ -90,10 +90,10 @@
         <Action name="go_lastpage"/>
     </ToolBar>
     <Menu name="node_popup">
-        <Action name="edit_cut"/>
+<!--        <Action name="edit_cut"/>
         <Action name="edit_copy"/>
         <Action name="edit_paste"/>
-        <Separator/>
+        <Separator/> -->
         <Action name="delete_task"/>
         <Action name="indent_task"/>
         <Action name="unindent_task"/>
@@ -103,10 +103,10 @@
     <Menu name="task_popup">
         <Action name="node_properties"/>
         <Separator/>
-        <Action name="edit_cut"/>
+<!--        <Action name="edit_cut"/>
         <Action name="edit_copy"/>
         <Action name="edit_paste"/>
-        <Separator/>
+        <Separator/> -->
         <Action name="delete_task"/>
         <Action name="indent_task"/>
         <Action name="unindent_task"/>
@@ -117,9 +117,9 @@
     </Menu>
     <Menu name="resource_popup">
         <Action name="edit_resource"/>
-        <Separator/>
+<!--        <Separator/>
         <Action name="edit_cut"/>
         <Action name="edit_copy"/>
-        <Action name="edit_paste"/>
+        <Action name="edit_paste"/> -->
     </Menu>
 </kpartgui>
