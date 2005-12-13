@@ -67,8 +67,10 @@ void KWStartupWidget::columnsUpdated(KoColumns &columns) {
 void KWStartupWidget::buttonClicked() {
     if(m_WpStyleCheckbox->isChecked())
         m_doc->initEmpty();
-    else
+    else {
         m_doc->m_processingType = KWDocument::DTP;
+        m_doc->clear();
+    }
     KoKWHeaderFooter hf;
     hf.header = HF_SAME;
     hf.footer = HF_SAME;
