@@ -603,7 +603,7 @@ void KWFootNoteVariable::setDeleted( bool del )
 int KWFootNoteVariable::pageNum() const
 {
     int page = m_doc->pageManager()->pageNumber(varY());
-    Q_ASSERT( page <= m_doc->pageCount()-1 );
+    Q_ASSERT( page <= m_doc->lastPage() );
     return page;
 }
 
