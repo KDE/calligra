@@ -7975,19 +7975,19 @@ bool Sheet::loadXML( const QDomElement& sheet )
     {
         if( layoutDir == "rtl" )
         {
-           detectDirection = false;
-           d->layoutDirection = RightToLeft;
+            detectDirection = false;
+            d->layoutDirection = RightToLeft;
         }
         else if( layoutDir == "ltr" )
         {
-           detectDirection = false;
-           d->layoutDirection = LeftToRight;
+            detectDirection = false;
+            d->layoutDirection = LeftToRight;
         }
         else
             kdDebug()<<" Direction not implemented : "<<layoutDir<<endl;
     }
     if( detectDirection )
-       checkContentDirection( d->name );
+        checkContentDirection( d->name );
 
     /* older versions of KSpread allowed all sorts of characters that
        the parser won't actually understand.  Replace these with '_'
@@ -7995,16 +7995,16 @@ bool Sheet::loadXML( const QDomElement& sheet )
     */
     if (d->name[0] == ' ')
     {
-      d->name.remove(0,1);
+        d->name.remove(0,1);
     }
     for (unsigned int i=0; i < d->name.length(); i++)
     {
-      if ( !(d->name[i].isLetterOrNumber() ||
-             d->name[i] == ' ' || d->name[i] == '.' ||
-             d->name[i] == '_'))
+        if ( !(d->name[i].isLetterOrNumber() ||
+               d->name[i] == ' ' || d->name[i] == '.' ||
+               d->name[i] == '_'))
         {
-        d->name[i] = '_';
-      }
+            d->name[i] = '_';
+        }
     }
 
     /* make sure there are no name collisions with the altered name */
@@ -8019,8 +8019,8 @@ bool Sheet::loadXML( const QDomElement& sheet )
     d->name = "";
     while (workbook()->findSheet(testName) != NULL)
     {
-      nameSuffix++;
-      testName = baseName + '_' + QString::number(nameSuffix);
+        nameSuffix++;
+        testName = baseName + '_' + QString::number(nameSuffix);
     }
     d->name = testName;
 
@@ -8071,7 +8071,7 @@ bool Sheet::loadXML( const QDomElement& sheet )
     }
     if( sheet.hasAttribute( "showCommentIndicator" ) )
     {
-      d->showCommentIndicator = (bool)sheet.attribute("showCommentIndicator").toInt( &ok );
+        d->showCommentIndicator = (bool)sheet.attribute("showCommentIndicator").toInt( &ok );
         // we just ignore 'ok' - if it didn't work, go on
     }
     if( sheet.hasAttribute( "borders" ) )
@@ -8109,152 +8109,155 @@ bool Sheet::loadXML( const QDomElement& sheet )
     QDomElement paper = sheet.namedItem( "paper" ).toElement();
     if ( !paper.isNull() )
     {
-      QString format = paper.attribute( "format" );
-      QString orientation = paper.attribute( "orientation" );
+        QString format = paper.attribute( "format" );
+        QString orientation = paper.attribute( "orientation" );
 
-      // <borders>
-      QDomElement borders = paper.namedItem( "borders" ).toElement();
-      if ( !borders.isNull() )
-      {
-        float left = borders.attribute( "left" ).toFloat();
-        float right = borders.attribute( "right" ).toFloat();
-        float top = borders.attribute( "top" ).toFloat();
-        float bottom = borders.attribute( "bottom" ).toFloat();
-        d->print->setPaperLayout( left, top, right, bottom, format, orientation );
-      }
-      QString hleft, hright, hcenter;
-      QString fleft, fright, fcenter;
-      // <head>
-      QDomElement head = paper.namedItem( "head" ).toElement();
-      if ( !head.isNull() )
-      {
-        QDomElement left = head.namedItem( "left" ).toElement();
-        if ( !left.isNull() )
-          hleft = left.text();
-        QDomElement center = head.namedItem( "center" ).toElement();
-        if ( !center.isNull() )
-        hcenter = center.text();
-        QDomElement right = head.namedItem( "right" ).toElement();
-        if ( !right.isNull() )
-          hright = right.text();
-      }
-      // <foot>
-      QDomElement foot = paper.namedItem( "foot" ).toElement();
-      if ( !foot.isNull() )
-      {
-        QDomElement left = foot.namedItem( "left" ).toElement();
-        if ( !left.isNull() )
-          fleft = left.text();
-        QDomElement center = foot.namedItem( "center" ).toElement();
-        if ( !center.isNull() )
-          fcenter = center.text();
-        QDomElement right = foot.namedItem( "right" ).toElement();
-        if ( !right.isNull() )
-          fright = right.text();
-      }
-      d->print->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
+        // <borders>
+        QDomElement borders = paper.namedItem( "borders" ).toElement();
+        if ( !borders.isNull() )
+        {
+            float left = borders.attribute( "left" ).toFloat();
+            float right = borders.attribute( "right" ).toFloat();
+            float top = borders.attribute( "top" ).toFloat();
+            float bottom = borders.attribute( "bottom" ).toFloat();
+            d->print->setPaperLayout( left, top, right, bottom, format, orientation );
+        }
+        QString hleft, hright, hcenter;
+        QString fleft, fright, fcenter;
+        // <head>
+        QDomElement head = paper.namedItem( "head" ).toElement();
+        if ( !head.isNull() )
+        {
+            QDomElement left = head.namedItem( "left" ).toElement();
+            if ( !left.isNull() )
+                hleft = left.text();
+            QDomElement center = head.namedItem( "center" ).toElement();
+            if ( !center.isNull() )
+                hcenter = center.text();
+            QDomElement right = head.namedItem( "right" ).toElement();
+            if ( !right.isNull() )
+                hright = right.text();
+        }
+        // <foot>
+        QDomElement foot = paper.namedItem( "foot" ).toElement();
+        if ( !foot.isNull() )
+        {
+            QDomElement left = foot.namedItem( "left" ).toElement();
+            if ( !left.isNull() )
+                fleft = left.text();
+            QDomElement center = foot.namedItem( "center" ).toElement();
+            if ( !center.isNull() )
+                fcenter = center.text();
+            QDomElement right = foot.namedItem( "right" ).toElement();
+            if ( !right.isNull() )
+                fright = right.text();
+        }
+        d->print->setHeadFootLine( hleft, hcenter, hright, fleft, fcenter, fright);
     }
 
-      // load print range
-      QDomElement printrange = sheet.namedItem( "printrange-rect" ).toElement();
-      if ( !printrange.isNull() )
-      {
+    // load print range
+    QDomElement printrange = sheet.namedItem( "printrange-rect" ).toElement();
+    if ( !printrange.isNull() )
+    {
         int left = printrange.attribute( "left-rect" ).toInt();
         int right = printrange.attribute( "right-rect" ).toInt();
         int bottom = printrange.attribute( "bottom-rect" ).toInt();
         int top = printrange.attribute( "top-rect" ).toInt();
         if ( left == 0 ) //whole row(s) selected
         {
-          left = 1;
-          right = KS_colMax;
+            left = 1;
+            right = KS_colMax;
         }
         if ( top == 0 ) //whole column(s) selected
         {
-          top = 1;
-          bottom = KS_rowMax;
+            top = 1;
+            bottom = KS_rowMax;
         }
         d->print->setPrintRange( QRect( QPoint( left, top ), QPoint( right, bottom ) ) );
-      }
+    }
 
-      // load print zoom
-      if( sheet.hasAttribute( "printZoom" ) )
-      {
+    // load print zoom
+    if( sheet.hasAttribute( "printZoom" ) )
+    {
         double zoom = sheet.attribute( "printZoom" ).toDouble( &ok );
         if ( ok )
         {
-          d->print->setZoom( zoom );
+            d->print->setZoom( zoom );
         }
-      }
+    }
 
-      // load page limits
-      if( sheet.hasAttribute( "printPageLimitX" ) )
-      {
+    // load page limits
+    if( sheet.hasAttribute( "printPageLimitX" ) )
+    {
         int pageLimit = sheet.attribute( "printPageLimitX" ).toInt( &ok );
         if ( ok )
         {
-          d->print->setPageLimitX( pageLimit );
+            d->print->setPageLimitX( pageLimit );
         }
-      }
+    }
 
-      // load page limits
-      if( sheet.hasAttribute( "printPageLimitY" ) )
-      {
+    // load page limits
+    if( sheet.hasAttribute( "printPageLimitY" ) )
+    {
         int pageLimit = sheet.attribute( "printPageLimitY" ).toInt( &ok );
         if ( ok )
         {
-          d->print->setPageLimitY( pageLimit );
+            d->print->setPageLimitY( pageLimit );
         }
-      }
+    }
 
     // Load the cells
     QDomNode n = sheet.firstChild();
     while( !n.isNull() )
     {
         QDomElement e = n.toElement();
-        if ( !e.isNull() && e.tagName() == "cell" )
+        if ( !e.isNull() )
         {
-            Cell *cell = new Cell( this, 0, 0 );
-            if ( cell->load( e, 0, 0 ) )
-                insertCell( cell );
-            else
-                delete cell; // Allow error handling: just skip invalid cells
+            QString tagName=e.tagName();
+            if ( tagName == "cell" )
+            {
+                Cell *cell = new Cell( this, 0, 0 );
+                if ( cell->load( e, 0, 0 ) )
+                    insertCell( cell );
+                else
+                    delete cell; // Allow error handling: just skip invalid cells
+            }
+            else if ( tagName == "row" )
+            {
+                RowFormat *rl = new RowFormat( this, 0 );
+                if ( rl->load( e ) )
+                    insertRowFormat( rl );
+                else
+                    delete rl;
+            }
+            else if ( tagName == "column" )
+            {
+                ColumnFormat *cl = new ColumnFormat( this, 0 );
+                if ( cl->load( e ) )
+                    insertColumnFormat( cl );
+                else
+                    delete cl;
+            }
+            else if ( tagName == "object" )
+            {
+                Child *ch = new Child( doc(), this );
+                if ( ch->load( e ) )
+                    insertChild( ch );
+                else
+                    delete ch;
+            }
+            else if ( tagName == "chart" )
+            {
+                ChartChild *ch = new ChartChild( doc(), this );
+                if ( ch->load( e ) )
+                    insertChild( ch );
+                else
+                {
+                    ch->setDeleted(true);
+                    delete ch;
+                }
+            }
         }
-        else if ( !e.isNull() && e.tagName() == "row" )
-        {
-            RowFormat *rl = new RowFormat( this, 0 );
-            if ( rl->load( e ) )
-                insertRowFormat( rl );
-            else
-                delete rl;
-        }
-        else if ( !e.isNull() && e.tagName() == "column" )
-        {
-            ColumnFormat *cl = new ColumnFormat( this, 0 );
-            if ( cl->load( e ) )
-                insertColumnFormat( cl );
-            else
-                delete cl;
-        }
-        else if ( !e.isNull() && e.tagName() == "object" )
-        {
-            Child *ch = new Child( doc(), this );
-            if ( ch->load( e ) )
-                insertChild( ch );
-            else
-                delete ch;
-        }
-        else if ( !e.isNull() && e.tagName() == "chart" )
-        {
-            ChartChild *ch = new ChartChild( doc(), this );
-            if ( ch->load( e ) )
-                insertChild( ch );
-            else
-      {
-    ch->setDeleted(true);
-                delete ch;
-      }
-        }
-
         n = n.nextSibling();
     }
 
@@ -8278,20 +8281,20 @@ bool Sheet::loadXML( const QDomElement& sheet )
 
     if( !sheet.hasAttribute( "borders1.2" ) )
     {
-      convertObscuringBorders();
+        convertObscuringBorders();
     }
 
     if ( sheet.hasAttribute( "protected" ) )
     {
-      QString passwd = sheet.attribute( "protected" );
+        QString passwd = sheet.attribute( "protected" );
 
-      if ( passwd.length() > 0 )
-      {
-        QCString str( passwd.latin1() );
-        d->password = KCodecs::base64Decode( str );
-      }
-      else
-        d->password = QCString( "" );
+        if ( passwd.length() > 0 )
+        {
+            QCString str( passwd.latin1() );
+            d->password = KCodecs::base64Decode( str );
+        }
+        else
+            d->password = QCString( "" );
     }
 
     return true;
