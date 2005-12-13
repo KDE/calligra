@@ -648,7 +648,7 @@ settings.</para></listitem>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Default language</guilabel></term>
+<term><guilabel>Default language:</guilabel></term>
 <listitem><para>You can choose here the language for the spellchecker. The languages listed come from aspell so if you want more spelling support languages, you should install the corresponding aspell-ISO packages.</para></listitem>
 </varlistentry>
 
