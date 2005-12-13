@@ -516,6 +516,8 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
 
             KWFrame * frame = view ? view->frame() : 0L;
             KWFrameSet * fs = frame ? frame->frameSet() : 0L;
+            if(fs->groupmanager())
+                fs = fs->groupmanager();
             bool emitChanged = false;
             if ( fs )
             {
@@ -526,9 +528,10 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             if ( m_currentFrameSetEdit )
                 m_currentFrameSetEdit->mousePressEvent( e, normalPoint, docPoint );
 
-            if ( emitChanged ) // emitted after mousePressEvent [for tables]
+            if ( emitChanged ) { // emitted after mousePressEvent [for tables]
                 emit currentFrameSetEditChanged();
-            emit updateRuler();
+                emit updateRuler();
+            }
 
             if ( m_frameInline )
             {
