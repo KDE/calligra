@@ -44,6 +44,7 @@ class KoOpenPane : public KoOpenPaneBase
     /**
      * If the application has a way to create a document not based on a template, but on user
      * provided settings, the widget showing these gets set here.
+     * @see KoDocument::createCustomDocumentWidget()
      * @param widget the widget.
      */
     void setCustomDocumentWidget(QWidget *widget);

@@ -27,11 +27,23 @@ class QWidget;
 class KoUnitDoubleSpinBox;
 class KoPagePreview;
 
+/**
+ * This class is a widget that shows the KoKWHeaderFooter data structure and allows the user to change it.
+ */
 class KoPageLayoutHeader : public KoPageLayoutHeaderBase {
     Q_OBJECT
 
 public:
+    /**
+     * Contructor
+     * @param parent the parent widget
+     * @param unit the unit-type (mm/cm/inch) that the dialog should show
+     * @param kwhf the data that this widget will be filled with initially
+     */
     KoPageLayoutHeader(QWidget *parent, KoUnit::Unit unit, const KoKWHeaderFooter &kwhf);
+    /**
+     * @return the altered data as it is currently set by the user.
+     */
     const KoKWHeaderFooter& headerFooter();
 
 private:
