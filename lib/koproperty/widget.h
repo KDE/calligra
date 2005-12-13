@@ -48,7 +48,7 @@ class KOPROPERTY_EXPORT Widget : public QWidget
 		if you don't want to emit propertyChanged signal.*/
 		virtual void setValue(const QVariant &value, bool emitChange=true) = 0;
 
-		/*! \retrun edited property. */
+		/*! \return edited property. */
 		virtual Property* property() const;
 
 		/*! Sets the name of edited property.*/
