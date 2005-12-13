@@ -1,20 +1,19 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
 
-   This library is distributed in the hope that it will be useful,
+   This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 
@@ -26,6 +25,8 @@
 #include <qvaluelist.h>
 
 #include <koffice_export.h>
+
+#include "kspread_global.h"
 
 namespace KSpread
 {
@@ -49,41 +50,55 @@ public:
 
   /**
    * Constructor.
-   * Creates a region consisting of a point @param point
+   * Creates a region consisting of a point.
+   * @param point the point's location
+   * @param sheet the sheet the point belongs to
    */
-  Region(const QPoint& point);
+  Region(const QPoint& point, Sheet* sheet = 0);
 
   /**
    * Constructor.
-   * Creates a region consisting of a range @param range
+   * Creates a region consisting of a range.
+   * @param range the range's location
+   * @param sheet the sheet the range belongs to
    */
-  Region(const QRect& range);
+  Region(const QRect& range, Sheet* sheet = 0);
 
   /**
    * Constructor.
-   * Creates a region consisting of the region defined in @param strRegion.
-   * Uses the @param view to determine the sheet, if it's named in @param strRegion.
+   * Creates a region consisting of the region defined in @p strRegion .
+   * @param view used to determine the sheet, if it's named in the string
+   * @param strRegion a string representing the region (e.g. "A1:B3")
+   * @param sheet the sheet the region belongs to
    */
-  Region(const QString& strRegion, View* view);
+  Region(View* view, const QString& strRegion, Sheet* sheet = 0);
 
   /**
-   * Constructor.
-   * Creates a copy of the region @param region.
+   * Copy Constructor.
+   * Creates a copy of the region.
+   * @param region the region to copy
    */
   Region(const Region& region);
 
   /**
    * Constructor.
-   * Creates a region consisting of a point at the location @param col, @param row
+   * Creates a region consisting of a point.
+   * @param col the column of the point
+   * @param row the row of the point
+   * @param sheet the sheet the point belongs to
    */
-  Region(int col, int row);
+  Region(int col, int row, Sheet* sheet = 0);
 
   /**
    * Constructor.
-   * Creates a region consisting of a range at the location @param col, @param row
-   * and the size @param width, @param height
+   * Creates a region consisting of a range at the location
+   * @param col the column of the range' starting point
+   * @param row the row of the range' starting point
+   * @param width the width of the range
+   * @param height the height of the range
+   * @param sheet the sheet the range belongs to
    */
-  Region(int col, int row, int width, int height);
+  Region(int col, int row, int width, int height, Sheet* sheet = 0);
 
   /**
    * Destructor.
@@ -92,94 +107,108 @@ public:
 
 
   /**
+   * @param originSheet The name is created relative to this sheet.
    * @return the name of the region (e.g. "A1:A2")
    */
-  QString name(const QString& relToSheetName = QString()) const;
+  QString name(Sheet* originSheet = 0) const;
 
 
   /**
-   * @return true, if this region contains no elements
+   * @return @c true, if this region contains no elements
    */
   bool isEmpty() const;
 
   /**
-   * @return true, if this region contains only a single point
+   * @return @c true, if this region contains only a single point
    */
   bool isSingular() const;
 
   /**
-   * @return true, if this region contains at least one valid point or one valid range
+   * @return @c true, if this region contains at least one valid point or one valid range
    */
   bool isValid() const;
 
   /**
-   * @return true, if the colum @param col is selected. If column @param col
-   * is not given, it returns true, if at least one column is selected.
+   * @param col the col to check
+   * @return @c true, if the colum @p col is selected. If column @p col
+   * is not given, it returns true, if at least one column is selected
    */
   bool isColumnSelected(uint col = 0) const;
 
   /**
-   * @return true, if the row @param row is selected. If row @param row
-   * is not given, it returns true, if at least one row is selected.
+   * @param row the row to check
+   * @return @c true, if the row @p row is selected. If row @p row
+   * is not given, it returns true, if at least one row is selected
    */
   bool isRowSelected(uint row = 0) const;
 
   /**
-   * @return true, if the at least on cell in column @param col is selected.
+   * @param col the col to check
+   * @return @c true, if the at least one cell in column @p col is selected
    */
   bool isColumnAffected(uint col) const;
 
   /**
-   * @return true, if the at least on cell in row @param row is selected.
+   * @param row the row to check
+   * @return @c true, if the at least one cell in row @p row is selected
    */
   bool isRowAffected(uint row) const;
 
 
   /* TODO Stefan #2: Optimize! Adjacent Points/Ranges */
   /**
-   * Adds the point @param point to this region.
+   * Adds the point @p point to this region.
+   * @param point the point's location
+   * @param sheet the sheet the point belongs to
    */
-  void add(const QPoint& point);
+  void add(const QPoint& point, Sheet* sheet = 0);
   /**
-   * Adds the range @param range to this region.
+   * Adds the range @p range to this region.
+   * @param range the range's location
+   * @param sheet the sheet the range belongs to
    */
-  void add(const QRect& range);
+  void add(const QRect& range, Sheet* sheet = 0);
   /**
-   * Adds the region @param region to this region.
+   * Adds the region @p region to this region.
+   * @param region the range's location
    */
   void add(const Region& region);
 
   /* TODO Stefan #3: Improve! */
   /**
-   * Substracts the point @param point to this region.
+   * Substracts the point @p point to this region.
+   * @param point the point's location
    */
-  void sub(const QPoint&);
+  void sub(const QPoint& point);
   /**
-   * Substracts the range @param range to this region.
+   * Substracts the range @p range to this region.
+   * @param range the range's location
    */
-  void sub(const QRect&);
+  void sub(const QRect& range);
 
   /**
-   * deletes all elements of the region. The result is an empty region.
+   * Deletes all elements of the region. The result is an empty region.
    */
   void clear();
 
 
   /**
-   * @return true, if the region contains the point @param point
+   * @param point the point's location
+   * @return @c true, if the region contains the point @p point
    */
   bool contains(const QPoint& point) const;
 
   /**
-   * @return true, if this region equals region @param region
+   * @param region the region to compare
+   * @return @c true, if this region equals region @p region
    */
   bool operator==(const Region& region) const;
 
 
   /**
     * @param sRegion will be modified, if a valid sheet was found. The sheetname
-    * will be removed.
-    * @return sheet named in the @param sRegion or the active sheet of the view.
+    * will be removed
+    * @return sheet named in the @p sRegion or the active sheet of the view
     */
   Sheet* filterSheetName(QString& sRegion);
 
@@ -190,7 +219,7 @@ public:
   View* view() const;
 
   /**
-   * sets the view to which this region belongs.
+   * Sets the view to which this region belongs.
    */
   void setView(View*);
 
@@ -259,7 +288,7 @@ public:
   virtual bool contains(const QPoint&) const { return false; }
   virtual bool contains(const QRect&) const { return false; }
 
-  virtual QString name(const QString& /*relToSheetName */ = QString()) const { return QString(); }
+  virtual QString name(Sheet* originSheet = 0) const { return QString(); }
   virtual QRect rect() const { return QRect(); }
 
   Sheet* sheet() const { return m_sheet; }
@@ -305,7 +334,7 @@ public:
   virtual bool contains(const QPoint&) const;
   virtual bool contains(const QRect&) const;
 
-  virtual QString name(const QString& relToSheetName = QString()) const;
+  virtual QString name(Sheet* originSheet = 0) const;
 
   virtual QRect rect() const { return QRect(m_point,m_point); }
 
@@ -353,7 +382,7 @@ public:
   virtual bool contains(const QPoint&) const;
   virtual bool contains(const QRect&) const;
 
-  virtual QString name(const QString& relToSheetName = QString()) const;
+  virtual QString name(Sheet* originSheet = 0) const;
 
   virtual QRect rect() const { return m_range; }
 

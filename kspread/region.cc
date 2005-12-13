@@ -1,20 +1,19 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Stefan Nikolaus <stefan.nikolaus@kdemail.net>
 
-   This library is free software; you can redistribute it and/or
-   modify it under the terms of the GNU Library General Public
-   License as published by the Free Software Foundation; either
-   version 2 of the License.
+   This program is free software; you can redistribute it and/or modify
+   it under the terms of the GNU General Public License as published by
+   the Free Software Foundation; either version 2 of the License, or
+   (at your option) any later version.
 
-   This library is distributed in the hope that it will be useful,
+   This program is distributed in the hope that it will be useful,
    but WITHOUT ANY WARRANTY; without even the implied warranty of
-   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU
-   Library General Public License for more details.
+   MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+   GNU General Public License for more details.
 
-   You should have received a copy of the GNU Library General Public License
-   along with this library; see the file COPYING.LIB.  If not, write to
-   the Free Software Foundation, Inc., 59 Temple Place - Suite 330,
-   Boston, MA 02111-1307, USA.
+   You should have received a copy of the GNU General Public License
+   along with this program; if not, write to the Free Software
+   Foundation, Inc., 51 Franklin Steet, Fifth Floor, Boston, MA  02110-1301  USA
 */
 
 #include <qregexp.h>
@@ -26,6 +25,7 @@
 #include "kspread_doc.h"
 #include "kspread_global.h"
 #include "kspread_map.h"
+#include "kspread_sheet.h"
 #include "kspread_util.h"
 #include "kspread_view.h"
 
@@ -56,7 +56,7 @@ Region::Region()
   d = new Private();
 }
 
-Region::Region(const QString& string, View* view)
+Region::Region(View* view, const QString& string, Sheet* sheet)
 {
   d = new Private();
   d->view = view;
@@ -74,7 +74,10 @@ Region::Region(const QString& string, View* view)
     {
       // range
       QString sRegion = *it;
-      Sheet* sheet = filterSheetName(sRegion);
+      if (!sheet)
+      {
+        sheet = filterSheetName(sRegion);
+      }
       Range* range = new Range(sRegion);
       range->setSheet(sheet);
       d->cells.append(range);
@@ -83,7 +86,10 @@ Region::Region(const QString& string, View* view)
     {
       // single cell
       QString sRegion = *it;
-      Sheet* sheet = filterSheetName(sRegion);
+      if (!sheet)
+      {
+        sheet = filterSheetName(sRegion);
+      }
       Point* point = new Point(sRegion);
       point->setSheet(sheet);
       d->cells.append(point);
@@ -91,7 +97,7 @@ Region::Region(const QString& string, View* view)
   }
 }
 
-Region::Region(const QRect& rect)
+Region::Region(const QRect& rect, Sheet* sheet)
 {
   d = new Private();
 
@@ -100,10 +106,12 @@ Region::Region(const QRect& rect)
     kdError(36001) << "Region::Region(const QRect&): QRect is empty!" << endl;
     return;
   }
-  d->cells.append(new Range(rect));
+  Range* range = new Range(rect);
+  range->setSheet(sheet);
+  d->cells.append(range);
 }
 
-Region::Region(const QPoint& point)
+Region::Region(const QPoint& point, Sheet* sheet)
 {
   d = new Private();
 
@@ -112,7 +120,9 @@ Region::Region(const QPoint& point)
     kdError(36001) << "Region::Region(const QPoint&): QPoint is empty!" << endl;
     return;
   }
-  d->cells.append(new Point(point));
+  Point* rpoint = new Point(point);
+  rpoint->setSheet(sheet);
+  d->cells.append(rpoint);
 }
 
 Region::Region(const Region& list)
@@ -136,7 +146,7 @@ Region::Region(const Region& list)
   }
 }
 
-Region::Region(int x, int y)
+Region::Region(int x, int y, Sheet* sheet)
 {
   d = new Private();
 
@@ -145,10 +155,12 @@ Region::Region(int x, int y)
     kdError(36001) << "Region::Region(int x, int y): Coordinates are invalid!" << endl;
     return;
   }
-  d->cells.append(new Point(QPoint(x,y)));
+  Point* point = new Point(QPoint(x,y));
+  point->setSheet(sheet);
+  d->cells.append(point);
 }
 
-Region::Region(int x, int y, int width, int height)
+Region::Region(int x, int y, int width, int height, Sheet* sheet)
 {
   d = new Private();
 
@@ -157,7 +169,9 @@ Region::Region(int x, int y, int width, int height)
     kdError(36001) << "Region::Region(int x, int y, int width, int height): Dimensions are invalid!" << endl;
     return;
   }
-  d->cells.append(new Point(QPoint(x,y)));
+  Range* range = new Range(QRect(x,y,width,height));
+  range->setSheet(sheet);
+  d->cells.append(range);
 }
 
 
@@ -200,19 +214,19 @@ bool Region::isSingular() const
   return true;
 }
 
-QString Region::name(const QString& originSheetName) const
+QString Region::name(Sheet* originSheet) const
 {
   QStringList names;
   ConstIterator endOfList(d->cells.constEnd());
   for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
   {
     Element *element = *it;
-    names += element->name(originSheetName);
+    names += element->name(originSheet);
   }
   return names.join(";");
 }
 
-void Region::add(const QPoint& point)
+void Region::add(const QPoint& point, Sheet* sheet)
 {
 //   kdDebug() << k_funcinfo << endl;
 
@@ -244,11 +258,13 @@ void Region::add(const QPoint& point)
   }
   if ( !containsPoint )
   {
-    d->cells.append(new Point(point));
+    Point* rpoint = new Point(point);
+    rpoint->setSheet(sheet);
+    d->cells.append(rpoint);
   }
 }
 
-void Region::add(const QRect& range)
+void Region::add(const QRect& range, Sheet* sheet)
 {
   if (range.size() == QSize(1,1))
   {
@@ -276,7 +292,9 @@ void Region::add(const QRect& range)
   }
   if ( !containsRange )
   {
-    d->cells.append(new Range(range));
+    Range* rrange = new Range(range);
+    rrange->setSheet(sheet);
+    d->cells.append(rrange);
     if (isValid())
     {
 //       kdDebug() << name() << endl;
@@ -387,6 +405,10 @@ bool Region::isRowSelected(uint row) const
 
 bool Region::contains(const QPoint& point) const
 {
+  if (d->cells.isEmpty())
+  {
+    return false;
+  }
   ConstIterator endOfList(d->cells.constEnd());
   for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
   {
@@ -616,9 +638,14 @@ Region::Point::~Point()
 {
 }
 
-QString Region::Point::name(const QString& /*originSheetName*/) const
+QString Region::Point::name(Sheet* originSheet) const
 {
-    return Cell::name(m_point.x(), m_point.y());
+  QString name;
+  if (m_sheet && originSheet && m_sheet != originSheet)
+  {
+    name = m_sheet->sheetName() + "!";
+  }
+  return name + Cell::name(m_point.x(), m_point.y());
 }
 
 bool Region::Point::contains(const QPoint& point) const
@@ -686,10 +713,15 @@ Region::Range::~Range()
 {
 }
 
-QString Region::Range::name(const QString& /*originSheetName*/) const
+QString Region::Range::name(Sheet* originSheet) const
 {
-    return Cell::name(m_range.left(), m_range.top()) + ":" +
-            Cell::name(m_range.right(), m_range.bottom() );
+  QString name;
+  if (m_sheet && originSheet && m_sheet != originSheet)
+  {
+    name = m_sheet->sheetName() + "!";
+  }
+  return name + Cell::name(m_range.left(), m_range.top()) + ":" +
+                Cell::name(m_range.right(), m_range.bottom() );
 }
 
 bool Region::Range::contains(const QPoint& point) const
@@ -699,7 +731,7 @@ bool Region::Range::contains(const QPoint& point) const
 
 bool Region::Range::contains(const QRect& range) const
 {
-    return m_range.contains(range);
+  return m_range.normalize().contains(range.normalize());
 }
 
 } // namespace KSpread

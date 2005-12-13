@@ -103,8 +103,8 @@ public:
   * Sets whether or not the row (y coordinate) of this point is fixed (ie. it represents an absolute coordinate - eg. the row number 30 in the formula "=A$30" is fixed)
   */
   void      setRowFixed(bool rowFixed);
-  bool      rowFixed() const;  
-  
+  bool      rowFixed() const;
+
 private:
   Sheet* _sheet;
   QString _sheetName;
@@ -164,7 +164,7 @@ public:
   /** Returns true if this range includes the specified cell */
   bool contains (const Point &cell) const;
   /** 
-  * Returns true if this range intersects Range @ref r  (ie. there is at least one cell 
+  * Returns true if this range intersects Range @p r  (ie. there is at least one cell
   * which is common to both Ranges )
   */
   bool intersects (const Range &r) const;
