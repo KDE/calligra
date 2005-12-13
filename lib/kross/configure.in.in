@@ -12,3 +12,23 @@ KDE_CHECK_PYTHON
 # $PYTHONINC, are defined.
 AM_CONDITIONAL(compile_kross_python,
                test -n "$LIBPYTHON" && test -n "$PYTHONINC")
+
+AC_CHECK_PROG(RUBY, ruby, ruby)
+
+if test "$RUBY"; then
+  AC_MSG_CHECKING(for ruby dirs)
+  RUBY_ARCHDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"archdir"@:>@)'`
+  RUBY_SITEARCHDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"sitearchdir"@:>@)'`
+  RUBY_SITEDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"sitelibdir"@:>@)'`
+  RUBY_LIBDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"libdir"@:>@)'`
+  RUBY_LIBRUBYARG=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"LIBRUBYARG_SHARED"@:>@)'`
+  AC_MSG_RESULT([archdir $RUBY_ARCHDIR, sitearchdir $RUBY_SITEARCHDIR, sitedir $RUBY_SITEDIR, libdir $RUBY_LIBDIR, librubyarg $RUBY_LIBRUBYARG])
+  AC_SUBST(RUBY_ARCHDIR)
+  AC_SUBST(RUBY_SITEARCHDIR)
+  AC_SUBST(RUBY_SITEDIR)
+  AC_SUBST(RUBY_LIBDIR)
+  AC_SUBST(RUBY_LIBRUBYARG)
+fi
+
+
+AM_CONDITIONAL(compile_kross_ruby, test -n "$RUBY_LIBDIR")

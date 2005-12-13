@@ -10,7 +10,11 @@ if compile_kross_python
   PYTHONSUBDIR = python
 endif
 
-SUBDIRS = api main $(PYTHONSUBDIR)
+if compile_kross_ruby
+  RUBYSUBDIR = ruby
+endif
+
+SUBDIRS = api main $(PYTHONSUBDIR) $(RUBYSUBDIR)
 
 # Don't compile test by default. To use test, just cd into the directory
 # and do a "make && ./krosstest" manualy.

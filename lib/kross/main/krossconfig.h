@@ -97,7 +97,7 @@ namespace Kross {
     // like I did at the following line.
     //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/trunk/koffice/lib/kross/python/krosspython.la"
     #define KROSS_PYTHON_LIBRARY "krosspython"
-
+    #define KROSS_RUBY_LIBRARY "krossruby"
 }
 
 #endif

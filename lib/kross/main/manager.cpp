@@ -103,6 +103,25 @@ Manager::Manager()
         );
     }
 #endif
+#ifdef KROSS_RUBY_LIBRARY
+    QString rubylib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_RUBY_LIBRARY) );
+    if(! rubylib.isEmpty()) { // If the Kross Ruby plugin exists we offer it as supported scripting language.
+      InterpreterInfo::Option::Map rubyoptions;
+//       rubyoptions.replace("restricted",
+//                             new InterpreterInfo::Option("Restricted", "Restricted Ruby interpreter", QVariant(false))
+//                            );
+      d->interpreterinfos.replace("ruby",
+                                  new InterpreterInfo("ruby",
+                                      rubylib, // library
+                                      "*.rb", // file filter-wildcard
+                                      QStringList() << "text/x-ruby" << "application/x-ruby", // mimetypes
+                                      rubyoptions // options
+                                                     )
+                                 );
+    } else {
+        kdDebug() << "Ruby interpreter for kross in unavailable" << endl;
+    }
+#endif
 }
 
 Manager::~Manager()
