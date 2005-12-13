@@ -59,6 +59,7 @@ QValueList<KWFrame *> KWFrameList::framesOnTop() {
 
     KWFrame *frame = m_frames.next();
     while( frame ) {
+        Q_ASSERT( !frame->frameSet()->isFloating() );
         frames.append( frame );
         frame = m_frames.next();
     }
