@@ -379,6 +379,13 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
         topPainter.setRasterOp( NotROP );
         switch ( toolEditMode )
         {
+            case MT_NONE:
+                if ( drawRubber )
+                {
+                    topPainter.setPen( QPen( black, 0, DotLine ) );
+                    topPainter.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
+                }
+                break;
             case INS_RECT:
                 if ( !m_insertRect.isNull() )
                 {
@@ -907,7 +914,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                             deSelectAllObj();
 
                             drawRubber = true;
-                            rubber = QRect( e->x(), e->y(), 0, 0 );
+                            m_rubber = KoRect( docPoint.x(), docPoint.y(), 0, 0 );
                     }
                 }
                 m_origMousePos = docPoint;
@@ -916,7 +923,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 modType = MT_NONE;
                 drawRubber = true;
                 m_zoomRubberDraw = false;
-                rubber = QRect( e->x(), e->y(), 0, 0 );
+                m_rubber = KoRect( docPoint.x(), docPoint.y(), 0, 0 );
             }break;
             case TEM_ROTATE: {
 
@@ -1308,18 +1315,17 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
                 p.begin( this );
                 p.setRasterOp( NotROP );
                 p.setPen( QPen( black, 0, DotLine ) );
-                p.drawRect( rubber );
+                p.translate( -diffx(), -diffy() );
+                p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
                 p.end();
                 drawRubber = false;
 
-                rubber = rubber.normalize();
-                rubber.moveBy(diffx(),diffy());
+                m_rubber = m_rubber.normalize();
 
-                KoRect selectedRect = m_view->zoomHandler()->unzoomRect( rubber );
                 QPtrListIterator<KPrObject> it( getObjectList() );
                 for ( ; it.current() ; ++it )
                 {
-                    if ( it.current()->intersects( selectedRect ) )
+                    if ( it.current()->intersects( m_rubber ) )
                     {
                         if( objectIsAHeaderFooterHidden(it.current()))
                             continue;
@@ -1393,14 +1399,14 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             p.begin( this );
             p.setRasterOp( NotROP );
             p.setPen( QPen( black, 0, DotLine ) );
-            p.drawRect( rubber );
+            p.translate( -diffx(), -diffy() );
+            p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
             p.end();
             drawRubber = false;
-            rubber = rubber.normalize();
-            rubber.moveBy(diffx(),diffy());
+            m_rubber = m_rubber.normalize();
             if ( m_zoomRubberDraw )
             {
-                m_view->setZoomRect( m_view->zoomHandler()->unzoomRect( rubber ) );
+                m_view->setZoomRect( m_rubber );
             }
             else
             {
@@ -1600,10 +1606,11 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         p.begin( this );
                         p.setRasterOp( NotROP );
                         p.setPen( QPen( black, 0, DotLine ) );
-                        p.drawRect( rubber );
-                        rubber.setRight( e->x() );
-                        rubber.setBottom( e->y() );
-                        p.drawRect( rubber );
+                        p.translate( -diffx(), -diffy() );
+                        p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
+                        m_rubber.setRight( docPoint.x() );
+                        m_rubber.setBottom( docPoint.y() );
+                        p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
                         p.end();
                     }
                 } else if ( modType == MT_MOVE ) {
@@ -1630,10 +1637,11 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     p.begin( this );
                     p.setRasterOp( NotROP );
                     p.setPen( QPen( black, 0, DotLine ) );
-                    p.drawRect( rubber );
-                    rubber.setRight( e->x() );
-                    rubber.setBottom( e->y() );
-                    p.drawRect( rubber );
+                    p.translate( -diffx(), -diffy() );
+                    p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
+                    m_rubber.setRight( docPoint.x() );
+                    m_rubber.setBottom( docPoint.y() );
+                    p.drawRect( m_view->zoomHandler()->zoomRect( m_rubber ) );
                     p.end();
                     m_zoomRubberDraw = true;
                 }

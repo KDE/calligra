@@ -787,7 +787,8 @@ private:
     int firstX, firstY;
     int delPageId;
     bool drawRubber;
-    QRect rubber;
+    /// rect for drawing rubber
+    KoRect m_rubber;
 
     //---- stuff needed for resizing ----
     /// object which gets resized
