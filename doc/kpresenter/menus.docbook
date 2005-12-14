@@ -807,7 +807,7 @@ see an overview of all the notes in your presentation.</para>
 </menuchoice>
 </term>
 <listitem>
-<para>FIXME: Find out about headers</para>
+<para><action>Toggle the display of the header field</action> on the current slide. Header content can only be added in the master slide but you can choose to display the header only on some slides with this action.</para>
 </listitem>
 </varlistentry>
 
@@ -819,7 +819,7 @@ see an overview of all the notes in your presentation.</para>
 </menuchoice>
 </term>
 <listitem>
-<para>FIXME: Find out about footers</para>
+<para><action>Toggle the display of the footer field</action> on the current slide. Footer content can only be added in the master slide but you can choose to display the footer only on some slides with this action.</para>
 </listitem>
 </varlistentry>
 
