@@ -313,6 +313,13 @@ VPolylineTool::mouseButtonRelease()
 }
 
 void
+VPolylineTool::rightMouseButtonRelease()
+{
+	// end line without adding new points
+	accept();
+}
+
+void
 VPolylineTool::mouseButtonDblClick()
 {
 	accept();

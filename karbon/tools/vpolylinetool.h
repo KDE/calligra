@@ -73,6 +73,7 @@ class VPolylineTool : public VTool
 		virtual void mouseMove();
 		virtual void mouseButtonPress();
 		virtual void mouseButtonRelease();
+		virtual void rightMouseButtonRelease();
 		virtual void mouseButtonDblClick();
 		virtual void mouseDrag();
 		virtual void mouseDragRelease();
