@@ -274,6 +274,8 @@ class KIVIO_EXPORT KivioView : public KoView
     /// This slot gets called when the loading has finished (doh!)
     void loadingFinished();
 
+    void moveTab(unsigned tab, unsigned target);
+
   protected:
     void setupActions();
     void initActions();

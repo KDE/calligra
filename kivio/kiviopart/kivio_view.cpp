@@ -188,6 +188,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect( m_pTabBar, SIGNAL( doubleClicked() ), SLOT( renamePage() ) );
   connect( m_pTabBar, SIGNAL( contextMenu( const QPoint& ) ),
       SLOT( popupTabBarMenu( const QPoint& ) ) );
+  connect(m_pTabBar, SIGNAL(tabMoved(unsigned, unsigned)), this, SLOT(moveTab(unsigned, unsigned)));
   m_pTabBar->setReverseLayout( QApplication::reverseLayout() );
 
   // Scroll Bar
@@ -2233,6 +2234,21 @@ void KivioView::loadingFinished()
       pSet = m_pDoc->spawnerSets()->next();
     }
   }
+}
+
+void KivioView::moveTab(unsigned tab, unsigned target)
+{
+  QStringList tabs = m_pTabBar->tabs();
+  QString tabTitle = tabs[tab];
+  QString targetTitle = tabs[target];
+
+  if(target >= m_pDoc->map()->count()) {
+    targetTitle = m_pDoc->map()->lastPage()->pageName();
+  }
+
+  kdDebug() << "Move tab " << tabTitle << " to " << targetTitle << " (" << target << ")" << endl;
+  m_pDoc->map()->movePage(tabTitle, targetTitle, target < m_pDoc->map()->count());
+  m_pTabBar->moveTab(tab, target);
 }
 
 #include "kivio_view.moc"

@@ -179,6 +179,11 @@ KivioPage* KivioMap::firstPage()
   return m_lstPages.first();
 }
 
+KivioPage* KivioMap::lastPage()
+{
+  return m_lstPages.last();
+}
+
 KivioPage* KivioMap::nextPage()
 {
   return m_lstPages.next();

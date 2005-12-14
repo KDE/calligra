@@ -66,7 +66,8 @@ class KivioMap : public QObject
   
     /**
     * The page named @param _from is being moved to the page @param _to.
-    * If @param _before is true @param _from is inserted before (after otherwise)   * @param _to.
+    * If @param _before is true @param _from is inserted before (after otherwise)
+    * @param _to.
     */
     void movePage( const QString & _from, const QString & _to, bool _before = true );
   
@@ -79,7 +80,12 @@ class KivioMap : public QObject
     * @return a pointer to the first page in this map.
     */
     KivioPage* firstPage();
-  
+
+    /**
+     * @return a pointer to the last page in this map.
+     */
+    KivioPage* lastPage();
+
     /**
     * Call @ref #firstPage first. This will set the list pointer to
     * the first page. Attention: Function is not reentrant.
