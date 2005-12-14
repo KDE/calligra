@@ -20,7 +20,7 @@
 #ifndef KROSS_RUBY_CONFIG_H
 #define KROSS_RUBY_CONFIG_H
 
-namespace Kross { namespace Python {
+namespace Kross { namespace Ruby {
 // #define KROSS_RUBY_SCRIPT_DEBUG
 // #define KROSS_RUBY_INTERPRETER_DEBUG
 #define KROSS_RUBY_EXTENSION_DEBUG
