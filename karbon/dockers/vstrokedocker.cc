@@ -34,7 +34,6 @@
 #include "karbon_part.h"
 #include "karbon_view.h"
 #include "vstroke.h"
-#include "vcolorslider.h"
 #include "vselection.h"
 #include "vstrokecmd.h"
 
