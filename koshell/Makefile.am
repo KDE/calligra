@@ -22,3 +22,5 @@ applnkdir = $(kde_appsdir)/Office
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp *.cc *.cpp -o $(podir)/koshell.pot
+
+include $(top_srcdir)/admin/Doxyfile.am

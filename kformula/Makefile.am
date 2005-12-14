@@ -38,3 +38,5 @@ messages: rc.cpp
 	$(PREPARETIPS) >> rc.cpp
 	$(XGETTEXT) rc.cpp *.cc kformula_aboutdata.h -o $(podir)/kformula.pot
 kde_services_DATA = kformulapart.desktop
+
+include $(top_srcdir)/admin/Doxyfile.am

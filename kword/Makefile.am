@@ -87,3 +87,5 @@ messages: rc.cpp
 	$(EXTRACTRC) `find mailmerge -name \*.ui` >> rc.cpp
 	$(XGETTEXT) rc.cpp *.cc `find mailmerge -name \*.cc -o -name \*.cpp` KWAboutData.h -o $(podir)/kword.pot
 	-rm xml_doc.cc
+
+include $(top_srcdir)/admin/Doxyfile.am

@@ -100,3 +100,5 @@ SUBDIRS = autoformEdit autoforms . pics templates dtd slideshow toolbar
 
 messages: rc.cpp
 	$(XGETTEXT) rc.cpp */*.cc *.cc *.h KPrAboutData.h -o $(podir)/kpresenter.pot
+
+include $(top_srcdir)/admin/Doxyfile.am

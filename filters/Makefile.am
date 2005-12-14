@@ -41,3 +41,5 @@ SUBDIRS = generic_wrapper libdialogfilter liboofilter $(KSPREADDIR) $(KCHARTDIR)
 messages:
 	$(EXTRACTRC) `find . -name \*.ui` > rc.cpp
 	$(XGETTEXT) `find . -name \*.cpp -o -name \*.cc` -o $(podir)/kofficefilters.pot
+
+include $(top_srcdir)/admin/Doxyfile.am
