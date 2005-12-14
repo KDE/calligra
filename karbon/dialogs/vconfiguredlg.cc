@@ -240,6 +240,7 @@ void VConfigMiscPage::apply()
     {
         m_oldUnit = m_unit->currentItem();
 	part->setUnit( static_cast<KoUnit::Unit>( m_oldUnit ) );
+	part->document().setUnit(part->unit());
         m_config->writeEntry( "Units", KoUnit::unitName( part->unit() ) );
     }
 
