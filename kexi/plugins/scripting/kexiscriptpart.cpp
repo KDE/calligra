@@ -20,22 +20,37 @@
 */
 
 #include "kexiscriptpart.h"
-
-#include <kdebug.h>
-#include <kgenericfactory.h>
+#include "kexiscriptdesignview.h"
+#include "kexiscripttextview.h"
 
 #include "kexiviewbase.h"
 #include "keximainwindow.h"
 #include "kexiproject.h"
-#include <kexipartitem.h>
-#include <kexidialogbase.h>
 
-#include "kexiscriptdesignview.h"
-#include "kexiscripttextview.h"
+#include <kross/main/manager.h>
+#include <kross/main/scriptaction.h>
+#include <kross/main/scriptguiclient.h>
+
+#include <kgenericfactory.h>
+#include <kstandarddirs.h>
+#include <kexipartitem.h>
+#include <kxmlguiclient.h>
+#include <kexidialogbase.h>
+#include <kdebug.h>
+
+/// \internal
+class KexiScriptPart::Private
+{
+	public:
+		Kross::Api::ScriptGUIClient* scriptguiclient;
+};
 
 KexiScriptPart::KexiScriptPart(QObject *parent, const char *name, const QStringList &l)
 	: KexiPart::Part(parent, name, l)
+	, d( new Private() )
 {
+	d->scriptguiclient = 0;
+
 	// REGISTERED ID:
 	m_registeredPartID = (int)KexiPart::ScriptObjectType;
 
@@ -50,34 +65,73 @@ KexiScriptPart::KexiScriptPart(QObject *parent, const char *name, const QStringL
 
 KexiScriptPart::~KexiScriptPart()
 {
+	delete d->scriptguiclient;
+	delete d;
 }
 
 void KexiScriptPart::initPartActions()
 {
+	if(m_mainWin) {
+		// At this stage the KexiPart::Part::m_mainWin should be defined, so
+		// that we are able to use it's KXMLGUIClient.
+
+		// Publish the KexiMainWindow singelton instance. At least the KexiApp 
+		// scripting-plugin depends on this instance and loading the plugin will 
+		// fail if it's not avaiable.
+		Kross::Api::Manager::scriptManager()->addQObject(m_mainWin, "KexiMainWindow");
+
+		// Initialize the ScriptGUIClient.
+		d->scriptguiclient = new Kross::Api::ScriptGUIClient( m_mainWin );
+
+		// Set the configurationfile.
+		QString file = KGlobal::dirs()->findResource("appdata", "kexiscripting.rc");
+		d->scriptguiclient->setXMLFile(file, true);
+
+		// Add the KAction's provided by the ScriptGUIClient to the
+		// KexiMainWindow.
+		//FIXME: fix+use createSharedPartAction() whyever it doesn't work as expected right now...
+		QPopupMenu* popup = m_mainWin->findPopupMenu("tools");
+		if(popup) {
+			KAction* execscriptaction = d->scriptguiclient->action("executescriptfile");
+			if(execscriptaction)
+				execscriptaction->plug( popup );
+
+			KAction* scriptmenuaction = d->scriptguiclient->action("scripts");
+			if(scriptmenuaction)
+				scriptmenuaction->plug( popup );
+		}
+	}
 }
 
 void KexiScriptPart::initInstanceActions()
 {
-	createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), "exec", 0, "script_execute");
-	createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", 0, "script_config_editor");
+	//FIXME createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), "exec", 0, "script_execute");
+	//FIXME createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", 0, "script_config_editor");
 }
 
 KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode)
 {
-	KexiMainWindow *win = dialog->mainWin();
+	QString partname = dialog->partItem()->name();
+	if(! partname.isNull()) {
+		const char* name = partname.latin1();
+		Kross::Api::ScriptAction* scriptaction = dynamic_cast< Kross::Api::ScriptAction* >( d->scriptguiclient->action(name) );
+		if(! scriptaction) {
+			scriptaction = new Kross::Api::ScriptAction(name, partname);
+			d->scriptguiclient->actionCollection()->insert(scriptaction);
+		}
 
-	if(viewMode == Kexi::DesignViewMode) {
-		if(!win || !win->project() || !win->project()->dbConnection())
-			return 0;
-		return new KexiScriptDesignView(win, parent, item.name().latin1());
+		KexiMainWindow *win = dialog->mainWin();
+		if(viewMode == Kexi::DesignViewMode) {
+			if(!win || !win->project() || !win->project()->dbConnection())
+				return 0;
+			return new KexiScriptDesignView(win, parent, scriptaction);
+		}
+		if(viewMode == Kexi::TextViewMode) {
+			if(!win || !win->project() || !win->project()->dbConnection())
+				return 0;
+			return new KexiScriptTextView(win, parent, scriptaction);
+		}
 	}
-
-	if(viewMode == Kexi::TextViewMode) {
-		if(!win || !win->project() || !win->project()->dbConnection())
-			return 0;
-		return new KexiScriptTextView(win, parent, item.name().latin1());
-	}
-
 	return 0;
 }
 

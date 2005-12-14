@@ -23,6 +23,11 @@
 #ifndef KEXISCRIPTEDITOR_H
 #define KEXISCRIPTEDITOR_H
 
+//#include <kross/main/manager.h>
+#include <kross/main/scriptaction.h>
+//#include <kross/api/interpreter.h>
+//#include <kross/api/exception.h>
+
 #include <kexieditor.h>
 
 class KexiScriptContainer;
@@ -53,14 +58,17 @@ class KexiScriptEditor : public KexiEditor
          * highlighter will be reset, undo/redo are cleared and
          * setDirty(false) is set.
          */
-        void initialize(KexiScriptContainer* scriptcontainer);
+        void initialize(Kross::Api::ScriptAction* scriptaction);
 
     private slots:
         void slotTextChanged();
         void setLineNo(long);
 
     private:
-        KexiScriptContainer* m_scriptcontainer;
+        /// \internal d-pointer class.
+        class Private;
+        /// \internal d-pointer instance.
+        Private* const d;
 };
 
 #endif

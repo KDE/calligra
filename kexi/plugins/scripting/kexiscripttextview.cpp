@@ -20,7 +20,6 @@
 #include "kexiscripttextview.h"
 
 #include <kexidialogbase.h>
-#include <kexiscripting.h>
 
 #include <qstringlist.h>
 #include <qlayout.h>
@@ -31,12 +30,12 @@
 class KexiScriptTextViewPrivate
 {
     public:
+
         /**
-         * The \a KexiScriptContainer instance is used to
-         * wrap the \a Kross::Api::ScriptContainer functionality
-         * to work with scripting code.
+         * The \a Kross::Api::ScriptAction instance which provides
+         * us access to the scripting framework Kross.
          */
-        KexiScriptContainer* scriptcontainer;
+        Kross::Api::ScriptAction* scriptaction;
 
         /**
          * The textbrowser used to display feedback like the
@@ -45,10 +44,12 @@ class KexiScriptTextViewPrivate
         KTextBrowser* browser;
 };
 
-KexiScriptTextView::KexiScriptTextView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
-    : KexiViewBase(mainWin, parent, name)
+KexiScriptTextView::KexiScriptTextView(KexiMainWindow *mainWin, QWidget *parent, Kross::Api::ScriptAction* scriptaction)
+    : KexiViewBase(mainWin, parent, "KexiScriptTextView")
     , d( new KexiScriptTextViewPrivate() )
 {
+    d->scriptaction = scriptaction;
+
     d->browser = new KTextBrowser(this, "KexiScriptTextViewEditor");
     d->browser->setReadOnly(true);
     //d->browser->setFocusPolicy(QTextBrowser::ClickFocus);
@@ -59,15 +60,15 @@ KexiScriptTextView::KexiScriptTextView(KexiMainWindow *mainWin, QWidget *parent,
     QBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->browser);
 
-    d->scriptcontainer = KexiScriptManager::self(mainWin)->getScriptContainer(parentDialog()->partItem()->name(), true);
+    //d->scriptcontainer = KexiScriptManager::self(mainWin)->getScriptContainer(parentDialog()->partItem()->name(), true);
     //plugSharedAction( "script_execute", scriptcontainer, SLOT(execute()) );
 
-    QStringList output = d->scriptcontainer->getOutput();
-    for (QStringList::ConstIterator it=output.constBegin(); it!=output.constEnd(); ++it)
-        d->browser->append( *it );
+    //QStringList output = d->scriptcontainer->getOutput();
+    //for (QStringList::ConstIterator it=output.constBegin(); it!=output.constEnd(); ++it)
+    //    d->browser->append( *it );
 
-    connect(d->scriptcontainer, SIGNAL(clearOutput()), this, SLOT(clearLog()));
-    connect(d->scriptcontainer, SIGNAL(addOutput(const QString&)), this, SLOT(addLog(const QString&)));
+    //connect(d->scriptcontainer, SIGNAL(clearOutput()), this, SLOT(clearLog()));
+    //connect(d->scriptcontainer, SIGNAL(addOutput(const QString&)), this, SLOT(addLog(const QString&)));
 }
 
 KexiScriptTextView::~KexiScriptTextView()

@@ -8,11 +8,11 @@ kexi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO)
 kexi_la_LIBADD = ./core/libkexicore.la ./main/libkeximain.la
 
 if compile_kross
-  SCRIPTINGSUBDIR=scripting
+  SCRIPTINGDIR=scripting
 endif
 
 SUBDIRS= 3rdparty kexiutils kexidb core widget formeditor \
-data pics main migration $(SCRIPTINGSUBDIR) plugins . tests
+data pics main migration $(SCRIPTINGDIR) plugins . tests
 
 #(will be reenabled after main/startup move)
 

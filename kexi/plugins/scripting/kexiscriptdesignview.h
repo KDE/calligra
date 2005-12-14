@@ -23,6 +23,11 @@
 #ifndef KEXISCRIPTDESIGNVIEW_H
 #define KEXISCRIPTDESIGNVIEW_H
 
+//#include <kross/main/manager.h>
+#include <kross/main/scriptaction.h>
+//#include <kross/api/interpreter.h>
+//#include <kross/api/exception.h>
+
 #include <kexiviewbase.h>
 
 #include <koproperty/set.h>
@@ -36,7 +41,8 @@ class KexiScriptDesignViewPrivate;
 /**
  * The KexiScriptDesignView class provides the \a KexiViewBase to
  * manage script modules in the design-view. The design-view
- * is used to be able to view and edit the scripting code.
+ * is used to be able to view and edit the scripting code via
+ * a \a KexiScriptEditor instance.
  */
 class KexiScriptDesignView : public KexiViewBase
 {
@@ -47,7 +53,7 @@ class KexiScriptDesignView : public KexiViewBase
         /**
          * Constructor.
          */
-        KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+        KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *parent, Kross::Api::ScriptAction* scriptaction);
 
         /**
          * Destructor.

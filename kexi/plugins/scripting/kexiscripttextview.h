@@ -20,6 +20,8 @@
 #ifndef KEXISCRIPTTEXTVIEW_H
 #define KEXISCRIPTTEXTVIEW_H
 
+#include <kross/main/scriptaction.h>
+
 #include <kexiviewbase.h>
 
 // Forward declarations.
@@ -39,7 +41,7 @@ class KexiScriptTextView : public KexiViewBase
         /**
          * Constructor.
          */
-        KexiScriptTextView(KexiMainWindow *mainWin, QWidget *parent, const char *name = 0);
+        KexiScriptTextView(KexiMainWindow *mainWin, QWidget *parent, Kross::Api::ScriptAction* scriptaction);
 
         /**
          * Destructor.

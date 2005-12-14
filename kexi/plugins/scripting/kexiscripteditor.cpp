@@ -30,30 +30,37 @@
 #include <kpopupmenu.h>
 
 #include <kexidialogbase.h>
-#include <kexiscripting.h>
+
+/// \internal d-pointer class
+class KexiScriptEditor::Private
+{
+    public:
+        Kross::Api::ScriptAction* scriptaction;
+};
 
 KexiScriptEditor::KexiScriptEditor(KexiMainWindow *mainWin, QWidget *parent, const char *name)
     : KexiEditor(mainWin, parent, name)
-    , m_scriptcontainer(0)
+    , d( new Private() )
 {
 }
 
 KexiScriptEditor::~KexiScriptEditor()
 {
+    delete d;
 }
 
-void KexiScriptEditor::initialize(KexiScriptContainer* scriptcontainer)
+void KexiScriptEditor::initialize(Kross::Api::ScriptAction* scriptaction)
 {
+    d->scriptaction = scriptaction;
+
     disconnect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
+    //FIXME connect(d->scriptcontainer, SIGNAL(lineNo(long)), this, SLOT(setLineNo(long)));
 
-    m_scriptcontainer = scriptcontainer;
-    connect(m_scriptcontainer, SIGNAL(lineNo(long)), this, SLOT(setLineNo(long)));
-
-    if(m_scriptcontainer) {
-        KexiEditor::setText(m_scriptcontainer->getCode());
+    if(d->scriptaction) {
+        KexiEditor::setText(d->scriptaction->getCode());
         // We assume Kross and the HighlightingInterface are using same
         // names for the support languages...
-        setHighlightMode(m_scriptcontainer->getInterpreterName());
+        setHighlightMode(d->scriptaction->getInterpreterName());
     }
     else {
         KexiEditor::setText("");
@@ -67,8 +74,8 @@ void KexiScriptEditor::initialize(KexiScriptContainer* scriptcontainer)
 void KexiScriptEditor::slotTextChanged()
 {
     KexiScriptEditor::setDirty(true);
-    if(m_scriptcontainer)
-        m_scriptcontainer->setCode( KexiEditor::text() );
+    if(d->scriptaction)
+        d->scriptaction->setCode( KexiEditor::text() );
 }
 
 void KexiScriptEditor::setLineNo(long lineno)

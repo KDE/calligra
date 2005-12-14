@@ -13,17 +13,9 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp \
 	kexistartupdata.cpp kexiguimsghandler.cpp kexitextmsghandler.cpp \
 	kexidataiteminterface.cpp kexievents.cpp \
 	kexidbshortcutfile.cpp \
-	kexiscripting.cpp kexiblobbuffer.cpp
+	kexiblobbuffer.cpp
 
 #kexipartdatasource.cpp
-
-if compile_kross
-  KROSSDEFINES=-DKEXI_KROSS_SUPPORT
-  KROSSINCLUDE=-I$(top_srcdir)/lib/kross
-  KROSSLIB=$(top_builddir)/lib/kross/main/libkrossmain.la
-endif
-
-AM_CPPFLAGS=$(KROSSDEFINES)
 
 libkexicore_la_LDFLAGS = $(KDE_RPATH) $(all_libraries) $(VER_INFO) -Wnounresolved -no-undefined
 
@@ -33,12 +25,10 @@ libkexicore_la_LIBADD = $(LIB_KEXI_KMDI) \
 	$(top_builddir)/kexi/kexiutils/libkexiutils.la \
 	$(top_builddir)/kexi/kexidb/libkexidb.la \
 	$(top_builddir)/kexi/kexidb/parser/libkexidbparser.la \
-	$(top_builddir)/lib/koproperty/libkoproperty.la \
-	$(KROSSLIB)
+	$(top_builddir)/lib/koproperty/libkoproperty.la
 
 INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/lib/kofficecore \
-	$(KROSSINCLUDE) \
 	-I$(top_srcdir)/lib \
 	-I$(top_srcdir)/kexi \
 	$(all_includes)

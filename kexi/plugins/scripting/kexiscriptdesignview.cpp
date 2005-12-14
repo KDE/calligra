@@ -23,20 +23,25 @@
 #include "kexiscriptdesignview.h"
 #include "kexiscripteditor.h"
 
+//#include <kross/main/manager.h>
+
 #include <qlayout.h>
 #include <qdom.h>
 #include <kdebug.h>
 
 #include <kexidialogbase.h>
 #include <kexidb/connection.h>
-#include <kexiscripting.h>
 
 /// @internal
 class KexiScriptDesignViewPrivate
 {
     public:
-        /// The \a KexiScriptContainer used as facade for the Kross functionality.
-        KexiScriptContainer* scriptcontainer;
+
+        /**
+         * The \a Kross::Api::ScriptAction instance which provides
+         * us access to the scripting framework Kross.
+         */
+        Kross::Api::ScriptAction* scriptaction;
 
         /// The \a KexiScriptEditor to edit the scripting code.
         KexiScriptEditor* editor;
@@ -45,19 +50,20 @@ class KexiScriptDesignViewPrivate
         KoProperty::Set* propertyset;
 };
 
-KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *parent, const char *name)
-    : KexiViewBase(mainWin, parent, name)
+KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *parent, Kross::Api::ScriptAction* scriptaction)
+    : KexiViewBase(mainWin, parent, "KexiScriptDesignView")
     , d( new KexiScriptDesignViewPrivate() )
 {
-    KexiScriptManager* scriptmanager = KexiScriptManager::self(mainWin);
+    d->scriptaction = scriptaction;
 
-    d->scriptcontainer = scriptmanager->getScriptContainer(parentDialog()->partItem()->name(), true);
-    plugSharedAction( "script_execute", d->scriptcontainer, SLOT(execute()) );
+    //FIXME Kross::Api::ScriptManager* scriptmanager = Kross::Api::ScriptManager::self(mainWin);
 
+    //d->scriptcontainer = scriptmanager->getScriptContainer( parentDialog()->partItem()->name() );
+    //plugSharedAction( "script_execute", d->scriptcontainer, SLOT(execute()) );
+
+/*
     d->propertyset = new KoProperty::Set(this, "KexiScripting");
-
     QStringList interpreters = scriptmanager->getInterpreters();
-
     KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(interpreters, interpreters);
     KoProperty::Property* prop = new KoProperty::Property(
         "language", // name
@@ -69,8 +75,8 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     );
     //prop->setVisible(false);
     d->propertyset->addProperty(prop);
-
     updateProperties();
+*/
 
     QBoxLayout* layout = new QVBoxLayout(this);
     d->editor = new KexiScriptEditor(mainWin, this, "ScriptEditor");
@@ -78,15 +84,15 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     setViewWidget((KexiViewBase*)d->editor);
     layout->addWidget((KexiViewBase*)d->editor);
 
-    if(KexiEditor::isAdvancedEditor()) // the configeditor is only in advanced mode avaiable.
-        plugSharedAction( "script_config_editor", d->editor, SLOT(slotConfigureEditor()) );
+    //if(KexiEditor::isAdvancedEditor()) // the configeditor is only in advanced mode avaiable.
+    //    plugSharedAction( "script_config_editor", d->editor, SLOT(slotConfigureEditor()) );
 
     loadData();
 
-    connect(d->propertyset, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ),
-            this, SLOT( slotPropertyChanged(KoProperty::Set&, KoProperty::Property&) ) );
+    //connect(d->propertyset, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ),
+    //        this, SLOT( slotPropertyChanged(KoProperty::Set&, KoProperty::Property&) ) );
 
-    d->editor->initialize(d->scriptcontainer);
+    d->editor->initialize( d->scriptaction );
 }
 
 KexiScriptDesignView::~KexiScriptDesignView()
@@ -97,11 +103,11 @@ KexiScriptDesignView::~KexiScriptDesignView()
 void KexiScriptDesignView::updateProperties()
 {
     //TODO d->propertyset->removePropertyGroup("Options");
-
-    QMap<QString, KexiScriptContainer::Option*> options = d->scriptcontainer->getOptions();
-    QMap<QString, KexiScriptContainer::Option*>::Iterator it( options.begin() );
+/*
+    QMap<QString, Kross::Api::ScriptContainer::Option*> options = d->scriptcontainer->getOptions();
+    QMap<QString, Kross::Api::ScriptContainer::Option*>::Iterator it( options.begin() );
     for(; it != options.end(); ++it) {
-        KexiScriptContainer::Option* option = it.data();
+        Kross::Api::ScriptContainer::Option* option = it.data();
         KoProperty::Property* prop = new KoProperty::Property(
             it.key().latin1(), // id
             option->value, // value
@@ -113,15 +119,17 @@ void KexiScriptDesignView::updateProperties()
     }
 
     propertySetSwitched(); // update property-editor
+*/
 }
 
 KoProperty::Set* KexiScriptDesignView::propertySet()
 {
-    return d->propertyset;
+    return 0; //return d->propertyset;
 }
 
 void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property)
 {
+/*
     if(property.name() == "language") {
         QString language = property.value().toString();
         kdDebug() << QString("KexiScriptDesignView::slotPropertyChanged() language=%1").arg(language) << endl;
@@ -138,6 +146,7 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& set, KoProperty:
         }
     }
     setDirty(true);
+*/
 }
 
 bool KexiScriptDesignView::loadData()
@@ -168,9 +177,9 @@ bool KexiScriptDesignView::loadData()
 
     QString language = scriptelem.attribute("language");
     if(! language.isEmpty())
-        d->scriptcontainer->setInterpreterName(language);
+        d->scriptaction->setInterpreterName(language);
 
-    d->scriptcontainer->setCode( scriptelem.text() );
+    d->scriptaction->setCode( scriptelem.text() );
     //d->editor->initialize(d->scriptcontainer); //FIXME clear prev states...
 
     return true;
@@ -205,9 +214,9 @@ tristate KexiScriptDesignView::storeData()
     QDomElement scriptelem = domdoc.createElement("script");
     domdoc.appendChild(scriptelem);
 
-    scriptelem.setAttribute("language", d->scriptcontainer->getInterpreterName());
+    scriptelem.setAttribute("language", d->scriptaction->getInterpreterName());
 
-    QDomText scriptcode = domdoc.createTextNode(d->scriptcontainer->getCode());
+    QDomText scriptcode = domdoc.createTextNode(d->scriptaction->getCode());
     scriptelem.appendChild(scriptcode);
 
     return storeDataBlock( domdoc.toString() );

@@ -58,6 +58,12 @@ class KexiScriptPart : public KexiPart::Part
 
         virtual void initPartActions();
         virtual void initInstanceActions();
+
+    private:
+        /// \internal d-pointer class.
+        class Private;
+        /// \internal d-pointer instance.
+        Private* const d;
 };
 
 #endif

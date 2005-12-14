@@ -319,7 +319,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotConfigureKeys();
 		void slotConfigureToolbars();
 		void slotToolsProjectMigration();
-		void slotToolsScriptsAboutToShow();
+
 		/// TMP: Display a dialog to download db examples from internet
 		void  slotGetNewStuff();
 

@@ -9,6 +9,7 @@ kexihandler_script_la_LDFLAGS = \
     $(KDE_PLUGIN) -module -no-undefined -Wnounresolved $(all_libraries) $(VER_INFO)
 
 kexihandler_script_la_LIBADD = \
+    $(top_builddir)/lib/kross/main/libkrossmain.la \
     $(top_builddir)/kexi/core/libkexicore.la \
     $(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
     $(top_builddir)/lib/koproperty/libkoproperty.la
@@ -24,6 +25,9 @@ INCLUDES = \
 METASOURCES = AUTO
 
 SUBDIRS = .
+
+scriptingconfigdir = $(kde_datadir)/kexi
+scriptingconfig_DATA = kexiscripting.rc
 
 include ../Makefile.common
 

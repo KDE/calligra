@@ -69,7 +69,6 @@
 #include "kexi.h"
 #include "kexistatusbar.h"
 #include "kexiinternalpart.h"
-#include "core/kexiscripting.h"
 //#include "kde2_closebutton.xpm"
 
 #include <widget/kexipropertyeditorview.h>
@@ -471,14 +470,6 @@ void KexiMainWindowImpl::initActions()
 		this, SLOT(slotToolsProjectMigration()), actionCollection(), "tools_import_project");
 #else
 	d->action_tools_data_migration = d->dummy_action;
-#endif
-
-#ifdef KEXI_SCRIPTS_SUPPORT
-	d->action_tools_scripts = new KActionMenu(i18n("Scripts"), actionCollection(), "tools_scripts");
-	connect(d->action_tools_scripts->popupMenu(), SIGNAL(aboutToShow()),
-		this, SLOT(slotToolsScriptsAboutToShow()));
-#else
-	d->action_tools_scripts = d->dummy_action;
 #endif
 
 #ifndef KEXI_NO_CSV_IMPORT
@@ -3536,13 +3527,6 @@ void KexiMainWindowImpl::slotProjectExportDataTable()
 	if (!d->nav)
 		return;
 	exportItemAsDataTable(d->nav->selectedPartItem());
-}
-
-void KexiMainWindowImpl::slotToolsScriptsAboutToShow()
-{
-#ifdef KEXI_SCRIPTS_SUPPORT
-	KexiScriptManager::self(this)->plugExtensions( d->action_tools_scripts->popupMenu() );
-#endif
 }
 
 void KexiMainWindowImpl::slotEditCopySpecialDataTable()
