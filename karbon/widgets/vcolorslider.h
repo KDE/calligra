@@ -18,8 +18,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-/* This is the color slider widget that is used to select color or color components */
-
 /* vcolorslider.h */
 #ifndef VCOLORSLIDER_H
 #define VCOLORSLIDER_H
@@ -30,36 +28,89 @@ class QLabel;
 class KIntSpinBox;
 class KGradientSelector;
 
+/**
+ * This is the color slider widget that is used to select color or color components.
+ * It combines a label, a gradient selector and a spinbox.
+ */
 class VColorSlider : public QWidget
 {
 	Q_OBJECT
 public:
+	/**
+	 * Constructs a new color slider.
+	 *
+	 * @param parent the parent widget
+	 * @param name the slider's name
+	 */
 	VColorSlider( QWidget* parent = 0L, const char* name = 0L );
-	VColorSlider( const QString&, const QColor&, const QColor&,
-		int, int, int, QWidget* parent = 0L, const char* name = 0L );
+
+	/**
+	 * Constructs a new color slider.
+	 *
+	 * @param label the label text
+	 * @param col1 the left color
+	 * @param col2 the right color
+	 * @param min the minimum value
+	 * @param max the maximum value
+	 * @param value the actual value
+	 * @param parent the parent widget
+	 * @param name the slider's name
+	 */
+	VColorSlider( const QString& label, const QColor& col1, const QColor& col2,
+		int min, int max, int value, QWidget* parent = 0L, const char* name = 0L );
+	
+	/** Destroys the color slider */
 	~VColorSlider();
 	
-	/** reflects if the slider is still being dragged while the color changes */
+	/** 
+	 * Reflects if the slider is still being dragged while the color changes 
+	 *
+	 * @return true if slider is still dragged, else false
+	 */
 	bool isDragging() { return m_isDragging; }
 public slots:
 	
-	/** Sets the description of the slider */
-	virtual void setLabel( const QString& );
+	/**
+	 * Sets the description of the slider 
+	 *
+	 * @param label the new label text
+	 */
+	virtual void setLabel( const QString& label );
 	
-	/** 
-	* Sets the colors for the slider. 
-	* @param Color1 is left
-	* @param Color2 is right 
+	/**
+	* Sets the colors for the slider.
+	*
+	* @param color1 the new left color
+	* @param color2 the new right color
 	*/
-	virtual void setColors( const QColor&, const QColor& );
+	virtual void setColors( const QColor& color1, const QColor& color2 );
 	
-	/** Sets the value of the spinbox (and the value of the vcolorslider) */
-	virtual void setValue( int );
-	/** Sets the minimum value of the spinbox and slider */
-	virtual void setMinValue( int );
-	/** Sets the maximum value of the spinbox and slider */
-	virtual void setMaxValue( int );
-	/** Retrieves the actual value of the spinbox and slider */
+	/**
+	 * Sets the value of the spinbox (and the value of the vcolorslider).
+	 *
+	 * @param value the new value
+	 */
+	virtual void setValue( int value );
+
+	/**
+	 * Sets the minimum value of the spinbox and slider.
+	 *
+	 * @param value the new minimum value
+	 */
+	virtual void setMinValue( int value );
+	
+	/**
+	 * Sets the maximum value of the spinbox and slider.
+	 *
+	 * @param value the new maximum value
+	 */
+	virtual void setMaxValue( int value );
+	
+	/**
+	 * Retrieves the actual value of the spinbox and slider.
+	 *
+	 * @return the actual value
+	 */
 	int value();
 
 private:
@@ -74,8 +125,10 @@ private:
 
 signals:
 	/** 
-	* is emitted whenever the slider or spinbox value has changed
-	* use @ref isDragging to know if the slider is still being dragged
+	* Is emitted whenever the slider or spinbox value has changed.
+	* Use @ref isDragging to know if the slider is still being dragged.
+	*
+	* @param value the actual value
 	*/
 	void valueChanged( int value );
 
