@@ -288,19 +288,19 @@ SizePolicyCustomProperty::SizePolicyCustomProperty(Property *property)
 
 		new Property("hSizeType", new Property::ListData(keys, strings),
 			(int)property->value().toSizePolicy().horData(), 
-			i18n("Hor. Size Type"),i18n("Horizontal Size Type"),
+			i18n("Horz. Size Type"),i18n("Horizontal Size Type"),
 			SizePolicy_HorData, property);
 		new Property("vSizeType", new Property::ListData(keys, strings),
 			(int)property->value().toSizePolicy().verData(), 
-			i18n("Ver. Size Type"), i18n("Vertical Size Type"),
+			i18n("Vert. Size Type"), i18n("Vertical Size Type"),
 			SizePolicy_VerData, property);
 		new Property("hStretch", 
 			property->value().toSizePolicy().horStretch(), 
-			i18n("Hor. Stretch"), i18n("Horizontal Stretch"),
+			i18n("Horz. Stretch"), i18n("Horizontal Stretch"),
 			SizePolicy_HorStretch, property);
 		new Property("vStretch", 
 			property->value().toSizePolicy().verStretch(), 
-			i18n("Ver. Stretch"), i18n("Vertical Stretch"),
+			i18n("Vert. Stretch"), i18n("Vertical Stretch"),
 			SizePolicy_VerStretch, property);
 	}
 }

@@ -99,7 +99,7 @@ CursorEdit::CursorEdit(Property *property, QWidget *parent, const char *name)
 			<< i18n("Mouse Cursor Shape", "Split Horizontal")
 			<< i18n("Mouse Cursor Shape", "Pointing Hand")
 			<< i18n("Mouse Cursor Shape", "Forbidden")
-			<< i18n("Mouse Cursor Shape", "What's this?");
+			<< i18n("Mouse Cursor Shape", "What's This?");
 		m_cursorListData = new Property::ListData(keys, strings);
 	}
 
