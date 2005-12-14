@@ -53,17 +53,6 @@ class EffortCostMap;
  * This class is basically an abstract interface to make the design more OO.
  */
 class Node {
-    /**
-     * Many Project functions deal with lists of Node objects. Although
-     * Node protected functions can be called for any Node in a list
-     * from a Node function (data hiding is at class level) Project can't
-     * call the same functions unless we explicitly allow this. A friend
-     * declaration is a simple solution.
-     *
-     * Note (Bo): When you need to use friend classes, you usually show a
-     * basic design flaw. We should get rid of this.
-     */
-    friend class Project;
 
 public:
     enum ConstraintType { ASAP, ALAP, MustStartOn, MustFinishOn, StartNotEarlier, FinishNotLater, FixedInterval };
