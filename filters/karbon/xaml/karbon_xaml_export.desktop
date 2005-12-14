@@ -18,6 +18,7 @@ Name[se]=Karbon14:a WVG-olggosfievrridansilli
 Name[sr]=Karbon14-ов филтер за извоз у WVG
 Name[sr@Latn]=Karbon14-ов филтер за извоз у WVG
 Name[sv]=Karbon14 WVG-exportfilter
+Name[uk]=Фільтр експорту WVG для Karbon14
 Name[xx]=xxKarbon14 WVG Export Filterxx
 ServiceTypes=KOfficeFilter
 Type=Service

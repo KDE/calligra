@@ -18,6 +18,7 @@ Name[se]=Karbon:a XAML-sisafievrridansilli
 Name[sr]=Karbon-ов филтер за увоз из XAML-а
 Name[sr@Latn]=Karbon-ов филтер за увоз из XAML-а
 Name[sv]=Karbon XAML-importfilter
+Name[uk]=Фільтр імпорту XAML для Karbon
 Name[xx]=xxKarbon XAML Import Filterxx
 X-KDE-Export=application/x-karbon
 X-KDE-Import=image/wvg+xml

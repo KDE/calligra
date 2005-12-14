@@ -23,6 +23,7 @@ Name[se]=KFormula SVG-olggosfievrridansilli
 Name[sr]=KFormula-ин филтер за извоз у SVG
 Name[sr@Latn]=KFormula-ин филтер за извоз у SVG
 Name[sv]=Kformula SVG-exportfilter
+Name[uk]=Фільтр експорту SVG для KFormula
 Name[xx]=xxKFormula SVG Export Filterxx
 Name[zh_CN]=KFormula SVG 导出过滤器
 ServiceTypes=KOfficeFilter

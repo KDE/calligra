@@ -20,6 +20,7 @@ GenericName[pt_BR]=Processamento de Texto Simplificado
 GenericName[sr]=Поједностављена обрада текста
 GenericName[sr@Latn]=Поједностављена обрада текста
 GenericName[sv]=Förenklad ordbehandling
+GenericName[uk]=Спрощений текстовий процесор
 GenericName[xx]=xxSimplified Word Processingxx
 GenericName[zh_CN]=简化的字处理
 MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite
