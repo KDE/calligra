@@ -120,6 +120,7 @@
 
 #include <qclipboard.h>
 #include <qgroupbox.h>
+#include <qlayout.h>
 #include <qpaintdevicemetrics.h>
 #include <qprogressdialog.h>
 #include <qregexp.h>
@@ -7395,38 +7396,36 @@ void KWView::deleteSelectedFrames() {
 
 
 /******************************************************************/
-/* Class: KWLayoutWidget                                          */
-/******************************************************************/
-
-KWLayoutWidget::KWLayoutWidget( QWidget *parent, KWGUI *g )
-    : QWidget( parent )
-{
-    m_gui = g;
-}
-
-void KWLayoutWidget::resizeEvent( QResizeEvent *e )
-{
-    QWidget::resizeEvent( e );
-    m_gui->reorganize();
-}
-
-/******************************************************************/
 /* Class: KWGUI                                                */
 /******************************************************************/
 KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
-    : QWidget( parent, "" )
+  : QHBox( parent, "" ),
+    m_view ( daView )
 {
-    m_view = daView;
 
-    m_horRuler = m_vertRuler = 0;
     KWDocument * doc = m_view->kWordDocument();
 
+    m_horRuler  = 0;
+    m_vertRuler = 0;
+
+    // The splitter
     m_panner = new QSplitter( Qt::Horizontal, this );
+    //addWidget( m_panner );
+
+    // The left side
     m_docStruct = new KWDocStruct( m_panner, doc, this );
     m_docStruct->setMinimumWidth( 0 );
-    m_left = new KWLayoutWidget( m_panner, this );
-    m_left->show();
-    m_canvas = new KWCanvas( viewMode, m_left, doc, this );
+
+    // The right side
+#if 0
+    m_right = new KWLayoutWidget( m_panner, this );
+#else
+    m_right = new QWidget( m_panner );
+    QGridLayout *gridLayout = new QGridLayout( m_right, 2, 2 );
+#endif
+    m_right->show();
+    m_canvas = new KWCanvas( viewMode, m_right, doc, this );
+    gridLayout->addWidget( m_canvas, 1, 1 );
 
     QValueList<int> l;
     l << 10;
@@ -7435,21 +7434,27 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
 
     KoPageLayout layout = doc->pageLayout();
 
-    m_tabChooser = new KoTabChooser( m_left, KoTabChooser::TAB_ALL );
+    m_tabChooser = new KoTabChooser( m_right, KoTabChooser::TAB_ALL );
     m_tabChooser->setReadWrite(doc->isReadWrite());
+    gridLayout->addWidget( m_tabChooser, 0, 0 );
 
-    m_horRuler = new KoRuler( m_left, m_canvas->viewport(), Qt::Horizontal, layout,
-                          KoRuler::F_INDENTS | KoRuler::F_TABS, doc->unit(), m_tabChooser );
+    m_horRuler = new KoRuler( m_right, m_canvas->viewport(), Qt::Horizontal, layout,
+			      KoRuler::F_INDENTS | KoRuler::F_TABS, 
+			      doc->unit(), m_tabChooser );
     m_horRuler->setReadWrite(doc->isReadWrite());
-    m_vertRuler = new KoRuler( m_left, m_canvas->viewport(), Qt::Vertical, layout, 0, doc->unit() );
-    connect( m_horRuler, SIGNAL( newPageLayout( const KoPageLayout & ) ), m_view, SLOT( newPageLayout( const KoPageLayout & ) ) );
+    gridLayout->addWidget( m_horRuler, 0, 1 );
+
+    m_vertRuler = new KoRuler( m_right, m_canvas->viewport(), Qt::Vertical, layout, 
+			       0, doc->unit() );
     m_vertRuler->setReadWrite(doc->isReadWrite());
+    gridLayout->addWidget( m_vertRuler, 1, 0 );
 
     m_horRuler->setZoom( doc->zoomedResolutionX() );
     m_vertRuler->setZoom( doc->zoomedResolutionY() );
 
     m_horRuler->setGridSize(doc->gridX());
 
+    connect( m_horRuler, SIGNAL( newPageLayout( const KoPageLayout & ) ), m_view, SLOT( newPageLayout( const KoPageLayout & ) ) );
     connect( m_horRuler, SIGNAL( newLeftIndent( double ) ), m_view, SLOT( newLeftIndent( double ) ) );
     connect( m_horRuler, SIGNAL( newFirstIndent( double ) ), m_view, SLOT( newFirstIndent( double ) ) );
     connect( m_horRuler, SIGNAL( newRightIndent( double ) ), m_view, SLOT( newRightIndent( double ) ) );
@@ -7465,7 +7470,7 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     m_vertRuler->hide();
 
     m_canvas->show();
-
+    
     reorganize();
 
     connect( m_horRuler, SIGNAL( tabListChanged( const KoTabulatorList & ) ), m_view,
@@ -7538,12 +7543,6 @@ void KWGUI::reorganize()
         m_canvas->setVScrollBarMode(QScrollView::AlwaysOff);
         m_canvas->setHScrollBarMode(QScrollView::AlwaysOff);
     }
-
-    m_panner->setGeometry( 0, 0, width(), height() );
-    m_canvas->setGeometry( hSpace, vSpace, m_left->width() - hSpace, m_left->height() - vSpace );
-    m_tabChooser->setGeometry( 0, 0, hSpace, vSpace );
-    m_horRuler->setGeometry( hSpace, 0, m_left->width() - hSpace, vSpace );
-    m_vertRuler->setGeometry( 0, hSpace, vSpace, m_left->height() - vSpace );
 }
 
 void KWGUI::unitChanged( KoUnit::Unit u )

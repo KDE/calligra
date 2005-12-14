@@ -26,7 +26,6 @@
 #endif
 
 #include <kprinter.h>
-#include <qbrush.h>
 
 #include <KoBorder.h>
 #include "defs.h"
@@ -36,6 +35,10 @@
 #include <koView.h>
 #include <KoPoint.h>
 #include <kshortcut.h>
+
+#include <qbrush.h>
+#include <qhbox.h>
+
 
 class KWViewMode;
 class DCOPObject;
@@ -803,21 +806,7 @@ private: // variables
 /* Class: KWGUI                                                   */
 /******************************************************************/
 
-class KWGUI;
-class KWLayoutWidget : public QWidget
-{
-    Q_OBJECT
-
-public:
-    KWLayoutWidget( QWidget *parent, KWGUI *g );
-
-protected:
-    void resizeEvent( QResizeEvent *e );
-    KWGUI *m_gui;
-
-};
-
-class KWGUI : public QWidget
+class KWGUI : public QHBox
 {
     friend class KWLayoutWidget;
 
@@ -844,13 +833,21 @@ protected slots:
 protected:
     void resizeEvent( QResizeEvent *e );
 
-    KoRuler *m_vertRuler, *m_horRuler;
-    KWCanvas *m_canvas;
-    KWView *m_view;
-    KoTabChooser *m_tabChooser;
-    KWDocStruct *m_docStruct;
-    QSplitter *m_panner;
-    KWLayoutWidget *m_left;
+    // A pointer to the view.
+    KWView          *m_view;
+
+    // The left side
+    KWDocStruct     *m_docStruct;
+
+    // The right side
+    QWidget         *m_right;	// The layout widget.
+
+    KoTabChooser    *m_tabChooser;
+    KoRuler         *m_vertRuler;
+    KoRuler         *m_horRuler;
+    KWCanvas        *m_canvas;
+
+    QSplitter       *m_panner;
 
 };
 
