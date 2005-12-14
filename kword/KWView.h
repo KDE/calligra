@@ -808,8 +808,6 @@ private: // variables
 
 class KWGUI : public QHBox
 {
-    friend class KWLayoutWidget;
-
     Q_OBJECT
 
 public:

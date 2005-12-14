@@ -7410,20 +7410,14 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
 
     // The splitter
     m_panner = new QSplitter( Qt::Horizontal, this );
-    //addWidget( m_panner );
 
     // The left side
     m_docStruct = new KWDocStruct( m_panner, doc, this );
     m_docStruct->setMinimumWidth( 0 );
 
     // The right side
-#if 0
-    m_right = new KWLayoutWidget( m_panner, this );
-#else
     m_right = new QWidget( m_panner );
     QGridLayout *gridLayout = new QGridLayout( m_right, 2, 2 );
-#endif
-    m_right->show();
     m_canvas = new KWCanvas( viewMode, m_right, doc, this );
     gridLayout->addWidget( m_canvas, 1, 1 );
 
