@@ -69,6 +69,8 @@ private:
 	KIntSpinBox* m_spinBox;
 	KGradientSelector* m_gradientSelect;
 	bool m_isDragging;
+	int m_minValue;
+	int m_maxValue;
 
 signals:
 	/** 

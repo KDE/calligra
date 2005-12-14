@@ -51,9 +51,9 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	QGridLayout *mainLayout = new QGridLayout( mRGBWidget, 5, 1 );
 	
 	//RGB
-	mRedSlider = new VColorSlider( i18n( "R:" ), QColor( "red" ), QColor( "black" ), 0, 255, 0, mRGBWidget );
-	mGreenSlider = new VColorSlider( i18n( "G:" ), QColor( "green" ), QColor( "black" ), 0, 255, 0, mRGBWidget );
-	mBlueSlider = new VColorSlider( i18n( "B:" ), QColor( "blue" ), QColor( "black" ), 0, 255, 0, mRGBWidget );
+	mRedSlider = new VColorSlider( i18n( "R:" ), QColor( "black" ), QColor( "red" ), 0, 255, 0, mRGBWidget );
+	mGreenSlider = new VColorSlider( i18n( "G:" ), QColor( "black" ), QColor( "green" ), 0, 255, 0, mRGBWidget );
+	mBlueSlider = new VColorSlider( i18n( "B:" ), QColor( "black" ), QColor( "blue" ), 0, 255, 0, mRGBWidget );
 	mainLayout->addWidget( mRedSlider, 1, 0 );
 	mainLayout->addWidget( mGreenSlider, 2, 0 );
 	mainLayout->addWidget( mBlueSlider, 3, 0 );
@@ -73,10 +73,10 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	QGridLayout *mainCMYKLayout = new QGridLayout( mCMYKWidget, 6, 1);
 
 	//Sliders
-	mCyanSlider = new VColorSlider( i18n( "C:" ), QColor( "cyan" ), QColor( "white" ), 0, 100, 0, mCMYKWidget );
-	mMagentaSlider = new VColorSlider( i18n( "M:" ), QColor( "magenta" ), QColor( "white" ), 0, 100, 0, mCMYKWidget );
-	mYellowSlider = new VColorSlider( i18n( "Y:" ), QColor( "yellow" ), QColor( "white" ), 0, 100, 0, mCMYKWidget );
-	mBlackSlider = new VColorSlider( i18n( "K:" ), QColor( "black" ), QColor( "white" ), 0, 100, 0, mCMYKWidget );
+	mCyanSlider = new VColorSlider( i18n( "C:" ), QColor( "white" ), QColor( "cyan" ), 0, 100, 0, mCMYKWidget );
+	mMagentaSlider = new VColorSlider( i18n( "M:" ), QColor( "white" ), QColor( "magenta" ), 0, 100, 0, mCMYKWidget );
+	mYellowSlider = new VColorSlider( i18n( "Y:" ), QColor( "white" ), QColor( "yellow" ), 0, 100, 0, mCMYKWidget );
+	mBlackSlider = new VColorSlider( i18n( "K:" ), QColor( "white" ), QColor( "black" ), 0, 100, 0, mCMYKWidget );
 	mainCMYKLayout->addWidget( mCyanSlider, 1, 0 );
 	mainCMYKLayout->addWidget( mMagentaSlider, 2, 0 );
 	mainCMYKLayout->addWidget( mYellowSlider, 3, 0 );
@@ -94,7 +94,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mTabWidget->addTab( mCMYKWidget, i18n( "CMYK" ) );
 
 	//Opacity
-	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "black" ), QColor( "white" ), 0, 100, 100, this );
+	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "white" ), QColor( "black" ), 0, 100, 100, this );
 	//TODO: Make "white" a transparent color
 	connect( mOpacity, SIGNAL( valueChanged ( int ) ), this, SLOT( updateOpacity() ) );
 

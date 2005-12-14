@@ -88,17 +88,19 @@ void VColorSlider::setColors( const QColor& color1, const QColor& color2 )
 void VColorSlider::setValue( int value )
 {
 	m_spinBox->setValue( value );
-	m_gradientSelect->setValue( value );
+	m_gradientSelect->setValue( (m_maxValue - value) + m_minValue );
 }
 
 void VColorSlider::setMinValue( int value )
 {
+	m_minValue = value;
 	m_spinBox->setMinValue( value );
 	m_gradientSelect->setMinValue( value );
 }
 
 void VColorSlider::setMaxValue( int value )
 {
+	m_maxValue = value;
 	m_spinBox->setMaxValue( value );
 	m_gradientSelect->setMaxValue( value );
 }
@@ -113,7 +115,7 @@ void VColorSlider::updateFrom_spinBox( int value )
 	if ( value != m_gradientSelect->value() )
 	{
 		disconnect( m_gradientSelect, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFrom_gradientSelect( int ) ) );
-		m_gradientSelect->setValue( value );
+		m_gradientSelect->setValue( (m_maxValue - value) + m_minValue );
 		connect( m_gradientSelect, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFrom_gradientSelect( int ) ) );
 		emit valueChanged( value );
 	}
@@ -121,6 +123,7 @@ void VColorSlider::updateFrom_spinBox( int value )
 
 void VColorSlider::updateFrom_gradientSelect( int value )
 {
+	value = (m_maxValue - value) + m_minValue;
 	if ( value != m_spinBox->value() )
 	{
 		disconnect( m_spinBox, SIGNAL( valueChanged ( int ) ), this, SLOT( updateFrom_spinBox( int ) ) );
