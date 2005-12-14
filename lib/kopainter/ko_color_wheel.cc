@@ -1,6 +1,4 @@
 /*
- * This file is part of Krita
- *
  * Copyright (c) 2004 Sven Langkamp <longamp@reallygood.de>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -25,27 +23,27 @@
 #include <qimage.h>
 
 #include <kdebug.h>
-#include "kis_colorwheel.h"
+#include "ko_color_wheel.h"
 
 #define pi 3.14159265
 
-KisColorWheel::KisColorWheel( QWidget *parent, const char *name ): KXYSelector( parent, name )
+KoColorWheel::KoColorWheel( QWidget *parent, const char *name ): KXYSelector( parent, name )
 {
 
 }
 
-void KisColorWheel::resizeEvent( QResizeEvent * )
+void KoColorWheel::resizeEvent( QResizeEvent * )
 {
     drawWheel(&m_pixmap);
     setRange( 0, 0, contentsRect().width(), contentsRect().height() );
 }
 
-void KisColorWheel::drawContents( QPainter *painter )
+void KoColorWheel::drawContents( QPainter *painter )
 {
     painter->drawPixmap( contentsRect().x(), contentsRect().y(), m_pixmap );
 }
 
-void KisColorWheel::drawWheel( QPixmap *pixmap )
+void KoColorWheel::drawWheel( QPixmap *pixmap )
 {
     int size = QMIN(contentsRect().width(), contentsRect().height());
     QPoint center(size/2, size/2);
@@ -78,7 +76,7 @@ void KisColorWheel::drawWheel( QPixmap *pixmap )
     pixmap->convertFromImage( image );
 }
 
-void KisColorWheel::mousePressEvent( QMouseEvent *e )
+void KoColorWheel::mousePressEvent( QMouseEvent *e )
 {
     int size = QMIN(contentsRect().width(), contentsRect().height());
     QPoint center(size/2, size/2);
@@ -100,12 +98,12 @@ void KisColorWheel::mousePressEvent( QMouseEvent *e )
     emit valueChanged(m_color);
 }
 
-void KisColorWheel::mouseMoveEvent( QMouseEvent *e )
+void KoColorWheel::mouseMoveEvent( QMouseEvent *e )
 {
     mousePressEvent( e );
 }
 
-void KisColorWheel::slotSetValue(const KoColor& c)
+void KoColorWheel::slotSetValue(const KoColor& c)
 {
     int size = QMIN(contentsRect().width(), contentsRect().height());
     QPoint center(size/2, size/2);
@@ -116,4 +114,4 @@ void KisColorWheel::slotSetValue(const KoColor& c)
     setValues( xVal, yVal );
 }
 
-#include "kis_colorwheel.moc"
+#include "ko_color_wheel.moc"

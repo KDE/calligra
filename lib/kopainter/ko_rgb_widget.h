@@ -16,13 +16,10 @@
  *  along with this program; if not, write to the Free Software
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
-#ifndef KIS_RGB_WIDGET_H
-#define KIS_RGB_WIDGET_H
+#ifndef KO_RGB_WIDGET_H
+#define KO_RGB_WIDGET_H
 
 #include "qwidget.h"
-
-#include "kis_canvas_subject.h"
-#include "kis_canvas_observer.h"
 
 #include <koffice_export.h>
 
@@ -36,18 +33,34 @@ class KDualColorButton;
 class KoColorSlider;
 class QColor;
 
-class KRITAUI_EXPORT KisRGBWidget
-     : public QWidget,
-       public KisCanvasObserver
+class KoRGBWidget
+     : public QWidget
 {
     Q_OBJECT
     typedef QWidget super;
 
 public:
-    KisRGBWidget(QWidget *parent = 0L, const char *name = 0);
-    virtual ~KisRGBWidget() {}
+    KoRGBWidget(QWidget *parent = 0L, const char *name = 0);
+    virtual ~KoRGBWidget() {}
+
+public slots:
+    /**
+     * Set the current color to c. Do not emit the color changed signals
+     */
+    virtual void setFgColor(const QColor & c);
+    virtual void setBgColor(const QColor & c);
+
+signals:
+
+    /**
+     * Emitted when the current color is changed.
+     */
+    virtual void sigFgColorChanged(const QColor & c);
+    virtual void sigBgColorChanged(const QColor & c);
+
 
 protected slots:
+
     virtual void slotRChanged(int r);
     virtual void slotGChanged(int g);
     virtual void slotBChanged(int b);
@@ -56,10 +69,11 @@ protected slots:
     void slotBGColorSelected(const QColor& c);
 
 private:
-    void update(KisCanvasSubject*);
+
+    void KoRGBWidget::update(const QColor fgColor, const QColor);
 
 private:
-    KisCanvasSubject *m_subject;
+
     KoColorSlider *mRSlider;
     KoColorSlider *mGSlider;
     KoColorSlider *mBSlider;

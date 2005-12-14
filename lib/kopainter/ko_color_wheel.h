@@ -1,6 +1,4 @@
 /*
- * This file is part of Krita
- *
  * Copyright (c) 2004 Sven Langkamp <longamp@reallygood.de>
  *
  *  This program is free software; you can redistribute it and/or modify
@@ -18,8 +16,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_COLORWHEEL_H
-#define KIS_COLORWHEEL_H
+#ifndef KO_COLORWHEEL_H
+#define KO_COLORWHEEL_H
 
 #include <qpixmap.h>
 
@@ -28,12 +26,12 @@
 
 class QPainter;
 
-class KisColorWheel : public KXYSelector
+class KoColorWheel : public KXYSelector
 {
   Q_OBJECT
 
 public:
-    KisColorWheel( QWidget *parent=0, const char *name=0 );
+    KoColorWheel( QWidget *parent=0, const char *name=0 );
 
 signals:
     void valueChanged(const KoColor& c);

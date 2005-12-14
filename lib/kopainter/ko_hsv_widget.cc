@@ -1,6 +1,4 @@
 /*
- * This file is part of Krita
- *
  * Copyright (c) 1999 Matthias Elter (me@kde.org)
  * Copyright (c) 2001-2002 Igor Jansen (rm@kde.org)
  *
@@ -19,8 +17,8 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kis_hsv_widget.h"
-#include "kis_colorwheel.h"
+#include "ko_hsv_widget.h"
+#include "ko_color_wheel.h"
 
 #include <kselect.h>
 #include <qlayout.h>
@@ -33,25 +31,17 @@
 #include <kdualcolorbutton.h>
 #include <koColor.h>
 #include <kdebug.h>
-#include "kis_color.h"
-#include "kis_canvas_subject.h"
-#include "kis_factory.h"
-#include "kis_colorspace_factory_registry.h"
-#include <kis_meta_registry.h>
 
-KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, name)
+KoHSVWidget::KoHSVWidget(QWidget *parent, const char *name) : super(parent, name)
 {
-    m_subject = 0;
-
     m_ColorButton = new KDualColorButton(this);
     m_ColorButton ->  setFixedSize(m_ColorButton->sizeHint());
 
     QGridLayout *mGrid = new QGridLayout(this, 5, 7, 5, 2);
-    m_colorwheel = new KisColorWheel(this);
+    m_colorwheel = new KoColorWheel(this);
     m_colorwheel->setFixedSize( 120, 120);
     m_VSelector = new KValueSelector(Qt::Vertical, this);
     m_VSelector-> setFixedSize( 30, 120);
-
 
     /* setup slider labels */
     mHLabel = new QLabel("H", this);
@@ -105,64 +95,59 @@ KisHSVWidget::KisHSVWidget(QWidget *parent, const char *name) : super(parent, na
     autovalue = true;
 }
 
-void KisHSVWidget::slotHChanged(int h)
+void KoHSVWidget::slotHChanged(int h)
 {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-
     if (m_ColorButton->current() == KDualColorButton::Foreground){
         m_fgColor.setHSV(h, m_fgColor.S(), m_fgColor.V());
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
-        if(m_subject)
-            m_subject->setFGColor(KisColor(m_fgColor.color(), cs));
+	QColor c = m_fgColor.color();
+	emit sigFgColorChanged(c);
     }
     else{
         m_bgColor.setHSV(h, m_bgColor.S(), m_bgColor.V());
         m_ColorButton->setCurrent(KDualColorButton::Background);
-        if(m_subject)
-            m_subject->setBGColor(KisColor(m_bgColor.color(), cs));
+	QColor c = m_bgColor.color();
+	emit sigBgColorChanged(c);
     }
 }
 
-void KisHSVWidget::slotSChanged(int s)
+void KoHSVWidget::slotSChanged(int s)
 {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     if (m_ColorButton->current() == KDualColorButton::Foreground){
         m_fgColor.setHSV(m_fgColor.H(), s, m_fgColor.V());
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
-        if(m_subject)
-            m_subject->setFGColor(KisColor(m_fgColor.color(), cs));
+	QColor c = m_fgColor.color();
+	emit sigFgColorChanged(c);
     }
     else{
         m_bgColor.setHSV(m_bgColor.H(), s, m_bgColor.V());
         m_ColorButton->setCurrent(KDualColorButton::Background);
-        if(m_subject)
-            m_subject->setBGColor(KisColor(m_bgColor.color(), cs));
+	QColor c = m_bgColor.color();
+	emit sigBgColorChanged(c);
     }
 }
 
-void KisHSVWidget::slotVChanged(int v)
+void KoHSVWidget::slotVChanged(int v)
 {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     autovalue = false;
     locked = true;
     if (m_ColorButton->current() == KDualColorButton::Foreground){
         m_fgColor.setHSV(m_fgColor.H(), m_fgColor.S(), v);
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
-        if(m_subject)
-            m_subject->setFGColor(KisColor(m_fgColor.color(), cs));
+	QColor c = m_fgColor.color();
+	emit sigFgColorChanged(c);
     }
     else{
         m_bgColor.setHSV(m_bgColor.H(), m_bgColor.S(), v);
         m_ColorButton->setCurrent(KDualColorButton::Background);
-        if(m_subject)
-            m_subject->setBGColor(KisColor(m_bgColor.color(), cs));
+	QColor c = m_bgColor.color();
+	emit sigBgColorChanged(c);
     }
     locked = false;
 }
 
-void KisHSVWidget::slotWheelChanged(const KoColor& c)
+void KoHSVWidget::slotWheelChanged(const KoColor& c)
 {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     locked = true;
     if (m_ColorButton->current() == KDualColorButton::Foreground){
         if(autovalue)
@@ -170,9 +155,8 @@ void KisHSVWidget::slotWheelChanged(const KoColor& c)
         else
             m_fgColor.setHSV(c.H(), c.S(), m_fgColor.V());
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
-        // XXX: I once got a crash here. BSAR.
-        if(m_subject)
-            m_subject->setFGColor(KisColor(m_fgColor.color(), cs));
+	QColor c = m_fgColor.color();
+	emit sigFgColorChanged(c);
     }
     else{
         if(autovalue)
@@ -180,19 +164,29 @@ void KisHSVWidget::slotWheelChanged(const KoColor& c)
         else
             m_bgColor.setHSV(c.H(), c.S(), m_fgColor.V());
         m_ColorButton->setCurrent(KDualColorButton::Background);
-        if(m_subject)
-            m_subject->setBGColor(KisColor(m_bgColor.color(), cs));
+	QColor c = m_bgColor.color();
+	emit sigBgColorChanged(c);
     }
     locked = false;
 }
 
-void KisHSVWidget::update(KisCanvasSubject *subject)
+
+void KoHSVWidget::setFgColor(const QColor & c)
+{
+    update(KoColor(c), m_bgColor);
+}
+
+void KoHSVWidget::setBgColor(const QColor & c)
+{
+    update(m_fgColor, KoColor(c));
+}
+
+void KoHSVWidget::update(const KoColor & fgColor, const KoColor & bgColor)
 {
     if( !locked )
     {
-        m_subject = subject;
-        m_fgColor = subject->fgColor().toQColor();
-        m_bgColor = subject->bgColor().toQColor();
+        m_fgColor = fgColor;
+        m_bgColor = bgColor;
     }
 
     KoColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
@@ -229,26 +223,16 @@ void KisHSVWidget::update(KisCanvasSubject *subject)
     m_colorwheel->blockSignals(false);
 }
 
-void KisHSVWidget::slotFGColorSelected(const QColor& c)
+void KoHSVWidget::slotFGColorSelected(const QColor& c)
 {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     m_fgColor = KoColor(c);
-    if(m_subject)
-    {
-        QColor bgColor = m_ColorButton -> background();
-        m_subject->setFGColor(KisColor(m_fgColor.color(), cs));
-        //Background signal could be blocked so do that manually
-        //see bug 106919
-        m_subject->setBGColor(KisColor(bgColor, cs));
-    }
+    emit sigFgColorChanged(c);
 }
 
-void KisHSVWidget::slotBGColorSelected(const QColor& c)
+void KoHSVWidget::slotBGColorSelected(const QColor& c)
 {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
     m_bgColor = KoColor(c);
-    if(m_subject)
-        m_subject->setBGColor(KisColor(m_bgColor.color(), cs));
+    emit sigBgColorChanged(c);
 }
 
-#include "kis_hsv_widget.moc"
+#include "ko_hsv_widget.moc"

@@ -1,5 +1,4 @@
-/* This file is part of Krita
- *
+/* 
  * Copyright (c) 1999 Matthias Elter (me@kde.org)
  * Copyright (c) 2001-2002 Igor Jansen (rm@kde.org)
  *
@@ -18,7 +17,7 @@
  *  Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301, USA.
 */
 
-#include "kis_gray_widget.h"
+#include "ko_gray_widget.h"
 
 #include <qlayout.h>
 #include <qhbox.h>
@@ -26,22 +25,15 @@
 #include <qspinbox.h>
 #include <qcolor.h>
 
+#include <kdebug.h>
 #include <kdualcolorbutton.h>
 
 #include <koFrameButton.h>
 #include <koColorSlider.h>
 #include <kcolordialog.h>
 
-#include <kis_meta_registry.h>
-#include <kis_factory.h>
-#include <kis_color.h>
-#include <kis_colorspace_factory_registry.h>
-#include <kis_canvas_subject.h>
-
-KisGrayWidget::KisGrayWidget(QWidget *parent, const char *name) : super(parent, name)
+KoGrayWidget::KoGrayWidget(QWidget *parent, const char *name) : super(parent, name)
 {
-    m_subject = 0;
-
     m_ColorButton = new KDualColorButton(this);
     Q_CHECK_PTR(m_ColorButton);
 
@@ -82,31 +74,37 @@ KisGrayWidget::KisGrayWidget(QWidget *parent, const char *name) : super(parent, 
     connect(mIn, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
 }
 
-void KisGrayWidget::slotChanged(int v)
+void KoGrayWidget::slotChanged(int v)
 {
     v = 255 - v;
-
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
 
     if (m_ColorButton->current() == KDualColorButton::Foreground){
         m_fgColor.setRgb(v, v, v);
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
-        if(m_subject)
-            m_subject->setFGColor(KisColor(m_fgColor, cs));
+	emit sigFgColorChanged(m_fgColor);
     }
     else{
         m_bgColor.setRgb(v, v, v);
         m_ColorButton->setCurrent(KDualColorButton::Background);
-        if(m_subject)
-            m_subject->setBGColor(KisColor(m_bgColor, cs));
+	emit sigBgColorChanged(m_bgColor);
     }
 }
 
-void KisGrayWidget::update(KisCanvasSubject *subject)
+void KoGrayWidget::setFgColor(const QColor & c)
 {
-    m_subject = subject;
-    m_fgColor = subject->fgColor().toQColor();
-    m_bgColor = subject->bgColor().toQColor();
+    update(c, m_bgColor);
+}
+
+void KoGrayWidget::setBgColor(const QColor & c)
+{
+    update(m_fgColor, c);
+}
+
+void KoGrayWidget::update(const QColor & fgColor, const QColor & bgColor)
+{
+    
+    m_fgColor = fgColor;
+    m_bgColor = bgColor;
 
     QColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
 
@@ -133,28 +131,16 @@ void KisGrayWidget::update(KisCanvasSubject *subject)
     connect(mIn, SIGNAL(valueChanged(int)), this, SLOT(slotChanged(int)));
 }
 
-void KisGrayWidget::slotFGColorSelected(const QColor& c)
+void KoGrayWidget::slotFGColorSelected(const QColor& c)
 {
     m_fgColor = c;
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-
-    if(m_subject)
-    {
-        QColor bgColor = m_ColorButton -> background();
-        m_subject->setFGColor(KisColor(m_fgColor, cs));
-        //Background signal could be blocked so do that manually
-        //see bug 106919
-        m_subject->setBGColor(KisColor(bgColor, cs));
-    }
+    emit sigFgColorChanged(m_fgColor);
 }
 
-void KisGrayWidget::slotBGColorSelected(const QColor& c)
+void KoGrayWidget::slotBGColorSelected(const QColor& c)
 {
-    KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getRGB8();
-
     m_bgColor = c;
-    if(m_subject)
-        m_subject->setBGColor(KisColor(m_bgColor, cs));
+    emit sigBgColorChanged(m_bgColor);
 }
 
-#include "kis_gray_widget.moc"
+#include "ko_gray_widget.moc"
