@@ -351,7 +351,6 @@ KoRecentDocumentsPane::~KoRecentDocumentsPane()
 void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
 {
   if(item) {
-    kdDebug() << "KoRecentDocumentsPane::selectionChanged() -- 1" << endl;
     m_openButton->setEnabled(true);
     m_titleLabel->setText(item->text(0));
     m_previewLabel->setPixmap(*(item->pixmap(2)));
