@@ -831,7 +831,7 @@ private:
     KoPoint m_endPoint;
     KoPoint m_symmetricEndPoint;
     KoPoint m_CubicBezierSecondPoint, m_CubicBezierThirdPoint;
-    unsigned int m_indexPointArray;
+    int m_indexPointArray;
     bool m_drawPolyline;
     bool m_drawCubicBezierCurve;
     bool m_drawLineWithCubicBezierCurve;

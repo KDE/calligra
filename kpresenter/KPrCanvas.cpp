@@ -431,7 +431,7 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
             case INS_CLOSED_CUBICBEZIERCURVE:
                 if ( m_drawCubicBezierCurve )
                 {
-                    if ( m_indexPointArray > 4 )
+                    if ( m_indexPointArray > 0 )
                     {
                         for ( int count = 0; count < m_indexPointArray - 4; count += 4 )
                         {
@@ -453,8 +453,8 @@ void KPrCanvas::paintEvent( QPaintEvent* paintEvent )
 
                             topPainter.drawCubicBezier( points.zoomPointArray( m_view->zoomHandler() ) );
                         }
+                        drawCubicBezierCurve( topPainter, m_oldCubicBezierPointArray );
                     }
-                    drawCubicBezierCurve( topPainter, m_oldCubicBezierPointArray );
                 }
                 break;
             case INS_POLYGON:
@@ -1061,11 +1061,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 m_indexPointArray += 2;
             }
 
-            if ( toolEditMode == INS_CUBICBEZIERCURVE || toolEditMode == INS_QUADRICBEZIERCURVE
-                 || toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE )
-                endDrawCubicBezierCurve();
+            endDrawCubicBezierCurve();
 
-            mouseMoveEvent( e );
+            m_gl.repaintAfterSnapping();
 
             return;
         }
@@ -3031,10 +3029,7 @@ void KPrCanvas::startScreenPresentation( double zoomX, double zoomY, int curPgNu
     setCursor( blankCursor );
 
     m_step.m_pageNumber = (unsigned int) -1; // force gotoPage to do something
-    // No need to paint yet, we'll get an update soon (probably due to reparent+showFullScreen)
-    setUpdatesEnabled( false );
     gotoPage( slide );
-    setUpdatesEnabled( true );
     //kdDebug(33001) << "Page::startScreenPresentation - done" << endl;
 }
 
