@@ -163,7 +163,7 @@ void KoTemplatesPane::selectionChanged(QListViewItem* item)
     m_openButton->setEnabled(false);
     m_alwaysUseCheckBox->setEnabled(false);
     m_alwaysUseCheckBox->setChecked(false);
-    m_titleLabel->setText("");
+    m_titleLabel->setText(QString::null);
     m_previewLabel->setPixmap(QPixmap());
   }
 }
@@ -205,8 +205,8 @@ void KoTemplatesPane::alwaysUseClicked()
 
   if(!m_alwaysUseCheckBox->isChecked()) {
     KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
-    cfgGrp.writeEntry("AlwaysUseTemplate", "");
-    d->m_alwaysUseTemplate = "";
+    cfgGrp.writeEntry("AlwaysUseTemplate", QString::null);
+    d->m_alwaysUseTemplate = QString::null;
   } else {
     d->m_alwaysUseTemplate = item->text(2);
   }
@@ -326,6 +326,8 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
 
   connect(m_documentList, SIGNAL(selectionChanged(QListViewItem*)),
           this, SLOT(selectionChanged(QListViewItem*)));
+  connect(m_documentList, SIGNAL(clicked(QListViewItem*)),
+          this, SLOT(selectionChanged(QListViewItem*)));
   connect(m_documentList, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)),
           this, SLOT(openFile(QListViewItem*)));
   connect(m_documentList, SIGNAL(returnPressed(QListViewItem*)),
@@ -349,6 +351,7 @@ KoRecentDocumentsPane::~KoRecentDocumentsPane()
 void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
 {
   if(item) {
+    kdDebug() << "KoRecentDocumentsPane::selectionChanged() -- 1" << endl;
     m_openButton->setEnabled(true);
     m_titleLabel->setText(item->text(0));
     m_previewLabel->setPixmap(*(item->pixmap(2)));
@@ -363,13 +366,13 @@ void KoRecentDocumentsPane::selectionChanged(QListViewItem* item)
       details += "</table></center>";
       m_detailsLabel->setText(details);
     } else {
-      m_detailsLabel->setText("");
+      m_detailsLabel->setText(QString::null);
     }
   } else {
-    m_openButton->setEnabled(true);
-    m_titleLabel->setText("");
+    m_openButton->setEnabled(false);
+    m_titleLabel->setText(QString::null);
     m_previewLabel->setPixmap(QPixmap());
-    m_detailsLabel->setText("");
+    m_detailsLabel->setText(QString::null);
   }
 }
 
