@@ -75,11 +75,6 @@ void KexiScriptPart::initPartActions()
 		// At this stage the KexiPart::Part::m_mainWin should be defined, so
 		// that we are able to use it's KXMLGUIClient.
 
-		// Publish the KexiMainWindow singelton instance. At least the KexiApp 
-		// scripting-plugin depends on this instance and loading the plugin will 
-		// fail if it's not avaiable.
-		Kross::Api::Manager::scriptManager()->addQObject(m_mainWin, "KexiMainWindow");
-
 		// Initialize the ScriptGUIClient.
 		d->scriptguiclient = new Kross::Api::ScriptGUIClient( m_mainWin );
 
@@ -87,18 +82,24 @@ void KexiScriptPart::initPartActions()
 		QString file = KGlobal::dirs()->findResource("appdata", "kexiscripting.rc");
 		d->scriptguiclient->setXMLFile(file, true);
 
-		// Add the KAction's provided by the ScriptGUIClient to the
-		// KexiMainWindow.
-		//FIXME: fix+use createSharedPartAction() whyever it doesn't work as expected right now...
-		QPopupMenu* popup = m_mainWin->findPopupMenu("tools");
-		if(popup) {
-			KAction* execscriptaction = d->scriptguiclient->action("executescriptfile");
-			if(execscriptaction)
-				execscriptaction->plug( popup );
+		// Publish the KexiMainWindow singelton instance. At least the KexiApp 
+		// scripting-plugin depends on this instance and loading the plugin will 
+		// fail if it's not avaiable.
+		if( Kross::Api::Manager::scriptManager()->addQObject(m_mainWin, "KexiMainWindow") ) {
 
-			KAction* scriptmenuaction = d->scriptguiclient->action("scripts");
-			if(scriptmenuaction)
-				scriptmenuaction->plug( popup );
+			// Add the KAction's provided by the ScriptGUIClient to the
+			// KexiMainWindow.
+			//FIXME: fix+use createSharedPartAction() whyever it doesn't work as expected right now...
+			QPopupMenu* popup = m_mainWin->findPopupMenu("tools");
+			if(popup) {
+				KAction* execscriptaction = d->scriptguiclient->action("executescriptfile");
+				if(execscriptaction)
+					execscriptaction->plug( popup );
+
+				KAction* scriptmenuaction = d->scriptguiclient->action("scripts");
+				if(scriptmenuaction)
+					scriptmenuaction->plug( popup );
+			}
 		}
 	}
 }
