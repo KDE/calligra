@@ -979,13 +979,14 @@ JBIG2Bitmap::JBIG2Bitmap(Guint segNumA, int wA, int hA):
   h = hA;
   line = (wA + 7) >> 3;
 
-  if (h < 0 || line <= 0 || h >= INT_MAX / line) {
+  if (h < 0 || line <= 0 || h >= (INT_MAX - 1)/ line) {
     error(-1, "invalid width/height");
     data = NULL;
     return;
   }
 
-  data = (Guchar *)gmalloc(h * line);
+  // need to allocate one extra guard byte for use in combine()
+  data = (Guchar *)gmalloc(h * line + 1);
 }
 
 JBIG2Bitmap::JBIG2Bitmap(Guint segNumA, JBIG2Bitmap *bitmap):
@@ -995,13 +996,14 @@ JBIG2Bitmap::JBIG2Bitmap(Guint segNumA, JBIG2Bitmap *bitmap):
   h = bitmap->h;
   line = bitmap->line;
 
-  if (h < 0 || line <= 0 || h >= INT_MAX / line) {
+  if (h < 0 || line <= 0 || h >= (INT_MAX - 1) / line) {
     error(-1, "invalid width/height");
     data = NULL;
     return;
   }
 
-  data = (Guchar *)gmalloc(h * line);
+  // need to allocate one extra guard byte for use in combine()
+  data = (Guchar *)gmalloc(h * line + 1);
   memcpy(data, bitmap->data, h * line);
 }
 
@@ -1027,13 +1029,14 @@ JBIG2Bitmap *JBIG2Bitmap::getSlice(Guint x, Guint y, Guint wA, Guint hA) {
 }
 
 void JBIG2Bitmap::expand(int newH, Guint pixel) {
-  if (newH <= h || line <= 0 || newH >= INT_MAX / line) {
+  if (newH <= h || line <= 0 || newH >= (INT_MAX-1) / line) {
     error(-1, "invalid width/height");
     gfree(data);
     data = NULL;
     return;
   }
-  data = (Guchar *)grealloc(data, newH * line);
+  /* need to allocate one extra guard byte for use in combine() */
+  data = (Guchar *)grealloc(data, newH * line + 1);
   if (pixel) {
     memset(data + h * line, 0xff, (newH - h) * line);
   } else {
@@ -2256,6 +2259,11 @@ JBIG2Bitmap *JBIG2Stream::readTextRegion(GBool huff, GBool refine,
   Guint symID, inst, bw, bh;
 
   strips = 1 << logStrips;
+
+  if (w < 0 || h <= 0 || w >= INT_MAX / h) {
+     error(-1, "invalid width/height");
+     return NULL;
+  }
 
   // allocate the bitmap
   bitmap = new JBIG2Bitmap(0, w, h);
