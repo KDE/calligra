@@ -163,10 +163,11 @@ class KFORMEDITOR_EXPORT FormIO : public QObject
 		static QVariant readPropertyValue(QDomNode node, QObject *obj, const QString &name);
 
 		/*! Write an object property in the DOM doc.
-		   \param parent the DOM document to write to
+		   \param parentNode the DOM document to write to
 		   \param name   the name of the property being saved
 		   \param value  the value of this property
 		   \param w      the widget whose property is being saved
+		   \param lib    the widget library for which the property is being saved
 		*/
 		static void savePropertyValue(QDomElement &parentNode, QDomDocument &parent, const char *name,
 			const QVariant &value, QWidget *w, WidgetLibrary *lib=0);

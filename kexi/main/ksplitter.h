@@ -111,6 +111,7 @@ public:
   /**
    * set separator position.
    * @param pos the separator position in range [0..100000]. 100000 is 100%.
+   * @param do_resize true by default
    */
   void setSeparatorPos(int pos, bool do_resize = true);
   /**

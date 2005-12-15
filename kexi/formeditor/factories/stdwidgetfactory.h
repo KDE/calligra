@@ -58,8 +58,8 @@ class StdWidgetFactory : public KFormDesigner::WidgetFactory
 		StdWidgetFactory(QObject *parent, const char *name, const QStringList &args);
 		~StdWidgetFactory();
 
-		virtual QWidget *createWidget(const QCString &, QWidget *, const char *, 
-			KFormDesigner::Container *, int options = DefaultOptions);
+		virtual QWidget *createWidget(const QCString &c, QWidget *p, const char *n, 
+			KFormDesigner::Container *container, int options = DefaultOptions);
 
 		virtual bool createMenuActions(const QCString &classname, QWidget *w, QPopupMenu *menu,
 		   KFormDesigner::Container *container);
