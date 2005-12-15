@@ -139,7 +139,7 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 	hlyr->addWidget(label);
 	label->setPixmap( SmallIcon("mouse_pointer") );
 	label->setFixedWidth(label->pixmap()->width());
-	label = new QLabel(i18n("Select fields from the list below and drag them onto a form or click \"Insert\" button"), this);
+	label = new QLabel(i18n("Select fields from the list below and drag them onto a form or click the \"Insert\" button"), this);
 	label->setAlignment( Qt::AlignAuto | Qt::WordBreak );
 	hlyr->addWidget(label);
 

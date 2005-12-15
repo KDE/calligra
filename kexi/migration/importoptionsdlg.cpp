@@ -57,9 +57,9 @@ OptionsDialog::OptionsDialog( const QString& databaseFile, const QString& select
 	lyr->addWidget( m_encodingComboBox, 1, 1 );
 	QLabel* lbl = new QLabel( 
 		i18n("<h3>Text encoding for Microsoft Access database</h3>\n"
-		"<p>Database file \"%1\" appears to be created by version of Microsoft Access older than 2000.</p>"
-		"<p>In order to properly import national characters you may need to choose a proper text encoding "
-		"if the database is was created on a computer with a different character set.</p>")
+		"<p>Database file \"%1\" appears to be created by a version of Microsoft Access older than 2000.</p>"
+		"<p>In order to properly import national characters, you may need to choose a proper text encoding "
+		"if the database was created on a computer with a different character set.</p>")
 		.arg(QDir::convertSeparators(databaseFile)), plainPage());
 	lbl->setAlignment( Qt::AlignAuto | Qt::WordBreak );
 	lbl->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);

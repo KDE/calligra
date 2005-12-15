@@ -104,7 +104,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_openAction = new KAction(i18n("&Open"), "fileopen", Key_Enter, this, 
 		SLOT(slotOpenObject()), this, "open_object");
 	m_openAction->setToolTip(i18n("Open object"));
-	m_openAction->setWhatsThis(i18n("Opens object selected on the list"));
+	m_openAction->setWhatsThis(i18n("Opens object selected in the list"));
 	m_openAction->plug(m_itemPopup);
 	m_openAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 //	m_openAction->plug(m_toolbar);
@@ -114,7 +114,7 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_designAction = new KAction(i18n("&Design"), "edit", CTRL + Key_Enter, this, 
 		SLOT(slotDesignObject()), this, "design_object");
 	m_designAction->setToolTip(i18n("Design object"));
-	m_designAction->setWhatsThis(i18n("Starts designing of the object selected on the list"));
+	m_designAction->setWhatsThis(i18n("Starts designing of the object selected in the list"));
 	m_designAction->plug(m_itemPopup);
 	m_designAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 //	m_designAction->plug(m_toolbar);
@@ -124,12 +124,12 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_editTextAction = new KAction(i18n("Open in &Text View"), "", 0, this, 
 		SLOT(slotEditTextObject()), this, "editText_object");
 	m_editTextAction->setToolTip(i18n("Open object in Text View"));
-	m_editTextAction->setWhatsThis(i18n("Opens object selected on the list in Text View"));
+	m_editTextAction->setWhatsThis(i18n("Opens object selected in the list in Text View"));
 	m_editTextAction->plug(m_itemPopup);
 	m_editTextAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 	m_newObjectAction = new KAction("", "filenew", 0, this, SLOT(slotNewObject()), this, "new_object");
 	m_editTextAction->setToolTip(i18n("Open object in Text View"));
-	m_editTextAction->setWhatsThis(i18n("Opens object selected on the list in Text View"));
+	m_editTextAction->setWhatsThis(i18n("Opens object selected in the list in Text View"));
 	m_newObjectAction->plug(m_itemPopup);
 //	m_newObjectToolbarAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
 //	m_toolbar->insertSeparator();

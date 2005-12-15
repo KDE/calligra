@@ -75,9 +75,9 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 	driversComboLyr->addWidget( m_driversCombo );
 
 	btnLoadDBList->setIconSet(SmallIconSet("reload"));
-	QToolTip::add(btnLoadDBList, i18n("Load databases list from the server"));
+	QToolTip::add(btnLoadDBList, i18n("Load database list from the server"));
 	QWhatsThis::add(btnLoadDBList, 
-		i18n("Loads databases list from the server, so you can select one using the \"Name\" combo box."));
+		i18n("Loads database list from the server, so you can select one using the \"Name\" combo box."));
 
 	QHBoxLayout *hbox = new QHBoxLayout(frmBottom);
 	hbox->addStretch(2);
@@ -92,7 +92,7 @@ KexiDBConnectionWidget::KexiDBConnectionWidget( QWidget* parent,  const char* na
 
 	d->btnTestConnection = new KPushButton(KGuiItem(i18n("&Test Connection..."), "", 
 		i18n("Test database connection"), 
-		i18n("Tests database connection. You can to ensure that a valid connection information is provided.")), 
+		i18n("Tests database connection. You can ensure that valid connection information is provided.")), 
 		frmBottom, "testConnection");
 	hbox->addWidget( d->btnTestConnection );
 	QWidget::setTabOrder(d->btnSaveChanges, d->btnTestConnection);

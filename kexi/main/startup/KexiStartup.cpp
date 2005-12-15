@@ -760,7 +760,7 @@ tristate KexiStartupHandler::detectActionForFile(
 		if (!res) {
 			//TODO msg
 			KMessageBox::sorry(parent, i18n(
-				"Failed converting project file \"%1\" to a new \"%2\" format.\n"
+				"Failed to convert project file \"%1\" to a new \"%2\" format.\n"
 				"The file format remains unchanged.")
 				.arg(dbFileName).arg(newFileFormat) );
 			//continue...

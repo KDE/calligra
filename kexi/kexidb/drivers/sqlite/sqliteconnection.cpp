@@ -181,7 +181,7 @@ bool SQLiteConnection::drv_dropDatabase( const QString &dbName )
 {
 	if (QFile(m_data->fileName()).exists() && !QDir().remove(m_data->fileName())) {
 		setError(ERR_ACCESS_RIGHTS, i18n("Could not remove file \"%1\". "
-			"Please check the file's permission and whether it is locked by other application.")
+			"Check the file's permissions and whether it is locked by another application.")
 			.arg(dbName) );
 		return false;
 	}

@@ -441,7 +441,7 @@ void ImportWizard::arriveSrcDBPage()
 			m_srcDBName = new KexiProjectSelectorWidget(m_srcDBPage,
 				"KexiMigrationProjectSelector", m_prjSet);
 			vbox->addWidget( m_srcDBName );
-			m_srcDBName->label->setText(i18n("Select source database to you wish to import:"));
+			m_srcDBName->label->setText(i18n("Select source database you wish to import:"));
 		}
 		m_srcDBPage->show();
 	}
@@ -661,7 +661,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 		{
 			//TODO This needs a better message
 			//KMessageBox::error(this, 
-			result.setStatus(i18n("No connection data is available. You did not select an destination filename."),"");
+			result.setStatus(i18n("No connection data is available. You did not select a destination filename."),"");
 			//return false;
 		}
 	}

@@ -191,7 +191,7 @@ class KexiTableView::WhatsThis : public QWhatsThis
 			//const int topMargin = m_tv->horizontalHeaderVisible() ? m_tv->d->pTopHeader->height() : 0;
 			//const int bottomMargin = m_tv->d->appearance.navigatorEnabled ? m_tv->m_navPanel->height() : 0;
 			if (KexiUtils::hasParent(m_tv->verticalHeader(), m_tv->childAt(pos))) {
-				return i18n("Contains a pointer to currently selected row");
+				return i18n("Contains a pointer to the currently selected row");
 			}
 			else if (KexiUtils::hasParent(m_tv->m_navPanel, m_tv->childAt(pos))) {
 				return i18n("Row navigator");

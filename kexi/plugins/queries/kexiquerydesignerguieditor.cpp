@@ -210,7 +210,7 @@ f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
 	d->data->addColumn(col5);*/
 
 	KexiTableViewColumn *col6 = new KexiTableViewColumn("criteria", KexiDB::Field::Text, i18n("Criteria"),
-		i18n("Describes criateria for a given field or expression."));
+		i18n("Describes the criteria for a given field or expression."));
 	d->data->addColumn(col6);
 
 //	KexiTableViewColumn *col7 = new KexiTableViewColumn(i18n("Or"), KexiDB::Field::Text);

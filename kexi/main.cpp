@@ -66,18 +66,18 @@ static KCmdLineOptions options[] =
 	"is provided."), 0 },
   { "t", 0, 0 },
   { "type <name>", I18N_NOOP(
-	"Specifies a type of a file provided\n"
-	"as argument. This option is useful\n"
-	"if your filename has not set a valid \n"
-	"extension and it's type cannot be detected\n"
-	"unambiguously by looking at it's contents.\n"
+	"Specifies the type of file provided\n"
+	"as an argument. This option is useful\n"
+	"if your filename does not have a recognized\n"
+	"extension set and its type cannot be detected\n"
+	"unambiguously by looking at its contents.\n"
 	"This option is ignored if no file\n"
 	"is specified as an argument.\n"
 	"Available file types are:\n"
 	"- \"project\" for a project file (the default)\n"
 	"- \"shortcut\" for a shortcut file pointing\n"
-	"  you to a project.\n"
-	"- \"connection\" for a database connection data.\n"
+	"  to a project.\n"
+	"- \"connection\" for database connection data.\n"
 	), 0 },
 
   { ":", I18N_NOOP("Options related to opening objects within a project:"), 0 },

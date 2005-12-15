@@ -128,7 +128,7 @@ Manager::part(Info *i)
 		if(!p) {
 			kdDebug() << "Manager::part(): failed :( (ERROR #" << error << ")" << endl;
 			kdDebug() << "  " << KLibLoader::self()->lastErrorMessage() << endl;
-			i->setBroken(true, i18n("Error during loading plugin \"%1\"").arg(i->objectName()));
+			i->setBroken(true, i18n("Error while loading plugin \"%1\"").arg(i->objectName()));
 			setError(i->errorMessage());
 			return 0;
 		}
