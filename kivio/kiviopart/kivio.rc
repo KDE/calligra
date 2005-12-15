@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="kivio" version="26">
+<kpartgui name="kivio" version="27">
   <MenuBar>
     <Menu name="file">
       <Action name="installStencilSet"/>
@@ -12,6 +12,7 @@
       <Action name="cutStencil"/>
       <Action name="copyStencil"/>
       <Action name="pasteStencil"/>
+      <Action name="deleteObject"/>
       <Separator/>
       <Action name="selectAllStencils"/>
       <Action name="unselectAllStencils"/>

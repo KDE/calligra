@@ -194,6 +194,8 @@ class KIVIO_EXPORT KivioView : public KoView
     void cutStencil();
     void copyStencil();
     void pasteStencil();
+    /// Called by the delete action
+    void deleteObject();
 
     void alignStencilsDlg();
     void optionsDialog();
@@ -343,6 +345,7 @@ class KIVIO_EXPORT KivioView : public KoView
     KAction *m_editCopy;
     KAction* m_editCut;
     KAction* m_editPaste;
+    KAction* m_editDelete;
     bool m_bShowPageMargins;
     bool m_bShowRulers;
     bool m_bSnapGuides;

@@ -1000,20 +1000,6 @@ void KivioCanvas::keyReleaseEvent( QKeyEvent *e )
 {
     switch( e->key() )
     {
-        case Key_Delete: {
-            KivioGuideLines* gl = activePage()->guideLines();
-            if (gl->hasSelected()) {
-              eraseGuides();
-              gl->removeSelected();
-              paintGuides();
-              updateGuidesCursor();
-              m_pDoc->setModified( true );
-            } else {
-              activePage()->deleteSelectedStencils();
-              m_pDoc->updateView(activePage());
-            }
-            break;
-        }
         case Key_Escape: {
             m_pView->pluginManager()->activateDefaultTool();
         }break;

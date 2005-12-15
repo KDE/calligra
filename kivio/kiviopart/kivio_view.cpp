@@ -125,6 +125,7 @@
 #include "kivio_config.h"
 #include "kivioaddstencilsetpanel.h"
 #include "kiviostencilsetinstaller.h"
+#include "kivio_guidelines.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -505,6 +506,9 @@ void KivioView::setupActions()
 
   (void) new KAction(i18n("Install Stencil Set..."), 0, this,
     SLOT(installStencilSet()), actionCollection(), "installStencilSet");
+
+  m_editDelete = new KAction(i18n("Delete"), "editdelete", Key_Delete,
+    this, SLOT(deleteObject()), actionCollection(), "deleteObject");
 }
 
 void KivioView::initActions()
@@ -642,8 +646,7 @@ void KivioView::setActivePage( KivioPage* page )
 
   m_pActivePage = page;
 
-  m_pTabBar->setActiveTab(page->pageName());
-
+  m_pTabBar->setActiveTab(m_pActivePage->pageName());
   updateToolBars();
 
   m_pLayersPanel->reset();
@@ -652,6 +655,7 @@ void KivioView::setActivePage( KivioPage* page )
   setRulerPageLayout(m_pActivePage->paperLayout());
   connect(m_pActivePage, SIGNAL(sig_pageLayoutChanged(const KoPageLayout&)),
     SLOT(setRulerPageLayout(const KoPageLayout&)));
+
 }
 
 void KivioView::setActiveSpawnerSet( KivioStencilSpawnerSet *set )
@@ -1376,6 +1380,7 @@ void KivioView::updateToolBars()
     if(activePage()->selectedStencils()->count() > 0) {
       m_editCut->setEnabled(true);
       m_editCopy->setEnabled(true);
+      m_editDelete->setEnabled(true);
 
       if(activePage()->checkForStencilTypeInSelection(kstGroup)) {
         m_ungroupAction->setEnabled(true);
@@ -1390,6 +1395,7 @@ void KivioView::updateToolBars()
     } else {
       m_editCut->setEnabled(false);
       m_editCopy->setEnabled(false);
+      m_editDelete->setEnabled(false);
       m_ungroupAction->setEnabled(false);
       m_stencilToBack->setEnabled(false);
       m_stencilToFront->setEnabled(false);
@@ -1821,12 +1827,12 @@ void KivioView::updateButton()
 
 }
 
-void KivioView::slotPageHidden( KivioPage* page )
+void KivioView::slotPageHidden( KivioPage* /*page*/ )
 {
     //m_pTabBar->hidePage( page->pageName() );
 }
 
-void KivioView::slotPageShown( KivioPage* page )
+void KivioView::slotPageShown( KivioPage* /*page*/ )
 {
     m_pTabBar->setTabs( m_pDoc->map()->visiblePages() );
 }
@@ -2242,13 +2248,18 @@ void KivioView::moveTab(unsigned tab, unsigned target)
   QString tabTitle = tabs[tab];
   QString targetTitle = tabs[target];
 
-  if(target >= m_pDoc->map()->count()) {
+  if(target >= static_cast<unsigned>(m_pDoc->map()->count())) {
     targetTitle = m_pDoc->map()->lastPage()->pageName();
   }
 
-  kdDebug() << "Move tab " << tabTitle << " to " << targetTitle << " (" << target << ")" << endl;
-  m_pDoc->map()->movePage(tabTitle, targetTitle, target < m_pDoc->map()->count());
+  m_pDoc->map()->movePage(tabTitle, targetTitle, target < static_cast<unsigned>(m_pDoc->map()->count()));
   m_pTabBar->moveTab(tab, target);
+}
+
+void KivioView::deleteObject()
+{
+  activePage()->deleteSelectedStencils();
+  m_pDoc->updateView(activePage());
 }
 
 #include "kivio_view.moc"
