@@ -139,6 +139,9 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
     flags = tabs;
     m_layout = layout;
     m_unit = unit;
+    m_pageSizeTab = 0;
+    m_columnsTab = 0;
+    m_headerTab = 0;
 
     m_column.columns = 1;
 
@@ -164,6 +167,9 @@ KoPageLayoutDia::KoPageLayoutDia( QWidget* parent, const char* name,
     m_layout = layout;
     m_column = columns;
     m_unit = unit;
+    m_pageSizeTab = 0;
+    m_columnsTab = 0;
+    m_headerTab = 0;
 
     if ( tabs & FORMAT_AND_BORDERS ) setupTab1( !( tabs & DISABLE_BORDERS ) );
     if ( tabs & HEADER_AND_FOOTER ) setupTab2( hf );

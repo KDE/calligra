@@ -102,6 +102,7 @@ protected slots:
     void topChanged( double );
     void bottomChanged( double );
     void orientationChanged( int );
+    void setUnitInt( int unit );
 
 private:
     void updatePreview();

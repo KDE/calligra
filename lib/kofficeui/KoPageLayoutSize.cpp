@@ -51,10 +51,11 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
 
         // combo unit
         cpgUnit = new QComboBox( false, unitFrame, "cpgUnit" );
+        lpgUnit->setBuddy( cpgUnit );
         cpgUnit->insertStringList( KoUnit::listOfUnitName() );
         cpgUnit->setCurrentItem( unit );
         unitLayout->addWidget( cpgUnit, 0, Qt::AlignLeft | Qt::AlignVCenter );
-        connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( setUnit( int ) ) );
+        connect( cpgUnit, SIGNAL( activated( int ) ), this, SLOT( setUnitInt( int ) ) );
     }
     else {
         QString str=KoUnit::unitDescription(unit);
@@ -232,6 +233,10 @@ void KoPageLayoutSize::setUnit( KoUnit::Unit unit ) {
     ebrBottom->changeValue( m_layout.ptBottom );
     ebrBottom->setMinMaxStep( 0, m_layout.ptHeight, dStep );
     emit propertyChange(m_layout);
+}
+
+void KoPageLayoutSize::setUnitInt( int unit ) {
+    setUnit((KoUnit::Unit)unit);
 }
 
 void KoPageLayoutSize::formatChanged( int format ) {
