@@ -47,8 +47,8 @@ When you start &kpresenter;, the usual &koffice; startup dialog appears.
 </para>
 
 <screenshot>
-<screeninfo>The <guilabel></guilabel>
-dialog</screeninfo>
+<screeninfo>The <guilabel>&koffice;</guilabel>
+startup dialog</screeninfo>
 <mediaobject>
 <imageobject>
 <imagedata fileref="tut01.png" format="PNG"/></imageobject>
@@ -153,7 +153,7 @@ new page after page 1.
 <para>
 The <guilabel>Create Document</guilabel> dialog comes up so that we can decide
 what the new slide should look like. This time, double click on the
-<guilabel>One</guilabel> template (highlighted in blue.)
+<guilabel>One Column</guilabel> template (highlighted in blue.)
 </para>
 
 <screenshot>
@@ -280,10 +280,10 @@ it correctly.
 </para>
 
 <screenshot>
-<screeninfo>Moving the image into place</screeninfo>
+<screeninfo>Dragging and resizing the image</screeninfo>
 <mediaobject>
 <imageobject><imagedata fileref="tut14.png" format="PNG"/></imageobject>
-<textobject><phrase>Moving the image into place</phrase></textobject>
+<textobject><phrase>Dragging and resizing the image</phrase></textobject>
 </mediaobject>
 </screenshot>
 
@@ -433,7 +433,7 @@ blue. To do so, select the title text by double-clicking the text box.
 
 <para>
 Change the color to blue by clicking on the <guiicon>dark blue A</guiicon>
-icon in the color palette on the right side of the editing window (this icon has
+icon on the right side of the editing window (this icon has
 a Color... tooltip) or choose
 the <guimenu>Text</guimenu> menu and then click on
 <guimenuitem>Color...</guimenuitem>.</para>
