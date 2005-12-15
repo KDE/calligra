@@ -117,7 +117,7 @@ const PageFormatInfo pageFormatInfo[]=
     { PG_US_LETTER,     KPrinter::Letter,       "Letter",       I18N_NOOP("US Letter"),    215.9,  279.4 },
     { PG_US_LEGAL,      KPrinter::Legal,        "Legal",        I18N_NOOP("US Legal"),     215.9,  355.6 },
     { PG_SCREEN,        KPrinter::A4,           "Screen",       I18N_NOOP("Screen"), PG_A4_HEIGHT, PG_A4_WIDTH }, // Custom, so fall back to A4
-    { PG_CUSTOM,        KPrinter::A4,           "Custom",       I18N_NOOP("Custom"), PG_A4_WIDTH, PG_A4_HEIGHT }, // Custom, so fall back to A4
+    { PG_CUSTOM,        KPrinter::A4,           "Custom",       I18N_NOOP2("Custom size", "Custom"), PG_A4_WIDTH, PG_A4_HEIGHT }, // Custom, so fall back to A4
     { PG_DIN_B5,        KPrinter::B5,           "B5",           I18N_NOOP("ISO B5"),       182.0,  257.0 },
     // Hmm, wikipedia says 184.15 * 266.7 for executive !
     { PG_US_EXECUTIVE,  KPrinter::Executive,    "Executive",    I18N_NOOP("US Executive"), 191.0,  254.0 }, // should be 190.5 mm x 254.0 mm
