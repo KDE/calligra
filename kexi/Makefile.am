@@ -72,9 +72,9 @@ messages: rc.cpp
 	fi
 	rm -f tips.cpp
 
-#uncomment this if you like doxygen docs for Kexi
+
+DOXYGEN_EXCLUDE = 3rdparty kexidb/parser/sqlparser.h kexidb/drivers/odbc
+
 include $(top_srcdir)/admin/Doxyfile.am
 
-#obsolete:
-#kde_services_DATA = kexipart.desktop
 
