@@ -480,8 +480,11 @@ void KWDocStructTableItem::setupCells()
     QPtrList<KWTextFrameSet> cellPtrs;
     cellPtrs.setAutoDelete(false);
     for (uint row = 0; row < m_table->getRows(); ++row)
-        for (uint col = 0; col < m_table->getColumns(); ++ col)
-            cellPtrs.append(m_table->cell(row, col));
+        for (uint col = 0; col < m_table->getColumns(); ++ col) {
+            KWTextFrameSet* cell = m_table->cell(row, col);
+            if (cell)
+                cellPtrs.append(cell);
+        }
 
     // Remove deleted cells from the listview.
     KWDocStructTextFrameItem* item = dynamic_cast<KWDocStructTextFrameItem *>(firstChild());
