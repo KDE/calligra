@@ -29,6 +29,7 @@
 #include "kivio_stackbar.h"
 #include "kivio_screen_painter.h"
 #include "kivio_grid_data.h"
+#include "kivio_layer.h"
 
 #include "kivio_pluginmanager.h"
 
@@ -404,6 +405,7 @@ void KivioCanvas::mousePressEvent(QMouseEvent* e)
 
     if(m_pView->isShowGuides()) {
       if(m_guides.mousePressEvent(e)) {
+        delegateThisEvent = false;
         return;
       }
     }
@@ -415,6 +417,7 @@ void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
     return;
 
   if(view()->isShowGuides() && m_guides.mouseReleaseEvent(e)) {
+    delegateThisEvent = false;
     return;
   }
 }
@@ -781,6 +784,8 @@ void KivioCanvas::dragEnterEvent( QDragEnterEvent *e )
     {
         e->accept();
         startSpawnerDragDraw( e->pos() );
+        activePage()->unselectAllStencils();
+        updateAutoGuideLines();
     }
 }
 
@@ -966,11 +971,9 @@ KoPoint KivioCanvas::snapToGuides(const KoPoint& point, bool &snappedX, bool &sn
     p += diff;
 
     if(status & KoGuides::SNAP_HORIZ) {
-      kdDebug() << "TESTING X" << endl;
       snappedY = true;
     }
     if(status & KoGuides::SNAP_VERT) {
-      kdDebug() << "TESTING Y" << endl;
       snappedX = true;
     }
 
@@ -1193,6 +1196,38 @@ void KivioCanvas::endPasteMoving()
   // Clear the list of old geometry
   m_lstOldGeometry.clear();
   m_pasteMoving = false;
+}
+
+void KivioCanvas::updateAutoGuideLines()
+{
+  QValueList<double> hGuideLines;
+  QValueList<double> vGuideLines;
+  QPtrList<KivioLayer> layerList = *(activePage()->layers());
+  QPtrListIterator<KivioLayer> layerIt(layerList);
+  KivioLayer* layer = 0;
+  QPtrList<KivioStencil> stencilList;
+  QPtrListIterator<KivioStencil> stencilIt(stencilList);
+  KivioStencil* stencil = 0;
+
+  while((layer = layerIt.current()) != 0) {
+    ++layerIt;
+
+    if(layer->visible()) {
+      stencilList = *(layer->stencilList());
+      stencilIt.toFirst();
+
+      while((stencil = stencilIt.current()) != 0) {
+        ++stencilIt;
+
+        if(!stencil->isSelected()) {
+          hGuideLines << stencil->y() << (stencil->y() + stencil->h());
+          vGuideLines << stencil->x() << (stencil->x() + stencil->w());
+        }
+      }
+    }
+  }
+
+  guideLines().setAutoGuideLines(hGuideLines, vGuideLines);
 }
 
 #include "kivio_canvas.moc"

@@ -1713,6 +1713,7 @@ void KivioView::addStencilFromSpawner( KivioStencilSpawner *pSpawner, double x, 
     // Mark the page as modified and repaint
     m_pDoc->updateView(m_pActivePage);
     pluginManager()->activateDefaultTool();
+    m_pCanvas->updateAutoGuideLines();
 }
 
 void KivioView::alignStencilsDlg()

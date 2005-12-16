@@ -132,6 +132,8 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
 
     void startPasteMoving();
 
+    void updateAutoGuideLines();
+
   protected:
     virtual void mousePressEvent( QMouseEvent* );
     virtual void mouseReleaseEvent( QMouseEvent* );

@@ -292,6 +292,8 @@ bool SelectTool::startDragging(const QPoint &pos, bool onlySelected)
       pPage->unselectAllStencils();
 
     pPage->selectStencil( pStencil );
+    // Update the auto guidelines
+    view()->canvasWidget()->updateAutoGuideLines();
   }
 
   // Create a new painter object
