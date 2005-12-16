@@ -23,7 +23,7 @@ libkofficeui_la_SOURCES = \
 	koImageResource.cc kotoolbox.cc kozoomhandler.cpp \
 	koGuideLineDia.cpp koGuides.cpp \
 	KoPageLayoutColumns.cpp KoPageLayoutColumnsBase.ui KoPageLayoutSize.cpp \
-	KoPageLayoutHeaderBase.ui KoPageLayoutHeader.cpp
+	KoPageLayoutHeaderBase.ui KoPageLayoutHeader.cpp KoZoomMode.cpp
 
 libkofficeui_la_LDFLAGS	= -version-info 3:0:0 -no-undefined $(all_libraries)
 libkofficeui_la_LIBADD  = $(LIB_KOFFICECORE) 
@@ -40,7 +40,8 @@ include_HEADERS = \
 	kocommandhistory.h  koImageResource.h \
 	koselectaction.h kolinewidthaction.h kolinestyleaction.h \
 	kozoomhandler.h koGuideLineDia.h koGuides.h \
-	KoPageLayoutHeader.h KoPageLayoutSize.h KoPageLayoutColumns.h
+	KoPageLayoutHeader.h KoPageLayoutSize.h KoPageLayoutColumns.h \
+	KoZoomMode.h
 
 
 # FIXME: Disabled for now as it breaks the installation process if

@@ -22,6 +22,7 @@
 
 #include <KoRect.h>
 #include <koffice_export.h>
+#include <KoZoomMode.h>
 
 /**
  * This class handles the zooming and DPI stuff (conversions between pt values and pixels).
@@ -84,13 +85,22 @@ public:
      * @param zoom the zoom factor (e.g. 100 for 100%)
      */
     void setZoom( int zoom );
-
+    /**
+     * Change the zoom mode
+     * @param zoomMode the zoom mode.
+     */
+    void setZoomMode( KoZoomMode::Mode zoomMode ) { m_zoomMode = zoomMode; }
     /**
      * @return the global zoom factor (e.g. 100 for 100%).
      * Only use this to display to the user, don't use in calculations
      */
     int zoom() const { return m_zoom; }
-
+    /**
+     * @return the global zoom mode (e.g. KoZoomMode::ZOOM_WIDTH).
+     * use this to determine how to zoom
+     */
+    KoZoomMode::Mode zoomMode() const { return m_zoomMode; }
+    
     // Input: pt. Output: pixels. Resolution and zoom are applied.
     int zoomItX( double z ) const {
         return qRound( m_zoomedResolutionX * z );
@@ -142,6 +152,8 @@ public:
 
 protected:
     int m_zoom;
+    KoZoomMode::Mode m_zoomMode;
+    
     double m_resolutionX;
     double m_resolutionY;
     double m_zoomedResolutionX;

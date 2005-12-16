@@ -358,6 +358,10 @@ void KWDocument::initConfig()
       m_viewFrameBorders = config->readBoolEntry( "ViewFrameBorders", true );
 
       m_zoom = config->readNumEntry( "Zoom", 100 );
+      m_zoomMode = static_cast<KoZoomMode::Mode> (
+              config->readNumEntry( "ZoomMode", KoZoomMode::ZOOM_CONSTANT )
+      );
+      
       m_bShowDocStruct = config->readBoolEntry( "showDocStruct", true );
       m_viewModeType = config->readEntry( "viewmode", "ModeNormal" );
       setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
@@ -376,7 +380,10 @@ void KWDocument::initConfig()
       setGridY( config->readDoubleNumEntry( "ResolutionY", MM_TO_POINT( 5.0 ) ));
   }
   else
+  {
       m_zoom = 100;
+      m_zoomMode = KoZoomMode::ZOOM_CONSTANT;
+  }
   int undo=30;
   if(config->hasGroup("Misc" ) )
   {
@@ -435,6 +442,7 @@ void KWDocument::saveConfig()
         config->writeEntry( "ViewFormattingSpace", m_viewFormattingSpace );
         config->writeEntry( "ViewFrameBorders", m_viewFrameBorders );
         config->writeEntry( "Zoom", m_zoom );
+        config->writeEntry( "ZoomMode", m_zoomMode );
         config->writeEntry( "showDocStruct", m_bShowDocStruct );
         config->writeEntry( "Rulers", m_bShowRuler );
         config->writeEntry( "viewmode", m_viewModeType) ;

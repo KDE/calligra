@@ -249,8 +249,11 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     m_actionList.setAutoDelete( true );
     m_variableActionList.setAutoDelete( true );
     // Default values.
-    m_zoomViewModeNormal = m_doc->zoom();
-    m_zoomViewModePreview = 33;
+    m_zoomViewModeNormal.m_zoom = m_doc->zoom();
+    m_zoomViewModeNormal.m_zoomMode = m_doc->zoomMode();
+    m_zoomViewModePreview.m_zoom = 33; // TODO: bad to leave hardcoded...
+    m_zoomViewModePreview.m_zoomMode = KoZoomMode::ZOOM_CONSTANT;
+    
     m_viewFrameBorders = m_doc->viewFrameBorders();
     KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
     //m_viewTableGrid = true;
@@ -477,8 +480,8 @@ void KWView::initGui()
     updateGridButton();
 
     //refresh zoom combobox
-    changeZoomMenu( m_doc->zoom() );
-    showZoom( m_doc->zoom() );
+    updateZoomControls();
+    
 
     // This is probably to emit currentMouseModeChanged and set the cursor
     m_gui->canvasWidget()->setMouseMode( m_gui->canvasWidget()->mouseMode() );
@@ -2877,9 +2880,31 @@ void KWView::viewTextMode()
         KWTextFrameSet* fs = KWViewModeText::determineTextFrameSet( m_doc );
         if ( fs ) { // TODO: disable the action when there is no text frameset available
             if ( dynamic_cast<KWViewModePreview *>(viewMode()) )
-                m_zoomViewModePreview = m_doc->zoom();
-            showZoom( m_zoomViewModeNormal ); // share the same zoom
-            setZoom( m_zoomViewModeNormal, false );
+            {
+                m_zoomViewModePreview.m_zoom = m_doc->zoom();
+                m_zoomViewModePreview.m_zoomMode = m_doc->zoomMode();
+            }
+            else
+            {
+                m_zoomViewModeNormal.m_zoom = m_doc->zoom();
+                m_zoomViewModeNormal.m_zoomMode = m_doc->zoomMode();
+            }
+            // we don't know ZOOM_PAGE in the new view. so
+            // we use ZOOM_CONSTANT in that case
+            switch(m_zoomViewModeNormal.m_zoomMode)
+            {
+                case KoZoomMode::ZOOM_WIDTH:
+                    m_doc->setZoomMode(KoZoomMode::ZOOM_WIDTH);
+                    QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
+                    break;
+                case KoZoomMode::ZOOM_PAGE: // no break
+                    m_zoomViewModeNormal.m_zoomMode = KoZoomMode::ZOOM_CONSTANT;
+                case KoZoomMode::ZOOM_CONSTANT:
+                    m_doc->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+                    showZoom( m_zoomViewModeNormal.m_zoom );
+                    setZoom( m_zoomViewModeNormal.m_zoom, false );
+                    break;
+            }
             m_doc->switchViewMode( "ModeText" );
         } else
             initGUIButton(); // ensure we show the current viewmode
@@ -2893,9 +2918,31 @@ void KWView::viewPageMode()
     if ( m_actionViewPageMode->isChecked() )
     {
         if ( dynamic_cast<KWViewModePreview *>(viewMode()) )
-            m_zoomViewModePreview = m_doc->zoom();
-        showZoom( m_zoomViewModeNormal );
-        setZoom( m_zoomViewModeNormal, false );
+        {
+            m_zoomViewModePreview.m_zoom = m_doc->zoom();
+            m_zoomViewModePreview.m_zoomMode = m_doc->zoomMode();
+        }
+        else
+        {
+            m_zoomViewModeNormal.m_zoom = m_doc->zoom();
+            m_zoomViewModeNormal.m_zoomMode = m_doc->zoomMode();
+        }
+        switch(m_zoomViewModeNormal.m_zoomMode)
+        {
+            case KoZoomMode::ZOOM_WIDTH:
+                m_doc->setZoomMode(KoZoomMode::ZOOM_WIDTH);
+                QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
+                break;
+            case KoZoomMode::ZOOM_PAGE:
+                m_doc->setZoomMode(KoZoomMode::ZOOM_PAGE);
+                QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
+                break;
+            case KoZoomMode::ZOOM_CONSTANT:
+                m_doc->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+                showZoom( m_zoomViewModeNormal.m_zoom );
+                setZoom( m_zoomViewModeNormal.m_zoom, false );
+                break;
+        }
         m_doc->switchViewMode( "ModeNormal" );
     }
     else
@@ -2906,13 +2953,43 @@ void KWView::viewPreviewMode()
 {
     if ( m_actionViewPreviewMode->isChecked() )
     {
-        m_zoomViewModeNormal = m_doc->zoom();
-        showZoom( m_zoomViewModePreview );
-        setZoom( m_zoomViewModePreview, false );
+        m_zoomViewModeNormal.m_zoom = m_doc->zoom();
+        m_zoomViewModeNormal.m_zoomMode = m_doc->zoomMode();
+        switch(m_zoomViewModePreview.m_zoomMode)
+        {
+            case KoZoomMode::ZOOM_WIDTH:
+                m_doc->setZoomMode(KoZoomMode::ZOOM_WIDTH);
+                QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
+                break;
+            case KoZoomMode::ZOOM_PAGE:
+                m_doc->setZoomMode(KoZoomMode::ZOOM_PAGE);
+                QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
+                break;
+            case KoZoomMode::ZOOM_CONSTANT:
+                m_doc->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
+                showZoom( m_zoomViewModePreview.m_zoom );
+                setZoom( m_zoomViewModePreview.m_zoom, false );
+                break;
+        }
         m_doc->switchViewMode( "ModePreview" );
     }
     else
         m_actionViewPreviewMode->setChecked( true ); // always one has to be checked !
+}
+
+void KWView::updateZoomControls()
+{
+    switch(m_doc->zoomMode())
+    {
+        case KoZoomMode::ZOOM_WIDTH:
+        case KoZoomMode::ZOOM_PAGE:
+            showZoom( KoZoomMode::toString(m_doc->zoomMode()) );
+            break;
+        case KoZoomMode::ZOOM_CONSTANT:
+            changeZoomMenu( m_doc->zoom() );
+            showZoom( m_doc->zoom() );
+            break;
+    }
 }
 
 void KWView::changeZoomMenu( int zoom )
@@ -2922,9 +2999,9 @@ void KWView::changeZoomMenu( int zoom )
         mode = viewMode()->type();
 
     QStringList lst;
-    lst << i18n( "Fit to Width" );
+    lst << KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH);
     if ( mode!="ModeText" )
-        lst << i18n( "Fit to Page" );
+        lst << KoZoomMode::toString(KoZoomMode::ZOOM_PAGE);
 
     if(zoom>0)
     {
@@ -3099,9 +3176,11 @@ void KWView::viewZoom( const QString &s )
     KWCanvas * canvas = m_gui->canvasWidget();
     int zoom = 0;
 
-    if ( s == i18n("Fit to Width") )
+    if ( s == KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH) )
     {
+        m_doc->setZoomMode(KoZoomMode::ZOOM_WIDTH);
         zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->pageManager()->page(m_currentPage)->width() ) ) - 1;
+        
         if(zoom != m_doc->zoom() && !canvas->verticalScrollBar() ||
                 !canvas->verticalScrollBar()->isVisible()) { // has no vertical scrollbar
             // we have to do this twice to take into account a possibly appearing vertical scrollbar
@@ -3109,24 +3188,27 @@ void KWView::viewZoom( const QString &s )
         }
         ok = true;
     }
-    else if ( s == i18n("Fit to Page") )
+    else if ( s == KoZoomMode::toString(KoZoomMode::ZOOM_PAGE) )
     {
+        m_doc->setZoomMode(KoZoomMode::ZOOM_PAGE);
         double height = m_doc->resolutionY() * m_doc->pageManager()->page(m_currentPage)->height();
         double width = m_doc->resolutionX() * m_doc->pageManager()->page(m_currentPage)->height();
         zoom = QMIN( qRound( static_cast<double>(canvas->visibleHeight() * 100 ) / height ),
                      qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / width ) ) - 1;
+
         ok = true;
     }
     else
     {
+        m_doc->setZoomMode(KoZoomMode::ZOOM_CONSTANT);
         QRegExp regexp("(\\d+)"); // "Captured" non-empty sequence of digits
         regexp.search(s);
         zoom=regexp.cap(1).toInt(&ok);
     }
+    
     if( !ok || zoom<10 ) //zoom should be valid and >10
         zoom = m_doc->zoom();
-
-    if ( s == i18n("Fit to Width") || s == i18n("Fit to Page") )
+    if ( !KoZoomMode::isConstant(s) )
         showZoom( s ); //set current menu item
     else
     {
@@ -5252,7 +5334,7 @@ void KWView::resizeEvent( QResizeEvent *e )
     {
         m_gui->resize( width(), height() );
         QString s = m_actionViewZoom->currentText();
-        if ( s == i18n("Fit to Width") || s == i18n("Fit to Page") )
+        if ( !KoZoomMode::isConstant(s) )
             viewZoom( s );
     }
 }
@@ -6410,8 +6492,8 @@ void KWView::switchModeView()
 
     }
     //remove/add "zoom to page". Not necessary in text mode view.
-    changeZoomMenu( m_doc->zoom() );
-    showZoom( m_doc->zoom() );
+    updateZoomControls();
+    
     updatePageInfo();
     // set page layout in rulers
     canvas->viewMode()->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), m_doc->pageLayout() );

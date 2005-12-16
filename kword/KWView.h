@@ -35,6 +35,7 @@
 #include <koView.h>
 #include <KoPoint.h>
 #include <kshortcut.h>
+#include <KoZoomMode.h>
 
 #include <qbrush.h>
 #include <qhbox.h>
@@ -544,7 +545,8 @@ protected:
 private:  // methods
     void deleteSelectedFrames();
     void borderChanged(KoBorder::BorderType type);
-
+    void updateZoomControls();
+    
 private: // variables
     KWDocument *m_doc;
 
@@ -778,8 +780,12 @@ private: // variables
     KStatusBarLabel* m_sbZoomLabel;
 
     // Zoom values for each viewmode ( todo a viewmode enum and a qmap or so )
-    int m_zoomViewModeNormal;
-    int m_zoomViewModePreview;
+    struct KWZoomValueStore {
+        int m_zoom;
+        KoZoomMode::Mode m_zoomMode;
+    };
+    KWZoomValueStore m_zoomViewModeNormal;
+    KWZoomValueStore m_zoomViewModePreview;
 
     bool m_viewFrameBorders /*, m_viewTableGrid*/;
 
