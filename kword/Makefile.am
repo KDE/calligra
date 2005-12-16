@@ -83,9 +83,9 @@ rc_DATA = kword.rc kword_readonly.rc
 SUBDIRS = . mailmerge templates dtd pics toolbar expression data tests
 
 messages: rc.cpp
-	$(EXTRACTRC) --tag-group=koffice expression/*.xml > xml_doc.cc
+	$(EXTRACTRC) --tag-group=koffice expression/*.xml > xml_doc.cpp
 	$(EXTRACTRC) `find mailmerge -name \*.ui` >> rc.cpp
-	$(XGETTEXT) rc.cpp *.cc `find mailmerge -name \*.cc -o -name \*.cpp` KWAboutData.h -o $(podir)/kword.pot
-	-rm xml_doc.cc
+	$(XGETTEXT) rc.cpp *.cpp `find mailmerge -name \*.cpp -o -name \*.cpp` KWAboutData.h -o $(podir)/kword.pot
+	-rm xml_doc.cpp
 
 include $(top_srcdir)/admin/Doxyfile.am
