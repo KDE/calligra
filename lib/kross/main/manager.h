@@ -82,6 +82,12 @@ namespace Kross { namespace Api {
             QMap<QString, InterpreterInfo*> getInterpreterInfos();
 
             /**
+             * \return true if there exists an interpreter with the
+             * name \p interpretername else false.
+             */
+            bool hasInterpreterInfo(const QString& interpretername) const;
+
+            /**
              * \return the \a InterpreterInfo* matching to the defined
              * \p interpretername or NULL if there does not exists such
              * a interpreter.

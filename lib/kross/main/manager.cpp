@@ -136,6 +136,11 @@ QMap<QString, InterpreterInfo*> Manager::getInterpreterInfos()
     return d->interpreterinfos;
 }
 
+bool Manager::hasInterpreterInfo(const QString& interpretername) const
+{
+    return d->interpreterinfos.contains(interpretername);
+}
+
 InterpreterInfo* Manager::getInterpreterInfo(const QString& interpretername)
 {
     return d->interpreterinfos[interpretername];

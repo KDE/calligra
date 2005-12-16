@@ -18,12 +18,7 @@
  ***************************************************************************/
 
 #include "scriptguiclient.h"
-//#include "../api/object.h"
-//#include "../api/list.h"
-//#include "../api/interpreter.h"
-//#include "../api/script.h"
-//#include "../main/manager.h"
-//#include "mainmodule.h"
+#include "manager.h"
 
 #include <kapplication.h>
 #include <kpopupmenu.h>
@@ -148,10 +143,12 @@ void ScriptGUIClient::showScriptGUIClientsMenu()
 
             if(node.nodeName() == "ScriptAction") {
                 ScriptAction* action = new ScriptAction( node.toElement() );
-                connect(action, SIGNAL( failed(const QString&, const QString&) ),
-                        this, SLOT( executionFailed(const QString&, const QString&) ));
+                if(! Manager::scriptManager()->hasInterpreterInfo( action->getInterpreterName() ) )
+                    action->setEnabled(false); // disable action if the interpreter isn't supported.
                 d->scriptactions.append( action );
                 d->scriptextensions->insert( action );
+                connect(action, SIGNAL( failed(const QString&, const QString&) ),
+                        this, SLOT( executionFailed(const QString&, const QString&) ));
             }
 
             node = node.nextSibling();

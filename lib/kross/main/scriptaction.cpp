@@ -20,13 +20,7 @@
 #include "scriptaction.h"
 #include "manager.h"
 #include "scriptcontainer.h"
-//#include "../api/object.h"
-//#include "../api/list.h"
-//#include "../api/interpreter.h"
-//#include "../api/script.h"
-//#include "mainmodule.h"
 
-//#include <qfile.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
