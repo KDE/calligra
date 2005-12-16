@@ -70,7 +70,7 @@ protected slots:
 
 private:
 
-    void KoRGBWidget::update(const QColor fgColor, const QColor);
+    void update(const QColor fgColor, const QColor);
 
 private:
 
