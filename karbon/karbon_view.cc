@@ -142,7 +142,7 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 	// set selectTool by default
 	//m_toolbox->slotPressButton( 0 );
 
-	m_pPaletteManager = new KoPaletteManager(this, actionCollection(), "kivio palette manager");
+	m_pPaletteManager = new KoPaletteManager(this, actionCollection(), "karbon palette manager");
 
 	unsigned int max = part()->maxRecentFiles();
 	setNumberOfRecentFiles( max );
@@ -1387,51 +1387,51 @@ KarbonView::setUnit( KoUnit::Unit /*_unit*/ )
 
 void KarbonView::createDocumentTabDock()
 {
-    m_DocumentTab = new VDocumentTab(this, this);
-    m_DocumentTab->setCaption(i18n("Document"));
-    paletteManager()->addWidget(m_DocumentTab, "DocumentTabDock", "DocumentPanel");
+	m_DocumentTab = new VDocumentTab(this, this);
+	m_DocumentTab->setCaption(i18n("Document"));
+	paletteManager()->addWidget(m_DocumentTab, "DocumentTabDock", "DocumentPanel");
 	connect( m_part, SIGNAL( unitChanged( KoUnit::Unit ) ), m_DocumentTab, SLOT( updateDocumentInfo() ) );
 }
 
 void KarbonView::createLayersTabDock()
 {
-    m_LayersTab = new VLayersTab(this, this);
-    m_LayersTab->setCaption(i18n("Layers"));
-    paletteManager()->addWidget(m_LayersTab, "LayersTabDock", "DocumentPanel");
+	m_LayersTab = new VLayersTab(this, this);
+	m_LayersTab->setCaption(i18n("Layers"));
+	paletteManager()->addWidget(m_LayersTab, "LayersTabDock", "DocumentPanel");
 }
 
 void KarbonView::createHistoryTabDock()
 {
-    m_HistoryTab = new VHistoryTab(part(), this);
-    m_HistoryTab->setCaption(i18n("History"));
-    paletteManager()->addWidget(m_HistoryTab, "HistoryTabDock", "DocumentPanel");
+	m_HistoryTab = new VHistoryTab(part(), this);
+	m_HistoryTab->setCaption(i18n("History"));
+	paletteManager()->addWidget(m_HistoryTab, "HistoryTabDock", "DocumentPanel");
 }
 
 void KarbonView::createStrokeDock()
 {
-    m_strokeDocker = new VStrokeDocker(part(), this);
-    m_strokeDocker->setCaption(i18n("Stroke Properties"));
-    paletteManager()->addWidget(m_strokeDocker, "StrokeTabDock", "StrokePanel");
+	m_strokeDocker = new VStrokeDocker(part(), this);
+	m_strokeDocker->setCaption(i18n("Stroke Properties"));
+	paletteManager()->addWidget(m_strokeDocker, "StrokeTabDock", "StrokePanel");
 
 	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_strokeDocker, SLOT( setUnit( KoUnit::Unit ) ) );
 }
 
 void KarbonView::createColorDock()
 {
-    m_ColorManager = new VColorDocker(part(),this);
-    //m_ColorManager->setCaption(i18n("Stroke Properties"));
-    paletteManager()->addWidget(m_ColorManager, "ColorTabDock", "ColorPanel");
+	m_ColorManager = new VColorDocker(part(),this);
+	//m_ColorManager->setCaption(i18n("Stroke Properties"));
+	paletteManager()->addWidget(m_ColorManager, "ColorTabDock", "ColorPanel");
 
 	connect( this, SIGNAL( selectionChange() ), m_ColorManager, SLOT( update() ) );
 }
 
 void KarbonView::createTransformDock()
 {
-    m_TransformDocker = new VTransformDocker(part(), this);
-    m_TransformDocker->setCaption(i18n("Transform"));
-    paletteManager()->addWidget(m_TransformDocker, "TransformTabDock", "TransformPanel");
+	m_TransformDocker = new VTransformDocker(part(), this);
+	m_TransformDocker->setCaption(i18n("Transform"));
+	paletteManager()->addWidget(m_TransformDocker, "TransformTabDock", "TransformPanel");
 
-    connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
+	connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
 	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_TransformDocker, SLOT( setUnit( KoUnit::Unit ) ) );
 }
 
