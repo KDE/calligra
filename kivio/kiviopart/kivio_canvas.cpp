@@ -332,7 +332,10 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   m_pDoc->paintContent(kpainter, paintRect, false, page, QPoint(0, 0), m_pView->zoomHandler(), true);
   kpainter.stop();
 
-  m_guides.paintGuides(painter);
+  if(m_pView->isShowGuides()) {
+    m_guides.paintGuides(painter);
+  }
+
   painter.end();
 
   bitBlt(this, paintRect.left(), paintRect.top(), m_buffer,

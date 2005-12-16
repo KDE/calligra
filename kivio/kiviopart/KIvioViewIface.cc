@@ -135,11 +135,6 @@ void KIvioViewIface::toggleShowGuides(bool b)
     view->toggleShowGuides(b);
 }
 
-void KIvioViewIface::toggleSnapGuides(bool b)
-{
-    view->toggleSnapGuides(b);
-}
-
 void KIvioViewIface::toggleViewManager(bool b)
 {
     view->toggleViewManager(b);

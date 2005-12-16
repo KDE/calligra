@@ -1130,4 +1130,19 @@ void KivioDoc::updateGuideLines(KoView* sender)
   }
 }
 
+void KivioDoc::updateGuideLines(KivioPage* page)
+{
+  QValueList<double> hGuideLines = page->horizontalGuideLines();
+  QValueList<double> vGuideLines = page->verticalGuideLines();
+  QPtrListIterator<KoView> it(views());
+  KivioView* itView = 0;
+
+  for (; it.current(); ++it ) {
+    itView = static_cast<KivioView*>(it.current());
+    if(itView->activePage() == page) {
+      itView->canvasWidget()->guideLines().setGuideLines(hGuideLines, vGuideLines);
+    }
+  }
+}
+
 #include "kivio_doc.moc"

@@ -58,7 +58,6 @@ k_dcop:
     virtual void toggleShowGrid(bool);
     virtual void toggleSnapGrid(bool);
     virtual void toggleShowGuides(bool);
-    virtual void toggleSnapGuides(bool);
 
     virtual void toggleViewManager(bool);
 

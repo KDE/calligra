@@ -76,6 +76,7 @@
 #include <kolinewidthaction.h>
 #include <kolinestyleaction.h>
 #include <kopalettemanager.h>
+#include <koGuideLineDia.h>
 
 #include "kivio_view.h"
 #include "kivio_dlg_pageshow.h"
@@ -494,14 +495,11 @@ void KivioView::setupActions()
   connect( snapGrid, SIGNAL(toggled(bool)), SLOT(toggleSnapGrid(bool)));
 
   // Guides actions
-  showGuides = new KToggleAction( i18n("Show Guides"), 0, actionCollection(), "showGuides" );
+  showGuides = new KToggleAction( i18n("Guide Lines"), 0, actionCollection(), "showGuides" );
   connect( showGuides, SIGNAL(toggled(bool)), SLOT(toggleShowGuides(bool)));
-#if KDE_IS_VERSION(3,2,90)
-  showGuides->setCheckedState(i18n("Hide Guides"));
-#endif
-
-  KToggleAction* snapGuides = new KToggleAction( i18n("Snap Guides"), 0, actionCollection(), "snapGuides" );
-  connect( snapGuides, SIGNAL(toggled(bool)), SLOT(toggleSnapGuides(bool)));
+  KAction* addGuide = new KAction(i18n("Add Guide Line..."), 0, this, SLOT(addGuideLine()),
+    actionCollection(), "addGuideLine");
+  connect(showGuides, SIGNAL(toggled(bool)), addGuide, SLOT(setEnabled(bool)));
   //--
 
   m_setArrowHeads = new KivioArrowHeadAction(i18n("Arrowheads"), "arrowheads", actionCollection(), "arrowHeads");
@@ -893,12 +891,6 @@ void KivioView::toggleShowGuides(bool b)
   m_bShowGuides = b;
 
   m_pCanvas->update();
-}
-
-void KivioView::toggleSnapGuides(bool b)
-{
-  TOGGLE_ACTION("snapGuides")->setChecked(b);
-  m_bSnapGuides = b;
 }
 
 void KivioView::toggleShowGrid(bool b)
@@ -1833,8 +1825,6 @@ void KivioView::updateButton()
   toggleSnapGrid(Kivio::Config::snapGrid());
 
   toggleShowGuides(koDocument()->isReadWrite());
-  toggleSnapGuides(koDocument()->isReadWrite());
-
 }
 
 void KivioView::slotPageHidden( KivioPage* /*page*/ )
@@ -2270,6 +2260,19 @@ void KivioView::deleteObject()
 {
   activePage()->deleteSelectedStencils();
   m_pDoc->updateView(activePage());
+}
+
+void KivioView::addGuideLine()
+{
+  KoPageLayout pl = activePage()->paperLayout();
+  KoRect pageRect(0.0, 0.0, pl.ptWidth, pl.ptHeight);
+  KoPoint pos(0.0, 0.0);
+  KoGuideLineDia dlg(this, pos, pageRect, m_pDoc->unit(), "addGuideDialog");
+
+  if(dlg.exec() == QDialog::Accepted) {
+    activePage()->addGuideLine(dlg.orientation(), dlg.pos());
+    m_pDoc->updateGuideLines(activePage());
+  }
 }
 
 #include "kivio_view.moc"

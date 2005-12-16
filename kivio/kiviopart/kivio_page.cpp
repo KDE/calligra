@@ -1699,14 +1699,17 @@ void KivioPage::loadGuideLines(const QDomElement& element)
   {
     double pos = XmlReadDouble(e, "pos", 0.0);
     Qt::Orientation orient = (Qt::Orientation)XmlReadInt(e, "orient", 0);
+    addGuideLine(orient, pos);
+  }
+}
 
-    if(orient == Qt::Horizontal) {
-      m_hGuideLines.append(pos);
-    } else {
-      m_vGuideLines.append(pos);
-    }
+void KivioPage::addGuideLine(Qt::Orientation orientation, double position)
+{
+  if(orientation == Qt::Horizontal) {
+    m_hGuideLines.append(position);
+  } else {
+    m_vGuideLines.append(position);
   }
 }
 
 #include "kivio_page.moc"
-

@@ -177,6 +177,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     void setPaintSelected(bool paint = true);
 
     void setGuideLines(const QValueList<double> hGuideLines, const QValueList<double> vGuideLines);
+    void addGuideLine(Qt::Orientation orientation, double position);
 
   signals:
     void sig_updateView( KivioPage *_page );

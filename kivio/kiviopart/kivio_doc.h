@@ -127,9 +127,6 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
 
     static QPtrList<KivioDoc>& documents();
 
-    // ### kivio calls units() what KoDocument calls unit()
-    KoUnit::Unit units() const { return unit(); }
-
     KivioGridData grid() { return Kivio::Config::grid(); }
 
     void initConfig();
@@ -157,6 +154,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     void setDefaultFont(const QFont& f) { m_font = f; }
 
     void updateGuideLines(KoView* sender);
+    void updateGuideLines(KivioPage* page);
 
   protected slots:
     void slotDocumentRestored();

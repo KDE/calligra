@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" >
-<kpartgui name="kivio" version="27">
+<kpartgui name="kivio" version="28">
   <MenuBar>
     <Menu name="file">
       <Action name="installStencilSet"/>
@@ -23,15 +23,13 @@
       <ActionList name="view_closeallviews"/>
       <Separator/>
       <ActionList name="view_split"/>
-      <Action name="showPageBorders"/>
+      <Separator/>
       <Action name="showPageMargins"/>
-      <Separator/>
       <Action name="showRulers"/>
-      <Action name="showGrid"/>
       <Action name="showGuides"/>
-      <Separator/>
+      <Action name="addGuideLine"/>
+      <Action name="showGrid"/>
       <Action name="snapGrid"/>
-      <Action name="snapGuides"/>
       <Separator/>
       <Action name="view_palette_action_menu"/>
       </Menu>

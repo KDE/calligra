@@ -161,7 +161,6 @@ class KIVIO_EXPORT KivioView : public KoView
     void toggleShowGrid(bool);
     void toggleSnapGrid(bool);
     void toggleShowGuides(bool);
-    void toggleSnapGuides(bool);
 
     void toggleStencilGeometry(bool);
     void toggleViewManager(bool);
@@ -277,6 +276,8 @@ class KIVIO_EXPORT KivioView : public KoView
     void loadingFinished();
 
     void moveTab(unsigned tab, unsigned target);
+
+    void addGuideLine();
 
   protected:
     void setupActions();
