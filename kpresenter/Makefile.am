@@ -99,6 +99,6 @@ rc_DATA = kpresenter.rc kpresenter_readonly.rc
 SUBDIRS = autoformEdit autoforms . pics templates dtd slideshow toolbar
 
 messages: rc.cpp
-	$(XGETTEXT) rc.cpp */*.cc *.cc *.h KPrAboutData.h -o $(podir)/kpresenter.pot
+	$(XGETTEXT) rc.cpp */*.cpp *.cpp *.h KPrAboutData.h -o $(podir)/kpresenter.pot
 
 include $(top_srcdir)/admin/Doxyfile.am
