@@ -21,14 +21,11 @@
 #include "KWView.h"
 #include "KWViewMode.h"
 #include "KWCanvas.h"
-#include "KWCommand.h"
 #include "KWFrame.h"
 #include "defs.h"
 #include "KWTextFrameSet.h"
-#include "KWTableFrameSet.h"
-#include "KWAnchor.h"
+//#include "KWAnchor.h"
 #include <KoTextObject.h> // for customItemChar!
-#include <qpopupmenu.h>
 
 #include <kformulacontainer.h>
 #include <kformuladocument.h>
@@ -37,12 +34,10 @@
 #include <kcursor.h>
 #include <klocale.h>
 #include <kmessagebox.h>
-#include <kparts/partmanager.h>
 #include <kdebug.h>
 #include <float.h>
 #include "KWordFrameSetIface.h"
 #include <dcopobject.h>
-#include "qdrawutil.h"
 #include "KWordTextFrameSetEditIface.h"
 #include "KWordFormulaFrameSetIface.h"
 #include "KWordFormulaFrameSetEditIface.h"
@@ -148,7 +143,7 @@ void KWFormulaFrameSet::drawFrameContents( KWFrame* /*frame*/,
                                            QPainter* painter, const QRect& crect,
                                            const QColorGroup& cg, bool onlyChanged,
                                            bool resetChanged,
-                                           KWFrameSetEdit */*edit*/, KWViewMode * )
+                                           KWFrameSetEdit* /*edit*/, KWViewMode * )
 {
     if ( m_changed || !onlyChanged )
     {
