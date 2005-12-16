@@ -147,10 +147,14 @@ public:
      * @brief Snap rect to guidelines
      *
      * This looks for a guide which is in reach for the guide as defined in snap.
+     * This method has the abillity to combine more calls. The snapStatus and diff args are both input and
+     * output. On first call you should set snapStatus to 0. The return value would then show in which
+     * directions it has snapped. If you combine several KoGuides you can let these output arguments
+     * be input for the next koGuide. That way you'll always catch the nearest guide.
      *
      * @param rect the rect which should be snapped
      * @param snap the distance within the guide should snap - but always snap if already snapped
-     * @param snapStatus if horiz,vert or both directions are snapped (both in and out param)
+     * @param snapStatus if horiz,vert or both directions are snapped (both in and out param). 
      * @param diff distance away from guide. Only valid if status is snapping (both in and out param)
      */
     void snapToGuideLines( KoRect &rect, int snap, SnapStatus &snapStatus, KoPoint &diff );
