@@ -16,19 +16,45 @@ AM_CONDITIONAL(compile_kross_python,
 AC_CHECK_PROG(RUBY, ruby, ruby)
 
 if test "$RUBY"; then
-  AC_MSG_CHECKING(for ruby dirs)
-  RUBY_ARCHDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"archdir"@:>@)'`
-  RUBY_SITEARCHDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"sitearchdir"@:>@)'`
-  RUBY_SITEDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"sitelibdir"@:>@)'`
-  RUBY_LIBDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"libdir"@:>@)'`
-  RUBY_LIBRUBYARG=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"LIBRUBYARG_SHARED"@:>@)'`
-  AC_MSG_RESULT([archdir $RUBY_ARCHDIR, sitearchdir $RUBY_SITEARCHDIR, sitedir $RUBY_SITEDIR, libdir $RUBY_LIBDIR, librubyarg $RUBY_LIBRUBYARG])
-  AC_SUBST(RUBY_ARCHDIR)
-  AC_SUBST(RUBY_SITEARCHDIR)
-  AC_SUBST(RUBY_SITEDIR)
-  AC_SUBST(RUBY_LIBDIR)
-  AC_SUBST(RUBY_LIBRUBYARG)
+    AC_MSG_CHECKING(for ruby dirs)
+    RUBY_ARCHDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"archdir"@:>@)'`
+    RUBY_SITEARCHDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"sitearchdir"@:>@)'`
+    RUBY_SITEDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"sitelibdir"@:>@)'`
+    RUBY_LIBDIR=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"libdir"@:>@)'`
+    RUBY_LIBRUBYARG=`$RUBY -r rbconfig -e 'printf("%s",Config::CONFIG@<:@"LIBRUBYARG_SHARED"@:>@)'`
+    AC_MSG_RESULT([archdir $RUBY_ARCHDIR, sitearchdir $RUBY_SITEARCHDIR, sitedir $RUBY_SITEDIR, libdir $RUBY_LIBDIR, librubyarg $RUBY_LIBRUBYARG])
+    AC_SUBST(RUBY_ARCHDIR)
+    AC_SUBST(RUBY_SITEARCHDIR)
+    AC_SUBST(RUBY_SITEDIR)
+    AC_SUBST(RUBY_LIBDIR)
+    AC_SUBST(RUBY_LIBRUBYARG)
+    AC_MSG_CHECKING(for ruby header)
+    if test ! -r $RUBY_ARCHDIR/ruby.h; then
+        RUBY_LIBDIR=""
+        AC_MSG_RESULT([not found])
+    else
+        AC_MSG_CHECKING([if C++ program with ruby can be compiled])
+        AC_LANG_SAVE
+        AC_LANG_CPLUSPLUS
+        ac_save_CXXFLAGS="$CXXFLAGS"
+        CXXFLAGS="$CXXFLAGS -I$RUBY_ARCHDIR"
+        AC_CACHE_VAL(ruby_build,
+        [
+            AC_TRY_COMPILE([
+                #include <ruby.h>
+            ],[
+                ruby_init();
+                return 0;
+            ], ruby_build=yes,
+            ruby_build=no)
+        ])
+        AC_MSG_RESULT($ruby_build)
+        if test "$ruby_build" = "no"; then
+            RUBY_LIBDIR=""
+        fi
+        CXXFLAGS="$ac_save_CXXFLAGS"
+        AC_LANG_RESTORE
+    fi
 fi
-
 
 AM_CONDITIONAL(compile_kross_ruby, test -n "$RUBY_LIBDIR")

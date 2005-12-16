@@ -107,9 +107,9 @@ Manager::Manager()
     QString rubylib = QFile::encodeName( KLibLoader::self()->findLibrary(KROSS_RUBY_LIBRARY) );
     if(! rubylib.isEmpty()) { // If the Kross Ruby plugin exists we offer it as supported scripting language.
       InterpreterInfo::Option::Map rubyoptions;
-//       rubyoptions.replace("restricted",
-//                             new InterpreterInfo::Option("Restricted", "Restricted Ruby interpreter", QVariant(false))
-//                            );
+      rubyoptions.replace("safelevel",
+                          new InterpreterInfo::Option("safelevel", "Level of safety of the Ruby interpreter", QVariant(0)) // 0 -> unsafe, 4 -> very safe
+                           );
       d->interpreterinfos.replace("ruby",
                                   new InterpreterInfo("ruby",
                                       rubylib, // library

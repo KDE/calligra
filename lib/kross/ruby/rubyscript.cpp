@@ -56,10 +56,11 @@ RubyScript::~RubyScript()
 {
 }
 
-void RubyScript::selectScript()
-{
+#define selectScript() \
+    NODE* old_tree = ruby_eval_tree; \
     ruby_eval_tree = d->m_compile;
-}
+#define unselectScript() \
+    ruby_eval_tree = old_tree;
 
 void RubyScript::compile()
 {
@@ -81,7 +82,8 @@ void RubyScript::compile()
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
         kdDebug() << "Compilation has failed" << endl;
 #endif
-        setException( new Kross::Api::Exception(QString("Failed to compile ruby code: %1").arg("unknow"), 0) ); // TODO: get the error
+//         kdDebug() << TYPE(ruby_errinfo) << endl;
+        setException( new Kross::Api::Exception(QString("Failed to compile ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
         d->m_compile = 0;
     }
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
@@ -101,6 +103,16 @@ const QStringList& RubyScript::getFunctionNames()
     return d->m_functions;
 }
 
+VALUE ruby_runtime_error(VALUE data, VALUE errinfo)
+{
+    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Error when running script.") ) );
+}
+
+VALUE ruby_exec2()
+{
+    return INT2FIX(ruby_exec());
+}
+
 Kross::Api::Object::Ptr RubyScript::execute()
 {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
@@ -116,8 +128,9 @@ Kross::Api::Object::Ptr RubyScript::execute()
     selectScript();
     RubyInterpreter* interpreterRuby = (RubyInterpreter*)m_interpreter;
     interpreterRuby->incCountScript();
-    ruby_exec();
+    rb_rescue2((VALUE (*)(...))ruby_exec2,0,0,0,rb_eStandardError,(VALUE)0);
     interpreterRuby->decCountScript();
+    unselectScript();
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
     kdDebug() << "Execution is finished" << endl;
 #endif
@@ -134,6 +147,7 @@ Kross::Api::Object::Ptr RubyScript::callFunction(const QString& name, Kross::Api
         compile();
     }
     selectScript();
+    unselectScript();
     return 0;
 }
 
@@ -159,6 +173,7 @@ Kross::Api::Object::Ptr RubyScript::classInstance(const QString& name)
         compile();
     }
     selectScript();
+    unselectScript();
     return 0;
 }
 

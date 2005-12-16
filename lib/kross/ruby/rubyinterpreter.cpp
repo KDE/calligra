@@ -82,6 +82,12 @@ RubyInterpreter::RubyInterpreter(Kross::Api::InterpreterInfo* info): Kross::Api:
     {
         initRuby();
     }
+    if(info->hasOption("safelevel") )
+    {
+        rb_set_safe_level( info->getOption("safelevel")->value.toInt() );
+    } else {
+        rb_set_safe_level(4); // if the safelevel option is undefined, set it to maximum level
+    }
 }
 
 

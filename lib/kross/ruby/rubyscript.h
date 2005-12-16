@@ -63,7 +63,6 @@ class RubyScript : public Kross::Api::Script
         virtual Kross::Api::Object::Ptr classInstance(const QString& name);
     private:
         void compile();
-        inline void selectScript();
     private:
         RubyScriptPrivate* d;
 };
