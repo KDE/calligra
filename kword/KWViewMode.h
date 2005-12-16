@@ -90,10 +90,13 @@ public:
 
     /** Config option for KWViewModePreview (a bit of a hack) */
     virtual void setPagesPerRow(int) {}
-    virtual int pagesPerRow() {return 0;}
+    virtual int pagesPerRow() { return 0; }
 
     /** Should selected text be drawn as such? */
-    virtual bool drawSelections() {return true;}
+    virtual bool drawSelections() { return true; }
+
+    /** Should frame background be drawn? Usually yes, but not for embedded docs with transparent=true */
+    virtual bool drawFrameBackground() { return true; }
 
     /** Should we see frame borders? This setting doesn't always come from KWView... */
     bool drawFrameBorders() const { return m_drawFrameBorders; }
@@ -182,8 +185,12 @@ class KWViewModeEmbedded : public KWViewMode
 {
 public:
     KWViewModeEmbedded ( KWDocument * doc )
-        : KWViewMode( doc, 0 /*no canvas*/, false /*drawFrameBorders*/ ) {}
+        : KWViewMode( doc, 0 /*no canvas*/, false /*drawFrameBorders*/ ),
+          mDrawFrameBackground( true )
+    {}
     virtual ~ KWViewModeEmbedded() {}
+
+    void setDrawFrameBackground( bool b ) { mDrawFrameBackground = b; }
 
     // This view mode is very easy to implement ;-P
     virtual QPoint normalToView( const QPoint & nPoint ) { return nPoint; }
@@ -194,6 +201,10 @@ public:
     virtual bool drawSelections() { return false; }
 
     virtual const QString type() const { return "ModeEmbedded"; }
+    virtual bool drawFrameBackground() { return mDrawFrameBackground; }
+
+private:
+    bool mDrawFrameBackground;
 };
 
 

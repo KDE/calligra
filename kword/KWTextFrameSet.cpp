@@ -618,6 +618,8 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
     uint drawingFlags = 0;
     if ( viewMode->drawSelections() )
         drawingFlags |= KoTextDocument::DrawSelections;
+    if ( !viewMode->drawFrameBackground() )
+        drawingFlags |= KoTextDocument::TransparentBackground;
     if ( m_doc->backgroundSpellCheckEnabled() )
         drawingFlags |= KoTextDocument::DrawMisspelledLine;
     if ( m_doc->viewFormattingChars() )
@@ -654,7 +656,8 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
 
     // Blank area under the very last paragraph - QRT draws it up to textdoc->height,
     // we have to draw it from there up to the bottom of the last frame.
-    if ( ( !lastFormatted || lastFormatted == textDocument()->lastParag() ) )
+    if ( ( !lastFormatted || lastFormatted == textDocument()->lastParag() )
+         && viewMode->drawFrameBackground() )
     {
         // This is drawing code, so we convert everything to pixels
         int docHeight = textDocument()->lastParag()->pixelRect(m_doc).bottom() + 1;

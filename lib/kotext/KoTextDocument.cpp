@@ -1074,7 +1074,11 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
                                           bool resetChanged, uint drawingFlags )
 {
     m_drawingFlags = drawingFlags;
-    if ( is_printer( p ) ) {
+    // We need to draw without double-buffering if
+    // 1) printing (to send text and not bitmaps to the printer)
+    // 2) drawing a transparent embedded document
+    //
+    if ( is_printer( p ) || ( drawingFlags & TransparentBackground ) ) {
     // This stuff relies on doLayout()... simpler to just test for Printer.
     // If someone understand doLayout() please tell me (David)
     /*if ( isWithoutDoubleBuffer() || par && par->withoutDoubleBuffer ) { */
@@ -1124,7 +1128,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 #ifdef DEBUG_PAINTING
         kdDebug(32500) << " drawWYSIWYG: ir=" << ir << endl;
 #endif
-	if ( isPageBreakEnabled() && parag->next() )
+	if ( isPageBreakEnabled() && parag->next() && ( drawingFlags & TransparentBackground ) == 0 )
         {
             int nexty = parag->next()->pixelRect(zoomHandler).y();
             // Test ir.y+ir.height, which is the first pixel _under_ the parag
@@ -1146,7 +1150,7 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
 	if ( !ir.intersects( crect ) ) {
             // Paragraph is not in the crect - but let's check if the area on its right is.
 	    ir.setWidth( zoomHandler->layoutUnitToPixelX( parag->document()->width() ) );
-	    if ( ir.intersects( crect ) )
+	    if ( ir.intersects( crect ) && ( drawingFlags & TransparentBackground ) == 0 )
 		p->fillRect( ir.intersect( crect ), cg.brush( QColorGroup::Base ) );
 	    if ( ir.y() > cy + ch ) {
                 goto floating;
@@ -1172,9 +1176,11 @@ floating:
     int docheight = zoomHandler->layoutUnitToPixelY( parag->document()->height() );
     if ( pixelRect.y() + pixelRect.height() < docheight ) {
         int docwidth = zoomHandler->layoutUnitToPixelX( parag->document()->width() );
-	p->fillRect( 0, pixelRect.y() + pixelRect.height(),
-                     docwidth, docheight - ( pixelRect.y() + pixelRect.height() ),
-		     cg.brush( QColorGroup::Base ) );
+        if ( ( drawingFlags & TransparentBackground ) == 0 ) {
+            p->fillRect( 0, pixelRect.y() + pixelRect.height(),
+                         docwidth, docheight - ( pixelRect.y() + pixelRect.height() ),
+                         cg.brush( QColorGroup::Base ) );
+        }
 	if ( !flow()->isEmpty() ) {
 	    QRect cr( cx, cy, cw, ch );
 	    cr = cr.intersect( QRect( 0, pixelRect.y() + pixelRect.height(), docwidth,
@@ -1202,7 +1208,7 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
     Q_ASSERT( (m_drawingFlags & DrawSelections) == 0 );
     if (m_drawingFlags & DrawSelections)
            kdDebug() << kdBacktrace();
-    if ( paper ) {
+    if ( paper && ( m_drawingFlags & TransparentBackground ) == 0 ) {
         p->setBrushOrigin(  -(int)p->translationX(),  -(int)p->translationY() );
         p->fillRect( cr, *paper );
     }
@@ -1239,7 +1245,7 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
                          !(brush.style() == Qt::SolidPattern &&
                            brush.color() == Qt::white &&
                            is_printer(p));
-        if ( needBrush )
+        if ( needBrush && ( m_drawingFlags & TransparentBackground ) == 0 )
             p->fillRect( QRect( 0, 0, pr.width(), pr.height() ), brush );
 
         //p->setBrushOrigin( p->brushOrigin() + QPoint( 0, pr.y() ) );
@@ -1295,6 +1301,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     // No need to brush plain white on a printer. Brush all
     // other cases (except "full transparent" case).
     bool needBrush = brush.style() != Qt::NoBrush &&
+                     ( drawingFlags & TransparentBackground ) == 0 &&
                      !(brush.style() == Qt::SolidPattern &&
                        brush.color() == Qt::white &&
                        is_printer(p));

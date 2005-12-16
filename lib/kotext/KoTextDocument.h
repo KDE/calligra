@@ -286,7 +286,8 @@ public:
         DrawMisspelledLine = 1,
         DrawFormattingChars = 2,
         DrawSelections = 4,
-        DontDrawNoteVariable = 8
+        DontDrawNoteVariable = 8,
+        TransparentBackground = 16
     };
     /** The main drawing method. Equivalent to KoTextDocument::draw, but reimplemented
      * for wysiwyg */

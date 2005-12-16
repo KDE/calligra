@@ -3689,6 +3689,7 @@ void KWDocument::paintContent( QPainter& painter, const QRect& rectangle, bool t
     rect.moveBy( leftBorder(), topBorder() );*/
 
     KWViewModeEmbedded * viewMode = new KWViewModeEmbedded( this );
+    viewMode->setDrawFrameBackground( !transparent );
 
     QColorGroup cg = QApplication::palette().active();
 
