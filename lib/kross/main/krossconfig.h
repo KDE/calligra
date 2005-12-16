@@ -75,29 +75,18 @@ namespace Kross {
 
         #define KROSS_API_EVENTSLOT_CALL_DEBUG
         #define KROSS_API_EVENTSIGNAL_CALL_DEBUG
+
+        // The name of the interpreter's library. Those library got loaded
+        // dynamicly during runtime. Comment out to disable compiling of
+        // the interpreter-plugin or to hardcode the location of the lib
+        // like I did at the following line.
+
+        //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/trunk/koffice/lib/kross/python/krosspython.la"
+        #define KROSS_PYTHON_LIBRARY "krosspython"
+        #define KROSS_RUBY_LIBRARY "krossruby"
+
     }
 
-    //TODO move to kexi/scripting/*
-    /**
-     * Wrapper around the Kexi::KexiDB classes.
-     *
-     * Only \a Kross::Api is used. So, this wrapper is independend
-     * to the used scripting backend and any interpreter who wraps
-     * the Kross-Api should be able to make such wrappers accessible
-     * from within scripting-languages.
-     *
-     * \author Sebastian Sauer
-     */
-    namespace KexiDB {
-    }
-
-    // The name of the global krosspyhon library. Loaded dynamicly
-    // during runtime. Comment out to disable compiling of the python
-    // support or for developing refer to your not jet installed lib
-    // like I did at the following line.
-    //#define KROSS_PYTHON_LIBRARY "/home/snoopy/cvs/kde/trunk/koffice/lib/kross/python/krosspython.la"
-    #define KROSS_PYTHON_LIBRARY "krosspython"
-    #define KROSS_RUBY_LIBRARY "krossruby"
 }
 
 #endif

@@ -40,6 +40,13 @@ class KexiScriptTextView : public KexiViewBase
 
         /**
          * Constructor.
+         *
+         * \param mainWin The \a KexiMainWindow instance this \a KexiScriptTextView
+         *        belongs to.
+         * \param parent The parent QWidget this \a KexiScriptTextView is displayed
+         *        in.
+         * \param scriptaction The \a Kross::Api::ScriptAction this \a KexiScriptTextView
+         *        was created for.
          */
         KexiScriptTextView(KexiMainWindow *mainWin, QWidget *parent, Kross::Api::ScriptAction* scriptaction);
 

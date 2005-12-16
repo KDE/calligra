@@ -40,23 +40,46 @@ class KexiScriptPart : public KexiPart::Part
 
         /**
          * Constructor.
+         *
+         * \param parent The parent QObject this part is child of.
+         * \param name The name this part has.
+         * \param args Optional list of arguments passed to this part.
          */
-        KexiScriptPart(QObject *parent, const char *name, const QStringList &);
+        KexiScriptPart(QObject *parent, const char *name, const QStringList& args);
 
         /**
          * Destructor.
          */
         virtual ~KexiScriptPart();
 
+        /**
+         * \return the i18n message for the passed \p englishMessage string.
+         */
         virtual QString i18nMessage(const QCString& englishMessage) const;
 
     protected:
+
+        /**
+         * Create a new view.
+         *
+         * \param parent The parent QWidget the new view is displayed in.
+         * \param dialog The \a KexiDialogBase the view is child of.
+         * \param item The \a KexiPart::Item this view is for.
+         * \param viewMode The viewmode we like to have a view for.
+         */
         virtual KexiViewBase* createView(QWidget *parent,
                                          KexiDialogBase* dialog,
                                          KexiPart::Item &item,
                                          int viewMode = Kexi::DesignViewMode);
 
+        /**
+         * Initialize the part's actions.
+         */
         virtual void initPartActions();
+
+        /**
+         * Initialize the instance actions.
+         */
         virtual void initInstanceActions();
 
     private:

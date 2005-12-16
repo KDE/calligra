@@ -36,7 +36,7 @@ namespace Kross { namespace KexiApp {
     class KexiAppMainWindowPrivate;
 
     /**
-     *
+     * Class to handle Kexi's mainwindow instance.
      */
     class KexiAppMainWindow : public Kross::Api::Class<KexiAppMainWindow>
     {

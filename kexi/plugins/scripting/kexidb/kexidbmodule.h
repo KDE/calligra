@@ -29,7 +29,17 @@ namespace Kross { namespace Api {
     class Manager;
 }}
 
-namespace Kross { namespace KexiDB {
+namespace Kross { 
+
+/**
+ * Wrapper around the Kexi::KexiDB classes.
+ *
+ * Only \a Kross::Api is used. So, this wrapper is independend
+ * to the used scripting backend and any interpreter who wraps
+ * the Kross-Api should be able to make such wrappers accessible
+ * from within scripting-languages.
+ */
+namespace KexiDB {
 
     /**
      * The KexiDBModule wrapper around KexiDB.

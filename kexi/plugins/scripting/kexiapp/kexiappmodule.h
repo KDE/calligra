@@ -29,12 +29,21 @@ namespace Kross { namespace Api {
     class Manager;
 }}
 
-namespace Kross { namespace KexiApp {
+namespace Kross { 
+
+/**
+ * Wrapper around the Kexi-application to access runtime
+ * informations a running Kexi-application likes to
+ * provide.
+ */
+namespace KexiApp {
 
     class KexiAppModulePrivate;
 
     /**
-     *
+     * The Kexi-application module which provides us the
+     * main entrypoint to communicate with a running
+     * Kexi-application.
      */
     class KexiAppModule : public Kross::Api::Module
     {
@@ -42,6 +51,9 @@ namespace Kross { namespace KexiApp {
 
             /**
              * Constructor.
+             *
+             * \param manager The \a Kross::Api::Manager singleton
+             *        instance used to access this module.
              */
             KexiAppModule(Kross::Api::Manager* manager);
 
