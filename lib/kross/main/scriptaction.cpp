@@ -161,6 +161,11 @@ void ScriptAction::setFile(const QString& scriptfile)
     d->scriptcontainer->setFile(scriptfile);
 }
 
+ScriptContainer* ScriptAction::getScriptContainer() const
+{
+    return d->scriptcontainer;
+}
+
 void ScriptAction::activate()
 {
     d->scriptcontainer->execute();

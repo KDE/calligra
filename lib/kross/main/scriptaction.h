@@ -26,6 +26,7 @@
 namespace Kross { namespace Api {
 
     // Forward declarations.
+    class ScriptContainer;
     class ScriptActionPrivate;
 
     /**
@@ -113,6 +114,12 @@ namespace Kross { namespace Api {
              * \param scriptfile The scriptfile.
              */
             void setFile(const QString& scriptfile);
+
+            /**
+             * \return the \a ScriptContainer instance this
+             * \a ScriptAction wraps.
+             */
+            ScriptContainer* getScriptContainer() const;
 
         public slots:
 

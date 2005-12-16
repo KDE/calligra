@@ -106,11 +106,11 @@ void KexiScriptPart::initPartActions()
 
 void KexiScriptPart::initInstanceActions()
 {
-	//FIXME createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), "exec", 0, "script_execute");
+	createSharedAction(Kexi::DesignViewMode, i18n("Execute Script"), "exec", 0, "script_execute");
 	//FIXME createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", 0, "script_config_editor");
 }
 
-KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode)
+KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& /*item*/, int viewMode)
 {
 	QString partname = dialog->partItem()->name();
 	if(! partname.isNull()) {

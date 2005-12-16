@@ -146,10 +146,16 @@ const QVariant& ScriptContainer::getOption(const QString name, QVariant defaultv
     return info ? info->getOptionValue(name, defaultvalue) : defaultvalue;
 }
 
-void ScriptContainer::setOption(const QString name, const QVariant& value)
+bool ScriptContainer::setOption(const QString name, const QVariant& value)
 {
-    //kdDebug()<<"############################# setOption name="<<name<<" value="<<value<<endl;
-    d->options.replace(name, value);
+    Kross::Api::InterpreterInfo* info = Kross::Api::Manager::scriptManager()->getInterpreterInfo( d->interpretername );
+    if(info) {
+        if(info->hasOption(name)) {
+            d->options.replace(name, value);
+            return true;
+        } else kdWarning() << QString("Kross::Api::ScriptContainer::setOption(%1, %2): No such option").arg(name).arg(value.toString()) << endl;
+    } else kdWarning() << QString("Kross::Api::ScriptContainer::setOption(%1, %2): No such interpreterinfo").arg(name).arg(value.toString()) << endl;
+    return false;
 }
 
 Object::Ptr ScriptContainer::execute()

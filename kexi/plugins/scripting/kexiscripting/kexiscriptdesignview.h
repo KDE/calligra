@@ -23,11 +23,6 @@
 #ifndef KEXISCRIPTDESIGNVIEW_H
 #define KEXISCRIPTDESIGNVIEW_H
 
-//#include <kross/main/manager.h>
-#include <kross/main/scriptaction.h>
-//#include <kross/api/interpreter.h>
-//#include <kross/api/exception.h>
-
 #include <kexiviewbase.h>
 
 #include <koproperty/set.h>
@@ -37,6 +32,10 @@
 class KexiScriptContainer;
 class KexiScriptEditor;
 class KexiScriptDesignViewPrivate;
+
+namespace Kross { namespace Api {
+  class ScriptAction;
+}}
 
 /**
  * The KexiScriptDesignView class provides the \a KexiViewBase to

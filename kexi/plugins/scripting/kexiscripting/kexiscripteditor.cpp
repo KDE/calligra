@@ -22,6 +22,8 @@
 
 #include "kexiscripteditor.h"
 
+#include <kross/main/scriptaction.h>
+
 #include <kdebug.h>
 //#include <kparts/factory.h>
 //#include <klibloader.h>

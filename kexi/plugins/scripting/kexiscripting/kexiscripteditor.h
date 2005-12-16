@@ -23,14 +23,11 @@
 #ifndef KEXISCRIPTEDITOR_H
 #define KEXISCRIPTEDITOR_H
 
-//#include <kross/main/manager.h>
-#include <kross/main/scriptaction.h>
-//#include <kross/api/interpreter.h>
-//#include <kross/api/exception.h>
-
 #include <kexieditor.h>
 
-class KexiScriptContainer;
+namespace Kross { namespace Api {
+  class ScriptAction;
+}}
 
 /**
  * The KexiEditor class embeds text editor

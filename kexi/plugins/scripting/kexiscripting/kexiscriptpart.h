@@ -69,7 +69,7 @@ class KexiScriptPart : public KexiPart::Part
          */
         virtual KexiViewBase* createView(QWidget *parent,
                                          KexiDialogBase* dialog,
-                                         KexiPart::Item &item,
+                                         KexiPart::Item& item,
                                          int viewMode = Kexi::DesignViewMode);
 
         /**
