@@ -23,7 +23,6 @@
 #include "kivio_page.h"
 #include "kivioglobal.h"
 #include "kivio_grid_data.h"
-#include "kivio_guidelines.h"
 #include "kivio_canvas.h"
 #include "kivio_settings.h"
 #include "kivio_config.h"
@@ -49,42 +48,42 @@
 #include <qlayout.h>
 #include <qtabwidget.h>
 
-GuidesListViewItem::GuidesListViewItem(QListView* parent, KivioGuideLineData *gd, KoUnit::Unit u)
-: KListViewItem(parent), m_data(gd)
-{
-  setPixmap(0, BarIcon(m_data->orientation() == Qt::Vertical ?
-    "guides_vertical":"guides_horizontal"));
-  QString s = KGlobal::_locale->formatNumber(KoUnit::toUserValue(m_data->position(), u), 2);
-  s += " " + KoUnit::unitName(u);
-  setText(1, s);
-}
-
-GuidesListViewItem::~GuidesListViewItem()
-{
-  delete m_data;
-}
-
-void GuidesListViewItem::setUnit(KoUnit::Unit u)
-{
-  QString s = KGlobal::_locale->formatNumber(KoUnit::toUserValue(m_data->position(), u), 2);
-  s += " " + KoUnit::unitName(u);
-  setText(1, s);
-}
-
-void GuidesListViewItem::setPosition(double p, KoUnit::Unit u)
-{
-  m_data->setPosition(KoUnit::fromUserValue(p, u));
-  QString s = KGlobal::_locale->formatNumber(p, 2);
-  s += " " + KoUnit::unitName(u);
-  setText(1, s);
-}
-
-void GuidesListViewItem::setOrientation(Qt::Orientation o)
-{
-  m_data->setOrientation(o);
-  setPixmap(0, BarIcon(m_data->orientation() == Qt::Vertical ?
-    "guides_vertical":"guides_horizontal"));
-}
+// GuidesListViewItem::GuidesListViewItem(QListView* parent, KivioGuideLineData *gd, KoUnit::Unit u)
+// : KListViewItem(parent), m_data(gd)
+// {
+//   setPixmap(0, BarIcon(m_data->orientation() == Qt::Vertical ?
+//     "guides_vertical":"guides_horizontal"));
+//   QString s = KGlobal::_locale->formatNumber(KoUnit::toUserValue(m_data->position(), u), 2);
+//   s += " " + KoUnit::unitName(u);
+//   setText(1, s);
+// }
+// 
+// GuidesListViewItem::~GuidesListViewItem()
+// {
+//   delete m_data;
+// }
+// 
+// void GuidesListViewItem::setUnit(KoUnit::Unit u)
+// {
+//   QString s = KGlobal::_locale->formatNumber(KoUnit::toUserValue(m_data->position(), u), 2);
+//   s += " " + KoUnit::unitName(u);
+//   setText(1, s);
+// }
+// 
+// void GuidesListViewItem::setPosition(double p, KoUnit::Unit u)
+// {
+//   m_data->setPosition(KoUnit::fromUserValue(p, u));
+//   QString s = KGlobal::_locale->formatNumber(p, 2);
+//   s += " " + KoUnit::unitName(u);
+//   setText(1, s);
+// }
+// 
+// void GuidesListViewItem::setOrientation(Qt::Orientation o)
+// {
+//   m_data->setOrientation(o);
+//   setPixmap(0, BarIcon(m_data->orientation() == Qt::Vertical ?
+//     "guides_vertical":"guides_horizontal"));
+// }
 
 /*****************************************************************************/
 
@@ -93,7 +92,6 @@ KivioOptionsDialog::KivioOptionsDialog(KivioView* parent, const char* name)
 {
   initPage();
   initGrid();
-  initGuides();
   unitChanged(parent->doc()->unit());
 }
 
@@ -210,101 +208,6 @@ void KivioOptionsDialog::initGrid()
   connect(m_spaceVertUSpin, SIGNAL(valueChanged(double)), SLOT(setMaxVertSnap(double)));
 }
 
-void KivioOptionsDialog::initGuides()
-{
-  QFrame* page = addPage(i18n("Guide Lines"), i18n("Guide Line Settings"),
-    kapp->iconLoader()->loadIcon("guides_horizontal", KIcon::Toolbar, 32));
-  m_guidesIndex = pageIndex(page);
-
-  KivioView* view = static_cast<KivioView*>(parent());
-  QTabWidget* tabs = new QTabWidget(page);
-  QWidget* managerTab = new QWidget(tabs);
-  QWidget* lookTab = new QWidget(tabs);
-
-  // Guide manager
-  m_guideList = new KListView(managerTab);
-  m_guideList->addColumn(i18n("Orientation"));
-  m_guideList->addColumn(i18n("Position"));
-  m_guideList->setColumnAlignment(1, AlignRight);
-  m_guideList->setFullWidth(true);
-  m_guideList->setAllColumnsShowFocus(true);
-  KPushButton* newBtn = new KPushButton(kapp->iconLoader()->
-    loadIcon("filenew", KIcon::Small, 16), i18n("Add"), managerTab);
-  KPushButton* delBtn = new KPushButton(kapp->iconLoader()->
-    loadIcon("editdelete", KIcon::Small, 16), i18n("Remove"), managerTab);
-  m_propertiesGrp = new QGroupBox( 0, Qt::Vertical, i18n("Guide Line Properties"), managerTab);
-  m_propertiesGrp->layout()->setSpacing(KDialog::spacingHint());
-  m_propertiesGrp->layout()->setMargin(KDialog::marginHint());
-  m_propertiesGrp->setEnabled(false);
-  m_orientHorizRBtn = new QRadioButton(i18n("&Horizontal"), m_propertiesGrp);
-  m_orientHorizRBtn->setChecked(true);
-  m_orientVertRBtn = new QRadioButton(i18n("&Vertical"), m_propertiesGrp);
-  QButtonGroup* orientBGrp = new QButtonGroup(m_propertiesGrp);
-  orientBGrp->hide();
-  orientBGrp->insert(m_orientHorizRBtn);
-  orientBGrp->insert(m_orientVertRBtn);
-  QLabel* posLbl = new QLabel(i18n("&Position:"), m_propertiesGrp);
-  KoUnit::Unit unit = view->doc()->unit();
-  m_posUSpin = new KoUnitDoubleSpinBox(m_propertiesGrp, 0.0, 0.0, 0.0, unit);
-  posLbl->setBuddy(m_posUSpin);
-
-  QGridLayout* pgl = new QGridLayout(m_propertiesGrp->layout());
-  pgl->setSpacing(KDialog::spacingHint());
-  pgl->setMargin(KDialog::marginHint());
-  pgl->addMultiCellWidget(m_orientHorizRBtn, 0, 0, 0, 1);
-  pgl->addMultiCellWidget(m_orientVertRBtn, 1, 1, 0, 1);
-  pgl->addWidget(posLbl, 2, 0);
-  pgl->addWidget(m_posUSpin, 2, 1);
-
-  QGridLayout* mgl = new QGridLayout(managerTab);
-  mgl->setSpacing(KDialog::spacingHint());
-  mgl->setMargin(KDialog::marginHint());
-  mgl->addMultiCellWidget(m_guideList, 0, 1, 0, 1);
-  mgl->addWidget(newBtn, 2, 0);
-  mgl->addWidget(delBtn, 2, 1);
-  mgl->addWidget(m_propertiesGrp, 0, 2);
-  mgl->addItem(new QSpacerItem(0, 0), 1, 2);
-
-  // Look&Feel
-  m_guidesChBox = new QCheckBox(i18n("&Show guides"), lookTab);
-  m_guidesChBox->setChecked(view->isShowGuides());
-  m_snapGuideChBox = new QCheckBox(i18n("S&nap to guides"), lookTab);
-  m_snapGuideChBox->setChecked(view->isSnapGuides());
-  QLabel* guideColorLbl = new QLabel(i18n("&Guide color:"), lookTab);
-  m_guideColorBtn = new KColorButton(lookTab);
-  guideColorLbl->setBuddy(m_guideColorBtn);
-  QLabel* guideSelColorLbl = new QLabel(i18n("S&elected guide color:"), lookTab);
-  m_guideSelColorBtn = new KColorButton(lookTab);
-  guideSelColorLbl->setBuddy(m_guideSelColorBtn);
-
-  QGridLayout* lgl = new QGridLayout(lookTab);
-  lgl->setSpacing(KDialog::spacingHint());
-  lgl->setMargin(KDialog::marginHint());
-  lgl->addMultiCellWidget(m_guidesChBox, 0, 0, 0, 1);
-  lgl->addMultiCellWidget(m_snapGuideChBox, 1, 1, 0, 1);
-  lgl->addWidget(guideColorLbl, 2, 0);
-  lgl->addWidget(m_guideColorBtn, 2, 1);
-  lgl->addWidget(guideSelColorLbl, 3, 0);
-  lgl->addWidget(m_guideSelColorBtn, 3, 1);
-  lgl->addMultiCell(new QSpacerItem(0, 0), 4, 4, 0, 1);
-
-  tabs->addTab(managerTab, i18n("&Manager"));
-  tabs->addTab(lookTab, i18n("&Look && Feel"));
-
-  QGridLayout* gl = new QGridLayout(page);
-  gl->setSpacing(KDialog::spacingHint());
-  gl->addWidget(tabs, 0, 0);
-
-  connect(m_guideList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(
-    guideSelectionChanged(QListViewItem*)));
-  connect(m_posUSpin, SIGNAL(valueChanged(double)), SLOT(changePos(double)));
-  connect(m_orientHorizRBtn, SIGNAL(toggled(bool)), SLOT(guideHoriz(bool)));
-  connect(newBtn, SIGNAL(clicked()), SLOT(addGuide()));
-  connect(delBtn, SIGNAL(clicked()), SLOT(delGuide()));
-
-  fillGuideList();
-}
-
 void KivioOptionsDialog::applyPage()
 {
   KivioView* view = static_cast<KivioView*>(parent());
@@ -330,28 +233,6 @@ void KivioOptionsDialog::applyGrid()
   view->doc()->updateView(0);
 }
 
-void KivioOptionsDialog::applyGuides()
-{
-  KivioView* view = static_cast<KivioView*>(parent());
-  view->toggleShowGuides(m_guidesChBox->isChecked());
-  view->toggleSnapGuides(m_snapGuideChBox->isChecked());
-
-  view->canvasWidget()->eraseGuides();
-  KivioGuideLines* gl = view->activePage()->guideLines();
-  gl->selectAll();
-  gl->removeSelected();
-  QListViewItemIterator it(m_guideList);
-
-  while (it.current()) {
-    KivioGuideLineData* data = static_cast<GuidesListViewItem*>(it.current())->
-      guideData();
-    gl->add(data->position(), data->orientation());
-    ++it;
-  }
-
-  view->canvasWidget()->paintGuides();
-}
-
 void KivioOptionsDialog::defaultPage()
 {
   m_layout = Kivio::Config::defaultPageLayout();
@@ -372,13 +253,6 @@ void KivioOptionsDialog::defaultGrid()
   m_gridChBox->setChecked(Kivio::Config::showGrid());
   m_snapChBox->setChecked(Kivio::Config::snapGrid());
   m_gridColorBtn->setColor(Kivio::Config::gridColor());
-}
-
-void KivioOptionsDialog::defaultGuides()
-{
-  m_guidesChBox->setChecked(true);
-  m_snapGuideChBox->setChecked(true);
-  m_guideList->clear();
 }
 
 void KivioOptionsDialog::setLayoutText(const KoPageLayout& l)
@@ -411,14 +285,6 @@ void KivioOptionsDialog::unitChanged(int u)
   m_snapVertUSpin->setUnit(unit);
   m_spaceHorizUSpin->setUnit(unit);
   m_spaceVertUSpin->setUnit(unit);
-  m_posUSpin->setUnit(unit);
-  QListViewItemIterator it(m_guideList);
-
-  while (it.current()) {
-    GuidesListViewItem* item = static_cast<GuidesListViewItem*>(it.current());
-    ++it;
-    item->setUnit(unit);
-  }
 }
 
 void KivioOptionsDialog::slotOk()
@@ -431,7 +297,6 @@ void KivioOptionsDialog::slotApply()
 {
   applyPage();
   applyGrid();
-  applyGuides();
 }
 
 void KivioOptionsDialog::slotDefault()
@@ -439,7 +304,6 @@ void KivioOptionsDialog::slotDefault()
   bool defaults = Kivio::Config::self()->useDefaults(true);
   defaultPage();
   defaultGrid();
-  defaultGuides();
   Kivio::Config::self()->useDefaults(defaults);
 }
 
@@ -453,108 +317,6 @@ void KivioOptionsDialog::setMaxVertSnap(double v)
 {
   KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
   m_snapVertUSpin->setMaxValue(KoUnit::fromUserValue(v, unit));
-}
-
-void KivioOptionsDialog::fillGuideList()
-{
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  KivioGuidesList list = static_cast<KivioView*>(parent())->activePage()->
-    guideLines()->guides();
-  list.sort();
-  m_guideList->clear();
-
-  for(KivioGuideLineData* d = list.first(); d; d = list.next()) {
-    (void) new GuidesListViewItem(m_guideList, new KivioGuideLineData(*d), unit);
-  }
-}
-
-void KivioOptionsDialog::guideSelectionChanged(QListViewItem* li)
-{
-  if(!li) {
-    m_propertiesGrp->setEnabled(false);
-    m_orientHorizRBtn->setChecked(true);
-    m_orientVertRBtn->setChecked(false);
-    m_posUSpin->setValue(0.0);
-    return;
-  }
-
-  m_propertiesGrp->setEnabled(true);
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  KivioGuideLineData* data = static_cast<GuidesListViewItem*>(li)->guideData();
-
-  m_orientHorizRBtn->setChecked(data->orientation() == Qt::Horizontal);
-  m_orientVertRBtn->setChecked(data->orientation() != Qt::Horizontal);
-
-  double max = KoUnit::toUserValue(m_layout.ptWidth, unit);
-
-  if(data->orientation() == Qt::Horizontal) {
-    max = KoUnit::toUserValue(m_layout.ptHeight, unit);
-  }
-
-  m_posUSpin->setMaxValue(max);
-  m_posUSpin->changeValue(KoUnit::toUserValue(data->position(), unit));
-}
-
-void KivioOptionsDialog::changePos(double p)
-{
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  QListViewItemIterator it(m_guideList);
-
-  while (it.current()) {
-    GuidesListViewItem* li = static_cast<GuidesListViewItem*>(it.current());
-
-    if(li->isSelected()) {
-      li->setPosition(p, unit);
-    }
-
-    ++it;
-  }
-}
-
-void KivioOptionsDialog::guideHoriz(bool h)
-{
-  Qt::Orientation o;
-
-  if(h) {
-    o = Qt::Horizontal;
-  } else {
-    o = Qt::Vertical;
-  }
-
-  QListViewItemIterator it(m_guideList);
-
-  while (it.current()) {
-    GuidesListViewItem* li = static_cast<GuidesListViewItem*>(it.current());
-
-    if(li->isSelected()) {
-      li->setOrientation(o);
-    }
-
-    ++it;
-  }
-}
-
-void KivioOptionsDialog::addGuide()
-{
-  KoUnit::Unit unit = static_cast<KoUnit::Unit>(m_unitCombo->currentItem());
-  GuidesListViewItem* it = new GuidesListViewItem(m_guideList, new KivioGuideLineData(Qt::Horizontal), unit);
-  m_guideList->clearSelection();
-  m_guideList->setSelected(it, true);
-}
-
-void KivioOptionsDialog::delGuide()
-{
-  QListViewItemIterator it(m_guideList);
-
-  while (it.current()) {
-    QListViewItem *item = it.current();
-    ++it;
-
-    if (item->isSelected()) {
-      delete item;
-      item = 0;
-    }
-  }
 }
 
 void KivioOptionsDialog::setFontText(const QFont& f)

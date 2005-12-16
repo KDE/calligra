@@ -17,7 +17,6 @@
  * Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
  */
 #include "kivio_canvas.h"
-#include "kivio_guidelines.h"
 #include "kivio_page.h"
 #include "kivio_map.h"
 #include "kivio_view.h"
@@ -60,7 +59,8 @@ KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, QScrollB
   m_pView(view),
   m_pDoc(doc),
   m_pVertScrollBar(vs),
-  m_pHorzScrollBar(hs)
+  m_pHorzScrollBar(hs),
+  m_guides(view, view->zoomHandler())
 {
   setBackgroundMode(NoBackground);
   setAcceptDrops(true);
@@ -69,8 +69,6 @@ KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, QScrollB
   setFocus();
 
   delegateThisEvent = true;
-  storedCursor = 0;
-  pressGuideline = 0;
 
   m_pVertScrollBar->setLineStep(1);
   m_pHorzScrollBar->setLineStep(1);
@@ -98,17 +96,12 @@ KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, QScrollB
 
   m_borderTimer = new QTimer(this);
   connect(m_borderTimer,SIGNAL(timeout()),SLOT(borderTimerTimeout()));
-
-  m_guideLinesTimer = new QTimer(this);
-  connect(m_guideLinesTimer,SIGNAL(timeout()),SLOT(guideLinesTimerTimeout()));
 }
 
 KivioCanvas::~KivioCanvas()
 {
   delete m_buffer;
   delete m_borderTimer;
-  delete m_guideLinesTimer;
-  delete storedCursor;
   delete unclippedPainter;
 }
 
@@ -129,8 +122,6 @@ KivioPage* KivioCanvas::activePage()
 
 void KivioCanvas::scrollH( int value )
 {
-  eraseGuides();
-
   // Relative movement
   int dx = m_iXOffset - value;
   // New absolute position
@@ -144,8 +135,6 @@ void KivioCanvas::scrollH( int value )
 
 void KivioCanvas::scrollV( int value )
 {
-  eraseGuides();
-
   // Relative movement
   int dy = m_iYOffset - value;
   // New absolute position
@@ -177,7 +166,6 @@ void KivioCanvas::scrollDy( int dy )
 
 void KivioCanvas::resizeEvent( QResizeEvent* )
 {
-  KivioGuideLines::resize(size(),m_pDoc);
   m_buffer->resize(size());
   updateScrollBars();
 
@@ -263,7 +251,6 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
     return;
 
   KivioPage* page = activePage();
-  eraseGuides();
 
   QPainter painter;
   painter.begin(m_buffer);
@@ -291,11 +278,9 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   painter.fillRect(fillRect, white);
 
   // Draw Grid
-  if (m_pDoc->grid().isShow) {
-    KoPoint topLeft = mapFromScreen(paintRect.topLeft());
-    KoPoint bottomRight = mapFromScreen(paintRect.bottomRight());
-    bottomRight.setX(QMIN(bottomRight.x(), pl.ptWidth));
-    bottomRight.setY(QMIN(bottomRight.y(), pl.ptHeight));
+  if(m_pDoc->grid().isShow) {
+    KoPoint topLeft(0, 0);
+    KoPoint bottomRight(pl.ptWidth, pl.ptHeight);
     QPoint zoomedTL = m_pView->zoomHandler()->zoomPoint(topLeft);
     QPoint zoomedBR = m_pView->zoomHandler()->zoomPoint(bottomRight);
 
@@ -306,7 +291,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
     double x = qRound(topLeft.x() / freq.width()) * freq.width();
     int zoomed = 0;
 
-    while (x <= bottomRight.x()) {
+    while(x <= bottomRight.x()) {
       zoomed = m_pView->zoomHandler()->zoomItX(x);
       painter.drawLine(zoomed, zoomedTL.y(), zoomed, zoomedBR.y());
       x += freq.width();
@@ -314,14 +299,14 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
     double y = qRound(topLeft.y() / freq.height()) * freq.height();
 
-    while (y <= bottomRight.y()) {
+    while(y <= bottomRight.y()) {
       zoomed = m_pView->zoomHandler()->zoomItY(y);
       painter.drawLine(zoomedTL.x(), zoomed, zoomedBR.x(), zoomed);
       y += freq.height();
     }
   }
 
-  if (m_pView->isShowPageMargins()) {
+  if(m_pView->isShowPageMargins()) {
     int ml = m_pView->zoomHandler()->zoomItX(pl.ptLeft);
     int mt = m_pView->zoomHandler()->zoomItY(pl.ptTop);
     int mr = m_pView->zoomHandler()->zoomItX(pl.ptRight);
@@ -346,7 +331,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   m_pDoc->paintContent(kpainter, paintRect, false, page, QPoint(0, 0), m_pView->zoomHandler(), true);
   kpainter.stop();
 
-  paintGuides(false);
+  m_guides.paintGuides(painter);
   painter.end();
 
   bitBlt(this, paintRect.left(), paintRect.top(), m_buffer,
@@ -411,46 +396,16 @@ void KivioCanvas::mousePressEvent(QMouseEvent* e)
 {
     if(!m_pDoc->isReadWrite())
         return;
+
     if(m_pasteMoving) {
       endPasteMoving();
       return;
     }
 
-    if(m_pView->isShowGuides())
-    {
-        lastPoint = e->pos();
-        KoPoint p = mapFromScreen(e->pos());
-        KivioGuideLines* gl = activePage()->guideLines();
-
-        bool unselectAllGuideLines = true;
-        pressGuideline = 0;
-
-        if ((e->state() & ~ShiftButton) == NoButton) {
-            KivioGuideLineData* gd = gl->find(p.x(),p.y(), m_pView->zoomHandler()->unzoomItY(2));
-            if (gd) {
-                pressGuideline = gd;
-                if ((e->button() == RightButton) || ((e->button() & ShiftButton) == ShiftButton)) {
-                    if (gd->isSelected())
-                        gl->unselect(gd);
-                    else
-                        gl->select(gd);
-                } else {
-                    if (!gd->isSelected()) {
-                        gl->unselectAll();
-                        gl->select(gd);
-                    }
-                }
-                unselectAllGuideLines = false;
-                delegateThisEvent = false;
-                updateGuides();
-                m_guideLinesTimer->start(500,true);
-            }
-        }
-
-        if (unselectAllGuideLines && gl->hasSelected()) {
-            gl->unselectAll();
-            updateGuides();
-        }
+    if(m_pView->isShowGuides()) {
+      if(m_guides.mousePressEvent(e)) {
+        return;
+      }
     }
 }
 
@@ -459,29 +414,8 @@ void KivioCanvas::mouseReleaseEvent(QMouseEvent* e)
   if(!m_pDoc->isReadWrite())
     return;
 
-  if (pressGuideline) {
-    m_guideLinesTimer->stop();
-    KoPoint p = mapFromScreen(e->pos());
-    bool insideCanvas = geometry().contains(mapFromGlobal(e->globalPos()));
-    KivioGuideLines* gl = activePage()->guideLines();
-
-    if(!insideCanvas) {
-      eraseGuides();
-      gl->remove(pressGuideline);
-      paintGuides();
-      delegateThisEvent = false;
-      pressGuideline = 0;
-      return;
-    }
-
-    KivioGuideLineData* gd = gl->find(p.x(),p.y(),m_pView->zoomHandler()->unzoomItY(2));
-    if (gd) {
-      setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
-    } else {
-      updateGuidesCursor();
-    }
-    delegateThisEvent = false;
-    pressGuideline = 0;
+  if(view()->isShowGuides() && m_guides.mouseReleaseEvent(e)) {
+    return;
   }
 }
 
@@ -495,39 +429,7 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
   } else {
     if(m_pView->isShowGuides())
     {
-      m_pView->setMousePos(e->pos().x(),e->pos().y());
-
-      KivioGuideLines* gl = activePage()->guideLines();
-
-      if ((e->state() & LeftButton == LeftButton) && gl->hasSelected()) {
-        if (m_guideLinesTimer->isActive()) {
-          m_guideLinesTimer->stop();
-          guideLinesTimerTimeout();
-        }
-        delegateThisEvent = false;
-        eraseGuides();
-        QPoint p = e->pos();
-        p -= lastPoint;
-        if (p.x() != 0)
-          gl->moveSelectedByX(m_pView->zoomHandler()->unzoomItX(p.x()));
-        if (p.y() != 0)
-          gl->moveSelectedByY(m_pView->zoomHandler()->unzoomItY(p.y()));
-        m_pDoc->setModified( true );
-        paintGuides();
-      } else {
-        if ((e->state() & ~ShiftButton) == NoButton) {
-          KoPoint p = mapFromScreen(e->pos());
-          KivioGuideLineData* gd = gl->find(p.x(), p.y(), m_pView->zoomHandler()->unzoomItY(2));
-          if (gd) {
-            delegateThisEvent = false;
-            if (!storedCursor)
-              storedCursor = new QCursor(cursor());
-            setCursor(gd->orientation()==Qt::Vertical ? sizeHorCursor:sizeVerCursor);
-          } else {
-            updateGuidesCursor();
-          }
-        }
-      }
+      m_guides.mouseMoveEvent(e);
     }
   }
 
@@ -996,17 +898,14 @@ void KivioCanvas::drawStencilXOR( KivioStencil *pStencil )
     unclippedSpawnerPainter->painter()->restore();
 }
 
-void KivioCanvas::keyReleaseEvent( QKeyEvent *e )
+void KivioCanvas::keyPressEvent( QKeyEvent *e )
 {
-    switch( e->key() )
-    {
-        case Key_Escape: {
-            m_pView->pluginManager()->activateDefaultTool();
-        }break;
-    }
+  if(view()->isShowGuides() && m_guides.keyPressEvent(e)) {
+    return;
+  }
 }
 
-KoPoint KivioCanvas::snapToGridAndGuides(KoPoint point)
+KoPoint KivioCanvas::snapToGridAndGuides(const KoPoint& point)
 {
   KoPoint p = point;
 
@@ -1018,7 +917,7 @@ KoPoint KivioCanvas::snapToGridAndGuides(KoPoint point)
   return p;
 }
 
-KoPoint KivioCanvas::snapToGrid(KoPoint point)
+KoPoint KivioCanvas::snapToGrid(const KoPoint& point)
 {
   if (!m_pDoc->grid().isSnap)
     return point;
@@ -1045,7 +944,7 @@ KoPoint KivioCanvas::snapToGrid(KoPoint point)
   return p;
 }
 
-KoPoint KivioCanvas::snapToGuides(KoPoint point, bool &snappedX, bool &snappedY)
+KoPoint KivioCanvas::snapToGuides(const KoPoint& point, bool &snappedX, bool &snappedY)
 {
   snappedX = false;
   snappedY = false;
@@ -1053,166 +952,24 @@ KoPoint KivioCanvas::snapToGuides(KoPoint point, bool &snappedX, bool &snappedY)
 
   if (m_pView->isSnapGuides())
   {
-    double four = m_pView->zoomHandler()->unzoomItY(4);
-    KivioGuideLines *pGuides = activePage()->guideLines();
-    KivioGuideLineData *pData = pGuides->findHorizontal( point.y(), four );
+    KoGuides::SnapStatus status = KoGuides::SNAP_NONE;
+    KoPoint diff;
+    m_guides.snapToGuideLines(p, 4, status, diff);
+    p += diff;
 
-    if(pData)
-    {
+    if(status & KoGuides::SNAP_HORIZ) {
+      kdDebug() << "TESTING X" << endl;
       snappedY = true;
-      p.ry() = pData->position();
     }
-
-    pData = pGuides->findVertical( point.x(), four );
-
-    if(pData)
-    {
+    if(status & KoGuides::SNAP_VERT) {
+      kdDebug() << "TESTING Y" << endl;
       snappedX = true;
-      p.rx() = pData->position();
     }
+
+    m_guides.repaintSnapping(p, status);
   }
 
   return p;
-}
-
-double KivioCanvas::snapToGridX(double z)
-{
-  KoPoint p(z, 0);
-  return snapToGrid(p).x();
-}
-
-double KivioCanvas::snapToGridY(double z)
-{
-  KoPoint p(0, z);
-  return snapToGrid(p).y();
-}
-
-void KivioCanvas::updateGuides()
-{
-  eraseGuides();
-  paintGuides();
-}
-
-void KivioCanvas::guideLinesTimerTimeout()
-{
-  if (!storedCursor) {
-    storedCursor = new QCursor(cursor());
-  }
-
-  setCursor(sizeAllCursor);
-}
-
-void KivioCanvas::updateGuidesCursor()
-{
-  if (storedCursor) {
-    setCursor(*storedCursor);
-    delete storedCursor;
-    storedCursor = 0;
-  }
-}
-
-bool KivioCanvas::eventFilter(QObject* o, QEvent* e)
-{
-  if ((o == view()->vertRuler() || o == view()->horzRuler()) && (e->type() == QEvent::MouseMove || e->type() ==
-    QEvent::MouseButtonRelease) && m_pView->isShowGuides())
-  {
-    QMouseEvent* me = (QMouseEvent*)e;
-    QPoint p = mapFromGlobal(me->globalPos());
-    KivioGuideLines* gl = activePage()->guideLines();
-
-    if (e->type() == QEvent::MouseMove) {
-      bool f = geometry().contains(p);
-      if (!pressGuideline && f && (me->state() == QMouseEvent::LeftButton)) {
-        enterEvent(0);
-
-        eraseGuides();
-        gl->unselectAll();
-        KivioGuideLineData* gd;
-        KoPoint tp = mapFromScreen(p);
-
-        if (o == view()->vertRuler()) {
-          gd = gl->add(tp.x(),Qt::Vertical);
-        } else {
-          gd = gl->add(tp.y(),Qt::Horizontal);
-        }
-
-        pressGuideline = gd;
-        gl->select(gd);
-        paintGuides();
-
-        updateGuidesCursor();
-        QWidget* w = (QWidget*)o;
-        storedCursor = new QCursor(w->cursor());
-        w->setCursor(sizeAllCursor);
-
-        lastPoint = p;
-      } else if (pressGuideline && !f) {
-        leaveEvent(0);
-
-        eraseGuides();
-        gl->remove(pressGuideline);
-        paintGuides();
-
-        if (storedCursor) {
-          QWidget* w = (QWidget*)o;
-          w->setCursor(*storedCursor);
-          delete storedCursor;
-          storedCursor = 0;
-        }
-
-        pressGuideline = 0;
-      } else if (pressGuideline && f) {
-        QMouseEvent* m = new QMouseEvent(QEvent::MouseMove, p, me->globalPos(), me->button(), me->state());
-        mouseMoveEvent(m);
-        delete m;
-        delegateThisEvent = true;
-      }
-    }
-
-    if (e->type() == QEvent::MouseButtonRelease && pressGuideline) {
-      eraseGuides();
-      gl->unselect(pressGuideline);
-      paintGuides();
-
-      pressGuideline = 0;
-      if (storedCursor) {
-        QWidget* w = (QWidget*)o;
-        w->setCursor(*storedCursor);
-        delete storedCursor;
-        storedCursor = 0;
-      }
-      enterEvent(0);
-      QMouseEvent* m = new QMouseEvent(QEvent::MouseMove, p, me->globalPos(), NoButton, NoButton);
-      mouseMoveEvent(m);
-      delete m;
-      delegateThisEvent = true;
-    }
-
-    if(o == view()->vertRuler()) {
-      view()->vertRuler()->update();
-    } else {
-      view()->horzRuler()->update();
-    }
-  }
-
-  return QWidget::eventFilter(o, e);
-}
-
-void KivioCanvas::eraseGuides()
-{
-  KivioGuideLines* gl = activePage()->guideLines();
-  gl->erase(m_buffer,this);
-}
-
-void KivioCanvas::paintGuides(bool show)
-{
-  if (!m_pView->isShowGuides())
-    return;
-
-  KivioGuideLines* gl = activePage()->guideLines();
-  gl->paint(m_buffer,this);
-  if (show)
-    bitBlt(this,0,0,m_buffer);
 }
 
 void KivioCanvas::setViewCenterPoint(const KoPoint &p)

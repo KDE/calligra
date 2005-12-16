@@ -32,7 +32,6 @@ class QDomElement;
 
 class KivioLayer;
 class KoPoint;
-class KivioGuideLines;
 class DCOPObject;
 
 #include <koDocument.h>
@@ -147,7 +146,6 @@ class KIVIO_EXPORT KivioPage : public QObject
     void insertLayer( int, KivioLayer * );
     KivioLayer *layerAt( int );
     void takeLayer( KivioLayer *pLayer );
-    KivioGuideLines* guideLines()const{ return gLines; }
 
     /*
     * Stencil routines
@@ -160,7 +158,10 @@ class KIVIO_EXPORT KivioPage : public QObject
     KoPoint snapToTarget( const KoPoint& p, double thresh, bool& hit );
 
     void setHidePage(bool _hide);
-    
+
+    QValueList<double> horizontalGuideLines() const { return m_hGuideLines; }
+    QValueList<double> verticalGuideLines() const { return m_vGuideLines; }
+
   public slots:
     void deleteSelectedStencils();
     void groupSelectedStencils();
@@ -174,6 +175,8 @@ class KIVIO_EXPORT KivioPage : public QObject
     void paste(KivioView* view);
     
     void setPaintSelected(bool paint = true);
+
+    void setGuideLines(const QValueList<double> hGuideLines, const QValueList<double> vGuideLines);
 
   signals:
     void sig_updateView( KivioPage *_page );
@@ -190,6 +193,9 @@ class KIVIO_EXPORT KivioPage : public QObject
 
     QDomElement saveLayout( QDomDocument & );
     bool loadLayout( const QDomElement & );
+
+    void saveGuideLines(QDomElement& element);
+    void loadGuideLines(const QDomElement& element);
 
     QString m_strName;
 
@@ -208,8 +214,10 @@ class KIVIO_EXPORT KivioPage : public QObject
 
     KoPageLayout m_pPageLayout;
 
-    KivioGuideLines* gLines;
     DCOPObject* m_dcop;
+
+    QValueList<double> m_hGuideLines;
+    QValueList<double> m_vGuideLines;
 };
 
 #endif

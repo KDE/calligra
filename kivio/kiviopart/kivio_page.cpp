@@ -59,7 +59,6 @@
 #include "kivio_map.h"
 #include "kivio_doc.h"
 #include "kivio_canvas.h"
-#include "kivio_guidelines.h"
 #include "kivio_view.h"
 #include "kivio_config.h"
 
@@ -112,7 +111,6 @@ KivioPage::KivioPage( KivioMap *_map, const QString &pageName, const char *_name
   }
 
   m_pPageLayout = Kivio::Config::defaultPageLayout();
-  gLines = new KivioGuideLines(this);
 }
 
 DCOPObject* KivioPage::dcopObject()
@@ -126,7 +124,6 @@ DCOPObject* KivioPage::dcopObject()
 KivioPage::~KivioPage()
 {
   kdDebug(43000)<<" KivioPage::~KivioPage()************ :"<<this<<endl;
-  delete gLines;
   s_mapPages->remove(m_id);
   delete m_dcop;
 }
@@ -161,7 +158,7 @@ QDomElement KivioPage::save( QDomDocument& doc )
     // Save guides
     QDomElement guidesElement = doc.createElement("GuidesLayout");
     page.appendChild(guidesElement);
-    gLines->save(guidesElement);
+    saveGuideLines(guidesElement);
 
     // Iterate through all layers saving them as child elements
     KivioLayer *pLayer = m_lstLayers.first();
@@ -280,7 +277,7 @@ bool KivioPage::loadXML( const QDomElement& pageE )
 	  loadLayout( node.toElement() );
        }
        else if ( node.nodeName() == "GuidesLayout" ) {
-	  gLines->load(node.toElement());
+	  loadGuideLines(node.toElement());
        }
        else
        {
@@ -1661,6 +1658,54 @@ bool KivioPage::checkForTextBoxesInSelection()
   }
 
   return false;
+}
+
+void KivioPage::setGuideLines(const QValueList<double> hGuideLines, const QValueList<double> vGuideLines)
+{
+  m_hGuideLines = hGuideLines;
+  m_vGuideLines = vGuideLines;
+}
+
+void KivioPage::saveGuideLines(QDomElement& element)
+{
+  QValueList<double>::iterator it;
+  QValueList<double>::iterator itEnd = m_hGuideLines.end();
+
+  for(it = m_hGuideLines.begin(); it != itEnd; ++it) {
+    QDomElement e = element.ownerDocument().createElement("Guideline");
+    element.appendChild(e);
+    XmlWriteDouble(e, "pos", *it);
+    XmlWriteInt(e, "orient", (int)Qt::Horizontal);
+  }
+
+  itEnd = m_vGuideLines.end();
+
+  for(it = m_vGuideLines.begin(); it != itEnd; ++it) {
+    QDomElement e = element.ownerDocument().createElement("Guideline");
+    element.appendChild(e);
+    XmlWriteDouble(e, "pos", *it);
+    XmlWriteInt(e, "orient", (int)Qt::Vertical);
+  }
+}
+
+void KivioPage::loadGuideLines(const QDomElement& element)
+{
+  m_hGuideLines.clear();
+  m_vGuideLines.clear();
+
+  QDomElement e = element.firstChild().toElement();
+
+  for( ; !e.isNull(); e = e.nextSibling().toElement() )
+  {
+    double pos = XmlReadDouble(e, "pos", 0.0);
+    Qt::Orientation orient = (Qt::Orientation)XmlReadInt(e, "orient", 0);
+
+    if(orient == Qt::Horizontal) {
+      m_hGuideLines.append(pos);
+    } else {
+      m_vGuideLines.append(pos);
+    }
+  }
 }
 
 #include "kivio_page.moc"

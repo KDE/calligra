@@ -41,6 +41,7 @@
 #include <kozoomhandler.h>
 #include <KoPoint.h>
 #include <klocale.h>
+#include <koGuides.h>
 #include "kivio_command.h"
 
 #include <qwmatrix.h>
@@ -51,7 +52,9 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
 {
   view()->pluginManager()->setDefaultTool(this);
 
-  m_selectAction = new KRadioAction(i18n("&Select"), "select", Key_Space, actionCollection(), "select");
+  KShortcut selectShortCut(Key_Space);
+  selectShortCut.setSeq(1, QKeySequence(Key_Escape));
+  m_selectAction = new KRadioAction(i18n("&Select"), "select", selectShortCut, actionCollection(), "select");
   connect(m_selectAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
   m_textEditAction = new KAction(i18n("&Edit Text..."), "text", Key_F2, this, SLOT(editStencilText()), actionCollection(), "editText");
@@ -964,6 +967,7 @@ void SelectTool::mouseRelease(const QPoint &pos)
 
   m_mode = stmNone;
 
+  view()->canvasWidget()->guideLines().repaintAfterSnapping();
   view()->doc()->updateView(view()->activePage());
 }
 
@@ -1219,6 +1223,7 @@ void SelectTool::keyPress(QKeyEvent* e)
   }
   
   endDragging(QPoint());
+  canvas->guideLines().repaintAfterSnapping();
   canvas->setFocus();
 }
 

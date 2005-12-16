@@ -37,20 +37,20 @@ class KivioGuideLineData;
 class QGroupBox;
 class QFont;
 
-class GuidesListViewItem : public KListViewItem
-{
-  public:
-    GuidesListViewItem(QListView* parent, KivioGuideLineData *gd, KoUnit::Unit u);
-    ~GuidesListViewItem();
-
-    void setUnit(KoUnit::Unit u);
-    void setPosition(double p, KoUnit::Unit u);
-    void setOrientation(Qt::Orientation o);
-    KivioGuideLineData* guideData() { return m_data; }
-
-  private:
-    KivioGuideLineData* m_data;
-};
+// class GuidesListViewItem : public KListViewItem
+// {
+//   public:
+//     GuidesListViewItem(QListView* parent, KivioGuideLineData *gd, KoUnit::Unit u);
+//     ~GuidesListViewItem();
+// 
+//     void setUnit(KoUnit::Unit u);
+//     void setPosition(double p, KoUnit::Unit u);
+//     void setOrientation(Qt::Orientation o);
+//     KivioGuideLineData* guideData() { return m_data; }
+// 
+//   private:
+//     KivioGuideLineData* m_data;
+// };
 
 /***********************************************************************/
 
@@ -63,19 +63,15 @@ class KivioOptionsDialog : public KDialogBase
   protected:
     void initPage();
     void initGrid();
-    void initGuides();
 
     void applyPage();
     void applyGrid();
-    void applyGuides();
 
     void defaultPage();
     void defaultGrid();
-    void defaultGuides();
 
     void setLayoutText(const KoPageLayout& l);
     void setFontText(const QFont& f);
-    void fillGuideList();
 
   protected slots:
     void pageLayoutDlg();
@@ -86,17 +82,11 @@ class KivioOptionsDialog : public KDialogBase
     void slotDefault();
     void setMaxHorizSnap(double v);
     void setMaxVertSnap(double v);
-    void guideSelectionChanged(QListViewItem*);
-    void changePos(double p);
-    void guideHoriz(bool);
-    void addGuide();
-    void delGuide();
 
   private:
     // Page indecies
     int m_pageIndex;
     int m_gridIndex;
-    int m_guidesIndex;
 
     QComboBox* m_unitCombo;
     QCheckBox* m_marginsChBox;
@@ -112,15 +102,6 @@ class KivioOptionsDialog : public KDialogBase
     QCheckBox* m_gridChBox;
     QCheckBox* m_snapChBox;
     KColorButton* m_gridColorBtn;
-    KListView* m_guideList;
-    QRadioButton* m_orientHorizRBtn;
-    QRadioButton* m_orientVertRBtn;
-    KoUnitDoubleSpinBox* m_posUSpin;
-    QCheckBox* m_snapGuideChBox;
-    QCheckBox* m_guidesChBox;
-    KColorButton* m_guideColorBtn;
-    KColorButton* m_guideSelColorBtn;
-    QGroupBox* m_propertiesGrp;
 };
 
 #endif

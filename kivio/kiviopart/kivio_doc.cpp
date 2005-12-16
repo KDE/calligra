@@ -39,6 +39,7 @@
 #include "kivioglobal.h"
 #include "kivio_config.h"
 #include "polylineconnectorspawner.h"
+#include "kivio_canvas.h"
 
 #include "stencilbarbutton.h"
 
@@ -1106,6 +1107,25 @@ void KivioDoc::loadStencil()
       emit endProgress();
     } else {
       emit initProgress();
+    }
+  }
+}
+
+void KivioDoc::updateGuideLines(KoView* sender)
+{
+  QValueList<double> hGuideLines;
+  QValueList<double> vGuideLines;
+  KivioView* view = static_cast<KivioView*>(sender);
+  view->canvasWidget()->guideLines().getGuideLines(hGuideLines, vGuideLines);
+  view->activePage()->setGuideLines(hGuideLines, vGuideLines);
+
+  QPtrListIterator<KoView> it(views());
+  KivioView* itView = 0;
+
+  for (; it.current(); ++it ) {
+    itView = static_cast<KivioView*>(it.current());
+    if(it.current() != sender && (itView->activePage() == view->activePage())) {
+      itView->canvasWidget()->guideLines().setGuideLines(hGuideLines, vGuideLines);
     }
   }
 }

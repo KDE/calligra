@@ -125,7 +125,6 @@
 #include "kivio_config.h"
 #include "kivioaddstencilsetpanel.h"
 #include "kiviostencilsetinstaller.h"
-#include "kivio_guidelines.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -224,9 +223,17 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect(hRuler, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(rulerChangedUnit(KoUnit::Unit)));
   connect(vRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
   connect(hRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
-  connect( m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)) );
-  vRuler->installEventFilter(m_pCanvas);
-  hRuler->installEventFilter(m_pCanvas);
+  connect(m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)));
+
+  connect(vRuler, SIGNAL(addGuide(const QPoint&, bool, int)),
+          &(m_pCanvas->guideLines()), SLOT(addGuide(const QPoint&, bool, int)));
+  connect(vRuler, SIGNAL(moveGuide(const QPoint&, bool, int)),
+          &(m_pCanvas->guideLines()), SLOT(moveGuide(const QPoint&, bool, int)));
+  connect(hRuler, SIGNAL(addGuide(const QPoint&, bool, int)),
+          &(m_pCanvas->guideLines()), SLOT(addGuide(const QPoint&, bool, int)));
+  connect(hRuler, SIGNAL(moveGuide(const QPoint&, bool, int)),
+          &(m_pCanvas->guideLines()), SLOT(moveGuide(const QPoint&, bool, int)));
+  connect(&(m_pCanvas->guideLines()), SIGNAL(guideLinesChanged(KoView*)), m_pDoc, SLOT(updateGuideLines(KoView*)));
 
   QGridLayout* layout = new QGridLayout(pRightSide);
   layout->addWidget(hRuler, 0, 1);
@@ -656,6 +663,8 @@ void KivioView::setActivePage( KivioPage* page )
   connect(m_pActivePage, SIGNAL(sig_pageLayoutChanged(const KoPageLayout&)),
     SLOT(setRulerPageLayout(const KoPageLayout&)));
 
+  m_pCanvas->guideLines().setGuideLines(m_pActivePage->horizontalGuideLines(),
+    m_pActivePage->verticalGuideLines());
 }
 
 void KivioView::setActiveSpawnerSet( KivioStencilSpawnerSet *set )

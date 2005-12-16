@@ -31,6 +31,7 @@
 #include <koQueryTrader.h>
 #include <KoPoint.h>
 #include <KoRect.h>
+#include <koGuides.h>
 #include <koffice_export.h>
 #include "kivio_intra_stencil_data.h"
 
@@ -79,7 +80,6 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     QSize actualSize();
 
     virtual bool event(QEvent*);
-    virtual bool eventFilter(QObject*, QEvent*);
 
     enum RectType { Insert, Rubber };
     void startRectDraw( const QPoint &p, RectType t );
@@ -94,11 +94,9 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     void drawSelectedStencilsXOR();
     void drawStencilXOR( KivioStencil * );
 
-    KoPoint snapToGrid(KoPoint);
-    KoPoint snapToGuides(KoPoint, bool &, bool &);
-    KoPoint snapToGridAndGuides(KoPoint);
-    double snapToGridX(double);
-    double snapToGridY(double);
+    KoPoint snapToGrid(const KoPoint&);
+    KoPoint snapToGuides(const KoPoint&, bool &, bool &);
+    KoPoint snapToGridAndGuides(const KoPoint&);
 
     KoPoint mapFromScreen( const QPoint& );
     QPoint mapToScreen( KoPoint );
@@ -106,15 +104,14 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     void beginUnclippedSpawnerPainter();
     void endUnclippedSpawnerPainter();
 
-    void eraseGuides();
-    void paintGuides(bool=true);
-
     void setViewCenterPoint(const KoPoint &);
 
     KoRect visibleArea();
     void setVisibleArea(KoRect, int margin = 0);
     void setVisibleAreaByWidth(KoRect, int margin = 0);
     void setVisibleAreaByHeight(KoRect, int margin = 0);
+
+    KoGuides& guideLines() { return m_guides; }
 
   signals:
     void visibleAreaChanged();
@@ -130,8 +127,6 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
 
     void scrollV(int value);
     void scrollH(int value);
-
-    void updateGuides();
 
     void updateScrollBars();
 
@@ -154,21 +149,18 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     virtual void dragLeaveEvent( QDragLeaveEvent * );
     virtual void dropEvent( QDropEvent * );
 
-    virtual void keyReleaseEvent( QKeyEvent * );
+    virtual void keyPressEvent( QKeyEvent * );
 
     void beginUnclippedPainter();
     void endUnclippedPainter();
 
     void paintSelectedXOR();
 
-    void updateGuidesCursor();
-
     void continuePasteMoving(const QPoint &pos);
     void endPasteMoving();
 
   protected slots:
     void borderTimerTimeout();
-    void guideLinesTimerTimeout();
 
   private:
     KivioView* m_pView;
@@ -197,16 +189,15 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     KivioStencil* m_pDragStencil;
 
     QTimer* m_borderTimer;
-    QTimer* m_guideLinesTimer;
 
     bool delegateThisEvent;
-    QCursor* storedCursor;
-    KivioGuideLineData* pressGuideline;
     QPoint lastPoint;
 
     bool m_pasteMoving;
     QPtrList<KoRect> m_lstOldGeometry;
     KoPoint m_origPoint;
+
+    KoGuides m_guides;
 };
 
 #endif

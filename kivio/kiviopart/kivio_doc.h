@@ -156,6 +156,8 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
 
     void setDefaultFont(const QFont& f) { m_font = f; }
 
+    void updateGuideLines(KoView* sender);
+
   protected slots:
     void slotDocumentRestored();
     void slotCommandExecuted();
