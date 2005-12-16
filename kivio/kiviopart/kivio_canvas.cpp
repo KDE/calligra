@@ -912,7 +912,15 @@ KoPoint KivioCanvas::snapToGridAndGuides(const KoPoint& point)
   p = snapToGrid(p);
 
   bool snappedX, snappedY;
-  p = snapToGuides(p, snappedX, snappedY);
+  KoPoint guidePoint = snapToGuides(point, snappedX, snappedY);
+
+  if(snappedX) {
+    p.setX(guidePoint.x());
+  }
+
+  if(snappedY) {
+    p.setY(guidePoint.y());
+  }
 
   return p;
 }

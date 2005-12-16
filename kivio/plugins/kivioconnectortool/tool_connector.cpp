@@ -26,6 +26,7 @@
 #include <KoPoint.h>
 #include <kozoomhandler.h>
 #include <klocale.h>
+#include <koGuides.h>
 
 #include "kivio_view.h"
 #include "kivio_canvas.h"
@@ -283,7 +284,7 @@ void ConnectorTool::continueRubberBanding( QMouseEvent *e )
   KoPoint endPoint = pPage->snapToTarget(canvas->mapFromScreen(e->pos()), 8.0, hit);
 
   if(!hit) {
-    endPoint = canvas->snapToGrid(endPoint);
+    endPoint = canvas->snapToGridAndGuides(endPoint);
   }
 
   m_pDragData->x = endPoint.x();
@@ -313,7 +314,7 @@ void ConnectorTool::mouseRelease( QMouseEvent *e )
         endRubberBanding(e);
         break;
     }
-  
+
     view()->canvasWidget()->setCursor(*m_pConnectorCursor1);
     m_mode = stmNone;
   }
@@ -323,7 +324,8 @@ void ConnectorTool::endRubberBanding(QMouseEvent *)
 {
   connector(view()->canvasWidget()->rect());
   m_pStencil = 0;
-  
+  view()->canvasWidget()->guideLines().repaintAfterSnapping();
+
   if(!m_permanent) {
     view()->pluginManager()->activateDefaultTool();
   }
