@@ -1,1 +1,0 @@
-SUBDIRS = kexidb kexiapp scripts

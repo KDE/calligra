@@ -7,12 +7,8 @@ kexi_la_SOURCES = main.cpp
 kexi_la_LDFLAGS = $(all_libraries) -module $(KDE_PLUGIN) $(VER_INFO)
 kexi_la_LIBADD = ./core/libkexicore.la ./main/libkeximain.la
 
-if compile_kross
-  SCRIPTINGDIR=scripting
-endif
-
 SUBDIRS= 3rdparty kexiutils kexidb core widget formeditor \
-data pics main migration $(SCRIPTINGDIR) plugins . tests
+data pics main migration plugins . tests
 
 #(will be reenabled after main/startup move)
 
