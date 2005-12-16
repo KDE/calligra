@@ -186,6 +186,10 @@ void KFormulaDoc::showStartUpWidget(KoMainWindow* parent, bool alwaysShow)
     parent->setRootDocument( this );
 }
 
+bool KFormulaDoc::showEmbedInitDialog(QWidget* parent)
+{
+  return true;
+}
 
 void KFormulaDoc::paintContent(QPainter& painter, const QRect& rect, bool transparent, double zoomX, double zoomY)
 {

@@ -63,6 +63,7 @@ public:
 
     virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
     virtual void showStartUpWidget(KoMainWindow* parent, bool alwaysShow = false);
+    virtual bool showEmbedInitDialog(QWidget* parent);
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* );
     virtual bool loadXML(QIODevice *, const QDomDocument& doc);
     virtual QDomDocument saveXML();
