@@ -29,6 +29,7 @@
 #include <kross/api/interpreter.h>
 
 #include <qlayout.h>
+#include <qtimer.h>
 #include <qdom.h>
 #include <kdebug.h>
 
@@ -93,13 +94,18 @@ void KexiScriptDesignView::updateProperties()
                    this, SLOT( slotPropertyChanged(KoProperty::Set&, KoProperty::Property&) ));
 
         if(d->properties->contains("language")) {
-            const QValueList<KoProperty::Property*>*  children = d->properties->property("language").children();
+            KoProperty::Property& prop = d->properties->property("language");
+            if(prop.isNull())
+                return;
+
+            prop.setVisible(false);
+            const QValueList<KoProperty::Property*>*  children = prop.children();
             QValueListConstIterator<KoProperty::Property*> itt = children->begin();
             for(; itt != children->end(); ++itt)
                 (*itt)->setVisible(false);
 
-            d->properties->property("language").setValue( interpretername );
-            d->properties->property("language").setVisible(true);
+            prop.setValue( interpretername );
+            prop.setVisible(true);
         }
         else {
             QStringList interpreters = Kross::Api::Manager::scriptManager()->getInterpreters();
@@ -116,15 +122,12 @@ void KexiScriptDesignView::updateProperties()
             d->properties->addProperty(prop);
         }
 
-        connect(d->properties, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ),
-                this, SLOT( slotPropertyChanged(KoProperty::Set&, KoProperty::Property&) ));
-
         Kross::Api::InterpreterInfo::Option::Map options = info->getOptions();
         Kross::Api::InterpreterInfo::Option::Map::Iterator it( options.begin() );
         for(; it != options.end(); ++it) {
             Kross::Api::InterpreterInfo::Option* option = it.data();
 
-if(! d->properties->contains( it.key().latin1() )) {
+//if(! d->properties->contains( it.key().latin1() )) {
             KoProperty::Property* prop = new KoProperty::Property(
                     it.key().latin1(), // id
                     option->value, // value
@@ -133,13 +136,16 @@ if(! d->properties->contains( it.key().latin1() )) {
                     KoProperty::Auto, // type
                     & d->properties->property("language")
             );
-}
+//}
 
         }
+
+        connect(d->properties, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ),
+                this, SLOT( slotPropertyChanged(KoProperty::Set&, KoProperty::Property&) ));
     }
 
-    propertySetReloaded(true);
     //propertySetSwitched();
+    propertySetReloaded(true);
 }
 
 KoProperty::Set* KexiScriptDesignView::propertySet()
@@ -160,7 +166,7 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoPrope
         // names for the support languages...
         d->editor->setHighlightMode( language );
 
-        updateProperties(); // update the properties
+        QTimer::singleShot(150, this, SLOT( updateProperties() )); // update the properties
     }
     else {
         bool ok = d->scriptaction->getScriptContainer()->setOption( property.name(), property.value() );

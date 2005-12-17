@@ -89,14 +89,14 @@ class KexiScriptDesignView : public KexiViewBase
          */
         void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
 
-    private:
-        KexiScriptDesignViewPrivate* d;
-
         /**
          * Update the \a KoProperty::Property::Dict propertymap of the
          * interpreter-dependend options.
          */
         void updateProperties();
+
+    private:
+        KexiScriptDesignViewPrivate* d;
 
         /**
          * Load the data from XML source and fill the internally
