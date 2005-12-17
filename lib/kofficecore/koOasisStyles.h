@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 David Faure <faure@kde.org>
+   Copyright (C) 2004-2005 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -41,11 +41,16 @@ public:
     ~KoOasisStyles();
 
     /// Look into @p doc for styles and remember them
-    void createStyleMap( const QDomDocument& doc );
+    /// @param stylesDotXml true when loading styles.xml, false otherwise
+    void createStyleMap( const QDomDocument& doc, bool stylesDotXml );
 
     /// @return all styles (with tag "style:style", "style:page-layout" or "style:presentation-page-layout")
     /// hashed by name
     const QDict<QDomElement>& styles() const { return m_styles; }
+
+    /// @return all automatic styles with tag "style:style" from styles.xml
+    /// hashed by name
+    const QDict<QDomElement>& stylesAutoStyles() const { return m_stylesAutoStyles; }
 
     /// @return the style:styles that are "user styles", i.e. those from office:styles
     /// styles() is used for lookup. userStyles() is used to load all user styles upfront.
@@ -94,13 +99,13 @@ public:
 
     static QBrush loadOasisFillStyle( const KoStyleStack &styleStack, const QString & fill,  const KoOasisStyles & oasisStyles );
 
-protected:
+private:
     /// Add styles to styles map
-    void insertStyles( const QDomElement& styles );
+    void insertStyles( const QDomElement& styles, bool styleAutoStyles = false );
 
 private:
     void insertOfficeStyles( const QDomElement& styles );
-    void insertStyle( const QDomElement& style );
+    void insertStyle( const QDomElement& style, bool styleAutoStyles );
     void importDataStyle( const QDomElement& parent );
     static bool saveOasisTimeFormat( KoXmlWriter &elementWriter, QString & format, QString & text, bool &antislash );
     static void parseOasisDateKlocale(KoXmlWriter &elementWriter, QString & format, QString & text );
@@ -113,6 +118,7 @@ private:
 
 private:
     QDict<QDomElement>   m_styles;
+    QDict<QDomElement>   m_stylesAutoStyles;
     QDict<QDomElement>   m_defaultStyle;
     QDomElement m_officeStyle;
 

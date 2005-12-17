@@ -1823,9 +1823,9 @@ bool KoDocument::loadOasisFromStore( KoStore* store )
     QDomDocument stylesDoc;
     (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, d->lastErrorMessage );
     // Load styles from style.xml
-    oasisStyles.createStyleMap( stylesDoc );
+    oasisStyles.createStyleMap( stylesDoc, true );
     // Also load styles from content.xml
-    oasisStyles.createStyleMap( contentDoc );
+    oasisStyles.createStyleMap( contentDoc, false );
 
     // TODO post 1.4, pass manifestDoc to the apps so that they don't have to do it themselves
     // (when calling KoDocumentChild::loadOasisDocument)

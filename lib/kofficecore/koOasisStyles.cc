@@ -32,6 +32,7 @@
 KoOasisStyles::KoOasisStyles()
 {
     m_styles.setAutoDelete( true );
+    m_stylesAutoStyles.setAutoDelete( true );
     m_defaultStyle.setAutoDelete( true );
     m_masterPages.setAutoDelete( true );
     m_listStyles.setAutoDelete( true );
@@ -43,7 +44,7 @@ KoOasisStyles::~KoOasisStyles()
 
 }
 
-void KoOasisStyles::createStyleMap( const QDomDocument& doc )
+void KoOasisStyles::createStyleMap( const QDomDocument& doc, bool stylesDotXml )
 {
    const QDomElement docElement  = doc.documentElement();
     // We used to have the office:version check here, but better let the apps do that
@@ -51,15 +52,15 @@ void KoOasisStyles::createStyleMap( const QDomDocument& doc )
 
     if ( !fontStyles.isNull() ) {
         //kdDebug(30003) << "Starting reading in font-decl..." << endl;
-        insertStyles( fontStyles );
+        insertStyles( fontStyles, false );
     }// else
     //   kdDebug(30003) << "No items found" << endl;
 
-    //kdDebug(30003) << "Starting reading in office:automatic-styles" << endl;
+    //kdDebug(30003) << "Starting reading in office:automatic-styles. stylesDotXml=" << stylesDotXml << endl;
 
     QDomElement autoStyles = KoDom::namedItemNS( docElement, KoXmlNS::office, "automatic-styles" );
     if ( !autoStyles.isNull() ) {
-        insertStyles( autoStyles );
+        insertStyles( autoStyles, stylesDotXml );
     }// else
     //    kdDebug(30003) << "No items found" << endl;
 
@@ -140,20 +141,20 @@ void KoOasisStyles::insertOfficeStyles( const QDomElement& styles )
             m_drawStyles.insert( name, ep );
         }
         else
-            insertStyle( e );
+            insertStyle( e, false );
     }
 }
 
 
-void KoOasisStyles::insertStyles( const QDomElement& styles )
+void KoOasisStyles::insertStyles( const QDomElement& styles, bool styleAutoStyles )
 {
     //kdDebug(30003) << "Inserting styles from " << styles.tagName() << endl;
     QDomElement e;
     forEachElement( e, styles )
-        insertStyle( e );
+        insertStyle( e, styleAutoStyles );
 }
 
-void KoOasisStyles::insertStyle( const QDomElement& e )
+void KoOasisStyles::insertStyle( const QDomElement& e, bool styleAutoStyles )
 {
     const QString localName = e.localName();
     const QString ns = e.namespaceURI();
@@ -166,11 +167,15 @@ void KoOasisStyles::insertStyle( const QDomElement& e )
              || localName == "font-decl"
              || localName == "presentation-page-layout" ) )
     {
-        if ( m_styles.find( name ) != 0 )
-        {
-            kdDebug(30003) << "Style: '" << name << "' allready exists" << endl;
+        if ( styleAutoStyles && localName == "style" ) {
+            if ( m_stylesAutoStyles.find( name ) != 0 )
+                kdDebug(30003) << "Auto-style: '" << name << "' already exists" << endl;
+            m_stylesAutoStyles.insert( name, new QDomElement( e ) );
+        } else {
+            if ( m_styles.find( name ) != 0 )
+                kdDebug(30003) << "Style: '" << name << "' already exists" << endl;
+            m_styles.insert( name, new QDomElement( e ) );
         }
-        m_styles.insert( name, new QDomElement( e ) );
         //kdDebug(30003) << "Style: '" << name << "' loaded " << endl;
     } else if ( localName == "default-style" && ns == KoXmlNS::style ) {
         const QString family = e.attributeNS( KoXmlNS::style, "family", QString::null );

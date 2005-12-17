@@ -62,8 +62,38 @@ public:
     /// Return the <meta:generator> of the document, e.g. "KOffice/1.4.0a"
     QString generator() const;
 
-    void fillStyleStack( const QDomElement& object, const char* nsURI, const char* attrName );
-    void addStyles( const QDomElement* style );
+    /**
+     * Convenience method for loading the style of an object
+     * before loading that object.
+     *
+     * Read attribute (nsURI,attrName) from the given dom element,
+     * treat that attribute as a style name, and load that style
+     * including all its parent styles.
+     * @param element the dom element to read the attribute from
+     * @param nsURI the namespace URI of the attribute to read
+     * @param attrName the name of the attribute to read
+     */
+    void fillStyleStack( const QDomElement& element, const char* nsURI, const char* attrName );
+
+    /**
+     * Add @p style to the stack, as well as all its parent styles
+     * and the default style for this style family.
+     *
+     * @param style the dom element containing the style to add to the stack
+     * @param usingStylesAutoStyles if true, the parent styles are looked up
+     *   in the automatic styles from styles.xml, instead of looking up
+     *   in the automatic styles from content.xml as we usually do.
+     *   This is useful for loading headers and footers for instance.
+     *   See setUseStylesAutoStyles(), which makes fillStyleStack() set this bool.
+     *
+     * Usually you would call fillStyleStack() instead.
+     */
+    void addStyles( const QDomElement* style, bool usingStylesAutoStyles = false );
+
+    /// Set to true while loading headers and footers, to remember to use auto styles
+    /// from styles.xml
+    void setUseStylesAutoStyles( bool useStylesAutoStyles ) { m_useStylesAutoStyles = useStylesAutoStyles; }
+    //bool useStylesAutoStyles() const { return m_useStylesAutoStyles; }
 
 private:
     void parseMeta() const;
@@ -76,7 +106,9 @@ private:
 
     mutable QString m_generator;
     mutable bool m_metaXmlParsed;
-    bool m_unused1;
+    bool m_useStylesAutoStyles;
+    bool m_unused1; // padding, can be used later
+    bool m_unused2; // padding, can be used later
 
     QDomDocument m_manifestDoc;
 

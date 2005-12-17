@@ -26,7 +26,7 @@
 KoOasisLoadingContext::KoOasisLoadingContext( KoDocument* doc,
                                               KoOasisStyles& styles, KoStore* store )
     : m_doc( doc ), m_store( store ), m_styles( styles ),
-      m_metaXmlParsed( false )
+      m_metaXmlParsed( false ), m_useStylesAutoStyles( false )
 {
     // Ideally this should be done by KoDocument and passed as argument here...
     KoOasisStore oasisStore( store );
@@ -47,24 +47,41 @@ void KoOasisLoadingContext::fillStyleStack( const QDomElement& object, const cha
     // ### TODO check the above comment, now that things are in kotext...
     if ( object.hasAttributeNS( nsURI, attrName ) ) {
         const QString styleName = object.attributeNS( nsURI, attrName, QString::null );
-        const QDomElement* style = m_styles.styles()[styleName];
+        const QDomElement* style = 0;
+        bool isStyleAutoStyle = false;
+        if ( m_useStylesAutoStyles ) {
+            // When loading something from styles.xml, look into the styles.xml auto styles first
+            style = m_styles.stylesAutoStyles()[styleName];
+            // and fallback to looking at styles(), which includes the user styles from styles.xml
+            if ( style )
+                isStyleAutoStyle = true;
+        }
+        if ( !style )
+            style = m_styles.styles()[styleName];
         if ( style )
-            addStyles( style );
+            addStyles( style, isStyleAutoStyle );
         else
             kdWarning(32500) << "fillStyleStack: no style named " << styleName << " found." << endl;
     }
 }
 
-void KoOasisLoadingContext::addStyles( const QDomElement* style )
+void KoOasisLoadingContext::addStyles( const QDomElement* style, bool usingStylesAutoStyles )
 {
     Q_ASSERT( style );
     if ( !style ) return;
     // this recursive function is necessary as parent styles can have parents themselves
     if ( style->hasAttributeNS( KoXmlNS::style, "parent-style-name" ) ) {
         const QString parentStyleName = style->attributeNS( KoXmlNS::style, "parent-style-name", QString::null );
-        QDomElement* parentStyle = m_styles.styles()[ parentStyleName ];
+        QDomElement* parentStyle = 0;
+        if ( usingStylesAutoStyles ) {
+            // When loading something from styles.xml, look into the styles.xml auto styles first
+            parentStyle = m_styles.stylesAutoStyles()[ parentStyleName ];
+            // and fallback to looking at styles(), which includes the user styles from styles.xml
+        }
+        if ( !parentStyle )
+            parentStyle = m_styles.styles()[ parentStyleName ];
         if ( parentStyle )
-            addStyles( parentStyle );
+            addStyles( parentStyle, usingStylesAutoStyles );
         else
             kdWarning(32500) << "Parent style not found: " << parentStyleName << endl;
     }
