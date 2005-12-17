@@ -63,3 +63,12 @@ Kivio 1.4 -> 1.4.2
 -------------------
 - Fix copy/paste of polyline connector
 - Fix focus problem on paste (BUG: 109194)
+
+Kivio 1.4.x -> 1.5
+-------------------
+- Fix grid painting
+- Port to the new KoGuides which adds auto guide lines
+- Add undo support for Add Connector Target
+- Fix loading of remote documents
+- Port to KoPalette and cleaned up the palettes (toolwindows)
+- Make it possible to rearrange the pages with d'n'd in the tab bar
