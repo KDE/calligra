@@ -10,6 +10,7 @@ if compile_kross_python
   PYTHONSUBDIR = python
 endif
 
+# Also only compile the ruby plugin if ruby is installed.
 if compile_kross_ruby
   RUBYSUBDIR = ruby
 endif

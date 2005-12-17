@@ -1,2 +1,12 @@
-
 TODO for 1.5
+
+
+
+
+Name: Kross
+Location: koffice/lib/kross
+Configure-flag: --enable-scripting
+State: Experimental and disabled by default.
+Usage: koffice/kexi, koffice/krita
+Description: The Kross scripting library provides abstract access to scripting languages to an application.
+Dependencies: Kross provides access to the python and ruby scripting languages by the dynamic loadable plugins koffice/lib/kross/python and koffice/lib/kross/ruby. At runtime Kross detects if they are installed and if that's the case provides access to the scripting language. Kross itself doesn't direct depend on any scripting interpreter. It is recommed to put both Kross interpreter plugins into a separate package and to let the user decide if he likes to have support for e.g. python.
