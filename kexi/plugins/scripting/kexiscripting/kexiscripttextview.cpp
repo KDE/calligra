@@ -82,12 +82,8 @@ void KexiScriptTextView::activateSuccess()
 
 void KexiScriptTextView::activateFailed(const QString& errormessage, const QString& tracedetails)
 {
-    d->browser->clear();
     d->browser->append( QString("<b>%1</b><br>").arg( QStyleSheet::escape(errormessage) ) );
     d->browser->append( QStyleSheet::escape(tracedetails) );
-    if(! hasFocus()) {
-        setFocus();
-    }
 }
 
 #include "kexiscripttextview.moc"
