@@ -33,6 +33,7 @@
 
 VDocument::VDocument()
 	: VObject( 0L ),
+	  m_width(0.), m_height(0.),
 	  m_selectionMode( VDocument::ActiveLayer ),
 	  m_unit( KoUnit::U_MM ),
 	  m_mime( "application/x-karbon" ),
@@ -51,7 +52,7 @@ VDocument::VDocument()
 }
 
 VDocument::VDocument( const VDocument& document )
-	: VObject( document )
+	: VObject( document ), m_width(0), m_height(0)
 {
 	m_selection = new VSelection( this );
 // TODO
@@ -221,8 +222,10 @@ VDocument::save( QDomElement& me ) const
 	me.setAttribute( "version", m_version );
 	me.setAttribute( "editor", m_editor );
 	me.setAttribute( "syntaxVersion", m_syntaxVersion );
-	me.setAttribute( "width", m_width );
-	me.setAttribute( "height", m_height );
+	if( m_width > 0. )
+		me.setAttribute( "width", m_width );
+	if( m_height > 0. )
+		me.setAttribute( "height", m_height );
 	me.setAttribute( "unit", KoUnit::unitName( m_unit ) );
 
 	// save objects:

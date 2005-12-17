@@ -83,8 +83,10 @@ void KarbonAIParserBase::parsingFinished(){
   {
     kdDebug() << "bbox 1 is " << m_bbox << endl;
 
-    m_document->setWidth (m_bbox.width());
-    m_document->setHeight (m_bbox.height());
+    if (m_bbox.width() > 0. )
+      m_document->setWidth (m_bbox.width());
+    if (m_bbox.height() > 0. )
+      m_document->setHeight (m_bbox.height());
 
 /*    QWMatrix matrix;
     matrix.translate (-m_bbox.x(),-m_bbox.y());

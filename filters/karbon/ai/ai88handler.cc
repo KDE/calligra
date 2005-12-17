@@ -17,6 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <kglobal.h>
 #include "ai88handler.h"
 
 AI88Handler::AI88Handler(AIParserBase *delegate){
@@ -91,7 +92,7 @@ bool AI88Handler::handleAIOperation (AIOperation op) {
       return true;
       break;
     case AIO_SetLineWidth :
-      fval = m_delegate->getDoubleValue();
+      fval = kMax(0.2, m_delegate->getDoubleValue()); // Use thinnest pen stroke possible for 0 (Rob)
       if (m_delegate->m_gstateHandler) m_delegate->m_gstateHandler->gotLineWidth (fval);
       return true;
       break;
