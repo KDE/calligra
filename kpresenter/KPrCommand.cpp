@@ -1824,27 +1824,25 @@ KoTextCursor * KPrOasisPasteTextCommand::execute( KoTextCursor *c )
         kdError(30518) << "No office:body found!" << endl;
         return 0;
     }
-    QDomElement tmpbody = KoDom::namedItemNS( body, KoXmlNS::office, "presentation" );
-    if ( tmpbody.isNull() )
-    {
-        //find a better method to search body element
-        tmpbody = KoDom::namedItemNS( body, KoXmlNS::office, "text" );
-        if ( tmpbody.isNull() ) {
-            kdError(30518) << "No office:text found!" << endl;
-            return 0;
-        }
-
+    // We then want to use whichever element is the child of <office:body>,
+    // whether that's <office:text> or <office:presentation> or whatever.
+    QDomElement iter, realBody;
+    forEachElement( iter, body ) {
+        realBody = iter;
     }
+    if ( realBody.isNull() ) {
+        kdError(32001) << "No element found inside office:body!" << endl;
+        return 0;
+    }
+
     KPrTextDocument * textdoc = static_cast<KPrTextDocument *>(c->parag()->document());
 
     KoOasisStyles oasisStyles;
-    oasisStyles.createStyleMap( domDoc );
+    oasisStyles.createStyleMap( domDoc, false );
     KPrDocument *doc = textdoc->textObject()->kPresenterDocument();
     KoOasisContext context( doc, *doc->getVariableCollection(), oasisStyles, 0 /*TODO store*/ );
-    *c = textdoc->textObject()->textObject()->pasteOasisText( tmpbody, context, cursor, doc->styleCollection() );
+    *c = textdoc->textObject()->textObject()->pasteOasisText( realBody, context, cursor, doc->styleCollection() );
     textdoc->textObject()->textObject()->setNeedSpellCheck( true );
-    // In case loadFormatting queued any image request
-
 
     m_lastParag = c->parag()->paragId();
     m_lastIndex = c->index();
