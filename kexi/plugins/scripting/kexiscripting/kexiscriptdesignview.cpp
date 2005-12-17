@@ -51,6 +51,7 @@ class KexiScriptDesignViewPrivate
 
         /// The \a KoProperty::Set used in the propertyeditor.
         KoProperty::Set* propertyset;
+QStringList properties;
 };
 
 KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *parent, Kross::Api::ScriptAction* scriptaction)
@@ -61,8 +62,6 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
 
     //d->scriptcontainer = scriptmanager->getScriptContainer( parentDialog()->partItem()->name() );
     plugSharedAction( "script_execute", d->scriptaction, SLOT(activate()) );
-
-    Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
 
     QBoxLayout* layout = new QVBoxLayout(this);
     d->editor = new KexiScriptEditor(mainWin, this, "ScriptEditor");
@@ -76,7 +75,8 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     loadData();
 
     d->propertyset = new KoProperty::Set(this, "KexiScripting");
-    QStringList interpreters = manager->getInterpreters();
+
+    QStringList interpreters = Kross::Api::Manager::scriptManager()->getInterpreters();
     KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(interpreters, interpreters);
     KoProperty::Property* prop = new KoProperty::Property(
         "language", // name
@@ -88,6 +88,7 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     );
     //prop->setVisible(false);
     d->propertyset->addProperty(prop);
+
     updateProperties();
     connect(d->propertyset, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ),
             this, SLOT( slotPropertyChanged(KoProperty::Set&, KoProperty::Property&) ) );
@@ -102,7 +103,11 @@ KexiScriptDesignView::~KexiScriptDesignView()
 
 void KexiScriptDesignView::updateProperties()
 {
-    //TODO d->propertyset->removePropertyGroup("Options");
+    d->propertyset->blockSignals(true);
+
+    for(QStringList::Iterator it = d->properties.begin(); it != d->properties.end(); ++it)
+        d->propertyset->removeProperty( (*it).latin1() );
+    d->properties.clear();
 
     Kross::Api::InterpreterInfo* info = Kross::Api::Manager::scriptManager()->getInterpreterInfo( d->scriptaction->getInterpreterName() );
     if(info) {
@@ -117,11 +122,13 @@ void KexiScriptDesignView::updateProperties()
                 option->comment, // description
                 KoProperty::Auto // type
             );
-            d->propertyset->addProperty(prop, "Options");
+            d->propertyset->addProperty(prop, "Options"); //info->getInterpretername().latin1());
+            d->properties.append( prop->name() );
         }
     }
 
-    propertySetSwitched(); // update property-editor
+    d->propertyset->blockSignals(false);
+    propertySetReloaded(true);
 }
 
 KoProperty::Set* KexiScriptDesignView::propertySet()
@@ -131,6 +138,8 @@ KoProperty::Set* KexiScriptDesignView::propertySet()
 
 void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoProperty::Property& property)
 {
+    //if(property.isNull()) return;
+
     if(property.name() == "language") {
         QString language = property.value().toString();
         kdDebug() << QString("KexiScriptDesignView::slotPropertyChanged() language=%1").arg(language) << endl;
@@ -138,6 +147,7 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoPrope
         // We assume Kross and the HighlightingInterface are using same
         // names for the support languages...
         d->editor->setHighlightMode( language );
+        updateProperties(); // update the properties
     }
     else {
         bool ok = d->scriptaction->getScriptContainer()->setOption( property.name(), property.value() );
@@ -146,7 +156,7 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoPrope
             return;
         }
     }
-    updateProperties();
+
     setDirty(true);
 }
 
@@ -181,7 +191,6 @@ bool KexiScriptDesignView::loadData()
         d->scriptaction->setInterpreterName(language);
 
     d->scriptaction->setCode( scriptelem.text() );
-    //d->editor->initialize(d->scriptcontainer); //FIXME clear prev states...
 
     return true;
 }
