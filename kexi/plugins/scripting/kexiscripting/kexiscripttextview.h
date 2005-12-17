@@ -55,13 +55,9 @@ class KexiScriptTextView : public KexiViewBase
          */
         virtual ~KexiScriptTextView();
 
-    public slots:
-
-        /// Clear the logs.
-        void clearLog();
-
-        /// Add a string to the logs.
-        void addLog(const QString&);
+    private slots:
+        void activateSuccess();
+        void activateFailed(const QString& errormessage, const QString& tracedetails);
 
     private:
         /// Private d-pointer.

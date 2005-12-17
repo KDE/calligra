@@ -121,6 +121,12 @@ namespace Kross { namespace Api {
              */
             ScriptContainer* getScriptContainer() const;
 
+            /**
+             * \return a list of all kind of logs this \a ScriptAction
+             * does remember.
+             */
+            const QStringList& getLogs() const;
+
         public slots:
 
             /**

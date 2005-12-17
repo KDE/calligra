@@ -21,6 +21,7 @@
 #include "manager.h"
 #include "scriptcontainer.h"
 
+#include <qstylesheet.h>
 #include <kstandarddirs.h>
 #include <kdebug.h>
 
@@ -39,6 +40,12 @@ namespace Kross { namespace Api {
             * is hidden behind the action.
             */
             ScriptContainer::Ptr scriptcontainer;
+
+            /**
+            * List of all kind of logs this \a ScriptAction does
+            * remember.
+            */
+            QStringList logs;
 
     };
 
@@ -163,12 +170,20 @@ ScriptContainer* ScriptAction::getScriptContainer() const
     return d->scriptcontainer;
 }
 
+const QStringList& ScriptAction::getLogs() const
+{
+    return d->logs;
+}
+
 void ScriptAction::activate()
 {
     d->scriptcontainer->execute();
     if( d->scriptcontainer->hadException() ) {
         QString errormessage = d->scriptcontainer->getException()->getError();
         QString tracedetails = d->scriptcontainer->getException()->getTrace();
+        d->logs << QString("<b>%1</b><br>%2")
+                   .arg( QStyleSheet::escape(errormessage) )
+                   .arg( QStyleSheet::escape(tracedetails) );
         emit failed(errormessage, tracedetails);
     }
     else {
@@ -182,6 +197,9 @@ bool ScriptAction::activate(QString& errormessage, QString& tracedetails)
     if( d->scriptcontainer->hadException() ) {
         errormessage = d->scriptcontainer->getException()->getError();
         tracedetails = d->scriptcontainer->getException()->getTrace();
+        d->logs << QString("<b>%1</b><br>%2")
+                   .arg( QStyleSheet::escape(errormessage) )
+                   .arg( QStyleSheet::escape(tracedetails) );
         return false;
     }
     return true;

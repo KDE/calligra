@@ -23,8 +23,9 @@
 
 #include <qstringlist.h>
 #include <qlayout.h>
-//#include <kdebug.h>
+#include <qstylesheet.h>
 #include <ktextbrowser.h>
+//#include <kdebug.h>
 
 /// @internal
 class KexiScriptTextViewPrivate
@@ -50,6 +51,11 @@ KexiScriptTextView::KexiScriptTextView(KexiMainWindow *mainWin, QWidget *parent,
 {
     d->scriptaction = scriptaction;
 
+    connect(d->scriptaction, SIGNAL( success() ), 
+            this, SLOT( activateSuccess() ));
+    connect(d->scriptaction, SIGNAL( failed(const QString&, const QString&) ), 
+            this, SLOT( activateFailed(const QString&, const QString&) ));
+
     d->browser = new KTextBrowser(this, "KexiScriptTextViewEditor");
     d->browser->setReadOnly(true);
     //d->browser->setFocusPolicy(QTextBrowser::ClickFocus);
@@ -57,39 +63,31 @@ KexiScriptTextView::KexiScriptTextView(KexiMainWindow *mainWin, QWidget *parent,
     //d->browser->setLinkUnderline(true);
     //d->browser->setWordWrap(QTextEdit::WidgetWidth);
 
+    QStringList logs = d->scriptaction->getLogs();
+    for(QStringList::ConstIterator it = logs.constBegin(); it != logs.constEnd(); ++it)
+        d->browser->append( *it );
+
     QBoxLayout *layout = new QVBoxLayout(this);
     layout->addWidget(d->browser);
-
-    //d->scriptcontainer = KexiScriptManager::self(mainWin)->getScriptContainer(parentDialog()->partItem()->name(), true);
-    //plugSharedAction( "script_execute", scriptcontainer, SLOT(execute()) );
-
-    //QStringList output = d->scriptcontainer->getOutput();
-    //for (QStringList::ConstIterator it=output.constBegin(); it!=output.constEnd(); ++it)
-    //    d->browser->append( *it );
-
-    //connect(d->scriptcontainer, SIGNAL(clearOutput()), this, SLOT(clearLog()));
-    //connect(d->scriptcontainer, SIGNAL(addOutput(const QString&)), this, SLOT(addLog(const QString&)));
 }
 
 KexiScriptTextView::~KexiScriptTextView()
 {
-    /*
-    disconnect(d->scriptcontainer, SIGNAL(stdOut(const QString&)),
-            this, SLOT(addStdOut(const QString&)));
-    disconnect(d->scriptcontainer, SIGNAL(stdErr(const QString&)),
-            this, SLOT(addStdErr(const QString&)));
-    */
 }
 
-void KexiScriptTextView::clearLog()
+void KexiScriptTextView::activateSuccess()
 {
     d->browser->clear();
 }
 
-void KexiScriptTextView::addLog(const QString& message)
+void KexiScriptTextView::activateFailed(const QString& errormessage, const QString& tracedetails)
 {
-    d->browser->append( message );
-    //if(! hasFocus()) setFocus();
+    d->browser->clear();
+    d->browser->append( QString("<b>%1</b><br>").arg( QStyleSheet::escape(errormessage) ) );
+    d->browser->append( QStyleSheet::escape(tracedetails) );
+    if(! hasFocus()) {
+        setFocus();
+    }
 }
 
 #include "kexiscripttextview.moc"
