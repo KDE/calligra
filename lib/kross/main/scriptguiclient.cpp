@@ -19,6 +19,7 @@
 
 #include "scriptguiclient.h"
 #include "manager.h"
+#include "../api/interpreter.h"
 
 #include <kapplication.h>
 #include <kpopupmenu.h>
@@ -160,9 +161,14 @@ void ScriptGUIClient::showScriptGUIClientsMenu()
 
 bool ScriptGUIClient::executeScriptFile()
 {
+    QStringList mimetypes;
+    QMap<QString, InterpreterInfo*> infos = Manager::scriptManager()->getInterpreterInfos();
+    for(QMap<QString, InterpreterInfo*>::Iterator it = infos.begin(); it != infos.end(); ++it)
+        mimetypes.append( it.data()->getMimeTypes().join(" ").stripWhiteSpace() );
+
     KFileDialog* filedialog = new KFileDialog(
         QString::null, // startdir
-        "*.py", // filter
+        mimetypes.join(" "), // filter
         0, // parent widget
         "ScriptGUIClientFileDialog", // name
         true // modal

@@ -97,7 +97,7 @@ Manager::Manager()
             new InterpreterInfo("python",
                 pythonlib, // library
                 "*.py", // file filter-wildcard
-                QStringList() << "text/x-python" << "application/x-python", // mimetypes
+                QStringList() << /* "text/x-python" << */ "application/x-python", // mimetypes
                 pythonoptions // options
             )
         );
@@ -114,7 +114,7 @@ Manager::Manager()
                                   new InterpreterInfo("ruby",
                                       rubylib, // library
                                       "*.rb", // file filter-wildcard
-                                      QStringList() << "text/x-ruby" << "application/x-ruby", // mimetypes
+                                      QStringList() << /* "text/x-ruby" << */ "application/x-ruby", // mimetypes
                                       rubyoptions // options
                                                      )
                                  );
