@@ -48,7 +48,7 @@ ScriptAction::ScriptAction(const char* name, const QString& text)
     : KAction()
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
 {
-    kdDebug() << QString("Kross::Api::ScriptAction::ScriptAction(const char*, const QString&) name='%1' text='%2'").arg(name).arg(text) << endl;
+    //kdDebug() << QString("Kross::Api::ScriptAction::ScriptAction(const char*, const QString&) name='%1' text='%2'").arg(name).arg(text) << endl;
 
     setName( name );
     setText( text.isEmpty() ? name : text );
@@ -60,7 +60,7 @@ ScriptAction::ScriptAction(const QDomElement& element)
     : KAction()
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
 {
-    kdDebug() << "Kross::Api::ScriptAction::ScriptAction(const QDomElement&)" << endl;
+    //kdDebug() << "Kross::Api::ScriptAction::ScriptAction(const QDomElement&)" << endl;
 
     QString name = element.attribute("name");
     QString text = element.attribute("text");
@@ -111,7 +111,7 @@ ScriptAction::ScriptAction(const QDomElement& element)
 
 ScriptAction::~ScriptAction()
 {
-    kdDebug() << QString("Kross::Api::ScriptAction::~ScriptAction() name='%1' text='%2'").arg(name()).arg(text()) << endl;
+    //kdDebug() << QString("Kross::Api::ScriptAction::~ScriptAction() name='%1' text='%2'").arg(name()).arg(text()) << endl;
 
     // disconnect signal
     //disconnect(this, SIGNAL(activated()), this, SLOT(activate()));
