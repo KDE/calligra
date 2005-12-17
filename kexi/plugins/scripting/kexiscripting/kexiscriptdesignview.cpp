@@ -103,7 +103,7 @@ KexiScriptDesignView::~KexiScriptDesignView()
 void KexiScriptDesignView::updateProperties()
 {
     //TODO d->propertyset->removePropertyGroup("Options");
-kdDebug()<<"=========================> "<<d->scriptaction->getInterpreterName()<<endl;
+
     Kross::Api::InterpreterInfo* info = Kross::Api::Manager::scriptManager()->getInterpreterInfo( d->scriptaction->getInterpreterName() );
     if(info) {
         Kross::Api::InterpreterInfo::Option::Map options = info->getOptions();
@@ -115,7 +115,7 @@ kdDebug()<<"=========================> "<<d->scriptaction->getInterpreterName()<
                 option->value, // value
                 option->name, // caption
                 option->comment, // description
-                KoProperty::Boolean //KoProperty::Auto // type
+                KoProperty::Auto // type
             );
             d->propertyset->addProperty(prop, "Options");
         }

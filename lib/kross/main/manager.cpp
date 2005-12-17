@@ -91,7 +91,7 @@ Manager::Manager()
     if(! pythonlib.isEmpty()) { // If the Kross Python plugin exists we offer it as supported scripting language.
         InterpreterInfo::Option::Map pythonoptions;
         pythonoptions.replace("restricted",
-            new InterpreterInfo::Option("Restricted", "Restricted Python interpreter", QVariant(false))
+            new InterpreterInfo::Option("Restricted", "Restricted Python interpreter", QVariant(false,0))
         );
         d->interpreterinfos.replace("python",
             new InterpreterInfo("python",
