@@ -74,9 +74,9 @@ QValueList<KWFrame *> KWOasisLoader::insertOasisData( KoStore* store, KoTextCurs
     QDomDocument stylesDoc;
     (void)oasisStore.loadAndParse( "styles.xml", stylesDoc, errorMessage );
     // Load styles from style.xml
-    oasisStyles.createStyleMap( stylesDoc );
+    oasisStyles.createStyleMap( stylesDoc, true );
     // Also load styles from content.xml
-    oasisStyles.createStyleMap( contentDoc );
+    oasisStyles.createStyleMap( contentDoc, false );
 
     m_doc->createLoadingInfo();
 
@@ -225,7 +225,9 @@ void KWOasisLoader::loadOasisHeaderFooter( const QDomElement& headerFooter, bool
     if ( !style.isNull() )
         context.styleStack().pop(); // don't let it be active when parsing the text
 
+    context.setUseStylesAutoStyles( true ); // use auto-styles from styles.xml, not those from content.xml
     fs->loadOasisContent( headerFooter, context );
+    context.setUseStylesAutoStyles( false );
 
     if ( isHeader )
         m_doc->m_headerVisible = true;
