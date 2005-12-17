@@ -162,9 +162,9 @@ void PythonScript::initialize()
     }
     catch(Py::Exception& e) {
         QString err = Py::value(e).as_string().c_str();
-        long lineno = getLineNo(e);
+        Kross::Api::Exception::Ptr exception = toException( QString("Failed to compile python code: %1").arg(err) );
         e.clear(); // exception is handled. clear it now.
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Failed to compile python code: %1").arg(err), lineno) );
+        throw exception;
     }
 }
 
@@ -181,10 +181,11 @@ void PythonScript::finalize()
     d->m_classes.clear();
 }
 
-long PythonScript::getLineNo(Py::Exception& /*exception*/)
+Kross::Api::Exception::Ptr PythonScript::toException(const QString& error)
 {
     PyObject *type, *value, *traceback;
     PyObject *lineobj = 0;
+    Py::List tblist;
 
     PyErr_Fetch(&type, &value, &traceback);
     Py_FlushLine();
@@ -199,7 +200,7 @@ long PythonScript::getLineNo(Py::Exception& /*exception*/)
             Py::Callable tbfunc(tbdict.getItem("format_tb"));
             Py::Tuple args(1);
             args.setItem(0, Py::Object(traceback));
-            Py::List tblist = tbfunc.apply(args);
+            tblist = tbfunc.apply(args);
             uint length = tblist.length();
             for(Py::List::size_type i = 0; i < length; ++i)
                 kdDebug() << Py::Object(tblist[i]).as_string().c_str() << endl;
@@ -207,7 +208,7 @@ long PythonScript::getLineNo(Py::Exception& /*exception*/)
         catch(Py::Exception& e) {
             QString err = Py::value(e).as_string().c_str();
             e.clear(); // exception is handled. clear it now.
-            kdWarning() << QString("Kross::Python::PythonScript::getLineNo() Failed to fetch a traceback: %1").arg(err) << endl;
+            kdWarning() << QString("Kross::Python::PythonScript::toException() Failed to fetch a traceback: %1").arg(err) << endl;
         }
     }
 
@@ -223,7 +224,15 @@ long PythonScript::getLineNo(Py::Exception& /*exception*/)
             line = long(Py::Long(o)) - 1; // python linecount starts with 1..
     }
 
-    return line;
+    QStringList tb;
+    uint tblength = tblist.length();
+    for(Py::List::size_type i = 0; i < tblength; ++i)
+        tb.append( Py::Object(tblist[i]).as_string().c_str() );
+
+    Kross::Api::Exception::Ptr exception = new Kross::Api::Exception(error, line);;
+    if(tb.count() > 0)
+        exception->setTrace( tb.join("\n") );
+    return exception;
 }
 
 const QStringList& PythonScript::getFunctionNames()
@@ -337,14 +346,16 @@ PyGILState_Release(gilstate);
             if(errobj.ptr() == Py_None) // at least string-exceptions have there errormessage in the type-object
                 errobj = Py::type(e);
             QString err = errobj.as_string().c_str();
-            long lineno = getLineNo(e);
+
+            Kross::Api::Exception::Ptr exception = toException( QString("Failed to execute python code: %1").arg(err) );
             e.clear(); // exception is handled. clear it now.
-            setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(err), lineno) );
+            setException( exception );
         }
         catch(Py::Exception& e) {
             QString err = Py::value(e).as_string().c_str();
+            Kross::Api::Exception::Ptr exception = toException( QString("Failed to execute python code: %1").arg(err) );
             e.clear(); // exception is handled. clear it now.
-            setException( new Kross::Api::Exception(QString("Failed to execute python code: %1").arg(err)) );
+            setException( exception );
         }
     }
     catch(Kross::Api::Exception::Ptr e) {

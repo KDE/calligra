@@ -90,6 +90,11 @@ namespace Kross { namespace Api {
             const QString& getTrace() const;
 
             /**
+             * Set a more detailed tracemessage.
+             */
+            void setTrace(const QString& tracemessage);
+
+            /**
              * \return the line number in the scripting code
              * where the exception got thrown or -1 if there
              * was no line number defined.

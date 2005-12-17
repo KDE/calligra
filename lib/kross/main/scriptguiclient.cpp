@@ -144,8 +144,6 @@ void ScriptGUIClient::showScriptGUIClientsMenu()
 
             if(node.nodeName() == "ScriptAction") {
                 ScriptAction* action = new ScriptAction( node.toElement() );
-                if(! Manager::scriptManager()->hasInterpreterInfo( action->getInterpreterName() ) )
-                    action->setEnabled(false); // disable action if the interpreter isn't supported.
                 d->scriptactions.append( action );
                 d->scriptextensions->insert( action );
                 connect(action, SIGNAL( failed(const QString&, const QString&) ),

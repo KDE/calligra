@@ -52,6 +52,7 @@ ScriptAction::ScriptAction(const char* name, const QString& text)
 
     setName( name );
     setText( text.isEmpty() ? name : text );
+    setEnabled(false);
 
     d->scriptcontainer = Manager::scriptManager()->getScriptContainer(name);
 }
@@ -83,9 +84,10 @@ ScriptAction::ScriptAction(const QDomElement& element)
     d->scriptcontainer = Manager::scriptManager()->getScriptContainer(name);
 
     QString interpreter = element.attribute("interpreter");
-    if(! interpreter.isNull()) {
+    if(interpreter.isNull())
+        setEnabled(false);
+    else
         setInterpreterName( interpreter );
-    }
 
     if(file.isNull()) {
         setCode( element.text().stripWhiteSpace() );
@@ -132,6 +134,7 @@ const QString& ScriptAction::getInterpreterName() const
 
 void ScriptAction::setInterpreterName(const QString& name)
 {
+    setEnabled( Manager::scriptManager()->hasInterpreterInfo(name) );
     d->scriptcontainer->setInterpreterName(name);
 }
 

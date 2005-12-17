@@ -85,7 +85,7 @@ namespace Kross { namespace Python {
             void initialize();
             void finalize();
 
-            long getLineNo(Py::Exception&);
+            Kross::Api::Exception::Ptr toException(const QString& error);
     };
 
 }}

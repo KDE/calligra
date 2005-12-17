@@ -59,6 +59,11 @@ const QString& Exception::getTrace() const
     return m_trace;
 }
 
+void Exception::setTrace(const QString& tracemessage)
+{
+    m_trace = tracemessage;
+}
+
 long Exception::getLineNo() const
 {
     return m_lineno;
