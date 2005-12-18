@@ -583,6 +583,8 @@ public slots:
 
   void flushDamages();
 
+  virtual void initEmpty();
+
 signals:
   // Document signals
   /**

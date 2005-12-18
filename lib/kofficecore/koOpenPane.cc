@@ -171,6 +171,8 @@ void KoOpenPane::initTemplates(const QString& templateType)
         selectItem = item;
       }
     }
+  } else {
+    firstItem = m_sectionList->firstChild();
   }
 
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");

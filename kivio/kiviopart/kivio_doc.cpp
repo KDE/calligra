@@ -224,18 +224,25 @@ bool KivioDoc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
 void KivioDoc::openExistingFile( const QString& file )
 {
-  KivioPage *t = createPage();
-  m_pMap->addPage( t );
+  KivioPage* t = createPage();
+  m_pMap->addPage(t);
 
   KoDocument::openExistingFile(file);
 }
 
 void KivioDoc::openTemplate( const QString& file )
 {
-  KivioPage *t = createPage();
-  m_pMap->addPage( t );
+  KivioPage* t = createPage();
+  m_pMap->addPage(t);
 
   KoDocument::openTemplate(file);
+}
+
+void KivioDoc::initEmpty()
+{
+  KivioPage* t = createPage();
+  m_pMap->addPage(t);
+  KoDocument::initEmpty();
 }
 
 KoView* KivioDoc::createViewInstance( QWidget* parent, const char* name )

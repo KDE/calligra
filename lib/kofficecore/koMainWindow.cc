@@ -553,20 +553,21 @@ bool KoMainWindow::openDocument( KoDocument *newdoc, const KURL & url )
 {
     if (!KIO::NetAccess::exists(url,true,0) )
     {
-        if ( newdoc->checkAutoSaveFile() || newdoc->initDoc(KoDocument::InitDocEmpty) ) //create an emtpy document
+        if (!newdoc->checkAutoSaveFile())
         {
-                setRootDocument( newdoc );
-                newdoc->setURL(url);
-                QString mime = KMimeType::findByURL(url)->name();
-                if ( mime.isEmpty() || mime == KMimeType::defaultMimeType() )
-                    mime = newdoc->nativeFormatMimeType();
-                if ( url.isLocalFile() ) // workaround for kde<=3.3 kparts bug, fixed for 3.4
-                    newdoc->setFile(url.path());
-                newdoc->setMimeTypeAfterLoading( mime );
-                updateCaption();
-                return true;
+          newdoc->initEmpty(); //create an emtpy document
         }
-        return false;
+
+        setRootDocument( newdoc );
+        newdoc->setURL(url);
+        QString mime = KMimeType::findByURL(url)->name();
+        if ( mime.isEmpty() || mime == KMimeType::defaultMimeType() )
+            mime = newdoc->nativeFormatMimeType();
+        if ( url.isLocalFile() ) // workaround for kde<=3.3 kparts bug, fixed for 3.4
+            newdoc->setFile(url.path());
+        newdoc->setMimeTypeAfterLoading( mime );
+        updateCaption();
+        return true;
     }
     return openDocumentInternal( url, newdoc );
 }

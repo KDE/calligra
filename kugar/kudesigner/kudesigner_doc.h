@@ -73,6 +73,7 @@ signals:
 public slots:
     virtual void setModified( const bool val );
     virtual void setModified();
+    virtual void initEmpty();
 
 protected:
     virtual KoView* createViewInstance( QWidget* parent, const char* name );

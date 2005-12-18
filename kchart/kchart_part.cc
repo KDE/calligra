@@ -159,6 +159,13 @@ bool KChartPart::initDoc(InitDocFlags flags, QWidget* parentWidget)
     return false;
 }
 
+void KChartPart::initEmpty()
+{
+    initNullChart();
+
+    resetURL();
+    setEmpty();
+}
 
 // This method creates the simplest chart imaginable:
 // Data size 1x1, empty, no headers

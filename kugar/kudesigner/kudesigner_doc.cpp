@@ -109,6 +109,17 @@ bool KudesignerDoc::initDoc( InitDocFlags flags, QWidget* parentWidget )
     return ok;
 }
 
+void KudesignerDoc::initEmpty()
+{
+    QString fileName( locate( "kudesigner_template", "General/.source/A4.ktm", KudesignerFactory::global() ) );
+    bool ok = loadNativeFormat( fileName );
+    if ( !ok )
+        showLoadingErrorDialog();
+    setEmpty();
+    resetURL();
+    setModified(false);
+}
+
 KoView* KudesignerDoc::createViewInstance( QWidget* parent, const char* name )
 {
     return new KudesignerView( this, parent, name );

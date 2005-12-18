@@ -86,6 +86,7 @@ public:
 
 public slots:
     void  slotModified();
+    virtual void initEmpty();
 
 signals:
     void docChanged();

@@ -156,6 +156,8 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     void updateGuideLines(KoView* sender);
     void updateGuideLines(KivioPage* page);
 
+    virtual void initEmpty();
+
   protected slots:
     void slotDocumentRestored();
     void slotCommandExecuted();

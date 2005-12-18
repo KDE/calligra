@@ -2510,6 +2510,12 @@ void KoDocument::openTemplate( const QString& file )
     }
 }
 
+void KoDocument::initEmpty()
+{
+  setEmpty();
+  setModified(false);
+}
+
 void KoDocument::startCustomDocument() {
     deleteOpenPane();
 }

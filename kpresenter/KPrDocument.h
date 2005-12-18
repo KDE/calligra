@@ -157,7 +157,6 @@ class KPrDocument : public KoDocument
     virtual int supportedSpecialFormats() const;
 
     virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
-    void initEmpty();
     virtual void setEmpty();
 
     virtual void addView( KoView *_view );
@@ -527,6 +526,8 @@ public slots:
     static void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context );
 
     void slotGuideLinesChanged( KoView *view );
+
+    virtual void initEmpty();
 
 signals:
     void enablePaste( bool );

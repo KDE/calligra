@@ -138,7 +138,6 @@ public:
 
 public:
     virtual bool initDoc(InitDocFlags flags, QWidget* parentWidget=0);
-    void initEmpty();
 
     virtual bool loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles, const QDomDocument& settings, KoStore* store );
 
@@ -804,6 +803,8 @@ public slots:
 
     /** calls invalidate() on all framesets  */
     void invalidate(const KWFrameSet *skipThisFrameSet=0);
+
+    virtual void initEmpty();
 
 protected slots:
     void slotRecalcFrames();

@@ -906,6 +906,13 @@ public:
      */
     virtual bool showEmbedInitDialog(QWidget* parent);
 
+public slots:
+    /**
+     * Initialize an empty document using default values
+     * @since 1.5
+     */
+    virtual void initEmpty();
+
 signals:
 
     /**
