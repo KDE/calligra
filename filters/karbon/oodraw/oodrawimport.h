@@ -26,7 +26,7 @@
 #include <qdom.h>
 #include <qdict.h>
 #include <qcolor.h>
-#include <stylestack.h>
+#include <koStyleStack.h>
 #include <core/vdocument.h>
 #include <core/vcomposite.h>
 #include <core/vstroke.h>
@@ -70,7 +70,7 @@ private:
 	QDomDocument			m_meta;
 	QDomDocument			m_settings;
 	QDict<QDomElement>		m_styles, m_draws;
-	StyleStack			m_styleStack;
+	KoStyleStack			m_styleStack;
 	KZip * m_zip;
 
 };
