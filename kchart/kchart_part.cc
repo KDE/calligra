@@ -1771,6 +1771,11 @@ void  KChartPart::slotModified()
     setModified(true);
 }
 
+bool KChartPart::showEmbedInitDialog(QWidget* /*parent*/)
+{
+  // Don't show an embed dialog
+  return true;
+}
 
 }  //KChart namespace
 

@@ -82,6 +82,8 @@ public:
     // Functions that generate templates (not used yet):
     void  generateBarChartTemplate();
 
+    virtual bool showEmbedInitDialog(QWidget* parent);
+
 public slots:
     void  slotModified();
 
