@@ -93,51 +93,32 @@ void KexiScriptDesignView::updateProperties()
         disconnect(d->properties, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ),
                    this, SLOT( slotPropertyChanged(KoProperty::Set&, KoProperty::Property&) ));
 
-        if(d->properties->contains("language")) {
-            KoProperty::Property& prop = d->properties->property("language");
-            if(prop.isNull())
-                return;
+        d->properties->clear();
 
-            prop.setVisible(false);
-            const QValueList<KoProperty::Property*>*  children = prop.children();
-            QValueListConstIterator<KoProperty::Property*> itt = children->begin();
-            for(; itt != children->end(); ++itt)
-                (*itt)->setVisible(false);
-
-            prop.setValue( interpretername );
-            prop.setVisible(true);
-        }
-        else {
-            QStringList interpreters = Kross::Api::Manager::scriptManager()->getInterpreters();
-            KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(interpreters, interpreters);
-            KoProperty::Property* prop = new KoProperty::Property(
-                "language", // name
-                proplist, // ListData
-                d->scriptaction->getInterpreterName(), // value
-                i18n("Interpreter"), // caption
-                i18n("The used scripting interpreter."), // description
-                KoProperty::List // type
-            );
-            //prop->setVisible(false);
-            d->properties->addProperty(prop);
-        }
+        QStringList interpreters = Kross::Api::Manager::scriptManager()->getInterpreters();
+        KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(interpreters, interpreters);
+        KoProperty::Property* prop = new KoProperty::Property(
+            "language", // name
+            proplist, // ListData
+            d->scriptaction->getInterpreterName(), // value
+            i18n("Interpreter"), // caption
+            i18n("The used scripting interpreter."), // description
+            KoProperty::List // type
+        );
+        d->properties->addProperty(prop);
 
         Kross::Api::InterpreterInfo::Option::Map options = info->getOptions();
         Kross::Api::InterpreterInfo::Option::Map::Iterator it( options.begin() );
         for(; it != options.end(); ++it) {
             Kross::Api::InterpreterInfo::Option* option = it.data();
-
-//if(! d->properties->contains( it.key().latin1() )) {
             KoProperty::Property* prop = new KoProperty::Property(
-                    it.key().latin1(), // id
-                    option->value, // value
+                    it.key().latin1(), // name
+                    d->scriptaction->getScriptContainer()->getOption(it.key(), option->value), // value
                     option->name, // caption
                     option->comment, // description
-                    KoProperty::Auto, // type
-                    & d->properties->property("language")
+                    KoProperty::Auto // type
             );
-//}
-
+            d->properties->addProperty(prop);
         }
 
         connect(d->properties, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ),
@@ -206,8 +187,23 @@ bool KexiScriptDesignView::loadData()
     }
 
     QString language = scriptelem.attribute("language");
-    if(! language.isEmpty())
+    if(! language.isNull()) {
         d->scriptaction->setInterpreterName(language);
+
+        Kross::Api::InterpreterInfo* info = Kross::Api::Manager::scriptManager()->getInterpreterInfo(language);
+        if(info) {
+            Kross::Api::InterpreterInfo::Option::Map options = info->getOptions();
+            Kross::Api::InterpreterInfo::Option::Map::Iterator it = options.begin();
+            for(; it != options.end(); ++it) {
+                QString value = scriptelem.attribute( it.data()->name );
+                if(! value.isNull()) {
+                    QVariant v(value);
+                    if( v.cast( it.data()->value.type() ) ) // preserve the QVariant's type
+                        d->scriptaction->getScriptContainer()->setOption(it.data()->name, v);
+                }
+            }
+        }
+    }
 
     d->scriptaction->setCode( scriptelem.text() );
 
@@ -243,7 +239,19 @@ tristate KexiScriptDesignView::storeData()
     QDomElement scriptelem = domdoc.createElement("script");
     domdoc.appendChild(scriptelem);
 
-    scriptelem.setAttribute("language", d->scriptaction->getInterpreterName());
+    QString language = d->scriptaction->getInterpreterName();
+    scriptelem.setAttribute("language", language);
+
+    Kross::Api::InterpreterInfo* info = Kross::Api::Manager::scriptManager()->getInterpreterInfo(language);
+    if(info) {
+        Kross::Api::InterpreterInfo::Option::Map defoptions = info->getOptions();
+        QMap<QString, QVariant>& options = d->scriptaction->getScriptContainer()->getOptions();
+        for(QMap<QString, QVariant>::Iterator it = options.begin(); it != options.end(); ++it) {
+            if( defoptions.contains(it.key()) ) { // only remember options which the InterpreterInfo knows about...
+                scriptelem.setAttribute(it.key(), it.data().toString());
+            }
+        }
+    }
 
     QDomText scriptcode = domdoc.createTextNode(d->scriptaction->getCode());
     scriptelem.appendChild(scriptcode);

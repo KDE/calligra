@@ -124,6 +124,13 @@ namespace Kross { namespace Api {
             void setFile(const QString& scriptfile);
 
             /**
+             * \return a map of options this \a ScriptContainer defines.
+             * The options are returned call-by-ref, so you are able to
+             * manipulate them.
+             */
+            QMap<QString, QVariant>& getOptions();
+
+            /**
              * \return the value of the option defined with \p name .
              * If there doesn't exists an option with such a name,
              * the \p defaultvalue is returned. If \p recursive is

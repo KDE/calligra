@@ -137,9 +137,13 @@ void ScriptContainer::setFile(const QString& scriptfile)
     d->scriptfile = scriptfile;
 }
 
+QMap<QString, QVariant>& ScriptContainer::getOptions()
+{
+    return d->options;
+}
+
 const QVariant& ScriptContainer::getOption(const QString name, QVariant defaultvalue, bool /*recursive*/)
 {
-    //kdDebug()<<"############################# getOption name="<<name<<" value="<<d->options[name]<<endl;
     if(d->options.contains(name))
         return d->options[name];
     Kross::Api::InterpreterInfo* info = Kross::Api::Manager::scriptManager()->getInterpreterInfo( d->interpretername );
