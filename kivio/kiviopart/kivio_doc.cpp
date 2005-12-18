@@ -886,7 +886,7 @@ void KivioDoc::saveConfig()
 void KivioDoc::initConfig()
 {
   setUnit( KoUnit::unit(Kivio::Config::unit()) );
-  m_font = KoGlobal::defaultFont();
+  m_font = Kivio::Config::font();
   m_pageLayout = Kivio::Config::defaultPageLayout();
 }
 

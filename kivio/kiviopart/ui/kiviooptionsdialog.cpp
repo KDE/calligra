@@ -215,6 +215,7 @@ void KivioOptionsDialog::applyPage()
   Kivio::Config::setUnit(KoUnit::unitName(view->doc()->unit()));
   Kivio::Config::setDefaultPageLayout(m_layout);
   Kivio::Config::setFont(m_font);
+  view->doc()->setDefaultFont(m_font);
   view->togglePageMargins(m_marginsChBox->isChecked());
   view->toggleShowRulers(m_rulersChBox->isChecked());
 }
@@ -240,6 +241,7 @@ void KivioOptionsDialog::defaultPage()
   m_unitCombo->setCurrentItem(KoUnit::unit(Kivio::Config::unit()));
   unitChanged(m_unitCombo->currentItem());
   setLayoutText(m_layout);
+  setFontText(m_font);
   m_marginsChBox->setChecked(true);
   m_rulersChBox->setChecked(true);
 }
@@ -297,6 +299,7 @@ void KivioOptionsDialog::slotApply()
 {
   applyPage();
   applyGrid();
+  Kivio::Config::self()->writeConfig();
 }
 
 void KivioOptionsDialog::slotDefault()
