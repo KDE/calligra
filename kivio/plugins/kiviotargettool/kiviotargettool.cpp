@@ -100,7 +100,7 @@ namespace Kivio {
     if(view()->canvasWidget()->activePage()->checkForStencil(&p, &colType, 0, false)) {
       view()->canvasWidget()->setCursor(Qt::CrossCursor);
     } else {
-      view()->canvasWidget()->setCursor(Qt::ArrowCursor);
+      view()->canvasWidget()->setCursor(Qt::ForbiddenCursor);
     }
   }
 

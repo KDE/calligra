@@ -839,81 +839,70 @@ QRect KivioScreenPainter::boundingRect( int x, int y, int w, int h, int tf, cons
 
 void KivioScreenPainter::drawPixmap( float x, float y, const QPixmap &pix )
 {
-   PAINTER_CHECK();
+  PAINTER_CHECK();
   m_pPainter->drawPixmap( (int)x, (int)y, pix );
 }
 
 void KivioScreenPainter::drawHandle( float x, float y, int flags )
 {
-   PAINTER_CHECK();
-   QColor fillColor, penColor;
-   QBrush b;
-   QPen p;
+  PAINTER_CHECK();
+  QColor fillColor, penColor;
+  QBrush b;
+  QPen p;
 
-   const float HW = 6.0f;
-   const float HWP1 = HW+1.0f;
-   const float HWo2 = HW/2.0f;
+  const float HW = 6.0f;
+  const float HWP1 = HW+1.0f;
+  const float HWo2 = HW/2.0f;
 
-   float x1, y1;
+  float x1, y1;
 
-   // Is it a locked handle?
-   if( flags & cpfLock )
-   {
-      x1 = x - 4;
-      y1 = y - 4;
+  // Is it a locked handle?
+  if( flags & cpfLock )
+  {
+    x1 = x - 4;
+    y1 = y - 4;
 
-      m_pPainter->drawPixmap( qRound(x1), qRound(y1), Kivio::lockPixmap() );
-      return;
-   }
+    m_pPainter->drawPixmap( qRound(x1), qRound(y1), Kivio::lockPixmap() );
+    return;
+  }
 
-   if( flags & cpfConnected )
-   {
-      fillColor = QColor(200,0,0);
-   }
-   else
-   {
-      fillColor = QColor(0,200,0);
-   }
+  if( flags & cpfConnected )
+  {
+    fillColor = QColor(200,0,0);
+  }
+  else
+  {
+    fillColor = QColor(0,200,0);
+  }
 
-   if( flags & cpfStart ) {
-     penColor.setRgb(125, 138, 255);
-   } else if( flags & cpfEnd ) {
-     penColor.setRgb(143, 255, 120);
-   } else {
-     penColor.setRgb(0, 0, 0);
-   }
+  penColor.setRgb(0, 0, 0);
 
-   b.setColor(fillColor);
-   b.setStyle(Qt::SolidPattern);
-   p.setColor(penColor);
-   m_pPainter->setPen(p);
-   m_pPainter->setBrush(b);
+  b.setColor(fillColor);
+  b.setStyle(Qt::SolidPattern);
+  p.setColor(penColor);
+  m_pPainter->setPen(p);
+  m_pPainter->setBrush(b);
 
 
-   x1 = x - HWo2;
-   y1 = y - HWo2;
+  x1 = x - HWo2;
+  y1 = y - HWo2;
 
-   // first fill it
+  // first fill it
 //   m_pPainter->fillRect( x1, y1, HWP1, HWP1, b );
-   m_pPainter->drawRect( qRound(x1), qRound(y1), qRound(HWP1), qRound(HWP1) );
 
-   // Now put something in it if needed
-   if( flags & cpfStart )
-   {
-      m_pPainter->drawLine( qRound(x), qRound(y1+2), qRound(x), qRound(y1+4) );
-      m_pPainter->drawLine( qRound(x1+2), qRound(y), qRound(x1+4), qRound(y) );
-   }
-   else if( flags & cpfEnd )
-   {
-      m_pPainter->drawLine( qRound(x1+2), qRound(y1+2), qRound(x1+4), qRound(y1+4) );
-      m_pPainter->drawLine( qRound(x1+2), qRound(y1+4), qRound(x1+4), qRound(y1+2) );
-   }
-   else if( flags & cpfConnectable )
-   {
-      b.setColor(QColor(0,0,0));
+  if(flags & cpfEnd) {
+    m_pPainter->drawEllipse( qRound(x1), qRound(y1), qRound(HWP1), qRound(HWP1) );
+  } else {
+    m_pPainter->drawRect( qRound(x1), qRound(y1), qRound(HWP1), qRound(HWP1) );
+  }
 
-      m_pPainter->fillRect(qRound(x-1),qRound(y-1),3,3, b);
-   }
+  // Now put something in it if needed
+  if( flags & cpfConnectable )
+  {
+    b.setColor(QColor(0,0,0));
+
+    m_pPainter->fillRect(qRound(x-1),qRound(y-1),3,3, b);
+  }
 }
 
 void KivioScreenPainter::drawSelectionBox( const QRect& r )

@@ -166,16 +166,6 @@ void KivioArrowHeadAction::loadArrowHeads(KPopupMenu* popup, bool endArrow)
   QPixmap pix(pixAll.width(), 17);
   QPainter p(&pix, popup);
   int cindex = 0;
-  QPen markPen;
-  markPen.setWidth(2);
-  
-  if(endArrow) {
-    markPen.setColor(QColor(143, 255, 120));
-  } else {
-    markPen.setColor(QColor(125, 138, 255));
-  }
-  
-  p.setPen(markPen);
 
   // insert item "None"
   popup->insertItem(i18n("no line end", "None"),cindex++);
@@ -183,8 +173,6 @@ void KivioArrowHeadAction::loadArrowHeads(KPopupMenu* popup, bool endArrow)
   for (int y = 0; y < pixAll.height(); y += 17 ) {
     pix.fill(white);
     p.drawPixmap(0, 0, pixAll, 0, y, pix.width(), pix.height());
-    p.drawRect(1, 1, pix.width() - 2, pix.height() - 2);
-
     popup->insertItem(pix, cindex++);
   }
 

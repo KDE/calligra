@@ -82,24 +82,12 @@ void KivioArrowHeadFormatDlg::loadArrowHeads(KComboBox* combo, bool endArrow)
   QPixmap pix(pixAll.width(), 17);
   QPainter p(&pix, combo);
   int cindex = 0;
-  QPen markPen;
-  markPen.setWidth(2);
-  
-  if(endArrow) {
-    markPen.setColor(QColor(143, 255, 120));
-  } else {
-    markPen.setColor(QColor(125, 138, 255));
-  }
-
-  p.setPen(markPen);
 
   // insert item "None"
   combo->insertItem(i18n("no line end", "None"),cindex++);
 
   for (int y = 0; y < pixAll.height(); y += 17 ) {
     p.drawPixmap(0, 0, pixAll, 0, y, pix.width(), pix.height());
-    p.drawRect(1, 1, pix.width() - 2, pix.height() - 2);
-
     combo->insertItem(pix,cindex++);
   }
 
