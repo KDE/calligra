@@ -38,6 +38,8 @@ class KoXmlWriter;
 
 #define FLOW_LAYER_VISIBLE 0x0001
 #define FLOW_LAYER_CONNECTABLE 0x0002
+#define FLOW_LAYER_EDITABLE 0x0004
+#define FLOW_LAYER_PRINTABLE 0x0008
 
 class KivioLayer
 {
@@ -66,11 +68,17 @@ public:
 
     QPtrList<KivioStencil> *stencilList() { return m_pStencilList; }
 
-    bool visible() { return (m_flags & FLOW_LAYER_VISIBLE)?true:false; }
+    bool visible() { return (m_flags & FLOW_LAYER_VISIBLE); }
     void setVisible( bool f );
 
-    bool connectable() { return (m_flags & FLOW_LAYER_CONNECTABLE)?true:false; }
+    bool connectable() { return (m_flags & FLOW_LAYER_CONNECTABLE); }
     void setConnectable( bool f );
+
+    void setEditable(bool f);
+    bool editable() { return (m_flags & FLOW_LAYER_EDITABLE); }
+
+    void setPrintable(bool f);
+    bool printable() { return (m_flags & FLOW_LAYER_PRINTABLE); }
 
     QString name() const { return m_name; }
     void setName( const QString &n ) { m_name = QString(n); }

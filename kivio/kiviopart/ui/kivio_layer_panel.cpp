@@ -54,8 +54,8 @@ KivioLayerItem::~KivioLayerItem()
 void KivioLayerItem::update()
 {
   setPixmap(0, data->visible() ? SmallIcon("layer_visible",KivioFactory::global()):SmallIcon("layer_novisible",KivioFactory::global()));
-  setPixmap(1, true/*data->print()*/ ? SmallIcon("layer_print",KivioFactory::global()):SmallIcon("layer_noprint",KivioFactory::global()));
-  setPixmap(2, true/*data->edit()*/ ? SmallIcon("layer_editable",KivioFactory::global()):SmallIcon("layer_noeditable",KivioFactory::global()));
+  setPixmap(1, data->printable() ? SmallIcon("layer_print",KivioFactory::global()):SmallIcon("layer_noprint",KivioFactory::global()));
+  setPixmap(2, data->editable() ? SmallIcon("layer_editable",KivioFactory::global()):SmallIcon("layer_noeditable",KivioFactory::global()));
   setPixmap(3, data->connectable() ? SmallIcon("layer_connect",KivioFactory::global()):SmallIcon("layer_noconnect",KivioFactory::global()));
   setText(4,data->name());
 }
@@ -257,23 +257,30 @@ void KivioLayerPanel::updateButtons(QListViewItem* i)
 
 void KivioLayerPanel::itemClicked(QListViewItem* i, const QPoint&, int c)
 {
-  if (!i)
+  if(!i) {
     return;
+  }
 
-  KivioLayerItem* vi = (KivioLayerItem*)i;
+  KivioLayerItem* vi = static_cast<KivioLayerItem*>(i);
   KivioLayer* layer = vi->data;
 
-  if (c==0)
-    layer->setVisible(!layer->visible());
-/*
-  if (c==1)
-    layer->setPrint(!layer->print());
-
-  if (c==2)
-    layer->setEdit(!layer->editt());
-*/
-  if (c==3)
-    layer->setConnectable(!layer->connectable());
+  switch(c)
+  {
+    case 0:
+      layer->setVisible(!layer->visible());
+      break;
+    case 1:
+      layer->setPrintable(!layer->printable());
+      break;
+    case 2:
+      layer->setEditable(!layer->editable());
+      break;
+    case 3:
+      layer->setConnectable(!layer->connectable());
+      break;
+    default:
+      break;
+  }
 
   vi->update();
   m_pView->doc()->updateView(m_pView->activePage());

@@ -56,6 +56,8 @@ KivioLayer::KivioLayer( KivioPage *pPage )
     m_dcop = 0;
     setVisible(true);
     setConnectable(false);
+    setEditable(true);
+    setPrintable(true);
 }
 
 DCOPObject* KivioLayer::dcopObject()
@@ -303,26 +305,33 @@ void KivioLayer::saveOasis(KoXmlWriter* layerWriter)
 void KivioLayer::paintContent( KivioPainter& painter, const QRect&, bool, QPoint, 
   KoZoomHandler* zoom )
 {
-    KivioStencil *pStencil = m_pStencilList->first();
-    KivioIntraStencilData data;
+  if(!visible()) {
+    return;
+  }
 
-    painter.setFGColor( QColor(0,0,0) );
+  KivioStencil *pStencil = m_pStencilList->first();
+  KivioIntraStencilData data;
 
-    data.painter = &painter;
-    data.zoomHandler = zoom;
+  painter.setFGColor( QColor(0,0,0) );
 
-    while( pStencil )
-    {
-        if(!pStencil->hidden()) {
-          pStencil->paint( &data );
-        }
+  data.painter = &painter;
+  data.zoomHandler = zoom;
 
-        pStencil = m_pStencilList->next();
+  while( pStencil )
+  {
+    if(!pStencil->hidden()) {
+      pStencil->paint( &data );
     }
+
+    pStencil = m_pStencilList->next();
+  }
 }
 
 void KivioLayer::printContent( KivioPainter& painter, int xdpi, int ydpi )
 {
+  if(!printable() || !visible())
+    return;
+
   if(!xdpi) {
     xdpi = KoGlobal::dpiX();
   }
@@ -353,41 +362,49 @@ void KivioLayer::printContent( KivioPainter& painter, int xdpi, int ydpi )
 void KivioLayer::paintConnectorTargets( KivioPainter& painter, const QRect&, bool, QPoint,
   KoZoomHandler* zoom )
 {
-    KivioIntraStencilData data;
+  if(!visible()) {
+    return;
+  }
 
-    painter.setFGColor( QColor(0,0,0) );
+  KivioIntraStencilData data;
 
-    data.painter = &painter;
-    data.zoomHandler = zoom;
+  painter.setFGColor( QColor(0,0,0) );
 
-    KivioStencil *pStencil = m_pStencilList->first();
-    while( pStencil )
-    {
-        if(!pStencil->hidden()) {
-          pStencil->paintConnectorTargets( &data );
-        }
+  data.painter = &painter;
+  data.zoomHandler = zoom;
 
-        pStencil = m_pStencilList->next();
+  KivioStencil *pStencil = m_pStencilList->first();
+  while( pStencil )
+  {
+    if(!pStencil->hidden()) {
+      pStencil->paintConnectorTargets( &data );
     }
+
+    pStencil = m_pStencilList->next();
+  }
 }
 
 void KivioLayer::paintSelectionHandles( KivioPainter& painter, const QRect&, bool, QPoint, KoZoomHandler* zoom )
 {
-    KivioIntraStencilData data;
+  if(!visible()) {
+    return;
+  }
 
-    painter.setFGColor( QColor(0,0,0) );
+  KivioIntraStencilData data;
 
-    data.painter = &painter;
-    data.zoomHandler = zoom;
+  painter.setFGColor( QColor(0,0,0) );
 
-    KivioStencil *pStencil = m_pStencilList->first();
-    while( pStencil )
-    {
-        if( pStencil->isSelected() && !pStencil->hidden() )
-            pStencil->paintSelectionHandles( &data );
+  data.painter = &painter;
+  data.zoomHandler = zoom;
 
-        pStencil = m_pStencilList->next();
-    }
+  KivioStencil *pStencil = m_pStencilList->first();
+  while( pStencil )
+  {
+    if( pStencil->isSelected() && !pStencil->hidden() )
+        pStencil->paintSelectionHandles( &data );
+
+    pStencil = m_pStencilList->next();
+  }
 }
 
 KivioStencil *KivioLayer::checkForStencil( KoPoint *pPoint, int *collisionType, float threshold, bool selectedOnly )
@@ -441,6 +458,24 @@ void KivioLayer::setConnectable( bool f )
     {
         m_flags = m_flags & (~FLOW_LAYER_CONNECTABLE);
     }
+}
+
+void KivioLayer::setEditable(bool f)
+{
+  if(f) {
+    m_flags = m_flags | FLOW_LAYER_EDITABLE;
+  } else {
+    m_flags = m_flags & (~FLOW_LAYER_EDITABLE);
+  }
+}
+
+void KivioLayer::setPrintable(bool f)
+{
+  if(f) {
+    m_flags = m_flags | FLOW_LAYER_PRINTABLE;
+  } else {
+    m_flags = m_flags & (~FLOW_LAYER_PRINTABLE);
+  }
 }
 
 int KivioLayer::generateStencilIds( int next )
