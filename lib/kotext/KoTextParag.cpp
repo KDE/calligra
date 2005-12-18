@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001-2005 David Faure <faure@kde.org>
+   Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1012,6 +1013,12 @@ void KoTextParag::setJoinBorder( bool join )
     m_layout.joinBorder = join;
 }
 
+void KoTextParag::setBackgroundColor ( const QColor& color )
+{
+    m_layout.backgroundColor = color;
+    invalidate(0);
+}
+
 void KoTextParag::setNoCounter()
 {
     delete m_layout.counter;
@@ -1379,6 +1386,23 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     kdDebug(32500) << " clipw in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( clipw ) << " cliph in pix (approx) : " << textDocument()->paintingZoomHandler()->layoutUnitToPixelX( cliph ) << endl;
 #endif
 
+    KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
+    assert(zh);
+
+    // Draw the paragraph background color
+    QRect paraPixelRect = pixelRect( zh );
+    int leftMarginInPix = zh->layoutUnitToPixelX( leftMargin() );
+    int firstLineOffsetInPix = zh->layoutUnitToPixelX( firstLineMargin() );
+    int backgroundLeft = QMIN ( leftMarginInPix,  leftMarginInPix + firstLineOffsetInPix );
+    int backgroundRight = paraPixelRect.width() - zh->layoutUnitToPixelX( rightMargin() );
+    int backgroundWidth = backgroundRight - backgroundLeft;
+    int backgroundHeight = pixelRect( zh ).height();
+
+    if ( backgroundColor().isValid() )
+        painter.fillRect( backgroundLeft, 0,
+                          backgroundWidth, backgroundHeight,
+                          backgroundColor() );
+
     // Let's call drawLabel ourselves, rather than having to deal with QStyleSheetItem to get paintLines to call it!
     if ( m_layout.counter && m_layout.counter->numbering() != KoParagCounter::NUM_NONE && m_lineChanged <= 0 )
     {
@@ -1395,9 +1419,6 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     // Now draw paragraph border
     if ( m_layout.hasBorder() )
     {
-        KoTextZoomHandler * zh = textDocument()->paintingZoomHandler();
-        assert(zh);
-
         bool const drawTopBorder = !prev() || !prev()->joinBorder() || prev()->bottomBorder() != bottomBorder() || prev()->topBorder() != topBorder() || prev()->leftBorder() != leftBorder() || prev()->rightBorder() != rightBorder();
         bool const drawBottomBorder = !joinBorder() || !next() || next()->bottomBorder() != bottomBorder() || next()->topBorder() != topBorder() || next()->leftBorder() != leftBorder() || next()->rightBorder() != rightBorder();
         QRect r;

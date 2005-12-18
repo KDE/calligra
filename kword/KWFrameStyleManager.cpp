@@ -145,7 +145,7 @@ KWFrameStyleManager::KWFrameStyleManager( QWidget *_parent, KWDocument *_doc,
     addGeneralTab();
 
     KWFrameStyleBordersTab *bordersTab = new KWFrameStyleBordersTab( m_tabs );
-    bordersTab->setWidget( new KoParagBorderWidget( bordersTab ) );
+    bordersTab->setWidget( new KoParagDecorationWidget( bordersTab ) );
     addTab( bordersTab );
 
     KWFrameStyleBackgroundTab *bgTab = new KWFrameStyleBackgroundTab( m_tabs );

@@ -1147,7 +1147,8 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
                 }
 	    }
         }
-	if ( !ir.intersects( crect ) ) {
+
+        if ( !ir.intersects( crect ) ) {
             // Paragraph is not in the crect - but let's check if the area on its right is.
 	    ir.setWidth( zoomHandler->layoutUnitToPixelX( parag->document()->width() ) );
 	    if ( ir.intersects( crect ) && ( drawingFlags & TransparentBackground ) == 0 )
@@ -1165,7 +1166,6 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
             drawParagWYSIWYG( p, parag, cx, cy, cw, ch, doubleBuffer, cg,
                               zoomHandler, drawCursor, cursor, resetChanged, drawingFlags );
         }
-
 	parag = parag->next();
     }
 
@@ -1231,16 +1231,9 @@ void KoTextDocument::drawWithoutDoubleBuffer( QPainter *p, const QRect &cr, cons
 
         p->translate( 0, pr.y() );
 
-        QBrush brush;
-        if ( parag->backgroundColor().isValid() ) {
-          brush.setColor( parag->backgroundColor() );
-          brush.setStyle( SolidPattern );
-        }
-        else {
-            brush = cg.brush( QColorGroup::Base );
-        }
         // No need to brush plain white on a printer. Brush all
         // other cases (except "full transparent" case).
+        QBrush brush = cg.brush( QColorGroup::Base );;
         bool needBrush = brush.style() != Qt::NoBrush &&
                          !(brush.style() == Qt::SolidPattern &&
                            brush.color() == Qt::white &&
@@ -1289,14 +1282,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
     QRect crect( cx, cy, cw, ch ); // the overall crect
     QRect ir( rect ); // will be the rect to be repainted
 
-    QBrush brush;
-    if ( parag->backgroundColor().isValid() ) {
-        brush.setColor( parag->backgroundColor() );
-        brush.setStyle( SolidPattern );
-    }
-    else {
-        brush = cg.brush( QColorGroup::Base );
-    }
+    QBrush brush = cg.brush( QColorGroup::Base );
 
     // No need to brush plain white on a printer. Brush all
     // other cases (except "full transparent" case).
@@ -1357,6 +1343,7 @@ void KoTextDocument::drawParagWYSIWYG( QPainter *p, KoTextParag *parag, int cx, 
                     ir.width(), ir.height() );
         }
     }
+
     if ( needBrush )
         painter->fillRect( QRect( 0, 0, ir.width(), ir.height() ), brush );
 

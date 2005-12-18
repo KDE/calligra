@@ -259,7 +259,7 @@ public:
 
     // Paragraph background
     QColor backgroundColor() { return m_layout.backgroundColor; }
-    void setBackgroundColor( const QColor& _color) { m_layout.backgroundColor = _color; }
+    void setBackgroundColor( const QColor& color);
 
     // Counters are used to implement list and heading numbering/bullets.
     void setCounter( const KoParagCounter & counter );

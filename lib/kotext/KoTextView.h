@@ -103,6 +103,7 @@ public:
     KCommand * setJoinBordersCommand( bool join );
     KCommand * setMarginCommand( QStyleSheetItem::Margin m, double margin );
     KCommand * setTabListCommand( const KoTabulatorList & tabList );
+    KCommand * setBackgroundColorCommand( const QColor & color );
     void applyStyle( const KoParagStyle * style );
 
     void dragStarted();

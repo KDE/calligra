@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +25,7 @@
 #include "KoTextParag.h"
 #include "KoTextDocument.h"
 #include "KoTextZoomHandler.h"
+#include "KoParagDecorationTab.h"
 
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -45,6 +47,7 @@
 #include <qgroupbox.h>
 #include <knuminput.h>
 #include <kdeversion.h>
+#include <kpushbutton.h>
 #include <kcombobox.h>
 
 KoCounterStyleWidget::KoCounterStyleWidget( bool displayDepth, bool onlyStyleTypeLetter, bool disableAll, QWidget * parent, const char* name  )
@@ -651,6 +654,25 @@ void KoBorderPreview::mousePressEvent( QMouseEvent *_ev )
     emit choosearea(_ev);
 }
 
+void KoBorderPreview::setBorder( KoBorder::BorderType which, const KoBorder& border)
+{
+    switch( which ) {
+    case KoBorder::TopBorder:
+        setTopBorder( border );
+        break;
+    case KoBorder::BottomBorder:
+        setBottomBorder( border );
+        break;
+    case KoBorder::LeftBorder:
+        setLeftBorder( border );
+        break;
+    case KoBorder::RightBorder:
+        setRightBorder( border );
+        break;
+    default:
+        kdError() << "KoBorderPreview: unknown border type" << endl;
+    }
+}
 
 void KoBorderPreview::drawContents( QPainter* painter )
 {
@@ -1273,253 +1295,241 @@ void KoParagAlignWidget::clearAligns()
     rJustify->setChecked( false );
 }
 
-KoParagBorderWidget::KoParagBorderWidget( QWidget * parent, const char * name )
-    : KoParagLayoutWidget( KoParagDia::PD_BORDERS, parent, name )
+////////////////////////////////////////////////////////////////////////////////
+
+KoParagDecorationWidget::KoParagDecorationWidget( QWidget * parent,
+                                                    const char * name )
+    : KoParagLayoutWidget( KoParagDia::PD_DECORATION, parent, name )
 {
-    QGridLayout *grid = new QGridLayout( this, 8, 2, KDialog::marginHint(), KDialog::spacingHint() );
+    QVBoxLayout *tabLayout = new QVBoxLayout( this );
+    wDeco = new KoParagDecorationTab( this );
+    tabLayout->add( wDeco );
 
-    QLabel * lStyle = new QLabel( i18n( "St&yle:" ), this );
-    grid->addWidget( lStyle, 0, 0 );
+    // Set up Border Style combo box
+    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::SOLID ) );
+    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::DASH ) );
+    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::DOT ) );
+    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT ) );
+    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT_DOT ) );
+    wDeco->cbBorderStyle->insertItem( KoBorder::getStyle( KoBorder::DOUBLE_LINE  ) );
 
-    cStyle = new QComboBox( false, this );
-    cStyle->insertItem( KoBorder::getStyle( KoBorder::SOLID ) );
-    cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH ) );
-    cStyle->insertItem( KoBorder::getStyle( KoBorder::DOT ) );
-    cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT ) );
-    cStyle->insertItem( KoBorder::getStyle( KoBorder::DASH_DOT_DOT ) );
-    cStyle->insertItem( KoBorder::getStyle( KoBorder::DOUBLE_LINE  ) );
-    lStyle->setBuddy( cStyle );
-    grid->addWidget( cStyle, 1, 0 );
-    //connect( cStyle, SIGNAL( activated( const QString & ) ), this, SLOT( brdStyleChanged( const QString & ) ) );
-
-    QLabel * lWidth = new QLabel( i18n( "&Width:" ), this );
-    grid->addWidget( lWidth, 2, 0 );
-
-    cWidth = new QComboBox( false, this );
+    // Set up Border Width combo box
     for( unsigned int i = 1; i <= 10; i++ )
-        cWidth->insertItem(QString::number(i));
-    lWidth->setBuddy( cWidth );
-    grid->addWidget( cWidth, 3, 0 );
-    //connect( cWidth, SIGNAL( activated( const QString & ) ), this, SLOT( brdWidthChanged( const QString & ) ) );
+        wDeco->cbBorderWidth->insertItem(QString::number(i));
 
-    QLabel * lColor = new QLabel( i18n( "Co&lor:" ), this );
-    grid->addWidget( lColor, 4, 0 );
+    // Setup the border toggle buttons, and merge checkbox
+    connect( wDeco->bBorderLeft, SIGNAL( toggled( bool ) ),
+             this, SLOT( brdLeftToggled( bool ) ) );
+    connect( wDeco->bBorderRight, SIGNAL( toggled( bool ) ),
+             this, SLOT( brdRightToggled( bool ) ) );
+    connect( wDeco->bBorderTop, SIGNAL( toggled( bool ) ),
+             this, SLOT( brdTopToggled( bool ) ) );
+    connect( wDeco->bBorderBottom, SIGNAL( toggled( bool ) ),
+             this, SLOT( brdBottomToggled( bool ) ) );
+    connect( wDeco->cbJoinBorder, SIGNAL( toggled( bool ) ),
+             this, SLOT( brdJoinToggled( bool ) ) );
 
-    bColor = new KColorButton( black,
-                                black,
-                                this );
-
-    lColor->setBuddy( bColor );
-    grid->addWidget( bColor, 5, 0 );
-    //connect( bColor, SIGNAL( changed( const QColor& ) ), this, SLOT( brdColorChanged( const QColor& ) ) );
-
-    QButtonGroup * bb = new QHButtonGroup( this );
-    bb->setFrameStyle(QFrame::NoFrame);
-    bLeft = new QPushButton(bb);
-    bLeft->setPixmap( BarIcon( "borderleft" ) );
-    bLeft->setToggleButton( true );
-    bRight = new QPushButton(bb);
-    bRight->setPixmap( BarIcon( "borderright" ) );
-    bRight->setToggleButton( true );
-    bTop = new QPushButton(bb);
-    bTop->setPixmap( BarIcon( "bordertop" ) );
-    bTop->setToggleButton( true );
-    bBottom = new QPushButton(bb);
-    bBottom->setPixmap( BarIcon( "borderbottom" ) );
-    bBottom->setToggleButton( true );
-    grid->addWidget( bb, 6, 0 );
-    cbJoinBorder = new QCheckBox(i18n("Merge with next paragraph"), this);
-    QToolTip::add( cbJoinBorder, i18n("Merges the border style of the current paragraph with the next paragraph") );
-    grid->addWidget( cbJoinBorder, 7, 0 );
-
-    connect( bLeft, SIGNAL( toggled( bool ) ), this, SLOT( brdLeftToggled( bool ) ) );
-    connect( bRight, SIGNAL( toggled( bool ) ), this, SLOT( brdRightToggled( bool ) ) );
-    connect( bTop, SIGNAL( toggled( bool ) ), this, SLOT( brdTopToggled( bool ) ) );
-    connect( bBottom, SIGNAL( toggled( bool ) ), this, SLOT( brdBottomToggled( bool ) ) );
-    connect( cbJoinBorder, SIGNAL( toggled( bool ) ), this, SLOT( brdJoinToggled( bool ) ) );
-
-    QGroupBox *grp=new QGroupBox( 0, Qt::Vertical, i18n( "Preview" ), this, "previewgrp" );
-    grid->addMultiCellWidget( grp , 0, 7, 1, 1 );
-    grp->layout()->setSpacing(KDialog::spacingHint());
-    grp->layout()->setMargin(KDialog::marginHint());
-    prev3 = new KoBorderPreview( grp );
-    QVBoxLayout *lay1 = new QVBoxLayout( grp->layout() );
-    lay1->addWidget(prev3);
-
-    connect( prev3, SIGNAL( choosearea(QMouseEvent * ) ),
+    // Set up Border preview widget
+    wPreview  = new KoBorderPreview( wDeco->borderPreview );
+    QVBoxLayout *previewLayout = new QVBoxLayout( wDeco->borderPreview );
+    previewLayout->addWidget( wPreview );
+    connect( wPreview, SIGNAL( choosearea(QMouseEvent * ) ),
              this, SLOT( slotPressEvent(QMouseEvent *) ) );
-
-    grid->setRowStretch( 7, 1 );
-    grid->setColStretch( 1, 1 );
 }
 
-void KoParagBorderWidget::display( const KoParagLayout & lay )
+///////
+// Current GUI selections
+KoBorder::BorderStyle KoParagDecorationWidget::curBorderStyle() const
 {
+    QString selection = wDeco->cbBorderStyle->currentText();
+    return KoBorder::getStyle( selection );
+}
+
+unsigned int KoParagDecorationWidget::curBorderWidth() const {
+    return wDeco->cbBorderWidth->currentText().toUInt();
+}
+
+QColor KoParagDecorationWidget::curBorderColor() const {
+    return wDeco->bBorderColor->color();
+}
+///////
+
+// Check whether a border is the same as that selected in the GUI
+bool KoParagDecorationWidget::borderChanged( const KoBorder& border ) {
+    return (unsigned int)border.penWidth() != curBorderWidth() ||
+           border.color != curBorderColor() ||
+           border.getStyle() != curBorderStyle();
+}
+
+// Set a given border according to the values selected in the GUI
+void KoParagDecorationWidget::updateBorder( KoBorder& border )
+{
+    border.setPenWidth( curBorderWidth() );
+    border.color = curBorderColor();
+    border.setStyle( curBorderStyle () );
+}
+
+void KoParagDecorationWidget::clickedBorderPreview( KoBorder& border,
+                                                     KoBorder::BorderType position,
+                                                     KPushButton *corresponding )
+{
+    if ( borderChanged( border ) && corresponding->isOn() ) {
+        updateBorder( border );
+        wPreview->setBorder( position, border );
+    }
+    else
+        corresponding->setOn( !corresponding->isOn() );
+}
+
+// Establish which border position was clicked in the border preview,
+// and update the appropriate border
+void KoParagDecorationWidget::slotPressEvent(QMouseEvent *_ev)
+{
+    const int OFFSETX = 15;
+    const int OFFSETY = 7;
+    const int Ko_SPACE = 30;
+
+    QRect r = wPreview->contentsRect();
+    QRect rect(r.x() + OFFSETX, r.y() + OFFSETY,
+               r.width() - OFFSETX, r.y() + OFFSETY + Ko_SPACE);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+        KoBorder::BorderType border = KoBorder::TopBorder;
+        clickedBorderPreview( m_topBorder, border,  wDeco->bBorderTop );
+    }
+
+    rect.setCoords(r.x() + OFFSETX, r.height() - OFFSETY - Ko_SPACE,
+                   r.width() - OFFSETX, r.height() - OFFSETY);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+        KoBorder::BorderType border = KoBorder::BottomBorder;
+        clickedBorderPreview( m_bottomBorder, border,  wDeco->bBorderBottom );
+    }
+
+    rect.setCoords(r.x() + OFFSETX, r.y() + OFFSETY,
+                   r.x() + Ko_SPACE + OFFSETX, r.height() - OFFSETY);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+        KoBorder::BorderType border = KoBorder::LeftBorder;
+        clickedBorderPreview( m_leftBorder, border,  wDeco->bBorderLeft );
+    }
+
+    rect.setCoords(r.width() - OFFSETX - Ko_SPACE, r.y() + OFFSETY,
+                   r.width() - OFFSETX, r.height() - OFFSETY);
+    if(rect.contains(QPoint(_ev->x(),_ev->y())))
+    {
+        KoBorder::BorderType border = KoBorder::RightBorder;
+        clickedBorderPreview( m_rightBorder, border,  wDeco->bBorderRight );
+    }
+}
+
+void KoParagDecorationWidget::display( const KoParagLayout & lay )
+{
+    wDeco->bBackgroundColor->setColor( lay.backgroundColor );
+
     m_leftBorder = lay.leftBorder;
     m_rightBorder = lay.rightBorder;
     m_topBorder = lay.topBorder;
     m_bottomBorder = lay.bottomBorder;
     m_joinBorder = lay.joinBorder;
-    bLeft->blockSignals( true );
-    bRight->blockSignals( true );
-    bTop->blockSignals( true );
-    bBottom->blockSignals( true );
+
+    wDeco->bBorderLeft->blockSignals( true );
+    wDeco->bBorderRight->blockSignals( true );
+    wDeco->bBorderTop->blockSignals( true );
+    wDeco->bBorderBottom->blockSignals( true );
     updateBorders();
-    bLeft->blockSignals( false );
-    bRight->blockSignals( false );
-    bTop->blockSignals( false );
-    bBottom->blockSignals( false );
+    wDeco->bBorderLeft->blockSignals( false );
+    wDeco->bBorderRight->blockSignals( false );
+    wDeco->bBorderTop->blockSignals( false );
+    wDeco->bBorderBottom->blockSignals( false );
 }
 
-void KoParagBorderWidget::save( KoParagLayout & lay )
+void KoParagDecorationWidget::updateBorders()
 {
-    lay.leftBorder = m_leftBorder;
-    lay.rightBorder = m_rightBorder;
+    wDeco->bBorderLeft->setOn( m_leftBorder.penWidth() > 0 );
+    wDeco->bBorderRight->setOn( m_rightBorder.penWidth() > 0 );
+    wDeco->bBorderTop->setOn( m_topBorder.penWidth() > 0 );
+    wDeco->bBorderBottom->setOn( m_bottomBorder.penWidth() > 0 );
+    wDeco->cbJoinBorder->setChecked( m_joinBorder );
+    wPreview->setLeftBorder( m_leftBorder );
+    wPreview->setRightBorder( m_rightBorder );
+    wPreview->setTopBorder( m_topBorder );
+    wPreview->setBottomBorder( m_bottomBorder );
+}
+
+
+void KoParagDecorationWidget::save( KoParagLayout & lay )
+{
+    lay.backgroundColor = wDeco->bBackgroundColor->color();
     lay.topBorder = m_topBorder;
     lay.bottomBorder = m_bottomBorder;
+    lay.leftBorder = m_leftBorder;
+    lay.rightBorder = m_rightBorder;
     lay.joinBorder = m_joinBorder;
 }
 
-#define OFFSETX 15
-#define OFFSETY 7
-#define Ko_SPACE 30
-void KoParagBorderWidget::slotPressEvent(QMouseEvent *_ev)
-{
-    QRect r = prev3->contentsRect();
-    QRect rect(r.x()+OFFSETX,r.y()+OFFSETY,r.width()-OFFSETX,r.y()+OFFSETY+Ko_SPACE);
-    if(rect.contains(QPoint(_ev->x(),_ev->y())))
-    {
-        if( (  ((int)m_topBorder.penWidth() != cWidth->currentText().toInt()) ||(m_topBorder.color != bColor->color() )
-               ||(m_topBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bTop->isOn() )
-        {
-            m_topBorder.setPenWidth( cWidth->currentText().toInt() );
-            m_topBorder.color = QColor( bColor->color() );
-            m_topBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
-            prev3->setTopBorder( m_topBorder );
-        }
-        else
-            bTop->setOn(!bTop->isOn());
-    }
-    rect.setCoords(r.x()+OFFSETX,r.height()-OFFSETY-Ko_SPACE,r.width()-OFFSETX,r.height()-OFFSETY);
-    if(rect.contains(QPoint(_ev->x(),_ev->y())))
-    {
-        if( (  ((int)m_bottomBorder.penWidth() != cWidth->currentText().toInt()) ||(m_bottomBorder.color != bColor->color() )
-               ||(m_bottomBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bBottom->isOn() )
-        {
-            m_bottomBorder.setPenWidth(cWidth->currentText().toInt());
-            m_bottomBorder.color = QColor( bColor->color() );
-            m_bottomBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
-            prev3->setBottomBorder( m_bottomBorder );
-        }
-        else
-            bBottom->setOn(!bBottom->isOn());
-    }
-
-    rect.setCoords(r.x()+OFFSETX,r.y()+OFFSETY,r.x()+Ko_SPACE+OFFSETX,r.height()-OFFSETY);
-    if(rect.contains(QPoint(_ev->x(),_ev->y())))
-    {
-
-        if( (  ((int)m_leftBorder.penWidth() != cWidth->currentText().toInt()) ||(m_leftBorder.color != bColor->color() )
-               ||(m_leftBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bLeft->isOn() )
-        {
-            m_leftBorder.setPenWidth( cWidth->currentText().toInt());
-            m_leftBorder.color = QColor( bColor->color() );
-            m_leftBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
-            prev3->setLeftBorder( m_leftBorder );
-        }
-        else
-            bLeft->setOn(!bLeft->isOn());
-    }
-    rect.setCoords(r.width()-OFFSETX-Ko_SPACE,r.y()+OFFSETY,r.width()-OFFSETX,r.height()-OFFSETY);
-    if(rect.contains(QPoint(_ev->x(),_ev->y())))
-    {
-
-        if( (  ((int)m_rightBorder.penWidth() != cWidth->currentText().toInt()) ||(m_rightBorder.color != bColor->color() )
-               ||(m_rightBorder.getStyle()!=KoBorder::getStyle(cStyle->currentText()) )) && bRight->isOn() )
-        {
-            m_rightBorder.setPenWidth( cWidth->currentText().toInt());
-            m_rightBorder.color = bColor->color();
-            m_rightBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
-            prev3->setRightBorder( m_rightBorder );
-        }
-        else
-            bRight->setOn(!bRight->isOn());
-    }
-}
-#undef OFFSETX
-#undef OFFSETY
-#undef Ko_SPACE
-
-void KoParagBorderWidget::updateBorders()
-{
-    bLeft->setOn( m_leftBorder.penWidth() > 0 );
-    bRight->setOn( m_rightBorder.penWidth() > 0 );
-    bTop->setOn( m_topBorder.penWidth() > 0 );
-    bBottom->setOn( m_bottomBorder.penWidth() > 0 );
-    prev3->setLeftBorder( m_leftBorder );
-    prev3->setRightBorder( m_rightBorder );
-    prev3->setTopBorder( m_topBorder );
-    prev3->setBottomBorder( m_bottomBorder );
-    cbJoinBorder->setChecked( m_joinBorder );
+QColor KoParagDecorationWidget::backgroundColor() const {
+    return wDeco->bBackgroundColor->color();
 }
 
-void KoParagBorderWidget::brdLeftToggled( bool _on )
+QString KoParagDecorationWidget::tabName() {
+    // Why D&e..?  Because &De.. conflicts with &Delete in
+    // the style manager.
+    return i18n( "D&ecorations" );
+}
+
+void KoParagDecorationWidget::brdLeftToggled( bool _on )
 {
     if ( !_on )
         m_leftBorder.setPenWidth(0);
     else {
-        m_leftBorder.setPenWidth(cWidth->currentText().toInt());
-        m_leftBorder.color = bColor->color();
-        m_leftBorder.setStyle(KoBorder::getStyle( cStyle->currentText() ));
+        m_leftBorder.setPenWidth( curBorderWidth() );
+        m_leftBorder.color = curBorderColor();
+        m_leftBorder.setStyle( curBorderStyle() );
     }
-    prev3->setLeftBorder( m_leftBorder );
+    wPreview->setLeftBorder( m_leftBorder );
 }
 
-void KoParagBorderWidget::brdRightToggled( bool _on )
+void KoParagDecorationWidget::brdRightToggled( bool _on )
 {
     if ( !_on )
         m_rightBorder.setPenWidth(0);
     else {
-        m_rightBorder.setPenWidth(cWidth->currentText().toInt());
-        m_rightBorder.color = bColor->color();
-        m_rightBorder.setStyle( KoBorder::getStyle( cStyle->currentText() ));
+        m_rightBorder.setPenWidth( curBorderWidth() );
+        m_rightBorder.color = curBorderColor();
+        m_rightBorder.setStyle( curBorderStyle() );
     }
-    prev3->setRightBorder( m_rightBorder );
+    wPreview->setRightBorder( m_rightBorder );
 }
 
-void KoParagBorderWidget::brdTopToggled( bool _on )
+void KoParagDecorationWidget::brdTopToggled( bool _on )
 {
     if ( !_on )
         m_topBorder.setPenWidth(0);
     else {
-        m_topBorder.setPenWidth(cWidth->currentText().toInt());
-        m_topBorder.color = bColor->color();
-        m_topBorder.setStyle(KoBorder::getStyle( cStyle->currentText() ));
+        m_topBorder.setPenWidth( curBorderWidth() );
+        m_topBorder.color = curBorderColor();
+        m_topBorder.setStyle( curBorderStyle() );
     }
-    prev3->setTopBorder( m_topBorder );
+    wPreview->setTopBorder( m_topBorder );
 }
 
-void KoParagBorderWidget::brdBottomToggled( bool _on )
+void KoParagDecorationWidget::brdBottomToggled( bool _on )
 {
     if ( !_on )
         m_bottomBorder.setPenWidth ( 0 );
     else {
-        m_bottomBorder.setPenWidth( cWidth->currentText().toInt());
-        m_bottomBorder.color = bColor->color();
-        m_bottomBorder.setStyle(KoBorder::getStyle(cStyle->currentText()));
+        m_bottomBorder.setPenWidth( curBorderWidth() );
+        m_bottomBorder.color = curBorderColor();
+        m_bottomBorder.setStyle( curBorderStyle() );
     }
-    prev3->setBottomBorder( m_bottomBorder );
+    wPreview->setBottomBorder( m_bottomBorder );
 }
 
-void KoParagBorderWidget::brdJoinToggled( bool _on )
-{
+void KoParagDecorationWidget::brdJoinToggled( bool _on ) {
     m_joinBorder = _on;
 }
-
-QString KoParagBorderWidget::tabName()
-{
-    return i18n( "&Borders" );
-}
+////////////////////////////////////////////////////////////////////////////////
 
 
 KoParagCounterWidget::KoParagCounterWidget( bool disableAll, QWidget * parent, const char * name )
@@ -2093,11 +2103,10 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
         m_alignWidget = new KoParagAlignWidget( breakLine, page, "align" );
         m_alignWidget->layout()->setMargin(0);
     }
-    if ( m_flags & PD_BORDERS )
+    if ( m_flags & PD_DECORATION )
     {
-        QVBox * page = addVBoxPage( i18n( "&Borders" ) );
-        m_borderWidget = new KoParagBorderWidget( page, "border" );
-        m_borderWidget->layout()->setMargin(0);
+        QVBox * page = addVBoxPage( i18n( "D&ecorations" ) );
+        m_decorationsWidget = new KoParagDecorationWidget( page, "decorations");
     }
     if ( m_flags & PD_NUMBERING )
     {
@@ -2141,8 +2150,8 @@ void KoParagDia::setCurrentPage( int page )
     case PD_ALIGN:
         showPage( pageIndex( m_alignWidget->parentWidget() ) );
         break;
-    case PD_BORDERS:
-        showPage( pageIndex( m_borderWidget->parentWidget() ) );
+    case PD_DECORATION:
+        showPage( pageIndex( m_decorationsWidget->parentWidget() ) );
         break;
     case PD_NUMBERING:
         showPage( pageIndex( m_counterWidget->parentWidget() ) );
@@ -2159,7 +2168,7 @@ void KoParagDia::setParagLayout( const KoParagLayout & lay )
 {
     m_indentSpacingWidget->display( lay );
     m_alignWidget->display( lay );
-    m_borderWidget->display( lay );
+    m_decorationsWidget->display( lay );
     m_counterWidget->display( lay );
     m_tabulatorsWidget->display( lay );
     oldLayout = lay;
@@ -2171,8 +2180,8 @@ void KoParagDia::slotReset()
         m_indentSpacingWidget->display( oldLayout );
     if( m_alignWidget )
         m_alignWidget->display( oldLayout );
-    if( m_borderWidget )
-        m_borderWidget->display( oldLayout );
+    if ( m_decorationsWidget )
+        m_decorationsWidget->display( oldLayout );
     if( m_counterWidget )
         m_counterWidget->display( oldLayout );
     if( m_tabulatorsWidget )
@@ -2210,6 +2219,7 @@ KoParagLayout KoParagDia::paragLayout() const
     newLayout.topBorder = topBorder();
     newLayout.bottomBorder = bottomBorder();
     newLayout.joinBorder = joinBorder();
+    newLayout.backgroundColor = backgroundColor();
     newLayout.counter = new KoParagCounter( counter() );
     return newLayout;
 }

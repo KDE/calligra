@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2001-2005 David Faure <faure@kde.org>
+   Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1196,6 +1197,50 @@ KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetIte
     emit showCursor();
     emit updateUI( true );
     return  new KoTextCommand( this, /*cmd, */name );
+}
+
+KCommand * KoTextObject::setBackgroundColorCommand( KoTextCursor * cursor,
+                                                    const QColor & color,
+                                                    int selectionId ) {
+    if ( protectContent() )
+        return 0L;
+
+    if ( !textdoc->hasSelection( selectionId, true ) && cursor &&
+         cursor->parag()->backgroundColor() == color )
+        return 0L; // No change needed.
+
+    emit hideCursor();
+    storeParagUndoRedoInfo( cursor, selectionId );
+    if ( !textdoc->hasSelection( selectionId, true )&&cursor )
+    {
+        // Update a single paragraph
+        cursor->parag()->setBackgroundColor(color);
+        setLastFormattedParag( cursor->parag() );
+    }
+    else
+    {
+        // Update multiple paragraphs
+        KoTextParag *start = textdoc->selectionStart( selectionId );
+        KoTextParag *end = textdoc->selectionEnd( selectionId );
+        setLastFormattedParag( start );
+        for ( ; start && start != end->next() ; start = start->next() )
+            start->setBackgroundColor(color);
+    }
+    formatMore( 2 );
+    emit repaintChanged( this );
+
+    // Update undo/redo info
+    undoRedoInfo.newParagLayout.backgroundColor = color;
+    KoTextParagCommand *cmd = new KoTextParagCommand(
+        textdoc, undoRedoInfo.id, undoRedoInfo.eid,
+        undoRedoInfo.oldParagLayouts, undoRedoInfo.newParagLayout,
+        KoParagLayout::BackgroundColor );
+    textdoc->addCommand( cmd );
+    undoRedoInfo.clear();
+
+    emit showCursor();
+    emit updateUI( true );
+    return new KoTextCommand( this, /*cmd, */ i18n("Change Paragraph Background Color" ) );
 }
 
 KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double spacing, KoParagLayout::SpacingType _type, int selectionId )

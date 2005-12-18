@@ -118,6 +118,9 @@ public:
     //void setTabList(const KoTabulatorList & tabList );
     KCommand *setTabListCommand(const KoTabulatorList & tabList );
 
+    //void setBackgroundColor(const QColor & color );
+    KCommand *setBackgroundColorCommand(const QColor & color );
+
     //void setCounter(const KoParagCounter & counter );
     KCommand *setCounterCommand(const KoParagCounter & counter );
 
@@ -315,6 +318,7 @@ public:
     KCommand * setJoinBordersCommand( KoTextCursor * cursor, bool join, int selectionId = KoTextDocument::Standard );
     KCommand * setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin, int selectionId = KoTextDocument::Standard);
     KCommand* setTabListCommand( KoTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = KoTextDocument::Standard );
+    KCommand* setBackgroundColorCommand( KoTextCursor * cursor,const QColor & color , int selectionId = KoTextDocument::Standard );
 
     KCommand * setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId = KoTextDocument::Standard );
 

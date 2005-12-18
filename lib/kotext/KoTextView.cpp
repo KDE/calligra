@@ -1044,6 +1044,10 @@ KCommand * KoTextView::setTabListCommand( const KoTabulatorList & tabList )
 {
     return textObject()->setTabListCommand( m_cursor, tabList );
 }
+KCommand * KoTextView::setBackgroundColorCommand( const QColor & color )
+{
+    return textObject()->setBackgroundColorCommand( m_cursor, color );
+}
 
 KoTextDocument * KoTextView::textDocument() const
 {

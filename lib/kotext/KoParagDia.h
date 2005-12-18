@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -37,6 +38,7 @@
 #include <koffice_export.h>
 class KoTextZoomHandler;
 class KButtonBox;
+class KPushButton;
 class KColorButton;
 class KoTextDocument;
 class KoBorderPreview;
@@ -58,6 +60,7 @@ class KDoubleNumInput;
 class KComboBox;
 class QVBoxLayout;
 class KoUnitDoubleSpinBox;
+class KoParagDecorationTab; // From KoParagDecorationTab.ui
 
 /**
  * This is the base class for any widget [usually used in a tab]
@@ -172,26 +175,27 @@ private:
 /**
  * The widget for editing paragraph borders (tab 3)
  */
-class KOTEXT_EXPORT KoParagBorderWidget : public KoParagLayoutWidget
+class KOTEXT_EXPORT KoParagDecorationWidget : public KoParagLayoutWidget
 {
     Q_OBJECT
 public:
-    KoParagBorderWidget( QWidget * parent, const char * name = 0 );
-    virtual ~KoParagBorderWidget() {}
+    KoParagDecorationWidget( QWidget * parent, const char * name = 0 );
+    virtual ~KoParagDecorationWidget() {}
 
     virtual void display( const KoParagLayout & lay );
     virtual void save( KoParagLayout & lay );
     //virtual bool isModified();
     virtual QString tabName();
 
+    // Borders
     KoBorder leftBorder() const { return m_leftBorder; }
     KoBorder rightBorder() const { return m_rightBorder; }
     KoBorder topBorder() const { return m_topBorder; }
     KoBorder bottomBorder() const { return m_bottomBorder; }
     bool joinBorder() const { return m_joinBorder; }
 
-protected:
-    void updateBorders();
+    // Background color
+    QColor backgroundColor() const;
 
 protected slots:
     void brdLeftToggled( bool );
@@ -199,20 +203,53 @@ protected slots:
     void brdTopToggled( bool );
     void brdBottomToggled( bool );
     void brdJoinToggled( bool );
-    //void brdStyleChanged( const QString & );
-    //void brdWidthChanged( const QString & );
-    //void brdColorChanged( const QColor& );
     void slotPressEvent(QMouseEvent *_ev);
 
+protected:
+    void updateBorders();
+
 private:
-    QComboBox *cWidth, *cStyle;
-    QPushButton *bLeft, *bRight, *bTop, *bBottom;
-    KColorButton *bColor;
+    // GUI
+    KoBorderPreview *wPreview;
+    //! Widget defined in .ui file
+    KoParagDecorationTab *wDeco;
+    //! Get the currently selected border style
+    KoBorder::BorderStyle curBorderStyle() const;
+    //! Get the currently selected border width
+    unsigned int curBorderWidth() const;
+    //! Get the currently selected border color
+    QColor curBorderColor() const;
+
+    // Borders
     KoBorder m_leftBorder, m_rightBorder, m_topBorder, m_bottomBorder;
-    KoBorderPreview *prev3;
-    QCheckBox *cbJoinBorder;
     bool m_joinBorder;
+    
+    /**
+     * Update a border that has been clicked in the border preview.
+     *
+     * If there is no border already at the clicked @p position, then
+     * create a border at that position using the selected width,color and
+     * style.
+     * 
+     * If the clicked border is already on, and it is different to the
+     * selected width, color or style, then update it to match the
+     * current selection.  If it's the same, then remove the border.
+     *
+     * Used by slotPressEvent.
+     * @param border the border to be updated
+     * @param position the position of the border to be updated
+     * @param corresponding the toggle button corresponding to the border
+     */
+    void clickedBorderPreview( KoBorder& border, KoBorder::BorderType position,
+			       KPushButton *corresponding );
+
+    //! Set a given border according to the values selected in the GUI
+    void updateBorder( KoBorder& border );
+    //! Check whether a border is the same as that selected in the GUI
+    bool borderChanged( const KoBorder& border );
+
 };
+
 
 class KOTEXT_EXPORT KoCounterStyleWidget : public QWidget
 {
@@ -437,6 +474,7 @@ protected:
     KoTextZoomHandler *m_zoomHandler;
 };
 
+
 /**
  * The complete(*) dialog for changing attributes of a paragraph
  *
@@ -448,7 +486,7 @@ class KOTEXT_EXPORT KoParagDia : public KDialogBase
     Q_OBJECT
 
 public:
-    enum { PD_SPACING = 1, PD_ALIGN = 2, PD_BORDERS = 4, PD_NUMBERING = 8,
+    enum { PD_SPACING = 1, PD_ALIGN = 2, PD_DECORATION = 4, PD_NUMBERING = 8,
            PD_TABS = 16 };
 
     /**
@@ -480,11 +518,11 @@ public:
     int pageBreaking() const { return m_alignWidget->pageBreaking(); }
 
     // tab 3
-    KoBorder leftBorder() const { return m_borderWidget->leftBorder(); }
-    KoBorder rightBorder() const { return m_borderWidget->rightBorder(); }
-    KoBorder topBorder() const { return m_borderWidget->topBorder(); }
-    KoBorder bottomBorder() const { return m_borderWidget->bottomBorder(); }
-    bool joinBorder() const { return m_borderWidget->joinBorder(); }
+    KoBorder leftBorder() const { return m_decorationsWidget->leftBorder(); }
+    KoBorder rightBorder() const { return m_decorationsWidget->rightBorder(); }
+    KoBorder topBorder() const { return m_decorationsWidget->topBorder(); }
+    KoBorder bottomBorder() const { return m_decorationsWidget->bottomBorder(); }
+    bool joinBorder() const { return m_decorationsWidget->joinBorder(); }
 
     // tab 4
     const KoParagCounter & counter() const { return m_counterWidget->counter(); }
@@ -493,23 +531,43 @@ public:
     KoTabulatorList tabListTabulator() const { return m_tabulatorsWidget->tabList(); }
     KoParagTabulatorsWidget * tabulatorsWidget() const { return m_tabulatorsWidget; }
 
+    QColor backgroundColor() const { return m_decorationsWidget->backgroundColor(); }
+
     // Support for "what has changed?"
     bool isAlignChanged() const {return oldLayout.alignment!=align();}
-    bool isLineSpacingChanged() const {return (oldLayout.lineSpacingValue() !=lineSpacing() || oldLayout.lineSpacingType != lineSpacingType());}
-    bool isLeftMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginLeft]!=leftIndent(); }
-    bool isRightMarginChanged() const { return oldLayout.margins[QStyleSheetItem::MarginRight]!=rightIndent();}
-    bool isFirstLineChanged() const {return oldLayout.margins[ QStyleSheetItem::MarginFirstLine]!=firstLineIndent();}
-    bool isSpaceBeforeChanged() const { return oldLayout.margins[QStyleSheetItem::MarginTop]!=spaceBeforeParag();}
-    bool isSpaceAfterChanged() const {return oldLayout.margins[QStyleSheetItem::MarginBottom]!=spaceAfterParag();}
-    bool isPageBreakingChanged() const { return oldLayout.pageBreaking!=pageBreaking(); }
+    bool isLineSpacingChanged() const {
+	return (oldLayout.lineSpacingValue() !=lineSpacing() ||
+                oldLayout.lineSpacingType != lineSpacingType());
+    }
+    bool isLeftMarginChanged() const {
+	return oldLayout.margins[QStyleSheetItem::MarginLeft]!=leftIndent();
+    }
+    bool isRightMarginChanged() const {
+	return oldLayout.margins[QStyleSheetItem::MarginRight]!=rightIndent();
+    }
+    bool isFirstLineChanged() const {
+	return oldLayout.margins[ QStyleSheetItem::MarginFirstLine]!=firstLineIndent();
+    }
+    bool isSpaceBeforeChanged() const {
+	return oldLayout.margins[QStyleSheetItem::MarginTop]!=spaceBeforeParag();
+    }
+    bool isSpaceAfterChanged() const {
+	return oldLayout.margins[QStyleSheetItem::MarginBottom]!=spaceAfterParag();
+    }
+    bool isPageBreakingChanged() const {
+	return oldLayout.pageBreaking!=pageBreaking();
+    }
     bool isCounterChanged() const;
-
-    bool isBorderChanged() const { return (oldLayout.leftBorder!=leftBorder() ||
-                                           oldLayout.rightBorder!=rightBorder() ||
-                                           oldLayout.topBorder!=topBorder() ||
-                                           oldLayout.bottomBorder!=bottomBorder() ); }
+    bool isBorderChanged() const {
+	return (oldLayout.leftBorder!=leftBorder() ||
+                oldLayout.rightBorder!=rightBorder() ||
+                oldLayout.topBorder!=topBorder() ||
+                oldLayout.bottomBorder!=bottomBorder() );
+    }
     bool isJoinBorderChanged() const { return oldLayout.joinBorder!=joinBorder(); }
     bool listTabulatorChanged() const {return oldLayout.tabList()!=tabListTabulator();}
+    bool isBackgroundColorChanged() const { return oldLayout.backgroundColor != backgroundColor(); }
+
     KoParagLayout paragLayout() const;
     /// @return the set of flags which were changed
     int changedFlags() const;
@@ -524,10 +582,9 @@ signals:
 private:
     KoIndentSpacingWidget * m_indentSpacingWidget;
     KoParagAlignWidget * m_alignWidget;
-    KoParagBorderWidget * m_borderWidget;
+    KoParagDecorationWidget * m_decorationsWidget;
     KoParagCounterWidget * m_counterWidget;
     KoParagTabulatorsWidget * m_tabulatorsWidget;
-
     int m_flags;
     KoParagLayout oldLayout;
 };

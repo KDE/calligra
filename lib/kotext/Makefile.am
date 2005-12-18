@@ -18,7 +18,7 @@ libkotext_la_SOURCES = KoComplexText.cpp KoRichText.cpp \
 	KoTextViewIface.skel KoTextViewIface.cc KoFontDia.cpp KoBgSpellCheck.cpp \
 	KoCommentDia.cpp KoSpell.cpp KoCreateStyleDia.cpp KoTextCustomItem.cpp \
 	KoImportStyleDia.cpp KoTextIterator.cpp KoOasisContext.cpp KoListStyleStack.cpp \
-	KoUserStyle.cpp KoUserStyleCollection.cpp KoParagStyle.cpp
+	KoUserStyle.cpp KoUserStyleCollection.cpp KoParagStyle.cpp KoParagDecorationTab.ui
 
 libkotext_la_LDFLAGS = $(all_libraries) -version-info 3:0:0 -no-undefined
 # We use kofficeui for koRect :)

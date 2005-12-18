@@ -4651,7 +4651,7 @@ void KPrView::showParagraphDialog(int initialPage, double initialTabPos)
     delete m_paragDlg;
     m_paragDlg = new KoParagDia( this, "",
                                  KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
-                                 KoParagDia::PD_BORDERS | KoParagDia::PD_NUMBERING |
+                                 KoParagDia::PD_DECORATION | KoParagDia::PD_NUMBERING |
                                  KoParagDia::PD_TABS,
                                  m_pKPresenterDoc->unit(),
                                  lstObjects.first()->getSize().width(),false );

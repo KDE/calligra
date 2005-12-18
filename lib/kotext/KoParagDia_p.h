@@ -119,13 +119,19 @@ public:
     ~KoBorderPreview() {}
 
     KoBorder leftBorder()const { return m_leftBorder; }
-    void setLeftBorder( KoBorder _leftBorder ) { m_leftBorder = _leftBorder; repaint( true ); }
-    KoBorder rightBorder()const { return m_rightBorder; }
-    void setRightBorder( KoBorder _rightBorder ) { m_rightBorder = _rightBorder; repaint( true ); }
+    void setLeftBorder( const KoBorder& _leftBorder ) 
+	{ m_leftBorder = _leftBorder; repaint( true ); }
+    KoBorder rightBorder() const { return m_rightBorder; }
+    void setRightBorder( const KoBorder& _rightBorder )
+	{ m_rightBorder = _rightBorder; repaint( true ); }
     KoBorder topBorder()const { return m_topBorder; }
-    void setTopBorder( KoBorder _topBorder ) { m_topBorder = _topBorder; repaint( true ); }
+    void setTopBorder( const KoBorder& _topBorder )
+	{ m_topBorder = _topBorder; repaint( true ); }
     KoBorder bottomBorder()const { return m_bottomBorder; }
-    void setBottomBorder( KoBorder _bottomBorder ) { m_bottomBorder = _bottomBorder; repaint( true ); }
+    void setBottomBorder( const KoBorder& _bottomBorder )
+	{ m_bottomBorder = _bottomBorder; repaint( true ); }
+
+    void setBorder( KoBorder::BorderType which, const KoBorder& border);
 
 protected:
     virtual void mousePressEvent( QMouseEvent* _ev );

@@ -85,7 +85,7 @@ KoStyleManager::KoStyleManager( QWidget *_parent, KoUnit::Unit unit,
     addTab( newTab );
 
     newTab = new KoStyleParagTab( m_tabs );
-    newTab->setWidget( new KoParagBorderWidget( newTab ) );
+    newTab->setWidget( new KoParagDecorationWidget( newTab ) );
     addTab( newTab );
 
     newTab = new KoStyleParagTab( m_tabs );

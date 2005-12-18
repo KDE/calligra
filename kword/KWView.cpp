@@ -253,7 +253,7 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     m_zoomViewModeNormal.m_zoomMode = m_doc->zoomMode();
     m_zoomViewModePreview.m_zoom = 33; // TODO: bad to leave hardcoded...
     m_zoomViewModePreview.m_zoomMode = KoZoomMode::ZOOM_CONSTANT;
-    
+
     m_viewFrameBorders = m_doc->viewFrameBorders();
     KoView::setZoom( m_doc->zoomedResolutionY() /* KoView only supports one zoom */ ); // initial value
     //m_viewTableGrid = true;
@@ -481,7 +481,7 @@ void KWView::initGui()
 
     //refresh zoom combobox
     updateZoomControls();
-    
+
 
     // This is probably to emit currentMouseModeChanged and set the cursor
     m_gui->canvasWidget()->setMouseMode( m_gui->canvasWidget()->mouseMode() );
@@ -3180,7 +3180,7 @@ void KWView::viewZoom( const QString &s )
     {
         m_doc->setZoomMode(KoZoomMode::ZOOM_WIDTH);
         zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->pageManager()->page(m_currentPage)->width() ) ) - 1;
-        
+
         if(zoom != m_doc->zoom() && !canvas->verticalScrollBar() ||
                 !canvas->verticalScrollBar()->isVisible()) { // has no vertical scrollbar
             // we have to do this twice to take into account a possibly appearing vertical scrollbar
@@ -3205,7 +3205,7 @@ void KWView::viewZoom( const QString &s )
         regexp.search(s);
         zoom=regexp.cap(1).toInt(&ok);
     }
-    
+
     if( !ok || zoom<10 ) //zoom should be valid and >10
         zoom = m_doc->zoom();
     if ( !KoZoomMode::isConstant(s) )
@@ -3644,10 +3644,16 @@ void KWView::showParagraphDialog( int initialPage, double initialTabPos )
     if (edit)
     {
         delete m_paragDlg;
+        bool showFrameEndOptions = !edit->frameSet()->isHeaderOrFooter() &&
+                                   !edit->frameSet()->groupmanager();
         m_paragDlg = new KoParagDia( this, "",
                                      KoParagDia::PD_SPACING | KoParagDia::PD_ALIGN |
-                                     KoParagDia::PD_BORDERS |
-                                     KoParagDia::PD_NUMBERING | KoParagDia::PD_TABS, m_doc->unit(),edit->textFrameSet()->frame(0)->width() ,(!edit->frameSet()->isHeaderOrFooter() && !edit->frameSet()->groupmanager()), edit->frameSet()->isFootEndNote());
+                                     KoParagDia::PD_DECORATION | KoParagDia::PD_NUMBERING |
+                                     KoParagDia::PD_TABS,
+                                     m_doc->unit(),
+                                     edit->textFrameSet()->frame(0)->width(),
+                                     showFrameEndOptions,
+                                     edit->frameSet()->isFootEndNote());
         m_paragDlg->setCaption( i18n( "Paragraph Settings" ) );
 
         // Initialize the dialog from the current paragraph's settings
@@ -3777,8 +3783,10 @@ void KWView::slotApplyParag()
     }
     if(m_paragDlg->isBorderChanged())
     {
-        cmd=edit->setBordersCommand( m_paragDlg->leftBorder(), m_paragDlg->rightBorder(),
-                                     m_paragDlg->topBorder(), m_paragDlg->bottomBorder() );
+        cmd=edit->setBordersCommand( m_paragDlg->leftBorder(),
+                                     m_paragDlg->rightBorder(),
+                                     m_paragDlg->topBorder(),
+                                     m_paragDlg->bottomBorder() );
         if(cmd)
         {
             if ( !macroCommand )
@@ -3801,6 +3809,18 @@ void KWView::slotApplyParag()
     if ( m_paragDlg->isPageBreakingChanged() )
     {
         cmd=edit->setPageBreakingCommand( m_paragDlg->pageBreaking() );
+        if(cmd)
+        {
+            if ( !macroCommand )
+                macroCommand = new KMacroCommand( i18n( "Paragraph Settings" ) );
+
+            macroCommand->addCommand(cmd);
+        }
+    }
+
+    if ( m_paragDlg->isBackgroundColorChanged() )
+    {
+        cmd=edit->setBackgroundColorCommand( m_paragDlg->backgroundColor() );
         if(cmd)
         {
             if ( !macroCommand )
@@ -6493,7 +6513,7 @@ void KWView::switchModeView()
     }
     //remove/add "zoom to page". Not necessary in text mode view.
     updateZoomControls();
-    
+
     updatePageInfo();
     // set page layout in rulers
     canvas->viewMode()->setPageLayout( m_gui->getHorzRuler(), m_gui->getVertRuler(), m_doc->pageLayout() );
@@ -7515,12 +7535,12 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     gridLayout->addWidget( m_tabChooser, 0, 0 );
 
     m_horRuler = new KoRuler( m_right, m_canvas->viewport(), Qt::Horizontal, layout,
-			      KoRuler::F_INDENTS | KoRuler::F_TABS, 
+			      KoRuler::F_INDENTS | KoRuler::F_TABS,
 			      doc->unit(), m_tabChooser );
     m_horRuler->setReadWrite(doc->isReadWrite());
     gridLayout->addWidget( m_horRuler, 0, 1 );
 
-    m_vertRuler = new KoRuler( m_right, m_canvas->viewport(), Qt::Vertical, layout, 
+    m_vertRuler = new KoRuler( m_right, m_canvas->viewport(), Qt::Vertical, layout,
 			       0, doc->unit() );
     m_vertRuler->setReadWrite(doc->isReadWrite());
     gridLayout->addWidget( m_vertRuler, 1, 0 );
@@ -7546,7 +7566,7 @@ KWGUI::KWGUI( const QString& viewMode, QWidget *parent, KWView *daView )
     m_vertRuler->hide();
 
     m_canvas->show();
-    
+
     reorganize();
 
     connect( m_horRuler, SIGNAL( tabListChanged( const KoTabulatorList & ) ), m_view,
