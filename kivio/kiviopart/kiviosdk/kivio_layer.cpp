@@ -412,23 +412,25 @@ KivioStencil *KivioLayer::checkForStencil( KoPoint *pPoint, int *collisionType, 
     KivioStencil *pStencil;
     int colType;
 
-    pStencil = m_pStencilList->last();
-    while( pStencil )
-    {
-      // If we are only supposed to check the selected stencils, then only do that.  Otherwise
-      // check them all.
-      if( (selectedOnly==true && pStencil->isSelected()==true) ||
-        (selectedOnly==false) )
+    if(editable()) {
+      pStencil = m_pStencilList->last();
+      while( pStencil )
       {
-        if( (colType = pStencil->checkForCollision( pPoint, threshold )) != kctNone )
+        // If we are only supposed to check the selected stencils, then only do that.  Otherwise
+        // check them all.
+        if( (selectedOnly==true && pStencil->isSelected()==true) ||
+          (selectedOnly==false) )
         {
-          // Assign the collision type and return
-          *collisionType = colType;
-          return pStencil;
+          if( (colType = pStencil->checkForCollision( pPoint, threshold )) != kctNone )
+          {
+            // Assign the collision type and return
+            *collisionType = colType;
+            return pStencil;
+          }
         }
+  
+        pStencil = m_pStencilList->prev();
       }
-
-      pStencil = m_pStencilList->prev();
     }
 
     *collisionType = kctNone;
