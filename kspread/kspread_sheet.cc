@@ -8437,7 +8437,7 @@ void Sheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _
 
     kdDebug(36001) << "NOW FETCHING INTERFACE" << endl;
 
-    if ( !dd->initDoc(KoDocument::InitDocEmbedded) )
+    if ( !dd->showEmbedInitDialog( 0 ) )
         return;
 
     ChartChild * ch = new ChartChild( doc(), this, dd, _rect );
