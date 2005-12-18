@@ -451,7 +451,131 @@ adjacent.
 </para>
 
 <para>This toolbar contains dropdown <quote>palettes</quote> in which you
-can choose brush shapes, gradients, fill patterns, and painter's tools.</para>
+can choose brush shapes, gradients, and fill patterns. There is also a
+dropdown box for painter's tools.</para>
+
+<sect3 id="commands-toolbars-brushesandstuff-brushshapes">
+<title>Brush Shapes</title>
+
+<para>
+<screenshot>
+<screeninfo>The Brush Shapes palette</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-brushshapes-predefined.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Brush Shapes palette</phrase>
+</textobject>
+<caption><para>The Brush Shapes palette</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>In the <guilabel>Brush Shapes</guilabel> palette, you can choose
+which brush to paint with. This brush is used for painting operations
+like Freehand, Rectangle, Ellipse, etcetera. You can choose a predefined
+brush (in the <guilabel>Predefined brushes</guilabel> tab, shown above), or
+customize or create one.</para>
+
+<para>
+<screenshot>
+<screeninfo>The Brush Shapes palette with the Autobrush tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-brushshapes-autobrush.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Brush Shapes palette with the Autobrush tab</phrase>
+</textobject>
+<caption><para>The Brush Shapes palette with the Autobrush
+tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>The <guilabel>Autobrush</guilabel> tab allows you to create a customized
+rectangular or ellipsoid brush. You can set its height and width using
+the <guilabel>Size</guilabel> spin boxes. The link icon controls whether 
+the height and width are forced to be the same or not. If a connected link
+picture is shown, changing one value will automatically change the other one 
+as well. A disconnected link indicates that both values can be set
+independently. The fuzziness of the brush can be set with the
+<guilabel>Fade</guilabel> spin boxes. Again, horizontal and vertical values can
+be allowed to differ or not, depending on the state of the link button.</para>
+
+<para>
+<screenshot>
+<screeninfo>The Brush Shapes palette with the Custom Brush tab</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-brushshapes-custombrush.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Brush Shapes palette with the Custom Brush tab</phrase>
+</textobject>
+<caption><para>The Brush Shapes palette with the Custom Brush
+tab</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>The <guilabel>Custom Brush</guilabel> tab of this palette lets you
+use the current image as a brush. With the <guibutton>Add to
+predefined brushes</guibutton> button, you can save it for later use.</para>
+
+</sect3>
+
+<sect3 id="commands-toolbars-brushesandstuff-gradients">
+<title>Gradients</title>
+
+<para>
+<screenshot>
+<screeninfo>The Gradients palette</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-gradients.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Gradients palette</phrase>
+</textobject>
+<caption><para>The Gradients palette</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>In the <guilabel>Gradients</guilabel> palette, you can choose a gradient
+to paint with using the Gradient fill tool. Clicking once on a gradient in the
+palette will show a larger preview. Click it again to make it the current
+gradient.</para>
+<para>You can create your own gradients with the <guibutton>Custom
+gradient</guibutton> button.</para>
+
+</sect3>
+
+<sect3 id="commands-toolbars-brushesandstuff-patterns">
+<title>Patterns</title>
+
+<para>
+<screenshot>
+<screeninfo>The Patterns palette</screeninfo>
+<mediaobject>
+<imageobject>
+<imagedata fileref="toolbar-brushes-patterns.png" format="PNG" />
+</imageobject>
+<textobject>
+<phrase>The Patterns palette</phrase>
+</textobject>
+<caption><para>The Patterns palette</para></caption>
+</mediaobject>
+</screenshot>
+</para>
+
+<para>The <guilabel>Patterns</guilabel> palette allows you to choose a pattern
+for operations like Pattern fill. Click a pattern to see a preview at
+actual size, then click it again to select it.</para>
+
+</sect3>
 
 </sect2>
 
