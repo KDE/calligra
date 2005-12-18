@@ -256,7 +256,7 @@ void KoShellWindow::slotSidebarItemClicked( QIconViewItem *item )
     {
         // koshell isn't starting, but this is like starting a new app:
         // offer both "open existing file" and "open new file".
-        if ( doc->initDoc( KoDocument::InitDocAppStarting) )
+        if ( doc->showEmbedInitDialog( this ) )
         {
             partManager()->addPart( doc, false );
             setRootDocument( doc );
@@ -410,7 +410,7 @@ void KoShellWindow::slotSidebar_Part(int _item)
   kapp->restoreOverrideCursor();
   if (doc)
   {
-    if ( doc->initDoc( KoDocument::InitDocAppStarting) )
+    if ( doc->showEmbedInitDialog( this ) )
     {
       partManager()->addPart( doc, false );
       setRootDocument( doc );
@@ -498,7 +498,7 @@ void KoShellWindow::slotFileNew()
     KoDocument* newdoc = m_documentEntry.createDoc();
     if ( !newdoc )
         return;
-    if ( !newdoc->initDoc(KoDocument::InitDocFileNew) )
+    if ( !newdoc->showEmbedInitDialog( this ) )
     {
       delete newdoc;
       return;
