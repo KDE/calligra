@@ -87,15 +87,32 @@ KexiScriptDesignView::~KexiScriptDesignView()
 
 void KexiScriptDesignView::updateProperties()
 {
+    Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
+
     QString interpretername = d->scriptaction->getInterpreterName();
-    Kross::Api::InterpreterInfo* info = Kross::Api::Manager::scriptManager()->getInterpreterInfo( interpretername );
+    Kross::Api::InterpreterInfo* info = interpretername.isEmpty() ? 0 : manager->getInterpreterInfo(interpretername);
+
+    {
+        // if interpreter isn't defined or invalid, try to fallback.
+        QStringList list;
+        list << "python" << "ruby";
+        QStringList::Iterator it( list.begin() );
+        while( (! info) && (it != list.end()) ) {
+            interpretername = (*it);
+            info = manager->getInterpreterInfo(interpretername);
+            if(info)
+                d->scriptaction->setInterpreterName(interpretername);
+            ++it;
+        }
+    }
+
     if(info) {
         disconnect(d->properties, SIGNAL( propertyChanged(KoProperty::Set&, KoProperty::Property&) ),
                    this, SLOT( slotPropertyChanged(KoProperty::Set&, KoProperty::Property&) ));
 
         d->properties->clear();
 
-        QStringList interpreters = Kross::Api::Manager::scriptManager()->getInterpreters();
+        QStringList interpreters = manager->getInterpreters();
         KoProperty::Property::ListData* proplist = new KoProperty::Property::ListData(interpreters, interpreters);
         KoProperty::Property* prop = new KoProperty::Property(
             "language", // name
@@ -186,21 +203,20 @@ bool KexiScriptDesignView::loadData()
         return false;
     }
 
-    QString language = scriptelem.attribute("language");
-    if(! language.isNull()) {
-        d->scriptaction->setInterpreterName(language);
+    QString interpretername = scriptelem.attribute("language");
+    Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
+    Kross::Api::InterpreterInfo* info = interpretername.isEmpty() ? 0 : manager->getInterpreterInfo(interpretername);
+    if(info) {
+        d->scriptaction->setInterpreterName(interpretername);
 
-        Kross::Api::InterpreterInfo* info = Kross::Api::Manager::scriptManager()->getInterpreterInfo(language);
-        if(info) {
-            Kross::Api::InterpreterInfo::Option::Map options = info->getOptions();
-            Kross::Api::InterpreterInfo::Option::Map::Iterator it = options.begin();
-            for(; it != options.end(); ++it) {
-                QString value = scriptelem.attribute( it.data()->name );
-                if(! value.isNull()) {
-                    QVariant v(value);
-                    if( v.cast( it.data()->value.type() ) ) // preserve the QVariant's type
-                        d->scriptaction->getScriptContainer()->setOption(it.data()->name, v);
-                }
+        Kross::Api::InterpreterInfo::Option::Map options = info->getOptions();
+        Kross::Api::InterpreterInfo::Option::Map::Iterator it = options.begin();
+        for(; it != options.end(); ++it) {
+            QString value = scriptelem.attribute( it.data()->name );
+            if(! value.isNull()) {
+                QVariant v(value);
+                if( v.cast( it.data()->value.type() ) ) // preserve the QVariant's type
+                    d->scriptaction->getScriptContainer()->setOption(it.data()->name, v);
             }
         }
     }
