@@ -95,3 +95,8 @@ MAKE IT NICE:
 -	introduce our own "Color drag" class, since we have in addition to rgb also opacity,
 	and maybe also gradient info could be dragged later.
 
+NEW IDEAS:
+- make VDocument a KoDocument?
+- use KParts::plugin for tools?
+- use KoToolBox ?
+
