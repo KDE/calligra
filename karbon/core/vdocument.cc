@@ -35,10 +35,7 @@ VDocument::VDocument()
 	: VObject( 0L ),
 	  m_width(0.), m_height(0.),
 	  m_selectionMode( VDocument::ActiveLayer ),
-	  m_unit( KoUnit::U_MM ),
-	  m_mime( "application/x-karbon" ),
-	  m_version( "0.1" ), m_editor( "karbon14 0.0.1" ),
-	  m_syntaxVersion( "0.1" )
+	  m_unit( KoUnit::U_MM )
 {
 	m_selection = new VSelection( this );
 
@@ -218,10 +215,10 @@ VDocument::saveOasis( KoStore *store, KoXmlWriter *docWriter, KoGenStyles &mainS
 void
 VDocument::save( QDomElement& me ) const
 {
-	me.setAttribute( "mime", m_mime );
-	me.setAttribute( "version", m_version );
-	me.setAttribute( "editor", m_editor );
-	me.setAttribute( "syntaxVersion", m_syntaxVersion );
+	me.setAttribute( "mime", "application/x-karbon" ),
+	me.setAttribute( "version", "0.1" );
+	me.setAttribute( "editor", "Karbon14" );
+	me.setAttribute( "syntaxVersion", "0.1" );
 	if( m_width > 0. )
 		me.setAttribute( "width", m_width );
 	if( m_height > 0. )
@@ -258,11 +255,6 @@ VDocument::loadXML( const QDomElement& doc )
 	}
 
 	m_layers.clear();
-
-	m_mime = doc.attribute( "mime" );
-	m_version = doc.attribute( "version" );
-	m_editor = doc.attribute( "editor" );
-	m_syntaxVersion = doc.attribute( "syntaxVersion" );
 
 	m_width  = doc.attribute( "width", "800.0" ).toDouble();
 	m_height = doc.attribute( "height", "550.0" ).toDouble();

@@ -79,75 +79,11 @@ public:
 	virtual void draw( VPainter* painter, const KoRect* rect ) const;
 	
 	/**
-	 *	Draw the document frame to a painting device.
+	 * Draw the document frame to a painting device.
 	 *
 	 * @param painter abstraction that is used to render to a painting device.
 	 */
 	void drawPage( VPainter *painter ) const;
-
-	/**
-	 * Returns the mime type.
-	 *
-	 * @return the document's mime type
-	 */ 
-	const QString& mime()
-		{ return m_mime; }
-
-	/**
-	 * Sets the mime type.
-	 *
-	 * @param mime the new mime type
-	 */
-	void setMime( const QString& mime )
-		{ m_mime = mime; }
-
-	/**
-	 * Returns the version.
-	 *
-	 * @return the document's version
-	 */ 
-	const QString& version()
-		{ return m_version; }
-
-	/**
-	 * Sets the version.
-	 *
-	 * @param version the new version
-	 */ 
-	void setVersion( const QString& version )
-		{ m_version = version; }
-
-	/**
-	 * Returns the editor.
-	 *
-	 * @return the document's editor
-	 */ 
-	const QString& editor()
-		{ return m_editor; }
-
-	/**
-	 * Sets the editor.
-	 *
-	 * @param editor the new editor
-	 */ 
-	void setEditor( const QString& editor )
-		{ m_editor = editor; }
-
-	/**
-	 * Returns the syntax version.
-	 *
-	 * @return the document's syntax version
-	 */ 
-	const QString& syntaxVersion()
-		{ return m_syntaxVersion; }
-
-	/**
-	 * Sets the syntax version.
-	 *
-	 * @param syntaxVersion the new syntax version
-	 */ 
-	void setSyntaxVersion( const QString& syntaxVersion )
-		{ m_syntaxVersion = syntaxVersion; }
 
 	/**
 	 * Returns document width.
@@ -374,18 +310,6 @@ private:
 	 * The unit.
 	 */
 	KoUnit::Unit m_unit;
-
-	/**
-	 * The mime type.
-	 */
-	QString m_mime;
-
-	/// The version.
-	QString m_version;
-	/// The editor name.
-	QString m_editor;
-	/// The syntax version.
-	QString m_syntaxVersion;
 
 	QMap<const VObject *, QString>	m_objectNames;
 
