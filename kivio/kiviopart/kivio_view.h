@@ -59,6 +59,7 @@ class KActionMenu;
 class QStringList;
 class QPushButton;
 class QProgressBar;
+class QScrollBar;
 class DCOPObject;
 class KoRuler;
 class KoZoomHandler;
@@ -372,6 +373,8 @@ class KIVIO_EXPORT KivioView : public KoView
 
     QProgressBar* m_statusBarProgress;
 
+    QScrollBar* m_vertScrollBar;
+    QScrollBar* m_horzScrollBar;
 };
 
 #endif

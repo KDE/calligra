@@ -140,24 +140,25 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   m_pluginManager = new PluginManager(this, "Kivio Plugin Manager");
   m_pPaletteManager = new KoPaletteManager(this, actionCollection(), "kivio palette manager");
   m_zoomHandler = new KoZoomHandler();
-  zoomHandler()->setZoomAndResolution(100, KoGlobal::dpiX(),
-    KoGlobal::dpiY());
+  zoomHandler()->setZoomAndResolution(100, KoGlobal::dpiX(), KoGlobal::dpiY());
   m_pDoc = doc;
   m_pActivePage = 0;
   dcop = 0;
   dcopObject(); // build it
 
-  m_pageCountSLbl = new KStatusBarLabel(i18n("%1 current page, %2 total number of pages", "Page %1/%2").arg(0).arg(0), PAGECOUNT_TEXT);
+  m_pageCountSLbl = new KStatusBarLabel(i18n("%1 current page, %2 total number of pages",
+                                        "Page %1/%2").arg(0).arg(0), PAGECOUNT_TEXT);
   addStatusBarItem(m_pageCountSLbl, 0, false);
 
   m_infoSLbl = new KStatusBarLabel("", INFO_TEXT);
-  addStatusBarItem(m_infoSLbl, 0, false);
+  addStatusBarItem(m_infoSLbl, 10, false);
 
   // Add coords to the statusbar
   QString unit = KoUnit::unitName(m_pDoc->unit());
   KoPoint xy(0, 0);
-  QString text = i18n("X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
-  .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
+  QString text = i18n("%1 x coord, %2 y coord, %3 and %4 the unit",
+                      "X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
+                      .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
   m_coordSLbl = new KStatusBarLabel(text, MOUSEPOS_TEXT);
   addStatusBarItem(m_coordSLbl, 0, true);
 
@@ -193,8 +194,8 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   m_pTabBar->setReverseLayout( QApplication::reverseLayout() );
 
   // Scroll Bar
-  QScrollBar* vertScrollBar = new QScrollBar(QScrollBar::Vertical,pRightSide);
-  QScrollBar* horzScrollBar = new QScrollBar(QScrollBar::Horizontal,tabSplit);
+  m_vertScrollBar = new QScrollBar(QScrollBar::Vertical,pRightSide);
+  m_horzScrollBar = new QScrollBar(QScrollBar::Horizontal,tabSplit);
 
   QValueList<int> sizes;
   sizes << tabSplit->width() / 2 << tabSplit->width() / 2;
@@ -204,7 +205,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 
   // The widget on which we display the page
   QWidgetStack* canvasBase = new QWidgetStack(pRightSide);
-  m_pCanvas = new KivioCanvas(canvasBase,this,doc,vertScrollBar,horzScrollBar);
+  m_pCanvas = new KivioCanvas(canvasBase,this,doc,m_vertScrollBar,m_horzScrollBar);
   canvasBase->addWidget(m_pCanvas,0);
   canvasBase->raiseWidget(m_pCanvas);
   m_pCanvas->setFocusPolicy(QWidget::StrongFocus);
@@ -218,8 +219,8 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
     KoRuler::F_HELPLINES, m_pDoc->unit());
   hRuler->showMousePos(true);
   hRuler->setZoom(zoomHandler()->zoomedResolutionX());
-  connect(vertScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerVOffset(int)));
-  connect(horzScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerHOffset(int)));
+  connect(m_vertScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerVOffset(int)));
+  connect(m_horzScrollBar, SIGNAL(valueChanged(int)), SLOT(setRulerHOffset(int)));
   connect(vRuler, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(rulerChangedUnit(KoUnit::Unit)));
   connect(hRuler, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(rulerChangedUnit(KoUnit::Unit)));
   connect(vRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
@@ -241,7 +242,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   layout->addWidget(vRuler, 1, 0);
   layout->addWidget(canvasBase, 1, 1);
   layout->addMultiCellLayout(tabLayout, 2, 2, 0, 1);
-  layout->addMultiCellWidget(vertScrollBar, 0, 1, 2, 2);
+  layout->addMultiCellWidget(m_vertScrollBar, 0, 1, 2, 2);
   layout->setRowStretch(1, 10);
   layout->setColStretch(1, 10);
 
@@ -739,22 +740,34 @@ void KivioView::showPage()
 
 int KivioView::leftBorder() const
 {
-  return 0;
+  int retVal = 0;
+
+  if(isShowRulers()) {
+    retVal = vertRuler()->width();
+  }
+
+  return retVal;
 }
 
 int KivioView::rightBorder() const
 {
-  return 0;
+  return m_vertScrollBar->width();
 }
 
 int KivioView::topBorder() const
 {
-  return 0;
+  int retVal = 0;
+
+  if(isShowRulers()) {
+    retVal = horzRuler()->height();
+  }
+
+  return retVal;
 }
 
 int KivioView::bottomBorder() const
 {
-  return 0;
+  return m_horzScrollBar->height();
 }
 
 void KivioView::paperLayoutDlg()
