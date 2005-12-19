@@ -127,7 +127,8 @@ Object::Ptr Object::call(const QString& name, List::Ptr arguments)
         return object->call(name, arguments);
     }
 
-    // If there exists no such object throw an exception.
-    throw Exception::Ptr( new Exception(QString("Object '%1' has no function named '%2'.").arg(getName()).arg(name)) );
+    // If there exists no such object return NULL.
+    kdDebug() << QString("Object '%1' has no callable object named '%2'.").arg(getName()).arg(name) << endl;
+    return 0;
 }
 
