@@ -176,7 +176,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
     m_pictureCollection = new KoPictureCollection();
 
     m_personalExpressionPath = KWFactory::instance()->dirs()->resourceDirs("expression");
-    m_picturePath= KGlobalSettings::documentPath();
 
     m_bShowGrid = false;
     m_bSnapToGrid = false;
@@ -412,8 +411,6 @@ void KWDocument::initConfig()
       config->setGroup( "Kword Path" );
       if ( config->hasKey( "expression path" ) )
           m_personalExpressionPath = config->readPathListEntry( "expression path" );
-      if ( config->hasKey( "picture path" ) )
-          m_picturePath = config->readPathEntry( "picture path" );
       setBackupPath(config->readPathEntry( "backup path" ));
   }
 

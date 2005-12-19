@@ -114,7 +114,6 @@ class KWDocument : public KoDocument, public KoTextZoomHandler
     Q_PROPERTY( QString globalLanguage READ globalLanguage WRITE setGlobalLanguage )
     Q_PROPERTY( bool globalHyphenation READ globalHyphenation WRITE setGlobalHyphenation )
     Q_PROPERTY( bool insertDirectCursor READ insertDirectCursor WRITE setInsertDirectCursor )
-    Q_PROPERTY( QString picturePath READ picturePath WRITE setPicturePath )
     Q_PROPERTY( QStringList personalExpressionPath READ personalExpressionPath WRITE setPersonalExpressionPath )
     Q_PROPERTY( bool viewFormattingBreak READ viewFormattingBreak WRITE setViewFormattingBreak )
     Q_PROPERTY( bool viewFormattingTabs READ viewFormattingTabs WRITE setViewFormattingTabs )
@@ -751,10 +750,6 @@ public:
     void setPersonalExpressionPath( const QStringList & );
 
 
-    QString picturePath()const { return m_picturePath; }
-    void setPicturePath( const QString & path ) { m_picturePath = path ; }
-
-
     void updateDirectCursorButton();
 
     QString globalLanguage()const { return m_globalLanguage; }
@@ -975,7 +970,6 @@ private:
     QPtrList<KWBookMark> m_bookmarkList;
 
     QStringList m_personalExpressionPath;
-    QString m_picturePath;
     QString m_globalLanguage;
     bool m_bGlobalHyphenation;
     bool m_bGeneratingPreview;

@@ -924,7 +924,6 @@ ConfigurePathPage::ConfigurePathPage( KWView *view, QVBox *box, char *name )
     m_pPathView->addColumn( i18n( "Type" ) );
     m_pPathView->addColumn( i18n( "Path" ), 400 ); // not too big by default
     (void) new QListViewItem( m_pPathView, i18n("Personal Expression"), doc->personalExpressionPath().join(";") );
-    (void) new QListViewItem( m_pPathView, i18n("Picture Path"),doc->picturePath() );
     (void) new QListViewItem( m_pPathView, i18n("Backup Path"),doc->backupPath() );
 
     m_modifyPath = new QPushButton( i18n("Modify Path..."), gbPathGroup);
@@ -951,16 +950,6 @@ void ConfigurePathPage::slotModifyPath()
                 item->setText(1, dlg->newPath());
             delete dlg;
         }
-        if ( item->text(0)==i18n("Picture Path"))
-        {
-
-            KURLRequesterDlg * dlg = new KURLRequesterDlg( item->text(1), 0L,
-                                                           "picture path dlg");
-            dlg->fileDialog()->setMode(KFile::Directory | KFile::LocalOnly);
-            if ( dlg->exec() )
-                item->setText( 1, dlg->selectedURL().path());
-            delete dlg;
-        }
         if ( item->text(0)==i18n("Backup Path"))
         {
             KoChangePathDia *dlg = new KoChangePathDia( item->text(1), 0L, "backup path" );
@@ -976,9 +965,6 @@ void ConfigurePathPage::slotDefault()
     QListViewItem * item = m_pPathView->findItem(i18n("Personal Expression"), 0);
     if ( item )
         item->setText(1, KWFactory::instance()->dirs()->resourceDirs("expression").join(";"));
-    item = m_pPathView->findItem(i18n("Picture Path"), 0);
-    if ( item )
-        item->setText(1, KGlobalSettings::documentPath());
     item = m_pPathView->findItem(i18n("Backup Path"), 0);
     if ( item )
         item->setText(1, QString::null );
@@ -995,17 +981,6 @@ void ConfigurePathPage::apply()
             m_pView->kWordDocument()->setPersonalExpressionPath(lst);
             config->setGroup( "Kword Path" );
             config->writePathEntry( "expression path", lst);
-        }
-    }
-    item = m_pPathView->findItem(i18n("Picture Path"), 0);
-    if ( item )
-    {
-        QString res = item->text(1 );
-        if ( res != m_pView->kWordDocument()->picturePath())
-        {
-            config->setGroup( "Kword Path" );
-            m_pView->kWordDocument()->setPicturePath( res );
-            config->writePathEntry( "picture path",res );
         }
     }
     item = m_pPathView->findItem(i18n("Backup Path"), 0);

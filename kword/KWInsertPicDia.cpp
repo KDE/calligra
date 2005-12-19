@@ -131,7 +131,7 @@ bool KWInsertPicDia::keepRatio() const
 
 void KWInsertPicDia::slotChooseImage()
 {
-    KoPicture tmppicture = KWInsertPicDia::selectPictureDia( m_doc->picturePath(), this );
+    KoPicture tmppicture = KWInsertPicDia::selectPictureDia( ":picture", this );
     if ( !tmppicture.isNull() ) // if canceled, keep current picture (#72827)
         m_picture = tmppicture;
     if ( m_picture.isNull() && m_bFirst)
