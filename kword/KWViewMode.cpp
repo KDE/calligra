@@ -88,15 +88,15 @@ QRect KWViewMode::drawBottomShadow( QPainter * painter, const QRect & crect, con
     return shadowRect;
 }
 
-QPoint KWViewMode::pageCorner( KWCanvas* canvas )
+QPoint KWViewMode::pageCorner()
 {
     // Same code as KWView::slotUpdateRuler
     KWFrame * frame = 0L;
     // Use the currently edited (fallback: the first selected) frame
-    if( canvas->currentFrameSetEdit() && canvas->currentFrameSetEdit()->currentFrame() )
-        frame = canvas->currentFrameSetEdit()->currentFrame();
+    if( m_canvas->currentFrameSetEdit() && m_canvas->currentFrameSetEdit()->currentFrame() )
+        frame = m_canvas->currentFrameSetEdit()->currentFrame();
     else {
-        KWFrameView *view = canvas->frameViewManager()->selectedFrame();
+        KWFrameView *view = m_canvas->frameViewManager()->selectedFrame();
         frame = view == 0 ? 0 : view->frame();
     }
 
@@ -111,16 +111,16 @@ QPoint KWViewMode::pageCorner( KWCanvas* canvas )
     return cPoint;
 }
 
-QRect KWViewMode::rulerFrameRect( KWCanvas* canvas )
+QRect KWViewMode::rulerFrameRect()
 {
     // Set the "frame start" in the ruler (tabs are relative to that position)
-    KWFrameSetEdit * edit = canvas->currentFrameSetEdit();
+    KWFrameSetEdit * edit = m_canvas->currentFrameSetEdit();
     KWFrame * frame = 0L;
     // Use the currently edited (fallback: the first selected) frame
     if ( edit && edit->currentFrame() )
         frame = edit->currentFrame();
     else {
-        KWFrameView *view = canvas->frameViewManager()->selectedFrame();
+        KWFrameView *view = m_canvas->frameViewManager()->selectedFrame();
         frame = view == 0 ? 0 : view->frame();
     }
     if( !frame) {
@@ -539,7 +539,7 @@ void KWViewModeText::drawPageBorders( QPainter * painter, const QRect & crect,
     painter->restore();
 }
 
-QRect KWViewModeText::rulerFrameRect( KWCanvas* )
+QRect KWViewModeText::rulerFrameRect()
 {
     return QRect( QPoint(0,0), contentsSize() );
 }

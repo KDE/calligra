@@ -155,20 +155,22 @@ void KWFrameView::paintFrameAttributes(QPainter *painter, const QRect &crect, KW
         }
     };
 
-    QPoint topLeft = vm->normalToView( zh->zoomPoint(frame()->topLeft()) );
-    QPoint bottomRight = vm->normalToView( zh->zoomPoint(frame()->bottomRight()) );
-    ResizeHandle handle(this);
+    const QRect frameRect = vm->normalToView( zh->zoomRect( *frame() ) );
+    if ( crect.intersects( frameRect ) )
+    {
+        ResizeHandle handle(this);
 
-    int width = bottomRight.x() - topLeft.x();
-    int height = bottomRight.y() - topLeft.y();
-    for(int y=0; y < 3; y++) {
-        int offsetY = -1 + y + topLeft.y();
-        if(y > 0)  offsetY += (height - 6) / (y == 1 ? 2:1);
-        for(int x=0; x < 3; x++) {
-            if(x == 1 && y == 1) continue; // don't draw in the center of the frame.
-            int offsetX = -1 + x + topLeft.x();
-            if(x > 0)  offsetX += (width - 6) / (x == 1 ? 2:1);
-            handle.paint(painter, offsetX, offsetY);
+        const int width = frameRect.width();
+        const int height = frameRect.height();
+        for(int y=0; y < 3; y++) {
+            int offsetY = -1 + y + frameRect.y();
+            if(y > 0)  offsetY += (height - 6) / (y == 1 ? 2:1);
+            for(int x=0; x < 3; x++) {
+                if(x == 1 && y == 1) continue; // don't draw in the center of the frame.
+                int offsetX = -1 + x + frameRect.x();
+                if(x > 0)  offsetX += (width - 6) / (x == 1 ? 2:1);
+                handle.paint(painter, offsetX, offsetY);
+            }
         }
     }
 }

@@ -67,7 +67,7 @@ public:
     QRect viewToNormal( const QRect & nRect )
     { return QRect( viewToNormal( nRect.topLeft() ), viewToNormal( nRect.bottomRight() ) ); }
 
-    /** Size of the contents area */
+    /** Size of the contents area, in pixels */
     virtual QSize contentsSize() = 0;
 
     /** Size (in pixels) of the total area available for text in a given textframeset
@@ -78,10 +78,10 @@ public:
     /** "Topleft of current page" - concept used by the rulers.
      * The default implementation is good enough for any page-based viewmode,
      * since it calls normalToView. But the textmode has no page concept. */
-    virtual QPoint pageCorner( KWCanvas* canvas );
+    virtual QPoint pageCorner();
     /** The result of this is passed to setFrameStartEnd for both rulers
      * (after adjustement with pageCorner()) */
-    virtual QRect rulerFrameRect( KWCanvas* canvas );
+    virtual QRect rulerFrameRect();
     /** Called when the page layout is set, or changes.
      * Usually this is directly passed to KoRuler (for page-based viewmodes) */
     virtual void setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPageLayout& layout );
@@ -195,7 +195,7 @@ public:
     // This view mode is very easy to implement ;-P
     virtual QPoint normalToView( const QPoint & nPoint ) { return nPoint; }
     virtual QPoint viewToNormal( const QPoint & vPoint ) { return vPoint; }
-    virtual QSize contentsSize() {return QSize();}
+    virtual QSize contentsSize() { return QSize(); }
 
     virtual void drawPageBorders( QPainter *, const QRect &, const QRegion & ){}
     virtual bool drawSelections() { return false; }
@@ -260,8 +260,8 @@ public:
     virtual QSize contentsSize();
     virtual QSize availableSizeForText( KWTextFrameSet* textfs );
     // There is no page concept. Keep everything relative to (0,0)
-    virtual QPoint pageCorner( KWCanvas* ) { return QPoint( 0, 0 ); }
-    virtual QRect rulerFrameRect( KWCanvas* canvas );
+    virtual QPoint pageCorner() { return QPoint( 0, 0 ); }
+    virtual QRect rulerFrameRect();
     virtual void setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPageLayout& layout );
 
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );

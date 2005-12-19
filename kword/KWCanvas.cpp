@@ -884,55 +884,32 @@ void KWCanvas::applyGrid( KoPoint &p )
 
 void KWCanvas::drawGrid( QPainter &p, const QRect& rect )
 {
-  if ( m_viewMode->type() != "ModeNormal" )
-    return;
-  QPen _pen = QPen( /*m_doc->gridColor()*/QColor("black"), 6, Qt::DotLine  );
-  p.save();
+  QPen _pen = QPen( /*m_doc->gridColor()*/Qt::black, 6, Qt::DotLine );
+  QPen oldPen = p.pen();
   p.setPen( _pen );
 
-//   Enable this when applyGrid works in preview mode.
-//   if ( m_viewMode->pagesPerRow() > 0 ) //preview mode
-//   {
-//     double const x = dynamic_cast<KWViewModePreview*>(m_viewMode)->leftSpacing();
-//     double const y = dynamic_cast<KWViewModePreview*>(m_viewMode)->topSpacing();
-//
-//     int const paperWidth = m_doc->paperWidth();
-//     int const paperHeight = m_doc->paperHeight();
-//
-//     int zoomedX,  zoomedY;
-//     double offsetX = m_doc->gridX();
-//     double offsetY = m_doc->gridY();
-//
-//     for ( int page = 0; page < m_doc->numPages(); page++ )
-//     {
-//       int row = page / m_viewMode->pagesPerRow();
-//       int col = page % m_viewMode->pagesPerRow();
-//
-//       QRect pageRect( x + col * ( paperWidth + 10 ),
-//                       y + row * ( paperHeight + 10 ),
-//                       paperWidth, paperHeight );
-//
-//       for ( double i = offsetX; ( zoomedX = m_doc->zoomItX( i )+pageRect.left() ) < pageRect.right() && offsetX < rect.right(); i += offsetX )
-//         for ( double j = offsetY; ( zoomedY = m_doc->zoomItY( j )+pageRect.top() ) < pageRect.bottom() && offsetY < rect.bottom(); j += offsetY )
-//           if( rect.contains( zoomedX, zoomedY ) )
-//             p.drawPoint( zoomedX, zoomedY );
-//     }
-//
-//     p.restore();
-//     return;
-//   }
-  QRect pageRect( QPoint(0,0), m_viewMode->contentsSize() );
+  // Do all the iteration in "normal" coordinates
+  const int documentWidth = m_doc->paperWidth( m_doc->startPage() );
+  const int documentHeight = m_doc->zoomItY( m_doc->pageManager()->bottomOfPage( m_doc->lastPage() ) );
+
+  // Limit the painting at the size wanted by the viewmode
+  // e.g. for the text viewmode it's only one frameset, not the whole page.
+  const QRect contentsArea( m_viewMode->normalToView( QPoint( 0, 0 ) ),
+                            m_viewMode->contentsSize() );
+  const QRect crect = rect & contentsArea;
 
   int zoomedX,  zoomedY;
-  double offsetX = m_doc->gridX();
-  double offsetY = m_doc->gridY();
+  const double offsetX = m_doc->gridX();
+  const double offsetY = m_doc->gridY();
 
-  for ( double i = offsetX; ( zoomedX = m_doc->zoomItX( i )+pageRect.left() ) < pageRect.right(); i += offsetX )
-    for ( double j = offsetY; ( zoomedY = m_doc->zoomItY( j )+pageRect.top() ) < pageRect.bottom(); j += offsetY )
-      if( rect.contains( zoomedX, zoomedY ) )
-        p.drawPoint( zoomedX, zoomedY );
+  for ( double i = offsetX; ( zoomedX = m_doc->zoomItX( i ) ) < documentWidth; i += offsetX )
+    for ( double j = offsetY; ( zoomedY = m_doc->zoomItY( j ) ) < documentHeight; j += offsetY ) {
+      const QPoint vp = m_viewMode->normalToView( QPoint( zoomedX, zoomedY ) );
+      if ( crect.contains( vp ) )
+        p.drawPoint( vp );
+    }
 
-  p.restore();
+  p.setPen( oldPen );
 }
 
 void KWCanvas::applyAspectRatio( double ratio, KoRect& insRect )
@@ -2146,7 +2123,7 @@ void KWCanvas::updateRulerOffsets( int cx, int cy )
     }
     // The offset is usually just the scrollview offset
     // But we also need to offset to the current page, for the graduations
-    QPoint pc = m_viewMode->pageCorner(this);
+    QPoint pc = m_viewMode->pageCorner();
     //kdDebug() << "KWCanvas::updateRulerOffsets contentsX=" << cx << ", contentsY=" << cy << endl;
     m_gui->getHorzRuler()->setOffset( cx - pc.x(), 0 );
     m_gui->getVertRuler()->setOffset( 0, cy - pc.y() );

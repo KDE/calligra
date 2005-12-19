@@ -5767,7 +5767,7 @@ void KWView::changeFootNoteMenuItem( bool footnote)
 void KWView::slotUpdateRuler()
 {
     KWCanvas* canvas = m_gui->canvasWidget();
-    QRect r( canvas->viewMode()->rulerFrameRect( canvas ) );
+    QRect r( canvas->viewMode()->rulerFrameRect() );
     if ( !r.isNull() )
     {
         m_gui->getHorzRuler()->setFrameStartEnd( r.left(), r.right() );
