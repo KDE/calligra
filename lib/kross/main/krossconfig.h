@@ -66,15 +66,15 @@ namespace Kross {
         //#define KROSS_API_OBJECT_DTOR_DEBUG
         //#define KROSS_API_OBJECT_ADDCHILD_DEBUG
         //#define KROSS_API_OBJECT_REMCHILD_DEBUG
-        #define KROSS_API_OBJECT_CALL_DEBUG
+        //#define KROSS_API_OBJECT_CALL_DEBUG
 
-        #define KROSS_API_EVENT_CALL_DEBUG
+        //#define KROSS_API_EVENT_CALL_DEBUG
 
-        #define KROSS_API_CALLABLE_CALL_DEBUG
-        #define KROSS_API_CALLABLE_CHECKARG_DEBUG
+        //#define KROSS_API_CALLABLE_CALL_DEBUG
+        //#define KROSS_API_CALLABLE_CHECKARG_DEBUG
 
-        #define KROSS_API_EVENTSLOT_CALL_DEBUG
-        #define KROSS_API_EVENTSIGNAL_CALL_DEBUG
+        //#define KROSS_API_EVENTSLOT_CALL_DEBUG
+        //#define KROSS_API_EVENTSIGNAL_CALL_DEBUG
 
         // The name of the interpreter's library. Those library got loaded
         // dynamicly during runtime. Comment out to disable compiling of
