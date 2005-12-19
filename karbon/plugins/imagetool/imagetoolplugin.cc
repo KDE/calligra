@@ -24,18 +24,18 @@
 #include <kdebug.h>
 
 #include "imagetoolplugin.h"
-#include <karbon_part_base.h>
 #include <karbon_part.h>
-#include <karbon_view_base.h>
+#include <karbon_part.h>
+#include <karbon_view.h>
 #include <karbon_view.h>
 #include <core/vimage.h>
 #include <core/vselection.h>
 #include <kgenericfactory.h>
 
-typedef KGenericFactory<VImageTool, KarbonViewBase> ImageToolPluginFactory;
+typedef KGenericFactory<VImageTool, KarbonView> ImageToolPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_imagetoolplugin, ImageToolPluginFactory( "karbonimagetoolplugin" ) )
 
-VImageTool::VImageTool( KarbonViewBase* view, const char *name, const QStringList & )
+VImageTool::VImageTool( KarbonView *view, const char *name, const QStringList & )
 	: VTool( (KarbonPart *)view->part(), name ), VKarbonPlugin( view, name )
 {
 	registerTool( this );

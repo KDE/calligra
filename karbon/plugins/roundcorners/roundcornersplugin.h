@@ -25,14 +25,14 @@
 #include <commands/vreplacingcmd.h>
 #include <koffice_export.h>
 
-class KarbonViewBase;
+class KarbonView;
 class VRoundCornersDlg;
 
 class KARBONBASE_EXPORT VRoundCornersPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	VRoundCornersPlugin( KarbonViewBase *parent, const char* name, const QStringList & );
+	VRoundCornersPlugin( KarbonView *parent, const char* name, const QStringList & );
 	virtual ~VRoundCornersPlugin();
 
 private slots:

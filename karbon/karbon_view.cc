@@ -100,7 +100,7 @@
 
 
 KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
-		: KarbonViewBase( p, parent, name ), KXMLGUIBuilder( shell() )
+		: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p )
 {
 	m_toolbox = 0L;
 

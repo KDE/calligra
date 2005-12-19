@@ -25,9 +25,9 @@
 #include <klocale.h>
 
 #include "vzoomtool.h"
-#include <karbon_part_base.h>
 #include <karbon_part.h>
-#include <karbon_view_base.h>
+#include <karbon_part.h>
+#include <karbon_view.h>
 #include <karbon_view.h>
 #include <render/vpainter.h>
 #include <render/vpainterfactory.h>

@@ -24,7 +24,8 @@
 #include <config.h>
 #endif
 
-#include "karbon_view_base.h"
+#include <koView.h>
+#include <KoPoint.h>
 #include <ksharedptr.h>
 #include <kxmlguibuilder.h>
 #include <koUnit.h>
@@ -63,7 +64,7 @@ class VCanvas;
 class VTool;
 class VToolBox;
 
-class KARBONCOMMON_EXPORT KarbonView : public KarbonViewBase, public KXMLGUIBuilder
+class KARBONCOMMON_EXPORT KarbonView : public KoView, public KXMLGUIBuilder
 {
 	Q_OBJECT
 
@@ -74,10 +75,13 @@ public:
 
 	virtual DCOPObject* dcopObject();
 
+	KarbonPart *part() const { return m_part; }
+
 	virtual void paintEverything( QPainter &p, const QRect &rect, bool transparent = false );
 
 	bool mouseEvent( QMouseEvent* event, const KoPoint & );
 	bool keyEvent( QEvent* event );
+	void dropEvent( QDropEvent *e );
 
 	virtual QWidget* canvas() const;
 
@@ -85,9 +89,7 @@ public:
 
 	virtual VPainterFactory* painterFactory() const { return m_painterFactory; }
 
-	KarbonPart* part() const { return (KarbonPart *)m_part; }
-
-    KoPaletteManager* paletteManager() { return m_pPaletteManager; };
+	KoPaletteManager* paletteManager() { return m_pPaletteManager; };
 
 	// printing support, override from KoView
 	virtual void setupPrinter( KPrinter &/*printer*/ ) {}
@@ -109,7 +111,7 @@ public:
 	void setPos( const KoPoint& p );
 
 	void setViewportRect( const KoRect &rect );
-	virtual void setZoomAt( double zoom, const KoPoint & = KoPoint() );
+	void setZoomAt( double zoom, const KoPoint & = KoPoint() );
 
 public slots:
 	// editing:
@@ -191,7 +193,6 @@ signals:
 protected:
 	virtual void updateReadWrite( bool ) {}
 	virtual void resizeEvent( QResizeEvent* event );
-	virtual void dropEvent( QDropEvent *e );
 
 	void createDocumentTabDock();
 	void createLayersTabDock();
@@ -209,6 +210,7 @@ private:
 	void initActions();
 	void updateRuler();
 
+	KarbonPart		*m_part;
 	VCanvas			*m_canvas;
 	VRuler		*m_horizRuler;
 	VRuler		*m_vertRuler;

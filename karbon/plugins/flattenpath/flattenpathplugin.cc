@@ -19,8 +19,8 @@
 
 #include "flattenpathplugin.h"
 #include "klocale.h"
-#include <karbon_view_base.h>
-#include <karbon_part_base.h>
+#include <karbon_view.h>
+#include <karbon_part.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
 #include <qgroupbox.h>
@@ -30,10 +30,10 @@
 #include <commands/vflattencmd.h>
 
 
-typedef KGenericFactory<FlattenPathPlugin, KarbonViewBase> FlattenPathPluginFactory;
+typedef KGenericFactory<FlattenPathPlugin, KarbonView> FlattenPathPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_flattenpathplugin, FlattenPathPluginFactory( "karbonflattenpathplugin" ) )
 
-FlattenPathPlugin::FlattenPathPlugin( KarbonViewBase *parent, const char* name, const QStringList & )
+FlattenPathPlugin::FlattenPathPlugin( KarbonView *parent, const char* name, const QStringList & )
 : Plugin( parent, name )
 {
 	new KAction(
@@ -47,7 +47,7 @@ FlattenPathPlugin::FlattenPathPlugin( KarbonViewBase *parent, const char* name, 
 void
 FlattenPathPlugin::slotFlattenPath()
 {
-	KarbonPartBase *part = ((KarbonViewBase *)parent())->part();
+	KarbonPart *part = ((KarbonView *)parent())->part();
 	if( part && m_flattenPathDlg->exec() )
 		part->addCommand( new VFlattenCmd( &part->document(), m_flattenPathDlg->flatness() ), true );
 }

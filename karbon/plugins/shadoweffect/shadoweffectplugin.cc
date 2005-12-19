@@ -19,8 +19,8 @@
 
 #include "shadoweffectplugin.h"
 #include "klocale.h"
-#include <karbon_view_base.h>
-#include <karbon_part_base.h>
+#include <karbon_view.h>
+#include <karbon_part.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
 #include <qgroupbox.h>
@@ -34,10 +34,10 @@
 #include <core/vdocument.h>
 #include "vshadowdecorator.h"
 
-typedef KGenericFactory<ShadowEffectPlugin, KarbonViewBase> ShadowEffectPluginFactory;
+typedef KGenericFactory<ShadowEffectPlugin, KarbonView> ShadowEffectPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_shadoweffectplugin, ShadowEffectPluginFactory( "karbonshadoweffectplugin" ) )
 
-ShadowEffectPlugin::ShadowEffectPlugin( KarbonViewBase *parent, const char* name, const QStringList & )
+ShadowEffectPlugin::ShadowEffectPlugin( KarbonView *parent, const char* name, const QStringList & )
 : Plugin( parent, name )
 {
 	new KAction(
@@ -52,7 +52,7 @@ ShadowEffectPlugin::ShadowEffectPlugin( KarbonViewBase *parent, const char* name
 void
 ShadowEffectPlugin::slotShadowEffect()
 {
-	KarbonPartBase *part = ((KarbonViewBase *)parent())->part();
+	KarbonPart *part = ((KarbonView *)parent())->part();
 	if( part && m_shadowEffectDlg->exec() )
 		part->addCommand( new VCreateShadowCmd( &part->document(), m_shadowEffectDlg->distance(), m_shadowEffectDlg->angle(), double( m_shadowEffectDlg->opacity() ) / 255.0 ), true );
 }

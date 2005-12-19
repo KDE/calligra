@@ -24,14 +24,14 @@
 #include <kparts/plugin.h>
 #include <commands/vcommand.h>
 
-class KarbonViewBase;
+class KarbonView;
 class VWhirlPinchDlg;
 
 class WhirlPinchPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	WhirlPinchPlugin( KarbonViewBase *parent, const char* name, const QStringList & );
+	WhirlPinchPlugin( KarbonView *parent, const char* name, const QStringList & );
 	virtual ~WhirlPinchPlugin() {}
 
 private slots:

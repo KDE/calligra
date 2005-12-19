@@ -23,14 +23,14 @@
 #include <kparts/plugin.h>
 #include <kdialogbase.h>
 
-class KarbonViewBase;
+class KarbonView;
 class VFlattenDlg;
 
 class FlattenPathPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	FlattenPathPlugin( KarbonViewBase *parent, const char* name, const QStringList & );
+	FlattenPathPlugin( KarbonView *parent, const char* name, const QStringList & );
 	virtual ~FlattenPathPlugin() {}
 
 private slots:

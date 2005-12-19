@@ -58,7 +58,7 @@
 
 KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 						QObject* parent, const char* name, bool singleViewMode )
-		: KarbonPartBase( parentWidget, widgetName, parent, name, singleViewMode )
+		: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
 	m_toolController = new VToolController( const_cast<KarbonPart *>( this ) );
 	m_toolController->init();
@@ -94,6 +94,8 @@ KarbonPart::~KarbonPart()
 	// delete the command-history:
 	delete m_commandHistory;
 	delete dcop;
+	delete m_toolController;
+	m_toolController = 0;
 }
 
 DCOPObject* KarbonPart::dcopObject()
@@ -102,6 +104,12 @@ DCOPObject* KarbonPart::dcopObject()
 		dcop = new KarbonPartIface( this );
 
 	return dcop;
+}
+
+VToolController *
+KarbonPart::toolController()
+{
+	return m_toolController;
 }
 
 void
@@ -200,10 +208,15 @@ KarbonPart::saveXML()
 bool
 KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDomDocument &settings, KoStore *store )
 {
-	kdDebug(38000) << "Start loading OASIS document..." << endl;
+	kdDebug(38000) << "Start loading OASIS document..." << doc.toString() << endl;
 
 	QDomElement contents = doc.documentElement();
-	QDomElement body( KoDom::namedItemNS( contents, KoXmlNS::office, "body" ) );
+	kdDebug(38000) << "Start loading OASIS document..." << contents.text() << endl;
+	kdDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().localName() << endl;
+	kdDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().namespaceURI() << endl;
+	kdDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().isElement() << endl;
+	QDomElement body( KoDom::namedItemNS( contents, "http://openoffice.org/2000/office"/*KoXmlNS::office*/, "body" ) );
+	kdDebug(38000) << "Start loading OASIS document..." << body.text() << endl;
 	if( body.isNull() )
 	{
 		kdDebug(38000) << "No office:body found!" << endl;

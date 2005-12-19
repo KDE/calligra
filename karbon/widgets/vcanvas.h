@@ -23,8 +23,8 @@
 
 #include <qscrollview.h>
 #include <koffice_export.h>
-class KarbonPartBase;
-class KarbonViewBase;
+class KarbonPart;
+class KarbonView;
 class KoRect;
 class KoPoint;
 class VPainter;
@@ -35,7 +35,7 @@ class KARBONCOMMON_EXPORT VCanvas : public QScrollView
 {
 	Q_OBJECT
 public:
-	VCanvas( QWidget *parent, KarbonViewBase* view, KarbonPartBase* part );
+	VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part );
 	virtual ~VCanvas();
 
 	void repaintAll( const KoRect & );
@@ -94,8 +94,8 @@ signals:
 
 private:
 	QPixmap *m_pixmap;
-	KarbonPartBase* m_part;
-	KarbonViewBase* m_view;
+	KarbonPart* m_part;
+	KarbonView* m_view;
 
 	bool m_bScrolling;
 	int	m_scrollX;

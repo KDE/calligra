@@ -23,7 +23,7 @@
 
 #include <qptrlist.h>
 
-#include "karbon_part_base.h"
+#include <koDocument.h>
 #include <koUnit.h>
 #include "vdocument.h"
 #include "koffice_export.h"
@@ -32,7 +32,9 @@ class DCOPObject;
 class KoRect;
 class QRect;
 class VCommand;
+class VDocument;
 class VCommandHistory;
+class VToolController;
 
 /**
  * Keeps track of visual per document properties.
@@ -41,7 +43,7 @@ class VCommandHistory;
  * Finally a dcop interface is set up here.
  */
 
-class KARBONCOMMON_EXPORT KarbonPart : public KarbonPartBase
+class KARBONCOMMON_EXPORT KarbonPart : public KoDocument
 {
 	Q_OBJECT
 public:
@@ -104,6 +106,8 @@ public:
 
 	bool mergeNativeFormat( const QString & file );
 
+	VToolController *toolController();
+
 public slots:
 	/// repaint all views attached to this koDocument
 	void repaintAllViews( bool repaint = true );
@@ -118,7 +122,6 @@ protected:
 	void saveOasisSettings( KoXmlWriter &/*settingsWriter*/ );
 	void loadOasisSettings( const QDomDocument&settingsDoc );
 
-
 private:
 	VDocument m_doc;					/// store non-visual doc info
 	VCommandHistory* m_commandHistory;	/// maintain a command history for undo/redo
@@ -127,6 +130,7 @@ private:
 	bool m_merge;
 	unsigned int m_maxRecentFiles;				/// max. number of files shown in open recent menu item
 	DCOPObject *dcop;
+	VToolController	*m_toolController;
 };
 
 #endif

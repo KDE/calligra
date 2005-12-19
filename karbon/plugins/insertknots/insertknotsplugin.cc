@@ -19,8 +19,8 @@
 
 
 #include "insertknotsplugin.h"
-#include <karbon_view_base.h>
-#include <karbon_part_base.h>
+#include <karbon_view.h>
+#include <karbon_part.h>
 #include <core/vpath.h>
 #include <core/vsegment.h>
 #include <kgenericfactory.h>
@@ -30,10 +30,10 @@
 
 #include <knuminput.h>
 
-typedef KGenericFactory<InsertKnotsPlugin, KarbonViewBase> InsertKnotsPluginFactory;
+typedef KGenericFactory<InsertKnotsPlugin, KarbonView> InsertKnotsPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_insertknotsplugin, InsertKnotsPluginFactory( "karboninsertknotsplugin" ) )
 
-InsertKnotsPlugin::InsertKnotsPlugin( KarbonViewBase *parent, const char* name, const QStringList & ) : Plugin( parent, name )
+InsertKnotsPlugin::InsertKnotsPlugin( KarbonView *parent, const char* name, const QStringList & ) : Plugin( parent, name )
 {
 	new KAction(
 		i18n( "&Insert Knots..." ), "14_insertknots", 0, this,
@@ -45,7 +45,7 @@ InsertKnotsPlugin::InsertKnotsPlugin( KarbonViewBase *parent, const char* name, 
 void
 InsertKnotsPlugin::slotInsertKnots()
 {
-	KarbonPartBase *part = ((KarbonViewBase *)parent())->part();
+	KarbonPart *part = ((KarbonView *)parent())->part();
 	if( part && m_insertKnotsDlg->exec() )
 		part->addCommand( new VInsertKnotsCmd( &part->document(), m_insertKnotsDlg->knots() ), true );
 }

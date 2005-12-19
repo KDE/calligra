@@ -27,13 +27,13 @@
 #include <commands/vcommand.h>
 #include <core/vkarbonplugin.h>
 
-class KarbonViewBase;
+class KarbonView;
 class VImage;
 
 class VImageTool : public VTool, public VKarbonPlugin
 {
 public:
-	VImageTool( KarbonViewBase *view, const char *, const QStringList & );
+	VImageTool( KarbonView *view, const char *, const QStringList & );
 	~VImageTool(); 
 
 	virtual void activate();

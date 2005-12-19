@@ -24,7 +24,7 @@
 #include <kdialogbase.h>
 #include <commands/vcommand.h>
 
-class KarbonViewBase;
+class KarbonView;
 class VSelection;
 class VShadowEffectDlg;
 
@@ -32,7 +32,7 @@ class ShadowEffectPlugin : public KParts::Plugin
 {
 	Q_OBJECT
 public:
-	ShadowEffectPlugin( KarbonViewBase *parent, const char* name, const QStringList & );
+	ShadowEffectPlugin( KarbonView *parent, const char* name, const QStringList & );
 	virtual ~ShadowEffectPlugin() {}
 
 private slots:

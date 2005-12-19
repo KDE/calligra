@@ -21,8 +21,8 @@
 #include <qpainter.h>
 #include <qpixmap.h>
 
-#include "karbon_view_base.h"
-#include "karbon_part_base.h"
+#include "karbon_view.h"
+#include "karbon_part.h"
 #include "karbon_drag.h"
 #include "vcanvas.h"
 #include "vdocument.h"
@@ -97,7 +97,7 @@ KoPoint VCanvas::snapToGrid( const KoPoint &point )
 }
 
 
-VCanvas::VCanvas( QWidget *parent, KarbonViewBase* view, KarbonPartBase* part )
+VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
     : QScrollView( parent, "canvas", WStaticContents/*WNorthWestGravity*/ | WResizeNoErase  |
 	  WRepaintNoErase ), m_part( part ), m_view( view )
 {

@@ -11,24 +11,10 @@ INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(KOPALETTE_INCLUDES) $(KOPAIN
 
 SUBDIRS = commands visitors core shapes widgets dialogs dockers render . tools plugins data pics templates
 
-# Filters should link to libkarbonbase or libkarboncommon, NOT to libkarbonpart
-#
-# libkarbonbase was initially intended for it, but filters (e.g. ai) need commands
-# (e.g. VTranslateCmd), and commands (e.g. VCommandHistory) need KarbonPart,
-# so even moving more stuff to libkarbonbase isn't enough.
-# -> I think the whole 'base' stuff can be removed (DF)
-lib_LTLIBRARIES = libkarboncommon.la libkarbonbase.la
+lib_LTLIBRARIES = libkarboncommon.la
 kde_module_LTLIBRARIES = libkarbonpart.la
 
 libkarboncommon_la_SOURCES = karbon_factory.cc 	karbon_resourceserver.cc 	karbon_part.cc 	karbon_part_iface.cc 	karbon_part_iface.skel 	karbon_view.cc 	karbon_view_iface.cc 	karbon_view_iface.skel karbon_drag.cpp karbon_grid_data.cpp karbon_tool_registry.cc karbon_tool_factory.cc	vtoolcontroller.cc vtool.cc
-
-
-libkarbonbase_la_SOURCES = \
-	karbon_view_base.cc \
-	karbon_part_base.cc
-
-libkarbonbase_la_LDFLAGS = $(KDE_RPATH) -version-info 2:0:0 -no-undefined
-libkarbonbase_la_LIBADD = $(LIB_KOFFICEUI)
 
 libkarboncommon_la_LDFLAGS = $(KDE_RPATH) $(LIBFREETYPE_RPATH) -no-undefined
 libkarboncommon_la_LIBADD = $(LIB_KOFFICECORE) $(LIB_KOFFICEUI) $(LIB_KOPALETTE) $(LIB_KOPAINTER) $(LIB_KOTEXT) \
@@ -41,7 +27,6 @@ libkarboncommon_la_LIBADD = $(LIB_KOFFICECORE) $(LIB_KOFFICEUI) $(LIB_KOPALETTE)
 	commands/libkarboncommands.la \
 	visitors/libkarbonvisitors.la \
 	dialogs/libkarbondialogs.la \
-	libkarbonbase.la \
 	$(LIBART_LIBS) \
 	$(LIBFONTCONFIG_LIBS) \
 	$(LIBMAGICK_LIBS) \
@@ -60,10 +45,8 @@ karbon_la_LIBADD = libkarboncommon.la
 
 noinst_HEADERS = \
 	karbon_factory.h \
-	karbon_part_base.h \
 	karbon_part.h \
 	karbon_part_iface.h \
-	karbon_view_base.h \
 	karbon_view.h \
 	karbon_drag.h \
 	vtoolcontroller.h \
