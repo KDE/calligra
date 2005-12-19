@@ -440,6 +440,7 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
   }
 
   lastPoint = e->pos();
+  view()->setMousePos(lastPoint.x(), lastPoint.y());
 }
 
 QPoint KivioCanvas::mapToScreen( KoPoint pos )
