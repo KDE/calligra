@@ -82,6 +82,8 @@ void KoUserStyleCollection::clear()
         delete *styleIt;
     for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_deletedStyles.begin(), styleEnd = m_deletedStyles.end() ; styleIt != styleEnd ; ++styleIt )
         delete *styleIt;
+    m_styleList.clear();
+    m_deletedStyles.clear();
     m_lastStyle = 0;
 }
 
