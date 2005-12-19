@@ -98,7 +98,7 @@ KoCMYKWidget::KoCMYKWidget(QWidget *parent, const char *name) : super(parent, na
     mKIn->setFixedHeight(20);
     mKIn->setFocusPolicy( QWidget::ClickFocus );
 
-    mGrid->addMultiCellWidget(m_ColorButton, 0, 3, 0, 0, Qt::AlignTop);
+    mGrid->addMultiCellWidget(m_ColorButton, 0, 4, 0, 0, Qt::AlignTop);
     mGrid->addWidget(mCLabel, 0, 1);
     mGrid->addWidget(mMLabel, 1, 1);
     mGrid->addWidget(mYLabel, 2, 1);
@@ -130,8 +130,6 @@ KoCMYKWidget::KoCMYKWidget(QWidget *parent, const char *name) : super(parent, na
 
 void KoCMYKWidget::slotCChanged(int c)
 {
-	kdDebug() << "slotCChanged: " << c << endl;
-
     if (m_ColorButton->current() == KDualColorButton::Foreground){
         m_fgC = c / 255;
         int r = int((1 - m_fgC * (1 - m_fgK) - m_fgK) * 255);
@@ -139,7 +137,7 @@ void KoCMYKWidget::slotCChanged(int c)
         int b = m_fgColor.blue();
         m_fgColor.setRgb(r, g, b);
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
-	emit sigFgColorChanged(m_fgColor);
+        emit sigFgColorChanged(m_fgColor);
     }
     else{
         m_bgC = c / 255;
@@ -148,7 +146,7 @@ void KoCMYKWidget::slotCChanged(int c)
         int b = m_bgColor.blue();
         m_bgColor.setRgb(r, g, b);
         m_ColorButton->setCurrent(KDualColorButton::Background);
-	emit sigBgColorChanged(m_bgColor);
+        emit sigBgColorChanged(m_bgColor);
     }
 }
 
@@ -161,7 +159,7 @@ void KoCMYKWidget::slotMChanged(int m)
         int b = m_fgColor.blue();
         m_fgColor.setRgb(r, g, b);
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
-	emit sigFgColorChanged(m_fgColor);
+        emit sigFgColorChanged(m_fgColor);
     }
     else{
         m_bgM = m / 255;
@@ -170,7 +168,7 @@ void KoCMYKWidget::slotMChanged(int m)
         int b = m_bgColor.blue();
         m_bgColor.setRgb(r, g, b);
         m_ColorButton->setCurrent(KDualColorButton::Background);
-	emit sigBgColorChanged(m_bgColor);
+        emit sigBgColorChanged(m_bgColor);
     }
 }
 
@@ -183,7 +181,7 @@ void KoCMYKWidget::slotYChanged(int y)
         int b = int((1 - m_fgY * (1 - m_fgK) - m_fgK) * 255);
         m_fgColor.setRgb(r, g, b);
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
-	emit sigFgColorChanged(m_fgColor);
+        emit sigFgColorChanged(m_fgColor);
     }
     else{
         m_bgY = y / 255;
@@ -192,7 +190,7 @@ void KoCMYKWidget::slotYChanged(int y)
         int b = int((1 - m_bgY * (1 - m_bgK) - m_bgK) * 255);
         m_bgColor.setRgb(r, g, b);
         m_ColorButton->setCurrent(KDualColorButton::Background);
-	emit sigBgColorChanged(m_bgColor);
+        emit sigBgColorChanged(m_bgColor);
     }
 }
 
@@ -205,7 +203,7 @@ void KoCMYKWidget::slotKChanged(int k)
         int b = int((1 - m_fgY * (1 - m_fgK) - m_fgK) * 255);
         m_fgColor.setRgb(r, g, b);
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
-	emit sigFgColorChanged(m_fgColor);
+        emit sigFgColorChanged(m_fgColor);
     }
     else{
         m_bgK = k / 255;
@@ -214,7 +212,7 @@ void KoCMYKWidget::slotKChanged(int k)
         int b = int((1 - m_bgY * (1 - m_bgK) - m_bgK) * 255);
         m_bgColor.setRgb(r, g, b);
         m_ColorButton->setCurrent(KDualColorButton::Background);
-	emit sigBgColorChanged(m_bgColor);
+        emit sigBgColorChanged(m_bgColor);
     }
 }
 
@@ -230,7 +228,6 @@ void KoCMYKWidget::setBgColor(const QColor & c)
 
 void KoCMYKWidget::update(const QColor fgColor, const QColor bgColor)
 {
-    kdDebug() << "update" << endl;
     m_fgColor = fgColor;
     m_bgColor = bgColor;
 
@@ -260,8 +257,6 @@ void KoCMYKWidget::update(const QColor fgColor, const QColor bgColor)
         m = (am - k) / (1 - k);
         y = (ay - k) / (1 - k);
     }
-
-	kdDebug() << "c = " << c << endl << "m = " << m << endl << "y = " << y << endl << "k = " << k << endl;
 
     disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
     disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
