@@ -11,7 +11,8 @@ libkopainter_la_SOURCES = svgpathparser.cc \
 	ko_color_wheel.cc \
 	ko_gray_widget.cc \
 	ko_hsv_widget.cc \
-	ko_rgb_widget.cc
+	ko_rgb_widget.cc \
+	ko_cmyk_widget.cc
 
 libkopainter_la_LDFLAGS = $(all_libraries) -version-info 2:0:0 -no-undefined
 
