@@ -36,9 +36,11 @@
 	<Action name="view_tool_options"/>
 	<Action name="view_context_help"/>
 	<Separator/>
+	<Action name="view_show_margins"/>
 	<Action name="view_show_ruler"/>
 	<Action name="view_show_grid"/>
 	<Separator/>
+	<Action name="view_snap_to_grid"/>
 	<Action name="view_snap_to_grid"/>
 
 	</Menu>

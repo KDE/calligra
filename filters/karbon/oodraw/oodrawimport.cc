@@ -29,6 +29,7 @@
 #include <karchive.h>
 #include <kdebug.h>
 #include <koUnit.h>
+#include <koPageLayout.h>
 #include <koDocumentInfo.h>
 #include <koDocument.h>
 #include <ooutils.h>
@@ -114,6 +115,12 @@ out->writeBlock( info , info.length() );
 
     convert();
     QDomDocument outdoc = m_document.saveXML();
+	// add paper info, we always need custom for svg (Rob)
+	QDomElement paper = outdoc.createElement( "PAPER" );
+	outdoc.documentElement().appendChild( paper );
+	paper.setAttribute( "format", PG_CUSTOM );
+	paper.setAttribute( "width", m_document.width() );
+	paper.setAttribute( "height", m_document.height() );
 
     // store document content
     out = m_chain->storageFile( "maindoc.xml", KoStore::Write );

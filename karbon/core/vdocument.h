@@ -36,6 +36,7 @@ class QDomDocument;
 class QDomElement;
 class VSelection;
 class VLayer;
+class KoPageLayout;
 
 typedef QPtrList<VLayer> VLayerList;
 typedef QPtrListIterator<VLayer> VLayerListIterator;
@@ -83,7 +84,7 @@ public:
 	 *
 	 * @param painter abstraction that is used to render to a painting device.
 	 */
-	void drawPage( VPainter *painter ) const;
+	void drawPage( VPainter *painter, const KoPageLayout &pl, bool drawPageMargins ) const;
 
 	/**
 	 * Returns document width.

@@ -914,6 +914,12 @@ KarbonView::initActions()
 	if( !shell() )
 		return;
 
+	m_showPageMargins = new KToggleAction( i18n("Show Page Margins"), "view_margins", 0, actionCollection(), "view_show_margins" );
+	connect( m_showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
+#if KDE_IS_VERSION(3,2,90)
+	m_showPageMargins->setCheckedState(i18n("Hide Page Margins"));
+#endif
+
 	// edit ----->
 	KStdAction::cut( this,
 					 SLOT( editCut() ), actionCollection(), "edit_cut" );
@@ -1174,6 +1180,19 @@ KarbonView::showRuler()
 	zoomChanged();
 }
 
+bool
+KarbonView::showPageMargins()
+{
+	return ((KToggleAction*)actionCollection()->action("view_show_margins"))->isChecked();
+}
+
+void
+KarbonView::togglePageMargins(bool b)
+{
+	((KToggleAction*)actionCollection()->action("view_show_margins"))->setChecked(b);
+	m_canvas->repaintAll();
+}
+
 void
 KarbonView::updateRuler()
 {
@@ -1249,7 +1268,7 @@ KarbonView::pageLayout()
 	KoHeadFoot hf;
 	KoPageLayout layout = part()->pageLayout();
 	KoUnit::Unit unit = part()->unit();
-	if( KoPageLayoutDia::pageLayout( layout, hf, FORMAT_AND_BORDERS, unit ) )
+	if( KoPageLayoutDia::pageLayout( layout, hf, FORMAT_AND_BORDERS | DISABLE_UNIT, unit ) )
 	{
 		part()->setPageLayout( layout, unit );
 		m_horizRuler->setUnit( unit );

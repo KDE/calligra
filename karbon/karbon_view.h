@@ -166,8 +166,10 @@ public slots:
 
 	void slotActiveToolChanged( VTool * );
 
+	void togglePageMargins(bool);
 	void showRuler();
 	void showGrid();
+	bool showPageMargins();
 	void snapToGrid();
 
 	void showSelectionPopupMenu( const QPoint &pos );
@@ -232,6 +234,7 @@ private:
 	KToggleAction		*m_showRulerAction;
 	KToggleAction		*m_showGridAction;
 	KToggleAction		*m_snapGridAction;
+	KToggleAction		*m_showPageMargins;
 	KoContextHelpAction	*m_contextHelpAction;
 	KAction			*m_deleteSelectionAction;
 	// line width

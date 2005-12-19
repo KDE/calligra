@@ -176,6 +176,15 @@ KarbonPart::removeView( KoView *view )
 	KoDocument::removeView( view );
 }
 
+double getAttribute(QDomElement &element, const char *attributeName, double defaultValue)
+{
+	QString value;
+	if ( ( value = element.attribute( attributeName ) ) != QString::null )
+		return value.toDouble();
+	else
+		return defaultValue;
+}
+
 bool
 KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 {
@@ -191,9 +200,40 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 
 	success = m_doc.loadXML( doc );
 
-	m_pageLayout.ptWidth	= m_doc.width();
-	m_pageLayout.ptHeight	= m_doc.height();
+	//m_pageLayout = KoPageLayout::standardLayout();
 
+	// <PAPER>
+	QDomElement paper = doc.namedItem( "PAPER" ).toElement();
+	if ( !paper.isNull() )
+	{
+		m_pageLayout.format = static_cast<KoFormat>( getAttribute( paper, "format", 0 ) );
+		m_pageLayout.orientation = static_cast<KoOrientation>( getAttribute( paper, "orientation", 0 ) );
+	}
+	if( m_pageLayout.format == PG_CUSTOM )
+	{
+		m_pageLayout.ptWidth	= m_doc.width();
+		m_pageLayout.ptHeight	= m_doc.height();
+	}
+	else
+	{
+		m_pageLayout.ptWidth = getAttribute( paper, "width", 0.0 );
+	        m_pageLayout.ptHeight = getAttribute( paper, "height", 0.0 );
+	}
+	kdDebug() << " ptWidth=" << m_pageLayout.ptWidth << endl;
+	kdDebug() << " ptHeight=" << m_pageLayout.ptHeight << endl;
+        QDomElement borders = paper.namedItem( "PAPERBORDERS" ).toElement();
+        if( !borders.isNull() )
+       	{
+            if( borders.hasAttribute( "ptLeft" ) )
+                m_pageLayout.ptLeft = borders.attribute( "ptLeft" ).toDouble();
+            if( borders.hasAttribute( "ptTop" ) )
+                m_pageLayout.ptTop = borders.attribute( "ptTop" ).toDouble();
+            if( borders.hasAttribute( "ptRight" ) )
+                m_pageLayout.ptRight = borders.attribute( "ptRight" ).toDouble();
+            if( borders.hasAttribute( "ptBottom" ) )
+                m_pageLayout.ptBottom = borders.attribute( "ptBottom" ).toDouble();
+	}
+ 
 	setUnit( m_doc.unit() );
 
 	return success;
@@ -202,7 +242,24 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 QDomDocument
 KarbonPart::saveXML()
 {
-	return m_doc.saveXML();
+	QDomDocument doc = m_doc.saveXML();
+	QDomElement me = doc.documentElement();
+	QDomElement paper = doc.createElement( "PAPER" );
+	me.appendChild( paper );
+	paper.setAttribute( "format", static_cast<int>( m_pageLayout.format ) );
+	paper.setAttribute( "pages", pageCount() );
+	paper.setAttribute( "width", m_pageLayout.ptWidth );
+	paper.setAttribute( "height", m_pageLayout.ptHeight );
+	paper.setAttribute( "orientation", static_cast<int>( m_pageLayout.orientation ) );
+
+	QDomElement paperBorders = doc.createElement( "PAPERBORDERS" );
+	paperBorders.setAttribute( "ptLeft", m_pageLayout.ptLeft );
+	paperBorders.setAttribute( "ptTop", m_pageLayout.ptTop );
+	paperBorders.setAttribute( "ptRight", m_pageLayout.ptRight );
+	paperBorders.setAttribute( "ptBottom", m_pageLayout.ptBottom );
+	paper.appendChild(paperBorders);
+
+	return doc;
 }
 
 bool

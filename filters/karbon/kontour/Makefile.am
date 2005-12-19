@@ -5,7 +5,7 @@ INCLUDES= -I$(srcdir) $(KOFFICE_INCLUDES) $(KOPAINTER_INCLUDES) -I$(top_srcdir)/
 ####### Files
 # Obviously you have to change "foo" (and maybe "import") to
 # reflect the name of your filter. If you have more files
-# than just fooimport.cc please add them to the _SOUCRES line.
+# than just fooimport.cc please add them to the _SOURCES line.
 
 kde_module_LTLIBRARIES = libkarbonkontourimport.la
 

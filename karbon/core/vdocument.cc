@@ -24,9 +24,11 @@
 #include "vvisitor.h"
 #include "vlayer.h"
 #include "vstroke.h"
+#include "vdashpattern.h"
 #include "vpainter.h"
 
 #include <KoStore.h>
+#include <koPageLayout.h>
 #include <KoXmlWriter.h>
 
 #include <kdebug.h>
@@ -61,7 +63,7 @@ VDocument::~VDocument()
 }
 
 void
-VDocument::drawPage( VPainter *p ) const
+VDocument::drawPage( VPainter *p, const KoPageLayout &pl, bool showPageMargins ) const
 {
 	p->setPen( Qt::black );
 	p->setBrush( Qt::white );
@@ -100,6 +102,22 @@ VDocument::drawPage( VPainter *p ) const
 
 			p0.ry() += dy;
 		}
+	}
+	// Draw page margins
+	if( showPageMargins )
+	{
+		int ml = pl.ptLeft;
+		int mt = pl.ptTop;
+		int mr = pl.ptRight;
+		int mb = pl.ptBottom;
+
+		VStroke s( 0, 1 );
+		s.setColor( Qt::blue );
+		QValueList<float> dashes;
+		s.dashPattern().setArray( dashes << 5 << 5 );
+		p->setPen( s );
+		p->setBrush( Qt::NoBrush );
+		p->drawRect(ml, mt, m_width-ml-mr, m_height-mt-mb);
 	}
 }
 
@@ -190,9 +208,6 @@ VDocument::saveXML() const
 	QDomDocument doc;
 	QDomElement me = doc.createElement( "DOC" );
 	doc.appendChild( me );
-
-	// TODO : add paper size/orientation storing code here
-	// maybe we need to provide it as param or member var? (Rob)
 	save( me );
 	return doc;
 }

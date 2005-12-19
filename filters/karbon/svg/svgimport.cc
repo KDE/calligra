@@ -20,6 +20,7 @@
 #include <svgimport.h>
 #include "color.h"
 #include <koFilterChain.h>
+#include <koPageLayout.h>
 #include <kgenericfactory.h>
 #include <kdebug.h>
 #include <koUnit.h>
@@ -103,6 +104,12 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 
 	// Do the conversion!
 	convert();
+	// add paper info, we always need custom for svg (Rob)
+	QDomElement paper = outdoc.createElement( "PAPER" );
+	outdoc.documentElement().appendChild( paper );
+	paper.setAttribute( "format", PG_CUSTOM );
+	paper.setAttribute( "width", m_document.width() );
+	paper.setAttribute( "height", m_document.height() );
 
 	KoStoreDevice* out = m_chain->storageFile( "root", KoStore::Write );
 	if( !out )

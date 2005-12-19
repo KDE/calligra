@@ -28,6 +28,8 @@
 #include <qwmatrix.h>
 #include <commands/vtransformcmd.h>
 
+#include <koPageLayout.h>
+
 const void pottoa (PathOutputType &data);
 
 // generic
@@ -458,6 +460,13 @@ bool KarbonAIParserBase::parse (QIODevice& fin, QDomDocument &doc)
   {
       qDebug ("before save document");
       doc = m_document->saveXML();
+	// add paper info, we always need custom for svg (Rob)
+	QDomElement paper = doc.createElement( "PAPER" );
+	doc.documentElement().appendChild( paper );
+	paper.setAttribute( "format", PG_CUSTOM );
+	paper.setAttribute( "width", m_document->width() );
+	paper.setAttribute( "height", m_document->height() );
+
       qDebug ("after save document");
   }
   else
