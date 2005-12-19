@@ -1415,15 +1415,6 @@ bool KoDocument::openFile()
 
     QApplication::setOverrideCursor( waitCursor );
 
-    if ( d->m_bSingleViewMode && !d->m_views.isEmpty() )
-    {
-        // We already had a view (this happens when doing reload in konqueror)
-        KoView* v = d->m_views.first();
-        removeView( v );
-        delete v;
-        Q_ASSERT( d->m_views.isEmpty() );
-    }
-
     d->m_specialOutputFlag = 0;
     QCString _native_format = nativeFormatMimeType();
 
@@ -1539,6 +1530,17 @@ bool KoDocument::openFile()
         KXMLGUIFactory* guiFactory = factory();
         if( guiFactory ) // 0L when splitting views in konq, for some reason
             guiFactory->removeClient( this );
+
+        if ( !d->m_views.isEmpty() )
+        {
+            // We already had a view (this happens when doing reload in konqueror)
+            KoView* v = d->m_views.first();
+            if( guiFactory )
+                guiFactory->removeClient( v );
+            removeView( v );
+            delete v;
+            Q_ASSERT( d->m_views.isEmpty() );
+        }
 
         KoView *view = createView( d->m_wrapperWidget );
         d->m_wrapperWidget->setKoView( view );
