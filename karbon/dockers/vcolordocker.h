@@ -23,9 +23,13 @@
 
 class QTabWidget;
 class QWidget;
+class QColor;
 class KarbonView;
 class VColor;
 class VColorSlider;
+class KoHSVWidget;
+class KoCMYKWidget;
+class KoRGBWidget;
 
 class VColorDocker : public QWidget
 {
@@ -47,27 +51,21 @@ private:
 	virtual void mouseReleaseEvent( QMouseEvent *e );
 
 	QTabWidget *mTabWidget;
-	QWidget *mRGBWidget;
-	QWidget *mCMYKWidget;
-	VColorSlider *mRedSlider;
-	VColorSlider *mGreenSlider;
-	VColorSlider *mBlueSlider;
-	VColorSlider *mCyanSlider;
-	VColorSlider *mMagentaSlider;
-	VColorSlider *mYellowSlider;
-	VColorSlider *mBlackSlider;
+	KoHSVWidget *mHSVWidget;
+	KoCMYKWidget *mCMYKWidget;
+	KoRGBWidget *mRGBWidget;
 	VColorSlider *mOpacity;
 
 private slots:
-	void updateCMYK();
-	void updateRGB();
+	void updateFgColor(const QColor &c);
+	void updateBgColor(const QColor &c);
 	void updateOpacity();
-	void changeColor();
 
 protected:
 	bool m_isStrokeDocker; //Are we setting stroke color ( true ) or fill color ( false )
-	VColor m_color;
-	VColor m_oldColor;
+	QColor m_color;
+	QColor m_oldColor;
+	float m_opacity;
 private:
 	KarbonPart *m_part;
 	KarbonView *m_view;
