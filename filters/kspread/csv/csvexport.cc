@@ -33,7 +33,6 @@
 #include <kspread_sheet.h>
 #include <kspread_doc.h>
 #include <kspread_view.h>
-#include <selection.h>
 
 #include <csvexportdialog.h>
 
@@ -205,7 +204,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
 
     Sheet const * const sheet = view->activeSheet();
 
-    QRect selection = view->selectionInfo()->lastRange();
+    QRect selection = view->selection();
     int right       = selection.right();
     int bottom      = selection.bottom();
 
