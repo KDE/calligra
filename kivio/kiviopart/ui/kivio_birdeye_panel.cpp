@@ -132,17 +132,16 @@ bool KivioBirdEyePanel::eventFilter(QObject* o, QEvent* ev)
 
 void KivioBirdEyePanel::updateView()
 {
-  // FIXME: This whole function needs fixing!
-  QSize s1 = canvas->size();
-  QSize s2;
- 
   if (!m_pView || !m_pView->activePage()) return;
 
   KoPageLayout pl = m_pView->activePage()->paperLayout();
+  m_zoomHandler->setZoomAndResolution(100, KoGlobal::dpiX(),
+                                      KoGlobal::dpiY());
 
-  int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
-  int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
-  s2 = QSize(pw,ph);
+  int pw = m_zoomHandler->zoomItX(pl.ptWidth);
+  int ph = m_zoomHandler->zoomItY(pl.ptHeight);
+  QSize s2 = QSize(pw,ph);
+  QSize s1 = canvas->size();
 
   double zx = (double)s1.width()/(double)s2.width();
   double zy = (double)s1.height()/(double)s2.height();
@@ -304,4 +303,5 @@ void KivioBirdEyePanel::handleMousePress(QPoint p)
 
   m_pCanvas->setViewCenterPoint(KoPoint(x,y));
 }
+
 #include "kivio_birdeye_panel.moc"
