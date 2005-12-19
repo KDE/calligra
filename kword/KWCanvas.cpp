@@ -179,6 +179,9 @@ void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
     p.setBrushOrigin( -contentsX(), -contentsY() );
     QRect crect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
     drawFrameSet( fs, &p, crect, true, resetChanged, m_viewMode );
+    // ###### This repaints the whole grid every time. Ouch.
+    // We should either have the grid in a double-buffer pixmap to start from,
+    // or, hmm, get the repainted rects from drawFrameSet... Tricky.
     if ( m_doc->showGrid() )
       drawGrid( p, crect );
 }
@@ -879,35 +882,49 @@ void KWCanvas::applyGrid( KoPoint &p )
   p.setX( static_cast<int>( p.x() / m_doc->gridX() + 1e-10 ) * m_doc->gridX() );
   p.setY( static_cast<int>( p.y() / m_doc->gridY() + 1e-10 ) * m_doc->gridY() );
 
-  //FIXME It doesn't work in preview mode
+  //FIXME It doesn't work in preview mode - apply viewmode
 }
 
 void KWCanvas::drawGrid( QPainter &p, const QRect& rect )
 {
+  // Grid-positioning makes no sense in text view mode
+  if ( !m_viewMode->hasFrames() )
+    return;
   QPen _pen = QPen( /*m_doc->gridColor()*/Qt::black, 6, Qt::DotLine );
   QPen oldPen = p.pen();
   p.setPen( _pen );
 
-  // Do all the iteration in "normal" coordinates
-  const int documentWidth = m_doc->paperWidth( m_doc->startPage() );
-  const int documentHeight = m_doc->zoomItY( m_doc->pageManager()->bottomOfPage( m_doc->lastPage() ) );
+  //const int documentWidth = m_doc->paperWidth( m_doc->startPage() );
+  //const int documentHeight = m_doc->zoomItY( m_doc->pageManager()->bottomOfPage( m_doc->lastPage() ) );
 
-  // Limit the painting at the size wanted by the viewmode
-  // e.g. for the text viewmode it's only one frameset, not the whole page.
-  const QRect contentsArea( m_viewMode->normalToView( QPoint( 0, 0 ) ),
-                            m_viewMode->contentsSize() );
-  const QRect crect = rect & contentsArea;
-
-  int zoomedX,  zoomedY;
   const double offsetX = m_doc->gridX();
   const double offsetY = m_doc->gridY();
 
-  for ( double i = offsetX; ( zoomedX = m_doc->zoomItX( i ) ) < documentWidth; i += offsetX )
-    for ( double j = offsetY; ( zoomedY = m_doc->zoomItY( j ) ) < documentHeight; j += offsetY ) {
-      const QPoint vp = m_viewMode->normalToView( QPoint( zoomedX, zoomedY ) );
-      if ( crect.contains( vp ) )
-        p.drawPoint( vp );
-    }
+  for ( int pgNum = m_doc->startPage() ; pgNum <= m_doc->lastPage() ; ++pgNum) {
+      const QRect pageRect = m_viewMode->viewPageRect( pgNum );
+      const QRect crect = pageRect & rect;
+      if ( crect.isEmpty() )
+          continue;
+
+      // docRect is the part of the document that needs to be painted
+      const KoRect docRect = m_doc->unzoomRect( m_viewMode->viewToNormal( crect ) );
+
+      //kdDebug() << "drawGrid page " << pgNum << " pageRect=" << pageRect << " crect=" << crect << " docRect=" << docRect << endl;
+
+      const double firstOffsetX = offsetX * static_cast<int>( docRect.x() / offsetX );
+      const double firstOffsetY = offsetY * static_cast<int>( docRect.y() / offsetY );
+      const double bottom = docRect.bottom();
+
+      for ( double i = firstOffsetX; i < docRect.right(); i += offsetX ) {
+          const int zoomedX = m_doc->zoomItX( i );
+          for ( double j = firstOffsetY; j < bottom; j += offsetY ) {
+              const int zoomedY = m_doc->zoomItY( j );
+              const QPoint vp = m_viewMode->normalToView( QPoint( zoomedX, zoomedY ) );
+              // if ( crect.contains( vp ) ) // should always be true
+              p.drawPoint( vp );
+          }
+      }
+  }
 
   p.setPen( oldPen );
 }

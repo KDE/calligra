@@ -90,12 +90,10 @@ double KWPage::offsetInDocument() const { // the y coordinate
 }
 
 QRect KWPage::zoomedRect(KoZoomHandler *zoomHandler) {
-    QRect rect = QRect(0, zoomHandler->zoomItY(offsetInDocument()),
-        zoomHandler->zoomItX(width()), zoomHandler->zoomItY(height()));
-    return rect;
+    return QRect(0, zoomHandler->zoomItY(offsetInDocument()),
+                 zoomHandler->zoomItX(width()), zoomHandler->zoomItY(height()));
 }
 
 const KoRect KWPage::rect() const {
-    KoRect rect = KoRect(0, offsetInDocument(), width(), height());
-    return rect;
+    return KoRect(0, offsetInDocument(), width(), height());
 }

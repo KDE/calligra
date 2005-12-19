@@ -6458,8 +6458,8 @@ void KWView::switchModeView()
     m_actionInsertContents->setEnabled( state );
     m_actionFrameStyle->setEnabled( state );
     m_actionTableStyle->setEnabled ( state );
-    m_actionViewShowGrid->setEnabled( isNormalMode );
-    m_actionViewSnapToGrid->setEnabled ( isNormalMode );
+    m_actionViewShowGrid->setEnabled( state );
+    m_actionViewSnapToGrid->setEnabled( isNormalMode ); // TODO fix snapping in preview mode
     if ( m_gui->getHorzRuler())
     {
         m_gui->getHorzRuler()->setPageLayoutMenuItemEnabled( state );

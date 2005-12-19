@@ -184,7 +184,15 @@ KWViewMode * KWViewMode::create( const QString & viewModeType, KWDocument *doc, 
 QSize KWViewModeNormal::contentsSize()
 {
     return QSize( m_doc->paperWidth(m_doc->startPage()),
-            m_doc->zoomItY( m_doc->pageManager()->bottomOfPage(m_doc->lastPage()) ) );
+                  m_doc->zoomItY( m_doc->pageManager()->bottomOfPage(m_doc->lastPage()) ) );
+}
+
+QRect KWViewModeNormal::viewPageRect( int pgNum )
+{
+    KWPage* page = m_doc->pageManager()->page( pgNum );
+    QRect r = page->zoomedRect( m_doc );
+    r.moveBy( xOffset( page ), 0 );
+    return r;
 }
 
 QPoint KWViewModeNormal::normalToView( const QPoint & nPoint )
@@ -285,6 +293,14 @@ void KWViewModeNormal::drawPageBorders( QPainter * painter, const QRect & crect,
     painter->restore();
 }
 
+////
+
+QRect KWViewModeEmbedded::viewPageRect( int pgNum )
+{
+    // Only one page makes sense in embedded mode though
+    return m_doc->pageManager()->page( pgNum )->zoomedRect( m_doc );
+}
+
 //////////////////////// Preview mode ////////////////////////////////
 
 KWViewModePreview::KWViewModePreview( KWDocument * doc, KWCanvas* canvas,
@@ -345,18 +361,31 @@ QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
         kdWarning(31001) << "KWViewModePreview::normalToView request for conversion out of the document! Check your input data.. ("<< nPoint << ")" << endl;
         return QPoint(0,0);
     }
+
     double yInPagePt = unzoomedY - page->offsetInDocument();// and rest
     int row = (page->pageNumber() - m_doc->startPage()) / m_pagesPerRow;
     int col = (page->pageNumber() - m_doc->startPage()) % m_pagesPerRow;
-    /*kdDebug() << "KWViewModePreview::normalToView nPoint=" << nPoint.x() << "," << nPoint.y()
+    /*kdDebug() << "KWViewModePreview::normalToView nPoint=" << nPoint
                 << " unzoomedY=" << unzoomedY
                 << " ptPaperHeight=" << m_doc->ptPaperHeight(page->pageNumber())
                 << " page=" << page->pageNumber() << " row=" << row << " col=" << col
                 << " yInPagePt=" << yInPagePt << endl;*/
     return QPoint( leftSpacing() + col * ( m_doc->paperWidth(page->pageNumber()) +
-                m_spacing ) + nPoint.x(),
-            topSpacing() + row * ( m_doc->paperHeight(page->pageNumber()) +
-                m_spacing ) + m_doc->zoomItY( yInPagePt ) );
+                                           m_spacing ) + nPoint.x(),
+                   topSpacing() + row * ( m_doc->paperHeight(page->pageNumber()) +
+                                          m_spacing ) + m_doc->zoomItY( yInPagePt ) );
+}
+
+QRect KWViewModePreview::viewPageRect( int pgNum )
+{
+    int row = (pgNum - m_doc->startPage()) / m_pagesPerRow;
+    int col = (pgNum - m_doc->startPage()) % m_pagesPerRow;
+    const int paperWidth = m_doc->paperWidth( pgNum );
+    const int paperHeight = m_doc->paperHeight( pgNum );
+    return QRect( leftSpacing() + col * ( paperWidth + m_spacing ),
+                  topSpacing() + row * ( paperHeight + m_spacing ),
+                  paperWidth,
+                  paperHeight );
 }
 
 QPoint KWViewModePreview::viewToNormal( const QPoint & vPoint )
@@ -418,6 +447,7 @@ void KWViewModePreview::drawPageBorders( QPainter * painter, const QRect & crect
 }
 
 //////////////////
+
 KWViewModeText::KWViewModeText( KWDocument * doc, KWCanvas* canvas, KWTextFrameSet* fs )
     : KWViewMode( doc, canvas, false )
 {

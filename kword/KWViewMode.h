@@ -67,6 +67,9 @@ public:
     QRect viewToNormal( const QRect & nRect )
     { return QRect( viewToNormal( nRect.topLeft() ), viewToNormal( nRect.bottomRight() ) ); }
 
+    /** Return view coord for page rect. Avoids rounding problems when doing normalToView(zoomedRect) */
+    virtual QRect viewPageRect( int pgNum ) = 0;
+
     /** Size of the contents area, in pixels */
     virtual QSize contentsSize() = 0;
 
@@ -158,6 +161,7 @@ public:
 
     virtual QPoint normalToView( const QPoint & nPoint );
     virtual QPoint viewToNormal( const QPoint & vPoint );
+    virtual QRect viewPageRect( int pgNum );
     virtual QSize contentsSize();
 
     virtual const QString type() const { return "ModeNormal"; }
@@ -195,6 +199,7 @@ public:
     // This view mode is very easy to implement ;-P
     virtual QPoint normalToView( const QPoint & nPoint ) { return nPoint; }
     virtual QPoint viewToNormal( const QPoint & vPoint ) { return vPoint; }
+    virtual QRect viewPageRect( int pgNum );
     virtual QSize contentsSize() { return QSize(); }
 
     virtual void drawPageBorders( QPainter *, const QRect &, const QRegion & ){}
@@ -218,6 +223,7 @@ public:
 
     virtual QPoint normalToView( const QPoint & nPoint );
     virtual QPoint viewToNormal( const QPoint & vPoint );
+    virtual QRect viewPageRect( int pgNum );
     virtual QSize contentsSize();
     virtual void drawPageBorders( QPainter * painter, const QRect & crect, const QRegion & emptySpaceRegion );
 
@@ -258,6 +264,7 @@ public:
     virtual QPoint normalToView( const QPoint & nPoint );
     virtual QPoint viewToNormal( const QPoint & vPoint );
     virtual QSize contentsSize();
+    virtual QRect viewPageRect( int ) { return QRect(); }
     virtual QSize availableSizeForText( KWTextFrameSet* textfs );
     // There is no page concept. Keep everything relative to (0,0)
     virtual QPoint pageCorner() { return QPoint( 0, 0 ); }
