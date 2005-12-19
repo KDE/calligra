@@ -1390,18 +1390,23 @@ void KoTextParag::paint( QPainter &painter, const QColorGroup &cg, KoTextCursor 
     assert(zh);
 
     // Draw the paragraph background color
-    QRect paraPixelRect = pixelRect( zh );
-    int leftMarginInPix = zh->layoutUnitToPixelX( leftMargin() );
-    int firstLineOffsetInPix = zh->layoutUnitToPixelX( firstLineMargin() );
-    int backgroundLeft = QMIN ( leftMarginInPix,  leftMarginInPix + firstLineOffsetInPix );
-    int backgroundRight = paraPixelRect.width() - zh->layoutUnitToPixelX( rightMargin() );
-    int backgroundWidth = backgroundRight - backgroundLeft;
-    int backgroundHeight = pixelRect( zh ).height();
-
     if ( backgroundColor().isValid() )
+    {
+        QRect paraRect = pixelRect( zh );
+        // Find left margin size, first line offset and right margin in pixels
+        int leftMarginPix = zh->layoutUnitToPixelX( leftMargin() );
+        int firstLineOffset = zh->layoutUnitToPixelX( firstLineMargin() );
+        int backgroundRight = paraRect.width() - zh->layoutUnitToPixelX( rightMargin() );
+
+        // Render background from either left margin indent, or first line indent,
+        // whichever is nearer the left.
+        int backgroundLeft = QMIN ( leftMarginPix,  leftMarginPix + firstLineOffset );
+        int backgroundWidth = backgroundRight - backgroundLeft;
+        int backgroundHeight = pixelRect( zh ).height();
         painter.fillRect( backgroundLeft, 0,
                           backgroundWidth, backgroundHeight,
                           backgroundColor() );
+    }
 
     // Let's call drawLabel ourselves, rather than having to deal with QStyleSheetItem to get paintLines to call it!
     if ( m_layout.counter && m_layout.counter->numbering() != KoParagCounter::NUM_NONE && m_lineChanged <= 0 )

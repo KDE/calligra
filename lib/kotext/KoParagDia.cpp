@@ -1394,32 +1394,32 @@ void KoParagDecorationWidget::slotPressEvent(QMouseEvent *_ev)
                r.width() - OFFSETX, r.y() + OFFSETY + Ko_SPACE);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
-        KoBorder::BorderType border = KoBorder::TopBorder;
-        clickedBorderPreview( m_topBorder, border,  wDeco->bBorderTop );
+        clickedBorderPreview( m_topBorder, KoBorder::TopBorder,
+                              wDeco->bBorderTop );
     }
 
     rect.setCoords(r.x() + OFFSETX, r.height() - OFFSETY - Ko_SPACE,
                    r.width() - OFFSETX, r.height() - OFFSETY);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
-        KoBorder::BorderType border = KoBorder::BottomBorder;
-        clickedBorderPreview( m_bottomBorder, border,  wDeco->bBorderBottom );
+        clickedBorderPreview( m_bottomBorder, KoBorder::BottomBorder,
+                              wDeco->bBorderBottom );
     }
 
     rect.setCoords(r.x() + OFFSETX, r.y() + OFFSETY,
                    r.x() + Ko_SPACE + OFFSETX, r.height() - OFFSETY);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
-        KoBorder::BorderType border = KoBorder::LeftBorder;
-        clickedBorderPreview( m_leftBorder, border,  wDeco->bBorderLeft );
+        clickedBorderPreview( m_leftBorder, KoBorder::LeftBorder,
+                              wDeco->bBorderLeft );
     }
 
     rect.setCoords(r.width() - OFFSETX - Ko_SPACE, r.y() + OFFSETY,
                    r.width() - OFFSETX, r.height() - OFFSETY);
     if(rect.contains(QPoint(_ev->x(),_ev->y())))
     {
-        KoBorder::BorderType border = KoBorder::RightBorder;
-        clickedBorderPreview( m_rightBorder, border,  wDeco->bBorderRight );
+        clickedBorderPreview( m_rightBorder, KoBorder::RightBorder,
+                              wDeco->bBorderRight );
     }
 }
 

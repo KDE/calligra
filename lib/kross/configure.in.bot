@@ -1,18 +1,17 @@
 if test -z "$RUBY_LIBDIR"; then
   echo ""
-  echo "ruby developement files were not found, ruby support for kross will"
-  echo "not be build. If you don't need ruby scripting, you can ignore this"
-  echo "message"
+  echo "Ruby developement files were not found, Ruby scripting support for"
+  echo "KOffice will not be built. If you don't need Ruby scripting, you"
+  echo "can ignore this message."
   echo ""
 
 fi
 
 if test -z "$LIBPYTHON" && test -z "$PYTHONINC"; then
   echo ""
-  echo "python developement files were not found, python support for kross"
-  echo "will not be build. If you don't need ruby scripting, you can ignore this"
-  echo "message"
+  echo "Python developement files were not found, Python scripting support for"
+  echo "KOffice will not be built. If you don't need Python scripting, you"
+  echo "can ignore this message"
   echo ""
-
 fi
 
