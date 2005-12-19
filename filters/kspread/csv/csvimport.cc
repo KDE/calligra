@@ -67,7 +67,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
 
     kdDebug(30501) << "here we go... " << document->className() << endl;
 
-    if(strcmp(document->className(), "Doc")!=0)  // it's safer that way :)
+    if ( !::qt_cast<const KSpread::Doc *>( document ) )
     {
       kdWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
@@ -80,8 +80,7 @@ KoFilter::ConversionStatus CSVFilter::convert( const QCString& from, const QCStr
 
     kdDebug(30501) << "...still here..." << endl;
 
-    // No need for a dynamic cast here, since we use Qt's moc magic
-    Doc *ksdoc=(Doc*)document;
+    Doc *ksdoc = static_cast<Doc *>( document ); // type checked above
 
     if(ksdoc->mimeType()!="application/x-kspread")
     {

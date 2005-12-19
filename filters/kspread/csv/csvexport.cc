@@ -121,7 +121,7 @@ KoFilter::ConversionStatus CSVExport::convert( const QCString & from, const QCSt
   if ( !document )
     return KoFilter::StupidError;
 
-  if ( strcmp( document->className(), "Doc" ) != 0 )  // it's safer that way :)
+  if ( !::qt_cast<const KSpread::Doc *>( document ) )
   {
     kdWarning(30501) << "document isn't a KSpread::Doc but a " << document->className() << endl;
     return KoFilter::NotImplemented;
