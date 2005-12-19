@@ -215,7 +215,7 @@ QPoint KWViewModeNormal::viewToNormal( const QPoint & vPoint )
     KWPage *page = m_doc->pageManager()->page(unzoomedY);   // quotient
     if( !page) {
         kdWarning(31001) << "KWViewModeNormal::normalToView request for conversion out of the document! Check your input data.. ("<< vPoint << ")" << endl;
-        return QPoint(0,0);
+        return QPoint(-1,-1); // yes this is an ugly way to mark this as an excetional state...
     }
     Q_ASSERT(canvas());
     return QPoint( vPoint.x() - xOffset(page), vPoint.y() );

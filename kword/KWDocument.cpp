@@ -4309,6 +4309,27 @@ void KWDocument::framesChanged( const QPtrList<KWFrame> & frames, KWView * view 
     updateRulerFrameStartEnd();
 }
 
+void KWDocument::framesChanged( const QValueList<KWFrame*> frames) {
+    QValueList<KWFrameSet *> visitedFrameSets;
+    QValueListConstIterator<KWFrame*> framesIterator = frames.begin();
+    bool layoutneeded = false;
+    for(;framesIterator != frames.end(); ++framesIterator) {
+        KWFrame *frame = *framesIterator;
+        if(frame->runAround() != KWFrame::RA_NO)
+            layoutneeded = true;
+        KWFrameSet *fs = frame->frameSet();
+        if(visitedFrameSets.contains(fs))
+            continue; // already updated
+        fs->updateFrames();
+    }
+
+    if(layoutneeded)
+        layout();
+
+    repaintAllViews();
+    updateRulerFrameStartEnd();
+}
+
 void KWDocument::setHeaderVisible( bool h )
 {
     m_headerVisible = h;

@@ -708,80 +708,86 @@ void KWTableTemplateCommand::unexecute()
 }
 
 
-KWFrameResizeCommand::KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, const FrameResizeStruct& _frameResize ) :
-    KNamedCommand(name),
-    m_indexFrame(_frameIndex),
-    m_FrameResize(_frameResize)
-{
-    //kdDebug() << "Resize command: oldRect=" << m_FrameResize.oldRect
-    //          << " oldMinHeight=" << m_FrameResize.oldMinHeight
-    //          << " newRect=" << m_FrameResize.newRect
-    //          << " newMinHeight=" << m_FrameResize.newMinHeight << endl;
+KWFrameResizeCommand::KWFrameResizeCommand(const QString &name, const QValueList<FrameIndex> &frameIndex, const QValueList<FrameResizeStruct> &frameResize )
+    : KNamedCommand(name), m_indexFrame(frameIndex), m_frameResize(frameResize) {
+    Q_ASSERT(m_indexFrame.count() == m_frameResize.count());
+}
+KWFrameResizeCommand::KWFrameResizeCommand(const QString &name, FrameIndex frameIndex, const FrameResizeStruct &frameResize )
+    : KNamedCommand(name) {
+    m_indexFrame.append(frameIndex);
+    m_frameResize.append(frameResize);
 }
 
 void KWFrameResizeCommand::execute()
 {
-    KWFrameSet *frameSet = m_indexFrame.m_pFrameSet;
-    Q_ASSERT( frameSet );
-    KWFrame *frame = frameSet->frame(m_indexFrame.m_iFrameIndex);
-    Q_ASSERT( frame );
-    frame->setCoords(m_FrameResize.newRect.left(),m_FrameResize.newRect.top(),m_FrameResize.newRect.right(),m_FrameResize.newRect.bottom());
-    frame->setMinFrameHeight(m_FrameResize.newMinHeight);
+    QValueList<FrameResizeStruct>::Iterator resizeIter = m_frameResize.begin();
+    QValueList<FrameIndex>::Iterator iter = m_indexFrame.begin();
+    for(; iter != m_indexFrame.end() && resizeIter != m_frameResize.end(); ++resizeIter, ++iter ) {
+        FrameIndex index = *iter;
+        FrameResizeStruct frs = *resizeIter;
 
-    KWTableFrameSet *table = frame->frameSet()->groupmanager();
-    if (table) {
-        KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
-        if(cell)
-        {
-            table->recalcCols(cell->firstColumn(), cell->firstRow());
-            table->recalcRows(cell->firstColumn(), cell->firstRow());
+        KWFrameSet *frameSet = index.m_pFrameSet;
+        Q_ASSERT( frameSet );
+        KWFrame *frame = frameSet->frame(index.m_iFrameIndex);
+        Q_ASSERT( frame );
+        frame->setCoords(frs.newRect.left(),frs.newRect.top(),frs.newRect.right(),frs.newRect.bottom());
+        frame->setMinFrameHeight(frs.newMinHeight);
+        KWTableFrameSet *table = frameSet->groupmanager();
+        if (table) {
+            KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frameSet);
+            if(cell) {
+                table->recalcCols(cell->firstColumn(), cell->firstRow());
+                table->recalcRows(cell->firstColumn(), cell->firstRow());
+            }
+            else {
+                table->recalcCols(0, 0);
+                table->recalcRows(0, 0);
+            }
         }
-        else
-        {
-           table->recalcCols(0, 0);
-           table->recalcRows(0, 0);
-        }
-        //repaintTableHeaders( table );
+
+        KWDocument * doc = frameSet->kWordDocument();
+        if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY ) // header/footer/footnote
+            doc->recalcFrames();
+
+        //update frames
+        doc->frameChanged( frame );
     }
-    KWDocument * doc = frameSet->kWordDocument();
-    if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY ) // header/footer/footnote
-        doc->recalcFrames();
-
-    frame->updateRulerHandles();
-
-    //update frames
-    doc->frameChanged( frame );
 }
 
 void KWFrameResizeCommand::unexecute()
 {
-    KWFrameSet *frameSet =m_indexFrame.m_pFrameSet;
-    KWFrame *frame=frameSet->frame(m_indexFrame.m_iFrameIndex);
-    frame->setCoords(m_FrameResize.oldRect.left(),m_FrameResize.oldRect.top(),m_FrameResize.oldRect.right(),m_FrameResize.oldRect.bottom());
-    frame->setMinFrameHeight(m_FrameResize.oldMinHeight);
-    KWTableFrameSet *table = frame->frameSet()->groupmanager();
-    if (table) {
-        KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frame->frameSet());
-        if(cell)
-        {
-            table->recalcCols(cell->firstColumn(), cell->firstRow());
-            table->recalcRows(cell->firstColumn(), cell->firstRow());
+    QValueList<FrameResizeStruct>::Iterator resizeIter = m_frameResize.begin();
+    QValueList<FrameIndex>::Iterator iter = m_indexFrame.begin();
+    for(; iter != m_indexFrame.end() && resizeIter != m_frameResize.end(); ++resizeIter, ++iter ) {
+        FrameIndex index = *iter;
+        FrameResizeStruct frs = *resizeIter;
+        KWFrameSet *frameSet =index.m_pFrameSet;
+        Q_ASSERT( frameSet );
+        KWFrame *frame=frameSet->frame(index.m_iFrameIndex);
+        Q_ASSERT( frame );
+        frame->setCoords(frs.oldRect.left(),frs.oldRect.top(),frs.oldRect.right(),frs.oldRect.bottom());
+        frame->setMinFrameHeight(frs.oldMinHeight);
+        KWTableFrameSet *table = frameSet->groupmanager();
+        if (table) {
+            KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frameSet);
+            if(cell) {
+                table->recalcCols(cell->firstColumn(), cell->firstRow());
+                table->recalcRows(cell->firstColumn(), cell->firstRow());
+            }
+            else {
+                table->recalcCols(0, 0);
+                table->recalcRows(0, 0);
+            }
         }
-        else
-        {
-           table->recalcCols(0, 0);
-           table->recalcRows(0, 0);
-        }
-        //repaintTableHeaders( table );
+        KWDocument * doc = frameSet->kWordDocument();
+        if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY ) // header/footer/footnote
+            doc->recalcFrames();
+
+        frame->updateRulerHandles();
+
+        //update frames
+        doc->frameChanged( frame );
     }
-    KWDocument * doc = frameSet->kWordDocument();
-    if ( frameSet->frameSetInfo() != KWFrameSet::FI_BODY ) // header/footer/footnote
-        doc->recalcFrames();
-
-    frame->updateRulerHandles();
-
-    //update frames
-    doc->frameChanged( frame );
 }
 
 KWFrameChangePictureCommand::KWFrameChangePictureCommand( const QString &name, FrameIndex _frameIndex, const KoPictureKey & _oldKey, const KoPictureKey & _newKey ) :
@@ -912,14 +918,7 @@ void KWFrameMoveCommand::execute()
         KWFrameSet *frameSet = (*tmp).m_pFrameSet;
         doc = frameSet->kWordDocument();
         KWFrame *frame = frameSet->frame((*tmp).m_iFrameIndex);
-        KWTableFrameSet *table = frameSet->groupmanager();
-        if(table)
-        {
-            KoPoint diff = (*moveIt).newPos - (*moveIt).oldPos;
-            table->moveBy( diff.x(), diff.y() );
-        }
-        else
-            frame->moveTopLeft( (*moveIt).newPos );
+        frame->moveTopLeft( (*moveIt).newPos );
 
         frame->updateRulerHandles();
         needRelayout = needRelayout || ( frame->runAround() != KWFrame::RA_NO );
@@ -946,14 +945,7 @@ void KWFrameMoveCommand::unexecute()
         KWFrameSet *frameSet = (*tmp).m_pFrameSet;
         doc = frameSet->kWordDocument();
         KWFrame *frame = frameSet->frame((*tmp).m_iFrameIndex);
-        KWTableFrameSet *table = frameSet->groupmanager();
-        if(table)
-        {
-            KoPoint diff = (*moveIt).oldPos - (*moveIt).newPos;
-            table->moveBy( diff.x(), diff.y() );
-        }
-        else
-            frame->moveTopLeft( (*moveIt).oldPos );
+        frame->moveTopLeft( (*moveIt).oldPos );
 
         frame->updateRulerHandles();
         needRelayout = needRelayout || ( frame->runAround() != KWFrame::RA_NO );

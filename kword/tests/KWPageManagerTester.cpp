@@ -35,6 +35,7 @@ void KWPageManagerTester::allTests() {
     createInsertPages();
     removePages();
     pageInfo();
+    testClipToDocument();
 }
 
 void KWPageManagerTester::getAddPages() {
@@ -184,6 +185,7 @@ void KWPageManagerTester::removePages() {
 
     /* todo: bool tryRemovingPages(); */
 }
+
 void KWPageManagerTester::pageInfo() {
     KWPageManager *pageManager = new KWPageManager();
     pageManager->setDefaultPageSize(300, 600, PG_DIN_A4);
@@ -227,4 +229,41 @@ void KWPageManagerTester::pageInfo() {
 
     lay.ptRight = 90; // should have no effect
     CHECK(page3->rightMargin(), 8.0);
+}
+
+void KWPageManagerTester::testClipToDocument() {
+    KWPageManager *pageManager = new KWPageManager();
+    pageManager->setDefaultPageSize(300, 600, PG_DIN_A4);
+    KWPage *page1 = pageManager->appendPage();
+    page1->setWidth(100);
+    page1->setHeight(200);
+    KWPage *page2 = pageManager->appendPage();
+    page2->setWidth(50);
+    page2->setHeight(100);
+    KWPage *page3 = pageManager->appendPage();
+
+    KoPoint p(10,10);
+
+    KoPoint result = pageManager->clipToDocument(p);
+    CHECK(p == result, true);
+
+    p.setX(110);
+    result = pageManager->clipToDocument(p);
+    CHECK(p.y(), result.y());
+    CHECK(result.x(), 100.0);
+
+    p.setY(210);
+    result = pageManager->clipToDocument(p);
+    CHECK(p.y(), result.y());
+    CHECK(result.x(), 50.0);
+
+    p.setY(330);
+    result = pageManager->clipToDocument(p);
+    CHECK(p == result, true);
+
+    p.setY(910);
+    p.setX(310);
+    result = pageManager->clipToDocument(p);
+    CHECK(result.y(), 900.0);
+    CHECK(result.x(), 300.0);
 }

@@ -201,6 +201,35 @@ void KWPageManager::setDefaultPageMargins(double top, double left, double bottom
     m_defaultPageLayout.ptRight = right;
 }
 
+KoPoint KWPageManager::clipToDocument(const KoPoint &point) {
+    int page=m_firstPage;
+    double startOfpage = 0.0;
+    QPtrListIterator<KWPage> pages(m_pageList);
+    while(pages.current()) {
+        startOfpage += pages.current()->height();
+        if(startOfpage >= point.y())
+            break;
+        page++;
+        ++pages;
+    }
+    page = QMIN(page, lastPageNumber());
+    KoRect rect = this->page(page)->rect();
+    if(rect.contains(point))
+        return point;
+
+    KoPoint rc(point);
+    if(rect.top() > rc.y())
+        rc.setY(rect.top());
+    else if(rect.bottom() < rc.y())
+        rc.setY(rect.bottom());
+
+    if(rect.left() > rc.x())
+        rc.setX(rect.left());
+    else if(rect.right() < rc.x())
+        rc.setX(rect.right());
+    return rc;
+}
+
 // **** PageList ****
 int KWPageManager::PageList::compareItems(QPtrCollection::Item a, QPtrCollection::Item b)
 {

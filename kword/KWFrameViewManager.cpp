@@ -159,6 +159,8 @@ void KWFrameViewManager::fireEvents() {
     QValueList<FrameEvent *> copy(m_frameEvents);
     m_frameEvents.clear();
 
+    QValueList<KWFrame*> resizedFrames;
+    QValueList<KWFrame*> movedFrames;
     QValueList<KWFramesListener *> listenersCopy(m_framesListener);
     bool selectionChangedFired=false;
 
@@ -178,16 +180,16 @@ void KWFrameViewManager::fireEvents() {
                     break;
                 }
             }
+        } else if(event->m_action == FrameEvent::FrameResized) {
+            resizedFrames.append(event->m_frame);
+        } else if(event->m_action == FrameEvent::FrameMoved) {
+            movedFrames.append(event->m_frame);
         }
 
         // listener based
         QValueListIterator<KWFramesListener *> listeners = listenersCopy.begin();
         while(listeners != listenersCopy.end()) {
-            if(event->m_action == FrameEvent::FrameMoved)
-                (*listeners)->frameMoved(event->m_frame);
-            else if(event->m_action == FrameEvent::FrameResized)
-                (*listeners)->frameResized(event->m_frame);
-            else if(event->m_action == FrameEvent::FrameRemoved)
+            if(event->m_action == FrameEvent::FrameRemoved)
                 (*listeners)->frameRemoved(event->m_frame);
             else if(event->m_action == FrameEvent::FrameAdded)
                 (*listeners)->frameAdded(event->m_frame);
@@ -201,6 +203,10 @@ void KWFrameViewManager::fireEvents() {
         delete event;
         events = copy.remove(events);
     }
+    if(resizedFrames.count() > 0)
+        emit sigFrameResized(resizedFrames);
+    if(movedFrames.count() > 0)
+        emit sigFrameMoved(movedFrames);
 }
 
 void KWFrameViewManager::recalculateFrameCache() {
@@ -391,7 +397,7 @@ void KWFrameViewManager::showPopup( const KoPoint &point, KWView *view, int keyS
 
 void KWFrameViewManager::selectFrames(KoPoint &point, int keyState, bool leftClick) {
     MouseMeaning mm = mouseMeaning(point, keyState);
-    bool multiSelect = mm == MEANING_MOUSE_SELECT || keyState & Qt::ControlButton;
+    bool multiSelect = mm == MEANING_MOUSE_SELECT || keyState & Qt::ControlButton ;
     selectionEnum se = frameOnTop;
     if(leftClick && multiSelect)
         se = nextUnselected;
@@ -399,7 +405,10 @@ void KWFrameViewManager::selectFrames(KoPoint &point, int keyState, bool leftCli
     //kdDebug() << "KWFrameViewManager::selectFrames" << point << " got: " << toBeSelected << endl;
     if(toBeSelected == 0)
         return;
-    if(!multiSelect || keyState & Qt::ShiftButton) {
+    if(!multiSelect || keyState & Qt::ShiftButton &&
+        !(leftClick && (mm == MEANING_TOPLEFT || mm == MEANING_TOPRIGHT || mm == MEANING_TOP ||
+        mm == MEANING_LEFT || mm == MEANING_RIGHT || mm == MEANING_MOUSE_MOVE ||
+        mm == MEANING_BOTTOMLEFT || mm == MEANING_BOTTOM || mm == MEANING_BOTTOMRIGHT))) {
         // unselect all
         for(QValueListConstIterator<KWFrameView*> frames = m_frames.begin();
                 frames != m_frames.end(); ++frames) {

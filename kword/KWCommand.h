@@ -233,6 +233,7 @@ struct FrameResizeStruct {
     // Note that the new "minimum frame height" is always s2.height(),
     // since this is called when the user manually resizes a frame (not when
     // some text changes the size of a frame).
+    FrameResizeStruct() { } // default constructor;
     FrameResizeStruct( const KoRect& s1, double min1, const KoRect& s2 )
         : oldRect(s1), oldMinHeight(min1),
           newRect( s2), newMinHeight(s2.height()) {
@@ -250,15 +251,16 @@ struct FrameResizeStruct {
 class KWFrameResizeCommand : public KNamedCommand
 {
 public:
-    KWFrameResizeCommand( const QString &name, FrameIndex _frameIndex, const FrameResizeStruct& _frameResize ) ;
+    KWFrameResizeCommand(const QString &name, const QValueList<FrameIndex> &frameIndex, const QValueList<FrameResizeStruct> &frameResize );
+    KWFrameResizeCommand(const QString &name, FrameIndex frameIndex, const FrameResizeStruct &frameResize );
     ~KWFrameResizeCommand() {}
 
     void execute();
     void unexecute();
 
 protected:
-    FrameIndex m_indexFrame;
-    FrameResizeStruct m_FrameResize;
+    QValueList<FrameIndex> m_indexFrame;
+    QValueList<FrameResizeStruct> m_frameResize;
 };
 
 /**

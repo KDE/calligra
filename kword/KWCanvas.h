@@ -31,6 +31,7 @@
 #include "KWTextParag.h"
 #include "KWFrame.h"
 #include "KWVariable.h"
+#include "KWCommand.h"
 
 class KWDocument;
 class KWFrame;
@@ -44,6 +45,8 @@ class KWGUI;
 class KWTableTemplate;
 class KoTextParag;
 class QTimer;
+class InteractionPolicy;
+class KWFrameView;
 
 /**
  * Class: KWCanvas
@@ -91,14 +94,12 @@ public:
 
     // Mouse press
     void mpEditFrame( const QPoint& nPoint, MouseMeaning meaning, QMouseEvent *e = 0 );
-    void mpCreate( const QPoint& normalPoint );
-    void mpCreatePixmap( const QPoint& normalPoint );
+    void mpCreate( const QPoint& normalPoint, bool noGrid );
+    void mpCreatePixmap( const QPoint& normalPoint, bool noGrid  );
     // Mouse move
-    void mmEditFrameResize( bool top, bool bottom, bool left, bool right, bool noGrid );
-    void mmEditFrameMove( const QPoint &normalPoint, bool shiftPressed );
-    void mmCreate( const QPoint& normalPoint, bool shiftPressed );
+    void mmCreate( const QPoint& normalPoint, bool noGrid );
     // Mouse release
-    void mrEditFrame( QMouseEvent *e, const QPoint &nPoint );
+    void mrEditFrame();
     void mrCreateText();
     void mrCreatePixmap();
     void mrCreatePart();
@@ -199,16 +200,14 @@ public:
     /// Resets the status bar text
     void resetStatusBarText();
 
-    bool isFrameResized() { return m_frameResized; }
-
     /** Returns the caret position in document coordinates.
         The current frame must be editable, i.e., a caret is possible. */
     KoPoint caretPos();
+    void applyGrid( KoPoint &p );
+    void applyAspectRatio( double ratio, KoRect& insRect );
 
 protected:
     void drawGrid( QPainter &p, const QRect& rect );
-    void applyGrid( KoPoint &p );
-    void applyAspectRatio( double ratio, KoRect& insRect );
 
     /**
      * Reimplemented from QScrollView, to draw the contents of the canvas
@@ -237,8 +236,6 @@ protected:
     virtual void contentsDragLeaveEvent( QDragLeaveEvent *e );
     virtual void contentsDropEvent( QDropEvent *e );
     virtual void resizeEvent( QResizeEvent *e );
-
-    void selectFrame( KWFrame* frame, bool select );
 
     KWTableFrameSet * createTable(); // uses m_insRect and m_table to create the table
 
@@ -306,11 +303,8 @@ private:
     MouseMeaning m_mouseMeaning; // set by mousePress, used by mouseMove
     KoRect m_resizedFrameInitialSize; // when resizing a frame
     double m_resizedFrameInitialMinHeight; // when resizing a frame
-    KoRect m_insRect;  // when creating a new frame
-    KoRect m_boundingRect; // when moving frame(s)
-    KoPoint m_hotSpot; // when moving frame(s)
-    bool m_deleteMovingRect, m_frameMoved, m_frameResized;
-    bool m_ctrlClickOnSelectedFrame;
+    KoRect m_insRect;  ///< variable updated and painted to represent the to insert frame
+    bool m_deleteMovingRect;
     KoPicture m_kopicture; // The picture
     QSize m_pixmapSize; // size when inserting a picture (not necessarily the size of the picture)
     bool m_keepRatio;//when inserting a picture
@@ -319,7 +313,6 @@ private:
     bool m_temporaryStatusBarTextShown; // Indicates if the temporary is shown
     double m_previousTableSize; //previous column or row size before resizing it
     KoPoint m_lastCaretPos; // position of caret when editing stopped in document coordinates
-
 
 
     // Table creation support.
@@ -336,7 +329,7 @@ private:
         KWTableTemplate *tt;
     } m_table;
     KWTableFrameSet *m_currentTable;
-    KWFrameMoveCommand *m_moveFrameCommand;
+    InteractionPolicy *m_interactionPolicy;
 
     struct
     {
@@ -349,6 +342,114 @@ private:
         bool pictureInline;
         bool keepRatio;
     }m_picture;
+};
+
+/**
+ * Interaction policy defines the behavior in case the user clicks or drags the mouse.
+ * The InteractionPolicy is created in the createPolicy() function which defines the
+ * resulting behavior and initiates a frame-move or a frame-resize, for example.
+ * The canvas forwards mouseMove events to the handleMouseMove() method and the interaction
+ * is either finished with finishInteraction() or cancelInteraction() (never both).
+ */
+class InteractionPolicy {
+    public:
+        /**
+         * Extending classes should implement this method to alter the frames or other data
+         * based on the new mouse position.
+         * @param keyState the orred-data of the Shift/Alt/Control buttons being held down
+         *   during the mousemove.
+         * @param point the new point where the mouse if at.  This is in the document (pt-based)
+         *  coordinate system.
+         */
+        virtual void handleMouseMove(Qt::ButtonState keyState, const KoPoint &point) = 0;
+        /**
+         * For interactions that are undo-able this method should be implemented to return such
+         * a command.  Implementations should return 0 otherwise.
+         * @return a command, or 0.
+         */
+        virtual KCommand* createCommand() = 0;
+        /**
+         * This method will undo frames based interactions by calling createCommand()
+         * and unexecuting that.
+         */
+        void cancelInteraction();
+        /**
+         * Override to make final changes to the data on the end of an interaction.
+         */
+        virtual void finishInteraction() = 0;
+
+        /**
+         * This instanciates a new policy object and decides which policy is created based on the params.
+         * @param parent the parent canvas for things like redraw commands.
+         * @param meaning the mouseMeaning of as it is at 'point'
+         * @param point the place where the mouseDown is registred.
+         * @param buttonState which button is used to click, like Qt::LeftButton
+         * @param keyState which keys are held down at the click, like Qt::ControlButton
+         */
+        static InteractionPolicy* createPolicy(KWCanvas *parent, MouseMeaning meaning, KoPoint &point, Qt::ButtonState buttonState, Qt::ButtonState keyState);
+
+    protected:
+        /**
+         * Constructor.
+         * @param parent the parent canvas.
+         * @param doInit if true this will initialize the m_frames and m_indexFrame variables.
+         */
+        InteractionPolicy(KWCanvas *parent, bool doInit = true);
+
+        QValueList<FrameIndex> m_indexFrame;
+        KWCanvas *m_parent;
+        QValueList<KWFrame*> m_frames;
+
+    private:
+        void init();
+};
+
+/**
+ * A policy that handles resizes of any number of frames.
+ * Includes support for undo/redo and support for scale from center plus various other
+ * usability features.
+ */
+class FrameResizePolicy : public InteractionPolicy {
+    public:
+        FrameResizePolicy(KWCanvas *parent, MouseMeaning meaning, KoPoint &point);
+        void handleMouseMove(Qt::ButtonState keyState, const KoPoint &point);
+        KCommand *createCommand();
+        void finishInteraction();
+
+    private:
+        QValueList<FrameResizeStruct> m_frameResize;
+        bool m_top, m_bottom, m_left, m_right;
+        KoRect m_boundingRect;
+        KoPoint m_hotSpot;
+};
+
+/**
+ * A policy that handles frame moves of any number of frames.
+ * Includes support for undo/redo and linear moves (moves constrained to one axis)
+ * plus various other usability features.
+ */
+class FrameMovePolicy : public InteractionPolicy {
+    public:
+        FrameMovePolicy(KWCanvas *parent, KoPoint &point);
+        void handleMouseMove(Qt::ButtonState keyState, const KoPoint &point);
+        KCommand *createCommand();
+        void finishInteraction();
+    private:
+        QValueList<FrameMoveStruct> m_frameMove;
+        KoPoint m_hotSpot;
+        KoPoint m_startPoint;
+        KoRect m_boundingRect;
+};
+
+/**
+ * A policy to select frames.
+ */
+class FrameSelectPolicy : public InteractionPolicy {
+    public:
+        FrameSelectPolicy(KWCanvas *parent, KoPoint &point, Qt::ButtonState state, Qt::ButtonState keyState);
+        void handleMouseMove(Qt::ButtonState keyState, const KoPoint &point);
+        KCommand *createCommand();
+        void finishInteraction();
 };
 
 #endif

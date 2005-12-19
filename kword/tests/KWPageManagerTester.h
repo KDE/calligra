@@ -26,4 +26,5 @@ class KWPageManagerTester : public KUnitTest::Tester {
         void createInsertPages();
         void removePages();
         void pageInfo();
+        void testClipToDocument();
 };

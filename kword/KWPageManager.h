@@ -116,6 +116,8 @@ public:
     /// Set the margins for the whole document changing all pages that don't have specific margins set.
     void setDefaultPageMargins(double top, double left, double bottom, double right);
 
+    KoPoint clipToDocument(const KoPoint &point);
+
 private:
     /// helper method for the topOfPage and bottomOfPage
     double pageOffset(int pageNumber, bool bottom) const;

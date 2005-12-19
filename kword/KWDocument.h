@@ -795,6 +795,7 @@ signals:
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );
     void slotRepaintVariable();
+    void framesChanged( const QValueList<KWFrame*> frames);
 
     /** calls invalidate() on all framesets  */
     void invalidate(const KWFrameSet *skipThisFrameSet=0);
