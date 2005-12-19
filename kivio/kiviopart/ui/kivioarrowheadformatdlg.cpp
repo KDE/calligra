@@ -25,9 +25,11 @@
 #include <qbitmap.h>
 #include <qpixmap.h>
 #include <qpainter.h>
+#include <qframe.h>
 
 #include <kcombobox.h>
 #include <klocale.h>
+#include <kiconloader.h>
 
 #include <koUnitWidgets.h>
 
@@ -45,34 +47,62 @@ void KivioArrowHeadFormatDlg::init()
 {
   QWidget* mainWidget = new QWidget(this);
   setMainWidget(mainWidget);
-  QGridLayout* gl = new QGridLayout(mainWidget, 2, 1, KDialog::marginHint(), KDialog::spacingHint());
+  QGridLayout* gl = new QGridLayout(mainWidget, 2, 1, 0, KDialog::spacingHint());
 
-  QGroupBox* startGBox = new QGroupBox(2, Qt::Horizontal, i18n("Arrowhead at Origin"), mainWidget);
-  QLabel* startAHTypeLbl = new QLabel(i18n("&Type:"), startGBox);
-  m_startAHTypeCBox = new KComboBox(startGBox);
+  QLabel* startAHHeaderIcon = new QLabel(mainWidget);
+  startAHHeaderIcon->setPixmap(SmallIcon("start_arrowhead", 16));
+  startAHHeaderIcon->setFixedSize(16, 16);
+  QLabel* startAHHeaderLabel = new QLabel(i18n("<b>Arrowhead At Origin</b>"), mainWidget);
+  QFont font = startAHHeaderLabel->font();
+  QFrame* startAHHeaderLine = new QFrame(mainWidget);
+  startAHHeaderLine->setFrameStyle(QFrame::HLine|QFrame::Plain);
+  QLabel* startAHTypeLbl = new QLabel(i18n("&Type:"), mainWidget);
+  m_startAHTypeCBox = new KComboBox(mainWidget);
   loadArrowHeads(m_startAHTypeCBox, false);
   startAHTypeLbl->setBuddy(m_startAHTypeCBox);
-  QLabel* startAHWidthLbl = new QLabel(i18n("&Width:"), startGBox);
-  m_startAHWidthUSBox = new KoUnitDoubleSpinBox(startGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
+  QLabel* startAHWidthLbl = new QLabel(i18n("&Width:"), mainWidget);
+  m_startAHWidthUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   startAHWidthLbl->setBuddy(m_startAHWidthUSBox);
-  QLabel* startAHHeightLbl = new QLabel(i18n("&Length:"), startGBox);
-  m_startAHHeightUSBox = new KoUnitDoubleSpinBox(startGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
+  QLabel* startAHHeightLbl = new QLabel(i18n("&Length:"), mainWidget);
+  m_startAHHeightUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   startAHHeightLbl->setBuddy(m_startAHHeightUSBox);
 
-  QGroupBox* endGBox = new QGroupBox(2, Qt::Horizontal, i18n("Arrowhead at End"), mainWidget);
-  QLabel* endAHTypeLbl = new QLabel(i18n("T&ype:"), endGBox);
-  m_endAHTypeCBox = new KComboBox(endGBox);
+  QLabel* endAHHeaderIcon = new QLabel(mainWidget);
+  endAHHeaderIcon->setPixmap(SmallIcon("end_arrowhead", 16));
+  endAHHeaderIcon->setFixedSize(16, 16);
+  QLabel* endAHHeaderLabel = new QLabel(i18n("<b>Arrowhead At End</b>"), mainWidget);
+  QFrame* endAHHeaderLine = new QFrame(mainWidget);
+  endAHHeaderLine->setFrameStyle(QFrame::HLine|QFrame::Plain);
+  QLabel* endAHTypeLbl = new QLabel(i18n("T&ype:"), mainWidget);
+  m_endAHTypeCBox = new KComboBox(mainWidget);
   loadArrowHeads(m_endAHTypeCBox, true);
   endAHTypeLbl->setBuddy(m_endAHTypeCBox);
-  QLabel* endAHWidthLbl = new QLabel(i18n("W&idth:"), endGBox);
-  m_endAHWidthUSBox = new KoUnitDoubleSpinBox(endGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
+  QLabel* endAHWidthLbl = new QLabel(i18n("W&idth:"), mainWidget);
+  m_endAHWidthUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   endAHWidthLbl->setBuddy(m_endAHWidthUSBox);
-  QLabel* endAHHeightLbl = new QLabel(i18n("L&ength:"), endGBox);
-  m_endAHHeightUSBox = new KoUnitDoubleSpinBox(endGBox, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
+  QLabel* endAHHeightLbl = new QLabel(i18n("L&ength:"), mainWidget);
+  m_endAHHeightUSBox = new KoUnitDoubleSpinBox(mainWidget, 0.0, 1000.0, 0.1, 1.0, m_unit, 2);
   endAHHeightLbl->setBuddy(m_endAHHeightUSBox);
 
-  gl->addWidget(startGBox, 0, 0);
-  gl->addWidget(endGBox, 1, 0);
+  gl->addWidget(startAHHeaderIcon, 0, 0);
+  gl->addMultiCellWidget(startAHHeaderLabel, 0, 0, 1, 2);
+  gl->addMultiCellWidget(startAHHeaderLine, 1, 1, 0, 2);
+  gl->addMultiCellWidget(startAHTypeLbl, 2, 2, 0, 1);
+  gl->addWidget(m_startAHTypeCBox, 2, 2);
+  gl->addMultiCellWidget(startAHWidthLbl, 3, 3, 0, 1);
+  gl->addWidget(m_startAHWidthUSBox, 3, 2);
+  gl->addMultiCellWidget(startAHHeightLbl, 4, 4, 0, 1);
+  gl->addWidget(m_startAHHeightUSBox, 4, 2);
+
+  gl->addWidget(endAHHeaderIcon, 5, 0);
+  gl->addMultiCellWidget(endAHHeaderLabel, 5, 5, 1, 2);
+  gl->addMultiCellWidget(endAHHeaderLine, 6, 6, 0, 2);
+  gl->addMultiCellWidget(endAHTypeLbl, 7, 7, 0, 1);
+  gl->addWidget(m_endAHTypeCBox, 7, 2);
+  gl->addMultiCellWidget(endAHWidthLbl, 8, 8, 0, 1);
+  gl->addWidget(m_endAHWidthUSBox, 8, 2);
+  gl->addMultiCellWidget(endAHHeightLbl, 9, 9, 0, 1);
+  gl->addWidget(m_endAHHeightUSBox, 9, 2);
 }
 
 void KivioArrowHeadFormatDlg::loadArrowHeads(KComboBox* combo, bool endArrow)
