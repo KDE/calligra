@@ -361,7 +361,7 @@ void KWDocument::initConfig()
       m_zoomMode = static_cast<KoZoomMode::Mode> (
               config->readNumEntry( "ZoomMode", KoZoomMode::ZOOM_CONSTANT )
       );
-      
+
       m_bShowDocStruct = config->readBoolEntry( "showDocStruct", true );
       m_viewModeType = config->readEntry( "viewmode", "ModeNormal" );
       setShowStatusBar( config->readBoolEntry( "ShowStatusBar" , true ) );
@@ -1386,7 +1386,10 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
     return true;
 }
 
-// called before loading
+// Called before loading
+// It's important to clear out anything that might be in the document already,
+// for things like using DCOP to load multiple documents into the same KWDocument,
+// or "reload" when kword is embedded into konqueror.
 void KWDocument::clear()
 {
     m_pictureMap.clear();
@@ -1404,6 +1407,8 @@ void KWDocument::clear()
     m_pageColumns.columns = 1;
     m_pageColumns.ptColumnSpacing = m_defaultColumnSpacing;
     m_bHasEndNotes = false;
+
+    m_lstFrameSet.clear();
 
     m_varColl->clear();
     m_pictureCollection->clear();
