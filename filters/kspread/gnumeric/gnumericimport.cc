@@ -1835,9 +1835,9 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
 
     kdDebug(30521) << "here we go... " << document->className() << endl;
 
-    if (strcmp(document->className(), "Doc") != 0)  // it's safer that way :)
+    if ( !::qt_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
-        kdWarning(30521) << "document isn't a Doc but a " << document->className() << endl;
+        kdWarning(30521) << "document isn't a KSpread::Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
     }
     if ( from != "application/x-gnumeric" || to != "application/x-kspread" )

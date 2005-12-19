@@ -104,9 +104,9 @@ KoFilter::ConversionStatus OpenCalcExport::convert( const QCString & from,
   if ( !document )
     return KoFilter::StupidError;
 
-  if ( strcmp(document->className(), "Doc") != 0)
+  if (  !::qt_cast<const KSpread::Doc *>( document ) )
   {
-    kdWarning(30518) << "document isn't a Doc but a "
+    kdWarning(30518) << "document isn't a KSpread::Doc but a "
                      << document->className() << endl;
     return KoFilter::NotImplemented;
   }

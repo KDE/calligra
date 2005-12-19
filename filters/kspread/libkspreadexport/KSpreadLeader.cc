@@ -74,7 +74,7 @@ KoFilter::ConversionStatus Leader::convert() {
 		kdWarning(30508) << "the KSpreadDoc is NULL!" << endl;
 		return KoFilter::StupidError;
 	}
-	if (strcmp(document->className(), "KSpreadDoc") != 0) {
+	if ( !::qt_cast<const KSpread::Doc *>( document ) ) {
 		kdWarning(30508) << "the document is not a KSpreadDoc!" << endl;
 		return KoFilter::StupidError;
 	}

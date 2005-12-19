@@ -948,7 +948,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
     if (!document)
         return KoFilter::StupidError;
 
-    if (strcmp(document->className(), "Doc") != 0)  // it's safer that way :)
+    if ( !::qt_cast<const KSpread::Doc *>( document ) )  // it's safer that way :)
     {
       kdWarning(30521) << "document isn't a KSpread::Doc but a " << document->className() << endl;
         return KoFilter::NotImplemented;
