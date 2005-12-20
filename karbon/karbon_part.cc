@@ -272,7 +272,7 @@ KarbonPart::loadOasis( const QDomDocument &doc, KoOasisStyles &styles, const QDo
 	kdDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().localName() << endl;
 	kdDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().namespaceURI() << endl;
 	kdDebug(38000) << "Start loading OASIS contents..." << contents.lastChild().isElement() << endl;
-	QDomElement body( KoDom::namedItemNS( contents, "http://openoffice.org/2000/office"/*KoXmlNS::office*/, "body" ) );
+	QDomElement body( KoDom::namedItemNS( contents, KoXmlNS::office, "body" ) );
 	kdDebug(38000) << "Start loading OASIS document..." << body.text() << endl;
 	if( body.isNull() )
 	{
