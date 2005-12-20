@@ -223,6 +223,7 @@ void KWTableStyleManager::setupWidget()
     m_stylesList = new QListBox( frame1, "stylesList" );
     m_stylesList->insertStringList( collection->displayNameList() );
     const QValueList<KoUserStyle*> styleList = collection->styleList();
+    Q_ASSERT( !styleList.isEmpty() );
     for ( QValueList<KoUserStyle *>::const_iterator it = styleList.begin(), end = styleList.end();
           it != end ; ++it )
     {
@@ -403,7 +404,7 @@ void KWTableStyleManager::updatePreview()
 
 void KWTableStyleManager::save()
 {
-    m_currentTableStyle->setName( m_nameString->text() );
+    m_currentTableStyle->setDisplayName( m_nameString->text() );
 }
 
 void KWTableStyleManager::addStyle()
@@ -416,7 +417,6 @@ void KWTableStyleManager::addStyle()
     {
         m_currentTableStyle = new KWTableStyle( *m_currentTableStyle );
         m_currentTableStyle->setDisplayName( str );
-        m_currentTableStyle->setName( collection->generateUniqueName() );
     }
     else
     {
@@ -428,11 +428,12 @@ void KWTableStyleManager::addStyle()
 
         m_currentTableStyle = new KWTableStyle( str, defaultParagraphStyle, defaultFrameStyle );
     }
+    m_currentTableStyle->setName( collection->generateUniqueName() );
 
     noSignals=true;
     m_tableStyles.append(new KWTableStyleListItem(0L,m_currentTableStyle));
     m_stylesList->insertItem( str );
-    m_styleOrder<< str;
+    m_styleOrder << m_currentTableStyle->name();
     m_stylesList->setCurrentItem( m_stylesList->count() - 1 );
     noSignals=false;
 
@@ -463,7 +464,7 @@ void KWTableStyleManager::addStyles(const QPtrList<KWTableStyle> &listStyle )
     {
         noSignals=true;
         m_stylesList->insertItem( style.current()->displayName() );
-        m_styleOrder<<style.current()->name();
+        m_styleOrder << style.current()->name();
         m_tableStyles.append( new KWTableStyleListItem( 0L,new KWTableStyle(*style.current())) );
         noSignals=false;
 
@@ -475,9 +476,10 @@ void KWTableStyleManager::addStyles(const QPtrList<KWTableStyle> &listStyle )
 
 void KWTableStyleManager::deleteStyle()
 {
+    Q_ASSERT( m_currentTableStyle );
 
     unsigned int cur = tableStyleIndex( m_stylesList->currentItem() );
-    m_styleOrder.remove( m_stylesList->currentText());
+    m_styleOrder.remove( m_currentTableStyle->name() );
     if ( !m_tableStyles.at(cur)->origTableStyle() )
         m_tableStyles.take( cur );
     else {
@@ -493,26 +495,25 @@ void KWTableStyleManager::deleteStyle()
 
 void KWTableStyleManager::moveUpStyle()
 {
-    if(m_currentTableStyle !=0L)
+    Q_ASSERT( m_currentTableStyle );
+    if ( m_currentTableStyle )
         save();
 
-    unsigned int pos = 0;
-    QString currentStyleName=m_stylesList->currentText ();
-    if ( currentStyleName.isEmpty() )
-        return;
+    const QString currentStyleName = m_currentTableStyle->name();
+    const QString currentStyleDisplayName = m_stylesList->currentText();
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {
-        m_styleOrder.remove( m_styleOrder.at(pos2));
-        m_styleOrder.insert( m_styleOrder.at(pos2-1), currentStyleName);
+        m_styleOrder.remove( m_styleOrder.at(pos2) );
+        m_styleOrder.insert( m_styleOrder.at(pos2-1), currentStyleName );
     }
 
 
-    pos=m_stylesList->currentItem();
+    int pos = m_stylesList->currentItem();
     noSignals=true;
-    m_stylesList->changeItem( m_stylesList->text ( pos-1 ),pos);
+    m_stylesList->changeItem( m_stylesList->text( pos-1 ), pos );
 
-    m_stylesList->changeItem( currentStyleName ,pos-1);
+    m_stylesList->changeItem( currentStyleDisplayName, pos-1 );
 
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
@@ -522,24 +523,23 @@ void KWTableStyleManager::moveUpStyle()
 
 void KWTableStyleManager::moveDownStyle()
 {
-    if(m_currentTableStyle !=0L)
+    Q_ASSERT( m_currentTableStyle );
+    if ( m_currentTableStyle )
         save();
 
-    unsigned int pos = 0;
-    QString currentStyleName=m_stylesList->currentText ();
-    if ( currentStyleName.isEmpty() )
-        return;
+    const QString currentStyleName = m_currentTableStyle->name();
+    const QString currentStyleDisplayName = m_stylesList->currentText();
     int pos2 = m_styleOrder.findIndex( currentStyleName );
     if ( pos2 != -1 )
     {
-        m_styleOrder.remove( m_styleOrder.at(pos2));
-        m_styleOrder.insert( m_styleOrder.at(pos2+1), currentStyleName);
+        m_styleOrder.remove( m_styleOrder.at(pos2) );
+        m_styleOrder.insert( m_styleOrder.at(pos2+1), currentStyleName );
     }
 
-    pos=m_stylesList->currentItem();
+    int pos = m_stylesList->currentItem();
     noSignals=true;
-    m_stylesList->changeItem( m_stylesList->text ( pos+1 ),pos);
-    m_stylesList->changeItem( currentStyleName ,pos+1);
+    m_stylesList->changeItem( m_stylesList->text( pos+1 ), pos );
+    m_stylesList->changeItem( currentStyleDisplayName, pos+1 );
     m_stylesList->setCurrentItem( m_stylesList->currentItem() );
     noSignals=false;
 
@@ -563,21 +563,22 @@ void KWTableStyleManager::apply() {
     for (unsigned int i =0 ; i < m_tableStyles.count() ; i++) {
         if(m_tableStyles.at(i)->origTableStyle() == 0) {           // newly added style
             kdDebug() << "adding new tablestyle" << m_tableStyles.at(i)->changedTableStyle()->name() << " (" << i << ")" << endl;
-            KWTableStyle *tmp = addTableStyleTemplate(m_tableStyles.take(i)->changedTableStyle());
+            KWTableStyle *tmp = m_doc->tableStyleCollection()->addStyle( m_tableStyles.take(i)->changedTableStyle() );
             m_tableStyles.insert(i, new KWTableStyleListItem(0, tmp) );
         } else if(m_tableStyles.at(i)->changedTableStyle() == 0) { // deleted style
             kdDebug() << "deleting orig tablestyle " << m_tableStyles.at(i)->origTableStyle()->name() << " (" << i << ")" << endl;
 
             KWTableStyle *orig = m_tableStyles.at(i)->origTableStyle();
-            removeTableStyleTemplate( orig );
+            m_doc->tableStyleCollection()->removeStyle( orig );
         } else {
             kdDebug() << "update tablestyle " << m_tableStyles.at(i)->changedTableStyle()->name() << " (" << i << ")" << endl;
 
             m_tableStyles.at(i)->apply();
         }
     }
-    updateTableStyleListOrder( m_styleOrder);
-    updateAllStyleLists();
+    m_doc->tableStyleCollection()->updateStyleListOrder( m_styleOrder );
+    m_doc->updateAllTableStyleLists();
+    m_doc->setModified( true );
     noSignals=false;
 }
 
@@ -590,7 +591,7 @@ void KWTableStyleManager::renameStyle(const QString &theText) {
 
     // rename only in the GUI, not even in the underlying objects (save() does it).
     m_stylesList->changeItem( theText, index );
-    m_styleOrder[index]=theText;
+    //m_styleOrder[index]=theText; // not needed anymore, we use internal names
     // Check how many styles with that name we have now
     int synonyms = 0;
     for ( unsigned int i = 0; i < m_stylesList->count(); i++ ) {
@@ -713,24 +714,3 @@ void KWTableStyleManager::selectStyle(int index)
     save();
     updateGUI();
 }
-
-KWTableStyle* KWTableStyleManager::addTableStyleTemplate(KWTableStyle *style)
-{
-    return m_doc->tableStyleCollection()->addStyle(style);
-}
-
-void KWTableStyleManager::removeTableStyleTemplate( KWTableStyle *style )
-{
-    m_doc->tableStyleCollection()->removeStyle(style);
-}
-
-void KWTableStyleManager::updateTableStyleListOrder( const QStringList &list )
-{
-    m_doc->tableStyleCollection()->updateStyleListOrder( list );
-}
-
-void KWTableStyleManager::updateAllStyleLists()
-{
-    m_doc->updateAllTableStyleLists();
-}
-

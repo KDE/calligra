@@ -221,10 +221,13 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
     // try to preserve existing internal name, if it looks adequate (no spaces)
     // ## TODO: check XML-Schemacs NCName conformity
     bool nameIsConform = !m_name.isEmpty() && m_name.find( ' ' ) == -1;
+    QString newName;
     if ( nameIsConform )
-        return genStyles.lookup( gs, m_name, false );
+        newName = genStyles.lookup( gs, m_name, false );
     else
-        return genStyles.lookup( gs, "U", true );
+        newName = genStyles.lookup( gs, "U", true );
+    const_cast<KoParagStyle*>( this )->m_name = newName;
+    return m_name;
 }
 
 const KoParagLayout & KoParagStyle::paragLayout() const

@@ -145,10 +145,13 @@ public:
      *
      * STYLE_FRAME_AUTO: for frame styles (family="graphic") used by actual frames, saved into content.xml
      * STYLE_FRAME_USER: for frame styles (family="graphic") defined by the user, saved into styles.xml
+     * STYLE_TABLE_CELL_AUTO: for table-cell styles (family="table-cell") used by actual tables, saved into content.xml
+     * STYLE_TABLE_CELL_USER: for table-cell styles (family="table-cell") defined by the user, saved into styles.xml
      * ...
      */
     enum {  STYLE_FRAME_AUTO = 20, STYLE_FRAME_USER,
-            STYLE_TABLE, STYLE_TABLE_COLUMN, STYLE_TABLE_ROW, STYLE_TABLE_CELL };
+            STYLE_TABLE_CELL_AUTO, STYLE_TABLE_CELL_USER,
+            STYLE_TABLE, STYLE_TABLE_COLUMN, STYLE_TABLE_ROW };
 
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 

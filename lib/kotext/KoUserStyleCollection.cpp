@@ -22,7 +22,8 @@
 
 KoUserStyleCollection::KoUserStyleCollection( const QString& prefix )
     : m_prefix( prefix ),
-      m_lastStyle( 0 )
+      m_lastStyle( 0 ),
+      m_default( false /*to be safe*/ )
 {
 }
 

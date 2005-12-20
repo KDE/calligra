@@ -1834,7 +1834,7 @@ void KWTableFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, 
                 writer.startElement( "table:table-cell" );
 
                 // Style: background, border, padding.
-                KoGenStyle cellStyle( KWDocument::STYLE_TABLE_CELL, "table-cell" );
+                KoGenStyle cellStyle( KWDocument::STYLE_TABLE_CELL_AUTO, "table-cell" );
                 daCell->frame( 0 )->saveBorderProperties( cellStyle );
                 const QString colStyleName = context.mainStyles().lookup( cellStyle, "cell" );
                 writer.addAttribute( "table:style-name", colStyleName );

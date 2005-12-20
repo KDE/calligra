@@ -21,6 +21,11 @@
 #include "KWDocument.h"
 #include "KWFrame.h"
 
+#include <koGenStyles.h>
+#include <koOasisStyles.h>
+#include <KoOasisContext.h>
+#include <koxmlns.h>
+
 #include <kdebug.h>
 #include <klocale.h>
 #include <qdom.h>
@@ -32,12 +37,45 @@ KWTableStyleCollection::KWTableStyleCollection()
 
 void KWTableStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
 {
-
+    if ( !isDefault() ) {
+        for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+        {
+            KWTableStyle* style = static_cast<KWTableStyle *>( *styleIt );
+            style->saveOasis( mainStyles, savingContext );
+        }
+    }
 }
 
-void KWTableStyleCollection::loadOasisStyles( KoOasisContext& context )
+int KWTableStyleCollection::loadOasisStyles( KoOasisContext& context, const KoStyleCollection& paragraphStyles, const KWFrameStyleCollection& frameStyles )
 {
+    QValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
+    bool defaultStyleDeleted = false;
+    int stylesLoaded = 0;
+    for (unsigned int item = 0; item < userStyles.count(); item++) {
+        QDomElement styleElem = userStyles[item];
+	Q_ASSERT( !styleElem.isNull() );
 
+        if ( styleElem.attributeNS( KoXmlNS::style, "family", QString::null ) != "table-cell" )
+            continue;
+
+        if ( !defaultStyleDeleted ) {
+            KWTableStyle *s = findStyle( defaultStyleName() );
+            //kdDebug() << "KWTableStyleCollection::loadOasisStyles looking for " << defaultStyleName() << ", to delete it. Found " << s << endl;
+            if(s) // delete the standard style.
+                removeStyle(s);
+            defaultStyleDeleted = true;
+        }
+
+        KWTableStyle *sty = new KWTableStyle( QString::null, 0, 0 );
+        // Load the style
+        sty->loadOasis( styleElem, context, paragraphStyles, frameStyles );
+        // Style created, now let's try to add it
+        sty = static_cast<KWTableStyle *>( addStyle( sty ) );
+
+        kdDebug() << " Loaded table cell style " << sty->name() << " - now " << count() << " styles" << endl;
+        ++stylesLoaded;
+    }
+    return stylesLoaded;
 }
 
 /******************************************************************/
@@ -64,7 +102,7 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
     element = parentElem.namedItem( "PFRAMESTYLE" ).toElement();
     m_frameStyle = 0;
     if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) )
-        m_frameStyle = _doc->frameStyleCollection()->findStyle( element.attribute( "name" ) );
+        m_frameStyle = _doc->frameStyleCollection()->findStyleByDisplayName( element.attribute( "name" ) );
 
     if ( !m_frameStyle ) {
         if ( !_doc->frameStyleCollection()->isEmpty() )
@@ -84,7 +122,7 @@ KWTableStyle::KWTableStyle( QDomElement & parentElem, KWDocument *_doc, int /*do
     element = parentElem.namedItem( "PSTYLE" ).toElement();
     m_paragStyle = 0;
     if ( ( !element.isNull() ) && ( element.hasAttribute("name") ) )
-        m_paragStyle = _doc->styleCollection()->findStyle( element.attribute( "name" ) );
+        m_paragStyle = _doc->styleCollection()->findStyleByDisplayName( element.attribute( "name" ) );
 
     if ( !m_paragStyle ) {
         if ( _doc->styleCollection()->styleList().count()>0 )
@@ -116,13 +154,13 @@ void KWTableStyle::saveTableStyle( QDomElement & parentElem )
     {
         element = doc.createElement( "PFRAMESTYLE" );
         parentElem.appendChild( element );
-        element.setAttribute( "name", m_frameStyle->name() );
+        element.setAttribute( "name", m_frameStyle->displayName() );
     }
     if (m_paragStyle)
     {
         element = doc.createElement( "PSTYLE" );
         parentElem.appendChild( element );
-        element.setAttribute( "name", m_paragStyle->name() );
+        element.setAttribute( "name", m_paragStyle->displayName() );
     }
 
 }
@@ -130,4 +168,50 @@ void KWTableStyle::saveTableStyle( QDomElement & parentElem )
 KWTableStyle *KWTableStyle::loadStyle( QDomElement & parentElem, KWDocument *_doc, int docVersion )
 {
     return new KWTableStyle( parentElem, _doc, docVersion );
+}
+
+void KWTableStyle::saveOasis( KoGenStyles& mainStyles, KoSavingContext& /*savingContext*/ ) const
+{
+    KoGenStyle tableCellStyle( KWDocument::STYLE_TABLE_CELL_USER, "table-cell" );
+    tableCellStyle.addAttribute( "style:display-name", displayName() );
+    tableCellStyle.addProperty( "koffice:frame-style-name", m_frameStyle->name() );
+    tableCellStyle.addProperty( "koffice:paragraph-style-name", m_paragStyle->name() );
+
+    // try to preserve existing internal name, if it looks adequate (no spaces)
+    // ## TODO: check XML-Schemacs NCName conformity
+    const bool nameIsConform = !m_name.isEmpty() && m_name.find( ' ' ) == -1;
+    QString newName;
+    if ( nameIsConform )
+        newName = mainStyles.lookup( tableCellStyle, m_name, false );
+    else
+        newName = mainStyles.lookup( tableCellStyle, "tc", true /*force numbering*/ );
+    const_cast<KWTableStyle*>( this )->m_name = newName;
+}
+
+void KWTableStyle::loadOasis( QDomElement & styleElem, KoOasisContext& context, const KoStyleCollection& paragraphStyles, const KWFrameStyleCollection& frameStyles )
+{
+    // Load name
+    m_name = styleElem.attributeNS( KoXmlNS::style, "name", QString::null );
+    m_displayName = styleElem.attributeNS( KoXmlNS::style, "display-name", QString::null );
+    if ( m_displayName.isEmpty() )
+        m_displayName = m_name;
+    kdDebug() << k_funcinfo << m_name << " " << m_displayName << endl;
+
+    KoStyleStack& styleStack = context.styleStack();
+    styleStack.setTypeProperties( "table-cell" );
+
+    styleStack.save();
+    context.addStyles( &styleElem ); // Load all parents - only because we don't support inheritance.
+
+    const QString frameStyleName = styleStack.attributeNS( KoXmlNS::koffice, "frame-style-name" );
+    m_frameStyle = frameStyles.findStyle( frameStyleName );
+    if ( !m_frameStyle )
+        kdWarning(32001) << "Frame style " << frameStyleName << " not found!" << endl;
+
+    const QString paragraphStyleName = styleStack.attributeNS( KoXmlNS::koffice, "paragraph-style-name" );
+    m_paragStyle = paragraphStyles.findStyle( paragraphStyleName );
+    if ( !m_paragStyle )
+        kdWarning(32001) << "Paragraph style " << paragraphStyleName << " not found!" << endl;
+
+    styleStack.restore();
 }

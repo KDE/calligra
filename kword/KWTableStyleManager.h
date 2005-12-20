@@ -111,10 +111,6 @@ private:
     int tableStyleIndex( int pos );
 
     void addStyles(const QPtrList<KWTableStyle> &listStyle );
-    KWTableStyle* addTableStyleTemplate(KWTableStyle *style);
-    void removeTableStyleTemplate( KWTableStyle *style );
-    void updateAllStyleLists();
-    void updateTableStyleListOrder( const QStringList &list );
 
     QListBox *m_stylesList;
     QLineEdit *m_nameString;

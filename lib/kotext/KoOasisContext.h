@@ -127,20 +127,6 @@ public:
     /// @return the saving mode: Store (a KoStore will be used) or Flat (all data must be inline in the XML)
     SavingMode savingMode() const { return m_savingMode; }
 
-    typedef QMap<KoParagStyle*, QString> StyleNameMap;
-
-    /// Called after saving the user styles.
-    /// Associates every KoParagStyle with its automatic name (style:name attribute)
-    void setStyleNameMap( const StyleNameMap& map ) { m_styleNameMap = map; }
-
-    /// @return the automatic name for a KoParagStyle
-    QString styleAutoName( KoParagStyle* style ) const {
-        StyleNameMap::const_iterator it = m_styleNameMap.find( style );
-        if ( it != m_styleNameMap.end() )
-            return *it;
-        return QString::null;
-    }
-
     /// Set cursor position (so that KoTextParag can insert a processing instruction)
     void setCursorPosition( KoTextParag* cursorTextParagraph,
                             int cursorTextIndex );
@@ -160,7 +146,6 @@ public:
 
 private:
     KoGenStyles& m_mainStyles;
-    StyleNameMap m_styleNameMap;
     SavingMode m_savingMode;
 
     KoTextParag* m_cursorTextParagraph;

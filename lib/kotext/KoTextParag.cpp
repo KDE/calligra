@@ -2803,7 +2803,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     // Write paraglayout to styles (with parent == the parag's style)
     QString parentStyleName;
     if ( m_layout.style )
-        parentStyleName = context.styleAutoName( m_layout.style );
+        parentStyleName = m_layout.style->name();
 
     KoGenStyle autoStyle( KoGenStyle::STYLE_AUTO, "paragraph", parentStyleName );
     paragFormat()->save( autoStyle, context );

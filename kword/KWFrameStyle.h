@@ -98,12 +98,23 @@ class KWFrameStyleCollection : public KoUserStyleCollection
 public:
     KWFrameStyleCollection();
 
+    static QString defaultStyleName() { return QString::fromLatin1( "Plain" ); }
+
     /**
      * Find style based on the untranslated name @p name.
      * Overloaded for convenience
      */
     KWFrameStyle* findStyle( const QString & name ) const {
-        return static_cast<KWFrameStyle*>( KoUserStyleCollection::findStyle( name, QString::fromLatin1( "Plain" ) ) );
+        return static_cast<KWFrameStyle*>( KoUserStyleCollection::findStyle( name, defaultStyleName() ) );
+    }
+
+    /**
+     * Find style based on the display name @p name.
+     * This is only for the old XML loading.
+     * Overloaded for convenience
+     */
+    KWFrameStyle* findStyleByDisplayName( const QString & name ) const {
+        return static_cast<KWFrameStyle*>( KoUserStyleCollection::findStyleByDisplayName( name ) );
     }
 
     /**
@@ -122,7 +133,7 @@ public:
     }
 
     void saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const;
-    void loadOasisStyles( KoOasisContext& context );
+    int loadOasisStyles( KoOasisContext& context );
 };
 
 #endif

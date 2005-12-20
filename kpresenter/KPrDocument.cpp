@@ -1006,8 +1006,7 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     KoSavingContext savingContext( mainStyles, 0, false, KoSavingContext::Store );
 
     // Save user styles as KoGenStyle objects
-    KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
-    savingContext.setStyleNameMap( map );
+    m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
 
     KTempFile contentTmpFile;
     contentTmpFile.setAutoDelete( true );

@@ -122,14 +122,31 @@ public:
      */
     KoUserStyle* addStyle( KoUserStyle* sty );
 
+    /**
+     * @return true if this collection only holds the default styles provided by the application
+     * When true, those styles don't need to be saved.
+     */
+    bool isDefault() const { return m_default; }
+    /**
+     * Set whether this collection only holds the default styles provided by the application
+     */
+    void setDefault( bool d ) { m_default = d; }
+
 protected:
     KoUserStyleCollection( const KoUserStyleCollection& rhs ); ///< forbidden
     void operator=( const KoUserStyleCollection& rhs ); ///< forbidden
 
     QValueList<KoUserStyle *> m_styleList;
+
+private:
     QValueList<KoUserStyle *> m_deletedStyles;
     const QString m_prefix;
+    // can become d pointer if needed
     mutable KoUserStyle *m_lastStyle; ///< Last style that was searched
+    bool m_default;
+    bool m_unused1;
+    bool m_unused2;
+    bool m_unused3;
 };
 
 

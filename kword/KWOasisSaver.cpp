@@ -134,7 +134,7 @@ void KWOasisSaver::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-column-properties"  );
     }
 
-    styles = mainStyles.styles( KWDocument::STYLE_TABLE_CELL, stylesDotXml );
+    styles = mainStyles.styles( KWDocument::STYLE_TABLE_CELL_AUTO, stylesDotXml );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( &contentWriter, mainStyles, "style:style", (*it).name , "style:table-cell-properties"  );

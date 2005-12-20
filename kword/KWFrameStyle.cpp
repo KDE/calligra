@@ -25,11 +25,11 @@
 #include <koGenStyles.h>
 #include <koOasisStyles.h>
 #include <KoOasisContext.h>
+#include <koxmlns.h>
 
 #include <kdebug.h>
 #include <klocale.h>
 #include <qdom.h>
-#include <koxmlns.h>
 
 KWFrameStyleCollection::KWFrameStyleCollection()
     : KoUserStyleCollection( QString::fromLatin1( "frame" ) )
@@ -38,29 +38,34 @@ KWFrameStyleCollection::KWFrameStyleCollection()
 
 void KWFrameStyleCollection::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingContext ) const
 {
-    for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
-    {
-        KWFrameStyle* style = static_cast<KWFrameStyle *>( *styleIt );
-        style->saveOasis( mainStyles, savingContext );
+    if ( !isDefault() ) {
+        for ( QValueList<KoUserStyle *>::const_iterator styleIt = m_styleList.begin(), styleEnd = m_styleList.end() ; styleIt != styleEnd ; ++styleIt )
+        {
+            KWFrameStyle* style = static_cast<KWFrameStyle *>( *styleIt );
+            style->saveOasis( mainStyles, savingContext );
+        }
     }
 }
 
-void KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
+int KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
 {
     QValueVector<QDomElement> userStyles = context.oasisStyles().userStyles();
-    uint nStyles = userStyles.count();
-    if( nStyles ) { // we are going to import at least one style.
-        KWFrameStyle *s = findStyle("Standard");
-        //kdDebug() << "loadOasisStyleTemplates looking for Standard, to delete it. Found " << s << endl;
-        if(s) // delete the standard style.
-            removeStyle(s);
-    }
-    for (unsigned int item = 0; item < nStyles; item++) {
+    bool defaultStyleDeleted = false;
+    int stylesLoaded = 0;
+    for (unsigned int item = 0; item < userStyles.count(); item++) {
         QDomElement styleElem = userStyles[item];
 	Q_ASSERT( !styleElem.isNull() );
 
         if ( styleElem.attributeNS( KoXmlNS::style, "family", QString::null ) != "graphic" )
             continue;
+
+        if ( !defaultStyleDeleted ) {
+            KWFrameStyle *s = findStyle( defaultStyleName() );
+            //kdDebug() << "KWFrameStyleCollection::loadOasisStyles looking for " << defaultStyleName() << ", to delete it. Found " << s << endl;
+            if(s) // delete the standard style.
+                removeStyle(s);
+            defaultStyleDeleted = true;
+        }
 
         KWFrameStyle *sty = new KWFrameStyle( QString::null );
         // Load the style
@@ -69,7 +74,9 @@ void KWFrameStyleCollection::loadOasisStyles( KoOasisContext& context )
         sty = static_cast<KWFrameStyle *>( addStyle( sty ) );
 
         kdDebug() << " Loaded frame style " << sty->name() << " - now " << count() << " styles" << endl;
+        ++stylesLoaded;
     }
+    return stylesLoaded;
 }
 
 /******************************************************************/
@@ -243,10 +250,12 @@ void KWFrameStyle::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingCo
     // try to preserve existing internal name, if it looks adequate (no spaces)
     // ## TODO: check XML-Schemacs NCName conformity
     const bool nameIsConform = !m_name.isEmpty() && m_name.find( ' ' ) == -1;
+    QString newName = m_name;
     if ( nameIsConform )
-        (void)mainStyles.lookup( frameStyle, m_name, false );
+        newName = mainStyles.lookup( frameStyle, m_name, false );
     else
-        (void)mainStyles.lookup( frameStyle, "fr", true /*force numbering*/ );
+        newName = mainStyles.lookup( frameStyle, "fr", true /*force numbering*/ );
+    const_cast<KWFrameStyle*>( this )->m_name = newName;
 }
 
 void KWFrameStyle::loadOasis( QDomElement & styleElem, KoOasisContext& context )

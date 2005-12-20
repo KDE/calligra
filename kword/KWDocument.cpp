@@ -1238,7 +1238,16 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
 
     // Load all styles before the corresponding paragraphs try to use them!
     m_styleColl->loadOasisStyles( context );
-    m_frameStyleColl->loadOasisStyles( context );
+    if ( m_frameStyleColl->loadOasisStyles( context ) == 0 ) {
+         // no styles loaded -> load default styles
+        loadDefaultFrameStyleTemplates();
+    }
+
+    if ( m_tableStyleColl->loadOasisStyles( context, *m_styleColl, *m_frameStyleColl ) == 0 ) {
+        // no styles loaded -> load default styles
+        loadDefaultTableStyleTemplates();
+    }
+
     static_cast<KWVariableSettings *>( m_varColl->variableSetting() )
         ->loadNoteConfiguration( oasisStyles.officeStyle() );
 
@@ -2044,6 +2053,8 @@ void KWDocument::loadDefaultFrameStyleTemplates()
     kdDebug(30003) << "Directory searched: " << KGlobal::dirs()->resourceDirs( "appdata" ) << endl;
     kdDebug(30003) << "File framestyles.xml searched at: " << fsfileName << endl;
 
+    m_frameStyleColl->setDefault( true );
+
     if ( ! QFile::exists( fsfileName ) )
     {
         kdWarning(30003) << "Cannot find any framestyles.xml" << endl;
@@ -2118,6 +2129,8 @@ void KWDocument::loadDefaultTableStyleTemplates()
 {
     KURL fsfile;
 
+    m_tableStyleColl->setDefault( true );
+
     if ( ! QFile::exists(locate("appdata", "tablestyles.xml")) )
     {
         if (!m_tableStyleColl->findStyle("Plain")) {
@@ -2175,15 +2188,16 @@ void KWDocument::loadDefaultTableTemplates()
     {
         if (!m_tableTemplateColl->findTableTemplate("Plain")) {
             KWTableTemplate * standardTableTemplate = new KWTableTemplate( "Plain" );
-            standardTableTemplate->setFirstRow(tableStyleCollection()->findStyle("Plain"));
-            standardTableTemplate->setLastRow(tableStyleCollection()->findStyle("Plain"));
-            standardTableTemplate->setFirstCol(tableStyleCollection()->findStyle("Plain"));
-            standardTableTemplate->setLastCol(tableStyleCollection()->findStyle("Plain"));
-            standardTableTemplate->setBodyCell(tableStyleCollection()->findStyle("Plain"));
-            standardTableTemplate->setTopLeftCorner(tableStyleCollection()->findStyle("Plain"));
-            standardTableTemplate->setTopRightCorner(tableStyleCollection()->findStyle("Plain"));
-            standardTableTemplate->setBottomLeftCorner(tableStyleCollection()->findStyle("Plain"));
-            standardTableTemplate->setBottomRightCorner(tableStyleCollection()->findStyle("Plain"));
+            KWTableStyle* defaultTableStyle = tableStyleCollection()->findStyle("Plain");
+            standardTableTemplate->setFirstRow( defaultTableStyle );
+            standardTableTemplate->setLastRow( defaultTableStyle );
+            standardTableTemplate->setFirstCol( defaultTableStyle );
+            standardTableTemplate->setLastCol( defaultTableStyle );
+            standardTableTemplate->setBodyCell( defaultTableStyle );
+            standardTableTemplate->setTopLeftCorner( defaultTableStyle );
+            standardTableTemplate->setTopRightCorner( defaultTableStyle );
+            standardTableTemplate->setBottomLeftCorner( defaultTableStyle );
+            standardTableTemplate->setBottomRightCorner( defaultTableStyle );
             m_tableTemplateColl->addTableTemplate( standardTableTemplate );
         }
         return;
@@ -2778,8 +2792,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
     KoSavingContext savingContext( mainStyles, m_varColl->variableSetting(), m_pageColumns.columns > 1, KoSavingContext::Store );
 
     // Save user styles as KoGenStyle objects
-    KoSavingContext::StyleNameMap map = m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
-    savingContext.setStyleNameMap( map );
+    m_styleColl->saveOasis( mainStyles, KoGenStyle::STYLE_USER, savingContext );
 
     QByteArray headerFooterContent;
     if ( saveFlag == SaveAll )
@@ -3065,6 +3078,7 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     if ( saveFlag == SaveAll )
     {
         m_frameStyleColl->saveOasis( mainStyles, savingContext );
+        m_tableStyleColl->saveOasis( mainStyles, savingContext );
     }
 
     KoStoreDevice stylesDev( store );
@@ -3091,6 +3105,11 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:graphic-properties"  );
+    }
+    styles = mainStyles.styles( KWDocument::STYLE_TABLE_CELL_USER );
+    it = styles.begin();
+    for ( ; it != styles.end() ; ++it ) {
+        (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:table-cell-properties"  );
     }
     styles = mainStyles.styles( KoGenStyle::STYLE_LIST );
     it = styles.begin();
@@ -4518,6 +4537,8 @@ void KWDocument::printStyleDebug()
 {
     kdDebug() << "----------------------------------------"<<endl;
     m_styleColl->printDebug();
+    kdDebug() << m_frameStyleColl->count() << " frame styles" << endl;
+    kdDebug() << m_tableStyleColl->count() << " table-cell styles" << endl;
 }
 
 void KWDocument::printDebug()
