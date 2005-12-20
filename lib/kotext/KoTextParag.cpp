@@ -1011,6 +1011,7 @@ void KoTextParag::setBottomBorder( const KoBorder & _brd )
 void KoTextParag::setJoinBorder( bool join )
 {
     m_layout.joinBorder = join;
+    invalidate(0);
 }
 
 void KoTextParag::setBackgroundColor ( const QColor& color )

@@ -192,6 +192,18 @@ modified in the preview.&lt;/p&gt;</string>
                             <property name="toolTip" stdset="0">
                                 <string>Merges the border style of the current paragraph with the next paragraph</string>
                             </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>&lt;p&gt;Merge with next paragraph&lt;/p&gt;
+
+&lt;p&gt;When this option is checked, no top or bottom borders
+will appear between consecutive paragraphs with the
+same style.  Top and Bottom borders will only appear between
+paragraphs with different styles.&lt;/p&gt;
+
+&lt;p&gt;When this option is unchecked, top and bottom borders
+always appear at the top and bottom of paragraphs with this style,
+regardless of the style of the preceeding and subsequent paragraphs.&lt;/p&gt;</string>
+                            </property>
                         </widget>
                         <widget class="QButtonGroup" row="3" column="0" rowspan="1" colspan="2">
                             <property name="name">
