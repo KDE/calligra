@@ -35,12 +35,14 @@ public:
 		stroke.setLineJoin( VStroke::joinMiter );
 		fill.setColor( VColor( Qt::black ) );
 		fillRule = winding;
+		color = Qt::black;
 	}
 	VFill		fill;
 	VFillRule	fillRule;
 	VStroke		stroke;
 	QWMatrix	matrix;
 	QFont		font;
+	QColor		color;
 };
 
 #endif

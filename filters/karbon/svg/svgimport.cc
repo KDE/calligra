@@ -531,6 +531,11 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 			else
 				gc->fill.setType( VFill::none );
 		}
+		else if( params == "currentColor" )
+		{
+			fillcolor = gc->color;
+			gc->fill.setType( VFill::solid );
+		}
 		else
 		{
 			parseColor( fillcolor,  params );
@@ -564,6 +569,11 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 			}
 			else 
 				gc->stroke.setType( VStroke::none );
+		}
+		else if( params == "currentColor" )
+		{
+			strokecolor = gc->color;
+			gc->stroke.setType( VStroke::solid );
 		}
 		else
 		{
@@ -712,6 +722,12 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 		else if( params == "underline" )
 			gc->font.setUnderline( true );
 	}
+	else if( command == "color" )
+	{
+		VColor color;
+		parseColor( color, params );
+		gc->color = color;
+	}
 	if( gc->fill.type() != VFill::none )
 		gc->fill.setColor( fillcolor, false );
 	//if( gc->stroke.type() == VStroke::solid )
@@ -744,6 +760,8 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	if( !gc ) return;
 
 	// try normal PA
+	if( !e.attribute( "color" ).isEmpty() )
+		parsePA( obj, gc, "color", e.attribute( "color" ) );
 	if( !e.attribute( "fill" ).isEmpty() )
 		parsePA( obj, gc, "fill", e.attribute( "fill" ) );
 	if( !e.attribute( "fill-rule" ).isEmpty() )
@@ -772,7 +790,7 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	// try style attr
 	QString style = e.attribute( "style" ).simplifyWhiteSpace();
 	QStringList substyles = QStringList::split( ';', style );
-    for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
+	for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
 	{
 		QStringList substyle = QStringList::split( ':', (*it) );
 		QString command	= substyle[0].stripWhiteSpace();
