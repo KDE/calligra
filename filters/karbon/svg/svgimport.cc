@@ -331,6 +331,11 @@ SvgImport::parseColor( VColor &color, const QString &s )
 		QColor c( r.toInt(), g.toInt(), b.toInt() );
 		color.set( c.red() / 255.0, c.green() / 255.0, c.blue() / 255.0 );
 	}
+	else if( s == "currentColor" )
+	{
+		SvgGraphicsContext *gc = m_gc.current();
+		color = gc->color;
+	}
 	else
 	{
 		QString rgbColor = s.stripWhiteSpace();
@@ -369,7 +374,7 @@ SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
 				// try style attr
 				QString style = stop.attribute( "style" ).simplifyWhiteSpace();
 				QStringList substyles = QStringList::split( ';', style );
-			    for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
+				for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
 				{
 					QStringList substyle = QStringList::split( ':', (*it) );
 					QString command	= substyle[0].stripWhiteSpace();
@@ -410,7 +415,27 @@ SvgImport::parseGradient( const QDomElement &e )
 		}
 	}
 
+	SvgGraphicsContext *gc = m_gc.current();
+	// parse color prop
+	VColor c = gc->color;
 	gradhelper.bbox = e.attribute( "gradientUnits" ) != "userSpaceOnUse";
+	if( !e.attribute( "color" ).isEmpty() )
+		parseColor( c, e.attribute( "color" ) );
+	else
+	{
+		// try style attr
+		QString style = e.attribute( "style" ).simplifyWhiteSpace();
+		QStringList substyles = QStringList::split( ';', style );
+		for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
+		{
+			QStringList substyle = QStringList::split( ':', (*it) );
+			QString command	= substyle[0].stripWhiteSpace();
+			QString params	= substyle[1].stripWhiteSpace();
+			if( command == "color" )
+				parseColor( c, params );
+		}
+	}
+	gc->color = c;
 
 	if( e.tagName() == "linearGradient" )
 	{
@@ -484,6 +509,8 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 	VColor fillcolor = gc->fill.color();
 	VColor strokecolor = gc->stroke.color();
 
+	if( params == "inherit" ) return;
+
 	if( command == "fill" )
 	{
 		if( params == "none" )
@@ -531,11 +558,6 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 			else
 				gc->fill.setType( VFill::none );
 		}
-		else if( params == "currentColor" )
-		{
-			fillcolor = gc->color;
-			gc->fill.setType( VFill::solid );
-		}
 		else
 		{
 			parseColor( fillcolor,  params );
@@ -569,11 +591,6 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 			}
 			else 
 				gc->stroke.setType( VStroke::none );
-		}
-		else if( params == "currentColor" )
-		{
-			strokecolor = gc->color;
-			gc->stroke.setType( VStroke::solid );
 		}
 		else
 		{
@@ -851,7 +868,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			parseStyle( group, b );
 			parseFont( b );
 			parseGroup( group, b );
-			
+
 			// handle id
 			if( !b.attribute("id").isEmpty() )
 				group->setName( b.attribute("id") );
