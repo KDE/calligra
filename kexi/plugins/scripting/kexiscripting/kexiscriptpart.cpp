@@ -85,7 +85,8 @@ void KexiScriptPart::initPartActions()
 		// Publish the KexiMainWindow singelton instance. At least the KexiApp 
 		// scripting-plugin depends on this instance and loading the plugin will 
 		// fail if it's not avaiable.
-		if( Kross::Api::Manager::scriptManager()->addQObject(m_mainWin, "KexiMainWindow") ) {
+		if(! Kross::Api::Manager::scriptManager()->hasChild("KexiMainWindow")) {
+			Kross::Api::Manager::scriptManager()->addQObject(m_mainWin, "KexiMainWindow");
 
 			// Add the KAction's provided by the ScriptGUIClient to the
 			// KexiMainWindow.
