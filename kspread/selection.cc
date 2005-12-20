@@ -393,6 +393,24 @@ void Selection::extend(const QRect& range, Sheet* sheet)
   emit changed(*this);
 }
 
+void Selection::extend(const Region& region)
+{
+  ConstIterator end(region.constEnd());
+  for (ConstIterator it = region.constBegin(); it != end; ++it)
+  {
+    Element *element = *it;
+    if (element->type() == Element::Point)
+    {
+      Point* point = static_cast<Point*>(element);
+      extend(point->pos(), element->sheet());
+    }
+    else
+    {
+      extend(element->rect(), element->sheet());
+    }
+  }
+}
+
 const QPoint& Selection::anchor() const
 {
   return d->anchor;
@@ -445,9 +463,9 @@ QRect Selection::selectionHandleArea() const
   return handle;
 }
 
-QString Selection::name() const
+QString Selection::name(Sheet* sheet) const
 {
-  return Region::name(d->sheet);
+  return Region::name(sheet ? sheet : d->sheet);
 }
 
 void Selection::setSheet(Sheet* sheet)

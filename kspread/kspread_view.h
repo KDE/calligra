@@ -536,6 +536,7 @@ public slots:
     void slotUpdateHBorder( Sheet *_sheet );
     void slotUpdateVBorder( Sheet *_sheet );
     void slotChangeSelection(const Region&);
+    void slotChangeChoice(const Region&);
     void slotAddSheet( Sheet *_sheet );
     void slotRemoveChild( Child *_child );
     void slotUpdateChildGeometry( Child *_child );

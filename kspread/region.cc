@@ -676,7 +676,7 @@ Region::Point::~Point()
 QString Region::Point::name(Sheet* originSheet) const
 {
   QString name = "";
-  if (m_sheet && originSheet && m_sheet != originSheet)
+  if (m_sheet && m_sheet != originSheet)
   {
     name = m_sheet->sheetName() + "!";
   }
@@ -737,6 +737,10 @@ Region::Range::Range(const QString& sRange)
     Region::Point ul(sRange.left(delimiterPos));
     Region::Point lr(sRange.mid(delimiterPos + 1));
 
+    if (!ul.isValid() || !lr.isValid())
+    {
+      return;
+    }
     m_range = QRect(ul.pos(), lr.pos());
     m_leftFixed = ul.columnFixed();
     m_rightFixed = lr.columnFixed();
@@ -751,7 +755,7 @@ Region::Range::~Range()
 QString Region::Range::name(Sheet* originSheet) const
 {
   QString name = "";
-  if (m_sheet && originSheet && m_sheet != originSheet)
+  if (m_sheet && m_sheet != originSheet)
   {
     name = m_sheet->sheetName() + "!";
   }

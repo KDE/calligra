@@ -219,7 +219,7 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
 
 
 
-    if ( (ch.isLetterOrNumber()) || (ch=='$') || (ch==':'))
+    if ( (ch.isLetterOrNumber()) || (ch=='!') ||(ch=='$') || (ch==':'))
     {
       if (wordStart == -1)
         wordStart=i;
@@ -235,7 +235,7 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
         //relativeRef.remove('$');
 
         if (relativeRef.find('!')==-1)
-          relativeRef.prepend(m_pCanvas->activeSheet()->sheetName().lower()+"!");
+          relativeRef.prepend(m_pCanvas->choice()->sheet()->sheetName().lower()+"!");
 
         bool cellRefValid=false;
 
@@ -271,12 +271,8 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
             //_refsChanged=true;
             refIndex=_refs.size()-1;
 
-/*            m_pCanvas->doc()->emitBeginOperation(false);
             Region region(m_pCanvas->view(), relativeRef);
-            m_pCanvas->choice()->add(region);
-            m_pCanvas->choice()->update();
-            //kdDebug() << *m_pCanvas->choice() << endl;
-            m_pCanvas->doc()->emitEndOperation(region);*/
+            m_pCanvas->choice()->extend(region);
           }
 
           QColor clr = m_colors[refIndex % m_colors.size()];

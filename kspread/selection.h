@@ -69,6 +69,10 @@ public:
    * Extends the current selection with an additional range
    */
   void extend(const QRect&, Sheet* sheet = 0);
+  /**
+   * Extends the current selection with an additional region
+   */
+  void extend(const Region&);
 
   /**
    * The anchor is the starting point of a range. For points marker and anchor are the same
@@ -95,7 +99,7 @@ public:
   /**
    * @return the name of the region (e.g. "A1:A2")
    */
-  QString name() const;
+  QString name(Sheet* originSheet = 0) const;
 
   void setSheet(Sheet* sheet);
   Sheet* sheet() const;

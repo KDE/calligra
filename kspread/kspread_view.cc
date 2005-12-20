@@ -1383,7 +1383,7 @@ View::View( QWidget *_parent, const char *_name,
     d->selection = new Selection( this );
     d->choice = new Selection( this );
     connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotChangeSelection(const Region&)));
-    connect(d->choice, SIGNAL(changed(const Region&)), this, SLOT(slotChangeSelection(const Region&)));
+    connect(d->choice, SIGNAL(changed(const Region&)), this, SLOT(slotChangeChoice(const Region&)));
 
     d->findOptions = 0;
     d->findLeftColumn = 0;
@@ -6254,6 +6254,17 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
   d->canvas->updatePosWidget();
 
   doc()->emitEndOperation( *selectionInfo() );
+}
+
+void View::slotChangeChoice(const KSpread::Region& changedRegion)
+{
+  if (!changedRegion.isValid())
+  {
+    return;
+  }
+  doc()->emitBeginOperation( false );
+  d->canvas->setSelectionChangePaintDirty( d->activeSheet, changedRegion );
+  doc()->emitEndOperation( *choice() );
 }
 
 void View::resultOfCalc()
