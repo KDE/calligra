@@ -23,14 +23,17 @@
 #include <qstring.h>
 #include "koffice_export.h"
 
+/**
+ * The ZoomMode container
+ */
 class KOFFICEUI_EXPORT KoZoomMode
 {
 public:
     enum Mode
     {
-        ZOOM_WIDTH    = 0,  /// zoom pagewidth
-        ZOOM_PAGE     = 1,  /// zoom to pagesize
-        ZOOM_CONSTANT = 2   /// zoom x %
+        ZOOM_WIDTH    = 0,  ///< zoom pagewidth
+        ZOOM_PAGE     = 1,  ///< zoom to pagesize
+        ZOOM_CONSTANT = 2   ///< zoom x %
     };
     
     /// \param mode the mode name
@@ -41,7 +44,7 @@ public:
     static QString toString(Mode mode);
     
     /// \param mode the mode name
-    /// \return true if \c mode isn't dependent of windowsize
+    /// \return true if \c mode isn't dependent on windowsize
     static bool isConstant(const QString& mode)
     { return toMode(mode) == ZOOM_CONSTANT; }
 private:
