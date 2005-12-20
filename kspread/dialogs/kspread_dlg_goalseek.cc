@@ -29,7 +29,7 @@
 #include "kspread_cell.h"
 #include "kspread_doc.h"
 #include "kspread_map.h"
-#include "kspread_selection.h"
+#include "selection.h"
 #include "kspread_sheet.h"
 #include "kspread_undo.h"
 #include "kspread_util.h"
@@ -61,9 +61,9 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
     m_maxIter( 1000 ),
     m_restored( true ),
     m_focus(0),
-    m_anchor( m_pView->canvasWidget()->selectionInfo()->selectionAnchor() ),
-    m_marker( m_pView->canvasWidget()->marker() ),
-    m_selection( m_pView->canvasWidget()->selection() )
+    m_anchor( m_pView->selectionInfo()->anchor() ),
+    m_marker( m_pView->selectionInfo()->marker() ),
+    m_selection( m_pView->selectionInfo()->selection() )
 {
   setWFlags( Qt::WDestructiveClose );
 
@@ -171,8 +171,8 @@ GoalSeekDialog::GoalSeekDialog( View * parent,  QPoint const & marker,
   connect( m_buttonOk, SIGNAL( clicked() ), this, SLOT( buttonOkClicked() ) );
   connect( m_buttonCancel, SIGNAL( clicked() ), this, SLOT( buttonCancelClicked() ) );
 
-  connect( m_pView, SIGNAL( sig_chooseSelectionChanged( Sheet*, const QRect& ) ),
-           this, SLOT( slotSelectionChanged( Sheet *, const QRect & ) ) );
+  connect( m_pView->choice(), SIGNAL(changed(const Region&)),
+           this, SLOT(slotSelectionChanged()));
 
   // tab order
   setTabOrder( m_targetEdit,      m_targetValueEdit );
@@ -217,27 +217,14 @@ void GoalSeekDialog::closeEvent ( QCloseEvent * e )
   e->accept();
 }
 
-void GoalSeekDialog::slotSelectionChanged( Sheet * _sheet, const QRect & _selection )
+void GoalSeekDialog::slotSelectionChanged()
 {
   if ( !m_focus )
     return;
 
-  if ( _selection.left() <= 0 )
-    return;
-
-  if ( _selection.left() >= _selection.right() && _selection.top() >= _selection.bottom() )
+  if (m_pView->choice()->isValid())
   {
-    int dx = _selection.right();
-    int dy = _selection.bottom();
-    QString tmp;
-
-    tmp.setNum( dy );
-    tmp = _sheet->sheetName() + "!" + Cell::columnName( dx ) + tmp;
-    m_focus->setText( tmp );
-  }
-  else
-  {
-    QString area = util_rangeName( _sheet, _selection );
+    QString area = m_pView->choice()->name();
     m_focus->setText( area );
   }
 }
@@ -376,7 +363,7 @@ void GoalSeekDialog::chooseCleanup()
     sheet = m_pView->activeSheet();
 
   // Revert the marker to its original position
-  m_pView->selectionInfo()->setSelection( m_marker, m_anchor, sheet );
+  m_pView->selectionInfo()->initialize(QRect(m_marker, m_anchor));//, sheet );
 }
 
 

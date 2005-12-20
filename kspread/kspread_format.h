@@ -58,6 +58,7 @@ public:
     enum FloatFormat { AlwaysSigned = 1, AlwaysUnsigned = 2, OnlyNegSigned = 3 };
     enum FloatColor { NegRed = 1, AllBlack = 2, NegBrackets = 3, NegRedBrackets = 4 };
 
+    // TODO Stefan: merge with Style::FlagsSet
     enum Properties{ PAlign  = 0x01,
 		     PAlignY = 0x02,
          //PFactor was here

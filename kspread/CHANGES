@@ -14,9 +14,6 @@ since 1.4.2
 - Fix cell protection (#116444)
 - Fix freeze with certain spreadsheet content (#116702)
 - Implement manual line wrap (#9881)
-- Fix failing dependency on empty cells (part of bug #58652)
-- Clicking on the sum function icon now automatically selects a suitable cell range
-- Use default increment of 1 for autofill if only one cell is selected
 
 Some important developer visible changes:
 - Decouple KSpread::Cell and KSpread::Format (association instead of inheritance)

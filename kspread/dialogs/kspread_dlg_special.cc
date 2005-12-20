@@ -30,6 +30,7 @@
 #include "kspread_doc.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"
+#include "selection.h"
 
 #include "kspread_dlg_special.h"
 
@@ -117,7 +118,7 @@ void SpecialDialog::slotOk()
       op = Paste::Div;
 
     m_pView->doc()->emitBeginOperation( false );
-    m_pView->activeSheet()->paste( m_pView->selection(), true, sp, op );
+    m_pView->activeSheet()->paste( m_pView->selectionInfo()->selection(), true, sp, op );
     m_pView->slotUpdateView( m_pView->activeSheet() );
     accept();
 }

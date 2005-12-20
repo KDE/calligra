@@ -553,14 +553,6 @@ public:
     QString testAnchor( int _x, int _y ) const;
 
     /**
-     * Called if the user clicks on a cell. If the cell is for example a button, then
-     * m_strAction is executed.
-     *
-     * @todo What m_strAction?
-     */
-    void clicked( Canvas *_canvas );
-
-    /**
      * Starts calculating.
      * @param delay true if you want to check for delay condition in doc()
      *         false if you really have to calculate the value right now

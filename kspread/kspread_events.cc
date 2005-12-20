@@ -6,10 +6,10 @@ using namespace KSpread;
 
 const char *SelectionChanged::s_strSelectionChanged = "KSpread/View/SelectionChanged";
 
-SelectionChanged::SelectionChanged( const QRect& rect, const QString& sheet )
+SelectionChanged::SelectionChanged( const Region& region, const QString& sheet )
     : KParts::Event( s_strSelectionChanged )
 {
-    m_rect = rect;
+    m_region = region;
     m_sheet = sheet;
 }
 

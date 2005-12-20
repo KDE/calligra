@@ -62,7 +62,7 @@ class GoalSeekDialog : public KDialog
  public slots:
   void buttonOkClicked();
   void buttonCancelClicked();
-  void slotSelectionChanged( Sheet * _sheet, const QRect & _selection );
+  void slotSelectionChanged();
 
  protected:
   virtual void closeEvent ( QCloseEvent * );

@@ -61,7 +61,8 @@ class Style
       PVerticalText  = 0x40
     };
 
-  enum FlagsSet
+    // TODO Stefan: merge with Format::Properties
+    enum FlagsSet
     {
       SAlignX          = 0x01,
       SAlignY          = 0x02,
@@ -125,10 +126,18 @@ class Style
     void loadOasisStyle( KoOasisStyles& oasisStyles, const QDomElement & element );
     static QString saveOasisBackgroundStyle( KoGenStyles &mainStyles, const QBrush &brush );
 
-
+  /**
+   * Releases this style. The internal reference counter is decremented.
+   * @return true, if this style is not used anymore and should be deleted.
+   */
   bool release();
+  /**
+   * Marks this style as used. The internal reference counter is incremented.
+   */
   void addRef();
-
+  /**
+   * @return the number of references to this style.
+   */
   int usage() const { return m_usageCount; }
 
   bool   hasProperty( Properties p ) const;

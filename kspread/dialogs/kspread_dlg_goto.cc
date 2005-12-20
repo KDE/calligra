@@ -32,6 +32,7 @@
 #include "kspread_locale.h"
 #include "kspread_util.h"
 #include "kspread_view.h"
+#include "selection.h"
 
 #include "kspread_dlg_goto.h"
 
@@ -70,18 +71,17 @@ void GotoDialog::slotOk()
 
     QString tmp_upper;
     tmp_upper=m_nameCell->text().upper();
-    bool result = true;
-    if ( tmp_upper.contains( ':' ) ) //Selection entered in location widget
-        result = m_pView->canvasWidget()->gotoLocation( Range( tmp_upper, m_pView->doc()->map() ) );
-    else //Location entered in location widget
-        result = m_pView->canvasWidget()->gotoLocation( Point( tmp_upper, m_pView->doc()->map() ) );
-
-    m_pView->slotUpdateView( m_pView->activeSheet() );
-
-    if ( result )
-        accept();
+    Region region(m_pView, tmp_upper);
+    if ( region.isValid() )
+    {
+      m_pView->selectionInfo()->initialize(region);
+      m_pView->slotUpdateView( m_pView->activeSheet() );
+      accept();
+    }
     else
+    {
         m_nameCell->clear();
+    }
 }
 
 #include "kspread_dlg_goto.moc"

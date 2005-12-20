@@ -22,7 +22,7 @@
 #include "kspread_canvas.h"
 #include "kspread_cell.h"
 #include "kspread_doc.h"
-#include "kspread_selection.h"
+#include "selection.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 #include "kspread_util.h"
@@ -77,18 +77,18 @@ CellEditor::~CellEditor()
 
 namespace KSpread
 {
-FormulaEditorHighlighter::FormulaEditorHighlighter(QTextEdit* textEdit,Sheet* sheet)
+FormulaEditorHighlighter::FormulaEditorHighlighter(QTextEdit* textEdit, Canvas* canvas)
 
-  : QSyntaxHighlighter(textEdit) , _sheet(sheet), _refsChanged(true)
+  : QSyntaxHighlighter(textEdit) , m_pCanvas(canvas), _refsChanged(true)
 {
-  _colors.push_back(Qt::red);
-  _colors.push_back(Qt::blue);
-  _colors.push_back(Qt::magenta);
-  _colors.push_back(Qt::darkRed);
-  _colors.push_back(Qt::darkGreen);
-  _colors.push_back(Qt::darkMagenta);
-  _colors.push_back(Qt::darkCyan);
-  _colors.push_back(Qt::darkYellow);
+  m_colors.push_back(Qt::red);
+  m_colors.push_back(Qt::blue);
+  m_colors.push_back(Qt::magenta);
+  m_colors.push_back(Qt::darkRed);
+  m_colors.push_back(Qt::darkGreen);
+  m_colors.push_back(Qt::darkMagenta);
+  m_colors.push_back(Qt::darkCyan);
+  m_colors.push_back(Qt::darkYellow);
 }
 
 
@@ -176,7 +176,7 @@ Cell* TextEditorHighlighter::cellRefAt(int position, QColor& outCellColor)
 
 void FormulaEditorHighlighter::getReferences(std::vector< KSharedPtr<HighlightRange> >* cellRefs)
 {
-  if (!cellRefs)
+/*  if (!cellRefs)
     return;
 
   for (unsigned int i=0;i<_refs.size();i++)
@@ -193,9 +193,9 @@ void FormulaEditorHighlighter::getReferences(std::vector< KSharedPtr<HighlightRa
     }
       
     HighlightRange* hr=new EditorHighlightRange(rangeReference,_sheet->workbook(),_sheet,textEdit());
-    hr->setColor(_colors[i%_colors.size()]);
+    hr->setColor(m_colors[i%m_colors.size()]);
     cellRefs->push_back(KSharedPtr<HighlightRange>(hr));
-  }
+  }*/
 }
 
 
@@ -219,7 +219,7 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
 
 
 
-    if ( (ch.isLetterOrNumber()) || (ch=='$') || (ch=='!') || (ch==':'))
+    if ( (ch.isLetterOrNumber()) || (ch=='$') || (ch==':'))
     {
       if (wordStart == -1)
         wordStart=i;
@@ -235,22 +235,24 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
         //relativeRef.remove('$');
 
         if (relativeRef.find('!')==-1)
-          relativeRef.prepend(_sheet->sheetName().lower()+"!");
+          relativeRef.prepend(m_pCanvas->activeSheet()->sheetName().lower()+"!");
 
         bool cellRefValid=false;
 
-        if (cellRef.find(':' ) != -1)
-        {
-          Range rg(cellRef,_sheet->workbook(),_sheet);
-          //Check that the syntax of the range is valid and that
-          //the range is not an invalid rectangle.
-          cellRefValid=(rg.isValid());
-        }
-        else
-        {
-          Point pt(cellRef,_sheet->workbook(),_sheet);
-          cellRefValid=pt.isValid();
-        }
+        Region rg(m_pCanvas->view(),cellRef);
+        cellRefValid = rg.isValid();
+//         if (cellRef.find(':' ) != -1)
+//         {
+//           Range rg(cellRef,m_pCanvas->activeSheet()->workbook(),m_pCanvas->activeSheet());
+//           //Check that the syntax of the range is valid and that
+//           //the range is not an invalid rectangle.
+//           cellRefValid=(rg.isValid());
+//         }
+//         else
+//         {
+//           Point pt(cellRef,m_pCanvas->activeSheet()->workbook(),m_pCanvas->activeSheet());
+//           cellRefValid=pt.isValid();
+//         }
 
         if (cellRefValid)
         {
@@ -268,9 +270,16 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
             _refs.push_back(relativeRef);
             //_refsChanged=true;
             refIndex=_refs.size()-1;
+
+/*            m_pCanvas->doc()->emitBeginOperation(false);
+            Region region(m_pCanvas->view(), relativeRef);
+            m_pCanvas->choice()->add(region);
+            m_pCanvas->choice()->update();
+            //kdDebug() << *m_pCanvas->choice() << endl;
+            m_pCanvas->doc()->emitEndOperation(region);*/
           }
 
-          QColor clr=_colors[refIndex%_colors.size()];
+          QColor clr = m_colors[refIndex % m_colors.size()];
 
           setFormat(wordStart,i-wordStart,clr);
         }
@@ -290,30 +299,30 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
  *
  ********************************************/
 
-EditorHighlightRange::EditorHighlightRange(const QString& rangeReference, Map* workbook, Sheet* sheet, QTextEdit* editor)
+/*EditorHighlightRange::EditorHighlightRange(const QString& rangeReference, Map* workbook, Sheet* sheet, QTextEdit* editor)
 : HighlightRange(rangeReference,workbook,sheet) , _editor(editor) {}
 
 void EditorHighlightRange::setRange(QRect& newArea)
 {
     QRect oldArea=range();
-    
+
     if (oldArea == newArea)
         return;
-        
+
     QString firstCellName = Cell::name(range().left(),range().top());
     QString lastCellName = Cell::name(range().right(),range().bottom());
-    
-    
+
+
     Range::setRange( newArea );
-    
+
     //Replace references in associated KTextEdit
     QRegExp searchExpression;
-    
+
     QString expr;
-    
+
     //Does this old range represent a single cell or multiple cells?
     if ( (oldArea.width() == 1) && (oldArea.height() == 1) )
-    { 
+    {
         expr=QString("\\b(%1!|)(%2:%3|%2)\\b")
                                         .arg(sheet()->sheetName())
                                         .arg(firstCellName)
@@ -330,14 +339,14 @@ void EditorHighlightRange::setRange(QRect& newArea)
         searchExpression=QRegExp( expr
                                         ,false);
     }
-        
+
     QString replacementText=toString();
-    
+
     QString newText=_editor->text();
     newText=newText.replace(searchExpression,replacementText);
-    
+
     _editor->setText(newText);
-}
+} */
 
 /********************************************
  *
@@ -461,13 +470,10 @@ void FunctionCompletion::showCompletion( const QStringList &choices )
 
 TextEditor::TextEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, const char* _name )
   : CellEditor( _cell, _parent, _name ),
-  
+    m_captureAllKeyEvents(captureAllKeyEvents),
     m_sizeUpdate(false),
     m_length(0),
-    m_captureAllKeyEvents(captureAllKeyEvents),
     m_fontLength(0)
-    
-
 {
  // m_pEdit = new KLineEdit( this );
   m_pEdit = new KTextEdit(this);
@@ -480,7 +486,7 @@ TextEditor::TextEditor( Cell* _cell, Canvas* _parent, bool captureAllKeyEvents, 
   m_pEdit->setLineWidth(0);
   m_pEdit->installEventFilter( this );
 
-  m_highlighter=new FormulaEditorHighlighter(m_pEdit,cell()->sheet());
+  m_highlighter = new FormulaEditorHighlighter(m_pEdit, _parent);
 
   functionCompletion = new FunctionCompletion( this );
   functionCompletionTimer = new QTimer( this );
@@ -612,7 +618,7 @@ void TextEditor::slotCursorPositionChanged(int /* para */,int /* pos */)
 {
 //  m_highlighter->cellRefAt(pos);
 
-  if (m_highlighter->referencesChanged())
+/*  if (m_highlighter->referencesChanged())
   {
     std::vector< KSharedPtr<HighlightRange> >* highlightedCells=
         new std::vector< KSharedPtr<HighlightRange> >;
@@ -622,7 +628,7 @@ void TextEditor::slotCursorPositionChanged(int /* para */,int /* pos */)
     canvas()->setHighlightedRanges(highlightedCells);
 
     delete highlightedCells;
-  }
+  }*/
 }
 
 void TextEditor::slotTextCursorChanged(  QTextCursor* cursor )
@@ -795,8 +801,9 @@ bool TextEditor::checkChoose()
       }
       else
       {
-          canvas()->endChoose();
-    }
+        //kdDebug() << "canvas()->endChoose(); 1" << endl;
+        //  canvas()->endChoose();
+      }
     }
     return true;
 }
@@ -934,6 +941,7 @@ bool TextEditor::eventFilter( QObject* o, QEvent* e )
           //otherwise it will merely select a different cell
           if (k->key() == Key_Return || k->key() == Key_Enter)
           {
+            kdDebug() << "canvas()->endChoose(); 2" << endl;
             canvas()->endChoose();
           }
 
@@ -953,7 +961,8 @@ bool TextEditor::eventFilter( QObject* o, QEvent* e )
         if ( e->type() == QEvent::KeyPress && !k->text().isEmpty() )
         {
             //kdDebug(36001) << "eventFilter End Choose" << endl;
-            canvas()->endChoose();
+//           kdDebug() << "canvas()->endChoose(); 3" << endl;
+//           canvas()->endChoose();
 
             //kdDebug(36001) << "Cont" << endl;
         }
@@ -1050,7 +1059,7 @@ bool LocationEditWidget::activateItem()
             QString tmp = (*it).sheet_name;
             tmp += "!";
             tmp += util_rangeName((*it).rect);
-            m_pView->canvasWidget()->gotoLocation( Range(tmp, m_pView->doc()->map()));
+            m_pView->selectionInfo()->initialize( Region(m_pView,tmp) );
             return true;
         }
     }
@@ -1065,11 +1074,11 @@ bool LocationEditWidget::activateItem()
 
     // Selection entered in location widget
     if ( ltext.contains( ':' ) )
-        m_pView->canvasWidget()->gotoLocation( Range( tmp, m_pView->doc()->map() ) );
+      m_pView->selectionInfo()->initialize( Region(m_pView,tmp) );
     // Location entered in location widget
     else
     {
-        Point point( tmp, m_pView->doc()->map());
+      Region region(m_pView,tmp);
         bool validName = true;
         for (unsigned int i = 0; i < ltext.length(); ++i)
         {
@@ -1079,18 +1088,19 @@ bool LocationEditWidget::activateItem()
                 break;
             }
         }
-        if ( !point.isValid() && validName)
+        if ( !region.isValid() && validName)
         {
-            QRect rect( m_pView->selection() );
+            QRect rect( m_pView->selectionInfo()->selection() );
             Sheet * t = m_pView->activeSheet();
             // set area name on current selection/cell
 
-            m_pView->doc()->addAreaName(rect, ltext.lower(),
-                                        t->sheetName());
+            m_pView->doc()->addAreaName(rect, ltext.lower(), t->sheetName());
         }
 
         if (!validName)
-            m_pView->canvasWidget()->gotoLocation( point );
+        {
+          m_pView->selectionInfo()->initialize(region);
+        }
     }
 
     // Set the focus back on the canvas.
@@ -1126,15 +1136,15 @@ void LocationEditWidget::keyPressEvent( QKeyEvent * _ev )
     // Escape pressed, restore original value
     case Key_Escape:
         // #### Torben says: This is duplicated code. Bad.
-        if ( m_pView->selectionInfo()->singleCellSelection() ) {
+        if ( m_pView->selectionInfo()->isSingular() ) {
             setText( Cell::columnName( m_pView->canvasWidget()->markerColumn() )
                      + QString::number( m_pView->canvasWidget()->markerRow() ) );
         } else {
-            setText( Cell::columnName( m_pView->selection().left() )
-                     + QString::number( m_pView->selection().top() )
+            setText( Cell::columnName( m_pView->selectionInfo()->lastRange().left() )
+                     + QString::number( m_pView->selectionInfo()->lastRange().top() )
                      + ":"
-                     + Cell::columnName( m_pView->selection().right() )
-                     + QString::number( m_pView->selection().bottom() ) );
+                     + Cell::columnName( m_pView->selectionInfo()->lastRange().right() )
+                     + QString::number( m_pView->selectionInfo()->lastRange().bottom() ) );
         }
         m_pView->canvasWidget()->setFocus();
         _ev->accept();

@@ -20,7 +20,7 @@
 */
 
 #include "kspread_sheet.h"
-#include "kspread_selection.h"
+#include "selection.h"
 #include "kspread_locale.h"
 #include "kspread_doc.h"
 #include "kspread_undo.h"
@@ -953,7 +953,7 @@ void SheetPrint::updateNewPageListY( int _row )
 
 void SheetPrint::definePrintRange( Selection* selectionInfo )
 {
-    if ( !selectionInfo->singleCellSelection() )
+    if ( !selectionInfo->isSingular() )
     {
         KCommand* command = new DefinePrintRangeCommand( m_pSheet );
         m_pDoc->addCommand( command );

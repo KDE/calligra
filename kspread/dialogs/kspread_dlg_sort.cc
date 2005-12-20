@@ -25,18 +25,6 @@
 */
 
 
-#include "kspread_dlg_sort.h"
-#include "kspread_doc.h"
-#include "kspread_map.h"
-#include "kspread_sheet.h"
-#include "kspread_view.h"
-#include "kspread_util.h"
-
-#include <kconfig.h>
-#include <kdebug.h>
-#include <klocale.h>
-#include <kmessagebox.h>
-
 #include <qbuttongroup.h>
 #include <qcheckbox.h>
 #include <qcombobox.h>
@@ -50,6 +38,19 @@
 #include <qtabwidget.h>
 #include <qwidget.h>
 #include <qvbox.h>
+
+#include <kconfig.h>
+#include <kdebug.h>
+#include <klocale.h>
+#include <kmessagebox.h>
+
+#include "kspread_dlg_sort.h"
+#include "kspread_doc.h"
+#include "kspread_map.h"
+#include "kspread_sheet.h"
+#include "kspread_view.h"
+#include "kspread_util.h"
+#include "selection.h"
 
 using namespace KSpread;
 
@@ -299,7 +300,7 @@ void SortDlg::init()
   }
   m_outputSheet->setCurrentText( m_pView->activeSheet()->sheetName() );
 
-  QRect r = m_pView->selection();
+  QRect r = m_pView->selectionInfo()->selection();
   QString cellArea;
   cellArea += Cell::columnName(r.left());
   cellArea += QString::number( r.top() );
@@ -469,7 +470,7 @@ void SortDlg::slotOk()
   }
   outputPoint.setSheet(sheet);
 
-  QRect r = m_pView->selection();
+  QRect r = m_pView->selectionInfo()->selection();
   if ( r.topLeft() != outputPoint.pos() )
   {
     int h = outputPoint.pos().y() + r.height();
@@ -561,7 +562,7 @@ void SortDlg::slotOk()
 
   if ( m_sortRow->isChecked() )
   {
-    m_pView->activeSheet()->sortByRow( m_pView->selection(), key1, key2, key3,
+    m_pView->activeSheet()->sortByRow( m_pView->selectionInfo()->selection(), key1, key2, key3,
                                        order1, order2, order3,
                                        firstKey, m_copyLayout->isChecked(),
                                        m_firstRowHeader->isChecked(),
@@ -569,7 +570,7 @@ void SortDlg::slotOk()
   }
   else if (m_sortColumn->isChecked())
   {
-    m_pView->activeSheet()->sortByColumn( m_pView->selection(), key1, key2, key3,
+    m_pView->activeSheet()->sortByColumn( m_pView->selectionInfo()->selection(), key1, key2, key3,
                                           order1, order2, order3,
                                           firstKey, m_copyLayout->isChecked(),
                                           m_firstRowHeader->isChecked(),

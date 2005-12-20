@@ -58,20 +58,21 @@ class Part;
 
 namespace KSpread
 {
+class Canvas;
 class Cell;
+class ChartChild;
 class DependencyManager;
+class Doc;
 class GenValidationStyles;
+class Map;
+class Point;
+class Region;
+class Selection;
 class Sheet;
 class SheetPrint;
 class Style;
-class View;
-class Point;
-class Map;
-class Canvas;
-class Doc;
-class Selection;
 class UndoInsertRemoveAction;
-class ChartChild;
+class View;
 
 /********************************************************************
  *
@@ -780,9 +781,11 @@ public:
 
     void setFirstLetterUpper(bool _firstUpper);
 
-    void mergeCells( const QRect &area );
-    void dissociateCell( const QPoint &cellRef );
-    void changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY);
+    // TODO Stefan: remove after kspread_undo.cc|h and commands.cc|h are obsolete
+    void changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY) {}
+
+    void mergeCells( const Region& region );
+    void dissociateCells( const Region &region );
 
     void increaseIndent( Selection* selectionInfo );
     void decreaseIndent( Selection* selectionInfo );
@@ -1051,6 +1054,7 @@ public:
      * will be one paint event instead of several
      */
     void updateCellArea(const QRect &cellArea);
+    void updateCellArea(const Region & cellArea);
 
     /**
      * Updates every cell on the sheet
@@ -1066,6 +1070,11 @@ public:
      * repaints all visible cells in the given rect
      */
     void updateView( QRect const & rect );
+
+    /**
+     * repaints all visible cells in the given rect
+     */
+    void updateView(Region*);
 
     /**
      * used to refresh cells when you make redodelete
@@ -1093,7 +1102,8 @@ public:
    * needs repainted.  This is not a flag on the cell itself since quite
    * often this needs set on a default cell
    */
-  void setRegionPaintDirty(QRect const & region);
+  void setRegionPaintDirty(QRect const & range);
+  void setRegionPaintDirty(Region const & region);
 
   /**
    * Remove all records of 'paint dirty' cells
@@ -1203,7 +1213,7 @@ public:
 signals:
     void sig_refreshView();
     void sig_updateView( Sheet *_sheet );
-    void sig_updateView( Sheet *_sheet, const QRect& );
+    void sig_updateView( Sheet *_sheet, const Region& );
     void sig_updateHBorder( Sheet *_sheet );
     void sig_updateVBorder( Sheet *_sheet );
     void sig_updateChildGeometry( Child *_child );
@@ -1269,7 +1279,8 @@ protected:
 public:
     // see kspread_sheet.cc for an explanation of this
     // this is for type B and also for type A (better use CellWorkerTypeA for that)
-    struct CellWorker {
+    struct CellWorker
+    {
   const bool create_if_default;
   const bool emit_signal;
   const bool type_B;
@@ -1277,25 +1288,27 @@ public:
   CellWorker( bool cid=true, bool es=true, bool tb=true ) : create_if_default( cid ), emit_signal( es ), type_B( tb ) { }
   virtual ~CellWorker() { }
 
-  virtual class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) =0;
+  virtual class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const Region& region ) =0;
 
   // these are only needed for type A
   virtual bool testCondition( RowFormat* ) { return false; }
   virtual void doWork( RowFormat* ) { }
   virtual void doWork( ColumnFormat* ) { }
-  virtual void prepareCell( KSpread::Cell* ) { }
+  virtual void prepareCell( Cell* ) { }
 
   // these are needed in all CellWorkers
-  virtual bool testCondition( KSpread::Cell* cell ) =0;
-  virtual void doWork( KSpread::Cell* cell, bool cellRegion, int x, int y ) =0;
+  virtual bool testCondition( Cell* cell ) =0;
+  virtual void doWork( Cell* cell, bool cellRegion, int x, int y ) =0;
     };
 
     // this is for type A (surprise :))
-    struct CellWorkerTypeA : public CellWorker {
+    struct CellWorkerTypeA : public CellWorker
+    {
   CellWorkerTypeA( ) : CellWorker( true, true, false ) { }
   virtual QString getUndoTitle( ) =0;
-  class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r );
+  class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const Region& region );
     };
+
     static QString translateOpenCalcPoint( const QString & str );
 protected:
     typedef enum { CompleteRows, CompleteColumns, CellRegion } SelectionType;
@@ -1303,18 +1316,18 @@ protected:
                                CellWorker& worker );
 
 private:
-    bool FillSequenceWithInterval (QPtrList<KSpread::Cell>& _srcList,
-           QPtrList<KSpread::Cell>& _destList,
+    bool FillSequenceWithInterval (QPtrList<Cell>& _srcList,
+           QPtrList<Cell>& _destList,
            QPtrList<AutoFillSequence>& _seqList,
                                    bool down);
 
-    void FillSequenceWithCopy (QPtrList<KSpread::Cell>& _srcList,
-             QPtrList<KSpread::Cell>& _destList,
+    void FillSequenceWithCopy (QPtrList<Cell>& _srcList,
+                               QPtrList<Cell>& _destList,
                                bool down);
 
     void convertObscuringBorders();
-    void checkCellContent(KSpread::Cell * cell1, KSpread::Cell * cell2, int & ret);
-    int  adjustColumnHelper( KSpread::Cell * c, int _col, int _row );
+    void checkCellContent(Cell * cell1, Cell * cell2, int & ret);
+    int  adjustColumnHelper(Cell * c, int _col, int _row);
     void checkContentDirection( QString const & name );
 
     class Private;

@@ -51,7 +51,7 @@ public:
 protected slots:
   virtual void slotOk();
   virtual void slotCancel();
-  void slotSelectionChanged( Sheet* _sheet, const QRect& _selection );
+  void slotSelectionChanged();
 
 protected:
   void initTab();

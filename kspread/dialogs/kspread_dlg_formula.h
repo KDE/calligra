@@ -103,7 +103,7 @@ private slots:
      * Connected to @ref View to get notified if the selection in the
      * sheet changes.
      */
-    void slotSelectionChanged( Sheet* _sheet, const QRect& _selection );
+    void slotSelectionChanged();
     /**
      * Called if the button @ref #selectFunction was clicked. That
      * insertes a new function call to the result.

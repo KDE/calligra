@@ -25,7 +25,7 @@
 #include "kspread_locale.h"
 #include "kspread_util.h"
 #include "kspread_map.h"
-
+#include "region.h"
 
 #include <kdebug.h>
 
@@ -119,7 +119,7 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
         SelectionChanged* event = (SelectionChanged*)ev;
 
         // Selection cleared ?
-        if ( event->rect().left() == 0 )
+        if (!event->region().isValid())
             return FALSE;
 
         Sheet* sheet = m_view->doc()->map()->findSheet( event->sheet() );
@@ -127,8 +127,7 @@ bool Calculator::eventFilter( QObject*, QEvent* ev )
             return FALSE;
 
         // A single cell selected ?
-        if ( event->rect().left() == event->rect().right() &&
-             event->rect().top() == event->rect().bottom() )
+        if (event->region().isSingular())
         {
             Cell* cell = sheet->cellAt( event->rect().left(), event->rect().top(), false );
             if ( !cell )

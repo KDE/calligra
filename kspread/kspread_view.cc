@@ -89,7 +89,7 @@
 #include "kspread_handler.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"
-#include "kspread_selection.h"
+#include "selection.h"
 #include "kspread_sheetprint.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
@@ -185,7 +185,8 @@ public:
     bool loading;
 
     // selection/marker
-    Selection* selectionInfo;
+    Selection* selection;
+    Selection* choice;
     QMap<Sheet*, QPoint> savedAnchors;
     QMap<Sheet*, QPoint> savedMarkers;
 
@@ -1236,23 +1237,24 @@ void View::Private::adjustActions( bool mode )
   formulaButton->setEnabled( mode );
 
   if ( activeSheet )
-    view->canvasWidget()->gotoLocation( selectionInfo->marker(), activeSheet );
+  {
+    selection->update();
+  }
 }
 
 void View::Private::adjustActions( Sheet* sheet, Cell* cell )
 {
-  QRect selection = selectionInfo->selection();
   if ( sheet->isProtected() && !cell->isDefault() && cell->format()->notProtected( cell->column(), cell->row() ) )
   {
-    if ( ( selection.width() > 1 ) || ( selection.height() > 1 ) )
-    {
-      if ( actions->bold->isEnabled() )
-        adjustActions( false );
-    }
-    else
+    if ( selection->isSingular() )
     {
       if ( !actions->bold->isEnabled() )
         adjustActions( true );
+    }
+    else
+    {
+      if ( actions->bold->isEnabled() )
+        adjustActions( false );
     }
   }
   else if ( sheet->isProtected() )
@@ -1378,7 +1380,10 @@ View::View( QWidget *_parent, const char *_name,
     d->toolbarLock = false;
     d->loading = false;
 
-    d->selectionInfo = new Selection( this );
+    d->selection = new Selection( this );
+    d->choice = new Selection( this );
+    connect(d->selection, SIGNAL(changed(const Region&)), this, SLOT(slotChangeSelection(const Region&)));
+    connect(d->choice, SIGNAL(changed(const Region&)), this, SLOT(slotChangeSelection(const Region&)));
 
     d->findOptions = 0;
     d->findLeftColumn = 0;
@@ -1492,7 +1497,8 @@ View::~View()
 
         }*/
 
-    delete d->selectionInfo;
+    delete d->selection;
+    delete d->choice;
     delete d->spell.kspell;
 
     d->canvas->endChoose();
@@ -1677,17 +1683,12 @@ bool View::isLoading() const
 
 Selection* View::selectionInfo() const
 {
-    return d->selectionInfo;
+    return d->selection;
 }
 
-QRect View::selection(bool extend) const
+Selection* View::choice() const
 {
-    return selectionInfo()->selection(extend);
-}
-
-QPoint View::marker() const
-{
-    return selectionInfo()->marker();
+  return d->choice;
 }
 
 void View::resetInsertHandle()
@@ -1863,10 +1864,10 @@ void View::extraSpelling()
   d->spell.firstSpellSheet    = d->activeSheet;
   d->spell.currentSpellSheet  = d->spell.firstSpellSheet;
 
-  QRect selection = d->selectionInfo->selection();
+  QRect selection = d->selection->selection();
 
   // if nothing is selected, check every cell
-  if (d->selectionInfo->singleCellSelection())
+  if (d->selection->isSingular())
   {
     d->spell.spellStartCellX = 0;
     d->spell.spellStartCellY = 0;
@@ -2108,7 +2109,7 @@ void View::spellCheckerMisspelling( const QString &,
     d->spell.spellCurrCellY = d->spell.currentCell->row();
   }
 
-  canvasWidget()->gotoLocation( d->spell.spellCurrCellX, d->spell.spellCurrCellY, activeSheet() );
+  d->selection->initialize(QPoint(d->spell.spellCurrCellX, d->spell.spellCurrCellY));
 }
 
 
@@ -2232,8 +2233,6 @@ void View::spellCheckerFinished()
 
 void View::initialPosition()
 {
-    kdDebug() << "View::initialPosition" << endl;
-
     // Loading completed, pick initial worksheet
     QPtrListIterator<Sheet> it( doc()->map()->sheetList() );
     for( ; it.current(); ++it )
@@ -2276,7 +2275,7 @@ void View::initialPosition()
     int row = doc()->map()->initialMarkerRow();
     if ( row <= 0 )
       row = 1;
-    d->canvas->gotoLocation( col, row );
+    d->selection->initialize( QPoint(col, row) );
 
     // Set the initial X and Y offsets for the view.
     d->canvas->setXOffset( doc()->map()->initialXOffset() );
@@ -2459,23 +2458,23 @@ void View::autoSum()
   //this behaviour??)
   Range rg;
   //rg.sheet=activeSheet();
-  QRect sel=selection(false);
+  QRect sel=d->selection->selection(false);
 
   if (sel.height() > 1)
   {
-    if (marker().y()==sel.top())
+    if (d->selection->marker().y()==sel.top())
       sel.setTop(sel.top()+1);
-    if (marker().y()==sel.bottom())
+    if (d->selection->marker().y()==sel.bottom())
       sel.setBottom(sel.bottom()-1);
   }
   else
   {
     if (sel.width() > 1)
     {
-      if (marker().x()==sel.left())
+      if (d->selection->marker().x()==sel.left())
         sel.setLeft(sel.left()+1);
 
-      if (marker().x()==sel.right())
+      if (d->selection->marker().x()==sel.right())
         sel.setRight(sel.right()-1);
     }
     else
@@ -2487,17 +2486,17 @@ void View::autoSum()
 
       int start = -1, end = -1;
 
-      if ( (marker().y() > 1) && activeSheet()->cellAt(marker().x(), marker().y()-1)->value().isNumber() )
+      if ( (d->selection->marker().y() > 1) && activeSheet()->cellAt(d->selection->marker().x(), d->selection->marker().y()-1)->value().isNumber() )
       {
         // check cells above the current one
-        start = end = marker().y()-1;
-        for (start--; (start > 0) && activeSheet()->cellAt(marker().x(), start)->value().isNumber(); start--) ;
+        start = end = d->selection->marker().y()-1;
+        for (start--; (start > 0) && activeSheet()->cellAt(d->selection->marker().x(), start)->value().isNumber(); start--) ;
 
         Point startPoint, endPoint;
         startPoint.setRow(start+1);
-        startPoint.setColumn(marker().x());
+        startPoint.setColumn(d->selection->marker().x());
         endPoint.setRow(end);
-        endPoint.setColumn(marker().x());
+        endPoint.setColumn(d->selection->marker().x());
 
         QString str = Range(startPoint, endPoint).toString();
 
@@ -2506,17 +2505,17 @@ void View::autoSum()
         d->canvas->editor()->setCursorPosition(5 + str.length());
         return;
       }
-      else if ( (marker().x() > 1) && activeSheet()->cellAt(marker().x()-1, marker().y())->value().isNumber() )
+      else if ( (d->selection->marker().x() > 1) && activeSheet()->cellAt(d->selection->marker().x()-1, d->selection->marker().y())->value().isNumber() )
       {
         // check cells to the left of the current one
-        start = end = marker().x()-1;
-        for (start--; (start > 0) && activeSheet()->cellAt(start, marker().y())->value().isNumber(); start--) ;
+        start = end = d->selection->marker().x()-1;
+        for (start--; (start > 0) && activeSheet()->cellAt(start, d->selection->marker().y())->value().isNumber(); start--) ;
 
         Point startPoint, endPoint;
         startPoint.setColumn(start+1);
-        startPoint.setRow(marker().y());
+        startPoint.setRow(d->selection->marker().y());
         endPoint.setColumn(end);
-        endPoint.setRow(marker().y());
+        endPoint.setRow(d->selection->marker().y());
 
         QString str = Range(startPoint, endPoint).toString();
 
@@ -2572,7 +2571,7 @@ void View::setSelectionTextColor(const QColor &txtColor)
   {
     doc()->emitBeginOperation(false);
     d->activeSheet->setSelectionTextColor( selectionInfo(), txtColor );
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -2652,13 +2651,13 @@ void View::deleteColumn()
 
   doc()->emitBeginOperation( false );
 
-  QRect r( d->selectionInfo->selection() );
+  QRect r( d->selection->selection() );
 
   d->activeSheet->removeColumn( r.left(), ( r.right()-r.left() ) );
 
   updateEditWidget();
-  d->selectionInfo->setSelection( d->selectionInfo->marker(),
-                                 d->selectionInfo->marker(), d->activeSheet );
+  // Stefan: update the selection after deleting (a) column(s)
+  d->selection->update();
 
   QRect vr( d->activeSheet->visibleRect( d->canvas ) );
   vr.setLeft( r.left() );
@@ -2672,12 +2671,12 @@ void View::deleteRow()
     return;
 
   doc()->emitBeginOperation( false );
-  QRect r( d->selectionInfo->selection() );
+  QRect r( d->selection->selection() );
   d->activeSheet->removeRow( r.top(),(r.bottom()-r.top()) );
 
   updateEditWidget();
-  d->selectionInfo->setSelection( d->selectionInfo->marker(),
-                                 d->selectionInfo->marker(), d->activeSheet );
+  // Stefan: update the selection after deleting (a) column(s)
+  d->selection->update();
 
   QRect vr( d->activeSheet->visibleRect( d->canvas ) );
   vr.setTop( r.top() );
@@ -2691,7 +2690,7 @@ void View::insertColumn()
     return;
 
   doc()->emitBeginOperation( false );
-  QRect r( d->selectionInfo->selection() );
+  QRect r( d->selection->selection() );
   d->activeSheet->insertColumn( r.left(), ( r.right()-r.left() ) );
 
   updateEditWidget();
@@ -2707,8 +2706,8 @@ void View::hideColumn()
   if ( !d->activeSheet )
     return;
   
-  QRect r( d->selectionInfo->selection() );
-  if ( util_isRowSelected( selection() ) )
+  QRect r( d->selection->selection() );
+  if ( d->selection->isRowSelected() )
   {
     KMessageBox::error( this, i18n( "Area is too large." ) );
     return;
@@ -2738,7 +2737,7 @@ void View::showSelColumns()
     return;
 
   int i;
-  QRect rect = d->selectionInfo->selection();
+  QRect rect = d->selection->selection();
   ColumnFormat * col;
   QValueList<int>hiddenCols;
 
@@ -2773,7 +2772,7 @@ void View::insertRow()
   if ( !d->activeSheet )
     return;
   doc()->emitBeginOperation( false );
-  QRect r( d->selectionInfo->selection() );
+  QRect r( d->selection->selection() );
   d->activeSheet->insertRow( r.top(), ( r.bottom() - r.top() ) );
 
   updateEditWidget();
@@ -2788,8 +2787,8 @@ void View::hideRow()
   if ( !d->activeSheet )
     return;
 
-  QRect r( d->selectionInfo->selection() );
-  if ( util_isColumnSelected( selection() ) )
+  QRect r( d->selection->selection() );
+  if ( d->selection->isColumnSelected() )
   {
     KMessageBox::error( this, i18n( "Area is too large." ) );
     return;
@@ -2820,7 +2819,7 @@ void View::showSelRows()
     return;
 
   int i;
-  QRect rect( d->selectionInfo->selection() );
+  QRect rect( d->selection->selection() );
   RowFormat * row;
   QValueList<int>hiddenRows;
 
@@ -2857,19 +2856,19 @@ void View::fontSelected( const QString & _font )
 
   doc()->emitBeginOperation(false);
   if ( d->activeSheet != 0L )
-    d->activeSheet->setSelectionFont( d->selectionInfo, _font.latin1() );
+    d->activeSheet->setSelectionFont( d->selection, _font.latin1() );
 
   // Dont leave the focus in the toolbars combo box ...
   if ( d->canvas->editor() )
   {
-    Cell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
+    Cell * cell = d->activeSheet->cellAt( d->selection->marker() );
     d->canvas->editor()->setEditorFont( cell->format()->textFont( cell->column(), cell->row() ), true );
     d->canvas->editor()->setFocus();
   }
   else
     d->canvas->setFocus();
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::decreaseFontSize()
@@ -2886,9 +2885,7 @@ void View::setSelectionFontSize( int size )
 {
   if ( d->activeSheet != NULL )
   {
-    doc()->emitBeginOperation( false );
     d->activeSheet->setSelectionSize( selectionInfo(), size );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
   }
 }
 
@@ -2902,7 +2899,7 @@ void View::lower()
   d->activeSheet->setSelectionUpperLower( selectionInfo(), -1 );
   updateEditWidget();
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::upper()
@@ -2915,7 +2912,7 @@ void View::upper()
   d->activeSheet->setSelectionUpperLower( selectionInfo(), 1 );
   updateEditWidget();
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::firstLetterUpper()
@@ -2925,7 +2922,7 @@ void View::firstLetterUpper()
   doc()->emitBeginOperation( false );
   d->activeSheet->setSelectionfirstLetterUpper( selectionInfo() );
   updateEditWidget();
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::verticalText(bool b)
@@ -2935,16 +2932,16 @@ void View::verticalText(bool b)
 
   doc()->emitBeginOperation( false );
   d->activeSheet->setSelectionVerticalText( selectionInfo(), b );
-  if ( util_isRowSelected( selection() ) == false
-       && util_isColumnSelected( selection() ) == false )
+  if ( d->selection->isRowSelected() == false
+       && d->selection->isColumnSelected() == false )
   {
     d->canvas->adjustArea( false );
     updateEditWidget();
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
     return;
   }
 
-  doc()->emitEndOperation( QRect( d->selectionInfo->marker(), d->selectionInfo->marker() ) );
+  doc()->emitEndOperation( QRect( d->selection->marker(), d->selection->marker() ) );
 }
 
 void View::insertSpecialChar()
@@ -2980,7 +2977,7 @@ void View::slotSpecialChar( QChar c, const QString & _font )
 {
   if ( d->activeSheet )
   {
-    QPoint marker( selectionInfo()->marker() );
+    QPoint marker( d->selection->marker() );
     Cell * cell = d->activeSheet->nonDefaultCell( marker );
     if ( cell->format()->textFont( marker.x(), marker.y() ).family() != _font )
     {
@@ -3033,7 +3030,7 @@ void View::fontSizeSelected( int _size )
   // Dont leave the focus in the toolbars combo box ...
   if ( d->canvas->editor() )
   {
-    Cell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
+    Cell * cell = d->activeSheet->cellAt( d->selection->marker() );
     d->canvas->editor()->setEditorFont( cell->format()->textFont( d->canvas->markerColumn(),
                                                                   d->canvas->markerRow() ), true );
     d->canvas->editor()->setFocus();
@@ -3041,7 +3038,7 @@ void View::fontSizeSelected( int _size )
   else
     d->canvas->setFocus();
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::bold( bool b )
@@ -3063,7 +3060,7 @@ void View::bold( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::underline( bool b )
@@ -3085,7 +3082,7 @@ void View::underline( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::strikeOut( bool b )
@@ -3107,7 +3104,7 @@ void View::strikeOut( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 
@@ -3130,13 +3127,13 @@ void View::italic( bool b )
     d->canvas->editor()->setEditorFont( cell->format()->textFont( col, row ), true );
   }
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::sortInc()
 {
-  QRect r( d->selectionInfo->selection() );
-  if ( d->selectionInfo->singleCellSelection() )
+  QRect r( d->selection->selection() );
+  if ( d->selection->isSingular() )
   {
     KMessageBox::error( this, i18n( "You must select multiple cells." ) );
     return;
@@ -3145,19 +3142,19 @@ void View::sortInc()
   doc()->emitBeginOperation( false );
 
   // Entire row(s) selected ? Or just one row ?
-  if ( util_isRowSelected( selection() ) || r.top() == r.bottom() )
-    activeSheet()->sortByRow( selection(), r.top(), Sheet::Increase );
+  if ( d->selection->isRowSelected() || r.top() == r.bottom() )
+    activeSheet()->sortByRow( d->selection->selection(), r.top(), Sheet::Increase );
   else
-    activeSheet()->sortByColumn( selection(), r.left(), Sheet::Increase );
+    activeSheet()->sortByColumn( d->selection->selection(), r.left(), Sheet::Increase );
   updateEditWidget();
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::sortDec()
 {
-  QRect r( d->selectionInfo->selection() );
-  if ( d->selectionInfo->singleCellSelection() )
+  QRect r( d->selection->selection() );
+  if ( d->selection->isSingular() )
   {
     KMessageBox::error( this, i18n( "You must select multiple cells." ) );
     return;
@@ -3166,13 +3163,13 @@ void View::sortDec()
   doc()->emitBeginOperation( false );
 
     // Entire row(s) selected ? Or just one row ?
-  if ( util_isRowSelected( selection() ) || r.top() == r.bottom() )
-    activeSheet()->sortByRow( selection(), r.top(), Sheet::Decrease );
+  if ( d->selection->isRowSelected() || r.top() == r.bottom() )
+    activeSheet()->sortByRow( d->selection->selection(), r.top(), Sheet::Decrease );
   else
-    activeSheet()->sortByColumn( selection(), r.left(), Sheet::Decrease );
+    activeSheet()->sortByColumn( d->selection->selection(), r.left(), Sheet::Decrease );
   updateEditWidget();
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 
@@ -3182,9 +3179,9 @@ void View::borderBottom()
   {
     doc()->emitBeginOperation( false );
 
-    d->activeSheet->borderBottom( d->selectionInfo, d->actions->borderColor->color() );
+    d->activeSheet->borderBottom( d->selection, d->actions->borderColor->color() );
 
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3194,7 +3191,7 @@ void View::setSelectionBottomBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderBottom( selectionInfo(), color );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3204,10 +3201,10 @@ void View::borderRight()
   {
     doc()->emitBeginOperation( false );
     if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
-      d->activeSheet->borderLeft( d->selectionInfo, d->actions->borderColor->color() );
+      d->activeSheet->borderLeft( d->selection, d->actions->borderColor->color() );
     else
-      d->activeSheet->borderRight( d->selectionInfo, d->actions->borderColor->color() );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+      d->activeSheet->borderRight( d->selection, d->actions->borderColor->color() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3220,7 +3217,7 @@ void View::setSelectionRightBorderColor( const QColor & color )
       d->activeSheet->borderLeft( selectionInfo(), color );
     else
       d->activeSheet->borderRight( selectionInfo(), color );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3230,10 +3227,10 @@ void View::borderLeft()
   {
     doc()->emitBeginOperation( false );
     if ( d->activeSheet->layoutDirection()==Sheet::RightToLeft )
-      d->activeSheet->borderRight( d->selectionInfo, d->actions->borderColor->color() );
+      d->activeSheet->borderRight( d->selection, d->actions->borderColor->color() );
     else
-      d->activeSheet->borderLeft( d->selectionInfo, d->actions->borderColor->color() );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+      d->activeSheet->borderLeft( d->selection, d->actions->borderColor->color() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3246,7 +3243,7 @@ void View::setSelectionLeftBorderColor( const QColor & color )
       d->activeSheet->borderRight( selectionInfo(), color );
     else
       d->activeSheet->borderLeft( selectionInfo(), color );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3255,8 +3252,8 @@ void View::borderTop()
   if ( d->activeSheet != 0L )
   {
     doc()->emitBeginOperation( false );
-    d->activeSheet->borderTop( d->selectionInfo, d->actions->borderColor->color() );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    d->activeSheet->borderTop( d->selection, d->actions->borderColor->color() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3266,7 +3263,7 @@ void View::setSelectionTopBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderTop( selectionInfo(), color );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3275,8 +3272,8 @@ void View::borderOutline()
   if ( d->activeSheet != 0L )
   {
     doc()->emitBeginOperation( false );
-    d->activeSheet->borderOutline( d->selectionInfo, d->actions->borderColor->color() );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    d->activeSheet->borderOutline( d->selection, d->actions->borderColor->color() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3286,7 +3283,7 @@ void View::setSelectionOutlineBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderOutline( selectionInfo(), color );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3295,8 +3292,8 @@ void View::borderAll()
   if ( d->activeSheet != 0L )
   {
     doc()->emitBeginOperation( false );
-    d->activeSheet->borderAll( d->selectionInfo, d->actions->borderColor->color() );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    d->activeSheet->borderAll( d->selection, d->actions->borderColor->color() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3306,7 +3303,7 @@ void View::setSelectionAllBorderColor( const QColor & color )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->borderAll( selectionInfo(), color );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3315,8 +3312,8 @@ void View::borderRemove()
   if ( d->activeSheet != 0L )
   {
     doc()->emitBeginOperation(false);
-    d->activeSheet->borderRemove( d->selectionInfo );
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    d->activeSheet->borderRemove( d->selection );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -3330,8 +3327,8 @@ void View::addSheet( Sheet * _t )
   QObject::connect( _t, SIGNAL( sig_refreshView() ), SLOT( slotRefreshView() ) );
   QObject::connect( _t, SIGNAL( sig_updateView( Sheet* ) ), SLOT( slotUpdateView( Sheet* ) ) );
   QObject::connect( _t->print(), SIGNAL( sig_updateView( Sheet* ) ), SLOT( slotUpdateView( Sheet* ) ) );
-  QObject::connect( _t, SIGNAL( sig_updateView( Sheet *, const QRect& ) ),
-                    SLOT( slotUpdateView( Sheet*, const QRect& ) ) );
+  QObject::connect( _t, SIGNAL( sig_updateView( Sheet *, const Region& ) ),
+                    SLOT( slotUpdateView( Sheet*, const Region& ) ) );
   QObject::connect( _t, SIGNAL( sig_updateHBorder( Sheet * ) ),
                     SLOT( slotUpdateHBorder( Sheet * ) ) );
   QObject::connect( _t, SIGNAL( sig_updateVBorder( Sheet * ) ),
@@ -3360,7 +3357,7 @@ void View::addSheet( Sheet * _t )
     doc()->emitEndOperation();
     return;
   }
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::slotSheetRemoved( Sheet *_t )
@@ -3393,7 +3390,7 @@ void View::slotSheetRemoved( Sheet *_t )
     }
   }
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::removeAllSheets()
@@ -3449,14 +3446,12 @@ void View::setActiveSheet( Sheet * _t, bool updateSheet )
   QMapIterator<Sheet*, QPoint> it = d->savedAnchors.find(d->activeSheet);
   QMapIterator<Sheet*, QPoint> it2 = d->savedMarkers.find(d->activeSheet);
 
+  // TODO Stefan: store the save markers/anchors in the Selection?
   QPoint newAnchor = (it == d->savedAnchors.end()) ? QPoint(1,1) : *it;
   QPoint newMarker = (it2 == d->savedMarkers.end()) ? QPoint(1,1) : *it2;
-  selectionInfo()->setSelection(newMarker, newAnchor, d->activeSheet);
-  if( d->canvas->chooseMode())
-  {
-    selectionInfo()->setChooseSheet( d->activeSheet );
-    selectionInfo()->setChooseMarker( QPoint(0,0) );
-  }
+
+  d->selection->setSheet( d->activeSheet );
+  d->selection->initialize(QRect(newMarker, newAnchor));
 
   d->canvas->scrollToCell(newMarker);
   resultOfCalc();
@@ -3680,7 +3675,7 @@ void View::cutSelection()
   else
     d->canvas->editor()->cut();
 
-  doc()->emitEndOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::paste()
@@ -3695,8 +3690,8 @@ void View::paste()
   doc()->emitBeginOperation( false );
   if ( !d->canvas->editor() )
   {
-      //kdDebug(36001) << "Pasting. Rect= " << selection(false) << " bytes" << endl;
-    d->activeSheet->paste( selection(false), true, Paste::Normal, Paste::OverWrite, false, 0, true );
+      //kdDebug(36001) << "Pasting. Rect= " << d->selection->selection(false) << " bytes" << endl;
+    d->activeSheet->paste( d->selection->selection(false), true, Paste::Normal, Paste::OverWrite, false, 0, true );
     resultOfCalc();
     updateEditWidget();
   }
@@ -3734,7 +3729,7 @@ void View::removeComment()
   doc()->emitBeginOperation(false);
   d->activeSheet->setSelectionRemoveComment( selectionInfo() );
   updateEditWidget();
-  doc()->emitEndOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 
@@ -3747,12 +3742,12 @@ void View::changeAngle()
                     QPoint( d->canvas->markerColumn(), d->canvas->markerRow() ));
   if ( dlg.exec() )
   {
-    if ( (util_isRowSelected(selection()) == false) &&
-        (util_isColumnSelected(selection()) == false) )
+    if ( (d->selection->isRowSelected() == false) &&
+        (d->selection->isColumnSelected() == false) )
     {
       doc()->emitBeginOperation( false );
       d->canvas->adjustArea( false );
-      doc()->emitEndOperation( selectionInfo()->selection() );
+      doc()->emitEndOperation( *selectionInfo() );
     }
   }
 }
@@ -3765,14 +3760,14 @@ void View::setSelectionAngle( int angle )
   {
     d->activeSheet->setSelectionAngle( selectionInfo(), angle );
 
-    if (util_isRowSelected(selection()) == false &&
-        util_isColumnSelected(selection()) == false)
+    if (d->selection->isRowSelected() == false &&
+        d->selection->isColumnSelected() == false)
     {
       d->canvas->adjustArea(false);
     }
   }
 
-  doc()->emitEndOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::mergeCell()
@@ -3780,24 +3775,7 @@ void View::mergeCell()
   // sanity check
   if( !d->activeSheet )
     return;
-  if( d->activeSheet->isProtected() )
-    return;
-  if( doc()->map()->isProtected() )
-    return;
-
-  if ( ( util_isRowSelected( selection() ) )
-       || ( util_isColumnSelected( selection() ) ) )
-  {
-    KMessageBox::error( this, i18n( "Area is too large." ) );
-    return;
-  }
-
-  QPoint topLeft = selection().topLeft();
-  Cell *cell = d->activeSheet->nonDefaultCell( topLeft );
-  KCommand* command = new MergeCellCommand( cell, selection().width() - 1,
-      selection().height() - 1);
-  doc()->addCommand( command );
-  command->execute();
+  d->activeSheet->mergeCells(*selectionInfo());
 }
 
 void View::dissociateCell()
@@ -3805,16 +3783,7 @@ void View::dissociateCell()
   // sanity check
   if( !d->activeSheet )
     return;
-  if( d->activeSheet->isProtected() )
-    return;
-  if( doc()->map()->isProtected() )
-    return;
-
-  Cell* cell = d->activeSheet->nonDefaultCell( QPoint( d->canvas->markerColumn(),
-      d->canvas->markerRow() ) );
-  KCommand* command = new DissociateCellCommand( cell );
-  doc()->addCommand( command );
-  command->execute();
+  d->activeSheet->dissociateCells(*selectionInfo());
 }
 
 
@@ -3824,9 +3793,9 @@ void View::increaseIndent()
     return;
 
   doc()->emitBeginOperation( false );
-  d->activeSheet->increaseIndent( d->selectionInfo );
+  d->activeSheet->increaseIndent( d->selection );
   updateEditWidget();
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::decreaseIndent()
@@ -3838,13 +3807,13 @@ void View::decreaseIndent()
   int column = d->canvas->markerColumn();
   int row = d->canvas->markerRow();
 
-  d->activeSheet->decreaseIndent( d->selectionInfo );
+  d->activeSheet->decreaseIndent( d->selection );
   Cell * cell = d->activeSheet->cellAt( column, row );
   if ( cell )
     if ( !d->activeSheet->isProtected() )
       d->actions->decreaseIndent->setEnabled( cell->format()->getIndent( column, row ) > 0.0 );
 
-  doc()->emitEndOperation( d->selectionInfo->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::goalSeek()
@@ -3864,7 +3833,7 @@ void View::goalSeek()
 
 void View::subtotals()
 {
-  QRect selection( d->selectionInfo->selection() );
+  QRect selection( d->selection->selection() );
   if ( ( selection.width() < 2 )
        || ( selection.height() < 2 ) )
   {
@@ -3876,9 +3845,8 @@ void View::subtotals()
   if ( dlg.exec() )
   {
     doc()->emitBeginOperation( false );
-    d->selectionInfo->setSelection( dlg.selection().topLeft(),
-                                   dlg.selection().bottomRight(),
-                                   dlg.sheet() );
+
+    d->selection->initialize( QRect(dlg.selection().topLeft(), dlg.selection().bottomRight()));//, dlg.sheet() );
     doc()->emitEndOperation( selection );
   }
 }
@@ -3897,12 +3865,12 @@ void View::textToColumns()
 {
   d->canvas->closeEditor();
 
-  QRect area=d->selectionInfo->selection();
+  QRect area=d->selection->selection();
 
   //Only use the first column
   area.setRight(area.left());
 
-/* if ( d->selectionInfo->selection().width() > 1 )
+/* if ( d->selection->selection().width() > 1 )
   {
   //Only use the first column
 
@@ -3938,7 +3906,7 @@ void View::gotoCell()
 void View::find()
 {
     FindDlg dlg( this, "Find", d->findOptions, d->findStrings );
-    dlg.setHasSelection( !d->selectionInfo->singleCellSelection() );
+    dlg.setHasSelection( !d->selection->isSingular() );
     dlg.setHasCursor( true );
     if ( KFindDialog::Accepted != dlg.exec() )
         return;
@@ -3977,7 +3945,7 @@ void View::initFindReplace()
     Sheet* currentSheet = d->searchInSheets.currentSheet;
 
     QRect region = ( d->findOptions & KFindDialog::SelectedText )
-                   ? d->selectionInfo->selection()
+                   ? d->selection->selection()
                    : QRect( 1, 1, currentSheet->maxColumn(), currentSheet->maxRow() ); // All cells
 
     int colStart = !bck ? region.left() : region.right();
@@ -3985,7 +3953,7 @@ void View::initFindReplace()
     int rowStart = !bck ? region.top() :region.bottom();
     int rowEnd = !bck ? region.bottom() : region.top();
     if ( d->findOptions & KFindDialog::FromCursor ) {
-        QPoint marker( d->selectionInfo->marker() );
+        QPoint marker( d->selection->marker() );
         colStart = marker.x();
         rowStart = marker.y();
     }
@@ -4162,7 +4130,7 @@ void View::findPrevious()
 void View::replace()
 {
     SearchDlg dlg( this, "Replace", d->findOptions, d->findStrings, d->replaceStrings );
-    dlg.setHasSelection( !d->selectionInfo->singleCellSelection() );
+    dlg.setHasSelection( !d->selection->isSingular() );
     dlg.setHasCursor( true );
     if ( KReplaceDialog::Accepted != dlg.exec() )
       return;
@@ -4205,7 +4173,7 @@ void View::replace()
 
 void View::slotHighlight( const QString &/*text*/, int /*matchingIndex*/, int /*matchedLength*/ )
 {
-    d->canvas->gotoLocation( d->findPos, d->searchInSheets.currentSheet );
+    d->selection->initialize( d->findPos );
     KDialogBase *baseDialog=0L;
     if ( d->find )
         baseDialog = d->find->findNextDialog();
@@ -4233,9 +4201,9 @@ void View::slotReplace( const QString &newText, int, int, int )
 
 void View::conditional()
 {
-  QRect rect( d->selectionInfo->selection() );
+  QRect rect( d->selection->selection() );
 
-  if ( util_isRowOrColumnSelected(selection()))
+  if ( util_isRowOrColumnSelected(d->selection->selection()))
   {
     KMessageBox::error( this, i18n("Area is too large.") );
   }
@@ -4248,9 +4216,9 @@ void View::conditional()
 
 void View::validity()
 {
-  QRect rect( d->selectionInfo->selection() );
+  QRect rect( d->selection->selection() );
 
-  if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
+  if ( (d->selection->isRowSelected()) || (d->selection->isColumnSelected()) )
   {
     KMessageBox::error( this, i18n("Area is too large."));
   }
@@ -4271,7 +4239,7 @@ void View::insertSeries()
 
 void View::sort()
 {
-    if ( d->selectionInfo->singleCellSelection() )
+    if ( d->selection->isSingular() )
     {
         KMessageBox::error( this, i18n("You must select multiple cells.") );
         return;
@@ -4283,7 +4251,7 @@ void View::sort()
 
 void View::removeHyperlink()
 {
-    QPoint marker( selectionInfo()->marker() );
+    QPoint marker( d->selection->marker() );
     Cell * cell = d->activeSheet->cellAt( marker );
     if( !cell ) return;
     if( cell->link().isEmpty() ) return;
@@ -4300,7 +4268,7 @@ void View::insertHyperlink()
 {
     d->canvas->closeEditor();
 
-    QPoint marker( selectionInfo()->marker() );
+    QPoint marker( d->selection->marker() );
     Cell* cell = d->activeSheet->cellAt( marker );
 
     LinkDialog* dlg = new LinkDialog( this );
@@ -4335,7 +4303,7 @@ void View::insertFromDatabase()
 #ifndef QT_NO_SQL
     d->canvas->closeEditor();
 
-    QRect rect = d->selectionInfo->selection();
+    QRect rect = d->selection->selection();
 
   QStringList str = QSqlDatabase::drivers();
   if ( str.isEmpty() )
@@ -4356,7 +4324,7 @@ void View::insertFromTextfile()
     d->canvas->closeEditor();
     //KMessageBox::information( this, "Not implemented yet, work in progress...");
 
-    CSVDialog dialog( this, "CSVDialog", selection(), CSVDialog::File );
+    CSVDialog dialog( this, "CSVDialog", d->selection->selection(), CSVDialog::File );
     if( !dialog.cancelled() )
       dialog.exec();
 }
@@ -4365,7 +4333,7 @@ void View::insertFromClipboard()
 {
     d->canvas->closeEditor();
 
-    CSVDialog dialog( this, "CSVDialog", d->selectionInfo->selection(), CSVDialog::Clipboard );
+    CSVDialog dialog( this, "CSVDialog", d->selection->selection(), CSVDialog::Clipboard );
     if( !dialog.cancelled() )
       dialog.exec();
 }
@@ -4465,7 +4433,7 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
     //KOfficeCore cannot handle KoRect directly, so switching to QRect
     QRect unzoomedGeometry = unzoomedRect.toQRect();
 
-    if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
+    if ( (d->selection->isRowSelected()) || (d->selection->isColumnSelected()) )
     {
       KMessageBox::error( this, i18n("Area is too large."));
       d->activeSheet->insertChart( unzoomedGeometry,
@@ -4480,7 +4448,7 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
       // Insert the new child in the active sheet.
       d->activeSheet->insertChart( unzoomedGeometry,
                              _e,
-                             d->selectionInfo->selection() );
+                             d->selection->selection() );
     }
 }
 
@@ -4756,7 +4724,7 @@ void View::setSelectionComment( QString comment )
     d->activeSheet->setSelectionComment( selectionInfo(), comment.stripWhiteSpace() );
     updateEditWidget();
 
-    doc()->emitEndOperation( d->selectionInfo->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -5060,7 +5028,7 @@ void View::popupColumnMenu( const QPoint & _point )
       d->popupColumn->insertSeparator();
       d->actions->defaultFormat->plug( d->popupColumn );
       // If there is no selection
-      if ((util_isRowSelected(selection()) == false) && (util_isColumnSelected(selection()) == FALSE) )
+      if ((d->selection->isRowSelected() == false) && (d->selection->isColumnSelected() == FALSE) )
       {
         d->actions->areaName->plug( d->popupColumn );
       }
@@ -5076,7 +5044,7 @@ void View::popupColumnMenu( const QPoint & _point )
 
       int i;
       ColumnFormat * col;
-      QRect rect = d->selectionInfo->selection();
+      QRect rect = d->selection->selection();
       //kdDebug(36001) << "Column: L: " << rect.left() << endl;
       for ( i = rect.left(); i <= rect.right(); ++i )
       {
@@ -5145,7 +5113,7 @@ void View::popupRowMenu( const QPoint & _point )
       d->popupRow->insertSeparator();
       d->actions->defaultFormat->plug( d->popupRow );
       // If there is no selection
-      if ( (util_isRowSelected(selection()) == false) && (util_isColumnSelected(selection()) == FALSE) )
+      if ( (d->selection->isRowSelected() == false) && (d->selection->isColumnSelected() == FALSE) )
       {
   d->actions->areaName->plug( d->popupRow );
       }
@@ -5161,7 +5129,7 @@ void View::popupRowMenu( const QPoint & _point )
 
       int i;
       RowFormat * row;
-      QRect rect = d->selectionInfo->selection();
+      QRect rect = d->selection->selection();
       for ( i = rect.top(); i <= rect.bottom(); ++i )
       {
         //kdDebug(36001) << "popupRow: " << rect.top() << endl;
@@ -5211,7 +5179,7 @@ void View::slotListChoosePopupMenu( )
 
   d->popupListChoose = new QPopupMenu();
   int id = 0;
-  QRect selection( d->selectionInfo->selection() );
+  QRect selection( d->selection->selection() );
   Cell * cell = d->activeSheet->cellAt( d->canvas->markerColumn(), d->canvas->markerRow() );
   QString tmp = cell->text();
   QStringList itemList;
@@ -5323,7 +5291,7 @@ void View::openPopupMenu( const QPoint & _point )
 
     bool isProtected = d->activeSheet->isProtected();
     if ( !cell->isDefault() && cell->format()->notProtected( d->canvas->markerColumn(), d->canvas->markerRow() )
-         && ( selection().width() == 1 ) && ( selection().height() == 1 ) )
+         && d->selection->isSingular() )
       isProtected = false;
 
     if ( !isProtected )
@@ -5346,7 +5314,7 @@ void View::openPopupMenu( const QPoint & _point )
       d->actions->defaultFormat->plug( d->popupMenu );
 
       // If there is no selection
-      if ( (util_isRowSelected(selection()) == false) && (util_isColumnSelected(selection()) == FALSE) )
+      if ( (d->selection->isRowSelected() == false) && (d->selection->isColumnSelected() == FALSE) )
       {
         d->actions->areaName->plug( d->popupMenu );
         d->popupMenu->insertSeparator();
@@ -5448,12 +5416,12 @@ void View::deleteSelection()
     d->activeSheet->deleteSelection( selectionInfo() );
     resultOfCalc();
     updateEditWidget();
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::adjust()
 {
-    if ( (util_isRowSelected(selection())) || (util_isColumnSelected(selection())) )
+    if ( (d->selection->isRowSelected()) || (d->selection->isColumnSelected()) )
     {
       KMessageBox::error( this, i18n("Area is too large."));
     }
@@ -5461,7 +5429,7 @@ void View::adjust()
     {
       doc()->emitBeginOperation( false );
       canvasWidget()->adjustArea();
-      doc()->emitEndOperation( selection() );
+      doc()->emitEndOperation( *selectionInfo() );
     }
 }
 
@@ -5472,7 +5440,7 @@ void View::clearTextSelection()
     d->activeSheet->clearTextSelection( selectionInfo() );
 
     updateEditWidget();
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::clearCommentSelection()
@@ -5482,7 +5450,7 @@ void View::clearCommentSelection()
     d->activeSheet->setSelectionRemoveComment( selectionInfo() );
 
     updateEditWidget();
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::clearValiditySelection()
@@ -5492,7 +5460,7 @@ void View::clearValiditySelection()
     d->activeSheet->clearValiditySelection( selectionInfo() );
 
     updateEditWidget();
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::clearConditionalSelection()
@@ -5502,7 +5470,7 @@ void View::clearConditionalSelection()
     d->activeSheet->clearConditionalSelection( selectionInfo() );
 
     updateEditWidget();
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::fillRight()
@@ -5510,7 +5478,7 @@ void View::fillRight()
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Right );
-  doc()->emitEndOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::fillLeft()
@@ -5518,7 +5486,7 @@ void View::fillLeft()
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Left );
-  doc()->emitEndOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::fillUp()
@@ -5526,7 +5494,7 @@ void View::fillUp()
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Up );
-  doc()->emitEndOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::fillDown()
@@ -5534,7 +5502,7 @@ void View::fillDown()
   Q_ASSERT( d->activeSheet );
   doc()->emitBeginOperation( false );
   d->activeSheet->fillSelection( selectionInfo(), Sheet::Down );
-  doc()->emitEndOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::defaultSelection()
@@ -5544,19 +5512,19 @@ void View::defaultSelection()
   d->activeSheet->defaultSelection( selectionInfo() );
 
   updateEditWidget();
-  doc()->emitEndOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::slotInsert()
 {
-  QRect r( selection() );
+  QRect r( d->selection->selection() );
   InsertDialog dlg( this, "InsertDialog", r, InsertDialog::Insert );
   dlg.exec();
 }
 
 void View::slotRemove()
 {
-  QRect r( d->selectionInfo->selection() );
+  QRect r( d->selection->selection() );
   InsertDialog dlg( this, "Remove", r, InsertDialog::Remove );
   dlg.exec();
 }
@@ -5569,12 +5537,12 @@ void View::slotInsertCellCopy()
   if ( !d->activeSheet->testAreaPasteInsert() )
   {
     doc()->emitBeginOperation( false );
-    d->activeSheet->paste( selection(), true, Paste::Normal, Paste::OverWrite, true );
+    d->activeSheet->paste( d->selection->selection(), true, Paste::Normal, Paste::OverWrite, true );
     doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
   }
   else
   {
-    PasteInsertDialog dlg( this, "Remove", selection() );
+    PasteInsertDialog dlg( this, "Remove", d->selection->selection() );
     dlg.exec();
   }
 
@@ -5601,7 +5569,7 @@ void View::showAreaName()
 
 void View::resizeRow()
 {
-  if ( util_isColumnSelected(selection()) )
+  if ( d->selection->isColumnSelected() )
     KMessageBox::error( this, i18n("Area is too large."));
   else
   {
@@ -5612,7 +5580,7 @@ void View::resizeRow()
 
 void View::resizeColumn()
 {
-  if ( util_isRowSelected( selection() ) )
+  if ( d->selection->isRowSelected() )
     KMessageBox::error( this, i18n( "Area is too large." ) );
   else
   {
@@ -5623,7 +5591,7 @@ void View::resizeColumn()
 
 void View::equalizeRow()
 {
-  if ( util_isColumnSelected( selection() ) )
+  if ( d->selection->isColumnSelected() )
     KMessageBox::error( this, i18n( "Area is too large." ) );
   else
   {
@@ -5635,7 +5603,7 @@ void View::equalizeRow()
 
 void View::equalizeColumn()
 {
-  if ( util_isRowSelected( selection() ) )
+  if ( d->selection->isRowSelected() )
     KMessageBox::error( this, i18n( "Area is too large." ) );
   else
   {
@@ -5648,16 +5616,7 @@ void View::equalizeColumn()
 
 void View::layoutDlg()
 {
-  QRect selection( d->selectionInfo->selection() );
-
-  if ( d->selectionInfo->singleCellSelection() )
-  {
-    CellFormatDialog dlg( this, d->activeSheet, selection.left(), selection.top(),
-                       selection.left(), selection.top() );
-  }
-  else
-    CellFormatDialog dlg( this, d->activeSheet, selection.left(), selection.top(),
-                       selection.right(), selection.bottom() );
+  CellFormatDialog dlg( this, d->activeSheet );
 }
 
 void View::styleDialog()
@@ -5749,7 +5708,7 @@ void View::alignLeft( bool b )
     else
       d->activeSheet->setSelectionAlign( selectionInfo(),
                                    Format::Left );
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -5766,7 +5725,7 @@ void View::alignRight( bool b )
     else
       d->activeSheet->setSelectionAlign( selectionInfo(), Format::Right );
 
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -5783,7 +5742,7 @@ void View::alignCenter( bool b )
     else
       d->activeSheet->setSelectionAlign( selectionInfo(), Format::Center );
 
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -5800,7 +5759,7 @@ void View::alignTop( bool b )
     else
       d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Top );
 
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -5817,7 +5776,7 @@ void View::alignBottom( bool b )
     else
       d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Bottom );
 
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -5834,7 +5793,7 @@ void View::alignMiddle( bool b )
     else
       d->activeSheet->setSelectionAlignY( selectionInfo(), Format::Middle );
 
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -5847,7 +5806,7 @@ void View::moneyFormat(bool b)
   if ( d->activeSheet != 0L )
     d->activeSheet->setSelectionMoneyFormat( selectionInfo(), b );
   updateEditWidget();
-  doc()->emitEndOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::createStyleFromCell()
@@ -5855,7 +5814,7 @@ void View::createStyleFromCell()
   if ( !d->activeSheet )
     return;
 
-  QPoint p( d->selectionInfo->selection().topLeft() );
+  QPoint p( d->selection->selection().topLeft() );
   Cell * cell = d->activeSheet->nonDefaultCell( p.x(), p.y() );
 
   bool ok = false;
@@ -5906,7 +5865,7 @@ void View::styleSelected( const QString & style )
     {
       doc()->emitBeginOperation(false);
       d->activeSheet->setSelectionStyle( selectionInfo(), s );
-      doc()->emitEndOperation( selectionInfo()->selection() );
+      doc()->emitEndOperation( *selectionInfo() );
     }
   }
 }
@@ -5927,7 +5886,7 @@ void View::setSelectionPrecision( int delta )
   {
     doc()->emitBeginOperation( false );
     d->activeSheet->setSelectionPrecision( selectionInfo(), delta );
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -5941,7 +5900,7 @@ void View::percent( bool b )
     d->activeSheet->setSelectionPercent( selectionInfo() ,b );
   updateEditWidget();
 
-  doc()->emitEndOperation( selectionInfo()->selection() );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::insertObject()
@@ -5963,7 +5922,7 @@ void View::insertObject()
 
 void View::insertChart()
 {
-  if ( util_isColumnSelected(selection()) || util_isRowSelected(selection()) )
+  if ( d->selection->isColumnSelected() || d->selection->isRowSelected() )
   {
     KMessageBox::error( this, i18n("Area too large."));
     return;
@@ -6130,7 +6089,7 @@ void View::setText (const QString & _text, bool array)
 
   if (array) {
     // array version
-    QRect r = d->canvas->selection();
+    QRect r = d->selection->selection();
     int x = r.left();
     int y = r.top();
     int xl = r.right() - r.left() + 1;
@@ -6189,7 +6148,7 @@ void View::slotUpdateView( Sheet *_sheet )
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void View::slotUpdateView( Sheet * _sheet, const QRect & _rect )
+void View::slotUpdateView( Sheet * _sheet, const Region& region )
 {
   // qDebug("void View::slotUpdateView( Sheet *_sheet, const QRect& %i %i|%i %i )\n",_rect.left(),_rect.top(),_rect.right(),_rect.bottom());
 
@@ -6198,8 +6157,8 @@ void View::slotUpdateView( Sheet * _sheet, const QRect & _rect )
     return;
 
   // doc()->emitBeginOperation( false );
-  d->activeSheet->setRegionPaintDirty( _rect );
-  doc()->emitEndOperation( _rect );
+  d->activeSheet->setRegionPaintDirty( region );
+  doc()->emitEndOperation( region );
 }
 
 void View::slotUpdateHBorder( Sheet * _sheet )
@@ -6228,23 +6187,22 @@ void View::slotUpdateVBorder( Sheet *_sheet )
   doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
 }
 
-void View::slotChangeSelection( Sheet *_sheet,
-                                       const QRect &oldSelection,
-                                       const QPoint& /* oldMarker*/ )
+void View::slotChangeSelection(const KSpread::Region& changedRegion)
 {
-  doc()->emitBeginOperation( false );
-  QRect newSelection = d->selectionInfo->selection();
+//   kdDebug() << *selectionInfo() << endl;
 
-  // Emit a signal for internal use
-  emit sig_selectionChanged( _sheet, newSelection );
-
-  // Empty selection ?
-  // Activate or deactivate some actions.
-  bool colSelected = util_isColumnSelected( selection() );
-  bool rowSelected = util_isRowSelected( selection() );
-
-  if ( d->activeSheet && !d->activeSheet->isProtected() )
+  if (!changedRegion.isValid())
   {
+    return;
+  }
+
+  doc()->emitBeginOperation( false );
+
+  bool colSelected = d->selection->isColumnSelected();
+  bool rowSelected = d->selection->isRowSelected();
+  if (d->activeSheet && !d->activeSheet->isProtected())
+  {
+    // Activate or deactivate some actions.
     d->actions->resizeRow->setEnabled( !colSelected );
     d->actions->equalizeRow->setEnabled( !colSelected );
     d->actions->hideRow->setEnabled( !colSelected );
@@ -6255,8 +6213,7 @@ void View::slotChangeSelection( Sheet *_sheet,
     d->actions->hideColumn->setEnabled( !rowSelected );
     d->actions->textToColumns->setEnabled( !rowSelected );
 
-    bool simpleSelection = d->selectionInfo->singleCellSelection()
-      || colSelected || rowSelected;
+    bool simpleSelection = d->selection->isSingular() || colSelected || rowSelected;
     d->actions->autoFormat->setEnabled( !simpleSelection );
     d->actions->sort->setEnabled( !simpleSelection );
     d->actions->mergeCell->setEnabled( !simpleSelection );
@@ -6273,21 +6230,30 @@ void View::slotChangeSelection( Sheet *_sheet,
   resultOfCalc();
   // Send some event around. This is read for example
   // by the calculator plugin.
-  SelectionChanged ev( newSelection, activeSheet()->name() );
-  QApplication::sendEvent( this, &ev );
+//   SelectionChanged ev(*selectionInfo(), activeSheet()->name());
+//   QApplication::sendEvent( this, &ev );
 
-  // Do we display this sheet ?
-  if ( _sheet != d->activeSheet )
+  d->canvas->setSelectionChangePaintDirty( d->activeSheet, changedRegion );
+  d->vBorderWidget->update();
+  d->hBorderWidget->update();
+
+  if (colSelected || rowSelected)
   {
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+    doc()->emitEndOperation( *selectionInfo() );
     return;
   }
 
-  d->canvas->setSelectionChangePaintDirty( d->activeSheet, oldSelection, newSelection );
+  d->canvas->validateSelection();
+  d->canvas->scrollToCell(selectionInfo()->marker());
+  // Perhaps the user is entering a value in the cell.
+  // In this case we may not touch the EditWidget
+  if ( !d->canvas->editor() && !d->canvas->chooseMode() )
+  {
+    updateEditWidgetOnPress();
+  }
+  d->canvas->updatePosWidget();
 
-  d->vBorderWidget->update();
-  d->hBorderWidget->update();
-  doc()->emitEndOperation( newSelection );
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::resultOfCalc()
@@ -6295,7 +6261,7 @@ void View::resultOfCalc()
   Sheet * sheet = activeSheet();
   ValueCalc* calc = d->doc->calc();
   Value val;
-  QRect tmpRect(d->selectionInfo->selection());
+  QRect tmpRect(d->selection->selection());
   MethodOfCalc tmpMethod = doc()->getTypeOfCalc() ;
   if ( tmpMethod != NoneCalc )
   {
@@ -6479,7 +6445,7 @@ void View::deleteEditor( bool saveChanges )
 {
     doc()->emitBeginOperation( false );
     d->canvas->deleteEditor( saveChanges );
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
 }
 
 DCOPObject * View::dcopObject()
@@ -6616,7 +6582,7 @@ void View::closeEditor()
   if ( d->activeSheet ) { // #45822
     doc()->emitBeginOperation( false );
     d->canvas->closeEditor();
-    doc()->emitEndOperation( selectionInfo()->selection() );
+    doc()->emitEndOperation( *selectionInfo() );
   }
 }
 
@@ -6652,10 +6618,10 @@ void View::saveCurrentSheetSelection()
     /* save the current selection on this sheet */
     if (d->activeSheet != NULL)
     {
-        d->savedAnchors.replace(d->activeSheet, selectionInfo()->selectionAnchor());
+        d->savedAnchors.replace(d->activeSheet, d->selection->anchor());
         kdDebug() << " Current scrollbar vert value: " << d->canvas->vertScrollBar()->value() << endl;
-        kdDebug() << "Saving marker pos: " << selectionInfo()->marker() << endl;
-        d->savedMarkers.replace(d->activeSheet, selectionInfo()->marker());
+        kdDebug() << "Saving marker pos: " << d->selection->marker() << endl;
+        d->savedMarkers.replace(d->activeSheet, d->selection->marker());
     }
 }
 
@@ -6713,13 +6679,10 @@ void View::runInspector()
 {
     // useful to inspect objects
     if(!d->activeSheet) return;
-    Cell * cell = d->activeSheet->cellAt( d->selectionInfo->marker() );
+    Cell * cell = d->activeSheet->cellAt( d->selection->marker() );
     KSpread::Inspector* ins = new KSpread::Inspector( cell );
     ins->exec();
     delete ins;
 }
 
-
-
 #include "kspread_view.moc"
-

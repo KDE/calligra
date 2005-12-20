@@ -2333,6 +2333,8 @@ Style * Style::setProperty( Properties p )
 {
   if ( m_type != AUTO || m_usageCount > 1 )
   {
+    kdDebug() << k_funcinfo << endl;
+    kdDebug() << "m_type != AUTO || m_usageCount > 1" << endl;
     Style * style = new Style( this );
     style->m_properties |= (uint) p;
     switch( p )
@@ -2374,7 +2376,9 @@ Style * Style::setProperty( Properties p )
     m_featuresSet |= SCustomFormat;
     break;
    case PNotProtected:
-    m_featuresSet |= SNotProtected;
+     kdDebug() << k_funcinfo << endl;
+     kdDebug() << "case PNotProtected" << endl;
+     m_featuresSet |= SNotProtected;
     break;
    case PHideAll:
     m_featuresSet |= SHideAll;

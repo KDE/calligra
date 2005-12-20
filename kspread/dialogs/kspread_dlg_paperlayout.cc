@@ -29,6 +29,7 @@
 #include <kspread_undo.h>
 #include <kspread_util.h>
 #include <kspread_view.h>
+#include <selection.h>
 
 #include <qcheckbox.h>
 #include <qlabel.h>
@@ -56,8 +57,8 @@ PaperLayout::PaperLayout( QWidget * parent, const char * name,
     m_pView( view )
 {
     initTab();
-    connect( view, SIGNAL( sig_selectionChanged( Sheet *, const QRect & ) ),
-             this, SLOT( slotSelectionChanged( Sheet *, const QRect & ) ) );
+    connect(view->selectionInfo(), SIGNAL(changed(const Region&)),
+            this, SLOT(slotSelectionChanged()));
     qApp->installEventFilter( this );
     m_focus= 0L;
 }
@@ -495,21 +496,21 @@ void PaperLayout::closeEvent ( QCloseEvent * )
     delete this;
 }
 
-void PaperLayout::slotSelectionChanged( Sheet* /*_sheet*/, const QRect& _selection )
+void PaperLayout::slotSelectionChanged()
 {
-  if ( _selection.left() == 0 || _selection.top() == 0 ||
-       _selection.right() == 0 || _selection.bottom() == 0 )
+  // TODO Stefan: check for improvement
+  if (!m_pView->selectionInfo()->isValid())
     return;
 
-  QString area = util_rangeName( _selection );
+  QString area = util_rangeName( m_pView->selectionInfo()->lastRange() );
   if ( m_focus )
   {
       if ( m_focus == ePrintRange )
-          area = util_rangeName( _selection );
+        area = util_rangeName( m_pView->selectionInfo()->lastRange() );
       else if ( m_focus == eRepeatRows )
-          area = util_rangeRowName( _selection );
+        area = util_rangeRowName( m_pView->selectionInfo()->lastRange() );
       else if ( m_focus == eRepeatCols )
-          area = util_rangeColumnName( _selection );
+        area = util_rangeColumnName( m_pView->selectionInfo()->lastRange() );
       else
           return;
       m_focus->setText( area );

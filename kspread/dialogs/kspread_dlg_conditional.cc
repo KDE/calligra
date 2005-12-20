@@ -27,7 +27,7 @@
 #include "kspread_canvas.h"
 #include "kspread_cell.h"
 #include "kspread_doc.h"
-#include "kspread_selection.h"
+#include "selection.h"
 #include "kspread_sheet.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
@@ -666,7 +666,7 @@ void ConditionalDialog::slotOk()
 
   kdDebug() << "Setting conditional list" << endl;
   m_view->activeSheet()->setConditional( m_view->selectionInfo(), newList );
-  m_view->slotUpdateView( m_view->activeSheet(), m_view->selectionInfo()->selection() );
+  m_view->slotUpdateView( m_view->activeSheet(), *m_view->selectionInfo() );
 
   accept();
 }

@@ -57,7 +57,7 @@ public slots:
   void slotAdd();
   void slotRemove();
 
-  void slotSelectionChanged( Sheet* _sheet, const QRect& _selection );
+  void slotSelectionChanged();
   void slotReturnPressed();
 
 protected:

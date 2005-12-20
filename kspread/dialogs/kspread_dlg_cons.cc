@@ -46,7 +46,7 @@
 #include <kspread_doc.h>
 #include <kspread_global.h>
 #include <kspread_locale.h>
-#include <kspread_selection.h>
+#include "selection.h"
 #include <kspread_sheet.h>
 #include <kspread_util.h>
 #include <kspread_view.h>
@@ -117,8 +117,8 @@ ConsolidateDialog::ConsolidateDialog( View* parent, const char* name )
   connect( m_pRemove, SIGNAL( clicked() ), this, SLOT( slotRemove() ) );
   connect( m_pRef, SIGNAL( returnPressed() ), this, SLOT( slotReturnPressed() ) );
 
-  connect( m_pView, SIGNAL( sig_selectionChanged( Sheet*, const QRect& ) ),
-	   this, SLOT( slotSelectionChanged( Sheet*, const QRect& ) ) );
+  connect(m_pView->selectionInfo(), SIGNAL(changed(const Region&)),
+          this, SLOT(slotSelectionChanged()));
 }
 
 ConsolidateDialog::~ConsolidateDialog()
@@ -634,16 +634,15 @@ QStringList ConsolidateDialog::refs()
   return list;
 }
 
-void ConsolidateDialog::slotSelectionChanged( Sheet* _sheet, const QRect& _selection )
+void ConsolidateDialog::slotSelectionChanged()
 {
-  if ( _selection.left() == 0 || _selection.top() == 0 ||
-       _selection.right() == 0 || _selection.bottom() == 0 )
+  if (!m_pView->selectionInfo()->isValid())
   {
     m_pRef->setText( "" );
     return;
   }
 
-  QString area = util_rangeName( _sheet, _selection );
+  QString area = m_pView->selectionInfo()->name();
   m_pRef->setText( area );
   m_pRef->setSelection( 0, area.length() );
 }

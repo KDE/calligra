@@ -41,7 +41,7 @@ AppIface::AppIface()
 DCOPRef AppIface::createDoc()
 {
     Doc* doc = new Doc();
-    doc->showEmbedInitDialog( 0 );
+    doc->initDoc(KoDocument::InitDocFileNew);
 
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );
 }
@@ -50,7 +50,7 @@ DCOPRef AppIface::createDoc( const QString& name )
 {
     // ######### Torben: Check for duplicate names here
     Doc* doc = new Doc( 0, name.latin1() );
-    doc->initEmpty();
+    doc->initDoc( KoDocument::InitDocEmpty, 0 );
 
     return DCOPRef( kapp->dcopClient()->appId(), doc->dcopObject()->objId() );
 }

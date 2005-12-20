@@ -56,7 +56,7 @@
 #include "kspread_canvas.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"
-#include "kspread_selection.h"
+#include "selection.h"
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_style_manager.h"
@@ -367,25 +367,6 @@ void Doc::openTemplate (const QString& file)
     KoDocument::openTemplate( file );
     deleteLoadingInfo();
     initConfig();
-}
-
-void Doc::initEmpty()
-{
-    KConfig *config = Factory::global()->config();
-    int _page=1;
-    if( config->hasGroup("Parameters" ))
-    {
-        config->setGroup( "Parameters" );
-        _page=config->readNumEntry( "NbPage",1 ) ;
-    }
-
-    for( int i=0; i<_page; i++ )
-        map()->addNewSheet();
-
-    resetURL();
-    setEmpty();
-    initConfig();
-    styleManager()->createBuiltinStyles();
 }
 
 KLocale *Doc::locale () const
@@ -1616,7 +1597,7 @@ void Doc::paintUpdates()
 void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
                                   View* view,
                                   QValueList<QRect> cellRegions,
-                                  const Sheet* sheet, bool drawCursor)
+                                  const Sheet* sheet, bool /*drawCursor*/)
 {
   //
   // Clip away children
@@ -1661,21 +1642,6 @@ void Doc::paintCellRegions(QPainter& painter, const QRect &viewRect,
     cellRegion = cellRegions[i];
 
     PaintRegion(painter, unzoomedViewRect, view, cellRegion, sheet);
-  }
-
-  if ((view != NULL) && drawCursor && !(painter.device()->isExtDev()))
-  {
-    if (view->activeSheet() == sheet)
-    {
-      //    PaintNormalMarker(painter, unzoomedViewRect, view, sheet, view->selection());
-      ;
-    }
-
-    if (view->selectionInfo()->getChooseSheet() == sheet)
-    {
-//      PaintChooseRect(painter, unzoomedViewRect, view, sheet, view->selectionInfo()->getChooseRect());
-      ;
-    }
   }
 }
 
@@ -1832,185 +1798,6 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
     dblCurrentCellPos.setY( dblCurrentCellPos.y() + row_lay->dblHeight() );
   }
 }
-
-// not used anywhere
-void Doc::PaintChooseRect(QPainter& painter, const KoRect &viewRect,
-                                 View* view, const Sheet* sheet,
-				 const QRect &chooseRect)
-{
-  double positions[4];
-  bool paintSides[4];
-
-  if ( chooseRect.left() != 0 )
-  {
-    QPen pen;
-    pen.setWidth( 2 );
-    pen.setStyle( DashLine );
-
-    retrieveMarkerInfo( chooseRect, sheet, view, viewRect, positions, paintSides );
-
-    double left =   positions[0];
-    double top =    positions[1];
-    double right =  positions[2];
-    double bottom = positions[3];
-
-    bool paintLeft =   paintSides[0];
-    bool paintTop =    paintSides[1];
-    bool paintRight =  paintSides[2];
-    bool paintBottom = paintSides[3];
-
-    RasterOp rop = painter.rasterOp();
-    painter.setRasterOp( NotROP );
-    painter.setPen( pen );
-
-    if ( paintTop )
-    {
-      painter.drawLine( zoomItX( left ),  zoomItY( top ),
-                        zoomItX( right ), zoomItY( top ) );
-    }
-    if ( paintLeft )
-    {
-      painter.drawLine( zoomItX( left ), zoomItY( top ),
-                        zoomItX( left ), zoomItY( bottom ) );
-    }
-    if ( paintRight )
-    {
-      painter.drawLine( zoomItX( right ), zoomItY( top ),
-                        zoomItX( right ), zoomItY( bottom ) );
-    }
-    if ( paintBottom )
-    {
-      painter.drawLine( zoomItX( left ),  zoomItY( bottom ),
-                        zoomItX( right ), zoomItY( bottom ) );
-    }
-
-    /* restore the old raster mode */
-    painter.setRasterOp( rop );
-  }
-  return;
-}
-
-// not used anywhere
-void Doc::PaintNormalMarker(QPainter& painter, const KoRect &viewRect,
-                                   View* view, const Sheet* sheet,
-                                   const QRect &marker)
-{
-  double positions[4];
-  bool paintSides[4];
-
-  QPen pen( Qt::black, 3 );
-  painter.setPen( pen );
-
-  retrieveMarkerInfo( marker, sheet, view, viewRect, positions, paintSides );
-
-  painter.setPen( pen );
-
-  double left =   positions[0];
-  double top =    positions[1];
-  double right =  positions[2];
-  double bottom = positions[3];
-
-  bool paintLeft =   paintSides[0];
-  bool paintTop =    paintSides[1];
-  bool paintRight =  paintSides[2];
-  bool paintBottom = paintSides[3];
-
-  /* the extra '-1's thrown in here account for the thickness of the pen.
-     want to look like this:                     not this:
-                            * * * * * *                     * * * *
-                            *         *                   *         *
-     .                      *         *                   *         *
-  */
-  int l = 1;
-
-  if( paintTop )
-  {
-    painter.drawLine( zoomItX( left ) - l,      zoomItY( top ),
-                      zoomItX( right ) + 2 * l, zoomItY( top ) );
-  }
-  if( paintLeft )
-  {
-    painter.drawLine( zoomItX( left ), zoomItY( top ),
-                      zoomItX( left ), zoomItY( bottom ) );
-  }
-  if( paintRight && paintBottom )
-  {
-    /* then the 'handle' in the bottom right corner is visible. */
-    painter.drawLine( zoomItX( right ), zoomItY( top ),
-                      zoomItX( right ), zoomItY( bottom ) - 3 );
-    painter.drawLine( zoomItX( left ) - l,  zoomItY( bottom ),
-                      zoomItX( right ) - 3, zoomItY( bottom ) );
-    painter.fillRect( zoomItX( right ) - 2, zoomItY( bottom ) - 2, 5, 5,
-                      painter.pen().color() );
-  }
-  else
-  {
-    if( paintRight )
-    {
-      painter.drawLine( zoomItX( right ), zoomItY( top ),
-                        zoomItX( right ), zoomItY( bottom ) );
-    }
-    if( paintBottom )
-    {
-      painter.drawLine( zoomItX( left ) - l,  zoomItY( bottom ),
-                        zoomItX( right ) + l, zoomItY( bottom ) );
-    }
-  }
-}
-
-
-void Doc::retrieveMarkerInfo( const QRect &marker,
-                                     const Sheet* sheet,
-                                     View* view,
-                                     const KoRect &viewRect,
-                                     double positions[],
-                                     bool paintSides[] )
-{
-  double xpos = sheet->dblColumnPos( marker.left() ) -
-                view->canvasWidget()->xOffset();
-  double ypos = sheet->dblRowPos( marker.top() ) -
-                view->canvasWidget()->yOffset();
-
-  double x = sheet->dblColumnPos( marker.right() ) -
-             view->canvasWidget()->xOffset();
-  const ColumnFormat *columnFormat = sheet->columnFormat( marker.right() );
-  double tw = columnFormat->dblWidth( );
-  double w = ( x - xpos ) + tw;
-
-  double y = sheet->dblRowPos( marker.bottom() ) -
-             view->canvasWidget()->yOffset();
-  const RowFormat* rowFormat = sheet->rowFormat( marker.bottom() );
-  double th = rowFormat->dblHeight( );
-  double h = ( y - ypos ) + th;
-
-  /* left, top, right, bottom */
-  positions[0] = xpos;
-  positions[1] = ypos;
-  positions[2] = xpos + w;
-  positions[3] = ypos + h;
-
-  /* these vars are used for clarity, the array for simpler function arguments  */
-  double left = positions[0];
-  double top = positions[1];
-  double right = positions[2];
-  double bottom = positions[3];
-
-  /* left, top, right, bottom */
-  paintSides[0] = (viewRect.left() <= left) && (left <= viewRect.right()) &&
-                  (bottom >= viewRect.top()) && (top <= viewRect.bottom());
-  paintSides[1] = (viewRect.top() <= top) && (top <= viewRect.bottom()) &&
-                  (right >= viewRect.left()) && (left <= viewRect.right());
-  paintSides[2] = (viewRect.left() <= right ) && (right <= viewRect.right()) &&
-                  (bottom >= viewRect.top()) && (top <= viewRect.bottom());
-  paintSides[3] = (viewRect.top() <= bottom) && (bottom <= viewRect.bottom()) &&
-                  (right >= viewRect.left()) && (left <= viewRect.right());
-
-  positions[0] = QMAX( left,   viewRect.left() );
-  positions[1] = QMAX( top,    viewRect.top() );
-  positions[2] = QMIN( right,  viewRect.right() );
-  positions[3] = QMIN( bottom, viewRect.bottom() );
-}
-
 
 DCOPObject* Doc::dcopObject()
 {
@@ -2342,6 +2129,51 @@ void Doc::emitEndOperation( QRect const & rect )
   {
     /* do this after the parent class emitEndOperation because that allows updates
        on the view again
+    */
+    paintUpdates();
+  }
+}
+
+void Doc::emitEndOperation( const Region& region )
+{
+  // ElapsedTime et( "*Doc::emitEndOperation - 2 -*" );
+  CellBinding  * b = 0;
+  d->numOperations--;
+
+  if ( d->numOperations > 0 || !d->activeSheet )
+  {
+    KoDocument::emitEndOperation();
+    QApplication::restoreOverrideCursor();
+    return;
+  }
+
+  d->numOperations = 0;
+  d->delayCalculation = false;
+
+  {
+    //ElapsedTime etm( "Updating active table..." );
+    d->activeSheet->updateCellArea(region);
+/*    Region::ConstIterator endOfList(region.constEnd());
+    for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
+    {
+      d->activeSheet->updateCellArea( (*it)->rect() );
+    }*/
+  }
+
+  //  ElapsedTime etm2( "Sub: Updating cellbindings..." );
+  for ( b = d->activeSheet->firstCellBinding(); b != 0; b = d->activeSheet->nextCellBinding() )
+  {
+    b->cellChanged( 0 );
+  }
+
+  KoDocument::emitEndOperation();
+
+  QApplication::restoreOverrideCursor();
+
+  if ( d->numOperations == 0 )
+  {
+    /* do this after the parent class emitEndOperation because that allows updates
+    on the view again
     */
     paintUpdates();
   }

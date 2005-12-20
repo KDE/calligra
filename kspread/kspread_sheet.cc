@@ -60,7 +60,7 @@
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_locale.h"
-#include "kspread_selection.h"
+#include "selection.h"
 #include "kspread_global.h"
 #include "kspread_undo.h"
 #include "kspread_map.h"
@@ -71,7 +71,7 @@
 #include "kspread_style_manager.h"
 #include "ksploadinginfo.h"
 #include "KSpreadTableIface.h"
-#include "region.h"
+#include "manipulator.h"
 
 #include <kdebug.h>
 #include <kmdcodec.h>
@@ -1085,7 +1085,9 @@ void Sheet::setText( int _row, int _column, const QString& _text, bool asString 
     cell->setCellText( _text, asString );
     //refresh anchor
     if(_text.at(0)=='!')
-      emit sig_updateView( this, QRect(_column,_row,_column,_row) );
+    {
+      emit sig_updateView( this, Region(_column,_row,_column,_row) );
+    }
 }
 
 void Sheet::setArrayFormula (int _row, int _column, int rows, int cols,
@@ -1269,10 +1271,10 @@ void Sheet::valueChanged (Cell *cell)
  --> use emit_signal=false, create_if_default=false and type B
  */
 
-class UndoAction* Sheet::CellWorkerTypeA::createUndoAction( Doc* doc, Sheet* sheet, QRect& r )
+class UndoAction* Sheet::CellWorkerTypeA::createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region )
 {
     QString title = getUndoTitle();
-    return new UndoCellFormat( doc, sheet, r, title );
+    return new UndoCellFormat( doc, sheet, region, title );
 }
 
 /*
@@ -1424,24 +1426,40 @@ Sheet::SelectionType Sheet::workOnCells( const QPoint& _marker, CellWorker& work
 
 Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & worker )
 {
-  // see what is selected; if nothing, take marker position
-  QRect selection(selectionInfo->selection());
-  bool selected = !(selectionInfo->singleCellSelection());
-
-  int top = selection.top();
-  int left = selection.left();
-  int bottom = selection.bottom();
-  int right  = selection.right();
-
   Sheet::SelectionType result;
 
   doc()->emitBeginOperation();
+
+  // see what is selected; if nothing, take marker position
+  bool selected = !(selectionInfo->isSingular());
+
+  // create an undo action
+  if ( !doc()->undoLocked() )
+  {
+    UndoAction* undo = worker.createUndoAction(doc(), this, *selectionInfo);
+    // test if the worker has an undo action
+    if ( undo != 0 )
+    {
+      doc()->addCommand( undo );
+    }
+  }
+
+  Region::Iterator endOfList(selectionInfo->cells().end());
+  for (Region::Iterator it = selectionInfo->cells().begin(); it != endOfList; ++it)
+  {
+    // see what is selected; if nothing, take marker position
+    QRect range = (*it)->rect().normalize();
+
+  int top = range.top();
+  int left = range.left();
+  int bottom = range.bottom();
+  int right  = range.right();
 
   // create cells in rows if complete columns selected
   Cell * cell;
   Style * s = doc()->styleManager()->defaultStyle();
 
-  if ( !worker.type_B && selected && util_isColumnSelected(selection) )
+  if ( !worker.type_B && selected && util_isColumnSelected(range) )
   {
     for ( RowFormat * rw = d->rows.first(); rw; rw = rw->next() )
     {
@@ -1455,17 +1473,8 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
     }
   }
 
-  // create an undo action
-  if ( !doc()->undoLocked() )
-  {
-    UndoAction * undo = worker.createUndoAction(doc(), this, selection);
-    // test if the worker has an undo action
-    if ( undo != 0L )
-      doc()->addCommand( undo );
-  }
-
   // complete rows selected ?
-  if ( selected && util_isRowSelected(selection) )
+  if ( selected && util_isRowSelected(range) )
   {
     for ( int row = top; row <= bottom; ++row )
     {
@@ -1514,9 +1523,9 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
     result = CompleteRows;
   }
   // complete columns selected ?
-  else if ( selected && util_isColumnSelected(selection) )
+  else if ( selected && util_isColumnSelected(range) )
   {
-    for ( int col = selection.left(); col <= right; ++col )
+    for ( int col = range.left(); col <= right; ++col )
     {
       cell = getFirstCellColumn( col );
       while ( cell )
@@ -1586,136 +1595,55 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
     result = CellRegion;
   }
 
+  } // for Region::Elements
+
   // emitEndOperation();
   emit sig_updateView( this );
 
   if (worker.emit_signal)
   {
-    emit sig_updateView( this, selection );
+    emit sig_updateView( this, *selectionInfo );
   }
 
   return result;
 }
 
-struct SetSelectionFontWorker : public Sheet::CellWorkerTypeA
-{
-    const char *_font;
-    int _size;
-    signed char _bold;
-    signed char _italic;
-    signed char _underline;
-    signed char _strike;
-    SetSelectionFontWorker( const char *font, int size, signed char bold, signed char italic,signed char underline, signed char strike )
-  : _font( font ), _size( size ), _bold( bold ), _italic( italic ), _underline( underline ), _strike( strike ) { }
-
-    QString getUndoTitle() { return i18n("Change Font"); }
-    bool testCondition( RowFormat* rw ) {
-        return ( rw->hasProperty( Format::PFont ) );
-    }
-    void doWork( RowFormat* rw ) {
-  if ( _font )
-      rw->setTextFontFamily( _font );
-  if ( _size > 0 )
-      rw->setTextFontSize( _size );
-  if ( _italic >= 0 )
-      rw->setTextFontItalic( (bool)_italic );
-  if ( _bold >= 0 )
-      rw->setTextFontBold( (bool)_bold );
-  if ( _underline >= 0 )
-      rw->setTextFontUnderline( (bool)_underline );
-  if ( _strike >= 0 )
-      rw->setTextFontStrike( (bool)_strike );
-    }
-    void doWork( ColumnFormat* cl ) {
-  if ( _font )
-      cl->setTextFontFamily( _font );
-  if ( _size > 0 )
-      cl->setTextFontSize( _size );
-  if ( _italic >= 0 )
-      cl->setTextFontItalic( (bool)_italic );
-  if ( _bold >= 0 )
-      cl->setTextFontBold( (bool)_bold );
-  if ( _underline >= 0 )
-      cl->setTextFontUnderline( (bool)_underline );
-  if ( _strike >= 0 )
-      cl->setTextFontStrike( (bool)_strike );
-    }
-    void prepareCell( Cell* cell ) {
-  cell->format()->clearProperty( Format::PFont );
-  cell->format()->clearNoFallBackProperties( Format::PFont );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
-    }
-    void doWork( Cell* cell, bool cellRegion, int, int ) {
-  if ( cellRegion )
-      cell->setDisplayDirtyFlag();
-  if ( _font )
-      cell->format()->setTextFontFamily( _font );
-  if ( _size > 0 )
-      cell->format()->setTextFontSize( _size );
-  if ( _italic >= 0 )
-      cell->format()->setTextFontItalic( (bool)_italic );
-  if ( _bold >= 0 )
-      cell->format()->setTextFontBold( (bool)_bold );
-  if ( _underline >= 0 )
-      cell->format()->setTextFontUnderline( (bool)_underline );
-  if ( _strike >= 0 )
-      cell->format()->setTextFontStrike( (bool)_strike );
-        if ( cellRegion )
-      cell->clearDisplayDirtyFlag();
-    }
-};
-
 void Sheet::setSelectionFont( Selection* selectionInfo,
-                                     const char *_font, int _size,
-                                     signed char _bold, signed char _italic,
-                                     signed char _underline, signed char _strike)
+                              const char *_font, int _size,
+                              signed char _bold, signed char _italic,
+                              signed char _underline, signed char _strike)
 {
-    SetSelectionFontWorker w( _font, _size, _bold, _italic, _underline, _strike );
-    workOnCells( selectionInfo, w );
+  FontManipulator* manipulator = new FontManipulator();
+  manipulator->setSheet(this);
+  manipulator->setProperty(Format::PFont);
+  manipulator->setFontFamily(_font);
+  manipulator->setFontSize(_size);
+  manipulator->setFontBold(_bold);
+  manipulator->setFontItalic(_italic);
+  manipulator->setFontStrike(_strike);
+  manipulator->setFontUnderline(_underline);
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
-struct SetSelectionSizeWorker : public Sheet::CellWorkerTypeA {
-    int _size, size;
-    SetSelectionSizeWorker( int __size, int size2 ) : _size( __size ), size( size2 ) { }
-
-    QString getUndoTitle() { return i18n("Change Font"); }
-    bool testCondition( RowFormat* rw ) {
-        return ( rw->hasProperty( Format::PFont ) );
-    }
-    void doWork( RowFormat* rw ) {
-  rw->setTextFontSize( size + _size) ;
-    }
-    void doWork( ColumnFormat* cl ) {
-  cl->setTextFontSize( size + _size );
-    }
-    void prepareCell( Cell* cell ) {
-  cell->format()->clearProperty( Format::PFont );
-  cell->format()->clearNoFallBackProperties( Format::PFont );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
-    }
-    void doWork( Cell* cell, bool cellRegion, int, int ) {
-  if ( cellRegion )
-      cell->setDisplayDirtyFlag();
-  cell->format()->setTextFontSize( size + _size );
-        if ( cellRegion )
-      cell->clearDisplayDirtyFlag();
-    }
-};
-
-void Sheet::setSelectionSize( Selection* selectionInfo, int _size )
+void Sheet::setSelectionSize(Selection* selectionInfo,
+                              int _size)
 {
-    int size;
-    Cell* c;
-    QPoint marker(selectionInfo->marker());
-    c = cellAt(marker);
-    size = c->format()->textFontSize(marker.x(), marker.y());
+  // TODO Stefan: Increase/Decrease font size still used?
+  int size;
+  Cell* c;
+  QPoint marker(selectionInfo->marker());
+  c = cellAt(marker);
+  size = c->format()->textFontSize(marker.x(), marker.y());
 
-    SetSelectionSizeWorker w( _size, size );
-    workOnCells( selectionInfo, w );
+  FontManipulator* manipulator = new FontManipulator();
+  manipulator->setSheet(this);
+  manipulator->setProperty(Format::PFont);
+  manipulator->setFontSize(_size+size);
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
 
@@ -1725,8 +1653,9 @@ struct SetSelectionUpperLowerWorker : public Sheet::CellWorker {
     SetSelectionUpperLowerWorker( int type, Sheet * s )
       : Sheet::CellWorker( false ), _type( type ),  _s( s ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
-  return new UndoChangeAreaTextCell( doc, sheet, r );
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region )
+    {
+      return new UndoChangeAreaTextCell( doc, sheet, region );
     }
     bool testCondition( Cell* c ) {
   return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
@@ -1759,8 +1688,8 @@ struct SetSelectionFirstLetterUpperWorker : public Sheet::CellWorker
     SetSelectionFirstLetterUpperWorker( Sheet * s )
       : Sheet::CellWorker( false ),  _s( s ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
-  return   new UndoChangeAreaTextCell( doc, sheet, r );
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
+  return   new UndoChangeAreaTextCell( doc, sheet, region );
     }
     bool testCondition( Cell* c ) {
   return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
@@ -1789,9 +1718,9 @@ struct SetSelectionVerticalTextWorker : public Sheet::CellWorker {
     bool _b;
     SetSelectionVerticalTextWorker( bool b ) : Sheet::CellWorker( ), _b( b ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
         QString title=i18n("Vertical Text");
-  return new UndoCellFormat( doc, sheet, r, title );
+        return new UndoCellFormat( doc, sheet, region, title );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -1817,9 +1746,9 @@ struct SetSelectionCommentWorker : public Sheet::CellWorker {
     QString _comment;
     SetSelectionCommentWorker( QString comment ) : Sheet::CellWorker( ), _comment( comment ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
         QString title=i18n("Add Comment");
-  return new UndoCellFormat( doc, sheet, r, title );
+  return new UndoCellFormat( doc, sheet, region, title );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -1839,56 +1768,24 @@ void Sheet::setSelectionComment( Selection* selectionInfo,
 }
 
 
-struct SetSelectionAngleWorker : public Sheet::CellWorkerTypeA {
-    int _value;
-    SetSelectionAngleWorker( int value ) : _value( value ) { }
-
-    QString getUndoTitle() { return i18n("Change Angle"); }
-    UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ){
-        return new UndoChangeAngle( doc, sheet, r );
-    }
-
-    bool testCondition( RowFormat* rw ) {
-        return ( rw->hasProperty( Format::PAngle ) );
-    }
-    void doWork( RowFormat* rw ) {
-  rw->setAngle( _value );
-    }
-    void doWork( ColumnFormat* cl ) {
-  cl->setAngle( _value );
-    }
-    void prepareCell( Cell* cell ) {
-  cell->format()->clearProperty( Format::PAngle );
-  cell->format()->clearNoFallBackProperties( Format::PAngle );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
-    }
-    void doWork( Cell* cell, bool cellRegion, int, int ) {
-  if ( cellRegion )
-      cell->setDisplayDirtyFlag();
-  cell->format()->setAngle( _value );
-  if ( cellRegion ) {
-    cell->format()->setVerticalText(false);
-    cell->format()->setMultiRow( false );
-      cell->clearDisplayDirtyFlag();
-  }
-    }
-};
-
 void Sheet::setSelectionAngle( Selection* selectionInfo,
-                                      int _value )
+                               int _value )
 {
-    SetSelectionAngleWorker w( _value );
-    workOnCells( selectionInfo, w );
+  AngleManipulator* manipulator = new AngleManipulator();
+  manipulator->setSheet(this);
+  manipulator->setProperty(Format::PAngle);
+  manipulator->setAngle(_value);
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
 struct SetSelectionRemoveCommentWorker : public Sheet::CellWorker {
     SetSelectionRemoveCommentWorker( ) : Sheet::CellWorker( false ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
         QString title=i18n("Remove Comment");
-  return new UndoCellFormat( doc, sheet, r, title );
+  return new UndoCellFormat( doc, sheet, region, title );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -1909,79 +1806,28 @@ void Sheet::setSelectionRemoveComment( Selection* selectionInfo )
 }
 
 
-struct SetSelectionTextColorWorker : public Sheet::CellWorkerTypeA {
-    const QColor& tb_Color;
-    SetSelectionTextColorWorker( const QColor& _tb_Color ) : tb_Color( _tb_Color ) { }
-
-    QString getUndoTitle() { return i18n("Change Text Color"); }
-    bool testCondition( RowFormat* rw ) {
-        return ( rw->hasProperty( Format::PTextPen ) );
-    }
-    void doWork( RowFormat* rw ) {
-  rw->setTextColor( tb_Color );
-    }
-    void doWork( ColumnFormat* cl ) {
-  cl->setTextColor( tb_Color );
-    }
-    void prepareCell( Cell* cell ) {
-  cell->format()->clearProperty( Format::PTextPen );
-  cell->format()->clearNoFallBackProperties( Format::PTextPen );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
-    }
-    void doWork( Cell* cell, bool cellRegion, int, int ) {
-  if ( cellRegion )
-      cell->setDisplayDirtyFlag();
-  cell->format()->setTextColor( tb_Color );
-  if ( cellRegion )
-      cell->clearDisplayDirtyFlag();
-    }
-};
-
 void Sheet::setSelectionTextColor( Selection* selectionInfo,
-                                          const QColor &tb_Color )
+                                   const QColor &tb_Color )
 {
-    SetSelectionTextColorWorker w( tb_Color );
-    workOnCells( selectionInfo, w );
+  FontColorManipulator* manipulator = new FontColorManipulator();
+  manipulator->setSheet(this);
+  manipulator->setProperty(Format::PTextPen);
+  manipulator->setTextColor(tb_Color);
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
-
-struct SetSelectionBgColorWorker : public Sheet::CellWorkerTypeA {
-    const QColor& bg_Color;
-    SetSelectionBgColorWorker( const QColor& _bg_Color ) : bg_Color( _bg_Color ) { }
-
-    QString getUndoTitle() { return i18n("Change Background Color"); }
-    bool testCondition( RowFormat* rw ) {
-        return ( rw->hasProperty( Format::PBackgroundColor ) );
-    }
-    void doWork( RowFormat* rw ) {
-  rw->setBgColor( bg_Color );
-    }
-    void doWork( ColumnFormat* cl ) {
-  cl->setBgColor( bg_Color );
-    }
-    void prepareCell( Cell* cell ) {
-  cell->format()->clearProperty( Format::PBackgroundColor );
-  cell->format()->clearNoFallBackProperties( Format::PBackgroundColor );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
-    }
-    void doWork( Cell* cell, bool cellRegion, int, int ) {
-  if ( cellRegion )
-      cell->setDisplayDirtyFlag();
-  cell->format()->setBgColor( bg_Color );
-  if ( cellRegion )
-      cell->clearDisplayDirtyFlag();
-    }
-};
-
 void Sheet::setSelectionbgColor( Selection* selectionInfo,
-                                        const QColor &bg_Color )
+                                 const QColor &bg_Color )
 {
-    SetSelectionBgColorWorker w( bg_Color );
-    workOnCells( selectionInfo, w );
+  BackgroundColorManipulator* manipulator = new BackgroundColorManipulator();
+  manipulator->setSheet(this);
+  manipulator->setProperty(Format::PBackgroundColor);
+  manipulator->setBackgroundColor(bg_Color);
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
 
@@ -1989,9 +1835,9 @@ struct SetSelectionBorderColorWorker : public Sheet::CellWorker {
     const QColor& bd_Color;
     SetSelectionBorderColorWorker( const QColor& _bd_Color ) : Sheet::CellWorker( false ), bd_Color( _bd_Color ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
         QString title=i18n("Change Border Color");
-  return new UndoCellFormat( doc, sheet, r, title );
+  return new UndoCellFormat( doc, sheet, region, title );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -3136,535 +2982,88 @@ void Sheet::replace( const QString &_find, const QString &_replace, long options
 }
 #endif
 
-void Sheet::borderBottom( Selection* selectionInfo,
-                                 const QColor &_color )
+void Sheet::borderBottom( Selection* selectionInfo, const QColor &_color )
 {
-  QRect selection( selectionInfo->selection() );
-
-  QPen pen( _color,1,SolidLine);
-
-  // Complete rows selected ?
-  if ( util_isRowSelected(selection) )
-  {
-    if ( !doc()->undoLocked() )
-    {
-      QString title = i18n("Change Border");
-      UndoCellFormat * undo =
-        new UndoCellFormat( doc(), this, selection, title );
-      doc()->addCommand( undo );
-    }
-
-    int row = selection.bottom();
-    Cell * c = getFirstCellRow( row );
-    while ( c )
-    {
-      c->format()->clearProperty( Format::PBottomBorder );
-      c->format()->clearNoFallBackProperties( Format::PBottomBorder );
-
-      c = getNextCellRight( c->column(), row );
-    }
-
-    RowFormat * rw = nonDefaultRowFormat(selection.bottom());
-    rw->setBottomBorderPen(pen);
-
-    emit sig_updateView( this );
-    return;
-  }
-  // Complete columns selected ?
-  else if ( util_isColumnSelected(selection) )
-  {
-    //nothing
-    return;
-  }
-  else
-  {
-    if ( !doc()->undoLocked() )
-    {
-      QString title=i18n("Change Border");
-      UndoCellFormat *undo =
-        new UndoCellFormat( doc(), this, selection,title );
-      doc()->addCommand( undo );
-    }
-
-    Cell* cell;
-    int y = selection.bottom();
-    for ( int x = selection.left(); x <= selection.right(); ++x )
-    {
-      cell = nonDefaultCell( x, y );
-      if ( cell->isObscuringForced() )
-        cell = cell->obscuringCells().first();
-      cell->setBottomBorderPen( pen );
-    }
-    emit sig_updateView( this, selection );
-  }
+  BorderManipulator* manipulator = new BorderManipulator();
+  manipulator->setSheet(this);
+  manipulator->setBottomBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
-void Sheet::borderRight( Selection* selectionInfo,
-                                const QColor &_color )
+void Sheet::borderRight( Selection* selectionInfo, const QColor &_color )
 {
-  QRect selection( selectionInfo->selection() );
-
-  QPen pen( _color,1,SolidLine);
-  // Complete rows selected ?
-  if ( util_isRowSelected(selection) )
-  {
-    //nothing
-    return;
-  }
-  // Complete columns selected ?
-  else if ( util_isColumnSelected(selection) )
-  {
-
-    if ( !doc()->undoLocked() )
-    {
-      QString title = i18n("Change Border");
-      UndoCellFormat * undo =
-        new UndoCellFormat( doc(), this, selection, title );
-      doc()->addCommand( undo );
-    }
-
-    int col = selection.right();
-    Cell * c = getFirstCellColumn( col );
-    while ( c )
-    {
-      if ( !c->isObscuringForced() )
-      {
-        c->format()->clearProperty( Format::PRightBorder );
-        c->format()->clearNoFallBackProperties( Format::PRightBorder );
-      }
-      c = getNextCellDown( col, c->row() );
-    }
-
-    RowFormat * rw = d->rows.first();
-
-    ColumnFormat * cl = nonDefaultColumnFormat(selection.right());
-    cl->setRightBorderPen(pen);
-
-    Cell * cell;
-    rw = d->rows.first();
-    for( ; rw; rw = rw->next() )
-    {
-      if ( !rw->isDefault() && (rw->hasProperty(Format::PRightBorder)))
-      {
-        for(int i = selection.left(); i <= selection.right(); i++)
-        {
-          cell = nonDefaultCell( i, rw->row() );
-          if ( cell->isObscuringForced() )
-            cell = cell->obscuringCells().first();
-          cell->setRightBorderPen(pen);
-        }
-      }
-    }
-
-    emit sig_updateView( this );
-    return;
-  }
-  else
-  {
-    if ( !doc()->undoLocked() )
-    {
-      QString title=i18n("Change Border");
-      UndoCellFormat *undo =
-        new UndoCellFormat( doc(), this, selection, title );
-      doc()->addCommand( undo );
-    }
-
-    Cell* cell;
-    int x = selection.right();
-    for ( int y = selection.top(); y <= selection.bottom(); y++ )
-    {
-      cell = nonDefaultCell( x, y );
-      if ( cell->isObscuringForced() )
-        cell = cell->obscuringCells().first();
-      cell->setRightBorderPen(pen);
-    }
-    emit sig_updateView( this, selection );
-  }
+  BorderManipulator* manipulator = new BorderManipulator();
+  manipulator->setSheet(this);
+  manipulator->setRightBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
-void Sheet::borderLeft( Selection* selectionInfo,
-                               const QColor &_color )
+void Sheet::borderLeft( Selection* selectionInfo, const QColor &_color )
 {
-  QString title = i18n("Change Border");
-  QRect selection( selectionInfo->selection() );
-
-  QPen pen( _color,1,SolidLine);
-
-  // Complete columns selected ?
-  if ( util_isColumnSelected(selection) )
-  {
-    RowFormat* rw =d->rows.first();
-
-    if ( !doc()->undoLocked() )
-    {
-      UndoCellFormat *undo =
-        new UndoCellFormat( doc(), this, selection, title );
-      doc()->addCommand( undo );
-    }
-
-    int col = selection.left();
-    Cell * c = getFirstCellColumn( col );
-    while ( c )
-    {
-      c->format()->clearProperty( Format::PLeftBorder );
-      c->format()->clearNoFallBackProperties( Format::PLeftBorder );
-
-      c = getNextCellDown( col, c->row() );
-    }
-
-
-    ColumnFormat * cl = nonDefaultColumnFormat( col );
-    cl->setLeftBorderPen(pen);
-
-    Cell * cell;
-    rw = d->rows.first();
-    for( ; rw; rw = rw->next() )
-    {
-      if ( !rw->isDefault() && (rw->hasProperty(Format::PLeftBorder)))
-      {
-        for(int i = selection.left(); i <= selection.right(); ++i)
-        {
-          cell = nonDefaultCell( i,  rw->row() );
-          if ( cell->isObscuringForced() )
-            continue;
-          cell->setLeftBorderPen(pen);
-        }
-      }
-    }
-
-    emit sig_updateView( this );
-    return;
-  }
-  else
-  {
-    if ( !doc()->undoLocked() )
-    {
-      UndoCellFormat *undo = new UndoCellFormat( doc(), this,
-                                                               selection,title );
-      doc()->addCommand( undo );
-    }
-
-    Cell* cell;
-    int x = selection.left();
-    for ( int y = selection.top(); y <= selection.bottom(); y++ )
-    {
-      cell = nonDefaultCell( x, y );
-      if ( cell->isObscuringForced() )
-        continue;
-      cell->setLeftBorderPen(pen);
-    }
-    emit sig_updateView( this, selection );
-  }
+  BorderManipulator* manipulator = new BorderManipulator();
+  manipulator->setSheet(this);
+  manipulator->setLeftBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
-void Sheet::borderTop( Selection* selectionInfo,
-                              const QColor &_color )
+void Sheet::borderTop( Selection* selectionInfo, const QColor &_color )
 {
-  /* duplicate code in kspread_dlg_layout.cc  That needs fixed at some point
-     We need to save the code here and have the dialog code removed.
-   */
-  QRect selection( selectionInfo->selection() );
-
-  QString title = i18n("Change Border");
-  QPen pen( _color, 1, SolidLine);
-  // Complete rows selected ?
-  if ( util_isRowSelected(selection) )
-  {
-    if ( !doc()->undoLocked() )
-    {
-      UndoCellFormat * undo =
-        new UndoCellFormat( doc(), this, selection, title );
-      doc()->addCommand( undo );
-    }
-
-    int row = selection.top();
-    Cell * c = getFirstCellRow( row );
-    while ( c )
-    {
-      c->format()->clearProperty( Format::PTopBorder );
-      c->format()->clearNoFallBackProperties( Format::PTopBorder );
-
-      c = getNextCellRight( c->column(), row );
-    }
-
-    RowFormat * rw = nonDefaultRowFormat( row );
-    rw->setTopBorderPen( pen );
-
-    emit sig_updateView( this );
-    return;
-  }
-  // Complete columns selected ? -- the top will just be row 1, then
-  // so it's the same as in no rows/columns selected
-  else
-  {
-    if ( !doc()->undoLocked() )
-    {
-      UndoCellFormat *undo =
-        new UndoCellFormat( doc(), this, selection, title );
-      doc()->addCommand( undo );
-    }
-
-    Cell* cell;
-    int y = selection.top();
-    for ( int x = selection.left(); x <= selection.right(); x++ )
-    {
-      cell = nonDefaultCell( x, y );
-      if ( cell->isObscuringForced() )
-        continue;
-      cell->setTopBorderPen(pen);
-    }
-    emit sig_updateView( this, selection );
-  }
+  BorderManipulator* manipulator = new BorderManipulator();
+  manipulator->setSheet(this);
+  manipulator->setTopBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
-void Sheet::borderOutline( Selection* selectionInfo,
-                                  const QColor &_color )
+void Sheet::borderOutline( Selection* selectionInfo, const QColor &_color )
 {
-  QRect selection( selectionInfo->selection() );
-
-  if ( !doc()->undoLocked() )
-  {
-    QString title = i18n("Change Border");
-    UndoCellFormat *undo = new UndoCellFormat( doc(), this,
-                                                             selection, title );
-    doc()->addCommand( undo );
-  }
-
-  QPen pen( _color, 1, SolidLine );
-
-  // Complete rows selected ?
-  if ( util_isRowSelected(selection) )
-  {
-    int row = selection.top();
-    Cell * c = getFirstCellRow( row );
-    while ( c )
-    {
-      c->format()->clearProperty( Format::PTopBorder );
-      c->format()->clearNoFallBackProperties( Format::PTopBorder );
-
-      c = getNextCellRight( c->column(), row );
-    }
-
-    row = selection.bottom();
-    c = getFirstCellRow( row );
-    while ( c )
-    {
-      c->format()->clearProperty( Format::PBottomBorder );
-      c->format()->clearNoFallBackProperties( Format::PBottomBorder );
-
-      c = getNextCellRight( c->column(), row );
-    }
-
-    RowFormat * rw = nonDefaultRowFormat( selection.top() );
-    rw->setTopBorderPen(pen);
-    rw=nonDefaultRowFormat(selection.bottom());
-    rw->setBottomBorderPen(pen);
-    Cell* cell;
-    int bottom = selection.bottom();
-    int left   = selection.left();
-    for ( int y = selection.top(); y <= bottom; ++y )
-    {
-      cell = nonDefaultCell( left, y );
-      if ( cell->isObscuringForced() )
-        continue;
-      cell->setLeftBorderPen( pen );
-    }
-    emit sig_updateView( this );
-    return;
-  }
-  // Complete columns selected ?
-  else if ( util_isColumnSelected(selection) )
-  {
-    int col = selection.left();
-    Cell * c = getFirstCellColumn( col );
-    while ( c )
-    {
-      c->format()->clearProperty( Format::PLeftBorder );
-      c->format()->clearNoFallBackProperties( Format::PLeftBorder );
-
-      c = getNextCellDown( col, c->row() );
-    }
-
-    col = selection.right();
-    c = getFirstCellColumn( col );
-    while ( c )
-    {
-      c->format()->clearProperty( Format::PRightBorder );
-      c->format()->clearNoFallBackProperties( Format::PRightBorder );
-
-      c = getNextCellDown( col, c->row() );
-    }
-
-    ColumnFormat *cl=nonDefaultColumnFormat(selection.left());
-    cl->setLeftBorderPen(pen);
-    cl=nonDefaultColumnFormat(selection.right());
-    cl->setRightBorderPen(pen);
-    Cell* cell;
-    for ( int x = selection.left(); x <= selection.right(); x++ )
-    {
-      cell = nonDefaultCell( x, selection.top() );
-      if ( cell->isObscuringForced() )
-        continue;
-      cell->setTopBorderPen( pen );
-    }
-    emit sig_updateView( this );
-    return;
-  }
-  else
-  {
-    Cell* cell;
-    for ( int x = selection.left(); x <= selection.right(); x++ )
-    {
-      cell = nonDefaultCell( x, selection.top() );
-      if ( !cell->isObscuringForced() )
-        cell->setTopBorderPen( pen );
-
-      cell = nonDefaultCell( x, selection.bottom() );
-      if ( cell->isObscuringForced() )
-        cell = cell->obscuringCells().first();
-      cell->setBottomBorderPen( pen );
-    }
-    for ( int y = selection.top(); y <= selection.bottom(); y++ )
-    {
-      cell = nonDefaultCell( selection.left(), y );
-      if ( !cell->isObscuringForced() )
-        cell->setLeftBorderPen( pen );
-
-      cell = nonDefaultCell( selection.right(), y );
-      if ( cell->isObscuringForced() )
-        cell = cell->obscuringCells().first();
-      cell->setRightBorderPen( pen );
-    }
-    emit sig_updateView( this, selection );
-  }
+  BorderManipulator* manipulator = new BorderManipulator();
+  manipulator->setSheet(this);
+  manipulator->setTopBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->setBottomBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->setLeftBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->setRightBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
-
-struct SetSelectionBorderAllWorker : public Sheet::CellWorkerTypeA {
-    QPen pen;
-    SetSelectionBorderAllWorker( const QColor& color ) : pen( color, 1, QPen::SolidLine ) { }
-
-    QString getUndoTitle() { return i18n("Change Border"); }
-    bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Format::PRightBorder )
-     || rw->hasProperty( Format::PLeftBorder )
-     || rw->hasProperty( Format::PTopBorder )
-     || rw->hasProperty( Format::PBottomBorder ) );
-    }
-    void doWork( RowFormat* rw ) {
-  rw->setTopBorderPen( pen );
-        rw->setRightBorderPen( pen );
-        rw->setLeftBorderPen( pen );
-        rw->setBottomBorderPen( pen );
-    }
-    void doWork( ColumnFormat* cl ) {
-  cl->setTopBorderPen( pen );
-        cl->setRightBorderPen( pen );
-        cl->setLeftBorderPen( pen );
-        cl->setBottomBorderPen( pen );
-    }
-    void prepareCell( Cell* c ) {
-  c->format()->clearProperty( Format::PTopBorder );
-  c->format()->clearNoFallBackProperties( Format::PTopBorder );
-  c->format()->clearProperty( Format::PBottomBorder );
-  c->format()->clearNoFallBackProperties( Format::PBottomBorder );
-  c->format()->clearProperty( Format::PLeftBorder );
-  c->format()->clearNoFallBackProperties( Format::PLeftBorder );
-  c->format()->clearProperty( Format::PRightBorder );
-  c->format()->clearNoFallBackProperties( Format::PRightBorder );
-    }
-
-  bool testCondition( Cell */* cell*/ ) { return true; }
-
-    void doWork( Cell* cell, bool, int, int ) {
-  //if ( cellRegion )
-  //    cell->setDisplayDirtyFlag();
-        cell->setTopBorderPen( pen );
-        cell->setRightBorderPen( pen );
-        cell->setLeftBorderPen( pen );
-        cell->setBottomBorderPen( pen );
-  //if ( cellRegion )
-  //    cell->clearDisplayDirtyFlag();
-    }
-};
 
 void Sheet::borderAll( Selection * selectionInfo,
-                              const QColor & _color )
+                       const QColor & _color )
 {
-  if ( selectionInfo->singleCellSelection() )
-  {
-    borderOutline( selectionInfo, _color );
-  }
-  else
-  {
-    SetSelectionBorderAllWorker w( _color );
-    workOnCells( selectionInfo, w );
-  }
+  BorderManipulator* manipulator = new BorderManipulator();
+  manipulator->setSheet(this);
+  manipulator->setTopBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->setBottomBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->setLeftBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->setRightBorderPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->setHorizontalPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->setVerticalPen(QPen(_color, 1, Qt::SolidLine));
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
-
-struct SetSelectionBorderRemoveWorker : public Sheet::CellWorkerTypeA {
-    QPen pen;
-    SetSelectionBorderRemoveWorker() : pen( Qt::black, 1, Qt::NoPen  ) { }
-    QString getUndoTitle() { return i18n("Change Border"); }
-    bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Format::PRightBorder )
-     || rw->hasProperty( Format::PLeftBorder )
-     || rw->hasProperty( Format::PTopBorder )
-     || rw->hasProperty( Format::PBottomBorder )
-     || rw->hasProperty( Format::PFallDiagonal )
-     || rw->hasProperty( Format::PGoUpDiagonal ) );
-    }
-    void doWork( RowFormat* rw ) {
-  rw->setTopBorderPen( pen );
-        rw->setRightBorderPen( pen );
-        rw->setLeftBorderPen( pen );
-        rw->setBottomBorderPen( pen);
-        rw->setFallDiagonalPen( pen );
-        rw->setGoUpDiagonalPen (pen );
-    }
-    void doWork( ColumnFormat* cl ) {
-  cl->setTopBorderPen( pen );
-        cl->setRightBorderPen( pen );
-        cl->setLeftBorderPen( pen );
-        cl->setBottomBorderPen( pen);
-        cl->setFallDiagonalPen( pen );
-        cl->setGoUpDiagonalPen (pen );
-    }
-    void prepareCell( Cell* c ) {
-  c->format()->clearProperty( Format::PTopBorder );
-  c->format()->clearNoFallBackProperties( Format::PTopBorder );
-  c->format()->clearProperty( Format::PLeftBorder );
-  c->format()->clearNoFallBackProperties( Format::PLeftBorder );
-  c->format()->clearProperty( Format::PRightBorder );
-  c->format()->clearNoFallBackProperties( Format::PRightBorder );
-  c->format()->clearProperty( Format::PBottomBorder );
-  c->format()->clearNoFallBackProperties( Format::PBottomBorder );
-  c->format()->clearProperty( Format::PFallDiagonal );
-  c->format()->clearNoFallBackProperties( Format::PFallDiagonal );
-  c->format()->clearProperty( Format::PGoUpDiagonal );
-  c->format()->clearNoFallBackProperties( Format::PGoUpDiagonal );
-    }
-
-    bool testCondition(Cell* /*cell*/ ){ return true; }
-
-    void doWork( Cell* cell, bool, int, int ) {
-  //if ( cellRegion )
-  //    cell->setDisplayDirtyFlag();
-        cell->setTopBorderPen( pen );
-        cell->setRightBorderPen( pen );
-        cell->setLeftBorderPen( pen );
-        cell->setBottomBorderPen( pen);
-        cell->format()->setFallDiagonalPen( pen );
-        cell->format()->setGoUpDiagonalPen (pen );
-  //if ( cellRegion )
-  //    cell->clearDisplayDirtyFlag();
-    }
-};
-
 
 void Sheet::borderRemove( Selection* selectionInfo )
 {
-    SetSelectionBorderRemoveWorker w;
-    workOnCells( selectionInfo, w );
+  BorderManipulator* manipulator = new BorderManipulator();
+  manipulator->setSheet(this);
+  manipulator->setTopBorderPen(QPen(Qt::NoPen));
+  manipulator->setBottomBorderPen(QPen(Qt::NoPen));
+  manipulator->setLeftBorderPen(QPen(Qt::NoPen));
+  manipulator->setRightBorderPen(QPen(Qt::NoPen));
+  manipulator->setHorizontalPen(QPen(Qt::NoPen));
+  manipulator->setVerticalPen(QPen(Qt::NoPen));
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
 
@@ -4771,10 +4170,10 @@ struct SetSelectionMultiRowWorker : public Sheet::CellWorker
   SetSelectionMultiRowWorker( bool _enable )
     : Sheet::CellWorker( ), enable( _enable ) { }
 
-  class UndoAction* createUndoAction( Doc * doc, Sheet * sheet, QRect & r )
+  class UndoAction* createUndoAction( Doc * doc, Sheet * sheet, const KSpread::Region& region )
   {
     QString title = i18n("Multirow");
-    return new UndoCellFormat( doc, sheet, r, title );
+    return new UndoCellFormat( doc, sheet, region, title );
   }
 
   bool testCondition( Cell * cell )
@@ -4798,38 +4197,6 @@ void Sheet::setSelectionMultiRow( Selection* selectionInfo,
     SetSelectionMultiRowWorker w( enable );
     workOnCells( selectionInfo, w );
 }
-
-
-struct SetSelectionAlignWorker
-  : public Sheet::CellWorkerTypeA
-{
-  Format::Align _align;
-  SetSelectionAlignWorker( Format::Align align ) : _align( align ) {}
-    QString getUndoTitle() { return i18n("Change Horizontal Alignment"); }
-    bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Format::PAlign ) );
-    }
-    void doWork( RowFormat* rw ) {
-  rw->setAlign( _align );
-    }
-    void doWork( ColumnFormat* cl ) {
-  cl->setAlign( _align );
-    }
-    void prepareCell( Cell* c ) {
-  c->format()->clearProperty( Format::PAlign );
-  c->format()->clearNoFallBackProperties( Format::PAlign );
-    }
-    bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
-    }
-    void doWork( Cell* cell, bool cellRegion, int, int ) {
-  if ( cellRegion )
-      cell->setDisplayDirtyFlag();
-  cell->format()->setAlign( _align );
-  if ( cellRegion )
-      cell->clearDisplayDirtyFlag();
-    }
-};
 
 QString Sheet::guessColumnTitle(QRect& area, int col)
 {
@@ -4883,55 +4250,27 @@ QString Sheet::guessRowTitle(QRect& area, int row)
 }
 
 void Sheet::setSelectionAlign( Selection* selectionInfo,
-                                      Format::Align _align )
+                               Format::Align _align )
 {
-    SetSelectionAlignWorker w( _align );
-    workOnCells( selectionInfo, w );
+  HorAlignManipulator* manipulator = new HorAlignManipulator();
+  manipulator->setSheet(this);
+  manipulator->setProperty(Format::PAlign);
+  manipulator->setHorizontalAlignment(_align);
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
-
-
-struct SetSelectionAlignYWorker : public Sheet::CellWorkerTypeA {
-    Format::AlignY _alignY;
-    SetSelectionAlignYWorker( Format::AlignY alignY )
-      : _alignY( alignY )
-    {
-      kdDebug() << "AlignY: " << _alignY << endl;
-    }
-    QString getUndoTitle() { return i18n("Change Vertical Alignment"); }
-    bool testCondition( RowFormat* rw ) {
-  return ( rw->hasProperty( Format::PAlignY ) );
-    }
-    void doWork( RowFormat* rw ) {
-  rw->setAlignY( _alignY );
-    }
-    void doWork( ColumnFormat* cl ) {
-  cl->setAlignY( _alignY );
-    }
-    void prepareCell( Cell* c ) {
-  c->format()->clearProperty( Format::PAlignY );
-  c->format()->clearNoFallBackProperties( Format::PAlignY );
-    }
-    bool testCondition( Cell* cell ) {
-        kdDebug() << "testCondition" << endl;
-  return ( !cell->isObscuringForced() );
-    }
-    void doWork( Cell* cell, bool cellRegion, int, int ) {
-  if ( cellRegion )
-      cell->setDisplayDirtyFlag();
-        kdDebug() << "cell->setAlignY: " << _alignY << endl;
-        cell->format()->setAlignY( _alignY );
-  if ( cellRegion )
-      cell->clearDisplayDirtyFlag();
-    }
-};
-
 
 void Sheet::setSelectionAlignY( Selection* selectionInfo,
                                 Format::AlignY _alignY )
 {
-  kdDebug() << "setSelectionAlignY: " << _alignY << endl;
-    SetSelectionAlignYWorker w( _alignY );
-    workOnCells( selectionInfo, w );
+  VerAlignManipulator* manipulator = new VerAlignManipulator();
+  manipulator->setSheet(this);
+  manipulator->setProperty(Format::PAlignY);
+  manipulator->setVerticalAlignment(_alignY);
+  manipulator->add(*selectionInfo);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
 
@@ -4939,9 +4278,9 @@ struct SetSelectionPrecisionWorker : public Sheet::CellWorker {
     int _delta;
     SetSelectionPrecisionWorker( int delta ) : Sheet::CellWorker( ), _delta( delta ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
         QString title=i18n("Change Precision");
-  return new UndoCellFormat( doc, sheet, r, title );
+  return new UndoCellFormat( doc, sheet, region, title );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscuringForced() );
@@ -5327,8 +4666,8 @@ struct ClearTextSelectionWorker : public Sheet::CellWorker {
     ClearTextSelectionWorker(  Sheet * s )
       : Sheet::CellWorker( ),  _s( s ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
-  return new UndoChangeAreaTextCell( doc, sheet, r );
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
+  return new UndoChangeAreaTextCell( doc, sheet, region );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscured() );
@@ -5352,8 +4691,8 @@ void Sheet::clearTextSelection( Selection* selectionInfo )
 struct ClearValiditySelectionWorker : public Sheet::CellWorker {
     ClearValiditySelectionWorker( ) : Sheet::CellWorker( ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
-  return new UndoConditional( doc, sheet, r );
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
+  return new UndoConditional( doc, sheet, region );
     }
     bool testCondition( Cell* cell ) {
   return ( !cell->isObscured() );
@@ -5379,9 +4718,9 @@ struct ClearConditionalSelectionWorker : public Sheet::CellWorker
 
   class UndoAction* createUndoAction( Doc* doc,
                Sheet* sheet,
-               QRect& r )
+               const KSpread::Region& region )
   {
-    return new UndoConditional( doc, sheet, r );
+    return new UndoConditional( doc, sheet, region );
   }
   bool testCondition( Cell* cell )
   {
@@ -5481,9 +4820,9 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
 struct DefaultSelectionWorker : public Sheet::CellWorker {
     DefaultSelectionWorker( ) : Sheet::CellWorker( true, false, true ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
         QString title=i18n("Default Parameters");
-  return new UndoCellFormat( doc, sheet, r, title );
+  return new UndoCellFormat( doc, sheet, region, title );
     }
     bool testCondition( Cell* ) {
   return true;
@@ -5505,7 +4844,7 @@ void Sheet::defaultSelection( Selection* selectionInfo )
       rw = nonDefaultRowFormat( i );
       rw->defaultStyleFormat();
     }
-    emit sig_updateView( this, selection );
+    emit sig_updateView( this, *selectionInfo );
     return;
   case CompleteColumns:
     ColumnFormat *cl;
@@ -5513,10 +4852,10 @@ void Sheet::defaultSelection( Selection* selectionInfo )
       cl=nonDefaultColumnFormat( i );
       cl->defaultStyleFormat();
     }
-    emit sig_updateView( this, selection );
+    emit sig_updateView( this, *selectionInfo );
     return;
   case CellRegion:
-      emit sig_updateView( this, selection );
+    emit sig_updateView( this, *selectionInfo );
       return;
   }
 }
@@ -5529,9 +4868,9 @@ struct SetConditionalWorker : public Sheet::CellWorker
     Sheet::CellWorker( ), conditionList( _tmp ) { }
 
   class UndoAction* createUndoAction( Doc* doc,
-               Sheet* sheet, QRect& r )
+                                      Sheet* sheet, const KSpread::Region& region )
   {
-    return new UndoConditional( doc, sheet, r );
+    return new UndoConditional( doc, sheet, region );
   }
 
   bool testCondition( Cell* )
@@ -5576,7 +4915,7 @@ void Sheet::setConditional( Selection* selectionInfo,
     }
   }
 
-  emit sig_updateView( this, selectionInfo->selection() );
+  emit sig_updateView( this, *selectionInfo );
 }
 
 
@@ -5584,8 +4923,8 @@ struct SetValidityWorker : public Sheet::CellWorker {
     Validity tmp;
     SetValidityWorker( Validity _tmp ) : Sheet::CellWorker( ), tmp( _tmp ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
-  return new UndoConditional( doc, sheet, r );
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
+  return new UndoConditional( doc, sheet, region );
     }
     bool testCondition( Cell* ) {
         return true;
@@ -5633,8 +4972,8 @@ struct GetWordSpellingWorker : public Sheet::CellWorker {
     QString& listWord;
     GetWordSpellingWorker( QString& _listWord ) : Sheet::CellWorker( false, false, true ), listWord( _listWord ) { }
 
-    class UndoAction* createUndoAction( Doc*, Sheet*, QRect& ) {
-  return 0L;
+    class UndoAction* createUndoAction( Doc*, Sheet*, const KSpread::Region& ) {
+  return 0;
     }
     bool testCondition( Cell* ) {
         return true;
@@ -5667,8 +5006,8 @@ struct SetWordSpellingWorker : public Sheet::CellWorker {
     SetWordSpellingWorker( QStringList & _list,Sheet * s )
       : Sheet::CellWorker( false, false, true ), list( _list ), pos( 0 ),  sheet( s ) { }
 
-    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, QRect& r ) {
-  return new UndoChangeAreaTextCell( doc, sheet, r );
+    class UndoAction* createUndoAction( Doc* doc, Sheet* sheet, const KSpread::Region& region ) {
+  return new UndoChangeAreaTextCell( doc, sheet, region );
     }
     bool testCondition( Cell* ) {
         return true;
@@ -5740,7 +5079,7 @@ static QString cellAsText( Cell* cell, unsigned int max )
 QString Sheet::copyAsText( Selection* selectionInfo )
 {
     // Only one cell selected? => copy active cell
-    if ( selectionInfo->singleCellSelection() )
+    if ( selectionInfo->isSingular() )
     {
         Cell * cell = cellAt( selectionInfo->marker() );
         if( !cell->isDefault() )
@@ -6347,7 +5686,12 @@ void Sheet::updateView()
 
 void Sheet::updateView( QRect const & rect )
 {
-  emit sig_updateView( this, rect );
+  emit sig_updateView( this, Region(rect) );
+}
+
+void Sheet::updateView(Region* region)
+{
+  emit sig_updateView( this, *region );
 }
 
 void Sheet::refreshView( const QRect & rect )
@@ -6370,25 +5714,11 @@ void Sheet::refreshView( const QRect & rect )
           }
     }
     deleteCells( rect );
-    emit sig_updateView( this, tmp );
+    emit sig_updateView( this, Region(tmp) );
 }
 
 
-void Sheet::changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY)
-{
-   if( m_iExtraX==0 && m_iExtraY==0)
-   {
-     dissociateCell( QPoint( m_iCol,m_iRow));
-     return;
-   }
-
-   QRect rect;
-   rect.setCoords(m_iCol,m_iRow,m_iCol+m_iExtraX,m_iRow+m_iExtraY);
-
-   mergeCells(rect);
-}
-
-void Sheet::mergeCells( const QRect &area )
+void Sheet::mergeCells(const Region& region)
 {
   // sanity check
   if( isProtected() )
@@ -6396,40 +5726,26 @@ void Sheet::mergeCells( const QRect &area )
   if( workbook()->isProtected() )
     return;
 
-  // no span ?
-  if( area.width() == 1 && area.height() == 1)
-    return;
-
-  QPoint topLeft = area.topLeft();
-
-  Cell *cell = nonDefaultCell( topLeft );
-  cell->forceExtraCells( topLeft.x(), topLeft.y(),
-                         area.width() - 1, area.height() - 1);
-
-  if ( getAutoCalc() )
-    recalc();
-
-  emit sig_updateView( this, area );
+  Manipulator* manipulator = new MergeManipulator();
+  manipulator->setSheet(this);
+  manipulator->add(region);
+  doc()->addCommand( manipulator );
+  manipulator->execute();
 }
 
-void Sheet::dissociateCell( const QPoint &cellRef )
+void Sheet::dissociateCells(const Region& region)
 {
-  QPoint marker(cellRef);
-  Cell *cell = nonDefaultCell( marker );
-  if(!cell->isForceExtraCells())
+  // sanity check
+  if( isProtected() )
+    return;
+  if( workbook()->isProtected() )
     return;
 
-  int x = cell->extraXCells() + 1;
-  if( x == 0 )
-    x = 1;
-  int y = cell->extraYCells() + 1;
-  if( y == 0 )
-    y = 1;
-
-  cell->forceExtraCells( marker.x() ,marker.y(), 0, 0 );
-  QRect selection( marker.x() - 1, marker.y() - 1, x + 2, y + 2 );
-  refreshMergedCell();
-  emit sig_updateView( this, selection );
+  Manipulator* manipulator = new DissociateManipulator();
+  manipulator->setSheet(this);
+  manipulator->add(region);
+  doc()->addCommand( manipulator );
+  manipulator->execute();
 }
 
 bool Sheet::testListChoose(Selection* selectionInfo)
@@ -8387,6 +7703,14 @@ void Sheet::updateCellArea( const QRect &cellArea )
   setRegionPaintDirty( cellArea );
 }
 
+void Sheet::updateCellArea(const Region& cellArea)
+{
+  if ( doc()->isLoading() || doc()->delayCalculation() || (!getAutoCalc()))
+    return;
+
+  setRegionPaintDirty( cellArea );
+}
+
 void Sheet::updateCell( Cell */*cell*/, int _column, int _row )
 {
   QRect cellArea(QPoint(_column, _row), QPoint(_column, _row));
@@ -8437,7 +7761,7 @@ void Sheet::insertChart( const QRect& _rect, KoDocumentEntry& _e, const QRect& _
 
     kdDebug(36001) << "NOW FETCHING INTERFACE" << endl;
 
-    if ( !dd->showEmbedInitDialog( 0 ) )
+    if ( !dd->initDoc(KoDocument::InitDocEmbedded) )
         return;
 
     ChartChild * ch = new ChartChild( doc(), this, dd, _rect );
@@ -8730,9 +8054,22 @@ void Sheet::convertObscuringBorders()
  * Printout Functions *
  **********************/
 
+// TODO Stefan: these belong to View, even better Canvas
+void Sheet::setRegionPaintDirty( Region const & region )
+{
+  Manipulator* manipulator = new DilationManipulator();
+  manipulator->setSheet(this);
+  manipulator->add(region);
+  manipulator->execute();
+  // don't put it in the undo list! ;-)
+  d->paintDirtyList.add(*manipulator);
+  kdDebug() << "setRegionPaintDirty "<< static_cast<Region*>(manipulator)->name(this) << endl;
+  delete manipulator;
+}
+
 void Sheet::setRegionPaintDirty( QRect const & range )
 {
-  d->paintDirtyList.add( range );
+  d->paintDirtyList.add(range);
 }
 
 void Sheet::clearPaintDirtyData()

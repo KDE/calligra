@@ -31,6 +31,27 @@
 #include <stdlib.h>
 #include <math.h>
 
+#include <qbitmap.h>
+#include <qcheckbox.h>
+#include <qframe.h>
+#include <qlabel.h>
+#include <qlayout.h>
+#include <qlistbox.h>
+#include <qfontdatabase.h>
+#include <qradiobutton.h>
+#include <qslider.h>
+#include <qwhatsthis.h>
+
+#include <kcolorbutton.h>
+#include <kcombobox.h>
+#include <kdebug.h>
+#include <kdialog.h>
+#include <klineedit.h>
+#include <kmessagebox.h>
+#include <knumvalidator.h>
+
+#include <koUnitWidgets.h>
+
 #include "kspread_canvas.h"
 #include "kspread_dlg_layout.h"
 #include "kspread_locale.h"
@@ -39,26 +60,9 @@
 #include "kspread_style_manager.h"
 #include "kspread_undo.h"
 #include "kspread_util.h"
+#include "manipulator.h"
+#include "selection.h"
 #include "valueformatter.h"
-
-#include <qbitmap.h>
-#include <qframe.h>
-#include <qlabel.h>
-#include <qlistbox.h>
-#include <qlayout.h>
-#include <qfontdatabase.h>
-#include <qslider.h>
-#include <qwhatsthis.h>
-#include <kdialog.h>
-#include <kdebug.h>
-#include <kmessagebox.h>
-#include <knumvalidator.h>
-#include <qradiobutton.h>
-#include <klineedit.h>
-#include <qcheckbox.h>
-#include <kcolorbutton.h>
-#include <kcombobox.h>
-#include <koUnitWidgets.h>
 
 using namespace KSpread;
 
@@ -294,8 +298,7 @@ bool GeneralTab::apply( CustomStyle * style )
 
 
 
-CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
-                              int _left, int _top, int _right, int _bottom )
+CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
   : QObject(),
     m_doc( _sheet->doc() ),
     m_sheet( _sheet ),
@@ -305,14 +308,14 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
   initMembers();
 
   //We need both conditions quite often, so store the condition here too
-  isRowSelected    = util_isRowSelected(_view->selection());
-  isColumnSelected = util_isColumnSelected(_view->selection());
+  isRowSelected    = _view->selectionInfo()->isRowSelected();
+  isColumnSelected = _view->selectionInfo()->isColumnSelected();
 
-  //Do we really need these as arguments? (_view->selection())
-  left = _left;
-  top = _top;
-  right = _right;
-  bottom = _bottom;
+  QRect range = _view->selectionInfo()->selection();
+  left = range.left();
+  top = range.top();
+  right = range.right();
+  bottom = range.bottom();
 
   if ( left == right )
     oneCol = true;
@@ -324,7 +327,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
   else
     oneRow = false;
 
-  Cell* obj = m_sheet->cellAt( _left, _top );
+  Cell* obj = m_sheet->cellAt( left, top );
   oneCell = (left == right && top == bottom &&
              !obj->isForceExtraCells());
 
@@ -333,45 +336,45 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
                top + obj->extraYCells() >= bottom));
 
   // Initialize with the upper left object.
-  borders[BorderType_Left].style = obj->format()->leftBorderStyle( _left, _top );
-  borders[BorderType_Left].width = obj->format()->leftBorderWidth( _left, _top );
-  borders[BorderType_Left].color = obj->format()->leftBorderColor( _left, _top );
-  borders[BorderType_Top].style = obj->format()->topBorderStyle( _left, _top );
-  borders[BorderType_Top].width = obj->format()->topBorderWidth( _left, _top );
-  borders[BorderType_Top].color = obj->format()->topBorderColor( _left, _top );
+  borders[BorderType_Left].style = obj->format()->leftBorderStyle( left, top );
+  borders[BorderType_Left].width = obj->format()->leftBorderWidth( left, top );
+  borders[BorderType_Left].color = obj->format()->leftBorderColor( left, top );
+  borders[BorderType_Top].style = obj->format()->topBorderStyle( left, top );
+  borders[BorderType_Top].width = obj->format()->topBorderWidth( left, top );
+  borders[BorderType_Top].color = obj->format()->topBorderColor( left, top );
   borders[BorderType_FallingDiagonal].style =
-      obj->format()->fallDiagonalStyle( _left, _top );
+      obj->format()->fallDiagonalStyle( left, top );
   borders[BorderType_FallingDiagonal].width =
-      obj->format()->fallDiagonalWidth( _left, _top );
+      obj->format()->fallDiagonalWidth( left, top );
   borders[BorderType_FallingDiagonal].color =
-      obj->format()->fallDiagonalColor( _left, _top );
+      obj->format()->fallDiagonalColor( left, top );
   borders[BorderType_RisingDiagonal].style =
-      obj->format()->goUpDiagonalStyle( _left, _top );
+      obj->format()->goUpDiagonalStyle( left, top );
   borders[BorderType_RisingDiagonal].width =
-      obj->format()->goUpDiagonalWidth( _left, _top );
+      obj->format()->goUpDiagonalWidth( left, top );
   borders[BorderType_RisingDiagonal].color =
-      obj->format()->goUpDiagonalColor( _left, _top );
+      obj->format()->goUpDiagonalColor( left, top );
 
   // Look at the upper right one for the right border.
-  obj = m_sheet->cellAt( _right, _top );
-  borders[BorderType_Right].style = obj->format()->rightBorderStyle( _right, _top );
-  borders[BorderType_Right].width = obj->format()->rightBorderWidth( _right, _top );
-  borders[BorderType_Right].color = obj->format()->rightBorderColor( _right, _top );
+  obj = m_sheet->cellAt( right, top );
+  borders[BorderType_Right].style = obj->format()->rightBorderStyle( right, top );
+  borders[BorderType_Right].width = obj->format()->rightBorderWidth( right, top );
+  borders[BorderType_Right].color = obj->format()->rightBorderColor( right, top );
 
   // Look at the bottom left cell for the bottom border.
-  obj = m_sheet->cellAt( _left, _bottom );
-  borders[BorderType_Bottom].style = obj->format()->bottomBorderStyle( _left, _bottom );
-  borders[BorderType_Bottom].width = obj->format()->bottomBorderWidth( _left, _bottom );
-  borders[BorderType_Bottom].color = obj->format()->bottomBorderColor( _left, _bottom );
+  obj = m_sheet->cellAt( left, bottom );
+  borders[BorderType_Bottom].style = obj->format()->bottomBorderStyle( left, bottom );
+  borders[BorderType_Bottom].width = obj->format()->bottomBorderWidth( left, bottom );
+  borders[BorderType_Bottom].color = obj->format()->bottomBorderColor( left, bottom );
 
   // Just an assumption
-  obj = m_sheet->cellAt( _right, _top );
+  obj = m_sheet->cellAt( right, top );
   if ( obj->isObscuringForced() )
   {
     obj = obj->obscuringCells().first();
     int moveX  = obj->column();
-    int moveY  = _top;
-    int moveX2 = _right;
+    int moveY  = top;
+    int moveX2 = right;
     int moveY2 = obj->row();
     borders[BorderType_Vertical].style = obj->format()->leftBorderStyle( moveX, moveY );
     borders[BorderType_Vertical].width = obj->format()->leftBorderWidth( moveX, moveY );
@@ -384,48 +387,48 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
   }
   else
   {
-    borders[BorderType_Vertical].style = obj->format()->leftBorderStyle( _right, _top );
-    borders[BorderType_Vertical].width = obj->format()->leftBorderWidth( _right, _top );
-    borders[BorderType_Vertical].color = obj->format()->leftBorderColor( _right, _top );
-    borders[BorderType_Horizontal].style = obj->format()->topBorderStyle(_right, _bottom);
-    borders[BorderType_Horizontal].width = obj->format()->topBorderWidth(_right, _bottom);
-    borders[BorderType_Horizontal].color = obj->format()->topBorderColor(_right, _bottom);
+    borders[BorderType_Vertical].style = obj->format()->leftBorderStyle( right, top );
+    borders[BorderType_Vertical].width = obj->format()->leftBorderWidth( right, top );
+    borders[BorderType_Vertical].color = obj->format()->leftBorderColor( right, top );
+    borders[BorderType_Horizontal].style = obj->format()->topBorderStyle(right, bottom);
+    borders[BorderType_Horizontal].width = obj->format()->topBorderWidth(right, bottom);
+    borders[BorderType_Horizontal].color = obj->format()->topBorderColor(right, bottom);
   }
 
-  obj = m_sheet->cellAt( _left, _top );
-  prefix = obj->format()->prefix( _left, _top );
-  postfix = obj->format()->postfix( _left, _top );
-  precision = obj->format()->precision( _left, _top );
-  floatFormat = obj->format()->floatFormat( _left, _top );
-  floatColor = obj->format()->floatColor( _left, _top );
-  alignX = obj->format()->align( _left, _top );
-  alignY = obj->format()->alignY( _left, _top );
-  textColor = obj->format()->textColor( _left, _top );
-  bgColor = obj->bgColor( _left, _top );
-  textFontSize = obj->format()->textFontSize( _left, _top );
-  textFontFamily = obj->format()->textFontFamily( _left, _top );
-  textFontBold = obj->format()->textFontBold( _left, _top );
-  textFontItalic = obj->format()->textFontItalic( _left, _top );
-  strike=obj->format()->textFontStrike( _left, _top );
-  underline = obj->format()->textFontUnderline( _left, _top );
+  obj = m_sheet->cellAt( left, top );
+  prefix = obj->format()->prefix( left, top );
+  postfix = obj->format()->postfix( left, top );
+  precision = obj->format()->precision( left, top );
+  floatFormat = obj->format()->floatFormat( left, top );
+  floatColor = obj->format()->floatColor( left, top );
+  alignX = obj->format()->align( left, top );
+  alignY = obj->format()->alignY( left, top );
+  textColor = obj->format()->textColor( left, top );
+  bgColor = obj->bgColor( left, top );
+  textFontSize = obj->format()->textFontSize( left, top );
+  textFontFamily = obj->format()->textFontFamily( left, top );
+  textFontBold = obj->format()->textFontBold( left, top );
+  textFontItalic = obj->format()->textFontItalic( left, top );
+  strike=obj->format()->textFontStrike( left, top );
+  underline = obj->format()->textFontUnderline( left, top );
   // Needed to initialize the font correctly ( bug in Qt )
-  textFont = obj->format()->textFont( _left, _top );
+  textFont = obj->format()->textFont( left, top );
   obj->format()->currencyInfo( cCurrency );
 
-  brushColor = obj->format()->backGroundBrushColor( _left, _top );
-  brushStyle = obj->format()->backGroundBrushStyle( _left,_top );
+  brushColor = obj->format()->backGroundBrushColor( left, top );
+  brushStyle = obj->format()->backGroundBrushStyle( left,top );
 
-  bMultiRow = obj->format()->multiRow( _left, _top );
-  bVerticalText = obj->format()->verticalText( _left, _top );
-  textRotation = obj->format()->getAngle(_left, _top);
-  formatType = obj->format()->getFormatType(_left, _top);
+  bMultiRow = obj->format()->multiRow( left, top );
+  bVerticalText = obj->format()->verticalText( left, top );
+  textRotation = obj->format()->getAngle(left, top);
+  formatType = obj->format()->getFormatType(left, top);
 
-  bDontPrintText = obj->format()->getDontprintText( _left, _top );
-  bHideFormula   = obj->format()->isHideFormula( _left, _top );
-  bHideAll       = obj->format()->isHideAll( _left, _top );
-  bIsProtected   = !obj->format()->notProtected( _left, _top );
+  bDontPrintText = obj->format()->getDontprintText( left, top );
+  bHideFormula   = obj->format()->isHideFormula( left, top );
+  bHideAll       = obj->format()->isHideAll( left, top );
+  bIsProtected   = !obj->format()->notProtected( left, top );
 
-  indent = obj->format()->getIndent(_left, _top);
+  indent = obj->format()->getIndent(left, top);
 
   value = obj->value();
 
@@ -436,7 +439,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
 
   if ( !isRowSelected )
   {
-    for ( int x = _left; x <= _right; x++ )
+    for ( int x = left; x <= right; x++ )
     {
       cl = m_pView->activeSheet()->columnFormat( x );
       widthSize = QMAX( cl->dblWidth(), widthSize );
@@ -445,7 +448,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
 
   if ( !isColumnSelected )
   {
-    for ( int y = _top; y <= _bottom; y++ )
+    for ( int y = top; y <= bottom; y++ )
     {
       rl = m_pView->activeSheet()->rowFormat(y);
       heightSize = QMAX( rl->dblHeight(), heightSize );
@@ -457,7 +460,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
   {
     int y = 1;
     Cell* cell = NULL;
-    for (int x = _left;x <= _right; x++)
+    for (int x = left;x <= right; x++)
     {
       ColumnFormat *obj = m_sheet->nonDefaultColumnFormat(x);
       initParameters( obj,x,y);
@@ -474,7 +477,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
   {
     int x = 1;
     Cell* c = NULL;
-    for ( int y = _top;y<=_bottom;y++)
+    for ( int y = top;y<=bottom;y++)
     {
       RowFormat *obj = m_sheet->nonDefaultRowFormat(y);
       initParameters( obj,x,y);
@@ -489,9 +492,9 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
   else
   {
     // Do the other objects have the same values ?
-    for ( int x = _left; x <= _right; x++ )
+    for ( int x = left; x <= right; x++ )
     {
-      for ( int y = _top; y <= _bottom; y++ )
+      for ( int y = top; y <= bottom; y++ )
       {
         Cell *obj = m_sheet->cellAt( x, y );
 
@@ -508,33 +511,33 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
   if ( isColumnSelected )
   {
     int y=1;
-    ColumnFormat *obj=m_sheet->nonDefaultColumnFormat(_left);
-    checkBorderLeft( obj,_left, y);
+    ColumnFormat *obj=m_sheet->nonDefaultColumnFormat(left);
+    checkBorderLeft( obj,left, y);
 
     Cell* c = NULL;
-    for (c = m_sheet->getFirstCellColumn(_left); c != NULL;
+    for (c = m_sheet->getFirstCellColumn(left); c != NULL;
          c = m_sheet->getNextCellDown(c->column(), c->row()) )
     {
       checkBorderLeft(c->format(), c->column(), c->row());
     }
 
 
-    obj=m_sheet->nonDefaultColumnFormat(_right);
-    checkBorderRight(obj,_right,y);
+    obj=m_sheet->nonDefaultColumnFormat(right);
+    checkBorderRight(obj,right,y);
     c = NULL;
-    for (c = m_sheet->getFirstCellColumn(_right); c != NULL;
+    for (c = m_sheet->getFirstCellColumn(right); c != NULL;
          c = m_sheet->getNextCellDown(c->column(), c->row()) )
     {
       checkBorderRight(c->format(), c->column(), c->row());
     }
 
-    for ( int x = _left; x <= _right; x++ )
+    for ( int x = left; x <= right; x++ )
     {
-      Cell *obj = m_sheet->cellAt( x, _top );
-      checkBorderTop(obj->format(),x, _top);
-      obj = m_sheet->cellAt( x, _bottom );
-      checkBorderBottom(obj->format(),x, _bottom);
-      if ( x > _left )
+      Cell *obj = m_sheet->cellAt( x, top );
+      checkBorderTop(obj->format(),x, top);
+      obj = m_sheet->cellAt( x, bottom );
+      checkBorderBottom(obj->format(),x, bottom);
+      if ( x > left )
       {
         ColumnFormat *obj = m_sheet->nonDefaultColumnFormat(x);
         checkBorderHorizontal(obj,x, y);
@@ -545,13 +548,13 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
   else if ( isRowSelected )
   {
     int x=1;
-    for ( int y = _top; y <= _bottom; y++ )
+    for ( int y = top; y <= bottom; y++ )
     {
-      Cell *obj = m_sheet->cellAt( _right, y );
-      checkBorderRight(obj->format(),_right,y);
-      obj = m_sheet->cellAt( _left, y );
-      checkBorderLeft( obj->format(),_left, y);
-      if ( y > _top )
+      Cell *obj = m_sheet->cellAt( right, y );
+      checkBorderRight(obj->format(),right,y);
+      obj = m_sheet->cellAt( left, y );
+      checkBorderLeft( obj->format(),left, y);
+      if ( y > top )
       {
         RowFormat* obj = m_sheet->nonDefaultRowFormat(y);
         checkBorderHorizontal(obj,x, y);
@@ -559,42 +562,42 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet,
       }
     }
 
-    RowFormat *obj=m_sheet->nonDefaultRowFormat(_top);
-    checkBorderTop(obj,x, _top);
-    obj=m_sheet->nonDefaultRowFormat(_bottom);
-    checkBorderBottom(obj,x, _bottom);
+    RowFormat *obj=m_sheet->nonDefaultRowFormat(top);
+    checkBorderTop(obj,x, top);
+    obj=m_sheet->nonDefaultRowFormat(bottom);
+    checkBorderBottom(obj,x, bottom);
   }
   else
   {
-    for ( int y = _top; y <= _bottom; y++ )
+    for ( int y = top; y <= bottom; y++ )
     {
-      Cell *obj = m_sheet->cellAt( _left, y );
-      checkBorderLeft( obj->format(),_left, y);
-      obj = m_sheet->cellAt( _right, y );
-      checkBorderRight(obj->format(),_right,y);
+      Cell *obj = m_sheet->cellAt( left, y );
+      checkBorderLeft( obj->format(),left, y);
+      obj = m_sheet->cellAt( right, y );
+      checkBorderRight(obj->format(),right,y);
     }
 
-    for ( int x = _left; x <= _right; x++ )
+    for ( int x = left; x <= right; x++ )
     {
-      Cell *obj = m_sheet->cellAt( x, _top );
-      checkBorderTop( obj->format(), x, _top );
-      obj = m_sheet->cellAt( x, _bottom );
-      checkBorderBottom( obj->format(), x, _bottom );
+      Cell *obj = m_sheet->cellAt( x, top );
+      checkBorderTop( obj->format(), x, top );
+      obj = m_sheet->cellAt( x, bottom );
+      checkBorderBottom( obj->format(), x, bottom );
     }
 
     // Look for the Outline
-    for ( int x = _left; x <= _right; x++ )
+    for ( int x = left; x <= right; x++ )
     {
-      for ( int y = _top+1; y <= _bottom; y++ )
+      for ( int y = top+1; y <= bottom; y++ )
       {
         Cell *obj = m_sheet->cellAt( x, y );
         checkBorderHorizontal(obj->format(),x, y);
       }
     }
 
-    for ( int x = _left+1; x <= _right; x++ )
+    for ( int x = left+1; x <= right; x++ )
     {
-      for ( int y = _top; y <= _bottom; y++ )
+      for ( int y = top; y <= bottom; y++ )
       {
         Cell *obj = m_sheet->cellAt( x, y );
         checkBorderVertical(obj->format(),x,y);
@@ -947,7 +950,7 @@ void CellFormatDialog::applyStyle()
 {
   generalPage->apply( m_style );
 
-  borderPage->applyOutline();
+  borderPage->apply(0);
   floatPage->apply( m_style );
   // miscPage->apply( m_style );
   fontPage->apply( m_style );
@@ -964,191 +967,76 @@ void CellFormatDialog::slotApply()
     return;
   }
 
-  m_pView->doc()->emitBeginOperation( false );
-  Cell * cell = 0;
-
-  MacroUndoAction * macroUndo = new MacroUndoAction( m_doc, i18n("Change Format") );
+  KMacroCommand* macroCommand = new KMacroCommand( i18n("Change Format") );
 
   if ( isMerged != positionPage->getMergedCellState() )
   {
     if ( positionPage->getMergedCellState() )
     {
-      Cell * obj = m_sheet->nonDefaultCell( left, top );
-
-      UndoMergedCell * undo = new UndoMergedCell( m_doc, m_sheet, left,
-                                                                top, obj->extraXCells(), obj->extraYCells() );
-      macroUndo->addCommand( undo );
-
-      //merge cell doesn't create undo
-      m_sheet->mergeCells( m_pView->selection() );
-      right  = left;
-      bottom = top;
+      Manipulator* manipulator = new MergeManipulator();
+      manipulator->setSheet(m_pView->activeSheet());
+      manipulator->add(*m_pView->selectionInfo());
+      macroCommand->addCommand( manipulator );
     }
     else
     {
       //dissociate cells
-      Cell * obj = m_sheet->nonDefaultCell( left, top );
-      right  = obj->extraXCells() + left;
-      bottom = obj->extraYCells() + top;
-
-      UndoMergedCell * undo = new UndoMergedCell( m_doc, m_sheet, left,
-                                                                top, obj->extraXCells(), obj->extraYCells() );
-      macroUndo->addCommand(undo);
-
-      m_sheet->dissociateCell(QPoint(left,top));
+      Manipulator* manipulator = new DissociateManipulator();
+      manipulator->setSheet(m_pView->activeSheet());
+      manipulator->add(*m_pView->selectionInfo());
+      macroCommand->addCommand( manipulator );
     }
   }
 
-  // Prepare the undo buffer
-  if ( !m_doc->undoLocked() )
+  FormatManipulator* manipulator = new FormatManipulator();
+  manipulator->setSheet(m_pView->activeSheet());
+  manipulator->add(*m_pView->selectionInfo());
+  borderPage->apply(manipulator);
+  floatPage->apply(manipulator);
+  fontPage->apply(manipulator);
+  positionPage->apply(manipulator);
+  patternPage->apply(manipulator);
+  protectPage->apply(manipulator);
+
+  if (!manipulator->isEmpty())
   {
-    QRect rect;
-
-    // Since the right/bottom border is stored in objects right + 1 ( or: bottom + 1 )
-    // So we have to save these formats, too
-    if ( (!isRowSelected ) && ( !isColumnSelected ) )
-      rect.setCoords( left, top, right + 1, bottom + 1 );
-    else if ( isRowSelected )
-      rect.setCoords( left, top, right, bottom + 1  );
-    else if ( isColumnSelected )
-    {
-      //create cell before to apply
-      RowFormat * rw = m_sheet->firstRow();
-      for ( ; rw; rw = rw->next() )
-      {
-        if ( !rw->isDefault() )
-        {
-          for ( int i = left; i <= right; ++i )
-          {
-            cell = m_sheet->nonDefaultCell( i, rw->row() );
-          }
-        }
-      }
-      rect.setCoords( left, top, right + 1, bottom  );
-    }
-
-    QString title = i18n( "Change Format" );
-    UndoCellFormat * undo = new UndoCellFormat( m_doc, m_sheet, rect, title );
-    // m_doc->addCommand( undo );
-    macroUndo->addCommand( undo );
-
-    /*	if ( miscPage->getStyle()!=eStyle)
-        {
-        //make undo for style of cell
-        UndoStyleCell *undo3 = new UndoStyleCell( m_doc, m_sheet, rect );
-        //m_doc->addCommand( undo3 );
-        macroUndo->addCommand( undo3 );
-        }*/
+    macroCommand->addCommand( manipulator );
   }
-  borderPage->applyOutline();
-
-  if ( ( !isRowSelected ) && ( !isColumnSelected ) )
+  else
   {
-    for ( int x = left; x <= right; x++ )
-      for ( int y = top; y <= bottom; y++ )
-      {
-        Cell *obj = m_sheet->nonDefaultCell( x, y );
-        if ( !obj->isObscuringForced() )
-        {
-          floatPage->apply( obj );
-          //                    miscPage->apply( obj );
-          fontPage->apply( obj );
-          positionPage->apply( obj );
-          patternPage->apply(obj);
-          protectPage->apply( obj );
-        }
-      }
-
-    // Check for a change in the height and width of the cells
-    if ( int( positionPage->getSizeHeight() ) != int( heightSize )
-         || int( positionPage->getSizeWidth() ) != int( widthSize ) )
-    {
-      if ( !m_doc->undoLocked() )
-      {
-        QRect rect;
-        rect.setCoords( left, top, right , bottom  );
-        UndoResizeColRow *undo2 = new UndoResizeColRow( m_doc, m_sheet , rect );
-        //m_doc->addCommand( undo2 );
-        macroUndo->addCommand( undo2 );
-      }
-    }
-    if ( int( positionPage->getSizeHeight() ) != int( heightSize ) )
-    {
-      for ( int x = top; x <= bottom; x++ ) // The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
-        m_pView->vBorderWidget()->resizeRow( positionPage->getSizeHeight(), x, false );
-
-    }
-    if ( int( positionPage->getSizeWidth() ) != int( widthSize ) )
-      // The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
-    {
-      for ( int x = left; x <= right; x++ )
-        m_pView->hBorderWidget()->resizeColumn( positionPage->getSizeWidth(), x, false );
-    }
+    delete manipulator;
   }
-  else if ( isRowSelected )
+
+  if ( int( positionPage->getSizeHeight() ) != int( heightSize ) )
   {
-    for ( int i = top; i <= bottom; i++ )
-    {
-      RowFormat * rw = m_sheet->nonDefaultRowFormat( i );
-      floatPage->apply( rw );
-      fontPage->apply( rw );
-      positionPage->apply( rw );
-      patternPage->apply( rw );
-      protectPage->apply( rw );
-    }
-    //        miscPage->applyRow( );
-    if ( int( positionPage->getSizeHeight() ) != int( heightSize ) )
-    {
-      if ( !m_doc->undoLocked())
-      {
-        QRect rect;
-        rect.setCoords( left, top, right, bottom  );
-        UndoResizeColRow * undo2 = new UndoResizeColRow( m_doc, m_sheet , rect );
-        //m_doc->addCommand( undo2 );
-        macroUndo->addCommand(undo2);
-      }
-      for ( int x = top; x <= bottom; x++ ) // The loop seems to be doubled, already done in resizeRow: Philipp -> fixme
-        m_pView->vBorderWidget()->resizeRow( positionPage->getSizeHeight(), x, false );
-    }
+    ResizeRowManipulator* manipulator = new ResizeRowManipulator();
+    manipulator->setSheet(m_pView->activeSheet());
+    manipulator->setSize(positionPage->getSizeHeight());
+    // TODO Stefan:
+    manipulator->setOldSize(heightSize);
+    manipulator->add(*m_pView->selectionInfo());
+    macroCommand->addCommand( manipulator );
   }
-  else if ( isColumnSelected )
+  if ( int( positionPage->getSizeWidth() ) != int( widthSize ) )
   {
-    for ( int i = left; i <= right; ++i )
-    {
-      ColumnFormat * cl = m_sheet->nonDefaultColumnFormat( i );
-      floatPage->apply( cl );
-      fontPage->apply( cl );
-      positionPage->apply( cl );
-      patternPage->apply( cl );
-      protectPage->apply( cl );
-    }
-    //        miscPage->applyColumn( );
-
-    if ( int( positionPage->getSizeWidth() ) != int( widthSize ) )
-    {
-      if ( !m_doc->undoLocked())
-      {
-        QRect rect;
-        rect.setCoords( left, top, right , bottom  );
-        UndoResizeColRow * undo2 = new UndoResizeColRow( m_doc, m_sheet , rect );
-        // m_doc->addCommand( undo2 );
-        macroUndo->addCommand(undo2);
-      }
-      for ( int x = left; x <= right; x++ ) // The loop seems to be doubled, already done in resizeColumn: Philipp -> fixme
-        m_pView->hBorderWidget()->resizeColumn(positionPage->getSizeWidth(), x, false );
-    }
+    ResizeColumnManipulator* manipulator = new ResizeColumnManipulator();
+    manipulator->setSheet(m_pView->activeSheet());
+    manipulator->setSize(positionPage->getSizeWidth());
+    // TODO Stefan:
+    manipulator->setOldSize(widthSize);
+    manipulator->add(*m_pView->selectionInfo());
+    macroCommand->addCommand( manipulator );
   }
+
+  macroCommand->execute();
 
   if ( !m_doc->undoLocked())
-    m_doc->addCommand( macroUndo );
+  {
+    m_doc->addCommand( macroCommand );
+  }
 
-  // m_pView->drawVisibleCells();
-  QRect r;
-  r.setCoords( left, top, right, bottom );
-  m_pView->doc()->setModified( true );
   // Update the toolbar (bold/italic/font...)
   m_pView->updateEditWidget();
-  m_pView->slotUpdateView( m_sheet, r );
 }
 
 
@@ -1850,7 +1738,7 @@ void CellFormatPageFloat::apply( CustomStyle * style )
   }
 }
 
-void CellFormatPageFloat::applyFormat( Format *_obj )
+void CellFormatPageFloat::apply(FormatManipulator* _obj)
 {
   if ( postfix->text() != dlg->postfix )
     if ( postfix->text() != "########" && postfix->isEnabled())
@@ -1931,124 +1819,6 @@ void CellFormatPageFloat::applyFormat( Format *_obj )
   }
 }
 
-void CellFormatPageFloat::apply( Cell *cell )
-{
-  applyFormat(cell->format());
-}
-
-void CellFormatPageFloat::apply( RowFormat *_obj )
-{
-  Sheet* sheet = dlg->getSheet();
-  Cell* c = NULL;
-  for (int row = dlg->top; row <= dlg->bottom; row++)
-  {
-    for ( c = sheet->getFirstCellRow(row); c != NULL;
-         c = sheet->getNextCellRight(c->column(), c->row()) )
-    {
-      if ( dlg->precision != precision->value() )
-      {
-        c->format()->clearProperty(Format::PPrecision);
-        c->format()->clearNoFallBackProperties( Format::PPrecision );
-      }
-      if ( postfix->text() != dlg->postfix )
-      {
-        if ( postfix->text() != "########" )
-        {
-          c->format()->clearProperty(Format::PPostfix);
-          c->format()->clearNoFallBackProperties( Format::PPostfix );
-        }
-      }
-      if ( prefix->text() != dlg->prefix )
-      {
-        if ( postfix->text() != "########" )
-        {
-          c->format()->clearProperty(Format::PPrefix);
-          c->format()->clearNoFallBackProperties( Format::PPrefix );
-        }
-      }
-      if (m_bFormatColorChanged)
-      {
-        c->format()->clearProperty(Format::PFloatFormat);
-        c->format()->clearNoFallBackProperties( Format::PFloatFormat );
-        c->format()->clearProperty(Format::PFloatColor);
-        c->format()->clearNoFallBackProperties( Format::PFloatColor );
-      }
-      if (m_bFormatTypeChanged)
-      {
-        c->format()->clearProperty(Format::PFormatType);
-        c->format()->clearNoFallBackProperties( Format::PFormatType );
-      }
-    }
-  }
-  applyFormat(_obj);
-}
-
-void CellFormatPageFloat::apply( ColumnFormat *_obj )
-{
-  Sheet *sheet = dlg->getSheet();
-  Cell* c = NULL;
-  for (int col = dlg->left; col <= dlg->right; col++)
-  {
-    for ( c = sheet->getFirstCellColumn(col); c != NULL;
-         c = sheet->getNextCellDown(c->column(), c->row()) )
-    {
-      if ( dlg->precision != precision->value() )
-      {
-        c->format()->clearProperty(Format::PPrecision);
-        c->format()->clearNoFallBackProperties( Format::PPrecision );
-      }
-      if ( postfix->text() != dlg->postfix )
-      {
-        if ( postfix->text() != "########" )
-        {
-          c->format()->clearProperty(Format::PPostfix);
-          c->format()->clearNoFallBackProperties( Format::PPostfix );
-        }
-      }
-      if ( prefix->text() != dlg->prefix )
-      {
-        if ( prefix->text() != "########" )
-        {
-          c->format()->clearProperty(Format::PPrefix);
-          c->format()->clearNoFallBackProperties( Format::PPrefix );
-        }
-      }
-      if (m_bFormatColorChanged)
-      {
-        c->format()->clearProperty(Format::PFloatFormat);
-        c->format()->clearNoFallBackProperties( Format::PFloatFormat );
-        c->format()->clearProperty(Format::PFloatColor);
-        c->format()->clearNoFallBackProperties( Format::PFloatColor );
-      }
-      if (m_bFormatTypeChanged)
-      {
-        c->format()->clearProperty(Format::PFormatType);
-        c->format()->clearNoFallBackProperties( Format::PFormatType );
-      }
-    }
-  }
-  applyFormat(_obj);
-
-  RowFormat* rw =dlg->getSheet()->firstRow();
-  for ( ; rw; rw = rw->next() )
-  {
-    if ( !rw->isDefault() &&
-         (rw->hasProperty(Format::PPrecision) ||
-          rw->hasProperty(Format::PPostfix) ||
-          rw->hasProperty(Format::PPrefix) ||
-          rw->hasProperty(Format::PFloatFormat) ||
-          rw->hasProperty(Format::PFloatColor) ||
-          rw->hasProperty(Format::PFormatType) ))
-    {
-      for ( int i=dlg->left;i<=dlg->right;i++)
-      {
-        Cell *cell = dlg->getSheet()->nonDefaultCell( i, rw->row() );
-        applyFormat(cell->format() );
-      }
-    }
-  }
-}
-
 CellFormatPageProtection::CellFormatPageProtection( QWidget* parent, CellFormatDialog * _dlg )
   : ProtectionTab( parent ),
     m_dlg( _dlg )
@@ -2098,82 +1868,7 @@ void CellFormatPageProtection::apply( CustomStyle * style )
   }
 }
 
-void CellFormatPageProtection::apply( Cell * cell )
-{
-  applyFormat( cell->format() );
-}
-
-void CellFormatPageProtection::apply( ColumnFormat * _col )
-{
-  Sheet * sheet = m_dlg->getSheet();
-  Cell  * c     = 0;
-  for (int col = m_dlg->left; col <= m_dlg->right; col++)
-  {
-    for ( c = sheet->getFirstCellColumn( col ); c != 0;
-         c = sheet->getNextCellDown( c->column(), c->row() ) )
-    {
-      if ( m_dlg->bDontPrintText != m_bDontPrint->isChecked() )
-      {
-        c->format()->clearProperty( Format::PDontPrintText );
-        c->format()->clearNoFallBackProperties( Format::PDontPrintText );
-      }
-      if ( m_dlg->bIsProtected != m_bIsProtected->isChecked() )
-      {
-        c->format()->clearProperty( Format::PNotProtected );
-        c->format()->clearNoFallBackProperties( Format::PNotProtected );
-      }
-      if ( m_dlg->bHideFormula != m_bHideFormula->isChecked() )
-      {
-        c->format()->clearProperty( Format::PHideFormula );
-        c->format()->clearNoFallBackProperties( Format::PHideFormula );
-      }
-      if ( m_dlg->bHideAll != m_bHideAll->isChecked() )
-      {
-        c->format()->clearProperty( Format::PHideAll );
-        c->format()->clearNoFallBackProperties( Format::PHideAll );
-      }
-    }
-  }
-
-  applyFormat( _col );
-}
-
-void CellFormatPageProtection::apply( RowFormat * _row )
-{
-  Sheet * sheet = m_dlg->getSheet();
-  Cell  * c = 0;
-  for ( int row = m_dlg->top; row <= m_dlg->bottom; ++row)
-  {
-    for ( c = sheet->getFirstCellRow( row ); c != 0;
-         c = sheet->getNextCellRight( c->column(), c->row() ) )
-    {
-      if ( m_dlg->bDontPrintText != m_bDontPrint->isChecked() )
-      {
-        c->format()->clearProperty( Format::PDontPrintText );
-        c->format()->clearNoFallBackProperties( Format::PDontPrintText );
-      }
-      if ( m_dlg->bIsProtected != m_bIsProtected->isChecked() )
-      {
-        c->format()->clearProperty( Format::PNotProtected );
-        c->format()->clearNoFallBackProperties( Format::PNotProtected );
-      }
-      if ( m_dlg->bHideFormula != m_bHideFormula->isChecked() )
-      {
-        c->format()->clearProperty( Format::PHideFormula );
-        c->format()->clearNoFallBackProperties( Format::PHideFormula );
-      }
-      if ( m_dlg->bHideAll != m_bHideAll->isChecked() )
-      {
-        c->format()->clearProperty( Format::PHideAll );
-        c->format()->clearNoFallBackProperties( Format::PHideAll );
-      }
-    }
-  }
-
-  applyFormat( _row );
-}
-
-void CellFormatPageProtection::applyFormat( Format * _obj )
+void CellFormatPageProtection::apply(FormatManipulator* _obj)
 {
   if ( m_dlg->bDontPrintText != m_bDontPrint->isChecked())
     _obj->setDontPrintText( m_bDontPrint->isChecked() );
@@ -2312,74 +2007,7 @@ void CellFormatPageFont::apply( CustomStyle * style )
   style->changeFontFlags( flags );
 }
 
-void CellFormatPageFont::apply( ColumnFormat *_obj)
-{
-  Sheet* sheet = dlg->getSheet();
-  Cell* c= NULL;
-  for (int col = dlg->left; col <= dlg->right; col++)
-  {
-    for ( c = sheet->getFirstCellColumn(col); c != NULL;
-         c = sheet->getNextCellDown(c->column(), c->row()) )
-    {
-      if ( !bTextColorUndefined )
-      {
-        c->format()->clearProperty(Format::PTextPen);
-        c->format()->clearNoFallBackProperties( Format::PTextPen );
-      }
-      if (fontChanged)
-      {
-        c->format()->clearProperty(Format::PFont);
-        c->format()->clearNoFallBackProperties( Format::PFont );
-      }
-    }
-  }
-
-  applyFormat(_obj);
-  RowFormat* rw =dlg->getSheet()->firstRow();
-  for ( ; rw; rw = rw->next() )
-  {
-    if ( !rw->isDefault() && (rw->hasProperty(Format::PFont) ))
-    {
-      for ( int i=dlg->left;i<=dlg->right;i++)
-      {
-        Cell *cell = dlg->getSheet()->nonDefaultCell( i, rw->row() );
-        applyFormat(cell->format() );
-      }
-    }
-  }
-}
-
-void CellFormatPageFont::apply( RowFormat *_obj)
-{
-  Sheet* sheet = dlg->getSheet();
-  Cell* c= NULL;
-  for (int row = dlg->top; row <= dlg->bottom; row++)
-  {
-    for ( c = sheet->getFirstCellRow(row); c != NULL;
-         c = sheet->getNextCellRight(c->column(), c->row()) )
-    {
-      if ( !bTextColorUndefined )
-      {
-        c->format()->clearProperty(Format::PTextPen);
-        c->format()->clearNoFallBackProperties( Format::PTextPen );
-      }
-      if (fontChanged)
-      {
-        c->format()->clearProperty(Format::PFont);
-        c->format()->clearNoFallBackProperties( Format::PFont );
-      }
-    }
-  }
-  applyFormat(_obj);
-}
-
-
-void CellFormatPageFont::apply( Cell *_obj )
-{
-  applyFormat(_obj->format());
-}
-
-void CellFormatPageFont::applyFormat( Format *_obj )
+void CellFormatPageFont::apply(FormatManipulator* _obj)
 {
   if ( !bTextColorUndefined && textColor != dlg->textColor )
     _obj->setTextColor( textColor );
@@ -2387,15 +2015,15 @@ void CellFormatPageFont::applyFormat( Format *_obj )
   {
     if ( ( size_combo->currentItem() != 0 )
          && ( dlg->textFontSize != selFont.pointSize() ) )
-      _obj->setTextFontSize( selFont.pointSize() );
+      _obj->setFontSize( selFont.pointSize() );
     if ( ( selFont.family() != dlg->textFontFamily ) && ( !family_combo->currentText().isEmpty() ) )
-      _obj->setTextFontFamily( selFont.family() );
+      _obj->setFontFamily( selFont.family() );
     if ( weight_combo->currentItem() != 0 )
-      _obj->setTextFontBold( selFont.bold() );
+      _obj->setFontBold( selFont.bold() );
     if ( style_combo->currentItem() != 0 )
-      _obj->setTextFontItalic( selFont.italic() );
-    _obj->setTextFontStrike( strike->isChecked() );
-    _obj->setTextFontUnderline(underline->isChecked() );
+      _obj->setFontItalic( selFont.italic() );
+    _obj->setFontStrike( strike->isChecked() );
+    _obj->setFontUnderline(underline->isChecked() );
   }
 }
 
@@ -2715,172 +2343,7 @@ void CellFormatPagePosition::apply( CustomStyle * style )
     style->changeIndent( m_indent->value() );
 }
 
-void CellFormatPagePosition::apply( ColumnFormat *_obj )
-{
-  Format::Align  ax;
-  Format::AlignY ay;
-
-  if ( top->isChecked() )
-    ay = Format::Top;
-  else if ( bottom->isChecked() )
-    ay = Format::Bottom;
-  else if ( middle->isChecked() )
-    ay = Format::Middle;
-  else
-    ay = Format::Middle; //Default, just in case
-
-  if ( left->isChecked() )
-    ax = Format::Left;
-  else if ( right->isChecked() )
-    ax = Format::Right;
-  else if ( center->isChecked() )
-    ax = Format::Center;
-  else if ( standard->isChecked() )
-    ax = Format::Undefined;
-  else
-    ax = Format::Undefined; //Default, just in case
-
-
-  Sheet * sheet = dlg->getSheet();
-  Cell * c = NULL;
-  for ( int col = dlg->left; col <= dlg->right; ++col)
-  {
-    for ( c = sheet->getFirstCellColumn(col); c != NULL;
-         c = sheet->getNextCellDown(c->column(), c->row()) )
-    {
-      if ( m_indent->isEnabled()
-	   && dlg->indent != m_indent->value() )
-
-      {
-        c->format()->clearProperty( Format::PIndent );
-        c->format()->clearNoFallBackProperties( Format::PIndent );
-      }
-      if ( ax != dlg->alignX )
-      {
-        c->format()->clearProperty(Format::PAlign);
-        c->format()->clearNoFallBackProperties( Format::PAlign );
-      }
-      if ( ay != dlg->alignY )
-      {
-        c->format()->clearProperty(Format::PAlignY);
-        c->format()->clearNoFallBackProperties( Format::PAlignY );
-      }
-      if ( m_bOptionText)
-      {
-        c->format()->clearProperty(Format::PMultiRow);
-        c->format()->clearNoFallBackProperties( Format::PMultiRow );
-      }
-      if ( m_bOptionText)
-      {
-        c->format()->clearProperty(Format::PVerticalText);
-        c->format()->clearNoFallBackProperties( Format::PVerticalText );
-      }
-
-      if (dlg->textRotation != angleRotation->value())
-      {
-        c->format()->clearProperty(Format::PAngle);
-        c->format()->clearNoFallBackProperties( Format::PAngle );
-      }
-    }
-  }
-
-  applyFormat( _obj );
-
-  RowFormat* rw =dlg->getSheet()->firstRow();
-  for ( ; rw; rw = rw->next() )
-  {
-    if ( !rw->isDefault() && ( rw->hasProperty(Format::PAngle) ||
-                               rw->hasProperty(Format::PVerticalText) ||
-                               rw->hasProperty(Format::PMultiRow) ||
-                               rw->hasProperty(Format::PAlignY) ||
-                               rw->hasProperty(Format::PAlign) ||
-                               rw->hasProperty(Format::PIndent) ))
-    {
-      for ( int i = dlg->left; i <= dlg->right; ++i )
-      {
-        Cell * cell = dlg->getSheet()->nonDefaultCell( i, rw->row() );
-        applyFormat( cell->format() );
-      }
-    }
-  }
-}
-
-void CellFormatPagePosition::apply( RowFormat *_obj )
-{
-  Format::Align  ax;
-  Format::AlignY ay;
-
-  if ( top->isChecked() )
-    ay = Format::Top;
-  else if ( bottom->isChecked() )
-    ay = Format::Bottom;
-  else if ( middle->isChecked() )
-    ay = Format::Middle;
-  else
-    ay = Format::Middle; //Default, just in case
-
-  if ( left->isChecked() )
-    ax = Format::Left;
-  else if ( right->isChecked() )
-    ax = Format::Right;
-  else if ( center->isChecked() )
-    ax = Format::Center;
-  else if ( standard->isChecked() )
-    ax = Format::Undefined;
-  else
-    ax = Format::Undefined; //Default, just in case
-
-  Sheet* sheet = dlg->getSheet();
-  Cell* c= NULL;
-  for (int row = dlg->top; row <= dlg->bottom; row++)
-  {
-    for ( c = sheet->getFirstCellRow(row); c != NULL;
-         c = sheet->getNextCellRight(c->column(), c->row()) )
-    {
-      if ( m_indent->isEnabled()
-	   && dlg->indent != m_indent->value() )
-      {
-        c->format()->clearProperty(Format::PIndent);
-        c->format()->clearNoFallBackProperties( Format::PIndent );
-      }
-      if ( ax != dlg->alignX )
-      {
-        c->format()->clearProperty(Format::PAlign);
-        c->format()->clearNoFallBackProperties( Format::PAlign );
-      }
-      if ( ay != dlg->alignY )
-      {
-        c->format()->clearProperty(Format::PAlignY);
-        c->format()->clearNoFallBackProperties( Format::PAlignY );
-      }
-      if ( m_bOptionText)
-      {
-        c->format()->clearProperty(Format::PMultiRow);
-        c->format()->clearNoFallBackProperties( Format::PMultiRow );
-      }
-      if ( m_bOptionText)
-      {
-        c->format()->clearProperty(Format::PVerticalText);
-        c->format()->clearNoFallBackProperties( Format::PVerticalText );
-      }
-      if (dlg->textRotation!=angleRotation->value())
-      {
-        c->format()->clearProperty(Format::PAngle);
-        c->format()->clearNoFallBackProperties( Format::PAngle );
-      }
-    }
-  }
-
-  applyFormat( _obj );
-}
-
-
-void CellFormatPagePosition::apply( Cell *_obj )
-{
-  applyFormat( _obj->format() );
-}
-
-void CellFormatPagePosition::applyFormat( Format * _obj )
+void CellFormatPagePosition::apply(FormatManipulator* _obj)
 {
   Format::Align  ax;
   Format::AlignY ay;
@@ -2906,20 +2369,20 @@ void CellFormatPagePosition::applyFormat( Format * _obj )
     ax = Format::Undefined; //Default, just in case
 
   if ( top->isChecked() && ay != dlg->alignY )
-    _obj->setAlignY( Format::Top );
+    _obj->setVerticalAlignment( Format::Top );
   else if ( bottom->isChecked() && ay != dlg->alignY )
-    _obj->setAlignY( Format::Bottom );
+    _obj->setVerticalAlignment( Format::Bottom );
   else if ( middle->isChecked() && ay != dlg->alignY )
-    _obj->setAlignY( Format::Middle );
+    _obj->setVerticalAlignment( Format::Middle );
 
   if ( left->isChecked() && ax != dlg->alignX )
-    _obj->setAlign( Format::Left );
+    _obj->setHorizontalAlignment( Format::Left );
   else if ( right->isChecked() && ax != dlg->alignX )
-    _obj->setAlign( Format::Right );
+    _obj->setHorizontalAlignment( Format::Right );
   else if ( center->isChecked() && ax != dlg->alignX )
-    _obj->setAlign( Format::Center );
+    _obj->setHorizontalAlignment( Format::Center );
   else if ( standard->isChecked() && ax != dlg->alignX )
-    _obj->setAlign( Format::Undefined );
+    _obj->setHorizontalAlignment( Format::Undefined );
 
   if ( m_bOptionText )
   {
@@ -3399,32 +2862,32 @@ void CellFormatPageBorder::loadIcon( QString _pix, BorderButton *_button)
   _button->setPixmap( QPixmap( KSBarIcon(_pix) ) );
 }
 
-void CellFormatPageBorder::applyOutline()
+void CellFormatPageBorder::apply(FormatManipulator* obj)
 {
   if (borderButtons[BorderType_Horizontal]->isChanged())
-    applyHorizontalOutline();
+    applyHorizontalOutline(obj);
 
   if (borderButtons[BorderType_Vertical]->isChanged())
-    applyVerticalOutline();
+    applyVerticalOutline(obj);
 
   if ( borderButtons[BorderType_Left]->isChanged() )
-    applyLeftOutline();
+    applyLeftOutline(obj);
 
   if ( borderButtons[BorderType_Right]->isChanged() )
-    applyRightOutline();
+    applyRightOutline(obj);
 
   if ( borderButtons[BorderType_Top]->isChanged() )
-    applyTopOutline();
+    applyTopOutline(obj);
 
   if ( borderButtons[BorderType_Bottom]->isChanged() )
-    applyBottomOutline();
+    applyBottomOutline(obj);
 
   if ( borderButtons[BorderType_RisingDiagonal]->isChanged() ||
        borderButtons[BorderType_FallingDiagonal]->isChanged() )
-    applyDiagonalOutline();
+    applyDiagonalOutline(obj);
 }
 
-void CellFormatPageBorder::applyTopOutline()
+void CellFormatPageBorder::applyTopOutline(FormatManipulator* obj)
 {
   BorderButton * top = borderButtons[BorderType_Top];
 
@@ -3434,166 +2897,63 @@ void CellFormatPageBorder::applyTopOutline()
   {
     dlg->getStyle()->changeTopBorderPen( tmpPen );
   }
-  else if ( !dlg->isRowSelected )
+  else
   {
-    /* if a column is selected then _top will just be row 1 so there's no special
-       handling */
-
-    for ( int x = dlg->left; x <= dlg->right; x++ )
-    {
-      Cell *obj = dlg->getSheet()->nonDefaultCell( x, dlg->top );
-      if ( obj->isObscuringForced() /* && dlg->isSingleCell() */ )
-        obj = obj->obscuringCells().first();
+    if (borderButtons[BorderType_Top]->isChanged())
       obj->setTopBorderPen( tmpPen );
-    }
-  }
-  else if ( dlg->isRowSelected )
-  {
-    Cell* c = NULL;
-    for ( c = sheet->getFirstCellRow(dlg->top); c != NULL;
-         c = sheet->getNextCellRight(c->column(), c->row()) )
-    {
-      c->format()->clearProperty(Format::PTopBorder);
-      c->format()->clearNoFallBackProperties( Format::PTopBorder );
-    }
-
-    RowFormat *obj=dlg->getSheet()->nonDefaultRowFormat(dlg->top-1);
-    obj->setBottomBorderPen( tmpPen );
   }
 }
 
-void CellFormatPageBorder::applyBottomOutline()
+void CellFormatPageBorder::applyBottomOutline(FormatManipulator* obj)
 {
-  Sheet * sheet = dlg->getSheet();
   BorderButton * bottom = borderButtons[BorderType_Bottom];
 
   QPen tmpPen( bottom->getColor(), bottom->getPenWidth(), bottom->getPenStyle() );
 
   if ( dlg->getStyle() )
+  {
     dlg->getStyle()->changeBottomBorderPen( tmpPen );
-  else if ( !dlg->isRowSelected && !dlg->isColumnSelected )
-  {
-    for ( int x = dlg->left; x <= dlg->right; x++ )
-    {
-      Cell *obj = dlg->getSheet()->nonDefaultCell( x, dlg->bottom );
-      if ( obj->isObscuringForced() /* && dlg->isSingleCell() */ )
-        obj = obj->obscuringCells().first();
-      obj->setBottomBorderPen( tmpPen );
-    }
   }
-  else if ( dlg->isRowSelected )
+  else
   {
-    Cell* c = NULL;
-    for ( c = sheet->getFirstCellRow(dlg->bottom); c != NULL;
-         c = sheet->getNextCellRight(c->column(), c->row()) )
-    {
-      c->format()->clearProperty(Format::PBottomBorder);
-      c->format()->clearNoFallBackProperties( Format::PBottomBorder );
-    }
-
-    RowFormat *obj=dlg->getSheet()->nonDefaultRowFormat(dlg->bottom);
-    obj->setBottomBorderPen( tmpPen );
+    if (borderButtons[BorderType_Bottom]->isChanged())
+      obj->setBottomBorderPen( tmpPen );
   }
 }
 
-void CellFormatPageBorder::applyLeftOutline()
+void CellFormatPageBorder::applyLeftOutline(FormatManipulator* obj)
 {
   BorderButton * left = borderButtons[BorderType_Left];
   QPen tmpPen( left->getColor(), left->getPenWidth(), left->getPenStyle() );
 
   if ( dlg->getStyle() )
-    dlg->getStyle()->changeLeftBorderPen( tmpPen );
-  else if ( !dlg->isColumnSelected )
   {
-    for ( int y = dlg->top; y <= dlg->bottom; y++ )
-    {
-      Cell *obj = dlg->getSheet()->nonDefaultCell( dlg->left, y );
-      if ( obj->isObscuringForced() /* && dlg->isSingleCell() */ )
-        continue;
-      obj->setLeftBorderPen( tmpPen );
-    }
+    dlg->getStyle()->changeLeftBorderPen( tmpPen );
   }
   else
   {
-    Cell* c = NULL;
-    for ( c = sheet->getFirstCellColumn(dlg->left); c != NULL;
-         c = sheet->getNextCellDown(c->column(), c->row()) )
-    {
-      c->format()->clearProperty(Format::PLeftBorder);
-      c->format()->clearNoFallBackProperties( Format::PLeftBorder );
-    }
-    ColumnFormat *obj=dlg->getSheet()->nonDefaultColumnFormat(dlg->left);
-    obj->setLeftBorderPen( tmpPen );
-
-    RowFormat* rw =dlg->getSheet()->firstRow();
-    for ( ; rw; rw = rw->next() )
-    {
-      if (rw->row()==dlg->left&& !rw->isDefault() &&
-          (rw->hasProperty(Format::PLeftBorder)  ))
-      {
-        for ( int i=dlg->left;i<=dlg->right;i++)
-        {
-          Cell *cell =
-            dlg->getSheet()->nonDefaultCell( i, rw->row() );
-          if ( cell->isObscuringForced() && dlg->isSingleCell() )
-            continue;
-          cell->setLeftBorderPen( tmpPen );
-        }
-      }
-    }
+    if (borderButtons[BorderType_Left]->isChanged())
+      obj->setLeftBorderPen( tmpPen );
   }
 }
 
-void CellFormatPageBorder::applyRightOutline()
+void CellFormatPageBorder::applyRightOutline(FormatManipulator* obj)
 {
   BorderButton* right = borderButtons[BorderType_Right];
   QPen tmpPen( right->getColor(), right->getPenWidth(), right->getPenStyle() );
 
   if ( dlg->getStyle() )
+  {
     dlg->getStyle()->changeRightBorderPen( tmpPen );
-  else if ( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
-  {
-    for ( int y = dlg->top; y <= dlg->bottom; y++ )
-    {
-      Cell * obj = dlg->getSheet()->nonDefaultCell( dlg->right, y );
-      if ( obj->isObscuringForced() /* && dlg->isSingleCell() */ )
-        obj = obj->obscuringCells().first();
-      obj->setRightBorderPen( tmpPen );
-    }
   }
-  else if (  dlg->isColumnSelected )
+  else
   {
-    Cell* c = NULL;
-    for ( c = sheet->getFirstCellColumn(dlg->right); c != NULL;
-         c = sheet->getNextCellDown(c->column(), c->row()) )
-    {
-      c->format()->clearProperty(Format::PRightBorder);
-      c->format()->clearNoFallBackProperties( Format::PRightBorder );
-    }
-
-    ColumnFormat *obj=dlg->getSheet()->nonDefaultColumnFormat(dlg->right);
-    obj->setRightBorderPen(tmpPen);
-
-    RowFormat* rw =dlg->getSheet()->firstRow();
-    for ( ; rw; rw = rw->next() )
-    {
-      if (rw->row()==dlg->right&& !rw->isDefault() &&
-          (rw->hasProperty(Format::PRightBorder)  ))
-      {
-        for ( int i=dlg->left;i<=dlg->right;i++)
-        {
-          Cell *cell =
-            dlg->getSheet()->nonDefaultCell( i, rw->row() );
-          if ( cell->isObscuringForced() /* && dlg->isSingleCell() */ )
-            cell = cell->obscuringCells().first();
-          cell->setRightBorderPen( tmpPen );
-        }
-      }
-    }
+    if (borderButtons[BorderType_Right]->isChanged())
+      obj->setRightBorderPen( tmpPen );
   }
 }
 
-void CellFormatPageBorder::applyDiagonalOutline()
+void CellFormatPageBorder::applyDiagonalOutline(FormatManipulator* obj)
 {
   BorderButton * fallDiagonal = borderButtons[BorderType_FallingDiagonal];
   BorderButton * goUpDiagonal = borderButtons[BorderType_RisingDiagonal];
@@ -3609,96 +2969,16 @@ void CellFormatPageBorder::applyDiagonalOutline()
     if ( goUpDiagonal->isChanged() )
       dlg->getStyle()->changeGoUpBorderPen( tmpPenGoUp );
   }
-  else if ( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
+  else
   {
-    for ( int x = dlg->left; x <= dlg->right; x++ )
-    {
-      for ( int y = dlg->top; y <= dlg->bottom; y++ )
-      {
-        Cell *obj = dlg->getSheet()->nonDefaultCell( x, y );
-        if ( fallDiagonal->isChanged() )
-          obj->format()->setFallDiagonalPen( tmpPenFall );
-        if ( goUpDiagonal->isChanged() )
-          obj->format()->setGoUpDiagonalPen( tmpPenGoUp );
-      }
-    }
-  }
-  else if ( dlg->isColumnSelected )
-  {
-    Cell* c = NULL;
-    for (int col = dlg->left; col <= dlg->right; col++)
-    {
-      for (c = sheet->getFirstCellColumn(col); c != NULL;
-           c = sheet->getNextCellDown(c->column(), c->row()))
-      {
-        if ( fallDiagonal->isChanged() )
-        {
-          c->format()->clearProperty(Format::PFallDiagonal);
-          c->format()->clearNoFallBackProperties( Format::PFallDiagonal );
-        }
-        if ( goUpDiagonal->isChanged() )
-        {
-          c->format()->clearProperty(Format::PGoUpDiagonal);
-          c->format()->clearNoFallBackProperties( Format::PGoUpDiagonal);
-        }
-      }
-
-      ColumnFormat *obj=dlg->getSheet()->nonDefaultColumnFormat(col);
-      if ( fallDiagonal->isChanged() )
-        obj->setFallDiagonalPen( tmpPenFall );
-      if ( goUpDiagonal->isChanged() )
-        obj->setGoUpDiagonalPen( tmpPenGoUp );
-    }
-
-
-    RowFormat* rw =dlg->getSheet()->firstRow();
-    for ( ; rw; rw = rw->next() )
-    {
-      if ( !rw->isDefault() && (rw->hasProperty(Format::PFallDiagonal)
-                                ||rw->hasProperty(Format::PGoUpDiagonal) ))
-      {
-        for ( int i=dlg->left;i<=dlg->right;i++)
-        {
-          Cell *cell =
-            dlg->getSheet()->nonDefaultCell( i, rw->row() );
-          if ( cell->isObscuringForced() && dlg->isSingleCell() )
-            continue;
-          cell->format()->setFallDiagonalPen( tmpPenFall );
-          cell->format()->setGoUpDiagonalPen( tmpPenGoUp );
-        }
-      }
-    }
-  }
-  else if ( dlg->isRowSelected )
-  {
-    Cell* c = NULL;
-    for (int row = dlg->top; row <= dlg->bottom; row++)
-    {
-      for (c = sheet->getFirstCellRow(row); c != NULL;
-           c = sheet->getNextCellRight(c->column(), c->row()))
-      {
-        if ( fallDiagonal->isChanged() )
-        {
-          c->format()->clearProperty(Format::PFallDiagonal);
-          c->format()->clearNoFallBackProperties( Format::PFallDiagonal );
-        }
-        if ( goUpDiagonal->isChanged() )
-        {
-          c->format()->clearProperty(Format::PGoUpDiagonal);
-          c->format()->clearNoFallBackProperties( Format::PGoUpDiagonal);
-        }
-      }
-
-      RowFormat *obj=dlg->getSheet()->nonDefaultRowFormat(row);
-      if ( fallDiagonal->isChanged() )
-        obj->setFallDiagonalPen( tmpPenFall );
-      if ( goUpDiagonal->isChanged() )
-        obj->setGoUpDiagonalPen( tmpPenGoUp );
-    }
+    if ( fallDiagonal->isChanged() )
+      obj->setFallDiagonalPen( tmpPenFall );
+    if ( goUpDiagonal->isChanged() )
+      obj->setGoUpDiagonalPen( tmpPenGoUp );
   }
 }
 
-void CellFormatPageBorder::applyHorizontalOutline()
+void CellFormatPageBorder::applyHorizontalOutline(FormatManipulator* obj)
 {
   QPen tmpPen( borderButtons[BorderType_Horizontal]->getColor(),
                borderButtons[BorderType_Horizontal]->getPenWidth(),
@@ -3708,127 +2988,27 @@ void CellFormatPageBorder::applyHorizontalOutline()
   {
     dlg->getStyle()->changeTopBorderPen( tmpPen );
   }
-  else if ( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
+  else
   {
-    for ( int x = dlg->left; x <= dlg->right; x++ )
-    {
-      for ( int y = dlg->top + 1; y <= dlg->bottom; y++ )
-      {
-        Cell * obj = dlg->getSheet()->nonDefaultCell( x, y );
-        obj->setTopBorderPen( tmpPen );
-      }
-    }
-  }
-  else if ( dlg->isColumnSelected )
-  {
-    Cell* c = NULL;
-    for (int col = dlg->left; col <= dlg->right; col++)
-    {
-      for (c = sheet->getFirstCellColumn(col); c != NULL;
-           c = sheet->getNextCellDown(c->column(), c->row()))
-      {
-        c->format()->clearProperty(Format::PTopBorder);
-        c->format()->clearNoFallBackProperties( Format::PTopBorder );
-      }
-
-      ColumnFormat *obj=dlg->getSheet()->nonDefaultColumnFormat(col);
-      obj->setTopBorderPen(tmpPen);
-    }
-
-    RowFormat* rw =dlg->getSheet()->firstRow();
-    for ( ; rw; rw = rw->next() )
-    {
-      if ( !rw->isDefault() && (rw->hasProperty(Format::PTopBorder)  ))
-      {
-        for ( int i=dlg->left;i<=dlg->right;i++)
-        {
-          Cell *cell =
-            dlg->getSheet()->nonDefaultCell( i, rw->row() );
-          cell->setTopBorderPen(tmpPen);
-        }
-      }
-    }
-  }
-  else if ( dlg->isRowSelected )
-  {
-    Cell* c = NULL;
-    for (int row = dlg->top + 1; row <= dlg->bottom; row++)
-    {
-      for (c = sheet->getFirstCellRow(row); c != NULL;
-           c = sheet->getNextCellRight(c->column(), c->row()))
-      {
-        c->format()->clearProperty(Format::PTopBorder);
-        c->format()->clearNoFallBackProperties( Format::PTopBorder );
-      }
-
-      RowFormat *obj = dlg->getSheet()->nonDefaultRowFormat(row);
-      obj->setTopBorderPen(tmpPen);
-    }
+    if (borderButtons[BorderType_Horizontal]->isChanged())
+      obj->setHorizontalPen( tmpPen );
   }
 }
 
-void CellFormatPageBorder::applyVerticalOutline()
+void CellFormatPageBorder::applyVerticalOutline(FormatManipulator* obj)
 {
   BorderButton* vertical = borderButtons[BorderType_Vertical];
   QPen tmpPen( vertical->getColor(), vertical->getPenWidth(),
                vertical->getPenStyle());
 
   if ( dlg->getStyle() )
+  {
     dlg->getStyle()->changeLeftBorderPen( tmpPen );
-  else if ( (!dlg->isRowSelected) && (!dlg->isColumnSelected) )
-  {
-    for ( int x = dlg->left+1; x <= dlg->right; x++ )
-    {
-      for ( int y = dlg->top; y <= dlg->bottom; y++ )
-      {
-        Cell *obj = dlg->getSheet()->nonDefaultCell( x, y );
-        obj->setLeftBorderPen( tmpPen );
-      }
-    }
   }
-  else if ( dlg->isColumnSelected )
+  else
   {
-    Cell* c = NULL;
-    for (int col = dlg->left + 1; col <= dlg->right; ++col)
-    {
-      for (c = sheet->getFirstCellColumn(col); c != NULL;
-           c = sheet->getNextCellDown(c->column(), c->row()))
-      {
-        c->format()->clearProperty(Format::PLeftBorder);
-        c->format()->clearNoFallBackProperties( Format::PLeftBorder );
-      }
-      ColumnFormat *obj=dlg->getSheet()->nonDefaultColumnFormat(col);
-      obj->setLeftBorderPen( tmpPen );
-    }
-
-    RowFormat * rw = dlg->getSheet()->firstRow();
-    for ( ; rw; rw = rw->next() )
-    {
-      if ( !rw->isDefault() && (rw->hasProperty(Format::PLeftBorder)  ))
-      {
-        for ( int i = dlg->left + 1; i <= dlg->right; ++i )
-        {
-          Cell * cell =
-            dlg->getSheet()->nonDefaultCell( i, rw->row() );
-          cell->setLeftBorderPen( tmpPen );
-        }
-      }
-    }
-  }
-  else if ( dlg->isRowSelected )
-  {
-    Cell* c = NULL;
-    for (int row = dlg->top; row <= dlg->bottom; row++)
-    {
-      for (c = sheet->getFirstCellRow(row); c != NULL;
-           c = sheet->getNextCellRight(c->column(), c->row()))
-      {
-        c->format()->clearProperty(Format::PLeftBorder);
-        c->format()->clearNoFallBackProperties( Format::PLeftBorder );
-      }
-      RowFormat *obj=dlg->getSheet()->nonDefaultRowFormat(row);
-      obj->setLeftBorderPen( tmpPen );
-    }
+    if (borderButtons[BorderType_Vertical]->isChanged())
+      obj->setVerticalPen( tmpPen );
   }
 }
 
@@ -4591,95 +3771,20 @@ void CellFormatPagePattern::apply( CustomStyle * style )
     style->changeBgColor( bgColor );
 }
 
-void CellFormatPagePattern::apply( ColumnFormat *_obj )
-{
-  Sheet * sheet = dlg->getSheet();
-  Cell  * c = NULL;
-  for ( int col = dlg->left; col <= dlg->right; ++col )
-  {
-    for (c = sheet->getFirstCellColumn(col); c != NULL;
-         c = sheet->getNextCellDown(c->column(), c->row()))
-    {
-      if ( selectedBrush != 0L
-           && ( dlg->brushStyle != selectedBrush->getBrushStyle()
-                || dlg->brushColor != selectedBrush->getBrushColor() ) )
-      {
-        c->format()->clearProperty(Format::PBackgroundBrush);
-        c->format()->clearNoFallBackProperties( Format::PBackgroundBrush );
-      }
-      if ( ( !bBgColorUndefined || b_notAnyColor )
-           && bgColor != dlg->bgColor )
-      {
-        c->format()->clearProperty(Format::PBackgroundColor);
-        c->format()->clearNoFallBackProperties( Format::PBackgroundColor );
-      }
-    }
-  }
-  applyFormat( _obj );
-
-  RowFormat * rw = dlg->getSheet()->firstRow();
-  for ( ; rw; rw = rw->next() )
-  {
-    if ( !rw->isDefault() && (rw->hasProperty(Format::PBackgroundColor) || rw->hasProperty(Format::PBackgroundBrush)))
-    {
-      for ( int i = dlg->left; i <= dlg->right; ++i )
-      {
-        Cell * cell =
-          dlg->getSheet()->nonDefaultCell( i, rw->row() );
-        applyFormat(cell->format() );
-      }
-    }
-  }
-
-}
-
-void CellFormatPagePattern::apply( RowFormat *_obj )
-{
-  Sheet * sheet = dlg->getSheet();
-  Cell * c = NULL;
-  for ( int row = dlg->top; row <= dlg->bottom; ++row)
-  {
-    for (c = sheet->getFirstCellRow(row); c != NULL;
-         c = sheet->getNextCellRight(c->column(), c->row()))
-    {
-      if ( selectedBrush != 0L
-           && ( dlg->brushStyle != selectedBrush->getBrushStyle()
-                || dlg->brushColor != selectedBrush->getBrushColor() ) )
-      {
-        c->format()->clearProperty(Format::PBackgroundBrush);
-        c->format()->clearNoFallBackProperties( Format::PBackgroundBrush );
-      }
-      if ( ( !bBgColorUndefined || b_notAnyColor )
-           && bgColor != dlg->bgColor )
-      {
-        c->format()->clearProperty(Format::PBackgroundColor);
-        c->format()->clearNoFallBackProperties( Format::PBackgroundColor );
-      }
-    }
-  }
-  applyFormat( _obj );
-}
-
-
-void CellFormatPagePattern::apply( Cell *_obj )
-{
-  applyFormat( _obj->format() );
-}
-
-void CellFormatPagePattern::applyFormat( Format *_obj )
+void CellFormatPagePattern::apply(FormatManipulator *_obj)
 {
   if ( selectedBrush != 0L
        && ( dlg->brushStyle != selectedBrush->getBrushStyle()
             || dlg->brushColor != selectedBrush->getBrushColor() ) )
-    _obj->setBackGroundBrush( QBrush( selectedBrush->getBrushColor(), selectedBrush->getBrushStyle() ) );
+    _obj->setBackgroundBrush( QBrush( selectedBrush->getBrushColor(), selectedBrush->getBrushStyle() ) );
 
   if ( bgColor == dlg->bgColor )
     return;
 
   if ( b_notAnyColor)
-    _obj->setBgColor( QColor() );
+    _obj->setBackgroundColor( QColor() );
   else if ( !bBgColorUndefined )
-    _obj->setBgColor( bgColor );
+    _obj->setBackgroundColor( bgColor );
 }
 
 #include "kspread_dlg_layout.moc"

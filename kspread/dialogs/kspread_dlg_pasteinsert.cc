@@ -20,13 +20,6 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-#include "kspread_dlg_pasteinsert.h"
-#include "kspread_canvas.h"
-#include "kspread_doc.h"
-#include "kspread_sheet.h"
-#include "kspread_view.h"
-
 #include <qlayout.h>
 #include <klocale.h>
 #include <kbuttonbox.h>
@@ -34,6 +27,13 @@
 #include <kdebug.h>
 #include <qradiobutton.h>
 #include <qcheckbox.h>
+
+#include "kspread_dlg_pasteinsert.h"
+#include "kspread_canvas.h"
+#include "kspread_doc.h"
+#include "kspread_sheet.h"
+#include "kspread_view.h"
+#include "selection.h"
 
 using namespace KSpread;
 
@@ -62,10 +62,10 @@ void PasteInsertDialog::slotOk()
 {
     m_pView->doc()->emitBeginOperation( false );
     if( rb1->isChecked() )
-        m_pView->activeSheet()->paste( m_pView->selection() ,
+      m_pView->activeSheet()->paste( m_pView->selectionInfo()->selection() ,
     true, Paste::Normal,Paste::OverWrite,true,-1);
     else if( rb2->isChecked() )
-        m_pView->activeSheet()->paste( m_pView->selection() ,
+      m_pView->activeSheet()->paste( m_pView->selectionInfo()->selection() ,
     true, Paste::Normal,Paste::OverWrite,true,+1);
 
     m_pView->slotUpdateView( m_pView->activeSheet() );

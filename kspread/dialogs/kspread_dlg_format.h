@@ -43,6 +43,9 @@ class Format;
 class Sheet;
 class View;
 
+/**
+ * Dialog for the "AutoFormat..." action
+ */
 class FormatDialog : public KDialogBase
 {
     Q_OBJECT

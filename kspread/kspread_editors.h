@@ -40,12 +40,13 @@ class QTextCursor;
 
 namespace KSpread
 {
-class Cell;
-class Sheet;
 class Canvas;
-class View;
-class TextEditor;
+class Cell;
 class LocationEditWidget;
+class Region;
+class Sheet;
+class TextEditor;
+class View;
 
 
 class CellEditor : public QWidget
@@ -91,7 +92,7 @@ class FormulaEditorHighlighter : public QSyntaxHighlighter
 	 * @param textEdit The QTextEdit widget which the highlighter should operate on
 	 * @param sheet The active KSpreadSheet object
 	 */
-		FormulaEditorHighlighter(QTextEdit* textEdit,Sheet* sheet);
+		FormulaEditorHighlighter(QTextEdit* textEdit, Canvas* canvas);
 		virtual ~FormulaEditorHighlighter(){}
 
 
@@ -106,20 +107,13 @@ class FormulaEditorHighlighter : public QSyntaxHighlighter
 	*/
 		void getReferences(std::vector<KSharedPtr<HighlightRange> >* ranges);
 
-
-	/**	Set spread sheet used for cell reference checking
-		 *	This should be called if the active spreadsheet is changed after the highlighter is constructed.
-	 */
-		void setSheet(Sheet* sheet) {_sheet=sheet;}
-		Sheet* sheet() {return _sheet;}
-
 	/**
 	*	Returns true if the cell references in the formula have changed since the last call
 	*	to referencesChanged().
 	*	The first call always returns true.
 	 */
 		bool referencesChanged();
-
+  const QValueList<QColor>& colors() const { return m_colors; }
 	protected:
 
 	//Array of references already found in text.  This is so that all references to the same cell
@@ -128,10 +122,10 @@ class FormulaEditorHighlighter : public QSyntaxHighlighter
 
 	//These are the default colours used to
 	//highlight cell references
-		std::vector<QColor> _colors;
+		QValueList<QColor> m_colors;
 
 	//Source for cell reference checking
-		Sheet* _sheet;
+		Canvas* m_pCanvas;
 
 	//Have cell references changed since last call to referencesChanged()?
 		bool _refsChanged;
@@ -142,29 +136,29 @@ class FormulaEditorHighlighter : public QSyntaxHighlighter
 * When the @ref EditorHighlightRange::setRange() method is called any references to the old
 * area in the edit widget's text are replaced with references to the new area.
 */
-class EditorHighlightRange : public HighlightRange
-{
-public:
-
-    /**
-    * Constructs a new highlighted range and associates it with a QTextEdit widget.
-    * @param rangeReference The string reference for the range (eg. "A1" or "Sheet2!B2:B12")
-    * @param workbook The workbook which this range's sheet is in
-    * @param sheet The sheet which this range is in
-    * @param editor The KTextEdit widget to associate this this highlighted range.  When the area of the range is changed via 
-    * @ref EditorHighlightRange::setRange() , any references to the old area in the edit widget's text will be updated.
-    */
-    EditorHighlightRange(const QString& rangeReference, Map* workbook, Sheet* sheet, QTextEdit* editor);
-    
-    
-    /**
-    * Changes the area of this range and replaces references in the associated KTextEdit widget
-    */
-    virtual void setRange(QRect& newRange);
-    
-protected:
-    QTextEdit* _editor;
-};
+// class EditorHighlightRange : public HighlightRange
+// {
+// public:
+// 
+//     /**
+//     * Constructs a new highlighted range and associates it with a QTextEdit widget.
+//     * @param rangeReference The string reference for the range (eg. "A1" or "Sheet2!B2:B12")
+//     * @param workbook The workbook which this range's sheet is in
+//     * @param sheet The sheet which this range is in
+//     * @param editor The KTextEdit widget to associate this this highlighted range.  When the area of the range is changed via 
+//     * @ref EditorHighlightRange::setRange() , any references to the old area in the edit widget's text will be updated.
+//     */
+//     EditorHighlightRange(const QString& rangeReference, Map* workbook, Sheet* sheet, QTextEdit* editor);
+//     
+//     
+//     /**
+//     * Changes the area of this range and replaces references in the associated KTextEdit widget
+//     */
+//     virtual void setRange(QRect& newRange);
+//     
+// protected:
+//     QTextEdit* _editor;
+// };
 
 
 
@@ -222,13 +216,13 @@ class TextEditor : public CellEditor
 public:
 
     /**
-    * Creates a new KSpreadTextEditor.
+    * Creates a new TextEditor.
     * @param cell The spreadsheet cell to associate the cell text editor with
     * @param _parent The @ref KSpreadCanvas object to associate this cell text editor with
     * @param captureAllKeyEvents Controls whether or not the text editor swallows arrow key events or sends them to the parent canvas instead.  If this is set to true, pressing the arrow keys will navigate backwards and forwards through the text in the editor.  If it is false, the key events will be sent to the parent canvas which will change the cell being edited (depending on the direction of the arrow pressed).  Generally this should be set to true if the user double clicks on the cell to edit it, and false if the user initiates editing by typing whilst the cell is selected.
     * @param _name This parameter is sent to the QObject constructor
     */
-    TextEditor( KSpread::Cell* cell, Canvas* _parent = 0, bool captureAllKeyEvents = false, const char* _name = 0 );
+    TextEditor( Cell* cell, Canvas* _parent = 0, bool captureAllKeyEvents = false, const char* _name = 0 );
     ~TextEditor();
 
 
@@ -253,6 +247,8 @@ public:
     bool checkChoose();
     void blockCheckChoose( bool b ) { m_blockCheck = b; }
     bool sizeUpdate() const { return m_sizeUpdate; }
+
+    const QValueList<QColor>& colors() const { return m_highlighter->colors(); }
 
 private slots:
     void  slotTextChanged();
@@ -332,8 +328,6 @@ private:
     View * m_pView;
     KCompletion completionList;
     bool activateItem();
-signals:
-    void gotoLocation( int, int );
 };
 
 /**

@@ -67,6 +67,7 @@ class Sheet;
 class Doc;
 class Point;
 class Range;
+class Region;
 class View;
 class Selection;
 class CellEditor;
@@ -95,12 +96,24 @@ public:
      * The current action associated with the mouse.
      * Default is 'NoAction'.
      */
-    enum MouseActions { NoAction = 0, Mark = 1, ResizeCell = 2, AutoFill = 3 };
+    enum MouseActions
+    {
+      /** No mouse action (default) */
+      NoAction,
+      /** Marking action */
+      Mark,
+      /** Merging cell */
+      ResizeCell,
+      /** Autofilling */
+      AutoFill,
+      /** Rsizing the selection */
+      ResizeSelection
+    };
     enum EditorType { CellEditor, FormulaEditor, EditWidget };
 
     Canvas (View *_view);
     ~Canvas( );
-    
+
     View* view();
     Doc* doc();
 
@@ -123,6 +136,8 @@ public:
     int chooseTextLen() const;
 
     Selection* selectionInfo() const;
+    Selection* choice() const;
+
     QRect selection() const;
     QPoint marker() const;
     int markerColumn() const;
@@ -159,40 +174,11 @@ public:
     Sheet* activeSheet() const;
     Sheet* findSheet( const QString& _name ) const;
 
-    /**
-     * A convenience function.
-     */
-    bool gotoLocation( const Range & _range );
-    /**
-     * A convenience function.
-     */
-    bool gotoLocation( const Point& _cell );
 
     /**
-     * Move the cursor to the specified cell. This may include switching
-     * the sheet. In addition @ref View::updateEditWidget() is called.
-     *
-     * @param location the cell to move to
-     *
-     * @param sheet the sheet to move to.  If NULL, the active sheet is used
-
-     * @param extendSelection determines wether this move of the marker is part
-     *                        of a selection, that means: The user holds the
-     *                        shift key and moves the cursor keys. In this case
-     *                        the selection is updated accordingly.
-     *                        If this is false, the cell will be the single cell
-     *                        selected, and the selection anchor will be reset
-     *                        to this cell.
+     * Validates the selected cell.
      */
-    void gotoLocation( QPoint const & location, Sheet* sheet = NULL,
-                       bool extendSelection = false);
-
-    /**
-     * convenience function
-     */
-    void gotoLocation( int col, int row, Sheet* sheet = NULL,
-                       bool extendSelection = false)
-    {gotoLocation(QPoint(col, row), sheet, extendSelection);}
+    void validateSelection();
 
 
     /**
@@ -280,23 +266,23 @@ public:
      * for the autoscroll acceleration
      */
     double autoScrollAccelerationY( int offset );
-    
-    
-    
+
     /**
     * Sets which cell ranges are highlighted and the colours used to highlight them.
     * This is used to highlight cells referenced in the formula currently being edited for example
     *
     */
     void setHighlightedRanges(std::vector< KSharedPtr<HighlightRange> >* ranges);
-    
-    
-    //Moved this functionality elsewhere --
-    //void resizeHighlightedRange(KSpread::HighlightRange* range, const QRect& newArea);
-    
-	
-    
-    
+
+    /**
+    * Resizes a highlighted range, and updates the text in the formula edit box accordingly.
+    *
+    * @param range Highlighted range to be resized.  References to this range in the formula edit
+    * box will be changed accordingly.
+    * @param newArea The new area for the highlighted range.  @see resizeHighlightedRange
+    * normalises this area before applying it to @p range.
+    */
+    void resizeHighlightedRange(KSpread::HighlightRange* range, const QRect& newArea);
 
 public slots:
     void slotScrollVert( int _value );
@@ -319,7 +305,7 @@ protected:
     virtual void dragMoveEvent(QDragMoveEvent * _ev);
     virtual void dropEvent(QDropEvent * _ev);
     virtual void dragLeaveEvent(QDragLeaveEvent * _ev);
-    
+
     /**
      * Retrieves the highlighted ranges at the specified position.
      * @param col Column index of cell
@@ -340,17 +326,13 @@ protected:
      * @return A pointer to a HighlightRange struct containing information about the range, or null if there is no size grip at 
      * the specified position.
      */
-    HighlightRange* highlightRangeSizeGripAt(double x, double y); 
+    bool highlightRangeSizeGripAt(double x, double y);
 
 private slots:
     void doAutoScroll();
     void speakCell(QWidget* w, const QPoint& p, uint flags);
 
 private:
-    virtual void chooseMousePressEvent( QMouseEvent* _ev );
-    virtual void chooseMouseReleaseEvent( QMouseEvent* _ev );
-    virtual void chooseMouseMoveEvent( QMouseEvent* _ev );
-
     virtual bool eventFilter( QObject *o, QEvent *e );
 
     HBorder* hBorderWidget() const;
@@ -402,13 +384,6 @@ private:
   void startTheDrag();
   void paintSelectionChange(QRect area1, QRect area2);
 
-  /**
-   * Small helper function to take a rect representing a selection onscreen and
-   * extend it one cell in every direction (taking into account hidden columns
-   * and rows)
-   */
-  void ExtendRectBorder(QRect& area);
-
   /* helpers for the paintUpdates function */
   void paintChooseRect(QPainter& painter, const KoRect &viewRect);
 
@@ -447,6 +422,20 @@ private:
   void sheetAreaToRect( const QRect& sheetArea, KoRect& rect );
   
 
+  /**
+   * helper function in drawing the marker and choose marker.
+   * @param marker the rectangle that represents the marker being drawn
+   *               (cell coordinates)
+   * @param viewRect the visible area on the canvas
+   * @param positions output parameter where the viewable left, top, right, and
+   *                  bottom of the marker will be.  They are stored in the array
+   *                  in that order, and take into account cropping due to part
+   *                  of the marker being off screen.  This array should have
+   *                  at least a size of 4 pre-allocated.
+   * @param paintSides booleans indicating whether a particular side is visible.
+   *                   Again, these are in the order left, top, right, bottom.
+   *                   This should be preallocated with a size of at least 4.
+   */
   void retrieveMarkerInfo( const QRect &marker, const KoRect &viewRect,
                            double positions[], bool paintSides[] );
   
@@ -461,14 +450,6 @@ private:
   void processClickSelectionHandle(QMouseEvent *event);
   void processLeftClickAnchor();
 
-
-  /**
-   * Helper function used from many places to extend the current selection such as with
-   * a shift-click, mouse drag, shift-arrow key, etc.
-   *
-   * @param cell coordinates of the cell we want to extend towards.
-   */
-  void extendCurrentSelection(QPoint cell);
 
   /** current cursor position, be it marker of choose marker */
   QPoint cursorPos ();
@@ -493,17 +474,17 @@ private:
 
   void processIMEvent( QIMEvent * event );
 
-  void updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor);
+  void updateChooseRect();
 
   /**
-   * This function sets the paint dirty flag for a selection change.  The idea
-   * here is that only the edges of the selection need to change (no matter whether
-   * its the real selection or the 'choose' selection).  This calculates which
-   * cells really should look different with the new selection rather than repainting
-   * the entire area
+   * This function sets the paint dirty flag for a @p changedRegion in a
+   * @p sheet .
+   * The calculation which cells really should look different with the new
+   * selection rather than repainting the entire area has to be done before.
+   * @param sheet the sheet, which contains the cells
+   * @param changedRegion the cell region to be set as dirty
    */
-  void setSelectionChangePaintDirty(Sheet* sheet,
-                                    QRect area1, QRect area2);
+  void setSelectionChangePaintDirty(Sheet* sheet, const Region& changedRegion);
 
 private:
   class Private;
@@ -521,7 +502,6 @@ public:
     ~HBorder();
 
     int markerColumn() const { return  m_iSelectionAnchor; }
-    void resizeColumn( double resize, int nb = -1, bool makeUndo = true );
     void adjustColumn( int _col = -1, bool makeUndo = true );
     void equalizeColumn( double resize );
 
@@ -606,7 +586,6 @@ public:
     ~VBorder();
 
     int markerRow() const { return  m_iSelectionAnchor; }
-    void resizeRow( double resize, int nb = -1, bool makeUndo = true );
     void adjustRow( int _row = -1, bool makeUndo = true );
     void equalizeRow( double resize );
     void updateRows( int from, int to );

@@ -1037,9 +1037,9 @@ void Sheet::FillSequenceWithCopy(QPtrList<Cell>& _srcList,
   if (!down)
     s = _srcList.count() - 1;
 
-//   if ( _srcList.at( s )->value().isNumber() &&
-//        !(_srcList.at( s )->isDate() || _srcList.at( s )->isTime() ) )
-//     factor = _srcList.at( s )->value().asFloat();
+  if ( _srcList.at( s )->value().isNumber() &&
+       !(_srcList.at( s )->isDate() || _srcList.at( s )->isTime() ) )
+    factor = _srcList.at( s )->value().asFloat();
 
   while ( cell )
   {

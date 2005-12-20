@@ -50,6 +50,7 @@ class Doc;
 class EditWidget;
 class HBorder;
 class LocationEditWidget;
+class Region;
 class Selection;
 class VBorder;
 class View;
@@ -214,8 +215,7 @@ public:
     QColor borderColor() const;
 
     Selection* selectionInfo() const;
-    QRect selection(bool extend = true) const;
-    QPoint marker() const;
+    Selection* choice() const;
 
     void updateShowSheetMenu();
 
@@ -488,7 +488,7 @@ protected slots:
      * popup menu is selected.
      */
     void slotPopupDeleteChild();
-    
+
     /**
      * Deletes an embedded document. This has a different
      * purpose to the @ref View::slotRemoveChild() function
@@ -498,7 +498,7 @@ protected slots:
     */
     void slotDeleteChild(KoChild* child);
 
-  
+
 
     /**
      * Border popup menu
@@ -525,7 +525,6 @@ protected slots:
     void slotSpecialCharDlgClosed();
 
 protected slots:
-
     void slotChildSelected( KoDocumentChild* ch );
     void slotChildUnselected( KoDocumentChild* );
 
@@ -533,11 +532,10 @@ public slots:
     // Document signals
     void slotRefreshView();
     void slotUpdateView( Sheet *_sheet );
-    void slotUpdateView( Sheet *_sheet, const QRect& );
+    void slotUpdateView( Sheet *_sheet, const Region& );
     void slotUpdateHBorder( Sheet *_sheet );
     void slotUpdateVBorder( Sheet *_sheet );
-    void slotChangeSelection( Sheet *_sheet, const QRect &oldSelection,
-                              const QPoint &_oldMarker );
+    void slotChangeSelection(const Region&);
     void slotAddSheet( Sheet *_sheet );
     void slotRemoveChild( Child *_child );
     void slotUpdateChildGeometry( Child *_child );
@@ -567,10 +565,6 @@ public slots:
     virtual int rightBorder() const;
     virtual int topBorder() const;
     virtual int bottomBorder() const;
-
-signals:
-    void sig_selectionChanged( Sheet* _sheet, const QRect& _selection );
-    void sig_chooseSelectionChanged(Sheet *sheet, const QRect& _selection);
 
 protected:
 

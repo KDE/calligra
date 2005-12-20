@@ -24,6 +24,8 @@
 #include <qstring.h>
 #include <qvaluelist.h>
 
+#include <kdebug.h>
+
 #include <koffice_export.h>
 
 #include "kspread_global.h"
@@ -39,8 +41,7 @@ class View;
  */
 class KSPREAD_EXPORT Region
 {
-  friend class Manipulator;
-  friend class Sheet;
+  friend class Sheet; // TODO Stefan: remove this
 public:
   /**
    * Constructor.
@@ -196,7 +197,7 @@ public:
    * @param point the point's location
    * @return @c true, if the region contains the point @p point
    */
-  bool contains(const QPoint& point) const;
+  bool contains(const QPoint& point, Sheet* sheet = 0) const;
 
   /**
    * @param region the region to compare
@@ -204,6 +205,10 @@ public:
    */
   bool operator==(const Region& region) const;
 
+  /**
+   * @param region the region to copy
+   */
+  void operator=(const Region& region);
 
   /**
     * @param sRegion will be modified, if a valid sheet was found. The sheetname
@@ -288,7 +293,7 @@ public:
   virtual bool contains(const QPoint&) const { return false; }
   virtual bool contains(const QRect&) const { return false; }
 
-  virtual QString name(Sheet* originSheet = 0) const { return QString(); }
+  virtual QString name(Sheet* = 0) const { return QString(""); }
   virtual QRect rect() const { return QRect(); }
 
   Sheet* sheet() const { return m_sheet; }
@@ -404,8 +409,6 @@ private:
 /***************************************************************************
   kdDebug support
 ****************************************************************************/
-
-#include <kdebug.h>
 
 inline kdbgstream operator<<( kdbgstream str, const KSpread::Region& r )
 {

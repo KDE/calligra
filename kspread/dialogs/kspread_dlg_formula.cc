@@ -34,7 +34,7 @@
 #include "kspread_doc.h"
 #include "kspread_locale.h"
 #include "kspread_map.h"
-#include "kspread_selection.h"
+#include "selection.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 #include "functions.h"
@@ -192,8 +192,8 @@ FormulaDialog::FormulaDialog( View* parent, const char* name,const QString& form
     connect( fiveElement,SIGNAL(textChanged ( const QString & )),
 	     this,SLOT(slotChangeText(const QString &)));
 
-    connect( m_pView, SIGNAL( sig_chooseSelectionChanged( Sheet*, const QRect& ) ),
-             this, SLOT( slotSelectionChanged( Sheet*, const QRect& ) ) );
+    connect( m_pView->choice(), SIGNAL(changed(const Region&)),
+             this, SLOT(slotSelectionChanged()));
 
     connect( m_browser, SIGNAL( linkClicked( const QString& ) ),
              this, SLOT( slotShowFunction( const QString& ) ) );
@@ -304,8 +304,7 @@ void FormulaDialog::slotOk()
     }
 
     // Revert the marker to its original position
-    m_pView->selectionInfo()->setMarker( QPoint( m_column, m_row ),
-                                         m_pView->activeSheet());
+    m_pView->selectionInfo()->initialize( QPoint( m_column, m_row ) );
 
     // If there is still an editor then set the text.
     // Usually the editor is always in place.
@@ -343,8 +342,7 @@ void FormulaDialog::slotClose()
 
 
     // Revert the marker to its original position
-    m_pView->selectionInfo()->setMarker( QPoint( m_column, m_row ),
-                                         m_pView->activeSheet() );
+    m_pView->selectionInfo()->initialize( QPoint( m_column, m_row ) );
 
     // If there is still an editor then reset the text.
     // Usually the editor is always in place.
@@ -720,27 +718,15 @@ void FormulaDialog::slotShowFunction( const QString& function )
     slotSelected( function );
 }
 
-void FormulaDialog::slotSelectionChanged( Sheet* _sheet, const QRect& _selection )
+void FormulaDialog::slotSelectionChanged()
 {
     if ( !m_focus )
         return;
 
-    if ( _selection.left() == 0 )
-        return;
-
-    if ( _selection.left() >= _selection.right() && _selection.top() >= _selection.bottom() )
+    if (m_pView->choice()->isValid())
     {
-        int dx = _selection.right();
-        int dy = _selection.bottom();
-        QString tmp;
-        tmp.setNum( dy );
-        tmp = _sheet->sheetName() + "!" + Cell::columnName( dx ) + tmp;
-        m_focus->setText( tmp );
-    }
-    else
-    {
-        QString area = util_rangeName( _sheet, _selection );
-        m_focus->setText( area );
+      QString area = m_pView->choice()->name();
+      m_focus->setText( area );
     }
 }
 

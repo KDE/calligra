@@ -1257,14 +1257,9 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
         if ( ok && ( a != 0 ))
             setAngle( -a );
     }
-
     if ( styleStack.hasAttributeNS( KoXmlNS::style, "direction" ) )
     {
-        QString dir = styleStack.attributeNS( KoXmlNS::fo, "wrap-option" );
-        if ( dir == "ttb" )
-            setVerticalText( true );
-        else if ( dir == "ltr" )
-            setVerticalText( false );
+        setVerticalText( true );
     }
 
     //kdDebug()<<"property.hasAttribute( fo:background-color ) :"<<styleStack.hasAttributeNS( KoXmlNS::fo, "background-color" )<<endl;
@@ -1333,13 +1328,14 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
 
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "wrap-option" ) )
     {
-        QString wrapOpt = styleStack.attributeNS( KoXmlNS::fo, "wrap-option" );
-        if ( wrapOpt == "wrap" )
-            setMultiRow( true );
-        else if ( wrapOpt == "no-wrap" )
-            setMultiRow( false );
-    }
+        setMultiRow( true );
 
+        /* we do not support anything else yet
+           QString s = property.attributeNS( KoXmlNS::fo, "wrap-option", QString::null );
+           if ( s == "wrap" )
+           layout->setMultiRow( true );
+        */
+    }
     if ( styleStack.hasAttributeNS( KoXmlNS::fo, "border-bottom" ) )
     {
         setBottomBorderPen( convertOasisStringToPen( styleStack.attributeNS( KoXmlNS::fo, "border-bottom" ) ) );

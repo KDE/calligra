@@ -50,6 +50,7 @@
 #include <qscrollbar.h>
 #include <qtimer.h>
 #include <qtooltip.h>
+
 #include <kcursor.h>
 #include <kdebug.h>
 #include <kmessagebox.h>
@@ -65,13 +66,17 @@
 #include "kspread_locale.h"
 #include "kspread_map.h"
 #include "kspread_sheet.h"
-#include "kspread_selection.h"
 #include "kspread_undo.h"
 #include "kspread_util.h"
 #include "kspread_view.h"
+#include "selection.h"
 
 #include "kspread_canvas.h"
 #include "highlight_range.h"
+
+// TODO Stefan: undefine/remove, if non-contiguous selections don't work
+//              properly of if we are sure, that they do. ;-)
+#define NONCONTIGUOUSSELECTION
 
 using namespace KSpread;
 
@@ -111,9 +116,6 @@ class Canvas::Private
 
     // true if the user is to choose a cell.
     bool chooseCell;
-
-    // if a choose selection is started (@ref #startChoose) the current
-    Sheet* chooseStartSheet;
 
     // True when the mouse button is pressed
     bool mousePressed;
@@ -178,7 +180,6 @@ Canvas::Canvas (View *_view)
 
 
   d->length_namecell = 0;
-  d->chooseStartSheet = NULL;
   d->cellEditor = 0;
   d->chooseCell = false;
   d->validationInfo = 0L;
@@ -223,8 +224,10 @@ Canvas::Canvas (View *_view)
   d->scrollTimer = new QTimer( this );
   connect (d->scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
   if (kospeaker)
+  {
     connect (kospeaker, SIGNAL(customSpeakWidget(QWidget*, const QPoint&, uint)),
       this, SLOT(speakCell(QWidget*, const QPoint&, uint)));
+  }
 
   d->choose_visible = false;
   setFocus();
@@ -361,6 +364,11 @@ Selection* Canvas::selectionInfo() const
   return d->view->selectionInfo();
 }
 
+Selection* Canvas::choice() const
+{
+  return d->view->choice();
+}
+
 QRect Canvas::selection() const
 {
   return d->view->selectionInfo()->selection();
@@ -396,11 +404,13 @@ void Canvas::startChoose()
   if ( d->chooseCell )
     return;
 
-  updateChooseRect(QPoint(0,0), QPoint(0,0));
+  kdDebug() << k_funcinfo << endl;
+
+  choice()->clear();
+  choice()->setSheet(activeSheet());
 
   // It is important to enable this AFTER we set the rect!
   d->chooseCell = true;
-  d->chooseStartSheet = activeSheet();
 }
 
 void Canvas::startChoose( const QRect& rect )
@@ -408,11 +418,13 @@ void Canvas::startChoose( const QRect& rect )
   if (d->chooseCell)
     return;
 
-  updateChooseRect(rect.bottomRight(), rect.topLeft());
+  kdDebug() << k_funcinfo << endl;
+
+  choice()->setSheet(activeSheet());
+  choice()->initialize(rect);
 
   // It is important to enable this AFTER we set the rect!
   d->chooseCell = true;
-  d->chooseStartSheet = activeSheet();
 }
 
 void Canvas::endChoose()
@@ -420,16 +432,19 @@ void Canvas::endChoose()
   if ( !d->chooseCell )
     return;
 
-  updateChooseRect(QPoint(0,0), QPoint(0,0));
+  kdDebug() << k_funcinfo << endl;
+
+  choice()->clear();
+  repaint();
 
   d->length_namecell = 0;
   d->chooseCell = false;
 
-  Sheet *sheet=d->view->doc()->map()->findSheet(d->chooseStartSheet->sheetName());
+  Sheet *sheet=d->view->doc()->map()->findSheet(choice()->sheet()->sheetName());
   if (sheet)
+  {
     d->view->setActiveSheet(sheet);
-
-  d->chooseStartSheet = 0;
+  }
 }
 
 HBorder* Canvas::hBorderWidget() const
@@ -462,98 +477,15 @@ Sheet* Canvas::activeSheet() const
   return d->view->activeSheet();
 }
 
-bool Canvas::gotoLocation( const Range & _range )
+void Canvas::validateSelection()
 {
-  if ( !_range.isValid() )
-  {
-    KMessageBox::error( this, i18n( "Invalid cell reference" ) );
-    return false;
-  }
-  Sheet * sheet = activeSheet();
-  if ( _range.isSheetKnown() )
-    sheet = _range.sheet();
-  if ( !sheet )
-  {
-    KMessageBox::error( this, i18n("Unknown table name %1" ).arg( _range.sheetName() ) );
-    return false;
-  }
-
-  gotoLocation( _range.range().topLeft(), sheet, false );
-  gotoLocation( _range.range().bottomRight(), sheet, true );
-  return true;
-}
-
-
-bool Canvas::gotoLocation( const Point& _cell )
-{
-  if ( !_cell.isValid() )
-  {
-    KMessageBox::error( this, i18n("Invalid cell reference") );
-    return false;
-  }
-
   Sheet* sheet = activeSheet();
-  if ( _cell.isSheetKnown() )
-    sheet = _cell.sheet();
-  if ( !sheet )
+  if (!sheet)
   {
-    KMessageBox::error( this, i18n("Unknown table name %1").arg( _cell.sheetName() ) );
-    return false;
+    return;
   }
 
-  gotoLocation( _cell.pos(), sheet );
-  return true;
-}
-
-void Canvas::gotoLocation( QPoint const & location, Sheet* sheet,
-                                  bool extendSelection)
-{
-    kdDebug(36001) << "GotoLocation: " << location.x() << ", " << location.x() << endl;
-
-    if ( sheet && (sheet != activeSheet() ))
-        d->view->setActiveSheet(sheet);
-    else
-        sheet = activeSheet();
-
-    if (extendSelection)
-    {
-        extendCurrentSelection(location);
-    }
-    else
-    {
-        QPoint topLeft(location);
-        Cell* cell = sheet->cellAt(location);
-        if ( cell->isObscured() && cell->isObscuringForced() )
-        {
-            cell = cell->obscuringCells().first();
-            topLeft = QPoint(cell->column(), cell->row());
-        }
-
-        if (d->chooseCell)
-        {
-            updateChooseRect(topLeft, topLeft);
-            if( d->cellEditor )
-            {
-                if( d->chooseStartSheet != sheet )
-                    d->cellEditor->hide();
-                else
-                    d->cellEditor->show();
-            }
-        }
-        else
-        {
-            /* anchor and marker should be on the same cell here */
-            selectionInfo()->setSelection(topLeft, topLeft, sheet);
-        }
-    }
-    scrollToCell(location);
-
-    // Perhaps the user is entering a value in the cell.
-    // In this case we may not touch the EditWidget
-    if ( !d->cellEditor && !d->chooseCell )
-        d->view->updateEditWidgetOnPress();
-
-    if ( selectionInfo()->singleCellSelection() )
+    if ( selectionInfo()->isSingular() )
     {
         int col = selectionInfo()->marker().x();
         int row = selectionInfo()->marker().y();
@@ -642,7 +574,6 @@ void Canvas::gotoLocation( QPoint const & location, Sheet* sheet,
         delete d->validationInfo;
         d->validationInfo = 0L;
     }
-    updatePosWidget();
 }
 
 
@@ -682,8 +613,8 @@ void Canvas::scrollToCell(QPoint location)
 
   double minY = 40.0;
   double maxY = unzoomedHeight - 40.0;
-  kdDebug(36001) << "Canvas::gotoLocation : height=" << height() << endl;
-  kdDebug(36001) << "Canvas::gotoLocation : width=" << width() << endl;
+  kdDebug(36001) << "Canvas::scrollToCell : height=" << height() << endl;
+  kdDebug(36001) << "Canvas::scrollToCell : width=" << width() << endl;
 
   if ( sheet->layoutDirection()==Sheet::RightToLeft ) {
     // Right to left sheet.
@@ -934,11 +865,7 @@ bool Canvas::getHighlightedRangesAt(const int col, const int row, std::vector< H
 	return result;
 }
 
-
-/*void KSpreadCanvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
-
 void Canvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
-
 {
 	if (!range) return;
 	if (!d->cellEditor) return;
@@ -951,10 +878,9 @@ void Canvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
 		return;
 
 
-	Range rg;
-	range->getRange(rg);
+ Range rg(*range);
 
-	if (rg.range == normArea) //Don't update if no change to area
+	if (rg.range() == normArea) //Don't update if no change to area
 		return;
 
 	QString oldRangeRef=rg.toString();
@@ -977,7 +903,7 @@ void Canvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
 
 	newRangeRef.remove(0,sheetNameEndPos+1); //Remove sheet name, will be same name as for old reference
 
-	if ( (rg.range.width()==1) && (rg.range.height()==1) )
+	if ( (rg.range().width()==1) && (rg.range().height()==1) )
 		newRangeRef.remove(0,newRangeRef.find(":")+1);
 
 	//kdDebug() << "Old Range Ref - " << oldRangeRef << " -- New Range Ref - " << newRangeRef << endl;
@@ -1040,10 +966,7 @@ void Canvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
 
 	d->editWidget->setText(formulaText);
 	d->editWidget->setCursorPosition(canvasEditWidgetCursorPos);
-
-<<<<<<< .mine
-	
-}*/
+}
 
 
 void Canvas::mouseMoveEvent( QMouseEvent * _ev )
@@ -1053,8 +976,9 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
 
   if ( d->dragging )
+  {
     return;
-
+  }
   if ( d->dragStart.x() != -1 )
   {
     QPoint p ( (int) _ev->pos().x() + (int) xOffset(),
@@ -1070,66 +994,61 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
     return;
   }
 
-  // Working on this sheet ?
+  // Get info about where the event occurred - this is duplicated
+  // in ::mousePressEvent, needs to be separated into one function
   Sheet *sheet = activeSheet();
   if ( !sheet )
+  {
     return;
+  }
 
   double dwidth = d->view->doc()->unzoomItX( width() );
   double ev_PosX;
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
+  {
     ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+  }
   else
+  {
     ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+  }
   double ev_PosY = d->view->doc()->unzoomItY( _ev->pos().y() ) + yOffset();
 
+  // In which cell did the user click ?
   double xpos;
   double ypos;
   int col = sheet->leftColumn( ev_PosX, xpos );
   int row  = sheet->topRow( ev_PosY, ypos );
 
-
-  //*** Highlighted Range Resize Handling ***
-  
-    //End range resizing if the user releases the mouse
-    if ( !(_ev->state() & Qt::LeftButton) )
-	  d->sizingHighlightRange=0;
-
-    if (d->sizingHighlightRange)
-    {
-          QRect area=d->sizingHighlightRange->range();
-	  QRect newArea;
-	  newArea.setCoords(area.left(),area.top(),col,row);
-
-          d->sizingHighlightRange->setRange(newArea);
-    //	  resizeHighlightedRange(d->sizingHighlightRange,newRange);
-
-	  setCursor(Qt::SizeFDiagCursor);
-
-	  return;
-    }
-
-    //Check to see if the mouse is over a highlight range size grip and if it is, change the cursor
-    //shape to a resize arrow
-    if (highlightRangeSizeGripAt(ev_PosX,ev_PosY))
-    {
-	   setCursor(Qt::SizeFDiagCursor);
-	   return;
-    }
-
-   // Special handling for choose mode.
-  if ( d->chooseCell )
-  {
-	  chooseMouseMoveEvent( _ev );
-	  return;
-  }
-
+  // you cannot move marker when col > KS_colMax or row > KS_rowMax
   if ( col > KS_colMax || row > KS_rowMax )
   {
-	  return;
+    kdDebug(36001) << "Canvas::mouseMoveEvent: col or row is out of range: "
+                   << "col: " << col << " row: " << row << endl;
+    return;
   }
 
-  QRect rct( selectionInfo()->selection() );
+
+  //*** Highlighted Range Resize Handling ***
+  if (d->mouseAction == ResizeSelection)
+  {
+    choice()->update(QPoint(col,row));
+    updateChooseRect();
+    return;
+  }
+
+  //Check to see if the mouse is over a highlight range size grip and if it is, change the cursor
+  //shape to a resize arrow
+  if (highlightRangeSizeGripAt(ev_PosX,ev_PosY))
+  {
+    if ( sheet->layoutDirection()==Sheet::RightToLeft )
+      setCursor( sizeBDiagCursor );
+    else
+      setCursor( sizeFDiagCursor );
+    return;
+  }
+
+  QRect rct( (d->chooseCell ? choice() : selectionInfo())->lastRange() );
 
   QRect r1;
   QRect r2;
@@ -1149,28 +1068,34 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   r2.setRight( (int) (rx - 1) );
   r2.setBottom( (int) (by - 1) );
 
-  QRect selectionHandle = d->view->selectionInfo()->selectionHandleArea();
-
   // Test whether the mouse is over some anchor
   {
     Cell *cell = sheet->visibleCellAt( col, row );
     QString anchor;
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
-      anchor = cell->testAnchor( d->view->doc()->zoomItX( cell->dblWidth() - ev_PosX +
-                               xpos ), d->view->doc()->zoomItY( ev_PosY - ypos ) );
+    {
+      anchor = cell->testAnchor( d->view->doc()->zoomItX( cell->dblWidth() - ev_PosX + xpos ),
+                                 d->view->doc()->zoomItY( ev_PosY - ypos ) );
+    }
     else
+    {
       anchor = cell->testAnchor( d->view->doc()->zoomItX( ev_PosX - xpos ),
-                                       d->view->doc()->zoomItY( ev_PosY - ypos ) );
+                                 d->view->doc()->zoomItY( ev_PosY - ypos ) );
+    }
     if ( !anchor.isEmpty() && anchor != d->anchor )
+    {
       setCursor( KCursor::handCursor() );
+    }
 
     d->anchor = anchor;
   }
 
+  // Test wether mouse is over the selection handle
+  QRect selectionHandle = d->view->selectionInfo()->selectionHandleArea();
   if ( selectionHandle.contains( QPoint( d->view->doc()->zoomItX( ev_PosX ),
                                          d->view->doc()->zoomItY( ev_PosY ) ) ) )
   {
-    //If the cursor is over the hanlde, than it might be already on the next cell.
+    //If the cursor is over the handle, than it might be already on the next cell.
     //Recalculate the cell!
     col  = sheet->leftColumn( ev_PosX - d->view->doc()->unzoomItX( 2 ), xpos );
     row  = sheet->topRow( ev_PosY - d->view->doc()->unzoomItY( 2 ), ypos );
@@ -1190,68 +1115,46 @@ void Canvas::mouseMoveEvent( QMouseEvent * _ev )
   }
   else if ( r1.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) )
             && !r2.contains( QPoint( (int) ev_PosX, (int) ev_PosY ) ) )
+  {
     setCursor( KCursor::handCursor() );
+  }
   else
+  {
     setCursor( arrowCursor );
+  }
 
   // No marking, selecting etc. in progess? Then quit here.
   if ( d->mouseAction == NoAction )
     return;
 
   // Set the new extent of the selection
-  gotoLocation( QPoint( col, row ), sheet, true );
+  (d->chooseCell ? choice() : selectionInfo())->update(QPoint(col,row));
+
+  if (d->chooseCell)
+  {
+    updateChooseRect();
+  }
 }
 
-void Canvas::mouseReleaseEvent( QMouseEvent* _ev )
+void Canvas::mouseReleaseEvent( QMouseEvent* )
 {
   if ( d->scrollTimer->isActive() )
     d->scrollTimer->stop();
 
   d->mousePressed = false;
 
-  if ( d->chooseCell )
-  {
-    chooseMouseReleaseEvent( _ev );
-    return;
-  }
-
-
   Sheet *sheet = activeSheet();
   if ( !sheet )
     return;
 
   Selection* selectionInfo = d->view->selectionInfo();
-  QRect s( selection() );
-
-  if ( selectionInfo->singleCellSelection() )
-  {
-    Cell* cell = sheet->cellAt( selectionInfo->marker() );
-    cell->clicked( this );
-  }
+  QRect s( selectionInfo->lastRange() );
 
   // The user started the drag in the lower right corner of the marker ?
   if ( d->mouseAction == ResizeCell && !sheet->isProtected() )
   {
-    QPoint selectionAnchor = selectionInfo->selectionAnchor();
-    int x = selectionAnchor.x();
-    int y = selectionAnchor.y();
-    if ( x > s.left())
-        x = s.left();
-    if ( y > s.top() )
-        y = s.top();
-    Cell *cell = sheet->nonDefaultCell( x, y );
-    if ( !d->view->doc()->undoLocked() )
-    {
-        UndoMergedCell *undo = new UndoMergedCell( d->view->doc(),
-                        sheet, x, y, cell->extraXCells(), cell->extraYCells() );
-        d->view->doc()->addCommand( undo );
-    }
-    cell->forceExtraCells( x, y,
-                           abs( s.right() - s.left() ),
-                           abs( s.bottom() - s.top() ) );
-
+    sheet->mergeCells(Region(selectionInfo->lastRange()));
     d->view->updateEditWidget();
-    if ( sheet->getAutoCalc() ) sheet->recalc();
   }
   else if ( d->mouseAction == AutoFill && !sheet->isProtected() )
   {
@@ -1261,7 +1164,7 @@ void Canvas::mouseReleaseEvent( QMouseEvent* _ev )
     d->view->updateEditWidget();
   }
   // The user started the drag in the middle of a cell ?
-  else if ( d->mouseAction == Mark )
+  else if ( d->mouseAction == Mark && !d->chooseCell )
   {
     d->view->updateEditWidget();
   }
@@ -1277,45 +1180,16 @@ void Canvas::processClickSelectionHandle( QMouseEvent *event )
   if ( event->button() == LeftButton )
   {
     d->mouseAction = AutoFill;
-    d->autoFillSource = selection();
+    d->autoFillSource = selectionInfo()->lastRange();
   }
   // Resize a cell (done with the right mouse button) ?
   // But for that to work there must not be a selection.
-  else if ( event->button() == MidButton && selectionInfo()->singleCellSelection())
+  else if ( event->button() == MidButton && selectionInfo()->isSingular())
   {
     d->mouseAction = ResizeCell;
   }
 
   return;
-}
-
-
-void Canvas::extendCurrentSelection( QPoint cell )
-{
-  Sheet* sheet = activeSheet();
-  QPoint chooseAnchor = selectionInfo()->getChooseAnchor();
-//  Cell* destinationCell = sheet->cellAt(cell);
-
-  if ( d->chooseCell )
-  {
-    if ( chooseAnchor.x() == 0 )
-    {
-      updateChooseRect( cell, cell );
-    }
-    else
-    {
-      updateChooseRect( cell, chooseAnchor );
-    }
-  }
-  else
-  {
-
-    /* the selection simply becomes a box with the anchor and given cell as
-       opposite corners
-    */
-    selectionInfo()->setSelection( cell, selectionInfo()->selectionAnchor(),
-                                   sheet );
-  }
 }
 
 void Canvas::processLeftClickAnchor()
@@ -1349,76 +1223,62 @@ void Canvas::processLeftClickAnchor()
     }
     else
     {
-        gotoLocation( Point( d->anchor, d->view->doc()->map() ) );
+      selectionInfo()->initialize(Region(d->view, d->anchor));
     }
 }
 
-HighlightRange* Canvas::highlightRangeSizeGripAt(double x, double y)
+bool Canvas::highlightRangeSizeGripAt(double x, double y)
 {
-	if (!d->highlightedRanges)
+  if (!d->chooseCell)
 		return 0;
 
-	double xpos;
-	double ypos;
-	int col  = activeSheet()->leftColumn( x, xpos );
-	int row  = activeSheet()->topRow( y, ypos );
+  Region::ConstIterator end = choice()->constEnd();
+  for (Region::ConstIterator it = choice()->constBegin(); it != end; ++it)
+  {
+    // TODO Stefan: adapt to Selection::selectionHandleArea
+    KoRect visibleRect;
+    sheetAreaToRect((*it)->rect().normalize(), visibleRect);
 
-	std::vector<HighlightRange*> highlightedRangesUnderMouse;
+    QPoint bottomRight((int) visibleRect.right(), (int) visibleRect.bottom());
+    QRect handle( ( (int) bottomRight.x() - 6 ),
+                  ( (int) bottomRight.y() - 6 ),
+                  ( 6 ),
+                  ( 6 ) );
 
-	if (getHighlightedRangesAt(col,row,highlightedRangesUnderMouse))
-	{
-		std::vector<HighlightRange*>::iterator iter;
-
-		for (iter=highlightedRangesUnderMouse.begin();iter != highlightedRangesUnderMouse.end();iter++)
-		{
-			HighlightRange* highlight=*iter;
-
-	  	//Is the mouse over the size grip at the bottom-right hand corner of the range?
-  
-			KoRect visibleRect;
-			sheetAreaToRect(QRect(highlight->startCol(),highlight->startRow(),
-					       highlight->endCol()-highlight->startCol()+1,
-					       highlight->endRow()-highlight->startRow()+1),visibleRect);
-
-			double distFromSizeGripCorner=( sqrt( (visibleRect.right()-x) +
-						(visibleRect.bottom()-y) ) );
-
-			if (distFromSizeGripCorner < 5)
+    if (handle.contains(QPoint((int) x,(int) y)))
 			{
-				return highlight;
+				return true;
 			}
-		}
 	}
 
-	return 0;
+	return false;
 }
+
 void Canvas::mousePressEvent( QMouseEvent * _ev )
 {
   if ( _ev->button() == LeftButton )
-    d->mousePressed = true;
-
-  // If in choose mode, we handle the mouse differently.
-  if ( d->chooseCell )
   {
-    chooseMousePressEvent( _ev );
+    d->mousePressed = true;
+  }
+
+  // Get info about where the event occurred - this is duplicated
+  // in ::mouseMoveEvent, needs to be separated into one function
+  Sheet *sheet = activeSheet();
+  if ( !sheet )
+  {
     return;
   }
 
-  //Get info about where the event occurred - this is duplicated in ::mouseMoveEvent, needs to be separated into one function
-  Sheet *sheet = activeSheet();
-
-  if ( !sheet )
-	  return;
-
-  double dwidth = 0.0;
+  double dwidth = d->view->doc()->unzoomItX( width() );
   double ev_PosX;
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
-	  dwidth = d->view->doc()->unzoomItX( width() );
-	  ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+    ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
   }
   else
-	  ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+  {
+    ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() ) + xOffset();
+  }
   double ev_PosY = d->view->doc()->unzoomItY( _ev->pos().y() ) + yOffset();
 
   // In which cell did the user click ?
@@ -1426,25 +1286,36 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   double ypos;
   int col  = sheet->leftColumn( ev_PosX, xpos );
   int row  = sheet->topRow( ev_PosY, ypos );
+  // you cannot move marker when col > KS_colMax or row > KS_rowMax
+  if ( col > KS_colMax || row > KS_rowMax )
+  {
+    kdDebug(36001) << "Canvas::mousePressEvent: col or row is out of range: "
+                   << "col: " << col << " row: " << row << endl;
+    return;
+  }
 
-  //Check region to see if we are over a highlight range size grip
+  // you cannot move marker when col > KS_colMax or row > KS_rowMax
+  if ( col > KS_colMax || row > KS_rowMax )
+  {
+    kdDebug(36001) << "Canvas::mousePressEvent: col or row is out of range: "
+                   << "col: " << col << " row: " << row << endl;
+    return;
+  }
 
-  d->sizingHighlightRange=KSharedPtr<HighlightRange>(highlightRangeSizeGripAt(ev_PosX,ev_PosY));
-
-  if (d->sizingHighlightRange)
-		  return;
-
+  if (d->chooseCell && highlightRangeSizeGripAt(ev_PosX,ev_PosY))
+  {
+    choice()->setActive(QPoint(col,row));
+    d->mouseAction = ResizeSelection;
+    return;
+  }
 
   // We were editing a cell -> save value and get out of editing mode
-  if ( d->cellEditor )
+  if ( d->cellEditor && !d->chooseCell )
   {
     deleteEditor( true ); // save changes
   }
 
   d->scrollTimer->start( 50 );
-
-  // Remember current values.
-  QRect s( selection() );
 
   // Did we click in the lower right corner of the marker/marked-area ?
   if ( selectionInfo()->selectionHandleArea().contains( QPoint( d->view->doc()->zoomItX( ev_PosX ),
@@ -1455,10 +1326,10 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   }
 
 
-
+  // TODO Stefan: adapt to non-cont. selection
   {
     // start drag ?
-    QRect rct( selectionInfo()->selection() );
+    QRect rct( selectionInfo()->lastRange() );
 
     QRect r1;
     QRect r2;
@@ -1493,24 +1364,17 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 
   //  kdDebug() << "Clicked in cell " << col << ", " << row << endl;
 
-  //you cannot move marker when col > KS_colMax or row > KS_rowMax
-  if ( col > KS_colMax || row > KS_rowMax)
-  {
-    kdDebug(36001) << "Canvas::mousePressEvent: col or row is out of range: col: " << col << " row: " << row << endl;
-    return;
-  }
-
   // Extending an existing selection with the shift button ?
-  if ( d->view->koDocument()->isReadWrite() && s.right() != KS_colMax &&
-       s.bottom() != KS_rowMax && _ev->state() & ShiftButton )
+  if ( (_ev->state() & ShiftButton) && d->view->koDocument()->isReadWrite() &&
+       !selectionInfo()->isColumnSelected() && !selectionInfo()->isRowSelected() )
   {
-    gotoLocation( QPoint( col, row ), activeSheet(), true );
+    (d->chooseCell ? choice() : selectionInfo())->update(QPoint(col,row));
     return;
   }
 
-  Cell *cell = sheet->cellAt( col, row );
 
   // Go to the upper left corner of the obscuring object if cells are merged
+  Cell *cell = sheet->cellAt( col, row );
   if (cell->isObscuringForced())
   {
     cell = cell->obscuringCells().first();
@@ -1518,44 +1382,68 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
     row = cell->row();
   }
 
-  // Start a marking action ?
-  if ( !d->anchor.isEmpty() && _ev->button() == LeftButton )
+  switch (_ev->button())
   {
-    processLeftClickAnchor();
-    updatePosWidget();
-  }
-  else if ( _ev->button() == LeftButton )
-  {
-    d->mouseAction = Mark;
-    gotoLocation( QPoint( col, row ), activeSheet(), false );
-  }
-  else if ( _ev->button() == RightButton &&
-            !s.contains( QPoint( col, row ) ) )
-  {
-    // No selection or the mouse press was outside of an existing selection ?
-    gotoLocation( QPoint( col, row ), activeSheet(), false );
+    case LeftButton:
+      if (!d->anchor.isEmpty())
+      {
+        // Hyperlink pressed
+        processLeftClickAnchor();
+      }
+#ifdef NONCONTIGUOUSSELECTION
+      else if ( _ev->state() & ControlButton )
+      {
+        // Start a marking action
+        d->mouseAction = Mark;
+        // extend the existing selection
+        (d->chooseCell ? choice() : selectionInfo())->extend(QPoint(col,row), activeSheet());
+      }
+#endif
+      else
+      {
+        // Start a marking action
+        d->mouseAction = Mark;
+        // reinitialize the selection
+        (d->chooseCell ? choice() : selectionInfo())->initialize(QPoint(col,row), activeSheet());
+      }
+      break;
+    case MidButton:
+      // Paste operation with the middle button?
+      if ( d->view->koDocument()->isReadWrite() && !sheet->isProtected() )
+      {
+        (d->chooseCell ? choice() : selectionInfo())->initialize( QPoint( col, row ), activeSheet() );
+        // TODO Stefan: adapt to non-cont. selection
+        sheet->paste( QRect(marker(), marker()) );
+        sheet->setRegionPaintDirty(*selectionInfo());
+      }
+      break;
+    case RightButton:
+      if (!selectionInfo()->contains( QPoint( col, row ) ))
+      {
+        // No selection or the mouse press was outside of an existing selection?
+        (d->chooseCell ? choice() : selectionInfo())->initialize(QPoint(col,row), activeSheet());
+      }
+      break;
+    default:
+      break;
   }
 
-  // Paste operation with the middle button ?
-  if ( _ev->button() == MidButton )
+  if (d->chooseCell)
   {
-    if ( d->view->koDocument()->isReadWrite() && !sheet->isProtected() )
-    {
-      selectionInfo()->setMarker( QPoint( col, row ), sheet );
-      sheet->paste( QRect(marker(), marker()) );
-      sheet->setRegionPaintDirty(QRect(marker(), marker()));
-    }
-    updatePosWidget();
+    updateChooseRect();
   }
 
-  // Update the edit box
-  d->view->updateEditWidgetOnPress();
+  scrollToCell(selectionInfo()->marker());
+  if ( !d->chooseCell )
+  {
+    d->view->updateEditWidgetOnPress();
+  }
+  updatePosWidget();
 
-  // Context menu ?
+  // Context menu?
   if ( _ev->button() == RightButton )
   {
-    updatePosWidget();
-    // TODO: Handle anchor
+    // TODO: Handle anchor // TODO Stefan: ???
     QPoint p = mapToGlobal( _ev->pos() );
     d->view->openPopupMenu( p );
   }
@@ -1571,7 +1459,7 @@ void Canvas::startTheDrag()
   TextDrag * d = new TextDrag( this );
   setCursor( KCursor::handCursor() );
 
-  QRect rct( selectionInfo()->selection() );
+  QRect rct( selectionInfo()->lastRange() );
   QDomDocument doc = sheet->saveCellRect( rct );
 
   // Save to buffer
@@ -1587,91 +1475,6 @@ void Canvas::startTheDrag()
 
   d->dragCopy();
   setCursor( KCursor::arrowCursor() );
-}
-
-void Canvas::chooseMouseMoveEvent( QMouseEvent * _ev )
-{
-  if ( !d->mousePressed )
-    return;
-
-  Sheet * sheet = activeSheet();
-  if ( !sheet )
-    return;
-
-  double tmp;
-  double ev_PosX;
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
-  {
-    double dwidth = d->view->doc()->unzoomItX( width() );
-    ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() );
-  }
-  else
-    ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() );
-
-  double ev_PosY = d->view->doc()->unzoomItY( _ev->pos().y() );
-  int col = sheet->leftColumn( (ev_PosX + xOffset()), tmp );
-  int row = sheet->topRow( (ev_PosY + yOffset()), tmp );
-
-  if ( col > KS_colMax || row > KS_rowMax )
-  {
-    return;
-  }
-
-  QPoint chooseMarker = selectionInfo()->getChooseMarker();
-
-  // Nothing changed ?
-  if ( row == chooseMarker.y() && col == chooseMarker.x() )
-  {
-    return;
-  }
-
-  gotoLocation( QPoint( col, row ), sheet, ( d->mouseAction != NoAction ) );
-}
-
-void Canvas::chooseMouseReleaseEvent( QMouseEvent* )
-{
-    // gets done in mouseReleaseEvent
-    //  d->mousePressed = false;
-  d->mouseAction = NoAction;
-}
-
-void Canvas::chooseMousePressEvent( QMouseEvent * _ev )
-{
-  Sheet *sheet = activeSheet();
-  if ( !sheet )
-    return;
-
-
-  double ev_PosX;
-  if ( sheet->layoutDirection()==Sheet::RightToLeft )
-  {
-    double dwidth = d->view->doc()->unzoomItX( width() );
-    ev_PosX = dwidth - d->view->doc()->unzoomItX( _ev->pos().x() );
-  }
-  else
-    ev_PosX = d->view->doc()->unzoomItX( _ev->pos().x() );
-
-  double ev_PosY = d->view->doc()->unzoomItY( _ev->pos().y() );
-  double ypos, xpos;
-  int col = sheet->leftColumn( (ev_PosX + xOffset()), xpos );
-  int row = sheet->topRow( (ev_PosY + yOffset()), ypos );
-
-  if ( col > KS_colMax || row > KS_rowMax )
-  {
-    return;
-  }
-
-  bool extend = ( ( ( !util_isColumnSelected(selection() ) ) &&
-                    ( !util_isRowSelected(selection() ) ) ) &&
-                  ( _ev->state() & ShiftButton ) );
-
-  gotoLocation( QPoint( col, row ), activeSheet(), extend );
-
-  if ( _ev->button() == LeftButton )
-  {
-    d->mouseAction = Mark;
-  }
-  return;
 }
 
 void Canvas::mouseDoubleClickEvent( QMouseEvent*  )
@@ -1779,10 +1582,10 @@ void Canvas::dragMoveEvent( QDragMoveEvent * _ev )
   _ev->accept( TextDrag::canDecode( _ev ) );
 
   double dwidth = d->view->doc()->unzoomItX( width() );
-  double xpos = sheet->dblColumnPos( selectionInfo()->selection().left() );
-  double ypos = sheet->dblRowPos( selectionInfo()->selection().top() );
-  double width  = sheet->columnFormat( selectionInfo()->selection().left() )->dblWidth( this );
-  double height = sheet->rowFormat( selectionInfo()->selection().top() )->dblHeight( this );
+  double xpos = sheet->dblColumnPos( selectionInfo()->lastRange().left() );
+  double ypos = sheet->dblRowPos( selectionInfo()->lastRange().top() );
+  double width  = sheet->columnFormat( selectionInfo()->lastRange().left() )->dblWidth( this );
+  double height = sheet->rowFormat( selectionInfo()->lastRange().top() )->dblHeight( this );
 
   QRect r1 ((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
 
@@ -1815,10 +1618,10 @@ void Canvas::dropEvent( QDropEvent * _ev )
   }
 
   double dwidth = d->view->doc()->unzoomItX( width() );
-  double xpos = sheet->dblColumnPos( selectionInfo()->selection().left() );
-  double ypos = sheet->dblRowPos( selectionInfo()->selection().top() );
-  double width  = sheet->columnFormat( selectionInfo()->selection().left() )->dblWidth( this );
-  double height = sheet->rowFormat( selectionInfo()->selection().top() )->dblHeight( this );
+  double xpos = sheet->dblColumnPos( selectionInfo()->lastRange().left() );
+  double ypos = sheet->dblRowPos( selectionInfo()->lastRange().top() );
+  double width  = sheet->columnFormat( selectionInfo()->lastRange().left() )->dblWidth( this );
+  double height = sheet->rowFormat( selectionInfo()->lastRange().top() )->dblHeight( this );
 
   QRect r1 ((int) xpos - 1, (int) ypos - 1, (int) width + 3, (int) height + 3);
 
@@ -1859,9 +1662,9 @@ void Canvas::dropEvent( QDropEvent * _ev )
       if ( !d->view->doc()->undoLocked() )
       {
         UndoDragDrop * undo
-          = new UndoDragDrop( d->view->doc(), sheet, selectionInfo()->selection(),
-                                     QRect( col, row, selectionInfo()->selection().width(),
-                                            selectionInfo()->selection().height() ) );
+          = new UndoDragDrop( d->view->doc(), sheet, selectionInfo()->lastRange(),
+                                     QRect( col, row, selectionInfo()->lastRange().width(),
+                                            selectionInfo()->lastRange().height() ) );
         d->view->doc()->addCommand( undo );
         makeUndo = false;
       }
@@ -1962,18 +1765,18 @@ void Canvas::resizeEvent( QResizeEvent* _ev )
     }
 }
 
-QPoint Canvas::cursorPos ()
+QPoint Canvas::cursorPos()
 {
   QPoint cursor;
   if (d->chooseCell)
   {
-    cursor = selectionInfo()->getChooseCursor();
+    cursor = choice()->cursor();
     /* if the cursor is unset, pretend we're starting at the regular cursor */
     if (cursor.x() == 0 || cursor.y() == 0)
-      cursor = selectionInfo()->cursorPosition();
+      cursor = choice()->cursor();
   }
   else
-    cursor = selectionInfo()->cursorPosition();
+    cursor = selectionInfo()->cursor();
 
   return cursor;
 }
@@ -1983,7 +1786,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
   kdDebug(36001) << "Canvas::moveDirection" << endl;
 
   QPoint destination;
-  QPoint cursor = cursorPos ();
+  QPoint cursor = cursorPos();
 
   QPoint cellCorner = cursor;
   Cell* cell = activeSheet()->cellAt(cursor.x(), cursor.y());
@@ -2062,7 +1865,14 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
       break;
   }
 
-  gotoLocation(destination, activeSheet(), extendSelection);
+  if (extendSelection)
+  {
+    (d->chooseCell ? choice() : selectionInfo())->update(destination);
+  }
+  else
+  {
+    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+  }
   d->view->updateEditWidget();
 
   return QRect( cursor, destination );
@@ -2214,8 +2024,7 @@ bool Canvas::processHomeKey(QKeyEvent* event)
     }
     else
     {
-      QPoint marker = d->chooseCell ?
-        selectionInfo()->getChooseMarker() : selectionInfo()->marker();
+      QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
 
       Cell * cell = sheet->getFirstCellRow(marker.y());
       while (cell != NULL && cell->column() < marker.x() && cell->isEmpty())
@@ -2235,7 +2044,14 @@ bool Canvas::processHomeKey(QKeyEvent* event)
       return false;
     }
 
-    gotoLocation( destination, activeSheet(), makingSelection );
+    if (makingSelection)
+    {
+      (d->chooseCell ? choice() : selectionInfo())->update(destination);
+    }
+    else
+    {
+      (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+    }
   }
   return true;
 }
@@ -2245,9 +2061,7 @@ bool Canvas::processEndKey( QKeyEvent *event )
   bool makingSelection = event->state() & ShiftButton;
   Sheet* sheet = activeSheet();
   Cell* cell = NULL;
-  QPoint marker = d->chooseCell ?
-    selectionInfo()->getChooseMarker() : selectionInfo()->marker();
-
+  QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
 
   // move to the last used cell in the row
   // We are in edit mode -> go beginning of line
@@ -2280,7 +2094,14 @@ bool Canvas::processEndKey( QKeyEvent *event )
       return false;
     }
 
-    gotoLocation( destination, activeSheet(), makingSelection );
+    if (makingSelection)
+    {
+      (d->chooseCell ? choice() : selectionInfo())->update(destination);
+    }
+    else
+    {
+      (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+    }
   }
   return true;
 }
@@ -2293,8 +2114,7 @@ bool Canvas::processPriorKey(QKeyEvent *event)
     deleteEditor( true );
   }
 
-  QPoint marker = d->chooseCell ?
-    selectionInfo()->getChooseMarker() : selectionInfo()->marker();
+  QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
 
   QPoint destination(marker.x(), QMAX(1, marker.y() - 10));
   if ( destination == marker )
@@ -2303,8 +2123,14 @@ bool Canvas::processPriorKey(QKeyEvent *event)
     return false;
   }
 
-  gotoLocation(destination, activeSheet(), makingSelection);
-
+  if (makingSelection)
+  {
+    (d->chooseCell ? choice() : selectionInfo())->update(destination);
+  }
+  else
+  {
+    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+  }
   return true;
 }
 
@@ -2317,8 +2143,7 @@ bool Canvas::processNextKey(QKeyEvent *event)
     deleteEditor( true /*save changes*/ );
   }
 
-  QPoint marker = d->chooseCell ?
-    selectionInfo()->getChooseMarker() : selectionInfo()->marker();
+  QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
   QPoint destination(marker.x(), QMAX(1, marker.y() + 10));
 
   if ( marker == destination )
@@ -2327,8 +2152,14 @@ bool Canvas::processNextKey(QKeyEvent *event)
     return false;
   }
 
-  gotoLocation(destination, activeSheet(), makingSelection);
-
+  if (makingSelection)
+  {
+    (d->chooseCell ? choice() : selectionInfo())->update(destination);
+  }
+  else
+  {
+    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+  }
   return true;
 }
 
@@ -2412,8 +2243,7 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
   int row;
   int col;
 
-  QPoint marker = d->chooseCell ?
-    selectionInfo()->getChooseMarker() : selectionInfo()->marker();
+  QPoint marker = d->chooseCell ? choice()->marker() : selectionInfo()->marker();
 
   /* here, we want to move to the first or last cell in the given direction that is
      actually being used.  Ignore empty cells and cells on hidden rows/columns */
@@ -2708,7 +2538,14 @@ bool Canvas::processControlArrowKey( QKeyEvent *event )
     return false;
   }
 
-  gotoLocation( destination, sheet, makingSelection );
+  if (makingSelection)
+  {
+    (d->chooseCell ? choice() : selectionInfo())->update(destination);
+  }
+  else
+  {
+    (d->chooseCell ? choice() : selectionInfo())->initialize(destination, activeSheet());
+  }
   return true;
 }
 
@@ -2830,13 +2667,13 @@ void Canvas::processIMEvent( QIMEvent * event )
 
   if ( d->chooseCell )
   {
-    cursor = selectionInfo()->getChooseCursor();
+    cursor = choice()->cursor();
     /* if the cursor is unset, pretend we're starting at the regular cursor */
     if (cursor.x() == 0 || cursor.y() == 0)
-      cursor = selectionInfo()->cursorPosition();
+      cursor = choice()->cursor();
   }
   else
-    cursor = selectionInfo()->cursorPosition();
+    cursor = selectionInfo()->cursor();
 
   d->view->doc()->emitEndOperation( QRect( cursor, cursor ) );
 }
@@ -2854,21 +2691,25 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
 
   Cell  * cell = 0L;
   Sheet * sheet = activeSheet();
-  QRect rect = selection();
 
   d->view->doc()->emitBeginOperation(false);
-  sheet->setRegionPaintDirty( rect );
-  int right  = rect.right();
-  int bottom = rect.bottom();
 
   if ( !d->view->doc()->undoLocked() )
   {
     QString dummy;
-    UndoCellFormat * undo = new UndoCellFormat( d->view->doc(), sheet, rect, dummy );
+    UndoCellFormat * undo = new UndoCellFormat( d->view->doc(), sheet, *selectionInfo(), dummy );
     d->view->doc()->addCommand( undo );
   }
 
-  if ( util_isRowSelected(selection()) )
+  Region::ConstIterator end(selectionInfo()->constEnd());
+  for (Region::ConstIterator it = selectionInfo()->constBegin(); it != end; ++it)
+  {
+    QRect rect = (*it)->rect().normalize();
+
+  int right  = rect.right();
+  int bottom = rect.bottom();
+
+  if ( util_isRowSelected(rect) )
   {
     for ( int r = rect.top(); r <= bottom; ++r )
     {
@@ -2939,7 +2780,7 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
     return true;
   }
 
-  if ( util_isColumnSelected(selection()) )
+  if ( util_isColumnSelected(rect) )
   {
     for ( int c = rect.left(); c <= right; ++c )
     {
@@ -3022,9 +2863,11 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
       formatCellByKey (cell, _ev->key(), rect);
     } // for left .. right
   } // for top .. bottom
+
+  }
   _ev->accept();
 
-  d->view->doc()->emitEndOperation( rect );
+  d->view->doc()->emitEndOperation( *selectionInfo() );
   return true;
 }
 
@@ -3374,7 +3217,7 @@ bool Canvas::createEditor( EditorType ed, bool addFocus, bool captureArrowKeys )
     if ( addFocus )
         d->cellEditor->setFocus();
 
-	setSelectionChangePaintDirty(sheet,selection(),QRect(0,0,0,0));
+	setSelectionChangePaintDirty(sheet, *selectionInfo());
 	paintUpdates();
   }
 
@@ -3391,51 +3234,26 @@ void Canvas::closeEditor()
     deleteEditor( true ); // save changes
   }
 }
-
-
-void Canvas::updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor)
+void Canvas::updateChooseRect()
 {
   if( !d->chooseCell )
     return;
 
   Sheet* sheet = activeSheet();
-
   if ( ! sheet )
-      return;
-
-  QPoint oldAnchor = selectionInfo()->getChooseAnchor();
-  QPoint oldMarker = selectionInfo()->getChooseMarker();
-  QPoint chooseCursor = selectionInfo()->getChooseCursor();
-  QRect oldChooseRect = selectionInfo()->getChooseRect();
-
-
-  if ( newMarker == oldMarker && newAnchor == oldAnchor )
-  {
     return;
-  }
 
-  selectionInfo()->setChooseMarker(newMarker);
-  selectionInfo()->setChooseAnchor(newAnchor);
-
-  QRect newChooseRect = selectionInfo()->getChooseRect();
-
-  /* keep the choose cursor updated.  If you don't know what the 'cursor' is
-     supposed to represent, check the comments of the regular selection cursor
-     in kspread_selection.h (Selection::m_cursorPosition).  It's the
-     same thing here except for the choose selection.
-  */
-  if ( !newChooseRect.contains(chooseCursor) )
+  if( d->cellEditor )
   {
-    selectionInfo()->setChooseCursor(sheet, newMarker);
+    if( choice()->sheet() != sheet )
+    {
+      d->cellEditor->hide();
+    }
+    else
+    {
+      d->cellEditor->show();
+    }
   }
-
-  d->view->doc()->emitBeginOperation();
-  setSelectionChangePaintDirty(sheet, oldChooseRect, newChooseRect);
-  repaint();
-  d->view->doc()->emitEndOperation();
-
-  /* this signal is used in the formula editor to update the text display */
-  emit d->view->sig_chooseSelectionChanged(activeSheet(), newChooseRect);
 
   if ( !d->cellEditor )
   {
@@ -3446,28 +3264,13 @@ void Canvas::updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor)
   /* the rest of this function updates the text showing the choose rect */
   /***** TODO - should this be here? */
 
-  if (newMarker.x() != 0 && newMarker.y() != 0)
+//  if (newMarker.x() != 0 && newMarker.y() != 0)
     /* don't update the text if we are removing the marker */
   {
-    QString name_cell;
-
-    if ( d->chooseStartSheet != sheet )
-    {
-      if ( newMarker == newAnchor )
-        name_cell = Cell::fullName( sheet, newChooseRect.left(), newChooseRect.top() );
-      else
-        name_cell = util_rangeName( sheet, newChooseRect );
-    }
-    else
-    {
-      if ( newMarker == newAnchor )
-        name_cell = Cell::name( newChooseRect.left(), newChooseRect.top() );
-      else
-        name_cell = util_rangeName( newChooseRect );
-    }
+    QString name_cell = choice()->name();
 
     int old = d->length_namecell;
-    d->length_namecell= name_cell.length();
+    d->length_namecell = name_cell.length();
     d->length_text = d->cellEditor->text().length();
     //kdDebug(36001) << "updateChooseMarker2 len=" << d->length_namecell << endl;
 
@@ -3484,164 +3287,9 @@ void Canvas::updateChooseRect(const QPoint &newMarker, const QPoint &newAnchor)
   }
 }
 
-
-void Canvas::setSelectionChangePaintDirty(Sheet* sheet,
-                                                 QRect area1, QRect area2)
+void Canvas::setSelectionChangePaintDirty(Sheet* sheet, const Region& region)
 {
-  QValueList<QRect> cellRegions;
-
-  /* first of all, let's not get confused by an unset region at 0,0,0,0
-     Just reset to region to something ridiculous that will be ignored by a paint call
-   */
-  if (area1.contains(QPoint(0,0)))
-  {
-    area1.setLeft(-100);
-    area1.setRight(-100);
-  }
-
-  if (area2.contains(QPoint(0,0)))
-  {
-    area2.setLeft(-50);
-    area2.setRight(-50);
-  }
-
-  /* let's try to only paint where the selection is actually changing*/
-  bool newLeft   = area1.left() != area2.left();
-  bool newTop    = area1.top() != area2.top();
-  bool newRight  = area1.right() != area2.right();
-  bool newBottom = area1.bottom() != area2.bottom();
-  bool topLeftSame = !newLeft && !newTop;
-  bool topRightSame = !newTop && !newRight;
-  bool bottomLeftSame = !newLeft && !newBottom;
-  bool bottomRightSame = !newBottom && !newRight;
-
-  if (!topLeftSame && !topRightSame && !bottomLeftSame && !bottomRightSame)
-  {
-    /* the two areas are not related. */
-    /* since the marker/selection border extends into neighboring cells, we
-       want to calculate all the cells bordering these regions.
-    */
-    ExtendRectBorder(area1);
-    ExtendRectBorder(area2);
-    cellRegions.append(area1);
-    cellRegions.append(area2);
-  }
-  else
-  {
-    /* at least one corner is the same -- let's only paint the extension
-       on corners that are not the same
-    */
-
-    /* first, calculate some numbers that we'll use a few times */
-    int farLeft = QMIN(area1.left(), area2.left());
-    if (farLeft != 1) farLeft--;
-    int innerLeft = QMAX(area1.left(), area2.left());
-    if (innerLeft != KS_colMax) innerLeft++;
-
-    int farTop = QMIN(area1.top(), area2.top());
-    if (farTop != 1) farTop--;
-    int innerTop = QMAX(area1.top(), area2.top());
-    if (innerTop != KS_rowMax) innerTop++;
-
-    int farRight = QMAX(area1.right(), area2.right());
-    if (farRight != KS_colMax) farRight++;
-    int innerRight = QMIN(area1.right(), area2.right());
-    if (innerRight != 1) innerRight--;
-
-    int farBottom = QMAX(area1.bottom(), area2.bottom());
-    if (farBottom!= KS_rowMax) farBottom++;
-    int innerBottom = QMIN(area1.bottom(), area2.bottom());
-    if (innerBottom != 1) innerBottom--;
-
-    if (newLeft)
-    {
-      cellRegions.append(QRect(QPoint(farLeft, farTop),
-                               QPoint(innerLeft, farBottom)));
-    }
-
-    if (newTop)
-    {
-      cellRegions.append(QRect(QPoint(farLeft, farTop),
-                               QPoint(farRight, innerTop)));
-    }
-
-    if (newRight)
-    {
-      cellRegions.append(QRect(QPoint(innerRight, farTop),
-                               QPoint(farRight, farBottom)));
-    }
-
-    if (newBottom)
-    {
-      cellRegions.append(QRect(QPoint(farLeft, innerBottom),
-                               QPoint(farRight, farBottom)));
-    }
-  }
-
-  QValueList<QRect>::iterator it = cellRegions.begin();
-
-  while (it != cellRegions.end())
-  {
-    sheet->setRegionPaintDirty(*it);
-    it++;
-  }
-}
-
-void Canvas::ExtendRectBorder(QRect& area)
-{
-  ColumnFormat *cl;
-  RowFormat *rl;
-  //look at if column is hiding.
-  //if it's hiding refreshing column+1 (or column -1 )
-  int left = area.left();
-  int right = area.right();
-  int top = area.top();
-  int bottom = area.bottom();
-
-  //Maybe the case for ridiculous settings, see setSelectionChangePaintDirty
-  //No need to extend then, avoids warnings
-  if ( left < 1 && right < 1 )
-      return;
-
-  if ( right < KS_colMax )
-  {
-    do
-    {
-      right++;
-      cl = activeSheet()->nonDefaultColumnFormat( right );
-    } while ( cl->isHide() && right != KS_colMax );
-  }
-  if ( left > 1 )
-  {
-    do
-    {
-      left--;
-      cl = activeSheet()->nonDefaultColumnFormat( left );
-    } while ( cl->isHide() && left != 1);
-  }
-
-  if ( bottom < KS_rowMax )
-  {
-    do
-    {
-      bottom++;
-      rl = activeSheet()->nonDefaultRowFormat( bottom );
-    } while ( rl->isHide() && bottom != KS_rowMax );
-  }
-
-  if ( top > 1 )
-  {
-    do
-    {
-      top--;
-      rl = activeSheet()->nonDefaultRowFormat( top );
-    } while ( rl->isHide() && top != 1);
-  }
-
-  area.setLeft(left);
-  area.setRight(right);
-  area.setTop(top);
-  area.setBottom(bottom);
+  sheet->setRegionPaintDirty(region); // TODO should the paintDirtyList be in Canvas?
 }
 
 
@@ -3649,7 +3297,7 @@ void Canvas::updatePosWidget()
 {
     QString buffer;
     // No selection, or only one cell merged selected
-    if ( selectionInfo()->singleCellSelection() )
+    if ( selectionInfo()->isSingular() )
     {
         if (activeSheet()->getLcMode())
         {
@@ -3666,21 +3314,21 @@ void Canvas::updatePosWidget()
     {
         if (activeSheet()->getLcMode())
         {
-            buffer = QString::number( (selection().bottom()-selection().top()+1) )+"Lx";
-            if ( util_isRowSelected( selection() ) )
-                buffer+=QString::number((KS_colMax-selection().left()+1))+"C";
+          buffer = QString::number( (selectionInfo()->lastRange().bottom()-selectionInfo()->lastRange().top()+1) )+"Lx";
+          if ( util_isRowSelected( selectionInfo()->lastRange() ) )
+            buffer+=QString::number((KS_colMax-selectionInfo()->lastRange().left()+1))+"C";
             else
-                buffer+=QString::number((selection().right()-selection().left()+1))+"C";
+              buffer+=QString::number((selectionInfo()->lastRange().right()-selectionInfo()->lastRange().left()+1))+"C";
         }
         else
         {
                 //encodeColumnLabelText return @@@@ when column >KS_colMax
                 //=> it's not a good display
                 //=> for the moment I display pos of marker
-                buffer=Cell::columnName( selection().left() ) +
-		    QString::number(selection().top()) + ":" +
-		    Cell::columnName( QMIN( KS_colMax, selection().right() ) ) +
-		    QString::number(selection().bottom());
+          buffer=Cell::columnName( selectionInfo()->lastRange().left() ) +
+                    QString::number(selectionInfo()->lastRange().top()) + ":" +
+                    Cell::columnName( QMIN( KS_colMax, selectionInfo()->lastRange().right() ) ) +
+                    QString::number(selectionInfo()->lastRange().bottom());
                 //buffer=activeSheet()->columnLabel( m_iMarkerColumn );
                 //buffer+=tmp.setNum(m_iMarkerRow);
         }
@@ -3949,7 +3597,6 @@ void Canvas::paintUpdates()
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
 
-
 	cell->paintCell( unzoomedRect, painter, d->view, dblCorner, QPoint( x, y), paintBorder,
 				 rightPen,bottomPen,leftPen,topPen);
 
@@ -3965,7 +3612,6 @@ void Canvas::paintUpdates()
   //Nb.  No longer necessary to paint choose selection here as the cell reference highlight
   //stuff takes care of this anyway
 
- // paintChooseRect(painter, unzoomedRect);
   paintHighlightedRanges(painter, unzoomedRect);
   paintNormalMarker(painter, unzoomedRect);
 
@@ -4015,101 +3661,24 @@ void Canvas::paintChildren( QPainter& painter, QWMatrix& matrix )
   }
 }
 
-
-void Canvas::paintChooseRect(QPainter& painter, const KoRect &viewRect)
-{
-
-  double positions[4];
-  bool paintSides[4];
-
-  QRect chooseRect = d->view->selectionInfo()->getChooseRect();
-
-  if ( chooseRect.left() != 0 )
-  {
-    QPen pen;
-    pen.setWidth( 2 );
-    pen.setStyle( DashLine );
-
-    retrieveMarkerInfo( chooseRect, viewRect, positions, paintSides );
-
-    double left =   positions[0];
-    double top =    positions[1];
-    double right =  positions[2];
-    double bottom = positions[3];
-
-    bool paintLeft =   paintSides[0];
-    bool paintTop =    paintSides[1];
-    bool paintRight =  paintSides[2];
-    bool paintBottom = paintSides[3];
-
-    RasterOp rop = painter.rasterOp();
-    painter.setRasterOp( NotROP );
-    painter.setPen( pen );
-
-    if ( paintTop )
-    {
-      painter.drawLine( d->view->doc()->zoomItX( left ),  d->view->doc()->zoomItY( top ),
-                        d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ) );
-    }
-    if ( paintLeft )
-    {
-      painter.drawLine( d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( top ),
-                        d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( bottom ) );
-    }
-    if ( paintRight )
-    {
-      painter.drawLine( d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ),
-                        d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) );
-    }
-    if ( paintBottom )
-    {
-      painter.drawLine( d->view->doc()->zoomItX( left ),  d->view->doc()->zoomItY( bottom ),
-                        d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) );
-    }
-
-    /* restore the old raster mode */
-    painter.setRasterOp( rop );
-  }
-  return;
-}
-
-
 void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*/)
 {
-	if (!d->highlightedRanges)
-		return;
+  if (!d->chooseCell)
+  {
+    return;
+  }
 
-	std::vector< KSharedPtr<HighlightRange> >::iterator iter;
+  QBrush nullBrush;
+  int index = 0;
+  Region::ConstIterator end(choice()->constEnd());
+  for (Region::ConstIterator it = choice()->constBegin(); it != end; ++it)
+  {
 
-	QBrush nullBrush;
-
-	for (iter=d->highlightedRanges->begin();iter != d->highlightedRanges->end();iter++)
-	{
 		//Only paint ranges or cells on the current sheet
-		if ( (*iter)->sheet() != activeSheet())
+		if ( (*it)->sheet() != activeSheet())
 			continue;
 
-		QRect region= (*iter)->range();
-
-                /*
-		region.setTop(iter->firstCell()->row());
-		region.setLeft(iter->firstCell()->column());
-
-		if (iter->lastCell()) //is this a range (lastCell != 0) or a single cell (lastCell == 0) ?
-		{
-			region.setBottom(iter->lastCell()->row());
-			region.setRight(iter->lastCell()->column());
-		}
-		else
-		{
-			region.setBottom(region.top());
-			region.setRight(region.left());
-		}*/
-
-		//Sanity-check: If the top-left corner is lower and/or further right than the bottom-right corner,
-		//the user has entered an invalid region and we should go to the next range.
-		if (!region.isValid())
-			continue;
+    QRect region= (*it)->rect().normalize();
 
 		//double positions[4];
 		//bool paintSides[4];
@@ -4118,8 +3687,12 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 		sheetAreaToVisibleRect(region,unzoomedRect);
 		//Convert region from sheet coordinates to canvas coordinates for use with the painter
 		//retrieveMarkerInfo(region,viewRect,positions,paintSides);
+  
+  if ( !d->cellEditor->inherits("KSpread::TextEditor") )
+    return;
 
-		QPen highlightPen( (*iter)->color() );
+  QValueList<QColor> colors = static_cast<TextEditor*>(d->cellEditor)->colors();
+  QPen highlightPen( colors[(index) % colors.size()] ); // Qt::red ); //(*iter)->color() );
 		painter.setPen(highlightPen);
 
 		//Adjust the canvas coordinate - rect to take account of zoom level
@@ -4146,7 +3719,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 		//click and drag to resize the region)
 
 
-		QBrush sizeGripBrush( (*iter)->color());
+  QBrush sizeGripBrush( colors[(index++) % colors.size()] ); //  Qt::red ); //(*iter)->color());
 		QPen   sizeGripPen(Qt::white);
 
 		painter.setPen(sizeGripPen);
@@ -4169,54 +3742,77 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
   double positions[4];
   bool paintSides[4];
 
-  QRect marker = selection();
-
-  QPen pen( Qt::black, 3 );
-  painter.setPen( pen );
-
-  retrieveMarkerInfo( marker, viewRect, positions, paintSides );
-
-  painter.setPen( pen );
-
-  double left =   positions[0];
-  double top =    positions[1];
-  double right =  positions[2];
-  double bottom = positions[3];
-
-  bool paintLeft =   paintSides[0];
-  bool paintTop =    paintSides[1];
-  bool paintRight =  paintSides[2];
-  bool paintBottom = paintSides[3];
-
-  /* the extra '-1's thrown in here account for the thickness of the pen.
-     want to look like this:                     not this:
-                            * * * * * *                     * * * *
-                            *         *                   *         *
-     .                      *         *                   *         *
-  */
-  int l = 1;
-
-  if ( paintTop )
+/*  Region::ConstIterator end(selectionInfo()->constEnd());
+  for (Region::ConstIterator it = selectionInfo()->constBegin(); it != end; ++it)
   {
-    painter.drawLine( d->view->doc()->zoomItX( left ) - l,      d->view->doc()->zoomItY( top ),
-                      d->view->doc()->zoomItX( right ) + 2 * l, d->view->doc()->zoomItY( top ) );
-  }
-  if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
-  {
-    if ( paintRight )
+    QRect marker = (*it)->rect();
+
+    bool current = (selectionInfo()->marker() == marker.bottomRight()) &&
+                   (selectionInfo()->anchor() == marker.topLeft());
+    marker = marker.normalize();
+    QPen pen( Qt::black, (current ? 3 : 1 ) );*/
+    QRect marker = selectionInfo()->lastRange();
+
+    QPen pen( Qt::black, 3 );
+    painter.setPen( pen );
+
+    retrieveMarkerInfo( marker, viewRect, positions, paintSides );
+
+    painter.setPen( pen );
+
+    double left =   positions[0];
+    double top =    positions[1];
+    double right =  positions[2];
+    double bottom = positions[3];
+
+    bool paintLeft =   paintSides[0];
+    bool paintTop =    paintSides[1];
+    bool paintRight =  paintSides[2];
+    bool paintBottom = paintSides[3];
+
+    /* the extra '-1's thrown in here account for the thickness of the pen.
+      want to look like this:                     not this:
+                              * * * * * *                     * * * *
+                              *         *                   *         *
+                              *         *                   *         *
+    */
+    int l = 1;
+
+    if ( paintTop )
     {
-      painter.drawLine( d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ),
-                        d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) );
+      painter.drawLine( d->view->doc()->zoomItX( left ) - l,      d->view->doc()->zoomItY( top ),
+                        d->view->doc()->zoomItX( right ) + 2 * l, d->view->doc()->zoomItY( top ) );
     }
-    if ( paintLeft && paintBottom )
+    if ( activeSheet()->layoutDirection()==Sheet::RightToLeft )
     {
-      /* then the 'handle' in the bottom left corner is visible. */
-      painter.drawLine( d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( top ),
-                        d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( bottom ) - 3 );
-      painter.drawLine( d->view->doc()->zoomItX( left ) + 4,  d->view->doc()->zoomItY( bottom ),
-                        d->view->doc()->zoomItX( right ) + l + 1, d->view->doc()->zoomItY( bottom ) );
-      painter.fillRect( d->view->doc()->zoomItX( left ) - 2, d->view->doc()->zoomItY( bottom ) -2, 5, 5,
-                        painter.pen().color() );
+      if ( paintRight )
+      {
+        painter.drawLine( d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ),
+                          d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) );
+      }
+      if ( paintLeft && paintBottom )
+      {
+        /* then the 'handle' in the bottom left corner is visible. */
+        painter.drawLine( d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( top ),
+                          d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( bottom ) - 3 );
+        painter.drawLine( d->view->doc()->zoomItX( left ) + 4,  d->view->doc()->zoomItY( bottom ),
+                          d->view->doc()->zoomItX( right ) + l + 1, d->view->doc()->zoomItY( bottom ) );
+        painter.fillRect( d->view->doc()->zoomItX( left ) - 2, d->view->doc()->zoomItY( bottom ) -2, 5, 5,
+                          painter.pen().color() );
+      }
+      else
+      {
+        if ( paintLeft )
+        {
+          painter.drawLine( d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( top ),
+                            d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( bottom ) );
+        }
+        if ( paintBottom )
+        {
+          painter.drawLine( d->view->doc()->zoomItX( left ) - l,  d->view->doc()->zoomItY( bottom ),
+                            d->view->doc()->zoomItX( right ) + l + 1, d->view->doc()->zoomItY( bottom ));
+        }
+      }
     }
     else
     {
@@ -4225,44 +3821,31 @@ void Canvas::paintNormalMarker(QPainter& painter, const KoRect &viewRect)
         painter.drawLine( d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( top ),
                           d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( bottom ) );
       }
-      if ( paintBottom )
+      if ( paintRight && paintBottom )
       {
-        painter.drawLine( d->view->doc()->zoomItX( left ) - l,  d->view->doc()->zoomItY( bottom ),
-                          d->view->doc()->zoomItX( right ) + l + 1, d->view->doc()->zoomItY( bottom ));
-      }
-    }
-  }
-  else
-  {
-    if ( paintLeft )
-    {
-      painter.drawLine( d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( top ),
-                        d->view->doc()->zoomItX( left ), d->view->doc()->zoomItY( bottom ) );
-    }
-    if ( paintRight && paintBottom )
-    {
-      /* then the 'handle' in the bottom right corner is visible. */
-      painter.drawLine( d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ),
-                        d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) - 3 );
-      painter.drawLine( d->view->doc()->zoomItX( left ) - l,  d->view->doc()->zoomItY( bottom ),
-                        d->view->doc()->zoomItX( right ) - 3, d->view->doc()->zoomItY( bottom ) );
-      painter.fillRect( d->view->doc()->zoomItX( right ) - 2, d->view->doc()->zoomItY( bottom ) - 2, 5, 5,
-                        painter.pen().color() );
-    }
-    else
-    {
-      if ( paintRight )
-      {
+        /* then the 'handle' in the bottom right corner is visible. */
         painter.drawLine( d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ),
-                          d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) );
-      }
-      if ( paintBottom )
-      {
+                          d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) - 3 );
         painter.drawLine( d->view->doc()->zoomItX( left ) - l,  d->view->doc()->zoomItY( bottom ),
-                          d->view->doc()->zoomItX( right ) + l, d->view->doc()->zoomItY( bottom ) );
+                          d->view->doc()->zoomItX( right ) - 3, d->view->doc()->zoomItY( bottom ) );
+        painter.fillRect( d->view->doc()->zoomItX( right ) - 2, d->view->doc()->zoomItY( bottom ) - 2, 5, 5,
+                          painter.pen().color() );
+      }
+      else
+      {
+        if ( paintRight )
+        {
+          painter.drawLine( d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( top ),
+                            d->view->doc()->zoomItX( right ), d->view->doc()->zoomItY( bottom ) );
+        }
+        if ( paintBottom )
+        {
+          painter.drawLine( d->view->doc()->zoomItX( left ) - l,  d->view->doc()->zoomItY( bottom ),
+                            d->view->doc()->zoomItX( right ) + l, d->view->doc()->zoomItY( bottom ) );
+        }
       }
     }
-  }
+/*  }*/
 }
 
 void Canvas::sheetAreaToRect(const QRect& sheetArea, KoRect& rect)
@@ -4525,15 +4108,27 @@ void VBorder::mousePressEvent( QMouseEvent * _ev )
 
     m_iSelectionAnchor = hit_row;
 
-    QRect rect = m_pView->selection();
-    if ( !rect.contains( QPoint(1, hit_row) ) ||
-        !( _ev->button() == RightButton ) ||
-        ( !util_isRowSelected( rect ) ) )
+    if ( !m_pView->selectionInfo()->contains( QPoint(1, hit_row) ) ||
+         !( _ev->button() == RightButton ) ||
+         !m_pView->selectionInfo()->isRowSelected() )
     {
       QPoint newMarker( 1, hit_row );
       QPoint newAnchor( KS_colMax, hit_row );
-      m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
-                                              m_pView->activeSheet() );
+#ifdef NONCONTIGUOUSSELECTION
+      if (_ev->state() == ControlButton)
+      {
+        m_pView->selectionInfo()->extend(QRect(newAnchor, newMarker));
+      }
+      else
+#endif
+      if (_ev->state() == ShiftButton)
+      {
+        m_pView->selectionInfo()->update(newMarker);
+      }
+      else
+      {
+        m_pView->selectionInfo()->initialize(QRect(newAnchor, newMarker));
+      }
     }
 
     if ( _ev->button() == RightButton )
@@ -4574,13 +4169,13 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
         int end = m_iResizedRow;
         QRect rect;
         rect.setCoords( 1, m_iResizedRow, KS_colMax, m_iResizedRow );
-        if ( util_isRowSelected( m_pView->selection() ) )
+        if ( m_pView->selectionInfo()->isRowSelected() )
         {
-            if ( m_pView->selection().contains( QPoint( 1, m_iResizedRow ) ) )
+          if ( m_pView->selectionInfo()->contains( QPoint( 1, m_iResizedRow ) ) )
             {
-                start = m_pView->selection().top();
-                end = m_pView->selection().bottom();
-                rect = m_pView->selection();
+                start = m_pView->selectionInfo()->lastRange().top();
+                end = m_pView->selectionInfo()->lastRange().bottom();
+                rect = m_pView->selectionInfo()->lastRange();
             }
         }
 
@@ -4631,7 +4226,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
     }
     else if ( m_bSelection )
     {
-        QRect rect = m_pView->selection();
+      QRect rect = m_pView->selectionInfo()->lastRange();
 
         // TODO: please don't remove. Right now it's useless, but it's for a future feature
         // Norbert
@@ -4707,7 +4302,7 @@ void VBorder::equalizeRow( double resize )
   Sheet *sheet = m_pCanvas->activeSheet();
   Q_ASSERT( sheet );
 
-  QRect selection( m_pView->selection() );
+  QRect selection( m_pView->selectionInfo()->selection() );
   if ( !m_pCanvas->d->view->doc()->undoLocked() )
   {
      UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
@@ -4721,56 +4316,6 @@ void VBorder::equalizeRow( double resize )
      rl->setDblHeight( resize );
   }
 }
-
-void VBorder::resizeRow( double resize, int nb, bool makeUndo )
-{
-  Sheet *sheet = m_pCanvas->activeSheet();
-  Q_ASSERT( sheet );
-
-  if ( nb == -1 ) // I don't know, where this is the case
-  {
-    if ( makeUndo && !m_pCanvas->d->view->doc()->undoLocked() )
-    {
-        QRect rect;
-        rect.setCoords( 1, m_iSelectionAnchor, KS_colMax, m_iSelectionAnchor );
-        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
-        m_pCanvas->d->view->doc()->addCommand( undo );
-    }
-    RowFormat *rl = sheet->nonDefaultRowFormat( m_iSelectionAnchor );
-    rl->setDblHeight( QMAX( 2.0, resize ) );
-  }
-  else
-  {
-    QRect selection( m_pView->selection() );
-    if ( m_pView->selectionInfo()->singleCellSelection() )
-    {
-      if ( makeUndo && !m_pCanvas->d->view->doc()->undoLocked() )
-      {
-        QRect rect;
-        rect.setCoords( 1, m_pCanvas->markerRow(), KS_colMax, m_pCanvas->markerRow() );
-        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
-        m_pCanvas->d->view->doc()->addCommand( undo );
-      }
-      RowFormat *rl = sheet->nonDefaultRowFormat( m_pCanvas->markerRow() );
-      rl->setDblHeight( QMAX( 2.0, resize ) );
-    }
-    else
-    {
-      if ( makeUndo && !m_pCanvas->d->view->doc()->undoLocked() )
-      {
-          UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
-          m_pCanvas->d->view->doc()->addCommand( undo );
-      }
-      RowFormat *rl;
-      for ( int i = selection.top(); i<=selection.bottom(); i++ )
-      {
-        rl = sheet->nonDefaultRowFormat( i );
-        rl->setDblHeight( QMAX( 2.0, resize ) );
-      }
-    }
-  }
-}
-
 
 void VBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
 {
@@ -4809,13 +4354,11 @@ void VBorder::mouseMoveEvent( QMouseEvent * _ev )
     if ( row > KS_rowMax )
       return;
 
-    QPoint newAnchor = m_pView->selectionInfo()->selectionAnchor();
+    QPoint newAnchor = m_pView->selectionInfo()->anchor();
     QPoint newMarker = m_pView->selectionInfo()->marker();
     newMarker.setY( row );
     newAnchor.setY( m_iSelectionAnchor );
-
-    m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
-                                            m_pView->activeSheet() );
+    m_pView->selectionInfo()->update(newMarker);
 
     if ( _ev->pos().y() < 0 )
       m_pCanvas->vertScrollBar()->setValue( m_pCanvas->d->view->doc()->zoomItY( ev_PosY ) );
@@ -4996,22 +4539,17 @@ void VBorder::paintEvent( QPaintEvent* _ev )
   QFont boldFont = normalFont;
   boldFont.setBold( true );
 
-  //several cells selected but not just a cell merged
-  bool area = !( m_pView->selectionInfo()->singleCellSelection() );
-
   //Loop through the rows, until we are out of range
   while ( yPos <= m_pCanvas->d->view->doc()->unzoomItY( _ev->rect().bottom() ) )
   {
-    bool highlighted = ( area && y >= m_pView->selection().top() &&
-                         y <= m_pView->selection().bottom() );
-    bool selected = ( highlighted && (util_isRowSelected(m_pView->selection())) );
-    bool current  = ( !highlighted && y == m_pView->selection().top() );
+    bool selected = (m_pView->selectionInfo()->isRowSelected(y));
+    bool highlighted = (!selected && m_pView->selectionInfo()->isRowAffected(y));
 
     const RowFormat *row_lay = sheet->rowFormat( y );
     int zoomedYPos = m_pCanvas->d->view->doc()->zoomItY( yPos );
     int height = m_pCanvas->d->view->doc()->zoomItY( yPos + row_lay->dblHeight() ) - zoomedYPos;
 
-    if ( selected || current )
+    if ( selected )
     {
       QColor c = colorGroup().highlight().light();
       QBrush fillSelected( c );
@@ -5041,7 +4579,7 @@ void VBorder::paintEvent( QPaintEvent* _ev )
 
     if ( selected )
       painter.setPen( colorGroup().highlightedText() );
-    else if ( highlighted || current )
+    else if ( highlighted )
       painter.setFont( boldFont );
 
     int len = painter.fontMetrics().width( rowText );
@@ -5084,7 +4622,7 @@ HBorder::HBorder( QWidget *_parent, Canvas *_canvas,View *_view )
   m_bMousePressed = false;
 
   m_scrollTimer = new QTimer( this );
-  connect ( m_scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
+  connect( m_scrollTimer, SIGNAL( timeout() ), this, SLOT( doAutoScroll() ) );
 }
 
 
@@ -5228,15 +4766,27 @@ void HBorder::mousePressEvent( QMouseEvent * _ev )
 
     m_iSelectionAnchor = hit_col;
 
-    QRect rect = m_pView->selection();
-    if ( !rect.contains( QPoint( hit_col, 1 ) ) ||
-        !( _ev->button() == RightButton ) ||
-        ( !util_isColumnSelected( rect ) ) )
+    if ( !m_pView->selectionInfo()->contains( QPoint( hit_col, 1 ) ) ||
+         !( _ev->button() == RightButton ) ||
+         !m_pView->selectionInfo()->isColumnSelected() )
     {
       QPoint newMarker( hit_col, 1 );
       QPoint newAnchor( hit_col, KS_rowMax );
-      m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
-                                              m_pView->activeSheet() );
+#ifdef NONCONTIGUOUSSELECTION
+      if (_ev->state() == ControlButton)
+      {
+        m_pView->selectionInfo()->extend(QRect(newAnchor, newMarker));
+      }
+      else
+#endif
+      if (_ev->state() == ShiftButton)
+      {
+        m_pView->selectionInfo()->update(newMarker);
+      }
+      else
+      {
+        m_pView->selectionInfo()->initialize(QRect(newAnchor, newMarker));
+      }
     }
 
     if ( _ev->button() == RightButton )
@@ -5278,13 +4828,13 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
         int end   = m_iResizedColumn;
         QRect rect;
         rect.setCoords( m_iResizedColumn, 1, m_iResizedColumn, KS_rowMax );
-        if ( util_isColumnSelected(m_pView->selection()) )
+        if ( m_pView->selectionInfo()->isColumnSelected() )
         {
-            if ( m_pView->selection().contains( QPoint( m_iResizedColumn, 1 ) ) )
+            if ( m_pView->selectionInfo()->contains( QPoint( m_iResizedColumn, 1 ) ) )
             {
-                start = m_pView->selection().left();
-                end   = m_pView->selection().right();
-                rect  = m_pView->selection();
+                start = m_pView->selectionInfo()->lastRange().left();
+                end   = m_pView->selectionInfo()->lastRange().right();
+                rect  = m_pView->selectionInfo()->lastRange();
             }
         }
 
@@ -5341,7 +4891,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
     }
     else if ( m_bSelection )
     {
-        QRect rect = m_pView->selection();
+        QRect rect = m_pView->selectionInfo()->lastRange();
 
         // TODO: please don't remove. Right now it's useless, but it's for a future feature
         // Norbert
@@ -5419,7 +4969,7 @@ void HBorder::equalizeColumn( double resize )
   Sheet *sheet = m_pCanvas->activeSheet();
   Q_ASSERT( sheet );
 
-  QRect selection( m_pView->selection() );
+  QRect selection( m_pView->selectionInfo()->selection() );
   if ( !m_pCanvas->d->view->doc()->undoLocked() )
   {
       UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
@@ -5433,56 +4983,6 @@ void HBorder::equalizeColumn( double resize )
       cl->setDblWidth( resize );
   }
 
-}
-
-void HBorder::resizeColumn( double resize, int nb, bool makeUndo )
-{
-  Sheet *sheet = m_pCanvas->activeSheet();
-  Q_ASSERT( sheet );
-
-  if ( nb == -1 )
-  {
-    if ( makeUndo && !m_pCanvas->d->view->doc()->undoLocked() )
-    {
-        QRect rect;
-        rect.setCoords( m_iSelectionAnchor, 1, m_iSelectionAnchor, KS_rowMax );
-        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
-        m_pCanvas->d->view->doc()->addCommand( undo );
-    }
-    ColumnFormat *cl = sheet->nonDefaultColumnFormat( m_iSelectionAnchor );
-    cl->setDblWidth( QMAX( 2.0, resize ) );
-  }
-  else
-  {
-    QRect selection( m_pView->selection() );
-    if ( m_pView->selectionInfo()->singleCellSelection() )
-    {
-      if ( makeUndo && !m_pCanvas->d->view->doc()->undoLocked() )
-      {
-        QRect rect;
-        rect.setCoords( m_iSelectionAnchor, 1, m_iSelectionAnchor, KS_rowMax );
-        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
-        m_pCanvas->d->view->doc()->addCommand( undo );
-      }
-
-      ColumnFormat *cl = sheet->nonDefaultColumnFormat( m_pCanvas->markerColumn() );
-      cl->setDblWidth( QMAX( 2.0, resize ) );
-    }
-    else
-    {
-      if ( makeUndo && !m_pCanvas->d->view->doc()->undoLocked() )
-      {
-        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), selection );
-        m_pCanvas->d->view->doc()->addCommand( undo );
-      }
-      ColumnFormat *cl;
-      for ( int i = selection.left(); i <= selection.right(); i++ )
-      {
-        cl = sheet->nonDefaultColumnFormat( i );
-        cl->setDblWidth( QMAX( 2.0, resize ) );
-      }
-    }
-  }
 }
 
 void HBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
@@ -5527,13 +5027,10 @@ void HBorder::mouseMoveEvent( QMouseEvent * _ev )
       return;
 
     QPoint newMarker = m_pView->selectionInfo()->marker();
-    QPoint newAnchor = m_pView->selectionInfo()->selectionAnchor();
-
+    QPoint newAnchor = m_pView->selectionInfo()->anchor();
     newMarker.setX( col );
     newAnchor.setX( m_iSelectionAnchor );
-
-    m_pView->selectionInfo()->setSelection( newMarker, newAnchor,
-                                            m_pView->activeSheet() );
+    m_pView->selectionInfo()->update(newMarker);
 
     if ( sheet->layoutDirection()==Sheet::RightToLeft )
     {
@@ -5797,16 +5294,6 @@ void HBorder::paintEvent( QPaintEvent* _ev )
   QFont boldFont = normalFont;
   boldFont.setBold( true );
 
-  Cell *cell = sheet->cellAt( m_pView->marker() );
-  QRect extraCell;
-  extraCell.setCoords( m_pCanvas->markerColumn(),
-                       m_pCanvas->markerRow(),
-                       m_pCanvas->markerColumn() + cell->extraXCells(),
-                       m_pCanvas->markerRow() + cell->extraYCells());
-
-  //several cells selected but not just a cell merged
-  bool area = ( m_pView->selection().left()!=0 && extraCell != m_pView->selection() );
-
   if ( sheet->layoutDirection()==Sheet::RightToLeft )
   {
     if ( x > KS_colMax )
@@ -5817,16 +5304,14 @@ void HBorder::paintEvent( QPaintEvent* _ev )
     //Loop through the columns, until we are out of range
     while ( xPos <= m_pCanvas->d->view->doc()->unzoomItX( _ev->rect().right() ) )
     {
-      bool highlighted = ( area && x >= m_pView->selection().left() && x <= m_pView->selection().right());
-      bool selected = ( highlighted && util_isColumnSelected( m_pView->selection() ) &&
-                        ( !util_isRowSelected( m_pView->selection() ) ) );
-      bool current = ( !highlighted && x == m_pView->selection().left() );
+      bool selected = (m_pView->selectionInfo()->isColumnSelected(x));
+      bool highlighted = (!selected && m_pView->selectionInfo()->isColumnAffected(x));
 
       const ColumnFormat * col_lay = sheet->columnFormat( x );
       int zoomedXPos = m_pCanvas->d->view->doc()->zoomItX( xPos );
       int width = m_pCanvas->d->view->doc()->zoomItX( xPos + col_lay->dblWidth() ) - zoomedXPos;
 
-      if ( selected || current )
+      if ( selected )
       {
         QColor c = colorGroup().highlight().light();
         QBrush fillSelected( c );
@@ -5854,7 +5339,7 @@ void HBorder::paintEvent( QPaintEvent* _ev )
 
       if ( selected )
         painter.setPen( colorGroup().highlightedText() );
-      else if ( highlighted || current )
+      else if ( highlighted )
         painter.setFont( boldFont );
       if ( !m_pView->activeSheet()->getShowColumnNumber() )
       {
@@ -5884,16 +5369,14 @@ void HBorder::paintEvent( QPaintEvent* _ev )
     //Loop through the columns, until we are out of range
     while ( xPos <= m_pCanvas->d->view->doc()->unzoomItX( _ev->rect().right() ) )
     {
-      bool highlighted = ( area && x >= m_pView->selection().left() && x <= m_pView->selection().right());
-      bool selected = ( highlighted && util_isColumnSelected( m_pView->selection() ) &&
-                        ( !util_isRowSelected( m_pView->selection() ) ) );
-      bool current = ( !highlighted && x == m_pView->selection().left() );
+      bool selected = (m_pView->selectionInfo()->isColumnSelected(x));
+      bool highlighted = (!selected && m_pView->selectionInfo()->isColumnAffected(x));
 
       const ColumnFormat *col_lay = sheet->columnFormat( x );
       int zoomedXPos = m_pCanvas->d->view->doc()->zoomItX( xPos );
       int width = m_pCanvas->d->view->doc()->zoomItX( xPos + col_lay->dblWidth() ) - zoomedXPos;
 
-      if ( selected || current )
+      if ( selected )
       {
         QColor c = colorGroup().highlight().light();
         QBrush fillSelected( c );
@@ -5921,7 +5404,7 @@ void HBorder::paintEvent( QPaintEvent* _ev )
 
       if ( selected )
         painter.setPen( colorGroup().highlightedText() );
-      else if ( highlighted || current )
+      else if ( highlighted )
         painter.setFont( boldFont );
       if ( !m_pView->activeSheet()->getShowColumnNumber() )
       {
@@ -6127,10 +5610,10 @@ void Canvas::setHighlightedRanges(std::vector< KSharedPtr<HighlightRange> >* cel
 			{
 
 				Range rg(*(iter->firstCell),*(iter->lastCell));
-				/*QRect range=rg.range;
+				/*QRect range=rg.range();
 				range.setWidth(range.width()+1);
 				range.setHeight(range.height()+1);*/
-				rg.sheet->setRegionPaintDirty(rg.range);
+				rg.sheet->setRegionPaintDirty(rg.range());
 			}
 			else
 			{

@@ -30,16 +30,18 @@
 #include <koPageLayout.h>
 
 #include "kspread_doc.h"
+#include "region.h"
 
 namespace KSpread
 {
-class Undo;
-class Sheet;
-class Format;
-class Doc;
-class UndoResizeColRow;
 class ColumnFormat;
+class Doc;
+class Format;
+class Region;
 class RowFormat;
+class Sheet;
+class Undo;
+class UndoResizeColRow;
 
 struct rowSize {
 int rowNumber;
@@ -352,7 +354,7 @@ protected:
 class UndoCellFormat : public UndoAction
 {
 public:
-    UndoCellFormat( Doc *_doc, Sheet *_sheet, const QRect &_selection, const QString &_title );
+    UndoCellFormat( Doc *_doc, Sheet *_sheet, const Region &_selection, const QString &_title );
     virtual ~UndoCellFormat();
 
     virtual void undo();
@@ -361,7 +363,7 @@ public:
 protected:
     void copyFormat( QValueList<layoutCell> &list,QValueList<layoutColumn> &listCol,QValueList<layoutRow> &listRow, Sheet* sheet );
 
-    QRect m_rctRect;
+    Region m_region;
     QValueList<layoutCell> m_lstFormats;
     QValueList<layoutCell> m_lstRedoFormats;
     QValueList<layoutColumn> m_lstColFormats;
@@ -375,7 +377,7 @@ protected:
 class UndoChangeAngle : public UndoAction
 {
 public:
-    UndoChangeAngle( Doc *_doc, Sheet *_sheet, const QRect &_selection );
+    UndoChangeAngle( Doc *_doc, Sheet *_sheet, const Region &_selection );
     virtual ~UndoChangeAngle();
 
     virtual void undo();
@@ -435,7 +437,7 @@ protected:
 class UndoResizeColRow : public UndoAction
 {
 public:
-    UndoResizeColRow( Doc *_doc, Sheet *_sheet, const QRect &_selection );
+    UndoResizeColRow( Doc *_doc, Sheet *_sheet, const Region &_selection );
     virtual ~UndoResizeColRow();
 
     virtual void undo();
@@ -444,7 +446,7 @@ public:
 protected:
     void createList( QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, Sheet* sheet );
 
-    QRect m_rctRect;
+    Region m_region;
     QValueList<columnSize> m_lstColumn;
     QValueList<columnSize> m_lstRedoColumn;
     QValueList<rowSize> m_lstRow;
@@ -455,7 +457,7 @@ protected:
 class UndoChangeAreaTextCell : public UndoAction
 {
 public:
-    UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const QRect &_selection );
+    UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const Region &_selection );
     virtual ~UndoChangeAreaTextCell();
 
     virtual void undo();
@@ -464,7 +466,7 @@ public:
 protected:
     void createList( QValueList<textOfCell> &list, Sheet* sheet );
 
-    QRect m_rctRect;
+    Region m_region;
     QValueList<textOfCell> m_lstTextCell;
     QValueList<textOfCell> m_lstRedoTextCell;
     QString m_sheetName;
@@ -591,14 +593,14 @@ protected:
 class UndoConditional : public UndoAction
 {
 public:
-    UndoConditional( Doc *_doc, Sheet *_sheet, QRect const & _rect );
+    UndoConditional( Doc *_doc, Sheet *_sheet, const Region & _selection );
     virtual ~UndoConditional();
 
     virtual void undo();
     virtual void redo();
 protected:
     void createListCell( QCString &list, Sheet* sheet );
-    QRect m_selection;
+    Region m_region;
     QCString m_data;
     QCString m_dataRedo;
     QString m_sheetName;

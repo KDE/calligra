@@ -128,6 +128,7 @@ Region::Region(const QPoint& point, Sheet* sheet)
 Region::Region(const Region& list)
 {
   d = new Private();
+  d->view = list.d->view;
 
   ConstIterator end(list.d->cells.constEnd());
   for (ConstIterator it = list.d->cells.constBegin(); it != end; ++it)
@@ -223,7 +224,7 @@ QString Region::name(Sheet* originSheet) const
     Element *element = *it;
     names += element->name(originSheet);
   }
-  return names.join(";");
+  return names.isEmpty() ? "" : names.join(";");
 }
 
 void Region::add(const QPoint& point, Sheet* sheet)
@@ -238,6 +239,10 @@ void Region::add(const QPoint& point, Sheet* sheet)
   for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
   {
     Element *element = *it;
+    if (sheet && sheet != element->sheet())
+    {
+      continue;
+    }
     if (element->contains(point))
     {
       containsPoint = true;
@@ -268,7 +273,7 @@ void Region::add(const QRect& range, Sheet* sheet)
 {
   if (range.size() == QSize(1,1))
   {
-    add(range.topLeft());
+    add(range.topLeft(), sheet);
     return;
   }
 
@@ -278,6 +283,11 @@ void Region::add(const QRect& range, Sheet* sheet)
   Iterator endOfList( d->cells.end() );
   while ( it != endOfList )
   {
+    if (sheet && sheet != (*it)->sheet())
+    {
+      ++it;
+      continue;
+    }
     if ((*it)->contains(range))
     {
       containsRange = true;
@@ -307,7 +317,7 @@ void Region::add(const Region& region)
   ConstIterator endOfList(region.d->cells.constEnd());
   for (ConstIterator it = region.d->cells.constBegin(); it != endOfList; ++it)
   {
-    add((*it)->rect());
+    add((*it)->rect(), (*it)->sheet());
   }
 }
 
@@ -403,7 +413,7 @@ bool Region::isRowSelected(uint row) const
   return false;
 }
 
-bool Region::contains(const QPoint& point) const
+bool Region::contains(const QPoint& point, Sheet* sheet) const
 {
   if (d->cells.isEmpty())
   {
@@ -415,6 +425,10 @@ bool Region::contains(const QPoint& point) const
     Element *element = *it;
     if (element->contains(point))
     {
+      if (sheet && element->sheet() != sheet)
+      {
+        return false;
+      }
       return true;
     }
   }
@@ -464,6 +478,27 @@ bool Region::operator==(const Region& other) const
     }
   }
   return true;
+}
+
+void Region::operator=(const Region& other)
+{
+  d->view = other.d->view;
+  clear();
+  ConstIterator end(other.d->cells.constEnd());
+  for (ConstIterator it = other.d->cells.constBegin(); it != end; ++it)
+  {
+    Element *element = *it;
+    if (element->type() == Element::Point)
+    {
+      Point* point = static_cast<Point*>(element);
+      d->cells.append(new Point(*point));
+    }
+    else
+    {
+      Range* range = static_cast<Range*>(element);
+      d->cells.append(new Range(*range));
+    }
+  }
 }
 
 Sheet* Region::filterSheetName(QString& sRegion)
@@ -640,7 +675,7 @@ Region::Point::~Point()
 
 QString Region::Point::name(Sheet* originSheet) const
 {
-  QString name;
+  QString name = "";
   if (m_sheet && originSheet && m_sheet != originSheet)
   {
     name = m_sheet->sheetName() + "!";
@@ -715,7 +750,7 @@ Region::Range::~Range()
 
 QString Region::Range::name(Sheet* originSheet) const
 {
-  QString name;
+  QString name = "";
   if (m_sheet && originSheet && m_sheet != originSheet)
   {
     name = m_sheet->sheetName() + "!";

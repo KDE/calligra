@@ -736,8 +736,7 @@ most important thing is to separate the interface and the implementation.
 Furthermore, build time is reduced since modification on the implementation
 would not cause tons of recompile.</p>
 
-<p>When creating a new class, use namespace KSpread. Legacy code will be someday
-converted into namespaces but in the mean time do not use KSpread prefix
+<p>When creating a new class, use namespace KSpread. Do not use KSpread prefix
 anymore. Example: use <tt>KSpread::Foo</tt> instead of <tt>KSpreadFoo</tt>.
 Also source file name should not contain kspread prefix anymore, i.e.
 <tt>foo.h</tt> and <tt>foo.cc</tt> (but not <tt>kspread_foo.h</tt> and

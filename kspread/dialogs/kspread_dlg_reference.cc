@@ -32,7 +32,7 @@
 #include "kspread_map.h"
 #include "kspread_view.h"
 #include "kspread_sheet.h"
-#include "kspread_selection.h"
+#include "selection.h"
 #include "kspread_locale.h"
 
 #include <qvariant.h>
@@ -230,13 +230,9 @@ void reference::slotOk()
         m_pView->setActiveSheet(sheet);
     }
 
-    m_pView->canvasWidget()->
-	gotoLocation(Point(Cell::fullName(m_pView->activeSheet(),
-        area[ index ].rect.left(), area[ index ].rect.top() ),
-				  m_pView->doc()->map() ) );
-    m_pView->selectionInfo()->setSelection(area[ index ].rect.topLeft(),
-                                           area[index].rect.bottomRight(),
-                                           m_pView->activeSheet() );
+    Region region(m_pView, Cell::fullName(m_pView->activeSheet(), area[index].rect.left(), area[index].rect.top()));
+    m_pView->selectionInfo()->initialize(region);
+    m_pView->selectionInfo()->initialize(area[ index ].rect);//,                                           m_pView->activeSheet() );
   }
 
   m_pView->slotUpdateView( m_pView->activeSheet() );

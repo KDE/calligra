@@ -28,7 +28,7 @@
 
 #include "../../kspread_view.h"
 #include "../../kspread_doc.h"
-#include "../../kspread_selection.h"
+#include "../../selection.h"
 #include "../../kspread_sheet.h"
 
 #include <kcalendarsystem.h>
@@ -180,7 +180,7 @@ void PluginInsertCalendar::slotInsertCalendar(const QDate &start, const QDate &e
     if (KMessageBox::No == KMessageBox::warningYesNo(NULL,i18n("The area where the calendar is inserted is NOT empty, are you sure you want to continue, overwriting existing data? If you choose No the area that would be required for the desired calendar will be selected so you can see what data would be overwritten."),i18n("Warning")))
     {
       //select the area so the user knows what's in the way
-      selection_info->setSelection(selection,QPoint(selection.x()+sizeX,selection.y()+sizeY),sheet);
+      selection_info->initialize(QRect(selection.x(),selection.y(),sizeX,sizeY));//,sheet);
       return;
     }
   }

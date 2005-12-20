@@ -23,26 +23,27 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <qcombobox.h>
+#include <qfile.h>
+#include <qlayout.h>
+#include <qlabel.h>
+#include <qpushbutton.h>
+
+#include <kbuttonbox.h>
+#include <kmessagebox.h>
+#include <kstandarddirs.h>
+#include <ksimpleconfig.h>
+
 #include "kspread_dlg_format.h"
 #include "kspread_doc.h"
 #include "kspread_locale.h"
-#include "kspread_selection.h"
 #include "kspread_sheet.h"
 #include "kspread_style.h"
 #include "kspread_style_manager.h"
 #include "kspread_undo.h"
 #include "kspread_view.h"
+#include "selection.h"
 
-#include <kstandarddirs.h>
-#include <ksimpleconfig.h>
-#include <kbuttonbox.h>
-#include <kmessagebox.h>
-
-#include <qlayout.h>
-#include <qlabel.h>
-#include <qcombobox.h>
-#include <qfile.h>
-#include <qpushbutton.h>
 
 using namespace KSpread;
 
@@ -156,12 +157,12 @@ void FormatDialog::slotOk()
 	return;
     }
 
-    QRect r = m_view->selection();
+    QRect r = m_view->selectionInfo()->selection();
 
     if ( !m_view->doc()->undoLocked() )
     {
         QString title=i18n("Change Format");
-        UndoCellFormat *undo = new UndoCellFormat( m_view->doc(), m_view->activeSheet(), r ,title);
+        UndoCellFormat *undo = new UndoCellFormat( m_view->doc(), m_view->activeSheet(), Region(r), title);
         m_view->doc()->addCommand( undo );
     }
     //
@@ -310,8 +311,7 @@ void FormatDialog::slotOk()
         }
     }
 
-    m_view->selectionInfo()->setSelection( r.topLeft(), r.bottomRight(),
-                                           m_view->activeSheet() );
+    m_view->selectionInfo()->initialize(r);//,       m_view->activeSheet() );
     m_view->doc()->setModified( true );
     m_view->slotUpdateView( m_view->activeSheet() );
     accept();

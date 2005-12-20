@@ -40,6 +40,8 @@
 #include <kspread_sheet.h>
 #include <kspread_undo.h>
 #include <kspread_view.h>
+#include "manipulator.h"
+#include "selection.h"
 
 #include "kspread_dlg_resize2.h"
 
@@ -56,7 +58,7 @@ ResizeRow::ResizeRow( View* parent, const char* name )
     QVBoxLayout *vLay = new QVBoxLayout( page, 0, spacingHint() );
     QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
-    QRect selection( m_pView->selection() );
+    QRect selection( m_pView->selectionInfo()->selection() );
     RowFormat* rl = m_pView->activeSheet()->rowFormat( selection.top() );
     rowHeight = rl->dblHeight();
 
@@ -86,26 +88,21 @@ ResizeRow::ResizeRow( View* parent, const char* name )
 
 void ResizeRow::slotOk()
 {
-    m_pView->doc()->emitBeginOperation( false );
-    double height = m_pHeight->value();
+  double height = m_pHeight->value();
 
-    //Don't generate a resize, when there isn't a change or the change is only a rounding issue
-    if ( fabs( height - rowHeight ) > DBL_EPSILON )
-    {
-        QRect selection( m_pView->selection() );
-
-        if ( !m_pView->doc()->undoLocked() )
-        {
-            UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), m_pView->activeSheet(), selection );
-            m_pView->doc()->addCommand( undo );
-        }
-
-        for( int i=selection.top(); i <= selection.bottom(); i++ )
-            m_pView->vBorderWidget()->resizeRow( height, i, false );
-    }
-
-    m_pView->slotUpdateView( m_pView->activeSheet() );
-    accept();
+  //Don't generate a resize, when there isn't a change or the change is only a rounding issue
+  if ( fabs( height - rowHeight ) > DBL_EPSILON )
+  {
+    ResizeRowManipulator* manipulator = new ResizeRowManipulator();
+    manipulator->setSheet(m_pView->activeSheet());
+    manipulator->setSize(height);
+    // TODO Stefan:
+    manipulator->setOldSize(rowHeight);
+    manipulator->add(*m_pView->selectionInfo());
+    m_pView->doc()->addCommand( manipulator );
+    manipulator->execute();
+  }
+  accept();
 }
 
 void ResizeRow::slotDefault()
@@ -124,7 +121,7 @@ ResizeColumn::ResizeColumn( View* parent, const char* name )
     QVBoxLayout *vLay = new QVBoxLayout( page, 0, spacingHint() );
     QHBoxLayout *hLay = new QHBoxLayout( vLay );
 
-    QRect selection( m_pView->selection() );
+    QRect selection( m_pView->selectionInfo()->selection() );
     ColumnFormat* cl = m_pView->activeSheet()->columnFormat( selection.left() );
     columnWidth = cl->dblWidth();
 
@@ -154,27 +151,21 @@ ResizeColumn::ResizeColumn( View* parent, const char* name )
 
 void ResizeColumn::slotOk()
 {
-    m_pView->doc()->emitBeginOperation( false );
-    double width = m_pWidth->value();
+  double width = m_pWidth->value();
 
-    //Don't generate a resize, when there isn't a change or the change is only a rounding issue
-    if ( fabs( width - columnWidth ) > DBL_EPSILON )
-    {
-        QRect selection( m_pView->selection() );
-
-        if ( !m_pView->doc()->undoLocked() )
-        {
-            UndoResizeColRow *undo = new UndoResizeColRow( m_pView->doc(), m_pView->activeSheet(), selection );
-            m_pView->doc()->addCommand( undo );
-        }
-
-        for( int i = selection.left(); i <= selection.right(); i++ )
-            m_pView->hBorderWidget()->resizeColumn( width, i, false );
-
-    }
-
-    m_pView->slotUpdateView( m_pView->activeSheet() );
-    accept();
+  //Don't generate a resize, when there isn't a change or the change is only a rounding issue
+  if ( fabs( width - columnWidth ) > DBL_EPSILON )
+  {
+    ResizeColumnManipulator* manipulator = new ResizeColumnManipulator();
+    manipulator->setSheet(m_pView->activeSheet());
+    manipulator->setSize(width);
+    // TODO Stefan:
+    manipulator->setOldSize(columnWidth);
+    manipulator->add(*m_pView->selectionInfo());
+    m_pView->doc()->addCommand( manipulator );
+    manipulator->execute();
+  }
+  accept();
 }
 
 void ResizeColumn::slotDefault()

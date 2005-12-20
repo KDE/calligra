@@ -27,10 +27,11 @@
 
 #include <kmessagebox.h>
 
-#include "kspread_view.h"
-#include "kspread_sheet.h"
 #include "kspread_doc.h"
 #include "kspread_locale.h"
+#include "kspread_sheet.h"
+#include "kspread_view.h"
+#include "selection.h"
 
 #include "kspread_dlg_area.h"
 
@@ -72,7 +73,7 @@ void AreaDialog::slotOk()
   {
     tmp = tmp.lower();
 
-    QRect rect( m_pView->selection() );
+    QRect rect( m_pView->selectionInfo()->selection() );
     bool newName = true;
     QValueList<Reference>::Iterator it;
     QValueList<Reference> area = m_pView->doc()->listArea();

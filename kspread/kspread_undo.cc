@@ -894,9 +894,9 @@ void UndoSetText::redo()
  ***************************************************************************/
 
 UndoCellFormat::UndoCellFormat( Doc * _doc,
-                                              Sheet * _sheet,
-                                              const QRect & _selection,
-                                              const QString & _name ) :
+                                Sheet * _sheet,
+                                const Region & _selection,
+                                const QString & _name ) :
   UndoAction( _doc )
 {
   if ( _name.isEmpty())
@@ -904,7 +904,7 @@ UndoCellFormat::UndoCellFormat( Doc * _doc,
   else
     name = _name;
 
-  m_rctRect   = _selection;
+  m_region   = _selection;
   m_sheetName = _sheet->sheetName();
   copyFormat( m_lstFormats, m_lstColFormats, m_lstRowFormats, _sheet );
 }
@@ -922,13 +922,17 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
   list.clear();
 
   Cell * cell;
-  int bottom = m_rctRect.bottom();
-  int right  = m_rctRect.right();
+  Region::ConstIterator endOfList(m_region.constEnd());
+  for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
+  int bottom = range.bottom();
+  int right  = range.right();
 
-  if ( util_isColumnSelected( m_rctRect ) )
+  if ( util_isColumnSelected( range ) )
   {
     /* Don't need to go through the loop twice...
-      for (int i = m_rctRect.left(); i <= right; ++i)
+      for (int i = range.left(); i <= right; ++i)
       {
       layoutColumn tmplayout;
       tmplayout.col = i;
@@ -937,7 +941,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
       listCol.append(tmplayout);
       }
     */
-    for ( int c = m_rctRect.left(); c <= right; ++c )
+    for ( int c = range.left(); c <= right; ++c )
     {
       layoutColumn tmplayout;
       tmplayout.col = c;
@@ -969,7 +973,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
       for( ; c; c = c->nextCell() )
       {
       int col = c->column();
-      if ( m_rctRect.left() <= col && right >= col
+      if ( range.left() <= col && right >= col
           && !c->isObscuringForced())
       {
         layoutCell tmplayout;
@@ -982,9 +986,9 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
       }
     */
   }
-  else if (util_isRowSelected( m_rctRect ) )
+  else if (util_isRowSelected( range ) )
   {
-    for ( int row = m_rctRect.top(); row <= bottom; ++row )
+    for ( int row = range.top(); row <= bottom; ++row )
     {
       layoutRow tmplayout;
       tmplayout.row = row;
@@ -1015,7 +1019,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
       for( ; c; c = c->nextCell() )
       {
       int row = c->row();
-      if ( m_rctRect.top() <= row && bottom >= row
+      if ( range.top() <= row && bottom >= row
            && !c->isObscuringForced())
       {
         layoutCell tmplayout;
@@ -1030,8 +1034,8 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
   }
   else
   {
-    for ( int y = m_rctRect.top(); y <= bottom; ++y )
-      for ( int x = m_rctRect.left(); x <= right; ++x )
+    for ( int y = range.top(); y <= bottom; ++y )
+      for ( int x = range.left(); x <= right; ++x )
       {
         Cell * cell = sheet->nonDefaultCell( x, y );
         if ( !cell->isObscuringForced() )
@@ -1044,6 +1048,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
           list.append(tmplayout);
         }
       }
+  }
   }
 }
 
@@ -1100,7 +1105,11 @@ void UndoCellFormat::undo()
   doc()->undoLock();
   doc()->emitBeginOperation();
   copyFormat( m_lstRedoFormats, m_lstRedoColFormats, m_lstRedoRowFormats, sheet );
-  if( util_isColumnSelected( m_rctRect ) )
+  Region::ConstIterator endOfList(m_region.constEnd());
+  for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
+  if( util_isColumnSelected( range ) )
   {
     QValueList<layoutColumn>::Iterator it2;
     for ( it2 = m_lstColFormats.begin(); it2 != m_lstColFormats.end(); ++it2 )
@@ -1109,7 +1118,7 @@ void UndoCellFormat::undo()
       col->copy( *(*it2).l );
     }
   }
-  else if( util_isRowSelected( m_rctRect ) )
+  else if( util_isRowSelected( range ) )
   {
     QValueList<layoutRow>::Iterator it2;
     for ( it2 = m_lstRowFormats.begin(); it2 != m_lstRowFormats.end(); ++it2 )
@@ -1128,9 +1137,9 @@ void UndoCellFormat::undo()
     cell->setDisplayDirtyFlag();
     sheet->updateCell( cell, (*it2).col, (*it2).row );
   }
-
-  sheet->setRegionPaintDirty( m_rctRect );
-  sheet->updateView( m_rctRect );
+  }
+  sheet->setRegionPaintDirty( m_region );
+  sheet->updateView( &m_region );
 
   doc()->undoUnlock();
 }
@@ -1144,7 +1153,11 @@ void UndoCellFormat::redo()
   doc()->undoLock();
   doc()->emitBeginOperation();
 
-  if ( util_isColumnSelected( m_rctRect ) )
+  Region::ConstIterator endOfList(m_region.constEnd());
+  for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
+  if ( util_isColumnSelected( range ) )
   {
     QValueList<layoutColumn>::Iterator it2;
     for ( it2 = m_lstRedoColFormats.begin(); it2 != m_lstRedoColFormats.end(); ++it2 )
@@ -1153,7 +1166,7 @@ void UndoCellFormat::redo()
       col->copy( *(*it2).l );
     }
   }
-  else if( util_isRowSelected( m_rctRect ) )
+  else if( util_isRowSelected( range ) )
   {
     QValueList<layoutRow>::Iterator it2;
     for ( it2 = m_lstRedoRowFormats.begin(); it2 != m_lstRedoRowFormats.end(); ++it2 )
@@ -1172,9 +1185,10 @@ void UndoCellFormat::redo()
     cell->setDisplayDirtyFlag();
     sheet->updateCell( cell, (*it2).col, (*it2).row );
   }
+  }
 
-  sheet->setRegionPaintDirty( m_rctRect );
-  sheet->updateView( m_rctRect );
+  sheet->setRegionPaintDirty( m_region );
+  sheet->updateView( &m_region );
   doc()->undoUnlock();
 }
 
@@ -1186,11 +1200,11 @@ void UndoCellFormat::redo()
 
 UndoChangeAngle::UndoChangeAngle( Doc * _doc,
                                               Sheet * _sheet,
-                                              const QRect & _selection ) :
+                                              const Region & _selection ) :
   UndoAction( _doc )
 {
   name = i18n("Change Angle");
-  m_layoutUndo = new UndoCellFormat( _doc, _sheet, _selection, QString::null );
+  m_layoutUndo = new UndoCellFormat( _doc, _sheet, Region(_selection), QString::null );
   m_resizeUndo = new UndoResizeColRow( _doc, _sheet, _selection );
 }
 
@@ -1729,11 +1743,11 @@ void UndoDragDrop::redo()
  ***************************************************************************/
 
 
-UndoResizeColRow::UndoResizeColRow( Doc *_doc, Sheet *_sheet, const QRect &_selection ) :
+UndoResizeColRow::UndoResizeColRow( Doc *_doc, Sheet *_sheet, const Region &_selection ) :
     UndoAction( _doc )
 {
   name=i18n("Resize");
-  m_rctRect = _selection;
+  m_region = _selection;
   m_sheetName = _sheet->sheetName();
 
   createList( m_lstColumn,m_lstRow, _sheet );
@@ -1743,6 +1757,10 @@ void UndoResizeColRow::createList( QValueList<columnSize> &listCol,QValueList<ro
 {
     listCol.clear();
     listRow.clear();
+    Region::ConstIterator endOfList(m_region.constEnd());
+    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+    {
+      QRect m_rctRect = (*it)->rect().normalize();
 
     if( util_isColumnSelected( m_rctRect ) ) // entire column(s)
     {
@@ -1798,6 +1816,7 @@ void UndoResizeColRow::createList( QValueList<columnSize> &listCol,QValueList<ro
         }
 
     }
+    }
 }
 
 UndoResizeColRow::~UndoResizeColRow()
@@ -1813,6 +1832,11 @@ void UndoResizeColRow::undo()
     doc()->undoLock();
 
     createList( m_lstRedoColumn,m_lstRedoRow, sheet );
+
+    Region::ConstIterator endOfList(m_region.constEnd());
+    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+    {
+      QRect m_rctRect = (*it)->rect().normalize();
 
     if( util_isColumnSelected( m_rctRect ) ) // complete column(s)
     {
@@ -1847,6 +1871,7 @@ void UndoResizeColRow::undo()
            rw->setDblHeight((*it1).rowHeight);
         }
     }
+    }
 
     doc()->undoUnlock();
 }
@@ -1858,6 +1883,12 @@ void UndoResizeColRow::redo()
 	return;
 
     doc()->undoLock();
+
+    Region::ConstIterator endOfList(m_region.constEnd());
+    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+    {
+      QRect m_rctRect = (*it)->rect().normalize();
+
     if( util_isColumnSelected( m_rctRect ) ) // complete column(s)
     {
     QValueList<columnSize>::Iterator it2;
@@ -1891,6 +1922,7 @@ void UndoResizeColRow::redo()
            rw->setDblHeight((*it1).rowHeight);
         }
     }
+    }
 
     doc()->undoUnlock();
 }
@@ -1902,12 +1934,12 @@ void UndoResizeColRow::redo()
  ***************************************************************************/
 
 
-UndoChangeAreaTextCell::UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const QRect &_selection ) :
+UndoChangeAreaTextCell::UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const Region &_selection ) :
     UndoAction( _doc )
 {
   name=i18n("Change Text");
 
-  m_rctRect = _selection;
+  m_region = _selection;
   m_sheetName = _sheet->sheetName();
 
   createList( m_lstTextCell, _sheet );
@@ -1915,6 +1947,10 @@ UndoChangeAreaTextCell::UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const 
 
 void UndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, Sheet* sheet )
 {
+  Region::ConstIterator endOfList(m_region.constEnd());
+  for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+  {
+    QRect m_rctRect = (*it)->rect().normalize();
     int bottom = m_rctRect.bottom();
     int right  = m_rctRect.right();
     list.clear();
@@ -1981,6 +2017,7 @@ void UndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, Sheet* sh
         }
       }
     }
+  }
 }
 
 UndoChangeAreaTextCell::~UndoChangeAreaTextCell()
@@ -1997,6 +2034,10 @@ void UndoChangeAreaTextCell::undo()
     doc()->emitBeginOperation();
     createList( m_lstRedoTextCell, sheet );
 
+    Region::ConstIterator endOfList(m_region.constEnd());
+    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+    {
+      QRect m_rctRect = (*it)->rect().normalize();
 
     if ( !util_isRowSelected( m_rctRect )
          && !util_isColumnSelected( m_rctRect ) )
@@ -2033,6 +2074,7 @@ void UndoChangeAreaTextCell::undo()
           cell->setCellText( (*it2).text );
       }
     }
+    }
 
     sheet->updateView();
     doc()->undoUnlock();
@@ -2047,6 +2089,10 @@ void UndoChangeAreaTextCell::redo()
 
     doc()->undoLock();
     doc()->emitBeginOperation();
+    Region::ConstIterator endOfList(m_region.constEnd());
+    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+    {
+      QRect m_rctRect = (*it)->rect().normalize();
 
     if ( !util_isRowSelected( m_rctRect )
          && !util_isColumnSelected( m_rctRect ) )
@@ -2082,6 +2128,7 @@ void UndoChangeAreaTextCell::redo()
         else
           cell->setCellText( (*it2).text );
       }
+    }
     }
 
     sheet->updateView();
@@ -2432,13 +2479,13 @@ void UndoRemoveCellCol::redo()
  *
  ***************************************************************************/
 
-UndoConditional::UndoConditional( Doc *_doc, Sheet* sheet, QRect const & _selection)
+UndoConditional::UndoConditional( Doc *_doc, Sheet* sheet, const Region & _selection)
     : UndoAction( _doc )
 {
     name=i18n("Conditional Cell Attribute");
 
     m_sheetName = sheet->sheetName();
-    m_selection = _selection;
+    m_region = _selection;
     createListCell( m_data, sheet );
 
 }
@@ -2449,11 +2496,17 @@ UndoConditional::~UndoConditional()
 
 void UndoConditional::createListCell( QCString &list, Sheet* sheet )
 {
-    QDomDocument doc = sheet->saveCellRect( m_selection );
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
+
+  Region::ConstIterator endOfList(m_region.constEnd());
+  for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+  {
+    QRect m_rctRect = (*it)->rect().normalize();
+    QDomDocument doc = sheet->saveCellRect( m_rctRect );
     str << doc;
+  }
 
     // This is a terrible hack to store unicode
     // data in a QCString in a way that
@@ -2475,7 +2528,12 @@ void UndoConditional::undo()
     createListCell( m_dataRedo, sheet );
 
     doc()->undoLock();
-    sheet->paste( m_data, m_selection );
+    Region::ConstIterator endOfList(m_region.constEnd());
+    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+    {
+      QRect m_rctRect = (*it)->rect().normalize();
+    sheet->paste( m_data, m_rctRect );
+    }
     if(sheet->getAutoCalc()) sheet->recalc();
 
     doc()->undoUnlock();
@@ -2490,7 +2548,12 @@ void UndoConditional::redo()
 	return;
 
     doc()->undoLock();
-    sheet->paste( m_dataRedo, m_selection );
+    Region::ConstIterator endOfList(m_region.constEnd());
+    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+    {
+      QRect m_rctRect = (*it)->rect().normalize();
+    sheet->paste( m_dataRedo, m_rctRect );
+    }
     if(sheet->getAutoCalc()) sheet->recalc();
 
     doc()->undoUnlock();

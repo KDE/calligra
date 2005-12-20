@@ -30,7 +30,7 @@
 
 #include "kspread_doc.h"
 #include "kspread_map.h"
-#include "kspread_selection.h"
+#include "selection.h"
 #include "kspread_sheet.h"
 #include "kspread_view.h"
 
@@ -289,8 +289,7 @@ void ViewIface::copyAsText()
 
 void ViewIface::setSelection(QRect selection)
 {
-  m_view->selectionInfo()->setSelection(selection.topLeft(), selection.bottomRight(),
-                                        m_view->activeSheet());
+  m_view->selectionInfo()->initialize(selection);//,m_view->activeSheet());
 }
 
 QRect ViewIface::selection()
