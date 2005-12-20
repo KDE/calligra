@@ -1383,7 +1383,7 @@ void KWCanvas::terminateCurrentEdit()
 
 void KWCanvas::terminateEditing( KWFrameSet *fs )
 {
-    if ( m_currentFrameSetEdit->frameSet() == fs )
+    if ( m_currentFrameSetEdit && m_currentFrameSetEdit->frameSet() == fs )
         terminateCurrentEdit();
     // Also deselect the frames from this frameset
     QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
