@@ -30,6 +30,20 @@
             <property name="title">
                 <string>Background Color</string>
             </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;p&gt;Paragraph Background Color&lt;/p&gt;
+
+&lt;p&gt;The paragraph background colour appears
+between the left and right margins of a
+paragraph.&lt;/p&gt;
+
+&lt;p&gt;If the text has a background color set, then
+the text background will appear 'on top' of the
+paragraph background.  In this case, the paragraph
+background will still show on parts of the paragraph
+that have no text (usually on the last line, between
+the end of the text and the margin).&lt;/p&gt;</string>
+            </property>
             <hbox>
                 <property name="name">
                     <cstring>unnamed</cstring>
@@ -69,6 +83,24 @@
             </property>
             <property name="title">
                 <string>Borders</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;p&gt;Paragraph Borders&lt;/p&gt;
+
+&lt;p&gt;The preview shows what the currently 
+selected paragraph borders will look like.&lt;/p&gt;
+
+&lt;p&gt;To &lt;i&gt;add&lt;/i&gt; a new border: Select the desired style,
+width and color.  Click the toggle button that corresponds
+to that border.&lt;/p&gt;
+
+&lt;p&gt;To &lt;i&gt;remove&lt;/i&gt; an existing border: Either click on the
+border to be removed in the preview, or click the
+toggle button corresponding to that border.&lt;/p&gt;
+
+&lt;p&gt;To &lt;i&gt;modify&lt;/i&gt; a border: Select the desired style,
+width and color, then click on the border to be
+modified in the preview.&lt;/p&gt;</string>
             </property>
             <hbox>
                 <property name="name">
@@ -196,6 +228,12 @@
                                     <property name="toggleButton">
                                         <bool>true</bool>
                                     </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Add/remove left paragraph border</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Toggles the left paragraph border on or off.</string>
+                                    </property>
                                 </widget>
                                 <widget class="KPushButton">
                                     <property name="name">
@@ -209,6 +247,12 @@
                                     </property>
                                     <property name="toggleButton">
                                         <bool>true</bool>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Add/remove right paragraph border</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Toggles the right paragraph border on or off.</string>
                                     </property>
                                 </widget>
                                 <widget class="KPushButton">
@@ -224,6 +268,12 @@
                                     <property name="toggleButton">
                                         <bool>true</bool>
                                     </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Add/remove top paragraph border</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Toggles the top paragraph border on or off.</string>
+                                    </property>
                                 </widget>
                                 <widget class="KPushButton">
                                     <property name="name">
@@ -237,6 +287,12 @@
                                     </property>
                                     <property name="toggleButton">
                                         <bool>true</bool>
+                                    </property>
+                                    <property name="toolTip" stdset="0">
+                                        <string>Add/remove bottom paragraph border</string>
+                                    </property>
+                                    <property name="whatsThis" stdset="0">
+                                        <string>Toggles the bottom paragraph border on or off.</string>
                                     </property>
                                 </widget>
                             </hbox>
