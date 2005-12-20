@@ -185,6 +185,15 @@ double getAttribute(QDomElement &element, const char *attributeName, double defa
 		return defaultValue;
 }
 
+int getAttribute(QDomElement &element, const char *attributeName, int defaultValue)
+{
+	QString value;
+	if ( ( value = element.attribute( attributeName ) ) != QString::null )
+		return value.toInt();
+	else
+		return defaultValue;
+}
+
 bool
 KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 {
