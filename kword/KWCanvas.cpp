@@ -261,7 +261,8 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
     drawDocument( painter, QRect( cx, cy, cw, ch ), m_viewMode );
     if ( m_doc->showGrid() )
       drawGrid( *painter, QRect( cx, cy, cw, ch ) );
-    else if ( m_doc->snapToGrid() && ( m_interactionPolicy || m_mouseMode != MM_EDIT ) )
+    else if ( m_doc->snapToGrid() && ( m_interactionPolicy && m_interactionPolicy->gotDragEvents()
+                || m_mouseMode != MM_EDIT ) )
       drawGrid( *painter, rect() );
   }
 }
@@ -351,19 +352,6 @@ void KWCanvas::switchViewMode( const QString& newViewMode )
 {
     delete m_viewMode;
     m_viewMode = KWViewMode::create( newViewMode, m_doc, this );
-}
-
-void KWCanvas::mpEditFrame( const QPoint &nPoint, MouseMeaning meaning, QMouseEvent *event ) // mouse press in edit-frame mode
-{
-    KoPoint docPoint( m_doc->unzoomPoint( nPoint ) );
-    m_mouseMeaning = meaning;
-    m_mousePressed = true;
-
-    delete m_interactionPolicy;
-    m_interactionPolicy = InteractionPolicy::createPolicy(this, meaning, docPoint, event->button(), event->state());
-    viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, event->state() ) );
-
-    m_deleteMovingRect = false;
 }
 
 void KWCanvas::mpCreate( const QPoint& normalPoint, bool noGrid )
@@ -540,8 +528,14 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
         case MEANING_SELECT_COLUMN:
         case MEANING_FORBIDDEN:
         case MEANING_MOUSE_SELECT:
-            terminateCurrentEdit();
-            mpEditFrame( normalPoint, m_mouseMeaning, e );
+            m_mousePressed = true;
+            m_deleteMovingRect = false;
+
+            delete m_interactionPolicy;
+            m_interactionPolicy = InteractionPolicy::createPolicy(this, m_mouseMeaning, docPoint, e->button(), e->state());
+            if(m_interactionPolicy)
+                terminateCurrentEdit();
+            viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, e->state() ) );
             break;
         case MEANING_NONE:
             break;
@@ -826,9 +820,11 @@ void KWCanvas::contentsMouseMoveEvent( QMouseEvent *e )
                     QRect newRect( m_viewMode->normalToView( m_doc->zoomRect( m_currentTable->boundingRect() ) ) );
                     repaintContents( QRegion(oldRect).unite(newRect).boundingRect(), FALSE );
                 }
-                else if (m_interactionPolicy)
+                else if (m_interactionPolicy) {
                     m_interactionPolicy->handleMouseMove(e->state(),
                             m_doc->unzoomPoint( normalPoint ));
+                    m_interactionPolicy->hadDragEvents();
+                }
             } break;
             case MM_CREATE_TEXT: case MM_CREATE_PIX: case MM_CREATE_PART:
             case MM_CREATE_TABLE: case MM_CREATE_FORMULA:
@@ -2001,6 +1997,7 @@ KoPoint KWCanvas::caretPos()
 
 // ************** InteractionPolicy ***********************
 InteractionPolicy::InteractionPolicy(KWCanvas *parent, bool doInit) {
+    m_gotDragEvents = false;
     m_parent = parent;
     if(doInit) {
         QValueList<KWFrameView*> selectedFrames = m_parent->frameViewManager()->selectedFrames();
@@ -2022,6 +2019,7 @@ InteractionPolicy::InteractionPolicy(KWCanvas *parent, bool doInit) {
 }
 
 InteractionPolicy* InteractionPolicy::createPolicy(KWCanvas *parent, MouseMeaning meaning, KoPoint &point, Qt::ButtonState buttonState, Qt::ButtonState keyState) {
+kdDebug() << "InteractionPolicy::createPolicy " << endl;
     if(buttonState & Qt::LeftButton || buttonState & Qt::RightButton) {
         // little inner class to make sure we don't duplicate code
         class Selector {
@@ -2061,7 +2059,10 @@ InteractionPolicy* InteractionPolicy::createPolicy(KWCanvas *parent, MouseMeanin
                 selector.doSelect();
                 return new FrameResizePolicy(parent, meaning, point);
             default:
-                return new FrameSelectPolicy(parent, point, buttonState, keyState);
+                FrameSelectPolicy *fsp = new FrameSelectPolicy(parent, point, buttonState, keyState);
+                if(fsp->isValid())
+                    return fsp;
+                delete fsp;
         }
     }
     return 0; // no interaction policy found
@@ -2367,8 +2368,38 @@ void FrameMovePolicy::finishInteraction() {
 // ************** FrameSelectPolicy ***********************
 FrameSelectPolicy::FrameSelectPolicy(KWCanvas *parent, KoPoint &point, Qt::ButtonState buttonState, Qt::ButtonState keyState)
     : InteractionPolicy(parent, false) {
-kdDebug() << "FrameSelectPolicy " << endl;
-    m_parent->frameViewManager()->selectFrames(point, keyState, buttonState & Qt::LeftButton );
+
+    bool leftButton = buttonState & Qt::LeftButton;
+    // this is a special case; if a frame that is curently being edited is 'selected' on the border
+    // we redirect that click to the text part of the frame.
+    // this means we give the user a lot more space to click on the left side of the frame to
+    // select the first characters.
+    KWFrameSetEdit *fse = parent->currentFrameSetEdit();
+    if(leftButton && fse) {
+        KWFrameView *view = m_parent->frameViewManager()->view(point,
+                KWFrameViewManager::unselected, true);
+        if(view && view->frame()->frameSet() == fse->frameSet()) {
+            // make sure 'point' is inside the frame
+            point.setX(QMAX(point.x(), view->frame()->left()));
+            point.setY(QMAX(point.y(), view->frame()->right()));
+            point.setX(QMIN(point.x(), view->frame()->right()));
+            point.setY(QMIN(point.y(), view->frame()->bottom()));
+
+            // convert point to the view coordinate system.
+            QPoint normalPoint = parent->kWordDocument()->zoomPoint(point);
+            QPoint mousePos = parent->viewMode()->normalToView(normalPoint);
+            QMouseEvent *me = new QMouseEvent(QEvent::MouseButtonRelease, mousePos,
+                    buttonState, keyState);
+            fse->mousePressEvent(me, normalPoint, point );
+            delete me;
+
+            m_validSelection = false;
+            return;
+        }
+    }
+
+    m_validSelection = true;
+    m_parent->frameViewManager()->selectFrames(point, keyState, leftButton );
 }
 
 void FrameSelectPolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint &point) {

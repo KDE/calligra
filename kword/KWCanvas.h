@@ -93,7 +93,6 @@ public:
     void pasteFrames();
 
     // Mouse press
-    void mpEditFrame( const QPoint& nPoint, MouseMeaning meaning, QMouseEvent *e = 0 );
     void mpCreate( const QPoint& normalPoint, bool noGrid );
     void mpCreatePixmap( const QPoint& normalPoint, bool noGrid  );
     // Mouse move
@@ -388,6 +387,9 @@ class InteractionPolicy {
          */
         static InteractionPolicy* createPolicy(KWCanvas *parent, MouseMeaning meaning, KoPoint &point, Qt::ButtonState buttonState, Qt::ButtonState keyState);
 
+        void hadDragEvents() { m_gotDragEvents = true; }
+        bool gotDragEvents() { return m_gotDragEvents; }
+
     protected:
         /**
          * Constructor.
@@ -402,6 +404,7 @@ class InteractionPolicy {
 
     private:
         void init();
+        bool m_gotDragEvents;
 };
 
 /**
@@ -450,6 +453,10 @@ class FrameSelectPolicy : public InteractionPolicy {
         void handleMouseMove(Qt::ButtonState keyState, const KoPoint &point);
         KCommand *createCommand();
         void finishInteraction();
+        bool isValid() { return m_validSelection; }
+
+    private:
+        bool m_validSelection;
 };
 
 #endif
