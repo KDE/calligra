@@ -63,7 +63,8 @@ TODO:
 -	VImage
 -	VPattern like VImage with embedded binaries instead of paths
 -	bring text support back, ideally using fontconfig and freetype, and no xft.
--	printing
+-	improve printing (specifically printing of gradient and pattern fill), 
+	should go along with porting to qt4/the new rendering framework
 -	select first/last segment's knot if one of each other's knot is selected
 -	allow for multiple strokes and fills in VPath which get rendered in the order they occur.
 -	use inside/intersection tests in vpath::combine() for changing winding.
