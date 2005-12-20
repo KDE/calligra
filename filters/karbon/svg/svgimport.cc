@@ -1178,6 +1178,7 @@ VObject* SvgImport::createObject( const QDomElement &b )
 		{
 			KoPoint point;
 			point.setX( (*it).toDouble() );
+			++it;
 			point.setY( (*it).toDouble() );
 			if( bFirst )
 			{
