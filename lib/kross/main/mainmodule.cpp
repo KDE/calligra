@@ -70,6 +70,11 @@ void MainModule::setException(Exception::Ptr exception)
     d->exception = exception;
 }
 
+bool MainModule::hasChild(const QString& name) const
+{
+    return Object::hasChild(name);
+}
+
 EventSignal::Ptr MainModule::addSignal(const QString& name, QObject* sender, QCString signal)
 {
     EventSignal* event = new EventSignal(name, this, sender, signal);

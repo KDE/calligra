@@ -30,12 +30,19 @@
 
 namespace Kross { namespace Python {
 
+    /**
+     * The PythonObject class is used for Instances of Python
+     * Classes by the \a PythonExtension class.
+     */
     class PythonObject : public Kross::Api::Object
     {
         public:
 
             /**
              * Constructor.
+             *
+             * \param object The Py::Object this \a PythonObject
+             *        provides access to.
              */
             explicit PythonObject(const Py::Object& object);
 

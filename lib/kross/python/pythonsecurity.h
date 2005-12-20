@@ -21,7 +21,6 @@
 #define KROSS_PYTHON_SECURITY_H
 
 #include "pythonconfig.h"
-//#include "../api/module.h"
 
 #include <qstring.h>
 

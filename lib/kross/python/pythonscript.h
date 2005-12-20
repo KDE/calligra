@@ -80,11 +80,15 @@ namespace Kross { namespace Python {
             virtual Kross::Api::Object::Ptr classInstance(const QString& name);
 
         private:
+            /// Private d-pointer class.
             PythonScriptPrivate* d;
 
+            /// Initialize the script.
             void initialize();
+            /// Finalize and cleanup the script.
             void finalize();
 
+            /// \return a \a Kross::Api::Exception instance.
             Kross::Api::Exception::Ptr toException(const QString& error);
     };
 

@@ -79,9 +79,6 @@ void PythonSecurity::initRestrictedPython()
 
             "setattr(__main__, '_getattr_', PythonSecurity._getattr_)\n"
             "setattr(__main__, '_print_', PrintCollector)\n"
-
-            //"setattr(__main__, '_getitem_', getitem)\n"
-            //"setattr(__main__, '_write_', TestGuard)\n"
             ,
             Py_file_input,
             m_pymodule->getDict().ptr(),
@@ -101,36 +98,32 @@ void PythonSecurity::initRestrictedPython()
 
 Py::Object PythonSecurity::_getattr_(const Py::Tuple& args)
 {
-    kdDebug() << "1 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PythonSecurity::_getattr_" << endl;
+    kdDebug() << "PythonSecurity::_getattr_" << endl;
     for(uint i = 0; i < args.size(); i++) {
         Py::Object o = args[i];
         kdDebug()<<o.as_string().c_str()<<endl;
     }
-    kdDebug() << "9 >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> PythonSecurity::_getattr_" << endl;
     return Py::None();
 }
 
 PyObject* PythonSecurity::compile_restricted(const QString& source, const QString& filename, const QString& mode)
 {
-kdDebug()<<"PythonSecurity::compile_restricted 1"<<endl;
+    kdDebug()<<"PythonSecurity::compile_restricted"<<endl;
     if(! m_pymodule)
         initRestrictedPython(); // throws exception if failed
-kdDebug()<<"PythonSecurity::compile_restricted 2"<<endl;
+
     try {
         Py::Dict mainmoduledict = ((PythonInterpreter*)m_interpreter)->mainModule()->getDict();
-kdDebug()<<"PythonSecurity::compile_restricted 3"<<endl;
 
         PyObject* func = PyDict_GetItemString(m_pymodule->getDict().ptr(), "compile_restricted");
         if(! func)
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("No such function '%1'.").arg("compile_restricted")) );
 
-kdDebug()<<"PythonSecurity::compile_restricted 4"<<endl;
         Py::Callable funcobject(func, true); // the funcobject takes care of freeing our func pyobject.
 
         if(! funcobject.isCallable())
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Function '%1' is not callable.").arg("compile_restricted")) );
 
-kdDebug()<<"PythonSecurity::compile_restricted 5"<<endl;
         Py::Tuple args(3);
         args[0] = Py::String(source.utf8());
         args[1] = Py::String(filename.utf8());
@@ -138,7 +131,6 @@ kdDebug()<<"PythonSecurity::compile_restricted 5"<<endl;
 
         Py::Object result = funcobject.apply(args);
 
-kdDebug()<<"PythonSecurity::compile_restricted 6"<<endl;
         PyObject* pycode = PyEval_EvalCode(
             (PyCodeObject*)result.ptr(),
             mainmoduledict.ptr(),
@@ -147,7 +139,7 @@ kdDebug()<<"PythonSecurity::compile_restricted 6"<<endl;
         if(! pycode)
             throw Py::Exception();
 
-/*
+        /*
         kdDebug()<<"$---------------------------------------------------"<<endl;
         Py::List ml = mainmoduledict;
         for(Py::List::size_type mi = 0; mi < ml.length(); ++mi) {
@@ -155,17 +147,16 @@ kdDebug()<<"PythonSecurity::compile_restricted 6"<<endl;
             kdDebug() << QString("dir() = %1").arg( ml[mi].str().as_string().c_str() ) << endl;
             //kdDebug() << QString("dir().dir() = %1").arg( Py::Object(ml[mi]).dir().as_string().c_str() ) << endl;
         }
-*/
         kdDebug()<<"$---------------------------------------------------"<<endl;
+        */
+
         Py::Object code(pycode);
         kdDebug()<< code.as_string().c_str() << " callable=" << PyCallable_Check(code.ptr()) << endl;
         Py::List l = code.dir();
         for(Py::List::size_type i = 0; i < l.length(); ++i) {
-            //kdDebug() << QString("-------------------") << endl;
             kdDebug() << QString("dir() = %1").arg( l[i].str().as_string().c_str() ) << endl;
             //kdDebug() << QString("dir().dir() = %1").arg( Py::Object(l[i]).dir().as_string().c_str() ) << endl;
         }
-        kdDebug()<<"$---------------------------------------------------"<<endl;
 
         return pycode;
     }

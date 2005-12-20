@@ -49,6 +49,10 @@ namespace Kross { namespace Python {
 
             /**
              * Constructor.
+             *
+             * \param info The \a Kross::Api::InterpreterInfo instance
+             *        which describes the \a PythonInterpreter for
+             *        applications using Kross.
              */
             PythonInterpreter(Kross::Api::InterpreterInfo* info);
 
@@ -76,7 +80,9 @@ namespace Kross { namespace Python {
             /// Internal d-pointer class.
             PythonInterpreterPrivate* d;
 
+            /// Initialize the python interpreter.
             inline void initialize();
+            /// Finalize the python interpreter.
             inline void finalize();
     };
 

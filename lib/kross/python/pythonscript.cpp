@@ -58,10 +58,6 @@ namespace Kross { namespace Python {
             * A list of classnames.
             */
             QStringList m_classes;
-
-            //QMap<QString, Kross::Api::Object::Ptr> m_functions;
-            //QMap<QString, Kross::Api::Object::Ptr> m_classes;
-            //QValueList<Kross::Api::Object::Ptr> m_classinstances;
     };
 
 }}
@@ -268,11 +264,10 @@ Kross::Api::Object::Ptr PythonScript::execute()
         // Initialize context before execution.
         QString s =
             "import sys\n"
-//"sys.path = __main__.path\n"
-            "if self.has(\"stdout\"):\n"
-            "  sys.stdout = Redirect( self.get(\"stdout\") )\n"
-            "if self.has(\"stderr\"):\n"
-            "  sys.stderr = Redirect( self.get(\"stderr\") )\n"
+            //"if self.has(\"stdout\"):\n"
+            //"  sys.stdout = Redirect( self.get(\"stdout\") )\n"
+            //"if self.has(\"stderr\"):\n"
+            //"  sys.stderr = Redirect( self.get(\"stderr\") )\n"
             ;
 
         PyObject* pyrun = PyRun_String(s.latin1(), Py_file_input, mainmoduledict.ptr(), moduledict.ptr());
@@ -280,15 +275,8 @@ Kross::Api::Object::Ptr PythonScript::execute()
             throw Py::Exception(); // throw exception
         Py_XDECREF(pyrun); // free the reference.
 
-// Acquire interpreter lock*/
-PyGILState_STATE gilstate = PyGILState_Ensure();
-kdDebug()<<"PyGILState_Ensure GILSTATE: "<<gilstate<<endl;
-
-//PyThreadState* ts = PyEval_SaveThread();
-//PyEval_AcquireLock();
-//PyEval_RestoreThread( dynamic_cast<PythonInterpreter*>(m_interpreter)->getThreadState() );
-//PyThreadState_Swap( dynamic_cast<PythonInterpreter*>(m_interpreter)->getThreadState() );
-//Py_BEGIN_ALLOW_THREADS
+        // Acquire interpreter lock*/
+        PyGILState_STATE gilstate = PyGILState_Ensure();
 
         // Evaluate the already compiled code.
         PyObject* pyresult = PyEval_EvalCode(
@@ -297,19 +285,8 @@ kdDebug()<<"PyGILState_Ensure GILSTATE: "<<gilstate<<endl;
             moduledict.ptr()
         );
 
-//Py_END_ALLOW_THREADS
-//PyEval_ReleaseThread(ts);
-//PyThreadState_Swap(NULL);
-//PyEval_ReleaseLock();
-//PyThreadState_Swap(ts);
-
-// Free interpreter lock
-kdDebug()<<"PyGILState_Release GILSTATE: "<<gilstate<<endl;
-PyGILState_Release(gilstate);
-
-//KApplication::kApplication()->processEvents ();
-//KApplication::kApplication()->wakeUpGuiThread ();
-//KApplication::kApplication()->unlock (TRUE);
+        // Free interpreter lock
+        PyGILState_Release(gilstate);
 
         if(! pyresult) {
             kdWarning() << "Kross::Python::PythonScript::execute(): Failed to PyEval_EvalCode" << endl;

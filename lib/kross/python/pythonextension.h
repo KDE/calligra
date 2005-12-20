@@ -125,10 +125,6 @@ namespace Kross { namespace Python {
              */
             Kross::Api::Object::Ptr getObject();
 
-            //virtual Py::Object repr() { return Py::String(m_object->getName().utf8()); }
-            //virtual Py::Object str() { return Py::String(m_object->getName().utf8()); }
-            //virtual int print(FILE *, int) {}
-
         private:
             /// The \a Kross::Api::Object this PythonExtension wraps.
             Kross::Api::Object::Ptr m_object;

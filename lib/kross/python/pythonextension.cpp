@@ -290,10 +290,10 @@ Py::List PythonExtension::toPyObject(QStringList list)
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(QStringList)") << endl;
 #endif
-    Py::List* l = new Py::List();
+    Py::List l;
     for(QStringList::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
-        l->append(toPyObject(*it));
-    return *l;
+        l.append(toPyObject(*it));
+    return l;
 }
 
 Py::Dict PythonExtension::toPyObject(QMap<QString, QVariant> map)
@@ -301,10 +301,10 @@ Py::Dict PythonExtension::toPyObject(QMap<QString, QVariant> map)
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(QMap<QString,QVariant>)") << endl;
 #endif
-    Py::Dict* d = new Py::Dict();
+    Py::Dict d;
     for(QMap<QString, QVariant>::Iterator it = map.begin(); it != map.end(); ++it)
-        d->setItem(it.key().latin1(), toPyObject(it.data()));
-    return *d;
+        d.setItem(it.key().latin1(), toPyObject(it.data()));
+    return d;
 }
 
 Py::List PythonExtension::toPyObject(QValueList<QVariant> list)
@@ -312,10 +312,10 @@ Py::List PythonExtension::toPyObject(QValueList<QVariant> list)
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(QValueList<QVariant>)") << endl;
 #endif
-    Py::List* l = new Py::List();
+    Py::List l;
     for(QValueList<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
-        l->append(toPyObject(*it));
-    return *l;
+        l.append(toPyObject(*it));
+    return l;
 }
 
 Py::Object PythonExtension::toPyObject(const QVariant& variant)

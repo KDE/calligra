@@ -19,7 +19,6 @@
 
 #include "pythonobject.h"
 #include "pythonextension.h"
-//#include "pythoninterpreter.h"
 
 #include <kdebug.h>
 

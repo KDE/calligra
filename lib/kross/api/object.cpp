@@ -87,9 +87,6 @@ bool Object::addChild(Object::Ptr object, const QString& name)
     if(n.isEmpty()) // prevent invalid items.
         return false; //throw Exception::Ptr( new Exception( QString("Failed to add child object to object '%1'. Invalid name for class '%2'.").arg(getName()).arg(object->getClassName()) ) );
 
-    if(m_children.contains(n)) // don't replace.
-        return false; //throw Exception::Ptr( new Exception(QString("Failed to add child object '%1' from type '%2' to object '%3'. There exists already a child with such a name.").arg(n).arg(object->getClassName()).arg(getName())) );
-
     object->m_parent = this;
     m_children.replace(n, object);
     return true;

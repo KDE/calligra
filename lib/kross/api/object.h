@@ -135,13 +135,13 @@ namespace Kross { namespace Api {
             QMap<QString, Object::Ptr> getChildren() const;
 
             /**
-             * Add a new Child.
+             * Add a new child. Replaces a possible already existing
+             * child with such a name.
              *
              * \param name the name of the child
              * \param object The Object to add.
              * \return true if the Object was added successfully
-             *         else (e.g. if there exists already another
-             *         childobject with same name) false.
+             *         else false.
              */
             bool addChild(Object::Ptr object, const QString& name = QString::null);
 
