@@ -48,8 +48,8 @@ DONE  4.6.3. Property pane
 DONE  5. Building simple databases
 DONE    5.1. Designing database tables
 DONE      5.1.1. Table Designer window
-  5.2. Entering data to tables
-  5.3. Designing database queries
+DONE  5.2. Entering data into tables
+DONE  5.3. Designing database queries
   5.4. Designing forms
     5.4.1. Most important terms
     5.4.2. Forms versus tables
