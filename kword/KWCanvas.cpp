@@ -191,8 +191,7 @@ void KWCanvas::repaintChanged( KWFrameSet * fs, bool resetChanged )
     QRect crect( contentsX(), contentsY(), visibleWidth(), visibleHeight() );
     drawFrameSet( fs, &p, crect, true, resetChanged, m_viewMode );
     // ###### This repaints the whole grid every time. Ouch.
-    // We should either have the grid in a double-buffer pixmap to start from,
-    // or, hmm, get the repainted rects from drawFrameSet... Tricky.
+    // We should return a QRegion from drawFrameSet.... Tricky.
     if ( m_doc->showGrid() )
       drawGrid( p, crect );
 }
