@@ -1870,8 +1870,9 @@ next word.</para>
 <term><guilabel>Key to accept suggestion</guilabel></term>
 <listitem>
 <para>Set the key you want to use when an autocompleted word is suggested to you
-and you want to accept it. You can choose Enter, Tab, Space, End or
-Right.</para>
+and you want to accept it. You can choose
+<keycap>Enter</keycap>, <keycap>Tab</keycap>, <keycap>Space</keycap>,
+<keycap>End</keycap> or <keycap>Right</keycap>.</para>
 </listitem>
 </varlistentry>
 
@@ -1893,7 +1894,7 @@ click this button.</para>
 <para>Click <guibutton>OK</guibutton> to save your options. Click
 <guibutton>Cancel</guibutton> to abort all changes. Click 
 <guibutton>Reset</guibutton> to reset to the state after you clicked on the 
-Make Default button.</para>
+<guibutton>Make Default</guibutton> button.</para>
 
 </sect2>
 </sect1>

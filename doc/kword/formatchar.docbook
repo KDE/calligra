@@ -219,7 +219,7 @@ selecting one of the eight red squares.  A preview of your shadow appears at the
 </mediaobject>
 </screenshot>
 
-<para>The section labeled <guilabel>Position</guilabel> has 4 radio buttions and two spin boxes.  Selecting <guilabel>Normal</guilabel>, produces text of normal height and at the normal vertical position.  Selecting <guilabel>Superscript</guilabel> or <guilabel>Subscript</guilabel> will convert the currently selected text.  If you select <guilabel>Custom</guilabel>, you can use the spin box labeled <guilabel>Offset:</guilabel> to move the selected text up or down relative to normal text alignment.  Look at the example below:</para>
+<para>The section labeled <guilabel>Position</guilabel> has four radio buttons and two spin boxes.  Selecting <guilabel>Normal</guilabel>, produces text of normal height and at the normal vertical position.  Selecting <guilabel>Superscript</guilabel> or <guilabel>Subscript</guilabel> will convert the currently selected text.  If you select <guilabel>Custom</guilabel>, you can use the spin box labeled <guilabel>Offset:</guilabel> to move the selected text up or down relative to normal text alignment.  Look at the example below:</para>
 
 <screenshot>
 <mediaobject>
@@ -234,7 +234,7 @@ selecting one of the eight red squares.  A preview of your shadow appears at the
 
 <para>The checkbox labeld <guilabel>Auto hyphenation</guilabel> is used to toggle automatic hyphenation on or off for the selected text.</para>
 
-<para>The fifth tab labeled <guilabel>Language</guilabel> allows you to change the color of the font, change the background color and create artificial shadows for your characters.  Click on the tab:</para>
+<para>The fifth tab labeled <guilabel>Language</guilabel> allows you to change the language. Click on the tab:</para>
 
 <screenshot>
 <mediaobject>

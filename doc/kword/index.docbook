@@ -112,11 +112,11 @@ Environment.  Other applications in &koffice; include:
 <itemizedlist>
 <listitem><para>&kspread; (A spreadsheet application.)</para></listitem>
 <listitem><para>&kpresenter; (A presentation creator.)</para></listitem>
-<listitem><para><application>Karbon14</application> (A vector drawing program.)</para></listitem>
+<listitem><para>&karbon14; (A vector drawing program.)</para></listitem>
 <listitem><para>&kivio; (A flowchart creator)</para></listitem>
 <listitem><para>&krita; (A pixel based drawing program.)</para></listitem>
 <listitem><para>&kugar; (A report generation tool.)  </para></listitem>
-<listitem><para>Kexi (An integrated environment for databases.)  </para></listitem>
+<listitem><para>&kexi; (An integrated environment for databases.)  </para></listitem>
 <listitem><para>&kchart; (A chart and graph creator.)</para></listitem>
 <listitem><para>and a simple integrated office desktop, to help organize your
 work.</para></listitem>
@@ -441,10 +441,10 @@ information (email address, telephone numbers and physical address).</para>
 <tip><para>Every value entered in this dialog can be inserted as a
 <link linkend="variables">document variables</link>.</para></tip>
 <para>At the bottom of the dialog is a button labeled <guibutton>Load from Address Book</guibutton>. Clicking 
-on this button will automatically insert your information contained in the KDE address book into this &kword; document information dialog.</para>
-<note><para>You must inform the KDE addressbook which entry corresponds to your information.  </para>
-<para>To do this, open the KDE addressbook, select the entry that contains your name and address.  Now select <menuchoice>
-<guimenu>Edit</guimenu><guimenuitem>Set as Personal Contact Data</guimenuitem></menuchoice>from the menubar in the KDE addressbook. This only needs to be performed once.</para>
+on this button will automatically insert your information contained in the &kde; address book into this &kword; document information dialog.</para>
+<note><para>You must inform the &kde; address book which entry corresponds to your information.  </para>
+<para>To do this, open the &kde; address book, select the entry that contains your name and address.  Now select <menuchoice>
+<guimenu>Edit</guimenu><guimenuitem>Set as Personal Contact Data</guimenuitem></menuchoice>from the menubar in the &kde; address book. This only needs to be performed once.</para>
 <para>&kword; will now insert the entered information when the <guibutton>Load from Address Book</guibutton> button is clicked.</para></note>
 <para>The second tab is labeled <guilabel>Document</guilabel>. Enter a document title, subject lines, keywords and an abstract. </para>
 <tip><para>Both the document title and the abstract can be accessed through
@@ -583,7 +583,7 @@ from the menubar.</para>
 </orderedlist>
 <para>Your PDF file will be created and saved at the location specified in <guilabel>Output file</guilabel>.  This file can be uploaded
 onto any website.</para>
-<para>For more information on printing in &kde;, visit <ulink url="http://printing.kde.org">The KDE Print web page</ulink>.</para>
+<para>For more information on printing in &kde;, visit <ulink url="http://printing.kde.org">The &kde; Print web page</ulink>.</para>
 
 </sect1>
 
