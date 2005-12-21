@@ -526,7 +526,6 @@ protected:
     bool spManualSwitch() const;
     QRect getPageRect( bool decBorders = true ) const;
     unsigned int pageNums() const;
-    void calcRatio( double &dx, double &dy, ModifyType _modType, double ratio ) const;
 
     void _repaint( bool erase=true );
     void _repaint( const QRect &r );
@@ -608,7 +607,7 @@ private:
 
     //---- stuff needed for resizing ----
     /// resize the m_resizeObject
-    void resizeObject( ModifyType _modType, const KoPoint & point );
+    void resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio );
     /// create KPrResizeCmd
     void finishResizeObject( const QString &name, bool layout = true );
 
@@ -795,8 +794,6 @@ private:
     KPrObject *m_resizeObject;
     /// size of the object at when resizing is started
     KoRect m_rectBeforeResize;
-    /// should the ratio of the object kept during resize
-    bool m_keepRatio;
     /// ratio of the object ( width / height )
     double m_ratio;
     bool m_isResizing;

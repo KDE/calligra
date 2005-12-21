@@ -133,7 +133,6 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPrView *_view )
         toolEditMode = TEM_MOUSE;
         setAcceptDrops( true );
         m_ratio = 0.0;
-        m_keepRatio = false;
         m_isMoving = false;
         m_isResizing = false;
         mouseSelectedObject = false;
@@ -864,11 +863,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                         m_resizeObject = kpobject;
 
-                        m_keepRatio = false;
-                        if ( e->state() & ControlButton )
-                            m_keepRatio = true;
-
-                        m_keepRatio = m_keepRatio || m_resizeObject->isKeepRatio();
                         m_ratio = static_cast<double>( kpobject->getSize().width() ) /
                                 static_cast<double>( kpobject->getSize().height() );
                         m_rectBeforeResize = kpobject->getRect();
@@ -1628,7 +1622,14 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     }
 
                     KoPoint sp( snapPoint( docPoint, false ) );
-                    resizeObject( modType, sp );
+
+                    bool keepRatio = m_resizeObject->isKeepRatio();
+                    if ( e->state() & AltButton )
+                    {
+                        keepRatio = true;
+                    }
+
+                    resizeObject( modType, sp, keepRatio );
                 }
             } break;
             case TEM_ZOOM : {
@@ -2152,7 +2153,6 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                         m_view->kPresenterDoc()->repaint( oldBoundingRect );
                         m_view->kPresenterDoc()->repaint( m_resizeObject );
                         m_ratio = 0.0;
-                        m_keepRatio = false;
                         m_resizeObject = 0;
                         m_isResizing = false;
                         m_view->disableAutoScroll();
@@ -4446,24 +4446,6 @@ void KPrCanvas::setSwitchingMode( bool continueTimer )
         m_view->continueAutoPresTimer();
 }
 
-void KPrCanvas::calcRatio( double &dx, double &dy, ModifyType _modType, double ratio ) const
-{
-    if ( fabs( dy ) > fabs( dx ) )
-    {
-        if ( _modType == MT_RESIZE_LD || _modType == MT_RESIZE_RU )
-            dx = ( dy ) * -ratio ;
-        else
-            dx = ( dy ) * ratio ;
-    }
-    else
-    {
-        if ( _modType == MT_RESIZE_LD || _modType == MT_RESIZE_RU )
-            dy =  -dx  / ratio;
-        else
-            dy =  dx  / ratio;
-    }
-}
-
 void KPrCanvas::exitEditMode()
 {
     if ( editNum )
@@ -4853,147 +4835,157 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
 }
 
 
-void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point )
+void KPrCanvas::resizeObject( ModifyType _modType, const KoPoint & point, bool keepRatio )
 {
     KPrObject *kpobject = m_resizeObject;
 
     QRect oldBoundingRect( m_view->zoomHandler()->zoomRect( kpobject->getRepaintRect() ) );
 
-    KoSize objSize = kpobject->getSize();
     KoRect objRect = kpobject->getRealRect();
-    KoPoint sp( point );
     KoGuides::SnapStatus snapStatus( KoGuides::SNAP_NONE );
 
-    bool repaintNeeded = false;
-    switch ( _modType )
+    bool left = false;
+    bool right = false;
+    bool top = false;
+    bool bottom = false;
+    if ( _modType == MT_RESIZE_UP || _modType == MT_RESIZE_LU || _modType == MT_RESIZE_RU )
     {
-    case MT_RESIZE_LU:
-        if ( objRect.topLeft() != point )
+        top = true;
+        snapStatus |= KoGuides::SNAP_HORIZ;
+    }
+    if ( _modType == MT_RESIZE_DN || _modType == MT_RESIZE_LD || _modType == MT_RESIZE_RD )
+    {
+        bottom = true;
+        snapStatus |= KoGuides::SNAP_HORIZ;
+    }
+    if ( _modType == MT_RESIZE_LF || _modType == MT_RESIZE_LU || _modType == MT_RESIZE_LD )
+    {
+        left = true;
+        snapStatus |= KoGuides::SNAP_VERT;
+    }
+    if ( _modType == MT_RESIZE_RT || _modType == MT_RESIZE_RU || _modType == MT_RESIZE_RD )
+    {
+        right = true;
+        snapStatus |= KoGuides::SNAP_VERT;
+    }
+    
+    double newLeft = objRect.left();
+    double newRight = objRect.right();
+    double newTop = objRect.top();
+    double newBottom = objRect.bottom();
+    if ( top )
+    {
+        if ( point.y() < objRect.bottom() - MIN_SIZE )
         {
-            double dx = point.x() - objRect.left();
-            double dy = point.y() - objRect.top();
-            if ( m_keepRatio && m_ratio != 0.0 )
-                calcRatio( dx, dy, _modType, m_ratio );
-            kpobject->resizeBy( -dx, -dy );
-            if ( objSize.width() != kpobject->getSize().width() )
-                kpobject->moveBy( KoPoint( dx, 0 ) );
-            if ( objSize.height() != kpobject->getSize().height() )
-                kpobject->moveBy( KoPoint( 0, dy ) );
-            repaintNeeded = true;
+            newTop = point.y();
         }
-        sp = kpobject->getRealRect().topLeft();
-        snapStatus = KoGuides::SNAP_BOTH;
-        break;
-    case MT_RESIZE_LF:
-        if ( objRect.left() != point.x() )
+        else
         {
-            double dx = point.x() - objRect.left();
-            double dy = 0;
-            if ( m_keepRatio && m_ratio != 0.0 )
-                calcRatio( dx, dy, _modType, m_ratio );
-            kpobject->resizeBy( -dx, -dy );
-            if ( objSize != kpobject->getSize() )
-                kpobject->moveBy( KoPoint( dx, 0 ) );
-            repaintNeeded = true;
+            newTop = objRect.bottom() - MIN_SIZE;
         }
-        sp.setX( kpobject->getRealRect().left() );
-        snapStatus = KoGuides::SNAP_VERT;
-        break;
-    case MT_RESIZE_LD:
-        if ( objRect.bottomLeft() != point )
+    }
+    if ( bottom )
+    {
+        if ( point.y() > objRect.top() + MIN_SIZE )
         {
-            double dx = point.x() - objRect.left();
-            double dy = point.y() - objRect.bottom();
-            if ( m_keepRatio && m_ratio != 0.0 )
-                calcRatio( dx, dy, _modType, m_ratio );
-            kpobject->resizeBy( -dx, dy );
-            if ( objSize.width() != kpobject->getSize().width() )
-                kpobject->moveBy( KoPoint( dx, 0 ) );
-            repaintNeeded = true;
+            newBottom = point.y();
         }
-        sp = kpobject->getRealRect().bottomLeft();
-        snapStatus = KoGuides::SNAP_BOTH;
-        break;
-    case MT_RESIZE_RU:
-        if ( objRect.topRight() != point )
+        else
         {
-            double dx = point.x() - objRect.right();
-            double dy = point.y() - objRect.top();
-            if ( m_keepRatio && m_ratio != 0.0 )
-                calcRatio( dx, dy, _modType, m_ratio );
-            kpobject->resizeBy( dx, -dy );
-            if ( objSize.height() != kpobject->getSize().height() )
-                kpobject->moveBy( KoPoint( 0, dy ) );
-            repaintNeeded = true;
+            newBottom = objRect.top() + MIN_SIZE;
         }
-        sp = kpobject->getRealRect().topRight();
-        snapStatus = KoGuides::SNAP_BOTH;
-        break;
-    case MT_RESIZE_RT:
-        if ( objRect.right() != point.x() )
+    }
+    if ( left )
+    {
+        if ( point.x() < objRect.right() - MIN_SIZE )
         {
-            double dx = point.x() - objRect.right();
-            double dy = 0;
-            if ( m_keepRatio && m_ratio != 0.0 )
-                calcRatio( dx, dy, _modType, m_ratio );
-            kpobject->resizeBy( dx, dy );
-            repaintNeeded = true;
+            newLeft = point.x();
         }
-        sp.setX( kpobject->getRealRect().right() );
-        snapStatus = KoGuides::SNAP_VERT;
-        break;
-    case MT_RESIZE_RD:
-        if ( objRect.bottomRight() != point )
+        else
         {
-            double dx = point.x() - objRect.right();
-            double dy = point.y() - objRect.bottom();
-            if ( m_keepRatio && m_ratio != 0.0 )
-                calcRatio( dx, dy, _modType, m_ratio );
-            kpobject->resizeBy( dx, dy );
-            repaintNeeded = true;
+            newLeft = objRect.right() - MIN_SIZE;
         }
-        sp = kpobject->getRealRect().bottomRight();
-        snapStatus = KoGuides::SNAP_BOTH;
-        break;
-    case MT_RESIZE_UP:
-        if ( objRect.top() != point.y() )
+    }
+    if ( right )
+    {
+        if ( point.x() > objRect.left() + MIN_SIZE )
         {
-            double dx = 0;
-            double dy = point.y() - objRect.top();
-            if ( m_keepRatio && m_ratio != 0.0 )
-                calcRatio( dx, dy, _modType, m_ratio );
-            kpobject->resizeBy( -dx, -dy );
-            if ( objSize.height() != kpobject->getSize().height() )
-                kpobject->moveBy( KoPoint( 0, dy ) );
-            repaintNeeded = true;
+            newRight = point.x();
         }
-        sp.setY( kpobject->getRealRect().top() );
-        snapStatus = KoGuides::SNAP_HORIZ;
-        break;
-    case MT_RESIZE_DN:
-        if ( objRect.bottom() != point.y() )
+        else
         {
-            double dx = 0;
-            double dy = point.y() - objRect.bottom();
-            if ( m_keepRatio && m_ratio != 0.0 )
-                calcRatio( dx, dy, _modType, m_ratio );
-            kpobject->resizeBy( dx, dy );
-            repaintNeeded = true;
+            newRight = objRect.left() + MIN_SIZE;
         }
-        sp.setY( kpobject->getRealRect().bottom() );
-        snapStatus = KoGuides::SNAP_HORIZ;
-        break;
-    default:
-        break;
     }
 
-    if ( m_view->kPresenterDoc()->showGuideLines() && !m_disableSnapping )
+    double width = newRight - newLeft;
+    double height = newBottom - newTop;
+
+    if ( keepRatio && m_ratio != 0 )
     {
-        m_gl.repaintSnapping( sp, snapStatus );
+        if ( ( top || bottom ) && ( right || left ) )
+        {
+            if ( height * height * m_ratio > width * width / m_ratio )
+            {
+                width = height * m_ratio;
+            }
+            else
+            {
+                height = width / m_ratio;
+            }
+        }
+        else if ( top || bottom )
+        {
+            width = height * m_ratio;
+        }
+        else
+        {
+            height = width / m_ratio;
+        }
+
+        if ( top )
+        {
+            newTop = objRect.bottom() - height;
+        }
+        else
+        {
+            newBottom = objRect.top() + height;
+        }
+        if ( left )
+        {
+            newLeft = objRect.right() - width;
+        }
+        else
+        {
+            newRight = objRect.right() + width;
+        }
     }
 
-    if ( repaintNeeded )
+    if ( newLeft != objRect.left() || newRight != objRect.right() || newTop != objRect.top() || newBottom != objRect.bottom() )
     {
+        // resizeBy and moveBy have to been used to make it work with rotated objects
+        kpobject->resizeBy( width - objRect.width(), height - objRect.height() );
+
+        if ( objRect.left() != newLeft || objRect.top() != newTop )
+        {
+            kpobject->moveBy( KoPoint( newLeft - objRect.left(), newTop - objRect.top() ) );
+        }
+
+        if ( m_view->kPresenterDoc()->showGuideLines() && !m_disableSnapping )
+        {
+            KoRect rect( kpobject->getRealRect() );
+            KoPoint sp( rect.topLeft() );
+            if ( right )
+            {
+                sp.setX( rect.right() );
+            }
+            if ( bottom )
+            {
+                sp.setY( rect.bottom() );
+            }
+            m_gl.repaintSnapping( sp, snapStatus );
+        }
+
         _repaint( oldBoundingRect );
         _repaint( kpobject );
         emit objectSizeChanged();
@@ -5022,7 +5014,6 @@ void KPrCanvas::finishResizeObject( const QString &name, bool layout )
             m_view->kPresenterDoc()->layout( m_resizeObject );
 
         m_ratio = 0.0;
-        m_keepRatio = false;
         m_isResizing = false;
         _repaint( m_resizeObject );
         m_resizeObject = NULL;

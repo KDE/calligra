@@ -54,6 +54,7 @@ class KoTextObject;
 class KoOasisContext;
 
 #define RAD_FACTOR 180.0 / M_PI
+#define MIN_SIZE 10
 
 class KPrObject
 {
@@ -71,7 +72,7 @@ public:
     virtual void setSize( const KoSize & _size )
         { setSize( _size.width(), _size.height() ); }
     virtual void setSize(double _width, double _height )
-        { ext = KoSize( QMAX( 10, _width ), QMAX( 10, _height ) ); } // no object is smaller than 10x10
+        { ext = KoSize( QMAX( MIN_SIZE, _width ), QMAX( MIN_SIZE, _height ) ); } // no object is smaller than 10x10
     virtual void setOrig( const KoPoint & _point )
         { orig = _point; }
     virtual void setOrig( double _x, double _y )
