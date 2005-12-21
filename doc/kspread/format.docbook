@@ -443,6 +443,28 @@ linkend="protection">Advanced &kspread; chapter, Protection
 section</link>.</para>
 <variablelist>
 <varlistentry>
+<term><guilabel>Hide all</guilabel></term>
+<listitem><para>This hides the cell content and works only when the sheet is
+protected which means that changing the <guilabel>Hide all</guilabel>
+attribute of a cell has no effect unless the sheet is protected. Whether the
+cell itself is protected or not does not matter.</para>
+<para>
+<mediaobject>
+<imageobject>
+<imagedata fileref="cellformat7.png" format="PNG"/>
+</imageobject>
+<textobject>
+<phrase>Hide all.</phrase>
+</textobject>
+</mediaobject>
+</para>
+<para>When <guilabel>Hide
+all</guilabel> is selected, Protected and Hide formula are disabled as when the
+sheet is protected <guilabel>Hide all</guilabel> hides the cell content and the
+formula and thus masks and protects the cell content.</para>
+</listitem>
+</varlistentry>
+<varlistentry>
 <term><guilabel>Protected</guilabel></term>
 <listitem><para>If checked, the cell content will be protected. This is
 the default behaviour. You need to protect the whole sheet using the
@@ -460,12 +482,7 @@ for cells that contain formulae so the user cannot view the formula. And the
 sheet must be protected for this to work.</para>
 </listitem>
 </varlistentry>
-<varlistentry>
-<term><guilabel>Hide all</guilabel></term>
-<listitem><para>This hides the cell content and works only when the sheet is
-protected. Whether the cell itself is protected or not does not matter.</para>
-</listitem>
-</varlistentry>
+
 <varlistentry>
 <term><guilabel>Do not print text</guilabel></term>
 <listitem><para>If you check <guilabel>Do not print text</guilabel> then the

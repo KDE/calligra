@@ -488,7 +488,7 @@ more secure your password.</para>
 </textobject>
 </mediaobject>
 </para>
-<para>When a document is protected, the user may not:</para>
+<para>When a document is protected, you may not:</para>
 <itemizedlist>
 <listitem><para>
 Rename a sheet
@@ -522,12 +522,12 @@ unprotected within a protected sheet, see <link
 linkend="cell-protection">next section</link>.</para>
 <para>To protect a sheet, select
 <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
-Document</guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>.A
- dialog appears asking you for a password. The Password strength meter indicates
-if your password is secure enough. The longer the indicator is, the more secure
-will be your password.</para>
+Document</guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>.
+A  dialog appears asking you for a password. The Password strength meter
+indicates if your password is secure enough. The longer the indicator is, the
+more secure will be your password.</para>
 <para>That password will then be required to unprotect the sheet.</para>
-<para>When a sheet is protected, the user may not:</para>
+<para>When a sheet is protected, you may not:</para>
 <itemizedlist>
 <listitem><para>
 Insert any object or chart
@@ -559,7 +559,7 @@ you protect the sheet, all cells will be protected.</para></warning>
 must be turned off for all other cells. For example you might  want most cells
 to accept user input so you will uncheck <guilabel>Protected</guilabel> for
 those and choose to keep protected cells that should stay unchanged (such as
-titles).So you need 3 steps in order to protect only some cells: unprotect all
+titles). So you need 3 steps in order to protect only some cells: unprotect all
 the cells, select the cells to protect and protect them and then protect the
 whole sheet.</para>
 <para>To unprotect all the cells:</para>
@@ -579,11 +579,10 @@ Check <guilabel>Hide all</guilabel> and uncheck <guilabel>Protected</guilabel>
 to remove the protection on all cells. The cells are now all unprotected.
 </para></listitem>
 </itemizedlist>
-<para>To protect a range of selected cells, or to protect non-adjacent cells:</para>
+<para>To protect a range of selected cells:</para>
 <itemizedlist>
 <listitem><para>
-Hold down the Ctrl key while clicking on the non-adjacent cells to highlight the
-ones that are to be protected.
+Highlight the range of cells that are to be protected.
 </para></listitem>
 <listitem><para>
 When all of the desired cells are selected, go to
@@ -599,8 +598,8 @@ on <guibutton>OK</guibutton>.
 </para></listitem>
 </itemizedlist>
 <para>Once the cells are marked for protection, the protection option must be
-enabled at the sheet level, that mans you must protect the entire sheet for the
-cell to ba effectively protected:</para>
+enabled at the sheet level, that means you must protect the entire sheet for the
+cell to be effectively protected:</para>
 <itemizedlist>
 <listitem><para>
 Select
@@ -613,7 +612,7 @@ it again. Click on <guibutton>OK</guibutton>.
 </para></listitem>
 <listitem><para>
 Protected cells in a protected sheet cannot be edited without unprotecting the
-whole sheet, and other sheet changes are disabled. For example, no one can
+whole sheet, and any sheet changes are disabled. For example, no one can
 insert rows or columns, change column width, or create embedded charts. 
 </para></listitem>
 </itemizedlist>
@@ -635,9 +634,8 @@ protected.</para>
 </textobject>
 </mediaobject>
 </para>
-<para>To hide the current cell formula or the selected cells formulae, select
-the appropriate cell or range and then choose the
-<menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
+<para>To hide cell formulae, select the appropriate cell or range of cells and
+then choose the <menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
 Format...</guimenuitem></menuchoice> menu. In the Cell format
 dialog, click the Protection tab and select <guilabel>Hide formula</guilabel>.
 After you protect the sheet, the results of the formulae will be visible, but
@@ -686,7 +684,7 @@ best solution.</para>
 choosing <guilabel>Hide all</guilabel> in the Cell Protection tab in the
 <menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
 Format...</guimenuitem></menuchoice> menu. In the screenshot below, the
-cell itself is not protected (<guilabel>Protected</guilabel> is uncheck) thus
+cell itself is not protected (<guilabel>Protected</guilabel> is unchecked) thus
 the cell content can be changed.</para>
 <para>
 <mediaobject>
