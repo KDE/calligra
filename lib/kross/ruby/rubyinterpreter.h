@@ -39,14 +39,6 @@ class RubyInterpreter : public Kross::Api::Interpreter
         ~RubyInterpreter();
 
         virtual Kross::Api::Script* createScript(Kross::Api::ScriptContainer* scriptcontainer);
-    public:
-        /// Increase the number of ruby script which are executed at a given time.
-        void incCountScript();
-        /**
-         * Decrease the number of script which are executed at a given time, when the number reaches zero
-         * this function will unload the modules.
-         */ 
-        void decCountScript();
 
     private:
         void initRuby();

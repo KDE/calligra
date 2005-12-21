@@ -29,6 +29,7 @@
 
 #include "rubyconfig.h"
 #include "rubyextension.h"
+#include "rubymodule.h"
 #include "rubyscript.h"
 
 extern "C"
@@ -65,10 +66,6 @@ typedef mStrVALUE::iterator mStrVALUE_it;
 typedef mStrVALUE::const_iterator mStrVALUE_cit;
 class RubyInterpreterPrivate {
     friend class RubyInterpreter;
-    RubyInterpreterPrivate() : m_countScript(0) { }
-    mStrVALUE m_modules;
-    /// Count the number of script launched at the same time
-    int m_countScript;
 };
     
 RubyInterpreterPrivate* RubyInterpreter::d = 0;
@@ -129,39 +126,23 @@ VALUE RubyInterpreter::require (VALUE obj, VALUE name)
             kdWarning() << QString("Denied import of Kross module '%1' cause of untrusted chars.").arg(modname) << endl;
         }
         else {
-            if(RubyInterpreter::d->m_modules.find(modname) == RubyInterpreter::d->m_modules.end())
+            Kross::Api::Module* module = Kross::Api::Manager::scriptManager()->loadModule(modname);
+            if(module)
             {
-                Kross::Api::Module* module = Kross::Api::Manager::scriptManager()->loadModule(modname);
-                if(module)
-                {
-                    VALUE rm = RubyExtension::toVALUE(module);
-                    rb_define_variable( ("$" + modname).ascii(), & RubyInterpreter::d->m_modules.insert( mStrVALUE::value_type( modname, rm) ).first->second );
-                    return Qtrue;
-                }
-                kdWarning() << QString("Loading of Kross module '%1' failed.").arg(modname) << endl;
-            } else {
-                kdDebug() << QString("Kross module '%1' is already loaded.").arg(modname) << endl;
+                new RubyModule(module, modname);
+//                     VALUE rmodule = rb_define_module(modname.ascii());
+//                     rb_define_module_function();
+//                     VALUE rm = RubyExtension::toVALUE(module);
+//                     rb_define_variable( ("$" + modname).ascii(), & RubyInterpreter::d->m_modules.insert( mStrVALUE::value_type( modname, rm) ).first->second );
+                return Qtrue;
             }
+            kdWarning() << QString("Loading of Kross module '%1' failed.").arg(modname) << endl;
         }
     } else {
         return rb_f_require(obj, name);
     }
     return Qfalse;
 }
-
-void RubyInterpreter::incCountScript()
-{
-    ++RubyInterpreter::d->m_countScript;
-}
-
-void RubyInterpreter::decCountScript()
-{
-    if( (--RubyInterpreter::d->m_countScript) == 0)
-    {
-        RubyInterpreter::d->m_modules.clear();
-    }
-}
-
 
 }
 

@@ -35,8 +35,9 @@ class RubyExtensionPrivate;
 @author Cyrille Berger
 */
 class RubyExtension{
-        friend class RubyScript;
         friend class RubyInterpreter;
+        friend class RubyModule;
+        friend class RubyScript;
     public:
         RubyExtension(Kross::Api::Object::Ptr object);
         ~RubyExtension();
@@ -46,6 +47,13 @@ class RubyExtension{
          * 
          */
         static VALUE method_missing(int argc, VALUE *argv, VALUE self);
+        /**
+         * This function will call a function in a Kross object
+         * @param obj kross object which contains the function
+         * @param argc the number of argument
+         * @param argv the lists of arguments (the first argument is the Ruby ID of the function)
+         */
+        static VALUE call_method( Kross::Api::Object::Ptr obj, int argc, VALUE *argv);
     private: //Converting functions
         /**
          * This function iterats through a ruby hash

@@ -14,4 +14,4 @@ krossruby_la_LIBADD = \
 
 
 noinst_HEADERS = rubyinterpreter.h rubyextension.h rubyscript.h rubyconfig.h
-krossruby_la_SOURCES = rubyinterpreter.cpp rubyextension.cpp rubyscript.cpp
+krossruby_la_SOURCES = rubyinterpreter.cpp rubyextension.cpp rubyscript.cpp rubymodule.cpp

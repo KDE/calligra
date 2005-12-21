@@ -1,7 +1,7 @@
 /***************************************************************************
- * pythonconfig.h
+ * rubyinterpreter.cpp
  * This file is part of the KDE project
- * copyright (C)2004-2005 by Sebastian Sauer (mail@dipe.org)
+ * copyright (C)2005 by Cyrille Berger (cberger@cberger.net)
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU Library General Public
@@ -17,16 +17,38 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_RUBY_CONFIG_H
-#define KROSS_RUBY_CONFIG_H
+#ifndef KROSS_RUBYRUBYMODULE_H
+#define KROSS_RUBYRUBYMODULE_H
 
-namespace Kross { namespace Ruby {
-#define KROSS_RUBY_SCRIPT_DEBUG
-// #define KROSS_RUBY_INTERPRETER_DEBUG
-// #define KROSS_RUBY_EXTENSION_DEBUG
-// #define KROSS_RUBY_MODULE_DEBUG
+#include <ruby.h>
+
+#include <qstring.h>
+
+namespace Kross {
+
+namespace Api {
+    class Module;
 }
+
+namespace Ruby {
+
+class RubyModulePrivate;
+
+class RubyModule {
+    public:
+        RubyModule(Kross::Api::Module* , QString);
+        ~RubyModule();
+    private:
+        /**
+         * This function will catch functions that are undefined.
+         */
+        static VALUE method_missing(int argc, VALUE *argv, VALUE self);
+    private:
+        RubyModulePrivate* d;
+};
+    
+}
+
 }
 
 #endif
-

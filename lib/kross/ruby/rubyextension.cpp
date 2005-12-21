@@ -65,7 +65,11 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
     }
     
     Kross::Api::Object::Ptr object = objectExtension->d->m_object;
-    
+    return RubyExtension::call_method(object, argc, argv);
+}
+
+VALUE RubyExtension::call_method( Kross::Api::Object::Ptr object, int argc, VALUE *argv)
+{
     QString funcname = rb_id2name(SYM2ID(argv[0]));
     QValueList<Api::Object::Ptr> argsList;
 #ifdef KROSS_RUBY_EXTENSION_DEBUG
@@ -284,7 +288,7 @@ VALUE RubyExtension::toVALUE(Kross::Api::Object::Ptr object)
         RubyExtensionPrivate::s_krossObject = rb_define_class("KrossObject", rb_cObject);
         rb_define_method(RubyExtensionPrivate::s_krossObject, "method_missing",  (VALUE (*)(...))RubyExtension::method_missing, -1);
     }
-    return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, 0, new RubyExtension(object) );
+    return Data_Wrap_Struct(RubyExtensionPrivate::s_krossObject, 0, free, new RubyExtension(object) );
 }
 
 VALUE RubyExtension::toVALUE(Kross::Api::List::Ptr list)

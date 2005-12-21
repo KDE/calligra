@@ -20,6 +20,7 @@
 #include "rubyscript.h"
 
 #include <ruby.h>
+#include <env.h>
 #include <rubysig.h>
 #include <node.h>
 
@@ -70,11 +71,14 @@ void RubyScript::compile()
     int critical;
 
     ruby_nerrs = 0;
+    ruby_errinfo = Qnil;
     VALUE src = RubyExtension::toVALUE( m_scriptcontainer->getCode() );
     StringValue(src);
     critical = rb_thread_critical;
     rb_thread_critical = Qtrue;
+    ruby_in_eval++;
     d->m_compile = rb_compile_string((char*) m_scriptcontainer->getName().latin1(), src, 0);
+    ruby_in_eval--;
     rb_thread_critical = critical;
 
     if (ruby_nerrs != 0)
@@ -82,7 +86,6 @@ void RubyScript::compile()
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
         kdDebug() << "Compilation has failed" << endl;
 #endif
-//         kdDebug() << TYPE(ruby_errinfo) << endl;
         setException( new Kross::Api::Exception(QString("Failed to compile ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
         d->m_compile = 0;
     }
@@ -103,16 +106,6 @@ const QStringList& RubyScript::getFunctionNames()
     return d->m_functions;
 }
 
-VALUE ruby_runtime_error(VALUE data, VALUE errinfo)
-{
-    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Error when running script.") ) );
-}
-
-VALUE ruby_exec2()
-{
-    return INT2FIX(ruby_exec());
-}
-
 Kross::Api::Object::Ptr RubyScript::execute()
 {
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
@@ -126,10 +119,16 @@ Kross::Api::Object::Ptr RubyScript::execute()
     kdDebug() << "Start execution" << endl;
 #endif
     selectScript();
-    RubyInterpreter* interpreterRuby = (RubyInterpreter*)m_interpreter;
-    interpreterRuby->incCountScript();
-    rb_rescue2((VALUE (*)(...))ruby_exec2,0,0,0,rb_eStandardError,(VALUE)0);
-    interpreterRuby->decCountScript();
+    int result = ruby_exec();
+    if (result != 0)
+    {
+#ifdef KROSS_RUBY_SCRIPT_DEBUG
+        kdDebug() << "Execution has failed" << endl;
+#endif
+        setException( new Kross::Api::Exception(QString("Failed to execute ruby code: %1").arg(STR2CSTR( rb_obj_as_string(ruby_errinfo) )), 0) ); // TODO: get the error
+        d->m_compile = 0;
+    }
+
     unselectScript();
 #ifdef KROSS_RUBY_SCRIPT_DEBUG
     kdDebug() << "Execution is finished" << endl;
