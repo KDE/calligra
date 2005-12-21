@@ -115,15 +115,6 @@ namespace Kross { namespace Api {
              */
             Object::Ptr callChild(List::Ptr args);
 
-            /**
-             * Check the passed of \p arguments are valid for this event.
-             *
-             * \param arguments The \a List::Ptr list of arguments to check.
-             * \return true if the arguments are valid for this event else
-             *         false.
-             */
-            bool validArguments(List::Ptr arguments);
-
         protected:
 
             /**

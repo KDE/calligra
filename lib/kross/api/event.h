@@ -142,25 +142,31 @@ namespace Kross { namespace Api {
                     kdDebug() << QString("Event::call() event.name='%1' event.tostring='%2' event.args.tostring='%3'")
                                  .arg(event->getName()).arg(event->toString()).arg(event->m_arglist.toString()) << endl;
 #endif
+
                     // We have an valid event, so just call it...
                     return event->call(QString::null, arguments);
                 }
 
-                if(name.isNull() && m_function) {
+                if(name.isNull()) {
+                    if(m_function) {
 #ifdef KROSS_API_EVENT_CALL_DEBUG
-                    kdDebug() << QString("Event::call() Call builtin function in object '%1'").arg(parent->getName()) << endl;
+                        kdDebug() << QString("Event::call() Call builtin function in object '%1'").arg(getParent().data() ? getParent()->getName() : "!NULL!") << endl;
 #endif
 
-                    // Check the arguments. Throws an exception if failed.
-                    checkArguments(arguments);
+                        // Check the arguments. Throws an exception if failed.
+                        checkArguments(arguments);
 
-                    // We try to redirect the call to the m_function pointer the
-                    // parent object defines.
-                    T *self = static_cast<T*>( getParent().data() );
-                    if(! self)
-                        throw Exception::Ptr( new Exception(QString("The event '%1' points to an invalid instance.").arg(getName())) );
+                        // We try to redirect the call to the m_function pointer the
+                        // parent object defines.
+                        T *self = static_cast<T*>( getParent().data() );
+                        if(! self)
+                            throw Exception::Ptr( new Exception(QString("The event '%1' points to an invalid instance.").arg(getName())) );
 
-                    return (self->*m_function)(arguments);
+                        return (self->*m_function)(arguments);
+                    }
+
+                    // If no name and no function are defined, we return a reference to our instance.
+                    return this;
                 }
 
                 // Redirect the call to the Kross::Api::Callable we are inheritated from.

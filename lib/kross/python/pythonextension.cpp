@@ -75,40 +75,39 @@ Py::Object PythonExtension::repr()
 
 Py::Object PythonExtension::getattr(const char* n)
 {
-    QString name(n);
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
-    kdDebug() << QString("Kross::Python::PythonExtension::getattr name='%1'").arg(name) << endl;
+    kdDebug() << QString("Kross::Python::PythonExtension::getattr name='%1'").arg(n) << endl;
 #endif
 
-    if(name == "__methods__") {
-        Py::List methods;
-        QStringList calls = m_object->getCalls();
-        for(QStringList::Iterator it = calls.begin(); it != calls.end(); ++it) {
+    if(n[0] == '_') {
+        if(n == "__methods__") {
+            Py::List methods;
+            QStringList calls = m_object->getCalls();
+            for(QStringList::Iterator it = calls.begin(); it != calls.end(); ++it) {
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
-            kdDebug() << QString("Kross::Python::PythonExtension::getattr name='%1' callable='%2'").arg(name).arg(*it) << endl;
+                kdDebug() << QString("Kross::Python::PythonExtension::getattr name='%1' callable='%2'").arg(n).arg(*it) << endl;
 #endif
-            methods.append(Py::String( (*it).latin1() ));
+                methods.append(Py::String( (*it).latin1() ));
+            }
+            return methods;
         }
-        return methods;
-    }
 
-    if(name == "__members__") {
-        Py::List members;
-        QMap<QString, Kross::Api::Object::Ptr> children = m_object->getChildren();
-        QMap<QString, Kross::Api::Object::Ptr>::Iterator it( children.begin() );
-        for(; it != children.end(); ++it) {
+        if(n == "__members__") {
+            Py::List members;
+            QMap<QString, Kross::Api::Object::Ptr> children = m_object->getChildren();
+            QMap<QString, Kross::Api::Object::Ptr>::Iterator it( children.begin() );
+            for(; it != children.end(); ++it) {
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
-            kdDebug() << QString("Kross::Python::PythonExtension::getattr name='%1' child='%2'").arg(name).arg(it.key()) << endl;
+                kdDebug() << QString("Kross::Python::PythonExtension::getattr n='%1' child='%2'").arg(n).arg(it.key()) << endl;
 #endif
-            members.append(Py::String( it.key().latin1() ));
+                members.append(Py::String( it.key().latin1() ));
+            }
+            return members;
         }
-        return members;
-    }
 
-    if(name == "__dict__") { kdDebug()<<QString("PythonExtension::getattr(%1) __dict__").arg(name)<<endl; return Py::None(); }
-    if(name == "__class__") { kdDebug()<<QString("PythonExtension::getattr(%1) __class__").arg(name)<<endl; return Py::None(); }
+        //if(n == "__dict__") { kdDebug()<<QString("PythonExtension::getattr(%1) __dict__").arg(n)<<endl; return Py::None(); }
+        //if(n == "__class__") { kdDebug()<<QString("PythonExtension::getattr(%1) __class__").arg(n)<<endl; return Py::None(); }
 
-    if(name.startsWith("__")) {
 #ifdef KROSS_PYTHON_EXTENSION_GETATTR_DEBUG
         kdDebug() << QString("Kross::Python::PythonExtension::getattr name='%1' is a internal name.").arg(name) << endl;
 #endif
@@ -117,7 +116,7 @@ Py::Object PythonExtension::getattr(const char* n)
 
     // use our methodproxy "_call_" to dynamicly redirect the call
     // to the correct method. It's a dirty hack, but it's the easiest way ;)
-    m_methodname = name;
+    m_methodname = n;
     return Py::PythonExtension<PythonExtension>::getattr_methods("_call_");
 }
 
@@ -149,13 +148,11 @@ Kross::Api::List::Ptr PythonExtension::toObject(const Py::Tuple& tuple)
     kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Tuple)") << endl;
 #endif
 
-    QValueList<Kross::Api::Object::Ptr> list;
+    QValueList<Kross::Api::Object::Ptr> l;
     uint size = tuple.size();
-    for(uint i = 0; i < size; i++) {
-        Kross::Api::Object::Ptr o = toObject( Py::Object(tuple[i]) );
-        if(o) list.append(o);
-    }
-    return new Kross::Api::List(list);
+    for(uint i = 0; i < size; i++)
+        l.append( toObject( tuple[i] ) );
+    return new Kross::Api::List(l);
 }
 
 Kross::Api::List::Ptr PythonExtension::toObject(const Py::List& list)
@@ -166,10 +163,8 @@ Kross::Api::List::Ptr PythonExtension::toObject(const Py::List& list)
 
     QValueList<Kross::Api::Object::Ptr> l;
     uint length = list.length();
-    for(Py::List::size_type i = 0; i < length; ++i) {
-        Kross::Api::Object::Ptr o = toObject( Py::Object(list[i]) );
-        if(o) l.append(o);
-    }
+    for(uint i = 0; i < length; i++)
+        l.append( toObject( list[i] ) );
     return new Kross::Api::List(l);
 }
 
@@ -180,8 +175,7 @@ Kross::Api::Dict::Ptr PythonExtension::toObject(const Py::Dict& dict)
     uint length = l.length();
     for(Py::List::size_type i = 0; i < length; ++i) {
         const char* n = l[i].str().as_string().c_str();
-        Kross::Api::Object::Ptr o = toObject( dict[n] );
-        if(o) map.replace(n, o);
+        map.replace(n, toObject( dict[n] ));
     }
     return new Kross::Api::Dict(map);
 }
@@ -191,28 +185,6 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
 #ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) object='%1'").arg(object.as_string().c_str()) << endl;
 #endif
-
-    if(object == Py::None()) {
-#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isNone") << endl;
-#endif
-        return 0;
-    }
-
-    if(object.isInstance()) {
-#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isInstance") << endl;
-#endif
-        return new PythonObject(object);
-    }
-
-    if(object.isTuple()) {
-#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isTuple") << endl;
-#endif
-        Py::Tuple tuple = object;
-        return toObject(tuple).data();
-    }
 
     if(object.isNumeric()) {
 #ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
@@ -237,12 +209,12 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
         return new Kross::Api::Variant(QString(object.as_string().c_str()));
     }
 
-    if(object.isDict()) {
+    if(object.isTuple()) {
 #ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isDict") << endl;
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isTuple") << endl;
 #endif
-        Py::Dict dict(object.ptr());
-        return toObject(dict).data();
+        Py::Tuple tuple = object;
+        return toObject(tuple).data();
     }
 
     if(object.isList()) {
@@ -253,6 +225,22 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
         return toObject(list).data();
     }
 
+    if(object.isDict()) {
+#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isDict") << endl;
+#endif
+        Py::Dict dict(object.ptr());
+        return toObject(dict).data();
+    }
+
+    if(object.isInstance()) {
+#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isInstance") << endl;
+#endif
+        return new PythonObject(object);
+    }
+
+
     /*TODO
     if(object.isUnicode()) {
         Py::String s = object;
@@ -262,6 +250,14 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
     isSequence()
     isTrue()
     */
+
+    if(object == Py::None()) {
+#ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
+        kdDebug() << QString("Kross::Python::PythonExtension::toObject(Py::Object) isNone") << endl;
+#endif
+        return 0;
+    }
+
 
     Py::ExtensionObject<PythonExtension> extobj(object);
     PythonExtension* extension = extobj.extensionObject();
@@ -435,7 +431,6 @@ Py::Tuple PythonExtension::toPyTuple(Kross::Api::List::Ptr list)
 Py::Object PythonExtension::_call_(const Py::Tuple& args)
 {
     Kross::Api::List::Ptr arguments = toObject(args);
-    Kross::Api::Object::Ptr obj;
 
 #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::_call_(Py::Tuple) m_methodname='%1' arguments='%2'").arg(m_methodname).arg(arguments->toString()) << endl;
@@ -446,20 +441,19 @@ Py::Object PythonExtension::_call_(const Py::Tuple& args)
 #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
             kdDebug() << QString("Kross::Python::PythonExtension::_call_ name='%1' is a child object of '%2'.").arg(m_methodname).arg(m_object->getName()) << endl;
 #endif
-            obj = m_object->getChild(m_methodname)->call(QString::null, arguments);
+            return toPyObject( m_object->getChild(m_methodname)->call(QString::null, arguments) );
         }
-        else {
 #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
-            kdDebug() << QString("Kross::Python::PythonExtension::_call_ try to call function with name '%1' in object '%2'.").arg(m_methodname).arg(m_object->getName()) << endl;
+        kdDebug() << QString("Kross::Python::PythonExtension::_call_ try to call function with name '%1' in object '%2'.").arg(m_methodname).arg(m_object->getName()) << endl;
 #endif
-            obj = m_object->call(m_methodname, arguments);
-        }
+        return toPyObject( m_object->call(m_methodname, arguments) );
+
     }
     catch(Kross::Api::Exception::Ptr e) {
         kdDebug() << "EXCEPTION in PythonExtension::_call_" << endl;
         throw Py::RuntimeError( (char*) e->toString().latin1() );
     }
 
-    return obj ? toPyObject(obj) : Py::None();
+    return Py::None();
 }
 

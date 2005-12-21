@@ -70,16 +70,6 @@ Object::Ptr Callable::call(const QString& name, List::Ptr arguments)
     return Object::call(name, arguments);
 }
 
-bool Callable::validArguments(List::Ptr arguments)
-{
-    try {
-        checkArguments(arguments);
-        return true;
-    }
-    catch(Exception::Ptr&) {} // just ignore the exception
-    return false;
-}
-
 void Callable::checkArguments(List::Ptr arguments)
 {
 #ifdef KROSS_API_CALLABLE_CHECKARG_DEBUG
@@ -92,8 +82,10 @@ void Callable::checkArguments(List::Ptr arguments)
     // check the number of parameters passed.
     if(arglist.size() < m_arglist.getMinParams())
         throw Exception::Ptr( new Exception(QString("Too few parameters for callable object '%1'.").arg(getName())) );
-    if(arglist.size() > m_arglist.getMaxParams())
-        throw Exception::Ptr( new Exception(QString("Too many parameters for callable object '%1'.").arg(getName())) );
+    // Don't check if the user passed more arguments as allowed cause it's cheaper
+    // to just ignore the additional arguments.
+    //if(arglist.size() > m_arglist.getMaxParams())
+    //    throw Exception::Ptr( new Exception(QString("Too many parameters for callable object '%1'.").arg(getName())) );
 
     // check type of passed parameters.
     QValueList<Argument>& farglist = m_arglist;
@@ -106,13 +98,10 @@ void Callable::checkArguments(List::Ptr arguments)
 
         if( ! (*it).isVisible() ) {
             // if the argument isn't visibled, we always use the default argument.
-            Object::Ptr o = (*it).getObject();
-            if(! o)
-                throw Exception::Ptr( new Exception(QString("Callable object '%1' is hidden, but has no default value.").arg(getName())) );
             if(argend)
-                arglist.append(o);
+                arglist.append( (*it).getObject() );
             else
-                arglist.insert(argit, o);
+                arglist.insert(argit, (*it).getObject());
         }
         else {
             // the argument is visibled and therefore the passed arguments may
@@ -120,10 +109,7 @@ void Callable::checkArguments(List::Ptr arguments)
 
             if(argend) {
                 // no argument defined, use the default value.
-                Object::Ptr o = (*it).getObject();
-                if(! o)
-                    throw Exception::Ptr( new Exception(QString("Callable object '%1' was not passed, but has also no default value.").arg(getName())) );
-                arglist.append( o );
+                arglist.append( (*it).getObject() );
             }
             else {
 
@@ -135,7 +121,7 @@ void Callable::checkArguments(List::Ptr arguments)
                 bool ok = ocn.startsWith(fcn);
                 if(! ok) {
                     if(ocn.startsWith("Kross::Api::Variant")) {
-                        ocn = Variant::getVariantType(*argit);
+                        QString ocn = Variant::getVariantType(*argit);
                         ok = (
                             ocn == fcn ||
                             (
@@ -154,44 +140,6 @@ void Callable::checkArguments(List::Ptr arguments)
         if(! argend)
             ++argit;
     }
-
-/*
-    // check type of passed parameters.
-    QValueList<Argument>& farglist = m_arglist;
-    for(uint i = 0; i < fmax; i++) {
-        if(i >= arglist.count()) { // handle default arguments
-kdDebug()<<"##############> ("<<farglist[i].getObject()->getName()<<") "<<farglist[i].getObject()->toString()<<endl;
-            arglist.append( farglist[i].getObject() );
-            continue;
-        }
-kdDebug()<<"==> "<<arguments->toString()<<endl;
-
-        Object::Ptr o = arguments->item(i);
-        QString fcn = farglist[i].getClassName(); // expected argument
-        QString ocn = o->getClassName(); // given argument
-
-        // Check if the type of the passed argument matches to what we 
-        // expect. The given argument could have just the same type like 
-        // the expected argument or could be a specialization of it.
-        bool ok = ocn.startsWith(fcn);
-        if(! ok) {
-            if(ocn.startsWith("Kross::Api::Variant")) {
-                ocn = Variant::getVariantType(o);
-//FIXME: we need a more typesafe way to handle QVariant::type's
-                if(ocn == fcn ||
-                    (
-                        (fcn == "Kross::Api::Variant::Integer" || fcn == "Kross::Api::Variant::UInt") &&
-                        (ocn == "Kross::Api::Variant::Integer" || ocn == "Kross::Api::Variant::UInt")
-                    )
-                ) {
-                    ok = true;
-                }
-            }
-            if(! ok)
-                throw Exception::Ptr( new Exception(QString("Callable object '%1' expected parameter of type '%2', but got '%3'").arg(getName()).arg(fcn).arg(ocn)) );
-        }
-    }
-*/
 }
 
 Object::Ptr Callable::hasChild(List::Ptr args)
