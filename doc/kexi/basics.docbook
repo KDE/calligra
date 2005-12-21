@@ -13,7 +13,7 @@
       Kexi Databases
     </title>
     <para>
-      Many applications such as OpenOffice or Microsoft Excel create
+      Many applications such as OpenOffice.org or Microsoft Excel create
       files which are called <firstterm>documents</firstterm>. &kexi;
       creates files too, but we refer to them as <firstterm>&kexi;
       database files</firstterm>, or simple <firstterm>database
@@ -71,7 +71,7 @@
 	  <para>
 	    Use the file browser to choose a folder where you would
 	    like to save your database file.  You may change the file
-	    name in <guilabel>Location:</guilabel> box if you dislike
+	    name in the <guilabel>Location:</guilabel> box if you dislike
 	    the one that is suggested.
 	  </para>
       </step>

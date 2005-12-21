@@ -46,7 +46,7 @@
       <para>
 	IDEAl mode is the default MDI mode, and may be familiar from
 	other &kde; applications.  In this mode, a single child window
-	is shown maximized within in the &kexi; main window at once.
+	is shown maximized within the &kexi; main window at once.
 	A tab bar, containing one tab for each child window, allows
 	other child windows to be viewed by simply clicking on the
 	relevant tab.
@@ -156,8 +156,7 @@
       </para>
       <para>
 	Once undocked, panel windows may be docked into the main
-	window again in a similar manner to they way that they were
-	undocked:
+	window again similarly to undocking:
 	<itemizedlist>
 	  <listitem>
 	    <para>

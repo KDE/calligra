@@ -19,16 +19,16 @@ revision history. (see installation appendix comment) -->
 </para>
 
 <para>
-  &kexi; is part of the &koffice; productivity suite for for the K Desktop
+  &kexi; is part of the &koffice; productivity suite for the K Desktop
   Environment.
 </para>
 
 <para>
-  In addition to storing &kexi; your databases in files, &kexi; can also
+  In addition to storing your &kexi; databases in files, &kexi; can also
   store your data on a <firstterm>database server</firstterm>.  Using
   a database server allows you to share your database with other
   people, and also allows more than one person to use the database at
-  one time.  The following database servers are supported by &kexi;:
+  one time. The following database servers are supported by &kexi;:
   <itemizedlist>
     <listitem>
       <para>
@@ -46,7 +46,7 @@ revision history. (see installation appendix comment) -->
 </para>
 
 <para>
-  More information about &kexi; can be found a the &kexi; page on the
+  More information about &kexi; can be found at the &kexi; page on the
   &koffice; website
   at <ulink
 	url="http://www.koffice.org/kexi/">http://www.koffice.org/kexi/</ulink>,
@@ -61,8 +61,8 @@ revision history. (see installation appendix comment) -->
     list</ulink> can be used to ask questions about using &kexi; or about
   the &kexi; project.  The <ulink url="mailto:kexi-devel@kde.org">Kexi
     development mailing list</ulink> can be used to ask questions about
-  the development of &kexi;.  Further information about how to subscribe
-  to these lists; together with a few other ways of making contact with
+  the development of &kexi;.  Further information on how to subscribe
+  to these lists, together with a few other ways of making contact with
   &kexi; developers, can be found at:
   <itemizedlist>
     <listitem>
