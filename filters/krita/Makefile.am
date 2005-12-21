@@ -6,4 +6,6 @@ if include_imagemagick_filter
 IMAGEMAGICK_SUBDIR=magick
 endif
 
-SUBDIRS = $(IMAGEMAGICK_SUBDIR) $(OPENEXR_SUBDIR) png jpeg
+SUBDIRS =
+
+oldSUBDIRS = $(IMAGEMAGICK_SUBDIR) $(OPENEXR_SUBDIR) png jpeg
