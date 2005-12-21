@@ -163,7 +163,7 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &
 			stripQuotes(item, type_name);
 			name_required = false;
 		}
-		else {//open, design, text
+		else {//open, design, text...
 			//option with " " (default type == "table")
 			if (stripQuotes(item, obj_name)) {
 				type_name = "table";
@@ -192,10 +192,12 @@ bool KexiStartupHandler::getAutoopenObjects(KCmdLineArgs *args, const QCString &
 		info["type"]=type_name;
 		info["action"]=action_name;
 		//ok, now add info for this object
-		projectData()->autoopenObjects.append( info );
-//		projectData->autoopenObjects.append( QPair<QString,QString>(type_name, obj_name) );
 		atLeastOneFound = true;
-	}
+		if (projectData())
+			projectData()->autoopenObjects.append( info );
+		else
+			return true; //no need to find more because we do not have projectData() anyway
+	} //for
 	return atLeastOneFound;
 }
 
@@ -527,7 +529,9 @@ tristate KexiStartupHandler::init(int /*argc*/, char ** /*argv*/)
 	const bool atLeastOneAOOFound = getAutoopenObjects(args, "open")
 		|| getAutoopenObjects(args, "design")
 		|| getAutoopenObjects(args, "edittext")
-		|| getAutoopenObjects(args, "new");
+		|| getAutoopenObjects(args, "new")
+		|| getAutoopenObjects(args, "print")
+		|| getAutoopenObjects(args, "printpreview");
 
 	if (atLeastOneAOOFound && !openExisting) {
 		KMessageBox::information( 0, 

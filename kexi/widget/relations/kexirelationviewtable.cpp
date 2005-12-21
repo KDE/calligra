@@ -316,8 +316,14 @@ QSize KexiRelationViewTable::sizeHint()
 	kdDebug() << schema()->name() << " cw=" << columnWidth(0) + fm.width("i") 
 		<< ", " << fm.width(schema()->name()+"  ") << endl; 
 
-	QSize s( 
-		QMAX( columnWidth(0) + fm.width("i"), fm.width(schema()->name()+"  ")), 
+//! @todo width is still not OK
+	int maxWidth = columnWidth(0) + fm.width("i");
+  const KexiDB::QueryColumnInfo::Vector columns(schema()->columns(true/*unique*/));
+  for (uint i=0; i<columns.count(); i++)
+  	maxWidth = QMAX(maxWidth, fm.width(columns[i]->field->name())+20);
+
+	QSize s(
+		QMAX( maxWidth, fm.width(schema()->name()+"  ")+20), 
 		childCount()*firstChild()->totalHeight() + 4 );
 //	QSize s( columnWidth(1), childCount()*firstChild()->totalHeight() + 3*firstChild()->totalHeight()/10);
 	return s;

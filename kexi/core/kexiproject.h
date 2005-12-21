@@ -52,7 +52,7 @@ namespace KexiDB
 
 namespace KexiPart
 {
-//	class Manager;
+	class Part;
 	class Info;
 }
 
@@ -150,13 +150,22 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		KexiPart::Item* item(KexiPart::Info *i, const QString &name);
 
 		/**
+		 * @return item for \a identifier
+		 */
+		KexiPart::Item* item(int identifier);
+
+		/**
 		 * @return the database connection assosiated with this project
 		 */
 		KexiDB::Connection *dbConnection() const;
 
 		KexiProjectData *data() const;
 
-		KexiDialogBase* openObject(KexiMainWindow *wnd, KexiPart::Item& item, int viewMode = Kexi::DataViewMode);
+		/*! Opens object pointed by \a item in a view \a viewMode.
+		 \a staticObjectArgs can be passed for static object 
+		 (only works when part for this item is of type KexiPart::StaticPart) */
+		KexiDialogBase* openObject(KexiMainWindow *wnd, KexiPart::Item& item, 
+			int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 		//! For convenience
 		KexiDialogBase* openObject(KexiMainWindow *wnd, const QCString &mimeType, 
@@ -186,6 +195,10 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 \return newly created part item or NULL on any error. */
 		KexiPart::Item* createPartItem(KexiPart::Info *info, 
 			const QString& suggestedCaption = QString::null );
+
+		//! Added for convenience.
+		KexiPart::Item* createPartItem(KexiPart::Part *part, 
+			const QString& suggestedCaption = QString::null);
 
 		/*! Adds item \a item after it is succesfully stored as an instance of part
 		 pointed by \a info. Also clears 'neverSaved' flag if \a item.

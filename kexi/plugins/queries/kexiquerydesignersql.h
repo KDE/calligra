@@ -51,7 +51,7 @@ class KexiQueryDesignerSQLView : public KexiViewBase
 		virtual tristate beforeSwitchTo(int mode, bool &dontStore);
 		virtual tristate afterSwitchFrom(int mode);
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-		virtual tristate storeData();
+		virtual tristate storeData(bool dontAsk = false);
 
 		void setStatusOk();
 		void setStatusError(const QString& msg);

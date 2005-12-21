@@ -228,6 +228,7 @@ public:
 //js	void setSorting(int key, bool order=true, short type=1);
 
 	/*! Preloads all rows provided by cursor (only for db-aware version). */
+//! @todo change to bool and return false on error!
 	void preloadAllRows();
 
 	/*! Sets sorting for \a column. If \a column is -1, sorting is disabled. */

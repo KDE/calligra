@@ -38,9 +38,9 @@ namespace KexiDB
 	class Connection;
 }
 
-//class KexiQueryDataSource;
 class KexiProject;
 
+//! @short Kexi Query Designer Plugin.
 class KexiQueryPart : public KexiPart::Part
 {
 	Q_OBJECT
@@ -50,10 +50,6 @@ class KexiQueryPart : public KexiPart::Part
 		virtual ~KexiQueryPart();
 
 		virtual bool remove(KexiMainWindow *win, KexiPart::Item &item);
-
-//		KexiQueryDocument	*data(KexiDB::Connection *conn, KexiPart::Item &item);
-
-//		virtual KexiPart::DataSource *dataSource();
 
 		class TempData : public KexiDialogTempData, 
 		                 public KexiDB::Connection::TableSchemaChangeListenerInterface
@@ -75,7 +71,8 @@ class KexiQueryPart : public KexiPart::Part
 				bool queryChangedInPreviousView : 1;
 		};
 
-		virtual QString i18nMessage(const QCString& englishMessage) const;
+		virtual QString i18nMessage(const QCString& englishMessage, 
+			KexiDialogBase* dlg) const;
 
 	protected:
 		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
@@ -92,18 +89,6 @@ class KexiQueryPart : public KexiPart::Part
 		virtual KexiDB::SchemaData* loadSchemaData(KexiDialogBase *dlg, 
 			const KexiDB::SchemaData& sdata, int viewMode);
 };
-
-#if 0
-class KexiQueryDataSource : public KexiPart::DataSource
-{
-	public:
-		KexiQueryDataSource(KexiPart::Part *part);
-		~KexiQueryDataSource();
-
-		virtual KexiDB::FieldList *fields(KexiProject *prj, const KexiPart::Item &);
-		virtual KexiDB::Cursor *cursor(KexiProject *prj, const KexiPart::Item &i, bool buffer);
-};
-#endif
 
 #endif
 

@@ -102,7 +102,7 @@ class KEXIREPORTUTILS_EXPORT KexiReportView : public KexiViewBase
 		virtual KoProperty::Set* propertySet() { return m_propertySet; }
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-		virtual tristate storeData();
+		virtual tristate storeData(bool dontAsk = false);
 
 		KexiReportPart::TempData* tempData() const {
 			return static_cast<KexiReportPart::TempData*>(parentDialog()->tempData()); }

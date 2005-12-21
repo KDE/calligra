@@ -116,8 +116,9 @@ KexiReportPart::createView(QWidget *parent, KexiDialogBase* dialog,
 }
 
 QString
-KexiReportPart::i18nMessage(const QCString& englishMessage) const
+KexiReportPart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
 {
+	Q_UNUSED(dlg);
 	if (englishMessage=="Design of object \"%1\" has been modified.")
 		return i18n("Design of report \"%1\" has been modified.");
 	if (englishMessage=="Object \"%1\" already exists.")

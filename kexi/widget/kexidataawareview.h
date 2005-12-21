@@ -63,6 +63,7 @@ class KEXIEXTWIDGETS_EXPORT KexiDataAwareView : public KexiViewBase
 		void slotCellSelected(int col, int row);
 		void reloadActions();
 		void slotUpdateRowActions(int row);
+		void slotClosing(bool& cancel);
 
 	protected:
 		void init( QWidget* viewWidget, KexiSharedActionClient* actionClient,

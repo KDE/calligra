@@ -46,7 +46,7 @@ void KexiDataAwareView::init( QWidget* viewWidget, KexiSharedActionClient* actio
 		m_dataAwareObject->connectCellSelectedSignal(this, SLOT(slotCellSelected(int,int)));
 
 		//! before closing - we'are accepting editing
-		connect(this, SIGNAL(closing()), this, SLOT(acceptRowEdit()));
+		connect(this, SIGNAL(closing(bool&)), this, SLOT(slotClosing(bool&)));
 
 		//! updating actions on start/stop editing
 		m_dataAwareObject->connectRowEditStartedSignal(this, SLOT(slotUpdateRowActions(int)));
@@ -211,6 +211,12 @@ void KexiDataAwareView::startEditOrToggleValue()
 bool KexiDataAwareView::acceptRowEdit()
 {
 	return m_dataAwareObject->acceptRowEdit();
+}
+
+void KexiDataAwareView::slotClosing(bool& cancel)
+{
+	if (!acceptRowEdit())
+		cancel = true;
 }
 
 void KexiDataAwareView::cancelRowEdit()

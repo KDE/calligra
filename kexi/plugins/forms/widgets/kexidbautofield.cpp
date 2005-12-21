@@ -573,7 +573,9 @@ KexiDBAutoField::paintEvent( QPaintEvent* pe )
 }*/
 
 void
-KexiDBAutoField::paletteChange( const QPalette& oldPal ) {
+KexiDBAutoField::paletteChange( const QPalette& oldPal )
+{
+	Q_UNUSED(oldPal);
 	m_label->setPalette( palette() );
 }
 

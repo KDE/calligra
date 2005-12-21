@@ -131,7 +131,7 @@ class KEXIFORMUTILS_EXPORT KexiFormView : public KexiDataAwareView
 		virtual KoProperty::Set* propertySet() { return m_propertySet; }
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-		virtual tristate storeData();
+		virtual tristate storeData(bool dontAsk = false);
 
 		KexiFormPart::TempData* tempData() const {
 			return dynamic_cast<KexiFormPart::TempData*>(parentDialog()->tempData()); }

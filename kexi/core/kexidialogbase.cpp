@@ -24,6 +24,7 @@
 #include "kexiviewbase.h"
 #include "kexicontexthelp_p.h"
 #include "kexipart.h"
+#include "kexistaticpart.h"
 #include "kexipartitem.h"
 #include "kexipartinfo.h"
 #include "kexiproject.h"
@@ -181,10 +182,14 @@ void KexiDialogBase::closeEvent( QCloseEvent * e )
 	KexiViewBase *view;
 	QObjectListIt it( *list );
 	for ( ;(view = static_cast<KexiViewBase*>(it.current()) ) != 0; ++it ) {
-		emit view->closing();
+		bool cancel = false;
+		emit view->closing(cancel);
+		if (cancel) {
+			e->ignore();
+			return;
+		}
 	}
 	delete list;
-
 	emit closing();
 	KMdiChildView::closeEvent(e);
 }
@@ -263,7 +268,7 @@ KexiPart::GUIClient* KexiDialogBase::commonGUIClient() const
 	return m_part->instanceGuiClient(0);
 }
 
-tristate KexiDialogBase::switchToViewMode( int newViewMode )
+tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString>* staticObjectArgs )
 {
 	m_parentWindow->acceptPropertySetEditing();
 
@@ -275,7 +280,7 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode )
 	tristate res = true;
 	if (designModePreloadedForTextModeHack) {
 		/* A HACK: open design BEFORE text mode: otherwise Query schema becames crazy */
-		res = switchToViewMode( Kexi::DesignViewMode );
+		res = switchToViewMode( Kexi::DesignViewMode, staticObjectArgs );
 		if (!res || ~res)
 			return res;
 	}
@@ -297,7 +302,8 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode )
 		if (~res || !res)
 			return res;
 		if (!dontStore && view->dirty()) {
-			res = m_parentWindow->saveObject(this, i18n("Design has been changed. You must save it before switching to other view."));
+			res = m_parentWindow->saveObject(this, i18n("Design has been changed. "
+				"You must save it before switching to other view."));
 			if (~res || !res)
 				return res;
 //			KMessageBox::questionYesNo(0, i18n("Design has been changed. You must save it before switching to other view."))
@@ -306,13 +312,18 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode )
 	}
 
 	//get view for viewMode
-	KexiViewBase *newView = (m_stack->widget(newViewMode) && m_stack->widget(newViewMode)->inherits("KexiViewBase"))
+	KexiViewBase *newView 
+		= (m_stack->widget(newViewMode) && m_stack->widget(newViewMode)->inherits("KexiViewBase"))
 		? static_cast<KexiViewBase*>(m_stack->widget(newViewMode)) : 0;
 	if (!newView) {
 		KexiUtils::setWaitCursor();
 		//ask the part to create view for the new mode
 		m_creatingViewsMode = newViewMode;
-		newView = m_part->createView(m_stack, this, *m_item, newViewMode);
+		KexiPart::StaticPart *staticPart = dynamic_cast<KexiPart::StaticPart*>((KexiPart::Part*)m_part);
+		if (staticPart)
+			newView = staticPart->createView(m_stack, this, *m_item, newViewMode, staticObjectArgs);
+		else
+			newView = m_part->createView(m_stack, this, *m_item, newViewMode);
 		KexiUtils::removeWaitCursor();
 		if (!newView) {
 			//js TODO error?
@@ -360,6 +371,11 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode )
 	m_parentWindow->invalidateSharedActions( newView );
 //	setFocus();
 	return true;
+}
+
+tristate KexiDialogBase::switchToViewMode( int newViewMode )
+{
+	return switchToViewMode( newViewMode, 0 );
 }
 
 void KexiDialogBase::setFocus()
@@ -540,7 +556,7 @@ tristate KexiDialogBase::storeNewData()
 	return true;
 }
 
-tristate KexiDialogBase::storeData()
+tristate KexiDialogBase::storeData(bool dontAsk)
 {
 	if (neverSaved())
 		return false;
@@ -559,7 +575,7 @@ tristate KexiDialogBase::storeData()
 	}
 	KexiDB::TransactionGuard tg(transaction);
 
-	const tristate res = v->storeData();
+	const tristate res = v->storeData(dontAsk);
 	if (~res) //trans. will be cancelled
 		return res;
 	if (!res) {

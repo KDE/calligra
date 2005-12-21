@@ -319,8 +319,9 @@ KexiReportView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 }
 
 tristate
-KexiReportView::storeData()
+KexiReportView::storeData(bool dontAsk)
 {
+	Q_UNUSED(dontAsk)
 	kexipluginsdbg << "KexiReportForm::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 	QString data;
 	KFormDesigner::FormIO::saveFormToString(tempData()->form, data);

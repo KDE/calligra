@@ -55,6 +55,8 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		void installEventFilter ( const QObject * filterObj );
 		virtual bool eventFilter ( QObject *o, QEvent * e );
 
+		bool actionEnabled(const QCString& actionName) const;
+
 	public slots:
 		void addGroup(KexiPart::Info& info);
 		void addItem(KexiPart::Item& item);
@@ -83,6 +85,10 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 
 		void exportItemAsDataTable( KexiPart::Item* );
 
+		void printItem( KexiPart::Item* );
+
+		void printPreviewForItem( KexiPart::Item* );
+
 //		void actionAvailable(const char *name, bool avail);
 
 	protected slots:
@@ -103,6 +109,8 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		void slotPaste();
 		void slotRename();
 		void slotExportAsDataTable();
+		void slotPrintItem();
+		void slotPrintPreviewForItem();
 
 	protected:
 		void itemRenameDone();
@@ -112,12 +120,13 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		KPopupMenu *m_itemPopup, *m_partPopup;
 		KAction *m_newObjectAction, // *m_newObjectToolbarAction,
 			*m_openAction, *m_designAction, *m_editTextAction,
-			*m_dataExportAction;
+			*m_dataExportAction, *m_printAction, *m_printPreviewAction;
 		KActionMenu* m_exportActionMenu;
 		KPopupMenu* m_newObjectPopup;
 		int m_itemPopupTitle_id, m_partPopupTitle_id, 
 			m_openAction_id, m_designAction_id, m_editTextAction_id,
-			m_exportActionMenu_id;
+			m_exportActionMenu_id, m_exportActionMenu_id_sep,
+			m_printAction_id, m_printPreviewAction_id, m_printPreviewAction_id_sep;
 
 		KexiPart::Part *m_prevSelectedPart;
 		KToolBar *m_toolbar;

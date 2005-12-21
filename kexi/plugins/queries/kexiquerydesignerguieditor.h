@@ -83,7 +83,7 @@ class KexiQueryDesignerGuiEditor : public KexiViewBase
 		virtual tristate afterSwitchFrom(int mode);
 
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
-		virtual tristate storeData();
+		virtual tristate storeData(bool dontAsk = false);
 
 		/*! Updates data in columns depending on tables that are currently inserted.
 		 Tabular Data in combo box popups is updated as well. */

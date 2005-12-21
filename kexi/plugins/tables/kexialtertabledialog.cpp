@@ -159,6 +159,8 @@ KexiAlterTableDialog::KexiAlterTableDialog(KexiMainWindow *win, QWidget *parent,
 		this, SLOT(slotRowUpdated(KexiTableItem*)));
 	connect(d->data, SIGNAL(aboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)),
 		this, SLOT(slotAboutToInsertRow(KexiTableItem*,KexiDB::ResultInfo*,bool)));
+	connect(d->data, SIGNAL(aboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)),
+		this, SLOT(slotAboutToDeleteRow(KexiTableItem&,KexiDB::ResultInfo*,bool)));
 
 	setMinimumSize(d->view->minimumSizeHint().width(), d->view->minimumSizeHint().height());
 	d->view->setFocus();
@@ -456,9 +458,9 @@ void KexiAlterTableDialog::slotTogglePrimaryKey()
 	d->slotTogglePrimaryKeyCalled = false;
 }
 
-void KexiAlterTableDialog::setPrimaryKey(KoProperty::Set &propertySet, bool set)
+void KexiAlterTableDialog::setPrimaryKey(KoProperty::Set &propertySet, bool set, bool aWasPKey)
 {
-	const bool was_pkey = propertySet["primaryKey"].value().toBool();
+	const bool was_pkey = aWasPKey || propertySet["primaryKey"].value().toBool();
 	propertySet["primaryKey"] = QVariant(set, 1);
 	if (&propertySet==this->propertySet()) {
 		//update action and icon @ column 0 (only if we're changing current property set)
@@ -526,7 +528,8 @@ QString KexiAlterTableDialog::messageForSavingChanges(bool &emptyTable)
 	emptyTable = conn->isEmpty( *tempData()->table, ok ) && ok;
 	return i18n("Do you want to save the design now?")
 	+ ( emptyTable ? QString::null :
-		QString("\n\n") + i18n("Note: This table is already filled with data which will be removed.") );
+		(QString("\n\n") + part()->i18nMessage(":additional message before saving design", parentDialog())) );
+//		QString("\n\n") + i18n("Note: This table is already filled with data which will be removed.") );
 }
 
 tristate KexiAlterTableDialog::beforeSwitchTo(int mode, bool &dontStore)
@@ -791,7 +794,7 @@ void KexiAlterTableDialog::slotPropertyChanged(KoProperty::Set& set, KoProperty:
 		else {
 			set["autoIncrement"] = QVariant(false,1);
 		}
-		setPrimaryKey(set, property.value().toBool());
+		setPrimaryKey(set, property.value().toBool(), true/*wasPKey*/);
 		updatePropertiesVisibility(
 			KexiDB::Field::typeForString( set["subType"].value().toString() ), set);
 		//properties' visiblility changed: refresh prop. set
@@ -857,6 +860,13 @@ void KexiAlterTableDialog::slotAboutToInsertRow(KexiTableItem* /*item*/,
 	//TODO
 }
 
+void KexiAlterTableDialog::slotAboutToDeleteRow(
+	KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint)
+{
+	if (item[COLUMN_ID_PK].toString()=="key")
+		d->primaryKeyExists = false;
+}
+
 tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 {
 	if (!d->view->acceptRowEdit())
@@ -878,12 +888,34 @@ tristate KexiAlterTableDialog::buildSchema(KexiDB::TableSchema &schema)
 			return cancelled;
 		}
 		else if (questionRes==KMessageBox::Yes) {
+			//-find unique name, starting with, "id", "id2", ....
+			int i=0;
+			int idIndex = 1; //means "id"
+			QString pkFieldName("id%1");
+			QString pkFieldCaption(i18n("Identifier%1", "Id%1"));
+			while (i<(int)d->sets->size()) {
+				KoProperty::Set *set = d->sets->at(i);
+				if (set) {
+					if ((*set)["name"].value().toString()
+						== pkFieldName.arg(idIndex==1?QString::null : QString::number(idIndex))
+					|| (*set)["caption"].value().toString()
+					== pkFieldCaption.arg(idIndex==1?QString::null : QString::number(idIndex)))
+					{
+						//try next id index
+						i = 0;
+						idIndex++;
+						continue;
+					}
+				}
+				i++;
+			}
+			pkFieldName = pkFieldName.arg(idIndex==1?QString::null : QString::number(idIndex));
+			pkFieldCaption = pkFieldCaption.arg(idIndex==1?QString::null : QString::number(idIndex));
+			//ok, add PK with such unique name
 			d->view->insertEmptyRow(0);
 			d->view->setCursorPosition(0, COLUMN_ID_CAPTION);
-			//name and type
-//todo: does this already exist?
 			d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_CAPTION,
-				QVariant(i18n("Identifier", "Id")));
+				QVariant(pkFieldCaption));
 			d->view->data()->updateRowEditBuffer(d->view->selectedItem(), COLUMN_ID_TYPE,
 				QVariant(KexiDB::Field::IntegerGroup-1/*counting from 0*/));
 			if (!d->view->data()->saveRowChanges(*d->view->selectedItem(), true)) {
@@ -1029,13 +1061,13 @@ KexiDB::SchemaData* KexiAlterTableDialog::storeNewData(const KexiDB::SchemaData&
 	return tempData()->table;
 }
 
-tristate KexiAlterTableDialog::storeData()
+tristate KexiAlterTableDialog::storeData(bool dontAsk)
 {
 	if (!tempData()->table || !m_dialog->schemaData())
 		return 0;
 
 	tristate res = true;
-	if (!d->dontAskOnStoreData) {
+	if (!d->dontAskOnStoreData && !dontAsk) {
 		bool emptyTable;
 		const QString msg = messageForSavingChanges(emptyTable);
 		if (!emptyTable) {

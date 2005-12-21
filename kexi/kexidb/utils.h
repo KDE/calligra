@@ -139,6 +139,10 @@ namespace KexiDB
 			//! using \a conn connection and \a name.
 			TableOrQuerySchema(Connection *conn, const QCString& name, bool table);
 
+			//! Creates a new TableOrQuerySchema variant object. \a tableOrQuery must be of 
+			//! class TableSchema or QuerySchema.
+			TableOrQuerySchema(FieldList &tableOrQuery);
+			
 			//! Creates a new TableOrQuerySchema variant object, retrieving table or query schema
 			//! using \a conn connection and \a id.
 			TableOrQuerySchema(Connection *conn, int id);
@@ -169,6 +173,8 @@ namespace KexiDB
 			QueryColumnInfo* columnInfo(const QString& name);
 
 		protected:
+			QCString m_name; //!< the name is kept here because m_table and m_table can be 0
+			                 //! and we still want name() and acptionOrName() work.
 			TableSchema* m_table;
 			QuerySchema* m_query;
 	};

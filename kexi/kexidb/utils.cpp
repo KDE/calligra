@@ -145,7 +145,9 @@ void KexiDB::getHTMLErrorMesage(Object* obj, QString& msg, QString &details)
 	}
 	if (!serverResultName.isEmpty())
 		details += (QString("<p><b><nobr>")+i18n("Server result name:")+"</nobr></b><br>"+serverResultName);
-	if (!details.isEmpty()) {
+	if (!details.isEmpty() 
+		&& (!obj->serverErrorMsg().isEmpty() || !obj->recentSQLString().isEmpty() || !serverResultName.isEmpty() || serverResult!=0) )
+	{
 		details += (QString("<p><b><nobr>")+i18n("Server result number:")+"</nobr></b><br>"+QString::number(serverResult));
 	}
 
@@ -181,7 +183,8 @@ int KexiDB::idForObjectName( Connection &conn, const QString& objName, int objTy
 //-----------------------------------------
 
 TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QCString& name, bool table)
- : m_table(table ? conn->tableSchema(QString(name)) : 0)
+ : m_name(name)
+ , m_table(table ? conn->tableSchema(QString(name)) : 0)
  , m_query(table ? 0 : conn->querySchema(QString(name)))
 {
 	if (table && !m_table)
@@ -190,6 +193,15 @@ TableOrQuerySchema::TableOrQuerySchema(Connection *conn, const QCString& name, b
 	if (!table && !m_query)
 		kdWarning() << "TableOrQuery(Connection *conn, const QCString& name, bool table) : "
 			"no query specified!" << endl;
+}
+
+TableOrQuerySchema::TableOrQuerySchema(FieldList &tableOrQuery)
+ : m_table(dynamic_cast<TableSchema*>(&tableOrQuery))
+ , m_query(dynamic_cast<QuerySchema*>(&tableOrQuery))
+{
+	if (!m_table && !m_query)
+		kdWarning() << "TableOrQuery(FieldList &tableOrQuery) : "
+			" tableOrQuery is nether table nor query!" << endl;
 }
 
 TableOrQuerySchema::TableOrQuerySchema(Connection *conn, int id)
@@ -235,14 +247,14 @@ QCString TableOrQuerySchema::name() const
 		return m_table->name().latin1();
 	if (m_query)
 		return m_query->name().latin1();
-	return QCString();
+	return m_name;
 }
 
 QString TableOrQuerySchema::captionOrName() const
 {
 	SchemaData *sdata = m_table ? static_cast<SchemaData *>(m_table) : static_cast<SchemaData *>(m_query);
 	if (!sdata)
-		return QString::null;
+		return m_name;
 	return sdata->caption().isEmpty() ? sdata->name() : sdata->caption();
 }
 

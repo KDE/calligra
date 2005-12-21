@@ -68,6 +68,9 @@ class KexiAlterTableDialog : public KexiDataTable
 		//! Called before row inserting in tableview.
 		void slotAboutToInsertRow(KexiTableItem* item, KexiDB::ResultInfo* result, bool repaint);
 
+		//! Called before row deleting in tableview.
+		void slotAboutToDeleteRow(KexiTableItem& item, KexiDB::ResultInfo* result, bool repaint);
+
 		/*! Called after any property has been changed in the current property set,
 		 to perform some actions (like updating other dependent properties) */
 		void slotPropertyChanged(KoProperty::Set& set, KoProperty::Property& property);
@@ -107,7 +110,7 @@ class KexiAlterTableDialog : public KexiDataTable
 		virtual KexiDB::SchemaData* storeNewData(const KexiDB::SchemaData& sdata, bool &cancel);
 
 		/*! Reimplemented from KexiViewBase, because table storage is more complex. */
-		virtual tristate storeData();
+		virtual tristate storeData(bool dontAsk = false);
 
 		tristate buildSchema(KexiDB::TableSchema &schema);
 
@@ -115,8 +118,9 @@ class KexiAlterTableDialog : public KexiDataTable
 
 		/*! Helper, used for slotTogglePrimaryKey() and slotPropertyChanged().
 		 Assigns primary key icon and value for property set \a propertySet, 
-		 and deselects it from previous pkey's row. */
-		void setPrimaryKey(KoProperty::Set &propertySet, bool set);
+		 and deselects it from previous pkey's row. 
+		 \a aWasPKey is internal. */
+		void setPrimaryKey(KoProperty::Set &propertySet, bool set, bool aWasPKey = false);
 
 		//! Gets subtype strings and names for type \a fieldType.
 		void getSubTypeListData(KexiDB::Field::TypeGroup fieldTypeGroup, 

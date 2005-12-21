@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -43,7 +43,7 @@ namespace KexiPart
 {
 	class Info;
 	class Part;
-//	class DataSource;
+	class StaticPart;
 
 	struct Missing
 	{
@@ -117,24 +117,22 @@ class KEXICORE_EXPORT Manager : public QObject, public KexiDB::Object
 		 */
 		PartInfoList *partInfoList() { return &m_partlist; }
 
-#if 0
-		DataSourceList *dataSources() { return &m_datasources; }
-		void unloadPart(Info *i);
-		void unloadAllParts();
-#endif
 	signals:
 		void partLoaded(KexiPart::Part*);
+
+	protected:
+		//! Used by StaticPart
+		void insertStaticPart(KexiPart::StaticPart* part);
 
 	private:
 		PartDict m_parts;
 		PartInfoList m_partlist;
 		PartInfoDict m_partsByMime;
 		MissingList m_missing;
-#if 0
-		DataSourceList m_datasources;
-#endif
 		int m_nextTempProjectPartID;
 		bool m_lookupDone : 1;
+
+		friend class StaticPart;
 };
 
 }

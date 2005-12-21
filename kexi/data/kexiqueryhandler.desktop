@@ -81,3 +81,4 @@ X-Kexi-TypeName=query
 X-Kexi-TypeMime=kexi/query
 X-Kexi-ItemIcon=query
 X-Kexi-SupportsDataExport=true
+X-Kexi-SupportsPrinting=true

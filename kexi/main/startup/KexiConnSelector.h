@@ -20,9 +20,9 @@
 #ifndef KEXICONNSELECTOR_H
 #define KEXICONNSELECTOR_H
 
-#include "kexidbconnectionset.h"
-#include "KexiStartupFileDialog.h"
+#include <kexidbconnectionset.h>
 #include <kexidb/driver.h>
+#include "KexiStartupFileDialog.h"
 
 #include <kdialogbase.h>
 #include <klistview.h>

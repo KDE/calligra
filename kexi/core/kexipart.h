@@ -43,6 +43,7 @@ namespace KexiPart
 	class Item;
 	class GUIClient;
 	class PartPrivate;
+	class StaticInfo;
 
 /*! Official (registered) type IDs for objects like table, query, form... */
 enum ObjectTypes {
@@ -78,9 +79,10 @@ class KEXICORE_EXPORT Part : public QObject
 		inline int supportedViewModes() const { return m_supportedViewModes; }
 
 		/*! "Opens" an instance that the part provides, pointed by \a item in a mode \a viewMode. 
-		 \a viewMode is one of Kexi::ViewMode enum. */
+		 \a viewMode is one of Kexi::ViewMode enum. 
+		 \a staticObjectArgs can be passed for static Kexi Parts. */
 		KexiDialogBase* openInstance(KexiMainWindow *win, KexiPart::Item &item, 
-			int viewMode = Kexi::DataViewMode);
+			int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 		/*! Removes any stored data pointed by \a item (example: table is dropped for table part). 
 		 From now this data is inaccesible, and \a item disappear.
@@ -165,8 +167,15 @@ class KEXICORE_EXPORT Part : public QObject
 		 while this could not: "<p>%1 \"%2\" has been modified.</p>".
 		 See implementation of this method in KexiTablePart to see 
 		 what strings are needed for translation.
-		 Default implementation returns generic \a englishMessage. */
-		virtual QString i18nMessage(const QCString& englishMessage) const;
+
+		 Default implementation returns generic \a englishMessage. 
+		 In special cases, \a englishMessage can start with ":", 
+		 to indicate that empty string will be generated if 
+		 a part does not offer a message for such \a englishMessage.
+		 This is used e.g. in KexiMainWindowImpl::closeDialog().
+		 */
+		virtual QString i18nMessage(const QCString& englishMessage, 
+			KexiDialogBase* dlg) const;
 
 	signals: 
 		void newObjectRequest( KexiPart::Info *info );
@@ -175,6 +184,9 @@ class KEXICORE_EXPORT Part : public QObject
 		void slotCreate();
 
 	protected:
+		//! Used by StaticPart
+		Part(QObject* parent, StaticInfo *info);
+
 //		virtual KexiDialogBase* createInstance(KexiMainWindow *win, const KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
 
 		//! Creates GUICLients for this part, attached to \a win

@@ -185,13 +185,17 @@ tristate KexiTablePart::askForClosingObjectsUsingTableSchema(QWidget *parent, Ke
 }
 
 QString
-KexiTablePart::i18nMessage(const QCString& englishMessage) const
+KexiTablePart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
 {
 	if (englishMessage=="Design of object \"%1\" has been modified.")
 		return i18n("Design of table \"%1\" has been modified.");
 
 	if (englishMessage=="Object \"%1\" already exists.")
 		return i18n("Table \"%1\" already exists.");
+
+	if (dlg->currentViewMode()==Kexi::DesignViewMode && !dlg->neverSaved()
+		&& englishMessage==":additional message before saving design")
+		return i18n("Note: Any data in this table will be removed upon design's saving.");
 
 	return englishMessage;
 }

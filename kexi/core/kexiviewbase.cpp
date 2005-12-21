@@ -87,7 +87,12 @@ QSize KexiViewBase::preferredSizeHint(const QSize& otherSize)
 
 void KexiViewBase::closeEvent( QCloseEvent * e )
 {
-	emit closing();
+	bool cancel = false;
+	emit closing(cancel);
+	if (cancel) {
+		e->ignore();
+		return;
+	}
 	QWidget::closeEvent(e);
 }
 
@@ -156,8 +161,9 @@ KexiDB::SchemaData* KexiViewBase::storeNewData(const KexiDB::SchemaData& sdata, 
 	return new_schema;
 }
 
-tristate KexiViewBase::storeData()
+tristate KexiViewBase::storeData(bool dontAsk)
 {
+	Q_UNUSED(dontAsk);
 	if (!m_dialog || !m_dialog->schemaData())
 		return false;
 	if (!m_mainWin->project()->dbConnection()

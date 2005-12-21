@@ -37,8 +37,8 @@ namespace KexiDB
 	class FieldList;
 }
 
-//! Kexi Report Plugin
-/*! It just creates a \ref KexiReportView. See there for most of code. */
+/*! @short Kexi Report Plugin
+ It just creates a \ref KexiReportView. See there for most of code. */
 class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
 {
 	Q_OBJECT
@@ -66,7 +66,8 @@ class KEXIREPORTUTILS_EXPORT KexiReportPart : public KexiPart::Part
 				int resizeMode; //!< form's window's resize mode -one of KexiFormView::ResizeMode items
 		};
 
-		virtual QString i18nMessage(const QCString& englishMessage) const;
+		virtual QString i18nMessage(const QCString& englishMessage, 
+			KexiDialogBase* dlg) const;
 
 	protected:
 		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);

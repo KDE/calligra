@@ -235,8 +235,9 @@ tristate KexiQueryPart::TempData::closeListener()
 	return dlg->mainWin()->closeDialog(dlg);
 }
 
-QString KexiQueryPart::i18nMessage(const QCString& englishMessage) const
+QString KexiQueryPart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
 {
+	Q_UNUSED(dlg);
 	if (englishMessage=="Design of object \"%1\" has been modified.")
 		return i18n("Design of query \"%1\" has been modified.");
 	if (englishMessage=="Object \"%1\" already exists.")

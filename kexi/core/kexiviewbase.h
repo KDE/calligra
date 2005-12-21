@@ -122,7 +122,7 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 
 	signals:
 		//! emitted when the view is about to close
-		void closing();
+		void closing(bool& cancel);
 
 		void focus(bool in);
 
@@ -191,9 +191,13 @@ class KEXICORE_EXPORT KexiViewBase : public QWidget, public KexiActionProxy
 		 - makes a deep copy of \a sdata
 		 - stores object schema data \a sdata in 'kexi__objects' internal table
 		   using Connection::storeObjectSchemaData().
-		 Reimpelment this for your needs. Should return true on success.
+		 If \a dontAsk is true, no question dialog will 
+		 be shown to the user. The default is false.
+
+		 Reimpelment this for your needs. Should return true on success 
+		 or cancelled when the task should be cancelled.
 		 \sa storeNewData() */
-		virtual tristate storeData();
+		virtual tristate storeData(bool dontAsk = false);
 
 		/*! Stores (potentially large) string data \a dataString, block (e.g. xml form's representation),
 		 at the database backend. Block will be stored in "kexi__objectdata" table pointed by

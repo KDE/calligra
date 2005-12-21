@@ -18,59 +18,52 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include "kexipartinfo_p.h"
+
 #include <kexidb/global.h>
-#include "kexipartinfo.h"
-
-
-namespace KexiPart
-{
-//! @internal
-class Info::Private
-{
-	public:
-	Private(const KService::Ptr& aPtr)
-	 : ptr(aPtr)
-	 , groupName(aPtr->name())
-	 , mimeType(aPtr->property("X-Kexi-TypeMime").toCString())
-	 , itemIcon(aPtr->property("X-Kexi-ItemIcon").toString())
-	 , objectName(aPtr->property("X-Kexi-TypeName").toString())
-	 , broken(false)
-	 , idStoredInPartDatabase(false)
-	{
-		QVariant val = ptr->property("X-Kexi-NoObject");
-		isVisibleInNavigator = val.isValid() ? (val.toInt() != 1) : true;
-
-//! @todo (js)..... now it's hardcoded!
-		if(objectName == "table")
-			projectPartID = KexiDB::TableObjectType;
-		else if(objectName == "query")
-			projectPartID = KexiDB::QueryObjectType;
-	//	else if(objectName == "html")
-	//		m_projectPartID = KexiDB::WebObjectType;
-		else
-			projectPartID = -1; //TODO!!
-
-	}
-
-	KService::Ptr ptr;
-	QString errorMessage;
-	QString groupName;
-	QCString mimeType;
-	QString itemIcon;
-	QString objectName;
-	int projectPartID;
-	bool broken : 1;
-	bool isVisibleInNavigator : 1;
-	bool idStoredInPartDatabase : 1;
-};
-}
 
 using namespace KexiPart;
+
+Info::Private::Private(const KService::Ptr& aPtr)
+ : ptr(aPtr)
+ , groupName(aPtr->name())
+ , mimeType(aPtr->property("X-Kexi-TypeMime").toCString())
+ , itemIcon(aPtr->property("X-Kexi-ItemIcon").toString())
+ , objectName(aPtr->property("X-Kexi-TypeName").toString())
+ , broken(false)
+ , idStoredInPartDatabase(false)
+{
+	QVariant val = ptr->property("X-Kexi-NoObject");
+	isVisibleInNavigator = val.isValid() ? (val.toInt() != 1) : true;
+
+//! @todo (js)..... now it's hardcoded!
+	if(objectName == "table")
+		projectPartID = KexiDB::TableObjectType;
+	else if(objectName == "query")
+		projectPartID = KexiDB::QueryObjectType;
+//	else if(objectName == "html")
+//		m_projectPartID = KexiDB::WebObjectType;
+	else
+		projectPartID = -1; //TODO!!
+}
+
+Info::Private::Private()
+ : projectPartID(-1) //OK?
+ , broken(false)
+ , isVisibleInNavigator(false)
+ , idStoredInPartDatabase(false)
+{
+}
 
 //------------------------------
 
 Info::Info(KService::Ptr ptr)
  : d(new Private(ptr))
+{
+}
+
+Info::Info()
+ : d(new Private())
 {
 }
 
@@ -116,7 +109,13 @@ bool Info::isIdStoredInPartDatabase() const
 
 bool Info::isDataExportSuppored() const
 {
-	QVariant val = d->ptr->property("X-Kexi-SupportsDataExport");
+	QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsDataExport") : QVariant();
+	return val.isValid() ? val.toBool() : false;
+}
+
+bool Info::isPrintingSuppored() const
+{
+	QVariant val = d->ptr ? d->ptr->property("X-Kexi-SupportsPrinting") : QVariant();
 	return val.isValid() ? val.toBool() : false;
 }
 

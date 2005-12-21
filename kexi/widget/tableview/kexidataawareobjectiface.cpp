@@ -630,6 +630,8 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 		return true;
 	}
 	m_internal_acceptsRowEditAfterCellAccepting = false;
+
+	const int columnEditedBeforeAccepting = m_editor ? currentColumn() : -1;
 	if (!acceptEditor())
 		return false;
 	kdDebug() << "EDIT ROW ACCEPTING..." << endl;
@@ -706,17 +708,23 @@ bool KexiDataAwareObjectInterface::acceptRowEdit()
 //		else {
 //			kdDebug() << "EDIT ROW - ERROR!" << endl;
 //		}
-		if (m_data->result()->column>=0 && m_data->result()->column<columns()) {
-			//move to faulty column
-			setCursorPosition(m_curRow, m_data->result()->column);
+		int faultyColumn = -1;
+		if (m_data->result()->column >= 0 && m_data->result()->column < columns())
+			faultyColumn = m_data->result()->column;
+		else if (columnEditedBeforeAccepting >= 0)
+			faultyColumn = columnEditedBeforeAccepting;
+		if (faultyColumn >= 0) {
+			setCursorPosition(m_curRow, faultyColumn);
 		}
 		if (m_data->result()->desc.isEmpty())
 			KMessageBox::sorry(dynamic_cast<QWidget*>(this), m_data->result()->msg);
 		else
 			KMessageBox::detailedSorry(dynamic_cast<QWidget*>(this), m_data->result()->msg, m_data->result()->desc);
 
-		//edit this cell
-		startEditCurrentCell();
+		if (faultyColumn >= 0) {
+			//edit this cell
+			startEditCurrentCell();
+		}
 	}
 
 	return success;

@@ -62,7 +62,8 @@ class KexiMainWindowImpl::Private
 		KAction *action_save, *action_save_as, *action_close,
 			*action_project_properties, *action_open_recent_more,
 			*action_project_relations, *action_project_import_data_table,
- 			*action_project_export_data_table;
+ 			*action_project_export_data_table,
+			*action_project_print, *action_project_print_preview;
 //		KRecentFilesAction *action_open_recent;
 		KActionMenu *action_open_recent, *action_show_other;
 //		int action_open_recent_more_id;
@@ -124,8 +125,16 @@ class KexiMainWindowImpl::Private
 		//! on dialog removing
 		bool insideCloseDialog : 1;
 
-		//! used for delayed dialogs closing for 'close all'
+		//! Used for delayed dialogs closing for 'close all'
 		QPtrList<KexiDialogBase> windowsToClose;
+
+		//! Opened page setup dialogs, used by printOrPrintPreviewForItem().
+		QIntDict<KexiDialogBase> pageSetupDialogs;
+
+		/*! A map from Kexi dialog to "print setup" part item's ID of the data item
+		 used by closeDialog() to find an ID of the data item, so the entry 
+		 can be removed from pageSetupDialogs dictionary. */
+		QMap<int, int> pageSetupDialogItemID2dataItemID_map;
 
 		//! Used in several places to show info dialog at startup (only once per session)
 		//! before displaying other stuff
@@ -319,6 +328,11 @@ void updatePropEditorDockWidthInfo() {
 //					ds->setSeparatorPos( ds->separatorPos(), true );
 			}
 #endif
+	}
+
+	KexiDialogBase *dialogForItem( KexiPart::Item* item ) const
+	{
+		return item ? dialogs[ item->identifier() ] : 0;
 	}
 
 };

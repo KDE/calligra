@@ -514,14 +514,17 @@ KexiQueryDesignerGuiEditor::afterSwitchFrom(int mode)
 		if (!m_dialog->neverSaved()) {
 			if (!loadLayout()) {
 				//err msg
-				parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(), i18n("Query definition loading failed."), i18n("Query data may be corrupted."));
+				parentDialog()->setStatus(parentDialog()->mainWin()->project()->dbConnection(), 
+					i18n("Query definition loading failed."), 
+					i18n("Query design may be corrupted so it could not be opened even in text view.\n"
+						"You can delete the query and create it again."));
 				return false;
 			}
 			// Invalid queries case: 
 			// KexiDialogBase::switchToViewMode() first opens DesignViewMode,
 			// and then KexiQueryPart::loadSchemaData() doesn't allocate QuerySchema object
 			// do we're carefully looking at parentDialog()->schemaData()
-			KexiDB::QuerySchema * q =	dynamic_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
+			KexiDB::QuerySchema * q = dynamic_cast<KexiDB::QuerySchema *>(parentDialog()->schemaData());
 			if (q)
 				showFieldsForQuery( q );
 			//todo: load global query properties
@@ -581,9 +584,9 @@ KexiQueryDesignerGuiEditor::storeNewData(const KexiDB::SchemaData& sdata, bool &
 	return query;
 }
 
-tristate KexiQueryDesignerGuiEditor::storeData()
+tristate KexiQueryDesignerGuiEditor::storeData(bool dontAsk)
 {
-	tristate res = KexiViewBase::storeData();
+	tristate res = KexiViewBase::storeData(dontAsk);
 	if (~res)
 		return res;
 	if (res) {

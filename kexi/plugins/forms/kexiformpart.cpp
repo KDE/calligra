@@ -419,8 +419,9 @@ void KexiFormPart::slotAssignAction()
 }
 
 QString
-KexiFormPart::i18nMessage(const QCString& englishMessage) const
+KexiFormPart::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
 {
+	Q_UNUSED(dlg);
 	if (englishMessage=="Design of object \"%1\" has been modified.")
 		return i18n("Design of form \"%1\" has been modified.");
 	if (englishMessage=="Object \"%1\" already exists.")

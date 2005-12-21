@@ -1,5 +1,5 @@
 
 
-SUBDIRS = kexisql3 kexisql
+SUBDIRS = kolibs kexisql3 kexisql
 
 #unused: uuid

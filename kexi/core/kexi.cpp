@@ -18,6 +18,9 @@
 */
 
 #include "kexi.h"
+#include "kexiaboutdata.h"
+#include "kexicmdlineargs.h"
+
 #include <kexiutils/identifier.h>
 #include <kexidb/msghandler.h>
 
@@ -268,4 +271,13 @@ ObjectStatus::operator KexiDB::MessageHandler*()
 	if (!msgHandler)
 		msgHandler = new ObjectStatusMessageHandler(this);
 	return msgHandler;
+}
+
+void Kexi::initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData)
+{
+	KAboutData *about = aboutData;
+	if (!about)
+		about = newKexiAboutData();
+	KCmdLineArgs::init( argc, argv, about );
+	KCmdLineArgs::addCmdLineOptions( options );
 }

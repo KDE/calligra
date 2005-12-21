@@ -627,8 +627,9 @@ KexiFormView::storeNewData(const KexiDB::SchemaData& sdata, bool &cancel)
 }
 
 tristate
-KexiFormView::storeData()
+KexiFormView::storeData(bool dontAsk)
 {
+	Q_UNUSED(dontAsk);
 	kexipluginsdbg << "KexiDBForm::storeData(): " << parentDialog()->partItem()->name() 
 		<< " [" << parentDialog()->id() << "]" << endl;
 

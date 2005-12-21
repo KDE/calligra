@@ -484,9 +484,9 @@ KexiQueryDesignerSQLView::storeNewData(const KexiDB::SchemaData& sdata, bool &ca
 	return query;
 }
 
-tristate KexiQueryDesignerSQLView::storeData()
+tristate KexiQueryDesignerSQLView::storeData(bool dontAsk)
 {
-	tristate res = KexiViewBase::storeData();
+	tristate res = KexiViewBase::storeData(dontAsk);
 	if (~res)
 		return res;
 	if (res) {

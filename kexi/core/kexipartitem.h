@@ -35,12 +35,14 @@ namespace KexiPart
 
 class Info;
 
-/** Project Part Item stores:
+/*!
+ @short Information about a single object that can be instantiated using Kexi Part
+
+ KexiPart::Item stores:
 	- identifier ident (low-level name, for example: table name)
 	- mime type name, eg. "kexi/table"
 	- caption (visible, i18n'd hight level name, eg. table or query title)
 */
-//! Data that identifies a single part object (not necessary instantiated)
 class KEXICORE_EXPORT Item
 {
 	public:
@@ -76,6 +78,9 @@ class KEXICORE_EXPORT Item
 
 		bool isNull() const { return m_id==0; }
 
+		//! \return caption if not empty, else returns name.
+		inline QString captionOrName() const { return m_caption.isEmpty() ? m_name : m_caption; }
+
 	private:
 		QCString m_mime;
 		QString m_name;
@@ -87,10 +92,14 @@ class KEXICORE_EXPORT Item
 
 typedef QIntDict<KexiPart::Item> ItemDict;
 typedef QIntDictIterator<KexiPart::Item> ItemDictIterator;
+typedef QPtrListIterator<KexiPart::Item> ItemListIterator;
 
-/*! This is part item list with reimplemented compareItems() method.
+/*! 
+ @short Part item list with reimplemented compareItems() method.
+
  Such a list is returend by KexiProject::getSortedItems(KexiPart::ItemList& list, KexiPart::Info *i);
- so you can call sort() on the list to sort it by item name. */
+ so you can call sort() on the list to sort it by item name. 
+*/
 class KEXICORE_EXPORT ItemList : public QPtrList<KexiPart::Item> {
 	public:
 		ItemList() {}
@@ -101,7 +110,6 @@ class KEXICORE_EXPORT ItemList : public QPtrList<KexiPart::Item> {
 				static_cast<KexiPart::Item*>(item2)->name());
 		}
 };
-typedef QPtrListIterator<KexiPart::Item> ItemListIterator;
 
 }
 

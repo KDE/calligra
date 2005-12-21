@@ -19,9 +19,9 @@
 */
 
 #include "kexipart.h"
-
 #include "kexipartinfo.h"
 #include "kexipartitem.h"
+#include "kexistaticpart.h"
 #include "kexidialogbase.h"
 #include "kexiviewbase.h"
 
@@ -65,6 +65,18 @@ Part::Part(QObject *parent, const char *name, const QStringList &)
 {
 	m_info = 0;
 	m_supportedViewModes = Kexi::DataViewMode | Kexi::DesignViewMode;
+	m_mainWin = 0;
+	m_newObjectsAreDirty = false;
+}
+
+Part::Part(QObject* parent, StaticInfo *info)
+: QObject(parent, "StaticPart")
+, m_guiClient(0)
+, m_registeredPartID(-1) //no registered ID by default
+, d(new PartPrivate())
+{
+	m_info = info;
+	m_supportedViewModes = Kexi::DesignViewMode;
 	m_mainWin = 0;
 	m_newObjectsAreDirty = false;
 }
@@ -188,7 +200,8 @@ void Part::setActionAvailable(const char *action_name, bool avail)
 	m_mainWin->setActionAvailable(action_name, avail);
 }
 
-KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode )
+KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, int viewMode,
+	QMap<QString,QString>* staticObjectArgs)
 {
 	//now it's the time for creating instance actions
 	if (!d->instanceActionsInitialized) {
@@ -257,8 +270,13 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 			}
 		}
 		if (!dlg->m_schemaData) {
-			m_status = Kexi::ObjectStatus( dlg->mainWin()->project()->dbConnection(), 
-				i18n("Failed loading object's definition."), i18n("Data may be corrupted."));
+			if (!m_status.error())
+				m_status = Kexi::ObjectStatus( dlg->mainWin()->project()->dbConnection(), 
+					i18n("Could not load object's definition."), i18n("Object design may be corrupted."));
+			m_status.append( 
+				Kexi::ObjectStatus(i18n("You can delete \"%1\" object and create it again.")
+				.arg(item.name()), QString::null) );
+
 			dlg->close();
 			delete dlg;
 			return 0;
@@ -266,7 +284,7 @@ KexiDialogBase* Part::openInstance(KexiMainWindow *win, KexiPart::Item &item, in
 	}
 
 	bool switchingFailed = false;
-	tristate res = dlg->switchToViewMode( viewMode );
+	tristate res = dlg->switchToViewMode( viewMode, staticObjectArgs );
 	if (!res) {
 		//js TODO ERROR???
 		switchingFailed = true;
@@ -311,7 +329,8 @@ KexiDB::SchemaData* Part::loadSchemaData(KexiDialogBase * /*dlg*/, const KexiDB:
 bool Part::loadDataBlock( KexiDialogBase *dlg, QString &dataString, const QString& dataID)
 {
 	if (!dlg->mainWin()->project()->dbConnection()->loadDataBlock( dlg->id(), dataString, dataID )) {
-		m_status = Kexi::ObjectStatus( dlg->mainWin()->project()->dbConnection(), i18n("Failed loading object's data."), i18n("Data identifier: \"%1\".").arg(dataID) );
+		m_status = Kexi::ObjectStatus( dlg->mainWin()->project()->dbConnection(), 
+			i18n("Could not load object's data."), i18n("Data identifier: \"%1\".").arg(dataID) );
 		m_status.append( *dlg );
 		return false;
 	}
@@ -339,9 +358,10 @@ KexiDialogTempData* Part::createTempData(KexiDialogBase* dialog)
 	return new KexiDialogTempData(dialog);
 }
 
-QString Part::i18nMessage(const QCString& englishMessage) const
+QString Part::i18nMessage(const QCString& englishMessage, KexiDialogBase* dlg) const
 {
-	return englishMessage;
+	Q_UNUSED(dlg);
+	return QString(englishMessage).startsWith(":") ? QString::null : englishMessage;
 }
 
 void Part::setupCustomPropertyPanelTabs(KTabWidget *, KexiMainWindow*)

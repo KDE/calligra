@@ -13,7 +13,7 @@ libkexicore_la_SOURCES = kexi_global.cpp kexi.cpp \
 	kexistartupdata.cpp kexiguimsghandler.cpp kexitextmsghandler.cpp \
 	kexidataiteminterface.cpp kexievents.cpp \
 	kexidbshortcutfile.cpp \
-	kexiblobbuffer.cpp
+	kexiblobbuffer.cpp kexistaticpart.cpp
 
 #kexipartdatasource.cpp
 
@@ -33,6 +33,7 @@ INCLUDES = $(LIB_KEXI_KMDI_INCLUDES) \
 	-I$(top_srcdir)/kexi \
 	$(all_includes)
 
-noinst_HEADERS = kexiactionproxy_p.h kexicontexthelp_p.h kexisharedactionhost_p.h
+noinst_HEADERS = kexiactionproxy_p.h kexicontexthelp_p.h kexisharedactionhost_p.h \
+	kexipartinfo_p.h
 
 METASOURCES = AUTO

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -27,6 +27,7 @@
 #include "kexipartmanager.h"
 #include "kexipart.h"
 #include "kexipartinfo.h"
+#include "kexistaticpart.h"
 #include "kexi_version.h"
 
 #include <kexidb/connection.h>
@@ -135,20 +136,6 @@ Manager::part(Info *i)
 		if (p->m_registeredPartID>0) {
 			i->setProjectPartID( p->m_registeredPartID );
 		}
-
-#if 0
-		DataSource *ds = p->dataSource();
-
-		if(ds)
-		{
-			kdDebug() << "Manager::part(): " << i->groupName() << " provides data" << endl;
-			m_datasources.append(ds);
-		}
-		else
-		{
-			kdDebug() << "Manager::part(): " << i->groupName() << " doesn't provide data" << endl;
-		}
-#endif
 
 		p->setInfo(i);
 		m_parts.insert(i->projectPartID(),p);
@@ -277,5 +264,15 @@ Manager::checkProject(KexiDB::Connection *conn)
 	return true;
 }
 
-#include "kexipartmanager.moc"
+void Manager::insertStaticPart(StaticPart* part)
+{
+	if (!part)
+		return;
+	part->info()->setProjectPartID(m_nextTempProjectPartID--); // temp. part id are -1, -2, and so on, 
+	m_partlist.append(part->info());
+	if (!part->info()->mimeType().isEmpty())
+		m_partsByMime.insert(part->info()->mimeType(), part->info());
+	m_parts.insert(part->info()->projectPartID(), part);
+}
 
+#include "kexipartmanager.moc"

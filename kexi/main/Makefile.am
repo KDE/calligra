@@ -8,19 +8,18 @@ libkeximain_la_SOURCES = \
 	kexinamewidget.cpp kexinamedialog.cpp \
 	kexinewstuff.cpp
 
-# kexiprojectconnectiondata.cpp
-
 libkeximain_la_LDFLAGS = -no-undefined $(KDE_RPATH) $(all_libraries) \
 	$(VER_INFO) -Wnounresolved
 
-SUBDIRS = startup .
+SUBDIRS = startup printing .
 
 libkeximain_la_LIBADD =  $(top_builddir)/kexi/kexidb/libkexidb.la $(top_builddir)/kexi/core/libkexicore.la \
 	$(top_builddir)/kexi/kexiutils/libkexiutils.la \
 	$(top_builddir)/kexi/main/startup/libkeximainstartup.la \
+	$(top_builddir)/kexi/main/printing/libkeximainprinting.la \
 	$(top_builddir)/lib/koproperty/libkoproperty.la \
 	$(top_builddir)/kexi/widget/libkexiextendedwidgets.la \
-	$(LIB_KFEEDBACK) $(LIB_KEXI_KMDI) $(LIB_KNEWSTUFF) $(LIB_KIO)
+	$(LIB_KFEEDBACK) $(LIB_KEXI_KMDI) $(LIB_KNEWSTUFF) $(LIB_KIO) $(LIB_KDEPRINT)
 
 #disabled	../migration/libkeximigrate.la
 

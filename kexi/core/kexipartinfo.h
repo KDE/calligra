@@ -35,7 +35,7 @@ namespace KexiPart
 	class Part;
 
 /**
- * information about available modules
+ * @short Information about a Kexi Part (plugin).
  */
 class KEXICORE_EXPORT Info
 {
@@ -98,7 +98,17 @@ class KEXICORE_EXPORT Info
 		 */
 		bool isDataExportSuppored() const;
 
+		/**
+		 * \return true if the part supports data printing.
+		 */
+		bool isPrintingSuppored() const;
+
 	protected:
+		/**
+		 * Used in StaticInfo
+		 */
+		Info();
+
 		friend class Manager;
 		friend class ::KexiProject;
 		friend class ::KexiMainWindowImpl;
@@ -130,7 +140,6 @@ class KEXICORE_EXPORT Info
 		 */
 		bool isIdStoredInPartDatabase() const;
 
-	private:
 		class Private;
 		Private *d;
 };

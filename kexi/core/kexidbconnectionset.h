@@ -20,6 +20,7 @@
 #ifndef KEXIDBCONNSET_H
 #define KEXIDBCONNSET_H
 
+#include <qstring.h>
 #include <kexidb/connectiondata.h>
 
 class KexiDBConnectionSetPrivate;

@@ -21,8 +21,10 @@
 #ifndef KEXIMAINWINDOW_H
 #define KEXIMAINWINDOW_H
 
-#include <kmdimainfrm.h>
+#include <qmap.h>
 #include <qintdict.h>
+
+#include <kmdimainfrm.h>
 #include <kexiutils/tristate.h>
 
 #include "kexisharedactionhost.h"
@@ -69,7 +71,8 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 
 	public slots:
 		//! Opens object pointed by \a item in a view \a viewMode
-		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode) = 0;
+		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode,
+			QMap<QString,QString>* staticObjectArgs = 0) = 0;
 
 		//! For convenience
 		virtual KexiDialogBase * openObject(const QCString& mime, const QString& name, int viewMode = Kexi::DataViewMode) = 0;
@@ -95,7 +98,7 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 within name/caption dialog (see KexiNameDialog), which is popped
 		 up for never saved objects. */
 		virtual tristate saveObject( KexiDialogBase *dlg,
-			const QString& messageWhenAskingForName = QString::null ) = 0;
+			const QString& messageWhenAskingForName = QString::null, bool dontAsk = false ) = 0;
 
 		/*! Closes dialog \a dlg. If dialog's data (see KexiDialoBase::dirty()) is unsaved,
 		 used will be asked if saving should be perforemed.

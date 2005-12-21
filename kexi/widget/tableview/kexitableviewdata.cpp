@@ -572,7 +572,7 @@ bool KexiTableViewData::updateRowEditBufferRef(KexiTableItem *item,
 //get a new value (of present in the buffer), or the old one, otherwise
 //(taken here for optimization)
 #define GET_VALUE if (!val) { \
-	val = m_cursor ? rowEditBuffer()->at( *it_f.current()->fieldinfo ) : rowEditBuffer()->at( *f ); \
+	val = m_cursor ? m_pRowEditBuffer->at( *it_f.current()->fieldinfo ) : m_pRowEditBuffer->at( *f ); \
 	if (!val) \
 		val = &(*it_r); /* get old value */ \
 	}
@@ -619,7 +619,7 @@ bool KexiTableViewData::saveRow(KexiTableItem& item, bool insert, bool repaint)
 
 	if (m_cursor) {//db-aware
 		if (insert) {
-			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer(), 
+			if (!m_cursor->insertRow( static_cast<KexiDB::RowData&>(item), *m_pRowEditBuffer, 
 				m_containsROWIDInfo/*also retrieve ROWID*/ )) 
 			{
 				m_result.msg = i18n("Row inserting failed.") + "\n\n" 
@@ -639,10 +639,11 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 		else {
 //			if (m_containsROWIDInfo)
 //				ROWID = item[columns.count()].toULongLong();
-			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *rowEditBuffer(),
+			if (!m_cursor->updateRow( static_cast<KexiDB::RowData&>(item), *m_pRowEditBuffer,
 					m_containsROWIDInfo/*use ROWID*/))
 			{
 				m_result.msg = i18n("Row changing failed.") + "\n\n" + Kexi::msgYouCanImproveData();
+//! @todo set m_result.column if possible
 				KexiDB::getHTMLErrorMesage(m_cursor, m_result.desc);
 				return false;
 			}
@@ -660,6 +661,9 @@ js: TODO: use KexiMainWindowImpl::showErrorMessage(const QString &title, KexiDB:
 			}
 		}
 	}
+	
+	m_pRowEditBuffer->clear();
+
 	if (repaint)
 		emit rowRepaintRequested(item);
 	return true;
@@ -669,7 +673,7 @@ bool KexiTableViewData::saveRowChanges(KexiTableItem& item, bool repaint)
 {
 	kdDebug() << "KexiTableViewData::saveRowChanges()..." << endl;
 	m_result.clear();
-	emit aboutToUpdateRow(&item, rowEditBuffer(), &m_result);
+	emit aboutToUpdateRow(&item, m_pRowEditBuffer, &m_result);
 	if (!m_result.success)
 		return false;
 

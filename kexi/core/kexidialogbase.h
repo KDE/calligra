@@ -216,10 +216,11 @@ class KEXICORE_EXPORT KexiDialogBase :
 
 		/*! Internal. Called by KexiMainWindowImpl::saveObject().
 		 Tells this dialog to save changes of the existing object
-		 to the backend.
+		 to the backend. If \a dontAsk is true, no question dialog will 
+		 be shown to the user. The default is false.
 		 \sa storeNewData()
 		 \return true on success, false on failure and cancelled when storing has been cancelled. */
-		tristate storeData();
+		tristate storeData(bool dontAsk = false);
 
 		/*! Internal. Called by KexiMainWindowImpl::saveObject().
 		 Tells this dialog to create and store data of the new object
@@ -256,6 +257,10 @@ class KEXICORE_EXPORT KexiDialogBase :
 		void setDirty(bool dirty);
 
 	protected:
+		/*! Used by Part::openInstance(), 
+		 like switchToViewMode( int newViewMode ), but passed \a staticObjectArgs.
+		 Only used for parts of class KexiPart::StaticPart. */
+		tristate switchToViewMode( int newViewMode, QMap<QString,QString>* staticObjectArgs );
 
 		void registerDialog();
 

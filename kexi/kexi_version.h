@@ -30,7 +30,7 @@
 #endif
 
 #ifndef KEXI_VERSION_STRING
-# define KEXI_VERSION_STRING "1.0 Beta 1 -pre2"
+# define KEXI_VERSION_STRING "1.0 Beta 1 -pre3"
 #endif
 
 #define KEXI_VERSION_MAJOR 0

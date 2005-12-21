@@ -36,6 +36,8 @@
 
 namespace Kexi
 {
+	void initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData = 0);
+
 	/*! Modes of view for the dialogs. Used mostly for parts and KexiDialogBase. */
 	enum ViewMode { 
 		AllViewModes = 0, //!< Usable primarily in KexiPart::initInstanceActions()

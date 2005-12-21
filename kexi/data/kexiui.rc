@@ -1,5 +1,5 @@
 <!DOCTYPE kpartgui SYSTEM "kpartgui.dtd">
-<kpartgui name="kexi" version="138">
+<kpartgui name="kexi" version="139">
 <MenuBar>
   <Menu name="file" noMerge="0">
     <text>&amp;Project</text>
@@ -28,6 +28,9 @@
       <text>&amp;Export</text>
       <Action name="project_export_data_table" />
     </Menu>
+    <Separator />
+    <Action name="project_print"/>
+    <Action name="project_print_preview"/>
     <Separator />
     <Action name="project_relations"/>
     <Action name="project_properties"/>

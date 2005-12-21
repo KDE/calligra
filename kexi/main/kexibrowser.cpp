@@ -155,11 +155,30 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 	m_itemPopup->insertSeparator();
 #endif
 	m_exportActionMenu = new KActionMenu(i18n("Export"));
-	m_dataExportAction = new KAction(i18n("Export->As Data &Table... ", "As Data &Table..."), "", 0, this, 
-		SLOT(slotExportAsDataTable()), this, "exportAsDataTable");
+	m_dataExportAction = new KAction(i18n("Export->As Data &Table... ", "As Data &Table..."), 
+		"table", 0, this, SLOT(slotExportAsDataTable()), this, "exportAsDataTable");
+	m_dataExportAction->setWhatsThis(
+		i18n("Exports data from the currently selected table or query data to a file."));
 	m_exportActionMenu->insert( m_dataExportAction );
 	m_exportActionMenu->plug(m_itemPopup);
 	m_exportActionMenu_id = m_exportActionMenu->menuId(0);
+	m_itemPopup->insertSeparator();
+	m_exportActionMenu_id_sep = m_itemPopup->idAt(m_itemPopup->count()-1);
+
+	m_printAction = new KAction(i18n("&Print..."), "fileprint", 0, this, 
+		SLOT(slotPrintItem()), this, "printItem");
+	m_printAction->setWhatsThis(
+		i18n("Prints data from the currently selected table or query."));
+	m_printAction->plug(m_itemPopup);
+	m_printAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
+	m_printPreviewAction = new KAction(i18n("Print Previe&w..."), "filequickprint", 0, this, 
+		SLOT(slotPrintPreviewForItem()), this, "printPreviewForItem");
+	m_printPreviewAction->setWhatsThis(
+		i18n("Shows print preview for the currently selected table or query."));
+	m_printPreviewAction->plug(m_itemPopup);
+	m_printPreviewAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
+	m_itemPopup->insertSeparator();
+	m_printPreviewAction_id_sep = m_itemPopup->idAt(m_itemPopup->count()-1);
 
 	plugSharedAction("edit_edititem", i18n("&Rename"), m_itemPopup);
 //	m_renameObjectAction = new KAction(i18n("&Rename"), 0, Key_F2, this, 
@@ -312,6 +331,10 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	m_itemPopup->setItemVisible(m_designAction_id, m_designAction->isEnabled());
 	m_itemPopup->setItemVisible(m_editTextAction_id, part && m_editTextAction->isEnabled());
 	m_itemPopup->setItemVisible(m_exportActionMenu_id, gotitem && it->info()->isDataExportSuppored());
+	m_itemPopup->setItemVisible(m_exportActionMenu_id_sep, gotitem && it->info()->isDataExportSuppored());
+	m_itemPopup->setItemVisible(m_printAction_id, gotitem && it->info()->isPrintingSuppored());
+	m_itemPopup->setItemVisible(m_printPreviewAction_id, gotitem && it->info()->isPrintingSuppored());
+	m_itemPopup->setItemVisible(m_printPreviewAction_id_sep, gotitem && it->info()->isDataExportSuppored());
 
 	if (m_prevSelectedPart != part) {
 		m_prevSelectedPart = part;
@@ -513,7 +536,8 @@ void KexiBrowser::slotNewObjectPopupAboutToShow()
 		KexiPart::PartInfoList *list = Kexi::partManager().partInfoList(); //this list is properly sorted
 		for (KexiPart::PartInfoListIterator it(*list); it.current(); ++it) {
 			//add an item to "New object" toolbar popup 
-			KAction *action = m_mainWin->actionCollection()->action( KexiPart::nameForCreateAction(*it.current()) );
+			KAction *action = m_mainWin->actionCollection()->action( 
+				KexiPart::nameForCreateAction(*it.current()) );
 			if (action) {
 				action->plug(m_newObjectPopup);
 			}
@@ -535,6 +559,28 @@ KexiPart::Item* KexiBrowser::selectedPartItem() const
 {
 	KexiBrowserItem *it = static_cast<KexiBrowserItem*>(m_list->selectedItem());
 	return it ? it->item() : 0;
+}
+
+bool KexiBrowser::actionEnabled(const QCString& actionName) const
+{
+	if (actionName=="project_export_data_table")
+		return m_itemPopup->isItemVisible(m_exportActionMenu_id);
+	kdWarning() << "KexiBrowser::actionEnabled() no such action: " << actionName << endl;
+	return false;
+}
+
+void KexiBrowser::slotPrintItem()
+{
+	KexiPart::Item* item = selectedPartItem();
+	if (item)
+		emit printItem( item );
+}
+
+void KexiBrowser::slotPrintPreviewForItem()
+{
+	KexiPart::Item* item = selectedPartItem();
+	if (item)
+		emit printPreviewForItem( item );
 }
 
 //--------------------------------------------

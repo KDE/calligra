@@ -586,6 +586,18 @@ KexiProject::item(KexiPart::Info *i, const QString &name)
 	return 0;
 }
 
+KexiPart::Item*
+KexiProject::item(int identifier)
+{
+	KexiPart::ItemDict *dict;
+	for (QIntDictIterator<KexiPart::ItemDict> it(d->itemDictsCache); (dict = it.current()); ++it) {
+		KexiPart::Item *item = dict->find(identifier);
+		if (item)
+			return item;
+	}
+	return 0;
+}
+
 /*void KexiProject::clearMsg()
 {
 	clearError();
@@ -637,17 +649,19 @@ KexiPart::Part *KexiProject::findPartFor(KexiPart::Item& item)
 	return part;
 }
 
-KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& item, int viewMode)
+KexiDialogBase* KexiProject::openObject(KexiMainWindow *wnd, KexiPart::Item& item, 
+	int viewMode, QMap<QString,QString>* staticObjectArgs)
 {
 	clearError();
 	KexiDB::MessageTitle et(this);
 	KexiPart::Part *part = findPartFor(item);
 	if (!part)
 		return 0;
-	KexiDialogBase *dlg  = part->openInstance(wnd, item, viewMode);
+	KexiDialogBase *dlg  = part->openInstance(wnd, item, viewMode, staticObjectArgs);
 	if (!dlg) {
 		if (part->lastOperationStatus().error())
-			setError(i18n("Opening object \"%1\" failed.").arg(item.name())+"<br>"+part->lastOperationStatus().message, 
+			setError(i18n("Opening object \"%1\" failed.").arg(item.name())+"<br>"
+				+part->lastOperationStatus().message, 
 				part->lastOperationStatus().description);
 		return 0;
 	}
@@ -672,20 +686,23 @@ bool KexiProject::removeObject(KexiMainWindow *wnd, KexiPart::Item& item)
 		//js TODO check for errors
 		return false;
 	}
-	KexiDB::TransactionGuard tg( *d->connection );
-	if (!tg.transaction().active()) {
-		setError(d->connection);
-		return false;
-	}
-	if (!d->connection->removeObject( item.identifier() )) {
-		setError(d->connection);
-		return false;
-	}
-	if (!tg.commit()) {
-		setError(d->connection);
-		return false;
+	if (!item.neverSaved()) {
+		KexiDB::TransactionGuard tg( *d->connection );
+		if (!tg.transaction().active()) {
+			setError(d->connection);
+			return false;
+		}
+		if (!d->connection->removeObject( item.identifier() )) {
+			setError(d->connection);
+			return false;
+		}
+		if (!tg.commit()) {
+			setError(d->connection);
+			return false;
+		}
 	}
 	emit itemRemoved(item);
+
 	//now: remove this item from cache
 	if (part->info()) {
 		KexiPart::ItemDict *dict = d->itemDictsCache[ part->info()->projectPartID() ];
@@ -806,6 +823,11 @@ KexiPart::Item* KexiProject::createPartItem(KexiPart::Info *info, const QString&
 	item->setNeverSaved(true);
 	d->unstoredItems.insert(item, item);
 	return item;
+}
+
+KexiPart::Item* KexiProject::createPartItem(KexiPart::Part *part, const QString& suggestedCaption)
+{
+	return createPartItem(part->info(), suggestedCaption);
 }
 
 void KexiProject::deleteUnstoredItem(KexiPart::Item *item)

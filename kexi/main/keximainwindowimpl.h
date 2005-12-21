@@ -113,15 +113,18 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		virtual void detachWindow(KMdiChildView *pWnd,bool bShow=true);
 		virtual void attachWindow(KMdiChildView *pWnd,bool bShow=true,bool bAutomaticResize=false);
 
-		//! Opens object pointed by \a item in a view \a viewMode
-		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode);
+		/*! Opens object pointed by \a item in a view \a viewMode.
+		 \a staticObjectArgs can be passed for static object 
+		 (only works when part for this item is of type KexiPart::StaticPart) */
+		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode, 
+			QMap<QString,QString>* staticObjectArgs = 0);
 
 		//! For convenience
 		virtual KexiDialogBase * openObject(const QCString& mime, const QString& name, int viewMode = Kexi::DataViewMode);
 
 		/*! Implemented for KexiMainWindow */
 		virtual tristate saveObject( KexiDialogBase *dlg,
-			const QString& messageWhenAskingForName = QString::null );
+			const QString& messageWhenAskingForName = QString::null, bool dontAsk = false );
 
 		/*! Implemented for KexiMainWindow */
 		virtual tristate getNewObjectInfo( KexiPart::Item *partItem, KexiPart::Part *part, 
@@ -302,6 +305,8 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotProjectOpenRecentMore();
 		void slotProjectSave();
 		void slotProjectSaveAs();
+		void slotProjectPrint();
+		void slotProjectPrintPreview();
 		void slotProjectProperties();
 		void slotProjectClose();
 		void slotProjectRelations();
@@ -360,10 +365,23 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 parameters of destination project and skip pages related to source project. */
 		tristate showProjectMigrationWizard(const QString& mimeType, const QString& fileName);
 
-		//! Receives "selectionCHanged()" signal from navigator to update some actions.
+		//! Receives "selectionChanged()" signal from navigator to update some actions.
 		void slotPartItemSelectedInNavigator(KexiPart::Item* item);
 
+		//! Shows "exports as data table" dialog for \a item.
 		void exportItemAsDataTable(KexiPart::Item* item);
+
+		//! Shows "print" dialog for \a item.
+		//! \return true on success.
+		bool printItem(KexiPart::Item* item);
+
+		//! Shows "print preview" dialog for \a item.
+		//! \return true on success.
+		bool printPreviewForItem(KexiPart::Item* item);
+
+		//! Helper for printItem() and printPreviewForItem()
+		//! \return true on success.
+		bool printOrPrintPreviewForItem(KexiPart::Item* item, bool printPreview);
 
 	private:
 

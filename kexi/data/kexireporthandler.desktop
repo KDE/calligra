@@ -80,3 +80,4 @@ X-Kexi-TypeName=report
 X-Kexi-TypeMime=kexi/report
 X-Kexi-ItemIcon=report
 X-Kexi-SupportsDataExport=false
+X-Kexi-SupportsPrinting=false
