@@ -236,7 +236,7 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     m_broker = Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) );
     m_spell.macroCmdSpellCheck=0L;
     m_spell.textIterator = 0L;
-    m_currentPage = 0;
+    m_currentPage = m_doc->startPage();
     m_specialCharDlg=0L;
     m_searchEntry = 0L;
     m_replaceEntry = 0L;

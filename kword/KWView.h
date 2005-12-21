@@ -145,6 +145,7 @@ public:
 
     void initGui();
 
+    /// returns the current page number this view is looking at
     int currentPage() const { return m_currentPage; }
 
     /**
@@ -770,7 +771,7 @@ private: // variables
     QPtrList<KAction> m_variableActionList;
     QPtrList<KAction> m_tableActionList;
 
-    int m_currentPage; ///< 0-based current page number
+    int m_currentPage; ///< current page number
 
     // Statusbar items
     KStatusBarLabel* m_sbPageLabel; ///< 'Current page number and page count' label
