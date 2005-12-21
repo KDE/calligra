@@ -58,8 +58,6 @@ VDefaultTools::VDefaultTools(QObject *parent, const char *name, const QStringLis
 		<< parent -> className()
 		<< "\n";
 
-	VTool tool();
-
 	if ( parent->inherits("KarbonFactory") )
 	{
 		KarbonToolRegistry* r = KarbonToolRegistry::instance();
@@ -80,7 +78,6 @@ VDefaultTools::VDefaultTools(QObject *parent, const char *name, const QStringLis
 		r -> add(new KarbonToolFactory<VStarTool>());
 		r -> add(new KarbonToolFactory<VTextTool>());
 	}
-
 }
 
 VDefaultTools::~VDefaultTools()
