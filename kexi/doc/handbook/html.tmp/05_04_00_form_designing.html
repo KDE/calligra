@@ -1,0 +1,312 @@
+<H2>5.4. Designing Forms</H2>
+<p>
+</p>
+
+<a name="basics"></a>
+<H3>5.4.1. Podstawowe pojêcia</H2>
+<p>
+<ul>
+<li><b>Formularz</b> - okno umo¿liwiaj±ce wygodne wprowadzanie i prezentacjê danych na ekranie komputera. 
+</li>
+<li><b>¬ród³o danych formularza</b> - tabela lub zapytanie dostarczaj±ce danych do wy¶wietlania w formularzu. Sam formularz jest tylko <b>narzêdziem</b> do wy¶wietlania i wprowadzania danych. Przechowywaniem ich zajmuje siê tabela.</li>
+<li><b>Pole formularza</b> - bezpo¶redni odpowiednik kolumny w tabeli. Najczê¶ciej spotykane s± pola tekstowe i liczbowe. Wpisanie lub zmiana warto¶ci polu formularza powoduje zmianê odpowiedniej warto¶ci w okre¶lonej kolumnie i wierszu tabeli.</li>
+<li><b>Projekt formularza</b> - czynno¶ci, które wykonujesz, by ustaliæ wygl±d formularza, ¼ród³o danych, rodzaj i po³o¿enie pól formularza.</li>
+ <li><b>Wid¿et formularza</b> - element formularza. Wid¿ety mo¿na podzieliæ na:
+ <ul>
+ <li>wy¶wietlaj±ce informacje, np. pole tekstowe, obrazek; ka¿dy tego typu wid¿et mo¿e byæ <i>zwi±zany z wybranym polem danych tabeli</i>, st±d w skrócie o takich wid¿etach mówi siê: pole formularza.</li>
+ <li>umo¿liwiaj±ce wykonanie okre¶lonej akcji, np. przycisk; niekiedy s± one zwane kontrolkami, gdy¿ w pewnej mierze umo¿liwiaj± u¿ytkownikowi kontrolowanie pracy aplikacji</li>
+ <li>inne wid¿ety, umo¿liwiaj±ce wzbogacenie wygl±du formularza, np. za pomoc± wid¿etu &quot;linii prostej&quot; mo¿na oddzieliæ od siebie dwa obszary formularza.</li>
+ </ul>
+</li>
+<li><p>
+<a name="widget_containers"></a>
+<b>Wid¿et kontenera</b> - wid¿et wewn±trz którego mo¿na wstawiaæ inne wid¿ety. Przyk³ad wid¿etu kontenera to wid¿et ramki lub zak³adki. Sama powierzchnia g³ówna okna te¿ jest kontenerem. Natomiast przycisk polecenia nie jest kontenerem, gdy¿ nie mo¿na wstawiæ do jego wnêtrza innego wid¿etu. Wid¿et kontenera mo¿e zawieraæ inny wid¿et kontenera, co jest zwane zagnie¿d¿eniem.
+ <br><img src="img/05_04_01_widget_containers.png">
+ <br>Przyk³adowe wid¿ety kontenerów<br><br>
+</p>
+</li>
+</ul>
+</p>
+
+
+<a name="forms_and_tables"></a>
+<H3>5.4.2. Formularze a tabele</H3>
+<p>
+W rozdziale <a href="05_02_00_entering_data_into_tables.html">5.2</a> pozna³e¶ jak mo¿na wprowadzaæ dane wprost do tabeli. Istniej± jednak sytuacje, gdy przy wprowadzaniu lepiej sprawdza siê formularz:
+<ul>
+<li>Tabela mo¿e mieæ zbyt wiele kolumn, by mog³y siê zmie¶ciæ na ekranie. U¿ycie formularza umo¿liwia umieszczenie danych w wielu rzêdach.</li>
+<li>Formularz pozwala na wizualne oddzielanie pól w postaci grup, co mo¿e zwiêkszyæ czytelno¶æ formularza. Mo¿na te¿ wstawiaæ dodatkowe etykiety z tekstem pomocnym w u¿ytkowaniu formularza.</li>
+<li>W widoku tabelarycznym nie jest ³atwo wy¶wietliæ wielowierszowych pól z tekstem oraz obrazków.</li>
+</ul>
+</p>
+
+<a name="design"></a>
+<H3>5.4.3. Praca z projektem formularza</H3>
+<p>
+Podobnie jak przy projektowaniu tabel i zapytañ, masz do dyspozycji widok danych oraz widok projektu. Tworzenie projektu formularza przebiega w widoku projektu.
+</p>
+<ol>
+<li>
+Aby utworzyæ pusty formularz, z menu <em>Wstaw</eM> wybierz <nobr><img src="icons/form_newobj.png" class="icon"> <em>Formularz</em></nobr>. Mo¿esz te¿ w nawigatorze projektu wskazaæ grupê &quot;Formularze&quot;, po czym u¿yæ przycisku <nobr><img src="icons/form_newobj.png" class="icon"> <em>Nowy formularz</em></nobr> na pasku narzêdzi nawigatora projektu.
+</li>
+<li>
+Pojawi siê okno z pust± prostok±tn± powierzchni± nowego formularza. Poza powierzchni± znajduje siê obszar zewnêtrzny oddzielony krawêdziami. Mo¿esz przesuwaæ te krawêdzie, aby zmieniaæ rozmiar formularza.
+ <br><img src="img/05_04_03_new_empty_form.png">
+ <br>Okno z projektem nowego, pustego formularza<br><br>
+Podobnie, jak przy projektowaniu tabel lub zapytañ, projektowi formularza towarzyszy panel w³a¶ciwo¶ci. Zawiera on w³a¶ciwo¶ci aktualnie wskazanego wid¿etu lub powierzchni samego formularza. Masz te¿ do dyspozycji dodatkowe paski narzêdzi:
+ <ul>
+ <li>pasek <em>Wid¿ety</em> u¿ywany przy wstawianiu wid¿etów do formularza</li>
+ <li>pasek <em>Format</em> u¿ywany przy formatowaniu elementów formularza (zmiana rozmiaru wid¿etów, itd). Wiêcej na temat poleceñ formatowania formularza dowiesz siê z dodatku <a href="aa_05_00_menu.html#menu_format">A.6. Menu Format</a>.</li>
+ </ul>
+</li>
+</ol>
+
+<a name="fields_inserting"></a>
+<H3>5.4.4. Wstawianie pól tekstowych</H3>
+
+<p>Zak³adamy, ¿e tworzysz formularz przedstawiaj±cy osoby, czyli korzystaj±cy z tabeli <em>Osoby</em>.
+<p>
+Je¶li projektowany przez Ciebie formularz ma udostêpniaæ dane z bazy, musisz umie¶ciæ na nim odpowiednie <em>pola</em>. U¿ywa siê do tego paska narzêdzi, zawieraj±cego przyciski prze³±czników: ka¿dy odpowiada jednemu typowi wid¿etu.
+</p>
+
+<p>
+<ol>
+<li>Na pasku narzêdzi <em>Wid¿ety</em> kliknij przycisk <nobr><img src="icons/lineedit.png" class="icon"> <em>Pole tekstowe</em></nobr>.</li>
+<li>Kliknij na powierzchni formularza. Nowe pole tekstowe zostanie umieszczone w punkcie klikniêcia. Mo¿esz te¿ przeci±gn±æ mysz± tak, jak siê rysuje prostok±t, aby wstawiæ pole tekstowe o zadanym rozmiarze.</li>
+<li>Je¶li konieczne, przesuñ pole tekstowe za pomoc± przeci±gniêcia mysz± do ¿±danego po³o¿enia. Mo¿esz te¿ zmieniæ rozmiar pola tekstowego poprzez przeci±gniêcie jednego z kwadracików znajduj±cych siê wokó³ jego krawêdzi.</li>
+<li>Ponownie kliknij przycisk <em>Pole tekstowe</em> na pasku narzêdzi i wstaw kolejne pole. Postêpuj tak a¿ otrzymasz trzy pola tekstowe na formularzu (dla uproszczenia ograniczamy sie obecnie do trzech pól).</li>
+</ol>
+</p>
+
+<a name="data_sources"></a>
+<H3>5.4.5. Ustalanie ¼róde³ danych</H3>
+
+<p>
+Wstawione przez Ciebie pola formularza nie maj± jeszcze przypisanych <em>¼róde³ danych</em>, zatem nie s± w stanie wy¶wietliæ informacji z bazy danych. Do ustalania ¼róde³ danych u¿ywa siê panelu w³a¶ciwo¶ci.
+</p>
+
+<p>
+Pierwsz± czynno¶ci± bêdzie ustalenie <em>¼ród³a danych formularza</em>, czyli tabeli z której maj± byæ pobierane dane dostêpne na formularzu. Jak ju¿ wspomnieli¶my, korzystamy z tabeli osoby.
+</p>
+
+<p>
+<ol>
+<li>Kliknij na powierzchni formularza, tak aby w panelu w³a¶ciwo¶ci pojawi³y siê jego w³a¶ciwo¶ci.</li>
+<li>W panelu w³a¶ciwo¶ci znajd¼ w³a¶ciwo¶æ <em>¬ród³o danych</em>. Umie¶æ tam kursor i wpisz nazwê <em>osoby</em></li>
+</ol>
+</p>
+
+<p>
+Formularz ma ju¿ przypisane ¼ród³o danych. Teraz kolej na ¼ród³a danych dla pól tekstowych. 
+</p>
+
+<p>
+<ol>
+<li>Kliknij pojedyncze pole tekstowe. W panelu w³a¶ciwo¶ci pojawi± siê jego w³a¶ciwo¶ci.</li>
+<li>W panelu w³a¶ciwo¶ci znajd¼ w³a¶ciwo¶æ <em>¬ród³o danych</em>. Umie¶æ tam kursor i wpisz nazwê pola <em>imie</em>.
+ <br><img src="img/05_04_05_entering_text_field_data_source.png">
+ <br>Wpisywanie ¼ród³a danych pola ,,imie''<br><br>
+</li>
+<li>Kliknij nastêpne pole tekstowe i w podobny sposób wpisz nazwê <em>nazwisko</em> jako jego ¼ród³o danych.</li>
+<li>Wpisz nazwê <em>ulica</em> dla ostatniego pola tekstowego.</li>
+</ol>
+</p>
+<p>
+Mimo, ¿e nie jest to konieczne do przetestowania formularza, mo¿esz teraz zachowaæ projekt formularza w bazie danych. Kliknij przycisk <nobr><img src="icons/filesave.png" class="icon"> <em>Zapisz zmiany obiektu</em></nobr> znajduj±cy siê na pasku narzêdzi lub wykonaj pole <em>Zapisz</em> z menu <em>Plik</em>. Zostaniesz zapytany o tytu³ formularza. Wpisz tytu³ <em>Osoby</em> i kliknij przycisk <em>OK</em> - nazwa uzupe³ni siê samoczynnie.
+</p>
+<p>
+Teraz jest odpowiedni moment na przetestowanie Twojego formularza. 
+Kliknij przycisk <nobr><img src="icons/state_data.png" class="icon"> <em>Prze³±cz do widoku danych</em></nobr> na pasku narzêdzi. Je¶li nie pope³ni³e¶ b³êdu przy wpisywaniu ¼róde³ danych, pola formularza zostan± wype³nione danymi z tabeli <em>osoby</em>.
+ <br><img src="img/05_04_06_form_with_text_fields.png">
+ <br>Formularz w widoku danych po wstawieniu pól tekstowych i ¼róde³ danych<br><br>
+</p>
+
+<a name="text_labels"></a>
+<H3>5.4.6. Wstawianie etykiet tekstowych</H3>
+<p>
+Aby u¿ytkownik formularza by³ w stanie okre¶liæ przeznaczenie ka¿dego pola, powinny one mieæ do³±czone etykiety z tytu³ami pól. Do wykonania etykiet u¿ywa siê wid¿etu <nobr><img src="icons/filesave.png" class="icon"> <em>etykiety tekstowej</em></nobr>.
+</p>
+<p>
+Wstaw trzy etykiety tekstowe do formularza, umieszczaj±c je po lewych stronach pól tekstowych. Przy wstawianiu ka¿dej nowej etykiety pojawia siê wewn±trz niej kursor, za pomoc± którego mo¿esz wpisaæ ¿±dany tytu³, czyli kolejno: <em>imiê</em>, <em>nazwisko</em> oraz <em>ulica</em>. Dodatkowo, na górze formularza wstaw etykietê tekstow± z jego nazw±, czyli ,,Osoby''. Powiêksz czcionkê w tej etykiecie za pomoc± polecenia <a href="aa_05_00_menu.html#menu_format_font">Czcionka</a> w menu <em>Format</em>.
+</p>
+<p>
+ <br><img src="img/05_04_06_form_with_labels.png">
+ <br>Gotowy formularz po dodaniu etykiet tekstowych<br><br>
+</p>
+<!-- TODO: update this topic then we've auto-labels -->
+
+<a name="actions"></a>
+<H3>5.4.7. Akcje</H3>
+
+<p>
+<b>Akcja</b> jest pojedyncz± czynno¶ci± wyodrêbnion± w aplikacji, która mo¿e byæ wykonana przez u¿ytkownika lub uruchomiona automatycznie w wyniku jakiego¶ zdarzenia.
+</p>
+<!-- TODO: co to jest zdarzenie -->
+
+<a name="assigning_actions_to_buttons"></a>
+<H4>Przypisywanie akcji do przycisków formularza</H4>
+<p>
+Wiêkszo¶æ akcji mo¿na przypisaæ do przycisku formularza tak, by by³a wykonywana po jego klikniêciu. Aby to zrobiæ:
+</p>
+<p>
+<ol>
+<li>Na powierzchniê formularza wstaw wid¿et przycisku.</li>
+<li>W widoku projektu formularza zaznacz przycisk poprzez jego klikniêcie.</li>
+<li>Kliknij przycisk prawym klawiszem myszy, aby pokaza³o siê menu kontekstowe.</li>
+<li>Wybierz polecenie <nobr><img src="icons/form_action.png" class="icon"> <em>Przypisz akcjê</em>.</li>
+<li>Pojawi siê okno z list± akcji. Jedna z nich jest zaznaczona, o ile wskazany przycisk mia³ ju¿ przypisan± jak±¶ akcjê.</li>
+<li>Zaznacz jedn± z akcji na li¶cie (np. ,,Usuñ wiersz'') lub liniê <em>&lt;brak akcji&gt;</em>, je¶li nie chcesz przypisywaæ ¿adnej akcji.</li>
+<li>Kliknij przycisk <em>OK</em> lub naci¶nij klawisz <em>Enter</em>.</li>
+</ol>
+</p>
+<p>
+ <img src="img/05_04_07_assigning_action_to_button.png">
+ <br>Przypisywanie akcji ,,Usuñ wiersz'' do przycisku<br><br>
+</p>
+
+<p>
+Po prze³±czeniu sie do widoku danych formularza mo¿esz sprawdziæ dzia³anie akcji, któr± przypisa³e¶ do przycisku. Je¶li np. przypisa³e¶ akcjê ,,Usuñ wiersz'', po naci¶nieciu przycisku zostaniesz poproszony o potwierdzenie usuniêcia wiersza, zupe³nie tak samo, jakby¶ wywo³a³ polecenie <em>Edycja &gt; Usuñ wiersz</em>.
+</p>
+<p>
+Uwaga: zauwa¿, ¿e nie ka¿da akcja ma sens, gdy j± przypiszemy do przycisku, np. akcja <em>Czcionka...</em> jest nie dostêpna w widoku danych formularza, wiêc je¶li j± przypiszemy, klikanie w przycisk nie bêdzie mia³o ¿adnego efektu.
+</p>
+
+<a name="form_layouts"></a>
+<H3>5.4.8. Uk³ady wid¿etów</H3>
+<p>
+W wiêkszo¶ci przypadków wid¿ety na formularzu musz± byæ w jaki¶ porozmieszczane i wyrównane. Zwyk³e rêczne rozmieszczenie wid¿etów sprawia k³opot je¶li u¿ytkownik zmieni rozmiar formularza. W rzeczywisto¶ci sytuacja komplikuje siê jeszcze bardziej, poniewa¿ nie mo¿na za³o¿yæ, ¿e formularz ma dany rozmiar, gdy¿ u¿ytkownicy posiadaj± ró¿ne monitory oraz rozdzielczo¶ci ekranu.
+</p>
+<p>
+Poni¿szy przyk³ad prezentuje formularz w któym pola tekstowe i etykiety zosta³y rozmieszczone rêcznie. Niektóre z nich nie mieszcz± siê w oknie formularza. 
+ <br><img src="img/05_04_08_form_no_fit.png">
+ <br>Przyk³adowy formularz z nie mieszcz±cymi siê wid¿etami<br><br>
+</p>
+<p>
+Zastowosanie uk³adu w tym samym formularzu poprawia sytuacjê. Co wiêcej, miejsce jest lepiej zagospodarowane. Pola tekstowe s± bli¿ej siebie, w równych odstêpach.
+ <br><img src="img/05_04_08_form_well_fit.png">
+ <br>Przyk³adowy formularz z uk³adem wid¿etów<br><br>
+</p>
+<p>
+W tej sytuacji przychodzi z pomoc± specjalna funkcja zwana <em>uk³adami wid¿etów</em>. Uk³ad wid¿etów to czynno¶æ zgrupowania dwóch lub wiêkszej liczby wid¿etów, tak by znajdowa³y siê na uporz±dkownych pozycjach i mia³y ustalone rozmiary.
+</p>
+<p>
+Istniej± dwa sposoby na wykonanie uk³adu wid¿etów.
+<ul>
+<li>Zaznacz dwa lub wiêcej wid¿etów, które maj± wchodziæ w sk³ad uk³adu, po czym wybierz jednen ze typów uk³adu w menu <a href="aa_05_00_menu.html#menu_format_layout">U³ó¿ wid¿ety</a>.</li>
+<li>Kliknij <a hrf="widget_containers">wid¿et kontenera</a>, po czym wybierz jednen ze typów uk³adu w menu <a href="aa_05_00_menu.html#menu_format_layout">U³ó¿ wid¿ety</a>. Wszystkie wid¿ety znajduj±ce siê wewn±trz wskazanego wid¿etu kontenera zostan± umieszczone we wspólnym uk³adzie.</li>
+</ul>
+</p>
+<p>
+ <img src="img/05_04_08_form_layout_selecting.png">
+ <br>Zaznaczanie wid¿etów, z których zostanie wykonany uk³ad<br>
+ <br><img src="img/05_04_08_form_layout_selected.png">
+ <br>Cztery wid¿ety zaznaczone<br><br>
+ <br><img src="img/05_04_08_form_layout_popup.png"><br>
+ <br>U¿ycie menu kontekstowego do uk³adania wid¿etów w formie siatki<br><br>
+</p>
+<p>
+Aby utworzyæ uk³ad mo¿esz u¿yæ menu <em>Format &gt; U³ó¿ wid¿ety</em> lub klikn±æ prawym przyciskiem na zaznaczonych wid¿etach i u¿yæ podmenu <em>U³ó¿ wid¿ety</em>. Uk³ad wid¿etów jest reprezentowany w widoku projektu przez niebieski, zielony lub czerwony prostok±t narysowany lini± przerywan±.
+</p>
+<p>
+ <br><img src="img/05_04_08_form_layout_grid.png">
+ <br>Wid¿ety u³o¿one w formie siatki<br><br>
+</p>
+<p>
+Oprócz uk³adu w siatce, istniej± inne uk³ady wid¿etów.
+<ul>
+<li>pionowy oraz poziomy
+ <br><img src="img/05_04_08_form_layout_vertical.png">
+ <br>Pionowy uk³ad wid¿etów<br>
+ <br><img src="img/05_04_08_form_layout_horizontal.png">
+ <br>Poziomy uk³ad wid¿etów<br>
+</li>
+<li>podzial 
+TODO------------
+ <br><img src="img/05_04_08_form_layout_vertical_splitter.png">
+ <br><br>
+ <br><img src="img/05_04_08_form_layout_horizontal_splitter.png">
+ <br><br>
+
+</li>
+</ul>
+</p>
+
+<a name="form_springs"></a>
+<H4>Sprê¿yny w uk³adach wid¿etów</H4>
+<p>
+<em>Sprê¿yna</em> jest specjalnym, niewidocznym elementem pozwalaj±cym dostosowywaæ pozycjê wid¿etów wewn±trz uk³adów. Wprê¿yna ,,dopycha'' wid¿et z boku, z góry lub z do³u, tak aby lepiej ustaliæ jego pozycjê i rozmiar.
+</p>
+<p>Aby u¿yæ sprê¿yny:
+<ol>
+<li>wybierz ikonê <img src="icons/spring.png" class="icon"> na pasku narzedziownym <em>Wid¿ety</em>;</li>
+<li>kliknij w miejscu formularza, w którym chcesz j± wstawiæ.</li>
+</ol>
+</p>
+<p>
+Na poni¿szym przyk³adzie sprê¿yna zosta³a wstawiona z lewej strony etykiety tekstowej ,,Osoby'', tak aby zosta³a ona wy¶wietlona po prawej stronie formularza. Nastêpnie sprê¿yna z etykiet± zosta³a po³±czona w uk³adzie poziomym.
+ <br><img src="img/05_04_08_form_spring.png">
+ <br>Poziomy uk³ad sprê¿yny i etykiety tekstowej<br><br>
+</p>
+
+<a name="advanced_form_layouts"></a>
+<H4>Zaawansowane uk³ady wid¿etów</H4>
+<p>
+Uk³ady wid¿etów mo¿na ³±czyæ, czyli inaczej: zagnie¿d¿aæ. Mo¿na np. czê¶æ wid¿etów po³±czyæ za pomoc± uk³adu poziomego, po czym do ca³o¶ci formularza zastosowaæ uk³ad siatkowy.
+Na poni¿szym przyk³adzie mo¿esz zobaczyæ po³±czenie dwóch uk³adów:
+</p>
+<p>
+<ol>
+<li>uk³adu poziomego ze sprê¿yn±, omówionego w poprzedniej sekcji</li>
+<li>uk³adu siatkowego grupuj±cego wid¿ety na ca³ej powierzchni formularza</li>
+</ol>
+</p>
+<p>
+ <img src="img/05_04_08_form_advanced_layout.png">
+ <br>Dwa uk³ady wid¿etów: uk³ad poziomy wewn±trz siatkowego<br><br>
+</p>
+<p>
+Po otwarciu tak zaprojektowanego formularza w widoku danych, mo¿esz sprawdziæ (poprzez zmianê rozmiaru okna formularza), ¿e:
+</p>
+<ul>
+<li>etykieta tekstowa ,,Osoby'', dziêki u¿yciu sprê¿yny jest stale wyrównywana do prawego brzegu formularza</li>
+<li>wid¿ety pól tekstowych zajmuj± ca³± szeroko¶æ formularza dziêki zastosowaniu uk³adu siatkowego</li>
+<li>wszystkie wid¿ety formularza s± ,,dopchniête'' maksymalnie do góry, dziêki u¿yciu sprê¿yny u do³u formularza</li>
+</ul>
+<p>
+ <img src="img/05_04_08_form_advanced_layout_view.png">
+ <br>Widok danych dla formularza z dwoma uk³adami<br><br>
+</p>
+
+<a name="layout_breaking"></a>
+<H4>Usuwanie uk³adów wid¿etów</H3>
+<p>
+Aby usun±æ uk³ad wid¿etów bez usuwania samych wid¿etów, wykonaj jedn± z dwóch czynno¶ci:
+<ul>
+<li>kliknij prawym przyciskiem myszy na obramowaniu uk³adu i wybierz polecenie <em>Przerwij u³o¿enie</em>.</li>
+<li>kliknij lewym przyciskiem myszy na obramowaniu uk³adu i wybierz polecenie <em>Przerwij u³o¿enie</em> z menu <em>Format</em></li>
+</ul>
+</p>
+
+<a name="layout_size_types"></a>
+<H4>Typy rozmiarów w uk³adach wid¿etów</H3>
+<p>
+Temat zostanie wprowadzony w uaktualnieniu Kexi &ver;.
+<!-- TODO 
+minimal/preferred, etc.
+-->
+</p>
+
+<a name="widget_adjusting"></a>
+<H3>5.4.9. Rêczne ustalanie rozmiarów i pozycji wid¿etów</H3>
+<p>
+<!-- TODO -->
+</p>
+
+<a name="tab_order_editing"></a>
+<H3>5.4.10. Ustalanie kolejno¶ci tabulacji</H3>
+<!-- TODO -->
+<p>
+Temat zostanie wprowadzony w uaktualnieniu Kexi &ver;.
+</p> 
+
+<!-- TODO wyrownywanie widzetow; layouty; rozmiary -->

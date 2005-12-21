@@ -1,0 +1,44 @@
+<H3>4.6.3. Property Editor pane</H3>
+<p>
+The Property Editor pane allows to change properties of object displayed in the active window. Depending on the context, the pane is consisted of one or more tabs. The first, always visible, <em>Properties</em>tab contains the list of available properties. 
+</p>
+<p>
+ <img src="img/04_06_03_prop_panel.png">
+ <br>Property Editor<br><br>
+</p>
+<p>
+Rules for using the Property Editor:
+</p>
+<p>
+<ul>
+<li>One row means a single property.</li>
+<li>You can use mouse or keyboard to change values of particular properties.</li>
+<li>Most frequently used types of property values are:
+<ul>
+<li>a number; you can enter the value directly or increate or decrease it's value clicking with the &LMB; on the arrows: <img src="img/04_06_03_prop_arrows.png" class="icon"></li>
+<li>text</li>
+<li>drop down list of values</li>
+<li>Yes/No value; in form of a button you can toggle; button toggled on means <em>yes</em> (<em>true</em>) value, button toggled off means <em>no</em> (<em>false</em>) value; see the above figure</li>
+</ul>
+</li>
+<li>There is no need for accepting changed value: changes are visible immediately after moving to a different row of the Property Editor's list or by pressing <em>Enter</em> key.</li>
+<li>Names of the recently changed properties that not yet were stored in the database are marked with bold text.</li>
+<li>After changing a value of property, a special <em>Undo changes</em> button appears on the right hand of the Property Editor's list:<br>
+ <img src="img/04_06_03_prop_undo.png" class="icon"><br>
+By clicking it you can revert the value of the property to the original value that was loaded from the database upon opening the database object. The button is only visible when the property is actually highlighted.
+</li>
+</ul>
+</p>
+<p>
+Property Editor pane is empty if:
+<ul>
+<li>no single database object's window is opened, or</li>
+<li>active database object's window does not offer properties; it is usually the case when it is opened in Data View instead of Design View</li>
+</ul>
+</p>
+
+<!-- TODO (js) describe custom form designer's tabs -->
+
+<p>
+See also the list of keyboard shortcuts available for the Property Editor pane in appendix <a href="ab_00_00_shortcuts.html#prop_panel">B.3. Property Editor pane<!-- TODO (js) chapter# --></a>.
+</p>
