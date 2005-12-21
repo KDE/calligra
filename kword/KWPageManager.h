@@ -116,6 +116,12 @@ public:
     /// Set the margins for the whole document changing all pages that don't have specific margins set.
     void setDefaultPageMargins(double top, double left, double bottom, double right);
 
+    /**
+     * Returns the argument point, with altered coordinats if the point happens to be
+     * outside all pages.
+     * The resulting point is the shortest distance from the argument inside the document.
+     * @param point the point to test
+     */
     KoPoint clipToDocument(const KoPoint &point);
 
 private:
