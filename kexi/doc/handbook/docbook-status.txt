@@ -10,6 +10,9 @@ The chapter numbers in section headings here refer to
 the Chapters in the HTML manual at
   http://iidea.pl/~js/kexi/manual/en/
 
+The original Polish version can be found here:
+http://iidea.pl/~js/kexi/manual/pl/html/contents.html
+
 Chapter numbers in each descriptions refers to docbook version.
 
 Chapter 1:
