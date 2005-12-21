@@ -28,22 +28,6 @@ class QEvent;
 class VTool;
 class KarbonPart;
 class KarbonView;
-class VSelectTool;
-class VSelectNodesTool;
-class VRotateTool;
-class VShearTool;
-class VEllipseTool;
-class VGradientTool;
-class VPatternTool;
-class VPencilTool;
-class VPolygonTool;
-class VPolylineTool;
-class VRectangleTool;
-class VRoundRectTool;
-class VSinusTool;
-class VSpiralTool;
-class VStarTool;
-class VTextTool;
 
 class VToolController
 {
@@ -72,22 +56,6 @@ private:
 	KarbonView			*m_activeView;
 	VTool				*m_activeTool;
 	QDict<VTool>		m_tools;
-	VSelectTool			*m_selectTool;
-	VSelectNodesTool	*m_selectNodesTool;
-	VRotateTool			*m_rotateTool;
-	VShearTool			*m_shearTool;
-	VEllipseTool		*m_ellipseTool;
-	VGradientTool		*m_gradientTool;
-	VPatternTool		*m_patternTool;
-	VPencilTool			*m_pencilTool;
-	VPolygonTool		*m_polygonTool;
-	VPolylineTool		*m_polylineTool;
-	VRectangleTool		*m_rectangleTool;
-	VRoundRectTool		*m_roundRectTool;
-	VSinusTool			*m_sinusTool;
-	VSpiralTool			*m_spiralTool;
-	VStarTool			*m_starTool;
-	VTextTool			*m_textTool;
 };
 
 #endif
