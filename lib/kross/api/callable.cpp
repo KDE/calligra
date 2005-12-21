@@ -25,7 +25,7 @@
 
 using namespace Kross::Api;
 
-Callable::Callable(const QString& name, Object::Ptr parent, ArgumentList arglist)
+Callable::Callable(const QString& name, Object::Ptr parent, const ArgumentList& arglist)
     : Object(name, parent)
     , m_arglist(arglist)
 {
@@ -88,21 +88,21 @@ void Callable::checkArguments(List::Ptr arguments)
 #endif
 
     QValueList<Object::Ptr>& arglist = arguments->getValue();
-    uint fmax = m_arglist.getMaxParams();
-    uint fmin = m_arglist.getMinParams();
 
     // check the number of parameters passed.
-    if(arglist.size() < fmin)
+    if(arglist.size() < m_arglist.getMinParams())
         throw Exception::Ptr( new Exception(QString("Too few parameters for callable object '%1'.").arg(getName())) );
-    if(arglist.size() > fmax)
+    if(arglist.size() > m_arglist.getMaxParams())
         throw Exception::Ptr( new Exception(QString("Too many parameters for callable object '%1'.").arg(getName())) );
 
     // check type of passed parameters.
     QValueList<Argument>& farglist = m_arglist;
     QValueList<Argument>::Iterator it = farglist.begin();
     QValueList<Object::Ptr>::Iterator argit = arglist.begin();
+    bool argend = ( argit == arglist.end() );
     for(; it != farglist.end(); ++it) {
-        bool argend = ( argit == arglist.end() );
+        if(! argend)
+            argend = ( argit == arglist.end() );
 
         if( ! (*it).isVisible() ) {
             // if the argument isn't visibled, we always use the default argument.
@@ -130,18 +130,17 @@ void Callable::checkArguments(List::Ptr arguments)
                 // Check if the type of the passed argument matches to what we 
                 // expect. The given argument could have just the same type like 
                 // the expected argument or could be a specialization of it.
-                Object::Ptr o = (*argit);
                 QString fcn = (*it).getClassName(); // expected argument
-                QString ocn = o->getClassName(); // given argument
+                QString ocn = (*argit)->getClassName(); // given argument
                 bool ok = ocn.startsWith(fcn);
                 if(! ok) {
                     if(ocn.startsWith("Kross::Api::Variant")) {
-                        ocn = Variant::getVariantType(o);
+                        ocn = Variant::getVariantType(*argit);
                         ok = (
                             ocn == fcn ||
                             (
-                                (fcn == "Kross::Api::Variant::Integer" || fcn == "Kross::Api::Variant::UInt") &&
-                                (ocn == "Kross::Api::Variant::Integer" || ocn == "Kross::Api::Variant::UInt")
+                                (fcn == "Kross::Api::Variant::Integer" || fcn == "Kross::Api::Variant::UInt" || fcn == "Kross::Api::Variant::Bool") &&
+                                (ocn == "Kross::Api::Variant::Integer" || ocn == "Kross::Api::Variant::UInt" || ocn == "Kross::Api::Variant::Bool")
                             )
                         );
                     }

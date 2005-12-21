@@ -57,7 +57,7 @@ namespace Kross { namespace Api {
              * \param arglist A list of arguments the callable
              *       object expects if it got called.
              */
-            Callable(const QString& name, Object::Ptr parent, ArgumentList arglist);
+            Callable(const QString& name, Object::Ptr parent, const ArgumentList& arglist);
 
             /**
              * Destructor.

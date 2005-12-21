@@ -29,6 +29,7 @@
 
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qmap.h>
 #include <kdebug.h>
 
 namespace Kross { namespace Api {
@@ -56,12 +57,9 @@ namespace Kross { namespace Api {
 
             /**
              * List of memberfunctions. Each function is accessible
-             * by the functionname. Cause it is possible to have
-             * more then one function with the same functionname
-             * (overloaded methods) the functionname points to
-             * a list of functions (which are events too).
+             * by the functionname.
              */
-            QMap<QString, QValueList< Event<T> * > > m_functions;
+            QMap<QString, Event<T>* > m_functions;
 
         protected:
 
@@ -80,16 +78,13 @@ namespace Kross { namespace Api {
              */
             void addFunction(const QString& name, FunctionPtr function, ArgumentList arglist = ArgumentList())
             {
-                Event<T> *event = new Event<T>(name, this, function, arglist);
-                if(m_functions.contains(name)) {
-                    kdDebug() << QString("Event::addFunction() Added overloaded function %1 with arguments %2").arg(name).arg(arglist.toString()) << endl;
-                    QValueList< Event<T> * > & eventlist = m_functions[name];
-                    eventlist.append(event);
-                }
-                else {
+#ifdef KROSS_API_EVENT_CALL_DEBUG
+                if(m_functions.contains(name))
+                    kdDebug() << QString("Event::addFunction() Replaced function %1 with arguments %2").arg(name).arg(arglist.toString()) << endl;
+                else
                     kdDebug() << QString("Event::addFunction() Added function %1 with arguments %2").arg(name).arg(arglist.toString()) << endl;
-                    m_functions.replace(name, QValueList< Event<T> * >() << event);
-                }
+#endif
+                m_functions.replace(name, new Event<T>(name, this, function, arglist));
             }
 
         public:
@@ -111,7 +106,11 @@ namespace Kross { namespace Api {
             /**
              * Destructor.
              */
-            virtual ~Event() {}
+            virtual ~Event()
+            {
+                for(QMapIterator<QString, Event<T>* > it = m_functions.begin(); it != m_functions.end(); ++it)
+                    delete it.data();
+            }
 
             /**
              * Overloaded method to handle function-calls.
@@ -137,9 +136,19 @@ namespace Kross { namespace Api {
                 kdDebug() << QString("Event::call() name='%1' getName()='%2'").arg(name).arg(getName()) << endl;
 #endif
 
-                if(name.isEmpty() && m_function) {
+                Event<T>* event = m_functions[name];
+                if(event) {
 #ifdef KROSS_API_EVENT_CALL_DEBUG
-                    kdDebug() << QString("Event::call() arguments='%1' arglist='%2'").arg(arguments.data()->toString()).arg(m_arglist.toString()) << endl;
+                    kdDebug() << QString("Event::call() event.name='%1' event.tostring='%2' event.args.tostring='%3'")
+                                 .arg(event->getName()).arg(event->toString()).arg(event->m_arglist.toString()) << endl;
+#endif
+                    // We have an valid event, so just call it...
+                    return event->call(QString::null, arguments);
+                }
+
+                if(name.isNull() && m_function) {
+#ifdef KROSS_API_EVENT_CALL_DEBUG
+                    kdDebug() << QString("Event::call() Call builtin function in object '%1'").arg(parent->getName()) << endl;
 #endif
 
                     // Check the arguments. Throws an exception if failed.
@@ -147,61 +156,14 @@ namespace Kross { namespace Api {
 
                     // We try to redirect the call to the m_function pointer the
                     // parent object defines.
-                    Object::Ptr parent = getParent();
-                    if(parent) {
-#ifdef KROSS_API_EVENT_CALL_DEBUG
-                        kdDebug() << QString("Event::call() Call builtin function in object '%1'").arg(parent->getName()) << endl;
-#endif
-                        T *self = static_cast<T*>( parent.data() );
-                        if(self)
-                            return (self->*m_function)(arguments);
-                    }
+                    T *self = static_cast<T*>( getParent().data() );
+                    if(! self)
+                        throw Exception::Ptr( new Exception(QString("The event '%1' points to an invalid instance.").arg(getName())) );
 
-                    // Something went wrong.
-                    throw Exception::Ptr( new Exception(QString("The event '%1' points to an invalid instance.").arg(getName())) );
+                    return (self->*m_function)(arguments);
                 }
 
-                // Check if we've a registered event with that name and
-                // if that's the case, just redirect the call to the event.
-                if(m_functions.contains(name)) {
-                    QValueList< Event<T> * > eventlist = m_functions[name];
-                    Event<T> *event = 0;
-
-                    if(eventlist.count() == 1) {
-                        // If there is only one event in the list (no overloaded
-                        // methods are defined, what should be mostly the case)
-                        // we just try to call those event direct without
-                        // checking the arguments.
-                        event = eventlist.first();
-                    }
-                    else {
-                        // If the list is empty or has >=2 events, we just iterate
-                        // through the events to find the matching one.
-                        QValueListIterator< Event<T> * > it( eventlist.begin() );
-                        for(; it != eventlist.end(); ++it) {
-                            if( (*it)->validArguments(arguments) ) {
-                                event = *it;
-                                break;
-                            }
-                        }
-                    }
-
-                    if(event) {
-#ifdef KROSS_API_EVENT_CALL_DEBUG
-                        kdDebug() << QString("Event::call() event.name='%1' event.tostring='%2' event.args.tostring='%3'")
-                                     .arg(event->getName()).arg(event->toString()).arg(event->m_arglist.toString()) << endl;
-#endif
-
-                        // We have an valid event, so just call it...
-                        QString s = ""; // empty string cause we like to execute the event itself.
-                        return event->call(s, arguments);
-                    }
-
-                    // If we reach this point something went totaly wrong.
-                    throw Exception::Ptr( new Exception(QString("The event '%1' is defined but invalid.").arg(getName())) );
-                }
-
-                // Redirect the call to Kross::Api::Object
+                // Redirect the call to the Kross::Api::Callable we are inheritated from.
                 return Callable::call(name, arguments);
             }
 

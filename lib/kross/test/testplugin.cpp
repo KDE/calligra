@@ -104,80 +104,80 @@ const QString TestPluginObject::getClassName() const
 
 Kross::Api::Object::Ptr TestPluginObject::func1(Kross::Api::List::Ptr args)
 {
-    kdDebug() << "CALLED => TestPluginObject::func1 args=" << args->toString() << endl;
+    //kdDebug() << "CALLED => TestPluginObject::func1 args=" << args->toString() << endl;
     return 0;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func2(Kross::Api::List::Ptr args)
 {
-    kdDebug() << "CALLED => TestPluginObject::func2 args=" << args->toString() << endl;
+    //kdDebug() << "CALLED => TestPluginObject::func2 args=" << args->toString() << endl;
     return new Kross::Api::Variant("func2returnvalue");
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func3(Kross::Api::List::Ptr args)
 {
-    kdDebug() << "CALLED => TestPluginObject::func3 args=" << args->toString() << endl;
+    //kdDebug() << "CALLED => TestPluginObject::func3 args=" << args->toString() << endl;
     return new Kross::Api::Variant("func3returnvalue");
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func4(Kross::Api::List::Ptr args)
 {
-    kdDebug() << "CALLED => TestPluginObject::func4 args=" << args->toString() << endl;
+    //kdDebug() << "CALLED => TestPluginObject::func4 args=" << args->toString() << endl;
     return 0;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func5(Kross::Api::List::Ptr args)
 {
-    kdDebug() << "CALLED => TestPluginObject::func5 args=" << args->toString() << endl;
+    //kdDebug() << "CALLED => TestPluginObject::func5 args=" << args->toString() << endl;
     return 0;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func6(Kross::Api::List::Ptr args)
 {
     Kross::Api::List* list = Kross::Api::Object::fromObject< Kross::Api::List >( args->item(0) );
-    kdDebug() << "CALLED => TestPluginObject::func6 args=" << list->toString() << endl;
+    //kdDebug() << "CALLED => TestPluginObject::func6 args=" << list->toString() << endl;
     return 0;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::overloadedFunc1(Kross::Api::List::Ptr)
 {
-    kdDebug() << "CALLED => TestPluginObject::overloadedFunc1()" << endl;
+    //kdDebug() << "CALLED => TestPluginObject::overloadedFunc1()" << endl;
     return 0;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::overloadedFunc2(Kross::Api::List::Ptr)
 {
-    kdDebug() << "CALLED => TestPluginObject::overloadedFunc2(Kross::Api::Variant::String)" << endl;
+    //kdDebug() << "CALLED => TestPluginObject::overloadedFunc2(Kross::Api::Variant::String)" << endl;
     return 0;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::overloadedFunc3(Kross::Api::List::Ptr)
 {
-    kdDebug() << "CALLED => TestPluginObject::overloadedFunc3(Kross::Api::Variant::Integer)" << endl;
+    //kdDebug() << "CALLED => TestPluginObject::overloadedFunc3(Kross::Api::Variant::Integer)" << endl;
     return 0;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::overloadedFunc4(Kross::Api::List::Ptr)
 {
-    kdDebug() << "CALLED => TestPluginObject::overloadedFunc4(Kross::Api::Variant::String, Kross::Api::Variant::String)" << endl;
+    //kdDebug() << "CALLED => TestPluginObject::overloadedFunc4(Kross::Api::Variant::String, Kross::Api::Variant::String)" << endl;
     return 0;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::overloadedFunc5(Kross::Api::List::Ptr)
 {
-    kdDebug() << "CALLED => TestPluginObject::overloadedFunc5(Kross::Api::Variant::String, Kross::Api::Variant::Integer)" << endl;
+    //kdDebug() << "CALLED => TestPluginObject::overloadedFunc5(Kross::Api::Variant::String, Kross::Api::Variant::Integer)" << endl;
     return 0;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::overloadedFunc6(Kross::Api::List::Ptr)
 {
-    kdDebug() << "CALLED => TestPluginObject::overloadedFunc5(Kross::Api::Variant::Bool)" << endl;
+    //kdDebug() << "CALLED => TestPluginObject::overloadedFunc5(Kross::Api::Variant::Bool)" << endl;
     return 0;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::overloadedFunc7(Kross::Api::List::Ptr)
 {
-    kdDebug() << "CALLED => TestPluginObject::overloadedFunc5(Kross::Api::Variant::StringList)" << endl;
+    //kdDebug() << "CALLED => TestPluginObject::overloadedFunc5(Kross::Api::Variant::StringList)" << endl;
     return 0;
 }
 
