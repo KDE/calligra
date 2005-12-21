@@ -100,7 +100,7 @@ class GuiApp:
 
 		self.dialog = gui.Dialog("Project Documentator")
 
-                self.dialog.addLabel(self.dialog, "Save informations about the project to a HTML-file.")
+		self.dialog.addLabel(self.dialog, "Save informations about the project to a HTML file.")
 		#self.dialog.addLabel(self.dialog.addFrame(self.dialog), "Export informations about the opened project.")
 		
 		self.file = self.dialog.addFileChooser(self.dialog,
