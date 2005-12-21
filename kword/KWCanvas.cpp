@@ -944,40 +944,37 @@ void KWCanvas::mrCreateText()
 
 void KWCanvas::mrCreatePixmap()
 {
-    kdDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
+    // kdDebug() << "KWCanvas::mrCreatePixmap m_insRect=" << DEBUGRECT(m_insRect) << endl;
+    Q_ASSERT(m_insRect.width() > 0 && m_insRect.height() > 0);
+    // Make sure the pic is completely in document.
+    double ratio = m_insRect.width() / m_insRect.height();
+    KoRect picRect(m_doc->pageManager()->clipToDocument(m_insRect.topLeft()),
+            m_doc->pageManager()->clipToDocument(m_insRect.bottomRight()) );
+    picRect = picRect.normalize();
+
     // Make sure it's completely on page.
-    KoRect picRect( kMin(m_insRect.left(), m_insRect.right()), kMin( m_insRect.top(), m_insRect.bottom()), kAbs( m_insRect.width()), kAbs(m_insRect.height()));
-    int page = m_doc->pageManager()->pageNumber( picRect );
-    double pageWidth = m_doc->pageManager()->pageLayout(page).ptWidth;
-    if(picRect.right() > pageWidth) {
-        double width = picRect.width();
+    KWPage *page = m_doc->pageManager()->page( picRect.bottom() );
+    KoRect pageRect = page->rect();
+    picRect = pageRect.intersect(picRect);
 
-        m_insRect.setLeft(pageWidth - width);
-        m_insRect.setRight(pageWidth);
-    }
-
-    double pageBottom = m_doc->pageManager()->bottomOfPage(page);
-    if(picRect.bottom() >  pageBottom) {
-        double height = picRect.height();
-        picRect.setTop(pageBottom - height);
-        picRect.setBottom(pageBottom);
-    }
+    // make sure we keep ratio!
+    double height = picRect.width() / ratio ;
+    if(picRect.height() > height)
+        picRect.setBottom(picRect.top() + height);
+    else // moving bottom would make it bigger, so alter width
+        picRect.setRight(picRect.left() + ratio * picRect.height());
 
     setMouseMode( MM_EDIT );
-    if ( picRect.width() > 0 /*m_doc->gridX()*/ &&picRect.height() > 0 /*m_doc->gridY()*/ && !m_kopicture.isNull() )
-    {
-        KWFrameSet * fs = 0L;
-        KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
-        frameset->insertPicture( m_kopicture );
-        frameset->setKeepAspectRatio( m_keepRatio );
-        fs = frameset;
-        picRect = picRect.normalize();
+    if ( !m_kopicture.isNull() ) {
+        KWPictureFrameSet *fs = new KWPictureFrameSet( m_doc, QString::null /*automatic name*/ );
+        fs->insertPicture( m_kopicture );
+        fs->setKeepAspectRatio( m_keepRatio );
         KWFrame *frame = new KWFrame(fs, picRect.x(), picRect.y(), picRect.width(),
-                                     picRect.height() );
-        frame->setZOrder( m_doc->maxZOrder( page ) +1 ); // make sure it's on top
+                picRect.height() );
+        frame->setZOrder( m_doc->maxZOrder( page->pageNumber() ) +1 ); // make sure it's on top
         fs->addFrame( frame, false );
         m_doc->addFrameSet( fs );
-        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Create Picture Frame"), frame );
+        KWCreateFrameCommand *cmd=new KWCreateFrameCommand( i18n("Insert Picture"), frame );
         m_doc->addCommand(cmd);
         m_doc->frameChanged( frame );
         frameViewManager()->view(frame)->setSelected(true);
