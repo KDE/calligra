@@ -105,8 +105,7 @@ KoTemplateCreateDia::KoTemplateCreateDia( const QCString &templateType, KInstanc
     d=new KoTemplateCreateDiaPrivate( parent, instance );
 
     QFrame *mainwidget=makeMainWidget();
-    QHBoxLayout *mbox=new QHBoxLayout(mainwidget, KDialogBase::marginHint(),
-                                      KDialogBase::spacingHint());
+    QHBoxLayout *mbox=new QHBoxLayout(mainwidget, 0, KDialogBase::spacingHint());
     QVBoxLayout *leftbox=new QVBoxLayout(mbox);
 
     QLabel *label=new QLabel(i18n("Name:"), mainwidget);
