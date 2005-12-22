@@ -45,11 +45,11 @@ PythonExtension::PythonExtension(Kross::Api::Object::Ptr object)
     );
     behaviors().supportGetattr();
 
-    proxymethod = new Py::MethodDefExt<PythonExtension>(
-        "_call_", // methodname
-        0, // method that should handle the callback. Not needed cause proxyhandler will handle it.
+    m_proxymethod = new Py::MethodDefExt<PythonExtension>(
+        "", // methodname, not needed cause we use the method only internaly.
+        0, // method that should handle the callback, not needed cause proxyhandler will handle it.
         Py::method_varargs_call_handler_t( proxyhandler ), // callback handler
-        "Internal method use to wrap method- and attribute-calls." // documentation
+        "" // documentation
     );
 }
 
@@ -58,6 +58,7 @@ PythonExtension::~PythonExtension()
 #ifdef KROSS_PYTHON_EXTENSION_DTOR_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::Destructor objectname='%1' objectclass='%2'").arg(m_object->getName()).arg(m_object->getClassName()) << endl;
 #endif
+    delete m_proxymethod;
 }
 
 Py::Object PythonExtension::str()
@@ -117,14 +118,14 @@ Py::Object PythonExtension::getattr(const char* n)
     Py::Tuple self(2);
     self[0] = Py::Object(this);
     self[1] = Py::String(n);
-    return Py::Object(PyCFunction_New( &proxymethod->ext_meth_def, self.ptr() ), true);
+    return Py::Object(PyCFunction_New( &m_proxymethod->ext_meth_def, self.ptr() ), true);
 }
 
+/*
 Py::Object PythonExtension::getattr_methods(const char* n)
 {
-    QString name(n);
 #ifdef KROSS_PYTHON_EXTENSION_GETATTRMETHOD_DEBUG
-    kdDebug()<<"PythonExtension::getattr_methods name="<<name<<endl;
+    kdDebug()<<"PythonExtension::getattr_methods name="<<n<<endl;
 #endif
     return Py::PythonExtension<PythonExtension>::getattr_methods(n);
 }
@@ -136,11 +137,7 @@ int PythonExtension::setattr(const char* name, const Py::Object& value)
 #endif
     return Py::PythonExtension<PythonExtension>::setattr(name, value);
 }
-
-Kross::Api::Object::Ptr PythonExtension::getObject()
-{
-    return m_object;
-}
+*/
 
 Kross::Api::List::Ptr PythonExtension::toObject(const Py::Tuple& tuple)
 {
@@ -263,14 +260,13 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
     PythonExtension* extension = extobj.extensionObject();
     if(! extension)
         throw Py::TypeError("Failed to determinate PythonExtension object.");
-    Kross::Api::Object::Ptr obj = extension->getObject();
-    if(! obj)
+    if(! extension->m_object)
         throw Py::TypeError("Failed to convert the PythonExtension object into a Kross::Api::Object.");
 
 #ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
     kdDebug() << "Kross::Python::PythonExtension::toObject(Py::Object) successfully converted into Kross::Api::Object." << endl;
 #endif
-    return obj;
+    return extension->m_object;
 }
 
 Py::Object PythonExtension::toPyObject(const QString& s)

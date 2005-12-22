@@ -94,36 +94,8 @@ namespace Kross { namespace Python {
              */
             virtual Py::Object getattr(const char* name);
 
-            /**
-             * Overloaded method to handle method calls
-             * from within python. This function behaves
-             * similar as the \a getattr but should return
-             * callable objects or None if there is no
-             * method with such name.
-             *
-             * \param name The name of the callable object
-             *        that should be returned.
-             */
-            virtual Py::Object getattr_methods(const char* name);
-
-            /**
-             * Overloaded method to handle setting of attributes
-             * from within python.
-             *
-             * \param name The name of the attribute that
-             *        should be changed.
-             * \param value The value to set to the defined 
-             *        attribute.
-             * \return An indicator if setting the attribute 
-             *         failed (<0) or if succeed (>=0).
-             */
-            virtual int setattr(const char* name, const Py::Object& value);
-
-            /**
-             * Return the \a Kross::Api::Object this
-             * PythonExtension wraps.
-             */
-            Kross::Api::Object::Ptr getObject();
+            //virtual Py::Object getattr_methods(const char* name);
+            //virtual int setattr(const char* name, const Py::Object& value);
 
         private:
 
@@ -224,7 +196,7 @@ namespace Kross { namespace Python {
              * The proxymethod which will handle all calls to our
              * \a PythonExtension instance.
              */
-            Py::MethodDefExt<PythonExtension>* proxymethod;
+            Py::MethodDefExt<PythonExtension>* m_proxymethod;
 
             /**
              * The static proxy-handler which will be used to dispatch
