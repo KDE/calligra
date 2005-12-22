@@ -344,7 +344,7 @@ KWTableFrameSet* KWOasisLoader::loadOasisTable( const QDomElement& tag,
 {
     const QString name = tag.attributeNS( KoXmlNS::table, "name", i18n( "Unnamed Table" ) ); // ### check for unicity?
     KWTableFrameSet* table = new KWTableFrameSet( m_doc, name );
-    m_doc->m_lstFrameSet.append( table );
     table->loadOasis( tag, context );
+    m_doc->addFrameSet(table);
     return table;
 }
