@@ -2542,30 +2542,32 @@ void Sheet::hideRow( int _row, int nbRow, QValueList<int>_list )
     {
       UndoHideRow *undo ;
       if( nbRow!=-1 )
-  undo= new UndoHideRow( doc(), this, _row, nbRow );
+        undo= new UndoHideRow( doc(), this, _row, nbRow );
       else
-  undo= new UndoHideRow( doc(), this, _row, nbRow, _list );
+        undo= new UndoHideRow( doc(), this, _row, nbRow, _list );
+
       doc()->addCommand( undo  );
     }
 
     RowFormat *rl;
     if( nbRow!=-1 )
     {
-  for( int i=0; i<=nbRow; i++ )
-  {
-      rl=nonDefaultRowFormat( _row+i );
-      rl->setHide(true);
-  }
+      for( int i=0; i<=nbRow; ++i )
+      {
+         rl=nonDefaultRowFormat( _row+i );
+         rl->setHide(true, /* repaint */ false );
+       }
     }
-    else
+    else // nbRow == -1 means that we're hiding by undo/redo
     {
-  QValueList<int>::Iterator it;
-  for( it = _list.begin(); it != _list.end(); ++it )
-  {
-      rl=nonDefaultRowFormat( *it );
-      rl->setHide(true);
-  }
+      QValueList<int>::Iterator it;
+      for( it = _list.begin(); it != _list.end(); ++it )
+      {
+         rl=nonDefaultRowFormat( *it );
+         rl->setHide(true, /* repaint */ false );
+      }
     }
+
     emitHideRow();
 }
 
@@ -2593,7 +2595,7 @@ void Sheet::showRow( int _row, int nbRow, QValueList<int>_list )
   for( int i=0; i<=nbRow; i++ )
     {
       rl=nonDefaultRowFormat( _row + i );
-      rl->setHide( false );
+      rl->setHide( false, /* repaint */ false );
     }
       }
     else
@@ -2602,11 +2604,11 @@ void Sheet::showRow( int _row, int nbRow, QValueList<int>_list )
   for( it = _list.begin(); it != _list.end(); ++it )
     {
       rl=nonDefaultRowFormat( *it );
-      rl->setHide( false );
+      rl->setHide( false, /* repaint */ false );
     }
       }
-    emit sig_updateVBorder( this );
-    emit sig_updateView( this );
+
+    emitHideRow();
 }
 
 
@@ -7718,7 +7720,7 @@ void Sheet::updateCell( Cell */*cell*/, int _column, int _row )
   updateCellArea(cellArea);
 }
 
-void Sheet::emit_updateRow( RowFormat *_format, int _row )
+void Sheet::emit_updateRow( RowFormat *_format, int _row, bool repaint )
 {
     if ( doc()->isLoading() )
         return;
@@ -7728,8 +7730,11 @@ void Sheet::emit_updateRow( RowFormat *_format, int _row )
       if ( c->row() == _row )
           c->setLayoutDirtyFlag( true );
 
-    emit sig_updateVBorder( this );
-    emit sig_updateView( this );
+    if ( repaint )
+    {
+      emit sig_updateVBorder( this );
+      emit sig_updateView( this );
+    }
     emit sig_maxRow(maxRow());
     _format->clearDisplayDirtyFlag();
 }

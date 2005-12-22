@@ -1081,7 +1081,7 @@ public:
      */
     void refreshView(const QRect& rect);
 
-    void emit_updateRow( RowFormat *_format, int _row );
+    void emit_updateRow( RowFormat *_format, int _row, bool repaint = true );
     void emit_updateColumn( ColumnFormat *_format, int _column );
 
     /**

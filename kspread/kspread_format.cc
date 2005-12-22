@@ -3019,7 +3019,7 @@ void RowFormat::setBottomBorderPen( const QPen & p )
     Format::setBottomBorderPen( p );
 }
 
-void RowFormat::setHide( bool _hide )
+void RowFormat::setHide( bool _hide, bool repaint )
 {
     if ( _hide != m_bHide ) // only if we change the status
     {
@@ -3028,14 +3028,14 @@ void RowFormat::setHide( bool _hide )
 	    // Lower maximum size by height of row
 	    m_pSheet->adjustSizeMaxY ( - dblHeight() );
 	    m_bHide = _hide; //hide must be set after we requested the height
-            m_pSheet->emit_updateRow( this, m_iRow );
+      m_pSheet->emit_updateRow( this, m_iRow, repaint );
 	}
 	else
 	{
 	    // Rise maximum size by height of row
 	    m_bHide = _hide; //unhide must be set before we request the height
 	    m_pSheet->adjustSizeMaxY ( dblHeight() );
-            m_pSheet->emit_updateRow( this, m_iRow );
+            m_pSheet->emit_updateRow( this, m_iRow, repaint );
 	}
     }
 }

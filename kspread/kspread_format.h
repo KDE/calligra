@@ -534,7 +534,7 @@ public:
     /**
      * Sets the hide flag
      */
-    void setHide( bool _hide );
+    void setHide( bool _hide, bool repaint = true );
     bool isHide()const { return m_bHide;}
 
 protected:
