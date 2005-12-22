@@ -134,11 +134,15 @@ void DurationWidget::setValue(const KPlato::Duration &newDuration)
             v[i] = value;
             if (i < 4 && r > 0) {
                 v[i+1] += r;
+                if (v[i+1] >= m_fields[i].scale) {
+                    //kdDebug()<<"Overflow v["<<i+1<<"]="<<v[i+1]<<">="<<m_fields[i].scale<<endl;
+                    v[i]++;
+                    v[i+1] -= m_fields[i].scale;
+                }
                 tmp.sprintf(m_fields[i+1].format, v[i+1]);
                 m_fields[i+1].current->setText(tmp);
-                //kdDebug()<<"v["<<i+1<<"] r="<<r<<endl;
             }
-            //kdDebug()<<"v["<<i<<"] r="<<r<<endl;
+            //kdDebug()<<"v["<<i<<"]="<<v[i]<<" r="<<r<<endl;
         }
         v[i] += t; // add overflow from prevoius field
         t = 0;
