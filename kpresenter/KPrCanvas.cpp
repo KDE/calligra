@@ -113,9 +113,9 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPrView *_view )
         mousePressed = false;
         drawContour = false;
         modType = MT_NONE;
-        m_resizeObject = 0L;
-        editNum = 0L;
-        m_rotateObject = 0L;
+        m_resizeObject = 0;
+        m_editObject = 0;
+        m_rotateObject = 0;
         setBackgroundMode( Qt::NoBackground );
         m_view = _view;
         setupMenus();
@@ -179,12 +179,6 @@ KPrCanvas::~KPrCanvas()
     // block all signals (save for destroyed()) to avoid crashes on exit
     // (exitEditMode) emits signals
     blockSignals(true);
-
-    // deactivate possible opened textobject to avoid double deletion, KPrTextObject deletes this already
-    delete m_currentTextObjectView;
-    m_currentTextObjectView = 0;
-    if ( editNum )
-        editNum = 0;
 
     exitEditMode();
 
@@ -1468,7 +1462,7 @@ void KPrCanvas::mouseReleaseEvent( QMouseEvent *e )
             if ( kpPartObject )
             {
                 kpPartObject->activate( m_view );
-                editNum = kpPartObject;
+                m_editObject = kpPartObject;
             }
         }
         break;
@@ -1949,7 +1943,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
 
                 //setTextBackground( kptextobject );
                 setCursor( arrowCursor );
-                editNum = kpobject;
+                m_editObject = kpobject;
             }
         }
         else if ( kpobject->getType() == OT_PART )
@@ -1959,7 +1953,7 @@ void KPrCanvas::mouseDoubleClickEvent( QMouseEvent *e )
             if(obj)
             {
                 obj->activate( m_view );
-                editNum = obj;
+                m_editObject = obj;
             }
         }
         else
@@ -2059,7 +2053,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
             break;
         default: break;
         }
-    } else if ( editNum ) {
+    } else if ( m_editObject ) {
         if ( e->key() == Qt::Key_Escape ) {
             exitEditMode();
         }
@@ -2256,7 +2250,7 @@ void KPrCanvas::keyReleaseEvent( QKeyEvent *e )
 
 void KPrCanvas::imStartEvent( QIMEvent * e )
 {
-    if ( editNum && m_currentTextObjectView )
+    if ( m_editObject && m_currentTextObjectView )
     {
         if ( !m_currentTextObjectView->kpTextObject()->isProtectContent() )
             m_currentTextObjectView->imStartEvent( e );
@@ -2267,7 +2261,7 @@ void KPrCanvas::imStartEvent( QIMEvent * e )
 
 void KPrCanvas::imComposeEvent( QIMEvent * e )
 {
-    if ( editNum && m_currentTextObjectView )
+    if ( m_editObject && m_currentTextObjectView )
     {
         if ( !m_currentTextObjectView->kpTextObject()->isProtectContent() )
             m_currentTextObjectView->imComposeEvent( e );
@@ -2276,7 +2270,7 @@ void KPrCanvas::imComposeEvent( QIMEvent * e )
 
 void KPrCanvas::imEndEvent( QIMEvent * e )
 {
-    if ( editNum && m_currentTextObjectView )
+    if ( m_editObject && m_currentTextObjectView )
     {
         if ( !m_currentTextObjectView->kpTextObject()->isProtectContent() )
             m_currentTextObjectView->imEndEvent( e );
@@ -4259,8 +4253,8 @@ void KPrCanvas::presGotoFirstPage()
 
 KPrTextObject* KPrCanvas::kpTxtObj() const
 {
-    return ( ( editNum && editNum->getType() == OT_TEXT ) ?
-             dynamic_cast<KPrTextObject*>( editNum ) : 0 );
+    return ( ( m_editObject && m_editObject->getType() == OT_TEXT ) ?
+             dynamic_cast<KPrTextObject*>( m_editObject ) : 0 );
     // ### return m_currentTextObjectView->kpTextObject()
 }
 
@@ -4454,9 +4448,9 @@ void KPrCanvas::setSwitchingMode( bool continueTimer )
 
 void KPrCanvas::exitEditMode()
 {
-    if ( editNum )
+    if ( m_editObject )
     {
-        if ( editNum->getType() == OT_TEXT )
+        if ( m_editObject->getType() == OT_TEXT )
         {
             if(m_currentTextObjectView)
             {
@@ -4467,20 +4461,20 @@ void KPrCanvas::exitEditMode()
                 KPrTextObject *kpTextObj = m_currentTextObjectView->kpTextObject();
                 kpTextObj->setEditingTextObj( false );
                 delete m_currentTextObjectView;
-                m_currentTextObjectView=0L;
+                m_currentTextObjectView = 0;
 
                 _repaint( static_cast<KPrObject*>( kpTextObj ) );
             }
             // Title of slide may have changed
             m_view->kPresenterDoc()->updateSideBarItem( m_activePage );
             emit objectSelectedChanged();
-            editNum=0L;
+            m_editObject = 0;
         }
-        else if (editNum->getType() == OT_PART )
+        else if (m_editObject->getType() == OT_PART )
         {
-            static_cast<KPrPartObject *>(editNum)->deactivate();
-            _repaint( editNum );
-            editNum=0L;
+            static_cast<KPrPartObject *>(m_editObject)->deactivate();
+            _repaint( m_editObject );
+            m_editObject = 0;
             return;
         }
     }
@@ -5097,11 +5091,11 @@ void KPrCanvas::createEditing( KPrTextObject *textObj )
     {
         m_currentTextObjectView->terminate();
         delete m_currentTextObjectView;
-        m_currentTextObjectView = 0L;
-        editNum = 0L;
+        m_currentTextObjectView = 0;
+        m_editObject = 0;
     }
-    m_currentTextObjectView=textObj->createKPTextView( this );
-    editNum=textObj;
+    m_currentTextObjectView = textObj->createKPTextView( this );
+    m_editObject = textObj;
 }
 
 void KPrCanvas::terminateEditing( KPrTextObject *textObj )
@@ -5110,8 +5104,8 @@ void KPrCanvas::terminateEditing( KPrTextObject *textObj )
     {
         m_currentTextObjectView->terminate();
         delete m_currentTextObjectView;
-        m_currentTextObjectView = 0L;
-        editNum = 0L;
+        m_currentTextObjectView = 0;
+        m_editObject = 0;
     }
 }
 

@@ -731,7 +731,8 @@ private:
     bool drawContour;
     ModifyType modType;
 
-    KPrObject *editNum;
+    /// text or part object when it is edited
+    KPrObject * m_editObject;
 
     bool fillBlack;
     KPrView *m_view;
