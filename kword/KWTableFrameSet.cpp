@@ -320,7 +320,7 @@ void KWTableFrameSet::recalcCols(unsigned int col,unsigned int row) {
         }
         m_redrawFromCol=col;
         if(col>0) m_redrawFromCol--;
-        //if(activeCell) activeCell->frame(0)->setMinFrameHeight(0);
+        //if(activeCell) activeCell->frame(0)->setMinimumFrameHeight(0);
     }
     updateFrames();
     //kdDebug(32004) << "end KWTableFrameSet::recalcCols" << endl;
@@ -337,7 +337,7 @@ void KWTableFrameSet::recalcRows(unsigned int col, unsigned int row) {
     Cell *activeCell = cell(row,col);
     double difference = 0;
 
-    if(activeCell->frame(0)->height() != activeCell->frame(0)->minFrameHeight() &&
+    if(activeCell->frame(0)->height() != activeCell->frame(0)->minimumFrameHeight() &&
           activeCell->type() == FT_TEXT) {
         // when the amount of text changed and the frame has to be rescaled we are also called.
         // lets check the minimum size for all the cells in this row.
@@ -370,12 +370,12 @@ void KWTableFrameSet::recalcRows(unsigned int col, unsigned int row) {
                     break;
                 }
 
-                thisColHeight+=thisCell->frame(0)->minFrameHeight();
+                thisColHeight+=thisCell->frame(0)->minimumFrameHeight();
                 thisColHeight+=thisCell->topBorder();
                 thisColHeight+=thisCell->bottomBorder();
 
                 if(thisCell->firstRow() >= activeCell->firstRow() && thisCell->rowAfter() <= activeCell->rowAfter())
-                    thisColActiveRow+=thisCell->frame(0)->minFrameHeight();
+                    thisColActiveRow+=thisCell->frame(0)->minimumFrameHeight();
 
                 rowCount += thisCell->rowSpan();
             } while (rowCount < rowSpan+startRow);
@@ -392,18 +392,18 @@ void KWTableFrameSet::recalcRows(unsigned int col, unsigned int row) {
         bool bottomRow = (startRow+rowSpan == activeCell->rowAfter());
         if(!bottomRow) {
             Cell *bottomCell=cell(startRow+rowSpan-1, activeCell->firstColumn());
-            bottomCell->frame(0)->setHeight(bottomCell->frame(0)->minFrameHeight() +
+            bottomCell->frame(0)->setHeight(bottomCell->frame(0)->minimumFrameHeight() +
                     minHeightOtherCols - minHeightMyCol);
             // ### RECURSE ###
             recalcRows(bottomCell->firstColumn(), bottomCell->firstRow());
         }
-        if(activeCell->frame(0)->minFrameHeight() > activeCell->frame(0)->height()) { // wants to grow
-            activeCell->frame(0)->setHeight(activeCell->frame(0)->minFrameHeight());
-            //kdDebug(32004) << activeCell->name() << " grew to its minheight: " << activeCell->frame(0)->minFrameHeight() << endl;
+        if(activeCell->frame(0)->minimumFrameHeight() > activeCell->frame(0)->height()) { // wants to grow
+            activeCell->frame(0)->setHeight(activeCell->frame(0)->minimumFrameHeight());
+            //kdDebug(32004) << activeCell->name() << " grew to its minheight: " << activeCell->frame(0)->minimumFrameHeight() << endl;
         } else { // wants to shrink
-            double newHeight=kMax(activeCell->frame(0)->minFrameHeight(),minHeightActiveRow);
+            double newHeight=kMax(activeCell->frame(0)->minimumFrameHeight(),minHeightActiveRow);
             if(bottomRow) // I'm a strech cell
-                newHeight=kMax(newHeight, minHeightOtherCols - (minHeightMyCol - activeCell->frame(0)->minFrameHeight()));
+                newHeight=kMax(newHeight, minHeightOtherCols - (minHeightMyCol - activeCell->frame(0)->minimumFrameHeight()));
             activeCell->frame(0)->setHeight(newHeight);
             //kdDebug(32004) << activeCell->name() << " shrunk to: " << newHeight << endl;
         }
@@ -846,9 +846,8 @@ void KWTableFrameSet::position( Cell *theCell, bool setMinFrameHeight ) {
     height-=theCell->bottomBorder();
 
     theFrame->setRect( x,y,width,height);
-    if( setMinFrameHeight ) {
-        theFrame->setMinFrameHeight(height);
-    }
+    if( setMinFrameHeight )
+        theFrame->setMinimumFrameHeight(height);
 
     if(!theCell->isVisible())
         theCell->setVisible(true);
@@ -1747,7 +1746,7 @@ void KWTableFrameSet::drawBorders( QPainter& painter, const QRect &crect, KWView
         painter.setPen( minsizeLinePen );
         for ( unsigned int i = 0; i < m_cells.count(); i++ ) {
             Cell *daCell = m_cells.at( i );
-            double y = daCell->frame(0)->top() + daCell->frame(0)->minFrameHeight() + 1.5;
+            double y = daCell->frame(0)->top() + daCell->frame(0)->minimumFrameHeight() + 1.5;
             if(y >= daCell->frame(0)->bottom()) continue;
             int ypix=m_doc->zoomItY(y);
             QPoint topLeft = viewMode->normalToView(QPoint(m_doc->zoomItX(daCell->frame(0)->left()), ypix));
@@ -2003,7 +2002,7 @@ void KWTableFrameSet::loadOasisCell( const QDomElement& element, KoOasisContext&
     double height = currentRowHeight > 0 ? currentRowHeight : 20;
     KWFrame* frame = new KWFrame( daCell, columnLefts[column], 0, width, height );
     if ( currentRowHeight > 0 )
-        frame->setMinFrameHeight( height ); // ensure that text formatting won't resize it down
+        frame->setMinimumFrameHeight( height ); // ensure that text formatting won't resize it down
     frame->setRunAround( KWFrame::RA_NO );
     frame->setFrameBehavior( KWFrame::AutoExtendFrame );
     frame->setNewFrameBehavior( KWFrame::NoFollowup );
@@ -2104,7 +2103,7 @@ void KWTableFrameSet::afterLoadingCell( Cell* daCell )
 
     kdDebug(32004) << "loading cell (" << row << "," << col << ")\n";
     if(daCell->frame(0)) {
-        daCell->frame(0)->setMinFrameHeight(daCell->frame(0)->height()); // TODO run the formatter over the text here
+        daCell->frame(0)->setMinimumFrameHeight(daCell->frame(0)->height()); // TODO run the formatter over the text here
         QValueList<double>::iterator tmp = m_colPositions.at(col);
         if(*tmp == 0) (*tmp) = daCell->frame(0)->left();
         else (*tmp) = (daCell->frame(0)->left() + *tmp) / 2;

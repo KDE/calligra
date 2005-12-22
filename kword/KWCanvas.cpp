@@ -927,7 +927,7 @@ void KWCanvas::mrCreateText()
     m_insRect = m_insRect.normalize();
     if ( !m_doc->snapToGrid() || ( m_insRect.width() > m_doc->gridX() && m_insRect.height() > m_doc->gridY() ) ) {
         KWFrame *frame = new KWFrame(0L, m_insRect.x(), m_insRect.y(), m_insRect.width(), m_insRect.height() );
-        frame->setMinFrameHeight( frame->height() ); // so that AutoExtendFrame doesn't resize it down right away
+        frame->setMinimumFrameHeight( frame->height() ); // so that AutoExtendFrame doesn't resize it down right away
         frame->setNewFrameBehavior(KWFrame::Reconnect);
         frame->setZOrder( m_doc->maxZOrder( frame->pageNumber(m_doc) ) + 1 ); // make sure it's on top
         KWFrameDia frameDia( this, frame, m_doc, FT_TEXT );
@@ -2105,7 +2105,7 @@ FrameResizePolicy::FrameResizePolicy(KWCanvas *parent, MouseMeaning meaning, KoP
     QValueListConstIterator<KWFrame*> framesIterator = m_frames.begin();
     for(;framesIterator != m_frames.end(); ++framesIterator) {
         KWFrame *frame = *framesIterator;
-        FrameResizeStruct frs(*frame, frame->minFrameHeight(), *frame);
+        FrameResizeStruct frs(*frame, frame->minimumFrameHeight(), *frame);
         m_frameResize.append(frs);
         m_boundingRect |= frame->outerKoRect();
     }
@@ -2221,7 +2221,7 @@ void FrameResizePolicy::finishInteraction() {
     KWFrameViewManager *frameViewManager = m_parent->frameViewManager();
     for(unsigned int i=0; i < m_frames.count(); i++) {
         KWFrame *frame = m_frames[i];
-        frame->setMinFrameHeight(frame->height());
+        frame->setMinimumFrameHeight(frame->height());
         frameViewManager->slotFrameResized(frame);
     }
 }

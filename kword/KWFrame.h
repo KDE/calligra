@@ -257,8 +257,19 @@ public:
     void saveMarginProperties( KoGenStyle& frameStyle ) const;
     void saveMarginAttributes( KoXmlWriter &writer ) const;
 
-    void setMinFrameHeight(double h);
-    double minFrameHeight(void)const {return m_minFrameHeight;}
+    /**
+     * The property minimum frame height is used to make the automatic frame shrinking code stop.
+     * Each frame has a height based on its frame dimentions, but changes in content may change
+     * the sizes automatically.  If all text is removed from a text frame it will grow smaller
+     * until the minimum frame height is reached, and it will not shrink below that.
+     * @param h the new minimum height
+     */
+    void setMinimumFrameHeight(double h) { m_minFrameHeight = h; }
+    /**
+     * @return the minimum frame height.
+     * @see setMinimumFrameHeight() for details.
+     */
+    double minimumFrameHeight(void)const {return m_minFrameHeight;}
 
     /** Return if the point is on the frame.
         @param nPoint the point in normal coordinates.

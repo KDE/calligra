@@ -2203,7 +2203,7 @@ bool KWFrameDia::applyChanges()
                 {
                     FrameIndex index( f );
                     KoRect initialRect = f->normalize();
-                    double initialMinFrameHeight = f->minFrameHeight();
+                    double initialMinFrameHeight = f->minimumFrameHeight();
                     if ( m_frame ) // single frame: can be moved and resized
                         f->setRect( px, py, pw, ph );
                     else { // multiple frames: can only be resized

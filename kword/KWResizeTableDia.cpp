@@ -63,7 +63,7 @@ bool KWResizeTableDia::doResize()
         FrameIndex index( frm );
         KoRect newRect( frm->normalize() );
         newRect.setWidth( m_position->value() );
-        FrameResizeStruct resizeStruct( frm->normalize(), frm->minFrameHeight(), newRect );
+        FrameResizeStruct resizeStruct( frm->normalize(), frm->minimumFrameHeight(), newRect );
         KWFrameResizeCommand * cmd =new KWFrameResizeCommand( i18n("Resize Column"), index, resizeStruct );
         cmd->execute();
         m_doc->addCommand( cmd );

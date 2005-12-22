@@ -157,7 +157,7 @@ void KWFrame::copySettings(KWFrame *frm)
     setPaddingRight(frm->paddingRight());
     setPaddingTop(frm->paddingTop());
     setPaddingBottom(frm->paddingBottom());
-    setMinFrameHeight(frm->minFrameHeight());
+    setMinimumFrameHeight(frm->minimumFrameHeight());
     m_internalY = 0; // internal Y is recalculated
     setZOrder(frm->zOrder());
     setCopy(frm->isCopy());
@@ -231,8 +231,8 @@ void KWFrame::save( QDomElement &frameElem )
     frameElem.setAttribute( "top", QString::number( top(), 'g', DBL_DIG ) );
     frameElem.setAttribute( "right", QString::number( right(), 'g', DBL_DIG ) );
     frameElem.setAttribute( "bottom", QString::number( bottom(), 'g', DBL_DIG ) );
-    if ( minFrameHeight() > 0 )
-        frameElem.setAttribute( "min-height", QString::number( minFrameHeight(), 'g', DBL_DIG ) );
+    if ( minimumFrameHeight() > 0 )
+        frameElem.setAttribute( "min-height", QString::number( minimumFrameHeight(), 'g', DBL_DIG ) );
 
     if ( !m_frameSet->isHeaderOrFooter() && !m_frameSet->isMainFrameset() )
     {
@@ -721,11 +721,4 @@ void KWFrame::setFramePadding( double left, double top, double right, double bot
     m_paddingTop = top;
     m_paddingRight = right;
     m_paddingBottom = bottom;
-}
-
-void KWFrame::setMinFrameHeight(double h)
-{
-    //if ( m_frameSet )
-    //    kdDebug() << k_funcinfo << m_frameSet->name() << " " << this << " " << h << endl;
-    m_minFrameHeight = h;
 }

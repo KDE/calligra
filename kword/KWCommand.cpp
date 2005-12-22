@@ -731,7 +731,7 @@ void KWFrameResizeCommand::execute()
         KWFrame *frame = frameSet->frame(index.m_iFrameIndex);
         Q_ASSERT( frame );
         frame->setCoords(frs.newRect.left(),frs.newRect.top(),frs.newRect.right(),frs.newRect.bottom());
-        frame->setMinFrameHeight(frs.newMinHeight);
+        frame->setMinimumFrameHeight(frs.newMinHeight);
         KWTableFrameSet *table = frameSet->groupmanager();
         if (table) {
             KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frameSet);
@@ -766,7 +766,7 @@ void KWFrameResizeCommand::unexecute()
         KWFrame *frame=frameSet->frame(index.m_iFrameIndex);
         Q_ASSERT( frame );
         frame->setCoords(frs.oldRect.left(),frs.oldRect.top(),frs.oldRect.right(),frs.oldRect.bottom());
-        frame->setMinFrameHeight(frs.oldMinHeight);
+        frame->setMinimumFrameHeight(frs.oldMinHeight);
         KWTableFrameSet *table = frameSet->groupmanager();
         if (table) {
             KWTableFrameSet::Cell *cell=dynamic_cast<KWTableFrameSet::Cell *>(frameSet);

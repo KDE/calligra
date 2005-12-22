@@ -3210,13 +3210,13 @@ void KWDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyle
                 }
 #if 0 // more code reuse, but harder to integrate
                 KoGenStyle hfStyle;
-                hfStyle.addPropertyPt( "fo:min-height", frame->minFrameHeight() );
+                hfStyle.addPropertyPt( "fo:min-height", frame->minimumFrameHeight() );
                 frame->saveBorderProperties( hfStyle );
                 frame->saveMarginProperties( hfStyle );
                 ...
 #endif
                 stylesWriter->startElement( "style:header-footer-properties" );
-                stylesWriter->addAttributePt( "fo:min-height", frame->minFrameHeight() );
+                stylesWriter->addAttributePt( "fo:min-height", frame->minimumFrameHeight() );
                 if ( fs->isAHeader() )
                     stylesWriter->addAttributePt( "fo:margin-bottom", m_pageHeaderFooter.ptHeaderBodySpacing );
                 else

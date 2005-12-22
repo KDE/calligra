@@ -1676,14 +1676,14 @@ KWFrame* KWTextFrameSet::loadOasisTextFrame( const QDomElement& frameTag, const 
     bool hasMinHeight = tag.hasAttributeNS( KoXmlNS::fo, "min-height" );
     if ( hasMinHeight ) {
         double height = KoUnit::parseValue( tag.attributeNS( KoXmlNS::fo, "min-height", QString::null ) );
-        frame->setMinFrameHeight( height );
+        frame->setMinimumFrameHeight( height );
         if ( height > frame->height() ) // do apply the min frame height
             frame->setHeight( height );
     }
 
     // Load overflow behavior (OASIS 14.27.27, not in OO-1.1 DTD). This is here since it's only for text framesets.
     const QString overflowBehavior = context.styleStack().attributeNS( KoXmlNS::style, "overflow-behavior" );
-    if ( frame->minFrameHeight() > 0 )
+    if ( frame->minimumFrameHeight() > 0 )
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
     else if ( overflowBehavior == "auto-create-new-frame" )
     {
@@ -1770,7 +1770,7 @@ void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, b
 
     writer.startElement( "draw:text-box" );
     if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
-        writer.addAttributePt( "fo:min-height", frame->minFrameHeight() );
+        writer.addAttributePt( "fo:min-height", frame->minimumFrameHeight() );
     if ( m_frames.count() > 1 && saveFrames )
         writer.addAttribute( "draw:chain-next-name", nextFrameName + "2" );
     saveOasisContent( writer, context );
@@ -1790,7 +1790,7 @@ void KWTextFrameSet::saveOasis( KoXmlWriter& writer, KoSavingContext& context, b
             lastFrameName = frameName; // this is used for copy-m_frames
             writer.startElement( "draw:text-box" );
             if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
-                writer.addAttributePt( "fo:min-height", frame->minFrameHeight() );
+                writer.addAttributePt( "fo:min-height", frame->minimumFrameHeight() );
             if ( frameNumber < (int)m_frames.count() )
                 writer.addAttribute( "draw:chain-next-name", nextFrameName + QString::number( frameNumber+1 ) );
             // No contents. Well, OOo saves an empty paragraph, but I'd say that's wrong.
@@ -1989,9 +1989,9 @@ bool KWTextFrameSet::slotAfterFormattingNeedMoreSpace( int bottom, KoTextParag *
                 kdDebug(32002) << "is table cell; just setting new minFrameHeight, to " << newPosition - theFrame->top() << endl;
 #endif
                 double newMinFrameHeight = newPosition - theFrame->top();
-                resized = QABS( newMinFrameHeight - theFrame->minFrameHeight() ) > 1E-10;
+                resized = QABS( newMinFrameHeight - theFrame->minimumFrameHeight() ) > 1E-10;
                 if ( resized ) {
-                    theFrame->setMinFrameHeight( newMinFrameHeight );
+                    theFrame->setMinimumFrameHeight( newMinFrameHeight );
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
                     table->recalcCols(cell->firstColumn(), cell->firstRow());
                     table->recalcRows(cell->firstColumn(), cell->firstRow());
@@ -2135,10 +2135,10 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
                 // we don't have the full picture of the change.
                 // We will set the minFrameHeight to the correct value and let the tables code
                 // do the rescaling based on all the m_frames in the row. (see KWTableFrameSet::recalcRows())
-                if(wantedPosition != theFrame->top() + theFrame->minFrameHeight()) {
-                    theFrame->setMinFrameHeight(wantedPosition - theFrame->top());
+                if(wantedPosition != theFrame->top() + theFrame->minimumFrameHeight()) {
+                    theFrame->setMinimumFrameHeight(wantedPosition - theFrame->top());
 #ifdef DEBUG_FORMAT_MORE
-                    kdDebug(32002) << "is table cell; only setting new minFrameHeight to " << theFrame->minFrameHeight() << ", recalcrows will do the rest" << endl;
+                    kdDebug(32002) << "is table cell; only setting new minFrameHeight to " << theFrame->minimumFrameHeight() << ", recalcrows will do the rest" << endl;
 #endif
                     KWTableFrameSet::Cell *cell = (KWTableFrameSet::Cell *)theFrame->frameSet();
                     table->recalcCols(cell->firstColumn(), cell->firstRow());
@@ -2168,7 +2168,7 @@ void KWTextFrameSet::slotAfterFormattingTooMuchSpace( int bottom )
             }
         } else {
             // Also apply the frame's minimum height
-            wantedPosition = QMAX( wantedPosition, theFrame->top() + theFrame->minFrameHeight() );
+            wantedPosition = QMAX( wantedPosition, theFrame->top() + theFrame->minimumFrameHeight() );
             if ( wantedPosition != theFrame->bottom()) {
 #ifdef DEBUG_FORMAT_MORE
                 kdDebug() << "    the frame was " << *theFrame << endl;
@@ -2203,7 +2203,7 @@ void KWTextFrameSet::slotAfterFormatting( int bottom, KoTextParag *lastFormatted
         // Remove the empty last frame, if it's an auto-created one (e.g. a
         // continuation on the next page). Not when the user just created it!
         if(m_frames.last()->frameBehavior() == KWFrame::AutoExtendFrame
-           && m_frames.last()->minFrameHeight() < 1E-10 ) { // i.e. equal to 0
+           && m_frames.last()->minimumFrameHeight() < 1E-10 ) { // i.e. equal to 0
             deleteFrame(m_frames.last(), true);
             m_doc->frameChanged( 0L );
         }

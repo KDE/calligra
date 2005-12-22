@@ -1170,7 +1170,7 @@ void KWFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight,
     frame->setWidth( newWidth );
     frame->setHeight( newHeight );
     if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
-        frame->setMinFrameHeight( newHeight );
+        frame->setMinimumFrameHeight( newHeight );
 }
 
 // ## this should pass the viewmode as argument, probably.
@@ -1272,7 +1272,7 @@ void KWFrameSet::printDebug()
         }
         else
             kdDebug() << "     no frameStack set." << endl;
-        kdDebug() << "     minFrameHeight "<< frame->minFrameHeight() << endl;
+        kdDebug() << "     minFrameHeight "<< frame->minimumFrameHeight() << endl;
         QString page = pageManager() && pageManager()->pageCount() > 0 ? QString::number(frame->pageNumber()) : " [waiting for pages to be created]";
 
         KWFrameView *fv = 0;
