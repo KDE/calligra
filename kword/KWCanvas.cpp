@@ -262,7 +262,7 @@ void KWCanvas::drawContents( QPainter *painter, int cx, int cy, int cw, int ch )
       drawGrid( *painter, QRect( cx, cy, cw, ch ) );
     else if ( m_doc->snapToGrid() && ( m_interactionPolicy && m_interactionPolicy->gotDragEvents()
                 || m_mouseMode != MM_EDIT ) )
-      drawGrid( *painter, rect() );
+      drawGrid( *painter, QRect(contentsX(), contentsY(), visibleWidth(), visibleHeight()) );
   }
 }
 
@@ -668,46 +668,47 @@ void KWCanvas::applyGrid( KoPoint &p )
 
 void KWCanvas::drawGrid( QPainter &p, const QRect& rect )
 {
-  // Grid-positioning makes no sense in text view mode
-  if ( !m_viewMode->hasFrames() )
-    return;
-  QPen _pen = QPen( /*m_doc->gridColor()*/Qt::black, 6, Qt::DotLine );
-  QPen oldPen = p.pen();
-  p.setPen( _pen );
+    // Grid-positioning makes no sense in text view mode
+    if ( !m_viewMode->hasFrames() )
+        return;
+    QPen pen = QPen( Qt::black, 6, Qt::DotLine );
+    QPen oldPen = p.pen();
+    p.setPen( pen );
 
-  //const int documentWidth = m_doc->paperWidth( m_doc->startPage() );
-  //const int documentHeight = m_doc->zoomItY( m_doc->pageManager()->bottomOfPage( m_doc->lastPage() ) );
+    const double offsetX = m_doc->gridX();
+    const double offsetY = m_doc->gridY();
 
-  const double offsetX = m_doc->gridX();
-  const double offsetY = m_doc->gridY();
+    // per page, this is needed to paint correctly on preview mode as well as making sure
+    // we start the grid from the topleft of each page.
+    for ( int pgNum = m_doc->startPage() ; pgNum <= m_doc->lastPage() ; ++pgNum) {
+        const QRect pageRect = m_viewMode->viewPageRect( pgNum );
+        const QRect crect = pageRect & rect;
+        if ( crect.isEmpty() )
+            continue;
 
-  for ( int pgNum = m_doc->startPage() ; pgNum <= m_doc->lastPage() ; ++pgNum) {
-      const QRect pageRect = m_viewMode->viewPageRect( pgNum );
-      const QRect crect = pageRect & rect;
-      if ( crect.isEmpty() )
-          continue;
+        // To convert back to view coordinates later we can calculate the offset for each
+        // point again, or we can do it one time for the page and re-use the answer.
+        KoPoint pageTopLeft (0, m_doc->pageManager()->topOfPage(pgNum) + 2); // +2 to get around rounding problems..
+        QPoint pageTopLeftView = m_viewMode->normalToView( m_doc->zoomPoint(pageTopLeft) );
 
-      // docRect is the part of the document that needs to be painted
-      const KoRect docRect = m_doc->unzoomRect( m_viewMode->viewToNormal( crect ) );
+        // docRect is the part of the document that needs to be painted.. Coordinates in pt
+        const KoRect docRect = m_doc->unzoomRect( m_viewMode->viewToNormal( crect ) );
+        // kdDebug() << "drawGrid page " << pgNum << " pageRect=" << pageRect << " crect=" << crect << " docRect=" << docRect << endl;
 
-      //kdDebug() << "drawGrid page " << pgNum << " pageRect=" << pageRect << " crect=" << crect << " docRect=" << docRect << endl;
+        // the following is effectively a docRect.y() modulo offsetY
+        const double firstOffsetY = pageTopLeft.y() - offsetY * static_cast<int>( docRect.y() / offsetY );
+        const double bottom = docRect.bottom() - pageTopLeft.y();
 
-      const double firstOffsetX = offsetX * static_cast<int>( docRect.x() / offsetX );
-      const double firstOffsetY = offsetY * static_cast<int>( docRect.y() / offsetY );
-      const double bottom = docRect.bottom();
+        for ( double x = 0; x <= docRect.right(); x += offsetX ) {
+            const int zoomedX = m_doc->zoomItX( x ) + pageTopLeftView.x();
+            for ( double y = firstOffsetY; y <= bottom; y += offsetY ) {
+                const int zoomedY = m_doc->zoomItY( y ) + pageTopLeftView.y();
+                p.drawPoint( zoomedX, zoomedY );
+            }
+        }
+    }
 
-      for ( double i = firstOffsetX; i < docRect.right(); i += offsetX ) {
-          const int zoomedX = m_doc->zoomItX( i );
-          for ( double j = firstOffsetY; j < bottom; j += offsetY ) {
-              const int zoomedY = m_doc->zoomItY( j );
-              const QPoint vp = m_viewMode->normalToView( QPoint( zoomedX, zoomedY ) );
-              // if ( crect.contains( vp ) ) // should always be true
-              p.drawPoint( vp );
-          }
-      }
-  }
-
-  p.setPen( oldPen );
+    p.setPen( oldPen );
 }
 
 void KWCanvas::applyAspectRatio( double ratio, KoRect& insRect )

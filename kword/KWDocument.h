@@ -258,7 +258,9 @@ public:
     void deleteTable( KWTableFrameSet *groupManager );
     void deleteFrame( KWFrame * frame );
 
+    /// return the height of one page in pixels in the current zoom level (normal coord system)
     unsigned int paperHeight(int pageNum) const;
+    /// return the width of one page in pixels in the current zoom level (normal coord system)
     unsigned int paperWidth(int pageNum) const;
     /// Top of the page number pgNum, in pixels (in the normal coord system)
     unsigned int pageTop( int pgNum ) const;

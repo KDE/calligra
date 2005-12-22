@@ -367,7 +367,6 @@ QPoint KWViewModePreview::normalToView( const QPoint & nPoint )
     int col = (page->pageNumber() - m_doc->startPage()) % m_pagesPerRow;
     /*kdDebug() << "KWViewModePreview::normalToView nPoint=" << nPoint
                 << " unzoomedY=" << unzoomedY
-                << " ptPaperHeight=" << m_doc->ptPaperHeight(page->pageNumber())
                 << " page=" << page->pageNumber() << " row=" << row << " col=" << col
                 << " yInPagePt=" << yInPagePt << endl;*/
     return QPoint( leftSpacing() + col * ( m_doc->paperWidth(page->pageNumber()) +
