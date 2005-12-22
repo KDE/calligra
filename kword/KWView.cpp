@@ -236,7 +236,7 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     m_broker = Broker::openBroker( KSharedConfig::openConfig( "kwordrc" ) );
     m_spell.macroCmdSpellCheck=0L;
     m_spell.textIterator = 0L;
-    m_currentPage = m_doc->startPage();
+    m_currentPage = m_doc->pageManager()->page(m_doc->startPage());
     m_specialCharDlg=0L;
     m_searchEntry = 0L;
     m_replaceEntry = 0L;
@@ -1615,26 +1615,23 @@ void KWView::updatePageInfo()
     {
         KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
         if ( edit && edit->currentFrame() )
-        {
-            m_currentPage = edit->currentFrame()->pageNumber();
-        } else {
+            m_currentPage = m_doc->pageManager()->page(edit->currentFrame());
+        else {
             KWFrameView *view = frameViewManager()->selectedFrame();
             if(view)
-                m_currentPage = m_doc->pageManager()->pageNumber(view->frame());
+                m_currentPage = m_doc->pageManager()->page(view->frame());
         }
         /*kdDebug() << (void*)this << " KWView::updatePageInfo "
                   << " edit: " << edit << " " << ( edit?edit->frameSet()->name():QString::null)
                   << " currentFrame: " << (edit?edit->currentFrame():0L)
-                  << " m_currentPage=" << m_currentPage << " m_sbPageLabel=" << m_sbPageLabel
+                  << " m_currentPage=" << currentPage() << " m_sbPageLabel=" << m_sbPageLabel
                   << endl;*/
-
-        // To avoid bugs, apply max page number in case a page was removed.
-        m_currentPage = QMIN( m_currentPage, m_doc->lastPage());
 
         QString oldText = m_sbPageLabel->text();
         QString newText;
         if ( viewMode()->hasPages() )
-            newText = ' ' + i18n( "Page %1 of %2" ).arg(m_currentPage).arg(m_doc->pageCount()) + ' ';
+            newText = ' ' + i18n( "Page %1 of %2" ).arg(m_currentPage->pageNumber())
+                .arg(m_doc->pageCount()) + ' ';
 
         if ( newText != oldText )
         {
@@ -2417,9 +2414,8 @@ void KWView::pasteData( QMimeSource* data )
             }
         }
         else { // providesImage, must be after providesOasis
-            KoPageLayout pl = m_doc->pageManager()->pageLayout( m_currentPage );
-            KoPoint docPoint( pl.ptLeft,
-                    m_doc->pageManager()->topOfPage( m_currentPage ) + pl.ptTop);
+            KoPoint docPoint( m_currentPage->leftMargin(),
+                    m_currentPage->offsetInDocument() + m_currentPage->topMargin());
             m_gui->canvasWidget()->pasteImage( data, docPoint );
         }
     }
@@ -3179,7 +3175,7 @@ void KWView::viewZoom( const QString &s )
     if ( s == KoZoomMode::toString(KoZoomMode::ZOOM_WIDTH) )
     {
         m_doc->setZoomMode(KoZoomMode::ZOOM_WIDTH);
-        zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_doc->pageManager()->page(m_currentPage)->width() ) ) - 1;
+        zoom = qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / (m_doc->resolutionX() * m_currentPage->width() ) ) - 1;
 
         if(zoom != m_doc->zoom() && !canvas->verticalScrollBar() ||
                 !canvas->verticalScrollBar()->isVisible()) { // has no vertical scrollbar
@@ -3191,8 +3187,8 @@ void KWView::viewZoom( const QString &s )
     else if ( s == KoZoomMode::toString(KoZoomMode::ZOOM_PAGE) )
     {
         m_doc->setZoomMode(KoZoomMode::ZOOM_PAGE);
-        double height = m_doc->resolutionY() * m_doc->pageManager()->page(m_currentPage)->height();
-        double width = m_doc->resolutionX() * m_doc->pageManager()->page(m_currentPage)->height();
+        double height = m_doc->resolutionY() * m_currentPage->height();
+        double width = m_doc->resolutionX() * m_currentPage->height();
         zoom = QMIN( qRound( static_cast<double>(canvas->visibleHeight() * 100 ) / height ),
                      qRound( static_cast<double>(canvas->visibleWidth() * 100 ) / width ) ) - 1;
 
@@ -3280,9 +3276,10 @@ void KWView::insertPicture( const KoPicture& picture, const bool makeInline, con
 {
     if ( makeInline )
     {
-        KWPage *page = m_doc->pageManager()->page(m_currentPage);
-        const double widthLimit = page->width() - page->leftMargin() - page->rightMargin() - 10;
-        const double heightLimit = page->height() - page->topMargin() - page->bottomMargin() - 10;
+        const double widthLimit = m_currentPage->width() - m_currentPage->leftMargin() -
+            m_currentPage->rightMargin() - 10;
+        const double heightLimit = m_currentPage->height() - m_currentPage->topMargin() -
+            m_currentPage->bottomMargin() - 10;
         m_fsInline = 0;
         KWPictureFrameSet *frameset = new KWPictureFrameSet( m_doc, QString::null );
 
@@ -3450,7 +3447,8 @@ void KWView::insertPage()
         if ( dlg.exec())
         {
             // If 'before', subtract 1 to the page number
-            KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Insert, dlg.getInsertPagePos()==KW_INSERTPAGEAFTER ?  m_currentPage : (m_currentPage -1));
+            int page = m_currentPage->pageNumber();
+            KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Insert, dlg.getInsertPagePos()==KW_INSERTPAGEAFTER ?  page : (page -1));
             cmd->execute();
             m_doc->addCommand( cmd );
         }
@@ -3465,7 +3463,7 @@ void KWView::deletePage()
         // (e.g. everything between two (auto or manual) frame breaks)
         // Note: This must also be done in DTP mode, in some cases.
     } else {
-        KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Remove, m_currentPage );
+        KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Remove, m_currentPage->pageNumber() );
         cmd->execute();
         m_doc->addCommand( cmd );
     }
@@ -7654,6 +7652,10 @@ QPoint KWView::applyViewTransformations( const QPoint& p ) const
 QPoint KWView::reverseViewTransformations( const QPoint& p ) const
 {
     return m_doc->unzoomPoint( viewMode()->viewToNormal( p ) ).toQPoint();
+}
+
+int KWView::currentPage() const {
+    return m_currentPage->pageNumber();
 }
 
 #include "KWView.moc"

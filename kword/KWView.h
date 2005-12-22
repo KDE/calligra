@@ -40,49 +40,48 @@
 #include <qbrush.h>
 #include <qhbox.h>
 
-
+class KWPage;
 class KWViewMode;
-class DCOPObject;
-class KURL;
-
-class KoPicture;
 class KWDocStruct;
-class KoRuler;
 class KWCanvas;
 class KWDocument;
 class KWGUI;
 class KWFrame;
-class KoSearchContext;
 class KWFrameView;
 class KWFrameViewManager;
-class KWView;
-class QResizeEvent;
-class QSplitter;
+class KWTextFrameSetEdit;
+class KMacroCommand;
+class KWFrameSet;
+class KWFindReplace;
+class KWFrameStyle;
+class KWTableStyle;
+class KWTableFrameSet;
 
+class KoPicture;
+class KoSearchContext;
+class KoTextFormatInterface;
+class KoRuler;
+class TKSelectColorAction;
+class KoPartSelectAction;
+class KoCharSelectDia;
+class KoTextFormat;
+class KoFontDia;
+class KoParagDia;
+class KoTextIterator;
+
+class DCOPObject;
+class KStatusBarLabel;
+class KoSpell;
+class KURL;
 class KAction;
 class KActionMenu;
 class KSelectAction;
 class KToggleAction;
 class KFontSizeAction;
 class KFontAction;
-class KWTextFrameSetEdit;
-class KoTextFormatInterface;
-class TKSelectColorAction;
-class KoPartSelectAction;
-class KoCharSelectDia;
-class KMacroCommand;
-class KWFrameSet;
-class KWFindReplace;
-class KoTextFormat;
-class KoFontDia;
-class KoParagDia;
-class KWFrameStyle;
-class KWTableStyle;
-class KoTextIterator;
-class KWTableFrameSet;
-class KStatusBarLabel;
+class QResizeEvent;
+class QSplitter;
 
-class KoSpell;
 #include <kspell2/broker.h>
 namespace KSpell2 {
     class Dialog;
@@ -146,7 +145,7 @@ public:
     void initGui();
 
     /// returns the current page number this view is looking at
-    int currentPage() const { return m_currentPage; }
+    int currentPage() const;
 
     /**
      * Overloaded from View
@@ -771,7 +770,7 @@ private: // variables
     QPtrList<KAction> m_variableActionList;
     QPtrList<KAction> m_tableActionList;
 
-    int m_currentPage; ///< current page number
+    KWPage *m_currentPage; ///< current page number
 
     // Statusbar items
     KStatusBarLabel* m_sbPageLabel; ///< 'Current page number and page count' label
