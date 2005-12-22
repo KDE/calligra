@@ -18,49 +18,21 @@
 
 */
 
-#ifndef __VIMAGETOOL_H__
-#define __VIMAGETOOL_H__
+#ifndef __IMAGETOOLPLUGIN_H__
+#define __IMAGETOOLPLUGIN_H__
 
 #include <qstring.h>
 
-#include "vtool.h"
-#include <commands/vcommand.h>
-#include <core/vkarbonplugin.h>
+#include <kparts/plugin.h>
 
-class KarbonView;
-class VImage;
-
-class VImageTool : public VTool, public VKarbonPlugin
+/**
+ */
+class ImageToolPlugin : public KParts::Plugin
 {
+	Q_OBJECT
 public:
-	VImageTool( KarbonView *view, const char *, const QStringList & );
-	~VImageTool(); 
-
-	virtual void activate();
-	virtual void deactivate();
-
-	virtual QString name() { return i18n( "Image Tool" ); }
-	virtual QString contextHelp();
-	virtual QString icon() { return "14_image"; }
-	virtual QString statusText();
-
-protected:
-	class VInsertImageCmd : public VCommand
-	{
-	public:
-		VInsertImageCmd( VDocument* doc, const QString& name, VImage *image, KoPoint pos );
-		virtual ~VInsertImageCmd() {}
-
-		virtual void execute();
-		virtual void unexecute();
-		virtual bool changesSelection() const { return true; }
-
-	protected:
-		VImage	*m_image;
-		KoPoint	m_pos;
-	};
-
-	virtual void mouseButtonRelease();
+	ImageToolPlugin(QObject *parent, const char *name, const QStringList &);
+	virtual ~ImageToolPlugin();
 };
 
 #endif

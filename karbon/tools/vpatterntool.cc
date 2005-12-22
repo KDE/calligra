@@ -116,8 +116,8 @@ void VPatternWidget::patternSelected( KoIconItem* item )
 	m_deletePatternButton->setEnabled( QFileInfo( m_pattern->tilename() ).isWritable() );
 } // VPatternWidget::patternSelected
 
-VPatternTool::VPatternTool( KarbonPart *part )
-	: VTool( part, "patterntool" )
+VPatternTool::VPatternTool( KarbonView *view )
+	: VTool( view, "tool_pattern" )
 {
 	m_optionsWidget = new VPatternWidget( &KarbonFactory::rServer()->patterns(), this );
 	registerTool( this );
@@ -131,6 +131,7 @@ VPatternTool::~VPatternTool()
 void
 VPatternTool::activate()
 {
+	VTool::activate();
 	view()->statusMessage()->setText( i18n( "Pattern" ) );
 	view()->setCursor( QCursor( Qt::crossCursor ) );
 }
@@ -252,5 +253,18 @@ VPatternTool::showDialog() const
 	return m_optionsWidget->exec() == QDialog::Accepted;
 }
 
+void
+VPatternTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Pattern Tool" ), "14_pattern", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Pattern" ) );
+		m_action->setExclusiveGroup( "misc" );
+		//m_ownAction = true;
+	}
+}
 
 #include "vpatterntool.moc"

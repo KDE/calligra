@@ -25,7 +25,7 @@
 #include <koffice_export.h>
 class KActionCollection;
 class VTool;
-class KarbonPart;
+class KarbonView;
 class KarbonAbstractToolFactory;
 
 /**
@@ -38,7 +38,7 @@ public:
 
 	static KarbonToolRegistry* instance();
 
-	QValueVector<VTool*> createTools(KActionCollection * ac, KarbonPart* part);
+	QValueVector<VTool*> createTools( KActionCollection * ac, KarbonView* view );
 	void add(KarbonAbstractToolFactory* factory);
 
 private:

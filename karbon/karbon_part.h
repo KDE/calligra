@@ -34,7 +34,6 @@ class QRect;
 class VCommand;
 class VDocument;
 class VCommandHistory;
-class VToolController;
 
 /**
  * Keeps track of visual per document properties.
@@ -106,8 +105,6 @@ public:
 
 	bool mergeNativeFormat( const QString & file );
 
-	VToolController *toolController();
-
 public slots:
 	/// repaint all views attached to this koDocument
 	void repaintAllViews( bool repaint = true );
@@ -130,7 +127,6 @@ private:
 	bool m_merge;
 	unsigned int m_maxRecentFiles;				/// max. number of files shown in open recent menu item
 	DCOPObject *dcop;
-	VToolController	*m_toolController;
 };
 
 #endif

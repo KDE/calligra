@@ -20,14 +20,27 @@
 #ifndef __VTOOL_H__
 #define __VTOOL_H__
 
+#include <qobject.h>
+#include <kaction.h>
 #include <klocale.h>
 #include <KoPoint.h>
 #include <koffice_export.h>
+class KRadioAction;
 class KarbonPart;
 class KarbonView;
 class QEvent;
 class QWidget;
 class VPainter;
+class VToolController;
+
+enum enumToolType
+{
+	TOOL_SELECT = 0,       // 
+	TOOL_FREEHAND = 1,     //
+	TOOL_SHAPE = 2,        // Geometric shapes like ellipses and lines
+	TOOL_MANIPULATION = 3, //
+	TOOL_MISC = 4          //
+};
 
 /**
  * The base class for all karbon tools.
@@ -35,8 +48,10 @@ class VPainter;
  * Each tool has an icon, name and category. Basic mouse event and key handling is
  * implemented here.
  */
-class KARBONBASE_EXPORT VTool
+class KARBONBASE_EXPORT VTool : public QObject
 {
+	Q_OBJECT
+
 public:
 	/**
 	 * Constructs a new tool connected to the specified karbon part.
@@ -44,7 +59,7 @@ public:
 	 * @param part the karbon part the tool is connected to
 	 * @param name unused
 	 */
-	VTool( KarbonPart *part, const char* name );
+	VTool( KarbonView *view, const char* name );
 	// Make VTool "abstract":
 	
 	/**
@@ -62,18 +77,6 @@ public:
 	virtual void registerTool( VTool *tool );
 
 	/**
-	 * Activates the tool and sets up some dockers and finally calls activate().
-	 * Do not reimplement this method but activate().
-	 */
-	void activateAll();
-
-	/**
-	 * Called during the tool activation. A tool is supposed to set a mouse cursor and/or
-	 * the statusbar properly here.
-	 */
-	virtual void activate() {}
-
-	/**
 	 * Deactivates the tool.
 	 */
 	virtual void deactivate() {}
@@ -86,7 +89,7 @@ public:
 	/**
 	 * The name of the tool.
 	 */
-	virtual QString name() { return i18n( "Unnamed Tool" ); }
+	virtual QString uiname() { return i18n( "Unnamed Tool" ); }
 
 	/**
 	 * The context help of the tool.
@@ -94,14 +97,9 @@ public:
 	virtual QString contextHelp() { return i18n( "This tool has no description." ); }
 
 	/**
-	 * The tool icon name.
+	 * The tool type.
 	 */
-	virtual QString icon() { return "help"; }
-
-	/**
-	 * The tool category.
-	 */
-	virtual QString category() { return "misc"; }
+	virtual enumToolType toolType() { return TOOL_MISC; }
 
 	/**
 	 * The tool status text.
@@ -113,6 +111,8 @@ public:
 	 * values indicate the true position.
 	 */
 	virtual uint priority() { return 0; }
+
+	QString icon() { return m_action->icon(); }
 
 	/**
 	 * This function processes every important mouse event.
@@ -132,6 +132,17 @@ public:
 	 * This function is called when the documents unit setting were changed.
 	 */
 	virtual void refreshUnit() {}
+
+	virtual void setup(KActionCollection *) {}
+
+	KRadioAction *action() const { return m_action; }
+
+public slots:
+	/**
+	 * Called during the tool activation. A tool is supposed to set a mouse cursor and/or
+	 * the statusbar properly here.
+	 */
+	virtual void activate();
 
 protected:
 	/**
@@ -236,7 +247,7 @@ protected:
 	/**
 	 * Returns the connected karbon part.
 	 */
-	KarbonPart* part() const { return m_part; }
+//	KarbonPart* part() const { return m_part; }
 
 	/**
 	 * Returns the connected karbon view.
@@ -274,11 +285,14 @@ protected:
 	 */
 	bool altPressed() const { return m_altPressed; }
 
+	KRadioAction *m_action;
+
+	VToolController *toolController() const;
+
 private:
 	/**
-	 * The view the tool acts upon.
 	 */
-	KarbonPart *m_part;
+	KarbonView *m_view;
 
 	/**
 	 * First input mouse coordinate.

@@ -31,12 +31,13 @@ class KIntSpinBox;
 class VPolygonTool : public VShapeTool
 {
 public:
-	VPolygonTool( KarbonPart *part );
+	VPolygonTool( KarbonView *view );
 	virtual ~VPolygonTool();
 
-	virtual QString name() { return i18n( "Polygon Tool" ); }
+	virtual void setup(KActionCollection *collection);
 	virtual bool showDialog() const;
-	
+	virtual QString uiname() { return i18n( "Polygon Tool" ); }
+
 	virtual VPath *shape( bool interactive = false ) const;
 
 	void refreshUnit();
@@ -47,7 +48,7 @@ private:
 	class VPolygonOptionsWidget : public KDialogBase
 	{
 	public:
-		VPolygonOptionsWidget( KarbonPart *part, QWidget *parent = 0L, const char *name = 0L );
+		VPolygonOptionsWidget( KarbonView *view, QWidget *parent = 0L, const char *name = 0L );
 
 		double radius() const;
 		uint edges() const;
@@ -59,7 +60,7 @@ private:
 	private:
 		KoUnitDoubleSpinBox		*m_radius;
 		KIntSpinBox			*m_edges;
-		KarbonPart		        *m_part;
+		KarbonView		        *m_view;
 	};
 
 	VPolygonOptionsWidget* m_optionsWidget;

@@ -22,9 +22,9 @@
 #define KARBON_TOOL_FACTORY_H_
 
 #include "kactioncollection.h"
-#include "karbon_part.h"
+#include "karbon_view.h"
 #include <koffice_export.h>
-class VTool;
+#include <vtool.h>
 
 class KARBONBASE_EXPORT KarbonAbstractToolFactory
 {
@@ -32,7 +32,7 @@ public:
 	KarbonAbstractToolFactory();
 	virtual ~KarbonAbstractToolFactory();
 
-	virtual VTool * createTool(KActionCollection * ac, KarbonPart* part) = 0;
+	virtual VTool * createTool( KActionCollection * ac, KarbonView* view ) = 0;
 };
 
 template<class T> class KarbonToolFactory : public KarbonAbstractToolFactory
@@ -41,11 +41,11 @@ public:
 	KarbonToolFactory() {}
 	virtual ~KarbonToolFactory() {}
 
-	virtual VTool * createTool(KActionCollection * ac, KarbonPart* part)
+	virtual VTool * createTool( KActionCollection * ac, KarbonView* view )
 	{
-		VTool * t = new T( part); 
+		VTool * t = new T( view ); 
 		Q_CHECK_PTR(t);
-		//t -> setup(ac); 
+		t -> setup(ac); 
 		return t; 
 	}
 };

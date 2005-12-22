@@ -30,8 +30,8 @@
 #include <shapes/vstar.h>
 #include "vpolygontool.h"
 
-VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Insert Polygon" ), Ok | Cancel ), m_part(part)
+VPolygonTool::VPolygonOptionsWidget::VPolygonOptionsWidget( KarbonView *view, QWidget* parent, const char* name )
+	: KDialogBase( parent, name, true, i18n( "Insert Polygon" ), Ok | Cancel ), m_view(view)
 {
 	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
@@ -76,14 +76,14 @@ VPolygonTool::VPolygonOptionsWidget::setEdges( uint value )
 void
 VPolygonTool::VPolygonOptionsWidget::refreshUnit()
 {
-	m_radius->setUnit( m_part->unit() );
+	m_radius->setUnit( m_view->part()->unit() );
 }
 
-VPolygonTool::VPolygonTool( KarbonPart *part )
-	: VShapeTool( part, i18n( "Insert Polygon" ), true )
+VPolygonTool::VPolygonTool( KarbonView *view )
+	: VShapeTool( view, "tool_polygon", true )
 {
 	// create config dialog:
-	m_optionsWidget = new VPolygonOptionsWidget( part );
+	m_optionsWidget = new VPolygonOptionsWidget( view );
 	m_optionsWidget->setEdges( 5 );
 	registerTool( this );
 }
@@ -145,5 +145,21 @@ bool
 VPolygonTool::showDialog() const
 {
 	return m_optionsWidget->exec() == QDialog::Accepted;
+}
+
+void
+VPolygonTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		KShortcut shortcut( Qt::Key_Plus );
+		shortcut.append(KShortcut( Qt::Key_F9 ) );
+		m_action = new KRadioAction( i18n( "Polygon Tool" ), "14_polygon", shortcut, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Polygon" ) );
+		m_action->setExclusiveGroup( "shapes" );
+		//m_ownAction = true;
+	}
 }
 

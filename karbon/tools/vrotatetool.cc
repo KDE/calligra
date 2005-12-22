@@ -35,8 +35,8 @@
 
 #include <kdebug.h>
 
-VRotateTool::VRotateTool( KarbonPart *part )
-	: VTool( part, "roundrecttool" )
+VRotateTool::VRotateTool( KarbonView *view )
+	: VTool( view, "tool_rotate" )
 {
 	m_objects.setAutoDelete( true );
 	registerTool( this );
@@ -53,6 +53,7 @@ VRotateTool::activate()
 	view()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->setState( VObject::selected );
 	view()->part()->document().selection()->showHandle( false );
+	VTool::activate();
 }
 
 QString
@@ -155,6 +156,20 @@ VRotateTool::recalc()
 
 			m_objects.append( copy );
 		}
+	}
+}
+
+void
+VRotateTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Rotate Tool" ), "14_rotate", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Rotate" ) );
+		m_action->setExclusiveGroup( "manipulation" );
+		//m_ownAction = true;
 	}
 }
 

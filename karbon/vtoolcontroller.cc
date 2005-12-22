@@ -22,17 +22,15 @@
 #include <vselection.h>
 #include "vtoolcontroller.h"
 #include "vtool.h"
+#include "vtoolbox.h"
 
-VToolController::VToolController( KarbonPart *part ) : m_part( part )
+VToolController::VToolController( KarbonView *view ) : m_view( view ), m_currentTool( 0L ), m_setup( false )
 {
-	//m_tools.setAutoDelete( true );
-	m_activeTool = 0L;
 }
 
 void
 VToolController::init()
 {
-	KarbonToolRegistry::instance()->createTools( m_part->actionCollection(), m_part);
 }
 
 VToolController::~VToolController()
@@ -40,17 +38,21 @@ VToolController::~VToolController()
 }
 
 void
-VToolController::setActiveTool( VTool *tool )
+VToolController::setCurrentTool( VTool *tool )
 {
-	if( m_activeTool )
-		m_activeTool->deactivate();
+	if( m_currentTool )
+	{
+		m_currentTool->action()->setChecked( false );
+		m_currentTool->deactivate();
+	}
 
-	if( m_activeTool == tool )
-		m_activeTool->showDialog();
+	if( m_currentTool == tool )
+		m_currentTool->showDialog();
 	else
 	{
-		m_activeTool = tool;
-		m_activeTool->activateAll();
+		m_currentTool = tool;
+		m_currentTool->action()->setChecked( true );
+		m_currentTool->action()->activate();
 	}
 }
 
@@ -59,7 +61,7 @@ VToolController::registerTool( VTool *tool )
 {
 	if( !m_tools.find( tool->name() ) )
 		m_tools.insert( tool->name(), tool );
-	//kdDebug(38000) << "active tool : " << m_activeTool->name() << endl;
+	//kdDebug(38000) << "active tool : " << m_currentTool->name() << endl;
 }
 
 void
@@ -78,20 +80,82 @@ VToolController::unregisterTool( VTool *tool )
 bool
 VToolController::mouseEvent( QMouseEvent* event, const KoPoint &p )
 {
-	if( !m_activeTool ) {
+	if( !m_currentTool ) {
 		return false;
 	}
 
-	return m_activeTool->mouseEvent( event, p );
+	return m_currentTool->mouseEvent( event, p );
 }
 
 bool
 VToolController::keyEvent( QEvent* event )
 {
-	if( !m_activeTool ) {
+	if( !m_currentTool ) {
 		return false;
 	}
 
-	return m_activeTool->keyEvent( event );
+	return m_currentTool->keyEvent( event );
+}
+
+void
+VToolController::setUp( KActionCollection *ac, VToolBox * toolbox )
+{
+	if( m_setup )
+	{
+		resetToolBox( toolbox);
+		return;
+	}
+
+	KarbonToolRegistry::instance()->createTools( ac, m_view );
+
+	m_toolBox = toolbox;
+
+	QDictIterator<VTool> it( m_tools );
+	for( ; it.current(); ++it )
+		toolbox->registerTool( it.current() );
+
+	toolbox->setupTools();
+
+	VTool *t = findTool( "tool_select" );
+	setCurrentTool(t);
+
+	m_setup = true;
+}
+
+void
+VToolController::resetToolBox( VToolBox * toolbox )
+{
+	m_toolBox = toolbox;
+
+	QDictIterator<VTool> it( m_tools );
+	for( ; it.current(); ++it )
+		toolbox->registerTool( it.current() );
+
+	toolbox->setupTools();
+
+	if( m_currentTool )
+	{
+		// restore the old current tool
+		setCurrentTool( m_currentTool );
+		m_currentTool = 0;
+	}
+}
+
+VTool *
+VToolController::findTool( const QString &toolName ) const
+{
+	VTool *tool = 0;
+	QDictIterator<VTool> it( m_tools );
+	for( ; it.current(); ++it )
+		if( it.current()->name() == toolName )
+			return it.current();
+	return tool;
+}
+
+void
+VToolController::youAintGotNoToolBox()
+{
+	m_toolBox = 0;
+	//m_currentTool = currentTool();
 }
 

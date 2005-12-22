@@ -59,13 +59,13 @@ private:
 class VPatternTool : public VTool
 {
 public:
-	VPatternTool( KarbonPart *part );
+	VPatternTool( KarbonView *view );
 	virtual ~VPatternTool();
 
 	virtual void activate();
 
-	virtual QString name() { return i18n( "Pattern Tool" ); }
-	virtual QString icon() { return "14_pattern"; }
+	virtual void setup(KActionCollection *collection);
+	virtual QString uiname() { return i18n( "Pattern Tool" ); }
 	virtual QString contextHelp();
 	virtual bool showDialog() const;
 

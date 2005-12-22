@@ -1,5 +1,4 @@
 /* This file is part of the KDE project
-   Made by Tomislav Lukman (tomislav.lukman@ck.tel.hr)
    Copyright (C) 2002, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
@@ -16,27 +15,42 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
+
 */
 
-#include "vtoolbox.h"
-#include "vtool.h"
+#include <kgenericfactory.h>
 
-VToolBox::VToolBox( KMainWindow *mainWin, const char* name, KInstance* instance ) : KoToolBox( mainWin, name, instance, 5 )
+#include "karbon_factory.h"
+#include "karbon_tool_factory.h"
+#include "karbon_tool_registry.h"
+
+#include "vtool_image.h"
+
+#include "imagetoolplugin.h"
+
+typedef KGenericFactory<VToolImage> VToolImageFactory;
+K_EXPORT_COMPONENT_FACTORY( karbonvtoolimage, VToolImageFactory( "karbonimagetoolplugin" ) )
+
+VToolImage::VToolImage(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
+{
+	setInstance(VToolImageFactory::instance());
+
+	kdDebug() << "VToolImage. Class: "
+		<< className()
+		<< ", Parent: "
+		<< parent -> className()
+		<< "\n";
+
+	if ( parent->inherits("KarbonFactory") )
+	{
+		KarbonToolRegistry* r = KarbonToolRegistry::instance();
+		r->add(new KarbonToolFactory<VImageTool>());
+	}
+}
+
+VToolImage::~VToolImage()
 {
 }
 
-void
-VToolBox::registerTool( VTool *tool )
-{
-	kdDebug(38000) << "VToolBox::registerTool : " << tool->name() << endl;
-	KoToolBox::registerTool( tool->action(), tool->toolType(), tool->priority() );
-}
+#include "vtool_image.moc"
 
-void
-VToolBox::setupTools()
-{
-	kdDebug(38000) << k_funcinfo << endl;
-	KoToolBox::setupTools();
-}
-
-#include "vtoolbox.moc"

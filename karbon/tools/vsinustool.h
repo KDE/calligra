@@ -25,18 +25,18 @@
 
 class KoUnitDoubleSpinBox;
 class KIntSpinBox;
-class KarbonPart;
+class KarbonView;
 class QLabel;
 
 class VSinusTool : public VShapeTool
 {
 public:
-	VSinusTool( KarbonPart *part );
+	VSinusTool( KarbonView *view );
 	virtual ~VSinusTool();
 
+	virtual void setup(KActionCollection *collection);
 	virtual bool showDialog() const;
-	virtual QString name() { return i18n( "Sinus Tool" ); }
-	virtual QString icon() { return "14_sinus"; }
+	virtual QString uiname() { return i18n( "Sinus Tool" ); }
 
 	virtual VPath *shape( bool interactive = false ) const;
 

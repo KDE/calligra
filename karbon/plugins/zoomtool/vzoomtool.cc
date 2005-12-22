@@ -84,7 +84,7 @@ static const char* const cplus[] = {
 "OOOOOOOOOOOOO  O"
 };
 
-VZoomTool::VZoomTool(KarbonPart* part ): VTool( part, "zoomtoolplugin" )
+VZoomTool::VZoomTool(KarbonView *view ): VTool( view, "tool_zoom_plugin" )
 {
 	QPixmap pix;
 
@@ -116,6 +116,7 @@ VZoomTool::contextHelp()
 void
 VZoomTool::activate()
 {
+	VTool::activate();
 	view()->setCursor( *m_plusCursor );
 }
 
@@ -210,5 +211,19 @@ void
 VZoomTool::recalc()
 {
 	m_current = last();
+}
+
+void
+VZoomTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Zoom Tool" ), "14_zoom", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Zoom" ) );
+		m_action->setExclusiveGroup( "misc" );
+		//m_ownAction = true;
+	}
 }
 

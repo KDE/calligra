@@ -25,16 +25,16 @@
 class VSelectNodesTool : public VTool
 {
 public:
-	VSelectNodesTool( KarbonPart *part );
+	VSelectNodesTool( KarbonView *view );
 	virtual ~VSelectNodesTool();
 
 	virtual void activate();
 
-	virtual QString name() { return i18n( "Select Nodes Tool" ); }
-	virtual QString icon() { return "14_selectnodes"; }
-	virtual QString category() { return "manipulation"; }
+	virtual void setup(KActionCollection *collection);
+	virtual QString uiname() { return i18n( "Select Nodes Tool" ); }
+	virtual enumToolType toolType() { return TOOL_SELECT; }
 	virtual QString statusText();
-	virtual uint priority() { return 2; }
+	virtual uint priority() { return 1; }
 
 protected:
 	virtual void draw();

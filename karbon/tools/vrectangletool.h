@@ -26,30 +26,28 @@
 
 #include "vshapetool.h"
 
-class KarbonPart;
+class KarbonView;
 class QLabel;
 class KoUnitDoubleSpinBox;
 
 class VRectangleTool : public VShapeTool
 {
 public:
-	VRectangleTool( KarbonPart *part );
+	VRectangleTool( KarbonView *view );
 	virtual ~VRectangleTool();
 
-	virtual QString name() { return i18n( "Rectangle Tool" ); }
-	virtual QString icon() { return "14_rectangle"; }
-
+	virtual void setup(KActionCollection *collection);
+	virtual bool showDialog() const;
+	virtual QString uiname() { return i18n( "Rectangle Tool" ); }
 	virtual VPath* shape( bool interactive = false ) const;
 
 	void refreshUnit();
-
-	virtual bool showDialog() const;
 
 private:
 	class VRectangleOptionsWidget : public KDialogBase
 	{
 	public:
-		VRectangleOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
+		VRectangleOptionsWidget( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L );
 
 		double width() const;
 		double height() const;
@@ -60,7 +58,7 @@ private:
 	private:
 		KoUnitDoubleSpinBox		*m_width;
 		KoUnitDoubleSpinBox		*m_height;
-		KarbonPart			*m_part;
+		KarbonPart 			*m_part;
 		QLabel				*m_heightLabel;
 		QLabel				*m_widthLabel;
 	};

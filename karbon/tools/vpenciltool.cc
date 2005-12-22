@@ -50,8 +50,8 @@
 
 #include "vpenciltool.moc"
 
-VPencilOptionsWidget::VPencilOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Pencil Settings" ), Ok | Cancel ), m_part( part )
+VPencilOptionsWidget::VPencilOptionsWidget( KarbonView*view, QWidget* parent, const char* name )
+	: KDialogBase( parent, name, true, i18n( "Pencil Settings" ), Ok | Cancel ), m_view( view )
 {
 	QVBox *vbox = new QVBox( this );
 
@@ -137,11 +137,11 @@ int VPencilOptionsWidget::currentMode(){
 
 /* ------------------------------------------------------------------------------------------------------------------------*/
 
-VPencilTool::VPencilTool( KarbonPart *part )
-	: VTool( part, "penciltool" )
+VPencilTool::VPencilTool( KarbonView *view )
+	: VTool( view, "tool_pencil" )
 {
 	m_Points.setAutoDelete( true );
-	m_optionWidget = new VPencilOptionsWidget( part );
+	m_optionWidget = new VPencilOptionsWidget( view );
 	registerTool( this );
 	m_mode = CURVE;
 	m_optimize = true;
@@ -165,6 +165,7 @@ VPencilTool::contextHelp()
 void
 VPencilTool::activate()
 {
+	VTool::activate();
 	view()->statusMessage()->setText( i18n( "Pencil Tool" ) );
 	view()->setCursor( QCursor( Qt::crossCursor ) );
 	view()->part()->document().selection()->showHandle( false );
@@ -389,5 +390,19 @@ bool
 VPencilTool::showDialog() const
 {
 	return m_optionWidget->exec() == QDialog::Accepted;
+}
+
+void
+VPencilTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Pencil Tool" ), "14_pencil", Qt::SHIFT+Qt::Key_P, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Pencil" ) );
+		m_action->setExclusiveGroup( "freehand" );
+		//m_ownAction = true;
+	}
 }
 

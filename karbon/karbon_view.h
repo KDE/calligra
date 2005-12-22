@@ -60,9 +60,12 @@ class VStateButton;
 class VStroke;
 class VStrokeFillPreview;
 class VCanvas;
+class VStrokeFillPreview;
+class VTypeButtonBox;
 
 class VTool;
 class VToolBox;
+class VToolController;
 
 class KARBONCOMMON_EXPORT KarbonView : public KoView, public KXMLGUIBuilder
 {
@@ -112,6 +115,8 @@ public:
 
 	void setViewportRect( const KoRect &rect );
 	void setZoomAt( double zoom, const KoPoint & = KoPoint() );
+
+	VToolController *toolController();
 
 public slots:
 	// editing:
@@ -214,11 +219,12 @@ private:
 
 	KarbonPart		*m_part;
 	VCanvas			*m_canvas;
-	VRuler		*m_horizRuler;
-	VRuler		*m_vertRuler;
+	VRuler			*m_horizRuler;
+	VRuler			*m_vertRuler;
 
 	VPainterFactory		*m_painterFactory;
 	VStrokeFillPreview	*m_strokeFillPreview;
+	VTypeButtonBox		*m_typeButtonBox;
 
 	VToolBox		*m_toolbox;
 
@@ -230,21 +236,21 @@ private:
 	// actions:
 	KSelectAction		*m_zoomAction;
 	KSelectAction		*m_viewAction;
-	KAction			*m_configureAction;
+	KAction				*m_configureAction;
 	KToggleAction		*m_showRulerAction;
 	KToggleAction		*m_showGridAction;
 	KToggleAction		*m_snapGridAction;
 	KToggleAction		*m_showPageMargins;
 	KoContextHelpAction	*m_contextHelpAction;
-	KAction			*m_deleteSelectionAction;
+	KAction				*m_deleteSelectionAction;
 	// line width
 	KoUnitDoubleSpinComboBox *m_setLineWidth;
 
 	//dockers
-	KoPaletteManager *m_pPaletteManager;
-	VDocumentTab *m_DocumentTab;
-	VLayersTab *m_LayersTab;
-	VHistoryTab *m_HistoryTab;
+	KoPaletteManager	*m_pPaletteManager;
+	VDocumentTab		*m_DocumentTab;
+	VLayersTab			*m_LayersTab;
+	VHistoryTab			*m_HistoryTab;
 	VColorDocker		*m_ColorManager;
 	VStrokeDocker		*m_strokeDocker;
 	VStyleDocker		*m_styleDocker;
@@ -259,6 +265,7 @@ private:
 	QLabel				*m_status;       // Ordinary status
 	QLabel				*m_cursorCoords; // Cursor coordinates
 	VSmallPreview		*m_smallPreview; // Stroke and Fill
+	VToolController	*m_toolController;
 };
 
 #endif

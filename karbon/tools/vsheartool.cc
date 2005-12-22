@@ -33,8 +33,9 @@
 #include "vsheartool.h"
 #include <commands/vtransformcmd.h>
 
-VShearTool::VShearTool( KarbonPart *part ) : VTool( part, "sheartool" )
+VShearTool::VShearTool( KarbonView *view ) : VTool( view, "sheartool" )
 {
+	setName( "tool_shear" );
 	m_objects.setAutoDelete( true );
 	registerTool( this );
 }
@@ -49,6 +50,7 @@ VShearTool::activate()
 	view()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->showHandle( true );
 	view()->part()->document().selection()->setState( VObject::selected );
+	VTool::activate();
 }
 
 QString
@@ -200,3 +202,18 @@ VShearTool::recalc()
 		}
 	}
 }
+
+void
+VShearTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Shear Tool" ), "14_shear", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Shear" ) );
+		m_action->setExclusiveGroup( "manipulation" );
+		//m_ownAction = true;
+	}
+}
+

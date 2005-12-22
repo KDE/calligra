@@ -26,13 +26,13 @@
 class QEvent;
 
 class VTool;
-class KarbonPart;
 class KarbonView;
+class VToolBox;
 
 class VToolController
 {
 public:
-	VToolController( KarbonPart *part );
+	VToolController( KarbonView *view );
 	virtual ~VToolController();
 
 	void init();
@@ -40,22 +40,27 @@ public:
 	void registerTool( VTool *tool );
 	void unregisterTool( VTool *tool );
 
-	void setActiveTool( VTool * );
-	VTool *activeTool() const { return m_activeTool; }
-
-	KarbonView *activeView() const { return m_activeView; }
-	void setActiveView( KarbonView *view ) { m_activeView = view; }
+	void setCurrentTool( VTool * );
+	VTool *currentTool() const { return m_currentTool; }
 
 	bool mouseEvent( QMouseEvent* event, const KoPoint& );
 	bool keyEvent( QEvent* event );
 
 	const QDict<VTool> &tools() { return m_tools; }
 
+	void setUp( KActionCollection *ac, VToolBox * toolbox );
+	void resetToolBox( VToolBox * toolbox );
+	VTool *findTool( const QString &toolName ) const;
+
+	// Called when the toolbox is deleted because the view was made inactive in favour of another view
+	void youAintGotNoToolBox();
+
 private:
-	KarbonPart			*m_part;
-	KarbonView			*m_activeView;
-	VTool				*m_activeTool;
-	QDict<VTool>		m_tools;
+	KarbonView		*m_view;
+	VTool			*m_currentTool;
+	QDict<VTool>		 m_tools;
+	VToolBox 		*m_toolBox;
+	bool			 m_setup;
 };
 
 #endif

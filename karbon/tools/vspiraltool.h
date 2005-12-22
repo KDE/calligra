@@ -29,17 +29,17 @@ class KComboBox;
 class KoUnitDoubleSpinBox;
 class KDoubleNumInput;
 class KIntSpinBox;
-class KarbonPart;
+class KarbonView;
 
 class VSpiralTool : public VShapeTool
 {
 public:
-	VSpiralTool( KarbonPart *part );
+	VSpiralTool( KarbonView *view );
 	virtual ~VSpiralTool();
 
+	virtual void setup(KActionCollection *collection);
 	virtual bool showDialog() const;
-	virtual QString name() { return i18n( "Spiral Tool" ); }
-	virtual QString icon() { return "14_spiral"; }
+	virtual QString uiname() { return i18n( "Spiral Tool" ); }
 
 	virtual VPath* shape( bool interactive = false ) const;
 

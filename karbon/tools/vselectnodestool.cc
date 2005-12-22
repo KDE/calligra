@@ -42,8 +42,8 @@
 
 #include <kdebug.h>
 
-VSelectNodesTool::VSelectNodesTool( KarbonPart* part )
-	: VTool( part, "selectnodes" ), m_state( normal )
+VSelectNodesTool::VSelectNodesTool( KarbonView* view )
+	: VTool( view, "tool_select_nodes" ), m_state( normal )
 {
 	registerTool( this );
 }
@@ -58,6 +58,7 @@ VSelectNodesTool::activate()
 	view()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->showHandle( false );
 	view()->part()->document().selection()->setSelectObjects( false );
+	VTool::activate();
 }
 
 QString
@@ -308,3 +309,18 @@ VSelectNodesTool::recalc()
 		}
 	}
 }
+
+void
+VSelectNodesTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Select Nodes Tool" ), "14_selectnodes", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Select Nodes" ) );
+		m_action->setExclusiveGroup( "select" );
+		//m_ownAction = true;
+	}
+}
+

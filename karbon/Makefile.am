@@ -35,7 +35,6 @@ libkarboncommon_la_LIBADD = $(LIB_KOFFICECORE) $(LIB_KOFFICEUI) $(LIB_KOPALETTE)
 libkarbonpart_la_SOURCES = karbon_factory_init.cc
 libkarbonpart_la_LDFLAGS = $(KDE_PLUGIN) $(LIBFREETYPE_RPATH)
 libkarbonpart_la_LIBADD = libkarboncommon.la
-libkarbonpart_la_METASOURCES = AUTO
 
 bin_PROGRAMS =
 kdeinit_LTLIBRARIES = karbon.la
@@ -51,6 +50,8 @@ noinst_HEADERS = \
 	karbon_drag.h \
 	vtoolcontroller.h \
 	vtool.h
+
+METASOURCES = AUTO
 
 messages: rc.cpp
 	$(EXTRACTRC) data/*.rc >> rc.cpp

@@ -33,13 +33,12 @@ class VPath;
 class VShapeTool : public VTool
 {
 public:
-	VShapeTool( KarbonPart *part, const QString& name, bool polar = false );
+	VShapeTool( KarbonView *view, const char *name, bool polar = false );
 
-	virtual QString icon() { return "14_polygon"; }
-	virtual QString category() { return "shapecreation"; }
+	virtual enumToolType toolType() { return TOOL_SHAPE; }
 	virtual QString statusText();
 	virtual QString contextHelp();
-	
+
 	virtual void activate();
 
 protected:

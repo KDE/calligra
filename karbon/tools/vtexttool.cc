@@ -590,8 +590,8 @@ VTextOptionsWidget::moveEvent ( QMoveEvent * )
 		m_tool->textChanged();
 }
 
-VTextTool::VTextTool( KarbonPart *part )
-		: VTool( part, "texttool" )
+VTextTool::VTextTool( KarbonView *view )
+		: VTool( view, "tool_text" )
 {
 	m_optionsWidget = new VTextOptionsWidget( this, 0L );
 	m_text = 0L;
@@ -619,6 +619,7 @@ QString VTextTool::contextHelp()
 void
 VTextTool::activate()
 {
+	VTool::activate();
 	view()->statusMessage()->setText( i18n( "Text Tool" ) );
 	view()->setCursor( QCursor( Qt::crossCursor ) );
 
@@ -1124,6 +1125,20 @@ VTextTool::mouseDragShiftReleased()
 {
 	m_stepwise = false;
 	mouseDrag();
+}
+
+void
+VTextTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Text Tool" ), "14_text", Qt::SHIFT+Qt::Key_T, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Text Tool" ) );
+		m_action->setExclusiveGroup( "misc" );
+		//m_ownAction = true;
+	}
 }
 
 #include "vtexttool.moc"

@@ -153,11 +153,11 @@ protected:
 class VTextTool : public VTool, public VVisitor
 {
 public:
-	VTextTool( KarbonPart *part );
+	VTextTool( KarbonView *view );
 	~VTextTool();
 
-	virtual QString name() { return i18n( "Text Tool" ); }
-	virtual QString icon() { return "14_text"; }
+	virtual void setup (KActionCollection *collection );
+	virtual QString uiname() { return i18n( "Text Tool" ); }
 
 	virtual QString contextHelp();
 	virtual bool showDialog() const;

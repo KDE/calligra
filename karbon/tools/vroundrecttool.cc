@@ -113,11 +113,11 @@ VRoundRectTool::VRoundRectOptionsWidget::refreshUnit ()
 	m_roundy->setUnit( m_part->unit() );
 }
 
-VRoundRectTool::VRoundRectTool( KarbonPart *part )
-		: VShapeTool( part, i18n( "Insert Round Rectangle" ) )
+VRoundRectTool::VRoundRectTool( KarbonView *view )
+		: VShapeTool( view, "tool_round_rectangle" )
 {
 	// Create config dialog:
-	m_optionsWidget = new VRoundRectOptionsWidget( part );
+	m_optionsWidget = new VRoundRectOptionsWidget( view->part() );
 	registerTool( this );
 }
 
@@ -162,3 +162,18 @@ VRoundRectTool::showDialog() const
 {
 	return m_optionsWidget->exec() == QDialog::Accepted;
 }
+
+void
+VRoundRectTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Round Rectangle Tool" ), "14_roundrect", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Round Rectangle" ) );
+		m_action->setExclusiveGroup( "shapes" );
+		//m_ownAction = true;
+	}
+}
+

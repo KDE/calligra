@@ -129,11 +129,11 @@ VEllipseOptionsWidget::refreshUnit ()
 	m_height->setUnit( m_part->unit() );
 }
 
-VEllipseTool::VEllipseTool( KarbonPart *part )
-	: VShapeTool( part, i18n( "Insert Ellipse" ) )
+VEllipseTool::VEllipseTool( KarbonView *view )
+	: VShapeTool( view, "tool_ellipse" )
 {
 	// create config dialog:
-	m_optionsWidget = new VEllipseOptionsWidget( part );
+	m_optionsWidget = new VEllipseOptionsWidget( view->part() );
 	registerTool( this );
 
 	m_startAngle = m_endAngle = 0;
@@ -259,6 +259,20 @@ bool
 VEllipseTool::showDialog() const
 {
 	return m_optionsWidget->exec() == QDialog::Accepted;
+}
+
+void
+VEllipseTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Ellipse Tool" ), "14_ellipse", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Ellipse" ) );
+		m_action->setExclusiveGroup( "shapes" );
+		//m_ownAction = true;
+	}
 }
 
 #include "vellipsetool.moc"

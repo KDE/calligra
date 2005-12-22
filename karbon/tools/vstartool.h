@@ -29,13 +29,13 @@
 class KoUnitDoubleSpinBox;
 class KIntSpinBox;
 class KComboBox;
-class KarbonPart;
+class KarbonView;
 
 class VStarOptionsWidget : public KDialogBase
 {
 Q_OBJECT
 public:
-	VStarOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
+	VStarOptionsWidget( KarbonPart *part, QWidget* parent = 0L, const char* name = 0L );
 
 	void refreshUnit();
 
@@ -59,7 +59,7 @@ private:
 	KIntSpinBox			*m_edges;
 	KIntSpinBox			*m_innerAngle;
 	KComboBox			*m_type;
-	KarbonPart			*m_part;
+	KarbonPart 			*m_part;
 	QLabel				*m_innerRLabel;
 	QLabel				*m_outerRLabel;
 };
@@ -67,13 +67,12 @@ private:
 class VStarTool : public VShapeTool
 {
 public:
-	VStarTool( KarbonPart *part );
+	VStarTool( KarbonView *view );
 	virtual ~VStarTool();
 
 	virtual bool showDialog() const;
-	virtual QString name() { return i18n( "Star Tool" ); }
-	virtual QString icon() { return "14_star"; }
-
+	virtual void setup(KActionCollection *collection);
+	virtual QString uiname() { return i18n( "Star Tool" ); }
 	virtual VPath* shape( bool interactive = false ) const;
 
 	void refreshUnit();

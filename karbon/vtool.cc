@@ -28,44 +28,44 @@
 #include "vtoolcontroller.h"
 #include "kocontexthelp.h"
 #include "vtool.h"
+#include "vtool.moc"
 
 
-VTool::VTool( KarbonPart *part, const char* ) : m_part( part )
+VTool::VTool( KarbonView *view, const char *name ) : QObject( 0, name ), m_view( view )
 {
 	m_mouseButtonIsDown	= false;
 	m_isDragging		= false;
 	m_shiftPressed		= false;
 	m_ctrlPressed		= false;
 	m_altPressed		= false;
+	m_action = 0;
 }
 
 VTool::~VTool()
 {
-	if (part() && part()->toolController())
-		part()->toolController()->unregisterTool( this );
+	if (toolController())
+		toolController()->unregisterTool( this );
+
+	delete m_action;
 	//kdDebug(38000) << "Deleting : " << name().latin1() << endl;
 }
 
 void
 VTool::registerTool( VTool *tool )
 {
-	part()->toolController()->registerTool( tool );
+	toolController()->registerTool( tool );
+}
+
+VToolController *
+VTool::toolController() const
+{
+	return m_view->toolController();
 }
 
 KarbonView *
 VTool::view() const
 {
-	return part()->toolController()->activeView();
-}
-
-void VTool::activateAll()
-{
-	refreshUnit();
-	QPixmap Icon = BarIcon( icon() );
-	view()->contextHelpAction()->updateHelp( name(), contextHelp(), &Icon );
-	view()->statusMessage()->setText( statusText() );
-
-	activate();
+	return m_view;
 }
 
 bool
@@ -246,5 +246,34 @@ VTool::keyEvent( QEvent* event )
 	}
 
 	return false;
+}
+
+void
+VTool::activate()
+{
+	kdDebug() << k_funcinfo << endl;
+	refreshUnit();
+	QPixmap Icon = BarIcon( icon() );
+	view()->contextHelpAction()->updateHelp( uiname(), contextHelp(), &Icon );
+	view()->statusMessage()->setText( statusText() );
+	toolController()->setCurrentTool( this );
+#if 0
+	if( toolController()->activeTool() )
+	{
+		toolController()->activeTool()->action()->setChecked( false );
+		toolController()->activeTool()->deactivate();
+	}
+
+	if( toolController()->activeTool() == this )
+		showDialog();
+	else
+	{
+		refreshUnit();
+		QPixmap Icon = BarIcon( icon() );
+		view()->contextHelpAction()->updateHelp( uiname(), contextHelp(), &Icon );
+		view()->statusMessage()->setText( statusText() );
+		toolController()->activeTool()->action()->setChecked( true );
+	}
+#endif
 }
 

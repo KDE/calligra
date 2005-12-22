@@ -27,7 +27,7 @@
 class KoUnitDoubleSpinBox;
 class KComboBox;
 class KIntSpinBox;
-class KarbonPart;
+class KarbonView;
 class QLabel;
 class QWidget;
 
@@ -63,13 +63,12 @@ private:
 class VEllipseTool : public VShapeTool
 {
 public:
-	VEllipseTool( KarbonPart *part );
+	VEllipseTool( KarbonView *view );
 	virtual ~VEllipseTool();
 
-	virtual QString name() { return i18n( "Ellipse Tool" ); }
-	virtual QString icon() { return "14_ellipse"; }
+	virtual void setup(KActionCollection *collection);
 	virtual bool showDialog() const;
-
+	virtual QString uiname() { return i18n( "Ellipse Tool" ); }
 	virtual VPath *shape( bool interactive = false ) const;
 	void refreshUnit();
 

@@ -44,20 +44,20 @@ private:
 class VSelectTool : public VTool
 {
 public:
-	VSelectTool( KarbonPart *part );
+	VSelectTool( KarbonView *view );
 	virtual ~VSelectTool();
 
-	virtual void activate();
-
+	virtual void setup(KActionCollection *collection);
 	virtual bool showDialog() const;
-	virtual QString name() { return i18n( "Select Tool" ); }
-	virtual QString icon() { return "14_select"; }
-	virtual QString category() { return "manipulation"; }
+	virtual QString uiname() { return i18n( "Select Tool" ); }
+	virtual enumToolType toolType() { return TOOL_SELECT; }
 	virtual QString statusText();
-	virtual uint priority() { return 1; }
+	virtual uint priority() { return 0; }
 	virtual QString contextHelp();
 
 	virtual void refreshUnit();
+
+	virtual void activate();
 
 protected:
 	virtual void draw();

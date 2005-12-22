@@ -27,6 +27,7 @@
 
 #include "vshapetool.h"
 
+class KarbonView;
 class KarbonPart;
 class QLabel;
 class KoUnitDoubleSpinBox;
@@ -35,12 +36,12 @@ class KoUnitDoubleSpinBox;
 class VRoundRectTool : public VShapeTool
 {
 public:
-	VRoundRectTool( KarbonPart *part );
+	VRoundRectTool( KarbonView *view );
 	virtual ~VRoundRectTool();
 
 	virtual bool showDialog() const;
-	virtual QString name() { return i18n( "Round Rectangle Tool" ); }
-	virtual QString icon() { return "14_roundrect"; }
+	virtual void setup(KActionCollection *collection);
+	virtual QString uiname() { return i18n( "Round Rectangle Tool" ); }
 
 	virtual VPath* shape( bool interactive = false ) const;
 

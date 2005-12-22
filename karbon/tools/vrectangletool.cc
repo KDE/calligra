@@ -30,8 +30,8 @@
 #include <koUnitWidgets.h>
 
 
-VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart*part, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Insert Rectangle" ), Ok | Cancel ), m_part(part)
+VRectangleTool::VRectangleOptionsWidget::VRectangleOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
+	: KDialogBase( parent, name, true, i18n( "Insert Rectangle" ), Ok | Cancel ), m_part( part )
 {
 	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 	// add width/height-input:
@@ -81,11 +81,11 @@ VRectangleTool::VRectangleOptionsWidget::refreshUnit()
 	m_height->setUnit( m_part->unit() );
 }
 
-VRectangleTool::VRectangleTool( KarbonPart *part )
-	: VShapeTool( part, i18n( "Insert Rectangle" ) )
+VRectangleTool::VRectangleTool( KarbonView *view )
+	: VShapeTool( view, "tool_rectangle" )
 {
 	// Create config dialog:
-	m_optionWidget = new VRectangleOptionsWidget( part );
+	m_optionWidget = new VRectangleOptionsWidget( view->part() );
 	registerTool( this );
 }
 
@@ -125,5 +125,19 @@ bool
 VRectangleTool::showDialog() const
 {
 	return m_optionWidget->exec() == QDialog::Accepted;
+}
+
+void
+VRectangleTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Rectangle Tool" ), "14_rectangle", Qt::Key_Plus+Qt::Key_F9, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Rectangle" ) );
+		m_action->setExclusiveGroup( "shapes" );
+		//m_ownAction = true;
+	}
 }
 

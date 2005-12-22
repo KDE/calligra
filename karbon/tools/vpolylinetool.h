@@ -49,15 +49,16 @@ class VPath;
 class VPolylineTool : public VTool
 {
 	public:
-		VPolylineTool( KarbonPart *part );
+		VPolylineTool( KarbonView *view );
 		~VPolylineTool(); 
 
+		virtual void setup(KActionCollection *collection);
 		virtual void activate();
 		virtual void deactivate();
 
-		virtual QString name() { return i18n( "Polyline Tool" ); }
+		virtual QString uiname() { return i18n( "Polyline Tool" ); }
 		virtual QString contextHelp();
-		virtual QString icon() { return "14_polyline"; }
+		virtual enumToolType toolType() { return TOOL_FREEHAND; }
 
 	protected:
 		/**

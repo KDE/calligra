@@ -41,8 +41,6 @@ ZoomToolPlugin::ZoomToolPlugin(QObject *parent, const char *name, const QStringL
 		<< parent -> className()
 		<< "\n";
 
-	VTool tool();
-
 	if ( parent->inherits("KarbonFactory") )
 	{
 		KarbonToolRegistry* r = KarbonToolRegistry::instance();

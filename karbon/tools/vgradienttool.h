@@ -30,13 +30,15 @@ class VGradientTabWidget;
 class VGradientTool : public VTool
 {
 public:
-	VGradientTool( KarbonPart *part );
+	VGradientTool( KarbonView *view );
 	virtual ~VGradientTool();
 
 	virtual void activate();
 
-	virtual QString name() { return i18n( "Gradient Tool" ); }
-	virtual QString icon() { return "14_gradient"; }
+	virtual void setup(KActionCollection *collection);
+	virtual QString uiname() { return i18n( "Gradient Tool" ); }
+	virtual QString statusText();
+
 	virtual QString contextHelp();
 	virtual bool showDialog() const;
 

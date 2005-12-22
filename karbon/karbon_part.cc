@@ -60,8 +60,6 @@ KarbonPart::KarbonPart( QWidget* parentWidget, const char* widgetName,
 						QObject* parent, const char* name, bool singleViewMode )
 		: KoDocument( parentWidget, widgetName, parent, name, singleViewMode )
 {
-	m_toolController = new VToolController( const_cast<KarbonPart *>( this ) );
-	m_toolController->init();
 	setInstance( KarbonFactory::instance(), false );
 	setTemplateType( "karbon_template" );
 	m_bShowStatusBar = true;
@@ -94,8 +92,6 @@ KarbonPart::~KarbonPart()
 	// delete the command-history:
 	delete m_commandHistory;
 	delete dcop;
-	delete m_toolController;
-	m_toolController = 0;
 }
 
 DCOPObject* KarbonPart::dcopObject()
@@ -104,12 +100,6 @@ DCOPObject* KarbonPart::dcopObject()
 		dcop = new KarbonPartIface( this );
 
 	return dcop;
-}
-
-VToolController *
-KarbonPart::toolController()
-{
-	return m_toolController;
 }
 
 void
@@ -165,7 +155,6 @@ KoView*
 KarbonPart::createViewInstance( QWidget* parent, const char* name )
 {
 	KarbonView *result = new KarbonView( this, parent, name );
-	toolController()->setActiveView( result );
 	return result;
 }
 
@@ -654,10 +643,12 @@ KarbonPart::addShell( KoMainWindow *shell )
 void
 KarbonPart::slotUnitChanged( KoUnit::Unit unit )
 {
+#if 0
 	// VDocument has its own storage of the unit...
 	m_doc.setUnit( unit );
 	if( m_toolController->activeTool() )
 		m_toolController->activeTool()->refreshUnit();
+#endif
 }
 
 #include "karbon_part.moc"

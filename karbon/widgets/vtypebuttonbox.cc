@@ -221,42 +221,42 @@ VTypeButtonBox::VTypeButtonBox( KarbonPart *part,
 	: QHButtonGroup( parent, name ),
 	  m_part( part )
 {
-	setMaximumWidth( parent->width() );
+	setMaximumWidth( parent->width() - 2 );
 
 	// The button for no fill
 	QToolButton* button = new QToolButton( this );
 	button->setPixmap( QPixmap( (const char **) buttonnone ) );
-	button->setMaximumWidth( 20 );
-	button->setMaximumHeight( 20 );
+	button->setMaximumWidth( 14 );
+	button->setMaximumHeight( 14 );
 	QToolTip::add( button, i18n( "None" ) );
 	insert( button, none );
 
 	// The button for solid fill
 	button = new QToolButton( this );
 	button->setPixmap( QPixmap( (const char **) buttonsolid ) );
-	button->setMaximumWidth( 20 );
-	button->setMaximumHeight( 20 );
+	button->setMaximumWidth( 14 );
+	button->setMaximumHeight( 14 );
 	QToolTip::add( button, i18n( "Solid" ) );
 	insert( button, solid );
 
 	// The button for gradient fill
 	button = new QToolButton( this );
 	button->setPixmap( QPixmap( (const char **) buttongradient ) );
-	button->setMaximumWidth( 20 );
-	button->setMaximumHeight( 20 );
+	button->setMaximumWidth( 14 );
+	button->setMaximumHeight( 14 );
 	QToolTip::add( button, i18n( "Gradient" ) );
 	insert( button, gradient );
 
 	// The button for pattern fill
 	button = new QToolButton( this );
 	button->setPixmap( QPixmap( (const char **) buttonpattern ) );
-	button->setMaximumWidth( 20 );
-	button->setMaximumHeight( 20 );
+	button->setMaximumWidth( 14 );
+	button->setMaximumHeight( 14 );
 	QToolTip::add( button, i18n( "Pattern" ) );
 	insert( button, pattern );
 
-	setInsideMargin( 2 );
-	setInsideSpacing( 2 );
+	setInsideMargin( 1 );
+	setInsideSpacing( 1 );
 	connect( this, SIGNAL( clicked( int ) ),
 			 this, SLOT( slotButtonPressed( int ) ) );
 }

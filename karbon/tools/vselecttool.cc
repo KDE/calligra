@@ -66,13 +66,13 @@ void VSelectOptionsWidget::modeChange( int mode )
 	m_part->document().setSelectionMode( (VDocument::VSelectionMode)mode );
 } // VSelectOptionsWidget::modeChanged
 
-VSelectTool::VSelectTool( KarbonPart *part )
-	: VTool( part, "selecttool" ), m_state( normal )
+VSelectTool::VSelectTool( KarbonView *view )
+	: VTool( view, "tool_select" ), m_state( normal )
 {
 	m_lock = false;
 	m_add = true;
 	m_objects.setAutoDelete( true );
-	m_optionsWidget = new VSelectOptionsWidget( part );
+	m_optionsWidget = new VSelectOptionsWidget( view->part() );
 	registerTool( this );
 }
 
@@ -84,6 +84,7 @@ VSelectTool::~VSelectTool()
 void
 VSelectTool::activate()
 {
+	VTool::activate();
 	view()->setCursor( QCursor( Qt::arrowCursor ) );
 	view()->part()->document().selection()->showHandle();
 	view()->part()->document().selection()->setSelectObjects();
@@ -240,7 +241,7 @@ VSelectTool::rightMouseButtonRelease()
 
 		updateStatusBar();
 	}
-	else if( part()->document().selection()->objects().count() > 0 )
+	else if( view()->part()->document().selection()->objects().count() > 0 )
 	{
 		view()->showSelectionPopupMenu( QCursor::pos() );
 	}
@@ -558,6 +559,20 @@ void
 VSelectTool::refreshUnit()
 {
 	updateStatusBar();
+}
+
+void
+VSelectTool::setup( KActionCollection *collection )
+{
+       m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Select Tool" ), "14_select", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Select" ) );
+		m_action->setExclusiveGroup( "select" );
+		//m_ownAction = true;
+	}
 }
 
 #include "vselecttool.moc"

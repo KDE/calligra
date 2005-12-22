@@ -20,61 +20,23 @@
 
 #ifndef __VTOOLBOX_H__
 #define __VTOOLBOX_H__
-#include <qtoolbutton.h>
-#include <qptrvector.h>
-
-#include <ktoolbar.h>
-class QWidget;
-class KarbonPart;
-class VStrokeFillPreview;
-class Vtool;
-class VTypeButtonBox;
-
+#include <kotoolbox.h>
+class VTool;
 
 /// This class...
 
-class VToolBox : public KToolBar
+class VToolBox : public KoToolBox
 {
 	Q_OBJECT
 
 public:
-	VToolBox( KarbonPart* part, KMainWindow *mainWin, const char* name = 0L );
-
-	VStrokeFillPreview *strokeFillPreview();
+	VToolBox( KMainWindow *mainWin, const char* name, KInstance* instance );
 
 	void registerTool( VTool * );
 	void setupTools();
 
 signals:
 	void activeToolChanged( VTool * );
-
-public slots:
-	virtual void setOrientation ( Orientation o );
-	void slotButtonPressed( int id );
-	void slotPressButton( int id );
-
-private:
-	KarbonPart *m_part;
-
-	VStrokeFillPreview  *m_strokeFillPreview;
-	VTypeButtonBox      *m_typeButtonBox;
-
-	QBoxLayout          *leftLayout;
-	QBoxLayout          *rightLayout;
-	QBoxLayout          *columnsLayouter;
-
-	QWidget             *left;
-	QWidget             *right;
-
-	QButtonGroup        *buttonGroup;
-
-	bool                 insertLeft;
-
-	QToolButton *addButton( const char* iconName, QString tooltip, int id );
-	// tools:
-	QPtrVector<VTool> m_misctools;
-	QPtrVector<VTool> m_shapetools;
-	QPtrVector<VTool> m_manipulationtools;
 };
 
 #endif

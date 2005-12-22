@@ -18,104 +18,39 @@
 
 */
 
-#include <qcursor.h>
-#include <klocale.h>
-#include <kfiledialog.h>
-#include <kdebug.h>
-
-#include "imagetoolplugin.h"
-#include <karbon_part.h>
-#include <karbon_part.h>
-#include <karbon_view.h>
-#include <karbon_view.h>
-#include <core/vimage.h>
-#include <core/vselection.h>
 #include <kgenericfactory.h>
 
-typedef KGenericFactory<VImageTool, KarbonView> ImageToolPluginFactory;
+#include "karbon_factory.h"
+#include "karbon_tool_factory.h"
+#include "karbon_tool_registry.h"
+
+#include "vimagetool.h"
+
+#include "imagetoolplugin.h"
+
+typedef KGenericFactory<ImageToolPlugin> ImageToolPluginFactory;
 K_EXPORT_COMPONENT_FACTORY( karbon_imagetoolplugin, ImageToolPluginFactory( "karbonimagetoolplugin" ) )
 
-VImageTool::VImageTool( KarbonView *view, const char *name, const QStringList & )
-	: VTool( (KarbonPart *)view->part(), name ), VKarbonPlugin( view, name )
+ImageToolPlugin::ImageToolPlugin(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
 {
-	registerTool( this );
-}
+	setInstance(ImageToolPluginFactory::instance());
 
-VImageTool::~VImageTool()
-{
-}
+	kdDebug() << "VImageToolPlugin. Class: "
+		<< className()
+		<< ", Parent: "
+		<< parent -> className()
+		<< "\n";
 
-QString
-VImageTool::contextHelp()
-{
-	QString s = i18n( "<qt><b>Image tool:</b><br>" );
-	return s;
-}
-
-void
-VImageTool::activate()
-{
-	view()->setCursor( QCursor( Qt::crossCursor ) );
-}
-
-QString
-VImageTool::statusText()
-{
-	return i18n( "Image Tool" );
-}
-
-void
-VImageTool::deactivate()
-{
-}
-
-void
-VImageTool::mouseButtonRelease()
-{
-	QString fname = KFileDialog::getOpenFileName( QString::null, "*.jpg *.gif *.png", view(), i18n( "Choose Image to Add" ) );
-	if( !fname.isEmpty() )
+	if ( parent->inherits("KarbonFactory") )
 	{
-		VImage *image = new VImage( 0L, fname );
-		VInsertImageCmd *cmd = new VInsertImageCmd( &view()->part()->document(), i18n( "Insert Image" ), image, first() );
-
-		view()->part()->addCommand( cmd, true );
+		KarbonToolRegistry* r = KarbonToolRegistry::instance();
+		r->add(new KarbonToolFactory<VImageTool>());
 	}
 }
 
-VImageTool::VInsertImageCmd::VInsertImageCmd( VDocument* doc, const QString& name, VImage *image, KoPoint pos )
-	: VCommand( doc, name, "frame_image" ), m_image( image ), m_pos( pos )
+ImageToolPlugin::~ImageToolPlugin()
 {
 }
 
-void
-VImageTool::VInsertImageCmd::execute()
-{
-	if( !m_image )
-		return;
-
-	if( m_image->state() == VObject::deleted )
-		m_image->setState( VObject::normal );
-	else
-	{
-		m_image->setState( VObject::normal );
-		m_image->transform( QWMatrix().translate( m_pos.x(), m_pos.y() ) );
-		document()->append( m_image );
-		document()->selection()->clear();
-		document()->selection()->append( m_image );
-	}
-															
-	setSuccess( true );
-}
-
-void
-VImageTool::VInsertImageCmd::unexecute()
-{
-	if( !m_image )
-		return;
-
-	document()->selection()->take( *m_image );
-	m_image->setState( VObject::deleted );
-
-	setSuccess( false );
-}
+#include "imagetoolplugin.moc"
 

@@ -32,7 +32,7 @@
 
 
 VSpiralTool::VSpiralOptionsWidget::VSpiralOptionsWidget( KarbonPart *part, QWidget* parent, const char* name )
-	: KDialogBase( parent, name, true, i18n( "Insert Spiral" ), Ok | Cancel ), m_part(part)
+	: KDialogBase( parent, name, true, i18n( "Insert Spiral" ), Ok | Cancel ), m_part( part )
 {
 	QGroupBox *group = new QGroupBox( 2, Qt::Horizontal, i18n( "Properties" ), this );
 
@@ -123,11 +123,11 @@ VSpiralTool::VSpiralOptionsWidget::refreshUnit()
 	m_radius->setUnit( m_part->unit() );
 }
 
-VSpiralTool::VSpiralTool( KarbonPart *part )
-	: VShapeTool( part, i18n( "Insert Spiral" ), true )
+VSpiralTool::VSpiralTool( KarbonView *view )
+	: VShapeTool( view, "tool_spiral", true )
 {
 	// create config dialog:
-	m_optionsWidget = new VSpiralOptionsWidget( part );
+	m_optionsWidget = new VSpiralOptionsWidget( view->part() );
 	m_optionsWidget->setSegments( 8 );
 	m_optionsWidget->setFade( 0.8 );
 	m_optionsWidget->setClockwise( true );
@@ -195,5 +195,19 @@ bool
 VSpiralTool::showDialog() const
 {
 	return m_optionsWidget->exec() == QDialog::Accepted;
+}
+
+void
+VSpiralTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Spiral Tool" ), "14_spiral", Qt::SHIFT+Qt::Key_H, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Spiral" ) );
+		m_action->setExclusiveGroup( "shapes" );
+		//m_ownAction = true;
+	}
 }
 

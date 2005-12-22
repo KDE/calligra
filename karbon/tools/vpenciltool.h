@@ -35,7 +35,7 @@
 class QLabel;
 class QWidget;
 class VPath;
-class KarbonPart;
+class KarbonView;
 class QCheckBox;
 class QWidgetStack;
 class QComboBox;
@@ -45,7 +45,7 @@ class VPencilOptionsWidget : public KDialogBase
 {
 	Q_OBJECT
 	public:
-		VPencilOptionsWidget( KarbonPart*part, QWidget* parent = 0L, const char* name = 0L );
+		VPencilOptionsWidget( KarbonView*view, QWidget* parent = 0L, const char* name = 0L );
 
 		int currentMode();
 		bool optimize();
@@ -56,7 +56,7 @@ class VPencilOptionsWidget : public KDialogBase
 		void selectMode();
 
 	private:
-		KarbonPart			*m_part;
+		KarbonView			*m_view;
 		QCheckBox			*m_optimizeRaw;
 		QCheckBox			*m_optimizeCurve;
 		KDoubleNumInput			*m_combineAngle;
@@ -80,16 +80,17 @@ class VPencilOptionsWidget : public KDialogBase
 class VPencilTool : public VTool
 {
 	public:
-		VPencilTool( KarbonPart *part );
+		VPencilTool( KarbonView *view );
 		~VPencilTool(); 
 
 		virtual void activate();
 		virtual void deactivate();
 
-		virtual QString name() { return i18n( "Pencil Tool" ); }
+		virtual void setup(KActionCollection *collection);
+		virtual QString uiname() { return i18n( "Pencil Tool" ); }
 		virtual QString contextHelp();
-		virtual QString icon() { return "14_pencil"; }
-	
+		virtual enumToolType toolType() { return TOOL_FREEHAND; }
+
 		virtual bool showDialog() const;
 		
 		enum {

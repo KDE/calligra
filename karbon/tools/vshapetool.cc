@@ -32,8 +32,8 @@
 #include "vshapetool.h"
 #include "vselection.h"
 
-VShapeTool::VShapeTool( KarbonPart *part, const QString& name, bool polar )
-	: VTool( part, name.latin1() )
+VShapeTool::VShapeTool( KarbonView *view, const char *name, bool polar )
+	: VTool( view, name )
 {
 	m_isPolar = polar;
 	m_isSquare   = false;
@@ -52,6 +52,7 @@ VShapeTool::contextHelp()
 void
 VShapeTool::activate()
 {
+	VTool::activate();
 	view()->setCursor( QCursor( Qt::crossCursor ) );
 	view()->part()->document().selection()->showHandle( true );
 }
@@ -59,7 +60,7 @@ VShapeTool::activate()
 QString
 VShapeTool::statusText()
 {
-	return name();
+	return uiname();
 }
 
 void

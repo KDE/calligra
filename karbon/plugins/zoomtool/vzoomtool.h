@@ -28,20 +28,20 @@
 
 class QCursor;
 
-class KarbonViewBase;
+class KarbonView;
 
 class VZoomTool : public VTool
 {
 public:
-	VZoomTool( KarbonPart* part );
+	VZoomTool( KarbonView *view );
 	~VZoomTool();
 
 	virtual void activate();
 	virtual void deactivate();
 
-	virtual QString name() { return i18n( "Zoom Tool" ); }
+	virtual void setup( KActionCollection *collection );
+	virtual QString uiname() { return i18n( "Zoom Tool" ); }
 	virtual QString contextHelp();
-	virtual QString icon() { return "14_zoom"; }
 	virtual QString statusText();
 
 protected:

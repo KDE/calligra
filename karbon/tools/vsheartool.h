@@ -25,14 +25,15 @@
 class VShearTool : public VTool
 {
 public:
-	VShearTool( KarbonPart *part );
+	VShearTool( KarbonView *view );
 	virtual ~VShearTool();
 
 	virtual void activate();
 
-	virtual QString name() { return i18n( "Shear Tool" ); }
-	virtual QString icon() { return "14_shear"; }
-	virtual QString category() { return "manipulation"; }
+	virtual void setup(KActionCollection *collection);
+	virtual QString uiname() { return i18n( "Shear Tool" ); }
+	virtual enumToolType toolType() { return TOOL_MANIPULATION; }
+	virtual uint priority() { return 1; }
 	virtual QString statusText();
 
 protected:

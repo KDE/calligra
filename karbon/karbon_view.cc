@@ -87,6 +87,7 @@
 #include "vpainterfactory.h"
 #include "vqpainter.h"
 #include "vstrokefillpreview.h"
+#include "vtypebuttonbox.h"
 #include "vstatebutton.h"
 #include "vcanvas.h"
 #include "vtoolbox.h"
@@ -103,6 +104,8 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 		: KoView( p, parent, name ), KXMLGUIBuilder( shell() ), m_part( p )
 {
 	m_toolbox = 0L;
+	m_toolController = new VToolController( this );
+	m_toolController->init();
 
 	setInstance( KarbonFactory::instance(), true );
 
@@ -221,7 +224,29 @@ KarbonView::~KarbonView()
 
 	delete( m_dcop );
 
-	//delete( m_toolbox );
+	delete m_toolController;
+	m_toolController = 0;
+}
+
+static Qt::Dock stringToDock( const QString& attrPosition )
+{
+	KToolBar::Dock dock = KToolBar::DockTop;
+	if ( !attrPosition.isEmpty() ) {
+		if ( attrPosition == "top" )
+			dock = Qt::DockTop;
+		else if ( attrPosition == "left" )
+			dock = Qt::DockLeft;
+		else if ( attrPosition == "right" )
+			dock = Qt::DockRight;
+		else if ( attrPosition == "bottom" )
+			dock = Qt::DockBottom;
+		else if ( attrPosition == "floating" )
+			dock = Qt::DockTornOff;
+		else if ( attrPosition == "flat" )
+			dock = Qt::DockMinimized;
+	}
+
+	return dock;
 }
 
 QWidget *
@@ -229,21 +254,25 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 {
 	if( element.attribute( "name" ) == "Tools" )
 	{
-		if( !m_toolbox )
-			m_toolbox = new VToolBox( (KarbonPart *)m_part, mainWindow(), "Tools" );
-		else
-		{
-			m_toolbox = dynamic_cast<VToolBox *>( shell()->toolBar( "Tools" ) );
-			mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
-			return m_toolbox;
-		}
+		m_toolbox = new VToolBox( mainWindow(), "Tools", KarbonFactory::instance() );
+		toolController()->setUp( actionCollection(), m_toolbox );
 
-		m_toolbox->setupTools();
-		connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
+		kdDebug() << "Toolbox position: " << element.attribute( "position" ) << "\n";
+	        Dock dock = stringToDock( element.attribute( "position" ).lower() );
+
+	        mainWindow()->addDockWindow( m_toolbox, dock, false);
+	        mainWindow()->moveDockWindow( m_toolbox, dock, false, 0, 0 );
+
+		//connect( m_toolbox, SIGNAL( activeToolChanged( VTool * ) ), this, SLOT( slotActiveToolChanged( VTool * ) ) );
 
 		if( shell() )
 		{
-			m_strokeFillPreview = m_toolbox->strokeFillPreview();
+			m_strokeFillPreview = new VStrokeFillPreview( part(), m_toolbox );
+			m_typeButtonBox = new VTypeButtonBox( part(), m_toolbox );
+
+			connect( m_strokeFillPreview, SIGNAL( fillSelected() ), m_typeButtonBox, SLOT( setFill() ) );
+			connect( m_strokeFillPreview, SIGNAL( strokeSelected() ), m_typeButtonBox, SLOT( setStroke() ) );
+
 			connect( m_strokeFillPreview, SIGNAL( strokeChanged( const VStroke & ) ), this, SLOT( slotStrokeChanged( const VStroke & ) ) );
 			connect( m_strokeFillPreview, SIGNAL( fillChanged( const VFill & ) ), this, SLOT( slotFillChanged( const VFill & ) ) );
 
@@ -256,12 +285,7 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 // 			mainWindow()->addToolBar( m_selectToolBar );
 		}
 
-		mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
-		part()->toolController()->setActiveView( this );
-		// set selectTool by default
-		m_toolbox->slotPressButton( 0 );
-
-		return m_toolbox;
+		//mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
 	}
 
 	return KXMLGUIBuilder::createContainer( parent, index, element, id );
@@ -278,6 +302,11 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 	{
 		delete m_toolbox;
 		m_toolbox = 0L;
+		m_toolController->youAintGotNoToolBox();
+//		delete m_strokeFillPreview;
+		m_strokeFillPreview = 0;
+//		delete m_typeButtonBox;
+		m_typeButtonBox = 0;
 // 		delete m_selectToolBar;
 // 		m_selectToolBar = 0L;
 		delete m_DocumentTab;
@@ -307,8 +336,8 @@ KarbonView::canvas() const
 void
 KarbonView::resizeEvent( QResizeEvent* /*event*/ )
 {
-    int hSpace = 20;
-    int vSpace = 20;
+	int hSpace = 20;
+	int vSpace = 20;
 
 	if( shell() && m_showRulerAction->isChecked())
 	{
@@ -448,9 +477,9 @@ void
 KarbonView::editPaste()
 {
 	KarbonDrag kd;
-	VObjectList  objects;
+	VObjectList objects;
 
-	if ( !kd.decode( QApplication::clipboard()->data(), objects, part()->document() ) )
+	if( !kd.decode( QApplication::clipboard()->data(), objects, part()->document() ) )
 		return;
 
 	// Paste with a small offset.
@@ -695,7 +724,7 @@ KarbonView::closePath()
 void
 KarbonView::slotActiveToolChanged( VTool *tool )
 {
-	part()->toolController()->setActiveTool( tool );
+	toolController()->setCurrentTool( tool );
 
 	m_canvas->repaintAll();
 }
@@ -1102,9 +1131,8 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 
 	m_cursorCoords->setText( QString( "%1, %2" ).arg(KGlobal::_locale->formatNumber(xy.x(), 2)).arg(KGlobal::_locale->formatNumber(xy.y(), 2)) );
 
-	part()->toolController()->setActiveView( this );
-	if( part()->toolController() )
-		return part()->toolController()->mouseEvent( event, p );
+	if( toolController() )
+		return toolController()->mouseEvent( event, p );
 	else
 		return false;
 }
@@ -1112,8 +1140,8 @@ KarbonView::mouseEvent( QMouseEvent* event, const KoPoint &p )
 bool
 KarbonView::keyEvent( QEvent* event )
 {
-	if( part()->toolController() )
-		return part()->toolController()->keyEvent( event );
+	if( toolController() )
+		return toolController()->keyEvent( event );
 	else
 		return false;
 }
@@ -1452,6 +1480,12 @@ void KarbonView::createTransformDock()
 
 	connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
 	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_TransformDocker, SLOT( setUnit( KoUnit::Unit ) ) );
+}
+
+VToolController *
+KarbonView::toolController()
+{
+	return m_toolController;
 }
 
 #include "karbon_view.moc"

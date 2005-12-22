@@ -159,11 +159,11 @@ VStarOptionsWidget::typeChanged( int type )
 		m_innerR->changeValue( VStar::getOptimalInnerRadius( edges(), outerRadius(), innerAngle() ) );
 }
 
-VStarTool::VStarTool( KarbonPart *part )
-	: VShapeTool( part, i18n( "Insert Star" ), true )
+VStarTool::VStarTool( KarbonView *view )
+	: VShapeTool( view, "tool_star", true )
 {
 	// create config dialog:
-	m_optionsWidget = new VStarOptionsWidget( part );
+	m_optionsWidget = new VStarOptionsWidget( view->part() );
 	m_optionsWidget->setEdges( 5 );
 	registerTool( this );
 }
@@ -228,6 +228,22 @@ bool
 VStarTool::showDialog() const
 {
 	return m_optionsWidget->exec() == QDialog::Accepted;
+}
+
+void
+VStarTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		KShortcut shortcut( Qt::Key_Plus );
+		shortcut.append(KShortcut( Qt::Key_F9 ) );
+		m_action = new KRadioAction( i18n( "Star Tool" ), "14_star", shortcut, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Draw a star" ) );
+		m_action->setExclusiveGroup( "shapes" );
+		//m_ownAction = true;
+	}
 }
 
 #include "vstartool.moc"

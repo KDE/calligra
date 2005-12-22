@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001, 2002, 2003 The Karbon Developers
+   Copyright (C) 2002, The Karbon Developers
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -15,48 +15,24 @@
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
+
 */
 
-#ifndef __VROTATETOOL_H__
-#define __VROTATETOOL_H__
+#ifndef __TOOL_IMAGE_H__
+#define __TOOL_IMAGE_H__
 
-#include "vselection.h"
-#include "vtool.h"
+#include <qstring.h>
 
+#include <kparts/plugin.h>
 
-class VRotateTool : public VTool
+/**
+ */
+class VToolImage : public KParts::Plugin
 {
+	Q_OBJECT
 public:
-	VRotateTool( KarbonView *view );
-	virtual ~VRotateTool();
-
-	virtual void activate();
-
-	virtual void setup(KActionCollection *collection);
-	virtual QString uiname() { return i18n( "Rotate Tool" ); }
-	virtual enumToolType toolType() { return TOOL_MANIPULATION; }
-	virtual QString statusText();
-	virtual uint priority() { return 0; }
-
-protected:
-	virtual void draw();
-
-	virtual void mouseButtonPress();
-	virtual void mouseDrag();
-	virtual void mouseDragRelease();
-
-	virtual void cancel();
-
-private:
-	void recalc();
-
-	KoPoint m_center;
-	double m_angle;
-
-	VHandleNode m_activeNode;
-
-	// A list of temporary objects:
-	VObjectList m_objects;
+	VToolImage(QObject *parent, const char *name, const QStringList &);
+	virtual ~VToolImage();
 };
 
 #endif

@@ -44,9 +44,10 @@ VGradientTool::VGradientOptionsWidget::VGradientOptionsWidget( VGradient *gradie
 	setFixedSize( baseSize() );
 }
 
-VGradientTool::VGradientTool( KarbonPart *part )
-	: VTool( part, "gradienttool" )
+VGradientTool::VGradientTool( KarbonView *view )
+	: VTool( view, "gradienttool" )
 {
+	setName( "tool_gradient" );
 	m_optionsWidget = new VGradientOptionsWidget( &m_gradient );
 	registerTool( this );
 }
@@ -61,6 +62,13 @@ VGradientTool::activate()
 {
 	view()->statusMessage()->setText( i18n( "Gradient" ) );
 	view()->setCursor( QCursor( Qt::crossCursor ) );
+	VTool::activate();
+}
+
+QString
+VGradientTool::statusText()
+{
+	return i18n( "Gradient tool" );
 }
 
 QString 
@@ -178,5 +186,19 @@ bool
 VGradientTool::showDialog() const
 {
 	return m_optionsWidget->exec() == QDialog::Accepted;
+}
+
+void
+VGradientTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Gradient Tool" ), "14_gradient", Qt::Key_G, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Gradient" ) );
+		m_action->setExclusiveGroup( "misc" );
+		//m_ownAction = true;
+	}
 }
 

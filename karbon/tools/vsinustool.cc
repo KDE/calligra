@@ -99,11 +99,11 @@ VSinusTool::VSinusOptionsWidget::refreshUnit ()
 	m_height->setUnit( m_part->unit() );
 }
 
-VSinusTool::VSinusTool( KarbonPart *part )
-	: VShapeTool( part, i18n( "Insert Sinus" ) )
+VSinusTool::VSinusTool( KarbonView *view )
+	: VShapeTool( view, "tool_sinus" )
 {
 	// create config widget:
-	m_optionsWidget = new VSinusOptionsWidget( part );
+	m_optionsWidget = new VSinusOptionsWidget( view->part() );
 	m_optionsWidget->setPeriods( 1 );
 	registerTool( this );
 }
@@ -144,5 +144,19 @@ bool
 VSinusTool::showDialog() const
 {
 	return m_optionsWidget->exec() == QDialog::Accepted;
+}
+
+void
+VSinusTool::setup( KActionCollection *collection )
+{
+	m_action = static_cast<KRadioAction *>(collection -> action( name() ) );
+
+	if( m_action == 0 )
+	{
+		m_action = new KRadioAction( i18n( "Sinus Tool" ), "14_sinus", Qt::SHIFT+Qt::Key_S, this, SLOT( activate() ), collection, name() );
+		m_action->setToolTip( i18n( "Sinus" ) );
+		m_action->setExclusiveGroup( "shapes" );
+		//m_ownAction = true;
+	}
 }
 

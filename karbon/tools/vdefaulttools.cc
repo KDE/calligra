@@ -61,22 +61,22 @@ VDefaultTools::VDefaultTools(QObject *parent, const char *name, const QStringLis
 	if ( parent->inherits("KarbonFactory") )
 	{
 		KarbonToolRegistry* r = KarbonToolRegistry::instance();
-		r -> add(new KarbonToolFactory<VSelectTool>());
-		r -> add(new KarbonToolFactory<VSelectNodesTool>());
-		r -> add(new KarbonToolFactory<VRotateTool>());
-		r -> add(new KarbonToolFactory<VShearTool>());
-		r -> add(new KarbonToolFactory<VEllipseTool>());
-		r -> add(new KarbonToolFactory<VGradientTool>());
-		r -> add(new KarbonToolFactory<VPatternTool>());
-		r -> add(new KarbonToolFactory<VPencilTool>());
-		r -> add(new KarbonToolFactory<VPolygonTool>());
-		r -> add(new KarbonToolFactory<VPolylineTool>());
-		r -> add(new KarbonToolFactory<VRectangleTool>());
-		r -> add(new KarbonToolFactory<VRoundRectTool>());
-		r -> add(new KarbonToolFactory<VSinusTool>());
-		r -> add(new KarbonToolFactory<VSpiralTool>());
-		r -> add(new KarbonToolFactory<VStarTool>());
-		r -> add(new KarbonToolFactory<VTextTool>());
+		r->add(new KarbonToolFactory<VSelectTool>());
+		r->add(new KarbonToolFactory<VSelectNodesTool>());
+		r->add(new KarbonToolFactory<VRotateTool>());
+		r->add(new KarbonToolFactory<VShearTool>());
+		r->add(new KarbonToolFactory<VEllipseTool>());
+		r->add(new KarbonToolFactory<VGradientTool>());
+		r->add(new KarbonToolFactory<VPatternTool>());
+		r->add(new KarbonToolFactory<VPencilTool>());
+		r->add(new KarbonToolFactory<VPolygonTool>());
+		r->add(new KarbonToolFactory<VPolylineTool>());
+		r->add(new KarbonToolFactory<VRectangleTool>());
+		r->add(new KarbonToolFactory<VRoundRectTool>());
+		r->add(new KarbonToolFactory<VSinusTool>());
+		r->add(new KarbonToolFactory<VSpiralTool>());
+		r->add(new KarbonToolFactory<VStarTool>());
+		r->add(new KarbonToolFactory<VTextTool>());
 	}
 }
 
