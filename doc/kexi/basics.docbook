@@ -102,4 +102,55 @@
     </para>
   </sect1>
 
+  <sect1 id="project-opening">
+    <title>
+      Opening an existing Kexi database file
+    </title>
+    <itemizedlist>
+      <title>
+        To open an existing Kexi database file:
+      </title>
+      <listitem>
+        select it in <guimenuitem>Open Existing Project</guimenuitem> window; or
+      </listitem>
+      <listitem>
+        open it by clicking on .kexi file's icon.
+      </listitem>
+    </itemizedlist>
+
+    <sect2 id="window-open-existing">
+      <title>
+        Opening a database file in the <guimenuitem>Open Existing Project</guimenuitem> window
+      </title>
+      <itemizedlist>
+        <listitem>
+            Run &kexi;. <!--(see <a href="04_02_00_running_kexi.html">Running Kexi</a>).-->
+            You should see <guilabel>Choose Project</guilabel> startup dialog.
+            Choose <guilabel>Open Existing Project</guilabel> tab.
+            You will see following dialog:
+          <!-- image: <img src="img/04_04_01_startup_open_existing.png"> -->
+        </listitem>
+        <listitem>
+          From <guilabel>Look in</guilabel> drop down box, pick a folder
+          containing a file you are looking for.
+        </listitem>
+        <listitem>
+          You can either pick a file or enter its name in the
+          <guilabel>File name</guilabel> box.
+        </listitem>
+        <listitem>
+          Click <guibutton>OK</guibutton>.
+        </listitem>
+      </itemizedlist>
+
+      <sect3 id="open-existing-notes">
+        <title>
+          Notes
+        </title>
+      </sect3>
+    </sect2>
+  </sect1>
+
+
 </chapter>
+
