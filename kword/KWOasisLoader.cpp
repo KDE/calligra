@@ -213,7 +213,7 @@ void KWOasisLoader::loadOasisHeaderFooter( const QDomElement& headerFooter, bool
 
     KWTextFrameSet *fs = new KWTextFrameSet( m_doc, headerTypeToFramesetName( localName, hasEvenOdd ) );
     fs->setFrameSetInfo( headerTypeToFrameInfo( localName, hasEvenOdd ) );
-    m_doc->m_lstFrameSet.append( fs ); // don't use addFrameSet here. We'll call finalize() once and for all in completeLoading
+    m_doc->addFrameSet( fs, false );
 
     if ( !style.isNull() )
         context.styleStack().push( style );
@@ -345,6 +345,6 @@ KWTableFrameSet* KWOasisLoader::loadOasisTable( const QDomElement& tag,
     const QString name = tag.attributeNS( KoXmlNS::table, "name", i18n( "Unnamed Table" ) ); // ### check for unicity?
     KWTableFrameSet* table = new KWTableFrameSet( m_doc, name );
     table->loadOasis( tag, context );
-    m_doc->addFrameSet(table);
+    m_doc->addFrameSet(table, false);
     return table;
 }
