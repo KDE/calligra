@@ -126,10 +126,6 @@ namespace Kross { namespace Python {
             Kross::Api::Object::Ptr getObject();
 
         private:
-            /// The \a Kross::Api::Object this PythonExtension wraps.
-            Kross::Api::Object::Ptr m_object;
-            /// Internal value used by our dirty hack to handle calls more flexible.
-            QString m_methodname;
 
             /**
              * Converts a \a Py::Tuple into a \a Kross::Api::List .
@@ -221,17 +217,28 @@ namespace Kross { namespace Python {
              */
             static Py::Tuple toPyTuple(Kross::Api::List::Ptr list);
 
+            /// The \a Kross::Api::Object this PythonExtension wraps.
+            Kross::Api::Object::Ptr m_object;
+
             /**
-             * Callback function called from within python. This
-             * function acts as call redirector. The \a m_dynamic_methods
-             * and \a m_static_methods are used to forward the calling
-             * to the correct method or throw an \a Py::Exception if
-             * something went wrong.
-             *
-             * \param args The methodarguments.
-             * \return Returnvalue of the methodcall.
+             * The proxymethod which will handle all calls to our
+             * \a PythonExtension instance.
              */
-            Py::Object _call_(const Py::Tuple&);
+            Py::MethodDefExt<PythonExtension>* proxymethod;
+
+            /**
+             * The static proxy-handler which will be used to dispatch
+             * a call to our \a PythonExtension instance and redirect
+             * the call to the matching method.
+             *
+             * \param _self_and_name_tuple A tuple containing as first
+             *        argument a reference to our \a PythonExtension
+             *        instance.
+             * \param _args The optional passed arguments for the method
+             *        which should be called.
+             * \return The returnvalue of the methodcall.
+             */
+            static PyObject* proxyhandler(PyObject* _self_and_name_tuple, PyObject* _args);
     };
 
 }}

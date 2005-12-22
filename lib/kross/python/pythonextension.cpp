@@ -44,14 +44,12 @@ PythonExtension::PythonExtension(Kross::Api::Object::Ptr object)
         "backwards in a transparent way."
     );
     behaviors().supportGetattr();
-    add_varargs_method(
-        "_call_",
-        &PythonExtension::_call_,
-        "Internal method use to wrap method- and attribute-calls. "
-        "Something like 'myobj.myfunc(myarguments)' got wrapped "
-        "into a 'myobj._call_('myfunc',myarguments)' methodcall. "
-        "That way all callbacks are passed back through the "
-        "_call_() member-function."
+
+    proxymethod = new Py::MethodDefExt<PythonExtension>(
+        "_call_", // methodname
+        0, // method that should handle the callback. Not needed cause proxyhandler will handle it.
+        Py::method_varargs_call_handler_t( proxyhandler ), // callback handler
+        "Internal method use to wrap method- and attribute-calls." // documentation
     );
 }
 
@@ -114,10 +112,12 @@ Py::Object PythonExtension::getattr(const char* n)
         return Py::PythonExtension<PythonExtension>::getattr_methods(n);
     }
 
-    // use our methodproxy "_call_" to dynamicly redirect the call
-    // to the correct method. It's a dirty hack, but it's the easiest way ;)
-    m_methodname = n;
-    return Py::PythonExtension<PythonExtension>::getattr_methods("_call_");
+    // Redirect the call to our static proxy method which will take care
+    // of handling the call.
+    Py::Tuple self(2);
+    self[0] = Py::Object(this);
+    self[1] = Py::String(n);
+    return Py::Object(PyCFunction_New( &proxymethod->ext_meth_def, self.ptr() ), true);
 }
 
 Py::Object PythonExtension::getattr_methods(const char* n)
@@ -428,32 +428,38 @@ Py::Tuple PythonExtension::toPyTuple(Kross::Api::List::Ptr list)
     return tuple;
 }
 
-Py::Object PythonExtension::_call_(const Py::Tuple& args)
+PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject *args)
 {
-    Kross::Api::List::Ptr arguments = toObject(args);
-
-#ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
-    kdDebug() << QString("Kross::Python::PythonExtension::_call_(Py::Tuple) m_methodname='%1' arguments='%2'").arg(m_methodname).arg(arguments->toString()) << endl;
-#endif
+    Py::Tuple tuple(_self_and_name_tuple);
+    PythonExtension *self = static_cast<PythonExtension*>( tuple[0].ptr() );
+    QString methodname = Py::String(tuple[1]).as_string().c_str();
 
     try {
-        if(m_object->hasChild(m_methodname)) {
+        Kross::Api::List::Ptr arguments = toObject( Py::Tuple(args) );
+
 #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
-            kdDebug() << QString("Kross::Python::PythonExtension::_call_ name='%1' is a child object of '%2'.").arg(m_methodname).arg(m_object->getName()) << endl;
+        kdDebug() << QString("Kross::Python::PythonExtension::proxyhandler methodname='%1' arguments='%2'").arg(methodname).arg(arguments->toString()) << endl;
 #endif
-            return toPyObject( m_object->getChild(m_methodname)->call(QString::null, arguments) );
+
+        if(self->m_object->hasChild(methodname)) {
+#ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
+            kdDebug() << QString("Kross::Python::PythonExtension::proxyhandler methodname='%1' is a child object of '%2'.").arg(methodname).arg(self->m_object->getName()) << endl;
+#endif
+            Py::Object result = toPyObject( self->m_object->getChild(methodname)->call(QString::null, arguments) );
+            result.increment_reference_count();
+            return result.ptr();
         }
 #ifdef KROSS_PYTHON_EXTENSION_CALL_DEBUG
-        kdDebug() << QString("Kross::Python::PythonExtension::_call_ try to call function with name '%1' in object '%2'.").arg(m_methodname).arg(m_object->getName()) << endl;
+        kdDebug() << QString("Kross::Python::PythonExtension::proxyhandler try to call function with methodname '%1' in object '%2'.").arg(methodname).arg(self->m_object->getName()) << endl;
 #endif
-        return toPyObject( m_object->call(m_methodname, arguments) );
-
+        Py::Object result = toPyObject( self->m_object->call(methodname, arguments) );
+        result.increment_reference_count();
+        return result.ptr();
     }
     catch(Kross::Api::Exception::Ptr e) {
-        kdDebug() << "EXCEPTION in PythonExtension::_call_" << endl;
+        kdWarning() << "EXCEPTION in Kross::Python::PythonExtension::proxyhandler" << endl;
         throw Py::RuntimeError( (char*) e->toString().latin1() );
     }
 
-    return Py::None();
+    return Py_None;
 }
-
