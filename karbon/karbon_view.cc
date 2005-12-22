@@ -204,28 +204,19 @@ KarbonView::KarbonView( KarbonPart* p, QWidget* parent, const char* name )
 KarbonView::~KarbonView()
 {
 	kdDebug(38000) << "Handling KarbonView dtor" << endl;
-	if( shell() )
-	{
-		delete( m_ColorManager );
-		delete( m_strokeDocker );
-		delete( m_styleDocker );
-		disconnect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
-		delete( m_TransformDocker );
-	}
 
 	// widgets:
-	delete( m_smallPreview );
-	delete( m_status );
-	delete( m_cursorCoords );
+	delete m_smallPreview;
+	delete m_status;
+	delete m_cursorCoords;
 
-	delete( m_painterFactory );
+	delete m_painterFactory;
 
-	delete( m_canvas );
+	delete m_canvas;
 
-	delete( m_dcop );
+	delete m_dcop;
 
 	delete m_toolController;
-	m_toolController = 0;
 }
 
 static Qt::Dock stringToDock( const QString& attrPosition )
@@ -284,8 +275,6 @@ KarbonView::createContainer( QWidget *parent, int index, const QDomElement &elem
 // 			m_selectToolBar = new VSelectToolBar( this, "selecttoolbar" );
 // 			mainWindow()->addToolBar( m_selectToolBar );
 		}
-
-		//mainWindow()->moveDockWindow( m_toolbox, Qt::DockLeft, false, 0 );
 	}
 
 	return KXMLGUIBuilder::createContainer( parent, index, element, id );
@@ -309,9 +298,6 @@ KarbonView::removeContainer( QWidget *container, QWidget *parent,
 		m_typeButtonBox = 0;
 // 		delete m_selectToolBar;
 // 		m_selectToolBar = 0L;
-		delete m_DocumentTab;
-		delete m_LayersTab;
-		delete m_HistoryTab;
 	}
 	else
 		KXMLGUIBuilder::removeContainer( container, parent, element, id );
@@ -939,15 +925,15 @@ KarbonView::initActions()
 	KStdAction::zoomIn( this, SLOT( viewZoomIn() ), actionCollection(), "view_zoom_in" );
 	KStdAction::zoomOut( this, SLOT( viewZoomOut() ), actionCollection(), "view_zoom_out" );
 
-	// No need for the other actions in read-only (embedded) mode
-	if( !shell() )
-		return;
-
 	m_showPageMargins = new KToggleAction( i18n("Show Page Margins"), "view_margins", 0, actionCollection(), "view_show_margins" );
 	connect( m_showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
 #if KDE_IS_VERSION(3,2,90)
 	m_showPageMargins->setCheckedState(i18n("Hide Page Margins"));
 #endif
+
+	// No need for the other actions in read-only (embedded) mode
+	if( !shell() )
+		return;
 
 	// edit ----->
 	KStdAction::cut( this,
