@@ -54,6 +54,7 @@ VToolController::setCurrentTool( VTool *tool )
 		m_currentTool->action()->setChecked( true );
 		m_currentTool->action()->activate();
 	}
+	m_toolBox->slotSetTool( tool->name() );
 }
 
 void
