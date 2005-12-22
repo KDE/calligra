@@ -94,15 +94,19 @@ void KivioArrowHeadFormatDlg::init()
   gl->addMultiCellWidget(startAHHeightLbl, 4, 4, 0, 1);
   gl->addWidget(m_startAHHeightUSBox, 4, 2);
 
-  gl->addWidget(endAHHeaderIcon, 5, 0);
-  gl->addMultiCellWidget(endAHHeaderLabel, 5, 5, 1, 2);
-  gl->addMultiCellWidget(endAHHeaderLine, 6, 6, 0, 2);
-  gl->addMultiCellWidget(endAHTypeLbl, 7, 7, 0, 1);
-  gl->addWidget(m_endAHTypeCBox, 7, 2);
-  gl->addMultiCellWidget(endAHWidthLbl, 8, 8, 0, 1);
-  gl->addWidget(m_endAHWidthUSBox, 8, 2);
-  gl->addMultiCellWidget(endAHHeightLbl, 9, 9, 0, 1);
-  gl->addWidget(m_endAHHeightUSBox, 9, 2);
+  gl->addMultiCell(new QSpacerItem(KDialog::marginHint(), KDialog::marginHint(),
+                   QSizePolicy::Minimum, QSizePolicy::Fixed), 5, 5, 0, 2);
+
+  gl->addWidget(endAHHeaderIcon, 6, 0);
+  gl->addMultiCellWidget(endAHHeaderLabel, 6, 6, 1, 2);
+  gl->addMultiCellWidget(endAHHeaderLine, 7, 7, 0, 2);
+  gl->addMultiCellWidget(endAHTypeLbl, 8, 8, 0, 1);
+  gl->addWidget(m_endAHTypeCBox, 8, 2);
+  gl->addMultiCellWidget(endAHWidthLbl, 9, 9, 0, 1);
+  gl->addWidget(m_endAHWidthUSBox, 9, 2);
+  gl->addMultiCellWidget(endAHHeightLbl, 10, 10, 0, 1);
+  gl->addWidget(m_endAHHeightUSBox, 10, 2);
+  gl->setRowStretch(11, 10);
 }
 
 void KivioArrowHeadFormatDlg::loadArrowHeads(KComboBox* combo, bool endArrow)
