@@ -625,11 +625,11 @@ void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect,
     KoRect rect = m_view->zoomHandler()->unzoomRect(_rect);
 
     int pageNum = m_view->kPresenterDoc()->pageList().findRef( page );
-    //objects in current page
-    drawObjectsEdit( painter, rect, page->objectList(), selectionMode, pageNum );
-    //draw sticky object
+    //objects on master page
     if ( page->masterPage() && page->displayObjectFromMasterPage() )
         drawObjectsEdit( painter, rect, page->masterPage()->objectList(), selectionMode, pageNum );
+    //objects on current page
+    drawObjectsEdit( painter, rect, page->objectList(), selectionMode, pageNum );
 }
 
 
@@ -638,11 +638,11 @@ void KPrCanvas::drawPresPage( QPainter *painter, const QRect &_rect, PresStep st
     KoRect rect = m_view->zoomHandler()->unzoomRect(_rect);
 
     KPrPage * page = m_view->kPresenterDoc()->pageList().at(step.m_pageNumber);
-    //objects in current page
-    drawObjectsPres( painter, page->objectList(), step );
-    //draw master page object
-    if (  page->masterPage() && page->displayObjectFromMasterPage() )
+    //objects on master page
+    if ( page->masterPage() && page->displayObjectFromMasterPage() )
         drawObjectsPres( painter, page->masterPage()->objectList(), step );
+    //objects on current page
+    drawObjectsPres( painter, page->objectList(), step );
 }
 
 
@@ -3372,11 +3372,11 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
         }
     }
 
-    drawAllObjectsInPage( &p, _list, pgnum );
-
-    //draw sticky object
+    // draw objects on master slide
     if ( page->masterPage() && page->displayObjectFromMasterPage() )
         drawAllObjectsInPage( &p, page->masterPage()->objectList(), pgnum );
+
+    drawAllObjectsInPage( &p, _list, pgnum );
 
     editMode = _editMode;
     p.end();
@@ -3493,8 +3493,8 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
         bitBlt( &screen_orig, 0, 0, this );
     }
 
-    QPtrList<KPrObject> allObjects( page->objectList() );
-
+    QPtrList<KPrObject> allObjects;
+    // master slide objects are below the objects of the normal slide
     if ( page->displayObjectFromMasterPage() )
     {
         QPtrListIterator<KPrObject> it( page->masterPage()->objectList() );
@@ -3505,6 +3505,13 @@ void KPrCanvas::doObjEffects( bool isAllreadyPainted )
                 allObjects.append( it.current() );
         }
     }
+
+    QPtrListIterator<KPrObject> it( page->objectList() );
+    for ( ; it.current(); ++it ) 
+    {
+        allObjects.append( it.current() );
+    }
+
     //TODO add global presentation speed
     m_effectHandler = new KPrEffectHandler( m_step, goingBack, this, &screen_orig, allObjects, m_view, 1 );
     if ( m_effectHandler->doEffect() )
