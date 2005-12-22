@@ -2744,13 +2744,12 @@ void KWDocument::insertEmbedded( KoStore *store, QDomElement topElem, KMacroComm
 
 bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 {
-    return saveOasisHelper( store, manifestWriter, SaveAll );
+    QValueList<KWFrameView*> noFrames;
+    return saveOasisHelper( store, manifestWriter, SaveAll, noFrames);
 }
 
 // can't be const due to recalcVariables()
-bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
-                            QString* plainText, KoPicture* picture, KWTextFrameSet* fs )
-{
+bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag, QValueList<KWFrameView*> selectedFrames, QString* plainText, KoPicture* picture, KWTextFrameSet* fs) {
     m_pictureCollection->assignUniqueIds();
     fixZOrders();
 
@@ -2874,7 +2873,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
         // write selected (non-inline) frames
         QString newText;
         saveSelectedFrames( *bodyWriter, store, manifestWriter, savingContext, pictureList,
-                            &newText ); // output vars
+                            selectedFrames, &newText ); // output vars
         *plainText += newText;
         // Single image -> return it
         if ( picture && pictureList.count() == 1 )
@@ -2927,7 +2926,16 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
 }
 
 // can't be const due to recalcVariables()
-QDragObject* KWDocument::dragSelected( QWidget* parent, KWTextFrameSet* fs )
+QDragObject* KWDocument::dragSelected( QValueList<KWFrameView*> selectedFrames) {
+    return dragSelectedPrivate(0, selectedFrames, 0);
+}
+// can't be const due to recalcVariables()
+QDragObject* KWDocument::dragSelected( QWidget *parent, KWTextFrameSet* fs) {
+    QValueList<KWFrameView*> noFrames;
+    return dragSelectedPrivate(parent, noFrames, fs);
+}
+// can't be const due to recalcVariables()
+QDragObject* KWDocument::dragSelectedPrivate( QWidget *parent, QValueList<KWFrameView*> selectedFrames, KWTextFrameSet* fs)
 {
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
@@ -2941,7 +2949,7 @@ QDragObject* KWDocument::dragSelected( QWidget* parent, KWTextFrameSet* fs )
 
     QString plainText;
     KoPicture picture;
-    if ( !saveOasisHelper( store, manifestWriter, KWDocument::SaveSelected, &plainText, &picture, fs )
+    if ( !saveOasisHelper( store, manifestWriter, KWDocument::SaveSelected, selectedFrames, &plainText, &picture, fs )
          || !oasisStore.closeManifestWriter() )
     {
         delete store;
@@ -2962,12 +2970,8 @@ QDragObject* KWDocument::dragSelected( QWidget* parent, KWTextFrameSet* fs )
     return multiDrag;
 }
 
-void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoXmlWriter* manifestWriter,
-                                     KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList,
-                                     QString* plainText ) const
-{
+void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoXmlWriter* manifestWriter, KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList, QValueList<KWFrameView*> selectedFrames, QString* plainText ) const {
     QPtrList<KoDocumentChild> embeddedObjects;
-    QValueList<KWFrameView*> selectedFrames = getAllViews()[0]->frameViewManager()->selectedFrames();
     QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
     for(; framesIterator != selectedFrames.end(); ++framesIterator) {
         KWFrame *frame = (*framesIterator)->frame();

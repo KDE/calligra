@@ -2332,7 +2332,7 @@ void KWView::editCut()
     if ( edit )
         edit->cut();
     else {
-        QDragObject *drag = m_doc->dragSelected( 0 );
+        QDragObject *drag = m_doc->dragSelected( frameViewManager()->selectedFrames() );
         QApplication::clipboard()->setData( drag );
         deleteFrame(false);
     }
@@ -2344,7 +2344,7 @@ void KWView::editCopy()
     if ( edit )
         edit->copy();
     else {
-        QDragObject *drag = m_doc->dragSelected( 0 );
+        QDragObject *drag = m_doc->dragSelected( frameViewManager()->selectedFrames() );
         QApplication::clipboard()->setData( drag );
     }
 }

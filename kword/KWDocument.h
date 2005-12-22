@@ -160,26 +160,13 @@ public:
     enum SaveFlag { SaveAll, SaveSelected }; // kpresenter will also have SavePage
 
     /**
-     * Save the whole document, or just the selection, into OASIS format
-     * When saving the selection, also return the data as plain text and/or plain picture,
-     * which are used to insert into the KMultipleDrag drag object.
-     *
-     * @param store the KoStore to save into
-     * @param manifestWriter pointer to a koxmlwriter to add entries to the manifest
-     * @param saveFlag either the whole document, or only the selected text/objects.
-     * @param plainText must be set when saveFlag==SaveSelected.
-     *        It returns the plain text format of the saved data, when available.
-     * @param picture must be set when saveFlag==SaveSelected.
-     *        It returns the selected picture, when exactly one picture was selected.
-     * @param fs the text frameset, which must be set when saveFlag==SaveSelected.
+     * Return a drag object with the selected frames
      */
-    bool saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
-                    QString* plainText = 0, KoPicture* picture = 0, KWTextFrameSet* fs = 0 );
-
+    QDragObject* dragSelected( QValueList<KWFrameView*> selectedFrames);
     /**
-     * Return a drag object with the selected data
+     * Return a drag object with the selected text
      */
-    QDragObject* dragSelected( QWidget* parent, KWTextFrameSet* fs = 0 );
+    QDragObject* dragSelected( QWidget *parent, KWTextFrameSet* fs );
 
     virtual bool loadXML( QIODevice *, const QDomDocument & dom );
     virtual bool loadChildren( KoStore *store );
@@ -846,10 +833,30 @@ protected:
 
     QValueList<KoPictureKey> savePictureList();
 
+    /// helper method for the 2 different dragSelected() versions
+    QDragObject* dragSelectedPrivate( QWidget *parent, QValueList<KWFrameView*> selectedFrames, KWTextFrameSet* fs);
+    /**
+     * Save the whole document, or just the selection, into OASIS format
+     * When saving the selection, also return the data as plain text and/or plain picture,
+     * which are used to insert into the KMultipleDrag drag object.
+     *
+     * @param store the KoStore to save into
+     * @param manifestWriter pointer to a koxmlwriter to add entries to the manifest
+     * @param saveFlag either the whole document, or only the selected text/objects.
+     * @param plainText must be set when saveFlag==SaveSelected.
+     *        It returns the plain text format of the saved data, when available.
+     * @param picture must be set when saveFlag==SaveSelected.
+     *        It returns the selected picture, when exactly one picture was selected.
+     * @param fs the text frameset, which must be set when saveFlag==SaveSelected.
+     */
+    bool saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
+                    QValueList<KWFrameView*> selectedFrames,
+                    QString* plainText = 0, KoPicture* picture = 0, KWTextFrameSet* fs = 0 );
+
     void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
     void saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoXmlWriter* manifestWriter,
                              KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList,
-                             QString* plainText ) const;
+                             QValueList<KWFrameView*> selectedFrames, QString* plainText ) const;
 
     // inherited from KoDocument
     QWidget* createCustomDocumentWidget(QWidget *parent);
