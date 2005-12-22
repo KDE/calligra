@@ -112,9 +112,14 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 
 	m_oldRecentFiles = 10;
 	m_oldCopyOffset = 10;
+	m_oldDockerFontSize = 8;
 	bool oldShowStatusBar = true;
 
 	QVGroupBox* tmpQGroupBox = new QVGroupBox( i18n( "Interface" ), box );
+
+	m_config->setGroup( "" );
+
+	m_oldDockerFontSize = m_config->readNumEntry( "palettefontsize", m_oldDockerFontSize );
 
 	if( m_config->hasGroup( "Interface" ) )
 	{
@@ -140,6 +145,10 @@ VConfigInterfacePage::VConfigInterfacePage( KarbonView* view,
 	m_copyOffset = new KIntNumInput( m_oldCopyOffset, tmpQGroupBox );
 	m_copyOffset->setRange( 1, 50, 1 );
 	m_copyOffset->setLabel( i18n( "Copy offset:" ) );
+
+	m_dockerFontSize = new KIntNumInput( m_oldDockerFontSize, tmpQGroupBox );
+	m_dockerFontSize->setRange( 5, 20, 1 );
+	m_dockerFontSize->setLabel( i18n( "Palette font size:" ) );
 }
 
 void VConfigInterfacePage::apply()
@@ -176,13 +185,26 @@ void VConfigInterfacePage::apply()
 		refreshGUI = true;
 	}
 
+	m_config->setGroup( "" );
+
+	int dockerFontSize = m_dockerFontSize->value();
+
+	if( dockerFontSize != m_oldDockerFontSize )
+	{
+		m_config->writeEntry( "palettefontsize", dockerFontSize );
+		m_oldDockerFontSize = dockerFontSize;
+		refreshGUI = true;
+	}
+
 	if( refreshGUI )
 		part->reorganizeGUI();
+
 }
 
 void VConfigInterfacePage::slotDefault()
 {
 	m_recentFiles->setValue( 10 );
+	m_dockerFontSize->setValue( 8 );
 	m_showStatusBar->setChecked( true );
 }
 

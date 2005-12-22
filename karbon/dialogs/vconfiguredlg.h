@@ -55,6 +55,9 @@ private:
 
 	KIntNumInput* m_copyOffset;
 	int m_oldCopyOffset;
+
+	KIntNumInput* m_dockerFontSize;
+	int m_oldDockerFontSize;
 };
 
 
