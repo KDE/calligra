@@ -830,8 +830,6 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
             switch ( toolEditMode ) {
             case TEM_MOUSE: {
-                firstX = contentsPoint.x();
-                firstY = contentsPoint.y();
                 KPrObject *kpobject = getObjectAt( docPoint, true );
 
                 if ( kpobject ) {
@@ -888,6 +886,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
                     if ( kpobject )
                     {
+                        mousePressed = false;
                         QString msg( i18n( "The object you are trying to select belongs to the master slide. "
                                            "Editing the object can only be done on the master slide.\n"
                                            "Go there now?" ) );
@@ -895,6 +894,9 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                         if ( KMessageBox::questionYesNo( this, msg ) == KMessageBox::Yes )
                         {
                             getView()->setEditMaster( true );
+                            selectObj( kpobject );
+                            raiseObject( kpobject );
+                            m_moveStartPosMouse = objectRect( false ).topLeft();
                         }
                         else
                         {
@@ -919,11 +921,8 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 m_zoomRubberDraw = false;
                 m_rubber = KoRect( docPoint.x(), docPoint.y(), 0, 0 );
             }break;
-            case TEM_ROTATE: {
-
-                firstX = contentsPoint.x();
-                firstY = contentsPoint.y();
-
+            case TEM_ROTATE: 
+            {
                 KPrObject *kpobject = getObjectAt( docPoint );
 
                 // clear old selections even if shift or control are pressed
@@ -933,6 +932,7 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
                 if ( kpobject && !kpobject->isProtect())
                 {
                     m_rotateObject = kpobject;
+                    m_rotateStart = docPoint;
                     m_angleBeforeRotate = kpobject->getAngle();
                     selectObj( kpobject );
                     raiseObject( kpobject );
@@ -1654,8 +1654,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                     // angle to mouse pos
                     double angle = KoPoint::getAngle( m_rotateCenter, docPoint );
                     // angle to start of mouse pos
-                    double angle1 = KoPoint::getAngle( m_rotateCenter,
-                                        m_view->zoomHandler()->unzoomPoint( QPoint( firstX, firstY ) ) );
+                    double angle1 = KoPoint::getAngle( m_rotateCenter, m_rotateStart );
 
                     angle -= angle1;
                     angle += m_angleBeforeRotate;

@@ -783,7 +783,6 @@ private:
 
     /// menu identifier for draw mode
     int PM_DM;
-    int firstX, firstY;
     int delPageId;
     bool drawRubber;
     /// rect for drawing rubber
@@ -807,6 +806,8 @@ private:
     KPrObject *m_rotateObject;
     /// center of the rotated object
     KoPoint m_rotateCenter;
+    /// start point for rotation
+    KoPoint m_rotateStart;
     /// angle of the object at start of rotate
     double m_angleBeforeRotate;
 
