@@ -26,6 +26,7 @@
  * Boston, MA 02110-1301, USA.
 */
 
+#include <kdebug.h>
 
 namespace KPlato
 {
@@ -128,7 +129,16 @@ void DurationWidget::setValue(const KPlato::Duration &newDuration)
     {
         if (m_fields[i].scale > 0 && m_fields[i].scale < m_fields[i].fullScale)
         {
-            v[i] = (v[i] * m_fields[i].fullScale) / m_fields[i].scale;
+            unsigned int value = (v[i] * m_fields[i].fullScale) / m_fields[i].scale;
+            unsigned int r = (v[i] * m_fields[i].fullScale) - value * m_fields[i].scale;
+            v[i] = value;
+            if (i < 4 && r > 0) {
+                v[i+1] += r;
+                tmp.sprintf(m_fields[i+1].format, v[i+1]);
+                m_fields[i+1].current->setText(tmp);
+                //kdDebug()<<"v["<<i+1<<"] r="<<r<<endl;
+            }
+            //kdDebug()<<"v["<<i<<"] r="<<r<<endl;
         }
         v[i] += t; // add overflow from prevoius field
         t = 0;
