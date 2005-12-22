@@ -45,8 +45,7 @@ const QString Variant::toString()
 
 const QString Variant::getVariantType(Object::Ptr object)
 {
-    QVariant value = toVariant(object);
-    switch( value.type() ) {
+    switch( toVariant(object).type() ) {
 
         case QVariant::CString:
         case QVariant::String:
@@ -83,52 +82,40 @@ const QVariant& Variant::toVariant(Object::Ptr object)
 
 const QString Variant::toString(Object::Ptr object)
 {
-    QVariant variant = toVariant(object);
-    if(variant.type() != QVariant::String && variant.type() != QVariant::CString)
+    const QVariant& variant = toVariant(object);
+    if(! variant.canCast(QVariant::String))
         throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::String expected, but got %1.").arg(variant.typeName()).latin1()) );
     return variant.toString();
 }
 
 uint Variant::toUInt(Object::Ptr object)
 {
-    QVariant variant = toVariant(object);
-    //TODO check for QVariant::UInt ?!
-    bool ok;
-    uint i = variant.toUInt(&ok);
-    if(! ok)
+    const QVariant& variant = toVariant(object);
+    if(! variant.canCast(QVariant::UInt))
         throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::UInt expected, but got %1.").arg(variant.typeName()).latin1()) );
-    return i;
+    return variant.toUInt();
 }
 
 Q_LLONG Variant::toLLONG(Object::Ptr object)
 {
-    QVariant variant = toVariant(object);
-    bool ok;
-    Q_LLONG l = variant.toLongLong(&ok);
-    if(! ok)
+    const QVariant& variant = toVariant(object);
+    if(! variant.canCast(QVariant::LongLong))
         throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::LLONG expected, but got %1.").arg(variant.typeName()).latin1()) );
-    return l;
+    return variant.toLongLong();
 }
 
 Q_ULLONG Variant::toULLONG(Object::Ptr object)
 {
-    QVariant variant = toVariant(object);
-    bool ok;
-    Q_ULLONG l = variant.toULongLong(&ok);
-    if(! ok)
+    const QVariant& variant = toVariant(object);
+    if(! variant.canCast(QVariant::ULongLong))
         throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::ULLONG expected, but got %1.").arg(variant.typeName()).latin1()) );
-    return l;
+    return variant.toULongLong();
 }
 
 bool Variant::toBool(Object::Ptr object)
 {
-    QVariant variant = toVariant(object);
-    if(variant.type() != QVariant::Bool &&
-       variant.type() != QVariant::LongLong &&
-       variant.type() != QVariant::ULongLong &&
-       variant.type() != QVariant::Int &&
-       variant.type() != QVariant::UInt
-    )
+    const QVariant& variant = toVariant(object);
+    if(! variant.canCast(QVariant::Bool))
         throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::Bool expected, but got %1.").arg(variant.typeName()).latin1()) );
     return variant.toBool();
 }
@@ -142,8 +129,8 @@ QValueList<QVariant> Variant::toList(Object::Ptr object)
             l.append( toVariant(*it) );
         return l;
     }
-    QVariant variant = toVariant(object);
-    if(variant.type() != QVariant::List)
+    const QVariant& variant = toVariant(object);
+    if(! variant.canCast(QVariant::List))
         throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::List expected, but got '%1'.").arg(variant.typeName()).latin1()) );
     return variant.toList();
 }
