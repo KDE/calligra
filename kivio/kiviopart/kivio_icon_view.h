@@ -37,14 +37,15 @@ class KivioIconView : public QIconView
     KivioStencilSpawnerSet *m_pSpawnerSet;
     static KivioStencilSpawner *m_pCurDrag;
 
-    void drawBackground( QPainter *, const QRect & );
     QDragObject *dragObject();
 
   protected slots:
-    void slotDoubleClicked( QIconViewItem * );
+    void slotDoubleClicked(QIconViewItem*);
+    void slotClicked(QIconViewItem* item);
 
   signals:
-    void createNewStencil( KivioStencilSpawner * );
+    void createNewStencil(KivioStencilSpawner * );
+    void stencilSelected(KivioStencilSpawner*);
 
   public:
     KivioIconView( bool _readWrite,QWidget *parent=0, const char *name=0 );
@@ -53,7 +54,7 @@ class KivioIconView : public QIconView
     static void clearCurrentDrag();
     static KivioStencilSpawner *curDragSpawner() { return m_pCurDrag; }
 
-    void setStencilSpawnerSet( KivioStencilSpawnerSet * );
+    void setStencilSpawnerSet(KivioStencilSpawnerSet*);
     KivioStencilSpawnerSet *spawnerSet() { return m_pSpawnerSet; }
 
   private:
@@ -72,7 +73,7 @@ class KivioIconViewItem : public QIconViewItem
     KivioIconViewItem( QIconView *parent );
     virtual ~KivioIconViewItem();
 
-    void setStencilSpawner( KivioStencilSpawner * );
+    void setStencilSpawner(KivioStencilSpawner*);
     KivioStencilSpawner *spawner() { return m_pSpawner; }
 
     virtual bool acceptDrop( const QMimeSource *e ) const;

@@ -126,6 +126,7 @@
 #include "kivio_config.h"
 #include "kivioaddstencilsetpanel.h"
 #include "kiviostencilsetinstaller.h"
+#include "addstenciltool.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -138,6 +139,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 : KoView( doc, _parent, _name )
 {
   m_pluginManager = new PluginManager(this, "Kivio Plugin Manager");
+  m_addStencilTool = new Kivio::AddStencilTool(this);
   m_pPaletteManager = new KoPaletteManager(this, actionCollection(), "kivio palette manager");
   m_zoomHandler = new KoZoomHandler();
   zoomHandler()->setZoomAndResolution(100, KoGlobal::dpiX(), KoGlobal::dpiY());
@@ -942,6 +944,8 @@ void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
   KivioIconView *pView = new KivioIconView(m_pDoc->isReadWrite());
   QObject::connect(pView, SIGNAL(createNewStencil(KivioStencilSpawner*)), this,
                    SLOT(addStencilFromSpawner(KivioStencilSpawner*)));
+  connect(pView, SIGNAL(stencilSelected(KivioStencilSpawner*)),
+          m_addStencilTool, SLOT(activateNewStencil(KivioStencilSpawner* )));
 
   pView->setStencilSpawnerSet(pSpawner);
   m_pStencilBarDockManager->insertStencilSet(pView, pSpawner->name());

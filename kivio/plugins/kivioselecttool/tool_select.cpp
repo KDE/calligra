@@ -57,13 +57,15 @@ SelectTool::SelectTool( KivioView* parent ) : Kivio::MouseTool(parent, "Selectio
   m_selectAction = new KRadioAction(i18n("&Select"), "select", selectShortCut, actionCollection(), "select");
   connect(m_selectAction, SIGNAL(toggled(bool)), this, SLOT(setActivated(bool)));
 
-  m_textEditAction = new KAction(i18n("&Edit Text..."), "text", Key_F2, this, SLOT(editStencilText()), actionCollection(), "editText");
-  m_textFormatAction = new KAction(i18n("Format &Text..."), 0, 0, view(), SLOT(textFormat()), actionCollection(), "formatText");
+  m_textEditAction = new KAction(i18n("&Edit Text..."), "text", Key_F2,
+                                 this, SLOT(editStencilText()), actionCollection(), "editText");
+  m_textFormatAction = new KAction(i18n("Format &Text..."), 0, 0,
+                                   view(), SLOT(textFormat()), actionCollection(), "formatText");
   (void) new KAction(i18n("Format &Stencils && Connectors..."), 0, 0, view(), SLOT(stencilFormat()),
                           actionCollection(), "formatStencil");
   m_arrowHeadAction = new KAction(i18n("Format &Arrowheads..."), 0, 0, view(), SLOT(arrowHeadFormat()),
                                   actionCollection(), "formatConnector");
-  
+
   m_mode = stmNone;
   m_pResizingStencil = NULL;
   m_pCustomDraggingStencil = NULL;

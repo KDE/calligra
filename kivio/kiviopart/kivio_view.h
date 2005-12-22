@@ -38,6 +38,7 @@ namespace Kivio {
   class ToolController;
   class PluginManager;
   class AddStencilSetPanel;
+  class AddStencilTool;
 }
 
 class KivioBirdEyePanel;
@@ -375,6 +376,7 @@ class KIVIO_EXPORT KivioView : public KoView
 
     QScrollBar* m_vertScrollBar;
     QScrollBar* m_horzScrollBar;
+    Kivio::AddStencilTool* m_addStencilTool;
 };
 
 #endif
