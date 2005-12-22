@@ -18,39 +18,49 @@
 
 */
 
-#include <kgenericfactory.h>
+#ifndef __VIMAGETOOL_H__
+#define __VIMAGETOOL_H__
 
-#include "karbon_factory.h"
-#include "karbon_tool_factory.h"
-#include "karbon_tool_registry.h"
+#include <qstring.h>
 
-#include "vtool_image.h"
+#include "vtool.h"
+#include <commands/vcommand.h>
 
-#include "imagetoolplugin.h"
+class KarbonView;
+class VImage;
 
-typedef KGenericFactory<VToolImage> VToolImageFactory;
-K_EXPORT_COMPONENT_FACTORY( karbonvtoolimage, VToolImageFactory( "karbonimagetoolplugin" ) )
-
-VToolImage::VToolImage(QObject *parent, const char *name, const QStringList &) : KParts::Plugin(parent, name)
+class VImageTool : public VTool
 {
-	setInstance(VToolImageFactory::instance());
+public:
+	VImageTool( KarbonView *view );
+	~VImageTool(); 
 
-	kdDebug() << "VToolImage. Class: "
-		<< className()
-		<< ", Parent: "
-		<< parent -> className()
-		<< "\n";
+	virtual void activate();
+	virtual void deactivate();
 
-	if ( parent->inherits("KarbonFactory") )
+	virtual void setup( KActionCollection *collection );
+	virtual QString uiname() { return i18n( "Image Tool" ); }
+	virtual QString contextHelp();
+	virtual QString statusText();
+
+protected:
+	class VInsertImageCmd : public VCommand
 	{
-		KarbonToolRegistry* r = KarbonToolRegistry::instance();
-		r->add(new KarbonToolFactory<VImageTool>());
-	}
-}
+	public:
+		VInsertImageCmd( VDocument* doc, const QString& name, VImage *image, KoPoint pos );
+		virtual ~VInsertImageCmd() {}
 
-VToolImage::~VToolImage()
-{
-}
+		virtual void execute();
+		virtual void unexecute();
+		virtual bool changesSelection() const { return true; }
 
-#include "vtool_image.moc"
+	protected:
+		VImage	*m_image;
+		KoPoint	m_pos;
+	};
+
+	virtual void mouseButtonRelease();
+};
+
+#endif
 

@@ -1,5 +1,3 @@
-kde_services_DATA = karbonimagetool.desktop
-
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/karbon  -I$(top_srcdir)/karbon/core $(all_includes)
 
 kde_module_LTLIBRARIES = karbon_imagetoolplugin.la
