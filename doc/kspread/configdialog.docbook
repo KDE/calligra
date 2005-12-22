@@ -14,7 +14,7 @@
 <title>The &kspread; Configuration Dialog Box</title>
 
 <para>Selecting <menuchoice><guimenu>Settings</guimenu><guimenuitem>
-Configure Kspread...</guimenuitem></menuchoice> opens a dialog box 
+Configure &kspread;...</guimenuitem></menuchoice> opens a dialog box 
 with several pages, selected with the icons at the left of the dialog box, 
 which allow you to change many aspects of &kspread;'s operation.</para>
 
@@ -179,7 +179,9 @@ calculation performed by the <link linkend="statusbarsum">Statusbar Summary
 <guimenuitem>Increase indent</guimenuitem> option in the <guimenu>Format
 </guimenu> menu.
 </para>
-<para>The unit taken here is the one you fixe in the Configure &kspread;... dialog, in the Page Layout tab in the <guilabel>Default page units</guilabel> setting. </para></listitem>
+<para>The unit taken here is the one you fixe in the Configure
+&kspread; dialog, in the Page Layout tab in the <guilabel>Default page
+units</guilabel> setting. </para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -267,7 +269,10 @@ default page size, orientation and units used by the printer and by the
 
 <varlistentry>
 <term><guilabel>Default page orientation:</guilabel></term>
-<listitem><para>Choose the default sheet orientation: portrait or lanscape. Note that you can overwrite the orientation for the current sheet using the <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice> dialog.
+<listitem><para>Choose the default sheet orientation: portrait or landscape.
+Note that you can overwrite the orientation for the current sheet using the
+<menuchoice><guimenu>Format</guimenu><guimenuitem>Page
+Layout...</guimenuitem></menuchoice> dialog.
 </para></listitem>
 </varlistentry>
 

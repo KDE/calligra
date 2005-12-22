@@ -82,7 +82,7 @@ from a combo box of recently used files.</para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Import...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Import other spreatsheet documents.</action>
+<listitem><para><action>Import other documents.</action>
 </para></listitem>
 </varlistentry>
 
@@ -945,7 +945,11 @@ by &kspread;.</action>
 <guimenuitem>Protect Doc...</guimenuitem>
 </menuchoice></term>
 <listitem><para>
-<action>Protect the whole document with a password. A dialog pops up prompting you for a password. Unchecking this option will prompt you for the password in order to unprotect the document. In a protected document you cannot rename or remove a sheet. Document protection does not mean that each individual sheet are protected.</action>
+<action>Protect the whole document with a password. A dialog pops up prompting
+you for a password. Unchecking this option will prompt you for the password in
+order to unprotect the document. In a protected document you cannot rename or
+remove a sheet. Document protection does not mean that each individual sheet
+is protected.</action>
 </para></listitem>
 </varlistentry>
 

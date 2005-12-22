@@ -158,15 +158,17 @@ Dates</guimenuitem></menuchoice>.There are two formats set here: the date format
 and the short date format.</para>
 <para>A random natural number NN will be transformed in the date from 30st
 December 1899 (which is 0) with the number of days NN added. For example if you
-have a cell
-with 100 and you choose Data Format -&gt; Date, "1900-04-09" will be displayed
-in the cell which is 100 days after 30st December 1899. This starting date is
-two days early as it was a bug in Lotus 123 and then it stayed that way in Excel
-in order to keep compatibility. Few people will need to calculate from 1st
-January 1900 anyway and adding 9 days to 1st November 2000 for example will give
-you 10th November 2000 so all normal calculations on dates are correct.</para>
-<note><para>Just like you can drag down numbers you can also drag down dates and
-the next cells will also get dates.</para></note><!--TODO explain that better-->
+have a cell with 100 and you choose Data Format -&gt; Date, "1900-04-09" will be
+displayed in the cell which is 100 days after 30st December 1899. This starting
+date is two days early as it was a bug in Lotus 123 and then it stayed that way
+in Excel in order to keep compatibility. Few people will need to calculate from
+1st January 1900 anyway and adding 9 days to 1st November 2000 for example will
+give you 10th November 2000 so all normal calculations on dates are
+correct.</para>
+<note><para>When a cell is in the date format, you can drag this cell down as
+you do with numbers and the next cells will also get
+dates, each date being increased by one day.</para></note><!--TODO explain that
+better-->
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -266,20 +268,21 @@ weight to <guilabel>Bold</guilabel>.</para>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Color:</guilabel></term>
-<listitem><para>Choose the color for the currently selected cells text. Clicking
-on the color bar will bring you the standard KDE Select Color dialog where you
-will be able to choose the new color. </para>
+<listitem><para>Choose the color for the currently selected cells' text.
+Clicking on the color bar will bring you the standard KDE Select Color dialog
+where you will be able to choose the new color. </para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Underline</guilabel></term>
-<listitem><para>Underlines the currently selected cells text if checked. This is
+<listitem><para>Underlines the currently selected cells' text if checked. This
+is
 not checked per default.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term><guilabel>Strike out</guilabel></term>
-<listitem><para>This will strike out the currently selected cells text if this
+<listitem><para>This will strike out the currently selected cells'  text if this
 is checked. This is not checked per default.</para>
 </listitem>
 </varlistentry>
@@ -309,7 +312,7 @@ appear vertically rather than horizontally, or even at an angle.</para>
 <varlistentry>
 <term><guilabel>Horizontal</guilabel></term>
 <listitem><para>Set the content position horizontally in the cell. 
-Standard is default and is set from the format you choose 
+Standard is default and is set from the data format you choose. 
 Left means the content will be displayed on the left of the cell.
 Center means the content will be in the center horizontally in the cell.
 Right means the content of the cell will be displayed on the right of the
@@ -329,8 +332,7 @@ cell.</para>
 <term><guilabel>Text option</guilabel></term>
 <listitem><para>This is only available when the rotation is 0°. 
 Wrap text wraps the text so it fits in the previous cell size. If this is not
-checked, the text will stay on one line and the cell size will be adjusted to
-contain the text.</para>
+checked, the text will stay on one line.</para>
 <para>Vertical text puts your text vertically.</para>
 </listitem>
 </varlistentry>
@@ -435,7 +437,7 @@ sheet using the <menuchoice><guimenu>Tools</guimenu><guimenuitem>Protect
 Document </guimenuitem><guimenuitem>Protect Sheet...</guimenuitem></menuchoice>
 menu and to provide a password.
 You can also hide the cell formula in order to protect the way you calculate the
-formula. This also needs to enable shet protection to work.
+formula. This also needs to enable sheet protection to work.
 You can hide the cell content with Hide all and again this needs sheet
 protection.
 You can learn more about all these settings in the <link
@@ -605,7 +607,7 @@ and <guibutton>Defaults</guibutton> will bring back the default settings.</para>
 <variablelist>
 <varlistentry>
 <term><guilabel>Layout direction:</guilabel></term>
-<listitem><para>Let you choose the sheet orientation. Defaut is that the first
+<listitem><para>Let you choose the sheet orientation. Default is that the first
 column of the sheet is on the left. If you choose Right to Left, then the first
 column will be on the right and the others added from right to left.</para>
 </listitem>
@@ -619,7 +621,7 @@ automatically when the value of any cell they refer to changes.</para>
 <varlistentry>
 <term><guilabel>Show grid</guilabel></term>
 <listitem><para>If checked the grid (the cell limits) will be shown. This is
-default. If you uncheck it, the grid willl be hidden.</para>
+default. If you uncheck it, the grid will be hidden.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
