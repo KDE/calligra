@@ -131,20 +131,16 @@ KoCMYKWidget::KoCMYKWidget(QWidget *parent, const char *name) : super(parent, na
 void KoCMYKWidget::slotCChanged(int c)
 {
     if (m_ColorButton->current() == KDualColorButton::Foreground){
-        m_fgC = c / 255;
-        int r = int((1 - m_fgC * (1 - m_fgK) - m_fgK) * 255);
-        int g = m_fgColor.green();
-        int b = m_fgColor.blue();
-        m_fgColor.setRgb(r, g, b);
+        CMYKColor col = RgbToCmyk(m_fgColor);
+        col.C = c / 255.0;
+        m_fgColor = CmykToRgb(col);
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
         emit sigFgColorChanged(m_fgColor);
     }
     else{
-        m_bgC = c / 255;
-        int r = int((1 - m_bgC * (1 - m_bgK) - m_bgK) * 255);
-        int g = m_bgColor.green();
-        int b = m_bgColor.blue();
-        m_bgColor.setRgb(r, g, b);
+        CMYKColor col = RgbToCmyk(m_bgColor);
+        col.C = c / 255.0;
+        m_bgColor = CmykToRgb(col);
         m_ColorButton->setCurrent(KDualColorButton::Background);
         emit sigBgColorChanged(m_bgColor);
     }
@@ -153,20 +149,16 @@ void KoCMYKWidget::slotCChanged(int c)
 void KoCMYKWidget::slotMChanged(int m)
 {
     if (m_ColorButton->current() == KDualColorButton::Foreground){
-        m_fgM = m / 255;
-        int r = m_fgColor.red();
-        int g = int((1 - m_fgM * (1 - m_fgK) - m_fgK) * 255);
-        int b = m_fgColor.blue();
-        m_fgColor.setRgb(r, g, b);
+        CMYKColor col = RgbToCmyk(m_fgColor);
+        col.M = m / 255.0;
+        m_fgColor = CmykToRgb(col);
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
         emit sigFgColorChanged(m_fgColor);
     }
     else{
-        m_bgM = m / 255;
-        int r = m_bgColor.red();
-        int g = int((1 - m_bgM * (1 - m_bgK) - m_bgK) * 255);
-        int b = m_bgColor.blue();
-        m_bgColor.setRgb(r, g, b);
+        CMYKColor col = RgbToCmyk(m_bgColor);
+        col.M = m / 255.0;
+        m_bgColor = CmykToRgb(col);
         m_ColorButton->setCurrent(KDualColorButton::Background);
         emit sigBgColorChanged(m_bgColor);
     }
@@ -175,20 +167,16 @@ void KoCMYKWidget::slotMChanged(int m)
 void KoCMYKWidget::slotYChanged(int y)
 {
     if (m_ColorButton->current() == KDualColorButton::Foreground){
-        m_fgY = y / 255;
-        int r = m_fgColor.red();
-        int g = m_fgColor.green();
-        int b = int((1 - m_fgY * (1 - m_fgK) - m_fgK) * 255);
-        m_fgColor.setRgb(r, g, b);
+        CMYKColor col = RgbToCmyk(m_fgColor);
+        col.Y = y / 255.0;
+        m_fgColor = CmykToRgb(col);
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
         emit sigFgColorChanged(m_fgColor);
     }
     else{
-        m_bgY = y / 255;
-        int r = m_bgColor.red();
-        int g = m_bgColor.green();
-        int b = int((1 - m_bgY * (1 - m_bgK) - m_bgK) * 255);
-        m_bgColor.setRgb(r, g, b);
+        CMYKColor col = RgbToCmyk(m_bgColor);
+        col.Y = y / 255.0;
+        m_bgColor = CmykToRgb(col);
         m_ColorButton->setCurrent(KDualColorButton::Background);
         emit sigBgColorChanged(m_bgColor);
     }
@@ -197,20 +185,16 @@ void KoCMYKWidget::slotYChanged(int y)
 void KoCMYKWidget::slotKChanged(int k)
 {
     if (m_ColorButton->current() == KDualColorButton::Foreground){
-        m_fgK = k / 255;
-        int r = int((1 - m_fgC * (1 - m_fgK) - m_fgK) * 255);
-        int g = int((1 - m_fgM * (1 - m_fgK) - m_fgK) * 255);
-        int b = int((1 - m_fgY * (1 - m_fgK) - m_fgK) * 255);
-        m_fgColor.setRgb(r, g, b);
+        CMYKColor col = RgbToCmyk(m_fgColor);
+        col.K = k / 255.0;
+        m_fgColor = CmykToRgb(col);
         m_ColorButton->setCurrent(KDualColorButton::Foreground);
         emit sigFgColorChanged(m_fgColor);
     }
     else{
-        m_bgK = k / 255;
-        int r = int((1 - m_bgC * (1 - m_bgK) - m_bgK) * 255);
-        int g = int((1 - m_bgM * (1 - m_bgK) - m_bgK) * 255);
-        int b = int((1 - m_bgY * (1 - m_bgK) - m_bgK) * 255);
-        m_bgColor.setRgb(r, g, b);
+        CMYKColor col = RgbToCmyk(m_bgColor);
+        col.K = k / 255.0;
+        m_bgColor = CmykToRgb(col);
         m_ColorButton->setCurrent(KDualColorButton::Background);
         emit sigBgColorChanged(m_bgColor);
     }
@@ -233,30 +217,7 @@ void KoCMYKWidget::update(const QColor fgColor, const QColor bgColor)
 
     QColor color = (m_ColorButton->current() == KDualColorButton::Foreground)? m_fgColor : m_bgColor;
 
-    int r = color.red();
-    int g = color.green();
-    int b = color.blue();
-
-    float ac = (255 - r) / 255;
-    float am = (255 - g) / 255;
-    float ay = (255 - b) / 255;
-
-    float c = 0;
-    float m = 0;
-    float y = 0;
-    float k = 0;
-
-    if ((r == 0) && (g == 0) && (b == 0))
-    {
-        k = 1; 
-    }
-    else
-    {
-        KMIN(ac,am) ? k = KMIN(ac,ay) : k = KMIN(am,ay);
-        c = (ac - k) / (1 - k);
-        m = (am - k) / (1 - k);
-        y = (ay - k) / (1 - k);
-    }
+    CMYKColor col = RgbToCmyk(color);
 
     disconnect(m_ColorButton, SIGNAL(fgChanged(const QColor &)), this, SLOT(slotFGColorSelected(const QColor &)));
     disconnect(m_ColorButton, SIGNAL(bgChanged(const QColor &)), this, SLOT(slotBGColorSelected(const QColor &)));
@@ -276,77 +237,45 @@ void KoCMYKWidget::update(const QColor fgColor, const QColor bgColor)
     mKSlider->blockSignals(true);
     mKIn->blockSignals(true);
 
-    QColor minC;
-    QColor maxC;
+    CMYKColor minC = col;
+    minC.C = 0.0;
+    CMYKColor maxC = col;
+    maxC.C = 1.0;
 
-    int minCr = int((1 - k) * 255);
-    int minCg = g;
-    int minCb = b;
-    minC.setRgb(minCr, minCg, minCb);
+    mCSlider->slotSetColor1(CmykToRgb(minC));
+    mCSlider->slotSetColor2(CmykToRgb(maxC));
+    mCSlider->slotSetValue(int(col.C * 255));
+    mCIn->setValue(int(col.C * 255));
 
-    int maxCr = 0;
-    int maxCg = g;
-    int maxCb = b;
-    maxC.setRgb(maxCr, maxCg, maxCb);
+    CMYKColor minM = col;
+    minM.M = 0.0;
+    CMYKColor maxM = col;
+    maxM.M = 1.0;
 
-    mCSlider->slotSetColor1(minC);
-    mCSlider->slotSetColor2(maxC);
-    mCSlider->slotSetValue(int(c * 255));
-    mCIn->setValue(int(c * 255));
+    mMSlider->slotSetColor1(CmykToRgb(minM));
+    mMSlider->slotSetColor2(CmykToRgb(maxM));
+    mMSlider->slotSetValue(int(col.M * 255));
+    mMIn->setValue(int(col.M * 255));
 
-    QColor minM;
-    QColor maxM;
+    CMYKColor minY = col;
+    minY.Y = 0.0;
+    CMYKColor maxY = col;
+    maxY.Y = 1.0;
 
-    int minMr = r;
-    int minMg = int((1 - k) * 255);
-    int minMb = b;
-    minM.setRgb(minMr, minMg, minMb);
+    mYSlider->slotSetColor1(CmykToRgb(minY));
+    mYSlider->slotSetColor2(CmykToRgb(maxY));
+    mYSlider->slotSetValue(int(col.Y * 255));
+    mYIn->setValue(int(col.Y * 255));
 
-    int maxMr = r;
-    int maxMg = 0;
-    int maxMb = b;
-    maxM.setRgb(maxMr, maxMg, maxMb);
+    CMYKColor minK = col;
+    minK.K = 0.0;
+    CMYKColor maxK = col;
+    maxK.K = 1.0;
 
-    mMSlider->slotSetColor1(minM);
-    mMSlider->slotSetColor2(maxM);
-    mMSlider->slotSetValue(int(m * 255));
-    mMIn->setValue(int(m * 255));
-
-    QColor minY;
-    QColor maxY;
-
-    int minYr = r;
-    int minYg = g;
-    int minYb = int((1 - k) * 255);
-    minY.setRgb(minYr, minYg, minYb);
-
-    int maxYr = r;
-    int maxYg = g;
-    int maxYb = 0;
-    maxY.setRgb(maxYr, maxYg, maxYb);
-
-    mYSlider->slotSetColor1(minY);
-    mYSlider->slotSetColor2(maxY);
-    mYSlider->slotSetValue(int(y * 255));
-    mYIn->setValue(int(y * 255));
-
-    QColor minK;
-    QColor maxK;
-
-    int minKr = 255;
-    int minKg = 255;
-    int minKb = 255;
-    minK.setRgb(minKr, minKg, minKb);
-
-    int maxKr = 0;
-    int maxKg = 0;
-    int maxKb = 0;
-    maxK.setRgb(maxKr, maxKg, maxKb);
-
-    mKSlider->slotSetColor1(minK);
-    mKSlider->slotSetColor2(maxK);
-    mKSlider->slotSetValue(int(k * 255));
-    mKIn->setValue(int(k * 255));
+    mKSlider->slotSetColor1(CmykToRgb(minK));
+    mKSlider->slotSetColor2(CmykToRgb(maxK));
+    mKSlider->slotSetValue(int(col.K * 255));
+    mKIn->setValue(int(col.K * 255));
 
     mCSlider->blockSignals(false);
     mCIn->blockSignals(false);
@@ -368,6 +297,101 @@ void KoCMYKWidget::slotBGColorSelected(const QColor& c)
 {
     m_bgColor = QColor(c);
     emit sigBgColorChanged(m_bgColor);
+}
+
+CMYKColor KoCMYKWidget::RgbToCmyk(const QColor& col)
+{
+	kdDebug() << "--[ KoCMYKWidget::RgbToCmyk ]--------------------------------------" << endl;
+	kdDebug() << endl;
+
+    // RGB to CMY
+    float r = col.red() / 255.0;
+    float g = col.green() / 255.0;
+    float b = col.blue() / 255.0;
+
+	kdDebug() << "float r = col.red() / 255.0;" << endl;
+	kdDebug() << "      r = " << col.red() << " / 255.0 = " << r << endl;
+	kdDebug() << "float g = col.green() / 255.0;" << endl;
+	kdDebug() << "      g = " << col.green() << " / 255.0 = " << g << endl;
+	kdDebug() << "float b = col.blue() / 255.0;" << endl;
+	kdDebug() << "      b = " << col.blue() << " / 255.0 = " << b << endl;
+	kdDebug() << endl;
+
+    float ac = 1.0 - r;
+    float am = 1.0 - g;
+    float ay = 1.0 - b;
+
+	kdDebug() << "float ac = 1.0 - r;" << endl;
+	kdDebug() << "      ac = 1.0 - " << r << " = " << ac << endl;
+	kdDebug() << "float am = 1.0 - g;" << endl;
+	kdDebug() << "      am = 1.0 - " << g << " = " << am << endl;
+	kdDebug() << "float ay = 1.0 - b;" << endl;
+	kdDebug() << "      ay = 1.0 - " << b << " = " << ay << endl;
+	kdDebug() << endl;
+
+    // CMY to CMYK
+    float c = 0.0;
+    float m = 0.0;
+    float y = 0.0;
+    float k = 0.0;
+
+    if ((r == 0.0) && (g == 0.0) && (b == 0.0))
+    {
+		kdDebug() << "r = g = b = 0.0: Therefor k = 1.0" << endl;
+        k = 1.0;
+    }
+    else
+    {
+		kdDebug() << "r = g = b != 0.0: Therefor k = min(ac,am,ay)" << endl;
+
+        if (kMin(ac,am) == ac)
+            k = kMin(ac,ay);
+        else
+            k = kMin(am,ay);
+
+        c = (ac - k) / (1.0 - k);
+        m = (am - k) / (1.0 - k);
+        y = (ay - k) / (1.0 - k);
+    }
+
+	kdDebug() << "float k = " << k << endl;
+	kdDebug() << endl;
+
+	kdDebug() << "float c = (ac - k) / (1.0 - k);" << endl;
+	kdDebug() << "      c = (" << ac << " - " << k << ") / (1.0 - " << k << ") = " << c << endl;
+	kdDebug() << "float m = (am - k) / (1.0 - k);" << endl;
+	kdDebug() << "      m = (" << am << " - " << k << ") / (1.0 - " << k << ") = " << m << endl;
+	kdDebug() << "float y = (ay - k) / (1.0 - k);" << endl;
+	kdDebug() << "      y = (" << ay << " - " << k << ") / (1.0 - " << k << ") = " << y << endl;
+	kdDebug() << endl;
+
+    CMYKColor color;
+    color.C = c;
+    color.M = m;
+    color.Y = y;
+    color.K = k;
+
+	kdDebug() << "===================================================================" << endl;
+
+    return color;
+}
+
+QColor KoCMYKWidget::CmykToRgb(const CMYKColor& c)
+{
+    // CMYK to CMY
+    float ac = kMin(1.0, c.C * (1.0 - c.K) + c.K);
+    float am = kMin(1.0, c.M * (1.0 - c.K) + c.K);
+    float ay = kMin(1.0, c.Y * (1.0 - c.K) + c.K);
+
+    // CMY to RGB
+    int r = int((1.0 - ac) * 255.0);
+    int g = int((1.0 - am) * 255.0);
+    int b = int((1.0 - ay) * 255.0);
+
+    QColor color;
+    color.setRgb(r,g,b);
+
+    return color;
 }
 
 #include "ko_cmyk_widget.moc"

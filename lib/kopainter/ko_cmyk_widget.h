@@ -32,6 +32,14 @@ class QLabel;
 class QSpinBox;
 class KDualColorButton;
 
+struct CMYKColor
+{
+    float C;
+    float M;
+    float Y;
+    float K;
+};
+
 class KoCMYKWidget
      : public QWidget
 {
@@ -71,6 +79,9 @@ protected slots:
 private:
 
     void update(const QColor fgColor, const QColor);
+
+    CMYKColor RgbToCmyk(const QColor& col);
+    QColor CmykToRgb(const CMYKColor& c);
 
 private:
 
