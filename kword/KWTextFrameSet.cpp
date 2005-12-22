@@ -609,11 +609,6 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
         }
     }
 
-    // Do we draw a cursor ?
-    bool drawCursor = edit!=0L;
-    // Only if it will blink, i.e. not in a 'copy frame' that's not the current one
-    if ( drawCursor && viewMode->hasFrames() && edit->currentFrame() != theFrame /*always true if currentFrame()==0 */ )
-        drawCursor = false;
     KoTextCursor * cursor = edit ? (dynamic_cast<KWTextFrameSetEdit *>(edit) ? static_cast<KWTextFrameSetEdit *>(edit)->cursor() : 0) : 0;
     uint drawingFlags = 0;
     if ( viewMode->drawSelections() )
@@ -629,7 +624,7 @@ void KWTextFrameSet::drawFrameContents( KWFrame *theFrame, QPainter *painter, co
     KoTextParag * lastFormatted = textDocument()->drawWYSIWYG(
         painter, r.x(), r.y(), r.width(), r.height(),
         cg, kWordDocument(),
-        onlyChanged, drawCursor, cursor, resetChanged, drawingFlags );
+        onlyChanged, false, cursor, resetChanged, drawingFlags );
 
     // The last paragraph of this frame might have a bit in the next frame too.
     // In that case, and if we're only drawing changed paragraphs, (and resetting changed),
@@ -772,6 +767,10 @@ void KWTextFrameSet::drawCursor( QPainter *p, KoTextCursor *cursor, bool cursorV
                 QBrush bgBrush( settings->backgroundColor() );
                 bgBrush.setColor( KWDocument::resolveBgColor( bgBrush.color(), p ) );
                 cg.setBrush( QColorGroup::Base, bgBrush );
+                // color of cursor, the inverse of the frame background
+                QColor background = bgBrush.color();
+                cg.setColor(QColorGroup::Text, QColor( 255 - background.red(),
+                    255 - background.green(), 255 - background.blue()) );
             }
 
             QPixmap *pix = 0;
