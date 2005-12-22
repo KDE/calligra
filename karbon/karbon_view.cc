@@ -41,6 +41,7 @@
 #include <koUnitWidgets.h>
 #include <koPageLayoutDia.h>
 #include <vruler.h>
+#include <koView.h>
 
 // Commands.
 #include "valigncmd.h"
@@ -828,8 +829,16 @@ KarbonView::zoomChanged( const KoPoint &p )
 
 	m_canvas->viewport()->setUpdatesEnabled( false );
 
-	m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 300 ) * zoomFactor ),
-							  int( ( part()->pageLayout().ptHeight + 460 ) * zoomFactor ) );
+	if( ! part()->isEmbedded() )
+	{
+		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 300 ) * zoomFactor ),
+								  int( ( part()->pageLayout().ptHeight + 460 ) * zoomFactor ) );
+	}
+	else
+	{
+		m_canvas->resizeContents( int( part()->pageLayout().ptWidth * zoomFactor ),
+								  int( part()->pageLayout().ptHeight * zoomFactor ) );
+	}
 
 
 	VPainter *painter = painterFactory()->editpainter();
@@ -1287,8 +1296,12 @@ KarbonView::pageLayout()
 		part()->setPageLayout( layout, unit );
 		m_horizRuler->setUnit( unit );
 		m_vertRuler->setUnit( unit );
-		m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 300 ) * zoom() ),
-								  int( ( part()->pageLayout().ptHeight + 460 ) * zoom() ) );
+		if( part()->isEmbedded() )
+			m_canvas->resizeContents( int( part()->pageLayout().ptWidth * zoom() ),
+									  int( part()->pageLayout().ptHeight * zoom() ) );
+		else 
+			m_canvas->resizeContents( int( ( part()->pageLayout().ptWidth + 300 ) * zoom() ),
+									  int( ( part()->pageLayout().ptHeight + 460 ) * zoom() ) );
 		part()->repaintAllViews();
 
 		emit pageLayoutChanged();
@@ -1467,6 +1480,14 @@ void KarbonView::createTransformDock()
 	connect( this, SIGNAL( selectionChange() ), m_TransformDocker, SLOT( update() ) );
 	connect( part(), SIGNAL( unitChanged( KoUnit::Unit ) ), m_TransformDocker, SLOT( setUnit( KoUnit::Unit ) ) );
 }
+
+void KarbonView::setZoom( double zoom )
+{
+	kdDebug(38000) << "KarbonView::setZoom(): " << zoom << endl;
+	setZoomAt( zoom );
+	KoView::setZoom( zoom );
+}
+
 
 VToolController *
 KarbonView::toolController()

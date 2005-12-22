@@ -542,26 +542,21 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	VPainter *p = painterFactory->painter();
 	//VPainter *p = new VKoPainter( painter.device() );
 	p->begin();
-	p->setZoomFactor( zoomFactor );
 	kdDebug(38000) << "painter.worldMatrix().dx() : " << painter.worldMatrix().dx() << endl;
 	kdDebug(38000) << "painter.worldMatrix().dy() : " << painter.worldMatrix().dy() << endl;
 	kdDebug(38000) << "rect.x() : "<< rect.x() << endl;
 	kdDebug(38000) << "rect.y() : "<< rect.y() << endl;
 	kdDebug(38000) << "rect.width() : "<< rect.width() << endl;
 	kdDebug(38000) << "rect.height() : "<< rect.height() << endl;
-	r = document().boundingBox();
+
+	p->setZoomFactor( zoomFactor );
 	QWMatrix mat = painter.worldMatrix();
 	mat.scale( 1, -1 );
-	mat.translate( 0, -r.height() * zoomFactor );
+	mat.translate( 0, -m_doc.height() * zoomFactor );
 	p->setWorldMatrix( mat );
 
 	m_doc.selection()->clear();
-	QPtrListIterator<VLayer> itr( m_doc.layers() );
-
-	for( ; itr.current(); ++itr )
-	{
-		itr.current()->draw( p, &r );
-	}
+	m_doc.draw( p, &r );
 
 	p->end();
 	delete painterFactory;

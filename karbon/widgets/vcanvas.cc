@@ -39,11 +39,10 @@ int
 VCanvas::pageOffsetX() const
 {
 	double zoomedWidth = m_part->document().width() * m_view->zoom();
-	if( contentsWidth() < viewport()->width() )
-	{
-		//kdDebug(38000) << "offsetx : " << int( ( viewport()->width() - zoomedWidth ) / 2.0 ) << endl;
+	if( m_part->isEmbedded() )
+		return 0;
+	else if( contentsWidth() < viewport()->width() )
 		return int( ( viewport()->width() - zoomedWidth ) / 2.0 );
-	}
 	else
 		return int( ( contentsWidth() - zoomedWidth ) / 2.0 );
 }
@@ -52,11 +51,10 @@ int
 VCanvas::pageOffsetY() const
 {
 	double zoomedHeight = m_part->document().height() * m_view->zoom();
-	if( contentsHeight() < viewport()->height() )
-	{
-		//kdDebug(38000) << "offsetx : " << int( ( viewport()->height() - zoomedHeight ) / 2.0 ) << endl;
+	if( m_part->isEmbedded() )
+		return 0;
+	else if( contentsHeight() < viewport()->height() )
 		return int( ( viewport()->height() - zoomedHeight ) / 2.0 );
-	}
 	else
 		return int( ( contentsHeight() - zoomedHeight ) / 2.0 );
 }
@@ -111,8 +109,16 @@ VCanvas::VCanvas( QWidget *parent, KarbonView* view, KarbonPart* part )
 	viewport()->setBackgroundMode( QWidget::NoBackground );
 	viewport()->installEventFilter( this );
 
-	resizeContents( 800, 600 );
-	m_pixmap = new QPixmap( 800, 600 );
+	if( ! m_part->isEmbedded() )
+	{
+		resizeContents( 800, 600 );
+		m_pixmap = new QPixmap( 800, 600 );
+	}
+	else
+	{
+		resizeContents( m_part->document().width(), m_part->document().height() );
+		m_pixmap = new QPixmap( m_part->document().width(), m_part->document().height() );
+	}
 
 	setFocus();
 
@@ -209,7 +215,9 @@ VCanvas::setYMirroring( VPainter *p )
 	mat.scale( 1, -1 );
 	mat.translate( pageOffsetX(), pageOffsetY() );
 
-	if( contentsHeight() > height() )
+	if( m_part->isEmbedded() )
+		mat.translate( 0, -contentsHeight() );
+	else if( contentsHeight() > height() )
 		mat.translate( -contentsX(), contentsY() - contentsHeight() );
 	else
 		mat.translate( 0, -height() );
@@ -270,8 +278,13 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 void
 VCanvas::setViewport( double centerX, double centerY )
 {
-	setContentsPos( int( centerX * contentsWidth() - visibleWidth() / 2 ),
-					int( centerY * contentsHeight() - visibleHeight() / 2 ) );
+	// if embedded set viewport always to top left corner
+	// else center viewport to the given fractions of the content
+	if( m_part->isEmbedded() )
+		setContentsPos( 0, 0 );
+	else
+		setContentsPos( int( centerX * contentsWidth() - visibleWidth() / 2 ),
+						int( centerY * contentsHeight() - visibleHeight() / 2 ) );
 }
 
 void
