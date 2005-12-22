@@ -338,7 +338,7 @@ void KexiSimplePrintingWindow::slotChangePageSizeAndMargins()
 {
 	KoHeadFoot headfoot; //dummy
 
-	if (QDialog::Accepted != KoPageLayoutDia::pageLayout( 
+	if (int(QDialog::Accepted) != KoPageLayoutDia::pageLayout( 
 		m_settings.pageLayout, headfoot, FORMAT_AND_BORDERS | DISABLE_UNIT, m_unit, this ))
 		return;
 
