@@ -82,6 +82,24 @@ static KCmdLineOptions options[] =
 	"be opened in Text Mode, if one is available"), 0 },
   { "new <object_type>", I18N_NOOP(
 	"Start new object design of type <object_type>"), 0 },
+  { "print [<object_type>:]<object_name>", I18N_NOOP(
+	"\nOpen object of type <object_type>\n"
+	"and name <object_name> from specified project\n"
+	"on application start for quick printing\n"
+	"of the object's data.\n"
+	"<object_type>: is optional, if omitted - table\n"
+	"type is assumed.\n"
+	"Other object types can be query, report, form,\n"
+	"script (may be more or less, depending on your\n"
+	"plugins installed).\n"
+	"Use \"\" chars to specify names containing spaces.\n"
+	"Examples: --print MyTable,\n"
+	" --print query:\"My very big query\""), 0 },
+  { "printpreview [<object_type>:]<object_name>", I18N_NOOP(
+	"\nOpen Print Preview window for object\n"
+	"of type <object_type> and name <object_name>\n"
+	"from specified project on application start.\n"
+	"See --print for more details"), 0 },
 #ifdef KEXI_SHOW_UNIMPLEMENTED
   { "final-mode", I18N_NOOP(
 	"Start project in the Final Mode, regardless \n"
