@@ -630,25 +630,8 @@ void KWDocument::setPageLayout( const KoPageLayout& layout, const KoColumns& cl,
         pageManager()->setDefaultPageMargins(layout.ptTop, layout.ptLeft, layout.ptBottom, layout.ptRight);
         m_pageColumns = cl;
         m_pageHeaderFooter = hf;
-
-#if 0  // I don't think this is needed anymore since we auto-create new pages and all.. (TZ)
-        if ( updateViews ) {
-            // Fix things up, when we change the orientation we might accidentally change the number of pages
-            // (and frames of the main textframeset might just remain un-moved...)
-            int numPages = pageCount();
-            KWFrameSet *frameset = m_lstFrameSet.getFirst();
-            KWFrame* lastFrame = frameset->frame( frameset->frameCount() - 1 );
-            if ( lastFrame && lastFrame->pageNumber() + 1 < numPages ) {
-                kdDebug(32002) << "KWDocument::setPageLayout ensuring that recalcFrames will consider " << numPages << " pages." << endl;
-                // All that matters is that it's on numPages so that all pages will be recalc-ed.
-                // If the text layout then wants to remove some pages, no problem.
-                KWPage *page =  pageManager()->page( numPages );
-                lastFrame->setY( page->offsetInDocument() + page->topMargin() );
-            }
-        }
-#endif
-
-    } else {
+    }
+    else {
         //kdDebug() << "KWDocument::setPageLayout NON-WP" << endl;
         pageManager()->setDefaultPageSize(layout.ptWidth, layout.ptHeight, layout.format);
         pageManager()->setDefaultPageMargins(0, 0, 0, 0);
@@ -3912,14 +3895,15 @@ void KWDocument::repaintAllViews( bool erase )
         (*it)->getGUI()->canvasWidget()->repaintAll( erase );
 }
 
-QPtrList<KWFrame> KWDocument::framesToCopyOnNewPage( int afterPageNum ) const // can be -1 for 'before page 0'
-{
+QPtrList<KWFrame> KWDocument::framesToCopyOnNewPage( int afterPageNum ) const {
+    // afterPageNum can be -1 for 'before page 1'
+
     // Look at frames on pages afterPageNum and afterPageNum-1 (for sheetside stuff)
     QPtrList<KWFrame> framesToLookAt;
-    if ( afterPageNum >= 0 )
+    if ( afterPageNum >= startPage() )
         framesToLookAt = framesInPage( afterPageNum, false );
 
-    if ( afterPageNum >= 1 )
+    if ( afterPageNum >= startPage() + 1 )
     {
         QPtrList<KWFrame> framesToAlsoLookAt = framesInPage( afterPageNum-1, false ); // order doesn't matter
 
