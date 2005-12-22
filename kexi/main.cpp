@@ -39,9 +39,6 @@
 
 extern "C" int kdemain(int argc, char *argv[])
 {
-#ifdef CUSTOM_VERSION
-# include "custom_startup.h"
-#endif
 	Kexi::initCmdLineArgs( argc, argv );
 
 	bool GUIenabled = true;
@@ -52,6 +49,7 @@ extern "C" int kdemain(int argc, char *argv[])
 	KGlobal::locale()->removeCatalogue("kexi");
 	KGlobal::locale()->insertCatalogue("standalone_kexi");
 #endif
+	KGlobal::locale()->insertCatalogue("koffice");
 
 	if (GUIenabled) {
 		dummyWidget = new QWidget();

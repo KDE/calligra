@@ -253,7 +253,7 @@ void KexiSimplePrintingWindow::print()
 	printer.setOrientation( m_settings.pageLayout.orientation == PG_PORTRAIT 
 		? QPrinter::Portrait : QPrinter::Landscape );
 	printer.setPageSize( 
-		(KPrinter::PageSize)KoPageFormat::printerPageSize( m_settings.pageLayout.format ) );
+		(QPrinter::PageSize)KoPageFormat::printerPageSize( m_settings.pageLayout.format ) );
 #else
 	KPrinter printer;
 	printer.setOrientation( m_settings.pageLayout.orientation == PG_PORTRAIT 

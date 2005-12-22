@@ -29,6 +29,7 @@
 #include <qpixmap.h>
 #include <qpixmapcache.h>
 #include <qcolor.h>
+#include <qfileinfo.h>
 
 #include <kdebug.h>
 #include <kcursor.h>
@@ -278,6 +279,9 @@ void Kexi::initCmdLineArgs(int argc, char *argv[], KAboutData* aboutData)
 	KAboutData *about = aboutData;
 	if (!about)
 		about = newKexiAboutData();
+#ifdef CUSTOM_VERSION
+# include "../custom_startup.h"
+#endif
 	KCmdLineArgs::init( argc, argv, about );
 	KCmdLineArgs::addCmdLineOptions( options );
 }
