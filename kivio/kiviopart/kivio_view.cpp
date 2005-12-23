@@ -941,6 +941,10 @@ void KivioView::addSpawnerToStackBar( KivioStencilSpawnerSet *pSpawner )
     return;
   }
 
+  if(pSpawner->hidden()) {
+    return;
+  }
+
   KivioIconView *pView = new KivioIconView(m_pDoc->isReadWrite());
   QObject::connect(pView, SIGNAL(createNewStencil(KivioStencilSpawner*)), this,
                    SLOT(addStencilFromSpawner(KivioStencilSpawner*)));

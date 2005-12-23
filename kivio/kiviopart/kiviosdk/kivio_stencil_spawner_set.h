@@ -31,22 +31,24 @@ class KivioStencilSpawnerSet
     QString m_dir;
     QString m_name;
     QString m_id;
-    
+
     QStringList m_files;
-    
+
     QPtrList<KivioStencilSpawner> *m_pSpawners;
     KivioStencilSpawner *m_pSelected;
-    
+
+    bool m_hidden;
+
   public:
     KivioStencilSpawnerSet(const QString& name=QString::null);
     virtual ~KivioStencilSpawnerSet();
-    
+
     bool loadDir( const QString & );
     KivioStencilSpawner* loadFile( const QString & );
-    
+
     bool loadXML( const QDomElement & );
     QDomElement saveXML( QDomDocument & );
-    
+
     QPtrList<KivioStencilSpawner> *spawners() { return m_pSpawners; }
     KivioStencilSpawner *selected() { return m_pSelected; }
 
@@ -57,19 +59,22 @@ class KivioStencilSpawnerSet
     void setDir( const QString &s ) { m_dir=s; }
     void setName( const QString &s ) { m_name=s; }
     void setId( const QString &s ) { m_id=s; }
-    
+
     KivioStencilSpawner *spawnerAt( int i ) { return m_pSpawners->at(i); }
     KivioStencilSpawner *find( const QString& );
-    
+
     int count() { return m_pSpawners->count(); }
 
     static QString readTitle( const QString & );
     static QString readId( const QString & );
     static QString readDescription(const QString&);
-    
+
     QStringList files() const { return m_files; }
-    
+
     void addSpawner(KivioStencilSpawner* spawner);
+
+    void setHidden(bool hide) { m_hidden = hide; }
+    bool hidden() const { return m_hidden; }
 };
 
 #endif

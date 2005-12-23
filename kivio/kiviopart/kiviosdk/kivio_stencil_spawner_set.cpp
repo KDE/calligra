@@ -61,8 +61,7 @@ KivioStencilSpawnerSet::~KivioStencilSpawnerSet()
  */
 bool KivioStencilSpawnerSet::loadXML( const QDomElement & )
 {
-
-    return false;
+  return false;
 }
 
 
@@ -78,20 +77,21 @@ bool KivioStencilSpawnerSet::loadXML( const QDomElement & )
  */
 QDomElement KivioStencilSpawnerSet::saveXML( QDomDocument &doc )
 {
-    QDomElement spawnE = doc.createElement("KivioStencilSpawnerSet");
+  QDomElement spawnE = doc.createElement("KivioStencilSpawnerSet");
 
-    XmlWriteString( spawnE, "id", m_id );
+  XmlWriteString( spawnE, "id", m_id );
+  XmlWriteString(spawnE, "hidden", (m_hidden ? "true" : "false"));
 
-    KivioStencilSpawner *pSpawner = m_pSpawners->first();
-    while( pSpawner )
-    {
-        spawnE.appendChild( pSpawner->saveXML( doc ) );
+  KivioStencilSpawner *pSpawner = m_pSpawners->first();
+  while( pSpawner )
+  {
+    spawnE.appendChild( pSpawner->saveXML( doc ) );
 
-        pSpawner = m_pSpawners->next();
-    }
+    pSpawner = m_pSpawners->next();
+  }
 
 
-    return spawnE;
+  return spawnE;
 }
 
 bool KivioStencilSpawnerSet::loadDir( const QString &dirName )

@@ -101,7 +101,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     *
     */
     void addSpawnerSet( const QString& );
-    void addSpawnerSetDuringLoad( const QString& );
+    void addSpawnerSetDuringLoad(const QString& dirName, bool hidden);
     bool removeSpawnerSet( KivioStencilSpawnerSet * );
 
     QPtrList<KivioStencilSpawnerSet> *spawnerSets()const { return m_pLstSpawnerSets; }
@@ -182,9 +182,9 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     void loadingFinished();
 
   protected:
-    bool checkStencilsForSpawner( KivioStencilSpawner * );
-    bool checkGroupForSpawner( KivioStencil *, KivioStencilSpawner *);
-    bool setIsAlreadyLoaded( QString dirName, QString name );
+    bool checkStencilsForSpawnerSet(KivioStencilSpawnerSet *);
+    bool checkGroupForSpawnerSet(KivioStencil *, KivioStencilSpawnerSet *);
+    KivioStencilSpawnerSet* findSpawnerSet(const QString& dirName, const QString& name);
 
     void saveOasisSettings( KoXmlWriter &/*settingsWriter*/ );
     void loadOasisSettings( const QDomDocument&settingsDoc );
@@ -200,7 +200,7 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     /**
     * Loads a KivioStencilSpawnerSet based on it's id
     */
-    bool loadStencilSpawnerSet( const QString &id );
+    bool loadStencilSpawnerSet(const QString &id, bool hidden);
 
     /**
     * Overloaded function of @ref KoDocument.
