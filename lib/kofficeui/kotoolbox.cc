@@ -54,6 +54,7 @@ KoToolBox::KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instanc
     m_buttonGroup->setExclusive( true );
     connect( m_buttonGroup, SIGNAL( pressed( int ) ), this, SLOT( slotButtonPressed( int ) ) );
 
+    m_tools.setAutoDelete( true );
     // Create separate lists for the various sorts of tools
     for (int i = 0; i < numberOfTooltypes ; ++i) {
         ToolList * tl = new ToolList();
@@ -63,6 +64,7 @@ KoToolBox::KoToolBox( KMainWindow *mainWin, const char* name, KInstance* instanc
 
 KoToolBox::~KoToolBox()
 {
+    delete m_buttonGroup;
 }
 
 
