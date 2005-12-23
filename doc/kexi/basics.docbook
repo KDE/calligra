@@ -147,11 +147,88 @@
         <title>
           Notes
         </title>
+        <itemizedlist>
+          <listitem><para>
+            By default <guilabel>File type</guilabel> drop down list has
+            <guilabel>All Supported Files</guilabel> setting chosen.
+            In case the file you are looking for has other extension,
+            you can change selection of <guilabel>File type</guilabel>
+            drop down list to <guilabel>All files</guilabel> to display
+            all available files (regardless of an extension).
+          </para></listitem>
+          <listitem><para>
+            If you have selected a file of external type like MS Access' .mdb
+            file, &kexi; will provide you with option to import the file.
+<!-- todo an advice to read "importing" chapter will be placed here -->
+          </para></listitem>
+          <listitem><para>
+            If you have selected a <emphasis>connection data</emphasis> file
+            (with .kexic extension) or a <emphasis>shortcut to a project on
+            database server</emphasis> file (with .kexis extension), &kexi;
+            will display appropriate windows.
+          </para></listitem>
+        </itemizedlist>
         <para></para>
+      </sect3>
+    </sect2>
+
+    <sect2 id="open-icon">
+      <title>
+        Opening an existing Kexi database file by clicking on .kexi file's icon
+      </title>
+      <para>
+        Click file's icon using your file manager or desktop.
+        Kexi will open this database project automatically.
+      </para>
+<!-- <img src="icons/mime-kexiproject_sqlite.png" class="icon"/> -->
+      <sect3 id="open-icon-notes">
+        <title>
+          Notes
+        </title>
+        <para>
+          <emphasis>Note about database files accessed remotely.</emphasis>
+          You may want to open a database file that is located on a remote
+          source (e.g. an web or FTP server or MS Windows share).
+          K Desktop Environment allows you to open files from remote sources
+          directly in applications and saving changes back to the source, but
+          this is not the case with database files. By clicking on a database
+          file located on a remote source, you will cause a download the file
+          to a temporary directory on your computer and all eventual your
+          changes will be made to this local file. The remote original of
+          the file will remain unchanged after you close Kexi, so it's
+          recommended to copy (download) the file to your computer first,
+          then open the file and copy it back to remove source if you want
+          to make it up to date.
+        </para>
       </sect3>
     </sect2>
   </sect1>
 
+  <sect1 id="using-help">
+    <title>
+      Using built-in help
+    </title>
+    <itemizedlist>
+      <title>
+        Following ways to get built-in help in Kexi are available:
+      </title>
+      <listitem>
+        <para><emphasis>The Handbook in form of electronic document.</emphasis></para>
+        <para>
+          THe Handbook is available by presing <keycombo>F1</keycombo> key
+          or selecting <menuchoice><guimenu>Help</guimenu><guimenuitem>&kexi;
+          Handbook</guimenuitem></menuchoice> from the menubar.
+        </para>
+      </listitem>
+      <listitem>
+        <para><emphasis>What's This? hints.</emphasis></para>
+        <para>
+          Select <menuchoice><guimenu>Help</guimenu><guimenuitem>What's
+          This?</guimenuitem></menuchoice>from the menu bar and click on
+          an area of the application to get hints about it.
+        </para>
+      </listitem>
+    </itemizedlist>
+  </sect1>
 
 </chapter>
-
