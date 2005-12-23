@@ -1114,8 +1114,8 @@ KoTextParag *KoTextDocument::drawWYSIWYG( QPainter *p, int cx, int cy, int cw, i
         if ( !r.isEmpty() ) {
 #ifdef DEBUG_PAINTING
             kdDebug(32500) << " drawWYSIWYG: space above first parag: " << r << " (pixels)" << endl;
-            p->fillRect( r, cg.brush( QColorGroup::Base ) );
 #endif
+            p->fillRect( r, cg.brush( QColorGroup::Base ) );
         }
     }
 
