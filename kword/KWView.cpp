@@ -2173,6 +2173,7 @@ void KWView::showStyle( const QString & styleName )
     }
 }
 
+static const QString STYLE_ACTION_PREFIX = "paragstyle_"; // used to avoid action naming conflicts
 void KWView::updateStyleList()
 {
     QString currentStyle = m_actionFormatStyle->currentText();
@@ -2208,10 +2209,10 @@ void KWView::updateStyleList()
         KoParagStyle *style = m_doc->styleCollection()->styleAt( i );
         if ( style )
         {
-            QString name = "paragstyle_" + style->name();
+            QString name = STYLE_ACTION_PREFIX + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotStyleSelected() ),
-                                     actionCollection(), style->name().utf8() );
+                                     actionCollection(), name.utf8() );
             act->setGroup( "styleList" );
             act->setExclusiveGroup( "styleListAction" );
             act->setToolTip( i18n( "Apply a paragraph style" ) );
@@ -2219,6 +2220,17 @@ void KWView::updateStyleList()
         }
         else
             kdWarning() << "No style found for " << *it << endl;
+    }
+}
+
+// Called when selecting a style in the Format / Style menu
+void KWView::slotStyleSelected()
+{
+    QString actionName = QString::fromUtf8(sender()->name());
+    if(actionName.startsWith(STYLE_ACTION_PREFIX)) {
+        actionName = actionName.right(actionName.length() - STYLE_ACTION_PREFIX.length());
+        // kdDebug(32001) << "KWView::slotStyleSelected " << actionName << endl;
+        textStyleSelected( m_doc->styleCollection()->findStyle( actionName ) );
     }
 }
 
@@ -4425,14 +4437,6 @@ void KWView::tableProtectCells(bool on)
         macro->execute();
         m_doc->addCommand( macro );
     }
-}
-
-// Called when selecting a style in the Format / Style menu
-void KWView::slotStyleSelected()
-{
-    QString actionName = QString::fromUtf8(sender()->name());
-    kdDebug() << "KWView::slotStyleSelected " << actionName << endl;
-    textStyleSelected( m_doc->styleCollection()->findStyle( actionName ) );
 }
 
 void KWView::textStyleSelected( KoParagStyle *sty )
