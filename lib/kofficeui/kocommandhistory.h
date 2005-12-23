@@ -164,6 +164,10 @@ signals:
      * saved the document for the last time. See @ref #documentSaved
      */
     void documentRestored();
+    /**
+     * Emitted whenever addCommand (executed or not), undo, or redo is called.
+     */
+    void commandHistoryChanged();
 
 private:
     void clipCommands();  // ensures that the limits are kept

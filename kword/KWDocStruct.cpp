@@ -1200,6 +1200,9 @@ KWDocStruct::KWDocStruct(QWidget* parent, KWDocument* doc, KWGUI* gui)
     searchBar->setStretchableWidget( searchLine );
     connect( eraseButton, SIGNAL( clicked() ), searchLine, SLOT( clear() ) );
 
+    connect( m_doc->commandHistory(), SIGNAL( commandHistoryChanged() ),
+        this, SLOT( refreshEntireTree() ) );
+
     m_layout->addWidget(searchBar);
     m_layout->addWidget(m_tree);
     m_tree->setup();
@@ -1221,6 +1224,11 @@ void KWDocStruct::refreshTree(int type)
         dirtyTreeTypes |= type;
         update();
     }
+}
+
+void KWDocStruct::refreshEntireTree()
+{
+    refreshTree((int)(TextFrames | FormulaFrames | Tables | Pictures | Embedded));
 }
 
 void KWDocStruct::setFocusHere()

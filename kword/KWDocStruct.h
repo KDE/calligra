@@ -335,6 +335,10 @@ public:
     /** Set focus to the tree, if visible. */
     void setFocusHere();
 
+public slots:
+    /** Refresh the entire tree. */
+    void refreshEntireTree();
+
 protected:
     KWDocStructTree* m_tree;
     QVBoxLayout* m_layout;

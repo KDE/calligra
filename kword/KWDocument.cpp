@@ -5237,6 +5237,7 @@ QStringList KWDocument::listOfBookmarkName(KWViewMode * viewMode)const
 void KWDocument::paragraphModified(KoTextParag* /*parag*/, int /*KoTextParag::ParagModifyType*/ /*type*/, int /*start*/, int /*lenght*/)
 {
     //kdDebug()<<" parag :"<<parag<<" start :"<<start<<" lenght :"<<lenght<<endl;
+    emit docStructureChanged(Tables | TextFrames);
 }
 
 
