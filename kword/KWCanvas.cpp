@@ -2384,7 +2384,7 @@ FrameSelectPolicy::FrameSelectPolicy(KWCanvas *parent, KoPoint &point, Qt::Butto
             // convert point to the view coordinate system.
             QPoint normalPoint = parent->kWordDocument()->zoomPoint(point);
             QPoint mousePos = parent->viewMode()->normalToView(normalPoint);
-            QMouseEvent *me = new QMouseEvent(QEvent::MouseButtonRelease, mousePos,
+            QMouseEvent *me = new QMouseEvent(QEvent::MouseButtonPress, mousePos,
                     buttonState, keyState);
             fse->mousePressEvent(me, normalPoint, point );
             delete me;
