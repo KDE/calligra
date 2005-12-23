@@ -615,8 +615,8 @@ void KWDocument::initEmpty()
 
 KoPageLayout KWDocument::pageLayout(int pageNumber /* = 0 */) const
 {
-    if( pageNumber == 0) // impossible page..
-        pageNumber = pageManager()->startPage();
+    if( pageNumber < startPage()) // impossible page..
+        pageNumber = startPage();
     return pageManager()->pageLayout(pageNumber);
 }
 
