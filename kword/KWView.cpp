@@ -5704,10 +5704,10 @@ void KWView::slotFrameSetEditChanged()
     m_actionAddPersonalExpression->setEnabled( state && hasSelection);
     m_actionSortText->setEnabled( state && hasSelection);
     bool goodleftMargin=false;
-    if(state)
+    if(state && edit)
         goodleftMargin=(edit->currentLeftMargin()>0);
 
-    m_actionFormatDecreaseIndent->setEnabled(goodleftMargin /*&& state*/);
+    m_actionFormatDecreaseIndent->setEnabled(goodleftMargin);
     bool isFootNoteSelected = ((rw && edit && !edit->textFrameSet()->isFootEndNote())||(!edit&& rw));
     m_actionFormatBullet->setEnabled(isFootNoteSelected);
     m_actionFormatNumber->setEnabled(isFootNoteSelected);
