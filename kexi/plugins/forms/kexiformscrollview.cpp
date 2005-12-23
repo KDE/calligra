@@ -120,8 +120,8 @@ void KexiFormScrollView::ensureCellVisible(int row, int col/*=-1*/)
 
 void KexiFormScrollView::moveToRecordRequested(uint r)
 {
-	Q_UNUSED( r );
 	//! @todo
+	selectRow(r);
 }
 
 void KexiFormScrollView::moveToLastRecordRequested()
