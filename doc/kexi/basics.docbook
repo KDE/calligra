@@ -215,7 +215,7 @@
       <listitem>
         <para><emphasis>The Handbook in form of electronic document.</emphasis></para>
         <para>
-          THe Handbook is available by presing <keycombo>F1</keycombo> key
+          THe Handbook is available by presing <keycombo><keycap>F1</keycap></keycombo> key
           or selecting <menuchoice><guimenu>Help</guimenu><guimenuitem>&kexi;
           Handbook</guimenuitem></menuchoice> from the menubar.
         </para>
