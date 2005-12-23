@@ -2173,7 +2173,11 @@ void KWView::showStyle( const QString & styleName )
     }
 }
 
-static const QString STYLE_ACTION_PREFIX = "paragstyle_"; // used to avoid action naming conflicts
+// used to avoid action naming conflicts
+static const char* PARAGSTYLE_ACTION_PREFIX = "paragstyle_";
+static const char* FRAMESTYLE_ACTION_PREFIX = "framestyle_";
+static const char* TABLESTYLE_ACTION_PREFIX = "tablestyle_";
+
 void KWView::updateStyleList()
 {
     QString currentStyle = m_actionFormatStyle->currentText();
@@ -2209,7 +2213,7 @@ void KWView::updateStyleList()
         KoParagStyle *style = m_doc->styleCollection()->styleAt( i );
         if ( style )
         {
-            QString name = STYLE_ACTION_PREFIX + style->name();
+            QString name = PARAGSTYLE_ACTION_PREFIX + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotStyleSelected() ),
                                      actionCollection(), name.utf8() );
@@ -2227,9 +2231,10 @@ void KWView::updateStyleList()
 void KWView::slotStyleSelected()
 {
     QString actionName = QString::fromUtf8(sender()->name());
-    if(actionName.startsWith(STYLE_ACTION_PREFIX)) {
-        actionName = actionName.right(actionName.length() - STYLE_ACTION_PREFIX.length());
-        // kdDebug(32001) << "KWView::slotStyleSelected " << actionName << endl;
+    const QString prefix = PARAGSTYLE_ACTION_PREFIX;
+    if ( actionName.startsWith( prefix ) ) {
+        actionName = actionName.mid( prefix.length() );
+        kdDebug(32001) << "KWView::slotStyleSelected " << actionName << endl;
         textStyleSelected( m_doc->styleCollection()->findStyle( actionName ) );
     }
 }
@@ -2273,7 +2278,7 @@ void KWView::updateFrameStyleList()
         KWFrameStyle *style = m_doc->frameStyleCollection()->frameStyleAt( i );
         if ( style )
         {
-            QString name = "framestyle_" + style->name();
+            QString name = FRAMESTYLE_ACTION_PREFIX + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                                     shortCuts[name], // KDE4: use value()
                                                     this, SLOT( slotFrameStyleSelected() ),
@@ -2324,7 +2329,7 @@ void KWView::updateTableStyleList()
         KWTableStyle *style = m_doc->tableStyleCollection()->tableStyleAt( i );
         if ( style )
         {
-            QString name = "tablestyle_" + style->name();
+            QString name = TABLESTYLE_ACTION_PREFIX + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotTableStyleSelected() ),
                                      actionCollection(), name.utf8() );
@@ -4494,7 +4499,11 @@ void KWView::textStyleSelected( int index )
 void KWView::slotFrameStyleSelected()
 {
     QString actionName = QString::fromUtf8(sender()->name());
-    frameStyleSelected( m_doc->frameStyleCollection()->findStyle( actionName ) );
+    const QString prefix = FRAMESTYLE_ACTION_PREFIX;
+    if ( actionName.startsWith( prefix ) ) {
+        actionName = actionName.mid( prefix.length() );
+        frameStyleSelected( m_doc->frameStyleCollection()->findStyle( actionName ) );
+    }
 }
 
 void KWView::frameStyleSelected( int index )
@@ -4559,7 +4568,11 @@ void KWView::frameStyleSelected( KWFrameStyle *sty )
 void KWView::slotTableStyleSelected()
 {
     QString actionName = QString::fromUtf8(sender()->name());
-    tableStyleSelected( m_doc->tableStyleCollection()->findStyle( actionName ) );
+    const QString prefix = TABLESTYLE_ACTION_PREFIX;
+    if ( actionName.startsWith( prefix ) ) {
+        actionName = actionName.mid( prefix.length() );
+        tableStyleSelected( m_doc->tableStyleCollection()->findStyle( actionName ) );
+    }
 }
 
 void KWView::tableStyleSelected( int index )
