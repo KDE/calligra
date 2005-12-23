@@ -167,9 +167,9 @@ signals:
     /// emitted after a frameset that had at least one selected frame was renamed.
     void sigFrameSetRenamed();
     /// emitted after frames were resized
-    void sigFrameResized(const QValueList<KWFrame*>);
+    void sigFrameResized(const QValueList<KWFrame*>&);
     /// emitted after frames were moved
-    void sigFrameMoved(const QValueList<KWFrame*>);
+    void sigFrameMoved(const QValueList<KWFrame*>&);
 
 protected slots:
     /**

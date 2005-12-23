@@ -2749,7 +2749,7 @@ bool KWDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 }
 
 // can't be const due to recalcVariables()
-bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag, QValueList<KWFrameView*> selectedFrames, QString* plainText, KoPicture* picture, KWTextFrameSet* fs) {
+bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag, const QValueList<KWFrameView*> &selectedFrames, QString* plainText, KoPicture* picture, KWTextFrameSet* fs) {
     m_pictureCollection->assignUniqueIds();
     fixZOrders();
 
@@ -2926,7 +2926,7 @@ bool KWDocument::saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, S
 }
 
 // can't be const due to recalcVariables()
-QDragObject* KWDocument::dragSelected( QValueList<KWFrameView*> selectedFrames) {
+QDragObject* KWDocument::dragSelected( const QValueList<KWFrameView*> &selectedFrames) {
     return dragSelectedPrivate(0, selectedFrames, 0);
 }
 // can't be const due to recalcVariables()
@@ -2935,7 +2935,7 @@ QDragObject* KWDocument::dragSelected( QWidget *parent, KWTextFrameSet* fs) {
     return dragSelectedPrivate(parent, noFrames, fs);
 }
 // can't be const due to recalcVariables()
-QDragObject* KWDocument::dragSelectedPrivate( QWidget *parent, QValueList<KWFrameView*> selectedFrames, KWTextFrameSet* fs)
+QDragObject* KWDocument::dragSelectedPrivate( QWidget *parent, const QValueList<KWFrameView*> &selectedFrames, KWTextFrameSet* fs)
 {
     // We'll create a store (ZIP format) in memory
     QBuffer buffer;
@@ -2970,9 +2970,9 @@ QDragObject* KWDocument::dragSelectedPrivate( QWidget *parent, QValueList<KWFram
     return multiDrag;
 }
 
-void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoXmlWriter* manifestWriter, KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList, QValueList<KWFrameView*> selectedFrames, QString* plainText ) const {
+void KWDocument::saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoXmlWriter* manifestWriter, KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList, const QValueList<KWFrameView*> &selectedFrames, QString* plainText ) const {
     QPtrList<KoDocumentChild> embeddedObjects;
-    QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
+    QValueListConstIterator<KWFrameView*> framesIterator = selectedFrames.begin();
     for(; framesIterator != selectedFrames.end(); ++framesIterator) {
         KWFrame *frame = (*framesIterator)->frame();
         KWFrameSet *fs = frame->frameSet();
@@ -4316,7 +4316,7 @@ void KWDocument::framesChanged( const QPtrList<KWFrame> & frames, KWView * view 
     updateRulerFrameStartEnd();
 }
 
-void KWDocument::framesChanged( const QValueList<KWFrame*> frames) {
+void KWDocument::framesChanged( const QValueList<KWFrame*> &frames) {
     QValueList<KWFrameSet *> visitedFrameSets;
     QValueListConstIterator<KWFrame*> framesIterator = frames.begin();
     bool layoutneeded = false;

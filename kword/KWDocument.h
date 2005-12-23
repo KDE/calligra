@@ -162,7 +162,7 @@ public:
     /**
      * Return a drag object with the selected frames
      */
-    QDragObject* dragSelected( QValueList<KWFrameView*> selectedFrames);
+    QDragObject* dragSelected( const QValueList<KWFrameView*> &selectedFrames);
     /**
      * Return a drag object with the selected text
      */
@@ -787,7 +787,7 @@ signals:
 public slots:
     void slotRepaintChanged( KWFrameSet * frameset );
     void slotRepaintVariable();
-    void framesChanged( const QValueList<KWFrame*> frames);
+    void framesChanged( const QValueList<KWFrame*> &frames);
 
     /** calls invalidate() on all framesets  */
     void invalidate(const KWFrameSet *skipThisFrameSet=0);
@@ -834,7 +834,7 @@ protected:
     QValueList<KoPictureKey> savePictureList();
 
     /// helper method for the 2 different dragSelected() versions
-    QDragObject* dragSelectedPrivate( QWidget *parent, QValueList<KWFrameView*> selectedFrames, KWTextFrameSet* fs);
+    QDragObject* dragSelectedPrivate( QWidget *parent, const QValueList<KWFrameView*> &selectedFrames, KWTextFrameSet* fs);
     /**
      * Save the whole document, or just the selection, into OASIS format
      * When saving the selection, also return the data as plain text and/or plain picture,
@@ -850,13 +850,13 @@ protected:
      * @param fs the text frameset, which must be set when saveFlag==SaveSelected.
      */
     bool saveOasisHelper( KoStore* store, KoXmlWriter* manifestWriter, SaveFlag saveFlag,
-                    QValueList<KWFrameView*> selectedFrames,
+                    const QValueList<KWFrameView*> &selectedFrames,
                     QString* plainText = 0, KoPicture* picture = 0, KWTextFrameSet* fs = 0 );
 
     void saveOasisSettings( KoXmlWriter &settingsWriter ) const;
     void saveSelectedFrames( KoXmlWriter& bodyWriter, KoStore* store, KoXmlWriter* manifestWriter,
                              KoSavingContext& savingContext, QValueList<KoPictureKey>& pictureList,
-                             QValueList<KWFrameView*> selectedFrames, QString* plainText ) const;
+                             const QValueList<KWFrameView*> &selectedFrames, QString* plainText ) const;
 
     // inherited from KoDocument
     QWidget* createCustomDocumentWidget(QWidget *parent);

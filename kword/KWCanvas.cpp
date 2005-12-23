@@ -160,10 +160,10 @@ KWCanvas::KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGU
     }
     m_doc->deleteInitialEditingInfo();
 
-    connect(frameViewManager(), SIGNAL(sigFrameResized(const QValueList<KWFrame*>)),
-        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>)));
-    connect(frameViewManager(), SIGNAL(sigFrameMoved(const QValueList<KWFrame*>)),
-        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>)));
+    connect(frameViewManager(), SIGNAL(sigFrameResized(const QValueList<KWFrame*>&)),
+        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>&)));
+    connect(frameViewManager(), SIGNAL(sigFrameMoved(const QValueList<KWFrame*>&)),
+        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>&)));
 }
 
 KWCanvas::~KWCanvas()
@@ -173,10 +173,10 @@ KWCanvas::~KWCanvas()
     m_currentFrameSetEdit = 0;
     delete m_viewMode;
     m_viewMode = 0;
-    disconnect(frameViewManager(), SIGNAL(sigFrameResized(const QValueList<KWFrame*>)),
-        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>)));
-    disconnect(frameViewManager(), SIGNAL(sigFrameMoved(const QValueList<KWFrame*>)),
-        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>)));
+    disconnect(frameViewManager(), SIGNAL(sigFrameResized(const QValueList<KWFrame*>&)),
+        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>&)));
+    disconnect(frameViewManager(), SIGNAL(sigFrameMoved(const QValueList<KWFrame*>&)),
+        m_doc, SLOT(framesChanged(const QValueList<KWFrame*>&)));
     delete m_frameViewManager;
     m_frameViewManager = 0;
 }
@@ -2016,7 +2016,6 @@ InteractionPolicy::InteractionPolicy(KWCanvas *parent, bool doInit) {
 }
 
 InteractionPolicy* InteractionPolicy::createPolicy(KWCanvas *parent, MouseMeaning meaning, KoPoint &point, Qt::ButtonState buttonState, Qt::ButtonState keyState) {
-kdDebug() << "InteractionPolicy::createPolicy " << endl;
     if(buttonState & Qt::LeftButton || buttonState & Qt::RightButton) {
         // little inner class to make sure we don't duplicate code
         class Selector {
