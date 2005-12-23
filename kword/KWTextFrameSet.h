@@ -348,6 +348,11 @@ private:
                      int* breakBegin, int* breakEnd, KoTextParag* parag );
     bool checkVerticalBreak( int & yp, int & h, KoTextParag * parag, bool linesTogether, int breakBegin, int breakEnd );
     void frameResized( KWFrame *theFrame, bool invalidateLayout );
+    /**
+     * Return the list of frames containing the text that goes from @p y1 to @p y2
+     * (in internal coordinates).
+     */
+    QValueList<KWFrame*> framesFromTo( int y1, int y2 ) const;
     double footerHeaderSizeMax( KWFrame *theFrame );
     double footNoteSize( KWFrame *theFrame );
     QDomElement saveInternal( QDomElement &parentElem, bool saveFrames, bool saveAnchorsFramesets );
