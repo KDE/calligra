@@ -2435,7 +2435,6 @@ int KexiTableView::validRowNumber(const QString& text)
 
 void KexiTableView::moveToRecordRequested( uint r )
 {
-	r--;
 	if (r > uint(rows()+(isInsertingEnabled()?1:0)))
 		r = rows()+(isInsertingEnabled()?1:0);
 	setFocus();

@@ -38,6 +38,7 @@ class KEXIGUIUTILS_EXPORT KexiRecordNavigatorHandler
 		KexiRecordNavigatorHandler();
 		virtual ~KexiRecordNavigatorHandler();
 
+		//! Moving to record \a r is requested. Records are counted from 0.
 		virtual void moveToRecordRequested(uint r) = 0;
 		virtual void moveToLastRecordRequested() = 0;
 		virtual void moveToPreviousRecordRequested() = 0;
