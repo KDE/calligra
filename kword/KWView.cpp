@@ -2211,7 +2211,7 @@ void KWView::updateStyleList()
             QString name = "paragstyle_" + style->name();
             KToggleAction* act = new KToggleAction( (*it),
                                      shortCuts[name], this, SLOT( slotStyleSelected() ),
-                                     actionCollection(), name.utf8() );
+                                     actionCollection(), style->name().utf8() );
             act->setGroup( "styleList" );
             act->setExclusiveGroup( "styleListAction" );
             act->setToolTip( i18n( "Apply a paragraph style" ) );
@@ -5647,6 +5647,7 @@ void KWView::slotFrameSetEditChanged()
 {
     KWTextFrameSetEdit * edit = currentTextEdit();
     bool rw = koDocument()->isReadWrite();
+    bool selectedFrames = frameViewManager()->selectedFrames().count() > 0;
     bool hasSelection = false;
     if ( edit ) {
         hasSelection = edit->textFrameSet()->hasSelection();
@@ -5665,35 +5666,35 @@ void KWView::slotFrameSetEditChanged()
     m_actionEditReplace->setEnabled( /*edit &&*/ rw );
     clipboardDataChanged(); // for paste
 
-    bool state = (edit != 0L) && rw;
+    bool state = (edit != 0 | selectedFrames) && rw;
     m_actionEditSelectAll->setEnabled(state);
     m_actionEditSelectCurrentFrame->setEnabled(state);
     m_actionInsertComment->setEnabled( state );
-    m_actionFormatDefault->setEnabled( rw);
-    m_actionFormatFont->setEnabled( rw );
-    m_actionFormatFontSize->setEnabled( rw );
-    m_actionFormatFontFamily->setEnabled( rw );
+    m_actionFormatDefault->setEnabled( state );
+    m_actionFormatFont->setEnabled( state );
+    m_actionFormatFontSize->setEnabled( state );
+    m_actionFormatFontFamily->setEnabled( state );
     m_actionAddBookmark->setEnabled(state);
-    m_actionBackgroundColor->setEnabled( rw );
-    m_actionFormatStyleMenu->setEnabled( rw );
-    m_actionFormatBold->setEnabled( rw );
-    m_actionFormatItalic->setEnabled( rw );
-    m_actionFormatUnderline->setEnabled( rw );
-    m_actionFormatStrikeOut->setEnabled( rw );
-    m_actionFormatColor->setEnabled( rw );
-    m_actionFormatAlignLeft->setEnabled( rw );
-    m_actionFormatAlignCenter->setEnabled( rw );
-    m_actionFormatAlignRight->setEnabled( rw );
-    m_actionFormatAlignBlock->setEnabled( rw );
+    m_actionBackgroundColor->setEnabled( state );
+    m_actionFormatStyleMenu->setEnabled( state );
+    m_actionFormatBold->setEnabled( state );
+    m_actionFormatItalic->setEnabled( state );
+    m_actionFormatUnderline->setEnabled( state );
+    m_actionFormatStrikeOut->setEnabled( state );
+    m_actionFormatColor->setEnabled( state );
+    m_actionFormatAlignLeft->setEnabled( state );
+    m_actionFormatAlignCenter->setEnabled( state );
+    m_actionFormatAlignRight->setEnabled( state );
+    m_actionFormatAlignBlock->setEnabled( state );
 
-    m_actionBorderLeft->setEnabled( rw );
-    m_actionBorderRight->setEnabled( rw );
-    m_actionBorderTop->setEnabled( rw );
-    m_actionBorderBottom->setEnabled( rw );
-    m_actionBorderOutline->setEnabled( rw );
-    m_actionBorderColor->setEnabled( rw );
-    m_actionBorderWidth->setEnabled( rw );
-    m_actionBorderStyle->setEnabled( rw );
+    m_actionBorderLeft->setEnabled( state );
+    m_actionBorderRight->setEnabled( state );
+    m_actionBorderTop->setEnabled( state );
+    m_actionBorderBottom->setEnabled( state );
+    m_actionBorderOutline->setEnabled( state );
+    m_actionBorderColor->setEnabled( state );
+    m_actionBorderWidth->setEnabled( state );
+    m_actionBorderStyle->setEnabled( state );
 
 
     //m_actionFormatIncreaseIndent->setEnabled(state);
