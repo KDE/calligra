@@ -47,19 +47,13 @@ KarbonToolRegistry* KarbonToolRegistry::instance()
 	return KarbonToolRegistry::m_singleton;
 }
 
-QValueVector<VTool*> KarbonToolRegistry::createTools(KActionCollection * ac, KarbonView* view)
+void KarbonToolRegistry::createTools(KActionCollection * ac, KarbonView* view)
 {
 	Q_ASSERT(view);
 
-	QValueVector<VTool*> tools;
-
 	QValueVector<KarbonAbstractToolFactory*>::iterator it;
 	for ( it = begin(); it != end(); ++it )
-	{
 		VTool * tool = (*it) -> createTool(ac, view);
-		tools.push_back(tool);
-	}
-	return tools;
 }
 
 void KarbonToolRegistry::add(KarbonAbstractToolFactory* factory)

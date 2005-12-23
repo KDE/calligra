@@ -38,7 +38,7 @@ public:
 
 	static KarbonToolRegistry* instance();
 
-	QValueVector<VTool*> createTools( KActionCollection * ac, KarbonView* view );
+	void createTools( KActionCollection * ac, KarbonView* view );
 	void add(KarbonAbstractToolFactory* factory);
 
 private:
