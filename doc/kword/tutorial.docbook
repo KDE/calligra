@@ -25,7 +25,7 @@ least once if you are new to frame based word processors.</para>
 Beneath each step, is text in <emphasis>italics</emphasis> which further elaborates or explains the changes.</para></note>
 
 <para>When you first <link linkend="starting-kword">start &kword;</link> (or <link linkend="new-doc">start a new
-document</link> after &kword; is running), a dialog appears.</para>
+document</link> after &kword; is running), &kword; asks for a document template.</para>
 
 <mediaobject>
 <imageobject>
@@ -33,7 +33,7 @@ document</link> after &kword; is running), a dialog appears.</para>
 <textobject><phrase>Screen shot</phrase></textobject>
 </mediaobject>
 
-<para><emphasis>This dialog box is used to either:</emphasis></para>
+<para><emphasis>Here you can either:</emphasis></para>
 <itemizedlist>
 <listitem>
 <para><emphasis>Select the initial template for your new
@@ -66,7 +66,7 @@ fileref="Tut2.png"/></imageobject><textobject><phrase>Screen shot</phrase></text
 tutorial</emphasis>.</para>
 
 <para>Step 3: Now confirm your selection by clicking on
-<guibutton>OK</guibutton>.</para>
+<guibutton>Use This Template</guibutton>.</para>
 
 <mediaobject><imageobject><imagedata format="PNG" fileref="Tut3.png"
 align="center"/></imageobject><textobject><phrase>Screen shot</phrase></textobject></mediaobject>
@@ -121,7 +121,7 @@ newsletter.</emphasis></para>
 <para>Step 7: Select <emphasis>KWord Press Release</emphasis> by placing
 the mouse cursor on the right end of the text.  Click once with the
 &LMB; and drag the mouse cursor
-to the left.  Selected text will be black text on a yellow
+to the left.  Selected text will be white text on a colored 
 background.  When all the text has been selected, release the &LMB;.</para>
 
 <para><mediaobject><imageobject><imagedata format="PNG"
@@ -157,7 +157,7 @@ re-shaped.</emphasis></para>
 8 yellow squares on the outline.  These squares are used for re-sizing the
 frame.</emphasis></para>
 
-<para>Step 10: Place the mouse pointer over the yellow square in the lower
+<para>Step 10: Place the mouse pointer over the grey square in the lower
 right corner of the frame. Click with the &LMB; and hold it
 down. Drag the mouse up and to the right.</para>
 

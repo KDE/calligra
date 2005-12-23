@@ -54,13 +54,13 @@
 <!-- TRANS:ROLES_OF_TRANSLATORS -->
 </authorgroup>
 <copyright>
-<year>2000</year> <year>2001</year> <year>2002</year> <year>2003</year> <year>2004</year> <year>2005</year>
+<year>2000-2006</year>
 <holder>Michael McBride</holder>
 </copyright>
 
 <legalnotice>&FDLNotice;</legalnotice>
 
-<date>2005-12-10</date>
+<date>2005-12-22</date>
 <releaseinfo>1.5</releaseinfo>
 
 <abstract>
@@ -118,6 +118,7 @@ Environment.  Other applications in &koffice; include:
 <listitem><para>&kugar; (A report generation tool.)  </para></listitem>
 <listitem><para>&kexi; (An integrated environment for databases.)  </para></listitem>
 <listitem><para>&kchart; (A chart and graph creator.)</para></listitem>
+<listitem><para><application>KPlato</application> (An integrated project management and planning tool.)</para></listitem>
 <listitem><para>and a simple integrated office desktop, to help organize your
 work.</para></listitem>
 </itemizedlist>
@@ -227,7 +228,7 @@ features of the text. By adding wild-cards to your search, the search and
 replace functions can become very powerful.</para>
 </listitem>
 <listitem>
-<para>Footnotes.  &kword; has all the tools necessary to manage footnotes.</para>
+<para>Footnotes and Endnotes.  &kword; has all the tools necessary to manage footnotes or endnotes.</para>
 </listitem>
 <listitem>
 <para>Tables. You can either use the table formatting capabilities of
@@ -248,7 +249,7 @@ easier on any computer, and with any font size. </para>
 <para>&kword; supports customizable toolbars and menus.</para>
 </listitem>
 <listitem>
-<para>&kword; has extensive internationalization support.</para>
+<para>&kword; has extensive internationalization support including right to left and left to right text flow..</para>
 </listitem>
 <listitem>
 <para>You can embed formulas directly into &kword; using the integrated
@@ -279,7 +280,7 @@ formula editor.</para>
 comments are stored in the &kword; file, and can be changed or deleted easily.</para>
 </listitem>
 <listitem>
-<para>&kword; can merge data from an outside database to create mailinglists, form letters, invoices, etc.</para>
+<para>&kword; can merge data from an outside database, spreadsheet, document or text file to create mailinglists, form letters, invoices, etc.</para>
 </listitem>
 <listitem>
 <para>&kword; can load and save documents from other wordprocessing programs with an extensive list of filters.</para>
@@ -718,19 +719,19 @@ can read and write effectively.  Rich Text Format is probably a good choice.</pa
 <listitem><para>John Califf <email>jcaliff@compuzone.net</email></para></listitem>
 <listitem><para>Frank Dekervel <email>frank.dekervel@student.kuleuven.ac.be</email></para></listitem>
 <listitem><para>Krister Wicksell Eriksson <email>krister.wicksell@spray.se</email></para></listitem>
-<listitem><para>David Faure <email>faure@kde.org</email></para></listitem>
+<listitem><para>&David.Faure; &David.Faure.mail;</para></listitem>
 <listitem><para>Nicolas Goutte <email>goutte@kde.org</email></para></listitem>
 <listitem><para>Shaheed Haque <email>srhaque@iee.org</email></para></listitem>
-<listitem><para>Simon Hausmann <email>hausmann@kde.org</email></para></listitem>
+<listitem><para>&Simon.Hausmann; &Simon.Hausmann.mail;</para></listitem>
 <listitem><para>Nash Hoogwater <email>nrhoogwater@wanadoo.nl</email></para></listitem>
-<listitem><para>Stephan Kulow <email>coolo@kde.org</email></para></listitem>
+<listitem><para>&Stephan.Kulow; &Stephan.Kulow.mail;</para></listitem>
 <listitem><para>Sven L&uuml;ppken <email>sven@kde.org></email></para></listitem>
 <listitem><para>Laurent Montel <email>montel@kde.org</email></para></listitem>
-<listitem><para>Daniel Naber<email>daniel.naber@t-online.de</email></para></listitem>
+<listitem><para>&Daniel.Naber; &Daniel.Naber.mail;</para></listitem>
 <listitem><para>Reginald Stadlbauer <email>reggie@kde.org</email></para></listitem>
 <listitem><para>Werner Trobin <email>trobin@kde.org</email></para></listitem>
 <listitem><para>Torben Weis <email>weis@kde.org</email></para></listitem>
-<listitem><para>Joseph Wenninger <email>jowenn@kde.org</email></para></listitem>
+<listitem><para>&Joseph.Wenninger; <email>jowenn@kde.org</email></para></listitem>
 <listitem><para>Thomas Zander <email>zander@kde.org</email></para></listitem>
 
 </itemizedlist>
@@ -739,7 +740,7 @@ can read and write effectively.  Rich Text Format is probably a good choice.</pa
 <title>&kword; Import/Export Filter Developers (Alphabetically)</title>
 <listitem><para>Enno Bartels <email>ebartels@nwn.de</email></para></listitem>
 <listitem><para>Wolf-Michael Bolle</para></listitem>
-<listitem><para>Matthias Kalle Dalheimer <email>kalle@dalheimer.de</email></para></listitem>
+<listitem><para>&Matthias.Kalle.Dalheimer; <email>kalle@dalheimer.de</email></para></listitem>
 <listitem><para>Clarence Dang <email>dang@kde.org</email></para></listitem>
 <listitem><para>Frank Dekervel <email>frank.dekervel@student.kuleuven.ac.be</email></para></listitem>
 <listitem><para>Nicolas Goutte <email>goutte@kde.org</email></para></listitem>
@@ -758,7 +759,7 @@ can read and write effectively.  Rich Text Format is probably a good choice.</pa
 <listitem><para>Ulrich Kuettler <email>ulrich.kuettler@mailbox.tu-dresden.de</email></para></listitem>
 </itemizedlist>
 
-<para>Documentation by Mike McBride <email>mpmcbride7@yahoo.com</email> </para>
+<para>Documentation by &Mike.McBride; &Mike.McBride.mail; </para>
 
 <!-- TRANS:CREDIT_FOR_TRANSLATORS -->
 &underFDL;
@@ -779,8 +780,7 @@ Public License v2</ulink>.</para>
 
 <para>&kword; is part of the &kde; project <ulink
 url="http://www.kde.org">http://www.kde.org</ulink>.  &kword; is located
-in the &koffice; package which can be obtained from <ulink
-url="ftp://ftp.kde.org/pub/kde/">ftp://ftp.kde.org/pub/kde/</ulink>, the
+in the &koffice; package which can be obtained from &kde-ftp;, the
 main ftp site of the &kde; project. </para>
 
 <para>Many distributions offer precompiled binaries on their ftp sites.  Please check your distribution's web sites for more information.</para>
@@ -797,10 +797,10 @@ main ftp site of the &kde; project. </para>
 
 <itemizedlist>
 <listitem>
-<para>Qt Toolkit 3.2 or later.  This can be obtained from <ulink
+<para>&Qt; Toolkit 3.2 or later.  This can be obtained from <ulink
 url="http://www.trolltech.com">Trolltech</ulink>.</para>
-<tip><para>While &koffice; will compile and run with any version of Qt 3.2 or later, it is recommended that you compile and install
-Qt 3.3.4 to take advantage of all the bug fixes (including some security fixes) that have occurred.</para></tip>
+<tip><para>While &koffice; will compile and run with any version of &Qt; 3.2 or later, it is recommended that you compile and install
+&Qt; 3.3.4 to take advantage of all the bug fixes (including some security fixes) that have occurred.</para></tip>
 </listitem>
 
 <listitem>
@@ -810,7 +810,7 @@ url="http://www.kde.org">&kde; web page.</ulink></para>
 <tip><para>While &koffice; will compile and run with any version of &kde; 3.3.0 or later, it is recommended that you compile and install
 &kde; 3.4 to take advantage of all the bug fixes that have occurred.</para>
 <para>It is also recommended that you install the arts package 1.3.2 from the
-<ulink url="ftp://ftp.kde.org/pub/kde/">&kde; &FTP; site</ulink>.</para></tip>
+<ulink url="ftp://ftp.kde.org">&kde; &FTP; site</ulink>.</para></tip>
 </listitem>
 
 <listitem>
@@ -932,12 +932,12 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 <table>
 <title>Available import/export filters</title>
 <tgroup cols="3">
-<thead><row><entry></entry><entry>Import</entry><entry>Export</entry></row></thead>
+<thead><row><entry> </entry><entry>Import</entry><entry>Export</entry></row></thead>
 <tbody>
 <row><entry>Abiword</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>AmiPro</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>Applixword</entry><entry>Yes</entry><entry>No</entry></row>
-<row><entry>HTML</entry><entry>Yes</entry><entry>Yes</entry></row>
+<row><entry>&HTML;</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>&kpresenter;</entry><entry>Yes</entry><entry>No</entry></row>
 <row><entry>Hancom Word</entry><entry>Yes</entry><entry>No</entry></row>
 <row><entry>Magic Point Presentation</entry><entry>Yes</entry><entry>No</entry></row>
@@ -955,7 +955,7 @@ file format, it is <emphasis>exporting</emphasis> the data.</para>
 <row><entry>TeX Document</entry><entry>No</entry><entry>Yes</entry></row>
 <row><entry>WML</entry><entry>Yes</entry><entry>Yes</entry></row>
 <row><entry>Wordperfect</entry><entry>Yes</entry><entry>Yes</entry></row>
-<row><entry>XML</entry><entry>Yes</entry><entry>No</entry></row>
+<row><entry>&XML;</entry><entry>Yes</entry><entry>No</entry></row>
 </tbody>
 </tgroup>
 </table>
@@ -1047,7 +1047,7 @@ action="simul">&Ctrl;<keycap>Q</keycap></keycombo></entry>
 
 <row><entry>Moves the current endpoint down one screen.</entry><entry><keycombo action="simul">&Shift;<keycap>Page-Down</keycap></keycombo></entry></row>
 
-<row><entry>Moves the current endpoint down one page.  The endpoint is located at the first character of this page.</entry><entry><keycombo action="simul">&Ctrl;&Shift;<keycap>Page-Down</keycap></keycombo></entry></row>
+<row><entry>Moves the current endpoint down one page.  The endpoint is located at the first character of this page.</entry><entry><keycombo action="simul">&Ctrl; &Shift;<keycap>Page-Down</keycap></keycombo></entry></row>
 <row><entry>Select all text in the current frame.</entry><entry><keycombo action="simul">&Ctrl;<keycap>A</keycap></keycombo></entry></row>
 
 </tbody>
@@ -1073,13 +1073,11 @@ action="simul">&Ctrl;<keycap>I</keycap></keycombo></entry>
 
 <row>
 <entry>Toggle Underline On/Off</entry>
-<entry><keycombo
-action="simul">&Ctrl;<keycap>U</keycap></keycombo></entry>
+<entry><keycombo action="simul">&Ctrl;<keycap>U</keycap></keycombo></entry>
 </row>
 
 <row>
-<entry><link linkend="format-font">Format
-Font</link></entry>
+<entry><link linkend="format-font">Format Font</link></entry>
 <entry><keycombo
 action="simul">&Alt;&Ctrl;<keycap>F</keycap></keycombo></entry>
 </row>
@@ -1092,9 +1090,10 @@ action="simul">&Ctrl;<keycap>&lt;</keycap></keycombo></entry>
 
 <row>
 <entry>Increase Font Size</entry>
-<entry><keycombo
-action="simul">&Ctrl;<keycap>&gt;</keycap></keycombo></entry>
+<entry><keycombo action="simul">&Ctrl;<keycap>&gt;</keycap></keycombo></entry>
 </row>
+
+
 
 </tbody>
 </tgroup>
@@ -1191,8 +1190,6 @@ action="simul">&Ctrl;<keycap>Z</keycap></keycombo></entry>
 <entry><keycombo
 action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo></entry>
 </row>
-
-
 </tbody>
 </tgroup>
 </table>
@@ -1307,10 +1304,10 @@ action="simul">&Ctrl;<keycap>Return</keycap></keycombo></entry>
 
 &techstuff;
 <sect1 id="mimetype">
-<title>Kword MIME types</title>
-<indexterm><primary>&kword;</primary><secondary>MIME types</secondary></indexterm>
+<title>Kword &MIME; types</title>
+<indexterm><primary>&kword;</primary><secondary>&MIME; types</secondary></indexterm>
 
-<para>The &kword; MIME type is :  application/x-kword</para>
+<para>The &kword; &MIME; type is :  application/x-kword</para>
 </sect1>
 </appendix>
 
@@ -1550,12 +1547,12 @@ as well. See <glossterm linkend="deffooter">Footer</glossterm>.</para>
 </glossentry>
 
 <glossentry id="defhtml">
-<glossterm><acronym>HTML</acronym></glossterm>
+<glossterm><acronym>&HTML;</acronym></glossterm>
 <glossdef>
 <para>Stands for <emphasis>HyperText Markup Language</emphasis>. Most
 web pages on the Internet are written in
-<acronym>HTML</acronym>. &kword; can read and write
-<acronym>HTML</acronym> documents for publishing on the World Wide
+&HTML;. &kword; can read and write
+&HTML; documents for publishing on the World Wide
 Web.</para>
 </glossdef>
 </glossentry>
