@@ -80,6 +80,32 @@ VStrokeCmd::~VStrokeCmd()
 }
 
 void
+VStrokeCmd::changeStroke( const VColor &color )
+{
+	m_state = Color;
+	m_stroke.setColor( color );
+
+	VObjectListIterator itr( m_selection->objects() );
+	for ( ; itr.current() ; ++itr )
+	{
+		//if( m_opacity == -1 )
+		//	m_color.setOpacity( itr.current()->stroke()->color().opacity() );
+
+		m_oldstrokes.push_back( *itr.current()->stroke() );
+
+		VStroke stroke( *itr.current()->stroke() );
+		stroke.setParent( itr.current() );
+		
+		stroke.setColor( m_stroke.color() );
+		stroke.setType( VStroke::solid );
+		
+		itr.current()->setStroke( stroke );
+	}
+
+	setSuccess( true );
+}
+
+void
 VStrokeCmd::execute()
 {
 	VObjectListIterator itr( m_selection->objects() );

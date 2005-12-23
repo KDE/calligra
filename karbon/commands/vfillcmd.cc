@@ -45,6 +45,24 @@ VFillCmd::~VFillCmd()
 }
 
 void
+VFillCmd::changeFill( const VFill &fill )
+{
+	m_fill = fill;
+
+	if( !m_selection )
+		m_selection = document()->selection()->clone();
+
+	VObjectListIterator itr( m_selection->objects() );
+
+	for( ; itr.current() ; ++itr )
+	{
+		visit( *itr.current() );
+	}
+
+	setSuccess( true );
+}
+
+void
 VFillCmd::visitVGroup( VGroup& group )
 {
 	VObjectListIterator itr( group.objects() );
@@ -99,10 +117,6 @@ VFillCmd::unexecute()
 	{
 		itr.current()->setFill( m_oldfills[ i++ ] );
 	}
-
-	m_objects.clear();
-	delete m_selection;
-	m_selection = 0L;
 
 	setSuccess( false );
 }

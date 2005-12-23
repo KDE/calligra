@@ -44,6 +44,9 @@ public:
 
 	virtual bool changesSelection() const { return true; }
 
+	virtual void changeStroke( const VColor & );
+	virtual VSelection* getSelection() const { return m_selection; }
+
 protected:
 	typedef enum
 	{

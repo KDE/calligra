@@ -46,6 +46,9 @@ public:
 	virtual void visitVPath( VPath& composite );
 	virtual void visitVText( VText& text );
 
+	virtual void changeFill( const VFill & );
+	virtual VSelection* getSelection() const { return m_selection; }
+
 protected:
 	VObjectList m_objects;
 	VSelection *m_selection;

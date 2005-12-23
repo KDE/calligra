@@ -24,6 +24,7 @@
 #include <qwidget.h>
 #include <qcolor.h>
 #include <qevent.h>
+#include <qptrlist.h>
 
 #include <klocale.h>
 #include <koMainWindow.h>
@@ -37,6 +38,8 @@
 #include "vselection.h"
 #include "vfillcmd.h"
 #include "vstrokecmd.h"
+#include "vcommand.h"
+#include "vobject.h"
 
 #include "vcolordocker.h"
 
@@ -55,6 +58,9 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 
 	m_opacity = 1;
 
+	m_fillCmd = 0;
+	m_strokeCmd = 0;
+
 	mTabWidget = new QTabWidget( this );
 
 	/* ##### HSV WIDGET ##### */
@@ -70,10 +76,10 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mTabWidget->addTab( mRGBWidget, i18n( "RGB" ) );
 
 	/* ##### CMYK WIDGET ##### */
-	mCMYKWidget = new KoCMYKWidget( mTabWidget );
+	/*mCMYKWidget = new KoCMYKWidget( mTabWidget );
 	connect( mCMYKWidget, SIGNAL( sigFgColorChanged( const QColor &) ), this, SLOT( updateFgColor( const QColor &) ) );
 	connect( mCMYKWidget, SIGNAL( sigBgColorChanged( const QColor &) ), this, SLOT( updateBgColor( const QColor &) ) );
-	mTabWidget->addTab( mCMYKWidget, i18n( "CMYK" ) );
+	mTabWidget->addTab( mCMYKWidget, i18n( "CMYK" ) );*/
 
 	//Opacity
 	mOpacity = new VColorSlider( i18n( "Opacity:" ), QColor( "white" ), QColor( "black" ), 0, 100, 100, this );
@@ -86,6 +92,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	mainWidgetLayout->activate();
 	setMaximumHeight( 174 );
 	setMinimumWidth( 194 );
+	
 }
 
 VColorDocker::~VColorDocker()
@@ -96,7 +103,7 @@ void VColorDocker::updateFgColor(const QColor &c)
 {
 	mHSVWidget->blockSignals(true);
 	mRGBWidget->blockSignals(true);
-	mCMYKWidget->blockSignals(true);
+	//mCMYKWidget->blockSignals(true);
 
 	m_oldColor = m_color;
 
@@ -105,18 +112,43 @@ void VColorDocker::updateFgColor(const QColor &c)
 	VColor v = VColor(c);
 	v.setOpacity( m_opacity );
 
-	m_part->addCommand( new VStrokeCmd( &m_part->document(), v ), true );
+	VCommandHistory* history = m_part->commandHistory();
+	const QPtrList<VCommand>* commandList = history->commands();
+	VStrokeCmd* command = dynamic_cast<VStrokeCmd*>(commandList->getLast());
+
+	if(command == 0 || m_strokeCmd == 0)
+	{
+		m_strokeCmd = new VStrokeCmd( &m_part->document(), v );
+		m_part->addCommand( m_strokeCmd, true );
+	}
+	else
+	{
+
+		QPtrList<VObject> VOldObjectList = command->getSelection()->objects();
+		QPtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
+
+		if( VOldObjectList == VNewObjectList )
+		{
+			m_strokeCmd->changeStroke(v);
+			m_part->repaintAllViews();
+		}
+		else
+		{
+			m_strokeCmd = new VStrokeCmd( &m_part->document(), v );
+			m_part->addCommand( m_strokeCmd, true );
+		}
+	}
 
 	mHSVWidget->blockSignals(false);
 	mRGBWidget->blockSignals(false);
-	mCMYKWidget->blockSignals(false);
+	//mCMYKWidget->blockSignals(false);
 }
 
 void VColorDocker::updateBgColor(const QColor &c)
 {
 	mHSVWidget->blockSignals(true);
 	mRGBWidget->blockSignals(true);
-	mCMYKWidget->blockSignals(true);
+	//mCMYKWidget->blockSignals(true);
 
 	m_oldColor = m_color;
 
@@ -125,11 +157,36 @@ void VColorDocker::updateBgColor(const QColor &c)
 	VColor v = VColor(c);
 	v.setOpacity( m_opacity );
 
-	m_part->addCommand( new VFillCmd( &m_part->document(), VFill( v ) ), true );
+	VCommandHistory* history = m_part->commandHistory();
+	const QPtrList<VCommand>* commandList = history->commands();
+	VFillCmd* command = dynamic_cast<VFillCmd*>(commandList->getLast());
+
+	if(command == 0 || m_fillCmd == 0)
+	{
+		m_fillCmd = new VFillCmd( &m_part->document(), VFill(v) );
+		m_part->addCommand( m_fillCmd, true );
+	}
+	else
+	{
+
+		QPtrList<VObject> VOldObjectList = command->getSelection()->objects();
+		QPtrList<VObject> VNewObjectList = m_part->document().selection()->objects();
+
+		if( VOldObjectList == VNewObjectList )
+		{
+			m_fillCmd->changeFill(VFill(v));
+			m_part->repaintAllViews();
+		}
+		else
+		{
+			m_fillCmd = new VFillCmd( &m_part->document(), VFill(v) );
+			m_part->addCommand( m_fillCmd, true );
+		}
+	}
 
 	mHSVWidget->blockSignals(false);
 	mRGBWidget->blockSignals(false);
-	mCMYKWidget->blockSignals(false);
+	//mCMYKWidget->blockSignals(false);
 }
 
 void VColorDocker::updateOpacity()
@@ -151,7 +208,6 @@ void
 VColorDocker::mouseReleaseEvent( QMouseEvent * )
 {
 	//changeColor();
-	// TODO Only create new commands here, otherwise the command history will be flooded.
 }
 
 void VColorDocker::setFillDocker()
@@ -169,7 +225,7 @@ void VColorDocker::update()
 
 	mHSVWidget->blockSignals(true);
 	mRGBWidget->blockSignals(true);
-	mCMYKWidget->blockSignals(true);
+	//mCMYKWidget->blockSignals(true);
 
 	int objCnt = m_part->document().selection()->objects().count();
 
@@ -182,16 +238,16 @@ void VColorDocker::update()
 
 		mHSVWidget->setFgColor(fgColor);
 		mRGBWidget->setFgColor(fgColor);
-		mCMYKWidget->setFgColor(fgColor);
+		//mCMYKWidget->setFgColor(fgColor);
 			
 		mHSVWidget->setBgColor(bgColor);
 		mRGBWidget->setBgColor(bgColor);
-		mCMYKWidget->setBgColor(bgColor);
+		//mCMYKWidget->setBgColor(bgColor);
 	}
 
 	mHSVWidget->blockSignals(false);
 	mRGBWidget->blockSignals(false);
-	mCMYKWidget->blockSignals(false);
+	//mCMYKWidget->blockSignals(false);
 }
 
 #include "vcolordocker.moc"

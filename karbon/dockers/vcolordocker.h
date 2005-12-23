@@ -52,7 +52,7 @@ private:
 
 	QTabWidget *mTabWidget;
 	KoHSVWidget *mHSVWidget;
-	KoCMYKWidget *mCMYKWidget;
+	//KoCMYKWidget *mCMYKWidget;
 	KoRGBWidget *mRGBWidget;
 	VColorSlider *mOpacity;
 
@@ -69,6 +69,8 @@ protected:
 private:
 	KarbonPart *m_part;
 	KarbonView *m_view;
+	VFillCmd *m_fillCmd;
+	VStrokeCmd *m_strokeCmd;
 };
 
 #endif
