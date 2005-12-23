@@ -1412,8 +1412,10 @@ void KPrPage::recalcPageNum()
     QPtrListIterator<KPrObject> it( m_objectList );
     for ( ; it.current() ; ++it )
     {
-        if ( it.current()->getType() == OT_TEXT )
+        if ( it.current()->getType() == OT_TEXT ) {
             ( (KPrTextObject*)it.current() )->recalcPageNum( this );
+            m_doc->repaint( it.current() ); // TODO only if something changed
+        }
     }
 }
 

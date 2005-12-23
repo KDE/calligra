@@ -3756,7 +3756,6 @@ void KPrView::skipToPage( int num )
     m_pKPresenterDoc->displayActivePage( page );
 
     m_pKPresenterDoc->recalcPageNum();
-    m_pKPresenterDoc->slotRepaintVariable();
 }
 
 void KPrView::refreshPageButton()

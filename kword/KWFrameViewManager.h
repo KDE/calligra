@@ -136,7 +136,7 @@ public:
      * @param point the point clicked.
      * @param keyState the bitmask of keys that are pressed.  Same as Event::state();
      */
-    void selectFrames(KoPoint &point, int keyState, bool leftClick);
+    void selectFrames(const KoPoint &point, int keyState, bool leftClick);
 
 public slots:
     /// notify this slot if a FrameSet has been created and should become visible.

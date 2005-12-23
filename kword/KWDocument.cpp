@@ -279,7 +279,6 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
 
     if ( name )
         dcopObject();
-    connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
 }
 
 DCOPObject* KWDocument::dcopObject()
@@ -2384,6 +2383,7 @@ bool KWDocument::completeLoading( KoStore *store )
     // The fields and dates just got loaded -> update vars
     recalcVariables( VT_FIELD );
     recalcVariables( VT_DATE );
+    recalcVariables( VT_STATISTIC ); // e.g. number of words etc.
 
     // Finalize all the existing [non-inline] framesets
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
@@ -4402,63 +4402,27 @@ void KWDocument::addFootNoteRequest( const QString &framesetName, KWFootNoteVari
     m_footnoteVarRequests.insert( framesetName, var );
 }
 
-
 void KWDocument::refreshMenuCustomVariable()
 {
    emit sig_refreshMenuCustomVariable();
 }
 
-
 void KWDocument::recalcVariables( int type )
 {
-    m_varColl->recalcVariables(type);
-    if ( !m_bGeneratingPreview )
-        slotRepaintVariable();
+    const QValueList<KoVariable *> modifiedVariables = m_varColl->recalcVariables(type);
+    if ( m_bGeneratingPreview )
+        return;
 
-#if 0
-    bool update = false;
-    QPtrListIterator<KWVariable> it( variables );
-    QPtrList<KWTextFrameSet> toRepaint;
-    for ( ; it.current() ; ++it )
-    {
-        if ( it.current()->type() == type )
+    QMap<KoTextDocument *, bool> modifiedTextDocuments; // Qt4: QSet
+    for ( QValueList<KoVariable *>::const_iterator it = modifiedVariables.begin(), end = modifiedVariables.end() ; it != end ; ++it ) {
+        KoTextDocument* textdoc = (*it)->textDocument();
+        if ( modifiedTextDocuments.find( textdoc ) != modifiedTextDocuments.end() ) // Qt4: !contains
         {
-            update = true;
-            it.current()->recalc();
-            KoTextParag * parag = it.current()->paragraph();
-            if ( parag )
-            {
-                kdDebug(32002) << "KWDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
-                parag->invalidate( 0 );
-                parag->setChanged( true );
-                KWTextFrameSet * textfs = static_cast<KWTextDocument *>(it.current()->textDocument())->textFrameSet();
-                if ( toRepaint.findRef( textfs ) == -1 )
-                    toRepaint.append( textfs );
-            }
+            modifiedTextDocuments.insert( textdoc, true );
+            KWTextFrameSet * textfs = static_cast<KWTextDocument *>(textdoc)->textFrameSet();
+            slotRepaintChanged( textfs );
         }
     }
-    for ( KWTextFrameSet * fs = toRepaint.first() ; fs ; fs = toRepaint.next() )
-        slotRepaintChanged( fs );
-#endif
-}
-
-// TODO pass list of textdocuments as argument
-void KWDocument::slotRepaintVariable()
-{
-    QPtrListIterator<KWFrameSet> it = framesetsIterator();
-    for (; it.current(); ++it )
-        if( it.current()->type()==FT_TEXT && it.current()->isVisible() )
-            slotRepaintChanged( (*it) );
-#if 0
-    KWTextFrameSet * textfs = static_cast<KWTextDocument *>(it.current()->textDocument())->textFrameSet();
-    if ( toRepaint.findRef( textfs ) == -1 )
-        toRepaint.append( textfs );
-
-
-    QPtrListIteratorQPtrList<KWTextFrameSet> toRepaint;
-        for ( KWTextFrameSet * fs = toRepaint.first() ; fs ; fs = toRepaint.next() )
-        slotRepaintChanged( fs );
-#endif
 }
 
 int KWDocument::mailMergeRecord() const
@@ -5054,24 +5018,34 @@ void KWDocument::displayFootNoteFieldCode()
 
 void KWDocument::changeFootNoteConfig()
 {
+    QMap<KoTextDocument *, bool> modifiedTextDocuments; // Qt4: QSet
     QPtrListIterator<KoVariable> it( m_varColl->getVariables() );
     for ( ; it.current() ; ++it )
     {
         if ( it.current()->type() == VT_FOOTNOTE )
         {
-            static_cast<KWFootNoteVariable *>(it.current())->formatedNote();
-            static_cast<KWFootNoteVariable *>(it.current())->resize();
-            static_cast<KWFootNoteVariable *>(it.current())->frameSet()->setCounterText( static_cast<KWFootNoteVariable *>(it.current())->text() );
+            KWFootNoteVariable* footNoteVar = static_cast<KWFootNoteVariable *>(it.current());
+            footNoteVar->formatedNote();
+            footNoteVar->resize();
+            footNoteVar->frameSet()->setCounterText( footNoteVar->text() );
 
-            KoTextParag * parag = it.current()->paragraph();
+            KoTextParag * parag = footNoteVar->paragraph();
             if ( parag )
             {
                 parag->invalidate( 0 );
                 parag->setChanged( true );
             }
+            KoTextDocument* textdoc = parag->textDocument();
+            if ( modifiedTextDocuments.find( textdoc ) != modifiedTextDocuments.end() ) // Qt4: !contains
+                modifiedTextDocuments.insert( textdoc, true );
         }
     }
-    slotRepaintVariable();
+    for( QMap<KoTextDocument *,bool>::const_iterator it = modifiedTextDocuments.begin();
+         it != modifiedTextDocuments.end(); ++it ) {
+        KoTextDocument* textdoc = it.key();
+        KWTextFrameSet * textfs = static_cast<KWTextDocument *>(textdoc)->textFrameSet();
+        slotRepaintChanged( textfs );
+    }
 }
 
 

@@ -47,18 +47,18 @@ enum VariableType {
     VT_MAILMERGE        = 7,
     VT_FIELD            = 8,
     VT_LINK             = 9,
-    VT_NOTE             = 10, 
-    VT_FOOTNOTE         = 11, 
+    VT_NOTE             = 10,
+    VT_FOOTNOTE         = 11,
     VT_STATISTIC        = 12,
 
     VT_ALL              = 256
 };
 
-enum VariableFormat { 
-    VF_DATE   = 0, 
-    VF_TIME   = 1, 
-    VF_STRING = 2, 
-    VF_NUM    = 3 
+enum VariableFormat {
+    VF_DATE   = 0,
+    VF_TIME   = 1,
+    VF_STRING = 2,
+    VF_NUM    = 3
 };
 
 class KoVariable;
@@ -299,8 +299,7 @@ public:
     ~KoVariableCollection();
     void registerVariable( KoVariable *var );
     void unregisterVariable( KoVariable *var );
-    void recalcVariables(int type);
-    void recalcVariables(KoVariable *var);
+    QValueList<KoVariable *> recalcVariables(int type);
 
     // For custom variables
     void setVariableValue( const QString &name, const QString &value );
@@ -328,9 +327,6 @@ public:
 
     /// List of KActions to put into the popupmenu on a variable
     QPtrList<KAction> popupActionList() const;
-
- signals:
-    void repaintVariable();
 
  protected slots:
     // This is here because variables and formats are not QObjects
@@ -763,20 +759,20 @@ class KOTEXT_EXPORT KoStatisticVariable : public KoVariable
 {
 public:
     KoStatisticVariable( KoTextDocument *textdoc, short int subtype,
-			 KoVariableFormat *varFormat, 
+			 KoVariableFormat *varFormat,
 			 KoVariableCollection *_varColl);
 
-    enum { 
-	VST_STATISTIC_NB_WORD                      = 0, 
-	VST_STATISTIC_NB_SENTENCE                  = 1, 
-	VST_STATISTIC_NB_LINES                     = 2, 
+    enum {
+	VST_STATISTIC_NB_WORD                      = 0,
+	VST_STATISTIC_NB_SENTENCE                  = 1,
+	VST_STATISTIC_NB_LINES                     = 2,
 	VST_STATISTIC_NB_CHARACTERE                = 3,
-	VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE = 4, 
-	VST_STATISTIC_NB_SYLLABLE                  = 5, 
-	VST_STATISTIC_NB_FRAME                     = 6, 
-	VST_STATISTIC_NB_EMBEDDED                  = 7,  
-	VST_STATISTIC_NB_PICTURE                   = 8, 
-	VST_STATISTIC_NB_TABLE                     = 9 
+	VST_STATISTIC_NB_NON_WHITESPACE_CHARACTERE = 4,
+	VST_STATISTIC_NB_SYLLABLE                  = 5,
+	VST_STATISTIC_NB_FRAME                     = 6,
+	VST_STATISTIC_NB_EMBEDDED                  = 7,
+	VST_STATISTIC_NB_PICTURE                   = 8,
+	VST_STATISTIC_NB_TABLE                     = 9
     };
 
     virtual VariableType type() const

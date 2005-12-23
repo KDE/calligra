@@ -395,7 +395,7 @@ void KWFrameViewManager::showPopup( const KoPoint &point, KWView *view, int keyS
     framesThatAreHit[0]->showPopup(point, view, popupPoint);
 }
 
-void KWFrameViewManager::selectFrames(KoPoint &point, int keyState, bool leftClick) {
+void KWFrameViewManager::selectFrames(const KoPoint &point, int keyState, bool leftClick) {
     MouseMeaning mm = mouseMeaning(point, keyState);
     bool multiSelect = mm == MEANING_MOUSE_SELECT || keyState & Qt::ControlButton ;
     selectionEnum se = frameOnTop;

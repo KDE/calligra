@@ -511,19 +511,22 @@ void KoVariableCollection::unregisterVariable( KoVariable *var )
     variables.take( variables.findRef( var ) );
 }
 
-void KoVariableCollection::recalcVariables(int type)
+QValueList<KoVariable *> KoVariableCollection::recalcVariables(int type)
 {
-    bool update = false;
+    QValueList<KoVariable *> modifiedVariables;
     QPtrListIterator<KoVariable> it( variables );
     for ( ; it.current() ; ++it )
     {
-        if ( it.current()->isDeleted() )
+        KoVariable* variable = it.current();
+        if ( variable->isDeleted() )
             continue;
-        if ( it.current()->type() == type || type == VT_ALL )
+        if ( variable->type() == type || type == VT_ALL )
         {
-            update = true;
-            it.current()->recalc();
-            KoTextParag * parag = it.current()->paragraph();
+            QVariant oldValue = variable->varValue();
+            variable->recalc();
+            if ( variable->varValue() != oldValue )
+                modifiedVariables.append( variable );
+            KoTextParag * parag = variable->paragraph();
             if ( parag )
             {
                 //kdDebug(32500) << "KoDoc::recalcVariables -> invalidating parag " << parag->paragId() << endl;
@@ -532,10 +535,13 @@ void KoVariableCollection::recalcVariables(int type)
             }
         }
     }
+#if 0
     // TODO pass list of textdocuments as argument
     // Or even better, call emitRepaintChanged on all modified textobjects
-    if(update)
+    if( !modifiedVariables.isEmpty() )
         emit repaintVariable();
+#endif
+    return modifiedVariables;
 }
 
 
@@ -554,21 +560,6 @@ QString KoVariableCollection::getVariableValue( const QString &name ) const
 bool KoVariableCollection::customVariableExist(const QString &varname) const
 {
     return varValues.contains( varname );
-}
-
-void KoVariableCollection::recalcVariables(KoVariable *var)
-{
-    if( var )
-    {
-        var->recalc();
-        KoTextParag * parag = var->paragraph();
-        if ( parag )
-        {
-            parag->invalidate( 0 );
-            parag->setChanged( true );
-        }
-        emit repaintVariable();
-    }
 }
 
 void KoVariableCollection::setVariableSelected(KoVariable * var)

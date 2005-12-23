@@ -521,8 +521,6 @@ public slots:
 
     void slotRepaintChanged( KPrTextObject * );
 
-    void slotRepaintVariable();
-
     static void writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles& mainStyles, KoSavingContext& context );
 
     void slotGuideLinesChanged( KoView *view );

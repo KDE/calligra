@@ -279,7 +279,6 @@ KPrDocument::KPrDocument( QWidget *parentWidget, const char *widgetName, QObject
     connect( m_commandHistory, SIGNAL( documentRestored() ), this, SLOT( slotDocumentRestored() ) );
     connect( m_commandHistory, SIGNAL( commandExecuted() ), this, SLOT( slotCommandExecuted() ) );
 
-    connect(m_varColl,SIGNAL(repaintVariable()),this,SLOT(slotRepaintVariable()));
     dcopObject();
 }
 
@@ -1741,6 +1740,7 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
 
     emit sigProgress( 100 );
     recalcVariables( VT_FIELD );
+    recalcVariables( VT_STATISTIC );
     emit sigProgress( -1 );
 
     setModified( false );
@@ -4095,12 +4095,11 @@ void KPrDocument::slotRepaintChanged( KPrTextObject *kptextobj )
 void KPrDocument::recalcVariables( int type )
 {
     recalcPageNum();
-    m_varColl->recalcVariables(type);
-    slotRepaintVariable();
-}
+    QValueList<KoVariable* > modifiedVariables = m_varColl->recalcVariables(type);
+    if ( modifiedVariables.isEmpty() )
+        return;
 
-void KPrDocument::slotRepaintVariable()
-{
+    // TODO use the return value from recalcVariables to only repaint what has changed.
     QPtrListIterator<KPrPage> it( m_pageList );
     for ( ; it.current(); ++it )
         it.current()->slotRepaintVariable();
