@@ -153,7 +153,6 @@ void KoCommandHistory::clear() {
     }
     d->m_present = 0L;
     d->m_savedAt=-42;
-    emit commandHistoryChanged();
 }
 
 void KoCommandHistory::addCommand(KCommand *command, bool execute) {
@@ -205,7 +204,6 @@ void KoCommandHistory::addCommand(KCommand *command, bool execute) {
         command->execute();
         emit commandExecuted();
     }
-    emit commandHistoryChanged();
 }
 
 void KoCommandHistory::undo() {
@@ -240,7 +238,6 @@ void KoCommandHistory::undo() {
         m_first=true;
     }
     clipCommands(); // only needed here and in addCommand, NOT in redo
-    emit commandHistoryChanged();
 }
 
 void KoCommandHistory::redo() {
@@ -280,7 +277,6 @@ void KoCommandHistory::redo() {
             m_redo->setText(i18n("&Redo"));
         }
     }
-    emit commandHistoryChanged();
 }
 
 void KoCommandHistory::documentSaved() {
