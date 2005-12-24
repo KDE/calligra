@@ -70,8 +70,8 @@ The Kexi main window stuff is text I've written can be mered with 4.6 in HTML
                                 Merge with "Kexi Main Window" section in docbook.
                                 Done.
 04_06_01_project_navigator.html Done.
-04_06_02_object_windows.html    TODO
-04_06_03_property_editor.html   TODO
+04_06_02_object_windows.html    Done.
+04_06_03_property_editor.html   Done.
 
 Chapter 3: Configuring Kexi (Martin):
 08_00_00_kexi_tuning.html     Removed. (It's basically a chapter TOC)
