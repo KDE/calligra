@@ -526,14 +526,14 @@ KarbonPart::repaintAllViews( const KoRect &rect )
 
 void
 KarbonPart::paintContent( QPainter& painter, const QRect& rect,
-						  bool /*transparent*/, double zoomX, double zoomY )
+						  bool /*transparent*/, double /*zoomX*/, double /*zoomY*/ )
 {
 	kdDebug(38000) << "**** part->paintContent()" << endl;
 
 	KoRect r = KoRect::fromQRect( rect );
-	//double zoomFactorX = double( r.width() ) / double( document().width() );
-	//double zoomFactorY = double( r.height() ) / double( document().height() );
-	double zoomFactor = kMin( zoomX, zoomY );
+	double zoomFactorX = double( r.width() ) / double( document().width() );
+	double zoomFactorY = double( r.height() ) / double( document().height() );
+	double zoomFactor = kMin( zoomFactorX, zoomFactorY );
 
 	painter.eraseRect( rect );
 	VPainterFactory *painterFactory = new VPainterFactory;
@@ -542,21 +542,26 @@ KarbonPart::paintContent( QPainter& painter, const QRect& rect,
 	VPainter *p = painterFactory->painter();
 	//VPainter *p = new VKoPainter( painter.device() );
 	p->begin();
+	p->setZoomFactor( zoomFactor );
 	kdDebug(38000) << "painter.worldMatrix().dx() : " << painter.worldMatrix().dx() << endl;
 	kdDebug(38000) << "painter.worldMatrix().dy() : " << painter.worldMatrix().dy() << endl;
 	kdDebug(38000) << "rect.x() : "<< rect.x() << endl;
 	kdDebug(38000) << "rect.y() : "<< rect.y() << endl;
 	kdDebug(38000) << "rect.width() : "<< rect.width() << endl;
 	kdDebug(38000) << "rect.height() : "<< rect.height() << endl;
-
-	p->setZoomFactor( zoomFactor );
+	r = document().boundingBox();
 	QWMatrix mat = painter.worldMatrix();
 	mat.scale( 1, -1 );
-	mat.translate( 0, -m_doc.height() * zoomFactor );
+	mat.translate( 0, -r.height() * zoomFactor );
 	p->setWorldMatrix( mat );
 
 	m_doc.selection()->clear();
-	m_doc.draw( p, &r );
+	QPtrListIterator<VLayer> itr( m_doc.layers() );
+
+	for( ; itr.current(); ++itr )
+	{
+		itr.current()->draw( p, &r );
+	}
 
 	p->end();
 	delete painterFactory;

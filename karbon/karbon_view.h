@@ -116,9 +116,6 @@ public:
 	void setViewportRect( const KoRect &rect );
 	void setZoomAt( double zoom, const KoPoint & = KoPoint() );
 
-	// KoView implementation
-	virtual void setZoom( double zoom );
-
 	VToolController *toolController();
 
 public slots:
