@@ -98,7 +98,7 @@ class GuiApp:
 		except:
 			raise "Import of the Kross GUI module failed."
 
-		self.dialog = gui.Dialog("Project Documentator")
+		self.dialog = gui.Dialog("Project Documentor")
 
 		self.dialog.addLabel(self.dialog, "Save information about the project to an HTML file.")
 		
