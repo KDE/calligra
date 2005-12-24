@@ -68,7 +68,8 @@ The Kexi main window stuff is text I've written can be mered with 4.6 in HTML
 04_05_00_help_on_help.html      Done.
 04_06_00_main_application_elements.html
                                 Merge with "Kexi Main Window" section in docbook.
-04_06_01_project_navigator.html TODO
+                                Done.
+04_06_01_project_navigator.html Done.
 04_06_02_object_windows.html    TODO
 04_06_03_property_editor.html   TODO
 
