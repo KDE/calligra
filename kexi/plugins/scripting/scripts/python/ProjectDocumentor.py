@@ -1,5 +1,5 @@
 """ 
-Project Documentator
+Project Documentor
 
 Description:
 This script collects various informations about a Kexi project
@@ -9,7 +9,7 @@ Author:
 Sebastian Sauer <mail@dipe.org>
 
 Copyright:
-Published as-is without any warranties.
+Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 class DataProvider:
@@ -100,8 +100,7 @@ class GuiApp:
 
 		self.dialog = gui.Dialog("Project Documentator")
 
-		self.dialog.addLabel(self.dialog, "Save informations about the project to a HTML file.")
-		#self.dialog.addLabel(self.dialog.addFrame(self.dialog), "Export informations about the opened project.")
+		self.dialog.addLabel(self.dialog, "Save information about the project to an HTML file.")
 		
 		self.file = self.dialog.addFileChooser(self.dialog,
 			"File:",

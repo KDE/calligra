@@ -9,7 +9,7 @@ Author:
 Sebastian Sauer <mail@dipe.org>
 
 Copyright:
-Published as-is without any warranties.
+Dual-licensed under LGPL v2+higher and the BSD license.
 """
 
 class SaxInput:

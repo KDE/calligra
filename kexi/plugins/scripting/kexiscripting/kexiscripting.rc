@@ -18,12 +18,12 @@
       file="kross/python/ExportXHTML.py" />
 
     <ScriptAction
-      name="projectdocumentator"
-      text="Project Documentator"
+      name="projectdocumentor"
+      text="Project Documentation Generator"
       icon="contents"
       interpreter="python"
       resource="appdata"
-      file="kross/python/ProjectDocumentator.py" />
+      file="kross/python/ProjectDocumentor.py" />
 
   </Scripts>
 </KrossScripting>
