@@ -64,8 +64,7 @@ KexiDBConnectionData::KexiDBConnectionData(::KexiDB::ConnectionData* data)
     addFunction("dbPath", &KexiDBConnectionData::dbPath);
     addFunction("dbFileName", &KexiDBConnectionData::dbFileName);
 
-    addFunction("serverInfoString", &KexiDBConnectionData::serverInfoString,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::Bool", new Kross::Api::Variant(bool(true))));
+    addFunction("serverInfoString", &KexiDBConnectionData::serverInfoString);
 }
 
 KexiDBConnectionData::~KexiDBConnectionData()
@@ -199,7 +198,8 @@ Kross::Api::Object::Ptr KexiDBConnectionData::dbFileName(Kross::Api::List::Ptr)
 
 Kross::Api::Object::Ptr KexiDBConnectionData::serverInfoString(Kross::Api::List::Ptr args)
 {
-    return new Kross::Api::Variant(m_data->serverInfoString(args->item(0)),
+    bool user = args->count() > 0 ? Kross::Api::Variant::toBool(args->item(0)) : true;
+    return new Kross::Api::Variant(m_data->serverInfoString(user),
            "Kross::KexiDB::Connection::serverInfoString::String");
 }
 
