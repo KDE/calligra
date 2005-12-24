@@ -100,6 +100,133 @@
       the names of database objects listed in the <guilabel>Project
       Navigator</guilabel>.
     </para>
+
+<sect2 id="main-application-elements">
+<title>
+Main application elements
+</title>
+<!--
+<br><img src="img/04_06_00_main_window.png">
+<br>Kexi's main window<br><br>
+-->
+<itemizedlist>
+<title>
+Main elements of Kexi application's window are:
+</title>
+<listitem>
+<para><emphasis>Menubar</emphasis></para>
+<para>
+contains available commands for the application.
+You will find detailed description of any of the commands in the appendix.
+<!-- @todo: point to the appendix (link) -->
+</para>
+</listitem>
+<listitem>
+<para><emphasis>Toolbar</emphasis></para>
+<para>
+contains most frequently used commands.
+</para>
+</listitem>
+<listitem>
+
+<!-- @todo: link to the various chapters from the listitems -->
+
+<para><emphasis>Project Navigator's pane</emphasis></para>
+<para>
+contains a list of any object (tables, queries, forms, ...) created
+within the currently opened database project. The navigator also contains
+small toolbar with most usable commands related to the database objects.
+</para>
+</listitem>
+
+<listitem>
+<para><emphasis>Opened database objects area</emphasis></para>
+<para>
+a central area of the application taking most of the screen space.
+For IDEAl user interface mode it contains a switchable tabs with
+windows that are always maximized. For Childframe user interface
+mode it contains floating windows.
+</para>
+</listitem>
+
+<listitem>
+<para><emphasis>Properties pane</emphasis></para>
+<para>
+contains a list of properties of currently activated database object.
+For certain objects (e.g. form's widgets) it can be consisted of several tabs.
+</para>
+</listitem>
+
+<listitem>
+<para><emphasis>Taskbar</emphasis></para>
+<para>
+contains a list of currently opened windows with database objects.
+For IDEAl user interface mode, it is available as a number of tabs.
+For Childframe user interface mode, it is available as a number of
+buttons, behaving just like your operating system's taskbar.
+</para>
+</listitem>
+
+</itemizedlist>
+
+<sect3 id="project-navigator-pane">
+<title>Project Navigator pane</title>
+<para>
+Project Navigator pane is one of the most frequently used elements
+of the &kexi; main window. The pane contains a list of all objects
+created within the currently opened &kexi; database project. The objects
+are splitted into groups: tables, queries, forms.
+</para>
+<para>
+Project Navigator pane also contains a <emphasis>small toolbar for most
+frequently used commands</emphasis> (from left to right): <emphasis>Open
+selected object</emphasis>, <emphasis>Design selected object</emphasis>,
+<emphasis>Create a new object</emphasis>, and <emphasis>Delete selected
+object</emphasis>.
+<!--
+<img src="img/04_06_01_nav_mini_toolbar.png">
+<br>A toolbar in the Project Navigator pane<br><br>
+-->
+</para>
+<para>
+For each object on the list context menu is available using the &RMB;
+For example, this is context menu for <emphasis>persons</emphasis> table.
+<!--
+ <br><img src="img/04_06_01_context_menu.png">
+ <br>Project Navigator pane's context menu<br><br>
+-->
+
+<!-- TODO Commands of this menu is documented in <appendix> 
+
+See also a list of available shortcuts in <a href=
+"ab_00_00_shortcuts.html#nav_panel">Appendix B.2. Project Navigator
+pane <! - - TODO (js) APPENDIX number - - ></a> .
+
+-->
+</para>
+
+<para>
+Double clicking with &LMB; on the object's name on the list allows to
+open the object in Data View. If the object's window was alread opened,
+the action just activates the window without switching it's view mode.
+</para>
+<para>
+Note that your operating system can be set up to handle single clicks
+instead of double clicks. In this case it is enough to single click
+on the object name to open it's window.
+<!-- TODO (js) but then how to select an object without opening it? -->
+</para>
+
+</sect3>
+
+<sect3 id="database-object-windows">
+<title>Database object windows</title>
+<para>
+</para>
+</sect3>
+
+</sect2>
+
   </sect1>
 
   <sect1 id="project-opening">
@@ -215,8 +342,8 @@
       <listitem>
         <para><emphasis>The Handbook in form of electronic document.</emphasis></para>
         <para>
-          THe Handbook is available by presing <keycombo><keycap>F1</keycap></keycombo> key
-          or selecting <menuchoice><guimenu>Help</guimenu><guimenuitem>&kexi;
+          The Handbook is available by presing <keycombo><keycap>F1</keycap></keycombo>
+          key or selecting <menuchoice><guimenu>Help</guimenu><guimenuitem>&kexi;
           Handbook</guimenuitem></menuchoice> from the menubar.
         </para>
       </listitem>
