@@ -177,7 +177,7 @@ of the &kexi; main window. The pane contains a list of all objects
 created within the currently opened &kexi; database project. The objects
 are splitted into groups: tables, queries, forms.
 </para>
-<para>
+<para id="project-navigator-pane-toolbar">
 Project Navigator pane also contains a <emphasis>small toolbar for most
 frequently used commands</emphasis> (from left to right): <emphasis>Open
 selected object</emphasis>, <emphasis>Design selected object</emphasis>,
@@ -221,8 +221,152 @@ on the object name to open it's window.
 
 <sect3 id="database-object-windows">
 <title>Database object windows</title>
+
+<orderedlist>
+<title>Opening object's window</title>
+<listitem>
 <para>
+Select the object in <link linkend="project-navigator-pane">Project Navigator
+pane</link>.
 </para>
+</listitem>
+<listitem>
+<para>
+<!-- <img src="icons/edit.png" class="icon"> -->
+Click the <guilabel>Open</guilabel> button on the <link
+linkend="project-navigator-pane-toolbar">Project Navigator pane's toolbar</link>.
+</para>
+</listitem>
+</orderedlist>
+
+<itemizedlist>
+<title>Commands related to object windows</title>
+<listitem><para><emphasis>Closing an object window</emphasis></para>
+<para>
+When the IDEAl user interface mode (the default) is used, each window has
+it's own tab. Move the mouse pointer to the tab. You will see the
+<!-- <img src="fileclose.png" class="icon"> --> close button.
+Click it to close the tab.
+</para>
+<para>
+In the Childframe on the right hand of each opened window there are
+buttons you can use to control the window. Click the first one on the
+right hand to close the window.
+</para>
+<para>
+Alternatively, regardless of the user interface mode you are using,
+you can select <menuchoice><guimenu>Window</guimenu>
+<guimenuitem>Close</guimenuitem></menuchoice> from the Menubar.
+</para>
+</listitem>
+<listitem><para><emphasis>Window's buttons for Childframe user interface
+mode</emphasis></para>
+<!--
+<para>
+<br><img src="img/04_06_02_window_buttons.png">
+<br>Window's buttons<br><br>
+</para>
+-->
+<para>
+Other button's (from right to left) can be used to: maximize, minimize
+and undock the window.
+</para>
+<para>
+There's a small icon on the left hand of the window which can be clicked
+to show a context menu with commands related to the window.
+</para>
+<!--
+<para>See also Docking and undocking of the windows.</para>
+-->
+</listitem>
+</itemizedlist>
+
+</sect3>
+
+<sect3 id="property-editor-pane">
+<title>Property Editor pane</title>
+<para>
+The Property Editor pane allows to change properties of object
+displayed in the active window. Depending on the context, the pane is
+consisted of one or more tabs. The first, always visible, Propertiestab
+contains the list of available properties.
+</para>
+<!--
+<para>
+<img src="img/04_06_03_prop_panel.png">
+<br>Property Editor<br><br>
+</para>
+-->
+<itemizedlist>
+<title>Rules for using the Property Editor:</title>
+<listitem>
+<para>One row means a single property.</para>
+</listitem>
+<listitem>
+<para>You can use mouse or keyboard to change values of particular
+properties.</para>
+</listitem>
+<listitem>
+<itemizedlist>
+<title>Most frequently used types of property values are:</title>
+<listitem>
+<para><emphasis>a number;</emphasis> you can enter the value directly
+or increate or decrease it's value clicking with the &LMB; on the arrows.
+<!-- <img src="img/04_06_03_prop_arrows.png" class="icon"> -->
+</para>
+</listitem>
+<listitem><para>text</para></listitem>
+<listitem><para>drop down list of values</para></listitem>
+<listitem><para><emphasis>Yes/No value;</emphasis>
+in form of a button you can toggle; button toggled on means
+<emphasis>yes</emphasis> (<emphasis>true</emphasis>) value, button toggled
+off means <emphasis>no</emphasis> (<emphasis>false</emphasis>) value;
+<!-- see the above figure -->
+</para>
+</listitem>
+</itemizedlist>
+</listitem>
+<listitem><para>
+There is no need for accepting changed value: changes are visible immediately
+after moving to a different row of the Property Editor's list or by pressing
+the <keycombo><keycap>Enter</keycap></keycombo> key.
+</para></listitem>
+<listitem>
+<para>
+Names of the recently changed properties that not yet were stored in the
+database are marked with bold text.
+</para>
+</listitem>
+<listitem>
+<para>
+After changing a value of property, a special <guilabel>Undo changes</guilabel>
+button appears on the right hand of the Property Editor's list.
+<!-- <img src="img/04_06_03_prop_undo.png" class="icon"> -->
+By clicking it you can revert the value of the property to the original value
+that was loaded from the database upon opening the database object. The button
+is only visible when the property is actually highlighted.
+</para>
+</listitem>
+</itemizedlist>
+
+<itemizedlist>
+<title>Property Editor pane is empty if:</title>
+<listitem><para>no single database object's window is opened, or</para>
+</listitem>
+<listitem><para>
+active database object's window does not offer properties; it is usually
+the case when it is opened in Data View instead of Design View
+</para>
+</listitem>
+</itemizedlist>
+
+<!--
+<para>
+See also the list of keyboard shortcuts available for the Property Editor
+pane in appendix Property Editor pane.
+</para>
+-->
+
 </sect3>
 
 </sect2>
