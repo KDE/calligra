@@ -98,6 +98,7 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPrView *_view )
 , buffer( size() )
 , m_gl( _view, _view->zoomHandler() )
 , m_paintGuides( false )
+, m_objectDisplayAbove( 0 )    
 {
     m_presMenu = 0;
     m_currentTextObjectView=0L;
@@ -136,7 +137,6 @@ KPrCanvas::KPrCanvas( QWidget *parent, const char *name, KPrView *_view )
         m_isMoving = false;
         m_isResizing = false;
         mouseSelectedObject = false;
-        selectedObjectPosition = -1;
         m_setPageTimer = true;
         m_drawLineInDrawMode = false;
         soundPlayer = 0;
@@ -623,7 +623,7 @@ void KPrCanvas::drawEditPage( QPainter *painter, const QRect &_rect,
     if ( page->masterPage() && page->displayObjectFromMasterPage() )
         drawObjectsEdit( painter, rect, page->masterPage()->objectList(), selectionMode, pageNum );
     //objects on current page
-    drawObjectsEdit( painter, rect, page->objectList(), selectionMode, pageNum );
+    drawObjectsEdit( painter, rect, displayObjectList(), selectionMode, pageNum );
 }
 
 
@@ -3352,24 +3352,12 @@ void KPrCanvas::drawPageInPix( QPixmap &_pix, int pgnum, int zoom,
 
     drawBackground( &p, _pix.rect(), page, true );
 
-    //objects in current page
-    QPtrList<KPrObject> _list = page->objectList();
-
-    // check if object is selected, if so put it on the right place for the output
-    if( _list.count() > 1 && (int)_list.count() > selectedObjectPosition && selectedObjectPosition >= 0) {
-        _list.setAutoDelete( false );
-        KPrObject *kpobject = _list.last();
-        if ( kpobject->isSelected() ) {
-            _list.take( _list.count() - 1 );
-            _list.insert( selectedObjectPosition, kpobject );
-        }
-    }
-
     // draw objects on master slide
     if ( page->masterPage() && page->displayObjectFromMasterPage() )
         drawAllObjectsInPage( &p, page->masterPage()->objectList(), pgnum );
 
-    drawAllObjectsInPage( &p, _list, pgnum );
+    //objects in current page
+    drawAllObjectsInPage( &p, page->objectList(), pgnum );
 
     editMode = _editMode;
     p.end();
@@ -5020,47 +5008,37 @@ void KPrCanvas::finishResizeObject( const QString &name, bool layout )
     }
 }
 
-void KPrCanvas::raiseObject( KPrObject *_kpobject )
+void KPrCanvas::raiseObject( KPrObject *object )
 {
-    if( objectList().count() <= 1 )
+    if ( objectList().count() <= 1 )
         return;
-    if ( selectedObjectPosition == -1 ) {
-        if ( m_activePage->numSelected() == 1 ) { // execute this if user selected is one object.
-            QPtrList<KPrObject> _list = objectList();
-            _list.setAutoDelete( false );
-
-            if ( _kpobject->isSelected() ) {
-                selectedObjectPosition = objectList().findRef( _kpobject );
-                _list.take( selectedObjectPosition );
-                _list.append( _kpobject );
-            }
-
-            m_activePage->setObjectList( _list );
+    
+    if ( m_objectDisplayAbove == 0 )
+    {
+        if ( m_activePage->numSelected() == 1 )
+        {
+            m_objectDisplayAbove = object;
         }
-        //tz not needed
-        else
-            selectedObjectPosition = -1;
     }
 }
 
 void KPrCanvas::lowerObject()
 {
-    if ( selectedObjectPosition != -1 )
-    {
-        if( objectList().count() <= 1 || (int)objectList().count() <= selectedObjectPosition )
-            return;
-        KPrObject *kpobject = objectList().last();
-        QPtrList<KPrObject> _list = objectList();
-        _list.setAutoDelete( false );
+    m_objectDisplayAbove = 0;
+}
 
-        if ( kpobject->isSelected() ) {
-            _list.take( _list.count() - 1 );
-            if ( objectList().findRef( kpobject ) != -1 )
-                _list.insert( selectedObjectPosition, kpobject );
-        }
-        m_activePage->setObjectList( _list );
-        selectedObjectPosition = -1;
+const QPtrList<KPrObject> KPrCanvas::displayObjectList() const
+{
+    QPtrList<KPrObject> list = objectList();
+    list.setAutoDelete( false );
+
+    if ( m_objectDisplayAbove && m_objectDisplayAbove->isSelected() ) 
+    {
+        int pos = objectList().findRef( m_objectDisplayAbove );
+        list.take( pos );
+        list.append( m_objectDisplayAbove );
     }
+    return list;
 }
 
 void KPrCanvas::playSound( const QString &soundFileName )
@@ -5249,6 +5227,8 @@ void KPrCanvas::setActivePage( KPrPage* active )
 {
     Q_ASSERT(active);
     //kdDebug(33001)<<"KPrCanvas::setActivePage( KPrPage* active) :"<<active<<endl;
+    // reset the m_objectDisplayAbove so that it is not display wrong on the other page
+    m_objectDisplayAbove = 0;
     m_activePage = active;
 }
 

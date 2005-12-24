@@ -611,9 +611,29 @@ private:
     /// create KPrResizeCmd
     void finishResizeObject( const QString &name, bool layout = true );
 
-    void raiseObject( KPrObject *_kpobject );
+    /**
+     * @brief Display object above the other objects in editiong mode
+     *
+     * This is used to bring a single slected object to front, so it is easier 
+     * to modify.
+     *
+     * @param object which should be displayed above the other objects
+     */
+    void raiseObject( KPrObject *object );
+    /**
+     * @brief Don't display an object above the others
+     */
     void lowerObject();
-    int selectedObjectPosition;
+    /**
+     * @brief Get the list of objects in the order they should be displayed.
+     *
+     * This takes into acount the object set in raiseObject so that it is 
+     * the last one in the list returned (the one that is displayed above all
+     * the others).
+     *
+     * @return List of objects
+     */
+    const QPtrList<KPrObject> displayObjectList() const; 
 
     /**
      * This is used in automatic presentation mode.
@@ -862,6 +882,9 @@ private:
     KoGuides m_gl;
     /// true if we are in guide move state, false otherwise
     bool m_paintGuides;
+
+    /// object which is selected and should be shown above all the other objects
+    KPrObject * m_objectDisplayAbove;
 
     /// Previously spoken text object.
     KPrTextObject *m_prevSpokenTO;
