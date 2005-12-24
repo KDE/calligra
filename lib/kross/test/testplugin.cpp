@@ -36,17 +36,17 @@ TestPluginObject::TestPluginObject(const QString& name)
     addFunction("func3", &TestPluginObject::func3,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
-            << Kross::Api::Argument("Kross::Api::Variant::String", new Kross::Api::Variant("func3string2_default")) );
+            << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("func4", &TestPluginObject::func4,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::Variant::String")
             << Kross::Api::Argument("Kross::Api::Variant::String")
-            << Kross::Api::Argument("Kross::Api::Variant::String", new Kross::Api::Variant("func4string3_defaultconst"), false) );
+            << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("func5", &TestPluginObject::func5,
         Kross::Api::ArgumentList()
-            << Kross::Api::Argument("Kross::Api::Variant::String", new Kross::Api::Variant("func5string1_defaultconst"), false)
-            << Kross::Api::Argument("Kross::Api::Variant::String", new Kross::Api::Variant("func5string2_default"))
-            << Kross::Api::Argument("Kross::Api::Variant::String", new Kross::Api::Variant("func5string3_default")) );
+            << Kross::Api::Argument("Kross::Api::Variant::String")
+            << Kross::Api::Argument("Kross::Api::Variant::String")
+            << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("func6", &TestPluginObject::func6,
         Kross::Api::ArgumentList()
             << Kross::Api::Argument("Kross::Api::List")
