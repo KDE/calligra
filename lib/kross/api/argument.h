@@ -53,7 +53,7 @@ namespace Kross { namespace Api {
              *        argument won't be even visible by scripting
              *        languages.
              */
-            explicit Argument(const QString& classname = QString::null, Object::Ptr object = 0, bool visible = true);
+            explicit Argument(const QString& classname = QString::null /*, Object::Ptr object = 0, bool visible = true*/ );
 
             /**
              * Destructor.
@@ -75,13 +75,13 @@ namespace Kross { namespace Api {
              *         isn't optional and therefore doesn't have
              *         an default object.
              */
-            Object::Ptr getObject() const;
+            //Object::Ptr getObject() const;
 
             /**
              * \return true if the \a Argument should be hidden
              * to the scripting backend.
              */
-            bool isVisible() const;
+            //bool isVisible() const;
 
             /**
              * Implementation of the << operator.
@@ -99,9 +99,9 @@ namespace Kross { namespace Api {
             /// The classname of the argument.
             QString m_classname;
             /// The optional default \a Object this argument holds.
-            Object::Ptr m_object;
+            //Object::Ptr m_object;
             /// Defines if the argument is visible to the user.
-            bool m_visible;
+            //bool m_visible;
     };
 
     /**
@@ -144,26 +144,26 @@ namespace Kross { namespace Api {
              *
              * \return Minimal needed parameters.
              */
-            uint getMinParams() const;
+            //uint getMinParams() const;
 
             /**
              * Return the number of maximal allowed parameters.
              *
              * \return Maximal needed parameters.
              */
-            uint getMaxParams() const;
+            //uint getMaxParams() const;
 
             /**
              * \return a string of the classnames each argument in the
              * argumentlist has. Mainly used foir debugging.
              */
-            QString toString();
+            //QString toString();
 
         private:
             /// Minimal needed parameters.
-            uint m_minparams;
+            //uint m_minparams;
             /// Maximal needed parameters.
-            uint m_maxparams;
+            //uint m_maxparams;
             /// List of \a Argument.
             QValueList<Argument> m_arguments;
     };

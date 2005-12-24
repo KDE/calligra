@@ -26,6 +26,7 @@
 #include "callable.h"
 #include "list.h"
 #include "exception.h"
+#include "function.h"
 
 #include <qstring.h>
 #include <qvaluelist.h>
@@ -46,20 +47,15 @@ namespace Kross { namespace Api {
         private:
 
             /**
-             * Definition of funtion-pointers.
+             * Definition of function-pointers.
              */
             typedef Object::Ptr(T::*FunctionPtr)(List::Ptr);
-
-            /**
-             * The function-pointer this event points too.
-             */
-            FunctionPtr m_function;
 
             /**
              * List of memberfunctions. Each function is accessible
              * by the functionname.
              */
-            QMap<QString, Event<T>* > m_functions;
+            QMap<QString, Function* > m_functions;
 
         protected:
 
@@ -76,15 +72,15 @@ namespace Kross { namespace Api {
              *
              * \todo Is that template arguments or concrete arguments?
              */
-            void addFunction(const QString& name, FunctionPtr function, ArgumentList arglist = ArgumentList())
+            void addFunction(const QString& name, FunctionPtr function, const ArgumentList& /*arglist*/ = ArgumentList())
             {
-#ifdef KROSS_API_EVENT_CALL_DEBUG
-                if(m_functions.contains(name))
-                    kdDebug() << QString("Event::addFunction() Replaced function %1 with arguments %2").arg(name).arg(arglist.toString()) << endl;
-                else
-                    kdDebug() << QString("Event::addFunction() Added function %1 with arguments %2").arg(name).arg(arglist.toString()) << endl;
-#endif
-                m_functions.replace(name, new Event<T>(name, this, function, arglist));
+                //FIXME arglist
+                m_functions.replace(name, new VarFunction0<T>(static_cast<T*>(this), function));
+            }
+
+            void addFunction(const QString& name, Function* function)
+            {
+                m_functions.replace(name, function);
             }
 
         public:
@@ -94,21 +90,15 @@ namespace Kross { namespace Api {
              */
             Event(const QString& name, Object::Ptr parent)
                 : Callable(name, parent, ArgumentList())
-                , m_function(0) {}
-
-            /**
-             * Constructor.
-             */
-            Event(const QString& name, Object::Ptr parent, FunctionPtr function, ArgumentList arglist)
-                : Callable(name, parent, arglist)
-                , m_function(function) {}
+            {
+            }
 
             /**
              * Destructor.
              */
             virtual ~Event()
             {
-                for(QMapIterator<QString, Event<T>* > it = m_functions.begin(); it != m_functions.end(); ++it)
+                for(QMapIterator<QString, Function* > it = m_functions.begin(); it != m_functions.end(); ++it)
                     delete it.data();
             }
 
@@ -136,36 +126,18 @@ namespace Kross { namespace Api {
                 kdDebug() << QString("Event::call() name='%1' getName()='%2'").arg(name).arg(getName()) << endl;
 #endif
 
-                Event<T>* event = m_functions[name];
-                if(event) {
+                Function* function = m_functions[name];
+                if(function) {
 #ifdef KROSS_API_EVENT_CALL_DEBUG
-                    kdDebug() << QString("Event::call() event.name='%1' event.tostring='%2' event.args.tostring='%3'")
-                                 .arg(event->getName()).arg(event->toString()).arg(event->m_arglist.toString()) << endl;
+                    kdDebug() << QString("Event::call() name='%1' is a builtin function.").arg(name) << endl;
 #endif
 
-                    // We have an valid event, so just call it...
-                    return event->call(QString::null, arguments);
+                    //FIXME checkArguments(arguments);
+                    return function->call(arguments);
                 }
 
                 if(name.isNull()) {
-                    if(m_function) {
-#ifdef KROSS_API_EVENT_CALL_DEBUG
-                        kdDebug() << QString("Event::call() Call builtin function in object '%1'").arg(getParent().data() ? getParent()->getName() : "!NULL!") << endl;
-#endif
-
-                        // Check the arguments. Throws an exception if failed.
-                        checkArguments(arguments);
-
-                        // We try to redirect the call to the m_function pointer the
-                        // parent object defines.
-                        T *self = static_cast<T*>( getParent().data() );
-                        if(! self)
-                            throw Exception::Ptr( new Exception(QString("The event '%1' points to an invalid instance.").arg(getName())) );
-
-                        return (self->*m_function)(arguments);
-                    }
-
-                    // If no name and no function are defined, we return a reference to our instance.
+                    // If no name is defined, we return a reference to our instance.
                     return this;
                 }
 

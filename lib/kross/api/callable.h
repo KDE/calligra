@@ -17,8 +17,8 @@
  * Boston, MA 02110-1301, USA.
  ***************************************************************************/
 
-#ifndef KROSS_API_FUNCTION_H
-#define KROSS_API_FUNCTION_H
+#ifndef KROSS_API_CALLABLE_H
+#define KROSS_API_CALLABLE_H
 
 #include "object.h"
 #include "list.h"
@@ -126,7 +126,7 @@ namespace Kross { namespace Api {
              * Check the passed arguments against the \a m_arglist and throws 
              * an exception if failed.
              */
-            void checkArguments(KSharedPtr<List> arguments);
+            //void checkArguments(KSharedPtr<List> arguments);
 
     };
 
