@@ -162,6 +162,8 @@ void StencilTextEditor::updateFormating()
   m_mainWidget->m_textArea->selectAll(true);
   m_mainWidget->m_textArea->setAlignment(alignment());
   m_mainWidget->m_textArea->selectAll(false);
+
+  m_mainWidget->m_textArea->setFocus();
 }
 
 }
