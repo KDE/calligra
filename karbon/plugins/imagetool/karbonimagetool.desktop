@@ -1,6 +1,9 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Image Tool
+Name[ga]=Uirlis Íomhá
+Name[pt]=Ferramenta de Imagens
+Name[pt_BR]=Ferramenta de Imagens
 ServiceTypes=Karbon/CoreModule
 Type=Service
 X-KDE-Library=karbon_imagetoolplugin
