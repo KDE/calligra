@@ -68,7 +68,7 @@ void KoBorder::setStyle(BorderStyle _style)
 void KoBorder::setPenWidth(double _w)
 {
     ptPenWidth = _w;
-    if ( m_style == KoBorder::DOUBLE_LINE )
+    if ( m_style == KoBorder::DOUBLE_LINE && _w > 0 )
         ptWidth = 2 * ptPenWidth + 1;
     else
         ptWidth = _w;
