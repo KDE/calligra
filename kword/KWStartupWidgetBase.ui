@@ -12,9 +12,6 @@
             <height>280</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>KWStartupWidgetBase</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
