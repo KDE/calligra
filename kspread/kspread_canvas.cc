@@ -75,7 +75,7 @@
 #include "highlight_range.h"
 
 // TODO Stefan: undefine/remove, if non-contiguous selections don't work
-//              properly of if we are sure, that they do. ;-)
+//              properly or if we are sure, that they do. ;-)
 #define NONCONTIGUOUSSELECTION
 
 using namespace KSpread;
@@ -3338,54 +3338,6 @@ void Canvas::updatePosWidget()
       d->posWidget->lineEdit()->setText(buffer);
 }
 
-
-
-
-void Canvas::adjustArea(bool makeUndo)
-{
-  QRect s( selection() );
-  if (activeSheet()->areaIsEmpty(s))
-        return;
-
-  if (makeUndo)
-  {
-        if ( !d->view->doc()->undoLocked() )
-        {
-                UndoResizeColRow *undo = new UndoResizeColRow( d->view->doc(),activeSheet() , s );
-                d->view->doc()->addCommand( undo );
-        }
-  }
-  // Columns selected
-  if ( util_isColumnSelected(s) )
-  {
-    for (int x=s.left(); x <= s.right(); x++ )
-    {
-      hBorderWidget()->adjustColumn(x,false);
-    }
-  }
-  // Rows selected
-  else if ( util_isRowSelected(s) )
-  {
-    for(int y = s.top(); y <= s.bottom(); y++ )
-    {
-      vBorderWidget()->adjustRow(y,false);
-    }
-  }
-  // No selection
-  // Selection of a rectangular area
-  else
-  {
-    for (int x=s.left(); x <= s.right(); x++ )
-    {
-      hBorderWidget()->adjustColumn(x,false);
-    }
-    for(int y = s.top(); y <= s.bottom(); y++ )
-    {
-      vBorderWidget()->adjustRow(y,false);
-    }
-  }
-}
-
 void Canvas::equalizeRow()
 {
   QRect s( selection() );
@@ -4257,46 +4209,6 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
     m_bResize = false;
 }
 
-void VBorder::adjustRow( int _row, bool makeUndo )
-{
-    double adjust = -1.0;
-    int select;
-    if ( _row == -1 )
-    {
-        adjust = m_pCanvas->activeSheet()->adjustRow( m_pView->selectionInfo() );
-        select = m_iSelectionAnchor;
-    }
-    else
-    {
-        adjust = m_pCanvas->activeSheet()->adjustRow( m_pView->selectionInfo(), _row );
-        select = _row;
-    }
-
-    if ( adjust != -1.0 )
-    {
-        Sheet * sheet = m_pCanvas->activeSheet();
-        assert( sheet );
-        if ( _row == -1 )
-        {
-            RowFormat * rl = sheet->nonDefaultRowFormat( select );
-
-            if ( kAbs( rl->dblHeight() - adjust ) < DBL_EPSILON )
-                return;
-        }
-
-        if ( makeUndo && !m_pCanvas->d->view->doc()->undoLocked() )
-        {
-            QRect rect;
-            rect.setCoords( 1, select, KS_colMax, select);
-            UndoResizeColRow * undo = new UndoResizeColRow( m_pCanvas->d->view->doc(),
-                                                                          m_pCanvas->activeSheet(), rect );
-            m_pCanvas->d->view->doc()->addCommand( undo );
-        }
-        RowFormat * rl = sheet->nonDefaultRowFormat( select );
-        rl->setDblHeight( QMAX( 2.0, adjust ) );
-    }
-}
-
 void VBorder::equalizeRow( double resize )
 {
   Sheet *sheet = m_pCanvas->activeSheet();
@@ -4317,15 +4229,16 @@ void VBorder::equalizeRow( double resize )
   }
 }
 
-void VBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
+void VBorder::mouseDoubleClickEvent(QMouseEvent*)
 {
   Sheet *sheet = m_pCanvas->activeSheet();
-  assert( sheet );
+  if (!sheet)
+    return;
 
   if ( !m_pView->koDocument()->isReadWrite() || sheet->isProtected() )
     return;
 
-  adjustRow();
+  sheet->adjustRow(*m_pCanvas->selectionInfo());
 }
 
 
@@ -4922,48 +4835,6 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
     m_bResize = false;
 }
 
-void HBorder::adjustColumn( int _col, bool makeUndo )
-{
-  double adjust = -1.0;
-  int select;
-
-  if ( _col == -1 )
-  {
-    adjust = m_pCanvas->activeSheet()->adjustColumn( m_pView->selectionInfo() );
-    select = m_iSelectionAnchor;
-  }
-  else
-  {
-    adjust = m_pCanvas->activeSheet()->adjustColumn( m_pView->selectionInfo(), _col );
-    select = _col;
-  }
-
-  if ( adjust != -1.0 )
-  {
-    Sheet * sheet = m_pCanvas->activeSheet();
-    assert( sheet );
-
-    if ( _col == -1 )
-    {
-        ColumnFormat * cl = sheet->nonDefaultColumnFormat( select );
-        if ( kAbs( cl->dblWidth() - adjust ) < DBL_EPSILON )
-            return;
-
-    }
-    if ( makeUndo && !m_pCanvas->d->view->doc()->undoLocked() )
-    {
-        QRect rect;
-        rect.setCoords( select, 1, select, KS_rowMax );
-        UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(),
-                                                                     m_pCanvas->activeSheet(), rect );
-        m_pCanvas->d->view->doc()->addCommand( undo );
-    }
-
-    ColumnFormat * cl = sheet->nonDefaultColumnFormat( select );
-    cl->setDblWidth( QMAX( 2.0, adjust ) );
-  }
-}
-
 void HBorder::equalizeColumn( double resize )
 {
   Sheet *sheet = m_pCanvas->activeSheet();
@@ -4985,15 +4856,16 @@ void HBorder::equalizeColumn( double resize )
 
 }
 
-void HBorder::mouseDoubleClickEvent( QMouseEvent * /*_ev */)
+void HBorder::mouseDoubleClickEvent(QMouseEvent*)
 {
   Sheet *sheet = m_pCanvas->activeSheet();
-  assert( sheet );
+  if (!sheet)
+    return;
 
   if ( !m_pView->koDocument()->isReadWrite() || sheet->isProtected() )
     return;
 
-  adjustColumn();
+  sheet->adjustColumn(*m_pCanvas->selectionInfo());
 }
 
 void HBorder::mouseMoveEvent( QMouseEvent * _ev )

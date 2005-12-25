@@ -2932,16 +2932,9 @@ void View::verticalText(bool b)
 
   doc()->emitBeginOperation( false );
   d->activeSheet->setSelectionVerticalText( selectionInfo(), b );
-  if ( d->selection->isRowSelected() == false
-       && d->selection->isColumnSelected() == false )
-  {
-    d->canvas->adjustArea( false );
-    updateEditWidget();
-    doc()->emitEndOperation( *selectionInfo() );
-    return;
-  }
-
-  doc()->emitEndOperation( QRect( d->selection->marker(), d->selection->marker() ) );
+  d->activeSheet->adjustArea(*selectionInfo());
+  updateEditWidget(); // TODO Stefan: nescessary?
+  doc()->emitEndOperation( *selectionInfo() );
 }
 
 void View::insertSpecialChar()
@@ -3742,13 +3735,8 @@ void View::changeAngle()
                     QPoint( d->canvas->markerColumn(), d->canvas->markerRow() ));
   if ( dlg.exec() )
   {
-    if ( (d->selection->isRowSelected() == false) &&
-        (d->selection->isColumnSelected() == false) )
-    {
-      doc()->emitBeginOperation( false );
-      d->canvas->adjustArea( false );
-      doc()->emitEndOperation( *selectionInfo() );
-    }
+    //TODO Stefan: where is the angle operation?
+    d->activeSheet->adjustArea(*selectionInfo());
   }
 }
 
@@ -3759,12 +3747,7 @@ void View::setSelectionAngle( int angle )
   if ( d->activeSheet != NULL )
   {
     d->activeSheet->setSelectionAngle( selectionInfo(), angle );
-
-    if (d->selection->isRowSelected() == false &&
-        d->selection->isColumnSelected() == false)
-    {
-      d->canvas->adjustArea(false);
-    }
+    d->activeSheet->adjustArea(*selectionInfo());
   }
 
   doc()->emitEndOperation( *selectionInfo() );
@@ -5077,12 +5060,10 @@ void View::popupColumnMenu( const QPoint & _point )
 
 void View::slotPopupAdjustColumn()
 {
-    if ( !d->activeSheet )
-       return;
+  if ( !d->activeSheet )
+      return;
 
-    doc()->emitBeginOperation( false );
-    canvasWidget()->adjustArea();
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  d->activeSheet->adjustColumn(*selectionInfo());
 }
 
 void View::popupRowMenu( const QPoint & _point )
@@ -5160,12 +5141,10 @@ void View::popupRowMenu( const QPoint & _point )
 
 void View::slotPopupAdjustRow()
 {
-    if ( !d->activeSheet )
-       return;
+  if ( !d->activeSheet )
+      return;
 
-    doc()->emitBeginOperation(false);
-    canvasWidget()->adjustArea();
-    doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  d->activeSheet->adjustRow(*selectionInfo());
 }
 
 
@@ -5421,16 +5400,10 @@ void View::deleteSelection()
 
 void View::adjust()
 {
-    if ( (d->selection->isRowSelected()) || (d->selection->isColumnSelected()) )
-    {
-      KMessageBox::error( this, i18n("Area is too large."));
-    }
-    else
-    {
-      doc()->emitBeginOperation( false );
-      canvasWidget()->adjustArea();
-      doc()->emitEndOperation( *selectionInfo() );
-    }
+  if ( !d->activeSheet )
+    return;
+
+  d->activeSheet->adjustArea(*selectionInfo());
 }
 
 void View::clearTextSelection()

@@ -381,8 +381,8 @@ public:
 
   virtual Type type() const { return Element::Range; }
   virtual bool isValid() const { return !m_range.isNull(); }
-  virtual bool isColumn() const { return (m_range.top() == 1 && m_range.bottom() == KS_rowMax); }
-  virtual bool isRow() const { return (m_range.left() == 1 && m_range.right() == KS_colMax); }
+  virtual bool isColumn() const { return (m_range.normalize().top() == 1 && m_range.normalize().bottom() == KS_rowMax); }
+  virtual bool isRow() const { return (m_range.normalize().left() == 1 && m_range.normalize().right() == KS_colMax); }
 
   virtual bool contains(const QPoint&) const;
   virtual bool contains(const QRect&) const;

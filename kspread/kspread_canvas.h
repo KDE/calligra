@@ -232,11 +232,6 @@ public:
 
     bool chooseMode() const;
 
-    /**
-    * Adjust a area in height and width
-    */
-    void adjustArea(bool makeUndo=true);
-
     void equalizeRow();
     void equalizeColumn();
 
@@ -502,11 +497,10 @@ public:
     ~HBorder();
 
     int markerColumn() const { return  m_iSelectionAnchor; }
-    void adjustColumn( int _col = -1, bool makeUndo = true );
     void equalizeColumn( double resize );
 
     void updateColumns( int from, int to );
-    
+
     QSize sizeHint() const;
 
 private slots:
@@ -586,7 +580,6 @@ public:
     ~VBorder();
 
     int markerRow() const { return  m_iSelectionAnchor; }
-    void adjustRow( int _row = -1, bool makeUndo = true );
     void equalizeRow( double resize );
     void updateRows( int from, int to );
 

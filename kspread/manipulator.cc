@@ -17,6 +17,8 @@
    Boston, MA 02110-1301, USA.
 */
 
+#include <float.h>
+
 #include <qcolor.h>
 
 #include <kdebug.h>
@@ -39,8 +41,6 @@
 using namespace KSpread;
 
 // TODO Stefan: RemoveComment
-// TODO Stefan: AdjustColumn
-// TODO Stefan: AdjustRow
 // TODO Stefan: ClearText
 // TODO Stefan: ClearValidity
 // TODO Stefan: FillSelection ?
@@ -66,6 +66,7 @@ using namespace KSpread;
 // TODO Stefan: Validity
 // TODO Stefan: more ????
 
+// TODO Stefan: maybe make the undos optional
 
 /***************************************************************************
   class Manipulator
@@ -88,7 +89,7 @@ void Manipulator::execute()
 {
   if (!m_sheet)
   {
-    kdWarning() << "Manipulator::execute(): No explicit sheet is set. "
+    kdWarning() << "Manipulator::execute(): No explicit m_sheet is set. "
                 << "Manipulating all sheets of the region." << endl;
   }
 
@@ -123,7 +124,7 @@ void Manipulator::unexecute()
 bool Manipulator::process(Element* element)
 {
   Sheet* sheet = m_sheet; // TODO Stefan: element->sheet();
-  if (m_sheet && m_sheet != sheet)
+  if (m_sheet && sheet != m_sheet)
   {
     return true;
   }
@@ -134,7 +135,7 @@ bool Manipulator::process(Element* element)
     for (int col = range.left(); col <= range.right(); ++col)
     {
       kdDebug() << "Processing column " << col << "." << endl;
-      ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
+      ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
       process(format);
         // TODO Stefan: process cells with this property
     }
@@ -144,7 +145,7 @@ bool Manipulator::process(Element* element)
     for (int row = range.top(); row <= range.bottom(); ++row)
     {
       kdDebug() << "Processing row " << row << "." << endl;
-      RowFormat* format = m_sheet->nonDefaultRowFormat(row);
+      RowFormat* format = sheet->nonDefaultRowFormat(row);
       process(format);
         // TODO Stefan: process cells with this property
     }
@@ -156,7 +157,7 @@ bool Manipulator::process(Element* element)
     {
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
-        Cell* cell = m_sheet->cellAt(col, row);
+        Cell* cell = sheet->cellAt(col, row);
         if ( cell->isObscuringForced() )
         {
           cell = cell->obscuringCells().first();
@@ -164,11 +165,11 @@ bool Manipulator::process(Element* element)
 
         //if (testCondition(cell))
         {
-          if (cell == m_sheet->defaultCell() && m_creation)
+          if (cell == sheet->defaultCell() && m_creation)
           {
-            Style* style = m_sheet->doc()->styleManager()->defaultStyle();
-            cell = new Cell(m_sheet, style, col, row);
-            m_sheet->insertCell(cell);
+            Style* style = sheet->doc()->styleManager()->defaultStyle();
+            cell = new Cell(sheet, style, col, row);
+            sheet->insertCell(cell);
           }
 
           if (!process(cell))
@@ -509,17 +510,17 @@ void FormatManipulator::copyFormat(QValueList<layoutCell> & list,
     }
     else
     {
-      for ( int y = range.top(); y <= bottom; ++y )
-        for ( int x = range.left(); x <= right; ++x )
+      for ( int row = range.top(); row <= bottom; ++row )
+        for ( int col = range.left(); col <= right; ++col )
         {
-          Cell * cell = m_sheet->nonDefaultCell( x, y );
+          Cell * cell = m_sheet->nonDefaultCell( col, row );
           if ( !cell->isObscuringForced() )
           {
             layoutCell tmplayout;
-            tmplayout.col = x;
-            tmplayout.row = y;
+            tmplayout.col = col;
+            tmplayout.row = row;
             tmplayout.l = new Format( m_sheet, 0 );
-            tmplayout.l->copy( *(m_sheet->cellAt( x, y )->format()) );
+            tmplayout.l->copy( *(m_sheet->cellAt( col, row )->format()) );
             list.append(tmplayout);
           }
         }
@@ -993,8 +994,8 @@ bool ResizeColumnManipulator::process(Element* element)
   QRect range = element->rect().normalize();
   for (int col = range.right(); col >= range.left(); --col)
   {
-    ColumnFormat *cl = m_sheet->nonDefaultColumnFormat( col );
-    cl->setDblWidth( QMAX( 2.0, m_reverse ? m_oldSize : m_newSize ) );
+    ColumnFormat *format = m_sheet->nonDefaultColumnFormat( col );
+    format->setDblWidth( QMAX( 2.0, m_reverse ? m_oldSize : m_newSize ) );
   }
   return true;
 }
@@ -1022,6 +1023,350 @@ bool ResizeRowManipulator::process(Element* element)
     rl->setDblHeight( QMAX( 2.0, m_reverse ? m_oldSize : m_newSize ) );
   }
   return true;
+}
+
+
+
+/***************************************************************************
+  class AdjustColumnRowManipulator
+****************************************************************************/
+
+AdjustColumnRowManipulator::AdjustColumnRowManipulator()
+  : Manipulator(),
+    m_adjustColumn(false),
+    m_adjustRow(false)
+{
+}
+
+AdjustColumnRowManipulator::~AdjustColumnRowManipulator()
+{
+}
+
+bool AdjustColumnRowManipulator::process(Element* element)
+{
+  Sheet* sheet = m_sheet; // TODO Stefan: element->sheet();
+  if (m_sheet && sheet != m_sheet)
+  {
+    return true;
+  }
+
+  QMap<int,double> heights;
+  QMap<int,double> widths;
+  if (m_reverse)
+  {
+    heights = m_oldHeights;
+    widths = m_oldWidths;
+  }
+  else
+  {
+    heights = m_newHeights;
+    widths = m_newWidths;
+  }
+
+  QRect range = element->rect().normalize();
+  if (m_adjustColumn)
+  {
+    if (element->isRow())
+    {
+      for (int row = range.top(); row <= range.bottom(); ++row)
+      {
+        Cell* cell = sheet->getFirstCellRow( row );
+        while ( cell )
+        {
+          int col = cell->column();
+          if ( !cell->isEmpty() && !cell->isObscured())
+          {
+            if (widths.contains(col) && widths[col] != -1.0)
+            {
+              ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
+              if ( kAbs(format->dblWidth() - widths[col] ) > DBL_EPSILON )
+              {
+                format->setDblWidth( QMAX( 2.0, widths[col] ) );
+              }
+            }
+          }
+          cell = sheet->getNextCellRight(col, row);
+        }
+      }
+    }
+    else
+    {
+      for (int col = range.left(); col <= range.right(); ++col)
+      {
+        if (widths.contains(col) && widths[col] != -1.0)
+        {
+          ColumnFormat* format = sheet->nonDefaultColumnFormat(col);
+          if ( kAbs(format->dblWidth() - widths[col] ) > DBL_EPSILON )
+          {
+            format->setDblWidth( QMAX( 2.0, widths[col] ) );
+          }
+        }
+      }
+    }
+  }
+  if (m_adjustRow)
+  {
+    if (element->isColumn())
+    {
+      for (int col = range.left(); col <= range.right(); ++col)
+      {
+        Cell* cell = sheet->getFirstCellColumn( col );
+        while ( cell )
+        {
+          int row = cell->row();
+          if ( !cell->isEmpty() && !cell->isObscured())
+          {
+            if (heights.contains(row) && heights[row] != -1.0)
+            {
+              RowFormat* format = sheet->nonDefaultRowFormat(row);
+              if ( kAbs(format->dblHeight() - heights[row] ) > DBL_EPSILON )
+              {
+                format->setDblHeight( QMAX( 2.0, heights[row] ) );
+              }
+            }
+          }
+          cell = sheet->getNextCellDown( col, row );
+        }
+      }
+    }
+    else
+    {
+      for (int row = range.top(); row <= range.bottom(); ++row)
+      {
+        if (heights.contains(row) && heights[row] != -1.0)
+        {
+          RowFormat* format = sheet->nonDefaultRowFormat(row);
+          if ( kAbs(format->dblHeight() - heights[row] ) > DBL_EPSILON )
+          {
+            format->setDblHeight( QMAX( 2.0, heights[row] ) );
+          }
+        }
+      }
+    }
+  }
+  return true;
+}
+
+bool AdjustColumnRowManipulator::preProcessing()
+{
+  if (m_reverse)
+  {
+  }
+  else
+  {
+    if (!m_newHeights.isEmpty() || !m_newWidths.isEmpty())
+    {
+      return true;
+    }
+//     createUndo();
+
+    ConstIterator endOfList(cells().end());
+    for (ConstIterator it = cells().begin(); it != endOfList; ++it)
+    {
+      Element* element = *it;
+      QRect range = element->rect().normalize();
+      if (element->isColumn())
+      {
+        for (int col = range.left(); col <= range.right(); ++col)
+        {
+          Cell* cell = m_sheet->getFirstCellColumn( col );
+          while ( cell )
+          {
+            int row = cell->row();
+            if (m_adjustColumn)
+            {
+              if (!m_newWidths.contains(col))
+              {
+                m_newWidths[col] = -1.0;
+                ColumnFormat* format = m_sheet->columnFormat(col);
+                m_oldWidths[col] = format->dblWidth();
+              }
+              if (!cell->isEmpty() && !cell->isObscured())
+              {
+                m_newWidths[col] = QMAX(adjustColumnHelper(cell, col, row),
+                                        m_newWidths[col] );
+              }
+            }
+            if (m_adjustRow)
+            {
+              if (!m_newHeights.contains(row))
+              {
+                m_newHeights[row] = -1.0;
+                RowFormat* format = m_sheet->rowFormat(row);
+                m_oldHeights[row] = format->dblHeight();
+              }
+              if (!cell->isEmpty() && !cell->isObscured())
+              {
+                m_newHeights[row] = QMAX(adjustRowHelper(cell, col, row),
+                                        m_newHeights[row]);
+              }
+            }
+            cell = m_sheet->getNextCellDown( col, row );
+          }
+        }
+      }
+      else if (element->isRow())
+      {
+        for (int row = range.top(); row <= range.bottom(); ++row)
+        {
+          Cell* cell = m_sheet->getFirstCellRow( row );
+          while ( cell )
+          {
+            int col = cell->column();
+            if (m_adjustColumn)
+            {
+              if (!m_newWidths.contains(col))
+              {
+                m_newWidths[col] = -1.0;
+                ColumnFormat* format = m_sheet->columnFormat(col);
+                m_oldWidths[col] = format->dblWidth();
+              }
+              if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
+              {
+                m_newWidths[col] = QMAX(adjustColumnHelper(cell, col, row),
+                                        m_newWidths[col] );
+              }
+            }
+            if (m_adjustRow)
+            {
+              if (!m_newHeights.contains(row))
+              {
+                m_newHeights[row] = -1.0;
+                RowFormat* format = m_sheet->rowFormat(row);
+                m_oldHeights[row] = format->dblHeight();
+              }
+              if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
+              {
+                m_newHeights[row] = QMAX(adjustRowHelper(cell, col, row),
+                                        m_newHeights[row]);
+              }
+            }
+            cell = m_sheet->getNextCellRight(col, row);
+          }
+        }
+      }
+      else
+      {
+        Cell* cell;
+        for (int col = range.left(); col <= range.right(); ++col)
+        {
+          for ( int row = range.top(); row <= range.bottom(); ++row )
+          {
+            cell = m_sheet->cellAt( col, row );
+            if (m_adjustColumn)
+            {
+              if (!m_newWidths.contains(col))
+              {
+                m_newWidths[col] = -1.0;
+                ColumnFormat* format = m_sheet->columnFormat(col);
+                m_oldWidths[col] = format->dblWidth();
+              }
+              if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
+              {
+                  m_newWidths[col] = QMAX(adjustColumnHelper(cell, col, row),
+                                          m_newWidths[col] );
+              }
+            }
+            if (m_adjustRow)
+            {
+              if (!m_newHeights.contains(row))
+              {
+                m_newHeights[row] = -1.0;
+                RowFormat* format = m_sheet->rowFormat(row);
+                m_oldHeights[row] = format->dblHeight();
+              }
+              if (cell != m_sheet->defaultCell() && !cell->isEmpty() && !cell->isObscured())
+              {
+                m_newHeights[row] = QMAX(adjustRowHelper(cell, col, row),
+                                        m_newHeights[row]);
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  return true;
+}
+
+double AdjustColumnRowManipulator::adjustColumnHelper(Cell* cell, int col, int row )
+{
+  double long_max = 0.0;
+  cell->calculateTextParameters( m_sheet->painter(), col, row );
+  if ( cell->textWidth() > long_max )
+  {
+    double indent = 0.0;
+    Format::Align alignment = cell->format()->align(cell->column(), cell->row());
+    if (alignment == Format::Undefined)
+    {
+      if (cell->value().isNumber() || cell->isDate() || cell->isTime())
+      {
+        alignment = Format::Right;
+      }
+      else
+      {
+        alignment = Format::Left;
+      }
+    }
+
+    if (alignment == Format::Left)
+    {
+      indent = cell->format()->getIndent( cell->column(), cell->row() );
+    }
+    long_max = indent + cell->textWidth()
+             + cell->format()->leftBorderWidth( cell->column(), cell->row() )
+             + cell->format()->rightBorderWidth( cell->column(), cell->row() );
+  }
+
+  // add 4 because long_max is the length of the text
+  // but column has borders
+  if ( long_max == 0.0 )
+  {
+    return -1.0;
+  }
+  else
+  {
+    return long_max + 4;
+  }
+}
+
+double AdjustColumnRowManipulator::adjustRowHelper(Cell* cell, int col, int row)
+{
+  double long_max = 0.0;
+  cell->calculateTextParameters( m_sheet->painter(), col, row);
+  if ( cell->textHeight() > long_max )
+  {
+      long_max = cell->textHeight()
+               + cell->format()->topBorderWidth(col, row)
+               + cell->format()->bottomBorderWidth(col, row);
+  }
+
+  //  add 1 because long_max is the height of the text
+  //  but row has borders
+  if ( long_max == 0.0 )
+  {
+    return -1.0;
+  }
+  else
+  {
+    return long_max + 1;
+  }
+}
+
+QString AdjustColumnRowManipulator::name() const
+{
+  if (m_adjustColumn && m_adjustRow)
+  {
+    return i18n("Adjust Columns/Rows");
+  }
+  else if (m_adjustColumn)
+  {
+    return i18n("Adjust Columns");
+  }
+  else
+  {
+    return i18n("Adjust Rows");
+  }
 }
 
 

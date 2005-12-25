@@ -707,8 +707,18 @@ public:
     void emitHideColumn();
     void showColumn( int col, int NbCol=0, QValueList<int>list=QValueList<int>() );
 
-    int adjustColumn( Selection* selectionInfo, int _col = -1 );
-    int adjustRow( Selection* selectionInfo, int _row = -1 );
+    /**
+     * Adjust columns and rows of a region
+     */
+    void adjustArea(const Region&);
+    /**
+     * Adjust columns of a region
+     */
+    void adjustColumn(const Region&);
+    /**
+     * Adjust rows of a region
+     */
+    void adjustRow(const Region&);
 
     /**
      * Install borders

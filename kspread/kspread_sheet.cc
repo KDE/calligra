@@ -4525,9 +4525,27 @@ int Sheet::adjustColumnHelper( Cell * c, int _col, int _row )
     return (int)long_max;
 }
 
-int Sheet::adjustColumn( Selection* selectionInfo, int _col )
+void Sheet::adjustArea(const Region& region)
 {
-  QRect selection(selectionInfo->selection());
+  AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
+  manipulator->setSheet(this);
+  manipulator->setAdjustColumn(true);
+  manipulator->setAdjustRow(true);
+  manipulator->add(region);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
+}
+
+void Sheet::adjustColumn(const Region& region)
+{
+  AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
+  manipulator->setSheet(this);
+  manipulator->setAdjustColumn(true);
+  manipulator->add(region);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
+
+/*  QRect selection(selectionInfo->selection());
   double long_max = 0.0;
   if ( _col == -1 )
   {
@@ -4585,12 +4603,19 @@ int Sheet::adjustColumn( Selection* selectionInfo, int _col )
   if( long_max == 0 )
     return -1;
   else
-    return ( (int)long_max + 4 );
+    return ( (int)long_max + 4 );*/
 }
 
-int Sheet::adjustRow( Selection* selectionInfo, int _row )
+void Sheet::adjustRow(const Region& region)
 {
-  QRect selection(selectionInfo->selection());
+  AdjustColumnRowManipulator* manipulator = new AdjustColumnRowManipulator();
+  manipulator->setSheet(this);
+  manipulator->setAdjustRow(true);
+  manipulator->add(region);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
+
+/*  QRect selection(selectionInfo->selection());
   double long_max = 0.0;
   if( _row == -1 ) //No special row is defined, so use selected rows
   {
@@ -4659,7 +4684,7 @@ int Sheet::adjustRow( Selection* selectionInfo, int _row )
   if( long_max == 0.0 )
     return -1;
   else
-    return ( (int)long_max + 4 );
+    return ( (int)long_max + 4 );*/
 }
 
 struct ClearTextSelectionWorker : public Sheet::CellWorker {

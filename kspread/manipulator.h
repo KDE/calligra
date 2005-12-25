@@ -476,6 +476,40 @@ private:
 
 
 
+/**
+ * AdjustColumnRowManipulator
+ */
+class AdjustColumnRowManipulator : public Manipulator
+{
+public:
+  AdjustColumnRowManipulator();
+  virtual ~AdjustColumnRowManipulator();
+
+  virtual bool process(Element*);
+  virtual bool preProcessing();
+
+  void setAdjustColumn(bool state) { m_adjustColumn = state; }
+  void setAdjustRow(bool state) { m_adjustRow = state; }
+
+protected:
+  virtual bool process(Cell*) { return true; }
+  virtual bool process(Format*) { return true; }
+
+  virtual QString name() const;
+
+  double adjustColumnHelper( Cell * c, int _col, int _row );
+  double adjustRowHelper( Cell * c, int _col, int _row );
+
+private:
+  bool m_adjustColumn : 1;
+  bool m_adjustRow    : 1;
+  QMap<int, double> m_newWidths;
+  QMap<int, double> m_oldWidths;
+  QMap<int, double> m_newHeights;
+  QMap<int, double> m_oldHeights;
+};
+
+
 
 /**
  * ManipulatorManager
