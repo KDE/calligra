@@ -10,7 +10,7 @@ INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \
 libkiviotexttool_la_METASOURCES = AUTO
 libkiviotexttool_la_SOURCES = \
 		plugin.cpp\
-		tool_text.cpp
+		tool_text.cpp kivio_stenciltexteditorui.ui stenciltexteditor.cpp
 EXTRA_DIST = \
 		plugin.h\
 		plugin.cpp\

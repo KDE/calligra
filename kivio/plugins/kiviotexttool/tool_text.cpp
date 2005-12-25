@@ -43,6 +43,7 @@
 #include "kivio_command.h"
 #include "kivio_pluginmanager.h"
 #include "mousetoolaction.h"
+#include "stenciltexteditor.h"
 
 
 TextTool::TextTool( KivioView* parent ) : Kivio::MouseTool(parent, "Text Mouse Tool")
@@ -257,6 +258,7 @@ void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
   while(stencil) {
     if(stencil->hasTextBox()) {
       ok = true;
+      break;
     }
 
     stencil = stencils->next();
@@ -266,39 +268,69 @@ void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
     return;
   }
 
-  stencil = stencils->first();
-  QString text = KInputDialog::getMultiLineText(i18n("Edit Text"), QString::null,
-      stencil->text(), &ok, view());
+  Kivio::StencilTextEditor editor(i18n("Edit Text"), view(), "StencilTextEditor");
+  editor.setFont(stencil->textFont());
+  editor.setFontColor(stencil->textColor());
+  editor.setBackgroundColor(stencil->bgColor());
+  editor.setText(stencil->text());
+  editor.setHorizontalAlign(static_cast<Qt::AlignmentFlags>(stencil->hTextAlign()));
 
-  if(!ok) {
-    return;
-  }
+  if(editor.exec() == QDialog::Accepted) {
+    KMacroCommand* macroCmd = new KMacroCommand(i18n("Change Stencil Text And Formating"));
+    bool changed = false;
+    QString text = editor.text();
+    QFont font = editor.font();
+    QColor textColor = editor.fontColor();
+    int alignment = editor.alignment();
+    bool changeFont = (stencil->textFont() != font);
+    bool changeTextColor = (stencil->textColor() != textColor);
+    bool changeAlignment = (stencil->hTextAlign() != alignment);
 
-  KMacroCommand *macro = new KMacroCommand( i18n("Change Stencil Text"));
-  bool createMacro = false;
-  KivioDoc* doc = view()->doc();
-  KivioPage* page = view()->activePage();
-
-  while( stencil )
-  {
-    if(stencil->text() != text)
+    while( stencil )
     {
-      KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand(i18n("Change Stencil Text"),
-        stencil, stencil->text(), text, page);
-      macro->addCommand( cmd);
-      stencil->setText( text );
-      createMacro=true;
+      if(stencil->text() != text)
+      {
+        KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand(i18n("Change Stencil Text"),
+            stencil, stencil->text(), text, view()->activePage());
+        stencil->setText(text);
+        macroCmd->addCommand(cmd);
+        changed = true;
+      }
+
+      if(changeFont && (stencil->textFont() != font)) {
+        KivioChangeStencilFontCommand* cmd = new KivioChangeStencilFontCommand(i18n("Change Stencil Font"),
+            view()->activePage(), stencil, stencil->textFont(), font);
+        stencil->setTextFont(font);
+        macroCmd->addCommand(cmd);
+        changed = true;
+      }
+
+      if(changeTextColor && (stencil->textColor() != textColor)) {
+        KivioChangeStencilColorCommand* cmd = new KivioChangeStencilColorCommand(i18n("Change Stencil Text Color"),
+            view()->activePage(), stencil, stencil->textColor(), textColor, KivioChangeStencilColorCommand::CT_TEXTCOLOR);
+        stencil->setTextColor(textColor);
+        macroCmd->addCommand(cmd);
+        changed = true;
+      }
+
+      if(changeAlignment && (stencil->hTextAlign() != alignment)) {
+        KivioChangeStencilHAlignmentCommand* cmd = new KivioChangeStencilHAlignmentCommand(
+            i18n("Change Stencil Horizontal Alignment"), view()->activePage(), stencil, stencil->hTextAlign(), alignment);
+        stencil->setHTextAlign(alignment);
+        macroCmd->addCommand(cmd);
+        changed = true;
+      }
+
+      stencil = stencils->next();
     }
-    
-    stencil = stencils->next();
+
+    if(changed) {
+      view()->doc()->addCommand(macroCmd);
+      view()->doc()->updateView(view()->activePage());
+    } else {
+      delete macroCmd;
+    }
   }
-  
-  if(createMacro)
-    doc->addCommand(macro);
-  else
-    delete macro;
-  
-  doc->updateView(page);
 }
 
 void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
@@ -313,26 +345,64 @@ void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
     return;
   }
 
-  bool ok = false;
-  QString text = KInputDialog::getMultiLineText(i18n("Edit Text"), QString::null,
-      stencil->text(name), &ok, view());
+  Kivio::StencilTextEditor editor(i18n("Edit Text"), view(), "StencilTextEditor");
+  editor.setFont(stencil->textFont());
+  editor.setFontColor(stencil->textColor());
+  editor.setBackgroundColor(stencil->bgColor());
+  editor.setText(stencil->text(name));
+  editor.setHorizontalAlign(static_cast<Qt::AlignmentFlags>(stencil->hTextAlign()));
 
-  if(!ok) {
-    return;
+  if(editor.exec() == QDialog::Accepted) {
+    KMacroCommand* macroCmd = new KMacroCommand(i18n("Change Stencil Text And Formating"));
+    bool changed = false;
+    QString text = editor.text();
+
+    if(stencil->text(name) != text)
+    {
+      KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand(i18n("Change Stencil Text"),
+          stencil, stencil->text(name), text, view()->activePage());
+      stencil->setText(text, name);
+      macroCmd->addCommand(cmd);
+      changed = true;
+    }
+
+    QFont font = editor.font();
+
+    if(stencil->textFont() != font) {
+      KivioChangeStencilFontCommand* cmd = new KivioChangeStencilFontCommand(i18n("Change Stencil Font"),
+          view()->activePage(), stencil, stencil->textFont(), font);
+      stencil->setTextFont(font);
+      macroCmd->addCommand(cmd);
+      changed = true;
+    }
+
+    QColor textColor = editor.fontColor();
+
+    if(stencil->textColor() != textColor) {
+      KivioChangeStencilColorCommand* cmd = new KivioChangeStencilColorCommand(i18n("Change Stencil Text Color"),
+          view()->activePage(), stencil, stencil->textColor(), textColor, KivioChangeStencilColorCommand::CT_TEXTCOLOR);
+      stencil->setTextColor(textColor);
+      macroCmd->addCommand(cmd);
+      changed = true;
+    }
+
+    int alignment = editor.alignment();
+
+    if(stencil->hTextAlign() != alignment) {
+      KivioChangeStencilHAlignmentCommand* cmd = new KivioChangeStencilHAlignmentCommand(
+          i18n("Change Stencil Horizontal Alignment"), view()->activePage(), stencil, stencil->hTextAlign(), alignment);
+      stencil->setHTextAlign(alignment);
+      macroCmd->addCommand(cmd);
+      changed = true;
+    }
+
+    if(changed) {
+      view()->doc()->addCommand(macroCmd);
+      view()->doc()->updateView(view()->activePage());
+    } else {
+      delete macroCmd;
+    }
   }
-
-  KivioDoc* doc = view()->doc();
-  KivioPage* page = view()->activePage();
-
-  if(stencil->text(name) != text)
-  {
-    KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand(i18n("Change Stencil Text"),
-      stencil, stencil->text(name), text, page);
-    stencil->setText(text, name);
-    doc->addCommand(cmd);
-  }
-
-  doc->updateView(page);
 }
 
 void TextTool::makePermanent()

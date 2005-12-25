@@ -134,6 +134,7 @@ public:
     virtual void setText( const QString & );
 
     virtual QFont textFont();
+    virtual QColor textColor();
 
     virtual KivioCollisionType checkForCollision( KoPoint *, double );
 

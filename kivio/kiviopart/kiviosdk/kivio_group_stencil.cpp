@@ -23,6 +23,8 @@
 
 #include <kdebug.h>
 
+#include <koGlobal.h>
+
 KivioGroupStencil::KivioGroupStencil()
     : KivioStencil(),
     m_pGroupList(NULL)
@@ -602,12 +604,22 @@ void KivioGroupStencil::setTextFont( const QFont &f )
 
 QFont KivioGroupStencil::textFont()
 {
-    KivioStencil *pStencil = m_pGroupList->first();
+  KivioStencil *pStencil = m_pGroupList->first();
 
-    if( !pStencil )
-        return QFont("Times");
+  if( !pStencil )
+    return KoGlobal::defaultFont();
 
-    return pStencil->textFont();
+  return pStencil->textFont();
+}
+
+QColor KivioGroupStencil::textColor()
+{
+  KivioStencil *pStencil = m_pGroupList->first();
+
+  if( !pStencil )
+    return QColor(0, 0, 0);
+
+  return pStencil->textColor();
 }
 
 int KivioGroupStencil::resizeHandlePositions()

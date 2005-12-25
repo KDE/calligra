@@ -63,6 +63,7 @@ class KivioGroupStencil : public KivioStencil
 
 
     // Text operations
+    virtual QColor textColor();
     virtual void setTextColor( QColor );
 
     virtual QFont textFont();

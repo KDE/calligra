@@ -1411,7 +1411,6 @@ void KivioSMLStencil::setTextColor( QColor c )
     }
 }
 
-
 /**
  * Set the text font of this stencil
  */
@@ -1604,6 +1603,23 @@ QFont KivioSMLStencil::textFont()
     return KoGlobal::defaultFont();
 }
 
+QColor KivioSMLStencil::textColor()
+{
+  KivioShape *pShape;
+
+  pShape = m_pShapeList->first();
+  while( pShape )
+  {
+    if( pShape->shapeData()->shapeType() == KivioShapeData::kstTextBox )
+    {
+      return pShape->shapeData()->textColor();
+    }
+
+    pShape = m_pShapeList->next();
+  }
+
+  return QColor(0, 0, 0);
+}
 
 /**
  * Sets the horizontal alignemnt of this stencil.
