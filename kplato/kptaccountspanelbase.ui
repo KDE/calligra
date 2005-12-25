@@ -100,9 +100,6 @@
                     <property name="text">
                         <string>&amp;New</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+N</string>
-                    </property>
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">
@@ -111,9 +108,6 @@
                     <property name="text">
                         <string>New &amp;Sub-account</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+S</string>
-                    </property>
                 </widget>
                 <widget class="QPushButton">
                     <property name="name">
@@ -121,9 +115,6 @@
                     </property>
                     <property name="text">
                         <string>&amp;Remove</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+R</string>
                     </property>
                 </widget>
             </hbox>
