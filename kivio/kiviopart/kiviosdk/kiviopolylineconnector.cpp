@@ -264,9 +264,13 @@ namespace Kivio {
   
   void PolyLineConnector::movePoint(int index, double xOffset, double yOffset)
   {
+    if(index >= m_points.count()) {
+      return;
+    }
+
     KoPoint p(xOffset, yOffset);
     m_points[index] += p;
-    
+
     if(index == (m_points.count() - 1)) {
       m_pEnd->setPosition(m_points[index].x(), m_points[index].y(), false);
       m_pEnd->disconnect();
@@ -330,7 +334,7 @@ namespace Kivio {
       return 0;
     }
     
-    return m_points.first().x();
+    return rect().x();
   }
   
   void PolyLineConnector::setX(double newX)
@@ -345,7 +349,7 @@ namespace Kivio {
       return 0;
     }
   
-    return m_points.first().y();
+    return rect().y();
   }
   
   void PolyLineConnector::setY(double newY)
