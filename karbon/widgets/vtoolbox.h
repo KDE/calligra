@@ -31,6 +31,7 @@ class VToolBox : public KoToolBox
 
 public:
 	VToolBox( KMainWindow *mainWin, const char* name, KInstance* instance );
+	virtual ~VToolBox() {}
 
 	void registerTool( VTool * );
 	void setupTools();

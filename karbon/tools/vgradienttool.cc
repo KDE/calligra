@@ -117,6 +117,11 @@ void
 VGradientTool::mouseButtonRelease()
 {
 	if( view()->part()->document().selection()->objects().count() == 0 ) return;
+	if( first() == last() )
+	{
+		showDialog();
+		return;
+	}
 	m_gradient.setOrigin( first() );
 	KoPoint p = last();
 	if( first().x() == last().x() && first().y() == last().y() ) // workaround for a libart 2.3.10 bug

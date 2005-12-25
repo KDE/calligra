@@ -175,8 +175,12 @@ VPatternTool::mouseButtonPress()
 void
 VPatternTool::mouseButtonRelease()
 {
-	if( view()->part()->document().selection()->objects().count() == 0 )
+	if( view()->part()->document().selection()->objects().count() == 0 ) return;
+	if( first() == last() )
+	{
+		showDialog();
 		return;
+	}
 	else if( !m_optionsWidget->selectedPattern() )
 		KMessageBox::error( 0L, i18n( "Please select a pattern." ), "" );
 	else
