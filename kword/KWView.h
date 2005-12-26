@@ -441,9 +441,13 @@ public slots:
     void autoSpellCheck();
     void goToFootEndNote();
 
-    void selectFrameSet();
-    void editFrameSet();
-    void openDocStructurePopupMenu( const QPoint &p, KWFrameSet *frameset);
+    // Document Structure Area popup menu.
+    void docStructEdit();
+    void docStructSpeak();
+    void docStructSelect();
+    void docStructDelete();
+    void docStructProperties();
+    void openDocStructurePopupMenu( const QPoint &p, KWFrameSet *frameset, KWTextParag *parag);
 
     void insertFile();
 
@@ -465,10 +469,6 @@ public slots:
     void goToDocument();
 
     void addWordToDictionary();
-
-    void deleteFrameSet();
-    void editFrameSetProperties();
-    void speakFrameSet();
 
 protected slots:
     virtual void slotChildActivated( bool a ); ///< from KoView
@@ -725,10 +725,13 @@ private: // variables
 
     KAction *m_actionGoToFootEndNote;
 
+    // Document Structure Area popup menu.
+    KAction *m_actionDocStructEdit;
+    KAction *m_actionDocStructSpeak;
+    KAction *m_actionDocStructSelect;
+    KAction *m_actionDocStructDelete;
+    KAction *m_actionDocStructProperties;
 
-    KAction *m_actionEditFrameSet;
-    KAction *m_actionDeleteFrameSet;
-    KAction *m_actionSelectedFrameSet;
     KAction *m_actionInsertFile;
 
     KAction *m_actionAddBookmark;
@@ -743,8 +746,6 @@ private: // variables
     KAction *m_actionSpellIgnoreAll;
     KAction *m_actionSpellCheck;
 
-    KAction *m_actionEditFrameSetProperties;
-    KAction *m_actionSpeakFrameSet;
     KToggleAction *m_actionEmbeddedStoreInternal;
 
     KAction *m_actionAddWordToPersonalDictionary;

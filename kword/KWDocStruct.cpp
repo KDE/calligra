@@ -134,7 +134,7 @@ void KWDocStructParagItem::contextMenu(QListViewItem* item, const QPoint& p, int
     if (item == this)
     {
         KWTextFrameSet* fs = m_parag->kwTextDocument()->textFrameSet();
-        gui()->getView()->openDocStructurePopupMenu(p, fs);
+        gui()->getView()->openDocStructurePopupMenu(p, fs, m_parag);
     }
 }
 
@@ -261,7 +261,7 @@ void KWDocStructTextFrameItem::setupTextParags()
 void KWDocStructTextFrameItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
     if (item == this)
-        gui()->getView()->openDocStructurePopupMenu(p, m_frameset);
+        gui()->getView()->openDocStructurePopupMenu(p, m_frameset, 0);
 }
 
 void KWDocStructTextFrameItem::selectItem()
@@ -406,7 +406,7 @@ void KWDocStructTextFrameSetItem::setupTextFrames()
 void KWDocStructTextFrameSetItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
     if (item == this)
-        gui()->getView()->openDocStructurePopupMenu(p, m_frameset);
+        gui()->getView()->openDocStructurePopupMenu(p, m_frameset, 0);
 }
 
 void KWDocStructTextFrameSetItem::selectItem()
@@ -524,7 +524,7 @@ void KWDocStructTableItem::setupCells()
 void KWDocStructTableItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
     if (item == this)
-        gui()->getView()->openDocStructurePopupMenu(p, m_table);
+        gui()->getView()->openDocStructurePopupMenu(p, m_table, 0);
 }
 
 void KWDocStructTableItem::selectItem()
@@ -541,6 +541,9 @@ void KWDocStructTableItem::editItem()
 
 void KWDocStructTableItem::deleteItem()
 {
+    // TODO: Crash if the frame of one of the cells (not first one) is selected.
+    // Following statement doesn't prevent the crash.
+    // gui()->getView()->deselectAllFrames();
     gui()->getView()->deleteFrameSet(m_table);
 }
 
@@ -594,7 +597,7 @@ KWDocStructPictureItem::KWDocStructPictureItem(QListViewItem* parent, const QStr
 void KWDocStructPictureItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
     if (item == this)
-        gui()->getView()->openDocStructurePopupMenu(p, m_pic);
+        gui()->getView()->openDocStructurePopupMenu(p, m_pic, 0);
 }
 
 
@@ -634,7 +637,7 @@ KWDocStructFormulaItem::KWDocStructFormulaItem(QListViewItem* parent, const QStr
 void KWDocStructFormulaItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
     if (item == this)
-        gui()->getView()->openDocStructurePopupMenu(p, m_form);
+        gui()->getView()->openDocStructurePopupMenu(p, m_form, 0);
 }
 
 void KWDocStructFormulaItem::selectItem()
@@ -680,7 +683,7 @@ KWDocStructPartItem::KWDocStructPartItem(QListViewItem* parent, const QString& t
 void KWDocStructPartItem::contextMenu(QListViewItem* item, const QPoint& p, int )
 {
     if (item == this)
-        gui()->getView()->openDocStructurePopupMenu(p, m_part);
+        gui()->getView()->openDocStructurePopupMenu(p, m_part, 0);
 }
 
 

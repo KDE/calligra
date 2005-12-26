@@ -1309,25 +1309,22 @@ void KWView::setupActions()
                                             this, SLOT( goToFootEndNote() ),
                                             actionCollection(), "goto_footendnote" );
 
-    m_actionEditFrameSet = new KAction( i18n( "Edit Text Frameset" ), 0,
-                                            this, SLOT( editFrameSet() ),
-                                            actionCollection(), "edit_frameset" );
-
-    m_actionDeleteFrameSet = new KAction( i18n( "Delete Frameset" ), 0,
-                                        this, SLOT( deleteFrameSet() ),
-                                        actionCollection(), "delete_frameset" );
-
-    m_actionEditFrameSetProperties = new KAction( i18n( "Edit Frameset Properties" ), 0,
-                                        this, SLOT( editFrameSetProperties() ),
-                                        actionCollection(), "edit_frameset_properties" );
-
-    m_actionSpeakFrameSet = new KAction( i18n("Speak Text" ), 0,
-                                        this, SLOT( speakFrameSet() ),
-                                        actionCollection(), "speak_frameset" );
-
-    m_actionSelectedFrameSet = new KAction( i18n( "Select Frameset" ), 0,
-                                            this, SLOT( selectFrameSet() ),
-                                            actionCollection(), "select_frameset" );
+    // Document Structure Area popup menu.
+    m_actionDocStructEdit = new KAction( i18n( "Edit Text" ), 0,
+                                         this, SLOT( docStructEdit() ),
+                                         actionCollection(), "docstruct_edit" );
+    m_actionDocStructSpeak = new KAction( i18n("Speak Text" ), 0,
+                                          this, SLOT( docStructSpeak() ),
+                                          actionCollection(), "docstruct_speak" );
+    m_actionDocStructSelect = new KAction( i18n( "Show" ), 0,
+                                           this, SLOT( docStructSelect() ),
+                                           actionCollection(), "docstruct_select" );
+    m_actionDocStructDelete = new KAction( i18n( "Delete Frame" ), 0,
+                                           this, SLOT( docStructDelete() ),
+                                           actionCollection(), "docstruct_delete" );
+    m_actionDocStructProperties = new KAction( i18n( "Properties" ), 0,
+                                               this, SLOT( docStructProperties() ),
+                                               actionCollection(), "docstruct_properties" );
 
     m_actionAddBookmark= new KAction( i18n( "&Bookmark..." ), 0,
                                             this, SLOT( addBookmark() ),
@@ -6617,28 +6614,25 @@ void KWView::goToFootEndNote()
     }
 }
 
-void KWView::openDocStructurePopupMenu( const QPoint &p, KWFrameSet *frameset)
+void KWView::openDocStructurePopupMenu( const QPoint &p, KWFrameSet *frameset, KWTextParag *parag)
 {
     bool rw = koDocument()->isReadWrite();
     bool kttsdInstalled = KoSpeaker::isKttsdInstalled();
     if (!rw && !kttsdInstalled)
         return;
-
-    QPtrList<KAction> actionList;
     bool hasText = (frameset->type()==FT_TEXT || frameset->type()==FT_TABLE || frameset->type()==FT_FORMULA );
-    if ( rw && hasText )
-        actionList.append(m_actionEditFrameSet);
-    m_actionDeleteFrameSet->setEnabled( (rw && !frameset->isMainFrameset() && !frameset->isFootEndNote() && !frameset->isHeaderOrFooter()) );
-    m_actionSpeakFrameSet->setEnabled( hasText && kttsdInstalled );
 
-    plugActionList( "edit_action", actionList );
+    m_actionDocStructEdit->setEnabled( rw && hasText );
+    m_actionDocStructDelete->setEnabled( (rw && !parag && !frameset->isMainFrameset() && 
+        !frameset->isFootEndNote() && !frameset->isHeaderOrFooter()) );
+    m_actionDocStructSpeak->setEnabled( hasText && kttsdInstalled );
+
     QPopupMenu* popup = static_cast<QPopupMenu *>(factory()->container("docstruct_popup",this));
     if ( popup )
         popup->exec(p);
-    unplugActionList( "edit_action" );
 }
 
-void KWView::selectFrameSet()
+void KWView::docStructSelect()
 {
     if ( m_gui->getDocStruct() )
     {
@@ -6646,7 +6640,7 @@ void KWView::selectFrameSet()
     }
 }
 
-void KWView::editFrameSet()
+void KWView::docStructEdit()
 {
     if ( m_gui->getDocStruct() )
     {
@@ -6656,7 +6650,7 @@ void KWView::editFrameSet()
     }
 }
 
-void KWView::editFrameSetProperties()
+void KWView::docStructProperties()
 {
     if ( m_gui->getDocStruct() )
     {
@@ -6664,7 +6658,7 @@ void KWView::editFrameSetProperties()
     }
 }
 
-void KWView::deleteFrameSet()
+void KWView::docStructDelete()
 {
     if ( m_gui->getDocStruct() )
     {
@@ -6672,7 +6666,7 @@ void KWView::deleteFrameSet()
     }
 }
 
-void KWView::speakFrameSet()
+void KWView::docStructSpeak()
 {
     if ( m_gui->getDocStruct() )
     {
