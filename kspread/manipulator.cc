@@ -1396,27 +1396,6 @@ bool HideShowManipulator::process(Element* element)
   QRect range = element->rect().normalize();
   if (m_manipulateColumns)
   {
-    if (m_reverse && range.left() > 1)
-    {
-      int col;
-      for (col = 1; col < range.left(); ++col)
-      {
-        ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
-        if (!format->isHide())
-        {
-          break;
-        }
-      }
-      if (col == range.left())
-      {
-        for (col = 1; col < range.left(); ++col)
-        {
-          ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
-          format->setHide(false);
-        }
-        add(QRect(1, 1, range.left()-2, KS_colMax-1));
-      }
-    }
     for (int col = range.left(); col <= range.right(); ++col)
     {
       ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
@@ -1425,27 +1404,6 @@ bool HideShowManipulator::process(Element* element)
   }
   if (m_manipulateRows)
   {
-    if (m_reverse && range.top() > 1)
-    {
-      int row;
-      for (row = 1; row < range.top(); ++row)
-      {
-        RowFormat* format = m_sheet->nonDefaultRowFormat(row);
-        if (!format->isHide())
-        {
-          break;
-        }
-      }
-      if (row == range.top())
-      {
-        for (row = 1; row < range.top(); ++row)
-        {
-          RowFormat* format = m_sheet->nonDefaultRowFormat(row);
-          format->setHide(false);
-        }
-        add(QRect(1, 1, KS_rowMax, range.top()-2));
-      }
-    }
     for (int row = range.top(); row <= range.bottom(); ++row)
     {
       RowFormat* format = m_sheet->nonDefaultRowFormat(row);
@@ -1466,25 +1424,55 @@ bool HideShowManipulator::preProcessing()
       QRect range = (*it)->rect().normalize();
       if (m_manipulateColumns)
       {
+        if (range.left() > 1)
+        {
+          int col;
+          for (col = 1; col < range.left(); ++col)
+          {
+            ColumnFormat* format = m_sheet->columnFormat(col);
+            if (!format->isHide())
+            {
+              break;
+            }
+          }
+          if (col == range.left())
+          {
+            region.add(QRect(1, 1, range.left()-1, KS_rowMax));
+          }
+        }
         for (int col = range.left(); col <= range.right(); ++col)
         {
           ColumnFormat* format = m_sheet->columnFormat(col);
-          if (!format->isHide())
+          if (format->isHide())
           {
-            region.add(range);
-            break;
+            region.add(QRect(col, 1, 1, KS_rowMax));
           }
         }
       }
       if (m_manipulateRows)
       {
+        if (range.top() > 1)
+        {
+          int row;
+          for (row = 1; row < range.top(); ++row)
+          {
+            RowFormat* format = m_sheet->rowFormat(row);
+            if (!format->isHide())
+            {
+              break;
+            }
+          }
+          if (row == range.top())
+          {
+            region.add(QRect(1, 1, KS_colMax, range.top()-1));
+          }
+        }
         for (int row = range.top(); row <= range.bottom(); ++row)
         {
           RowFormat* format = m_sheet->rowFormat(row);
-          if (!format->isHide())
+          if (format->isHide())
           {
-            region.add(range);
-            break;
+            region.add(QRect(1, row, KS_colMax, 1));
           }
         }
       }
@@ -1498,9 +1486,11 @@ bool HideShowManipulator::preProcessing()
     }
   }
 
-  // TODO Stefan
-  // substract not hidden cols/rows
-  //sub(region);
+  if (m_reverse)
+  {
+    clear();
+    add(region);
+  }
 
   return true;
 }

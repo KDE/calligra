@@ -128,11 +128,11 @@ void ShowColRow::slotOk()
     {
       if (typeShow == Column)
       {
-        region.add(QRect(*listInt.at(i), 1, 1, KS_rowMax-1));
+        region.add(QRect(*listInt.at(i), 1, 1, KS_rowMax));
       }
       if (typeShow == Row)
       {
-        region.add(QRect(1, *listInt.at(i), KS_colMax-1, 1));
+        region.add(QRect(1, *listInt.at(i), KS_colMax, 1));
       }
     }
   }
