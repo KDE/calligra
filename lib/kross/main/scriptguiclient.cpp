@@ -20,6 +20,7 @@
 #include "scriptguiclient.h"
 #include "manager.h"
 #include "../api/interpreter.h"
+#include "wdgscriptsmanager.h"
 
 #include <kapplication.h>
 #include <kpopupmenu.h>
@@ -39,14 +40,16 @@ namespace Kross { namespace Api {
     {
         public:
             KXMLGUIClient* guiclient;
+            QWidget* parent;
             bool dirtyscriptlist;
             KActionMenu* scriptextensions;
-            ScriptAction::List scriptactions;
+            ScriptAction::List installedscriptactions;
+            ScriptAction::List executedscriptactions;
     };
 
 }}
 
-ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QObject* parent)
+ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     : QObject( parent )
     , KXMLGUIClient( guiclient )
     , d( new ScriptGUIClientPrivate() ) // initialize d-pointer class
@@ -54,6 +57,7 @@ ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QObject* parent)
     kdDebug() << QString("ScriptGUIClient::ScriptGUIClient() Ctor") << endl;
 
     d->guiclient = guiclient;
+    d->parent = parent;
     d->dirtyscriptlist = true;
 
     setInstance( ScriptGUIClient::instance() );
@@ -78,9 +82,14 @@ ScriptGUIClient::~ScriptGUIClient()
     delete d;
 }
 
-ScriptAction::List ScriptGUIClient::getScriptActions()
+ScriptAction::List ScriptGUIClient::getInstalledScriptActions()
 {
-    return d->scriptactions;
+    return d->installedscriptactions;
+}
+
+ScriptAction::List ScriptGUIClient::getExecutedScriptActions()
+{
+    return d->executedscriptactions;
 }
 
 void ScriptGUIClient::setXMLFile(const QString &file, bool merge, bool setxmldoc)
@@ -122,11 +131,11 @@ void ScriptGUIClient::showScriptGUIClientsMenu()
     }
 
     // remove the dirty ScriptAction's we don't need any longer.
-    for(ScriptAction::List::Iterator it = d->scriptactions.begin(); it != d->scriptactions.end(); ++it) {
+    for(ScriptAction::List::Iterator it = d->installedscriptactions.begin(); it != d->installedscriptactions.end(); ++it) {
         d->scriptextensions->remove(*it);
         (*it)->deleteLater();
     }
-    d->scriptactions.clear();
+    d->installedscriptactions.clear();
 
     // time to parse the DOM-document
     QDomDocument domdoc = domDocument();
@@ -144,7 +153,7 @@ void ScriptGUIClient::showScriptGUIClientsMenu()
 
             if(node.nodeName() == "ScriptAction") {
                 ScriptAction* action = new ScriptAction( node.toElement() );
-                d->scriptactions.append( action );
+                d->installedscriptactions.append( action );
                 d->scriptextensions->insert( action );
                 connect(action, SIGNAL( failed(const QString&, const QString&) ),
                         this, SLOT( executionFailed(const QString&, const QString&) ));
@@ -185,6 +194,7 @@ bool ScriptGUIClient::executeScriptFile(const QString& file)
 
     ScriptAction* action = new ScriptAction( file.latin1() );
     action->setFile(file);
+    d->executedscriptactions.append(action);
 
     QString errormessage, tracedetails;
     bool ok = action->activate(errormessage, tracedetails);
@@ -197,7 +207,10 @@ bool ScriptGUIClient::executeScriptFile(const QString& file)
 
 void ScriptGUIClient::showScriptManager()
 {
-    //TODO
+    KDialogBase* kdb = new KDialogBase(d->parent, "", true, i18n("Script Manager"), KDialogBase::Close);
+    WdgScriptsManager* wsm = new WdgScriptsManager(this, kdb);
+    kdb->setMainWidget(wsm);
+    kdb->show();
 }
 
 #include "scriptguiclient.moc"

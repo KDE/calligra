@@ -134,6 +134,11 @@ ScriptAction::~ScriptAction()
     delete d;
 }
 
+const QString& ScriptAction::getName() const
+{
+    return d->scriptcontainer->getName();
+}
+
 const QString& ScriptAction::getInterpreterName() const
 {
     return d->scriptcontainer->getInterpreterName();

@@ -2,12 +2,8 @@ include $(top_srcdir)/lib/kross/Makefile.global
 
 lib_LTLIBRARIES = libkrossmain.la
 
-libkrossmain_la_SOURCES = \
-    mainmodule.cpp \
-    scriptcontainer.cpp \
-    manager.cpp \
-    scriptaction.cpp \
-    scriptguiclient.cpp
+libkrossmain_la_SOURCES = mainmodule.cpp scriptcontainer.cpp manager.cpp \
+	scriptaction.cpp scriptguiclient.cpp wdgscriptsmanagerbase.ui wdgscriptsmanager.cpp
 
 libkrossmain_la_LDFLAGS = $(all_libraries) $(VER_INFO) -Wnounresolved
 
@@ -21,3 +17,4 @@ libkrossmain_la_LIBADD = \
 METASOURCES = AUTO
 SUBDIRS = .
 INCLUDES = $(KROSS_INCLUDES) $(all_includes)
+noinst_HEADERS = wdgscriptsmanager.h

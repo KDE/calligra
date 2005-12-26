@@ -28,6 +28,8 @@
 #include <kurl.h>
 #include <kxmlguiclient.h>
 
+class QWdiget;
+
 namespace Kross { namespace Api {
 
     // Forward declarations.
@@ -60,7 +62,7 @@ namespace Kross { namespace Api {
              *        caller has to take care of freeing this instance
              *        if not needed any longer.
              */
-            explicit ScriptGUIClient(KXMLGUIClient* guiclient, QObject* parent = 0);
+            explicit ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent = 0);
 
             /**
              * Destructor.
@@ -68,9 +70,14 @@ namespace Kross { namespace Api {
             virtual ~ScriptGUIClient();
 
             /**
-             * \return a list of \a ScriptAction instances.
+             * \return the list of \a ScriptAction instances which are installed.
              */
-            ScriptAction::List getScriptActions();
+            ScriptAction::List getInstalledScriptActions();
+
+            /**
+             * \return the list of \a ScriptAction instances which have been executed.
+             */
+            ScriptAction::List getExecutedScriptActions();
 
             /**
             * This methods are reimplemented from the inherited KXMLGUIClient

@@ -72,6 +72,10 @@ namespace Kross { namespace Api {
             virtual ~ScriptAction();
 
             /**
+             * @return the name of the script
+             */
+            const QString& getName() const;
+            /**
              * \return the name of the interpreter which will be used
              * on activation to execute the scripting code.
              */
