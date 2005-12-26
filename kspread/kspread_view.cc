@@ -2705,21 +2705,14 @@ void View::hideColumn()
 {
   if ( !d->activeSheet )
     return;
-  
-  QRect r( d->selection->selection() );
+
   if ( d->selection->isRowSelected() )
   {
     KMessageBox::error( this, i18n( "Area is too large." ) );
     return;
   }
-  
-  doc()->emitBeginOperation( false );
-  
-  d->activeSheet->hideColumn( r.left(), ( r.right()-r.left() ) );
 
-  QRect vr( d->activeSheet->visibleRect( d->canvas ) );
-  vr.setLeft( r.left() );
-  doc()->emitEndOperation( vr );
+  d->activeSheet->hideColumn(*selectionInfo());
 }
 
 void View::showColumn()
@@ -2736,35 +2729,7 @@ void View::showSelColumns()
   if ( !d->activeSheet )
     return;
 
-  int i;
-  QRect rect = d->selection->selection();
-  ColumnFormat * col;
-  QValueList<int>hiddenCols;
-
-  doc()->emitBeginOperation( false );
-
-  for ( i = rect.left(); i <= rect.right(); ++i )
-  {
-    if ( i == 2 ) // "B"
-    {
-      col = activeSheet()->columnFormat( 1 );
-      if ( col->isHide() )
-      {
-        hiddenCols.append( 1 );
-      }
-    }
-
-    col = d->activeSheet->columnFormat( i );
-    if ( col->isHide() )
-    {
-      hiddenCols.append( i );
-    }
-  }
-
-  if ( hiddenCols.count() > 0 )
-    d->activeSheet->showColumn( 0, -1, hiddenCols );
-
-  doc()->emitEndOperation( d->activeSheet->visibleRect( d->canvas ) );
+  d->activeSheet->showColumn(*selectionInfo());
 }
 
 void View::insertRow()
@@ -2787,21 +2752,13 @@ void View::hideRow()
   if ( !d->activeSheet )
     return;
 
-  QRect r( d->selection->selection() );
   if ( d->selection->isColumnSelected() )
   {
     KMessageBox::error( this, i18n( "Area is too large." ) );
     return;
   }
-  
-  doc()->emitBeginOperation( false );
-  
-  d->activeSheet->hideRow( r.top(), ( r.bottom() - r.top() ) );
 
-  QRect vr( d->activeSheet->visibleRect( d->canvas ) );
-  vr.setTop( r.top() );
-
-  doc()->emitEndOperation( vr );
+  d->activeSheet->hideRow(*selectionInfo());
 }
 
 void View::showRow()
@@ -2818,35 +2775,7 @@ void View::showSelRows()
   if ( !d->activeSheet )
     return;
 
-  int i;
-  QRect rect( d->selection->selection() );
-  RowFormat * row;
-  QValueList<int>hiddenRows;
-
-  doc()->emitBeginOperation( false );
-
-  for ( i = rect.top(); i <= rect.bottom(); ++i )
-  {
-    if ( i == 2 )
-    {
-      row = activeSheet()->rowFormat( 1 );
-      if ( row->isHide() )
-      {
-        hiddenRows.append( 1 );
-      }
-    }
-
-    row = d->activeSheet->rowFormat( i );
-    if ( row->isHide() )
-    {
-      hiddenRows.append( i );
-    }
-  }
-
-  if ( hiddenRows.count() > 0 )
-    d->activeSheet->showRow( 0, -1, hiddenRows );
-
-  doc()->emitEndOperation( rect );
+  d->activeSheet->showRow(*selectionInfo());
 }
 
 void View::fontSelected( const QString & _font )

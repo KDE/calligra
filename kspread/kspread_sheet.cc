@@ -2536,39 +2536,14 @@ void Sheet::removeRow( int row, int nbRow, bool makeUndo )
     emit sig_updateView( this );
 }
 
-void Sheet::hideRow( int _row, int nbRow, QValueList<int>_list )
+void Sheet::hideRow(const Region& region)
 {
-    if ( !doc()->undoLocked() )
-    {
-      UndoHideRow *undo ;
-      if( nbRow!=-1 )
-        undo= new UndoHideRow( doc(), this, _row, nbRow );
-      else
-        undo= new UndoHideRow( doc(), this, _row, nbRow, _list );
-
-      doc()->addCommand( undo  );
-    }
-
-    RowFormat *rl;
-    if( nbRow!=-1 )
-    {
-      for( int i=0; i<=nbRow; ++i )
-      {
-         rl=nonDefaultRowFormat( _row+i );
-         rl->setHide(true, /* repaint */ false );
-       }
-    }
-    else // nbRow == -1 means that we're hiding by undo/redo
-    {
-      QValueList<int>::Iterator it;
-      for( it = _list.begin(); it != _list.end(); ++it )
-      {
-         rl=nonDefaultRowFormat( *it );
-         rl->setHide(true, /* repaint */ false );
-      }
-    }
-
-    emitHideRow();
+  HideShowManipulator* manipulator = new HideShowManipulator();
+  manipulator->setSheet(this);
+  manipulator->setManipulateRows(true);
+  manipulator->add(region);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
 void Sheet::emitHideRow()
@@ -2577,72 +2552,26 @@ void Sheet::emitHideRow()
     emit sig_updateView( this );
 }
 
-void Sheet::showRow( int _row, int nbRow, QValueList<int>_list )
+void Sheet::showRow(const Region& region)
 {
-    if ( !doc()->undoLocked() )
-    {
-      UndoShowRow *undo;
-      if(nbRow!=-1)
-        undo = new UndoShowRow( doc(), this, _row,nbRow );
-      else
-  undo = new UndoShowRow( doc(), this, _row,nbRow, _list );
-      doc()->addCommand( undo );
-    }
-
-    RowFormat *rl;
-    if( nbRow!=-1 )
-      {
-  for( int i=0; i<=nbRow; i++ )
-    {
-      rl=nonDefaultRowFormat( _row + i );
-      rl->setHide( false, /* repaint */ false );
-    }
-      }
-    else
-      {
-  QValueList<int>::Iterator it;
-  for( it = _list.begin(); it != _list.end(); ++it )
-    {
-      rl=nonDefaultRowFormat( *it );
-      rl->setHide( false, /* repaint */ false );
-    }
-      }
-
-    emitHideRow();
+  HideShowManipulator* manipulator = new HideShowManipulator();
+  manipulator->setSheet(this);
+  manipulator->setManipulateRows(true);
+  manipulator->setReverse(true);
+  manipulator->add(region);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
 
-void Sheet::hideColumn( int _col, int nbCol, QValueList<int>_list )
+void Sheet::hideColumn(const Region& region)
 {
-    if ( !doc()->undoLocked() )
-    {
-        UndoHideColumn *undo;
-  if( nbCol!=-1 )
-    undo= new UndoHideColumn( doc(), this, _col, nbCol );
-  else
-    undo= new UndoHideColumn( doc(), this, _col, nbCol, _list );
-        doc()->addCommand( undo );
-    }
-
-    ColumnFormat *cl;
-    if( nbCol != -1 )
-    {
-  for( int i=0; i<=nbCol; i++ )
-  {
-      cl=nonDefaultColumnFormat( _col + i );
-      cl->setHide( true );
-  }
-    }
-    else
-    {
-  QValueList<int>::Iterator it;
-  for( it = _list.begin(); it != _list.end(); ++it )
-  {
-      cl=nonDefaultColumnFormat( *it );
-      cl->setHide( true );
-  }
-    }
-    emitHideColumn();
+  HideShowManipulator* manipulator = new HideShowManipulator();
+  manipulator->setSheet(this);
+  manipulator->setManipulateColumns(true);
+  manipulator->add(region);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
 void Sheet::emitHideColumn()
@@ -2651,39 +2580,15 @@ void Sheet::emitHideColumn()
     emit sig_updateView( this );
 }
 
-
-void Sheet::showColumn( int _col, int nbCol, QValueList<int>_list )
+void Sheet::showColumn(const Region& region)
 {
-    if ( !doc()->undoLocked() )
-    {
-      UndoShowColumn *undo;
-      if( nbCol != -1 )
-  undo = new UndoShowColumn( doc(), this, _col, nbCol );
-      else
-  undo = new UndoShowColumn( doc(), this, _col, nbCol, _list );
-      doc()->addCommand( undo );
-    }
-
-    ColumnFormat *cl;
-    if( nbCol != -1 )
-    {
-      for( int i=0; i<=nbCol; i++ )
-      {
-  cl=nonDefaultColumnFormat( _col + i );
-  cl->setHide( false );
-      }
-    }
-    else
-    {
-       QValueList<int>::Iterator it;
-       for( it = _list.begin(); it != _list.end(); ++it )
-       {
-     cl=nonDefaultColumnFormat( *it );
-     cl->setHide( false );
-       }
-    }
-    emit sig_updateHBorder( this );
-    emit sig_updateView( this );
+  HideShowManipulator* manipulator = new HideShowManipulator();
+  manipulator->setSheet(this);
+  manipulator->setManipulateColumns(true);
+  manipulator->setReverse(true);
+  manipulator->add(region);
+  doc()->addCommand(manipulator);
+  manipulator->execute();
 }
 
 
@@ -4544,66 +4449,6 @@ void Sheet::adjustColumn(const Region& region)
   manipulator->add(region);
   doc()->addCommand(manipulator);
   manipulator->execute();
-
-/*  QRect selection(selectionInfo->selection());
-  double long_max = 0.0;
-  if ( _col == -1 )
-  {
-    if ( util_isColumnSelected(selection) )
-    {
-      for ( int col = selection.left(); col <= selection.right(); ++col )
-      {
-        Cell * c = getFirstCellColumn( col );
-        while ( c )
-        {
-          if ( !c->isEmpty() && !c->isObscured() )
-          {
-              long_max = QMAX( adjustColumnHelper( c, col, c->row() ), long_max );
-          } // if !isEmpty...
-          c = getNextCellDown( col, c->row() );
-        }
-      }
-    }
-  }
-  else
-  {
-    if ( util_isColumnSelected(selection) )
-    {
-      for ( int col = selection.left(); col <= selection.right(); ++col )
-      {
-        Cell * c = getFirstCellColumn( col );
-        while ( c )
-        {
-          if ( !c->isEmpty() && !c->isObscured())
-          {
-              long_max = QMAX( adjustColumnHelper( c, col, c->row() ), long_max );
-          }
-          c = getNextCellDown( col, c->row() );
-        } // end while
-      }
-    }
-    else
-    {
-      int x = _col;
-      Cell * cell;
-      for ( int y = selection.top(); y <= selection.bottom(); ++y )
-      {
-        cell = cellAt( x, y );
-        if ( cell != d->defaultCell && !cell->isEmpty()
-             && !cell->isObscured() )
-        {
-            long_max = QMAX( adjustColumnHelper( cell, x, y ), long_max );
-        }
-      } // for top...bottom
-    } // not column selected
-  }
-
-  //add 4 because long_max is the long of the text
-  //but column has borders
-  if( long_max == 0 )
-    return -1;
-  else
-    return ( (int)long_max + 4 );*/
 }
 
 void Sheet::adjustRow(const Region& region)
@@ -4614,77 +4459,6 @@ void Sheet::adjustRow(const Region& region)
   manipulator->add(region);
   doc()->addCommand(manipulator);
   manipulator->execute();
-
-/*  QRect selection(selectionInfo->selection());
-  double long_max = 0.0;
-  if( _row == -1 ) //No special row is defined, so use selected rows
-  {
-    if ( util_isRowSelected(selection) )
-    {
-      for ( int row = selection.top(); row <= selection.bottom(); ++row )
-      {
-        Cell * c = getFirstCellRow( row );
-        while ( c )
-        {
-          if ( !c->isEmpty() && !c->isObscured() )
-          {
-            c->calculateTextParameters( painter(), c->column(), row );
-            if( c->textHeight() > long_max )
-              long_max = c->textHeight()
-                  + c->format()->topBorderWidth( c->column(), c->row() )
-                  + c->format()->bottomBorderWidth( c->column(), c->row() );
-          }
-          c = getNextCellRight( c->column(), row );
-        }
-      }
-    }
-  }
-  else
-  {
-    if ( util_isRowSelected(selection) )
-    {
-      for ( int row = selection.top(); row <= selection.bottom(); ++row )
-      {
-        Cell * c = getFirstCellRow( row );
-        while ( c )
-        {
-          if ( !c->isEmpty() && !c->isObscured() )
-          {
-            c->calculateTextParameters( painter(), c->column(), row );
-            if ( c->textHeight() > long_max )
-              long_max = c->textHeight()
-                  + c->format()->topBorderWidth( c->column(), c->row() )
-                  + c->format()->bottomBorderWidth( c->column(), c->row() );
-          }
-          c = getNextCellRight( c->column(), row );
-        }
-      }
-    }
-    else // no row selected
-    {
-      int y = _row;
-      Cell * cell;
-      for ( int x = selection.left(); x <= selection.right(); ++x )
-      {
-        cell = cellAt( x, y );
-        if ( cell != d->defaultCell && !cell->isEmpty()
-            && !cell->isObscured() )
-        {
-          cell->calculateTextParameters( painter(), x, y );
-          if ( cell->textHeight() > long_max )
-            long_max = cell->textHeight()
-                + cell->format()->topBorderWidth( cell->column(), cell->row() )
-                + cell->format()->bottomBorderWidth( cell->column(), cell->row() );
-        }
-      }
-    }
-  }
-  //add 4 because long_max is the long of the text
-  //but row has borders
-  if( long_max == 0.0 )
-    return -1;
-  else
-    return ( (int)long_max + 4 );*/
 }
 
 struct ClearTextSelectionWorker : public Sheet::CellWorker {

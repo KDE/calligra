@@ -4145,14 +4145,8 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             //just resize
             if ( height != 0.0 )
             {
-                UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
-                m_pCanvas->d->view->doc()->addCommand( undo );
-            }
-            else
-            {
-                //hide row
-                UndoHideRow *undo = new UndoHideRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(),
-                                                                   rect.top(), ( rect.bottom() - rect.top() ) );
+              // TODO Stefan: replace this
+              UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
                 m_pCanvas->d->view->doc()->addCommand( undo );
             }
           }
@@ -4166,11 +4160,10 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
                 rl->setDblHeight( height );
             }
             else
-              rl->setHide( true );
+            {
+              sheet->hideRow(*m_pView->selectionInfo());
+            }
           }
-
-          if ( height == 0.0 )
-            sheet->emitHideColumn();
 
           delete m_lSize;
           m_lSize = 0;
@@ -4201,7 +4194,7 @@ void VBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
 
             if ( hiddenRows.count() > 0 )
-                m_pView->activeSheet()->showRow( 0, -1, hiddenRows );
+              m_pView->activeSheet()->showRow(*m_pView->selectionInfo());
         }
     }
 
@@ -4773,12 +4766,8 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             //just resize
             if ( width != 0.0 )
             {
+              // TODO Stefan: replace this
                 UndoResizeColRow *undo = new UndoResizeColRow( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect );
-                m_pCanvas->d->view->doc()->addCommand( undo );
-            }
-            else
-            {//hide column
-                UndoHideColumn *undo = new UndoHideColumn( m_pCanvas->d->view->doc(), m_pCanvas->activeSheet(), rect.left(), (rect.right()-rect.left()));
                 m_pCanvas->d->view->doc()->addCommand( undo );
             }
           }
@@ -4792,11 +4781,10 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
                     cl->setDblWidth( width );
             }
             else
-                cl->setHide( true );
+            {
+              sheet->hideColumn(*m_pView->selectionInfo());
+            }
           }
-
-          if ( width == 0.0 )
-            sheet->emitHideRow();
 
           delete m_lSize;
           m_lSize = 0;
@@ -4827,7 +4815,7 @@ void HBorder::mouseReleaseEvent( QMouseEvent * _ev )
             }
 
             if ( hiddenCols.count() > 0 )
-                m_pView->activeSheet()->showColumn( 0, -1, hiddenCols );
+              m_pView->activeSheet()->showColumn(*m_pView->selectionInfo());
         }
     }
 

@@ -696,16 +696,16 @@ public:
     /**
     * hide row
     */
-    void hideRow( int row, int nbRow=0, QValueList<int>list=QValueList<int>() );
+    void hideRow(const Region&);
     void emitHideRow();
-    void showRow( int row, int NbRow=0, QValueList<int>list=QValueList<int>() );
+    void showRow(const Region&);
 
     /**
     * hide column
     */
-    void hideColumn( int col, int NbCol=0, QValueList<int>list=QValueList<int>() );
+    void hideColumn(const Region&);
     void emitHideColumn();
-    void showColumn( int col, int NbCol=0, QValueList<int>list=QValueList<int>() );
+    void showColumn(const Region&);
 
     /**
      * Adjust columns and rows of a region

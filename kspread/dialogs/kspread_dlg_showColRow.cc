@@ -20,16 +20,18 @@
  * Boston, MA 02110-1301, USA.
 */
 
-
-
-#include "kspread_dlg_showColRow.h"
-#include "kspread_doc.h"
-#include "kspread_view.h"
-#include "kspread_sheet.h"
-#include "kspread_util.h"
 #include <qlabel.h>
 #include <qlayout.h>
+
 #include <klocale.h>
+
+#include "kspread_doc.h"
+#include "kspread_sheet.h"
+#include "kspread_util.h"
+#include "kspread_view.h"
+#include "region.h"
+
+#include "kspread_dlg_showColRow.h"
 
 using namespace KSpread;
 
@@ -119,26 +121,31 @@ void ShowColRow::slotDoubleClicked(QListBoxItem *)
 
 void ShowColRow::slotOk()
 {
-  m_pView->doc()->emitBeginOperation( false );
+  Region region;
+  for(unsigned int i=0; i < list->count(); i++)
+  {
+    if (list->isSelected(i))
+    {
+      if (typeShow == Column)
+      {
+        region.add(QRect(*listInt.at(i), 1, 1, KS_rowMax-1));
+      }
+      if (typeShow == Row)
+      {
+        region.add(QRect(1, *listInt.at(i), KS_colMax-1, 1));
+      }
+    }
+  }
 
-  QValueList<int>listSelected;
-  for(unsigned int i=0;i<list->count();i++)
-    {
-      if(list->isSelected(i))
-	listSelected.append(*listInt.at(i));
-    }
-  if( typeShow==Column)
-    {
-      if(listSelected.count()!=0)
-	m_pView->activeSheet()->showColumn(0,-1,listSelected);
-    }
-  if( typeShow==Row)
-    {
-      if(listSelected.count()!=0)
-	m_pView->activeSheet()->showRow(0,-1,listSelected);
-    }
+  if (typeShow == Column)
+  {
+    m_pView->activeSheet()->showColumn(region);
+  }
+  if (typeShow == Row)
+  {
+    m_pView->activeSheet()->showRow(region);
+  }
 
-  m_pView->slotUpdateView( m_pView->activeSheet() );
   accept();
 }
 

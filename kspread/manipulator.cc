@@ -95,9 +95,14 @@ void Manipulator::execute()
 
   m_sheet->doc()->emitBeginOperation();
 
-  preProcessing();
-
   bool successfully = true;
+  successfully = preProcessing();
+  if (!successfully)
+  {
+    kdWarning() << "Manipulator::execute(): preprocessing was not successful!" << endl;
+  }
+
+  successfully = true;
   Region::Iterator endOfList(cells().end());
   for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
   {
@@ -109,7 +114,12 @@ void Manipulator::execute()
     kdWarning() << "Manipulator::execute(): processing was not successful!" << endl;
   }
 
+  successfully = true;
   postProcessing();
+  if (!successfully)
+  {
+    kdWarning() << "Manipulator::execute(): postprocessing was not successful!" << endl;
+  }
 
   m_sheet->doc()->emitEndOperation(*this);
 }
@@ -1369,6 +1379,138 @@ QString AdjustColumnRowManipulator::name() const
   }
 }
 
+
+
+/***************************************************************************
+  class HideShowManipulator
+****************************************************************************/
+
+HideShowManipulator::HideShowManipulator()
+  : m_manipulateColumns(false),
+    m_manipulateRows(false)
+{
+}
+
+HideShowManipulator::~HideShowManipulator()
+{
+}
+
+bool HideShowManipulator::process(Element* element)
+{
+  QRect range = element->rect().normalize();
+  if (m_manipulateColumns)
+  {
+    if (m_reverse && range.left() > 1)
+    {
+      int col;
+      for (col = 1; col < range.left(); ++col)
+      {
+        ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
+        if (!format->isHide())
+        {
+          break;
+        }
+      }
+      if (col == range.left())
+      {
+        for (col = 1; col < range.left(); ++col)
+        {
+          ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
+          format->setHide(false);
+        }
+      }
+    }
+    for (int col = range.left(); col <= range.right(); ++col)
+    {
+      ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
+      format->setHide(!m_reverse);
+    }
+  }
+  if (m_manipulateRows)
+  {
+    if (m_reverse && range.top() > 1)
+    {
+      int row;
+      for (row = 1; row < range.top(); ++row)
+      {
+        RowFormat* format = m_sheet->nonDefaultRowFormat(row);
+        if (!format->isHide())
+        {
+          break;
+        }
+      }
+      if (row == range.top())
+      {
+        for (row = 1; row < range.top(); ++row)
+        {
+          RowFormat* format = m_sheet->nonDefaultRowFormat(row);
+          format->setHide(false);
+        }
+      }
+    }
+    for (int row = range.top(); row <= range.bottom(); ++row)
+    {
+      RowFormat* format = m_sheet->nonDefaultRowFormat(row);
+      format->setHide(!m_reverse);
+    }
+  }
+  return true;
+}
+
+bool HideShowManipulator::preProcessing()
+{
+  ConstIterator endOfList = cells().constEnd();
+  for (ConstIterator it = cells().constBegin(); it != endOfList; ++it)
+  {
+    if (((*it)->isRow() && m_manipulateColumns) ||
+        ((*it)->isColumn() && m_manipulateRows))
+    {
+/*      KMessageBox::error( this, i18n( "Area is too large." ) );*/
+      return false;
+    }
+  }
+  return true;
+}
+
+bool HideShowManipulator::postProcessing()
+{
+  if (m_manipulateColumns)
+  {
+    m_sheet->emitHideColumn();
+  }
+  if (m_manipulateRows)
+  {
+    m_sheet->emitHideRow();
+  }
+
+  return true;
+}
+
+QString HideShowManipulator::name() const
+{
+  QString name;
+  if (m_reverse)
+  {
+    name = "Show ";
+  }
+  else
+  {
+    name = "Hide ";
+  }
+  if (m_manipulateColumns)
+  {
+    name += "Columns";
+  }
+  if (m_manipulateColumns && m_manipulateRows)
+  {
+    name += "/";
+  }
+  if (m_manipulateRows)
+  {
+    name += "Rows";
+  }
+  return name;
+}
 
 
 

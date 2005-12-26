@@ -83,8 +83,8 @@ public:
 
 protected:
   virtual bool process(Element*);
-  virtual bool process(Cell*) = 0;
-  virtual bool process(Format*) = 0;
+  virtual bool process(Cell*) { return true; }
+  virtual bool process(Format*) { return true; }
 
   virtual bool preProcessing() { return true; }
   virtual bool postProcessing() { return true; }
@@ -161,9 +161,6 @@ public:
   void setCurrency(int type, const QString& symbol) { m_currencyType = type; m_currencySymbol = symbol; }
 
 protected:
-  virtual bool process(Cell*) { return true; }
-  virtual bool process(Format*) { return true; }
-
   virtual QString name() const { return i18n("Format Change"); }
 
   void copyFormat(QValueList<layoutCell> &list,
@@ -249,8 +246,6 @@ public:
 
 protected:
   virtual bool process(Element*);
-  virtual bool process(Cell*) { return true; }
-  virtual bool process(Format*) { return true; }
 
   virtual QString name() const { return i18n("Resize Column"); }
 
@@ -275,8 +270,6 @@ public:
 
 protected:
   virtual bool process(Element*);
-  virtual bool process(Cell*) { return true; }
-  virtual bool process(Format*) { return true; }
 
   virtual QString name() const { return i18n("Resize Row"); }
 
@@ -420,8 +413,6 @@ public:
 
 protected:
   virtual bool process(Element*);
-  virtual bool process(Cell*) { return true; }
-  virtual bool process(Format*) { return true; }
 
   virtual bool preProcessing();
   virtual bool postProcessing();
@@ -465,10 +456,6 @@ public:
   virtual void unexecute();
 
 protected:
-
-  virtual bool process(Cell*) { return true; }
-  virtual bool process(Format*) { return true; }
-
   virtual QString name() const { return i18n("Dilate Region"); }
 
 private:
@@ -492,9 +479,6 @@ public:
   void setAdjustRow(bool state) { m_adjustRow = state; }
 
 protected:
-  virtual bool process(Cell*) { return true; }
-  virtual bool process(Format*) { return true; }
-
   virtual QString name() const;
 
   double adjustColumnHelper( Cell * c, int _col, int _row );
@@ -508,6 +492,35 @@ private:
   QMap<int, double> m_newHeights;
   QMap<int, double> m_oldHeights;
 };
+
+
+
+/**
+ * HideShowManipulator
+ */
+class HideShowManipulator : public Manipulator
+{
+public:
+  HideShowManipulator();
+  virtual ~HideShowManipulator();
+
+  virtual bool process(Element*);
+  virtual bool preProcessing();
+  virtual bool postProcessing();
+
+  void setManipulateColumns(bool state) { m_manipulateColumns = state; }
+  void setManipulateRows(bool state) { m_manipulateRows = state; }
+
+protected:
+  virtual QString name() const;
+
+private:
+  bool m_manipulateColumns : 1;
+  bool m_manipulateRows    : 1;
+};
+
+
+
 
 
 
