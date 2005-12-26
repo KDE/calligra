@@ -30,27 +30,58 @@
 
 namespace Kross { namespace Api {
 
+    /**
+     * The ProxyValue template-class is used to represent a single
+     * value (returnvalue or argument) of a \a ProxyFunction .
+     */
     template< class OBJECT, typename TYPE >
     class ProxyValue
     {
         public:
+
+            /**
+             * The C/C++ type of the value. This could be something
+             * like a int, uint or a const QString&.
+             */
             typedef TYPE type;
+
+            /**
+             * The \a Kross::Api::Object or a from it inherited class
+             * that we should use internaly to wrap the C/C++ type. This
+             * could be e.g. a \a Kross::Api::Variant to wrap an uint.
+             */
             typedef OBJECT object;
     };
 
+    /**
+     * The ProxyFunction template-class is used to publish any C/C++
+     * method (not only slots) of a struct or class instance as a
+     * a \a Kross::Api::Function to Kross.
+     *
+     * With this class we don't need to have a method-wrapper for
+     * each single function what a) should reduce the code needed for
+     * wrappers and b) is more typesafe cause the connection to the
+     * C/C++ method is done on compiletime.
+     */
     template< class INSTANCE,
-              class RET  = ProxyValue<Kross::Api::Object,void>,
-              class ARG1 = ProxyValue<Kross::Api::Object,void>,
-              class ARG2 = ProxyValue<Kross::Api::Object,void>,
-              class ARG3 = ProxyValue<Kross::Api::Object,void>,
-              class ARG4 = ProxyValue<Kross::Api::Object,void> >
+              class RET  = ProxyValue<Kross::Api::Object,void>, // returnvalue
+              class ARG1 = ProxyValue<Kross::Api::Object,void>, // first argument
+              class ARG2 = ProxyValue<Kross::Api::Object,void>, // second argument
+              class ARG3 = ProxyValue<Kross::Api::Object,void>, // forth argument
+              class ARG4 = ProxyValue<Kross::Api::Object,void> > // fifth argument
     class ProxyFunction : public Function
     {
         private:
+            /// The wrapped method.
             typedef typename RET::type (INSTANCE::*Method)( typename ARG1::type, typename ARG2::type, typename ARG3::type, typename ARG4::type );
+            /// Pointer to the objectinstance which method should be called.
             INSTANCE* m_instance;
+            /// Pointer to the method which should be called.
             Method m_method;
 
+            /**
+             * Internal used struct that does the execution of the wrapped method.
+             */
             template<class PROXYFUNC, typename RETURNRYPE>
             struct ProxyFunctionCaller {
                 inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1, typename ARG2::type arg2, typename ARG3::type arg3, typename ARG4::type arg4) {
@@ -58,6 +89,11 @@ namespace Kross { namespace Api {
                 }
             };
 
+            /**
+             * Template-specialization of the \a ProxyFunctionCaller above which
+             * handles void-returnvalues. We need to handle this special case
+             * seperatly cause compilers deny to return void.
+             */
             template<class PROXYFUNC>
             struct ProxyFunctionCaller<PROXYFUNC, void> {
                 inline static Object::Ptr exec(PROXYFUNC* self, typename ARG1::type arg1, typename ARG2::type arg2, typename ARG3::type arg3, typename ARG4::type arg4) {
@@ -67,8 +103,26 @@ namespace Kross { namespace Api {
             };
 
         public:
+
+            /**
+             * Constructor.
+             *
+             * \param instance The objectinstance to which the \p method
+             *        belongs to.
+             * \param method The method-pointer.
+             */
             ProxyFunction(INSTANCE* instance, Method method)
                 : m_instance(instance), m_method(method) {}
+
+            /**
+             * This method got called if the wrapped method should be executed.
+             * 
+             * \param args The optional list of arguments passed to the
+             *        execution-call.
+             * \return The returnvalue of the functioncall. It will be NULL if
+             *        the functioncall doesn't provide us a returnvalue (e.g.
+             *        if the function has void as returnvalue).
+             */
             Object::Ptr call(List::Ptr args) {
                 return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this,
                     Kross::Api::Object::fromObject<typename ARG1::object>(args->item(0))->operator typename ARG1::type(),
@@ -79,6 +133,9 @@ namespace Kross { namespace Api {
             }
     };
 
+    /**
+     * Template-specialization of the \a ProxyFunction above with 3 arguments.
+     */
     template<class INSTANCE, class RET, class ARG1, class ARG2, class ARG3>
     class ProxyFunction<INSTANCE, RET, ARG1, ARG2, ARG3 > : public Function
     {
@@ -114,6 +171,9 @@ namespace Kross { namespace Api {
             }
     };
 
+    /**
+     * Template-specialization of the \a ProxyFunction above with 2 arguments.
+     */
     template<class INSTANCE, class RET, class ARG1, class ARG2>
     class ProxyFunction<INSTANCE, RET, ARG1, ARG2 > : public Function
     {
@@ -148,6 +208,9 @@ namespace Kross { namespace Api {
             }
     };
 
+    /**
+     * Template-specialization of the \a ProxyFunction above with one argument.
+     */
     template<class INSTANCE, class RET, class ARG1>
     class ProxyFunction<INSTANCE, RET, ARG1 > : public Function
     {
@@ -181,6 +244,9 @@ namespace Kross { namespace Api {
             }
     };
 
+    /**
+     * Template-specialization of the \a ProxyFunction above with no arguments.
+     */
     template<class INSTANCE, class RET>
     class ProxyFunction<INSTANCE, RET > : public Function
     {
@@ -212,7 +278,10 @@ namespace Kross { namespace Api {
             }
     };
 
-
+    /**
+     * The ProxyClass provides us a template-class to create a
+     * \a Kross::Api::Class on the fly.
+     */
     template<class INSTANCE>
     class ProxyClass : public Class< ProxyClass<INSTANCE> >
     {
