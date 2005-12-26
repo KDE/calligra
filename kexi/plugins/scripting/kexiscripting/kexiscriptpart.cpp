@@ -96,7 +96,9 @@ void KexiScriptPart::initPartActions()
 				KAction* execscriptaction = d->scriptguiclient->action("executescriptfile");
 				if(execscriptaction)
 					execscriptaction->plug( popup );
-
+				KAction* configscriptaction = d->scriptguiclient->action("configurescripts");
+				if(configscriptaction)
+					configscriptaction->plug( popup );
 				KAction* scriptmenuaction = d->scriptguiclient->action("scripts");
 				if(scriptmenuaction)
 					scriptmenuaction->plug( popup );
