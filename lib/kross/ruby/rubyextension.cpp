@@ -25,6 +25,8 @@
 
 #include "api/list.h"
 
+#include "rubyconfig.h"
+
 namespace Kross {
 
 namespace Ruby {
@@ -53,18 +55,7 @@ VALUE RubyExtension::method_missing(int argc, VALUE *argv, VALUE self)
     kdDebug() << "Converting self to Kross::Api::Object" << endl;
 #endif
     
-    RubyExtension* objectExtension;
-    Data_Get_Struct(self, RubyExtension, objectExtension);
-    
-    if(objectExtension == 0)
-    {
-#ifdef KROSS_RUBY_EXTENSION_DEBUG
-        kdDebug() << "Invalid object" << endl;
-#endif
-        return 0;
-    }
-    
-    Kross::Api::Object::Ptr object = objectExtension->d->m_object;
+    Kross::Api::Object::Ptr object = toObject( self );
     return RubyExtension::call_method(object, argc, argv);
 }
 
@@ -123,13 +114,27 @@ int RubyExtension::convertHash_i(VALUE key, VALUE value, VALUE  vmap)
 
 Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
 {
+#ifdef KROSS_RUBY_EXTENSION_DEBUG
+    kdDebug() << "RubyExtension::toObject of type " << TYPE(value) << endl;
+#endif
     switch( TYPE( value ) )
     {
         case T_DATA:
         {
-            Kross::Api::Object::Ptr object;
-            Data_Get_Struct(value, Kross::Api::Object, object);
-            return object;
+#ifdef KROSS_RUBY_EXTENSION_DEBUG
+            kdDebug() << "Object is a Kross Object" << endl;
+#endif
+            VALUE result = rb_funcall(value, rb_intern("kind_of?"), 1, RubyExtensionPrivate::s_krossObject );
+            if(TYPE(result) == T_TRUE)
+            {
+                RubyExtension* objectExtension;
+                Data_Get_Struct(value, RubyExtension, objectExtension);
+                Kross::Api::Object::Ptr object = objectExtension->d->m_object;
+                return object;
+            } else {
+                kdWarning() << "Cannot yet convert standard ruby type to kross object" << endl;
+                return 0;
+            }
         }
         case T_FLOAT:
             return new Kross::Api::Variant(NUM2DBL(value));
