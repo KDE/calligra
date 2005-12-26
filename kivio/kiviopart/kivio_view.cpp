@@ -813,10 +813,8 @@ void KivioView::slotUpdateView( KivioPage* page )
   if (page && page != m_pActivePage)
     return;
 
-  if (!page) {
-    // global view updates (toolbar, statusbar.... actions...)
-    updateToolBars();
-  }
+  // global view updates (toolbar, statusbar.... actions...)
+  updateToolBars();
 
   m_pCanvas->update();
   m_pCanvas->updateScrollBars();
@@ -1350,6 +1348,10 @@ void KivioView::updateToolBars()
         m_setBold->setChecked( f.bold() );
         m_setItalics->setChecked( f.italic() );
         m_setUnderline->setChecked( f.underline() );
+
+        m_setFGColor->setCurrentColor(pStencil->fgColor());
+        m_setBGColor->setCurrentColor(pStencil->bgColor());
+        m_setTextColor->setCurrentColor(pStencil->textColor());
 
         m_lineWidthAction->setCurrentWidth(pStencil->lineWidth());
         m_lineStyleAction->setCurrentSelection(pStencil->linePattern());
