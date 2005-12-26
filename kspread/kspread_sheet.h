@@ -800,7 +800,7 @@ public:
     void increaseIndent( Selection* selectionInfo );
     void decreaseIndent( Selection* selectionInfo );
 
-    bool areaIsEmpty(const QRect &area, TestType _type = Text) ;
+    bool areaIsEmpty(const Region& area, TestType _type = Text) ;
 
     void refreshPreference() ;
 

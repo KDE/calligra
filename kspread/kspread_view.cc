@@ -3054,7 +3054,7 @@ void View::italic( bool b )
 
 void View::sortInc()
 {
-  QRect r( d->selection->selection() );
+  QRect range = d->selection->selection();
   if ( d->selection->isSingular() )
   {
     KMessageBox::error( this, i18n( "You must select multiple cells." ) );
@@ -3064,10 +3064,10 @@ void View::sortInc()
   doc()->emitBeginOperation( false );
 
   // Entire row(s) selected ? Or just one row ?
-  if ( d->selection->isRowSelected() || r.top() == r.bottom() )
-    activeSheet()->sortByRow( d->selection->selection(), r.top(), Sheet::Increase );
+  if ( d->selection->isRowSelected() || range.top() == range.bottom() )
+    activeSheet()->sortByRow( range, range.top(), Sheet::Increase );
   else
-    activeSheet()->sortByColumn( d->selection->selection(), r.left(), Sheet::Increase );
+    activeSheet()->sortByColumn( range, range.left(), Sheet::Increase );
   updateEditWidget();
 
   doc()->emitEndOperation( *selectionInfo() );
@@ -3075,7 +3075,7 @@ void View::sortInc()
 
 void View::sortDec()
 {
-  QRect r( d->selection->selection() );
+  QRect range = d->selection->selection();
   if ( d->selection->isSingular() )
   {
     KMessageBox::error( this, i18n( "You must select multiple cells." ) );
@@ -3085,10 +3085,10 @@ void View::sortDec()
   doc()->emitBeginOperation( false );
 
     // Entire row(s) selected ? Or just one row ?
-  if ( d->selection->isRowSelected() || r.top() == r.bottom() )
-    activeSheet()->sortByRow( d->selection->selection(), r.top(), Sheet::Decrease );
+  if ( d->selection->isRowSelected() || range.top() == range.bottom() )
+    activeSheet()->sortByRow( range, range.top(), Sheet::Decrease );
   else
-    activeSheet()->sortByColumn( d->selection->selection(), r.left(), Sheet::Decrease );
+    activeSheet()->sortByColumn( range, range.left(), Sheet::Decrease );
   updateEditWidget();
 
   doc()->emitEndOperation( *selectionInfo() );
@@ -3746,8 +3746,7 @@ void View::goalSeek()
 void View::subtotals()
 {
   QRect selection( d->selection->selection() );
-  if ( ( selection.width() < 2 )
-       || ( selection.height() < 2 ) )
+  if ( ( selection.width() < 2 ) || ( selection.height() < 2 ) )
   {
     KMessageBox::error( this, i18n("You must select multiple cells.") );
     return;
@@ -3782,7 +3781,7 @@ void View::textToColumns()
   //Only use the first column
   area.setRight(area.left());
 
-/* if ( d->selection->selection().width() > 1 )
+/* if ( area.width() > 1 )
   {
   //Only use the first column
 
@@ -4115,7 +4114,7 @@ void View::conditional()
 {
   QRect rect( d->selection->selection() );
 
-  if ( util_isRowOrColumnSelected(d->selection->selection()))
+  if ( util_isRowOrColumnSelected(rect))
   {
     KMessageBox::error( this, i18n("Area is too large.") );
   }

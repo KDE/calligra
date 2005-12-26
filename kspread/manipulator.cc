@@ -40,26 +40,31 @@
 
 using namespace KSpread;
 
-// TODO Stefan: RemoveComment
-// TODO Stefan: ClearText
-// TODO Stefan: ClearValidity
+// TODO Stefan: SubTotal	(neither NCS nor undo)
+// TODO Stefan: Conditional	(neither NCS nor undo)
+// TODO Stefan: Validity	(undo doesn't work)
+
+// TODO Stefan: AutoSum ?
 // TODO Stefan: FillSelection ?
 // TODO Stefan: Default ?
-// TODO Stefan: Conditional
+
 // TODO Stefan: Copy
 // TODO Stefan: Cut
 // TODO Stefan: Delete
-// TODO Stefan: AutoSum ?
+// TODO Stefan: Paste (Special)
+
+// TODO Stefan: SortInc
+// TODO Stefan: SortDec
+
 // TODO Stefan: DeleteColumn
 // TODO Stefan: DeleteRow
 // TODO Stefan: InsertColumn
 // TODO Stefan: InsertRow
-// TODO Stefan: SortInc
-// TODO Stefan: SortDec
-// TODO Stefan: Paste (Special)
-// TODO Stefan: SubTotal
-// TODO Stefan: Conditional
-// TODO Stefan: Validity
+
+// TODO Stefan: RemoveComment	(works, but not a manipulator yet)
+// TODO Stefan: ClearText	(works, but not a manipulator yet)
+// TODO Stefan: ClearValidity	(works, but not a manipulator yet)
+
 // TODO Stefan: more ????
 
 // TODO Stefan: maybe make the undos optional

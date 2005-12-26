@@ -1799,10 +1799,11 @@ struct SetSelectionRemoveCommentWorker : public Sheet::CellWorker {
 
 void Sheet::setSelectionRemoveComment( Selection* selectionInfo )
 {
-    if(areaIsEmpty(selectionInfo->selection(), Comment))
-        return;
-    SetSelectionRemoveCommentWorker w;
-    workOnCells( selectionInfo, w );
+  if (areaIsEmpty(*selectionInfo, Comment))
+    return;
+
+  SetSelectionRemoveCommentWorker w;
+  workOnCells( selectionInfo, w );
 }
 
 
@@ -3962,12 +3963,16 @@ void Sheet::refreshPreference()
 }
 
 
-bool Sheet::areaIsEmpty(const QRect &area, TestType _type)
+bool Sheet::areaIsEmpty(const Region& region, TestType _type)
 {
+  Region::ConstIterator endOfList = region.constEnd();
+  for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
     // Complete rows selected ?
-    if ( util_isRowSelected(area) )
+    if ((*it)->isRow())
     {
-        for ( int row = area.top(); row <= area.bottom(); ++row )
+        for ( int row = range.top(); row <= range.bottom(); ++row )
         {
             Cell * c = getFirstCellRow( row );
             while ( c )
@@ -4000,9 +4005,9 @@ bool Sheet::areaIsEmpty(const QRect &area, TestType _type)
         }
     }
     // Complete columns selected ?
-    else if ( util_isColumnSelected(area) )
+    else if ((*it)->isColumn())
     {
-        for ( int col = area.left(); col <= area.right(); ++col )
+        for ( int col = range.left(); col <= range.right(); ++col )
         {
             Cell * c = getFirstCellColumn( col );
             while ( c )
@@ -4038,10 +4043,10 @@ bool Sheet::areaIsEmpty(const QRect &area, TestType _type)
     {
         Cell * cell;
 
-        int right  = area.right();
-        int bottom = area.bottom();
-        for ( int x = area.left(); x <= right; ++x )
-            for ( int y = area.top(); y <= bottom; ++y )
+        int right  = range.right();
+        int bottom = range.bottom();
+        for ( int x = range.left(); x <= right; ++x )
+            for ( int y = range.top(); y <= bottom; ++y )
             {
                 cell = cellAt( x, y );
                 if (!cell->isObscuringForced() )
@@ -4068,7 +4073,8 @@ bool Sheet::areaIsEmpty(const QRect &area, TestType _type)
                 }
             }
     }
-    return true;
+  }
+  return true;
 }
 
 struct SetSelectionMultiRowWorker : public Sheet::CellWorker
@@ -4481,7 +4487,7 @@ struct ClearTextSelectionWorker : public Sheet::CellWorker {
 
 void Sheet::clearTextSelection( Selection* selectionInfo )
 {
-  if (areaIsEmpty(selectionInfo->selection()))
+  if (areaIsEmpty(*selectionInfo))
     return;
 
   ClearTextSelectionWorker w( this );
@@ -4505,8 +4511,8 @@ struct ClearValiditySelectionWorker : public Sheet::CellWorker {
 
 void Sheet::clearValiditySelection( Selection* selectionInfo )
 {
-    if(areaIsEmpty(selectionInfo->selection(), Validity))
-        return;
+  if (areaIsEmpty(*selectionInfo, Validity))
+    return;
 
   ClearValiditySelectionWorker w;
   workOnCells( selectionInfo, w );

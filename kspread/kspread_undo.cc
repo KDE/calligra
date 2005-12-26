@@ -1947,13 +1947,14 @@ UndoChangeAreaTextCell::UndoChangeAreaTextCell( Doc *_doc, Sheet *_sheet, const 
 
 void UndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, Sheet* sheet )
 {
+  list.clear();
+
   Region::ConstIterator endOfList(m_region.constEnd());
   for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
   {
     QRect m_rctRect = (*it)->rect().normalize();
     int bottom = m_rctRect.bottom();
     int right  = m_rctRect.right();
-    list.clear();
 
     if( util_isColumnSelected( m_rctRect ) )
     {

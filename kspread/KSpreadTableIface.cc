@@ -27,18 +27,19 @@
  * Boston, MA 02110-1301, USA.
 */
 
-#include "KSpreadTableIface.h"
-
 #include "kspread_sheet.h"
 #include "kspread_sheetprint.h"
 #include "kspread_util.h"
 #include "kspread_doc.h"
 
-#include "KSpreadCellIface.h"
-
-#include <kapplication.h>
 #include <dcopclient.h>
+#include <kapplication.h>
 #include <kdebug.h>
+
+#include "KSpreadCellIface.h"
+#include "region.h"
+
+#include "KSpreadTableIface.h"
 
 using namespace KSpread;
 
@@ -214,12 +215,12 @@ int SheetIface::maxColumn() const
 bool SheetIface::areaHasNoContent(QRect area) const
 {
 	kdDebug(36001) << "SheetIface::areaHasNoContent("<<area<<");"<<endl;
-	return m_sheet->areaIsEmpty(area);
+	return m_sheet->areaIsEmpty(Region(area));
 }
 
 bool SheetIface::areaHasNoComments(QRect area) const
 {
-	return m_sheet->areaIsEmpty(area,Sheet::Comment);
+	return m_sheet->areaIsEmpty(Region(area),Sheet::Comment);
 }
 
 int SheetIface::maxRow() const
