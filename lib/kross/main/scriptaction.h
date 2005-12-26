@@ -153,6 +153,12 @@ namespace Kross { namespace Api {
              */
             virtual bool activate(QString& errormessage, QString& tracedetails);
 
+            /**
+             * This slot finalizes the \a ScriptContainer and tries to clean
+             * any still running script.
+             */
+            void finalize();
+
         signals:
 
             /**

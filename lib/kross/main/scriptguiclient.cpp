@@ -202,7 +202,7 @@ bool ScriptGUIClient::executeScriptFile(const QString& file)
 
     QString errormessage, tracedetails;
     bool ok = action->activate(errormessage, tracedetails);
-    action->deleteLater(); // we don't need the ScriptAction any longer.
+    action->finalize(); // we don't need the ScriptAction any longer.
     if(! ok) { // display an errormessage if execution failed.
         executionFailed(errormessage, tracedetails);
     }

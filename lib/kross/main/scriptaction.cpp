@@ -210,4 +210,9 @@ bool ScriptAction::activate(QString& errormessage, QString& tracedetails)
     return true;
 }
 
+void ScriptAction::finalize()
+{
+    d->scriptcontainer->finalize();
+}
+
 #include "scriptaction.moc"
