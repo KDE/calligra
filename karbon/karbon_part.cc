@@ -206,17 +206,24 @@ KarbonPart::loadXML( QIODevice*, const QDomDocument& document )
 	{
 		m_pageLayout.format = static_cast<KoFormat>( getAttribute( paper, "format", 0 ) );
 		m_pageLayout.orientation = static_cast<KoOrientation>( getAttribute( paper, "orientation", 0 ) );
-	}
-	if( m_pageLayout.format == PG_CUSTOM )
-	{
-		m_pageLayout.ptWidth	= m_doc.width();
-		m_pageLayout.ptHeight	= m_doc.height();
+
+		if( m_pageLayout.format == PG_CUSTOM )
+		{
+			m_pageLayout.ptWidth	= m_doc.width();
+			m_pageLayout.ptHeight	= m_doc.height();
+		}
+		else
+		{
+			m_pageLayout.ptWidth = getAttribute( paper, "width", 0.0 );
+			m_pageLayout.ptHeight = getAttribute( paper, "height", 0.0 );
+		}
 	}
 	else
 	{
-		m_pageLayout.ptWidth = getAttribute( paper, "width", 0.0 );
-	        m_pageLayout.ptHeight = getAttribute( paper, "height", 0.0 );
+		m_pageLayout.ptWidth = getAttribute( doc, "width", 595.277);
+		m_pageLayout.ptHeight = getAttribute( doc, "height", 841.891 );
 	}
+
 	kdDebug() << " ptWidth=" << m_pageLayout.ptWidth << endl;
 	kdDebug() << " ptHeight=" << m_pageLayout.ptHeight << endl;
         QDomElement borders = paper.namedItem( "PAPERBORDERS" ).toElement();
