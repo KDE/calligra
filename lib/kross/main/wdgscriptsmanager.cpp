@@ -63,9 +63,9 @@ WdgScriptsManager::~WdgScriptsManager()
 void WdgScriptsManager::fillScriptsList()
 {
     scriptsList->clear();
-    d->m_qlviInstalledScripts = new QListViewItem(scriptsList, i18n("Scripts"));
+    d->m_qlviInstalledScripts = new QListViewItem(scriptsList, i18n("Installed Scripts"));
     d->m_qlviInstalledScripts->setOpen(true);
-    d->m_qlviExecutedScripts = new QListViewItem(scriptsList, i18n("Scripts"));
+    d->m_qlviExecutedScripts = new QListViewItem(scriptsList, i18n("Executed Scripts"));
     d->m_qlviExecutedScripts->setOpen(true);
 //     m_qlviFilters = new QListViewItem(scriptsList, i18n("Filters"));
 //     m_qlviTools = new QListViewItem(scriptsList, i18n("Tools"));

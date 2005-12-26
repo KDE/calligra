@@ -91,6 +91,14 @@ namespace Kross { namespace Api {
         public slots:
 
             /**
+             * Call this slot to set the list of installed actions dirty.
+             * On the next try to access the list (e.g. via the
+             * \a getInstalledScriptActions() method) the list will be
+             * rebuild/updated.
+             */
+            void dirtyInstalledScriptActions();
+
+            /**
             * A KFileDialog will be displayed to let the user choose
             * the scriptfile that should be executed.
             */

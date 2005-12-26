@@ -69,7 +69,7 @@ ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     new KAction(i18n("Execute Script File..."), 0, 0, this, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
 
     // acion to show the ScriptManagerGUI dialog.
-    new KAction(i18n("Configure Scripts..."), 0, 0, this, SLOT(showScriptManager()), actionCollection(), "configurescripts");
+    new KAction(i18n("Script Manager..."), 0, 0, this, SLOT(showScriptManager()), actionCollection(), "configurescripts");
 
     // list of actions with each item beeing a scriptfile we are able to execute.
     d->scriptextensions = new KActionMenu(i18n("Scripts"), actionCollection(), "scripts");
@@ -84,6 +84,7 @@ ScriptGUIClient::~ScriptGUIClient()
 
 ScriptAction::List ScriptGUIClient::getInstalledScriptActions()
 {
+    showScriptGUIClientsMenu(); // update the list if needed.
     return d->installedscriptactions;
 }
 
@@ -125,9 +126,7 @@ void ScriptGUIClient::showScriptGUIClientsMenu()
     if(! d->dirtyscriptlist) {
         // if the d->scriptextensions KActionMenu isn't dirty we don't
         // need to update it.
-
-        //FIXME Naaah, let's rebuild the list each time for now (bad for larger collections)...
-        //return;
+        return;
     }
 
     // remove the dirty ScriptAction's we don't need any longer.
@@ -164,6 +163,11 @@ void ScriptGUIClient::showScriptGUIClientsMenu()
     }
 
     d->dirtyscriptlist = false;
+}
+
+void ScriptGUIClient::dirtyInstalledScriptActions()
+{
+    d->dirtyscriptlist = true;
 }
 
 bool ScriptGUIClient::executeScriptFile()
