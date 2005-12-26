@@ -53,11 +53,7 @@ using namespace KSpread;
 // TODO Stefan: DeleteColumn
 // TODO Stefan: DeleteRow
 // TODO Stefan: InsertColumn
-// TODO Stefan: HideColumn
 // TODO Stefan: InsertRow
-// TODO Stefan: HideRow
-// TODO Stefan: ShowSelColumn
-// TODO Stefan: ShowSelRow
 // TODO Stefan: SortInc
 // TODO Stefan: SortDec
 // TODO Stefan: Paste (Special)
@@ -1418,6 +1414,7 @@ bool HideShowManipulator::process(Element* element)
           ColumnFormat* format = m_sheet->nonDefaultColumnFormat(col);
           format->setHide(false);
         }
+        add(QRect(1, 1, range.left()-2, KS_colMax-1));
       }
     }
     for (int col = range.left(); col <= range.right(); ++col)
@@ -1446,6 +1443,7 @@ bool HideShowManipulator::process(Element* element)
           RowFormat* format = m_sheet->nonDefaultRowFormat(row);
           format->setHide(false);
         }
+        add(QRect(1, 1, KS_rowMax, range.top()-2));
       }
     }
     for (int row = range.top(); row <= range.bottom(); ++row)
@@ -1459,9 +1457,39 @@ bool HideShowManipulator::process(Element* element)
 
 bool HideShowManipulator::preProcessing()
 {
+  Region region;
   ConstIterator endOfList = cells().constEnd();
   for (ConstIterator it = cells().constBegin(); it != endOfList; ++it)
   {
+    if (m_reverse)
+    {
+      QRect range = (*it)->rect().normalize();
+      if (m_manipulateColumns)
+      {
+        for (int col = range.left(); col <= range.right(); ++col)
+        {
+          ColumnFormat* format = m_sheet->columnFormat(col);
+          if (!format->isHide())
+          {
+            region.add(range);
+            break;
+          }
+        }
+      }
+      if (m_manipulateRows)
+      {
+        for (int row = range.top(); row <= range.bottom(); ++row)
+        {
+          RowFormat* format = m_sheet->rowFormat(row);
+          if (!format->isHide())
+          {
+            region.add(range);
+            break;
+          }
+        }
+      }
+    }
+
     if (((*it)->isRow() && m_manipulateColumns) ||
         ((*it)->isColumn() && m_manipulateRows))
     {
@@ -1469,6 +1497,11 @@ bool HideShowManipulator::preProcessing()
       return false;
     }
   }
+
+  // TODO Stefan
+  // substract not hidden cols/rows
+  //sub(region);
+
   return true;
 }
 

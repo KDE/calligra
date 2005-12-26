@@ -177,15 +177,20 @@ public:
 
   /* TODO Stefan #3: Improve! */
   /**
-   * Substracts the point @p point to this region.
+   * Substracts the point @p point from this region.
    * @param point the point's location
    */
   void sub(const QPoint& point);
   /**
-   * Substracts the range @p range to this region.
+   * Substracts the range @p range from this region.
    * @param range the range's location
    */
   void sub(const QRect& range);
+  /**
+   * Substracts the region @p region from this region.
+   * @param region the region to substract
+   */
+  void sub(const Region& region);
 
   /**
    * Deletes all elements of the region. The result is an empty region.

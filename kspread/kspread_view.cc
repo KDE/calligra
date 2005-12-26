@@ -4954,29 +4954,42 @@ void View::popupColumnMenu( const QPoint & _point )
 
       d->actions->showSelColumns->setEnabled(false);
 
-      int i;
-      ColumnFormat * col;
-      QRect rect = d->selection->selection();
+      ColumnFormat* format;
       //kdDebug(36001) << "Column: L: " << rect.left() << endl;
-      for ( i = rect.left(); i <= rect.right(); ++i )
+      Region::ConstIterator endOfList = d->selection->constEnd();
+      for (Region::ConstIterator it = d->selection->constBegin(); it != endOfList; ++it)
       {
-        if (i == 2) // "B"
+        QRect range = (*it)->rect().normalize();
+        int col;
+        for (col = range.left(); col < range.right(); ++col)
         {
-          col = activeSheet()->columnFormat( 1 );
-          if ( col->isHide() )
+          format = activeSheet()->columnFormat(col);
+
+          if ( format->isHide() )
           {
-            d->actions->showSelColumns->setEnabled(true);
+            d->actions->showSelColumns->setEnabled( true );
             d->actions->showSelColumns->plug( d->popupColumn );
             break;
           }
         }
-
-        col = activeSheet()->columnFormat( i );
-
-        if ( col->isHide() )
+        if (range.left() > 1 && col == range.right())
         {
-          d->actions->showSelColumns->setEnabled( true );
-          d->actions->showSelColumns->plug( d->popupColumn );
+          bool allHidden = true;
+          for (col = 1; col < range.left(); ++col)
+          {
+            format = activeSheet()->columnFormat(col);
+
+            allHidden &= format->isHide();
+          }
+          if (allHidden)
+          {
+            d->actions->showSelColumns->setEnabled( true );
+            d->actions->showSelColumns->plug( d->popupColumn );
+            break;
+          }
+        }
+        else
+        {
           break;
         }
       }
@@ -5037,28 +5050,41 @@ void View::popupRowMenu( const QPoint & _point )
 
       d->actions->showSelColumns->setEnabled(false);
 
-      int i;
-      RowFormat * row;
-      QRect rect = d->selection->selection();
-      for ( i = rect.top(); i <= rect.bottom(); ++i )
+      RowFormat* format;
+      Region::ConstIterator endOfList = d->selection->constEnd();
+      for (Region::ConstIterator it = d->selection->constBegin(); it != endOfList; ++it)
       {
-        //kdDebug(36001) << "popupRow: " << rect.top() << endl;
-        if (i == 2)
+        QRect range = (*it)->rect().normalize();
+        int row;
+        for (row = range.top(); row < range.bottom(); ++row)
         {
-          row = activeSheet()->rowFormat( 1 );
-          if ( row->isHide() )
+          format = activeSheet()->rowFormat(row);
+
+          if ( format->isHide() )
           {
-            d->actions->showSelRows->setEnabled(true);
+            d->actions->showSelRows->setEnabled( true );
             d->actions->showSelRows->plug( d->popupRow );
             break;
           }
         }
-
-        row = activeSheet()->rowFormat( i );
-        if ( row->isHide() )
+        if (range.top() > 1 && row == range.bottom())
         {
-          d->actions->showSelRows->setEnabled(true);
-          d->actions->showSelRows->plug( d->popupRow );
+          bool allHidden = true;
+          for (row = 1; row < range.top(); ++row)
+          {
+            format = activeSheet()->rowFormat(row);
+
+            allHidden &= format->isHide();
+          }
+          if (allHidden)
+          {
+            d->actions->showSelRows->setEnabled( true );
+            d->actions->showSelRows->plug( d->popupRow );
+            break;
+          }
+        }
+        else
+        {
           break;
         }
       }

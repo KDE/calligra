@@ -343,10 +343,28 @@ void Region::sub(const QRect& range)
   for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
   {
     Element *element = *it;
-    if (element->rect() == range)
+    if (element->rect().normalize() == range.normalize())
     {
       d->cells.remove(element);
       break;
+    }
+  }
+}
+
+void Region::sub(const Region& region)
+{
+  ConstIterator endOfList(region.constEnd());
+  for (ConstIterator it = region.constBegin(); it != endOfList; ++it)
+  {
+    Element *element = *it;
+    if (element->type() == Element::Point)
+    {
+      Point* point = static_cast<Point*>(element);
+      sub(point->pos());
+    }
+    else
+    {
+      sub(element->rect());
     }
   }
 }
