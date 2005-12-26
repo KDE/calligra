@@ -29,6 +29,10 @@ Variant::Variant(const QVariant& value, const QString& name)
 {
 }
 
+Variant::Variant(uint i)
+    : Value<Variant, QVariant>(QVariant(i), "bla")
+{}
+
 Variant::~Variant()
 {
 }
@@ -88,12 +92,28 @@ const QString Variant::toString(Object::Ptr object)
     return variant.toString();
 }
 
+int Variant::toInt(Object::Ptr object)
+{
+    const QVariant& variant = toVariant(object);
+    if(! variant.canCast(QVariant::Int))
+        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::Int expected, but got %1.").arg(variant.typeName()).latin1()) );
+    return variant.toInt();
+}
+
 uint Variant::toUInt(Object::Ptr object)
 {
     const QVariant& variant = toVariant(object);
     if(! variant.canCast(QVariant::UInt))
         throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::UInt expected, but got %1.").arg(variant.typeName()).latin1()) );
     return variant.toUInt();
+}
+
+double Variant::toDouble(Object::Ptr object)
+{
+    const QVariant& variant = toVariant(object);
+    if(! variant.canCast(QVariant::Double))
+        throw Exception::Ptr( new Exception(QString("Kross::Api::Variant::Double expected, but got %1.").arg(variant.typeName()).latin1()) );
+    return variant.toDouble();
 }
 
 Q_LLONG Variant::toLLONG(Object::Ptr object)

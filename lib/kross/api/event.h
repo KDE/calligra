@@ -57,7 +57,24 @@ namespace Kross { namespace Api {
              */
             QMap<QString, Function* > m_functions;
 
-        protected:
+        public:
+
+            /**
+             * Constructor.
+             */
+            Event(const QString& name, Object::Ptr parent)
+                : Callable(name, parent, ArgumentList())
+            {
+            }
+
+            /**
+             * Destructor.
+             */
+            virtual ~Event()
+            {
+                for(QMapIterator<QString, Function* > it = m_functions.begin(); it != m_functions.end(); ++it)
+                    delete it.data();
+            }
 
             /**
              * Add a \a Callable methodfunction to the list of functions
@@ -81,25 +98,6 @@ namespace Kross { namespace Api {
             void addFunction(const QString& name, Function* function)
             {
                 m_functions.replace(name, function);
-            }
-
-        public:
-
-            /**
-             * Constructor.
-             */
-            Event(const QString& name, Object::Ptr parent)
-                : Callable(name, parent, ArgumentList())
-            {
-            }
-
-            /**
-             * Destructor.
-             */
-            virtual ~Event()
-            {
-                for(QMapIterator<QString, Function* > it = m_functions.begin(); it != m_functions.end(); ++it)
-                    delete it.data();
             }
 
             /**

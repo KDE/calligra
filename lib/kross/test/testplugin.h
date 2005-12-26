@@ -23,6 +23,7 @@
 #include "../api/object.h"
 #include "../api/list.h"
 #include "../api/class.h"
+#include "../api/proxy.h"
 #include "../api/module.h"
 
 #include <qobject.h>
@@ -36,6 +37,8 @@ class TestPluginObject : public Kross::Api::Class<TestPluginObject>
         virtual const QString getClassName() const;
 
     private:
+        uint internalfunc1(uint);
+
         Kross::Api::Object::Ptr func1(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr func2(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr func3(Kross::Api::List::Ptr);
@@ -46,6 +49,8 @@ class TestPluginObject : public Kross::Api::Class<TestPluginObject>
         Kross::Api::Object::Ptr func8(Kross::Api::List::Ptr);
         Kross::Api::Object::Ptr func9(Kross::Api::List::Ptr);
 };
+
+class TestObject;
 
 class TestPluginModule : public Kross::Api::Module
 {
@@ -58,7 +63,8 @@ class TestPluginModule : public Kross::Api::Module
         {
                 return 0;
         }
-
+    private:
+        TestObject* m_testobject;
 };
 
 #endif

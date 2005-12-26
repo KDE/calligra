@@ -98,41 +98,29 @@ def testPluginModule():
     import krosstestpluginmodule
     print "krosstestpluginmodule => %s %s" % (krosstestpluginmodule,dir(krosstestpluginmodule))
 
+    print "-------------------------------------"
     testobject1 = krosstestpluginmodule.testpluginobject1()
     print "testpluginobject1 => %s %s" % (testobject1,dir(testobject1))
+    print "testobject1.func1: %s" % testobject1.func1()
+    print "testobject1.func2: %s" % testobject1.func2("func2string1","func2string2")
+    print "testobject1.func3(s,s): %s" % testobject1.func3("func3string1","func3string2")
+    print "testobject1.func3(s): %s" % testobject1.func3("func3string1")
+    print "testobject1.func4: %s" % testobject1.func4("func4string1","func4string2")
+    print "testobject1.func5: %s" % testobject1.func5("func5string1","func5string2")
+    print "testobject1.func6: %s" % testobject1.func6( ("One","Two") )
+    print "testobject1.internalfunc1: %s" % testobject1.internalfunc1(17)
+    print "-------------------------------------"
+    testobject2 = krosstestpluginmodule.testpluginobject2()
+    print "testpluginobject2 => %s %s" % (testobject2,dir(testobject2))
+    print "testobject2.func1: %s" % testobject2.func1(98765)
+    print "testobject2.func2: %s" % testobject2.func2("ThisIsFunc2",12)
+    print "testobject2.func3: %s" % testobject2.func3("ThisIsFunc3",34)
+    print "testobject2.func4: %s" % testobject2.func4("ThisIsFunc4",56)
+    print "-------------------------------------"
 
-    print "-------------------------------------"
-    print testobject1.func1()
-    print "-------------------------------------"
-    print testobject1.func2("func2string1","func2string2")
-    print "-------------------------------------"
-    print testobject1.func3("func3string1","func3string2")
-    print "-------------------------------------"
-    print testobject1.func3("func3string1")
-    print "-------------------------------------"
-    print testobject1.func4("func4string1","func4string2")
-    print "-------------------------------------"
-    print testobject1.func5("func5string1","func5string2")
-    print "-------------------------------------"
-    print testobject1.func6( ("One","Two") )
-    print "-------------------------------------"
-
-    #print "-------------------------------------"
-    #print testobject1.overloadedFunc()
-    #print "-------------------------------------"
-    #print testobject1.overloadedFunc("somestring")
-    #print "-------------------------------------"
-    #print testobject1.overloadedFunc(22)
-    #print "-------------------------------------"
-    #print testobject1.overloadedFunc(True)
-    #print "-------------------------------------"
-    #print testobject1.overloadedFunc("somestring1","somestring2")
-    #print "-------------------------------------"
-    #print testobject1.overloadedFunc("somestring",22)
-
-print "########## BEGIN TEST: testpluginmodule ##########"
+#print "########## BEGIN TEST: testpluginmodule ##########"
 testPluginModule()
-print "########## END TEST: testpluginmodule ##########"
+#print "########## END TEST: testpluginmodule ##########"
 
 #print "########## BEGIN TEST: QObject ##########"
 #testQtObject(self)

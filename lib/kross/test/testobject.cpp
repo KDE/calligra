@@ -23,6 +23,11 @@
 
 #include <kdebug.h>
 
+TestObject::TestObject()
+    : QObject(0, "TestObject")
+{
+}
+
 TestObject::TestObject(QObject* parent, Kross::Api::ScriptContainer::Ptr scriptcontainer)
     : QObject(parent, "TestObject")
 {
@@ -44,6 +49,29 @@ TestObject::TestObject(QObject* parent, Kross::Api::ScriptContainer::Ptr scriptc
 TestObject::~TestObject()
 {
     //kdDebug() << "TestObject::~TestObject Destructor." << endl;
+}
+
+uint TestObject::func1(uint i)
+{
+    kdDebug() << "CALLED => TestObject::func1 i=" << i << endl;
+    return i;
+}
+
+void TestObject::func2(QString s, int i)
+{
+    kdDebug() << "CALLED => TestObject::func2 s=" << s << " i=" << i << endl;
+}
+
+QString TestObject::func3(QString s, int i)
+{
+    kdDebug() << "CALLED => TestObject::func3 s=" << s << " i=" << i << endl;
+    return s;
+}
+
+const QString& TestObject::func4(const QString& s, int i)
+{
+    kdDebug() << "CALLED => TestObject::func4 s=" << s << " i=" << i << endl;
+    return s;
 }
 
 void TestObject::testSlot()

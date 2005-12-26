@@ -48,6 +48,17 @@ namespace Kross { namespace Api {
              */
             Variant(const QVariant& value, const QString& name = "variant");
 
+            //Variant(uint i);
+            operator bool () { return getValue().toBool(); }
+            operator int () { return getValue().toInt(); }
+            operator uint () { return getValue().toUInt(); }
+            operator double () { return getValue().toDouble(); }
+            operator const char* () { return getValue().toString().latin1(); }
+            operator QString () { return getValue().toString(); }
+            operator const QString () { return getValue().toString(); }
+            operator const QString& () { return getValue().asString(); }
+            operator const QVariant& () { return getValue(); }
+
             /**
              * Destructor.
              */
@@ -99,6 +110,16 @@ namespace Kross { namespace Api {
 
             /**
              * Try to convert the given \a Object into
+             * a int.
+             *
+             * \throw TypeException If the convert failed.
+             * \param object The object to convert.
+             * \return The to a int converted object.
+             */
+            static int toInt(Object::Ptr object);
+
+            /**
+             * Try to convert the given \a Object into
              * a uint.
              *
              * \throw TypeException If the convert failed.
@@ -106,6 +127,16 @@ namespace Kross { namespace Api {
              * \return The to a uint converted object.
              */
             static uint toUInt(Object::Ptr object);
+
+            /**
+             * Try to convert the given \a Object into
+             * a uint.
+             *
+             * \throw TypeException If the convert failed.
+             * \param object The object to convert.
+             * \return The to a uint converted object.
+             */
+            static double toDouble(Object::Ptr object);
 
             /**
              * Try to convert the given \a Object into

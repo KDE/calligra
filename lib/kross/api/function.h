@@ -24,9 +24,12 @@
 #include "object.h"
 #include "list.h"
 
+#include <qstring.h>
+
 namespace Kross { namespace Api {
 
-    class Function {
+    class Function
+    {
         public:
             virtual Object::Ptr call(List::Ptr) = 0;
     };

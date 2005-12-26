@@ -269,7 +269,7 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
     return extension->m_object;
 }
 
-Py::Object PythonExtension::toPyObject(const QString& s)
+const Py::Object PythonExtension::toPyObject(const QString& s)
 {
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(QString)") << endl;
@@ -277,7 +277,7 @@ Py::Object PythonExtension::toPyObject(const QString& s)
     return s.isNull() ? Py::String() : Py::String(s.latin1());
 }
 
-Py::List PythonExtension::toPyObject(QStringList list)
+const Py::List PythonExtension::toPyObject(const QStringList& list)
 {
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(QStringList)") << endl;
@@ -288,29 +288,29 @@ Py::List PythonExtension::toPyObject(QStringList list)
     return l;
 }
 
-Py::Dict PythonExtension::toPyObject(QMap<QString, QVariant> map)
+const Py::Dict PythonExtension::toPyObject(const QMap<QString, QVariant>& map)
 {
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(QMap<QString,QVariant>)") << endl;
 #endif
     Py::Dict d;
-    for(QMap<QString, QVariant>::Iterator it = map.begin(); it != map.end(); ++it)
+    for(QMap<QString, QVariant>::ConstIterator it = map.constBegin(); it != map.constEnd(); ++it)
         d.setItem(it.key().latin1(), toPyObject(it.data()));
     return d;
 }
 
-Py::List PythonExtension::toPyObject(QValueList<QVariant> list)
+const Py::List PythonExtension::toPyObject(const QValueList<QVariant>& list)
 {
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(QValueList<QVariant>)") << endl;
 #endif
     Py::List l;
-    for(QValueList<QVariant>::Iterator it = list.begin(); it != list.end(); ++it)
+    for(QValueList<QVariant>::ConstIterator it = list.constBegin(); it != list.constEnd(); ++it)
         l.append(toPyObject(*it));
     return l;
 }
 
-Py::Object PythonExtension::toPyObject(const QVariant& variant)
+const Py::Object PythonExtension::toPyObject(const QVariant& variant)
 {
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toPyObject(QVariant) typename='%1'").arg(variant.typeName()) << endl;
@@ -363,7 +363,7 @@ Py::Object PythonExtension::toPyObject(const QVariant& variant)
     }
 }
 
-Py::Object PythonExtension::toPyObject(Kross::Api::Object::Ptr object)
+const Py::Object PythonExtension::toPyObject(Kross::Api::Object::Ptr object)
 {
     if(! object) {
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
@@ -412,7 +412,7 @@ Py::Object PythonExtension::toPyObject(Kross::Api::Object::Ptr object)
     return Py::asObject( new PythonExtension(object) );
 }
 
-Py::Tuple PythonExtension::toPyTuple(Kross::Api::List::Ptr list)
+const Py::Tuple PythonExtension::toPyTuple(Kross::Api::List::Ptr list)
 {
 #ifdef KROSS_PYTHON_EXTENSION_TOPYOBJECT_DEBUG
     kdDebug() << QString("Kross::Python::PythonExtension::toPyTuple(Kross::Api::List) name='%1'").arg(list ? list->getName() : "NULL") << endl;

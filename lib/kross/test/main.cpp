@@ -55,7 +55,7 @@ KApplication *app = 0;
 static KCmdLineOptions options[] =
 {
     { "interpreter <interpretername>", I18N_NOOP("Name of the interpreter being used"), "python" },
-    { "scriptfile <filename>", I18N_NOOP("Script file to execute with the defined interpreter"), "test.py" },
+    { "scriptfile <filename>", I18N_NOOP("Script file to execute with the defined interpreter"), "testcase.py" },
     { "gui", I18N_NOOP("Start the GUI; otherwise the command line application is used."), 0 },
 
     //{ "functionname <functioname>", I18N_NOOP("Execute the function in the defined script file."), "" },

@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "testplugin.h"
+#include "testobject.h"
 
 #include <kdebug.h>
 
@@ -28,6 +29,14 @@
 TestPluginObject::TestPluginObject(const QString& name)
     : Kross::Api::Class<TestPluginObject>(name)
 {
+    this->addFunction("internalfunc1",
+        new Kross::Api::ProxyFunction <
+            TestPluginObject,
+            Kross::Api::ProxyValue< Kross::Api::Variant, uint >, // returnvalue
+            Kross::Api::ProxyValue< Kross::Api::Variant, uint > // first argument
+            > ( this, &TestPluginObject::internalfunc1 )
+    );
+
     addFunction("func1", &TestPluginObject::func1);
     addFunction("func2", &TestPluginObject::func2,
         Kross::Api::ArgumentList()
@@ -49,11 +58,10 @@ TestPluginObject::TestPluginObject(const QString& name)
             << Kross::Api::Argument("Kross::Api::Variant::String") );
     addFunction("func6", &TestPluginObject::func6,
         Kross::Api::ArgumentList()
-            << Kross::Api::Argument("Kross::Api::List")
-            << Kross::Api::Argument("Kross::Api::Variant") );
+            << Kross::Api::Argument("Kross::Api::List") );
     addFunction("func7", &TestPluginObject::func7,
         Kross::Api::ArgumentList()
-            << Kross::Api::Argument("Kross::Api::Variant")
+            << Kross::Api::Argument("Kross::Api::List")
             << Kross::Api::Argument("Kross::Api::Variant") );
     addFunction("func8", &TestPluginObject::func8,
         Kross::Api::ArgumentList()
@@ -73,6 +81,12 @@ TestPluginObject::~TestPluginObject()
 const QString TestPluginObject::getClassName() const
 {
     return "TestPluginObject";
+}
+
+uint TestPluginObject::internalfunc1(uint i)
+{
+    kdDebug() << "CALLED => TestPluginObject::internalfunc1" << endl;
+    return i;
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func1(Kross::Api::List::Ptr /*args*/)
@@ -108,23 +122,22 @@ Kross::Api::Object::Ptr TestPluginObject::func5(Kross::Api::List::Ptr /*args*/)
 Kross::Api::Object::Ptr TestPluginObject::func6(Kross::Api::List::Ptr args)
 {
     Kross::Api::List* list = Kross::Api::Object::fromObject< Kross::Api::List >( args->item(0) );
-    //kdDebug() << "CALLED => TestPluginObject::func6 args=" << list->toString() << endl;
-    return new Kross::Api::Variant("func6returnvalue");
+    return list->item(0);
 }
 
 Kross::Api::Object::Ptr TestPluginObject::func7(Kross::Api::List::Ptr args)
 {
-    return new Kross::Api::Variant("func7returnvalue");
+    return args->item(0);
 }
 
-Kross::Api::Object::Ptr TestPluginObject::func8(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr TestPluginObject::func8(Kross::Api::List::Ptr args)
 {
-    return new Kross::Api::Variant("func8returnvalue");
+    return args->item(0);
 }
 
-Kross::Api::Object::Ptr TestPluginObject::func9(Kross::Api::List::Ptr)
+Kross::Api::Object::Ptr TestPluginObject::func9(Kross::Api::List::Ptr args)
 {
-    return new Kross::Api::Variant("func9returnvalue");
+    return args->item(0);
 }
 
 /************************************************************************
@@ -133,13 +146,51 @@ Kross::Api::Object::Ptr TestPluginObject::func9(Kross::Api::List::Ptr)
 
 TestPluginModule::TestPluginModule(const QString& name)
     : Kross::Api::Module(name)
+    , m_testobject( new TestObject() )
+
 {
     addChild( new TestPluginObject("testpluginobject1") );
-    //addChild( new TestPluginObject("testpluginobject2") );
+
+    // Let's wrap a whole instance and it's methodfunctions.
+    Kross::Api::ProxyClass<TestObject> *proxyclass =
+        new Kross::Api::ProxyClass<TestObject>("testpluginobject2", m_testobject);
+    addChild(proxyclass);
+
+    proxyclass->addFunction("func1",
+        new Kross::Api::ProxyFunction <
+            TestObject,
+            Kross::Api::ProxyValue< Kross::Api::Variant, uint >, // returnvalue
+            Kross::Api::ProxyValue< Kross::Api::Variant, uint > // first argument
+            > ( m_testobject, &TestObject::func1 )
+    );
+    proxyclass->addFunction("func2",
+        new Kross::Api::ProxyFunction <
+            TestObject,
+            Kross::Api::ProxyValue< Kross::Api::Variant, void >, // returnvalue
+            Kross::Api::ProxyValue< Kross::Api::Variant, QString >, // first argument
+            Kross::Api::ProxyValue< Kross::Api::Variant, int > // second argument
+            > ( m_testobject, &TestObject::func2 )
+    );
+    proxyclass->addFunction("func3",
+        new Kross::Api::ProxyFunction<
+            TestObject,
+            Kross::Api::ProxyValue< Kross::Api::Variant, QString >, // returnvalue
+            Kross::Api::ProxyValue< Kross::Api::Variant, QString >, // first argument
+            Kross::Api::ProxyValue< Kross::Api::Variant, int > // second argument
+            > ( m_testobject, &TestObject::func3) );
+    proxyclass->addFunction("func4",
+        new Kross::Api::ProxyFunction<
+            TestObject,
+            Kross::Api::ProxyValue< Kross::Api::Variant, const QString& >, // returnvalue
+            Kross::Api::ProxyValue< Kross::Api::Variant, const QString& >, // first argument
+            Kross::Api::ProxyValue< Kross::Api::Variant, int > // second argument
+            > ( m_testobject, &TestObject::func4) );
+
 }
 
 TestPluginModule::~TestPluginModule()
 {
+    delete m_testobject;
 }
 
 const QString TestPluginModule::getClassName() const
