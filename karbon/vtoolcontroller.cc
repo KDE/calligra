@@ -26,6 +26,7 @@
 
 VToolController::VToolController( KarbonView *view ) : m_view( view ), m_currentTool( 0L ), m_setup( false )
 {
+    m_tools.setAutoDelete( true );
 }
 
 void
