@@ -29,9 +29,11 @@ Variant::Variant(const QVariant& value, const QString& name)
 {
 }
 
+/*
 Variant::Variant(uint i)
     : Value<Variant, QVariant>(QVariant(i), "bla")
 {}
+*/
 
 Variant::~Variant()
 {
