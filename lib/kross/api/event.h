@@ -95,6 +95,21 @@ namespace Kross { namespace Api {
                 m_functions.replace(name, new VarFunction0<T>(static_cast<T*>(this), function));
             }
 
+            /**
+             * Add a methodfunction to the list of functions this Object
+             * supports.
+             *
+             * \param name The functionname. Each function this object
+             *        holds should have an unique name to be
+             *        still accessable.
+             * \param function A \a Function instance which defines
+             *        the methodfunction. This \a Event will be the
+             *        owner of the \a Function instance and will take
+             *        care of deleting it if this \a Event got deleted.
+             * \param arglist A list of arguments for the function.
+             *
+             * \todo Is that template arguments or concrete arguments?
+             */
             void addFunction(const QString& name, Function* function)
             {
                 m_functions.replace(name, function);
