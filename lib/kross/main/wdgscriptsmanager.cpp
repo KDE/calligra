@@ -83,7 +83,9 @@ void WdgScriptsManager::fillScriptsList(QListViewItem* item, ScriptAction::List 
 
 void WdgScriptsManager::slotLoadScript()
 {
-    d->m_scripguiclient->executeScriptFile();
+    if(d->m_scripguiclient->executeScriptFile()) {
+        fillScriptsList();
+    }
 }
 void WdgScriptsManager::slotExecuteScript()
 {
