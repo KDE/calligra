@@ -54,7 +54,7 @@ VColorDocker::VColorDocker( KarbonPart* part, KarbonView* parent, const char* /*
 	: QWidget(), m_part ( part ), m_view( parent )
 {
 	m_isStrokeDocker = false;
-	setCaption( i18n( "Colorchooser" ) );
+	setCaption( i18n( "Color Chooser" ) );
 
 	m_opacity = 1;
 
