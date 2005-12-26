@@ -80,14 +80,16 @@ namespace Kross { namespace Api {
              * Add a \a Callable methodfunction to the list of functions
              * this Object supports.
              *
+             * The FunctionPtr points to the concret
+             * Object::Ptr myfuncname(List::Ptr)
+             * method in the class defined with template T.
+             *
              * \param name The functionname. Each function this object
              *        holds should have an unique name to be
              *        still accessable.
              * \param function A pointer to the methodfunction that
              *        should handle calls.
              * \param arglist A list of arguments for the function.
-             *
-             * \todo Is that template arguments or concrete arguments?
              */
             void addFunction(const QString& name, FunctionPtr function, const ArgumentList& /*arglist*/ = ArgumentList())
             {
@@ -107,8 +109,6 @@ namespace Kross { namespace Api {
              *        owner of the \a Function instance and will take
              *        care of deleting it if this \a Event got deleted.
              * \param arglist A list of arguments for the function.
-             *
-             * \todo Is that template arguments or concrete arguments?
              */
             void addFunction(const QString& name, Function* function)
             {
