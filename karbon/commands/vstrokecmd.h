@@ -37,6 +37,7 @@ public:
 	VStrokeCmd( VDocument *doc, VPattern * );
 	VStrokeCmd( VDocument *doc, const VColor & );
 	VStrokeCmd( VDocument *doc, double );
+	VStrokeCmd( VDocument *doc, const QValueList<float>& );
 	virtual ~VStrokeCmd();
 
 	virtual void execute();
@@ -54,13 +55,14 @@ protected:
 		Color,
 		Gradient,
 		Pattern,
-		Stroke
+		Stroke,
+		Dash
 	} State;
 
 	State					m_state;
 	VSelection				*m_selection;
 	VStroke					m_stroke;
-	QValueVector<VStroke>	m_oldstrokes;
+	QValueVector<VStroke>			m_oldstrokes;
 };
 
 #endif

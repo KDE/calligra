@@ -26,7 +26,7 @@
 #include "vstrokecmd.h"
 #include "vdocument.h"
 
-VStrokeCmd::VStrokeCmd( VDocument *doc,  const VStroke *stroke, const QString& icon )
+VStrokeCmd::VStrokeCmd( VDocument *doc, const VStroke *stroke, const QString& icon )
     : VCommand( doc, i18n( "Stroke Objects" ), icon ), m_stroke( *stroke )
 {
 	m_selection = document()->selection()->clone();
@@ -48,7 +48,7 @@ VStrokeCmd::VStrokeCmd( VDocument *doc, VGradient *gradient )
 }
 
 VStrokeCmd::VStrokeCmd( VDocument *doc, VPattern *pattern )
-	: VCommand( doc, i18n( "Stroke Objects" ) )
+	: VCommand( doc, i18n( "Stroke Objects" ), "14_pattern" )
 {
 	m_selection = document()->selection()->clone();
 	m_state = Pattern;
@@ -67,11 +67,19 @@ VStrokeCmd::VStrokeCmd( VDocument *doc, double width )
 }
 
 VStrokeCmd::VStrokeCmd( VDocument *doc, const VColor &color )
-	: VCommand( doc, i18n( "Stroke Color" ) )
+	: VCommand( doc, i18n( "Stroke Color" ), "linewidth" )
 {
 	m_selection = document()->selection()->clone();
 	m_state = Color;
 	m_stroke.setColor( color );
+}
+
+VStrokeCmd::VStrokeCmd( VDocument *doc, const QValueList<float>& array )
+	: VCommand( doc, i18n( "Dash pattern" ), "linewidth" )
+{
+	m_selection = document()->selection()->clone();
+	m_state = Dash;
+	m_stroke.dashPattern().setArray( array );
 }
 
 VStrokeCmd::~VStrokeCmd()
@@ -159,6 +167,10 @@ VStrokeCmd::execute()
 				stroke.pattern() = m_stroke.pattern();
 				stroke.setType( VStroke::patt );
 			}
+		}
+		else if( m_state == Dash )
+		{
+			stroke.dashPattern() = m_stroke.dashPattern();
 		}
 		itr.current()->setStroke( stroke );
 	}

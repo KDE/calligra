@@ -41,6 +41,7 @@
 #include <koUnitWidgets.h>
 #include <koPageLayoutDia.h>
 #include <vruler.h>
+#include <kolinestyleaction.h>
 
 // Commands.
 #include "valigncmd.h"
@@ -855,6 +856,24 @@ KarbonView::zoomChanged( const KoPoint &p )
 }
 
 void
+KarbonView::setLineStyle( int style )
+{
+	QValueList<float> dashes;
+	if( style == Qt::NoPen )
+		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 0 << 20 ), true );
+	else if( style == Qt::SolidLine )
+		part()->addCommand( new VStrokeCmd( &part()->document(), dashes ), true );
+	else if( style == Qt::DashLine )
+		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 12 << 6 ), true );
+	else if( style == Qt::DotLine )
+		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 2 << 2 ), true );
+	else if( style == Qt::DashDotLine )
+		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 12 << 2 << 2 << 2 ), true );
+	else if( style == Qt::DashDotDotLine )
+		part()->addCommand( new VStrokeCmd( &part()->document(), dashes << 12 << 2 << 2 << 2 << 2 << 2 ), true );
+}
+
+void
 KarbonView::slotStrokeChanged( const VStroke &c )
 {
 	part()->document().selection()->setStroke( c );
@@ -1056,6 +1075,9 @@ KarbonView::initActions()
 		i18n( "&Close Path" ), QKeySequence( "Ctrl+U" ), this,
 		SLOT( closePath() ), actionCollection(), "close_path" );
 	// object <-----
+
+	// line style (dashes)
+	m_lineStyleAction = new KoLineStyleAction( i18n( "Line Style" ), "linestyle", this, SLOT( setLineStyle( int ) ), actionCollection(), "setLineStyle" );
 
 	// line width
 	m_setLineWidth = new KoUnitDoubleSpinComboBox( this, 0.0, 1000.0, 0.5, 1.0, KoUnit::U_PT, 1 );
@@ -1370,6 +1392,20 @@ KarbonView::selectionChanged()
 		part()->document().selection()->setFill( *obj->fill() );
 		m_setLineWidth->setEnabled( true );
 		m_setLineWidth->updateValue( obj->stroke()->lineWidth() );
+		// dashes
+  		m_lineStyleAction->setEnabled( true );
+		if( obj->stroke()->dashPattern().array().isEmpty() )
+  			m_lineStyleAction->setCurrentSelection( Qt::SolidLine );
+		else if( obj->stroke()->dashPattern().array()[ 0 ] == 0. )
+  			m_lineStyleAction->setCurrentSelection( Qt::NoPen );
+		else if( obj->stroke()->dashPattern().array()[ 0 ]  == 2. )
+  			m_lineStyleAction->setCurrentSelection( Qt::DotLine );
+		else if( obj->stroke()->dashPattern().array().count() == 2 )
+  			m_lineStyleAction->setCurrentSelection( Qt::DashLine );
+		else if( obj->stroke()->dashPattern().array().count() == 4 )
+  			m_lineStyleAction->setCurrentSelection( Qt::DashDotLine );
+		else if( obj->stroke()->dashPattern().array().count() == 6 )
+  			m_lineStyleAction->setCurrentSelection( Qt::DashDotDotLine );
 
 		m_deleteSelectionAction->setEnabled( true );
 	}
@@ -1379,7 +1415,7 @@ KarbonView::selectionChanged()
 			if ( this == shell()->rootView() || koDocument()->isEmbedded() )
 			m_strokeFillPreview->update( *( part()->document().selection()->stroke() ),
 									 *( part()->document().selection()->fill() ) );
-		m_setLineWidth->setEnabled( false );
+  		m_lineStyleAction->setEnabled( false );
 		m_deleteSelectionAction->setEnabled( false );
 	}
 	emit selectionChange();

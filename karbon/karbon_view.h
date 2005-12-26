@@ -38,6 +38,7 @@ class KarbonPart;
 class KSelectAction;
 class KToggleAction;
 class KoContextHelpAction;
+class KoLineStyleAction;
 
 class KoUnitDoubleSpinComboBox;
 class KoRect;
@@ -185,6 +186,7 @@ protected slots:
 	// View.
 	void viewModeChanged();
 	void zoomChanged( const KoPoint & = KoPoint() );
+	void setLineStyle( int );
 
 	// Toolbox dialogs.
 	void slotStrokeChanged( const VStroke& );
@@ -245,6 +247,7 @@ private:
 	KAction				*m_deleteSelectionAction;
 	// line width
 	KoUnitDoubleSpinComboBox *m_setLineWidth;
+	KoLineStyleAction	*m_lineStyleAction;
 
 	//dockers
 	KoPaletteManager	*m_pPaletteManager;
