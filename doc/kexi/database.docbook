@@ -3,36 +3,128 @@
 -->
 
 <appendix id="database">
-  <title>Introduction to databases</title>
+<title>Introduction to databases</title>
 
-  <sect1 id="what-is-a-database">
-    <title>What is a database?</title>
-    <para>
-    </para>
-  </sect1>
+<!--
+<sect1 id="what-is-a-database">
+<title>What is a database?</title>
+<para>
+You can define a database as a collection of data on one topic. It is organised in a way allowing to easily browse the information, make changes or add new items.
+</para>
+</sect1>
+-->
 
-  <sect1 id="database-and-spreadsheet">
-    <title>Database and spreadsheet</title>
-    <para>
-    </para>
-  </sect1>
+<sect1 id="database-and-spreadsheet">
+<title>Database and spreadsheet</title>
+<para>
+It is very likely that you have already used spreadsheet applications like
+KSpread, OpenOffice.org Calc or Microsoft Excel. If so, you will probably
+wonder: since both spreadsheets and databases have tables, why should I use
+the latter?
+</para>
+<para>
+While comparing spreadsheets and databases you may encounter the following issues which you will later see in greater detail:
+</para>
+<itemizedlist>
+<listitem><para><link linkend="referential-data-integrity">Referential
+data integrity</link></para></listitem>
+<listitem><para><link linkend="data-redundyncy">Data redundancy</link>
+</para></listitem>
+<listitem><para><link linkend="data-integrity-and-validity">Data integrity
+and validity</link></para></listitem>
+<listitem><para><link linkend="data-limiting">Data limiting</link></para></listitem>
+<listitem><para><link linkend="performance-and-capacity">Performance and
+capacity</link></para></listitem>
+<listitem><para><link linkend="convenient-data-entry">Convenient data entry</link></para></listitem>
+<listitem><para><link linkend="reports">Reports</link></para></listitem>
+<listitem><para><link linkend="programming">Programming</link></para></listitem>
+<listitem><para><link linkend="multiuse">Multiuse</link></para></listitem>
+<listitem><para><link linkend="security">Security</link></para></listitem>
+</itemizedlist>
 
-  <sect1 id="database-design">
-    <title>Database design</title>
-    <para>
-    </para>
-  </sect1>
+<sect2 id="difference-database-and-spreadsheet">
+<title>How is a database different from a spreadsheet?</title>
 
-  <sect1 id="who-needs-a-database">
-    <title>Who needs a database?</title>
-    <para>
-    </para>
-  </sect1>
+<sect3 id="referential-data-integrity">
+<title>Referential data integrity</title>
+<para>
+</para>
+</sect3>
 
-  <sect1 id="database-software">
-    <title>Database creation software</title>
-    <para>
-    </para>
-  </sect1>
+<sect3 id="data-redundyncy">
+<title>Data redundancy</title>
+<para>
+</para>
+</sect3>
+
+<sect3 id="data-integrity-and-validity">
+<title>Data integrity and validity</title>
+<para>
+</para>
+</sect3>
+
+<sect3 id="data-limiting">
+<title>Data limiting</title>
+<para>
+</para>
+</sect3>
+
+<sect3 id="performance-and-capacity">
+<title>Performance and capacity</title>
+<para>
+</para>
+</sect3>
+
+<sect3 id="convenient-data-entry">
+<title>Convenient data entry</title>
+<para>
+</para>
+</sect3>
+
+<sect3 id="reports">
+<title>Reports</title>
+<para>
+</para>
+</sect3>
+
+<sect3 id="programming">
+<title>Programming</title>
+<para>
+</para>
+</sect3>
+
+<sect3 id="multiuse">
+<title>Multiuse</title>
+<para>
+</para>
+</sect3>
+
+<sect3 id="security">
+<title>Security</title>
+<para>
+</para>
+</sect3>
+
+</sect2>
+
+</sect1>
+
+<sect1 id="database-design">
+<title>Database design</title>
+<para>
+</para>
+</sect1>
+
+<sect1 id="who-needs-a-database">
+<title>Who needs a database?</title>
+<para>
+</para>
+</sect1>
+
+<sect1 id="database-software">
+<title>Database creation software</title>
+<para>
+</para>
+</sect1>
 
 </appendix>
