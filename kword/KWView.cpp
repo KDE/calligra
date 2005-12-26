@@ -7447,15 +7447,14 @@ KWFrameViewManager* KWView::frameViewManager() const {
 }
 
 void KWView::deleteSelectedFrames() {
-    QValueList<KWFrameView*> selectedFrames=frameViewManager()->selectedFrames();
     int nbCommand=0;
 
     int docItem=0; // bitmask for changed doc items.
 
     KMacroCommand * macroCmd = new KMacroCommand( i18n("Delete Frames") );
-    QValueListIterator<KWFrameView*> framesIterator = selectedFrames.begin();
-    for(;framesIterator != selectedFrames.end(); ++framesIterator) {
-        KWFrame *frame = (*framesIterator)->frame();
+    KWFrameViewManager *fvMgr = frameViewManager();
+    while (KWFrameView *frameView = fvMgr->selectedFrame()) {
+        KWFrame *frame = frameView->frame();
         KWFrameSet *fs = frame->frameSet();
         if ( fs->isAFooter() || fs->isAHeader() )
             continue;

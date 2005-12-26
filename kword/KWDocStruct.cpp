@@ -541,9 +541,8 @@ void KWDocStructTableItem::editItem()
 
 void KWDocStructTableItem::deleteItem()
 {
-    // TODO: Crash if the frame of one of the cells (not first one) is selected.
-    // Following statement doesn't prevent the crash.
-    // gui()->getView()->deselectAllFrames();
+    // TODO: The following statement isn't working for some reason.
+    gui()->getView()->deselectAllFrames();
     gui()->getView()->deleteFrameSet(m_table);
 }
 
