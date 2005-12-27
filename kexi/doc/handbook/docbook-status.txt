@@ -89,10 +89,10 @@ not been translated into English yet.
 
 Appendix A (Raphael):
 01_01_00_what_is_db.html     TODO
-01_02_00_db_spreadsheet.html TODO
-01_03_00_design.html         TODO
-01_04_00_who_needs.html      TODO
-01_05_00_db_software.html    TODO
+01_02_00_db_spreadsheet.html Done.
+01_03_00_design.html         Done.
+01_04_00_who_needs.html      Done.
+01_05_00_db_software.html    Done.
 
 Appendix B:
 02_04_00_differences.html     1/2 Done.  Another table to go.
