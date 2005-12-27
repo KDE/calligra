@@ -460,6 +460,17 @@ easy way as in case of spreadsheet files.
 <sect1 id="database-design">
 <title>Database design</title>
 <para>
+Database design needs careful planning. Note that <guilabel>Contacts</guilabel>
+table redesign proposed in this section 1.2 can generate problems when the
+table is filled with data. For exampe, renaming a field is a simple task,
+but splitting <guilabel>Address</guilabel> field into two separate fields
+requires careful and tedious work.
+</para>
+<para>
+To avoid such situations, <emphasis>rethink your database project</emphasis>
+before you create it in your computer, and before you and others will start
+to use it. Thus, by investing some time initially, you will most probably
+save your time on everyday use.
 </para>
 </sect1>
 
