@@ -178,8 +178,6 @@ namespace Kross { namespace Api {
         private:
             /// Internaly used private d-pointer.
             ScriptActionPrivate* d;
-            /// Set the actions icon from the mimetype.
-            void setIconFromMimetype();
     };
 
 }}
