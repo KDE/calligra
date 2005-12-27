@@ -88,7 +88,7 @@ not been translated into English yet.
 
 
 Appendix A (Raphael):
-01_01_00_what_is_db.html     TODO
+01_01_00_what_is_db.html     Done.
 01_02_00_db_spreadsheet.html Done.
 01_03_00_design.html         Done.
 01_04_00_who_needs.html      Done.
