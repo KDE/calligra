@@ -54,9 +54,10 @@ namespace Kross { namespace Api {
             /**
              * Constructor.
              *
-             * \param name The name the \a ScriptAction has.
+             * \param file The KURL scriptfile this \a ScriptAction
+             *        points to.
              */
-            explicit ScriptAction(const char* name, const QString& text = QString::null);
+            explicit ScriptAction(const QString& file);
 
             /**
              * Constructor.
@@ -177,6 +178,8 @@ namespace Kross { namespace Api {
         private:
             /// Internaly used private d-pointer.
             ScriptActionPrivate* d;
+            /// Set the actions icon from the mimetype.
+            void setIconFromMimetype();
     };
 
 }}

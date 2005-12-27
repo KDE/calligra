@@ -22,7 +22,9 @@
 #include "scriptcontainer.h"
 
 #include <qstylesheet.h>
+#include <kurl.h>
 #include <kstandarddirs.h>
+#include <kmimetype.h>
 #include <kdebug.h>
 
 using namespace Kross::Api;
@@ -51,17 +53,22 @@ namespace Kross { namespace Api {
 
 }}
 
-ScriptAction::ScriptAction(const char* name, const QString& text)
+ScriptAction::ScriptAction(const QString& file)
     : KAction()
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
 {
     //kdDebug() << QString("Kross::Api::ScriptAction::ScriptAction(const char*, const QString&) name='%1' text='%2'").arg(name).arg(text) << endl;
 
-    setName( name );
-    setText( text.isEmpty() ? name : text );
-    setEnabled(false);
+    d->scriptcontainer = Manager::scriptManager()->getScriptContainer(file);
 
-    d->scriptcontainer = Manager::scriptManager()->getScriptContainer(name);
+    setName( file.latin1() );
+    setFile( file );
+
+    KURL url(file);
+    setText( url.fileName() );
+    setIcon( KMimeType::iconForURL(url) );
+
+    setEnabled( false );
 }
 
 ScriptAction::ScriptAction(const QDomElement& element)
@@ -73,6 +80,7 @@ ScriptAction::ScriptAction(const QDomElement& element)
     QString name = element.attribute("name");
     QString text = element.attribute("text");
     QString file = element.attribute("file");
+    QString icon = element.attribute("icon");
 
     if(file.isEmpty()) {
         if(text.isEmpty())
@@ -84,9 +92,6 @@ ScriptAction::ScriptAction(const QDomElement& element)
         if(text.isEmpty())
             text = file;
     }
-
-    setText( text );
-    setIcon( element.attribute("icon") );
 
     d->scriptcontainer = Manager::scriptManager()->getScriptContainer(name);
 
@@ -111,8 +116,14 @@ ScriptAction::ScriptAction(const QDomElement& element)
                 file = f;
 
         }
-        setFile( file );
+        setFile(file);
+        if(icon.isNull())
+            icon = KMimeType::iconForURL( KURL(file) );
     }
+
+    setName( name.latin1() );
+    setText( text );
+    setIcon( icon );
 
     // connect signal
     connect(this, SIGNAL(activated()), this, SLOT(activate()));

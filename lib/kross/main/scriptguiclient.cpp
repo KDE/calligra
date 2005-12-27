@@ -30,7 +30,6 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kurl.h>
-#include <kmimetype.h>
 #include <kdebug.h>
 
 using namespace Kross::Api;
@@ -198,15 +197,10 @@ bool ScriptGUIClient::executeScriptFile(const QString& file)
 {
     kdDebug() << QString("Kross::Api::ScriptGUIClient::executeScriptFile() file='%1'").arg(file) << endl;
 
-    KURL url(file);
-
-    ScriptAction* action = new ScriptAction( file.latin1(), url.fileName() );
-    action->setFile(file);
-
+    ScriptAction* action = new ScriptAction(file);
     QString errormessage, tracedetails;
     bool ok = action->activate(errormessage, tracedetails);
-    if(ok) { 
-        action->setIcon( KMimeType::iconForURL(url) );
+    if(ok) {
         action->finalize(); // execution is done.
         d->executedscriptactions.append(action);
     }
