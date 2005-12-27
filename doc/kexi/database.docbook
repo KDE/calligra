@@ -45,68 +45,416 @@ capacity</link></para></listitem>
 <sect2 id="difference-database-and-spreadsheet">
 <title>How is a database different from a spreadsheet?</title>
 
+<para>
+Gradually exceeding the capacity of a mobile phone, expand your table
+<guilabel>Contacts</guilabel> adding a column (field)
+<guilabel>Address</guilabel>. Add more telephone numbers
+(office, home) for each person and add surnames to names.
+To make it simpler we assume the following:
+</para>
+<itemizedlist>
+<listitem><para>the table is limited to two people (obviously,
+there could be hundreds and thousands of them in a real
+database)</para></listitem>
+<listitem><para>there are no two persons with the same name and surname</para>
+</listitem>
+</itemizedlist>
+<table>
+<title>Contacts</title>
+<tgroup cols="3">
+<tbody>
+<row>
+<entry><emphasis>Name and surname</emphasis></entry>
+<entry><emphasis>Tel</emphasis></entry>
+<entry><emphasis>Address</emphasis></entry>
+</row>
+<row>
+<entry>Joan Smith</entry>
+<entry>699 23 43 12</entry>
+<entry>Western Gate 1, Warsaw</entry>
+</row>
+<row>
+<entry>Adam Willson</entry>
+<entry>711 19 77 21</entry>
+<entry>London, Frogs Drive 5</entry>
+</row>
+<row>
+<entry>Joan Smith</entry>
+<entry>110 98 98 00</entry>
+<entry>Western Gate 1</entry>
+</row>
+<row>
+<entry>Smith Joan</entry>
+<entry>312 43 42 22</entry>
+<entry>Warsaw, Western Gate 1</entry>
+</row>
+<row>
+<entry>ADAM Willson</entry>
+<entry>231 83 02 04</entry>
+<entry>Frogs Drive 5, London</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>
+Such a table can be made both in a spreadsheet and in a database.
+Using a spreadsheet is very easy, of couse. What problems do we
+encounter at this stage?
+</para>
+
 <sect3 id="referential-data-integrity">
 <title>Referential data integrity</title>
 <para>
+Suppose you are using a spreadsheet and you need to change the address of at
+least one person. You have a small problem: you often have to change the
+address in many lines. For example, Joan takes three lines. A real problem
+will arise if you forget to change one of the lines - the address asigned
+to this person will be <emphasis>ambiguous</emphasis>, hence
+<emphasis>your data loses integrity</emphasis>.
+</para>
+<para>
+Moreover there is no simple way of deleting a chosen person from the table
+since you have to remember about deleting all the lines releted to him or her.
 </para>
 </sect3>
+
 
 <sect3 id="data-redundyncy">
 <title>Data redundancy</title>
 <para>
+This is directly connected to the previous problem. In fields
+<guilabel>Name and surname</guilabel> and <guilabel>Address</guilabel>
+the same data is entered many times. This is typical of spreadsheets,
+ineffective way of storing data because the database grows unnecessarily,
+thus requiring more computer resources (larger size of data and slower access).
 </para>
+<para>
+How can you solve these problems with a database? You can split information
+into smaller chunks by creating additional table <emphasis>Persons</emphasis>
+with only two columns: <guilabel>Name and suname</guilabel>
+and <guilabel>Address</guilabel>:
+</para>
+
+<table>
+<title>Persons</title>
+<tgroup cols="2">
+<tbody>
+<row>
+<entry><emphasis>Name and surname</emphasis></entry>
+<entry><emphasis>Address</emphasis></entry>
+</row>
+<row>
+<entry>Joan Smith</entry>
+<entry>Western Gate 1, Warsaw</entry>
+</row>
+<row>
+<entry>Adam Willson</entry>
+<entry>Frogs Drive 5, London</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>
+Each line in the table <guilabel>Persons</guilabel> corresponds to a
+<emphasis>single person</emphasis>. Table <guilabel>Contacts</guilabel>
+is from now in a relation to the table <guilabel>Persons</guilabel>
+(see next paragraph).
+</para>
+
 </sect3>
 
 <sect3 id="data-integrity-and-validity">
 <title>Data integrity and validity</title>
 <para>
+Note the way data is entered in fields <guilabel>Name and surname</guilabel>
+and <guilabel>Address</guilabel>. People entering data can be fallible,
+sometimes even negligent. In our sample data we have both different sequence
+of entering name and surname (Joan Smith and Smith Joan; Adam and ADAM) and
+many more ways of entering the same address. Surely you can think of many
+other ways.
 </para>
+<para>
+The above problem shows that e.g. when searching the telephone number of a
+person whose address is "Western Gate 1, Warsaw" you will not get a full
+result. You will get only one line instead of three. Moreover You will also
+not find all the telephone numbers searching for the value "Joan Smith" in
+the field <guilabel>Name and surname</guilabel>, because "Smith Joan" will
+not fit to "Joan Smith".
+</para>
+<para>
+How can you solve these problems using a database? You can do this by changing the design of the table <guilabel>Persons</guilabel> by:
+</para>
+<orderedlist>
+<listitem><para>
+<emphasis>Dividing data</emphasis> in the field <guilabel>Name and
+surname</guilabel> into two separate fields: <guilabel>Name</guilabel>
+and <guilabel>Surname</guilabel>.
+</para></listitem>
+<listitem><para>
+<emphasis>Dividing data</emphasis> in the field <guilabel>Address</guilabel>
+into three separate fields <guilabel>Street</guilabel>, <guilabel>House
+number</guilabel> and <guilabel>Town</guilabel>.
+</para></listitem>
+<listitem><para>
+<emphasis>Guaranteeing data correctness:</emphasis> by ensuring that no fields
+are empty, e.g. you must always enter house number.
+</para></listitem>
+</orderedlist>
+
+<para>
+A modified table looks something like this:
+</para>
+
+<table>
+<title>Persons</title>
+<tgroup cols="5">
+<colspec colnum="1" colname="c1"></colspec>
+<colspec colnum="2" colname="c2"></colspec>
+<colspec colnum="3" colname="c3"></colspec>
+<colspec colnum="4" colname="c4"></colspec>
+<colspec colnum="5" colname="c5"></colspec>
+<tbody>
+<row>
+<entry><emphasis>Name</emphasis></entry>
+<entry><emphasis>Surname</emphasis></entry>
+<entry><emphasis>Street</emphasis></entry>
+<entry><emphasis>House number</emphasis></entry>
+<entry><emphasis>City</emphasis></entry>
+</row>
+<row>
+<entry>Joan</entry>
+<entry>Smith</entry>
+<entry>Western Gate</entry>
+<entry>1</entry>
+<entry>Warsaw</entry>
+</row>
+<row>
+<entry>Adam</entry>
+<entry>Willson</entry>
+<entry>Frogs Drive</entry>
+<entry>5</entry>
+<entry>London</entry>
+</row>
+<row>
+<entry namest="c1" nameend="c5"><emphasis>Conditions</emphasis></entry>
+</row>
+<row>
+<entry>required field</entry>
+<entry>required field</entry>
+<entry>required field</entry>
+<entry>required field</entry>
+<entry>required field</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>
+Thanks to introducing conditions <guilabel>required field</guilabel> we can
+be sure that the entered data is complete. In case of other tables you may
+of course allow omitting certain fields while entering data.
+</para>
+
 </sect3>
 
 <sect3 id="data-limiting">
-<title>Data limiting</title>
+<title>Limiting data view</title>
 <para>
+Spreadsheet displays all lines and columns of the table which is bothersome
+in case of very large data sheets. You may of course filter and sort lines
+in spreadsheets, however you must be extra careful while doing so. Spreadsheet
+users are in risk of forgetting that their data view has been filtered what
+can lead to mistakes. For example, while calculating sums you may think you
+have 100 rows of data while in fact there are 20 rows more hidden.
 </para>
+<para>
+If you want to work on a small subset of data, e.g. to send it for others to edit, you can copy and paste it to another spreadsheet and after editing paste the changed data back to the main spreadsheet. Such "manual" editing may cause data loss or incorect calculations.
+</para>
+<para>
+To limit the <emphasis>data view</emphasis> database applications offer
+<emphasis>queries</emphasis>, <emphasis>forms</emphasis>
+and <emphasis>reports</emphasis>.
+</para>
+<para>
+A very practical way of limitting is the following extended version of
+the previously described table <guilabel>Persons</guilabel>:
+</para>
+
+<table>
+<title>Persons</title>
+<tgroup cols="6">
+<tbody>
+<row>
+<entry><emphasis>Name</emphasis></entry>
+<entry><emphasis>Surname</emphasis></entry>
+<entry><emphasis>Street</emphasis></entry>
+<entry><emphasis>House number</emphasis></entry>
+<entry><emphasis>City</emphasis></entry>
+<entry><emphasis>Income</emphasis></entry>
+</row>
+<row>
+<entry>Joan</entry>
+<entry>Smith</entry>
+<entry>Western Gate</entry>
+<entry>1</entry>
+<entry>Warsaw</entry>
+<entry>2300</entry>
+</row>
+<row>
+<entry>Adam</entry>
+<entry>Willson</entry>
+<entry>Frogs Drive</entry>
+<entry>5</entry>
+<entry>London</entry>
+<entry>1900</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>
+Let's assume that the newly introduced column <guilabel>Income</guilabel>
+contains confidential data. How can you share e.g. contact details of the
+persons with your coworkers but without <emphasis>revealing their
+income</emphasis>? It is possible if <emphasis>you share only a query and
+not the whole table</emphasis>. The query could select all columns except
+for the column <guilabel>Income</guilabel>. In database world such a query
+is often known as a <guilabel>view</guilabel>.
+</para>
+
 </sect3>
 
 <sect3 id="performance-and-capacity">
 <title>Performance and capacity</title>
 <para>
+Your computer is probably quite fast, however you will easily see that it
+doesn't help with slow, large spreadsheets. Their low efficiency is first
+of all due to lack of indexes accelertaing the process of data search
+(databases do offer them). Moreover if you use things like system clipboard,
+even copying data may become troublesome with time.
 </para>
+<para>
+Spreadsheets containing large data sets may take ages to open. Spreadsheet
+loads lots of data to the computer's memory while opening. Most of the data
+loaded are probably useless/unneccessary for you at the moment. Databases
+unlike spreadsheets load data from computer storage only when needed.
+</para>
+<para>
+In most cases you will not have to worry how the database stores its data.
+This means that unlike spreadsheets, databases do not care about:
+</para>
+<itemizedlist>
+<listitem><para>
+The sequence of lines since you can order the lines according to your needs.
+Moreover, you can view the same data in many views with different orders.
+</para></listitem>
+<listitem><para>
+The same goes for columns (fields) of the table.
+</para></listitem>
+</itemizedlist>
+
+<para>
+Together with <link linkend="data-limiting">Limiting data view</link>
+described in the previous paragraph these qualities constitute the
+advantage of databases.
+</para>
+
 </sect3>
 
 <sect3 id="convenient-data-entry">
-<title>Convenient data entry</title>
+<title>Data entry</title>
 <para>
+The latest editions of applications for creating spreadsheets enable you
+to design data-entry forms. Such forms are most useful if your data cannot
+be conveniently displayed in tabular view, e.g. if the text occupies
+too many lines or if all the columns do not fit on the screen.
+</para>
+<para>
+In this case the very way the spreadsheet works is problematic.
+Fields for data entry are placed loosely within the spreadsheet
+and very often are not secure against the user's (intentional
+or accidental) intervention.
 </para>
 </sect3>
 
 <sect3 id="reports">
 <title>Reports</title>
 <para>
+Databases enable grouping, limiting and summing up data in a form of a
+<emphasis>report</emphasis>. Spreadsheets are usually printed in a form
+of small tables without fully automatic control over page divisions and
+the layout of fields.
 </para>
 </sect3>
 
 <sect3 id="programming">
 <title>Programming</title>
 <para>
+Applications for creating databases often contain full programming languages.
+Newer spreadsheets have this capability too, however calculations come down
+to modifying the spreadsheet's fields and simple data copying, regardless of
+the relevance an integrity rules mentioned in previous paragraphs.
+</para>
+<para>
+Data processing within a spreadsheet is usually done via a graphical user's
+interface which may slow down the data processing speed. Databases are
+capable of working in background, outside of graphical interfaces.
 </para>
 </sect3>
 
 <sect3 id="multiuse">
 <title>Multiuse</title>
 <para>
+It is hard to imagine a multiuse of one spreadsheet. Even if it is technically
+possible in the case of the latest applications, it requires a lot of
+discipline, attention and knowledge from the users, and these cannot
+be guaranteed.
+</para>
+<para>
+A classical way to sharing data saved in a spreadsheet with other person is
+to send a file as a whole (usually using e-mail) or providing a spreadsheet
+file in a computer network. This way of work is ineffective for larger
+groups of people - data that could be needed in a particular time may
+be currently locked by another person.
+</para>
+<para>
+On the other hand, databases have been designed mainly with multiuser
+access in mind. Even for simplest version locking at particular table
+row's level is possible, what enables easy sharing of table data.
 </para>
 </sect3>
 
 <sect3 id="security">
 <title>Security</title>
 <para>
+Securing a spreadsheet or its particular sections with a password is only
+symbolic activity. After providing a spreadsheet file in computer network,
+every person being able to copy the file can try to break the password.
+It is sometimes not so hard as the password is stored in the same file
+as the spreadsheet.
 </para>
+<para>
+Features for edit locking or copy locking of a spreadsheet (or its part)
+is equally easy to break.
+</para>
+<para>
+Databases (except these saved in a file instead of a server) do not need
+to be available in a single file. You're accessing them using a computer
+network, usually by providing a user name and a password. You are gaining
+access only to these areas (tables, forms or even selected rows and columns)
+whose were assigned to you by setting appropriate access rights.
+</para>
+<para>
+Access rights can affect ability of data editing or only data reading.
+If any data is not avaliable to you, it will not be even sent to your
+computer, so there is no possibility of making a copy of the data in such
+easy way as in case of spreadsheet files.
+</para>
+
 </sect3>
-
 </sect2>
-
 </sect1>
 
 <sect1 id="database-design">
