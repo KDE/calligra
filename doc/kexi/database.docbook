@@ -514,7 +514,73 @@ to using a database with form views.
 <sect1 id="database-software">
 <title>Database creation software</title>
 <para>
+So far you have learnt the general characteristics of databases without
+going into much detail about specific applications for designing them.
 </para>
+<para>
+The first databases were built together with large mainframe computers
+in the 60s, e.g. IBM System/360. Those were not the days of PCs,
+therefore these databases required a highly specialized personnel.
+Although the old computers' hardware was unreliable, they were immeasurably
+slower and had less storage capacity, one feature of databases still remains
+most attractive: the data access by many users through network.
+</para>
+<para>
+In the 70s scientists formed the theory of relational databases
+(terms like: <firstterm>table</firstterm>, <firstterm>record</firstterm>,
+<firstterm>column (field)</firstterm> and <firstterm>relationality</firstterm>
+and many others).
+On the basis of this theory IBM DB2 and Oracle databases were created,
+which have been developed and used till today. In the late 70s the first
+PCs were constructed. Their users could (gradually) utilize many types of
+applications, including those for database construction.
+</para>
+<para>When it comes to large databases in companies, the situation
+hasn't changed:
+they still require powerful computers or computer complexes called
+<firstterm>clusters</firstterm>. This goes, however, beyond the topic
+of this manual.
+</para>
+<para>
+In the area of "accessible" databases with graphic user interface
+for PCs you can choose from the following:
+</para>
+
+<itemizedlist>
+<listitem><para>
+<ulink url="http://www.dbase.com/">DBase</ulink>
+- a tool for databases operation for DOS popular in the 80s. Files in DBase format 
+are still used in some specific cases due to their simplicity.
+</para></listitem>
+<listitem><para>
+<ulink url="http://msdn.microsoft.com/vfoxpro/productinfo/overview/">FoxPro</ulink>
+- an application similar to DBase (early 90s). After being taken over by 
+Microsoft, graphic user interfaces were introduced and therefore it is 
+used for creating databases on PCs. This product is still offered, though
+seems a bit obsolete.
+</para></listitem>
+<listitem><para>
+<ulink url="http://office.microsoft.com/access/">Microsoft Access</ulink>
+- an application for databases (data and graphic interface design) with many
+simplifications, therefore suitable for beginners, designed in the late 80s,
+based on 16-Bit Architecture. Product offered and widely used till today, especially
+by small companies, where efficiency and multiuser requirements are not very demanding.
+</para></listitem>
+<listitem><para>
+<ulink url="http://www.filemaker.com/">FileMaker</ulink>
+- popular application similar to MS Access in simplicity, operating on Windows
+and Macintosh platforms, offered since 1985.
+</para></listitem>
+<listitem><para>
+<ulink url="http://www.kexi.pl/">&kexi;</ulink>
+- a multiplatform application (Unix/Linux, Windows, Mac OS X) designed in 2003, 
+developed according to OpenSource principles, part of the global
+<ulink url="http://www.kde.org/">K Desktop Environment</ulink> project,
+i.e. graphic environment for Unix/Linux systems. A significant contributor
+to &kexi;'s development is the OpenOffice Poland company.
+</para></listitem>
+</itemizedlist>
+
 </sect1>
 
 </appendix>
