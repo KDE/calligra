@@ -32,6 +32,7 @@ TestPluginObject::TestPluginObject(const QString& name)
     this->addFunction("internalfunc1",
         new Kross::Api::ProxyFunction <
             TestPluginObject,
+            uint (TestPluginObject::*)(uint),
             Kross::Api::ProxyValue< Kross::Api::Variant, uint >, // returnvalue
             Kross::Api::ProxyValue< Kross::Api::Variant, uint > // first argument
             > ( this, &TestPluginObject::internalfunc1 )
@@ -159,6 +160,7 @@ TestPluginModule::TestPluginModule(const QString& name)
     proxyclass->addFunction("func1",
         new Kross::Api::ProxyFunction <
             TestObject,
+            uint (TestObject::*)(uint),
             Kross::Api::ProxyValue< Kross::Api::Variant, uint >, // returnvalue
             Kross::Api::ProxyValue< Kross::Api::Variant, uint > // first argument
             > ( m_testobject, &TestObject::func1 )
@@ -166,6 +168,7 @@ TestPluginModule::TestPluginModule(const QString& name)
     proxyclass->addFunction("func2",
         new Kross::Api::ProxyFunction <
             TestObject,
+            void (TestObject::*)(QString, int),
             Kross::Api::ProxyValue< Kross::Api::Variant, void >, // returnvalue
             Kross::Api::ProxyValue< Kross::Api::Variant, QString >, // first argument
             Kross::Api::ProxyValue< Kross::Api::Variant, int > // second argument
@@ -174,6 +177,7 @@ TestPluginModule::TestPluginModule(const QString& name)
     proxyclass->addFunction("func3",
         new Kross::Api::ProxyFunction<
             TestObject,
+            QString (TestObject::*)(QString, int),
             Kross::Api::ProxyValue< Kross::Api::Variant, QString >, // returnvalue
             Kross::Api::ProxyValue< Kross::Api::Variant, QString >, // first argument
             Kross::Api::ProxyValue< Kross::Api::Variant, int > // second argument
@@ -181,11 +185,11 @@ TestPluginModule::TestPluginModule(const QString& name)
     proxyclass->addFunction("func4",
         new Kross::Api::ProxyFunction<
             TestObject,
+            const QString& (TestObject::*)(const QString&, int) const,
             Kross::Api::ProxyValue< Kross::Api::Variant, const QString& >, // returnvalue
             Kross::Api::ProxyValue< Kross::Api::Variant, const QString& >, // first argument
             Kross::Api::ProxyValue< Kross::Api::Variant, int > // second argument
             > ( m_testobject, &TestObject::func4) );
-
 }
 
 TestPluginModule::~TestPluginModule()

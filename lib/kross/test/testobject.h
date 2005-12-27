@@ -39,7 +39,7 @@ class TestObject : public QObject
         uint func1(uint);
         void func2(QString, int);
         QString func3(QString, int);
-        const QString& func4(const QString&, int) /*const*/;
+        const QString& func4(const QString&, int) const;
 
         //QString m_prop;
         //QString testProperty() const { return m_prop; }

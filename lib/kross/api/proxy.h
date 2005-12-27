@@ -63,7 +63,8 @@ namespace Kross { namespace Api {
      * wrappers and b) is more typesafe cause the connection to the
      * C/C++ method is done on compiletime.
      */
-    template< class INSTANCE,
+    template< class INSTANCE, // the objectinstance
+              typename METHOD, // the method-signature
               class RET  = ProxyValue<Kross::Api::Object,void>, // returnvalue
               class ARG1 = ProxyValue<Kross::Api::Object,void>, // first argument
               class ARG2 = ProxyValue<Kross::Api::Object,void>, // second argument
@@ -72,12 +73,10 @@ namespace Kross { namespace Api {
     class ProxyFunction : public Function
     {
         private:
-            /// The wrapped method.
-            typedef typename RET::type (INSTANCE::*Method)( typename ARG1::type, typename ARG2::type, typename ARG3::type, typename ARG4::type );
             /// Pointer to the objectinstance which method should be called.
             INSTANCE* m_instance;
             /// Pointer to the method which should be called.
-            Method m_method;
+            const METHOD m_method;
 
             /**
              * Internal used struct that does the execution of the wrapped method.
@@ -111,7 +110,7 @@ namespace Kross { namespace Api {
              *        belongs to.
              * \param method The method-pointer.
              */
-            ProxyFunction(INSTANCE* instance, Method method)
+            ProxyFunction(INSTANCE* instance, const METHOD& method)
                 : m_instance(instance), m_method(method) {}
 
             /**
@@ -136,13 +135,12 @@ namespace Kross { namespace Api {
     /**
      * Template-specialization of the \a ProxyFunction above with 3 arguments.
      */
-    template<class INSTANCE, class RET, class ARG1, class ARG2, class ARG3>
-    class ProxyFunction<INSTANCE, RET, ARG1, ARG2, ARG3 > : public Function
+    template<class INSTANCE, typename METHOD, class RET, class ARG1, class ARG2, class ARG3>
+    class ProxyFunction<INSTANCE, METHOD, RET, ARG1, ARG2, ARG3 > : public Function
     {
         private:
-            typedef typename RET::type (INSTANCE::*Method)( typename ARG1::type, typename ARG2::type, typename ARG3::type );
             INSTANCE* m_instance;
-            Method m_method;
+            const METHOD m_method;
 
             template<class PROXYFUNC, typename RETURNRYPE>
             struct ProxyFunctionCaller {
@@ -160,7 +158,7 @@ namespace Kross { namespace Api {
             };
 
         public:
-            ProxyFunction(INSTANCE* instance, Method method)
+            ProxyFunction(INSTANCE* instance, const METHOD& method)
                 : m_instance(instance), m_method(method) {}
             Object::Ptr call(List::Ptr args) {
                 return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this,
@@ -174,13 +172,12 @@ namespace Kross { namespace Api {
     /**
      * Template-specialization of the \a ProxyFunction above with 2 arguments.
      */
-    template<class INSTANCE, class RET, class ARG1, class ARG2>
-    class ProxyFunction<INSTANCE, RET, ARG1, ARG2 > : public Function
+    template<class INSTANCE, typename METHOD, class RET, class ARG1, class ARG2>
+    class ProxyFunction<INSTANCE, METHOD, RET, ARG1, ARG2 > : public Function
     {
         private:
-            typedef typename RET::type (INSTANCE::*Method)( typename ARG1::type, typename ARG2::type );
             INSTANCE* m_instance;
-            Method m_method;
+            const METHOD m_method;
 
             template<class PROXYFUNC, typename RETURNRYPE>
             struct ProxyFunctionCaller {
@@ -198,7 +195,7 @@ namespace Kross { namespace Api {
             };
 
         public:
-            ProxyFunction(INSTANCE* instance, Method method)
+            ProxyFunction(INSTANCE* instance, const METHOD& method)
                 : m_instance(instance), m_method(method) {}
             Object::Ptr call(List::Ptr args) {
                 return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this,
@@ -211,13 +208,12 @@ namespace Kross { namespace Api {
     /**
      * Template-specialization of the \a ProxyFunction above with one argument.
      */
-    template<class INSTANCE, class RET, class ARG1>
-    class ProxyFunction<INSTANCE, RET, ARG1 > : public Function
+    template<class INSTANCE, typename METHOD, class RET, class ARG1>
+    class ProxyFunction<INSTANCE, METHOD, RET, ARG1 > : public Function
     {
         private:
-            typedef typename RET::type (INSTANCE::*Method)( typename ARG1::type );
             INSTANCE* m_instance;
-            Method m_method;
+            const METHOD m_method;
 
             template<class PROXYFUNC, typename RETURNRYPE>
             struct ProxyFunctionCaller {
@@ -235,7 +231,7 @@ namespace Kross { namespace Api {
             };
 
         public:
-            ProxyFunction(INSTANCE* instance, Method method)
+            ProxyFunction(INSTANCE* instance, const METHOD& method)
                 : m_instance(instance), m_method(method) {}
             Object::Ptr call(List::Ptr args) {
                 return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this,
@@ -247,13 +243,12 @@ namespace Kross { namespace Api {
     /**
      * Template-specialization of the \a ProxyFunction above with no arguments.
      */
-    template<class INSTANCE, class RET>
-    class ProxyFunction<INSTANCE, RET > : public Function
+    template<class INSTANCE, typename METHOD, class RET>
+    class ProxyFunction<INSTANCE, METHOD, RET > : public Function
     {
         private:
-            typedef typename RET::type (INSTANCE::*Method)();
             INSTANCE* m_instance;
-            Method m_method;
+            const METHOD m_method;
 
             template<class PROXYFUNC, typename RETURNRYPE>
             struct ProxyFunctionCaller {
@@ -271,9 +266,9 @@ namespace Kross { namespace Api {
             };
 
         public:
-            ProxyFunction(INSTANCE* instance, Method method)
+            ProxyFunction(INSTANCE* instance, const METHOD& method)
                 : m_instance(instance), m_method(method) {}
-            Object::Ptr call(List::Ptr args) {
+            Object::Ptr call(List::Ptr) {
                 return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this);
             }
     };

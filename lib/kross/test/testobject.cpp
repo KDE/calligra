@@ -68,7 +68,7 @@ QString TestObject::func3(QString s, int i)
     return s;
 }
 
-const QString& TestObject::func4(const QString& s, int i)
+const QString& TestObject::func4(const QString& s, int i) const
 {
     kdDebug() << "CALLED => TestObject::func4 s=" << s << " i=" << i << endl;
     return s;
