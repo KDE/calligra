@@ -111,10 +111,7 @@ public:
     /// return the effective pageLayout of @p pageNumber combining the default and the page specific ones
     const KoPageLayout pageLayout(int pageNumber) const;
 
-    /// Set the page size for the whole document changing all pages that don't have a specific size set.
-    void setDefaultPageSize(double width, double height, KoFormat format);
-    /// Set the margins for the whole document changing all pages that don't have specific margins set.
-    void setDefaultPageMargins(double top, double left, double bottom, double right);
+    void setDefaultPage(const KoPageLayout &layout);
 
     /**
      * Returns the argument point, with altered coordinats if the point happens to be

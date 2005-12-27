@@ -188,17 +188,8 @@ void KWPageManager::removePage(KWPage *page) {
     m_pageList.remove(page);
 }
 
-void KWPageManager::setDefaultPageSize(double width, double height, KoFormat format) {
-    m_defaultPageLayout.ptWidth = width;
-    m_defaultPageLayout.ptHeight = height;
-    m_defaultPageLayout.format = format;
-}
-
-void KWPageManager::setDefaultPageMargins(double top, double left, double bottom, double right) {
-    m_defaultPageLayout.ptTop = top;
-    m_defaultPageLayout.ptLeft = left;
-    m_defaultPageLayout.ptBottom = bottom;
-    m_defaultPageLayout.ptRight = right;
+void KWPageManager::setDefaultPage(const KoPageLayout &layout) {
+    m_defaultPageLayout = layout;
 }
 
 KoPoint KWPageManager::clipToDocument(const KoPoint &point) {

@@ -622,25 +622,20 @@ KoPageLayout KWDocument::pageLayout(int pageNumber /* = 0 */) const
 
 void KWDocument::setPageLayout( const KoPageLayout& layout, const KoColumns& cl, const KoKWHeaderFooter& hf, bool updateViews )
 {
+    m_pageLayout = layout;
     if ( m_processingType == WP ) {
         //kdDebug() << "KWDocument::setPageLayout WP" << endl;
-        m_pageLayout = layout;
-        pageManager()->setDefaultPageSize(layout.ptWidth, layout.ptHeight, layout.format);
-        pageManager()->setDefaultPageMargins(layout.ptTop, layout.ptLeft, layout.ptBottom, layout.ptRight);
         m_pageColumns = cl;
-        m_pageHeaderFooter = hf;
     }
     else {
         //kdDebug() << "KWDocument::setPageLayout NON-WP" << endl;
-        pageManager()->setDefaultPageSize(layout.ptWidth, layout.ptHeight, layout.format);
-        pageManager()->setDefaultPageMargins(0, 0, 0, 0);
-        m_pageLayout = layout;
         m_pageLayout.ptLeft = 0;
         m_pageLayout.ptRight = 0;
         m_pageLayout.ptTop = 0;
         m_pageLayout.ptBottom = 0;
-        m_pageHeaderFooter = hf;
     }
+    pageManager()->setDefaultPage(m_pageLayout);
+    m_pageHeaderFooter = hf;
 
     // pages have a different size -> update framesInPage
     // TODO: it would be better to move stuff so that text boxes remain in the same page...
@@ -663,8 +658,8 @@ void KWDocument::setPageLayout( const KoPageLayout& layout, const KoColumns& cl,
 
 double KWDocument::ptColumnWidth() const
 {
-    KoPageLayout pl = pageManager()->pageLayout(pageManager()->startPage());
-    return ( pl.ptWidth - pl.ptLeft - pl.ptRight -
+    KWPage *page = pageManager()->page(pageManager()->startPage());
+    return ( page->width() - page->leftMargin() - page->rightMargin() -
              ptColumnSpacing() * ( m_pageColumns.columns - 1 ) )
         / m_pageColumns.columns;
 }
@@ -1106,9 +1101,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
                 setErrorMessage( i18n( "Invalid document. Paper size: %1x%2" ).arg( m_pageLayout.ptWidth ).arg( m_pageLayout.ptHeight ) );
             return false;
         }
-        pageManager()->setDefaultPageSize(m_pageLayout.ptWidth, m_pageLayout.ptHeight, m_pageLayout.format);
-        pageManager()->setDefaultPageMargins(m_pageLayout.ptTop, m_pageLayout.ptLeft,
-                m_pageLayout.ptBottom, m_pageLayout.ptRight);
+        pageManager()->setDefaultPage(m_pageLayout);
 
         const QDomElement properties( KoDom::namedItemNS( *masterPageStyle, KoXmlNS::style, "page-layout-properties" ) );
         const QDomElement footnoteSep = KoDom::namedItemNS( properties, KoXmlNS::style, "footnote-sep" );
@@ -1183,9 +1176,7 @@ bool KWDocument::loadOasis( const QDomDocument& doc, KoOasisStyles& oasisStyles,
         m_headerVisible = false;
         m_footerVisible = false;
         m_pageLayout = KoPageLayout::standardLayout();
-        pageManager()->setDefaultPageSize(m_pageLayout.ptWidth, m_pageLayout.ptHeight, m_pageLayout.format);
-        pageManager()->setDefaultPageMargins(m_pageLayout.ptTop, m_pageLayout.ptLeft,
-                m_pageLayout.ptBottom, m_pageLayout.ptRight);
+        pageManager()->setDefaultPage(m_pageLayout);
     }
 
     createLoadingInfo();
@@ -1760,9 +1751,9 @@ void KWDocument::endOfLoading()
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Header" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_FIRST_HEADER );
-        KoPageLayout pl = pageManager()->pageLayout(pageManager()->startPage());
-        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptTop, pl.ptWidth - pl.ptLeft -
-                pl.ptRight, 20 );
+        KWPage *page = pageManager()->page(startPage());
+        KWFrame *frame = new KWFrame(fs, page->leftMargin(), page->topMargin(),
+                page->width() - page->leftMargin() - page->rightMargin(), 20 );
         //kdDebug(32001) << "KWDocument::loadXML KWFrame created " << frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
@@ -1774,9 +1765,9 @@ void KWDocument::endOfLoading()
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Header" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_HEADER );
-        KoPageLayout pl = pageManager()->pageLayout(pageManager()->startPage()+2);
-        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptTop, pl.ptWidth - pl.ptLeft -
-                pl.ptRight, 20 );
+        KWPage *page = pageManager()->page(QMIN(startPage()+2, lastPage()));
+        KWFrame *frame = new KWFrame(fs, page->leftMargin(), page->topMargin(),
+                page->width() - page->leftMargin() - page->rightMargin(), 20 );
         //kdDebug(32001) << "KWDocument::loadXML KWFrame created " << *frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
@@ -1788,9 +1779,9 @@ void KWDocument::endOfLoading()
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Header" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_HEADER );
-        KoPageLayout pl = pageManager()->pageLayout(pageManager()->startPage()+1);
-        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptTop, pl.ptWidth - pl.ptLeft -
-                pl.ptRight, 20 );
+        KWPage *page = pageManager()->page(QMIN(startPage()+1, lastPage()));
+        KWFrame *frame = new KWFrame(fs, page->leftMargin(), page->topMargin(), page->width() -
+                page->leftMargin() - page->rightMargin(), 20 );
         //kdDebug(32001) << "KWDocument::loadXML KWFrame created " << *frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
@@ -1802,9 +1793,9 @@ void KWDocument::endOfLoading()
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "First Page Footer" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_FIRST_FOOTER );
-        KoPageLayout pl = pageManager()->pageLayout(pageManager()->startPage());
-        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptHeight - pl.ptTop - 20,
-                pl.ptWidth - pl.ptLeft - pl.ptRight, 20 );
+        KWPage *page = pageManager()->page(pageManager()->startPage());
+        KWFrame *frame = new KWFrame(fs, page->leftMargin(), page->height() - page->topMargin()- 20,
+                page->width() - page->leftMargin() - page->rightMargin(), 20 );
         //kdDebug(32001) << "KWDocument::loadXML KWFrame created " << *frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
@@ -1816,9 +1807,9 @@ void KWDocument::endOfLoading()
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Odd Pages Footer" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_ODD_FOOTER );
-        KoPageLayout pl = pageManager()->pageLayout(pageManager()->startPage()+2);
-        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptHeight - pl.ptTop - 20,
-                pl.ptWidth - pl.ptLeft - pl.ptRight, 20 );
+        KWPage *page = pageManager()->page(QMIN(startPage()+2, lastPage()));
+        KWFrame *frame = new KWFrame(fs, page->leftMargin(), page->height()- page->topMargin() - 20,
+                page->width() - page->leftMargin() - page->rightMargin(), 20 );
         //kdDebug(32001) << "KWDocument::loadXML KWFrame created " << *frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
@@ -1830,9 +1821,9 @@ void KWDocument::endOfLoading()
         KWTextFrameSet *fs = new KWTextFrameSet( this, i18n( "Even Pages Footer" ) );
         //kdDebug(32001) << "KWDocument::loadXML KWTextFrameSet created " << fs << endl;
         fs->setFrameSetInfo( KWFrameSet::FI_EVEN_FOOTER );
-        KoPageLayout pl = pageManager()->pageLayout(pageManager()->startPage()+1);
-        KWFrame *frame = new KWFrame(fs, pl.ptLeft, pl.ptHeight - pl.ptTop - 20,
-                pl.ptWidth - pl.ptLeft - pl.ptRight, 20 );
+        KWPage *page = pageManager()->page(QMIN(startPage()+1, lastPage()));
+        KWFrame *frame = new KWFrame(fs, page->leftMargin(), page->height() - page->topMargin()- 20,
+                page->width() - page->leftMargin() - page->rightMargin(), 20 );
         //kdDebug(32001) << "KWDocument::loadXML KWFrame created " << *frame << endl;
         frame->setFrameBehavior( KWFrame::AutoExtendFrame );
         frame->setNewFrameBehavior( KWFrame::Copy );
@@ -1872,9 +1863,10 @@ void KWDocument::endOfLoading()
                 }
             }
             if(fs->frameCount() == 0) {
-                KWFrame *frame = new KWFrame(fs, m_pageLayout.ptLeft, m_pageLayout.ptTop,
-                        m_pageLayout.ptWidth - m_pageLayout.ptLeft - m_pageLayout.ptRight,
-                        m_pageLayout.ptHeight - m_pageLayout.ptTop - m_pageLayout.ptBottom);
+                KWPage *page = pageManager()->page(startPage());
+                KWFrame *frame = new KWFrame(fs, page->leftMargin(), page->topMargin(),
+                        page->width() - page->leftMargin() - page->rightMargin(),
+                        page->height() - page->topMargin() - page->bottomMargin());
                 //kdDebug(32001) << "KWDocument::loadXML main-KWFrame created " << *frame << endl;
                 fs->addFrame( frame );
             }

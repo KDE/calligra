@@ -30,6 +30,8 @@ KWPage::KWPage(KWPageManager *parent, int pageNum) {
     m_pageLayout.ptRight = -1.0;
     m_pageLayout.ptBottom = -1.0;
     m_pageLayout.ptTop = -1.0;
+    m_pageLayout.ptPageEdge = -1.0;
+    m_pageLayout.ptBindingSide = -1.0;
     m_pageSide = pageNum%2==0 ? Left : Right;
 }
 
@@ -57,11 +59,11 @@ void KWPage::setTopMargin(const double &t) {
 void KWPage::setBottomMargin(const double &b) {
     m_pageLayout.ptBottom = b == m_parent->m_defaultPageLayout.ptBottom ? -1 : b;
 }
-void KWPage::setLeftMargin(const double &l) {
-    m_pageLayout.ptLeft = l == m_parent->m_defaultPageLayout.ptLeft ? -1 : l;
+void KWPage::setPageEdgeMargin(const double &m) {
+    m_pageLayout.ptPageEdge = m == m_parent->m_defaultPageLayout.ptPageEdge ? -1 : m;
 }
-void KWPage::setRightMargin(const double &r) {
-    m_pageLayout.ptRight = r == m_parent->m_defaultPageLayout.ptRight ? -1 : r;
+void KWPage::setMarginClosestBinding(const double &m) {
+    m_pageLayout.ptBindingSide = m == m_parent->m_defaultPageLayout.ptBindingSide ? -1 : m;
 }
 
 double KWPage::topMargin() const {
@@ -75,14 +77,39 @@ double KWPage::bottomMargin() const {
     return m_parent->m_defaultPageLayout.ptBottom;
 }
 double KWPage::leftMargin() const {
+    // first try fallback right/left
     if(m_pageLayout.ptLeft != -1)
         return m_pageLayout.ptLeft;
-    return m_parent->m_defaultPageLayout.ptLeft;
+    if(m_parent->m_defaultPageLayout.ptLeft != -1)
+        return m_parent->m_defaultPageLayout.ptLeft;
+
+    // not set? then use the edges based one
+    if(m_pageSide == Right)
+        return pageEdgeMargin();
+    else
+        return marginClosestBinding();
 }
 double KWPage::rightMargin() const {
+    // first try fallback right/left
     if(m_pageLayout.ptRight != -1)
         return m_pageLayout.ptRight;
-    return m_parent->m_defaultPageLayout.ptRight;
+    if(m_parent->m_defaultPageLayout.ptRight != -1)
+        return m_parent->m_defaultPageLayout.ptRight;
+    // not set? then use the edges based one
+    if(m_pageSide == Left)
+        return pageEdgeMargin();
+    else
+        return marginClosestBinding();
+}
+double KWPage::pageEdgeMargin() const {
+    if(m_pageLayout.ptPageEdge != -1)
+        return m_pageLayout.ptPageEdge;
+    return m_parent->m_defaultPageLayout.ptPageEdge;
+}
+double KWPage::marginClosestBinding() const {
+    if(m_pageLayout.ptBottom != -1)
+        return m_pageLayout.ptBindingSide;
+    return m_parent->m_defaultPageLayout.ptBindingSide;
 }
 
 double KWPage::offsetInDocument() const { // the y coordinate

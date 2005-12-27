@@ -587,6 +587,8 @@ void KWViewModeText::setPageLayout( KoRuler* hRuler, KoRuler* vRuler, const KoPa
     layout.ptRight = 0;
     layout.ptTop = 0;
     layout.ptBottom = 0;
+    layout.ptBindingSide = 0;
+    layout.ptPageEdge = 0;
     hRuler->setPageLayout( layout );
     vRuler->setPageLayout( layout );
 }

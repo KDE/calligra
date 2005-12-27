@@ -176,6 +176,8 @@ struct KoPageLayout
     double ptTop;
     /** Bottom margin in pt */
     double ptBottom;
+    double ptPageEdge;
+    double ptBindingSide;
 
     bool operator==( const KoPageLayout& l ) const {
        return ( ptWidth == l.ptWidth &&
@@ -183,7 +185,9 @@ struct KoPageLayout
                 ptLeft == l.ptLeft &&
                 ptRight == l.ptRight &&
                 ptTop == l.ptTop &&
-                ptBottom == l.ptBottom );
+                ptBottom == l.ptBottom &&
+                ptPageEdge == l.ptPageEdge &&
+                ptBindingSide == l.ptBindingSide);
     }
     bool operator!=( const KoPageLayout& l ) const {
         return !( (*this) == l );

@@ -40,10 +40,10 @@ public:
     void setTopMargin(const double &x);
     /// set height of the bottom margin in pt
     void setBottomMargin(const double &y);
-    /// set width of the left margin in pt
-    void setLeftMargin(const double &x);
-    /// set width of the right margin in pt
-    void setRightMargin(const double &y);
+    /// set width of the margin that is the closest to the page edge, i.e. left for even pages
+    void setPageEdgeMargin(const double &x);
+    /// set width of the margin that is the closest to the binding, i.e. right for even pages
+    void setMarginClosestBinding(const double &y);
 
     /// return the width of this page (in pt)
     double width() const;
@@ -57,6 +57,10 @@ public:
     double leftMargin() const;
     /// return the width of the margin at left (in pt);
     double rightMargin() const;
+    /// return width of the margin that is the closest to the page edge, i.e. left for even pages
+    double pageEdgeMargin() const;
+    /// return width of the margin that is the closest to the binding, i.e. right for even pages
+    double marginClosestBinding() const;
 
     // the y coordinate
     /**
