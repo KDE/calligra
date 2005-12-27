@@ -5,14 +5,77 @@
 <appendix id="database">
 <title>Introduction to databases</title>
 
-<!--
 <sect1 id="what-is-a-database">
 <title>What is a database?</title>
 <para>
-You can define a database as a collection of data on one topic. It is organised in a way allowing to easily browse the information, make changes or add new items.
+You can define a database as a collection of data on one topic.
+It is organised in a way allowing to easily browse the information,
+make changes or add new items.
+</para>
+<para>
+Look at this diagram for one of the above examples: a simple phone book.
+</para>
+<screenshot>
+  <screeninfo>A diagram of a phone number database</screeninfo>
+    <mediaobject>
+        <imageobject>
+            <imagedata fileref="contact-example.png" format="PNG"/>
+        </imageobject>
+        <textobject>
+            <phrase>A diagram of a phone number database</phrase>
+        </textobject>
+    </mediaobject>
+</screenshot>
+<para>
+The above picture shows a set of two contacts each of which is
+presented on a separate card. It appears that such a card can
+constitute a single line in a table:
+</para>
+
+<table>
+<title>Contacts</title>
+<tgroup cols="2">
+<tbody>
+<row>
+<entry><emphasis>Name</emphasis></entry>
+<entry><emphasis>Tel No.</emphasis></entry>
+</row>
+<row>
+<entry>Joan</entry>
+<entry>699 23 43 12</entry>
+</row>
+<row>
+<entry>Adam</entry>
+<entry>711 19 77 21</entry>
+</row>
+</tbody>
+</tgroup>
+</table>
+
+<para>
+<emphasis>Terms and definitions</emphasis>:
+A single data which constitutes a part of a greater collection can be called a
+<firstterm>line</firstterm> or more professionally a
+<firstterm>record</firstterm>.
+The collection is narmally called a <firstterm>table</firstterm>.
+Moreover, the most natural name for the table is one describing the data it
+offers/stores which is <guilabel>Contacts</guilabel>.
+Furthermore, each line in the table consists of <firstterm>columns</firstterm>
+often also called <firstterm>fields</firstterm>. In the table
+<guilabel>Contacts</guilabel> there are two columns (fields):
+<guilabel>Name</guilabel> and <guilabel>Tel No.</guilabel>.
+</para>
+<para>
+For simple uses a single table can make up a <firstterm>database</firstterm>.
+Many people consider these two equivalent.
+As you will see, for real databases we usually need more than one table.
+</para>
+<para>
+To sum up, you have already got a simple database with one table
+<guilabel>Contacts</guilabel>.
 </para>
 </sect1>
--->
+
 
 <sect1 id="database-and-spreadsheet">
 <title>Database and spreadsheet</title>
