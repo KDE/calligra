@@ -780,7 +780,7 @@ void KoTextDocument::removeSelectedText( int id, KoTextCursor *cursor )
     while ( p && p != c2.parag() ) {
 	tmp = p->next();
 	dy -= p->rect().height();
-        emit paragraphDeleted( p );
+        //emit paragraphDeleted( p ); // done by KoTextParag dtor already
 	delete p;
 	p = tmp;
     }

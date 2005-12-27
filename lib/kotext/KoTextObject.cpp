@@ -150,6 +150,7 @@ void KoTextObject::slotParagraphCreated(KoTextParag * parag)
 void KoTextObject::slotParagraphDeleted(KoTextParag * /*parag*/)
 {
     // ### TODO: remove from kwbgspellcheck
+    // not needed, since KoTextIterator takes care of that.
 }
 
 int KoTextObject::docFontSize( KoTextFormat * format ) const

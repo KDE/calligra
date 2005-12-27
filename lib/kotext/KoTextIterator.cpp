@@ -183,7 +183,7 @@ void KoTextIterator::slotParagraphModified( KoTextParag* parag, int modifyType, 
 void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
 {
 #ifdef DEBUG_ITERATOR
-    kdDebug(32500) << "slotParagraphDeleted " << parag << endl;
+    kdDebug(32500) << "KoTextIterator::slotParagraphDeleted " << parag << " (" << parag->paragId() << ")" << endl;
 #endif
     // Note that the direction doesn't matter here. A begin/end
     // at end of parag N or at beginning of parag N+1 is the same,
@@ -214,7 +214,8 @@ void KoTextIterator::slotParagraphDeleted( KoTextParag* parag )
         emit currentParagraphDeleted();
     }
 #ifdef DEBUG_ITERATOR
-    kdDebug(32500) << "firstParag:" << m_firstParag << " (" << m_firstParag->paragId() << ") -  lastParag:" << m_lastParag << " (" << m_lastParag->paragId() << ") m_currentParag:" << m_currentParag << " (" << m_currentParag->paragId() << ")" << endl;
+    if ( m_currentParag )
+        kdDebug(32500) << "KoTextIterator: firstParag:" << m_firstParag << " (" << m_firstParag->paragId() << ") -  lastParag:" << m_lastParag << " (" << m_lastParag->paragId() << ") m_currentParag:" << m_currentParag << " (" << m_currentParag->paragId() << ")" << endl;
 #endif
 }
 
@@ -243,8 +244,11 @@ void KoTextIterator::operator++()
         nextTextObject();
     }
 #ifdef DEBUG_ITERATOR
-    kdDebug(32500) << "KoTextIterator++ (" << *m_currentTextObj << "," <<
-        (m_currentParag ? m_currentParag->paragId() : 0) << ")" << endl;
+    if ( m_currentParag )
+        kdDebug(32500) << "KoTextIterator++ (" << *m_currentTextObj << "," <<
+            m_currentParag->paragId() << ")" << endl;
+    else
+        kdDebug(32500) << "KoTextIterator++ (at end)" << endl;
 #endif
 }
 
@@ -271,7 +275,8 @@ void KoTextIterator::nextTextObject()
     // loop in case this new textobject is not visible
     while ( m_currentParag && !(*m_currentTextObj)->isVisible() );
 #ifdef DEBUG_ITERATOR
-    kdDebug(32500) << k_funcinfo << " m_currentTextObj=" << (*m_currentTextObj) << endl;
+    if ( m_currentParag )
+        kdDebug(32500) << k_funcinfo << " m_currentTextObj=" << (*m_currentTextObj) << endl;
 #endif
 }
 

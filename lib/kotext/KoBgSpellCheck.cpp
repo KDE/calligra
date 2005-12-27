@@ -251,8 +251,10 @@ void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModif
 void KoBgSpellCheck::slotParagraphDeleted( KoTextParag* parag )
 {
     d->paragCache.take( parag );
-    if ( parag == d->backSpeller->currentParag() )
-        d->backSpeller->slotCurrentParagraphDeleted();
+
+    // don't do it here, let KoTextIterator do that after adjusting itself better...
+    //if ( parag == d->backSpeller->currentParag() )
+    //    d->backSpeller->slotCurrentParagraphDeleted();
 }
 
 void KoBgSpellCheck::slotClearPara()
