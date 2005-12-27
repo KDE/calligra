@@ -29,6 +29,7 @@
 #include <kmessagebox.h>
 #include <kfiledialog.h>
 #include <klocale.h>
+#include <kurl.h>
 #include <kdebug.h>
 
 using namespace Kross::Api;
@@ -196,7 +197,7 @@ bool ScriptGUIClient::executeScriptFile(const QString& file)
 {
     kdDebug() << QString("Kross::Api::ScriptGUIClient::executeScriptFile() file='%1'").arg(file) << endl;
 
-    ScriptAction* action = new ScriptAction( file.latin1() );
+    ScriptAction* action = new ScriptAction( file.latin1(), KURL(file).fileName() );
     action->setFile(file);
     d->executedscriptactions.append(action);
 

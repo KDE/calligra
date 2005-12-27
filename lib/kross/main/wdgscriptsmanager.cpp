@@ -21,7 +21,7 @@
 #include <klistview.h>
 #include <klocale.h>
 #include <ktoolbar.h>
-
+#include <kiconloader.h>
 
 #include "scriptguiclient.h"
 #include "scriptaction.h"
@@ -41,11 +41,11 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     : WdgScriptsManagerBase(parent, name, fl), d(new WdgScriptsManagerPrivate)
 {
     d->m_scripguiclient = scr;
-    scriptsList->addColumn("Name");
-//     scriptsList->addColumn("Filename");
-    
+    scriptsList->addColumn(i18n("Text"));
+    scriptsList->addColumn(i18n("Name"));
+
     fillScriptsList();
-    
+
     toolBar->insertButton("fileopen",0, true, i18n("Load script"));
     connect((QObject*)toolBar->getButton(0),SIGNAL(clicked()), this, SLOT(slotLoadScript()));
     toolBar->insertButton("exec",0, true, i18n("Execute script"));
@@ -77,7 +77,19 @@ void WdgScriptsManager::fillScriptsList()
 void WdgScriptsManager::fillScriptsList(QListViewItem* item, ScriptAction::List list)
 {
     for (ScriptAction::List::iterator it = list.begin(); it !=  list.end(); ++it) {
-        new QListViewItem(item, (*it)->getName() );
+        QListViewItem* i = new QListViewItem(item, (*it)->text(), (*it)->getName() );
+
+        QPixmap pm;
+        if((*it)->hasIcon()) {
+            KIconLoader* icons = KGlobal::iconLoader();
+            pm = icons->loadIconSet((*it)->icon(), KIcon::Small).pixmap(QIconSet::Small, QIconSet::Active);
+        }
+        else {
+            pm = (*it)->iconSet(KIcon::Small, 16).pixmap(QIconSet::Small, QIconSet::Active);
+        }
+        if(! pm.isNull()) {
+            i->setPixmap(0, pm); // display the icon
+        }
     }
 }
 
@@ -90,16 +102,16 @@ void WdgScriptsManager::slotLoadScript()
 void WdgScriptsManager::slotExecuteScript()
 {
     QListViewItem * current = scriptsList->currentItem ();
-    if(current !=0 && current->text(0) != "")
+    if(current !=0 && current->text(1) != "")
     {
-        ScriptAction * s = find(current->text(0));
+        ScriptAction * s = find(current->text(1));
         s->activate();
     }
 }
 void WdgScriptsManager::slotRemoveScript()
 {
     QListViewItem * current = scriptsList->currentItem ();
-    if(current !=0 && current->text(0) != "")
+    if(current !=0 && current->text(1) != "")
     {
 //         KisScriptSP s = KisScriptsRegistry::instance()->remove(current->text(1));
 //         if(s==0) kdDebug() << "Script not found" <<endl;
