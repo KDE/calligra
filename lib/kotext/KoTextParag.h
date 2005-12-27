@@ -144,6 +144,7 @@ public:
     int firstLineMargin() const;
     int rightMargin() const;
     int lineSpacing( int line ) const;
+    int calculateLineSpacing( int line, int start, int last ) const;
 
     void registerFloatingItem( KoTextCustomItem *i );
     void unregisterFloatingItem( KoTextCustomItem *i );
@@ -377,10 +378,13 @@ private:
     KoParagLayout loadParagLayout( KoOasisContext& context, KoStyleCollection *styleCollection, bool findStyle );
 
 
+
     /////// End of kotext-specific additions
 private:
     QMap<int, KoTextParagSelection> &selections() const;
     QPtrList<KoTextCustomItem> &floatingItems() const;
+    /// Returns the height of the biggest character in that line
+    int heightForLineSpacing( int startChar, int lastChar ) const;
 
     QMap<int, KoTextParagLineStart*> lineStarts;
     QRect r;

@@ -346,7 +346,7 @@ void KoTextParag::format( int start, bool doMove )
     for ( ; it != oldLineStarts.end(); ++it )
 	delete *it;
 
-/*    if ( hasBorder() || string()->isRightToLeft() )
+/*    if ( hasBorder() || str->isRightToLeft() )
         ////kotext: border extends to doc width
         ////        and, bidi parags might have a counter, which will be right-aligned...
     {
@@ -356,7 +356,7 @@ void KoTextParag::format( int start, bool doMove )
     {
         if ( lineStarts.count() == 1 ) { //&& ( !doc || doc->flow()->isEmpty() ) ) {
 // kotext: for proper parag borders, we want all parags to be as wide as linestart->w
-/*            if ( !string()->isBidi() ) {
+/*            if ( !str->isBidi() ) {
                 KoTextStringChar *c = &str->at( str->length() - 1 );
                 r.setWidth( c->x + c->width );
             } else*/ {
@@ -464,7 +464,7 @@ void KoTextParag::format( int start, bool doMove )
         m_invalid = false;
     }
     changed = TRUE;
-    //####   string()->setTextChanged( FALSE );
+    //####   str->setTextChanged( FALSE );
 }
 
 int KoTextParag::lineHeightOfChar( int i, int *bl, int *y ) const
@@ -628,7 +628,7 @@ void KoTextParag::drawCursorDefault( QPainter &painter, KoTextCursor *cursor, in
 {
     painter.fillRect( QRect( curx, cury, 1, curh ), cg.color( QColorGroup::Text ) );
     painter.save();
-    if ( string()->isBidi() ) {
+    if ( str->isBidi() ) {
         const int d = 4;
         if ( at( cursor->index() )->rightToLeft ) {
             painter.setPen( Qt::black );
@@ -980,7 +980,7 @@ void KoTextParag::setAlign( int align )
 int KoTextParag::resolveAlignment() const
 {
     if ( (int)m_layout.alignment == Qt::AlignAuto )
-        return string()->isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
+        return str->isRightToLeft() ? Qt::AlignRight : Qt::AlignLeft;
     return m_layout.alignment;
 }
 
@@ -1298,6 +1298,25 @@ int KoTextParag::firstLineMargin() const
 
 int KoTextParag::lineSpacing( int line ) const
 {
+    Q_ASSERT( isValid() );
+    if ( m_layout.lineSpacingType == KoParagLayout::LS_SINGLE )
+        return 0; // or shadow, see calculateLineSpacing
+    else {
+        if( line >= (int)lineStarts.count() )
+        {
+            kdError() << "KoTextParag::lineSpacing assert(line<lines) failed: line=" << line << " lines=" << lineStarts.count() << endl;
+            return 0;
+        }
+        QMap<int, KoTextParagLineStart*>::ConstIterator it = lineStarts.begin();
+        while ( line-- > 0 )
+            ++it;
+        return (*it)->lineSpacing;
+    }
+}
+
+// Called by KoTextFormatter
+int KoTextParag::calculateLineSpacing( int line, int startChar, int lastChar ) const
+{
     KoTextZoomHandler * zh = textDocument()->formattingZoomHandler();
     // TODO add shadow in KoTextFormatter!
     int shadow = 0; //QABS( zh->ptToLayoutUnitPixY( shadowDistanceY() ) );
@@ -1306,47 +1325,45 @@ int KoTextParag::lineSpacing( int line ) const
     else if ( m_layout.lineSpacingType == KoParagLayout::LS_CUSTOM )
         return zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() ) + shadow;
     else {
-        KoTextParag * that = const_cast<KoTextParag *>(this);
-        if( line >= (int)that->lineStartList().count() )
+        if( line >= (int)lineStarts.count() )
         {
-            kdError() << "KoTextParag::lineSpacing assert(line<lines) failed: line=" << line << " lines=" << that->lineStartList().count() << endl;
+            kdError() << "KoTextParag::lineSpacing assert(line<lines) failed: line=" << line << " lines=" << lineStarts.count() << endl;
             return 0+shadow;
         }
-        QMap<int, KoTextParagLineStart*>::ConstIterator it = that->lineStartList().begin();
+        QMap<int, KoTextParagLineStart*>::ConstIterator it = lineStarts.begin();
         while ( line-- > 0 )
             ++it;
-        if ( isValid() )
-            return (*it)->lineSpacing;
 
-        int height = ( *it )->h;
-        //kdDebug(32500) << " line spacing type: " << m_layout.lineSpacingType << " value:" << m_layout.lineSpacingValue() << " line_height=" << height << endl;
+        kdDebug(32500) << " line spacing type: " << m_layout.lineSpacingType << " value:" << m_layout.lineSpacingValue() << " line_height=" << (*it)->h << " startChar=" << startChar << " lastChar=" << lastChar << endl;
         switch ( m_layout.lineSpacingType )
         {
         case KoParagLayout::LS_MULTIPLE:
         {
             double n = QMAX( m_layout.lineSpacingValue() - 1.0, 0.0 );
-            return shadow + qRound( n * height );
+            return shadow + qRound( n * heightForLineSpacing( startChar, lastChar ) );
         }
         case KoParagLayout::LS_ONEANDHALF:
         {
             // Special case of LS_MULTIPLE, with n=1.5
-            return shadow + height / 2;
+            return shadow + heightForLineSpacing( startChar, lastChar ) / 2;
         }
         case KoParagLayout::LS_DOUBLE:
         {
             // Special case of LS_MULTIPLE, with n=1
-            return shadow + height;
+            return shadow + heightForLineSpacing( startChar, lastChar );
         }
         case KoParagLayout::LS_AT_LEAST:
         {
             int atLeast = zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() );
-            int h = QMAX( height, atLeast );
+            const int lineHeight = ( *it )->h;
+            int h = QMAX( lineHeight, atLeast );
             // height is now the required total height
-            return shadow + h - height;
+            return shadow + h - lineHeight;
         }
         case KoParagLayout::LS_FIXED:
         {
-            return shadow + zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() ) - height;
+            const int lineHeight = ( *it )->h;
+            return shadow + zh->ptToLayoutUnitPixY( m_layout.lineSpacingValue() ) - lineHeight;
         }
         // Silence compiler warnings
         case KoParagLayout::LS_SINGLE:
@@ -2021,7 +2038,7 @@ void KoTextParag::copyParagData( KoTextParag *parag )
             KoTextFormat * format = &newStyle->format();
             setFormat( format );
             format->addRef();
-            string()->setFormat( 0, format, true ); // prepare format for text insertion
+            str->setFormat( 0, format, true ); // prepare format for text insertion
             styleApplied = true;
         }
     }
@@ -2086,21 +2103,21 @@ int KoTextParag::nextTab( int chnum, int x )
         // We stored them there for faster access
         int * tArray = tabArray();
         int i = 0;
-        if ( string()->isRightToLeft() )
+        if ( str->isRightToLeft() )
             i = m_layout.tabList().size() - 1;
         KoTextZoomHandler* zh = textDocument()->formattingZoomHandler();
 
         while ( i >= 0 && i < (int)m_layout.tabList().size() ) {
             //kdDebug(32500) << "KoTextParag::nextTab tArray[" << i << "]=" << tArray[i] << " type " << m_layout.tabList()[i].type << endl;
             int tab = tArray[ i ];
-            if ( string()->isRightToLeft() )
+            if ( str->isRightToLeft() )
                 tab = rect().width() - tab;
 
             if ( tab > x ) {
                 int type = m_layout.tabList()[i].type;
 
                 // fix the tab type for right to left text
-                if ( string()->isRightToLeft() )
+                if ( str->isRightToLeft() )
                     if ( type == T_RIGHT )
                         type = T_LEFT;
                     else if ( type == T_LEFT )
@@ -2113,9 +2130,9 @@ int KoTextParag::nextTab( int chnum, int x )
                     // Look for the next tab (or EOL)
                     int c = chnum + 1;
                     int w = 0;
-                    while ( c < string()->length() - 1 && string()->at( c ).c != '\t' && string()->at( c ).c != '\n' )
+                    while ( c < str->length() - 1 && str->at( c ).c != '\t' && str->at( c ).c != '\n' )
                     {
-                        KoTextStringChar & ch = string()->at( c );
+                        KoTextStringChar & ch = str->at( c );
                         // Determine char width
                         // This must be done in the same way as in KoTextFormatter::format() or there can be different rounding errors.
                         if ( ch.isCustom() )
@@ -2143,15 +2160,15 @@ int KoTextParag::nextTab( int chnum, int x )
                     // Default to right-aligned if no decimal point found (behavior from msword)
                     int c = chnum + 1;
                     int w = 0;
-                    while ( c < string()->length()-1 && string()->at( c ).c != '\t' && string()->at( c ).c != '\n' )
+                    while ( c < str->length()-1 && str->at( c ).c != '\t' && str->at( c ).c != '\n' )
                     {
-                        KoTextStringChar & ch = string()->at( c );
+                        KoTextStringChar & ch = str->at( c );
                         if ( ch.c == m_layout.tabList()[i].alignChar )
                         {
                             // Can't use ch.width yet, since the formatter hasn't run over those chars
                             int ww = ch.format()->charWidth( zh, false, &ch, this, c );
                             ww = KoTextZoomHandler::ptToLayoutUnitPt( ww );
-                            if ( string()->isRightToLeft() )
+                            if ( str->isRightToLeft() )
                             {
                                 w = ww / 2; // center around the decimal point
                                 ++c;
@@ -2183,7 +2200,7 @@ int KoTextParag::nextTab( int chnum, int x )
                     return tab;
                 }
             }
-            if ( string()->isRightToLeft() )
+            if ( str->isRightToLeft() )
                 --i;
             else
                 ++i;
@@ -2197,7 +2214,7 @@ void KoTextParag::applyStyle( KoParagStyle *style )
 {
     setParagLayout( style->paragLayout() );
     KoTextFormat *newFormat = &style->format();
-    setFormat( 0, string()->length(), newFormat );
+    setFormat( 0, str->length(), newFormat );
     setFormat( newFormat );
 }
 
@@ -2267,10 +2284,10 @@ void KoTextParag::removeCustomItem( int index )
 
 int KoTextParag::findCustomItem( const KoTextCustomItem * custom ) const
 {
-    int len = string()->length();
+    int len = str->length();
     for ( int i = 0; i < len; ++i )
     {
-        KoTextStringChar & ch = string()->at(i);
+        KoTextStringChar & ch = str->at(i);
         if ( ch.isCustom() && ch.customItem() == custom )
             return i;
     }
@@ -2283,7 +2300,7 @@ int KoTextParag::findCustomItem( const KoTextCustomItem * custom ) const
 void KoTextParag::printRTDebug( int info )
 {
     QString specialFlags;
-    if ( string()->needsSpellCheck() )
+    if ( str->needsSpellCheck() )
         specialFlags += " needsSpellCheck=true";
     if ( wasMovedDown() )
         specialFlags += " wasMovedDown=true";
@@ -2300,7 +2317,7 @@ void KoTextParag::printRTDebug( int info )
     //if ( !next() )
     //    kdDebug(32500) << "  next is 0L" << endl;
     kdDebug(32500) << "  Style: " << style() << " " << ( style() ? style()->name().local8Bit().data() : "NO STYLE" ) << endl;
-    kdDebug(32500) << "  Text: '" << string()->toString() << "'" << endl;
+    kdDebug(32500) << "  Text: '" << str->toString() << "'" << endl;
     if ( info == 0 ) // paragraph info
     {
         if ( m_layout.counter )
@@ -2311,7 +2328,7 @@ void KoTextParag::printRTDebug( int info )
         static const char * const s_linespacing[] = { "Single", "1.5", "2", "custom", "atLeast", "Multiple", "Fixed" };
         static const char * const s_dir[] = { "DirL", "DirR", "DirEN", "DirES", "DirET", "DirAN", "DirCS", "DirB", "DirS", "DirWS", "DirON", "DirLRE", "DirLRO", "DirAL", "DirRLE", "DirRLO", "DirPDF", "DirNSM", "DirBN" };
         kdDebug(32500) << "  align: " << s_align[alignment()] << "  resolveAlignment: " << s_align[resolveAlignment()]
-                  << "  isRTL:" << string()->isRightToLeft()
+                  << "  isRTL:" << str->isRightToLeft()
                   << "  dir: " << s_dir[direction()] << endl;
         QRect pixr = pixelRect( textDocument()->paintingZoomHandler() );
         kdDebug(32500) << "  rect() : " << DEBUGRECT( rect() )
@@ -2326,7 +2343,7 @@ void KoTextParag::printRTDebug( int info )
         static const char * const tabtype[] = { "T_LEFT", "T_CENTER", "T_RIGHT", "T_DEC_PNT", "error!!!" };
         KoTabulatorList tabList = m_layout.tabList();
         if ( tabList.isEmpty() ) {
-            if ( string()->toString().find( '\t' ) != -1 )
+            if ( str->toString().find( '\t' ) != -1 )
                 kdDebug(32500) << "Tab width: " << textDocument()->tabStopWidth() << endl;
         } else {
             KoTabulatorList::Iterator it = tabList.begin();
@@ -2383,7 +2400,7 @@ void KoTextParag::printRTDebug( int info )
 	    if ( ch.format() != textDocument()->formatCollection()->defaultFormat() )
                 Q_ASSERT( textDocument()->formatCollection()->dict()[ch.format()->key()] );
 
-            if ( !string()->isBidi() && !ch.lineStart )
+            if ( !str->isBidi() && !ch.lineStart )
                 Q_ASSERT( lastX + lastW == pixelx ); // looks like some rounding problem with justified spaces
             lastX = pixelx;
             lastW = ch.pixelwidth;
@@ -2787,7 +2804,7 @@ void KoTextParag::loadOasis( const QDomElement& parent, KoOasisContext& context,
     loadOasisSpan( parent, context, pos );
 
     // Apply default format to trailing space
-    const int len = string()->length();
+    const int len = str->length();
     Q_ASSERT( len >= 1 );
     setFormat( len - 1, 1, paragFormat(), TRUE );
 
@@ -2869,7 +2886,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         writer.addAttribute( "text:style-name", autoParagStyleName );
     }
 
-    QString text = string()->toString();
+    QString text = str->toString();
     Q_ASSERT( text.right(1)[0] == ' ' );
 
     const int cursorIndex = context.cursorTextParagraph() == this ? context.cursorTextIndex() : -1;
@@ -2896,7 +2913,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     KoTextFormat *lastFormatFixed = 0; // raw = as stored in the chars; fixed = after removing misspelled
     int startPos = from;
     for ( int i = from; i <= to; ++i ) {
-        KoTextStringChar & ch = string()->at(i);
+        KoTextStringChar & ch = str->at(i);
         KoTextFormat * newFormat = static_cast<KoTextFormat *>( ch.format() );
         if ( newFormat->isMisspelled() ) {
             if ( newFormat == lastFormatRaw )
@@ -3009,7 +3026,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
     if ( start + len == length() && ( whichFormattingChars & FormattingEndParag ) )
     {
         // drawing the end of the parag
-        KoTextStringChar &ch = string()->at( length() - 1 );
+        KoTextStringChar &ch = str->at( length() - 1 );
         KoTextFormat* format = static_cast<KoTextFormat *>( ch.format() );
         int w = format->charWidth( zh, true, &ch, this, 'X' );
         int size = QMIN( w, h_pix * 3 / 4 );
@@ -3043,7 +3060,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
         int end = QMIN( start + len, length() - 1 ); // don't look at the trailing space
         for ( int i = start ; i < end ; ++i )
         {
-            KoTextStringChar &ch = string()->at(i);
+            KoTextStringChar &ch = str->at(i);
 #ifdef DEBUG_FORMATTING
             painter.setPen( (i % 2)? Qt::red: Qt::green );
             painter.drawRect( zh->layoutUnitToPixelX( ch.x ) /*+ ch.pixelxadj*/ - 1, lastY_pix, ch.pixelwidth, baseLine_pix );
@@ -3069,7 +3086,7 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
             }
             else if ( ch.c == '\t' && (whichFormattingChars & FormattingTabs) )
             {
-                /*KoTextStringChar &nextch = string()->at(i+1);
+                /*KoTextStringChar &nextch = str->at(i+1);
                   int nextx = (nextch.x > ch.x) ? nextch.x : rect().width();
                   //kdDebug() << "tab x=" << ch.x << " nextch.x=" << nextch.x
                   //          << " nextx=" << nextx << " startX=" << startX << " bw=" << bw << endl;
@@ -3129,4 +3146,17 @@ void KoTextParag::drawFormattingChars( QPainter &painter, int start, int len,
         }
         painter.restore();
     }
+}
+
+int KoTextParag::heightForLineSpacing( int startChar, int lastChar ) const
+{
+    int h = 0;
+    int end = QMIN( lastChar, length() - 1 ); // don't look at the trailing space
+    for( int i = startChar; i <= end; ++i )
+    {
+        const KoTextStringChar &chr = str->at( i );
+        if ( !chr.isCustom() )
+            h = QMAX( h, chr.format()->height() );
+    }
+    return h;
 }

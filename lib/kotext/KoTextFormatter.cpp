@@ -313,7 +313,7 @@ bool KoTextFormatterCore::format()
             y += lineStart->h;
             lineStart = new KoTextParagLineStart( y, c->ascent(), c->height() );
             // Added for kotext (to be tested)
-            lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
+            lineStart->lineSpacing = doc ? parag->calculateLineSpacing( (int)parag->lineStartList().count()-1, i, i ) : 0;
             lineStart->h += lineStart->lineSpacing;
             lineStart->w = dw;
             parag->insertLineStart( i, lineStart );
@@ -483,8 +483,6 @@ bool KoTextFormatterCore::format()
                     lineStart->w = dw;
 
                     KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c-1, align, availableWidth - x );
-                    lineStart->lineSpacing = parag->lineSpacing( (int)parag->lineStartList().count()-1 );
-                    lineStart->h += lineStart->lineSpacing;
                     y += lineStart->h;
                     lineStart = lineStart2;
 #ifdef DEBUG_FORMATTER
@@ -580,9 +578,7 @@ bool KoTextFormatterCore::format()
                         spaceAfterLine -= width;
                     }
                     KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, spaceAfterLine );
-                    lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
                     lineStart->w = dw;
-                    lineStart->h += lineStart->lineSpacing;
                     y += lineStart->h;
                     lineStart = lineStart2;
 #ifdef DEBUG_FORMATTER
@@ -794,8 +790,6 @@ bool KoTextFormatterCore::format()
             align = Qt::AlignAuto;
         int space = availableWidth - x + c->width; // don't count the trailing space (it breaks e.g. centering)
         KoTextParagLineStart *lineStart2 = koFormatLine( zh, parag, string, lineStart, firstChar, c, align, space );
-        lineStart->lineSpacing = doc ? parag->lineSpacing( (int)parag->lineStartList().count()-1 ) : 0;
-        lineStart->h += lineStart->lineSpacing;
         delete lineStart2;
     }
 
@@ -859,111 +853,114 @@ KoTextParagLineStart *KoTextFormatterCore::koFormatLine(
     KoTextParag *parag, KoTextString *string, KoTextParagLineStart *line,
     KoTextStringChar *startChar, KoTextStringChar *lastChar, int align, int space )
 {
-    if( string->isBidi() )
-        return koBidiReorderLine( zh, parag, string, line, startChar, lastChar, align, space );
-    int start = (startChar - &string->at(0));
-    int last = (lastChar - &string->at(0) );
+    KoTextParagLineStart* ret = 0;
+    if( string->isBidi() ) {
+        ret = koBidiReorderLine( zh, parag, string, line, startChar, lastChar, align, space );
+    } else {
+        int start = (startChar - &string->at(0));
+        int last = (lastChar - &string->at(0) );
 
-#if 0 // strange Qt code, breaks right-alignment
-    KoTextStringChar *ch = lastChar;
-    while ( ch > startChar && ch->whiteSpace ) {
-        space += ch->format()->width( ' ' ); // wrong unit, in any case
-        --ch;
-    }
-#endif
+        if (space < 0)
+            space = 0;
 
-    if (space < 0)
-        space = 0;
-
-    // do alignment Auto == Left in this case
-    if ( align & Qt::AlignHCenter || align & Qt::AlignRight ) {
-        if ( align & Qt::AlignHCenter )
-            space /= 2;
-        int toAddPix = zh->layoutUnitToPixelX( space );
-        for ( int j = last; j >= start; --j ) {
-            KoTextStringChar &chr = string->at( j );
-            //// Start at last tab, if any - BR #40472.
-            if ( chr.c == '\t' ) {
-                break;
+        // do alignment Auto == Left in this case
+        if ( align & Qt::AlignHCenter || align & Qt::AlignRight ) {
+            if ( align & Qt::AlignHCenter )
+                space /= 2;
+            int toAddPix = zh->layoutUnitToPixelX( space );
+            for ( int j = last; j >= start; --j ) {
+                KoTextStringChar &chr = string->at( j );
+                //// Start at last tab, if any - BR #40472.
+                if ( chr.c == '\t' ) {
+                    break;
+                }
+                moveChar( chr, zh, space, toAddPix );
             }
-            moveChar( chr, zh, space, toAddPix );
-        }
-    } else if ( align & Qt::AlignJustify ) {
-        int numSpaces = 0;
-        // End at "last-1", the last space ends up with a width of 0
-        for ( int j = last-1; j >= start; --j ) {
-            //// Start at last tab, if any. BR #40472 specifies that justifying should start after the last tab.
-            if ( string->at( j ).c == '\t' ) {
-                start = j+1;
-                break;
+        } else if ( align & Qt::AlignJustify ) {
+            int numSpaces = 0;
+            // End at "last-1", the last space ends up with a width of 0
+            for ( int j = last-1; j >= start; --j ) {
+                //// Start at last tab, if any. BR #40472 specifies that justifying should start after the last tab.
+                if ( string->at( j ).c == '\t' ) {
+                    start = j+1;
+                    break;
+                }
+                if( settings->isStretchable( string, j ) ) {
+                    numSpaces++;
+                }
             }
-            if( settings->isStretchable( string, j ) ) {
-                numSpaces++;
-            }
-        }
-        int toAdd = 0;
-        int toAddPix = 0;
-        for ( int k = start + 1; k <= last; ++k ) {
-            KoTextStringChar &chr = string->at( k );
-            if ( toAdd != 0 )
-                moveChar( chr, zh, toAdd, toAddPix );
-            if( settings->isStretchable( string, k ) && numSpaces ) {
-                int s = space / numSpaces;
-                toAdd += s;
-                toAddPix = zh->layoutUnitToPixelX( toAdd );
-                space -= s;
-                numSpaces--;
-                chr.width += s;
+            int toAdd = 0;
+            int toAddPix = 0;
+            for ( int k = start + 1; k <= last; ++k ) {
+                KoTextStringChar &chr = string->at( k );
+                if ( toAdd != 0 )
+                    moveChar( chr, zh, toAdd, toAddPix );
+                if( settings->isStretchable( string, k ) && numSpaces ) {
+                    int s = space / numSpaces;
+                    toAdd += s;
+                    toAddPix = zh->layoutUnitToPixelX( toAdd );
+                    space -= s;
+                    numSpaces--;
+                    chr.width += s;
 #ifndef REF_IS_LU
-                chr.pixelwidth += zh->layoutUnitToPixelX( s ); // ### rounding problem, recalculate
+                    chr.pixelwidth += zh->layoutUnitToPixelX( s ); // ### rounding problem, recalculate
 #endif
+                }
             }
         }
-    }
-    int current=0;
-    int nc=0; // Not double, as we check it against 0 and to avoid gcc warnings
-    KoTextFormat refFormat( *string->at(0).format() ); // we need a ref format, doesn't matter where it comes from
-    for(int i=start;i<=last;++i)
-    {
-        KoTextFormat* format=string->at(i).format();
-        // End of underline
-        if ( (((!format->underline())&&
-               (!format->doubleUnderline())&&
-               (!format->waveUnderline())&&
-               (format->underlineType()!=KoTextFormat::U_SIMPLE_BOLD))
-              || i == last)
-             && nc )
+        int current=0;
+        int nc=0; // Not double, as we check it against 0 and to avoid gcc warnings
+        KoTextFormat refFormat( *string->at(0).format() ); // we need a ref format, doesn't matter where it comes from
+        for(int i=start;i<=last;++i)
         {
-            double avg=static_cast<double>(current)/nc;
-            avg/=18.0;
-            // Apply underline width "avg" from i-nc to i
-            refFormat.setUnderLineWidth( avg );
-            parag->setFormat( i-nc, i, &refFormat, true, KoTextFormat::UnderLineWidth );
-            nc=0;
-            current=0;
+            KoTextFormat* format=string->at(i).format();
+            // End of underline
+            if ( (((!format->underline())&&
+                   (!format->doubleUnderline())&&
+                   (!format->waveUnderline())&&
+                   (format->underlineType()!=KoTextFormat::U_SIMPLE_BOLD))
+                  || i == last)
+                 && nc )
+            {
+                double avg=static_cast<double>(current)/nc;
+                avg/=18.0;
+                // Apply underline width "avg" from i-nc to i
+                refFormat.setUnderLineWidth( avg );
+                parag->setFormat( i-nc, i, &refFormat, true, KoTextFormat::UnderLineWidth );
+                nc=0;
+                current=0;
+            }
+            // Inside underline
+            else if(format->underline()||
+                    format->waveUnderline()||
+                    format->doubleUnderline()||
+                    (format->underlineType() == KoTextFormat::U_SIMPLE_BOLD))
+            {
+                ++nc;
+                current += format->pointSize(); //pointSize() is independent of {Sub,Super}Script in contrast to height()
+            }
         }
-        // Inside underline
-        else if(format->underline()||
-                format->waveUnderline()||
-                format->doubleUnderline()||
-                (format->underlineType() == KoTextFormat::U_SIMPLE_BOLD))
-        {
-            ++nc;
-            current += format->pointSize(); //pointSize() is independent of {Sub,Super}Script in contrast to height()
-        }
-    }
 #if 0
-    if ( last >= 0 && last < string->length() ) {
-        KoTextStringChar &chr = string->at( last );
-        line->w = chr.x + chr.width; //string->width( last );
-        // Add width of hyphen (so that it appears)
-        if ( line->hyphenated )
-            line->w += KoTextZoomHandler::ptToLayoutUnitPt( chr.format()->refFontMetrics().width( QChar(0xad) ) );
-    } else
-        line->w = 0;
+        if ( last >= 0 && last < string->length() ) {
+            KoTextStringChar &chr = string->at( last );
+            line->w = chr.x + chr.width; //string->width( last );
+            // Add width of hyphen (so that it appears)
+            if ( line->hyphenated )
+                line->w += KoTextZoomHandler::ptToLayoutUnitPt( chr.format()->refFontMetrics().width( QChar(0xad) ) );
+        } else
+            line->w = 0;
 #endif
 
-    return new KoTextParagLineStart();
+        ret = new KoTextParagLineStart();
+    }
+
+    // Now calculate and add linespacing
+    const int start = (startChar - &string->at(0));
+    const int last = (lastChar - &string->at(0) );
+    line->lineSpacing = parag->calculateLineSpacing( (int)parag->lineStartList().count()-1, start, last );
+    line->h += line->lineSpacing;
+
+    return ret;
 }
 
 // collects one line of the paragraph and transforms it to visual order
