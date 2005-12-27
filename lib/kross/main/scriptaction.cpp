@@ -62,11 +62,16 @@ ScriptAction::ScriptAction(const QString& file)
     d->scriptcontainer = Manager::scriptManager()->getScriptContainer(file);
 
     setName( file.latin1() );
-    setFile( file );
 
     KURL url(file);
-    setText( url.fileName() );
-    setIcon( KMimeType::iconForURL(url) );
+    if(url.isLocalFile()) {
+        setFile( file );
+        setText( url.fileName() );
+        setIcon( KMimeType::iconForURL(url) );
+    }
+    else {
+        setText( file );
+    }
 
     setEnabled( false );
 }

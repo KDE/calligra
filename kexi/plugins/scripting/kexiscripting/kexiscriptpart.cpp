@@ -120,7 +120,7 @@ KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog
 		const char* name = partname.latin1();
 		Kross::Api::ScriptAction* scriptaction = dynamic_cast< Kross::Api::ScriptAction* >( d->scriptguiclient->action(name) );
 		if(! scriptaction) {
-			scriptaction = new Kross::Api::ScriptAction(name, partname);
+			scriptaction = new Kross::Api::ScriptAction(partname);
 			d->scriptguiclient->actionCollection()->insert(scriptaction);
 		}
 
