@@ -115,6 +115,16 @@ namespace Kross { namespace Api {
                 m_functions.replace(name, function);
             }
 
+           /**
+             * Check if a function is a member of this \a Callable
+             * \param name the function name
+             * \return true if the function is available in this \a Callable
+             */
+            bool isAFunction(const QString & name)
+            {
+                return m_functions.contains(name);
+            }
+
             /**
              * Overloaded method to handle function-calls.
              *
