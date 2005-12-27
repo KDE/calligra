@@ -35,6 +35,7 @@ class WdgScriptsManagerPrivate
     ~WdgScriptsManagerPrivate() { delete m_qlviInstalledScripts; delete m_qlviExecutedScripts; }
     QListViewItem* m_qlviInstalledScripts, *m_qlviExecutedScripts/*,* m_qlviFilters,* m_qlviTools*/;
     ScriptGUIClient* m_scripguiclient;
+    int loadbutton, execbutton, removebutton;
 };
     
 WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, const char* name, WFlags fl )
@@ -46,12 +47,16 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
 
     fillScriptsList();
 
-    toolBar->insertButton("fileopen",0, true, i18n("Load script"));
-    connect((QObject*)toolBar->getButton(0),SIGNAL(clicked()), this, SLOT(slotLoadScript()));
-    toolBar->insertButton("exec",0, true, i18n("Execute script"));
-    connect((QObject*)toolBar->getButton(0),SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
-    toolBar->insertButton("fileclose",0, true, i18n("Remove script"));
-    connect((QObject*)toolBar->getButton(0),SIGNAL(clicked()), this, SLOT(slotRemoveScript()));
+    connect(scriptsList, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelectionChanged(QListViewItem*)));
+
+    d->loadbutton = toolBar->insertButton("fileopen",0, true, i18n("Load script"));
+    toolBar->addConnection(d->loadbutton,SIGNAL(clicked()), this, SLOT(slotLoadScript()));
+
+    d->execbutton = toolBar->insertButton("exec",1, false, i18n("Execute script"));
+    toolBar->addConnection(d->execbutton,SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
+
+    d->removebutton = toolBar->insertButton("fileclose",2, false, i18n("Remove script"));
+    toolBar->addConnection(d->removebutton,SIGNAL(clicked()), this, SLOT(slotRemoveScript()));
 }
 
 
@@ -91,6 +96,12 @@ void WdgScriptsManager::fillScriptsList(QListViewItem* item, ScriptAction::List 
             i->setPixmap(0, pm); // display the icon
         }
     }
+}
+
+void WdgScriptsManager::slotSelectionChanged(QListViewItem* item)
+{
+    toolBar->setItemEnabled(d->execbutton, item && item->parent());
+    toolBar->setItemEnabled(d->removebutton, item && item->parent());
 }
 
 void WdgScriptsManager::slotLoadScript()

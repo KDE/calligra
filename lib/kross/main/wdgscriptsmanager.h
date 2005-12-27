@@ -42,6 +42,7 @@ class WdgScriptsManager : public WdgScriptsManagerBase
         void slotLoadScript();
         void slotExecuteScript();
         void slotRemoveScript();
+        void slotSelectionChanged(QListViewItem*);
     private:
         void fillScriptsList();
         void fillScriptsList(QListViewItem* item, ScriptAction::List list);
