@@ -44,6 +44,7 @@ KexiDBCursor::KexiDBCursor(KexiDBConnection* connection, ::KexiDB::Cursor* curso
 
 KexiDBCursor::~KexiDBCursor()
 {
+    delete m_cursor;
 }
 
 const QString KexiDBCursor::getClassName() const
