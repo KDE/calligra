@@ -39,6 +39,7 @@ namespace Kivio {
   class PluginManager;
   class AddStencilSetPanel;
   class AddStencilTool;
+  class ObjectListPalette;
 }
 
 class KivioBirdEyePanel;
@@ -154,6 +155,7 @@ class KIVIO_EXPORT KivioView : public KoView
     void createBirdEyeDock();
     void createProtectionDock();
     void createAddStencilSetDock();
+    void createObjectListPalette();
 
   public slots:
     void paperLayoutDlg();
@@ -339,6 +341,7 @@ class KIVIO_EXPORT KivioView : public KoView
     KivioBirdEyePanel* m_pBirdEyePanel;
     KivioProtectionPanel* m_pProtectionPanel;
     Kivio::AddStencilSetPanel* m_addStencilSetPanel;
+    Kivio::ObjectListPalette* m_objectListPalette;
     KToggleAction* showPageMargins;
     KToggleAction* showRulers;
     KToggleAction* showGrid;

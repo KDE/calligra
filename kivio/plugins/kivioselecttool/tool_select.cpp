@@ -110,7 +110,7 @@ bool SelectTool::processEvent(QEvent* e)
       if( m->button() == RightButton ) {
         showPopupMenu(m->globalPos());
       } else if( m->button() == LeftButton ) {
-        if((m->state() & ControlButton) || (m->state() & ShiftButton)) {
+        if(m->state() & ControlButton) {
           m_controlKey = true;
         } else {
           m_controlKey = false;

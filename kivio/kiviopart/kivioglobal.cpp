@@ -1306,7 +1306,7 @@ QPixmap Kivio::generatePixmapFromStencil(int width, int height, KivioStencil* st
   pix.fill(Qt::white);
   KivioScreenPainter kpainter;
   kpainter.start(&pix);
-  kpainter.translateBy((width - rect.width()) / 2, (height - rect.height()) / 2);
+  kpainter.translateBy(-rect.x() + ((width - rect.width()) / 2), -rect.y() + ((height - rect.height()) / 2));
   KivioIntraStencilData data;
   data.painter = &kpainter;
   data.zoomHandler = &zoomHandler;

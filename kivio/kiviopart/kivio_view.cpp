@@ -127,6 +127,7 @@
 #include "kivioaddstencilsetpanel.h"
 #include "kiviostencilsetinstaller.h"
 #include "addstenciltool.h"
+#include "objectlistpalette.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -264,6 +265,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   // Must be executed before setActivePage() and before setupActions()
   createBirdEyeDock();
   createLayerDock();
+  createObjectListPalette();
   createGeometryDock();
   createProtectionDock();
 //   createAddStencilSetDock();
@@ -369,6 +371,12 @@ void KivioView::createAddStencilSetDock()
   connect(this, SIGNAL(updateStencilSetList()), m_addStencilSetPanel, SLOT(updateList()));
 }
 
+void KivioView::createObjectListPalette()
+{
+  m_objectListPalette = new Kivio::ObjectListPalette(this);
+  m_objectListPalette->setCaption("Stencils");
+  paletteManager()->addWidget(m_objectListPalette, "objectlistpalette", "birdeyedocker");
+}
 
 void KivioView::setupActions()
 {
@@ -666,6 +674,7 @@ void KivioView::setActivePage( KivioPage* page )
 
   m_pCanvas->guideLines().setGuideLines(m_pActivePage->horizontalGuideLines(),
     m_pActivePage->verticalGuideLines());
+  m_objectListPalette->updateObjectList();
 }
 
 void KivioView::setActiveSpawnerSet( KivioStencilSpawnerSet *set )
@@ -820,6 +829,7 @@ void KivioView::slotUpdateView( KivioPage* page )
   m_pCanvas->updateScrollBars();
   vRuler->update();
   hRuler->update();
+  m_objectListPalette->updateObjectList();
 }
 
 void KivioView::paintContent( KivioPainter&, const QRect&, bool)
