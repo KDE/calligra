@@ -21,6 +21,7 @@
 #include "kexidbconnection.h"
 
 #include <api/exception.h>
+#include <api/proxy.h>
 
 #include <kdebug.h>
 
@@ -30,16 +31,43 @@ KexiDBCursor::KexiDBCursor(KexiDBConnection* connection, ::KexiDB::Cursor* curso
     : Kross::Api::Class<KexiDBCursor>("KexiDBCursor", connection)
     , m_cursor(cursor)
 {
-    addFunction("moveFirst", &KexiDBCursor::moveFirst);
-    addFunction("moveLast", &KexiDBCursor::moveLast);
-    addFunction("moveNext", &KexiDBCursor::moveNext);
-    addFunction("movePrev", &KexiDBCursor::movePrev);
-    addFunction("eof", &KexiDBCursor::eof);
-    addFunction("bof", &KexiDBCursor::bof);
-    addFunction("at", &KexiDBCursor::at);
-    addFunction("fieldCount", &KexiDBCursor::fieldCount);
-    addFunction("value", &KexiDBCursor::value,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::UInt"));
+    // Moves current position to the first record and retrieves it.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("moveFirst", m_cursor, &::KexiDB::Cursor::moveFirst );
+
+    // Moves current position to the last record and retrieves it.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("moveLast", m_cursor, &::KexiDB::Cursor::moveLast );
+
+    // Moves current position to the previous record and retrieves it.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("movePrev", m_cursor, &::KexiDB::Cursor::movePrev );
+
+    // Moves current position to the next record and retrieves it.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("moveNext", m_cursor, &::KexiDB::Cursor::moveNext );
+
+    // Returns true if current position is before first record.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("bof", m_cursor, &::KexiDB::Cursor::bof );
+
+    // Returns true if current position is after last record.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("eof", m_cursor, &::KexiDB::Cursor::eof );
+
+    // Returns current internal position of the cursor's query. Records 
+    // are numbered from 0; the value -1 means that the cursor does not 
+    // point to a valid record.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,Q_LLONG> >
+        ("at", m_cursor, &::KexiDB::Cursor::at );
+
+    // Returns the number of fields available for this cursor.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,uint> >
+        ("fieldCount", m_cursor, &::KexiDB::Cursor::fieldCount );
+
+    // Returns the value stored in the passed column number (counting from 0).
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,QVariant>, Kross::Api::ProxyValue<Kross::Api::Variant,uint> >
+        ("value", m_cursor, &::KexiDB::Cursor::value );
 }
 
 KexiDBCursor::~KexiDBCursor()
@@ -50,69 +78,5 @@ KexiDBCursor::~KexiDBCursor()
 const QString KexiDBCursor::getClassName() const
 {
     return "Kross::KexiDB::KexiDBCursor";
-}
-
-::KexiDB::Cursor* KexiDBCursor::cursor()
-{
-    if(! m_cursor)
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Cursor is NULL.")) );
-    if(m_cursor->error())
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Cursor error: %1").arg(m_cursor->errorMsg())) );
-    return m_cursor;
-}
-
-Kross::Api::Object::Ptr KexiDBCursor::moveFirst(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(cursor()->moveFirst(),
-           "Kross::KexiDB::Cursor::moveFirst::Bool");
-}
-
-Kross::Api::Object::Ptr KexiDBCursor::moveLast(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(cursor()->moveLast(),
-           "Kross::KexiDB::Cursor::moveLast::Bool");
-}
-
-Kross::Api::Object::Ptr KexiDBCursor::moveNext(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(cursor()->moveNext(),
-           "Kross::KexiDB::Cursor::moveNext::Bool");
-}
-
-Kross::Api::Object::Ptr KexiDBCursor::movePrev(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(cursor()->movePrev(),
-           "Kross::KexiDB::Cursor::movePrev::Bool");
-}
-
-Kross::Api::Object::Ptr KexiDBCursor::eof(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(cursor()->eof(),
-           "Kross::KexiDB::Cursor::eof::Bool");
-}
-
-Kross::Api::Object::Ptr KexiDBCursor::bof(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(cursor()->bof(),
-           "Kross::KexiDB::Cursor::bof::Bool");
-}
-
-Kross::Api::Object::Ptr KexiDBCursor::at(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(cursor()->at(),
-           "Kross::KexiDB::Cursor::at::LLONG");
-}
-
-Kross::Api::Object::Ptr KexiDBCursor::fieldCount(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(cursor()->fieldCount(),
-           "Kross::KexiDB::Cursor::fieldCount::UInt");
-}
-
-Kross::Api::Object::Ptr KexiDBCursor::value(Kross::Api::List::Ptr args)
-{
-    return new Kross::Api::Variant(
-           cursor()->value( Kross::Api::Variant::toUInt(args->item(0)) ),
-           "Kross::KexiDB::Cursor::value::Variant");
 }
 
