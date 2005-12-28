@@ -163,12 +163,12 @@ void KoPaletteManager::addWidget(QWidget * widget,
 
     KToggleAction * a;
     if (visible) {
-        a = new KToggleAction(i18n("Hide") + " " + widget->caption(), 0, m_mapper, SLOT(map()), m_actionCollection);
-        a->setCheckedState(i18n("Show") + " " + widget->caption());
+        a = new KToggleAction(i18n("Hide %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
+        a->setCheckedState(i18n("Show %1").arg(widget->caption()));
     }
     else {
-        a = new KToggleAction(i18n("Show") + " " + widget->caption(), 0, m_mapper, SLOT(map()), m_actionCollection);
-        a->setCheckedState(i18n("Hide") + " " + widget->caption());
+        a = new KToggleAction(i18n("Show %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
+        a->setCheckedState(i18n("Hide %1").arg(widget->caption()));
 
     }
         
