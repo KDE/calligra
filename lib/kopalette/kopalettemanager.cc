@@ -161,16 +161,9 @@ void KoPaletteManager::addWidget(QWidget * widget,
         m_defaultPaletteOrder.append(pname+ "," + QString::number(style));
     }
 
-    KToggleAction * a;
-    if (visible) {
-        a = new KToggleAction(i18n("Hide %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
-        a->setCheckedState(i18n("Show %1").arg(widget->caption()));
-    }
-    else {
-        a = new KToggleAction(i18n("Show %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
-        a->setCheckedState(i18n("Hide %1").arg(widget->caption()));
-
-    }
+    KToggleAction * a = new KToggleAction(i18n("Hide %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
+    a->setCheckedState(i18n("Show %1").arg(widget->caption()));
+    if (!visible) a->setChecked(true);
         
     m_mapper->setMapping(a, m_actions->count()); // This is the position at which we'll insert the action
     m_actions->insert( name, a );
@@ -398,10 +391,21 @@ void KoPaletteManager::slotTogglePalette(int paletteIndex)
 void KoPaletteManager::slotToggleAllPalettes()
 {
     m_allPalettesShown = !m_allPalettesShown;
-    
-    QDictIterator<KoPalette> it(*m_palettes);
-    for (; it.current(); ++it) {
-        it.current()->makeVisible(m_allPalettesShown);
+
+    QMap<QString, QString>::Iterator it;
+    for ( it = m_currentMapping->begin(); it != m_currentMapping->end(); ++it ) {
+        QString name = it.key().latin1();
+        QWidget * w = m_widgets->find(name);
+        QString pname = it.data().latin1();
+        KoPalette * p = m_palettes->find(pname);
+	if(m_allPalettesShown && p->isHidden(w))
+            p->togglePageHidden(w);
+	else if(!m_allPalettesShown && !p->isHidden(w))
+            p->togglePageHidden(w);
+    }
+    QDictIterator<KToggleAction> it2(*m_actions);
+    for (; it2.current(); ++it2) {
+        it2.current()->setChecked(!m_allPalettesShown);
     }
 }
 
