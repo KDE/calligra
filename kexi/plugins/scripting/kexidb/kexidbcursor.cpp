@@ -20,9 +20,6 @@
 #include "kexidbcursor.h"
 #include "kexidbconnection.h"
 
-#include <api/exception.h>
-#include <api/proxy.h>
-
 #include <kdebug.h>
 
 using namespace Kross::KexiDB;
