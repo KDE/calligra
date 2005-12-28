@@ -90,7 +90,9 @@ KoPageLayout KoPageLayout::standardLayout()
     layout.ptLeft = MM_TO_POINT( 20.0 );
     layout.ptRight = MM_TO_POINT( 20.0 );
     layout.ptTop = MM_TO_POINT( 20.0 );
-    layout.ptBottom = MM_TO_POINT( 20.0 ); 
+    layout.ptBottom = MM_TO_POINT( 20.0 );
+    layout.ptPageEdge = -1;
+    layout.ptBindingSide = -1;
     return layout;
 }
 
