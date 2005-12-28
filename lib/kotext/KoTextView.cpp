@@ -590,8 +590,11 @@ KoTextCursor KoTextView::selectWordUnderCursor( const KoTextCursor& cursor, int 
         const QChar ch = s->at(i).c;
         // This list comes from KoTextCursor::gotoPreviousWord.
         // Can't use QChar::isPunct since "'" and "-" are not word separators
-        const bool isWordDelimiter = ch.isSpace() || ch == '.' ||
-                                     ch == ',' || ch == ':' || ch == ';';
+        const bool isWordDelimiter = ch.isSpace()
+                                   || ch.category() == QChar::Punctuation_Open // e.g. '('
+                                   || ch.category() == QChar::Punctuation_Close // e.g. ')'
+                                   || ch.category() == QChar::Punctuation_Other // see http://www.fileformat.info/info/unicode/category/Po/list.htm
+                                   ;
 
         if( !beginFound && !isWordDelimiter )
         {
