@@ -21,6 +21,7 @@
 #include "KPrPointObject.h"
 #include "KPrUtils.h"
 #include "KPrDocument.h"
+#include "KPrSVGPathParser.h"
 #include <KoTextZoomHandler.h>
 #include <koUnit.h>
 #include <qdom.h>
@@ -45,7 +46,7 @@ KoSize KPrPointObject::getRealSize() const
 {
     KoSize size( ext );
     KoPoint realOrig( orig );
-    KoPointArray p( points );
+    KoPointArray p( getDrawingPoints() );
     getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
     return size;
 }
@@ -55,9 +56,23 @@ KoPoint KPrPointObject::getRealOrig() const
 {
     KoSize size( ext );
     KoPoint realOrig( orig );
-    KoPointArray p( points );
+    KoPointArray p( getDrawingPoints() );
     getRealSizeAndOrigFromPoints( p, angle, size, realOrig );
     return realOrig;
+}
+
+
+void KPrPointObject::loadOasis( const QDomElement &element, KoOasisContext & context,  KPrLoadingInfo* info )
+{
+    kdDebug(33001) << "KPrPointObject::loadOasis" << endl;
+
+    KPrShadowObject::loadOasis( element, context, info );
+    QString d = element.attributeNS( KoXmlNS::svg, "d", QString::null);
+    kdDebug(33001) << "path d: " << d << endl;
+
+    KPrSVGPathParser parser;
+    points = parser.getPoints( d, getType() == OT_FREEHAND );
+    loadOasisApplyViewBox( element, points );
 }
 
 

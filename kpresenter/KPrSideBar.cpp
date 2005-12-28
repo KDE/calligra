@@ -46,8 +46,7 @@
 #include "KPrCommand.h"
 #include <qvalidator.h>
 #include "KPrFreehandObject.h"
-#include "KPrCubicBezierCurveObject.h"
-#include "KPrQuadricBezierCurveObject.h"
+#include "KPrBezierCurveObject.h"
 #include "KPrTextObject.h"
 #include "KPrPolylineObject.h"
 #include "KPrClosedLineObject.h"

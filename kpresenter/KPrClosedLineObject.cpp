@@ -21,6 +21,7 @@
 
 #include "KPrClosedLineObject.h"
 #include "KPrGradient.h"
+#include "KPrSVGPathParser.h"
 #include <KoTextZoomHandler.h>
 #include <kdebug.h>
 #include <qbitmap.h>
@@ -250,7 +251,24 @@ void KPrClosedLineObject::loadOasis( const QDomElement &element, KoOasisContext 
 {
     kdDebug()<<"void KPrClosedLineObject::loadOasis( const QDomElement &element )***********\n";
     KPr2DObject::loadOasis( element,context, info );
-    KPrShadowObject::loadOasisDrawPoints( points, element, context, info );
+    QString tag( element.tagName() );
+    if ( tag == "polygon" )
+    {
+        KPrShadowObject::loadOasisDrawPoints( points, element, context, info );
+    }
+    else if ( tag == "path" ) // this is used to load closed draw:path objects
+    {
+        QString d = element.attributeNS( KoXmlNS::svg, "d", QString::null);
+        kdDebug(33001) << "path d: " << d << endl;
+
+        KPrSVGPathParser parser;
+        points = parser.getPoints( d, true );
+        loadOasisApplyViewBox( element, points );
+    }
+    else
+    {
+        kdDebug(33001) << "KPrClosedLineObject::loadOasis unsupported tag" << endl;
+    }
 }
 
 KoSize KPrClosedLineObject::getRealSize() const {

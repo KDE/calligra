@@ -37,10 +37,10 @@
 #include "insertpagedia.h"
 #include "KPrFreehandObject.h"
 #include "KPrPolylineObject.h"
-#include "KPrQuadricBezierCurveObject.h"
-#include "KPrCubicBezierCurveObject.h"
+#include "KPrBezierCurveObject.h"
 #include "KPrPolygonObject.h"
 #include "KPrClosedLineObject.h"
+#include "KPrSVGPathParser.h"
 
 #include <qpopupmenu.h>
 #include <qclipboard.h>
@@ -1888,49 +1888,57 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
 #endif
         else if ( name == "path" && isDrawNS)
         {
-            //we have 4 elements to use here.
-            //Cubicbeziercurve/Quadricbeziercurve/closeline/KPrFreehandObject
-            //we must parse svd:d argument
-            // "z" close element
-            // "c" cubic element
-            // "q" quadic element
-            // parse line we use relative position
-            // see http://www.w3.org/TR/SVG/paths.html#PathData
-            // see svgpathparser.cc (ksvg)
-            QString pathDefinition = o.attributeNS( KoXmlNS::svg, "d", QString::null);
-            kdDebug()<<"pathDefinition :"<<pathDefinition<<endl;
             fillStyleStack( o, context );
+            QString d = o.attributeNS( KoXmlNS::svg, "d", QString::null);
 
-            if ( pathDefinition.contains( "c" ) )
-            {
-                kdDebug()<<"Cubicbeziercurve \n";
-                KPrCubicBezierCurveObject *kpCurveObject = new KPrCubicBezierCurveObject();
-                kpCurveObject->loadOasis( o, context, m_loadingInfo);
-                if ( groupObject )
-                    groupObject->addObjects( kpCurveObject );
-                else
-                    newpage->appendObject( kpCurveObject );
+            KPrSVGPathParser parser;
+            ObjType objType = parser.getType( d );
 
-            }
-            else if ( pathDefinition.contains( "q" ) )
+            switch ( objType )
             {
-                kdDebug()<<"Quadricbeziercurve \n";
-                KPrQuadricBezierCurveObject *kpQuadricObject = new KPrQuadricBezierCurveObject();
-                kpQuadricObject->loadOasis( o, context, m_loadingInfo);
-                if ( groupObject )
-                    groupObject->addObjects( kpQuadricObject );
-                else
-                    newpage->appendObject( kpQuadricObject );
-            }
-            else
-            {
-                kdDebug()<<"KPrFreehandObject \n";
-                KPrFreehandObject *kpFreeHandObject = new KPrFreehandObject();
-                kpFreeHandObject->loadOasis( o, context, m_loadingInfo);
-                if ( groupObject )
-                    groupObject->addObjects( kpFreeHandObject );
-                else
-                    newpage->appendObject( kpFreeHandObject );
+                case OT_CUBICBEZIERCURVE:
+                {
+                    kdDebug(33001) << "Cubicbeziercurve" << endl;
+                    KPrCubicBezierCurveObject *kpCurveObject = new KPrCubicBezierCurveObject();
+                    kpCurveObject->loadOasis( o, context, m_loadingInfo );
+                    if ( groupObject )
+                        groupObject->addObjects( kpCurveObject );
+                    else
+                        newpage->appendObject( kpCurveObject );
+                } break;
+                case OT_QUADRICBEZIERCURVE:
+                {
+                    kdDebug(33001) << "Quadricbeziercurve" << endl;
+                    KPrQuadricBezierCurveObject *kpQuadricObject = new KPrQuadricBezierCurveObject();
+                    kpQuadricObject->loadOasis( o, context, m_loadingInfo );
+                    if ( groupObject )
+                        groupObject->addObjects( kpQuadricObject );
+                    else
+                        newpage->appendObject( kpQuadricObject );
+                } break;
+                case OT_FREEHAND:
+                {
+                    kdDebug(33001) << "Freehand" << endl;
+                    KPrFreehandObject *kpFreeHandObject = new KPrFreehandObject();
+                    kpFreeHandObject->loadOasis( o, context, m_loadingInfo );
+                    if ( groupObject )
+                        groupObject->addObjects( kpFreeHandObject );
+                    else
+                        newpage->appendObject( kpFreeHandObject );
+                } break;
+                case OT_CLOSED_LINE:
+                {
+                    kdDebug(33001) << "Closed Line" << endl;
+                    KPrClosedLineObject *kpClosedObject = new KPrClosedLineObject();
+                    kpClosedObject->loadOasis( o, context, m_loadingInfo );
+                    if ( groupObject )
+                        groupObject->addObjects( kpClosedObject );
+                    else
+                        newpage->appendObject( kpClosedObject );
+                } break;
+                default:
+                    kdDebug(33001) << "draw:path found unsupported object type " << objType << " in svg:d " << d << endl;
+                    break;
             }
         }
         else if ( name == "g" && isDrawNS)

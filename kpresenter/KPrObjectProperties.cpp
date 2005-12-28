@@ -21,7 +21,6 @@
 #include "KPrObjectProperties.h"
 
 #include "KPrObject.h"
-#include "KPrCubicBezierCurveObject.h"
 #include "KPrGroupObject.h"
 #include "KPrLineObject.h"
 #include "KPrRectObject.h"
@@ -29,7 +28,7 @@
 #include "KPrPieObject.h"
 #include "KPrPixmapObject.h"
 #include "KPrPointObject.h"
-#include "KPrQuadricBezierCurveObject.h"
+#include "KPrBezierCurveObject.h"
 #include "KPrTextObject.h"
 
 KPrObjectProperties::KPrObjectProperties( const QPtrList<KPrObject> &objects )

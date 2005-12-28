@@ -441,6 +441,20 @@ protected:
     bool loadOasisDrawPoints( KoPointArray &points, const QDomElement &element,
                               KoOasisContext & context, KPrLoadingInfo *info );
 
+
+    /**
+     * @brief Apply the svg:viewBox attribute to the points.
+     *
+     * This calculates the points of the object. It uses the size of the object and the 
+     * viewBox attribute to calculate the object points.
+     * When no svg:viewBox is  specified it is calculated form the supplied 
+     * points. 
+     *
+     * @param element the xml element from which the viewBox attribute should be read.
+     * @param points which should be updated.
+     */
+    bool loadOasisApplyViewBox( const QDomElement &element, KoPointArray &points );
+
     virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     /**

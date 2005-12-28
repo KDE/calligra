@@ -1,5 +1,5 @@
 KDE_CXXFLAGS = $(USE_RTTI)
-INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) -I$(kde_includes)/arts $(all_includes)
+INCLUDES = $(KOFFICE_INCLUDES) $(KOTEXT_INCLUDES) $(KOPAINTER_INCLUDES) -I$(kde_includes)/arts $(all_includes)
 
 bin_SCRIPTS = kprconverter.pl
 
@@ -30,7 +30,7 @@ libkpresenterprivate_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp \
 	insertpagedia.ui \
 	KPrConfig.cpp KPrVariableCollection.cpp KPrTextDrag.cpp \
 	KPrTextDocument.cpp KPrPointObject.cpp KPrFreehandObject.cpp KPrPolylineObject.cpp \
-	KPrQuadricBezierCurveObject.cpp KPrCubicBezierCurveObject.cpp \
+    KPrBezierCurveObject.cpp \
 	KPrPolygonObject.cpp KPrNoteBar.cpp \
 	KPrTextObjectIface.skel KPrTextObjectIface.cpp \
 	KPrTextViewIface.skel KPrTextViewIface.cpp KPrPresDurationDia.cpp \
@@ -43,6 +43,7 @@ libkpresenterprivate_la_SOURCES = KoPointArray.cpp KPrCanvas.cpp \
 	KPrLineObjectIface.skel KPrLineObjectIface.cpp \
 	KPrQuadricBezierCurveObjectIface.skel KPrQuadricBezierCurveObjectIface.cpp \
 	KPrCubicBezierCurveObjectIface.skel KPrCubicBezierCurveObjectIface.cpp \
+    KPrSVGPathParser.cpp \
 	shadowdialog.ui KPrShadowDialogImpl.cpp KPrTextPreview.cpp \
 	KPrRotationDialogImpl.cpp rotationpropertyui.ui \
 	KPrFreehandObjectIface.skel KPrFreehandObjectIface.cpp KPrStyleManager.cpp \
@@ -71,7 +72,7 @@ libkpresenterprivate_la_LDFLAGS = $(all_libraries) -version-info 4:0 -no-undefin
 if include_ARTS
 ARTSKDE = -lartskde
 endif
-libkpresenterprivate_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) $(ARTSKDE)
+libkpresenterprivate_la_LIBADD = autoformEdit/libaf.la $(LIB_KOFFICEUI) $(LIB_KOTEXT) $(LIB_KOPAINTER) $(ARTSKDE)
 
 ## The part
 kde_module_LTLIBRARIES = libkpresenterpart.la

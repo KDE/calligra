@@ -57,7 +57,26 @@ DCOPObject* KPrFreehandObject::dcopObject()
 
 bool KPrFreehandObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug()<<"bool KPrFreehandObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
+    KoRect rect( getRealRect() );
+    sc.xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( int( rect.width() * 100 ) )
+                                                                   .arg( int( rect.height() * 100 ) ) );
+    unsigned int pointCount = points.count();
+    unsigned int pos = 0;
+
+    QString d;
+    d += QString( "M%1 %2" ).arg( int( points.at(pos).x() * 100 ) )
+                            .arg( int( points.at(pos).y() * 100 ) );
+    ++pos;
+
+    while ( pos < pointCount )
+    {
+        d += QString( "L%1 %2" ).arg( int( points.at( pos ).x() * 100 ) )
+                                .arg( int( points.at( pos ).y() * 100 ) );
+        ++pos;
+    }
+
+    sc.xmlWriter.addAttribute( "svg:d", d );
+
     return true;
 }
 
@@ -68,8 +87,8 @@ const char * KPrFreehandObject::getOasisElementName() const
 
 void KPrFreehandObject::loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo* info )
 {
-    //todo
-    //we use draw:path
+    kdDebug(33001) << "KPrFreehandObject::loadOasis" << endl;
+    KPrPointObject::loadOasis( element, context, info );
 
     //load marker
     loadOasisMarker( context );

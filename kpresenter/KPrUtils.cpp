@@ -24,8 +24,7 @@
 #include "KPrGroupObject.h"
 #include "KPrFreehandObject.h"
 #include "KPrPolylineObject.h"
-#include "KPrQuadricBezierCurveObject.h"
-#include "KPrCubicBezierCurveObject.h"
+#include "KPrBezierCurveObject.h"
 #include "KPrPieObject.h"
 
 #include <koxmlns.h>

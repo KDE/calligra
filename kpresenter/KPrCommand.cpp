@@ -31,8 +31,7 @@
 #include "KPrAutoformObject.h"
 #include "KPrFreehandObject.h"
 #include "KPrPolylineObject.h"
-#include "KPrQuadricBezierCurveObject.h"
-#include "KPrCubicBezierCurveObject.h"
+#include "KPrBezierCurveObject.h"
 #include "KPrPolygonObject.h"
 #include "KPrClosedLineObject.h"
 

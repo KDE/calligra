@@ -27,20 +27,13 @@
 class QPainter;
 class DCOPObject;
 
-class KPrCubicBezierCurveObject : public KPrPointObject
+class KPrBezierCurveObject : public KPrPointObject
 {
 public:
-    KPrCubicBezierCurveObject();
-    KPrCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
-                              const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
-    virtual ~KPrCubicBezierCurveObject() {}
-
-    virtual DCOPObject* dcopObject();
-
-    KPrCubicBezierCurveObject &operator=( const KPrCubicBezierCurveObject & );
-
-    virtual ObjType getType() const { return OT_CUBICBEZIERCURVE; }
-    virtual QString getTypeString() const { return i18n("Cubic Bezier Curve"); }
+    KPrBezierCurveObject();
+    KPrBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
+                          const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    virtual ~KPrBezierCurveObject() {}
 
     virtual QDomDocumentFragment save( QDomDocument& doc,double offset );
 
@@ -51,6 +44,7 @@ public:
     void closeObject(bool _close);
     bool isClosed()const;
 
+    static KoPointArray bezier2polyline( const KoPointArray &bezierPoints );
 
 protected:
     virtual const char * getOasisElementName() const;
@@ -59,9 +53,40 @@ protected:
     virtual void updatePoints( double _fx, double _fy );
     virtual KoPointArray getDrawingPoints() const;
 
-    KoPointArray getCubicBezierPointsFrom( const KoPointArray &_pointArray );
-
     KoPointArray allPoints;
+
+private:
+    // Don't assign it
+    KPrBezierCurveObject &operator=( const KPrBezierCurveObject & );
+};
+
+
+class KPrCubicBezierCurveObject : public KPrBezierCurveObject
+{
+public:
+    KPrCubicBezierCurveObject();
+    KPrCubicBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
+                               const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    virtual ~KPrCubicBezierCurveObject() {}
+
+    virtual DCOPObject* dcopObject();
+
+    virtual ObjType getType() const { return OT_CUBICBEZIERCURVE; }
+    virtual QString getTypeString() const { return i18n( "Cubic Bezier Curve" ); }
+};
+
+class KPrQuadricBezierCurveObject : public KPrBezierCurveObject
+{
+public:
+    KPrQuadricBezierCurveObject();
+    KPrQuadricBezierCurveObject( const KoPointArray &_controlPoints, const KoPointArray &_allPoints, const KoSize & _size,
+                                 const KPrPen &_pen, LineEnd _lineBegin, LineEnd _lineEnd );
+    virtual ~KPrQuadricBezierCurveObject() {}
+
+    virtual DCOPObject* dcopObject();
+
+    virtual ObjType getType() const { return OT_CUBICBEZIERCURVE; }
+    virtual QString getTypeString() const { return i18n( "Quadric Bezier Curve" ); }
 };
 
 #endif

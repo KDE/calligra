@@ -19,7 +19,7 @@
 */
 
 #include "KPrCubicBezierCurveObjectIface.h"
-#include "KPrCubicBezierCurveObject.h"
+#include "KPrBezierCurveObject.h"
 #include "KPrUtils.h"
 #include <kdebug.h>
 

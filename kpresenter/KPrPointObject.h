@@ -36,6 +36,7 @@ public:
     virtual QDomDocumentFragment save( QDomDocument& doc, double offset );
 
     virtual double load( const QDomElement &element );
+    virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo* info );
 
     virtual void setLineBegin( LineEnd _lineBegin ) { lineBegin = _lineBegin; }
     virtual void setLineEnd( LineEnd _lineEnd ) { lineEnd = _lineEnd; }

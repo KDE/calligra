@@ -67,8 +67,7 @@
 #include "KPrBackground.h"
 #include "KPrPixmapObject.h"
 #include "KPrFreehandObject.h"
-#include "KPrCubicBezierCurveObject.h"
-#include "KPrQuadricBezierCurveObject.h"
+#include "KPrBezierCurveObject.h"
 #include "KPrGotoPage.h"
 #include "KPrTextObject.h"
 #include "KPrSoundPlayer.h"
@@ -3791,102 +3790,32 @@ void KPrCanvas::insertPolyline( const KoPointArray &_pointArray )
 
 void KPrCanvas::insertCubicBezierCurve( const KoPointArray &_pointArray )
 {
-    if( _pointArray.count()> 1)
+    if ( _pointArray.count() > 1 )
     {
-
-        KoPointArray _points( _pointArray );
-        KoPointArray _allPoints;
-        unsigned int pointCount = _points.count();
-        KoRect _rect;
-
-        if ( pointCount == 2 ) { // line
-            _rect = _points.boundingRect();
-            _allPoints = _points;
-        }
-        else { // cubic bezier curve
-            KoPointArray tmpPointArray;
-            unsigned int _tmpIndex = 0;
-            unsigned int count = 0;
-            while ( count < pointCount ) {
-                if ( pointCount >= ( count + 4 ) ) { // for cubic bezier curve
-                    double _firstX = _points.at( count ).x();
-                    double _firstY = _points.at( count ).y();
-
-                    double _fourthX = _points.at( count + 1 ).x();
-                    double _fourthY = _points.at( count + 1 ).y();
-
-                    double _secondX = _points.at( count + 2 ).x();
-                    double _secondY = _points.at( count + 2 ).y();
-
-                    double _thirdX = _points.at( count + 3 ).x();
-                    double _thirdY = _points.at( count + 3 ).y();
-
-                    KoPointArray _cubicBezierPoint;
-                    _cubicBezierPoint.putPoints( 0, 4, _firstX,_firstY, _secondX,_secondY, _thirdX,_thirdY, _fourthX,_fourthY );
-
-                    _cubicBezierPoint = _cubicBezierPoint.cubicBezier();
-
-                    KoPointArray::ConstIterator it;
-                    for ( it = _cubicBezierPoint.begin(); it != _cubicBezierPoint.end(); ++it ) {
-                        KoPoint _point = (*it);
-                        tmpPointArray.putPoints( _tmpIndex, 1, _point.x(), _point.y() );
-                        ++_tmpIndex;
-                    }
-
-                    count += 4;
-                }
-                else { // for line
-                    double _x1 = _points.at( count ).x();
-                    double _y1 = _points.at( count ).y();
-
-                    double _x2 = _points.at( count + 1 ).x();
-                    double _y2 = _points.at( count + 1 ).y();
-
-                    tmpPointArray.putPoints( _tmpIndex, 2, _x1,_y1, _x2,_y2 );
-                    _tmpIndex += 2;
-                    count += 2;
-                }
-            }
-
-            _rect = tmpPointArray.boundingRect();
-            _allPoints = tmpPointArray;
-        }
-
-        double ox = _rect.x();
-        double oy = _rect.y();
-        unsigned int index = 0;
-
         KoPointArray points( _pointArray );
-        KoPointArray tmpPoints;
-        KoPointArray::ConstIterator it;
-        for ( it = points.begin(); it != points.end(); ++it ) {
-            KoPoint point = (*it);
-            double tmpX = point.x() - ox;
-            double tmpY = point.y() - oy;
-            tmpPoints.putPoints( index, 1, tmpX,tmpY );
-            ++index;
-        }
+        KoPointArray bezierPoints( KPrBezierCurveObject::bezier2polyline( _pointArray ) );
+        KoRect rect = bezierPoints.boundingRect();
+        points.translate( -rect.x(), -rect.y() );
+        bezierPoints.translate( -rect.x(), -rect.y() );
 
-        index = 0;
-        KoPointArray tmpAllPoints;
-        for ( it = _allPoints.begin(); it != _allPoints.end(); ++it ) {
-            KoPoint point = (*it);
-            double tmpX = point.x() - ox ;
-            double tmpY = point.y() - oy;
-            tmpAllPoints.putPoints( index, 1, tmpX,tmpY );
-            ++index;
-        }
         if ( toolEditMode == INS_CUBICBEZIERCURVE )
-            m_activePage->insertCubicBezierCurve( tmpPoints, tmpAllPoints, _rect, m_view->getPen(),
+        {
+            m_activePage->insertCubicBezierCurve( points, bezierPoints, rect, m_view->getPen(),
                                                   m_view->getLineBegin(), m_view->getLineEnd() );
+        }
         else if ( toolEditMode == INS_QUADRICBEZIERCURVE )
-            m_activePage->insertQuadricBezierCurve( tmpPoints, tmpAllPoints, _rect, m_view->getPen(),
+        {
+            m_activePage->insertQuadricBezierCurve( points, bezierPoints, rect, m_view->getPen(),
                                                     m_view->getLineBegin(), m_view->getLineEnd() );
-        else if ( toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE )
-            m_activePage->insertClosedLine( tmpAllPoints, _rect, m_view->getPen(), m_view->getBrush(), m_view->getFillType(),
-                                            m_view->getGColor1(), m_view->getGColor2(), m_view->getGType(), m_view->getGUnbalanced(),
+        }
+        else if ( toolEditMode == INS_CLOSED_CUBICBEZIERCURVE || 
+                  toolEditMode == INS_CLOSED_QUADRICBEZIERCURVE )
+        {
+            m_activePage->insertClosedLine( bezierPoints, rect, m_view->getPen(), m_view->getBrush(), 
+                                            m_view->getFillType(), m_view->getGColor1(), m_view->getGColor2(), 
+                                            m_view->getGType(), m_view->getGUnbalanced(),
                                             m_view->getGXFactor(), m_view->getGYFactor(), toolEditMode );
-
+        }
     }
     m_pointArray = KoPointArray();
     m_indexPointArray = 0;
@@ -5624,17 +5553,8 @@ KoPointArray KPrCanvas::getObjectPoints( const KoPointArray &pointArray )
 {
     KoRect rect = pointArray.boundingRect();
 
-    double ox = rect.x();
-    double oy = rect.y();
+    KoPointArray points( pointArray );
+    points.translate( -rect.x(), -rect.y() );
 
-    unsigned int index = 0;
-
-    KoPointArray tmpPoints;
-    KoPointArray::ConstIterator it( pointArray.begin() );
-    for ( ; it != pointArray.end(); ++it )
-    {
-        tmpPoints.putPoints( index, 1, ( *it ).x() - ox, ( *it ).y() - oy );
-        ++index;
-    }
-    return tmpPoints;
+    return points;
 }

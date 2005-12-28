@@ -1725,66 +1725,75 @@ bool KPrShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomEleme
                                           KoOasisContext & context, KPrLoadingInfo *info )
 {
     QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
-    QStringList viewBox = QStringList::split( ' ', element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
-    //for ( QStringList::Iterator it = viewBox.begin(); it != viewBox.end(); ++it )
-    //{
-    //    kdDebug(33001) << "viewBox = " << *it << endl;
-    //}
 
-    int left = 0;
-    int top = 0;
-    int right = 0;
-    int bottom = 0;
-
-    if ( viewBox.size() == 4 )
+    unsigned int index = 0;
+    for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
     {
-        QStringList::Iterator it = viewBox.begin();
-        left = ( *it++ ).toInt();
-        top = ( *it++ ).toInt();
-        right = ( *it++ ).toInt();
-        bottom = ( *it ).toInt();
-        //kdDebug(33001) << "left = " << left
-        //               << "top = " << top
-        //               << "right =" << right
-        //               << "bottom =" << bottom << endl;
+        points.putPoints( index++, 1, ( *it ).section( ',', 0, 0 ).toInt(), ( *it ).section( ',', 1, 1 ).toInt() );
+    }
+    loadOasisApplyViewBox( element, points );
+    return true;
+}
+
+
+bool KPrShadowObject::loadOasisApplyViewBox( const QDomElement &element, KoPointArray &points )
+{
+    kdDebug(33001) << "loadOasisApplayViewBox svg:viewBox = " << element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) << endl;
+    QStringList viewBoxPoints = QStringList::split( ' ', element.attributeNS( KoXmlNS::svg, "viewBox", QString::null ) );
+
+    KoRect viewBox;
+    if ( viewBoxPoints.size() == 4 )
+    {
+        QStringList::Iterator it = viewBoxPoints.begin();
+        //viewBox.setCoords( ( *it++ ).toInt(), ( *it++ ).toInt(), ( *it++ ).toInt(), ( *it ).toInt() );
+        viewBox.setLeft( ( *it++ ).toInt() );
+        viewBox.setTop( ( *it++ ).toInt() );
+        viewBox.setRight( ( *it++ ).toInt() );
+        viewBox.setBottom( ( *it ).toInt() );
+        
+        kdDebug(33001) << "viewBox supplied = " << viewBox << endl;
     }
     else
     {
         //if no viewBox is found
-        QStringList::ConstIterator end( ptList.end() );
-        for (QStringList::ConstIterator it = ptList.begin(); it != end; ++it)
+        KoPointArray::ConstIterator it( points.begin() );
+        bool first = true;
+        for ( ; it != points.end(); ++it )
         {
-            right = QMAX( (*it).section( ',', 0, 0 ).toInt(), right );
-            bottom = QMAX( (*it).section( ',', 1, 1 ).toInt(), bottom );
+            KoPoint p = (*it);
+            if ( first )
+            {
+                viewBox.setCoords( p.x(), p.y(), p.x(), p.y() );
+                first = false;
+            }
+            else
+            {
+                viewBox.setLeft( QMIN( viewBox.left(), p.x() ) );
+                viewBox.setRight( QMAX( viewBox.right(), p.x() ) );
+                viewBox.setTop( QMIN( viewBox.top(), p.y() ) );
+                viewBox.setBottom( QMAX( viewBox.bottom(), p.y() ) );
+            }
         }
+        kdDebug(33001) << "viewBox calculated = " << viewBox << endl;
     }
 
-    if ( right - left != 0 && bottom - top != 0 )
+    if ( viewBox.width() != 0 && viewBox.height() != 0 )
     {
-        double tmp_x, tmp_y;
-        unsigned int index = 0;
-        for (QStringList::Iterator it = ptList.begin(); it != ptList.end(); ++it)
+        KoPointArray::Iterator it( points.begin() );
+        for ( ; it != points.end(); ++it )
         {
-            tmp_x = double( (*it).section( ',', 0, 0 ).toInt() + left ) / ( right - left ) * ext.width();
-            tmp_y = double( (*it).section( ',', 1, 1 ).toInt() + top ) / ( bottom - top ) * ext.height();
-
-            //kdDebug(33001) << "p" << index << " x: " << tmp_x << endl;
-            //kdDebug(33001) << "p" << index << " y: " << tmp_y << endl;
-
-            points.putPoints( index, 1, tmp_x, tmp_y );
-            ++index;
+            KoPoint *p = it;
+            p->setX( ( p->x() - viewBox.left() ) / viewBox.width() * ext.width() );
+            p->setY( ( p->y() - viewBox.top() ) / viewBox.height() * ext.height() );
         }
     }
     else
     {
-        kdDebug(33001) << "problem in viewBox values are: "
-                       << "left = " << left << ", "
-                       << "top = " << top << ", "
-                       << "right =" << right << ", "
-                       << "bottom =" << bottom << endl;
+        kdDebug(33001) << "problem in viewBox: " << viewBox << endl;
     }
     return true;
 }
+
 
 void KPrShadowObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
