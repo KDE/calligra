@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<KivioStencilSpawnerSet>
+  <Title data="Entity Relationship"/>
+  <Id data="Kivio-ER-Collection"/>
+  <Description>Stencils needed for to create a Entity Relationship diagram.</Description>
+</KivioStencilSpawnerSet>
