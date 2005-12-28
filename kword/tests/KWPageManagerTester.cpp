@@ -172,7 +172,7 @@ void KWPageManagerTester::removePages() {
     KWPage *page1 = pageManager->appendPage();
     pageManager->appendPage();
     KWPage *page2 = pageManager->appendPage();
-    KWPage *page3 = pageManager->appendPage();
+    /*KWPage *page3 =*/ pageManager->appendPage();
     KWPage *page4 = pageManager->appendPage();
 
     pageManager->removePage(2);
@@ -188,7 +188,11 @@ void KWPageManagerTester::removePages() {
 
 void KWPageManagerTester::pageInfo() {
     KWPageManager *pageManager = new KWPageManager();
-    pageManager->setDefaultPageSize(300, 600, PG_DIN_A4);
+    KoPageLayout layout;
+    layout.ptWidth = 300;
+    layout.ptHeight = 600;
+    layout.format = PG_DIN_A4;
+    pageManager->setDefaultPage(layout);
     pageManager->setStartPage(1);
     KWPage *page1 = pageManager->appendPage();
     page1->setWidth(100);
@@ -200,12 +204,19 @@ void KWPageManagerTester::pageInfo() {
 
     CHECK(pageManager->topOfPage(3), 300.0);
     CHECK(pageManager->bottomOfPage(3), 900.0);
-    pageManager->setDefaultPageSize(300, 500.0, PG_DIN_A4);
+    layout.ptHeight = 500;
+    pageManager->setDefaultPage(layout);
     CHECK(pageManager->bottomOfPage(3), 800.0);
     page2->setHeight(-1);
     CHECK(pageManager->bottomOfPage(3), 1200.0);
 
-    pageManager->setDefaultPageMargins(5, 6, 7, 8);
+    layout.ptTop = 5;
+    layout.ptLeft = 6;
+    layout.ptBottom = 7;
+    layout.ptRight = 8;
+    layout.ptBindingSide = -1;
+    layout.ptPageEdge = -1;
+    pageManager->setDefaultPage(layout);
     page2->setTopMargin(9);
     page2->setLeftMargin(10);
     page2->setBottomMargin(11);
@@ -227,20 +238,42 @@ void KWPageManagerTester::pageInfo() {
     CHECK(lay.ptBottom, 7.0);
     CHECK(lay.ptRight, 8.0);
 
-    lay.ptRight = 90; // should have no effect
+    lay.ptRight = 90; // should have no effect, since its a copy
     CHECK(page3->rightMargin(), 8.0);
+
+
+    // Page Edge / Page Margin
+    page1->setPageEdgeMargin(14.0);
+    CHECK(page1->pageSide(), KWPage::Right);
+    CHECK(page1->rightMargin(), 14.0);
+    page1->setMarginClosestBinding(15.0);
+    CHECK(page1->rightMargin(), 14.0);
+    CHECK(page1->leftMargin(), 15.0);
+
+    CHECK(page2->rightMargin(), 12.0); // unchanged due to changes in page1
+    CHECK(page2->leftMargin(), 10.0);
+    page2->setPageEdgeMargin(16.0);
+    CHECK(page2->pageSide(), KWPage::Left);
+    CHECK(page2->leftMargin(), 16.0);
+    page2->setMarginClosestBinding(17.0);
+    CHECK(page2->leftMargin(), 16.0);
+    CHECK(page2->rightMargin(), 17.0);
 }
 
 void KWPageManagerTester::testClipToDocument() {
     KWPageManager *pageManager = new KWPageManager();
-    pageManager->setDefaultPageSize(300, 600, PG_DIN_A4);
+    KoPageLayout lay;
+    lay.ptWidth = 300;
+    lay.ptHeight = 600;
+    lay.format = PG_DIN_A4;
+    pageManager->setDefaultPage(lay);
     KWPage *page1 = pageManager->appendPage();
     page1->setWidth(100);
     page1->setHeight(200);
     KWPage *page2 = pageManager->appendPage();
     page2->setWidth(50);
     page2->setHeight(100);
-    KWPage *page3 = pageManager->appendPage();
+    /*KWPage *page3 =*/ pageManager->appendPage();
 
     KoPoint p(10,10);
 

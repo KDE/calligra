@@ -25,6 +25,7 @@ KWPageManager::KWPageManager() {
     m_firstPage = 1;
     m_onlyAllowAppend = false;
     m_pageList.setAutoDelete(true);
+    m_defaultPageLayout = KoPageLayout::standardLayout();
 }
 
 int KWPageManager::pageNumber(const KoRect &frame) const {

@@ -40,10 +40,31 @@ public:
     void setTopMargin(const double &x);
     /// set height of the bottom margin in pt
     void setBottomMargin(const double &y);
-    /// set width of the margin that is the closest to the page edge, i.e. left for even pages
+
+    /**
+     * set width of the margin that is the closest to the page edge, i.e. left for even pages.
+     * Any page should either use valid left and right margins, or valid pageedge/binding ones,
+     * setting this one will remove the left/right ones.
+     */
     void setPageEdgeMargin(const double &x);
-    /// set width of the margin that is the closest to the binding, i.e. right for even pages
+    /**
+     * set width of the margin that is the closest to the binding, i.e. right for even pages.
+     * Any page should either use valid left and right margins, or valid pageedge/binding ones,
+     * setting this one will remove the left/right ones.
+     */
     void setMarginClosestBinding(const double &y);
+    /**
+     * set width of the left margin.
+     * Any page should either use valid left and right margins, or valid pageedge/binding ones,
+     * setting this one will remove the pageedge/closest-binding ones.
+     */
+    void setLeftMargin(const double &l);
+    /**
+     * set width of the right margin.
+     * Any page should either use valid left and right margins, or valid pageedge/binding ones,
+     * setting this one will remove the pageedge/closest-binding ones.
+     */
+    void setRightMargin(const double &r);
 
     /// return the width of this page (in pt)
     double width() const;

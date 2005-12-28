@@ -2483,9 +2483,9 @@ double KWFourSideConfigWidget::bottomValue() const
     return m_inputBottom->value();
 }
 
-// not needed, setEnabled does it
-// m_inputBottom->setEnabled( state );
-// m_inputRight->setEnabled( state );
-// m_inputTop->setEnabled( state );
-// m_inputLeft->setEnabled( state );
-// m_synchronize->setEnabled( state );
+/*
+    TODO;
+    features that are present in the frames but not shown (yet)
+        - frames with 'copy' should have a radiogroup showing that its only going to be copied to
+          the even/odd side or to both sides.
+*/

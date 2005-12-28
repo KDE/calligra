@@ -61,9 +61,27 @@ void KWPage::setBottomMargin(const double &b) {
 }
 void KWPage::setPageEdgeMargin(const double &m) {
     m_pageLayout.ptPageEdge = m == m_parent->m_defaultPageLayout.ptPageEdge ? -1 : m;
+    m_pageLayout.ptLeft = -1;
+    m_pageLayout.ptRight = -1;
 }
 void KWPage::setMarginClosestBinding(const double &m) {
     m_pageLayout.ptBindingSide = m == m_parent->m_defaultPageLayout.ptBindingSide ? -1 : m;
+    m_pageLayout.ptLeft = -1;
+    m_pageLayout.ptRight = -1;
+}
+void KWPage::setLeftMargin(const double &l) {
+    m_pageLayout.ptLeft = l == m_parent->m_defaultPageLayout.ptLeft ? -1 : l;
+    m_pageLayout.ptBindingSide = -1;
+    m_pageLayout.ptPageEdge = -1;
+    if(rightMargin() == -1)
+        m_pageLayout.ptRight = 0; // never leave this object in an illegal state
+}
+void KWPage::setRightMargin(const double &r) {
+    m_pageLayout.ptRight = r == m_parent->m_defaultPageLayout.ptRight ? -1 : r;
+    m_pageLayout.ptBindingSide = -1;
+    m_pageLayout.ptPageEdge = -1;
+    if(leftMargin() == -1)
+        m_pageLayout.ptLeft = 0; // never leave this object in an illegal state
 }
 
 double KWPage::topMargin() const {
@@ -77,29 +95,24 @@ double KWPage::bottomMargin() const {
     return m_parent->m_defaultPageLayout.ptBottom;
 }
 double KWPage::leftMargin() const {
-    // first try fallback right/left
+    // first try local left.
     if(m_pageLayout.ptLeft != -1)
         return m_pageLayout.ptLeft;
-    if(m_parent->m_defaultPageLayout.ptLeft != -1)
-        return m_parent->m_defaultPageLayout.ptLeft;
 
-    // not set? then use the edges based one
-    if(m_pageSide == Right)
-        return pageEdgeMargin();
-    else
-        return marginClosestBinding();
+    // then see if the margin is in use.
+    double answer = m_pageSide == Right ? marginClosestBinding() : pageEdgeMargin();
+    if(answer != -1)
+        return answer;
+    return m_parent->m_defaultPageLayout.ptLeft;
 }
 double KWPage::rightMargin() const {
-    // first try fallback right/left
     if(m_pageLayout.ptRight != -1)
         return m_pageLayout.ptRight;
-    if(m_parent->m_defaultPageLayout.ptRight != -1)
-        return m_parent->m_defaultPageLayout.ptRight;
-    // not set? then use the edges based one
-    if(m_pageSide == Left)
-        return pageEdgeMargin();
-    else
-        return marginClosestBinding();
+
+    double answer = m_pageSide == Left ? marginClosestBinding() : pageEdgeMargin();
+    if(answer != -1)
+        return answer;
+    return m_parent->m_defaultPageLayout.ptRight;
 }
 double KWPage::pageEdgeMargin() const {
     if(m_pageLayout.ptPageEdge != -1)
@@ -107,7 +120,7 @@ double KWPage::pageEdgeMargin() const {
     return m_parent->m_defaultPageLayout.ptPageEdge;
 }
 double KWPage::marginClosestBinding() const {
-    if(m_pageLayout.ptBottom != -1)
+    if(m_pageLayout.ptBindingSide != -1)
         return m_pageLayout.ptBindingSide;
     return m_parent->m_defaultPageLayout.ptBindingSide;
 }

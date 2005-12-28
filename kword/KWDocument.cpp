@@ -3920,27 +3920,18 @@ QPtrList<KWFrame> KWDocument::framesToCopyOnNewPage( int afterPageNum ) const {
         // don't add tables! A table cell ( frameset ) _must_ not have cells auto-added to them!
         if ( frameSet->type() == FT_TABLE ) continue;
 
-        /* copy the frame if: - it is on this page or
-           - it is on the former page and the frame is set to double sided.
-           - AND the frame is set to be reconnected or copied
-           -  */
+        // NewFrameBehavior == Copy is handled here except for headers/footers, which
+        // are created in recalcFrames()
+        if(frameSet->isAHeader() || frameSet->isAFooter()) continue;
+
 #ifdef DEBUG_PAGES
         kdDebug(32002) << "KWDocument::framesToCopyOnNewPage looking at frame " << frame << ", pageNum=" << frame->pageNumber() << " from " << frameSet->name() << endl;
         static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
         kdDebug(32002) << "   frame->newFrameBehavior()==" << newFrameBh[frame->newFrameBehavior()] << endl;
 #endif
-        if ( (frame->pageNumber() == afterPageNum ||
-              (frame->pageNumber() == afterPageNum -1 && frame->sheetSide() != KWFrame::AnySide) )
-             &&
-             ( ( frame->newFrameBehavior()==KWFrame::Reconnect && frameSet->type() == FT_TEXT ) ||  // (*)
-               ( frame->newFrameBehavior()==KWFrame::Copy && !frameSet->isAHeader() && !frameSet->isAFooter() ) ) // (**)
-            )
-        {
-            // (*) : Reconnect only makes sense for text frames
-            // (**) : NewFrameBehavior == Copy is handled here except for headers/footers, which
-            // are created in recalcFrames() anyway.
+        if (frame->newFrameBehavior() == KWFrame::Copy &&
+                (frame->sheetSide() == KWFrame::AnySide || frame->pageNumber() == afterPageNum -1))
             framesToCopy.append( frame );
-        }
     }
     return framesToCopy;
 }
@@ -3978,13 +3969,13 @@ KWPage* KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page
 
         KWFrame *newFrame = frame->getCopy();
         newFrame->moveBy( 0, pageHeight );
-        //newFrame->setPageNum( frame->pageNumber()+1 );
         frame->frameSet()->addFrame( newFrame );
 
         if ( frame->newFrameBehavior()==KWFrame::Copy )
             newFrame->setCopy( true );
         //kdDebug(32002) << "   => created frame " << newFrame << " " << *newFrame << endl;
     }
+    delayedRecalcFrames(page->pageNumber()); // make sure the main-text-frame is created.
     return page;
 }
 
