@@ -23,8 +23,6 @@
 #include "../main/krossconfig.h"
 #include "object.h"
 #include "list.h"
-#include "class.h"
-#include "variant.h"
 
 #include <qstring.h>
 
@@ -271,22 +269,6 @@ namespace Kross { namespace Api {
             Object::Ptr call(List::Ptr) {
                 return ProxyFunctionCaller<ProxyFunction, typename RET::type>::exec(this);
             }
-    };
-
-    /**
-     * The ProxyClass provides us a template-class to create a
-     * \a Kross::Api::Class on the fly.
-     */
-    template<class INSTANCE>
-    class ProxyClass : public Class< ProxyClass<INSTANCE> >
-    {
-        protected:
-            INSTANCE* m_instance;
-        public:
-            typedef INSTANCE type;
-            ProxyClass(const QString& classname, INSTANCE* instance)
-                : Class< ProxyClass<INSTANCE> >(classname)
-                , m_instance(instance) {}
     };
 
 }}

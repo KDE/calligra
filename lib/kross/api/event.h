@@ -27,6 +27,8 @@
 #include "list.h"
 #include "exception.h"
 #include "function.h"
+#include "proxy.h"
+#include "variant.h"
 
 #include <qstring.h>
 #include <qvaluelist.h>
@@ -61,6 +63,10 @@ namespace Kross { namespace Api {
 
             /**
              * Constructor.
+             *
+             * \param name The name this \a Event has.
+             * \param parent The \a Object that this \a Event is
+             *        child of.
              */
             Event(const QString& name, Object::Ptr parent)
                 : Callable(name, parent, ArgumentList())
@@ -91,9 +97,9 @@ namespace Kross { namespace Api {
              *        should handle calls.
              * \param arglist A list of arguments for the function.
              */
+//TODO remove this method as soon as there is no code using it any longer.
             void addFunction(const QString& name, FunctionPtr function, const ArgumentList& /*arglist*/ = ArgumentList())
             {
-                //FIXME arglist
                 m_functions.replace(name, new VarFunction0<T>(static_cast<T*>(this), function));
             }
 
@@ -115,12 +121,70 @@ namespace Kross { namespace Api {
                 m_functions.replace(name, function);
             }
 
-           /**
-             * Check if a function is a member of this \a Callable
-             * \param name the function name
-             * \return true if the function is available in this \a Callable
+            /**
+             * Template function to add a \a Kross::Api::ProxyFunction as
+             * builtin-function to this \a Event instance.
              */
-            bool isAFunction(const QString & name)
+            template<class RET, class ARG1, class ARG2, class ARG3, class ARG4, class INSTANCE, typename METHOD>
+            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
+            {
+                m_functions.replace(name,
+                    new Kross::Api::ProxyFunction <
+                        INSTANCE, METHOD,
+                        RET, ARG1, ARG2, ARG3, ARG4
+                    > ( instance, method ) );
+            }
+
+            /// Same as above, but with three arguments.
+            template<class RET, class ARG1, class ARG2, class ARG3, class INSTANCE, typename METHOD>
+            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
+            {
+                m_functions.replace(name,
+                    new Kross::Api::ProxyFunction <
+                        INSTANCE, METHOD,
+                        RET, ARG1, ARG2, ARG3
+                    > ( instance, method ) );
+            }
+
+            /// Same as above, but with two arguments.
+            template<class RET, class ARG1, class ARG2, class INSTANCE, typename METHOD>
+            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
+            {
+                m_functions.replace(name,
+                    new Kross::Api::ProxyFunction <
+                        INSTANCE, METHOD,
+                        RET, ARG1, ARG2
+                    > ( instance, method ) );
+            }
+
+            /// Same as above, but with one argument.
+            template<class RET, class ARG1, class INSTANCE, typename METHOD>
+            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
+            {
+                m_functions.replace(name,
+                    new Kross::Api::ProxyFunction <
+                        INSTANCE, METHOD,
+                        RET, ARG1
+                    > ( instance, method ) );
+            }
+
+            /// Same as above, but with no arguments.
+            template<class RET, class INSTANCE, typename METHOD>
+            inline void addProxyFunction(const QString& name, INSTANCE* instance, METHOD method)
+            {
+                m_functions.replace(name,
+                    new Kross::Api::ProxyFunction <
+                        INSTANCE, METHOD,
+                        RET
+                    > ( instance, method ) );
+            }
+
+           /**
+            * Check if a function is a member of this \a Callable
+            * \param name the function name
+            * \return true if the function is available in this \a Callable
+            */
+            bool isAFunction(const QString & name) const
             {
                 return m_functions.contains(name);
             }

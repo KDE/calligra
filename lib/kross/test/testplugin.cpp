@@ -153,11 +153,11 @@ TestPluginModule::TestPluginModule(const QString& name)
     addChild( new TestPluginObject("testpluginobject1") );
 
     // Let's wrap a whole instance and it's methodfunctions.
-    Kross::Api::ProxyClass<TestObject> *proxyclass =
-        new Kross::Api::ProxyClass<TestObject>("testpluginobject2", m_testobject);
-    addChild(proxyclass);
+    Kross::Api::Event<TestObject> *testobjectclass =
+        new Kross::Api::Event<TestObject>("testpluginobject2", this);
+    addChild(testobjectclass);
 
-    proxyclass->addFunction("func1",
+    testobjectclass->addFunction("func1",
         new Kross::Api::ProxyFunction <
             TestObject,
             uint (TestObject::*)(uint),
@@ -165,7 +165,7 @@ TestPluginModule::TestPluginModule(const QString& name)
             Kross::Api::ProxyValue< Kross::Api::Variant, uint > // first argument
             > ( m_testobject, &TestObject::func1 )
     );
-    proxyclass->addFunction("func2",
+    testobjectclass->addFunction("func2",
         new Kross::Api::ProxyFunction <
             TestObject,
             void (TestObject::*)(QString, int),
@@ -174,7 +174,7 @@ TestPluginModule::TestPluginModule(const QString& name)
             Kross::Api::ProxyValue< Kross::Api::Variant, int > // second argument
             > ( m_testobject, &TestObject::func2 )
     );
-    proxyclass->addFunction("func3",
+    testobjectclass->addFunction("func3",
         new Kross::Api::ProxyFunction<
             TestObject,
             QString (TestObject::*)(QString, int),
@@ -182,7 +182,7 @@ TestPluginModule::TestPluginModule(const QString& name)
             Kross::Api::ProxyValue< Kross::Api::Variant, QString >, // first argument
             Kross::Api::ProxyValue< Kross::Api::Variant, int > // second argument
             > ( m_testobject, &TestObject::func3) );
-    proxyclass->addFunction("func4",
+    testobjectclass->addFunction("func4",
         new Kross::Api::ProxyFunction<
             TestObject,
             const QString& (TestObject::*)(const QString&, int) const,
