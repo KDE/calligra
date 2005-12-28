@@ -258,6 +258,12 @@ void KWPageManagerTester::pageInfo() {
     page2->setMarginClosestBinding(17.0);
     CHECK(page2->leftMargin(), 16.0);
     CHECK(page2->rightMargin(), 17.0);
+
+    page2->setLeftMargin(18);
+    CHECK(page2->leftMargin(), 18.0);
+    page2->setRightMargin(19);
+    CHECK(page2->rightMargin(), 19.0);
+    CHECK(page2->leftMargin(), 18.0);
 }
 
 void KWPageManagerTester::testClipToDocument() {
