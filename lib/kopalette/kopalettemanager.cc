@@ -71,7 +71,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     
     if (m_allPalettesShown) {
         m_toggleShowHidePalettes = new KToggleAction(i18n("Hide All Palette Windows"),
-                                    "CTRL+SHIFT+F9", this,
+                                    "CTRL+SHIFT+H", this,
                                     SLOT(slotToggleAllPalettes()),
                                     this, "toggleAllPaletteWindows");
 
@@ -161,9 +161,16 @@ void KoPaletteManager::addWidget(QWidget * widget,
         m_defaultPaletteOrder.append(pname+ "," + QString::number(style));
     }
 
-    KToggleAction * a = new KToggleAction(i18n("Hide %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
-    a->setCheckedState(i18n("Show %1").arg(widget->caption()));
-    if (!visible) a->setChecked(true);
+    KToggleAction * a;
+    if (visible) {
+        a = new KToggleAction(i18n("Hide %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
+        a->setCheckedState(i18n("Show %1").arg(widget->caption()));
+    }
+    else {
+        a = new KToggleAction(i18n("Show %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
+        a->setCheckedState(i18n("Hide %1").arg(widget->caption()));
+
+    }
         
     m_mapper->setMapping(a, m_actions->count()); // This is the position at which we'll insert the action
     m_actions->insert( name, a );
@@ -392,6 +399,12 @@ void KoPaletteManager::slotToggleAllPalettes()
 {
     m_allPalettesShown = !m_allPalettesShown;
 
+#if 1    
+    QDictIterator<KoPalette> it(*m_palettes);
+    for (; it.current(); ++it) {
+        it.current()->makeVisible(m_allPalettesShown);
+    }
+#else
     QMap<QString, QString>::Iterator it;
     for ( it = m_currentMapping->begin(); it != m_currentMapping->end(); ++it ) {
         QString name = it.key().latin1();
@@ -407,6 +420,7 @@ void KoPaletteManager::slotToggleAllPalettes()
     for (; it2.current(); ++it2) {
         it2.current()->setChecked(!m_allPalettesShown);
     }
+#endif
 }
 
 void KoPaletteManager::showAllPalettes(bool shown)
