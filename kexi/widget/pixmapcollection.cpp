@@ -250,14 +250,14 @@ PixmapCollectionEditor::PixmapCollectionEditor(PixmapCollection *collection, QWi
 
 	QToolButton *newItemName = new QToolButton(frame);
 	newItemName->setIconSet(BarIconSet("icons"));
-	newItemName->setTextLabel(i18n("&Add an icon"), true);
+	newItemName->setTextLabel(i18n("&Add an Icon"), true);
 	vlayout->addWidget(newItemName);
 	m_buttons.insert(BNewItemName, newItemName);
 	connect(newItemName, SIGNAL(clicked()), this, SLOT(newItemByName()));
 
 	QToolButton *delItem = new QToolButton(frame);
 	delItem->setIconSet(BarIconSet("edit_remove"));
-	delItem->setTextLabel(i18n("&Remove selected item"), true);
+	delItem->setTextLabel(i18n("&Remove Selected Item"), true);
 	vlayout->addWidget(delItem);
 	m_buttons.insert(BDelItem, delItem);
 	connect(delItem, SIGNAL(clicked()), this, SLOT(removeItem()));

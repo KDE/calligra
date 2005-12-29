@@ -370,7 +370,7 @@ void KexiConnSelectorWidget::slotRemoteAddBtnClicked()
 {
 	KexiDB::ConnectionData data;
 	KexiDBConnectionDialog dlg(data, QString::null,
-		KGuiItem(i18n("&Add"), "button_ok", i18n("Add database connection")) );
+		KGuiItem(i18n("&Add"), "button_ok", i18n("Add Database Connection")) );
 	dlg.setCaption(i18n("Add New Database Connection"));
 	if (QDialog::Accepted!=dlg.exec())
 		return;
@@ -395,7 +395,7 @@ void KexiConnSelectorWidget::slotRemoteEditBtnClicked()
 	if (!item)
 		return;
 	KexiDBConnectionDialog dlg(*item->data(), QString::null,
-		KGuiItem(i18n("&Save"), "filesave", i18n("Save changes made to this database connection")) );
+		KGuiItem(i18n("&Save"), "filesave", i18n("Save Changes Made to This Database Connection")) );
 	dlg.setCaption(i18n("Edit Database Connection"));
 	if (QDialog::Accepted!=dlg.exec())
 		return;

@@ -69,21 +69,21 @@ KexiCSVExportWizard::KexiCSVExportWizard( Mode mode, int itemId,
 	m_tableOrQuery = new KexiDB::TableOrQuerySchema(m_mainWin->project()->dbConnection(), itemId);
 	if (m_tableOrQuery->table()) {
 		if (m_mode==Clipboard) {
-			setCaption(i18n("Copy Data From a Table to Clipboard"));
+			setCaption(i18n("Copy Data From Table to Clipboard"));
 			infoLblFromText = i18n("Copying data from table:");
 		}
 		else {
-			setCaption(i18n("Export Data From a Table to CSV File"));
+			setCaption(i18n("Export Data From Table to CSV File"));
 			infoLblFromText = i18n("Exporting data from table:");
 		}
 	}
 	else if (m_tableOrQuery->query()) {
 		if (m_mode==Clipboard) {
-			setCaption(i18n("Copy Data From a Query to Clipboard"));
+			setCaption(i18n("Copy Data From Query to Clipboard"));
 			infoLblFromText = i18n("Copying data from table:");
 		}
 		else {
-			setCaption(i18n("Export Data From a Query to CSV File"));
+			setCaption(i18n("Export Data From Query to CSV File"));
 			infoLblFromText = i18n("Exporting data from query:");
 		}
 	}

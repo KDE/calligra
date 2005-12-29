@@ -50,7 +50,7 @@
                 <widget class="KListView" row="0" column="0" rowspan="1" colspan="2">
                     <column>
                         <property name="text">
-                            <string>Calendar name</string>
+                            <string>Calendar Name</string>
                         </property>
                         <property name="clickable">
                             <bool>true</bool>

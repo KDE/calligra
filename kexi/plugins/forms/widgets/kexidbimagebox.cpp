@@ -391,7 +391,7 @@ void KexiDBImageBox::saveAs()
 		KFileDialog::getStartURL(":LastVisitedImagePath", recentDir).path()
 		+"/"+m_data.originalFileName(), 
 		convertKFileDialogFilterToQFileDialogFilter(KImageIO::pattern(KImageIO::Writing)), 
-		this, 0, i18n("Save Image To File"));
+		this, 0, i18n("Save Image to File"));
 #else
 	//! @todo add originalFileName! (requires access to KRecentDirs)
 	QString fileName = KFileDialog::getSaveFileName(
@@ -557,9 +557,9 @@ void KexiDBImageBox::updateActionStrings()
 
 	if (m_chooser) {
 		if (popupMenuAvailable() && dataSource().isEmpty()) //this may work in the future (see @todo below)
-			QToolTip::add(m_chooser, i18n("Click to show actions for this Image Box"));
+			QToolTip::add(m_chooser, i18n("Click to show actions for this image box"));
 		else
-			QToolTip::add(m_chooser, i18n("Click to show actions for \"%1\" Image Box").arg(dataSource()));
+			QToolTip::add(m_chooser, i18n("Click to show actions for \"%1\" image box").arg(dataSource()));
 	}
 }
 

@@ -106,7 +106,7 @@
                         <cstring>subBtn</cstring>
                     </property>
                     <property name="text">
-                        <string>New &amp;Sub-account</string>
+                        <string>New &amp;Sub-Account</string>
                     </property>
                 </widget>
                 <widget class="QPushButton">

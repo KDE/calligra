@@ -250,7 +250,7 @@ When a merged cell is selected and when you uncheck this, then all cells come ba
                         <cstring>mergeCell</cstring>
                     </property>
                     <property name="text">
-                        <string>Merge Cells</string>
+                        <string>Merge cells</string>
                     </property>
                 </widget>
             </hbox>

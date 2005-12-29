@@ -233,7 +233,7 @@ void ListDialog::slotRemove()
   //don't remove the two first line
   if(list->currentItem()<2)
       return;
-  int ret = KMessageBox::warningContinueCancel( this, i18n("Do you really want to remove this list?"),i18n("Remove List"),KGuiItem(i18n("&Delete"),"editdelete"));
+  int ret = KMessageBox::warningContinueCancel( this, i18n("Do you really want to remove this list?"),i18n("Remove List"),KStdGuiItem::del());
   if(ret==Cancel) // reponse = No
     return;
   list->removeItem(list->currentItem ());

@@ -50,7 +50,7 @@ the end of the text and the margin).&lt;/p&gt;</string>
                         <cstring>lblBackgroundColor</cstring>
                     </property>
                     <property name="text">
-                        <string>&amp;Background Color:</string>
+                        <string>&amp;Background color:</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>bBackgroundColor</cstring>

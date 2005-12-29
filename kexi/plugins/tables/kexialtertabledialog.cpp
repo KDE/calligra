@@ -388,13 +388,13 @@ KexiAlterTableDialog::createPropertySet( int row, KexiDB::Field *field, bool new
 
 //! @todo set reasonable default for column width
 	set->addProperty( prop 
-		= new KoProperty::Property("width", (int)field->width()/*200?*/, i18n("Column width")));
+		= new KoProperty::Property("width", (int)field->width()/*200?*/, i18n("Column Width")));
 #ifdef KEXI_NO_UNFINISHED
 	prop->setVisible(false);
 #endif
 
 	set->addProperty( prop 
-		= new KoProperty::Property("defaultValue", field->defaultValue(), i18n("Default value")));
+		= new KoProperty::Property("defaultValue", field->defaultValue(), i18n("Default Value")));
 //! @todo show this after we get properly working editor for QVariant
 	prop->setVisible(false);
 

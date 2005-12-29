@@ -1574,7 +1574,7 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
                 textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
 
                 QString replacement = word[1].lower();
-                cmd = txtObj->replaceSelectionCommand( textEditCursor, replacement,KoTextObject::HighlightSelection,i18n("Autocorrect (Convert two upper case letters to one upper case and one lower case letter.)") );
+                cmd = txtObj->replaceSelectionCommand( textEditCursor, replacement,KoTextObject::HighlightSelection,i18n("Autocorrect (convert two upper case letters to one upper case and one lower case letter)") );
 
                 bNeedMove = true;
             }

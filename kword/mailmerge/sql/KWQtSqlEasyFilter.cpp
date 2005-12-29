@@ -18,7 +18,7 @@ KWQtSqlEasyFilter::KWQtSqlEasyFilter( QWidget *parent)
 		
 	m_table->verticalHeader()->setLabel(0,i18n("Field"));
 	m_table->verticalHeader()->setLabel(1,i18n("Sorting Order"));
-	m_table->verticalHeader()->setLabel(2,i18n("include"));
+	m_table->verticalHeader()->setLabel(2,i18n("Include"));
 	m_table->verticalHeader()->setLabel(3,i18n("Operator"));
 	m_table->verticalHeader()->setLabel(4,i18n("Condition"));
 	m_table->verticalHeader()->setLabel(5,i18n("Value"));

@@ -198,7 +198,7 @@ SortDlg::SortDlg( View * parent,  const char * name,
 
 
   QGroupBox * resultToBox = new QGroupBox( m_page2, "resultToBox" );
-  resultToBox->setTitle( i18n( "Location To Store Sort Results" ) );
+  resultToBox->setTitle( i18n( "Location to Store Sort Results" ) );
   resultToBox->setColumnLayout(0, Qt::Vertical );
   resultToBox->layout()->setSpacing( KDialog::spacingHint() );
   resultToBox->layout()->setMargin( KDialog::marginHint() );

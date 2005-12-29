@@ -75,7 +75,7 @@ VStrokeCmd::VStrokeCmd( VDocument *doc, const VColor &color )
 }
 
 VStrokeCmd::VStrokeCmd( VDocument *doc, const QValueList<float>& array )
-	: VCommand( doc, i18n( "Dash pattern" ), "linewidth" )
+	: VCommand( doc, i18n( "Dash Pattern" ), "linewidth" )
 {
 	m_selection = document()->selection()->clone();
 	m_state = Dash;

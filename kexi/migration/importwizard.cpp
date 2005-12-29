@@ -320,7 +320,7 @@ void ImportWizard::setupImporting()
 
 	KButtonBox *optionsBox = new KButtonBox(m_importingPage);
 	vbox->addWidget( optionsBox );
-	m_importOptionsButton = optionsBox->addButton(i18n("Advanced options..."), this, SLOT(slotOptionsButtonClicked()));
+	m_importOptionsButton = optionsBox->addButton(i18n("Advanced Options"), this, SLOT(slotOptionsButtonClicked()));
 	m_importOptionsButton->setIconSet(SmallIconSet("configure"));
 	optionsBox->addStretch(1);
 
@@ -912,31 +912,31 @@ void ImportWizard::helpClicked()
 {
 	if (currentPage() == m_introPage)
 	{
-		KMessageBox::information(this, i18n("No help available for this page"), i18n("Help"));
+		KMessageBox::information(this, i18n("No help is available for this page."), i18n("Help"));
 	}
 /*	else if (currentPage() == m_srcTypePage)
 	{
-		KMessageBox::information(this, i18n("Here you can choose the type of data to import data from"), i18n("Help"));
+		KMessageBox::information(this, i18n("Here you can choose the type of data to import data from."), i18n("Help"));
 	}*/
 	else if (currentPage() == m_srcConnPage)
 	{
-		KMessageBox::information(this, i18n("Here you can choose the location to import data from"), i18n("Help"));
+		KMessageBox::information(this, i18n("Here you can choose the location to import data from."), i18n("Help"));
 	}
 	else if (currentPage() == m_srcDBPage)
 	{
-		KMessageBox::information(this, i18n("Here you can choose the actual database to import data from"), i18n("Help"));
+		KMessageBox::information(this, i18n("Here you can choose the actual database to import data from."), i18n("Help"));
 	}
 	else if (currentPage() == m_dstTypePage)
 	{
-		KMessageBox::information(this, i18n("Here you can choose the location to save the data"), i18n("Help"));
+		KMessageBox::information(this, i18n("Here you can choose the location to save the data."), i18n("Help"));
 	}
 	else if (currentPage() == m_dstPage)
 	{
-		KMessageBox::information(this, i18n("Here you can choose the location to save the data in and the new database name"), i18n("Help"));
+		KMessageBox::information(this, i18n("Here you can choose the location to save the data in and the new database name."), i18n("Help"));
 	}
 	else if (currentPage() == m_finishPage || currentPage() == m_importingPage)
 	{
-		KMessageBox::information(this, i18n("No help available for this page"), i18n("Help"));
+		KMessageBox::information(this, i18n("No help is available for this page."), i18n("Help"));
 	}
 }
 

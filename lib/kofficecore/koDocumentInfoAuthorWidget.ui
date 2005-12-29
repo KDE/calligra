@@ -80,7 +80,7 @@
                         <cstring>textLabel7</cstring>
                     </property>
                     <property name="text">
-                        <string>Telephone (Work):</string>
+                        <string>Telephone (work):</string>
                     </property>
                 </widget>
                 <widget class="QLabel" row="4" column="0">
@@ -210,7 +210,7 @@
                         <cstring>textLabel6</cstring>
                     </property>
                     <property name="text">
-                        <string>Telephone (Home):</string>
+                        <string>Telephone (home):</string>
                     </property>
                 </widget>
                 <widget class="KLineEdit" row="11" column="1">

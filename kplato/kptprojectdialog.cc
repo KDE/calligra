@@ -91,11 +91,11 @@ void ProjectDialog::slotSchedulingChanged(int activated) {
     switch(activated) {
         // TODO please provide nice explenations on this.
         case 0: // ASAP
-            label = label.arg(i18n("As Soon As Possible"));
+            label = label.arg(i18n("As Soon as Possible"));
             label = label.arg(i18n("Place all events at the earliest possible moment permitted in the schedule"));
             break;
         case 1: // ALAP
-            label = label.arg(i18n("As Late As Possible"));
+            label = label.arg(i18n("As Late as Possible"));
             label = label.arg(i18n("Place all events at the last possible moment permitted in the schedule"));
             break;
         case 2: // Start not earlier then

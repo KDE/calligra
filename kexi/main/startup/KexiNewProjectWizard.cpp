@@ -105,7 +105,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	m_prjtype_sel->lv_types->setAlternateBackground(QColor()); //disable altering
 	m_prjtype_sel->lv_types->setItemMargin( KDialogBase::marginHint() );
 	QString none;
-	d->lvi_file = new KListViewItem( m_prjtype_sel->lv_types, i18n("New Project Stored in a File") );
+	d->lvi_file = new KListViewItem( m_prjtype_sel->lv_types, i18n("New Project Stored in File") );
 	d->lvi_file->setPixmap(0, 
 		KGlobal::iconLoader()->loadIcon( KMimeType::mimeType( 
 			KexiDB::Driver::defaultFileBasedDriverMimeType() )->icon(none,0), KIcon::Desktop 
@@ -113,7 +113,7 @@ KexiNewProjectWizard::KexiNewProjectWizard(KexiDBConnectionSet& conn_set,
 	);
 	d->lvi_file->setMultiLinesEnabled( true );
 	d->lvi_server = new KListViewItem( m_prjtype_sel->lv_types, d->lvi_file, 
-		i18n("New Project Stored on a Database Server") );
+		i18n("New Project Stored on Database Server") );
 	d->lvi_server->setPixmap(0, DesktopIcon("network") );
 	d->lvi_server->setMultiLinesEnabled( true );
 //	m_prjtype_sel->lv_types->resize(d->m_prjtype_sel->lv_types->width(), d->lvi_file->height()*3);

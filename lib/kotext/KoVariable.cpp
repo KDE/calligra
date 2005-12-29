@@ -1971,10 +1971,10 @@ QString KoFieldVariable::fieldCode()
         return i18n("Company Name");
         break;
     case VST_TELEPHONE_WORK:
-        return i18n("Telephone (Work)");
+        return i18n("Telephone (work)");
         break;
     case VST_TELEPHONE_HOME:
-        return i18n("Telephone (Home)");
+        return i18n("Telephone (home)");
         break;
     case VST_FAX:
         return i18n("Fax");

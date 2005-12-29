@@ -3,7 +3,7 @@
 
     <ScriptAction
       name="importxhtml"
-      text="Import Data from XHTML File"
+      text="Import Data From XHTML File"
       icon="fileimport"
       interpreter="python"
       resource="appdata"

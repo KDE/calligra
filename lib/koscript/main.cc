@@ -41,7 +41,7 @@ int main( int argc, char** argv )
   const char *appName = (argc > 1) ? argv[1] : "koscript";
   KCmdLineArgs::init(argc, argv, appName,
 		     I18N_NOOP("KoScript"),
-		     I18N_NOOP("KOffice script interpreter."),
+		     I18N_NOOP("KOffice script interpreter"),
 		     "2.0.0");
 
   KCmdLineArgs::addCmdLineOptions(options);
@@ -52,7 +52,7 @@ int main( int argc, char** argv )
 
   if (args->count() < 1)
   {
-     fprintf(stderr, i18n("You must specify a script.\n").local8Bit());
+     fprintf(stderr, "%s", i18n("You must specify a script.\n").local8Bit().data());
      ::exit(1);
   }
 

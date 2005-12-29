@@ -276,7 +276,7 @@ void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
   editor.setHorizontalAlign(static_cast<Qt::AlignmentFlags>(stencil->hTextAlign()));
 
   if(editor.exec() == QDialog::Accepted) {
-    KMacroCommand* macroCmd = new KMacroCommand(i18n("Change Stencil Text And Formatting"));
+    KMacroCommand* macroCmd = new KMacroCommand(i18n("Change Stencil Text and Formatting"));
     bool changed = false;
     QString text = editor.text();
     QFont font = editor.font();
@@ -353,7 +353,7 @@ void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
   editor.setHorizontalAlign(static_cast<Qt::AlignmentFlags>(stencil->hTextAlign()));
 
   if(editor.exec() == QDialog::Accepted) {
-    KMacroCommand* macroCmd = new KMacroCommand(i18n("Change Stencil Text And Formatting"));
+    KMacroCommand* macroCmd = new KMacroCommand(i18n("Change Stencil Text and Formatting"));
     bool changed = false;
     QString text = editor.text();
 

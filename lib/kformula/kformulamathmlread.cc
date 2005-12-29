@@ -1351,7 +1351,7 @@ void MathML2KFormula::startConversion()
     }
     else {
         kdError() << "Not a MathML document!" << endl;
-        KMessageBox::error( 0, i18n( "The document does not seem to be MathML" ), i18n( "MathML Import Error" ) );
+        KMessageBox::error( 0, i18n( "The document does not seem to be MathML." ), i18n( "MathML Import Error" ) );
         m_error = true;
     }
     done = true;

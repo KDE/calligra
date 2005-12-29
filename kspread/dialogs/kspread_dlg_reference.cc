@@ -154,7 +154,7 @@ void reference::slotRemove()
   if (m_list->currentItem() == -1)
     return;
 
-  int ret = KMessageBox::warningContinueCancel( this, i18n("Do you really want to remove this area name?"),i18n("Remove Area"),KGuiItem(i18n("&Delete"),"editdelete"));
+  int ret = KMessageBox::warningContinueCancel( this, i18n("Do you really want to remove this area name?"),i18n("Remove Area"),KStdGuiItem::del());
   if (ret == KMessageBox::Cancel)
     return;
 

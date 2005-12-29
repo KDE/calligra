@@ -485,8 +485,8 @@ void KexiMainWindowImpl::initActions()
 #else
 	d->action_project_import_data_table = d->dummy_action;
 #endif
-	d->action_project_export_data_table = new KAction(i18n("Export->Table or Query As Data Table...", 
-		"Table or Query As Data &Table..."),
+	d->action_project_export_data_table = new KAction(i18n("Export->Table or Query as Data Table...", 
+		"Table or Query as Data &Table..."),
 		"table"/*! @todo: change to "file_export" or so*/,
 		0, this, SLOT(slotProjectExportDataTable()), actionCollection(), "project_export_data_table");
 	d->action_project_export_data_table->setToolTip(
@@ -573,33 +573,33 @@ void KexiMainWindowImpl::initActions()
 		this, SLOT(slotViewDataMode()), actionCollection(), "view_data_mode");
 	d->actions_for_view_modes.insert( Kexi::DataViewMode, d->action_view_data_mode );
 	d->action_view_data_mode->setExclusiveGroup("view_mode");
-	d->action_view_data_mode->setToolTip(i18n("Switch to Data View"));
-	d->action_view_data_mode->setWhatsThis(i18n("Switches to Data View."));
+	d->action_view_data_mode->setToolTip(i18n("Switch to data view"));
+	d->action_view_data_mode->setWhatsThis(i18n("Switches to data view."));
 
 	d->action_view_design_mode = new KRadioAction(i18n("D&esign View"), "state_edit", Key_F7,
 		this, SLOT(slotViewDesignMode()), actionCollection(), "view_design_mode");
 	d->actions_for_view_modes.insert( Kexi::DesignViewMode, d->action_view_design_mode );
 	d->action_view_design_mode->setExclusiveGroup("view_mode");
-	d->action_view_design_mode->setToolTip(i18n("Switch to Design View"));
-	d->action_view_design_mode->setWhatsThis(i18n("Switches to Design View."));
+	d->action_view_design_mode->setToolTip(i18n("Switch to design view"));
+	d->action_view_design_mode->setWhatsThis(i18n("Switches to design view."));
 
 	d->action_view_text_mode = new KRadioAction(i18n("&Text View"), "state_sql", Key_F8,
 		this, SLOT(slotViewTextMode()), actionCollection(), "view_text_mode");
 	d->actions_for_view_modes.insert( Kexi::TextViewMode, d->action_view_text_mode );
 	d->action_view_text_mode->setExclusiveGroup("view_mode");
-	d->action_view_text_mode->setToolTip(i18n("Switch to Text View"));
-	d->action_view_text_mode->setWhatsThis(i18n("Switches to Text View."));
+	d->action_view_text_mode->setToolTip(i18n("Switch to text view"));
+	d->action_view_text_mode->setWhatsThis(i18n("Switches to text view."));
 
 	d->action_view_nav = new KAction(i18n("Project Navigator"), "", ALT + Key_1,
 		this, SLOT(slotViewNavigator()), actionCollection(), "view_navigator");
-	d->action_view_nav->setToolTip(i18n("Go to Project navigator panel"));
-	d->action_view_nav->setWhatsThis(i18n("Goes to Project navigator panel."));
+	d->action_view_nav->setToolTip(i18n("Go to project navigator panel"));
+	d->action_view_nav->setWhatsThis(i18n("Goes to project navigator panel."));
 
 #ifdef KEXI_PROP_EDITOR
 	d->action_view_propeditor = new KAction(i18n("Property Editor"), "", ALT + Key_2,
 		this, SLOT(slotViewPropertyEditor()), actionCollection(), "view_propeditor");
-	d->action_view_propeditor->setToolTip(i18n("Go to Property editor panel"));
-	d->action_view_propeditor->setWhatsThis(i18n("Goes to Property editor panel."));
+	d->action_view_propeditor->setToolTip(i18n("Go to property editor panel"));
+	d->action_view_propeditor->setWhatsThis(i18n("Goes to property editor panel."));
 #endif
 
 	//DATA MENU
@@ -2582,7 +2582,7 @@ tristate KexiMainWindowImpl::getNewObjectInfo(
 						.arg(d->nameDialog->widget()->nameText())
 					+"</p><p>"+i18n("Do you want to replace it?")+"</p>", 0,
 					KGuiItem(i18n("&Replace"), "button_yes"),
-					KGuiItem(i18n("&Choose other name...")));
+					KGuiItem(i18n("&Choose Other Name...")));
 				if (res == KMessageBox::No)
 					continue;
 				else if (res == KMessageBox::Cancel)
