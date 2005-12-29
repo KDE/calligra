@@ -151,7 +151,7 @@ Kross::Api::Object::Ptr RubyExtension::toObject(VALUE value)
             return new Kross::Api::List(l);
         }
         case T_FIXNUM:
-            return new Kross::Api::Variant(FIX2INT(value));
+            return new Kross::Api::Variant((Q_LLONG)FIX2INT(value));
         case T_HASH:
         {
             QMap<QString, Kross::Api::Object::Ptr> map;
