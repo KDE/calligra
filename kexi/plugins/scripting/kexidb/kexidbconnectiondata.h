@@ -48,6 +48,9 @@ namespace Kross { namespace KexiDB {
              */
             KexiDBConnectionData(::KexiDB::ConnectionData* data);
 
+            operator ::KexiDB::ConnectionData& () { return *m_data; }
+            operator ::KexiDB::ConnectionData* () { return m_data; }
+
             /**
              * Destructor.
              */
@@ -55,12 +58,6 @@ namespace Kross { namespace KexiDB {
 
             /// See \see Kross::Api::Object::getClassName
             virtual const QString getClassName() const;
-
-            /**
-             * \return the \a ::KexiDB::ConnectionData instance this 
-             * class wraps.
-             */
-            ::KexiDB::ConnectionData* getConnectionData() const;
 
         private:
             ::KexiDB::ConnectionData* m_data;

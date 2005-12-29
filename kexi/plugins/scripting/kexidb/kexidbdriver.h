@@ -21,7 +21,7 @@
 #define KROSS_KEXIDB_KEXIDBDRIVER_H
 
 #include <qstring.h>
-#include <qguardedptr.h>
+//#include <qguardedptr.h>
 
 #include <api/object.h>
 #include <api/variant.h>
@@ -57,47 +57,7 @@ namespace Kross { namespace KexiDB {
             virtual const QString getClassName() const;
 
         private:
-            ::KexiDB::Driver* driver();
-            QGuardedPtr< ::KexiDB::Driver > m_driver;
-
-            /**
-             * Return the major version number of this driver.
-             * See \see ::KexiDB::Driver::versionMajor
-             */
-            Kross::Api::Object::Ptr versionMajor(Kross::Api::List::Ptr);
-
-            /**
-             * Return the minor version number of this driver.
-             * See \see ::KexiDB::Driver::versionMinor
-             */
-            Kross::Api::Object::Ptr versionMinor(Kross::Api::List::Ptr);
-
-            /**
-             * Return a driver-specific escaped SQL string.
-             * See \see ::KexiDB::Driver::escapeString
-             */
-            Kross::Api::Object::Ptr escapeString(Kross::Api::List::Ptr);
-
-            /**
-             * Return the escaped and convert as second argument
-             * passed \a Kross::Api::Variant value to the as first
-             * argument passed \a KexiDBField::type.
-             * See \see ::KexiDB::Driver::valueToSQL
-             */
-            Kross::Api::Object::Ptr valueToSQL(Kross::Api::List::Ptr);
-
-            /**
-             * Create a new KexiDBConnection object and return it.
-             * See \see ::KexiDB::Driver::createConnection
-             */
-            Kross::Api::Object::Ptr createConnection(Kross::Api::List::Ptr);
-
-            /**
-             * Return a list of KexiDBConnection objects.
-             * See \see ::KexiDB::Driver::connectionList
-             */
-            Kross::Api::Object::Ptr connectionList(Kross::Api::List::Ptr);
-
+            ::KexiDB::Driver* m_driver;
     };
 
 }}

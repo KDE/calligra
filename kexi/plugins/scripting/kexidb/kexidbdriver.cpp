@@ -24,6 +24,7 @@
 #include "kexidbconnectiondata.h"
 
 #include <qvaluelist.h>
+#include <qptrlist.h>
 #include <kdebug.h>
 
 #include <kexidb/connection.h>
@@ -34,19 +35,58 @@ KexiDBDriver::KexiDBDriver(::KexiDB::Driver* driver)
     : Kross::Api::Class<KexiDBDriver>("KexiDBDriver", KexiDBDriverManager::self())
     , m_driver(driver)
 {
-    addFunction("versionMajor", &KexiDBDriver::versionMajor);
-    addFunction("versionMinor", &KexiDBDriver::versionMinor);
+    // The drivers major versionnumber.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,int> >
+        ("versionMajor", driver, &::KexiDB::Driver::versionMajor );
 
-    addFunction("escapeString", &KexiDBDriver::escapeString,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::Api::Variant::String"));
-    addFunction("valueToSQL", &KexiDBDriver::valueToSQL,
-        Kross::Api::ArgumentList()
-            << Kross::Api::Argument("Kross::Api::Variant::String")
-            << Kross::Api::Argument("Kross::Api::Variant"));
+    // The drivers minor versionnumber.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,int> >
+        ("versionMinor", driver, &::KexiDB::Driver::versionMinor );
 
-    addFunction("createConnection", &KexiDBDriver::createConnection,
-        Kross::Api::ArgumentList() << Kross::Api::Argument("Kross::KexiDB::KexiDBConnectionData"));
-    addFunction("connectionList", &KexiDBDriver::connectionList);
+    // Driver-specific SQL string escaping. For example the " or ' char may
+    // need to be escaped for values used within SQL-statements.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,QString>, Kross::Api::ProxyValue<Kross::Api::Variant,const QString&> >
+        ("escapeString", driver, (QString(::KexiDB::Driver::*)(const QString&)const) &::KexiDB::Driver::escapeString);
+
+    // Returns true if this driver is file-based.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool> >
+        ("isFileDriver", driver, &::KexiDB::Driver::isFileDriver );
+
+    // Returns true if the passed string is a system object's name, eg. name
+    // of build-in system table that cannot be used or created by a user.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool>, Kross::Api::ProxyValue<Kross::Api::Variant,const QString&> >
+        ("isSystemObjectName", driver, &::KexiDB::Driver::isSystemObjectName );
+
+    // Returns true if the passed string is a system database's name, eg. name
+    // of build-in, system database that cannot be used or created by a user.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool>, Kross::Api::ProxyValue<Kross::Api::Variant,const QString&> >
+        ("isSystemDatabaseName", driver, &::KexiDB::Driver::isSystemDatabaseName );
+
+    // Returns true if the passed string is a system field's name, build-in
+    // system field that cannot be used or created by a user.
+    this->addProxyFunction< Kross::Api::ProxyValue<Kross::Api::Variant,bool>, Kross::Api::ProxyValue<Kross::Api::Variant,const QString&> >
+        ("isSystemFieldName", driver, &::KexiDB::Driver::isSystemFieldName );
+
+    // The as second argument passed string got escaped to be usuable within
+    // a SQL-statement and those escaped string got returned by the method.
+    // The first argument defines the fieldtype to what we should escape the
+    // second argument to.
+    this->addProxyFunction<
+        Kross::Api::ProxyValue<Kross::Api::Variant,QString>,
+        Kross::Api::ProxyValue<Kross::Api::Variant,const QString&>,
+        Kross::Api::ProxyValue<Kross::Api::Variant,const QVariant&>
+        > ("valueToSQL", driver, (QString(::KexiDB::Driver::*)(const QString&,const QVariant&)const) &::KexiDB::Driver::valueToSQL );
+
+    // Create a new KexiDBConnection object and return it.
+    this->addProxyFunction<
+        Kross::Api::ProxyValue<Kross::KexiDB::KexiDBConnection, ::KexiDB::Connection* >,
+        Kross::Api::ProxyValue<Kross::KexiDB::KexiDBConnectionData, ::KexiDB::ConnectionData& > >
+        ("createConnection", driver, &::KexiDB::Driver::createConnection );
+
+    // Return a list of KexiDBConnection objects.
+    this->addProxyFunction< 
+        Kross::Api::ProxyValue< Kross::Api::ListT<Kross::KexiDB::KexiDBConnection,::KexiDB::Connection>, const QPtrList<::KexiDB::Connection> > >
+        ("connectionsList", driver, &::KexiDB::Driver::connectionsList );
 }
 
 KexiDBDriver::~KexiDBDriver()
@@ -56,64 +96,5 @@ KexiDBDriver::~KexiDBDriver()
 const QString KexiDBDriver::getClassName() const
 {
     return "Kross::KexiDB::KexiDBDriver";
-}
-
-::KexiDB::Driver* KexiDBDriver::driver()
-{
-    if(! m_driver)
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Driver is NULL.")) );
-    if(m_driver->error())
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("KexiDB::Driver error: %1").arg(m_driver->errorMsg())) );
-    return m_driver;
-}
-
-Kross::Api::Object::Ptr KexiDBDriver::versionMajor(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(driver()->versionMajor(),
-           "Kross::KexiDB::Driver::versionMajor::Int");
-}
-
-Kross::Api::Object::Ptr KexiDBDriver::versionMinor(Kross::Api::List::Ptr)
-{
-    return new Kross::Api::Variant(driver()->versionMinor(),
-           "Kross::KexiDB::Driver::versionMinor::Int");
-}
-
-Kross::Api::Object::Ptr KexiDBDriver::createConnection(Kross::Api::List::Ptr args)
-{
-    KexiDBConnectionData* data =
-        Kross::Api::Object::fromObject<KexiDBConnectionData>(args->item(0));
-    QGuardedPtr< ::KexiDB::Connection > connection = driver()->createConnection( *(data->getConnectionData()) );
-    if(! connection)
-        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("Failed to create connection.") );
-    return new KexiDBConnection(connection, this, data);
-}
-
-Kross::Api::Object::Ptr KexiDBDriver::connectionList(Kross::Api::List::Ptr)
-{
-    QValueList<Kross::Api::Object::Ptr> list;
-    QPtrList< ::KexiDB::Connection > connectionlist = driver()->connectionsList();
-    ::KexiDB::Connection* connection;
-    for(connection = connectionlist.first(); connection; connection = connectionlist.next())
-        list.append( new KexiDBConnection(connection, this) );
-    return new Kross::Api::List(list,
-           "Kross::KexiDB::Driver::connectionList::List");
-}
-
-Kross::Api::Object::Ptr KexiDBDriver::escapeString(Kross::Api::List::Ptr args)
-{
-    return new Kross::Api::Variant(
-           driver()->escapeString( Kross::Api::Variant::toString(args->item(0)) ),
-           "Kross::KexiDB::DriverManager::escapeString::String");
-}
-
-Kross::Api::Object::Ptr KexiDBDriver::valueToSQL(Kross::Api::List::Ptr args)
-{
-    return new Kross::Api::Variant(
-           driver()->valueToSQL(
-               (uint)::KexiDB::Field::typeForString(Kross::Api::Variant::toString(args->item(0))),
-               Kross::Api::Variant::toVariant(args->item(1))
-           ),
-           "Kross::KexiDB::DriverManager::valueToSQL::String");
 }
 

@@ -23,23 +23,21 @@ class KexiDBClass:
     def printKexiDB(self):
         print "KexiDB = %s %s" % (str(self.kexidbmodule),dir(self.kexidbmodule))
         # Each object has __name__ and __doc__
-        print "KexiDB.__name__ = %s" % self.kexidbmodule.__name__
-        print "KexiDB.__doc__ = %s" % self.kexidbmodule.__doc__
+        #print "KexiDB.__name__ = %s" % self.kexidbmodule.__name__
+        #print "KexiDB.__doc__ = %s" % self.kexidbmodule.__doc__
         # Print some infos about the drivermanager.
-        print "drivermanager = %s %s" % str(self.drivermanager,dir(self.drivermanager))
+        print "drivermanager = %s %s" % (self.drivermanager,dir(self.drivermanager))
         # The drivermanager holds a list of drivers he supports.
         print "drivermanager.driverNames() = %s" % self.driverNames()
-        # Orint some infos about the connectiondatamanager.
-        print "connectiondatamanager = %s %s" % str(self.connectiondatamanager,dir(self.connectiondatamanager))
 
     # Print informations about a driver.
     def printDriverManger(self, driver):
-        print "driver = %s %s" % str(driver,dir(driver))
+        print "driver = %s %s" % (driver,dir(driver))
         # Each driver has a version to be able to determinate with what release we are working.
         print "driver.versionMajor() = %s" % driver.versionMajor()
         print "driver.versionMinor() = %s" % driver.versionMinor()
         # Show us what connections are opened right now.
-        print "driver.connectionList() = %s" % str(driver.connectionList())
+        print "driver.connectionsList() = %s" % str(driver.connectionsList())
 
     # Print informations about a connection.
     def printConnection(self, connection):
@@ -173,13 +171,13 @@ class KexiDBClass:
 def testKexiDB():
     global KexiDBClass
     mykexidbclass = KexiDBClass()
-    #mykexidbclass.printKexiDB()
+    mykexidbclass.printKexiDB()
 
     mydriver = mykexidbclass.driver("SQLite3")
-    #mykexidbclass.printDriverManger(mydriver)
+    mykexidbclass.printDriverManger(mydriver)
 
     myfileconnection = mykexidbclass.connectWithFile(mydriver, "/home/snoopy/test.kexi")
-    #mykexidbclass.printConnection(myfileconnection)
+    mykexidbclass.printConnection(myfileconnection)
     #mykexidbclass.testParser(myfileconnection, "SELECT * from table1")
 
     #mykexidbclass.printQuerySingleString(myfileconnection, "SELECT * FROM dept")

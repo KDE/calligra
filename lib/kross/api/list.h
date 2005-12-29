@@ -49,7 +49,7 @@ namespace Kross { namespace Api {
              *        list has initialy.
              * \param name A name this list has.
              */
-            explicit List(QValueList<Object::Ptr> value, const QString& name = "list");
+            List(QValueList<Object::Ptr> value = QValueList<Object::Ptr>(), const QString& name = "list");
 
             /**
              * Destructor.
@@ -94,6 +94,26 @@ namespace Kross { namespace Api {
              */
             void append(Object::Ptr object);
 
+    };
+
+    /**
+     * This template class extends the \a List class with a more
+     * generic way to deal with lists.
+     */
+    template< class OBJECT, class TYPE >
+    class ListT : public List
+    {
+        public:
+            ListT(QValueList<TYPE> values) : List(values) {}
+            ListT(const QPtrList<TYPE> values) : List() {
+                QPtrListIterator<TYPE> it( values );
+                TYPE *t;
+                while( (t = it.current()) != 0 ) {
+                    this->append( new OBJECT(t) );
+                    ++it;
+                }
+            }
+            virtual ~ListT() {}
     };
 
 }}

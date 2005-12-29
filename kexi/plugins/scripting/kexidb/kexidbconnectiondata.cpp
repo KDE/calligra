@@ -77,11 +77,6 @@ const QString KexiDBConnectionData::getClassName() const
     return "Kross::KexiDB::KexiDBConnectionData";
 }
 
-::KexiDB::ConnectionData* KexiDBConnectionData::getConnectionData() const
-{
-    return m_data;
-}
-
 Kross::Api::Object::Ptr KexiDBConnectionData::caption(Kross::Api::List::Ptr)
 {
     return new Kross::Api::Variant(m_data->caption,
