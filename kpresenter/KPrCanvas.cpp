@@ -5375,14 +5375,9 @@ void KPrCanvas::closeObject(bool /*close*/)
     if ( lst.isEmpty())
         return;
 
-    KMacroCommand *macro = new KMacroCommand( i18n("Close Object"));
-    QPtrListIterator<KPrObject> it2( lst );
-    for ( ; it2.current() ; ++it2 ) {
-        KCommand * cmd= new KPrCloseObjectCommand(i18n("Close Object"), it2.current(), m_view->kPresenterDoc());
-        macro->addCommand(cmd);
-    }
-    macro->execute();
-    m_view->kPresenterDoc()->addCommand(macro);
+    KCommand * cmd= new KPrCloseObjectCommand( i18n("Close Object"), lst, m_view->kPresenterDoc() );
+    cmd->execute();
+    m_view->kPresenterDoc()->addCommand( cmd );
 }
 
 void KPrCanvas::layout()

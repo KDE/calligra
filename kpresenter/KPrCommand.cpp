@@ -2487,19 +2487,23 @@ void KPrProtectContentCommand::unexecute()
     m_doc->updateRulerInProtectContentMode();
 }
 
-KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &name, KPrObject *obj, KPrDocument *doc )
+KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &name, QPtrList<KPrObject> objects, KPrDocument *doc )
 : KNamedCommand( name )
 , m_doc( doc )
-, m_page( doc->findPage( obj ) )
+, m_page( doc->findPage( objects.at( 0 ) ) )
 {
-    KPrPointObject * pointObject = dynamic_cast<KPrPointObject *>( obj );
-    if ( pointObject )
+    QPtrListIterator<KPrObject> it( objects );
+    for ( ; it.current(); ++it )
     {
-        m_openObjects.append( obj );
-        obj->incCmdRef();
-        KPrClosedLineObject * closedObject = new KPrClosedLineObject( *pointObject );
-        closedObject->incCmdRef();
-        m_closedObjects.append( closedObject );
+        KPrPointObject * pointObject = dynamic_cast<KPrPointObject *>( *it );
+        if ( pointObject )
+        {
+            m_openObjects.append( *it );
+            ( *it )->incCmdRef();
+            KPrClosedLineObject * closedObject = new KPrClosedLineObject( *pointObject );
+            closedObject->incCmdRef();
+            m_closedObjects.append( closedObject );
+        }
     }
 }
 
