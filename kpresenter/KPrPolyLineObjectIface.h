@@ -36,8 +36,6 @@ public:
 k_dcop:
     void horizontalFlip();
     void verticalFlip();
-    void closeObject();
-    bool isClosed()const;
 private:
     KPrPolylineObject *obj;
 };

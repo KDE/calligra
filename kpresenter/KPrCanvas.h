@@ -362,6 +362,14 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void dropImage( QMimeSource * data, bool resizeImageToOriginalSize = false , int posX = 10, int posX=10 );
     KoGuides & guideLines() { return m_gl; }
 
+    /**
+     * @brief Open the object popup
+     *
+     * @param object the selected object
+     * @param point where the popup should be displayed
+     */
+    void objectPopup( KPrObject *object, const QPoint &point );
+
 public slots:
     void exitEditMode();
 

@@ -1064,123 +1064,18 @@ void KPrCanvas::mousePressEvent( QMouseEvent *e )
 
         if ( e->button() == RightButton && toolEditMode == TEM_MOUSE ) {
             KPrObject * obj = getObjectAt( docPoint );
-            if ( obj ) {
+            if ( obj ) 
+            {
                 kpobject = obj;
                 QPoint pnt = QCursor::pos();
                 mousePressed = false;
                 m_view->disableAutoScroll();
                 bool state=!( e->state() & ShiftButton ) && !( e->state() & ControlButton ) && !kpobject->isSelected();
-                ObjType objectType = kpobject->getType();
 
-                if ( objectType == OT_PICTURE || objectType == OT_CLIPART ) {
+                if ( state )
                     deSelectAllObj();
-                    selectObj( kpobject );
-                    m_view->openPopupMenuObject( "picmenu_popup", pnt );
-                } else if ( objectType == OT_TEXT ) {
-                    if ( state )
-                        deSelectAllObj();
-                    KPrTextObject *obj=dynamic_cast<KPrTextObject *>(kpobject);
-                    selectObj( kpobject );
-                    if ( obj )
-                        m_view->changeVerticalAlignmentStatus( obj->verticalAlignment() );
-                    m_view->openPopupMenuObject( "textobject_popup", pnt );
-
-                } else if ( objectType == OT_PIE ) {
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    m_view->openPopupMenuObject( "piemenu_popup", pnt );
-                } else if ( objectType == OT_RECT || objectType == OT_ELLIPSE ) {
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    m_view->openPopupMenuObject( "rectangleobject_popup", pnt );
-                } else if ( objectType == OT_PART ) {
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    m_view->openPopupMenuObject( "partobject_popup", pnt );
-                } else if ( objectType == OT_POLYGON ) {
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    m_view->openPopupMenuObject( "polygonobject_popup", pnt );
-                } else if ( objectType == OT_POLYLINE ) {
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    KPrPolylineObject *tmpObj=dynamic_cast<KPrPolylineObject *>(kpobject);
-                    if ( tmpObj )
-                    {
-                        if (!tmpObj->isClosed())
-                            m_view->openPopupMenuObject( "closed_popup", pnt );
-                        else
-                            m_view->openPopupMenuObject( "flip_popup", pnt );
-                    }
-                } else if ( objectType == OT_CUBICBEZIERCURVE ) {
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    KPrCubicBezierCurveObject *tmpObj=dynamic_cast<KPrCubicBezierCurveObject *>(kpobject);
-                    if ( tmpObj )
-                    {
-                        if (!tmpObj->isClosed())
-                            m_view->openPopupMenuObject( "closed_popup", pnt );
-                        else
-                            m_view->openPopupMenuObject( "flip_popup", pnt );
-                    }
-                } else if ( objectType == OT_QUADRICBEZIERCURVE ) {
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    KPrQuadricBezierCurveObject *tmpObj=dynamic_cast<KPrQuadricBezierCurveObject *>(kpobject);
-                    if ( tmpObj )
-                    {
-                        if (!tmpObj->isClosed())
-                            m_view->openPopupMenuObject( "closed_popup", pnt );
-                        else
-                            m_view->openPopupMenuObject( "flip_popup", pnt );
-                    }
-                } else if ( objectType == OT_FREEHAND ) {
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    KPrFreehandObject *tmpObj=dynamic_cast<KPrFreehandObject *>(kpobject);
-                    if ( tmpObj )
-                    {
-                        if (!tmpObj->isClosed())
-                            m_view->openPopupMenuObject( "closed_popup", pnt );
-                        else
-                            m_view->openPopupMenuObject( "flip_popup", pnt );
-                    }
-                } else if ( objectType == OT_LINE ){
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    m_view->openPopupMenuObject( "flip_popup", pnt );
-                } else if ( objectType == OT_CLOSED_LINE ) {
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    KPrClosedLineObject *tmpObj=dynamic_cast<KPrClosedLineObject *>(kpobject);
-                    if ( tmpObj )
-                        m_view->openPopupMenuObject( "flip_popup", pnt );
-                } else if ( objectType == OT_GROUP ) {
-                    KPrGroupObject *obj=dynamic_cast<KPrGroupObject *>(kpobject);
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    if ( obj && oneObjectTextSelected())
-                        m_view->openPopupMenuObject( "textobject_popup", pnt );
-                    else
-                        m_view->openPopupMenuObject( "flip_popup", pnt );
-
-                } else {
-                    if ( state )
-                        deSelectAllObj();
-                    selectObj( kpobject );
-                    m_view->openPopupMenuObject( "graphmenu_popup", pnt );
-                }
+                selectObj( kpobject );
+                objectPopup( kpobject, pnt );
             } else {
                 QPoint pnt = QCursor::pos();
                 m_view->openPopupMenuMenuPage( pnt );
@@ -4961,11 +4856,21 @@ const QPtrList<KPrObject> KPrCanvas::displayObjectList() const
     QPtrList<KPrObject> list = objectList();
     list.setAutoDelete( false );
 
-    if ( m_objectDisplayAbove && m_objectDisplayAbove->isSelected() ) 
+    if ( m_objectDisplayAbove )
     {
+        // it can happen that the object is no longer there e.g. when 
+        // the insert of the object is undone
         int pos = objectList().findRef( m_objectDisplayAbove );
-        list.take( pos );
-        list.append( m_objectDisplayAbove );
+        if ( pos != -1 && m_objectDisplayAbove->isSelected() )
+        {
+            list.take( pos );
+            list.append( m_objectDisplayAbove );
+        }
+        else
+        {
+            //tz not possible due to const. should const be removed?
+            //m_objectDisplayAbove = 0;
+        }
     }
     return list;
 }
@@ -5557,4 +5462,54 @@ KoPointArray KPrCanvas::getObjectPoints( const KoPointArray &pointArray )
     points.translate( -rect.x(), -rect.y() );
 
     return points;
+}
+
+void KPrCanvas::objectPopup( KPrObject *object, const QPoint &point )
+{
+    switch ( object->getType() )
+    {
+        case OT_PICTURE:
+        case OT_CLIPART:
+            m_view->openPopupMenuObject( "picmenu_popup", point );
+            break;
+        case OT_TEXT:    
+            {
+                KPrTextObject *obj=dynamic_cast<KPrTextObject *>(object);
+                if ( obj )
+                    m_view->changeVerticalAlignmentStatus( obj->verticalAlignment() );
+                m_view->openPopupMenuObject( "textobject_popup", point );
+            } break;
+        case OT_PIE:
+            m_view->openPopupMenuObject( "piemenu_popup", point );
+            break;
+        case OT_RECT:
+        case OT_ELLIPSE:    
+            m_view->openPopupMenuObject( "rectangleobject_popup", point );
+            break;
+        case OT_PART:
+            m_view->openPopupMenuObject( "partobject_popup", point );
+            break;
+        case OT_POLYGON:    
+            m_view->openPopupMenuObject( "polygonobject_popup", point );
+            break;
+        case OT_POLYLINE:
+        case OT_CUBICBEZIERCURVE:
+        case OT_QUADRICBEZIERCURVE:
+        case OT_FREEHAND:
+            m_view->openPopupMenuObject( "closed_popup", point );
+            break;
+        case OT_LINE:    
+        case OT_CLOSED_LINE:
+            m_view->openPopupMenuObject( "flip_popup", point );
+            break;
+        case OT_GROUP:
+            if ( oneObjectTextSelected())
+                m_view->openPopupMenuObject( "textobject_popup", point );
+            else
+                m_view->openPopupMenuObject( "flip_popup", point );
+            break;
+        default:
+            m_view->openPopupMenuObject( "graphmenu_popup", point );
+            break;
+    }
 }

@@ -50,8 +50,12 @@ public:
 
     virtual void flip( bool horizontal );
 
-    virtual void closeObject( bool close );
-    virtual bool isClosed() const;
+    /**
+     * @brief Get the points of the object
+     *
+     * @return points of the object
+     */
+    virtual const KoPointArray getPoints() const { return getDrawingPoints(); }
 
 protected:
     virtual const char * getOasisElementName() const;

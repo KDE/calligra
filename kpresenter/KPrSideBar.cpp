@@ -4,6 +4,7 @@
    Copyright (C) 2001 Lukas Tinkl <lukas@kde.org>
    Copyright (C) 2002 Ariya Hidayat <ariya@kde.org>
    Copyright (C) 2005 Laurent Montel <montel@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1042,84 +1043,19 @@ void KPrOutline::rightButtonPressed( QListViewItem *, const QPoint &pnt, int )
         m_view->openPopupMenuSideBar(pnt);
     } else {
         OutlineObjectItem* objectItem = dynamic_cast<OutlineObjectItem*>(item);
-        KPrObject * kpobject = objectItem->object();
+        if( objectItem ) 
+        {
+            KPrObject * kpobject = objectItem->object();
 
-        if( !kpobject ) {
-            return;
-        }
-
-        KPrCanvas* canvas = static_cast<KPrCanvas*>(m_view->canvas());
-        ObjType objectType = kpobject->getType();
-        canvas->deSelectAllObj();
-        canvas->selectObj( kpobject );
-
-        if( objectItem ) {
-            if ( objectType == OT_PICTURE || objectType == OT_CLIPART ) {
-                m_view->openPopupMenuObject( "picmenu_popup", pnt );
-            } else if ( objectType == OT_TEXT ) {
-                KPrTextObject *obj = dynamic_cast<KPrTextObject *>(kpobject);
-                if ( obj )
-                    m_view->changeVerticalAlignmentStatus( obj->verticalAlignment() );
-                m_view->openPopupMenuObject( "textobject_popup", pnt );
-            } else if ( objectType == OT_PIE ) {
-                m_view->openPopupMenuObject( "piemenu_popup", pnt );
-            } else if ( objectType == OT_RECT || objectType == OT_ELLIPSE ) {
-                m_view->openPopupMenuObject( "rectangleobject_popup", pnt );
-            } else if ( objectType == OT_PART ) {
-                m_view->openPopupMenuObject( "partobject_popup", pnt );
-            } else if ( objectType == OT_POLYGON ) {
-                m_view->openPopupMenuObject( "polygonobject_popup", pnt );
-            } else if ( objectType == OT_POLYLINE ) {
-                KPrPolylineObject *tmpObj = dynamic_cast<KPrPolylineObject *>(kpobject);
-                if ( tmpObj )
-                {
-                    if (!tmpObj->isClosed())
-                        m_view->openPopupMenuObject( "closed_popup", pnt );
-                    else
-                        m_view->openPopupMenuObject( "flip_popup", pnt );
-                }
-            } else if ( objectType == OT_CUBICBEZIERCURVE ) {
-                KPrCubicBezierCurveObject *tmpObj = dynamic_cast<KPrCubicBezierCurveObject *>(kpobject);
-                if ( tmpObj )
-                {
-                    if (!tmpObj->isClosed())
-                        m_view->openPopupMenuObject( "closed_popup", pnt );
-                    else
-                        m_view->openPopupMenuObject( "flip_popup", pnt );
-                }
-            } else if ( objectType == OT_QUADRICBEZIERCURVE ) {
-                KPrQuadricBezierCurveObject *tmpObj = dynamic_cast<KPrQuadricBezierCurveObject *>(kpobject);
-                if ( tmpObj )
-                {
-                    if (!tmpObj->isClosed())
-                        m_view->openPopupMenuObject( "closed_popup", pnt );
-                    else
-                        m_view->openPopupMenuObject( "flip_popup", pnt );
-                }
-            } else if ( objectType == OT_FREEHAND ) {
-                KPrFreehandObject *tmpObj = dynamic_cast<KPrFreehandObject *>(kpobject);
-                if ( tmpObj )
-                {
-                    if (!tmpObj->isClosed())
-                        m_view->openPopupMenuObject( "closed_popup", pnt );
-                    else
-                        m_view->openPopupMenuObject( "flip_popup", pnt );
-                }
-            } else if ( objectType == OT_LINE ){
-                m_view->openPopupMenuObject( "flip_popup", pnt );
-            } else if ( objectType == OT_CLOSED_LINE ) {
-                KPrClosedLineObject *tmpObj=dynamic_cast<KPrClosedLineObject *>(kpobject);
-                if ( tmpObj )
-                    m_view->openPopupMenuObject( "flip_popup", pnt );
-            } else if ( objectType == OT_GROUP ) {
-                KPrGroupObject *obj=dynamic_cast<KPrGroupObject *>(kpobject);
-                if ( obj && canvas->oneObjectTextSelected())
-                    m_view->openPopupMenuObject( "textobject_popup", pnt );
-                else
-                    m_view->openPopupMenuObject( "flip_popup", pnt );
-            } else {
-                m_view->openPopupMenuObject( "graphmenu_popup", pnt );
+            if( !kpobject ) {
+                return;
             }
+
+            KPrCanvas* canvas = static_cast<KPrCanvas*>(m_view->canvas());
+            canvas->deSelectAllObj();
+            canvas->selectObj( kpobject );
+
+            canvas->objectPopup( kpobject, pnt );
         }
     }
 }

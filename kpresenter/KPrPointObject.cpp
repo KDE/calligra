@@ -193,18 +193,6 @@ void KPrPointObject::flip( bool horizontal )
 }
 
 
-void KPrPointObject::closeObject( bool close )
-{
-    points = getCloseObject( points, close, isClosed() );
-}
-
-
-bool KPrPointObject::isClosed() const
-{
-    return ( points.at(0) == points.at(points.count()-1) );
-}
-
-
 void KPrPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                            int /* pageNum */, bool /*drawingShadow*/, bool drawContour )
 {
@@ -223,7 +211,7 @@ void KPrPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
     QPointArray pointArray = getDrawingPoints().zoomPointArray( _zoomHandler, _w );
     _painter->drawPolyline( pointArray );
 
-    if ( lineBegin != L_NORMAL && !drawContour && !isClosed()) {
+    if ( lineBegin != L_NORMAL && !drawContour ) {
         QPoint startPoint;
         bool first = true;
         QPointArray::ConstIterator it1;
@@ -243,7 +231,7 @@ void KPrPointObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
         }
     }
 
-    if ( lineEnd != L_NORMAL && !drawContour &&!isClosed()) {
+    if ( lineEnd != L_NORMAL && !drawContour ) {
         QPoint endPoint;
         bool last = true;
         QPointArray::ConstIterator it2 = pointArray.end();

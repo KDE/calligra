@@ -41,8 +41,6 @@ public:
     virtual void loadOasis( const QDomElement &element, KoOasisContext & context, KPrLoadingInfo* info );
 
     virtual void flip(bool horizontal );
-    void closeObject(bool _close);
-    bool isClosed()const;
 
     static KoPointArray bezier2polyline( const KoPointArray &bezierPoints );
 

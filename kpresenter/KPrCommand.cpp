@@ -2487,70 +2487,64 @@ void KPrProtectContentCommand::unexecute()
     m_doc->updateRulerInProtectContentMode();
 }
 
-KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &_name, KPrObject *_obj, KPrDocument *_doc )
-    : KNamedCommand( _name ),
-      objects( _obj ),
-      doc(_doc)
+KPrCloseObjectCommand::KPrCloseObjectCommand( const QString &name, KPrObject *obj, KPrDocument *doc )
+: KNamedCommand( name )
+, m_doc( doc )
+, m_page( doc->findPage( obj ) )
 {
-    m_page = doc->findPage( _obj );
+    KPrPointObject * pointObject = dynamic_cast<KPrPointObject *>( obj );
+    if ( pointObject )
+    {
+        m_openObjects.append( obj );
+        obj->incCmdRef();
+        KPrClosedLineObject * closedObject = new KPrClosedLineObject( *pointObject );
+        closedObject->incCmdRef();
+        m_closedObjects.append( closedObject );
+    }
 }
 
 KPrCloseObjectCommand::~KPrCloseObjectCommand()
 {
+    QPtrListIterator<KPrObject> it( m_openObjects );
+    for ( ; it.current() ; ++it )
+        it.current()->decCmdRef();
+    QPtrListIterator<KPrObject> it2( m_closedObjects );
+    for ( ; it2.current() ; ++it2 )
+        it2.current()->decCmdRef();
 }
 
 void KPrCloseObjectCommand::execute()
 {
-    closeObject(true);
+    QPtrListIterator<KPrObject> openIt( m_openObjects );
+    QPtrListIterator<KPrObject> closeIt( m_closedObjects );
+    for ( ; openIt.current() ; ++openIt, ++closeIt )
+    {
+        m_page->replaceObject( *openIt, *closeIt );
+        bool selected = ( *openIt )->isSelected();
+        ( *openIt )->removeFromObjList();
+        ( *closeIt )->addToObjList();
+        ( *openIt )->setSelected( false );
+        ( *closeIt )->setSelected( selected );
+        m_doc->repaint( *closeIt );
+    }
+    m_doc->updateSideBarItem( m_page );
 }
 
 void KPrCloseObjectCommand::unexecute()
 {
-    closeObject(false);
-}
-
-void KPrCloseObjectCommand::closeObject(bool close)
-{
-    ObjType tmpType = objects->getType();
-
-    if ( tmpType==OT_POLYLINE )
+    QPtrListIterator<KPrObject> openIt( m_openObjects );
+    QPtrListIterator<KPrObject> closeIt( m_closedObjects );
+    for ( ; openIt.current() ; ++openIt, ++closeIt )
     {
-        KPrPolylineObject * obj = dynamic_cast<KPrPolylineObject *>(objects);
-        if ( obj )
-        {
-            obj->closeObject( close );
-            doc->repaint( obj );
-        }
+        m_page->replaceObject( *closeIt, *openIt );
+        bool selected = ( *closeIt )->isSelected();
+        ( *closeIt )->removeFromObjList();
+        ( *openIt )->addToObjList();
+        ( *closeIt )->setSelected( false );
+        ( *openIt )->setSelected( selected );
+        m_doc->repaint( *openIt );
     }
-    else if ( tmpType==OT_FREEHAND )
-    {
-        KPrFreehandObject * obj = dynamic_cast<KPrFreehandObject *>(objects);
-        if ( obj )
-        {
-            obj->closeObject( close );
-            doc->repaint( obj );
-        }
-    }
-    else if ( tmpType==OT_QUADRICBEZIERCURVE )
-    {
-        KPrQuadricBezierCurveObject * obj = dynamic_cast<KPrQuadricBezierCurveObject *>(objects);
-        if ( obj )
-        {
-            obj->closeObject( close );
-            doc->repaint( obj );
-        }
-    }
-    else if ( tmpType==OT_CUBICBEZIERCURVE )
-    {
-        KPrCubicBezierCurveObject * obj = dynamic_cast<KPrCubicBezierCurveObject *>(objects);
-        if ( obj )
-        {
-            obj->closeObject( close );
-            doc->repaint( obj );
-        }
-    }
-
-    doc->updateSideBarItem( m_page );
+    m_doc->updateSideBarItem( m_page );
 }
 
 MarginsStruct::MarginsStruct( KPrTextObject *obj )

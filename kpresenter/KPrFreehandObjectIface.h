@@ -42,8 +42,6 @@ k_dcop:
     QString lineEnd() const;
     void horizontalFlip();
     void verticalFlip();
-    void closeObject(bool close);
-    bool isClosed()const;
 
 private:
     KPrFreehandObject *obj;

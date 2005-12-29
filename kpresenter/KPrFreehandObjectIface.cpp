@@ -65,13 +65,3 @@ void KPrFreehandObjectIface::verticalFlip()
     //todo repaint it
     obj->flip( false );
 }
-
-void KPrFreehandObjectIface::closeObject(bool close)
-{
-    obj->closeObject( close );
-}
-
-bool KPrFreehandObjectIface::isClosed()const
-{
-    return obj->isClosed();
-}

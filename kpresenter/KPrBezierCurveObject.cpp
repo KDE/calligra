@@ -249,17 +249,6 @@ void KPrBezierCurveObject::flip(bool horizontal )
     allPoints = tmpPoints;
 }
 
-void KPrBezierCurveObject::closeObject( bool _close )
-{
-    allPoints = getCloseObject( allPoints, _close, isClosed() );
-}
-
-
-bool KPrBezierCurveObject::isClosed() const
-{
-    return ( allPoints.at( 0 ) == allPoints.at( allPoints.count() - 1 ) );
-}
-
 
 KoPointArray KPrBezierCurveObject::getDrawingPoints() const
 {

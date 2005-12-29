@@ -1023,7 +1023,7 @@ protected:
 class KPrCloseObjectCommand : public KNamedCommand
 {
 public:
-    KPrCloseObjectCommand( const QString &_name, KPrObject *_obj, KPrDocument *_doc );
+    KPrCloseObjectCommand( const QString &name, KPrObject *obj, KPrDocument *doc );
 
     ~KPrCloseObjectCommand();
     virtual void execute();
@@ -1032,8 +1032,9 @@ public:
 protected:
     void closeObject(bool close);
 
-    KPrObject *objects;
-    KPrDocument * doc;
+    QPtrList<KPrObject> m_openObjects;
+    QPtrList<KPrObject> m_closedObjects;
+    KPrDocument * m_doc;
     KPrPage *m_page;
 };
 

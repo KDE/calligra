@@ -29,6 +29,7 @@
 class KPrGradient;
 class QPainter;
 class DCOPObject;
+class KPrPointObject;
 
 class KPrClosedLineObject : public KPr2DObject
 {
@@ -37,6 +38,15 @@ public:
     KPrClosedLineObject( const KoPointArray &_points, const KoSize &_size, const KPrPen &_pen, const QBrush &_brush,
                         FillType _fillType, const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                         bool _unbalanced, int _xfactor, int _yfactor, const QString _type );
+    /**
+     * @brief Construct object form a KPrPointObject.
+     *
+     * This constructor is used when a KPrPointObject objects gets closed.
+     * It is then changed into a KPrClosedLineObject.
+     *
+     * @param object form which the KPrClosedLineObject is constructed
+     */
+    KPrClosedLineObject( const KPrPointObject &object );
 
     virtual ~KPrClosedLineObject() {}
     //virtual DCOPObject* dcopObject();

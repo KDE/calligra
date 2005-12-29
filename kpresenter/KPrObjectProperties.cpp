@@ -54,27 +54,12 @@ void KPrObjectProperties::getProperties( const QPtrList<KPrObject> &objects )
         switch ( it.current()->getType() )
         {
             case OT_LINE:
-                getPenProperties( it.current() );
-                getLineEndsProperties( it.current() );
-                m_flags |= PtOther;
-                break;
             case OT_FREEHAND:
             case OT_POLYLINE:
-                getPenProperties( it.current() );
-                if( !static_cast<KPrPointObject*>( it.current() )->isClosed() )
-                    getLineEndsProperties( it.current() );
-                m_flags |= PtOther;
-                break;
             case OT_QUADRICBEZIERCURVE:
-                getPenProperties( it.current() );
-                if ( !static_cast<KPrQuadricBezierCurveObject*>( it.current() )->isClosed() )
-                    getLineEndsProperties( it.current() );
-                m_flags |= PtOther;
-                break;
             case OT_CUBICBEZIERCURVE:
                 getPenProperties( it.current() );
-                if ( !static_cast<KPrCubicBezierCurveObject*>( it.current() )->isClosed() )
-                    getLineEndsProperties( it.current() );
+                getLineEndsProperties( it.current() );
                 m_flags |= PtOther;
                 break;
             case OT_PIE:

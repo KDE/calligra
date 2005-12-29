@@ -20,6 +20,7 @@
 */
 
 #include "KPrClosedLineObject.h"
+#include "KPrPointObject.h"
 #include "KPrGradient.h"
 #include "KPrSVGPathParser.h"
 #include <KoTextZoomHandler.h>
@@ -48,6 +49,34 @@ KPrClosedLineObject::KPrClosedLineObject( const KoPointArray &_points, const KoS
     points = KoPointArray( _points );
     ext = _size;
     typeString = _typeString;
+}
+
+KPrClosedLineObject::KPrClosedLineObject( const KPrPointObject &object )
+: KPr2DObject( object.getPen(), QBrush::NoBrush, FT_BRUSH, QColor(), QColor(), BCT_PLAIN, false, 0, 0 )
+{
+    ext = object.getSize();
+    orig = object.getOrig();
+    objectName = object.getObjectName();
+    points = object.getPoints().copy();
+    points.putPoints( points.count(), 1, points.at( 0 ).x(), points.at( 0 ).y() );
+    switch ( object.getType() )
+    {
+        case OT_FREEHAND:
+            typeString = i18n( "Closed Freehand" );
+            break;
+        case OT_POLYLINE:
+            typeString = i18n( "Closed Polyline" );
+            break;
+        case OT_CUBICBEZIERCURVE:
+            typeString = i18n( "Closed Cubic Bezier Curve" );
+            break;
+        case OT_QUADRICBEZIERCURVE:
+            typeString = i18n( "Closed Quadric Bezier Curve" );
+            break;
+        default:    
+            break;
+    }
+            
 }
 
 KPrClosedLineObject &KPrClosedLineObject::operator=( const KPrClosedLineObject & )

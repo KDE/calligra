@@ -43,13 +43,3 @@ void KPrPolyLineObjectIface::verticalFlip()
     //todo repaint it
     obj->flip( false );
 }
-
-void KPrPolyLineObjectIface::closeObject()
-{
-    obj->closeObject(true);
-}
-
-bool KPrPolyLineObjectIface::isClosed()const
-{
-    return obj->isClosed();
-}
