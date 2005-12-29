@@ -22,7 +22,9 @@
 #ifndef KOPAGELAYOUT_H
 #define KOPAGELAYOUT_H
 
-#include <koGenStyles.h>
+#ifndef SIMPLE_KOLIBS
+# include <koGenStyles.h>
+#endif
 #include <qstringlist.h>
 #include <koffice_export.h>
 class QDomElement;

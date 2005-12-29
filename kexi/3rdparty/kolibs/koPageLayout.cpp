@@ -24,8 +24,10 @@
 #include <kprinter.h>
 #include <kdebug.h>
 #include <kglobal.h>
-#include <kodom.h>
-#include <koxmlns.h>
+#ifndef SIMPLE_KOLIBS
+# include <kodom.h>
+# include <koxmlns.h>
+#endif
 #include <qdom.h>
 
 // paper formats ( mm )
