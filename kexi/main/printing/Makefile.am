@@ -23,6 +23,7 @@ SUBDIRS = .
 # set the include path for X, qt and KDE
 
 INCLUDES= -I$(top_srcdir)/kexi -I$(top_srcdir)/kexi/main/printing \
-	-I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi/widget \
+	-I$(top_srcdir)/kexi/core -I$(top_srcdir)/kexi/widget -I$(top_srcdir)/kexi/3rdparty/kolibs \
 	-I$(top_builddir)/kexi/widget $(all_includes)
 
+KDE_CXXFLAGS += -DSIMPLE_KOLIBS -DKOFFICECORE_EXPORT= -DKOFFICEUI_EXPORT=
