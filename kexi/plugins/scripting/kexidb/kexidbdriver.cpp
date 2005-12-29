@@ -85,7 +85,7 @@ KexiDBDriver::KexiDBDriver(::KexiDB::Driver* driver)
 
     // Return a list of KexiDBConnection objects.
     this->addProxyFunction< 
-        Kross::Api::ProxyValue< Kross::Api::ListT<Kross::KexiDB::KexiDBConnection,::KexiDB::Connection>, const QPtrList<::KexiDB::Connection> > >
+        Kross::Api::ProxyValue< Kross::Api::ListT<Kross::KexiDB::KexiDBConnection, ::KexiDB::Connection>, const QPtrList< ::KexiDB::Connection> > >
         ("connectionsList", driver, &::KexiDB::Driver::connectionsList );
 }
 
