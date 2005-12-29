@@ -602,11 +602,8 @@ public:
     };
 
     KPrPolygonSettingCmd( const QString &name, PolygonSettings newSettings,
-                       QPtrList<KPrObject> &objects, KPrDocument *doc,
-                       KPrPage *page, int flags = All );
-    KPrPolygonSettingCmd( const QString &name, QPtrList<PolygonSettings> &oldSettings,
-                       PolygonSettings newSettings, QPtrList<KPrObject> &objects,
-                       KPrDocument *doc,  KPrPage *page, int flags = All );
+                          QPtrList<KPrObject> &objects, KPrDocument *doc,
+                          KPrPage *page, int flags = All );
     ~KPrPolygonSettingCmd();
 
     virtual void execute();
@@ -1053,8 +1050,6 @@ class KPrChangeMarginCommand : public KNamedCommand
 public:
     KPrChangeMarginCommand( const QString &name, QPtrList<KPrObject> &objects, MarginsStruct newMargins,
                             KPrDocument *doc, KPrPage *page );
-    KPrChangeMarginCommand( const QString &name, KPrTextObject *_obj, MarginsStruct _MarginsBegin,
-                            MarginsStruct _MarginsEnd, KPrDocument *_doc );
     ~KPrChangeMarginCommand();
 
     virtual void execute();

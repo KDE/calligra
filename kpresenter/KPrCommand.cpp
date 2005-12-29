@@ -1376,8 +1376,8 @@ void KPrPieValueCmd::unexecute()
 
 
 KPrPolygonSettingCmd::KPrPolygonSettingCmd( const QString &name, PolygonSettings newSettings,
-                                      QPtrList<KPrObject> &objects, KPrDocument *doc,
-                                      KPrPage *page, int flags )
+                                            QPtrList<KPrObject> &objects, KPrDocument *doc,
+                                            KPrPage *page, int flags )
 : KNamedCommand( name )
 , m_doc( doc )
 , m_page( page )
@@ -1390,25 +1390,6 @@ KPrPolygonSettingCmd::KPrPolygonSettingCmd( const QString &name, PolygonSettings
     addObjects( objects );
 }
 
-
-KPrPolygonSettingCmd::KPrPolygonSettingCmd( const QString &name, QPtrList<PolygonSettings> &oldSettings,
-                                      PolygonSettings newSettings, QPtrList<KPrObject> &objects,
-                                      KPrDocument *doc, KPrPage *page, int flags )
-: KNamedCommand( name )
-, m_doc( doc )
-, m_page( page )
-, m_oldSettings( oldSettings )
-, m_objects( objects )
-, m_newSettings( newSettings )
-, m_flags( flags )
-{
-    m_objects.setAutoDelete( false );
-    m_oldSettings.setAutoDelete( false );
-
-    QPtrListIterator<KPrObject> it( m_objects );
-    for ( ; it.current() ; ++it )
-        it.current()->incCmdRef();
-}
 
 KPrPolygonSettingCmd::~KPrPolygonSettingCmd()
 {
@@ -2580,19 +2561,6 @@ KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, QPtrList<KP
     m_oldMargins.setAutoDelete( false );
 
     addObjects( objects );
-}
-
-
-KPrChangeMarginCommand::KPrChangeMarginCommand( const QString &name, KPrTextObject *_obj, MarginsStruct _MarginsBegin,
-                                                MarginsStruct _MarginsEnd, KPrDocument *_doc ) :
-    KNamedCommand(name),
-    m_newMargins(_MarginsEnd),
-    m_doc( _doc )
-{
-    _obj->incCmdRef();
-    m_objects.append( _obj );
-    m_oldMargins.append( new MarginsStruct( _obj ) );
-    m_page = m_doc->findPage( _obj );
 }
 
 
