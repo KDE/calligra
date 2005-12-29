@@ -1,4 +1,4 @@
-lib_LTLIBRARIES =libkiviotexttool.la
+kde_module_LTLIBRARIES =libkiviotexttool.la
 
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \

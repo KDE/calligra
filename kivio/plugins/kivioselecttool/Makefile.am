@@ -1,5 +1,5 @@
 SUBDIRS = select_pics
-lib_LTLIBRARIES =libkivioselecttool.la
+kde_module_LTLIBRARIES =libkivioselecttool.la
 
 
 INCLUDES = -I$(top_srcdir)/kivio/kiviopart/config \

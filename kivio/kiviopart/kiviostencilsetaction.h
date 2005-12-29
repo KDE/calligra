@@ -53,6 +53,7 @@ class KivioStencilSetAction : public KAction
 
   signals:
     void activated( const QString& );
+    void showDialog();
 
   protected:
     QPixmap dirtPixmap( const QString& dir );

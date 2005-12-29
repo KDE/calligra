@@ -128,6 +128,7 @@
 #include "kiviostencilsetinstaller.h"
 #include "addstenciltool.h"
 #include "objectlistpalette.h"
+#include "addstencilsetdialog.h"
 
 #define TOGGLE_ACTION(X) ((KToggleAction*)actionCollection()->action(X))
 #define MOUSEPOS_TEXT 1000
@@ -139,6 +140,7 @@ using namespace Kivio;
 KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 : KoView( doc, _parent, _name )
 {
+  m_addStencilSetDialog = 0;
   m_pluginManager = new PluginManager(this, "Kivio Plugin Manager");
   m_addStencilTool = new Kivio::AddStencilTool(this);
   m_pPaletteManager = new KoPaletteManager(this, actionCollection(), "kivio palette manager");
@@ -268,7 +270,6 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   createObjectListPalette();
   createGeometryDock();
   createProtectionDock();
-//   createAddStencilSetDock();
   paletteManager()->showWidget("birdseyepanel");
   paletteManager()->showWidget("stencilgeometrypanel");
 
@@ -361,16 +362,6 @@ void KivioView::createProtectionDock()
   paletteManager()->addWidget(m_pProtectionPanel, "protectionpanel", "geometrydocker");
 }
 
-void KivioView::createAddStencilSetDock()
-{
-  m_addStencilSetPanel = new Kivio::AddStencilSetPanel(this);
-  m_addStencilSetPanel -> setCaption(i18n("Add Stencil Set"));
-  paletteManager()->addWidget(m_addStencilSetPanel, "addstencilsetpanel", "stencilsetdocker");
-
-  connect(m_addStencilSetPanel, SIGNAL(addStencilSet(const QString&)), this, SLOT(addStencilSet(const QString&)));
-  connect(this, SIGNAL(updateStencilSetList()), m_addStencilSetPanel, SLOT(updateList()));
-}
-
 void KivioView::createObjectListPalette()
 {
   m_objectListPalette = new Kivio::ObjectListPalette(this);
@@ -384,6 +375,7 @@ void KivioView::setupActions()
     "open_stencilset", actionCollection(), "addStencilSet" );
   connect(addStSet,SIGNAL(activated(const QString&)),SLOT(addStencilSet(const QString&)));
   connect(this, SIGNAL(updateStencilSetList()), addStSet, SLOT(updateMenu()));
+  connect(addStSet, SIGNAL(showDialog()), this, SLOT(showAddStencilSetDialog()));
 
   m_alignAndDistribute = new KAction( i18n("Align && Distribute..."), CTRL+ALT+Key_A, this,
     SLOT(alignStencilsDlg()), actionCollection(), "alignStencils" );
@@ -2310,6 +2302,17 @@ void KivioView::addGuideLine()
     activePage()->addGuideLine(dlg.orientation(), dlg.pos());
     m_pDoc->updateGuideLines(activePage());
   }
+}
+
+void KivioView::showAddStencilSetDialog()
+{
+  if(!m_addStencilSetDialog) {
+    m_addStencilSetDialog = new Kivio::AddStencilSetDialog(this, "AddStencilSetDialog");
+    connect(m_addStencilSetDialog, SIGNAL(addStencilSet(const QString&)), this, SLOT(addStencilSet(const QString&)));
+    connect(this, SIGNAL(updateStencilSetList()), m_addStencilSetDialog, SLOT(updateList()));
+  }
+
+  m_addStencilSetDialog->show();
 }
 
 #include "kivio_view.moc"

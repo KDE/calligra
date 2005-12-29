@@ -16,7 +16,7 @@
   <KivioConnectorTarget x="36.0" y="34.0"/>
   <KivioConnectorTarget x="0.0" y="17.0"/>
   <KivioShape type="Ellipse" name="Outline" x="0.0" y="0.0" w="72.0" h="34.0">
-    <KivioLineStyle pattern="2"/>
+    <KivioLineStyle pattern="2" join="80"/>
   </KivioShape>
   <KivioShape type="TextBox" name="Text" x="0.0" y="0.0" w="72.0" h="34.0"/>
 </KivioShapeStencil>

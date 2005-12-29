@@ -668,7 +668,7 @@ uninstall-am: uninstall-erDATA uninstall-info-am
 .NOEXPORT:
 
 #>+ 2
-KDE_DIST=weakrelationship.sml relationship.sml icon.png Makefile.in weakentity.sml entity.sml desc multivaluedattribute.sml derivedattribute.sml attribute.sml 
+KDE_DIST=derivedattribute.sml Makefile.in icon.png desc relationship.sml weakentity.sml multivaluedattribute.sml attribute.sml entity.sml weakrelationship.sml 
 
 #>+ 2
 docs-am:

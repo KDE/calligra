@@ -37,7 +37,7 @@ class KivioArrowHeadAction;
 namespace Kivio {
   class ToolController;
   class PluginManager;
-  class AddStencilSetPanel;
+  class AddStencilSetDialog;
   class AddStencilTool;
   class ObjectListPalette;
 }
@@ -154,7 +154,6 @@ class KIVIO_EXPORT KivioView : public KoView
     void createLayerDock();
     void createBirdEyeDock();
     void createProtectionDock();
-    void createAddStencilSetDock();
     void createObjectListPalette();
 
   public slots:
@@ -283,6 +282,8 @@ class KIVIO_EXPORT KivioView : public KoView
 
     void addGuideLine();
 
+    void showAddStencilSetDialog();
+
   protected:
     void setupActions();
     void initActions();
@@ -340,7 +341,6 @@ class KIVIO_EXPORT KivioView : public KoView
     KivioLayerPanel* m_pLayersPanel;
     KivioBirdEyePanel* m_pBirdEyePanel;
     KivioProtectionPanel* m_pProtectionPanel;
-    Kivio::AddStencilSetPanel* m_addStencilSetPanel;
     Kivio::ObjectListPalette* m_objectListPalette;
     KToggleAction* showPageMargins;
     KToggleAction* showRulers;
@@ -380,6 +380,8 @@ class KIVIO_EXPORT KivioView : public KoView
     QScrollBar* m_vertScrollBar;
     QScrollBar* m_horzScrollBar;
     Kivio::AddStencilTool* m_addStencilTool;
+
+    Kivio::AddStencilSetDialog* m_addStencilSetDialog;
 };
 
 #endif

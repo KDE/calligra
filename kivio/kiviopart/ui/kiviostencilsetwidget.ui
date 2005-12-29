@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KivioStencilSetWidget</class>
 <comment>This program is free software; you can redistribute it and/or
 modify it under the terms of the GNU General Public License
@@ -14,7 +14,7 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 </comment>
-<author>(C) 2004 Peter Simonsson</author>
+<author>(C) 2004-2005 Peter Simonsson</author>
 <widget class="QWidget">
     <property name="name">
         <cstring>KivioStencilSetWidget</cstring>
@@ -33,6 +33,9 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
         </property>
         <widget class="QSplitter" row="0" column="0">
             <property name="name">
@@ -62,6 +65,18 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
                 <property name="resizeMode">
                     <enum>AllColumns</enum>
                 </property>
+                <property name="fullWidth">
+                    <bool>true</bool>
+                </property>
+                <property name="itemsMovable">
+                    <bool>false</bool>
+                </property>
+                <property name="dropVisualizer">
+                    <bool>false</bool>
+                </property>
+                <property name="shadeSortColumn">
+                    <bool>false</bool>
+                </property>
             </widget>
             <widget class="QGroupBox">
                 <property name="name">
@@ -85,14 +100,29 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
                             <property name="name">
                                 <cstring>m_stencilIView</cstring>
                             </property>
+                            <property name="acceptDrops">
+                                <bool>false</bool>
+                            </property>
                             <property name="hScrollBarMode">
                                 <enum>AlwaysOff</enum>
                             </property>
                             <property name="selectionMode">
                                 <enum>NoSelection</enum>
                             </property>
+                            <property name="gridX">
+                                <number>64</number>
+                            </property>
+                            <property name="gridY">
+                                <number>64</number>
+                            </property>
+                            <property name="resizeMode">
+                                <enum>Adjust</enum>
+                            </property>
                             <property name="itemsMovable">
                                 <bool>false</bool>
+                            </property>
+                            <property name="whatsThis" stdset="0">
+                                <string>This is a preview of the stencils contained in the set</string>
                             </property>
                         </widget>
                         <widget class="QTextBrowser">
@@ -105,8 +135,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
                         <property name="name">
                             <cstring>m_addToDocBtn</cstring>
                         </property>
+                        <property name="enabled">
+                            <bool>false</bool>
+                        </property>
                         <property name="text">
                             <string>&amp;Add to Document</string>
+                        </property>
+                        <property name="accel">
+                            <string>Alt+A</string>
                         </property>
                     </widget>
                 </grid>
@@ -114,9 +150,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
         </widget>
     </grid>
 </widget>
+<customwidgets>
+</customwidgets>
 <includes>
     <include location="global" impldecl="in implementation">kdialog.h</include>
 </includes>
 <layoutdefaults spacing="6" margin="11"/>
 <layoutfunctions spacing="KDialog::spacingHint" margin="KDialog::marginHint"/>
+<includehints>
+    <includehint>klistview.h</includehint>
+</includehints>
 </UI>

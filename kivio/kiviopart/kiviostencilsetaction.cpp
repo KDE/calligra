@@ -27,6 +27,7 @@
 #include <ktoolbar.h>
 #include <ktoolbarbutton.h>
 #include <kiconloader.h>
+#include <klocale.h>
 
 #include <qfile.h>
 #include <qdir.h>
@@ -175,6 +176,9 @@ void KivioStencilSetAction::updateMenu()
 {
   m_ssId = 0;
   m_popup->clear();
+
+  m_popup->insertItem(i18n("Show Stencil Set Chooser"), this, SIGNAL(showDialog()));
+  m_popup->insertSeparator();
 
   m_pathList.clear();
   m_collectionIdList.clear();

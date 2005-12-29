@@ -35,18 +35,19 @@ KivioStencilSpawnerSet::KivioStencilSpawnerSet(const QString& name)
     : m_pSpawners(NULL),
       m_pSelected(NULL)
 {
-    m_dir = "";
-    m_name = name.isEmpty() ? QString("Untitled") : name;
+  m_hidden = false;
+  m_dir = "";
+  m_name = name.isEmpty() ? QString("Untitled") : name;
 
-    m_pSpawners = new QPtrList<KivioStencilSpawner>;
-    m_pSpawners->setAutoDelete(true);
+  m_pSpawners = new QPtrList<KivioStencilSpawner>;
+  m_pSpawners->setAutoDelete(true);
 }
 
 KivioStencilSpawnerSet::~KivioStencilSpawnerSet()
 {
-    delete m_pSpawners;
-    m_pSpawners = NULL;
-    kdDebug(43000) << "KivioStencilSpawnerSet::~KivioStencilSpawnerSet() - StencilSpawnerSet " <<  m_name << " deleted" << endl;
+  delete m_pSpawners;
+  m_pSpawners = NULL;
+  kdDebug(43000) << "KivioStencilSpawnerSet::~KivioStencilSpawnerSet() - " <<  m_name << endl;
 }
 
 

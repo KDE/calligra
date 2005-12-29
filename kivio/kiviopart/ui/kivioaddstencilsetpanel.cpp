@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Peter Simonsson <psn@linux.se>,
+   Copyright (C) 2004-2005 Peter Simonsson <psn@linux.se>,
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -31,16 +31,17 @@
 #include <klistview.h>
 
 #include "kivio_stencil_spawner_set.h"
+#include "kivio_stencil_spawner.h"
+#include "kivio_stencil_spawner_info.h"
+#include "kivio_stencil.h"
+#include "kivioglobal.h"
 
 namespace Kivio {
   AddStencilSetPanel::AddStencilSetPanel(QWidget *parent, const char *name)
     : KivioStencilSetWidget(parent, name)
   {
     updateList();
-    
-    m_stencilIView->setResizeMode(QIconView::Adjust);
-    m_addToDocBtn->setEnabled(false);
-    
+
     connect(m_stencilSetLView, SIGNAL(clicked(QListViewItem*)), this, SLOT(changeStencilSet(QListViewItem*)));
     connect(m_addToDocBtn, SIGNAL(clicked()), this, SLOT(addToDocument()));
   }
@@ -152,26 +153,40 @@ namespace Kivio {
     
     m_stencilsetGBox->setTitle(li->text(0));
     m_addToDocBtn->setEnabled(true);
-    
+    KivioStencilSpawnerSet* spawnerSet = new KivioStencilSpawnerSet(li->text(0));
     // Load the stencil icons
     m_currentDir = li->text(1);
-    QDir d(m_currentDir);
-    d.setNameFilter("*.png *.xpm");
-    QStringList files = d.entryList();
-    
-    // Don't use the stencil set icon
-    files.remove("icon.png");
-    files.remove("icon.xpm");
-    
+    spawnerSet->loadDir(m_currentDir);
+    QStringList files = spawnerSet->files();
+
     // Remove the old icons
     m_stencilIView->clear();
-    
+    KivioStencilSpawner* spawner = 0;
+    KivioStencil* stencil = 0;
+    int count = 0;
+
     for(QStringList::Iterator it = files.begin(); it != files.end(); ++it)
     {
-      (void) new QIconViewItem(m_stencilIView, "", QPixmap(m_currentDir + "/" + (*it)));
+      spawner = spawnerSet->loadFile(m_currentDir + "/" + (*it));
+
+      if(spawner) {
+        stencil = spawner->newStencil();
+
+        if(stencil) {
+          (void) new QIconViewItem(m_stencilIView, spawner->info()->title(), Kivio::generatePixmapFromStencil(32, 32, stencil));
+          delete stencil;
+          count++;
+        }
+      }
+
+      if(count == 10) { // Limit to max 10 stencils
+        break;
+      }
     }
-  
+
     m_descriptionBrowser->setText(KivioStencilSpawnerSet::readDescription(m_currentDir));
+
+    delete spawnerSet;
   }
 
   void AddStencilSetPanel::addToDocument()
