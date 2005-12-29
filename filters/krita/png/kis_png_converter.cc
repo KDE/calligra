@@ -35,6 +35,7 @@
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
 #include <kis_profile.h>
+#include <kis_paint_layer.h>
 
 namespace {
 
@@ -112,6 +113,7 @@ KisPNGConverter::~KisPNGConverter()
 
 KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
 {
+    kdDebug() << "Start decoding PNG File" << endl;
     // open the file
     FILE *fp = fopen(uri.path().ascii(), "rb");
     if (!fp)
@@ -257,10 +259,10 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
         }
     }
 
-    KisLayerSP layer = new KisLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
-    m_img->add(layer, 0);
+    KisPaintLayer* layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
+    m_img->addLayer(layer, m_img->rootLayer(), 0);
     for (png_uint_32 y = 0; y < height; y++) {
-        KisHLineIterator it = layer -> createHLineIterator(0, y, width, true);
+        KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
         switch(color_type)
         {
             case PNG_COLOR_TYPE_GRAY:
@@ -381,8 +383,9 @@ KisImageSP KisPNGConverter::image()
 }
 
 
-KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
+KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
+    kdDebug() << "Start writing PNG File" << endl;
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
@@ -438,7 +441,7 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP la
     png_set_compression_method(png_ptr, 8);
     png_set_compression_buffer_size(png_ptr, 8192);
     
-    int color_nb_bits = 8 * layer -> pixelSize() / layer -> nChannels();
+    int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
     int color_type = getColorTypeforColorSpace(img->colorSpace(), alpha);
     
     if(color_type == -1)
@@ -516,8 +519,8 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisLayerSP la
     png_byte** row_pointers= new png_byte*[height];
     
     for (int y = 0; y < height; y++) {
-        KisHLineIterator it = layer -> createHLineIterator(0, y, width, false);
-        row_pointers[y] = new png_byte[width*layer -> pixelSize()];
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width, false);
+        row_pointers[y] = new png_byte[width*layer->paintDevice()->pixelSize()];
         switch(color_type)
         {
             case PNG_COLOR_TYPE_GRAY:

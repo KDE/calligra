@@ -31,7 +31,7 @@
 #include <kis_doc.h>
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
-#include <kis_layer.h>
+#include <kis_paint_layer.h>
 #include <kis_meta_registry.h>
 #include <kis_profile.h>
 
@@ -167,13 +167,13 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
         }
     }
 
-    KisLayerSP layer = new KisLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
-    m_img->add(layer, 0);
+    KisPaintLayerSP layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
+    m_img->addLayer(layer.data(), m_img->rootLayer(), 0);
     // Read data
     JSAMPROW row_pointer = new JSAMPLE[cinfo.image_width*cinfo.num_components];
         
     for (; cinfo.output_scanline < cinfo.image_height;) {
-        KisHLineIterator it = layer -> createHLineIterator(0, cinfo.output_scanline, cinfo.image_width, true);
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.output_scanline, cinfo.image_width, true);
         jpeg_read_scanlines(&cinfo, &row_pointer, 1);
         Q_UINT8 *src = row_pointer;
         switch(cinfo.out_color_space)
@@ -250,7 +250,7 @@ KisImageSP KisJPEGConverter::image()
 }
 
 
-KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options)
+KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, KisJPEGOptions options)
 {
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
@@ -330,10 +330,10 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisLayerSP l
 #endif
 
     JSAMPROW row_pointer = new JSAMPLE[width*cinfo.input_components];
-    int color_nb_bits = 8 * layer -> pixelSize() / layer -> nChannels();
+    int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
     
     for (; cinfo.next_scanline < height;) {
-        KisHLineIterator it = layer -> createHLineIterator(0, cinfo.next_scanline, width, false);
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, cinfo.next_scanline, width, false);
         Q_UINT8 *dst = row_pointer;
         switch(color_type)
         {

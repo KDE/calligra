@@ -30,7 +30,7 @@
 
 #include <kis_doc.h>
 #include <kis_image.h>
-#include <kis_layer.h>
+#include <kis_paint_layer.h>
 #include <kis_progress_display_interface.h>
 
 #include "kis_png_converter.h"
@@ -96,7 +96,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QCString& from, const QCS
 
     img->flatten();
 
-    dst = img->layer(0);
+    dst = img->activeLayer();
     Q_ASSERT(dst);
     
     output->undoAdapter()->setUndo(undo);
@@ -104,7 +104,7 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QCString& from, const QCS
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
-    if ( (res = kpc.buildFile(url, dst, beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
+    if ( (res = kpc.buildFile(url, (KisPaintLayer*)dst.data(), beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
         kdDebug() << "success !" << endl;
         return KoFilter::OK;
     }
