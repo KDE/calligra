@@ -201,6 +201,11 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		 what seems to be accepted by SQL servers. 
 		 @see Qt::DateFormat */
 		virtual QString valueToSQL( uint ftype, const QVariant& v ) const;
+		
+		//! Like above but with the fildtype as string.
+		inline QString valueToSQL( const QString& ftype, const QVariant& v ) const {
+			return valueToSQL(Field::typeForString(ftype), v);
+		}
 
 		//! Like above method, for \a field.
 		inline QString valueToSQL( const Field *field, const QVariant& v ) const {
