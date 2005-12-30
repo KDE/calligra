@@ -375,7 +375,7 @@ void Region::eor(const QPoint& point, Sheet* sheet)
 
   Iterator it = cells().begin();
   Iterator endOfList = cells().end();
-  while (it != /*endOfList*/ cells().end())
+  while (it != endOfList)
   {
     if (!(*it)->contains(point))
     {
@@ -394,31 +394,58 @@ void Region::eor(const QPoint& point, Sheet* sheet)
     int top = fullRange.top();
     int width = fullRange.width();
     int height = y - top;
-    add(QRect(left, top, width, height), sheet);
+    insert(it, QRect(left, top, width, height), sheet);
     // left range
     left = fullRange.left();
     top = y;
     width = QMAX(0, x - left);
     height = 1;
-    add(QRect(left, top, width, height), sheet);
+    insert(it, QRect(left, top, width, height), sheet);
     // right range
     left = QMIN(x+1, fullRange.right());
     top = y;
     width = QMAX(0, fullRange.right() - x);
     height = 1;
-    add(QRect(left, top, width, height), sheet);
+    insert(it, QRect(left, top, width, height), sheet);
     // bottom range
     left = fullRange.left();
     top = y+1;
     width = fullRange.width();
     height = QMAX(0, fullRange.bottom() - y);
-    add(QRect(left, top, width, height), sheet);
+    insert(it, QRect(left, top, width, height), sheet);
   }
 
   if (!containsPoint)
   {
     add(point, sheet);
   }
+}
+
+void Region::insert(Region::Iterator pos, const QPoint& point, Sheet* sheet)
+{
+  if (point.x() < 1 || point.y() < 1)
+  {
+    return;
+  }
+  Point* rpoint = new Point(point);
+  rpoint->setSheet(sheet);
+  d->cells.insert(pos, 1, rpoint);
+}
+
+void Region::insert(Region::Iterator pos, const QRect& range, Sheet* sheet)
+{
+  if (range.width() == 0 || range.height() == 0)
+  {
+    return;
+  }
+  if (range.size() == QSize(1,1))
+  {
+    insert(pos, range.topLeft(), sheet);
+    return;
+  }
+  Range* rrange = new Range(range);
+  rrange->setSheet(sheet);
+  d->cells.insert(pos, 1, rrange);
 }
 
 bool Region::isColumnAffected(uint col) const

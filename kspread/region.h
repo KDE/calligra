@@ -41,7 +41,6 @@ class View;
  */
 class KSPREAD_EXPORT Region
 {
-  friend class Sheet; // TODO Stefan: remove this
 public:
   /**
    * Constructor.
@@ -107,11 +106,20 @@ public:
   virtual ~Region();
 
 
+
   /**
    * @param originSheet The name is created relative to this sheet.
    * @return the name of the region (e.g. "A1:A2")
    */
   QString name(Sheet* originSheet = 0) const;
+
+  /**
+   * @param sRegion will be modified, if a valid sheet was found. The sheetname
+   * will be removed
+   * @return sheet named in the @p sRegion or the active sheet of the view
+   */
+  Sheet* filterSheetName(QString& sRegion);
+
 
 
   /**
@@ -154,6 +162,13 @@ public:
    * @return @c true, if the at least one cell in row @p row is selected
    */
   bool isRowAffected(uint row) const;
+
+  /**
+   * @param point the point's location
+   * @return @c true, if the region contains the point @p point
+   */
+  bool contains(const QPoint& point, Sheet* sheet = 0) const;
+
 
 
   /* TODO Stefan #2: Optimize! Adjacent Points/Ranges */
@@ -204,11 +219,6 @@ public:
   void clear();
 
 
-  /**
-   * @param point the point's location
-   * @return @c true, if the region contains the point @p point
-   */
-  bool contains(const QPoint& point, Sheet* sheet = 0) const;
 
   /**
    * @param region the region to compare
@@ -221,12 +231,6 @@ public:
    */
   void operator=(const Region& region);
 
-  /**
-    * @param sRegion will be modified, if a valid sheet was found. The sheetname
-    * will be removed
-    * @return sheet named in the @p sRegion or the active sheet of the view
-    */
-  Sheet* filterSheetName(QString& sRegion);
 
 
   /**
@@ -265,14 +269,18 @@ private:
 
 public:
   /* TODO Stefan #6:
-     Remove these typedefs/iterators. Create a manipulator or whatever for
-     the cases, in which they are used.
+  Remove these typedefs/iterators. Create a manipulator or whatever for
+  the cases, in which they are used.
   */
   typedef QValueList<Element*>::Iterator      Iterator;
   typedef QValueList<Element*>::ConstIterator ConstIterator;
 
   ConstIterator constBegin() const;
   ConstIterator constEnd() const;
+
+protected:
+  void insert(Iterator, const QPoint&, Sheet*);
+  void insert(Iterator, const QRect&, Sheet*);
 };
 
 

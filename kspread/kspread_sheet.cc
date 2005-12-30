@@ -1444,8 +1444,8 @@ Sheet::SelectionType Sheet::workOnCells( Selection* selectionInfo, CellWorker & 
     }
   }
 
-  Region::Iterator endOfList(selectionInfo->cells().end());
-  for (Region::Iterator it = selectionInfo->cells().begin(); it != endOfList; ++it)
+  Region::ConstIterator endOfList(selectionInfo->constEnd());
+  for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
   {
     // see what is selected; if nothing, take marker position
     QRect range = (*it)->rect().normalize();
