@@ -91,7 +91,7 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
                     </property>
                     <widget class="QSplitter" row="0" column="0">
                         <property name="name">
-                            <cstring>splitter2</cstring>
+                            <cstring>m_stencilSetSplitter</cstring>
                         </property>
                         <property name="orientation">
                             <enum>Vertical</enum>
@@ -128,6 +128,14 @@ Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
                         <widget class="QTextBrowser">
                             <property name="name">
                                 <cstring>m_descriptionBrowser</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>7</hsizetype>
+                                    <vsizetype>4</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
                             </property>
                         </widget>
                     </widget>

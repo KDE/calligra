@@ -25,6 +25,7 @@
 #include <qgroupbox.h>
 #include <qpushbutton.h>
 #include <qtextbrowser.h>
+#include <qsplitter.h>
 
 #include <kstandarddirs.h>
 #include <kglobal.h>
@@ -40,10 +41,25 @@ namespace Kivio {
   AddStencilSetPanel::AddStencilSetPanel(QWidget *parent, const char *name)
     : KivioStencilSetWidget(parent, name)
   {
+    int height = m_stencilsetGBox->height() / 2;
+    QValueList<int> sizes;
+    sizes << height << height;
+    m_stencilSetSplitter->setSizes(sizes);
     updateList();
 
-    connect(m_stencilSetLView, SIGNAL(clicked(QListViewItem*)), this, SLOT(changeStencilSet(QListViewItem*)));
+    connect(m_stencilSetLView, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(changeStencilSet(QListViewItem*)));
     connect(m_addToDocBtn, SIGNAL(clicked()), this, SLOT(addToDocument()));
+
+    QListViewItem* tmp = m_stencilSetLView->firstChild();
+
+    if(tmp) {
+      tmp = tmp->firstChild();
+
+      if(tmp) {
+        m_stencilSetLView->setSelected(tmp, true);
+        m_stencilSetLView->ensureItemVisible(tmp);
+      }
+    }
   }
   
   
@@ -124,12 +140,17 @@ namespace Kivio {
         KListViewItem* tmp = new KListViewItem(li, KivioStencilSpawnerSet::readTitle(setFInfo->absFilePath()),
           dir + "/" + setFInfo->fileName());
         tmp->setPixmap(0, loadIcon("icon", setFInfo->absFilePath()));
+
+        if(m_currentDir == setFInfo->absFilePath()) {
+          tmp->setSelected(true);
+          m_stencilSetLView->ensureItemVisible(tmp);
+        }
       }
-      
+
       ++setIt;
     }
   }
-  
+
   QPixmap AddStencilSetPanel::loadIcon(const QString& name, const QString& dir)
   {
     QString fs;

@@ -29,6 +29,7 @@ AddStencilSetDialog::AddStencilSetDialog(QWidget *parent, const char *name)
 {
   m_mainWidget = new AddStencilSetPanel(this);
   setMainWidget(m_mainWidget);
+  setInitialSize(QSize(600, 450));
 
   connect(m_mainWidget, SIGNAL(addStencilSet(const QString&)), this, SIGNAL(addStencilSet(const QString&)));
 }
