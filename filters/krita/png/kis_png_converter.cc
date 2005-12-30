@@ -209,19 +209,22 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     }
     
     png_text* text_ptr;
-    int num_comments = png_get_text(png_ptr, info_ptr, &text_ptr, NULL);
+    int num_comments;
+    png_get_text(png_ptr, info_ptr, &text_ptr, &num_comments);
     KoDocumentInfo * info = m_doc->documentInfo();
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author"));
+    kdDebug() << "There are " << num_comments << " comments in the text" << endl;
     for(int i = 0; i < num_comments; i++)
     {
-        if(QString::compare(text_ptr[i].key, "title"))
+        kdDebug() << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text << endl;
+        if(QString::compare(text_ptr[i].key, "title") == 0)
         {
                 aboutPage->setTitle(text_ptr[i].text);
-        } else if(QString::compare(text_ptr[i].key, "abstract"))
+        } else if(QString::compare(text_ptr[i].key, "abstract")  == 0)
         {
                 aboutPage->setAbstract(text_ptr[i].text);
-        } else if(QString::compare(text_ptr[i].key, "author"))
+        } else if(QString::compare(text_ptr[i].key, "author") == 0)
         {
                 authorPage->setFullName(text_ptr[i].text);
         }
@@ -255,7 +258,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
         Q_CHECK_PTR(m_img);
         if(profile)
         {
-            m_img -> addAnnotation( new KisAnnotation(profile_name, "", profile_rawdata) );
+            m_img -> addAnnotation( profile->annotation() );
         }
     }
 

@@ -83,8 +83,6 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QCString& from, const QCS
 
     KURL url(filename);
 
-    KisLayerSP dst;
-
     KisImageSP img = new KisImage(*output->currentImage());
     Q_CHECK_PTR(img);
 
@@ -96,15 +94,18 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QCString& from, const QCS
 
     img->flatten();
 
-    dst = img->activeLayer();
-    Q_ASSERT(dst);
+    KisPaintLayerSP dst = dynamic_cast<KisPaintLayer*>(img->activeLayer().data());
+    if(dst == 0)
+    {
+        return KoFilter::InternalError;
+    }
     
     output->undoAdapter()->setUndo(undo);
 
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
-    if ( (res = kpc.buildFile(url, (KisPaintLayer*)dst.data(), beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
+    if ( (res = kpc.buildFile(url, dst, beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
         kdDebug() << "success !" << endl;
         return KoFilter::OK;
     }
