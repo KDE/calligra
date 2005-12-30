@@ -91,22 +91,22 @@ void KPrLineObject::saveOasisPosObject( KoXmlWriter &xmlWriter, int indexObj ) c
     switch ( lineType )
     {
         case LT_LD_RU:
-            x1 = -center.x() / 2.0;
-            y1 = center.y() / 2.0;
+            x1 = -center.x();
+            y1 = center.y();
             x2 = -x1;
             y2 = -y1;
             break;
         case LT_HORZ:
-            x1 = -center.x() / 2.0;
+            x1 = -center.x();
             x2 = -x1;
             break;
         case LT_VERT:
-            y1 = -center.y() / 2.0;
+            y1 = -center.y();
             y2 = -y1;
             break;
         case LT_LU_RD:
-            x1 = -center.x() / 2.0;
-            y1 = -center.y() / 2.0;
+            x1 = -center.x();
+            y1 = -center.y();
             x2 = -x1;
             y2 = -y1;
             break;
