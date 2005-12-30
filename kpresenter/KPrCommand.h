@@ -887,23 +887,6 @@ protected:
     KoLinkVariable *m_var;
 };
 
-class KPrStickyObjCommand : public KNamedCommand
-{
-public:
-    KPrStickyObjCommand( const QString &_name, QPtrList<KPrObject> &_objects, bool sticky,
-                         KPrPage*_page,KPrDocument *_doc );
-
-    ~KPrStickyObjCommand();
-    void execute();
-    void unexecute();
-    void stickObj(KPrObject *_obj);
-    void unstickObj(KPrObject *_obj);
-protected:
-    QPtrList<KPrObject> objects;
-    bool m_bSticky;
-    KPrDocument *m_doc;
-    KPrPage*m_page;
-};
 
 class KPrNameObjectCommand : public KNamedCommand
 {

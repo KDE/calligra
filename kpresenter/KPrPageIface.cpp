@@ -631,12 +631,6 @@ void KPrPageIface::rotateAllObjSelected(float _newAngle)
     delete cmd;
 }
 
-void KPrPageIface::stickyAllObjSelected(bool sticky)
-{
-    KCommand *cmd=m_page->stickyObj(sticky, m_page);
-    delete cmd;
-}
-
 void KPrPageIface::moveAllObjectSelected( int diffx,int diffy)
 {
     KPrView *_view=m_page->kPresenterDoc()->firstView();

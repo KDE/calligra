@@ -488,7 +488,6 @@ public:
 
     KCommand *rotateSelectedObjects(float _newAngle, bool addAngle=false);
     KCommand *shadowObj(ShadowDirection dir,int dist, const QColor &col);
-    KCommand *stickyObj(bool _sticky, KPrPage * currentPage);
 
     QPtrList<KoTextObject> allTextObjects() const;
     void addTextObjects(QPtrList<KoTextObject>& lst) const;

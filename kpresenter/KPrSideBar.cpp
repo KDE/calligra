@@ -111,7 +111,7 @@ class OutlineObjectItem: public KListViewItem
 {
 public:
     OutlineObjectItem( OutlineSlideItem * parent, KPrObject* object,
-                       bool sticky, const QString& name = QString::null );
+                       const QString& name = QString::null );
 
     KPrObject* object() const { return m_object; }
 
@@ -619,8 +619,7 @@ void OutlineSlideItem::update()
     if ( !m_masterPage )
     {
         for ( ; it.current(); ++it ) {
-            OutlineObjectItem *item = new OutlineObjectItem( this, it.current(),
-                                                             it.current()->isSticky() );
+            OutlineObjectItem *item = new OutlineObjectItem( this, it.current() );
             item->setDragEnabled( false );
             if ( it.current()->isSelected() )
                 ooi = item;
@@ -642,7 +641,7 @@ void OutlineSlideItem::update()
             else if( m_page->hasFooter() && doc->isFooter( object ) )
                 footer = object;
             else if( !doc->isHeader( object ) && !doc->isFooter( object ) ) {
-                OutlineObjectItem *item = new OutlineObjectItem( this, object, true );
+                OutlineObjectItem *item = new OutlineObjectItem( this, object );
                 if ( object->isSelected() )
                     ooi = item;
             }
@@ -651,13 +650,13 @@ void OutlineSlideItem::update()
 
         // add header and footer (if any)
         if ( footer ) {
-            OutlineObjectItem *item = new OutlineObjectItem( this, footer, true, i18n("Footer") );
+            OutlineObjectItem *item = new OutlineObjectItem( this, footer, i18n("Footer") );
             if ( footer->isSelected() )
                 ooi = item;
         }
 
         if ( header ) {
-            OutlineObjectItem *item = new OutlineObjectItem( this, header, true, i18n("Header") );
+            OutlineObjectItem *item = new OutlineObjectItem( this, header, i18n("Header") );
             if ( header->isSelected() )
                 ooi = item;
         }
@@ -678,10 +677,9 @@ void OutlineSlideItem::updateTitle()
 }
 
 OutlineObjectItem::OutlineObjectItem( OutlineSlideItem* parent, KPrObject* _object,
-                                      bool sticky, const QString& name )
+                                      const QString& name )
     : KListViewItem( parent ), m_object( _object )
 {
-    Q_UNUSED( sticky );
     setObject( m_object );
     setDragEnabled( false );
 

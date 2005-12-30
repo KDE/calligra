@@ -219,7 +219,7 @@ QString KPrStartEndLine::saveOasisMarkerStyle( KoGenStyles &mainStyles, const Li
 }
 
 KPrObject::KPrObject()
-    : orig(), ext(), shadowColor( Qt::gray ), sticky( FALSE )
+    : orig(), ext(), shadowColor( Qt::gray )
 {
     appearStep = 0;
     disappearStep = 1;
@@ -247,7 +247,6 @@ KPrObject::KPrObject()
     inObjList = true;
     cmds = 0;
     resize = false;
-    sticky = false;
     protect = false;
     keepRatio = false;
     dcop = 0;

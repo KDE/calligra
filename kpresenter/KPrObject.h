@@ -276,9 +276,6 @@ public:
     virtual void decCmdRef()
         { cmds--; doDelete(); }
 
-    virtual void setSticky( bool b ) { sticky = b; }
-    bool isSticky() const { return sticky; }
-
     virtual void setProtect( bool b ) { protect = b; }
     bool isProtect() const { return protect; }
 
@@ -378,7 +375,6 @@ protected:
     bool ownClipping:1;
     bool inObjList:1;
     bool resize:1;
-    bool sticky:1;
     bool protect:1;
     bool keepRatio:1;
 

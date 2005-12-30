@@ -1,6 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -109,16 +110,6 @@ void KPrObjectIface::rotate( float _angle )
 void KPrObjectIface::setShadowDistance( int _distance )
 {
     obj->setShadowDistance(_distance);
-}
-
-void KPrObjectIface::setSticky( bool b )
-{
-    obj->setSticky(b);
-}
-
-bool KPrObjectIface::isSticky() const
-{
-    return obj->isSticky();
 }
 
 void KPrObjectIface::shadowColor( const QColor & _color )

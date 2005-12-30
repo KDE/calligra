@@ -819,10 +819,9 @@ QDomElement KPrDocument::saveObjects( QDomDocument &doc )
         objects=m_pageList.at(i)->saveObjects( doc, objects, yoffset, saveOnlyPage );
 
     }
-    if ( !_duplicatePage ) //don't copy sticky objects when we duplicate page
+    if ( !_duplicatePage ) //don't copy objects on master slide when we duplicate page
     {
-        //offset = 0.0 when it's a sticky page.
-        objects=m_masterPage->saveObjects( doc, objects, /*yoffset*/0.0, saveOnlyPage );
+        objects = m_masterPage->saveObjects( doc, objects, 0.0, saveOnlyPage );
     }
 
     return objects;
@@ -2310,7 +2309,6 @@ bool KPrDocument::loadXML( const QDomDocument &doc )
                     m_masterPage->insertObject( kppartobject, pos );
                 }
                 kppartobject->setOrig(kppartobject->getOrig().x(), offset);
-                kppartobject->setSticky(sticky);
             }
             else if ( kppartobject ) {
                 if ( m_pageWhereLoadObject )
@@ -2631,7 +2629,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kplineobject);
                     kplineobject->setOrig(kplineobject->getOrig().x(),offset);
-                    kplineobject->setSticky(sticky);
                 }
                 else if (m_pageWhereLoadObject && paste) {
                     kplineobject->setOrig(kplineobject->getOrig().x(),offset);
@@ -2655,7 +2652,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kprectobject);
                     kprectobject->setOrig(kprectobject->getOrig().x(),offset);
-                    kprectobject->setSticky(sticky);
                 }
                 else if (m_pageWhereLoadObject && paste) {
                     kprectobject->setOrig(kprectobject->getOrig().x(),offset);
@@ -2678,7 +2674,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kpellipseobject);
                     kpellipseobject->setOrig(kpellipseobject->getOrig().x(),offset);
-                    kpellipseobject->setSticky(sticky);
                 }
                 else if ( m_pageWhereLoadObject && paste)
                 {
@@ -2702,7 +2697,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kppieobject);
                     kppieobject->setOrig(kppieobject->getOrig().x(),offset);
-                    kppieobject->setSticky(sticky);
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kppieobject->setOrig(kppieobject->getOrig().x(),offset);
@@ -2725,7 +2719,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kpautoformobject);
                     kpautoformobject->setOrig(kpautoformobject->getOrig().x(),offset);
-                    kpautoformobject->setSticky(sticky);
                 }
                 else if ( m_pageWhereLoadObject&& paste) {
                     kpautoformobject->setOrig(kpautoformobject->getOrig().x(),offset);
@@ -2748,7 +2741,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kptextobject);
                     kptextobject->setOrig(kptextobject->getOrig().x(),offset);
-                    kptextobject->setSticky(sticky);
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kptextobject->setOrig(kptextobject->getOrig().x(),offset);
@@ -2772,7 +2764,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kppixmapobject);
                     kppixmapobject->setOrig(kppixmapobject->getOrig().x(),offset);
-                    kppixmapobject->setSticky(sticky);
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kppixmapobject->setOrig(kppixmapobject->getOrig().x(),offset);
@@ -2797,7 +2788,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kpfreehandobject);
                     kpfreehandobject->setOrig(kpfreehandobject->getOrig().x(),offset);
-                    kpfreehandobject->setSticky(sticky);
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpfreehandobject->setOrig(kpfreehandobject->getOrig().x(),offset);
@@ -2820,7 +2810,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kppolylineobject);
                     kppolylineobject->setOrig(kppolylineobject->getOrig().x(),offset);
-                    kppolylineobject->setSticky(sticky);
                 }
                 else if (m_pageWhereLoadObject && paste) {
                     kppolylineobject->setOrig(kppolylineobject->getOrig().x(),offset);
@@ -2844,7 +2833,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kpQuadricBezierCurveObject);
                     kpQuadricBezierCurveObject->setOrig(kpQuadricBezierCurveObject->getOrig().x(),offset);
-                    kpQuadricBezierCurveObject->setSticky(sticky);
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpQuadricBezierCurveObject->setOrig(kpQuadricBezierCurveObject->getOrig().x(),offset);
@@ -2868,7 +2856,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kpCubicBezierCurveObject);
                     kpCubicBezierCurveObject->setOrig(kpCubicBezierCurveObject->getOrig().x(),offset);
-                    kpCubicBezierCurveObject->setSticky(sticky);
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpCubicBezierCurveObject->setOrig(kpCubicBezierCurveObject->getOrig().x(),offset);
@@ -2893,7 +2880,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kpPolygonObject);
                     kpPolygonObject->setOrig(kpPolygonObject->getOrig().x(),offset);
-                    kpPolygonObject->setSticky(sticky);
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpPolygonObject->setOrig(kpPolygonObject->getOrig().x(),offset);
@@ -2916,7 +2902,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 if ( sticky && !ignoreSticky) {
                     m_masterPage->appendObject( kpClosedLinneObject );
                     kpClosedLinneObject->setOrig( kpClosedLinneObject->getOrig().x(), offset );
-                    kpClosedLinneObject->setSticky( sticky );
                 }
                 else if ( m_pageWhereLoadObject && paste ) {
                     kpClosedLinneObject->setOrig( kpClosedLinneObject->getOrig().x(), offset );
@@ -2941,7 +2926,6 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                 {
                     m_masterPage->appendObject(kpgroupobject);
                     kpgroupobject->setOrig(kpgroupobject->getOrig().x(),offset);
-                    kpgroupobject->setSticky(sticky);
                 }
                 else if ( m_pageWhereLoadObject && paste) {
                     kpgroupobject->setOrig(kpgroupobject->getOrig().x(),offset);
@@ -3765,29 +3749,33 @@ void KPrDocument::paintContent( QPainter& painter, const QRect& rect,
         bool forPrint = painter.device() && painter.device()->devType() == QInternal::Printer;
         newZoomAndResolution( false, forPrint );
     }
+    //for the moment draw first page.
     KPrPage *page=m_pageList.first();
     if( m_initialActivePage )
-        page=m_initialActivePage;
+        page = m_initialActivePage;
 
     int pageNum = m_pageList.findRef( page );
 
     if ( page->displayBackground() )
         page->background()->drawBackground( &painter, zoomHandler(), rect, false );
-    //for the moment draw first page.
+    if ( page->displayObjectFromMasterPage() )
+    {
+        KPrPage *masterPage = page->masterPage();
+        if ( masterPage )
+        {
+            QPtrListIterator<KPrObject> it( masterPage->objectList() );
+            //draw objects on master slide
+            for ( ; it.current() ; ++it )
+            {
+                if( (it.current()==_header && !page->hasHeader())||(it.current()==_footer && !page->hasFooter()))
+                    continue;
+                it.current()->draw( &painter, zoomHandler(), pageNum, SM_NONE );
+            }
+        }
+    }
     QPtrListIterator<KPrObject> it( page->objectList() );
     for ( ; it.current() ; ++it )
         it.current()->draw( &painter, zoomHandler(), pageNum, SM_NONE );
-    if ( page->displayObjectFromMasterPage() )
-    {
-        it= m_masterPage->objectList();
-        //draw sticky obj
-        for ( ; it.current() ; ++it )
-        {
-            if( (it.current()==_header && !page->hasHeader())||(it.current()==_footer && !page->hasFooter()))
-                continue;
-            it.current()->draw( &painter, zoomHandler(), pageNum, SM_NONE );
-        }
-    }
 }
 
 QPixmap KPrDocument::generatePreview( const QSize& size )

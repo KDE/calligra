@@ -345,8 +345,12 @@ exportPage( 0, s, 800, 600, "/home/khz/page0.png", "PNG", 100 );
     void raiseObjs( bool forward );
 
     /**
-     * Align all selected and not protected objects on the
-     * active and on the sticky page according to the AlignType
+     * @brief Align objects
+     *
+     * This will align all selected non protected objects according to the 
+     * align type at.
+     *
+     * @param at the align type
      */
     void alignObjects( AlignType at );
 

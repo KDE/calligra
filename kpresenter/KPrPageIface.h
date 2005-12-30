@@ -110,7 +110,6 @@ k_dcop:
     bool haveASelectedPartObj() const;
     bool haveASelectedGroupObj() const;
     void rotateAllObjSelected(float _newAngle);
-    void stickyAllObjSelected(bool sticky);
 
     void moveAllObjectSelected( int diffx,int diffy);
     void deleteAllObjectSelected();

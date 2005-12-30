@@ -1459,8 +1459,7 @@ void KPrTextObject::highlightPortion( KoTextParag * parag, int index, int length
         KPrDocument* doc = canvas->getView()->kPresenterDoc();
 
         // Is this object in the current active page?
-        if ( canvas->activePage()->findTextObject( this ) ||
-             (isSticky() && doc->masterPage()->findTextObject( this ) ) )
+        if ( canvas->activePage()->findTextObject( this ) )
         {
             kdDebug(33001) << k_funcinfo << "object in current page" << endl;
         }
@@ -1471,8 +1470,11 @@ void KPrTextObject::highlightPortion( KoTextParag * parag, int index, int length
             KPrPage* page = doc->findPage( this );
             if ( page ) {
                 int pageNum = doc->pageList().findRef( page );
-                Q_ASSERT( pageNum > -1 );
-                canvas->getView()->skipToPage( pageNum );
+                // if the pageNum is -1 the object is located on the master slide
+                if ( pageNum > -1 )
+                {
+                    canvas->getView()->skipToPage( pageNum );
+                }
             } else
                 kdWarning(33001) << "object " << this << " not found in any page!?" << endl;
         }

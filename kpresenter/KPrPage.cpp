@@ -2106,34 +2106,6 @@ KCommand *KPrPage::rotateSelectedObjects( float _newAngle, bool addAngle )
     return cmd;
 }
 
-//necessary to use currentPage otherwise when we unsticke object
-//it not take from sticky page.
-KCommand *KPrPage::stickyObj(bool _sticky, KPrPage * currentPage)
-{
-    KPrStickyObjCommand *stickyCmd=0L;
-    QPtrList<KPrObject> _objects;
-
-    _objects.setAutoDelete( false );
-    //store all object which isSticky!=_sticky
-    QPtrListIterator<KPrObject> it( m_objectList );
-    for ( ; it.current() ; ++it )
-    {
-        //don't unsticke stike a header/footer
-        if ( it.current()== m_doc->header() || it.current()== m_doc->footer())
-            continue;
-
-        if ( it.current()->isSelected() && it.current()->isSticky()!=_sticky)
-            _objects.append( it.current() );
-    }
-
-    if ( !_objects.isEmpty() )
-    {
-        stickyCmd = new KPrStickyObjCommand( i18n( "Sticky Object" ),
-                                             _objects,_sticky, currentPage, m_doc );
-        stickyCmd->execute();
-    }
-    return stickyCmd;
-}
 
 KCommand *KPrPage::shadowObj(ShadowDirection dir,int dist, const QColor &col)
 {
