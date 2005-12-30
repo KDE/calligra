@@ -1569,13 +1569,13 @@ void KexiTableView::keyPressEvent(QKeyEvent* e)
 	if (printable && !ro) {
 		KexiTableViewColumn *colinfo = m_data->column(curCol);
 		if (colinfo->acceptsFirstChar(e->text()[0])) {
-			kdDebug(44021) << "KexiTableView::KeyPressEvent(): ev pressed: acceptsFirstChar()==true";
+			kdDebug(44021) << "KexiTableView::KeyPressEvent(): ev pressed: acceptsFirstChar()==true" << endl;
 	//			if (e->text()[0].isPrint())
 			createEditor(curRow, curCol, e->text(), true);
 		}
 		else {
 //TODO show message "key not allowed eg. on a statusbar"
-			kdDebug(44021) << "KexiTableView::KeyPressEvent(): ev pressed: acceptsFirstChar()==false";
+			kdDebug(44021) << "KexiTableView::KeyPressEvent(): ev pressed: acceptsFirstChar()==false" << endl;
 		}
 	}
 
