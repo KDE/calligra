@@ -344,11 +344,12 @@ void Selection::extend(const QPoint& point, Sheet* sheet)
     topLeft = QPoint(cell->column(), cell->row());
   }
 
-  d->anchor = topLeft;
-  d->cursor = point;
-  d->marker = topLeft;
+  eor(topLeft, sheet);
+  d->anchor = cells().last()->rect().topLeft();
+  d->cursor = cells().last()->rect().bottomRight();
+  d->marker = d->cursor;
 
-  add(topLeft, sheet);
+  changedRegion.add(topLeft, sheet);
   changedRegion.add(*this);
 
   emit changed(changedRegion);
@@ -409,6 +410,16 @@ void Selection::extend(const Region& region)
       extend(element->rect(), element->sheet());
     }
   }
+}
+
+void Selection::eor(const QPoint& point, Sheet* sheet)
+{
+  if (isSingular())
+  {
+    Region::add(point, sheet);
+    return;
+  }
+  Region::eor(point, sheet);
 }
 
 const QPoint& Selection::anchor() const

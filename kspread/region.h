@@ -193,6 +193,12 @@ public:
   void sub(const Region& region);
 
   /**
+   * @param point the point's location
+   * @param sheet the sheet the point belongs to
+   */
+  virtual void eor(const QPoint& point, Sheet* sheet = 0);
+
+  /**
    * Deletes all elements of the region. The result is an empty region.
    */
   void clear();

@@ -75,6 +75,12 @@ public:
   void extend(const Region&);
 
   /**
+   * @param point the point's location
+   * @param sheet the sheet the point belongs to
+   */
+  virtual void eor(const QPoint& point, Sheet* sheet = 0);
+
+  /**
    * The anchor is the starting point of a range. For points marker and anchor are the same
    */
   const QPoint& anchor() const;
