@@ -26,7 +26,6 @@ GenericName[zh_CN]=简化的字处理
 MimeType=application/vnd.oasis.opendocument.text;application/x-kword;application/msword;text/rtf;text/plain;application/x-mswrite
 Icon=writeup
 X-KDE-NativeMimeType=application/vnd.oasis.opendocument.text
-DocPath=kword/index.html
 X-KDE-StartupNotify=true
 X-DCOP-ServiceType=Multi
 Categories=Qt;KDE;Office;Ascend

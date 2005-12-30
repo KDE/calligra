@@ -86,6 +86,7 @@ Comment[uz]=Маълумот базани бошқарув дастури
 Comment[wa]=On programe po manaedjî les båzes di dnêyes
 Comment[xx]=xxA Database Management Applicationxx
 Comment[zh_CN]=一个数据库管理应用程序
+DocPath=kexi/index.html
 X-KDE-NativeMimeType=application/x-kexiproject-sqlite
 X-KDE-NOTKoDocumentEmbeddable=true
 Categories=Qt;KDE;Office;
