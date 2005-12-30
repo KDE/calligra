@@ -20,7 +20,7 @@ class DataProvider:
 		try:
 			self.connection = keximainwindow.getConnection()
 		except:
-			raise "No connection established. Please open the project that should be documentated before."
+			raise "No connection established. Please open the project to be documented first."
 
 	def printConnection(self):
 		condata = self.connection.data()
@@ -34,7 +34,7 @@ class DataProvider:
 	def printDriver(self):
 		driver = self.connection.driver()
 		result = [ ("Version", "%s.%s" % (driver.versionMajor(),driver.versionMinor())) ]
-		conlist = driver.connectionList()
+		conlist = driver.connectionsList()
 		if len(conlist) > 0:
 			result.append( ("Connections",str(conlist)) )
 		return result
@@ -118,8 +118,8 @@ class GuiApp:
 				#	f.write( self.toHTML(value) )
 
 		#self.exportProjectdetails = 
-		#self.exportTableschemas = self.dialog.addCheckBox(self.dialog, "Tableschemas", True)
-		#self.exportQueryschemas = self.dialog.addCheckBox(self.dialog, "Queryschemas", True)
+		#self.exportTableschemas = self.dialog.addCheckBox(self.dialog, "Table schemas", True)
+		#self.exportQueryschemas = self.dialog.addCheckBox(self.dialog, "Query schemas", True)
 
 		btnframe = self.dialog.addFrame(self.dialog)
 		self.dialog.addButton(btnframe, "Save", self.doSave)
@@ -151,19 +151,19 @@ class GuiApp:
 
 	def doSave(self):
 		file = str( self.file.get() )
-		print "Try to save project documentation to file: %s" % file
+		print "Attempting to save project documentation to file: %s" % file
 
 		f = open(file, "w")
 
 		f.write("<?xml version=\"1.0\" encoding=\"UTF-8\" ?>")
 		f.write("<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 4.01 Strict//EN\" \"http://www.w3.org/TR/xhtml11/DTD/xhtml11-strict.dtd\">")
-		f.write("<html><head><title>Projectinformations</title>")
+		f.write("<html><head><title>Project information</title>")
 		f.write("<style type=\"text/css\">")
 		f.write("  html { background-color:#fafafa; }")
 		f.write("  body { background-color:#ffffff; margin:1em; padding:1em; border:#99a 1px solid; color:#003; }")
 		f.write("</style>")
 		f.write("<meta http-equiv=\"Content-Type\" content=\"text/html; charset=UTF-8\" />")
-		f.write("</head><body><h1>Projectinformations</h1>")
+		f.write("</head><body><h1>Project information</h1>")
 
 		for d in dir(self.dataprovider):
 			if d.startswith("print"):
