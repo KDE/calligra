@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kmessagebox.h>
+#include <kdebug.h>
 
 #include <qlabel.h>
 #include <qlayout.h>
@@ -34,7 +35,7 @@
 #include <qhbuttongroup.h>
 
 KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, KoUnit::Unit unit,const KoColumns& columns,  bool unitChooser, bool enableBorders)
-    : QWidget(parent) {
+    : QWidget(parent), m_blockSignals(false) {
     m_layout = layout;
     m_unit = unit;
 
@@ -43,14 +44,14 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
         // ------------- unit _______________
         QWidget* unitFrame = new QWidget( this );
         grid1->addWidget( unitFrame, 0, 0, Qt::AlignLeft );
-        QBoxLayout* unitLayout = new QHBoxLayout( unitFrame, KDialog::marginHint(), KDialog::spacingHint() );
+        QBoxLayout* unitLayout = new QHBoxLayout( unitFrame, 0, KDialog::spacingHint() );
 
         // label unit
         QLabel *lpgUnit = new QLabel( i18n( "Unit:" ), unitFrame );
         unitLayout->addWidget( lpgUnit, 0, Qt::AlignRight | Qt::AlignVCenter );
 
         // combo unit
-        cpgUnit = new QComboBox( false, unitFrame, "cpgUnit" );
+        QComboBox *cpgUnit = new QComboBox( false, unitFrame, "cpgUnit" );
         lpgUnit->setBuddy( cpgUnit );
         cpgUnit->insertStringList( KoUnit::listOfUnitName() );
         cpgUnit->setCurrentItem( unit );
@@ -205,8 +206,8 @@ void KoPageLayoutSize::setValues() {
 
 void KoPageLayoutSize::setUnit( KoUnit::Unit unit ) {
     m_unit = unit;
+    m_blockSignals = true; // due to non-atomic changes the propertyChange emits should be blocked
 
-    //setUnit always befor changeValue
     epgWidth->setUnit( m_unit );
     epgWidth->setMinMaxStep( 0, KoUnit::fromUserValue( 9999, m_unit ), KoUnit::fromUserValue( 0.01, m_unit ) );
     epgWidth->changeValue( m_layout.ptWidth );
@@ -232,7 +233,8 @@ void KoPageLayoutSize::setUnit( KoUnit::Unit unit ) {
     ebrBottom->setUnit( m_unit );
     ebrBottom->changeValue( m_layout.ptBottom );
     ebrBottom->setMinMaxStep( 0, m_layout.ptHeight, dStep );
-    emit propertyChange(m_layout);
+
+    m_blockSignals = false;
 }
 
 void KoPageLayoutSize::setUnitInt( int unit ) {
@@ -290,31 +292,37 @@ void KoPageLayoutSize::orientationChanged(int which) {
 }
 
 void KoPageLayoutSize::widthChanged(double width) {
+    if(m_blockSignals) return;
     m_layout.ptWidth = width;
     updatePreview();
     emit propertyChange(m_layout);
 }
 void KoPageLayoutSize::heightChanged(double height) {
+    if(m_blockSignals) return;
     m_layout.ptHeight = height;
     updatePreview( );
     emit propertyChange(m_layout);
 }
 void KoPageLayoutSize::leftChanged( double left ) {
+    if(m_blockSignals) return;
     m_layout.ptLeft = left;
     updatePreview();
     emit propertyChange(m_layout);
 }
 void KoPageLayoutSize::rightChanged(double right) {
+    if(m_blockSignals) return;
     m_layout.ptRight = right;
     updatePreview();
     emit propertyChange(m_layout);
 }
 void KoPageLayoutSize::topChanged(double top) {
+    if(m_blockSignals) return;
     m_layout.ptTop = top;
     updatePreview();
     emit propertyChange(m_layout);
 }
 void KoPageLayoutSize::bottomChanged(double bottom) {
+    if(m_blockSignals) return;
     m_layout.ptBottom = bottom;
     updatePreview();
     emit propertyChange(m_layout);

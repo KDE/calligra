@@ -82,7 +82,6 @@ signals:
     void propertyChange(KoPageLayout &layout);
 
 protected:
-    QComboBox *cpgUnit;
     QComboBox *cpgFormat;
     KoUnitDoubleSpinBox *epgWidth;
     KoUnitDoubleSpinBox *epgHeight;
@@ -110,6 +109,8 @@ private:
 
     KoUnit::Unit m_unit;
     KoPageLayout m_layout;
+
+    bool m_blockSignals;
 };
 
 #endif
