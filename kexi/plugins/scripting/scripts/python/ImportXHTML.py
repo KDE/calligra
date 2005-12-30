@@ -123,6 +123,8 @@ class SaxInput:
 					u = unicode(chars[offset:offset+length])
 					self.field.append(u.encode("latin-1"))
 
+		# start the job
+		outputwriter.begin()
 		# create saxhandler to handle parsing events.
 		handler = SaxHandler(self, outputwriter)
 		# we need a sax-parser and connect it with the handler.
@@ -132,6 +134,8 @@ class SaxInput:
 		f = file(self.xmlfile, 'r')
 		parser.parseFile(f)
 		f.close()
+		# job is done
+		outputwriter.end()
 
 class KexiDBOutput:
 	""" The destination target we like to import the data to. This class
@@ -139,21 +143,31 @@ class KexiDBOutput:
 
 	class Result:
 		""" Holds some informations about the import-result. """
-		def __init__(self):
+		def __init__(self, outputwriter):
+			self.outputwriter = outputwriter
 			# number of records successfully imported.
 			self.successcount = 0
 			# number of records where import failed.
 			self.failedcount = 0
 			
+		def addLog(self, record, state):
+			import datetime
+			date = datetime.datetime.now().strftime("%Y-%m-%d %H:%M.%S")
+			self.outputwriter.logfile.write("%s (%s) %s\n" % (date,state,str(record)))
+
 		def success(self, record):
 			""" Called if a record was written successfully. """
 			print "SUCCESS: %s" % str(record)
 			self.successcount += 1
+			if hasattr(self.outputwriter,"logfile"):
+				self.addLog(record, "Success")
 
 		def failed(self, record):
 			""" Called if we failed to write a record. """
 			print "FAILED: %s" % str(record)
 			self.failedcount += 1
+			if hasattr(self.outputwriter,"logfile"):
+				self.addLog(record, "Failed")
 
 	class Record:
 		""" A Record in the dataset. """
@@ -188,13 +202,20 @@ class KexiDBOutput:
 
 		self.tableschema = None
 
+	def begin(self):
+		""" Called before parsing starts. """
+		print "START JOB"
+		if self.tableschema == None:
+			raise "Invalid tableschema!"
 		global KexiDBOutput
-		self.result = KexiDBOutput.Result()
+		self.result = KexiDBOutput.Result(self)
+		if hasattr(self,"logfilename") and self.logfilename != None and self.logfilename != "":
+			self.logfile = open(self.logfilename,'w')
 
-	#def tableExists(self, tablename):
-	#	return tablename in self.connection.tableNames()
-	def getResult(self):
-		return self.result
+	def end(self):
+		""" Called if parsing is fineshed. """
+		print "END JOB"
+		self.logfile = None
 
 	def getTables(self):
 		""" return a list of avaiable tablenames. """
@@ -211,12 +232,13 @@ class KexiDBOutput:
 		for field in fields:
 			print "KexiDBOutput.setTable(%s): %s(%s)" % (tablename,field.name(),field.type())
 		print "names=%s" % self.tableschema.fieldlist().names()
+		
+	def setLogFile(self, logfilename):
+		""" Set the name of the logfile. """
+		self.logfilename = logfilename
 
 	def write(self, record):
 		""" Write the record to the KexiDB table. """
-
-		if self.tableschema == None:
-			raise "Invalid tableschema!"
 
 		sys.stdout.write('KexiDBOutput.write:')
 		for f in record.fields:
@@ -263,6 +285,11 @@ class GuiApp:
 
 		self.desttable = self.dialog.addList(self.dialog, "Destination Table:", self.outputwriter.getTables())
 
+		self.logfile = self.dialog.addFileChooser(self.dialog,
+			"Log File:",
+			"",
+			(('Logfiles', '*.log'),('All files', '*')))
+
 		btnframe = self.dialog.addFrame(self.dialog)
 		self.dialog.addButton(btnframe, "Import", self.doImport)
 		self.dialog.addButton(btnframe, "Cancel", self.doClose)
@@ -278,19 +305,16 @@ class GuiApp:
 
 		self.inputreader.xmlfile = str(self.importfile.get())
 		self.outputwriter.setTable( str(self.desttable.get()) )
-
-		#if self.inputreader.outputwriter.tableExists(self.inputreader.tablename):
-		#	msgbox = self.dialog.showMessageBox("okcancel", "Overwrite?", "There exists already a table with the name '%s'.\nOverwrite those already existing table?" % tablename)
-		#	if not msgbox.show():
-		#		return
+		self.outputwriter.setLogFile( str(self.logfile.get()) )
 
 		try:
 			self.inputreader.read( self.outputwriter )
-			self.dialog.close()
 
 			msgbox = self.dialog.showMessageBox("info","Import done",
 				"Successfully imported records: %s\nFailed to import records: %s" % (self.outputwriter.result.successcount, self.outputwriter.result.failedcount) )
 			msgbox.show()
+
+			self.doClose()
 		except Exception, e:
 			import traceback
 			traceback.print_exc()
