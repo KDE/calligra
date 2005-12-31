@@ -42,8 +42,6 @@ KPrAutoformObject::KPrAutoformObject()
 , KPrStartEndLine( L_NORMAL, L_NORMAL )
 , atfInterp()
 {
-    lineBegin = L_NORMAL;
-    lineEnd = L_NORMAL;
 }
 
 KPrAutoformObject::KPrAutoformObject( const KPrPen & _pen, const QBrush &_brush, const QString & _filename,
