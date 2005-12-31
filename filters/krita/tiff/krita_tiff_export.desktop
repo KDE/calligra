@@ -1,0 +1,10 @@
+[Desktop Entry]
+Encoding=UTF-8
+Icon=
+Name=Krita TIFF Export Filter
+ServiceTypes=KOfficeFilter
+Type=Service
+X-KDE-Export=image/tiff
+X-KDE-Import=application/x-krita
+X-KDE-Library=libkritatiffexport
+X-KDE-Weight=1
