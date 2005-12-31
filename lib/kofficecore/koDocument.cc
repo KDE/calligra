@@ -2480,9 +2480,9 @@ void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
     }
 
     if(d->m_startUpWidget){
-      d->m_startUpWidget->show();
+        d->m_startUpWidget->show();
     } else {
-      d->m_startUpWidget = createOpenPane( parent->centralWidget(), instance(), templateType() );
+        d->m_startUpWidget = createOpenPane( parent->centralWidget(), instance(), templateType() );
     }
 
     parent->setDocToOpen( this );
@@ -2516,8 +2516,8 @@ void KoDocument::openTemplate( const QString& file )
 
 void KoDocument::initEmpty()
 {
-  setEmpty();
-  setModified(false);
+    setEmpty();
+    setModified(false);
 }
 
 void KoDocument::startCustomDocument() {
@@ -2559,8 +2559,8 @@ void KoDocument::deleteOpenPane()
         d->m_startUpWidget->hide();
         QTimer::singleShot(1000, this, SLOT(deleteOpenPaneDelayed()));
 
-        shells().getFirst()->setRootDocument( this );
         shells().getFirst()->factory()->container("mainToolBar", shells().getFirst())->show();
+        shells().getFirst()->setRootDocument( this );
     } else {
       emit closeEmbedInitDialog();
     }
