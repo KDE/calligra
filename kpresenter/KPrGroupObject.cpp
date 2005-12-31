@@ -211,7 +211,7 @@ double KPrGroupObject::load( const QDomElement &element, KPrDocument *doc)
                     objects.append( kpellipseobject );
                 } break;
                 case OT_PIE: {
-                    KPrKPPieObject *kppieobject = new KPrKPPieObject();
+                    KPrPieObject *kppieobject = new KPrPieObject();
                     objOffset = kppieobject->load(current);
                     kppieobject->setOrig(kppieobject->getOrig().x(),objOffset - offset);
                     objects.append( kppieobject );

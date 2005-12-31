@@ -916,7 +916,7 @@ void KPrPenCmd::applyPen( KPrObject *object, Pen *tmpPen )
         } break;
         case OT_PIE:
         {
-            KPrKPPieObject *obj = dynamic_cast<KPrKPPieObject*>( object );
+            KPrPieObject *obj = dynamic_cast<KPrPieObject*>( object );
             if ( obj )
             {
                 obj->setLineBegin( tmpPen->lineBegin );
@@ -997,7 +997,7 @@ void KPrPenCmd::addObjects( const QPtrList<KPrObject> &_objects )
                 } break;
                 case OT_PIE:
                 {
-                    KPrKPPieObject *obj = dynamic_cast<KPrKPPieObject*>( object );
+                    KPrPieObject *obj = dynamic_cast<KPrPieObject*>( object );
                     if ( obj )
                     {
                         lineBegin = obj->getLineBegin();
@@ -1338,7 +1338,7 @@ void KPrPieValueCmd::addObjects( const QPtrList<KPrObject> &objects )
         }
         else
         {
-            KPrKPPieObject *obj = dynamic_cast<KPrKPPieObject*>( it.current() );
+            KPrPieObject *obj = dynamic_cast<KPrPieObject*>( it.current() );
             if( obj )
             {
                 m_objects.append( obj );
@@ -1359,7 +1359,7 @@ void KPrPieValueCmd::execute()
     QPtrListIterator<KPrObject> it( m_objects );
     for ( ; it.current() ; ++it )
     {
-        KPrKPPieObject* obj=dynamic_cast<KPrKPPieObject*>( it.current() );
+        KPrPieObject* obj=dynamic_cast<KPrPieObject*>( it.current() );
         if(obj)
         {
             if (m_flags & Type)
@@ -1379,7 +1379,7 @@ void KPrPieValueCmd::unexecute()
 {
     for ( unsigned int i = 0; i < m_objects.count(); i++ )
     {
-        KPrKPPieObject* obj=dynamic_cast<KPrKPPieObject*>( m_objects.at( i ) );
+        KPrPieObject* obj=dynamic_cast<KPrPieObject*>( m_objects.at( i ) );
         if(obj)
         {
             obj->setPieType( m_oldValues.at( i )->pieType );

@@ -26,7 +26,7 @@
 #include <dcopclient.h>
 #include <kdebug.h>
 
-KPrPieObjectIface::KPrPieObjectIface( KPrKPPieObject *_obj )
+KPrPieObjectIface::KPrPieObjectIface( KPrPieObject *_obj )
     : KPrObject2DIface(_obj)
 {
     obj = _obj;

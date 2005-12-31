@@ -37,7 +37,7 @@
 #include <qbitmap.h>
 using namespace std;
 
-KPrKPPieObject::KPrKPPieObject()
+KPrPieObject::KPrPieObject()
 : KPr2DObject()
 , KPrStartEndLine( L_NORMAL, L_NORMAL )
 {
@@ -46,7 +46,7 @@ KPrKPPieObject::KPrKPPieObject()
     p_len = 270 * 16;
 }
 
-KPrKPPieObject::KPrKPPieObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
+KPrPieObject::KPrPieObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
                           const QColor &_gColor1, const QColor &_gColor2, BCType _gType,
                           PieType _pieType, int _p_angle, int _p_len,
                           LineEnd _lineBegin, LineEnd _lineEnd,
@@ -59,19 +59,19 @@ KPrKPPieObject::KPrKPPieObject( const KPrPen &_pen, const QBrush &_brush, FillTy
     p_len = _p_len;
 }
 
-DCOPObject* KPrKPPieObject::dcopObject()
+DCOPObject* KPrPieObject::dcopObject()
 {
     if ( !dcop )
         dcop = new KPrPieObjectIface( this );
     return dcop;
 }
 
-KPrKPPieObject &KPrKPPieObject::operator=( const KPrKPPieObject & )
+KPrPieObject &KPrPieObject::operator=( const KPrPieObject & )
 {
     return *this;
 }
 
-QDomDocumentFragment KPrKPPieObject::save( QDomDocument& doc, double offset )
+QDomDocumentFragment KPrPieObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KPr2DObject::save(doc, offset);
     KPrStartEndLine::save( fragment, doc );
@@ -84,7 +84,7 @@ QDomDocumentFragment KPrKPPieObject::save( QDomDocument& doc, double offset )
     return fragment;
 }
 
-bool KPrKPPieObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
+bool KPrPieObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
     switch( pieType )
     {
@@ -110,7 +110,7 @@ bool KPrKPPieObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
     return true;
 }
 
-void KPrKPPieObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+void KPrPieObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
 {
     KPrShadowObject::fillStyle( styleObjectAuto, mainStyles );
     if ( pieType == PT_ARC )
@@ -123,15 +123,15 @@ void KPrKPPieObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainSt
     }
 }
 
-const char * KPrKPPieObject::getOasisElementName() const
+const char * KPrPieObject::getOasisElementName() const
 {
     return ext.width() == ext.height() ? "draw:circle" : "draw:ellipse";
 }
 
 
-void KPrKPPieObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
+void KPrPieObject::loadOasis(const QDomElement &element, KoOasisContext & context, KPrLoadingInfo *info)
 {
-    kdDebug()<<"void KPrKPPieObject::loadOasis(const QDomElement &element) ***************\n";
+    kdDebug()<<"void KPrPieObject::loadOasis(const QDomElement &element) ***************\n";
     KPr2DObject::loadOasis(element, context, info);
     QString kind = element.attributeNS( KoXmlNS::draw, "kind", QString::null );
     if ( kind == "section" )
@@ -142,7 +142,7 @@ void KPrKPPieObject::loadOasis(const QDomElement &element, KoOasisContext & cont
         pieType =PT_ARC;
     else
     {
-        kdDebug()<<" KPrKPPieObject::loadOasis(const QDomElement &element) type indefined :"<<kind<<endl;
+        kdDebug()<<" KPrPieObject::loadOasis(const QDomElement &element) type indefined :"<<kind<<endl;
         pieType = PT_PIE;
     }
     kdDebug()<<" type of pie object :"<<( ( pieType == PT_PIE ) ? "pie" : ( pieType == PT_CHORD )?"cut" : "arc" )<<endl;
@@ -156,7 +156,7 @@ void KPrKPPieObject::loadOasis(const QDomElement &element, KoOasisContext & cont
     else
         p_len = (  ( end - start ) * 16 );
 
-    kdDebug()<<"KPrKPPieObject::loadOasis(const QDomElement &element) : p_angle :"<<p_angle<<" p_len :"<<p_len<<endl;
+    kdDebug()<<"KPrPieObject::loadOasis(const QDomElement &element) : p_angle :"<<p_angle<<" p_len :"<<p_len<<endl;
     if ( pieType == PT_ARC )
     {
         loadOasisMarkerElement( context, "marker-start", lineBegin );
@@ -164,7 +164,7 @@ void KPrKPPieObject::loadOasis(const QDomElement &element, KoOasisContext & cont
     }
 }
 
-double KPrKPPieObject::load(const QDomElement &element)
+double KPrPieObject::load(const QDomElement &element)
 {
     double offset=KPr2DObject::load(element);
     KPrStartEndLine::load( element );
@@ -195,7 +195,7 @@ double KPrKPPieObject::load(const QDomElement &element)
     return offset;
 }
 
-void KPrKPPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
+void KPrPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
                          int /* pageNum */, bool drawingShadow, bool drawContour )
 {
     double ow = ext.width();
@@ -310,7 +310,7 @@ void KPrKPPieObject::paint( QPainter* _painter, KoTextZoomHandler*_zoomHandler,
     }
 }
 
-void KPrKPPieObject::flip( bool horizontal )
+void KPrPieObject::flip( bool horizontal )
 {
     KPr2DObject::flip( horizontal );
     if ( ! horizontal )
@@ -329,7 +329,7 @@ void KPrKPPieObject::flip( bool horizontal )
 }
 
 
-void KPrKPPieObject::setMinMax( double &min_x, double &min_y,
+void KPrPieObject::setMinMax( double &min_x, double &min_y,
                              double &max_x, double &max_y, KoPoint point ) const
 {
     double tmp_x = point.x();
@@ -362,7 +362,7 @@ void KPrKPPieObject::setMinMax( double &min_x, double &min_y,
  * 4. check if the maximal points lie on the arc
  *
  */
-void KPrKPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
+void KPrPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const {
     double radius1 = size.width() / 2.0;
     double radius2 = size.height() / 2.0;
 
@@ -557,7 +557,7 @@ void KPrKPPieObject::getRealSizeAndOrig( KoSize &size, KoPoint &realOrig ) const
     realOrig.setY( realOrig.y() + mid_y - max_y );
 }
 
-void KPrKPPieObject::setEndPoints( KoPointArray &points ) const
+void KPrPieObject::setEndPoints( KoPointArray &points ) const
 {
     int angles[] = { p_angle, ( p_angle + p_len ) % ( 16 * 360 ) };
     double anglesInRad[] = { p_angle / 16.0 * M_PI / 180, ( angles[1] ) / 16.0 * M_PI / 180 };
@@ -591,7 +591,7 @@ void KPrKPPieObject::setEndPoints( KoPointArray &points ) const
     }
 }
 
-KoSize KPrKPPieObject::getRealSize() const {
+KoSize KPrPieObject::getRealSize() const {
     KoSize size( ext );
     KoPoint realOrig( orig );
     getRealSizeAndOrig( size, realOrig );
@@ -599,7 +599,7 @@ KoSize KPrKPPieObject::getRealSize() const {
 }
 
 
-KoPoint KPrKPPieObject::getRealOrig() const {
+KoPoint KPrPieObject::getRealOrig() const {
     KoSize size( ext );
     KoPoint realOrig( orig );
     getRealSizeAndOrig( size, realOrig );

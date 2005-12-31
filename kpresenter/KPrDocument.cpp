@@ -1818,7 +1818,7 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             fillStyleStack( o, context );
             if ( o.hasAttributeNS( KoXmlNS::draw, "kind" ) ) // pie, chord or arc
             {
-                KPrKPPieObject *kppieobject = new KPrKPPieObject();
+                KPrPieObject *kppieobject = new KPrPieObject();
                 kppieobject->loadOasis(o, context, m_loadingInfo);
                 if ( groupObject )
                     groupObject->addObjects( kppieobject );
@@ -2691,7 +2691,7 @@ KCommand *KPrDocument::loadObjects( const QDomElement &element, bool paste )
                     insertObjectInPage(offset, kpellipseobject);
             } break;
             case OT_PIE: {
-                KPrKPPieObject *kppieobject = new KPrKPPieObject();
+                KPrPieObject *kppieobject = new KPrPieObject();
                 offset=kppieobject->load(obj);
                 if ( sticky && !ignoreSticky)
                 {

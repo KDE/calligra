@@ -1200,7 +1200,7 @@ void KPrPage::insertPie( const KoRect &r, const KPrPen &pen, const QBrush &brush
                          BCType gt, PieType pt, int _angle, int _len, LineEnd lb, LineEnd le,
                          bool unbalanced, int xfactor, int yfactor )
 {
-    KPrKPPieObject *kppieobject = new KPrKPPieObject( pen, brush, ft, g1, g2, gt, pt, _angle,
+    KPrPieObject *kppieobject = new KPrPieObject( pen, brush, ft, g1, g2, gt, pt, _angle,
                                                 _len, lb, le, unbalanced, xfactor, yfactor );
     insertObject( i18n( "Insert Pie/Arc/Chord" ), kppieobject, r );
 }

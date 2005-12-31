@@ -152,7 +152,7 @@ void KPrObjectProperties::getLineEndsProperties( KPrObject *object )
                 }
             case OT_PIE:
                 {
-                    KPrKPPieObject *obj = dynamic_cast<KPrKPPieObject*>( object );
+                    KPrPieObject *obj = dynamic_cast<KPrPieObject*>( object );
                     if ( obj )
                     {
                         m_pen.lineBegin = obj->getLineBegin();
@@ -231,7 +231,7 @@ void KPrObjectProperties::getPieProperties( KPrObject *object )
 {
     if ( !( m_flags & PtPie ) )
     {
-        KPrKPPieObject *obj = dynamic_cast<KPrKPPieObject*>( object );
+        KPrPieObject *obj = dynamic_cast<KPrPieObject*>( object );
         if ( obj )
         {
             m_pieValues.pieType = obj->getPieType();
