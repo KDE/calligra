@@ -19,19 +19,28 @@
 
 #include <qstring.h>
 #include <qfile.h>
-#include <qprocess.h>
 #include <qimage.h>
 #include <qradiobutton.h>
 #include <qgroupbox.h>
+#include <qbuttongroup.h>
 #include <qpushbutton.h>
 #include <qlabel.h>
+#include <qcheckbox.h>
+#include <qapplication.h>
+#include <qcursor.h>
+#include <qeventloop.h>
 
+#include <knuminput.h>
 #include <kgenericfactory.h>
 #include <kdialogbase.h>
+#include <kmessagebox.h>
+#include <klocale.h>
+#include <kprocess.h>
 
 #include <koDocument.h>
 #include <koFilterChain.h>
 
+#include "imageviewer.h"
 #include "kis_config.h"
 #include "kis_cmb_idlist.h"
 #include "kis_types.h"
@@ -51,25 +60,30 @@
 typedef KGenericFactory<KisRawImport, KoFilter> KisRawImportFactory;
 K_EXPORT_COMPONENT_FACTORY(libkrita_raw_import, KisRawImportFactory("kofficefilters"))
 
-KisRawImport::KisRawImport(KoFilter *, const char *, const QStringList&) : KoFilter()
+KisRawImport::KisRawImport(KoFilter *, const char *, const QStringList&) 
+    : KoFilter()
+    , m_data(0)
+    , m_process(0)
 {
     m_dialog = new KDialogBase();
     m_page = new WdgRawImport(m_dialog);
     m_dialog -> setMainWidget(m_page);
-    QObject::connect(m_page->bnPreview, SIGNAL(clicked()), this, SLOT(slotUpdatePreview()));
-    QObject::connect(m_page->grpColorSpace, SIGNAL(clicked( int )), this, SLOT(slotFillCmbProfiles()));
-    QObject::connect(m_page->grpChannelDepth, SIGNAL(clicked( int )), this, SLOT(slotFillCmbProfiles()));
-    
+
+    connect(m_page->bnPreview, SIGNAL(clicked()), this, SLOT(slotUpdatePreview()));
+    connect(m_page->grpColorSpace, SIGNAL(clicked( int )), this, SLOT(slotFillCmbProfiles()));
+    connect(m_page->grpChannelDepth, SIGNAL(clicked( int )), this, SLOT(slotFillCmbProfiles()));
+
     KisConfig cfg;
     QString monitorProfileName = cfg.monitorProfile();
     m_monitorProfile = KisMetaRegistry::instance()->csRegistry()->getProfileByName(monitorProfileName);
-    
-    
+
+    slotFillCmbProfiles();
 }
 
 KisRawImport::~KisRawImport()
 {
     delete m_dialog;
+    delete m_process;
 }
 
 KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCString& to)
@@ -78,7 +92,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
         return KoFilter::NotImplemented;
     }
 
-    kdDebug() << "\n\n\nKrita importing from Raw\n";
+    kdDebug(41008) << "Krita importing from Raw\n";
 
     KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
     if (!doc) {
@@ -93,10 +107,13 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
         return KoFilter::FileNotFound;
     }
 
-    // Show dialog
-    m_dialog->exec();
+    slotUpdatePreview();
 
-    // Determine settings
+    // Show dialog
+    m_dialog->setCursor(Qt::ArrowCursor);
+    QApplication::setOverrideCursor(Qt::ArrowCursor);
+    m_dialog->exec();
+    QApplication::restoreOverrideCursor();
 
     // Prepare image
     KisColorSpace *cs;// = KisMetaRegistry::instance()->csRegistry()->getColorSpace(KisID("", ""),"" );
@@ -115,7 +132,7 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
         return KoFilter::CreationError;
     }
 
-    KisLayerSP layer = image -> layerAdd(image -> nextLayerName(), OPACITY_OPAQUE);
+    KisLayerSP layer = image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE);
 
     if (layer == 0) {
         return KoFilter::CreationError;
@@ -130,44 +147,223 @@ KoFilter::ConversionStatus KisRawImport::convert(const QCString& from, const QCS
 
 void KisRawImport::slotUpdatePreview()
 {
-    QByteArray data = getImageData(createArgumentList(true));
+    QApplication::setOverrideCursor(Qt::waitCursor);
+    getImageData(createArgumentList(true));
+    
+    kdDebug(41008) << "Retrieved " << m_data->size() << " bytes of image data\n";
+
+    if (m_data->isNull()) return;
+
     QImage img;
-    if (m_page->grpChannelDepth->selectedId() == 0) {
+
+    if (m_page->radio8->isChecked()) {
         // 8 bits
-        img = QImage(data);
+        img.loadFromData(*m_data);
+
     } else {
         // 16 bits
+
+        Q_UINT32 startOfImagedata;
+        QSize sz = determineSize(&startOfImagedata);
+
+        kdDebug(41008) << "Total bytes: " << m_data->size() 
+                  << "\n start of image data: " << startOfImagedata 
+                  << "\n bytes for pixels left: " << m_data->size() - startOfImagedata
+                  << "\n total pixels: " << sz.width() * sz.height()
+                  << "\n total pixel bytes: " << sz.width() * sz.height() * 6
+                  << "\n total necessary bytes: " << (sz.width() * sz.height() * 6) + startOfImagedata
+                  << "\n";
+
+        char * data = m_data->data() + startOfImagedata;
+        
         KisColorSpace * cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace( KisID("RGBA16"), profile() );
         KisPaintDeviceImpl * dev = new KisPaintDeviceImpl(cs, "preview");
-        QSize sz = determineSize(data);
-        dev->writeBytes(data.data(), 0, 0, sz.width(), sz.height());
+
+        KisRectIterator it = dev->createRectIterator(0, 0, sz.width(), sz.height(), true);
+        int pos = 0;
+        // Copy the colordata to the pixels
+        while (!it.isDone()) {
+            memcpy(it.rawData(), data + pos, 2);
+            cs->setAlpha(it.rawData(), OPACITY_OPAQUE, 1);
+            pos += 6;
+            ++it;
+        }
+        // Set the alpha for all the pixels to opaque
+        //cs->setAlpha((Q_UINT8*)data, OPACITY_OPAQUE, sz.width() * sz.height());
+
         img = dev->convertToQImage(m_monitorProfile);
     }
 
-    m_page->lblPreview->setPixmap(img);
+    m_page->lblPreview->setImage(img);
+    QApplication::restoreOverrideCursor();
 }
 
 
-QByteArray KisRawImport::getImageData( QStringList arguments )
+void KisRawImport::getImageData( QStringList arguments )
 {
-    return QByteArray();
+    //    delete m_process;
+    delete m_data;
+
+    kdDebug(41008) << "getImageData " << arguments.join(" ") << "\n";
+    KProcess process (this);
+    m_data = new QByteArray(0);
+
+    for (QStringList::iterator it = arguments.begin(); it != arguments.end(); ++it) {
+        process << *it;
+    }
+
+    process.setUseShell(true);
+    connect(&process, SIGNAL(receivedStdout(KProcess *, char *, int)), this, SLOT(slotReceivedStdout(KProcess *, char *, int)));
+    connect(&process, SIGNAL(receivedStderr(KProcess *, char *, int)), this, SLOT(slotReceivedStderr(KProcess *, char *, int)));
+    connect(&process, SIGNAL(processExited(KProcess *)), this, SLOT(slotProcessDone()));
+    
+
+    kdDebug(41008) << "Starting process\n";
+
+    if (!process.start(KProcess::NotifyOnExit, KProcess::AllOutput)) {
+        KMessageBox::error( 0, i18n("Cannot convert RAW files because the dcraw executable could not be started."));
+    }
+    while (process.isRunning()) {
+        //kdDebug(41008) << "Waiting...\n";
+        qApp->eventLoop()->processEvents(QEventLoop::ExcludeUserInput);
+        //process.wait(2);
+    }
+
+    if (process.normalExit()) {
+        kdDebug(41008) << "Return value of process: " << process.exitStatus() << "\n";
+    }
+    else {
+        kdDebug(41008) << "Process did not exit normally. Exit signal: " << process.exitSignal() << "\n";
+    }
+
 }
+
+
+void KisRawImport::slotProcessDone()
+{
+    kdDebug(41008) << "process done!\n";
+}
+
+void KisRawImport::slotReceivedStdout(KProcess *, char *buffer, int buflen)
+{
+    //kdDebug(41008) << "stdout received " << buflen << " bytes on stdout.\n";
+    //kdDebug(41008) << QString::fromAscii(buffer, buflen) << "\n";
+    int oldSize = m_data->size();
+    m_data->resize(oldSize + buflen, QGArray::SpeedOptim);
+    memcpy(m_data->data() + oldSize, buffer, buflen);
+}
+
+void KisRawImport::slotReceivedStderr(KProcess *, char *buffer, int buflen)
+{
+    QByteArray b(buflen);
+    memcpy(b.data(), buffer, buflen);
+    kdDebug(41008) << QString(b) << "\n";
+    //KMessageBox::error(0, i18n("dcraw says: ") + QString(b));
+}
+
 
 QStringList KisRawImport::createArgumentList(bool forPreview)
 {
-    return QStringList();
+    QStringList args;
+
+    args.append("dcraw"); // XXX: Create a kritadcraw so we can count on it being available
+
+    //args.append("-v"); // Verbose
+
+    args.append("-c"); // Write to stdout
+
+    if (forPreview) {
+        args.append("-h"); // Fast, half size image
+    }
+    
+    if (m_page->radio8->isChecked()) {
+        args.append("-2"); // 8 bits
+    }
+    else {
+        args.append("-4"); // 16 bits
+    }
+    
+    if (m_page->radioGray->isChecked()) {
+        args.append("-d"); // Create grayscale image
+    }
+
+
+    if (m_page->chkCameraColors->isChecked()) {
+        args.append("-m"); // Use camera raw colors instead of sRGB
+    }
+
+    if (m_page->radioAutomatic->isChecked()) {
+        args.append("-a"); // Automatic white balancing
+    }
+    else {
+        args.append("-w"); // Use camera white balance, if present
+    }
+
+    if (m_page->chkFourColorRGB->isChecked()) {
+        args.append("-f"); // Interpolate RGB as four colors
+    }
+
+    if (!m_page->chkClip->isChecked()) {
+        args.append("-n"); // Do not clip colors
+    }
+    
+    args.append("-b " + QString::number(m_page->dblBrightness->value()));
+    args.append("-k " + QString::number(m_page->dblBlackpoint->value()));
+
+    KisProfile * pf  = profile();
+    if (!pf->filename().isNull()) {
+        // Use the user-set profile, if it's not an lcms internal
+        // profile. This does not add the profile to the image, we
+        // need to do that later.
+        args.append("-p " + pf->filename());
+    }
+
+    // Don't forget the filename
+    args.append(m_chain -> inputFile());
+
+    return args;
 }
 
-QSize KisRawImport::determineSize( QByteArray data ) const
+QSize KisRawImport::determineSize(Q_UINT32 * startOfImageData)
 {
-    return QSize(0, 0);
+    if (m_data->isNull() || m_data->size() < 2048) {
+        * startOfImageData = 0;
+        return QSize(0,0);
+    }
+
+    QString magick = QString::fromAscii(m_data->data(), 2);
+    if (magick != "P6") {
+        kdDebug(41008) << " Bad magick! " << magick << "\n";
+        *startOfImageData = 0;
+        return QSize(0,0);
+    }
+
+    // Find the third newline that marks the header end in a dcraw generated ppm.
+    Q_UINT32 i = 0;
+    Q_UINT32 counter = 0;
+
+    while (true) {
+        if (counter == 3) break;
+        if (m_data->data()[i] == '\n') {
+            counter++;
+        }
+        ++i;
+    }
+        
+    QString size = QStringList::split("\n", QString::fromAscii(m_data->data(), i))[1];
+    kdDebug(41008) << "Header: " << QString::fromAscii(m_data->data(), i) << "\n";
+    QStringList sizelist = QStringList::split(" ", size);
+    Q_INT32 w = sizelist[0].toInt();
+    Q_INT32 h = sizelist[1].toInt();
+
+    *startOfImageData = i;
+    return QSize(w, h);
+    
 }
 
 KisProfile * KisRawImport::profile()
 {
-    QValueVector<KisProfile *>  profileList = KisMetaRegistry::instance()->csRegistry()->profilesFor( getColorSpace() );
-    KisID id = m_page -> cmbProfile -> currentItem();
-    return profileList.at(index);
+    return KisMetaRegistry::instance()->csRegistry()->getProfileByName(m_page->cmbProfile->currentText());
 }
 
 void KisRawImport::slotFillCmbProfiles()
@@ -202,4 +398,3 @@ KisID KisRawImport::getColorSpace()
 }
 
 #include "kis_raw_import.moc"
-

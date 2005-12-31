@@ -42,7 +42,7 @@ XCFImport::~XCFImport()
 
 KoFilter::ConversionStatus XCFImport::convert(const QCString&, const QCString& to)
 {
-    kdDebug() << "Importing using XCFImport!\n";
+    kdDebug(41008) << "Importing using XCFImport!\n";
 
     if (to != "application/x-krita")
         return KoFilter::BadMimeType;

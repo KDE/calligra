@@ -43,7 +43,7 @@ XCFExport::~XCFExport()
 
 KoFilter::ConversionStatus XCFExport::convert(const QCString& from, const QCString& to)
 {
-    kdDebug() << "xcf export! From: " << from << ", To: " << to << "\n";
+    kdDebug(41008) << "xcf export! From: " << from << ", To: " << to << "\n";
     
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;

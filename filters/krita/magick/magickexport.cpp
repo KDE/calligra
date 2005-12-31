@@ -69,12 +69,14 @@ KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCS
     output->undoAdapter()->setUndo(false);
 
     KisImageMagickConverter ib(output, output->undoAdapter());
-
     img->flatten();
 
-    dst = (KisPaintLayer*)img->activeLayer().data();
+    dst = dynamic_cast<KisPaintLayer*>(img->activeLayer().data());
+
     Q_ASSERT(dst);
-    
+
+    if (dst == 0) return KoFilter::InternalError;
+
     output->undoAdapter()->setUndo(undo);
 
     vKisAnnotationSP_it beginIt = img->beginAnnotations();

@@ -49,7 +49,7 @@ KisJPEGExport::~KisJPEGExport()
 
 KoFilter::ConversionStatus KisJPEGExport::convert(const QCString& from, const QCString& to)
 {
-    kdDebug() << "JPEG export! From: " << from << ", To: " << to << "\n";
+    kdDebug(41008) << "JPEG export! From: " << from << ", To: " << to << "\n";
     
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -104,10 +104,10 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QCString& from, const QC
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
     if ( (res = kpc.buildFile(url, (KisPaintLayer*)dst.data(), beginIt, endIt, options)) == KisImageBuilder_RESULT_OK) {
-        kdDebug() << "success !" << endl;
+        kdDebug(41008) << "success !" << endl;
         return KoFilter::OK;
     }
-    kdDebug() << " Result = " << res << endl;
+    kdDebug(41008) << " Result = " << res << endl;
     return KoFilter::InternalError;
 }
 

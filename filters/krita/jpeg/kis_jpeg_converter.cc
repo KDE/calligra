@@ -51,7 +51,7 @@ namespace {
         {
             return JCS_CMYK;
         }
-        kdDebug() << "Cannot export images in " + cs->id().name() + " yet.\n";
+        kdDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return JCS_UNKNOWN;
     }
 
@@ -106,7 +106,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
     // Get the colorspace
     QString csName = getColorSpaceForColorType(cinfo.out_color_space);
     if(csName == "") {
-        kdDebug() << "unsupported colorspace : " << cinfo.out_color_space << endl;
+        kdDebug(41008) << "unsupported colorspace : " << cinfo.out_color_space << endl;
         jpeg_destroy_decompress(&cinfo);
         fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
@@ -143,7 +143,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
     KisColorSpace* cs;
     if (profile)
     {
-        kdDebug() << "image has embedded profile: " << profile -> productName() << "\n";
+        kdDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
     }
     else
@@ -151,7 +151,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
 
     if(cs == 0)
     {
-        kdDebug() << "unknown colorspace" << endl;
+        kdDebug(41008) << "unknown colorspace" << endl;
         jpeg_destroy_decompress(&cinfo);
         fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
@@ -310,16 +310,16 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLaye
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
         if (!(*it) || (*it) -> type() == QString()) {
-            kdDebug() << "Warning: empty annotation" << endl;
+            kdDebug(41008) << "Warning: empty annotation" << endl;
             ++it;
             continue;
         }
 
-        kdDebug() << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
+        kdDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
 
         if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
             // FIXME: it should be possible to save krita_attributes in the "CHUNKs"
-            kdDebug() << "can't save this annotation : " << (*it) -> type() << endl;
+            kdDebug(41008) << "can't save this annotation : " << (*it) -> type() << endl;
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];
             strcpy(name, (*it)->type().ascii());

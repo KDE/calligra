@@ -56,7 +56,7 @@ namespace {
             return alpha ? PNG_COLOR_TYPE_RGB_ALPHA : PNG_COLOR_TYPE_RGB;
         }
 
-        kdDebug() << "Cannot export images in " + cs->id().name() + " yet.\n";
+        kdDebug(41008) << "Cannot export images in " + cs->id().name() + " yet.\n";
         return -1;
 
     }
@@ -113,7 +113,7 @@ KisPNGConverter::~KisPNGConverter()
 
 KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
 {
-    kdDebug() << "Start decoding PNG File" << endl;
+    kdDebug(41008) << "Start decoding PNG File" << endl;
     // open the file
     FILE *fp = fopen(uri.path().ascii(), "rb");
     if (!fp)
@@ -196,7 +196,7 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     KisColorSpace* cs;
     if (profile)
     {
-        kdDebug() << "image has embedded profile: " << profile -> productName() << "\n";
+        kdDebug(41008) << "image has embedded profile: " << profile -> productName() << "\n";
         cs = KisMetaRegistry::instance()->csRegistry()->getColorSpace(csName, profile);
     }
     else
@@ -214,10 +214,10 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     KoDocumentInfo * info = m_doc->documentInfo();
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author"));
-    kdDebug() << "There are " << num_comments << " comments in the text" << endl;
+    kdDebug(41008) << "There are " << num_comments << " comments in the text" << endl;
     for(int i = 0; i < num_comments; i++)
     {
-        kdDebug() << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text << endl;
+        kdDebug(41008) << "key is " << text_ptr[i].key << " containing " << text_ptr[i].text << endl;
         if(QString::compare(text_ptr[i].key, "title") == 0)
         {
                 aboutPage->setTitle(text_ptr[i].text);
@@ -388,7 +388,7 @@ KisImageSP KisPNGConverter::image()
 
 KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
 {
-    kdDebug() << "Start writing PNG File" << endl;
+    kdDebug(41008) << "Start writing PNG File" << endl;
     if (!layer)
         return KisImageBuilder_RESULT_INVALID_ARG;
 
@@ -467,16 +467,16 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisPaintLayer
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
         if (!(*it) || (*it) -> type() == QString()) {
-            kdDebug() << "Warning: empty annotation" << endl;
+            kdDebug(41008) << "Warning: empty annotation" << endl;
             ++it;
             continue;
         }
 
-        kdDebug() << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
+        kdDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
 
         if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
             // FIXME: it should be possible to save krita_attributes in the "CHUNKs"
-            kdDebug() << "can't save this annotation : " << (*it) -> type() << endl;
+            kdDebug(41008) << "can't save this annotation : " << (*it) -> type() << endl;
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];
             strcpy(name, (*it)->type().ascii());

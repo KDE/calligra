@@ -22,6 +22,7 @@
 
 #include <koFilter.h>
 
+class KProcess;
 class KDialogBase;
 class WdgRawImport;
 class KisProfile;
@@ -41,20 +42,24 @@ private slots:
 
     void slotUpdatePreview();
     void slotFillCmbProfiles();
-    
-private:
-    QStringList createArgumentList(bool forPreview = false);
-    QSize determineSize(QByteArray data);
-    QByteArray getImageData(QStringList arguments);
-    KisProfile * profile();
+    void slotProcessDone();
+    void slotReceivedStdout(KProcess *proc, char *buffer, int buflen);
+    void slotReceivedStderr(KProcess *proc, char *buffer, int buflen);
 
+private:
+
+    QStringList createArgumentList(bool forPreview = false);
+    QSize determineSize(Q_UINT32 * startOfImageData);
+    void getImageData(QStringList arguments);
+    KisProfile * profile();
     KisID getColorSpace();
     
 private:
-
+    QByteArray * m_data;
     KDialogBase * m_dialog;
     WdgRawImport * m_page;
     KisProfile * m_monitorProfile;
+    KProcess * m_process;
 };
 
 #endif // KIS_RAW_IMPORT_H_

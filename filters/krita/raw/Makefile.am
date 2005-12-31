@@ -5,6 +5,7 @@ AM_CPPFLAGS= \
 	-I$(top_srcdir)/krita/sdk \
 	-I$(top_srcdir)/krita/kritacolor \
 	-I$(top_srcdir)/krita/ui \
+	-I$(top_srcdir)/filters/krita/magick \
 	$(KOFFICE_INCLUDES) \
 	$(all_includes) 
 
@@ -14,9 +15,7 @@ libkrita_raw_import_la_LDFLAGS = $(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries) -mo
 libkrita_raw_import_la_LIBADD = \
 	$(KOFFICE_LIBS) \
 	$(raw_LIBS) \
-	$(top_builddir)/krita/libkritacommon.la \
-	$(top_builddir)/krita/colorspaces/rgb_f32/libkrita_rgb_f32.la \
-	$(top_builddir)/krita/colorspaces/rgb_f16half/libkrita_rgb_f16half.la
+	$(top_builddir)/krita/libkritacommon.la 
 
 
 service_DATA = krita_raw_import.desktop
