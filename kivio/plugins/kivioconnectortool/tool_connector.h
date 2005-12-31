@@ -1,6 +1,7 @@
 /*
  * Kivio - Visual Modelling and Flowcharting
  * Copyright (C) 2000-2001 theKompany.com & Dave Marotti
+ * Copyright (C) 2003-2005 Peter Simonsson <psn@linux.se>
  *
  * This program is free software; you can redistribute it and/or
  * modify it under the terms of the GNU General Public License
@@ -40,48 +41,46 @@ class ConnectorTool : public Kivio::MouseTool
   public:
     ConnectorTool( KivioView* parent );
     ~ConnectorTool();
-  
+
     virtual bool processEvent(QEvent* e);
-  
+
     void connector(QRect);
-    
+
   public slots:
     void setActivated(bool a);
-  
+
   protected slots:
     void activateStraight();
     void activatePolyline();
-    
+
     void makePermanent();
-  
+
   signals:
     void operationDone();
-  
+
   protected:
     void mousePress(QMouseEvent *);
     void mouseMove(QMouseEvent *);
     void mouseRelease(QMouseEvent *);
-  
+
     bool startRubberBanding(QMouseEvent*);
     void continueRubberBanding(QMouseEvent *);
     void endRubberBanding(QMouseEvent *);
-  
-  
-  
+
     QPoint m_startPoint, m_releasePoint;
-  
+
     // Connector Tool Mode
     enum
     {
       stmNone,
       stmDrawRubber
     };
-    
+
     enum {
       StraightConnector,
       PolyLineConnector
     };
-  
+
   private:
     int m_mode; // Flag to indicate that we are drawing a rubber band
     int m_type; // Type of connector
@@ -90,10 +89,10 @@ class ConnectorTool : public Kivio::MouseTool
     Kivio1DStencil* m_pStencil;
     KoPoint startPoint;
     KivioCustomDragData* m_pDragData;
-    
+
     Kivio::MouseToolAction* m_connectorAction;
     Kivio::MouseToolAction* m_polyLineAction;
-    
+
     bool m_permanent;
 };
 

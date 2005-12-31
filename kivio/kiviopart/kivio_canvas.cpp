@@ -87,6 +87,9 @@ KivioCanvas::KivioCanvas( QWidget *par, KivioView* view, KivioDoc* doc, QScrollB
   m_pScrollX = 0;
   m_pScrollY = 0;
 
+  m_pageOffsetX = 0;
+  m_pageOffsetY = 0;
+
   m_pasteMoving = false;
 
   m_buffer = new QPixmap();
@@ -262,9 +265,9 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   QRect fillRect(0, 0, pw, ph);
   QRect paintRect = ev->rect();
   QRegion grayRegion(paintRect);
-  grayRegion.translate(m_iXOffset, m_iYOffset);
+  grayRegion.translate(m_iXOffset - m_pageOffsetX, m_iYOffset - m_pageOffsetY);
   grayRegion -= fillRect;
-  grayRegion.translate(-m_iXOffset, -m_iYOffset);
+  grayRegion.translate(-m_iXOffset + m_pageOffsetX, -m_iYOffset + m_pageOffsetY);
 
   // This code comes from KPresenter's kprcanvas.cpp
   // Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
@@ -275,7 +278,7 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
   painter.restore();
   // end of copy...
 
-  painter.translate(-m_iXOffset, -m_iYOffset);
+  painter.translate(-m_iXOffset + m_pageOffsetX, -m_iYOffset +m_pageOffsetY);
   painter.fillRect(fillRect, white);
 
   // Draw Grid
@@ -327,8 +330,8 @@ void KivioCanvas::paintEvent( QPaintEvent* ev )
 
   // Draw content
   KivioScreenPainter kpainter;
-  kpainter.start( m_buffer );
-  kpainter.translateBy( -m_iXOffset, -m_iYOffset );
+  kpainter.start(m_buffer);
+  kpainter.translateBy(-m_iXOffset + m_pageOffsetX, -m_iYOffset + m_pageOffsetY);
   m_pDoc->paintContent(kpainter, paintRect, false, page, QPoint(0, 0), m_pView->zoomHandler(), true);
   kpainter.stop();
 
@@ -349,8 +352,11 @@ void KivioCanvas::updateScrollBars()
   }
 
   KoPageLayout pl = activePage()->paperLayout();
-  m_pScrollX = QMAX(m_pView->zoomHandler()->zoomItX(pl.ptWidth) - width(), 0);
-  m_pScrollY = QMAX(m_pView->zoomHandler()->zoomItY(pl.ptHeight) - height(), 0);
+  int pw = m_pView->zoomHandler()->zoomItX(pl.ptWidth);
+  int ph = m_pView->zoomHandler()->zoomItY(pl.ptHeight);
+
+  m_pScrollX = QMAX(pw - width(), 0);
+  m_pScrollY = QMAX(ph - height(), 0);
 
   m_pHorzScrollBar->setRange(0, m_pScrollX);
   if ( m_pHorzScrollBar->value() > m_pHorzScrollBar->maxValue() ||
@@ -368,9 +374,21 @@ void KivioCanvas::updateScrollBars()
 
   m_pVertScrollBar->setPageStep( height() );
   m_pHorzScrollBar->setPageStep( width() );
+
+  if(pw >= width()) {
+    m_pageOffsetX = 0;
+  } else {
+    m_pageOffsetX = (width() - pw) / 2;
+  }
+
+  if(ph >= height()) {
+    m_pageOffsetY = 0;
+  } else {
+    m_pageOffsetY = (height() - ph) / 2;
+  }
 }
 
-QSize KivioCanvas::actualSize()
+QSize KivioCanvas::actualSize() const
 {
   return QSize(m_pScrollX, m_pScrollY);
 }
@@ -443,22 +461,22 @@ void KivioCanvas::mouseMoveEvent(QMouseEvent* e)
   view()->setMousePos(lastPoint.x(), lastPoint.y());
 }
 
-QPoint KivioCanvas::mapToScreen( KoPoint pos )
+QPoint KivioCanvas::mapToScreen(const KoPoint& pos)
 {
   QPoint p;
   int x = m_pView->zoomHandler()->zoomItX(pos.x());
   int y = m_pView->zoomHandler()->zoomItY(pos.y());
 
-  p.setX( x - m_iXOffset );
-  p.setY( y - m_iYOffset );
+  p.setX( x - m_iXOffset + m_pageOffsetX);
+  p.setY( y - m_iYOffset + m_pageOffsetY);
 
   return p;
 }
 
 KoPoint KivioCanvas::mapFromScreen( const QPoint & pos )
 {
-  int x = pos.x() + m_iXOffset;
-  int y = pos.y() + m_iYOffset;
+  int x = pos.x() + m_iXOffset - m_pageOffsetX;
+  int y = pos.y() + m_iYOffset - m_pageOffsetY;
   double xf = m_pView->zoomHandler()->unzoomItX(x);
   double yf = m_pView->zoomHandler()->unzoomItY(y);
 
@@ -551,7 +569,7 @@ void KivioCanvas::startSpawnerDragDraw( const QPoint &p )
 
   // Translate the painter so that 0,0 means where the page starts on the canvas
   unclippedSpawnerPainter->painter()->save();
-  unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
+  unclippedSpawnerPainter->painter()->translate(-m_iXOffset + m_pageOffsetX, -m_iYOffset + m_pageOffsetY);
 
   // Assign the painter object to the intra-stencil data object, as well
   // as the zoom factor
@@ -573,7 +591,7 @@ void KivioCanvas::continueSpawnerDragDraw( const QPoint &p )
 
   // Translate the painter so that 0,0 means where the page starts on the canvas
   unclippedSpawnerPainter->painter()->save();
-  unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
+  unclippedSpawnerPainter->painter()->translate(-m_iXOffset + m_pageOffsetX, -m_iYOffset + m_pageOffsetY);
 
   // Undraw the old outline
   if( oldRectValid )
@@ -633,7 +651,7 @@ void KivioCanvas::endSpawnerDragDraw()
   if ( oldRectValid )
   {
     unclippedSpawnerPainter->painter()->save();
-    unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
+    unclippedSpawnerPainter->painter()->translate(-m_iXOffset + m_pageOffsetX, -m_iYOffset + m_pageOffsetY);
     m_pDragStencil->paintOutline( &m_dragStencilData );
     unclippedSpawnerPainter->painter()->restore();
   }
@@ -867,7 +885,7 @@ void KivioCanvas::drawSelectedStencilsXOR()
 
     // Translate the painter so that 0,0 means where the page starts on the canvas
     unclippedSpawnerPainter->painter()->save();
-    unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
+    unclippedSpawnerPainter->painter()->translate(-m_iXOffset + m_pageOffsetX, -m_iYOffset + m_pageOffsetY);
 
     // Assign the painter object to the intra-stencil data object, as well
     // as the zoom factor
@@ -894,7 +912,7 @@ void KivioCanvas::drawStencilXOR( KivioStencil *pStencil )
 
     // Translate the painter so that 0,0 means where the page starts on the canvas
     unclippedSpawnerPainter->painter()->save();
-    unclippedSpawnerPainter->painter()->translate( -m_iXOffset, -m_iYOffset );
+    unclippedSpawnerPainter->painter()->translate(-m_iXOffset + m_pageOffsetX, -m_iYOffset + m_pageOffsetY);
 
     // Assign the painter object to the intra-stencil data object, as well
     // as the zoom factor

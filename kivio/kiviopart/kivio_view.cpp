@@ -868,6 +868,8 @@ void KivioView::viewZoom(int zoom)
   KoPageLayout l = activePage()->paperLayout();
   vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
   hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
+  setRulerVOffset(m_vertScrollBar->value());
+  setRulerHOffset(m_horzScrollBar->value());
   KoView::setZoom(zoomHandler()->zoomedResolutionY());
 
   emit zoomChanged(zoom);
@@ -1905,14 +1907,14 @@ void KivioView::setRulerUnit(KoUnit::Unit u)
 void KivioView::setRulerHOffset(int h)
 {
   if(hRuler) {
-    hRuler->setOffset(h, 0);
+    hRuler->setOffset(h - m_pCanvas->pageOffsetX(), 0);
   }
 }
 
 void KivioView::setRulerVOffset(int v)
 {
   if(vRuler) {
-    vRuler->setOffset(0, v);
+    vRuler->setOffset(0, v - m_pCanvas->pageOffsetY());
   }
 }
 
@@ -1932,6 +1934,8 @@ void KivioView::setRulerPageLayout(const KoPageLayout& l)
   hRuler->setPageLayout(l);
   vRuler->setFrameStartEnd(zoomHandler()->zoomItY(l.ptTop), zoomHandler()->zoomItY(l.ptHeight - l.ptBottom));
   hRuler->setFrameStartEnd(zoomHandler()->zoomItX(l.ptLeft), zoomHandler()->zoomItX(l.ptWidth - l.ptRight));
+  setRulerVOffset(m_vertScrollBar->value());
+  setRulerHOffset(m_horzScrollBar->value());
   m_pStencilGeometryPanel->setPageLayout(l);
 }
 

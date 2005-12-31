@@ -63,12 +63,9 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
   public:
     KivioCanvas( QWidget*, KivioView*, KivioDoc*, QScrollBar*, QScrollBar* );
     ~KivioCanvas();
-    /**
-    * Called from @ref KivioView to complete the construction. Has to
-    * be called before any other method on this object may be invoced.
-    */
-    int xOffset() { return m_iXOffset; }
-    int yOffset() { return m_iYOffset; }
+
+    int xOffset() const { return m_iXOffset; }
+    int yOffset() const { return m_iYOffset; }
 
     const KivioPage* activePage() const;
     KivioPage* activePage();
@@ -77,7 +74,7 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     KivioView* view()const  { return m_pView; }
     KivioDoc* doc()const { return m_pDoc; }
 
-    QSize actualSize();
+    QSize actualSize() const;
 
     virtual bool event(QEvent*);
 
@@ -98,8 +95,8 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     KoPoint snapToGuides(const KoPoint&, bool &, bool &);
     KoPoint snapToGridAndGuides(const KoPoint&);
 
-    KoPoint mapFromScreen( const QPoint& );
-    QPoint mapToScreen( KoPoint );
+    KoPoint mapFromScreen(const QPoint&);
+    QPoint mapToScreen(const KoPoint&);
 
     void beginUnclippedSpawnerPainter();
     void endUnclippedSpawnerPainter();
@@ -112,6 +109,9 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     void setVisibleAreaByHeight(KoRect, int margin = 0);
 
     KoGuides& guideLines() { return m_guides; }
+
+    int pageOffsetX() const { return m_pageOffsetX; }
+    int pageOffsetY() const { return m_pageOffsetY; }
 
   signals:
     void visibleAreaChanged();
@@ -200,6 +200,9 @@ class KIVIO_EXPORT KivioCanvas : public QWidget
     KoPoint m_origPoint;
 
     KoGuides m_guides;
+
+    int m_pageOffsetX;
+    int m_pageOffsetY;
 };
 
 #endif
