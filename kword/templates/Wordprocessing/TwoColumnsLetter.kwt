@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?><!DOCTYPE DOC >
 <DOC mime="application/x-kword" syntaxVersion="3" editor="KWord" >
- <PAPER width="595" zoom="100" spHeadBody="9" format="1" height="841" fType="0" orientation="0" hType="0" spFootBody="9" columns="1" >
-  <PAPERBORDERS right="0" left="0" bottom="0" top="0" />
+ <PAPER width="612.285" zoom="100" spHeadBody="9.92128" format="3" height="790.868" fType="0" orientation="0" hType="0" columnspacing="15" spFootBody="9.92128" columns="2" >
+  <PAPERBORDERS right="56.693" left="56.693" bottom="42.5198" top="42.5198" />
  </PAPER>
  <ATTRIBUTES standardpage="1" hasFooter="0" unit="mm" hasHeader="0" processing="0" />
  <FRAMESETS>
   <FRAMESET removable="0" frameType="1" frameInfo="0" visible="1" >
-   <FRAME runaround="1" right="566" left="0" bottom="798" runaroundGap="2" top="0" />
-  </FRAMESET>
+   <FRAME runaround="1" right="294" left="28" bottom="798" runaroundGap="2" top="42" />
+   </FRAMESET>
  </FRAMESETS>
  <STYLES>
   <STYLE>

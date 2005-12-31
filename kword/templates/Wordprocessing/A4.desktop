@@ -2,12 +2,8 @@
 Encoding=UTF-8
 Type=Link
 URL=.source/A4.kwt
-Name=A4
-Name[ru]=А4
-Name[sr]=А4
-Name[xx]=xxA4xx
-Name[zu]=u-A4
-Comment=Creates an empty A4 document.
+Name=Blank Document
+Comment=Creates an blank A4 document, with a small page margin.
 Comment[bg]=Създаване на празен документ във формат А4.
 Comment[ca]=Crea un document A4 buit.
 Comment[cs]=Vytvoří prázdný A4 dokument

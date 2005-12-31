@@ -1,1 +1,1 @@
-SUBDIRS = Wordprocessing DTP Envelopes CardsAndLabels
+SUBDIRS = Wordprocessing Envelopes CardsAndLabels

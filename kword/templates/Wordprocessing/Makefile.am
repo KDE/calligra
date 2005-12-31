@@ -1,7 +1,7 @@
-templates_DATA = .directory PlainText.desktop TwoColumns.desktop Letter.desktop A4.desktop Memo.desktop
+templates_DATA = .directory TwoColumns.desktop Letter.desktop A4.desktop Memo.desktop TwoColumnsLetter.desktop ProfessionalLetter.desktop ProfessionalA4.desktop
 templatesdir = $(kde_datadir)/kword/templates/Normal
 
-templatesrc_DATA = PlainText.kwt TwoColumns.kwt Letter.kwt A4.kwt Memo.kwt Embedded.kwt
+templatesrc_DATA = TwoColumns.kwt Letter.kwt A4.kwt Memo.kwt TwoColumnsLetter.kwt ProfessionalLetter.odt ProfessionalA4.odt
 templatesrcdir = $(kde_datadir)/kword/templates/Normal/.source
 
 kworddir = $(kde_datadir)/kword/icons
