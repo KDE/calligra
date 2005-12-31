@@ -2481,10 +2481,12 @@ void KoDocument::showStartUpWidget( KoMainWindow* parent, bool alwaysShow )
 
     if(d->m_startUpWidget){
       d->m_startUpWidget->show();
+    } else {
+      d->m_startUpWidget = createOpenPane( parent->centralWidget(), instance(), templateType() );
     }
 
-    d->m_startUpWidget = createOpenPane( parent->centralWidget(), instance(), templateType() );
     parent->setDocToOpen( this );
+    parent->factory()->container("mainToolBar", parent)->hide();
 }
 
 void KoDocument::openExistingFile( const QString& file )
@@ -2558,6 +2560,7 @@ void KoDocument::deleteOpenPane()
         QTimer::singleShot(1000, this, SLOT(deleteOpenPaneDelayed()));
 
         shells().getFirst()->setRootDocument( this );
+        shells().getFirst()->factory()->container("mainToolBar", shells().getFirst())->show();
     } else {
       emit closeEmbedInitDialog();
     }
