@@ -346,11 +346,11 @@ void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
   }
 
   Kivio::StencilTextEditor editor(i18n("Edit Text"), view(), "StencilTextEditor");
-  editor.setFont(stencil->textFont());
-  editor.setFontColor(stencil->textColor());
+  editor.setFont(stencil->textFont(name));
+  editor.setFontColor(stencil->textColor(name));
   editor.setBackgroundColor(stencil->bgColor());
   editor.setText(stencil->text(name));
-  editor.setHorizontalAlign(static_cast<Qt::AlignmentFlags>(stencil->hTextAlign()));
+  editor.setHorizontalAlign(static_cast<Qt::AlignmentFlags>(stencil->hTextAlign(name)));
 
   if(editor.exec() == QDialog::Accepted) {
     KMacroCommand* macroCmd = new KMacroCommand(i18n("Change Stencil Text and Formatting"));
