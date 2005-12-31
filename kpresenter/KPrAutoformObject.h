@@ -31,7 +31,7 @@
 class KPrGradient;
 class DCOPObject;
 
-class KPrAutoformObject : public KPr2DObject
+class KPrAutoformObject : public KPr2DObject, public KPrStartEndLine
 {
 public:
     KPrAutoformObject();
@@ -68,12 +68,12 @@ public:
 protected:
     virtual const char * getOasisElementName() const;
     virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
+    virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     virtual void paint( QPainter *_painter, KoTextZoomHandler *_zoomHandler,
                         int /* pageNum */, bool drawingShadow, bool drawContour = FALSE );
 
     QString filename;
-    LineEnd lineBegin, lineEnd;
 
     ATFInterpreter atfInterp;
 };

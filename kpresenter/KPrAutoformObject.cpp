@@ -38,7 +38,9 @@
 using namespace std;
 
 KPrAutoformObject::KPrAutoformObject()
-    : KPr2DObject(), atfInterp()
+: KPr2DObject()
+, KPrStartEndLine( L_NORMAL, L_NORMAL )
+, atfInterp()
 {
     lineBegin = L_NORMAL;
     lineEnd = L_NORMAL;
@@ -49,12 +51,11 @@ KPrAutoformObject::KPrAutoformObject( const KPrPen & _pen, const QBrush &_brush,
                                     FillType _fillType, const QColor &_gColor1,
                                     const QColor &_gColor2, BCType _gType,
                                     bool _unbalanced, int _xfactor, int _yfactor)
-    : KPr2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor ),
-      filename( _filename ), atfInterp()
+: KPr2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
+, KPrStartEndLine( _lineBegin, _lineEnd )
+, filename( _filename ), atfInterp()
 {
     atfInterp.load( filename );
-    lineBegin = _lineBegin;
-    lineEnd = _lineEnd;
 }
 
 KPrAutoformObject &KPrAutoformObject::operator=( const KPrAutoformObject & )
@@ -78,22 +79,69 @@ void KPrAutoformObject::setFileName( const QString & _filename )
 
 bool KPrAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    kdDebug()<<"bool KPrAutoformObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) not implemented\n";
+    kdDebug(33001) << "bool KPrAutoformObject::saveOasisObjectAttributes()" << endl;
+    QSize size( int( ext.width() * 100 ), int( ext.height() * 100 )  );
+
+    sc.xmlWriter.addAttribute( "svg:viewBox", QString( "0 0 %1 %2" ).arg( size.width() )
+                                                                    .arg( size.height() ) );
+
+    QPointArray points = const_cast<ATFInterpreter &>( atfInterp ).getPointArray( size.width(), size.height() );
+
+    unsigned int pointCount = points.size();
+    unsigned int pos = 0;
+    bool closed = points.at( 0 ) == points.at( pointCount - 1 );
+
+    if ( closed )
+        --pointCount;
+
+    QString d;
+    d += QString( "M%1 %2" ).arg( points.at(pos).x() )
+                            .arg( points.at(pos).y() );
+    ++pos;
+
+    while ( pos < pointCount )
+    {
+        d += QString( "L%1 %2" ).arg( points.at( pos ).x() )
+                                .arg( points.at( pos ).y() );
+        ++pos;
+    }
+
+    if ( closed )
+        d += "Z";
+
+    sc.xmlWriter.addAttribute( "svg:d", d );
+
     return true;
+}
+
+void KPrAutoformObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+{
+    kdDebug(33001) << "KPr2DObject::fillStyle" << endl;
+    KPrShadowObject::fillStyle( styleObjectAuto, mainStyles );
+
+    QPointArray points = const_cast<ATFInterpreter &>( atfInterp ).getPointArray( int( ext.width() * 100 ),
+                                                                                  int( ext.height() * 100 ) );
+
+    // if it is a closed object save the background
+    if ( points.at( 0 ) == points.at( points.size() - 1 ) )
+    {
+        saveOasisBackgroundElement( styleObjectAuto, mainStyles );
+    }
+    else
+    {
+        saveOasisMarkerElement( mainStyles, styleObjectAuto );
+    }
 }
 
 const char * KPrAutoformObject::getOasisElementName() const
 {
-    return "draw:custom-shape";
+    return "draw:path";
 }
 
 QDomDocumentFragment KPrAutoformObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KPr2DObject::save(doc, offset);
-    if (lineBegin!=L_NORMAL)
-        fragment.appendChild(KPrObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
-    if (lineEnd!=L_NORMAL)
-        fragment.appendChild(KPrObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
+    KPrStartEndLine::save( fragment, doc );
 
     // The filename contains the absolute path to the autoform. This is
     // bad, so we simply remove everything but the last dir and the name.
@@ -116,21 +164,8 @@ QDomDocumentFragment KPrAutoformObject::save( QDomDocument& doc, double offset )
 double KPrAutoformObject::load(const QDomElement &element)
 {
     double offset=KPr2DObject::load(element);
-    QDomElement e=element.namedItem("LINEBEGIN").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        lineBegin=static_cast<LineEnd>(tmp);
-    }
-    e=element.namedItem("LINEEND").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        lineEnd=static_cast<LineEnd>(tmp);
-    }
-    e=element.namedItem("FILENAME").toElement();
+    KPrStartEndLine::load( element );
+    QDomElement e=element.namedItem("FILENAME").toElement();
     if(!e.isNull()) {
         if(e.hasAttribute("value"))
             filename=e.attribute("value");
