@@ -31,6 +31,8 @@
 #include <core/vfillrule.h>
 #include "svggraphiccontext.h"
 
+#include <vobject.h>
+
 class VGroup;
 class VPath;
 
@@ -58,9 +60,11 @@ protected:
 	};
 
 	void parseGroup( VGroup *, const QDomElement & );
+	void parseDefs( const QDomElement & );
+	void parseUse( VGroup *, const QDomElement & );
 	void parseStyle( VObject *, const QDomElement & );
 	void parsePA( VObject *, SvgGraphicsContext *, const QString &, const QString & );
-	void parseGradient( const QDomElement & );
+	void parseGradient( const QDomElement &, const QDomElement &referencedBy = QDomElement() );
 	void parseColorStops( VGradient *, const QDomElement & );
 	double parseUnit( const QString &, bool horiz = false, bool vert = false, KoRect bbox = KoRect() );
 	void parseColor( VColor &, const QString & );
@@ -72,7 +76,7 @@ protected:
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();
-	VObject* createObject( const QDomElement & );
+	void createObject( VGroup *grp, const QDomElement &, VObject::VState state = VObject::normal );
 	void createText( VGroup *, const QDomElement & );
 	void parseFont( const QDomElement & );
 	// find object with given id in document
@@ -80,7 +84,7 @@ protected:
 	// find object with given id in given group
 	VObject* findObject( const QString &name, VGroup * );
 	// find gradient with given id in gradient map
-	GradientHelper* findGradient( const QString &id );
+	GradientHelper* findGradient( const QString &id, const QString &href = 0 );
 
 	// Determine scaling factor from given matrix
 	double getScalingFromMatrix( QWMatrix &matrix );

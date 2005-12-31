@@ -59,47 +59,48 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 	if( to != "application/x-karbon" || from != "image/svg+xml" )
 		return KoFilter::NotImplemented;
 
-        //Find the last extension
-        QString strExt;
-        QString fileIn ( m_chain->inputFile() );
-        const int result=fileIn.findRev('.');
-        if (result>=0)
-        {
-    	        strExt=fileIn.mid(result).lower();
-        }
+	//Find the last extension
+	QString strExt;
+	QString fileIn ( m_chain->inputFile() );
+	const int result=fileIn.findRev('.');
+	if (result>=0)
+		strExt=fileIn.mid(result).lower();
 
-        QString strMime; // Mime type of the compressor
-        if ((strExt==".gz")      //in case of .svg.gz (logical extension)
-                ||(strExt==".svgz")) //in case of .svgz (extension used prioritary)
-                strMime="application/x-gzip"; // Compressed with gzip
-        else if (strExt==".bz2") //in case of .svg.bz2 (logical extension)
-                strMime="application/x-bzip2"; // Compressed with bzip2
-        else
-                strMime="text/plain";
+	QString strMime; // Mime type of the compressor
+	if ((strExt==".gz")      //in case of .svg.gz (logical extension)
+       ||(strExt==".svgz")) //in case of .svgz (extension used prioritary)
+		strMime="application/x-gzip"; // Compressed with gzip
+	else if (strExt==".bz2") //in case of .svg.bz2 (logical extension)
+		strMime="application/x-bzip2"; // Compressed with bzip2
+	else
+		strMime="text/plain";
 
-        kdDebug(30514) << "File extension: -" << strExt << "- Compression: " << strMime << endl;
+	/*kdDebug(30514) << "File extension: -" << strExt << "- Compression: " << strMime << endl;*/
 
-        QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
+	QIODevice* in = KFilterDev::deviceForFile(fileIn,strMime);
 
-        if (!in->open(IO_ReadOnly))
-        {
-                kdError(30514) << "Cannot open file! Aborting!" << endl;
-                delete in;
-                return KoFilter::FileNotFound;
-        }
+	if (!in->open(IO_ReadOnly))
+	{
+		kdError(30514) << "Cannot open file! Aborting!" << endl;
+		delete in;
+		return KoFilter::FileNotFound;
+	}
 
 	int line, col;
 	QString errormessage;
-        const bool parsed=inpdoc.setContent( in, &errormessage, &line, &col );
-        in->close();
-        delete in;
+
+	const bool parsed=inpdoc.setContent( in, &errormessage, &line, &col );
+
+	in->close();
+	delete in;
+
 	if ( ! parsed )
 	{
-	        kdError(30514) << "Error while parsing file: "
+		kdError(30514) << "Error while parsing file: "
 		        << "at line " << line << " column: " << col
 		        << " message: " << errormessage << endl;
 		// ### TODO: feedback to the user
-	        return KoFilter::ParsingError;
+		return KoFilter::ParsingError;
 	}
 
 	// Do the conversion!
@@ -123,8 +124,7 @@ KoFilter::ConversionStatus SvgImport::convert(const QCString& from, const QCStri
 	return KoFilter::OK; // was successful
 }
 
-void
-SvgImport::convert()
+void SvgImport::convert()
 {
 	SvgGraphicsContext *gc = new SvgGraphicsContext;
 	QDomElement docElem = inpdoc.documentElement();
@@ -133,9 +133,11 @@ SvgImport::convert()
 	double height	= !docElem.attribute( "height" ).isEmpty() ? parseUnit( docElem.attribute( "height" ), false, true, bbox ) : 841.0;
 	m_document.setWidth( width );
 	m_document.setHeight( height );
+
 	m_outerRect = m_document.boundingBox();
 
 	// undo y-mirroring
+	//m_debug->append(QString("%1\tUndo Y-mirroring.").arg(m_time.elapsed()));
 	if( !docElem.attribute( "viewBox" ).isEmpty() )
 	{
 		// allow for viewbox def with ',' or whitespace
@@ -146,9 +148,10 @@ SvgImport::convert()
 		m_outerRect.setWidth( m_outerRect.width() * ( points[2].toFloat() / width ) );
 		m_outerRect.setHeight( m_outerRect.height() * ( points[3].toFloat() / height ) );
 	}
+
 	m_gc.push( gc );
 	parseGroup( 0L, docElem );
-
+	
 	QWMatrix mat;
 	mat.scale( 1, -1 );
 	mat.translate( 0, -m_document.height() );
@@ -159,8 +162,10 @@ SvgImport::convert()
 
 #define DPI 90
 
-double
-SvgImport::toPercentage( QString s )
+// Helper functions
+// ---------------------------------------------------------------------------------------
+
+double SvgImport::toPercentage( QString s )
 {
 	if( s.endsWith( "%" ) )
 		return s.remove( '%' ).toDouble();
@@ -168,8 +173,7 @@ SvgImport::toPercentage( QString s )
 		return s.toDouble() * 100.0;
 }
 
-double
-SvgImport::fromPercentage( QString s )
+double SvgImport::fromPercentage( QString s )
 {
 	if( s.endsWith( "%" ) )
 		return s.remove( '%' ).toDouble() / 100.0;
@@ -177,9 +181,15 @@ SvgImport::fromPercentage( QString s )
 		return s.toDouble();
 }
 
+double SvgImport::getScalingFromMatrix( QWMatrix &matrix )
+{
+	double xscale = matrix.m11() + matrix.m12();
+	double yscale = matrix.m22() + matrix.m21();
+	return sqrt( xscale*xscale + yscale*yscale ) / sqrt( 2.0 );
+}
+
 // parses the number into parameter number
-const char *
-getNumber( const char *ptr, double &number )
+const char * getNumber( const char *ptr, double &number )
 {
 	int integer, exponent;
 	double decimal, frac;
@@ -238,9 +248,108 @@ getNumber( const char *ptr, double &number )
 	return ptr;
 }
 
+void SvgImport::addGraphicContext()
+{
+	SvgGraphicsContext *gc = new SvgGraphicsContext;
+	// set as default
+	if( m_gc.current() )
+		*gc = *( m_gc.current() );
+	m_gc.push( gc );
+}
 
-double
-SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
+void SvgImport::setupTransform( const QDomElement &e )
+{
+	SvgGraphicsContext *gc = m_gc.current();
+
+	QWMatrix mat = VPath::parseTransform( e.attribute( "transform" ) );
+	gc->matrix = mat * gc->matrix;
+}
+
+VObject* SvgImport::findObject( const QString &name, VGroup* group )
+{
+	if( ! group )
+		return 0L;
+
+	VObjectListIterator itr = group->objects();
+
+	for( uint objcount = 1; itr.current(); ++itr, objcount++ )
+		if( itr.current()->state() != VObject::deleted )
+		{
+			if( itr.current()->name() == name )
+				return itr.current();
+			
+			if( dynamic_cast<VGroup *>( itr.current() ) )
+			{
+				VObject *obj = findObject( name, dynamic_cast<VGroup *>( itr.current() ) );
+				if( obj )
+					return obj;
+			}
+		}
+	
+	return 0L;
+}
+
+VObject* SvgImport::findObject( const QString &name )
+{
+	QPtrVector<VLayer> vector;
+	m_document.layers().toVector( &vector );
+	for( int i = vector.count() - 1; i >= 0; i-- )
+	{
+		if ( vector[i]->state() != VObject::deleted )
+		{
+			VObject* obj = findObject( name, dynamic_cast<VGroup *>( vector[i] ) );
+			if( obj )
+				return obj;
+		}
+	}
+	
+	return 0L;
+}
+
+SvgImport::GradientHelper* SvgImport::findGradient( const QString &id, const QString &href)
+{
+	// check if gradient was already parsed, and return it 
+	if( m_gradients.contains( id ) )
+		return &m_gradients[ id ];
+
+	// check if gradient was stored for later parsing
+	if( !m_defs.contains( id ) )
+		return 0L;
+
+	QDomElement e = m_defs[ id ];
+	if(e.childNodes().count() == 0)
+	{
+		QString mhref = e.attribute("xlink:href").mid(1);
+		
+		if(m_defs.contains(mhref))
+			return findGradient(mhref, id);
+		else
+			return 0L;
+	}
+	else
+	{
+		// ok parse gradient now
+		parseGradient( m_defs[ id ], m_defs[ href ] );
+	}
+	
+	// return successfully parsed gradient or NULL
+	QString n;
+	if(href.isEmpty())
+		n = id;
+	else
+		n = href;
+
+	if( m_gradients.contains( n ) )
+		return &m_gradients[ n ];
+	else
+		return 0L;
+}
+
+
+// Parsing functions
+// ---------------------------------------------------------------------------------------
+
+double SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 {
 	// TODO : percentage?
 	double value = 0;
@@ -291,16 +400,14 @@ SvgImport::parseUnit( const QString &unit, bool horiz, bool vert, KoRect bbox )
 	return value;
 }
 
-QColor
-SvgImport::parseColor( const QString &rgbColor )
+QColor SvgImport::parseColor( const QString &rgbColor )
 {
 	int r, g, b;
 	keywordToRGB( rgbColor, r, g, b );
 	return QColor( r, g, b );
 }
 
-void
-SvgImport::parseColor( VColor &color, const QString &s )
+void SvgImport::parseColor( VColor &color, const QString &s )
 {
 	if( s.startsWith( "rgb(" ) )
 	{
@@ -348,8 +455,7 @@ SvgImport::parseColor( VColor &color, const QString &s )
 	}
 }
 
-void
-SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
+void SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
 {
 	VColor c;
 	for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
@@ -390,41 +496,63 @@ SvgImport::parseColorStops( VGradient *gradient, const QDomElement &e )
 				c.setOpacity( stop.attribute( "stop-opacity" ).toDouble() );
 			gradient->addStop( c, offset, 0.5 );
 		}
-	}
+	} 
 }
 
-void
-SvgImport::parseGradient( const QDomElement &e )
+void SvgImport::parseGradient( const QDomElement &e , const QDomElement &referencedBy)
 {
-	GradientHelper gradhelper;
-	gradhelper.gradient.clearStops();
-	gradhelper.gradient.setRepeatMethod( VGradient::none );
+	// IMPROVEMENTS:
+	// - Store the parsed colorstops in some sort of a cache so they don't need to be parsed again.
+	// - A gradient inherits attributes it does not have from the referencing gradient.
+	// - Gradients with no color stops have no fill or stroke.
+	// - Gradients with one color stop have a solid color.
+	
+	SvgGraphicsContext *gc = m_gc.current();
+	if( !gc ) return;
 
-	QString href = e.attribute( "xlink:href" ).mid( 1 );
-	if( !href.isEmpty() )
+	if(e.childNodes().count() == 0)
 	{
-		//kdDebug() << "Indexing with href : " << href.latin1() << endl;
-		// copy referenced gradient if it exist
-		if( m_gradients.find( href ) != m_gradients.end() )
-			gradhelper.gradient = m_gradients[ href ].gradient;
-		else
+		QString href = e.attribute("xlink:href").mid(1);
+		
+		if(href.isEmpty())
 		{
-			// save element for later parsing
-			m_defs.insert( e.attribute( "id" ), e );
+			//gc->fill.setType( VFill::none ); // <--- TODO Fill OR Stroke are none
 			return;
 		}
 	}
 
-	SvgGraphicsContext *gc = m_gc.current();
+	GradientHelper gradhelper;
+	gradhelper.gradient.clearStops();
+	gradhelper.gradient.setRepeatMethod( VGradient::none );
+
+	// Use the gradient that is referencing, or if there isn't one, the original gradient.
+	QDomElement b;
+	if( !referencedBy.isNull() )
+		b = referencedBy;
+	else
+		b = e;
+	
+	QString id = b.attribute("id");
+	if( !id.isEmpty() )
+	{ 
+		// Copy existing gradient if it exists
+		if( m_gradients.find( id ) != m_gradients.end() )
+			gradhelper.gradient = m_gradients[ id ].gradient;
+	}
+
+	gradhelper.bbox = b.attribute( "gradientUnits" ) != "userSpaceOnUse";
+
 	// parse color prop
-	VColor c = gc->color;
-	gradhelper.bbox = e.attribute( "gradientUnits" ) != "userSpaceOnUse";
-	if( !e.attribute( "color" ).isEmpty() )
-		parseColor( c, e.attribute( "color" ) );
+	VColor c = m_gc.current()->color;
+	
+	if( !b.attribute( "color" ).isEmpty() )
+	{
+		parseColor( c, b.attribute( "color" ) );
+	}
 	else
 	{
 		// try style attr
-		QString style = e.attribute( "style" ).simplifyWhiteSpace();
+		QString style = b.attribute( "style" ).simplifyWhiteSpace();
 		QStringList substyles = QStringList::split( ';', style );
 		for( QStringList::Iterator it = substyles.begin(); it != substyles.end(); ++it )
 		{
@@ -435,76 +563,61 @@ SvgImport::parseGradient( const QDomElement &e )
 				parseColor( c, params );
 		}
 	}
-	gc->color = c;
+	m_gc.current()->color = c;
 
-	if( e.tagName() == "linearGradient" )
+	if( b.tagName() == "linearGradient" )
 	{
 		if( gradhelper.bbox )
-		{
-			gradhelper.gradient.setOrigin( KoPoint( toPercentage( e.attribute( "x1", "0%" ) ), toPercentage( e.attribute( "y1", "0%" ) ) ) );
-			gradhelper.gradient.setVector( KoPoint( toPercentage( e.attribute( "x2", "100%" ) ), toPercentage( e.attribute( "y2", "0%" ) ) ) );
+		{			
+			gradhelper.gradient.setOrigin( KoPoint( toPercentage( b.attribute( "x1", "0%" ) ), toPercentage( b.attribute( "y1", "0%" ) ) ) );
+			gradhelper.gradient.setVector( KoPoint( toPercentage( b.attribute( "x2", "100%" ) ), toPercentage( b.attribute( "y2", "0%" ) ) ) );
 		}
 		else
 		{
-			gradhelper.gradient.setOrigin( KoPoint( e.attribute( "x1" ).toDouble(), e.attribute( "y1" ).toDouble() ) );
-			gradhelper.gradient.setVector( KoPoint( e.attribute( "x2" ).toDouble(), e.attribute( "y2" ).toDouble() ) );
+			gradhelper.gradient.setOrigin( KoPoint( b.attribute( "x1" ).toDouble(), b.attribute( "y1" ).toDouble() ) );
+			gradhelper.gradient.setVector( KoPoint( b.attribute( "x2" ).toDouble(), b.attribute( "y2" ).toDouble() ) );
 		}
+		gradhelper.gradient.setType( VGradient::linear );
 	}
 	else
 	{
 		if( gradhelper.bbox )
 		{
-			gradhelper.gradient.setOrigin( KoPoint( toPercentage( e.attribute( "cx", "50%" ) ), toPercentage( e.attribute( "cy", "50%" ) ) ) );
-			gradhelper.gradient.setVector( KoPoint( toPercentage( e.attribute( "cx", "50%" ) ) + toPercentage( e.attribute( "r", "50%" ) ),
-													toPercentage( e.attribute( "cy", "50%" ) ) ) );
-			gradhelper.gradient.setFocalPoint( KoPoint( toPercentage( e.attribute( "fx", "50%" ) ), toPercentage( e.attribute( "fy", "50%" ) ) ) );
+			gradhelper.gradient.setOrigin( KoPoint( toPercentage( b.attribute( "cx", "50%" ) ), toPercentage( b.attribute( "cy", "50%" ) ) ) );
+			gradhelper.gradient.setVector( KoPoint( toPercentage( b.attribute( "cx", "50%" ) ) + toPercentage( b.attribute( "r", "50%" ) ), toPercentage( b.attribute( "cy", "50%" ) ) ) );
+			gradhelper.gradient.setFocalPoint( KoPoint( toPercentage( b.attribute( "fx", "50%" ) ), toPercentage( b.attribute( "fy", "50%" ) ) ) );
 		}
 		else
 		{
-			gradhelper.gradient.setOrigin( KoPoint( e.attribute( "cx" ).toDouble(), e.attribute( "cy" ).toDouble() ) );
-			gradhelper.gradient.setFocalPoint( KoPoint( e.attribute( "fx" ).toDouble(), e.attribute( "fy" ).toDouble() ) );
-			gradhelper.gradient.setVector( KoPoint( e.attribute( "cx" ).toDouble() + e.attribute( "r" ).toDouble(), e.attribute( "cy" ).toDouble() ) );
+			gradhelper.gradient.setOrigin( KoPoint( b.attribute( "cx" ).toDouble(), b.attribute( "cy" ).toDouble() ) );
+			gradhelper.gradient.setFocalPoint( KoPoint( b.attribute( "fx" ).toDouble(), b.attribute( "fy" ).toDouble() ) );
+			gradhelper.gradient.setVector( KoPoint( b.attribute( "cx" ).toDouble() + b.attribute( "r" ).toDouble(), b.attribute( "cy" ).toDouble() ) );
 		}
 		gradhelper.gradient.setType( VGradient::radial );
 	}
 	// handle spread method
-	QString spreadMethod = e.attribute( "spreadMethod" );
+	QString spreadMethod = b.attribute( "spreadMethod" );
 	if( !spreadMethod.isEmpty() )
 	{
 		if( spreadMethod == "reflect" )
 			gradhelper.gradient.setRepeatMethod( VGradient::reflect );
 		else if( spreadMethod == "repeat" )
 			gradhelper.gradient.setRepeatMethod( VGradient::repeat );
+		else
+			gradhelper.gradient.setRepeatMethod( VGradient::none );
 	}
+	else
+		gradhelper.gradient.setRepeatMethod( VGradient::none );
+
+	// Parse the color stops. The referencing gradient does not have colorstops, 
+	// so use the stops from the gradient it references to (e in this case and not b)
 	parseColorStops( &gradhelper.gradient, e );
 	//gradient.setGradientTransform( parseTransform( e.attribute( "gradientTransform" ) ) );
-	gradhelper.gradientTransform = VPath::parseTransform( e.attribute( "gradientTransform" ) );
-	m_gradients.insert( e.attribute( "id" ), gradhelper );
+	gradhelper.gradientTransform = VPath::parseTransform( b.attribute( "gradientTransform" ) );
+	m_gradients.insert( b.attribute( "id" ), gradhelper );
 }
 
-SvgImport::GradientHelper* 
-SvgImport::findGradient( const QString &id )
-{
-	// check if gradient was already parsed, and return it 
-	if( m_gradients.contains( id ) )
-		return &m_gradients[ id ];
-
-	// check if gradient was stored for later parsing
-	if( ! m_defs.contains( id ) )
-		return 0L;
-
-	// ok parse gradient now
-	parseGradient( m_defs[ id ] );
-	
-	// return successfully parsed gradient or NULL
-	if( m_gradients.contains( id ) )
-		return &m_gradients[ id ];
-	else
-		return 0L;
-}
-
-void
-SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command, const QString &params )
+void SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command, const QString &params )
 {
 	VColor fillcolor = gc->fill.color();
 	VColor strokecolor = gc->stroke.color();
@@ -524,7 +637,7 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 			if( gradHelper )
 			{
 				gc->fill.gradient() = gradHelper->gradient;
-
+	
 				if( gradHelper->bbox )
 				{
 					// adjust to bbox
@@ -536,9 +649,12 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 					double offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().x() ), true, false, bbox );
 					double offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().origin().y() ), false, true, bbox );
 					gc->fill.gradient().setOrigin( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
-					offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().focalPoint().x() ), true, false, bbox );
-					offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().focalPoint().y() ), false, true, bbox );
-					gc->fill.gradient().setFocalPoint( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
+					if(gc->fill.gradient().type() == VGradient::radial)
+					{
+						offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().focalPoint().x() ), true, false, bbox );
+						offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().focalPoint().y() ), false, true, bbox );
+						gc->fill.gradient().setFocalPoint( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
+					}
 					offsetx = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().x() ), true, false, bbox );
 					offsety = parseUnit( QString( "%1%" ).arg( gc->fill.gradient().vector().y() ), false, true, bbox );
 					gc->fill.gradient().setVector( KoPoint( bbox.x() + offsetx, bbox.y() + offsety ) );
@@ -751,27 +867,7 @@ SvgImport::parsePA( VObject *obj, SvgGraphicsContext *gc, const QString &command
 		gc->stroke.setColor( strokecolor );
 }
 
-void
-SvgImport::addGraphicContext()
-{
-	SvgGraphicsContext *gc = new SvgGraphicsContext;
-	// set as default
-	if( m_gc.current() )
-		*gc = *( m_gc.current() );
-	m_gc.push( gc );
-}
-
-void
-SvgImport::setupTransform( const QDomElement &e )
-{
-	SvgGraphicsContext *gc = m_gc.current();
-
-	QWMatrix mat = VPath::parseTransform( e.attribute( "transform" ) );
-	gc->matrix = mat * gc->matrix;
-}
-
-void
-SvgImport::parseStyle( VObject *obj, const QDomElement &e )
+void SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 {
 	SvgGraphicsContext *gc = m_gc.current();
 	if( !gc ) return;
@@ -815,6 +911,9 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 		parsePA( obj, gc, command, params );
 	}
 
+	if(!obj)
+		return;
+
 	obj->setFill( gc->fill );
 	if( dynamic_cast<VPath *>( obj ) )
 		dynamic_cast<VPath *>( obj )->setFillRule( gc->fillRule );
@@ -825,8 +924,7 @@ SvgImport::parseStyle( VObject *obj, const QDomElement &e )
 	gc->stroke.setLineWidth( lineWidth );
 }
 
-void
-SvgImport::parseFont( const QDomElement &e )
+void SvgImport::parseFont( const QDomElement &e )
 {
 	SvgGraphicsContext *gc = m_gc.current();
 	if( !gc ) return;
@@ -841,18 +939,95 @@ SvgImport::parseFont( const QDomElement &e )
 		parsePA( 0L, m_gc.current(), "text-decoration", e.attribute( "text-decoration" ) );
 }
 
-void
-SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
+void SvgImport::parseUse( VGroup *grp, const QDomElement &e )
 {
-	bool isDef = false;
-	if( e.tagName() == "defs" )
-		isDef = true;
+	QString id = e.attribute( "xlink:href" );
 
+	if( !id.isEmpty() )
+	{
+		QString key = id.mid( 1 );
+
+		if( !e.attribute( "x" ).isEmpty() && !e.attribute( "y" ).isEmpty() )
+		{
+			double tx = e.attribute( "x" ).toDouble();
+			double ty = e.attribute( "y" ).toDouble();
+
+			m_gc.current()->matrix.reset();
+			m_gc.current()->matrix.translate(tx,ty);
+		}
+		else if( !e.attribute( "transform" ).isEmpty() )
+		{
+			QString xfrmStr = e.attribute( "transform" );
+			
+			int t = xfrmStr.find("translate");
+			int s = xfrmStr.find("scale");
+			int r = xfrmStr.find("rotate");
+
+			m_gc.current()->matrix.reset();
+
+			if(t > -1)
+			{
+				int tbegin = xfrmStr.find("(",t);
+				int tend = xfrmStr.find(",",tbegin);
+				double tx = xfrmStr.mid(tbegin+1,tend-tbegin-1).toDouble();
+				tbegin = tend+1;
+				tend = xfrmStr.find(")",tbegin);
+				double ty = xfrmStr.mid(tbegin,tend-tbegin).toDouble();
+				
+				m_gc.current()->matrix.translate(tx,ty);
+			}
+
+			if(s > -1)
+			{
+				int sbegin = xfrmStr.find("(",s);
+				int send = xfrmStr.find(")",sbegin);
+				double sx = xfrmStr.mid(sbegin+1,send-sbegin-1).toDouble();
+
+				m_gc.current()->matrix.scale(sx,-sx);
+			}
+
+			if(r > -1)
+			{
+				int rbegin = xfrmStr.find("(",r);
+				int rend = xfrmStr.find(")",rbegin);
+				double rx = xfrmStr.mid(rbegin+1,rend-rbegin-1).toDouble();
+
+				m_gc.current()->matrix.rotate(rx);
+			}
+
+		}
+
+		if(m_defs.contains(key))
+		{
+			QDomElement a = m_defs[key];
+			if(a.tagName() == "g" || a.tagName() == "a")
+				parseGroup( grp, a);
+			else
+				createObject( grp, a );
+		}
+		else
+			return;
+
+		// Names are not unique, so findObject(objectname) will not always give the correct results.
+		// Since we just created our object, it's the last one so get the last one.
+		VObject *obj = 0L;
+		if(grp)
+			obj = grp->objects().getLast(); //findObject(key, grp);
+		else
+			obj = m_document.activeLayer()->objects().getLast();
+
+		// Parse stroke and fill etc...
+		if(obj)
+			parseStyle( obj, e );
+	}
+}
+
+void SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
+{
 	for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
 	{
 		QDomElement b = n.toElement();
 		if( b.isNull() ) continue;
-		VObject *obj = 0L;
 		
 		// treat svg link <a> as group so we don't miss its child elements
 		if( b.tagName() == "g" || b.tagName() == "a" )
@@ -881,7 +1056,7 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 		}
 		if( b.tagName() == "defs" )
 		{
-			parseGroup( 0L, b ); 	// try for gradients at least
+			parseDefs( b );
 			continue;
 		}
 		else if( b.tagName() == "linearGradient" || b.tagName() == "radialGradient" )
@@ -889,99 +1064,50 @@ SvgImport::parseGroup( VGroup *grp, const QDomElement &e )
 			parseGradient( b );
 			continue;
 		}
-		else if( b.tagName() == "rect" ||
-				 b.tagName() == "ellipse" ||
-				 b.tagName() == "circle" ||
-				 b.tagName() == "line" ||
-				 b.tagName() == "polyline" ||
-				 b.tagName() == "polygon" ||
-				 b.tagName() == "path" ||
-				 b.tagName() == "image" )
+		if( b.tagName() == "rect" ||
+			b.tagName() == "ellipse" ||
+			b.tagName() == "circle" ||
+			b.tagName() == "line" ||
+			b.tagName() == "polyline" ||
+			b.tagName() == "polygon" ||
+			b.tagName() == "path" ||
+			b.tagName() == "image" )
 		{
-			if (!isDef)
-				obj = createObject( b );
-			else
-				m_defs.insert( b.attribute( "id" ), b );
+			createObject( grp, b );
+			continue;
 		}
 		else if( b.tagName() == "text" )
 		{
-			if( isDef )
-				m_defs.insert( b.attribute( "id" ), b );
-			else
-				createText( grp, b );
+			createText( grp, b );
+			continue;
 		}
 		else if( b.tagName() == "use" )
 		{
-			double tx = b.attribute( "x" ).toDouble();
-			double ty = b.attribute( "y" ).toDouble();
-
-			if( !b.attribute( "xlink:href" ).isEmpty() )
-			{
-				QString key = b.attribute( "xlink:href" ).mid( 1 );
-				if(m_defs.contains(key))
-				{
-					QDomElement a = m_defs[key];
-					obj = createObject( a );
-					setupTransform( b );
-					m_gc.current()->matrix.translate(tx,ty);
-				}
-			}
+			parseUse( grp, b );
+			continue;
 		}
-		if( !obj ) continue;
-		VTransformCmd trafo( 0L, m_gc.current()->matrix );
-		trafo.visit( *obj );
-		parseStyle( obj, b );
-		// handle id
-		if( !b.attribute("id").isEmpty() )
-			obj->setName( b.attribute("id") );
-		if( grp )
-			grp->append( obj );
-		else
-			m_document.append( obj );
-		delete( m_gc.pop() );
 	}
 }
 
-VObject* SvgImport::findObject( const QString &name, VGroup* group )
+void SvgImport::parseDefs( const QDomElement &e )
 {
-	if( ! group )
-		return 0L;
-
-	VObjectListIterator itr = group->objects();
-
-	for( uint objcount = 1; itr.current(); ++itr, objcount++ )
-		if( itr.current()->state() != VObject::deleted )
-		{
-			if( itr.current()->name() == name )
-				return itr.current();
-			
-			if( dynamic_cast<VGroup *>( itr.current() ) )
-			{
-				VObject *obj = findObject( name, dynamic_cast<VGroup *>( itr.current() ) );
-				if( obj ) 
-					return obj;
-			}
-		}
-	
-	return 0L;
-}
-
-VObject* SvgImport::findObject( const QString &name )
-{
-	QPtrVector<VLayer> vector;
-	m_document.layers().toVector( &vector );
-	for( int i = vector.count() - 1; i >= 0; i-- )
+	for( QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling() )
 	{
-		if ( vector[i]->state() != VObject::deleted )
+		QDomElement b = n.toElement();
+		if( b.isNull() ) continue;
+
+		QString definition = b.attribute( "id" );
+		if( !definition.isEmpty() )
 		{
-			VObject* obj = findObject( name, dynamic_cast<VGroup *>( vector[i] ) );
-			if( obj ) 
-				return obj;
+			if( !m_defs.contains( definition ) )
+				m_defs.insert( definition, b );
 		}
 	}
-	
-	return 0L;
 }
+
+
+// Creating functions
+// ---------------------------------------------------------------------------------------
 
 void SvgImport::createText( VGroup *grp, const QDomElement &b )
 {
@@ -1038,9 +1164,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 				else
 				{
 					QDomElement p = m_defs[key];
-					path = dynamic_cast<VPath*>( createObject( p ) );
-					if( path )
-						path->setState( VObject::deleted );
+					createObject( grp, p, VObject::deleted);
 				}
 				if( ! path )
 					continue;
@@ -1150,44 +1274,42 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 		else 
 			m_document.append( text );
 	}
+
 	delete( m_gc.pop() );
 }
 
-VObject* SvgImport::createObject( const QDomElement &b )
+void SvgImport::createObject( VGroup *grp, const QDomElement &b, const VObject::VState state )
 {
+	VObject *obj = 0L;
+
+	addGraphicContext();
+	setupTransform( b );
+
 	if( b.tagName() == "rect" )
 	{
-		addGraphicContext();
 		double x		= parseUnit( b.attribute( "x" ), true, false, m_outerRect );
 		double y		= parseUnit( b.attribute( "y" ), false, true, m_outerRect );
 		double width	= parseUnit( b.attribute( "width" ), true, false, m_outerRect );
 		double height	= parseUnit( b.attribute( "height" ), false, true, m_outerRect );
-		setupTransform( b );
-		return new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
+		obj = new VRectangle( 0L, KoPoint( x, height + y ) , width, height );
 	}
 	else if( b.tagName() == "ellipse" )
 	{
-		addGraphicContext();
-		setupTransform( b );
 		double rx		= parseUnit( b.attribute( "rx" ) );
 		double ry		= parseUnit( b.attribute( "ry" ) );
 		double left		= parseUnit( b.attribute( "cx" ) ) - rx;
 		double top		= parseUnit( b.attribute( "cy" ) ) - ry;
-		return new VEllipse( 0L, KoPoint( left, top ), rx * 2.0, ry * 2.0 );
+		obj = new VEllipse( 0L, KoPoint( left, top ), rx * 2.0, ry * 2.0 );
 	}
 	else if( b.tagName() == "circle" )
 	{
-		addGraphicContext();
-		setupTransform( b );
 		double r		= parseUnit( b.attribute( "r" ) );
 		double left		= parseUnit( b.attribute( "cx" ) ) - r;
 		double top		= parseUnit( b.attribute( "cy" ) ) - r;
-		return new VEllipse( 0L, KoPoint( left, top ), r * 2.0, r * 2.0 );
+		obj = new VEllipse( 0L, KoPoint( left, top ), r * 2.0, r * 2.0 );
 	}
 	else if( b.tagName() == "line" )
 	{
-		addGraphicContext();
-		setupTransform( b );
 		VPath *path = new VPath( &m_document );
 		double x1 = b.attribute( "x1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "x1" ) );
 		double y1 = b.attribute( "y1" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y1" ) );
@@ -1195,12 +1317,10 @@ VObject* SvgImport::createObject( const QDomElement &b )
 		double y2 = b.attribute( "y2" ).isEmpty() ? 0.0 : parseUnit( b.attribute( "y2" ) );
 		path->moveTo( KoPoint( x1, y1 ) );
 		path->lineTo( KoPoint( x2, y2 ) );
-		return path;
+		obj = path;
 	}
 	else if( b.tagName() == "polyline" || b.tagName() == "polygon" )
 	{
-		addGraphicContext();
-		setupTransform( b );
 		VPath *path = new VPath( &m_document );
 		bool bFirst = true;
 
@@ -1224,32 +1344,38 @@ VObject* SvgImport::createObject( const QDomElement &b )
 				path->lineTo( point );
 		}
 		if( b.tagName() == "polygon" ) path->close();
-		return path;
+		obj = path;
 	}
 	else if( b.tagName() == "path" )
 	{
-		addGraphicContext();
-		setupTransform( b );
 		VPath *path = new VPath( &m_document );
 		path->loadSvgPath( b.attribute( "d" ) );
-		return path;
+		obj = path;
 	}
 	else if( b.tagName() == "image" )
 	{
-		addGraphicContext();
-		setupTransform( b );
 		QString fname = b.attribute("xlink:href");
-		return new VImage( 0L, fname );
+		obj = new VImage( 0L, fname );
 	}
-	
-	return 0L;
-}
 
-double SvgImport::getScalingFromMatrix( QWMatrix &matrix )
-{
-	double xscale = matrix.m11() + matrix.m12();
-	double yscale = matrix.m22() + matrix.m21();
-	return sqrt( xscale*xscale + yscale*yscale ) / sqrt( 2.0 );
+	if( !obj ) 
+		return;
+
+	if (state != VObject::normal)
+		obj->setState(state);
+
+	VTransformCmd trafo( 0L, m_gc.current()->matrix );
+	trafo.visit( *obj );
+	parseStyle( obj, b );
+	// handle id
+	if( !b.attribute("id").isEmpty() )
+		obj->setName( b.attribute("id") );
+	if( grp )
+		grp->append( obj );
+	else
+		m_document.append( obj );
+
+	delete( m_gc.pop() );
 }
 
 #include <svgimport.moc>
