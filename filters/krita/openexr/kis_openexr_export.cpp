@@ -31,6 +31,7 @@
 #include "kis_doc.h"
 #include "kis_image.h"
 #include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_annotation.h"
 #include "kis_types.h"
 #include "kis_iterators_pixel.h"
@@ -62,7 +63,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QCString& from, const
         return KoFilter::NotImplemented;
     }
 
-    kdDebug() << "Krita exporting to OpenEXR\n";
+    kdDebug(41008) << "Krita exporting to OpenEXR\n";
 
     // XXX: Add dialog about flattening layers here
 
@@ -86,13 +87,13 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QCString& from, const
 
     img -> flatten();
 
-    KisLayerSP layer = img -> layer(0);
+    KisPaintLayerSP layer = (KisPaintLayer*)img->activeLayer().data();
     Q_ASSERT(layer);
     
     doc -> undoAdapter() -> setUndo(undo);
 
     //KisF32RgbColorSpace * cs = static_cast<KisF32RgbColorSpace *>((KisColorSpaceRegistry::instance() -> get(KisID("RGBAF32", ""))));
-    KisRgbF16HalfColorSpace *cs = dynamic_cast<KisRgbF16HalfColorSpace *>(layer -> colorSpace());
+    KisRgbF16HalfColorSpace *cs = dynamic_cast<KisRgbF16HalfColorSpace *>(layer->paintDevice()->colorSpace());
 
     if (cs == 0) {
         // We could convert automatically, but the conversion wants to be done with
@@ -123,7 +124,7 @@ KoFilter::ConversionStatus KisOpenEXRExport::convert(const QCString& from, const
 
         file.setFrameBuffer(pixels.data() - dataWindow.min.x - (dataWindow.min.y + y) * dataWidth, 1, dataWidth);
 
-        KisHLineIterator it = layer -> createHLineIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth, false);
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth, false);
         Rgba *rgba = pixels.data();
 
         while (!it.isDone()) {

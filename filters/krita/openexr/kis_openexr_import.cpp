@@ -39,6 +39,7 @@
 #include "kis_image.h"
 #include "kis_meta_registry.h"
 #include "kis_layer.h"
+#include "kis_paint_layer.h"
 #include "kis_annotation.h"
 #include "kis_colorspace_factory_registry.h"
 #include "kis_iterators_pixel.h"
@@ -68,7 +69,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
         return KoFilter::NotImplemented;
     }
 
-    kdDebug() << "\n\n\nKrita importing from OpenEXR\n";
+    kdDebug(41008) << "\n\n\nKrita importing from OpenEXR\n";
 
     KisDoc * doc = dynamic_cast<KisDoc*>(m_chain -> outputDocument());
     if (!doc) {
@@ -87,8 +88,8 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
     Box2i dataWindow = file.dataWindow();
     Box2i displayWindow = file.displayWindow();
 
-    kdDebug() << "Data window: " << QRect(dataWindow.min.x, dataWindow.min.y, dataWindow.max.x - dataWindow.min.x + 1, dataWindow.max.y - dataWindow.min.y + 1) << endl;
-    kdDebug() << "Display window: " << QRect(displayWindow.min.x, displayWindow.min.y, displayWindow.max.x - displayWindow.min.x + 1, displayWindow.max.y - displayWindow.min.y + 1) << endl;
+    kdDebug(41008) << "Data window: " << QRect(dataWindow.min.x, dataWindow.min.y, dataWindow.max.x - dataWindow.min.x + 1, dataWindow.max.y - dataWindow.min.y + 1) << endl;
+    kdDebug(41008) << "Display window: " << QRect(displayWindow.min.x, displayWindow.min.y, displayWindow.max.x - displayWindow.min.x + 1, displayWindow.max.y - displayWindow.min.y + 1) << endl;
 
     int imageWidth = displayWindow.max.x - displayWindow.min.x + 1;
     int imageHeight = displayWindow.max.y - displayWindow.min.y + 1;
@@ -112,7 +113,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
         return KoFilter::CreationError;
     }
 
-    KisLayerSP layer = image -> layerAdd(image -> nextLayerName(), OPACITY_OPAQUE);
+    KisPaintLayerSP layer = (KisPaintLayer*)(image->newLayer(image -> nextLayerName(), OPACITY_OPAQUE).data());
 
     if (layer == 0) {
         return KoFilter::CreationError;
@@ -125,7 +126,7 @@ KoFilter::ConversionStatus KisOpenEXRImport::convert(const QCString& from, const
         file.setFrameBuffer(pixels.data() - dataWindow.min.x - (dataWindow.min.y + y) * dataWidth, 1, dataWidth);
         file.readPixels(dataWindow.min.y + y);
 
-        KisHLineIterator it = layer -> createHLineIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth, true);
+        KisHLineIterator it = layer->paintDevice()->createHLineIterator(dataWindow.min.x, dataWindow.min.y + y, dataWidth, true);
         Rgba *rgba = pixels.data();
 
         while (!it.isDone()) {
