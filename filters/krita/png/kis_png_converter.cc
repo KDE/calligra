@@ -178,18 +178,17 @@ KisImageBuilder_Result KisPNGConverter::decode(const KURL& uri)
     int compression_type;
     png_uint_32 proflen;
     
-    png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen);
-    
     KisProfile* profile = 0;
-    QByteArray profile_rawdata;
-    // XXX: Hardcoded for icc type -- is that correct for us?
-    if (QString::compare(profile_name, "icc") == 0) {
-       
-        profile_rawdata.resize(proflen);
-        memcpy(profile_rawdata.data(), profile_data, proflen);
-
-        profile = new KisProfile(profile_rawdata);
-        Q_CHECK_PTR(profile);
+    if(png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen))
+    {
+        QByteArray profile_rawdata;
+        // XXX: Hardcoded for icc type -- is that correct for us?
+        if (QString::compare(profile_name, "icc") == 0) {
+            profile_rawdata.resize(proflen);
+            memcpy(profile_rawdata.data(), profile_data, proflen);
+            profile = new KisProfile(profile_rawdata);
+            Q_CHECK_PTR(profile);
+        }
     }
 
     // Retrieve a pointer to the colorspace
@@ -585,9 +584,9 @@ KisImageBuilder_Result KisPNGConverter::buildFile(const KURL& uri, KisPaintLayer
     // Free memory
     png_destroy_write_struct(&png_ptr, &info_ptr);
     for (int y = 0; y < height; y++) {
-        delete row_pointers[y];
+        delete[] row_pointers[y];
     }
-    delete row_pointers;
+    delete[] row_pointers;
 
     fclose(fp);
     
