@@ -365,7 +365,7 @@ void KivioView::createProtectionDock()
 void KivioView::createObjectListPalette()
 {
   m_objectListPalette = new Kivio::ObjectListPalette(this);
-  m_objectListPalette->setCaption("Stencils");
+  m_objectListPalette->setCaption("Objects");
   paletteManager()->addWidget(m_objectListPalette, "objectlistpalette", "birdeyedocker");
 }
 
