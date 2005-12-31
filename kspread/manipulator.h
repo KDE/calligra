@@ -109,9 +109,6 @@ public:
   FormatManipulator();
   virtual ~FormatManipulator();
 
-  virtual void execute();
-  virtual void unexecute();
-
   void setProperty(Format::Properties property) { m_properties |= property; }
   bool isEmpty() { return m_properties == 0; }
 
@@ -162,6 +159,9 @@ public:
 
 protected:
   virtual QString name() const { return i18n("Format Change"); }
+
+  virtual bool preProcessing();
+  virtual bool process(Element*);
 
   void copyFormat(QValueList<layoutCell> &list,
                   QValueList<layoutColumn> &listCol,

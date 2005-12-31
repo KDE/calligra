@@ -110,7 +110,7 @@ public:
   QString fileURL;
 
   // for undo/redo
-  bool undoLocked;
+  int undoLocked;
   KoCommandHistory* commandHistory;
 
   // true if loading is in process, otherwise false.
@@ -203,7 +203,7 @@ Doc::Doc( QWidget *parentWidget, const char *widgetName, QObject* parent, const 
   d->isLoading = false;
   d->numOperations = 1; // don't start repainting before the GUI is done...
 
-  d->undoLocked = false;
+  d->undoLocked = 0;
   d->commandHistory = new KoCommandHistory( actionCollection() );
   connect( d->commandHistory, SIGNAL( commandExecuted() ), SLOT( commandExecuted() ) );
   connect( d->commandHistory, SIGNAL( documentRestored() ), SLOT( documentRestored() ) );
@@ -311,36 +311,36 @@ bool Doc::initDoc(InitDocFlags flags, QWidget* parentWidget)
 
     if ( ret == KoTemplateChooseDia::File )
     {
-	KURL url( f );
+  KURL url( f );
 
-	bool ok=openURL(url);
+  bool ok=openURL(url);
 
-	while (KoDocument::isLoading())
-		kapp->processEvents();
+  while (KoDocument::isLoading())
+    kapp->processEvents();
 
-	return ok;
+  return ok;
 
 
     }
 
     if ( ret == KoTemplateChooseDia::Empty )
     {
-	KConfig *config = Factory::global()->config();
-	int _page=1;
-	if( config->hasGroup("Parameters" ))
-	{
-		config->setGroup( "Parameters" );
-		_page=config->readNumEntry( "NbPage",1 ) ;
-	}
+  KConfig *config = Factory::global()->config();
+  int _page=1;
+  if( config->hasGroup("Parameters" ))
+  {
+    config->setGroup( "Parameters" );
+    _page=config->readNumEntry( "NbPage",1 ) ;
+  }
 
-	for( int i=0; i<_page; i++ )
-		map()->addNewSheet ();
+  for( int i=0; i<_page; i++ )
+    map()->addNewSheet ();
 
-	resetURL();
-	setEmpty();
-	initConfig();
+  resetURL();
+  setEmpty();
+  initConfig();
         styleManager()->createBuiltinStyles();
-	return true;
+  return true;
     }
 
     if ( ret == KoTemplateChooseDia::Template )
@@ -670,7 +670,7 @@ bool Doc::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
 
     saveOasisAreaName( contentTmpWriter );
     contentTmpWriter.endElement(); ////office:spreadsheet
-	contentTmpWriter.endElement(); ////office:body
+  contentTmpWriter.endElement(); ////office:body
 
     // Done with writing out the contents to the tempfile, we can now write out the automatic styles
     contentWriter->startElement( "office:automatic-styles" );
@@ -1436,13 +1436,15 @@ void Doc::newZoomAndResolution( bool updateViews, bool /*forPrint*/ )
 
 void Doc::addCommand( KCommand* command )
 {
-    d->commandHistory->addCommand( command, false );
+  if (undoLocked()) return;
+  d->commandHistory->addCommand( command, false );
 }
 
 void Doc::addCommand( UndoAction* undo )
 {
-    UndoWrapperCommand* command = new UndoWrapperCommand( undo );
-    addCommand( command );
+  if (undoLocked()) return;
+  UndoWrapperCommand* command = new UndoWrapperCommand( undo );
+  addCommand( command );
 }
 
 void Doc::undo()
@@ -1467,17 +1469,17 @@ void Doc::documentRestored()
 
 void Doc::undoLock()
 {
-  d->undoLocked = true;
+  d->undoLocked++;
 }
 
 void Doc::undoUnlock()
 {
-  d->undoLocked = false;
+  d->undoLocked--;
 }
 
 bool Doc::undoLocked() const
 {
-  return d->undoLocked;
+  return (d->undoLocked > 0);
 }
 
 KoCommandHistory* Doc::commandHistory()
@@ -1715,17 +1717,17 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       // the pen that is of more "worth"
       if ( x >= KS_colMax )
         //paintBordersRight = true;
-	      paintBorder |= Cell::Border_Right;
+        paintBorder |= Cell::Border_Right;
       else
         if ( x == regionRight )
         {
-		paintBorder |= Cell::Border_Right;
+    paintBorder |= Cell::Border_Right;
           if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
             rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
         }
       else
       {
-	      paintBorder |= Cell::Border_Right;
+        paintBorder |= Cell::Border_Right;
         if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
           rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
       }
@@ -1733,51 +1735,51 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       // similiar for other borders...
       // bottom border:
       if ( y >= KS_rowMax )
-	      paintBorder |= Cell::Border_Bottom;
+        paintBorder |= Cell::Border_Bottom;
       else
         if ( y == regionBottom )
         {
-		paintBorder |= Cell::Border_Bottom;
+    paintBorder |= Cell::Border_Bottom;
           if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
             bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
         }
       else
       {
-	      paintBorder |= Cell::Border_Bottom;
+        paintBorder |= Cell::Border_Bottom;
         if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
           bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
       }
 
       // left border:
       if ( x == 1 )
-	      paintBorder |= Cell::Border_Left;
+        paintBorder |= Cell::Border_Left;
       else
         if ( x == regionLeft )
         {
-		paintBorder |= Cell::Border_Left;
+    paintBorder |= Cell::Border_Left;
           if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
             leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
         }
       else
       {
-	      paintBorder |= Cell::Border_Left;
+        paintBorder |= Cell::Border_Left;
         if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
           leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
       }
 
       // top border:
       if ( y == 1 )
-	      paintBorder |= Cell::Border_Top;
+        paintBorder |= Cell::Border_Top;
       else
         if ( y == regionTop )
         {
-		paintBorder |= Cell::Border_Top;
+    paintBorder |= Cell::Border_Top;
           if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
       else
       {
-	      paintBorder |= Cell::Border_Top;
+        paintBorder |= Cell::Border_Top;
         if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
           topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
       }
@@ -1790,7 +1792,7 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       QPen highlightPen;*/
 
       cell->paintCell(viewRegion,painter,view,dblCurrentCellPos,cellRef,paintBorder,
-		      rightPen,bottomPen,leftPen,topPen,false);
+          rightPen,bottomPen,leftPen,topPen,false);
 
 
       dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );
@@ -2195,14 +2197,14 @@ void Doc::insertSheet( Sheet * sheet )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((View*)it.current())->insertSheet( sheet );
+  ((View*)it.current())->insertSheet( sheet );
 }
 
 void Doc::takeSheet( Sheet * sheet )
 {
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((View*)it.current())->removeSheet( sheet );
+  ((View*)it.current())->removeSheet( sheet );
 }
 
 void Doc::addIgnoreWordAll( const QString & word)
@@ -2236,7 +2238,7 @@ void Doc::addView( KoView *_view )
     KoDocument::addView( _view );
     QPtrListIterator<KoView> it( views() );
     for (; it.current(); ++it )
-	((View*)it.current())->closeEditor();
+  ((View*)it.current())->closeEditor();
 }
 
 void Doc::addDamage( Damage* damage )

@@ -99,7 +99,6 @@ void ResizeRow::slotOk()
     // TODO Stefan:
     manipulator->setOldSize(rowHeight);
     manipulator->add(*m_pView->selectionInfo());
-    m_pView->doc()->addCommand( manipulator );
     manipulator->execute();
   }
   accept();
@@ -162,7 +161,6 @@ void ResizeColumn::slotOk()
     // TODO Stefan:
     manipulator->setOldSize(columnWidth);
     manipulator->add(*m_pView->selectionInfo());
-    m_pView->doc()->addCommand( manipulator );
     manipulator->execute();
   }
   accept();

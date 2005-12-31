@@ -1623,7 +1623,6 @@ void Sheet::setSelectionFont( Selection* selectionInfo,
   manipulator->setFontStrike(_strike);
   manipulator->setFontUnderline(_underline);
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -1642,7 +1641,6 @@ void Sheet::setSelectionSize(Selection* selectionInfo,
   manipulator->setProperty(Format::PFont);
   manipulator->setFontSize(_size+size);
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -1776,7 +1774,6 @@ void Sheet::setSelectionAngle( Selection* selectionInfo,
   manipulator->setProperty(Format::PAngle);
   manipulator->setAngle(_value);
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -1815,7 +1812,6 @@ void Sheet::setSelectionTextColor( Selection* selectionInfo,
   manipulator->setProperty(Format::PTextPen);
   manipulator->setTextColor(tb_Color);
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -1827,7 +1823,6 @@ void Sheet::setSelectionbgColor( Selection* selectionInfo,
   manipulator->setProperty(Format::PBackgroundColor);
   manipulator->setBackgroundColor(bg_Color);
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -2543,7 +2538,6 @@ void Sheet::hideRow(const Region& region)
   manipulator->setSheet(this);
   manipulator->setManipulateRows(true);
   manipulator->add(region);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -2560,7 +2554,6 @@ void Sheet::showRow(const Region& region)
   manipulator->setManipulateRows(true);
   manipulator->setReverse(true);
   manipulator->add(region);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -2571,7 +2564,6 @@ void Sheet::hideColumn(const Region& region)
   manipulator->setSheet(this);
   manipulator->setManipulateColumns(true);
   manipulator->add(region);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -2588,7 +2580,6 @@ void Sheet::showColumn(const Region& region)
   manipulator->setManipulateColumns(true);
   manipulator->setReverse(true);
   manipulator->add(region);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -2896,7 +2887,6 @@ void Sheet::borderBottom( Selection* selectionInfo, const QColor &_color )
   manipulator->setSheet(this);
   manipulator->setBottomBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -2906,7 +2896,6 @@ void Sheet::borderRight( Selection* selectionInfo, const QColor &_color )
   manipulator->setSheet(this);
   manipulator->setRightBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -2916,7 +2905,6 @@ void Sheet::borderLeft( Selection* selectionInfo, const QColor &_color )
   manipulator->setSheet(this);
   manipulator->setLeftBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -2926,7 +2914,6 @@ void Sheet::borderTop( Selection* selectionInfo, const QColor &_color )
   manipulator->setSheet(this);
   manipulator->setTopBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -2939,7 +2926,6 @@ void Sheet::borderOutline( Selection* selectionInfo, const QColor &_color )
   manipulator->setLeftBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->setRightBorderPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -2955,7 +2941,6 @@ void Sheet::borderAll( Selection * selectionInfo,
   manipulator->setHorizontalPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->setVerticalPen(QPen(_color, 1, Qt::SolidLine));
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -2970,7 +2955,6 @@ void Sheet::borderRemove( Selection* selectionInfo )
   manipulator->setHorizontalPen(QPen(Qt::NoPen));
   manipulator->setVerticalPen(QPen(Qt::NoPen));
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -4170,7 +4154,6 @@ void Sheet::setSelectionAlign( Selection* selectionInfo,
   manipulator->setProperty(Format::PAlign);
   manipulator->setHorizontalAlignment(_align);
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -4182,7 +4165,6 @@ void Sheet::setSelectionAlignY( Selection* selectionInfo,
   manipulator->setProperty(Format::PAlignY);
   manipulator->setVerticalAlignment(_alignY);
   manipulator->add(*selectionInfo);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -4443,7 +4425,6 @@ void Sheet::adjustArea(const Region& region)
   manipulator->setAdjustColumn(true);
   manipulator->setAdjustRow(true);
   manipulator->add(region);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -4453,7 +4434,6 @@ void Sheet::adjustColumn(const Region& region)
   manipulator->setSheet(this);
   manipulator->setAdjustColumn(true);
   manipulator->add(region);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -4463,7 +4443,6 @@ void Sheet::adjustRow(const Region& region)
   manipulator->setSheet(this);
   manipulator->setAdjustRow(true);
   manipulator->add(region);
-  doc()->addCommand(manipulator);
   manipulator->execute();
 }
 
@@ -5536,7 +5515,6 @@ void Sheet::mergeCells(const Region& region)
   Manipulator* manipulator = new MergeManipulator();
   manipulator->setSheet(this);
   manipulator->add(region);
-  doc()->addCommand( manipulator );
   manipulator->execute();
 }
 
@@ -5551,7 +5529,6 @@ void Sheet::dissociateCells(const Region& region)
   Manipulator* manipulator = new DissociateManipulator();
   manipulator->setSheet(this);
   manipulator->add(region);
-  doc()->addCommand( manipulator );
   manipulator->execute();
 }
 

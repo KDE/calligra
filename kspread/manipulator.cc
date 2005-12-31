@@ -40,9 +40,9 @@
 
 using namespace KSpread;
 
-// TODO Stefan: SubTotal	(neither NCS nor undo)
-// TODO Stefan: Conditional	(neither NCS nor undo)
-// TODO Stefan: Validity	(undo doesn't work)
+// TODO Stefan: SubTotal  (neither NCS nor undo)
+// TODO Stefan: Conditional (neither NCS nor undo)
+// TODO Stefan: Validity  (undo doesn't work)
 
 // TODO Stefan: AutoSum ?
 // TODO Stefan: FillSelection ?
@@ -61,9 +61,9 @@ using namespace KSpread;
 // TODO Stefan: InsertColumn
 // TODO Stefan: InsertRow
 
-// TODO Stefan: RemoveComment	(works, but not a manipulator yet)
-// TODO Stefan: ClearText	(works, but not a manipulator yet)
-// TODO Stefan: ClearValidity	(works, but not a manipulator yet)
+// TODO Stefan: RemoveComment (works, but not a manipulator yet)
+// TODO Stefan: ClearText (works, but not a manipulator yet)
+// TODO Stefan: ClearValidity (works, but not a manipulator yet)
 
 // TODO Stefan: more ????
 
@@ -94,14 +94,16 @@ void Manipulator::execute()
                 << "Manipulating all sheets of the region." << endl;
   }
 
-  m_sheet->doc()->emitBeginOperation();
-
   bool successfully = true;
   successfully = preProcessing();
   if (!successfully)
   {
     kdWarning() << "Manipulator::execute(): preprocessing was not successful!" << endl;
+    return;   // do nothing if pre-processing fails
   }
+
+  m_sheet->doc()->undoLock ();
+  m_sheet->doc()->emitBeginOperation();
 
   successfully = true;
   Region::Iterator endOfList(cells().end());
@@ -123,6 +125,12 @@ void Manipulator::execute()
   }
 
   m_sheet->doc()->emitEndOperation(*this);
+  m_sheet->doc()->undoUnlock ();
+  
+  // add me to undo if needed
+  if (!m_reverse)
+    // addCommand itself checks for undo lock
+    m_sheet->doc()->addCommand (this);
 }
 
 void Manipulator::unexecute()
@@ -169,11 +177,12 @@ bool Manipulator::process(Element* element)
       for (int row = range.top(); row <= range.bottom(); ++row)
       {
         Cell* cell = sheet->cellAt(col, row);
+/* (Tomas) don't force working on obscurring cells - most manipulators don't want this, and those that do can do that manually ... Plus I think that no manipulator should do it anyway ...
         if ( cell->isObscuringForced() )
         {
           cell = cell->obscuringCells().first();
         }
-
+*/
         //if (testCondition(cell))
         {
           if (cell == sheet->defaultCell() && m_creation)
@@ -256,26 +265,30 @@ FormatManipulator::~FormatManipulator()
   m_lstRedoRowFormats.clear();
 }
 
-void FormatManipulator::execute()
+bool FormatManipulator::preProcessing ()
 {
-  m_sheet->doc()->undoLock();
-  m_sheet->doc()->emitBeginOperation();
-  copyFormat( m_lstFormats, m_lstColFormats, m_lstRowFormats );
+  if (m_reverse)
+    copyFormat (m_lstRedoFormats, m_lstRedoColFormats, m_lstRedoRowFormats);
+  else
+    copyFormat (m_lstFormats, m_lstColFormats, m_lstRowFormats);
+  return true;
+}
 
-  Region::Iterator endOfList(cells().end());
-  for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
-  {
-    // see what is selected; if nothing, take marker position
-    QRect range = (*it)->rect().normalize();
-
+bool FormatManipulator::process (Element *element)
+{
+  // see what is selected; if nothing, take marker position
+  QRect range = element->rect().normalize();
+  
+  if (!m_reverse) {
+  
     int top = range.top();
     int left = range.left();
     int bottom = range.bottom();
     int right  = range.right();
-
+  
     // create cells in rows if complete columns selected
     Cell * cell;
-    if ( (*it)->isColumn() )
+    if ( element->isColumn() )
     {
       for ( RowFormat * row = m_sheet->firstRow(); row; row = row->next() )
       {
@@ -288,9 +301,9 @@ void FormatManipulator::execute()
         }
       }
     }
-
+  
     // complete rows selected ?
-    if ( (*it)->isRow() )
+    if ( element->isRow() )
     {
       for ( int row = top; row <= bottom; ++row )
       {
@@ -305,7 +318,7 @@ void FormatManipulator::execute()
       }
     }
     // complete columns selected ?
-    else if ( (*it)->isColumn() )
+    else if ( element->isColumn() )
     {
       for ( int col = left; col <= right; ++col )
       {
@@ -318,7 +331,7 @@ void FormatManipulator::execute()
         ColumnFormat * colFormat = m_sheet->nonDefaultColumnFormat( col );
         doWork(colFormat, false, false, col==left, col==right);
       }
-
+  
       for ( RowFormat * rowFormat = m_sheet->firstRow(); rowFormat; rowFormat = rowFormat->next() )
       {
         if ( !rowFormat->isDefault() && testCondition( rowFormat ) )
@@ -348,22 +361,10 @@ void FormatManipulator::execute()
         }
       }
     }
-  } // for Region::Elements
-
-  m_sheet->doc()->emitEndOperation(*this);
-  m_sheet->doc()->undoUnlock();
-}
-
-void FormatManipulator::unexecute()
-{
-  m_sheet->doc()->undoLock();
-  m_sheet->doc()->emitBeginOperation();
-  copyFormat( m_lstRedoFormats, m_lstRedoColFormats, m_lstRedoRowFormats );
-  Region::ConstIterator endOfList(cells().constEnd());
-  for (Region::ConstIterator it = cells().constBegin(); it != endOfList; ++it)
-  {
-    QRect range = (*it)->rect().normalize();
-    if( (*it)->isColumn() )
+  }
+  else
+  {  // undoing
+    if( element->isColumn() )
     {
       QValueList<layoutColumn>::Iterator it2;
       for ( it2 = m_lstColFormats.begin(); it2 != m_lstColFormats.end(); ++it2 )
@@ -372,7 +373,7 @@ void FormatManipulator::unexecute()
         col->copy( *(*it2).l );
       }
     }
-    else if( (*it)->isRow() )
+    else if( element->isRow() )
     {
       QValueList<layoutRow>::Iterator it2;
       for ( it2 = m_lstRowFormats.begin(); it2 != m_lstRowFormats.end(); ++it2 )
@@ -392,9 +393,7 @@ void FormatManipulator::unexecute()
       m_sheet->updateCell( cell, (*it2).col, (*it2).row );
     }
   }
-
-  m_sheet->doc()->emitEndOperation( *this );
-  m_sheet->doc()->undoUnlock();
+  return true;
 }
 
 void FormatManipulator::copyFormat(QValueList<layoutCell> & list,

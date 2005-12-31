@@ -967,6 +967,10 @@ void CellFormatDialog::slotApply()
     return;
   }
 
+  // (Tomas) TODO: this will be slow !!!
+  // We need to create a manipulator that would act as KMacroCommand,
+  // but which would also ensure that updates are not painted until everything
+  // is updated properly ...
   KMacroCommand* macroCommand = new KMacroCommand( i18n("Change Format") );
 
   if ( isMerged != positionPage->getMergedCellState() )
@@ -1029,11 +1033,7 @@ void CellFormatDialog::slotApply()
   }
 
   macroCommand->execute();
-
-  if ( !m_doc->undoLocked())
-  {
-    m_doc->addCommand( macroCommand );
-  }
+  m_doc->addCommand( macroCommand );
 
   // Update the toolbar (bold/italic/font...)
   m_pView->updateEditWidget();
