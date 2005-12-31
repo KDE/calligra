@@ -69,6 +69,11 @@ class KoTemplatesPane : public KoDetailsPaneBase
     /// Emited when the always use checkbox is selected
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
 
+    void splitterResized(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
+
+  public slots:
+    void resizeSplitter(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
+
   protected slots:
     void selectionChanged(QListViewItem* item);
     void openTemplate();
@@ -104,6 +109,11 @@ class KoRecentDocumentsPane : public KoDetailsPaneBase
 
   signals:
     void openFile(const QString&);
+
+    void splitterResized(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
+
+  public slots:
+    void resizeSplitter(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
 
   protected slots:
     void selectionChanged(QListViewItem* item);

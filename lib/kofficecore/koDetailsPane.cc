@@ -28,6 +28,7 @@
 #include <qpainter.h>
 #include <qsimplerichtext.h>
 #include <qevent.h>
+#include <qsplitter.h>
 
 #include <kinstance.h>
 #include <klocale.h>
@@ -87,6 +88,7 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
   d = new KoTemplatesPanePrivate;
   d->m_instance = instance;
   m_previewLabel->installEventFilter(this);
+  m_documentList->installEventFilter(this);
   KGuiItem openGItem(i18n("Use This Template"));
   m_openButton->setGuiItem(openGItem);
   setFocusProxy(m_openButton);
@@ -237,7 +239,21 @@ bool KoTemplatesPane::eventFilter(QObject* watched, QEvent* e)
     }
   }
 
+  if(watched == m_documentList) {
+    if((e->type() == QEvent::Resize) && isShown()) {
+      emit splitterResized(this, m_splitter->sizes());
+    }
+  }
+
   return false;
+}
+
+void KoTemplatesPane::resizeSplitter(KoDetailsPaneBase* sender, const QValueList<int>& sizes)
+{
+  if(sender == this)
+    return;
+
+  m_splitter->setSizes(sizes);
 }
 
 
@@ -265,6 +281,7 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
   d = new KoRecentDocumentsPanePrivate;
   d->m_instance = instance;
   m_previewLabel->installEventFilter(this);
+  m_documentList->installEventFilter(this);
   KGuiItem openGItem(i18n("Open This Document"), "fileopen");
   m_openButton->setGuiItem(openGItem);
   setFocusProxy(m_openButton);
@@ -440,7 +457,21 @@ bool KoRecentDocumentsPane::eventFilter(QObject* watched, QEvent* e)
     }
   }
 
+  if(watched == m_documentList) {
+    if((e->type() == QEvent::Resize) && isShown()) {
+      emit splitterResized(this, m_splitter->sizes());
+    }
+  }
+
   return false;
+}
+
+void KoRecentDocumentsPane::resizeSplitter(KoDetailsPaneBase* sender, const QValueList<int>& sizes)
+{
+  if(sender == this)
+    return;
+
+  m_splitter->setSizes(sizes);
 }
 
 #include "koDetailsPane.moc"

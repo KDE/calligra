@@ -29,6 +29,7 @@ class KInstance;
 class QPixmap;
 class KListViewItem;
 class KoTemplatesPane;
+class KoDetailsPaneBase;
 
 class KoOpenPane : public KoOpenPaneBase
 {
@@ -54,12 +55,18 @@ class KoOpenPane : public KoOpenPaneBase
 
     void selectionChanged(QListViewItem* item);
 
+    /// Saves the splitter sizes for KoDetailsPaneBase based panes
+    void saveSplitterSizes(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
+
   signals:
     void openExistingFile(const QString&);
     void openTemplate(const QString&);
 
     /// Emitted when the always use template has changed
     void alwaysUseChanged(KoTemplatesPane* sender, const QString& alwaysUse);
+
+    /// Emitted when one of the detail panes have changed it's splitter
+    void splitterResized(KoDetailsPaneBase* sender, const QValueList<int>& sizes);
 
   protected:
     void initRecentDocs();
