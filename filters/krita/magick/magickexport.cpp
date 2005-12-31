@@ -22,7 +22,7 @@
 #include <koFilterChain.h>
 
 #include <kis_doc.h>
-#include <kis_layer.h>
+#include <kis_paint_layer.h>
 #include <kis_image.h>
 #include <kis_annotation.h>
 #include <kis_types.h>
@@ -41,7 +41,7 @@ MagickExport::~MagickExport()
 
 KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCString& to)
 {
-    kdDebug() << "magick export! From: " << from << ", To: " << to << "\n";
+    kdDebug(41008) << "magick export! From: " << from << ", To: " << to << "\n";
     
     if (from != "application/x-krita")
         return KoFilter::NotImplemented;
@@ -59,7 +59,7 @@ KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCS
 
     KURL url(filename);
 
-    KisLayerSP dst;
+    KisPaintLayerSP dst;
 
     KisImageSP img = new KisImage(*output->currentImage());
     Q_CHECK_PTR(img);
@@ -72,7 +72,7 @@ KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCS
 
     img->flatten();
 
-    dst = img->layer(0);
+    dst = (KisPaintLayer*)img->activeLayer().data();
     Q_ASSERT(dst);
     
     output->undoAdapter()->setUndo(undo);
