@@ -27,7 +27,7 @@
 class KPrGradient;
 class DCOPObject;
 
-class KPrKPPieObject : public KPr2DObject
+class KPrKPPieObject : public KPr2DObject, public KPrStartEndLine
 {
 public:
     KPrKPPieObject();
@@ -91,6 +91,7 @@ public:
 protected:
     virtual const char * getOasisElementName() const;
     virtual bool saveOasisObjectAttributes( KPOasisSaveContext &sc ) const;
+    virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     virtual void paint( QPainter *_painter, KoTextZoomHandler*_zoomHandler,
                         int /* pageNum */, bool drawingShadow, bool drawContour );
@@ -102,7 +103,6 @@ protected:
 
     PieType pieType;
     int p_angle, p_len;
-    LineEnd lineBegin, lineEnd;
 };
 
 #endif

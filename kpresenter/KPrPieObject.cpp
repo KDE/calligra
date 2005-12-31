@@ -38,13 +38,12 @@
 using namespace std;
 
 KPrKPPieObject::KPrKPPieObject()
-    : KPr2DObject()
+: KPr2DObject()
+, KPrStartEndLine( L_NORMAL, L_NORMAL )
 {
     pieType = PT_PIE;
     p_angle = 45 * 16;
     p_len = 270 * 16;
-    lineBegin = L_NORMAL;
-    lineEnd = L_NORMAL;
 }
 
 KPrKPPieObject::KPrKPPieObject( const KPrPen &_pen, const QBrush &_brush, FillType _fillType,
@@ -52,13 +51,12 @@ KPrKPPieObject::KPrKPPieObject( const KPrPen &_pen, const QBrush &_brush, FillTy
                           PieType _pieType, int _p_angle, int _p_len,
                           LineEnd _lineBegin, LineEnd _lineEnd,
                           bool _unbalanced, int _xfactor, int _yfactor )
-    : KPr2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
+: KPr2DObject( _pen, _brush, _fillType, _gColor1, _gColor2, _gType, _unbalanced, _xfactor, _yfactor )
+, KPrStartEndLine( _lineBegin, _lineEnd )
 {
     pieType = _pieType;
     p_angle = _p_angle;
     p_len = _p_len;
-    lineBegin = _lineBegin;
-    lineEnd = _lineEnd;
 }
 
 DCOPObject* KPrKPPieObject::dcopObject()
@@ -76,10 +74,7 @@ KPrKPPieObject &KPrKPPieObject::operator=( const KPrKPPieObject & )
 QDomDocumentFragment KPrKPPieObject::save( QDomDocument& doc, double offset )
 {
     QDomDocumentFragment fragment=KPr2DObject::save(doc, offset);
-    if (lineBegin!=L_NORMAL)
-        fragment.appendChild(KPrObject::createValueElement("LINEBEGIN", static_cast<int>(lineBegin), doc));
-    if (lineEnd!=L_NORMAL)
-        fragment.appendChild(KPrObject::createValueElement("LINEEND", static_cast<int>(lineEnd), doc));
+    KPrStartEndLine::save( fragment, doc );
     if (p_angle!=720)
         fragment.appendChild(KPrObject::createValueElement("PIEANGLE", p_angle, doc));
     if (p_len!=1440)
@@ -113,6 +108,19 @@ bool KPrKPPieObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
     sc.xmlWriter.addAttribute( "draw:end-angle", endangle );
 
     return true;
+}
+
+void KPrKPPieObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const
+{
+    KPrShadowObject::fillStyle( styleObjectAuto, mainStyles );
+    if ( pieType == PT_ARC )
+    {
+        saveOasisMarkerElement( mainStyles, styleObjectAuto );
+    }
+    else
+    {
+        saveOasisBackgroundElement( styleObjectAuto, mainStyles );
+    }
 }
 
 const char * KPrKPPieObject::getOasisElementName() const
@@ -149,67 +157,18 @@ void KPrKPPieObject::loadOasis(const QDomElement &element, KoOasisContext & cont
         p_len = (  ( end - start ) * 16 );
 
     kdDebug()<<"KPrKPPieObject::loadOasis(const QDomElement &element) : p_angle :"<<p_angle<<" p_len :"<<p_len<<endl;
-    KoStyleStack & styleStack = context.styleStack();
-    styleStack.setTypeProperties( "" );
-
-    //fixme !!!!!!
-    //we use value use into oo and not style (see kplineobject)
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "marker-start" ) )
+    if ( pieType == PT_ARC )
     {
-        QString type = styleStack.attributeNS( KoXmlNS::draw, "marker-start" );
-        kdDebug()<<"type arrow start :"<<type<<endl;
-        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
-             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
-            lineBegin =  L_ARROW;
-        else if ( type == "Square" )
-            lineBegin =  L_SQUARE;
-        else if ( type == "Circle" || type == "Square 45" )
-            lineBegin = L_CIRCLE;
-        else if ( type == "Line Arrow" )
-            lineBegin = L_LINE_ARROW;
-        else if ( type == "Dimension Lines" )
-            lineBegin = L_DIMENSION_LINE;
-        else if ( type == "Double Arrow" )
-            lineBegin = L_DOUBLE_LINE_ARROW;
-    }
-    if ( styleStack.hasAttributeNS( KoXmlNS::draw, "marker-end" ) )
-    {
-        QString type = styleStack.attributeNS( KoXmlNS::draw, "marker-end" );
-        kdDebug()<<"type arrow end :"<<type<<endl;
-        if ( type == "Arrow" || type == "Small Arrow" || type == "Rounded short Arrow" ||
-             type == "Symmetric Arrow" || type == "Rounded large Arrow" || type == "Arrow concave" )
-            lineEnd =  L_ARROW;
-        else if ( type == "Square" )
-            lineEnd =  L_SQUARE;
-        else if ( type == "Circle" || type == "Square 45" )
-            lineEnd = L_CIRCLE;
-        else if ( type == "Line Arrow" )
-            lineEnd = L_LINE_ARROW;
-        else if ( type == "Dimension Lines" )
-            lineEnd = L_DIMENSION_LINE;
-        else if ( type == "Double Arrow" )
-            lineEnd = L_DOUBLE_LINE_ARROW;
+        loadOasisMarkerElement( context, "marker-start", lineBegin );
+        loadOasisMarkerElement( context, "marker-end", lineEnd );
     }
 }
 
 double KPrKPPieObject::load(const QDomElement &element)
 {
     double offset=KPr2DObject::load(element);
-    QDomElement e=element.namedItem("LINEBEGIN").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        lineBegin=static_cast<LineEnd>(tmp);
-    }
-    e=element.namedItem("LINEEND").toElement();
-    if(!e.isNull()) {
-        int tmp=0;
-        if(e.hasAttribute("value"))
-            tmp=e.attribute("value").toInt();
-        lineEnd=static_cast<LineEnd>(tmp);
-    }
-    e=element.namedItem("PIEANGLE").toElement();
+    KPrStartEndLine::load( element );
+    QDomElement e=element.namedItem("PIEANGLE").toElement();
     if(!e.isNull()) {
         int tmp=0;
         if(e.hasAttribute("value"))
