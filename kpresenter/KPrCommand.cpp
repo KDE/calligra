@@ -923,6 +923,15 @@ void KPrPenCmd::applyPen( KPrObject *object, Pen *tmpPen )
                 obj->setLineEnd( tmpPen->lineEnd );
             }
         } break;
+        case OT_AUTOFORM:
+        {
+            KPrAutoformObject *obj = dynamic_cast<KPrAutoformObject*>( object );
+            if ( obj )
+            {
+                obj->setLineBegin( tmpPen->lineBegin );
+                obj->setLineEnd( tmpPen->lineEnd );
+            }
+        } break;
         default:
             break;
     }
@@ -989,6 +998,15 @@ void KPrPenCmd::addObjects( const QPtrList<KPrObject> &_objects )
                 case OT_PIE:
                 {
                     KPrKPPieObject *obj = dynamic_cast<KPrKPPieObject*>( object );
+                    if ( obj )
+                    {
+                        lineBegin = obj->getLineBegin();
+                        lineEnd = obj->getLineEnd();
+                    }
+                } break;
+                case OT_AUTOFORM:
+                {
+                    KPrAutoformObject *obj = dynamic_cast<KPrAutoformObject*>( object );
                     if ( obj )
                     {
                         lineBegin = obj->getLineBegin();
