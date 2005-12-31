@@ -72,3 +72,7 @@ Kivio 1.4.x -> 1.5
 - Fix loading of remote documents
 - Port to KoPalette and cleaned up the palettes (toolwindows)
 - Make it possible to rearrange the pages with d'n'd in the tab bar
+- New stencil text editor
+- Added an object list palette
+- Made the old stencil set toolwindow a dialog and cleaned it up a bit
+- Made text properties editable for each textbox and not only each stencil
