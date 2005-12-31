@@ -93,8 +93,6 @@ void KoToolBox::registerTool( KAction *tool, int toolType, Q_UINT32 priority )
 
 QToolButton *KoToolBox::createButton(QWidget * parent,  const char* iconName, QString tooltip)
 {
-    kdDebug() << "Tool icon name: " << iconName << "\n";
-
     QToolButton *button = new QToolButton(parent);
 
     if ( iconName != "" ) {
