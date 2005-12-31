@@ -35,7 +35,10 @@ action="simul">&Ctrl;<keycap>N</keycap></keycombo></shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>New</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Creates a new document.</action></para></listitem>
+<listitem><para><action>Creates a new document.</action> This displays the
+new document window standard across &koffice;, in which you can choose to start
+with a blank document of a certain type, or to open a recently opened
+document.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -45,7 +48,11 @@ action="simul">&Ctrl;<keycap>O</keycap></keycombo></shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Open</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens an existing document.</action></para></listitem>
+<listitem><para><action>Opens an existing document.</action>
+Because this uses the usual &kde; <guilabel>Open Document</guilabel>
+window to let you select a file, you can open files via various protocols
+(ftp, fish, etcetera).
+</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -53,8 +60,10 @@ action="simul">&Ctrl;<keycap>O</keycap></keycombo></shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Open Recent</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens a recently opened
-document.</action></para></listitem>
+<listitem><para><action>Opens a recently
+opened document.</action> Clicking this menu item will show a 
+submenu with the ten most recently opened documents in which
+you can quickly open an image you have been working on lately.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -64,7 +73,10 @@ action="simul">&Ctrl;<keycap>S</keycap></keycombo></shortcut>
 <guimenu>File</guimenu>
 <guimenuitem>Save</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Saves the document.</action></para></listitem>
+<listitem><para><action>Saves the document.</action> If you
+haven't saved the document before, you will get the <guilabel>Save
+Document As</guilabel> dialog, otherwise the document will be saved under
+its current name. </para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -73,7 +85,8 @@ action="simul">&Ctrl;<keycap>S</keycap></keycombo></shortcut>
 <guimenuitem>Save As...</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Saves the document under a different name.</action>
-</para></listitem>
+The default &kde; dialog is used, so saving remotely via ftp
+or ssh (fish) is perfectly possible.</para> </listitem>
 </varlistentry>
 
 <varlistentry>
@@ -82,7 +95,8 @@ action="simul">&Ctrl;<keycap>S</keycap></keycombo></shortcut>
 <guimenuitem>Reload</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Reloads the current document
-from disk.</action></para></listitem>
+from disk.</action> All changes since you last saved the document
+will be lost.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -90,7 +104,10 @@ from disk.</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Import</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens an existing document.</action>
+<listitem><para><action>Opens an existing document.</action> (For the moment,
+this is the same as
+<menuchoice><guimenu>File</guimenu><guimenuitem>Open</guimenuitem></menuchoice>.
+)
 </para></listitem>
 </varlistentry>
 
@@ -99,7 +116,10 @@ from disk.</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Export</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Saves the document under a different name.</action>
+<listitem><para><action>Saves the document under a different name.</action> (For
+the moment, this is the same as
+<menuchoice><guimenu>File</guimenu><guimenuitem>Save
+As...</guimenuitem></menuchoice>.)
 </para></listitem>
 </varlistentry>
 
@@ -127,8 +147,10 @@ will look like.</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Document Information</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Opens the Document Information
-dialog.</action></para></listitem>
+<listitem><para><action>Opens the <guilabel>Document Information</guilabel>
+dialog.</action> This dialog can be used to add various
+information to the image, like title, subject, keywords, author information,
+and any other information you want to save with the image.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -136,8 +158,8 @@ dialog.</action></para></listitem>
 <guimenu>File</guimenu>
 <guimenuitem>Mail...</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Sends the document via
-e-mail.</action></para></listitem>
+<listitem><para><action>Sends the document via email.</action> The default &kde;
+mail compose window will be used.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -180,8 +202,11 @@ action="simul">&Ctrl;<keycap>Z</keycap></keycombo></shortcut>
 <guimenu>Edit</guimenu>
 <guimenuitem>Undo</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Undos the last action
-carried out.</action></para></listitem>
+<listitem><para><action>Undoes the last action carried out.</action> Actions
+(like painting a stroke, filling an area, etcetera) are stored on
+a <quote>stack</quote>. The last action you did will be undone, and the image is
+restored to the state before that. Choosing <guimenuitem>Undo</guimenuitem> 
+again will undo the action before that, etcetera.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -191,8 +216,11 @@ action="simul">&Ctrl;&Shift;<keycap>Z</keycap></keycombo></shortcut>
 <guimenu>Edit</guimenu>
 <guimenuitem>Redo</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Carries out the last undone
-action.</action></para></listitem>
+<listitem><para><action>Redoes the last action undone.</action> As described at
+<guimenuitem>Undo</guimenuitem>, a series of actions can be undone. With
+<guimenuitem>Redo</guimenuitem>, an action undone is carried out again, and if
+more actions have been undone before that, you can redo these in
+turn.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -203,7 +231,8 @@ action="simul">&Ctrl;<keycap>X</keycap></keycombo></shortcut>
 <guimenuitem>Cut</guimenuitem>
 </menuchoice></term>
 <listitem><para><action>Cuts the selection to the
-clipboard.</action></para></listitem>
+clipboard.</action> The current selection is put on the &kde; 
+clipboard, and the selection is cleared.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -252,7 +281,9 @@ action="simul">&Alt;&Backspace;</keycombo></shortcut>
 <guimenu>Edit</guimenu>
 <guimenuitem>Fill with Foreground Color</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Fills the selection with the current foreground color.</action></para></listitem>
+<listitem><para><action>Fills the selection with the current foreground
+color.</action> The current foreground color is shown in the top left color
+square of the <guilabel>Colors</guilabel> palette.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -261,7 +292,10 @@ action="simul">&Alt;&Backspace;</keycombo></shortcut>
 <guimenu>Edit</guimenu>
 <guimenuitem>Fill with Background Color</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Fills the selection with the current background color.</action></para></listitem>
+<listitem><para><action>Fills the selection with the current background
+color.</action> The current background color is shown in the bottom right color
+square in the top left corner of the <guilabel>Colors</guilabel>
+palette.</para></listitem>
 </varlistentry>
 
 <varlistentry>
@@ -269,7 +303,9 @@ action="simul">&Alt;&Backspace;</keycombo></shortcut>
 <guimenu>Edit</guimenu>
 <guimenuitem>Fill with Pattern</guimenuitem>
 </menuchoice></term>
-<listitem><para><action>Fills the selection with the current pattern.</action></para></listitem>
+<listitem><para><action>Fills the selection with the current pattern.</action>
+The current pattern is shown on the <guilabel>Brush shapes</guilabel> toolbar,
+usually at the top right of the &krita; window.</para></listitem>
 </varlistentry>
 
 </variablelist>
@@ -433,7 +469,11 @@ rulers on and off.</action></para></listitem>
 <guisubmenu>Palettes</guisubmenu>
 </menuchoice></term>
 <listitem><para><action>Allows you to toggle the
-display of the various palettes on and off.</action></para></listitem>
+display of the various palettes on and off.</action> The
+default view of &krita; shows all palettes, and the items are listed as Hide
+<replaceable>palette</replaceable> therefore. When a certain palette is hidden,
+the corresponding menu item changes to Show
+<replaceable>palette</replaceable>.</para></listitem>
 </varlistentry>
 
 <varlistentry>

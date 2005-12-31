@@ -86,7 +86,10 @@ linkend="commands-menus-edit"><guimenu>Edit</guimenu> menu</link>.</para>
 
 <para>This toolbar offers easy access to navigation actions. The two
 default actions available are <guilabel>Zoom In</guilabel> and
-<guilabel>Zoom Out</guilabel>.</para>
+<guilabel>Zoom Out</guilabel>. With <guilabel>Zoom In</guilabel>, the zoom 
+level is increased. You will see less, but in higher detail. With
+<guilabel>Zoom Out</guilabel>, the zoom level is decreased, so that you see
+more at less detail. </para>
 
 </sect2>
 
@@ -110,9 +113,11 @@ default actions available are <guilabel>Zoom In</guilabel> and
 
 <para>This toolbar contains actions to transform your image in certain
 ways. By default, there are four actions available on this toolbar:
-<guilabel>Flip on X axis</guilabel>, <guilabel>Flip on Y axis</guilabel>,
-<guilabel>Rotate Image CW</guilabel>, and <guilabel>Rotate Image
-CCW</guilabel>.</para>
+<guilabel>Flip on X axis</guilabel> flips the image vertically,
+<guilabel>Flip on Y axis</guilabel> flips the image horizontally,
+<guilabel>Rotate Image CW</guilabel> rotates the image 90 degrees clockwise
+(right), and <guilabel>Rotate Image CCW</guilabel> rotates the image 90 degrees
+counterclockwise (left).</para>
 
 </sect2>
 

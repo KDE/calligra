@@ -441,7 +441,7 @@ of at the current layer.
 </sect4>
 
 <sect4 id="commands-palettes-controlbox-tool-selectsimilar">
-<title><guilabel></guilabel></title>
+<title><guilabel>Select similar</guilabel></title>
 <para>The <guilabel>Action</guilabel> and <guilabel>Fuzziness</guilabel> 
 options are the same as with <link
 linkend="commands-palettes-controlbox-tool-selectcontiguous">Select
@@ -602,8 +602,8 @@ opacity corresponds to 100% transparency.
 </para><para>
 The list shows all layers and their names, and offers various controls for each
 layer. The eye icon toggles whether the layer is visible or not. The link icon
-is used to link layers together. The lock icon determines if the layer can be
-edited or not.
+is used to link layers together. The lock icon determines if the layer is
+locked or not. Locked layers cannot be edited.
 </para><para>
 Below the layer list, there are some other controls. You can create a new
 layer, move the current layer up or down, show the layer's properties and
