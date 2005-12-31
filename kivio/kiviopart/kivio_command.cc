@@ -153,12 +153,14 @@ KivioRemoveStencilCommand::KivioRemoveStencilCommand(const QString &_name, Kivio
 {
 }
 
-KivioChangeStencilTextCommand::KivioChangeStencilTextCommand( const QString &_name, KivioStencil *_stencil, const QString & _oldText, const QString & _newText, KivioPage *_page)
+KivioChangeStencilTextCommand::KivioChangeStencilTextCommand(const QString& _name, KivioStencil* _stencil,
+    const QString& _oldText, const QString& _newText, KivioPage* _page, const QString& textBoxName)
     : KNamedCommand( _name ),
-      m_stencil( _stencil),
-      oldText( _oldText ),
-      newText( _newText ),
-      m_page( _page)
+      m_stencil(_stencil),
+      oldText(_oldText),
+      newText(_newText),
+      m_page(_page),
+      m_textBoxName(textBoxName)
 {
 }
 
@@ -168,14 +170,24 @@ KivioChangeStencilTextCommand::~KivioChangeStencilTextCommand()
 
 void KivioChangeStencilTextCommand::execute()
 {
-    m_stencil->setText( newText );
-    m_page->doc()->updateView(m_page);
+  if(m_textBoxName.isEmpty()) {
+    m_stencil->setText(newText);
+  } else {
+    m_stencil->setText(newText, m_textBoxName);
+  }
+
+  m_page->doc()->updateView(m_page);
 }
 
 void KivioChangeStencilTextCommand::unexecute()
 {
-    m_stencil->setText( oldText );
-    m_page->doc()->updateView(m_page);
+  if(m_textBoxName.isEmpty()) {
+    m_stencil->setText(oldText);
+  } else {
+    m_stencil->setText(oldText, m_textBoxName);
+  }
+
+  m_page->doc()->updateView(m_page);
 }
 
 
@@ -313,12 +325,14 @@ void KivioChangeLayoutCommand::unexecute()
     m_page->setPaperLayout(oldLayout);
 }
 
-KivioChangeStencilHAlignmentCommand::KivioChangeStencilHAlignmentCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldAlign,  int _newAlign)
-    :KNamedCommand( _name),
+KivioChangeStencilHAlignmentCommand::KivioChangeStencilHAlignmentCommand(const QString& _name, KivioPage* _page,
+    KivioStencil* _stencil, int _oldAlign, int _newAlign, const QString& textBoxName)
+    : KNamedCommand(_name),
      m_page(_page),
-     m_stencil( _stencil ),
-     oldAlign( _oldAlign),
-     newAlign( _newAlign)
+     m_stencil(_stencil),
+     oldAlign(_oldAlign),
+     newAlign(_newAlign),
+     m_textBoxName(textBoxName)
 {
 }
 
@@ -328,24 +342,36 @@ KivioChangeStencilHAlignmentCommand::~KivioChangeStencilHAlignmentCommand()
 
 void KivioChangeStencilHAlignmentCommand::execute()
 {
-    m_stencil->setHTextAlign( newAlign );
-    m_page->doc()->updateView(m_page);
-    m_page->doc()->slotSelectionChanged();
+  if(m_textBoxName.isEmpty()) {
+    m_stencil->setHTextAlign(newAlign);
+  } else {
+    m_stencil->setHTextAlign(m_textBoxName, newAlign);
+  }
+
+  m_page->doc()->updateView(m_page);
+  m_page->doc()->slotSelectionChanged();
 }
 
 void KivioChangeStencilHAlignmentCommand::unexecute()
 {
-    m_stencil->setHTextAlign( oldAlign );
-    m_page->doc()->updateView(m_page);
-    m_page->doc()->slotSelectionChanged();
+  if(m_textBoxName.isEmpty()) {
+    m_stencil->setHTextAlign(newAlign);
+  } else {
+    m_stencil->setHTextAlign(m_textBoxName, newAlign);
+  }
+
+  m_page->doc()->updateView(m_page);
+  m_page->doc()->slotSelectionChanged();
 }
 
-KivioChangeStencilVAlignmentCommand::KivioChangeStencilVAlignmentCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldAlign,  int _newAlign)
-    :KNamedCommand( _name),
+KivioChangeStencilVAlignmentCommand::KivioChangeStencilVAlignmentCommand(const QString& _name, KivioPage* _page,
+    KivioStencil* _stencil, int _oldAlign, int _newAlign, const QString& textBoxName)
+    : KNamedCommand(_name),
      m_page(_page),
-     m_stencil( _stencil ),
-     oldAlign( _oldAlign),
-     newAlign( _newAlign)
+     m_stencil(_stencil),
+     oldAlign(_oldAlign),
+     newAlign(_newAlign),
+     m_textBoxName(textBoxName)
 {
 }
 
@@ -355,25 +381,37 @@ KivioChangeStencilVAlignmentCommand::~KivioChangeStencilVAlignmentCommand()
 
 void KivioChangeStencilVAlignmentCommand::execute()
 {
-    m_stencil->setHTextAlign( newAlign );
-    m_page->doc()->updateView(m_page);
-    m_page->doc()->slotSelectionChanged();
+  if(m_textBoxName.isEmpty()) {
+    m_stencil->setVTextAlign(newAlign);
+  } else {
+    m_stencil->setVTextAlign(m_textBoxName, newAlign);
+  }
+
+  m_page->doc()->updateView(m_page);
+  m_page->doc()->slotSelectionChanged();
 }
 
 void KivioChangeStencilVAlignmentCommand::unexecute()
 {
-    m_stencil->setHTextAlign( oldAlign );
-    m_page->doc()->updateView(m_page);
-    m_page->doc()->slotSelectionChanged();
+  if(m_textBoxName.isEmpty()) {
+    m_stencil->setVTextAlign(oldAlign);
+  } else {
+    m_stencil->setVTextAlign(m_textBoxName, oldAlign);
+  }
+
+  m_page->doc()->updateView(m_page);
+  m_page->doc()->slotSelectionChanged();
 }
 
 
-KivioChangeStencilFontCommand::KivioChangeStencilFontCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QFont &_oldFont,  const QFont & _newFont)
-    :KNamedCommand( _name),
+KivioChangeStencilFontCommand::KivioChangeStencilFontCommand(const QString& _name, KivioPage* _page,
+    KivioStencil* _stencil, const QFont& _oldFont, const QFont& _newFont, const QString& textBoxName)
+    : KNamedCommand(_name),
      m_page(_page),
-     m_stencil( _stencil ),
-     oldFont( _oldFont),
-     newFont( _newFont)
+     m_stencil( _stencil),
+     oldFont(_oldFont),
+     newFont(_newFont),
+     m_textBoxName(textBoxName)
 {
 }
 
@@ -383,25 +421,37 @@ KivioChangeStencilFontCommand::~KivioChangeStencilFontCommand()
 
 void KivioChangeStencilFontCommand::execute()
 {
-    m_stencil->setTextFont( newFont );
-    m_page->doc()->updateView(m_page);
-    m_page->doc()->slotSelectionChanged();
+  if(m_textBoxName.isEmpty()) {
+    m_stencil->setTextFont(newFont);
+  } else {
+    m_stencil->setTextFont(m_textBoxName, newFont);
+  }
+
+  m_page->doc()->updateView(m_page);
+  m_page->doc()->slotSelectionChanged();
 }
 
 void KivioChangeStencilFontCommand::unexecute()
 {
-    m_stencil->setTextFont( oldFont );
-    m_page->doc()->updateView(m_page);
-    m_page->doc()->slotSelectionChanged();
+  if(m_textBoxName.isEmpty()) {
+    m_stencil->setTextFont(oldFont);
+  } else {
+    m_stencil->setTextFont(m_textBoxName, oldFont);
+  }
+
+  m_page->doc()->updateView(m_page);
+  m_page->doc()->slotSelectionChanged();
 }
 
-KivioChangeStencilColorCommand::KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor &_oldColor,  const QColor & _newColor, ColorType _type)
-    :KNamedCommand( _name),
+KivioChangeStencilColorCommand::KivioChangeStencilColorCommand(const QString& _name, KivioPage* _page,
+    KivioStencil* _stencil, const QColor& _oldColor,  const QColor& _newColor, ColorType _type, const QString& textBoxName)
+    : KNamedCommand(_name),
      m_page(_page),
-     m_stencil( _stencil ),
-     oldColor( _oldColor),
-     newColor( _newColor),
-     type( _type )
+     m_stencil(_stencil),
+     oldColor(_oldColor),
+     newColor(_newColor),
+     type(_type),
+     m_textBoxName(textBoxName)
 {
 }
 
@@ -411,38 +461,46 @@ KivioChangeStencilColorCommand::~KivioChangeStencilColorCommand()
 
 void KivioChangeStencilColorCommand::execute()
 {
-    switch( type )
-    {
+  switch( type ) {
     case CT_TEXTCOLOR:
-        m_stencil->setTextColor( newColor );
-        break;
+      if(m_textBoxName.isEmpty()) {
+        m_stencil->setTextColor(newColor);
+      } else {
+        m_stencil->setTextColor(m_textBoxName, newColor);
+      }
+      break;
     case CT_BGCOLOR:
-        m_stencil->setBGColor( newColor );
-        break;
+      m_stencil->setBGColor(newColor);
+      break;
     case CT_FGCOLOR:
-        m_stencil->setFGColor( newColor );
-        break;
-    }
-    m_page->doc()->updateView(m_page);
-    m_page->doc()->slotSelectionChanged();
+      m_stencil->setFGColor(newColor);
+      break;
+  }
+
+  m_page->doc()->updateView(m_page);
+  m_page->doc()->slotSelectionChanged();
 }
 
 void KivioChangeStencilColorCommand::unexecute()
 {
-    switch( type )
-    {
+  switch( type ) {
     case CT_TEXTCOLOR:
-        m_stencil->setTextColor( oldColor );
-        break;
+      if(m_textBoxName.isEmpty()) {
+        m_stencil->setTextColor(oldColor);
+      } else {
+        m_stencil->setTextColor(m_textBoxName, oldColor);
+      }
+      break;
     case CT_BGCOLOR:
-        m_stencil->setBGColor( oldColor );
-        break;
+      m_stencil->setBGColor(oldColor);
+      break;
     case CT_FGCOLOR:
-        m_stencil->setFGColor( oldColor );
-        break;
-    }
-    m_page->doc()->updateView(m_page);
-    m_page->doc()->slotSelectionChanged();
+      m_stencil->setFGColor(oldColor);
+      break;
+  }
+
+  m_page->doc()->updateView(m_page);
+  m_page->doc()->slotSelectionChanged();
 }
 
 

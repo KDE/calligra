@@ -2138,3 +2138,92 @@ bool KivioSMLStencil::hasTextBox() const
 
   return false;
 }
+
+QColor KivioSMLStencil::textColor(const QString& textBoxName)
+{
+  KivioShape* shape = locateShape(textBoxName);
+
+  if(!shape)
+    return textColor();
+
+  return shape->shapeData()->textColor();
+}
+
+void KivioSMLStencil::setTextColor(const QString& textBoxName, const QColor& color)
+{
+  KivioShape* shape = locateShape(textBoxName);
+
+  // If we didn't find the shape set the color stencil wide
+  if(!shape) {
+    setTextColor(color);
+    return;
+  }
+
+  shape->shapeData()->setTextColor(color);
+}
+
+QFont KivioSMLStencil::textFont(const QString& textBoxName)
+{
+  KivioShape* shape = locateShape(textBoxName);
+
+  if(!shape)
+    return textFont();
+
+  return shape->shapeData()->textFont();
+}
+
+void KivioSMLStencil::setTextFont(const QString& textBoxName, const QFont& font)
+{
+  KivioShape* shape = locateShape(textBoxName);
+
+  if(!shape) {
+    setTextFont(font);
+    return;
+  }
+
+  shape->shapeData()->setTextFont(font);
+}
+
+int KivioSMLStencil::hTextAlign(const QString& textBoxName)
+{
+  KivioShape* shape = locateShape(textBoxName);
+
+  if(!shape)
+    return hTextAlign();
+
+  return shape->shapeData()->hTextAlign();
+}
+
+int KivioSMLStencil::vTextAlign(const QString& textBoxName)
+{
+  KivioShape* shape = locateShape(textBoxName);
+
+  if(!shape)
+    return vTextAlign();
+
+  return shape->shapeData()->vTextAlign();
+}
+
+void KivioSMLStencil::setHTextAlign(const QString& textBoxName, int align)
+{
+  KivioShape* shape = locateShape(textBoxName);
+
+  if(!shape) {
+    setHTextAlign(align);
+    return;
+  }
+
+  shape->shapeData()->setHTextAlign(align);
+}
+
+void KivioSMLStencil::setVTextAlign(const QString& textBoxName, int align)
+{
+  KivioShape* shape = locateShape(textBoxName);
+
+  if(!shape) {
+    setVTextAlign(align);
+    return;
+  }
+
+  shape->shapeData()->setVTextAlign(align);
+}

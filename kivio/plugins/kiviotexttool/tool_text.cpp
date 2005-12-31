@@ -360,7 +360,7 @@ void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
     if(stencil->text(name) != text)
     {
       KivioChangeStencilTextCommand *cmd = new KivioChangeStencilTextCommand(i18n("Change Stencil Text"),
-          stencil, stencil->text(name), text, view()->activePage());
+          stencil, stencil->text(name), text, view()->activePage(), name);
       stencil->setText(text, name);
       macroCmd->addCommand(cmd);
       changed = true;
@@ -368,30 +368,32 @@ void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
 
     QFont font = editor.font();
 
-    if(stencil->textFont() != font) {
+    if(stencil->textFont(name) != font) {
       KivioChangeStencilFontCommand* cmd = new KivioChangeStencilFontCommand(i18n("Change Stencil Font"),
-          view()->activePage(), stencil, stencil->textFont(), font);
-      stencil->setTextFont(font);
+          view()->activePage(), stencil, stencil->textFont(name), font, name);
+      stencil->setTextFont(name, font);
       macroCmd->addCommand(cmd);
       changed = true;
     }
 
     QColor textColor = editor.fontColor();
 
-    if(stencil->textColor() != textColor) {
+    if(stencil->textColor(name) != textColor) {
       KivioChangeStencilColorCommand* cmd = new KivioChangeStencilColorCommand(i18n("Change Stencil Text Color"),
-          view()->activePage(), stencil, stencil->textColor(), textColor, KivioChangeStencilColorCommand::CT_TEXTCOLOR);
-      stencil->setTextColor(textColor);
+          view()->activePage(), stencil, stencil->textColor(name), textColor,
+          KivioChangeStencilColorCommand::CT_TEXTCOLOR, name);
+      stencil->setTextColor(name, textColor);
       macroCmd->addCommand(cmd);
       changed = true;
     }
 
     int alignment = editor.alignment();
 
-    if(stencil->hTextAlign() != alignment) {
+    if(stencil->hTextAlign(name) != alignment) {
       KivioChangeStencilHAlignmentCommand* cmd = new KivioChangeStencilHAlignmentCommand(
-          i18n("Change Stencil Horizontal Alignment"), view()->activePage(), stencil, stencil->hTextAlign(), alignment);
-      stencil->setHTextAlign(alignment);
+          i18n("Change Stencil Horizontal Alignment"), view()->activePage(), stencil,
+          stencil->hTextAlign(name), alignment, name);
+      stencil->setHTextAlign(name, alignment);
       macroCmd->addCommand(cmd);
       changed = true;
     }

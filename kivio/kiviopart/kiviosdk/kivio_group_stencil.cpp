@@ -690,3 +690,67 @@ bool KivioGroupStencil::hasTextBox() const
 
   return false;
 }
+
+QColor KivioGroupStencil::textColor(const QString& textBoxName)
+{
+  int id = textBoxName.section("-", 0, 0).toInt();
+  QString n = textBoxName.section("-", 1);
+
+  return m_pGroupList->at(id)->textColor(n);
+}
+
+void KivioGroupStencil::setTextColor(const QString& textBoxName, const QColor& color)
+{
+  int id = textBoxName.section("-", 0, 0).toInt();
+  QString n = textBoxName.section("-", 1);
+
+  m_pGroupList->at(id)->setTextColor(n, color);
+}
+
+QFont KivioGroupStencil::textFont(const QString& textBoxName)
+{
+  int id = textBoxName.section("-", 0, 0).toInt();
+  QString n = textBoxName.section("-", 1);
+
+  return m_pGroupList->at(id)->textFont(n);
+}
+
+void KivioGroupStencil::setTextFont(const QString& textBoxName, const QFont& font)
+{
+  int id = textBoxName.section("-", 0, 0).toInt();
+  QString n = textBoxName.section("-", 1);
+
+  m_pGroupList->at(id)->setTextFont(n, font);
+}
+
+int KivioGroupStencil::hTextAlign(const QString& textBoxName)
+{
+  int id = textBoxName.section("-", 0, 0).toInt();
+  QString n = textBoxName.section("-", 1);
+
+  return m_pGroupList->at(id)->hTextAlign(n);
+}
+
+int KivioGroupStencil::vTextAlign(const QString& textBoxName)
+{
+  int id = textBoxName.section("-", 0, 0).toInt();
+  QString n = textBoxName.section("-", 1);
+
+  return m_pGroupList->at(id)->vTextAlign(n);
+}
+
+void KivioGroupStencil::setHTextAlign(const QString& textBoxName, int align)
+{
+  int id = textBoxName.section("-", 0, 0).toInt();
+  QString n = textBoxName.section("-", 1);
+
+  m_pGroupList->at(id)->setHTextAlign(n, align);
+}
+
+void KivioGroupStencil::setVTextAlign(const QString& textBoxName, int align)
+{
+  int id = textBoxName.section("-", 0, 0).toInt();
+  QString n = textBoxName.section("-", 1);
+
+  m_pGroupList->at(id)->setVTextAlign(n, align);
+}

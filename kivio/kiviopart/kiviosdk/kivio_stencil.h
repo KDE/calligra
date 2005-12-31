@@ -268,7 +268,19 @@ class KIVIO_EXPORT KivioStencil
 
     /// Returns true if the stencil has a text box
     virtual bool hasTextBox() const { return false; }
-    
+
+    virtual QColor textColor(const QString& /*textBoxName*/) { return QColor(); }
+    virtual void setTextColor(const QString& /*textBoxName*/, const QColor& /*color*/) {}
+
+    virtual QFont textFont(const QString& /*textBoxName*/) { return KGlobalSettings::generalFont(); }
+    virtual void setTextFont(const QString& /*textBoxName*/, const QFont& /*font*/) {}
+
+    virtual int hTextAlign(const QString& /*textBoxName*/) { return -1; }
+    virtual int vTextAlign(const QString& /*textBoxName*/) { return -1; }
+
+    virtual void setHTextAlign(const QString& /*textBoxName*/, int /*align*/) {}
+    virtual void setVTextAlign(const QString& /*textBoxName*/, int /*align*/) {}
+
     virtual void setPinPoint(const KoPoint& p) { m_pinPoint = p; }
     virtual KoPoint pinPoint() const { return m_pinPoint; }
     

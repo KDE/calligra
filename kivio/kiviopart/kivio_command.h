@@ -124,7 +124,7 @@ public:
 class KIVIO_EXPORT KivioChangeStencilTextCommand : public KNamedCommand
 {
 public:
-    KivioChangeStencilTextCommand( const QString &_name, KivioStencil *_stencil, const QString & _oldText, const QString & _newText, KivioPage *_page);
+  KivioChangeStencilTextCommand( const QString &_name, KivioStencil *_stencil, const QString & _oldText, const QString & _newText, KivioPage *_page, const QString& textBoxName = QString::null);
     ~KivioChangeStencilTextCommand();
     virtual void execute();
     virtual void unexecute();
@@ -133,6 +133,7 @@ protected:
     QString oldText;
     QString newText;
     KivioPage *m_page;
+    QString m_textBoxName;
 };
 
 class KivioAddLayerCommand : public KNamedCommand
@@ -225,69 +226,79 @@ protected:
 
 class KivioChangeStencilHAlignmentCommand : public KNamedCommand
 {
-public:
-    KivioChangeStencilHAlignmentCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldAlign,  int _newAlign);
+  public:
+    KivioChangeStencilHAlignmentCommand(const QString& _name, KivioPage* _page, KivioStencil* _stencil,
+                                        int _oldAlign, int _newAlign, const QString& textBoxName = QString::null);
     ~KivioChangeStencilHAlignmentCommand();
 
     virtual void execute();
     virtual void unexecute();
 
-protected:
+  protected:
     KivioPage *m_page;
     KivioStencil *m_stencil;
     int oldAlign;
     int newAlign;
+    QString m_textBoxName;
 };
 
 class KivioChangeStencilVAlignmentCommand : public KNamedCommand
 {
-public:
-    KivioChangeStencilVAlignmentCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, int _oldAlign,  int _newAlign);
+  public:
+    KivioChangeStencilVAlignmentCommand(const QString& _name, KivioPage* _page, KivioStencil* _stencil,
+                                        int _oldAlign, int _newAlign, const QString& textBoxName = QString::null);
     ~KivioChangeStencilVAlignmentCommand();
 
     virtual void execute();
     virtual void unexecute();
 
-protected:
+  protected:
     KivioPage *m_page;
     KivioStencil *m_stencil;
     int oldAlign;
     int newAlign;
+    QString m_textBoxName;
 };
 
 
 class KivioChangeStencilFontCommand : public KNamedCommand
 {
-public:
-    KivioChangeStencilFontCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QFont & _oldFont,  const QFont & _newFont);
+  public:
+    KivioChangeStencilFontCommand(const QString& _name, KivioPage* _page, KivioStencil* _stencil,
+                                  const QFont& _oldFont,  const QFont& _newFont,
+                                  const QString& textBoxName = QString::null);
     ~KivioChangeStencilFontCommand();
 
     virtual void execute();
     virtual void unexecute();
 
-protected:
+  protected:
     KivioPage *m_page;
     KivioStencil *m_stencil;
     QFont oldFont;
     QFont newFont;
+    QString m_textBoxName;
 };
 
 class KivioChangeStencilColorCommand : public KNamedCommand
 {
-public:
+  public:
     enum ColorType { CT_TEXTCOLOR, CT_FGCOLOR, CT_BGCOLOR };
-    KivioChangeStencilColorCommand( const QString &_name, KivioPage *_page, KivioStencil * _stencil, const QColor & _oldColor,  const QColor & _newColor, ColorType _type);
+    KivioChangeStencilColorCommand(const QString& _name, KivioPage* _page, KivioStencil*  _stencil,
+                                   const QColor& _oldColor,  const QColor& _newColor, ColorType _type,
+                                   const QString& textBoxName = QString::null);
     ~KivioChangeStencilColorCommand();
 
     virtual void execute();
     virtual void unexecute();
 
-protected:
+  protected:
     KivioPage *m_page;
     KivioStencil *m_stencil;
     QColor oldColor;
     QColor newColor;
     ColorType type;
+    QString m_textBoxName;
 };
 
 class KivioChangeRotationCommand : public KNamedCommand
