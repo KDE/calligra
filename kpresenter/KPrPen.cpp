@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Peter Simonsson
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -42,6 +43,16 @@ KPrPen::KPrPen(const QColor& _color)
 
 KPrPen::~KPrPen()
 {
+}
+
+bool KPrPen::operator==( const KPrPen &p ) const
+{
+    return color() == p.color() && style() == p.style() && m_pointWidth == p.pointWidth();
+}
+
+bool KPrPen::operator!=( const KPrPen &p ) const
+{
+    return color() != p.color() || style() != p.style() || m_pointWidth != p.pointWidth();
 }
 
 void KPrPen::setPointWidth(double w)

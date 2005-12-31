@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2005 Peter Simonsson
+   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -33,6 +34,24 @@ class KPrPen : public QPen
     KPrPen(const QColor& _color, double _pointWidth, Qt::PenStyle _style);
     KPrPen(const QColor& _color);
     ~KPrPen();
+    
+    /**
+     * @brief Compare pens if they are equal
+     * 
+     * Two pens are equal if they have equal styles, widths and colors. 
+     *
+     * @return true if the pens are equal, false otherwise
+     */
+    bool operator==( const KPrPen &p ) const;
+
+    /**
+     * @brief Compare pens if they differ
+     *
+     * Two pens are different if they have different styles, widths or colors.
+     *
+     * @return true if the pens are different, false otherwise
+     */
+    bool operator!=( const KPrPen &p ) const;
 
     /// Set the pen width in points
     void setPointWidth(double width);
