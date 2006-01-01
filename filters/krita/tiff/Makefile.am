@@ -6,7 +6,7 @@ libkritatiffexport_la_LIBADD = \
 	$(top_builddir)/krita/libkritacommon.la \
 	-ltiff
 
-libkritatifffimport_la_LDFLAGS = -avoid-version -module -no-undefined \
+libkritatiffimport_la_LDFLAGS = -avoid-version -module -no-undefined \
 	$(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries)
 libkritatiffimport_la_LIBADD = $(KOFFICE_LIBS) \
 	$(top_builddir)/krita/libkritacommon.la -ltiff
