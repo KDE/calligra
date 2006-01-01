@@ -174,6 +174,7 @@ KoPageLayoutSize::KoPageLayoutSize(QWidget *parent, const KoPageLayout& layout, 
 }
 
 void KoPageLayoutSize::setEnableBorders(bool on) {
+    m_haveBorders = on;
     ebrLeft->setEnabled( on );
     ebrRight->setEnabled( on );
     ebrTop->setEnabled( on );
@@ -201,7 +202,7 @@ void KoPageLayoutSize::setValues() {
     m_orientGroup->setButton( m_layout.orientation == PG_PORTRAIT ? 0: 1 );
 
     setUnit( m_unit );
-    pgPreview->setPageLayout( m_layout );
+    updatePreview();
 }
 
 void KoPageLayoutSize::setUnit( KoUnit::Unit unit ) {
@@ -264,31 +265,29 @@ void KoPageLayoutSize::formatChanged( int format ) {
 }
 
 void KoPageLayoutSize::orientationChanged(int which) {
-    KoOrientation oldOrientation = m_layout.orientation;
     m_layout.orientation = which == 0 ? PG_PORTRAIT : PG_LANDSCAPE;
 
-    // without this check, width & height would be swapped around (below)
-    // even though the orientation has not changed
-    if (m_layout.orientation == oldOrientation) return;
+    // swap dimension
+    double val = epgWidth->value();
+    epgWidth->changeValue(epgHeight->value());
+    epgHeight->changeValue(val);
+    // and adjust margins
+    m_blockSignals = true;
+    val = ebrTop->value();
+    if(m_layout.orientation == PG_PORTRAIT) { // clockwise
+        ebrTop->changeValue(ebrRight->value());
+        ebrRight->changeValue(ebrBottom->value());
+        ebrBottom->changeValue(ebrLeft->value());
+        ebrLeft->changeValue(val);
+    } else { // counter clockwise
+        ebrTop->changeValue(ebrLeft->value());
+        ebrLeft->changeValue(ebrBottom->value());
+        ebrBottom->changeValue(ebrRight->value());
+        ebrRight->changeValue(val);
+    }
+    m_blockSignals = false;
 
-    m_layout.ptWidth = epgWidth->value();
-    m_layout.ptHeight = epgHeight->value();
-    m_layout.ptLeft = ebrLeft->value();
-    m_layout.ptRight = ebrRight->value();
-    m_layout.ptTop = ebrTop->value();
-    m_layout.ptBottom = ebrBottom->value();
-
-    // swap dimension and adjust margins
-    qSwap( m_layout.ptWidth, m_layout.ptHeight );
-    double tmp = m_layout.ptTop;
-    m_layout.ptTop = m_layout.ptRight;
-    m_layout.ptRight = m_layout.ptBottom;
-    m_layout.ptBottom = m_layout.ptLeft;
-    m_layout.ptLeft = tmp;
-
-    setValues();
-    updatePreview( );
-    emit propertyChange(m_layout);
+    setEnableBorders(m_haveBorders); // will update preview+emit
 }
 
 void KoPageLayoutSize::widthChanged(double width) {

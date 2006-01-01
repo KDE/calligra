@@ -110,7 +110,7 @@ private:
     KoUnit::Unit m_unit;
     KoPageLayout m_layout;
 
-    bool m_blockSignals;
+    bool m_blockSignals, m_haveBorders;
 };
 
 #endif
