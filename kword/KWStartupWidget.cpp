@@ -34,7 +34,7 @@ KWStartupWidget::KWStartupWidget(QWidget *parent, KWDocument *doc, const KoColum
     m_doc = doc;
 
     QVBoxLayout *lay = new QVBoxLayout(m_sizeTab, KDialog::marginHint());
-    m_sizeWidget = new KoPageLayoutSize(m_sizeTab, m_layout, KoUnit::U_MM, m_columns , false, true);
+    m_sizeWidget = new KoPageLayoutSize(m_sizeTab, m_layout, KoUnit::U_MM, m_columns , true, true);
     lay->addWidget(m_sizeWidget);
 
     lay = new QVBoxLayout(m_columnsTab, KDialog::marginHint());

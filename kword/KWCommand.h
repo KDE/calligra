@@ -52,30 +52,6 @@ class KWFootNoteVariable;
 // TODO: change most KNamedCommands into KCommands, removing name arguments
 // and implementing name() instead (less memory used).
 
-#if 0
-/**
- * Command created when pasting formatted text
- * [relies on KWord's XML structure, so not moved to kotext]
- */
-class KWPasteTextCommand : public KoTextDocCommand
-{
-public:
-    KWPasteTextCommand( KoTextDocument *d, int parag, int idx,
-                    const QCString & data );
-    ~KWPasteTextCommand() {}
-    KoTextCursor *execute( KoTextCursor *c );
-    KoTextCursor *unexecute( KoTextCursor *c );
-protected:
-    int m_parag;
-    int m_idx;
-    QCString m_data;
-    // filled in by execute(), for unexecute()
-    int m_lastParag;
-    int m_lastIndex;
-    KoParagLayout* m_oldParagLayout;
-};
-#endif
-
 /**
  * Command created when pasting oasis-formatted text
  */
@@ -118,7 +94,7 @@ private:
 
 ////////////////////////// Frame commands ////////////////////////////////
 
-// Identifies a frame
+/// Identifies a frame
 struct FrameIndex {
     FrameIndex() {}
     FrameIndex( KWFrame *frame );
@@ -747,7 +723,7 @@ class KWInsertRemovePageCommand : public KCommand
  public:
     enum Command { Insert, Remove };
     KWInsertRemovePageCommand( KWDocument *_doc, Command cmd, int pgNum);
-    ~KWInsertRemovePageCommand(){}
+    ~KWInsertRemovePageCommand();
     virtual QString name() const;
     void execute();
     void unexecute();
@@ -755,6 +731,10 @@ class KWInsertRemovePageCommand : public KCommand
     KWDocument *m_doc;
     Command m_cmd;
     int m_pgNum;
+    QValueList<KCommand*> childCommands;
+
+    void doRemove(int pageNumber);
+    void doInsert(int pageNumber);
 };
 
 struct FramePaddingStruct {

@@ -49,6 +49,7 @@ KWFrameSet::KWFrameSet( KWDocument *doc )
       m_anchorTextFs( 0L ), m_dcop( 0L ), m_pageManager( 0 )
 {
     // Send our "repaintChanged" signals to the document.
+    setName("KWFrameSet");
     if(m_doc) {
         connect( this, SIGNAL( repaintChanged( KWFrameSet * ) ),
              doc, SLOT( slotRepaintChanged( KWFrameSet * ) ) );
@@ -522,14 +523,14 @@ int KWFrameSet::frameFromPtr( KWFrame *frame )
 
 KWFrame * KWFrameSet::settingsFrame( const KWFrame* frame )
 {
-    QPtrListIterator<KWFrame> frameIt( frame->frameSet()->frameIterator() );
     if ( !frame->isCopy() )
         return const_cast<KWFrame *>( frame );
     KWFrame* lastRealFrame=0L;
+    QPtrListIterator<KWFrame> frameIt( frame->frameSet()->frameIterator() );
     for ( ; frameIt.current(); ++frameIt )
     {
         KWFrame *curFrame = frameIt.current();
-        if( curFrame == frame )
+        if ( curFrame == frame )
             return lastRealFrame ? lastRealFrame : const_cast<KWFrame *>( frame );
         if ( !lastRealFrame || !curFrame->isCopy() )
             lastRealFrame = curFrame;

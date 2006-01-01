@@ -34,6 +34,7 @@
 #include "KWFrameSet.h"
 #include "KWPictureFrameSet.h"
 #include "KWPageManager.h"
+#include "KWPage.h"
 
 #include <KoTextObject.h>
 #include <koOasisStyles.h>
@@ -1099,12 +1100,16 @@ void KWDeleteFrameCommand::execute()
     Q_ASSERT( frame );
     KWDocument* doc = frameSet->kWordDocument();
     doc->terminateEditing( frameSet );
+    doc->frameChanged( frame );
     frameSet->deleteFrame( m_frameIndex.m_iFrameIndex );
-    //when you delete a frame frame pointer is deleted
-    //so used frameChanged with a null pointer.
-    doc->frameChanged( 0L );
+
+/*   KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>(fs);
+     if(textfs) { TODO
+        // if content does not fit; change properties of previous frame to be 'do not show'
+     }
+*/
+
     doc->refreshDocStructure( frameSet->type() );
-    doc->updateRulerFrameStartEnd();
     doc->updateTextFrameSetEdit();
 }
 
@@ -1128,7 +1133,6 @@ void KWDeleteFrameCommand::unexecute()
     doc->recalcFrames( frame->pageNumber() );
     doc->refreshDocStructure(frameSet->type());
     doc->updateRulerFrameStartEnd();
-    doc->updateTextFrameSetEdit();
 }
 
 KWCreateFrameCommand::KWCreateFrameCommand( const QString &name, KWFrame * frame ) :
@@ -1723,32 +1727,86 @@ KWInsertRemovePageCommand::KWInsertRemovePageCommand( KWDocument *_doc, Command 
     : KCommand(), m_doc(_doc), m_cmd(cmd), m_pgNum(pgNum)
 {}
 
+KWInsertRemovePageCommand::~KWInsertRemovePageCommand() {
+    QValueListIterator<KCommand*> cmdIter = childCommands.begin();
+    for(;cmdIter != childCommands.end(); ++ cmdIter)
+         delete (*cmdIter);
+}
+
 QString KWInsertRemovePageCommand::name() const
 {
     return m_cmd == Insert ? i18n("Insert Page") // problem with after/before page
                   : i18n("Delete Page %1").arg(m_pgNum);
 }
 
-void KWInsertRemovePageCommand::execute()
-{
-    if ( m_cmd == Insert ) {
-        m_doc->pageManager()->insertPage( m_pgNum );
-        m_doc->afterAppendPage( m_pgNum ); // TODO rename to afterInsertPage
-    } else { // Remove
-        m_doc->pageManager()->removePage( m_pgNum );
-        m_doc->afterRemovePages();
-    }
+void KWInsertRemovePageCommand::execute() {
+    if ( m_cmd == Insert )
+        doInsert(m_pgNum);
+    else
+        doRemove(m_pgNum);
 }
 
-void KWInsertRemovePageCommand::unexecute()
-{
-    if ( m_cmd == Insert ) { // remove the page that was inserted
-        m_doc->pageManager()->removePage( m_pgNum+1 );
-        m_doc->afterRemovePages();
-    } else { // Re-insert the page that was deleted
-        m_doc->pageManager()->insertPage( m_pgNum-1 );
-        m_doc->afterAppendPage( m_pgNum-1 ); // TODO rename to afterInsertPage
+void KWInsertRemovePageCommand::unexecute() {
+    if ( m_cmd == Insert )
+        // remove the page that was inserted
+        doRemove(m_pgNum+1);
+    else
+        // Re-insert the page that was deleted
+        doInsert(m_pgNum-1);
+}
+
+void KWInsertRemovePageCommand::doRemove(int pageNumber) {
+    bool firstRun = childCommands.count() == 0;
+    if(firstRun) {
+        QPtrList<KWFrame> frames = m_doc->framesInPage(pageNumber, false);
+        QPtrListIterator<KWFrame> framesIter(frames);
+        for(; framesIter.current(); ++framesIter)
+            childCommands.append(new KWDeleteFrameCommand("", *framesIter));
     }
+    QValueListIterator<KCommand*> cmdIter = childCommands.begin();
+    for(;cmdIter != childCommands.end(); ++ cmdIter)
+         (*cmdIter)->execute();
+
+    // next move all frames up that are on higher pagenumbers
+    const double pageHeight = m_doc->pageManager()->page(pageNumber)->height();
+    const double topOfPage = m_doc->pageManager()->topOfPage(pageNumber);
+    m_doc->pageManager()->removePage( pageNumber );
+
+    if(firstRun && m_doc->lastPage() >= pageNumber) { // only walk frames when there was a page
+                                                      // after the deleted one
+        QValueList<FrameIndex> indexes;
+        QValueList<FrameMoveStruct> moveStructs;
+        QPtrListIterator<KWFrameSet> fss = m_doc->framesetsIterator();
+        for(;fss.current(); ++fss) {
+            KWFrameSet *fs = *fss;
+            if(fs->isMainFrameset()) continue;
+            if(fs->isHeaderOrFooter()) continue;
+            if(fs->isFootEndNote()) continue;
+            if(! fs->isVisible()) continue;
+            QPtrList<KWFrame> frames = fs->frameIterator();
+            QPtrListIterator<KWFrame> framesIter(frames);
+            for(; framesIter.current(); ++framesIter) {
+                KWFrame *frame = *framesIter;
+                if(frame->top() > topOfPage) {
+                    indexes.append(FrameIndex(frame));
+                    KoPoint before = frame->topLeft();
+                    frame->moveBy(0, -pageHeight);
+                    moveStructs.append(FrameMoveStruct(before, frame->topLeft()));
+                }
+            }
+        }
+        KCommand *cmd = new KWFrameMoveCommand("", indexes, moveStructs);
+        childCommands.append(cmd);
+    }
+    m_doc->afterRemovePages();
+}
+
+void KWInsertRemovePageCommand::doInsert(int pageNumber) {
+    m_doc->pageManager()->insertPage( pageNumber );
+    QValueListIterator<KCommand*> cmdIter = childCommands.begin();
+    for(;cmdIter != childCommands.end(); ++ cmdIter)
+         (*cmdIter)->unexecute();
+    m_doc->afterAppendPage( pageNumber );
 }
 
 FramePaddingStruct::FramePaddingStruct( KWFrame *frame )

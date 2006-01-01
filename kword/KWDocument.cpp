@@ -157,6 +157,7 @@ KWDocument::KWDocument(QWidget *parentWidget, const char *widname, QObject* pare
 {
     KWStatisticVariable::setExtendedType(  true );
     dcop = 0;
+    m_framesChangedHandler = 0;
     m_pageManager = new KWPageManager();
     m_pageManager->appendPage();
     m_loadingInfo = 0L;
@@ -3929,8 +3930,10 @@ QPtrList<KWFrame> KWDocument::framesToCopyOnNewPage( int afterPageNum ) const {
         static const char * newFrameBh[] = { "Reconnect", "NoFollowup", "Copy" };
         kdDebug(32002) << "   frame->newFrameBehavior()==" << newFrameBh[frame->newFrameBehavior()] << endl;
 #endif
+        const int frameIsOnPage = frame->pageNumber();
         if (frame->newFrameBehavior() == KWFrame::Copy &&
-                (frame->sheetSide() == KWFrame::AnySide || frame->pageNumber() == afterPageNum -1))
+                (frameIsOnPage == afterPageNum && frame->sheetSide() == KWFrame::AnySide ||
+                 frameIsOnPage == afterPageNum -1 && frame->sheetSide() != KWFrame::AnySide))
             framesToCopy.append( frame );
     }
     return framesToCopy;
@@ -4021,6 +4024,7 @@ void KWDocument::afterAppendPage( int pageNum )
 
 bool KWDocument::canRemovePage( int num )
 {
+kdDebug() << "KWDocument::canRemovePage " << num<< endl;
     QPtrListIterator<KWFrameSet> fit = framesetsIterator();
     for ( ; fit.current() ; ++fit )
     {
@@ -4258,66 +4262,31 @@ void KWDocument::updateAllFrames( int flags )
 // and everything will be update / repainted accordingly
 void KWDocument::frameChanged( KWFrame * frame, KWView * view )
 {
-    if ( !frame ) // TODO call another method for 'deleted frame', which passes the frameset
-        updateAllFrames(); // ... in order to get rid of that call, and use the 'else' case instead
-    else {
-        frame->frameSet()->updateFrames();
-        KWFrameList::recalcAllFrames(this);
+    if(! m_framesChangedHandler) {
+        m_framesChangedHandler = new FramesChangedHandler(this);
+        QTimer::singleShot( 0, this, SLOT( updateFramesChanged() ) );
     }
-
-    //kdDebug(32002) << "KWDocument::frameChanged" << endl;
-    // If frame with text flowing around it -> re-layout all frames
-    if ( !frame || frame->runAround() != KWFrame::RA_NO )
-    {
-        layout();
-    }
-    else
-    {
-        frame->frameSet()->layout();
-    }
-    repaintAllViewsExcept( view );
-    updateRulerFrameStartEnd();
+    m_framesChangedHandler->addFrame(frame);
 }
 
 void KWDocument::framesChanged( const QPtrList<KWFrame> & frames, KWView * view )
 {
-    //kdDebug(32002) << "KWDocument::framesChanged" << endl;
-    // TODO replace with 'make unique list of framesets', call updateFrames on those,
-    // then call updateFramesOnTopOrBelow.
-    updateAllFrames();
-    // Is there at least one frame with a text runaround set ?
     QPtrListIterator<KWFrame> it( frames );
     for ( ; it.current() ; ++it )
-        if ( it.current()->runAround() != KWFrame::RA_NO )
-        {
-            //kdDebug(32002) << "KWDocument::framesChanged ->layout" << endl;
-            layout();
-            //kdDebug(32002) << "KWDocument::framesChanged ->repaintAllViewsExcept" << endl;
-            repaintAllViewsExcept( view );
-            break;
-        }
-    updateRulerFrameStartEnd();
+        frameChanged(it.current());
+}
+
+void KWDocument::updateFramesChanged() { // slot called from frameChanged()
+    if(!m_framesChangedHandler) return;
+    m_framesChangedHandler->execute();
+    delete m_framesChangedHandler;
+    m_framesChangedHandler = 0;
 }
 
 void KWDocument::framesChanged( const QValueList<KWFrame*> &frames) {
-    QValueList<KWFrameSet *> visitedFrameSets;
     QValueListConstIterator<KWFrame*> framesIterator = frames.begin();
-    bool layoutneeded = false;
-    for(;framesIterator != frames.end(); ++framesIterator) {
-        KWFrame *frame = *framesIterator;
-        if(frame->runAround() != KWFrame::RA_NO)
-            layoutneeded = true;
-        KWFrameSet *fs = frame->frameSet();
-        if(visitedFrameSets.contains(fs))
-            continue; // already updated
-        fs->updateFrames();
-    }
-
-    if(layoutneeded)
-        layout();
-
-    repaintAllViews();
-    updateRulerFrameStartEnd();
+    for(;framesIterator != frames.end(); ++framesIterator)
+        frameChanged(*framesIterator);
 }
 
 void KWDocument::setHeaderVisible( bool h )
@@ -4595,10 +4564,7 @@ void KWDocument::deleteFrame( KWFrame * frame )
         docItem=FormulaFrames;
         break;
     case FT_CLIPART:
-    {
-        kdError(32001) << "FT_CLIPART used! (in KWDocument::loadFrameSet)" << endl;
-        // Do not break!
-    }
+        kdError(32001) << "FT_CLIPART used! (in KWDocument::deleteFrame)" << endl;
     case FT_PICTURE:
         cmdName=i18n("Delete Picture Frame");
         docItem=Pictures;
@@ -5415,6 +5381,48 @@ QWidget* KWDocument::createCustomDocumentWidget(QWidget *parent) {
     columns.columns = 1;
     columns.ptColumnSpacing = m_defaultColumnSpacing;
     return new KWStartupWidget(parent, this, columns);
+}
+
+KWDocument::FramesChangedHandler::FramesChangedHandler(KWDocument *parent) {
+    m_parent = parent;
+    m_needLayout = false;
+}
+
+void KWDocument::FramesChangedHandler::addFrame(KWFrame *frame) {
+    if(frame == 0) return;
+    if(m_frameSets.contains(frame->frameSet())) return;
+    m_frameSets.append(frame->frameSet());
+    if( frame->runAround() != KWFrame::RA_NO )
+        m_needLayout = true;
+}
+
+void KWDocument::FramesChangedHandler::addFrameSet(KWFrameSet *fs) {
+    if(m_frameSets.contains(fs)) return;
+    m_frameSets.append(fs);
+    m_needLayout = true;
+}
+
+void KWDocument::FramesChangedHandler::execute() {
+    if(m_frameSets.count() == 0)
+        m_parent->updateAllFrames();
+    else {
+        QValueListIterator<KWFrameSet*> iter = m_frameSets.begin();
+        for(;iter != m_frameSets.end(); ++iter) {
+            KWFrameSet *fs = *iter;
+            fs->updateFrames();
+            if(!m_needLayout)
+                fs->layout();
+        }
+
+        KWFrameList::recalcAllFrames(m_parent);
+    }
+
+    // If frame with text flowing around it -> re-layout all frames
+    if ( m_needLayout)
+        m_parent->layout();
+    //m_parent->repaintAllViewsExcept( 0 );
+    m_parent->repaintAllViews();
+    m_parent->updateRulerFrameStartEnd();
 }
 
 #include "KWDocument.moc"

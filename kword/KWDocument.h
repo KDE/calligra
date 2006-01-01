@@ -805,6 +805,10 @@ protected slots:
     virtual void openExistingFile( const QString& file );
     virtual void openTemplate( const QString& file );
 
+private slots:
+    /// is called from a singleShot timer due to frameChanged()
+    void updateFramesChanged();
+
 protected:
     void nextParagraphNeedingCheck();
     /// fix up Z-order for import from older kword versions.
@@ -863,6 +867,18 @@ protected:
 private:
     void clear();
     void endOfLoading();
+
+    class FramesChangedHandler {
+        public:
+            FramesChangedHandler(KWDocument *parent);
+            void addFrame(KWFrame*);
+            void addFrameSet(KWFrameSet*);
+            void execute();
+        private:
+            KWDocument *m_parent;
+            QValueList<KWFrameSet*> m_frameSets;
+            bool m_needLayout;
+    };
 
     // Variables:
     QValueList<KWView *> m_lstViews;
@@ -990,6 +1006,7 @@ private:
     bool m_bSnapToGrid;
 
     KWPageManager *m_pageManager;
+    FramesChangedHandler *m_framesChangedHandler;
 };
 
 

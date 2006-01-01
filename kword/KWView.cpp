@@ -2730,11 +2730,12 @@ void KWView::deleteFrame( bool warning )
         }
 
         if ( fs->frameCount() == 1 && fs->type() == FT_TEXT) {
-            if ( m_doc->processingType() == KWDocument::WP && m_doc->frameSetNum( fs ) == 0 )
+            if ( fs->isMainFrameset())
                 return; // if primairy FS, we can't delete it :)
 
             KWTextFrameSet * textfs = dynamic_cast<KWTextFrameSet *>(fs);
-            if ( !textfs ) // assertion...
+            Q_ASSERT(textfs);
+            if ( !textfs )
                 return;
 
             KoTextDocument * textdoc = textfs->textDocument();
