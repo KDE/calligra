@@ -16,6 +16,7 @@
 #include <kozoomhandler.h>
 #include <kdeversion.h>
 #include <kiconloader.h>
+#include <kapplication.h>
 
 #include <qpixmap.h>
 #include <qslider.h>
@@ -161,7 +162,7 @@ void KivioBirdEyePanel::updateView()
 
   KivioScreenPainter kpainter;
   kpainter.start(m_buffer);
-  kpainter.painter()->fillRect(rect, QColor(120, 120, 120));
+  kpainter.painter()->fillRect(rect, KApplication::palette().active().brush(QColorGroup::Mid));
 
   kpainter.painter()->fillRect(px0, py0, pw, ph, white);
 
