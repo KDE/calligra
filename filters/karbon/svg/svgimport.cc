@@ -945,6 +945,9 @@ void SvgImport::parseUse( VGroup *grp, const QDomElement &e )
 
 	if( !id.isEmpty() )
 	{
+		addGraphicContext();
+		setupTransform( e );
+
 		QString key = id.mid( 1 );
 
 		if( !e.attribute( "x" ).isEmpty() && !e.attribute( "y" ).isEmpty() )
@@ -952,49 +955,7 @@ void SvgImport::parseUse( VGroup *grp, const QDomElement &e )
 			double tx = e.attribute( "x" ).toDouble();
 			double ty = e.attribute( "y" ).toDouble();
 
-			m_gc.current()->matrix.reset();
 			m_gc.current()->matrix.translate(tx,ty);
-		}
-		else if( !e.attribute( "transform" ).isEmpty() )
-		{
-			QString xfrmStr = e.attribute( "transform" );
-			
-			int t = xfrmStr.find("translate");
-			int s = xfrmStr.find("scale");
-			int r = xfrmStr.find("rotate");
-
-			m_gc.current()->matrix.reset();
-
-			if(t > -1)
-			{
-				int tbegin = xfrmStr.find("(",t);
-				int tend = xfrmStr.find(",",tbegin);
-				double tx = xfrmStr.mid(tbegin+1,tend-tbegin-1).toDouble();
-				tbegin = tend+1;
-				tend = xfrmStr.find(")",tbegin);
-				double ty = xfrmStr.mid(tbegin,tend-tbegin).toDouble();
-				
-				m_gc.current()->matrix.translate(tx,ty);
-			}
-
-			if(s > -1)
-			{
-				int sbegin = xfrmStr.find("(",s);
-				int send = xfrmStr.find(")",sbegin);
-				double sx = xfrmStr.mid(sbegin+1,send-sbegin-1).toDouble();
-
-				m_gc.current()->matrix.scale(sx,-sx);
-			}
-
-			if(r > -1)
-			{
-				int rbegin = xfrmStr.find("(",r);
-				int rend = xfrmStr.find(")",rbegin);
-				double rx = xfrmStr.mid(rbegin+1,rend-rbegin-1).toDouble();
-
-				m_gc.current()->matrix.rotate(rx);
-			}
-
 		}
 
 		if(m_defs.contains(key))
@@ -1003,22 +964,22 @@ void SvgImport::parseUse( VGroup *grp, const QDomElement &e )
 			if(a.tagName() == "g" || a.tagName() == "a")
 				parseGroup( grp, a);
 			else
+			{
 				createObject( grp, a );
+				// Names are not unique, so findObject(objectname) will not always give the correct results.
+				// Since we just created our object, it's the last one so get the last one.
+				/*VObject *obj = 0L;
+				if(grp)
+					obj = grp->objects().getLast(); //findObject(key, grp);
+				else
+					obj = m_document.activeLayer()->objects().getLast();
+
+				// Parse stroke and fill etc...
+				/*if(obj)
+					parseStyle( obj, e );*/
+			}
 		}
-		else
-			return;
-
-		// Names are not unique, so findObject(objectname) will not always give the correct results.
-		// Since we just created our object, it's the last one so get the last one.
-		VObject *obj = 0L;
-		if(grp)
-			obj = grp->objects().getLast(); //findObject(key, grp);
-		else
-			obj = m_document.activeLayer()->objects().getLast();
-
-		// Parse stroke and fill etc...
-		if(obj)
-			parseStyle( obj, e );
+		delete( m_gc.pop() );
 	}
 }
 
