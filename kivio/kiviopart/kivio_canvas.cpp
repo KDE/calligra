@@ -619,6 +619,17 @@ void KivioCanvas::continueSpawnerDragDraw( const QPoint &p )
     m_pDragStencil->setY(qp.y() - m_pDragStencil->h());
   }
 
+  qp.setCoords(orig.x() + (m_pDragStencil->w() / 2.0), orig.y() + (m_pDragStencil->h() / 2.0));
+  qp = snapToGuides(qp, snappedX, snappedY);
+
+  if(snappedX) {
+    m_pDragStencil->setX(qp.x() - (m_pDragStencil->w() / 2.0));
+  }
+
+  if(snappedY) {
+    m_pDragStencil->setY(qp.y() - (m_pDragStencil->h() / 2.0));
+  }
+
   qp.setCoords(orig.x(), orig.y());
   qp = snapToGuides(qp, snappedX, snappedY);
 
@@ -1156,6 +1167,17 @@ void KivioCanvas::continuePasteMoving(const QPoint &pos)
     newY = p.y() - selectedRect.height();
   }
 
+  p.setCoords(selectedRect.x() + dx + (selectedRect.width() / 2.0), selectedRect.y() + dy + (selectedRect.height() / 2.0));
+  p = snapToGuides(p, snappedX, snappedY);
+
+  if(snappedX) {
+    newX = p.x() - (selectedRect.width() / 2.0);
+  }
+
+  if(snappedY) {
+    newY = p.y() - (selectedRect.height() / 2.0);
+  }
+
   p.setCoords(selectedRect.x() + dx, selectedRect.y() + dy);
   p = snapToGuides(p, snappedX, snappedY);
 
@@ -1242,12 +1264,18 @@ void KivioCanvas::updateAutoGuideLines()
         ++stencilIt;
 
         if(!stencil->isSelected()) {
-          hGuideLines << stencil->y() << (stencil->y() + stencil->h());
-          vGuideLines << stencil->x() << (stencil->x() + stencil->w());
+          hGuideLines << stencil->y() << (stencil->y() + (stencil->h() / 2.0)) << (stencil->y() + stencil->h());
+          vGuideLines << stencil->x() << (stencil->x() + (stencil->w() / 2.0)) << (stencil->x() + stencil->w());
         }
       }
     }
   }
+
+  KoPageLayout pl = activePage()->paperLayout();
+
+  // Add the middle of the page and the margins
+  hGuideLines << (pl.ptHeight / 2.0) << pl.ptTop << pl.ptBottom;
+  vGuideLines << (pl.ptWidth / 2.0) << pl.ptLeft << pl.ptRight;
 
   guideLines().setAutoGuideLines(hGuideLines, vGuideLines);
 }

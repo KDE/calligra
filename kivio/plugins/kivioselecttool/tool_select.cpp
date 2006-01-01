@@ -523,31 +523,46 @@ void SelectTool::continueDragging(const QPoint &pos, bool ignoreGridGuides)
   if(!ignoreGridGuides) {
     // First attempt a snap-to-grid
     p.setCoords(newX, newY);
-    
+
     p = canvas->snapToGrid(p);
-  
+
     newX = p.x();
     newY = p.y();
-  
+
     // Now the guides override the grid so we attempt to snap to them
+    // The bottom
     p.setCoords(m_selectedRect.x() + dx + m_selectedRect.width(), m_selectedRect.y() + dy + m_selectedRect.height());
     p = canvas->snapToGuides(p, snappedX, snappedY);
-  
+
     if(snappedX) {
       newX = p.x() - m_selectedRect.width();
     }
-  
+
     if(snappedY) {
       newY = p.y() - m_selectedRect.height();
     }
-  
+
+    // The middle
+    p.setCoords(m_selectedRect.x() + dx + (m_selectedRect.width() / 2.0),
+                m_selectedRect.y() + dy + (m_selectedRect.height() / 2.0));
+    p = canvas->snapToGuides(p, snappedX, snappedY);
+
+    if(snappedX) {
+      newX = p.x() - (m_selectedRect.width() / 2.0);
+    }
+
+    if(snappedY) {
+      newY = p.y() - (m_selectedRect.height() / 2.0);
+    }
+
+    // The top
     p.setCoords(m_selectedRect.x() + dx, m_selectedRect.y() + dy);
     p = canvas->snapToGuides(p, snappedX, snappedY);
-  
+
     if(snappedX) {
       newX = p.x();
     }
-  
+
     if(snappedY) {
       newY = p.y();
     }
