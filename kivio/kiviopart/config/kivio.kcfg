@@ -48,11 +48,11 @@
   <group name="Interface">
     <entry name="ShowGrid" type="Bool">
       <label>Show the grid.</label>
-      <default>true</default>
+      <default>false</default>
     </entry>
     <entry name="SnapGrid" type="Bool">
       <label>Snap to the grid.</label>
-      <default>true</default>
+      <default>false</default>
     </entry>
     <entry name="GridColor" type="Color">
       <label>Color of the grid lines.</label>
