@@ -17,7 +17,6 @@
  * Boston, MA 02110-1301, USA.
  */
  
- // A big thank to Glenn Randers-Pehrson for it's wonderfull documentation of libpng available at http://www.libpng.org/pub/png/libpng-1.2.5-manual.html
 #include "kis_tiff_converter.h"
 
 #include <stdio.h>
@@ -44,6 +43,89 @@ namespace {
     const Q_UINT8 PIXEL_RED = 2;
     const Q_UINT8 PIXEL_ALPHA = 3;
 
+    
+    class TIFFStream {
+        public:
+            TIFFStream( uint16 depth) : m_depth(depth) {};
+            virtual uint32 nextValue() =0;
+            virtual void restart() =0;
+        protected:
+            uint16 m_depth;
+    };
+    class TIFFStreamContig : public TIFFStream {
+        public:
+            TIFFStreamContig( uint8* src, uint16 depth ) : TIFFStream(depth), m_src(src) { restart(); };
+            virtual uint32 nextValue()
+            {
+                register uint8 remain;
+                register uint32 value;
+                remain = m_depth;
+                value = 0;
+                while (remain > 0)
+                {
+                    register uint8 toread;
+                    toread = remain;
+                    if (toread > m_posinc) toread = m_posinc;
+                    remain -= toread;
+                    m_posinc -= toread;
+                    value = (value << toread) | (( (*m_srcit) >> (m_posinc) ) & ( ( 1 << toread ) - 1 ) );
+                    if (m_posinc == 0)
+                    {
+                        m_srcit++;
+                        m_posinc=8;
+                    }
+                }
+                return value;
+            }
+            virtual void restart()
+            {
+                m_srcit = m_src;
+                m_posinc = 8;
+            }
+        private:
+            uint8* m_src;
+            uint8* m_srcit;
+            uint8 m_posinc;
+    };
+    
+    class TIFFStreamSeperate : public TIFFStream {
+        public:
+            TIFFStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth) : TIFFStream(depth), m_nb_samples(nb_samples)
+            {
+                streams = new TIFFStreamContig*[nb_samples];
+                for(uint8 i = 0; i < m_nb_samples; i++)
+                {
+                    streams[i] = new TIFFStreamContig(srcs[i], depth);
+                }
+                restart();
+            }
+            ~TIFFStreamSeperate()
+            {
+                for(uint8 i = 0; i < m_nb_samples; i++)
+                {
+                    delete streams[i];
+                }
+                delete[] streams;
+            }
+            virtual uint32 nextValue()
+            {
+                uint32 value = streams[ m_current_sample ]->nextValue();
+                if( (++m_current_sample) >= m_nb_samples)
+                    m_current_sample = 0;
+                return value;
+            }
+            virtual void restart()
+            {
+                m_current_sample = 0;
+                for(uint8 i = 0; i < m_nb_samples; i++)
+                {
+                    streams[i]->restart();
+                }
+            }
+        private:
+            TIFFStreamContig** streams;
+            uint8 m_current_sample, m_nb_samples;
+    };
     
     int16 getColorTypeforColorSpace( KisColorSpace * cs )
     {
@@ -113,368 +195,154 @@ namespace {
         }
         return "";
     }
-    uint32 ddReader(Q_UINT8** srcit, uint16 depth, uint8 &posinc)
+    
+    typedef int32 (*copyTransform)(int32);
+    
+    int32 cTidentity(int32 v)
     {
-        register uint8 remain;
-        register uint32 value;
-
-        remain = depth;
-        value = 0;
-
-        while (remain > 0)
+        return v;
+    }
+    
+    int32 cTinvert8(int32 v)
+    {
+        return Q_UINT8_MAX - v;
+    }
+    
+    int32 cTinvert16(int32 v)
+    {
+        return Q_UINT16_MAX - v;
+    }
+    
+    void copyDataToChannels( KisHLineIterator it, TIFFStream* tiffstream, int8 alphapos, uint8 depth, uint8 nbcolorssamples, uint8 extrasamplescount, Q_UINT8* poses, copyTransform transform = cTidentity)
+    {
+       if( depth <= 8 )
         {
-            register uint8 toread;
-
-            toread = remain;
-            if (toread > posinc) toread = posinc;
-
-            remain -= toread;
-            posinc -= toread;
-
-            value = (value << toread) | (( (**srcit) >> (posinc) ) & ( ( 1 << toread ) - 1 ) );
-
-            if (posinc == 0)
-            {
-                *srcit = *srcit + 1;
-                posinc=8;
+            Q_UINT8 coeff = 1 << ( 8 - depth );
+//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
+            while (!it.isDone()) {
+                Q_UINT8 *d = it.rawData();
+                Q_UINT8 i;
+                for(i = 0; i < nbcolorssamples; i++)
+                {
+                    d[poses[i]] = transform( tiffstream->nextValue() *coeff );
+                }
+                d[poses[i]] = Q_UINT8_MAX;
+                for(int i = 0; i < extrasamplescount; i++)
+                {
+                    if(i == alphapos)
+                        d[poses[i]] = tiffstream->nextValue() *coeff;
+                    else
+                        tiffstream->nextValue();
+                }
+                ++it;
+            }
+        } else if( depth <= 16 ) {
+            Q_UINT16 coeff =  1 << ( 16 - depth );
+//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
+            while (!it.isDone()) {
+                Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                Q_UINT8 i;
+                for(i = 0; i < nbcolorssamples; i++)
+                {
+                    d[poses[i]] = transform( tiffstream->nextValue() *coeff );
+                }
+                d[poses[i]] = Q_UINT16_MAX;
+                for(int i = 0; i < extrasamplescount; i++)
+                {
+                    if(i == alphapos)
+                        d[poses[i]] = tiffstream->nextValue() *coeff;
+                    else
+                        tiffstream->nextValue();
+                }
+                ++it;
+            }
+        } else if( depth > 16 ) {
+            Q_UINT32 coeff =  1 << ( depth - 16 );
+            kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
+            while (!it.isDone()) {
+                Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                Q_UINT8 i;
+                for(i = 0; i < nbcolorssamples; i++)
+                {
+                    d[poses[i]] = tiffstream->nextValue() / coeff;
+                }
+                d[poses[i]] = Q_UINT16_MAX;
+                for(int i = 0; i < extrasamplescount; i++)
+                {
+                    if(i == alphapos)
+                        d[poses[i]] = tiffstream->nextValue() / coeff;
+                    else
+                        tiffstream->nextValue();
+                }
+                ++it;
             }
         }
-        return value;
     }
-    void convertFromTIFFData( KisHLineIterator it, uint8* src, int8 alphapos, uint16 color_type, uint16 depth, uint8 extrasamplescount, uint16 *red, uint16 *green, uint16 *blue)
+    void convertFromTIFFData( KisHLineIterator it, TIFFStream* tiffstream, int8 alphapos, uint16 color_type, uint16 depth, uint8 nbcolorssamples, uint8 extrasamplescount, uint16 *red, uint16 *green, uint16 *blue)
     {
         switch(color_type)
         {
             case PHOTOMETRIC_MINISWHITE:
-                if(depth == 16)
-                {
-                    Q_UINT16 *srcit = reinterpret_cast<Q_UINT16 *>(src);
-                    while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        d[0] = Q_UINT16_MAX - *(srcit++);
-                        if(alphapos != -1)
-                        {
-                            d[1] = *(srcit + alphapos);
-                        } else {
-                            d[1] = Q_UINT16_MAX;
-                        }
-                        ++it;
-                    }
-                } else if( depth == 8) {
-                    Q_UINT8 *srcit = src;
-                    while (!it.isDone()) {
-                        Q_UINT8 *d = it.rawData();
-                        d[0] = Q_UINT8_MAX - *(srcit++);
-                        if(alphapos != -1)
-                        {
-                            d[1] = *(srcit + alphapos);
-                        } else {
-                            d[1] = Q_UINT8_MAX;
-                        }
-                        ++it;
-                    }
-                } else if( depth < 8 ) {
-                    uint8 posinc = 8;
-                    Q_UINT8 *srcit = src;
-                    Q_UINT8 coeff = Q_UINT8_MAX >> (depth - 1);
-                    kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-                    while (!it.isDone()) {
-                            Q_UINT8 *d = it.rawData();
-                            d[0] = Q_UINT8_MAX - (ddReader(&srcit, depth, posinc))*coeff;
-                            d[1] = Q_UINT8_MAX;
-                            for(int i = 0; i < extrasamplescount; i++)
-                            {
-                                if(i == alphapos)
-                                    d[1] = (ddReader(&srcit, depth, posinc))*coeff;
-                                else
-                                    (ddReader(&srcit, depth, posinc));
-                            }
-                            ++it;
-                    }
-                } else if( depth < 16 ) {
-                    uint8 posinc = 8;
-                    Q_UINT8 *srcit = src;
-                    Q_UINT16 coeff =  1 << ( 16 - depth );
-                    kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-                    while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        d[0] = Q_UINT16_MAX - (ddReader(&srcit, depth, posinc)) *coeff;
-                        d[1] = Q_UINT16_MAX;
-                        for(uint i = 0; i < extrasamplescount; i++)
-                        {
-                            if(i == alphapos)
-                                d[1] = (ddReader(&srcit, depth, posinc))*coeff;
-                            else
-                                (ddReader(&srcit, depth, posinc));
-                        }
-                        ++it;
-                    }
-                }
-                break;
+            {
+                Q_UINT8 poses[]={ 0, 1};
+                if(depth > 8)
+                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, cTinvert16);
+                else
+                    copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses, cTinvert8);
+            }
+            break;
             case PHOTOMETRIC_MINISBLACK:
-                if(depth == 16)
-                {
-                    Q_UINT16 *srcit = reinterpret_cast<Q_UINT16 *>(src);
-                    while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        d[0] = *(srcit++);
-                        if(alphapos != -1)
-                        {
-                            d[1] = *(srcit + alphapos);
-                        } else {
-                            d[1] = Q_UINT16_MAX;
-                        }
-                        ++it;
-                    }
-                }
-                else if( depth == 8)
-                {
-                    Q_UINT8 *srcit = src;
-                    while (!it.isDone()) {
-                        Q_UINT8 *d = it.rawData();
-                        d[0] = *(srcit++);
-                        if(alphapos != -1)
-                        {
-                            d[1] = *(srcit + alphapos);
-                        } else {
-                            d[1] = Q_UINT8_MAX;
-                        }
-                        ++it;
-                    }
-                }
-                else if( depth < 8 )
-                {
-                    uint8 posinc = 8;
-                    Q_UINT8 *srcit = src;
-                    Q_UINT8 coeff = 1 << ( 8 - depth );
-                    kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-                    while (!it.isDone()) {
-                        Q_UINT8 *d = it.rawData();
-                        d[0] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[1] = Q_UINT8_MAX;
-                        for(int i = 0; i < extrasamplescount; i++)
-                        {
-                            if(i == alphapos)
-                                d[1] = (ddReader(&srcit, depth, posinc))*coeff;
-                            else
-                                (ddReader(&srcit, depth, posinc));
-                        }
-                        ++it;
-                    }
-                } else if( depth < 16 ) {
-                    uint8 posinc = 8;
-                    Q_UINT8 *srcit = src;
-                    Q_UINT16 coeff =  1 << ( 16 - depth );
-                    kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-                    while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        d[0] = (ddReader(&srcit, depth, posinc)) *coeff;
-                        d[1] = Q_UINT16_MAX;
-                        for(int i = 0; i < extrasamplescount; i++)
-                        {
-                            if(i == alphapos)
-                                d[1] = (ddReader(&srcit, depth, posinc))*coeff;
-                            else
-                                (ddReader(&srcit, depth, posinc));
-                        }
-                        ++it;
-                    }
-                } else if( depth > 16 ) {
-                    uint8 posinc = 8;
-                    Q_UINT8 *srcit = src;
-                    Q_UINT32 coeff =  1 << ( depth - 16 );
-                    kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-                    while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        d[0] = (ddReader(&srcit, depth, posinc)) / coeff;
-                        d[1] = Q_UINT16_MAX;
-                        for(int i = 0; i < extrasamplescount; i++)
-                        {
-                            if(i == alphapos)
-                                d[1] = (ddReader(&srcit, depth, posinc))*coeff;
-                            else
-                                (ddReader(&srcit, depth, posinc));
-                        }
-                        ++it;
-                    }
-                }
-                break;
+            {
+                Q_UINT8 poses[]={ 0, 1};
+                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses);
+            }
+            break;
             case PHOTOMETRIC_CIELAB:
+            {
+                Q_UINT8 poses[]={ 0, 1, 2, 3};
+                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses);
+            }
+            break;
             case PHOTOMETRIC_RGB:
-                if(depth == 16)
-                {
-                    Q_UINT16 *srcit = reinterpret_cast<Q_UINT16 *>(src);
-                    while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        d[2] = *(srcit++);
-                        d[1] = *(srcit++);
-                        d[0] = *(srcit++);
-                        if(alphapos != -1)
-                        {
-                            d[3] = *(srcit + alphapos);
-                        } else {
-                            d[3] = Q_UINT16_MAX;
-                        }
-                        srcit+= extrasamplescount;
-                        ++it;
-                    }
-                }
-                else if( depth == 8)
-                {
-                    Q_UINT8 *srcit = src;
-                    while (!it.isDone()) {
-                        Q_UINT8 *d = it.rawData();
-                        d[2] = *(srcit++);
-                        d[1] = *(srcit++);
-                        d[0] = *(srcit++);
-                        if(alphapos != -1)
-                        {
-                            d[3] = *(srcit + alphapos);
-                        } else {
-                            d[3] = Q_UINT8_MAX;
-                        }
-                        srcit+= extrasamplescount;
-                        ++it;
-                    }
-                }
-                else if( depth < 8 )
-                {
-                    uint8 posinc = 8;
-                    Q_UINT8 *srcit = src;
-                    Q_UINT8 coeff = 1 << ( 8 - depth );
-                    kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-                    while (!it.isDone()) {
-                        Q_UINT8 *d = it.rawData();
-                        d[2] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[1] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[0] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[3] = Q_UINT8_MAX;
-                        for(int i = 0; i < extrasamplescount; i++)
-                        {
-                            if(i == alphapos)
-                                d[3] = (ddReader(&srcit, depth, posinc))*coeff;
-                            else
-                                (ddReader(&srcit, depth, posinc));
-                        }
-                        ++it;
-                    }
-                } else if( depth < 16 ) {
-                    uint8 posinc = 8;
-                    Q_UINT8 *srcit = src;
-                    Q_UINT16 coeff =  1 << ( 16 - depth );
-                    kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-                    while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        d[2] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[1] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[0] = (ddReader(&srcit, depth, posinc)) *coeff;
-                        d[3] = Q_UINT16_MAX;
-                        for(int i = 0; i < extrasamplescount; i++)
-                        {
-                            if(i == alphapos)
-                                d[3] = (ddReader(&srcit, depth, posinc))*coeff;
-                            else
-                                (ddReader(&srcit, depth, posinc));
-                        }
-                        ++it;
-                    }
-                } 
+            {
+                Q_UINT8 poses[]={ 2, 1, 0, 3};
+                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses);
+            }
+            break;
             case PHOTOMETRIC_PALETTE:
             {
-                Q_UINT8* srcit = src;
-                while (!it.isDone()) {
-                    Q_UINT16* d = (Q_UINT16*)it.rawData();
-                    uint8 index = *(srcit++);
-                    d[2] = red[index];
-                    d[1] = green[index];
-                    d[0] = blue[index];
-                    d[3] = Q_UINT16_MAX;
-                    ++it;
+                if(depth <= 8)
+                {
+                    uint8 posinc = 8;
+                    while (!it.isDone()) {
+                        Q_UINT16* d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                        uint32 index = tiffstream->nextValue();
+                        d[2] = red[index];
+                        d[1] = green[index];
+                        d[0] = blue[index];
+                        d[3] = Q_UINT16_MAX;
+                        ++it;
+                    }
+                } else if(depth <= 16)
+                {
+                    uint8 posinc = 8;
+                    while (!it.isDone()) {
+                        Q_UINT16* d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                        uint32 index = tiffstream->nextValue();
+                        d[2] = red[index];
+                        d[1] = green[index];
+                        d[0] = blue[index];
+                        d[3] = Q_UINT16_MAX;
+                        ++it;
+                    }
                 }
             }
             case PHOTOMETRIC_SEPARATED: // it means CMYK
-                if(depth == 16)
-                {
-                    Q_UINT16 *srcit = reinterpret_cast<Q_UINT16 *>(src);
-                    while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        d[0] = *(srcit++);
-                        d[1] = *(srcit++);
-                        d[2] = *(srcit++);
-                        d[3] = *(srcit++);
-                        if(alphapos != -1)
-                        {
-                            d[4] = *(srcit + alphapos);
-                        } else {
-                            d[4] = Q_UINT16_MAX;
-                        }
-                        srcit+= extrasamplescount;
-                        ++it;
-                    }
-                }
-                else if(depth == 8)
-                {
-                    Q_UINT8 *srcit = src;
-                    while (!it.isDone()) {
-                        Q_UINT8 *d = it.rawData();
-                        d[0] = *(srcit++);
-                        d[1] = *(srcit++);
-                        d[2] = *(srcit++);
-                        d[3] = *(srcit++);
-                        if(alphapos != -1)
-                        {
-                            d[4] = *(srcit + alphapos);
-                        } else {
-                            d[4] = Q_UINT16_MAX;
-                        }
-                        srcit+= extrasamplescount;
-                        ++it;
-                    }
-                }
-                else if( depth < 8 )
-                {
-                    uint8 posinc = 8;
-                    Q_UINT8 *srcit = src;
-                    Q_UINT8 coeff = 1 << ( 8 - depth );
-                    kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-                    while (!it.isDone()) {
-                        Q_UINT8 *d = it.rawData();
-                        d[0] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[1] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[2] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[3] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[4] = Q_UINT8_MAX;
-                        for(int i = 0; i < extrasamplescount; i++)
-                        {
-                            if(i == alphapos)
-                                d[4] = (ddReader(&srcit, depth, posinc))*coeff;
-                            else
-                                (ddReader(&srcit, depth, posinc));
-                        }
-                        ++it;
-                    }
-                } else if( depth < 16 ) {
-                    uint8 posinc = 8;
-                    Q_UINT8 *srcit = src;
-                    Q_UINT16 coeff =  1 << ( 16 - depth );
-                    kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
-                    while (!it.isDone()) {
-                        Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        d[0] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[1] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[2] = (ddReader(&srcit, depth, posinc))*coeff;
-                        d[3] = (ddReader(&srcit, depth, posinc)) *coeff;
-                        d[4] = Q_UINT16_MAX;
-                        for(int i = 0; i < extrasamplescount; i++)
-                        {
-                            if(i == alphapos)
-                                d[4] = (ddReader(&srcit, depth, posinc))*coeff;
-                            else
-                                (ddReader(&srcit, depth, posinc));
-                        }
-                        ++it;
-                    }
-                } 
+            {
+                Q_UINT8 poses[]={ 0, 1, 2, 3, 4};
+                copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses);
+            }
+            break;
 /*            case PHOTOMETRIC_ICCLAB:
                 // TODO: convert from ICCLAB to CIELAB
                 switch(depth)
@@ -667,14 +535,6 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
         TIFFClose(image);
         return KisImageBuilder_RESULT_INVALID_ARG;
     }
-    // Get the fill order
-/*    uint8 fillorder;
-    if(TIFFGetField(image, TIFFTAG_FILLORDER, &fillorder) == 0)
-    {
-        kdDebug() <<  "Fill order is not define" << endl;
-        TIFFClose(image);
-        return KisImageBuilder_RESULT_INVALID_ARG;
-    }*/
     // Creating the KisImageSP
     if( ! m_img) {
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
@@ -686,6 +546,9 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
     }
     KisPaintLayer* layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
     m_img->addLayer(layer, m_img->rootLayer(), 0);
+    tdata_t buf = 0;
+    tdata_t* ps_buf = 0; // used only for planar configuration seperated
+    TIFFStream* tiffstream;
     if(TIFFIsTiled(image))
     {
         kdDebug() << "tiled image" << endl;
@@ -693,75 +556,88 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
         uint32 x, y;
         TIFFGetField(image, TIFFTAG_TILEWIDTH, &tileWidth);
         TIFFGetField(image, TIFFTAG_TILELENGTH, &tileHeight);
-        tdata_t buf = _TIFFmalloc(TIFFTileSize(image));
+        if(planarconfig == PLANARCONFIG_CONTIG)
+        {
+            buf = _TIFFmalloc(TIFFTileSize(image));
+            tiffstream = new TIFFStreamContig((uint8*)buf, depth);
+        } else {
+            ps_buf = new tdata_t[nbchannels];
+            for(uint i = 0; i < nbchannels; i++)
+            {
+                ps_buf[i] = _TIFFmalloc(TIFFTileSize(image)/nbchannels);
+            }
+            tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth);
+        }
+
         uint32 linewidth = (tileWidth * depth * nbchannels) / 8;
         kdDebug() << linewidth << " " << nbchannels << " " << layer->paintDevice()->colorSpace()->nColorChannels() << endl;
         for (y = 0; y < height; y+= tileHeight)
         {
             for (x = 0; x < width; x += tileWidth)
             { // TODO support for different planarity
+                kdDebug() << "Reading tile x = " << x << " y = " << y << endl;
                 if( planarconfig == PLANARCONFIG_CONTIG )
                 {
-                    TIFFReadTile(image, buf, x, y, 0, 0);
+                    TIFFReadTile(image, buf, x, y, 0, (tsize_t) -1);
                 } else {
-                    kdDebug() <<  "Plannar configuration seperated is not supported" << endl;
-                    TIFFClose(image);
-                    return KisImageBuilder_RESULT_UNSUPPORTED;
+                    for(uint i = 0; i < nbchannels; i++)
+                    {
+                        TIFFReadTile(image, ps_buf[i], x, y, 0, i);
+                    }
                 }
-                uint32 realTileWidth =  (x + tileWidth) < width ? tileWidth : ((x + tileWidth) - width);
+                uint32 realTileWidth =  (x + tileWidth) < width ? tileWidth : width - x;
                 for (uint yintile = 0; y + yintile < height && yintile < tileHeight; yintile++) {
                     KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(x, y + yintile, realTileWidth, true);
-                    convertFromTIFFData( it, (uint8*)buf + yintile * linewidth, alphapos, color_type, depth, extrasamplescount, red, green, blue);
+                    convertFromTIFFData( it, tiffstream, alphapos, color_type, depth, nbchannels - extrasamplescount, extrasamplescount, red, green, blue);
                 }
-                
+                tiffstream->restart();
             }
         }
-        _TIFFfree(buf);
     } else {
         kdDebug() << "striped image" << endl;
         uint32 strip_height;
         TIFFGetField( image, TIFFTAG_ROWSPERSTRIP, &strip_height );
         tsize_t stripsize = TIFFStripSize(image);
-        tdata_t buf = _TIFFmalloc(stripsize);
+        if(planarconfig == PLANARCONFIG_CONTIG)
+        {
+            buf = _TIFFmalloc(stripsize);
+            tiffstream = new TIFFStreamContig((uint8*)buf, depth);
+        } else {
+            ps_buf = new tdata_t[nbchannels];
+            for(uint i = 0; i < nbchannels; i++)
+            {
+                ps_buf[i] = _TIFFmalloc(stripsize/nbchannels);
+            }
+            tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth);
+        } 
         uint32 y = 0;
-        uint32 linewidth = (uint32)ceil((width * depth * nbchannels) / 8.);
-        kdDebug() << " linewidth = " << width << " * " << depth << " * " << nbchannels << " / 8 = " << linewidth << " TIFFScanlineSize = " << TIFFScanlineSize(image) << endl;
-//         if(depth < 8){ linewidth++; }
+        uint32 linewidth = TIFFScanlineSize(image);
         for (y = 0; y < height; y++)
         { // TODO support for different planarity
             if( planarconfig == PLANARCONFIG_CONTIG )
             {
                 TIFFReadScanline(image, buf, y, (tsize_t) -1);
             } else {
-                kdDebug() <<  "Plannar configuration seperated is not supported" << endl;
-                TIFFClose(image);
-                return KisImageBuilder_RESULT_UNSUPPORTED;
+                for(uint i = 0; i < nbchannels; i++)
+                {
+                    TIFFReadScanline(image, ps_buf[i], y, i);
+                }
             }
             KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
-            convertFromTIFFData( it, (uint8*)buf, alphapos, color_type, depth, extrasamplescount,  red, green, blue);
+            convertFromTIFFData( it, tiffstream, alphapos, color_type, depth, nbchannels - extrasamplescount, extrasamplescount,  red, green, blue);
+            tiffstream->restart();
         }
-#if 0
-        for (strip = 0; strip < TIFFNumberOfStrips(image); strip++)
-        { // TODO support for different planarity
-            if( planarconfig == PLANARCONFIG_CONTIG )
-            {
-                TIFFReadEncodedStrip(image, strip, buf, (tsize_t) -1);
-            } else {
-                kdDebug() <<  "Plannar configuration seperated is not supported" << endl;
-                TIFFClose(image);
-                return KisImageBuilder_RESULT_UNSUPPORTED;
-            }
-/*            if( fillorder == FILLORDER_LSB2MSB)
-            {
-                convertMSB2LSB(buf, stripsize );
-            }*/
-            for (uint yinstrip = 0; y < height && yinstrip < strip_height; y++, yinstrip++) {
-                KisHLineIterator it = layer -> paintDevice() -> createHLineIterator(0, y, width, true);
-                convertFromTIFFData( it, (uint8*)buf + (yinstrip * linewidth), alphapos, color_type, depth, extrasamplescount,  red, green, blue);
-            }
-        }
-#endif
+    }
+    delete tiffstream;
+    if( planarconfig == PLANARCONFIG_CONTIG )
+    {
         _TIFFfree(buf);
+    } else {
+        for(uint i = 0; i < nbchannels; i++)
+        {
+            _TIFFfree(ps_buf[i]);
+        }
+        delete[] ps_buf;
     }
 
     // Freeing memory
@@ -1003,8 +879,8 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisPaintLaye
 
     fclose(fp);
     
-    return KisImageBuilder_RESULT_OK;
 #endif
+    return KisImageBuilder_RESULT_OK;
 }
 
 
