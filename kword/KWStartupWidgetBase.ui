@@ -12,6 +12,9 @@
             <height>280</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>KWStartupWidgetBase</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -28,6 +31,10 @@
             </property>
             <property name="checked">
                 <bool>true</bool>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;p&gt;&lt;b&gt;Check to make each page have a text area created automatically&lt;/b&gt;&lt;br&gt;
+For letters and notes with one major text, possibly on several pages, you want to keep this checked. Only when you want to completely define where each text frame should be positioned you should disable this.&lt;/p&gt;</string>
             </property>
         </widget>
         <widget class="QTabWidget" row="1" column="0" rowspan="1" colspan="2">
