@@ -716,7 +716,9 @@ void KivioChangeStencilProtectCommand::changeValue( bool b )
     default:
         break;
     }
+
     m_page->doc()->updateProtectPanelCheckBox();
+    m_page->doc()->updateView(m_page);
 }
 
 KivioAddConnectorTargetCommand::KivioAddConnectorTargetCommand(const QString& name, KivioPage* page,

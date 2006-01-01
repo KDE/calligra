@@ -59,6 +59,8 @@ void KivioLayerItem::update()
   setPixmap(3, data->connectable() ? SmallIcon("layer_connect",KivioFactory::global()):SmallIcon("layer_noconnect",KivioFactory::global()));
   setText(4,data->name());
 }
+
+
 /*********************************************************/
 KivioLayerPanel::KivioLayerPanel(KivioView* view, QWidget* parent, const char* name)
 : KivioLayerPanelBase(parent, name), m_pView(view)
@@ -69,7 +71,7 @@ KivioLayerPanel::KivioLayerPanel(KivioView* view, QWidget* parent, const char* n
   list->addColumn(i18n("Editable"),15);
   list->addColumn(i18n("Connect"),15);
   list->addColumn(i18n("Name"),-1);
-  list->setSorting(5,true);
+  list->setSorting(5, false);
   list->installEventFilter(this);
 
   actNew = new KAction( i18n("New Layer"), BarIcon("layer_add",KivioFactory::global()), 0, this, SLOT(addItem()), this);
@@ -315,7 +317,7 @@ void KivioLayerPanel::reset()
 
   KivioPage* page = m_pView->activePage();
   KivioLayer* layer = page->firstLayer();
-  KivioLayerItem* ci = 0;
+  QListViewItem* ci = 0;
 
   while (layer) {
     KivioLayerItem* i = new KivioLayerItem(list, layer, id++);
@@ -324,9 +326,11 @@ void KivioLayerPanel::reset()
     layer = page->nextLayer();
   }
 
-  if (ci)
-    list->setCurrentItem(ci);
+  if(!ci) {
+    ci = list->firstChild();
+  }
 
+  list->setSelected(ci, true);
   list->sort();
   updateButtons(list->currentItem());
 }

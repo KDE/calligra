@@ -351,14 +351,14 @@ void KivioView::createBirdEyeDock()
 void KivioView::createLayerDock()
 {
   m_pLayersPanel = new KivioLayerPanel( this, this);
-  m_pLayersPanel -> setCaption(i18n("Layers"));
+  m_pLayersPanel->setCaption(i18n("Layers"));
   paletteManager()->addWidget(m_pLayersPanel, "layerspanel", "birdeyedocker");
 }
 
 void KivioView::createProtectionDock()
 {
   m_pProtectionPanel = new KivioProtectionPanel(this,this);
-  m_pProtectionPanel -> setCaption(i18n("Protection"));
+  m_pProtectionPanel->setCaption(i18n("Protection"));
   paletteManager()->addWidget(m_pProtectionPanel, "protectionpanel", "geometrydocker");
 }
 
