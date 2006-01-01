@@ -76,7 +76,7 @@ protected:
 	QDomDocument inpdoc;
 	QDomDocument outdoc;
 	void convert();
-	void createObject( VGroup *grp, const QDomElement &, VObject::VState state = VObject::normal );
+	void createObject( VGroup *grp, const QDomElement &, VObject::VState state = VObject::normal, const QDomElement &style = QDomElement() );
 	void createText( VGroup *, const QDomElement & );
 	void parseFont( const QDomElement & );
 	// find object with given id in document
@@ -88,6 +88,8 @@ protected:
 
 	// Determine scaling factor from given matrix
 	double getScalingFromMatrix( QWMatrix &matrix );
+
+	QDomElement mergeStyles( const QDomElement &, const QDomElement & );
 
 private:
 	VDocument						m_document;

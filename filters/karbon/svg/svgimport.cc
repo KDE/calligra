@@ -345,6 +345,44 @@ SvgImport::GradientHelper* SvgImport::findGradient( const QString &id, const QSt
 		return 0L;
 }
 
+QDomElement SvgImport::mergeStyles( const QDomElement &referencedBy, const QDomElement &referencedElement )
+{
+	// First use all the style attributes of the element being referenced.
+	QDomElement e = referencedElement;
+
+	// Now go through the style attributes of the element that is referencing and substitute the original ones.
+	if( !referencedBy.attribute( "color" ).isEmpty() )
+		e.setAttribute( "color", referencedBy.attribute( "color" ) );
+	if( !referencedBy.attribute( "fill" ).isEmpty() )
+		e.setAttribute( "fill", referencedBy.attribute( "fill" ) );
+	if( !referencedBy.attribute( "fill-rule" ).isEmpty() )
+		e.setAttribute( "fill-rule", referencedBy.attribute( "fill-rule" ) );
+	if( !referencedBy.attribute( "stroke" ).isEmpty() )
+		e.setAttribute( "stroke", referencedBy.attribute( "stroke" ) );
+	if( !referencedBy.attribute( "stroke-width" ).isEmpty() )
+		e.setAttribute( "stroke-width", referencedBy.attribute( "stroke-width" ) );
+	if( !referencedBy.attribute( "stroke-linejoin" ).isEmpty() )
+		e.setAttribute( "stroke-linejoin", referencedBy.attribute( "stroke-linejoin" ) );
+	if( !referencedBy.attribute( "stroke-linecap" ).isEmpty() )
+		e.setAttribute( "stroke-linecap", referencedBy.attribute( "stroke-linecap" ) );
+	if( !referencedBy.attribute( "stroke-dasharray" ).isEmpty() )
+		e.setAttribute( "stroke-dasharray", referencedBy.attribute( "stroke-dasharray" ) );
+	if( !referencedBy.attribute( "stroke-dashoffset" ).isEmpty() )
+		e.setAttribute( "stroke-dashoffset", referencedBy.attribute( "stroke-dashoffset" ) );
+	if( !referencedBy.attribute( "stroke-opacity" ).isEmpty() )
+		e.setAttribute( "stroke-opacity", referencedBy.attribute( "stroke-opacity" ) );
+	if( !referencedBy.attribute( "stroke-miterlimit" ).isEmpty() )
+		e.setAttribute( "stroke-miterlimit", referencedBy.attribute( "stroke-miterlimit" ) );
+	if( !referencedBy.attribute( "fill-opacity" ).isEmpty() )
+		e.setAttribute( "fill-opacity", referencedBy.attribute( "fill-opacity" ) );
+	if( !referencedBy.attribute( "opacity" ).isEmpty() )
+		e.setAttribute( "opacity", referencedBy.attribute( "opacity" ) );
+	if( !referencedBy.attribute( "style" ).isEmpty() )
+		e.setAttribute( "style", referencedBy.attribute( "style" ) );
+
+	return e;
+}
+
 
 // Parsing functions
 // ---------------------------------------------------------------------------------------
@@ -965,18 +1003,10 @@ void SvgImport::parseUse( VGroup *grp, const QDomElement &e )
 				parseGroup( grp, a);
 			else
 			{
-				createObject( grp, a );
-				// Names are not unique, so findObject(objectname) will not always give the correct results.
-				// Since we just created our object, it's the last one so get the last one.
-				/*VObject *obj = 0L;
-				if(grp)
-					obj = grp->objects().getLast(); //findObject(key, grp);
-				else
-					obj = m_document.activeLayer()->objects().getLast();
-
-				// Parse stroke and fill etc...
-				/*if(obj)
-					parseStyle( obj, e );*/
+				// Create the object with the merged styles.
+				// The object inherits all style attributes from the use tag, but keeps it's own attributes.
+				// So, not just use the style attributes of the use tag, but merge them first.
+				createObject( grp, a, VObject::normal, mergeStyles(e, a) );
 			}
 		}
 		delete( m_gc.pop() );
@@ -1239,7 +1269,7 @@ void SvgImport::createText( VGroup *grp, const QDomElement &b )
 	delete( m_gc.pop() );
 }
 
-void SvgImport::createObject( VGroup *grp, const QDomElement &b, const VObject::VState state )
+void SvgImport::createObject( VGroup *grp, const QDomElement &b, const VObject::VState state, const QDomElement &style )
 {
 	VObject *obj = 0L;
 
@@ -1327,7 +1357,12 @@ void SvgImport::createObject( VGroup *grp, const QDomElement &b, const VObject::
 
 	VTransformCmd trafo( 0L, m_gc.current()->matrix );
 	trafo.visit( *obj );
-	parseStyle( obj, b );
+	
+	if( !style.isNull() )
+		parseStyle( obj, style );
+	else
+		parseStyle( obj, b );
+
 	// handle id
 	if( !b.attribute("id").isEmpty() )
 		obj->setName( b.attribute("id") );
