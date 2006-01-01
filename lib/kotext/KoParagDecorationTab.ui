@@ -1,4 +1,4 @@
-<!DOCTYPE UI><UI version="3.2" stdsetdef="1">
+<!DOCTYPE UI><UI version="3.3" stdsetdef="1">
 <class>KoParagDecorationTab</class>
 <author>Martin Ellis &lt;martin.ellis@kdemail.net&gt;</author>
 <widget class="QWidget">
@@ -12,6 +12,9 @@
             <width>626</width>
             <height>345</height>
         </rect>
+    </property>
+    <property name="caption">
+        <string>KoBorderWidgetBase</string>
     </property>
     <vbox>
         <property name="name">
@@ -99,11 +102,54 @@ toggle button corresponding to that border.&lt;/p&gt;
 width and color, then click on the border to be
 modified in the preview.&lt;/p&gt;</string>
             </property>
-            <hbox>
+            <grid>
                 <property name="name">
                     <cstring>unnamed</cstring>
                 </property>
-                <widget class="QFrame">
+                <widget class="QLayoutWidget" row="0" column="1" rowspan="2" colspan="1">
+                    <property name="name">
+                        <cstring>previewLayout</cstring>
+                    </property>
+                    <vbox>
+                        <property name="name">
+                            <cstring>unnamed</cstring>
+                        </property>
+                        <widget class="QLabel">
+                            <property name="name">
+                                <cstring>borderPreviewLabel</cstring>
+                            </property>
+                            <property name="text">
+                                <string>Preview:</string>
+                            </property>
+                        </widget>
+                        <widget class="QFrame">
+                            <property name="name">
+                                <cstring>borderPreview</cstring>
+                            </property>
+                            <property name="sizePolicy">
+                                <sizepolicy>
+                                    <hsizetype>5</hsizetype>
+                                    <vsizetype>3</vsizetype>
+                                    <horstretch>0</horstretch>
+                                    <verstretch>0</verstretch>
+                                </sizepolicy>
+                            </property>
+                            <property name="minimumSize">
+                                <size>
+                                    <width>200</width>
+                                    <height>200</height>
+                                </size>
+                            </property>
+                            <property name="frameShape">
+                                <enum>NoFrame</enum>
+                            </property>
+                            <property name="frameShadow">
+                                <enum>Raised</enum>
+                            </property>
+                        </widget>
+                    </vbox>
+                </widget>
+                <widget class="QFrame" row="0" column="0">
                     <property name="name">
                         <cstring>borderControlFrame</cstring>
                     </property>
@@ -124,6 +170,9 @@ modified in the preview.&lt;/p&gt;</string>
                     <grid>
                         <property name="name">
                             <cstring>unnamed</cstring>
+                        </property>
+                        <property name="margin">
+                            <number>0</number>
                         </property>
                         <widget class="QLabel" row="1" column="0">
                             <property name="name">
@@ -154,17 +203,6 @@ modified in the preview.&lt;/p&gt;</string>
                                 <cstring>cbBorderStyle</cstring>
                             </property>
                         </widget>
-                        <widget class="QLabel" row="0" column="0">
-                            <property name="name">
-                                <cstring>lblBorderStyle</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Style:</string>
-                            </property>
-                            <property name="buddy" stdset="0">
-                                <cstring>cbBorderStyle</cstring>
-                            </property>
-                        </widget>
                         <widget class="QLabel" row="2" column="0">
                             <property name="name">
                                 <cstring>textLabel3</cstring>
@@ -174,29 +212,6 @@ modified in the preview.&lt;/p&gt;</string>
                             </property>
                             <property name="buddy" stdset="0">
                                 <cstring>bBorderColor</cstring>
-                            </property>
-                        </widget>
-                        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
-                            <property name="name">
-                                <cstring>cbJoinBorder</cstring>
-                            </property>
-                            <property name="text">
-                                <string>&amp;Merge with next paragraph</string>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Merges the border style of the current paragraph with the next paragraph</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>&lt;p&gt;Merge with next paragraph&lt;/p&gt;
-
-&lt;p&gt;When this option is checked, no top or bottom borders
-will appear between consecutive paragraphs with the
-same style.  Top and Bottom borders will only appear between
-paragraphs with different styles.&lt;/p&gt;
-
-&lt;p&gt;When this option is unchecked, top and bottom borders
-always appear at the top and bottom of paragraphs with this style,
-regardless of the style of the preceeding and subsequent paragraphs.&lt;/p&gt;</string>
                             </property>
                         </widget>
                         <widget class="QButtonGroup" row="3" column="0" rowspan="1" colspan="2">
@@ -303,55 +318,68 @@ regardless of the style of the preceeding and subsequent paragraphs.&lt;/p&gt;</
                                 </widget>
                             </hbox>
                         </widget>
-                    </grid>
-                </widget>
-                <widget class="QLayoutWidget">
-                    <property name="name">
-                        <cstring>previewLayout</cstring>
-                    </property>
-                    <vbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
+                        <widget class="QLabel" row="0" column="0">
                             <property name="name">
-                                <cstring>borderPreviewLabel</cstring>
+                                <cstring>lblBorderStyle</cstring>
                             </property>
                             <property name="text">
-                                <string>Preview:</string>
+                                <string>&amp;Style:</string>
+                            </property>
+                            <property name="buddy" stdset="0">
+                                <cstring>cbBorderStyle</cstring>
                             </property>
                         </widget>
-                        <widget class="QFrame">
+                        <widget class="QCheckBox" row="4" column="0" rowspan="1" colspan="2">
                             <property name="name">
-                                <cstring>borderPreview</cstring>
+                                <cstring>cbJoinBorder</cstring>
                             </property>
-                            <property name="sizePolicy">
-                                <sizepolicy>
-                                    <hsizetype>5</hsizetype>
-                                    <vsizetype>3</vsizetype>
-                                    <horstretch>0</horstretch>
-                                    <verstretch>0</verstretch>
-                                </sizepolicy>
+                            <property name="text">
+                                <string>&amp;Merge with next paragraph</string>
                             </property>
-                            <property name="minimumSize">
-                                <size>
-                                    <width>200</width>
-                                    <height>200</height>
-                                </size>
+                            <property name="accel">
+                                <string>Alt+M</string>
                             </property>
-                            <property name="frameShape">
-                                <enum>NoFrame</enum>
+                            <property name="toolTip" stdset="0">
+                                <string>Merges the border style of the current paragraph with the next paragraph</string>
                             </property>
-                            <property name="frameShadow">
-                                <enum>Raised</enum>
+                            <property name="whatsThis" stdset="0">
+                                <string>&lt;p&gt;Merge with next paragraph&lt;/p&gt;
+
+&lt;p&gt;When this option is checked, no top or bottom borders
+will appear between consecutive paragraphs with the
+same style.  Top and Bottom borders will only appear between
+paragraphs with different styles.&lt;/p&gt;
+
+&lt;p&gt;When this option is unchecked, top and bottom borders
+always appear at the top and bottom of paragraphs with this style,
+regardless of the style of the preceeding and subsequent paragraphs.&lt;/p&gt;</string>
                             </property>
                         </widget>
-                    </vbox>
+                    </grid>
                 </widget>
-            </hbox>
+                <spacer row="1" column="0">
+                    <property name="name">
+                        <cstring>spacer1</cstring>
+                    </property>
+                    <property name="orientation">
+                        <enum>Vertical</enum>
+                    </property>
+                    <property name="sizeType">
+                        <enum>Expanding</enum>
+                    </property>
+                    <property name="sizeHint">
+                        <size>
+                            <width>250</width>
+                            <height>21</height>
+                        </size>
+                    </property>
+                </spacer>
+            </grid>
         </widget>
     </vbox>
 </widget>
+<customwidgets>
+</customwidgets>
 <images>
     <image name="image0">
         <data format="PNG" length="106">89504e470d0a1a0a0000000d49484452000000140000001408060000008d891d0d0000003149444154388d63601805d406ffa198810c9aa0816401264a34233982aa063252dbc05117520e465d48d8668af2f20800009c621507e8d6c1420000000049454e44ae426082</data>

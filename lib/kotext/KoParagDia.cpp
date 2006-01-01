@@ -2104,6 +2104,7 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
                         int flags, KoUnit::Unit unit, double _frameWidth, bool breakLine, bool disableAll )
     : KDialogBase(Tabbed, QString::null, Ok | Cancel | User1 | Apply, Ok, parent, name, true )
 {
+    m_decorationsWidget = 0;
     m_flags = flags;
     setButtonText( KDialogBase::User1, i18n("Reset") );
 
@@ -2123,6 +2124,7 @@ KoParagDia::KoParagDia( QWidget* parent, const char* name,
     {
         QVBox * page = addVBoxPage( i18n( "D&ecorations" ) );
         m_decorationsWidget = new KoParagDecorationWidget( page, "decorations");
+        m_decorationsWidget->layout()->setMargin(0);
     }
     if ( m_flags & PD_NUMBERING )
     {
