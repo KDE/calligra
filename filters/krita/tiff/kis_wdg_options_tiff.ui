@@ -24,7 +24,7 @@
                 <cstring>groupBox1</cstring>
             </property>
             <property name="title">
-                <string>TIIFF Options :</string>
+                <string>TIFF Options:</string>
             </property>
             <vbox>
                 <property name="name">
@@ -43,7 +43,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Compression Type :</string>
+                                <string>Compression Type:</string>
                             </property>
                         </widget>
                         <widget class="KComboBox">
@@ -69,7 +69,7 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Lempel-Ziv  &amp; Welch (LZW)</string>
+                                    <string>Lempel-Ziv &amp; Welch (LZW)</string>
                                 </property>
                             </item>
                             <item>
@@ -111,7 +111,7 @@
                                 <cstring>textLabel1_3</cstring>
                             </property>
                             <property name="text">
-                                <string>Predictor :</string>
+                                <string>Predictor:</string>
                             </property>
                         </widget>
                         <widget class="KComboBox">
@@ -149,7 +149,7 @@
                 <cstring>groupBoxJPEG</cstring>
             </property>
             <property name="title">
-                <string>JPEG Compression Options :</string>
+                <string>JPEG Compression Options:</string>
             </property>
             <hbox>
                 <property name="name">
@@ -363,7 +363,7 @@
                         <cstring>textLabel2</cstring>
                     </property>
                     <property name="text">
-                        <string>Fax mode :</string>
+                        <string>Fax mode:</string>
                     </property>
                 </widget>
                 <widget class="KComboBox">
