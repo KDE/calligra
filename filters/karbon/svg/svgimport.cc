@@ -377,8 +377,8 @@ QDomElement SvgImport::mergeStyles( const QDomElement &referencedBy, const QDomE
 		e.setAttribute( "fill-opacity", referencedBy.attribute( "fill-opacity" ) );
 	if( !referencedBy.attribute( "opacity" ).isEmpty() )
 		e.setAttribute( "opacity", referencedBy.attribute( "opacity" ) );
-	if( !referencedBy.attribute( "style" ).isEmpty() )
-		e.setAttribute( "style", referencedBy.attribute( "style" ) );
+
+	// TODO merge style attribute too.
 
 	return e;
 }
