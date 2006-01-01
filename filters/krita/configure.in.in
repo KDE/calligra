@@ -1,0 +1,11 @@
+# Check if the tiff lib is available
+AC_FIND_TIFF
+AM_CONDITIONAL(have_tiff, test -n "$LIBTIFF")
+
+AC_FIND_PNG
+AM_CONDITIONAL(have_png, test -n "$LIBPNG")
+
+AC_FIND_JPEG
+AM_CONDITIONAL(have_jpeg, test -n "$LIBJPEG")
+
+

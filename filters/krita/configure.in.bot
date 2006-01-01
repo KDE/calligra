@@ -1,0 +1,21 @@
+if test -z "$LIBTIFF"; then
+  echo ""
+  echo "You're missing libtiff (binaries and/or headers), krita won't be able"
+  echo "to import/export tiff"
+  echo ""
+fi
+
+if test -z "$LIBJPEG"; then
+  echo ""
+  echo "You're missing libjpeg (binaries and/or headers), krita won't be able"
+  echo "to import/export jpeg"
+  echo ""
+fi
+
+if test -z "$LIBPNG"; then
+  echo ""
+  echo "You're missing libpng (binaries and/or headers), krita won't be able"
+  echo "to import/export png"
+  echo ""
+fi
+
