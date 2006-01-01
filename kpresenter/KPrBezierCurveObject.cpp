@@ -1,7 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2001 Toshitaka Fujioka <fujioka@kde.org>
-   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -59,7 +59,7 @@ KPrBezierCurveObject &KPrBezierCurveObject::operator=( const KPrBezierCurveObjec
 
 bool KPrBezierCurveObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    KoRect rect( getRealRect() );
+    KoRect rect( getRect() );
     sc.xmlWriter.addAttribute("svg:viewBox", QString( "0 0 %1 %2" ).arg( int( rect.width() * 100 ) )
                                                                    .arg( int( rect.height() * 100 ) ) );
 
