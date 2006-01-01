@@ -3,6 +3,6 @@ Encoding=UTF-8
 Type=Link
 URL=.source/Letter.kwt
 Name=Blank Page
-Comment=Creates an blank US Letter document.
+Comment=Creates a blank US Letter document.
 Icon=template_letter
 X-KDE-MeasureSystem=imperial
