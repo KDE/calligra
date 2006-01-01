@@ -78,7 +78,18 @@ QDomDocumentFragment KPrRectObject::save( QDomDocument& doc, double offset )
 
 bool KPrRectObject::saveOasisObjectAttributes( KPOasisSaveContext &sc ) const
 {
-    // TODO corner-radius
+    if ( xRnd > 0 && yRnd > 0 )
+    {
+        double cornerRadiusX = ext.width() / 200.0 * xRnd; 
+        double cornerRadiusY = ext.height() / 200.0 * yRnd; 
+        double cornerRadius = QMIN( cornerRadiusX, cornerRadiusY );
+        sc.xmlWriter.addAttributePt( "draw:corner-radius", cornerRadius );
+        if ( cornerRadiusX != cornerRadiusY )
+        {
+            sc.xmlWriter.addAttributePt( "koffice:corner-radius-x", cornerRadiusX );
+            sc.xmlWriter.addAttributePt( "koffice:corner-radius-y", cornerRadiusY );
+        }
+    }
     return true;
 }
 
@@ -92,14 +103,24 @@ const char * KPrRectObject::getOasisElementName() const
 void KPrRectObject::loadOasis(const QDomElement &element, KoOasisContext&context, KPrLoadingInfo *info)
 {
     KPr2DObject::loadOasis(element, context, info);
-    if ( element.hasAttributeNS( KoXmlNS::draw, "corner-radius" ) )
+    if ( element.hasAttributeNS( KoXmlNS::koffice, "corner-radius-x" ) && 
+         element.hasAttributeNS( KoXmlNS::koffice, "corner-radius-y" ) )
     {
-        //todo FIXME, conversion is not good, oo give radius and kpresenter give xRnd and yRnd 0->99
-        int radius = static_cast<int>( KoUnit::parseValue( element.attributeNS( KoXmlNS::draw, "corner-radius", QString::null ) ) );
-        xRnd = radius;
-        yRnd = radius;
-        kdDebug()<<" KPrRectObject : radius xRnd :"<<xRnd <<" yRnd :"<<yRnd<<endl;
+        xRnd = int( KoUnit::parseValue( 
+                      element.attributeNS( KoXmlNS::koffice, "corner-radius-x", QString::null )
+                    ) * 200.0 / ext.width() );
+        yRnd = int( KoUnit::parseValue( 
+                      element.attributeNS( KoXmlNS::koffice, "corner-radius-y", QString::null )
+                    ) * 200.0 / ext.height() );
     }
+    else if ( element.hasAttributeNS( KoXmlNS::draw, "corner-radius" ) )
+    {
+        xRnd = int( KoUnit::parseValue( 
+                      element.attributeNS( KoXmlNS::draw, "corner-radius", QString::null )
+                    ) * 200.0 / ext.width() );
+        yRnd = xRnd;
+    }
+    kdDebug(33001) << " KPrRectObject : radius xRnd :" << xRnd << " yRnd :" << yRnd <<endl;
 }
 
 double KPrRectObject::load(const QDomElement &element)
