@@ -47,7 +47,9 @@ namespace {
     class TIFFStream {
         public:
             TIFFStream( uint16 depth) : m_depth(depth) {};
-            virtual uint32 nextValue() =0;
+            virtual uint32 nextValueBelow16() =0;
+            virtual uint32 nextValueBelow32() =0;
+            virtual uint32 nextValueAbove32() =0;
             virtual void restart() =0;
         protected:
             uint16 m_depth;
@@ -55,7 +57,7 @@ namespace {
     class TIFFStreamContig : public TIFFStream {
         public:
             TIFFStreamContig( uint8* src, uint16 depth ) : TIFFStream(depth), m_src(src) { restart(); };
-            virtual uint32 nextValue()
+            virtual uint32 nextValueBelow16()
             {
                 register uint8 remain;
                 register uint32 value;
@@ -69,6 +71,53 @@ namespace {
                     remain -= toread;
                     m_posinc -= toread;
                     value = (value << toread) | (( (*m_srcit) >> (m_posinc) ) & ( ( 1 << toread ) - 1 ) );
+                    if (m_posinc == 0)
+                    {
+                        m_srcit++;
+                        m_posinc=8;
+                    }
+                }
+                return value;
+            }
+            virtual uint32 nextValueBelow32()
+            {
+                register uint8 remain;
+                register uint32 value;
+                remain = m_depth;
+                value = 0;
+                while (remain > 0)
+                {
+                    register uint8 toread;
+                    toread = remain;
+                    if (toread > m_posinc) toread = m_posinc;
+                    remain -= toread;
+                    m_posinc -= toread;
+                    value = (value) | ( (( (*m_srcit) >> (m_posinc) ) & ( ( 1 << toread ) - 1 ) ) << ( m_depth - 8 - remain ) );
+                    if (m_posinc == 0)
+                    {
+                        m_srcit++;
+                        m_posinc=8;
+                    }
+                }
+                return value;
+            }
+            virtual uint32 nextValueAbove32()
+            {
+                register uint8 remain;
+                register uint32 value;
+                remain = m_depth;
+                value = 0;
+                while (remain > 0)
+                {
+                    register uint8 toread;
+                    toread = remain;
+                    if (toread > m_posinc) toread = m_posinc;
+                    remain -= toread;
+                    m_posinc -= toread;
+                    if(remain < 32 )
+                    {
+                        value = (value) | ( (( (*m_srcit) >> (m_posinc) ) & ( ( 1 << toread ) - 1 ) ) << ( 24 - remain ) );
+                    }
                     if (m_posinc == 0)
                     {
                         m_srcit++;
@@ -107,9 +156,23 @@ namespace {
                 }
                 delete[] streams;
             }
-            virtual uint32 nextValue()
+            virtual uint32 nextValueBelow16()
             {
-                uint32 value = streams[ m_current_sample ]->nextValue();
+                uint32 value = streams[ m_current_sample ]->nextValueBelow16();
+                if( (++m_current_sample) >= m_nb_samples)
+                    m_current_sample = 0;
+                return value;
+            }
+            virtual uint32 nextValueBelow32()
+            {
+                uint32 value = streams[ m_current_sample ]->nextValueBelow32();
+                if( (++m_current_sample) >= m_nb_samples)
+                    m_current_sample = 0;
+                return value;
+            }
+            virtual uint32 nextValueAbove32()
+            {
+                uint32 value = streams[ m_current_sample ]->nextValueAbove32();
                 if( (++m_current_sample) >= m_nb_samples)
                     m_current_sample = 0;
                 return value;
@@ -158,18 +221,18 @@ namespace {
             if(color_nb_bits <= 8)
             {
                     return "GRAYA";
-            } else if(color_nb_bits <= 32){ // WARNING from 17 to 32 bits, it's highly experimental
+            } else {
                     return "GRAYA16";
             }
         } else if(color_type == PHOTOMETRIC_RGB ) {
             if(color_nb_bits <= 8)
             {
                 return "RGBA";
-            } else if(color_nb_bits <= 16){
+            } else {
                 return "RGBA16";
             }
         } else if(color_type == PHOTOMETRIC_SEPARATED ) {
-            // SEPARATED is in general CMYK but not allways
+            // SEPARATED is in general CMYK but not allways, so we check
             uint16 inkset;
             if((TIFFGetField(image, TIFFTAG_INKSET, &inkset) == 0)){
                 kdDebug() <<  "Image does not define the inkset." << endl;
@@ -183,14 +246,13 @@ namespace {
             if(color_nb_bits <= 8)
             {
                 return "CMYK";
-            } else if(color_nb_bits <= 16){
+            } else {
                 return "CMYKA16";
             }
-        } else if(color_type == PHOTOMETRIC_CIELAB || color_type == PHOTOMETRIC_ICCLAB ) {
-            // TODO: support for PHOTOMETRIC_ITULAB
+        } else if(color_type == PHOTOMETRIC_CIELAB ) {
             return "LABA"; // TODO add support for a 8bit LAB colorspace when it is written
         } else if(color_type ==  PHOTOMETRIC_PALETTE) {
-            // <-- we will convert the index image to RGBA16 as the index is allways on 16bits colors
+            // <-- we will convert the index image to RGBA16 as the palette is allways on 16bits colors
             return "RGBA16";
         }
         return "";
@@ -224,39 +286,39 @@ namespace {
                 Q_UINT8 i;
                 for(i = 0; i < nbcolorssamples; i++)
                 {
-                    d[poses[i]] = transform( tiffstream->nextValue() *coeff );
+                    d[poses[i]] = transform( tiffstream->nextValueBelow16() *coeff );
                 }
                 d[poses[i]] = Q_UINT8_MAX;
                 for(int i = 0; i < extrasamplescount; i++)
                 {
                     if(i == alphapos)
-                        d[poses[i]] = tiffstream->nextValue() *coeff;
+                        d[poses[i]] = tiffstream->nextValueBelow16() *coeff;
                     else
-                        tiffstream->nextValue();
+                        tiffstream->nextValueBelow16();
                 }
                 ++it;
             }
-        } else if( depth <= 16 ) {
+        } else if( depth < 16 ) {
             Q_UINT16 coeff =  1 << ( 16 - depth );
-//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
+            kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
             while (!it.isDone()) {
                 Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
                 Q_UINT8 i;
                 for(i = 0; i < nbcolorssamples; i++)
                 {
-                    d[poses[i]] = transform( tiffstream->nextValue() *coeff );
+                    d[poses[i]] = transform( tiffstream->nextValueBelow16() *coeff );
                 }
                 d[poses[i]] = Q_UINT16_MAX;
                 for(int i = 0; i < extrasamplescount; i++)
                 {
                     if(i == alphapos)
-                        d[poses[i]] = tiffstream->nextValue() *coeff;
+                        d[poses[i]] = tiffstream->nextValueBelow16() *coeff;
                     else
-                        tiffstream->nextValue();
+                        tiffstream->nextValueBelow16();
                 }
                 ++it;
             }
-        } else if( depth > 16 ) {
+        } else if( depth < 32 ) {
             Q_UINT32 coeff =  1 << ( depth - 16 );
             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
             while (!it.isDone()) {
@@ -264,15 +326,35 @@ namespace {
                 Q_UINT8 i;
                 for(i = 0; i < nbcolorssamples; i++)
                 {
-                    d[poses[i]] = tiffstream->nextValue() / coeff;
+                    d[poses[i]] = tiffstream->nextValueBelow32() / coeff;
                 }
                 d[poses[i]] = Q_UINT16_MAX;
                 for(int i = 0; i < extrasamplescount; i++)
                 {
                     if(i == alphapos)
-                        d[poses[i]] = tiffstream->nextValue() / coeff;
+                        d[poses[i]] = tiffstream->nextValueBelow32() / coeff;
                     else
-                        tiffstream->nextValue();
+                        tiffstream->nextValueBelow32();
+                }
+                ++it;
+            }
+        } else {
+            Q_UINT32 coeff =  1 << ( 16 );
+            kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
+            while (!it.isDone()) {
+                Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                Q_UINT8 i;
+                for(i = 0; i < nbcolorssamples; i++)
+                {
+                    d[poses[i]] = tiffstream->nextValueAbove32() / coeff;
+                }
+                d[poses[i]] = Q_UINT16_MAX;
+                for(int i = 0; i < extrasamplescount; i++)
+                {
+                    if(i == alphapos)
+                        d[poses[i]] = tiffstream->nextValueAbove32() / coeff;
+                    else
+                        tiffstream->nextValueBelow32();
                 }
                 ++it;
             }
@@ -313,22 +395,31 @@ namespace {
             {
                 if(depth <= 8)
                 {
-                    uint8 posinc = 8;
                     while (!it.isDone()) {
                         Q_UINT16* d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        uint32 index = tiffstream->nextValue();
+                        uint32 index = tiffstream->nextValueBelow16();
                         d[2] = red[index];
                         d[1] = green[index];
                         d[0] = blue[index];
                         d[3] = Q_UINT16_MAX;
                         ++it;
                     }
-                } else if(depth <= 16)
+                } else if(depth < 16)
                 {
-                    uint8 posinc = 8;
                     while (!it.isDone()) {
                         Q_UINT16* d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                        uint32 index = tiffstream->nextValue();
+                        uint32 index = tiffstream->nextValueBelow16();
+                        d[2] = red[index];
+                        d[1] = green[index];
+                        d[0] = blue[index];
+                        d[3] = Q_UINT16_MAX;
+                        ++it;
+                    }
+                } else if(depth < 32)
+                {
+                    while (!it.isDone()) {
+                        Q_UINT16* d = reinterpret_cast<Q_UINT16 *>(it.rawData());
+                        uint32 index = tiffstream->nextValueBelow32();
                         d[2] = red[index];
                         d[1] = green[index];
                         d[0] = blue[index];
@@ -343,48 +434,6 @@ namespace {
                 copyDataToChannels(it, tiffstream, alphapos, depth, nbcolorssamples, extrasamplescount, poses);
             }
             break;
-/*            case PHOTOMETRIC_ICCLAB:
-                // TODO: convert from ICCLAB to CIELAB
-                switch(depth)
-                {
-                    case 16:
-                    {
-                        Q_UINT16 *srcit = reinterpret_cast<Q_UINT16 *>(src);
-                        while (!it.isDone()) {
-                            Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                            d[0] = *(srcit++);
-                            d[1] = *(srcit++);
-                            d[2] = *(srcit++);
-                            if(alphapos != -1)
-                            {
-                                d[3] = *(srcit + alphapos);
-                            } else {
-                                d[3] = Q_UINT16_MAX;
-                            }
-                            srcit+= extrasamplescount;
-                            ++it;
-                        }
-                    }
-                    case 8:
-                    {
-                        Q_UINT8 *srcit = src;
-                        while (!it.isDone()) {
-                            Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
-                            d[0] = *(srcit++) / Q_UINT8_MAX;
-                            d[1] = *(srcit++) / Q_UINT8_MAX;
-                            d[2] = *(srcit++) / Q_UINT8_MAX;
-                            if(alphapos != -1)
-                            {
-                                d[3] = *(srcit + alphapos);
-                            } else {
-                                d[3] = Q_UINT16_MAX;
-                            }
-                            srcit+= extrasamplescount;
-                            ++it;
-                        }
-                    }
-                }
-                break;*/
         }
     }
 }
@@ -406,7 +455,7 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
     kdDebug() << "Start decoding TIFF File" << endl;
     // Opent the TIFF file
     TIFF *image;
-    if((image = TIFFOpen(uri.path().ascii(), "r")) == NULL){
+    if((image = TIFFOpen(uri.path().ascii(), "rB")) == NULL){
         kdDebug() << "Could not open the file, either it doesn't exist, either it is not a TIFF : " << uri.path() << endl;
         TIFFClose(image);
         return (KisImageBuilder_RESULT_BAD_FETCH);
@@ -611,7 +660,6 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
             tiffstream = new TIFFStreamSeperate( (uint8**) ps_buf, nbchannels, depth);
         } 
         uint32 y = 0;
-        uint32 linewidth = TIFFScanlineSize(image);
         for (y = 0; y < height; y++)
         { // TODO support for different planarity
             if( planarconfig == PLANARCONFIG_CONTIG )
