@@ -47,7 +47,7 @@ class WdgScriptsManager : public WdgScriptsManagerBase
         void fillScriptsList();
     private:
         WdgScriptsManagerPrivate* d;
-        void addItem(ScriptActionCollection* collection, bool opened = true);
+        void addItem(ScriptActionCollection* collection);
         QListViewItem* addItem(ScriptAction::Ptr, QListViewItem* parentitem, QListViewItem* afteritem);
 };
 

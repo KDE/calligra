@@ -62,7 +62,7 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     scriptsList->header()->hide();
     //scriptsList->header()->setClickEnabled(false);
     scriptsList->setAllColumnsShowFocus(true);
-    scriptsList->setRootIsDecorated(true);
+    //scriptsList->setRootIsDecorated(true);
     scriptsList->setSorting(-1);
 
     scriptsList->addColumn(i18n("Name"));
@@ -94,19 +94,19 @@ void WdgScriptsManager::fillScriptsList()
 {
     scriptsList->clear();
 
-    addItem( d->m_scripguiclient->getActionCollection("executedscripts"), false );
+    addItem( d->m_scripguiclient->getActionCollection("executedscripts") );
     addItem( d->m_scripguiclient->getActionCollection("loadedscripts") );
     addItem( d->m_scripguiclient->getActionCollection("installedscripts") );
 }
 
-void WdgScriptsManager::addItem(ScriptActionCollection* collection, bool opened)
+void WdgScriptsManager::addItem(ScriptActionCollection* collection)
 {
     if(! collection)
         return;
 
     ListItem* i = new ListItem(scriptsList, collection);
     i->setText(0, collection->actionMenu()->text());
-    i->setOpen( opened );
+    i->setOpen(true);
 
     QValueList<ScriptAction::Ptr> list = collection->actions();
     QListViewItem* lastitem = 0;
