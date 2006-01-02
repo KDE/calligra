@@ -2,6 +2,8 @@
 Encoding=UTF-8
 Icon=
 Name=Krita TIFF Import Filter
+Name[da]=Krita TIFF-importfilter
+Name[ga]=Scagaire Iompórtála TIFF Krita
 ServiceTypes=KOfficeFilter
 Type=Service
 X-KDE-Export=application/x-krita

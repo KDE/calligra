@@ -64,5 +64,6 @@ Name[zh_CN]=两栏
 Name[zh_TW]=兩列
 Name[zu]=Amakholamu Amabili
 Comment=Creates a letter document with two columns per page
+Comment[da]=Opretter et brev-dokument med to søjler pr side.
 Icon=template_twocolumns
 X-KDE-MeasureSystem=imperial
