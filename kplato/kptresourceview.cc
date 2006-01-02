@@ -134,7 +134,8 @@ ResourceView::ResourceView(View *view, QWidget *parent)
 
     draw(view->getProject());
 
-    connect(resList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(resSelectionChanged(QListViewItem*)));
+    //connect(resList, SIGNAL(selectionChanged(QListViewItem*)), SLOT(resSelectionChanged(QListViewItem*)));
+    connect(resList, SIGNAL(selectionChanged()), SLOT(resSelectionChanged()));
     connect(resList, SIGNAL( contextMenuRequested(QListViewItem*, const QPoint&, int)), SLOT(popupMenuRequested(QListViewItem*, const QPoint&, int)));
 
 }
@@ -152,18 +153,20 @@ Resource *ResourceView::currentResource() {
 void ResourceView::draw(Project &project)
 {
     //kdDebug()<<k_funcinfo<<endl;
-	resList->clear();
+    resList->clear();
+    m_appview->clear();
     m_selectedItem = 0;
 
     QPtrListIterator<ResourceGroup> it(project.resourceGroups());
     for (; it.current(); ++it) {
         QListViewItem *item = new QListViewItem(resList, it.current()->name());
-	    item->setOpen(true);
+        item->setOpen(true);
         drawResources(item, it.current());
     }
     if (m_selectedItem) {
         resList->setSelected(m_selectedItem, true);
     }
+    resSelectionChanged(m_selectedItem);
 }
 
 
@@ -194,15 +197,21 @@ void ResourceView::drawResources(QListViewItem *parent, ResourceGroup *group)
 }
 
 
+void ResourceView::resSelectionChanged() {
+    kdDebug()<<k_funcinfo<<endl;
+    resSelectionChanged(resList->selectedItem());
+}
+
 void ResourceView::resSelectionChanged(QListViewItem *item) {
-    //kdDebug()<<k_funcinfo<<endl;
-    if (item == 0)
-        return;
+    kdDebug()<<k_funcinfo<<item<<endl;
     ResourceItemPrivate *ritem = dynamic_cast<ResourceItemPrivate *>(item);
     if (ritem) {
         m_selectedItem = ritem;
         m_appview->draw(ritem->resource, m_mainview->getProject().startTime().date(), m_mainview->getProject().endTime().date());
+        return;
     }
+    m_selectedItem = 0;
+    m_appview->clear();
 }
 
 

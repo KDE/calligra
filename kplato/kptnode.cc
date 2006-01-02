@@ -19,19 +19,23 @@
 */
 #include "kptnode.h"
 
+#include "kptappointment.h"
 #include "kptaccount.h"
 #include "kptwbsdefinition.h"
 #include "kptresource.h"
+#include "kptschedule.h"
 
 #include <qptrlist.h>
 #include <qdom.h>
 
+#include <klocale.h>
 #include <kdebug.h>
 
 namespace KPlato
 {
 
 Node::Node(Node *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
+    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_parent = parent;
     init();
     m_id = QString(); // Not mapped
@@ -41,15 +45,11 @@ Node::Node(Node &node, Node *parent)
     : m_nodes(), 
       m_dependChildNodes(), 
       m_dependParentNodes() {
+    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_parent = parent;
     init();
     m_name = node.name();
     m_leader = node.leader();
-    m_startTime = node.startTime();
-    m_endTime = node.endTime();
-    m_duration = node.duration();
-    earliestStart = node.earliestStart;
-    latestFinish = node.latestFinish;
     m_constraint = (ConstraintType) node.constraint();
     m_constraintStartTime = node.constraintStartTime();
     m_constraintEndTime = node.constraintEndTime();
@@ -63,6 +63,8 @@ Node::Node(Node &node, Node *parent)
 
     m_startupCost = node.startupCost();
     m_shutdownCost = node.shutdownCost();
+    
+    m_schedules.setAutoDelete(node.m_schedules.autoDelete());
 }
 
 Node::~Node() {
@@ -74,10 +76,6 @@ Node::~Node() {
     while ((rel = m_dependChildNodes.getFirst())) {
         delete rel;
     }
-    Appointment *a;
-    while ((a = m_appointments.getFirst())) {
-        delete a;
-    }
     if (m_runningAccount)
         m_runningAccount->removeRunning(*this);
     if (m_startupAccount)
@@ -87,23 +85,13 @@ Node::~Node() {
 }
 
 void Node::init() {
+    m_currentSchedule = 0;
     m_nodes.setAutoDelete(true);
     m_name="";
-    m_startTime = DateTime::currentDateTime();
-    m_endTime = m_startTime.addDays(1);
-    earliestStart = m_startTime;
-    latestFinish = m_endTime;
-    m_duration = m_endTime - m_startTime;
     m_constraint = Node::ASAP;
     m_effort = 0;
-    m_resourceOverbooked = false;
-    m_resourceError = false;
-    m_resourceNotAvailable = false;
-    m_schedulingError = false;
-    m_notScheduled = true;
     m_visitedForward = false;
     m_visitedBackward = false;
-    m_inCriticalPath = false;
     
     m_dateOnlyStartDate = m_dateOnlyEndDate = QDate::currentDate();
     m_dateOnlyDuration.addDays(1);
@@ -357,6 +345,8 @@ bool Node::isDependChildOf(Node *node) {
 
 Duration Node::duration(const DateTime &time, int use, bool backward) {
     //kdDebug()<<k_funcinfo<<endl;
+    if (m_currentSchedule == 0)
+        return Duration::zeroDuration;
     if (!m_effort) {
         kdError()<<k_funcinfo<<"m_effort = 0"<<endl;
         return Duration::zeroDuration;
@@ -371,7 +361,7 @@ Duration Node::duration(const DateTime &time, int use, bool backward) {
         dur = calcDuration(time, effort, backward);
         if (dur == Duration::zeroDuration) {
             kdWarning()<<k_funcinfo<<"zero duration: Resource not available"<<endl;
-            m_resourceNotAvailable = true;
+            m_currentSchedule->resourceNotAvailable = true;
             return effort;
         }
     } else {
@@ -449,8 +439,10 @@ QString Node::constraintToString() const {
 }
 
 void Node::propagateEarliestStart(DateTime &time) {
-    earliestStart = time;
-    //kdDebug()<<k_funcinfo<<m_name<<": "<<earliestStart.toString()<<endl;
+    if (m_currentSchedule == 0)
+        return;
+    m_currentSchedule->earliestStart = time;
+    //kdDebug()<<k_funcinfo<<m_name<<": "<<m_currentSchedule->earliestStart.toString()<<endl;
     QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->propagateEarliestStart(time);
@@ -458,7 +450,9 @@ void Node::propagateEarliestStart(DateTime &time) {
 }
 
 void Node::propagateLatestFinish(DateTime &time) {
-    latestFinish = time;
+    if (m_currentSchedule == 0)
+        return;
+    m_currentSchedule->latestFinish = time;
     //kdDebug()<<k_funcinfo<<m_name<<": "<<latestFinish.toString()<<endl;
     QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
@@ -467,8 +461,10 @@ void Node::propagateLatestFinish(DateTime &time) {
 }
 
 void Node::moveEarliestStart(DateTime &time) {
-    if (earliestStart < time)
-        earliestStart = time;
+    if (m_currentSchedule == 0)
+        return;
+    if (m_currentSchedule->earliestStart < time)
+        m_currentSchedule->earliestStart = time;
     QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->moveEarliestStart(time);
@@ -476,25 +472,20 @@ void Node::moveEarliestStart(DateTime &time) {
 }
 
 void Node::moveLatestFinish(DateTime &time) {
-    if (latestFinish > time)
-        latestFinish = time;
+    if (m_currentSchedule == 0)
+        return;
+    if (m_currentSchedule->latestFinish > time)
+        m_currentSchedule->latestFinish = time;
     QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
         it.current()->moveLatestFinish(time);
     }
 }
 
-void Node::initiateCalculation() {
-    m_visitedForward = false;
-    m_visitedBackward = false;
-    m_resourceError = false;
-    m_resourceOverbooked = false;
-    m_schedulingError = false;
-    m_inCriticalPath = false;
-    clearProxyRelations();
+void Node::initiateCalculation(Schedule *sch) {
     QPtrListIterator<Node> it = m_nodes;
     for (; it.current(); ++it) {
-        it.current()->initiateCalculation();
+        it.current()->initiateCalculation(sch);
     }
 }
 
@@ -609,84 +600,105 @@ bool Node::setId(QString id) {
 }
 
 void Node::setStartTime(DateTime startTime) { 
-    m_startTime = startTime; 
+    if (m_currentSchedule)
+        m_currentSchedule->startTime = startTime;
     m_dateOnlyStartDate = startTime.date();
 }
 
 void Node::setEndTime(DateTime endTime) { 
-    m_endTime = endTime; 
+    if (m_currentSchedule)
+        m_currentSchedule->endTime = endTime;
+    
     m_dateOnlyEndDate = endTime.date();
     if (endTime.time().isNull() && m_dateOnlyEndDate > m_dateOnlyStartDate)
         m_dateOnlyEndDate = m_dateOnlyEndDate.addDays(-1);
 }
 
-Appointment *Node::findAppointment(Resource *resource) {
-    QPtrListIterator<Appointment> it = m_appointments;
-    for (; it.current(); ++it) {
-        if (it.current()->resource() == resource)
-            return it.current();
+void Node::saveAppointments(QDomElement &element, long id) const {
+    kdDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
+    QPtrListIterator<Node> it(m_nodes);
+    for (; it.current(); ++it ) {
+        kdDebug()<<k_funcinfo<<m_name<<" calling "<<it.current()->name()<<endl;
+        it.current()->saveAppointments(element, id);
     }
-    return 0;
 }
 
+QPtrList<Appointment> Node::appointments() {
+    QPtrList<Appointment> lst;
+    if (m_currentSchedule)
+        lst = m_currentSchedule->appointments();
+    return lst;
+}
+
+// Appointment *Node::findAppointment(Resource *resource) {
+//     if (m_currentSchedule)
+//         return m_currentSchedule->findAppointment(resource);
+//     return 0;
+// }
 bool Node::addAppointment(Appointment *appointment) {
-    if (m_appointments.findRef(appointment) != -1) {
-        kdError()<<k_funcinfo<<"Appointment allready exists"<<endl;
-        return false;
-    }
-    m_appointments.append(appointment);
-    return true;
-        
+    if (m_currentSchedule)
+        return m_currentSchedule->add(appointment);
+    return false;
 }
 
-void Node::addAppointment(Resource *resource, DateTime &start, DateTime &end, double load) {
-    Appointment *a = findAppointment(resource);
-    if (a != 0) {
-        a->addInterval(start, end, load);
+bool Node::addAppointment(Appointment *appointment, Schedule &sch) {
+    kdDebug()<<k_funcinfo<<this<<endl;
+    NodeSchedule *s = findSchedule(sch.id());
+    if (s == 0) {
+        s = createSchedule(sch.name(), sch.type(), sch.id());
+    }
+    kdDebug()<<k_funcinfo<<this<<" s="<<s<<" node="<<s->node()<<endl;
+    appointment->setNode(s);
+    return s->add(appointment);
+}
+
+void Node::addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load) {
+    NodeSchedule *node = findSchedule(resource->id());
+    if (node == 0) {
+        node = createSchedule(resource->name(), resource->type(), resource->id());
+    }
+    node->addAppointment(resource, start, end, load);
+}
+
+void Node::takeSchedule(const NodeSchedule *schedule) {
+    if (schedule == 0)
         return;
-    }
-    a = new Appointment(resource, this, start, end, load);
-    if (resource->addAppointment(a)) {
-        m_appointments.append(a);
-    } else {
-        delete a;
-    }
+    if (m_currentSchedule == schedule)
+        m_currentSchedule = 0;
+    m_schedules.take(schedule->id());
 }
 
-void Node::removeAppointment(Appointment *appointment) {
-    takeAppointment(appointment);
-    delete appointment;
+void Node::addSchedule(NodeSchedule *schedule) {
+    if (schedule == 0)
+        return;
+    m_schedules.replace(schedule->id(), schedule);
 }
 
-void Node::takeAppointment(Appointment *appointment) {
-    int i = m_appointments.findRef(appointment);
-    if (i != -1) {
-        m_appointments.take(i);
-        //kdDebug()<<k_funcinfo<<"Taken: "<<appointment<<endl;
-        if (appointment->resource())
-            appointment->resource()->takeAppointment(appointment);
-    } else {
-        //kdDebug()<<k_funcinfo<<"Couldn't find appointment: "<<appointment<<endl;
-    }
+NodeSchedule *Node::createSchedule(QString name, Schedule::Type type, long id) {
+    kdDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
+    NodeSchedule *sch = new NodeSchedule(this, name, type, id);
+    addSchedule(sch);
+    return sch;
 }
-
 
 bool Node::calcCriticalPath() {
+    if (m_currentSchedule == 0)
+        return false;
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (!isCritical()) {
         return false;
     }
     if (isStartNode()) {
-        m_inCriticalPath = true;
+        m_currentSchedule->inCriticalPath = true;
         return true;
     }
     QPtrListIterator<Relation> pit(m_dependParentNodes);
     for (; pit.current(); ++pit) {
         if (pit.current()->parent()->calcCriticalPath()) {
-            m_inCriticalPath = true;
+            m_currentSchedule->inCriticalPath = true;
         }
     }
-    return m_inCriticalPath;
+    return m_currentSchedule->inCriticalPath;
 }
 
 int Node::level() {
@@ -705,6 +717,13 @@ void Node::generateWBS(int count, WBSDefinition &def, QString wbs) {
 
 }
 
+void Node::setCurrentSchedule(long id) {
+    QPtrListIterator<Node> it = m_nodes;
+    for (; it.current(); ++it) {
+        it.current()->setCurrentSchedule(id);
+    }
+    kdDebug()<<k_funcinfo<<m_name<<" id: "<<id<<"="<<m_currentSchedule<<endl;
+}
 //////////////////////////   Effort   /////////////////////////////////
 
 Effort::Effort( Duration e, Duration p, Duration o) {
@@ -819,20 +838,23 @@ void Node::printDebug(bool children, QCString indent) {
     kdDebug()<<indent<<"  Unique node identity="<<m_id<<endl;
     if (m_effort) m_effort->printDebug(indent);
     QString s = "  Constraint: " + constraintToString();
-    kdDebug()<<indent<<s<<" ("<<constraintStartTime().toString()<<")"<<endl;
-    kdDebug()<<indent<<s<<" ("<<constraintEndTime().toString()<<")"<<endl;
-    //kdDebug()<<indent<<"  Duration: "<<m_duration.toString()<<endl;
-    kdDebug()<<indent<<"  Duration: "<<m_duration.seconds()<<QCString(" secs")<<" ("<<m_duration.toString()<<")"<<endl;
-    kdDebug()<<indent<<"  Start time: "<<m_startTime.toString()<<endl;
-    kdDebug()<<indent<<"  End time: " <<m_endTime.toString()<<endl;
-    kdDebug()<<indent<<"  Earliest start: "<<earliestStart.toString()<<endl;
-    kdDebug()<<indent<<"  Latest finish: " <<latestFinish.toString()<<endl;
+    if (m_constraint == MustStartOn || m_constraint == StartNotEarlier || m_constraint == FixedInterval)
+        kdDebug()<<indent<<s<<" ("<<constraintStartTime().toString()<<")"<<endl;
+    if (m_constraint == MustFinishOn || m_constraint == FinishNotLater || m_constraint == FixedInterval)
+        kdDebug()<<indent<<s<<" ("<<constraintEndTime().toString()<<")"<<endl;
+    NodeSchedule *cs = m_currentSchedule; 
+    if (cs) {
+        kdDebug()<<indent<<"  Current schedule: "<<"id="<<cs->id()<<" '"<<cs->name()<<"' type: "<<cs->type()<<endl;
+    } else {
+        kdDebug()<<indent<<"  Current schedule: None"<<endl;
+    }
+    QIntDictIterator<NodeSchedule> it = m_schedules;
+    for (; it.current(); ++it) {
+        it.current()->printDebug(indent+"  ");
+    }
     kdDebug()<<indent<<"  Parent: "<<(m_parent ? m_parent->name() : QString("None"))<<endl;
     kdDebug()<<indent<<"  Level: "<<level()<<endl;
-//    kdDebug()<<indent<<"  Predecessors="<<start_node()->predecessors.number<<" unvisited="<<start_node()->predecessors.unvisited<<endl;
-    //kdDebug()<<indent<<"  Successors="<<start_node()->successors.number<<" unvisited="<<start_node()->successors.unvisited<<endl;
-
-
+    kdDebug()<<indent<<"  No of predecessors: "<<m_dependParentNodes.count()<<endl;
     QPtrListIterator<Relation> pit(m_dependParentNodes);
     //kdDebug()<<indent<<"  Dependant parents="<<pit.count()<<endl;
     if (pit.count() > 0) {
@@ -840,7 +862,7 @@ void Node::printDebug(bool children, QCString indent) {
             pit.current()->printDebug(indent);
         }
     }
-
+    kdDebug()<<indent<<"  No of successors: "<<m_dependChildNodes.count()<<endl;
     QPtrListIterator<Relation> cit(m_dependChildNodes);
     //kdDebug()<<indent<<"  Dependant children="<<cit.count()<<endl;
     if (cit.count() > 0) {
@@ -864,7 +886,7 @@ void Node::printDebug(bool children, QCString indent) {
 
 #ifndef NDEBUG
 void Effort::printDebug(QCString indent) {
-    kdDebug()<<indent<<"  Effort: "<<m_expectedEffort.toString()<<endl;
+    kdDebug()<<indent<<"  Effort:"<<endl;
     indent += "  ";
     kdDebug()<<indent<<"  Expected: "<<m_expectedEffort.toString()<<endl;
     kdDebug()<<indent<<"  Optimistic: "<<m_optimisticEffort.toString()<<endl;

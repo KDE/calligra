@@ -26,7 +26,9 @@
 namespace KPlato
 {
 
-Context::Context() {
+Context::Context()
+    : currentEstimateType(0),
+      currentSchedule(0) {
 }
 
 Context::~Context() {
@@ -34,7 +36,12 @@ Context::~Context() {
 
 bool Context::load(QDomElement &element) {
     currentView = element.attribute("current-view");
-    
+    currentEstimateType = element.attribute("estimate-type").toInt();
+    currentSchedule = element.attribute("current-schedule").toLong();
+    actionViewExpected = element.attribute("view-expected").toInt();
+    actionViewOptimistic = element.attribute("view-optimistic").toInt();
+    actionViewPessimistic = element.attribute("view-pessimistic").toInt();
+
     QDomNodeList list = element.childNodes();
     for (unsigned int i=0; i<list.count(); ++i) {
         if (list.item(i).isElement()) {
@@ -87,6 +94,11 @@ void Context::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("context");
     element.appendChild(me);
     me.setAttribute("current-view", currentView);
+    me.setAttribute("estimate-type", currentEstimateType);
+    me.setAttribute("current-schedule", currentSchedule);
+    me.setAttribute("view-expected", actionViewExpected);
+    me.setAttribute("view-optimistic", actionViewOptimistic);
+    me.setAttribute("view-pessimistic", actionViewPessimistic);
     // Ganttview
     QDomElement g = me.ownerDocument().createElement("gantt-view");
     me.appendChild(g);

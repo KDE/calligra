@@ -62,6 +62,7 @@
 #include "kptaccountsview.h"
 #include "kptfactory.h"
 #include "kptmilestoneprogressdialog.h"
+#include "kptnode.h"
 #include "kptpart.h"
 #include "kptproject.h"
 #include "kptmainprojectdialog.h"
@@ -101,9 +102,12 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     m_pertview(0),
     m_pertlayout(0),
     m_reportview(0),
-    m_baselineMode(false)
+    m_baselineMode(false),
+    m_currentEstimateType(Effort::Use_Expected)
 {
     //kdDebug()<<k_funcinfo<<endl;
+    getProject().setCurrentSchedule(Schedule::Expected);
+    
     setInstance(Factory::global());
     if ( !part->isReadWrite() )
         setXMLFile("kplato_readonly.rc");
@@ -159,6 +163,15 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
 
     // ------ View
     actionViewGantt = new KAction(i18n("Gantt"), "gantt_chart", 0, this, SLOT(slotViewGantt()), actionCollection(), "view_gantt");
+    
+    QString group = "EstimationType";
+    actionViewExpected = new KRadioAction(i18n("Expected"), 0, 0, this, SLOT(slotViewExpected()), actionCollection(), "view_expected");
+    actionViewExpected->setExclusiveGroup(group);
+    actionViewOptimistic = new KRadioAction(i18n("Optimistic"), 0, 0, this, SLOT(slotViewOptimistic()), actionCollection(), "view_optimistic");
+    actionViewOptimistic->setExclusiveGroup(group);
+    actionViewPessimistic = new KRadioAction(i18n("Pessimistic"), 0, 0, this, SLOT(slotViewPessimistic()), actionCollection(), "view_pessimistic");
+    actionViewPessimistic->setExclusiveGroup(group);
+
     actionViewGanttResources = new KToggleAction(i18n("Resources"), 0, 0, this, SLOT(slotViewGanttResources()), actionCollection(), "view_gantt_showResources");
     actionViewGanttTaskName = new KToggleAction(i18n("Task Name"), 0, 0, this, SLOT(slotViewGanttTaskName()), actionCollection(), "view_gantt_showTaskName");
     actionViewGanttTaskLinks = new KToggleAction(i18n("Task Links"), 0, 0, this, SLOT(slotViewGanttTaskLinks()), actionCollection(), "view_gantt_showTaskLinks");
@@ -189,8 +202,13 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     actionEditCalendar = new KAction(i18n("Edit Calendar..."), "project_calendar", 0, this, SLOT(slotProjectCalendar()), actionCollection(), "project_calendar");
     actionEditAccounts = new KAction(i18n("Edit Accounts..."), "project_accounts", 0, this, SLOT(slotProjectAccounts()), actionCollection(), "project_accounts");
     actionEditResources = new KAction(i18n("Edit Resources..."), "project_resources", 0, this, SLOT(slotProjectResources()), actionCollection(), "project_resources");
-    actionCalculate = new KAction(i18n("Calculate"), "project_calculate", 0, this, SLOT(slotProjectCalculate()), actionCollection(), "project_calculate");
     
+    actionCalculateExpected = new KAction(i18n("Expected"), "project_calculate_expected", 0, this, SLOT(slotProjectCalculateExpected()), actionCollection(), "project_calculate_expected");
+    
+    actionCalculateOptimistic = new KAction(i18n("Optimistic"), "project_calculate_optimistic", 0, this, SLOT(slotProjectCalculateOptimistic()), actionCollection(), "project_calculate_optimistic");
+    
+    actionCalculatePessimistic = new KAction(i18n("Pessimistic"), "project_calculate_pessimistic", 0, this, SLOT(slotProjectCalculatePessimistic()), actionCollection(), "project_calculate_pessimistic");
+
     // ------ Reports
     actionFirstpage = KStdAction::firstPage(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_firstpage");
     actionPriorpage = KStdAction::prior(m_reportview,SLOT(slotPrevPage()),actionCollection(),"go_prevpage");
@@ -246,6 +264,11 @@ View::View(Part* part, QWidget* parent, const char* /*name*/)
     Q_UNUSED( actExportGantt );
 #endif
 
+    actionViewExpected->setEnabled(getProject().findSchedule(Schedule::Expected));
+    actionViewOptimistic->setEnabled(getProject().findSchedule(Schedule::Optimistic));
+    actionViewPessimistic->setEnabled(getProject().findSchedule(Schedule::Pessimistic));
+    actionViewExpected->setChecked(true); //TODO: context
+    slotViewExpected();
 }
 
 View::~View()
@@ -312,6 +335,36 @@ void View::slotEditCopy() {
 
 void View::slotEditPaste() {
     //kdDebug()<<k_funcinfo<<endl;
+}
+
+void View::slotViewExpected() {
+    kdDebug()<<k_funcinfo<<endl;
+    m_currentEstimateType = Effort::Use_Expected;
+    getProject().setCurrentSchedule(Schedule::Expected);
+    m_ganttview->setShowExpected(actionViewExpected->isChecked());
+    m_ganttview->setShowOptimistic(false);
+    m_ganttview->setShowPessimistic(false);
+    slotUpdate(false);
+}
+
+void View::slotViewOptimistic() {
+    kdDebug()<<k_funcinfo<<endl;
+    m_currentEstimateType = Effort::Use_Optimistic;
+    getProject().setCurrentSchedule(Schedule::Optimistic);
+    m_ganttview->setShowOptimistic(actionViewOptimistic->isChecked());
+    m_ganttview->setShowExpected(false);
+    m_ganttview->setShowPessimistic(false);
+    slotUpdate(false);
+}
+
+void View::slotViewPessimistic() {
+    kdDebug()<<k_funcinfo<<endl;
+    m_currentEstimateType = Effort::Use_Pessimistic;
+    getProject().setCurrentSchedule(Schedule::Pessimistic);
+    m_ganttview->setShowPessimistic(actionViewPessimistic->isChecked());
+    m_ganttview->setShowExpected(false);
+    m_ganttview->setShowOptimistic(false);
+    slotUpdate(false);
 }
 
 void View::slotViewGanttResources() {
@@ -449,6 +502,21 @@ void View::slotProjectCalculate() {
     slotUpdate(true);
 }
 
+void View::slotProjectCalculateExpected() {
+    m_currentEstimateType = Effort::Use_Expected;
+    slotUpdate(true);
+}
+
+void View::slotProjectCalculateOptimistic() {
+    m_currentEstimateType = Effort::Use_Optimistic;
+    slotUpdate(true);
+}
+
+void View::slotProjectCalculatePessimistic() {
+    m_currentEstimateType = Effort::Use_Pessimistic;
+    slotUpdate(true);
+}
+
 void View::projectCalculate() {
     if (getProject().actualEffort() > 0) {
         // NOTE: This can be removed when proper baselining etc is implemented
@@ -456,8 +524,18 @@ void View::projectCalculate() {
             return;
         }
     }
+    if (m_currentEstimateType == Schedule::Optimistic) {
+        actionViewOptimistic->setEnabled(true);
+    } else if (m_currentEstimateType == Schedule::Pessimistic) {
+        actionViewPessimistic->setEnabled(true);
+    } else if (m_currentEstimateType == Schedule::Expected) {
+        actionViewExpected->setEnabled(true);
+    } else {
+        m_currentEstimateType = Schedule::Expected;
+        actionViewExpected->setEnabled(true);
+    }
     QApplication::setOverrideCursor(Qt::waitCursor);
-    getProject().calculate();
+    getProject().calculate((Effort::Use)m_currentEstimateType);
     QApplication::restoreOverrideCursor();
 }
 
@@ -968,6 +1046,12 @@ void View::renameNode(Node *node, QString name) {
 
 bool View::setContext(Context &context) {
     kdDebug()<<k_funcinfo<<endl;
+    m_currentEstimateType = context.currentEstimateType;
+    getProject().setCurrentSchedule(context.currentSchedule);
+    actionViewExpected->setChecked(context.actionViewExpected);
+    actionViewOptimistic->setChecked(context.actionViewOptimistic);
+    actionViewPessimistic->setChecked(context.actionViewPessimistic);
+    
     m_ganttview->setContext(context.ganttview);
     // hmmm, can't decide if these should be here or actions moved to ganttview
     actionViewGanttResources->setChecked(context.ganttview.showResources);
@@ -984,6 +1068,9 @@ bool View::setContext(Context &context) {
     m_reportview->setContext(context.reportview);
     
     if (context.currentView == "ganttview") {
+        m_ganttview->setShowExpected(actionViewExpected->isChecked());
+        m_ganttview->setShowOptimistic(actionViewOptimistic->isChecked());
+        m_ganttview->setShowPessimistic(actionViewPessimistic->isChecked());
         slotViewGantt();
     } else if (context.currentView == "pertview") {
         slotViewPert();
@@ -993,6 +1080,8 @@ bool View::setContext(Context &context) {
         slotViewAccounts();
     } else if (context.currentView == "reportview") {
         //slotViewReport();
+    } else {
+        slotViewGantt();
     }
     slotUpdate(false);
     return true;
@@ -1000,6 +1089,13 @@ bool View::setContext(Context &context) {
 
 void View::getContext(Context &context) const {
     kdDebug()<<k_funcinfo<<endl;
+    context.currentEstimateType = m_currentEstimateType;
+    if (getProject().currentSchedule())
+        context.currentSchedule = getProject().currentSchedule()->id();
+    context.actionViewExpected = actionViewExpected->isChecked();
+    context.actionViewOptimistic = actionViewOptimistic->isChecked();
+    context.actionViewPessimistic = actionViewPessimistic->isChecked();
+    
     if (m_tab->visibleWidget() == m_ganttview) {
         context.currentView = "ganttview";
     } else if (m_tab->visibleWidget() == m_pertview) {
@@ -1020,7 +1116,7 @@ void View::getContext(Context &context) const {
 
 void View::setBaselineMode(bool on) {
     kdDebug()<<k_funcinfo<<endl;
-    m_baselineMode = on;
+/*    m_baselineMode = on;
     
     m_ganttview->setReadWriteMode(!on);
     
@@ -1043,7 +1139,7 @@ void View::setBaselineMode(bool on) {
     actionEditResources->setEnabled(!on);
     actionCalculate->setEnabled(!on);
 
-    actionEditResource->setEnabled(!on);
+    actionEditResource->setEnabled(!on);*/
 }
 
 #ifndef NDEBUG

@@ -70,6 +70,7 @@ class ResourceItemPrivate;
     virtual void getContext(Context::Resourceview &context) const;
 
 protected slots:
+    void resSelectionChanged();
     void resSelectionChanged(QListViewItem *item);
     void popupMenuRequested(QListViewItem * item, const QPoint & pos, int);
 

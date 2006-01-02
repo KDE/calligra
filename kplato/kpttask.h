@@ -83,7 +83,8 @@ public:
     virtual bool load(QDomElement &element, Project &project);
     /// Save to document
     virtual void save(QDomElement &element);
-
+    /// Save appointments for schedule with id
+    virtual void saveAppointments(QDomElement &element, long id) const;
     /**
      * Returns a list of planned effort and cost for this task
      * for the interval start, end inclusive
@@ -127,6 +128,7 @@ public:
     /// Cost performance index
     double costPerformanceIndex(const QDate &date, bool *error=0);
     
+    void initiateCalculation(Schedule *sch);
     /**
      * Sets up the lists used for calculation.
      * This includes adding summarytasks relations to subtasks
@@ -158,7 +160,7 @@ public:
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      * @return The tasks endtime which can be used for scheduling the successor.
      */
-    DateTime &scheduleForward(DateTime &earliest, int use);
+    DateTime scheduleForward(const DateTime &earliest, int use);
     /**
      * Schedules the task within the limits of earliestStart and latestFinish.
      * Calculates @ref m_startTime, @ref m_endTime and @ref m_duration,
@@ -168,7 +170,7 @@ public:
      * @param use Calculate using expected-, optimistic- or pessimistic estimate.
      * @return The tasks starttime which can be used for scheduling the predeccessor.
      */
-    DateTime &scheduleBackward(DateTime &latest, int use);
+    DateTime scheduleBackward(const DateTime &latest, int use);
     
     /**
      * Summarytasks (with milestones) need special treatment because 
@@ -200,7 +202,7 @@ public:
      * with their calendar, or if no resources have been assigned,
      * the scheduled starttime is used.
      */
-    virtual const DateTime &workStartTime() const;
+    virtual DateTime workStartTime() const;
     
     /**
      * Return the time when work can actually finish on this task.
@@ -208,7 +210,7 @@ public:
      * with their calendar, or if no resources have been assigned,
      * the scheduled endtime is used.
      */
-    virtual const DateTime &workEndTime() const;
+    virtual DateTime workEndTime() const;
     
     /**
      * Return the duration that an activity's start can be delayed 
@@ -241,6 +243,9 @@ public:
     virtual bool isCritical();
     /// Calculate critical path
     virtual bool calcCriticalPath();
+    
+    /// Set current schedule to schedule with identity id, for me nd my children
+    virtual void setCurrentSchedule(long id);
     
     struct Progress {
         Progress() { started = finished = false; percentFinished = 0; }

@@ -35,6 +35,7 @@ class KPrinter;
 class KAction;
 class KSelectAction;
 class KToggleAction;
+class KRadioAction;
 
 class DCOPObject;
 
@@ -88,6 +89,10 @@ public slots:
     void slotEditCopy();
     void slotEditPaste();
     void slotViewGantt();
+    void slotViewExpected();
+    void slotViewOptimistic();
+    void slotViewPessimistic();
+    
     void slotViewGanttResources();
     void slotViewGanttTaskName();
     void slotViewGanttTaskLinks();
@@ -118,6 +123,9 @@ protected slots:
     void slotProjectCalendar();
     void slotProjectWorktime();
     void slotProjectCalculate();
+    void slotProjectCalculateExpected();
+    void slotProjectCalculateOptimistic();
+    void slotProjectCalculatePessimistic();
     void slotProjectAccounts();
     void slotProjectResources();
     void slotViewReportDesign();
@@ -164,7 +172,8 @@ private:
     
     int m_viewGrp;
     int m_defaultFontSize;
-
+    int m_currentEstimateType;
+    
     DCOPObject* m_dcop;
 
     // ------ Edit
@@ -179,6 +188,10 @@ private:
     
     // ------ View
     KAction *actionViewGantt;
+    KRadioAction *actionViewExpected;
+    KRadioAction *actionViewOptimistic;
+    KRadioAction *actionViewPessimistic;
+    
     KToggleAction *actionViewGanttResources;
     KToggleAction *actionViewGanttTaskName;
     KToggleAction *actionViewGanttTaskLinks;
@@ -203,7 +216,9 @@ private:
     KAction *actionEditAccounts;
     KAction *actionEditResources;
     KAction *actionCalculate;
-    
+    KAction *actionCalculateExpected;
+    KAction *actionCalculateOptimistic;
+    KAction *actionCalculatePessimistic;
     // ------ Reports
     KAction *actionFirstpage;
     KAction *actionPriorpage;

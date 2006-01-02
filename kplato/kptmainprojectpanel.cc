@@ -39,6 +39,7 @@
 
 #include "kptproject.h"
 #include "kptcommand.h"
+#include "kptschedule.h"
 
 namespace KPlato
 {
@@ -54,8 +55,16 @@ MainProjectPanel::MainProjectPanel(Project &p, QWidget *parent, const char *name
 
     //baseline->setChecked(project.isBaselined()); FIXME: Removed for this release
     
+    QString s = i18n("Scheduling");
+    NodeSchedule *sch = project.currentSchedule();
+    if (sch) {
+        s = i18n("Scheduling (%1)").arg(sch->typeToString(true));
+    }
+    schedulingGroup->setTitle(s);
     startDate->setDate(project.startTime().date());
+    startTime->setTime(project.startTime().time());
     endDate->setDate(project.endTime().date());
+    endTime->setTime(project.endTime().time());
     if (project.constraint() == Node::MustStartOn) {
         schedulingGroup->setButton(0);
     }
@@ -107,18 +116,22 @@ KCommand *MainProjectPanel::buildCommand(Part *part) {
     if (bStartDate->state() && project.constraint() != Node::MustStartOn) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new NodeModifyConstraintCmd(part, project, Node::MustStartOn));
+        m->addCommand(new NodeModifyConstraintStartTimeCmd(part, project, startDateTime()));
     } 
     if (bEndDate->state() && project.constraint() != Node::MustFinishOn) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new NodeModifyConstraintCmd(part, project, Node::MustFinishOn));
+        m->addCommand(new NodeModifyConstraintEndTimeCmd(part, project, endDateTime()));
     } 
     if (startDateTime() != project.startTime()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new NodeModifyStartTimeCmd(part, project, startDateTime()));
+        m->addCommand(new NodeModifyConstraintStartTimeCmd(part, project, startDateTime()));
     }
     if (endDateTime() != project.endTime()) {
         if (!m) m = new KMacroCommand(c);
         m->addCommand(new NodeModifyEndTimeCmd(part, project, endDateTime()));
+        m->addCommand(new NodeModifyConstraintEndTimeCmd(part, project, endDateTime()));
     }
     return m;
 }

@@ -25,6 +25,7 @@
 
 #include "kptaccount.h"
 #include "kptcalendar.h"
+#include "kptdatetime.h"
 #include "kptduration.h"
 #include "kptresource.h"
 
@@ -33,6 +34,7 @@
 #include <qdict.h>
 
 #include <klistview.h>
+#include <klocale.h>
 
 namespace KPlato
 {
@@ -63,7 +65,10 @@ public:
      
     virtual bool calcCriticalPath();
     
-    ///Returns the duration calculated as latestFinish - earliestStart.
+    virtual DateTime startTime() const;
+    virtual DateTime endTime() const;
+
+    /// Returns the duration calculated as latestFinish - earliestStart.
     Duration *getExpectedDuration();
 
     /**
@@ -75,9 +80,6 @@ public:
 
     virtual bool load(QDomElement &element);
     virtual void save(QDomElement &element) ;
-
-    DateTime getEarliestStart() const { return earliestStart; }
-    DateTime getLatestFinish() const { return latestFinish; }
 
     QPtrList<ResourceGroup> &resourceGroups();
     virtual void addResourceGroup(ResourceGroup *resource);
@@ -211,6 +213,11 @@ public:
 
     Accounts &accounts() { return m_accounts; }
     
+    /// Set current schedule to schedule with identity id, for me nd my children
+    virtual void setCurrentSchedule(long id);
+    /// Create new schedule with unique id.
+    NodeSchedule *createSchedule(QString name, Schedule::Type type);
+    
 protected:
     Accounts m_accounts;
     QPtrList<ResourceGroup> m_resourceGroups;
@@ -222,11 +229,11 @@ protected:
         
     DateTime calculateForward(int use);
     DateTime calculateBackward(int use);
-    DateTime &scheduleForward(DateTime &earliest, int use);
-    DateTime &scheduleBackward(DateTime &latest, int use);
+    DateTime scheduleForward(const DateTime &earliest, int use);
+    DateTime scheduleBackward(const DateTime &latest, int use);
     void adjustSummarytask();
 
-    void initiateCalculation();
+    void initiateCalculation(Schedule *sch);
     void initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node> &endnodes, QPtrList<Node> &summarytasks);
 
     bool legalParents(Node *par, Node *child);

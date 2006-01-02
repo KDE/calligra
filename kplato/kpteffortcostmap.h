@@ -20,6 +20,7 @@
 #ifndef KPTEFFORTCOST_H
 #define KPTEFFORTCOST_H
 
+#include <qdatetime.h>
 #include <qmap.h>
 
 #include "kptduration.h"
@@ -46,6 +47,7 @@ public:
     }
     Duration effort() const { return m_effort; }
     double cost() const { return m_cost; }
+    void setCost(double cost) { m_cost = cost; }
     void add(const Duration &effort, const double cost) {
         m_effort += effort;
         m_cost += cost;

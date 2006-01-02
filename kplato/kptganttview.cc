@@ -19,6 +19,7 @@
 
 #include "kptganttview.h"
 
+#include "kptappointment.h"
 #include "kptpart.h"
 #include "kptview.h"
 #include "kptcanvasitem.h"
@@ -77,6 +78,9 @@ GanttView::GanttView(View *view, QWidget *parent, bool readWrite, const char* na
     
     m_gantt = new KDGanttView(this, "Gantt view");
     
+    m_showExpected = true;
+    m_showOptimistic = false;
+    m_showPessimistic = false;
     m_showResources = false; // FIXME
     m_showTaskName = false; // FIXME
     m_showTaskLinks = false; // FIXME
@@ -130,6 +134,17 @@ void GanttView::clear()
 void GanttView::draw(Project &project)
 {
     //kdDebug()<<k_funcinfo<<endl;
+    Schedule::Type type = Schedule::Expected;
+    if (m_showOptimistic) {
+        type = Schedule::Optimistic;
+    } else if (m_showPessimistic) {
+        type = Schedule::Pessimistic;
+    }
+    Schedule *sch = project.findSchedule(type);
+    if (sch) {
+        project.setCurrentSchedule(sch->id());
+    }
+    kdDebug()<<k_funcinfo<<"Schedule: "<<(sch?sch->typeToString():"None")<<endl;
     m_gantt->setUpdateEnabled(false);
 
     clear();
@@ -146,7 +161,18 @@ void GanttView::draw(Project &project)
 
 void GanttView::drawChanges(Project &project)
 {
-    //kdDebug()<<k_funcinfo<<endl;
+    kdDebug()<<k_funcinfo<<endl;
+    Schedule::Type type = Schedule::Expected;
+    if (m_showOptimistic) {
+        type = Schedule::Optimistic;
+    } else if (m_showPessimistic) {
+        type = Schedule::Pessimistic;
+    }
+    Schedule *sch = project.findSchedule(type);
+    if (sch) {
+        project.setCurrentSchedule(sch->id());
+    }
+    kdDebug()<<k_funcinfo<<"Schedule: "<<(sch?sch->typeToString():"None")<<endl;
     m_gantt->setUpdateEnabled(false);
     resetDrawn(m_gantt->firstChild());
     updateChildren(&project); // don't draw project
@@ -441,41 +467,43 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
     }
     //TODO i18n
     QString w="Name: " + task->name();
+    if (!task->notScheduled()) {
     
-    w += "\n"; w += "Start: "  + task->startTime().toString();
-    w += "\n"; w += "End  : " + task->endTime().toString();
-    if (m_showProgress) {
-        w += "\n"; w += "Progress (%): " + QString().setNum(task->progress().percentFinished);
-    }
-    w += "\n"; w += "Float: " + task->positiveFloat().toString(Duration::Format_Hour);
+        w += "\n"; w += "Start: "  + task->startTime().toString();
+        w += "\n"; w += "End  : " + task->endTime().toString();
+        if (m_showProgress) {
+            w += "\n"; w += "Progress (%): " + QString().setNum(task->progress().percentFinished);
+        }
+        w += "\n"; w += "Float: " + task->positiveFloat().toString(Duration::Format_Hour);
     
-    if (task->inCriticalPath()) {
-        w += "\n"; w += "Critical path";
-    } else if (task->isCritical()) {
-        w += "\n"; w += "Critical";
+        if (task->inCriticalPath()) {
+            w += "\n"; w += "Critical path";
+        } else if (task->isCritical()) {
+            w += "\n"; w += "Critical";
+        }
     }
-
     QString sts;
     bool ok = true;
     if (task->notScheduled()) {
         sts += "\n"; sts += "Not scheduled";
         ok = false;
-    }
-    if (task->resourceError()) {
-        sts += "\n"; sts += "No resource assigned";
-        ok = false;
-    }
-    if (task->resourceOverbooked()) {
-        sts += "\n"; sts += "Resource overbooked";
-        ok = false;
-    }
-    if (task->resourceNotAvailable()) {
-        sts += "\n"; sts += "Resource not available";
-        ok = false;
-    }
-    if (task->schedulingError()) {
-        sts += "\n"; sts += "Scheduling conflict";
-        ok = false;
+    } else {
+        if (task->resourceError()) {
+            sts += "\n"; sts += "No resource assigned";
+            ok = false;
+        }
+        if (task->resourceOverbooked()) {
+            sts += "\n"; sts += "Resource overbooked";
+            ok = false;
+        }
+        if (task->resourceNotAvailable()) {
+            sts += "\n"; sts += "Resource not available";
+            ok = false;
+        }
+        if (task->schedulingError()) {
+            sts += "\n"; sts += "Scheduling conflict";
+            ok = false;
+        }
     }
     if (ok) {
         QColor c(green);
@@ -524,25 +552,27 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
     
     //TODO i18n
     QString w="Name: " + task->name();
-    w += "\n"; w += "Time: ";
-    w += task->startTime().toString();
+    if (!task->notScheduled()) {
+        w += "\n"; w += "Time: ";
+        w += task->startTime().toString();
+        
+        w += "\n"; w += "Float: " + task->positiveFloat().toString(Duration::Format_Hour);
     
-    w += "\n"; w += "Float: " + task->positiveFloat().toString(Duration::Format_Hour);
-
-    if (task->inCriticalPath()) {
-        w += "\n"; w += "Critical path";
-    } else if (task->isCritical()) {
-        w += "\n"; w += "Critical";
+        if (task->inCriticalPath()) {
+            w += "\n"; w += "Critical path";
+        } else if (task->isCritical()) {
+            w += "\n"; w += "Critical";
+        }
     }
-
     bool ok = true;
     if (task->notScheduled()) {
         w += "\n"; w += "Not scheduled";
         ok = false;
-    }
-    if (task->schedulingError()) {
-        w += "\n"; w += "Scheduling conflict";
-        ok = false;
+    } else {
+        if (task->schedulingError()) {
+            w += "\n"; w += "Scheduling conflict";
+            ok = false;
+        }
     }
     if (ok) {
         QColor c(blue);

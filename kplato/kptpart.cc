@@ -57,6 +57,7 @@ Part::Part(QWidget *parentWidget, const char *widgetName,
     m_config.setReadWrite(isReadWrite()|| !isEmbedded());
     m_config.load();
 
+    delete m_project;
     m_project = new Project(); // after config is loaded
 
     connect(m_commandHistory, SIGNAL(commandExecuted()), SLOT(slotCommandExecuted()));
@@ -78,6 +79,7 @@ bool Part::initDoc(InitDocFlags flags, QWidget* parentWidget) {
 
     if (flags==KoDocument::InitDocEmpty)
     {
+        delete m_project;
         m_project = new Project();
         setAutoSave(0); // disable
         setModified(false);
@@ -88,14 +90,14 @@ bool Part::initDoc(InitDocFlags flags, QWidget* parentWidget) {
     KoTemplateChooseDia::ReturnType ret;
     KoTemplateChooseDia::DialogType dlgtype;
     if (flags != KoDocument::InitDocFileNew )
-	    dlgtype = KoTemplateChooseDia::Everything;
+        dlgtype = KoTemplateChooseDia::Everything;
     else
-	    dlgtype = KoTemplateChooseDia::OnlyTemplates;
+        dlgtype = KoTemplateChooseDia::OnlyTemplates;
 
     ret = KoTemplateChooseDia::choose(Factory::global(), templateDoc,
-				      dlgtype,
-				      "kplato_template",
-				      NULL);
+                                      dlgtype,
+                                      "kplato_template",
+                                      NULL);
     if (ret == KoTemplateChooseDia::Template) {
         resetURL();
         result = loadNativeFormat(templateDoc);
@@ -106,13 +108,14 @@ bool Part::initDoc(InitDocFlags flags, QWidget* parentWidget) {
         kdDebug() << "Part::initDoc opening URL " << url.prettyURL() <<endl;
         result = openURL(url);
     } else if (ret == KoTemplateChooseDia::Empty) {
-	// Make a fresh project and let the user enter some info
-	m_project = new Project();
-	// an emty project should be empty
-	// m_projectDialog = new ProjectDialog(*m_project, m_view);
-	// m_projectDialog->exec();
+        // Make a fresh project and let the user enter some info
+        delete m_project;
+        m_project = new Project();
+       // an emty project should be empty
+        // m_projectDialog = new ProjectDialog(*m_project, m_view);
+        // m_projectDialog->exec();
 
-	result = true;
+        result = true;
     } else {
         result = false;
     }

@@ -41,7 +41,12 @@ public:
 
     // View
     QString currentView;
-    
+    int currentEstimateType;
+    long currentSchedule;
+    bool actionViewExpected;
+    bool actionViewOptimistic;
+    bool actionViewPessimistic;
+
     struct Ganttview {
         int ganttviewsize;
         int taskviewsize;

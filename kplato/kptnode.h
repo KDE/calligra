@@ -24,7 +24,9 @@
 #include "kptrelation.h"
 #include "kptduration.h"
 #include "kptdatetime.h"
+#include "kptschedule.h"
 
+#include <qintdict.h>
 #include <qrect.h>
 #include <qptrlist.h>
 #include <qstring.h>
@@ -169,11 +171,13 @@ public:
 
     void setStartTime(DateTime startTime);
     /// Return the scheduled start time
-    const DateTime &startTime() const { return m_startTime; }
+    virtual DateTime startTime() const
+        { return m_currentSchedule ? m_currentSchedule->startTime : DateTime(); }
     const QDate &startDate() const { return m_dateOnlyStartDate; }
     void setEndTime(DateTime endTime);
     /// Return the scheduled end time
-    const DateTime &endTime() const { return m_endTime; }
+    virtual DateTime endTime() const
+        { return m_currentSchedule ? m_currentSchedule->endTime : DateTime(); }
     const QDate &endDate() const { return m_dateOnlyEndDate; }
 
     void setEffort(Effort* e) { m_effort = e; }
@@ -202,23 +206,27 @@ public:
       * given the constraints of the network.
       * @see earliestStart
       */
-    DateTime getEarliestStart() const { return earliestStart; }
+    DateTime getEarliestStart() const
+        { return m_currentSchedule ? m_currentSchedule->earliestStart : DateTime(); }
     /**
       * setEarliestStart() sets earliest time this node can start
       * @see earliestStart
       */
-    void setEarliestStart(const DateTime &dt) { earliestStart = dt; }
+    void setEarliestStart(const DateTime &dt) 
+        { if (m_currentSchedule) m_currentSchedule->earliestStart = dt; }
     /**
       * getLatestFinish() returns latest time this node can finish
       * @see latestFinish
       */
-    DateTime getLatestFinish() const { return latestFinish; }
+    DateTime getLatestFinish() const 
+        { return m_currentSchedule ? m_currentSchedule->latestFinish : DateTime(); }
     /**
       * setLatestFinish() sets latest time this node can finish
       * given the constraints of the network.
       * @see latestFinish
       */
-    void setLatestFinish(const DateTime &dt) { latestFinish = dt; }
+    void setLatestFinish(const DateTime &dt) 
+        { if (m_currentSchedule) m_currentSchedule->latestFinish = dt; }
 
     QString &name() { return m_name; }
     QString &leader() { return m_leader; }
@@ -249,18 +257,23 @@ public:
     virtual void makeAppointments();
 
     /// EffortType == Effort, but no resource is requested
-    bool resourceError() const { return m_resourceError; }
+    bool resourceError() const 
+        { return m_currentSchedule ? m_currentSchedule->resourceError : false; }
     /// The assigned resource is overbooked
-    virtual bool resourceOverbooked() const { return m_resourceOverbooked; }
+    virtual bool resourceOverbooked() const
+        { return m_currentSchedule ? m_currentSchedule->resourceOverbooked : false; }
     /// Calculates if the assigned resource is overbooked 
     /// within the duration of this node
     virtual void calcResourceOverbooked();
     /// The requested resource is not available
-    bool resourceNotAvailable() const { return m_resourceNotAvailable; }
+    bool resourceNotAvailable() const
+        { return m_currentSchedule ? m_currentSchedule->resourceNotAvailable : false; }
     /// The task cannot be scheduled to fullfill all the constraints
-    virtual bool schedulingError() const { return m_schedulingError; }
+    virtual bool schedulingError() const
+        { return m_currentSchedule ? m_currentSchedule->schedulingError : false; }
     /// The node has not been scheduled
-    bool notScheduled() const { return m_notScheduled; }
+    bool notScheduled() const
+        { return m_currentSchedule ? m_currentSchedule->notScheduled : true; }
     
     virtual EffortCostMap plannedEffortCostPrDay(const QDate &start, const QDate &end) const=0;
         
@@ -309,11 +322,11 @@ public:
     virtual void initiateCalculationLists(QPtrList<Node> &startnodes, QPtrList<Node> &endnodes, QPtrList<Node> &summarytasks) = 0;
     virtual DateTime calculateForward(int /*use*/) = 0;
     virtual DateTime calculateBackward(int /*use*/) = 0;
-    virtual DateTime &scheduleForward(DateTime &, int /*use*/) = 0;
-    virtual DateTime &scheduleBackward(DateTime &, int /*use*/) = 0;
+    virtual DateTime scheduleForward(const DateTime &, int /*use*/) = 0;
+    virtual DateTime scheduleBackward(const DateTime &, int /*use*/) = 0;
     virtual void adjustSummarytask() = 0;
 
-    virtual void initiateCalculation();
+    virtual void initiateCalculation(Schedule *sch);
     virtual void resetVisited();
     void propagateEarliestStart(DateTime &time);
     void propagateLatestFinish(DateTime &time);
@@ -332,7 +345,8 @@ public:
     virtual DateTime summarytaskLatestFinish() 
         { return DateTime(); }
     // Returns the (previously) calculated duration
-    const Duration &duration() { return m_duration; }
+    const Duration &duration()
+        { return m_currentSchedule ? m_currentSchedule->duration : Duration::zeroDuration; }
     /**
      * Calculates and returns the duration of the node.
      * Uses the correct expected-, optimistic- or pessimistic effort
@@ -366,21 +380,18 @@ public:
     virtual void addParentProxyRelation(Node *, const Relation *) {}
     virtual void addChildProxyRelation(Node *, const Relation *) {}
 
-    QPtrList<Appointment> &appointments() { return m_appointments; }
-
-    /// Return appointments this node have with resource
-    Appointment *findAppointment(Resource *resource);
-    /// The total number of appointments
-    int numAppointments() const { return m_appointments.count(); }
+    /// Save appointments for schedule with id
+    virtual void saveAppointments(QDomElement &element, long id) const;
+    ///Return the list of appointments for current schedule.
+    QPtrList<Appointment> appointments();
+    /// Return appointment this node have with resource
+//    Appointment *findAppointment(Resource *resource);
     /// Adds appointment to this node only (not to resource)
     virtual bool addAppointment(Appointment *appointment);
+    /// Adds appointment to this node only (not to resource)
+    virtual bool addAppointment(Appointment *appointment, Schedule &sch);
     /// Adds appointment to both this node and resource
-    virtual void addAppointment(Resource *resource, DateTime &start, DateTime &end, double load=100);
-    
-    /// removes appoinrment and deletes it (independent of setAutoDelete)
-    void removeAppointment(Appointment *appointment);
-    /// removes appointment without deleting it (independent of setAutoDelete)
-    void takeAppointment(Appointment *appointment);
+    virtual void addAppointment(ResourceSchedule *resource, DateTime &start, DateTime &end, double load=100);
     
     /// Find the node with my id
     virtual Node *findNode() const { return findNode(m_id); }
@@ -406,20 +417,24 @@ public:
      * the calendar of allocated resources. Normally this is the same
      * as @ref startTime(), but may differ if timing constraints are set.
      */
-    virtual const DateTime &workStartTime() const { return m_workStartTime; }
-    void setWorkStartTime(const DateTime &dt) { m_workStartTime = dt; }
+    virtual DateTime workStartTime() const
+        { return m_currentSchedule ? m_currentSchedule->workStartTime : DateTime(); }
+    void setWorkStartTime(const DateTime &dt) 
+        { if (m_currentSchedule) m_currentSchedule->workStartTime = dt; }
     
     /**
      * This is when work can finish on this node in accordance with 
      * the calendar of allocated resources. Normally this is the same
      * as @ref endTime(), but may differ if timing constraints are set.
      */
-    virtual const DateTime &workEndTime() const { return m_workEndTime; }
-    void setWorkEndTime(const DateTime &dt) { m_workEndTime = dt; }
-
+    virtual DateTime workEndTime() const 
+        { return m_currentSchedule ? m_currentSchedule->workEndTime : DateTime(); }
+    void setWorkEndTime(const DateTime &dt) 
+        { if (m_currentSchedule) m_currentSchedule->workEndTime = dt; }
     
-    virtual bool isCritical() { return false; }
-    virtual bool inCriticalPath() { return m_inCriticalPath; }
+    virtual bool isCritical() const { return false; }
+    virtual bool inCriticalPath() const
+        { return m_currentSchedule ? m_currentSchedule->inCriticalPath : false; }
     virtual bool calcCriticalPath();
     
     /// Returns the level this node is in the hierarchy. Top node is level 0.
@@ -443,6 +458,31 @@ public:
     Account *runningAccount() const { return m_runningAccount; }
     void setRunningAccount(Account *acc) { m_runningAccount = acc; }
 
+    void setCurrentSchedule(NodeSchedule *schedule) { m_currentSchedule = schedule; }
+    NodeSchedule *currentSchedule() const { return m_currentSchedule; }
+    /// Set current schedule to schedule with identity id, for me and my children
+    virtual void setCurrentSchedule(long id);
+    QIntDict<NodeSchedule> &schedules() { return m_schedules; }
+    /// Find schedule matching name and type.
+    NodeSchedule *findSchedule(const QString name, const Schedule::Type type) const
+        { return NodeSchedule::find(m_schedules, name, type); }
+    /// Find schedule matching type.
+    NodeSchedule *findSchedule(const Schedule::Type type) const
+        { return NodeSchedule::find(m_schedules, type); }
+    /// Find schedule matching id.
+    NodeSchedule *findSchedule(long id) const { return m_schedules[id]; }
+    /// Take, don't delete.
+    void takeSchedule(const NodeSchedule *schedule);
+    /// Add schedule to list, replace if schedule with same id allready exists.
+    void addSchedule(NodeSchedule *schedule);
+    /// Create a new schedule.
+    NodeSchedule *createSchedule(QString name, Schedule::Type type, long id);
+
+    DateTime startTime()
+        { return m_currentSchedule ? m_currentSchedule->startTime : DateTime(); }
+    DateTime endTime()
+        { return m_currentSchedule ? m_currentSchedule->endTime : DateTime(); }
+
 protected:
     QPtrList<Node> m_nodes;
     QPtrList<Relation> m_dependChildNodes;
@@ -456,16 +496,6 @@ protected:
 
     Effort* m_effort;
     
-    /** earliestStart is calculated by PERT/CPM.
-      * A task may be scheduled to start later because of constraints
-      * or resource availability etc.
-      */
-    DateTime earliestStart;
-    /** latestFinish is calculated by PERT/CPM.
-      * A task may be scheduled to finish earlier because of constraints
-      * or resource availability etc.
-      */
-    DateTime latestFinish;
 
     ConstraintType m_constraint;
 
@@ -480,53 +510,20 @@ protected:
       */
     DateTime m_constraintEndTime;
 
-    /**  m_startTime is the scheduled start time.
-      *  It depends on constraints (i.e. ASAP/ALAP) and resource availability.
-      *  It will always be later or equal to @ref earliestStart
-      */
-    DateTime m_startTime;
-
-    /**  
-      *  m_endTime is the scheduled finish time.
-      *  It depends on constraints (i.e. ASAP/ALAP) and resource availability.
-      *  It will always be earlier or equal to @ref latestFinish
-      */
-    DateTime m_endTime;
-    
-    /**  
-      *  m_duration is the scheduled duration which depends on
-      *  e.g. estimated effort, allocated resources and risk
-      */
-    Duration m_duration;
-
-    /// Set if EffortType == Effort, but no resource is requested
-    bool m_resourceError;
-    /// Set if the assigned resource is overbooked
-    bool m_resourceOverbooked;
-    /// Set if the requested resource is not available
-    bool m_resourceNotAvailable;
-    /// Set if the task cannot be scheduled to fullfill all the constraints
-    bool m_schedulingError;
-    /// Set if the node has not been scheduled
-    bool m_notScheduled;
-    
     bool m_visitedForward;
     bool m_visitedBackward;
+    DateTime m_earliestStartForward;
+    DateTime m_latestFinishBackward;
+    Duration m_durationForward;
+    Duration m_durationBackward;
     
     QDate m_dateOnlyStartDate;
     QDate m_dateOnlyEndDate;
     Duration m_dateOnlyDuration;
  
-    QPtrList<Appointment> m_appointments;
- 
-    DateTime m_earliestStartForward;
-    Duration m_durationForward;
-    DateTime m_latestFinishBackward;
-    Duration m_durationBackward;
-    DateTime m_workStartTime;
-    DateTime m_workEndTime;
+    QIntDict<NodeSchedule> m_schedules;
+    NodeSchedule *m_currentSchedule;
 
-    bool m_inCriticalPath;
     QString m_wbs;
     
     double m_startupCost;

@@ -19,6 +19,7 @@
 
 #include "kpttaskappointmentsview.h"
 
+#include "kptappointment.h"
 #include "kpttask.h"
 #include "kptview.h"
 
@@ -86,9 +87,10 @@ void TaskAppointmentsView::draw() {
     if (!m_task)
         return;
     
-    QPtrListIterator<Appointment> it(m_task->appointments());
+    QPtrList<Appointment> lst = m_task->appointments();
+    QPtrListIterator<Appointment> it(lst);
     for (; it.current(); ++it) {
-        Resource *r = it.current()->resource();
+        Resource *r = it.current()->resource()->resource();
         TaskAppointmentsView::ResourceItem *item = new TaskAppointmentsView::ResourceItem(r, masterListView());
         
         item->effortMap = it.current()->plannedPrDay(m_task->startTime().date(), m_task->endTime().date());

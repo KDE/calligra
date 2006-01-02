@@ -19,6 +19,7 @@
 
 #include "kptcommand.h"
 #include "kptaccount.h"
+#include "kptappointment.h"
 #include "kptpart.h"
 #include "kptproject.h"
 #include "kpttask.h"

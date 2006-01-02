@@ -94,7 +94,7 @@ void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
         QTime time = workTime ? workTime->endOfDay(date.dayOfWeek()-1) : QTime::currentTime();
         setEndDateTime(QDateTime(date, time)); 
     }
-    
+    kdDebug()<<k_funcinfo<<"Effort: "<<task.effort()->expected().toString()<<endl;
     setEstimate(task.effort()->expected()); 
     setOptimistic(task.effort()->optimisticRatio());
     setPessimistic(task.effort()->pessimisticRatio());
@@ -145,6 +145,7 @@ KMacroCommand *TaskGeneralPanel::buildCommand(Part *part) {
         modified = true;
     }
     dt = estimationValue();
+    kdDebug()<<k_funcinfo<<"Estimate: "<<dt.toString()<<endl;
     bool expchanged = dt != m_task.effort()->expected();
     if ( expchanged ) {
         cmd->addCommand(new ModifyEffortCmd(part, m_task.effort(), m_task.effort()->expected(), dt));

@@ -92,6 +92,9 @@ signals:
 public slots:
     void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);
 
+    void setShowExpected(bool on) { m_showExpected = on; }
+    void setShowOptimistic(bool on) { m_showOptimistic = on; }
+    void setShowPessimistic(bool on) { m_showPessimistic = on; }
     void setShowResources(bool on) { m_showResources = on; }
     void setShowTaskName(bool on) { m_showTaskName = on; }
     void setShowTaskLinks(bool on) { m_showTaskLinks = on; }
@@ -165,6 +168,9 @@ private:
     KDGanttViewItem *m_currentItem;
     KDGanttView *m_gantt;
     TaskAppointmentsView *m_taskView;
+    bool m_showExpected;
+    bool m_showOptimistic;
+    bool m_showPessimistic;
     bool m_showResources;
     bool m_showTaskName;
     bool m_showTaskLinks;

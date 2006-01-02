@@ -19,6 +19,7 @@
 
 #include "kptresourceappointmentsview.h"
 
+#include "kptappointment.h"
 #include "kptcalendar.h"
 #include "kptnode.h"
 #include "kptresource.h"
@@ -104,10 +105,13 @@ void ResourceAppointmentsView::draw() {
     m_totalItem = new ResourceAppointmentsView::NodeItem(i18n("Total"), masterListView());
     m_totalItem->setExpandable(true);
     m_totalItem->setOpen(true);
-    m_availItem = new ResourceAppointmentsView::NodeItem(i18n("Available"), masterListView());    
-    QPtrListIterator<Appointment> it(m_resource->appointments());
+    m_availItem = new ResourceAppointmentsView::NodeItem(i18n("Available"), masterListView());
+    QPtrList<Appointment> lst = m_resource->appointments();
+    kdDebug()<<k_funcinfo<<lst.count()<<endl;
+    QPtrListIterator<Appointment> it(lst);
     for (; it.current(); ++it) {
-        Node *n = it.current()->node();
+        kdDebug()<<k_funcinfo<<endl;
+        Node *n = it.current()->node()->node();
         ResourceAppointmentsView::NodeItem *item = new ResourceAppointmentsView::NodeItem(n, m_totalItem);
         
         item->effortMap = it.current()->plannedPrDay(m_start, m_end);
