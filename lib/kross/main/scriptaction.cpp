@@ -63,6 +63,8 @@ ScriptAction::ScriptAction(const QString& file)
         setText( file );
     }
 
+    setToolTip( file );
+    setWhatsThis( file );
     setEnabled( false );
 }
 
@@ -98,6 +100,8 @@ ScriptAction::ScriptAction(const QDomElement& element)
         setInterpreterName( interpreter );
 
     if(file.isNull()) {
+        setToolTip( name );
+        setWhatsThis( name );
         setCode( element.text().stripWhiteSpace() );
     }
     else {
@@ -113,6 +117,8 @@ ScriptAction::ScriptAction(const QDomElement& element)
 
         }
         setFile(file);
+        setToolTip(file);
+        setWhatsThis(file);
         if(icon.isNull())
             icon = KMimeType::iconForURL( KURL(file) );
     }
