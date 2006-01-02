@@ -128,12 +128,6 @@ void KWFormulaFrameSet::deleteFrame( unsigned int _num, bool remove, bool recalc
 }
 
 
-void KWFormulaFrameSet::moveFrame( KWFrame* frame )
-{
-    formula->setDocumentPosition( frame->x(), frame->y()+formula->baseline() );
-}
-
-
 KWFrameSetEdit* KWFormulaFrameSet::createFrameSetEdit(KWCanvas* canvas)
 {
     return new KWFormulaFrameSetEdit(this, canvas);

@@ -56,11 +56,6 @@ public:
      */
     void reloadPicture( const KoPictureKey& key );
 
-    /**
-     * Called when the user resizes a frame.
-     */
-    virtual void resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize );
-
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
     virtual void load( QDomElement &attributes, bool loadFrames = true );
     virtual void saveOasis( KoXmlWriter& writer, KoSavingContext& context, bool saveFrames ) const;

@@ -64,8 +64,6 @@ public:
      */
     virtual void deleteFrame( unsigned int _num, bool remove = true, bool recalc = true );
 
-    virtual void moveFrame( KWFrame* frame );
-
     virtual KWFrameSetEdit* createFrameSetEdit(KWCanvas*);
 
     virtual MouseMeaning getMouseMeaningInsideFrame( const KoPoint& );

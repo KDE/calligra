@@ -450,9 +450,6 @@ public:
     * and wrong values will be detected (and corrected) */
     void validate();
 
-    /** returns true if we have a cell occupying that position */
-    bool contains( double mx, double my );
-
     /** override save so we save in table style.. */
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true );
 

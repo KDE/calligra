@@ -490,16 +490,6 @@ KCommand * KWFrameSet::anchoredObjectDeleteCommand( int frameNum )
     return new KWDeleteFrameCommand( QString::null, frame );
 }
 
-KWFrame * KWFrameSet::frameByBorder( const QPoint & nPoint ) const
-{
-    QPtrListIterator<KWFrame> frameIt = frameIterator();
-    for ( ; frameIt.current(); ++frameIt ) {
-        if(frameIt.current()->frameAtPos(nPoint, true))
-            return frameIt.current();
-    }
-    return 0L;
-}
-
 KWFrame * KWFrameSet::frameAtPos( double x, double y ) const
 {
     KoPoint docPoint( x, y );
@@ -852,16 +842,6 @@ void KWFrameSet::drawFrameContents( KWFrame *, QPainter *, const QRect &,
     kdWarning() << "Default implementation of drawFrameContents called for " << className() << " " << this << " " << name() << kdBacktrace();
 }
 
-bool KWFrameSet::contains( double mx, double my )
-{
-    QPtrListIterator<KWFrame> frameIt = frameIterator();
-    for ( ; frameIt.current(); ++frameIt )
-        if ( frameIt.current()->contains( KoPoint( mx, my ) ) )
-            return true;
-
-    return false;
-}
-
 void KWFrameSet::saveCommon( QDomElement &parentElem, bool saveFrames )
 {
     if ( m_frames.isEmpty() ) // Deleted frameset -> don't save
@@ -1157,21 +1137,6 @@ void KWFrameSet::setFrameBehavior( KWFrame::FrameBehavior fb ) {
 void KWFrameSet::setNewFrameBehavior( KWFrame::NewFrameBehavior nfb ) {
     for(KWFrame *f=m_frames.first();f;f=m_frames.next())
         f->setNewFrameBehavior(nfb);
-}
-
-void KWFrameSet::resizeFrameSetCoords( KWFrame* frame, double newLeft, double newTop, double newRight, double newBottom, bool finalSize )
-{
-    frame->setLeft( newLeft );
-    frame->setTop( newTop );
-    resizeFrame( frame, newRight - newLeft, newBottom - newTop, finalSize );
-}
-
-void KWFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool /*finalSize*/ )
-{
-    frame->setWidth( newWidth );
-    frame->setHeight( newHeight );
-    if ( frame->frameBehavior() == KWFrame::AutoExtendFrame )
-        frame->setMinimumFrameHeight( newHeight );
 }
 
 // ## this should pass the viewmode as argument, probably.

@@ -1441,42 +1441,6 @@ void KWTableFrameSet::validate()
     }
 }
 
-// not sure where this method is used, it will be fixed soon
-bool KWTableFrameSet::contains( double mx, double my ) {
-
-    // The default implementation looks into each cell, should be good enough (DF)
-    return KWFrameSet::contains( mx, my );
-/*
-    if(m_cells.count()==0)
-        return false;
-    if(m_pageBoundaries.count() ==0)
-        recalcRows();
-    KWFrame *first, *last;
-    for (unsigned int i=1 ; i < m_pageBoundaries.count(); i++) {
-
-        first = m_cells.at((m_pageBoundaries[i-1]))->frame( 0 );
-        if(m_pageBoundaries[i] != 0)
-        {
-            KWTableFrameSet::Cell *cell=m_cells.at(m_pageBoundaries[i] -1);
-            //not cell at right
-            if((cell->columnAfter() < getColumns()-1) || (cell->firstColumn() < getColumns()-1) )
-                cell = cell(cell->firstRow(),  getColumns()-1);
-            last = cell->frame( 0 );
-        }
-        else
-            last = first;
-
-
-        KoRect rect( KoPoint( first->x(), first->y() ), KoPoint( last->right(), last->bottom() ) );
-        if(rect.contains(mx,my)) {
-            return true;
-        }
-    }
-
-    return false;
-*/
-}
-
 void KWTableFrameSet::createEmptyRegion( const QRect & crect, QRegion & emptyRegion, KWViewMode *viewMode )
 {
     // Avoid iterating over all cells if we are out of view

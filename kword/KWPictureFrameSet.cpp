@@ -82,13 +82,6 @@ void KWPictureFrameSet::reloadPicture( const KoPictureKey& key )
     m_picture = collection->insertPicture( key, KoPicture() );
 }
 
-void KWPictureFrameSet::resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize )
-{
-    KWFrameSet::resizeFrame( frame, newWidth, newHeight, finalSize );
-    //QSize newSize = kWordDocument()->zoomSize( frame->innerRect().size() );
-    m_finalSize=finalSize; // Cache the value for drawing time!
-}
-
 QDomElement KWPictureFrameSet::save( QDomElement & parentElem, bool saveFrames )
 {
     if ( m_frames.isEmpty() ) // Deleted frameset -> don't save

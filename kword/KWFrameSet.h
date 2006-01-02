@@ -146,9 +146,6 @@ public:
      */
     bool isFrameAtPos( const KWFrame* frame, const QPoint& nPoint, bool borderOfFrameOnly=false ) const;
 
-    /** return a frame if nPoint in on one of its borders */
-    KWFrame *frameByBorder( const QPoint & nPoint ) const;
-
     /** get a frame by number */
     KWFrame *frame( unsigned int _num ) const;
 
@@ -168,13 +165,6 @@ public:
     int frameFromPtr( KWFrame *frame );
     /** Get number of child frames */
     unsigned int frameCount() const { return m_frames.count(); }
-
-    /** Called when the user resizes a frame. Calls resizeFrame. */
-    void resizeFrameSetCoords( KWFrame* frame, double newLeft, double newTop, double newRight, double newBottom, bool finalSize );
-    /** Called when the user resizes a frame. Reimplemented by KWPictureFrameSet. */
-    virtual void resizeFrame( KWFrame* frame, double newWidth, double newHeight, bool finalSize );
-    /** Called when the user moves a frame. */
-    virtual void moveFrame( KWFrame* ) {}
 
     /** True if the frameset was deleted (but not destroyed, since it's in the undo/redo) */
     bool isDeleted() const { return m_frames.isEmpty(); }
@@ -327,9 +317,6 @@ public:
     /** relayout text in frames, so that it flows correctly around other frames */
     virtual void layout() {}
     virtual void invalidate() {}
-
-    /** returns true if we have a frame occupying that position */
-    virtual bool contains( double mx, double my );
 
     /// save to XML - when saving
     virtual QDomElement save( QDomElement &parentElem, bool saveFrames = true ) = 0;
