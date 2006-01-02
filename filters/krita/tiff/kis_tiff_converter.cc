@@ -307,13 +307,13 @@ namespace {
                 Q_UINT8 i;
                 for(i = 0; i < nbcolorssamples; i++)
                 {
-                    d[poses[i]] = transform( (Q_UINT32) ( tiffstream->nextValueBelow16() *coeff ) );
+                    d[poses[i]] = transform( (Q_UINT32) ( tiffstream->nextValueBelow16() * coeff ) );
                 }
                 d[poses[i]] = Q_UINT8_MAX;
                 for(int i = 0; i < extrasamplescount; i++)
                 {
                     if(i == alphapos)
-                        d[poses[i]] = (Q_UINT32) ( tiffstream->nextValueBelow16() *coeff );
+                        d[poses[i]] = (Q_UINT32) ( tiffstream->nextValueBelow16() * coeff );
                     else
                         tiffstream->nextValueBelow16();
                 }
@@ -327,13 +327,13 @@ namespace {
                 Q_UINT8 i;
                 for(i = 0; i < nbcolorssamples; i++)
                 {
-                    d[poses[i]] = transform( tiffstream->nextValueBelow16() *coeff );
+                    d[poses[i]] = transform( (Q_UINT32) ( tiffstream->nextValueBelow16() * coeff ) );
                 }
                 d[poses[i]] = Q_UINT16_MAX;
                 for(int i = 0; i < extrasamplescount; i++)
                 {
                     if(i == alphapos)
-                        d[poses[i]] = tiffstream->nextValueBelow16() *coeff;
+                        d[poses[i]] = (Q_UINT32) ( tiffstream->nextValueBelow16() * coeff );
                     else
                         tiffstream->nextValueBelow16();
                 }
@@ -481,6 +481,16 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
         TIFFClose(image);
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
+    do {
+        readTIFFDirectory(image);
+    } while (TIFFReadDirectory(image));
+    // Freeing memory
+    TIFFClose(image);
+
+}
+
+KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
+{
     // Read information about the tiff
     uint32 width, height;
     if(TIFFGetField(image, TIFFTAG_IMAGEWIDTH, &width) == 0){
@@ -530,6 +540,8 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
     LPBYTE EmbedBuffer;
 
     if (TIFFGetField(image, TIFFTAG_ICCPROFILE, &EmbedLen, &EmbedBuffer)) {
+        kdDebug() << "Trying to open ICC profile of length : " << (Q_UINT32)EmbedLen << endl;
+        cmsErrorAction(LCMS_ERROR_SHOW);
         cmsHPROFILE hProfile = cmsOpenProfileFromMem(EmbedBuffer, EmbedLen);
         if(hProfile != NULL)
         {
@@ -603,12 +615,19 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
         return KisImageBuilder_RESULT_INVALID_ARG;
     }
     // Creating the KisImageSP
-    if( ! m_img) {
+    if( ! m_img ) {
         m_img = new KisImage(m_doc->undoAdapter(), width, height, cs, "built image");
         Q_CHECK_PTR(m_img);
         if(profile)
         {
             m_img -> addAnnotation( profile->annotation() );
+        }
+    } else {
+        if( m_img->width() < width || m_img->height() < height)
+        {
+            Q_UINT32 newwidth = (m_img->width() < width) ? width : m_img->width();
+            Q_UINT32 newheight = (m_img->height() < height) ? height : m_img->height();
+            m_img->resize(newwidth, newheight, false);
         }
     }
     KisPaintLayer* layer = new KisPaintLayer(m_img, m_img -> nextLayerName(), Q_UINT8_MAX);
@@ -641,7 +660,7 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
         for (y = 0; y < height; y+= tileHeight)
         {
             for (x = 0; x < width; x += tileWidth)
-            { // TODO support for different planarity
+            {
                 kdDebug() << "Reading tile x = " << x << " y = " << y << endl;
                 if( planarconfig == PLANARCONFIG_CONTIG )
                 {
@@ -679,7 +698,7 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
         } 
         uint32 y = 0;
         for (y = 0; y < height; y++)
-        { // TODO support for different planarity
+        {
             if( planarconfig == PLANARCONFIG_CONTIG )
             {
                 TIFFReadScanline(image, buf, y, (tsize_t) -1);
@@ -706,8 +725,6 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
         delete[] ps_buf;
     }
 
-    // Freeing memory
-    TIFFClose(image);
     return KisImageBuilder_RESULT_OK;
 }
 
