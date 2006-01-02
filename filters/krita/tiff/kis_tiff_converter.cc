@@ -310,9 +310,9 @@ namespace {
                     d[poses[i]] = transform( (Q_UINT32) ( tiffstream->nextValueBelow16() * coeff ) );
                 }
                 d[poses[i]] = Q_UINT8_MAX;
-                for(int i = 0; i < extrasamplescount; i++)
+                for(int k = 0; k < extrasamplescount; k++)
                 {
-                    if(i == alphapos)
+                    if(k == alphapos)
                         d[poses[i]] = (Q_UINT32) ( tiffstream->nextValueBelow16() * coeff );
                     else
                         tiffstream->nextValueBelow16();
@@ -330,9 +330,9 @@ namespace {
                     d[poses[i]] = transform( (Q_UINT32) ( tiffstream->nextValueBelow16() * coeff ) );
                 }
                 d[poses[i]] = Q_UINT16_MAX;
-                for(int i = 0; i < extrasamplescount; i++)
+                for(int k = 0; k < extrasamplescount; k++)
                 {
-                    if(i == alphapos)
+                    if(k == alphapos)
                         d[poses[i]] = (Q_UINT32) ( tiffstream->nextValueBelow16() * coeff );
                     else
                         tiffstream->nextValueBelow16();
@@ -350,9 +350,9 @@ namespace {
                     d[poses[i]] = (Q_UINT16) ( tiffstream->nextValueBelow32() * coeff );
                 }
                 d[poses[i]] = Q_UINT16_MAX;
-                for(int i = 0; i < extrasamplescount; i++)
+                for(int k = 0; k < extrasamplescount; k++)
                 {
-                    if(i == alphapos)
+                    if(k == alphapos)
                         d[poses[i]] = (Q_UINT16) ( tiffstream->nextValueBelow32() * coeff );
                     else
                         tiffstream->nextValueBelow32();
@@ -370,9 +370,9 @@ namespace {
                     d[poses[i]] = tiffstream->nextValueAbove32() / coeff;
                 }
                 d[poses[i]] = Q_UINT16_MAX;
-                for(int i = 0; i < extrasamplescount; i++)
+                for(int k = 0; k < extrasamplescount; k++)
                 {
-                    if(i == alphapos)
+                    if(k == alphapos)
                         d[poses[i]] = tiffstream->nextValueAbove32() / coeff;
                     else
                         tiffstream->nextValueBelow32();
