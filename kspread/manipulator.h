@@ -94,7 +94,7 @@ protected:
   Sheet* m_sheet;
   bool   m_creation : 1;
   bool   m_reverse  : 1;
-
+  
 private:
 };
 
@@ -420,6 +420,7 @@ protected:
   virtual QString name() const;
 
 private:
+  bool m_merge;
 };
 
 

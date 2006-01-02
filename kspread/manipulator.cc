@@ -129,8 +129,10 @@ void Manipulator::execute()
   
   // add me to undo if needed
   if (!m_reverse)
+  {
     // addCommand itself checks for undo lock
     m_sheet->doc()->addCommand (this);
+  }
 }
 
 void Manipulator::unexecute()
@@ -764,6 +766,7 @@ void FormatManipulator::prepareCell(Cell* cell)
 MergeManipulator::MergeManipulator()
   : Manipulator()
 {
+  m_merge = true;
 }
 
 MergeManipulator::~MergeManipulator()
@@ -786,7 +789,9 @@ bool MergeManipulator::process(Element* element)
 
   QRect range = element->rect().normalize();
 
-  if (!m_reverse)
+  bool doMerge = m_reverse ? (!m_merge) : m_merge;
+  
+  if (doMerge)
   {
     Cell *cell = m_sheet->nonDefaultCell( range.topLeft() );
     cell->forceExtraCells( range.topLeft().x(), range.topLeft().y(),
@@ -854,7 +859,7 @@ bool MergeManipulator::postProcessing()
 DissociateManipulator::DissociateManipulator()
   : MergeManipulator()
 {
-  m_reverse = true;
+  m_merge = false;
 }
 
 DissociateManipulator::~DissociateManipulator()
@@ -875,10 +880,7 @@ QString DissociateManipulator::name() const
 
 bool DissociateManipulator::preProcessing()
 {
-  if (!m_reverse)
-  {
-  }
-  else
+  if (!m_reverse)  // we will dissociate
   {
     Region unmergedCells;
     ConstIterator endOfList(cells().end());
