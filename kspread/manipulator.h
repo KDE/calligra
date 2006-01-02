@@ -418,9 +418,9 @@ protected:
   virtual bool postProcessing();
 
   virtual QString name() const;
-
-private:
+  
   bool m_merge;
+private:
 };
 
 
