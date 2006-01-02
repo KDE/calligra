@@ -1842,9 +1842,9 @@ void KPrShadowObject::loadOasis(const QDomElement &element, KoOasisContext & con
                          draw->attributeNS( KoXmlNS::draw, "dots2-length", QString::null )=="0.254cm" &&
                          draw->attributeNS( KoXmlNS::draw, "distance", QString::null )=="0.127cm" )
                         pen.setStyle(Qt::DashDotLine );
-                    else if ( draw->attributeNS( KoXmlNS::draw, "dots1", QString::null )=="1" &&
-                         draw->attributeNS( KoXmlNS::draw, "dots2", QString::null )=="2" &&
-                         draw->attributeNS( KoXmlNS::draw, "dots1-length", QString::null )=="0.203cm" &&
+                    else if ( draw->attributeNS( KoXmlNS::draw, "dots1", QString::null )=="2" &&
+                         draw->attributeNS( KoXmlNS::draw, "dots2", QString::null )=="1" &&
+                         draw->attributeNS( KoXmlNS::draw, "dots2-length", QString::null )=="0.203cm" &&
                          draw->attributeNS( KoXmlNS::draw, "distance", QString::null )=="0.203cm" )
                         pen.setStyle(Qt::DashDotDotLine );
                     else
