@@ -191,15 +191,16 @@ void KWPageManager::removePage(KWPage *page) {
 
 void KWPageManager::setDefaultPage(const KoPageLayout &layout) {
     m_defaultPageLayout = layout;
+kdDebug() << "setDefaultPage l:" << layout.ptLeft << ", r: " << layout.ptRight << ", a: " << layout.ptPageEdge << ", b: " << layout.ptBindingSide << endl;
     // make sure we have 1 default, either pageBound or left/right bound.
     if(m_defaultPageLayout.ptLeft < 0 || m_defaultPageLayout.ptRight < 0) {
+        m_defaultPageLayout.ptLeft = -1;
+        m_defaultPageLayout.ptRight = -1;
+    } else {
         m_defaultPageLayout.ptPageEdge = -1;
         m_defaultPageLayout.ptBindingSide = -1;
         m_defaultPageLayout.ptLeft = QMAX(m_defaultPageLayout.ptLeft, 0);
         m_defaultPageLayout.ptRight = QMAX(m_defaultPageLayout.ptRight, 0);
-    } else {
-        m_defaultPageLayout.ptLeft = -1;
-        m_defaultPageLayout.ptRight = -1;
     }
 }
 
