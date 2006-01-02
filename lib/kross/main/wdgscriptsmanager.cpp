@@ -65,20 +65,23 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     //scriptsList->setRootIsDecorated(true);
     scriptsList->setSorting(-1);
 
-    scriptsList->addColumn(i18n("Name"));
+    scriptsList->addColumn("");
+    //scriptsList->addColumn(i18n("Name"));
     //scriptsList->addColumn(i18n("Action"));
 
     fillScriptsList();
 
     connect(scriptsList, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelectionChanged(QListViewItem*)));
 
-    d->loadbutton = toolBar->insertButton("fileopen",0, true, i18n("Load script"));
+    toolBar->setIconText( KToolBar::IconTextRight );
+
+    d->loadbutton = toolBar->insertButton("fileopen",0, true, i18n("Load"));
     toolBar->addConnection(d->loadbutton,SIGNAL(clicked()), this, SLOT(slotLoadScript()));
 
-    d->execbutton = toolBar->insertButton("exec",1, false, i18n("Execute script"));
+    d->execbutton = toolBar->insertButton("exec",1, false, i18n("Execute"));
     toolBar->addConnection(d->execbutton,SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
 
-    d->removebutton = toolBar->insertButton("fileclose",2, false, i18n("Remove script"));
+    d->removebutton = toolBar->insertButton("fileclose",2, false, i18n("Remove"));
     toolBar->addConnection(d->removebutton,SIGNAL(clicked()), this, SLOT(slotRemoveScript()));
 
     connect(scr, SIGNAL( collectionChanged(ScriptActionCollection*) ),
