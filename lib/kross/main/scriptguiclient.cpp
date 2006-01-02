@@ -218,7 +218,7 @@ KURL ScriptGUIClient::openScriptFile(const QString& caption)
 
 bool ScriptGUIClient::loadScriptFile()
 {
-    KURL url = openScriptFile( i18n("Execute Script File") );
+    KURL url = openScriptFile( i18n("Load Script File") );
     if(url.isValid()) {
         ScriptActionCollection* loadedcollection = d->collections["loadedscripts"];
         if(loadedcollection) {
