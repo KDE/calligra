@@ -4026,7 +4026,7 @@ void KWView::extraCreateTemplate()
     int height = 60;
     QPixmap pix = m_doc->generatePreview(QSize(width, height));
 
-    KTempFile tempFile( QString::null, ".kwt" );
+    KTempFile tempFile( QString::null, ".odt" );
     tempFile.setAutoDelete(true);
 
     m_doc->saveNativeFormat( tempFile.name() );
