@@ -215,9 +215,10 @@ namespace {
     }
 
     
-    QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 nbchannels, uint16 extrasamplescount) {
+    QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 extrasamplescount) {
         if(color_type == PHOTOMETRIC_MINISWHITE || color_type == PHOTOMETRIC_MINISBLACK)
         {
+            if(nbchannels == 0) nbchannels = 1;
             if(color_nb_bits <= 8)
             {
                     return "GRAYA";
@@ -225,6 +226,7 @@ namespace {
                     return "GRAYA16";
             }
         } else if(color_type == PHOTOMETRIC_RGB ) {
+            if(nbchannels == 0) nbchannels = 3;
             if(color_nb_bits <= 8)
             {
                 return "RGBA";
@@ -232,6 +234,7 @@ namespace {
                 return "RGBA16";
             }
         } else if(color_type == PHOTOMETRIC_SEPARATED ) {
+            if(nbchannels == 0) nbchannels = 4;
             // SEPARATED is in general CMYK but not allways, so we check
             uint16 inkset;
             if((TIFFGetField(image, TIFFTAG_INKSET, &inkset) == 0)){
@@ -266,8 +269,10 @@ namespace {
                 return "CMYKA16";
             }
         } else if(color_type == PHOTOMETRIC_CIELAB ) {
+            if(nbchannels == 0) nbchannels = 3;
             return "LABA"; // TODO add support for a 8bit LAB colorspace when it is written
         } else if(color_type ==  PHOTOMETRIC_PALETTE) {
+            if(nbchannels == 0) nbchannels = 2;
             // <-- we will convert the index image to RGBA16 as the palette is allways on 16bits colors
             return "RGBA16";
         }
@@ -295,27 +300,27 @@ namespace {
     {
        if( depth <= 8 )
         {
-            Q_UINT8 coeff = 1 << ( 8 - depth );
-//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
+            double coeff = Q_UINT8_MAX / (double)( ( 1 << depth ) - 1 );
+            kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
             while (!it.isDone()) {
                 Q_UINT8 *d = it.rawData();
                 Q_UINT8 i;
                 for(i = 0; i < nbcolorssamples; i++)
                 {
-                    d[poses[i]] = transform( tiffstream->nextValueBelow16() *coeff );
+                    d[poses[i]] = transform( (Q_UINT32) ( tiffstream->nextValueBelow16() *coeff ) );
                 }
                 d[poses[i]] = Q_UINT8_MAX;
                 for(int i = 0; i < extrasamplescount; i++)
                 {
                     if(i == alphapos)
-                        d[poses[i]] = tiffstream->nextValueBelow16() *coeff;
+                        d[poses[i]] = (Q_UINT32) ( tiffstream->nextValueBelow16() *coeff );
                     else
                         tiffstream->nextValueBelow16();
                 }
                 ++it;
             }
         } else if( depth < 16 ) {
-            Q_UINT16 coeff =  1 << ( 16 - depth );
+            double coeff = Q_UINT16_MAX / (double)( ( 1 << depth ) - 1 );
             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
             while (!it.isDone()) {
                 Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
@@ -335,20 +340,20 @@ namespace {
                 ++it;
             }
         } else if( depth < 32 ) {
-            Q_UINT32 coeff =  1 << ( depth - 16 );
+            double coeff = Q_UINT16_MAX / (double)( ( 1 << depth ) - 1 );
             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
             while (!it.isDone()) {
                 Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
                 Q_UINT8 i;
                 for(i = 0; i < nbcolorssamples; i++)
                 {
-                    d[poses[i]] = tiffstream->nextValueBelow32() / coeff;
+                    d[poses[i]] = (Q_UINT16) ( tiffstream->nextValueBelow32() * coeff );
                 }
                 d[poses[i]] = Q_UINT16_MAX;
                 for(int i = 0; i < extrasamplescount; i++)
                 {
                     if(i == alphapos)
-                        d[poses[i]] = tiffstream->nextValueBelow32() / coeff;
+                        d[poses[i]] = (Q_UINT16) ( tiffstream->nextValueBelow32() * coeff );
                     else
                         tiffstream->nextValueBelow32();
                 }
@@ -491,15 +496,13 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
     uint16 depth;
     if((TIFFGetField(image, TIFFTAG_BITSPERSAMPLE, &depth) == 0)){
         kdDebug() <<  "Image does not define its depth" << endl;
-        TIFFClose(image);
-        return KisImageBuilder_RESULT_INVALID_ARG;
+        depth = 1;
     }
     // Determine the number of channels (usefull to know if a file has an alpha or not
     uint16 nbchannels;
     if(TIFFGetField(image, TIFFTAG_SAMPLESPERPIXEL, &nbchannels) == 0){
         kdDebug() << "Image has an undefined number of samples per pixel" << endl;
-        TIFFClose(image);
-        return KisImageBuilder_RESULT_INVALID_ARG;
+        nbchannels = 0;
     }
     // Get the number of extrasamples and information about them
     uint16 *sampleinfo, extrasamplescount;
@@ -511,8 +514,7 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
     uint16 color_type;
     if(TIFFGetField(image, TIFFTAG_PHOTOMETRIC, &color_type) == 0){
         kdDebug() << "Image has an undefined photometric interpretation" << endl;
-        TIFFClose(image);
-        return KisImageBuilder_RESULT_INVALID_ARG;
+        color_type = PHOTOMETRIC_MINISWHITE;
     }
     QString csName = getColorSpaceForColorType(color_type, depth, image, nbchannels, extrasamplescount);
     if(csName == "") {
