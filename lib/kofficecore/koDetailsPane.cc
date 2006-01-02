@@ -89,9 +89,9 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
   d->m_instance = instance;
   m_previewLabel->installEventFilter(this);
   m_documentList->installEventFilter(this);
+  setFocusProxy(m_documentList);
   KGuiItem openGItem(i18n("Use This Template"));
   m_openButton->setGuiItem(openGItem);
-  setFocusProxy(m_openButton);
   m_documentList->header()->hide();
   KConfigGroup cfgGrp(d->m_instance->config(), "TemplateChooserDialog");
   QString fullTemplateName = cfgGrp.readPathEntry("FullTemplateName");
@@ -122,7 +122,12 @@ KoTemplatesPane::KoTemplatesPane(QWidget* parent, KInstance* instance,
     }
 
     KListViewItem* item = new KListViewItem(m_documentList, t->name(), t->description(), t->file());
-    item->setPixmap(0, t->loadPicture(instance));
+    QImage icon = t->loadPicture(instance).convertToImage();
+    icon = icon.smoothScale(64, 64, QImage::ScaleMin);
+    icon.setAlphaBuffer(true);
+    icon = icon.copy((icon.width() - 64) / 2, (icon.height() - 64) / 2, 64, 64);
+    item->setPixmap(0, QPixmap(icon));
+    item->setPixmap(2, t->loadPicture(instance));
 
     if(d->m_alwaysUseTemplate == t->file()) {
       selectItem = item;
@@ -158,7 +163,7 @@ void KoTemplatesPane::selectionChanged(QListViewItem* item)
     m_openButton->setEnabled(true);
     m_alwaysUseCheckBox->setEnabled(true);
     m_titleLabel->setText(item->text(0));
-    m_previewLabel->setPixmap(*(item->pixmap(0)));
+    m_previewLabel->setPixmap(*(item->pixmap(2)));
     m_detailsLabel->setText(item->text(1));
     m_alwaysUseCheckBox->setChecked(item->text(2) == d->m_alwaysUseTemplate);
   } else {
@@ -183,7 +188,6 @@ void KoTemplatesPane::openTemplate(QListViewItem* item)
     cfgGrp.writePathEntry("FullTemplateName", item->text(2));
     cfgGrp.writeEntry("LastReturnType", "Template");
     cfgGrp.writeEntry("AlwaysUseTemplate", d->m_alwaysUseTemplate);
-    kdDebug() << "AlwaysUseTemplate == " << d->m_alwaysUseTemplate << endl;
     emit openTemplate(item->text(2));
   }
 }
@@ -282,9 +286,9 @@ KoRecentDocumentsPane::KoRecentDocumentsPane(QWidget* parent, KInstance* instanc
   d->m_instance = instance;
   m_previewLabel->installEventFilter(this);
   m_documentList->installEventFilter(this);
+  setFocusProxy(m_documentList);
   KGuiItem openGItem(i18n("Open This Document"), "fileopen");
   m_openButton->setGuiItem(openGItem);
-  setFocusProxy(m_openButton);
   m_alwaysUseCheckBox->hide();
   m_documentList->header()->hide();
   m_documentList->setSorting(-1); // Disable sorting

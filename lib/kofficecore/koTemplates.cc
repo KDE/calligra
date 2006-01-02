@@ -57,14 +57,14 @@ const QPixmap &KoTemplate::loadPicture( KInstance* instance ) {
             m_pixmap=QPixmap();
             return m_pixmap;
         }
-        const int maxHeightWidth = 64; // ### TODO: some people would surely like to have 128x128
+        const int maxHeightWidth = 128; // ### TODO: some people would surely like to have 128x128
         if (img.width() > maxHeightWidth || img.height() > maxHeightWidth) {
             img = img.smoothScale( maxHeightWidth, maxHeightWidth, QImage::ScaleMax );
         }
         m_pixmap.convertFromImage(img);
         return m_pixmap;
     } else { // relative path
-        m_pixmap = instance->iconLoader()->loadIcon( m_picture, KIcon::Desktop, KIcon::SizeLarge /*48*/ );
+        m_pixmap = instance->iconLoader()->loadIcon( m_picture, KIcon::Desktop, 128 );
         return m_pixmap;
     }
 }

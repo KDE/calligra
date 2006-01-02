@@ -25,6 +25,7 @@
 #include <qwidgetstack.h>
 #include <qlabel.h>
 #include <qvaluelist.h>
+#include <qimage.h>
 
 #include <klocale.h>
 #include <kfiledialog.h>
@@ -225,7 +226,15 @@ QListViewItem* KoOpenPane::addPane(const QString& title, const QPixmap& icon, QW
   KoSectionListItem* listItem = new KoSectionListItem(m_sectionList, title, sortWeight, id);
 
   if(!icon.isNull()) {
-    listItem->setPixmap(0, icon);
+    QImage image = icon.convertToImage();
+
+    if((image.width() > 48) || (image.height() > 48)) {
+      image = image.smoothScale(48, 48, QImage::ScaleMin);
+    }
+
+    image.setAlphaBuffer(true);
+    image = image.copy((image.width() - 48) / 2, (image.height() - 48) / 2, 48, 48);
+    listItem->setPixmap(0, QPixmap(image));
   }
 
   return listItem;
