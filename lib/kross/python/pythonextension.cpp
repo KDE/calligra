@@ -255,13 +255,16 @@ Kross::Api::Object::Ptr PythonExtension::toObject(const Py::Object& object)
         return 0;
     }
 
-
     Py::ExtensionObject<PythonExtension> extobj(object);
     PythonExtension* extension = extobj.extensionObject();
-    if(! extension)
-        throw Py::TypeError("Failed to determinate PythonExtension object.");
-    if(! extension->m_object)
-        throw Py::TypeError("Failed to convert the PythonExtension object into a Kross::Api::Object.");
+    if(! extension) {
+        kdWarning() << "EXCEPTION in PythonExtension::toObject(): Failed to determinate PythonExtension object." << endl;
+        throw Py::Exception("Failed to determinate PythonExtension object.");
+    }
+    if(! extension->m_object) {
+        kdWarning() << "EXCEPTION in PythonExtension::toObject(): Failed to convert the PythonExtension object into a Kross::Api::Object." << endl;
+        throw Py::Exception("Failed to convert the PythonExtension object into a Kross::Api::Object.");
+    }
 
 #ifdef KROSS_PYTHON_EXTENSION_TOOBJECT_DEBUG
     kdDebug() << "Kross::Python::PythonExtension::toObject(Py::Object) successfully converted into Kross::Api::Object." << endl;
@@ -453,9 +456,11 @@ PyObject* PythonExtension::proxyhandler(PyObject *_self_and_name_tuple, PyObject
         return result.ptr();
     }
     catch(Kross::Api::Exception::Ptr e) {
-        kdWarning() << "EXCEPTION in Kross::Python::PythonExtension::proxyhandler" << endl;
-        throw Py::RuntimeError( (char*) e->toString().latin1() );
+        kdWarning() << QString("EXCEPTION in Kross::Python::PythonExtension::proxyhandler %1").arg(e->toString()) << endl;
+        // Don't throw here cause it will end in a crash depp in python. The
+        // error is already handled anyway.
+        //throw Py::Exception( (char*) e->toString().latin1() );
     }
 
-    return Py_None;
+    return Py::None().ptr();
 }

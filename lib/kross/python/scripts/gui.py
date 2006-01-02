@@ -84,11 +84,14 @@ class TkDialog:
 
 			Tkinter.Label(listframe, text=caption).pack(side=Tkinter.LEFT)
 
-			self.items = Tkinter.StringVar()
-			itemlist = apply(Tkinter.OptionMenu, (listframe, self.items) + tuple( items ))
+			self.items = items
+			self.variable = Tkinter.StringVar()
+			itemlist = apply(Tkinter.OptionMenu, (listframe, self.variable) + tuple( items ))
 			itemlist.pack(side=Tkinter.LEFT)
 		def get(self):
-			return self.items.get()
+			return self.variable.get()
+		def set(self, index):
+			self.variable.set( self.items[index] )
 
 	class Button(Widget):
 		def __init__(self, dialog, parent, caption, commandmethod):
@@ -245,6 +248,8 @@ class QtDialog:
 					self.combo.insertItem( str(item) )
 			def get(self):
 				return self.combo.currentText()
+			def set(self, index):
+				self.combo.setCurrentItem(index)
 
 		class FileChooser(qt.QHBox):
 			def __init__(self, dialog, parent, caption, initialfile = None, filetypes = None):
