@@ -301,7 +301,7 @@ namespace {
        if( depth <= 8 )
         {
             double coeff = Q_UINT8_MAX / (double)( ( 1 << depth ) - 1 );
-            kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
+//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
             while (!it.isDone()) {
                 Q_UINT8 *d = it.rawData();
                 Q_UINT8 i;
@@ -321,7 +321,7 @@ namespace {
             }
         } else if( depth < 16 ) {
             double coeff = Q_UINT16_MAX / (double)( ( 1 << depth ) - 1 );
-            kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
+//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
             while (!it.isDone()) {
                 Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
                 Q_UINT8 i;
@@ -341,7 +341,7 @@ namespace {
             }
         } else if( depth < 32 ) {
             double coeff = Q_UINT16_MAX / (double)( ( 1 << depth ) - 1 );
-            kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
+//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
             while (!it.isDone()) {
                 Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
                 Q_UINT8 i;
@@ -361,7 +361,7 @@ namespace {
             }
         } else {
             Q_UINT32 coeff =  1 << ( 16 );
-            kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
+//             kdDebug() << " depth expension coefficient : " << ((Q_UINT32)coeff) << endl;
             while (!it.isDone()) {
                 Q_UINT16 *d = reinterpret_cast<Q_UINT16 *>(it.rawData());
                 Q_UINT8 i;
@@ -476,12 +476,13 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
     kdDebug() << "Start decoding TIFF File" << endl;
     // Opent the TIFF file
     TIFF *image;
-    if((image = TIFFOpen(uri.path().ascii(), "rB")) == NULL){
+    if((image = TIFFOpen(uri.path().ascii(), "r")) == NULL){
         kdDebug() << "Could not open the file, either it doesn't exist, either it is not a TIFF : " << uri.path() << endl;
         TIFFClose(image);
         return (KisImageBuilder_RESULT_BAD_FETCH);
     }
     do {
+        kdDebug() << "Read new sub-image" << endl;
         readTIFFDirectory(image);
     } while (TIFFReadDirectory(image));
     // Freeing memory
@@ -540,16 +541,12 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
     LPBYTE EmbedBuffer;
 
     if (TIFFGetField(image, TIFFTAG_ICCPROFILE, &EmbedLen, &EmbedBuffer)) {
-        kdDebug() << "Trying to open ICC profile of length : " << (Q_UINT32)EmbedLen << endl;
-        cmsErrorAction(LCMS_ERROR_SHOW);
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem(EmbedBuffer, EmbedLen);
-        if(hProfile != NULL)
-        {
-            profile = new KisProfile(hProfile);
-            Q_CHECK_PTR(profile);
-        }
+        QByteArray rawdata;
+        rawdata.resize(EmbedLen);
+        memcpy(rawdata.data(), EmbedBuffer, EmbedLen);
+        profile = new KisProfile(rawdata);
     }
-
+    
     // Retrieve a pointer to the colorspace
     KisColorSpace* cs;
     if (profile)
