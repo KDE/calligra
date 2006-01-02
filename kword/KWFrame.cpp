@@ -136,12 +136,6 @@ KWFrame *KWFrame::getCopy() {
     return new KWFrame(this);
 }
 
-
-void KWFrame::invalidateParentFrameset() {
-    if (frameSet()->isFloating())
-        frameSet()->anchorFrameset()->invalidate();
-}
-
 void KWFrame::copySettings(KWFrame *frm)
 {
     setFrameSet( frm->frameSet() ); // do this first in case of debug output in the methods below
@@ -170,7 +164,8 @@ void KWFrame::copySettings(KWFrame *frm)
 }
 
 void KWFrame::frameBordersChanged() {
-    invalidateParentFrameset();
+    if (frameSet()->isFloating())
+        frameSet()->anchorFrameset()->invalidate();
 }
 
 

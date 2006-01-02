@@ -166,8 +166,6 @@ public:
     void setTopBorder( KoBorder _brd ) { m_borderTop = _brd; }
     void setBottomBorder( KoBorder _brd ) { m_borderBottom = _brd; }
 
-    void invalidateParentFrameset();
-
     /** Return the _zoomed_ rectangle for this frame, including the border - for drawing
      * @param viewMode needed to know if borders are visible or not
      */
@@ -190,8 +188,9 @@ public:
      */
     const KoRect& rect() const { return *this; }
 
-    /** Resize handles (in kwcanvas.h) are the dots that are drawn on selected
-       frames, this creates and deletes them */
+    /** Marks a frame to have changed position/borders.
+      Make sure you call this when the frame borders changed so when its inline it will be moved.
+    */
     void frameBordersChanged();
     void updateRulerHandles();
 
