@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>452</width>
-            <height>472</height>
+            <height>517</height>
         </rect>
     </property>
     <property name="caption">
@@ -18,6 +18,9 @@
     <vbox>
         <property name="name">
             <cstring>unnamed</cstring>
+        </property>
+        <property name="margin">
+            <number>0</number>
         </property>
         <widget class="QGroupBox">
             <property name="name">
@@ -54,6 +57,26 @@
                             </item>
                             <item>
                                 <property name="text">
+                                    <string>JPEG DCT compression</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Deflate (ZIP)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Lempel-Ziv &amp; Welch (LZW)</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
+                                    <string>Leadtools JPEG2000</string>
+                                </property>
+                            </item>
+                            <item>
+                                <property name="text">
                                     <string>CCITT modified Huffman RLE</string>
                                 </property>
                             </item>
@@ -65,26 +88,6 @@
                             <item>
                                 <property name="text">
                                     <string>CCITT Group 4 fax encoding</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Lempel-Ziv &amp; Welch (LZW)</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>JPEG DCT compression</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Deflate (ZIP)</string>
-                                </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>Leadtools JPEG2000</string>
                                 </property>
                             </item>
                             <item>
@@ -131,7 +134,7 @@
                                 </property>
                             </item>
                             <property name="name">
-                                <cstring>kComboBox2</cstring>
+                                <cstring>kComboBoxPredictor</cstring>
                             </property>
                             <property name="currentItem">
                                 <number>1</number>
@@ -141,6 +144,52 @@
                             </property>
                         </widget>
                     </hbox>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>alpha</cstring>
+                    </property>
+                    <property name="text">
+                        <string>Store alpha &amp;channel (transparency)</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+C</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>Disable to get smaller files if your image has no transparancy</string>
+                    </property>
+                    <property name="whatsThis" stdset="0">
+                        <string>&lt;p&gt;The Portable Network Graphics (PNG) file format allows transparancy in your image to be stored by saving an alpha channel.
+You can uncheck the box if you are not using transparancy and you want to make the resulting file smaller .&lt;br&gt;Always saving the alpha channel is recommended.&lt;/p&gt;</string>
+                    </property>
+                </widget>
+                <widget class="QCheckBox">
+                    <property name="name">
+                        <cstring>flatten</cstring>
+                    </property>
+                    <property name="sizePolicy">
+                        <sizepolicy>
+                            <hsizetype>3</hsizetype>
+                            <vsizetype>3</vsizetype>
+                            <horstretch>0</horstretch>
+                            <verstretch>0</verstretch>
+                        </sizepolicy>
+                    </property>
+                    <property name="text">
+                        <string>flatten the &amp;image</string>
+                    </property>
+                    <property name="accel">
+                        <string>Alt+I</string>
+                    </property>
+                    <property name="checked">
+                        <bool>true</bool>
+                    </property>
+                    <property name="toolTip" stdset="0">
+                        <string>This option will merge all layers, it is advised to check this option, other application might not be able to read your file correctly.</string>
+                    </property>
                 </widget>
             </vbox>
         </widget>
@@ -241,10 +290,10 @@
         </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>groupBox3</cstring>
+                <cstring>groupBoxDeflate</cstring>
             </property>
             <property name="title">
-                <string>Deflate Compression Options</string>
+                <string>Deflate Compression Options:</string>
             </property>
             <hbox>
                 <property name="name">
@@ -296,7 +345,7 @@
                                 <enum>Horizontal</enum>
                             </property>
                             <property name="tickmarks">
-                                <enum>NoMarks</enum>
+                                <enum>Both</enum>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Note : the compression level doesn't change the quality of the result</string>
@@ -349,10 +398,10 @@
         </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>groupBox4</cstring>
+                <cstring>groupBoxCCITGroupCCITG3</cstring>
             </property>
             <property name="title">
-                <string>CCITT Group 3 fax encoding Options</string>
+                <string>CCITT Group 3 fax encoding Options:</string>
             </property>
             <hbox>
                 <property name="name">
@@ -383,17 +432,17 @@
                         </property>
                     </item>
                     <property name="name">
-                        <cstring>kComboBox3</cstring>
+                        <cstring>kComboBoxFaxMode</cstring>
                     </property>
                 </widget>
             </hbox>
         </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>groupBox5</cstring>
+                <cstring>groupBoxPixarLog</cstring>
             </property>
             <property name="title">
-                <string>Pixar Log Compression Options</string>
+                <string>Pixar Log Compression Options:</string>
             </property>
             <hbox>
                 <property name="name">
@@ -445,7 +494,7 @@
                                 <enum>Horizontal</enum>
                             </property>
                             <property name="tickmarks">
-                                <enum>NoMarks</enum>
+                                <enum>Both</enum>
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>Note : the compression level doesn't change the quality of the result</string>
@@ -496,6 +545,23 @@
                 </widget>
             </hbox>
         </widget>
+        <spacer>
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>71</height>
+                </size>
+            </property>
+        </spacer>
     </vbox>
 </widget>
 <customwidgets>

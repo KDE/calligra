@@ -84,7 +84,7 @@ KoFilter::ConversionStatus KisTIFFImport::convert(const QCString&, const QCStrin
                 break;
             case KisImageBuilder_RESULT_BAD_FETCH:
             case KisImageBuilder_RESULT_EMPTY:
-                return KoFilter::ParsingError;                
+                return KoFilter::ParsingError;
                 break;
             case KisImageBuilder_RESULT_FAILURE:
                 return KoFilter::InternalError;

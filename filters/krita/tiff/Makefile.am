@@ -39,6 +39,7 @@ METASOURCES = AUTO
 KDE_CXXFLAGS = $(USE_EXCEPTIONS)
 libkritatiffimport_la_SOURCES = kis_tiff_converter.cc kis_tiff_import.cc
 libkritatiffexport_la_SOURCES = kis_tiff_converter.cc kis_tiff_export.cc \
-	kis_wdg_options_tiff.ui
+		kis_wdg_options_tiff.ui kis_dlg_options_tiff.cpp
 service_DATA = krita_tiff_export.desktop krita_tiff_import.desktop
 kdelnk_DATA = krita_tiff.desktop
+noinst_HEADERS = kis_dlg_options_tiff.h

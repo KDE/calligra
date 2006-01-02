@@ -34,6 +34,7 @@
 #include <kis_progress_display_interface.h>
 
 #include "kis_tiff_converter.h"
+#include "kis_dlg_options_tiff.h"
 #include "kis_wdg_options_tiff.h"
 
 typedef KGenericFactory<KisTIFFExport, KoFilter> KisTIFFExportFactory;
@@ -55,20 +56,15 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QCString& from, const QC
         return KoFilter::NotImplemented;
 
     
-    KDialogBase* kdb = new KDialogBase(0, "", false, i18n("TIFF Export Options"), KDialogBase::Ok | KDialogBase::Cancel);
+    KisDlgOptionsTIFF* kdb = new KisDlgOptionsTIFF(0, "options dialog for tiff");
  
-    KisWdgOptionsTIFF* wdg = new KisWdgOptionsTIFF(kdb);
-    kdb->setMainWidget(wdg);
-    kapp->restoreOverrideCursor();
     if(kdb->exec() == KDialogBase::Cancel)
     {
         return KoFilter::OK; // FIXME Cancel doesn't exist :(
     }
-
-    bool alpha;// = wdg->alpha->isChecked();
-    bool interlace;// = wdg->interlacing->isChecked();
-    int compression;// = wdg->compressionLevel->value();
     
+    KisTIFFOptions options = kdb->options();
+
     delete kdb;
     // XXX: Add dialog about flattening layers here
 
@@ -83,28 +79,32 @@ KoFilter::ConversionStatus KisTIFFExport::convert(const QCString& from, const QC
 
     KURL url(filename);
 
-    KisLayerSP dst;
-
-    KisImageSP img = new KisImage(*output->currentImage());
-    Q_CHECK_PTR(img);
-
-    // Don't store this information in the document's undo adapter
-    bool undo = output->undoAdapter()->undo();
-    output->undoAdapter()->setUndo(false);
-
-    KisTIFFConverter kpc(output, output->undoAdapter());
-
-    img->flatten();
-
-    dst = img->activeLayer();
-    Q_ASSERT(dst);
+    KisImageSP img;
     
-    output->undoAdapter()->setUndo(undo);
+    if(options.flatten)
+    {
+        img = new KisImage(*output->currentImage());
+        Q_CHECK_PTR(img);
 
-    vKisAnnotationSP_it beginIt = img->beginAnnotations();
-    vKisAnnotationSP_it endIt = img->endAnnotations();
+        // Don't store this information in the document's undo adapter
+        bool undo = output->undoAdapter()->undo();
+        output->undoAdapter()->setUndo(false);
+
+        KisTIFFConverter kpc(output, output->undoAdapter());
+
+        img->flatten();
+
+        output->undoAdapter()->setUndo(undo);
+    } else {
+        img = output->currentImage();
+    }
+    
+
+    KisTIFFConverter ktc(output, output->undoAdapter());
+/*    vKisAnnotationSP_it beginIt = img->beginAnnotations();
+    vKisAnnotationSP_it endIt = img->endAnnotations();*/
     KisImageBuilder_Result res;
-    if ( (res = kpc.buildFile(url, (KisPaintLayer*)dst.data(), beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
+    if ( (res = ktc.buildFile(url, img, options)) == KisImageBuilder_RESULT_OK) {
         kdDebug() << "success !" << endl;
         return KoFilter::OK;
     }

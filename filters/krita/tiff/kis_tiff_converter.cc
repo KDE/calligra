@@ -756,7 +756,7 @@ KisImageSP KisTIFFConverter::image()
 }
 
 
-KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha)
+KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP img, KisTIFFOptions options)
 {
 #if 0
     kdDebug() << "Start writing TIFF File" << endl;

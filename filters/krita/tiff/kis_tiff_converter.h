@@ -55,6 +55,17 @@ enum KisImageBuilder_Result {
         KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE = 600
 };
 
+struct KisTIFFOptions {
+    Q_UINT16 compressionType;
+    Q_UINT16 predictor;
+    bool alpha;
+    bool flatten;
+    Q_UINT16 jpegQuality;
+    Q_UINT16 deflateCompress;
+    Q_UINT16 faxMode;
+    Q_UINT16 pixarLogCompress;
+};
+
 class KisTIFFConverter : public KisProgressSubject {
         Q_OBJECT
     public:
@@ -62,7 +73,7 @@ class KisTIFFConverter : public KisProgressSubject {
         virtual ~KisTIFFConverter();
     public:
         KisImageBuilder_Result buildImage(const KURL& uri);
-        KisImageBuilder_Result buildFile(const KURL& uri, KisPaintLayerSP layer, vKisAnnotationSP_it annotationsStart, vKisAnnotationSP_it annotationsEnd, int compression, bool interlace, bool alpha);
+        KisImageBuilder_Result buildFile(const KURL& uri, KisImageSP layer, KisTIFFOptions);
         /** Retrieve the constructed image
         */
         KisImageSP image();
@@ -70,9 +81,8 @@ class KisTIFFConverter : public KisProgressSubject {
         virtual void cancel();
     private:
         KisImageBuilder_Result decode(const KURL& uri);
-//         void progress(png_structp png_ptr, png_uint_32 row_number, int pass);
+        KisImageBuilder_Result readTIFFDirectory( TIFF* image);
     private:
-//         png_uint_32 m_max_row;
         KisImageSP m_img;
         KisDoc *m_doc;
         KisUndoAdapter *m_adapter;
