@@ -130,7 +130,7 @@ void KexiScriptDesignView::updateProperties()
             Kross::Api::InterpreterInfo::Option* option = it.data();
             KoProperty::Property* prop = new KoProperty::Property(
                     it.key().latin1(), // name
-                    d->scriptaction->getScriptContainer()->getOption(it.key(), option->value), // value
+                    d->scriptaction->getOption(it.key(), option->value), // value
                     option->name, // caption
                     option->comment, // description
                     KoProperty::Auto // type
@@ -167,7 +167,7 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoPrope
         QTimer::singleShot(150, this, SLOT( updateProperties() )); // update the properties
     }
     else {
-        bool ok = d->scriptaction->getScriptContainer()->setOption( property.name(), property.value() );
+        bool ok = d->scriptaction->setOption( property.name(), property.value() );
         if(! ok) {
             kdWarning() << QString("KexiScriptDesignView::slotPropertyChanged() unknown property '%1'.").arg(property.name()) << endl;
             return;
@@ -216,7 +216,7 @@ bool KexiScriptDesignView::loadData()
             if(! value.isNull()) {
                 QVariant v(value);
                 if( v.cast( it.data()->value.type() ) ) // preserve the QVariant's type
-                    d->scriptaction->getScriptContainer()->setOption(it.data()->name, v);
+                    d->scriptaction->setOption(it.data()->name, v);
             }
         }
     }
@@ -261,7 +261,7 @@ tristate KexiScriptDesignView::storeData()
     Kross::Api::InterpreterInfo* info = Kross::Api::Manager::scriptManager()->getInterpreterInfo(language);
     if(info) {
         Kross::Api::InterpreterInfo::Option::Map defoptions = info->getOptions();
-        QMap<QString, QVariant>& options = d->scriptaction->getScriptContainer()->getOptions();
+        QMap<QString, QVariant>& options = d->scriptaction->getOptions();
         for(QMap<QString, QVariant>::Iterator it = options.begin(); it != options.end(); ++it) {
             if( defoptions.contains(it.key()) ) { // only remember options which the InterpreterInfo knows about...
                 scriptelem.setAttribute(it.key(), it.data().toString());
