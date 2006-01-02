@@ -486,7 +486,6 @@
 <includehints>
     <includehint>knuminput.h</includehint>
     <includehint>knuminput.h</includehint>
-    <includehint>kiscmbidlist.h</includehint>
     <includehint>imageviewer.h</includehint>
 </includehints>
 </UI>
