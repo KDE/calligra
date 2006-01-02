@@ -1449,12 +1449,16 @@ void Doc::addCommand( UndoAction* undo )
 
 void Doc::undo()
 {
+  undoLock ();
   d->commandHistory->undo();
+  undoUnlock ();
 }
 
 void Doc::redo()
 {
+  undoLock ();
   d->commandHistory->redo();
+  undoUnlock ();
 }
 
 void Doc::commandExecuted()
