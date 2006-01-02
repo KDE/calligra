@@ -336,9 +336,6 @@ modified in the preview.&lt;/p&gt;</string>
                             <property name="text">
                                 <string>&amp;Merge with next paragraph</string>
                             </property>
-                            <property name="accel">
-                                <string>Alt+M</string>
-                            </property>
                             <property name="toolTip" stdset="0">
                                 <string>Merges the border style of the current paragraph with the next paragraph</string>
                             </property>
