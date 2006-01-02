@@ -215,7 +215,7 @@ namespace {
     }
 
     
-    QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image) {
+    QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 nbchannels, uint16 extrasamplescount) {
         if(color_type == PHOTOMETRIC_MINISWHITE || color_type == PHOTOMETRIC_MINISBLACK)
         {
             if(color_nb_bits <= 8)
@@ -236,12 +236,28 @@ namespace {
             uint16 inkset;
             if((TIFFGetField(image, TIFFTAG_INKSET, &inkset) == 0)){
                 kdDebug() <<  "Image does not define the inkset." << endl;
-                return "";
+                inkset = 2;
             }
             if(inkset !=  INKSET_CMYK)
             {
                 kdDebug() << "Unsupported inkset (right now, only CMYK is supported)" << endl;
-                return "";
+                char** ink_names;
+                uint16 numberofinks;
+                if( TIFFGetField(image, TIFFTAG_INKNAMES, &ink_names) && TIFFGetField(image, TIFFTAG_NUMBEROFINKS, &numberofinks) )
+                {
+                    kdDebug() << "Inks are : " << endl;
+                    for(uint i = 0; i < numberofinks; i++)
+                    {
+                        kdDebug() << ink_names[i] << endl;
+                    }
+                } else {
+                    kdDebug() << "inknames aren't defined !" << endl;
+                    // To be able to read stupid adobe files, if there are no information about inks and four channels, then it's a CMYK file :
+                    if( nbchannels - extrasamplescount != 4)
+                    {
+                        return "";
+                    }
+                }
             }
             if(color_nb_bits <= 8)
             {
@@ -485,6 +501,12 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
         TIFFClose(image);
         return KisImageBuilder_RESULT_INVALID_ARG;
     }
+    // Get the number of extrasamples and information about them
+    uint16 *sampleinfo, extrasamplescount;
+    if(TIFFGetField(image, TIFFTAG_EXTRASAMPLES, &extrasamplescount, &sampleinfo) == 0)
+    {
+        extrasamplescount = 0;
+    }
     // Determine the colorspace
     uint16 color_type;
     if(TIFFGetField(image, TIFFTAG_PHOTOMETRIC, &color_type) == 0){
@@ -492,7 +514,7 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
         TIFFClose(image);
         return KisImageBuilder_RESULT_INVALID_ARG;
     }
-    QString csName = getColorSpaceForColorType(color_type, depth, image);
+    QString csName = getColorSpaceForColorType(color_type, depth, image, nbchannels, extrasamplescount);
     if(csName == "") {
         kdDebug() << "Image has an unsupported colorspace : " << color_type << " for this depth : "<< depth << endl;
         TIFFClose(image);
@@ -529,13 +551,7 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
         TIFFClose(image);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-
     // Check if there is an alpha channel
-    uint16 *sampleinfo, extrasamplescount;
-    if(TIFFGetField(image, TIFFTAG_EXTRASAMPLES, &extrasamplescount, &sampleinfo) == 0)
-    {
-        extrasamplescount = 0;
-    }
     int8 alphapos = -1; // <- no alpha
     // Check which extra is alpha if any
     kdDebug() << "There are " << nbchannels << " channels and " << extrasamplescount << " extra channels" << endl;
