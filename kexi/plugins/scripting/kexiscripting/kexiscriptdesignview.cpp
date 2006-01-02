@@ -69,8 +69,8 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
     setViewWidget((KexiViewBase*)d->editor);
     layout->addWidget((KexiViewBase*)d->editor);
 
-    //if(KexiEditor::isAdvancedEditor()) // the configeditor is only in advanced mode avaiable.
-    //    plugSharedAction( "script_config_editor", d->editor, SLOT(slotConfigureEditor()) );
+    if(KexiEditor::isAdvancedEditor()) // the configeditor is only in advanced mode avaiable.
+        plugSharedAction( "script_config_editor", d->editor, SLOT(slotConfigureEditor()) );
 
     loadData();
 
