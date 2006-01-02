@@ -19,7 +19,6 @@
 
 #include "scriptaction.h"
 #include "manager.h"
-#include "scriptcontainer.h"
 
 #include <qstylesheet.h>
 #include <kurl.h>
@@ -37,31 +36,22 @@ namespace Kross { namespace Api {
         public:
 
             /**
-            * The \a ScriptContainer the \a ScriptAction instance
-            * uses internaly to evaluate the scripting code which
-            * is hidden behind the action.
-            */
-            ScriptContainer::Ptr scriptcontainer;
-
-            /**
             * List of all kind of logs this \a ScriptAction does
             * remember.
             */
             QStringList logs;
 
+            QValueList<ScriptActionCollection*> collections;
     };
 
 }}
 
 ScriptAction::ScriptAction(const QString& file)
-    : KAction()
+    : KAction(0, file.latin1())
+    , Kross::Api::ScriptContainer(file)
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
 {
     //kdDebug() << QString("Kross::Api::ScriptAction::ScriptAction(const char*, const QString&) name='%1' text='%2'").arg(name).arg(text) << endl;
-
-    d->scriptcontainer = Manager::scriptManager()->getScriptContainer(file);
-
-    setName( file.latin1() );
 
     KURL url(file);
     if(url.isLocalFile()) {
@@ -78,6 +68,7 @@ ScriptAction::ScriptAction(const QString& file)
 
 ScriptAction::ScriptAction(const QDomElement& element)
     : KAction()
+    , Kross::Api::ScriptContainer()
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
 {
     //kdDebug() << "Kross::Api::ScriptAction::ScriptAction(const QDomElement&)" << endl;
@@ -98,7 +89,7 @@ ScriptAction::ScriptAction(const QDomElement& element)
             text = file;
     }
 
-    d->scriptcontainer = Manager::scriptManager()->getScriptContainer(name);
+    //d->scriptcontainer = Manager::scriptManager()->getScriptContainer(name);
 
     QString interpreter = element.attribute("interpreter");
     if(interpreter.isNull())
@@ -126,9 +117,10 @@ ScriptAction::ScriptAction(const QDomElement& element)
             icon = KMimeType::iconForURL( KURL(file) );
     }
 
-    setName( name.latin1() );
-    setText( text );
-    setIcon( icon );
+    ScriptContainer::setName( name );
+    KAction::setName( name.latin1() );
+    KAction::setText( text );
+    KAction::setIcon( icon );
 
     // connect signal
     connect(this, SIGNAL(activated()), this, SLOT(activate()));
@@ -137,58 +129,14 @@ ScriptAction::ScriptAction(const QDomElement& element)
 ScriptAction::~ScriptAction()
 {
     //kdDebug() << QString("Kross::Api::ScriptAction::~ScriptAction() name='%1' text='%2'").arg(name()).arg(text()) << endl;
-
-    // disconnect signal
-    //disconnect(this, SIGNAL(activated()), this, SLOT(activate()));
-
-    // We don't need the ScriptContainer any longer. Cause the 
-    // ScriptContainer is a shared pointer we can't just delete it 
-    // because if may still be used somewhere else. So, we just 
-    // deligate cleanup to the ScriptContainer.
-    d->scriptcontainer->finalize();
-
+    detachAll();
     delete d;
-}
-
-const QString& ScriptAction::getName() const
-{
-    return d->scriptcontainer->getName();
-}
-
-const QString& ScriptAction::getInterpreterName() const
-{
-    return d->scriptcontainer->getInterpreterName();
 }
 
 void ScriptAction::setInterpreterName(const QString& name)
 {
     setEnabled( Manager::scriptManager()->hasInterpreterInfo(name) );
-    d->scriptcontainer->setInterpreterName(name);
-}
-
-const QString& ScriptAction::getCode() const
-{
-    return d->scriptcontainer->getCode();
-}
-
-void ScriptAction::setCode(const QString& code)
-{
-    d->scriptcontainer->setCode(code);
-}
-
-const QString& ScriptAction::getFile() const
-{
-    return d->scriptcontainer->getFile();
-}
-
-void ScriptAction::setFile(const QString& scriptfile)
-{
-    d->scriptcontainer->setFile(scriptfile);
-}
-
-ScriptContainer* ScriptAction::getScriptContainer() const
-{
-    return d->scriptcontainer;
+    Kross::Api::ScriptContainer::setInterpreterName(name);
 }
 
 const QStringList& ScriptAction::getLogs() const
@@ -196,12 +144,28 @@ const QStringList& ScriptAction::getLogs() const
     return d->logs;
 }
 
+void ScriptAction::attach(ScriptActionCollection* collection)
+{
+    d->collections.append( collection );
+}
+
+void ScriptAction::detach(ScriptActionCollection* collection)
+{
+    d->collections.remove( collection );
+}
+
+void ScriptAction::detachAll()
+{
+    for(QValueList<ScriptActionCollection*>::Iterator it = d->collections.begin(); it != d->collections.end(); ++it)
+        (*it)->detach( this );
+}
+
 void ScriptAction::activate()
 {
-    d->scriptcontainer->execute();
-    if( d->scriptcontainer->hadException() ) {
-        QString errormessage = d->scriptcontainer->getException()->getError();
-        QString tracedetails = d->scriptcontainer->getException()->getTrace();
+    Kross::Api::ScriptContainer::execute();
+    if( Kross::Api::ScriptContainer::hadException() ) {
+        QString errormessage = Kross::Api::ScriptContainer::getException()->getError();
+        QString tracedetails = Kross::Api::ScriptContainer::getException()->getTrace();
         d->logs << QString("<b>%1</b><br>%2")
                    .arg( QStyleSheet::escape(errormessage) )
                    .arg( QStyleSheet::escape(tracedetails) );
@@ -212,23 +176,9 @@ void ScriptAction::activate()
     }
 }
 
-bool ScriptAction::activate(QString& errormessage, QString& tracedetails)
-{
-    d->scriptcontainer->execute();
-    if( d->scriptcontainer->hadException() ) {
-        errormessage = d->scriptcontainer->getException()->getError();
-        tracedetails = d->scriptcontainer->getException()->getTrace();
-        d->logs << QString("<b>%1</b><br>%2")
-                   .arg( QStyleSheet::escape(errormessage) )
-                   .arg( QStyleSheet::escape(tracedetails) );
-        return false;
-    }
-    return true;
-}
-
 void ScriptAction::finalize()
 {
-    d->scriptcontainer->finalize();
+    Kross::Api::ScriptContainer::finalize();
 }
 
 #include "scriptaction.moc"

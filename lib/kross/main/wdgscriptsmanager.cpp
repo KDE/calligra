@@ -18,6 +18,8 @@
  */
 #include "wdgscriptsmanager.h"
 
+#include <qobjectlist.h>
+#include <qheader.h>
 #include <klistview.h>
 #include <klocale.h>
 #include <ktoolbar.h>
@@ -26,24 +28,45 @@
 #include "scriptguiclient.h"
 #include "scriptaction.h"
 
-namespace Kross {
-namespace Api {
+namespace Kross { namespace Api {
+
+class ListItem : public QListViewItem
+{
+    private:
+        ScriptActionCollection* m_collection;
+        ScriptAction::Ptr m_action;
+    public:
+        ListItem(QListView* parentview, ScriptActionCollection* collection)
+            : QListViewItem(parentview), m_collection(collection), m_action(0) {}
+
+        ListItem(ListItem* parentitem, QListViewItem* afteritem, ScriptAction::Ptr action)
+            : QListViewItem(parentitem, afteritem), m_collection( parentitem->collection() ), m_action(action) {}
+
+        ScriptAction::Ptr action() const { return m_action; }
+        ScriptActionCollection* collection() const { return m_collection; }
+        //ScriptActionMenu* actionMenu() const { return m_menu; }
+};
 
 class WdgScriptsManagerPrivate
 {
     friend class WdgScriptsManager;
-    ~WdgScriptsManagerPrivate() { delete m_qlviInstalledScripts; delete m_qlviExecutedScripts; }
-    QListViewItem* m_qlviInstalledScripts, *m_qlviExecutedScripts/*,* m_qlviFilters,* m_qlviTools*/;
     ScriptGUIClient* m_scripguiclient;
     int loadbutton, execbutton, removebutton;
 };
-    
+
 WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, const char* name, WFlags fl )
     : WdgScriptsManagerBase(parent, name, fl), d(new WdgScriptsManagerPrivate)
 {
     d->m_scripguiclient = scr;
-    scriptsList->addColumn(i18n("Text"));
+
+    scriptsList->header()->hide();
+    //scriptsList->header()->setClickEnabled(false);
+    scriptsList->setAllColumnsShowFocus(true);
+    scriptsList->setRootIsDecorated(true);
+    scriptsList->setSorting(-1);
+
     scriptsList->addColumn(i18n("Name"));
+    //scriptsList->addColumn(i18n("Action"));
 
     fillScriptsList();
 
@@ -57,8 +80,10 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
 
     d->removebutton = toolBar->insertButton("fileclose",2, false, i18n("Remove script"));
     toolBar->addConnection(d->removebutton,SIGNAL(clicked()), this, SLOT(slotRemoveScript()));
-}
 
+    connect(scr, SIGNAL( collectionChanged(ScriptActionCollection*) ),
+            this, SLOT( fillScriptsList() ));
+}
 
 WdgScriptsManager::~WdgScriptsManager()
 {
@@ -68,100 +93,78 @@ WdgScriptsManager::~WdgScriptsManager()
 void WdgScriptsManager::fillScriptsList()
 {
     scriptsList->clear();
-    d->m_qlviInstalledScripts = new QListViewItem(scriptsList, i18n("Installed Scripts"));
-    d->m_qlviInstalledScripts->setOpen(true);
-    d->m_qlviExecutedScripts = new QListViewItem(scriptsList, i18n("Executed Scripts"));
-    d->m_qlviExecutedScripts->setOpen(true);
-//     m_qlviFilters = new QListViewItem(scriptsList, i18n("Filters"));
-//     m_qlviTools = new QListViewItem(scriptsList, i18n("Tools"));
-    // TODO: support for category, it's not needed for Krita 1.5 but it will for 2.0
-    fillScriptsList(d->m_qlviInstalledScripts, d->m_scripguiclient->getInstalledScriptActions());
-    fillScriptsList(d->m_qlviExecutedScripts, d->m_scripguiclient->getExecutedScriptActions());
+
+    addItem( d->m_scripguiclient->getActionCollection("executedscripts"), false );
+    addItem( d->m_scripguiclient->getActionCollection("loadedscripts") );
+    addItem( d->m_scripguiclient->getActionCollection("installedscripts") );
 }
 
-void WdgScriptsManager::fillScriptsList(QListViewItem* item, ScriptAction::List list)
+void WdgScriptsManager::addItem(ScriptActionCollection* collection, bool opened)
 {
-    for (ScriptAction::List::iterator it = list.begin(); it !=  list.end(); ++it) {
-        QListViewItem* i = new QListViewItem(item, (*it)->text(), (*it)->getName() );
+    if(! collection)
+        return;
 
-        QPixmap pm;
-        if((*it)->hasIcon()) {
-            KIconLoader* icons = KGlobal::iconLoader();
-            pm = icons->loadIconSet((*it)->icon(), KIcon::Small).pixmap(QIconSet::Small, QIconSet::Active);
-        }
-        else {
-            pm = (*it)->iconSet(KIcon::Small, 16).pixmap(QIconSet::Small, QIconSet::Active);
-        }
-        if(! pm.isNull()) {
-            i->setPixmap(0, pm); // display the icon
-        }
+    ListItem* i = new ListItem(scriptsList, collection);
+    i->setText(0, collection->actionMenu()->text());
+    i->setOpen( opened );
+
+    QValueList<ScriptAction::Ptr> list = collection->actions();
+    QListViewItem* lastitem = 0;
+    for(QValueList<ScriptAction::Ptr>::Iterator it = list.begin(); it != list.end(); ++it)
+        lastitem = addItem(*it, i, lastitem);
+}
+
+QListViewItem* WdgScriptsManager::addItem(ScriptAction::Ptr action, QListViewItem* parentitem, QListViewItem* afteritem)
+{
+    if(! action)
+        return 0;
+
+    ListItem* i = new ListItem(dynamic_cast<ListItem*>(parentitem), afteritem, action);
+    i->setText(0, action->text());
+
+    QPixmap pm;
+    if(action->hasIcon()) {
+        KIconLoader* icons = KGlobal::iconLoader();
+        pm = icons->loadIconSet(action->icon(), KIcon::Small).pixmap(QIconSet::Small, QIconSet::Active);
     }
+    else {
+        pm = action->iconSet(KIcon::Small, 16).pixmap(QIconSet::Small, QIconSet::Active);
+    }
+    if(! pm.isNull())
+        i->setPixmap(0, pm); // display the icon
+
+    return i;
 }
 
 void WdgScriptsManager::slotSelectionChanged(QListViewItem* item)
 {
-    toolBar->setItemEnabled(d->execbutton, item && item->parent());
-    toolBar->setItemEnabled(d->removebutton, item && item->parent());
+    ListItem* i = dynamic_cast<ListItem*>(item);
+    toolBar->setItemEnabled(d->execbutton, i && i->action());
+    toolBar->setItemEnabled(d->removebutton, i && i->action() && i->collection() != d->m_scripguiclient->getActionCollection("installedscripts"));
 }
 
 void WdgScriptsManager::slotLoadScript()
 {
-    if(d->m_scripguiclient->executeScriptFile()) {
+    if(d->m_scripguiclient->loadScriptFile())
+        fillScriptsList();
+}
+
+void WdgScriptsManager::slotExecuteScript()
+{
+    ListItem* current = dynamic_cast<ListItem*>( scriptsList->currentItem() );
+    if(current && current->action())
+        current->action()->activate();
+}
+
+void WdgScriptsManager::slotRemoveScript()
+{
+    ListItem* current = dynamic_cast<ListItem*>( scriptsList->currentItem() );
+    if(current && current->action()) {
+        current->collection()->detach( current->action() );
         fillScriptsList();
     }
 }
-void WdgScriptsManager::slotExecuteScript()
-{
-    QListViewItem * current = scriptsList->currentItem ();
-    if(current !=0 && current->text(1) != "")
-    {
-        ScriptAction * s = find(current->text(1));
-        s->activate();
-    }
-}
-void WdgScriptsManager::slotRemoveScript()
-{
-    QListViewItem * current = scriptsList->currentItem ();
-    if(current !=0 && current->text(1) != "")
-    {
-//         KisScriptSP s = KisScriptsRegistry::instance()->remove(current->text(1));
-//         if(s==0) kdDebug() << "Script not found" <<endl;
-//         fillScriptsList();
-    }
-}
 
-ScriptAction* WdgScriptsManager::find(const QString name) const
-{
-    ScriptAction* s = findInInstalled(name);
-    if( s != 0)
-        return s;
-    return findInExecuted(name);
-}
-ScriptAction* WdgScriptsManager::findInInstalled(const QString name) const
-{
-    ScriptAction::List kl = d->m_scripguiclient->getInstalledScriptActions();
-    for (ScriptAction::List::iterator it = kl.begin(); it !=  kl.end(); ++it) {
-        if( (*it)->getName() == name )
-        {
-            return *it;
-        }
-    }
-    return 0;
-}
+}}
 
-ScriptAction* WdgScriptsManager::findInExecuted(const QString name) const
-{
-    ScriptAction::List kl = d->m_scripguiclient->getExecutedScriptActions();
-    for (ScriptAction::List::iterator it = kl.begin(); it !=  kl.end(); ++it) {
-        if( (*it)->getName() == name )
-        {
-            return *it;
-        }
-    }
-    return 0;
-}
-
-}
-
-}
 #include "wdgscriptsmanager.moc"

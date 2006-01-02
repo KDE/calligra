@@ -104,6 +104,11 @@ const QString& ScriptContainer::getName() const
     return d->name;
 }
 
+void ScriptContainer::setName(const QString& name)
+{
+    d->name = name;
+}
+
 const QString& ScriptContainer::getCode() const
 {
     return d->code;

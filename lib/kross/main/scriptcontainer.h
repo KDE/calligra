@@ -68,7 +68,7 @@ namespace Kross { namespace Api {
              *       has. It's used e.g. at the \a Manager to
              *       identify the ScriptContainer.
              */
-            explicit ScriptContainer(const QString& name);
+            explicit ScriptContainer(const QString& name = QString::null);
 
         public:
 
@@ -85,6 +85,11 @@ namespace Kross { namespace Api {
              * reachable as.
              */
             const QString& getName() const;
+
+            /**
+             * Set the name this ScriptContainer is reachable as.
+             */
+            void setName(const QString& name);
 
             /**
              * Return the scriptcode this ScriptContainer holds.

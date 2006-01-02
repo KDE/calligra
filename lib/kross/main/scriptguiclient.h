@@ -70,14 +70,36 @@ namespace Kross { namespace Api {
             virtual ~ScriptGUIClient();
 
             /**
-             * \return the list of \a ScriptAction instances which are installed.
+             * \return true if this \a ScriptGUIClient has a \a ScriptActionCollection
+             * with the name \p name else false is returned.
              */
-            ScriptAction::List getInstalledScriptActions();
+            bool hasActionCollection(const QString& name);
 
             /**
-             * \return the list of \a ScriptAction instances which have been executed.
+             * \return the \a ScriptActionCollection which has the name \p name
+             * or NULL if there exists no such \a ScriptActionCollection .
              */
-            ScriptAction::List getExecutedScriptActions();
+            ScriptActionCollection* getActionCollection(const QString& name);
+
+            /**
+             * \return a map of all avaiable \a ScriptActionCollection instances
+             * this \a ScriptGUIClient knows about.
+             * Per default there are 2 collections avaiable;
+             * 1. "installedscripts" The installed collection of scripts.
+             * 2. "loadedscripts" The loaded scripts.
+             */
+            QMap<QString, ScriptActionCollection*> getActionCollections();
+
+            /**
+             * Add a new \a ScriptActionCollection with the name \p name to
+             * our map of actioncollections.
+             */
+            void addActionCollection(const QString& name, ScriptActionCollection* collection);
+
+            /**
+             * Remove the \a ScriptActionCollection defined with name \p name.
+             */
+            bool removeActionCollection(const QString& name);
 
             /**
             * This methods are reimplemented from the inherited KXMLGUIClient
@@ -90,17 +112,25 @@ namespace Kross { namespace Api {
 
         public slots:
 
-            /**
-             * Call this slot to set the list of installed actions dirty.
-             * On the next try to access the list (e.g. via the
-             * \a getInstalledScriptActions() method) the list will be
-             * rebuild/updated.
-             */
-            void dirtyInstalledScriptActions();
+           /**
+            * A KFileDialog will be displayed to let the user choose
+            * a scriptfile. The choosen file will be returned as KURL.
+            */
+            KURL openScriptFile(const QString& caption = QString::null);
+
+           /**
+            * A KFileDialog will be displayed to let the user choose
+            * a scriptfile that should be loaded.
+            * Those loaded \a ScriptAction will be added to the
+            * \a ScriptActionCollection of loaded scripts.
+            */
+            bool loadScriptFile();
 
             /**
             * A KFileDialog will be displayed to let the user choose
             * the scriptfile that should be executed.
+            * The executed \a ScriptAction will be added to the
+            * \a ScriptActionCollection of executed scripts.
             */
             bool executeScriptFile();
 
@@ -123,7 +153,10 @@ namespace Kross { namespace Api {
 
         private slots:
             void executionFailed(const QString& errormessage, const QString& tracedetails);
-            void showScriptGUIClientsMenu();
+            void successfullyExecuted();
+
+        signals:
+            void collectionChanged(ScriptActionCollection*);
 
         private:
             /// Internaly used private d-pointer.

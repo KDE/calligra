@@ -24,11 +24,11 @@
 
 class Scripting;
 
-namespace Kross {
-namespace Api {
+namespace Kross { namespace Api {
 
 class ScriptGUIClient;
 class WdgScriptsManagerPrivate;
+
 /**
 @author Cyrille Berger
 */
@@ -43,15 +43,14 @@ class WdgScriptsManager : public WdgScriptsManagerBase
         void slotExecuteScript();
         void slotRemoveScript();
         void slotSelectionChanged(QListViewItem*);
-    private:
+    private slots:
         void fillScriptsList();
-        void fillScriptsList(QListViewItem* item, ScriptAction::List list);
-        ScriptAction* find(const QString name) const;
-        ScriptAction* findInInstalled(const QString name) const;
-        ScriptAction* findInExecuted(const QString name) const;
     private:
         WdgScriptsManagerPrivate* d;
+        void addItem(ScriptActionCollection* collection, bool opened = true);
+        QListViewItem* addItem(ScriptAction::Ptr, QListViewItem* parentitem, QListViewItem* afteritem);
 };
-}
-}
+
+}}
+
 #endif

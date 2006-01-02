@@ -91,6 +91,9 @@ void PythonScript::initialize()
         if(m_scriptcontainer->getCode().isNull())
             throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Invalid scripting code for script '%1'").arg( m_scriptcontainer->getName() )) );
 
+        if(m_scriptcontainer->getName().isNull())
+            throw Kross::Api::Exception::Ptr( new Kross::Api::Exception(QString("Name for the script is invalid!")) );
+
         PyObject* pymod = PyModule_New( (char*) m_scriptcontainer->getName().latin1() );
         d->m_module = new Py::Module(pymod, true);
         if(! d->m_module)

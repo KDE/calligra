@@ -42,10 +42,8 @@ namespace Kross { namespace Api {
         public:
             KXMLGUIClient* guiclient;
             QWidget* parent;
-            bool dirtyscriptlist;
-            KActionMenu* scriptextensions;
-            ScriptAction::List installedscriptactions;
-            ScriptAction::List executedscriptactions;
+
+            QMap<QString, ScriptActionCollection*> collections;
     };
 
 }}
@@ -59,7 +57,6 @@ ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent)
 
     d->guiclient = guiclient;
     d->parent = parent;
-    d->dirtyscriptlist = true;
 
     setInstance( ScriptGUIClient::instance() );
 
@@ -72,26 +69,53 @@ ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     // acion to show the ScriptManagerGUI dialog.
     new KAction(i18n("Script Manager..."), 0, 0, this, SLOT(showScriptManager()), actionCollection(), "configurescripts");
 
-    // list of actions with each item beeing a scriptfile we are able to execute.
-    d->scriptextensions = new KActionMenu(i18n("Scripts"), actionCollection(), "scripts");
-    connect(d->scriptextensions->popupMenu(), SIGNAL( aboutToShow() ), SLOT( showScriptGUIClientsMenu() ));
+    // The predefined ScriptActionCollection's this ScriptGUIClient provides.
+    d->collections.replace("installedscripts",
+        new ScriptActionCollection(i18n("Scripts"), actionCollection(), "installedscripts") );
+    d->collections.replace("loadedscripts",
+        new ScriptActionCollection(i18n("Loaded"), actionCollection(), "loadedscripts") );
+    d->collections.replace("executedscripts",
+        new ScriptActionCollection(i18n("History"), actionCollection(), "executedscripts") );
 }
 
 ScriptGUIClient::~ScriptGUIClient()
 {
     kdDebug() << QString("ScriptGUIClient::~ScriptGUIClient() Dtor") << endl;
+    for(QMap<QString, ScriptActionCollection*>::Iterator it = d->collections.begin(); it != d->collections.end(); ++it)
+        delete it.data();
     delete d;
 }
 
-ScriptAction::List ScriptGUIClient::getInstalledScriptActions()
+bool ScriptGUIClient::hasActionCollection(const QString& name)
 {
-    showScriptGUIClientsMenu(); // update the list if needed.
-    return d->installedscriptactions;
+    return d->collections.contains(name);
 }
 
-ScriptAction::List ScriptGUIClient::getExecutedScriptActions()
+ScriptActionCollection* ScriptGUIClient::getActionCollection(const QString& name)
 {
-    return d->executedscriptactions;
+    return d->collections[name];
+}
+
+QMap<QString, ScriptActionCollection*> ScriptGUIClient::getActionCollections()
+{
+    return d->collections;
+}
+
+void ScriptGUIClient::addActionCollection(const QString& name, ScriptActionCollection* collection)
+{
+    removeActionCollection(name);
+    d->collections.replace(name, collection);
+}
+
+bool ScriptGUIClient::removeActionCollection(const QString& name)
+{
+    if(d->collections.contains(name)) {
+        ScriptActionCollection* c = d->collections[name];
+        d->collections.remove(name);
+        delete c;
+        return true;
+    }
+    return false;
 }
 
 void ScriptGUIClient::setXMLFile(const QString &file, bool merge, bool setxmldoc)
@@ -109,38 +133,16 @@ void ScriptGUIClient::setXML(const QString &document, bool merge)
     KXMLGUIClient::setXML(document, merge);
 }
 
-void ScriptGUIClient::setDOMDocument(const QDomDocument &document, bool merge)
+void ScriptGUIClient::setDOMDocument(const QDomDocument &document, bool /*merge*/)
 {
-    KXMLGUIClient::setDOMDocument(document, merge);
-}
-
-void ScriptGUIClient::executionFailed(const QString& errormessage, const QString& tracedetails)
-{
-    if(tracedetails.isEmpty())
-        KMessageBox::error(0, errormessage);
-    else
-        KMessageBox::detailedError(0, errormessage, tracedetails);
-}
-
-void ScriptGUIClient::showScriptGUIClientsMenu()
-{
-    if(! d->dirtyscriptlist) {
-        // if the d->scriptextensions KActionMenu isn't dirty we don't
-        // need to update it.
-        return;
-    }
-
-    // remove the dirty ScriptAction's we don't need any longer.
-    for(ScriptAction::List::Iterator it = d->installedscriptactions.begin(); it != d->installedscriptactions.end(); ++it) {
-        d->scriptextensions->remove(*it);
-        (*it)->deleteLater();
-    }
-    d->installedscriptactions.clear();
+    ScriptActionCollection* installedcollection = d->collections["installedscripts"];
+    if(installedcollection)
+        installedcollection->clear();
 
     // time to parse the DOM-document
-    QDomDocument domdoc = domDocument();
-    kdDebug()<< QString("Kross::Api::ScriptGUIClient::showScriptGUIClientsMenu() XML-file: %1").arg(xmlFile()) << endl;
-    //kdDebug()<< QString("Kross::Api::ScriptGUIClient::showScriptGUIClientsMenu() XML-DOM: %1").arg(domdoc.toString()) << endl;
+    //QDomDocument domdoc = domDocument();
+    QDomDocument domdoc = document;
+    kdDebug()<< QString("Kross::Api::ScriptGUIClient::setDOMDocument() XML-file: %1").arg(xmlFile()) << endl;
 
     // walk throuh the list of Scripts-elements.
     QDomNodeList nodelist = domdoc.elementsByTagName("Scripts");
@@ -152,26 +154,48 @@ void ScriptGUIClient::showScriptGUIClientsMenu()
             //kdDebug() << "subnode => " << node.nodeName() << endl;
 
             if(node.nodeName() == "ScriptAction") {
-                ScriptAction* action = new ScriptAction( node.toElement() );
-                d->installedscriptactions.append( action );
-                d->scriptextensions->insert( action );
-                connect(action, SIGNAL( failed(const QString&, const QString&) ),
+                ScriptAction::Ptr action = new ScriptAction( node.toElement() );
+
+                if(installedcollection)
+                    installedcollection->attach( action );
+
+                connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
                         this, SLOT( executionFailed(const QString&, const QString&) ));
+                connect(action.data(), SIGNAL( success() ),
+                        this, SLOT( successfullyExecuted() ));
             }
 
             node = node.nextSibling();
         }
     }
 
-    d->dirtyscriptlist = false;
+    emit collectionChanged(installedcollection);
 }
 
-void ScriptGUIClient::dirtyInstalledScriptActions()
+void ScriptGUIClient::successfullyExecuted()
 {
-    d->dirtyscriptlist = true;
+    const ScriptAction* action = dynamic_cast< const ScriptAction* >( QObject::sender() );
+    if(action) {
+        ScriptActionCollection* executedcollection = d->collections["executedscripts"];
+        if(executedcollection) {
+            ScriptAction* actionptr = const_cast< ScriptAction* >( action );
+            executedcollection->detach(actionptr);
+            executedcollection->attach(actionptr);
+
+            emit collectionChanged(executedcollection);
+        }
+    }
 }
 
-bool ScriptGUIClient::executeScriptFile()
+void ScriptGUIClient::executionFailed(const QString& errormessage, const QString& tracedetails)
+{
+    if(tracedetails.isEmpty())
+        KMessageBox::error(0, errormessage);
+    else
+        KMessageBox::detailedError(0, errormessage, tracedetails);
+}
+
+KURL ScriptGUIClient::openScriptFile(const QString& caption)
 {
     QStringList mimetypes;
     QMap<QString, InterpreterInfo*> infos = Manager::scriptManager()->getInterpreterInfos();
@@ -185,11 +209,38 @@ bool ScriptGUIClient::executeScriptFile()
         "ScriptGUIClientFileDialog", // name
         true // modal
     );
-    filedialog->setCaption( i18n("Execute Script File") );
-    if( filedialog->exec() ) {
-        KURL file = filedialog->selectedURL();
-        return executeScriptFile( file.path() );
+    if(! caption.isNull())
+        filedialog->setCaption(caption);
+    if( filedialog->exec() )
+        return filedialog->selectedURL();
+    return KURL();
+}
+
+bool ScriptGUIClient::loadScriptFile()
+{
+    KURL url = openScriptFile( i18n("Execute Script File") );
+    if(url.isValid()) {
+        ScriptActionCollection* loadedcollection = d->collections["loadedscripts"];
+        if(loadedcollection) {
+            ScriptAction::Ptr action = new ScriptAction( url.path() );
+            connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
+                    this, SLOT( executionFailed(const QString&, const QString&) ));
+            connect(action.data(), SIGNAL( success() ),
+                    this, SLOT( successfullyExecuted() ));
+
+            loadedcollection->detach(action);
+            loadedcollection->attach(action);
+            return true;
+        }
     }
+    return false;
+}
+
+bool ScriptGUIClient::executeScriptFile()
+{
+    KURL url = openScriptFile( i18n("Execute Script File") );
+    if(url.isValid())
+        return executeScriptFile( url.path() );
     return false;
 }
 
@@ -197,17 +248,15 @@ bool ScriptGUIClient::executeScriptFile(const QString& file)
 {
     kdDebug() << QString("Kross::Api::ScriptGUIClient::executeScriptFile() file='%1'").arg(file) << endl;
 
-    ScriptAction* action = new ScriptAction(file);
-    QString errormessage, tracedetails;
-    bool ok = action->activate(errormessage, tracedetails);
-    if(ok) {
-        action->finalize(); // execution is done.
-        d->executedscriptactions.append(action);
-    }
-    else { // display an errormessage if execution failed.
-        executionFailed(errormessage, tracedetails);
-        action->deleteLater(); // we don't need the ScriptAction any longer.
-    }
+    ScriptAction::Ptr action = new ScriptAction(file);
+    connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
+            this, SLOT( executionFailed(const QString&, const QString&) ));
+    connect(action.data(), SIGNAL( success() ),
+            this, SLOT( successfullyExecuted() ));
+
+    action->activate();
+    bool ok = action->hadException();
+    action->finalize(); // execution is done.
     return ok;
 }
 

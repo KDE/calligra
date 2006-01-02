@@ -23,33 +23,41 @@
 #include <qdom.h>
 #include <kaction.h>
 
+#include "scriptcontainer.h"
+
 namespace Kross { namespace Api {
 
     // Forward declarations.
     class ScriptContainer;
+    class ScriptActionCollection;
     class ScriptActionPrivate;
 
     /**
      * A ScriptAction extends a KAction by providing a wrapper around
      * a \a ScriptContainer to execute scripting code on activation.
      */
-    class ScriptAction : public KAction
+    class ScriptAction
+        : public KAction
+        , public Kross::Api::ScriptContainer
     {
             Q_OBJECT
 
             /// The name of the interpreter used to execute the scripting code.
-            Q_PROPERTY(QString interpretername READ getInterpreterName WRITE setInterpreterName)
+            //Q_PROPERTY(QString interpretername READ getInterpreterName WRITE setInterpreterName)
 
             /// The scripting code which should be executed.
-            Q_PROPERTY(QString code READ getCode WRITE setCode)
+            //Q_PROPERTY(QString code READ getCode WRITE setCode)
 
             /// The scriptfile which should be executed.
-            Q_PROPERTY(QString file READ getFile WRITE setFile)
+            //Q_PROPERTY(QString file READ getFile WRITE setFile)
 
         public:
 
+            /// Shared pointer to implement reference-counting.
+            typedef KSharedPtr<ScriptAction> Ptr;
+
             /// A list of \a ScriptAction instances.
-            typedef QValueList< ScriptAction* > List;
+            //typedef QValueList<ScriptAction::Ptr> List;
 
             /**
              * Constructor.
@@ -73,16 +81,6 @@ namespace Kross { namespace Api {
             virtual ~ScriptAction();
 
             /**
-             * @return the name of the script
-             */
-            const QString& getName() const;
-            /**
-             * \return the name of the interpreter which will be used
-             * on activation to execute the scripting code.
-             */
-            const QString& getInterpreterName() const;
-
-            /**
              * Set the name of the interpreter which will be used
              * on activation to execute the scripting code.
              *
@@ -92,45 +90,28 @@ namespace Kross { namespace Api {
             void setInterpreterName(const QString& name);
 
             /**
-             * \return the scripting code which will be executed
-             * on activation.
-             */
-            const QString& getCode() const;
-
-            /**
-             * Set the scripting code which will be executed
-             * on activation.
-             *
-             * \param code The scripting code.
-             */
-            void setCode(const QString& code);
-
-            /**
-             * \return the scriptfile which will be executed on
-             * activation. The file needs to be local file we
-             * are able to use QFile on.
-             */
-            const QString& getFile() const;
-
-            /**
-             * Set the scriptfile which will be executed on
-             * activation.
-             *
-             * \param scriptfile The scriptfile.
-             */
-            void setFile(const QString& scriptfile);
-
-            /**
-             * \return the \a ScriptContainer instance this
-             * \a ScriptAction wraps.
-             */
-            ScriptContainer* getScriptContainer() const;
-
-            /**
              * \return a list of all kind of logs this \a ScriptAction
              * does remember.
              */
             const QStringList& getLogs() const;
+
+            /**
+             * Attach this \a ScriptAction to the \a ScriptActionCollection
+             * \p collection .
+             */
+            void attach(ScriptActionCollection* collection);
+
+            /**
+             * Detach this \a ScriptAction from the \a ScriptActionCollection
+             * \p collection .
+             */
+            void detach(ScriptActionCollection* collection);
+
+            /**
+             * Detach this \a ScriptAction from all \a ScriptActionCollection
+             * instance his \a ScriptAction is attached to.
+             */
+            void detachAll();
 
         public slots:
 
@@ -140,19 +121,6 @@ namespace Kross { namespace Api {
              * \a success() or \a failed() signal.
              */
             virtual void activate();
-
-            /**
-             * This method behaves like the \a activated() method above except
-             * that it doesn't emit the \a success() and \a failed() signals
-             * but provides them in the passed call-by-reference parameters.
-             * 
-             * \param errormessage A message describing the error.
-             * \param tracedetails A more detailed backtrace or QString::null
-             *        if there was no backtrace avaiable. Those parameters
-             *        will only change if the execution failed.
-             * \return true if the execution was successfully else false.
-             */
-            virtual bool activate(QString& errormessage, QString& tracedetails);
 
             /**
              * This slot finalizes the \a ScriptContainer and tries to clean
@@ -178,6 +146,50 @@ namespace Kross { namespace Api {
         private:
             /// Internaly used private d-pointer.
             ScriptActionPrivate* d;
+    };
+
+    class ScriptActionCollection
+    {
+        private:
+            QValueList<ScriptAction::Ptr> m_actions;
+            KActionMenu* m_actionmenu;
+            bool m_dirty;
+
+        public:
+            ScriptActionCollection(const QString& text, KActionCollection* ac, const char* name)
+                : m_actionmenu( new KActionMenu(text, ac, name) )
+                , m_dirty(true) {}
+
+            ~ScriptActionCollection() {
+                for(QValueList<ScriptAction::Ptr>::Iterator it = m_actions.begin(); it != m_actions.end(); ++it)
+                    (*it)->detach(this);
+            }
+
+            QValueList<ScriptAction::Ptr> actions() { return m_actions; }
+            KActionMenu* actionMenu() { return m_actionmenu; }
+
+            void attach(ScriptAction::Ptr action) {
+                m_dirty = true;
+                m_actions.append(action);
+                m_actionmenu->insert(action);
+                action->attach(this);
+            }
+
+            void detach(ScriptAction::Ptr action) {
+                m_dirty = true;
+                m_actions.remove(action);
+                m_actionmenu->remove(action);
+                action->detach(this);
+            }
+
+            void clear() {
+                for(QValueList<ScriptAction::Ptr>::Iterator it = m_actions.begin(); it != m_actions.end(); ++it) {
+                    m_actionmenu->remove(*it);
+                    (*it)->detach(this);
+                }
+                m_actions.clear();
+            }
+
     };
 
 }}
