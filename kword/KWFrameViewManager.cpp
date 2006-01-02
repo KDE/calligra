@@ -211,6 +211,7 @@ void KWFrameViewManager::fireEvents() {
 
 void KWFrameViewManager::recalculateFrameCache() {
     // TODO :) design and implement a cache...
+    // list of frames sorted on y-coord, with an additional list containing a jump-index
     kdDebug(31001) << "recalculateFrameCache " << m_frames.count() << " frames are currently registred" << endl;
 }
 
@@ -391,7 +392,6 @@ void KWFrameViewManager::showPopup( const KoPoint &point, KWView *view, int keyS
         }
         ++iter;
     }
-    // TODO; make selected?
     framesThatAreHit[0]->showPopup(point, view, popupPoint);
 }
 
