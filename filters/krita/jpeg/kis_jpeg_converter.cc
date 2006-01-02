@@ -199,10 +199,10 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
             case JCS_CMYK:
                 while (!it.isDone()) {
                     Q_UINT8 *d = it.rawData();
-                    d[0] = *(src++);
-                    d[1] = *(src++);
-                    d[2] = *(src++);
-                    d[3] = *(src++);
+                    d[0] = Q_UINT8_MAX - *(src++);
+                    d[1] = Q_UINT8_MAX - *(src++);
+                    d[2] = Q_UINT8_MAX - *(src++);
+                    d[3] = Q_UINT8_MAX - *(src++);
                     d[4] = Q_UINT8_MAX;
                     ++it;
                 }
@@ -378,19 +378,19 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLaye
                 {
                     while (!it.isDone()) {
                         const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
-                        *(dst++) = d[0] / Q_UINT8_MAX;
-                        *(dst++) = d[1] / Q_UINT8_MAX;
-                        *(dst++) = d[2] / Q_UINT8_MAX;
-                        *(dst++) = d[3] / Q_UINT8_MAX;
+                        *(dst++) = Q_UINT8_MAX - d[0] / Q_UINT8_MAX;
+                        *(dst++) = Q_UINT8_MAX - d[1] / Q_UINT8_MAX;
+                        *(dst++) = Q_UINT8_MAX - d[2] / Q_UINT8_MAX;
+                        *(dst++) = Q_UINT8_MAX - d[3] / Q_UINT8_MAX;
                         ++it;
                     }
                 } else {
                     while (!it.isDone()) {
                         const Q_UINT8 *d = it.rawData();
-                        *(dst++) = d[0];
-                        *(dst++) = d[1];
-                        *(dst++) = d[2];
-                        *(dst++) = d[3];
+                        *(dst++) = Q_UINT8_MAX - d[0];
+                        *(dst++) = Q_UINT8_MAX - d[1];
+                        *(dst++) = Q_UINT8_MAX - d[2];
+                        *(dst++) = Q_UINT8_MAX - d[3];
                         ++it;
                     }
                 }
