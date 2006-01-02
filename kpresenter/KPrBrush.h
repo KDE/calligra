@@ -1,6 +1,6 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
-   Copyright (C) 2004 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -24,6 +24,11 @@
 #include <qbrush.h>
 
 #include "global.h"
+
+class KoGenStyle;
+class KoGenStyles;
+class KoOasisContext;
+class QDomElement;
 
 class KPrBrush
 {
@@ -69,7 +74,11 @@ public:
     int getGYFactor() const
         { return m_yfactor; }
 
+    void saveOasisFillStyle( KoGenStyle &styleObjectAuto, KoGenStyles& mainStyles ) const;
+    void loadOasisFillStyle( KoOasisContext &context, const char * propertyType );
+
 private:
+    QString saveOasisGradientStyle( KoGenStyles& mainStyles ) const;
     QBrush m_brush;
     QColor m_gColor1;
     QColor m_gColor2;

@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -119,7 +119,7 @@ void KPrPieObject::fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyl
     }
     else
     {
-        saveOasisBackgroundElement( styleObjectAuto, mainStyles );
+        m_brush.saveOasisFillStyle( styleObjectAuto, mainStyles );
     }
 }
 

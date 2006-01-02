@@ -1,7 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2004 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2004-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -26,6 +26,7 @@
 #include "KPrTextObject.h"
 #include "KPrPage.h"
 #include "KPrUtils.h"
+#include "KPrBrush.h"
 
 #include <qpainter.h>
 #include <qpicture.h>
@@ -199,26 +200,35 @@ void KPrBackGround::saveOasisBackgroundPageStyle( KoGenStyle& stylepageauto, KoG
 {
     switch ( backType )
     {
-    case BT_COLOR:
-    {
-        if ( bcType == BCT_PLAIN )
+        case BT_COLOR:
         {
-            stylepageauto.addProperty( "draw:fill","solid" );
-            stylepageauto.addProperty( "draw:fill-color", backColor1.name() );
-        }
-        else
+            QBrush qbrush( backColor1 );
+            KPrBrush brush( qbrush, backColor1, backColor2, bcType, 
+                            bcType == BCT_PLAIN ? FT_BRUSH : FT_GRADIENT, 
+                            unbalanced, xfactor, yfactor );
+            brush.saveOasisFillStyle( stylepageauto, mainStyles );
+        } break;
+        case BT_BRUSH:
+        case BT_CLIPART:
+        case BT_PICTURE:
         {
-            stylepageauto.addProperty( "draw:fill","gradient" );
-            stylepageauto.addProperty( "draw:fill-gradient-name", saveOasisGradientStyle( mainStyles ) );
-        }
-        break;
-    }
-    case BT_BRUSH:
-    case BT_CLIPART:
-    case BT_PICTURE:
-        stylepageauto.addProperty("draw:fill", "bitmap" );
-        stylepageauto.addProperty("draw:fill-image-name", saveOasisPictureStyle( mainStyles ) );
-        break;
+            stylepageauto.addProperty("draw:fill", "bitmap" );
+            stylepageauto.addProperty("draw:fill-image-name", saveOasisPictureStyle( mainStyles ) );
+            QString repeat = "repeat";
+            switch ( backView )
+            {
+                case BV_ZOOM:
+                    repeat = "stretch";
+                    break;
+                case BV_CENTER:
+                    repeat = "no-repeat";
+                    break;
+                case BV_TILED:
+                    repeat = "repeat";
+                    break;
+            }
+            stylepageauto.addProperty( "style:repeat", repeat );
+        } break;
     }
 }
 
@@ -234,64 +244,6 @@ QString KPrBackGround::saveOasisPictureStyle( KoGenStyles& mainStyles )
     return mainStyles.lookup( pictureStyle, "picture" );
 }
 
-QString KPrBackGround::saveOasisGradientStyle( KoGenStyles& mainStyles )
-{
-    KoGenStyle gradientStyle( KPrDocument::STYLE_GRADIENT /*no family name*/);
-    gradientStyle.addAttribute( "draw:start-color", backColor1.name() );
-    gradientStyle.addAttribute( "draw:end-color", backColor2.name() );
-    QString unbalancedx( "50%" );
-    QString unbalancedy( "50%" );
-
-    if ( unbalanced )
-    {
-        unbalancedx = QString( "%1%" ).arg( xfactor / 4 + 50 );
-        unbalancedy = QString( "%1%" ).arg( yfactor / 4 + 50 );
-    }
-    gradientStyle.addAttribute( "draw:cx", unbalancedx );
-    gradientStyle.addAttribute( "draw:cy", unbalancedy );
-
-
-    switch( bcType )
-    {
-    case BCT_PLAIN:
-        gradientStyle.addAttribute( "draw:angle", 0 );
-        gradientStyle.addAttribute( "draw:style", "linear" );
-        break;
-    case BCT_GHORZ:
-        gradientStyle.addAttribute( "draw:angle", 0 );
-        gradientStyle.addAttribute( "draw:style", "linear" );
-        break;
-    case BCT_GVERT:
-        gradientStyle.addAttribute( "draw:angle", 900 );
-        gradientStyle.addAttribute( "draw:style", "linear" );
-        break;
-    case BCT_GDIAGONAL1:
-        gradientStyle.addAttribute( "draw:angle", 450 );
-        gradientStyle.addAttribute( "draw:style", "linear" );
-        break;
-    case BCT_GDIAGONAL2:
-        gradientStyle.addAttribute( "draw:angle", 135 );
-        gradientStyle.addAttribute( "draw:style", "linear" );
-        break;
-    case BCT_GCIRCLE:
-        gradientStyle.addAttribute( "draw:angle", 0 );
-        gradientStyle.addAttribute( "draw:style", "radial" );
-        break;
-    case BCT_GRECT:
-        gradientStyle.addAttribute( "draw:angle", 0 );
-        gradientStyle.addAttribute( "draw:style", "square" );
-        break;
-    case BCT_GPIPECROSS:
-        gradientStyle.addAttribute( "draw:angle", 0 );
-        gradientStyle.addAttribute( "draw:style", "axial" );
-        break;
-    case BCT_GPYRAMID: //todo fixme ! it doesn't work !
-        gradientStyle.addAttribute( "draw:angle", 0 );
-        gradientStyle.addAttribute( "draw:style", 0 );
-        break;
-    }
-    return mainStyles.lookup( gradientStyle, "gradient" );
-}
 
 void KPrBackGround::loadOasis(KoOasisContext & context )
 {
@@ -301,12 +253,26 @@ void KPrBackGround::loadOasis(KoOasisContext & context )
     if ( styleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
     {
         const QString fill = styleStack.attributeNS( KoXmlNS::draw, "fill" );
-        kdDebug()<<"fill page  type :"<<fill<<endl;
-        if ( fill == "solid" )
+        kdDebug(33001) <<"fill page type :" << fill << endl;
+        if ( fill == "solid" || fill == "gradient" )
         {
-            setBackColor1(QColor(styleStack.attributeNS( KoXmlNS::draw, "fill-color" ) ) );
-            setBackColorType(BCT_PLAIN);
-            setBackType(BT_COLOR);
+            KPrBrush brush;
+            brush.loadOasisFillStyle( context, "drawing-page" );
+            if ( brush.getFillType() == FT_BRUSH )
+            {
+                setBackColor1( brush.getBrush().color() );
+                setBackColorType( BCT_PLAIN );
+            }
+            else
+            {
+                setBackColor1( brush.getGColor1() );
+                setBackColor2( brush.getGColor2() );
+                setBackColorType( brush.getGType() );
+                setBackUnbalanced( brush.getGUnbalanced() );
+                setBackXFactor( brush.getGXFactor() );
+                setBackYFactor( brush.getGYFactor() );
+            }
+            setBackType( BT_COLOR );
         }
         else if ( fill == "bitmap" )
         {
@@ -352,89 +318,6 @@ void KPrBackGround::loadOasis(KoOasisContext & context )
                 setBackView( BV_TILED );; // use tiled as default
 
             setBackType(BT_PICTURE);
-        }
-        else if ( fill == "gradient" )
-        {
-            QString style = styleStack.attributeNS( KoXmlNS::draw, "fill-gradient-name" );
-            QDomElement *draw = context.oasisStyles().drawStyles()[style];
-            if ( draw )
-            {
-                //kdDebug()<<" draw style : name :"<<style<<endl;
-                setBackColor1( QColor( draw->attributeNS( KoXmlNS::draw, "start-color", QString::null ) ) );
-                setBackColor2( QColor( draw->attributeNS( KoXmlNS::draw, "end-color", QString::null ) ) );
-                setBackColorType( BCT_PLAIN );
-                setBackType(BT_COLOR);
-                QString type = draw->attributeNS( KoXmlNS::draw, "style", QString::null );
-                if ( type == "linear" )
-                {
-                    int angle = draw->attributeNS( KoXmlNS::draw, "angle", QString::null ).toInt() / 10;
-
-                    // make sure the angle is between 0 and 359
-                    angle = abs( angle );
-                    angle -= ( (int) ( angle / 360 ) ) * 360;
-
-                    // What we are trying to do here is to find out if the given
-                    // angle belongs to a horizontal, vertical or diagonal gradient.
-                    int lower, upper, nearAngle = 0;
-                    for ( lower = 0, upper = 45; upper < 360; lower += 45, upper += 45 )
-                    {
-                        if ( upper >= angle )
-                        {
-                            int distanceToUpper = abs( angle - upper );
-                            int distanceToLower = abs( angle - lower );
-                            nearAngle = distanceToUpper > distanceToLower ? lower : upper;
-                            break;
-                        }
-                    }
-
-                    // nearAngle should now be one of: 0, 45, 90, 135, 180...
-                    if ( nearAngle == 0 || nearAngle == 180 )
-                        setBackColorType(BCT_GHORZ);
-                    else if ( nearAngle == 90 || nearAngle == 270 )
-                        setBackColorType(BCT_GVERT);
-                    else if ( nearAngle == 45 || nearAngle == 225 )
-                        setBackColorType(BCT_GDIAGONAL1);
-                    else if ( nearAngle == 135 || nearAngle == 315 )
-                        setBackColorType(BCT_GDIAGONAL2);
-                }
-                else if ( type == "radial" || type == "ellipsoid" )
-                    setBackColorType(BCT_GCIRCLE);
-                else if ( type == "square" || type == "rectangular" )
-                    setBackColorType(BCT_GRECT);
-                else if ( type == "axial" )
-                    setBackColorType(BCT_GPIPECROSS);
-
-
-                // Hard to map between x- and y-center settings of ooimpress
-                // and (un-)balanced settings of kpresenter. Let's try it.
-                int x, y;
-                if ( draw->hasAttributeNS( KoXmlNS::draw, "cx" ) )
-                    x = draw->attributeNS( KoXmlNS::draw, "cx", QString::null ).remove( '%' ).toInt();
-                else
-                    x = 50;
-
-                if ( draw->hasAttributeNS( KoXmlNS::draw, "cy" ) )
-                    y = draw->attributeNS( KoXmlNS::draw, "cy", QString::null ).remove( '%' ).toInt();
-                else
-                    y = 50;
-
-                if ( x == 50 && y == 50 )
-                {
-                    unbalanced=0;
-                    setBackUnbalanced(false);
-                    setBackXFactor(100);
-                    setBackYFactor(100);
-                }
-                else
-                {
-                    unbalanced=1;
-                    setBackUnbalanced(true);
-
-                    // map 0 - 100% to -200 - 200
-                    setBackXFactor(( 4 * x - 200 ));
-                    setBackYFactor(( 4 * y - 200 ));
-                }
-            }
         }
     }
 }
