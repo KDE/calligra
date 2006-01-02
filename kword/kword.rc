@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="101">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="102">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -64,10 +64,10 @@
   <Action name="add_bookmark"/>
   <Separator/>
   <!-- Frames - the order matches the order of the keybindings -->
-  <Action name="tools_createtext"/>
-  <Action name="insert_picture"/>
-  <Action name="tools_formula"/>
   <Action name="insert_table"/>
+  <Action name="insert_picture"/>
+  <Action name="tools_createtext"/>
+  <Action name="tools_formula"/>
   <Action name="tools_part"/>
  </Menu>
  <Menu name="format"><text>F&amp;ormat</text>
@@ -218,12 +218,8 @@
 <ToolBar name="insert_toolbar" position="left"><Text>Insert</Text>
   <Action name="insert_table"/>
   <Action name="insert_picture"/>
-  <!-- Action name="insert_clipart"/>
-  <Separator/>
-  <Action name="insert_specialchar"/ -->
   <Separator/>
   <Action name="tools_createtext"/>
-  <Action name="tools_createpix"/>
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
 </ToolBar>
@@ -437,12 +433,14 @@
  <ActionList name="spell_action"/>
 </Menu>
 <Menu name="action_popup">
+  <Action name="insert_table"/>
+  <Action name="insert_picture"/>
+  <Separator />
   <Action name="tools_createtext"/>
-  <Action name="tools_createpix"/>
-  <Action name="tools_table"/>
-  <Action name="tools_kspreadtable"/>
   <Action name="tools_formula"/>
   <Action name="tools_part"/>
+  <Separator />
+  <Action name="delete_page"/>
 </Menu>
 <Menu name="frame_popup">
  <Action name="edit_delframe"/>
