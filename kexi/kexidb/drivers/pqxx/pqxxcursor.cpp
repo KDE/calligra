@@ -26,6 +26,7 @@
 #include <klocale.h>
 #include <kdebug.h>
 
+#include <migration/pqxx/pg_type.h>
 using namespace KexiDB;
 
 
@@ -37,7 +38,7 @@ pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection* conn, const QString& statement,
 	Cursor(conn,statement, options)
 {
 	KexiDBDrvDbg << "PQXXSQLCURSOR: constructor for query statement" << endl;
-	my_conn = static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql;
+	my_conn = static_cast<pqxxSqlConnection*>(conn)->d->m_pqxxsql;
 	m_options = Buffered;
 	m_res = 0;
 //	m_tran = 0;
@@ -50,7 +51,7 @@ pqxxSqlCursor::pqxxSqlCursor(Connection* conn, QuerySchema& query, uint options 
 	: Cursor( conn, query, options )
 {
 	KexiDBDrvDbg << "PQXXSQLCURSOR: constructor for query schema" << endl;
-	my_conn = static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql;
+	my_conn = static_cast<pqxxSqlConnection*>(conn)->d->m_pqxxsql;
 	m_options = Buffered;
 	m_res = 0;
 //	m_tran = 0;
@@ -196,6 +197,8 @@ QVariant pqxxSqlCursor::value(uint pos)
 //Return the value for a given column for the current record - Private const version
 QVariant pqxxSqlCursor::pValue(uint pos) const
 {
+	pqxx::binarystring *bs;
+	
 	if (m_res->size() <= 0)
 	{
 		KexiDBDrvDbg << "pqxxSqlCursor::value - ERROR: result size not greater than 0" << endl;
@@ -209,21 +212,67 @@ QVariant pqxxSqlCursor::pValue(uint pos) const
 	}
 
 	KexiDB::Field *f = (m_fieldsExpanded && pos<m_fieldCount) ? m_fieldsExpanded->at(pos)->field : 0;
+
+	KexiDBDrvDbg << "pqxxSqlCursor::value(" << pos << ")" << endl;
+
 	//from most to least frequently used types:
-	if ((f && f->isIntegerType()) || (/*ROWID*/!f && m_containsROWIDInfo && pos==m_fieldCount))
+	if (f) //We probably have a schema type query so can use kexi to determin the row type
 	{
-		return QVariant((*m_res)[at()][pos].as(int()));
+		if ((f->isIntegerType()) || (/*ROWID*/!f && m_containsROWIDInfo && pos==m_fieldCount))
+		{
+			return QVariant((*m_res)[at()][pos].as(int()));
+		}
+		else if (f->isTextType())
+		{
+			return QVariant((*m_res)[at()][pos].c_str());
+		}
+		else if (f->isFPNumericType())
+		{
+			return QVariant((*m_res)[at()][pos].as(double()));
+		}
+		else if (f->typeGroup() == Field::BLOBGroup)
+		{
+			bs = new pqxx::binarystring((*m_res)[at()][pos]);
+			return QVariant(bs->str().c_str());
+		}
 	}
-	else if (!f || f->isTextType())
+	else // We probably have a raw type query so use pqxx to determin the column type
 	{
-		return QVariant((*m_res)[at()][pos].c_str());
-	}
-	else if (f->isFPNumericType())
-	{
-		return QVariant((*m_res)[at()][pos].as(double()));
+		
+		switch((*m_res)[at()][pos].type())
+		{
+			case BOOLOID:
+				return QVariant((*m_res)[at()][pos].c_str()); //TODO check formatting
+			case INT2OID:
+			case INT4OID:
+			case INT8OID:
+				return QVariant((*m_res)[at()][pos].as(int()));
+			case FLOAT4OID:
+			case FLOAT8OID:
+			case NUMERICOID:
+				return QVariant((*m_res)[at()][pos].as(double()));
+			case DATEOID:
+				return QVariant((*m_res)[at()][pos].c_str()); //TODO check formatting
+			case TIMEOID:
+				return QVariant((*m_res)[at()][pos].c_str()); //TODO check formatting
+			case TIMESTAMPOID:
+				return QVariant((*m_res)[at()][pos].c_str()); //TODO check formatting
+			case BYTEAOID:
+				bs = new pqxx::binarystring((*m_res)[at()][pos]);
+				return QVariant(bs->str().c_str());
+			case BPCHAROID:
+			case VARCHAROID:
+			case TEXTOID:
+				return QVariant((*m_res)[at()][pos].c_str());
+			default:
+				return QVariant((*m_res)[at()][pos].c_str());
+		}
+		
 	}
 	
+	//If all else fails just return a string
 	return QVariant((*m_res)[at()][pos].c_str());
+	
 }
 
 //==================================================================================

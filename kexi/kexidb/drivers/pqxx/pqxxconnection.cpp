@@ -24,16 +24,16 @@
 #include <kexidb/error.h>
 #include <klocale.h>
 #include <string>
-
+#include "pqxxpreparedstatement.h"
 using namespace KexiDB;
 
 pqxxTransactionData::pqxxTransactionData(Connection *conn, bool nontransaction)
  : TransactionData(conn)
 {
 	if (nontransaction)
-		data = new pqxx::nontransaction(*static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql /* todo: add name? */);
+		data = new pqxx::nontransaction(*static_cast<pqxxSqlConnection*>(conn)->d->m_pqxxsql /* todo: add name? */);
 	else
-		data = new pqxx::transaction<>(*static_cast<pqxxSqlConnection*>(conn)->m_pqxxsql /* todo: add name? */);
+		data = new pqxx::transaction<>(*static_cast<pqxxSqlConnection*>(conn)->d->m_pqxxsql /* todo: add name? */);
 	if (!static_cast<pqxxSqlConnection*>(conn)->m_trans) {
 		static_cast<pqxxSqlConnection*>(conn)->m_trans = this;
 	}
@@ -52,16 +52,18 @@ pqxxTransactionData::~pqxxTransactionData()
 
 pqxxSqlConnection::pqxxSqlConnection(Driver *driver, ConnectionData &conn_data)
         :Connection(driver,conn_data)
-        ,m_pqxxsql(0), m_res(0), m_trans(0)
-{}
+{
+d = new pqxxSqlConnectionInternal();
+m_trans = 0;
+}
 
 //==================================================================================
 //Do any tidying up before the object is deleted
 pqxxSqlConnection::~pqxxSqlConnection()
 {
-		delete m_trans;
-		m_trans = 0;
-    destroy();
+	delete d;
+	//delete m_trans;
+    	destroy();
 }
 
 //==================================================================================
@@ -114,7 +116,7 @@ bool pqxxSqlConnection::drv_getDatabasesList( QStringList &list )
     if (executeSQL("SELECT datname FROM pg_database WHERE datallowconn = TRUE"))
     {
         std::string N;
-        for (pqxx::result::const_iterator c = m_res->begin(); c != m_res->end(); ++c)
+        for (pqxx::result::const_iterator c = d->m_res->begin(); c != d->m_res->end(); ++c)
         {
             // Read value of column 0 into a string N
             c[0].to(N);
@@ -190,18 +192,20 @@ bool pqxxSqlConnection::drv_useDatabase( const QString &dbName )
 
     try
     {
-        m_pqxxsql = new pqxx::connection( conninfo.latin1() );
+        d->m_pqxxsql = new pqxx::connection( conninfo.latin1() );
+	drv_executeSQL( "SET DEFAULT_WITH_OIDS TO ON" ); //Postgres 8.1 changed the default to no oids but we need them
         m_usedDatabase = dbName;
         return true;
     }
     catch(const std::exception &e)
     {
         KexiDBDrvDbg << "pqxxSqlConnection::drv_useDatabase:exception - " << e.what() << endl;
-        setError(ERR_DB_SPECIFIC,e.what());
+	d->errmsg = e.what();
+
     }
     catch(...)
     {
-    	setError();
+	    d->errmsg = "Unknown Error";
     }
     return false;
 }
@@ -213,13 +217,13 @@ bool pqxxSqlConnection::drv_closeDatabase()
     KexiDBDrvDbg << "pqxxSqlConnection::drv_closeDatabase" << endl;
     if (isConnected())
     {
-        delete m_pqxxsql;
-        m_pqxxsql = 0;
+        delete d->m_pqxxsql;
         return true;
     }
     else
     {
-        setError(ERR_NO_CONNECTION, "Not connected to database backend");
+	    d->errmsg = "Not connected to database backend";
+	    d->res = ERR_NO_CONNECTION;
     }
     return false;
 }
@@ -246,8 +250,9 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 
     ok = false;
     // Clear the last result information...
-    clearResultInfo ();
+    delete d->m_res;
 
+    KexiDBDrvDbg << "About to try" << endl;
     try
     {
         //Create a transaction
@@ -256,10 +261,10 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 			(void)new pqxxTransactionData(this, true);
 
 		//        m_trans = new pqxx::nontransaction(*m_pqxxsql);
-
+        KexiDBDrvDbg << "About to execute" << endl;
         //Create a result object through the transaction
-        m_res = new pqxx::result(m_trans->data->exec(statement.utf8()));
-
+        d->m_res = new pqxx::result(m_trans->data->exec(statement.utf8()));
+	KexiDBDrvDbg << "Executed" << endl;
 		//Commit the transaction
 		if (implicityStarted) {
 			pqxxTransactionData *t = m_trans;
@@ -274,14 +279,14 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
     catch (const std::exception &e)
     {
         //If an error ocurred then put the error description into _dbError
-        setError(ERR_DB_SPECIFIC,e.what());
+	    d->errmsg = e.what();
         KexiDBDrvDbg << "pqxxSqlConnection::drv_executeSQL:exception - " << e.what() << endl;
     }
     catch(...)
     {
-    	setError();
+	    d->errmsg = "Unknown Error";
     }
-    KexiDBDrvDbg << "EXECUTE SQL OK: OID was " << (m_res ? m_res->inserted_oid() : 0) << endl;
+    KexiDBDrvDbg << "EXECUTE SQL OK: OID was " << (d->m_res ? d->m_res->inserted_oid() : 0) << endl;
     return ok;
 }
 
@@ -289,32 +294,20 @@ bool pqxxSqlConnection::drv_executeSQL( const QString& statement )
 //Return true if currently connected to a database, ignoring the m_is_connected falg.
 bool pqxxSqlConnection::drv_isDatabaseUsed() const
 {
-    if (m_pqxxsql->is_open())
+    if (d->m_pqxxsql->is_open())
     {
         return true;
     }
     return false;
 }
 
-//Private Functions I Need
-//=========================================================================
-//Clears the current result
-void pqxxSqlConnection::clearResultInfo ()
-{
-    delete m_res;
-    m_res = 0;
-
-//??    delete m_trans;
-//??    m_trans = 0;
-}
-
 //==================================================================================
 //Return the oid of the last insert - only works if sql was insert of 1 row
 Q_ULLONG pqxxSqlConnection::drv_lastInsertRowID()
 {
-    if (m_res)
+    if (d->m_res)
     {
-        pqxx::oid theOid = m_res->inserted_oid();
+        pqxx::oid theOid = d->m_res->inserted_oid();
 
         if (theOid != pqxx::oid_none)
         {
@@ -341,7 +334,7 @@ bool pqxxSqlConnection::drv_getTablesList( QStringList &list )
 	KexiDB::Cursor *cursor;
 	m_sql = "select lower(relname) from pg_class where relkind='r'";
 	if (!(cursor = executeQuery( m_sql ))) {
-		KexiDBDbg << "Connection::drv_getTablesList(): !executeQuery()" << endl;
+		KexiDBDrvDbg << "pqxxSqlConnection::drv_getTablesList(): !executeQuery()" << endl;
 		return false;
 	}
 	list.clear();
@@ -372,7 +365,7 @@ bool pqxxSqlConnection::drv_commitTransaction(TransactionData *tdata)
 	catch (const std::exception &e)
 	{
 		//If an error ocurred then put the error description into _dbError
-		setError(ERR_DB_SPECIFIC,e.what());
+		d->errmsg = e.what();
 		result = false;
 	}
 	catch (...) {
@@ -394,12 +387,12 @@ bool pqxxSqlConnection::drv_rollbackTransaction(TransactionData *tdata)
 	catch (const std::exception &e)
 	{
 		//If an error ocurred then put the error description into _dbError
-		setError(ERR_DB_SPECIFIC,e.what());
+		d->errmsg = e.what();
+		
 		result = false;
 	}
 	catch (...) {
-		//! @todo
-		setError();
+		d->errmsg = "Unknown error";
 		result = false;
 	}
 	if (m_trans == tdata)
@@ -407,4 +400,29 @@ bool pqxxSqlConnection::drv_rollbackTransaction(TransactionData *tdata)
 	return result;
 }
 
+int pqxxSqlConnection::serverResult()
+{
+	return d->res;
+}
+
+QString pqxxSqlConnection::serverResultName()
+{
+	return QString::null;
+}
+
+void pqxxSqlConnection::drv_clearServerResult()
+{
+	d->res = 0;
+}
+
+QString pqxxSqlConnection::serverErrorMsg()
+{
+	return d->errmsg;
+}
+
+PreparedStatement::Ptr pqxxSqlConnection::prepareStatement(PreparedStatement::StatementType type, 
+	TableSchema& tableSchema)
+{
+	return new pqxxPreparedStatement(type, *d, tableSchema);
+}
 #include "pqxxconnection.moc"

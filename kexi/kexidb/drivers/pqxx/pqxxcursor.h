@@ -23,7 +23,11 @@
 #include <kexidb/cursor.h>
 #include <kexidb/connection.h>
 
+#if 0
 #include <pqxx/all.h>
+#else
+#include <pqxx/pqxx>
+#endif
 
 namespace KexiDB {
 

@@ -23,8 +23,10 @@
 #include <qstringlist.h>
 
 #include <kexidb/connection.h>
+#include "pqxxsqlconnectioninternal.h"
 #include "pqxxcursor.h"
-#include <pqxx/all.h>
+
+
 
 
 namespace KexiDB
@@ -51,7 +53,8 @@ class pqxxSqlConnection : public Connection
 
                 virtual Cursor* prepareQuery( const QString& statement = QString::null, uint cursor_options = 0 );
 		virtual Cursor* prepareQuery( QuerySchema& query, uint cursor_options = 0 );
-
+		virtual PreparedStatement::Ptr prepareStatement(PreparedStatement::StatementType type, 
+			TableSchema& tableSchema);
 	protected:
 
                 pqxxSqlConnection( Driver *driver, ConnectionData &conn_data );
@@ -76,15 +79,20 @@ class pqxxSqlConnection : public Connection
 		virtual bool drv_commitTransaction(TransactionData *);
 		virtual bool drv_rollbackTransaction(TransactionData *);
 
-		pqxx::connection* m_pqxxsql;
+		//Error reporting
+		virtual int serverResult();
+		virtual QString serverResultName();
+		virtual void drv_clearServerResult();
+		virtual QString serverErrorMsg();
+		
+		pqxxSqlConnectionInternal *d;
 	private:
-		void clearResultInfo();
 		QString escapeName(const QString &tn) const;
-
-		pqxx::result* m_res;
-//  		pqxx::transaction_base* m_trans;
+		//  	pqxx::transaction_base* m_trans;
 		//! temporary solution for executeSQL()...
 		pqxxTransactionData *m_trans;
+
+		
 
 	friend class pqxxSqlDriver;
 	friend class pqxxSqlCursor;
