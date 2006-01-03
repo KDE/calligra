@@ -32,7 +32,6 @@
 #include <kexidb/queryschema.h>
 #include <keximainwindow.h>
 #include <kexidialogbase.h>
-#include <kexipart.h>
 #include <kexipartitem.h>
 #include <kexiproject.h>
 
@@ -94,13 +93,11 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 			if(scriptName.isNull())
 				continue;
 
-			KexiPart::Part* scriptpart = Kexi::partManager().partForMimeType("kexi/script");
+			KexiPart::Info* scriptinfo = Kexi::partManager().infoForMimeType("kexi/script");
 			KexiProject* project = mainWin->project();
-			if( !scriptpart || !project)
+			if( !scriptinfo || !project)
 				continue;
-
-			KexiPart::Info* info = scriptpart->info();
-			KexiPart::ItemDict* itemdict = project->items(info);
+			KexiPart::ItemDict* itemdict = project->items(scriptinfo);
 			if(! itemdict)
 				continue;
 
