@@ -393,6 +393,7 @@ KWView::KWView( const QString& viewMode, QWidget *parent, const char *name, KWDo
     // We do this delayed, so that the GUI has been fully constructed
     // (and e.g. the statusbar can repaint).
     QTimer::singleShot( 0, this, SLOT( slotSetInitialPosition() ) );
+    QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
 }
 
 KWView::~KWView()

@@ -381,7 +381,7 @@ void KWDocument::initConfig()
   else
   {
       m_zoom = 100;
-      m_zoomMode = KoZoomMode::ZOOM_CONSTANT;
+      m_zoomMode = KoZoomMode::ZOOM_WIDTH;
   }
   int undo=30;
   if(config->hasGroup("Misc" ) )
