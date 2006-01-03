@@ -25,6 +25,7 @@
 #include <kdebug.h>
 #include <klocale.h>
 #include <kaction.h>
+#include <kurl.h>
 
 #include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
@@ -75,11 +76,11 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 	QObject *obj;
 	QDict<char> tmpSources;
 	for ( ; (obj = it.current()) != 0; ++it ) {
-		QString actionName = obj->property("onClickAction").toString();
+		KURL actionurl = obj->property("onClickAction").toString();
 
-		if (actionName.startsWith("kaction:")) {
+		if (actionurl.protocol() == "kaction") {
 			//this is kaction:
-			actionName = actionName.mid(QString("kaction:").length()); //cut prefix
+			QString actionName = actionurl.fileName();
 			KAction *action = (actionName.isEmpty()) ? 0 : mainWin->actionCollection()->action( actionName.latin1() );
 			if (!action) {
 				//! @todo show error?
@@ -88,9 +89,10 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 			QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) ); //safety
 			QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
 		}
-		else if (actionName.startsWith("script:")) {
-			//this is kaction:
-			actionName = actionName.mid(QString("script:").length()); //cut prefix
+		else if (actionurl.protocol() == "script") {
+			QString scriptName = actionurl.fileName();
+			if(scriptName.isNull())
+				continue;
 
 			KexiPart::Part* scriptpart = Kexi::partManager().partForMimeType("kexi/script");
 			KexiProject* project = mainWin->project();
@@ -103,7 +105,7 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 				continue;
 
 			for (KexiPart::ItemDictIterator it( *itemdict ); it.current(); ++it) {
-				if(it.current()->name() == actionName) {
+				if(it.current()->name() == scriptName) {
 					ScriptAction* action = new ScriptAction(obj, mainWin, it.current());
 					QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
 					QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
