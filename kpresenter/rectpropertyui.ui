@@ -133,7 +133,7 @@
                         <bool>true</bool>
                     </property>
                     <property name="whatsThis" stdset="0">
-                        <string>You can choose or not to keep the same ratio for the two settings depending of this icon.</string>
+                        <string>You can choose whether or not to keep the same declination for both vertical and horizontal using this button.</string>
                     </property>
                 </widget>
             </hbox>

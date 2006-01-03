@@ -228,12 +228,12 @@ KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *p
     }
 
     showRuler= new QCheckBox(i18n("Show rulers"),this);
-    QWhatsThis::add(showRuler, i18n( "This is checked by default and both a vertical and horizontal ruler are shown on KPresenter slide. When unchecked, the rulers are not shown anymore on any slide." ) );
+    QWhatsThis::add(showRuler, i18n( "When checked, both vertical and horizontal rulers are shown on the KPresenter slide (this is the default). When unchecked, the rulers are not shown on any slide." ) );
     showRuler->setChecked(bShowRuler);
     box->addWidget(showRuler);
 
     showStatusBar = new QCheckBox(i18n("Show status bar"),this);
-    QWhatsThis::add(showStatusBar, i18n( "Toggle the statusbar which is shown by default." ) );
+    QWhatsThis::add(showStatusBar, i18n( "Toggle the statusbar, which is shown by default." ) );
     showStatusBar->setChecked(oldShowStatusBar);
     box->addWidget(showStatusBar);
 
@@ -253,7 +253,7 @@ KPrConfigureInterfacePage::KPrConfigureInterfacePage( KPrView *_view, QWidget *p
 
     indent->setSuffix( suffix );
     indent->setLabel(i18n("Text indentation depth:"));
-    QWhatsThis::add(indent, i18n( "This setting is used in the Text menu by Increase Depth and Decrease Depth menu items to change the indentation depth. Default is 1 centimeter." ) );
+    QWhatsThis::add(indent, i18n( "This setting is used by Increase Depth and Decrease Depth menu items (in the Text menu) to change the indentation depth. The Default is 1 centimeter." ) );
 
     box->addWidget(indent);
 
@@ -324,7 +324,7 @@ KPrConfigureColorBackground::KPrConfigureColorBackground( KPrView* _view, QWidge
 
     QLabel *lab = new QLabel( this, "label20" );
     lab->setText( i18n( "Background object color:" ) );
-    QWhatsThis::add(lab, i18n( "Change the background color of the text box. The Text boxes background is white by default. If you had a dark background color and you wanted to put some white text over it, you could color the text box so that you could see what you were typing. When you have finished, the area around the text would revert to whatever the background color was. The Defaults button restores the original settings." ) );
+    QWhatsThis::add(lab, i18n( "Change the background color of the text box. The background is white by default. If you have a dark background color and you want to put some white text on it, you can change the color of the text box so that you can see what you are typing. When you have finished, the area around the text will revert to the background color. The Defaults button restores the original settings." ) );
     box->addWidget(lab);
 
     bgColor = new KColorButton( oldBgColor,
@@ -336,7 +336,7 @@ KPrConfigureColorBackground::KPrConfigureColorBackground( KPrView* _view, QWidge
 
     lab = new QLabel( this, "label20" );
     lab->setText( i18n( "Grid color:" ) );
-    QWhatsThis::add(lab, i18n( "You can change here the grid color which is black as default." ) );
+    QWhatsThis::add(lab, i18n( "Here you can change the grid color, which is black by default." ) );
     box->addWidget(lab);
 
     gridColor = new KColorButton( oldGridColor,
@@ -435,25 +435,25 @@ KPrConfigureMiscPage::KPrConfigureMiscPage( KPrView *_view, QWidget *parent, cha
     m_undoRedoLimit=new KIntNumInput( m_oldNbRedo, tmpQGroupBox );
     m_undoRedoLimit->setLabel(i18n("Undo/redo limit:"));
     m_undoRedoLimit->setRange(10, 60, 1);
-    QWhatsThis::add(m_undoRedoLimit, i18n( "Set the number of actions you can undo and redo (how many actions KPresenter keeps in its Undo buffer). Default is 30. Maximum is 60 and minimum is 0. Any action that exceeds the number set will be forgotten." ) );
+    QWhatsThis::add(m_undoRedoLimit, i18n( "Set the number of actions you can undo and redo (how many actions KPresenter keeps in its Undo buffer). This ranges from a minimum of 10 to a maximum of 60 (the default is 30). Once the number of actions reaches the number set here, earlier actions will be forgotten." ) );
     grid->addWidget(m_undoRedoLimit,0,0);
 
     KPrDocument* doc = m_pView->kPresenterDoc();
 
     m_displayLink=new QCheckBox(i18n("Display links"),tmpQGroupBox);
-    QWhatsThis::add(m_displayLink, i18n( "When you want to include a link in your slide, you will use the Insert->Link... menu which allows you to insert URL, mail or file links. If the option Display links is checked, all links will be displayed in a different color. This makes document links visible. This is the default behavior. If the option is unchecked, the link will be the same color as the text color. The links are visible(or not) both in the edited slides and in the slide show." ) );
+    QWhatsThis::add(m_displayLink, i18n( "When you want to include a link in your slide, you can use the Insert->Link... menu, which allows you to insert URL, mail or file links. If the option Display links is checked, all links will be active and displayed in a different color (this is the default behavior). If the option is unchecked, the links will be inactive and the same color as the text. This affects both the edited slides and the slide show." ) );
     grid->addWidget(m_displayLink,3,0);
     m_displayLink->setChecked(doc->getVariableCollection()->variableSetting()->displayLink());
 
     m_underlineLink=new QCheckBox(i18n("&Underline all links"),tmpQGroupBox);
     m_underlineLink->setChecked(doc->getVariableCollection()->variableSetting()->underlineLink());
-    QWhatsThis::add(m_underlineLink, i18n( "If this is checked, all links will be underlined. The option is checked per default. If it is not checked, the link will not be underlined." ) );
+    QWhatsThis::add(m_underlineLink, i18n( "If this is checked, all links will be underlined (this is the default). If it is not checked, the links will not be underlined." ) );
     grid->addWidget(m_underlineLink,4,0);
 
 
     m_displayComment=new QCheckBox(i18n("Display comments"),tmpQGroupBox);
     m_displayComment->setChecked(doc->getVariableCollection()->variableSetting()->displayComment());
-    QWhatsThis::add(m_displayComment, i18n( "Comments are inserted in the text at the cursor using the Insert->Comment... menu. Comments can only be viewed in editing mode and not in the slide show. If this option is checked (default) then each comment will be shown as a small yellow rectangle. You can then right click on it to edit it, remove it or copy its text." ) );
+    QWhatsThis::add(m_displayComment, i18n( "Comments are inserted in the text at the cursor using the Insert->Comment... menu. Comments can only be viewed in edit mode and not in the slide show. If this option is checked (default) then each comment will be shown as a small yellow rectangle. You can then right-click on them to edit them, remove them or copy the text." ) );
     grid->addWidget(m_displayComment,5,0);
 
     m_displayFieldCode=new QCheckBox(i18n("Display field code"),tmpQGroupBox);
