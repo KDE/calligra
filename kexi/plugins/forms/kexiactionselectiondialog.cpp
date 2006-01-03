@@ -21,102 +21,194 @@
 
 #include <widget/utils/klistviewitemtemplate.h>
 #include <keximainwindow.h>
+#include <kexipart.h>
+#include <kexipartitem.h>
+#include <kexiproject.h>
 
 #include <klistview.h>
 #include <kaction.h>
 #include <kiconloader.h>
+#include <kdebug.h>
 
 #include <qbitmap.h>
 #include <qlabel.h>
 #include <qheader.h>
 #include <qvbox.h>
 
-typedef KListViewItemTemplate<QCString> ActionSelectorDialogListItem;
+typedef KListViewItemTemplate<QString> ActionSelectorDialogListItem;
 
-KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QWidget *parent, 
-	const QCString& _currentActionName, const QCString& actionWidgetName)
- : KDialogBase(parent, "actionSelectorDialog", true, QString::null, 
-	KDialogBase::Ok | KDialogBase::Cancel )
+class ActionsListView : public KListView
 {
-	KActionPtrList sharedActions( mainWin->allActions() ); //sharedActions() );
+public:
+	ActionsListView(QWidget* parent, KexiActionSelectionDialog* dialog)
+		: KListView(parent, "actionslistview")
+	{
+		setResizeMode(QListView::LastColumn);
+		addColumn("");
+		header()->hide();
 
-	QCString currentActionName( _currentActionName );
+		//! @todo QLabel *lblDescription = new QLabel(d->mainbox);
+		//! @todo: add "update Button text and tooltip" check box
+		//! @todo double click accepts dialog
+		QListViewItem *pitem = 0;
 
-	//FOR FUTURE COMPATIBILITY:
-	//check if this is kaction-type action
-	if (!currentActionName.isEmpty()) {
-		if (QString(currentActionName).startsWith("kaction:")) {
-			currentActionName = currentActionName.mid(QCString("kaction:").length()); //cut prefix
-		} else {
-/*! @todo handle other types of action handlers here (eg. script event handler or function)! */
-			currentActionName = ""; //for now we're pretending there was no action assigned
+		QPixmap noIcon( IconSize( KIcon::Small ), IconSize( KIcon::Small ) );
+		QBitmap bmpNoIcon(noIcon.size());
+		bmpNoIcon.fill(Qt::color0);
+		noIcon.setMask(bmpNoIcon);
+
+		//add "no action" item (key == "")
+		pitem = new ActionSelectorDialogListItem(QString("kaction:"), this, pitem, i18n("<No Action>") );
+		pitem->setPixmap( 0, noIcon );
+
+		KActionPtrList sharedActions( dialog->mainWin()->allActions() ); //sharedActions() );
+		foreach (KActionPtrList::ConstIterator, it, sharedActions) {
+			//! @todo set invisible pixmap box if actual pixmap is null
+			//! @todo group actions
+			//! @todo: store KAction* here?
+			QString name = QString("kaction:%1").arg((*it)->name());
+			pitem = new ActionSelectorDialogListItem(name, this, pitem, (*it)->text().replace("&", "") );
+			pitem->setPixmap( 0, (*it)->iconSet( KIcon::Small, 16 ).pixmap( QIconSet::Small, QIconSet::Active ) );
+			if (!pitem->pixmap(0) || pitem->pixmap(0)->isNull())
+				pitem->setPixmap( 0, noIcon );
+			if (!selectedItem() && dialog->currentActionName() == name)
+				setSelected(pitem, true);
+		}
+		if (selectedItem()) {
+			ensureItemVisible(selectedItem());
+		}
+		else if (firstChild()) {
+			setSelected(firstChild(), true);
+			ensureItemVisible(selectedItem());
 		}
 	}
+	virtual ~ActionsListView() {}
+};
 
-	QVBox *vbox = makeVBoxMainWidget();
-	QLabel *lbl = new QLabel(i18n("Select Action to be executed after clicking \"%1\" button:")
-		.arg(actionWidgetName), vbox);
-		lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::WordBreak);
-	m_listview = new KListView(vbox, "actionSelectorDialogLV");
-	m_listview->setResizeMode(QListView::LastColumn);
-	m_listview->addColumn("");
-	m_listview->header()->hide();
+class ScriptsListView : public KListView
+{
+public:
+	ScriptsListView(QWidget* parent, KexiActionSelectionDialog* dialog)
+		: KListView(parent, "scriptslistview")
+	{
+		setResizeMode(QListView::LastColumn);
+		addColumn("");
+		header()->hide();
+
+		KexiPart::Part* part = Kexi::partManager().partForMimeType("kexi/script");
+		KexiProject* project = dialog->mainWin()->project();
+		if(part && project) {
+			KexiPart::Info* info = part->info();
+			KexiPart::ItemDict* itemdict = project->items(info);
+			if(itemdict) {
+				ActionSelectorDialogListItem* item = 0;
+				for (KexiPart::ItemDictIterator it( *itemdict ); it.current(); ++it) {
+					QString name = QString("script:%1").arg(it.current()->name());
+					item = new ActionSelectorDialogListItem(name, this, item, it.current()->caption());
+					if(!selectedItem() && dialog->currentActionName() == name)
+						setSelected(item, true);
+				}
+			}
+		}
+	}
+	virtual ~ScriptsListView() {}
+};
+
+class KexiActionSelectionDialog::KexiActionSelectionDialogPrivate
+{
+public:
+	KexiMainWindow* mainWin;
+	KListView* listview;
+	QVBox *mainbox;
+	QString currentActionName;
+	KexiActionSelectionDialogPrivate() : listview(0) {}
+};
+
+KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QWidget *parent, 
+	const QString& _currentActionName, const QCString& actionWidgetName)
+
+	: KDialogBase(parent, "actionSelectorDialog", true, QString::null, KDialogBase::Ok | KDialogBase::Cancel )
+	, d( new KexiActionSelectionDialogPrivate() )
+{
+	d->mainWin = mainWin;
+	d->currentActionName = _currentActionName;
+
+	QVBox* box = makeVBoxMainWidget();
+
+	QLabel *lbl = new QLabel(i18n("Select Action to be executed after clicking \"%1\" button:").arg(actionWidgetName), box);
+	lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::WordBreak);
+
+	QComboBox* combobox = new QComboBox(box);
+	combobox->insertItem( i18n("Actions") );
+	combobox->insertItem( i18n("Scripts") );
+	
+	d->mainbox = new QVBox(box);
 	resize(400, 500);
-	connect( m_listview, SIGNAL(executed(QListViewItem*)), this, SLOT(slotListViewExecuted(QListViewItem*)));
-//! @todo QLabel *lblDescription = new QLabel(vbox);
-//! @todo: add "update Button text and tooltip" check box
-//! @todo double click accepts dialog
-	QListViewItem *pitem = 0;
 
-	QPixmap noIcon( IconSize( KIcon::Small ), IconSize( KIcon::Small ) );
-	QBitmap bmpNoIcon(noIcon.size());
-	bmpNoIcon.fill(Qt::color0);
-	noIcon.setMask(bmpNoIcon);
+	if (QString(d->currentActionName).startsWith("script:")) {
+		combobox->setCurrentItem(1);
+		slotComboHighlighted(1);
+		
+	}
+	else { //startsWith("kaction:")
+		slotComboHighlighted(0);
+	}
 
-	//add "no action" item (key == "")
-	pitem = new ActionSelectorDialogListItem( QCString(), m_listview, pitem, i18n("<No Action>") );
-	pitem->setPixmap( 0, noIcon );
-
-	foreach (KActionPtrList::ConstIterator, it, sharedActions) {
-		//! @todo set invisible pixmap box if actual pixmap is null
-		//! @todo group actions
-		//! @todo: store KAction* here?
-		pitem = new ActionSelectorDialogListItem( (*it)->name(), m_listview, pitem, (*it)->text().replace("&", "") );
-		pitem->setPixmap( 0, (*it)->iconSet( KIcon::Small, 16 ).pixmap( QIconSet::Small, QIconSet::Active ) );
-		if (!pitem->pixmap(0) || pitem->pixmap(0)->isNull())
-			pitem->setPixmap( 0, noIcon );
-		if (!m_listview->selectedItem() && currentActionName == (*it)->name())
-			m_listview->setSelected(pitem, true);
-	}
-	if (m_listview->selectedItem()) {
-		m_listview->ensureItemVisible(m_listview->selectedItem());
-	}
-	else if (m_listview->firstChild()) {
-		m_listview->setSelected(m_listview->firstChild(), true);
-		m_listview->ensureItemVisible(m_listview->selectedItem());
-	}
+	connect(combobox, SIGNAL(highlighted(int)), this, SLOT(slotComboHighlighted(int)));
+	connect(this, SIGNAL(finished()), SLOT(closeDialog()));
 }
 
 KexiActionSelectionDialog::~KexiActionSelectionDialog()
 {
+	delete d;
 }
 
-QCString KexiActionSelectionDialog::selectedActionName() const
+void KexiActionSelectionDialog::setActionView()
 {
-	QCString actionName;
-	if (QDialog::Accepted == result() && m_listview->selectedItem()) {
-		//update property value
-		ActionSelectorDialogListItem *item = static_cast<ActionSelectorDialogListItem*>(m_listview->selectedItem());
-		actionName = item->data;
-		if (!actionName.isEmpty())
-			actionName = QCString("kaction:") + item->data;
+	delete d->listview;
+	d->listview = new ActionsListView(d->mainbox, this);
+	d->listview->show();
+}
+
+void KexiActionSelectionDialog::setScriptView()
+{
+	delete d->listview;
+	d->listview = new ScriptsListView(d->mainbox, this);
+	d->listview->show();
+}
+
+void KexiActionSelectionDialog::slotComboHighlighted(int index)
+{
+	switch(index) {
+		case 0: setActionView(); break;
+		case 1: setScriptView(); break;
+		default: break;
 	}
-	return actionName;
 }
 
-void KexiActionSelectionDialog::slotListViewExecuted(QListViewItem*)
+KexiMainWindow* KexiActionSelectionDialog::mainWin()
 {
-	accept();
+	return d->mainWin;
+}
+
+QString KexiActionSelectionDialog::currentActionName() const
+{
+	return d->currentActionName;
+}
+
+void KexiActionSelectionDialog::slotOk()
+{
+	if(d->listview && d->listview->selectedItem()) {
+		ActionSelectorDialogListItem *item = static_cast<ActionSelectorDialogListItem*>( d->listview->selectedItem() );
+		if(item)
+			d->currentActionName = item->data;
+	}
+	KDialogBase::slotOk();
+}
+
+void KexiActionSelectionDialog::closeDialog()
+{
+	delayedDestruct();
 }
 
 #include "kexiactionselectiondialog.moc"

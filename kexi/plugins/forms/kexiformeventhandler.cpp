@@ -24,11 +24,30 @@
 
 #include <kdebug.h>
 #include <klocale.h>
+#include <kaction.h>
 
 #include <tableview/kexitableitem.h>
 #include <tableview/kexitableviewdata.h>
 #include <kexidb/queryschema.h>
 #include <keximainwindow.h>
+#include <kexipart.h>
+#include <kexipartitem.h>
+#include <kexiproject.h>
+
+class ScriptAction : public KAction
+{
+private:
+	KexiMainWindow* m_mainWin;
+	KexiPart::Item* m_item;
+public:
+	ScriptAction(QObject* obj, KexiMainWindow *mainWin, KexiPart::Item* item)
+		: KAction(obj), m_mainWin(mainWin), m_item(item) {}
+public slots:
+	void activate() {
+		m_mainWin->openObject(m_item, Kexi::DesignViewMode);
+		//KexiDialogBase* openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0)
+	}
+};
 
 KexiFormEventHandler::KexiFormEventHandler()
  : m_mainWidget(0)
@@ -52,18 +71,41 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 	QObject *obj;
 	QDict<char> tmpSources;
 	for ( ; (obj = it.current()) != 0; ++it ) {
-		QCString actionName( obj->property("onClickAction").toCString() );
-//! @todo support also other action types!
-		if (QString(actionName).startsWith("kaction:")) {
+		QString actionName = obj->property("onClickAction").toString();
+
+		if (actionName.startsWith("kaction:")) {
 			//this is kaction:
-			actionName = actionName.mid(QCString("kaction:").length()); //cut prefix
-			KAction *action = mainWin->actionCollection()->action( actionName );
+			actionName = actionName.mid(QString("kaction:").length()); //cut prefix
+			KAction *action = (actionName.isEmpty()) ? 0 : mainWin->actionCollection()->action( actionName.latin1() );
 			if (!action) {
 				//! @todo show error?
 				continue;
 			}
 			QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) ); //safety
 			QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
+		}
+		else if (actionName.startsWith("script:")) {
+			//this is kaction:
+			actionName = actionName.mid(QString("script:").length()); //cut prefix
+
+			KexiPart::Part* scriptpart = Kexi::partManager().partForMimeType("kexi/script");
+			KexiProject* project = mainWin->project();
+			if( !scriptpart || !project)
+				continue;
+
+			KexiPart::Info* info = scriptpart->info();
+			KexiPart::ItemDict* itemdict = project->items(info);
+			if(! itemdict)
+				continue;
+
+			for (KexiPart::ItemDictIterator it( *itemdict ); it.current(); ++it) {
+				if(it.current()->name() == actionName) {
+					ScriptAction* action = new ScriptAction(obj, mainWin, it.current());
+					QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
+					QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
+					break;
+				}
+			}
 		}
 	}
 	delete l;

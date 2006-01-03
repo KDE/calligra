@@ -27,18 +27,18 @@
 class KEXIFORMUTILS_EXPORT KexiPushButton : public KPushButton
 {
 	Q_OBJECT
-	Q_PROPERTY(QCString onClickAction READ onClickAction WRITE setOnClickAction DESIGNABLE true)
+	Q_PROPERTY(QString onClickAction READ onClickAction WRITE setOnClickAction DESIGNABLE true)
 
 	public:
 		KexiPushButton( const QString & text, QWidget * parent, const char * name = 0 );
 		~KexiPushButton();
 
 	public slots:
-		QCString onClickAction() const { return m_onClickAction; }
-		void setOnClickAction(const QCString& actionName) { m_onClickAction = actionName; }
+		QString onClickAction() const { return m_onClickAction; }
+		void setOnClickAction(const QString& actionName) { m_onClickAction = actionName; }
 
 	protected:
-		QCString m_onClickAction;
+		QString m_onClickAction;
 };
 
 #endif

@@ -31,19 +31,29 @@ class KEXIFORMUTILS_EXPORT KexiActionSelectionDialog : public KDialogBase
 
 	public:
 		KexiActionSelectionDialog(KexiMainWindow* mainWin, QWidget *parent, 
-			const QCString& currentActionName, const QCString& actionWidgetName);
+			const QString& currentActionName, const QCString& actionWidgetName);
 		~KexiActionSelectionDialog();
 
 		/*! \return selected action name or empty string 
-		 if dialog has been rejected (check it with QDialog::result()) 
-		 or "<no action>" has been selected. */
-		QCString selectedActionName() const;
+		 if dialog has been rejected or "<no action>" has
+		 been selected. */
+		QString currentActionName() const;
+
+		/// \return the \a KexiMainWindow instance.
+		KexiMainWindow* mainWin();
+	
 
 	protected slots:
-		void slotListViewExecuted(QListViewItem *);
+		void slotComboHighlighted(int);
+		void slotOk();
+		void closeDialog();
 
-	protected:
-		KListView* m_listview;
+	private:
+		class KexiActionSelectionDialogPrivate;
+		KexiActionSelectionDialogPrivate* d;
+
+		void setActionView();
+		void setScriptView();
 };
 
 #endif

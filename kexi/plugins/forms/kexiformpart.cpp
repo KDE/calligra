@@ -398,7 +398,7 @@ void KexiFormPart::slotAssignAction()
 	KoProperty::Property &onClickActionProp = KFormDesigner::FormManager::self()->propertySet()->property("onClickAction");
 	if (onClickActionProp.isNull())
 		return;
-	QCString onClickActionValue( onClickActionProp.value().toCString() );
+	QString onClickActionValue( onClickActionProp.value().toString() );
 
 	KexiFormScrollView *scrollViewWidget = dynamic_cast<KexiFormScrollView*>(dbform->dataAwareObject());
 	if (!scrollViewWidget)
@@ -410,9 +410,9 @@ void KexiFormPart::slotAssignAction()
 	KexiMainWindow * mainWin = formViewWidget->parentDialog()->mainWin();
 	KexiActionSelectionDialog dlg(mainWin, dbform, onClickActionValue,
 		KFormDesigner::FormManager::self()->propertySet()->property("name").value().toCString());
-	dlg.exec();
-	onClickActionValue = dlg.selectedActionName();
-	if (QDialog::Accepted==dlg.result()) {
+
+	if(dlg.exec() == QDialog::Accepted) {
+		onClickActionValue = dlg.currentActionName();
 		//update property value
 		(*KFormDesigner::FormManager::self()->propertySet())["onClickAction"].setValue(onClickActionValue);
 	}
