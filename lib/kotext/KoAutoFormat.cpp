@@ -279,8 +279,8 @@ void KoAutoFormat::readConfig(bool force)
     m_bCapitalizeNameOfDays = config->readBoolEntry( "CapitalizeNameOfDays",false );
 
     m_autoDetectUrl = config->readBoolEntry("AutoDetectUrl",false);
-    m_ignoreDoubleSpace = config->readBoolEntry("IgnoreDoubleSpace",false);
-    m_removeSpaceBeginEndLine = config->readBoolEntry("RemoveSpaceBeginEndLine",false);
+    m_ignoreDoubleSpace = config->readBoolEntry("IgnoreDoubleSpace", true);
+    m_removeSpaceBeginEndLine = config->readBoolEntry("RemoveSpaceBeginEndLine", true);
 
     m_useBulletStyle = config->readBoolEntry("UseBulletStyle",false);
     QString tmp = config->readEntry( "BulletStyle", "" );
@@ -288,7 +288,7 @@ void KoAutoFormat::readConfig(bool force)
 
     m_autoChangeFormat = config->readBoolEntry( "AutoChangeFormat", false );
 
-    m_autoReplaceNumber = config->readBoolEntry( "AutoReplaceNumber", false );
+    m_autoReplaceNumber = config->readBoolEntry( "AutoReplaceNumber", true );
 
     m_useAutoNumberStyle = config->readBoolEntry( "AutoNumberStyle", false );
 
@@ -302,7 +302,7 @@ void KoAutoFormat::readConfig(bool force)
     QString end = config->readEntry( "TypographicSimpleQuotesEnd" );
     m_typographicSimpleQuotes.replace = config->readBoolEntry( "TypographicSimpleQuotesEnabled", false );
 
-    m_bAutoSuperScript = config->readBoolEntry( "AutoSuperScript", false );
+    m_bAutoSuperScript = config->readBoolEntry( "AutoSuperScript", true );
 
     config->setGroup( "completion" );
     m_completion = config->readBoolEntry( "completion", false );
