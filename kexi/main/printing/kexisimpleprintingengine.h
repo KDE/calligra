@@ -94,7 +94,7 @@ class KexiSimplePrintingEngine : public QObject
 		int m_maxFieldNameWidth;
 		int m_mainLineSpacing;
 		int m_footerHeight;
-		KexiDB::QueryColumnInfo::Vector m_fieldsExpanded;;
+		KexiDB::QueryColumnInfo::Vector m_fieldsExpanded;
 		bool m_eof;
 		bool m_paintInitialized; //!< used by paintPage()
 		double leftMargin;
