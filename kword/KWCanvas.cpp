@@ -1977,7 +1977,7 @@ KoPoint KWCanvas::caretPos()
 
 
 // ************** InteractionPolicy ***********************
-InteractionPolicy::InteractionPolicy(KWCanvas *parent, bool doInit) {
+InteractionPolicy::InteractionPolicy(KWCanvas *parent, bool doInit, bool includeInlineFrames) {
     m_gotDragEvents = false;
     m_parent = parent;
     if(doInit) {
@@ -1989,7 +1989,7 @@ InteractionPolicy::InteractionPolicy(KWCanvas *parent, bool doInit) {
             if(! fs) continue;
             if(!fs->isVisible()) continue;
             if(fs->isMainFrameset() ) continue;
-            if(fs->isFloating() ) continue;
+            if(fs->isFloating() && !includeInlineFrames) continue;
             if(fs->isProtectSize() ) continue;
             if(fs->type() == FT_TABLE ) continue;
             if(fs->type() == FT_TEXT && fs->frameSetInfo() != KWFrameSet::FI_BODY ) continue;
@@ -2059,7 +2059,7 @@ void InteractionPolicy::cancelInteraction() {
 
 // ************** FrameResizePolicy ***********************
 FrameResizePolicy::FrameResizePolicy(KWCanvas *parent, MouseMeaning meaning, KoPoint &point) :
-    InteractionPolicy (parent), m_boundingRect() {
+    InteractionPolicy (parent, true, true), m_boundingRect() {
 
     if( meaning == MEANING_TOPLEFT) {
         m_top = true; m_bottom = false; m_left = true; m_right = false;
@@ -2102,6 +2102,8 @@ void FrameResizePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint 
     //          << "  boundingrect: " << m_boundingRect << endl;
 
     bool keepAspect = keyState & Qt::AltButton;
+    if(m_frames.count() == 1 && m_frames[0]->frameSet()->type() == FT_PICTURE)
+        keepAspect = !keepAspect;
     bool noGrid = keyState & Qt::ShiftButton;
     bool scaleFromCenter = keyState & Qt::ControlButton;
 
@@ -2150,7 +2152,8 @@ void FrameResizePolicy::handleMouseMove(Qt::ButtonState keyState, const KoPoint 
         }
         void update(KWFrame *frame, KoRect &orig) {
             QRect oldRect( m_viewMode->normalToView( frame->outerRect(m_viewMode) ) );
-            frame->moveTopLeft( convert( orig.topLeft() ) );
+            if(! frame->frameSet()->isFloating())
+                frame->moveTopLeft( convert( orig.topLeft() ) );
             KoPoint bottomRight( convert( orig.bottomRight() ) );
             frame->setBottom( bottomRight.y() );
             frame->setRight( bottomRight.x() );

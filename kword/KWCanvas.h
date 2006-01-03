@@ -395,8 +395,9 @@ class InteractionPolicy {
          * Constructor.
          * @param parent the parent canvas.
          * @param doInit if true this will initialize the m_frames and m_indexFrame variables.
+         * @param includeInlineFrames if true the m_frames will include inline frames
          */
-        InteractionPolicy(KWCanvas *parent, bool doInit = true);
+        InteractionPolicy(KWCanvas *parent, bool doInit = true, bool includeInlineFrames = false);
 
         QValueList<FrameIndex> m_indexFrame;
         KWCanvas *m_parent;
