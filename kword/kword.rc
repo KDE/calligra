@@ -1,4 +1,4 @@
-<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="102">
+<!DOCTYPE kpartgui SYSTEM "kpartgui.dtd" ><kpartgui name="KWord" version="103">
 <MenuBar>
  <Menu name="file"><text>&amp;File</text>
   <Action name="extra_template"/>
@@ -237,10 +237,13 @@
   <Action name="format_decreaseindent"/>
   <Action name="format_increaseindent"/>
 </ToolBar>
-<ToolBar name="format_toolbar" position="top"><Text>Format</Text>
+<ToolBar hidden="true" name="format_toolbar" position="top"><Text>Font</Text>
   <Action name="format_fontfamily"/>
-  <Separator/>
   <Action name="format_fontsize"/>
+  <Separator/>
+  <Action name="format_color"/>
+</ToolBar>
+<ToolBar name="charformat_toolbar" position="top"><Text>Format</Text>
   <Separator/>
   <Action name="format_bold"/>
   <Action name="format_italic"/>
@@ -249,8 +252,6 @@
   <Separator/>
   <Action name="format_super"/>
   <Action name="format_sub"/>
-  <Separator/>
-  <Action name="format_color"/>
 </ToolBar>
 <ToolBar hidden="true" name="border_toolbar" position="top"><Text>Borders</Text>
   <Action name="frame_style"/>
@@ -509,4 +510,3 @@
   <Action name="docstruct_properties"/>
 </Menu>
 </kpartgui>
-
