@@ -26,10 +26,12 @@
 #include <qvaluelist.h>
 
 #include <kcommand.h>
+#include <klocale.h>
 
 #include <koffice_export.h>
 
 #include "kspread_format.h"
+#include "kspread_undo.h"
 #include "region.h"
 
 namespace KSpread
