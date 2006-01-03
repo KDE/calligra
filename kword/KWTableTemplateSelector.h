@@ -98,7 +98,7 @@ class KWTableTemplateSelector : public QWidget
     Q_OBJECT
 
 public:
-    enum FormatType { firstRow = 1 , firstColumn = 2, lastRow = 4, lastCol =8, body =16 };
+    enum FormatType { FirstRow = 1 , FirstColumn = 2, LastRow = 4, LastCol =8, Body =16 };
     KWTableTemplateSelector( KWDocument *_doc, QWidget * _parent, const QString & _tableTemplate, int _type = 31 , const char * _name = 0 );
 
     KWTableTemplate *getTableTemplate()const ;
@@ -115,7 +115,7 @@ protected:
     QCheckBox *cbFirstRow, *cbFirstCol, *cbLastRow, *cbLastCol, *cbBody;
 
     int selectedTableTemplate;
-    void initFormat( int _format);
+    void initFormat( int format);
     void initPreview();
 protected slots:
     void changeTableTemplate();

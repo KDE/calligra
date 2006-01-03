@@ -605,7 +605,6 @@ KWTableTemplateSelector::KWTableTemplateSelector( KWDocument *_doc, QWidget *_pa
       lbTemplates->setSelected( index, true );
     }
     initFormat( _type );
-
 }
 
 void KWTableTemplateSelector::changeTableTemplate()
@@ -620,21 +619,21 @@ KWTableTemplate* KWTableTemplateSelector::getTableTemplate() const
   return (selectedTableTemplate) ? preview->getTableTemplate() : 0L;
 }
 
-void KWTableTemplateSelector::initFormat( int _format)
+void KWTableTemplateSelector::initFormat( int format)
 {
-    if ( _format & firstRow)
+    if ( format & FirstRow)
         cbFirstRow->setChecked( true );
 
-    if ( _format & firstColumn)
+    if ( format & FirstColumn)
         cbFirstCol->setChecked( true );
 
-    if ( _format & lastRow)
+    if ( format & LastRow)
         cbLastRow->setChecked( true );
 
-    if ( _format & lastCol)
+    if ( format & LastCol)
         cbLastCol->setChecked( true );
 
-    if ( _format & body)
+    if ( format & Body)
         cbBody->setChecked( true );
     initPreview();
 }
@@ -656,25 +655,25 @@ int KWTableTemplateSelector::getFormatType() const
     int type = 0;
     if ( cbFirstRow->isChecked())
     {
-        type = type | firstRow;
+        type = type | FirstRow;
     }
     if ( cbFirstCol->isChecked())
     {
-        type = type |firstColumn;
+        type = type |FirstColumn;
 
     }
     if ( cbLastRow->isChecked())
     {
-        type = type | lastRow;
+        type = type | LastRow;
 
     }
     if ( cbLastCol->isChecked())
     {
-        type = type | lastCol;
+        type = type | LastCol;
     }
     if ( cbBody->isChecked())
     {
-        type = type | body;
+        type = type | Body;
     }
     return type;
 }
