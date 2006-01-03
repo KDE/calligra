@@ -463,7 +463,6 @@ VPolylineTool::cancelStep()
 void
 VPolylineTool::accept()
 {
-	deactivate();
 	activate();
 }
 
