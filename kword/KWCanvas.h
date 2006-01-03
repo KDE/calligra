@@ -449,7 +449,7 @@ class FrameMovePolicy : public InteractionPolicy {
  */
 class FrameSelectPolicy : public InteractionPolicy {
     public:
-        FrameSelectPolicy(KWCanvas *parent, KoPoint &point, Qt::ButtonState state, Qt::ButtonState keyState);
+        FrameSelectPolicy(KWCanvas *parent, MouseMeaning meaning, KoPoint &point, Qt::ButtonState state, Qt::ButtonState keyState);
         void handleMouseMove(Qt::ButtonState keyState, const KoPoint &point);
         KCommand *createCommand();
         void finishInteraction();

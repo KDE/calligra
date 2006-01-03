@@ -513,20 +513,7 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             }
             break;
         }
-        case MEANING_TOPLEFT:
-        case MEANING_TOP:
-        case MEANING_TOPRIGHT:
-        case MEANING_RIGHT:
-        case MEANING_BOTTOMRIGHT:
-        case MEANING_BOTTOM:
-        case MEANING_BOTTOMLEFT:
-        case MEANING_LEFT:
-        case MEANING_MOUSE_MOVE:
-        case MEANING_SELECT_ROW:
-        case MEANING_SELECT_RANGE:
-        case MEANING_SELECT_COLUMN:
-        case MEANING_FORBIDDEN:
-        case MEANING_MOUSE_SELECT:
+        default:
             m_mousePressed = true;
             m_deleteMovingRect = false;
 
@@ -535,9 +522,6 @@ void KWCanvas::contentsMousePressEvent( QMouseEvent *e )
             if(m_interactionPolicy)
                 terminateCurrentEdit();
             viewport()->setCursor( m_frameViewManager->mouseCursor( docPoint, e->state() ) );
-            break;
-        case MEANING_NONE:
-            break;
         }
         m_scrollTimer->start( 50 );
     }
@@ -2055,7 +2039,7 @@ InteractionPolicy* InteractionPolicy::createPolicy(KWCanvas *parent, MouseMeanin
                 selector.doSelect();
                 return new FrameResizePolicy(parent, meaning, point);
             default:
-                FrameSelectPolicy *fsp = new FrameSelectPolicy(parent, point, buttonState, keyState);
+                FrameSelectPolicy *fsp = new FrameSelectPolicy(parent, meaning, point, buttonState, keyState);
                 if(fsp->isValid())
                     return fsp;
                 delete fsp;
@@ -2362,7 +2346,7 @@ void FrameMovePolicy::finishInteraction() {
 
 
 // ************** FrameSelectPolicy ***********************
-FrameSelectPolicy::FrameSelectPolicy(KWCanvas *parent, KoPoint &point, Qt::ButtonState buttonState, Qt::ButtonState keyState)
+FrameSelectPolicy::FrameSelectPolicy(KWCanvas *parent, MouseMeaning meaning, KoPoint &point, Qt::ButtonState buttonState, Qt::ButtonState keyState)
     : InteractionPolicy(parent, false) {
 
     bool leftButton = buttonState & Qt::LeftButton;
@@ -2394,7 +2378,7 @@ FrameSelectPolicy::FrameSelectPolicy(KWCanvas *parent, KoPoint &point, Qt::Butto
         }
     }
 
-    m_validSelection = true;
+    m_validSelection = meaning != MEANING_NONE;
     m_parent->frameViewManager()->selectFrames(point, keyState, leftButton );
 }
 

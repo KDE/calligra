@@ -403,9 +403,7 @@ void KWFrameViewManager::selectFrames(const KoPoint &point, int keyState, bool l
         se = nextUnselected;
     KWFrameView *toBeSelected = view(point, se, !multiSelect);
     //kdDebug() << "KWFrameViewManager::selectFrames" << point << " got: " << toBeSelected << endl;
-    if(toBeSelected == 0)
-        return;
-    if(!multiSelect || keyState & Qt::ShiftButton &&
+    if(toBeSelected == 0 || !multiSelect || keyState & Qt::ShiftButton &&
         !(leftClick && (mm == MEANING_TOPLEFT || mm == MEANING_TOPRIGHT || mm == MEANING_TOP ||
         mm == MEANING_LEFT || mm == MEANING_RIGHT || mm == MEANING_MOUSE_MOVE ||
         mm == MEANING_BOTTOMLEFT || mm == MEANING_BOTTOM || mm == MEANING_BOTTOMRIGHT))) {
@@ -415,6 +413,8 @@ void KWFrameViewManager::selectFrames(const KoPoint &point, int keyState, bool l
             (*frames)->setSelected(false);
         }
     }
+    if(toBeSelected == 0)
+        return;
     toBeSelected->setSelected(true, mm);
     slotFrameSelectionChanged();
 }
