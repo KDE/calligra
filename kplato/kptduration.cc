@@ -166,17 +166,7 @@ QString Duration::toString(Format format) const {
 }
 
 Duration::Duration Duration::fromString(const QString &s, Format format, bool *ok) {
-    // FIXME: Older versions of this code saved durations as QDateTime's. To avoid
-    // making all test files instantly obsolete, we detect this case here. Before
-    // we ship, this should be removed!
     if (ok) *ok = false;
-    if (s[1].isLetter())
-    {
-        QDateTime zero(QDate(0, 1, 1));
-        int seconds = zero.secsTo(QDateTime::fromString(s));
-        if (ok) *ok = true;
-        return Duration(seconds);
-    }
     QRegExp matcher;
     Duration tmp;
     switch (format) {
