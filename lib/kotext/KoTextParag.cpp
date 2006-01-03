@@ -2836,7 +2836,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
     }
 
 
-    QString autoParagStyleName = mainStyles.lookup( autoStyle, "P", true );
+    QString autoParagStyleName = mainStyles.lookup( autoStyle, "P", KoGenStyles::ForceNumbering );
 
     KoParagCounter* paragCounter = m_layout.counter;
     // outline (text:h) assumes paragCounter != 0 (because depth is mandatory)
@@ -2852,7 +2852,7 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         KoGenStyle listStyle( KoGenStyle::STYLE_AUTO_LIST /*, no family*/ );
         paragCounter->saveOasis( listStyle );
 
-        QString autoListStyleName = mainStyles.lookup( listStyle, "L", true );
+        QString autoListStyleName = mainStyles.lookup( listStyle, "L", KoGenStyles::ForceNumbering );
         writer.addAttribute( "text:style-name", autoListStyleName );
 
         QString textNumber = m_layout.counter->text( this );

@@ -63,6 +63,27 @@ public:
     ~KoGenStyles();
 
     /**
+     * Those are flags for the lookup() call.
+     *
+     * By default, the generated style names will look like "name1", "name2".
+     * If DontForceNumbering is set, the first name that will be tried is "name", and only if
+     * that one exists, then "name1" is tried. Set DontForceNumbering if the name given as
+     * argument is supposed to be the full style name.
+     *
+     * AutoStyleInStylesDotXml marks a given automatic style as being needed in styles.xml.
+     * For instance styles used by headers and footers need to go there, since
+     * they are saved in styles.xml, and styles.xml must be independent from content.xml.
+     *
+     */
+    enum Flags { // bitfield
+        NoFlag = 0,
+        ForceNumbering = 0, // it's the default anyway
+        DontForceNumbering = 1,
+        AutoStyleInStylesDotXml = 2
+    };
+    // KDE4 TODO: use QFlags and change the arg type in lookup
+
+    /**
      * Look up a style in the collection, inserting it if necessary.
      * This assigns a name to the style and returns it.
      *
@@ -73,14 +94,12 @@ public:
      * But this attribute can be used for clarity of the files.
      * If this name is already in use (for another style), then a number is appended
      * to it until unique.
-     * @param forceNumbering if true, the generated style names will look like "name1", "name2".
-     * If false, the first name that will be tried is "name". Set it to false if @p name
-     * is supposed to be the full style name.
+     * @param flags see Flags
      *
      * @return the name for this style
      * @todo ### rename lookup to insert
      */
-    QString lookup( const KoGenStyle& style, const QString& name = QString::null, bool forceNumbering = true );
+    QString lookup( const KoGenStyle& style, const QString& name = QString::null, int flags = NoFlag );
 
     typedef QMap<KoGenStyle, QString> StyleMap;
     /**
@@ -100,7 +119,7 @@ public:
      * @param type the style type, see the KoGenStyle constructor
      * @param markedForStylesXml if true, return only style marked for styles.xml,
      * otherwise only those NOT marked for styles.xml.
-     * @see markStyleForStylesXml
+     * @see lookup
      */
     QValueList<NamedStyle> styles( int type, bool markedForStylesXml = false ) const;
 
@@ -123,28 +142,28 @@ public:
      * For instance styles used by headers and footers need to go there, since
      * they are saved in styles.xml, and styles.xml must be independent from content.xml.
      *
-     * This isn't a KoGenStyle property since it doesn't make the style any different,
-     * it's only the file in which it gets saved which differs; it's still usable
-     * from content.xml of course.
+     * Equivalent to using lookup(... AutoStyleInStylesDotXml) but this can be done afterwards.
+     *
      * This operation can't be undone; once styles are promoted they can't go back
      * to being content.xml-only.
      *
-     * @see styles
+     * @see styles, lookup
      */
     void markStyleForStylesXml( const QString& name );
 
+
 private:
-    QString makeUniqueName( const QString& base, bool forceNumbering ) const;
+    QString makeUniqueName( const QString& base, int flags ) const;
 
     /// style definition -> name
     StyleMap m_styleMap;
 
     /// Map with the style name as key.
     /// This map is mainly used to check for name uniqueness
-    /// (in which case the value of the bool doesn't matter)
-    /// It's also used to flag automatic styles that are needed in styles.xml
-    typedef QMap<QString, bool> NameMap;
+    /// The value of the bool doesn't matter.
+    typedef QMap<QString, bool> NameMap; // KDE4: QSet
     NameMap m_styleNames;
+    NameMap m_autoStylesInStylesDotXml;
 
     /// List of styles (used to preserve ordering)
     typedef QValueVector<NamedStyle> StyleArray;

@@ -209,7 +209,7 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
             listStyle.addAttribute( "style:display-name",
                                     i18n( "Numbering Style for %1" ).arg( m_displayName ) );
 
-            QString autoListStyleName = genStyles.lookup( listStyle, "L", true );
+            QString autoListStyleName = genStyles.lookup( listStyle, "L", KoGenStyles::ForceNumbering );
             gs.addAttribute( "style:list-style-name", autoListStyleName );
         }
     }
@@ -223,9 +223,9 @@ QString KoParagStyle::saveStyle( KoGenStyles& genStyles, int styleType, const QS
     bool nameIsConform = !m_name.isEmpty() && m_name.find( ' ' ) == -1;
     QString newName;
     if ( nameIsConform )
-        newName = genStyles.lookup( gs, m_name, false );
+        newName = genStyles.lookup( gs, m_name, KoGenStyles::DontForceNumbering );
     else
-        newName = genStyles.lookup( gs, "U", true );
+        newName = genStyles.lookup( gs, "U", KoGenStyles::ForceNumbering );
     const_cast<KoParagStyle*>( this )->m_name = newName;
     return m_name;
 }

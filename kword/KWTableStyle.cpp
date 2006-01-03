@@ -182,9 +182,9 @@ void KWTableStyle::saveOasis( KoGenStyles& mainStyles, KoSavingContext& /*saving
     const bool nameIsConform = !m_name.isEmpty() && m_name.find( ' ' ) == -1;
     QString newName;
     if ( nameIsConform )
-        newName = mainStyles.lookup( tableCellStyle, m_name, false );
+        newName = mainStyles.lookup( tableCellStyle, m_name, KoGenStyle::DontForceNumbering );
     else
-        newName = mainStyles.lookup( tableCellStyle, "tc", true /*force numbering*/ );
+        newName = mainStyles.lookup( tableCellStyle, "tc" );
     const_cast<KWTableStyle*>( this )->m_name = newName;
 }
 

@@ -76,7 +76,7 @@ int main( int, char** ) {
     KoGenStyle user( KoGenStyle::STYLE_USER ); // differs from third since it doesn't inherit second, and has a different type
     user.addProperty( "style:margin-left", "1.249cm" );
 
-    QString userStyleName = coll.lookup( user, "User", false );
+    QString userStyleName = coll.lookup( user, "User", KoGenStyles::DontForceNumbering );
     kdDebug() << "The user style got assigned the name " << userStyleName << endl;
     assert( userStyleName == "User" );
 
@@ -90,6 +90,7 @@ int main( int, char** ) {
     kdDebug() << "The 'same as parent' style got assigned the name " << sapName << endl;
 
     assert( sapName == secondName );
+    assert( coll.styles().count() == 3 );
 
     // OK, now add a style marked as for styles.xml
     KoGenStyle headerStyle( KoGenStyle::STYLE_AUTO, "paragraph" );
@@ -97,8 +98,7 @@ int main( int, char** ) {
     headerStyle.addProperty( "style:page-number", "0" );
     headerStyle.addStyleMap( map1 );
     headerStyle.addStyleMap( map2 );
-    QString headerStyleName = coll.lookup( headerStyle, "hs" );
-    coll.markStyleForStylesXml( headerStyleName );
+    QString headerStyleName = coll.lookup( headerStyle, "foobar", KoGenStyles::AutoStyleInStylesDotXml );
 
     assert( coll.styles().count() == 4 );
     assert( coll.styles( KoGenStyle::STYLE_AUTO ).count() == 2 );
