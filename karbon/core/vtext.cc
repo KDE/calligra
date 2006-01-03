@@ -74,7 +74,7 @@ int traceLineto( FT_Vector *to, VPath *composite )
 	composite->lineTo( KoPoint( tox, toy ) );
 
 	return 0;
-};
+}
 
 int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VPath *composite )
 {
@@ -89,7 +89,7 @@ int traceQuadraticBezier( FT_Vector *control, FT_Vector *to, VPath *composite )
 	//composite->curve2To( KoPoint( x1, y1 ), KoPoint( x2, y2 ) );
 
 	return 0;
-};
+}
 
 int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VPath *composite )
 {
@@ -106,7 +106,7 @@ int traceCubicBezier( FT_Vector *p, FT_Vector *q, FT_Vector *to, VPath *composit
 	composite->curveTo( KoPoint( x1, y1 ), KoPoint( x2, y2 ), KoPoint( x3, y3 ) );
 
 	return 0;
-};
+}
 
 FT_Outline_Funcs OutlineMethods =
 {
