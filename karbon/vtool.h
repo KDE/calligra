@@ -137,6 +137,11 @@ public:
 
 	KRadioAction *action() const { return m_action; }
 
+	/**
+	 * Draws the actual tool state.
+	 */
+	virtual void draw( VPainter* painter ) {}
+
 public slots:
 	/**
 	 * Called during the tool activation. A tool is supposed to set a mouse cursor and/or

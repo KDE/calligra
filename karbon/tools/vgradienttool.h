@@ -24,6 +24,7 @@
 
 #include "vtool.h"
 #include "vgradient.h"
+#include "KoRect.h"
 
 class VGradientTabWidget;
 
@@ -42,16 +43,20 @@ public:
 	virtual QString contextHelp();
 	virtual bool showDialog() const;
 
+	virtual void draw( VPainter* painter );
 protected:
-	virtual void draw();
 
+	virtual void draw();
 	virtual void mouseButtonRelease();
 	virtual void mouseButtonPress();
 	virtual void mouseDragRelease();
 	virtual void mouseDrag();
-	void cancel();
+	virtual void cancel();
+	virtual void setCursor() const;
 
 private:
+	enum { normal, moveStart, moveEnd, createNew } m_state;
+
 	class VGradientOptionsWidget : public KDialogBase
 	{
 	public:
@@ -62,7 +67,10 @@ private:
 	};
 	VGradient            m_gradient;
 	KoPoint              m_current;
+	KoPoint              m_fixed;
 	VGradientOptionsWidget*  m_optionsWidget;
+	KoRect               m_start; /**< the handle of the gradient origin */
+	KoRect               m_end;   /**< the handle of the gradient vector */
 };
 
 #endif

@@ -45,7 +45,7 @@ VGradientTool::VGradientOptionsWidget::VGradientOptionsWidget( VGradient *gradie
 }
 
 VGradientTool::VGradientTool( KarbonView *view )
-	: VTool( view, "gradienttool" )
+	: VTool( view, "gradienttool" ), m_state( normal )
 {
 	setName( "tool_gradient" );
 	m_optionsWidget = new VGradientOptionsWidget( &m_gradient );
@@ -63,6 +63,7 @@ VGradientTool::activate()
 	view()->statusMessage()->setText( i18n( "Gradient" ) );
 	view()->setCursor( QCursor( Qt::crossCursor ) );
 	VTool::activate();
+	draw( view()->painterFactory()->editpainter() );
 }
 
 QString
@@ -83,6 +84,40 @@ VGradientTool::contextHelp()
 	return s;
 }
 
+void 
+VGradientTool::draw( VPainter* painter )
+{
+	VSelection* selection = view()->part()->document().selection();
+	if( selection->objects().count() != 1 ) return;
+	
+	VObject *obj = selection->objects().getFirst();
+	// TODO find a way to determine if the fill or stroke is to be edited
+	if( obj->fill()->type() == VFill::grad )
+		m_gradient = obj->fill()->gradient();
+	else
+		return;
+
+	KoPoint s = m_gradient.origin();
+	KoPoint e = m_gradient.vector();
+
+	double handleSize = 3.0;
+	double zoom = view()->zoom();
+
+	// save the handle rects for later inside testing
+	m_start = KoRect( s.x()-handleSize, s.y()-handleSize, 2*handleSize, 2*handleSize );
+	m_end = KoRect( e.x()-handleSize, e.y()-handleSize, 2*handleSize, 2*handleSize );
+
+	// draw the gradient vector
+	painter->newPath();
+	painter->moveTo( s );
+	painter->lineTo( e );
+	painter->strokePath();
+
+	// draw the handle rects
+	painter->drawRect( KoRect( m_start.x()*zoom, m_start.y()*zoom, m_start.width(), m_start.height() ) );
+	painter->drawRect( KoRect( m_end.x()*zoom, m_end.y()*zoom, m_end.width(), m_end.height() ) );
+}
+
 void
 VGradientTool::draw()
 {
@@ -91,14 +126,28 @@ VGradientTool::draw()
 
 	painter->setPen( Qt::DotLine );
 	painter->newPath();
-	painter->moveTo( first() );
-	painter->lineTo( m_current );
+	
+	// differentiate between moving a handle and creating a complete new vector
+	if( m_state == moveStart || m_state == moveEnd )
+	{
+		painter->moveTo( m_fixed );
+		painter->lineTo( m_current );
+	}
+	else if( m_state == createNew )
+	{
+		painter->moveTo( first() );
+		painter->lineTo( m_current );
+	}
+
 	painter->strokePath();
 }
 
 void
 VGradientTool::mouseDrag()
 {
+	if( m_state == normal ) 
+		return;
+
 	// undo old line
 	draw();
 
@@ -111,22 +160,48 @@ void
 VGradientTool::mouseButtonPress()
 {
 	m_current = first();
+	// set the apropriate editing state
+	if( m_start.contains( m_current ) )
+	{
+		m_state = moveStart;
+		m_fixed = m_end.center();
+	}
+	else if( m_end.contains( m_current ) )
+	{
+		m_state = moveEnd;
+		m_fixed = m_start.center();
+	}
+	else 
+		m_state = createNew;
 }
 
 void
 VGradientTool::mouseButtonRelease()
 {
-	if( view()->part()->document().selection()->objects().count() == 0 ) return;
+	if( ! view() || view()->part()->document().selection()->objects().count() == 0 ) 
+		return;
+
+	// save old gradient position
+	VGradient oldGradient = m_gradient;
+
 	if( first() == last() )
 	{
-		showDialog();
-		return;
+		if( showDialog() != QDialog::Accepted )
+			return;
 	}
+
+	// use the old gradient position
+	m_gradient.setVector( oldGradient.vector() );
+	m_gradient.setOrigin( oldGradient.origin() );
+	m_gradient.setFocalPoint( oldGradient.focalPoint() );
+
+	/*
 	m_gradient.setOrigin( first() );
 	KoPoint p = last();
 	if( first().x() == last().x() && first().y() == last().y() ) // workaround for a libart 2.3.10 bug
 		p.setX( first().x() + 1 );
 	m_gradient.setVector( p );
+	*/
 
 	if( m_optionsWidget->gradientWidget()->target() == VGradientTabWidget::FILL )
 	{
@@ -149,19 +224,33 @@ VGradientTool::mouseButtonRelease()
 void
 VGradientTool::mouseDragRelease()
 {
+	if( ! view() || m_state == normal ) 
+		return;
+
 	if( view()->part()->document().selection()->objects().count() == 0 )
 	{
 		draw();
 		return;
 	}
-	// Y mirroring
-	KoPoint fp = first();
-	//fp.setY( -fp.y() + view()->canvasWidget()->viewport()->height() );
-	KoPoint lp = last();
-	//lp.setY( -lp.y() + view()->canvasWidget()->viewport()->height() );
-	m_gradient.setOrigin( fp );
-	m_gradient.setFocalPoint( fp );
-	m_gradient.setVector( lp );
+
+	if( m_state == moveStart )
+	{
+		m_gradient.setOrigin( last() );
+		m_gradient.setFocalPoint( last() );
+		m_gradient.setVector( m_fixed );
+	}
+	else if( m_state == moveEnd )
+	{
+		m_gradient.setOrigin( m_fixed );
+		m_gradient.setFocalPoint( m_fixed );
+		m_gradient.setVector( last() );
+	}
+	else if( m_state == createNew )
+	{
+		m_gradient.setOrigin( first() );
+		m_gradient.setFocalPoint( first() );
+		m_gradient.setVector( last() );
+	}
 
 	if( m_optionsWidget->gradientWidget()->target() == VGradientTabWidget::FILL )
 	{
@@ -207,3 +296,14 @@ VGradientTool::setup( KActionCollection *collection )
 	}
 }
 
+void
+VGradientTool::setCursor() const
+{
+	if( !view() ) return;
+
+	// set a different cursor if mouse is inside the handle rects
+	if( m_start.contains( last() ) || m_end.contains( last() ) )
+		view()->setCursor( QCursor( Qt::SizeAllCursor ) );
+	else
+		view()->setCursor( QCursor( Qt::arrowCursor ) );
+}

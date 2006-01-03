@@ -30,6 +30,8 @@
 #include "vqpainter.h"
 #include "vpainterfactory.h"
 #include "vselection.h"
+#include "vtoolcontroller.h"
+#include "vtool.h"
 
 #include <kdebug.h>
 #include <klocale.h>
@@ -262,6 +264,9 @@ VCanvas::viewportPaintEvent( QPaintEvent *e )
 	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
 
+	if( m_view->toolController()->currentTool() )
+		m_view->toolController()->currentTool()->draw( &qpainter );
+
 	bitBlt( viewport(), QPoint( int( rect.x() ), int( rect.y() ) ), p->device(), rect.toQRect() );
 	viewport()->setUpdatesEnabled( true );
 	//bitBlt( this, QPoint( rect.x(), rect.y() - pageOffsetY() ), p->device(), rect );
@@ -327,6 +332,9 @@ VCanvas::drawDocument( QPainter* /*painter*/, const KoRect&, bool drawVObjects )
 	setYMirroring( &qpainter );
 	qpainter.setZoomFactor( m_view->zoom() );
 	m_part->document().selection()->draw( &qpainter, m_view->zoom() );
+
+	if( m_view->toolController()->currentTool() )
+		m_view->toolController()->currentTool()->draw( &qpainter );
 
 	bitBlt( viewport(), 0, 0, p->device(), 0, 0, width(), height() );
 }
