@@ -74,7 +74,7 @@
         </widget>
         <widget class="QGroupBox">
             <property name="name">
-                <cstring>groupBox3</cstring>
+                <cstring>resourceGroupBox</cstring>
             </property>
             <property name="sizePolicy">
                 <sizepolicy>

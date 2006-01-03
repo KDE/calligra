@@ -30,6 +30,7 @@
 #include <kabc/addressee.h>
 #include <kabc/addresseedialog.h>
 
+#include <qgroupbox.h>
 #include <qheader.h>
 #include <qlistbox.h>
 #include <qlineedit.h>
@@ -470,21 +471,19 @@ KCommand *ResourcesPanel::buildCommand(Part *part) {
 }
 
 void ResourcesPanel::slotGroupChanged() {
-    QListViewItem *item = listOfGroups->selectedItem();
-    if (item) {
-        slotGroupChanged(item);
-    } else {
-        listOfResources->clear();
-        bAdd->setEnabled(true);
-        bRemove->setEnabled(false);
-    }
+    slotGroupChanged(listOfGroups->selectedItem());
 }
 
 void ResourcesPanel::slotGroupChanged(QListViewItem *itm) {
     ResourcesPanelGroupLVItem *item = static_cast<ResourcesPanelGroupLVItem*>(itm);
-    if (!item)
+    if (!item) {
+        bAdd->setEnabled(true);
+        bRemove->setEnabled(false);
+        listOfResources->clear();
+        resourceName->clear();
+        resourceGroupBox->setEnabled(false);
         return;
-
+    }
     m_blockResourceRename = true;
     resourceName->clear();
     resourceName->setEnabled(false);
@@ -500,6 +499,8 @@ void ResourcesPanel::slotGroupChanged(QListViewItem *itm) {
     }
     bAdd->setEnabled(true);
     bRemove->setEnabled(true);
+    slotResourceChanged(0);
+    resourceGroupBox->setEnabled(true);
 }
 
 void ResourcesPanel::slotListDoubleClicked(QListViewItem* item, const QPoint&, int col) {
