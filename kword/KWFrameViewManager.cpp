@@ -33,6 +33,7 @@
 #include <algorithm>
 
 KWFrameViewManager::KWFrameViewManager() : QObject() {
+    setName("KWFrameViewManager");
     m_queueRequested = false;
     m_blockEvents = false;
 }
@@ -83,8 +84,9 @@ void KWFrameViewManager::slotFrameSetAdded(KWFrameSet *fs) {
 void KWFrameViewManager::slotFrameSetRemoved(KWFrameSet *fs) {
     if(! m_blockEvents)
         m_frameEvents.append(new FrameEvent(FrameEvent::FrameSetRemoved, fs));
-    disconnect(fs, SLOT( sigFrameAdded(KWFrame*)), this, SIGNAL( slotFrameAdded(KWFrame *)));
-    disconnect(fs, SLOT( sigFrameRemoved(KWFrame*)), this, SIGNAL( slotFrameRemoved(KWFrame *)));
+    disconnect(fs, SIGNAL( sigFrameAdded(KWFrame*)), this, SLOT( slotFrameAdded(KWFrame *)));
+    disconnect(fs, SIGNAL( sigFrameRemoved(KWFrame*)), this, SLOT( slotFrameRemoved(KWFrame *)));
+    disconnect(fs, SIGNAL( sigNameChanged(KWFrameSet*)), this, SLOT( slotFrameSetRenamed(KWFrameSet *)));
     QPtrListIterator<KWFrame> frames = fs->frameIterator();
     while(frames.current()) {
         KWFrame *f = frames.current();
