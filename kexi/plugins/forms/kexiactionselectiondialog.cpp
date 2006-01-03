@@ -128,7 +128,13 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	QComboBox* combobox = new QComboBox(box);
 	combobox->insertItem( i18n("No Action") );
 	combobox->insertItem( i18n("Actions") );
-	combobox->insertItem( i18n("Scripts") );
+	
+	// We use the scriptpart to determinate if the Kexi ScriptPart-plugin is
+	// installed and if we like to show it in our list of actions.
+	KexiPart::Part* scriptpart = Kexi::partManager().partForMimeType("kexi/script");
+	if(scriptpart) {
+		combobox->insertItem( i18n("Scripts") );
+	}
 	
 	d->mainbox = new QVBox(box);
 	box->setStretchFactor(d->mainbox, 1);
@@ -136,8 +142,10 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	resize(400, 500);
 
 	if (d->currentActionName.startsWith("script:")) {
-		combobox->setCurrentItem(2);
-		slotComboHighlighted(2);
+		if(scriptpart) {
+			combobox->setCurrentItem(2);
+			slotComboHighlighted(2);
+		}
 		
 	}
 	else if (d->currentActionName.startsWith("kaction:")) {
