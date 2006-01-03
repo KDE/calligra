@@ -947,7 +947,7 @@ public:
                             int _xshift, int _yshift,bool insert,int insertTo);
 
     /**
-    *  Used when you insert and paste cell
+    * Used when you insert and paste cell
     * return true if it's a area
     * false if it's a column/row
     * it's used to select if you want to insert at the bottom or right

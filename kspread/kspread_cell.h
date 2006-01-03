@@ -324,13 +324,11 @@ public:
     void paintCell( const KoRect & rect, QPainter & painter,
                     View * view, const KoPoint & coordinate,
                     const QPoint & cellRef,
-        int paintBorder,
-        
-                    QPen & rightPen,
+		    int paintBorder,
+		    QPen & rightPen,
                     QPen & bottomPen,
                     QPen & leftPen,
                     QPen & topPen,
-        
                     bool drawCursor = true );
    
 
@@ -842,7 +840,6 @@ public:
    * CellTooShortY
    * When it's True when mouseover it, the tooltip displays the full value
    * it's true when text size is bigger that cell height
-
    */
 
 protected:
