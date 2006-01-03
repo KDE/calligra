@@ -63,7 +63,7 @@ KexiQueryPart::createTempData(KexiDialogBase* dialog)
 }
 
 KexiViewBase*
-KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode)
+KexiQueryPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item &item, int viewMode, QMap<QString,QString>*)
 {
 	Q_UNUSED( item );
 

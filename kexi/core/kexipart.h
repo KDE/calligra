@@ -124,7 +124,7 @@ class KEXICORE_EXPORT Part : public QObject
 		/*! Creates a new view for mode \a viewMode, \a item and \a parent. The view will be 
 		 used inside \a dialog. */
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode) = 0;
+			KexiPart::Item &item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0) = 0;
 
 		/*! i18n'd instance name usable for displaying in gui as object's name.
 		 The name is valid identifier - contains latin1 lowercase characters only.

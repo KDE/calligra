@@ -323,7 +323,7 @@ tristate KexiDialogBase::switchToViewMode( int newViewMode, QMap<QString,QString
 		if (staticPart)
 			newView = staticPart->createView(m_stack, this, *m_item, newViewMode, staticObjectArgs);
 		else
-			newView = m_part->createView(m_stack, this, *m_item, newViewMode);
+			newView = m_part->createView(m_stack, this, *m_item, newViewMode, staticObjectArgs);
 		KexiUtils::removeWaitCursor();
 		if (!newView) {
 			//js TODO error?

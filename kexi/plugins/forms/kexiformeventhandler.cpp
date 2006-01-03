@@ -30,6 +30,7 @@
 #include <tableview/kexitableviewdata.h>
 #include <kexidb/queryschema.h>
 #include <keximainwindow.h>
+#include <kexidialogbase.h>
 #include <kexipart.h>
 #include <kexipartitem.h>
 #include <kexiproject.h>
@@ -40,12 +41,15 @@ private:
 	KexiMainWindow* m_mainWin;
 	KexiPart::Item* m_item;
 public:
-	ScriptAction(QObject* obj, KexiMainWindow *mainWin, KexiPart::Item* item)
-		: KAction(obj), m_mainWin(mainWin), m_item(item) {}
+	ScriptAction(QObject* parent, KexiMainWindow *mainWin, KexiPart::Item* item)
+		: KAction(parent), m_mainWin(mainWin), m_item(item) {}
 public slots:
 	void activate() {
-		m_mainWin->openObject(m_item, Kexi::DesignViewMode);
-		//KexiDialogBase* openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0)
+		QMap<QString,QString> map;
+		map["do"] = "execute";
+
+		/*KexiDialogBase* dialog =*/ m_mainWin->openObject(m_item, Kexi::DesignViewMode, &map);
+		//dialog->minimize();
 	}
 };
 

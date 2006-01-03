@@ -68,7 +68,7 @@ class KexiTablePart : public KexiPart::Part
 		virtual KexiDialogTempData* createTempData(KexiDialogBase* dialog);
 
 		virtual KexiViewBase* createView(QWidget *parent, KexiDialogBase* dialog, 
-			KexiPart::Item &item, int viewMode = Kexi::DataViewMode);
+			KexiPart::Item &item, int viewMode = Kexi::DataViewMode, QMap<QString,QString>* staticObjectArgs = 0);
 
 		virtual void initPartActions();
 		virtual void initInstanceActions();

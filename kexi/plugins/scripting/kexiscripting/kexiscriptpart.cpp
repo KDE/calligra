@@ -31,6 +31,7 @@
 #include <kross/main/scriptaction.h>
 #include <kross/main/scriptguiclient.h>
 
+#include <qtimer.h>
 #include <kgenericfactory.h>
 #include <kstandarddirs.h>
 #include <kexipartitem.h>
@@ -121,7 +122,7 @@ void KexiScriptPart::initInstanceActions()
 	createSharedAction(Kexi::DesignViewMode, i18n("Configure Editor..."), "configure", 0, "script_config_editor");
 }
 
-KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& /*item*/, int viewMode)
+KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog, KexiPart::Item& /*item*/, int viewMode, QMap<QString,QString>* staticObjectArgs)
 {
 	QString partname = dialog->partItem()->name();
 	if(! partname.isNull()) {
@@ -136,7 +137,11 @@ KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog
 		if(viewMode == Kexi::DesignViewMode) {
 			if(!win || !win->project() || !win->project()->dbConnection())
 				return 0;
-			return new KexiScriptDesignView(win, parent, scriptaction);
+			KexiScriptDesignView* designview = new KexiScriptDesignView(win, parent, scriptaction);
+			if(staticObjectArgs && staticObjectArgs->operator[]("do") == "execute" ) {
+				QTimer::singleShot(10, scriptaction, SLOT(activate()));
+			}
+			return designview;
 		}
 		if(viewMode == Kexi::TextViewMode) {
 			if(!win || !win->project() || !win->project()->dbConnection())

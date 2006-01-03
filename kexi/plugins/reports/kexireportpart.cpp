@@ -102,7 +102,7 @@ KexiReportPart::createTempData(KexiDialogBase* dialog)
 
 KexiViewBase*
 KexiReportPart::createView(QWidget *parent, KexiDialogBase* dialog,
-	KexiPart::Item &item, int)
+	KexiPart::Item &item, int, QMap<QString,QString>*)
 {
 	kexipluginsdbg << "KexiReportPart::createView()" << endl;
 	KexiMainWindow *win = dialog->mainWin();

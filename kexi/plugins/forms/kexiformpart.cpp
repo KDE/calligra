@@ -221,7 +221,7 @@ KexiFormPart::createTempData(KexiDialogBase* dialog)
 }
 
 KexiViewBase* KexiFormPart::createView(QWidget *parent, KexiDialogBase* dialog,
-	KexiPart::Item &item, int viewMode)
+	KexiPart::Item &item, int viewMode, QMap<QString,QString>*)
 {
 	Q_UNUSED( viewMode );
 

@@ -79,7 +79,7 @@ KexiDialogTempData* KexiTablePart::createTempData(KexiDialogBase* dialog)
 }
 
 KexiViewBase* KexiTablePart::createView(QWidget *parent, KexiDialogBase* dialog, 
-	KexiPart::Item &item, int viewMode)
+	KexiPart::Item &item, int viewMode, QMap<QString,QString>*)
 {
 	KexiMainWindow *win = dialog->mainWin();
 	if (!win || !win->project() || !win->project()->dbConnection())
