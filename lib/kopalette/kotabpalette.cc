@@ -50,16 +50,25 @@ void KoTabPalette::plug(QWidget * w, const QString & /*name*/, int position)
     w -> setFont(m_font);
 
     m_page -> insertTab(w, w -> caption(), position);
+    show();
 }
 
 void KoTabPalette::unplug(const QWidget * w)
 {
     m_page->removePage(const_cast<QWidget *>(w));
+    if (m_page->count() == 0)
+        hide();
 }
 
 void KoTabPalette::showPage(QWidget *w)
 {
     m_page->showPage(w);
+    if (m_hiddenPages.find(w) == m_hiddenPages.end()) return;
+
+    int i = *m_hiddenPages.find(w);
+    m_page->insertTab(w, w->caption(), i);
+    m_hiddenPages.erase(w);
+    show();
 }
 
 void KoTabPalette::makeVisible(bool v)

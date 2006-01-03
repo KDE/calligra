@@ -23,6 +23,7 @@
 #include <qstring.h>
 #include <qmap.h>
 #include <qdict.h>
+#include <qvaluestack.h>
 #include <qwidget.h>
 #include <qsignalmapper.h>
 #include <qstringlist.h>
@@ -181,13 +182,13 @@ private:
     KActionCollection       * m_actionCollection;
     KActionMenu             * m_viewActionMenu;
     KToggleAction           * m_toggleShowHidePalettes;
-    bool                      m_allPalettesShown;
     enumKoDockability         m_dockability;
     
     QStringList             * m_widgetNames;
 
     QDict<QWidget>          * m_widgets;
     QDict<KoPalette>        * m_palettes;
+    QValueStack<QString>   m_hiddenWidgets; // names of widgets actively hidden by hide all
     QDict<KToggleAction>    * m_actions;
     QSignalMapper           * m_mapper;
 

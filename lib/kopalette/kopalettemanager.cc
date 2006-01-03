@@ -66,20 +66,20 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
     KConfig * cfg = KGlobal::config();
     cfg->setGroup("palettes");
     
-    m_allPalettesShown = cfg->readBoolEntry("palettesshown", true);
+    bool palettesShown = cfg->readBoolEntry("palettesshown", true);
     KToggleAction * m_toggleShowHidePalettes;
     
-    if (m_allPalettesShown) {
+    if ( palettesShown) {
         m_toggleShowHidePalettes = new KToggleAction(i18n("Hide All Palette Windows"),
                                     "CTRL+SHIFT+H", this,
                                     SLOT(slotToggleAllPalettes()),
                                     this, "toggleAllPaletteWindows");
 
-        m_toggleShowHidePalettes->setCheckedState(i18n("Show All Palette Windows"));
+        m_toggleShowHidePalettes->setCheckedState(i18n("Show Palette Windows Again"));
     }
     else {
-        m_toggleShowHidePalettes = new KToggleAction(i18n("Show All Palette Windows"),
-                                    "CTRL+SHIFT+F9", this,
+        m_toggleShowHidePalettes = new KToggleAction(i18n("Show Palette Windows Again"),
+                                    "CTRL+SHIFT+H", this,
                                     SLOT(slotToggleAllPalettes()),
                                     this, "toggleAllPaletteWindows");
 
@@ -97,7 +97,7 @@ KoPaletteManager::KoPaletteManager(KoView * view, KActionCollection *ac, const c
             
             enumKoPaletteStyle style = (enumKoPaletteStyle)cfg->readNumEntry("style", 0);
             QString caption = cfg->readEntry("caption", "");
-            
+
             createPalette((*it), caption, style); 
         }
     }
@@ -162,22 +162,14 @@ void KoPaletteManager::addWidget(QWidget * widget,
     }
 
     KToggleAction * a;
-    if (visible) {
-        a = new KToggleAction(i18n("Hide %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
-        a->setCheckedState(i18n("Show %1").arg(widget->caption()));
-    }
-    else {
-        a = new KToggleAction(i18n("Show %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
-        a->setCheckedState(i18n("Hide %1").arg(widget->caption()));
-
-    }
+    a = new KToggleAction(i18n("Show %1").arg(widget->caption()), 0, m_mapper, SLOT(map()), m_actionCollection);
+    a->setCheckedState(i18n("Hide %1").arg(widget->caption()));
         
-    m_mapper->setMapping(a, m_actions->count()); // This is the position at which we'll insert the action
+    m_mapper->setMapping(a, m_widgetNames->count()); // This is the position at which we'll insert the action
     m_actions->insert( name, a );
     m_viewActionMenu->insert(a);
 
     palette->plug(widget, name, position);
-    palette->showPage(widget);
     
     m_widgets->insert(name, widget);
 
@@ -185,15 +177,43 @@ void KoPaletteManager::addWidget(QWidget * widget,
     m_defaultMapping->insert(name, pname);
     m_defaultWidgetOrder.append(name);
 
+    // Find out the hidden state
+    if(m_widgetNames->contains(name))
+    {
+
+        // The widget has already been added (and removed) during this session
+        if(m_hiddenWidgets.contains(name))
+            palette->hidePage( widget );
+        else
+        {
+            a->setChecked(true);
+            palette->showPage( widget );
+        }
+    }
+    else
+    {
+        cfg->setGroup("palettes");
+        if( cfg->readBoolEntry("palettesshown",true))
+        {
+            if (visible)
+            {
+                a->setChecked(true);
+                palette->showPage( widget );
+            }
+            else
+                palette->hidePage( widget );
+        }
+        else
+        {
+            if (visible)
+                m_hiddenWidgets.push(name);
+            palette->hidePage( widget );
+        }
+    }
+
     // Fill the current mappings
     m_widgetNames->append(name);
     m_currentMapping->insert(name, pname);
-
-    if (!visible) {
-        palette->hidePage( widget );
-    }
-
-
 }
 
 
@@ -254,6 +274,8 @@ void KoPaletteManager::showWidget(const QString & name)
     KoPalette * p = m_palettes->find(pname);
     p->showPage(w);
 
+    KToggleAction * a = m_actions->find(name);
+    a->setChecked(true);
 }
 
 void KoPaletteManager::removeWidget(const QString & name)
@@ -267,6 +289,7 @@ void KoPaletteManager::removeWidget(const QString & name)
     KoPalette * p = m_palettes->find(palette);
     if (!p) return;
 
+    p->showPage(w);
     p->unplug(w);
     m_widgets->remove(name);
     m_currentMapping->remove(name);
@@ -274,7 +297,6 @@ void KoPaletteManager::removeWidget(const QString & name)
     KAction * a = m_actions->take(name);
     m_viewActionMenu->remove(a);
     m_actionCollection->remove(a);
-
 }
 
 KoPalette * KoPaletteManager::createPalette(const QString & name, const QString & caption, enumKoPaletteStyle style)
@@ -393,34 +415,46 @@ void KoPaletteManager::slotTogglePalette(int paletteIndex)
     QString pname = *m_currentMapping->find(name);
     KoPalette * p = m_palettes->find(pname);
     p->togglePageHidden( w );
+
+    m_hiddenWidgets.clear();
 }
 
 void KoPaletteManager::slotToggleAllPalettes()
 {
-    m_allPalettesShown = !m_allPalettesShown;
+    if( ! m_hiddenWidgets.isEmpty())
+    {
+        // Restore previous visibility state
+        while(!m_hiddenWidgets.isEmpty())
+        {
+            QString name = m_hiddenWidgets.pop();
+            QWidget *w = m_widgets->find(name);
+            KToggleAction * a = m_actions->find(name);
+            a->setChecked(true);
 
-#if 1    
-    QDictIterator<KoPalette> it(*m_palettes);
-    for (; it.current(); ++it) {
-        it.current()->makeVisible(m_allPalettesShown);
+            QString pname = *m_currentMapping->find(name);
+            KoPalette * p = m_palettes->find(pname);
+            p->showPage(w);
+        }
     }
-#else
-    QMap<QString, QString>::Iterator it;
-    for ( it = m_currentMapping->begin(); it != m_currentMapping->end(); ++it ) {
-        QString name = it.key().latin1();
-        QWidget * w = m_widgets->find(name);
-        QString pname = it.data().latin1();
-        KoPalette * p = m_palettes->find(pname);
-	if(m_allPalettesShown && p->isHidden(w))
-            p->togglePageHidden(w);
-	else if(!m_allPalettesShown && !p->isHidden(w))
-            p->togglePageHidden(w);
+    else
+    {
+        // Save hidden state and hide all palettes
+        m_hiddenWidgets.clear();
+        QDictIterator<QWidget> it(*m_widgets);
+        for (; it.current(); ++it)
+        {
+            KToggleAction * a = m_actions->find(it.currentKey());
+            if(a->isChecked())
+            {
+                a->setChecked(false);
+                m_hiddenWidgets.push(it.currentKey());
+
+                QString pname = *m_currentMapping->find(it.currentKey());
+                KoPalette * p = m_palettes->find(pname);
+                p->hidePage(it.current());
+            }
+        }
     }
-    QDictIterator<KToggleAction> it2(*m_actions);
-    for (; it2.current(); ++it2) {
-        it2.current()->setChecked(!m_allPalettesShown);
-    }
-#endif
 }
 
 void KoPaletteManager::showAllPalettes(bool shown)
@@ -439,7 +473,7 @@ bool KoPaletteManager::eventFilter( QObject *o, QEvent *e )
          KParts::PartActivateEvent * pae = dynamic_cast<KParts::PartActivateEvent *>(e);
          if(pae && pae->widget() && pae->widget() == m_view) {
             if (pae->activated()) {
-                showAllPalettes( m_allPalettesShown );
+//                showAllPalettes( m_allPalettesShown );
             }
             else {
                 showAllPalettes( false );
@@ -522,7 +556,8 @@ void KoPaletteManager::save()
     cfg->setGroup("palettes");
         
     cfg->writeEntry("palettes", paletteList.join(","));
-    cfg->writeEntry("palettesshown", m_allPalettesShown);
+    bool palettesShown = m_hiddenWidgets.isEmpty();
+    cfg->writeEntry("palettesshown", palettesShown);
     
     QDictIterator<QWidget> itW(*m_widgets);
     for (; itW.current(); ++itW) {
@@ -532,8 +567,13 @@ void KoPaletteManager::save()
         QWidget * w = itW.current();
         cfg->writeEntry("docker", pname);
         
-        cfg->writeEntry("visible", !p->isHidden(w));
-        
+        if(palettesShown)
+            cfg->writeEntry("visible", !p->isHidden(w));
+        else
+            if(m_hiddenWidgets.contains(itW.currentKey()))
+               cfg->writeEntry("visible", true);
+            else
+                cfg->writeEntry("visible", false);
     }
 }
 
