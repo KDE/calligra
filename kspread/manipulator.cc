@@ -78,7 +78,8 @@ Manipulator::Manipulator()
     KCommand(),
     m_sheet(0),
     m_creation(true),
-    m_reverse(false)
+    m_reverse(false),
+    m_firstrun(true)
 {
 }
 
@@ -128,10 +129,11 @@ void Manipulator::execute()
   m_sheet->doc()->undoUnlock ();
   
   // add me to undo if needed
-  if (!m_reverse)
+  if (m_firstrun)
   {
     // addCommand itself checks for undo lock
     m_sheet->doc()->addCommand (this);
+    m_firstrun = false;
   }
 }
 

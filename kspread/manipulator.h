@@ -94,7 +94,7 @@ protected:
   Sheet* m_sheet;
   bool   m_creation : 1;
   bool   m_reverse  : 1;
-  
+  bool   m_firstrun : 1;
 private:
 };
 
