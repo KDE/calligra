@@ -15,10 +15,6 @@
  * the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
  * Boston, MA 02110-1301, USA.
  */
-// TODO: KDE_CXXFLAGS = -UQT_NO_STL in Makefile.am instead
-#ifdef QT_NO_STL
-#undef QT_NO_STL
-#endif
 #include "KWDocument.h"
 #include "KWFrameViewManager.h"
 #include <KWFrameView.h>

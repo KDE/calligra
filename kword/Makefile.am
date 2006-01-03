@@ -1,5 +1,6 @@
+# We use STL sorting so we need some typedefs
+KDE_CXXFLAGS = -UQT_NO_STL
 
-KDE_CXXFLAGS = $(USE_RTTI)
 INCLUDES = $(KOFFICE_INCLUDES) -I$(top_srcdir)/lib/kformula \
 	$(KOTEXT_INCLUDES) $(all_includes)
 
