@@ -401,7 +401,7 @@ private:
 /**
  * Base class for objects with a pen and a brush,
  * and which takes care of painting the shadow in @ref draw
- * (by calling @ref paint twice)
+ * (by calling paint twice)
  */
 class KPrShadowObject : public KPrObject
 {
@@ -454,7 +454,7 @@ protected:
     virtual void fillStyle( KoGenStyle& styleObjectAuto, KoGenStyles& mainStyles ) const;
 
     /**
-     * @ref save() only saves if the pen is different from the default pen.
+     * save() only saves if the pen is different from the default pen.
      * The default pen can vary depending on the subclass of KPrShadowObject
      * (e.g. it's a black solidline for lines and rects, but it's NoPen
      * for text objects
@@ -463,8 +463,8 @@ protected:
 
     /**
      * This method is to be implemented by all KPShadowObjects, to draw themselves.
-     * @ref draw took care of the shadow and of preparing @p painter for rotation.
-     * @ref paint must take care of the gradient itself!
+     * draw() took care of the shadow and of preparing @p painter for rotation.
+     * paint() must take care of the gradient itself!
      *
      * @param drawingShadow true if called to draw the shadow of the object. Usually
      * objects will want to draw a simpler version of themselves in that case.
@@ -472,7 +472,7 @@ protected:
      * This method isn't pure virtual because some objects implement draw() directly.
      */
     virtual void paint( QPainter* /* painter */, KoTextZoomHandler* /* zoomHandler */,
-                        int /* pageNum */, bool /* drawingShadow */, bool /* drawContour */ =  FALSE ) {}
+                        int /* pageNum */, bool drawingShadow, bool /* drawContour */ =  FALSE );
     KPrPen pen;
 };
 

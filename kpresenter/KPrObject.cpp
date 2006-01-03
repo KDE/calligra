@@ -1930,6 +1930,14 @@ KPrPen KPrShadowObject::defaultPen() const
     return KPrPen();
 }
 
+void KPrShadowObject::paint(QPainter* painter, KoTextZoomHandler* zoomHandler, int pageNum, bool drawingShadow, bool drawContour) {
+    Q_UNUSED(painter);
+    Q_UNUSED(zoomHandler);
+    Q_UNUSED(pageNum);
+    Q_UNUSED(drawingShadow);
+    Q_UNUSED(drawContour);
+}
+
 KPr2DObject::KPr2DObject()
     : KPrShadowObject()
     , gradient( 0 )
