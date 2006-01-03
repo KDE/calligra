@@ -215,7 +215,7 @@ void KWFrameViewManager::recalculateFrameCache() {
     kdDebug(31001) << "recalculateFrameCache " << m_frames.count() << " frames are currently registred" << endl;
 }
 
-KWFrameView *KWFrameViewManager::view(const KoPoint &point, selectionEnum selected, bool borderOnly) const {
+KWFrameView *KWFrameViewManager::view(const KoPoint &point, SelectionType selected, bool borderOnly) const {
     QValueVector<KWFrameView*> framesThatAreHit = framesAt(point, borderOnly);
     bool foundCycleFrame = false;
     QValueVector<KWFrameView*>::iterator sortedFrames = framesThatAreHit.begin();
@@ -398,7 +398,7 @@ void KWFrameViewManager::showPopup( const KoPoint &point, KWView *view, int keyS
 void KWFrameViewManager::selectFrames(const KoPoint &point, int keyState, bool leftClick) {
     MouseMeaning mm = mouseMeaning(point, keyState);
     bool multiSelect = mm == MEANING_MOUSE_SELECT || keyState & Qt::ControlButton ;
-    selectionEnum se = frameOnTop;
+    SelectionType se = frameOnTop;
     if(leftClick && multiSelect)
         se = nextUnselected;
     KWFrameView *toBeSelected = view(point, se, !multiSelect);
@@ -420,14 +420,14 @@ void KWFrameViewManager::selectFrames(const KoPoint &point, int keyState, bool l
 }
 
 // ********** FrameEvent **** */
-KWFrameViewManager::FrameEvent::FrameEvent (actionEnum action) {
+KWFrameViewManager::FrameEvent::FrameEvent (ActionType action) {
     m_action = action;
 }
-KWFrameViewManager::FrameEvent::FrameEvent (actionEnum action, KWFrame *frame) {
+KWFrameViewManager::FrameEvent::FrameEvent (ActionType action, KWFrame *frame) {
     m_action = action;
     m_frame = frame;
 }
-KWFrameViewManager::FrameEvent::FrameEvent (actionEnum action, KWFrameSet *frameSet) {
+KWFrameViewManager::FrameEvent::FrameEvent (ActionType action, KWFrameSet *frameSet) {
     m_action = action;
     m_frameSet = frameSet;
 }

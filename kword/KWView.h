@@ -524,8 +524,8 @@ protected:
     QValueList<QString> getInlineFramesets( const QDomNode &framesetElem );
 
     // Helper stuff for the frame adjustment;
-    enum moveFrameType  { RaiseFrame, LowerFrame, BringToFront, SendToBack };
-    void adjustZOrderOfSelectedFrames(moveFrameType moveType);
+    enum MoveFrameType  { RaiseFrame, LowerFrame, BringToFront, SendToBack };
+    void adjustZOrderOfSelectedFrames(MoveFrameType moveType);
     void increaseAllZOrdersAbove(int refZOrder, int pageNum, const QPtrList<KWFrame>& frameSelection);
     void decreaseAllZOrdersUnder(int refZOrder, int pageNum, const QPtrList<KWFrame>& frameSelection);
     int raiseFrame(const QPtrList<KWFrame>& frameSelection, const KWFrame *frame);

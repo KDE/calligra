@@ -44,7 +44,7 @@ KWInsertPageDia::KWInsertPageDia( QWidget *parent, const char* name )
     setFocus();
 }
 
-insertPagePos KWInsertPageDia::getInsertPagePos() const
+InsertPagePos KWInsertPageDia::insertPagePos() const
 {
     return m_after->isChecked() ? KW_INSERTPAGEAFTER : KW_INSERTPAGEBEFORE;
 }

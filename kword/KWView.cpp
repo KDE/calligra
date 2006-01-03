@@ -2516,7 +2516,7 @@ void KWView::editFindPrevious()
     (void) m_findReplace->findPrevious();
 }
 
-void KWView::adjustZOrderOfSelectedFrames(moveFrameType moveType) {
+void KWView::adjustZOrderOfSelectedFrames(MoveFrameType moveType) {
     KMacroCommand* macroCmd = 0L;
     // For each selected frame...
     QValueList<KWFrameView*> selectedFrames = frameViewManager()->selectedFrames();
@@ -3464,7 +3464,7 @@ void KWView::insertPage()
         {
             // If 'before', subtract 1 to the page number
             int page = m_currentPage->pageNumber();
-            KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Insert, dlg.getInsertPagePos()==KW_INSERTPAGEAFTER ?  page : (page -1));
+            KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Insert, dlg.insertPagePos()==KW_INSERTPAGEAFTER ?  page : (page -1));
             cmd->execute();
             m_doc->addCommand( cmd );
         }

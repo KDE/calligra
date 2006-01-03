@@ -71,7 +71,7 @@ public:
      *    <dd>return the frame highest z-ordering, regardless of selection.</dd>
      * </dl>
      */
-    enum selectionEnum { selected, unselected, nextUnselected, frameOnTop };
+    enum SelectionType { selected, unselected, nextUnselected, frameOnTop };
     /**
      * Returns a frameView representing a frame positioned at @p point, or 0 when no match found.
      * @param point the position of the frame
@@ -80,7 +80,7 @@ public:
      * @param borderOnly If true frames only frames that have the border at the point will be
      *  looked at.
      */
-    KWFrameView *view(const KoPoint &point, selectionEnum select, bool borderOnly = false) const;
+    KWFrameView *view(const KoPoint &point, SelectionType select, bool borderOnly = false) const;
      /** Returns a frameView representing @p frame */
     KWFrameView *view(const KWFrame *frame) const;
 
@@ -190,13 +190,13 @@ private:
     /**  Internal class to store FrameEvents in (from the slots) until they are fired later */
     class FrameEvent {
         public:
-            enum actionEnum { FrameRemoved, FrameAdded, FrameSetRemoved, FrameSetAdded, FrameMoved,
+            enum ActionType { FrameRemoved, FrameAdded, FrameSetRemoved, FrameSetAdded, FrameMoved,
                 FrameResized, FrameSelectionChanged, FrameSetRenamed };
-            FrameEvent (actionEnum action);
-            FrameEvent (actionEnum action, KWFrame *frame);
-            FrameEvent (actionEnum action, KWFrameSet *frameSet);
+            FrameEvent (ActionType action);
+            FrameEvent (ActionType action, KWFrame *frame);
+            FrameEvent (ActionType action, KWFrameSet *frameSet);
         private:
-            actionEnum m_action;
+            ActionType m_action;
             KWFrame *m_frame;
             KWFrameSet *m_frameSet;
         friend class KWFrameViewManager;

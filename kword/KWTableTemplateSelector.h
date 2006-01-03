@@ -98,7 +98,7 @@ class KWTableTemplateSelector : public QWidget
     Q_OBJECT
 
 public:
-    enum formatType { firstRow = 1 , firstColumn = 2, lastRow = 4, lastCol =8, body =16 };
+    enum FormatType { firstRow = 1 , firstColumn = 2, lastRow = 4, lastCol =8, body =16 };
     KWTableTemplateSelector( KWDocument *_doc, QWidget * _parent, const QString & _tableTemplate, int _type = 31 , const char * _name = 0 );
 
     KWTableTemplate *getTableTemplate()const ;

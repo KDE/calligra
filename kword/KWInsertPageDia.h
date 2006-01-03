@@ -28,7 +28,7 @@ class KWInsertPageDia : public KDialogBase
     Q_OBJECT
 public:
     KWInsertPageDia( QWidget *parent, const char* name );
-    insertPagePos getInsertPagePos() const;
+    InsertPagePos insertPagePos() const;
 
 private:
     QRadioButton *m_before;
