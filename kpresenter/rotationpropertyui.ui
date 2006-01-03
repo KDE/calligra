@@ -61,7 +61,10 @@
                         <cstring>textLabel1</cstring>
                     </property>
                     <property name="text">
-                        <string>Angle:</string>
+                        <string>A&amp;ngle:</string>
+                    </property>
+                    <property name="buddy" stdset="0">
+                        <cstring>angleSpinbox</cstring>
                     </property>
                 </widget>
                 <widget class="KDoubleNumInput">
