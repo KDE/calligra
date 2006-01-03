@@ -1721,17 +1721,12 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       if ( x >= KS_colMax )
         //paintBordersRight = true;
         paintBorder |= Cell::Border_Right;
-      else 
-	if ( x == regionRight ) {
-	  paintBorder |= Cell::Border_Right;
-	  if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-	    rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-	}
-	else {
-	  paintBorder |= Cell::Border_Right;
-	  if ( cell->effRightBorderValue( x, y ) < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
-	    rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
-	}
+      else if ( x == regionRight ) {
+	paintBorder |= Cell::Border_Right;
+	if ( cell->effRightBorderValue( x, y )
+	     < sheet->cellAt( x + 1, y )->effLeftBorderValue( x + 1, y ) )
+	  rightPen = sheet->cellAt( x + 1, y )->effLeftBorderPen( x + 1, y );
+      }
       else {
 	paintBorder |= Cell::Border_Right;
 	if ( cell->effRightBorderValue( x, y )
@@ -1743,45 +1738,48 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       // bottom border:
       if ( y >= KS_rowMax )
         paintBorder |= Cell::Border_Bottom;
-      else
-        if ( y == regionBottom ) {
-	  paintBorder |= Cell::Border_Bottom;
-          if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
-            bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
-        }
+      else if ( y == regionBottom ) {
+	paintBorder |= Cell::Border_Bottom;
+	if ( cell->effBottomBorderValue( x, y )
+	     < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+	  bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
+      }
       else {
         paintBorder |= Cell::Border_Bottom;
-        if ( cell->effBottomBorderValue( x, y ) < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
+        if ( cell->effBottomBorderValue( x, y )
+	     < sheet->cellAt( x, y + 1 )->effTopBorderValue( x, y + 1) )
           bottomPen = sheet->cellAt( x, y + 1 )->effTopBorderPen( x, y + 1 );
       }
 
       // left border:
       if ( x == 1 )
         paintBorder |= Cell::Border_Left;
-      else
-        if ( x == regionLeft ) {
-	  paintBorder |= Cell::Border_Left;
-          if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
-            leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
-        }
+      else if ( x == regionLeft ) {
+	paintBorder |= Cell::Border_Left;
+	if ( cell->effLeftBorderValue( x, y )
+	     < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+	  leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
+      }
       else {
         paintBorder |= Cell::Border_Left;
-        if ( cell->effLeftBorderValue( x, y ) < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
+        if ( cell->effLeftBorderValue( x, y )
+	     < sheet->cellAt( x - 1, y )->effRightBorderValue( x - 1, y ) )
           leftPen = sheet->cellAt( x - 1, y )->effRightBorderPen( x - 1, y );
       }
 
       // top border:
       if ( y == 1 )
         paintBorder |= Cell::Border_Top;
-      else
-        if ( y == regionTop ) {
-	  paintBorder |= Cell::Border_Top;
-          if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
-            topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
-        }
+      else if ( y == regionTop ) {
+	paintBorder |= Cell::Border_Top;
+	if ( cell->effTopBorderValue( x, y )
+	     < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+	  topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
+      }
       else {
         paintBorder |= Cell::Border_Top;
-        if ( cell->effTopBorderValue( x, y ) < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
+        if ( cell->effTopBorderValue( x, y )
+	     < sheet->cellAt( x, y - 1 )->effBottomBorderValue( x, y - 1 ) )
           topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
       }
 
