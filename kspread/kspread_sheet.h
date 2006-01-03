@@ -792,7 +792,7 @@ public:
     void setFirstLetterUpper(bool _firstUpper);
 
     // TODO Stefan: remove after kspread_undo.cc|h and commands.cc|h are obsolete
-    void changeMergedCell( int m_iCol, int m_iRow, int m_iExtraX, int m_iExtraY) {}
+    void changeMergedCell( int /*m_iCol*/, int /*m_iRow*/, int /*m_iExtraX*/, int /*m_iExtraY*/) {}
 
     void mergeCells( const Region& region );
     void dissociateCells( const Region &region );
