@@ -21,7 +21,6 @@
 
 #include <widget/utils/klistviewitemtemplate.h>
 #include <keximainwindow.h>
-#include <kexipart.h>
 #include <kexipartitem.h>
 #include <kexiproject.h>
 
@@ -82,10 +81,9 @@ public:
 		addColumn("");
 		header()->hide();
 
-		KexiPart::Part* part = Kexi::partManager().partForMimeType("kexi/script");
+		KexiPart::Info* info = Kexi::partManager().infoForMimeType("kexi/script");
 		KexiProject* project = dialog->mainWin()->project();
-		if(part && project) {
-			KexiPart::Info* info = part->info();
+		if(info && project) {
 			KexiPart::ItemDict* itemdict = project->items(info);
 			if(itemdict) {
 				ActionSelectorDialogListItem* item = 0;
@@ -131,8 +129,8 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	
 	// We use the scriptpart to determinate if the Kexi ScriptPart-plugin is
 	// installed and if we like to show it in our list of actions.
-	KexiPart::Part* scriptpart = Kexi::partManager().partForMimeType("kexi/script");
-	if(scriptpart) {
+	KexiPart::Info* scriptinfo = Kexi::partManager().infoForMimeType("kexi/script");
+	if(scriptinfo) {
 		combobox->insertItem( i18n("Scripts") );
 	}
 	
@@ -142,7 +140,7 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	resize(400, 500);
 
 	if (d->currentActionName.startsWith("script:")) {
-		if(scriptpart) {
+		if(scriptinfo) {
 			combobox->setCurrentItem(2);
 			slotComboHighlighted(2);
 		}
