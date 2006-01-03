@@ -570,7 +570,7 @@ void KWTableFrameSet::recalcRows(unsigned int col, unsigned int row) {
             if((int)pageNumber > m_doc->numPages()) {
                 int num = m_doc->appendPage();
                 kdDebug(32004) << "Have appended page: " << num << " (one page mode!)" << endl;
-                m_doc->afterAppendPage( num );
+                m_doc->afterInsertPage( num );
             }
         }
         //if(diff > 0)  kdDebug(32004) << "   adding " << diff << ", line " << lineNumber << " " << *(j) <<" -> " << *(j)+diff << endl;

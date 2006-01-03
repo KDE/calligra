@@ -1806,7 +1806,7 @@ void KWInsertRemovePageCommand::doInsert(int pageNumber) {
     QValueListIterator<KCommand*> cmdIter = childCommands.begin();
     for(;cmdIter != childCommands.end(); ++ cmdIter)
          (*cmdIter)->unexecute();
-    m_doc->afterAppendPage( pageNumber );
+    m_doc->afterInsertPage( pageNumber );
 }
 
 FramePaddingStruct::FramePaddingStruct( KWFrame *frame )

@@ -357,7 +357,7 @@ public:
      * and all the caches properly updated. This is separate from appendPage
      * so that KWFrameLayout can call appendPage() only.
      */
-    void afterAppendPage( int num );
+    void afterInsertPage( int num );
     /**
      * @return list of frames that will be copied onto the new page
      * Used by insertPage but also by KWTextFrameSet to check if it's worth

@@ -3990,10 +3990,10 @@ KWPage* KWDocument::appendPage()
     return insertPage( lastPage() );
 }
 
-void KWDocument::afterAppendPage( int pageNum )
+void KWDocument::afterInsertPage( int pageNum )
 {
 #ifdef DEBUG_PAGES
-    kdDebug(32002) << "KWDocument::afterAppendPage " << pageNum << endl;
+    kdDebug(32002) << "KWDocument::afterInsertPage " << pageNum << endl;
 #endif
     if ( !m_bGeneratingPreview )
         emit newContentsSize();
@@ -4001,13 +4001,13 @@ void KWDocument::afterAppendPage( int pageNum )
     if ( isHeaderVisible() || isFooterVisible() || m_bHasEndNotes )
     {
 #ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::afterAppendPage calling recalcFrames" << endl;
+        kdDebug(32002) << "KWDocument::afterInsertPage calling recalcFrames" << endl;
 #endif
         // Get headers and footers on the new page
         // This shouldn't delete the newly created page because it's still empty though
         recalcFrames( pageNum, -1, KWFrameLayout::DontRemovePages );
 #ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::afterAppendPage recalcFrames done" << endl;
+        kdDebug(32002) << "KWDocument::afterInsertPage recalcFrames done" << endl;
 #endif
     }
     else
