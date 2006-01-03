@@ -179,7 +179,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                         </sizepolicy>
                     </property>
                     <property name="text">
-                        <string>flatten the &amp;image</string>
+                        <string>Flatten the &amp;image</string>
                     </property>
                     <property name="accel">
                         <string>Alt+I</string>
@@ -188,7 +188,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                         <bool>true</bool>
                     </property>
                     <property name="toolTip" stdset="0">
-                        <string>This option will merge all layers, it is advised to check this option, other application might not be able to read your file correctly.</string>
+                        <string>This option will merge all layers. It is advisable to check this option, otherwise other applications might not be able to read your file correctly.</string>
                     </property>
                 </widget>
             </vbox>
