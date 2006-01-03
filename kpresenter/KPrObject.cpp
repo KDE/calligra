@@ -911,7 +911,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
 bool KPrObject::saveOasisObject( KPOasisSaveContext &sc ) const
 {
     sc.xmlWriter.startElement( getOasisElementName() );
-    sc.xmlWriter.addAttribute( "draw:style-name", getStyle( sc ) );
+    sc.xmlWriter.addAttribute( sc.onMaster ? "presentation:style-name": "draw:style-name", getStyle( sc ) );
     saveOasisPosObject( sc.xmlWriter, sc.indexObj );
     if( !objectName.isEmpty())
         sc.xmlWriter.addAttribute( "draw:name", objectName );
@@ -1723,6 +1723,8 @@ bool KPrShadowObject::saveOasisDrawPoints( const KoPointArray &points, KPOasisSa
 bool KPrShadowObject::loadOasisDrawPoints( KoPointArray &points, const QDomElement &element,
                                           KoOasisContext & context, KPrLoadingInfo *info )
 {
+    Q_UNUSED( context );
+    Q_UNUSED( info );
     QStringList ptList = QStringList::split(' ', element.attributeNS( KoXmlNS::draw, "points", QString::null));
 
     unsigned int index = 0;

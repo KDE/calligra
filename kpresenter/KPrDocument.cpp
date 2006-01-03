@@ -2044,8 +2044,8 @@ void KPrDocument::fillStyleStack( const QDomElement& object, KoOasisContext & co
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttributeNS( KoXmlNS::presentation, "style-name" ))
     {
-        //kdDebug()<<"Add 'presentation:style-name' \n";
-        context.addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::presentation, "style-name", QString::null )] );
+        //kdDebug(33001) << "presentation:style-name :" << object.attributeNS( KoXmlNS::presentation, "style-name", QString::null ) << endl;
+        context.addStyles( context.oasisStyles().stylesAutoStyles()[object.attributeNS( KoXmlNS::presentation, "style-name", QString::null )] );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
