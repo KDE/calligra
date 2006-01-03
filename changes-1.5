@@ -8,7 +8,11 @@
 
 * Bug fixes:
 
+** KWord:
  - Statistic variables are not saved in KWord format (#111478)
+ - Fix bug where inserting a large image would not make it a size that fits the page
+ - Fix bug where images in headers were only shown in the first page.
+ - Fix RMB in table-cell should not unselect text
 
 
 ** Krita:
@@ -64,11 +68,6 @@
 
 * Features:
 
-** Kword
-
- - Undo and redo for resizing of tables and columns (Frederik Edemar)
- - Grid for objects (Frederik Edemar)
-
 ** Krita:
  - Add histograms
  - Histograms for images with more than 8-bit to the channel can be zoomed
@@ -114,12 +113,26 @@
  - Remove the text brush
 
 ** KWord:
- - allow documents to start at any page number
+ - Undo and redo for resizing of tables and columns
+ - Grid for objects
+ - allow documents to start at any page number (no gui yet)
  - accessibility features; keyboard navigation across frames, create frame using the keyboard
  - cleanups and usability improvements for the document structure widget
- - make the zoom to width work properly, even when you resize the window later.
+ - make the Fit to Width zoommode work properly, even when you resize the window later.
+ - make Fit to Width zoommode the default for new users
  - KWord makes selecting/moving/resizing frames easier by implementing all features from http://www.koffice.org/developer/keyboardmodifiers.php
- - Paint the cursor in a color that is always readable, even if you set the background color to black
+ - paint the cursor in a color that is always readable, even if you set the background color to black
+ - make positioning the caret at frame edge easier.
+ - make frame handling much easier
+ - Center page on screen
+ - Create new set of templates, based on usability and user feedback.
+ - make deleting a page (in dtp mode) actually work when there was still content on the page.
+ - frame selections are now per view.
+ - Remember picture insert directory
+ - Allow speaking texts using the kdeaccessibility tools.
+ - KWord now uses OASIS OpenDocument
+ - Accessibility improvement: "Menu" key shows RMB popup in document structure.
+ - Add a dot as the suffix of numbered lists (1, a, A, III)
 
 ** KSpread:
  - 	Added cell reference highlighting when editing formulae.  Also added click-and-drag resizing
