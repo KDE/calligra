@@ -1,10 +1,15 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
 Comment=
+Comment[xx]=xxxx
 Encoding=UTF-8
 Exec=krita %u
 GenericName=Application for Drawing and Handling of Images
 GenericName[da]=Tegne- og billedbehandlingsprogram
+GenericName[es]=Aplicación para dibujo y manipulación de imágenes
+GenericName[pt]=Aplicação de Desenho e Manipulação de Imagens
+GenericName[pt_BR]=Aplicação de Desenho e Manipulação de Imagens
+GenericName[xx]=xxApplication for Drawing and Handling of Imagesxx
 Icon=krita
 MimeType=image/jpeg
 Name=Krita

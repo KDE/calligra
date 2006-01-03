@@ -1,10 +1,13 @@
 [Desktop Entry]
 Encoding=UTF-8
 Name=Image Tool
+Name[br]=Ostilh skeudenn
 Name[da]=Billedværktøj
+Name[es]=Herramienta de imagen
 Name[ga]=Uirlis Íomhá
 Name[pt]=Ferramenta de Imagens
 Name[pt_BR]=Ferramenta de Imagens
+Name[xx]=xxImage Toolxx
 ServiceTypes=Karbon/CoreModule
 Type=Service
 X-KDE-Library=karbon_imagetoolplugin

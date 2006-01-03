@@ -1,6 +1,7 @@
 [Desktop Entry]
 Categories=Qt;KDE;Office;Graphics;
 Comment=
+Comment[xx]=xxxx
 Encoding=UTF-8
 Exec=krita %u
 GenericName=Painting and Image Editing Application
