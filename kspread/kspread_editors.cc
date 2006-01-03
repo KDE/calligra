@@ -234,8 +234,19 @@ int FormulaEditorHighlighter::highlightParagraph(const QString& text, int /* end
 
         //relativeRef.remove('$');
 
-        if (relativeRef.find('!')==-1)
-          relativeRef.prepend(m_pCanvas->choice()->sheet()->sheetName().lower()+"!");
+        if (relativeRef.find('!') == -1)
+        {
+          QString sheetName;
+          if (m_pCanvas->chooseMode())
+          {
+            sheetName = m_pCanvas->choice()->sheet()->sheetName().lower();
+          }
+          else
+          {
+            sheetName = m_pCanvas->selectionInfo()->sheet()->sheetName().lower();
+          }
+          relativeRef.prepend(sheetName + "!");
+        }
 
         bool cellRefValid=false;
 

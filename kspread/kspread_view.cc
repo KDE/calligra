@@ -2458,7 +2458,7 @@ void View::autoSum()
   //this behaviour??)
   Range rg;
   //rg.sheet=activeSheet();
-  QRect sel=d->selection->selection(false);
+  QRect sel = d->selection->selection(false);
 
   if (sel.height() > 1)
   {
