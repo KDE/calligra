@@ -47,20 +47,12 @@ public:
 		addColumn("");
 		header()->hide();
 
-		//! @todo QLabel *lblDescription = new QLabel(d->mainbox);
-		//! @todo: add "update Button text and tooltip" check box
-		//! @todo double click accepts dialog
-		QListViewItem *pitem = 0;
-
 		QPixmap noIcon( IconSize( KIcon::Small ), IconSize( KIcon::Small ) );
 		QBitmap bmpNoIcon(noIcon.size());
 		bmpNoIcon.fill(Qt::color0);
 		noIcon.setMask(bmpNoIcon);
 
-		//add "no action" item (key == "")
-		pitem = new ActionSelectorDialogListItem(QString("kaction:"), this, pitem, i18n("<No Action>") );
-		pitem->setPixmap( 0, noIcon );
-
+		QListViewItem *pitem = 0;
 		KActionPtrList sharedActions( dialog->mainWin()->allActions() ); //sharedActions() );
 		foreach (KActionPtrList::ConstIterator, it, sharedActions) {
 			//! @todo set invisible pixmap box if actual pixmap is null
@@ -71,15 +63,10 @@ public:
 			pitem->setPixmap( 0, (*it)->iconSet( KIcon::Small, 16 ).pixmap( QIconSet::Small, QIconSet::Active ) );
 			if (!pitem->pixmap(0) || pitem->pixmap(0)->isNull())
 				pitem->setPixmap( 0, noIcon );
-			if (!selectedItem() && dialog->currentActionName() == name)
+			if (!selectedItem() && dialog->currentActionName() == name) {
 				setSelected(pitem, true);
-		}
-		if (selectedItem()) {
-			ensureItemVisible(selectedItem());
-		}
-		else if (firstChild()) {
-			setSelected(firstChild(), true);
-			ensureItemVisible(selectedItem());
+				ensureItemVisible(pitem);
+			}
 		}
 	}
 	virtual ~ActionsListView() {}
@@ -139,20 +126,25 @@ KexiActionSelectionDialog::KexiActionSelectionDialog(KexiMainWindow* mainWin, QW
 	lbl->setAlignment(Qt::AlignTop|Qt::AlignLeft|Qt::WordBreak);
 
 	QComboBox* combobox = new QComboBox(box);
+	combobox->insertItem( i18n("No Action") );
 	combobox->insertItem( i18n("Actions") );
 	combobox->insertItem( i18n("Scripts") );
 	
 	d->mainbox = new QVBox(box);
+	box->setStretchFactor(d->mainbox, 1);
+
 	resize(400, 500);
 
-	if (QString(d->currentActionName).startsWith("script:")) {
-		combobox->setCurrentItem(1);
-		slotComboHighlighted(1);
+	if (d->currentActionName.startsWith("script:")) {
+		combobox->setCurrentItem(2);
+		slotComboHighlighted(2);
 		
 	}
-	else { //startsWith("kaction:")
-		slotComboHighlighted(0);
+	else if (d->currentActionName.startsWith("kaction:")) {
+		combobox->setCurrentItem(1);
+		slotComboHighlighted(1);
 	}
+	//else "No Action"
 
 	connect(combobox, SIGNAL(highlighted(int)), this, SLOT(slotComboHighlighted(int)));
 	connect(this, SIGNAL(finished()), SLOT(closeDialog()));
@@ -180,9 +172,12 @@ void KexiActionSelectionDialog::setScriptView()
 void KexiActionSelectionDialog::slotComboHighlighted(int index)
 {
 	switch(index) {
-		case 0: setActionView(); break;
-		case 1: setScriptView(); break;
-		default: break;
+		case 1: setActionView(); break;
+		case 2: setScriptView(); break;
+		default: // "No Action"
+			delete d->listview;
+			d->listview = 0;
+			break;
 	}
 }
 
@@ -203,12 +198,16 @@ void KexiActionSelectionDialog::slotOk()
 		if(item)
 			d->currentActionName = item->data;
 	}
+	else {
+		d->currentActionName = ""; // "No Action"
+	}
 	KDialogBase::slotOk();
 }
 
 void KexiActionSelectionDialog::closeDialog()
 {
-	delayedDestruct();
+	// not needed cause KexiFormPart which uses us takes care of freeing.
+	//delayedDestruct();
 }
 
 #include "kexiactionselectiondialog.moc"
