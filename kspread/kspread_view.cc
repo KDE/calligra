@@ -4129,7 +4129,7 @@ void View::validity()
 {
   QRect rect( d->selection->selection() );
 
-  if ( (d->selection->isRowSelected()) || (d->selection->isColumnSelected()) )
+  if (d->selection->isColumnOrRowSelected())
   {
     KMessageBox::error( this, i18n("Area is too large."));
   }
@@ -4344,7 +4344,7 @@ void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
     //KOfficeCore cannot handle KoRect directly, so switching to QRect
     QRect unzoomedGeometry = unzoomedRect.toQRect();
 
-    if ( (d->selection->isRowSelected()) || (d->selection->isColumnSelected()) )
+    if (d->selection->isColumnOrRowSelected())
     {
       KMessageBox::error( this, i18n("Area is too large."));
       d->activeSheet->insertChart( unzoomedGeometry,
@@ -4939,7 +4939,7 @@ void View::popupColumnMenu( const QPoint & _point )
       d->popupColumn->insertSeparator();
       d->actions->defaultFormat->plug( d->popupColumn );
       // If there is no selection
-      if ((d->selection->isRowSelected() == false) && (d->selection->isColumnSelected() == FALSE) )
+      if (!d->selection->isColumnOrRowSelected())
       {
         d->actions->areaName->plug( d->popupColumn );
       }
@@ -5035,9 +5035,9 @@ void View::popupRowMenu( const QPoint & _point )
       d->popupRow->insertSeparator();
       d->actions->defaultFormat->plug( d->popupRow );
       // If there is no selection
-      if ( (d->selection->isRowSelected() == false) && (d->selection->isColumnSelected() == FALSE) )
+      if (!d->selection->isColumnOrRowSelected())
       {
-  d->actions->areaName->plug( d->popupRow );
+        d->actions->areaName->plug(d->popupRow);
       }
 
       d->actions->resizeRow->plug( d->popupRow );
@@ -5247,7 +5247,7 @@ void View::openPopupMenu( const QPoint & _point )
       d->actions->defaultFormat->plug( d->popupMenu );
 
       // If there is no selection
-      if ( (d->selection->isRowSelected() == false) && (d->selection->isColumnSelected() == FALSE) )
+      if (!d->selection->isColumnOrRowSelected())
       {
         d->actions->areaName->plug( d->popupMenu );
         d->popupMenu->insertSeparator();
@@ -5849,7 +5849,7 @@ void View::insertObject()
 
 void View::insertChart()
 {
-  if ( d->selection->isColumnSelected() || d->selection->isRowSelected() )
+  if (d->selection->isColumnOrRowSelected())
   {
     KMessageBox::error( this, i18n("Area too large."));
     return;
@@ -6152,6 +6152,9 @@ void View::slotChangeSelection(const KSpread::Region& changedRegion)
     d->actions->sortDec->setEnabled( !simpleSelection );
     d->actions->sortInc->setEnabled( !simpleSelection);
     d->actions->createStyle->setEnabled( simpleSelection ); // just from one cell
+
+    bool contiguousSelection = d->selection->isContiguous();
+    d->actions->subTotals->setEnabled(contiguousSelection);
   }
   d->actions->selectStyle->setCurrentItem( -1 );
   resultOfCalc();

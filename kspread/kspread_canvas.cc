@@ -1365,8 +1365,9 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
   //  kdDebug() << "Clicked in cell " << col << ", " << row << endl;
 
   // Extending an existing selection with the shift button ?
-  if ( (_ev->state() & ShiftButton) && d->view->koDocument()->isReadWrite() &&
-       !selectionInfo()->isColumnSelected() && !selectionInfo()->isRowSelected() )
+  if ((_ev->state() & ShiftButton) &&
+      d->view->koDocument()->isReadWrite() &&
+      !selectionInfo()->isColumnOrRowSelected())
   {
     (d->chooseCell ? choice() : selectionInfo())->update(QPoint(col,row));
     return;

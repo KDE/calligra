@@ -447,7 +447,7 @@ QRect Selection::selectionHandleArea() const
   int column, row;
 
   // complete rows/columns are selected, use the marker.
-  if ( isRowSelected() || isColumnSelected() )
+  if (isColumnOrRowSelected())
   {
     column = d->marker.x();
     row = d->marker.y();

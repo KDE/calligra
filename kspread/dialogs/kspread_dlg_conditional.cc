@@ -273,7 +273,8 @@ void ConditionalWidget::slotTextChanged3( const QString & text )
 }
 
 /**
- * Dialog
+ * ConditionalDialog
+ * Sets conditional cell formattings.
  */
 ConditionalDialog::ConditionalDialog( View * parent, const char * name,
                                               const QRect & marker )

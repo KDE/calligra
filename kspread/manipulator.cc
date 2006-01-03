@@ -40,8 +40,7 @@
 
 using namespace KSpread;
 
-// TODO Stefan: SubTotal  (neither NCS nor undo)
-// TODO Stefan: Conditional (neither NCS nor undo)
+// TODO Stefan: Conditional (neither NCS nor undo) [see Sheet::setConditional()]
 // TODO Stefan: Validity  (undo doesn't work)
 
 // TODO Stefan: AutoSum ?
@@ -68,6 +67,15 @@ using namespace KSpread;
 // TODO Stefan: more ????
 
 // TODO Stefan: maybe make the undos optional
+
+
+// INFO Stefan: some words on some operations
+//
+// 1. SubTotal
+// a) Makes no sense to extend to non-contiguous selections (NCS) as
+//    it refers to a change in one column.
+// b) No special undo command available yet.
+
 
 /***************************************************************************
   class Manipulator
@@ -828,7 +836,7 @@ QString MergeManipulator::name() const
 
 bool MergeManipulator::preProcessing()
 {
-  if ( isRowSelected() || isColumnSelected() )
+  if (isColumnOrRowSelected())
   {
     KMessageBox::information( 0, i18n( "Merging of columns or rows is not supported." ) );
     return false;

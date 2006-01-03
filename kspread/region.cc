@@ -207,6 +207,15 @@ bool Region::isSingular() const
   return true;
 }
 
+bool Region::isContiguous() const
+{
+  if (d->cells.count() != 1 || !isValid())
+  {
+    return false;
+  }
+  return true;
+}
+
 QString Region::name(Sheet* originSheet) const
 {
   QStringList names;
@@ -503,6 +512,22 @@ bool Region::isRowSelected(uint row) const
     QRect region = element->rect().normalize();
     if ((row == 0 || ((int)row >= region.top() && (int)row <= region.bottom())) &&
          region.left() == 1 && region.right() == KS_colMax)
+    {
+      return true;
+    }
+  }
+  return false;
+}
+
+bool Region::isColumnOrRowSelected() const
+{
+  ConstIterator endOfList(d->cells.constEnd());
+  for (ConstIterator it = d->cells.constBegin(); it != endOfList; ++it)
+  {
+    Element *element = *it;
+    QRect region = element->rect().normalize();
+    if ((region.top() == 1 && region.bottom() == KS_rowMax) ||
+        (region.left() == 1 && region.right() == KS_colMax))
     {
       return true;
     }

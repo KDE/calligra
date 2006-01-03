@@ -133,6 +133,11 @@ public:
   bool isSingular() const;
 
   /**
+   * @return @c true, if this region is contiguous
+   */
+  bool isContiguous() const;
+
+  /**
    * @return @c true, if this region contains at least one valid point or one valid range
    */
   bool isValid() const;
@@ -150,6 +155,11 @@ public:
    * is not given, it returns true, if at least one row is selected
    */
   bool isRowSelected(uint row = 0) const;
+
+  /**
+   * @return @c true,if at least one column or one row is selected
+   */
+  bool isColumnOrRowSelected() const;
 
   /**
    * @param col the col to check
