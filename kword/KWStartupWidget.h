@@ -31,7 +31,7 @@ class KWDocument;
  * markup for his new empty document.
  */
 class KWStartupWidget : public KWStartupWidgetBase {
-    Q_OBJECT;
+    Q_OBJECT
 public:
     /**
      * Constructor. Please note that this class is being used/created by KWDocument.
