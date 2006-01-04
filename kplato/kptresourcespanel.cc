@@ -115,6 +115,9 @@ KCommand *ResourcesPanelResourceItem::saveResource(Part *part, ResourceGroup *gr
         if (m_resource->overtimeRate() != m_originalResource->overtimeRate()) {
             m->addCommand(new ModifyResourceOvertimeRateCmd(part, m_originalResource, m_resource->overtimeRate()));
         }
+        if (m_resource->calendar(true) != m_originalResource->calendar(true)) {
+            m->addCommand(new ModifyResourceCalendarCmd(part, m_originalResource, m_resource->calendar(true)));
+        }
     }
     return m;
 }

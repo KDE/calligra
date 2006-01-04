@@ -629,6 +629,18 @@ private:
     double m_newvalue;
     double m_oldvalue;
 };
+class ModifyResourceCalendarCmd : public NamedCommand
+{
+public:
+    ModifyResourceCalendarCmd(Part *part, Resource *resource, Calendar *value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    Calendar *m_newvalue;
+    Calendar *m_oldvalue;
+};
 
 class RemoveResourceGroupCmd : public NamedCommand
 {

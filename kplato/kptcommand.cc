@@ -191,16 +191,17 @@ CalendarModifyWeekdayCmd::CalendarModifyWeekdayCmd(Part *part, Calendar *cal, in
       m_mine(true) {
       
     m_value = value;
-    //kdDebug()<<k_funcinfo<<cal->name()<<" ("<<value<<")"<<endl;
+    kdDebug()<<k_funcinfo<<cal->name()<<" ("<<value<<")"<<endl;
 }
 CalendarModifyWeekdayCmd::~CalendarModifyWeekdayCmd() {
-    //kdDebug()<<k_funcinfo<<m_value<<endl;
+    kdDebug()<<k_funcinfo<<m_weekday<<": "<<m_value<<endl;
     delete m_value;
     
 }
 void CalendarModifyWeekdayCmd::execute() {
+    kdDebug()<<k_funcinfo<<"set "<<m_weekday<<": "<<m_value<<endl;
     m_value = m_cal->weekdays()->replace(m_weekday, m_value);
-    //kdDebug()<<k_funcinfo<<m_value<<endl;
+    kdDebug()<<k_funcinfo<<"taken "<<m_weekday<<": "<<m_value<<endl;
     setCommandType(1);
 }
 void CalendarModifyWeekdayCmd::unexecute() {
@@ -1018,6 +1019,23 @@ void ModifyResourceOvertimeRateCmd::unexecute() {
     m_resource->setOvertimeRate(m_oldvalue);
     
     setCommandType(0);
+}
+
+ModifyResourceCalendarCmd::ModifyResourceCalendarCmd(Part *part, Resource *resource, Calendar *value, QString name)
+    : NamedCommand(part, name),
+      m_resource(resource),
+      m_newvalue(value) {
+    m_oldvalue = resource->calendar(true);
+}
+void ModifyResourceCalendarCmd::execute() {
+    m_resource->setCalendar(m_newvalue);
+    
+    setCommandType(1);
+}
+void ModifyResourceCalendarCmd::unexecute() {
+    m_resource->setCalendar(m_oldvalue);
+    
+    setCommandType(1);
 }
 
 RemoveResourceGroupCmd::RemoveResourceGroupCmd(Part *part, ResourceGroup *group, QString name)
