@@ -23,7 +23,6 @@
 #include <qstringlist.h>
 
 #include <kexidb/connection.h>
-#include "pqxxsqlconnectioninternal.h"
 #include "pqxxcursor.h"
 
 
@@ -31,6 +30,8 @@
 
 namespace KexiDB
 {
+
+class pqxxSqlConnectionInternal;
 
 //! @internal
 class pqxxTransactionData : public TransactionData

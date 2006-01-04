@@ -17,7 +17,7 @@
  * Boston, MA 02110-1301, USA.
 */
 //
-// C++ Implementation: pqxxpreparedstatement
+// C++ Interface: pqxxsqlconnectioninternal
 //
 // Description: 
 //
@@ -26,24 +26,33 @@
 //
 // Copyright: See COPYING file that comes with this distribution
 //
-#include "pqxxpreparedstatement.h"
-#include <kdebug.h>
-using namespace KexiDB;
+//
+#ifndef PQXXSQLCONNECTIONINTERNAL_H
+#define PQXXSQLCONNECTIONINTERNAL_H
 
-pqxxPreparedStatement::pqxxPreparedStatement(StatementType type, ConnectionInternal& conn, TableSchema& tableSchema) : KexiDB::PreparedStatement(type, conn, tableSchema)
+#include <kexidb/connection_p.h>
+#include <pqxx/all.h>
+
+/**
+	@author Adam Pigg <adam@piggz.co.uk>
+*/
+namespace KexiDB
 {
-	KexiDBDrvDbg << "pqxxPreparedStatement: Construction" << endl;
-}
-
-
-pqxxPreparedStatement::~pqxxPreparedStatement()
+class pqxxSqlConnectionInternal : public ConnectionInternal
 {
+	public:
+		pqxxSqlConnectionInternal();
+
+		~pqxxSqlConnectionInternal();
+
+		//! stores last result's message
+		virtual void storeResult();
+
+		pqxx::connection* m_pqxxsql;
+		pqxx::result* m_res;
+
+		QString errmsg; //!< server-specific message of last operation
+		int res; //!< result code of last operation on server
+};
 }
-
-bool pqxxPreparedStatement::execute()
-{
-	KexiDBDrvDbg << "pqxxPreparedStatement::execute()" << endl;
-	return false;
-}
-
-
+#endif

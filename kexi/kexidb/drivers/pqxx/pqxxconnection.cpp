@@ -25,6 +25,7 @@
 #include <klocale.h>
 #include <string>
 #include "pqxxpreparedstatement.h"
+#include "pqxxconnection_p.h"
 using namespace KexiDB;
 
 pqxxTransactionData::pqxxTransactionData(Connection *conn, bool nontransaction)

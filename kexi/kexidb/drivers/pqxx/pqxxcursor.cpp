@@ -19,6 +19,7 @@
 
 #include "pqxxcursor.h"
 #include "pqxxconnection.h"
+#include "pqxxconnection_p.h"
 
 #include <kexidb/error.h>
 #include <kexidb/global.h>
