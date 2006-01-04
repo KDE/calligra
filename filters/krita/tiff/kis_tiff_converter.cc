@@ -496,7 +496,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
                 kdDebug() << "Reading tile x = " << x << " y = " << y << endl;
                 if( planarconfig == PLANARCONFIG_CONTIG )
                 {
-                    TIFFReadTile(image, buf, x, y, 0, (tsize_t) -1);
+                    TIFFReadTile(image, buf, x, y, 0, (tsample_t) -1);
                 } else {
                     for(uint i = 0; i < nbchannels; i++)
                     {
@@ -533,7 +533,7 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
         {
             if( planarconfig == PLANARCONFIG_CONTIG )
             {
-                TIFFReadScanline(image, buf, y, (tsize_t) -1);
+                TIFFReadScanline(image, buf, y, (tsample_t) -1);
             } else {
                 for(uint i = 0; i < nbchannels; i++)
                 {
