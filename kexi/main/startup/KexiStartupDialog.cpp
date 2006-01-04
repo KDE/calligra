@@ -116,7 +116,9 @@ class KexiStartupDialogPrivate {
 public:
 	KexiStartupDialogPrivate()
 		: pageTemplates(0), pageOpenExisting(0), pageOpenRecent(0)
-		, pageTemplatesID(-1), pageOpenExistingID(-1), pageOpenRecentID(-1)
+		, pageTemplatesID(-1)
+		, pageOpenExistingID(-1)
+		, pageOpenRecentID(-1)
 	{
 		result = 0;
 		QString none, iconname;
@@ -136,10 +138,12 @@ public:
 	int dialogType, dialogOptions;
 
 	QFrame *pageTemplates, *pageOpenExisting, *pageOpenRecent;
-	int pageTemplatesID, pageOpenExistingID, pageOpenRecentID;
-	int templatesSectionID_blank, templatesSectionID_import, 
-		templatesSectionID_custom1, templatesSectionID_custom2;
-
+	int pageTemplatesID;
+	int pageOpenExistingID, pageOpenRecentID;
+	int templatesSectionID_blank, templatesSectionID_import;
+#ifdef NO_DB_TEMPLATES
+	int templatesSectionID_custom1, templatesSectionID_custom2;
+#endif
 	QCheckBox *chkDoNotShow;
 
 	//widgets for template tab:
@@ -479,9 +483,10 @@ void KexiStartupDialog::updateSelectedTemplateKeyInfo()
 	if (d->templatesWidget->activePageIndex()==d->templatesSectionID_blank) {
 		d->selectedTemplateKey = "blank";
 	}
-	if (d->templatesWidget->activePageIndex()==d->templatesSectionID_import) {
+	else if (d->templatesWidget->activePageIndex()==d->templatesSectionID_import) {
 		d->selectedTemplateKey = "import";
 	}
+#ifdef NO_DB_TEMPLATES
 	else if (d->templatesWidget->activePageIndex()==d->templatesSectionID_custom1) {
 		item = d->viewPersonalTempl->templates->currentItem();
 		if (!item) {
@@ -498,6 +503,7 @@ void KexiStartupDialog::updateSelectedTemplateKeyInfo()
 		}
 		d->selectedTemplateKey=QString("business/")+static_cast<TemplateItem*>(item)->key;
 	}
+#endif
 }
 
 void KexiStartupDialog::tabShown(QWidget *w)
