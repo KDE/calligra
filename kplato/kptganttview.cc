@@ -32,6 +32,7 @@
 #include "kpttaskappointmentsview.h"
 #include "kptrelation.h"
 #include "kptcontext.h"
+#include "kptschedule.h"
 
 #include "KDGanttView.h"
 #include "KDGanttViewItem.h"
@@ -441,12 +442,17 @@ void GanttView::modifyTask(KDGanttViewItem *item, Task *task)
         text = task->name();
     }
     if (m_showResources) {
-        QPtrListIterator<Appointment> it = task->appointments();
-        for (; it.current(); ++it) {
-            if (!text.isEmpty())
+        if (!text.isEmpty())
+            text += ' ';
+        text += '(';
+        QPtrList<Appointment> lst = task->appointments();
+        QPtrListIterator<Appointment> it = lst;
+        for (bool first=true; it.current(); ++it) {
+            if (!first)
                 text += ", ";
-            text += it.current()->resource()->name();
+            text += it.current()->resource()->resource()->name();
         }
+        text += ')';
     }
     item->setText(text);
     if (m_showProgress) {
