@@ -102,7 +102,7 @@ KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
 	}
 
 	if(! item) {
-		kdWarning() << "KexiScriptPart::action(KURL,QObject*) No such item." << endl;
+		kdWarning() << QString("KexiScriptPart::action(KURL,QObject*) No such item: \"%1\"").arg(scripturi) << endl;
 		return 0;
 	}
 

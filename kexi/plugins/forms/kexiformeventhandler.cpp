@@ -87,6 +87,7 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 			QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
 		}
 		else if (actionName.startsWith("script:")) {
+			actionName = actionName.mid(QString("script:").length()); //cut prefix
 			KexiFormEventScriptAction* action = new KexiFormEventScriptAction(obj, actionName);
 			QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
 			QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );

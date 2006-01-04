@@ -88,7 +88,7 @@ public:
 			if(itemdict) {
 				ActionSelectorDialogListItem* item = 0;
 				for (KexiPart::ItemDictIterator it( *itemdict ); it.current(); ++it) {
-					QString name = QString("script:///%1").arg(it.current()->name());
+					QString name = QString("script:%1").arg(it.current()->name());
 					item = new ActionSelectorDialogListItem(name, this, item, it.current()->caption());
 					if(!selectedItem() && dialog->currentActionName() == name)
 						setSelected(item, true);
