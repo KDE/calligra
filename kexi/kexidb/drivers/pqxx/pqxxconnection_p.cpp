@@ -34,13 +34,13 @@ using namespace KexiDB;
 pqxxSqlConnectionInternal::pqxxSqlConnectionInternal()
  : ConnectionInternal()
 {
-m_pqxxsql = 0;
-m_res = 0;
+	m_pqxxsql = 0;
+	m_res = 0;
 }
 
 
 pqxxSqlConnectionInternal::~pqxxSqlConnectionInternal()
-{	
+{
 
 }
 

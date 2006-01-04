@@ -74,6 +74,7 @@ bool pqxxSqlCursor::drv_open()
 
 	if (!my_conn->is_open())
 	{
+//! @todo this check should be moved to Connection! when drv_prepareQuery() arrive
 		//should never happen, but who knows
 		setError(ERR_NO_CONNECTION,i18n("No connection for cursor open operation specified"));
 		return false;
