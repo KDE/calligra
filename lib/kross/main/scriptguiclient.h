@@ -142,6 +142,13 @@ namespace Kross { namespace Api {
             bool executeScriptFile(const QString& file);
 
             /**
+             * This method executes the \a ScriptAction \p action .
+             * Internaly we just call \a ScriptAction::activate and 
+             * redirect the success/failed signals to our internal slots.
+             */
+            bool executeScriptAction(ScriptAction* action);
+
+            /**
             * The \a ScriptManagerGUI dialog will be displayed to
             * let the user manage the scriptfiles.
             */

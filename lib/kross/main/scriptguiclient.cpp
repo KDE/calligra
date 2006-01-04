@@ -249,9 +249,14 @@ bool ScriptGUIClient::executeScriptFile(const QString& file)
     kdDebug() << QString("Kross::Api::ScriptGUIClient::executeScriptFile() file='%1'").arg(file) << endl;
 
     ScriptAction::Ptr action = new ScriptAction(file);
-    connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
+    return executeScriptAction(action.data());
+}
+
+bool ScriptGUIClient::executeScriptAction(ScriptAction* action)
+{
+    connect(action, SIGNAL( failed(const QString&, const QString&) ),
             this, SLOT( executionFailed(const QString&, const QString&) ));
-    connect(action.data(), SIGNAL( success() ),
+    connect(action, SIGNAL( success() ),
             this, SLOT( successfullyExecuted() ));
 
     action->activate();
