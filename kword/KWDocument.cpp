@@ -3978,7 +3978,7 @@ KWPage* KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page
             newFrame->setCopy( true );
         //kdDebug(32002) << "   => created frame " << newFrame << " " << *newFrame << endl;
     }
-    delayedRecalcFrames(page->pageNumber()); // make sure the main-text-frame is created.
+    slotRecalcFrames(); // make sure the main-text-frame is created.
     return page;
 }
 
