@@ -198,12 +198,12 @@ void ResourceView::drawResources(QListViewItem *parent, ResourceGroup *group)
 
 
 void ResourceView::resSelectionChanged() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     resSelectionChanged(resList->selectedItem());
 }
 
 void ResourceView::resSelectionChanged(QListViewItem *item) {
-    kdDebug()<<k_funcinfo<<item<<endl;
+    //kdDebug()<<k_funcinfo<<item<<endl;
     ResourceItemPrivate *ritem = dynamic_cast<ResourceItemPrivate *>(item);
     if (ritem) {
         m_selectedItem = ritem;
@@ -238,12 +238,12 @@ void ResourceView::print(KPrinter &printer) {
 }
 
 bool ResourceView::setContext(Context::Resourceview &context) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     return true;
 }
 
 void ResourceView::getContext(Context::Resourceview &context) const {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 }
 
 

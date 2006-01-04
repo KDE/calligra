@@ -603,13 +603,13 @@ void ReportView::slotLastPage() {
 
 bool ReportView::setContext(Context::Reportview &context) {
     Q_UNUSED(context);
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     return true;
 }
 
 void ReportView::getContext(Context::Reportview &context) const {
     Q_UNUSED(context);
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 }
 
 void ReportView::slotReportListClicked(QListViewItem* item) {

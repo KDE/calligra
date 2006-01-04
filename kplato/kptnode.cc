@@ -35,7 +35,7 @@ namespace KPlato
 {
 
 Node::Node(Node *parent) : m_nodes(), m_dependChildNodes(), m_dependParentNodes() {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_parent = parent;
     init();
     m_id = QString(); // Not mapped
@@ -45,7 +45,7 @@ Node::Node(Node &node, Node *parent)
     : m_nodes(), 
       m_dependChildNodes(), 
       m_dependParentNodes() {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_parent = parent;
     init();
     m_name = node.name();
@@ -615,10 +615,9 @@ void Node::setEndTime(DateTime endTime) {
 }
 
 void Node::saveAppointments(QDomElement &element, long id) const {
-    kdDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
     QPtrListIterator<Node> it(m_nodes);
     for (; it.current(); ++it ) {
-        kdDebug()<<k_funcinfo<<m_name<<" calling "<<it.current()->name()<<endl;
         it.current()->saveAppointments(element, id);
     }
 }
@@ -642,12 +641,11 @@ bool Node::addAppointment(Appointment *appointment) {
 }
 
 bool Node::addAppointment(Appointment *appointment, Schedule &sch) {
-    kdDebug()<<k_funcinfo<<this<<endl;
+    //kdDebug()<<k_funcinfo<<this<<endl;
     NodeSchedule *s = findSchedule(sch.id());
     if (s == 0) {
         s = createSchedule(sch.name(), sch.type(), sch.id());
     }
-    kdDebug()<<k_funcinfo<<this<<" s="<<s<<" node="<<s->node()<<endl;
     appointment->setNode(s);
     return s->add(appointment);
 }
@@ -675,7 +673,7 @@ void Node::addSchedule(NodeSchedule *schedule) {
 }
 
 NodeSchedule *Node::createSchedule(QString name, Schedule::Type type, long id) {
-    kdDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
+    //kdDebug()<<k_funcinfo<<name<<" type="<<type<<" id="<<(int)id<<endl;
     NodeSchedule *sch = new NodeSchedule(this, name, type, id);
     addSchedule(sch);
     return sch;
@@ -708,7 +706,7 @@ int Node::level() {
 
 void Node::generateWBS(int count, WBSDefinition &def, QString wbs) {
     m_wbs = wbs + def.code(count, level());
-    kdDebug()<<k_funcinfo<<m_name<<" wbs: "<<m_wbs<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" wbs: "<<m_wbs<<endl;
     QString w = wbs + def.wbs(count, level());
     QPtrListIterator<Node> it = m_nodes;
     for (int i=0; it.current(); ++it) {
@@ -722,7 +720,7 @@ void Node::setCurrentSchedule(long id) {
     for (; it.current(); ++it) {
         it.current()->setCurrentSchedule(id);
     }
-    kdDebug()<<k_funcinfo<<m_name<<" id: "<<id<<"="<<m_currentSchedule<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" id: "<<id<<"="<<m_currentSchedule<<endl;
 }
 //////////////////////////   Effort   /////////////////////////////////
 

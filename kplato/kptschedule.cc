@@ -46,7 +46,7 @@ Schedule::Schedule(QString name, Type type, long id)
       m_deleted(false),
       m_appointments() {
 
-    kdDebug()<<k_funcinfo<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<") Name: '"<<name<<"' Type="<<type<<" id="<<id<<endl;
     m_appointments.setAutoDelete(true);
 }
 
@@ -98,14 +98,14 @@ void Schedule::saveXML(QDomElement &element) const {
 }
 
 void Schedule::saveCommonXML(QDomElement &element) const {
-    kdDebug()<<k_funcinfo<<m_name<<" save schedule"<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" save schedule"<<endl;
     element.setAttribute("name", m_name);
     element.setAttribute("type", typeToString());
     element.setAttribute("id", m_id);
 }
 
 void Schedule::saveAppointments(QDomElement &element) const {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<Appointment> it = m_appointments;
     for (; it.current(); ++it) {
         it.current()->saveXML(element);
@@ -142,8 +142,8 @@ bool Schedule::add(Appointment *appointment) {
         return false;
     }
     m_appointments.append(appointment);
-    if (resource()) kdDebug()<<k_funcinfo<<"For resource '"<<resource()->name()<<"'"<<endl;
-    if (node()) kdDebug()<<k_funcinfo<<"For node '"<<node()->name()<<"'"<<endl;
+    //if (resource()) kdDebug()<<k_funcinfo<<"For resource '"<<resource()->name()<<"'"<<endl;
+    //if (node()) kdDebug()<<k_funcinfo<<"For node '"<<node()->name()<<"'"<<endl;
     return true;
 }
 
@@ -309,19 +309,19 @@ double Schedule::actualCostTo(const QDate &date) const {
 NodeSchedule::NodeSchedule()
     : Schedule(),
       m_node(0) {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     init();
 }
 
 NodeSchedule::NodeSchedule(Node *node, QString name, Schedule::Type type, long id)
     : Schedule(name, type, id),
       m_node(node) {
-    kdDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
+    //kdDebug()<<k_funcinfo<<"node name: "<<node->name()<<endl;
     init();
 }
 
 NodeSchedule::~NodeSchedule() {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
 void NodeSchedule::init() {
@@ -359,7 +359,7 @@ NodeSchedule *NodeSchedule::find(const QIntDict<NodeSchedule> &sch, QString name
 }
 
 bool NodeSchedule::loadXML(const QDomElement &sch) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     Schedule::loadXML(sch);
     
     earliestStart = DateTime::fromString(sch.attribute("earlieststart"));
@@ -380,7 +380,7 @@ bool NodeSchedule::loadXML(const QDomElement &sch) {
 }
 
 void NodeSchedule::saveXML(QDomElement &element) const {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     QDomElement sch = element.ownerDocument().createElement("schedule");
     element.appendChild(sch);
     saveCommonXML(sch);
@@ -408,14 +408,14 @@ void NodeSchedule::saveXML(QDomElement &element) const {
 }
 
 bool NodeSchedule::loadProjectXML(const QDomElement &sch, Project &project) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     Schedule::loadXML(sch);
     
     startTime = DateTime::fromString(sch.attribute("start"));
     endTime = DateTime::fromString(sch.attribute("end"));
     
     QDomNodeList al = sch.childNodes();
-    kdDebug()<<k_funcinfo<<"No of appointments: "<<al.count()<<endl;
+    //kdDebug()<<k_funcinfo<<"No of appointments: "<<al.count()<<endl;
     for (unsigned int i=0; i<al.count(); ++i) {
         if (al.item(i).isElement()) {
             QDomElement app = al.item(i).toElement();
@@ -449,10 +449,10 @@ void NodeSchedule::initiateCalculation() {
 }
 
 void NodeSchedule::addAppointment(Schedule *resource, DateTime &start, DateTime &end, double load) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     Appointment *a = findAppointment(resource, this);
     if (a != 0) {
-        kdDebug()<<k_funcinfo<<"Add interval"<<endl;
+        //kdDebug()<<k_funcinfo<<"Add interval"<<endl;
         a->addInterval(start, end, load);
         return;
     }
@@ -482,24 +482,24 @@ void NodeSchedule::calcResourceOverbooked() {
 ResourceSchedule::ResourceSchedule()
     : Schedule(),
       m_resource(0) {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
 ResourceSchedule::ResourceSchedule(Resource *resource, QString name, Schedule::Type type, long id)
     : Schedule(name, type, id),
       m_resource(resource) {
-    kdDebug()<<k_funcinfo<<"resource: "<<resource->name()<<endl;
+    //kdDebug()<<k_funcinfo<<"resource: "<<resource->name()<<endl;
 }
 
 ResourceSchedule::~ResourceSchedule() {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
 }
 
 void ResourceSchedule::addAppointment(Schedule *node, DateTime &start, DateTime &end, double load) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     Appointment *a = findAppointment(this, node);
     if (a != 0) {
-        kdDebug()<<k_funcinfo<<"Add interval"<<endl;
+        //kdDebug()<<k_funcinfo<<"Add interval"<<endl;
         a->addInterval(start, end, load);
         return;
     }

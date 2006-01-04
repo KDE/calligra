@@ -36,7 +36,7 @@ namespace KPlato
 {
 
 Task::Task(Node *parent) : Node(parent), m_resource() {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_resource.setAutoDelete(true);
     Duration d(1, 0, 0);
     m_effort = new Effort(d);
@@ -55,7 +55,7 @@ Task::Task(Node *parent) : Node(parent), m_resource() {
 Task::Task(Task &task, Node *parent) 
     : Node(task, parent), 
       m_resource() {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_resource.setAutoDelete(true);
     
     m_parentProxyRelations.setAutoDelete(true);
@@ -309,7 +309,7 @@ void Task::save(QDomElement &element)  {
 }
 
 void Task::saveAppointments(QDomElement &element, long id) const {
-    kdDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
+    //kdDebug()<<k_funcinfo<<m_name<<" id="<<id<<endl;
     NodeSchedule *sch = findSchedule(id);
     if (sch) {
         sch->saveAppointments(element);

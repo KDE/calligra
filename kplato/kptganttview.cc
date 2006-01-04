@@ -145,7 +145,7 @@ void GanttView::draw(Project &project)
     if (sch) {
         project.setCurrentSchedule(sch->id());
     }
-    kdDebug()<<k_funcinfo<<"Schedule: "<<(sch?sch->typeToString():"None")<<endl;
+    //kdDebug()<<k_funcinfo<<"Schedule: "<<(sch?sch->typeToString():"None")<<endl;
     m_gantt->setUpdateEnabled(false);
 
     clear();
@@ -162,7 +162,7 @@ void GanttView::draw(Project &project)
 
 void GanttView::drawChanges(Project &project)
 {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     Schedule::Type type = Schedule::Expected;
     if (m_showOptimistic) {
         type = Schedule::Optimistic;
@@ -173,7 +173,7 @@ void GanttView::drawChanges(Project &project)
     if (sch) {
         project.setCurrentSchedule(sch->id());
     }
-    kdDebug()<<k_funcinfo<<"Schedule: "<<(sch?sch->typeToString():"None")<<endl;
+    //kdDebug()<<k_funcinfo<<"Schedule: "<<(sch?sch->typeToString():"None")<<endl;
     m_gantt->setUpdateEnabled(false);
     resetDrawn(m_gantt->firstChild());
     updateChildren(&project); // don't draw project
@@ -544,7 +544,7 @@ void GanttView::modifyMilestone(KDGanttViewItem *item, Task *task)
     }    
     if (m_showPositiveFloat) {
         DateTime t = task->startTime() + task->positiveFloat();
-        kdDebug()<<k_funcinfo<<task->name()<<" float: "<<t.toString()<<endl;
+        //kdDebug()<<k_funcinfo<<task->name()<<" float: "<<t.toString()<<endl;
         if (t.isValid() && t > task->startTime()) {
             item->setFloatEndTime(t);
         } else {
@@ -953,7 +953,7 @@ bool GanttView::exportGantt(QIODevice* device) {
 }
 
 void GanttView::slotLinkItems(KDGanttViewItem* from, KDGanttViewItem* to, int linkType) {
-    kdDebug()<<k_funcinfo<<(from?from->listViewText():"null")<<" to "<<(to?to->listViewText():"null")<<" linkType="<<linkType<<endl;
+    //kdDebug()<<k_funcinfo<<(from?from->listViewText():"null")<<" to "<<(to?to->listViewText():"null")<<" linkType="<<linkType<<endl;
     Node *par = getNode(from);
     Node *child = getNode(to);
     if (!par || !child || !(par->legalToLink(child))) {
@@ -997,7 +997,7 @@ void GanttView::slotModifyLink(KDGanttViewTaskLink* link) {
 }
 
 bool GanttView::setContext(Context::Ganttview &context) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     
     QValueList<int> list = sizes();
     list[0] = context.ganttviewsize;
@@ -1029,7 +1029,7 @@ void GanttView::getContext(Context::Ganttview &context) const {
     //kdDebug()<<k_funcinfo<<endl;
     context.ganttviewsize = sizes()[0];
     context.taskviewsize = sizes()[1];
-    kdDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
+    //kdDebug()<<k_funcinfo<<"sizes="<<sizes()[0]<<","<<sizes()[1]<<endl;
     if (currentNode()) {
         context.currentNode = currentNode()->id();
     }

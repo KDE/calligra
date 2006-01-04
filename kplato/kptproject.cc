@@ -47,7 +47,7 @@ Project::Project(Node *parent)
       m_accounts(*this),
       m_defaultCalendar(0),
       m_baselined(false) {
-    kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
+    //kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_constraint = Node::MustStartOn;
     m_standardWorktime = new StandardWorktime();
     m_schedules.setAutoDelete(true);
@@ -83,9 +83,8 @@ void Project::calculate(Effort::Use estType) {
     if (m_currentSchedule == 0) {
         m_currentSchedule = createSchedule(i18n("Standard"), (Schedule::Type)estType);
     }
-    kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_currentSchedule->startTime.toString()<<endl;
+    //kdDebug()<<k_funcinfo<<"Node="<<m_name<<" Start="<<m_currentSchedule->startTime.toString()<<endl;
     if (type() == Type_Project) {
-        kdDebug()<<k_funcinfo<<m_currentSchedule->id()<<" "<<m_currentSchedule->typeToString()<<endl;
         initiateCalculation(m_currentSchedule);
         if (m_constraint == Node::MustStartOn) {
             m_currentSchedule->startTime = m_constraintStartTime;
@@ -117,7 +116,7 @@ void Project::calculate(Effort::Use estType) {
 }
 
 bool Project::calcCriticalPath() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<Node> endnodes = m_endNodes;
     for (; endnodes.current(); ++endnodes) {
         endnodes.current()->calcCriticalPath();
@@ -126,7 +125,7 @@ bool Project::calcCriticalPath() {
 }
 
 DateTime Project::startTime() const {
-    kdDebug()<<k_funcinfo<<(m_currentSchedule?m_currentSchedule->id():-1)<<" "<<(m_currentSchedule?m_currentSchedule->typeToString():"")<<endl;
+    //kdDebug()<<k_funcinfo<<(m_currentSchedule?m_currentSchedule->id():-1)<<" "<<(m_currentSchedule?m_currentSchedule->typeToString():"")<<endl;
     if (m_currentSchedule)
         return m_currentSchedule->startTime;
     
@@ -134,7 +133,7 @@ DateTime Project::startTime() const {
 }
 
 DateTime Project::endTime() const {
-    kdDebug()<<k_funcinfo<<(m_currentSchedule?m_currentSchedule->id():-1)<<" "<<(m_currentSchedule?m_currentSchedule->typeToString():"")<<endl;
+    //kdDebug()<<k_funcinfo<<(m_currentSchedule?m_currentSchedule->id():-1)<<" "<<(m_currentSchedule?m_currentSchedule->typeToString():"")<<endl;
     if (m_currentSchedule)
         return m_currentSchedule->endTime;
     
@@ -163,7 +162,7 @@ DateTime Project::calculateForward(int use) {
             if (!finish.isValid() || time > finish)
                 finish = time;
         }
-        kdDebug()<<k_funcinfo<<m_name<<" finish="<<finish.toString()<<endl;
+        //kdDebug()<<k_funcinfo<<m_name<<" finish="<<finish.toString()<<endl;
         return finish;
     } else {
         //TODO: subproject
@@ -184,7 +183,7 @@ DateTime Project::calculateBackward(int use) {
             if (!start.isValid() || time < start)
                 start = time;
         }
-        kdDebug()<<k_funcinfo<<m_name<<" start="<<start.toString()<<endl;
+        //kdDebug()<<k_funcinfo<<m_name<<" start="<<start.toString()<<endl;
         return start;
     } else {
         //TODO: subproject
@@ -339,8 +338,6 @@ bool Project::load(QDomElement &element) {
                 Task *child = new Task(this);
                 if (child->load(e, *this)) {
                     addChildNode(child);
-                    kdDebug()<<k_funcinfo<<child->name()<<" id="<<child->id()<<endl;
-                    kdDebug()<<k_funcinfo<<"Inserted="<<(bool)findNode(child->id())<<endl;
                 } else {
                     // TODO: Complain about this
                     delete child;
@@ -464,7 +461,7 @@ void Project::save(QDomElement &element)  {
             QDomElement schs = el.ownerDocument().createElement("schedule");
             el.appendChild(schs);
             it.current()->saveProjectXML(schs);
-            kdDebug()<<k_funcinfo<<m_name<<" id="<<it.current()->id()<<endl;
+            //kdDebug()<<k_funcinfo<<m_name<<" id="<<it.current()->id()<<endl;
             Node::saveAppointments(schs, it.current()->id());
         }
     }
@@ -716,7 +713,7 @@ Resource *Project::resource(QString id) {
 
 // TODO
 EffortCostMap Project::plannedEffortCostPrDay(const QDate &start, const QDate &end) const {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     EffortCostMap ec;
     return ec;
 
@@ -865,7 +862,6 @@ QPtrList<Calendar> Project::calendars() {
     QPtrList<Calendar> list;
     QPtrListIterator<Calendar> it = m_calendars;
     for (; it.current(); ++it) {
-        kdDebug()<<k_funcinfo<<it.current()->name()<<" deleted="<<it.current()->isDeleted()<<endl;
         if (!it.current()->isDeleted()) {
             list.append(it.current());
         }
@@ -956,7 +952,7 @@ void Project::setCurrentSchedule(long id) {
 }
 
 NodeSchedule *Project::createSchedule(QString name, Schedule::Type type) {
-    kdDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
+    //kdDebug()<<k_funcinfo<<"No of schedules: "<<m_schedules.count()<<endl;
     long i=1;
     while (m_schedules.find(i)) {
         ++i;
