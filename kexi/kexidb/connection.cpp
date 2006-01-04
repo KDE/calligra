@@ -65,10 +65,10 @@ class ConnectionPrivate
 		 , tableSchemaChangeListeners(101)
 		 , versionMajor(-1)
 		 , versionMinor(-1)
+		 , m_parser(0)
 		 , dont_remove_transactions(false)
 		 , skip_databaseExists_check_in_useDatabase(false)
 		 , default_trans_started_inside(false)
-		 , m_parser(0)
 		 , isConnected(false)
 		 , autoCommit(true)
 		{
