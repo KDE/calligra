@@ -36,6 +36,7 @@
 #include <kexipartitem.h>
 #include <kxmlguiclient.h>
 #include <kexidialogbase.h>
+#include <kconfig.h>
 #include <kdebug.h>
 
 /// \internal
@@ -111,15 +112,34 @@ KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
 	KexiDialogBase* dialog = new KexiDialogBase(m_mainWin);
 	dialog->setId( item->identifier() );
 	KexiScriptDesignView* view = dynamic_cast<KexiScriptDesignView*>( createView(dialog, dialog, *item, Kexi::DesignViewMode) );
-	if(view) {
-		Kross::Api::ScriptAction* scriptaction = view->scriptAction();
-		if(scriptaction) {
+	if(! view) {
+		kdWarning() << "KexiScriptPart::action(KURL,QObject*) Failed to create a view." << endl;
+		return 0;
+	}
+
+	Kross::Api::ScriptAction* scriptaction = view->scriptAction();
+	if(scriptaction) {
+
+		const QString dontAskAgainName = "askExecuteScript";
+		KConfig* config = KGlobal::config();
+		QString dontask = config->readEntry(dontAskAgainName).lower();
+
+		bool exec = (dontask == "yes");
+		if( !exec && dontask != "no" ) {
+			exec = KMessageBox::warningContinueCancel(0,
+				i18n("Do you want to execute the script \"%1\"?\n\nScripts obtained from unknown sources can contain dangerous code.").arg(scriptaction->text()),
+				i18n("Execute script?"), KGuiItem(i18n("Execute"), "exec"),
+				dontAskAgainName, KMessageBox::Notify | KMessageBox::Dangerous
+			) == KMessageBox::Continue;
+		}
+
+		if(exec) {
 			//QTimer::singleShot(10, scriptaction, SLOT(activate()));
 			d->scriptguiclient->executeScriptAction( scriptaction );
 		}
-		view->deleteLater(); // not needed any longer.
 	}
 
+	view->deleteLater(); // not needed any longer.
 	return 0;
 }
 
