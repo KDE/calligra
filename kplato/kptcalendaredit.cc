@@ -124,7 +124,7 @@ void CalendarEdit::slotApplyClicked() {
         calDay->clearIntervals();
         if (calDay->state() == Map::Working) {
             for (QListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
-                //kdDebug()<<k_funcinfo<<"Adding interval"<<endl;
+                //kdDebug()<<k_funcinfo<<"Adding interval: "<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString()<<endl;
                 calDay->addInterval(static_cast<IntervalItem *>(item)->interval());
             }
         }
@@ -143,7 +143,7 @@ void CalendarEdit::slotApplyClicked() {
         weekday->clearIntervals();
         if (weekday->state() == Map::Working) {
             for (QListViewItem *item = intervalList->firstChild(); item; item = item->nextSibling()) {
-                //kdDebug()<<k_funcinfo<<"Adding interval"<<endl;
+                //kdDebug()<<k_funcinfo<<"Adding interval: "<<static_cast<IntervalItem *>(item)->interval().first.toString()<<"-"<<static_cast<IntervalItem *>(item)->interval().second.toString()<<endl;
                 weekday->addInterval(static_cast<IntervalItem *>(item)->interval());
             }
         }

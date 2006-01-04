@@ -46,34 +46,11 @@ private slots:
     void slotCheckAllFieldsFilled();
     void slotEnableButtonOk(bool on);
 
-    void slotYearChanged(int);
-    void slotMonthChanged(int);
+    void slotYearChanged(double);
+    void slotMonthChanged(double);
+    void slotWeekChanged(double);
+    void slotDayChanged(double);
     
-    void slotEditDayClicked();
-    
-    void slotEditMondayClicked();
-    void slotEditTuesdayClicked();
-    void slotEditWednesdayClicked();
-    void slotEditThursdayClicked();
-    void slotEditFridayClicked();
-    void slotEditSaturdayClicked();
-    void slotEditSundayClicked();
-    
-    void slotStateMondayActivated(int);
-    void slotStateTuesdayActivated(int);
-    void slotStateWednesdayActivated(int);
-    void slotStateThursdayActivated(int);
-    void slotStateFridayActivated(int);
-    void slotStateSaturdayActivated(int);
-    void slotStateSundayActivated(int);
-    
-    void slotMondayTimeChanged(const QTime& time);
-    void slotTuesdayTimeChanged(const QTime& time);
-    void slotWednesdayTimeChanged(const QTime& time);
-    void slotThursdayTimeChanged(const QTime& time);
-    void slotFridayTimeChanged(const QTime& time);
-    void slotSaturdayTimeChanged(const QTime& time);
-    void slotSundayTimeTimeChanged(const QTime& time);
 
 signals:
     void obligatedFieldsFilled(bool yes);

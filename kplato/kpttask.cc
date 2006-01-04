@@ -1386,20 +1386,12 @@ DateTime Task::workStartAfter(const DateTime &dt) {
         DateTime t = m_requests->availableAfter(dt);
         return t.isValid() ? t : dt;
     }
-    Project *p = static_cast<Project*>(projectNode());
-    if (p && p->standardWorktime()) {
-        return p->standardWorktime()->workStartAfter(dt);
-    }
     return dt;
 }
 
 DateTime Task::workFinishBefore(const DateTime &dt) {
     if (m_requests) {
         return m_requests->availableBefore(dt);
-    }
-    Project *p = static_cast<Project*>(projectNode());
-    if (p && p->standardWorktime()) {
-        return p->standardWorktime()->workFinishBefore(dt);
     }
     return dt;
 }
@@ -1448,7 +1440,7 @@ bool Task::calcCriticalPath() {
 }
 
 void Task::setCurrentSchedule(long id) {
-    Node::setCurrentSchedule(findSchedule(id));
+    setCurrentSchedulePtr(findSchedule(id));
     Node::setCurrentSchedule(id);
 }
 

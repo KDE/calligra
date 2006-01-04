@@ -84,15 +84,12 @@ void TaskGeneralPanel::setStartValues(Task &task, StandardWorktime *workTime) {
         setStartDateTime(task.constraintStartTime());
     } else {
         QDate date = QDate::currentDate();
-        QTime time = workTime ? workTime->startOfDay(date.dayOfWeek()-1) : QTime::currentTime();
-        setStartDateTime(QDateTime(date, time)); 
+        setStartDateTime(QDateTime(date, QTime())); 
     }
     if (task.constraintEndTime().isValid()) {
         setEndDateTime(task.constraintEndTime());
     } else {
-        QDate date = QDate::currentDate();
-        QTime time = workTime ? workTime->endOfDay(date.dayOfWeek()-1) : QTime::currentTime();
-        setEndDateTime(QDateTime(date, time)); 
+        setEndDateTime(QDateTime(startDate().addDays(1), QTime())); 
     }
     kdDebug()<<k_funcinfo<<"Effort: "<<task.effort()->expected().toString()<<endl;
     setEstimate(task.effort()->expected()); 

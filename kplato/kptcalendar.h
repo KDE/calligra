@@ -256,7 +256,6 @@ public:
     Calendar();
     Calendar(QString name, Calendar *parent=0);
     Calendar(Calendar *calendar);
-    Calendar(StandardWorktime &wt);
     ~Calendar();
 
     QString name() const { return m_name; }
@@ -401,63 +400,43 @@ public:
     ~StandardWorktime();
     
     /// The work time of a normal year.
-    Duration durationYear() const;
+    Duration durationYear() const { return m_year; }
+    /// The work time of a normal year.
+    double year() const { return m_year.toDouble(Duration::Unit_h); }
     /// Set the work time of a normal year.
-    void setYear(Duration year) { m_year = year; }
+    void setYear(const Duration year) { m_year = year; }
+    /// Set the work time of a normal year.
+    void setYear(double hours) { m_year = Duration((Q_INT64)(hours*60.0*60.0)); }
     
     /// The work time of a normal month
-    Duration durationMonth() const;
+    Duration durationMonth() const { return m_month; }
+    /// The work time of a normal month
+    double month() const  { return m_month.toDouble(Duration::Unit_h); }
     /// Set the work time of a normal month
-    void setMonth(Duration month) { m_month = month; }
+    void setMonth(const Duration month) { m_month = month; }
+    /// Set the work time of a normal month
+    void setMonth(double hours) { m_month = Duration((Q_INT64)(hours*60.0*60.0)); }
     
     /// The work time of a normal week
-    Duration durationWeek() const;
+    Duration durationWeek() const { return m_week; }
+    /// The work time of a normal week
+    double week() const { return m_week.toDouble(Duration::Unit_h); }
     /// Set the work time of a normal week
-    void setWeek();
-    
-    /// The work time of a  weekday
-    Duration durationWeekday(int weekday) const;
+    void setWeek(const Duration week) { m_week = week; }
+    /// Set the work time of a normal week
+    void setWeek(double hours) { m_week = Duration((Q_INT64)(hours*60.0*60.0)); }
     
     /// The work time of a normal day
-    Duration durationDay() const;
-    /// The number of work time in a normal day
-    void setDay();
-    
-    /// Returns the time when the  weekday starts
-    QTime startOfDay(int weekday) const;
-    QTime startOfDay(const QDate &date) const;
-    /// Returns the time when the  weekday ends
-    QTime endOfDay(int weekday) const;
-    QTime endOfDay(const QDate &date) const;
-    
-    CalendarDay day() const { return m_day;}
-    CalendarWeekdays weekdays() const { return m_weekdays;}
+    Duration durationDay() const { return m_day; }
+    /// The work time of a normal day
+    double day() const { return m_day.toDouble(Duration::Unit_h); }
+    /// Set the work time of a normal day
+    void setDay(const Duration day) { m_day = day; }
+    /// Set the work time of a normal day
+    void setDay(double hours) { m_day = Duration((Q_INT64)(hours*60.0*60.0)); }
     
     bool load(QDomElement &element);
     void save(QDomElement &element);
-
-    int state(int weekday) const;
-    int state(const QDate &date) const;
-    void setState(int weekday, int state);
-    
-    const QPtrList<QPair<QTime, QTime> > &intervals() const { 
-        return m_day.workingIntervals(); 
-    }
-    const QPtrList<QPair<QTime, QTime> > &intervals(int weekday) const { 
-        return m_weekdays.intervals(weekday); 
-    }
-    void setIntervals(QPtrList<QPair<QTime, QTime> >intervals) {
-        m_day.setIntervals(intervals); 
-    }
-    void setIntervals(int weekday, QPtrList<QPair<QTime, QTime> >intervals) { 
-        m_weekdays.setIntervals(weekday, intervals); 
-    }
-
-    void clearIntervals() { m_day.clearIntervals(); }
-    void clearIntervals(int weekday) { m_weekdays.clearIntervals(weekday); }
-    
-    DateTime workStartAfter(const DateTime &dt) const;
-    DateTime workFinishBefore(const DateTime &dt) const;
 
 protected:
     void init();
@@ -465,8 +444,8 @@ protected:
 private:
     Duration m_year;
     Duration m_month;
-    CalendarDay m_day;
-    CalendarWeekdays m_weekdays;
+    Duration m_week;
+    Duration m_day;
     
 #ifndef NDEBUG
 public:

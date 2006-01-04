@@ -596,23 +596,6 @@ Calendar::Calendar(QString name, Calendar *parent)
     init();
 }
 
-Calendar::Calendar(StandardWorktime &wt)
-    : m_name(i18n("Standard calendar")),
-      m_parent(0),
-      m_project(0),
-      m_deleted(false),
-      m_days() {
-    
-    for (int i=-1; i > -1000; i--) {
-        if (setId(QString().setNum(i)))
-            break;
-    }
-    m_days.setAutoDelete(true);
-    m_weeks = new CalendarWeeks();
-    m_weekdays = new CalendarWeekdays(wt.weekdays());
-    
-}
-
 Calendar::~Calendar() {
     //kdDebug()<<k_funcinfo<<"deleting "<<m_name<<endl;
     removeId();
@@ -1144,8 +1127,8 @@ StandardWorktime::StandardWorktime(StandardWorktime *worktime) {
     if (worktime) {
         m_year = worktime->durationYear();
         m_month = worktime->durationMonth();
-        m_day.copy(worktime->day());
-        m_weekdays.copy(worktime->weekdays());
+        m_week = worktime->durationWeek();
+        m_day = worktime->durationDay();
     } else {
         init();
     }
@@ -1159,81 +1142,16 @@ void StandardWorktime::init() {
     // Some temporary sane default values
     m_year = Duration(0, 1760, 0);
     m_month = Duration(0, 176, 0);
-    m_day.setState(Map::Working);
-    m_day.addInterval(new QPair<QTime, QTime>(QTime(8, 0, 0), QTime(16, 0, 0)));
-    
-    for (int i=0; i<5; ++i) {
-        setState(i, Map::Working);
-        QPtrList<QPair<QTime, QTime> > l;
-        l.append(new QPair<QTime, QTime>(QTime(8, 0, 0), QTime(16, 0, 0)));
-        setIntervals(i, l);
-    }
-    m_weekdays.setState(5, Map::NonWorking);
-    m_weekdays.setState(6, Map::NonWorking);
-}    
-
-Duration StandardWorktime::durationYear() const {
-    return m_year;
+    m_week = Duration(0, 40, 0);
+    m_day = Duration(0, 8, 0);
 }
 
-Duration StandardWorktime::durationMonth() const {
-    return m_month;
-}
-
-Duration StandardWorktime::durationWeek() const {
-    return m_weekdays.duration();
-}
-
-void StandardWorktime::setWeek() {
-}
-
-Duration StandardWorktime::durationWeekday(int weekday) const {
-    return m_weekdays.duration(weekday);
-}
-
-Duration StandardWorktime::durationDay() const {
-    return m_day.duration();
-}
-
-void StandardWorktime::setDay() {
-}
-
-QTime StandardWorktime::startOfDay(int weekday) const {
-    return m_weekdays.startOfDay(weekday);
-}
-
-QTime StandardWorktime::startOfDay(const QDate &date) const {
-    return m_weekdays.startOfDay(date.dayOfWeek()-1);
-}
-
-QTime StandardWorktime::endOfDay(int weekday) const {
-    return m_weekdays.endOfDay(weekday);
-}
-    
-QTime StandardWorktime::endOfDay(const QDate &date) const {
-    return m_weekdays.endOfDay(date.dayOfWeek()-1);
-}
-    
 bool StandardWorktime::load(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
-    m_year = Duration::fromString(element.attribute("year"), Duration::Format_Hour); //FIXME
-    m_month = Duration::fromString(element.attribute("month"), Duration::Format_Hour); //FIXME
-    QDomNodeList list = element.childNodes();
-    for (unsigned int i=0; i<list.count(); ++i) {
-        if (list.item(i).isElement()) {
-            QDomElement e = list.item(i).toElement();
-            if (e.tagName() == "weekday") {
-                if (!m_weekdays.load(e))
-                    return false;
-            }
-            if (e.tagName() == "day") {
-                if (!m_day.load(e)) {
-                    kdError()<<k_funcinfo<<"Failed to load calendarDay"<<endl;
-                    return false;
-                }
-            }
-        }
-    }
+    m_year = Duration::fromString(element.attribute("year"), Duration::Format_Hour); 
+    m_month = Duration::fromString(element.attribute("month"), Duration::Format_Hour); 
+    m_week = Duration::fromString(element.attribute("week"), Duration::Format_Hour); 
+    m_day = Duration::fromString(element.attribute("day"), Duration::Format_Hour); 
     return true;
 }
 
@@ -1241,50 +1159,10 @@ void StandardWorktime::save(QDomElement &element) {
     //kdDebug()<<k_funcinfo<<endl;
     QDomElement me = element.ownerDocument().createElement("standard-worktime");
     element.appendChild(me);
-    me.setAttribute("year", m_year.toString(Duration::Format_Hour)); //FIXME
-    me.setAttribute("month", m_month.toString(Duration::Format_Hour)); //FIXME
-    QDomElement e = me.ownerDocument().createElement("day");
-    me.appendChild(e);
-    m_day.save(e);
-    m_weekdays.save(me);
-}
-
-int StandardWorktime::state(int weekday) const {
-    return m_weekdays.state(weekday);
-}
-
-int StandardWorktime::state(const QDate &date) const {
-    return m_weekdays.state(date.dayOfWeek()-1);
-}
-
-void StandardWorktime::setState(int weekday, int state) {
-    m_weekdays.setState(weekday, state);
-}
-
-DateTime StandardWorktime::workStartAfter(const DateTime &dt) const {
-    QDate date = dt.date();
-    if (state(date) == Map::Working && endOfDay(date) > dt.time())
-        return dt;
-    date = date.addDays(1);
-    for (int i = 0; i < 6; ++i) {
-        if (state(date) == Map::Working)
-            return DateTime(date, startOfDay(date));
-        date = date.addDays(1);
-    }
-    return dt;
-}
-
-DateTime StandardWorktime::workFinishBefore(const DateTime &dt) const {
-    QDate date = dt.date();
-    if (state(date) == Map::Working && startOfDay(date) < dt.time())
-        return dt;
-    date = date.addDays(-1);
-    for (int i = 0; i < 6; ++i) {
-        if (state(date) == Map::Working)
-            return DateTime(date, endOfDay(date));
-        date = date.addDays(-1);
-    }
-    return dt;
+    me.setAttribute("year", m_year.toString(Duration::Format_Hour));
+    me.setAttribute("month", m_month.toString(Duration::Format_Hour));
+    me.setAttribute("week", m_week.toString(Duration::Format_Hour));
+    me.setAttribute("day", m_day.toString(Duration::Format_Hour));
 }
 
 #ifndef NDEBUG
@@ -1332,10 +1210,9 @@ void Calendar::printDebug(QCString indent) {
 void StandardWorktime::printDebug(QCString indent) {
     kdDebug()<<indent<<"StandardWorktime "<<endl;
     kdDebug()<<indent<<"Year: "<<m_year.toString()<<endl;
-    kdDebug()<<indent<<"Month: "<<m_year.toString()<<endl;
-    m_weekdays.printDebug(indent + "  ");
-    kdDebug()<<indent<<"   Day ------"<<endl;
-    m_day.printDebug(indent + "  ");
+    kdDebug()<<indent<<"Month: "<<m_month.toString()<<endl;
+    kdDebug()<<indent<<"Week: "<<m_week.toString()<<endl;
+    kdDebug()<<indent<<"Day: "<<m_day.toString()<<endl;
 }
 
 #endif

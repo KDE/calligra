@@ -265,7 +265,11 @@ public:
 
     Project *project() const { return m_project; }
 
-    Calendar *calendar() const;
+    /**
+     * Get the calendar for this resource. 
+     * If local=false, check if there is a default calendar.
+     */
+    Calendar *calendar(bool local=false) const;
     Calendar *calendar(const QString id) const;
     void setCalendar(Calendar *calendar) { m_calendar = calendar; }
 

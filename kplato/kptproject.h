@@ -152,8 +152,8 @@ public:
      * and presentation in gantt chart.
      */    
     StandardWorktime *standardWorktime() { return m_standardWorktime; }
-    void addStandardWorktime(StandardWorktime * worktime); //FIXME
-    void addDefaultCalendar(StandardWorktime * worktime); //FIXME
+    void setStandardWorktime(StandardWorktime * worktime);
+    void setDefaultCalendar(Calendar *cal);
 
     /// Check if node par can be linked to node child.
     bool legalToLink(Node *par, Node *child);
@@ -213,7 +213,7 @@ public:
 
     Accounts &accounts() { return m_accounts; }
     
-    /// Set current schedule to schedule with identity id, for me nd my children
+    /// Set current schedule to schedule with identity id, for me and my children
     virtual void setCurrentSchedule(long id);
     /// Create new schedule with unique id.
     NodeSchedule *createSchedule(QString name, Schedule::Type type);

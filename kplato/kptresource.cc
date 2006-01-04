@@ -312,8 +312,8 @@ void Resource::addWorkingHour(QTime from, QTime until) {
     m_workingHours.append(new QTime(until));
 }
 
-Calendar *Resource::calendar() const {
-    if (!m_calendar && project())
+Calendar *Resource::calendar(bool local) const {
+    if ( local == false && m_calendar == 0 && project() != 0)
         return project()->defaultCalendar();
     return m_calendar;
 }

@@ -458,10 +458,12 @@ public:
     Account *runningAccount() const { return m_runningAccount; }
     void setRunningAccount(Account *acc) { m_runningAccount = acc; }
 
-    void setCurrentSchedule(NodeSchedule *schedule) { m_currentSchedule = schedule; }
     NodeSchedule *currentSchedule() const { return m_currentSchedule; }
     /// Set current schedule to schedule with identity id, for me and my children
     virtual void setCurrentSchedule(long id);
+    // NOTE: Cannot use setCurrentSchedule() due to overload/casting problems
+    void setCurrentSchedulePtr(NodeSchedule *schedule) { m_currentSchedule = schedule; }
+    
     QIntDict<NodeSchedule> &schedules() { return m_schedules; }
     /// Find schedule matching name and type.
     NodeSchedule *findSchedule(const QString name, const Schedule::Type type) const

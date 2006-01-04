@@ -41,16 +41,15 @@
 namespace KPlato
 {
 
-// Use for main projects
+
 Project::Project(Node *parent)
     : Node(parent),
       m_accounts(*this),
+      m_defaultCalendar(0),
       m_baselined(false) {
     kdDebug()<<k_funcinfo<<"("<<this<<")"<<endl;
     m_constraint = Node::MustStartOn;
     m_standardWorktime = new StandardWorktime();
-    m_defaultCalendar = new Calendar(*m_standardWorktime);
-    m_defaultCalendar->setProject(this);
     m_schedules.setAutoDelete(true);
     init();
 }
@@ -60,14 +59,13 @@ void Project::init() {
         if (m_currentSchedule == 0)
             m_currentSchedule = createSchedule(i18n("Standard"), Schedule::Expected);
         // set sensible defaults for a project wo parent
-        m_currentSchedule->startTime = DateTime(QDate::currentDate(),m_standardWorktime->startOfDay(QDate::currentDate()));
-        m_currentSchedule->endTime = DateTime(QDate::currentDate(),m_standardWorktime->endOfDay(QDate::currentDate()));
-        m_currentSchedule->duration = m_currentSchedule->endTime - m_currentSchedule->startTime;
+        m_currentSchedule->startTime = QDateTime(QDate::currentDate(), QTime());
+        m_currentSchedule->endTime = m_currentSchedule->startTime.addDays(1);        m_currentSchedule->duration = m_currentSchedule->endTime - m_currentSchedule->startTime;
         if (m_currentSchedule->duration == Duration::zeroDuration)
             m_currentSchedule->duration.addDays(1);
         m_constraintStartTime = m_currentSchedule->startTime;
         m_constraintEndTime = m_currentSchedule->endTime;
-    }    
+    }
     m_calendars.setAutoDelete(true);
 }
 
@@ -131,18 +129,16 @@ DateTime Project::startTime() const {
     kdDebug()<<k_funcinfo<<(m_currentSchedule?m_currentSchedule->id():-1)<<" "<<(m_currentSchedule?m_currentSchedule->typeToString():"")<<endl;
     if (m_currentSchedule)
         return m_currentSchedule->startTime;
-    if (m_constraint == Node::MustStartOn)
-        return m_constraintStartTime;
-    return DateTime();
+    
+    return m_constraintStartTime;
 }
 
 DateTime Project::endTime() const {
     kdDebug()<<k_funcinfo<<(m_currentSchedule?m_currentSchedule->id():-1)<<" "<<(m_currentSchedule?m_currentSchedule->typeToString():"")<<endl;
     if (m_currentSchedule)
         return m_currentSchedule->endTime;
-    if (m_constraint == Node::MustFinishOn)
-        return m_constraintEndTime;
-    return DateTime();
+    
+    return m_constraintEndTime;
 }
 
 Duration *Project::getExpectedDuration() {
@@ -299,8 +295,7 @@ bool Project::load(QDomElement &element) {
                 // Load standard worktime
                 StandardWorktime *child = new StandardWorktime();
                 if (child->load(e)) {
-                    addStandardWorktime(child);
-                    addDefaultCalendar(child);
+                    setStandardWorktime(child);
                 } else {
                     kdError()<<k_funcinfo<<"Failed to load standard worktime"<<endl;
                     delete child;
@@ -878,17 +873,15 @@ QPtrList<Calendar> Project::calendars() {
     return list;
 }
 
-void Project::addStandardWorktime(StandardWorktime * worktime) {
+void Project::setStandardWorktime(StandardWorktime * worktime) {
     if (m_standardWorktime != worktime) {
         delete m_standardWorktime; 
         m_standardWorktime = worktime; 
     }
 }
 
-void Project::addDefaultCalendar(StandardWorktime * worktime) {
-    delete m_defaultCalendar;
-    m_defaultCalendar = new Calendar(*worktime);
-    m_defaultCalendar->setProject(this);
+void Project::setDefaultCalendar(Calendar *cal) {
+    m_defaultCalendar = cal;
 }
 
 bool Project::legalToLink(Node *par, Node *child) {
@@ -954,7 +947,7 @@ void Project::generateWBS(int count, WBSDefinition &def, QString wbs) {
 }
 
 void Project::setCurrentSchedule(long id) {
-    Node::setCurrentSchedule(findSchedule(id));
+    setCurrentSchedulePtr(findSchedule(id));
     Node::setCurrentSchedule(id);
     QDictIterator<Resource> it = resourceIdDict;
     for (; it.current(); ++it) {

@@ -120,7 +120,7 @@ public:
                 }
             }
             if (calendar->weeks() != original->weeks()) {
-                kdDebug()<<k_funcinfo<<"Weeks modified: "<<calendar->name()<<endl;
+                //kdDebug()<<k_funcinfo<<"Weeks modified: "<<calendar->name()<<endl;
                 original->weeks()->setWeeks(calendar->weeks()->weeks());
             }
             //kdDebug()<<k_funcinfo<<"Check for weekdays modified: "<<calendar->name()<<endl;
@@ -202,7 +202,11 @@ KCommand *CalendarListDialog::buildCommand(Part *part) {
     for (;cit.current(); ++cit) {
         CalendarListViewItem *item = dynamic_cast<CalendarListViewItem *>(cit.current());
         if (item) {
-            cmd = item->buildCommand(part, project);
+            KMacroCommand *c = item->buildCommand(part, project);
+            if (c != 0) {
+                if (cmd == 0) cmd = new KMacroCommand("");
+                cmd->addCommand(c);
+            }
         }
     }
     QPtrListIterator<CalendarListViewItem> it = dia->deletedItems();
