@@ -718,9 +718,13 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
 
     // Notifications
     emit paragraphModified( oldCursor.parag(), AddChar, cursor->index(), txt.length() );
-    // TODO
-    // if (checkNewLine)
-    //     emit paragraphCreated for every paragraph from oldCursor->parag()->next() until cursor->parag()
+    if (checkNewLine) {
+        KoTextParag* p = oldCursor.parag()->next();
+        while ( p && p != cursor->parag() ) {
+            emit paragraphCreated( p );
+            p = p->next();
+        }
+    }
 }
 
 void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTextFormat * currentFormat, bool removeSelected )

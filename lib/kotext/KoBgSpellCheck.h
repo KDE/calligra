@@ -20,11 +20,6 @@
 #ifndef KOBGSPELLCHECK_H
 #define KOBGSPELLCHECK_H
 
-/// OK including config.h in public headers is bad practice - to be removed once kspell2 is required
-#include <config.h>
-
-#ifdef HAVE_LIBKSPELL2
-
 #include <kspell2/broker.h>
 #include <qobject.h>
 #include <qstringlist.h>
@@ -75,5 +70,4 @@ private:
     class Private;
     Private *d;
 };
-#endif
 #endif

@@ -19,11 +19,6 @@
 #ifndef KOSPELL_H
 #define KOSPELL_H
 
-/// OK including config.h in public headers is bad practice - to be removed once kspell2 is required
-#include <config.h>
-
-#ifdef HAVE_LIBKSPELL2
-
 #include <qobject.h>
 #include <qstringlist.h>
 #include <qstring.h>
@@ -69,7 +64,7 @@ public:
      * Spellchecks a buffer of many words in plain text
      * format.
      *
-     * The @p _buffer is not modified.  The signal done() will be
+     * The buffer is not modified.  The signal done() will be
      * sent when @ref check() is finished.
      */
     virtual bool check( KoTextIterator *itr, bool dialog = false );
@@ -107,5 +102,4 @@ private:
     class Private;
     Private *d;
 };
-#endif
 #endif

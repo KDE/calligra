@@ -193,7 +193,7 @@ void KoBgSpellCheck::stop()
 
 void KoBgSpellCheck::slotParagraphCreated( KoTextParag* parag )
 {
-    if ( d->backSpeller->check( parag ) ) {
+    if ( !d->backSpeller->check( parag ) ) {
         d->paragCache.insert( parag, parag );
     }
 }
@@ -201,7 +201,6 @@ void KoBgSpellCheck::slotParagraphCreated( KoTextParag* parag )
 void KoBgSpellCheck::slotParagraphModified( KoTextParag* parag, int /*ParagModifyType*/,
                                             int pos, int length )
 {
-    //kdDebug()<<"here 1 "<<endl;
     if ( d->backSpeller->checking() ) {
         d->paragCache.insert( parag, parag );
         return;

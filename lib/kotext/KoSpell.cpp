@@ -20,7 +20,6 @@
 */
 
 #include "config.h"
-#ifdef HAVE_LIBKSPELL2
 #include "KoSpell.h"
 
 #include "KoTextObject.h"
@@ -35,6 +34,8 @@
 #include <kdebug.h>
 
 #include <qtimer.h>
+
+//#define DEBUG_SPELL
 
 using namespace KSpell2;
 
@@ -114,7 +115,7 @@ bool KoSpell::checkWordInParagraph( KoTextParag *parag, int pos,
     foundWord = w.word;
     start = w.start;
 #ifdef DEBUG_SPELL
-    kdDebug()<<"XXXXX WORD IS " << w.word << ", pos = "<< pos
+    kdDebug()<<"KoSpell: WORD IS " << w.word << ", pos = "<< pos
              << ", start = "<< w.start <<endl;
 #endif
     return checkWord( w.word );
@@ -123,7 +124,7 @@ bool KoSpell::checkWordInParagraph( KoTextParag *parag, int pos,
 QString KoSpell::getMoreText()
 {
 #ifdef DEBUG_SPELL
-    kdDebug()<<"here 1 dialog = " << d->dialog << ", itr = "
+    kdDebug()<<"getMoreText: dialog = " << d->dialog << ", itr = "
              << d->itr << ", atEnd = "
              << ( ( d->itr ) ? d->itr->atEnd() : true )
              << endl;
@@ -212,9 +213,9 @@ void KoSpell::slotCurrentParagraphDeleted()
 bool KoSpell::checking() const
 {
 #ifdef DEBUG_SPELL
-    kdDebug()<< d->itr << ", "
-             << ( ( d->itr ) ? d->itr->atEnd() : false ) << ", "
-             << filter()->atEnd()
+    kdDebug()<< "KoSpell::checking: itr=" << d->itr
+             << ", atEnd=" << ( ( d->itr ) ? d->itr->atEnd() : false )
+             << ", filter()->atEnd()=" << filter()->atEnd()
              << endl;
 #endif
     if ( d->itr ) {
@@ -238,4 +239,3 @@ KSpell2::Settings * KoSpell::settings() const
 }
 
 #include "KoSpell.moc"
-#endif
