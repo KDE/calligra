@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -478,6 +478,38 @@ int KexiDB::fieldCount(KexiDB::TableOrQuerySchema& tableOrQuery)
 	if (tableOrQuery.query())
 		tableOrQuery.query()->fieldsExpanded().count();
 	return -1;
+}
+
+QMap<QString,QString> KexiDB::toMap( const ConnectionData& data )
+{
+	QMap<QString,QString> m;
+	m["caption"] = data.caption;
+	m["description"] = data.description;
+	m["driverName"] = data.driverName;
+	m["hostName"] = data.hostName;
+	m["port"] = QString::number(data.port);
+	m["useLocalSocketFile"] = QString::number((int)data.useLocalSocketFile);
+	m["localSocketFileName"] = data.localSocketFileName;
+	m["password"] = data.password;
+	m["savePassword"] = QString::number((int)data.savePassword);
+	m["userName"] = data.userName;
+	m["fileName"] = data.fileName();
+	return m;
+}
+
+void KexiDB::fromMap( const QMap<QString,QString>& map, ConnectionData& data )
+{
+	data.caption = map["caption"];
+	data.description = map["description"];
+	data.driverName = map["driverName"];
+	data.hostName = map["hostName"];
+	data.port = map["port"].toInt();
+	data.useLocalSocketFile = map["useLocalSocketFile"].toInt()==1;
+	data.localSocketFileName = map["localSocketFileName"];
+	data.password = map["password"];
+	data.savePassword = map["savePassword"].toInt()==1;
+	data.userName = map["userName"];
+	data.setFileName(map["fileName"]);
 }
 
 #include "utils_p.moc"

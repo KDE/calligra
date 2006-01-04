@@ -13,7 +13,6 @@
 ** subsystem.  The page cache subsystem reads and writes a file a page
 ** at a time and provides a journal for rollback.
 **
-** @(#) $Id$
 */
 
 /*
@@ -56,7 +55,7 @@ typedef struct Pager Pager;
 ** routines:
 */
 int sqlite3pager_open(Pager **ppPager, const char *zFilename,
-                     int nExtra, int useJournal);
+                     int nExtra, int useJournal, int exclusive, int allowReadonly);
 void sqlite3pager_set_busyhandler(Pager*, BusyHandler *pBusyHandler);
 void sqlite3pager_set_destructor(Pager*, void(*)(void*,int));
 void sqlite3pager_set_reiniter(Pager*, void(*)(void*,int));

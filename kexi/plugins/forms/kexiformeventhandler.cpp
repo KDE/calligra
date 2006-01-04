@@ -75,11 +75,11 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 	QObject *obj;
 	QDict<char> tmpSources;
 	for ( ; (obj = it.current()) != 0; ++it ) {
-		KURL actionurl = obj->property("onClickAction").toString();
+		QString actionName = obj->property("onClickAction").toString();
 
-		if (actionurl.protocol() == "kaction") {
+		if (actionName.startsWith("kaction:")) {
 			//this is kaction:
-			QString actionName = actionurl.fileName();
+			actionName = actionName.mid(QString("kaction:").length()); //cut prefix
 			KAction *action = (actionName.isEmpty()) ? 0 : mainWin->actionCollection()->action( actionName.latin1() );
 			if (!action) {
 				//! @todo show error?
@@ -88,10 +88,9 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 			QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) ); //safety
 			QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
 		}
-		else if (actionurl.protocol() == "script") {
-			QString scriptName = actionurl.fileName();
-			if(scriptName.isNull())
-				continue;
+		else if (actionName.startsWith("script:")) {
+			//this is kaction:
+			actionName = actionName.mid(QString("script:").length()); //cut prefix
 
 			KexiPart::Info* scriptinfo = Kexi::partManager().infoForMimeType("kexi/script");
 			KexiProject* project = mainWin->project();
@@ -102,7 +101,7 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 				continue;
 
 			for (KexiPart::ItemDictIterator it( *itemdict ); it.current(); ++it) {
-				if(it.current()->name() == scriptName) {
+				if(it.current()->name() == actionName) {
 					ScriptAction* action = new ScriptAction(obj, mainWin, it.current());
 					QObject::disconnect( obj, SIGNAL(clicked()), action, SLOT(activate()) );
 					QObject::connect( obj, SIGNAL(clicked()), action, SLOT(activate()) );

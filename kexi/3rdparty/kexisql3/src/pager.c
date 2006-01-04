@@ -18,7 +18,6 @@
 ** file simultaneously, or one process from reading the database while
 ** another is writing.
 **
-** @(#) $Id$
 */
 #include "os.h"         /* Must be first to enable large file support */
 #include "sqliteInt.h"
@@ -1411,7 +1410,9 @@ int sqlite3pager_open(
   Pager **ppPager,         /* Return the Pager structure here */
   const char *zFilename,   /* Name of the database file to open */
   int nExtra,              /* Extra bytes append to each in-memory page */
-  int useJournal           /* TRUE to use a rollback journal on this file */
+  int useJournal,          /* TRUE to use a rollback journal on this file */
+  int exclusive,           /* as in sqlite3OsOpenReadWrite() */
+  int allowReadonly        /* as in sqlite3OsOpenReadWrite() */
 ){
   Pager *pPager;
   char *zFullPathname = 0;
@@ -1437,7 +1438,7 @@ int sqlite3pager_open(
     }else{
       zFullPathname = sqlite3OsFullPathname(zFilename);
       if( zFullPathname ){
-        rc = sqlite3OsOpenReadWrite(zFullPathname, &fd, &readOnly);
+        rc = sqlite3OsOpenReadWrite(zFullPathname, &fd, &readOnly, exclusive, allowReadonly);
       }
     }
   }else{

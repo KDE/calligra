@@ -13,7 +13,6 @@
 ** subsystem.  See comments in the source code for a detailed description
 ** of what each interface routine does.
 **
-** @(#) $Id$
 */
 #ifndef _BTREE_H_
 #define _BTREE_H_
@@ -33,7 +32,9 @@ typedef struct BtCursor BtCursor;
 int sqlite3BtreeOpen(
   const char *zFilename,   /* Name of database file to open */
   Btree **,                /* Return open Btree* here */
-  int flags                /* Flags */
+  int flags,               /* Flags */
+  int exclusive,          /* as in sqlite3OsOpenReadWrite() */
+  int allowReadonly       /* as in sqlite3OsOpenReadWrite() */
 );
 
 /* The flags parameter to sqlite3BtreeOpen can be the bitwise or of the

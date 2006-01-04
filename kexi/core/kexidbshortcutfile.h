@@ -41,7 +41,8 @@ class KEXICORE_EXPORT KexiDBShortcutFile
 		/*! Loads project data (with connection data) into \a data.
 		 Database name and caption can be set there but these are optional. 
 		 \a groupKey, if provided will be set to a group key,
-		 so you can later use it in saveConnectionData(). */
+		 so you can later use it in saveConnectionData(). 
+		 \return true on success. */
 		bool loadProjectData(KexiProjectData& data, QString* groupKey = 0);
 
 		/*! Saves project data \a data (with connection data) to a shortcut file. 
@@ -50,7 +51,8 @@ class KEXICORE_EXPORT KexiDBShortcutFile
 		 Existing data is merged with new data. \a groupKey is reused, if specified. 
 		 If \a overwriteFirstGroup is true (the default) first found group will be overwritten 
 		 instead of creating of a new unique group. This mode is usable for updating .kexic files 
-		 containing single connection data, what's used for storing connections repository. */
+		 containing single connection data, what's used for storing connections repository. 
+		 \return true on success. */
 		bool saveProjectData(const KexiProjectData& data, bool savePassword, 
 			QString* groupKey = 0, bool overwriteFirstGroup = true);
 
@@ -77,7 +79,8 @@ class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile
 
 		/*! Loads connection data into \a data.
 		 \a groupKey, if provided will be set to a group key,
-		 so you can later use it in saveConnectionData(). */
+		 so you can later use it in saveConnectionData(). 
+		 \return true on success. */
 		bool loadConnectionData(KexiDB::ConnectionData& data, QString* groupKey = 0);
 
 		/*! Saves connection data \a data to a shortcut file. 
@@ -87,7 +90,7 @@ class KEXICORE_EXPORT KexiDBConnShortcutFile : protected KexiDBShortcutFile
 		 If \a overwriteFirstGroup is true (the default) first found group will be overwritten 
 		 instead of creating of a new unique group. This mode is usable for updating .kexic files 
 		 containing single connection data, what's used for storing connections repository.
-		 */
+		 \return true on success. */
 		bool saveConnectionData(const KexiDB::ConnectionData& data, 
 			bool savePassword, QString* groupKey = 0, bool overwriteFirstGroup = true);
 

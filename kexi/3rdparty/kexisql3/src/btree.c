@@ -9,7 +9,6 @@
 **    May you share freely, never taking more than you give.
 **
 *************************************************************************
-** $Id$
 **
 ** This file implements a external (disk-based) database using BTrees.
 ** For a detailed discussion of BTrees, refer to
@@ -1023,7 +1022,9 @@ static void pageReinit(void *pData, int pageSize){
 int sqlite3BtreeOpen(
   const char *zFilename,  /* Name of the file containing the BTree database */
   Btree **ppBtree,        /* Pointer to new Btree object written here */
-  int flags               /* Options */
+  int flags,              /* Options */
+  int exclusive,          /* as in sqlite3OsOpenReadWrite() */
+  int allowReadonly       /* as in sqlite3OsOpenReadWrite() */
 ){
   Btree *pBt;
   int rc;
@@ -1049,7 +1050,7 @@ int sqlite3BtreeOpen(
     return SQLITE_NOMEM;
   }
   rc = sqlite3pager_open(&pBt->pPager, zFilename, EXTRA_SIZE,
-                        (flags & BTREE_OMIT_JOURNAL)==0);
+                        (flags & BTREE_OMIT_JOURNAL)==0, exclusive, allowReadonly);
   if( rc!=SQLITE_OK ){
     if( pBt->pPager ) sqlite3pager_close(pBt->pPager);
     sqliteFree(pBt);

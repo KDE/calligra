@@ -94,8 +94,21 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		 @see versionMajor() */
 		int versionMinor() const;
 
-		//! Opens existing project using project data.
+		/*! Opens existing project using project data. 
+		 \return true on success */
 		bool open();
+
+		/*! Like open(). 
+		 \return true on success.
+		 Additional \a incompatibleWithKexi, is set to false on failure when
+		 connection for the project was successfully started bu the project 
+		 is probably not compatible with Kexi - no valid "kexidb_major_ver" 
+		 value in "kexi__db" table. 
+		 This is often the case for native server-based databases. 
+		 If so, Kexi application can propose importing the database
+		 or linking it to parent project (the latter isn't yet implemented).
+		 For other types of errors the variable is set to true. */
+		bool open(bool &incompatibleWithKexi);
 
 		/*! Creates new, empty project using project data.
 		 If \a forceOverwrite is true, existing database project is silently overwritten.
@@ -257,6 +270,9 @@ class KEXICORE_EXPORT KexiProject : public QObject, public KexiDB::Object
 		void closeConnection();
 
 		bool initProject();
+
+		//! Used in open() and open(bool&).
+		bool openInternal(bool *incompatibleWithKexi);
 
 		/*! Kexi itself can define a number of internal database objects (mostly data structures), 
 		 usually tables for it's own purposes.

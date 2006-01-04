@@ -11,7 +11,6 @@
 *************************************************************************
 ** This file contains code used to implement the PRAGMA command.
 **
-** $Id$
 */
 #include "sqliteInt.h"
 #include <ctype.h>

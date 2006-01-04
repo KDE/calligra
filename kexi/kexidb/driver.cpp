@@ -149,14 +149,13 @@ bool Driver::transactionsSupported() const
 
 QString Driver::sqlTypeName(int id_t, int /*p*/) const
 {
-	if (id_t==Field::Null)
-		return "Null";
-	else if (id_t<=Field::LastType)
+	if (id_t > Field::InvalidType && id_t <= Field::LastType)
 		return d->typeNames[(id_t>0 && id_t<=Field::LastType) ? id_t : Field::InvalidType /*sanity*/];
+
 	return d->typeNames[Field::InvalidType];
 }
 
-Connection *Driver::createConnection( ConnectionData &conn_data )
+Connection *Driver::createConnection( ConnectionData &conn_data, int options )
 {
 	clearError();
 	if (!isValid())
@@ -170,6 +169,9 @@ Connection *Driver::createConnection( ConnectionData &conn_data )
 	}
 //	Connection *conn = new Connection( this, conn_data );
 	Connection *conn = drv_createConnection( conn_data );
+
+	conn->setReadOnly(options & ReadOnlyConnection);
+
 	conn_data.driverName = name();
 	d->connections.insert( conn, conn );
 	return conn;

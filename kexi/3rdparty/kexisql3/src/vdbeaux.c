@@ -748,7 +748,8 @@ int sqlite3VdbeAggReset(sqlite3 *db, Agg *pAgg, KeyInfo *pKeyInfo){
   if( db ){
     if( !pAgg->pBtree ){
       assert( pAgg->nTab==0 );
-      rc = sqlite3BtreeFactory(db, ":memory:", 0, TEMP_PAGES, &pAgg->pBtree);
+      rc = sqlite3BtreeFactory(db, ":memory:", 0, TEMP_PAGES, &pAgg->pBtree, 
+           0 /*!exclusive*/, 1 /*allowReadonly*/);
       if( rc!=SQLITE_OK ) return rc;
       sqlite3BtreeBeginTrans(pAgg->pBtree, 1);
       rc = sqlite3BtreeCreateTable(pAgg->pBtree, &pAgg->nTab, 0);

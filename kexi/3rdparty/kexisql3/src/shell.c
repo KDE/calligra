@@ -12,7 +12,6 @@
 ** This file contains code to implement the "sqlite" command line
 ** utility for accessing SQLite databases.
 **
-** $Id$
 */
 #include <stdlib.h>
 #include <string.h>
@@ -750,7 +749,7 @@ static void process_input(struct callback_data *p, FILE *in);
 */
 static void open_db(struct callback_data *p){
   if( p->db==0 ){
-    sqlite3_open(p->zDbFilename, &p->db);
+    sqlite3_open(p->zDbFilename, &p->db, 0/*exclusive*/, 1/*allowReadonly*/);
     db = p->db;
 #ifdef SQLITE_HAS_CODEC
     sqlite3_key(p->db, p->zKey, p->zKey ? strlen(p->zKey) : 0);

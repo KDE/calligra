@@ -41,7 +41,8 @@
 #define ERR_OBJECT_NOT_FOUND 60
 #define ERR_ACCESS_RIGHTS 70
 #define ERR_TRANSACTION_ACTIVE 80
-#define ERR_NO_TRANSACTION_ACTIVE 90
+#define ERR_NO_TRANSACTION_ACTIVE 81
+#define ERR_NO_DB_PROPERTY 90 //! database property not found, see DatabaseProperties class
 #define ERR_DB_SPECIFIC 100
 #define ERR_CURSOR_NOT_OPEN 110
 #define ERR_SINGLE_DB_NAME_MISMATCH 120

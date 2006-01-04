@@ -125,13 +125,18 @@ namespace KexiUtils
 	 For black color the result is dark gray rather than black. */
 	KEXIUTILS_EXPORT QColor bleachedColor(const QColor& c, int factor);
 
-	/*! \return byte array of data serialized from \a map.
+	/*! Serializes \a map to \a array.
 	 KexiUtils::deserializeMap() can be used to deserialize this array back to map. */
-	KEXIUTILS_EXPORT QByteArray serializeMap(const QMap<QString,QString>& map);
+	KEXIUTILS_EXPORT void serializeMap(const QMap<QString,QString>& map, QByteArray& array);
+	KEXIUTILS_EXPORT void serializeMap(const QMap<QString,QString>& map, QString& string);
 
 	/*! \return a map deserialized from a byte array \a array.
 	 \a array need to contain data previously serialized using KexiUtils::serializeMap(). */
 	KEXIUTILS_EXPORT QMap<QString,QString> deserializeMap(const QByteArray& array);
+
+	/*! \return a map deserialized from \a string.
+	 \a string need to contain data previously serialized using KexiUtils::serializeMap(). */
+	KEXIUTILS_EXPORT QMap<QString,QString> deserializeMap(const QString& string);
 
 	/*! \return a valid filename converted from \a string by:
 	 - replacing \\, /, :, *, ?, ", <, >, |, \n \t characters with a space
@@ -139,6 +144,7 @@ namespace KexiUtils
 	 Do not pass full paths here, but only filename strings. */
 	KEXIUTILS_EXPORT QString stringToFileName(const QString& string);
 }
+
 
 //! sometimes we leave a space in the form of empty QFrame and want to insert here
 //! a widget that must be instantiated by hand.

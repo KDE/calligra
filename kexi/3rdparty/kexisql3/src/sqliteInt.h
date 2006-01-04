@@ -11,7 +11,6 @@
 *************************************************************************
 ** Internal interface definitions for SQLite.
 **
-** @(#) $Id$
 */
 #ifndef _SQLITEINT_H_
 #define _SQLITEINT_H_
@@ -1349,7 +1348,8 @@ void sqlite3DeferForeignKey(Parse*, int);
 void sqlite3Attach(Parse*, Token*, Token*, int, Token*);
 void sqlite3Detach(Parse*, Token*);
 int sqlite3BtreeFactory(const sqlite3 *db, const char *zFilename,
-                       int omitJournal, int nCache, Btree **ppBtree);
+                       int omitJournal, int nCache, Btree **ppBtree,
+                       int exclusive, int allowReadonly);
 int sqlite3FixInit(DbFixer*, Parse*, int, const char*, const Token*);
 int sqlite3FixSrcList(DbFixer*, SrcList*);
 int sqlite3FixSelect(DbFixer*, Select*);

@@ -132,8 +132,13 @@ class KEXI_DB_EXPORT Object
 		virtual void setError( const QString &title, const QString &msg );
 		
 		/*! Copies the (localized) error message and code from other KexiDB::Object. */
-		virtual void setError( KexiDB::Object *obj, const QString& prependMessage = QString::null );
-		
+		void setError( KexiDB::Object *obj, const QString& prependMessage = QString::null );
+
+		/*! Copies the (localized) error message and code from other KexiDB::Object 
+		 with custom error \a code. */
+		virtual void setError( KexiDB::Object *obj, int code, 
+			const QString& prependMessage = QString::null );
+
 		/*! Clears number of last server operation's result stored
 		 as a single integer. Formally, this integer should be set to value 
 		 that means "NO ERRORS" or "OK". This method is called by clearError().

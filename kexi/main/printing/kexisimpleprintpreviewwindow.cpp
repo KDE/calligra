@@ -20,16 +20,19 @@
 #include "kexisimpleprintpreviewwindow.h"
 #include "kexisimpleprintingengine.h"
 #include "kexisimpleprintpreviewwindow_p.h"
+#include <kexi_version.h>
 
 #include <qlayout.h>
 #include <qaccel.h>
 #include <qtimer.h>
+#include <qlabel.h>
 
 #include <kdialogbase.h>
 #include <ktoolbarbutton.h>
 #include <klocale.h>
 #include <kiconloader.h>
 #include <kdebug.h>
+#include <kpushbutton.h>
 #include <kapplication.h>
 
 KexiSimplePrintPreviewView::KexiSimplePrintPreviewView(
@@ -83,9 +86,9 @@ KexiSimplePrintPreviewScrollView::KexiSimplePrintPreviewScrollView(
 void KexiSimplePrintPreviewScrollView::resizeEvent( QResizeEvent *re )
 {
 	QScrollView::resizeEvent(re);
-	kdDebug() << re->size().width() << " " << re->size().height() << endl;
-	kdDebug() << contentsWidth() << " " << contentsHeight() << endl;
-	kdDebug() << widget->width() << " " << widget->height() << endl;
+//	kdDebug() << re->size().width() << " " << re->size().height() << endl;
+//	kdDebug() << contentsWidth() << " " << contentsHeight() << endl;
+//	kdDebug() << widget->width() << " " << widget->height() << endl;
 	setUpdatesEnabled(false);
 	if (re->size().width() > (widget->width()+2*KexiSimplePrintPreviewScrollView_MARGIN)
 		|| re->size().height() > (widget->height()+2*KexiSimplePrintPreviewScrollView_MARGIN)) {
@@ -97,15 +100,6 @@ void KexiSimplePrintPreviewScrollView::resizeEvent( QResizeEvent *re )
 			(contentsHeight() - widget->height())/2);
 	}
 	setUpdatesEnabled(true);
-		
-	/*else {
-		int newContentsWidth = ;
-		resizeContents(
-			QMIN(widget->width() re->size().width());
-		moveChild(widget, (contentsWidth() - widget->width())/2, 
-			(contentsHeight() - widget->height())/2);
-		newContentsWidth = re->size().width()+widget->width();
-	}*/
 }
 
 void KexiSimplePrintPreviewScrollView::setFullWidth()
@@ -144,39 +138,44 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
  , m_settings(*m_engine.settings())
  , m_pageNumber(-1)
 {
-	m_pagesCount = INT_MAX;
+//	m_pagesCount = INT_MAX;
 
-	setCaption(i18n("%1 - Print Preview").arg(previewName));
+	setCaption(i18n("%1 - Print Preview - %2").arg(previewName).arg(KEXI_APP_NAME));
 	setIcon(DesktopIcon("filequickprint"));
 	QVBoxLayout *lyr = new QVBoxLayout(this, 6);
 
 	int id;
-	QAccel *a;
-#ifndef KEXI_NO_UNFINISHED 
-//! @todo unfinished
 	m_toolbar = new KToolBar(0, this);
 	m_toolbar->setLineWidth(0);
 	m_toolbar->setFrameStyle(QFrame::NoFrame);
 	m_toolbar->setIconText(KToolBar::IconTextRight);
-
-/*	id = m_toolbar->insertButton("fileprint", -1, true, i18n("Print...")+" ");
-	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(slotPrintClicked()));
-	m_toolbar->getButton(id)->setAccel(Qt::CTRL|Qt::Key_P);
-	m_toolbar->insertSeparator();*/
-
-	id = m_toolbar->insertButton("viewmag+", -1, true, i18n("Zoom In"));
-	m_toolbar->getButton(id)->setAccel(Qt::Key_Plus);
-	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(slotZoomInClicked()));
-	a = new QAccel( m_toolbar->getButton(id) );
-	a->connectItem( a->insertItem( Key_Equal ), this, SLOT(slotZoomInClicked()) ); 
-
-	id = m_toolbar->insertButton("viewmag-", -1, true, i18n("Zoom Out"));
-	m_toolbar->getButton(id)->setAccel(Qt::Key_Minus);
-	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(slotZoomOutClicked()));
 	lyr->addWidget(m_toolbar);
+
+	id = m_toolbar->insertWidget( -1, 0, new KPushButton(KStdGuiItem::print(), m_toolbar) );
+	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(slotPrintClicked()));
+	static_cast<KPushButton*>(m_toolbar->getWidget(id))->setAccel(Qt::CTRL|Qt::Key_P);
+	m_toolbar->insertSeparator();
+
+	id = m_toolbar->insertWidget(-1, 0, new KPushButton(i18n("Page Set&up..."), m_toolbar));
+	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(slotPageSetup()));
+	m_toolbar->insertSeparator();
+
+
+#ifndef KEXI_NO_UNFINISHED 
+//! @todo unfinished
+	id = m_toolbar->insertWidget( -1, 0, new KPushButton(BarIconSet("viewmag+"), i18n("Zoom In"), m_toolbar));
+	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(slotZoomInClicked()));
+	m_toolbar->insertSeparator();
+
+	id = m_toolbar->insertWidget( -1, 0, new KPushButton(BarIconSet("viewmag-"), i18n("Zoom Out"), m_toolbar));
+	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(slotZoomOutClicked()));
+	m_toolbar->insertSeparator();
 #endif
 
-//tmp	lyr->addStretch(1);
+	id = m_toolbar->insertWidget(-1, 0, new KPushButton(KStdGuiItem::close(), m_toolbar));
+	m_toolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(close()));
+	m_toolbar->alignItemRight(id);
+
 	m_scrollView = new KexiSimplePrintPreviewScrollView(this);
 	m_scrollView->setUpdatesEnabled(false);
 	m_view = m_scrollView->widget;
@@ -188,53 +187,63 @@ KexiSimplePrintPreviewWindow::KexiSimplePrintPreviewWindow(
 	m_navToolbar->setLineWidth(0);
 	m_navToolbar->setFrameStyle(QFrame::NoFrame);
 	m_navToolbar->setIconText(KToolBar::IconTextRight);
+	lyr->addWidget(m_navToolbar);
 
-	m_idFirst = m_navToolbar->insertButton("start", -1, true, i18n("First Page"));
-	m_navToolbar->getButton(m_idFirst)->setAccel(Qt::Key_Home);
+	m_idFirst = m_navToolbar->insertWidget( -1, 0, new KPushButton(BarIconSet("start"), i18n("First Page"), m_navToolbar));
 	m_navToolbar->addConnection(m_idFirst, SIGNAL(clicked()), this, SLOT(slotFirstClicked()));
+	m_navToolbar->insertSeparator();
 
-	m_idPrevious = m_navToolbar->insertButton("previous", -1, true, i18n("Previous Page"));
-	m_navToolbar->getButton(m_idPrevious)->setAccel(Qt::Key_PageUp);
+	m_idPrevious = m_navToolbar->insertWidget( -1, 0, new KPushButton(BarIconSet("previous"), i18n("Previous Page"), m_navToolbar));
 	m_navToolbar->addConnection(m_idPrevious, SIGNAL(clicked()), this, SLOT(slotPreviousClicked()));
-	a = new QAccel( m_navToolbar->getButton(m_idPrevious) );
-	a->connectItem( a->insertItem( Key_Left ), this, SLOT(slotPreviousClicked()) ); 
+	m_navToolbar->insertSeparator();
 
-	m_idNext = m_navToolbar->insertButton("next", -1, true, i18n("Next Page"));
-	m_navToolbar->getButton(m_idNext)->setAccel(Qt::Key_PageDown);
+	m_idPageNumberLabel = m_navToolbar->insertWidget( -1, 0, new QLabel(m_navToolbar));
+	m_navToolbar->insertSeparator();
+
+	m_idNext = m_navToolbar->insertWidget( -1, 0, new KPushButton(BarIconSet("next"), i18n("Next Page"), m_navToolbar));
 	m_navToolbar->addConnection(m_idNext, SIGNAL(clicked()), this, SLOT(slotNextClicked()));
-	a = new QAccel( m_navToolbar->getButton(m_idNext) );
-	a->connectItem( a->insertItem( Key_Right ), this, SLOT(slotNextClicked()) ); 
+	m_navToolbar->insertSeparator();
 
-	m_idLast = m_navToolbar->insertButton("finish", -1, true, i18n("Last Page"));
-	m_navToolbar->getButton(m_idLast)->setAccel(Qt::Key_End);
+	m_idLast = m_navToolbar->insertWidget( -1, 0, new KPushButton(BarIconSet("finish"), i18n("Last Page"), m_navToolbar));
 	m_navToolbar->addConnection(m_idLast, SIGNAL(clicked()), this, SLOT(slotLastClicked()));
 	m_navToolbar->insertSeparator();
 
-	id = m_navToolbar->insertButton("fileclose", -1, true, i18n("Close"));
-	m_navToolbar->addConnection(id, SIGNAL(clicked()), this, SLOT(close()));
-	m_navToolbar->alignItemRight(id);
-	lyr->addWidget(m_navToolbar);
-
 	resize(width(), kapp->desktop()->height()*4/5);
-	goToPage(0);
 
-	QTimer::singleShot(50, m_scrollView, SLOT(setFullWidth()));
+//! @todo progress bar...
+
+	QTimer::singleShot(50, this, SLOT(initLater()));
+}
+
+void KexiSimplePrintPreviewWindow::initLater()
+{
+	setFullWidth();
+	updatePagesCount();
+	goToPage(0);
 }
 
 KexiSimplePrintPreviewWindow::~KexiSimplePrintPreviewWindow()
 {
 }
 
-void KexiSimplePrintPreviewWindow::setPagesCount(int pagesCount)
+/*void KexiSimplePrintPreviewWindow::setPagesCount(int pagesCount)
 {
 	m_pagesCount = pagesCount;
 	goToPage(0);
-}
+}*/
 
 void KexiSimplePrintPreviewWindow::slotPrintClicked()
 {
+	hide();
 	emit printRequested();
+	show();
 	raise();
+}
+
+void KexiSimplePrintPreviewWindow::slotPageSetup()
+{
+	lower();
+	emit pageSetupRequested();
 }
 
 void KexiSimplePrintPreviewWindow::slotZoomInClicked()
@@ -264,29 +273,85 @@ void KexiSimplePrintPreviewWindow::slotNextClicked()
 
 void KexiSimplePrintPreviewWindow::slotLastClicked()
 {
-	goToPage(m_pagesCount-1);
+	goToPage(m_engine.pagesCount()-1);
 }
 
 void KexiSimplePrintPreviewWindow::goToPage(int pageNumber)
 {
-	if (pageNumber==m_pageNumber || pageNumber < 0 || m_pageNumber > (m_pagesCount-1))
+	if (pageNumber==m_pageNumber || pageNumber < 0 || pageNumber > ((int)m_engine.pagesCount()-1))
 		return;
 	m_pageNumber = pageNumber;
 
 	m_view->repaint(); //this will automatically paint a new page
-	if (m_engine.eof())
-		m_pagesCount = pageNumber+1;
+//	if (m_engine.eof())
+//		m_pagesCount = pageNumber+1;
 
-	m_navToolbar->setItemEnabled(m_idNext, pageNumber < (m_pagesCount-1));
-	m_navToolbar->setItemEnabled(m_idLast, pageNumber < (m_pagesCount-1));
+	m_navToolbar->setItemEnabled(m_idNext, pageNumber < ((int)m_engine.pagesCount()-1));
+	m_navToolbar->setItemEnabled(m_idLast, pageNumber < ((int)m_engine.pagesCount()-1));
 	m_navToolbar->setItemEnabled(m_idPrevious, pageNumber > 0);
 	m_navToolbar->setItemEnabled(m_idFirst, pageNumber > 0);
+	static_cast<QLabel*>(m_navToolbar->getWidget(m_idPageNumberLabel))->setText(
+		i18n("Page (number) of (total)", "Page %1 of %2").arg(m_pageNumber+1).arg(m_engine.pagesCount()));
 }
 
 void KexiSimplePrintPreviewWindow::setFullWidth()
 {
 	m_scrollView->setFullWidth();
 }
+
+void KexiSimplePrintPreviewWindow::updatePagesCount()
+{
+	QPixmap pm(m_view->size()); //dbl buffered
+	QPainter p(m_view);
+	//p.begin(&pm, this);
+////! @todo only for screen!
+//	p.fillRect(pe->rect(), QBrush(white));
+	m_engine.calculatePagesCount(p);
+	p.end();
+}
+
+bool KexiSimplePrintPreviewWindow::event( QEvent * e )
+{
+	QEvent::Type t = e->type();
+	if (t==QEvent::KeyPress) {
+		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+		const int k = ke->key();
+		bool ok = true;
+		if (k==Qt::Key_Equal || k==Qt::Key_Plus)
+			slotZoomInClicked();
+		else if (k==Qt::Key_Minus)
+			slotZoomOutClicked();
+		else if (k==Qt::Key_Home)
+			slotFirstClicked();
+		else if (k==Qt::Key_End)
+			slotLastClicked();
+		else
+			ok = false;
+
+		if (ok) {
+			ke->accept();
+			return true;
+		}
+	}
+	else if (t==QEvent::AccelOverride) {
+		QKeyEvent *ke = static_cast<QKeyEvent*>(e);
+		const int k = ke->key();
+		bool ok = true;
+		if (k==Qt::Key_PageUp)
+			slotPreviousClicked();
+		else if (k==Qt::Key_PageDown)
+			slotNextClicked();
+		else
+			ok = false;
+
+		if (ok) {
+			ke->accept();
+			return true;
+		}
+	}
+	return QWidget::event(e);
+}
+
 
 #include "kexisimpleprintpreviewwindow.moc"
 #include "kexisimpleprintpreviewwindow_p.moc"

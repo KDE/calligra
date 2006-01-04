@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
    Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -26,6 +26,7 @@
 #include <kprogress.h>
 #include <kapplication.h>
 
+#include <kexiutils/tristate.h> 
 
 class QLabel;
 class QCheckBox;
@@ -46,6 +47,11 @@ class KexiDBDriverComboBox;
 namespace Kexi
 {
 	class ObjectStatus;
+}
+
+namespace KexiDB
+{
+	class ConnectionData;
 }
 
 namespace KexiMigration {
@@ -89,8 +95,13 @@ private:
 	void setupImportType();
 	void setupImporting();
 	bool checkUserInput();
+
 	KexiMigrate* prepareImport(Kexi::ObjectStatus& result);
-	bool import();
+
+	/*! Performs import. \return true/false on success/faulure 
+	 or cancelled when user cancelled importing (mainly 
+	 because didn't allow overwriting an existing database by a new one). */
+	tristate import();
 
 	bool fileBasedSrcSelected() const;
 	bool fileBasedDstSelected() const;
@@ -127,7 +138,8 @@ private:
 	KProgress *m_progressBar;
 	QPushButton* m_importOptionsButton;
 	QMap<QString,QString> *m_args;
-	QString m_predefinedFileName, m_predefinedMimeType;
+	QString m_predefinedDatabaseName, m_predefinedMimeType;
+	KexiDB::ConnectionData *m_predefinedConnectionData;
 
 	//! Encoding for source db. Currently only used for MDB driver.
 //! @todo Hardcoded. Move to KexiMigrate driver's impl.

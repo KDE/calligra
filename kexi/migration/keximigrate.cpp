@@ -61,12 +61,58 @@ KexiMigrate::~KexiMigrate()
 	delete m_destPrj;
 }
 
+bool KexiMigrate::checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::ObjectStatus* result, 
+	bool& acceptingNeeded)
+{
+	acceptingNeeded = false;
+	if (result)
+		result->clearStatus();
+
+	KexiDB::DriverManager drvManager;
+	KexiDB::Driver *destDriver = drvManager.driver(
+		m_migrateData->destination->connectionData()->driverName);
+	if (!destDriver) {
+		result->setStatus(&drvManager,
+			i18n("Could not create database \"%1\".")
+			.arg(m_migrateData->destination->databaseName()));
+		return false;
+	}
+
+	// For file-based dest. projects, we've already asked about overwriting 
+	// existing project but for server-based projects we need to ask now.
+	if (destDriver->isFileDriver())
+		return true; //nothing to check
+	KexiDB::Connection *tmpConn 
+		= destDriver->createConnection( *m_migrateData->destination->connectionData() );
+	if (!tmpConn || destDriver->error() || !tmpConn->connect()) {
+		delete tmpConn;
+		return true;
+	}
+	if (tmpConn->databaseExists( m_migrateData->destination->databaseName() )) {
+		acceptingNeeded = true;
+	}
+	tmpConn->disconnect();
+	delete tmpConn;
+	return true;
+}
+
 //=============================================================================
 // Perform Import operation
 bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 {
 	if (result)
 		result->clearStatus();
+
+	KexiDB::DriverManager drvManager;
+	KexiDB::Driver *destDriver = drvManager.driver(
+		m_migrateData->destination->connectionData()->driverName);
+	if (!destDriver) {
+		result->setStatus(&drvManager,
+			i18n("Could not create database \"%1\".")
+			.arg(m_migrateData->destination->databaseName()));
+		return false;
+	}
+
 	QStringList tables;
 
 	// Step 1 - connect
@@ -105,9 +151,6 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 
 	// Step 3 - Read table schemas
 	m_tableSchemas.clear();
-	KexiDB::DriverManager drvManager;
-	KexiDB::Driver *destDriver = drvManager.driver(
-		m_migrateData->destination->connectionData()->driverName);
 	if (!destDriver) {
 		result->setStatus(&drvManager);
 		return false;
@@ -256,8 +299,10 @@ bool KexiMigrate::performImport(Kexi::ObjectStatus* result)
 		//later		delete prj;
 		return false;
 	}
+	if (destConn)
+		ok = destConn->disconnect();
 	//later	delete prj;
-	return true;
+	return ok;
 }
 //=============================================================================
 

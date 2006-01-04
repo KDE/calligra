@@ -43,7 +43,6 @@
 ** in this file for details.  If in doubt, do not deviate from existing
 ** commenting and indentation practices when changing or adding code.
 **
-** $Id$
 */
 #include "sqliteInt.h"
 #include "os.h"
@@ -2440,7 +2439,7 @@ case OP_OpenTemp: {
   pCx = allocateCursor(p, i);
   if( pCx==0 ) goto no_mem;
   pCx->nullRow = 1;
-  rc = sqlite3BtreeFactory(db, 0, 1, TEMP_PAGES, &pCx->pBt);
+  rc = sqlite3BtreeFactory(db, 0, 1, TEMP_PAGES, &pCx->pBt, 0 /*!exclusive*/, 1/*allowReadonly*/);
   if( rc==SQLITE_OK ){
     rc = sqlite3BtreeBeginTrans(pCx->pBt, 1);
   }

@@ -52,8 +52,62 @@ KexiSimplePrintingSettings::KexiSimplePrintingSettings()
 	addDateAndTime = true;
 	addTableBorders = false;
 	pageTitleFont = kapp->font();
-	pageTitleFont.setPointSize( pageTitleFont.pointSize()*3/2 );
+	pageTitleFont.setPointSizeFloat( (double)QFontInfo(pageTitleFont).pointSize()*1.5 );
 	pageTitleFont.setBold(true);
+}
+
+KexiSimplePrintingSettings KexiSimplePrintingSettings::load()
+{
+	KexiSimplePrintingSettings settings; //this will set defaults
+
+	KConfig *config = kapp->config();
+	config->setGroup("Simple Printing");
+	if (config->hasKey("pageTitleFont"))
+		settings.pageTitleFont = config->readFontEntry("pageTitleFont");
+//! @todo system default?
+	if (config->hasKey("pageFormat"))
+		settings.pageLayout.format = KoPageFormat::formatFromString( 
+			config->readEntry("pageFormat" ) );
+	if (config->readEntry("pageOrientation", "portrait").lower()=="landscape")
+		settings.pageLayout.orientation = PG_LANDSCAPE;
+	else
+		settings.pageLayout.orientation = PG_PORTRAIT;
+	if (config->hasKey("pageWidth"))
+		settings.pageLayout.ptWidth = config->readDoubleNumEntry("pageWidth");
+	if (config->hasKey("pageHeight"))
+		settings.pageLayout.ptHeight = config->readDoubleNumEntry("pageHeight");
+	if (config->hasKey("pageLeftMargin"))
+		settings.pageLayout.ptLeft = config->readDoubleNumEntry("pageLeftMargin");
+	if (config->hasKey("pageRightMargin"))
+		settings.pageLayout.ptRight = config->readDoubleNumEntry("pageRightMargin");
+	if (config->hasKey("pageTopMargin"))
+		settings.pageLayout.ptTop = config->readDoubleNumEntry("pageTopMargin");
+	if (config->hasKey("pageBottomMargin"))
+		settings.pageLayout.ptBottom = config->readDoubleNumEntry("pageBottomMargin");
+	settings.addPageNumbers = config->readBoolEntry("addPageNumbersToPage", true);
+	settings.addDateAndTime = config->readBoolEntry("addDateAndTimePage", true);
+	settings.addTableBorders = config->readBoolEntry("addTableBorders", false);
+	return settings;
+}
+
+void KexiSimplePrintingSettings::save()
+{
+	KConfig *config = kapp->config();
+	config->setGroup("Simple Printing");
+	config->writeEntry( "pageTitleFont", pageTitleFont );
+	config->writeEntry( "pageFormat", KoPageFormat::formatString( pageLayout.format ) );
+	config->writeEntry("pageOrientation", 
+		pageLayout.orientation == PG_PORTRAIT ? "portrait" : "landscape");
+	config->writeEntry("pageWidth", pageLayout.ptWidth);
+	config->writeEntry("pageHeight", pageLayout.ptHeight);
+	config->writeEntry("pageLeftMargin", pageLayout.ptLeft);
+	config->writeEntry("pageRightMargin", pageLayout.ptRight);
+	config->writeEntry("pageTopMargin", pageLayout.ptTop);
+	config->writeEntry("pageBottomMargin", pageLayout.ptBottom);
+	config->writeEntry("addPageNumbersToPage", addPageNumbers);
+	config->writeEntry("addDateAndTimePage", addDateAndTime);
+	config->writeEntry("addTableBorders", addTableBorders);
+	config->sync();
 }
 
 //------------------------
@@ -76,11 +130,11 @@ KexiSimplePrintingEngine::~KexiSimplePrintingEngine()
 }
 
 bool KexiSimplePrintingEngine::init(KexiDB::Connection& conn, 
-	KexiDB::TableOrQuerySchema& tableOrQuery, QString& errorMessage)
+	KexiDB::TableOrQuerySchema& tableOrQuery, const QString& titleText, QString& errorMessage)
 {
 	errorMessage = QString::null;
 	done();
-	m_headerText = tableOrQuery.captionOrName();
+	m_headerText = titleText; //tableOrQuery.captionOrName();
 
 	//open data source
 	KexiDB::QuerySchema *query = 0;
@@ -98,17 +152,20 @@ bool KexiSimplePrintingEngine::init(KexiDB::Connection& conn,
 		conn.debugError();
 		return false;
 	}
-	if (m_cursor->error()) {
-		conn.debugError();
-		conn.deleteCursor(m_cursor);
-		m_cursor = 0;
-		return false;
-	}
+	bool ok = !m_cursor->error();
+	if (ok) {
+		m_data = new KexiTableViewData(m_cursor);
 //! @todo primitive: data should be loaded on demand
-	m_data = new KexiTableViewData(m_cursor);
-	m_data->preloadAllRows();
-	m_fieldsExpanded = KexiDB::QueryColumnInfo::Vector( query->fieldsExpanded() );
-	return true;
+		m_data->preloadAllRows();
+		m_fieldsExpanded = KexiDB::QueryColumnInfo::Vector( query->fieldsExpanded() );
+	}
+	else {
+		conn.debugError();
+	}
+	m_eof = !ok || m_data->count() == 0;
+	conn.deleteCursor(m_cursor);
+	m_cursor = 0;
+	return ok;
 }
 
 bool KexiSimplePrintingEngine::done()
@@ -121,19 +178,22 @@ bool KexiSimplePrintingEngine::done()
 	m_cursor = 0;
 	delete m_data;
 	m_data = 0;
+	m_pagesCount = 0;
 	m_paintInitialized = false;
+	m_fieldsExpanded.clear();
 	return result;
 }
 
 void KexiSimplePrintingEngine::clear()
 {
 	m_eof = false;
+	m_pagesCount = 0;
 	m_dataOffsets.clear();
 	m_dataOffsets.append(new uint(0));
 	m_paintInitialized = false;
 }
 
-bool KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter)
+void KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter, bool paint)
 {
 	uint offset = 0;
 	if (pageNumber < (int)m_dataOffsets.count()) {
@@ -142,19 +202,18 @@ bool KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter)
 
 	uint y = 0;
 
-	m_painter = &painter;
-	const bool printer = m_painter->device()->devType() == QInternal::Printer;
+	const bool printer = painter.device()->devType() == QInternal::Printer;
 
 	int w = 0, h = 0;
-	m_pdm = QPaintDeviceMetrics( m_painter->device() );
+	m_pdm = QPaintDeviceMetrics( painter.device() );
 	
-	if (dynamic_cast<QWidget*>(m_painter->device())) {
-		w = dynamic_cast<QWidget*>(m_painter->device())->width();
-		h = dynamic_cast<QWidget*>(m_painter->device())->height();
+	if (dynamic_cast<QWidget*>(painter.device())) {
+		w = dynamic_cast<QWidget*>(painter.device())->width();
+		h = dynamic_cast<QWidget*>(painter.device())->height();
 	}
-	else if (dynamic_cast<QPixmap*>(m_painter->device())) {
-		w = dynamic_cast<QPixmap*>(m_painter->device())->width();
-		h = dynamic_cast<QPixmap*>(m_painter->device())->height();
+	else if (dynamic_cast<QPixmap*>(painter.device())) {
+		w = dynamic_cast<QPixmap*>(painter.device())->width();
+		h = dynamic_cast<QPixmap*>(painter.device())->height();
 	}
 	else {//KPrinter...
 		w = m_pdm.widthMM();
@@ -173,18 +232,20 @@ bool KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter)
 		m_dpiX = m_pdm.logicalDpiX();
 #ifdef Q_WS_WIN //fix for 120dpi
 		if (!printer) {
-			m_dpiY = 96;
-			m_dpiX = 96;
+//			m_dpiY = 96;
+//			m_dpiX = 96;
+			m_dpiY = 86;
+			m_dpiX = 86;
 		}
 #endif
 		int pdWidthMM = m_pdm.widthMM();
 		int pdHeightMM = m_pdm.heightMM();
 
 		double screenF;
-		//if (printer)
+//		if (printer)
 			screenF = 1.0;
-		//else
-//todo			//screenF = (double)96.0/120.0;
+//		else
+//			screenF = (double)96.0/120.0;
 
 		leftMargin = POINT_TO_INCH(m_settings->pageLayout.ptLeft)*m_dpiX* screenF;
 		rightMargin = POINT_TO_INCH(m_settings->pageLayout.ptRight)*m_dpiX* screenF;
@@ -200,70 +261,86 @@ bool KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter)
 		m_pageHeight = int( m_fy*(double)m_pdm.height() - topMargin - bottomMargin);
 		m_headerFont = m_settings->pageTitleFont;
 		if(!printer) {
-			int pixelSize = (int)POINT_TO_INCH(m_headerFont.pointSizeFloat())*m_dpiX;
+			int pixelSize = int( POINT_TO_INCH((double)QFontInfo(m_headerFont).pointSize())*m_dpiX );
 			m_headerFont.setPixelSize(pixelSize);
 		}
 
 //! @todo add setting
 		m_mainFont = kapp->font(); 
 		if(!printer) {
-			int pixelSize = (int)POINT_TO_INCH(m_mainFont.pointSizeFloat())*m_dpiX;
+			int pixelSize = int( POINT_TO_INCH(m_mainFont.pointSizeFloat())*m_dpiX );
 			m_mainFont.setPixelSize(pixelSize);
 		}
-		m_painter->setFont(m_mainFont);
+		painter.setFont(m_mainFont);
 
 		m_dateTimeText = KGlobal::locale()->formatDateTime(QDateTime::currentDateTime(),
 			true, false);
-		m_dateTimeWidth = m_painter->fontMetrics().width(m_dateTimeText+"   ");
-		m_mainLineSpacing = m_painter->fontMetrics().lineSpacing();
+		m_dateTimeWidth = painter.fontMetrics().width(m_dateTimeText+"   ");
+		m_mainLineSpacing = painter.fontMetrics().lineSpacing();
 		m_footerHeight = m_mainLineSpacing * 2; //2 lines
-		m_painter->setFont(m_headerFont);
-		m_headerTextRect = m_painter->fontMetrics().boundingRect(
+		painter.setFont(m_headerFont);
+		m_headerTextRect = painter.fontMetrics().boundingRect(
 			(int)leftMargin, (int)topMargin,
 			m_pageWidth - m_dateTimeWidth,
 			m_pageHeight, Qt::AlignAuto|Qt::WordBreak, m_headerText);
 		m_headerTextRect.setRight(m_headerTextRect.right()+10);
+		m_headerTextRect.setWidth(
+			QMIN(int(m_pageWidth - m_dateTimeWidth), m_headerTextRect.width()));
 
 		//--compute max width of field names
 		m_maxFieldNameWidth = 0;
 		
-		m_painter->setFont(m_mainFont);
-		m_painter->setFont(m_mainFont);
+		painter.setFont(m_mainFont);
 		for (uint i=0; i < m_fieldsExpanded.count(); i++) {
 			const int newW =
-				m_painter->fontMetrics().width(m_fieldsExpanded[i]->captionOrAliasOrName()+":");
+				painter.fontMetrics().width(m_fieldsExpanded[i]->captionOrAliasOrName()+":");
 //			kdDebug() << "row"<<i<<": "<<m_fieldsExpanded[i]->captionOrAliasOrName()<<" " 
 //				<< newW <<endl;
 			if (m_maxFieldNameWidth < newW)
 				m_maxFieldNameWidth = newW;
 		}
-		m_maxFieldNameWidth += m_painter->fontMetrics().width("ww"); //more space
+		m_maxFieldNameWidth += painter.fontMetrics().width("ww"); //more space
 	}
 
-		//screen only
-		if(!printer) {
-			m_painter->setWindow(0, 0, int((double)w*m_fx), int((double)h*m_fy));
-		}
+	//screen only
+	if(!printer) {
+		painter.setWindow(0, 0, int((double)w*m_fx), int((double)h*m_fy));
+	}
 
 	//paint header
-	m_painter->setFont(m_headerFont);
-	m_painter->drawText(m_headerTextRect, Qt::AlignAuto|Qt::WordBreak, m_headerText);
-	m_painter->setFont(m_mainFont);
-	m_painter->drawText((int)leftMargin + m_pageWidth - m_dateTimeWidth, 
-		(int)topMargin, m_dateTimeWidth, 
-		m_headerTextRect.height(), Qt::AlignRight, m_dateTimeText);
-	//footer
-	m_painter->drawText((int)leftMargin, 
-		(int)topMargin + m_pageHeight - m_mainLineSpacing, 
-		m_pageWidth, m_mainLineSpacing,
-		Qt::AlignRight | Qt::AlignBottom, i18n("Page %1").arg(pageNumber+1));
-	m_painter->drawLine((int)leftMargin, 
-		(int)topMargin + m_pageHeight - m_mainLineSpacing*3/2, 
-		(int)leftMargin + m_pageWidth,
-		(int)topMargin + m_pageHeight - m_mainLineSpacing*3/2);
+	painter.setFont(m_headerFont);
+	if (paint) {
+		painter.drawText(m_headerTextRect, Qt::AlignAuto|Qt::WordBreak, m_headerText);
+	}
+	painter.setFont(m_mainFont);
+	if (paint) {
+		painter.drawText((int)leftMargin + m_pageWidth - m_dateTimeWidth, 
+			(int)topMargin, m_dateTimeWidth, 
+			m_headerTextRect.height(), Qt::AlignRight, m_dateTimeText);
+		//footer
+		
+		QString pageNumString;
+		if (m_pagesCount>0)
+			pageNumString = i18n("Page (number) of (total)", "Page %1 of %2")
+				.arg(pageNumber+1).arg(m_pagesCount);
+		else
+			pageNumString = i18n("Page %1").arg(pageNumber+1);
+		painter.drawText((int)leftMargin, 
+			(int)topMargin + m_pageHeight - m_mainLineSpacing, 
+			m_pageWidth, m_mainLineSpacing,
+			Qt::AlignRight | Qt::AlignBottom, pageNumString);
+		painter.drawLine((int)leftMargin, 
+			(int)topMargin + m_pageHeight - m_mainLineSpacing*3/2, 
+			(int)leftMargin + m_pageWidth,
+			(int)topMargin + m_pageHeight - m_mainLineSpacing*3/2);
+	}
 	y = (int)topMargin + m_headerTextRect.height() + m_mainLineSpacing/2;
-	m_painter->drawLine((int)leftMargin, y, (int)leftMargin + m_pageWidth-1, y);
-	y += m_mainLineSpacing;
+	if (!m_settings->addTableBorders) {
+		//separator line
+		if (paint)
+			painter.drawLine((int)leftMargin, y, (int)leftMargin + m_pageWidth-1, y);
+		y += m_mainLineSpacing;
+	}
 
 	//--print records
 	KexiDB::RowData row;
@@ -271,77 +348,137 @@ bool KexiSimplePrintingEngine::paintPage(int pageNumber, QPainter& painter)
 	const uint count = m_fieldsExpanded.count();
 	const uint rows = m_data->count();
 	const int cellMargin = m_settings->addTableBorders ? 
-		m_painter->fontMetrics().width("i") : 0;
+		painter.fontMetrics().width("i") : 0;
+	uint paintedRows = 0;
 	for (;offset < rows; ++offset) {
 		item = m_data->at(offset);
-		if (int(count * m_mainLineSpacing) > int(topMargin + m_pageHeight-(int)y-m_footerHeight)) 
+
+		//compute height of this record
+		uint newY = y;
+		paintRecord(painter, item, count, cellMargin, newY, paintedRows, false);
+		if ((int(topMargin + m_pageHeight-(int)newY-m_footerHeight)) < 0 /*(1)*/ && paintedRows > 0/*(2)*/) {
+			//(1) do not break records between pages
+			//(2) but paint at least one record
+//! @todo break large records anyway...
+			break;
+		}
+/*		if (int(count * m_mainLineSpacing) > int(topMargin + m_pageHeight-(int)y-m_footerHeight)) 
 		{
 			//do not break records between pages
 			break;
-		}
-		kdDebug() << " -------- " << y << " / " << m_pageHeight << endl;
-		for (uint i=0; i<count; i++) {
-//			kdDebug() << "row"<<i<<": "<<row.at(i).toString()<<endl;
-			m_painter->drawText(
-				(int)leftMargin+cellMargin, y, m_maxFieldNameWidth-cellMargin*2, m_mainLineSpacing, 
-				Qt::AlignTop, m_fieldsExpanded[i]->captionOrAliasOrName()
-				+ (m_settings->addTableBorders ? "" : ":"));
-			QString text;
-			KexiDB::Field::Type ftype = m_fieldsExpanded[i]->field->type();
-//! todo inherit format
-			if (ftype==KexiDB::Field::DateTime)
-				text = KGlobal::locale()->formatDateTime(item->at(i).toDateTime());
-//! todo inherit format
-			else if (ftype==KexiDB::Field::Date)
-				text = KGlobal::locale()->formatDate(item->at(i).toDate());
-//! todo inherit format
-			else if (ftype==KexiDB::Field::Time)
-				text = KGlobal::locale()->formatTime(item->at(i).toTime());
-//! todo currency, decimal...
-			else if (m_fieldsExpanded[i]->field->isFPNumericType())
-				text = KGlobal::locale()->formatNumber(item->at(i).toDouble());
-			else
-				text = item->at(i).toString();
-			QRect rect( m_painter->fontMetrics().boundingRect(
-				(int)leftMargin + m_maxFieldNameWidth + cellMargin, y,
-				m_pageWidth - m_maxFieldNameWidth - cellMargin*2, m_pageHeight - y, 
-				Qt::AlignAuto|Qt::WordBreak, text) );
-			m_painter->drawText(
-				rect.x(), rect.y(), rect.width(), rect.height(),
-				Qt::AlignTop|Qt::WordBreak, text);
-			if (m_settings->addTableBorders) {
-				m_painter->setPen(Qt::darkGray);
-				m_painter->drawLine(
-					(int)leftMargin, rect.top(), (int)leftMargin+m_pageWidth-1, rect.top());
-				m_painter->drawLine(
-					(int)leftMargin, rect.top(), (int)leftMargin, rect.bottom());
-				m_painter->drawLine(
-					(int)leftMargin+m_pageWidth-1, rect.top(), 
-					(int)leftMargin+m_pageWidth-1, rect.bottom());
-				m_painter->drawLine(
-					(int)leftMargin+m_maxFieldNameWidth, rect.top(), 
-					(int)leftMargin+m_maxFieldNameWidth, rect.bottom());
-				m_painter->setPen(Qt::black);
-			}
-			y += rect.height();
-		}
-		if (m_settings->addTableBorders) {
-			m_painter->setPen(Qt::darkGray);
-			m_painter->drawLine(
-				(int)leftMargin, y, (int)leftMargin+m_pageWidth-1, y);
-			m_painter->setPen(Qt::black);
-		}
-		//record spacing
-		y += m_mainLineSpacing;
-		if (m_settings->addTableBorders)
-			y += m_mainLineSpacing; //even more
+		}*/
+//		kdDebug() << " -------- " << y << " / " << m_pageHeight << endl;
+		if (paint)
+			paintRecord(painter, item, count, cellMargin, y, paintedRows, paint);
+		else
+			y = newY; //speedup
+		paintedRows++;
 	}
 
 	if (int(m_dataOffsets.count()-1)==pageNumber) {//this was next page
 		m_dataOffsets.append(new uint(offset));
 	}
 	m_eof = offset == rows;
-	return true;
+}
+
+void KexiSimplePrintingEngine::paintRecord(QPainter& painter, KexiTableItem *item, 
+	uint count, int cellMargin, uint &y, uint paintedRows, bool paint)
+{
+	if (paintedRows>0 && !m_settings->addTableBorders) {//separator
+		if (paint) {
+			painter.setPen(Qt::darkGray);
+			painter.drawLine(
+				(int)leftMargin, y-m_mainLineSpacing, 
+				(int)leftMargin+m_pageWidth-1, y-m_mainLineSpacing);
+			painter.setPen(Qt::black);
+		}
+	}
+
+	for (uint i=0; i<count; i++) {
+//			kdDebug() << "row"<<i<<": "<<row.at(i).toString()<<endl;
+		if (paint) {
+			painter.drawText(
+				(int)leftMargin+cellMargin, y, m_maxFieldNameWidth-cellMargin*2, m_mainLineSpacing, 
+				Qt::AlignTop, m_fieldsExpanded[i]->captionOrAliasOrName()
+				+ (m_settings->addTableBorders ? "" : ":"));
+		}
+		QString text;
+		KexiDB::Field::Type ftype = m_fieldsExpanded[i]->field->type();
+//! todo inherit format
+		if (ftype==KexiDB::Field::DateTime)
+			text = KGlobal::locale()->formatDateTime(item->at(i).toDateTime());
+//! todo inherit format
+		else if (ftype==KexiDB::Field::Date)
+			text = KGlobal::locale()->formatDate(item->at(i).toDate());
+//! todo inherit format
+		else if (ftype==KexiDB::Field::Time)
+			text = KGlobal::locale()->formatTime(item->at(i).toTime());
+//! todo currency, decimal...
+		else if (m_fieldsExpanded[i]->field->isFPNumericType())
+			text = KGlobal::locale()->formatNumber(item->at(i).toDouble());
+		else if (ftype==KexiDB::Field::Boolean)
+			text = item->at(i).toBool() 
+				? i18n("Boolean Yes (true)","Yes") : i18n("Boolean No (false)", "No");
+		else
+			text = item->at(i).toString();
+		QRect rect( painter.fontMetrics().boundingRect(
+			(int)leftMargin + m_maxFieldNameWidth + cellMargin, y,
+			m_pageWidth - m_maxFieldNameWidth - cellMargin*2, m_pageHeight - y, 
+			Qt::AlignAuto|Qt::WordBreak, text) );
+		if (paint) {
+			painter.drawText(
+				rect.x(), rect.y(), rect.width(), rect.height(),
+				Qt::AlignTop|Qt::WordBreak, text);
+		}
+		if (m_settings->addTableBorders) {
+			if (paint) {
+				painter.setPen(Qt::darkGray);
+				painter.drawLine(
+					(int)leftMargin, rect.top(), (int)leftMargin+m_pageWidth-1, rect.top());
+				painter.drawLine(
+					(int)leftMargin, rect.top(), (int)leftMargin, rect.bottom());
+				painter.drawLine(
+					(int)leftMargin+m_pageWidth-1, rect.top(), 
+					(int)leftMargin+m_pageWidth-1, rect.bottom());
+				painter.drawLine(
+					(int)leftMargin+m_maxFieldNameWidth, rect.top(), 
+					(int)leftMargin+m_maxFieldNameWidth, rect.bottom());
+				painter.setPen(Qt::black);
+			}
+		}
+		y += rect.height();
+	}
+	if (m_settings->addTableBorders) {
+		if (paint) {
+			painter.setPen(Qt::darkGray);
+			painter.drawLine(
+				(int)leftMargin, y, (int)leftMargin+m_pageWidth-1, y);
+			painter.setPen(Qt::black);
+		}
+	}
+	//record spacing
+	y += m_mainLineSpacing*3/2;
+//	if (m_settings->addTableBorders)
+//		y -= m_mainLineSpacing; //a bit less
+}
+
+void KexiSimplePrintingEngine::calculatePagesCount(QPainter& painter)
+{
+	if (m_eof || !m_data) {
+		m_pagesCount = 0;
+		return;
+	}
+
+	uint pageNumber = 0;
+	for(;!m_eof; ++pageNumber) {
+		paintPage(pageNumber, painter, false /* !paint */);
+	}
+	m_pagesCount = pageNumber;
+}
+
+void KexiSimplePrintingEngine::setTitleText(const QString& titleText)
+{
+	m_headerText = titleText;
 }
 
 #include "kexisimpleprintingengine.moc"

@@ -22,6 +22,7 @@
 
 #include <qregexp.h>
 
+#include <kdebug.h>
 #include <kcursor.h>
 #include <kapplication.h>
 
@@ -143,16 +144,42 @@ QColor KexiUtils::bleachedColor(const QColor& c, int factor)
 	return c2;
 }
 
-QByteArray KexiUtils::serializeMap(const QMap<QString,QString>& map)
+void KexiUtils::serializeMap(const QMap<QString,QString>& map, QByteArray& array)
 {
-	QByteArray ba;
-	QDataStream ds(ba, IO_WriteOnly);
+	QDataStream ds(array, IO_WriteOnly);
 	ds << map;
-	return ba;
+}
+
+void KexiUtils::serializeMap(const QMap<QString,QString>& map, QString& string)
+{
+	QByteArray array;
+	QDataStream ds(array, IO_WriteOnly);
+	ds << map;
+	kdDebug() << array[3] << " " << array[4] << " " << array[5] << endl;
+	const uint size = array.size();
+	string = QString::null;
+	string.reserve(size);
+	for (uint i=0; i<size; i++) {
+		string[i]=QChar(ushort(array[i]+1));
+	}
 }
 
 QMap<QString,QString> KexiUtils::deserializeMap(const QByteArray& array)
 {
+	QMap<QString,QString> map;
+	QDataStream ds(array, IO_ReadOnly);
+	ds >> map;
+	return map;
+}
+
+QMap<QString,QString> KexiUtils::deserializeMap(const QString& string)
+{
+	const uint size = string.length();
+	QCString cstr(string.latin1());
+	QByteArray array( size );
+	for (uint i=0; i<size; i++) {
+		array[i] = char(string[i].unicode()-1);
+	}
 	QMap<QString,QString> map;
 	QDataStream ds(array, IO_ReadOnly);
 	ds >> map;

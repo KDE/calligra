@@ -57,7 +57,7 @@ public:
 			//! @todo set invisible pixmap box if actual pixmap is null
 			//! @todo group actions
 			//! @todo: store KAction* here?
-			QString name = QString("kaction:///%1").arg((*it)->name());
+			QString name = QString("kaction:%1").arg((*it)->name());
 			pitem = new ActionSelectorDialogListItem(name, this, pitem, (*it)->text().replace("&", "") );
 			pitem->setPixmap( 0, (*it)->iconSet( KIcon::Small, 16 ).pixmap( QIconSet::Small, QIconSet::Active ) );
 			if (!pitem->pixmap(0) || pitem->pixmap(0)->isNull())

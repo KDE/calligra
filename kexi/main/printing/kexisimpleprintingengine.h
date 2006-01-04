@@ -39,6 +39,8 @@ class KexiSimplePrintingSettings
 {
 	public:
 		KexiSimplePrintingSettings();
+		static KexiSimplePrintingSettings load();
+		void save();
 
 		KoPageLayout pageLayout;
 		KoUnit::Unit unit;
@@ -59,7 +61,14 @@ class KexiSimplePrintingEngine : public QObject
 		~KexiSimplePrintingEngine();
 
 		bool init(KexiDB::Connection& conn, KexiDB::TableOrQuerySchema& tableOrQuery,
-			QString& errorMessage);
+			const QString& titleText, QString& errorMessage);
+
+		void setTitleText(const QString& titleText);
+
+		//! Calculates pafe count that can be later obtained using pagesCount().
+		//! Page count can depend on \a painter (printer/screen) and on printing settings.
+		void calculatePagesCount(QPainter& painter);
+
 		bool done();
 		void clear();
 		const KexiSimplePrintingSettings* settings() const { return m_settings; }
@@ -67,17 +76,26 @@ class KexiSimplePrintingEngine : public QObject
 		//! \return true when all records has been painted
 		bool eof() const { return m_eof; }
 
+		//! \return number of pages. Can be used after calculatePagesCount().
+		uint pagesCount() { return m_pagesCount; }
+
 		//! \return number of painted pages so far. 
 		//! If eof() is true, this number is equal to total page count.
 		uint paintedPages() const { return m_dataOffsets.count(); }
 
 	public slots:
-		bool paintPage(int pageNumber, QPainter& painter);
+		/*! Paints a page number \a pageNumber (counted from 0) on \a painter.
+		 If \a paint is false, drawings are only computed but not painted, 
+		 so this can be used for calculating page number before printing or previewing. */
+		void paintPage(int pageNumber, QPainter& painter, bool paint = true);
 
 	protected:
+		void paintRecord(QPainter& painter, KexiTableItem *item, 
+			uint count, int cellMargin, uint &y, uint paintedRows, bool paint);
+
 		const KexiSimplePrintingSettings* m_settings;
 
-		QPainter* m_painter;
+//		QPainter* m_painter;
 		QFont m_mainFont, m_headerFont;
 		QPaintDeviceMetrics m_pdm;
 		int m_dpiX, m_dpiY;
@@ -95,6 +113,7 @@ class KexiSimplePrintingEngine : public QObject
 		int m_mainLineSpacing;
 		int m_footerHeight;
 		KexiDB::QueryColumnInfo::Vector m_fieldsExpanded;
+		uint m_pagesCount;
 		bool m_eof;
 		bool m_paintInitialized; //!< used by paintPage()
 		double leftMargin;

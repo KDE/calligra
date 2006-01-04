@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2005-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This program is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -113,7 +113,7 @@ QVariant DatabaseProperties::value( const QString& _name )
 	if (true!=m_conn->querySingleString(
 		QString::fromLatin1("select db_value from kexi__db where db_property=")
 		+ m_conn->driver()->escapeString(name), result)) {
-		setError(m_conn, i18n("Could not read database property \"%1\".").arg(name));
+		m_conn->setError(ERR_NO_DB_PROPERTY, i18n("Could not read database property \"%1\".").arg(name));
 		return QVariant();
 	}
 	return result;

@@ -64,10 +64,10 @@ MySQLMigrate::~MySQLMigrate() {
 /* ************************************************************************** */
 /*! Connect to the db backend */
 bool MySQLMigrate::drv_connect() {
-  if(d->db_connect(*m_migrateData->source)) {
+	if(d->db_connect(*m_migrateData->source)) {
 		return d->useDatabase(m_migrateData->sourceName);
 	} else {
-	  return false;
+		return false;
 	}
 }
 

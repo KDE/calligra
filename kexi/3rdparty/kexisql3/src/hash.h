@@ -12,7 +12,6 @@
 ** This is the header file for the generic hash-table implemenation
 ** used in SQLite.
 **
-** $Id$
 */
 #ifndef _SQLITE_HASH_H_
 #define _SQLITE_HASH_H_

@@ -68,14 +68,7 @@ void Object::setError( int code, const QString &msg )
 
 void Object::setError( const QString &msg )
 {
-	STORE_PREV_ERR;
-
-	m_errno=ERR_OTHER;
-	m_errMsg = msg;
-	m_errorSql = m_sql;
-	m_hasError = true;
-	if (m_hasError)
-		ERRMSG(this);
+	setError( ERR_OTHER, msg );
 }
 
 void Object::setError( const QString& title, const QString &msg )
@@ -97,9 +90,14 @@ void Object::setError( const QString& title, const QString &msg )
 
 void Object::setError( KexiDB::Object *obj, const QString& prependMessage )
 {
-	STORE_PREV_ERR;
+	setError( obj, obj ? obj->errorNum() : ERR_OTHER, prependMessage );
+}
 
-	if (obj) {
+void Object::setError( KexiDB::Object *obj, int code, const QString& prependMessage )
+{
+	if (obj && obj->errorNum()!=0) {
+		STORE_PREV_ERR;
+
 		m_errno = obj->errorNum();
 		m_errMsg = (prependMessage.isEmpty() ? QString::null : (prependMessage + " ")) 
 			+ obj->errorMsg();
@@ -115,9 +113,15 @@ void Object::setError( KexiDB::Object *obj, const QString& prependMessage )
 		m_serverErrorMsg = obj->serverErrorMsg();
 		if (m_serverErrorMsg.isEmpty()) //try copied
 			m_serverErrorMsg = obj->m_serverErrorMsg;
+		//override
+		if (code!=0 && code!=ERR_OTHER)
+			m_errno = code;
+		if (m_hasError)
+			ERRMSG(this);
 	}
-	if (m_hasError)
-		ERRMSG(this);
+	else {
+		setError( code!=0 ? code : ERR_OTHER, prependMessage );
+	}
 }
 
 void Object::clearError()

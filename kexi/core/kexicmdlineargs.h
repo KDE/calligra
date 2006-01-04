@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2002, 2003 Lucijan Busch <lucijan@gmx.at>
    Copyright (C) 2002, 2003 Joseph Wenninger <jowenn@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -47,11 +47,11 @@ static KCmdLineOptions options[] =
 	"is provided."), 0 },
   { "t", 0, 0 },
   { "type <name>", I18N_NOOP(
-	"Specifies a type of a file provided\n"
-	"as argument. This option is useful\n"
+	"Specify a type of a file provided\n"
+	"as argument. This option is only useful\n"
 	"if your filename has not set a valid \n"
-	"extension and it's type cannot be detected\n"
-	"unambiguously by looking at it's contents.\n"
+	"extension and its type cannot be detected\n"
+	"unambiguously by looking at its contents.\n"
 	"This option is ignored if no file\n"
 	"is specified as an argument.\n"
 	"Available file types are:\n"
@@ -60,6 +60,16 @@ static KCmdLineOptions options[] =
 	"  you to a project.\n"
 	"- \"connection\" for a database connection data.\n"
 	), 0 },
+  { "conn", 0, 0 },
+  { "connection <shortcut_filename>", I18N_NOOP(
+	"\nSpecify a database connection shortcut .kexic\n"
+	"file containing connection data.\n"
+	"Can be used with --createdb or --create-opendb\n"
+	"for convenience instead of using options like \n"
+	"--user, --host or --port.\n"
+	"Note: Options like --user, --host have\n"
+	"precedence over settings defined in the shortcut\n"
+	"file." ), 0 },
 
   { ":", I18N_NOOP("Options related to opening objects within a project:"), 0 },
   { "open [<object_type>:]<object_name>", I18N_NOOP(
@@ -76,37 +86,31 @@ static KCmdLineOptions options[] =
 	" --open query:\"My very big query\""), 0 },
   { "design [<object_type>:]<object_name>", I18N_NOOP(
 	"\nLike --open, but the object will\n"
-	"be opened in Design Mode, if one is available"), 0 },
+	"be opened in Design Mode, if one is available."), 0 },
   { "edittext [<object_type>:]<object_name>", I18N_NOOP(
 	"\nLike --open, but the object will\n"
-	"be opened in Text Mode, if one is available"), 0 },
+	"be opened in Text Mode, if one is available."), 0 },
   { "new <object_type>", I18N_NOOP(
-	"Start new object design of type <object_type>"), 0 },
+	"Start new object design of type <object_type>."), 0 },
   { "print [<object_type>:]<object_name>", I18N_NOOP(
-	"\nOpen object of type <object_type>\n"
-	"and name <object_name> from specified project\n"
-	"on application start for quick printing\n"
+	"\nOpen Print dialog window for object of type\n"
+	"<object_type> and name <object_name> in specified\n"
+	"project on application start for quick printing\n"
 	"of the object's data.\n"
 	"<object_type>: is optional, if omitted - table\n"
-	"type is assumed.\n"
-	"Other object types can be query, report, form,\n"
-	"script (may be more or less, depending on your\n"
-	"plugins installed).\n"
-	"Use \"\" chars to specify names containing spaces.\n"
-	"Examples: --print MyTable,\n"
-	" --print query:\"My very big query\""), 0 },
-  { "printpreview [<object_type>:]<object_name>", I18N_NOOP(
+	"type is assumed. Object type can be also query."), 0 },
+  { "print-preview [<object_type>:]<object_name>", I18N_NOOP(
 	"\nOpen Print Preview window for object\n"
 	"of type <object_type> and name <object_name>\n"
 	"from specified project on application start.\n"
-	"See --print for more details"), 0 },
+	"See --print for more details."), 0 },
 #ifdef KEXI_SHOW_UNIMPLEMENTED
   { "final-mode", I18N_NOOP(
 	"Start project in the Final Mode, regardless \n"
-	"of the project settings"), 0 },
+	"of the project settings".), 0 },
   { "design-mode", I18N_NOOP(
 	"Start project in the Design Mode, regardless \n"
-	"of the project settings"), 0 },
+	"of the project settings."), 0 },
 #endif
 
 #ifdef KEXI_SERVER_SUPPORT
@@ -138,13 +142,17 @@ static KCmdLineOptions options[] =
 	"to be used for connecting to a database\n"
 	"project. Ignored if a shortcut filename\n"
 	"is provided."), 0 },
+  { "skip-dialog", I18N_NOOP(
+	"Skip displaying connection dialog window\n"
+	"and connect directly. Available when\n"
+	"opening .kexic or .kexis shortcut files."), 0 },
 #endif //KEXI_SERVER_SUPPORT
 
   { "+[project-name]", I18N_NOOP(
 	"Kexi database project's filename\n"
 	"or Kexi shortcut's filename\n"
 	"or Kexi database project's name\n"
-	"on a server to open"), 0 },
+	"on a server to open."), 0 },
   // INSERT YOUR COMMANDLINE OPTIONS HERE
   KCmdLineLastOption
 };

@@ -49,9 +49,6 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 			
 		/*! Constructs a copy of \a pdata */
 		KexiProjectData( const KexiProjectData& pdata );
-			
-//		const QString& driverName, const QString& databaseName, const QString &hostName, unsigned short int port,
-//			 const QString& userName, const QString &password, const QString& fileName);
 
 		~KexiProjectData();
 
@@ -65,9 +62,18 @@ class KEXICORE_EXPORT KexiProjectData : public QObject, public KexiDB::SchemaDat
 
 		const KexiDB::ConnectionData* constConnectionData() const;
 
-		//! in fact, this is the same as KexiDB::SchemaData::name()
+		/*! \return database name. 
+		 In fact, this is the same as KexiDB::SchemaData::name() */
 		QString databaseName() const;
 		void setDatabaseName(const QString& dbName);
+
+		/*! \return user-visible string better describing the project than just databaseName(). 
+		 For server-based projects returns i18n'd string: 
+		 "<project name>" (connection: user@server:port).
+		 For file-based projects returns project's filename. 
+		 If \a nobr is true, <nobr> tags are added around '(connection: user@server:port)'
+		 (useful for displaying in message boxes). */
+		QString infoString(bool nobr = true) const;
 
 		QDateTime lastOpened() const;
 		void setLastOpened(const QDateTime& lastOpened);

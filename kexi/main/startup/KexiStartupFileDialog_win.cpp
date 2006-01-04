@@ -456,14 +456,20 @@ QString KexiStartupFileDialogBase::realStartDir(const QString& startDir)
 	if (!startDir.startsWith(":"))
 		return startDir;
 	QString recentDir; //dummy
-	return KFileDialog::getStartURL(startDir, recentDir).path();
+	QString path( KFileDialog::getStartURL(startDir, recentDir).path() );
+	if (path.isEmpty())
+		return QString::null;
+	QFileInfo fi(path);
+	return fi.isDir() ? fi.absFilePath() : fi.dir(true).absPath();
 }
 
 void KexiStartupFileDialogBase::saveLastVisitedPath(const QString& path)
 {
 	if (!m_lastVisitedPathsVariable.isEmpty()) {
 		//save last visited dir path
-		QString dir = QDir(path).absPath();
+//		QString dir = QDir(path).absPath();
+		QFileInfo fi(path);
+		QString dir( fi.isDir() ? fi.absFilePath() : fi.dir(true).absPath() );
 		if (!dir.isEmpty())
 			KRecentDirs::add(m_lastVisitedPathsVariable, dir);
 	}

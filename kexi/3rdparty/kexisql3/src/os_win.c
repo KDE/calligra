@@ -48,47 +48,73 @@ int sqlite3OsFileExists(const char *zFilename){
 
 /*
 ** Attempt to open a file for both reading and writing.  If that
-** fails, try opening it read-only.  If the file does not exist,
-** try to create it.
+** fails, and allowReadonly is 1, try opening it read-only.  
+** If the file does not exist, try to create it.
 **
-** On success, a handle for the open file is written to *id
+** Exclusive read/write access is required if exclusive is 1. 
+** In this case, if allowReadonly is also 1, only shared writing is locked.
+**
 ** and *pReadonly is set to 0 if the file was opened for reading and
 ** writing or 1 if the file was opened read-only.  The function returns
 ** SQLITE_OK.
 **
-** On failure, the function returns SQLITE_CANTOPEN and leaves
-** *id and *pReadonly unchanged.
+** On failure the function leaves *id and *pReadonly unchanged, and returns:
+** - SQLITE_CANTOPEN_WITH_LOCKED_READWRITE if it was unable to lock the file 
+**   for read/write access.
+** - SQLITE_CANTOPEN_WITH_LOCKED_WRITE if it was unable to lock the file 
+**   for write access.
+** - SQLITE_CANTOPEN in any other case.
 */
 int sqlite3OsOpenReadWrite(
   const char *zFilename,
   OsFile *id,
-  int *pReadonly
+  int *pReadonly,
+  int exclusive,
+  int allowReadonly
 ){
   HANDLE h;
+  int access;
   assert( !id->isOpen );
+  /* js */
+  if (exclusive)
+     access = 0;
+  else
+     access = FILE_SHARE_READ | FILE_SHARE_WRITE;
   h = CreateFileA(zFilename,
      GENERIC_READ | GENERIC_WRITE,
-     FILE_SHARE_READ | FILE_SHARE_WRITE,
+     access,
      NULL,
      OPEN_ALWAYS,
      FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
      NULL
   );
-  if( h==INVALID_HANDLE_VALUE ){
+  if (!allowReadonly && GetLastError()==ERROR_SHARING_VIOLATION) {
+    return SQLITE_CANTOPEN_WITH_LOCKED_READWRITE;
+  }
+  if( allowReadonly && h==INVALID_HANDLE_VALUE ){
+    if (exclusive)
+       access = 0;
+    else
+       access = FILE_SHARE_READ;
     h = CreateFileA(zFilename,
        GENERIC_READ,
-       FILE_SHARE_READ,
+       access,
        NULL,
        OPEN_ALWAYS,
        FILE_ATTRIBUTE_NORMAL | FILE_FLAG_RANDOM_ACCESS,
        NULL
     );
-    if( h==INVALID_HANDLE_VALUE ){
-      return SQLITE_CANTOPEN;
+    if (GetLastError()==ERROR_SHARING_VIOLATION) {
+      return SQLITE_CANTOPEN_WITH_LOCKED_WRITE;
     }
-    *pReadonly = 1;
+    if( h!=INVALID_HANDLE_VALUE ){
+      *pReadonly = 1;
+    }
   }else{
     *pReadonly = 0;
+  }
+  if( h==INVALID_HANDLE_VALUE ){
+    return SQLITE_CANTOPEN;
   }
   id->h = h;
   id->locktype = NO_LOCK;

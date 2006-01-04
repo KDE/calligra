@@ -81,7 +81,7 @@ class KEXIMAIN_EXPORT KexiConnSelectorWidget : public QWidget
 		*/
 		KexiDB::ConnectionData* selectedConnectionData() const;
 
-		/*! \return the name of database file, if server-based connection was selected.
+		/*! \return the name of database file, if file-based connection was selected.
 		 Returns null string if no selection has been made or server-based connection 
 		 has been selected.
 		 @see selectedConnectionType()

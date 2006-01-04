@@ -38,6 +38,7 @@
 #include <kexiutils/utils.h>
 #include <kexiutils/identifier.h>
 
+#include <qdir.h>
 #include <qfileinfo.h>
 #include <qguardedptr.h>
 
@@ -60,16 +61,18 @@ class ConnectionPrivate
 {
 	public:
 		ConnectionPrivate(Connection *conn)
-		 : m_conn(conn)
-		 , m_tableSchemaChangeListeners(101)
-		 , m_versionMajor(-1)
-		 , m_versionMinor(-1)
-		 , m_dont_remove_transactions(false)
-		 , m_skip_databaseExists_check_in_useDatabase(false)
-		 , m_default_trans_started_inside(false)
+		 : conn(conn)
+		 , tableSchemaChangeListeners(101)
+		 , versionMajor(-1)
+		 , versionMinor(-1)
+		 , dont_remove_transactions(false)
+		 , skip_databaseExists_check_in_useDatabase(false)
+		 , default_trans_started_inside(false)
 		 , m_parser(0)
+		 , isConnected(false)
+		 , autoCommit(true)
 		{
-			m_tableSchemaChangeListeners.setAutoDelete(true);
+			tableSchemaChangeListeners.setAutoDelete(true);
 		}
 		~ConnectionPrivate()
 		{
@@ -77,40 +80,44 @@ class ConnectionPrivate
 		}
 
 		void errorInvalidDBContents(const QString& details) {
-			m_conn->setError( ERR_INVALID_DATABASE_CONTENTS, i18n("Invalid database contents. ")+details);
+			conn->setError( ERR_INVALID_DATABASE_CONTENTS, i18n("Invalid database contents. ")+details);
 		}
 
 		QString strItIsASystemObject() const {
 			return i18n("It is a system object.");
 		}
 
-		Parser *parser() { return m_parser ? m_parser : (m_parser = new Parser(m_conn)); }
+		inline Parser *parser() { return m_parser ? m_parser : (m_parser = new Parser(conn)); }
 
-		Connection *m_conn;
+		Connection *conn;
 
 		/*! Default transaction handle.
 		If transactions are supported: Any operation on database (e.g. inserts)
 		that is started without specifing transaction context, will be performed
 		in the context of this transaction. */
-		Transaction m_default_trans;
-		QValueList<Transaction> m_transactions;
+		Transaction default_trans;
+		QValueList<Transaction> transactions;
 
-		QPtrDict< QPtrList<Connection::TableSchemaChangeListenerInterface> > m_tableSchemaChangeListeners;
+		QPtrDict< QPtrList<Connection::TableSchemaChangeListenerInterface> > tableSchemaChangeListeners;
 
 		//! Version information for this connection.
-		int m_versionMajor;
-		int m_versionMinor;
+		int versionMajor;
+		int versionMinor;
+
+		Parser *m_parser;
 
 		//! Database properties
 		DatabaseProperties* dbProperties;
 
+		QString availableDatabaseName; //!< used by anyAvailableDatabaseName()
+
 		//! true if rollbackTransaction() and commitTransaction() shouldn't remove
 		//! the transaction object from m_transactions list; used by closeDatabase()
-		bool m_dont_remove_transactions : 1;
+		bool dont_remove_transactions : 1;
 
 		//! used to avoid endless recursion between useDatabase() and databaseExists()
 		//! when useTemporaryDatabaseIfNeeded() works
-		bool m_skip_databaseExists_check_in_useDatabase : 1;
+		bool skip_databaseExists_check_in_useDatabase : 1;
 
 		/*! Used when single transactions are only supported (Driver::SingleTransactions).
 		 True value means default transaction has been started inside connection object
@@ -120,10 +127,14 @@ class ConnectionPrivate
 		 transaction if m_default_trans_started_inside is false. Such behaviour allows user to
 		 execute a sequence of actions like CREATE TABLE...; INSERT DATA...; within a single transaction
 		 and commit it or rollback by hand. */
-		bool m_default_trans_started_inside : 1;
+		bool default_trans_started_inside : 1;
 
-	protected:
-		Parser *m_parser;
+		bool isConnected : 1;
+
+		bool autoCommit : 1;
+
+		/*! True for read only connection. Used especially for file-based drivers. */
+		bool readOnly : 1;
 };
 
 }//namespace KexiDB
@@ -143,8 +154,6 @@ Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	,m_kexiDBSystemTables(101)
 	,d(new ConnectionPrivate(this))
 	,m_driver(driver)
-	,m_is_connected(false)
-	,m_autoCommit(true)
 	,m_destructor_started(false)
 {
 	d->dbProperties = new DatabaseProperties(this);
@@ -154,12 +163,12 @@ Connection::Connection( Driver *driver, ConnectionData &conn_data )
 	m_queries.setAutoDelete(true);
 	m_queries_byname.setAutoDelete(false);//m_queries is owner, not me
 	m_cursors.setAutoDelete(true);
-//	d->m_transactions.setAutoDelete(true);
+//	d->transactions.setAutoDelete(true);
 	//reasonable sizes: TODO
 	m_tables.resize(101);
 	m_queries.resize(101);
 	m_cursors.resize(101);
-//	d->m_transactions.resize(101);//woohoo! so many transactions?
+//	d->transactions.resize(101);//woohoo! so many transactions?
 	m_sql.reserve(0x4000);
 }
 
@@ -192,22 +201,22 @@ Connection::~Connection()
 bool Connection::connect()
 {
 	clearError();
-	if (m_is_connected) {
+	if (d->isConnected) {
 		setError(ERR_ALREADY_CONNECTED, i18n("Connection already established.") );
 		return false;
 	}
 
-	if (!(m_is_connected = drv_connect())) {
+	if (!(d->isConnected = drv_connect())) {
 		setError(m_driver->isFileDriver() ?
-			i18n("Could not open \"%1\" project file.").arg(m_data->fileName())
+			i18n("Could not open \"%1\" project file.").arg(QDir::convertSeparators(m_data->fileName()))
 			: i18n("Could not connect to \"%1\" database server.").arg(m_data->serverInfoString()) );
 	}
-	return m_is_connected;
+	return d->isConnected;
 }
 
-bool Connection::isDatabaseUsed()
+bool Connection::isDatabaseUsed() const
 {
-	return !m_usedDatabase.isEmpty() && m_is_connected && drv_isDatabaseUsed();
+	return !m_usedDatabase.isEmpty() && d->isConnected && drv_isDatabaseUsed();
 }
 
 void Connection::clearError()
@@ -219,7 +228,7 @@ void Connection::clearError()
 bool Connection::disconnect()
 {
 	clearError();
-	if (!m_is_connected)
+	if (!d->isConnected)
 		return true;
 
 	if (!closeDatabase())
@@ -227,13 +236,18 @@ bool Connection::disconnect()
 
 	bool ok = drv_disconnect();
 	if (ok)
-		m_is_connected = false;
+		d->isConnected = false;
 	return ok;
+}
+
+bool Connection::isConnected() const
+{
+	return d->isConnected;
 }
 
 bool Connection::checkConnected()
 {
-	if (m_is_connected) {
+	if (d->isConnected) {
 		clearError();
 		return true;
 	}
@@ -323,17 +337,20 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 		QFileInfo file(dbName);
 		if (!file.exists() || ( !file.isFile() && !file.isSymLink()) ) {
 			if (!ignoreErrors)
-				setError(ERR_OBJECT_NOT_FOUND, i18n("Database file \"%1\" does not exist.").arg(m_data->fileName()) );
+				setError(ERR_OBJECT_NOT_FOUND, i18n("Database file \"%1\" does not exist.")
+				.arg(QDir::convertSeparators(m_data->fileName())) );
 			return false;
 		}
 		if (!file.isReadable()) {
 			if (!ignoreErrors)
-				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not readable.").arg(m_data->fileName()) );
+				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not readable.")
+				.arg(QDir::convertSeparators(m_data->fileName())) );
 			return false;
 		}
 		if (!file.isWritable()) {
 			if (!ignoreErrors)
-				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not writable.").arg(m_data->fileName()) );
+				setError(ERR_ACCESS_RIGHTS, i18n("Database file \"%1\" is not writable.")
+				.arg(QDir::convertSeparators(m_data->fileName())) );
 			return false;
 		}
 		return true;
@@ -341,10 +358,10 @@ bool Connection::databaseExists( const QString &dbName, bool ignoreErrors )
 
 	QString tmpdbName;
 	//some engines need to have opened any database before executing "create database"
-	d->m_skip_databaseExists_check_in_useDatabase = true;
+	d->skip_databaseExists_check_in_useDatabase = true;
 	if (!useTemporaryDatabaseIfNeeded(tmpdbName))
 		return false;
-	d->m_skip_databaseExists_check_in_useDatabase = false;
+	d->skip_databaseExists_check_in_useDatabase = false;
 
 	bool ret = drv_databaseExists(dbName, ignoreErrors);
 
@@ -377,7 +394,8 @@ bool Connection::createDatabase( const QString &dbName )
 		return false;
 	}
 	if (m_driver->isSystemDatabaseName( dbName )) {
-		setError(ERR_SYSTEM_NAME_RESERVED, i18n("Cannot create database \"%1\". This name is reserved for system database.").arg(dbName) );
+		setError(ERR_SYSTEM_NAME_RESERVED, 
+			i18n("Cannot create database \"%1\". This name is reserved for system database.").arg(dbName) );
 		return false;
 	}
 	if (m_driver->isFileDriver()) {
@@ -485,7 +503,7 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 	if (m_usedDatabase == my_dbName)
 		return true; //already used
 
-	if (!d->m_skip_databaseExists_check_in_useDatabase) {
+	if (!d->skip_databaseExists_check_in_useDatabase) {
 		if (!databaseExists(my_dbName, false /*don't ignore errors*/))
 			return false; //database must exist
 	}
@@ -496,7 +514,11 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 	m_usedDatabase = "";
 
 	if (!drv_useDatabase( my_dbName )) {
-		setError( i18n("Opening database \"%1\" failed").arg( my_dbName ) );
+		QString msg(i18n("Opening database \"%1\" failed.").arg( my_dbName ));
+		if (error())
+			setError( this, msg );
+		else
+			setError( msg );
 		return false;
 	}
 
@@ -512,7 +534,7 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 		num = d->dbProperties->value("kexidb_major_ver").toInt(&ok);
 		if (!ok)
 			return false;
-		d->m_versionMajor = num;
+		d->versionMajor = num;
 /*		if (true!=querySingleNumber(
 			"select db_value from kexi__db where db_property=" + m_driver->escapeString(QString("kexidb_major_ver")), num)) {
 			d->errorInvalidDBContents(notfound_str.arg("kexidb_major_ver"));
@@ -521,7 +543,7 @@ bool Connection::useDatabase( const QString &dbName, bool kexiCompatible )
 		num = d->dbProperties->value("kexidb_minor_ver").toInt(&ok);
 		if (!ok)
 			return false;
-		d->m_versionMinor = num;
+		d->versionMinor = num;
 /*		if (true!=querySingleNumber(
 			"select db_value from kexi__db where db_property=" + m_driver->escapeString(QString("kexidb_minor_ver")), num)) {
 			d->errorInvalidDBContents(notfound_str.arg("kexidb_minor_ver"));
@@ -558,8 +580,8 @@ bool Connection::closeDatabase()
 	if (m_driver->transactionsSupported()) {
 		//rollback all transactions
 		QValueList<Transaction>::ConstIterator it;
-		d->m_dont_remove_transactions=true; //lock!
-		for (it=d->m_transactions.constBegin(); it!= d->m_transactions.constEnd(); ++it) {
+		d->dont_remove_transactions=true; //lock!
+		for (it=d->transactions.constBegin(); it!= d->transactions.constEnd(); ++it) {
 			if (!rollbackTransaction(*it)) {//rollback as much as you can, don't stop on prev. errors
 				ret = false;
 			}
@@ -569,8 +591,8 @@ bool Connection::closeDatabase()
 				 ((*it).m_data ? QString::number((*it).m_data->refcount) : "(null)") << endl;
 			}
 		}
-		d->m_dont_remove_transactions=false; //unlock!
-		d->m_transactions.clear(); //free trans. data
+		d->dont_remove_transactions=false; //unlock!
+		d->transactions.clear(); //free trans. data
 	}
 
 	//delete own cursors:
@@ -599,7 +621,8 @@ bool Connection::useTemporaryDatabaseIfNeeded(QString &tmpdbName)
 			return false;
 		}
 		if (!useDatabase(tmpdbName, false)) {
-			setError(errorNum(), i18n("Error during starting temporary connection using \"%1\" database name.")
+			setError(errorNum(), 
+				i18n("Error during starting temporary connection using \"%1\" database name.")
 				.arg(tmpdbName) );
 			return false;
 		}
@@ -735,12 +758,12 @@ const QStringList& Connection::kexiDBSystemTableNames()
 
 int Connection::versionMajor() const
 {
-	return d->m_versionMinor;
+	return d->versionMinor;
 }
 
 int Connection::versionMinor() const
 {
-	return d->m_versionMinor;
+	return d->versionMinor;
 }
 
 DatabaseProperties& Connection::databaseProperties()
@@ -791,7 +814,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			first = false;
 		else
 			sql += ", ";
-		QString v = escapeIdentifier(field->m_name) + " ";
+		QString v = escapeIdentifier(field->name()) + " ";
 		const bool autoinc = field->isAutoIncrement();
 		const bool pk = field->isPrimaryKey() || (autoinc && m_driver->beh->AUTO_INCREMENT_REQUIRES_PK);
 //TODO: warning: ^^^^^ this allows only ont autonumber per table when AUTO_INCREMENT_REQUIRES_PK==true!
@@ -834,7 +857,7 @@ QString Connection::createTableStatement( const KexiDB::TableSchema& tableSchema
 			if (!autoinc && !pk && field->isNotNull())
 				v += " NOT NULL"; //only add not null option if no autocommit is set
 			if (field->defaultValue().isValid())
-				v += QString::fromLatin1(" DEFAULT ") + m_driver->valueToSQL( field, field->m_defaultValue );
+				v += QString::fromLatin1(" DEFAULT ") + m_driver->valueToSQL( field, field->defaultValue() );
 		}
 		sql += v;
 	}
@@ -1202,7 +1225,8 @@ bool Connection::createTable( KexiDB::TableSchema* tableSchema, bool replaceExis
 		if (existingTable) {
 			if (existingTable == tableSchema) {
 				clearError();
-				setError(ERR_OBJECT_EXISTS, i18n("Could not create the same table \"%1\" twice.").arg(tableSchema->name()) );
+				setError(ERR_OBJECT_EXISTS, 
+					i18n("Could not create the same table \"%1\" twice.").arg(tableSchema->name()) );
 				return false;
 			}
 //TODO(js): update any structure (e.g. queries) that depend on this table!
@@ -1490,10 +1514,10 @@ bool Connection::drv_alterTableName(TableSchema& tableSchema, const QString& new
 
 //moved to beginAutoCommitTransaction()	//transaction could be already started (e.g. within KexiProject)
 //	//--if that's true: do not touch it (especially important for single-transactional drivers)
-//	const bool skipTransactions = d->m_default_trans.active();
+//	const bool skipTransactions = d->default_trans.active();
 	TransactionGuard tg;
 //moved to beginAutoCommitTransaction()	if (skipTransactions)
-//		trans = d->m_default_trans;
+//		trans = d->default_trans;
 //	else
 	if (!beginAutoCommitTransaction(tg))
 		return false;
@@ -1615,7 +1639,7 @@ bool Connection::drv_createTable( const QString& tableSchemaName )
 bool Connection::beginAutoCommitTransaction(TransactionGuard &tg)
 {
 	if ((m_driver->d->features & Driver::IgnoreTransactions)
-		|| !m_autoCommit)
+		|| !d->autoCommit)
 	{
 		tg.setTransaction( Transaction() );
 		return true;
@@ -1624,15 +1648,15 @@ bool Connection::beginAutoCommitTransaction(TransactionGuard &tg)
 	// commit current transaction (if present) for drivers
 	// that allow single transaction per connection
 	if (m_driver->d->features & Driver::SingleTransactions) {
-		if (d->m_default_trans_started_inside) //only commit internally started transaction
-			if (!commitTransaction(d->m_default_trans, true)) {
+		if (d->default_trans_started_inside) //only commit internally started transaction
+			if (!commitTransaction(d->default_trans, true)) {
 				tg.setTransaction( Transaction() );
 				return false; //we have a real error
 			}
 
-		d->m_default_trans_started_inside = d->m_default_trans.isNull();
-		if (!d->m_default_trans_started_inside) {
-			tg.setTransaction( d->m_default_trans );
+		d->default_trans_started_inside = d->default_trans.isNull();
+		if (!d->default_trans_started_inside) {
+			tg.setTransaction( d->default_trans );
 			tg.doNothing();
 			return true; //reuse externally started transaction
 		}
@@ -1652,7 +1676,7 @@ bool Connection::commitAutoCommitTransaction(const Transaction& trans)
 	if (trans.isNull() || !m_driver->transactionsSupported())
 		return true;
 	if (m_driver->d->features & Driver::SingleTransactions) {
-		if (!d->m_default_trans_started_inside) //only commit internally started transaction
+		if (!d->default_trans_started_inside) //only commit internally started transaction
 			return true; //give up
 	}
 	return commitTransaction(trans, true);
@@ -1682,11 +1706,11 @@ Transaction Connection::beginTransaction()
 		//we're creating dummy transaction data here,
 		//so it will look like active
 		trans.m_data = new TransactionData(this);
-		d->m_transactions.append(trans);
+		d->transactions.append(trans);
 		return trans;
 	}
 	if (m_driver->d->features & Driver::SingleTransactions) {
-		if (d->m_default_trans.active()) {
+		if (d->default_trans.active()) {
 			setError(ERR_TRANSACTION_ACTIVE, i18n("Transaction already started.") );
 			return Transaction::null;
 		}
@@ -1694,16 +1718,16 @@ Transaction Connection::beginTransaction()
 			SET_BEGIN_TR_ERROR;
 			return Transaction::null;
 		}
-		d->m_default_trans = trans;
-		d->m_transactions.append(trans);
-		return d->m_default_trans;
+		d->default_trans = trans;
+		d->transactions.append(trans);
+		return d->default_trans;
 	}
 	if (m_driver->d->features & Driver::MultipleTransactions) {
 		if (!(trans.m_data = drv_beginTransaction())) {
 			SET_BEGIN_TR_ERROR;
 			return Transaction::null;
 		}
-		d->m_transactions.append(trans);
+		d->transactions.append(trans);
 		return trans;
 	}
 
@@ -1723,23 +1747,23 @@ bool Connection::commitTransaction(const Transaction trans, bool ignore_inactive
 	}
 	Transaction t = trans;
 	if (!t.active()) { //try default tr.
-		if (!d->m_default_trans.active()) {
+		if (!d->default_trans.active()) {
 			if (ignore_inactive)
 				return true;
 			clearError();
 			setError(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
 			return false;
 		}
-		t = d->m_default_trans;
-		d->m_default_trans = Transaction::null; //now: no default tr.
+		t = d->default_trans;
+		d->default_trans = Transaction::null; //now: no default tr.
 	}
 	bool ret = true;
 	if (! (m_driver->d->features & Driver::IgnoreTransactions) )
 		ret = drv_commitTransaction(t.m_data);
 	if (t.m_data)
 		t.m_data->m_active = false; //now this transaction if inactive
-	if (!d->m_dont_remove_transactions) //true=transaction obj will be later removed from list
-		d->m_transactions.remove(t);
+	if (!d->dont_remove_transactions) //true=transaction obj will be later removed from list
+		d->transactions.remove(t);
 	if (!ret && !error())
 		setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Error on commit transaction"));
 	return ret;
@@ -1757,23 +1781,23 @@ bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inacti
 	}
 	Transaction t = trans;
 	if (!t.active()) { //try default tr.
-		if (!d->m_default_trans.active()) {
+		if (!d->default_trans.active()) {
 			if (ignore_inactive)
 				return true;
 			clearError();
 			setError(ERR_NO_TRANSACTION_ACTIVE, i18n("Transaction not started.") );
 			return false;
 		}
-		t = d->m_default_trans;
-		d->m_default_trans = Transaction::null; //now: no default tr.
+		t = d->default_trans;
+		d->default_trans = Transaction::null; //now: no default tr.
 	}
 	bool ret = true;
 	if (! (m_driver->d->features & Driver::IgnoreTransactions) )
 	 	ret = drv_rollbackTransaction(t.m_data);
 	if (t.m_data)
 		t.m_data->m_active = false; //now this transaction if inactive
-	if (!d->m_dont_remove_transactions) //true=transaction obj will be later removed from list
-		d->m_transactions.remove(t);
+	if (!d->dont_remove_transactions) //true=transaction obj will be later removed from list
+		d->transactions.remove(t);
 	if (!ret && !error())
 		setError(ERR_ROLLBACK_OR_COMMIT_TRANSACTION, i18n("Error on rollback transaction"));
 	return ret;
@@ -1789,7 +1813,7 @@ bool Connection::rollbackTransaction(const Transaction trans, bool ignore_inacti
 
 Transaction& Connection::defaultTransaction() const
 {
-	return d->m_default_trans;
+	return d->default_trans;
 }
 
 void Connection::setDefaultTransaction(const Transaction& trans)
@@ -1801,26 +1825,26 @@ void Connection::setDefaultTransaction(const Transaction& trans)
 	{
 		return;
 	}
-	d->m_default_trans = trans;
+	d->default_trans = trans;
 }
 
 const QValueList<Transaction>& Connection::transactions()
 {
-	return d->m_transactions;
+	return d->transactions;
 }
 
 bool Connection::autoCommit() const
 {
-	return m_autoCommit;
+	return d->autoCommit;
 }
 
 bool Connection::setAutoCommit(bool on)
 {
-	if (m_autoCommit == on || m_driver->d->features & Driver::IgnoreTransactions)
+	if (d->autoCommit == on || m_driver->d->features & Driver::IgnoreTransactions)
 		return true;
 	if (!drv_setAutoCommit(on))
 		return false;
-	m_autoCommit = on;
+	d->autoCommit = on;
 	return true;
 }
 
@@ -2325,7 +2349,8 @@ KexiDB::QuerySchema* Connection::setupQuerySchema( const RowData &data )
 	QString sqlText;
 	if (!loadDataBlock( objID, sqlText, "sql" )) {
 		setError(ERR_OBJECT_NOT_FOUND, 
-			i18n("Could not find definition for query \"%1\". Removing this query is recommended.").arg(data[2].toString()));
+			i18n("Could not find definition for query \"%1\". Removing this query is recommended.")
+			.arg(data[2].toString()));
 		return 0;
 	}
 	d->parser()->parse( sqlText );
@@ -2491,15 +2516,15 @@ void Connection::removeMe(TableSchema *ts)
 
 QString Connection::anyAvailableDatabaseName()
 {
-	if (!m_availableDatabaseName.isEmpty()) {
-		return m_availableDatabaseName;
+	if (!d->availableDatabaseName.isEmpty()) {
+		return d->availableDatabaseName;
 	}
 	return m_driver->beh->ALWAYS_AVAILABLE_DATABASE_NAME;
 }
 
 void Connection::setAvailableDatabaseName(const QString& dbName)
 {
-	m_availableDatabaseName = dbName;
+	d->availableDatabaseName = dbName;
 }
 
 bool Connection::updateRow(QuerySchema &query, RowData& data, RowEditBuffer& buf, bool useROWID)
@@ -2813,10 +2838,10 @@ bool Connection::deleteAllRows(QuerySchema &query)
 void Connection::registerForTableSchemaChanges(TableSchemaChangeListenerInterface& listener,
 	TableSchema &schema)
 {
-	QPtrList<TableSchemaChangeListenerInterface>* listeners = d->m_tableSchemaChangeListeners[&schema];
+	QPtrList<TableSchemaChangeListenerInterface>* listeners = d->tableSchemaChangeListeners[&schema];
 	if (!listeners) {
 		listeners = new QPtrList<TableSchemaChangeListenerInterface>();
-		d->m_tableSchemaChangeListeners.insert(&schema, listeners);
+		d->tableSchemaChangeListeners.insert(&schema, listeners);
 	}
 //TODO: inefficient
 	if (listeners->findRef( &listener )==-1)
@@ -2826,7 +2851,7 @@ void Connection::registerForTableSchemaChanges(TableSchemaChangeListenerInterfac
 void Connection::unregisterForTableSchemaChanges(TableSchemaChangeListenerInterface& listener,
 	TableSchema &schema)
 {
-	QPtrList<TableSchemaChangeListenerInterface>* listeners = d->m_tableSchemaChangeListeners[&schema];
+	QPtrList<TableSchemaChangeListenerInterface>* listeners = d->tableSchemaChangeListeners[&schema];
 	if (!listeners)
 		return;
 //TODO: inefficient
@@ -2835,7 +2860,7 @@ void Connection::unregisterForTableSchemaChanges(TableSchemaChangeListenerInterf
 
 void Connection::unregisterForTablesSchemaChanges(TableSchemaChangeListenerInterface& listener)
 {
-	for (QPtrDictIterator< QPtrList<TableSchemaChangeListenerInterface> > it(d->m_tableSchemaChangeListeners);
+	for (QPtrDictIterator< QPtrList<TableSchemaChangeListenerInterface> > it(d->tableSchemaChangeListeners);
 		it.current(); ++it)
 	{
 		if (-1!=it.current()->find(&listener))
@@ -2846,13 +2871,13 @@ void Connection::unregisterForTablesSchemaChanges(TableSchemaChangeListenerInter
 QPtrList<Connection::TableSchemaChangeListenerInterface>*
 Connection::tableSchemaChangeListeners(TableSchema& tableSchema) const
 {
-	KexiDBDbg << d->m_tableSchemaChangeListeners.count() << endl;
-	return d->m_tableSchemaChangeListeners[&tableSchema];
+	KexiDBDbg << d->tableSchemaChangeListeners.count() << endl;
+	return d->tableSchemaChangeListeners[&tableSchema];
 }
 
 tristate Connection::closeAllTableSchemaChangeListeners(TableSchema& tableSchema)
 {
-	QPtrList<Connection::TableSchemaChangeListenerInterface> *listeners = d->m_tableSchemaChangeListeners[&tableSchema];
+	QPtrList<Connection::TableSchemaChangeListenerInterface> *listeners = d->tableSchemaChangeListeners[&tableSchema];
 	if (!listeners)
 		return true;
 	QPtrListIterator<KexiDB::Connection::TableSchemaChangeListenerInterface> tmpListeners(*listeners); //safer copy
@@ -2871,6 +2896,18 @@ PreparedStatement::Ptr Connection::prepareStatement(PreparedStatement::Statement
 {
 	//safe?
 	return 0;
+}
+
+void Connection::setReadOnly(bool set)
+{
+	if (d->isConnected)
+		return; //sanity
+	d->readOnly = set;
+}
+
+bool Connection::isReadOnly() const
+{
+	return d->readOnly;
 }
 
 #include "connection.moc"

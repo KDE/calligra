@@ -18,13 +18,14 @@
  * Boston, MA 02110-1301, USA.
 */
 
-typedef QMap< int, QGuardedPtr<KexiDialogBase> > KexiDialogDict; //safer dict
+//! @internal safer dictionary
+typedef QMap< int, QGuardedPtr<KexiDialogBase> > KexiDialogDict; 
 
 //! @internal
 class KexiMainWindowImpl::Private
 {
 	public:
-		KexiProject	*prj;
+		KexiProject *prj;
 		KConfig *config;
 #ifndef KEXI_NO_CTXT_HELP
 		KexiContextHelp *ctxHelp;
@@ -63,7 +64,8 @@ class KexiMainWindowImpl::Private
 			*action_project_properties, *action_open_recent_more,
 			*action_project_relations, *action_project_import_data_table,
  			*action_project_export_data_table,
-			*action_project_print, *action_project_print_preview;
+			*action_project_print, *action_project_print_preview, 
+			*action_project_print_setup;
 //		KRecentFilesAction *action_open_recent;
 		KActionMenu *action_open_recent, *action_show_other;
 //		int action_open_recent_more_id;
@@ -159,9 +161,13 @@ class KexiMainWindowImpl::Private
 		KexiNewStuff  *newStuff;
 #endif
 
+		//! Used by openedCustomObjectsForItem() and addOpenedCustomObjectForItem()
+		QAsciiDict<QObject> m_openedCustomObjectsForItem;
+
 	Private(KexiMainWindowImpl* w)
 //		: dialogs(401)
-		: wnd(w)
+		: m_openedCustomObjectsForItem(1019, true)
+		, wnd(w)
 	{
 		propEditor=0;
 		propEditorToolWindow=0;
@@ -206,6 +212,7 @@ class KexiMainWindowImpl::Private
 		forceShowProjectNavigatorOnCreation = false;
 		forceHideProjectNavigatorOnCreation = false;
 		navWasVisibleBeforeProjectClosing = false;
+		m_openedCustomObjectsForItem.setAutoDelete(true);
 	}
 	~Private() {
 	}
@@ -335,5 +342,22 @@ void updatePropEditorDockWidthInfo() {
 		return item ? dialogs[ item->identifier() ] : 0;
 	}
 
+	template<class type>
+	type *openedCustomObjectsForItem(KexiPart::Item* item, const char* name)
+	{
+		if (!item || !name) {
+			kdWarning() << 
+				"KexiMainWindowImpl::Private::openedCustomObjectsForItem(): !item || !name" << endl;
+			return 0;
+		}
+		QString key( QString::number(item->identifier()) + name );
+		return dynamic_cast<type*>( m_openedCustomObjectsForItem.find( key.latin1() ) );
+	}
+
+	void addOpenedCustomObjectForItem(KexiPart::Item* item, QObject* object, const char* name)
+	{
+		QString key = QString::number(item->identifier()) + name;
+		m_openedCustomObjectsForItem.insert( key.latin1(), object );
+	}
 };
 

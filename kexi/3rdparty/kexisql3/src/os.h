@@ -170,7 +170,8 @@
 
 int sqlite3OsDelete(const char*);
 int sqlite3OsFileExists(const char*);
-int sqlite3OsOpenReadWrite(const char*, OsFile*, int*);
+/* js: extended */
+int sqlite3OsOpenReadWrite(const char*, OsFile*, int*, int, int);
 int sqlite3OsOpenExclusive(const char*, OsFile*, int);
 int sqlite3OsOpenReadOnly(const char*, OsFile*);
 int sqlite3OsOpenDirectory(const char*, OsFile*);

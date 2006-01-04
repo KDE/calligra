@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Adam Pigg <adam@piggz.co.uk>
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
    Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -42,6 +42,7 @@
 #include <kexidb/drivermanager.h>
 #include <kexidb/driver.h>
 #include <kexidb/connectiondata.h>
+#include <kexidb/utils.h>
 #include <core/kexidbconnectionset.h>
 #include <core/kexi.h>
 #include <KexiConnSelector.h>
@@ -86,8 +87,14 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString,QString>* args)
 	connect(this, SIGNAL(selected(const QString &)), this, SLOT(pageSelected(const QString &)));
 	connect(this, SIGNAL(helpClicked()), this, SLOT(helpClicked()));
 
-	if (!m_predefinedFileName.isEmpty()) {
-		// setup wizard for predefined selections 
+	if (m_predefinedConnectionData) {
+		// setup wizard for predefined server source
+		m_srcConn->showAdvancedConn();
+		setAppropriate( m_srcConnPage, false );
+		setAppropriate( m_srcDBPage, false );
+	}
+	else if (!m_predefinedDatabaseName.isEmpty()) {
+		// setup wizard for predefined source
 		// (used when external project type was opened in Kexi, e.g. mdb file)
 //		MigrateManager manager;
 //		QString driverName = manager.driverForMimeType( m_predefinedMimeType );
@@ -95,7 +102,7 @@ ImportWizard::ImportWizard(QWidget *parent, QMap<QString,QString>* args)
 
 //		showPage( m_srcConnPage );
 		m_srcConn->showSimpleConn();
-		m_srcConn->setSelectedFileName(m_predefinedFileName);
+		m_srcConn->setSelectedFileName(m_predefinedDatabaseName);
 
 		//disable all prev pages except "welcome" page
 		for (int i=0; i<indexOf(m_dstTypePage); i++) {
@@ -120,10 +127,16 @@ void ImportWizard::parseArguments()
 {
 	if (!m_args)
 		return;
-
-	if (!(*m_args)["fileName"].isEmpty() && !(*m_args)["mimeType"].isEmpty()) {
-		m_predefinedFileName = (*m_args)["fileName"];
+	m_predefinedConnectionData = 0;
+	if (!(*m_args)["databaseName"].isEmpty() && !(*m_args)["mimeType"].isEmpty()) {
+		m_predefinedDatabaseName = (*m_args)["databaseName"];
 		m_predefinedMimeType = (*m_args)["mimeType"];
+		if (m_args->contains("connectionData")) {
+			m_predefinedConnectionData = new KexiDB::ConnectionData();
+			KexiDB::fromMap( 
+				KexiUtils::deserializeMap((*m_args)["connectionData"]), *m_predefinedConnectionData 
+			);
+		}
 	}
 	m_args->clear();
 }
@@ -138,12 +151,17 @@ void ImportWizard::setupIntro()
 	QLabel *lblIntro = new QLabel(m_introPage);
 	lblIntro->setAlignment( Qt::AlignTop | Qt::AlignLeft | Qt::WordBreak );
 	QString msg;
-	if (!m_predefinedFileName.isEmpty()) { //predefined import
+	if (m_predefinedConnectionData) { //predefined import: server source
+		msg = i18n("<qt>Database Importing wizard is about to import \"%1\" database "
+		"<nobr>(connection %2)</nobr> into a Kexi database.</qt>")
+			.arg(m_predefinedDatabaseName).arg(m_predefinedConnectionData->serverInfoString());
+	}
+	else if (!m_predefinedDatabaseName.isEmpty()) { //predefined import: file source
 //! @todo this message is currently ok for files only
 		KMimeType::Ptr mimeTypePtr = KMimeType::mimeType(m_predefinedMimeType);
-		msg = i18n("Database Importing wizard is about to import \"%1\" file "
-		"of type \"%2\" into a Kexi database.")
-			.arg(QDir::convertSeparators(m_predefinedFileName)).arg(mimeTypePtr->comment());
+		msg = i18n("<qt>Database Importing wizard is about to import <nobr>\"%1\"</nobr> file "
+		"of type \"%2\" into a Kexi database.</qt>")
+			.arg(QDir::convertSeparators(m_predefinedDatabaseName)).arg(mimeTypePtr->comment());
 	}
 	else {
 		msg = i18n("Database Importing wizard allows you to import an existing database "
@@ -456,11 +474,17 @@ void ImportWizard::arriveDstTitlePage()
 			- (fi.extension().length() ? (fi.extension().length()+1) : 0));
 		m_dstNewDBNameLineEdit->setText( suggestedDBName );
 	} else {
-		if (!m_srcDBName || !m_srcDBName->selectedProjectData()) {
-			back(); //todo!
-			return;
+		if (m_predefinedConnectionData) {
+			// server source db is predefined
+			m_dstNewDBNameLineEdit->setText( m_predefinedDatabaseName );
 		}
-		m_dstNewDBNameLineEdit->setText( m_srcDBName->selectedProjectData()->databaseName() );
+		else {
+			if (!m_srcDBName || !m_srcDBName->selectedProjectData()) {
+				back(); //todo!
+				return;
+			}
+			m_dstNewDBNameLineEdit->setText( m_srcDBName->selectedProjectData()->databaseName() );
+		}
 	}
 }
 
@@ -539,7 +563,11 @@ void ImportWizard::arriveFinishPage() {
 //	m_finishLbl->setText(	m_successText.arg(m_dstNewDBNameLineEdit->text()) );
 }
 
-bool ImportWizard::fileBasedSrcSelected() const {
+bool ImportWizard::fileBasedSrcSelected() const
+{
+	if (m_predefinedConnectionData)
+		return false;
+
 	return m_srcConn->selectedConnectionType()==KexiConnSelectorWidget::FileBased;
 /*	QString srcType(m_srcTypeCombo->currentText());
 
@@ -551,7 +579,8 @@ bool ImportWizard::fileBasedSrcSelected() const {
 	}*/
 }
 
-bool ImportWizard::fileBasedDstSelected() const {
+bool ImportWizard::fileBasedDstSelected() const
+{
 	QString dstType(m_dstTypeCombo->currentText());
 
 	//! @todo Use DriverManager to get dst type property
@@ -586,6 +615,10 @@ QString ImportWizard::driverNameForSelectedSource()
 	}
 
 	//server-based
+	if (m_predefinedConnectionData) {
+		return m_predefinedConnectionData->driverName;
+	}
+
 	return m_srcConn->selectedConnectionData() 
 		? m_srcConn->selectedConnectionData()->driverName : QString::null;
 }
@@ -604,10 +637,12 @@ void ImportWizard::accept()
 //	cancelButton()->setEnabled(true);
 */
 	if (m_args) {
-		if (!fileBasedDstSelected() || !m_openImportedProjectCheckBox->isChecked()) {
-			//do not opend dest db if used didn't want it
-//! @todo also remove result when using server connection as target
-			m_args->remove("destinationFileName");
+		if ((!fileBasedDstSelected() && !m_args->contains("destinationConnectionShortcut"))
+			|| !m_openImportedProjectCheckBox->isChecked())
+		{
+			//do not open dest db if used didn't want it
+			//for server connections, destinationConnectionShortcut must be defined
+			m_args->remove("destinationDatabaseName");
 		}
 	}
 	KWizard::accept();
@@ -731,8 +766,15 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 		}
 		else 
 		{
-			md->source = m_srcConn->selectedConnectionData();
-			md->sourceName = m_srcDBName->selectedProjectData()->databaseName();
+			if (m_predefinedConnectionData)
+				md->source = m_predefinedConnectionData;
+			else
+				md->source = m_srcConn->selectedConnectionData();
+
+			if (!m_predefinedDatabaseName.isEmpty())
+				md->sourceName = m_predefinedDatabaseName;
+			else
+				md->sourceName = m_srcDBName->selectedProjectData()->databaseName();
 	//! @todo Aah, this is so C-like. Move to performImport().
 		}
 		md->keepData = keepData;
@@ -742,7 +784,7 @@ KexiMigrate* ImportWizard::prepareImport(Kexi::ObjectStatus& result)
 	return 0;
 }
 
-bool ImportWizard::import()
+tristate ImportWizard::import()
 {
 	m_importExecuted = true;
 
@@ -759,22 +801,40 @@ bool ImportWizard::import()
 		
 		kdDebug() << sourceDriver->data()->destination->databaseName() << endl;
 		kdDebug() << "Performing import..." << endl;
+	}
 
-		if(sourceDriver->progressSupported()) {
-			m_progressBar->show();
-		}
+	bool acceptingNeeded;
+	sourceDriver->checkIfDestinationDatabaseOverwritingNeedsAccepting(
+		&result, acceptingNeeded);
 
-		if (sourceDriver->performImport(&result)) {
-			if (m_args) {
-				if (fileBasedDstSelected()) {
-	//! @todo also pass result when using server connection as target
-					m_args->insert("destinationFileName", 
-						sourceDriver->data()->destination->databaseName());
-				}
+	if (!result.error() && acceptingNeeded && KMessageBox::Yes != KMessageBox::questionYesNo(this,
+		"<qt>"+i18n("Database %1 already exists."
+		"<p>Do you want to replace it and with a new one?")
+		.arg(sourceDriver->data()->destination->infoString()),
+		0, KGuiItem(i18n("&Replace")), KGuiItem(i18n("No"))))
+	{
+		return cancelled;
+	}
+
+	if (!result.error() && sourceDriver->progressSupported()) {
+		m_progressBar->show();
+	}
+
+	if (!result.error() && sourceDriver->performImport(&result))
+	{
+		if (m_args) {
+//				if (fileBasedDstSelected()) {
+			m_args->insert("destinationDatabaseName", 
+				sourceDriver->data()->destination->databaseName());
+//				}
+			QString destinationConnectionShortcut( 
+				Kexi::connset().fileNameForConnectionData( m_dstConn->selectedConnectionData() ) );
+			if (!destinationConnectionShortcut.isEmpty()) {
+				m_args->insert("destinationConnectionShortcut", destinationConnectionShortcut);
 			}
-			setTitle(m_finishPage, i18n("Success"));
-			return true;
 		}
+		setTitle(m_finishPage, i18n("Success"));
+		return true;
 	}
 
 	if (result.error())
@@ -848,7 +908,8 @@ void ImportWizard::next()
 			finishButton()->setEnabled(false);
 			backButton()->setEnabled(false);
 			m_lblImportingTxt->setText(i18n("Importing in progress..."));
-			if (import()) {
+			tristate res = import();
+			if (true == res) {
 				m_finishLbl->setText( 
 					i18n("Database has been imported into Kexi database project \"%1\".")
 					.arg(m_dstNewDBNameLineEdit->text()) );
@@ -857,26 +918,32 @@ void ImportWizard::next()
 				setFinishEnabled(m_finishPage, true);
 				m_openImportedProjectCheckBox->show();
 				next();
+				return;
 			}
-			else {
-				cancelButton()->setEnabled(true);
-				setBackEnabled(m_finishPage, true);
-				setFinishEnabled(m_finishPage, false);
-				m_openImportedProjectCheckBox->hide();
+
+			m_progressBar->hide();
+			cancelButton()->setEnabled(true);
+			setBackEnabled(m_finishPage, true);
+			setFinishEnabled(m_finishPage, false);
+			m_openImportedProjectCheckBox->hide();
+			if (!res)
 				next();
-				m_importExecuted = false;
+			else if (~res) {
+				arriveImportingPage();
+	//			back();
 			}
+			m_importExecuted = false;
 			return;
 		}
 	}
 
-	setAppropriate( m_srcDBPage, !fileBasedSrcSelected() ); //skip m_srcDBPage
+	setAppropriate( m_srcDBPage, !fileBasedSrcSelected() && !m_predefinedConnectionData ); //skip m_srcDBPage
 	KWizard::next();
 }
 
 void ImportWizard::back()
 {
-	setAppropriate( m_srcDBPage, !fileBasedSrcSelected() ); //skip m_srcDBPage
+	setAppropriate( m_srcDBPage, !fileBasedSrcSelected() && !m_predefinedConnectionData ); //skip m_srcDBPage
 	KWizard::back();
 }
 

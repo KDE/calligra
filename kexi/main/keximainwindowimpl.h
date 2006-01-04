@@ -28,6 +28,7 @@
 class KexiProjectData;
 class KexiActionProxy;
 class KMdiChildView;
+class KexiSimplePrintingSettings;
 
 namespace KexiDB {
 	class Object;
@@ -37,6 +38,13 @@ namespace KexiPart {
 	class Info;
 	class Part;
 }
+
+//! @internal
+enum PrintActionType {
+	PrintItem,
+	PreviewItem,
+	PageSetupForItem
+};
 
 /**
  * @short Kexi's main window implementation
@@ -182,13 +190,32 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void invalidateViewModeActions();
 
 		/*! Opens project pointed by \a projectData, \return true on success.
-		 Application state (e.g. actions) is updated. */
-		bool openProject(KexiProjectData *projectData);
+		 Application state (e.g. actions) is updated. 
+		 \a projectData is copied into a project structures. 
+		 \return true on success */
+		tristate openProject(const KexiProjectData& projectData);
 
-		/*! Helper. Opens project pointed by \a fileName.
-		 If \a fileName is empty, a dialog with projects available 
-		 for connection \a cdata is opened. */
-		tristate openProject(const QString& fileName, KexiDB::ConnectionData *cdata);
+		/*! Helper. Opens project pointed by \a aFileName.
+		 If \a aFileName is empty, a connection shortcut (.kexic file name) is obtained from 
+		 global connection set using \a cdata (if present). 
+		 In this case:
+		 * If connection shortcut has been found and \a dbName (a server database name) is provided
+		  'kexi --skip-dialog --connection file.kexic dbName' is executed (or the project 
+		  is opened directly if there's no project opened in the current Kexi main window.
+		 * If connection shortcut has been found and \a dbName is not provided,
+		  'kexi --skip-dialog file.kexic' is executed (or the connection is opened 
+		  directly if there's no porject opened in the current Kexi main window. */
+		tristate openProject(const QString& aFileName, KexiDB::ConnectionData *cdata, 
+			const QString& dbName = QString::null);
+
+		/*! Helper. Opens project pointed by \a aFileName.
+		 Like above but \a fileNameForConnectionData can be passed instead of 
+		 a pointer to connection data itself. 
+		 \return false if \a fileNameForConnectionData is not empty but there is no such
+		 connection in Kexi::connset() for this filename. 
+		 \a fileNameForConnectionData can be empty. */
+		tristate KexiMainWindowImpl::openProject(const QString& aFileName, 
+			const QString& fileNameForConnectionData, const QString& dbName = QString::null);
 
 		/*! Closes current project, \return true on success.
 		 Application state (e.g. actions) is updated.
@@ -206,8 +233,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		/*! Shows dialog for creating new blank project,
 		 and return a data describing it. It the dialog was cancelled,
-		 \a cancelled will be set to true (false otherwise). */
-		KexiProjectData* createBlankProjectData(bool &cancelled, bool confirmOverwrites = true);
+		 \a cancelled will be set to true (false otherwise). 
+		 \a shortcutFileName, if not 0, will be set to a shortcut filename 
+		 (in case when server database project was selected). */
+		KexiProjectData* createBlankProjectData(bool &cancelled, bool confirmOverwrites = true, 
+			QString *shortcutFileName = 0);
 
 		void setWindowMenu(QPopupMenu *menu);
 
@@ -247,6 +277,14 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		/*! @overload void updateCustomPropertyPanelTabs(KexiDialogBase *prevDialog, int prevViewMode) */
 		void updateCustomPropertyPanelTabs(
 			KexiPart::Part *prevDialogPart, int prevViewMode, KexiPart::Part *curDialogPart, int curViewMode );
+
+		/*! Used in openProject when running another Kexi process is required. */
+		tristate openProjectInExternalKexiInstance(const QString& aFileName, 
+			KexiDB::ConnectionData *cdata, const QString& dbName);
+
+		/*! Used in openProject when running another Kexi process is required. */
+		tristate openProjectInExternalKexiInstance(const QString& aFileName, 
+			const QString& fileNameForConnectionData, const QString& dbName);
 
 	protected slots:
 
@@ -307,6 +345,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotProjectSaveAs();
 		void slotProjectPrint();
 		void slotProjectPrintPreview();
+		void slotProjectPageSetup();
 		void slotProjectProperties();
 		void slotProjectClose();
 		void slotProjectRelations();
@@ -326,7 +365,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		void slotToolsProjectMigration();
 
 		/// TMP: Display a dialog to download db examples from internet
-		void  slotGetNewStuff();
+		void slotGetNewStuff();
 
 		void slotTipOfTheDay();
 
@@ -361,9 +400,11 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		/*! Shows Project Migration Wizard. \return true on successfull migration, 
 		 cancelled on cancellation, and false on failure.
-		 If \a mimeType and \a fileName are not empty, the wizard will only ask about 
-		 parameters of destination project and skip pages related to source project. */
-		tristate showProjectMigrationWizard(const QString& mimeType, const QString& fileName);
+		 If \a mimeType and \a databaseName are not empty, the wizard will only ask about 
+		 parameters of destination project and skip pages related to source project. 
+		 \a cdata connection data can be also provided to preselect server-based connections. */
+		tristate showProjectMigrationWizard(const QString& mimeType, const QString& databaseName,
+			const KexiDB::ConnectionData *cdata = 0);
 
 		//! Receives "selectionChanged()" signal from navigator to update some actions.
 		void slotPartItemSelectedInNavigator(KexiPart::Item* item);
@@ -373,15 +414,32 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 
 		//! Shows "print" dialog for \a item.
 		//! \return true on success.
-		bool printItem(KexiPart::Item* item);
+		bool printItem(KexiPart::Item* item, const QString& titleText = QString::null);
 
-		//! Shows "print preview" dialog for \a item.
+		//! Shows "print" dialog for \a item and \a settings.
 		//! \return true on success.
-		bool printPreviewForItem(KexiPart::Item* item);
+		bool printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings,
+			const QString& titleText = QString::null);
+		
+		/*! Shows "print preview" dialog for \a item. 
+		 The preview dialog is cached, so \a reload == true is sometimes needed 
+		 if data or print settings have changed in the meantime.
+		 \return true on success. */
+		bool printPreviewForItem(KexiPart::Item* item, const QString& titleText = QString::null, 
+			bool reload = false);
+
+		/*! Shows "print preview" dialog for \a item and \a settings. 
+		 \return true on success. */
+		bool printPreviewForItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings, 
+			const QString& titleText = QString::null, bool reload = false);
+
+		//! Shows "page setup" dialog for \a item.
+		//! \return true on success.
+		bool pageSetupForItem(KexiPart::Item* item);
 
 		//! Helper for printItem() and printPreviewForItem()
 		//! \return true on success.
-		bool printOrPrintPreviewForItem(KexiPart::Item* item, bool printPreview);
+		bool printActionForItem(KexiPart::Item* item, PrintActionType action);
 
 	private:
 

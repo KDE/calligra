@@ -145,3 +145,18 @@ void KexiProjectData::setDescription(const QString& desc)
 {
 	return KexiDB::SchemaData::setDescription(desc);
 }
+
+QString KexiProjectData::infoString(bool nobr) const
+{
+	QString string;
+	if (constConnectionData()->fileName().isEmpty()) { //server-based
+		string = QString(nobr ? "<nobr>" : "") + QString("\"%1\"").arg(objectName()) + (nobr ? "</nobr>" : "")
+			+ (nobr ? " <nobr>" : " ") + i18n("database connection", "(connection %1)")
+		.arg(constConnectionData()->serverInfoString()) + (nobr ? "</nobr>" : "");
+	}
+	else {//file-based
+		string = QString(nobr ? "<nobr>" : "") 
+			+ QString("\"%1\"").arg(constConnectionData()->fileName()) + (nobr ? "</nobr>" : "");
+	}
+	return string;
+}

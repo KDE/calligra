@@ -45,15 +45,17 @@ class KexiSimplePrintPreviewWindow : public QWidget
 		const KexiSimplePrintingSettings& settings() const { return m_settings; }
 
 	public slots:
-		void setPagesCount(int pagesCount);
+		void updatePagesCount();
+//		void setPagesCount(int pagesCount);
 		void goToPage(int pageNumber);
 		void setFullWidth();
 
 	signals:
 		void printRequested();
-//		void paintingPageRequested(int pageNumber, QPainter& painter);
+		void pageSetupRequested();
 
 	protected slots:
+		void slotPageSetup();
 		void slotPrintClicked();
 		void slotZoomInClicked();
 		void slotZoomOutClicked();
@@ -61,13 +63,16 @@ class KexiSimplePrintPreviewWindow : public QWidget
 		void slotPreviousClicked();
 		void slotNextClicked();
 		void slotLastClicked();
+		void initLater();
 
 	protected:
+		virtual bool event( QEvent * e );
+
 		KexiSimplePrintingEngine &m_engine;
 		const KexiSimplePrintingSettings& m_settings;
 		KToolBar *m_toolbar, *m_navToolbar;
-		int m_pageNumber, m_pagesCount;
-		int m_idFirst, m_idLast, m_idPrevious, m_idNext;
+		int m_pageNumber;//, m_pagesCount;
+		int m_idFirst, m_idLast, m_idPrevious, m_idNext, m_idPageNumberLabel;
 		KexiSimplePrintPreviewScrollView *m_scrollView;
 		KexiSimplePrintPreviewView *m_view;
 

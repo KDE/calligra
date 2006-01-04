@@ -69,7 +69,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		virtual ~Connection();
 
 		/*! \return parameters that were used to create this connection. */
-		ConnectionData* data() { return m_data; }
+		ConnectionData* data() const { return m_data; }
 
 		/*! \return the driver used for this connection. */
 		Driver* driver() const { return m_driver; }
@@ -80,12 +80,15 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		bool connect();
 
 		/*! \return true, if connection is properly established. */
-		bool isConnected() { return m_is_connected; }
+		bool isConnected() const;
 
 		/*! \return true, both if connection is properly established
 		 and any database within this connection is properly used
 		 with useDatabase(). */
-		bool isDatabaseUsed();
+		bool isDatabaseUsed() const;
+
+		/*! \return true for read only connection. Used especially for file-based drivers. */
+		bool isReadOnly() const;
 
 		/*! Reimplemented from Object: also clears sql string.
 		 @sa recentSQLString() */
@@ -610,7 +613,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		
 		/*! \overload int lastInsertedAutoIncValue(const QString&, const QString&, Q_ULLONG*)
 		*/
-		Q_ULLONG lastInsertedAutoIncValue(const QString& aiFieldName, const TableSchema& table, Q_ULLONG* ROWID = 0);
+		Q_ULLONG lastInsertedAutoIncValue(const QString& aiFieldName, 
+			const TableSchema& table, Q_ULLONG* ROWID = 0);
 
 		/*! Executes query \a statement, but without returning resulting 
 		 rows (used mostly for functional queries). 
@@ -623,7 +627,8 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 Note: The statement string can be specific for this connection's driver database, 
 		 and thus not reusable in general.
 		*/
-		inline QString selectStatement( QuerySchema& querySchema, int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const
+		inline QString selectStatement( QuerySchema& querySchema, 
+			int idEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const
 		{
 			return selectStatement(querySchema, false, idEscaping);
 		}
@@ -1029,7 +1034,7 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 		 - we assume these are valid identifiers for all drivers.
 		*/
 		inline QString escapeIdentifier(const QString& id, 
-		    int drvEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const {
+			int drvEscaping = Driver::EscapeDriver|Driver::EscapeAsNecessary ) const {
 			return m_driver->escapeIdentifier(id, drvEscaping);
 		}
 		
@@ -1044,6 +1049,9 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		/*! @internal used by querySingleRecord() methods. */
 		tristate querySingleRecordInternal(RowData &data, const QString* sql, QuerySchema* query);
+
+		/*! @internal used by Driver::createConnection(). */
+		void setReadOnly(bool set);
 
 		QGuardedPtr<ConnectionData> m_data;
 		QString m_name;
@@ -1060,25 +1068,17 @@ class KEXI_DB_EXPORT Connection : public QObject, public KexiDB::Object
 
 		//! cursors created for this connection
 		QPtrDict<KexiDB::Cursor> m_cursors;
-//		ConnectionInternal* m_internal;
-
-//moved to Object		//! used to store of actually executed SQL statement
-//moved to Object		QString m_sql, m_errorSql;
 
 	friend class KexiDB::Driver;
 	friend class KexiDB::Cursor;
 	friend class KexiDB::TableSchema; //!< for removeMe()
+	friend class KexiDB::DatabaseProperties; //!< for setError()
 	friend class ConnectionPrivate;
 
 		ConnectionPrivate *d;
 	private:
-
 		Driver *m_driver;
-		bool m_is_connected : 1;
-		bool m_autoCommit : 1;
 		bool m_destructor_started : 1; //!< helper: true if destructor is started
-		
-		QString m_availableDatabaseName; //! used by anyAvailableDatabaseName()
 };
 
 } //namespace KexiDB

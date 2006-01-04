@@ -171,14 +171,14 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 		i18n("Prints data from the currently selected table or query."));
 	m_printAction->plug(m_itemPopup);
 	m_printAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
-	m_printPreviewAction = new KAction(i18n("Print Previe&w..."), "filequickprint", 0, this, 
-		SLOT(slotPrintPreviewForItem()), this, "printPreviewForItem");
-	m_printPreviewAction->setWhatsThis(
-		i18n("Shows print preview for the currently selected table or query."));
-	m_printPreviewAction->plug(m_itemPopup);
-	m_printPreviewAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
+	m_pageSetupAction = new KAction(i18n("Page Setup..."), "", 0, this, 
+		SLOT(slotPageSetupForItem()), this, "pageSetupForItem");
+	m_pageSetupAction->setWhatsThis(
+		i18n("Shows page setup for printing the active table or query."));
+	m_pageSetupAction->plug(m_itemPopup);
+	m_pageSetupAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 	m_itemPopup->insertSeparator();
-	m_printPreviewAction_id_sep = m_itemPopup->idAt(m_itemPopup->count()-1);
+	m_pageSetupAction_id_sep = m_itemPopup->idAt(m_itemPopup->count()-1);
 
 	plugSharedAction("edit_edititem", i18n("&Rename"), m_itemPopup);
 //	m_renameObjectAction = new KAction(i18n("&Rename"), 0, Key_F2, this, 
@@ -333,8 +333,8 @@ KexiBrowser::slotSelectionChanged(QListViewItem* i)
 	m_itemPopup->setItemVisible(m_exportActionMenu_id, gotitem && it->info()->isDataExportSuppored());
 	m_itemPopup->setItemVisible(m_exportActionMenu_id_sep, gotitem && it->info()->isDataExportSuppored());
 	m_itemPopup->setItemVisible(m_printAction_id, gotitem && it->info()->isPrintingSuppored());
-	m_itemPopup->setItemVisible(m_printPreviewAction_id, gotitem && it->info()->isPrintingSuppored());
-	m_itemPopup->setItemVisible(m_printPreviewAction_id_sep, gotitem && it->info()->isDataExportSuppored());
+	m_itemPopup->setItemVisible(m_pageSetupAction_id, gotitem && it->info()->isPrintingSuppored());
+	m_itemPopup->setItemVisible(m_pageSetupAction_id_sep, gotitem && it->info()->isPrintingSuppored());
 
 	if (m_prevSelectedPart != part) {
 		m_prevSelectedPart = part;
@@ -576,11 +576,11 @@ void KexiBrowser::slotPrintItem()
 		emit printItem( item );
 }
 
-void KexiBrowser::slotPrintPreviewForItem()
+void KexiBrowser::slotPageSetupForItem()
 {
 	KexiPart::Item* item = selectedPartItem();
 	if (item)
-		emit printPreviewForItem( item );
+		emit pageSetupForItem( item );
 }
 
 //--------------------------------------------

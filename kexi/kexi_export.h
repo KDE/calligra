@@ -144,6 +144,17 @@
 # define KEXIREPORTUTILS_EXPORT //for apps
 #endif
 
+/* temporary */
+#ifndef KOPROPERTY_EXPORT
+# ifdef MAKE_KOPROPERTY_LIB
+#  define KOPROPERTY_EXPORT KDE_EXPORT
+# elif defined(KDE_MAKE_LIB)
+#  define KOPROPERTY_EXPORT KDE_IMPORT
+# else
+#  define KOPROPERTY_EXPORT
+# endif
+#endif
+
 /* additional default options */
 #ifndef KEXI_NO_CTXT_HELP
 # define KEXI_NO_CTXT_HELP

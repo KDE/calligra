@@ -54,7 +54,15 @@ public:
 	 \return true on successful removing of corresponding .kexic file */
 	bool removeConnectionData(KexiDB::ConnectionData *data);
 
+	/*! \return the list of connection data items. */
 	const KexiDB::ConnectionData::List& list() const;
+
+	/*! \return a filename of a connection data file for \a data. */
+	QString fileNameForConnectionData(KexiDB::ConnectionData *data) const;
+
+	/*! \return a connection data for a .kexic shortcut filename. 
+	 0 is returned if the filename does not match. */
+	KexiDB::ConnectionData* connectionDataForFileName(const QString& fileName) const;
 
 private:
 	/*! Removes all connection data items from this set. */

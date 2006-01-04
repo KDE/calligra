@@ -32,6 +32,8 @@ LibActionWidget::LibActionWidget(WidgetInfo *w, KActionCollection *c)
 //	kdDebug() << "LibActionWidget::LibActionWidget(): " << QString("library_widget_" + w->className()).latin1() << endl;
 	m_className = w->className();
 	setExclusiveGroup("LibActionWidgets");
+	setToolTip(w->name());
+	setWhatsThis(w->description());
 //	connect(this, SIGNAL(activated()), this, SLOT(slotWidget()));
 }
 

@@ -143,6 +143,7 @@ bool SQLiteConnection::drv_getTablesList( QStringList &list )
 
 bool SQLiteConnection::drv_createDatabase( const QString &dbName )
 {
+	// SQLite creates a new db is it does not exist
 	return drv_useDatabase(dbName);
 #if 0
 	d->data = sqlite_open( QFile::encodeName( m_data->fileName() ), 0/*mode: unused*/, 
@@ -161,9 +162,30 @@ bool SQLiteConnection::drv_useDatabase( const QString &/*dbName*/ )
 	d->storeResult();
 	return d->data != 0;
 #else //SQLITE3
-//TODO: perhaps allow to use sqlite3_open16() as well ?
-	d->res = sqlite3_open( QFile::encodeName( m_data->fileName() ), &d->data );
+	//TODO: perhaps allow to use sqlite3_open16() as well for SQLite ~ 3.3 ?
+	int exclusive = 1;
+	int allowReadonly = isReadOnly() ? 1 : 0;
+	d->res = sqlite3_open( 
+		//m_data->fileName().ucs2(), //utf16
+		QFile::encodeName( m_data->fileName() ), 
+		&d->data,
+		exclusive, /* If 1, exclusive read/write access is required, else only shared writing is locked. */
+		allowReadonly /* If 1 and read/write opening fails, try opening in read-only mode */
+	);
+
 	d->storeResult();
+	if (d->res == SQLITE_CANTOPEN_WITH_LOCKED_READWRITE) {
+		setError(ERR_ACCESS_RIGHTS, 
+		i18n("The file is probably already opened on this or other computer.")+"\n\n"
+		+ i18n("Could not gain exclusive access for reading and writing the file.") + " "
+		+ i18n("Check the file's permissions and whether it is already opened and locked by another application."));
+	}
+	else if (d->res == SQLITE_CANTOPEN_WITH_LOCKED_WRITE) {
+		setError(ERR_ACCESS_RIGHTS, 
+		i18n("The file is probably already opened on this or other computer.")+"\n\n"
+		+ i18n("Could not gain exclusive access for writing the file.") + " "
+		+ i18n("Check the file's permissions and whether it is already opened and locked by another application."));
+	}
 	return d->res == SQLITE_OK;
 #endif
 }
@@ -180,9 +202,9 @@ bool SQLiteConnection::drv_closeDatabase()
 bool SQLiteConnection::drv_dropDatabase( const QString &dbName )
 {
 	if (QFile(m_data->fileName()).exists() && !QDir().remove(m_data->fileName())) {
-		setError(ERR_ACCESS_RIGHTS, i18n("Could not remove file \"%1\". "
-			"Check the file's permissions and whether it is locked by another application.")
-			.arg(dbName) );
+		setError(ERR_ACCESS_RIGHTS, i18n("Could not remove file \"%1\".")
+			.arg(QDir::convertSeparators(dbName)) + " "
+			+ i18n("Check the file's permissions and whether it is locked by another application."));
 		return false;
 	}
 	return true;

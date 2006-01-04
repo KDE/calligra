@@ -87,6 +87,18 @@ class KEXIMIGR_EXPORT KexiMigrate : public QObject, public KexiDB::Object
 		//! Data Setup.  Requires two connection objects, a name and a bool
 		void setData(KexiMigration::Data* migrateData);
 
+		/*! Checks whether the destination database exists.
+		 For file-based dest. projects, we've already asked about overwriting 
+		 existing project but for server-based projects it's better to ask user.
+		 This method should be called before performImport() or performExport().
+
+		 \return true if no connection-related errors occured. 
+		 \a acceptingNeeded is set to true if destination database exists. 
+		 In this case you should ask about accepting database overwriting. 
+		 Used in ImportWizard::import(). */
+		bool checkIfDestinationDatabaseOverwritingNeedsAccepting(Kexi::ObjectStatus* result,
+			bool& acceptingNeeded);
+
 		//! Perform an import operation
 		bool performImport(Kexi::ObjectStatus* result = 0);
 

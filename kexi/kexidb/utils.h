@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2004-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -205,6 +205,12 @@ namespace KexiDB
 	 On successful connecting, a message is displayed. After testing, temporary connection is closed. */
 	KEXI_DB_EXPORT void connectionTestDialog(QWidget* parent, const KexiDB::ConnectionData& data, 
 		KexiDB::MessageHandler& msgHandler);
+
+	/* Saves connection data \a data into \a map. */
+	KEXI_DB_EXPORT QMap<QString,QString> toMap( const ConnectionData& data );
+
+	/* Restores connection data \a data from \a map. */
+	KEXI_DB_EXPORT void fromMap( const QMap<QString,QString>& map, ConnectionData& data );
 }
 
 #endif

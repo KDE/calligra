@@ -18,7 +18,7 @@
 */
 
 #include "kexisimpleprintingpart.h"
-#include "kexisimpleprintingwindow.h"
+#include "kexisimpleprintingpagesetup.h"
 
 #include <kdebug.h>
 #include <kgenericfactory.h>
@@ -52,7 +52,7 @@ KexiViewBase* KexiSimplePrintingPart::createView(QWidget *parent, KexiDialogBase
 {
 	Q_UNUSED( item );
 	if (viewMode == Kexi::DesignViewMode) {
-		KexiSimplePrintingWindow *w = new KexiSimplePrintingWindow( dialog->mainWin(), parent, args );
+		KexiSimplePrintingPageSetup *w = new KexiSimplePrintingPageSetup( dialog->mainWin(), parent, args );
 		return w;
 	}
 

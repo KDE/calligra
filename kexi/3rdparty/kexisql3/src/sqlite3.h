@@ -12,7 +12,6 @@
 ** This header file defines the interface that the SQLite library
 ** presents to client programs.
 **
-** @(#) $Id$
 */
 #ifndef _SQLITE3_H_
 #define _SQLITE3_H_
@@ -159,6 +158,10 @@ int sqlite3_exec(
 #define SQLITE_NOTADB      26   /* File opened that is not a database file */
 #define SQLITE_ROW         100  /* sqlite3_step() has another row ready */
 #define SQLITE_DONE        101  /* sqlite3_step() has finished executing */
+
+/* js: Used in sqlite3OsOpenReadWrite() */
+#define SQLITE_CANTOPEN_WITH_LOCKED_READWRITE 0x1001 /* Cannot open with locked read/write access */
+#define SQLITE_CANTOPEN_WITH_LOCKED_WRITE     0x1002 /* Cannot open with locked write access */
 
 /*
 ** Each entry in an SQLite table has a unique integer key.  (The key is
@@ -503,11 +506,19 @@ void *sqlite3_commit_hook(sqlite3*, int(*)(void*), void*);
 */
 int sqlite3_open(
   const char *filename,   /* Database filename (UTF-8) */
-  sqlite3 **ppDb          /* OUT: SQLite db handle */
+  sqlite3 **ppDb,         /* OUT: SQLite db handle */
+  int exclusive,          /* If 1, exclusive read/write access is required, 
+                             else only shared writing is locked. */
+  int allowReadonly       /* If 1 and read/write opening fails, 
+                             try opening in read-only mode */
 );
 int sqlite3_open16(
   const void *filename,   /* Database filename (UTF-16) */
-  sqlite3 **ppDb          /* OUT: SQLite db handle */
+  sqlite3 **ppDb,         /* OUT: SQLite db handle */
+  int exclusive,          /* If 1, exclusive read/write access is required, 
+                             else only shared writing is locked. */
+  int allowReadonly       /* If 1 and read/write opening fails, 
+                             try opening in read-only mode */
 );
 
 /*

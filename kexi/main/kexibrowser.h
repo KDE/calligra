@@ -87,7 +87,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 
 		void printItem( KexiPart::Item* );
 
-		void printPreviewForItem( KexiPart::Item* );
+		void pageSetupForItem( KexiPart::Item* );
 
 //		void actionAvailable(const char *name, bool avail);
 
@@ -110,7 +110,7 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		void slotRename();
 		void slotExportAsDataTable();
 		void slotPrintItem();
-		void slotPrintPreviewForItem();
+		void slotPageSetupForItem();
 
 	protected:
 		void itemRenameDone();
@@ -120,13 +120,13 @@ class KEXIMAIN_EXPORT KexiBrowser : public KexiViewBase
 		KPopupMenu *m_itemPopup, *m_partPopup;
 		KAction *m_newObjectAction, // *m_newObjectToolbarAction,
 			*m_openAction, *m_designAction, *m_editTextAction,
-			*m_dataExportAction, *m_printAction, *m_printPreviewAction;
+			*m_dataExportAction, *m_printAction, *m_pageSetupAction;
 		KActionMenu* m_exportActionMenu;
 		KPopupMenu* m_newObjectPopup;
 		int m_itemPopupTitle_id, m_partPopupTitle_id, 
 			m_openAction_id, m_designAction_id, m_editTextAction_id,
 			m_exportActionMenu_id, m_exportActionMenu_id_sep,
-			m_printAction_id, m_printPreviewAction_id, m_printPreviewAction_id_sep;
+			m_printAction_id, m_pageSetupAction_id, m_pageSetupAction_id_sep;
 
 		KexiPart::Part *m_prevSelectedPart;
 		KToolBar *m_toolbar;

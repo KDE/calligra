@@ -118,9 +118,10 @@ KexiTableViewColumn::KexiTableViewColumn(
 	init();
 	//setup column's readonly flag: true if this is parent table's field
 	m_readOnly = (query.masterTable()!=fieldinfo->field->table());
-	kdDebug() << "KexiTableViewColumn: query.masterTable()==" 
-		<< (query.masterTable() ? query.masterTable()->name() : "notable") << ", fieldinfo->field->table()=="
-		<< (fieldinfo->field->table() ? fieldinfo->field->table()->name()  : "notable") << endl;
+//	kdDebug() << "KexiTableViewColumn: query.masterTable()==" 
+//		<< (query.masterTable() ? query.masterTable()->name() : "notable") << ", fieldinfo->field->table()=="
+//		<< (fieldinfo->field->table() ? fieldinfo->field->table()->name()  : "notable") << endl;
+
 //	m_visible = query.isFieldVisible(&f);
 }
 

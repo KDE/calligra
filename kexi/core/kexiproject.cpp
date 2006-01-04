@@ -173,8 +173,22 @@ int KexiProject::versionMinor() const
 }
 
 bool
+KexiProject::open(bool &incompatibleWithKexi)
+{
+	return openInternal(&incompatibleWithKexi);
+}
+
+bool
 KexiProject::open()
 {
+	return openInternal(0);
+}
+
+bool
+KexiProject::openInternal(bool *incompatibleWithKexi)
+{
+	if (incompatibleWithKexi)
+		*incompatibleWithKexi = false;
 	kdDebug() << "KexiProject::open(): " << d->data->databaseName() <<" "<< d->data->connectionData()->driverName  << endl;
 	KexiDB::MessageTitle et(this, 
 		i18n("Could not open project \"%1\".").arg(d->data->databaseName()));
@@ -187,6 +201,14 @@ KexiProject::open()
 	{
 		kdDebug() << "KexiProject::open(): !d->connection->useDatabase() " 
 			<< d->data->databaseName() <<" "<< d->data->connectionData()->driverName  << endl;
+
+		if (d->connection->errorNum() == ERR_NO_DB_PROPERTY) {
+			if (incompatibleWithKexi)
+				*incompatibleWithKexi = true;
+			closeConnection();
+			return false;
+		}
+
 		setError(d->connection);
 		closeConnection();
 		return false;
@@ -860,11 +882,12 @@ KexiProject::createBlankProject(bool &cancelled, KexiProjectData* data,
 	bool ok = true;
 	tristate res = prj->create(false);
 	if (~res) {
-//todo move to KexiMessageHandler
+//! @todo move to KexiMessageHandler
 		if (KMessageBox::Yes != KMessageBox::warningYesNo(0, i18n(
-			"The project \"%1\" already exists.\n"
+			"The project %1 already exists.\n"
 			"Do you want to replace it with a new, blank one?")
-			.arg(data->objectName())+"\n"+warningNoUndo ))
+				.arg(prj->data()->infoString())+"\n"+warningNoUndo,
+			QString::null, KGuiItem(i18n("Replace")) ))
 //todo add serverInfoString() for server-based prj
 		{
 			delete prj;

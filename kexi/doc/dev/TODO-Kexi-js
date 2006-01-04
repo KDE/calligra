@@ -396,6 +396,8 @@ CCPASTEUR:
 	-perhaps we'd reuse KDE Menu editor GUI?
 
 === KexiDB TODO ===
+- look at Connection::isReadOnly() to see if we can perform certain operations 
+   requiring write access (create db, update db props, etc.)
 - reuse ConnectionData::useLocalSocketFile for connections using socket file
 - Connection::alterTableName():
 --alter table name for server DB backends!
@@ -519,6 +521,8 @@ for blobs...The client has to read the _entire_ blob into memory."; use:
    when opening exisiting server project and clicking 'OK'
 - database files accessed remotely: make it work without copying a file to temp. dir. 
   (maybe even without copying entire file? - patching sqlite required)
+- add "Open read only" checkbox to the file browser
+  (Driver::ReadOnlyConnection option already allows to open in read only mode)
 
 === CLI TODO ===
 - add kexicmd as a symlink to kexi binary, for totally non-gui usage
@@ -683,7 +687,7 @@ GENERAL:
    eg. kexidb_mysqldriver.so -> kexidb_mysqldriver_standalone.so
 -- renaming kexi to kexi-standalone
 - rename "data view mode" to "browse view mode" (as in Filemaker)
-
+- add "File->Mail..." action (requires closing and copying of the sqlite file, if locked)
 
 MARKETING:
 - add "Created With Kexi" page and a link to it from k-p.org and kexi.pl
@@ -802,13 +806,10 @@ Table Column Lookup XML Format:
 
 
 
-KexiSimplePrintingWindow
-- react on object renaming and deletions
-
-KURLLabel
-- draw focus rect...
-- show pressing Enter
-
 General TODO:
 - handle KApplication::shutDown()
 - fix blocking kexi database when second was opened using file->open (KProcess?)
+
+TODO:
+- BUG! "edit->clear table" actions does not repaints tableview when it's in spreadsheet mode 
+  (e.g. in table/query designer)

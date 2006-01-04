@@ -100,14 +100,20 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 			 This flag is currently used for MySQL driver. */
 			IgnoreTransactions = 1024
 		};
+
+		//! Options used for createConnection()
+		enum CreateConnectionOptions {
+			ReadOnlyConnection = 1 //!< set to perform read only connection
+		};
 		
 		virtual ~Driver();
 
 		/*! Creates connection using \a conn_data as parameters. 
 		 \return 0 and sets error message on error.
 		 driverName member of \a conn_data will be updated with this driver name.
+		 \a options can be a combination of CreateConnectionOptions enum values.
 		 */
-		Connection *createConnection( ConnectionData &conn_data );
+		Connection *createConnection( ConnectionData &conn_data, int options = 0 );
 
 		/*! \return List of created connections. */
 		const QPtrList<Connection> connectionsList() const;
@@ -192,6 +198,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 		/*! Driver's static version information, it is automatically defined
 		 in implementation using KEXIDB_DRIVER macro (see driver_p.h) */
 		virtual int versionMajor() const = 0;
+
 		virtual int versionMinor() const = 0;
 
 		/*! Escapes and converts value \a v (for type \a ftype) 
@@ -214,6 +221,7 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 
 		/*! not compatible with all drivers - reimplement */
 		inline virtual QString dateTimeToSQL(const QDateTime& v) const {
+
 		/*! (was compatible with SQLite: http://www.sqlite.org/cvstrac/wiki?p=DateAndTimeFunctions)
 			Now it's ISO 8601 DateTime format - with "T" delimiter:
 			http://www.w3.org/TR/NOTE-datetime
@@ -240,15 +248,20 @@ class KEXI_DB_EXPORT Driver : public QObject, public KexiDB::Object
 //todo enum EscapePolicy { EscapeAsNecessary = 0x00, EscapeAlways = 0x02 };
 
 		enum EscapeType { EscapeDriver = 0x01, EscapeKexi = 0x02};
+		
 		enum EscapePolicy { EscapeAsNecessary = 0x04, EscapeAlways = 0x08 };
+
 		//! Driver-specific identifier escaping (e.g. for a table name, db name, etc.)
 		/*! Escape database identifier (\a str) in order that keywords
 		   can be used as table names, column names, etc.
 		   \a options is the union of the EscapeType and EscapePolicy types.
 		   If no escaping options are given, defaults to driver escaping as
 		   necessary. */
-		QString escapeIdentifier( const QString& str, int options = EscapeDriver|EscapeAsNecessary) const;
-		QCString escapeIdentifier( const QCString& str, int options = EscapeDriver|EscapeAsNecessary) const;
+		QString escapeIdentifier( const QString& str, 
+			int options = EscapeDriver|EscapeAsNecessary) const;
+
+		QCString escapeIdentifier( const QCString& str, 
+			int options = EscapeDriver|EscapeAsNecessary) const;
 
 		//! \return property value for \a propeName available for this driver. 
 		//! If there's no such property defined for driver, Null QVariant value is returned.

@@ -3,14 +3,55 @@
  From js's Point of View
  
  Copyright (C) 2003-2005 Jaroslaw Staniek js at iidea dot pl
- (C) OpenOffice Polska 2003-2005
+ (C) OpenOffice Polska 2003-2006
  Kexi home page: http://www.kexi-project.org/
 -------------------------------------------------------------
 
-CCMAIL: kexi-devel@kde.org
+For most important commits use: CCMAIL:kexi-devel@kde.org
+Use CCMAIL:###-done@bugs.kde.org
 
-TODO:
-kdelibs: - commit KURLLabel and fixes for KAccelManager, KAboutDialog
+
+TODO: test kexi1 db!!
+
+2006-01-02..04
+Startup
+- "--skip-dialog" command line option added. 
+  Skips displaying connection dialog\n"
+  and connects directly. Available when opening .kexic 
+  or .kexis shortcut files.
+- opening server-based projects works in File->Open when 
+  there's already project opened.
+- "--connection <shortcut_filename>" command line option added. 
+  Specifies a database connection shortcut .kexic file containing 
+  connection data. Can be used with --createdb or --create-opendb
+  for convenience instead of using options like --user, --host 
+  or --port. Note: Options like --user, --host have precedence 
+  over settings defined in the shortcut file.
+- creating server-based projects works in File->New when 
+  there's already project opened.
+Migration
+- Project Migration Wizard is proposed if a server-based database
+  is incompatible with Kexi and cannot be opened
+- if a destination for imported project is a server, it is also 
+  opened after imported, if user wanted this
+
+2005-12-23, 29
+General
+- (data forms, table view): fixed entering row number in the row navigator
+- win32: fixed saving recently displayed directories in file dialogs
+KexiDB
+- SQLite: opened files are now locked for read/write by default;
+  related error messages improved
+Simple Printouts
+- pages to print can be selected
+- number of copies can be entered
+- pages collation switch on or off (i.e. 1-2..n; 1-2..n.... for collation
+   and 1-1-...1; 2-2..2; .. for "no collation")
+- page count is properly computed and printed on the footer as "Page x of y"
+- "Page Setup" action added; 
+   now it's window is only presented when user really wants this
+- text of the page title properly updated
+
 
 2005-12-12..22
 Simple Printouts

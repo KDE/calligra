@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003 Lucijan Busch <lucijan@kde.org>
-   Copyright (C) 2003-2005 Jaroslaw Staniek <js@iidea.pl>
+   Copyright (C) 2003-2006 Jaroslaw Staniek <js@iidea.pl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -85,6 +85,7 @@
 */
 #include "kexinamedialog.h"
 #include "printing/kexisimpleprintingpart.h"
+#include "printing/kexisimpleprintingpagesetup.h"
 
 //Extreme verbose debug
 #if defined(Q_WS_WIN)
@@ -431,7 +432,8 @@ void KexiMainWindowImpl::initActions()
 	d->action_open_recent = d->dummy_action;
 #endif
 
-	d->action_save = KStdAction::save( this, SLOT( slotProjectSave() ), actionCollection(), "project_save" );
+	d->action_save = KStdAction::save( 
+		this, SLOT( slotProjectSave() ), actionCollection(), "project_save" );
 //	d->action_save = new KAction(i18n("&Save"), "filesave", KStdAccel::shortcut(KStdAccel::Save),
 //		this, SLOT(slotProjectSave()), actionCollection(), "project_save");
 	d->action_save->setToolTip(i18n("Save object changes"));
@@ -468,7 +470,8 @@ void KexiMainWindowImpl::initActions()
 	d->action_project_relations = d->dummy_action;
 #endif
 #ifndef KEXI_NO_MIGRATION
-	d->action_tools_data_migration = new KAction(i18n("&Import Database..."), "database_import", 0,
+	d->action_tools_data_migration = new KAction(
+		i18n("&Import Database..."), "database_import", 0,
 		this, SLOT(slotToolsProjectMigration()), actionCollection(), "tools_import_project");
 	d->action_tools_data_migration->setToolTip(i18n("Import entire database as a Kexi Project"));
 	d->action_tools_data_migration->setWhatsThis(i18n("Imports entire database as a Kexi Project."));
@@ -477,9 +480,11 @@ void KexiMainWindowImpl::initActions()
 #endif
 
 #ifndef KEXI_NO_CSV_IMPORT
-	d->action_project_import_data_table = new KAction(i18n("Import->Data Table...", "Data &Table..."),
+	d->action_project_import_data_table = new KAction(
+		i18n("Import->Data Table...", "Data &Table..."),
 		"table"/*! @todo: change to "file_import" or so*/,
-		0, this, SLOT(slotProjectImportDataTable()), actionCollection(), "project_import_data_table");
+		0, this, SLOT(slotProjectImportDataTable()), actionCollection(), 
+		"project_import_data_table");
 	d->action_project_import_data_table->setToolTip(i18n("Import table data from a file"));
 	d->action_project_import_data_table->setWhatsThis(i18n("Imports table data from a file."));
 #else
@@ -488,7 +493,8 @@ void KexiMainWindowImpl::initActions()
 	d->action_project_export_data_table = new KAction(i18n("Export->Table or Query as Data Table...", 
 		"Table or Query as Data &Table..."),
 		"table"/*! @todo: change to "file_export" or so*/,
-		0, this, SLOT(slotProjectExportDataTable()), actionCollection(), "project_export_data_table");
+		0, this, SLOT(slotProjectExportDataTable()), actionCollection(), 
+		"project_export_data_table");
 	d->action_project_export_data_table->setToolTip(
 		i18n("Export data from the active table or query data to a file"));
 	d->action_project_export_data_table->setWhatsThis(
@@ -504,12 +510,21 @@ void KexiMainWindowImpl::initActions()
 	d->action_project_print->setToolTip(i18n("Print data from the active table or query"));
 	d->action_project_print->setWhatsThis(i18n("Prints data from the active table or query."));
 
-	d->action_project_print_preview = KStdAction::printPreview(this, SLOT(slotProjectPrintPreview()),
+	d->action_project_print_preview = KStdAction::printPreview(
+		this, SLOT(slotProjectPrintPreview()),
 		actionCollection(), "project_print_preview" ); 
 	d->action_project_print_preview->setToolTip(
 		i18n("Show print preview for the active table or query"));
 	d->action_project_print_preview->setWhatsThis(
 		i18n("Shows print preview for the active table or query."));
+
+	d->action_project_print_setup = new KAction(i18n("Page Set&up..."),
+		"", 0, this, SLOT(slotProjectPageSetup()), actionCollection(), 
+		"project_print_setup");
+	d->action_project_print_setup->setToolTip(
+		i18n("Show page setup for printing the active table or query"));
+	d->action_project_print_setup->setWhatsThis(
+		i18n("Shows page setup for printing the active table or query."));
 
 	//EDIT MENU
 	d->action_edit_cut = createSharedAction( KStdAction::Cut, "edit_cut");
@@ -539,7 +554,9 @@ void KexiMainWindowImpl::initActions()
 		i18n("Copies selected table or query data to clipboard."));
 
 	d->action_edit_undo = createSharedAction( KStdAction::Undo, "edit_undo");
+	d->action_edit_undo->setWhatsThis(i18n("Reverts the most recent editing action."));
 	d->action_edit_redo = createSharedAction( KStdAction::Redo, "edit_redo");
+	d->action_edit_redo->setWhatsThis(i18n("Reverts the most recent undo action."));
 
 	d->action_edit_select_all =  createSharedAction( KStdAction::SelectAll, "edit_select_all");
 
@@ -793,12 +810,13 @@ void KexiMainWindowImpl::invalidateProjectWideActions()
 	d->action_project_export_data_table->setEnabled( 
 		d->curDialog && d->curDialog->part()->info()->isDataExportSuppored() 
 		&& !d->curDialog->neverSaved() );
-	d->action_project_print->setEnabled(
+
+	const bool printingActionsEnabled = 
 		d->curDialog && d->curDialog->part()->info()->isPrintingSuppored()
-		&& !d->curDialog->neverSaved() );
-	d->action_project_print_preview->setEnabled(
-		d->curDialog && d->curDialog->part()->info()->isPrintingSuppored()
-		&& !d->curDialog->neverSaved() );
+		&& !d->curDialog->neverSaved();
+	d->action_project_print->setEnabled( printingActionsEnabled );
+	d->action_project_print_preview->setEnabled( printingActionsEnabled );
+	d->action_project_print_setup->setEnabled( printingActionsEnabled );
 
 	//EDIT MENU
 	d->action_edit_paste_special_data_table->setEnabled(d->prj);
@@ -875,10 +893,7 @@ tristate KexiMainWindowImpl::startup()
 		//TODO
 		break;
 	case KexiStartupHandler::OpenProject:
-		if (!openProject(Kexi::startupHandler().projectData())) {
-				return false;
-		}
-		break;
+		return openProject(*Kexi::startupHandler().projectData());
 	case KexiStartupHandler::ImportProject:
 		return showProjectMigrationWizard(
 			Kexi::startupHandler().importActionData().mimeType,
@@ -898,25 +913,38 @@ static QString internalReason(KexiDB::Object *obj)
 	return QString("<br>(%1) ").arg(i18n("reason:")+" <i>"+s+"</i>");
 }
 
-bool KexiMainWindowImpl::openProject(KexiProjectData *projectData)
+tristate KexiMainWindowImpl::openProject(const KexiProjectData& projectData)
 {
-	if (!projectData)
-		return false;
+	KexiProjectData *newProjectData = new KexiProjectData(projectData);
 	if (d->final) {
 		//TODO: maybe also auto allow to open objects...
-		return initFinalMode(projectData);
+		return initFinalMode(newProjectData);
 	}
-	createKexiProject( projectData );
-//	d->prj = new KexiProject( projectData );
-//	connect(d->prj, SIGNAL(error(const QString&,KexiDB::Object*)), this, SLOT(showErrorMessage(const QString&,KexiDB::Object*)));
-	if (!d->prj->open()) {
+	createKexiProject( newProjectData );
+	bool incompatibleWithKexi;
+	if (!d->prj->open(incompatibleWithKexi)) {
 		delete d->prj;
 		d->prj = 0;
+		if (incompatibleWithKexi) {
+			if (KMessageBox::Yes == KMessageBox::questionYesNo(this,
+				i18n("<qt>Database project %1 appears to be not created using Kexi.<br><br>"
+				"Do you want to import it as a new Kexi project?</qt>").arg(projectData.infoString()),
+				0, KGuiItem(i18n("Import Database", "&Import..."), "database_import"),
+				KStdGuiItem::quit()))
+			{
+				showProjectMigrationWizard("application/x-kexi-connectiondata", 
+					projectData.databaseName(), projectData.constConnectionData());
+				//always return cancelled because even if migration succeeded, new Kexi instance 
+				//will be started if user wanted to open the imported db
+				return cancelled;
+			}
+			return cancelled;
+		}
 		return false;
 	}
 	initNavigator();
 //	initPropertyEditor();
-	Kexi::recentProjects().addProjectData( projectData );
+	Kexi::recentProjects().addProjectData( newProjectData );
 	invalidateActions();
 
 //	d->disableErrorMessages = true;
@@ -1075,6 +1103,14 @@ tristate KexiMainWindowImpl::closeProject()
 	if (!d->prj)
 		return true;
 
+	{
+		// make sure the project can be closed
+		bool cancel = false;
+		emit acceptProjectClosingRequested(cancel);
+		if (cancel)
+			return cancelled;
+	}
+
 	d->dialogExistedBeforeCloseProject = !d->curDialog.isNull();
 
 #if defined(KDOCKWIDGET_P)
@@ -1119,6 +1155,9 @@ tristate KexiMainWindowImpl::closeProject()
 			return res;
 	}
 
+	// now we will close for sure
+	emit beforeProjectClosing();
+
 	if(d->nav)
 	{
 		d->navWasVisibleBeforeProjectClosing = manager()->findWidgetParentDock(d->nav)->isVisible();
@@ -1142,6 +1181,7 @@ tristate KexiMainWindowImpl::closeProject()
 	if(!d->final)
 		updateAppCaption();
 
+	emit projectClosed();
 	return true;
 }
 
@@ -1182,10 +1222,10 @@ KexiMainWindowImpl::initNavigator()
 			this,SLOT(renameObject(KexiPart::Item*,const QString&, bool&)));
 		connect(d->nav,SIGNAL(exportItemAsDataTable(KexiPart::Item*)),
 			this,SLOT(exportItemAsDataTable(KexiPart::Item*)));
-		connect(d->nav,SIGNAL(printItem( KexiPart::Item*)),
+		connect(d->nav,SIGNAL(printItem( KexiPart::Item* )),
 			this,SLOT(printItem(KexiPart::Item*)));
-		connect(d->nav,SIGNAL(printPreviewForItem( KexiPart::Item*)),
-			this,SLOT(printPreviewForItem(KexiPart::Item*)));
+		connect(d->nav,SIGNAL(pageSetupForItem( KexiPart::Item*)),
+			this,SLOT(pageSetupForItem(KexiPart::Item*)));
 		if (d->prj) {//connect to the project
 			connect(d->prj, SIGNAL(itemRemoved(const KexiPart::Item&)),
 				d->nav, SLOT(slotRemoveItem(const KexiPart::Item&)));
@@ -1976,44 +2016,48 @@ KexiMainWindowImpl::slotConfigureToolbars()
 void
 KexiMainWindowImpl::slotProjectNew()
 {
-	if (d->prj) {
-//TODO use KexiStartupDialog(KexiStartupDialog::Templates...)
-
-		bool cancel;
-		KexiProjectData *new_data = createBlankProjectData(
-			cancel,
-			false /* do not confirm prj overwrites: user will be asked on process startup */
-		);
-		if (!new_data)
-			return;
-		//start new instance
-
-//TODO use KProcess?
-    QStringList args;
-		QProcess *proc = 0;
-		if (!new_data->connectionData()->fileName().isEmpty()) {
-			//file based
-			args << qApp->applicationFilePath() << "-create-opendb"
-				<< new_data->connectionData()->fileName();
-			proc = new QProcess(args, this, "process");
-			proc->setCommunication((QProcess::Communication)0);
-			proc->setWorkingDirectory( QFileInfo(new_data->connectionData()->fileName()).dir(true) );
-		}
-		else {
-			//server based
-			//TODO
-			return;
-		}
-		if (!proc->start()) {
-				d->showStartProcessMsg(args);
-		}
-		delete proc;
-		delete new_data;
-//		KEXI_UNFINISHED(i18n("Create another project"));
+	if (!d->prj) {
+		//create within this instance
+		createBlankProject();
 		return;
 	}
-	//create within this instance
-	createBlankProject();
+//TODO use KexiStartupDialog(KexiStartupDialog::Templates...)
+
+	bool cancel;
+	QString fileName;
+	KexiProjectData *new_data = createBlankProjectData(
+		cancel,
+		false, /* do not confirm prj overwrites: user will be asked on process startup */
+		&fileName //shortcut fname
+	);
+	if (!new_data)
+		return;
+
+  QStringList args;
+	args << qApp->applicationFilePath() << "-create-opendb";
+	if (new_data->connectionData()->fileName().isEmpty()) {
+		//server based - pass .kexic file
+		if (fileName.isEmpty())
+			return;
+		args << new_data->databaseName() << fileName;
+		//args << "--skip-dialog"; //user does not expect conn. dialog to be shown here
+	}
+	else {
+		//file based
+		fileName = new_data->connectionData()->fileName();
+		args << fileName;
+	}
+//todo:			pass new_data->caption()
+	//start new instance
+//! @todo use KProcess?
+	QProcess proc(args, this, "process");
+	proc.setCommunication((QProcess::Communication)0);
+//		proc.setWorkingDirectory( QFileInfo(new_data->connectionData()->fileName()).dir(true) );
+	proc.setWorkingDirectory( QFileInfo(fileName).dir(true) );
+	if (!proc.start()) {
+			d->showStartProcessMsg(args);
+	}
+	delete new_data;
 }
 
 void
@@ -2030,7 +2074,8 @@ KexiMainWindowImpl::createKexiProject(KexiProjectData* new_data)
 }
 
 KexiProjectData*
-KexiMainWindowImpl::createBlankProjectData(bool &cancelled, bool confirmOverwrites)
+KexiMainWindowImpl::createBlankProjectData(bool &cancelled, bool confirmOverwrites, 
+	QString* shortcutFileName)
 {
 	cancelled = false;
 	KexiNewProjectWizard wiz(Kexi::connset(), 0, "KexiNewProjectWizard", true);
@@ -2042,11 +2087,15 @@ KexiMainWindowImpl::createBlankProjectData(bool &cancelled, bool confirmOverwrit
 
 	KexiProjectData *new_data;
 
+	if (shortcutFileName)
+		*shortcutFileName = QString::null;
 	if (wiz.projectConnectionData()) {
 		//server-based project
 		KexiDB::ConnectionData *cdata = wiz.projectConnectionData();
 		kdDebug() << "DBNAME: " << wiz.projectDBName() << " SERVER: " << cdata->serverInfoString() << endl;
 		new_data = new KexiProjectData( *cdata, wiz.projectDBName(), wiz.projectCaption() );
+		if (shortcutFileName)
+			*shortcutFileName = Kexi::connset().fileNameForConnectionData(cdata); 
 	}
 	else if (!wiz.projectDBName().isEmpty()) {
 		//file-based project
@@ -2103,68 +2152,128 @@ KexiMainWindowImpl::slotProjectOpen()
 	openProject(dlg.selectedExistingFile(), dlg.selectedExistingConnection());
 }
 
-tristate KexiMainWindowImpl::openProject(const QString& fileName, KexiDB::ConnectionData *cdata)
+tristate KexiMainWindowImpl::openProject(const QString& aFileName, 
+	const QString& fileNameForConnectionData, const QString& dbName)
+{
+	if (d->prj)
+		return openProjectInExternalKexiInstance(aFileName, fileNameForConnectionData, dbName);
+
+	KexiDB::ConnectionData *cdata = 0;
+	if (!fileNameForConnectionData.isEmpty()) {
+		cdata = Kexi::connset().connectionDataForFileName( fileNameForConnectionData );
+		if (!cdata) {
+			kdWarning() << "KexiMainWindowImpl::openProject() cdata?" << endl;
+			return false;
+		}
+	}
+	return openProject(aFileName, cdata, dbName);
+}
+
+tristate KexiMainWindowImpl::openProject(const QString& aFileName, 
+	KexiDB::ConnectionData *cdata, const QString& dbName)
 {
 	if (d->prj) {
-		QProcess *proc;
-		QStringList args;
-		if (!fileName.isEmpty()) {
-//! @todo use KRun
-			args << qApp->applicationFilePath() << fileName;
-			proc = new QProcess(args, this, "process");
-			proc->setWorkingDirectory( QFileInfo(fileName).dir(true) );
-		}
-		//! @todo server-based
-		bool ok = proc->start();
-		if (!ok) {
-			d->showStartProcessMsg(args);
-		}
-		delete proc;
-		return ok;
+		return openProjectInExternalKexiInstance(aFileName, cdata, dbName);
 	}
 
 	KexiProjectData* projectData = 0;
-//	KexiDB::ConnectionData *cdata = dlg.selectedExistingConnection();
+	bool deleteAfterOpen = false;
 	if (cdata) {
-		bool cancel;
-		projectData = Kexi::startupHandler().selectProject( cdata, cancel, this );
-		if (cancel)
-			return cancelled;
-//		if (!projectData && !Kexi::startupHandler().error()) {
-//			showErrorMessage(&Kexi::startupHandler());
-//		}
+		//server-based project
+		if (dbName.isEmpty()) {//no database name given, ask user
+			bool cancel;
+			projectData = Kexi::startupHandler().selectProject( cdata, cancel, this );
+			if (cancel)
+				return cancelled;
+		}
+		else {
+//! @todo caption arg?
+			projectData = new KexiProjectData( *cdata, dbName );
+			deleteAfterOpen = true;
+		}
 	}
 	else {
 //		QString selFile = dlg.selectedExistingFile();
-		if (!fileName.isEmpty()) {
-			//file-based project
-			kdDebug() << "Project File: " << fileName << endl;
-			KexiDB::ConnectionData cdata;
-			cdata.setFileName( fileName );
-//			cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName, fileName, this );
-			QString detectedDriverName;
-			KexiStartupData::Import importActionData;
-			const tristate res = KexiStartupHandler::detectActionForFile( 
-				importActionData, detectedDriverName, cdata.driverName, fileName, this );
-			if (true != res)
-				return res;
-
-			if (importActionData) { //importing requested
-				return showProjectMigrationWizard( importActionData.mimeType, importActionData.fileName );
-			}
-			cdata.driverName = detectedDriverName;
-
-			if (cdata.driverName.isEmpty())
-				return false;
-
-			//opening requested
-			projectData = new KexiProjectData(cdata, fileName);
+		if (aFileName.isEmpty()) {
+			kdWarning() << "KexiMainWindowImpl::openProject(): aFileName.isEmpty()" << endl;
+			return false;
 		}
-	}
+		//file-based project
+		kdDebug() << "Project File: " << aFileName << endl;
+		KexiDB::ConnectionData cdata;
+		cdata.setFileName( aFileName );
+//			cdata.driverName = KexiStartupHandler::detectDriverForFile( cdata.driverName, fileName, this );
+		QString detectedDriverName;
+		KexiStartupData::Import importActionData;
+		const tristate res = KexiStartupHandler::detectActionForFile( 
+			importActionData, detectedDriverName, cdata.driverName, aFileName, this );
+		if (true != res)
+			return res;
 
+		if (importActionData) { //importing requested
+			return showProjectMigrationWizard( importActionData.mimeType, importActionData.fileName );
+		}
+		cdata.driverName = detectedDriverName;
+
+		if (cdata.driverName.isEmpty())
+			return false;
+
+		//opening requested
+		projectData = new KexiProjectData(cdata, aFileName);
+		deleteAfterOpen = true;
+	}
 	if (!projectData)
 		return false;
-	return openProject(projectData);
+	const tristate res = openProject(*projectData);
+	if (deleteAfterOpen) //projectData object has been copied
+		return projectData;
+	return res;
+}
+
+tristate KexiMainWindowImpl::openProjectInExternalKexiInstance(const QString& aFileName, 
+	KexiDB::ConnectionData *cdata, const QString& dbName)
+{
+	QString fileNameForConnectionData;
+	if (aFileName.isEmpty()) { //try .kexic file
+		if (cdata)
+			fileNameForConnectionData = Kexi::connset().fileNameForConnectionData(cdata);
+	}
+	return openProjectInExternalKexiInstance(aFileName, fileNameForConnectionData, dbName);
+}
+
+tristate KexiMainWindowImpl::openProjectInExternalKexiInstance(const QString& aFileName, 
+	const QString& fileNameForConnectionData, const QString& dbName)
+{
+	QString fileName(aFileName);
+	QStringList args;
+	args << qApp->applicationFilePath();
+	// open a file-based project or a server connection provided as a .kexic file
+	// (we have no other simple way to provide the startup data to a new process)
+	if (fileName.isEmpty()) { //try .kexic file
+		if (!fileNameForConnectionData.isEmpty())
+			args << "--skip-dialog"; //user does not expect conn. dialog to be shown here
+
+		if (dbName.isEmpty()) { //use 'kexi --skip-dialog file.kexic'
+			fileName = fileNameForConnectionData;
+		}
+		else { //use 'kexi --skip-dialog --connection file.kexic dbName'
+			args << "--connection" << fileNameForConnectionData;
+			fileName = dbName;
+		}
+	}
+	if (fileName.isEmpty()) {
+		kdWarning() << "KexiMainWindowImpl::openProjectInExternalKexiInstance() fileName?" << endl;
+		return false;
+	}
+//! @todo use KRun
+	args << fileName;
+	QProcess proc(args, this, "process");
+	proc.setWorkingDirectory( QFileInfo(fileName).dir(true) );
+	const bool ok = proc.start();
+	if (!ok) {
+		d->showStartProcessMsg(args);
+	}
+	return ok;
 }
 
 void
@@ -2269,6 +2378,13 @@ KexiMainWindowImpl::slotProjectPrintPreview()
 {
 	if (d->curDialog && d->curDialog->partItem())
 		printPreviewForItem(d->curDialog->partItem());
+}
+
+void
+KexiMainWindowImpl::slotProjectPageSetup()
+{
+	if (d->curDialog && d->curDialog->partItem())
+		pageSetupForItem(d->curDialog->partItem());
 }
 
 void KexiMainWindowImpl::slotProjectExportDataTable()
@@ -3210,8 +3326,8 @@ tristate KexiMainWindowImpl::removeObject( KexiPart::Item *item, bool dontAsk )
 	KexiDialogBase *dlg = (KexiDialogBase*)d->dialogs[item->identifier()];
 
 	//also close 'print setup' dialog for this item, if any
-	KexiDialogBase * printSetupDlg = d->pageSetupDialogs[item->identifier()];
-	res = closeDialog(printSetupDlg);
+	KexiDialogBase * pageSetupDlg = d->pageSetupDialogs[item->identifier()];
+	res = closeDialog(pageSetupDlg);
 	if (!res || ~res) {
 		return res;
 	}
@@ -3529,13 +3645,19 @@ void KexiMainWindowImpl::slotToolsProjectMigration()
 	showProjectMigrationWizard(QString::null, QString::null);
 }
 
-tristate KexiMainWindowImpl::showProjectMigrationWizard(const QString& mimeType, const QString& fileName)
+tristate KexiMainWindowImpl::showProjectMigrationWizard(
+	const QString& mimeType, const QString& databaseName, const KexiDB::ConnectionData *cdata)
 {
 #ifndef KEXI_NO_MIGRATION
 	//pass arguments
 	QMap<QString,QString> args;
 	args.insert("mimeType", mimeType);
-	args.insert("fileName", fileName);
+	args.insert("databaseName", databaseName);
+	if (cdata) { //pass ConnectionData serialized as a string...
+		QString str;
+		KexiUtils::serializeMap( KexiDB::toMap( *cdata ), str );
+		args.insert("connectionData", str);
+	}
 
 	QDialog *dlg = KexiInternalPart::createModalDialogInstance("migration", this, this, 0, &args);
 	if (!dlg)
@@ -3548,10 +3670,23 @@ tristate KexiMainWindowImpl::showProjectMigrationWizard(const QString& mimeType,
 		return cancelled;
 
 	//open imported project in a new Kexi instance
-//! @todo migration wizard should have added "open project after importing" checkbox (on, by default)
-	QString destinationFileName( args["destinationFileName"] );
-	if (!destinationFileName.isEmpty()) {
-		return openProject(destinationFileName, 0);
+	QString destinationDatabaseName( args["destinationDatabaseName"] );
+	QString fileName, destinationConnectionShortcut, dbName;
+	if (!destinationDatabaseName.isEmpty()) {
+		if (args.contains("destinationConnectionShortcut")) {
+			// server-based
+			destinationConnectionShortcut = args["destinationConnectionShortcut"];
+		}
+		else {
+			// file-based
+			fileName = destinationDatabaseName;
+			destinationDatabaseName = QString::null;
+		}
+		return openProject(fileName, destinationConnectionShortcut, 
+			destinationDatabaseName);
+//			KexiDB::ConnectionData *connData = new KexiDB::ConnectionData();
+//			KexiDB::fromMap( KexiUtils::deserializeMap( args["destinationConnectionData"] ), *connData );
+//		return openProject(destinationFileName, 0);
 	}
 	return true;
 #endif
@@ -3590,34 +3725,68 @@ void KexiMainWindowImpl::exportItemAsDataTable(KexiPart::Item* item)
 	delete dlg;
 }
 
-bool KexiMainWindowImpl::printItem(KexiPart::Item* item)
+bool KexiMainWindowImpl::printItem(KexiPart::Item* item, const QString& titleText)
+{
+	return printItem(item, KexiSimplePrintingSettings::load(), titleText);
+}
+
+bool KexiMainWindowImpl::printItem(KexiPart::Item* item, const KexiSimplePrintingSettings& settings,
+	const QString& titleText)
 {
 //! @todo: check if changes to this object's design are saved, if not: ask for saving
 //! @todo: accept row changes...
-	return printOrPrintPreviewForItem(item, false/*!preview*/);
+	KexiSimplePrintingCommand cmd(this, item->identifier());
+	//modal
+	return cmd.print(settings, titleText);
+//	return printActionForItem(item, PrintItem);
 }
 
-bool KexiMainWindowImpl::printPreviewForItem(KexiPart::Item* item)
+bool KexiMainWindowImpl::printPreviewForItem(KexiPart::Item* item, const QString& titleText, bool reload)
+{
+	return printPreviewForItem(item, KexiSimplePrintingSettings::load(), titleText, reload);
+}
+
+bool KexiMainWindowImpl::printPreviewForItem(KexiPart::Item* item, 
+	const KexiSimplePrintingSettings& settings, const QString& titleText, bool reload)
 {
 //! @todo: check if changes to this object's design are saved, if not: ask for saving
 //! @todo: accept row changes...
-	return printOrPrintPreviewForItem(item, true/*!preview*/);
+	KexiSimplePrintingCommand* cmd = d->openedCustomObjectsForItem<KexiSimplePrintingCommand>(
+		item, "KexiSimplePrintingCommand");
+	if (!cmd) {
+		d->addOpenedCustomObjectForItem(
+			item,
+			cmd = new KexiSimplePrintingCommand(this, item->identifier()), 
+			"KexiSimplePrintingCommand"
+		);
+	}
+	return cmd->showPrintPreview(settings, titleText, reload);
+//	return printActionForItem(item, PreviewItem);
 }
 
-bool KexiMainWindowImpl::printOrPrintPreviewForItem(KexiPart::Item* item, bool printPreview)
+bool KexiMainWindowImpl::pageSetupForItem(KexiPart::Item* item)
+{
+//! @todo: check if changes to this object's design are saved, if not: ask for saving
+//! @todo: accept row changes...
+	return printActionForItem(item, PageSetupForItem);
+}
+
+bool KexiMainWindowImpl::printActionForItem(KexiPart::Item* item, PrintActionType action)
 {
 	if (!item)
 		return false;
 	KexiPart::Info *info = Kexi::partManager().infoForMimeType( item->mimeType() );
-	if (!info->isDataExportSuppored())
+	if (!info->isPrintingSuppored())
 		return false;
 
 	KexiDialogBase *printingDialog = d->pageSetupDialogs[ item->identifier() ];
 	if (printingDialog) {
 		if (!activateWindow(printingDialog))
 			return false;
-		QTimer::singleShot(0,printingDialog->selectedView(),
-			printPreview ? SLOT(printPreview()) : SLOT(print()));
+		if (action == PreviewItem || action == PrintItem) {
+			QTimer::singleShot(0,printingDialog->selectedView(),
+				(action == PreviewItem) ? SLOT(printPreview()) : SLOT(print()));
+		}
 		return true;
 	}
 
@@ -3644,14 +3813,21 @@ bool KexiMainWindowImpl::printOrPrintPreviewForItem(KexiPart::Item* item, bool p
 			doNotSave.setWhatsThis(
 				i18n( "Pressing this button will ignore all unsaved changes made in \"%1\" object." )
 				.arg(dlg->partItem()->name()) );
+
+			QString question;
+			if (action == PrintItem)
+				question = i18n("Do you want to save changes before printing?");
+			else if (action == PreviewItem)
+				question = i18n("Do you want to save changes before making print preview?");
+			else if (action == PageSetupForItem)
+				question = i18n("Do you want to save changes before showing page setup?");
+			else
+				return false;
+
 			const int questionRes = KMessageBox::warningYesNoCancel( this,
 				"<p>"+dlg->part()->i18nMessage("Design of object \"%1\" has been modified.", dlg)
-				.arg(item->name())+"</p><p>"
-					+(printPreview
-						? i18n("Do you want to save changes before making print preview?")
-						: i18n("Do you want to save changes before printing?"))
-					+"</p>",
-				QString::null,
+				.arg(item->name()) + "</p><p>" + question + "</p>",
+				QString::null, 
 				saveChanges,
 				doNotSave);
 			if (KMessageBox::Cancel == questionRes)
@@ -3669,7 +3845,14 @@ bool KexiMainWindowImpl::printOrPrintPreviewForItem(KexiPart::Item* item, bool p
 	);
 	QMap<QString,QString> staticObjectArgs;
 	staticObjectArgs["identifier"] = QString::number(item->identifier());
-	staticObjectArgs["printPreview"] = printPreview ? "1" : 0;
+	if (action == PrintItem)
+		staticObjectArgs["action"] = "print";
+	else if (action == PreviewItem)
+		staticObjectArgs["action"] = "printPreview";
+	else if (action == PageSetupForItem)
+		staticObjectArgs["action"] = "pageSetup";
+	else
+		return false;
 	printingDialog = openObject(printingPartItem, Kexi::DesignViewMode, &staticObjectArgs);
 	if (!printingDialog) //sanity
 		return false;
@@ -3677,11 +3860,6 @@ bool KexiMainWindowImpl::printOrPrintPreviewForItem(KexiPart::Item* item, bool p
 	d->pageSetupDialogItemID2dataItemID_map.insert(
 		printingDialog->partItem()->identifier(), item->identifier());
 
-/*moved	if (printPreview) {
-		//show print preview window
-	}
-	else {//print
-	}*/
 	return true;
 }
 

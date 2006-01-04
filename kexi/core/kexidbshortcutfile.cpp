@@ -25,6 +25,7 @@
 #include <kdebug.h>
 
 #include <qstringlist.h>
+#include <qdir.h>
 
 #define KexiDBShortcutFile_version 1
 
@@ -43,7 +44,7 @@ class KexiDBShortcutFile::Private
 KexiDBShortcutFile::KexiDBShortcutFile( const QString& fileName )
  : d( new KexiDBShortcutFile::Private() )
 {
-	d->fileName = fileName;
+	d->fileName = QDir(fileName).absPath();
 }
 
 KexiDBShortcutFile::~KexiDBShortcutFile()

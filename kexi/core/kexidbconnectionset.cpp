@@ -167,3 +167,12 @@ void KexiDBConnectionSet::load()
 	}
 }
 
+QString KexiDBConnectionSet::fileNameForConnectionData(KexiDB::ConnectionData *data) const
+{
+	return data ? d->filenamesForData[data] : QString::null;
+}
+
+KexiDB::ConnectionData* KexiDBConnectionSet::connectionDataForFileName(const QString& fileName) const
+{
+	return d->dataForFilenames[fileName];
+}

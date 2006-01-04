@@ -69,6 +69,18 @@ class KEXICORE_EXPORT KexiMainWindow : public KMdiMainFrm, public KexiSharedActi
 		 in your windows by hand but user methods from KexiViewBase! */
 		virtual KActionPtrList allActions() const = 0;
 
+	signals:
+		//! Emitted to make sure the project can be close. 
+		//! Connect a slot here and set \a cancel to true to cancel the closing.
+		void acceptProjectClosingRequested(bool& cancel);
+
+		//! Emitted before closing the project (and destroying all it's data members).
+		//! You can do you cleanup of your structures here. 
+		void beforeProjectClosing();
+
+		//! Emitted after closing the project. 
+		void projectClosed();
+
 	public slots:
 		//! Opens object pointed by \a item in a view \a viewMode
 		virtual KexiDialogBase * openObject(KexiPart::Item *item, int viewMode = Kexi::DataViewMode,

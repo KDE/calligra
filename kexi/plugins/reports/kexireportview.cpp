@@ -186,7 +186,7 @@ KexiReportView::initForm()
 	form()->createToplevel(m_reportform, m_reportform);
 
 	// Show the form wizard if this is a new Form
-	KexiDB::FieldList *fields = 0;
+//	KexiDB::FieldList *fields = 0;
 	if(parentDialog()->id() < 0)
 	{
 #ifndef NO_DSWIZARD

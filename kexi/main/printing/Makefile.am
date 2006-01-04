@@ -5,8 +5,8 @@ noinst_LTLIBRARIES = libkeximainprinting.la
 libkeximainprinting_la_SOURCES = \
 kexisimpleprintingengine.cpp \
 kexisimpleprintingpart.cpp \
-kexisimpleprintingwindowbase.ui \
-kexisimpleprintingwindow.cpp \
+kexisimpleprintingpagesetupbase.ui \
+kexisimpleprintingpagesetup.cpp \
 kexisimpleprintpreviewwindow.cpp
 
 noinst_HEADERS = kexisimpleprintpreviewwindow_p.h

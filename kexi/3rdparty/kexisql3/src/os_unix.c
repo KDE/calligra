@@ -426,7 +426,9 @@ int sqlite3OsFileExists(const char *zFilename){
 int sqlite3OsOpenReadWrite(
   const char *zFilename,
   OsFile *id,
-  int *pReadonly
+  int *pReadonly,
+  int exclusive,
+  int allowReadonly
 ){
   int rc;
   assert( !id->isOpen );

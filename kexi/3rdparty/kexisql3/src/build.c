@@ -23,7 +23,6 @@
 **     ROLLBACK
 **     PRAGMA
 **
-** $Id$
 */
 #include "sqliteInt.h"
 #include <ctype.h>
@@ -2458,7 +2457,7 @@ void sqlite3RollbackTransaction(Parse *pParse){
 static int sqlite3OpenTempDatabase(Parse *pParse){
   sqlite3 *db = pParse->db;
   if( db->aDb[1].pBt==0 && !pParse->explain ){
-    int rc = sqlite3BtreeFactory(db, 0, 0, MAX_PAGES, &db->aDb[1].pBt);
+    int rc = sqlite3BtreeFactory(db, 0, 0, MAX_PAGES, &db->aDb[1].pBt, 0 /*!exclusive*/, 1/*allowReadonly*/);
     if( rc!=SQLITE_OK ){
       sqlite3ErrorMsg(pParse, "unable to open a temporary database "
         "file for storing temporary tables");
