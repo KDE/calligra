@@ -338,9 +338,9 @@ void View::slotEditPaste() {
 }
 
 void View::slotViewExpected() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_currentEstimateType = Effort::Use_Expected;
-    getProject().setCurrentSchedule(Schedule::Expected);
+    getProject().setCurrentSchedulePtr(getProject().findSchedule(Schedule::Expected));
     m_ganttview->setShowExpected(actionViewExpected->isChecked());
     m_ganttview->setShowOptimistic(false);
     m_ganttview->setShowPessimistic(false);
@@ -348,9 +348,9 @@ void View::slotViewExpected() {
 }
 
 void View::slotViewOptimistic() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_currentEstimateType = Effort::Use_Optimistic;
-    getProject().setCurrentSchedule(Schedule::Optimistic);
+    getProject().setCurrentSchedulePtr(getProject().findSchedule(Schedule::Optimistic));
     m_ganttview->setShowOptimistic(actionViewOptimistic->isChecked());
     m_ganttview->setShowExpected(false);
     m_ganttview->setShowPessimistic(false);
@@ -358,9 +358,9 @@ void View::slotViewOptimistic() {
 }
 
 void View::slotViewPessimistic() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_currentEstimateType = Effort::Use_Pessimistic;
-    getProject().setCurrentSchedule(Schedule::Pessimistic);
+    getProject().setCurrentSchedulePtr(getProject().findSchedule(Schedule::Pessimistic));
     m_ganttview->setShowPessimistic(actionViewPessimistic->isChecked());
     m_ganttview->setShowExpected(false);
     m_ganttview->setShowOptimistic(false);
@@ -368,49 +368,49 @@ void View::slotViewPessimistic() {
 }
 
 void View::slotViewGanttResources() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowResources(actionViewGanttResources->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttTaskName() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowTaskName(actionViewGanttTaskName->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttTaskLinks() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowTaskLinks(actionViewGanttTaskLinks->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttProgress() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowProgress(actionViewGanttProgress->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttFloat() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowPositiveFloat(actionViewGanttFloat->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttCriticalTasks() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowCriticalTasks(actionViewGanttCriticalTasks->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
 }
 
 void View::slotViewGanttCriticalPath() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_ganttview->setShowCriticalPath(actionViewGanttCriticalPath->isChecked());
     if (m_tab->visibleWidget() == m_ganttview)
         slotUpdate(false);
@@ -467,7 +467,7 @@ void View::slotProjectAccounts() {
     if (dia->exec()) {
         KCommand *cmd = dia->buildCommand(getPart());
         if (cmd) {
-            kdDebug()<<k_funcinfo<<"Modifying account(s)"<<endl;
+            //kdDebug()<<k_funcinfo<<"Modifying account(s)"<<endl;
             getPart()->addCommand(cmd); //also executes
         }
     }
@@ -858,7 +858,7 @@ void View::slotMoveTaskDown()
 }
 
 void View::slotAddRelation(Node *par, Node *child) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     Relation *rel = new Relation(par, child);
     AddRelationDialog *dia = new AddRelationDialog(rel, this);
     if (dia->exec()) {
@@ -872,7 +872,7 @@ void View::slotAddRelation(Node *par, Node *child) {
 }
 
 void View::slotAddRelation(Node *par, Node *child, int linkType) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (linkType == Relation::FinishStart ||
         linkType == Relation::StartStart ||
         linkType == Relation::FinishFinish) 
@@ -885,7 +885,7 @@ void View::slotAddRelation(Node *par, Node *child, int linkType) {
 }
 
 void View::slotModifyRelation(Relation *rel) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     ModifyRelationDialog *dia = new ModifyRelationDialog(rel, this);
     if (dia->exec()) {
         if (dia->relationIsDeleted()) {
@@ -901,7 +901,7 @@ void View::slotModifyRelation(Relation *rel) {
 }
 
 void View::slotModifyRelation(Relation *rel, int linkType) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (linkType == Relation::FinishStart ||
         linkType == Relation::StartStart ||
         linkType == Relation::FinishFinish) 
@@ -914,7 +914,7 @@ void View::slotModifyRelation(Relation *rel, int linkType) {
 
 // testing
 void View::slotExportGantt() {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     if (!m_ganttview) {
         return;
     }
@@ -974,7 +974,7 @@ void View::slotChanged()
 
 void View::slotUpdate(bool calculate)
 {
-    kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
+    //kdDebug()<<k_funcinfo<<"calculate="<<calculate<<endl;
     if (calculate)
 	    projectCalculate();
 
@@ -1045,7 +1045,7 @@ void View::renameNode(Node *node, QString name) {
 }
 
 bool View::setContext(Context &context) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     m_currentEstimateType = context.currentEstimateType;
     getProject().setCurrentSchedule(context.currentSchedule);
     actionViewExpected->setChecked(context.actionViewExpected);
@@ -1088,7 +1088,7 @@ bool View::setContext(Context &context) {
 }
 
 void View::getContext(Context &context) const {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
     context.currentEstimateType = m_currentEstimateType;
     if (getProject().currentSchedule())
         context.currentSchedule = getProject().currentSchedule()->id();
@@ -1115,7 +1115,7 @@ void View::getContext(Context &context) const {
 }
 
 void View::setBaselineMode(bool on) {
-    kdDebug()<<k_funcinfo<<endl;
+    //kdDebug()<<k_funcinfo<<endl;
 /*    m_baselineMode = on;
     
     m_ganttview->setReadWriteMode(!on);
