@@ -101,7 +101,7 @@ private:
  */
 class KPrCircleGroup : public QFrame
 {
-    Q_OBJECT;
+    Q_OBJECT
 public:
     /**
      * Constructor.

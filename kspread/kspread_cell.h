@@ -779,7 +779,7 @@ public:
       Flag_CircularCalculation   = 0x02000000,
       Flag_DependancyError       = 0x04000000,
       Flag_PaintingCell          = 0x08000000, // On during painting
-      Flag_TextFormatDirty       = 0x10000000,
+      Flag_TextFormatDirty       = 0x10000000
      // Flag_Highlight     = 0x20000000
     };
 
