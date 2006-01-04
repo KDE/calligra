@@ -76,6 +76,12 @@ public:
   bool creation() { return m_creation; }
   void setCreation(bool creation) { m_creation = creation; }
 
+  /** Is this a formatting manipulator ? If so, execute will call
+  process(Format*) for each complete row/column, instead of going
+  cell-by-cell. True by default. */
+  bool format() { return m_format; };
+  void setFormat (bool f) { m_format = f; };
+
   virtual void execute();
   virtual void unexecute();
 
@@ -97,6 +103,7 @@ protected:
   bool   m_creation : 1;
   bool   m_reverse  : 1;
   bool   m_firstrun : 1;
+  bool   m_format   : 1;
 private:
 };
 

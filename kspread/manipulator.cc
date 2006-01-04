@@ -87,7 +87,8 @@ Manipulator::Manipulator()
     m_sheet(0),
     m_creation(true),
     m_reverse(false),
-    m_firstrun(true)
+    m_firstrun(true),
+    m_format(true)
 {
 }
 
@@ -161,7 +162,7 @@ bool Manipulator::process(Element* element)
   }
 
   QRect range = element->rect().normalize();
-  if (element->isColumn())
+  if (m_format && element->isColumn())
   {
     for (int col = range.left(); col <= range.right(); ++col)
     {
@@ -171,7 +172,7 @@ bool Manipulator::process(Element* element)
         // TODO Stefan: process cells with this property
     }
   }
-  else if (element->isRow())
+  else if (m_format && element->isRow())
   {
     for (int row = range.top(); row <= range.bottom(); ++row)
     {
