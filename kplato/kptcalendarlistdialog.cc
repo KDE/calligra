@@ -288,11 +288,11 @@ void CalendarListDialogImpl::slotBaseCalendarActivated(int id) {
 }
 
 void CalendarListDialogImpl::slotSelectionChanged() {
+    //kdDebug()<<k_funcinfo<<endl;
     QListViewItem *item = calendarList->selectedItem();
     bDelete->setEnabled((bool)item);
     bAdd->setEnabled(true);
-    if (item)
-        slotSelectionChanged(item);
+    slotSelectionChanged(item);
 }
 
 void CalendarListDialogImpl::slotSelectionChanged(QListViewItem *listItem) {
