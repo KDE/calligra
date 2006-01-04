@@ -894,7 +894,7 @@ void Canvas::resizeHighlightedRange(HighlightRange* range, const QRect& newArea)
 	int refSeparator=oldRangeRef.find(":");
 
 	QString oldPointRef=oldRangeRef.mid(refSeparator+1);
-	
+
 
 
 	//Adjust range to fit new area selected by user
@@ -1611,6 +1611,8 @@ void Canvas::dragLeaveEvent( QDragLeaveEvent * )
 void Canvas::dropEvent( QDropEvent * _ev )
 {
   d->dragging = false;
+  if ( d->scrollTimer->isActive() )
+    d->scrollTimer->stop();
   Sheet * sheet = activeSheet();
   if ( !sheet || sheet->isProtected() )
   {
@@ -3640,7 +3642,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 		sheetAreaToVisibleRect(region,unzoomedRect);
 		//Convert region from sheet coordinates to canvas coordinates for use with the painter
 		//retrieveMarkerInfo(region,viewRect,positions,paintSides);
-  
+
   if ( !d->cellEditor->inherits("KSpread::TextEditor") )
     return;
 
