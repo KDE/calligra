@@ -7,7 +7,7 @@ INCLUDES = -I$(srcdir)/../../.. $(all_includes) -I$(PG_INCDIR) -I$(PQXX_INCDIR)
 kexidb_pqxxsqldriver_la_METASOURCES = AUTO
 
 kexidb_pqxxsqldriver_la_SOURCES = pqxxdriver.cpp pqxxcursor.cpp pqxxconnection.cpp \
-	pqxxkeywords.cpp pqxxsqlconnection_p.cpp pqxxpreparedstatement.cpp
+	pqxxkeywords.cpp pqxxconnection_p.cpp pqxxpreparedstatement.cpp
 
 kexidb_pqxxsqldriver_la_LIBADD = $(LIB_KPARTS) $(LIB_QT) -lpqxx ../../libkexidb.la
 
