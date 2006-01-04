@@ -146,7 +146,7 @@ namespace Kross { namespace Api {
              * Internaly we just call \a ScriptAction::activate and 
              * redirect the success/failed signals to our internal slots.
              */
-            bool executeScriptAction(ScriptAction* action);
+            bool executeScriptAction(ScriptAction::Ptr action);
 
             /**
             * The \a ScriptManagerGUI dialog will be displayed to

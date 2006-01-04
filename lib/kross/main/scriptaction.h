@@ -151,7 +151,8 @@ namespace Kross { namespace Api {
     class ScriptActionCollection
     {
         private:
-            QValueList<ScriptAction::Ptr> m_actions;
+            QValueList<ScriptAction::Ptr> m_list;
+            QMap<QCString, ScriptAction::Ptr> m_actions;
             KActionMenu* m_actionmenu;
             bool m_dirty;
 
@@ -161,32 +162,36 @@ namespace Kross { namespace Api {
                 , m_dirty(true) {}
 
             ~ScriptActionCollection() {
-                for(QValueList<ScriptAction::Ptr>::Iterator it = m_actions.begin(); it != m_actions.end(); ++it)
+                for(QValueList<ScriptAction::Ptr>::Iterator it = m_list.begin(); it != m_list.end(); ++it)
                     (*it)->detach(this);
             }
 
-            QValueList<ScriptAction::Ptr> actions() { return m_actions; }
+            ScriptAction::Ptr action(const QCString& name) { return m_actions[name]; }
+            QValueList<ScriptAction::Ptr> actions() { return m_list; }
             KActionMenu* actionMenu() { return m_actionmenu; }
 
             void attach(ScriptAction::Ptr action) {
                 m_dirty = true;
-                m_actions.append(action);
+                m_actions[ action->name() ] = action;
+                m_list.append(action);
                 m_actionmenu->insert(action);
                 action->attach(this);
             }
 
             void detach(ScriptAction::Ptr action) {
                 m_dirty = true;
-                m_actions.remove(action);
+                m_actions.remove(action->name());
+                m_list.remove(action);
                 m_actionmenu->remove(action);
                 action->detach(this);
             }
 
             void clear() {
-                for(QValueList<ScriptAction::Ptr>::Iterator it = m_actions.begin(); it != m_actions.end(); ++it) {
+                for(QValueList<ScriptAction::Ptr>::Iterator it = m_list.begin(); it != m_list.end(); ++it) {
                     m_actionmenu->remove(*it);
                     (*it)->detach(this);
                 }
+                m_list.clear();
                 m_actions.clear();
             }
 
