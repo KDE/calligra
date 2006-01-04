@@ -85,6 +85,11 @@ KexiScriptDesignView::~KexiScriptDesignView()
     delete d;
 }
 
+Kross::Api::ScriptAction* KexiScriptDesignView::scriptAction() const
+{
+    return d->scriptaction;
+}
+
 void KexiScriptDesignView::updateProperties()
 {
     Kross::Api::Manager* manager = Kross::Api::Manager::scriptManager();
@@ -193,7 +198,7 @@ bool KexiScriptDesignView::loadData()
     bool parsed = domdoc.setContent(data, false, &errMsg, &errLine, &errCol);
 
     if(! parsed) {
-        kdDebug() << "KexiScriptDesignView::loadData() XML parsing error line: " << errLine << " col: " << errCol << " message: " << errMsg << endl;
+        kexipluginsdbg << "KexiScriptDesignView::loadData() XML parsing error line: " << errLine << " col: " << errCol << " message: " << errMsg << endl;
         return false;
     }
 
@@ -237,6 +242,7 @@ KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData&
     }
 
     if(! storeData()) {
+        kdWarning() << "KexiScriptDesignView::storeNewData Failed to store the data." << endl;
         //failure: remove object's schema data to avoid garbage
         KexiDB::Connection *conn = parentDialog()->mainWin()->project()->dbConnection();
         conn->removeObject( s->id() );
@@ -247,7 +253,7 @@ KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData&
     return s;
 }
 
-tristate KexiScriptDesignView::storeData()
+tristate KexiScriptDesignView::storeData(bool dontAsk)
 {
     kexipluginsdbg << "KexiScriptDesignView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 

@@ -60,13 +60,19 @@ class KexiScriptDesignView : public KexiViewBase
         virtual ~KexiScriptDesignView();
 
         /**
+         * \return the \a Kross::Api::ScriptAction this \a KexiScriptDesignView
+         * is responsible for.
+         */
+        Kross::Api::ScriptAction* scriptAction() const;
+
+        /**
          * \return a property set for this view.
          */
         virtual KoProperty::Set* propertySet();
 
         /**
          * Try to call \a storeData with new data we like to store. On
-         * success the matching
+         * success the matching \a KexiDB::SchemaData is returned.
          *
          * \param sdata The source \a KexiDB::SchemaData instance.
          * \param cancel Cancel on failure and don't try to clean
@@ -80,7 +86,7 @@ class KexiScriptDesignView : public KexiViewBase
          * Try to store the modified data in the already opened and
          * currently used \a KexiDB::SchemaData instance.
          */
-        virtual tristate storeData();
+        virtual tristate storeData(bool dontAsk = false);
 
     private slots:
 

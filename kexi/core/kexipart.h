@@ -66,8 +66,23 @@ class KEXICORE_EXPORT Part : public QObject
 	Q_OBJECT
 
 	public:
+		/*! Constructor. */
 		Part(QObject *parent, const char *name, const QStringList &);
+		/*! Destructor. */
 		virtual ~Part();
+
+		/*! Query a KAction from the Part. This method is used to provide a
+		common way for Parts to provide there own KActrion's on the fly. This
+		method extends the normal KXMLGUIClient::action(const char*)
+		functionality cause the Part is able to provide the KAction
+		on the fly depending on the passed arguments.
+		@todo THIS IS EXPERIMENTAL STUFF and used only on the ScriptPart-plugin.
+		*/
+		virtual KAction* action(const QString& actionuri, QObject* object = 0) {
+			Q_UNUSED(actionuri);
+			Q_UNUSED(object);
+			return 0;
+		}
 
 		/*! \return supported modes for dialogs created by this part, ie. a combination
 		 of Kexi::ViewMode enum elements.
