@@ -35,9 +35,10 @@ KisDlgOptionsTIFF::KisDlgOptionsTIFF(QWidget *parent, const char *name)
     optionswdg = new KisWdgOptionsTIFF(this);
     activated(0);
     connect(optionswdg->kComboBoxCompressionType, SIGNAL(activated ( int )), this, SLOT(activated ( int ) ));
+    connect(optionswdg->flatten, SIGNAL(toggled(bool)), this, SLOT(flattenToggled( bool) ) );
     setMainWidget(optionswdg);
     kapp->restoreOverrideCursor();
-    setSizePolicy(QSizePolicy(QSizePolicy::MinimumExpanding, QSizePolicy::MinimumExpanding) );
+    setSizePolicy(QSizePolicy(QSizePolicy::Minimum, QSizePolicy::Minimum) );
 }
 
 KisDlgOptionsTIFF::~KisDlgOptionsTIFF()
@@ -66,6 +67,16 @@ void KisDlgOptionsTIFF::activated ( int index )
             break;
     }
 }
+
+void KisDlgOptionsTIFF::flattenToggled(bool t)
+{
+    optionswdg->alpha->setEnabled(t);
+    if(!t)
+    {
+        optionswdg->alpha->setChecked(true);
+    }
+}
+
 
 KisTIFFOptions KisDlgOptionsTIFF::options()
 {

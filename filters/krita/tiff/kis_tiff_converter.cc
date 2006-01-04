@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -34,7 +34,11 @@
 #include <kis_layer.h>
 #include <kis_meta_registry.h>
 #include <kis_profile.h>
+#include <kis_group_layer.h>
 #include <kis_paint_layer.h>
+
+#include "kis_tiff_stream.h"
+#include "kis_tiff_writer_visitor.h"
 
 namespace {
 
@@ -43,178 +47,6 @@ namespace {
     const Q_UINT8 PIXEL_RED = 2;
     const Q_UINT8 PIXEL_ALPHA = 3;
 
-    
-    class TIFFStream {
-        public:
-            TIFFStream( uint16 depth) : m_depth(depth) {};
-            virtual uint32 nextValueBelow16() =0;
-            virtual uint32 nextValueBelow32() =0;
-            virtual uint32 nextValueAbove32() =0;
-            virtual void restart() =0;
-        protected:
-            uint16 m_depth;
-    };
-    class TIFFStreamContig : public TIFFStream {
-        public:
-            TIFFStreamContig( uint8* src, uint16 depth ) : TIFFStream(depth), m_src(src) { restart(); };
-            virtual uint32 nextValueBelow16()
-            {
-                register uint8 remain;
-                register uint32 value;
-                remain = m_depth;
-                value = 0;
-                while (remain > 0)
-                {
-                    register uint8 toread;
-                    toread = remain;
-                    if (toread > m_posinc) toread = m_posinc;
-                    remain -= toread;
-                    m_posinc -= toread;
-                    value = (value << toread) | (( (*m_srcit) >> (m_posinc) ) & ( ( 1 << toread ) - 1 ) );
-                    if (m_posinc == 0)
-                    {
-                        m_srcit++;
-                        m_posinc=8;
-                    }
-                }
-                return value;
-            }
-            virtual uint32 nextValueBelow32()
-            {
-                register uint8 remain;
-                register uint32 value;
-                remain = m_depth;
-                value = 0;
-                while (remain > 0)
-                {
-                    register uint8 toread;
-                    toread = remain;
-                    if (toread > m_posinc) toread = m_posinc;
-                    remain -= toread;
-                    m_posinc -= toread;
-                    value = (value) | ( (( (*m_srcit) >> (m_posinc) ) & ( ( 1 << toread ) - 1 ) ) << ( m_depth - 8 - remain ) );
-                    if (m_posinc == 0)
-                    {
-                        m_srcit++;
-                        m_posinc=8;
-                    }
-                }
-                return value;
-            }
-            virtual uint32 nextValueAbove32()
-            {
-                register uint8 remain;
-                register uint32 value;
-                remain = m_depth;
-                value = 0;
-                while (remain > 0)
-                {
-                    register uint8 toread;
-                    toread = remain;
-                    if (toread > m_posinc) toread = m_posinc;
-                    remain -= toread;
-                    m_posinc -= toread;
-                    if(remain < 32 )
-                    {
-                        value = (value) | ( (( (*m_srcit) >> (m_posinc) ) & ( ( 1 << toread ) - 1 ) ) << ( 24 - remain ) );
-                    }
-                    if (m_posinc == 0)
-                    {
-                        m_srcit++;
-                        m_posinc=8;
-                    }
-                }
-                return value;
-            }
-            virtual void restart()
-            {
-                m_srcit = m_src;
-                m_posinc = 8;
-            }
-        private:
-            uint8* m_src;
-            uint8* m_srcit;
-            uint8 m_posinc;
-    };
-    
-    class TIFFStreamSeperate : public TIFFStream {
-        public:
-            TIFFStreamSeperate( uint8** srcs, uint8 nb_samples ,uint16 depth) : TIFFStream(depth), m_nb_samples(nb_samples)
-            {
-                streams = new TIFFStreamContig*[nb_samples];
-                for(uint8 i = 0; i < m_nb_samples; i++)
-                {
-                    streams[i] = new TIFFStreamContig(srcs[i], depth);
-                }
-                restart();
-            }
-            ~TIFFStreamSeperate()
-            {
-                for(uint8 i = 0; i < m_nb_samples; i++)
-                {
-                    delete streams[i];
-                }
-                delete[] streams;
-            }
-            virtual uint32 nextValueBelow16()
-            {
-                uint32 value = streams[ m_current_sample ]->nextValueBelow16();
-                if( (++m_current_sample) >= m_nb_samples)
-                    m_current_sample = 0;
-                return value;
-            }
-            virtual uint32 nextValueBelow32()
-            {
-                uint32 value = streams[ m_current_sample ]->nextValueBelow32();
-                if( (++m_current_sample) >= m_nb_samples)
-                    m_current_sample = 0;
-                return value;
-            }
-            virtual uint32 nextValueAbove32()
-            {
-                uint32 value = streams[ m_current_sample ]->nextValueAbove32();
-                if( (++m_current_sample) >= m_nb_samples)
-                    m_current_sample = 0;
-                return value;
-            }
-            virtual void restart()
-            {
-                m_current_sample = 0;
-                for(uint8 i = 0; i < m_nb_samples; i++)
-                {
-                    streams[i]->restart();
-                }
-            }
-        private:
-            TIFFStreamContig** streams;
-            uint8 m_current_sample, m_nb_samples;
-    };
-    
-    int16 getColorTypeforColorSpace( KisColorSpace * cs )
-    {
-        if ( cs->id() == KisID("GRAYA") || cs->id() == KisID("GRAYA16") )
-        {
-            return PHOTOMETRIC_MINISBLACK;
-        }
-        if ( cs->id() == KisID("RGBA") || cs->id() == KisID("RGBA16") )
-        {
-            return PHOTOMETRIC_RGB;
-        }
-        if ( cs->id() == KisID("CMYKA") || cs->id() == KisID("CMYKA16") )
-        {
-            return PHOTOMETRIC_SEPARATED;
-        }
-        if ( cs->id() == KisID("LABA") )
-        {
-            return PHOTOMETRIC_CIELAB;
-        }
-
-        kdDebug() << "Cannot export images in " + cs->id().name() + " yet.\n";
-        return -1;
-
-    }
-
-    
     QString getColorSpaceForColorType(uint16 color_type, uint16 color_nb_bits, TIFF *image, uint16 &nbchannels, uint16 extrasamplescount) {
         if(color_type == PHOTOMETRIC_MINISWHITE || color_type == PHOTOMETRIC_MINISBLACK)
         {
@@ -483,11 +315,14 @@ KisImageBuilder_Result KisTIFFConverter::decode(const KURL& uri)
     }
     do {
         kdDebug() << "Read new sub-image" << endl;
-        readTIFFDirectory(image);
+        KisImageBuilder_Result result = readTIFFDirectory(image);
+        if(result != KisImageBuilder_RESULT_OK){
+            return result;
+        }
     } while (TIFFReadDirectory(image));
     // Freeing memory
     TIFFClose(image);
-
+    return KisImageBuilder_RESULT_OK;
 }
 
 KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
@@ -620,10 +455,10 @@ KisImageBuilder_Result KisTIFFConverter::readTIFFDirectory( TIFF* image)
             m_img -> addAnnotation( profile->annotation() );
         }
     } else {
-        if( m_img->width() < width || m_img->height() < height)
+        if( m_img->width() < (Q_INT32)width || m_img->height() < (Q_INT32)height)
         {
-            Q_UINT32 newwidth = (m_img->width() < width) ? width : m_img->width();
-            Q_UINT32 newheight = (m_img->height() < height) ? height : m_img->height();
+            Q_UINT32 newwidth = (m_img->width() < (Q_INT32)width) ? width : m_img->width();
+            Q_UINT32 newheight = (m_img->height() < (Q_INT32)height) ? height : m_img->height();
             m_img->resize(newwidth, newheight, false);
         }
     }
@@ -755,12 +590,7 @@ KisImageSP KisTIFFConverter::image()
 
 KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP img, KisTIFFOptions options)
 {
-#if 0
     kdDebug() << "Start writing TIFF File" << endl;
-    if (!layer)
-        return KisImageBuilder_RESULT_INVALID_ARG;
-
-    KisImageSP img = layer -> image();
     if (!img)
         return KisImageBuilder_RESULT_EMPTY;
 
@@ -769,197 +599,62 @@ KisImageBuilder_Result KisTIFFConverter::buildFile(const KURL& uri, KisImageSP i
 
     if (!uri.isLocalFile())
         return KisImageBuilder_RESULT_NOT_LOCAL;
+    
     // Open file for writing
-    FILE *fp = fopen(uri.path().ascii(), "wb");
-    if (!fp)
-    {
-        return (KisImageBuilder_RESULT_FAILURE);
-    }
-    int height = img->height();
-    int width = img->width();
-    // Initialize structures
-    png_structp png_ptr =  png_create_write_struct(TIFF_LIBTIFF_VER_STRING, png_voidp_NULL, png_error_ptr_NULL, png_error_ptr_NULL);
-    if (!png_ptr) return (KisImageBuilder_RESULT_FAILURE);
-
-    png_infop info_ptr = png_create_info_struct(png_ptr);
-    if (!info_ptr)
-    {
-        png_destroy_write_struct(&png_ptr, (png_infopp)NULL);
+    TIFF *image;
+    if((image = TIFFOpen(uri.path().ascii(), "w")) == NULL){
+        kdDebug() << "Could not open the file for writting " << uri.path() << endl;
+        TIFFClose(image);
         return (KisImageBuilder_RESULT_FAILURE);
     }
 
-    // If an error occurs during writing, libpng will jump here
-    if (setjmp(png_jmpbuf(png_ptr)))
-    {
-        png_destroy_write_struct(&png_ptr, &info_ptr);
-        fclose(fp);
-        return (KisImageBuilder_RESULT_FAILURE);
-    }
-    // Initialize the writing
-    png_init_io(png_ptr, fp);
-    // Setup the progress function
-// FIXME    png_set_write_status_fn(png_ptr, progress);
-//     setProgressTotalSteps(100/*height*/);
-            
-
-    /* set the zlib compression level */
-    png_set_compression_level(png_ptr, compression);
-
-    /* set other zlib parameters */
-    png_set_compression_mem_level(png_ptr, 8);
-    png_set_compression_strategy(png_ptr, Z_DEFAULT_STRATEGY);
-    png_set_compression_window_bits(png_ptr, 15);
-    png_set_compression_method(png_ptr, 8);
-    png_set_compression_buffer_size(png_ptr, 8192);
+    // Set the compression options
+    TIFFSetField(image, TIFFTAG_COMPRESSION, options.compressionType);
+    TIFFSetField(image, TIFFTAG_FAXMODE, options.faxMode);
+    TIFFSetField(image, TIFFTAG_JPEGQUALITY, options.jpegQuality);
+    TIFFSetField(image, TIFFTAG_ZIPQUALITY, options.deflateCompress);
+    TIFFSetField(image, TIFFTAG_PIXARLOGQUALITY, options.pixarLogCompress);
     
-    int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
-    int color_type = getColorTypeforColorSpace(img->colorSpace(), alpha);
-    
-    if(color_type == -1)
-    {
-        return KisImageBuilder_RESULT_UNSUPPORTED;
-    }
-    
-    int interlacetype = interlace ? TIFF_INTERLACE_ADAM7 : TIFF_INTERLACE_NONE;
-    
-    png_set_IHDR(png_ptr, info_ptr,
-                 width,
-                 height,
-                 color_nb_bits,
-                 color_type, interlacetype,
-                 TIFF_COMPRESSION_TYPE_DEFAULT, TIFF_FILTER_TYPE_DEFAULT);
-    
-    png_set_sRGB(png_ptr, info_ptr, TIFF_sRGB_INTENT_ABSOLUTE);
-    
-    // Save annotation
-    vKisAnnotationSP_it it = annotationsStart;
-    while(it != annotationsEnd) {
-        if (!(*it) || (*it) -> type() == QString()) {
-            kdDebug() << "Warning: empty annotation" << endl;
-            ++it;
-            continue;
-        }
-
-        kdDebug() << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
-
-        if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
-            // FIXME: it should be possible to save krita_attributes in the "CHUNKs"
-            kdDebug() << "can't save this annotation : " << (*it) -> type() << endl;
-        } else { // Profile
-            char* name = new char[(*it)->type().length()+1];
-            strcpy(name, (*it)->type().ascii());
-            png_set_iCCP(png_ptr, info_ptr, name, TIFF_COMPRESSION_TYPE_BASE, (char*)(*it)->annotation().data(), (*it) -> annotation() . size());
-        }
-        ++it;
-    }
-
-    // read comments from the document information
-    png_text texts[3];
-    int nbtexts = 0;
+    // Set the predictor
+    TIFFSetField(image, TIFFTAG_PREDICTOR, options.predictor);
+    // Set the document informations
     KoDocumentInfo * info = m_doc->documentInfo();
     KoDocumentInfoAbout * aboutPage = static_cast<KoDocumentInfoAbout *>(info->page( "about" ));
     QString title = aboutPage->title();
     if(title != "")
     {
-        fillText(texts+nbtexts, "title", title);
-        nbtexts++;
+        TIFFSetField(image, TIFFTAG_DOCUMENTNAME, title.ascii());
     }
     QString abstract = aboutPage->abstract();
     if(abstract != "")
     {
-        fillText(texts+nbtexts, "abstract", abstract);
-        nbtexts++;
+        TIFFSetField(image, TIFFTAG_IMAGEDESCRIPTION, abstract.ascii());
     }
     KoDocumentInfoAuthor * authorPage = static_cast<KoDocumentInfoAuthor *>(info->page( "author" ));
     QString author = authorPage->fullName();
     if(author != "")
     {
-        fillText(texts+nbtexts, "author", author);
-        nbtexts++;
+        TIFFSetField(image, TIFFTAG_ARTIST, author.ascii());
+    }
+    // Use contiguous configuration
+    TIFFSetField(image, TIFFTAG_PLANARCONFIG, PLANARCONFIG_CONTIG);
+    // Use 8 rows per strip
+    TIFFSetField(image, TIFFTAG_ROWSPERSTRIP, 8);
+    
+    KisTIFFWriterVisitor* visitor = new KisTIFFWriterVisitor(image, options.alpha);
+    KisGroupLayer* root = dynamic_cast<KisGroupLayer*>(img->rootLayer().data());
+    if(root == 0)
+    {
+        TIFFClose(image);
+        return KisImageBuilder_RESULT_FAILURE;
+    }
+    if(!visitor->visit( root ))
+    {
+        TIFFClose(image);
+        return KisImageBuilder_RESULT_FAILURE;
     }
     
-    png_set_text(png_ptr, info_ptr, texts, nbtexts);
-    
-    // Save the information to the file
-    png_write_info(png_ptr, info_ptr);
-    png_write_flush(png_ptr);
-    // Write the TIFF
-//     png_write_png(png_ptr, info_ptr, TIFF_TRANSFORM_IDENTITY, NULL);
-    
-    // Fill the data structure
-    png_byte** row_pointers= new png_byte*[height];
-    
-    for (int y = 0; y < height; y++) {
-        KisHLineIterator it = layer->paintDevice()->createHLineIterator(0, y, width, false);
-        row_pointers[y] = new png_byte[width*layer->paintDevice()->pixelSize()];
-        switch(color_type)
-        {
-            case TIFF_COLOR_TYPE_GRAY:
-            case TIFF_COLOR_TYPE_GRAY_ALPHA:
-                if(color_nb_bits == 16)
-                {
-                    Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(row_pointers[y]);
-                    while (!it.isDone()) {
-                        const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
-                        *(dst++) = d[0];
-                        if(alpha) *(dst++) = d[1];
-                        ++it;
-                    }
-                } else {
-                    Q_UINT8 *dst = row_pointers[y];
-                    while (!it.isDone()) {
-                        const Q_UINT8 *d = it.rawData();
-                        *(dst++) = d[0];
-                        if(alpha) *(dst++) = d[1];
-                        ++it;
-                    }
-                }
-                break;
-            case TIFF_COLOR_TYPE_RGB:
-            case TIFF_COLOR_TYPE_RGB_ALPHA:
-                if(color_nb_bits == 16)
-                {
-                    Q_UINT16 *dst = reinterpret_cast<Q_UINT16 *>(row_pointers[y]);
-                    while (!it.isDone()) {
-                        const Q_UINT16 *d = reinterpret_cast<const Q_UINT16 *>(it.rawData());
-                        *(dst++) = d[2];
-                        *(dst++) = d[1];
-                        *(dst++) = d[0];
-                        if(alpha) *(dst++) = d[3];
-                        ++it;
-                    }
-                } else {
-                    Q_UINT8 *dst = row_pointers[y];
-                    while (!it.isDone()) {
-                        const Q_UINT8 *d = it.rawData();
-                        *(dst++) = d[2];
-                        *(dst++) = d[1];
-                        *(dst++) = d[0];
-                        if(alpha) *(dst++) = d[3];
-                        ++it;
-                    }
-                }
-                break;
-            default:
-                return KisImageBuilder_RESULT_UNSUPPORTED;
-        }
-    }
-    
-    png_write_image(png_ptr, row_pointers);
-
-    // Writting is over
-    png_write_end(png_ptr, info_ptr);
-    
-    // Free memory
-    png_destroy_write_struct(&png_ptr, &info_ptr);
-    for (int y = 0; y < height; y++) {
-        delete row_pointers[y];
-    }
-    delete row_pointers;
-
-    fclose(fp);
-    
-#endif
+    TIFFClose(image);
     return KisImageBuilder_RESULT_OK;
 }
 

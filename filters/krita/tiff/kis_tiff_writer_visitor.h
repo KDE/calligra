@@ -1,5 +1,5 @@
 /*
- *  Copyright (c) 2005-2006 Cyrille Berger <cberger@cberger.net>
+ *  Copyright (c) 2006 Cyrille Berger <cberger@cberger.net>
  *
  *  This program is free software; you can redistribute it and/or modify
  *  it under the terms of the GNU General Public License as published by
@@ -17,28 +17,34 @@
  * Boston, MA 02110-1301, USA.
  */
 
-#ifndef KIS_DLG_OPTIONS_TIFF_H
-#define KIS_DLG_OPTIONS_TIFF_H
+#ifndef KIS_TIFF_WRITER_VISITOR_H
+#define KIS_TIFF_WRITER_VISITOR_H
 
-#include <kdialogbase.h>
-#include <kis_tiff_converter.h>
+#include <kis_layer_visitor.h>
 
-class KisWdgOptionsTIFF;
+#include <kis_iterators_pixel.h>
+
+#include <tiffio.h>
+
 /**
 	@author Cyrille Berger <cberger@cberger.net>
 */
-class KisDlgOptionsTIFF : public KDialogBase
+class KisTIFFWriterVisitor : public KisLayerVisitor
 {
-    Q_OBJECT
     public:
-        KisDlgOptionsTIFF(QWidget *parent=0, const char *name=0);
-        ~KisDlgOptionsTIFF();
-    public slots:
-        void activated ( int index );
-        void flattenToggled(bool);
-        KisTIFFOptions options();
+        KisTIFFWriterVisitor(TIFF*img, bool sa);
+        ~KisTIFFWriterVisitor();
     public:
-        KisWdgOptionsTIFF* optionswdg;
+        virtual bool visit(KisPaintLayer *layer);
+        virtual bool visit(KisGroupLayer *layer);
+        virtual bool visit(KisPartLayer *layer);
+    private:
+        inline TIFF* image() { return m_image; }
+        inline bool saveAlpha() { return m_saveAlpha; }
+        bool copyDataToStrips( KisHLineIterator it, tdata_t buff, uint8 depth, uint8 nbcolorssamples, Q_UINT8* poses);
+    private:
+        TIFF* m_image;
+        bool m_saveAlpha;
 };
 
 #endif
