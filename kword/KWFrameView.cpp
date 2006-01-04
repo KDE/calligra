@@ -274,7 +274,7 @@ MouseMeaning TableFramePolicy::mouseMeaningOnBorder(const KoPoint &point, int ke
         if( static_cast<KWTableFrameSet::Cell *>(frame->frameSet())->firstRow() == 0 )
             return MEANING_SELECT_COLUMN;
         if(!ctrl)
-            return MEANING_RESIZE_ROW;
+            return MEANING_MOUSE_SELECT;
     }
 
     if (ctrl)
@@ -284,7 +284,7 @@ MouseMeaning TableFramePolicy::mouseMeaningOnBorder(const KoPoint &point, int ke
         return MEANING_RESIZE_COLUMN;
     if ( QABS( frame->bottom() - point.y() ) < vs
             && point.x() >= frame->x() && point.x() <= frame->right() )
-        return MEANING_RESIZE_ROW;
+        return MEANING_MOUSE_SELECT;
     return MEANING_NONE;
 }
 void TableFramePolicy::setSelected(MouseMeaning selectPolicy) {
