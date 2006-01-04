@@ -407,7 +407,7 @@ bool Project::load(QDomElement &element) {
 }
 
 
-void Project::save(QDomElement &element)  {
+void Project::save(QDomElement &element)  const {
     QDomElement me = element.ownerDocument().createElement("project");
     element.appendChild(me);
 

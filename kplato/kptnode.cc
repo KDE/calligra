@@ -387,7 +387,7 @@ void Node::calcResourceOverbooked() {
     }
 }
 
-void Node::saveRelations(QDomElement &element) {
+void Node::saveRelations(QDomElement &element) const {
     QPtrListIterator<Relation> it(m_dependChildNodes);
     for (; it.current(); ++it) {
         it.current()->save(element);

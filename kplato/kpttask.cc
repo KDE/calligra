@@ -261,7 +261,7 @@ bool Task::load(QDomElement &element, Project &project) {
 }
 
 
-void Task::save(QDomElement &element)  {
+void Task::save(QDomElement &element)  const {
     QDomElement me = element.ownerDocument().createElement("task");
     element.appendChild(me);
 

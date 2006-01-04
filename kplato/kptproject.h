@@ -79,7 +79,7 @@ public:
     Duration *getRandomDuration();
 
     virtual bool load(QDomElement &element);
-    virtual void save(QDomElement &element) ;
+    virtual void save(QDomElement &element) const;
 
     QPtrList<ResourceGroup> &resourceGroups();
     virtual void addResourceGroup(ResourceGroup *resource);

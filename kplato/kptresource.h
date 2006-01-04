@@ -124,7 +124,7 @@ class ResourceGroup {
           QPtrList<Resource> &resources() { return m_resources; }
 
           bool load(QDomElement &element);
-          void save(QDomElement &element);
+          void save(QDomElement &element) const;
 
           void initiateCalculation(Schedule *sch);
 
@@ -226,7 +226,7 @@ public:
     DateTime *getBestAvailableTime(const DateTime after, const Duration duration);
 
     bool load(QDomElement &element);
-    void save(QDomElement &element);
+    void save(QDomElement &element) const;
 
     ///Return the list of appointments for current schedule.
     QPtrList<Appointment> appointments();
@@ -387,7 +387,7 @@ class ResourceRequest {
         void setResource(Resource* resource) { m_resource = resource; }
         
         bool load(QDomElement &element, Project &project);
-        void save(QDomElement &element);
+        void save(QDomElement &element) const;
 
         /**
         * Get amount of requested resource units in percent
@@ -434,7 +434,7 @@ class ResourceGroupRequest {
         ResourceRequest *find(Resource *resource) const;
 
         bool load(QDomElement &element, Project &project);
-        void save(QDomElement &element);
+        void save(QDomElement &element) const;
 
         /**
         * Get total amount of resource units in percent
@@ -502,7 +502,7 @@ public:
     bool isEmpty() const;
     
     //bool load(QDomElement &element, Project &project);
-    void save(QDomElement &element);
+    void save(QDomElement &element) const;
 
     void clear() { m_requests.clear(); }
     

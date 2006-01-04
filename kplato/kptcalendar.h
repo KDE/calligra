@@ -49,7 +49,7 @@ public:
     ~CalendarDay();
 
     bool load(QDomElement &element);
-    void save(QDomElement &element);
+    void save(QDomElement &element) const;
 
     const QPtrList<QPair<QTime, QTime> > &workingIntervals() const { return m_workingIntervals; }
     void addInterval(QPair<QTime, QTime> *interval);
@@ -120,7 +120,7 @@ public:
     ~CalendarWeekdays();
 
     bool load(QDomElement &element);
-    void save(QDomElement &element);
+    void save(QDomElement &element) const;
 
     void addWeekday(CalendarDay *day) { m_weekdays.append(day); }
     const QPtrList<CalendarDay> &weekdays() const { return m_weekdays; }
@@ -197,7 +197,7 @@ public:
     ~CalendarWeeks();
 
     bool load(QDomElement &element);
-    void save(QDomElement &element);
+    void save(QDomElement &element) const;
 
     void setWeek(int week, int year, int type);
     void setWeek(WeekMap::iterator it, int state){ m_weeks.insert(it, state); }
@@ -275,7 +275,7 @@ public:
     void generateId();
     
     bool load(QDomElement &element);
-    void save(QDomElement &element);
+    void save(QDomElement &element) const;
 
     /**
      * Find the definition for the day date.
@@ -436,7 +436,7 @@ public:
     void setDay(double hours) { m_day = Duration((Q_INT64)(hours*60.0*60.0)); }
     
     bool load(QDomElement &element);
-    void save(QDomElement &element);
+    void save(QDomElement &element) const;
 
 protected:
     void init();

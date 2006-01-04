@@ -90,9 +90,9 @@ public:
     // The load and save methods
     virtual bool load(QDomElement &element) { return true; }
     virtual bool load(QDomElement &element, Project &project) { return true; }
-    virtual void save(QDomElement &element)  = 0;
+    virtual void save(QDomElement &element) const  = 0;
     /// Save my and my childrens relations.
-    virtual void saveRelations(QDomElement &element);
+    virtual void saveRelations(QDomElement &element) const;
 
     // simple child node management
     // Child nodes are things like subtasks, basically a task can exists of

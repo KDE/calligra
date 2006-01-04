@@ -141,7 +141,7 @@ bool ResourceGroup::load(QDomElement &element) {
     return true;
 }
 
-void ResourceGroup::save(QDomElement &element)  {
+void ResourceGroup::save(QDomElement &element)  const {
     //kdDebug()<<k_funcinfo<<endl;
 
     QDomElement me = element.ownerDocument().createElement("resource-group");
@@ -341,7 +341,7 @@ bool Resource::load(QDomElement &element) {
     return true;
 }
 
-void Resource::save(QDomElement &element) {
+void Resource::save(QDomElement &element) const {
     //kdDebug()<<k_funcinfo<<endl;
     QDomElement me = element.ownerDocument().createElement("resource");
     element.appendChild(me);
@@ -577,7 +577,7 @@ bool ResourceRequest::load(QDomElement &element, Project &project) {
     return true;
 }
 
-void ResourceRequest::save(QDomElement &element) {
+void ResourceRequest::save(QDomElement &element) const {
     QDomElement me = element.ownerDocument().createElement("resource-request");
     element.appendChild(me);
     me.setAttribute("resource-id", m_resource->id());
@@ -665,7 +665,7 @@ bool ResourceGroupRequest::load(QDomElement &element, Project &project) {
     return true;
 }
 
-void ResourceGroupRequest::save(QDomElement &element) {
+void ResourceGroupRequest::save(QDomElement &element) const {
     if (units() == 0)
         return;
     QDomElement me = element.ownerDocument().createElement("resourcegroup-request");
@@ -911,7 +911,7 @@ ResourceRequest *ResourceRequestCollection::find(Resource *resource) const {
 //     return true;
 // }
 
-void ResourceRequestCollection::save(QDomElement &element) {
+void ResourceRequestCollection::save(QDomElement &element) const {
     //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<ResourceGroupRequest> it(m_requests);
     for ( ; it.current(); ++it ) {

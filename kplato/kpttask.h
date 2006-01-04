@@ -82,7 +82,7 @@ public:
     /// Load from document
     virtual bool load(QDomElement &element, Project &project);
     /// Save to document
-    virtual void save(QDomElement &element);
+    virtual void save(QDomElement &element) const;
     /// Save appointments for schedule with id
     virtual void saveAppointments(QDomElement &element, long id) const;
     /**

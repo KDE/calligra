@@ -109,7 +109,7 @@ bool CalendarDay::load(QDomElement &element) {
     return true;
 }
 
-void CalendarDay::save(QDomElement &element) {
+void CalendarDay::save(QDomElement &element) const {
     //kdDebug()<<k_funcinfo<<m_date.toString()<<endl;
     if (m_state == Map::None)
         return;
@@ -357,7 +357,7 @@ bool CalendarWeekdays::load(QDomElement &element) {
     return true;
 }
 
-void CalendarWeekdays::save(QDomElement &element) {
+void CalendarWeekdays::save(QDomElement &element) const {
     //kdDebug()<<k_funcinfo<<endl;
     QPtrListIterator<CalendarDay> it = m_weekdays;
     for (int i=0; it.current(); ++it) {
@@ -551,10 +551,10 @@ bool CalendarWeeks::load(QDomElement &element) {
     return true;
 }
 
-void CalendarWeeks::save(QDomElement &element) {
+void CalendarWeeks::save(QDomElement &element) const {
     //kdDebug()<<k_funcinfo<<endl;
-    WeekMap::iterator it;
-    for (it = m_weeks.begin(); it != m_weeks.end(); ++it) {
+    WeekMap::ConstIterator it;
+    for (it = m_weeks.constBegin(); it != m_weeks.constEnd(); ++it) {
         QDomElement me = element.ownerDocument().createElement("week");
         element.appendChild(me);
         QPair<int, int> w = WeekMap::week(it.key());
@@ -729,7 +729,7 @@ bool Calendar::load(QDomElement &element) {
     return true;
 }
 
-void Calendar::save(QDomElement &element) {
+void Calendar::save(QDomElement &element) const {
     //kdDebug()<<k_funcinfo<<m_name<<endl;
     if (m_deleted)
         return;
@@ -1155,7 +1155,7 @@ bool StandardWorktime::load(QDomElement &element) {
     return true;
 }
 
-void StandardWorktime::save(QDomElement &element) {
+void StandardWorktime::save(QDomElement &element) const {
     //kdDebug()<<k_funcinfo<<endl;
     QDomElement me = element.ownerDocument().createElement("standard-worktime");
     element.appendChild(me);
