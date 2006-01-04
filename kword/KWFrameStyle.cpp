@@ -252,7 +252,7 @@ void KWFrameStyle::saveOasis( KoGenStyles& mainStyles, KoSavingContext& savingCo
     const bool nameIsConform = !m_name.isEmpty() && m_name.find( ' ' ) == -1;
     QString newName = m_name;
     if ( nameIsConform )
-        newName = mainStyles.lookup( frameStyle, m_name, KoGenStyle::DontForceNumbering );
+        newName = mainStyles.lookup( frameStyle, m_name, KoGenStyles::DontForceNumbering );
     else
         newName = mainStyles.lookup( frameStyle, "fr" );
     const_cast<KWFrameStyle*>( this )->m_name = newName;
