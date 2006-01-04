@@ -236,6 +236,8 @@ void KivioStencil::rotatePainter(KivioIntraStencilData *pData)
 
 KoRect KivioStencil::calculateBoundingBox()
 {
+   KoRect r;
+   return r;
 }
 
 void KivioStencil::setRotation(int d)

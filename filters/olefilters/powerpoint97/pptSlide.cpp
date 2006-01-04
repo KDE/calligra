@@ -54,6 +54,7 @@ Q_UINT16 PptSlide::getPlaceholderType(void)
 Q_UINT16 PptSlide::gotoPlaceholder(Q_UINT16 pholderNumber)
 {
 	m_currentPholder = m_placeholderList.at(pholderNumber);
+	return 0;
 }
 	
 Q_INT32 PptSlide::getPsrReference(void)

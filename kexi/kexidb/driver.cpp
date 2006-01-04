@@ -153,6 +153,7 @@ QString Driver::sqlTypeName(int id_t, int /*p*/) const
 		return "Null";
 	else if (id_t<=Field::LastType)
 		return d->typeNames[(id_t>0 && id_t<=Field::LastType) ? id_t : Field::InvalidType /*sanity*/];
+	return d->typeNames[Field::InvalidType];
 }
 
 Connection *Driver::createConnection( ConnectionData &conn_data )
