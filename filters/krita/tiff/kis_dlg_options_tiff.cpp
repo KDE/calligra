@@ -22,6 +22,7 @@
 #include <qcheckbox.h>
 #include <qgroupbox.h>
 #include <qslider.h>
+#include <qwidgetstack.h>
 
 #include <kapplication.h>
 #include <kcombobox.h>
@@ -47,24 +48,30 @@ KisDlgOptionsTIFF::~KisDlgOptionsTIFF()
 
 void KisDlgOptionsTIFF::activated ( int index )
 {
-    optionswdg->groupBoxJPEG->hide();
+/*    optionswdg->groupBoxJPEG->hide();
     optionswdg->groupBoxDeflate->hide();
     optionswdg->groupBoxCCITGroupCCITG3->hide();
-    optionswdg->groupBoxPixarLog->hide();
+    optionswdg->groupBoxPixarLog->hide();*/
     switch(index)
     {
         case 1:
-            optionswdg->groupBoxJPEG->show();
+            optionswdg->codecsOptionsStack->raiseWidget(1);
+//             optionswdg->groupBoxJPEG->show();
             break;
         case 2:
-            optionswdg->groupBoxDeflate->show();
+            optionswdg->codecsOptionsStack->raiseWidget(2);
+//             optionswdg->groupBoxDeflate->show();
             break;
         case 6:
-            optionswdg->groupBoxCCITGroupCCITG3->show();
+            optionswdg->codecsOptionsStack->raiseWidget(3);
+//             optionswdg->groupBoxCCITGroupCCITG3->show();
             break;
         case 8:
-            optionswdg->groupBoxPixarLog->show();
+            optionswdg->codecsOptionsStack->raiseWidget(4);
+//             optionswdg->groupBoxPixarLog->show();
             break;
+        default:
+            optionswdg->codecsOptionsStack->raiseWidget(0);
     }
 }
 

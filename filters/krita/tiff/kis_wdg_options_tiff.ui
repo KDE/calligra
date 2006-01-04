@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>452</width>
-            <height>521</height>
+            <height>267</height>
         </rect>
     </property>
     <property name="sizePolicy">
@@ -36,8 +36,8 @@
             </property>
             <property name="sizePolicy">
                 <sizepolicy>
-                    <hsizetype>3</hsizetype>
-                    <vsizetype>3</vsizetype>
+                    <hsizetype>1</hsizetype>
+                    <vsizetype>1</vsizetype>
                     <horstretch>0</horstretch>
                     <verstretch>0</verstretch>
                 </sizepolicy>
@@ -209,411 +209,503 @@ You can uncheck the box if you are not using transparancy and you want to make t
                 </widget>
             </vbox>
         </widget>
-        <widget class="QFrame">
+        <widget class="QWidgetStack">
             <property name="name">
-                <cstring>frame3</cstring>
+                <cstring>codecsOptionsStack</cstring>
             </property>
             <property name="frameShape">
                 <enum>NoFrame</enum>
             </property>
-            <property name="frameShadow">
-                <enum>Plain</enum>
-            </property>
-            <vbox>
+            <widget class="QWidget">
                 <property name="name">
-                    <cstring>unnamed</cstring>
+                    <cstring>WStackPage</cstring>
                 </property>
-                <property name="margin">
+                <attribute name="id">
                     <number>0</number>
+                </attribute>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="QFrame">
+                        <property name="name">
+                            <cstring>frame4</cstring>
+                        </property>
+                        <property name="frameShape">
+                            <enum>NoFrame</enum>
+                        </property>
+                        <property name="frameShadow">
+                            <enum>Plain</enum>
+                        </property>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>WStackPage</cstring>
                 </property>
-                <property name="spacing">
-                    <number>0</number>
+                <attribute name="id">
+                    <number>1</number>
+                </attribute>
+                <hbox>
+                    <property name="name">
+                        <cstring>unnamed</cstring>
+                    </property>
+                    <property name="margin">
+                        <number>0</number>
+                    </property>
+                    <property name="spacing">
+                        <number>0</number>
+                    </property>
+                    <widget class="QGroupBox">
+                        <property name="name">
+                            <cstring>groupBoxJPEG</cstring>
+                        </property>
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>1</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="title">
+                            <string>JPEG Compression Options:</string>
+                        </property>
+                        <hbox>
+                            <property name="name">
+                                <cstring>unnamed</cstring>
+                            </property>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Quality:</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignTop</set>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout5</cstring>
+                                </property>
+                                <vbox>
+                                    <property name="name">
+                                        <cstring>unnamed</cstring>
+                                    </property>
+                                    <widget class="QSlider">
+                                        <property name="name">
+                                            <cstring>qualityLevel</cstring>
+                                        </property>
+                                        <property name="minValue">
+                                            <number>0</number>
+                                        </property>
+                                        <property name="maxValue">
+                                            <number>100</number>
+                                        </property>
+                                        <property name="lineStep">
+                                            <number>1</number>
+                                        </property>
+                                        <property name="pageStep">
+                                            <number>1</number>
+                                        </property>
+                                        <property name="value">
+                                            <number>80</number>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="tickmarks">
+                                            <enum>Both</enum>
+                                        </property>
+                                        <property name="tickInterval">
+                                            <number>10</number>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>These settings determine how much information is lost during compression</string>
+                                        </property>
+                                    </widget>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout4_2</cstring>
+                                        </property>
+                                        <hbox>
+                                            <property name="name">
+                                                <cstring>unnamed</cstring>
+                                            </property>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel3</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Smallest</string>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel4</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Best</string>
+                                                </property>
+                                                <property name="alignment">
+                                                    <set>AlignVCenter|AlignRight</set>
+                                                </property>
+                                            </widget>
+                                        </hbox>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>WStackPage</cstring>
                 </property>
-                <widget class="QGroupBox">
+                <attribute name="id">
+                    <number>2</number>
+                </attribute>
+                <hbox>
                     <property name="name">
-                        <cstring>groupBoxJPEG</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
+                    <property name="margin">
+                        <number>0</number>
                     </property>
-                    <property name="title">
-                        <string>JPEG Compression Options:</string>
+                    <property name="spacing">
+                        <number>0</number>
                     </property>
-                    <hbox>
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>unnamed</cstring>
+                            <cstring>groupBoxDeflate</cstring>
                         </property>
-                        <widget class="QLabel">
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>1</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="title">
+                            <string>Deflate Compression Options:</string>
+                        </property>
+                        <hbox>
                             <property name="name">
-                                <cstring>textLabel1_2</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="text">
-                                <string>Quality:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignTop</set>
-                            </property>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout5</cstring>
-                            </property>
-                            <vbox>
+                            <widget class="QLabel">
                                 <property name="name">
-                                    <cstring>unnamed</cstring>
+                                    <cstring>textLabel1_4</cstring>
                                 </property>
-                                <widget class="QSlider">
-                                    <property name="name">
-                                        <cstring>qualityLevel</cstring>
-                                    </property>
-                                    <property name="minValue">
-                                        <number>0</number>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>100</number>
-                                    </property>
-                                    <property name="lineStep">
-                                        <number>1</number>
-                                    </property>
-                                    <property name="pageStep">
-                                        <number>1</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>80</number>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Horizontal</enum>
-                                    </property>
-                                    <property name="tickmarks">
-                                        <enum>Both</enum>
-                                    </property>
-                                    <property name="tickInterval">
-                                        <number>10</number>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>These settings determine how much information is lost during compression</string>
-                                    </property>
-                                </widget>
-                                <widget class="QLayoutWidget">
-                                    <property name="name">
-                                        <cstring>layout4_2</cstring>
-                                    </property>
-                                    <hbox>
-                                        <property name="name">
-                                            <cstring>unnamed</cstring>
-                                        </property>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>textLabel3</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>Smallest</string>
-                                            </property>
-                                        </widget>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>textLabel4</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>Best</string>
-                                            </property>
-                                            <property name="alignment">
-                                                <set>AlignVCenter|AlignRight</set>
-                                            </property>
-                                        </widget>
-                                    </hbox>
-                                </widget>
-                            </vbox>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QGroupBox">
-                    <property name="name">
-                        <cstring>groupBoxDeflate</cstring>
-                    </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
-                    </property>
-                    <property name="title">
-                        <string>Deflate Compression Options:</string>
-                    </property>
-                    <hbox>
-                        <property name="name">
-                            <cstring>unnamed</cstring>
-                        </property>
-                        <widget class="QLabel">
-                            <property name="name">
-                                <cstring>textLabel1_4</cstring>
-                            </property>
-                            <property name="text">
-                                <string>Compress:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignTop</set>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Note: the compression level does not change the quality of the result</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+                                <property name="text">
+                                    <string>Compress:</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignTop</set>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Note: the compression level does not change the quality of the result</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
 &lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
-                            </property>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout5_2</cstring>
-                            </property>
-                            <vbox>
+                                </property>
+                            </widget>
+                            <widget class="QLayoutWidget">
                                 <property name="name">
-                                    <cstring>unnamed</cstring>
+                                    <cstring>layout5_2</cstring>
                                 </property>
-                                <widget class="QSlider">
+                                <vbox>
                                     <property name="name">
-                                        <cstring>compressionLevelDeflate</cstring>
+                                        <cstring>unnamed</cstring>
                                     </property>
-                                    <property name="minValue">
-                                        <number>1</number>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>9</number>
-                                    </property>
-                                    <property name="pageStep">
-                                        <number>1</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>6</number>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Horizontal</enum>
-                                    </property>
-                                    <property name="tickmarks">
-                                        <enum>Both</enum>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>Note : the compression level doesn't change the quality of the result</string>
-                                    </property>
-                                    <property name="whatsThis" stdset="0">
-                                        <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
-                                    </property>
-                                </widget>
-                                <widget class="QLayoutWidget">
-                                    <property name="name">
-                                        <cstring>layout4</cstring>
-                                    </property>
-                                    <hbox>
+                                    <widget class="QSlider">
                                         <property name="name">
-                                            <cstring>unnamed</cstring>
+                                            <cstring>compressionLevelDeflate</cstring>
                                         </property>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>textLabel3_2</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>Fast</string>
-                                            </property>
-                                            <property name="whatsThis" stdset="0">
-                                                <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+                                        <property name="minValue">
+                                            <number>1</number>
+                                        </property>
+                                        <property name="maxValue">
+                                            <number>9</number>
+                                        </property>
+                                        <property name="pageStep">
+                                            <number>1</number>
+                                        </property>
+                                        <property name="value">
+                                            <number>6</number>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="tickmarks">
+                                            <enum>Both</enum>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Note : the compression level doesn't change the quality of the result</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
 &lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
-                                            </property>
-                                        </widget>
-                                        <widget class="QLabel">
+                                        </property>
+                                    </widget>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout4</cstring>
+                                        </property>
+                                        <hbox>
                                             <property name="name">
-                                                <cstring>textLabel4_2</cstring>
+                                                <cstring>unnamed</cstring>
                                             </property>
-                                            <property name="text">
-                                                <string>Small</string>
-                                            </property>
-                                            <property name="alignment">
-                                                <set>AlignVCenter|AlignRight</set>
-                                            </property>
-                                            <property name="whatsThis" stdset="0">
-                                                <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel3_2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Fast</string>
+                                                </property>
+                                                <property name="whatsThis" stdset="0">
+                                                    <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
 &lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
-                                            </property>
-                                        </widget>
-                                    </hbox>
-                                </widget>
-                            </vbox>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QGroupBox">
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel4_2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Small</string>
+                                                </property>
+                                                <property name="alignment">
+                                                    <set>AlignVCenter|AlignRight</set>
+                                                </property>
+                                                <property name="whatsThis" stdset="0">
+                                                    <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+                                                </property>
+                                            </widget>
+                                        </hbox>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>WStackPage</cstring>
+                </property>
+                <attribute name="id">
+                    <number>3</number>
+                </attribute>
+                <hbox>
                     <property name="name">
-                        <cstring>groupBoxCCITGroupCCITG3</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
+                    <property name="margin">
+                        <number>0</number>
                     </property>
-                    <property name="title">
-                        <string>CCITT Group 3 fax encoding Options:</string>
+                    <property name="spacing">
+                        <number>0</number>
                     </property>
-                    <hbox>
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>unnamed</cstring>
+                            <cstring>groupBoxCCITGroupCCITG3</cstring>
                         </property>
-                        <widget class="QLabel">
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>1</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="title">
+                            <string>CCITT Group 3 fax encoding Options:</string>
+                        </property>
+                        <hbox>
                             <property name="name">
-                                <cstring>textLabel2</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="text">
-                                <string>Fax mode:</string>
-                            </property>
-                        </widget>
-                        <widget class="KComboBox">
-                            <item>
-                                <property name="text">
-                                    <string>Classic</string>
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel2</cstring>
                                 </property>
-                            </item>
-                            <item>
                                 <property name="text">
-                                    <string>No RTC</string>
+                                    <string>Fax mode:</string>
                                 </property>
-                            </item>
-                            <item>
-                                <property name="text">
-                                    <string>No EOL</string>
+                            </widget>
+                            <widget class="KComboBox">
+                                <item>
+                                    <property name="text">
+                                        <string>Classic</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>No RTC</string>
+                                    </property>
+                                </item>
+                                <item>
+                                    <property name="text">
+                                        <string>No EOL</string>
+                                    </property>
+                                </item>
+                                <property name="name">
+                                    <cstring>kComboBoxFaxMode</cstring>
                                 </property>
-                            </item>
-                            <property name="name">
-                                <cstring>kComboBoxFaxMode</cstring>
-                            </property>
-                        </widget>
-                    </hbox>
-                </widget>
-                <widget class="QGroupBox">
+                            </widget>
+                        </hbox>
+                    </widget>
+                </hbox>
+            </widget>
+            <widget class="QWidget">
+                <property name="name">
+                    <cstring>WStackPage</cstring>
+                </property>
+                <attribute name="id">
+                    <number>4</number>
+                </attribute>
+                <hbox>
                     <property name="name">
-                        <cstring>groupBoxPixarLog</cstring>
+                        <cstring>unnamed</cstring>
                     </property>
-                    <property name="sizePolicy">
-                        <sizepolicy>
-                            <hsizetype>1</hsizetype>
-                            <vsizetype>1</vsizetype>
-                            <horstretch>0</horstretch>
-                            <verstretch>0</verstretch>
-                        </sizepolicy>
+                    <property name="margin">
+                        <number>0</number>
                     </property>
-                    <property name="title">
-                        <string>Pixar Log Compression Options:</string>
+                    <property name="spacing">
+                        <number>0</number>
                     </property>
-                    <hbox>
+                    <widget class="QGroupBox">
                         <property name="name">
-                            <cstring>unnamed</cstring>
+                            <cstring>groupBoxPixarLog</cstring>
                         </property>
-                        <widget class="QLabel">
+                        <property name="sizePolicy">
+                            <sizepolicy>
+                                <hsizetype>1</hsizetype>
+                                <vsizetype>1</vsizetype>
+                                <horstretch>0</horstretch>
+                                <verstretch>0</verstretch>
+                            </sizepolicy>
+                        </property>
+                        <property name="title">
+                            <string>Pixar Log Compression Options:</string>
+                        </property>
+                        <hbox>
                             <property name="name">
-                                <cstring>textLabel1_4_2</cstring>
+                                <cstring>unnamed</cstring>
                             </property>
-                            <property name="text">
-                                <string>Compress:</string>
-                            </property>
-                            <property name="alignment">
-                                <set>AlignTop</set>
-                            </property>
-                            <property name="toolTip" stdset="0">
-                                <string>Note: the compression level does not change the quality of the result</string>
-                            </property>
-                            <property name="whatsThis" stdset="0">
-                                <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+                            <widget class="QLabel">
+                                <property name="name">
+                                    <cstring>textLabel1_4_2</cstring>
+                                </property>
+                                <property name="text">
+                                    <string>Compress:</string>
+                                </property>
+                                <property name="alignment">
+                                    <set>AlignTop</set>
+                                </property>
+                                <property name="toolTip" stdset="0">
+                                    <string>Note: the compression level does not change the quality of the result</string>
+                                </property>
+                                <property name="whatsThis" stdset="0">
+                                    <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
 &lt;br&gt;Note: the compression level does not change the quality of the result.&lt;/p&gt;</string>
-                            </property>
-                        </widget>
-                        <widget class="QLayoutWidget">
-                            <property name="name">
-                                <cstring>layout5_2_2</cstring>
-                            </property>
-                            <vbox>
-                                <property name="name">
-                                    <cstring>unnamed</cstring>
                                 </property>
-                                <widget class="QSlider">
+                            </widget>
+                            <widget class="QLayoutWidget">
+                                <property name="name">
+                                    <cstring>layout5_2_2</cstring>
+                                </property>
+                                <vbox>
                                     <property name="name">
-                                        <cstring>compressionLevelPixarLog</cstring>
+                                        <cstring>unnamed</cstring>
                                     </property>
-                                    <property name="minValue">
-                                        <number>1</number>
-                                    </property>
-                                    <property name="maxValue">
-                                        <number>9</number>
-                                    </property>
-                                    <property name="pageStep">
-                                        <number>1</number>
-                                    </property>
-                                    <property name="value">
-                                        <number>6</number>
-                                    </property>
-                                    <property name="orientation">
-                                        <enum>Horizontal</enum>
-                                    </property>
-                                    <property name="tickmarks">
-                                        <enum>Both</enum>
-                                    </property>
-                                    <property name="toolTip" stdset="0">
-                                        <string>Note : the compression level doesn't change the quality of the result</string>
-                                    </property>
-                                    <property name="whatsThis" stdset="0">
-                                        <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
-&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
-                                    </property>
-                                </widget>
-                                <widget class="QLayoutWidget">
-                                    <property name="name">
-                                        <cstring>layout4_3</cstring>
-                                    </property>
-                                    <hbox>
+                                    <widget class="QSlider">
                                         <property name="name">
-                                            <cstring>unnamed</cstring>
+                                            <cstring>compressionLevelPixarLog</cstring>
                                         </property>
-                                        <widget class="QLabel">
-                                            <property name="name">
-                                                <cstring>textLabel3_2_2</cstring>
-                                            </property>
-                                            <property name="text">
-                                                <string>Fast</string>
-                                            </property>
-                                            <property name="whatsThis" stdset="0">
-                                                <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+                                        <property name="minValue">
+                                            <number>1</number>
+                                        </property>
+                                        <property name="maxValue">
+                                            <number>9</number>
+                                        </property>
+                                        <property name="pageStep">
+                                            <number>1</number>
+                                        </property>
+                                        <property name="value">
+                                            <number>6</number>
+                                        </property>
+                                        <property name="orientation">
+                                            <enum>Horizontal</enum>
+                                        </property>
+                                        <property name="tickmarks">
+                                            <enum>Both</enum>
+                                        </property>
+                                        <property name="toolTip" stdset="0">
+                                            <string>Note : the compression level doesn't change the quality of the result</string>
+                                        </property>
+                                        <property name="whatsThis" stdset="0">
+                                            <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
 &lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
-                                            </property>
-                                        </widget>
-                                        <widget class="QLabel">
+                                        </property>
+                                    </widget>
+                                    <widget class="QLayoutWidget">
+                                        <property name="name">
+                                            <cstring>layout4_3</cstring>
+                                        </property>
+                                        <hbox>
                                             <property name="name">
-                                                <cstring>textLabel4_2_2</cstring>
+                                                <cstring>unnamed</cstring>
                                             </property>
-                                            <property name="text">
-                                                <string>Small</string>
-                                            </property>
-                                            <property name="alignment">
-                                                <set>AlignVCenter|AlignRight</set>
-                                            </property>
-                                            <property name="whatsThis" stdset="0">
-                                                <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel3_2_2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Fast</string>
+                                                </property>
+                                                <property name="whatsThis" stdset="0">
+                                                    <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
 &lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
-                                            </property>
-                                        </widget>
-                                    </hbox>
-                                </widget>
-                            </vbox>
-                        </widget>
-                    </hbox>
-                </widget>
-            </vbox>
+                                                </property>
+                                            </widget>
+                                            <widget class="QLabel">
+                                                <property name="name">
+                                                    <cstring>textLabel4_2_2</cstring>
+                                                </property>
+                                                <property name="text">
+                                                    <string>Small</string>
+                                                </property>
+                                                <property name="alignment">
+                                                    <set>AlignVCenter|AlignRight</set>
+                                                </property>
+                                                <property name="whatsThis" stdset="0">
+                                                    <string>&lt;p&gt;Adjust the compression time. Better compression takes longer.
+&lt;br&gt;Note : the compression level doesn't change the quality of the result.&lt;/p&gt;</string>
+                                                </property>
+                                            </widget>
+                                        </hbox>
+                                    </widget>
+                                </vbox>
+                            </widget>
+                        </hbox>
+                    </widget>
+                </hbox>
+            </widget>
         </widget>
         <spacer>
             <property name="name">
