@@ -78,7 +78,7 @@
                 <number>8784</number>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Number of workhours in a normal year.</string>
+                <string>Number of working hours in a normal year.</string>
             </property>
         </widget>
         <widget class="KDoubleSpinBox" row="1" column="1">
@@ -89,7 +89,7 @@
                 <number>744</number>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Number of workhours in a normal month.</string>
+                <string>Number of working hours in a normal month.</string>
             </property>
         </widget>
         <widget class="KDoubleSpinBox" row="2" column="1">
@@ -100,7 +100,7 @@
                 <number>168</number>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Number of workhours in a normal week.</string>
+                <string>Number of working hours in a normal week.</string>
             </property>
         </widget>
         <widget class="KDoubleSpinBox" row="3" column="1">
@@ -111,7 +111,7 @@
                 <number>24</number>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Number of workhours in a normal day.</string>
+                <string>Number of working hours in a normal day.</string>
             </property>
         </widget>
     </grid>
