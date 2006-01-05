@@ -177,7 +177,7 @@ public:
     Line,
     Smiley,
     Heart,
-    FreeLine,
+    FreeLine
   };
 
   DrawObject();

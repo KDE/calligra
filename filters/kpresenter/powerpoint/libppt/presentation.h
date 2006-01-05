@@ -81,6 +81,6 @@ private:
 };
 
 
-};
+}
 
 #endif /* LIBPPT_PRESENTATION */

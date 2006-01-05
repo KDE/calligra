@@ -69,7 +69,7 @@ Object::Object()
   d->width = 10.0;
   d->height = 3.0;
   d->background = false;
-};
+}
 
 Object::~Object()
 {

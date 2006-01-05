@@ -56,6 +56,6 @@ private:
   Private* d;
 };
 
-};
+}
 
 #endif /* LIBPPT_SLIDE */

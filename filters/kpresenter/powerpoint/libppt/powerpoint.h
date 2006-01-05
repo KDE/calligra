@@ -1909,7 +1909,7 @@ public:
    msosptHostControl = 201,
    msosptTextBox = 202,
    msosptMax,
-   msosptNil = 0x0FFF,
+   msosptNil = 0x0FFF
  } ; 
 
   static const unsigned int id;
@@ -1965,7 +1965,7 @@ public:
     ShadowColor = 513,
     ShadowOpacity =  516,
     ShadowOffsetX = 517,
-    ShadowOffsetY = 518,
+    ShadowOffsetY = 518
   };
 
   enum {
@@ -2002,7 +2002,7 @@ public:
    LineArrowStealthEnd,
    LineArrowDiamondEnd,
    LineArrowOvalEnd,
-   LineArrowOpenEnd,
+   LineArrowOpenEnd
    };  // MSOLINEEND - line end effect
 
 
@@ -2543,6 +2543,6 @@ private:
   Private* d;
 };
 
-};
+}
 
 #endif /* LIBPPT_POWERPOINT */

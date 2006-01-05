@@ -37,7 +37,7 @@ enum ToolBoxSection {
     TB_Size_Color,
     TB_Alignment,
     TB_Type,
-    TB_Style,
+    TB_Style
 };
 const int  NumToolBoxSections = (int) TB_Style + 1;
 

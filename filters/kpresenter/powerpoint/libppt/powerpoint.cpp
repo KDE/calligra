@@ -393,7 +393,7 @@ Record* Record::create( unsigned type )
     record = new msofbtSelectionAtom() ;
 
 return record;
-};
+}
 
 void Record::setParent( Record* parent )
 {

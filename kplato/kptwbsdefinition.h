@@ -82,7 +82,7 @@ protected:
     QString toRoman(int n, bool upper = false);
     
 private:
-    CodeDef m_defaultDef;;
+    CodeDef m_defaultDef;
     
     bool m_levelsEnabled;
     QMap<int, CodeDef> m_levelsDef;

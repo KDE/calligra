@@ -19,7 +19,7 @@
  
 #include "kis_tiff_stream.h"
 
-TIFFStreamContig::TIFFStreamContig( uint8* src, uint16 depth ) : TIFFStream(depth), m_src(src) { restart(); };
+TIFFStreamContig::TIFFStreamContig( uint8* src, uint16 depth ) : TIFFStream(depth), m_src(src) { restart(); }
 uint32 TIFFStreamContig::nextValueBelow16()
 {
     register uint8 remain;

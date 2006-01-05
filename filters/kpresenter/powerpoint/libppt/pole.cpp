@@ -207,7 +207,7 @@ class StreamIO
     void updateCache();
 };
 
-}; // namespace POLE
+} // namespace POLE
 
 using namespace POLE;
 
