@@ -26,6 +26,14 @@
             <property name="name">
                 <cstring>ListViewSelected</cstring>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>List of sheets to print in given order.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;List of sheets to print.&lt;/b&gt;&lt;br&gt;
+Only the sheets listed here will be printed in the order of listing. You can change the print order with the up and down buttons.&lt;br&gt;
+It is even possible to print a sheet more than once. Just insert the desired sheet again and order the list to your needs.</string>
+            </property>
         </widget>
         <widget class="KIconButton" row="0" column="1">
             <property name="name">
@@ -36,6 +44,9 @@
             </property>
             <property name="pixmap">
                 <pixmap>image0</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Do not print selected sheets.</string>
             </property>
         </widget>
         <widget class="KIconButton" row="1" column="1">
@@ -48,6 +59,9 @@
             <property name="pixmap">
                 <pixmap>image1</pixmap>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Print selected sheets.</string>
+            </property>
         </widget>
         <widget class="KIconButton" row="2" column="1" rowspan="2" colspan="1">
             <property name="name">
@@ -58,6 +72,9 @@
             </property>
             <property name="pixmap">
                 <pixmap>image2</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Do not print any sheet.</string>
             </property>
         </widget>
         <widget class="KIconButton" row="4" column="1">
@@ -70,10 +87,21 @@
             <property name="pixmap">
                 <pixmap>image3</pixmap>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Print all sheets.</string>
+            </property>
         </widget>
         <widget class="KListView" row="0" column="0" rowspan="5" colspan="1">
             <property name="name">
                 <cstring>ListViewAvailable</cstring>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Available sheets.</string>
+            </property>
+            <property name="whatsThis" stdset="0">
+                <string>&lt;b&gt;Shows a list of all available sheets.&lt;/b&gt;&lt;br&gt;
+To print a sheet you have to select one or more sheets in this list and use the buttons to insert the selected sheet(s) in the right list, which lists all sheets that are printed.&lt;br&gt;
+You can insert a sheet as often as you like, this way it will be printed multiple times. This is useful for dividers or title pages for example.</string>
             </property>
         </widget>
         <widget class="KIconButton" row="1" column="3">
@@ -86,6 +114,9 @@
             <property name="pixmap">
                 <pixmap>image4</pixmap>
             </property>
+            <property name="toolTip" stdset="0">
+                <string>Move selected sheet up.</string>
+            </property>
         </widget>
         <widget class="KIconButton" row="2" column="3">
             <property name="name">
@@ -96,6 +127,9 @@
             </property>
             <property name="pixmap">
                 <pixmap>image5</pixmap>
+            </property>
+            <property name="toolTip" stdset="0">
+                <string>Move selected sheet down.</string>
             </property>
         </widget>
         <spacer row="0" column="3">
