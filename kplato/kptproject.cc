@@ -193,24 +193,32 @@ DateTime Project::calculateBackward(int use) {
 
 DateTime Project::scheduleForward(const DateTime &earliest, int use) {
     resetVisited();
+    DateTime end = earliest;
+    DateTime time;
     QPtrListIterator<Node> it(m_endNodes);
     for (; it.current(); ++it) {
-        it.current()->scheduleForward(earliest, use);
+        time = it.current()->scheduleForward(earliest, use);
+        if (time > end)
+            end = time;
     }
     // Fix summarytasks
     adjustSummarytask();
-    return m_currentSchedule->endTime;
+    return end;
 }
 
 DateTime Project::scheduleBackward(const DateTime &latest, int use) {
     resetVisited();
+    DateTime start = latest;
+    DateTime time;
     QPtrListIterator<Node> it(m_startNodes);
     for (; it.current(); ++it) {
-        it.current()->scheduleBackward(latest, use);
+        time = it.current()->scheduleBackward(latest, use);
+        if (time < start)
+            start = time;
     }
     // Fix summarytasks
     adjustSummarytask();
-    return m_currentSchedule->startTime;
+    return start;
 }
 
 void Project::adjustSummarytask() {
