@@ -2289,13 +2289,18 @@ bool KWTextFrameSet::createNewPageAndNewFrame( KoTextParag* lastFormatted, int /
     {
         // Let's first check if it will give us more space than we
         // already have left in this page. Otherwise we'll loop infinitely.
-        QPtrList<KWFrame> framesToCopy = m_doc->framesToCopyOnNewPage( lastPageNumber );
-        QPtrListIterator<KWFrame> frameIt( framesToCopy );
+
         int heightWeWillGet = 0; // in LU
-        for ( ; frameIt.current(); ++frameIt )
-            if (frameIt.current()->frameSet() == this &&
-                frameIt.current()->newFrameBehavior()==KWFrame::Reconnect)
-                heightWeWillGet += m_doc->ptToLayoutUnitPixY( frameIt.current()->height() );
+        if(isMainFrameset()) // is never added in the framesToCopyOnNewPage
+            heightWeWillGet += m_doc->ptToLayoutUnitPixY( m_frames.last()->height() );
+        else {
+            QPtrList<KWFrame> framesToCopy = m_doc->framesToCopyOnNewPage( lastPageNumber );
+            QPtrListIterator<KWFrame> frameIt( framesToCopy );
+            for ( ; frameIt.current(); ++frameIt )
+                if (frameIt.current()->frameSet() == this &&
+                    frameIt.current()->newFrameBehavior()==KWFrame::Reconnect)
+                    heightWeWillGet += m_doc->ptToLayoutUnitPixY( frameIt.current()->height() );
+        }
 
         // This logic doesn't applies to tables though, since they can be broken over multiple pages
         // TODO: lastFormatted->containsTable() or so (containsPageBreakableItem rather).
