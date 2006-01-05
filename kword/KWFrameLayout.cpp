@@ -451,7 +451,7 @@ void KWFrameLayout::layout( KWFrameSet* mainTextFrameSet, int numColumns,
         // For the last main text frameset, we use m_lastMainFramePage, so that
         // there's no frame on the "end notes only" page(s).
         int lastFrame = m_lastMainFramePage * numColumns + (numColumns-1);
-kdDebug() << "lastFrame: " << lastFrame << " due to " << m_lastMainFramePage << endl;
+//kdDebug() << "lastFrame: " << lastFrame << " due to " << m_lastMainFramePage << endl;
         bool deleted = false;
         while ( (int)mainTextFrameSet->frameCount() - 1 > lastFrame ) {
 #ifdef DEBUG_FRAMELAYOUT

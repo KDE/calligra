@@ -3473,16 +3473,11 @@ void KWView::insertPage()
 
 void KWView::deletePage()
 {
-    if ( m_doc->processingType() == KWDocument::WP )
-    {
-        // TODO we have to remove text so that the page can be removed
-        // (e.g. everything between two (auto or manual) frame breaks)
-        // Note: This must also be done in DTP mode, in some cases.
-    } else {
-        KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Remove, m_currentPage->pageNumber() );
-        cmd->execute();
-        m_doc->addCommand( cmd );
-    }
+    KCommand* cmd = new KWInsertRemovePageCommand( m_doc, KWInsertRemovePageCommand::Remove, m_currentPage->pageNumber() );
+    cmd->execute();
+    m_doc->addCommand( cmd );
+    if(m_doc->lastPage() > m_currentPage->pageNumber())
+        m_currentPage = m_doc->pageManager()->page( m_doc->lastPage() );
 }
 
 void KWView::insertLink()
@@ -4692,7 +4687,7 @@ QPtrList<KoTextFormatInterface> KWView::applicableTextInterfaces() const
         {
             // simply return the current textEdit
             lst.append( currentTextEdit() );
-            kdDebug() << "text frame name: " << currentTextEdit()->textFrameSet()->name() << endl;
+            //kdDebug() << "text frame name: " << currentTextEdit()->textFrameSet()->name() << endl;
             KWCollectFramesetsVisitor visitor;
             currentTextEdit()->textDocument()->visitSelection( KoTextDocument::Standard, &visitor ); //find all framesets in the selection
             const QValueList<KWFrameSet *>& frameset = visitor.frameSets();
@@ -6242,12 +6237,14 @@ void KWView::showDocStructure()
 {
     m_doc->setShowDocStruct(m_actionShowDocStruct->isChecked());
     m_doc->reorganizeGUI();
+    QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
 }
 
 void KWView::showRuler()
 {
     m_doc->setShowRuler( m_actionShowRuler->isChecked());
     m_doc->reorganizeGUI();
+    QTimer::singleShot( 0, this, SLOT( updateZoom() ) );
 }
 
 void KWView::viewGrid()
