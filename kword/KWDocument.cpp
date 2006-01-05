@@ -992,6 +992,7 @@ void KWDocument::recalcFrames( int fromPage, int toPage /*-1 for all*/, uint fla
             toPage = pageCount() - 1;
         KWFrameList::recalcFrames(this, fromPage, toPage);
     }
+    kdDebug(32002) << "            ~recalcFrames" << endl;
 }
 
 bool KWDocument::loadChildren( KoStore *store )
@@ -3978,7 +3979,6 @@ KWPage* KWDocument::insertPage( int afterPageNum ) // can be -1 for 'before page
             newFrame->setCopy( true );
         //kdDebug(32002) << "   => created frame " << newFrame << " " << *newFrame << endl;
     }
-    slotRecalcFrames(); // make sure the main-text-frame is created.
     return page;
 }
 
@@ -3998,23 +3998,11 @@ void KWDocument::afterInsertPage( int pageNum )
     if ( !m_bGeneratingPreview )
         emit newContentsSize();
 
-    if ( isHeaderVisible() || isFooterVisible() || m_bHasEndNotes )
-    {
-#ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::afterInsertPage calling recalcFrames" << endl;
-#endif
-        // Get headers and footers on the new page
-        // This shouldn't delete the newly created page because it's still empty though
-        recalcFrames( pageNum, -1, KWFrameLayout::DontRemovePages );
-#ifdef DEBUG_PAGES
-        kdDebug(32002) << "KWDocument::afterInsertPage recalcFrames done" << endl;
-#endif
-    }
-    else
-    {
-        // Take into account the frames on the new page, and run updateFramesOnTopOrBelow (#73819)
-        updateAllFrames();
-    }
+    // Get headers and footers on the new page
+    // This shouldn't delete the newly created page because it's still empty though
+    recalcFrames( pageNum, -1, KWFrameLayout::DontRemovePages );
+    // Take into account the frames on the new page, and run updateFramesOnTopOrBelow (#73819)
+    updateAllFrames();
 
     recalcVariables( VT_PGNUM );
     emit numPagesChanged();

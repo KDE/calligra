@@ -49,6 +49,7 @@
 
 #include <qxml.h>
 #include <qbuffer.h>
+#include <algorithm>
 
 // Helper class for deleting all custom items
 // (KWTextFrameset::removeSelectedText and readFormats do that already,
@@ -1085,6 +1086,13 @@ KWDeleteFrameCommand::KWDeleteFrameCommand( const QString &name, KWFrame * frame
 {
 }
 
+KWDeleteFrameCommand::KWDeleteFrameCommand( const FrameIndex &frameIndex) :
+    KNamedCommand("")
+{
+    m_frameIndex = frameIndex;
+    m_copyFrame = m_frameIndex.m_pFrameSet->frame(m_frameIndex.m_iFrameIndex)->getCopy();
+}
+
 KWDeleteFrameCommand::~KWDeleteFrameCommand()
 {
     delete m_copyFrame;
@@ -1098,6 +1106,8 @@ void KWDeleteFrameCommand::execute()
 
     KWFrame *frame = frameSet->frame( m_frameIndex.m_iFrameIndex );
     Q_ASSERT( frame );
+
+kdDebug() << "delete frame " << m_frameIndex.m_iFrameIndex << " of " << frameSet->name() << endl;
     KWDocument* doc = frameSet->kWordDocument();
     doc->terminateEditing( frameSet );
     doc->frameChanged( frame );
@@ -1758,10 +1768,19 @@ void KWInsertRemovePageCommand::unexecute() {
 void KWInsertRemovePageCommand::doRemove(int pageNumber) {
     bool firstRun = childCommands.count() == 0;
     if(firstRun) {
+        QValueVector<FrameIndex> indexes;
         QPtrList<KWFrame> frames = m_doc->framesInPage(pageNumber, false);
         QPtrListIterator<KWFrame> framesIter(frames);
         for(; framesIter.current(); ++framesIter)
-            childCommands.append(new KWDeleteFrameCommand("", *framesIter));
+            indexes.append(FrameIndex(*framesIter));
+
+        // we sort them to make sure frames are deleted in order and indexes are not going
+        // to get mixed up when there is more then one frame of a frameset on the page
+        std::sort(indexes.begin(), indexes.end(), compareIndex);
+
+        QValueVector<FrameIndex>::iterator iter = indexes.begin();
+        for(; iter != indexes.end(); ++iter)
+            childCommands.append(new KWDeleteFrameCommand(*iter));
     }
     QValueListIterator<KCommand*> cmdIter = childCommands.begin();
     for(;cmdIter != childCommands.end(); ++ cmdIter)
@@ -1801,11 +1820,17 @@ void KWInsertRemovePageCommand::doRemove(int pageNumber) {
     m_doc->afterRemovePages();
 }
 
+bool KWInsertRemovePageCommand::compareIndex(const FrameIndex &index1, const FrameIndex &index2) {
+    if(index1.m_pFrameSet == index2.m_pFrameSet)
+        return index1.m_iFrameIndex >= index2.m_iFrameIndex;
+    return index1.m_pFrameSet >= index2.m_pFrameSet; // I don't care about frameset order,
+                                                     // so just sort on pointers..
+}
+
 void KWInsertRemovePageCommand::doInsert(int pageNumber) {
     m_doc->pageManager()->insertPage( pageNumber );
-    QValueListIterator<KCommand*> cmdIter = childCommands.begin();
-    for(;cmdIter != childCommands.end(); ++ cmdIter)
-         (*cmdIter)->unexecute();
+    for(int i=childCommands.count()-1; i > 0; i--) // reverse order
+        childCommands[i]->unexecute();
     m_doc->afterInsertPage( pageNumber );
 }
 

@@ -415,6 +415,11 @@ class KWDeleteFrameCommand : public KNamedCommand
 {
 public:
     KWDeleteFrameCommand( const QString &name, KWFrame * frame) ;
+    /**
+     * Constructor to be used for chaining commands, i.e. inside another command.
+     * @param frameIndex a frameIndex object that specifies which frame to delete
+     */
+    KWDeleteFrameCommand( const FrameIndex &frameIndex) ;
     ~KWDeleteFrameCommand();
 
     void execute();
@@ -735,6 +740,9 @@ class KWInsertRemovePageCommand : public KCommand
 
     void doRemove(int pageNumber);
     void doInsert(int pageNumber);
+
+ private:
+    static bool compareIndex(const FrameIndex &index1, const FrameIndex &index2);
 };
 
 struct FramePaddingStruct {
