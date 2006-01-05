@@ -4535,7 +4535,7 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
   int width  = rct.width();
   int height = rct.height();
 
-  QDomDocument undoDoc = saveCellRect( rct );
+  QDomDocument undoDoc = saveCellRegion( rct );
   loadSelectionUndo( undoDoc, rct, left - 1, top - 1, false, 0 );
 
   QDomDocument doc;
@@ -4543,19 +4543,19 @@ void Sheet::fillSelection( Selection * selectionInfo, int direction )
   switch( direction )
   {
    case Right:
-    doc = saveCellRect( QRect( left, top, 1, height ) );
+    doc = saveCellRegion( QRect( left, top, 1, height ) );
     break;
 
    case Up:
-    doc = saveCellRect( QRect( left, bottom, width, 1 ) );
+    doc = saveCellRegion( QRect( left, bottom, width, 1 ) );
     break;
 
    case Left:
-    doc = saveCellRect( QRect( right, top, 1, height ) );
+    doc = saveCellRegion( QRect( right, top, 1, height ) );
     break;
 
    case Down:
-    doc = saveCellRect( QRect( left, top, width, 1 ) );
+    doc = saveCellRegion( QRect( left, top, width, 1 ) );
     break;
   };
 
@@ -4677,27 +4677,32 @@ struct SetConditionalWorker : public Sheet::CellWorker
 void Sheet::setConditional( Selection* selectionInfo,
                                    QValueList<Conditional> const & newConditions)
 {
-  QRect selection(selectionInfo->selection());
   if ( !doc()->undoLocked() )
   {
-    UndoConditional * undo = new UndoConditional( doc(), this, selection );
+    UndoConditional * undo = new UndoConditional(doc(), this, *selectionInfo);
     doc()->addCommand( undo );
   }
 
-  int l = selection.left();
-  int r = selection.right();
-  int t = selection.top();
-  int b = selection.bottom();
-
-  Cell * cell;
-  Style * s = doc()->styleManager()->defaultStyle();
-  for (int x = l; x <= r; ++x)
+  Region::ConstIterator endOfList = selectionInfo->constEnd();
+  for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
   {
-    for (int y = t; y <= b; ++y)
+    QRect range = (*it)->rect().normalize();
+
+    int l = range.left();
+    int r = range.right();
+    int t = range.top();
+    int b = range.bottom();
+
+    Cell * cell;
+    Style * s = doc()->styleManager()->defaultStyle();
+    for (int x = l; x <= r; ++x)
     {
-      cell = nonDefaultCell( x, y, false, s );
-      cell->setConditionList( newConditions );
-      cell->setDisplayDirtyFlag();
+      for (int y = t; y <= b; ++y)
+      {
+        cell = nonDefaultCell( x, y, false, s );
+        cell->setConditionList( newConditions );
+        cell->setDisplayDirtyFlag();
+      }
     }
   }
 
@@ -4918,11 +4923,7 @@ QString Sheet::copyAsText( Selection* selectionInfo )
 
 void Sheet::copySelection( Selection* selectionInfo )
 {
-    QRect rct;
-
-    rct = selectionInfo->selection();
-
-    QDomDocument doc = saveCellRect( rct, true );
+    QDomDocument doc = saveCellRegion( *selectionInfo, true );
 
     // Save to buffer
     QBuffer buffer;
@@ -4941,11 +4942,7 @@ void Sheet::copySelection( Selection* selectionInfo )
 
 void Sheet::cutSelection( Selection* selectionInfo )
 {
-    QRect rct;
-
-    rct = selectionInfo->selection();
-
-    QDomDocument doc = saveCellRect( rct, true, true );
+    QDomDocument doc = saveCellRegion(*selectionInfo, true, true);
 
     // Save to buffer
     QBuffer buffer;
@@ -5095,46 +5092,59 @@ void Sheet::paste( const QByteArray & b, const QRect & pasteArea, bool makeUndo,
                    insertTo, pasteFC );
 }
 
-bool Sheet::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
-                                  int _xshift, int _yshift, bool makeUndo,
-                                  Paste::Mode sp, Paste::Operation op, bool insert,
-                                  int insertTo, bool pasteFC )
+bool Sheet::loadSelection(const QDomDocument& doc, const QRect &pasteArea,
+                          int _xshift, int _yshift, bool makeUndo,
+                          Paste::Mode sp, Paste::Operation op, bool insert,
+                          int insertTo, bool pasteFC)
 {
-    QDomElement e = doc.documentElement();
+  //kdDebug(36001) << "loadSelection called. pasteArea=" << pasteArea << endl;
 
-    //kdDebug(36001) << "loadSelection called. pasteArea=" << pasteArea << endl;
+  if (!isLoading() && makeUndo)
+  {
+    loadSelectionUndo( doc, pasteArea, _xshift, _yshift, insert, insertTo );
+  }
 
-    if (!isLoading() && makeUndo)
-        loadSelectionUndo( doc, pasteArea, _xshift, _yshift, insert, insertTo );
+  QDomElement root = doc.documentElement(); // "spreadsheet-snippet"
 
-    int rowsInClpbrd    =  e.attribute( "rows" ).toInt();
-    int columnsInClpbrd =  e.attribute( "columns" ).toInt();
+  int rowsInClpbrd    =  root.attribute( "rows" ).toInt();
+  int columnsInClpbrd =  root.attribute( "columns" ).toInt();
 
-    // find size of rectangle that we want to paste to (either clipboard size or current selection)
-    const int pasteWidth = ( pasteArea.width() >= columnsInClpbrd
-                             && util_isRowSelected(pasteArea) == false
-                             && e.namedItem( "rows" ).toElement().isNull() )
-      ? pasteArea.width() : columnsInClpbrd;
-    const int pasteHeight = ( pasteArea.height() >= rowsInClpbrd
-                              && util_isColumnSelected(pasteArea) == false
-                              && e.namedItem( "columns" ).toElement().isNull())
-      ? pasteArea.height() : rowsInClpbrd;
+  // find size of rectangle that we want to paste to (either clipboard size or current selection)
+  const int pasteWidth = ( pasteArea.width() >= columnsInClpbrd
+                            && util_isRowSelected(pasteArea) == false
+                            && root.namedItem( "rows" ).toElement().isNull() )
+    ? pasteArea.width() : columnsInClpbrd;
+  const int pasteHeight = ( pasteArea.height() >= rowsInClpbrd
+                            && util_isColumnSelected(pasteArea) == false
+                            && root.namedItem( "columns" ).toElement().isNull())
+    ? pasteArea.height() : rowsInClpbrd;
 
-    /*    kdDebug() << "loadSelection: paste area has size " << pasteHeight << " rows * "
-          << pasteWidth << " columns " << endl;
-          kdDebug() << "loadSelection: " << rowsInClpbrd << " rows and "
-          << columnsInClpbrd << " columns in clipboard." << endl;
-          kdDebug() << "xshift: " << _xshift << " _yshift: " << _yshift << endl;
-    */
+//   kdDebug() << "loadSelection: paste area has size "
+//             << pasteHeight << " rows * "
+//             << pasteWidth << " columns " << endl;
+//   kdDebug() << "loadSelection: " << rowsInClpbrd << " rows and "
+//             << columnsInClpbrd << " columns in clipboard." << endl;
+//   kdDebug() << "xshift: " << _xshift << " _yshift: " << _yshift << endl;
 
-    if ( !e.namedItem( "columns" ).toElement().isNull() && !isProtected() )
+  for (QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
+  {
+    if (!n.isElement())
+    {
+      continue;
+    }
+    QDomElement e = n.toElement(); // "columns", "rows" or "cell"
+
+    // entire columns given
+    if (e.tagName() == "columns" && !isProtected())
     {
         _yshift = 0;
 
         // Clear the existing columns
-        for( int i = 1; i <= pasteWidth; ++i )
+        int col = e.attribute("column").toInt();
+        int width = e.attribute("count").toInt();
+        for ( int i = col; i < col + width; ++i )
         {
-            if(!insert)
+            if (!insert)
             {
                 d->cells.clearColumn( _xshift + i );
                 d->columns.removeElement( _xshift + i );
@@ -5143,7 +5153,7 @@ bool Sheet::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
 
         // Insert column formats
         QDomElement c = e.firstChild().toElement();
-        for( ; !c.isNull(); c = c.nextSibling().toElement() )
+        for ( ; !c.isNull(); c = c.nextSibling().toElement() )
         {
             if ( c.tagName() == "column" )
             {
@@ -5154,18 +5164,23 @@ bool Sheet::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
                     delete cl;
             }
         }
-
     }
 
-    if ( !e.namedItem( "rows" ).toElement().isNull() && !isProtected() )
+    // entire rows given
+    if (e.tagName() == "rows" && !isProtected())
     {
-        _xshift = 0;
+      _xshift = 0;
 
         // Clear the existing rows
-        for( int i = 1; i <= pasteHeight; ++i )
+        int row = e.attribute("row").toInt();
+        int height = e.attribute("count").toInt();
+        for( int i = row; i < row + height; ++i )
         {
+          if (!insert)
+          {
             d->cells.clearRow( _yshift + i );
             d->rows.removeElement( _yshift + i );
+          }
         }
 
         // Insert row formats
@@ -5186,54 +5201,54 @@ bool Sheet::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
     Cell* refreshCell = 0;
     Cell *cell;
     Cell *cellBackup = NULL;
-    QDomElement c = e.firstChild().toElement();
-    for( ; !c.isNull(); c = c.nextSibling().toElement() )
+    if (e.tagName() == "cell")
     {
-      if ( c.tagName() == "cell" )
+      int row = e.attribute( "row" ).toInt() + _yshift;
+      int col = e.attribute( "column" ).toInt() + _xshift;
+
+      // tile the selection with the clipboard contents
+      for (int roff = 0; row + roff - _yshift <= pasteHeight; roff += rowsInClpbrd)
       {
-        int row = c.attribute( "row" ).toInt() + _yshift;
-        int col = c.attribute( "column" ).toInt() + _xshift;
-        // tile the selection with the clipboard contents
-
-        for (int roff = 0; row + roff - _yshift <= pasteHeight; roff += rowsInClpbrd)
+        for (int coff = 0; col + coff - _xshift <= pasteWidth; coff += columnsInClpbrd)
         {
-          for (int coff = 0; col + coff - _xshift <= pasteWidth; coff += columnsInClpbrd)
+//           kdDebug() << "loadSelection: cell at " << (col+coff) << "," << (row+roff)
+//                     << " with roff,coff= " << roff << "," << coff
+//                     << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
+
+          cell = nonDefaultCell( col + coff, row + roff );
+          if (isProtected() && !cell->format()->notProtected(col + coff, row + roff))
           {
-            //kdDebug() << "loadSelection: cell at " << (col+coff) << "," << (row+roff) << " with roff,coff= "
-            //          << roff << "," << coff << ", _xshift: " << _xshift << ", _yshift: " << _yshift << endl;
+            continue;
+          }
 
-            cell = nonDefaultCell( col + coff, row + roff );
-            if ( isProtected() && !cell->format()->notProtected( col + coff, row + roff ) )
-              continue;
+          cellBackup = new Cell(this, cell->column(), cell->row());
+          cellBackup->copyAll(cell);
 
-            cellBackup = new Cell(this, cell->column(), cell->row());
-            cellBackup->copyAll(cell);
-
-            if ( !cell->load( c, _xshift + coff, _yshift + roff, sp, op, pasteFC ) )
+          if (!cell->load(e, _xshift + coff, _yshift + roff, sp, op, pasteFC))
+          {
+            cell->copyAll(cellBackup);
+          }
+          else
+          {
+            if (cell->isFormula())
             {
-              cell->copyAll(cellBackup);
+                cell->setCalcDirtyFlag();
             }
-            else
-            {
-              if( cell->isFormula() )
-              {
-                  cell->setCalcDirtyFlag();
-              }
-            }
+          }
 
-            delete cellBackup;
+          delete cellBackup;
 
 
 
-            cell = cellAt( col + coff, row + roff );
-            if( !refreshCell && cell->updateChart( false ) )
-            {
-              refreshCell = cell;
-            }
+          cell = cellAt( col + coff, row + roff );
+          if( !refreshCell && cell->updateChart( false ) )
+          {
+            refreshCell = cell;
           }
         }
       }
     }
+
     //refresh chart after that you paste all cells
 
     /* I don't think this is gonna work....doesn't this only update
@@ -5243,9 +5258,10 @@ bool Sheet::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
     */
     if ( refreshCell )
         refreshCell->updateChart();
+  }
     this->doc()->setModified( true );
 
-    if(!isLoading())
+    if (!isLoading())
         refreshMergedCell();
 
     emit sig_updateView( this );
@@ -5255,65 +5271,80 @@ bool Sheet::loadSelection( const QDomDocument& doc, const QRect &pasteArea,
     return true;
 }
 
-void Sheet::loadSelectionUndo( const QDomDocument & d, const QRect &loadArea,
-                                      int _xshift, int _yshift, bool insert,
-                                      int insertTo)
+void Sheet::loadSelectionUndo(const QDomDocument& d, const QRect &loadArea,
+                              int _xshift, int _yshift,
+                              bool insert, int insertTo)
 {
-    QDomElement e = d.documentElement();
-    QDomElement c = e.firstChild().toElement();
-    int rowsInClpbrd =  e.attribute( "rows" ).toInt();
-    int columnsInClpbrd =  e.attribute( "columns" ).toInt();
-    // find rect that we paste to
-    const int pasteWidth = ( loadArea.width() >= columnsInClpbrd &&
-                             util_isRowSelected(loadArea) == false &&
-                             e.namedItem( "rows" ).toElement().isNull() )
-        ? loadArea.width() : columnsInClpbrd;
-    const int pasteHeight = ( loadArea.height() >= rowsInClpbrd &&
-                              util_isColumnSelected(loadArea) == false &&
-                              e.namedItem( "columns" ).toElement().isNull() )
-        ? loadArea.height() : rowsInClpbrd;
-    QRect rect;
-    if ( !e.namedItem( "columns" ).toElement().isNull() )
-    {
-        if ( !doc()->undoLocked() )
-        {
-                UndoCellPaste *undo = new UndoCellPaste( doc(), this, pasteWidth, 0, _xshift,_yshift,rect,insert );
-                doc()->addCommand( undo );
-        }
-        if(insert)
-                 insertColumn(  _xshift+1,pasteWidth-1,false);
-  return;
-    }
+  QDomElement root = d.documentElement(); // "spreadsheet-snippet"
 
-    if ( !e.namedItem( "rows" ).toElement().isNull() )
-    {
-        if ( !doc()->undoLocked() )
-        {
-                UndoCellPaste *undo = new UndoCellPaste( doc(), this, 0,pasteHeight, _xshift,_yshift,rect,insert );
-                doc()->addCommand( undo );
-        }
-  if(insert)
-      insertRow(  _yshift+1,pasteHeight-1,false);
-  return;
-    }
+  int rowsInClpbrd    = root.attribute( "rows" ).toInt();
+  int columnsInClpbrd = root.attribute( "columns" ).toInt();
 
-    rect.setRect( _xshift+1, _yshift+1, pasteWidth, pasteHeight );
+  // find rect that we paste to
+  const int pasteWidth = (loadArea.width() >= columnsInClpbrd &&
+                          util_isRowSelected(loadArea) == false &&
+                          root.namedItem( "rows" ).toElement().isNull())
+      ? loadArea.width() : columnsInClpbrd;
+  const int pasteHeight = (loadArea.height() >= rowsInClpbrd &&
+                           util_isColumnSelected(loadArea) == false &&
+                           root.namedItem( "columns" ).toElement().isNull())
+      ? loadArea.height() : rowsInClpbrd;
 
-    if(!c.isNull())
+  Region region;
+  for (QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
+  {
+    QDomElement e = n.toElement(); // "columns", "rows" or "cell"
+    if (e.tagName() == "columns")
     {
-        if ( !doc()->undoLocked() )
-        {
-                UndoCellPaste *undo = new UndoCellPaste( doc(), this, 0,0,_xshift,_yshift,rect,insert,insertTo );
-                doc()->addCommand( undo );
-        }
-    if(insert)
-        {
-        if(insertTo==-1)
-                shiftRow(rect,false);
-        else if(insertTo==1)
-                shiftColumn(rect,false);
-        }
+      region.add(QRect(_xshift  +1, 1,
+                       _xshift + e.attribute("count").toInt(), KS_rowMax));
     }
+    else if (e.tagName() == "rows")
+    {
+      region.add(QRect(1, _yshift + 1,
+                       KS_colMax, _xshift + e.attribute("count").toInt()));
+    }
+    else if (!e.isNull())
+    {
+      // TODO Stefan: maybe save the range dimensions?!
+      region.add(QPoint(_xshift + e.attribute("column").toInt(),
+                        _yshift + e.attribute("row").toInt()));
+    }
+  }
+
+  if (!doc()->undoLocked())
+  {
+    UndoCellPaste *undo = new UndoCellPaste( doc(), this, _xshift, _yshift, region, insert );
+    doc()->addCommand( undo );
+  }
+
+  if (insert)
+  {
+    for (QDomNode n = root.firstChild(); !n.isNull(); n = n.nextSibling())
+    {
+      QDomElement e = n.toElement(); // "columns", "rows" or "cell"
+      if (e.tagName() == "columns")
+      {
+        insertColumn(_xshift+1, e.attribute("count").toInt()-1, false);
+      }
+      else if (e.tagName() == "rows")
+      {
+        insertRow(_yshift+1, e.attribute("count").toInt()-1, false);
+      }
+      else if (!e.isNull())
+      {
+        QRect rect(_xshift + 1, _yshift + 1, pasteWidth, pasteHeight);
+        if (insertTo == -1)
+        {
+          shiftRow(rect, false);
+        }
+        else if (insertTo == 1)
+        {
+          shiftColumn(rect, false);
+        }
+      }
+    }
+  }
 }
 
 bool Sheet::testAreaPasteInsert()const
@@ -5426,18 +5457,21 @@ void Sheet::deleteCells( const QRect& rect )
 
 void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
 {
-    QRect r( selectionInfo->selection() );
-
     if ( undo && !doc()->undoLocked() )
     {
-        UndoDelete *undo = new UndoDelete( doc(), this, r );
+        UndoDelete *undo = new UndoDelete( doc(), this, *selectionInfo );
         doc()->addCommand( undo );
     }
 
-    // Entire rows selected ?
-    if ( util_isRowSelected(r) )
+    Region::ConstIterator endOfList = selectionInfo->constEnd();
+    for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
     {
-        for( int i = r.top(); i <= r.bottom(); ++i )
+      QRect range = (*it)->rect().normalize();
+
+    // Entire rows selected ?
+    if ( util_isRowSelected(range) )
+    {
+        for( int i = range.top(); i <= range.bottom(); ++i )
         {
             d->cells.clearRow( i );
             d->rows.removeElement( i );
@@ -5446,9 +5480,9 @@ void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
         emit sig_updateVBorder( this );
     }
     // Entire columns selected ?
-    else if ( util_isColumnSelected(r) )
+    else if ( util_isColumnSelected(range) )
     {
-        for( int i = r.left(); i <= r.right(); ++i )
+        for( int i = range.left(); i <= range.right(); ++i )
         {
             d->cells.clearColumn( i );
             d->columns.removeElement( i );
@@ -5458,8 +5492,8 @@ void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
     }
     else
     {
-
-        deleteCells( r );
+        deleteCells( range );
+    }
     }
     refreshMergedCell();
     emit sig_updateView( this );
@@ -5480,27 +5514,36 @@ void Sheet::updateView(Region* region)
   emit sig_updateView( this, *region );
 }
 
-void Sheet::refreshView( const QRect & rect )
+void Sheet::refreshView( const Region& region )
 {
-  // TODO: don't go through all cells when refreshing!
-    QRect tmp(rect);
+  Region tmpRegion;
+  Region::ConstIterator endOfList = region.constEnd();
+  for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
+    // TODO: don't go through all cells when refreshing!
+    QRect tmp(range);
     Cell * c = d->cells.firstCell();
     for( ;c; c = c->nextCell() )
     {
-        if ( !c->isDefault() && c->row() >= rect.top() &&
-             c->row() <= rect.bottom() && c->column() >= rect.left() &&
-             c->column() <= rect.right() )
-          if(c->isForceExtraCells())
-          {
-                int right=QMAX(tmp.right(),c->column()+c->extraXCells());
-                int bottom=QMAX(tmp.bottom(),c->row()+c->extraYCells());
+      if ( !c->isDefault() &&
+            c->row() >= range.top() && c->row() <= range.bottom() &&
+            c->column() >= range.left() && c->column() <= range.right() )
+      {
+        if (c->isForceExtraCells())
+        {
+              int right=QMAX(tmp.right(),c->column()+c->extraXCells());
+              int bottom=QMAX(tmp.bottom(),c->row()+c->extraYCells());
 
-                tmp.setRight(right);
-                tmp.setBottom(bottom);
-          }
+              tmp.setRight(right);
+              tmp.setBottom(bottom);
+        }
+      }
     }
-    deleteCells( rect );
-    emit sig_updateView( this, Region(tmp) );
+    deleteCells( range );
+    tmpRegion.add(tmp);
+  }
+  emit sig_updateView( this, tmpRegion );
 }
 
 
@@ -5564,90 +5607,107 @@ bool Sheet::testListChoose(Selection* selectionInfo)
 
 
 
-
-QDomDocument Sheet::saveCellRect( const QRect &_rect, bool copy, bool era )
+QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
 {
-    QDomDocument dd( "spreadsheet-snippet" );
-    dd.appendChild( dd.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
-    QDomElement spread = dd.createElement( "spreadsheet-snippet" );
-    spread.setAttribute( "rows", _rect.bottom() - _rect.top() + 1 );
-    spread.setAttribute( "columns", _rect.right() - _rect.left() + 1 );
-    dd.appendChild( spread );
+  QDomDocument dd( "spreadsheet-snippet" );
+  dd.appendChild( dd.createProcessingInstruction( "xml", "version=\"1.0\" encoding=\"UTF-8\"" ) );
+  QDomElement root = dd.createElement( "spreadsheet-snippet" );
+  dd.appendChild(root);
+
+  // find the upper left corner of the selection
+  QRect boundingRect = region.boundingRect();
+  int left = boundingRect.left();
+  int top = boundingRect.top();
+
+  // for tiling the clipboard content in the selection
+  root.setAttribute( "rows", boundingRect.height() );
+  root.setAttribute( "columns", boundingRect.width() );
+
+  Region::ConstIterator endOfList = region.constEnd();
+  for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
 
     //
-    // Entire rows selected ?
+    // Entire rows selected?
     //
-    if ( util_isRowSelected( _rect ) )
+    if ((*it)->isRow())
     {
-        QDomElement rows = dd.createElement("rows");
-        rows.setAttribute( "count", _rect.bottom() - _rect.top() + 1 );
-        spread.appendChild( rows );
+      QDomElement rows = dd.createElement("rows");
+      rows.setAttribute( "count", range.height() );
+      rows.setAttribute( "row", range.top() - top + 1 );
+      root.appendChild( rows );
 
-        // Save all cells.
-        Cell* c = d->cells.firstCell();
-        for( ;c; c = c->nextCell() )
+      // Save all cells.
+      for (Cell* cell = d->cells.firstCell(); cell; cell = cell->nextCell())
+      {
+        if (!cell->isDefault() && !cell->isObscuringForced())
         {
-            if ( !c->isDefault()&&!c->isObscuringForced() )
-            {
-                QPoint p( c->column(), c->row() );
-                if ( _rect.contains( p ) )
-                    spread.appendChild( c->save( dd, 0, _rect.top() - 1, copy, copy, era ) );
-            }
+          QPoint point(cell->column(), cell->row());
+          if (range.contains(point))
+          {
+            root.appendChild(cell->save( dd, 0, top - 1, copy, copy, era));
+          }
         }
+      }
 
-        // ##### Inefficient
-        // Save the row formats if there are any
-        RowFormat* lay;
-        for( int y = _rect.top(); y <= _rect.bottom(); ++y )
+      // ##### Inefficient
+      // Save the row formats if there are any
+      RowFormat* format;
+      for (int row = range.top(); row <= range.bottom(); ++row)
+      {
+        format = rowFormat( row );
+        if (format && !format->isDefault())
         {
-            lay = rowFormat( y );
-            if ( lay && !lay->isDefault() )
-            {
-                QDomElement e = lay->save( dd, _rect.top() - 1, copy );
-                if ( !e.isNull() )
-                    spread.appendChild( e );
-            }
+          QDomElement e = format->save(dd, top - 1, copy);
+          if (!e.isNull())
+          {
+            rows.appendChild( e );
+          }
         }
-
-        return dd;
+      }
+      continue;
     }
 
     //
-    // Entire columns selected ?
+    // Entire columns selected?
     //
-    if ( util_isColumnSelected( _rect ) )
+    if ((*it)->isColumn())
     {
-        QDomElement columns = dd.createElement("columns");
-        columns.setAttribute( "count", _rect.right() - _rect.left() + 1 );
-        spread.appendChild( columns );
+      QDomElement columns = dd.createElement("columns");
+      columns.setAttribute( "count", range.width() );
+      columns.setAttribute( "column", range.left() - left + 1 );
+      root.appendChild( columns );
 
-        // Save all cells.
-        Cell* c = d->cells.firstCell();
-        for( ;c; c = c->nextCell() )
+      // Save all cells.
+      for (Cell* cell = d->cells.firstCell();cell; cell = cell->nextCell())
+      {
+        if (!cell->isDefault() && !cell->isObscuringForced())
         {
-            if ( !c->isDefault()&&!c->isObscuringForced())
-            {
-                QPoint p( c->column(), c->row() );
-                if ( _rect.contains( p ) )
-                    spread.appendChild( c->save( dd, _rect.left() - 1, 0, copy, copy, era ) );
-            }
+          QPoint point(cell->column(), cell->row());
+          if (range.contains(point))
+          {
+            root.appendChild(cell->save( dd, left - 1, 0, copy, copy, era));
+          }
         }
+      }
 
-        // ##### Inefficient
-        // Save the column formats if there are any
-        ColumnFormat* lay;
-        for( int x = _rect.left(); x <= _rect.right(); ++x )
+      // ##### Inefficient
+      // Save the column formats if there are any
+      ColumnFormat* format;
+      for (int col = range.left(); col <= range.right(); ++col)
+      {
+        format = columnFormat(col);
+        if (format && !format->isDefault())
         {
-            lay = columnFormat( x );
-            if ( lay && !lay->isDefault() )
-            {
-                QDomElement e = lay->save( dd, _rect.left() - 1, copy );
-                if ( !e.isNull() )
-                    spread.appendChild( e );
-            }
+          QDomElement e = format->save(dd, left - 1, copy);
+          if (!e.isNull())
+          {
+            columns.appendChild(e);
+          }
         }
-
-        return dd;
+      }
+      continue;
     }
 
     // Save all cells.
@@ -5655,25 +5715,29 @@ QDomDocument Sheet::saveCellRect( const QRect &_rect, bool copy, bool era )
     //when they don't exist we created them
     //because it's necessary when there is a  format on a column/row
     //but I remove cell which is inserted.
-    Cell *cell;
+    Cell* cell;
     bool insert;
-    for (int i=_rect.left();i<=_rect.right();i++)
-  for(int j=_rect.top();j<=_rect.bottom();j++)
-  {
-      insert = false;
-      cell = cellAt( i, j );
-      if ( cell == d->defaultCell )
+    for (int col = range.left(); col <= range.right(); ++col)
+    {
+      for (int row = range.top(); row <= range.bottom(); ++row)
       {
-    cell = new Cell( this, i, j );
-    insertCell( cell );
-    insert=true;
+        insert = false;
+        cell = cellAt(col, row);
+        if (cell == d->defaultCell)
+        {
+          cell = new Cell(this, col, row);
+          insertCell(cell);
+          insert = true;
+        }
+        root.appendChild(cell->save(dd, left - 1, top - 1, true, copy, era));
+        if (insert)
+        {
+          d->cells.remove(col, row);
+        }
       }
-      spread.appendChild( cell->save( dd, _rect.left() - 1, _rect.top() - 1, true, copy, era ) );
-      if( insert )
-          d->cells.remove(i,j);
+    }
   }
-
-    return dd;
+  return dd;
 }
 
 QDomElement Sheet::saveXML( QDomDocument& dd )

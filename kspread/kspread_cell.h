@@ -891,6 +891,7 @@ protected:
     
 private:
 
+    class Extra;
     class Private;
     Private *d;
     // static const char* s_dataTypeToString[];

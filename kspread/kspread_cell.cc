@@ -98,18 +98,19 @@ namespace Cell_LNS
 using namespace Cell_LNS;
 
 
-// Some variables are placed in CellExtra because normally they're not required
+// Some variables are placed in Cell::Extra because normally they're not required
 // in simple case of cell(s). For example, most plain text cells don't need
 // to store information about spanned columns and rows, as this is only
 // the case with merged cells.
 //
 // When the cell is getting complex (e.g. merged with other cells, contains
-// rich text, has validation criteria, etc), this CellExtra is allocated by
+// rich text, has validation criteria, etc), this Cell::Extra is allocated by
 // Cell::Private and starts to be available. Otherwise, it won't exist at all.
 
-class CellExtra
+class Cell::Extra
 {
 public:
+  Extra() {}
 
   // Not empty when the cell holds a link
   QString link;
@@ -147,7 +148,7 @@ public:
 
 private:
   // Don't allow implicit copy.
-  CellExtra& operator=( const CellExtra& );
+  Extra& operator=( const Extra& );
 };
 
 
@@ -216,14 +217,14 @@ public:
   Cell  *previousCell;
 
   bool        hasExtra() const { return (cellExtra != 0); };
-  CellExtra  *extra();
+  Extra      *extra();
 
   Format     *format;
   Q_UINT32   flags;
 
 private:
-  // "Extra stuff", see explanation for CellExtra.
-  CellExtra  *cellExtra;
+  // "Extra stuff", see explanation for Cell::Extra.
+  Extra  *cellExtra;
 };
 
 
@@ -259,10 +260,10 @@ Cell::Private::~Private()
 }
 
 
-CellExtra* Cell::Private::extra()
+Cell::Extra* Cell::Private::extra()
 {
     if ( !cellExtra ) {
-      cellExtra = new CellExtra;
+      cellExtra = new Extra;
       cellExtra->conditions   = 0;
       cellExtra->validity     = 0;
 
@@ -2070,7 +2071,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 		      QPen & leftPen,  QPen & topPen,
 		      bool drawCursor )
 {
-  kdDebug() << "Painting Cell " << cellRef.x() << " , " << cellRef.y() << endl;
+//   kdDebug() << "Painting Cell " << cellRef.x() << " , " << cellRef.y() << endl;
 
   bool paintBorderRight  = paintBorder & Border_Right;
   bool paintBorderBottom = paintBorder & Border_Bottom;
@@ -2091,7 +2092,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   // obscured by a cell.
   static int  paintingObscured = 0;
 
-#if 1
+#if 0
   if (paintingObscured == 0)
     kdDebug(36001) << "painting cell " << name() << endl;
   else
@@ -6129,6 +6130,16 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
       d->extra()->conditions->loadConditions( conditionsElement );
       d->extra()->conditions->checkMatches();
     }
+    else if ((pm == Paste::Normal) || (pm == Paste::NoBorder))
+    {
+      //clear the conditional formatting
+      if (d->hasExtra())
+      {
+        delete d->extra()->conditions;
+        d->extra()->conditions = 0;
+      }
+ 
+    }
 
     QDomElement validity = cell.namedItem( "validity" ).toElement();
     if ( !validity.isNull())
@@ -6225,6 +6236,11 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
         {
             d->extra()->validity->dateMax = toDate(dateMax);
          }
+    }
+    else if ((pm == Paste::Normal) || (pm == Paste::NoBorder))
+    {
+      // clear the validity
+      removeValidity();
     }
 
     //

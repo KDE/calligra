@@ -40,17 +40,12 @@
 
 using namespace KSpread;
 
-// TODO Stefan: Conditional (neither NCS nor undo) [see Sheet::setConditional()]
-// TODO Stefan: Validity  (undo doesn't work)
 
 // TODO Stefan: AutoSum ?
 // TODO Stefan: FillSelection ?
 // TODO Stefan: Default ?
 
-// TODO Stefan: Copy
-// TODO Stefan: Cut
-// TODO Stefan: Delete
-// TODO Stefan: Paste (Special)
+// TODO Stefan: Paste Special (check)
 
 // TODO Stefan: SortInc
 // TODO Stefan: SortDec
@@ -63,6 +58,12 @@ using namespace KSpread;
 // TODO Stefan: RemoveComment (works, but not a manipulator yet)
 // TODO Stefan: ClearText (works, but not a manipulator yet)
 // TODO Stefan: ClearValidity (works, but not a manipulator yet)
+// TODO Stefan: Validity (works, but not a manipulator yet)
+// TODO Stefan: Conditional (works, but not a manipulator yet)
+// TODO Stefan: Copy (works, but not a manipulator yet)
+// TODO Stefan: Delete (works, but not a manipulator yet)
+// TODO Stefan: Cut (works, but not a manipulator yet)
+// TODO Stefan: Paste (works, but not a manipulator yet)
 
 // TODO Stefan: more ????
 

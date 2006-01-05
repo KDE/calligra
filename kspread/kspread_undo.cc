@@ -251,7 +251,7 @@ UndoRemoveColumn::UndoRemoveColumn( Doc *_doc, Sheet *_sheet, int _column,int _n
     m_printRepeatColumns = _sheet->print()->printRepeatColumns();
     QRect selection;
     selection.setCoords( _column, 1, _column+m_iNbCol, KS_rowMax );
-    QDomDocument doc = _sheet->saveCellRect( selection );
+    QDomDocument doc = _sheet->saveCellRegion( selection );
 
     // Save to buffer
     QString buffer;
@@ -370,7 +370,7 @@ UndoRemoveRow::UndoRemoveRow( Doc *_doc, Sheet *_sheet, int _row,int _nbRow) :
 
     QRect selection;
     selection.setCoords( 1, _row, KS_colMax, _row+m_iNbRow );
-    QDomDocument doc = _sheet->saveCellRect( selection );
+    QDomDocument doc = _sheet->saveCellRegion( selection );
 
     // Save to buffer
     QString buffer;
@@ -1487,14 +1487,13 @@ void UndoSort::redo()
  *
  ***************************************************************************/
 
-UndoDelete::UndoDelete( Doc *_doc, Sheet* sheet, const QRect & _selection)
+UndoDelete::UndoDelete( Doc *_doc, Sheet* sheet, const Region& region)
     : UndoAction( _doc )
 {
     name=i18n("Delete");
     m_sheetName = sheet->sheetName();
-    m_selection = _selection;
-    createListCell( m_data, m_lstColumn,m_lstRow,sheet );
-
+    m_region = region;
+    createListCell(m_data, m_lstColumn, m_lstRow, sheet);
 }
 
 UndoDelete::~UndoDelete()
@@ -1505,10 +1504,14 @@ void UndoDelete::createListCell( QCString &listCell,QValueList<columnSize> &list
 {
     listRow.clear();
     listCol.clear();
-    //copy a column(s)
-    if( util_isColumnSelected( m_selection ) )
+    Region::ConstIterator endOfList = m_region.constEnd();
+    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
     {
-        for( int y = m_selection.left() ; y <= m_selection.right() ; ++y )
+      QRect range = (*it)->rect().normalize();
+      // copy column(s)
+      if ((*it)->isColumn())
+    {
+        for( int y = range.left() ; y <= range.right() ; ++y )
         {
            ColumnFormat * cl = sheet->columnFormat( y );
            if ( !cl->isDefault() )
@@ -1520,11 +1523,11 @@ void UndoDelete::createListCell( QCString &listCell,QValueList<columnSize> &list
            }
         }
     }
-    //copy a row(s)
-    else if( util_isRowSelected( m_selection ) )
+    // copy row(s)
+    else if ((*it)->isRow())
     {
         //save size of row(s)
-        for( int y =m_selection.top() ; y <=m_selection.bottom() ; ++y )
+        for( int y = range.top() ; y <= range.bottom() ; ++y )
         {
            RowFormat *rw=sheet->rowFormat(y);
            if(!rw->isDefault())
@@ -1537,9 +1540,10 @@ void UndoDelete::createListCell( QCString &listCell,QValueList<columnSize> &list
         }
 
     }
+    }
 
     //save all cells in area
-    QDomDocument doc = sheet->saveCellRect( m_selection );
+    QDomDocument doc = sheet->saveCellRegion( m_region );
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -1554,7 +1558,6 @@ void UndoDelete::createListCell( QCString &listCell,QValueList<columnSize> &list
     char tmp = listCell[ len - 1 ];
     listCell.resize( len );
     *( listCell.data() + len - 1 ) = tmp;
-
 }
 
 
@@ -1563,12 +1566,11 @@ void UndoDelete::undo()
     Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
-    createListCell( m_dataRedo, m_lstRedoColumn,m_lstRedoRow,sheet );
+    createListCell( m_dataRedo, m_lstRedoColumn, m_lstRedoRow, sheet );
 
     doc()->undoLock();
     doc()->emitBeginOperation();
 
-    if( util_isColumnSelected( m_selection ) )
     {
         QValueList<columnSize>::Iterator it2;
         for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
@@ -1577,7 +1579,7 @@ void UndoDelete::undo()
            cl->setDblWidth((*it2).columnWidth);
         }
     }
-    else if( util_isRowSelected( m_selection ) )
+
     {
         QValueList<rowSize>::Iterator it2;
         for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
@@ -1587,8 +1589,13 @@ void UndoDelete::undo()
         }
     }
 
-    sheet->deleteCells( m_selection );
-    sheet->paste( m_data, m_selection );
+    Region::ConstIterator endOfList = m_region.constEnd();
+    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+    {
+      QRect range = (*it)->rect().normalize();
+      sheet->deleteCells( range );
+    }
+    sheet->paste( m_data, m_region.boundingRect() );
     sheet->updateView( );
 
     if(sheet->getAutoCalc()) sheet->recalc();
@@ -1598,7 +1605,6 @@ void UndoDelete::undo()
 
 void UndoDelete::redo()
 {
-
     Sheet* sheet = doc()->map()->findSheet( m_sheetName );
     if ( !sheet )
 	return;
@@ -1606,7 +1612,6 @@ void UndoDelete::redo()
     doc()->undoLock();
     doc()->emitBeginOperation();
 
-    if( util_isColumnSelected( m_selection ) )
     {
         QValueList<columnSize>::Iterator it2;
         for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
@@ -1615,7 +1620,7 @@ void UndoDelete::redo()
            cl->setDblWidth((*it2).columnWidth);
         }
     }
-    else if( util_isRowSelected( m_selection ) )
+
     {
         QValueList<rowSize>::Iterator it2;
         for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
@@ -1629,10 +1634,10 @@ void UndoDelete::redo()
     //because I must know what is the real rect
     //that I must refresh, when there is cell Merged
 
-    sheet->paste( m_dataRedo, m_selection );
+    sheet->paste( m_dataRedo, m_region.boundingRect() );
     //sheet->deleteCells( m_selection );
     sheet->updateView();
-    sheet->refreshView( m_selection );
+    sheet->refreshView( m_region ); // deletes the cells in region!
     doc()->undoUnlock();
 }
 
@@ -1664,7 +1669,7 @@ UndoDragDrop::~UndoDragDrop()
 void UndoDragDrop::saveCellRect( QCString & cells, Sheet * sheet,
                                         QRect const & rect )
 {
-    QDomDocument doc = sheet->saveCellRect( rect );
+    QDomDocument doc = sheet->saveCellRegion( rect );
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -2213,7 +2218,7 @@ UndoAutofill::~UndoAutofill()
 
 void UndoAutofill::createListCell( QCString &list, Sheet* sheet )
 {
-    QDomDocument doc = sheet->saveCellRect( m_selection );
+    QDomDocument doc = sheet->saveCellRegion( m_selection );
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -2369,7 +2374,7 @@ UndoRemoveCellRow::UndoRemoveCellRow( Doc *_doc, Sheet *_sheet, const QRect &rec
 
     m_sheetName = _sheet->sheetName();
     m_rect=rect;
-    QDomDocument doc = _sheet->saveCellRect( m_rect );
+    QDomDocument doc = _sheet->saveCellRegion( m_rect );
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -2428,7 +2433,7 @@ UndoRemoveCellCol::UndoRemoveCellCol( Doc *_doc, Sheet *_sheet, const QRect &_re
 
     m_sheetName = _sheet->sheetName();
     m_rect=_rect;
-    QDomDocument doc = _sheet->saveCellRect( m_rect );
+    QDomDocument doc = _sheet->saveCellRegion( m_rect );
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -2501,13 +2506,8 @@ void UndoConditional::createListCell( QCString &list, Sheet* sheet )
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
 
-  Region::ConstIterator endOfList(m_region.constEnd());
-  for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
-  {
-    QRect m_rctRect = (*it)->rect().normalize();
-    QDomDocument doc = sheet->saveCellRect( m_rctRect );
+    QDomDocument doc = sheet->saveCellRegion( m_region );
     str << doc;
-  }
 
     // This is a terrible hack to store unicode
     // data in a QCString in a way that
@@ -2529,13 +2529,11 @@ void UndoConditional::undo()
     createListCell( m_dataRedo, sheet );
 
     doc()->undoLock();
-    Region::ConstIterator endOfList(m_region.constEnd());
-    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+    sheet->paste(m_data, m_region.boundingRect());
+    if (sheet->getAutoCalc())
     {
-      QRect m_rctRect = (*it)->rect().normalize();
-    sheet->paste( m_data, m_rctRect );
+      sheet->recalc();
     }
-    if(sheet->getAutoCalc()) sheet->recalc();
 
     doc()->undoUnlock();
 }
@@ -2549,13 +2547,11 @@ void UndoConditional::redo()
 	return;
 
     doc()->undoLock();
-    Region::ConstIterator endOfList(m_region.constEnd());
-    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+    sheet->paste(m_dataRedo, m_region.boundingRect());
+    if (sheet->getAutoCalc())
     {
-      QRect m_rctRect = (*it)->rect().normalize();
-    sheet->paste( m_dataRedo, m_rctRect );
+      sheet->recalc();
     }
-    if(sheet->getAutoCalc()) sheet->recalc();
 
     doc()->undoUnlock();
 }
@@ -2567,7 +2563,9 @@ void UndoConditional::redo()
  *
  ***************************************************************************/
 
-UndoCellPaste::UndoCellPaste( Doc *_doc, Sheet* sheet, int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection,bool insert,int _insertTo )
+UndoCellPaste::UndoCellPaste(Doc *_doc, Sheet* sheet,
+                             int _xshift, int _yshift,
+                             const Region& region, bool insert, int _insertTo)
     : UndoAction( _doc )
 {
     if(!insert)
@@ -2576,9 +2574,7 @@ UndoCellPaste::UndoCellPaste( Doc *_doc, Sheet* sheet, int _nbCol,int _nbRow, in
         name=i18n("Paste & Insert");
 
     m_sheetName = sheet->sheetName();
-    m_selection = _selection;
-    nbCol=_nbCol;
-    nbRow=_nbRow;
+    m_region = region;
     xshift=_xshift;
     yshift=_yshift;
     b_insert=insert;
@@ -2592,246 +2588,232 @@ UndoCellPaste::~UndoCellPaste()
 {
 }
 
-void UndoCellPaste::createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, Sheet* sheet )
+void UndoCellPaste::createListCell(QCString& listCell,
+                                   QValueList<columnSize>& listCol,
+                                   QValueList<rowSize>& listRow,
+                                   Sheet* sheet)
 {
-    listCol.clear();
-    listRow.clear();
-    //copy a column(s)
-    if(nbCol!=0)
+  listCol.clear();
+  listRow.clear();
+
+  Region::ConstIterator endOfList = m_region.constEnd();
+  for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+  {
+    int nbCol = 0;
+    int nbRow = 0;
+    QRect range = (*it)->rect().normalize();
+    if ((*it)->isColumn())
     {
-        //save all cells
-        QRect rect;
-        rect.setCoords( xshift, 1, xshift+nbCol, KS_rowMax );
-        QDomDocument doc = sheet->saveCellRect( rect);
-        // Save to buffer
-        QString buffer;
-        QTextStream str( &buffer, IO_WriteOnly );
-        str << doc;
+      nbCol = range.width();
+    }
+    else if ((*it)->isRow())
+    {
+      nbRow = range.height();
+    }
 
-        // This is a terrible hack to store unicode
-        // data in a QCString in a way that
-        // QCString::length() == QCString().size().
-        // This allows us to treat the QCString like a QByteArray later on.
-        listCell = buffer.utf8();
-        int len = listCell.length();
-        char tmp = listCell[ len - 1 ];
-        listCell.resize( len );
-        *( listCell.data() + len - 1 ) = tmp;
-
-        //save size of columns
-        for( int y = 1; y <=nbCol ; ++y )
+    // copy column(s)
+    if (nbCol != 0)
+    {
+      //save size of columns
+      for( int y = 1; y <=nbCol ; ++y )
+      {
+        ColumnFormat *cl=sheet->columnFormat(y);
+        if(!cl->isDefault())
         {
-           ColumnFormat *cl=sheet->columnFormat(y);
-           if(!cl->isDefault())
-                {
-                columnSize tmpSize;
-                tmpSize.columnNumber=y;
-                tmpSize.columnWidth=cl->dblWidth();
-                listCol.append(tmpSize);
-                }
+          columnSize tmpSize;
+          tmpSize.columnNumber=y;
+          tmpSize.columnWidth=cl->dblWidth();
+          listCol.append(tmpSize);
         }
+      }
     }
     //copy a row(s)
-    else if(nbRow!=0)
+    else if (nbRow != 0)
     {
-        //save all cells
-        QRect rect;
-        rect.setCoords( 1, yshift, KS_colMax, yshift+nbRow );
-        QDomDocument doc = sheet->saveCellRect( rect);
-        // Save to buffer
-        QString buffer;
-        QTextStream str( &buffer, IO_WriteOnly );
-        str << doc;
-
-        // This is a terrible hack to store unicode
-        // data in a QCString in a way that
-        // QCString::length() == QCString().size().
-        // This allows us to treat the QCString like a QByteArray later on.
-        listCell = buffer.utf8();
-        int len = listCell.length();
-        char tmp = listCell[ len - 1 ];
-        listCell.resize( len );
-        *( listCell.data() + len - 1 ) = tmp;
-
-        //save size of columns
-        for( int y = 1; y <=nbRow ; ++y )
+      //save size of columns
+      for ( int y = 1; y <=nbRow ; ++y )
+      {
+        RowFormat *rw=sheet->rowFormat(y);
+        if (!rw->isDefault())
         {
-           RowFormat *rw=sheet->rowFormat(y);
-           if(!rw->isDefault())
-                {
-                rowSize tmpSize;
-                tmpSize.rowNumber=y;
-                tmpSize.rowHeight=rw->dblHeight();
-                listRow.append(tmpSize);
-                }
+          rowSize tmpSize;
+          tmpSize.rowNumber=y;
+          tmpSize.rowHeight=rw->dblHeight();
+          listRow.append(tmpSize);
         }
-
+      }
     }
-    //copy just an area
-    else
-    {
-        //save all cells in area
-        QDomDocument doc = sheet->saveCellRect( m_selection );
-        // Save to buffer
-        QString buffer;
-        QTextStream str( &buffer, IO_WriteOnly );
-        str << doc;
+  }
+  //save all cells in area
+  QDomDocument doc = sheet->saveCellRegion(m_region);
+  // Save to buffer
+  QString buffer;
+  QTextStream str( &buffer, IO_WriteOnly );
+  str << doc;
 
-        // This is a terrible hack to store unicode
-        // data in a QCString in a way that
-        // QCString::length() == QCString().size().
-        // This allows us to treat the QCString like a QByteArray later on.
-        listCell = buffer.utf8();
-        int len = listCell.length();
-        char tmp = listCell[ len - 1 ];
-        listCell.resize( len );
-        *( listCell.data() + len - 1 ) = tmp;
-    }
+  // This is a terrible hack to store unicode
+  // data in a QCString in a way that
+  // QCString::length() == QCString().size().
+  // This allows us to treat the QCString like a QByteArray later on.
+  listCell = buffer.utf8();
+  int len = listCell.length();
+  char tmp = listCell[ len - 1 ];
+  listCell.resize( len );
+  *( listCell.data() + len - 1 ) = tmp;
 }
 
 void UndoCellPaste::undo()
 {
-    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
-    if ( !sheet )
-	return;
+  Sheet* sheet = doc()->map()->findSheet( m_sheetName );
+  if ( !sheet )
+      return;
 
-    createListCell( m_dataRedo, m_lstRedoColumn,m_lstRedoRow,sheet );
+  createListCell( m_dataRedo, m_lstRedoColumn, m_lstRedoRow, sheet );
 
-    doc()->undoLock();
-    doc()->emitBeginOperation();
+  doc()->undoLock();
+  doc()->emitBeginOperation();
 
-    if(nbCol!=0)
+  Region::ConstIterator endOfList = m_region.constEnd();
+  for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
+
+    if ((*it)->isColumn())
     {
-        if(!b_insert)
-                {
-                QRect rect;
-                rect.setCoords( xshift, 1, xshift+nbCol, KS_rowMax );
-                sheet->deleteCells( rect );
-                QPoint pastePoint(xshift, 1);
-                sheet->paste( m_data, QRect(pastePoint, pastePoint) );
-                QValueList<columnSize>::Iterator it2;
-                for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
-                        {
-                        ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
-                        cl->setDblWidth((*it2).columnWidth);
-                        }
-                }
-        else
-                {
-                sheet->removeColumn( xshift+1,nbCol-1,false);
-                }
-    }
-    else if(nbRow!=0)
-    {
-        if(!b_insert)
-                {
-                QRect rect;
-                rect.setCoords( 1, yshift, KS_colMax, yshift+nbRow );
-                sheet->deleteCells( rect );
-
-                QPoint pastePoint(1, yshift);
-                sheet->paste( m_data, QRect(pastePoint, pastePoint) );
-                QValueList<rowSize>::Iterator it2;
-                for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
-                        {
-                        RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
-                        rw->setDblHeight((*it2).rowHeight);
-                        }
-                }
-        else
-                {
-                sheet->removeRow(  yshift+1,nbRow-1);
-                }
-    }
-    else
-    {
-    if(!b_insert)
-        {
-        sheet->deleteCells( m_selection );
-        sheet->paste( m_data, m_selection );
-        }
-    else
-        {
-        if(m_iInsertTo==-1)
-                sheet->unshiftRow(m_selection);
-        else if(m_iInsertTo==1)
-                sheet->unshiftColumn(m_selection);
-        }
-    }
-
-    if(sheet->getAutoCalc())
-        sheet->recalc();
-    sheet->updateView();
-    doc()->undoUnlock();
-}
-
-void UndoCellPaste::redo()
-{
-    Sheet* sheet = doc()->map()->findSheet( m_sheetName );
-    if ( !sheet )
-	return;
-
-    doc()->undoLock();
-    doc()->emitBeginOperation();
-
-    if(nbCol!=0)
-    {
-        if( b_insert)
-                {
-                sheet->insertColumn(  xshift+1,nbCol-1,false);
-                }
-        QRect rect;
-        rect.setCoords( xshift, 1, xshift+nbCol, KS_rowMax );
-        sheet->deleteCells( rect );
-        QPoint pastePoint(xshift, 1);
-        sheet->paste( m_dataRedo, QRect(pastePoint, pastePoint) );
+      int nbCol = range.width();
+      if (!b_insert)
+      {
         QValueList<columnSize>::Iterator it2;
-         for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
-                {
-                ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
-                cl->setDblWidth((*it2).columnWidth);
-                }
-
+        for ( it2 = m_lstColumn.begin(); it2 != m_lstColumn.end(); ++it2 )
+        {
+          ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
+          cl->setDblWidth((*it2).columnWidth);
+        }
+      }
+      else
+      {
+        sheet->removeColumn( xshift+1,nbCol-1,false);
+      }
     }
-    else if(nbRow!=0)
+    else if ((*it)->isRow())
     {
-        if( b_insert)
-                {
-                sheet->insertRow(  yshift+1,nbRow-1);
-                }
-
-        QRect rect;
-        rect.setCoords( 1, yshift, KS_colMax, yshift+nbRow );
-        sheet->deleteCells( rect );
-
-        QPoint pastePoint(1, yshift);
-        sheet->paste( m_dataRedo, QRect(pastePoint, pastePoint) );
+      int nbRow = range.height();
+      if (!b_insert)
+      {
         QValueList<rowSize>::Iterator it2;
-        for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
-                {
-                RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
-                 rw->setDblHeight((*it2).rowHeight);
-                 }
+        for ( it2 = m_lstRow.begin(); it2 != m_lstRow.end(); ++it2 )
+        {
+          RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
+          rw->setDblHeight((*it2).rowHeight);
+        }
+      }
+      else
+      {
+        sheet->removeRow(yshift+1, nbRow-1);
+      }
     }
     else
     {
       if (b_insert)
       {
-        if (m_iInsertTo==-1)
-                sheet->shiftRow(m_selection);
-        else if(m_iInsertTo==1)
-                sheet->shiftColumn(m_selection);
-
+        if (m_iInsertTo == -1)
+        {
+          sheet->unshiftRow(range);
+        }
+        else if (m_iInsertTo == 1)
+        {
+          sheet->unshiftColumn(range);
+        }
       }
-      sheet->deleteCells( m_selection );
-      sheet->paste( m_dataRedo, m_selection );
     }
-    if (sheet->getAutoCalc())
-        sheet->recalc();
 
-    sheet->updateView();
+    if (!b_insert)
+    {
+      sheet->deleteCells(range);
+    }
+  } // for (Region::...
 
-    doc()->undoUnlock();
+  if (!b_insert)
+  {
+    sheet->paste(m_data, m_region.boundingRect());
+  }
+
+  if (sheet->getAutoCalc())
+  {
+      sheet->recalc();
+  }
+  sheet->updateView();
+  doc()->undoUnlock();
+}
+
+void UndoCellPaste::redo()
+{
+  Sheet* sheet = doc()->map()->findSheet( m_sheetName );
+  if ( !sheet )
+      return;
+
+  doc()->undoLock();
+  doc()->emitBeginOperation();
+
+  Region::ConstIterator endOfList = m_region.constEnd();
+  for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
+
+    if ((*it)->isColumn())
+    {
+      int nbCol = range.width();
+      if (b_insert)
+      {
+        sheet->insertColumn(  xshift+1,nbCol-1,false);
+      }
+      QValueList<columnSize>::Iterator it2;
+      for ( it2 = m_lstRedoColumn.begin(); it2 != m_lstRedoColumn.end(); ++it2 )
+      {
+        ColumnFormat *cl=sheet->nonDefaultColumnFormat((*it2).columnNumber);
+        cl->setDblWidth((*it2).columnWidth);
+      }
+    }
+    else if ((*it)->isRow())
+    {
+      int nbRow = range.height();
+      if (b_insert)
+      {
+        sheet->insertRow(  yshift+1,nbRow-1);
+      }
+      QValueList<rowSize>::Iterator it2;
+      for ( it2 = m_lstRedoRow.begin(); it2 != m_lstRedoRow.end(); ++it2 )
+      {
+        RowFormat *rw=sheet->nonDefaultRowFormat((*it2).rowNumber);
+        rw->setDblHeight((*it2).rowHeight);
+      }
+    }
+    else
+    {
+      if (b_insert)
+      {
+        if (m_iInsertTo == -1)
+        {
+          sheet->shiftRow(range);
+        }
+        else if (m_iInsertTo == 1)
+        {
+          sheet->shiftColumn(range);
+        }
+      }
+      sheet->deleteCells( range );
+    }
+  } // for (Region::...
+
+  sheet->paste( m_dataRedo, m_region.boundingRect() );
+
+  if (sheet->getAutoCalc())
+  {
+    sheet->recalc();
+  }
+
+  sheet->updateView();
+  doc()->undoUnlock();
 }
 
 

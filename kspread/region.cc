@@ -571,6 +571,36 @@ void Region::clear()
   }
 }
 
+QRect Region::boundingRect() const
+{
+  int left   = KS_colMax;
+  int right  = 1;
+  int top    = KS_rowMax;
+  int bottom = 1;
+  Region::ConstIterator endOfList = cells().constEnd();
+  for (Region::ConstIterator it = cells().constBegin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
+    if (range.left() < left)
+    {
+      left = range.left();
+    }
+    if (range.right() > right)
+    {
+      right = range.right();
+    }
+    if (range.top() < top)
+    {
+      top = range.top();
+    }
+    if (range.bottom() > bottom)
+    {
+      bottom = range.bottom();
+    }
+  }
+  return QRect(left, top, right-left+1, bottom-top+1);
+}
+
 Region::ConstIterator Region::constBegin() const
 {
   return d->cells.constBegin();

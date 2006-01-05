@@ -929,7 +929,7 @@ public:
      * @param era set this to true if you want to encode relative references absolutely (they will
      *            be switched back to relative references during decoding) - used for cut to clipboard
      */
-    QDomDocument saveCellRect( const QRect &, bool copy = false, bool era = false );
+    QDomDocument saveCellRegion(const Region&, bool copy = false, bool era = false);
 
     /**
     * insertTo defined if you insert to the bottom or right
@@ -1089,7 +1089,7 @@ public:
     /**
      * used to refresh cells when you make redodelete
      */
-    void refreshView(const QRect& rect);
+    void refreshView(const Region& region);
 
     void emit_updateRow( RowFormat *_format, int _row, bool repaint = true );
     void emit_updateColumn( ColumnFormat *_format, int _column );

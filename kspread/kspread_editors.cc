@@ -174,7 +174,7 @@ Cell* TextEditorHighlighter::cellRefAt(int position, QColor& outCellColor)
   return 0;
 }*/
 
-void FormulaEditorHighlighter::getReferences(std::vector< KSharedPtr<HighlightRange> >* cellRefs)
+void FormulaEditorHighlighter::getReferences(std::vector< KSharedPtr<HighlightRange> >* /*cellRefs*/)
 {
 /*  if (!cellRefs)
     return;

@@ -1460,8 +1460,7 @@ void Canvas::startTheDrag()
   TextDrag * d = new TextDrag( this );
   setCursor( KCursor::handCursor() );
 
-  QRect rct( selectionInfo()->lastRange() );
-  QDomDocument doc = sheet->saveCellRect( rct );
+  QDomDocument doc = sheet->saveCellRegion(*selectionInfo());
 
   // Save to buffer
   QBuffer buffer;

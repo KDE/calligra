@@ -393,7 +393,7 @@ protected:
 class UndoDelete : public UndoAction
 {
 public:
-    UndoDelete( Doc *_doc, Sheet *_sheet, const QRect &_rect );
+    UndoDelete(Doc *_doc, Sheet *_sheet, const Region& region);
     virtual ~UndoDelete();
 
     virtual void undo();
@@ -402,7 +402,7 @@ public:
 protected:
     void createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, Sheet* sheet );
 
-    QRect m_selection;
+    Region m_region;
     QCString m_data;
     QCString m_dataRedo;
     QValueList<columnSize> m_lstColumn;
@@ -609,7 +609,9 @@ protected:
 class UndoCellPaste : public UndoAction
 {
 public:
-    UndoCellPaste( Doc *_doc, Sheet *_sheet,int _nbCol,int _nbRow, int _xshift,int _yshift, QRect &_selection,bool insert,int insertTo=0 );
+    UndoCellPaste(Doc *_doc, Sheet *_sheet,
+                  int _xshift, int _yshift,
+                  const Region& _selection, bool insert, int insertTo = 0);
     virtual ~UndoCellPaste();
 
     virtual void undo();
@@ -618,15 +620,13 @@ public:
 protected:
     void createListCell( QCString &listCell,QValueList<columnSize> &listCol,QValueList<rowSize> &listRow, Sheet* sheet );
 
-    QRect m_selection;
+    Region m_region;
     QCString m_data;
     QCString m_dataRedo;
     QValueList<columnSize> m_lstColumn;
     QValueList<columnSize> m_lstRedoColumn;
     QValueList<rowSize> m_lstRow;
     QValueList<rowSize> m_lstRedoRow;
-    int nbCol;
-    int nbRow;
     int xshift;
     int yshift;
     bool  b_insert;

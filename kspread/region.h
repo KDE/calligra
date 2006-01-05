@@ -230,6 +230,10 @@ public:
 
 
 
+  QRect boundingRect() const;
+
+
+
   /**
    * @param region the region to compare
    * @return @c true, if this region equals region @p region
