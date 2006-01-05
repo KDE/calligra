@@ -57,7 +57,7 @@ class KexiScriptEditor : public KexiEditor
          */
         void initialize(Kross::Api::ScriptAction* scriptaction);
 
-    private slots:
+    public slots:
         void slotTextChanged();
         void setLineNo(long);
 

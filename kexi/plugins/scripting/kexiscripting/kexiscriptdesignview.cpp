@@ -29,8 +29,12 @@
 #include <kross/api/interpreter.h>
 
 #include <qlayout.h>
+#include <qsplitter.h>
 #include <qtimer.h>
+#include <qdatetime.h>
 #include <qdom.h>
+#include <qstylesheet.h>
+#include <ktextbrowser.h>
 #include <kdebug.h>
 
 #include <kexidialogbase.h>
@@ -52,6 +56,9 @@ class KexiScriptDesignViewPrivate
 
         /// The \a KoProperty::Set used in the propertyeditor.
         KoProperty::Set* properties;
+
+        /// Used to display statusmessages.
+        KTextBrowser* statusbrowser;
 };
 
 KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *parent, Kross::Api::ScriptAction* scriptaction)
@@ -60,15 +67,24 @@ KexiScriptDesignView::KexiScriptDesignView(KexiMainWindow *mainWin, QWidget *par
 {
     d->scriptaction = scriptaction;
 
-    //d->scriptcontainer = scriptmanager->getScriptContainer( parentDialog()->partItem()->name() );
-    plugSharedAction( "script_execute", d->scriptaction, SLOT(activate()) );
+    QSplitter* splitter = new QSplitter(this);
+    splitter->setOrientation(Vertical);
+    QHBoxLayout* layout = new QHBoxLayout(this);
+    layout->addWidget(splitter);
 
-    QBoxLayout* layout = new QVBoxLayout(this);
-    d->editor = new KexiScriptEditor(mainWin, this, "ScriptEditor");
-    addChildView((KexiViewBase*)d->editor);
-    setViewWidget((KexiViewBase*)d->editor);
-    layout->addWidget((KexiViewBase*)d->editor);
+    d->editor = new KexiScriptEditor(mainWin, splitter, "ScriptEditor");
+    splitter->setFocusProxy(d->editor);
+    addChildView(d->editor);
+    setViewWidget(d->editor);
 
+    d->statusbrowser = new KTextBrowser(splitter, "ScriptStatusBrowser");
+    d->statusbrowser->setReadOnly(true);
+    d->statusbrowser->setTextFormat(QTextBrowser::RichText);
+    //d->browser->setWordWrap(QTextEdit::WidgetWidth);
+    d->statusbrowser->installEventFilter(this);
+    splitter->setResizeMode(d->statusbrowser, QSplitter::KeepSize);
+
+    plugSharedAction( "script_execute", this, SLOT(execute()) );
     if(KexiEditor::isAdvancedEditor()) // the configeditor is only in advanced mode avaiable.
         plugSharedAction( "script_config_editor", d->editor, SLOT(slotConfigureEditor()) );
 
@@ -169,7 +185,9 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoPrope
         // names for the support languages...
         d->editor->setHighlightMode( language );
 
-        QTimer::singleShot(150, this, SLOT( updateProperties() )); // update the properties
+        // Update the properties. We need to call it delayed cause
+        // else we may crash whyever...
+        QTimer::singleShot(150, this, SLOT( updateProperties() ));
     }
     else {
         bool ok = d->scriptaction->setOption( property.name(), property.value() );
@@ -180,6 +198,29 @@ void KexiScriptDesignView::slotPropertyChanged(KoProperty::Set& /*set*/, KoPrope
     }
 
     setDirty(true);
+}
+
+void KexiScriptDesignView::execute()
+{
+    d->statusbrowser->clear();
+    QTime time;
+    time.start();
+    d->statusbrowser->append( i18n("Execution of the script \"%1\" started.").arg(d->scriptaction->name()) );
+
+    d->scriptaction->activate();
+    if( d->scriptaction->hadException() ) {
+        QString errormessage = d->scriptaction->getException()->getError();
+        d->statusbrowser->append(QString("<b>%2</b><br>").arg(QStyleSheet::escape(errormessage)) );
+
+        QString tracedetails = d->scriptaction->getException()->getTrace();
+        d->statusbrowser->append( QStyleSheet::escape(tracedetails) );
+
+        long lineno = d->scriptaction->getException()->getLineNo();
+        d->editor->setLineNo(lineno);
+    }
+    else {
+        d->statusbrowser->append( i18n("Successfully executed. Time elapsed: %1ms").arg(time.elapsed()) );
+    }
 }
 
 bool KexiScriptDesignView::loadData()
@@ -253,7 +294,7 @@ KexiDB::SchemaData* KexiScriptDesignView::storeNewData(const KexiDB::SchemaData&
     return s;
 }
 
-tristate KexiScriptDesignView::storeData(bool dontAsk)
+tristate KexiScriptDesignView::storeData(bool /*dontAsk*/)
 {
     kexipluginsdbg << "KexiScriptDesignView::storeData(): " << parentDialog()->partItem()->name() << " [" << parentDialog()->id() << "]" << endl;
 

@@ -3,7 +3,7 @@ include $(top_srcdir)/kexi/Makefile.global
 kde_module_LTLIBRARIES = kexihandler_script.la
 
 kexihandler_script_la_SOURCES = \
-    kexiscriptpart.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp kexiscripttextview.cpp
+    kexiscriptpart.cpp kexiscripteditor.cpp kexiscriptdesignview.cpp
 
 kexihandler_script_la_LDFLAGS = \
     $(KDE_PLUGIN) -module -no-undefined -Wnounresolved $(all_libraries) $(VER_INFO)
@@ -31,4 +31,4 @@ scriptingconfig_DATA = kexiscripting.rc
 
 include ../../Makefile.common
 
-noinst_HEADERS = kexiscriptpart.h kexiscripteditor.h kexiscriptdesignview.h kexiscripttextview.h
+noinst_HEADERS = kexiscriptpart.h kexiscripteditor.h kexiscriptdesignview.h

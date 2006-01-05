@@ -21,7 +21,6 @@
 
 #include "kexiscriptpart.h"
 #include "kexiscriptdesignview.h"
-#include "kexiscripttextview.h"
 
 #include "kexiviewbase.h"
 #include "keximainwindow.h"
@@ -61,7 +60,7 @@ KexiScriptPart::KexiScriptPart(QObject *parent, const char *name, const QStringL
 		"If you cannot use latin characters in your language, use english word.", 
 		"script");
 	m_names["instanceCaption"] = i18n("Script");
-	m_supportedViewModes = Kexi::DesignViewMode | Kexi::TextViewMode;
+	m_supportedViewModes = Kexi::DesignViewMode;
 }
 
 KexiScriptPart::~KexiScriptPart()
@@ -218,9 +217,6 @@ KexiViewBase* KexiScriptPart::createView(QWidget *parent, KexiDialogBase* dialog
 
 		if(viewMode == Kexi::DesignViewMode) {
 			return new KexiScriptDesignView(win, parent, scriptaction);
-		}
-		if(viewMode == Kexi::TextViewMode) {
-			return new KexiScriptTextView(win, parent, scriptaction);
 		}
 	}
 	return 0;

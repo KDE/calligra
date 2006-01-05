@@ -101,6 +101,11 @@ class KexiScriptDesignView : public KexiViewBase
          */
         void updateProperties();
 
+        /**
+         * Execute the scripting code.
+         */
+        void execute();
+
     private:
         KexiScriptDesignViewPrivate* d;
 
