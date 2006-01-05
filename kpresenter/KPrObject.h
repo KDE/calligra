@@ -400,8 +400,8 @@ private:
 
 /**
  * Base class for objects with a pen and a brush,
- * and which takes care of painting the shadow in @ref draw
- * (by calling paint twice)
+ * and which takes care of painting the shadow in draw()
+ * (by calling paint() twice)
  */
 class KPrShadowObject : public KPrObject
 {
