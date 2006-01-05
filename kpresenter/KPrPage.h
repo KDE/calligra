@@ -528,7 +528,6 @@ public:
     QString saveOasisPageStyle( KoStore *store, KoGenStyles& mainStyles ) const;
     QString saveOasisPageEffect() const;
     bool saveOasisNote( KoXmlWriter &xmlWriter ) const;
-    bool saveOasisStickyPage( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj, KoXmlWriter* manifestWriter ) const;
 
     bool hasHeader() const { return m_bHasHeader; }
     bool hasFooter() const { return m_bHasFooter; }
@@ -547,7 +546,7 @@ private:
     void makeUsedPixmapListForGroupObject( KPrObject *_obj );
     void completeLoadingForGroupObject( KPrObject *_obj );
     bool objectNameExists( KPrObject *object, QPtrList<KPrObject> &list );
-    void saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter, bool stickyObj=false ) const;
+    void saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter ) const;
 
 
     // list of objects

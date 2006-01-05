@@ -235,12 +235,12 @@ void KPrBackGround::saveOasisBackgroundPageStyle( KoGenStyle& stylepageauto, KoG
 
 QString KPrBackGround::saveOasisPictureStyle( KoGenStyles& mainStyles )
 {
-    //<draw:fill-image draw:name="Pattern" xlink:href="#Pictures/100000000000005E0000005E43C87AF2.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
+    //<draw:fill-image draw:name="Pattern" xlink:href="Pictures/100000000000005E0000005E43C87AF2.png" xlink:type="simple" xlink:show="embed" xlink:actuate="onLoad"/>
     KoGenStyle pictureStyle( KPrDocument::STYLE_PICTURE /*no family name*/ );
     pictureStyle.addAttribute( "xlink:show", "embed" );
     pictureStyle.addAttribute( "xlink:actuate", "onLoad" );
     pictureStyle.addAttribute( "xlink:type", "simple" );
-    pictureStyle.addAttribute( "xlink:href","#"+ pictureCollection()->getOasisFileName(backPicture ) );
+    pictureStyle.addAttribute( "xlink:href", pictureCollection()->getOasisFileName(backPicture ) );
     return mainStyles.lookup( pictureStyle, "picture" );
 }
 
@@ -281,7 +281,7 @@ void KPrBackGround::loadOasis(KoOasisContext & context )
 
             const QString href( draw->attributeNS( KoXmlNS::xlink, "href", QString::null) );
             kdDebug()<<" href: "<<href<<endl;
-            if ( !href.isEmpty() && href[0] == '#' )
+            if ( !href.isEmpty() )
             {
                 QString strExtension;
                 const int result=href.findRev(".");
@@ -289,7 +289,7 @@ void KPrBackGround::loadOasis(KoOasisContext & context )
                 {
                     strExtension=href.mid(result+1); // As we are using KoPicture, the extension should be without the dot.
                 }
-                QString filename(href.mid(1));
+                QString filename(href);
                 const KoPictureKey key(filename, QDateTime::currentDateTime(Qt::UTC));
                 backPicture.setKey(key);
 

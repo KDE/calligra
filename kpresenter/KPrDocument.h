@@ -139,7 +139,7 @@ class KPrDocument : public KoDocument
     virtual bool completeSaving( KoStore* _store );
     virtual bool saveOasis( KoStore* store, KoXmlWriter* manifestWriter );
 
-    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* tmpStyckyFile, const QString &_styleMasterPageName ) const;
+    void saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles ) const;
     enum { STYLE_BACKGROUNDPAGE = 20, STYLE_BACKGROUNDPAGEAUTO, STYLE_GRADIENT,STYLE_OBJECTANIMATION, STYLE_STROKE, STYLE_MARKER, STYLE_PICTURE, STYLE_PRESENTATIONSTICKYOBJECT };
 
     // load
@@ -589,7 +589,6 @@ protected:
     void saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpWriter );
     void loadOasisPresentationCustomSlideShow( QDomNode &settingsDoc );
 
-    void saveOasisHeaderFooter( KoXmlWriter &stickyTmpWriter , KoSavingContext& context );
     void loadOasisHeaderFooter( QDomNode & drawPage, KoOasisContext & context);
 
     void saveOasisSettings( KoXmlWriter &contentTmpWriter );

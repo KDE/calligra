@@ -1015,8 +1015,8 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     //For sticky objects
     KTempFile stickyTmpFile;
     stickyTmpFile.setAutoDelete( true );
-    QFile* tmpStickyFile = stickyTmpFile.file();
-    KoXmlWriter stickyTmpWriter( tmpStickyFile, 1 );
+    QFile* masterStyles = stickyTmpFile.file();
+    KoXmlWriter stickyTmpWriter( masterStyles, 1 );
 
 
     contentTmpWriter.startElement( "office:body" );
@@ -1039,16 +1039,12 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
             m_pageList.at( i )->saveOasisPage( store, contentTmpWriter, ( i+1 ), savingContext, indexObj, partIndexObj , manifestWriter);
         }
     }
-    QString styleMasterNamePage;
     if ( !_duplicatePage )
     {
-        m_masterPage->saveOasisStickyPage( store, stickyTmpWriter , savingContext, indexObj,partIndexObj, manifestWriter );
-        styleMasterNamePage = m_masterPage->saveOasisPageStyle( store, savingContext.mainStyles() );
-
+        m_masterPage->saveOasisPage( store, stickyTmpWriter, 0, savingContext, indexObj, partIndexObj, manifestWriter );
     }
     if ( saveOnlyPage == -1 ) //don't save setting when we save on page
     {
-        saveOasisHeaderFooter( stickyTmpWriter , savingContext );
         saveOasisPresentationSettings( contentTmpWriter );
     }
 
@@ -1069,12 +1065,6 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     if ( !store->close() ) // done with content.xml
         return false;
 
-
-    KoGenStyle pageLayout = m_pageLayout.saveOasis();
-    pageLayout.addAttribute( "style:page-usage", "all" ); // needed?
-    mainStyles.lookup( pageLayout, "pm" );
-
-
     //add manifest line for content.xml
     manifestWriter->addManifestEntry( "content.xml", "text/xml" );
 
@@ -1084,8 +1074,8 @@ bool KPrDocument::saveOasis( KoStore* store, KoXmlWriter* manifestWriter )
     manifestWriter->addManifestEntry( "styles.xml", "text/xml" );
 
     //todo fixme????
-    tmpStickyFile->close();
-    saveOasisDocumentStyles( store, mainStyles, tmpStickyFile, styleMasterNamePage);
+    masterStyles->close();
+    saveOasisDocumentStyles( store, mainStyles, masterStyles );
     stickyTmpFile.close();
 
     if ( !store->close() ) // done with styles.xml
@@ -1219,17 +1209,6 @@ void KPrDocument::writeAutomaticStyles( KoXmlWriter& contentWriter, KoGenStyles&
     }
 
     contentWriter.endElement(); // office:automatic-styles
-}
-
-void KPrDocument::saveOasisHeaderFooter( KoXmlWriter & stickyTmpWriter , KoSavingContext& context )
-{
-    stickyTmpWriter.startElement( "style:header" );
-    header()->textObject()->saveOasisContent( stickyTmpWriter, context );
-    stickyTmpWriter.endElement();
-
-    stickyTmpWriter.startElement( "style:footer" );
-    footer()->textObject()->saveOasisContent( stickyTmpWriter, context );
-    stickyTmpWriter.endElement();
 }
 
 void KPrDocument::loadOasisHeaderFooter(QDomNode & drawPage, KoOasisContext & context)
@@ -1431,9 +1410,8 @@ void KPrDocument::saveOasisPresentationCustomSlideShow( KoXmlWriter &contentTmpW
     //<presentation:show presentation:name="New Custom Slide Show" presentation:pages="page1,page1,page1,page1,page1"/>
 }
 
-void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* tmpStyckyFile, const QString &_styleMasterPageName ) const
+void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyles, QFile* masterStyles ) const
 {
-    QString pageLayoutName;
     KoStoreDevice stylesDev( store );
     KoXmlWriter* stylesWriter = createOasisXmlWriter( &stylesDev, "office:document-styles" );
 
@@ -1485,14 +1463,13 @@ void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyl
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:style", (*it).name , "style:drawing-page-properties"  );
     }
 
+    // if there's more than one pagemaster we need to rethink all this
     styles = mainStyles.styles( KoGenStyle::STYLE_PAGELAYOUT );
     Q_ASSERT( styles.count() == 1 );
     it = styles.begin();
     for ( ; it != styles.end() ; ++it ) {
         (*it).style->writeStyle( stylesWriter, mainStyles, "style:page-layout", (*it).name, "style:page-layout-properties", false /*don't close*/ );
         stylesWriter->endElement();
-        Q_ASSERT( pageLayoutName.isEmpty() ); // if there's more than one pagemaster we need to rethink all this
-        pageLayoutName = (*it).name;
     }
 
     styles = mainStyles.styles( STYLE_PRESENTATIONSTICKYOBJECT );
@@ -1504,21 +1481,9 @@ void KPrDocument::saveOasisDocumentStyles( KoStore* store, KoGenStyles& mainStyl
 
     stylesWriter->endElement(); // office:automatic-styles
 
-    //code from kword
     stylesWriter->startElement( "office:master-styles" );
-    stylesWriter->startElement( "style:master-page" );
-    stylesWriter->addAttribute( "style:name", "Standard" );
-    stylesWriter->addAttribute( "style:page-layout-name", pageLayoutName );
-    kdDebug()<<" styleMasterNamePage :"<<_styleMasterPageName<<endl;
-    if ( !_styleMasterPageName.isEmpty() )
-        stylesWriter->addAttribute( "draw:style-name", _styleMasterPageName );
-
-
-    //save sticky object
-    stylesWriter->addCompleteElement( tmpStyckyFile );
-    stylesWriter->endElement();
-    stylesWriter->endElement(); // office:master-style
-
+    stylesWriter->addCompleteElement( masterStyles );
+    stylesWriter->endElement(); 
 
     stylesWriter->endElement(); // root element (office:document-styles)
     stylesWriter->endDocument();
@@ -1602,8 +1567,8 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
     QString masterPageName = drawPage.toElement().attributeNS( KoXmlNS::draw, "master-page-name", QString::null );
     QDomElement *master = oasisStyles.masterPages()[ masterPageName];
 
-    //kdDebug()<<" master :"<<master<<endl;
-    //kdDebug()<<" masterPageName:"<<masterPageName<<endl;
+    kdDebug()<<" master :"<<master<<endl;
+    kdDebug()<<" masterPageName:"<<masterPageName<<endl;
     if ( ! master )
     {
         masterPageName = "Standard"; // use default layout as fallback (default in kpresenter)
@@ -1618,15 +1583,17 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
         return false;
     }
 
-    kdDebug()<<" load sticky oasis object \n";
-    if ( master )
-        kdDebug()<<" master.isNull() :"<<master->isNull()<<endl;
+    kdDebug()<<" load oasis master styles\n";
     QDomNode node = *master;
+    QDomElement masterElement = node.toElement();
     kdDebug()<<" node.isNull() :"<<node.isNull()<<endl;
+    // add the correct styles
+    context.addStyles( context.oasisStyles().stylesAutoStyles()[masterElement.attributeNS( KoXmlNS::draw, "style-name", QString::null )] );
+    m_masterPage->loadOasis( context );
     loadOasisObject( m_masterPage, node , context);
     loadOasisHeaderFooter( node,context );
 
-    kdDebug()<<" end load sticky oasis object \n";
+    kdDebug()<<" end load oasis master style \n";
 
     Q_ASSERT( master );
     QDomElement *style =master ? oasisStyles.styles()[master->attributeNS( KoXmlNS::style, "page-layout-name", QString::null )] : 0;
@@ -1685,20 +1652,8 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
             if ( str != QString( "page%1" ).arg( idPage ) )
                 newpage->insertManualTitle(str);
             context.styleStack().setTypeProperties( "drawing-page" );
-            if ( context.styleStack().hasAttributeNS( KoXmlNS::draw, "fill" )
-                 || context.styleStack().hasAttributeNS( KoXmlNS::presentation, "transition-style" ) )
-            {
-                kdDebug()<<" fill or presentation-style found \n";
-                newpage->loadOasis( context );
-            }
-            else if ( !context.styleStack().hasAttributeNS( KoXmlNS::draw, "fill" ) && backgroundStyle)
-            {
-                context.styleStack().save();
-                context.addStyles( backgroundStyle );
-                newpage->loadOasis(context);
-                context.styleStack().restore();
-                kdDebug()<<" load standard background \n";
-            }
+
+            newpage->loadOasis( context );
 
             //All animation object for current page is store into this element
             createPresentationAnimation(KoDom::namedItemNS( drawPage, KoXmlNS::presentation, "animations"));
@@ -2044,12 +1999,12 @@ void KPrDocument::fillStyleStack( const QDomElement& object, KoOasisContext & co
     // find all styles associated with an object and push them on the stack
     if ( object.hasAttributeNS( KoXmlNS::presentation, "style-name" ))
     {
-        //kdDebug(33001) << "presentation:style-name :" << object.attributeNS( KoXmlNS::presentation, "style-name", QString::null ) << endl;
+        kdDebug(33001) << "presentation:style-name :" << object.attributeNS( KoXmlNS::presentation, "style-name", QString::null ) << endl;
         context.addStyles( context.oasisStyles().stylesAutoStyles()[object.attributeNS( KoXmlNS::presentation, "style-name", QString::null )] );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "style-name" ) )
     {
-        kdDebug()<<"draw:style-name :"<<object.attributeNS( KoXmlNS::draw, "style-name", QString::null )<<endl;
+        kdDebug(33001)<<"draw:style-name :"<<object.attributeNS( KoXmlNS::draw, "style-name", QString::null )<<endl;
         context.addStyles( context.oasisStyles().styles()[object.attributeNS( KoXmlNS::draw, "style-name", QString::null )] );
     }
     if ( object.hasAttributeNS( KoXmlNS::draw, "text-style-name" ) )
