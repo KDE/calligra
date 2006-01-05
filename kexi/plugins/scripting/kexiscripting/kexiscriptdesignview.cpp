@@ -216,7 +216,8 @@ void KexiScriptDesignView::execute()
         d->statusbrowser->append( QStyleSheet::escape(tracedetails) );
 
         long lineno = d->scriptaction->getException()->getLineNo();
-        d->editor->setLineNo(lineno);
+        if(lineno >= 0)
+            d->editor->setLineNo(lineno);
     }
     else {
         d->statusbrowser->append( i18n("Successfully executed. Time elapsed: %1ms").arg(time.elapsed()) );
