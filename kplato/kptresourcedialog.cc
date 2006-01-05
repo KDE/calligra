@@ -106,6 +106,8 @@ ResourceDialog::ResourceDialog(Project &project, Resource &resource, QWidget *pa
     dia->emailEdit->setText(resource.email());
     dia->type->setCurrentItem((int)resource.type()); // NOTE: must match enum
     dia->units->setValue(resource.units());
+    dia->availableFrom->setDateTime(resource.availableFrom());
+    dia->availableUntil->setDateTime(resource.availableUntil());
     dia->rateEdit->setText(KGlobal::locale()->formatMoney(resource.normalRate()));
     dia->overtimeEdit->setText(KGlobal::locale()->formatMoney(resource.overtimeRate()));
 

@@ -988,6 +988,40 @@ void ModifyResourceTypeCmd::unexecute() {
     setCommandType(0); //FIXME
 }
 
+ModifyResourceAvailableFromCmd::ModifyResourceAvailableFromCmd(Part *part, Resource *resource, DateTime value, QString name)
+    : NamedCommand(part, name),
+      m_resource(resource),
+      m_newvalue(value) {
+    m_oldvalue = resource->availableFrom();
+}
+void ModifyResourceAvailableFromCmd::execute() {
+    m_resource->setAvailableFrom(m_newvalue);
+    
+    setCommandType(1); //FIXME
+}
+void ModifyResourceAvailableFromCmd::unexecute() {
+    m_resource->setAvailableFrom(m_oldvalue);
+    
+    setCommandType(1); //FIXME
+}
+
+ModifyResourceAvailableUntilCmd::ModifyResourceAvailableUntilCmd(Part *part, Resource *resource, DateTime value, QString name)
+    : NamedCommand(part, name),
+      m_resource(resource),
+      m_newvalue(value) {
+    m_oldvalue = resource->availableUntil();
+}
+void ModifyResourceAvailableUntilCmd::execute() {
+    m_resource->setAvailableUntil(m_newvalue);
+    
+    setCommandType(1); //FIXME
+}
+void ModifyResourceAvailableUntilCmd::unexecute() {
+    m_resource->setAvailableUntil(m_oldvalue);
+    
+    setCommandType(1); //FIXME
+}
+
 ModifyResourceNormalRateCmd::ModifyResourceNormalRateCmd(Part *part, Resource *resource, double value, QString name)
     : NamedCommand(part, name),
       m_resource(resource),

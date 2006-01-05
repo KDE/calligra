@@ -199,6 +199,9 @@ Resource::Resource(Project *project) : m_project(project), m_schedules(), m_work
     m_type = Type_Work;
     m_units = 100; // %
 
+    m_availableFrom = DateTime(QDate::currentDate());
+    m_availableUntil = m_availableFrom.addYears(2);
+
     cost.normalRate = 100;
     cost.overtimeRate = 200;
     cost.fixed = 0;
@@ -318,16 +321,16 @@ Calendar *Resource::calendar(bool local) const {
     return m_calendar;
 }
 
-DateTime *Resource::getFirstAvailableTime(DateTime /*after*/) {
-    return 0L;
+DateTime Resource::getFirstAvailableTime(DateTime /*after*/) {
+    return DateTime();
 }
 
-DateTime *Resource::getBestAvailableTime(Duration /*duration*/) {
-    return 0L;
+DateTime Resource::getBestAvailableTime(Duration /*duration*/) {
+    return DateTime();
 }
 
-DateTime *Resource::getBestAvailableTime(const DateTime after, const Duration duration) {
-    return 0L;
+DateTime Resource::getBestAvailableTime(const DateTime after, const Duration duration) {
+    return DateTime();
 }
 
 bool Resource::load(QDomElement &element) {
@@ -466,34 +469,46 @@ Duration Resource::effort(const DateTime &start, const Duration &duration, bool 
     //kdDebug()<<k_funcinfo<<m_name<<": "<<start.date().toString()<<" for duration "<<duration.toString(Duration::Format_Day)<<endl;
     bool sts=false;
     Duration e;
-    if ((!m_availableFrom.isValid() || start+duration >= m_availableFrom) && 
-        (!m_availableUntil.isValid() || start < m_availableUntil)) 
-    {
+    if (availableAfter(start).isValid()) {
         Calendar *cal = calendar();
         if (cal && cal->hasIntervalAfter(start)) {
             sts = true;
             e = (cal->effort(start, duration) * m_units)/100;
         }
     }
-    //kdDebug()<<k_funcinfo<<"e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")"<<endl;
+    kdDebug()<<k_funcinfo<<start.toString()<<" e="<<e.toString(Duration::Format_Day)<<" ("<<m_units<<")"<<endl;
     if (ok) *ok = sts;
     return e;
 }
 
-DateTime Resource::availableAfter(const DateTime &time) {
+DateTime Resource::availableAfter(const DateTime &time, bool checkAppointments) const {
     DateTime t;
+    if (time >= m_availableUntil)
+        return t;
     Calendar *cal = calendar();
-    if (cal)
-        t = cal->availableAfter(time);
+    if (cal == 0) {
+        return t;
+    }
+    t = cal->availableAfter(time);
+    if (checkAppointments) {
+        //TODO
+    }
     //kdDebug()<<k_funcinfo<<time.toString()<<"="<<t.toString()<<" "<<m_name<<endl;
     return t;
 }
 
-DateTime Resource::availableBefore(const DateTime &time) {
+DateTime Resource::availableBefore(const DateTime &time, bool checkAppointments) const {
     DateTime t;
+    if (time <= m_availableFrom)
+        return t;
     Calendar *cal = calendar();
-    if (cal)
-        t = cal->availableBefore(time);
+    if (cal == 0) {
+        return t;
+    }
+    t = cal->availableBefore(time);
+    if (checkAppointments) {
+        //TODO
+    }
     return t;
 }
 
@@ -713,7 +728,26 @@ Duration ResourceGroupRequest::effort(const DateTime &time, const Duration &dura
     return e;
 }
 
-// FIXME: Handle 'any' duration, atm stops at 2 years.
+int ResourceGroupRequest::numDays(const DateTime &time, bool backward) const {
+    DateTime t1, t2 = time;
+    if (backward) {
+        QPtrListIterator<ResourceRequest> it = m_resourceRequests;
+        for (; it.current(); ++it) {
+            t1 = it.current()->resource()->availableFrom();
+            if (!t2.isValid() || t2 > t1)
+                t2 = t1;
+        }
+        return t2.daysTo(time);
+    }
+    QPtrListIterator<ResourceRequest> it = m_resourceRequests;
+    for (; it.current(); ++it) {
+        t1 = it.current()->resource()->availableUntil();
+        if (!t2.isValid() || t2 < t1)
+            t2 = t1;
+    }
+    return time.daysTo(t2);
+}
+
 Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_effort, bool backward) {
     //kdDebug()<<k_funcinfo<<"--->"<<(backward?"(B) ":"(F) ")<<m_group->name()<<" "<<time.toString()<<": effort: "<<_effort.toString(Duration::Format_Day)<<" ("<<_effort.milliseconds()<<")"<<endl;
     Duration e;
@@ -726,7 +760,8 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
     int inc = backward ? -1 : 1;
     DateTime end = start;
     Duration e1;
-    for (int i=0; !match && i < 730 && sts; ++i) {
+    int nDays = numDays(time, backward) + 1;
+    for (int i=0; !match && i <= nDays && sts; ++i) {
         // days
         end = end.addDays(inc);
         e1 = backward ? effort(end, start - end, &sts) 
@@ -745,7 +780,7 @@ Duration ResourceGroupRequest::duration(const DateTime &time, const Duration &_e
         }
         //kdDebug()<<"duration(d)["<<i<<"] "<<(backward?"backward":"forward:")<<"  date="<<start.date().toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")"<<endl;
     }
-    //kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" - "<<end.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
+    kdDebug()<<"duration "<<(backward?"backward ":"forward: ")<<start.toString()<<" - "<<end.toString()<<" e="<<e.toString()<<" ("<<e.milliseconds()<<")  match="<<match<<" sts="<<sts<<endl;
     for (int i=0; !match && i < 24 && sts; ++i) {
         // hours
         end = end.addSecs(inc*60*60);

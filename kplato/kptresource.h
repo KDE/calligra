@@ -221,9 +221,9 @@ public:
     void addWorkingHour(QTime from, QTime until);
     QPtrList<QTime> workingHours() { return m_workingHours; }
 
-    DateTime *getFirstAvailableTime(DateTime after = DateTime());
-    DateTime *getBestAvailableTime(Duration duration);
-    DateTime *getBestAvailableTime(const DateTime after, const Duration duration);
+    DateTime getFirstAvailableTime(DateTime after = DateTime());
+    DateTime getBestAvailableTime(Duration duration);
+    DateTime getBestAvailableTime(const DateTime after, const Duration duration);
 
     bool load(QDomElement &element);
     void save(QDomElement &element) const;
@@ -285,8 +285,16 @@ public:
         
     Duration effort(const DateTime &start, const Duration &duration, bool *ok=0) const;
 
-    DateTime availableAfter(const DateTime &time);
-    DateTime availableBefore(const DateTime &time);
+    /**
+     * Find the first available time after time.
+     * Returns invalid DateTime if not available.
+     */
+    DateTime availableAfter(const DateTime &time, bool checkAppointments=false) const;
+    /**
+     * Find the first available time before time.
+     * Returns invalid DateTime if not available.
+     */
+    DateTime availableBefore(const DateTime &time, bool checkAppointments=false) const;
 
     Resource *findId() const { return findId(m_id); }
     Resource *findId(const QString &id) const;
@@ -448,9 +456,11 @@ class ResourceGroupRequest {
     
         Duration effort(const DateTime &time, const Duration &duration, bool *ok=0) const;
         
+        int numDays(const DateTime &time, bool backward) const;
+        
         /**
-         * Returns the duration needed to do the effort @param effort
-         * starting at @param start.
+         * Returns the duration needed to do the effort  effort
+         * starting at start.
          */
         Duration duration(const DateTime &start, const Duration &effort, bool backward=false);
         

@@ -109,6 +109,12 @@ KCommand *ResourcesPanelResourceItem::saveResource(Part *part, ResourceGroup *gr
         if (m_resource->type() != m_originalResource->type()) {
             m->addCommand(new ModifyResourceTypeCmd(part, m_originalResource, m_resource->type()));
         }
+        if (m_resource->availableFrom() != m_originalResource->availableFrom()) {
+            m->addCommand(new ModifyResourceAvailableFromCmd(part, m_originalResource, m_resource->availableFrom()));
+        }
+        if (m_resource->availableUntil() != m_originalResource->availableUntil()) {
+            m->addCommand(new ModifyResourceAvailableUntilCmd(part, m_originalResource, m_resource->availableUntil()));
+        }
         if (m_resource->normalRate() != m_originalResource->normalRate()) {
             m->addCommand(new ModifyResourceNormalRateCmd(part, m_originalResource, m_resource->normalRate()));
         }

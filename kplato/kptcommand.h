@@ -605,6 +605,31 @@ private:
     int m_oldvalue;
 };
 
+class ModifyResourceAvailableFromCmd : public NamedCommand
+{
+public:
+    ModifyResourceAvailableFromCmd(Part *part, Resource *resource, DateTime value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    DateTime m_newvalue;
+    DateTime m_oldvalue;
+};
+class ModifyResourceAvailableUntilCmd : public NamedCommand
+{
+public:
+    ModifyResourceAvailableUntilCmd(Part *part, Resource *resource, DateTime value, QString name=0);
+    void execute();
+    void unexecute();
+
+private:
+    Resource *m_resource;
+    DateTime m_newvalue;
+    DateTime m_oldvalue;
+};
+
 class ModifyResourceNormalRateCmd : public NamedCommand
 {
 public:
