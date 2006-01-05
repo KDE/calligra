@@ -223,6 +223,10 @@ void DurationWidget::handleLostFocus(
     unsigned rightScale = m_fields[field].rightScale; 
     const char *rightFormat = right ? m_fields[field + 1].format : NULL;
     
+    // avoid possible crash
+    if (leftScale == 0)
+        leftScale = 1;
+        
     // Get the text and start processing...
     QString newValue(current->text());
     unsigned currentValue;
