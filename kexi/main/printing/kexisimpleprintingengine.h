@@ -39,6 +39,8 @@ class KexiSimplePrintingSettings
 {
 	public:
 		KexiSimplePrintingSettings();
+		~KexiSimplePrintingSettings();
+
 		static KexiSimplePrintingSettings load();
 		void save();
 

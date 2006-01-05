@@ -56,6 +56,10 @@ KexiSimplePrintingSettings::KexiSimplePrintingSettings()
 	pageTitleFont.setBold(true);
 }
 
+KexiSimplePrintingSettings::~KexiSimplePrintingSettings()
+{
+}
+
 KexiSimplePrintingSettings KexiSimplePrintingSettings::load()
 {
 	KexiSimplePrintingSettings settings; //this will set defaults

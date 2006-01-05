@@ -270,8 +270,8 @@ bool KexiSimplePrintingCommand::showPrintPreview(const KexiSimplePrintingSetting
 		m_previewEngine->clear();
 //! @todo progress bar...
 		m_previewEngine->setTitleText( titleText );
-		m_previewWindow->updatePagesCount();
 		m_previewWindow->setFullWidth();
+		m_previewWindow->updatePagesCount();
 		m_printPreviewNeedsReloading = false;
 	}
 	if (backToPage0)
