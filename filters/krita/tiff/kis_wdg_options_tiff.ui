@@ -168,9 +168,6 @@
                     <property name="text">
                         <string>Store alpha &amp;channel (transparency)</string>
                     </property>
-                    <property name="accel">
-                        <string>Alt+C</string>
-                    </property>
                     <property name="checked">
                         <bool>true</bool>
                     </property>
@@ -196,9 +193,6 @@ You can uncheck the box if you are not using transparancy and you want to make t
                     </property>
                     <property name="text">
                         <string>Flatten the &amp;image</string>
-                    </property>
-                    <property name="accel">
-                        <string>Alt+I</string>
                     </property>
                     <property name="checked">
                         <bool>true</bool>
