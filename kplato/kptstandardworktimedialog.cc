@@ -95,23 +95,35 @@ void StandardWorktimeDialogImpl::slotCheckAllFieldsFilled() {
 }
 
 void StandardWorktimeDialogImpl::slotYearChanged(double value) {
-    kdDebug()<<k_funcinfo<<value<<endl;
+    //kdDebug()<<k_funcinfo<<value<<endl;
     m_std->setYear(value);
+    if (month->value() > value)
+        month->setValue(value);
     slotEnableButtonOk(true);
 }
 
 void StandardWorktimeDialogImpl::slotMonthChanged(double value) {
     m_std->setMonth(value);
+    if (year->value() < value)
+        year->setValue(value);
+    if (week->value() > value)
+        week->setValue(value);
     slotEnableButtonOk(true);
 }
 
 void StandardWorktimeDialogImpl::slotWeekChanged(double value) {
     m_std->setWeek(value);
+    if (month->value() < value)
+        month->setValue(value);
+    if (day->value() > value)
+        day->setValue(value);
     slotEnableButtonOk(true);
 }
 
 void StandardWorktimeDialogImpl::slotDayChanged(double value) {
     m_std->setDay(value);
+    if (week->value() < value)
+        week->setValue(value);
     slotEnableButtonOk(true);
 }
 
