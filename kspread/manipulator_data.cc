@@ -103,4 +103,21 @@ bool AbstractDataManipulator::preProcessing ()
   return true;
 }
 
+DataManipulator::DataManipulator ()
+{
+}
+
+DataManipulator::~DataManipulator ()
+{
+}
+
+Value DataManipulator::newValue (Element *element, int col, int row,
+    bool *isFormula)
+{
+  *isFormula = false;
+  QRect range = element->rect().normalize();
+  int colidx = range.left() - col;
+  int rowidx = range.top() - row;
+  return data.element (colidx, rowidx);
+}
 

@@ -294,7 +294,7 @@ class KSPREAD_EXPORT Value
     QTime asTime() const;
 
     /**
-     * Return an element in the array value. Do not call if isArray() is false.
+     * Return an element in the array value.
      */
     Value element( unsigned column, unsigned row ) const;
 
@@ -305,13 +305,13 @@ class KSPREAD_EXPORT Value
 
     /**
      * If this value is an array, return the number of columns.
-     * Note that return value is undefined if isArray() returns false.
+     * Returns 1 if isArray() returns false.
      */
     unsigned columns() const;
 
     /**
      * If this value is an array, return the number of rows.
-     * Note that return value is undefined if isArray() returns false.
+     * Returns 1 if isArray() returns false.
      */
     unsigned rows() const;
 

@@ -619,13 +619,11 @@ void Value::setFormat (Value::Format fmt)
   d->format = fmt;
 }
 
-// TODO: element and setElement need flattening support !!!
-// It is necessary for range functions to work correctly !!!
 Value Value::element( unsigned column, unsigned row ) const
 {
   if( d->type != Array ) return *this;
   if( !d->pa ) return *this;
-  Value* v = d->pa->at( column, row );
+  Value* v = d->pa->at (column % columns(), row % rows());
   return v ? Value( *v ) : empty();
 }
 
@@ -639,15 +637,15 @@ void Value::setElement( unsigned column, unsigned row, const Value& v )
 
 unsigned Value::columns() const
 {
-  if( d->type != Array ) return 0;
-  if( !d->pa ) return 0;
+  if( d->type != Array ) return 1;
+  if( !d->pa ) return 1;
   return d->pa->columns;
 }
 
 unsigned Value::rows() const
 {
-  if( d->type != Array ) return 0;
-  if( !d->pa ) return 0;
+  if( d->type != Array ) return 1;
+  if( !d->pa ) return 1;
   return d->pa->rows;
 }
 

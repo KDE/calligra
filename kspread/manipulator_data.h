@@ -24,17 +24,18 @@
 #include "manipulator.h"
 #include "kspread_value.h"
 
+namespace KSpread {
+
+
 /**
  * AbstractDataManipulator - provides storage of old cell data (for undo)
  * and has an abstract method for the actual setting of new values
- * */
-
-namespace KSpread {
+ */
 
 class AbstractDataManipulator : public Manipulator {
   public:
     AbstractDataManipulator ();
-    ~AbstractDataManipulator ();
+    virtual ~AbstractDataManipulator ();
     virtual bool process (Element* element);
     /** this abstract method should return a value that will be set
     for a given cell */
@@ -50,8 +51,23 @@ class AbstractDataManipulator : public Manipulator {
     QMap<int, QMap<int, QString> > oldFormula;
 };
 
+
+/**
+ * DataManipulator - allows setting values on one range.
+ * If multiple ranges are selected, they all get set to the same values
+ */
+
 class DataManipulator : public AbstractDataManipulator {
-  
+  public:
+    DataManipulator ();
+    virtual ~DataManipulator ();
+    /** set the values for the range. Can be either a single value, or
+    a value array */
+    void setValue (Value val) { data = val; };
+  protected:
+    virtual Value newValue (Element *element, int col, int row, bool *);
+    
+    Value data;
 };
 
 
