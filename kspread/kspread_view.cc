@@ -41,6 +41,7 @@
 #include <qtoolbutton.h>
 #include <qsqldatabase.h>
 #include <qlistview.h>
+#include <qsizepolicy.h>
 
 // KDE includes
 #include <dcopclient.h>
@@ -437,7 +438,7 @@ public:
 };
 
 /**
- * \class SheetSelectPrintDialogPage
+ * \class KPSheetSelectPage
  * \brief Print dialog page for selecting sheets to print.
  * @author raphael.langerhorst@kdemail.net
  * @see SheetSelectWidget
@@ -446,11 +447,11 @@ public:
  * to select the sheets that should be printed and in which order
  * they should be printed.
  */
-class SheetSelectPrintDialogPage : public KPrintDialogPage
+class KPSheetSelectPage : public KPrintDialogPage
 {
   public:
-    SheetSelectPrintDialogPage( QWidget *parent = 0 );
-//     ~SheetSelectPrintDialogPage();
+    KPSheetSelectPage( QWidget *parent = 0 );
+//     ~KPSheetSelectPage();
     
 //     //reimplement virtual functions
 //     void getOptions( QMap<QString,QString>& opts, bool incldef = false );
@@ -465,7 +466,12 @@ class SheetSelectPrintDialogPage : public KPrintDialogPage
     /**
      * Inserts given sheet to the list of sheets for printing.
      */
-    void addSheetForPrinting(const QString& sheetname);
+    void addSelectedSheet(const QString& sheetname);
+    
+    /**
+     * @return list of sheets that will be printed, in correct order.
+     */
+    QStringList SheetsForPrinting();
     
   private:
   
@@ -1395,24 +1401,34 @@ QButton* View::Private::newIconButton( const char *_file, bool _kbutton, QWidget
   return pb;
 }
 
-SheetSelectPrintDialogPage::SheetSelectPrintDialogPage( QWidget *parent )
+KPSheetSelectPage::KPSheetSelectPage( QWidget *parent )
 : KPrintDialogPage(parent),
   gui(new SheetSelectWidget(this))
 {
   setTitle(gui->caption());
+  
+  //TODO somehow the size policy doesn't take effect, I don't know what to do (raphael)
+  if (parent)
+    parent->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
+  this->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
+  gui->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
+  
+  //TODO finish this
+//   gui->ListViewAvailable->setColumnWidthMode(0,QListView::Maximum);
+//   gui->ListViewSelected->setColumnWidthMode(0,QListView::Maximum);
 }
 
-// SheetSelectPrintDialogPage::~SheetSelectPrintDialogPage()
+// KPSheetSelectPage::~KPSheetSelectPage()
 // {
 // }
 
-void SheetSelectPrintDialogPage::addAvailableSheet(const QString& sheetname)
+void KPSheetSelectPage::addAvailableSheet(const QString& sheetname)
 {
   Q_ASSERT(gui);
   new QListViewItem((QListView*)(gui->ListViewAvailable),sheetname);
 }
 
-void SheetSelectPrintDialogPage::addSheetForPrinting(const QString& sheetname)
+void KPSheetSelectPage::addSelectedSheet(const QString& sheetname)
 {
   Q_ASSERT(gui);
   new QListViewItem((QListView*)(gui->ListViewSelected),sheetname);
@@ -4333,7 +4349,26 @@ void View::setupPrinter( KPrinter &prt )
     prt.setFullPage( true );
     
     //add possibility to select the sheets to print:
-    prt.addDialogPage(new SheetSelectPrintDialogPage());
+    kdDebug() << "Adding sheet selection page." << endl;
+    KPSheetSelectPage* sheetpage = new KPSheetSelectPage();
+    prt.addDialogPage(sheetpage);
+    
+    kdDebug() << "Iterating through available sheets and initializing list of available sheets." << endl;
+    QPtrList<Sheet> sheetlist = doc()->map()->sheetList();
+    Sheet* sheet = sheetlist.first();
+    while ( sheet )
+    {
+      kdDebug() << "Adding " << sheet->sheetName() << endl;
+      sheetpage->addAvailableSheet(sheet->sheetName());
+      sheet = sheetlist.next();
+    }
+    
+    if (d->activeSheet)
+    {
+      kdDebug() << "Adding active sheet to the list of printed sheets:" << endl;
+      sheetpage->addSelectedSheet(d->activeSheet->sheetName());
+    }
+    
 }
 
 void View::print( KPrinter &prt )
