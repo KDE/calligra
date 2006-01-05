@@ -3,12 +3,12 @@ kde_module_LTLIBRARIES = libkritatiffimport.la libkritatiffexport.la
 libkritatiffexport_la_LDFLAGS = -avoid-version -module -no-undefined \
 	$(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries)
 libkritatiffexport_la_LIBADD = $(top_builddir)/krita/libkritacommon.la \
-	$(top_builddir)/filters/krita/tiff/libkritatiffconverter.la $(KOFFICE_LIBS) -ltiff
+	libkritatiffconverter.la $(KOFFICE_LIBS) -ltiff
 
 libkritatiffimport_la_LDFLAGS = -avoid-version -module -no-undefined \
 	$(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries)
 libkritatiffimport_la_LIBADD = $(top_builddir)/krita/libkritacommon.la \
-	$(top_builddir)/filters/krita/tiff/libkritatiffconverter.la $(KOFFICE_LIBS) -ltiff
+	libkritatiffconverter.la $(KOFFICE_LIBS) -ltiff
 
 INCLUDES= \
 	-I$(srcdir) \
