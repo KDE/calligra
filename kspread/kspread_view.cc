@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
-   Copyright (C) 2002-2005 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2005-2006 Raphael Langerhorst <raphael.langerhorst@kdemail.net>
+             (C) 2002-2005 Ariya Hidayat <ariya@kde.org>
              (C) 1999-2003 Laurent Montel <montel@kde.org>
              (C) 2002-2003 Norbert Andres <nandres@web.de>
              (C) 2002-2003 Philipp Mueller <philipp.mueller@gmx.de>
@@ -39,6 +40,7 @@
 #include <qtimer.h>
 #include <qtoolbutton.h>
 #include <qsqldatabase.h>
+#include <qlistview.h>
 
 // KDE includes
 #include <dcopclient.h>
@@ -63,6 +65,7 @@
 #include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <kparts/partmanager.h>
+#include <kdeprint/kprintdialogpage.h>
 
 // KOffice includes
 #include <tkcoloractions.h>
@@ -130,6 +133,7 @@
 #include "dialogs/link.h"
 #include "dialogs/sheet_properties.h"
 #include "dialogs/kspread_dlg_find.h"
+#include "dialogs/SheetSelectWidget.h"
 
 // KSpread DCOP
 #include "KSpreadViewIface.h"
@@ -430,6 +434,46 @@ public:
     KToggleAction* calcCount;
     KToggleAction* calcSum;
     KToggleAction* calcCountA;
+};
+
+/**
+ * \class SheetSelectPrintDialogPage
+ * \brief Print dialog page for selecting sheets to print.
+ * @author raphael.langerhorst@kdemail.net
+ * @see SheetSelectWidget
+ *
+ * This dialog is shown in the print dialog and allows the user
+ * to select the sheets that should be printed and in which order
+ * they should be printed.
+ */
+class SheetSelectPrintDialogPage : public KPrintDialogPage
+{
+  public:
+    SheetSelectPrintDialogPage( QWidget *parent = 0 );
+//     ~SheetSelectPrintDialogPage();
+    
+//     //reimplement virtual functions
+//     void getOptions( QMap<QString,QString>& opts, bool incldef = false );
+//     void setOptions( const QMap<QString,QString>& opts );
+//     bool isValid( QString& msg );
+    
+    /**
+     * Inserts given sheet to the list of available sheets.
+     */
+    void addAvailableSheet(const QString& sheetname);
+    
+    /**
+     * Inserts given sheet to the list of sheets for printing.
+     */
+    void addSheetForPrinting(const QString& sheetname);
+    
+  private:
+  
+    /**
+     * The widget used, includes two lists of sheet names and
+     * buttons to move sheets between and within the lists.
+     */
+    SheetSelectWidget* gui;
 };
 
 
@@ -1349,6 +1393,29 @@ QButton* View::Private::newIconButton( const char *_file, bool _kbutton, QWidget
   pb->setPixmap( QPixmap( KSBarIcon(_file) ) );
 
   return pb;
+}
+
+SheetSelectPrintDialogPage::SheetSelectPrintDialogPage( QWidget *parent )
+: KPrintDialogPage(parent),
+  gui(new SheetSelectWidget(this))
+{
+  setTitle(gui->caption());
+}
+
+// SheetSelectPrintDialogPage::~SheetSelectPrintDialogPage()
+// {
+// }
+
+void SheetSelectPrintDialogPage::addAvailableSheet(const QString& sheetname)
+{
+  Q_ASSERT(gui);
+  new QListViewItem((QListView*)(gui->ListViewAvailable),sheetname);
+}
+
+void SheetSelectPrintDialogPage::addSheetForPrinting(const QString& sheetname)
+{
+  Q_ASSERT(gui);
+  new QListViewItem((QListView*)(gui->ListViewSelected),sheetname);
 }
 
 } // namespace KSpread
@@ -4264,70 +4331,113 @@ void View::setupPrinter( KPrinter &prt )
         prt.setOrientation( KPrinter::Portrait );
 
     prt.setFullPage( true );
+    
+    //add possibility to select the sheets to print:
+    prt.addDialogPage(new SheetSelectPrintDialogPage());
 }
 
 void View::print( KPrinter &prt )
 {
-    SheetPrint* print = d->activeSheet->print();
-
-    if ( d->canvas->editor() )
+    Sheet* selectedsheet = this->activeSheet();
+    Q_ASSERT(selectedsheet);
+    
+    //print all sheets, start with first
+    this->firstSheet();
+    if (this->activeSheet() == NULL)
     {
-      d->canvas->deleteEditor( true ); // save changes
+      kdWarning() << "No sheet to print" << endl;
+      return;
     }
-
-    int oldZoom = doc()->zoom();
-
-    //Comment from KWord
-    //   We don't get valid metrics from the printer - and we want a better resolution
-    //   anyway (it's the PS driver that takes care of the printer resolution).
-    //But KSpread uses fixed 300 dpis, so we can use it.
-
-    QPaintDeviceMetrics metrics( &prt );
-
-    int dpiX = metrics.logicalDpiX();
-    int dpiY = metrics.logicalDpiY();
-
-    doc()->setZoomAndResolution( int( print->zoom() * 100 ), dpiX, dpiY );
-
-    //store the current setting in a temporary variable
-    KoOrientation _orient = print->orientation();
 
     QPainter painter;
-
     painter.begin( &prt );
-
-    //use the current orientation from print dialog
-    if ( prt.orientation() == KPrinter::Landscape )
+    
+    Sheet* previous_sheet = NULL;
+    
+    bool printnextsheet = false;
+    
+    do
     {
-        print->setPaperOrientation( PG_LANDSCAPE );
-    }
-    else
-    {
-        print->setPaperOrientation( PG_PORTRAIT );
-    }
-
-    bool result = print->print( painter, &prt );
-
-    //Restore original orientation
-    print->setPaperOrientation( _orient );
-
-    doc()->setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
-    doc()->newZoomAndResolution( true, false );
-
-    // Repaint at correct zoom
-    doc()->emitBeginOperation( false );
-    setZoom( oldZoom, false );
-    doc()->emitEndOperation();
-
-    // Nothing to print
-    if( !result )
-    {
-      if( !prt.previewOnly() )
-      {
-        KMessageBox::information( 0, i18n("Nothing to print.") );
-        prt.abort();
-      }
-    }
+        SheetPrint* print = d->activeSheet->print();
+    
+        if ( d->canvas->editor() )
+        {
+            d->canvas->deleteEditor( true ); // save changes
+        }
+    
+        int oldZoom = doc()->zoom();
+    
+        //Comment from KWord
+        //   We don't get valid metrics from the printer - and we want a better resolution
+        //   anyway (it's the PS driver that takes care of the printer resolution).
+        //But KSpread uses fixed 300 dpis, so we can use it.
+    
+        QPaintDeviceMetrics metrics( &prt );
+    
+        int dpiX = metrics.logicalDpiX();
+        int dpiY = metrics.logicalDpiY();
+    
+        doc()->setZoomAndResolution( int( print->zoom() * 100 ), dpiX, dpiY );
+    
+        //store the current setting in a temporary variable
+        KoOrientation _orient = print->orientation();
+    
+        
+    
+        //use the current orientation from print dialog
+        if ( prt.orientation() == KPrinter::Landscape )
+        {
+            print->setPaperOrientation( PG_LANDSCAPE );
+        }
+        else
+        {
+            print->setPaperOrientation( PG_PORTRAIT );
+        }
+    
+        bool result = print->print( painter, &prt );
+    
+        //Restore original orientation
+        print->setPaperOrientation( _orient );
+    
+        doc()->setZoomAndResolution( oldZoom, KoGlobal::dpiX(), KoGlobal::dpiY() );
+        doc()->newZoomAndResolution( true, false );
+    
+        // Repaint at correct zoom
+        doc()->emitBeginOperation( false );
+        setZoom( oldZoom, false );
+        doc()->emitEndOperation();
+        
+        //next sheet
+        previous_sheet = activeSheet();
+        nextSheet();
+        
+        printnextsheet = false;
+        if (previous_sheet != activeSheet())
+        {
+            printnextsheet = true;
+        }
+        
+        // Nothing to print
+        if( !result )
+        {
+            if( !prt.previewOnly() )
+            {
+                KMessageBox::information( 0,
+                i18n("Nothing to print for sheet %1.").arg(
+                d->activeSheet->sheetName()) );
+                //@todo: make sure we really can comment this out,
+                //       what to do with partially broken printouts?
+//                 prt.abort();
+            }
+        }
+        else if (printnextsheet)
+        { //only add a new page if the current sheet had content and there is another sheet
+            prt.newPage();
+        }
+        
+    }while(printnextsheet);
+    
+    this->setActiveSheet(selectedsheet);
 
     painter.end();
 }
