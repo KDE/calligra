@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2004 David Faure <faure@kde.org>
+   Copyright (C) 2004-2006 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -92,13 +92,16 @@ int main( int, char** ) {
     assert( sapName == secondName );
     assert( coll.styles().count() == 3 );
 
-    // OK, now add a style marked as for styles.xml
+    // OK, now add a style marked as for styles.xml; it looks like the above style, but
+    // since it's marked for styles.xml it shouldn't be shared with it.
     KoGenStyle headerStyle( KoGenStyle::STYLE_AUTO, "paragraph" );
     headerStyle.addAttribute( "style:master-page-name", "Standard" );
     headerStyle.addProperty( "style:page-number", "0" );
+    headerStyle.addProperty( "style:foobar", "2", KoGenStyle::TextType );
     headerStyle.addStyleMap( map1 );
     headerStyle.addStyleMap( map2 );
-    QString headerStyleName = coll.lookup( headerStyle, "foobar", KoGenStyles::AutoStyleInStylesDotXml );
+    headerStyle.setAutoStyleInStylesDotXml( true );
+    QString headerStyleName = coll.lookup( headerStyle, "foobar" );
 
     assert( coll.styles().count() == 4 );
     assert( coll.styles( KoGenStyle::STYLE_AUTO ).count() == 2 );

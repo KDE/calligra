@@ -52,8 +52,8 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
             styleName = 'A'; // for "auto".
             flags &= ~DontForceNumbering; // i.e. force numbering
         }
-        styleName = makeUniqueName( styleName, flags );
-        if ( flags & AutoStyleInStylesDotXml )
+        styleName = makeUniqueName( styleName, flags, style.autoStyleInStylesDotXml() );
+        if ( style.autoStyleInStylesDotXml() )
             m_autoStylesInStylesDotXml.insert( styleName, true /*unused*/ );
         else
             m_styleNames.insert( styleName, true /*unused*/ );
@@ -66,10 +66,10 @@ QString KoGenStyles::lookup( const KoGenStyle& style, const QString& name, int f
     return it.data();
 }
 
-QString KoGenStyles::makeUniqueName( const QString& base, int flags ) const
+QString KoGenStyles::makeUniqueName( const QString& base, int flags, bool autoStyleInStylesDotXml ) const
 {
     bool dontForceNumbering = flags & DontForceNumbering;
-    const NameMap& nameMap = flags & AutoStyleInStylesDotXml ? m_autoStylesInStylesDotXml : m_styleNames;
+    const NameMap& nameMap = autoStyleInStylesDotXml ? m_autoStylesInStylesDotXml : m_styleNames;
     if ( dontForceNumbering && nameMap.find( base ) == nameMap.end() )
         return base;
     int num = 1;
@@ -117,6 +117,7 @@ void KoGenStyles::markStyleForStylesXml( const QString& name )
     Q_ASSERT( m_styleNames.find( name ) != m_styleNames.end() );
     m_styleNames.remove( name );
     m_autoStylesInStylesDotXml.insert( name, true );
+    styleForModification( name )->setAutoStyleInStylesDotXml( true );
 }
 
 // Returns -1, 0 (equal) or 1
@@ -134,6 +135,18 @@ static int compareMap( const QMap<QString, QString>& map1, const QMap<QString, Q
 }
 
 ////
+
+
+KoGenStyle::KoGenStyle( int type, const char* familyName,
+                        const QString& parentName )
+    : m_type( type ), m_familyName( familyName ), m_parentName( parentName ),
+      m_autoStyleInStylesDotXml( false )
+{
+}
+
+KoGenStyle::~KoGenStyle()
+{
+}
 
 void KoGenStyle::writeStyle( KoXmlWriter* writer, KoGenStyles& styles, const char* elementName, const QString& name, const char* propertiesElementName, bool closeElement, bool drawElement ) const
 {
@@ -301,6 +314,7 @@ bool KoGenStyle::operator<( const KoGenStyle &other ) const
 {
     if ( m_type != other.m_type ) return m_type < other.m_type;
     if ( m_parentName != other.m_parentName ) return m_parentName < other.m_parentName;
+    if ( m_autoStyleInStylesDotXml != other.m_autoStyleInStylesDotXml ) return m_autoStyleInStylesDotXml;
     for ( uint i = 0 ; i < N_NumTypes ; ++i )
         if ( m_properties[i].count() != other.m_properties[i].count() )
             return m_properties[i].count() < other.m_properties[i].count();
@@ -327,6 +341,7 @@ bool KoGenStyle::operator==( const KoGenStyle &other ) const
 {
     if ( m_type != other.m_type ) return false;
     if ( m_parentName != other.m_parentName ) return false;
+    if ( m_autoStyleInStylesDotXml != other.m_autoStyleInStylesDotXml ) return false;
     for ( uint i = 0 ; i < N_NumTypes ; ++i )
         if ( m_properties[i].count() != other.m_properties[i].count() )
             return false;

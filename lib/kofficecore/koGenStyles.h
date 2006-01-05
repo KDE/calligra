@@ -70,16 +70,11 @@ public:
      * that one exists, then "name1" is tried. Set DontForceNumbering if the name given as
      * argument is supposed to be the full style name.
      *
-     * AutoStyleInStylesDotXml marks a given automatic style as being needed in styles.xml.
-     * For instance styles used by headers and footers need to go there, since
-     * they are saved in styles.xml, and styles.xml must be independent from content.xml.
-     *
      */
     enum Flags { // bitfield
         NoFlag = 0,
         ForceNumbering = 0, // it's the default anyway
-        DontForceNumbering = 1,
-        AutoStyleInStylesDotXml = 2
+        DontForceNumbering = 1
     };
     // KDE4 TODO: use QFlags and change the arg type in lookup
 
@@ -142,18 +137,18 @@ public:
      * For instance styles used by headers and footers need to go there, since
      * they are saved in styles.xml, and styles.xml must be independent from content.xml.
      *
-     * Equivalent to using lookup(... AutoStyleInStylesDotXml) but this can be done afterwards.
+     * Equivalent to using KoGenStyle::setAutoStyleInStylesDotXml() but this can be done after lookup.
      *
      * This operation can't be undone; once styles are promoted they can't go back
      * to being content.xml-only.
      *
-     * @see styles, lookup
+     * @see styles, KoGenStyle::setAutoStyleInStylesDotXml
      */
     void markStyleForStylesXml( const QString& name );
 
 
 private:
-    QString makeUniqueName( const QString& base, int flags ) const;
+    QString makeUniqueName( const QString& base, int flags, bool autoStyleInStylesDotXml ) const;
 
     /// style definition -> name
     StyleMap m_styleMap;
@@ -220,8 +215,20 @@ public:
      * @param parentName If set, name of the parent style from which this one inherits.
      */
     explicit KoGenStyle( int type = 0, const char* familyName = 0,
-                         const QString& parentName = QString::null )
-        : m_type( type ), m_familyName( familyName ), m_parentName( parentName ) {}
+                         const QString& parentName = QString::null );
+    ~KoGenStyle();
+
+    /*
+     * setAutoStyleInStylesDotXml(true) marks a given automatic style as being needed in styles.xml.
+     * For instance styles used by headers and footers need to go there, since
+     * they are saved in styles.xml, and styles.xml must be independent from content.xml.
+     *
+     * The application should use KoGenStyles::styles( type, true ) in order to retrieve
+     * those styles and save them separately.
+     */
+    void setAutoStyleInStylesDotXml( bool b ) { m_autoStyleInStylesDotXml = b; }
+    /// @return the value passed to setAutoStyleInStylesDotXml; false by default
+    bool autoStyleInStylesDotXml() const { return m_autoStyleInStylesDotXml; }
 
     /// Return the type of this style, as set in the constructor
     int type() const { return m_type; }
@@ -394,6 +401,10 @@ private:
     QMap<QString, QString> m_attributes;
     typedef QMap<QString, QString> StyleMap;
     QValueVector<StyleMap> m_maps; // we can't really sort the maps between themselves...
+
+    bool m_autoStyleInStylesDotXml;
+    bool m_unused;
+    short m_unused2;
 
     // For lookup
     friend class KoGenStyles;
