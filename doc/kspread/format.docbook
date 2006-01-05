@@ -579,7 +579,8 @@ accidental change.</para>
 <menuchoice><guisubmenu>Column</guisubmenu><guimenuitem>Show Columns...
 </guimenuitem></menuchoice> from the <guimenu>Format</guimenu>
 menu. In the dialog box which appears, you can select any number of
-rows to show (use &Ctrl;+click to select multiple rows or columns).</para>
+rows to show (use <keycombo action="simul">&Ctrl;</keycombo> + click to select
+multiple rows or columns).</para>
 </sect1>
 
 <sect1 id="sheet-properties">

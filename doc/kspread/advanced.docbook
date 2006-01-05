@@ -634,7 +634,8 @@ protected.</para>
 </textobject>
 </mediaobject>
 </para>
-<para>To hide cell formulae, select the appropriate cell or range of cells and
+<para>To hide cell formulae, select the appropriate cell or range of cells or
+non-contiguous cells with <keycombo action="simul">&Ctrl;</keycombo> and
 then choose the <menuchoice><guimenu>Format</guimenu><guimenuitem>Cell
 Format...</guimenuitem></menuchoice> menu. In the Cell format
 dialog, click the Protection tab and select <guilabel>Hide formula</guilabel>.
@@ -652,7 +653,7 @@ protecting the sheet but the cell content can be changed.</para>
 <mediaobject>
 <imageobject>
 <imagedata fileref="hideformula5.png" format="PNG"/>
-</imageobject>
+</imageobject>    
 <textobject>
 <phrase>Hide formula is enabled but the cell is not protected and the
 sheet is protected</phrase>
@@ -673,8 +674,8 @@ sheet is protected</phrase>
 </textobject>
 </mediaobject>
 </para>
-<para>Keep in mind that it is very easy to break the password for a protected
-sheet so if you are looking for real security, this is not the
+<para>Keep in mind that it is very easy to break the password for a
+protected sheet so if you are looking for real security, this is not the
 best solution.</para>
 </sect2>
 
