@@ -6,6 +6,7 @@ Encoding=UTF-8
 Exec=krita %u
 GenericName=Application for Drawing and Handling of Images
 GenericName[da]=Tegne- og billedbehandlingsprogram
+GenericName[de]=Programm zum Zeichnen und Bearbeiten von Bildern
 GenericName[es]=Aplicación para dibujo y manipulación de imágenes
 GenericName[pt]=Aplicação de Desenho e Manipulação de Imagens
 GenericName[pt_BR]=Aplicação de Desenho e Manipulação de Imagens
