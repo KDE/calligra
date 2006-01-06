@@ -166,7 +166,7 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
             return false;
         }
         if(!r) return false;
-        TIFFWriteScanline(image(), buff, y, (tsize_t) -1);
+        TIFFWriteScanline(image(), buff, y, (tsample_t) -1);
     }
     _TIFFfree(buff);
     TIFFWriteDirectory(image());
