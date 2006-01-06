@@ -24,6 +24,7 @@
 
 #include <kcombobox.h>
 #include <klocale.h>
+#include <kapplication.h>
 
 #include "kivio_imageexportwidget.h"
 
@@ -33,6 +34,7 @@ namespace Kivio
 ImageExportDialog::ImageExportDialog(QWidget* parent, const char* name)
   : KDialogBase(parent, name, false, i18n("Export To Image"))
 {
+  kapp->restoreOverrideCursor();
   m_mainWidget = new ImageExportWidget(this);
   setMainWidget(m_mainWidget);
 }

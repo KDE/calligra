@@ -8,12 +8,9 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>600</width>
-            <height>480</height>
+            <width>342</width>
+            <height>151</height>
         </rect>
-    </property>
-    <property name="caption">
-        <string>Form1</string>
     </property>
     <grid>
         <property name="name">
