@@ -94,6 +94,7 @@ public:
     KivioStencil *checkForStencil( KoPoint *, int *, float, bool );
 
     void printContent( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
+    void printContent(KivioPainter& painter, KoZoomHandler* zoomHandler);
     void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint p0,
       KoZoomHandler* zoom );
     void paintConnectorTargets( KivioPainter& painter, const QRect& rect, bool transparent,

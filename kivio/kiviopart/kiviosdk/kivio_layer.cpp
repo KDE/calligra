@@ -359,6 +359,28 @@ void KivioLayer::printContent( KivioPainter& painter, int xdpi, int ydpi )
   }
 }
 
+void KivioLayer::printContent(KivioPainter& painter, KoZoomHandler* zoomHandler)
+{
+  if(!printable() || !visible())
+    return;
+
+  KivioStencil *pStencil = m_pStencilList->first();
+  KivioIntraStencilData data;
+
+  painter.setFGColor( QColor(0,0,0) );
+
+  data.painter = &painter;
+  data.zoomHandler = zoomHandler;
+  data.printing = true;
+
+  while( pStencil )
+  {
+    pStencil->paint( &data );
+
+    pStencil = m_pStencilList->next();
+  }
+}
+
 void KivioLayer::paintConnectorTargets( KivioPainter& painter, const QRect&, bool, QPoint,
   KoZoomHandler* zoom )
 {

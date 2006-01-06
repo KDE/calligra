@@ -19,6 +19,9 @@
 
 #include "kivio_imageexportdialog.h"
 
+#include <qspinbox.h>
+#include <qcheckbox.h>
+
 #include <kcombobox.h>
 #include <klocale.h>
 
@@ -34,10 +37,16 @@ ImageExportDialog::ImageExportDialog(QWidget* parent, const char* name)
   setMainWidget(m_mainWidget);
 }
 
-void ImageExportDialog::setPageList(QStringList pages)
+void ImageExportDialog::setPageList(const QStringList& pages)
 {
   m_mainWidget->m_pageCombo->clear();
   m_mainWidget->m_pageCombo->insertStringList(pages);
+}
+
+void ImageExportDialog::setInitialCustomSize(const QSize& size)
+{
+  m_mainWidget->m_widthSpinBox->setValue(size.width());
+  m_mainWidget->m_heightSpinBox->setValue(size.height());
 }
 
 QString ImageExportDialog::selectedPage() const
@@ -48,6 +57,20 @@ QString ImageExportDialog::selectedPage() const
 bool ImageExportDialog::usePageBorders() const
 {
   return (m_mainWidget->m_exportAreaCombo->currentItem() == 0);
+}
+
+bool ImageExportDialog::useCustomSize() const
+{
+  return m_mainWidget->m_customSizeCheckBox->isChecked();
+}
+
+QSize ImageExportDialog::customSize() const
+{
+  QSize size;
+  size.setWidth(m_mainWidget->m_widthSpinBox->value());
+  size.setHeight(m_mainWidget->m_heightSpinBox->value());
+
+  return size;
 }
 
 }

@@ -114,6 +114,7 @@ class KIVIO_EXPORT KivioPage : public QObject
     void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, QPoint, KoZoomHandler*, bool );
     void printContent( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
     void printSelected( KivioPainter& painter, int xdpi = 0, int ydpi = 0 );
+    void printContent(KivioPainter& painter, KoZoomHandler* zoomHandler);
 
     bool isStencilSelected( KivioStencil * );
     void selectAllStencils();

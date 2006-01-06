@@ -33,10 +33,13 @@ class ImageExportDialog : public KDialogBase
   public:
     ImageExportDialog(QWidget* parent = 0, const char* name = 0);
 
-    void setPageList(QStringList pages);
+    void setPageList(const QStringList& pages);
+    void setInitialCustomSize(const QSize& size);
 
     QString selectedPage() const;
     bool usePageBorders() const;
+    bool useCustomSize() const;
+    QSize customSize() const;
 
   private:
     ImageExportWidget* m_mainWidget;

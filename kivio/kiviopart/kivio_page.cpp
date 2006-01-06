@@ -460,6 +460,21 @@ void KivioPage::printContent( KivioPainter& painter, int xdpi, int ydpi )
   }
 }
 
+void KivioPage::printContent(KivioPainter& painter, KoZoomHandler* zoomHandler)
+{
+  KivioLayer *pLayer = m_lstLayers.first();
+
+  while( pLayer )
+  {
+    if(pLayer->visible())
+    {
+      pLayer->printContent(painter, zoomHandler);
+    }
+
+    pLayer = m_lstLayers.next();
+  }
+}
+
 void KivioPage::printSelected( KivioPainter& painter, int xdpi, int ydpi )
 {
   if(!xdpi) {

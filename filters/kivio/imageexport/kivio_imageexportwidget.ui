@@ -146,6 +146,9 @@
             <property name="enabled">
                 <bool>false</bool>
             </property>
+            <property name="maxValue">
+                <number>10000</number>
+            </property>
         </widget>
         <widget class="QSpinBox" row="4" column="3">
             <property name="name">
@@ -153,6 +156,9 @@
             </property>
             <property name="enabled">
                 <bool>false</bool>
+            </property>
+            <property name="maxValue">
+                <number>10000</number>
             </property>
         </widget>
         <spacer row="3" column="4">

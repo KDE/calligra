@@ -97,29 +97,38 @@ KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCSt
     pageNames.append(it.current()->pageName());
   }
 
+  KoZoomHandler zoom;
+
   dlg.setPageList(pageNames);
+  KivioPage* page = doc.map()->firstPage();
+  QSize size = QSize(zoom.zoomItX(page->paperLayout().ptWidth), zoom.zoomItY(page->paperLayout().ptHeight));
+  dlg.setInitialCustomSize(size);
 
   if(dlg.exec() != QDialog::Accepted) {
     return KoFilter::UserCancelled;
   }
 
-  KoZoomHandler zoom;
-  zoom.setZoomAndResolution(100, KoGlobal::dpiX(),
-                            KoGlobal::dpiY());
-
-  KivioPage* page = doc.map()->findPage(dlg.selectedPage());
+  page = doc.map()->findPage(dlg.selectedPage());
 
   if(!page) {
     kdDebug() << "The page named " << dlg.selectedPage() << " wasn't found!!" << endl;
     return KoFilter::InternalError;
   }
 
-  QSize size;
-
   if(dlg.usePageBorders()) {
     size = QSize(zoom.zoomItX(page->paperLayout().ptWidth), zoom.zoomItY(page->paperLayout().ptHeight));
   } else {
     size = zoom.zoomSize(page->getRectForAllStencils().size());
+  }
+
+  if(dlg.useCustomSize()) {
+    QSize customSize = dlg.customSize();
+    float zw = (float)customSize.width() / (float)size.width();
+    float zh = (float)customSize.height() / (float)size.height();
+    float z = QMIN(zw, zh);
+
+    zoom.setZoomAndResolution(qRound(z * 100), KoGlobal::dpiX(), KoGlobal::dpiY());
+    size = customSize;
   }
 
   QPixmap pixmap = QPixmap(size);
@@ -132,7 +141,7 @@ KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCSt
     kpainter.setTranslation(-point.x(), -point.y());
   }
 
-  page->printContent(kpainter);
+  page->printContent(kpainter, &zoom);
 
   if(!pixmap.save(m_chain->outputFile(), format.local8Bit())) {
     return KoFilter::CreationError;
