@@ -1491,10 +1491,76 @@ void KPSheetSelectPage::moveTop()
 
 void KPSheetSelectPage::moveUp()
 {
+  //this creates a temporary new list
+  // which replaces the existing one, to avoid the need of an additional sort column
+  
+  QValueList<QListViewItem*> newlist;
+  QListViewItem* item = gui->ListViewSelected->firstChild();
+  QListViewItem* nextitem = NULL;
+  while (item)
+  {
+    nextitem = item->nextSibling();
+    if (nextitem)
+    {
+      if (nextitem->isSelected() && !item->isSelected())
+      {
+        QListViewItem* nextnextitem = nextitem->nextSibling();
+        newlist.prepend(nextitem);
+        gui->ListViewSelected->takeItem(nextitem);
+        nextitem = nextnextitem;
+      }
+    }
+
+    newlist.prepend(item);
+    gui->ListViewSelected->takeItem(item);
+    item = nextitem;
+  }
+  
+  kdDebug() << "Refill the view with the correctly ordered list" << endl;
+  //the view is empty now, refill in correct order (reversed!!)
+  QValueList<QListViewItem*>::iterator it;
+  for (it = newlist.begin(); it != newlist.end(); ++it)
+  {
+    kdDebug() << " adding " << (*it)->text(0) << endl;
+    gui->ListViewSelected->insertItem(*it);
+  }
 }
 
 void KPSheetSelectPage::moveDown()
 {
+  //this creates a temporary new list
+  // which replaces the existing one, to avoid the need of an additional sort column
+  
+  QValueList<QListViewItem*> newlist;
+  QListViewItem* item = gui->ListViewSelected->firstChild();
+  QListViewItem* nextitem = NULL;
+  while (item)
+  {
+    nextitem = item->nextSibling();
+    if (nextitem)
+    {
+      if (!nextitem->isSelected() && item->isSelected())
+      {
+        QListViewItem* nextnextitem = nextitem->nextSibling();
+        newlist.prepend(nextitem);
+        gui->ListViewSelected->takeItem(nextitem);
+        nextitem = nextnextitem;
+      }
+    }
+
+    newlist.prepend(item);
+    gui->ListViewSelected->takeItem(item);
+    item = nextitem;
+  }
+  
+  kdDebug() << "Refill the view with the correctly ordered list" << endl;
+  //the view is empty now, refill in correct order (reversed!!)
+  QValueList<QListViewItem*>::iterator it;
+  for (it = newlist.begin(); it != newlist.end(); ++it)
+  {
+    kdDebug() << " adding " << (*it)->text(0) << endl;
+    gui->ListViewSelected->insertItem(*it);
+  }
 }
 
 void KPSheetSelectPage::moveBottom()
