@@ -190,6 +190,10 @@ public:
     // don't try to refresh the view
     bool loading;
 
+    // stores the list of sheets that are to be printed by default
+    // see Sheet Selection in the print dialog, or KPSheetSelectPage
+    QStringList sheetsForPrinting;
+
     // selection/marker
     Selection* selection;
     Selection* choice;
@@ -1381,6 +1385,17 @@ KPSheetSelectPage::KPSheetSelectPage( QWidget *parent )
 // {
 // }
 
+bool KPSheetSelectPage::isValid(QString& msg)
+{
+  Q_ASSERT(gui);
+  if (gui->ListViewSelected->childCount() < 1)
+  {
+    msg = i18n("No sheets selected for printing!");
+    return false;
+  }
+  return true;
+}
+
 void KPSheetSelectPage::addAvailableSheet(const QString& sheetname)
 {
   Q_ASSERT(gui);
@@ -1408,22 +1423,38 @@ QStringList KPSheetSelectPage::selectedSheets()
 
 void KPSheetSelectPage::selectAll()
 {
+  //we have to add all the stuff in reverse order
+  // because inserted items (addSelectedSheet) are prepended
+  QStringList list;
   QListViewItem* item = gui->ListViewAvailable->firstChild();
   while (item)
   {
-    this->addSelectedSheet(item->text(0));
+    list.prepend(item->text(0));
     item = item->nextSibling();
+  }
+  QStringList::iterator it;
+  for (it = list.begin(); it != list.end(); ++it)
+  {
+    this->addSelectedSheet(*it);
   }
 }
 
 void KPSheetSelectPage::select()
 {
+  //we have to add all the stuff in reverse order
+  // because inserted items (addSelectedSheet) are prepended
+  QStringList list;
   QListViewItem* item = gui->ListViewAvailable->firstChild();
   while (item)
   {
     if (item->isSelected())
-      this->addSelectedSheet(item->text(0));
+      list.prepend(item->text(0));
     item = item->nextSibling();
+  }
+  QStringList::iterator it;
+  for (it = list.begin(); it != list.end(); ++it)
+  {
+    this->addSelectedSheet(*it);
   }
 }
 
@@ -4527,12 +4558,12 @@ void View::setupPrinter( KPrinter &prt )
     
     kdDebug() << "Iterating through available sheets and initializing list of available sheets." << endl;
     QPtrList<Sheet> sheetlist = doc()->map()->sheetList();
-    Sheet* sheet = sheetlist.first();
+    Sheet* sheet = sheetlist.last();
     while ( sheet )
     {
       kdDebug() << "Adding " << sheet->sheetName() << endl;
       sheetpage->addAvailableSheet(sheet->sheetName());
-      sheet = sheetlist.next();
+      sheet = sheetlist.prev();
     }
     
     if (d->activeSheet)
@@ -4552,6 +4583,7 @@ void View::setupPrinter( KPrinter &prt )
 
 void View::print( KPrinter &prt )
 {
+    //save the current active sheet for later, so we can restore it at the end
     Sheet* selectedsheet = this->activeSheet();
     Q_ASSERT(selectedsheet);
     

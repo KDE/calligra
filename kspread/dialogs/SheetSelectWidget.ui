@@ -102,7 +102,7 @@
                 <enum>AutoOneFit</enum>
             </property>
             <property name="selectionMode" stdset="0">
-                <enum>Multi</enum>
+                <enum>Extended</enum>
             </property>
             <property name="fullWidth">
                 <bool>true</bool>
@@ -197,7 +197,7 @@ You can insert a sheet as often as you like, this way it will be printed multipl
                 <enum>AutoOneFit</enum>
             </property>
             <property name="selectionMode" stdset="0">
-                <enum>Multi</enum>
+                <enum>Extended</enum>
             </property>
             <property name="fullWidth">
                 <bool>true</bool>

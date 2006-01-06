@@ -82,7 +82,7 @@ class KPSheetSelectPage : public KPrintDialogPage
 //     //reimplement virtual functions
 //     void getOptions( QMap<QString,QString>& opts, bool incldef = false );
 //     void setOptions( const QMap<QString,QString>& opts );
-//     bool isValid( QString& msg );
+    bool isValid( QString& msg );
     
     /**
      * @return list of sheets that will be printed, in correct order.
