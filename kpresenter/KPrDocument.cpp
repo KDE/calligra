@@ -1818,7 +1818,6 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             else
                 newpage->appendObject(kpClosedObject);
         }
-        //FIXME wait that it will ok'ed by oo spec
         else if (name=="regular-polygon"&& isDrawNS) { // kppolygone object
             fillStyleStack( o, context );
             KPrPolygonObject *kpPolygoneObject = new KPrPolygonObject();
@@ -1828,18 +1827,6 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
             else
                 newpage->appendObject(kpPolygoneObject);
         }
-#if 0 //old code
-        else if ( name == "image" && isDrawNS) // image
-        {
-            fillStyleStack( o, context );
-            KPrPixmapObject *kppixmapobject = new KPrPixmapObject( pictureCollection() );
-            kppixmapobject->loadOasis( o, context, m_loadingInfo);
-            if ( groupObject )
-                groupObject->addObjects( kppixmapobject );
-            else
-                newpage->appendObject(kppixmapobject);
-        }
-#endif
         else if ( name == "path" && isDrawNS)
         {
             fillStyleStack( o, context );
