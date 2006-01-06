@@ -75,9 +75,9 @@ QSize ImageExportDialog::customSize() const
   return size;
 }
 
-int ImageExportDialog::border() const
+int ImageExportDialog::margin() const
 {
-  return m_mainWidget->m_borderSpinBox->value();
+  return m_mainWidget->m_marginSpinBox->value();
 }
 
 }

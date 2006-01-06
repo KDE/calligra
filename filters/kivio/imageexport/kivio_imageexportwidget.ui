@@ -12,6 +12,9 @@
             <height>181</height>
         </rect>
     </property>
+    <property name="caption">
+        <string>Form1</string>
+    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -194,15 +197,15 @@
         </spacer>
         <widget class="QLabel" row="5" column="0" rowspan="1" colspan="2">
             <property name="name">
-                <cstring>m_borderLabel</cstring>
+                <cstring>m_marginLabel</cstring>
             </property>
             <property name="text">
-                <string>Border:</string>
+                <string>Margin:</string>
             </property>
         </widget>
         <widget class="QSpinBox" row="5" column="2">
             <property name="name">
-                <cstring>m_borderSpinBox</cstring>
+                <cstring>m_marginSpinBox</cstring>
             </property>
         </widget>
         <spacer row="5" column="3">

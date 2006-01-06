@@ -153,7 +153,7 @@ KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCSt
     size = customSize;
   }
 
-  int border = dlg.border();
+  int border = dlg.margin();
 
   size.setWidth(size.width() + (border * 2));
   size.setHeight(size.height() + (border * 2));
