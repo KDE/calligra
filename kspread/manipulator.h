@@ -427,7 +427,7 @@ protected:
   virtual bool postProcessing();
 
   virtual QString name() const;
-  
+
   bool m_merge;
 private:
 };
@@ -529,6 +529,23 @@ private:
   bool m_manipulateRows    : 1;
 };
 
+
+
+/**
+ * InsertDeleteManipulator
+ */
+class InsertDeleteManipulator : public Manipulator
+{
+public:
+  InsertDeleteManipulator();
+  ~InsertDeleteManipulator();
+
+protected:
+
+private:
+  bool m_manipulateColumns : 1;
+  bool m_manipulateRows    : 1;
+};
 
 
 

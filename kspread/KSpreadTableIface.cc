@@ -215,12 +215,12 @@ int SheetIface::maxColumn() const
 bool SheetIface::areaHasNoContent(QRect area) const
 {
 	kdDebug(36001) << "SheetIface::areaHasNoContent("<<area<<");"<<endl;
-	return m_sheet->areaIsEmpty(Region(area));
+	return m_sheet->areaIsEmpty(area);
 }
 
 bool SheetIface::areaHasNoComments(QRect area) const
 {
-	return m_sheet->areaIsEmpty(Region(area),Sheet::Comment);
+	return m_sheet->areaIsEmpty(area, Sheet::Comment);
 }
 
 int SheetIface::maxRow() const

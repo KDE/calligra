@@ -1153,7 +1153,7 @@ void Canvas::mouseReleaseEvent( QMouseEvent* )
   // The user started the drag in the lower right corner of the marker ?
   if ( d->mouseAction == ResizeCell && !sheet->isProtected() )
   {
-    sheet->mergeCells(Region(selectionInfo->lastRange()));
+    sheet->mergeCells(selectionInfo->lastRange());
     d->view->updateEditWidget();
   }
   else if ( d->mouseAction == AutoFill && !sheet->isProtected() )
@@ -1664,9 +1664,10 @@ void Canvas::dropEvent( QDropEvent * _ev )
       if ( !d->view->doc()->undoLocked() )
       {
         UndoDragDrop * undo
-          = new UndoDragDrop( d->view->doc(), sheet, selectionInfo()->lastRange(),
-                                     QRect( col, row, selectionInfo()->lastRange().width(),
-                                            selectionInfo()->lastRange().height() ) );
+          = new UndoDragDrop(d->view->doc(), sheet, *selectionInfo(),
+                             QRect(col, row,
+                                   selectionInfo()->boundingRect().width(),
+                                   selectionInfo()->boundingRect().height()));
         d->view->doc()->addCommand( undo );
         makeUndo = false;
       }

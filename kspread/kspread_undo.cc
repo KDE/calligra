@@ -1204,7 +1204,7 @@ UndoChangeAngle::UndoChangeAngle( Doc * _doc,
   UndoAction( _doc )
 {
   name = i18n("Change Angle");
-  m_layoutUndo = new UndoCellFormat( _doc, _sheet, Region(_selection), QString::null );
+  m_layoutUndo = new UndoCellFormat( _doc, _sheet, _selection, QString::null );
   m_resizeUndo = new UndoResizeColRow( _doc, _sheet, _selection );
 }
 
@@ -1589,12 +1589,7 @@ void UndoDelete::undo()
         }
     }
 
-    Region::ConstIterator endOfList = m_region.constEnd();
-    for (Region::ConstIterator it = m_region.constBegin(); it != endOfList; ++it)
-    {
-      QRect range = (*it)->rect().normalize();
-      sheet->deleteCells( range );
-    }
+    sheet->deleteCells(m_region);
     sheet->paste( m_data, m_region.boundingRect() );
     sheet->updateView( );
 
@@ -1647,8 +1642,9 @@ void UndoDelete::redo()
  *
  ***************************************************************************/
 
-UndoDragDrop::UndoDragDrop( Doc * _doc, Sheet * _sheet, const QRect & _source,
-                                          const QRect & _target )
+UndoDragDrop::UndoDragDrop( Doc * _doc, Sheet * _sheet,
+                            const Region& _source,
+                            const Region& _target )
   : UndoAction( _doc ),
     m_selectionSource( _source ),
     m_selectionTarget( _target )
@@ -1658,8 +1654,7 @@ UndoDragDrop::UndoDragDrop( Doc * _doc, Sheet * _sheet, const QRect & _source,
     m_sheetName = _sheet->sheetName();
 
     saveCellRect( m_dataTarget, _sheet, _target );
-    if ( _source.left() > 0 )
-      saveCellRect( m_dataSource, _sheet, _source );
+    saveCellRect( m_dataSource, _sheet, _source );
 }
 
 UndoDragDrop::~UndoDragDrop()
@@ -1667,9 +1662,9 @@ UndoDragDrop::~UndoDragDrop()
 }
 
 void UndoDragDrop::saveCellRect( QCString & cells, Sheet * sheet,
-                                        QRect const & rect )
+                                 const Region& region )
 {
-    QDomDocument doc = sheet->saveCellRegion( rect );
+    QDomDocument doc = sheet->saveCellRegion(region);
     // Save to buffer
     QString buffer;
     QTextStream str( &buffer, IO_WriteOnly );
@@ -1688,21 +1683,17 @@ void UndoDragDrop::undo()
     if ( !sheet )
 	return;
 
-    if ( m_selectionSource.left() > 0 )
-      saveCellRect( m_dataRedoSource, sheet, m_selectionSource );
+    saveCellRect( m_dataRedoSource, sheet, m_selectionSource );
     saveCellRect( m_dataRedoTarget, sheet, m_selectionTarget );
 
     doc()->undoLock();
     doc()->emitBeginOperation();
 
     sheet->deleteCells( m_selectionTarget );
-    sheet->paste( m_dataTarget, m_selectionTarget );
+    sheet->paste( m_dataTarget, m_selectionTarget.boundingRect() );
 
-    if ( m_selectionSource.left() > 0 )
-    {
-      sheet->deleteCells( m_selectionSource );
-      sheet->paste( m_dataSource, m_selectionSource );
-    }
+    sheet->deleteCells( m_selectionSource );
+    sheet->paste( m_dataSource, m_selectionSource.boundingRect() );
 
     sheet->updateView();
 
@@ -1726,17 +1717,14 @@ void UndoDragDrop::redo()
     //that I must refresh, when there is cell Merged
 
     sheet->deleteCells( m_selectionTarget );
-    sheet->paste( m_dataRedoTarget, m_selectionTarget );
-    if ( m_selectionSource.left() > 0 )
-    {
-	sheet->deleteCells( m_selectionSource );
-      sheet->paste( m_dataRedoSource, m_selectionSource );
-    }
+    sheet->paste( m_dataRedoTarget, m_selectionTarget.boundingRect() );
+    sheet->deleteCells( m_selectionSource );
+    sheet->paste( m_dataRedoSource, m_selectionSource.boundingRect() );
 
     sheet->updateView();
     if ( sheet->getAutoCalc() )
           sheet->recalc();
-    
+
     doc()->undoUnlock();
 }
 
@@ -2692,7 +2680,7 @@ void UndoCellPaste::undo()
       }
       else
       {
-        sheet->removeColumn( xshift+1,nbCol-1,false);
+        sheet->removeColumn( xshift+1, nbCol-1, false);
       }
     }
     else if ((*it)->isRow())

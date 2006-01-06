@@ -95,7 +95,7 @@ struct Validity
 };
 
 class Formula;
-  
+
 /**
  * For every cell in the spread sheet there is a Cell object.
  *

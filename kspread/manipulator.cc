@@ -40,20 +40,15 @@
 
 using namespace KSpread;
 
-
-// TODO Stefan: AutoSum ?
-// TODO Stefan: FillSelection ?
-// TODO Stefan: Default ?
-
-// TODO Stefan: Paste Special (check)
+// TODO Stefan: InsertColumn
+// TODO Stefan: InsertRow
+// TODO Stefan: Paste with insertion
+// TODO Stefan: DeleteColumn
+// TODO Stefan: DeleteRow
 
 // TODO Stefan: SortInc
 // TODO Stefan: SortDec
-
-// TODO Stefan: DeleteColumn
-// TODO Stefan: DeleteRow
-// TODO Stefan: InsertColumn
-// TODO Stefan: InsertRow
+// TODO Stefan: FillSelection ?
 
 // TODO Stefan: RemoveComment (works, but not a manipulator yet)
 // TODO Stefan: ClearText (works, but not a manipulator yet)
@@ -64,9 +59,9 @@ using namespace KSpread;
 // TODO Stefan: Delete (works, but not a manipulator yet)
 // TODO Stefan: Cut (works, but not a manipulator yet)
 // TODO Stefan: Paste (works, but not a manipulator yet)
+// TODO Stefan: Paste Special (works, but not a manipulator yet)
 
 // TODO Stefan: more ????
-
 // TODO Stefan: maybe make the undos optional
 
 
@@ -76,6 +71,12 @@ using namespace KSpread;
 // a) Makes no sense to extend to non-contiguous selections (NCS) as
 //    it refers to a change in one column.
 // b) No special undo command available yet.
+//
+// 2. AutoSum
+// a) should insert cell at the end of the selection, if the last
+//    is not empty
+// b) opens an editor, if the user's intention is fuzzy -> hard to
+//    convert to NCS
 
 
 /***************************************************************************
@@ -129,7 +130,7 @@ void Manipulator::execute()
   }
 
   successfully = true;
-  postProcessing();
+  successfully = postProcessing();
   if (!successfully)
   {
     kdWarning() << "Manipulator::execute(): postprocessing was not successful!" << endl;

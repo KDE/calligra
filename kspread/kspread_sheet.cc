@@ -2467,7 +2467,7 @@ void Sheet::removeColumn( int col, int nbCol, bool makeUndo )
         doc()->addCommand( undo );
     }
 
-    for( int i = 0; i <= nbCol; ++i )
+    for ( int i = 0; i <= nbCol; ++i )
     {
         // Recalculate range max (minus size of removed column)
         d->sizeMaxX -= columnFormat( col )->dblWidth();
@@ -4978,9 +4978,9 @@ void Sheet::paste( const QRect &pasteArea, bool makeUndo,
     {
         // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
         // In particular it handles charsets (in the mimetype). Copied from KPresenter ;-)
-  QString _text = QApplication::clipboard()->text();
+        QString _text = QApplication::clipboard()->text();
         doc()->emitBeginOperation();
-  pasteTextPlain( _text, pasteArea);
+        pasteTextPlain( _text, pasteArea);
         emit sig_updateView( this );
         // doc()->emitEndOperation();
   return;
@@ -5382,28 +5382,21 @@ bool Sheet::testAreaPasteInsert()const
     return false;
 }
 
-void Sheet::deleteCells( const QRect& rect )
+void Sheet::deleteCells(const Region& region)
 {
     // A list of all cells we want to delete.
     QPtrStack<Cell> cellStack;
 
-    QRect tmpRect;
-    bool extraCell = false;
-    if (rect.width() == 1 && rect.height() == 1 )
-    {
-      Cell * cell = nonDefaultCell( rect.x(), rect.y() );
-      if (cell->isForceExtraCells())
-      {
-        extraCell = true;
-        tmpRect = rect;
-      }
-    }
+  Region::ConstIterator endOfList = region.constEnd();
+  for (Region::ConstIterator it = region.constBegin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
 
-    int right  = rect.right();
-    int left   = rect.left();
-    int bottom = rect.bottom();
+    int right  = range.right();
+    int left   = range.left();
+    int bottom = range.bottom();
     int col;
-    for ( int row = rect.top(); row <= bottom; ++row )
+    for ( int row = range.top(); row <= bottom; ++row )
     {
       Cell * c = getFirstCellRow( row );
       while ( c )
@@ -5423,6 +5416,7 @@ void Sheet::deleteCells( const QRect& rect )
         c = getNextCellRight( col, row );
       }
     }
+  }
 
     d->cells.setAutoDelete( false );
 
@@ -5463,10 +5457,10 @@ void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
         doc()->addCommand( undo );
     }
 
-    Region::ConstIterator endOfList = selectionInfo->constEnd();
-    for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
-    {
-      QRect range = (*it)->rect().normalize();
+  Region::ConstIterator endOfList = selectionInfo->constEnd();
+  for (Region::ConstIterator it = selectionInfo->constBegin(); it != endOfList; ++it)
+  {
+    QRect range = (*it)->rect().normalize();
 
     // Entire rows selected ?
     if ( util_isRowSelected(range) )
@@ -5494,7 +5488,7 @@ void Sheet::deleteSelection( Selection* selectionInfo, bool undo )
     {
         deleteCells( range );
     }
-    }
+  }
     refreshMergedCell();
     emit sig_updateView( this );
 }
@@ -5506,7 +5500,7 @@ void Sheet::updateView()
 
 void Sheet::updateView( QRect const & rect )
 {
-  emit sig_updateView( this, Region(rect) );
+  emit sig_updateView( this, rect );
 }
 
 void Sheet::updateView(Region* region)

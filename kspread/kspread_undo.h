@@ -415,15 +415,15 @@ protected:
 class UndoDragDrop : public UndoAction
 {
 public:
-    UndoDragDrop( Doc * _doc, Sheet * _sheet, const QRect & _source, const QRect & _target );
+    UndoDragDrop( Doc * _doc, Sheet * _sheet, const Region& _source, const Region& _target );
     virtual ~UndoDragDrop();
 
     virtual void undo();
     virtual void redo();
 
 protected:
-    QRect    m_selectionSource;
-    QRect    m_selectionTarget;
+    Region   m_selectionSource;
+    Region   m_selectionTarget;
     QCString m_dataSource;
     QCString m_dataTarget;
     QCString m_dataRedoSource;
@@ -431,7 +431,7 @@ protected:
     QString  m_sheetName;
 
     void saveCellRect( QCString & cells, Sheet * sheet,
-                       QRect const & rect );
+                       const Region& region );
 };
 
 class UndoResizeColRow : public UndoAction

@@ -961,11 +961,11 @@ public:
      * This function can be used to clear an area before you paste something from the clipboard
      * in this area.
      *
-     * @param rect The rectangle that contains the cells that should be deleted
+     * @param region The region that contains the cells that should be deleted
      *
      * @see #loadCells
      */
-    void deleteCells( const QRect& rect );
+    void deleteCells(const Region& region);
 
 
     /**

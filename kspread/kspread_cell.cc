@@ -6138,7 +6138,6 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
         delete d->extra()->conditions;
         d->extra()->conditions = 0;
       }
- 
     }
 
     QDomElement validity = cell.namedItem( "validity" ).toElement();
