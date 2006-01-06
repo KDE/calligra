@@ -492,10 +492,13 @@ void KPrView::print( KPrinter &prt )
 
     QPainter painter;
     painter.begin( &prt );
-    kdDebug(33001) << "KPrView::print scaling by " << (double)metrics.logicalDpiX() / (double)dpiX
-                   << "," << (double)metrics.logicalDpiY() / (double)dpiY << endl;
-    painter.scale( (double)metrics.logicalDpiX() / (double)dpiX,
-                   (double)metrics.logicalDpiY() / (double)dpiY );
+    QRect rect = m_pKPresenterDoc->pageList().at( 0 )->getZoomPageRect();
+    double zoom = QMIN( double( metrics.width() ) / double( rect.width() ), 
+                        double( metrics.height() ) / double( rect.height() ) );
+    double newZoom = zoom * m_pKPresenterDoc->zoomHandler()->zoom();
+    kdDebug(33001) << "KPrView::print newZoom = " << newZoom << endl;
+    setZoom( int( newZoom ), false );
+    QRect paintingRect = m_pKPresenterDoc->pageList().at( 0 )->getZoomPageRect();
 
     m_canvas->print( &painter, &prt, left_margin, top_margin );
     painter.end();

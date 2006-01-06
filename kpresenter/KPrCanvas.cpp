@@ -3297,8 +3297,10 @@ void KPrCanvas::printPage( QPainter* painter, PresStep step, KPrinter *printer, 
 
     int height = rect.height();
     int width = rect.width();
-    int begin_left = 0;
-    int begin_top = 0;
+    
+    QPaintDeviceMetrics metrics( printer );
+    int begin_left = ( metrics.width() - rect.width() );
+    int begin_top = ( metrics.height() - rect.height() );
 
     rows = cols = QMAX( rows, cols ); // all slides have the same size
 
@@ -3492,7 +3494,6 @@ void KPrCanvas::print( QPainter *painter, KPrinter *printer, float /*left_margin
 {
     PresStep step( 0, 1000, 1000 );
     //deSelectAllObj(); // already done in KPrView::setupPrinter
-    printer->setFullPage( true );
     int i = 0;
 
     repaint( false );
