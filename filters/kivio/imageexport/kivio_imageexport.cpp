@@ -153,16 +153,26 @@ KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCSt
     size = customSize;
   }
 
+  int border = dlg.border();
+
+  size.setWidth(size.width() + (border * 2));
+  size.setHeight(size.height() + (border * 2));
+
   QPixmap pixmap = QPixmap(size);
   pixmap.fill(Qt::white);
   KivioScreenPainter kpainter;
   kpainter.start(&pixmap);
 
+  int translationX = border;
+  int translationY = border;
+
   if(!dlg.usePageBorders()) {
     QPoint point = zoom.zoomPoint(page->getRectForAllStencils().topLeft());
-    kpainter.setTranslation(-point.x(), -point.y());
+    translationX += point.x();
+    translationY += point.y();
   }
 
+  kpainter.setTranslation(-translationX, -translationY);
   page->printContent(kpainter, &zoom);
 
   if(!pixmap.save(m_chain->outputFile(), format.local8Bit())) {

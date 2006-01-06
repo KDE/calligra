@@ -40,6 +40,7 @@ class ImageExportDialog : public KDialogBase
     bool usePageBorders() const;
     bool useCustomSize() const;
     QSize customSize() const;
+    int border() const;
 
   private:
     ImageExportWidget* m_mainWidget;

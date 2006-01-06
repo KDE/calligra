@@ -75,6 +75,11 @@ QSize ImageExportDialog::customSize() const
   return size;
 }
 
+int ImageExportDialog::border() const
+{
+  return m_mainWidget->m_borderSpinBox->value();
+}
+
 }
 
 #include "kivio_imageexportdialog.moc"

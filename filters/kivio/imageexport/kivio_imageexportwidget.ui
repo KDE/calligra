@@ -9,7 +9,7 @@
             <x>0</x>
             <y>0</y>
             <width>342</width>
-            <height>151</height>
+            <height>181</height>
         </rect>
     </property>
     <grid>
@@ -27,12 +27,12 @@
                 <string>Page:</string>
             </property>
         </widget>
-        <widget class="KComboBox" row="0" column="2" rowspan="1" colspan="3">
+        <widget class="KComboBox" row="0" column="2" rowspan="1" colspan="2">
             <property name="name">
                 <cstring>m_pageCombo</cstring>
             </property>
         </widget>
-        <widget class="KComboBox" row="1" column="2" rowspan="1" colspan="3">
+        <widget class="KComboBox" row="1" column="2" rowspan="1" colspan="2">
             <item>
                 <property name="text">
                     <string>Complete page</string>
@@ -55,7 +55,7 @@
                 <string>Area to export:</string>
             </property>
         </widget>
-        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="5">
+        <widget class="QCheckBox" row="2" column="0" rowspan="1" colspan="4">
             <property name="name">
                 <cstring>m_customSizeCheckBox</cstring>
             </property>
@@ -97,24 +97,7 @@
                 </size>
             </property>
         </spacer>
-        <spacer row="5" column="3">
-            <property name="name">
-                <cstring>spacer3</cstring>
-            </property>
-            <property name="orientation">
-                <enum>Vertical</enum>
-            </property>
-            <property name="sizeType">
-                <enum>Expanding</enum>
-            </property>
-            <property name="sizeHint">
-                <size>
-                    <width>20</width>
-                    <height>211</height>
-                </size>
-            </property>
-        </spacer>
-        <widget class="QLabel" row="4" column="1" rowspan="1" colspan="2">
+        <widget class="QLabel" row="4" column="1">
             <property name="name">
                 <cstring>m_heightLabel</cstring>
             </property>
@@ -125,7 +108,7 @@
                 <string>Height:</string>
             </property>
         </widget>
-        <widget class="QLabel" row="3" column="1" rowspan="1" colspan="2">
+        <widget class="QLabel" row="3" column="1">
             <property name="name">
                 <cstring>m_widthLabel</cstring>
             </property>
@@ -136,7 +119,7 @@
                 <string>Width:</string>
             </property>
         </widget>
-        <widget class="QSpinBox" row="3" column="3">
+        <widget class="QSpinBox" row="3" column="2">
             <property name="name">
                 <cstring>m_widthSpinBox</cstring>
             </property>
@@ -147,7 +130,7 @@
                 <number>10000</number>
             </property>
         </widget>
-        <widget class="QSpinBox" row="4" column="3">
+        <widget class="QSpinBox" row="4" column="2">
             <property name="name">
                 <cstring>m_heightSpinBox</cstring>
             </property>
@@ -158,7 +141,7 @@
                 <number>10000</number>
             </property>
         </widget>
-        <spacer row="3" column="4">
+        <spacer row="3" column="3">
             <property name="name">
                 <cstring>spacer4</cstring>
             </property>
@@ -175,7 +158,7 @@
                 </size>
             </property>
         </spacer>
-        <spacer row="4" column="4">
+        <spacer row="4" column="3">
             <property name="name">
                 <cstring>spacer4_2</cstring>
             </property>
@@ -188,6 +171,53 @@
             <property name="sizeHint">
                 <size>
                     <width>41</width>
+                    <height>20</height>
+                </size>
+            </property>
+        </spacer>
+        <spacer row="6" column="2">
+            <property name="name">
+                <cstring>spacer3</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Vertical</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>20</width>
+                    <height>40</height>
+                </size>
+            </property>
+        </spacer>
+        <widget class="QLabel" row="5" column="0" rowspan="1" colspan="2">
+            <property name="name">
+                <cstring>m_borderLabel</cstring>
+            </property>
+            <property name="text">
+                <string>Border:</string>
+            </property>
+        </widget>
+        <widget class="QSpinBox" row="5" column="2">
+            <property name="name">
+                <cstring>m_borderSpinBox</cstring>
+            </property>
+        </widget>
+        <spacer row="5" column="3">
+            <property name="name">
+                <cstring>spacer4_2_2</cstring>
+            </property>
+            <property name="orientation">
+                <enum>Horizontal</enum>
+            </property>
+            <property name="sizeType">
+                <enum>Expanding</enum>
+            </property>
+            <property name="sizeHint">
+                <size>
+                    <width>165</width>
                     <height>20</height>
                 </size>
             </property>
