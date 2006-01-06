@@ -42,27 +42,27 @@ bool AbstractDataManipulator::process (Element* element)
   for (int col = range.left(); col <= range.right(); ++col)
     for (int row = range.top(); row <= range.bottom(); ++row) {
       Value val;
-      QString formula;
-      bool isFormula = false;
+      QString text;
+      bool parse = false;
       if (m_reverse) {
         // reverse - use the stored value
         if (oldData.contains (col) && oldData[col].contains (row)) {
           val = oldData[col][row];
         } else if (oldFormula.contains (col) &&
                    oldFormula[col].contains (row)) {
-          formula = oldFormula[col][row];
-          isFormula = true;
+          text = oldFormula[col][row];
+          parse = true;
         }
       } else {
-        val = newValue (element, col, row, &isFormula);
-        if (isFormula)
-          formula = val.asString();
+        val = newValue (element, col, row, &parse);
+        if (parse)
+          text = val.asString();
       }
       
       // we have the data - set it !
-      if (isFormula) {
+      if (parse) {
         Cell *cell = m_sheet->nonDefaultCell (col, row);
-        cell->setCellText (cell->decodeFormula (formula));
+        cell->setCellText (text);
       } else {
         Cell *cell = m_sheet->cellAt (col, row);
         if ((!val.isEmpty()) || cell)  // nothing if value and cell both empty
@@ -89,8 +89,7 @@ bool AbstractDataManipulator::preProcessing ()
         {
           if (cell->isFormula())
           {
-            QString f = cell->encodeFormula();
-            oldFormula[col][row] = f;
+            oldFormula[col][row] = cell->text();
           }
           else {
             Value val = m_sheet->value (col, row);
@@ -104,6 +103,7 @@ bool AbstractDataManipulator::preProcessing ()
 }
 
 DataManipulator::DataManipulator ()
+  : m_parsing (false)
 {
 }
 
@@ -112,9 +112,9 @@ DataManipulator::~DataManipulator ()
 }
 
 Value DataManipulator::newValue (Element *element, int col, int row,
-    bool *isFormula)
+    bool *parsing)
 {
-  *isFormula = false;
+  *parsing = m_parsing;
   QRect range = element->rect().normalize();
   int colidx = range.left() - col;
   int rowidx = range.top() - row;

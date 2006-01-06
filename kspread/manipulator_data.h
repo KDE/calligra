@@ -40,9 +40,11 @@ class AbstractDataManipulator : public Manipulator {
     /** this abstract method should return a value that will be set
     for a given cell */
   protected:
-    /** row/col are relative to sheet, not element */
+    /** Return new value. row/col are relative to sheet, not element.
+    If the function sets *parse to true, the value will be treated as an
+    user-entered string and parsed by Cell. */
     virtual Value newValue (Element *element, int col, int row,
-      bool *isFormula) = 0;
+      bool *parse) = 0;
     /** preProcessing will store the old cell's data */
     virtual bool preProcessing ();
     // has to be like this, so that column/row changes take less memory
@@ -61,6 +63,7 @@ class DataManipulator : public AbstractDataManipulator {
   public:
     DataManipulator ();
     virtual ~DataManipulator ();
+    void setParsing (bool val) { m_parsing = val; };
     /** set the values for the range. Can be either a single value, or
     a value array */
     void setValue (Value val) { data = val; };
@@ -68,6 +71,7 @@ class DataManipulator : public AbstractDataManipulator {
     virtual Value newValue (Element *element, int col, int row, bool *);
     
     Value data;
+    bool m_parsing : 1;
 };
 
 
