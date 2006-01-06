@@ -30,11 +30,14 @@ class VGradientTabWidget;
 
 class VGradientTool : public VTool
 {
+	Q_OBJECT
+
 public:
 	VGradientTool( KarbonView *view );
 	virtual ~VGradientTool();
 
 	virtual void activate();
+	virtual void deactivate();
 
 	virtual void setup(KActionCollection *collection);
 	virtual QString uiname() { return i18n( "Gradient Tool" ); }
@@ -44,6 +47,7 @@ public:
 	virtual bool showDialog() const;
 
 	virtual void draw( VPainter* painter );
+
 protected:
 
 	virtual void draw();
@@ -53,9 +57,21 @@ protected:
 	virtual void mouseDrag();
 	virtual void cancel();
 	virtual void setCursor() const;
+	virtual bool keyReleased( Qt::Key key );
+
+	/**
+	 * Determines the actual gradient to be edited.
+	 *
+	 * @param gradient the found gradient
+	 * @return true if gradient was found, else false
+	 */
+	bool getGradient( VGradient &gradient );
+
+protected slots:
+	void targetChanged();
 
 private:
-	enum { normal, moveStart, moveEnd, createNew } m_state;
+	enum { normal, moveOrigin, moveVector, moveCenter, createNew } m_state;
 
 	class VGradientOptionsWidget : public KDialogBase
 	{
@@ -65,12 +81,15 @@ private:
 	private:
 		VGradientTabWidget *m_gradientWidget;
 	};
-	VGradient            m_gradient;
-	KoPoint              m_current;
-	KoPoint              m_fixed;
-	VGradientOptionsWidget*  m_optionsWidget;
-	KoRect               m_start; /**< the handle of the gradient origin */
-	KoRect               m_end;   /**< the handle of the gradient vector */
+	VGradient            m_gradient; /**< the actual gradient */
+	KoPoint              m_current;  /**< the current position when dragging */
+	KoPoint              m_fixed;    /**< the fixed point when only dragging one point of the gradient vector */
+	VGradientOptionsWidget*  m_optionsWidget; /**< the options dialog, for editing gradients */
+	KoRect               m_origin;   /**< the handle of the gradient origin */
+	KoRect               m_vector;   /**< the handle of the gradient vector */
+	KoRect               m_center;   /**< the handle of the radial gradient focal point */
+	int                  m_handleSize; /**< the handle's size */
+	bool                 m_active;   /**< holds active state of the tool, which is used for drawing of the gradient vector */
 };
 
 #endif

@@ -119,6 +119,9 @@ public:
 
 	VToolController *toolController();
 
+	VStrokeFillPreview* strokeFillPreview()
+		{ return m_strokeFillPreview; }
+
 public slots:
 	// editing:
 	void editCut();
