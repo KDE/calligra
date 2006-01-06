@@ -64,7 +64,29 @@ KoFilter::ConversionStatus ImageExport::convert(const QCString& from, const QCSt
   if(to == "image/png") {
     format = "PNG";
   } else if(to == "image/jpeg") {
-    format ="JPEG";
+    format = "JPEG";
+  } else if(to == "image/bmp") {
+    format = "BMP";
+  } else if(to == "image/x-eps") {
+    format = "EPS";
+  } else if(to == "image/x-portable-bitmap") {
+    format = "PBM";
+  } else if(to == "image/x-pcx") {
+    format = "PCX";
+  } else if(to == "image/x-portable-graymap") {
+    format = "PGM";
+  } else if(to == "image/x-portable-pixmap") {
+    format = "PPM";
+  } else if(to == "image/x-rgb") {
+    format = "RGB";
+  } else if(to == "image/x-tga") {
+    format = "TGA";
+  } else if(to == "image/x-xbitmap") {
+    format = "XBM";
+  } else if(to == "image/x-xpixmap") {
+    format = "XPM";
+  } else if(to == "image/jpeg2000") {
+    format = "JP2";
   } else {
     return KoFilter::BadMimeType;
   }
