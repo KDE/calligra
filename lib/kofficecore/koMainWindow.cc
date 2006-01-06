@@ -403,7 +403,7 @@ void KoMainWindow::setRootDocument( KoDocument *doc )
 
 void KoMainWindow::updateReloadFileAction(KoDocument *doc)
 {
-    d->m_reloadfile->setEnabled( doc && !doc->url().isEmpty()&&doc->isModified());
+    d->m_reloadfile->setEnabled( doc && !doc->url().isEmpty() );
 }
 
 void KoMainWindow::updateVersionsFileAction(KoDocument *doc)
