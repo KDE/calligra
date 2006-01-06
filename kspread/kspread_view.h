@@ -80,8 +80,19 @@ class KPSheetSelectPage : public KPrintDialogPage
 //     ~KPSheetSelectPage();
     
 //     //reimplement virtual functions
-//     void getOptions( QMap<QString,QString>& opts, bool incldef = false );
-//     void setOptions( const QMap<QString,QString>& opts );
+    /**
+     * @see printOptionPrefix()
+     */
+    void getOptions( QMap<QString,QString>& opts, bool incldef = false );
+    
+    /**
+     * @see printOptionPrefix()
+     */
+    void setOptions( const QMap<QString,QString>& opts );
+    
+    /**
+     * @return false if no sheet is selected for printing.
+     */
     bool isValid( QString& msg );
     
     /**
@@ -89,17 +100,41 @@ class KPSheetSelectPage : public KPrintDialogPage
      */
     QStringList selectedSheets();
     
+    /**
+     * Removes all sheets from the list of selected sheets.
+     */
+    void clearSelection();
+    
+    /**
+     * The print order of the sheets is stored in the option map,
+     * using a prefix plus the index of the sheet, like the following:
+     * \li sheetprintorder0
+     * \li sheetprintorder1
+     * \li sheetprintorder2
+     * Please note that this is just the key to the value, not the value
+     * itself. The value of the option is the sheetname itself.
+     * @param index the index of the print order, starting at 0
+     * @return the string that is used in the printoption for given index
+     */
+    static QString printOptionForIndex(unsigned int index);
+    
+    /**
+     * @param prt the printer from which the options should be read.
+     * @return list of sheets to print in correct order configured for given printer.
+     */
+    static QStringList selectedSheets(KPrinter &prt);
+    
   public slots:
     
     /**
      * Inserts given sheet to the list of available sheets.
      */
-    void addAvailableSheet(const QString& sheetname);
+    void prependAvailableSheet(const QString& sheetname);
     
     /**
-     * Inserts given sheet to the list of sheets for printing.
+     * Inserts given sheet to the list of sheets for printing at the top.
      */
-    void addSelectedSheet(const QString& sheetname);
+    void prependSelectedSheet(const QString& sheetname);
     
   protected slots:
 
