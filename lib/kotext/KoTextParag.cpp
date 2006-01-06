@@ -2869,6 +2869,8 @@ void KoTextParag::saveOasis( KoXmlWriter& writer, KoSavingContext& context,
         writer.startElement( "text:h", false /*no indent inside this tag*/ );
         writer.addAttribute( "text:style-name", autoParagStyleName );
         writer.addAttribute( "text:outline-level", (int)paragCounter->depth() + 1 );
+        if ( paragCounter->numbering() == KoParagCounter::NUM_NONE )
+            writer.addAttribute( "text:is-list-header", "true" );
 
         QString textNumber = paragCounter->text( this );
         if ( !textNumber.isEmpty() )

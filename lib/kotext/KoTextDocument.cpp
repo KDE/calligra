@@ -1555,13 +1555,23 @@ KoTextParag* KoTextDocument::loadList( const QDomElement& list, KoOasisContext& 
             int restartNumbering = -1;
             if ( listItem.hasAttributeNS( KoXmlNS::text, "start-value" ) )
                 restartNumbering = listItem.attributeNS( KoXmlNS::text, "start-value", QString::null ).toInt();
+            bool isListHeader = listItem.localName() == "list-header" || listItem.attributeNS( KoXmlNS::text, "is-list-header", QString::null ) == "is-list-header";
             KoTextParag* oldLast = lastParagraph;
             lastParagraph = loadOasisText( listItem, context, lastParagraph, styleColl, nextParagraph );
             KoTextParag* firstListItem = oldLast ? oldLast->next() : firstParag();
+            KoTextParag* p = firstListItem;
             // It's either list-header (normal text on top of list) or list-item
-            if ( listItem.localName() != "list-header" && firstListItem ) {
+            if ( !isListHeader && firstListItem ) {
                 // Apply list style to first paragraph inside list-item
-                firstListItem->applyListStyle( context, restartNumbering, orderedList, false, level );
+                bool isOutline = firstListItem->counter() && firstListItem->counter()->numbering() == KoParagCounter::NUM_CHAPTER;
+                firstListItem->applyListStyle( context, restartNumbering, orderedList, isOutline, level );
+                p = p->next();
+            }
+            // Make text:h inside list-item (as non first child) unnumbered.
+            while ( p && p != lastParagraph->next() ) {
+                if ( p->counter() )
+                    p->counter()->setNumbering( KoParagCounter::NUM_NONE );
+                p = p->next();
             }
         }
     }

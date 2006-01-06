@@ -232,10 +232,12 @@ void KoStyleCollection::printDebug() const
         // short version:
         // kdDebug() << style << "  " << style->name() << "    " << style->displayName() << "  followingStyle=" << style->followingStyle() << endl;
 
-        kdDebug() << "Style " << style << "  " << style->name() <<endl;
+        kdDebug() << "Style " << style << "  " << style->name() << "  isOutline=" << style->isOutline() << endl;
         kdDebug() << "   format: " << style->format().key() <<endl;
         static const char * const s_align[] = { "Auto", "Left", "Right", "ERROR", "HCenter", "ERR", "ERR", "ERR", "Justify", };
         kdDebug() << "  align: " << s_align[(Qt::AlignmentFlags)style->paragLayout().alignment] << endl;
+        if ( style->paragLayout().counter )
+            kdDebug() << "  counter level=" << style->paragLayout().counter->depth() << endl;
 
         kdDebug() << "   following style: " << style->followingStyle() << " "
                   << ( style->followingStyle() ? style->followingStyle()->name() : QString::null ) << endl;
