@@ -24,6 +24,7 @@
 
 #include "vtool.h"
 #include "vpattern.h"
+#include "KoRect.h"
 
 class QHButtonGroup;
 class QToolButton;
@@ -58,16 +59,21 @@ private:
 
 class VPatternTool : public VTool
 {
+	Q_OBJECT
+
 public:
 	VPatternTool( KarbonView *view );
 	virtual ~VPatternTool();
 
 	virtual void activate();
+	virtual void deactivate();
 
 	virtual void setup(KActionCollection *collection);
 	virtual QString uiname() { return i18n( "Pattern Tool" ); }
 	virtual QString contextHelp();
 	virtual bool showDialog() const;
+
+	virtual void draw( VPainter* painter );
 
 protected:
 	virtual void draw();
@@ -79,10 +85,31 @@ protected:
 	/*virtual void mouseDragShiftPressed(); // To use to scale the pattern.
 	virtual void mouseDragShiftReleased(); */
 	virtual void cancel();
+	virtual void setCursor() const;
+	virtual bool keyReleased( Qt::Key key );
+
+	/**
+	 * Determines the actual pattern to be edited.
+	 *
+	 * @param pattern the found pattern
+	 * @return true if pattern was found, else false
+	 */
+	bool getPattern( VPattern &pattern );
+
+protected slots:
+	void targetChanged();
 
 private:
-	KoPoint			m_current;
-	VPatternWidget*	m_optionsWidget;
+	enum { normal, moveOrigin, moveVector, createNew } m_state;
+
+	VPattern             m_pattern;
+	KoPoint              m_current;  /**< the current position when dragging */
+	KoPoint              m_fixed;    /**< the fixed point when only dragging one point of the gradient vector */
+	VPatternWidget*	m_optionsWidget; /**< the options dialog, for selecting patterns */
+	KoRect               m_origin;   /**< the handle of the pattern origin */
+	KoRect               m_vector;   /**< the handle of the pattern vector */
+	int                  m_handleSize; /**< the handle's size */
+	bool                 m_active;   /**< holds active state of the tool, which is used for drawing of the pattern vector */
 }; // VPatternTool
 
 #endif /* __VPATTERNTOOL_H__ */

@@ -638,7 +638,7 @@ VKoPainter::applyPattern( ArtSVP *svp, bool fill )
 	pattern->theight = pat.tileHeight();
 	pattern->buffer = pat.pixels();
 	pattern->opacity = fill ? short( m_fill->color().opacity() * 255.0 ) : short( m_stroke->color().opacity() * 255.0 );
-	pattern->angle = atan2( dy, dx );
+	pattern->angle = atan2( -dy, dx );
 
 	if( x0 != x1 && y0 != y1 )
 	{
