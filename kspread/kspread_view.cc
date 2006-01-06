@@ -1448,6 +1448,45 @@ void KPSheetSelectPage::removeAll()
 
 void KPSheetSelectPage::moveTop()
 {
+  //this creates a temporary new list (selected first, then rest)
+  // which replaces the existing one, to avoid the need of an additional sort column
+  
+  QValueList<QListViewItem*> newlist;
+  QListViewItem* item = gui->ListViewSelected->firstChild();
+  QListViewItem* nextitem = NULL;
+  kdDebug() << "Filling new list with selected items first" << endl;
+  while (item)
+  {
+    nextitem = item->nextSibling();
+    if (item->isSelected())
+    {
+      newlist.prepend(item);
+      gui->ListViewSelected->takeItem(item);
+    }
+    item = nextitem;
+  }
+  kdDebug() << "Appending the rest" << endl;
+  item = gui->ListViewSelected->firstChild();
+  while (item)
+  {
+    kdDebug() << " processing item " << item->text(0) << endl;
+    nextitem = item->nextSibling();
+    if (!item->isSelected())
+    {
+      newlist.prepend(item);
+      gui->ListViewSelected->takeItem(item);
+    }
+    item = nextitem;
+  }
+  
+  kdDebug() << "Refill the view with the correctly ordered list" << endl;
+  //the view is empty now, refill in correct order (reversed!!)
+  QValueList<QListViewItem*>::iterator it;
+  for (it = newlist.begin(); it != newlist.end(); ++it)
+  {
+    kdDebug() << " adding " << (*it)->text(0) << endl;
+    gui->ListViewSelected->insertItem(*it);
+  }
 }
 
 void KPSheetSelectPage::moveUp()
@@ -1460,6 +1499,45 @@ void KPSheetSelectPage::moveDown()
 
 void KPSheetSelectPage::moveBottom()
 {
+  //this creates a temporary new list (unselected first, then rest)
+  // which replaces the existing one, to avoid the need of an additional sort column
+  
+  QValueList<QListViewItem*> newlist;
+  QListViewItem* item = gui->ListViewSelected->firstChild();
+  QListViewItem* nextitem = NULL;
+  kdDebug() << "Filling new list with unselected items first" << endl;
+  while (item)
+  {
+    kdDebug() << " processing item " << item->text(0) << endl;
+    nextitem = item->nextSibling();
+    if (!item->isSelected())
+    {
+      newlist.prepend(item);
+      gui->ListViewSelected->takeItem(item);
+    }
+    item = nextitem;
+  }
+  kdDebug() << "Appending the rest" << endl;
+  item = gui->ListViewSelected->firstChild();
+  while (item)
+  {
+    nextitem = item->nextSibling();
+    if (item->isSelected())
+    {
+      newlist.prepend(item);
+      gui->ListViewSelected->takeItem(item);
+    }
+    item = nextitem;
+  }
+  
+  kdDebug() << "Refill the view with the correctly ordered list" << endl;
+  //the view is empty now, refill in correct order (reversed!!)
+  QValueList<QListViewItem*>::iterator it;
+  for (it = newlist.begin(); it != newlist.end(); ++it)
+  {
+    kdDebug() << " adding " << (*it)->text(0) << endl;
+    gui->ListViewSelected->insertItem(*it);
+  }
 }
 
 } // namespace KSpread
