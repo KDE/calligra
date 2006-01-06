@@ -1,0 +1,9 @@
+[Desktop Entry]
+Encoding=UTF-8
+Type=Service
+Name=Kivio Image Export Filter
+X-KDE-Import=application/x-kivio
+X-KDE-Export=image/png,image/jpeg
+X-KDE-Weight=1
+X-KDE-Library=libkivioimageexport
+ServiceTypes=KOfficeFilter

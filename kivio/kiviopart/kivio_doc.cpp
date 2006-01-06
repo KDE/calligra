@@ -151,7 +151,7 @@ KivioDoc::KivioDoc( QWidget *parentWidget, const char* widgetName, QObject* pare
 
 
   if ( name )
-      dcopObject();
+    dcopObject();
 }
 
 DCOPObject* KivioDoc::dcopObject()
@@ -698,7 +698,7 @@ void KivioDoc::printContent( KPrinter &prn )
   // ### HACK: disable zooming-when-printing if embedded parts are used.
   // No koffice app supports zooming in paintContent currently.
   // Disable in ALL cases now
-  bool doZoom = true;
+  bool doZoom = false;
   int dpiX = doZoom ? 300 : KoGlobal::dpiX();
   int dpiY = doZoom ? 300 : KoGlobal::dpiY();
 

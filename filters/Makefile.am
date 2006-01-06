@@ -35,8 +35,11 @@ if compile_filter_KRITA
 KRITADIR = krita
 endif
 
+if compile_filter_KIVIO
+KIVIODIR = kivio
+endif
 
-SUBDIRS = generic_wrapper libdialogfilter liboofilter $(KSPREADDIR) $(KCHARTDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR) $(KRITADIR)
+SUBDIRS = generic_wrapper libdialogfilter liboofilter $(KSPREADDIR) $(KCHARTDIR) $(KWORDDIR) $(KPRESENTERDIR) olefilters $(XSLTFILTERDIR) $(KFORMULADIR) $(KARBONDIR) $(KUGARDIR) $(KRITADIR) $(KIVIODIR)
 
 messages:
 	$(EXTRACTRC) `find . -name \*.ui` > rc.cpp
