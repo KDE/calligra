@@ -66,7 +66,8 @@
 #include <kstandarddirs.h>
 #include <ktempfile.h>
 #include <kparts/partmanager.h>
-#include <kdeprint/kprintdialogpage.h>
+#include <klistview.h>
+#include <kpushbutton.h>
 
 // KOffice includes
 #include <tkcoloractions.h>
@@ -435,51 +436,6 @@ public:
     KToggleAction* calcCount;
     KToggleAction* calcSum;
     KToggleAction* calcCountA;
-};
-
-/**
- * \class KPSheetSelectPage
- * \brief Print dialog page for selecting sheets to print.
- * @author raphael.langerhorst@kdemail.net
- * @see SheetSelectWidget
- *
- * This dialog is shown in the print dialog and allows the user
- * to select the sheets that should be printed and in which order
- * they should be printed.
- */
-class KPSheetSelectPage : public KPrintDialogPage
-{
-  public:
-    KPSheetSelectPage( QWidget *parent = 0 );
-//     ~KPSheetSelectPage();
-    
-//     //reimplement virtual functions
-//     void getOptions( QMap<QString,QString>& opts, bool incldef = false );
-//     void setOptions( const QMap<QString,QString>& opts );
-//     bool isValid( QString& msg );
-    
-    /**
-     * Inserts given sheet to the list of available sheets.
-     */
-    void addAvailableSheet(const QString& sheetname);
-    
-    /**
-     * Inserts given sheet to the list of sheets for printing.
-     */
-    void addSelectedSheet(const QString& sheetname);
-    
-    /**
-     * @return list of sheets that will be printed, in correct order.
-     */
-    QStringList SheetsForPrinting();
-    
-  private:
-  
-    /**
-     * The widget used, includes two lists of sheet names and
-     * buttons to move sheets between and within the lists.
-     */
-    SheetSelectWidget* gui;
 };
 
 
@@ -1407,15 +1363,18 @@ KPSheetSelectPage::KPSheetSelectPage( QWidget *parent )
 {
   setTitle(gui->caption());
   
-  //TODO somehow the size policy doesn't take effect, I don't know what to do (raphael)
-  if (parent)
-    parent->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
-  this->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
-  gui->setSizePolicy(QSizePolicy(QSizePolicy::Expanding,QSizePolicy::Expanding));
+  gui->ListViewAvailable->setSorting(-1);
+  gui->ListViewSelected->setSorting(-1);
   
-  //TODO finish this
-//   gui->ListViewAvailable->setColumnWidthMode(0,QListView::Maximum);
-//   gui->ListViewSelected->setColumnWidthMode(0,QListView::Maximum);
+  connect(gui->ButtonSelectAll,SIGNAL(clicked()),this,SLOT(selectAll()));
+  connect(gui->ButtonSelect,SIGNAL(clicked()),this,SLOT(select()));
+  connect(gui->ButtonRemove,SIGNAL(clicked()),this,SLOT(remove()));
+  connect(gui->ButtonRemoveAll,SIGNAL(clicked()),this,SLOT(removeAll()));
+  
+  connect(gui->ButtonMoveTop,SIGNAL(clicked()),this,SLOT(moveTop()));
+  connect(gui->ButtonMoveUp,SIGNAL(clicked()),this,SLOT(moveUp()));
+  connect(gui->ButtonMoveDown,SIGNAL(clicked()),this,SLOT(moveDown()));
+  connect(gui->ButtonMoveBottom,SIGNAL(clicked()),this,SLOT(moveBottom()));
 }
 
 // KPSheetSelectPage::~KPSheetSelectPage()
@@ -1425,13 +1384,82 @@ KPSheetSelectPage::KPSheetSelectPage( QWidget *parent )
 void KPSheetSelectPage::addAvailableSheet(const QString& sheetname)
 {
   Q_ASSERT(gui);
-  new QListViewItem((QListView*)(gui->ListViewAvailable),sheetname);
+  new QListViewItem(gui->ListViewAvailable,sheetname);
 }
 
 void KPSheetSelectPage::addSelectedSheet(const QString& sheetname)
 {
   Q_ASSERT(gui);
-  new QListViewItem((QListView*)(gui->ListViewSelected),sheetname);
+  new QListViewItem(gui->ListViewSelected,sheetname);
+}
+
+QStringList KPSheetSelectPage::selectedSheets()
+{
+  Q_ASSERT(gui);
+  QStringList list;
+  QListViewItem* item = gui->ListViewSelected->firstChild();
+  while (item)
+  {
+    list.append(item->text(0));
+    item = item->nextSibling();
+  }
+  return list;
+}
+
+void KPSheetSelectPage::selectAll()
+{
+  QListViewItem* item = gui->ListViewAvailable->firstChild();
+  while (item)
+  {
+    this->addSelectedSheet(item->text(0));
+    item = item->nextSibling();
+  }
+}
+
+void KPSheetSelectPage::select()
+{
+  QListViewItem* item = gui->ListViewAvailable->firstChild();
+  while (item)
+  {
+    if (item->isSelected())
+      this->addSelectedSheet(item->text(0));
+    item = item->nextSibling();
+  }
+}
+
+void KPSheetSelectPage::remove()
+{
+  QListViewItem* item = gui->ListViewSelected->firstChild();
+  QListViewItem* nextitem = NULL;
+  while (item)
+  {
+    nextitem = item->nextSibling();
+    if (item->isSelected())
+      delete item;
+    item = nextitem;
+  }
+}
+
+void KPSheetSelectPage::removeAll()
+{
+  gui->ListViewSelected->clear();
+}
+
+
+void KPSheetSelectPage::moveTop()
+{
+}
+
+void KPSheetSelectPage::moveUp()
+{
+}
+
+void KPSheetSelectPage::moveDown()
+{
+}
+
+void KPSheetSelectPage::moveBottom()
+{
 }
 
 } // namespace KSpread
@@ -4369,6 +4397,13 @@ void View::setupPrinter( KPrinter &prt )
       sheetpage->addSelectedSheet(d->activeSheet->sheetName());
     }
     
+    kdDebug() << "The following sheets are currently selected for printing:" << endl;
+    QStringList list = sheetpage->selectedSheets();
+    QStringList::iterator it;
+    for (it = list.begin(); it != list.end(); ++it)
+    {
+      kdDebug() << "  " << *it << endl;
+    }
 }
 
 void View::print( KPrinter &prt )

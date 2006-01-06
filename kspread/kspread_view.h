@@ -32,12 +32,17 @@
 #include <qstringlist.h>
 #include <qvaluelist.h>
 
+#include <kprinter.h>
+#include <kdeprint/kprintdialogpage.h>
+
 #include <koView.h>
 
 class QScrollBar;
 
 class KoDocumentEntry;
 class KoTabBar;
+
+class SheetSelectWidget;
 
 namespace KSpread
 {
@@ -55,6 +60,70 @@ class Selection;
 class VBorder;
 class View;
 class ComboboxLocationEditWidget;
+
+
+/**
+ * \class KPSheetSelectPage
+ * \brief Print dialog page for selecting sheets to print.
+ * @author raphael.langerhorst@kdemail.net
+ * @see SheetSelectWidget
+ *
+ * This dialog is shown in the print dialog and allows the user
+ * to select the sheets that should be printed and in which order
+ * they should be printed.
+ */
+class KPSheetSelectPage : public KPrintDialogPage
+{
+  Q_OBJECT
+  public:
+    KPSheetSelectPage( QWidget *parent = 0 );
+//     ~KPSheetSelectPage();
+    
+//     //reimplement virtual functions
+//     void getOptions( QMap<QString,QString>& opts, bool incldef = false );
+//     void setOptions( const QMap<QString,QString>& opts );
+//     bool isValid( QString& msg );
+    
+    /**
+     * @return list of sheets that will be printed, in correct order.
+     */
+    QStringList selectedSheets();
+    
+  public slots:
+    
+    /**
+     * Inserts given sheet to the list of available sheets.
+     */
+    void addAvailableSheet(const QString& sheetname);
+    
+    /**
+     * Inserts given sheet to the list of sheets for printing.
+     */
+    void addSelectedSheet(const QString& sheetname);
+    
+  protected slots:
+
+    // The following slots just implement the code for the buttons
+
+    void selectAll();
+    void select();
+    void remove();
+    void removeAll();
+    
+    void moveTop();
+    void moveUp();
+    void moveDown();
+    void moveBottom();
+    
+  private:
+  
+    /**
+     * The widget used, includes two lists of sheet names and
+     * buttons to move sheets between and within the lists.
+     */
+    SheetSelectWidget* gui;
+};
+
 
 /** @class View
  *

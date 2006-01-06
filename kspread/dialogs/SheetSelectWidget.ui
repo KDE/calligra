@@ -29,7 +29,7 @@
         </property>
         <widget class="KPushButton" row="0" column="1">
             <property name="name">
-                <cstring>ButtonPrintAll</cstring>
+                <cstring>ButtonSelectAll</cstring>
             </property>
             <property name="text">
                 <string></string>
@@ -38,12 +38,12 @@
                 <pixmap>image0</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Print all sheets.</string>
+                <string>Select all sheets.</string>
             </property>
         </widget>
         <widget class="KPushButton" row="1" column="1">
             <property name="name">
-                <cstring>ButtonPrintSelected</cstring>
+                <cstring>ButtonSelect</cstring>
             </property>
             <property name="text">
                 <string></string>
@@ -52,12 +52,12 @@
                 <pixmap>image1</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Print selected sheets.</string>
+                <string>Select sheets.</string>
             </property>
         </widget>
         <widget class="KPushButton" row="3" column="1">
             <property name="name">
-                <cstring>kPushButton1</cstring>
+                <cstring>ButtonRemoveAll</cstring>
             </property>
             <property name="text">
                 <string></string>
@@ -66,12 +66,12 @@
                 <pixmap>image2</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Don't print any sheets.</string>
+                <string>Clear Selection.</string>
             </property>
         </widget>
         <widget class="KPushButton" row="2" column="1">
             <property name="name">
-                <cstring>ButtonSelected</cstring>
+                <cstring>ButtonRemove</cstring>
             </property>
             <property name="text">
                 <string></string>
@@ -80,7 +80,7 @@
                 <pixmap>image3</pixmap>
             </property>
             <property name="toolTip" stdset="0">
-                <string>Don't print selected sheets.</string>
+                <string>Remove sheets.</string>
             </property>
         </widget>
         <widget class="KListView" row="0" column="0" rowspan="4" colspan="1">
@@ -98,14 +98,14 @@
             <property name="name">
                 <cstring>ListViewAvailable</cstring>
             </property>
-            <property name="acceptDrops">
-                <bool>true</bool>
-            </property>
             <property name="resizePolicy">
                 <enum>AutoOneFit</enum>
             </property>
             <property name="selectionMode" stdset="0">
                 <enum>Multi</enum>
+            </property>
+            <property name="fullWidth">
+                <bool>true</bool>
             </property>
             <property name="dragEnabled">
                 <bool>true</bool>
@@ -199,6 +199,9 @@ You can insert a sheet as often as you like, this way it will be printed multipl
             <property name="selectionMode" stdset="0">
                 <enum>Multi</enum>
             </property>
+            <property name="fullWidth">
+                <bool>true</bool>
+            </property>
             <property name="dragEnabled">
                 <bool>true</bool>
             </property>
@@ -242,10 +245,10 @@ It is even possible to print a sheet more than once. Just insert the desired she
 <tabstops>
     <tabstop>ListViewAvailable</tabstop>
     <tabstop>ListViewSelected</tabstop>
-    <tabstop>ButtonPrintAll</tabstop>
-    <tabstop>ButtonPrintSelected</tabstop>
-    <tabstop>ButtonSelected</tabstop>
-    <tabstop>kPushButton1</tabstop>
+    <tabstop>ButtonSelectAll</tabstop>
+    <tabstop>ButtonSelect</tabstop>
+    <tabstop>ButtonRemove</tabstop>
+    <tabstop>ButtonRemoveAll</tabstop>
     <tabstop>ButtonMoveTop</tabstop>
     <tabstop>ButtonMoveUp</tabstop>
     <tabstop>ButtonMoveDown</tabstop>
