@@ -500,7 +500,7 @@ QDomDocument KPrDocument::saveXML()
     QDomElement paper=doc.createElement("PAPER");
     paper.setAttribute("format", static_cast<int>( m_pageLayout.format ));
     paper.setAttribute("ptWidth", m_pageLayout.ptWidth);
-    paper.setAttribute("ptHeight", m_pageLayout.ptHeight);
+    paper.setAttribute("ptHeight", QString::number( m_pageLayout.ptHeight, 'g', 10 ));
 
     paper.setAttribute("orientation", static_cast<int>( m_pageLayout.orientation ));
     paper.setAttribute("unit", unit() );
