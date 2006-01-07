@@ -32,6 +32,7 @@
 #include <kis_image.h>
 #include <kis_iterators_pixel.h>
 #include <kis_paint_layer.h>
+#include <kis_group_layer.h>
 #include <kis_meta_registry.h>
 #include <kis_profile.h>
 

@@ -36,6 +36,7 @@
 #include <kis_meta_registry.h>
 #include <kis_profile.h>
 #include <kis_paint_layer.h>
+#include <kis_group_layer.h>
 
 namespace {
 
