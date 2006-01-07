@@ -42,10 +42,12 @@ class StencilTextEditor : public KDialogBase
     void setFontColor(const QColor& color);
     void setBackgroundColor(const QColor& color);
     void setHorizontalAlign(Qt::AlignmentFlags flag);
+    void setVerticalAlign(Qt::AlignmentFlags flag);
 
     QFont font() const;
     QColor fontColor() const;
-    Qt::AlignmentFlags alignment() const;
+    Qt::AlignmentFlags horizontalAlignment() const;
+    Qt::AlignmentFlags verticalAlignment() const;
 
     void setText(const QString& text);
     QString text() const;

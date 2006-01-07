@@ -47,20 +47,34 @@ StencilTextEditor::StencilTextEditor(const QString& caption, QWidget *parent, co
   m_mainWidget->m_alignCenterButton->setIconSet(SmallIconSet("text_center", 16));
   m_mainWidget->m_alignRightButton->setIconSet(SmallIconSet("text_right", 16));
 
-  QButtonGroup* btnGrp = new QButtonGroup(m_mainWidget);
-  btnGrp->hide();
-  btnGrp->setExclusive(true);
-  btnGrp->insert(m_mainWidget->m_alignLeftButton);
-  btnGrp->insert(m_mainWidget->m_alignCenterButton);
-  btnGrp->insert(m_mainWidget->m_alignRightButton);
+  QButtonGroup* hAlignBtnGrp = new QButtonGroup(m_mainWidget);
+  hAlignBtnGrp->hide();
+  hAlignBtnGrp->setExclusive(true);
+  hAlignBtnGrp->insert(m_mainWidget->m_alignLeftButton);
+  hAlignBtnGrp->insert(m_mainWidget->m_alignCenterButton);
+  hAlignBtnGrp->insert(m_mainWidget->m_alignRightButton);
+
+  m_mainWidget->m_alignTopButton->setIconSet(SmallIconSet("align_top", 16));
+  m_mainWidget->m_alignVCenterButton->setIconSet(SmallIconSet("align_vcenter", 16));
+  m_mainWidget->m_alignBottomButton->setIconSet(SmallIconSet("align_bottom", 16));
+
+  QButtonGroup* vAlignBtnGrp = new QButtonGroup(m_mainWidget);
+  vAlignBtnGrp->hide();
+  vAlignBtnGrp->setExclusive(true);
+  vAlignBtnGrp->insert(m_mainWidget->m_alignTopButton);
+  vAlignBtnGrp->insert(m_mainWidget->m_alignVCenterButton);
+  vAlignBtnGrp->insert(m_mainWidget->m_alignBottomButton);
 
   connect(m_mainWidget->m_fontCombo, SIGNAL(activated(int)), this, SLOT(updateFormating()));
   connect(m_mainWidget->m_fontSizeCombo, SIGNAL(activated(int)), this, SLOT(updateFormating()));
-  connect(btnGrp, SIGNAL(clicked(int)), this, SLOT(updateFormating()));
+  connect(hAlignBtnGrp, SIGNAL(clicked(int)), this, SLOT(updateFormating()));
+  connect(vAlignBtnGrp, SIGNAL(clicked(int)), this, SLOT(updateFormating()));
   connect(m_mainWidget->m_boldButton, SIGNAL(clicked()), this, SLOT(updateFormating()));
   connect(m_mainWidget->m_italicsButton, SIGNAL(clicked()), this, SLOT(updateFormating()));
   connect(m_mainWidget->m_underLineButton, SIGNAL(clicked()), this, SLOT(updateFormating()));
   connect(m_mainWidget->m_textColorButton, SIGNAL(clicked()), this, SLOT(updateFormating()));
+
+  m_mainWidget->m_textArea->setFocus();
 }
 
 StencilTextEditor::~StencilTextEditor()
@@ -109,7 +123,31 @@ void StencilTextEditor::setHorizontalAlign(Qt::AlignmentFlags flag)
       break;
   }
 
-  m_mainWidget->m_textArea->setAlignment(flag);
+  m_mainWidget->m_textArea->setAlignment(flag|verticalAlignment());
+}
+
+void StencilTextEditor::setVerticalAlign(Qt::AlignmentFlags flag)
+{
+  switch(flag) {
+    case Qt::AlignTop:
+      m_mainWidget->m_alignTopButton->setOn(true);
+      m_mainWidget->m_alignVCenterButton->setOn(false);
+      m_mainWidget->m_alignBottomButton->setOn(false);
+      break;
+    case Qt::AlignBottom:
+      m_mainWidget->m_alignTopButton->setOn(false);
+      m_mainWidget->m_alignVCenterButton->setOn(false);
+      m_mainWidget->m_alignBottomButton->setOn(true);
+      break;
+    case Qt::AlignVCenter:
+    default:
+      m_mainWidget->m_alignTopButton->setOn(false);
+      m_mainWidget->m_alignVCenterButton->setOn(true);
+      m_mainWidget->m_alignBottomButton->setOn(false);
+      break;
+  }
+
+  m_mainWidget->m_textArea->setAlignment(flag|horizontalAlignment());
 }
 
 QFont StencilTextEditor::font() const
@@ -129,7 +167,7 @@ QColor StencilTextEditor::fontColor() const
   return m_mainWidget->m_textColorButton->color();
 }
 
-Qt::AlignmentFlags StencilTextEditor::alignment() const
+Qt::AlignmentFlags StencilTextEditor::horizontalAlignment() const
 {
   Qt::AlignmentFlags flag = Qt::AlignLeft;
 
@@ -137,6 +175,19 @@ Qt::AlignmentFlags StencilTextEditor::alignment() const
     flag = Qt::AlignHCenter;
   } else if(m_mainWidget->m_alignRightButton->isOn()) {
     flag = Qt::AlignRight;
+  }
+
+  return flag;
+}
+
+Qt::AlignmentFlags StencilTextEditor::verticalAlignment() const
+{
+  Qt::AlignmentFlags flag = Qt::AlignTop;
+
+  if(m_mainWidget->m_alignVCenterButton->isOn()) {
+    flag = Qt::AlignVCenter;
+  } else if(m_mainWidget->m_alignBottomButton->isOn()) {
+    flag = Qt::AlignBottom;
   }
 
   return flag;
@@ -160,7 +211,7 @@ void StencilTextEditor::updateFormating()
 
 
   m_mainWidget->m_textArea->selectAll(true);
-  m_mainWidget->m_textArea->setAlignment(alignment());
+  m_mainWidget->m_textArea->setAlignment(horizontalAlignment()|verticalAlignment());
   m_mainWidget->m_textArea->selectAll(false);
 
   m_mainWidget->m_textArea->setFocus();

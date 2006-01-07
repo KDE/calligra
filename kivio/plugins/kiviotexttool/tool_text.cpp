@@ -274,6 +274,7 @@ void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
   editor.setBackgroundColor(stencil->bgColor());
   editor.setText(stencil->text());
   editor.setHorizontalAlign(static_cast<Qt::AlignmentFlags>(stencil->hTextAlign()));
+  editor.setVerticalAlign(static_cast<Qt::AlignmentFlags>(stencil->vTextAlign()));
 
   if(editor.exec() == QDialog::Accepted) {
     KMacroCommand* macroCmd = new KMacroCommand(i18n("Change Stencil Text and Formatting"));
@@ -281,10 +282,13 @@ void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
     QString text = editor.text();
     QFont font = editor.font();
     QColor textColor = editor.fontColor();
-    int alignment = editor.alignment();
+    int halignment = editor.horizontalAlignment();
+    int valignment = editor.verticalAlignment();
     bool changeFont = (stencil->textFont() != font);
     bool changeTextColor = (stencil->textColor() != textColor);
-    bool changeAlignment = (stencil->hTextAlign() != alignment);
+    bool changeHAlignment = (stencil->hTextAlign() != halignment);
+    bool changeVAlignment = (stencil->vTextAlign() != valignment);
+
 
     while( stencil )
     {
@@ -313,10 +317,18 @@ void TextTool::applyToolAction(QPtrList<KivioStencil>* stencils)
         changed = true;
       }
 
-      if(changeAlignment && (stencil->hTextAlign() != alignment)) {
+      if(changeHAlignment && (stencil->hTextAlign() != halignment)) {
         KivioChangeStencilHAlignmentCommand* cmd = new KivioChangeStencilHAlignmentCommand(
-            i18n("Change Stencil Horizontal Alignment"), view()->activePage(), stencil, stencil->hTextAlign(), alignment);
-        stencil->setHTextAlign(alignment);
+            i18n("Change Stencil Horizontal Alignment"), view()->activePage(), stencil, stencil->hTextAlign(), halignment);
+        stencil->setHTextAlign(halignment);
+        macroCmd->addCommand(cmd);
+        changed = true;
+      }
+
+      if(changeVAlignment && (stencil->vTextAlign() != valignment)) {
+        KivioChangeStencilVAlignmentCommand* cmd = new KivioChangeStencilVAlignmentCommand(
+            i18n("Change Stencil Vertical Alignment"), view()->activePage(), stencil, stencil->vTextAlign(), valignment);
+        stencil->setVTextAlign(valignment);
         macroCmd->addCommand(cmd);
         changed = true;
       }
@@ -351,6 +363,7 @@ void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
   editor.setBackgroundColor(stencil->bgColor());
   editor.setText(stencil->text(name));
   editor.setHorizontalAlign(static_cast<Qt::AlignmentFlags>(stencil->hTextAlign(name)));
+  editor.setVerticalAlign(static_cast<Qt::AlignmentFlags>(stencil->vTextAlign(name)));
 
   if(editor.exec() == QDialog::Accepted) {
     KMacroCommand* macroCmd = new KMacroCommand(i18n("Change Stencil Text and Formatting"));
@@ -387,13 +400,24 @@ void TextTool::applyToolAction(KivioStencil* stencil, const KoPoint& pos)
       changed = true;
     }
 
-    int alignment = editor.alignment();
+    int halignment = editor.horizontalAlignment();
 
-    if(stencil->hTextAlign(name) != alignment) {
+    if(stencil->hTextAlign(name) != halignment) {
       KivioChangeStencilHAlignmentCommand* cmd = new KivioChangeStencilHAlignmentCommand(
           i18n("Change Stencil Horizontal Alignment"), view()->activePage(), stencil,
-          stencil->hTextAlign(name), alignment, name);
-      stencil->setHTextAlign(name, alignment);
+          stencil->hTextAlign(name), halignment, name);
+      stencil->setHTextAlign(name, halignment);
+      macroCmd->addCommand(cmd);
+      changed = true;
+    }
+
+    int valignment = editor.verticalAlignment();
+
+    if(stencil->vTextAlign(name) != valignment) {
+      KivioChangeStencilVAlignmentCommand* cmd = new KivioChangeStencilVAlignmentCommand(
+          i18n("Change Stencil Vertical Alignment"), view()->activePage(), stencil,
+      stencil->vTextAlign(name), valignment, name);
+      stencil->setVTextAlign(name, valignment);
       macroCmd->addCommand(cmd);
       changed = true;
     }
