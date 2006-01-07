@@ -1411,7 +1411,7 @@ void KPSheetSelectPage::setOptions( const QMap<QString,QString>& opts )
   }
 }
 
-bool KPSheetSelectPage::isValid(QString& msg)
+bool KPSheetSelectPage::isValid(QString& /*msg*/)
 {
   // we print the activeSheet() by default if no sheet is selected,
   // so we return true in any case
@@ -1536,7 +1536,7 @@ void KPSheetSelectPage::moveTop()
   QValueList<QListViewItem*> newlist;
   QListViewItem* item = gui->ListViewSelected->firstChild();
   QListViewItem* nextitem = NULL;
-  kdDebug() << "Filling new list with selected items first" << endl;
+//   kdDebug() << "Filling new list with selected items first" << endl;
   while (item)
   {
     nextitem = item->nextSibling();
@@ -1547,11 +1547,11 @@ void KPSheetSelectPage::moveTop()
     }
     item = nextitem;
   }
-  kdDebug() << "Appending the rest" << endl;
+//   kdDebug() << "Appending the rest" << endl;
   item = gui->ListViewSelected->firstChild();
   while (item)
   {
-    kdDebug() << " processing item " << item->text(0) << endl;
+//     kdDebug() << " processing item " << item->text(0) << endl;
     nextitem = item->nextSibling();
     if (!item->isSelected())
     {
@@ -1561,12 +1561,12 @@ void KPSheetSelectPage::moveTop()
     item = nextitem;
   }
   
-  kdDebug() << "Refill the view with the correctly ordered list" << endl;
+//   kdDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
   QValueList<QListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
-    kdDebug() << " adding " << (*it)->text(0) << endl;
+//     kdDebug() << " adding " << (*it)->text(0) << endl;
     gui->ListViewSelected->insertItem(*it);
   }
 }
@@ -1598,51 +1598,38 @@ void KPSheetSelectPage::moveUp()
     item = nextitem;
   }
   
-  kdDebug() << "Refill the view with the correctly ordered list" << endl;
+//   kdDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
   QValueList<QListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
-    kdDebug() << " adding " << (*it)->text(0) << endl;
+//     kdDebug() << " adding " << (*it)->text(0) << endl;
     gui->ListViewSelected->insertItem(*it);
   }
 }
 
 void KPSheetSelectPage::moveDown()
 {
-  //this creates a temporary new list
-  // which replaces the existing one, to avoid the need of an additional sort column
-  
-  QValueList<QListViewItem*> newlist;
-  QListViewItem* item = gui->ListViewSelected->firstChild();
-  QListViewItem* nextitem = NULL;
+  QListViewItem* item = gui->ListViewSelected->lastItem();
+//   while (item)
+//   {
+//     nextitem = item->nextSibling();
+//     if (previousitem && previousitem->isSelected())
+//     {
+//       previousitem->moveItem(item);
+//     }
+//     previousitem = item;
+//     item = nextitem;
+//   }
   while (item)
   {
-    //TODO this does not work correctly for contiguous selections
-    nextitem = item->nextSibling();
-    if (nextitem)
+    while (item && !item->isSelected() && item->itemAbove() && item->itemAbove()->isSelected())
     {
-      if (!nextitem->isSelected() && item->isSelected())
-      {
-        QListViewItem* nextnextitem = nextitem->nextSibling();
-        newlist.prepend(nextitem);
-        gui->ListViewSelected->takeItem(nextitem);
-        nextitem = nextnextitem;
-      }
+      QListViewItem* tempitem = item->itemAbove();
+      tempitem->moveItem(item);
     }
-
-    newlist.prepend(item);
-    gui->ListViewSelected->takeItem(item);
-    item = nextitem;
-  }
-  
-  kdDebug() << "Refill the view with the correctly ordered list" << endl;
-  //the view is empty now, refill in correct order (reversed!!)
-  QValueList<QListViewItem*>::iterator it;
-  for (it = newlist.begin(); it != newlist.end(); ++it)
-  {
-    kdDebug() << " adding " << (*it)->text(0) << endl;
-    gui->ListViewSelected->insertItem(*it);
+    if (item)
+      item = item->itemAbove();
   }
 }
 
@@ -1654,10 +1641,10 @@ void KPSheetSelectPage::moveBottom()
   QValueList<QListViewItem*> newlist;
   QListViewItem* item = gui->ListViewSelected->firstChild();
   QListViewItem* nextitem = NULL;
-  kdDebug() << "Filling new list with unselected items first" << endl;
+//   kdDebug() << "Filling new list with unselected items first" << endl;
   while (item)
   {
-    kdDebug() << " processing item " << item->text(0) << endl;
+//     kdDebug() << " processing item " << item->text(0) << endl;
     nextitem = item->nextSibling();
     if (!item->isSelected())
     {
@@ -1666,7 +1653,7 @@ void KPSheetSelectPage::moveBottom()
     }
     item = nextitem;
   }
-  kdDebug() << "Appending the rest" << endl;
+//   kdDebug() << "Appending the rest" << endl;
   item = gui->ListViewSelected->firstChild();
   while (item)
   {
@@ -1679,12 +1666,12 @@ void KPSheetSelectPage::moveBottom()
     item = nextitem;
   }
   
-  kdDebug() << "Refill the view with the correctly ordered list" << endl;
+//   kdDebug() << "Refill the view with the correctly ordered list" << endl;
   //the view is empty now, refill in correct order (reversed!!)
   QValueList<QListViewItem*>::iterator it;
   for (it = newlist.begin(); it != newlist.end(); ++it)
   {
-    kdDebug() << " adding " << (*it)->text(0) << endl;
+//     kdDebug() << " adding " << (*it)->text(0) << endl;
     gui->ListViewSelected->insertItem(*it);
   }
 }
@@ -4605,11 +4592,11 @@ void View::setupPrinter( KPrinter &prt )
     prt.setFullPage( true );
     
     //add possibility to select the sheets to print:
-    kdDebug() << "Adding sheet selection page." << endl;
+//     kdDebug() << "Adding sheet selection page." << endl;
     KPSheetSelectPage* sheetpage = new KPSheetSelectPage();
     prt.addDialogPage(sheetpage);
     
-    kdDebug() << "Iterating through available sheets and initializing list of available sheets." << endl;
+//     kdDebug() << "Iterating through available sheets and initializing list of available sheets." << endl;
     QPtrList<Sheet> sheetlist = doc()->map()->sheetList();
     Sheet* sheet = sheetlist.last();
     while ( sheet )
@@ -4618,29 +4605,10 @@ void View::setupPrinter( KPrinter &prt )
       sheetpage->prependAvailableSheet(sheet->sheetName());
       sheet = sheetlist.prev();
     }
-    
-//     //if only one page is preselected we assume that it is/was the active sheet
-//     //so remove all sheets and add the "current" active sheet
-//     //TODO we should find a better way later, when such info is saved in the file.
-//     if (d->activeSheet && sheetpage->selectedSheets().count() < 2)
-//     {
-//       sheetpage->clearSelection();
-//       kdDebug() << "Adding active sheet to the list of printed sheets:" << endl;
-//       sheetpage->prependSelectedSheet(d->activeSheet->sheetName());
-//     }
-    
-    kdDebug() << "The following sheets are currently selected for printing:" << endl;
-    QStringList list = sheetpage->selectedSheets();
-    QStringList::iterator it;
-    for (it = list.begin(); it != list.end(); ++it)
-    {
-      kdDebug() << "  " << *it << endl;
-    }
 }
 
 void View::print( KPrinter &prt )
 {
-    kdDebug() << "View::print()" << endl;
     //save the current active sheet for later, so we can restore it at the end
     Sheet* selectedsheet = this->activeSheet();
     Q_ASSERT(selectedsheet);
@@ -4742,15 +4710,8 @@ void View::print( KPrinter &prt )
         }
     }
     
-    kdDebug() << "Printing done." << endl;
-    
     painter.end();
-    
-    kdDebug() << "Setting original active sheet" << endl;
-    
     this->setActiveSheet(selectedsheet);
-    
-    kdDebug() << "View::print() done." << endl;
 }
 
 void View::insertChart( const QRect& _geometry, KoDocumentEntry& _e )
