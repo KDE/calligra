@@ -29,6 +29,8 @@
 #include <pqxx/pqxx>
 #endif
 
+#include <pqxx/binarystring>
+
 namespace KexiDB {
 
 class pqxxSqlCursor: public Cursor {
@@ -64,9 +66,9 @@ private:
 	pqxx::result* m_res;
 //	pqxx::nontransaction* m_tran;
 	pqxx::connection* my_conn;
-	QVariant pValue(uint pos) const;
+	QVariant pValue(uint pos)const;
 	bool m_implicityStarted : 1;
-	
+	QByteArray processBinaryData(pqxx::binarystring*) const;
 	friend class pqxxSqlConnection;
 };
 

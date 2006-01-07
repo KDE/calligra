@@ -33,6 +33,14 @@ using namespace KexiDB;
 
 unsigned int pqxxSqlCursor_trans_num=0; //!< debug helper
 
+QByteArray pqxxSqlCursor::processBinaryData(pqxx::binarystring *bs) const
+{
+	QByteArray ba;
+	ba.setRawData((const char *)(bs->data()), bs->size());
+	ba.detach();
+	return ba;
+}
+
 //==================================================================================
 //Constructor based on query statement
 pqxxSqlCursor::pqxxSqlCursor(KexiDB::Connection* conn, const QString& statement, uint options):
@@ -197,10 +205,8 @@ QVariant pqxxSqlCursor::value(uint pos)
 
 //==================================================================================
 //Return the value for a given column for the current record - Private const version
-QVariant pqxxSqlCursor::pValue(uint pos) const
-{
-	pqxx::binarystring *bs;
-	
+QVariant pqxxSqlCursor::pValue(uint pos)const
+{	
 	if (m_res->size() <= 0)
 	{
 		KexiDBDrvDbg << "pqxxSqlCursor::value - ERROR: result size not greater than 0" << endl;
@@ -234,8 +240,7 @@ QVariant pqxxSqlCursor::pValue(uint pos) const
 		}
 		else if (f->typeGroup() == Field::BLOBGroup)
 		{
-			bs = new pqxx::binarystring((*m_res)[at()][pos]);
-			return QVariant(bs->str().c_str());
+			return QVariant(processBinaryData( new pqxx::binarystring((*m_res)[at()][pos]) ));
 		}
 	}
 	else // We probably have a raw type query so use pqxx to determin the column type
@@ -260,8 +265,7 @@ QVariant pqxxSqlCursor::pValue(uint pos) const
 			case TIMESTAMPOID:
 				return QVariant((*m_res)[at()][pos].c_str()); //TODO check formatting
 			case BYTEAOID:
-				bs = new pqxx::binarystring((*m_res)[at()][pos]);
-				return QVariant(bs->str().c_str());
+				return QVariant(processBinaryData( new pqxx::binarystring((*m_res)[at()][pos]) ));
 			case BPCHAROID:
 			case VARCHAROID:
 			case TEXTOID:
@@ -363,3 +367,4 @@ void pqxxSqlCursor::drv_bufferMovePointerTo(Q_LLONG to)
 {
 
 }
+
