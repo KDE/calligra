@@ -2,6 +2,7 @@ INCLUDES = -I$(srcdir) $(KOFFICE_INCLUDES) \
 	-I$(top_srcdir)/kivio/kiviopart \
 	-I$(top_srcdir)/kivio/kiviopart/kiviosdk \
 	-I$(top_srcdir)/kivio/kiviopart/config \
+        -I$(top_builddir)/kivio/kiviopart/config \
 	$(all_includes)
 
 METASOURCES = AUTO
