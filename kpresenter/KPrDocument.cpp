@@ -1708,282 +1708,277 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
     {
         QDomElement o = object.toElement();
         QString name = o.tagName();
-        kdDebug()<<" name :"<<name<<endl;
-        context.styleStack().save();
-        const bool isDrawNS = o.namespaceURI() == KoXmlNS::draw;
-        //"draw:text-box"
-        if ( name == "frame" && isDrawNS) // textbox
+        if ( !name.isEmpty() )
         {
-            fillStyleStack( o, context );
+            kdDebug()<<" name :"<<name<<endl;
+            context.styleStack().save();
+            const bool isDrawNS = o.namespaceURI() == KoXmlNS::draw;
+            //"draw:text-box"
+            if ( name == "frame" && isDrawNS) // textbox
+            {
+                fillStyleStack( o, context );
 
-            QDomNode imageBox = KoDom::namedItemNS( o, KoXmlNS::draw, "image" );
-            kdDebug()<<" imageBox:"<<imageBox.isNull()<<endl;
-            if ( !imageBox.isNull() )
-            {
-                KPrPixmapObject *kppixmapobject = new KPrPixmapObject( pictureCollection() );
-                kppixmapobject->loadOasis( o, context, m_loadingInfo);
-                if ( groupObject )
-                    groupObject->addObjects( kppixmapobject );
-                else
-                    newpage->appendObject(kppixmapobject);
-            }
-            else
-            {
-                QDomNode object = KoDom::namedItemNS( o, KoXmlNS::draw, "object" );
-                kdDebug()<<" object:"<<object.isNull()<<endl;
-                if ( !object.isNull() )
+                QDomNode imageBox = KoDom::namedItemNS( o, KoXmlNS::draw, "image" );
+                kdDebug()<<" imageBox:"<<imageBox.isNull()<<endl;
+                if ( !imageBox.isNull() )
                 {
-                    fillStyleStack( o, context );
-                    KPrChild *ch = new KPrChild( this );
-                    QRect r;
-                    KPrPartObject *kppartobject = new KPrPartObject( ch );
-                    kppartobject->loadOasis( o, context, m_loadingInfo );
-                    r = ch->geometry();
+                    KPrPixmapObject *kppixmapobject = new KPrPixmapObject( pictureCollection() );
+                    kppixmapobject->loadOasis( o, context, m_loadingInfo);
                     if ( groupObject )
-                        groupObject->addObjects( kppartobject );
+                        groupObject->addObjects( kppixmapobject );
                     else
-                        newpage->appendObject(kppartobject);
-                    insertChild( ch );
-                    kppartobject->setOrig( r.x(), r.y() );
-                    kppartobject->setSize( r.width(), r.height() );
+                        newpage->appendObject(kppixmapobject);
                 }
                 else
                 {
-                    KPrTextObject *kptextobject = new KPrTextObject( this );
-                    kptextobject->loadOasis(o, context, m_loadingInfo);
-                    if ( groupObject )
-                        groupObject->addObjects( kptextobject );
+                    QDomNode object = KoDom::namedItemNS( o, KoXmlNS::draw, "object" );
+                    kdDebug()<<" object:"<<object.isNull()<<endl;
+                    if ( !object.isNull() )
+                    {
+                        fillStyleStack( o, context );
+                        KPrChild *ch = new KPrChild( this );
+                        QRect r;
+                        KPrPartObject *kppartobject = new KPrPartObject( ch );
+                        kppartobject->loadOasis( o, context, m_loadingInfo );
+                        r = ch->geometry();
+                        if ( groupObject )
+                            groupObject->addObjects( kppartobject );
+                        else
+                            newpage->appendObject(kppartobject);
+                        insertChild( ch );
+                        kppartobject->setOrig( r.x(), r.y() );
+                        kppartobject->setSize( r.width(), r.height() );
+                    }
                     else
-                        newpage->appendObject(kptextobject);
+                    {
+                        KPrTextObject *kptextobject = new KPrTextObject( this );
+                        kptextobject->loadOasis(o, context, m_loadingInfo);
+                        if ( groupObject )
+                            groupObject->addObjects( kptextobject );
+                        else
+                            newpage->appendObject(kptextobject);
+                    }
                 }
             }
-        }
-        else if ( name == "rect" && isDrawNS) // rectangle
-        {
-            fillStyleStack( o, context );
-            KPrRectObject *kprectobject = new KPrRectObject();
-            kprectobject->loadOasis(o, context , m_loadingInfo);
-            if ( groupObject )
-                groupObject->addObjects( kprectobject );
-            else
-                newpage->appendObject(kprectobject);
-        }
-        else if ( ( name == "circle" || name == "ellipse" )&& isDrawNS)
-        {
-            fillStyleStack( o, context );
-            if ( o.hasAttributeNS( KoXmlNS::draw, "kind" ) ) // pie, chord or arc
+            else if ( name == "rect" && isDrawNS) // rectangle
             {
-                KPrPieObject *kppieobject = new KPrPieObject();
-                kppieobject->loadOasis(o, context, m_loadingInfo);
+                fillStyleStack( o, context );
+                KPrRectObject *kprectobject = new KPrRectObject();
+                kprectobject->loadOasis(o, context , m_loadingInfo);
                 if ( groupObject )
-                    groupObject->addObjects( kppieobject );
+                    groupObject->addObjects( kprectobject );
                 else
-                    newpage->appendObject(kppieobject);
+                    newpage->appendObject(kprectobject);
             }
-            else  // circle or ellipse
+            else if ( ( name == "circle" || name == "ellipse" )&& isDrawNS)
             {
-                KPrEllipseObject *kpellipseobject = new KPrEllipseObject();
-                kpellipseobject->loadOasis(o,context, m_loadingInfo);
-                if ( groupObject )
-                    groupObject->addObjects( kpellipseobject );
-                else
-                    newpage->appendObject(kpellipseobject);
-            }
-        }
-        else if ( name == "line" && isDrawNS) // line
-        {
-            fillStyleStack( o, context );
-            KPrLineObject *kplineobject = new KPrLineObject();
-            kplineobject->loadOasis(o, context, m_loadingInfo);
-            if ( groupObject )
-                groupObject->addObjects( kplineobject );
-            else
-                newpage->appendObject( kplineobject );
-        }
-        else if (name=="polyline" && isDrawNS) { // polyline
-            fillStyleStack( o, context );
-            KPrPolylineObject *kppolylineobject = new KPrPolylineObject();
-            kppolylineobject->loadOasis(o, context, m_loadingInfo);
-            if ( groupObject )
-                groupObject->addObjects( kppolylineobject );
-            else
-                newpage->appendObject(kppolylineobject);
-        }
-        else if (name=="polygon" && isDrawNS) { // plcloseobject
-            fillStyleStack( o, context );
-            KPrClosedLineObject *kpClosedObject = new KPrClosedLineObject();
-            kpClosedObject->loadOasis( o, context, m_loadingInfo);
-            if ( groupObject )
-                groupObject->addObjects( kpClosedObject );
-            else
-                newpage->appendObject(kpClosedObject);
-        }
-        else if (name=="regular-polygon"&& isDrawNS) { // kppolygone object
-            fillStyleStack( o, context );
-            KPrPolygonObject *kpPolygoneObject = new KPrPolygonObject();
-            kpPolygoneObject->loadOasis( o, context, m_loadingInfo);
-            if ( groupObject )
-                groupObject->addObjects( kpPolygoneObject );
-            else
-                newpage->appendObject(kpPolygoneObject);
-        }
-        else if ( name == "path" && isDrawNS)
-        {
-            fillStyleStack( o, context );
-            QString d = o.attributeNS( KoXmlNS::svg, "d", QString::null);
-
-            KPrSVGPathParser parser;
-            ObjType objType = parser.getType( d );
-
-            switch ( objType )
-            {
-                case OT_CUBICBEZIERCURVE:
+                fillStyleStack( o, context );
+                if ( o.hasAttributeNS( KoXmlNS::draw, "kind" ) ) // pie, chord or arc
                 {
-                    kdDebug(33001) << "Cubicbeziercurve" << endl;
-                    KPrCubicBezierCurveObject *kpCurveObject = new KPrCubicBezierCurveObject();
-                    kpCurveObject->loadOasis( o, context, m_loadingInfo );
+                    KPrPieObject *kppieobject = new KPrPieObject();
+                    kppieobject->loadOasis(o, context, m_loadingInfo);
                     if ( groupObject )
-                        groupObject->addObjects( kpCurveObject );
+                        groupObject->addObjects( kppieobject );
                     else
-                        newpage->appendObject( kpCurveObject );
-                } break;
-                case OT_QUADRICBEZIERCURVE:
-                {
-                    kdDebug(33001) << "Quadricbeziercurve" << endl;
-                    KPrQuadricBezierCurveObject *kpQuadricObject = new KPrQuadricBezierCurveObject();
-                    kpQuadricObject->loadOasis( o, context, m_loadingInfo );
-                    if ( groupObject )
-                        groupObject->addObjects( kpQuadricObject );
-                    else
-                        newpage->appendObject( kpQuadricObject );
-                } break;
-                case OT_FREEHAND:
-                {
-                    kdDebug(33001) << "Freehand" << endl;
-                    KPrFreehandObject *kpFreeHandObject = new KPrFreehandObject();
-                    kpFreeHandObject->loadOasis( o, context, m_loadingInfo );
-                    if ( groupObject )
-                        groupObject->addObjects( kpFreeHandObject );
-                    else
-                        newpage->appendObject( kpFreeHandObject );
-                } break;
-                case OT_CLOSED_LINE:
-                {
-                    kdDebug(33001) << "Closed Line" << endl;
-                    KPrClosedLineObject *kpClosedObject = new KPrClosedLineObject();
-                    kpClosedObject->loadOasis( o, context, m_loadingInfo );
-                    if ( groupObject )
-                        groupObject->addObjects( kpClosedObject );
-                    else
-                        newpage->appendObject( kpClosedObject );
-                } break;
-                default:
-                    kdDebug(33001) << "draw:path found unsupported object type " << objType << " in svg:d " << d << endl;
-                    break;
-            }
-        }
-        else if ( name == "g" && isDrawNS)
-        {
-            fillStyleStack( o, context );
-            KPrGroupObject *kpgroupobject = new KPrGroupObject();
-            QDomNode nodegroup = object.firstChild();
-
-            kpgroupobject->loadOasisGroupObject( this, newpage, object, context, m_loadingInfo);
-            if ( groupObject )
-                groupObject->addObjects( kpgroupobject );
-            else
-                newpage->appendObject(kpgroupobject);
-        }
-        else if ( name == "notes" && o.namespaceURI() == KoXmlNS::presentation ) // notes
-        {
-            //we must extend note attribute
-            //kdDebug()<<"presentation:notes----------------------------------\n";
-            QDomNode frameBox = KoDom::namedItemNS( o, KoXmlNS::draw, "frame" );
-            //todo load layout for note.
-            QDomNode textBox = KoDom::namedItemNS( frameBox, KoXmlNS::draw, "text-box" );
-
-            if ( !textBox.isNull() )
-            {
-                QString note;
-                for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
-                {
-                    // We don't care about styles as they are not supported in kpresenter.
-                    // Only add a linebreak for every child.
-                    QDomElement t = text.toElement();
-                    note += t.text() + "\n";
-                    kdDebug()<<" note :"<<note<<endl;
+                        newpage->appendObject(kppieobject);
                 }
-                newpage->setNoteText( note );
+                else  // circle or ellipse
+                {
+                    KPrEllipseObject *kpellipseobject = new KPrEllipseObject();
+                    kpellipseobject->loadOasis(o,context, m_loadingInfo);
+                    if ( groupObject )
+                        groupObject->addObjects( kpellipseobject );
+                    else
+                        newpage->appendObject(kpellipseobject);
+                }
             }
-        }
-        else if ( ( name == "header" || name == "footer" ) && o.namespaceURI() == KoXmlNS::style )
-        {
-            //nothing
-        }
-        else
-        {
-            kdDebug() << "Unsupported object '" << name << "'" << endl;
+            else if ( name == "line" && isDrawNS) // line
+            {
+                fillStyleStack( o, context );
+                KPrLineObject *kplineobject = new KPrLineObject();
+                kplineobject->loadOasis(o, context, m_loadingInfo);
+                if ( groupObject )
+                    groupObject->addObjects( kplineobject );
+                else
+                    newpage->appendObject( kplineobject );
+            }
+            else if (name=="polyline" && isDrawNS) { // polyline
+                fillStyleStack( o, context );
+                KPrPolylineObject *kppolylineobject = new KPrPolylineObject();
+                kppolylineobject->loadOasis(o, context, m_loadingInfo);
+                if ( groupObject )
+                    groupObject->addObjects( kppolylineobject );
+                else
+                    newpage->appendObject(kppolylineobject);
+            }
+            else if (name=="polygon" && isDrawNS) { // plcloseobject
+                fillStyleStack( o, context );
+                KPrClosedLineObject *kpClosedObject = new KPrClosedLineObject();
+                kpClosedObject->loadOasis( o, context, m_loadingInfo);
+                if ( groupObject )
+                    groupObject->addObjects( kpClosedObject );
+                else
+                    newpage->appendObject(kpClosedObject);
+            }
+            else if (name=="regular-polygon"&& isDrawNS) { // kppolygone object
+                fillStyleStack( o, context );
+                KPrPolygonObject *kpPolygoneObject = new KPrPolygonObject();
+                kpPolygoneObject->loadOasis( o, context, m_loadingInfo);
+                if ( groupObject )
+                    groupObject->addObjects( kpPolygoneObject );
+                else
+                    newpage->appendObject(kpPolygoneObject);
+            }
+            else if ( name == "path" && isDrawNS)
+            {
+                fillStyleStack( o, context );
+                QString d = o.attributeNS( KoXmlNS::svg, "d", QString::null);
+
+                KPrSVGPathParser parser;
+                ObjType objType = parser.getType( d );
+
+                switch ( objType )
+                {
+                    case OT_CUBICBEZIERCURVE:
+                        {
+                            kdDebug(33001) << "Cubicbeziercurve" << endl;
+                            KPrCubicBezierCurveObject *kpCurveObject = new KPrCubicBezierCurveObject();
+                            kpCurveObject->loadOasis( o, context, m_loadingInfo );
+                            if ( groupObject )
+                                groupObject->addObjects( kpCurveObject );
+                            else
+                                newpage->appendObject( kpCurveObject );
+                        } break;
+                    case OT_QUADRICBEZIERCURVE:
+                        {
+                            kdDebug(33001) << "Quadricbeziercurve" << endl;
+                            KPrQuadricBezierCurveObject *kpQuadricObject = new KPrQuadricBezierCurveObject();
+                            kpQuadricObject->loadOasis( o, context, m_loadingInfo );
+                            if ( groupObject )
+                                groupObject->addObjects( kpQuadricObject );
+                            else
+                                newpage->appendObject( kpQuadricObject );
+                        } break;
+                    case OT_FREEHAND:
+                        {
+                            kdDebug(33001) << "Freehand" << endl;
+                            KPrFreehandObject *kpFreeHandObject = new KPrFreehandObject();
+                            kpFreeHandObject->loadOasis( o, context, m_loadingInfo );
+                            if ( groupObject )
+                                groupObject->addObjects( kpFreeHandObject );
+                            else
+                                newpage->appendObject( kpFreeHandObject );
+                        } break;
+                    case OT_CLOSED_LINE:
+                        {
+                            kdDebug(33001) << "Closed Line" << endl;
+                            KPrClosedLineObject *kpClosedObject = new KPrClosedLineObject();
+                            kpClosedObject->loadOasis( o, context, m_loadingInfo );
+                            if ( groupObject )
+                                groupObject->addObjects( kpClosedObject );
+                            else
+                                newpage->appendObject( kpClosedObject );
+                        } break;
+                    default:
+                        kdDebug(33001) << "draw:path found unsupported object type " << objType << " in svg:d " << d << endl;
+                        break;
+                }
+            }
+            else if ( name == "g" && isDrawNS)
+            {
+                fillStyleStack( o, context );
+                KPrGroupObject *kpgroupobject = new KPrGroupObject();
+                QDomNode nodegroup = object.firstChild();
+
+                kpgroupobject->loadOasisGroupObject( this, newpage, object, context, m_loadingInfo);
+                if ( groupObject )
+                    groupObject->addObjects( kpgroupobject );
+                else
+                    newpage->appendObject(kpgroupobject);
+            }
+            else if ( name == "notes" && o.namespaceURI() == KoXmlNS::presentation ) // notes
+            {
+                //we must extend note attribute
+                //kdDebug()<<"presentation:notes----------------------------------\n";
+                QDomNode frameBox = KoDom::namedItemNS( o, KoXmlNS::draw, "frame" );
+                //todo load layout for note.
+                QDomNode textBox = KoDom::namedItemNS( frameBox, KoXmlNS::draw, "text-box" );
+
+                if ( !textBox.isNull() )
+                {
+                    QString note;
+                    for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
+                    {
+                        // We don't care about styles as they are not supported in kpresenter.
+                        // Only add a linebreak for every child.
+                        QDomElement t = text.toElement();
+                        note += t.text() + "\n";
+                        kdDebug()<<" note :"<<note<<endl;
+                    }
+                    newpage->setNoteText( note );
+                }
+            }
+            else if ( ( name == "header" || name == "footer" ) && o.namespaceURI() == KoXmlNS::style || 
+                      ( name == "animations" && o.namespaceURI() == KoXmlNS::presentation) )
+            {
+                //nothing
+            }
+            else
+            {
+                kdDebug() << "Unsupported object '" << name << "'" << endl;
+            }
             context.styleStack().restore();
-            continue;
         }
-        context.styleStack().restore();
     }
 
 }
 
 int KPrDocument::createPresentationAnimation(const QDomElement& element, int order, bool increaseOrder)
 {
-  kdDebug()<<"void KPrDocument::createPresentationAnimation(const QDomElement& element)\n";
-  int orderAnimation = increaseOrder ? 0 : order;
-  for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
+    kdDebug()<<"void KPrDocument::createPresentationAnimation(const QDomElement& element)\n";
+    int orderAnimation = increaseOrder ? 0 : order;
+    for ( QDomNode n = element.firstChild(); !n.isNull(); n = n.nextSibling() )
     {
         QDomElement e = n.toElement();
-	QCString tagName = e.tagName().latin1();
-        const bool isPresentationNS = e.namespaceURI() == KoXmlNS::presentation;
-	kdDebug()<<"(createPresentationAnimation) tagName found :"<<tagName<<endl;
-        if ( tagName == "show-shape" && isPresentationNS )
+        QCString tagName = e.tagName().latin1();
+        if ( ! tagName.isEmpty() ) // only tags that open
         {
-            Q_ASSERT( e.hasAttributeNS( KoXmlNS::draw, "shape-id" ) );
-            QString name = e.attributeNS( KoXmlNS::draw, "shape-id", QString::null );
-	    kdDebug()<<" insert animation show style : name :"<<name<<endl;
-            if ( e.hasAttributeNS( KoXmlNS::koffice, "order-id" ) )
+            const bool isPresentationNS = e.namespaceURI() == KoXmlNS::presentation;
+            if ( isPresentationNS && 
+                 ( tagName == "show-shape" || tagName == "hide-shape" ) )
             {
-                orderAnimation = e.attributeNS( KoXmlNS::koffice, "order-id", QString::null ).toInt();
-	            //kdDebug(33001) << "order id = " << orderAnimation << ", " << e.attributeNS( KoXmlNS::koffice, "order-id", QString::null ) << endl;
+                Q_ASSERT( e.hasAttributeNS( KoXmlNS::draw, "shape-id" ) );
+                QString name = e.attributeNS( KoXmlNS::draw, "shape-id", QString::null );
+                kdDebug()<<" insert animation " << tagName << " name :" << name << endl;
+
+                if ( e.hasAttributeNS( KoXmlNS::koffice, "order-id" ) )
+                {
+                    orderAnimation = e.attributeNS( KoXmlNS::koffice, "order-id", QString::null ).toInt();
+                }
+
+                lstAnimation *tmp = new lstAnimation;
+                tmp->element = new QDomElement( e );
+                tmp->order = orderAnimation;
+                if ( tagName == "show-shape" )
+                {
+                    m_loadingInfo->storePresentationShowAnimation( tmp, name );
+                }
+                else
+                {
+                    m_loadingInfo->storePresentationHideAnimation( tmp, name );
+                }
+                if ( increaseOrder )
+                    ++orderAnimation;
             }
-            QDomElement* ep = new QDomElement( e );
-            lstAnimation *tmp = new lstAnimation;
-            tmp->element = ep;
-            tmp->order = orderAnimation;
-	    m_loadingInfo->storePresentationShowAnimation( tmp, name );
-            if ( increaseOrder )
-                ++orderAnimation;
-
-        }
-        else if ( tagName == "hide-shape" && isPresentationNS)
-        {
-            Q_ASSERT( e.hasAttributeNS( KoXmlNS::draw, "shape-id" ) );
-            QString name = e.attributeNS( KoXmlNS::draw, "shape-id", QString::null );
-	    kdDebug()<<" insert animation hide style : name :"<<name<<endl;
-            QDomElement* ep = new QDomElement( e );
-            lstAnimation *tmp = new lstAnimation;
-            tmp->element = ep;
-            tmp->order = orderAnimation;
-	    m_loadingInfo->storePresentationHideAnimation( tmp, name );
-            if ( increaseOrder )
-                ++orderAnimation;
-
-        }
-        else if ( tagName == "animation-group" && isPresentationNS)
-        {
-            kdDebug()<<" presentation:animation-group exist \n";
-            orderAnimation = createPresentationAnimation( e, orderAnimation, false );
-            kdDebug()<<" end presentation:animation-group exist\n";
+            else if ( tagName == "animation-group" && isPresentationNS )
+            {
+                orderAnimation = createPresentationAnimation( e, orderAnimation, false );
+            }
         }
     }
-  //increase when we finish it necessary for group object
-  ++orderAnimation;
-  return orderAnimation;
+    //increase when we finish it necessary for group object
+    ++orderAnimation;
+    return orderAnimation;
 }
 
 void KPrDocument::fillStyleStack( const QDomElement& object, KoOasisContext & context )
