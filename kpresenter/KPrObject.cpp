@@ -410,25 +410,26 @@ bool KPrObject::saveOasisObjectAttributes( KPOasisSaveContext &/* sc */ ) const
     return true;
 }
 
-bool KPrObject::haveAnimation() const
+bool KPrObject::hasAnimation() const
 {
-    //kdDebug()<<" effect :"<<effect<<" effect3 :"<<effect3<<" a_fileName :"<<a_fileName<<" d_fileName :"<<d_fileName<<" appearTimer :"<<appearTimer<<" disappearTimer :"<<disappearTimer<<endl;
-    if ( effect == EF_NONE && effect3==EF3_NONE && a_fileName.isEmpty() && d_fileName.isEmpty() && ( appearTimer==1 ) && ( disappearTimer==1 ))
-        return false;
-    else
-        return true;
+    return effect != EF_NONE || appearTimer != 0 || 
+           effect3 != EF3_NONE || disappear || 
+           !a_fileName.isEmpty() || ! d_fileName.isEmpty() ||
+           appearTimer != 1;
 }
 
 bool KPrObject::saveOasisObjectStyleShowAnimation( KoXmlWriter &animation, int objectId )
 {
-    if ( effect != EF_NONE || !a_fileName.isEmpty() )
+    if ( effect != EF_NONE || appearStep != 0 || !a_fileName.isEmpty() )
     {
         animation.startElement( "presentation:show-shape" );
-        animation.addAttribute( "draw:shape-id", "shape" + QString::number( objectId ) );
+        animation.addAttribute( "draw:shape-id", "object" + QString::number( objectId ) );
+        animation.addAttribute( "koffice:order-id", appearStep );
         switch( effect )
         {
         case EF_NONE:
-            animation.addAttribute( "presentation:effect", "none" );
+            // use appear instead none as oo understands this
+            animation.addAttribute( "presentation:effect", "appear" );
             break;
         case EF_COME_RIGHT:
             animation.addAttribute( "presentation:effect", "move" );
@@ -513,14 +514,16 @@ bool KPrObject::saveOasisObjectStyleHideAnimation( KoXmlWriter &animation, int o
 {
 
     //FIXME oo doesn't support hide animation object
-    if ( effect3 != EF3_NONE || !d_fileName.isEmpty())
+    if ( effect3 != EF3_NONE || disappearStep != 0 || !d_fileName.isEmpty())
     {
         animation.startElement( "presentation:hide-shape" );
-        animation.addAttribute( "draw:shape-id", "shape" + QString::number( objectId ) );
+        animation.addAttribute( "draw:shape-id", "object" + QString::number( objectId ) );
+        animation.addAttribute( "koffice:order-id", disappearStep );
         switch( effect3 )
         {
         case EF3_NONE:
-            animation.addAttribute( "presentation:effect", "none" );
+            // use hide instead none as oo understands this
+            animation.addAttribute( "presentation:effect", "hide" );
             break;
         case EF3_GO_RIGHT:
             animation.addAttribute( "presentation:effect", "move" );
@@ -691,7 +694,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             else if (dir=="from-bottom")
                 effect = EF_WIPE_BOTTOM;
             else
-                kdDebug()<<" not supported :"<<effectStr<<endl;
+                kdDebug(33001)<<" dir not supported: " << dir << endl;
         }
         else if (effectStr=="move")
         {
@@ -712,10 +715,17 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             else if (dir=="from-lower-left")
                 effect = EF_COME_LEFT_BOTTOM;
             else
-                kdDebug ()<<" not supported :"<<effectStr<<endl;
+                kdDebug(33001) << " dir not supported:" << dir << endl;
+        }
+        else if ( effectStr == "appear" )
+        {
+            effect = EF_NONE;
         }
         else
-            kdDebug()<<" not supported :"<<effectStr<<endl;
+        {
+            kdDebug(33001) << " appear effect not supported: " << effectStr << endl;
+            effect = EF_NONE;
+        }
         QDomElement sound = KoDom::namedItemNS( *animation, KoXmlNS::presentation, "sound" );
         if ( !sound.isNull() )
         {
@@ -742,7 +752,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
         QString effectStr = animation->attributeNS( KoXmlNS::presentation, "effect", QString::null);
         QString dir = animation->attributeNS( KoXmlNS::presentation, "direction", QString::null);
         QString speed = animation->attributeNS( KoXmlNS::presentation, "speed", QString::null );
-        kdDebug()<<" appear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
+        kdDebug()<<" disappear direction : "<<dir<<" effect :"<< effectStr <<" speed :"<<speed<<endl;
         disappearStep = tmp->order;
 
         if ( speed =="medium" )
@@ -775,7 +785,7 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             else if (dir=="from-bottom")
                 effect3 = EF3_WIPE_BOTTOM;
             else
-                kdDebug()<<" not supported :"<<effectStr<<endl;
+                kdDebug(33001) << " dir not supported: " << dir << endl;
         }
         else if (effectStr=="move")
         {
@@ -796,13 +806,20 @@ void KPrObject::loadOasis(const QDomElement &element, KoOasisContext & context, 
             else if (dir=="from-lower-left")
                 effect3 = EF3_GO_LEFT_BOTTOM;
             else
-                kdDebug ()<<" not supported :"<<effectStr<<endl;
+                kdDebug(33001) << " dir not supported: " << dir << endl;
+        }
+        else if ( effectStr == "hide" )
+        {
+            effect3 = EF3_NONE;
         }
         else
-            kdDebug()<<" not supported :"<<effectStr<<endl;
-        //FIXME allow to save/load this attribute
-        if ( effect3 != EF3_NONE )
-            disappear = true;
+        {
+            kdDebug(33001) << " hide effect not supported: " << effectStr << endl;
+            effect3 = EF3_NONE;
+        }
+
+        disappear = true;
+
         QDomElement sound = KoDom::namedItemNS( *animation, KoXmlNS::presentation, "sound" );
         if ( !sound.isNull() )
         {

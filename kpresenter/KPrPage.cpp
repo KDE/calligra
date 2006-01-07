@@ -1,7 +1,7 @@
 // -*- Mode: c++; c-basic-offset: 4; indent-tabs-mode: nil; tab-width: 4; -*-
 /* This file is part of the KDE project
    Copyright (C) 2002-2004 Laurent MONTEL <montel@kde.org>
-   Copyright (C) 2004-2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2004-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -139,11 +139,13 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
         it.current()->saveOasisObject( sc );
 
         //TODO tz: check if isMasterPage is needed
-        if ( isMasterPage() && it.current()->haveAnimation() )
+        if ( !isMasterPage() && it.current()->hasAnimation() )
         {
-            kdDebug()<<" it.current()->haveAnimation() \n";
-            if ( it.current()->getEffect() != EF_NONE || !it.current()->getAppearSoundEffectFileName().isEmpty())
+            if ( it.current()->getEffect() != EF_NONE || 
+                 it.current()->getAppearStep() != 0 || 
+                 !it.current()->getAppearSoundEffectFileName().isEmpty() )
             {
+                kdDebug(33001) << "has animation" << endl;
                 listAnimation *lstappear = new listAnimation;
                 lstappear->obj = it.current();
                 lstappear->objIndex = indexObj;
@@ -163,7 +165,9 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                     listObjectAnimation.insert( it.current()->getAppearStep(), tmp2 );
                 }
             }
-            if ( it.current()->getEffect3() != EF3_NONE || !( it.current()->getDisappearSoundEffectFileName() ).isEmpty())
+            if ( it.current()->getEffect3() != EF3_NONE || 
+                 it.current()->getDisappear() ||   
+                 ! it.current()->getDisappearSoundEffectFileName().isEmpty())
             {
                 listAnimation *lstappear = new listAnimation;
                 lstappear->obj = it.current();

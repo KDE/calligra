@@ -1,6 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
-   Copyright (C) 2005 Thorsten Zachmann <zachmann@kde.org>
+   Copyright (C) 2005-2006 Thorsten Zachmann <zachmann@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -1946,6 +1946,11 @@ int KPrDocument::createPresentationAnimation(const QDomElement& element, int ord
             Q_ASSERT( e.hasAttributeNS( KoXmlNS::draw, "shape-id" ) );
             QString name = e.attributeNS( KoXmlNS::draw, "shape-id", QString::null );
 	    kdDebug()<<" insert animation show style : name :"<<name<<endl;
+            if ( e.hasAttributeNS( KoXmlNS::koffice, "order-id" ) )
+            {
+                orderAnimation = e.attributeNS( KoXmlNS::koffice, "order-id", QString::null ).toInt();
+	            //kdDebug(33001) << "order id = " << orderAnimation << ", " << e.attributeNS( KoXmlNS::koffice, "order-id", QString::null ) << endl;
+            }
             QDomElement* ep = new QDomElement( e );
             lstAnimation *tmp = new lstAnimation;
             tmp->element = ep;

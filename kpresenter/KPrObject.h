@@ -299,7 +299,7 @@ public:
         { if (selected || force ) lst.append( this );}
     virtual KPrPen getPen() const;
 
-    bool haveAnimation() const;
+    bool hasAnimation() const;
 
     /**
      * Adds its edges to the KoGuides objectCollect all textobjects.
