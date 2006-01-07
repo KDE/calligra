@@ -140,6 +140,8 @@ using namespace Kivio;
 KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
 : KoView( doc, _parent, _name )
 {
+  m_bShowGuides = true;
+  m_bSnapGuides = true;
   m_addStencilSetDialog = 0;
   m_pluginManager = new PluginManager(this, "Kivio Plugin Manager");
   m_addStencilTool = new Kivio::AddStencilTool(this);
@@ -905,6 +907,7 @@ void KivioView::toggleShowGuides(bool b)
 {
   TOGGLE_ACTION("showGuides")->setChecked(b);
   m_bShowGuides = b;
+  m_bSnapGuides = b;
 
   m_pCanvas->update();
 }
