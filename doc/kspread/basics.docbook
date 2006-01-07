@@ -104,7 +104,7 @@ them. Using our example you can see the effect of reducing the amount spent on
 food in December by just entering a new value into cell C2. If you had a
 spreadsheet that modelled the greenhouse effect accurately you could perhaps
 see the effect of a 50 percent reduction in the amount of methane released 
-into the atmosphere. </para>
+into the atmosphere.</para>
 </sect1>
 
 <sect1 id="selecting">
@@ -122,31 +122,38 @@ into the cell reference box at the left end of the Formula toolbar and press
 Cell...</guimenuitem></menuchoice> menu option</para></listitem>
 </itemizedlist>
 
-<para>You can also steer your way around with the <keysym>arrow</keysym> keys. 
-Pressing the <keysym>Enter</keysym> key will move the current selection one 
+<para>You can also steer your way around with the <keysym>arrow</keysym> keys.
+Pressing the <keysym>Enter</keysym> key will move the current selection one
 position up, down, left or right depending on the setting in the <guilabel>Misc
-</guilabel> page of &kspread;'s <link linkend="configmisc">configuration 
-dialog box</link>.</para>
-<para>If you hold the &Ctrl; key down while using the <keysym>arrow</keysym> 
-keys the selection will move to the start or end of the block of occupied 
-cells.</para>
-<para>To select an area of cells drag the mouse cursor across the desired area 
-with the <mousebutton>left</mousebutton> button held down, or enter the 
-references of the top left and bottom right cells separated by a colon into 
+</guilabel> page of &kspread;'s <link linkend="configmisc">configuration dialog
+box</link>.</para> <para>If you hold the <keycombo
+action="simul">&Shift;</keycombo> key down while using the
+<keysym>arrow</keysym> keys the selection will move to the start or end of the
+block of occupied cells.</para>
+<para>To select an area of contiguous cells drag the mouse cursor across the
+desired area with the <mousebutton>left</mousebutton> button held down, or enter
+the references of the top left and bottom right cells separated by a colon into
 the Formula toolbar cell reference box (for example <userinput>B7:C14
-</userinput>) and press <keycap>Enter</keycap>, or enter these cell references 
+</userinput>) and press <keycap>Enter</keycap>, or enter these cell references
 in a similar format into the dialog box brought up by <menuchoice><guimenu>
 View</guimenu><guimenuitem>Goto Cell...</guimenuitem></menuchoice>.</para>
-<para>You can also select an area of cells by selecting the cell in one 
-corner of the wanted area then holding the &Shift; key down while using the 
-<mousebutton>left</mousebutton> mouse button to select the cell in the 
-opposite corner.</para>
+<para>You can also select an area of cells by selecting the cell in one corner
+of the wanted area then holding the <keycombo
+action="simul">&Shift; </keycombo> key down while using the
+<mousebutton>left</mousebutton> mouse button to select the cell in the opposite
+corner.</para>
 
 <para>To select a complete row or column of cells <mousebutton>left
 </mousebutton> click on the row number at the left of the worksheet or on the 
 column letters at the top. To select adjacent rows or columns drag the mouse 
 pointer over the appropriate row numbers or column letters with the 
 <mousebutton>left</mousebutton> button held down.</para>
+
+<para>To select non-contiguous cells, click on the first cell you want to select
+then hold the <keycombo
+action="simul">&Ctrl;</keycombo> key and select the other
+cells.</para>
+
 </sect1>
 
 <sect1 id="entering">

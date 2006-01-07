@@ -579,10 +579,12 @@ Check <guilabel>Hide all</guilabel> and uncheck <guilabel>Protected</guilabel>
 to remove the protection on all cells. The cells are now all unprotected.
 </para></listitem>
 </itemizedlist>
-<para>To protect a range of selected cells:</para>
+<para>To protect a range of selected cells or a selection of non-contiguous
+cells:</para>
 <itemizedlist>
 <listitem><para>
-Highlight the range of cells that are to be protected.
+Highlight the range of cells that are to be protected or use the <keycombo
+action="simul">&Ctrl;</keycombo> key to select non-contiguous cells.
 </para></listitem>
 <listitem><para>
 When all of the desired cells are selected, go to
