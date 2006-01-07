@@ -73,7 +73,7 @@ namespace Kross { namespace Api {
              * \param element The QDomElement which will be used
              *        to setup the \a ScriptAction attributes.
              */
-            explicit ScriptAction(const QDomElement& element);
+            explicit ScriptAction(const QString& scriptconfigfile, const QDomElement& element);
 
             /**
              * Destructor.
@@ -88,6 +88,13 @@ namespace Kross { namespace Api {
              *        could be e.g. "python".
              */
             void setInterpreterName(const QString& name);
+
+            /**
+             * \return the path of the package this \a ScriptAction
+             * belongs to or QString::null if it doesn't belong to
+             * any package.
+             */
+            const QString getPackagePath();
 
             /**
              * \return a list of all kind of logs this \a ScriptAction

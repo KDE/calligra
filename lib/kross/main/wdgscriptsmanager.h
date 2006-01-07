@@ -40,6 +40,8 @@ class WdgScriptsManager : public WdgScriptsManagerBase
         ~WdgScriptsManager();
     public slots:
         void slotLoadScript();
+        void slotInstallScript();
+        void slotUninstallScript();
         void slotExecuteScript();
         void slotRemoveScript();
         void slotSelectionChanged(QListViewItem*);

@@ -102,13 +102,31 @@ namespace Kross { namespace Api {
             bool removeActionCollection(const QString& name);
 
             /**
-            * This methods are reimplemented from the inherited KXMLGUIClient
-            * class to made them public accessible.
-            */
-            virtual void setXMLFile(const QString &file, bool merge = false, bool setxmldoc = true);
-            virtual void setLocalXMLFile(const QString &file);
-            virtual void setXML(const QString &document, bool merge = false);
-            virtual void setDOMDocument(const QDomDocument &document, bool merge = false);
+             * Reload the list of installed scripts.
+             */
+            bool reloadInstalledScripts();
+
+            /**
+             * Install the packagefile \p scriptpackagefile . Those
+             * packagefile should be a tar.gz-archive which will be
+             * extracted and to the users script-directory.
+             */
+            bool installScriptPackage(const QString& scriptpackagefile);
+
+            /**
+             * Uninstall the scriptpackage located in the path
+             * \p scriptpackagepath . This just deletes the whole
+             * directory.
+             */
+            bool uninstallScriptPackage(const QString& scriptpackagepath);
+
+            /**
+             * Load the scriptpackage's configurationfile
+             * \p scriptconfigfile and add the defined \a ScriptAction
+             * instances that will be added to the list of installed
+             * scripts.
+             */
+            bool loadScriptConfig(const QString& scriptconfigfile);
 
         public slots:
 
@@ -154,12 +172,20 @@ namespace Kross { namespace Api {
             */
             void showScriptManager();
 
-            //bool loadScriptFile(const QString& file);
-            //bool reloadScriptFile(const QString& file);
-            //bool unloadScriptFile(const QString& file);
-
         private slots:
+
+            /**
+            * Called if execution of this \a ScriptAction failed and
+            * displays an errormessage-dialog.
+            */
             void executionFailed(const QString& errormessage, const QString& tracedetails);
+
+            /**
+            * Called if execution of this \a ScriptAction was 
+            * successfully. The \a ScriptAction will be added
+            * to the history-collection of successfully executed
+            * \a ScriptAction instances.
+            */
             void successfullyExecuted();
 
         signals:

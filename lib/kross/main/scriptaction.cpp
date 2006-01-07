@@ -21,6 +21,9 @@
 #include "manager.h"
 
 #include <qstylesheet.h>
+#include <qdir.h>
+#include <qfile.h>
+#include <qfileinfo.h>
 #include <kurl.h>
 #include <kstandarddirs.h>
 #include <kmimetype.h>
@@ -34,6 +37,8 @@ namespace Kross { namespace Api {
     class ScriptActionPrivate
     {
         public:
+
+            QString packagepath;
 
             /**
             * List of all kind of logs this \a ScriptAction does
@@ -68,7 +73,7 @@ ScriptAction::ScriptAction(const QString& file)
     setEnabled( false );
 }
 
-ScriptAction::ScriptAction(const QDomElement& element)
+ScriptAction::ScriptAction(const QString& scriptconfigfile, const QDomElement& element)
     : KAction()
     , Kross::Api::ScriptContainer()
     , d( new ScriptActionPrivate() ) // initialize d-pointer class
@@ -105,17 +110,11 @@ ScriptAction::ScriptAction(const QDomElement& element)
         setCode( element.text().stripWhiteSpace() );
     }
     else {
-        QString res = element.attribute("resource");
-        if(! res.isNull()) {
-            QString f = KGlobal::dirs()->findResource(res.latin1(), file);
-            if(f.isNull()) { // if we failed to find the resource just pass both to provide later a better errormessage.
-                file = QString("%1://%2").arg(res).arg(file);
-                setEnabled(false);
-            }
-            else // else everything seems to be fine.
-                file = f;
-
-        }
+        QDir dir = QFileInfo(scriptconfigfile).dir(true);
+        d->packagepath = dir.absPath();
+        QFileInfo fi(dir, file);
+        file = fi.absFilePath();
+        setEnabled(fi.exists());
         setFile(file);
         setToolTip(file);
         setWhatsThis(file);
@@ -143,6 +142,11 @@ void ScriptAction::setInterpreterName(const QString& name)
 {
     setEnabled( Manager::scriptManager()->hasInterpreterInfo(name) );
     Kross::Api::ScriptContainer::setInterpreterName(name);
+}
+
+const QString ScriptAction::getPackagePath()
+{
+    return d->packagepath;
 }
 
 const QStringList& ScriptAction::getLogs() const

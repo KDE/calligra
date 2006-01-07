@@ -30,7 +30,11 @@
 #include <kfiledialog.h>
 #include <klocale.h>
 #include <kurl.h>
+#include <ktar.h>
+#include <kstandarddirs.h>
 #include <kdebug.h>
+
+#include <kio/netaccess.h>
 
 using namespace Kross::Api;
 
@@ -60,9 +64,6 @@ ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent)
 
     setInstance( ScriptGUIClient::instance() );
 
-//setXMLFile( guiclient->xmlFile() );
-//setXMLFile( KGlobal::dirs()->findResource("appdata", "scripting.rc") );
-
     // action to execute a scriptfile.
     new KAction(i18n("Execute Script File..."), 0, 0, this, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
 
@@ -76,6 +77,8 @@ ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent)
         new ScriptActionCollection(i18n("Loaded"), actionCollection(), "loadedscripts") );
     d->collections.replace("executedscripts",
         new ScriptActionCollection(i18n("History"), actionCollection(), "executedscripts") );
+
+    reloadInstalledScripts();
 }
 
 ScriptGUIClient::~ScriptGUIClient()
@@ -118,58 +121,100 @@ bool ScriptGUIClient::removeActionCollection(const QString& name)
     return false;
 }
 
-void ScriptGUIClient::setXMLFile(const QString &file, bool merge, bool setxmldoc)
-{
-    KXMLGUIClient::setXMLFile(file, merge, setxmldoc);
-}
-
-void ScriptGUIClient::setLocalXMLFile(const QString &file)
-{
-    KXMLGUIClient::setLocalXMLFile(file);
-}
-
-void ScriptGUIClient::setXML(const QString &document, bool merge)
-{
-    KXMLGUIClient::setXML(document, merge);
-}
-
-void ScriptGUIClient::setDOMDocument(const QDomDocument &document, bool /*merge*/)
+bool ScriptGUIClient::reloadInstalledScripts()
 {
     ScriptActionCollection* installedcollection = d->collections["installedscripts"];
     if(installedcollection)
         installedcollection->clear();
 
-    // time to parse the DOM-document
-    //QDomDocument domdoc = domDocument();
-    QDomDocument domdoc = document;
-    kdDebug()<< QString("Kross::Api::ScriptGUIClient::setDOMDocument() XML-file: %1").arg(xmlFile()) << endl;
+    QStringList files = KGlobal::dirs()->findAllResources("appdata", "scripts/*/*.rc");
+    //files.sort();
+    for(QStringList::iterator it = files.begin(); it != files.end(); ++it)
+        loadScriptConfig(*it);
+}
 
-    // walk throuh the list of Scripts-elements.
-    QDomNodeList nodelist = domdoc.elementsByTagName("Scripts");
-    uint nodelistcount = nodelist.count();
-    for(uint i = 0; i < nodelistcount; i++) {
-        QDomNode node = nodelist.item(i).firstChild();
-        // walk through the list of children this Scripts-element has.
-        while(! node.isNull()) {
-            //kdDebug() << "subnode => " << node.nodeName() << endl;
+bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
+{
+    kdDebug() << QString("Install script package: %1").arg(scriptpackagefile) << endl;
+    KTar archive( scriptpackagefile );
+    if(! archive.open(IO_ReadOnly)) {
+        KMessageBox::sorry(0, i18n("Could not read the package \"%1\".").arg(scriptpackagefile));
+        return false;
+    }
 
-            if(node.nodeName() == "ScriptAction") {
-                ScriptAction::Ptr action = new ScriptAction( node.toElement() );
+    QString destination = KGlobal::dirs()->saveLocation("appdata", "scripts", true);
+    if(destination.isNull()) {
+        kdWarning() << "ScriptGUIClient::installScriptPackage() Failed to determinate location where the scriptpackage should be installed to!" << endl;
+        return false;
+    }
 
-                if(installedcollection)
-                    installedcollection->attach( action );
+    QString packagename = QFileInfo(scriptpackagefile).baseName();
+    destination += packagename; // add the packagename to the name of the destination-directory.
 
-                connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
-                        this, SLOT( executionFailed(const QString&, const QString&) ));
-                connect(action.data(), SIGNAL( success() ),
-                        this, SLOT( successfullyExecuted() ));
-            }
+    if( QDir(destination).exists() ) {
+        if( KMessageBox::warningContinueCancel(0,
+            i18n("There exists already a scriptpackage with the name \"%1\". Replace those package?" ).arg(packagename),
+            i18n("Replace")) != KMessageBox::Continue )
+                return false;
 
-            node = node.nextSibling();
+        if(! KIO::NetAccess::del(destination, 0) ) {
+            KMessageBox::sorry(0, i18n("Could not uninstall this scriptpacke. You may not have sufficient permissions to delete the folder \"%1\".").arg(destination));
+            return false;
         }
     }
 
+    const KArchiveDirectory* archivedir = archive.directory();
+    archivedir->copyTo(destination, true);
+
+    reloadInstalledScripts();
+    return true;
+}
+
+bool ScriptGUIClient::uninstallScriptPackage(const QString& scriptpackagepath)
+{
+    if(! KIO::NetAccess::del(scriptpackagepath, 0) ) {
+        KMessageBox::sorry(0, i18n("Could not uninstall this scriptpacke. You may not have sufficient permissions to delete the folder \"%1\".").arg(scriptpackagepath));
+        return false;
+    }
+    return true;
+}
+
+bool ScriptGUIClient::loadScriptConfig(const QString& scriptconfigfile)
+{
+    kdDebug() << "ScriptGUIClient::loadScriptConfig file=" << scriptconfigfile << endl;
+
+    QDomDocument domdoc;
+    QFile file(scriptconfigfile);
+    if(! file.open(IO_ReadOnly)) {
+        kdWarning() << "ScriptGUIClient::loadScriptConfig(): Failed to read scriptconfigfile: " << scriptconfigfile << endl;
+        return false;
+    }
+    bool ok = domdoc.setContent(&file);
+    file.close();
+    if(! ok) {
+        kdWarning() << "ScriptGUIClient::loadScriptConfig(): Failed to parse scriptconfigfile: " << scriptconfigfile << endl;
+        return false;
+    }
+
+    ScriptActionCollection* installedcollection = d->collections["installedscripts"];
+
+    // walk throuh the list of Scripts-elements.
+    QDomNodeList nodelist = domdoc.elementsByTagName("ScriptAction");
+    uint nodelistcount = nodelist.count();
+    for(uint i = 0; i < nodelistcount; i++) {
+        ScriptAction::Ptr action = new ScriptAction(scriptconfigfile, nodelist.item(i).toElement());
+
+        if(installedcollection)
+            installedcollection->attach( action );
+
+        connect(action.data(), SIGNAL( failed(const QString&, const QString&) ),
+                this, SLOT( executionFailed(const QString&, const QString&) ));
+        connect(action.data(), SIGNAL( success() ),
+                this, SLOT( successfullyExecuted() ));
+    }
+
     emit collectionChanged(installedcollection);
+    return true;
 }
 
 void ScriptGUIClient::successfullyExecuted()
@@ -267,10 +312,10 @@ bool ScriptGUIClient::executeScriptAction(ScriptAction::Ptr action)
 
 void ScriptGUIClient::showScriptManager()
 {
-    KDialogBase* kdb = new KDialogBase(d->parent, "", true, i18n("Script Manager"), KDialogBase::Close);
-    WdgScriptsManager* wsm = new WdgScriptsManager(this, kdb);
-    kdb->setMainWidget(wsm);
-    kdb->show();
+    KDialogBase* dialog = new KDialogBase(d->parent, "", true, i18n("Script Manager"), KDialogBase::Close);
+    WdgScriptsManager* wsm = new WdgScriptsManager(this, dialog);
+    dialog->setMainWidget(wsm);
+    dialog->show();
 }
 
 #include "scriptguiclient.moc"
