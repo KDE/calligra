@@ -60,11 +60,6 @@ void KIvioViewIface::showPage()
     view->showPage();
 }
 
-void KIvioViewIface::exportPage()
-{
-    view->exportPage();
-}
-
 void KIvioViewIface::optionsDialog()
 {
     view->optionsDialog();

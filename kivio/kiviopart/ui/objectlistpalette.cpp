@@ -41,29 +41,35 @@ class ObjectListItem : public KListViewItem
 {
   public:
     ObjectListItem(KListView* parent, KivioStencil* _stencil)
-      : KListViewItem(parent, _stencil->spawner()->info()->title())
+      : KListViewItem(parent, "")
     {
       m_stencil = _stencil;
       setPixmap(0, Kivio::generatePixmapFromStencil(22, 22, m_stencil));
 
       QString type;
+      QString name;
 
       switch(m_stencil->type()) {
         case kstGroup:
           type = i18n("Group");
+          name = type;
           break;
         case kstConnector:
           type = i18n("Connector");
+          name = _stencil->spawner()->info()->title();
           break;
         case kstText:
           type = i18n("Text Area");
+          name = type;
           break;
         case kstNormal:
         default:
           type = i18n("Stencil");
+          name = _stencil->spawner()->info()->title();
           break;
       }
 
+      setText(0, name);
       setText(1, type);
       setSelected(m_stencil->isSelected());
     }

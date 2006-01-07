@@ -39,7 +39,6 @@ k_dcop:
     virtual void renamePage();
     virtual void hidePage();
     virtual void showPage();
-    virtual void exportPage();
     virtual void optionsDialog();
 
     virtual bool isSnapGuides()const;

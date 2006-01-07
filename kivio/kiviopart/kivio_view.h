@@ -175,7 +175,6 @@ class KIVIO_EXPORT KivioView : public KoView
     void renamePage();
     void hidePage();
     void showPage();
-    void exportPage();
     void viewZoom(int);
 
     void groupStencils();
@@ -303,7 +302,6 @@ class KIVIO_EXPORT KivioView : public KoView
     KAction* m_renamePage;
     KAction* m_hidePage;
     KAction* m_showPage;
-    KAction* m_exportPage;
     KAction* m_arrowHeadsMenuAction;
     KAction* m_menuTextFormatAction;
     KAction* m_menuStencilConnectorsAction;

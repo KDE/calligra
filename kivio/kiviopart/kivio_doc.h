@@ -123,7 +123,6 @@ class KIVIO_EXPORT KivioDoc : public KoDocument
     void paintContent( KivioPainter& painter, const QRect& rect, bool transparent, KivioPage* page, QPoint, KoZoomHandler*, bool );
 
     void printContent( KPrinter& prn );
-    bool exportPage( KivioPage *pPage, const QString &fileName, ExportPageDialog * );
 
     static QPtrList<KivioDoc>& documents();
 

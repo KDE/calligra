@@ -473,7 +473,6 @@ void KivioView::setupActions()
 
   m_showPage = new KAction( i18n("Show Page..."),0 ,this,SLOT(showPage()), actionCollection(), "showPage" );
   m_hidePage = new KAction( i18n("Hide Page"),0 ,this,SLOT(hidePage()), actionCollection(), "hidePage" );
-  m_exportPage = new KAction( i18n("Export Page..."),0,this,SLOT(exportPage()), actionCollection(), "exportPage");
 
   showPageMargins = new KToggleAction( i18n("Show Page Margins"), "view_margins", 0, actionCollection(), "showPageMargins" );
   connect( showPageMargins, SIGNAL(toggled(bool)), SLOT(togglePageMargins(bool)));
@@ -1779,58 +1778,6 @@ void KivioView::setupPrinter(KPrinter &p)
   } else {
     p.setOrientation( KPrinter::Portrait );
   }
-}
-
-void KivioView::exportPage()
-{
-   // First build a filter list
-   QString extList;
-   char *pStr;
-   QStrList strList;
-   ExportPageDialog dlg(this, "Export Page Dialog");
-
-   strList = QImageIO::outputFormats();
-   QString last = Kivio::Config::lastFormat();
-
-   if(strList.remove(last.lower().local8Bit()) || strList.remove(last.upper().local8Bit())) {
-     strList.insert(0, last.lower().local8Bit());
-   }
-
-   pStr = static_cast<char*>(strList.first());
-   while( pStr )
-   {
-      extList += "*." + QString(pStr).lower();
-
-      pStr = static_cast<char*>(strList.next());
-
-      if(pStr) {
-        extList += "\n";
-      }
-   }
-
-   KFileDialog fileDlg(":pageExport", extList, this, "exportPageFileDlg", true);
-   fileDlg.setOperationMode(KFileDialog::Saving);
-   fileDlg.setMode(KFile::File);
-   QString fileName;
-
-   if(fileDlg.exec() == QDialog::Accepted) {
-     fileName = fileDlg.selectedFile();
-   } else {
-     return;
-   }
-
-   if( dlg.exec()!=QDialog::Accepted ) {
-      return;
-   }
-
-   if(!m_pDoc->exportPage( m_pActivePage, fileName, &dlg ))
-   {
-      kdDebug(43000) << "KivioView::exportPage() failed\n";
-      return;
-   }
-
-   kdDebug(43000) << "KivioView::exportPage() succeeded\n";
-   Kivio::Config::setLastFormat(fileDlg.currentFilter().remove(0, 2));
 }
 
 void KivioView::popupTabBarMenu( const QPoint & _point )
