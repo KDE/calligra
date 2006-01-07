@@ -1,5 +1,6 @@
 since 1.4.2
 ===========
+- Implement custom sheet selection and ordering in print dialog
 - Fix format changes of automerged cells (#115948)
 - Fix zoomed printouts (#115879)
 - Fix indentation setting in preferences (#116903)

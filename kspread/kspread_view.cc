@@ -1581,11 +1581,10 @@ void KPSheetSelectPage::moveUp()
   QListViewItem* nextitem = NULL;
   while (item)
   {
-    //TODO this does not work correctly for contiguous selections
     nextitem = item->nextSibling();
-    if (nextitem)
+    if (!item->isSelected())
     {
-      if (nextitem->isSelected() && !item->isSelected())
+      while (nextitem && nextitem->isSelected())
       {
         QListViewItem* nextnextitem = nextitem->nextSibling();
         newlist.prepend(nextitem);
