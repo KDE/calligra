@@ -12,9 +12,6 @@
             <height>181</height>
         </rect>
     </property>
-    <property name="caption">
-        <string>Form1</string>
-    </property>
     <grid>
         <property name="name">
             <cstring>unnamed</cstring>
@@ -38,12 +35,12 @@
         <widget class="KComboBox" row="1" column="2" rowspan="1" colspan="2">
             <item>
                 <property name="text">
-                    <string>Complete page</string>
+                    <string>Complete Page</string>
                 </property>
             </item>
             <item>
                 <property name="text">
-                    <string>Area of the objects on the page</string>
+                    <string>Area of Objects on Page</string>
                 </property>
             </item>
             <property name="name">

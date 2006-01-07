@@ -32,7 +32,7 @@ namespace Kivio
 {
 
 ImageExportDialog::ImageExportDialog(QWidget* parent, const char* name)
-  : KDialogBase(parent, name, false, i18n("Export To Image"), Ok|Cancel)
+  : KDialogBase(parent, name, false, i18n("Export to Image"), Ok|Cancel)
 {
   kapp->restoreOverrideCursor();
   m_mainWidget = new ImageExportWidget(this);

@@ -43,7 +43,7 @@
                 </sizepolicy>
             </property>
             <property name="title">
-                <string>TIFF Options:</string>
+                <string>TIFF Options</string>
             </property>
             <vbox>
                 <property name="name">
@@ -62,7 +62,7 @@
                                 <cstring>textLabel1</cstring>
                             </property>
                             <property name="text">
-                                <string>Compression Type:</string>
+                                <string>Compression type:</string>
                             </property>
                         </widget>
                         <widget class="KComboBox">
@@ -73,7 +73,7 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>JPEG DCT compression</string>
+                                    <string>JPEG DCT Compression</string>
                                 </property>
                             </item>
                             <item>
@@ -93,17 +93,17 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>CCITT modified Huffman RLE</string>
+                                    <string>CCITT Modified Huffman RLE</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>CCITT Group 3 fax encoding</string>
+                                    <string>CCITT Group 3 Fax Encoding</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>CCITT Group 4 fax encoding</string>
+                                    <string>CCITT Group 4 Fax Encoding</string>
                                 </property>
                             </item>
                             <item>
@@ -141,12 +141,12 @@
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Horizontal differencing</string>
+                                    <string>Horizontal Differencing</string>
                                 </property>
                             </item>
                             <item>
                                 <property name="text">
-                                    <string>Floating point horizontal differencing</string>
+                                    <string>Floating Point Horizontal Differencing</string>
                                 </property>
                             </item>
                             <property name="name">
@@ -270,7 +270,7 @@ You can uncheck the box if you are not using transparancy and you want to make t
                             </sizepolicy>
                         </property>
                         <property name="title">
-                            <string>JPEG Compression Options:</string>
+                            <string>JPEG Compression Options</string>
                         </property>
                         <hbox>
                             <property name="name">

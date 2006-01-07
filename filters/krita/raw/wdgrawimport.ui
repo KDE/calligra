@@ -295,7 +295,7 @@
                                 <string></string>
                             </property>
                             <property name="toolTip" stdset="0">
-                                <string> 
+                                <string>
  Use the color balance specified by the camera. If this can't be found, dcraw prints a warning and reverts to the default. </string>
                             </property>
                         </widget>
@@ -397,7 +397,7 @@
                 <cstring>chkCameraColors</cstring>
             </property>
             <property name="text">
-                <string>Use camera raw colors, not sRGB.</string>
+                <string>Use camera raw colors, not sRGB</string>
             </property>
         </widget>
         <widget class="ImageViewer" row="0" column="0" rowspan="1" colspan="3">

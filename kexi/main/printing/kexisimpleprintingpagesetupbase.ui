@@ -54,7 +54,7 @@
                         <cstring>captionLabel</cstring>
                     </property>
                     <property name="text">
-                        <string>&lt;h2&gt;Page setup for printing "%1" table data&lt;/h2&gt;</string>
+                        <string>&lt;h2&gt;Page Setup for Printing "%1" Table Data&lt;/h2&gt;</string>
                     </property>
                     <property name="buddy" stdset="0">
                         <cstring>headerTitleLineEdit</cstring>

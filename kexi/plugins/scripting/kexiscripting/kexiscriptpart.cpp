@@ -127,7 +127,7 @@ KAction* KexiScriptPart::action(const QString& scripturi, QObject*)
 		if( !exec && dontask != "no" ) {
 			exec = KMessageBox::warningContinueCancel(0,
 				i18n("Do you want to execute the script \"%1\"?\n\nScripts obtained from unknown sources can contain dangerous code.").arg(scriptaction->text()),
-				i18n("Execute script?"), KGuiItem(i18n("Execute"), "exec"),
+				i18n("Execute Script?"), KGuiItem(i18n("Execute"), "exec"),
 				dontAskAgainName, KMessageBox::Notify | KMessageBox::Dangerous
 			) == KMessageBox::Continue;
 		}
