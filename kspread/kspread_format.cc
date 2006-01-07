@@ -1017,15 +1017,15 @@ bool Format::loadFormat( const QDomElement & f, Paste::Mode pm, bool paste )
     if ( f.hasAttribute( "hideformula" ) )
         setHideFormula( true );
 
-    if ( f.hasAttribute( "brushcolor" ) )
-        setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
-
     if ( f.hasAttribute( "brushstyle" ) )
     {
         setBackGroundBrushStyle( (Qt::BrushStyle) f.attribute( "brushstyle" ).toInt( &ok ) );
         if ( !ok )
           return false;
     }
+
+    if ( f.hasAttribute( "brushcolor" ) )
+        setBackGroundBrushColor( QColor( f.attribute( "brushcolor" ) ) );
 
     QDomElement pen( f.namedItem( "pen" ).toElement() );
     if ( !pen.isNull() )
@@ -1396,8 +1396,8 @@ bool Format::loadOasisStyleProperties( KoStyleStack & styleStack, const KoOasisS
             if ( fill == "solid" || fill == "hatch" )
             {
                 QBrush brush=KoOasisStyles::loadOasisFillStyle( drawStyleStack, fill, oasisStyles );
-                setBackGroundBrushColor( brush.color() );
                 setBackGroundBrushStyle( brush.style() );
+                setBackGroundBrushColor( brush.color() );
             }
             else
                 kdDebug()<<" fill style not supported into kspread : "<<fill<<endl;
