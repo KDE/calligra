@@ -439,18 +439,18 @@ miscParameters::miscParameters( View* _view,QVBox *box, char *name )
   comboChanged=false;
   connect(typeCompletion,SIGNAL(activated( const QString & )),this,SLOT(slotTextComboChanged(const QString &)));
 
-  label=new QLabel(i18n("&Pressing enter moves selection to:"), tmpQGroupBox);
+  label=new QLabel(i18n("&Pressing enter moves cell cursor:"), tmpQGroupBox);
   typeOfMove=new QComboBox( tmpQGroupBox);
   label->setBuddy(typeOfMove);
   listType.clear();
-  listType+=i18n("towards to", "Bottom");
-  listType+=i18n("towards to", "Top");
-  listType+=i18n("towards to", "Right");
-  listType+=i18n("towards to", "Left");
-  listType+=i18n("towards to", "Bottom, First Cell");
+  listType+=i18n("Down");
+  listType+=i18n("Up");
+  listType+=i18n("Right");
+  listType+=i18n("Left");
+  listType+=i18n("Down, First Column");
   typeOfMove->insertStringList(listType);
   typeOfMove->setCurrentItem(0);
-  QWhatsThis::add(typeOfMove, i18n( "When you have selected a cell then press the Enter key the selection will move one place to the left, right, up or down as determined by the setting in this drop down selection box." ) );
+  QWhatsThis::add(typeOfMove, i18n( "When you have selected a cell, pressing the Enter key will move the cell cursor one cell left, right, up or down, as determined by this setting." ) );
 
   label=new QLabel(i18n("&Method of calc:"), tmpQGroupBox);
 
