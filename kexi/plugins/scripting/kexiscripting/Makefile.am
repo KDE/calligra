@@ -26,9 +26,6 @@ METASOURCES = AUTO
 
 SUBDIRS = .
 
-scriptingconfigdir = $(kde_datadir)/kexi
-scriptingconfig_DATA = kexiscripting.rc
-
 include ../../Makefile.common
 
 noinst_HEADERS = kexiscriptpart.h kexiscripteditor.h kexiscriptdesignview.h

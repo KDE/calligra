@@ -1,1 +1,1 @@
-SUBDIRS = python
+SUBDIRS = exportxhtml importxhtml projectdocumentor python

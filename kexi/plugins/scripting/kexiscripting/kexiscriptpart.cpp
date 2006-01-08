@@ -31,7 +31,6 @@
 #include <kross/main/scriptguiclient.h>
 
 #include <kgenericfactory.h>
-#include <kstandarddirs.h>
 #include <kexipartitem.h>
 #include <kxmlguiclient.h>
 #include <kexidialogbase.h>
@@ -150,10 +149,6 @@ void KexiScriptPart::initPartActions()
 
 		// Initialize the ScriptGUIClient.
 		d->scriptguiclient = new Kross::Api::ScriptGUIClient( m_mainWin );
-
-		// Set the configurationfile.
-		QString file = KGlobal::dirs()->findResource("appdata", "kexiscripting.rc");
-		d->scriptguiclient->setXMLFile(file, true);
 
 		// Publish the KexiMainWindow singelton instance. At least the KexiApp 
 		// scripting-plugin depends on this instance and loading the plugin will 

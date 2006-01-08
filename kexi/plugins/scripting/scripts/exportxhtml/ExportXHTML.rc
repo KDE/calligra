@@ -1,0 +1,8 @@
+<KrossScripting>
+    <ScriptAction
+      name="exportxhtml"
+      text="Export Data to XHTML File"
+      icon="fileexport"
+      interpreter="python"
+      file="ExportXHTML.py" />
+</KrossScripting>

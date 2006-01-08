@@ -1,0 +1,8 @@
+<KrossScripting>
+    <ScriptAction
+      name="projectdocumentor"
+      text="Project Documentation Generator"
+      icon="contents"
+      interpreter="python"
+      file="ProjectDocumentor.py" />
+</KrossScripting>
