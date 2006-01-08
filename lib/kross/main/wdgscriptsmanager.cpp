@@ -90,7 +90,7 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     toolBar->insertButton("fileimport", WdgScriptsManagerPrivate::InstallBtn, true, i18n("Install"));
     toolBar->addConnection(WdgScriptsManagerPrivate::InstallBtn, SIGNAL(clicked()), this, SLOT(slotInstallScript()));
 
-    toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::UninstallBtn, true, i18n("Uninstall"));
+    toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::UninstallBtn, false, i18n("Uninstall"));
     toolBar->addConnection(WdgScriptsManagerPrivate::UninstallBtn, SIGNAL(clicked()), this, SLOT(slotUninstallScript()));
 
     toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::RemoveBtn, false, i18n("Remove"));
