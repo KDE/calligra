@@ -38,7 +38,7 @@ class KisTIFFWriterVisitor : public KisLayerVisitor
         virtual bool visit(KisPaintLayer *layer);
         virtual bool visit(KisGroupLayer *layer);
         virtual bool visit(KisPartLayer *layer);
-        virtual bool visit(KisAdjustmentLayer* layer);
+        virtual bool visit(KisAdjustmentLayer* layer) { return true; }
     private:
         inline TIFF* image() { return m_image; }
         inline bool saveAlpha() { return m_saveAlpha; }
