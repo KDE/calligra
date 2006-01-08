@@ -609,6 +609,15 @@ Below the layer list, there are some other controls. You can create a new
 layer, move the current layer up or down, show the layer's properties and
 delete it.
 </para>
+<para>
+There are some more handy tricks you can do with the mouse within the list.
+Right-click on the layer list and select <guilabel>New Folder</guilabel> to
+create a new layer folder, which you can use to group layers in. You can also
+drag and drop layers to change their order. To do so, click on the bottom part
+of the list item representing the layer, drag the mouse, and release the mouse
+button at the desired position. If you click at the top part of the list item
+instead, you will get a text field so that you can rename the layer.
+</para>
 </sect3>
 
 </sect2>
