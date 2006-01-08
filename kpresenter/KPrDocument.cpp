@@ -2985,10 +2985,9 @@ void KPrDocument::loadImagesFromStore( KoStore *_store )
     }
 }
 
-//TODO test if it's call when we load oasis format
 bool KPrDocument::completeLoading( KoStore* _store )
 {
-    //kdDebug()<<"bool KPrDocument::completeLoading( KoStore* _store )*************************\n";
+    kdDebug()<<"bool KPrDocument::completeLoading( KoStore* _store )*************************\n";
     emit sigProgress( 80 );
 
     if ( _store ) {

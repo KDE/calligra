@@ -30,12 +30,15 @@ struct lstAnimation
 class KPrLoadingInfo
 {
 public:
-    KPrLoadingInfo( bool oldFormat = false) {
-	m_oldFormat = oldFormat;
-	presSpeed = -1;
-	m_header = false;
-	m_footer = false;
-        m_headerFooterByPage=false;
+    KPrLoadingInfo( bool oldFormat = false) 
+	: presSpeed( -1 )
+	, m_header( false )
+	, m_footer( false )
+    , m_headerFooterByPage( false )
+	, m_oldFormat( oldFormat )
+    {
+        m_animationsShowDict.setAutoDelete( true );
+        m_animationsHideDict.setAutoDelete( true );
     }
     ~KPrLoadingInfo() {}
 
