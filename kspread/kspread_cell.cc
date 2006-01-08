@@ -507,6 +507,17 @@ void Cell::setValue( const Value& v )
   format()->sheet()->setRegionPaintDirty(cellRect());
 }
 
+void Cell::setCellValue (const Value &v, FormatType fmtType, const QString &txt)
+{
+  if (!txt.isEmpty())
+    d->strText = txt;
+  else
+    d->strText = v.asString();
+  if (fmtType != No_format)
+    format()->setFormatType (fmtType);
+  setValue (v);
+}
+
 // FIXME: Continue commenting and cleaning here (ingwa)
 
 
@@ -828,8 +839,8 @@ bool Cell::isObscuringForced() const
       // extra isn't enough.  We have to know that this cell is one of
       // the ones it is forcing over.
       if (column() <= cell->column() + cell->d->extra()->mergedXCells
-	  && row() <= cell->row() + cell->mergedYCells() )
-	return true;
+    && row() <= cell->row() + cell->mergedYCells() )
+  return true;
     }
   }
 
@@ -2061,15 +2072,15 @@ bool Cell::calc(bool delay)
 //
 
 void Cell::paintCell( const KoRect   &rect, QPainter & painter,
-		      View    *view,
-		      const KoPoint  &coordinate,
-		      const QPoint   &cellRef,
-		      /* bool paintBorderRight, bool paintBorderBottom,
-			 bool paintBorderLeft,  bool paintBorderTop,*/
-		      int paintBorder,
-		      QPen & rightPen, QPen & bottomPen,
-		      QPen & leftPen,  QPen & topPen,
-		      bool drawCursor )
+          View    *view,
+          const KoPoint  &coordinate,
+          const QPoint   &cellRef,
+          /* bool paintBorderRight, bool paintBorderBottom,
+       bool paintBorderLeft,  bool paintBorderTop,*/
+          int paintBorder,
+          QPen & rightPen, QPen & bottomPen,
+          QPen & leftPen,  QPen & topPen,
+          bool drawCursor )
 {
 //   kdDebug() << "Painting Cell " << cellRef.x() << " , " << cellRef.y() << endl;
 
@@ -2159,9 +2170,9 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 #else
       // FIXME: Make extraWidth/Height really contain the *extra* width/height.
       if ( d->extra()->extraXCells )
-	width  = d->extra()->extraWidth;
+  width  = d->extra()->extraWidth;
       if ( d->extra()->extraYCells )
-	height = d->extra()->extraHeight;
+  height = d->extra()->extraHeight;
 #endif
     }
   }
@@ -2178,7 +2189,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     // But the cell doesn't look selected if this is the marker cell.
     Cell  *cell = format()->sheet()->cellAt( view->selectionInfo()->marker() );
     QPoint bottomRight( view->selectionInfo()->marker().x() + cell->extraXCells(),
-			 view->selectionInfo()->marker().y() + cell->extraYCells() );
+       view->selectionInfo()->marker().y() + cell->extraYCells() );
     QRect markerArea( view->selectionInfo()->marker(), bottomRight );
     selected = selected && !( markerArea.contains( cellRef ) );
 
@@ -2232,9 +2243,9 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   if ( painter.device()->devType() != QInternal::Printer
        || format()->sheet()->print()->printGrid())
     paintDefaultBorders( painter, rect, cellRect, cellRef,
-			 paintBorderRight, paintBorderBottom,
+       paintBorderRight, paintBorderBottom,
                          paintBorderLeft,  paintBorderTop,
-			 rightPen, bottomPen, leftPen, topPen );
+       rightPen, bottomPen, leftPen, topPen );
 
   // 3. Paint all the cells that this one obscures.  They may only be
   //    partially obscured.
@@ -2245,13 +2256,13 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   paintingObscured++;
 
   if (d->hasExtra() && (d->extra()->extraXCells > 0
-			|| d->extra()->extraYCells > 0)) {
+      || d->extra()->extraYCells > 0)) {
     kdDebug(36001) << "painting obscured cells for " << name() << endl;
 
     paintObscuredCells( rect, painter, view, cellRect, cellRef,
-			paintBorderRight, paintBorderBottom,
-			paintBorderLeft,  paintBorderTop,
-			rightPen, bottomPen, leftPen, topPen );
+      paintBorderRight, paintBorderBottom,
+      paintBorderLeft,  paintBorderTop,
+      rightPen, bottomPen, leftPen, topPen );
   }
   paintingObscured--;
 
@@ -2268,10 +2279,10 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   if ( !isObscuringForced() ) {
     // if (!testFlag(Flag_Highlight))
     paintCellBorders( painter, rect, cellRect0,
-		      cellRef,
-		      paintBorderRight, paintBorderBottom,
+          cellRef,
+          paintBorderRight, paintBorderBottom,
                       paintBorderLeft,  paintBorderTop,
-		      rightPen, bottomPen, leftPen, topPen );
+          rightPen, bottomPen, leftPen, topPen );
   }
 
   // Turn clipping back on.
@@ -2282,7 +2293,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   paintCellDiagonalLines( painter, cellRect0, cellRef );
 
   paintPageBorders( painter, cellRect0, cellRef,
-		    paintBorderRight, paintBorderBottom );
+        paintBorderRight, paintBorderBottom );
 
 
   // 6. Now paint the content, if this cell isn't obscured.
@@ -2305,8 +2316,8 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 #if 0
     if (highlightBorder != Border_None)
       paintCellHighlight ( painter, cellRect, cellRef, highlightBorder,
-			   rightHighlightPen, bottomHighlightPen, 
-			   leftHighlightPen,  topHighlightPen );
+         rightHighlightPen, bottomHighlightPen, 
+         leftHighlightPen,  topHighlightPen );
 #endif
 
     // 6d. Paint the text in the cell unless:
@@ -2314,10 +2325,10 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     //  b) something indicates that the text should not be painted
     //  c) the sheet is protected and the cell is hidden.
     if ( !d->strOutText.isEmpty()
-	 && ( !painter.device()->isExtDev() 
-	      || !format()->getDontprintText( cellRef.x(), cellRef.y() ) )
-	 && !( format()->sheet()->isProtected() 
-	       && format()->isHideAll( cellRef.x(), cellRef.y() ) ) )
+   && ( !painter.device()->isExtDev() 
+        || !format()->getDontprintText( cellRef.x(), cellRef.y() ) )
+   && !( format()->sheet()->isProtected() 
+         && format()->isHideAll( cellRef.x(), cellRef.y() ) ) )
     {
       paintText( painter, cellRect, cellRef );
     }
@@ -2352,7 +2363,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
       for ( ; it1 != end1; ++it1 ) {
         QPoint obscuringCellRef = *it1;
         Cell *obscuringCell = format()->sheet()->cellAt( obscuringCellRef.x(),
-							 obscuringCellRef.y() );
+               obscuringCellRef.y() );
 
         if ( obscuringCell != 0 ) {
           double x = format()->sheet()->dblColumnPos( obscuringCellRef.x() );
@@ -2365,31 +2376,31 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
           KoPoint corner( x, y );
           painter.save();
 
-	  // Get the effective pens for the borders.  These are
-	  // determined by possible conditions on the cell with
-	  // associated styles.
+    // Get the effective pens for the borders.  These are
+    // determined by possible conditions on the cell with
+    // associated styles.
           QPen rp( obscuringCell->effRightBorderPen( obscuringCellRef.x(),
-						     obscuringCellRef.y() ) );
+                 obscuringCellRef.y() ) );
           QPen bp( obscuringCell->effBottomBorderPen( obscuringCellRef.x(),
-						      obscuringCellRef.y() ) );
+                  obscuringCellRef.y() ) );
           QPen lp( obscuringCell->effLeftBorderPen( obscuringCellRef.x(),
-						    obscuringCellRef.y() ) );
+                obscuringCellRef.y() ) );
           QPen tp( obscuringCell->effTopBorderPen( obscuringCellRef.x(),
-						   obscuringCellRef.y() ) );
+               obscuringCellRef.y() ) );
 
 
-	  kdDebug(36001) << "  painting obscuring cell "
-			 << obscuringCell->name() << endl;
-	  // QPen highlightPen;
+    kdDebug(36001) << "  painting obscuring cell "
+       << obscuringCell->name() << endl;
+    // QPen highlightPen;
 
-	  //Note: Painting of highlight isn't quite right.  If several
-	  //      cells are merged, then the whole merged cell will be
-	  //      painted with the colour of the last cell referenced 
-	  //      which is inside the merged range.
+    //Note: Painting of highlight isn't quite right.  If several
+    //      cells are merged, then the whole merged cell will be
+    //      painted with the colour of the last cell referenced 
+    //      which is inside the merged range.
           obscuringCell->paintCell( rect, painter, view,
                                     corner, obscuringCellRef,
-				    Border_Left|Border_Top|Border_Right|Border_Bottom,
-				    rp, bp, lp, tp); // new pens
+            Border_Left|Border_Top|Border_Right|Border_Bottom,
+            rp, bp, lp, tp); // new pens
           painter.restore();
         }
       }
@@ -2435,14 +2446,14 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 
 #if 0
  void Cell::paintCellHighlight(QPainter& painter,
-			       const KoRect& cellRect,
-			       const QPoint& cellRef,
-			       const int highlightBorder,
-			       const QPen& rightPen,
-			       const QPen& bottomPen,
-			       const QPen& leftPen,
-			       const QPen& topPen
-			       )
+             const KoRect& cellRect,
+             const QPoint& cellRef,
+             const int highlightBorder,
+             const QPen& rightPen,
+             const QPen& bottomPen,
+             const QPen& leftPen,
+             const QPen& topPen
+             )
 {
   //painter.drawLine(cellRect.left(),cellRect.top(),cellRect.right(),cellRect.bottom());
   //QPen pen(d->extra()->highlight);
@@ -2503,15 +2514,15 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
 // Paint all the cells that this cell obscures (helper function to paintCell).
 //
 void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
-			      View* view,
-			      const KoRect &cellRect,
-			      const QPoint &cellRef,
-			      bool paintBorderRight,
-			      bool _paintBorderBottom,
-			      bool paintBorderLeft,
-			      bool _paintBorderTop,
-			      QPen & rightPen, QPen & _bottomPen,
-			      QPen & leftPen,  QPen & _topPen )
+            View* view,
+            const KoRect &cellRect,
+            const QPoint &cellRef,
+            bool paintBorderRight,
+            bool _paintBorderBottom,
+            bool paintBorderLeft,
+            bool _paintBorderTop,
+            QPen & rightPen, QPen & _bottomPen,
+            QPen & leftPen,  QPen & _topPen )
 {
   // If there are no obscured cells, return.
   if ( !extraXCells() && !extraYCells() )
@@ -2529,62 +2540,62 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
     for( int x = 0; x <= maxX; ++ x ) {
       ColumnFormat * cl = format()->sheet()->columnFormat( cellRef.x() + x );
       if ( y != 0 || x != 0 ) {
-	uint  column = cellRef.x() + x;
-	uint  row    = cellRef.y() + y;
+  uint  column = cellRef.x() + x;
+  uint  row    = cellRef.y() + y;
 
-	QPen  topPen;
-	QPen  bottomPen;
-	bool  paintBorderTop;
-	bool  paintBorderBottom;
+  QPen  topPen;
+  QPen  bottomPen;
+  bool  paintBorderTop;
+  bool  paintBorderBottom;
 
-	Cell  *cell = format()->sheet()->cellAt( column, row );
-	KoPoint       corner( xpos, ypos );
+  Cell  *cell = format()->sheet()->cellAt( column, row );
+  KoPoint       corner( xpos, ypos );
 
-	// Check if the upper and lower borders should be painted, and
-	// if so which pens we should use.  There used to be a nasty
-	// bug here (#61452).
-	// Check top pen.  Only check if this is not on the top row.
-	topPen         = _topPen;
-	paintBorderTop = _paintBorderTop;
-	if ( row > 1 && !cell->isObscuringForced() ) {
-	  Cell  *cellUp = format()->sheet()->cellAt( column, row - 1 );
+  // Check if the upper and lower borders should be painted, and
+  // if so which pens we should use.  There used to be a nasty
+  // bug here (#61452).
+  // Check top pen.  Only check if this is not on the top row.
+  topPen         = _topPen;
+  paintBorderTop = _paintBorderTop;
+  if ( row > 1 && !cell->isObscuringForced() ) {
+    Cell  *cellUp = format()->sheet()->cellAt( column, row - 1 );
 
-	  if ( cellUp->isDefault() )
-	    paintBorderTop = false;
-	  else {
-	    // If the cell towards the top is part of a merged cell, get
-	    // the pointer to the master cell.
-	    cellUp = cellUp->ultimateObscuringCell();
+    if ( cellUp->isDefault() )
+      paintBorderTop = false;
+    else {
+      // If the cell towards the top is part of a merged cell, get
+      // the pointer to the master cell.
+      cellUp = cellUp->ultimateObscuringCell();
 
-	    topPen = cellUp->effBottomBorderPen( cellUp->column(),
-						 cellUp->row() );
+      topPen = cellUp->effBottomBorderPen( cellUp->column(),
+             cellUp->row() );
 
 #if 0
-	    int  penWidth = QMAX(1, sheet()->doc()->zoomItY( topPen.width() ));
-	    topPen.setWidth( penWidth );
+      int  penWidth = QMAX(1, sheet()->doc()->zoomItY( topPen.width() ));
+      topPen.setWidth( penWidth );
 #endif
-	  }
-	}
+    }
+  }
 
-	// FIXME: I thought we had to check bottom pen as well.
-	//        However, it looks as if we don't need to.  It works anyway.
-	bottomPen         = _bottomPen;
-	paintBorderBottom = _paintBorderBottom;
+  // FIXME: I thought we had to check bottom pen as well.
+  //        However, it looks as if we don't need to.  It works anyway.
+  bottomPen         = _bottomPen;
+  paintBorderBottom = _paintBorderBottom;
 
-	int  paintBorder = Border_None;
-	if (paintBorderLeft)   paintBorder |= Cell::Border_Left;
-	if (paintBorderRight)  paintBorder |= Cell::Border_Right;
-	if (paintBorderTop)    paintBorder |= Cell::Border_Top;
-	if (paintBorderBottom) paintBorder |= Cell::Border_Bottom;
+  int  paintBorder = Border_None;
+  if (paintBorderLeft)   paintBorder |= Cell::Border_Left;
+  if (paintBorderRight)  paintBorder |= Cell::Border_Right;
+  if (paintBorderTop)    paintBorder |= Cell::Border_Top;
+  if (paintBorderBottom) paintBorder |= Cell::Border_Bottom;
 
-	/*Cell::BorderSides highlightBorder = Border_None;
-	  QPen highlightPen;*/
+  /*Cell::BorderSides highlightBorder = Border_None;
+    QPen highlightPen;*/
 
-	cell->paintCell( rect, painter, view,
-			 corner,
-			 QPoint( cellRef.x() + x, cellRef.y() + y ),
-			 paintBorder,
-			 rightPen, bottomPen, leftPen, topPen);
+  cell->paintCell( rect, painter, view,
+       corner,
+       QPoint( cellRef.x() + x, cellRef.y() + y ),
+       paintBorder,
+       rightPen, bottomPen, leftPen, topPen);
       }
       xpos += cl->dblWidth();
     }
@@ -2597,8 +2608,8 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
 // Paint the background of this cell.
 //
 void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
-			    const QPoint &cellRef, bool selected,
-			    QColor &backgroundColor )
+          const QPoint &cellRef, bool selected,
+          QColor &backgroundColor )
 {
   QColorGroup  defaultColorGroup = QApplication::palette().active();
   QRect        zoomedCellRect    = sheet()->doc()->zoomRect( cellRect );
@@ -2667,12 +2678,12 @@ void Cell::paintBackground( QPainter& painter, const KoRect &cellRect,
 // Paint the standard light grey borders that are always visible.
 //
 void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
-				const KoRect &cellRect,
-				const QPoint &cellRef,
-				bool paintBorderRight, bool paintBorderBottom,
-				bool paintBorderLeft,  bool paintBorderTop,
-				QPen const & rightPen, QPen const & bottomPen,
-				QPen const & leftPen, QPen const & topPen )
+        const KoRect &cellRect,
+        const QPoint &cellRef,
+        bool paintBorderRight, bool paintBorderBottom,
+        bool paintBorderLeft,  bool paintBorderTop,
+        QPen const & rightPen, QPen const & bottomPen,
+        QPen const & leftPen, QPen const & topPen )
 {
   Doc* doc = sheet()->doc();
 
@@ -2689,11 +2700,11 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
   bool paintRight;
 
   paintLeft   = ( paintBorderLeft && leftPen.style() == Qt::NoPen
-		  && sheet()->getShowGrid() );
+      && sheet()->getShowGrid() );
   paintRight  = ( paintBorderRight && rightPen.style() == Qt::NoPen
-		  && sheet()->getShowGrid() );
+      && sheet()->getShowGrid() );
   paintTop    = ( paintBorderTop && topPen.style() == Qt::NoPen
-		  && sheet()->getShowGrid() );
+      && sheet()->getShowGrid() );
   paintBottom = ( paintBorderBottom && sheet()->getShowGrid()
                   && bottomPen.style() == Qt::NoPen );
 
@@ -2727,7 +2738,7 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 
     if ( cellRef.x() > 1 ) {
       Cell  *cell_west = format()->sheet()->cellAt( cellRef.x() - 1,
-						    cellRef.y() );
+                cellRef.y() );
       QPen t = cell_west->effTopBorderPen( cellRef.x() - 1, cellRef.y() );
       QPen b = cell_west->effBottomBorderPen( cellRef.x() - 1, cellRef.y() );
 
@@ -2890,9 +2901,9 @@ void Cell::paintDefaultBorders( QPainter& painter, const KoRect &rect,
 // Paint a comment indicator if the cell has a comment.
 //
 void Cell::paintCommentIndicator( QPainter& painter,
-				  const KoRect &cellRect,
-				  const QPoint &/*cellRef*/,
-				  QColor &backgroundColor )
+          const KoRect &cellRect,
+          const QPoint &/*cellRef*/,
+          QColor &backgroundColor )
 {
   Doc * doc = sheet()->doc();
 
@@ -2944,8 +2955,8 @@ void Cell::paintCommentIndicator( QPainter& painter,
 // Paint a small rectangle if this cell holds a formula.
 //
 void Cell::paintFormulaIndicator( QPainter& painter,
-				  const KoRect &cellRect,
-				  QColor &backgroundColor )
+          const KoRect &cellRect,
+          QColor &backgroundColor )
 {
   if ( isFormula() &&
       format()->sheet()->getShowFormulaIndicator() &&
@@ -2993,8 +3004,8 @@ void Cell::paintFormulaIndicator( QPainter& painter,
 // Paint an indicator that the text in the cell is cut.
 //
 void Cell::paintMoreTextIndicator( QPainter& painter,
-				   const KoRect &cellRect,
-				   QColor &backgroundColor )
+           const KoRect &cellRect,
+           QColor &backgroundColor )
 {
   // Show a red triangle when it's not possible to write all text in cell.
   // Don't print the red triangle if we're printing.
@@ -3044,8 +3055,8 @@ void Cell::paintMoreTextIndicator( QPainter& painter,
 // Paint the real contents of a cell - the text.
 //
 void Cell::paintText( QPainter& painter,
-		      const KoRect &cellRect,
-		      const QPoint &cellRef )
+          const KoRect &cellRect,
+          const QPoint &cellRef )
 {
   Doc    *doc = sheet()->doc();
 
@@ -3332,10 +3343,10 @@ void Cell::paintText( QPainter& painter,
 // Paint page borders on the page.  Only do this on the screen.
 //
 void Cell::paintPageBorders( QPainter& painter,
-			     const KoRect &cellRect,
-			     const QPoint &cellRef,
-			     bool paintBorderRight,
-			     bool paintBorderBottom )
+           const KoRect &cellRect,
+           const QPoint &cellRef,
+           bool paintBorderRight,
+           bool paintBorderBottom )
 {
   // Not screen?  Return immediately.
   if ( painter.device()->isExtDev() )
@@ -3411,12 +3422,12 @@ void Cell::paintPageBorders( QPainter& painter,
 // Paint the cell borders.
 //
 void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
-			     const KoRect &cellRect,
-			     const QPoint &cellRef,
-			     bool paintRight, bool paintBottom,
-			     bool paintLeft,  bool paintTop,
-			     QPen & _rightPen, QPen & _bottomPen,
-			     QPen & _leftPen,  QPen & _topPen )
+           const KoRect &cellRect,
+           const QPoint &cellRef,
+           bool paintRight, bool paintBottom,
+           bool paintLeft,  bool paintTop,
+           QPen & _rightPen, QPen & _bottomPen,
+           QPen & _leftPen,  QPen & _topPen )
 {
   Doc * doc = sheet()->doc();
 
@@ -3858,8 +3869,8 @@ void Cell::paintCellBorders( QPainter& painter, const KoRect& rect,
 // Paint diagonal lines through the cell.
 //
 void Cell::paintCellDiagonalLines( QPainter& painter,
-				   const KoRect &cellRect,
-				   const QPoint &cellRef )
+           const KoRect &cellRect,
+           const QPoint &cellRef )
 {
   if ( isObscuringForced() )
     return;

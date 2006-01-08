@@ -89,6 +89,9 @@ public:
 
   void setReverse(bool reverse) { m_reverse = reverse; }
 
+  virtual void setName (const QString &n) { m_name = n; }
+  virtual QString name() const { return m_name; };
+
 protected:
   virtual bool process(Element*);
   virtual bool process(Cell*) { return true; }
@@ -97,9 +100,9 @@ protected:
   virtual bool preProcessing() { return true; }
   virtual bool postProcessing() { return true; }
 
-  virtual QString name() const = 0;
 
   Sheet* m_sheet;
+  QString m_name;
   bool   m_creation : 1;
   bool   m_reverse  : 1;
   bool   m_firstrun : 1;

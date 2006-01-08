@@ -22,6 +22,7 @@
 #define KSPREAD_MANIPULATOR_DATA
 
 #include "manipulator.h"
+#include "kspread_global.h"
 #include "kspread_value.h"
 
 namespace KSpread {
@@ -31,6 +32,12 @@ namespace KSpread {
  * AbstractDataManipulator - provides storage of old cell data (for undo)
  * and has an abstract method for the actual setting of new values
  */
+
+struct ADMStorage {
+  Value val;
+  QString text;
+  FormatType format;
+};
 
 class AbstractDataManipulator : public Manipulator {
   public:
@@ -44,13 +51,10 @@ class AbstractDataManipulator : public Manipulator {
     If the function sets *parse to true, the value will be treated as an
     user-entered string and parsed by Cell. */
     virtual Value newValue (Element *element, int col, int row,
-      bool *parse) = 0;
+      bool *parse, FormatType *fmtType) = 0;
     /** preProcessing will store the old cell's data */
     virtual bool preProcessing ();
-    // has to be like this, so that column/row changes take less memory
-    // Value class can handle sparse arrays quite well, but still ...
-    QMap<int, QMap<int, Value> > oldData;
-    QMap<int, QMap<int, QString> > oldFormula;
+    QMap<int, QMap<int, ADMStorage> > oldData;
 };
 
 
@@ -67,10 +71,15 @@ class DataManipulator : public AbstractDataManipulator {
     /** set the values for the range. Can be either a single value, or
     a value array */
     void setValue (Value val) { data = val; };
+    /** If set, all cells shall be switched to this format. Will do
+    nothing if parsing is true. */
+    void setFormat (FormatType fmtType) { m_format = fmtType; };
   protected:
-    virtual Value newValue (Element *element, int col, int row, bool *);
+    virtual Value newValue (Element *element, int col, int row, bool *,
+        FormatType *);
     
     Value data;
+    FormatType m_format;
     bool m_parsing : 1;
 };
 

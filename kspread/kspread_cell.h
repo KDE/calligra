@@ -214,6 +214,10 @@ public:
      * Sets the value for this cell.
      */
     void setValue( const Value& value );
+    /** Like setValue, but also sets formatting and input text. Can therefore
+    be used as a replacement for setCellText, if we don't need to parse. */
+    void setCellValue (const Value &v, FormatType fmtType,
+	const QString &txt = QString::null);
 
     Cell* previousCell() const;
     Cell* nextCell() const;
@@ -324,8 +328,8 @@ public:
     void paintCell( const KoRect & rect, QPainter & painter,
                     View * view, const KoPoint & coordinate,
                     const QPoint & cellRef,
-		    int paintBorder,
-		    QPen & rightPen,
+        int paintBorder,
+        QPen & rightPen,
                     QPen & bottomPen,
                     QPen & leftPen,
                     QPen & topPen,

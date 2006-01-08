@@ -20,6 +20,8 @@
 
 #include "manipulator_data.h"
 
+#include <klocale.h>
+
 #include "kspread_cell.h"
 #include "kspread_sheet.h"
 
@@ -33,7 +35,6 @@ AbstractDataManipulator::AbstractDataManipulator ()
 AbstractDataManipulator::~AbstractDataManipulator ()
 {
   oldData.clear ();
-  oldFormula.clear ();
 }
 
 bool AbstractDataManipulator::process (Element* element)
@@ -44,17 +45,17 @@ bool AbstractDataManipulator::process (Element* element)
       Value val;
       QString text;
       bool parse = false;
+      FormatType fmtType = No_format;
       if (m_reverse) {
         // reverse - use the stored value
         if (oldData.contains (col) && oldData[col].contains (row)) {
-          val = oldData[col][row];
-        } else if (oldFormula.contains (col) &&
-                   oldFormula[col].contains (row)) {
-          text = oldFormula[col][row];
-          parse = true;
+          val = oldData[col][row].val;
+          text = oldData[col][row].text;
+          fmtType = oldData[col][row].format;
+          parse = false;
         }
       } else {
-        val = newValue (element, col, row, &parse);
+        val = newValue (element, col, row, &parse, &fmtType);
         if (parse)
           text = val.asString();
       }
@@ -65,8 +66,12 @@ bool AbstractDataManipulator::process (Element* element)
         cell->setCellText (text);
       } else {
         Cell *cell = m_sheet->cellAt (col, row);
-        if ((!val.isEmpty()) || cell)  // nothing if value and cell both empty
-          m_sheet->nonDefaultCell (col, row)->setValue (val);
+        if (!(val.isEmpty() && cell->isDefault()))
+        // nothing if value and cell both empty
+        {
+          Cell *cell = m_sheet->nonDefaultCell (col, row);
+          cell->setCellValue (val, fmtType, text);
+        }
       }
     }
   return true;
@@ -87,15 +92,13 @@ bool AbstractDataManipulator::preProcessing ()
         Cell* cell = m_sheet->cellAt(col, row);
         if (cell != m_sheet->defaultCell())  // non-default cell - remember it
         {
+          ADMStorage st;
+          
           if (cell->isFormula())
-          {
-            oldFormula[col][row] = cell->text();
-          }
-          else {
-            Value val = m_sheet->value (col, row);
-            if (!val.isEmpty())
-              oldData[col][row] = val;
-          }
+            st.text = cell->text();
+          st.val = m_sheet->value (col, row);
+          st.format = cell->formatType();
+          oldData[col][row] = st;
         }
       }
   }
@@ -103,8 +106,11 @@ bool AbstractDataManipulator::preProcessing ()
 }
 
 DataManipulator::DataManipulator ()
-  : m_parsing (false)
+  : m_parsing (false),
+  m_format (No_format)
 {
+  // default name for DataManipulator, can be changed using setName
+  m_name = i18n ("Change value");
 }
 
 DataManipulator::~DataManipulator ()
@@ -112,9 +118,11 @@ DataManipulator::~DataManipulator ()
 }
 
 Value DataManipulator::newValue (Element *element, int col, int row,
-    bool *parsing)
+    bool *parsing, FormatType *formatType)
 {
   *parsing = m_parsing;
+  if (m_format != No_format)
+    *formatType = m_format;
   QRect range = element->rect().normalize();
   int colidx = range.left() - col;
   int rowidx = range.top() - row;

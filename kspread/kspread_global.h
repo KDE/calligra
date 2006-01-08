@@ -153,7 +153,7 @@ enum FormatType {
     date_format17=216,date_format18=217,date_format19=218,date_format20=219,
     date_format21=220,date_format22=221,date_format23=222,date_format24=223,
     date_format25=224,date_format26=225,
-    Custom_format = 300
+    Custom_format = 300, No_format = 400
 };
 
 } // namespace KSpread
