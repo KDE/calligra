@@ -27,8 +27,11 @@ Column:
 
 Format:
   horizontal alignment
+  vertical alignment
   font (name, color, bold, italic, underline, strike)
   borders
+  background (pattern, color)
+  text wrapping
 
 
 
@@ -46,8 +49,6 @@ Cell:
   hyperlink
 
 Format:
-  vertical alignment
-  text wrapping
   rotation angle
   style
 

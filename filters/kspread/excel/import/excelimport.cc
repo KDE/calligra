@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 2003-2005 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -61,6 +62,30 @@ ExcelImport::ExcelImport ( QObject*, const char*, const QStringList& )
 static QString convertColor( const Swinder::Color& color )
 {
   return QColor( color.red, color.green, color.blue ).name();
+}
+
+// convert brush styles from Swinder values to KSpread values
+static QString convertBrushStyle( unsigned pattern )
+{
+  switch( pattern )
+  {
+    case Swinder::FormatBackground::EmptyPattern: return "0";
+    case Swinder::FormatBackground::SolidPattern: return "0"; // Solid pattern is not supported by the GUI of kspread, use empty pattern instead
+    case Swinder::FormatBackground::Dense1Pattern: return "2";
+    case Swinder::FormatBackground::Dense2Pattern: return "3";
+    case Swinder::FormatBackground::Dense3Pattern: return "4";
+    case Swinder::FormatBackground::Dense4Pattern: return "5";
+    case Swinder::FormatBackground::Dense5Pattern: return "6";
+    case Swinder::FormatBackground::Dense6Pattern: return "7";
+    case Swinder::FormatBackground::Dense7Pattern: return "8";
+    case Swinder::FormatBackground::HorPattern: return "9";
+    case Swinder::FormatBackground::VerPattern: return "10";
+    case Swinder::FormatBackground::CrossPattern: return "11";
+    case Swinder::FormatBackground::BDiagPattern: return "12";
+    case Swinder::FormatBackground::FDiagPattern: return "13";
+    case Swinder::FormatBackground::DiagCrossPattern: return "14";
+    default: return "0";
+  }
 }
 
 static QDomElement convertPen( QDomDocument& doc, const Swinder::Pen& pen )
@@ -351,30 +376,49 @@ static QDomElement convertFormat( QDomDocument& doc, const Swinder::Format& form
     e.setAttribute("format", "56"); // h:mm:ss
   else if( vf == "mm:ss.0" )
     e.setAttribute("format", "56"); // h:mm:ss
+  else if ( vf.upper() == "D-MMM" )
+    e.setAttribute("format", "210"); // dd/MMM
+  else if ( vf.upper() == "D/MMM" )
+    e.setAttribute("format", "210"); // dd/MMM
 
-  unsigned align = 0;
-  switch( format.alignment().alignX() )
+  if ( !format.alignment().isNull() )
   {
-    case Swinder::Format::Left: align = 1; break;
-    case Swinder::Format::Center: align = 2; break;
-    case Swinder::Format::Right: align = 3; break;
-     default: align = 0; break;
-  };
+    unsigned align = 0;
+    switch( format.alignment().alignX() )
+    {
+      case Swinder::Format::Left: align = 1; break;
+      case Swinder::Format::Center: align = 2; break;
+      case Swinder::Format::Right: align = 3; break;
+       default: align = 4; break;
+    };
+    e.setAttribute( "align", QString::number( align ) );
 
-  e.setAttribute( "align", QString::number( align ) );
+    switch( format.alignment().alignY() )
+    {
+      case Swinder::Format::Top: align = 1; break;
+      case Swinder::Format::Middle: align = 2; break;
+      case Swinder::Format::Bottom: align = 3; break;
+       default: align = 4; break;
+    }
+    e.setAttribute( "alignY", QString::number( align ) );
+    
+    if ( format.alignment().wrap() ) e.setAttribute( "multirow", "yes");
+  }
 
   QDomElement fontElement = doc.createElement( "font" );
   const Swinder::FormatFont& font = format.font();
-  QString fontFamily = string( font.fontFamily()).string();
-  double fontSize = font.fontSize();
-  fontElement.setAttribute( "family", fontFamily );
-  fontElement.setAttribute( "size", fontSize );
-  fontElement.setAttribute( "weight", font.bold() ? 75 : 50 );
-  fontElement.setAttribute( "bold", font.bold() ? "yes" : "no" );
-  fontElement.setAttribute( "italic", font.italic() ? "yes" : "no" );
-  fontElement.setAttribute( "underline", font.underline() ? "yes" : "no" );
-  fontElement.setAttribute( "strikeout", font.strikeout() ? "yes" : "no" );
-  e.appendChild( fontElement );
+  if ( !font.isNull() ) {
+    QString fontFamily = string( font.fontFamily()).string();
+    double fontSize = font.fontSize();
+    fontElement.setAttribute( "family", fontFamily );
+    fontElement.setAttribute( "size", fontSize );
+    fontElement.setAttribute( "weight", font.bold() ? 75 : 50 );
+    fontElement.setAttribute( "bold", font.bold() ? "yes" : "no" );
+    fontElement.setAttribute( "italic", font.italic() ? "yes" : "no" );
+    fontElement.setAttribute( "underline", font.underline() ? "yes" : "no" );
+    fontElement.setAttribute( "strikeout", font.strikeout() ? "yes" : "no" );
+    e.appendChild( fontElement );
+  }
 
   QDomElement penElement = doc.createElement( "pen" );
   penElement.setAttribute( "width", 0 );
@@ -386,22 +430,39 @@ static QDomElement convertFormat( QDomDocument& doc, const Swinder::Format& form
   // cell borders
 
   const Swinder::FormatBorders& borders = format.borders();
+  if( !borders.isNull() ) {
+    QDomElement leftBorderElement = doc.createElement( "left-border" );
+    leftBorderElement.appendChild( convertPen( doc, borders.leftBorder() ) );
+    e.appendChild( leftBorderElement );
 
-  QDomElement leftBorderElement = doc.createElement( "left-border" );
-  leftBorderElement.appendChild( convertPen( doc, borders.leftBorder() ) );
-  e.appendChild( leftBorderElement );
+    QDomElement rightBorderElement = doc.createElement( "right-border" );
+    rightBorderElement.appendChild( convertPen( doc, borders.rightBorder() ) );
+    e.appendChild( rightBorderElement );
 
-  QDomElement rightBorderElement = doc.createElement( "right-border" );
-  rightBorderElement.appendChild( convertPen( doc, borders.rightBorder() ) );
-  e.appendChild( rightBorderElement );
+    QDomElement topBorderElement = doc.createElement( "top-border" );
+    topBorderElement.appendChild( convertPen( doc, borders.topBorder() ) );
+    e.appendChild( topBorderElement );
 
-  QDomElement topBorderElement = doc.createElement( "top-border" );
-  topBorderElement.appendChild( convertPen( doc, borders.topBorder() ) );
-  e.appendChild( topBorderElement );
-
-  QDomElement bottomBorderElement = doc.createElement( "bottom-border" );
-  bottomBorderElement.appendChild( convertPen( doc, borders.bottomBorder() ) );
-  e.appendChild( bottomBorderElement );
+    QDomElement bottomBorderElement = doc.createElement( "bottom-border" );
+    bottomBorderElement.appendChild( convertPen( doc, borders.bottomBorder() ) );
+    e.appendChild( bottomBorderElement );
+  }
+  
+  // cell background
+  
+  const Swinder::FormatBackground& background = format.background();
+  if ( !background.isNull() && background.pattern() != Swinder::FormatBackground::EmptyPattern) {
+    Swinder::Color fgColor = background.foregroundColor();
+    Swinder::Color bgColor = background.backgroundColor();
+    if ( background.pattern() == Swinder::FormatBackground::SolidPattern ) {
+      // Solid pattern is not supported by the GUI of kspread, use empty pattern instead and switch colors
+      bgColor = fgColor;
+      fgColor = Swinder::Color();
+    }
+    e.setAttribute( "bgcolor", convertColor( bgColor ) );
+    e.setAttribute( "brushcolor", convertColor( fgColor ) );
+    e.setAttribute( "brushstyle", convertBrushStyle( background.pattern() ) );
+  }
 
   return e;
 }
@@ -595,7 +656,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     delete workbook;
     return KoFilter::StupidError;
   }
-
+kdDebug() << "Loaded workbook" << endl;
   QString root, documentInfo;
 
   QDomDocument mainDocument( "spreadsheet" );
@@ -615,6 +676,7 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
 
   for( unsigned i=0; i < workbook->sheetCount(); i++ )
   {
+    kdDebug() << "Worksheet " << i << endl;
     Swinder::Sheet* sheet = workbook->sheet( i );
 
     if( !sheet ) break;
@@ -705,6 +767,8 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
 
   }
 
+  // TODO: get real document information
+  documentInfo = "<document-info xmlns=\"http://www.koffice.org/DTD/document-info\"/>";
       
   // prepare storage
   KoStoreDevice* out=m_chain->storageFile( "root", KoStore::Write );

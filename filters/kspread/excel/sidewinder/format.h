@@ -1,5 +1,6 @@
 /* Sidewinder - Portable library for spreadsheet 
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -21,6 +22,7 @@
 #define SWINDER_FORMAT_H
 
 #include "ustring.h"
+#include <cstdio>	// for sscanf
 
 namespace Swinder
 {
@@ -54,6 +56,13 @@ public:
    */   
   Color( unsigned r, unsigned g, unsigned b )
     { red = r; green = g; blue = b; }
+  
+  /**
+   * Creates a color based on given red, green and blue values, encoded as #RRGGBB in a string.
+   */
+  Color( const char* c )
+    { std::sscanf(c, "#%2x%2x%2x", &red, &green, &blue); }
+  
 };
 
 class Pen
@@ -338,6 +347,108 @@ private:
 };
 
 /**
+ * Defines background information for cell.
+ * 
+ */
+class FormatBackground
+{
+public:
+  /**
+   * Creates a default background information.
+   */
+  FormatBackground();
+  
+  /**
+   * Destroys the background information.
+   */
+  ~FormatBackground();
+  
+  /**
+   * Creates a copy of background information.
+   */
+  FormatBackground( const FormatBackground& );
+  
+  /**
+   * Assigns from another background information.
+   */
+  FormatBackground& operator=( const FormatBackground& );
+  
+  /**
+   * Assigns from another background information.
+   */
+  FormatBackground& assign( const FormatBackground& );
+  
+  /**
+   * Returns true if it is a default background information.
+   */
+  bool isNull() const;
+  
+  enum {
+    SolidPattern,
+    Dense1Pattern,
+    Dense2Pattern,
+    Dense3Pattern,
+    Dense4Pattern,
+    Dense5Pattern,
+    Dense6Pattern,
+    Dense7Pattern,
+    HorPattern,		// Horizonatal lines
+    VerPattern,		// Vertical lines
+    CrossPattern,	// Horizontal and Vertical lines
+    BDiagPattern,	// Left-bottom to right-top diagonal lines
+    FDiagPattern,	// Left-top to right-bottom diagonal lines
+    DiagCrossPattern,	// Crossing diagonal lines
+    EmptyPattern
+  };
+  
+  /**
+   * Returns pattern for this background.
+   *
+   * \sa setPattern
+   */
+  unsigned pattern() const;
+  
+  /**
+   * Set the pattern for this background.
+   *
+   * \sa pattern
+   */
+  void setPattern( unsigned );
+  
+  /**
+   * Returns the background color of the background area.
+   *
+   * \sa setBackgroundColor
+   */
+  Color backgroundColor() const;
+  
+  /**
+   * Set the background color.
+   *
+   * \sa backgroundColor
+   */
+  void setBackgroundColor( const Color& );
+  
+  /**
+   * Returns the foreground color of the background area.
+   *
+   * \sa setForegroundColor
+   */
+  Color foregroundColor() const;
+  
+  /**
+   * Sets the foreground color.
+   *
+   * \sa foregroundColor
+   */
+  void setForegroundColor( const Color& );
+
+private:
+  class Private;
+  Private *d;
+};
+
+/**
  * Defines borders information for cell.
  * 
  */
@@ -522,6 +633,16 @@ public:
    * Sets new borders information for this format.
    */
   void setBorders( const FormatBorders& border );
+  
+  /**
+   * Retursn a reference to the background information of this format.
+   */
+  FormatBackground& background() const;
+  
+  /**
+   * Sets new background information for this format.
+   */
+  void setBackground( const FormatBackground& );
   
   /**
    * Returns the formatting string to display the value of this format.

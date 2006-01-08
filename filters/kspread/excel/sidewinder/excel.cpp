@@ -1,5 +1,6 @@
 /* Swinder - Portable library for spreadsheet
    Copyright (C) 2003-2005 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -3393,7 +3394,7 @@ void PaletteRecord::setData( unsigned size, const unsigned char* data )
   unsigned num = readU16( data );
   
   unsigned p = 2;
-  for( unsigned i = 0; i < num; i++, p+=3 )
+  for( unsigned i = 0; i < num; i++, p+=4 )
   {
     unsigned red = data[ p ];
     unsigned green = data[ p+1 ];
@@ -3756,13 +3757,19 @@ void SSTRecord::setData( unsigned size, const unsigned char* data )
   unsigned offset = 8;
   d->strings.clear();
   
-  //TODO check against size !!
   for( unsigned i = 0; i < d->count; i++ )
   {
-    EString es = EString::fromUnicodeString( data+offset, true, size );
+    // check against size
+    if (offset >= size) {
+      std::cerr << "Warning: reached end of SST record, but not all strings have been read!" << std::endl;
+      break;
+    }
+    
+    EString es = EString::fromUnicodeString( data+offset, true, size - offset );
     d->strings.push_back( es.str() );
     offset += es.size();
   }
+
   
   // sanity check, adjust to safer condition
   if( d->count < d->strings.size() )
@@ -4315,7 +4322,7 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
   unsigned align = data[6];
   setHorizontalAlignment( align & 0x07 );
   setVerticalAlignment( align >> 4 );
-  setTextWrap( align & 0x80 );
+  setTextWrap( align & 0x08 );
   
   unsigned angle = data[7];
   setRotationAngle( ( angle != 255 ) ? ( angle & 0x7f ) : 0 );
@@ -4324,6 +4331,8 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
   if( version() == Excel97 )
   { 
     unsigned options = data[8];
+    unsigned attributes = data[9];
+
     setIndentLevel( options & 0x0f );
     setShrinkContent( options & 0x10 );
   
@@ -4348,7 +4357,7 @@ void XFRecord::setData( unsigned size, const unsigned char* data )
     setDiagonalStyle( ( flag >> 4 ) & 0x1e  );
     setDiagonalColor( ( ( flag & 0x1f ) << 2 ) + (  ( color1 >> 14 ) & 3 ));
     
-    setFillPattern( ( flag << 10 ) & 0x3f );
+    setFillPattern( ( flag >> 10 ) & 0x3f );
     setPatternForeColor( fill & 0x7f );
     setPatternBackColor( ( fill >> 7 ) & 0x7f );
   }
@@ -4456,6 +4465,22 @@ ExcelReader::ExcelReader()
   d->workbook    = 0;
   d->activeSheet = 0;
   d->formulaCell = 0;
+  
+  // initialize palette
+  static const char *const default_palette[64-8] =	// default palette for all but the first 8 colors
+  {
+	  "#000000", "#ffffff", "#ff0000", "#00ff00", "#0000ff", "#ffff00", "#ff00ff",
+	  "#00ffff", "#800000", "#008000", "#000080", "#808000", "#800080", "#008080",
+	  "#c0c0c0", "#808080", "#9999ff", "#993366", "#ffffcc", "#ccffff", "#660066",
+	  "#ff8080", "#0066cc", "#ccccff", "#000080", "#ff00ff", "#ffff00", "#00ffff",
+	  "#800080", "#800000", "#008080", "#0000ff", "#00ccff", "#ccffff", "#ccffcc",
+	  "#ffff99", "#99ccff", "#ff99cc", "#cc99ff", "#ffcc99", "#3366ff", "#33cccc",
+	  "#99cc00", "#ffcc00", "#ff9900", "#ff6600", "#666699", "#969696", "#003366",
+	  "#339966", "#003300", "#333300", "#993300", "#993366", "#333399", "#333333",
+  };
+  for( int i = 0; i < 64-8; i++ ) {
+    d->colorTable.push_back(Color(default_palette[i]));
+  }
 }
 
 ExcelReader::~ExcelReader()
@@ -4490,9 +4515,10 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
   }
 
   unsigned long stream_size = stream->size();
-  
-  // FIXME
-  unsigned char buffer[65536];
+
+  unsigned int buffer_size = 65536;		// current size of the buffer
+  unsigned char *buffer = (unsigned char *) malloc(buffer_size);
+  unsigned char small_buffer[128];	// small, fixed size buffer
 
   workbook->clear();  
   d->workbook = workbook;
@@ -4509,9 +4535,57 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
     unsigned long type = readU16( buffer );
     unsigned long size = readU16( buffer + 2 );
     
+    // verify buffer is large enough to hold the record data
+    if (size > buffer_size) {
+        buffer = (unsigned char *) realloc(buffer, size);
+	buffer_size = size;
+    }
+    
     // load actual record data
     bytes_read = stream->read( buffer, size );
     if( bytes_read != size ) break;
+
+    // save current position in stream, to be able to restore the position later on
+    unsigned long saved_pos;
+    // repeatedly check if the next record is type 0x3C, a continuation record
+    unsigned long next_type; // the type of the next record
+    do {
+        saved_pos = stream->tell();
+
+        bytes_read = stream->read( small_buffer, 4 );
+	if (bytes_read != 4) break;
+	
+	next_type = readU16( small_buffer );
+	unsigned long next_size = readU16( small_buffer + 2 );
+	
+	if (next_type == 0x3C) {
+	    // type of next record is 0x3C, so go ahead and append the contents of the next record to the buffer
+
+	    // first verify the buffer is large enough to hold all the data
+	    if ( (size + next_size) > buffer_size) {
+                buffer = (unsigned char *) realloc(buffer, size + next_size);
+		buffer_size = size + next_size;
+	    }
+
+	    // next read the data of the record
+	    bytes_read = stream->read( buffer + size, next_size );
+	    if (bytes_read != next_size) {
+		    std::cout << "ERROR!" << std::endl;
+		break;
+	    }
+
+	    // if the first read byte is a zero, remove it (at least that is what the old excel97 filter did...)
+	    if (buffer[size] == 0) {
+                memmove( buffer + size, buffer + size + 1, --next_size );
+	    }
+
+	    // and finally update size
+	    size += next_size;
+	}
+    } while (next_type == 0x3C);
+
+    // restore position in stream to the beginning of the next record
+    stream->seek( saved_pos );
     
     // skip record type 0, this is just for filler
     if( type == 0 ) continue;
@@ -4561,6 +4635,8 @@ bool ExcelReader::load( Workbook* workbook, const char* filename )
 
   }
 
+  free(buffer);
+  
   delete stream;
   
   storage.close();
@@ -5247,7 +5323,6 @@ Color ExcelReader::convertColor( unsigned colorIndex )
 static Pen convertBorderStyle( unsigned style )
 {
   Pen pen;
-  
   switch( style )
   {
   case XFRecord::NoLine:
@@ -5255,7 +5330,7 @@ static Pen convertBorderStyle( unsigned style )
     pen.style = Pen::NoLine;
     break;
   case XFRecord::Thin:
-    pen.width = 2;
+    pen.width = 1;
     pen.style = Pen::SolidLine;
     break;
   case XFRecord::Medium:
@@ -5317,6 +5392,33 @@ static Pen convertBorderStyle( unsigned style )
   };
   
   return pen;
+}
+
+unsigned convertPatternStyle( unsigned pattern )
+{
+  switch ( pattern )
+  {
+    case 0x00: return FormatBackground::EmptyPattern;
+    case 0x01: return FormatBackground::SolidPattern;
+    case 0x02: return FormatBackground::Dense4Pattern;
+    case 0x03: return FormatBackground::Dense3Pattern;
+    case 0x04: return FormatBackground::Dense5Pattern;
+    case 0x05: return FormatBackground::HorPattern;
+    case 0x06: return FormatBackground::VerPattern;
+    case 0x07: return FormatBackground::FDiagPattern;
+    case 0x08: return FormatBackground::BDiagPattern;
+    case 0x09: return FormatBackground::Dense1Pattern;
+    case 0x0A: return FormatBackground::Dense2Pattern;
+    case 0x0B: return FormatBackground::HorPattern;
+    case 0x0C: return FormatBackground::VerPattern;
+    case 0x0D: return FormatBackground::FDiagPattern;
+    case 0x0E: return FormatBackground::BDiagPattern;
+    case 0x0F: return FormatBackground::CrossPattern;
+    case 0x10: return FormatBackground::DiagCrossPattern;
+    case 0x11: return FormatBackground::Dense6Pattern;
+    case 0x12: return FormatBackground::Dense7Pattern;
+    default: return FormatBackground::SolidPattern; // fallback
+  }
 }
 
 // big task: convert Excel XFormat into Swinder::Format
@@ -5386,6 +5488,18 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
     default: break;
     // FIXME still unsupported: Repeat, Justified, Filled, Distributed
   };
+  switch( xf.verticalAlignment() )
+  {
+    case XFRecord::Top:
+      alignment.setAlignY( Format::Top ); break;
+    case XFRecord::VCentered:
+      alignment.setAlignY( Format::Middle ); break;
+    case XFRecord::Bottom:
+      alignment.setAlignY( Format::Bottom ); break;
+    default: break;
+    // FIXME still unsupported: Justified, Distributed
+  }
+  alignment.setWrap( xf.textWrap() );
   format.setAlignment( alignment );
 
   FormatBorders borders;
@@ -5408,6 +5522,12 @@ Format ExcelReader::convertFormat( unsigned xfIndex )
   borders.setBottomBorder( pen );
   
   format.setBorders( borders );
+
+  FormatBackground background;
+  background.setForegroundColor( convertColor( xf.patternForeColor() ) );
+  background.setBackgroundColor( convertColor( xf.patternBackColor() ) );
+  background.setPattern( convertPatternStyle( xf.fillPattern() ) );
+  format.setBackground( background );
 
   return format;
 }

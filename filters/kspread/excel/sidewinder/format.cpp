@@ -1,5 +1,6 @@
 /* Swinder - Portable library for spreadsheet
    Copyright (C) 2003 Ariya Hidayat <ariya@kde.org>
+   Copyright (C) 2006 Marijn Kruisselbrink <m.kruisselbrink@student.tue.nl>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -305,6 +306,89 @@ void FormatAlignment::setRotationAngle( unsigned r )
   d->null = false;
 }
 
+class FormatBackground::Private
+{
+public:
+  bool null;
+  unsigned pattern;
+  Color background;
+  Color foreground;
+};
+
+// constructor
+FormatBackground::FormatBackground()
+{
+  d = new FormatBackground::Private();
+  d->null = true;
+}
+
+// destructor
+FormatBackground::~FormatBackground()
+{
+  delete d;
+}
+
+// copy constructor
+FormatBackground::FormatBackground( const FormatBackground& background )
+{
+  d = new FormatBackground::Private;
+  assign( background );
+}
+
+// assignment operator
+FormatBackground& FormatBackground::operator=( const FormatBackground& background )
+{
+  return assign( background );
+}
+
+// assign from another alignment
+FormatBackground& FormatBackground::assign( const FormatBackground& background )
+{
+  d->null         = background.isNull();
+  d->pattern      = background.pattern();
+  d->background   = background.backgroundColor();
+  d->foreground   = background.foregroundColor();
+  return *this;
+}
+
+bool FormatBackground::isNull() const
+{
+  return d->null;
+}
+
+unsigned FormatBackground::pattern() const
+{
+  return d->pattern;
+}
+
+void FormatBackground::setPattern( unsigned pattern )
+{
+  d->pattern = pattern;
+  d->null = false;
+}
+
+Color FormatBackground::backgroundColor() const
+{
+  return d->background;
+}
+
+void FormatBackground::setBackgroundColor( const Color& color )
+{
+  d->background = color;
+  d->null = false;
+}
+
+Color FormatBackground::foregroundColor() const
+{
+  return d->foreground;
+}
+
+void FormatBackground::setForegroundColor( const Color& color )
+{
+  d->foreground = color;
+  d->null = false;
+}
+
 class FormatBorders::Private
 {
 public:
@@ -408,6 +492,7 @@ public:
   FormatFont font;
   FormatAlignment alignment;
   FormatBorders borders;
+  FormatBackground background;
   UString valueFormat;
 };
 
@@ -444,6 +529,7 @@ Format& Format::assign( const Format& f )
   d->alignment = f.alignment();
   d->borders = f.borders();
   d->valueFormat = f.valueFormat();
+  d->background = f.background();
   return *this;
 }
 
@@ -487,6 +573,16 @@ void Format::setBorders( const FormatBorders& borders )
   d->borders = borders;
 }
 
+FormatBackground& Format::background() const
+{
+  return d->background;
+}
+
+void Format::setBackground( const FormatBackground& background )
+{
+  d->background = background;
+}
+
 UString Format::valueFormat() const
 {
   return d->valueFormat;
@@ -508,6 +604,8 @@ Format& Format::apply( const Format& f )
     borders() = f.borders();
   if( f.valueFormat().isEmpty() || f.valueFormat() == "General" )
     setValueFormat( f.valueFormat() );
+  if (!f.background().isNull() )
+    background() = f.background();
   
   return *this;
 }
