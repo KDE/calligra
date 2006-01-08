@@ -1644,12 +1644,10 @@ bool KPrDocument::loadOasis( const QDomDocument& doc, KoOasisStyles&oasisStyles,
                     newpage = m_pageList.at(pos);
                 }
             }
-            //m_pageList.at(pos)->insertManualTitle(dp.attributeNS( KoXmlNS::draw, "name", QString::null ));
-
-            //necessary to create a unique name for page
+            //only set the manual title if it is different to the draw:id. Only in this case it had one.
             QString str = dp.attributeNS( KoXmlNS::draw, "name", QString::null );
             QString idPage = dp.attributeNS( KoXmlNS::draw, "id", QString::null );
-            if ( str != QString( "page%1" ).arg( idPage ) )
+            if ( str != idPage )
                 newpage->insertManualTitle(str);
             context.styleStack().setTypeProperties( "drawing-page" );
 
@@ -1901,22 +1899,33 @@ void KPrDocument::loadOasisObject( KPrPage * newpage, QDomNode & drawPage, KoOas
                 //we must extend note attribute
                 //kdDebug()<<"presentation:notes----------------------------------\n";
                 QDomNode frameBox = KoDom::namedItemNS( o, KoXmlNS::draw, "frame" );
-                //todo load layout for note.
-                QDomNode textBox = KoDom::namedItemNS( frameBox, KoXmlNS::draw, "text-box" );
+                QString note;
 
-                if ( !textBox.isNull() )
+                while ( !frameBox.isNull() )
                 {
-                    QString note;
-                    for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
+                    //add an empty line between the different frames
+                    if ( !note.isEmpty() )
+                        note += "\n";
+
+                    //todo load layout for note.
+                    QDomNode textBox = KoDom::namedItemNS( frameBox, KoXmlNS::draw, "text-box" );
+
+                    if ( !textBox.isNull() )
                     {
-                        // We don't care about styles as they are not supported in kpresenter.
-                        // Only add a linebreak for every child.
-                        QDomElement t = text.toElement();
-                        note += t.text() + "\n";
-                        kdDebug()<<" note :"<<note<<endl;
+                        for ( QDomNode text = textBox.firstChild(); !text.isNull(); text = text.nextSibling() )
+                        {
+                            // We don't care about styles as they are not supported in kpresenter.
+                            // Only add a linebreak for every child.
+                            QDomElement t = text.toElement();
+                            if ( t.tagName() == "p" )
+                            {
+                                note += t.text() + "\n";
+                            }
+                        }
                     }
-                    newpage->setNoteText( note );
+                    frameBox = frameBox.nextSibling();
                 }
+                newpage->setNoteText( note );
             }
             else if ( ( name == "header" || name == "footer" ) && o.namespaceURI() == KoXmlNS::style || 
                       ( name == "animations" && o.namespaceURI() == KoXmlNS::presentation) )
