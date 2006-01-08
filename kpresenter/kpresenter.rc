@@ -40,9 +40,6 @@
   <Separator/>
   <Action name="view_master"/>
   <Separator/>
-  <Action name="view_header"/>
-  <Action name="view_footer"/>
-  <Separator/>
   <Action name="view_formattingchars"/>
   <Separator/>
   <Action name="view_guidelines"/>
@@ -114,6 +111,9 @@
   <Action name="extra_shadow"/>
   <Separator/>
   <Action name="extra_layout"/>
+  <Separator/>
+  <Action name="extra_header"/>
+  <Action name="extra_footer"/>
   <Separator/>
   <Action name="extra_background"/>
  </Menu>
@@ -291,8 +291,8 @@
   <Action name="display_object_from_master_page"/>
   <Action name="display_background"/>
   <Separator/> 
-  <Action name="view_header"/>
-  <Action name="view_footer"/>
+  <Action name="extra_header"/>
+  <Action name="extra_footer"/>
   <Separator/>
   <Action name="edit_paste"/>
   <ActionList name="picture_action"/>

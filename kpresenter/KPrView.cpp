@@ -2213,8 +2213,8 @@ void KPrView::updateDisplayBackgroundButton()
 
 void KPrView::updateHeaderFooterButton()
 {
-    actionViewHeader->setChecked( m_canvas->activePage()->hasHeader());
-    actionViewFooter->setChecked( m_canvas->activePage()->hasFooter());
+    m_actionExtraHeader->setChecked( m_canvas->activePage()->hasHeader() );
+    m_actionExtraFooter->setChecked( m_canvas->activePage()->hasFooter() );
 }
 
 void KPrView::guiActivateEvent( KParts::GUIActivateEvent *ev )
@@ -2278,14 +2278,6 @@ void KPrView::setupActions()
     actionViewSlideMaster = new KToggleAction( i18n( "Slide &Master" ), 0,
                                                this, SLOT( viewSlideMaster() ),
                                                actionCollection(), "view_master" );
-    actionViewHeader = new KToggleAction( i18n( "Show &Header" ), 0,
-                                          this, SLOT( viewHeader() ),
-                                          actionCollection(), "view_header" );
-    actionViewFooter = new KToggleAction( i18n( "Show Foo&ter" ), 0,
-                                          this, SLOT( viewFooter() ),
-                                          actionCollection(), "view_footer" );
-    actionViewHeader->setCheckedState(i18n("Hide &Header"));
-    actionViewFooter->setCheckedState(i18n("Hide Foo&ter"));
 
     actionViewShowGuideLine= new KToggleAction( i18n( "Guide Lines" ), 0,
                                                this, SLOT( viewGuideLines() ),
@@ -2617,6 +2609,18 @@ void KPrView::setupActions()
     actionExtraLayout = new KAction( i18n( "Page &Layout..." ), 0,
                                      this, SLOT( extraLayout() ),
                                      actionCollection(), "extra_layout" );
+
+    m_actionExtraHeader = new KToggleAction( i18n( "Enable Document &Header" ), 0,
+                                             this, SLOT( viewHeader() ),
+                                             actionCollection(), "extra_header" );
+    m_actionExtraHeader->setCheckedState( i18n( "Disable Document &Header" ) );
+    m_actionExtraHeader->setToolTip( i18n( "Shows and hides header display for the current slide." ) );
+
+    m_actionExtraFooter = new KToggleAction( i18n( "Enable Document Foo&ter" ), 0,
+                                             this, SLOT( viewFooter() ),
+                                             actionCollection(), "extra_footer" );
+    m_actionExtraFooter->setCheckedState( i18n( "Disable Document Foo&ter" ) );
+    m_actionExtraFooter->setToolTip( i18n( "Shows and hides footer display for the current slide." ) );
 
     actionExtraConfigure = new KAction( i18n( "Configure KPresenter..." ),
                                         "configure", 0,
@@ -4075,8 +4079,8 @@ void KPrView::viewSlideMaster()
     setEditMaster( state );
     //not activate action when slide master is displaying
     state = !state;
-    actionViewHeader->setEnabled( state );
-    actionViewFooter->setEnabled( state );
+    m_actionExtraHeader->setEnabled( state );
+    m_actionExtraFooter->setEnabled( state );
     actionDisplayBackgroundPage->setEnabled( state );
     actionDisplayObjectFromMasterPage->setEnabled( state );
 
@@ -5329,9 +5333,9 @@ QString KPrView::presentationDurationDataFormatChange( int _time )
 
 void KPrView::viewFooter()
 {
-    bool state=actionViewFooter->isChecked();
+    bool state = m_actionExtraFooter->isChecked();
     m_canvas->activePage()->setFooter( state );
-    KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Header") : i18n("Hide Header"),
+    KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Enable Document Header") : i18n("Disable Document Header"),
                                                                 m_pKPresenterDoc, m_canvas->activePage(), state, m_pKPresenterDoc->footer());
     m_pKPresenterDoc->addCommand(cmd);
 
@@ -5340,9 +5344,9 @@ void KPrView::viewFooter()
 
 void KPrView::viewHeader()
 {
-    bool state=actionViewHeader->isChecked();
-    m_canvas->activePage()->setHeader( state);
-    KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Show Footer") : i18n("Hide Footer"),
+    bool state = m_actionExtraHeader->isChecked();
+    m_canvas->activePage()->setHeader( state );
+    KPrHideShowHeaderFooter * cmd =new KPrHideShowHeaderFooter( state ? i18n("Enable Document Footer") : i18n("Disable Document Footer"),
                                                                 m_pKPresenterDoc, m_canvas->activePage(), state, m_pKPresenterDoc->header());
     m_pKPresenterDoc->addCommand(cmd);
 
