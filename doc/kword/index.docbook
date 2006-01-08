@@ -249,7 +249,7 @@ easier on any computer, and with any font size. </para>
 <para>&kword; supports customizable toolbars and menus.</para>
 </listitem>
 <listitem>
-<para>&kword; has extensive internationalization support including right to left and left to right text flow.</para>
+<para>&kword; has extensive internationalization support including right-to-left and left-to-right text flow.</para>
 </listitem>
 <listitem>
 <para>You can embed formulas directly into &kword; using the integrated
