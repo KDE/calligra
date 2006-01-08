@@ -595,7 +595,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     const Cell* cell = sheet->cellAt( i, row );
     QDomElement cellElem;
 
-    if ( !cell->isObscuringForced() )
+    if ( !cell->isPartOfMerged() )
       cellElem = doc.createElement( "table:table-cell" );
     else
       cellElem = doc.createElement( "table:covered-table-cell" );
@@ -617,7 +617,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
     cellElem.setAttribute( "table:style-name", m_styles.cellStyle( c ) );
 
     // group empty cells with the same style
-    if ( cell->isEmpty() && !hasComment && !cell->isObscuringForced() && !cell->isForceExtraCells() )
+    if ( cell->isEmpty() && !hasComment && !cell->isPartOfMerged() && !cell->doesMergeCells() )
     {
       int j = i + 1;
       while ( j <= maxCols )
@@ -628,7 +628,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
         CellStyle::loadData( c1, cell1 ); // TODO: number style
 
         if ( cell1->isEmpty() && !cell->format()->hasProperty( Format::PComment )
-             && CellStyle::isEqual( &c, c1 ) && !cell->isObscuringForced() && !cell->isForceExtraCells() )
+             && CellStyle::isEqual( &c, c1 ) && !cell->isPartOfMerged() && !cell->doesMergeCells() )
           ++repeated;
         else
           break;
@@ -693,7 +693,7 @@ void OpenCalcExport::exportCells( QDomDocument & doc, QDomElement & rowElem,
       kdDebug(30518) << "Cell StrOut: " << cell->strOutText() << endl;
     }
 
-    if ( cell->isForceExtraCells() )
+    if ( cell->doesMergeCells() )
     {
       int colSpan = cell->mergedXCells() + 1;
       int rowSpan = cell->mergedYCells() + 1;

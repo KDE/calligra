@@ -729,7 +729,7 @@ bool OpenCalcImport::readCells( QDomElement & rowNode, Sheet  * table, int row, 
     {
       if ( !cell )
         cell = table->nonDefaultCell( columns, row );
-      cell->forceExtraCells( columns, row, spanC - 1, spanR - 1 );
+      cell->mergeCells( columns, row, spanC - 1, spanR - 1 );
     }
 
     cellNode = cellNode.nextSibling();

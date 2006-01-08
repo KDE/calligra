@@ -2166,7 +2166,7 @@ KoFilter::ConversionStatus GNUMERICFilter::convert( const QCString & from, const
             Range range(cell_merge_area);
             //kdDebug()<<"text !!! :"<<cell_merge_area<< "range :start row : "<<range.startRow ()<<" start col :"<<range.startCol ()<<" end row :"<<range.endRow ()<<" end col :"<<range.endCol ()<<endl;
             Cell * cell = table->nonDefaultCell( range.startCol (), range.startRow () );
-            cell->forceExtraCells( range.startCol (), range.startRow (), range.endCol ()-range.startCol (),  range.endRow ()-range.startRow ());
+            cell->mergeCells( range.startCol (), range.startRow (), range.endCol ()-range.startCol (),  range.endRow ()-range.startRow ());
             mergedRegion = mergedRegion.nextSibling();
         }
 	/* There is a memory leak here...

@@ -1419,7 +1419,7 @@ KoFilter::ConversionStatus GNUMERICExport::convert( const QCString& from, const 
                     // Only cells with content are interesting?
                     // Otherwise it can take a while to parse a large sheet
 
-                    if (cell->isForceExtraCells())
+                    if (cell->doesMergeCells())
                     {
                         // The cell is forced to occupy other cells
                         QDomElement merge = gnumeric_doc.createElement("gmr:Merge");
