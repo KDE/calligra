@@ -37,9 +37,11 @@ enum ToolBoxSection {
     TB_Size_Color,
     TB_Alignment,
     TB_Type,
-    TB_Style
+    TB_Style,
+
+    TB_End			// This one is a dummy.
 };
-const int  NumToolBoxSections = (int) TB_Style + 1;
+const int  NumToolBoxSections = (int) TB_End;
 
 
 class WUView : public KWView
@@ -61,11 +63,16 @@ protected slots:
 private:
 
    void  setupWriteUpGUI();
+    void createWriteUpToolBox();
 
 
 private:
 
+#if 1
     KoToolBox  *m_toolBox;
+#else
+    QWidget    *m_toolBox;
+#endif
 
     KToggleAction * m_actionFormatBold;
     KToggleAction * m_actionFormatItalic;

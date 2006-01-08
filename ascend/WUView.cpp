@@ -65,20 +65,25 @@ void WUView::guiActivateEvent( KParts::GUIActivateEvent *ev )
 }
 
 
+// Set up the main window for WriteUp.
+
 void WUView::setupWriteUpGUI()
 {
     // Remove unwanted parts of the KWord GUI.
     KToggleAction* actionShowDocStruct = dynamic_cast<KToggleAction *> (actionCollection()->action("show_docstruct"));
     KToggleAction* actionShowRuler     = dynamic_cast<KToggleAction *> (actionCollection()->action("show_ruler"));
 
+    // Don't show the document structure to the left.
     if (actionShowDocStruct)
 	actionShowDocStruct->setChecked(false);
     showDocStructure();
 
+    // Don't show any rulers.
     if (actionShowRuler)
 	actionShowRuler->setChecked(false);
     showRuler();
 
+    // ----------------------------------------------------------------
     // Add some GUI parts unique to WriteUP
 
     m_actionFormatBold = dynamic_cast<KToggleAction *> (actionCollection()->action("format_bold" ) );
@@ -88,7 +93,7 @@ void WUView::setupWriteUpGUI()
     m_actionFormatUnderline = dynamic_cast<KToggleAction *> (actionCollection()->action("format_underline" ) );
     m_actionFormatUnderline->setIcon( "hi48-action-format_underline_active" );
 
-
+#if 1
     m_toolBox = new KoToolBox(mainWindow(), "ToolBox", WUFactory::instance(),
 			      NumToolBoxSections);
     m_toolBox -> setLabel(i18n("WriteUpToolBox"));
@@ -103,8 +108,16 @@ void WUView::setupWriteUpGUI()
 
     mainWindow()->addDockWindow( m_toolBox, Qt::DockRight, false);
     mainWindow()->moveDockWindow( m_toolBox, Qt::DockRight, false, 0, 0 );
+#else
+    createWriteUpToolBox();
+#endif
 }
 
+
+void WUView::createWriteUpToolBox()
+{
+    m_toolBox = 0;
+}
 
 
 
