@@ -98,14 +98,15 @@ namespace Cell_LNS
 using namespace Cell_LNS;
 
 
-// Some variables are placed in Cell::Extra because normally they're not required
-// in simple case of cell(s). For example, most plain text cells don't need
-// to store information about spanned columns and rows, as this is only
-// the case with merged cells.
+// Some variables are placed in Cell::Extra because normally they're
+// not required in simple case of cell(s). For example, most plain
+// text cells don't need to store information about spanned columns
+// and rows, as this is only the case with merged cells.
 //
-// When the cell is getting complex (e.g. merged with other cells, contains
-// rich text, has validation criteria, etc), this Cell::Extra is allocated by
-// Cell::Private and starts to be available. Otherwise, it won't exist at all.
+// When the cell is getting complex (e.g. merged with other cells,
+// contains rich text, has validation criteria, etc), this Cell::Extra
+// is allocated by Cell::Private and starts to be
+// available. Otherwise, it won't exist at all.
 
 class Cell::Extra
 {
@@ -306,6 +307,7 @@ Cell::Cell( Sheet * _sheet, Style * _style,  int _column, int _row )
   d->column = _column;
   d->format = new Format( _sheet, _style );
   d->format->setCell(this);
+
   clearAllErrors();
 }
 
@@ -658,22 +660,24 @@ void Cell::defaultStyle()
 }
 
 
-// Make this cell obscure a number of other cells.
+// Merge a number of cells, i.e. make this cell obscure a number of
+// other cells.  If _x and _y == 0, then the merging is removed.
 
-void Cell::forceExtraCells( int _col, int _row, int _x, int _y )
+void Cell::mergeCells( int _col, int _row, int _x, int _y )
 {
   // Start by unobscuring the cells that we obscure right now
   int  extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
   int  extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
-  for ( int x = _col; x <= _col + extraXCells; ++x )
+  for ( int x = _col; x <= _col + extraXCells; ++x ) {
     for ( int y = _row; y <= _row + extraYCells; ++y ) {
       if ( x != _col || y != _row )
         format()->sheet()->nonDefaultCell( x, y )->unobscure(this);
     }
+  }
 
-  // If no forcing, then remove all traces, and return.
+  // If no merging, then remove all traces, and return.
   if ( _x == 0 && _y == 0 ) {
-    clearFlag( Flag_ForceExtra );
+    clearFlag( Flag_Merged );
     if (d->hasExtra()) {
       d->extra()->extraXCells  = 0;
       d->extra()->extraYCells  = 0;
@@ -688,19 +692,20 @@ void Cell::forceExtraCells( int _col, int _row, int _x, int _y )
     return;
   }
 
-  // At this point, we know that we will force some extra cells.
-  setFlag(Flag_ForceExtra);
+  // At this point, we know that we will merge some cells.
+  setFlag(Flag_Merged);
   d->extra()->extraXCells  = _x;
   d->extra()->extraYCells  = _y;
   d->extra()->mergedXCells = _x;
   d->extra()->mergedYCells = _y;
 
   // Obscure the cells
-  for ( int x = _col; x <= _col + _x; ++x )
+  for ( int x = _col; x <= _col + _x; ++x ) {
     for ( int y = _row; y <= _row + _y; ++y ) {
       if ( x != _col || y != _row )
-  format()->sheet()->nonDefaultCell( x, y )->obscure( this, true );
+	format()->sheet()->nonDefaultCell( x, y )->obscure( this, true );
     }
+  }
 
   // Refresh the layout
   setFlag( Flag_LayoutDirty );
@@ -740,12 +745,8 @@ void Cell::move( int col, int row )
       d->extra()->mergedYCells = 0;
     }
 
-    //cell value has been changed (because we're another cell now)
+    // Cell value has been changed (because we're another cell now).
     valueChanged ();
-
-    // Reobscure cells if we are forced to do so.
-    //if ( m_bForceExtraCells )
-      //  forceExtraCells( col, row, ex, ey );
 }
 
 void Cell::setLayoutDirtyFlag( bool format )
@@ -759,46 +760,48 @@ void Cell::setLayoutDirtyFlag( bool format )
 
     QValueList<Cell*>::iterator it  = d->extra()->obscuringCells.begin();
     QValueList<Cell*>::iterator end = d->extra()->obscuringCells.end();
-    for ( ; it != end; ++it )
-    {
-  (*it)->setLayoutDirtyFlag( format );
+    for ( ; it != end; ++it ) {
+      (*it)->setLayoutDirtyFlag( format );
     }
 }
 
 bool Cell::needsPrinting() const
 {
-    if ( isDefault() )
-        return false;
-
-    if ( !d->strText.isEmpty() ) {
-  //kdWarning(36001) << name() << ": not empty - needs printing" << endl;
-        return true;
-    }
-
-    // Cell borders?
-    if ( format()->hasProperty( Format::PTopBorder ) || format()->hasProperty( Format::PLeftBorder ) ||
-         format()->hasProperty( Format::PRightBorder ) || format()->hasProperty( Format::PBottomBorder ) ||
-         format()->hasProperty( Format::PFallDiagonal ) || format()->hasProperty( Format::PGoUpDiagonal ) ) {
-  //kdDebug(36001) << name()
-  //     << ": has border property - needs printing" << endl;
-  return true;
-    }
-
-    // Background color or brush?
-    if ( format()->hasProperty( Format::PBackgroundBrush ) ) {
-  //kdDebug(36001) << name()
-  //     << ": has brush property - needs printing" << endl;
-        return true;
-    }
-
-    if ( format()->hasProperty( Format::PBackgroundColor ) ) {
-  //kdDebug(36001) << name()
-  //     << ": has backgroundColor property - needs printing"
-  //     << endl;
-  return true;
-    }
-
+  if ( isDefault() )
     return false;
+
+  if ( !d->strText.isEmpty() ) {
+    //kdWarning(36001) << name() << ": not empty - needs printing" << endl;
+    return true;
+  }
+
+  // Cell borders?
+  if ( format()->hasProperty( Format::PTopBorder )
+       || format()->hasProperty( Format::PLeftBorder ) 
+       || format()->hasProperty( Format::PRightBorder )
+       || format()->hasProperty( Format::PBottomBorder )
+       || format()->hasProperty( Format::PFallDiagonal )
+       || format()->hasProperty( Format::PGoUpDiagonal ) ) {
+    //kdDebug(36001) << name()
+    //     << ": has border property - needs printing" << endl;
+    return true;
+  }
+
+  // Background color or brush?
+  if ( format()->hasProperty( Format::PBackgroundBrush ) ) {
+    //kdDebug(36001) << name()
+    //     << ": has brush property - needs printing" << endl;
+    return true;
+  }
+
+  if ( format()->hasProperty( Format::PBackgroundColor ) ) {
+    //kdDebug(36001) << name()
+    //     << ": has backgroundColor property - needs printing"
+    //     << endl;
+    return true;
+  }
+
+  return false;
 }
 
 bool Cell::isEmpty() const
@@ -818,12 +821,10 @@ bool Cell::isObscured() const
 }
 
 
-// Return true if this cell is part of a merged cell ("forced
-// obscuring"), but not the master cell.
-//
-// FIXME: Better name!
+// Return true if this cell is part of a merged cell, but not the
+// master cell.
 
-bool Cell::isObscuringForced() const
+bool Cell::isPartOfMerged() const
 {
   if (!d->hasExtra())
     return false;
@@ -833,9 +834,9 @@ bool Cell::isObscuringForced() const
   for ( ; it != end; ++it ) {
     Cell *cell = *it;
 
-    if (cell->isForceExtraCells()) {
-      // The cell might force extra cells, and then overlap even
-      // beyond that so just knowing that the obscuring cell forces
+    if (cell->doesMergeCells()) {
+      // The cell might merge extra cells, and then overlap even
+      // beyond that so just knowing that the obscuring cell merges
       // extra isn't enough.  We have to know that this cell is one of
       // the ones it is forcing over.
       if (column() <= cell->column() + cell->d->extra()->mergedXCells
@@ -873,9 +874,9 @@ Cell *Cell::ultimateObscuringCell() const
   for ( ; it != end; ++it ) {
     Cell *cell = *it;
 
-    if (cell->isForceExtraCells()) {
-      // The cell might force extra cells, and then overlap even
-      // beyond that so just knowing that the obscuring cell forces
+    if (cell->doesMergeCells()) {
+      // The cell might merge extra cells, and then overlap even
+      // beyond that so just knowing that the obscuring cell merges
       // extra isn't enough.  We have to know that this cell is one of
       // the ones it is forcing over.
       if (column() <= cell->column() + cell->d->extra()->mergedXCells
@@ -1224,7 +1225,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   // are actually merged.
   freeAllObscuredCells();
   if (d->hasExtra())
-    forceExtraCells( d->column, d->row,
+    mergeCells( d->column, d->row,
          d->extra()->mergedXCells, d->extra()->mergedYCells );
 
   // If the column for this cell is hidden or the row is too low,
@@ -1271,7 +1272,7 @@ void Cell::makeLayout( QPainter &_painter, int _col, int _row )
   double         height = rl->dblHeight();
 
   // Calculate extraWidth and extraHeight if we have a merged cell.
-  if ( testFlag( Flag_ForceExtra ) ) {
+  if ( testFlag( Flag_Merged ) ) {
     int  extraXCells = d->hasExtra() ? d->extra()->extraXCells : 0;
     int  extraYCells = d->hasExtra() ? d->extra()->extraYCells : 0;
 
@@ -2235,7 +2236,7 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
     backgroundColor = bgColor( cellRef.x(), cellRef.y() );
 
   // 1. Paint the background.
-  if ( !isObscuringForced() )
+  if ( !isPartOfMerged() )
     paintBackground( painter, cellRect0, cellRef, selected, backgroundColor );
 
   // 2. Paint the default borders if we are on screen or if we are printing
@@ -2275,8 +2276,8 @@ void Cell::paintCell( const KoRect   &rect, QPainter & painter,
   if ( painter.device()->isExtDev() )
     painter.setClipping( false );
 
-  //  FIXME: I don't like the term "force" here. Find a better one.
-  if ( !isObscuringForced() ) {
+  // Paint the borders if this cell is not part of another merged cell.
+  if ( !isPartOfMerged() ) {
     // if (!testFlag(Flag_Highlight))
     paintCellBorders( painter, rect, cellRect0,
           cellRef,
@@ -2550,14 +2551,14 @@ void Cell::paintObscuredCells(const KoRect& rect, QPainter& painter,
 
   Cell  *cell = format()->sheet()->cellAt( column, row );
   KoPoint       corner( xpos, ypos );
-
+  
   // Check if the upper and lower borders should be painted, and
   // if so which pens we should use.  There used to be a nasty
   // bug here (#61452).
   // Check top pen.  Only check if this is not on the top row.
   topPen         = _topPen;
   paintBorderTop = _paintBorderTop;
-  if ( row > 1 && !cell->isObscuringForced() ) {
+  if ( row > 1 && !cell->isPartOfMerged() ) {
     Cell  *cellUp = format()->sheet()->cellAt( column, row - 1 );
 
     if ( cellUp->isDefault() )
@@ -3872,7 +3873,7 @@ void Cell::paintCellDiagonalLines( QPainter& painter,
            const KoRect &cellRect,
            const QPoint &cellRef )
 {
-  if ( isObscuringForced() )
+  if ( isPartOfMerged() )
     return;
 
   Doc* doc = sheet()->doc();
@@ -4059,14 +4060,14 @@ double Cell::dblWidth( int _col, const Canvas *_canvas ) const
 
   if ( _canvas )
   {
-    if ( testFlag(Flag_ForceExtra) )
+    if ( testFlag(Flag_Merged) )
       return d->extra()->extraWidth;
 
     const ColumnFormat *cl = format()->sheet()->columnFormat( _col );
     return cl->dblWidth( _canvas );
   }
 
-  if ( testFlag(Flag_ForceExtra) )
+  if ( testFlag(Flag_Merged) )
     return d->extra()->extraWidth;
 
   const ColumnFormat *cl = format()->sheet()->columnFormat( _col );
@@ -4085,14 +4086,14 @@ double Cell::dblHeight( int _row, const Canvas *_canvas ) const
 
   if ( _canvas )
   {
-    if ( testFlag(Flag_ForceExtra) )
+    if ( testFlag(Flag_Merged) )
       return d->extra()->extraHeight;
 
     const RowFormat *rl = format()->sheet()->rowFormat( _row );
     return rl->dblHeight( _canvas );
   }
 
-  if ( testFlag(Flag_ForceExtra) )
+  if ( testFlag(Flag_Merged) )
     return d->extra()->extraHeight;
 
   const RowFormat *rl = format()->sheet()->rowFormat( _row );
@@ -4251,7 +4252,7 @@ const QColor & Cell::effTextColor( int col, int row ) const
 
 const QPen& Cell::effLeftBorderPen( int col, int row ) const
 {
-  if ( isObscuringForced() )
+  if ( isPartOfMerged() )
   {
     Cell * cell = d->extra()->obscuringCells.first();
     return cell->effLeftBorderPen( cell->column(), cell->row() );
@@ -4267,7 +4268,7 @@ const QPen& Cell::effLeftBorderPen( int col, int row ) const
 
 const QPen& Cell::effTopBorderPen( int col, int row ) const
 {
-  if ( isObscuringForced() )
+  if ( isPartOfMerged() )
   {
     Cell * cell = d->extra()->obscuringCells.first();
     return cell->effTopBorderPen( cell->column(), cell->row() );
@@ -4283,7 +4284,7 @@ const QPen& Cell::effTopBorderPen( int col, int row ) const
 
 const QPen& Cell::effRightBorderPen( int col, int row ) const
 {
-  if ( isObscuringForced() )
+  if ( isPartOfMerged() )
   {
     Cell * cell = d->extra()->obscuringCells.first();
     return cell->effRightBorderPen( cell->column(), cell->row() );
@@ -4299,7 +4300,7 @@ const QPen& Cell::effRightBorderPen( int col, int row ) const
 
 const QPen& Cell::effBottomBorderPen( int col, int row ) const
 {
-  if ( isObscuringForced() )
+  if ( isPartOfMerged() )
   {
     Cell * cell = d->extra()->obscuringCells.first();
     return cell->effBottomBorderPen( cell->column(), cell->row() );
@@ -4335,7 +4336,7 @@ const QPen & Cell::effFallDiagonalPen( int col, int row ) const
 
 uint Cell::effBottomBorderValue( int col, int row ) const
 {
-  if ( isObscuringForced() )
+  if ( isPartOfMerged() )
   {
     Cell * cell = d->extra()->obscuringCells.first();
     return cell->effBottomBorderValue( cell->column(), cell->row() );
@@ -4350,7 +4351,7 @@ uint Cell::effBottomBorderValue( int col, int row ) const
 
 uint Cell::effRightBorderValue( int col, int row ) const
 {
-  if ( isObscuringForced() )
+  if ( isPartOfMerged() )
   {
     Cell * cell = d->extra()->obscuringCells.first();
     return cell->effRightBorderValue( cell->column(), cell->row() );
@@ -4365,7 +4366,7 @@ uint Cell::effRightBorderValue( int col, int row ) const
 
 uint Cell::effLeftBorderValue( int col, int row ) const
 {
-  if ( isObscuringForced() )
+  if ( isPartOfMerged() )
   {
     Cell * cell = d->extra()->obscuringCells.first();
     return cell->effLeftBorderValue( cell->column(), cell->row() );
@@ -4380,7 +4381,7 @@ uint Cell::effLeftBorderValue( int col, int row ) const
 
 uint Cell::effTopBorderValue( int col, int row ) const
 {
-  if ( isObscuringForced() )
+  if ( isPartOfMerged() )
   {
     Cell * cell = d->extra()->obscuringCells.first();
     return cell->effTopBorderValue( cell->column(), cell->row() );
@@ -5022,7 +5023,7 @@ QDomElement Cell::save( QDomDocument& doc,
     if ( formatElement.hasChildNodes() || formatElement.attributes().length() ) // don't save empty tags
         cell.appendChild( formatElement );
 
-    if ( isForceExtraCells() )
+    if ( doesMergeCells() )
     {
         if ( extraXCells() )
             formatElement.setAttribute( "colspan", extraXCells() );
@@ -5236,7 +5237,7 @@ QString Cell::saveOasisCellStyle( KoGenStyle &currentCellStyle, KoGenStyles &mai
 
 bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, int column, int maxCols, int &repeated, GenValidationStyles &valStyle )
 {
-    if ( !isObscuringForced() )
+    if ( !isPartOfMerged() )
         xmlwriter.startElement( "table:table-cell" );
     else
         xmlwriter.startElement( "table:covered-table-cell" );
@@ -5260,7 +5261,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, 
         xmlwriter.addAttribute( "style:data-style-name", cellNumericStyle );
 
     // group empty cells with the same style
-    if ( isEmpty() && !format()->hasProperty( Format::PComment ) && !isObscuringForced() && !isForceExtraCells() )
+    if ( isEmpty() && !format()->hasProperty( Format::PComment ) && !isPartOfMerged() && !doesMergeCells() )
     {
       int j = column + 1;
       while ( j <= maxCols )
@@ -5270,7 +5271,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, 
         nextCell->saveOasisCellStyle( nextCellStyle,mainStyles );
 
         if ( nextCell->isEmpty() && !nextCell->format()->hasProperty( Format::PComment )
-             && ( nextCellStyle==currentCellStyle ) && !isObscuringForced() && !isForceExtraCells() )
+             && ( nextCellStyle==currentCellStyle ) && !isPartOfMerged() && !doesMergeCells() )
           ++repeated;
         else
           break;
@@ -5310,7 +5311,7 @@ bool Cell::saveOasis( KoXmlWriter& xmlwriter, KoGenStyles &mainStyles, int row, 
         xmlwriter.endElement();
     }
 
-    if ( isForceExtraCells() )
+    if ( doesMergeCells() )
     {
       int colSpan = mergedXCells() + 1;
       int rowSpan = mergedYCells() + 1;
@@ -5723,7 +5724,7 @@ bool Cell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyl
         if( ok ) rowSpan = span;
     }
     if ( colSpan > 1 || rowSpan > 1 )
-        forceExtraCells( d->column, d->row, colSpan - 1, rowSpan - 1 );
+        mergeCells( d->column, d->row, colSpan - 1, rowSpan - 1 );
     // cell comment/annotation
     QDomElement annotationElement = KoDom::namedItemNS( element, KoXmlNS::office, "annotation" );
     if ( !annotationElement.isNull() )
@@ -6099,7 +6100,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
               d->extra()->extraXCells = i;
             if ( i > 0 )
             {
-              setFlag(Flag_ForceExtra);
+              setFlag(Flag_Merged);
             }
         }
 
@@ -6117,14 +6118,14 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
               d->extra()->extraYCells = i;
             if ( i > 0 )
             {
-              setFlag(Flag_ForceExtra);
+              setFlag(Flag_Merged);
             }
         }
 
-        if ( testFlag( Flag_ForceExtra ) )
+        if ( testFlag( Flag_Merged ) )
         {
             if (d->hasExtra())
-              forceExtraCells( d->column, d->row, d->extra()->extraXCells, d->extra()->extraYCells );
+              mergeCells( d->column, d->row, d->extra()->extraXCells, d->extra()->extraYCells );
         }
 
     }
@@ -6923,9 +6924,9 @@ void Cell::setDisplayDirtyFlag()
   setFlag( Flag_DisplayDirty );
 }
 
-bool Cell::isForceExtraCells() const
+bool Cell::doesMergeCells() const
 {
-  return testFlag( Flag_ForceExtra );
+  return testFlag( Flag_Merged );
 }
 
 void Cell::clearFlag( CellFlags flag )

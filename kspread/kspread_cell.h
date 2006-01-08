@@ -611,11 +611,12 @@ public:
      */
     bool isObscured() const;
     /**
-     * If obscuring is forced then the marker may never reside on this cell.
+     * If this cell is part of a merged cell, then the marker may
+     * never reside on this cell.
      *
-     * @return true if an obscuring cell is forced to obscure this one.
+     * @return true if another cell has this one merged into itself.
      */
-    bool isObscuringForced() const;
+    bool isPartOfMerged() const;
 
     /**
      * Return the cell that is obscuring this one (merged cells only).
@@ -634,8 +635,9 @@ public:
 
 
     /**
-     * Force the cell to occupy other cells space.
-     * If '_x' and '_y' are 0 then the forcing is disabled.
+     * Merge a number of cells, i.e. force the cell to occupy other
+     * cells space.  If '_x' and '_y' are 0 then the merging is
+     * disabled.
      *
      * @param _col is the column this cell is assumed to be in.
      * @param _row is the row this cell is assumed to be in.
@@ -643,12 +645,12 @@ public:
      * @param _y tells to occupy _y additional cells in the vertical
      *
      */
-    void forceExtraCells( int _col, int _row, int _x, int _y );
+    void mergeCells( int _col, int _row, int _x, int _y );
 
     /**
      * @return true if the cell is forced to obscure other cells.
      */
-    bool isForceExtraCells() const;
+    bool doesMergeCells() const;
 
     /**
      * @return the number of obscured cells in the horizontal direction as a
@@ -666,6 +668,7 @@ public:
      * @return the amount of obscured cells in the horizontal direction
      */
     int extraXCells() const;
+
     /**
      * @return the amount of obscured cells in the vertical direction
      */
@@ -776,7 +779,7 @@ public:
       Flag_Progress              = 0x00040000,
       Flag_UpdatingDeps          = 0x00080000,
       Flag_DisplayDirty          = 0x00100000,
-      Flag_ForceExtra            = 0x00200000,
+      Flag_Merged                = 0x00200000,
       Flag_CellTooShortX         = 0x00400000,
       Flag_CellTooShortY         = 0x00800000,
       Flag_ParseError            = 0x01000000,
@@ -829,11 +832,11 @@ public:
    * are done the function must call <tt>m_pSheet->updateCell(...).
    * The flag is cleared by the function format()->sheet()->updateCell.
    *
-   * ForceExtra
-   * Tells whether the cell is forced to exceed its size.
-   * Cells may occupy other cells space on demand. But you may force
-   * a cell to do so by setting this flag. Forcing the cell to have
-   * no extra size will disable this flag!
+   * Merged
+   * Tells whether the cell is merged with other cells.  Cells may
+   * occupy other cells space on demand. You may force a cell to
+   * do so by setting this flag. Merging the cell with 0 in both
+   * directions, will disable this flag!
    *
    * CellTooShortX
    * When it's True displays ** and/or the red triangle and when the

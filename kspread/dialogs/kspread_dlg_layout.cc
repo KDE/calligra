@@ -329,9 +329,9 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
 
   Cell* obj = m_sheet->cellAt( left, top );
   oneCell = (left == right && top == bottom &&
-             !obj->isForceExtraCells());
+             !obj->doesMergeCells());
 
-  isMerged = ((obj->isForceExtraCells() &&
+  isMerged = ((obj->doesMergeCells() &&
                left + obj->extraXCells() >= right &&
                top + obj->extraYCells() >= bottom));
 
@@ -369,7 +369,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
 
   // Just an assumption
   obj = m_sheet->cellAt( right, top );
-  if ( obj->isObscuringForced() )
+  if ( obj->isPartOfMerged() )
   {
     obj = obj->obscuringCells().first();
     int moveX  = obj->column();
@@ -498,7 +498,7 @@ CellFormatDialog::CellFormatDialog( View * _view, Sheet * _sheet )
       {
         Cell *obj = m_sheet->cellAt( x, y );
 
-        if ( obj->isObscuringForced() )
+        if ( obj->isPartOfMerged() )
           continue;
 
         initParameters( obj->format(),x,y);

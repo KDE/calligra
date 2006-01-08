@@ -952,7 +952,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
       cell = sheet->getFirstCellColumn( c );
       while ( cell )
       {
-        if ( cell->isObscuringForced() )
+        if ( cell->isPartOfMerged() )
         {
           cell = sheet->getNextCellDown( c, cell->row() );
           continue;
@@ -974,7 +974,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
       {
       int col = c->column();
       if ( range.left() <= col && right >= col
-          && !c->isObscuringForced())
+          && !c->isPartOfMerged())
       {
         layoutCell tmplayout;
         tmplayout.col = c->column();
@@ -999,7 +999,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
       cell = sheet->getFirstCellRow( row );
       while ( cell )
       {
-        if ( cell->isObscuringForced() )
+        if ( cell->isPartOfMerged() )
         {
           cell = sheet->getNextCellRight( cell->column(), row );
           continue;
@@ -1020,7 +1020,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
       {
       int row = c->row();
       if ( range.top() <= row && bottom >= row
-           && !c->isObscuringForced())
+           && !c->isPartOfMerged())
       {
         layoutCell tmplayout;
         tmplayout.col = c->column();
@@ -1038,7 +1038,7 @@ void UndoCellFormat::copyFormat(QValueList<layoutCell> & list,
       for ( int x = range.left(); x <= right; ++x )
       {
         Cell * cell = sheet->nonDefaultCell( x, y );
-        if ( !cell->isObscuringForced() )
+        if ( !cell->isPartOfMerged() )
         {
           layoutCell tmplayout;
           tmplayout.col = x;
@@ -1266,7 +1266,7 @@ void UndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColum
       c = sheet->getFirstCellColumn( col );
       while ( c )
       {
-        if ( !c->isObscuringForced() )
+        if ( !c->isPartOfMerged() )
         {
           layoutTextCell tmplayout;
           tmplayout.col = col;
@@ -1295,7 +1295,7 @@ void UndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColum
       c = sheet->getFirstCellRow( row );
       while ( c )
       {
-        if ( !c->isObscuringForced() )
+        if ( !c->isPartOfMerged() )
         {
           layoutTextCell tmplayout;
           tmplayout.col = c->column();
@@ -1318,7 +1318,7 @@ void UndoSort::copyAll(QValueList<layoutTextCell> & list, QValueList<layoutColum
       for ( int x = m_rctRect.left(); x <= right; ++x )
       {
         cell = sheet->nonDefaultCell( x, y );
-        if (!cell->isObscuringForced())
+        if (!cell->isPartOfMerged())
         {
           layoutTextCell tmplayout;
           tmplayout.col = x;
@@ -1957,7 +1957,7 @@ void UndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, Sheet* sh
         c = sheet->getFirstCellColumn( col );
         while ( c )
         {
-          if ( !c->isObscuringForced() )
+          if ( !c->isPartOfMerged() )
           {
             textOfCell tmpText;
             tmpText.col = col;
@@ -1977,7 +1977,7 @@ void UndoChangeAreaTextCell::createList( QValueList<textOfCell> &list, Sheet* sh
         c = sheet->getFirstCellRow( row );
         while ( c )
         {
-          if ( !c->isObscuringForced() )
+          if ( !c->isPartOfMerged() )
           {
             textOfCell tmpText;
             tmpText.col = c->column();
@@ -2838,7 +2838,7 @@ void UndoStyleCell::createListCell( QValueList<styleCell> &listCell, Sheet* shee
       c = sheet->getFirstCellColumn( col );
       while ( c )
       {
-        if ( !c->isObscuringForced() )
+        if ( !c->isPartOfMerged() )
         {
 	  styleCell tmpStyleCell;
 	  tmpStyleCell.row = c->row();
@@ -2857,7 +2857,7 @@ void UndoStyleCell::createListCell( QValueList<styleCell> &listCell, Sheet* shee
       c = sheet->getFirstCellRow( row );
       while ( c )
       {
-        if ( !c->isObscuringForced() )
+        if ( !c->isPartOfMerged() )
         {
 	  styleCell tmpStyleCell;
 	  tmpStyleCell.row = row;

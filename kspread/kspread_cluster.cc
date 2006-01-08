@@ -194,9 +194,9 @@ void Cluster::remove( int x, int y )
     {
 	if ( m_first == c )
 	    m_first = c->nextCell();
-        if(c->isForceExtraCells())
+        if(c->doesMergeCells())
         {
-	    c->forceExtraCells(c->column(),c->row(),0,0);
+	    c->mergeCells(c->column(),c->row(),0,0);
         }
 	delete c;
     }

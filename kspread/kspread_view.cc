@@ -5504,7 +5504,7 @@ void View::slotListChoosePopupMenu( )
     Cell * c = d->activeSheet->getFirstCellColumn( col );
     while ( c )
     {
-      if ( !c->isObscuringForced()
+      if ( !c->isPartOfMerged()
            && !( col == d->canvas->markerColumn()
                  && c->row() == d->canvas->markerRow()) )
       {
@@ -5524,7 +5524,7 @@ void View::slotListChoosePopupMenu( )
    {
      int col = c->column();
      if ( selection.left() <= col && selection.right() >= col
-    &&!c->isObscuringForced()&& !(col==d->canvas->markerColumn()&& c->row()==d->canvas->markerRow()))
+    &&!c->isPartOfMerged()&& !(col==d->canvas->markerColumn()&& c->row()==d->canvas->markerRow()))
        {
    if (c->isString() && c->text()!=tmp && !c->text().isEmpty())
      {

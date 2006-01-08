@@ -193,7 +193,7 @@ bool Manipulator::process(Element* element)
       {
         Cell* cell = sheet->cellAt(col, row);
 /* (Tomas) don't force working on obscurring cells - most manipulators don't want this, and those that do can do that manually ... Plus I think that no manipulator should do it anyway ...
-        if ( cell->isObscuringForced() )
+        if ( cell->isPartOfMerged() )
         {
           cell = cell->obscuringCells().first();
         }
@@ -367,7 +367,7 @@ bool FormatManipulator::process (Element *element)
         for ( int row = top; row <= bottom; ++row )
         {
           cell = m_sheet->nonDefaultCell(col,row);
-          if ( !cell->isObscuringForced() )
+          if ( !cell->isPartOfMerged() )
           {
             cell->setDisplayDirtyFlag();
             doWork(cell->format(), row==top, row==bottom, col==left, col==right);
@@ -453,7 +453,7 @@ void FormatManipulator::copyFormat(QValueList<layoutCell> & list,
         cell = m_sheet->getFirstCellColumn( col );
         while ( cell )
         {
-          if ( cell->isObscuringForced() )
+          if ( cell->isPartOfMerged() )
           {
             cell = m_sheet->getNextCellDown( col, cell->row() );
             continue;
@@ -475,7 +475,7 @@ void FormatManipulator::copyFormat(QValueList<layoutCell> & list,
         {
         int col = cell->column();
         if ( range.left() <= col && right >= col
-            && !cell->isObscuringForced())
+            && !cell->isPartOfMerged())
         {
           layoutCell tmplayout;
           tmplayout.col = cell->column();
@@ -500,7 +500,7 @@ void FormatManipulator::copyFormat(QValueList<layoutCell> & list,
         cell = m_sheet->getFirstCellRow( row );
         while ( cell )
         {
-          if ( cell->isObscuringForced() )
+          if ( cell->isPartOfMerged() )
           {
             cell = m_sheet->getNextCellRight( cell->column(), row );
             continue;
@@ -521,7 +521,7 @@ void FormatManipulator::copyFormat(QValueList<layoutCell> & list,
         {
         int row = cell->row();
         if ( range.top() <= row && bottom >= row
-            && !cell->isObscuringForced())
+            && !cell->isPartOfMerged())
         {
           layoutCell tmplayout;
           tmplayout.col = cell->column();
@@ -539,7 +539,7 @@ void FormatManipulator::copyFormat(QValueList<layoutCell> & list,
         for ( int col = range.left(); col <= right; ++col )
         {
           Cell * cell = m_sheet->nonDefaultCell( col, row );
-          if ( !cell->isObscuringForced() )
+          if ( !cell->isPartOfMerged() )
           {
             layoutCell tmplayout;
             tmplayout.col = col;
@@ -807,19 +807,19 @@ bool MergeManipulator::process(Element* element)
   if (doMerge)
   {
     Cell *cell = m_sheet->nonDefaultCell( range.topLeft() );
-    cell->forceExtraCells( range.topLeft().x(), range.topLeft().y(),
-                          range.width() - 1, range.height() - 1);
+    cell->mergeCells( range.topLeft().x(), range.topLeft().y(),
+		      range.width() - 1, range.height() - 1);
   }
   else
   {
     QPoint marker(range.topLeft());
     Cell *cell = m_sheet->nonDefaultCell( marker );
-    if(!cell->isForceExtraCells())
+    if(!cell->doesMergeCells())
     {
       return true;
     }
 
-    cell->forceExtraCells( marker.x() ,marker.y(), 0, 0 );
+    cell->mergeCells( marker.x() ,marker.y(), 0, 0 );
   }
 
   return true;

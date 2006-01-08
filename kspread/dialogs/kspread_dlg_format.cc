@@ -179,7 +179,7 @@ void FormatDialog::slotOk()
     {
 	int pos = 1 + ( ( x - r.left() - 1 ) % 2 );
 	Cell* cell = m_view->activeSheet()->nonDefaultCell( x, r.top() );
-        if(!cell->isObscuringForced())
+        if(!cell->isPartOfMerged())
         {
           cell->format()->copy( *m_cells[ pos ] );
 
@@ -211,7 +211,7 @@ void FormatDialog::slotOk()
     {
 	int pos = 4 + ( ( y - r.top() - 1 ) % 2 ) * 4;
 	Cell* cell = m_view->activeSheet()->nonDefaultCell( r.left(), y );
-        if(!cell->isObscuringForced())
+        if(!cell->isPartOfMerged())
         {
           cell->format()->copy( *m_cells[ pos ] );
 
@@ -240,7 +240,7 @@ void FormatDialog::slotOk()
         {
 	    int pos = 5 + ( ( y - r.top() - 1 ) % 2 ) * 4 + ( ( x - r.left() - 1 ) % 2 );
 	    Cell* cell = m_view->activeSheet()->nonDefaultCell( x, y );
-            if(!cell->isObscuringForced())
+            if(!cell->isPartOfMerged())
             {
               cell->format()->copy( *m_cells[ pos ] );
 
@@ -267,7 +267,7 @@ void FormatDialog::slotOk()
     for( y = r.top(); y <= r.bottom(); ++y )
     {
 	Cell* cell = m_view->activeSheet()->nonDefaultCell( r.right(), y );
-        if(!cell->isObscuringForced())
+        if(!cell->isPartOfMerged())
         {
 	if ( y == r.top() )
         {
@@ -291,7 +291,7 @@ void FormatDialog::slotOk()
     for( x = r.left(); x <= r.right(); ++x )
     {
 	Cell* cell = m_view->activeSheet()->nonDefaultCell( x, r.bottom() );
-        if(!cell->isObscuringForced())
+        if(!cell->isPartOfMerged())
         {
         if ( x == r.left() )
         {

@@ -1144,7 +1144,7 @@ void Sheet::setCalcDirtyFlag()
     Cell* c = d->cells.firstCell();
     for( ; c; c = c->nextCell() )
     {
-        if ( !(c->isObscured() && c->isObscuringForced()) )
+        if ( !(c->isObscured() && c->isPartOfMerged()) )
             c->setCalcDirtyFlag();
     }
 }
@@ -1658,7 +1658,7 @@ struct SetSelectionUpperLowerWorker : public Sheet::CellWorker {
     bool testCondition( Cell* c ) {
   return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
      && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
-     && !c->isObscuringForced() );
+     && !c->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool, int, int )
     {
@@ -1692,7 +1692,7 @@ struct SetSelectionFirstLetterUpperWorker : public Sheet::CellWorker
     bool testCondition( Cell* c ) {
   return ( !c->value().isNumber() && !c->value().isBoolean() &&!c->isFormula() && !c->isDefault()
      && !c->text().isEmpty() && c->text()[0] != '*' && c->text()[0] != '!'
-     && !c->isObscuringForced() );
+     && !c->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool, int, int )
     {
@@ -1721,7 +1721,7 @@ struct SetSelectionVerticalTextWorker : public Sheet::CellWorker {
         return new UndoCellFormat( doc, sheet, region, title );
     }
     bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
+  return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool, int, int ) {
   cell->setDisplayDirtyFlag();
@@ -1749,7 +1749,7 @@ struct SetSelectionCommentWorker : public Sheet::CellWorker {
   return new UndoCellFormat( doc, sheet, region, title );
     }
     bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
+  return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool, int, int ) {
   cell->setDisplayDirtyFlag();
@@ -1785,7 +1785,7 @@ struct SetSelectionRemoveCommentWorker : public Sheet::CellWorker {
   return new UndoCellFormat( doc, sheet, region, title );
     }
     bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
+  return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool, int, int ) {
   cell->setDisplayDirtyFlag();
@@ -1836,7 +1836,7 @@ struct SetSelectionBorderColorWorker : public Sheet::CellWorker {
   return new UndoCellFormat( doc, sheet, region, title );
     }
     bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
+  return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool, int, int ) {
   cell->setDisplayDirtyFlag();
@@ -1921,7 +1921,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
     {
       cell = cellAt( _marker.x(), y );
 
-      if ( cell->isObscuringForced() )
+      if ( cell->isPartOfMerged() )
       {
         /* case 2. */
         cell = cell->obscuringCells().first();
@@ -1946,7 +1946,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
          what is going on here. */
       cell = cellAt( x,_marker.y() );
 
-      if ( cell->isObscuringForced() )
+      if ( cell->isPartOfMerged() )
       {
         cell = cell->obscuringCells().first();
         undoRegion.setTop(QMIN(undoRegion.top(), cell->row()));
@@ -1981,7 +1981,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
     {
       cell = nonDefaultCell( x, y, false, s );
 
-      if ( cell->isObscuringForced() )
+      if ( cell->isPartOfMerged() )
       {
         cell = cell->obscuringCells().first();
       }
@@ -1992,7 +1992,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
       if (mode == Column)
       {
         ++y;
-        if (cell->isForceExtraCells())
+        if (cell->doesMergeCells())
         {
           y += cell->extraYCells();
         }
@@ -2000,7 +2000,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
       else if (mode == Row)
       {
         ++x;
-        if (cell->isForceExtraCells())
+        if (cell->doesMergeCells())
         {
           x += cell->extraXCells();
         }
@@ -2029,7 +2029,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
     {
       cell = nonDefaultCell( x, y, false, s );
 
-      if (cell->isObscuringForced())
+      if (cell->isPartOfMerged())
       {
         cell = cell->obscuringCells().first();
       }
@@ -2039,7 +2039,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
       if (mode == Column)
       {
         ++y;
-        if (cell->isForceExtraCells())
+        if (cell->doesMergeCells())
         {
           y += cell->extraYCells();
         }
@@ -2047,7 +2047,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
       else if (mode == Row)
       {
         ++x;
-        if (cell->isForceExtraCells())
+        if (cell->doesMergeCells())
         {
           x += cell->extraXCells();
         }
@@ -2075,7 +2075,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
     {
       cell = nonDefaultCell( x, y, false, s );
 
-      if (cell->isObscuringForced())
+      if (cell->isPartOfMerged())
       {
         cell = cell->obscuringCells().first();
       }
@@ -2085,7 +2085,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
       if (mode == Column)
       {
         ++y;
-        if (cell->isForceExtraCells())
+        if (cell->doesMergeCells())
         {
           y += cell->extraYCells();
         }
@@ -2093,7 +2093,7 @@ void Sheet::setSeries( const QPoint &_marker, double start, double end, double s
       else if (mode == Row)
       {
         ++x;
-        if (cell->isForceExtraCells())
+        if (cell->doesMergeCells())
         {
           x += cell->extraXCells();
         }
@@ -2149,7 +2149,7 @@ struct SetSelectionPercentWorker : public Sheet::CellWorkerTypeA
   cell->format()->clearNoFallBackProperties( Format::PFormatType );
     }
     bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
+  return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
   if ( cellRegion )
@@ -2636,8 +2636,8 @@ void Sheet::refreshMergedCell()
   Cell* c = d->cells.firstCell();
   for( ;c; c = c->nextCell() )
   {
-    if(c->isForceExtraCells())
-      c->forceExtraCells( c->column(), c->row(), c->extraXCells(), c->extraYCells() );
+    if(c->doesMergeCells())
+      c->mergeCells( c->column(), c->row(), c->extraXCells(), c->extraYCells() );
   }
 }
 
@@ -2991,7 +2991,7 @@ void Sheet::checkCellContent(Cell * cell1, Cell * cell2, int & ret)
     ret = 1;
     return;
   }
-  else if ( cell1->isObscured() && cell1->isObscuringForced() )
+  else if ( cell1->isObscured() && cell1->isPartOfMerged() )
   {
     ret = 1;
     return;
@@ -3096,7 +3096,7 @@ void Sheet::sortByRow( const QRect &area, int key1, int key2, int key3,
   for ( int d = target.left();  d <= target.right(); ++d )
   {
     cell1 = cellAt( d, key1 );
-    if ( cell1->isObscured() && cell1->isObscuringForced() )
+    if ( cell1->isObscured() && cell1->isPartOfMerged() )
     {
       Cell* obscuring = cell1->obscuringCells().first();
       cell = cellAt( obscuring->column(), key1 );
@@ -3152,7 +3152,7 @@ void Sheet::sortByRow( const QRect &area, int key1, int key2, int key3,
               /* No need to swap */
               continue;
             }
-            else if ( cell22->isObscured() && cell22->isObscuringForced() )
+            else if ( cell22->isObscured() && cell22->isPartOfMerged() )
             {
               /* No need to swap */
               continue;
@@ -3192,7 +3192,7 @@ void Sheet::sortByRow( const QRect &area, int key1, int key2, int key3,
                 /* No need to swap */
                 continue;
               }
-              else if ( cell23->isObscured() && cell23->isObscuringForced() )
+              else if ( cell23->isObscured() && cell23->isPartOfMerged() )
               {
                 /* No need to swap */
                 continue;
@@ -3446,7 +3446,7 @@ void Sheet::sortByColumn( const QRect &area, int key1, int key2, int key3,
   {
     // Look for which row we want to swap with the one number d
     cell1 = cellAt( key1, d );
-    if ( cell1->isObscured() && cell1->isObscuringForced() )
+    if ( cell1->isObscured() && cell1->isPartOfMerged() )
     {
       Cell* obscuring = cell1->obscuringCells().first();
       cell  = cellAt( key1, obscuring->row() );
@@ -3466,7 +3466,7 @@ void Sheet::sortByColumn( const QRect &area, int key1, int key2, int key3,
         /* No need to swap */
         continue;
       }
-      else if ( cell2->isObscured() && cell2->isObscuringForced() )
+      else if ( cell2->isObscured() && cell2->isPartOfMerged() )
       {
         /* No need to swap */
         continue;
@@ -3507,7 +3507,7 @@ void Sheet::sortByColumn( const QRect &area, int key1, int key2, int key3,
               /* No need to swap */
               continue;
             }
-            else if ( cell22->isObscured() && cell22->isObscuringForced() )
+            else if ( cell22->isObscured() && cell22->isPartOfMerged() )
             {
               /* No need to swap */
               continue;
@@ -3614,7 +3614,7 @@ void Sheet::sortByColumn( const QRect &area, int key1, int key2, int key3,
           /* No need to swap */
           continue;
         }
-        else if ( cell22->isObscured() && cell22->isObscuringForced() )
+        else if ( cell22->isObscured() && cell22->isPartOfMerged() )
         {
           /* No need to swap */
           continue;
@@ -3652,7 +3652,7 @@ void Sheet::sortByColumn( const QRect &area, int key1, int key2, int key3,
             /* No need to swap */
             continue;
           }
-          else if ( cell23->isObscured() && cell23->isObscuringForced() )
+          else if ( cell23->isObscured() && cell23->isPartOfMerged() )
           {
             /* No need to swap */
             continue;
@@ -3961,7 +3961,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
             Cell * c = getFirstCellRow( row );
             while ( c )
             {
-                if ( !c->isObscuringForced())
+                if ( !c->isPartOfMerged())
                 {
                     switch( _type )
                     {
@@ -3996,7 +3996,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
             Cell * c = getFirstCellColumn( col );
             while ( c )
             {
-                if ( !c->isObscuringForced() )
+                if ( !c->isPartOfMerged() )
                 {
                     switch( _type )
                     {
@@ -4033,7 +4033,7 @@ bool Sheet::areaIsEmpty(const Region& region, TestType _type)
             for ( int y = range.top(); y <= bottom; ++y )
             {
                 cell = cellAt( x, y );
-                if (!cell->isObscuringForced() )
+                if (!cell->isPartOfMerged() )
                 {
                     switch( _type )
                     {
@@ -4075,7 +4075,7 @@ struct SetSelectionMultiRowWorker : public Sheet::CellWorker
 
   bool testCondition( Cell * cell )
   {
-    return ( !cell->isObscuringForced() );
+    return ( !cell->isPartOfMerged() );
   }
 
   void doWork( Cell * cell, bool, int, int )
@@ -4178,7 +4178,7 @@ struct SetSelectionPrecisionWorker : public Sheet::CellWorker {
   return new UndoCellFormat( doc, sheet, region, title );
     }
     bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
+  return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool, int, int ) {
   cell->setDisplayDirtyFlag();
@@ -4222,7 +4222,7 @@ struct SetSelectionStyleWorker : public Sheet::CellWorkerTypeA
 
   bool testCondition( Cell* cell )
   {
-    return ( !cell->isObscuringForced() && cell->format()->kspreadStyle() != m_style );
+    return ( !cell->isPartOfMerged() && cell->format()->kspreadStyle() != m_style );
   }
 
   void doWork( Cell* cell, bool cellRegion, int, int )
@@ -4269,7 +4269,7 @@ struct SetSelectionMoneyFormatWorker : public Sheet::CellWorkerTypeA
   c->format()->clearNoFallBackProperties( Format::PFormatType );
     }
     bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
+  return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool cellRegion, int, int ) {
   if ( cellRegion )
@@ -4317,7 +4317,7 @@ struct IncreaseIndentWorker : public Sheet::CellWorkerTypeA {
   //c->format()->clearNoFallBackProperties( Format::PAlign );
     }
     bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
+  return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool cellRegion, int x, int y ) {
   if ( cellRegion ) {
@@ -4367,7 +4367,7 @@ struct DecreaseIndentWorker : public Sheet::CellWorkerTypeA {
   c->format()->clearNoFallBackProperties( Format::PIndent );
     }
     bool testCondition( Cell* cell ) {
-  return ( !cell->isObscuringForced() );
+  return ( !cell->isPartOfMerged() );
     }
     void doWork( Cell* cell, bool cellRegion, int x, int y ) {
   if ( cellRegion ) {
@@ -4666,7 +4666,7 @@ struct SetConditionalWorker : public Sheet::CellWorker
 
   void doWork( Cell* cell, bool, int, int )
   {
-    if ( !cell->isObscured() ) // TODO: isObscuringForced()???
+    if ( !cell->isObscured() ) // TODO: isPartOfMerged()???
     {
       cell->setConditionList(conditionList);
       cell->setDisplayDirtyFlag();
@@ -5442,9 +5442,9 @@ void Sheet::deleteCells(const Region& region)
     Cell * c = d->cells.firstCell();
     for( ;c; c = c->nextCell() )
     {
-      if ( c->isForceExtraCells() && !c->isDefault() )
-        c->forceExtraCells( c->column(), c->row(),
-                            c->extraXCells(), c->extraYCells() );
+      if ( c->doesMergeCells() && !c->isDefault() )
+        c->mergeCells( c->column(), c->row(),
+		       c->extraXCells(), c->extraYCells() );
     }
     doc()->setModified( true );
 }
@@ -5524,7 +5524,7 @@ void Sheet::refreshView( const Region& region )
             c->row() >= range.top() && c->row() <= range.bottom() &&
             c->column() >= range.left() && c->column() <= range.right() )
       {
-        if (c->isForceExtraCells())
+        if (c->doesMergeCells())
         {
               int right=QMAX(tmp.right(),c->column()+c->extraXCells());
               int bottom=QMAX(tmp.bottom(),c->row()+c->extraYCells());
@@ -5584,7 +5584,7 @@ bool Sheet::testListChoose(Selection* selectionInfo)
      {
        col = c->column();
        if ( selection.left() <= col && selection.right() >= col &&
-            !c->isObscuringForced() &&
+            !c->isPartOfMerged() &&
             !(col==marker.x() && c->row()==marker.y()))
    {
      if(!c->isFormula() && !c->value().isNumber() && !c->value().asString().isEmpty()
@@ -5635,7 +5635,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
       // Save all cells.
       for (Cell* cell = d->cells.firstCell(); cell; cell = cell->nextCell())
       {
-        if (!cell->isDefault() && !cell->isObscuringForced())
+        if (!cell->isDefault() && !cell->isPartOfMerged())
         {
           QPoint point(cell->column(), cell->row());
           if (range.contains(point))
@@ -5676,7 +5676,7 @@ QDomDocument Sheet::saveCellRegion(const Region& region, bool copy, bool era)
       // Save all cells.
       for (Cell* cell = d->cells.firstCell();cell; cell = cell->nextCell())
       {
-        if (!cell->isDefault() && !cell->isObscuringForced())
+        if (!cell->isDefault() && !cell->isPartOfMerged())
         {
           QPoint point(cell->column(), cell->row());
           if (range.contains(point))

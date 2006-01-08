@@ -505,7 +505,7 @@ void Canvas::validateSelection()
             double xpos = sheet->dblColumnPos( markerColumn() ) - xOffset();
             double ypos = sheet->dblRowPos( markerRow() ) - yOffset();
             // Special treatment for obscured cells.
-            if ( cell->isObscured() && cell->isObscuringForced() )
+            if ( cell->isObscured() && cell->isPartOfMerged() )
             {
                 cell = cell->obscuringCells().first();
                 int moveX = cell->column();
@@ -1376,7 +1376,7 @@ void Canvas::mousePressEvent( QMouseEvent * _ev )
 
   // Go to the upper left corner of the obscuring object if cells are merged
   Cell *cell = sheet->cellAt( col, row );
-  if (cell->isObscuringForced())
+  if (cell->isPartOfMerged())
   {
     cell = cell->obscuringCells().first();
     col = cell->column();
@@ -1797,7 +1797,7 @@ QRect Canvas::moveDirection( KSpread::MoveTo direction, bool extendSelection )
   /* cell is either the same as the marker, or the cell that is forced obscuring
      the marker cell
   */
-  if (cell->isObscuringForced())
+  if (cell->isPartOfMerged())
   {
     cell = cell->obscuringCells().first();
     cellCorner = QPoint(cell->column(), cell->row());
@@ -2719,7 +2719,7 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
       cell = sheet->getFirstCellRow( r );
       while ( cell )
       {
-        if ( cell->isObscuringForced() )
+        if ( cell->isPartOfMerged() )
         {
           cell = sheet->getNextCellRight( cell->column(), r );
           continue;
@@ -2790,7 +2790,7 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
       cell = sheet->getFirstCellColumn( c );
       while ( cell )
       {
-        if ( cell->isObscuringForced() )
+        if ( cell->isPartOfMerged() )
         {
           cell = sheet->getNextCellDown( c, cell->row() );
           continue;
@@ -2860,7 +2860,7 @@ bool Canvas::formatKeyPress( QKeyEvent * _ev )
     {
       cell = sheet->nonDefaultCell( col, row );
 
-      if ( cell->isObscuringForced() )
+      if ( cell->isPartOfMerged() )
         continue;
 
       formatCellByKey (cell, _ev->key(), rect);
@@ -5384,7 +5384,7 @@ void ToolTip::maybeTip( const QPoint& p )
     double v = cell->dblHeight( row );
 
     // Special treatment for obscured cells.
-    if ( cell->isObscured() && cell->isObscuringForced() )
+    if ( cell->isObscured() && cell->isPartOfMerged() )
     {
       cell = cell->obscuringCells().first();
       int moveX = cell->column();
