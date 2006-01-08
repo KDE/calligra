@@ -102,6 +102,7 @@ bool KisTIFFWriterVisitor::copyDataToStrips( KisHLineIterator it, tdata_t buff, 
 
 bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 {
+    kdDebug() << "visiting on paint layer " << layer->name() << "\n";
     KisPaintDeviceImplSP pd = layer->paintDevice();
     // Save depth
     int depth = 8 * pd->pixelSize() / pd->nChannels();
@@ -174,6 +175,7 @@ bool KisTIFFWriterVisitor::visit(KisPaintLayer *layer)
 }
 bool KisTIFFWriterVisitor::visit(KisGroupLayer *layer)
 {
+    kdDebug() << "Visiting on grouplayer " << layer->name() << "\n";
     KisLayerSP child = layer->firstChild();
     while (child) {
         child->accept(*this);
