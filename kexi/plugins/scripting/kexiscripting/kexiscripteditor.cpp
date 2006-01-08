@@ -54,19 +54,25 @@ KexiScriptEditor::~KexiScriptEditor()
 void KexiScriptEditor::initialize(Kross::Api::ScriptAction* scriptaction)
 {
     d->scriptaction = scriptaction;
+    Q_ASSERT(d->scriptaction);
 
     disconnect(this, SIGNAL(textChanged()), this, SLOT(slotTextChanged()));
-    //FIXME connect(d->scriptcontainer, SIGNAL(lineNo(long)), this, SLOT(setLineNo(long)));
 
-    if(d->scriptaction) {
-        KexiEditor::setText(d->scriptaction->getCode());
-        // We assume Kross and the HighlightingInterface are using same
-        // names for the support languages...
-        setHighlightMode(d->scriptaction->getInterpreterName());
+    QString code = d->scriptaction->getCode();
+    if(code.isNull()) {
+        // If there is no code we just add some informations.
+///@todo remove after release
+        code = "# " + QStringList::split("\n", i18n(
+            "This is Technology Preview (BETA) version of scripting\n"
+            "support in Kexi. The scripting-API may change in details\n"
+            "in the next Kexi version.\n"
+            "For more information and documentation see\n%1"
+        ).arg("http://www.kexi-project.org/scripting/"), true).join("\n# ");
     }
-    else {
-        KexiEditor::setText("");
-    }
+    KexiEditor::setText(code);
+    // We assume Kross and the HighlightingInterface are using same
+    // names for the support languages...
+    setHighlightMode(d->scriptaction->getInterpreterName());
 
     clearUndoRedo();
     KexiEditor::setDirty(false);
