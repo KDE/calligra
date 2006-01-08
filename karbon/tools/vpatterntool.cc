@@ -137,12 +137,15 @@ void
 VPatternTool::activate()
 {
 	m_active = true;
+	m_state = normal;
 	VTool::activate();
 	view()->statusMessage()->setText( i18n( "Pattern" ) );
 	view()->setCursor( QCursor( Qt::crossCursor ) );
 
 	if( view() )
 	{
+		// disable selection handles
+		view()->part()->document().selection()->showHandle( false );
 		// connect to the stroke-fill-preview to get notice when the stroke or fill gets selected
 		VStrokeFillPreview* preview = view()->strokeFillPreview();
 		if( preview )
@@ -161,6 +164,8 @@ VPatternTool::deactivate()
 
 	if( view() )
 	{
+		// enable selection handles
+		view()->part()->document().selection()->showHandle( true );
 		VStrokeFillPreview* preview = view()->strokeFillPreview();
 		if( preview )
 		{
@@ -184,6 +189,9 @@ VPatternTool::contextHelp()
 
 void VPatternTool::draw()
 {
+	if( ! view() || view()->part()->document().selection()->objects().count() == 0 )
+		return;
+
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
@@ -210,8 +218,6 @@ void VPatternTool::draw()
 		painter->drawNode( first(), m_handleSize );
 		painter->drawNode( m_current, m_handleSize );
 	}
-
-
 } // VPatternTool::draw
 
 bool 
@@ -221,7 +227,7 @@ VPatternTool::getPattern( VPattern &pattern )
 		return false;
 	
 	// determine if stroke of fill is selected for editing
-	VStrokeFillPreview *preview = view()->strokeFillPreview();
+	//VStrokeFillPreview *preview = view()->strokeFillPreview();
 	//bool strokeSelected = ( preview && preview->strokeIsSelected() );
 	bool strokeSelected = false; // FIXME: stroke patterns don't work
 
@@ -247,6 +253,9 @@ VPatternTool::draw( VPainter* painter )
 	if( ! m_active )
 		return;
 
+	if( m_state != normal )
+		return;
+
 	if( ! getPattern( m_pattern ) )
 		return;
 
@@ -257,6 +266,8 @@ VPatternTool::draw( VPainter* painter )
 	m_origin = KoRect( s.x()-m_handleSize, s.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 	m_vector = KoRect( e.x()-m_handleSize, e.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 
+	painter->setPen( Qt::blue.light() );
+	painter->setBrush( Qt::blue.light() );
 	painter->setRasterOp( Qt::XorROP );
 
 	// draw the pattern vector
@@ -306,6 +317,8 @@ VPatternTool::mouseButtonPress()
 void
 VPatternTool::mouseButtonRelease()
 {
+	m_state = normal;
+
 	if( view()->part()->document().selection()->objects().count() == 0 ) 
 		return;
 
@@ -323,7 +336,7 @@ VPatternTool::mouseButtonRelease()
 	bool strokeSelected = false;
 
 	// determine the target from the stroke-fill-preview-widget
-	VStrokeFillPreview* preview = view()->strokeFillPreview();
+	//VStrokeFillPreview* preview = view()->strokeFillPreview();
 	//if( preview && preview->strokeIsSelected() ) // FIXME: stroke patterns don't work
 	//	strokeSelected = true;
 
@@ -394,6 +407,8 @@ VPatternTool::mouseDragRelease()
 		m_pattern.setVector( last() );
 	}
 
+	m_state = normal;
+
 	VStrokeFillPreview* preview = view()->strokeFillPreview();
 	if( ! preview )
 		return;
@@ -424,6 +439,7 @@ VPatternTool::cancel()
 	// Erase old object:
 	if( isDragging() )
 		draw();
+	m_state = normal;
 }
 
 bool

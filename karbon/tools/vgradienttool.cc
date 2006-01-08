@@ -62,12 +62,15 @@ void
 VGradientTool::activate()
 {
 	m_active = true;
+	m_state = normal;
 	view()->statusMessage()->setText( i18n( "Gradient" ) );
 	view()->setCursor( QCursor( Qt::crossCursor ) );
 	VTool::activate();
 
 	if( view() )
 	{
+		// disable selection handles
+		view()->part()->document().selection()->showHandle( false );
 		// connect to the stroke-fill-preview to get notice when the stroke or fill gets selected
 		VStrokeFillPreview* preview = view()->strokeFillPreview();
 		if( preview )
@@ -86,6 +89,8 @@ VGradientTool::deactivate()
 
 	if( view() )
 	{
+		// enable selection handles
+		view()->part()->document().selection()->showHandle( true );
 		VStrokeFillPreview* preview = view()->strokeFillPreview();
 		if( preview )
 		{
@@ -149,6 +154,9 @@ VGradientTool::draw( VPainter* painter )
 	if( ! m_active )
 		return;
 
+	if( m_state != normal )
+		return;
+
 	if( ! getGradient( m_gradient ) )
 		return;
 
@@ -161,6 +169,8 @@ VGradientTool::draw( VPainter* painter )
 	m_vector = KoRect( e.x()-m_handleSize, e.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 	m_center = KoRect( f.x()-m_handleSize, f.y()-m_handleSize, 2*m_handleSize, 2*m_handleSize );
 
+	painter->setPen( Qt::blue.light() );
+	painter->setBrush( Qt::blue.light() );
 	painter->setRasterOp( Qt::XorROP );
 
 	// draw the gradient vector
@@ -192,6 +202,9 @@ VGradientTool::draw( VPainter* painter )
 void
 VGradientTool::draw()
 {
+	if( ! view() || view()->part()->document().selection()->objects().count() == 0 )
+		return;
+
 	VPainter *painter = view()->painterFactory()->editpainter();
 	painter->setRasterOp( Qt::NotROP );
 
@@ -251,12 +264,9 @@ VGradientTool::mouseButtonPress()
 	m_current = first();
 
 	// set the apropriate editing state
-	if( m_center.contains( m_current ) )
+	if( m_center.contains( m_current ) && shiftPressed())
 	{
-		if( shiftPressed() )
-			m_state = moveCenter;
-		else
-			m_state = normal;
+		m_state = moveCenter;
 	}
 	else if( m_origin.contains( m_current ) )
 	{
@@ -275,6 +285,8 @@ VGradientTool::mouseButtonPress()
 void
 VGradientTool::mouseButtonRelease()
 {
+	m_state = normal;
+
 	if( ! view() || view()->part()->document().selection()->objects().count() == 0 ) 
 		return;
 
@@ -379,6 +391,8 @@ VGradientTool::mouseDragRelease()
 		m_gradient.setVector( last() );
 	}
 
+	m_state = normal;
+
 	VStrokeFillPreview* preview = view()->strokeFillPreview();
 	if( ! preview )
 		return;
@@ -405,6 +419,7 @@ VGradientTool::cancel()
 	// Erase old object:
 	if( isDragging() )
 		draw();
+	m_state = normal;
 }
 
 bool
