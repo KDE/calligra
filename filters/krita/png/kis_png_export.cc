@@ -70,7 +70,6 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QCString& from, const QCS
     int compression = wdg->compressionLevel->value();
     
     delete kdb;
-    // XXX: Add dialog about flattening layers here
 
     KisDoc *output = dynamic_cast<KisDoc*>(m_chain->inputDocument());
     QString filename = m_chain->outputFile();
@@ -83,29 +82,17 @@ KoFilter::ConversionStatus KisPNGExport::convert(const QCString& from, const QCS
 
     KURL url(filename);
 
-    KisImageSP img = new KisImage(*output->currentImage());
-    Q_CHECK_PTR(img);
-
-    // Don't store this information in the document's undo adapter
-    bool undo = output->undoAdapter()->undo();
-    output->undoAdapter()->setUndo(false);
+    KisImageSP img = output->currentImage();
 
     KisPNGConverter kpc(output, output->undoAdapter());
-
-    img->flatten();
-
-    KisPaintLayerSP dst = dynamic_cast<KisPaintLayer*>(img->activeLayer().data());
-    if(dst == 0)
-    {
-        return KoFilter::InternalError;
-    }
-    
-    output->undoAdapter()->setUndo(undo);
 
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
-    if ( (res = kpc.buildFile(url, dst, beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
+
+    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, img->projection());
+    
+    if ( (res = kpc.buildFile(url, l, beginIt, endIt, compression, interlace, alpha)) == KisImageBuilder_RESULT_OK) {
         kdDebug(41008) << "success !" << endl;
         return KoFilter::OK;
     }

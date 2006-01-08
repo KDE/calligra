@@ -59,29 +59,15 @@ KoFilter::ConversionStatus MagickExport::convert(const QCString& from, const QCS
 
     KURL url(filename);
 
-    KisPaintLayerSP dst;
-
-    KisImageSP img = new KisImage(*output->currentImage());
-    Q_CHECK_PTR(img);
-
-    // Don't store this information in the document's undo adapter
-    bool undo = output->undoAdapter()->undo();
-    output->undoAdapter()->setUndo(false);
+    KisImageSP img = output->currentImage();
 
     KisImageMagickConverter ib(output, output->undoAdapter());
-    img->flatten();
 
-    dst = dynamic_cast<KisPaintLayer*>(img->activeLayer().data());
-
-    Q_ASSERT(dst);
-
-    if (dst == 0) return KoFilter::InternalError;
-
-    output->undoAdapter()->setUndo(undo);
-
+    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, img->projection());
+    
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
-    if (ib.buildFile(url, dst, beginIt, endIt) == KisImageBuilder_RESULT_OK) {
+    if (ib.buildFile(url, l, beginIt, endIt) == KisImageBuilder_RESULT_OK) {
         return KoFilter::OK;
     }
     return KoFilter::InternalError;

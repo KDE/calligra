@@ -82,28 +82,17 @@ KoFilter::ConversionStatus KisJPEGExport::convert(const QCString& from, const QC
 
     KURL url(filename);
 
-    KisLayerSP dst;
-
-    KisImageSP img = new KisImage(*output->currentImage());
+    KisImageSP img = output->currentImage();
     Q_CHECK_PTR(img);
-
-    // Don't store this information in the document's undo adapter
-    bool undo = output->undoAdapter()->undo();
-    output->undoAdapter()->setUndo(false);
 
     KisJPEGConverter kpc(output, output->undoAdapter());
 
-    img->flatten();
-
-    dst = img->activeLayer();
-    Q_ASSERT(dst);
-    
-    output->undoAdapter()->setUndo(undo);
+    KisPaintLayerSP l = new KisPaintLayer(img, "projection", OPACITY_OPAQUE, img->projection());
 
     vKisAnnotationSP_it beginIt = img->beginAnnotations();
     vKisAnnotationSP_it endIt = img->endAnnotations();
     KisImageBuilder_Result res;
-    if ( (res = kpc.buildFile(url, (KisPaintLayer*)dst.data(), beginIt, endIt, options)) == KisImageBuilder_RESULT_OK) {
+    if ( (res = kpc.buildFile(url, l, beginIt, endIt, options)) == KisImageBuilder_RESULT_OK) {
         kdDebug(41008) << "success !" << endl;
         return KoFilter::OK;
     }
