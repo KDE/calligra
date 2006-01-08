@@ -29,11 +29,41 @@
 #include <ktoolbar.h>
 #include <kiconloader.h>
 #include <kfiledialog.h>
+#include <kapplication.h>
+#include <kdeversion.h>
+
+#if KDE_IS_VERSION(3, 4, 0)
+  // The KNewStuffSecure we use internaly for the GetHotNewStuff-functionality
+  // was introduced with KDE 3.4.
+  #define KROSS_SUPPORT_NEWSTUFF
+#endif
+
+#ifdef KROSS_SUPPORT_NEWSTUFF
+  #include <knewstuff/provider.h>
+  #include <knewstuff/engine.h>
+  #include <knewstuff/downloaddialog.h>
+  #include <knewstuff/knewstuffsecure.h>
+#endif
 
 #include "scriptguiclient.h"
 #include "scriptaction.h"
 
 namespace Kross { namespace Api {
+
+#ifdef KROSS_SUPPORT_NEWSTUFF
+class ScriptNewStuff : public KNewStuffSecure
+{
+        //Q_OBJECT
+    public:
+        ScriptNewStuff(ScriptGUIClient* scripguiclient, const QString& type, QWidget *parentWidget = 0)
+            : KNewStuffSecure(type, parentWidget)
+            , m_scripguiclient(scripguiclient) {}
+        virtual ~ScriptNewStuff() {}
+    private:
+        ScriptGUIClient* m_scripguiclient;
+        virtual void installResource() { m_scripguiclient->installScriptPackage( m_tarName ); }
+};
+#endif
 
 class ListItem : public QListViewItem
 {
@@ -56,7 +86,10 @@ class WdgScriptsManagerPrivate
 {
     friend class WdgScriptsManager;
     ScriptGUIClient* m_scripguiclient;
-    enum { LoadBtn = 0, InstallBtn, UninstallBtn, ExecBtn, RemoveBtn };
+#ifdef KROSS_SUPPORT_NEWSTUFF
+    ScriptNewStuff* newstuff;
+#endif
+    enum { LoadBtn = 0, InstallBtn, UninstallBtn, ExecBtn, RemoveBtn, NewStuffBtn };
 };
 
 WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, const char* name, WFlags fl )
@@ -64,6 +97,9 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     , d(new WdgScriptsManagerPrivate)
 {
     d->m_scripguiclient = scr;
+#ifdef KROSS_SUPPORT_NEWSTUFF
+    d->newstuff = 0;
+#endif
 
     scriptsList->header()->hide();
     //scriptsList->header()->setClickEnabled(false);
@@ -95,6 +131,11 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
 
     toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::RemoveBtn, false, i18n("Remove"));
     toolBar->addConnection(WdgScriptsManagerPrivate::RemoveBtn, SIGNAL(clicked()), this, SLOT(slotRemoveScript()));
+
+#ifdef KROSS_SUPPORT_NEWSTUFF
+    toolBar->insertButton("knewstuff", WdgScriptsManagerPrivate::NewStuffBtn, true, i18n("Get More Scripts"));
+    toolBar->addConnection(WdgScriptsManagerPrivate::NewStuffBtn, SIGNAL(clicked()), this, SLOT(slotGetNewScript()));
+#endif
 
     connect(scr, SIGNAL( collectionChanged(ScriptActionCollection*) ),
             this, SLOT( fillScriptsList() ));
@@ -171,7 +212,7 @@ void WdgScriptsManager::slotInstallScript()
 {
     KFileDialog* filedialog = new KFileDialog(
         QString::null, // startdir
-        "*.tar.gz *.bz2", // filter
+        "*.tar.gz *.tgz *.bz2", // filter
         this, // parent widget
         "WdgScriptsManagerInstallFileDialog", // name
         true // modal
@@ -233,6 +274,31 @@ void WdgScriptsManager::slotRemoveScript()
         item->collection()->detach( item->action() );
         fillScriptsList();
     }
+}
+
+void WdgScriptsManager::slotGetNewScript()
+{
+#ifdef KROSS_SUPPORT_NEWSTUFF
+    const QString appname = KApplication::kApplication()->name();
+    const QString type = QString("%1/script").arg(appname);
+
+    if(! d->newstuff) {
+        d->newstuff = new ScriptNewStuff(d->m_scripguiclient, type, this);
+        //connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotResourceInstalled()));
+    }
+
+    KNS::Engine *engine = new KNS::Engine(d->newstuff, type, this);
+    KNS::DownloadDialog *d = new KNS::DownloadDialog( engine, this );
+    d->setType(type);
+
+    KNS::ProviderLoader *p = new KNS::ProviderLoader(this);
+    QObject::connect(p, SIGNAL(providersLoaded(Provider::List*)),
+                     d, SLOT(slotProviders(Provider::List*)));
+
+    ///@todo make it more generic for any kind of url ...
+    p->load(type, QString("http://download.kde.org/khotnewstuff/%1scripts-providers.xml").arg(appname));
+    d->exec();
+#endif
 }
 
 }}
