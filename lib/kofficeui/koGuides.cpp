@@ -79,6 +79,7 @@ KoGuides::KoGuides( KoView *view, KoZoomHandler *zoomHandler )
 , m_zoomHandler( zoomHandler )
 {
     m_popup = new Popup( this );
+    m_mouseSelected = false;
 }
 
 
