@@ -216,8 +216,8 @@ public:
     void setValue( const Value& value );
     /** Like setValue, but also sets formatting and input text. Can therefore
     be used as a replacement for setCellText, if we don't need to parse. */
-    void setCellValue (const Value &v, FormatType fmtType,
-	const QString &txt = QString::null);
+    void setCellValue (const Value &v, FormatType fmtType = No_format,
+  const QString &txt = QString::null);
 
     Cell* previousCell() const;
     Cell* nextCell() const;

@@ -703,7 +703,7 @@ void Cell::mergeCells( int _col, int _row, int _x, int _y )
   for ( int x = _col; x <= _col + _x; ++x ) {
     for ( int y = _row; y <= _row + _y; ++y ) {
       if ( x != _col || y != _row )
-	format()->sheet()->nonDefaultCell( x, y )->obscure( this, true );
+  format()->sheet()->nonDefaultCell( x, y )->obscure( this, true );
     }
   }
 
@@ -5571,7 +5571,7 @@ bool Cell::loadOasis( const QDomElement &element, const KoOasisStyles& oasisStyl
         QString valuetype = element.attributeNS( KoXmlNS::office, "value-type", QString::null );
         if( valuetype == "boolean" )
         {
-            QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString::null );
+          QString val = element.attributeNS( KoXmlNS::office, "boolean-value", QString::null ).lower();
             if( ( val == "true" ) || ( val == "false" ) )
             {
                 bool value = val == "true";
@@ -6309,9 +6309,9 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
         if( dataType == "Bool" )
         {
           if ( t == "false" )
-            setValue( true );
+            setCellValue( false );
           else if ( t == "true" )
-            setValue( false );
+            setCellValue( true );
           else
             clear = false;
         }
@@ -6320,7 +6320,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
           bool ok = false;
           double dd = t.toDouble( &ok );
           if ( ok )
-            setValue ( dd );
+            setCellValue ( dd );
           else
             clear = false;
         }
@@ -6329,7 +6329,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
           bool ok = false;
           double dd = t.toDouble( &ok );
           if ( ok )
-            setValue ( dd );
+            setCellValue ( dd );
           else
           {
             int pos   = t.find( '/' );
@@ -6339,7 +6339,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
             int day   = t.right( t.length() - pos1 - 1 ).toInt();
             QDate date( year, month, day );
             if ( date.isValid() )
-              setValue( date );
+              setCellValue( date );
             else
               clear = false;
           }
@@ -6349,7 +6349,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
           bool ok = false;
           double dd = t.toDouble( &ok );
           if ( ok )
-            setValue( dd );
+            setCellValue( dd );
           else
           {
             int hours   = -1;
@@ -6363,14 +6363,14 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
             second  = t.right( t.length() - pos1 - 1 ).toInt();
             QTime time( hours, minutes, second );
             if ( time.isValid() )
-              setValue( time );
+              setCellValue( time );
             else
               clear = false;
           }
         }
         else
         {
-          setValue( t );
+          setCellValue( t );
         }
 
         if ( clear )
@@ -6484,12 +6484,8 @@ bool Cell::loadCellData(const QDomElement & text, Paste::Operation op )
       // boolean ?
       if( dataType == "Bool" )
       {
-        if ( t == "false" )
-          setValue( true );
-        else if ( t == "true" )
-          setValue( false );
-        else
-          kdWarning() << "Cell with BoolData, should be true or false: " << t << endl;
+        bool val = (t.lower() == "true");
+        setCellValue (val);
       }
 
       // number ?
