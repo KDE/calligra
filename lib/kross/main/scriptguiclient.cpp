@@ -221,6 +221,7 @@ void ScriptGUIClient::successfullyExecuted()
 {
     const ScriptAction* action = dynamic_cast< const ScriptAction* >( QObject::sender() );
     if(action) {
+        emit executionFinished(action);
         ScriptActionCollection* executedcollection = d->collections["executedscripts"];
         if(executedcollection) {
             ScriptAction* actionptr = const_cast< ScriptAction* >( action );
@@ -234,6 +235,9 @@ void ScriptGUIClient::successfullyExecuted()
 
 void ScriptGUIClient::executionFailed(const QString& errormessage, const QString& tracedetails)
 {
+    const ScriptAction* action = dynamic_cast< const ScriptAction* >( QObject::sender() );
+    if(action)
+        emit executionFinished(action);
     if(tracedetails.isEmpty())
         KMessageBox::error(0, errormessage);
     else
@@ -303,7 +307,6 @@ bool ScriptGUIClient::executeScriptAction(ScriptAction::Ptr action)
             this, SLOT( executionFailed(const QString&, const QString&) ));
     connect(action.data(), SIGNAL( success() ),
             this, SLOT( successfullyExecuted() ));
-
     action->activate();
     bool ok = action->hadException();
     action->finalize(); // execution is done.

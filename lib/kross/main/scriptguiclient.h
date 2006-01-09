@@ -190,7 +190,8 @@ namespace Kross { namespace Api {
 
         signals:
             void collectionChanged(ScriptActionCollection*);
-
+            /// This signal is emited when the execution of a script is finished
+            void executionFinished(const Kross::Api::ScriptAction* );
         private:
             /// Internaly used private d-pointer.
             ScriptGUIClientPrivate* d;
