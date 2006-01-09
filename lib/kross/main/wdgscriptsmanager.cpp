@@ -245,7 +245,7 @@ void WdgScriptsManager::slotUninstallScript()
         return;
 
     if( KMessageBox::warningContinueCancel(0,
-        i18n("Uninstall the scriptpackage \"%1\" and delete the package's directory \"%2\"?")
+        i18n("Uninstall the script package \"%1\" and delete the package's folder \"%2\"?")
             .arg(item->action()->text()).arg(packagepath),
         i18n("Uninstall")) != KMessageBox::Continue )
     {

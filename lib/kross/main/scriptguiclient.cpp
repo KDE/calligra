@@ -153,12 +153,12 @@ bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
 
     if( QDir(destination).exists() ) {
         if( KMessageBox::warningContinueCancel(0,
-            i18n("There exists already a scriptpackage with the name \"%1\". Replace those package?" ).arg(packagename),
+            i18n("A script package with the name \"%1\" already exists. Replace this package?" ).arg(packagename),
             i18n("Replace")) != KMessageBox::Continue )
                 return false;
 
         if(! KIO::NetAccess::del(destination, 0) ) {
-            KMessageBox::sorry(0, i18n("Could not uninstall this scriptpacke. You may not have sufficient permissions to delete the folder \"%1\".").arg(destination));
+            KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".").arg(destination));
             return false;
         }
     }
@@ -173,7 +173,7 @@ bool ScriptGUIClient::installScriptPackage(const QString& scriptpackagefile)
 bool ScriptGUIClient::uninstallScriptPackage(const QString& scriptpackagepath)
 {
     if(! KIO::NetAccess::del(scriptpackagepath, 0) ) {
-        KMessageBox::sorry(0, i18n("Could not uninstall this scriptpacke. You may not have sufficient permissions to delete the folder \"%1\".").arg(scriptpackagepath));
+        KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".").arg(scriptpackagepath));
         return false;
     }
     return true;
