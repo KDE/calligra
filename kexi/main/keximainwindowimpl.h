@@ -214,7 +214,7 @@ class KEXIMAIN_EXPORT KexiMainWindowImpl : public KexiMainWindow, public KexiGUI
 		 \return false if \a fileNameForConnectionData is not empty but there is no such
 		 connection in Kexi::connset() for this filename. 
 		 \a fileNameForConnectionData can be empty. */
-		tristate KexiMainWindowImpl::openProject(const QString& aFileName, 
+		tristate openProject(const QString& aFileName, 
 			const QString& fileNameForConnectionData, const QString& dbName = QString::null);
 
 		/*! Closes current project, \return true on success.

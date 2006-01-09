@@ -76,8 +76,8 @@ public:
    * Return the separator position in percent (%), so the range is [0..100]
    * @return separator position in percent
    */
-  inline int separatorPosInPercent() 
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,89)
+  int separatorPosInPercent() 
+#if KDE_IS_VERSION(3,4,89)
 	;
 #else
 	{
@@ -89,8 +89,8 @@ public:
    * Set the separator position in percent (%), so the range must be [0..100]
    * @param percent separator position in percent
    */
-  inline void setSeparatorPosInPercent(int percent)
-#if KDE_VERSION >= KDE_MAKE_VERSION(3,4,89)
+  void setSeparatorPosInPercent(int percent)
+#if KDE_IS_VERSION(3,4,89)
 	;
 #else
 	{
