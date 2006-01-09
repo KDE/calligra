@@ -43,8 +43,11 @@ Value func_filename (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_info (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_isblank (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_isdate (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_iserr (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_iserror (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_iseven (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_islogical (valVector args, ValueCalc *calc, FuncExtra *);
+Value func_isna (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_isnottext (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_isnum (valVector args, ValueCalc *calc, FuncExtra *);
 Value func_isodd (valVector args, ValueCalc *calc, FuncExtra *);
@@ -70,9 +73,15 @@ void RegisterInformationFunctions()
   repo->add (f);
   f = new Function ("ISDATE", func_isdate);
   repo->add (f);
+  f = new Function ("ISERR", func_iserr);
+  repo->add (f);
+  f = new Function ("ISERROR", func_iserror);
+  repo->add (f);
   f = new Function ("ISEVEN", func_iseven);
   repo->add (f);
   f = new Function ("ISLOGICAL", func_islogical);
+  repo->add (f);
+  f = new Function ("ISNA", func_isna);
   repo->add (f);
   f = new Function ("ISNONTEXT", func_isnottext);
   repo->add (f);
@@ -222,6 +231,26 @@ Value func_isodd (valVector args, ValueCalc *calc, FuncExtra *)
 Value func_iseven (valVector args, ValueCalc *calc, FuncExtra *)
 {
   return Value (calc->isEven(args[0]));
+}
+
+// Function: ISERR
+Value func_iserr (valVector args, ValueCalc *, FuncExtra *)
+{
+  return (args[0].isError() &&
+      (args[0].errorMessage() != Value::errorNA().errorMessage()));
+}
+
+// Function: ISERROR
+Value func_iserror (valVector args, ValueCalc *, FuncExtra *)
+{
+  return args[0].isError();
+}
+
+// Function: ISNA
+Value func_isna (valVector args, ValueCalc *, FuncExtra *)
+{
+  return (args[0].isError() &&
+      (args[0].errorMessage() == Value::errorNA().errorMessage()));
 }
 
 // Function: TYPE

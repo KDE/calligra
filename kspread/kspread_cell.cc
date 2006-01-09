@@ -6270,6 +6270,8 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
     // The real content of the cell is loaded here. It is stored in
     // the "text" tag, which contains either a text or a CDATA section.
     //
+    // TODO: make this suck less. We set data twice, in loadCellData, and
+    // also here. Not good.
     QDomElement text = cell.namedItem( "text" ).toElement();
 
     if ( !text.isNull() &&
@@ -6284,8 +6286,10 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
       QDomElement result = cell.namedItem( "result" ).toElement();
       QString txt = text.text();
       if ((pm == Paste::Result) && (txt[0] == '='))
-          // paste text of the element, if we want to paste result
-          // and the source cell contains a formula
+        // paste text of the element, if we want to paste result
+        // and the source cell contains a formula
+        // note that we mustn't use setCellValue after this, or else we lose
+        // all the formulas ...
           d->strText = result.text();
       else
           //otherwise copy everything
@@ -6310,9 +6314,9 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
         if( dataType == "Bool" )
         {
           if ( t == "false" )
-            setCellValue( false );
+            setValue( false );
           else if ( t == "true" )
-            setCellValue( true );
+            setValue( true );
           else
             clear = false;
         }
@@ -6321,7 +6325,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
           bool ok = false;
           double dd = t.toDouble( &ok );
           if ( ok )
-            setCellValue ( dd );
+            setValue ( dd );
           else
             clear = false;
         }
@@ -6330,7 +6334,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
           bool ok = false;
           double dd = t.toDouble( &ok );
           if ( ok )
-            setCellValue ( dd );
+            setValue ( dd );
           else
           {
             int pos   = t.find( '/' );
@@ -6340,7 +6344,7 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
             int day   = t.right( t.length() - pos1 - 1 ).toInt();
             QDate date( year, month, day );
             if ( date.isValid() )
-              setCellValue( date );
+              setValue( date );
             else
               clear = false;
           }
@@ -6364,14 +6368,14 @@ bool Cell::load( const QDomElement & cell, int _xshift, int _yshift,
             second  = t.right( t.length() - pos1 - 1 ).toInt();
             QTime time( hours, minutes, second );
             if ( time.isValid() )
-              setCellValue( time );
+              setValue( time );
             else
               clear = false;
           }
         }
         else
         {
-          setCellValue( t );
+          setValue( t );
         }
 
         if ( clear )

@@ -216,6 +216,57 @@
       </Help>
     </Function>
 
+    <Function>
+      <Name>ISERR</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISERR() function returns True if its parameter is an error other than N/A. Otherwise, it returns False. Use ISERROR() if you want to include the N/A error as well.</Text>
+	<Syntax>ISERR(x)</Syntax>
+        <Related>ISERROR</Related>
+        <Related>ISNA</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISERROR</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISERROR() function returns True if its parameter is an error of any type. Otherwise, it returns False.</Text>
+	<Syntax>ISERROR(x)</Syntax>
+        <Related>ISERR</Related>
+        <Related>ISNA</Related>
+      </Help>
+    </Function>
+
+    <Function>
+      <Name>ISNA</Name>
+      <Type>Boolean</Type>
+      <Parameter>
+	<Comment>Any value</Comment>
+	<Type>Any</Type>
+      </Parameter>
+      <Help>
+	<Text>The ISNA() function returns True if its parameter is a N/A error. In all other cases, it returns False.</Text>
+	<Syntax>ISNA(x)</Syntax>
+        <Related>ISERR</Related>
+        <Related>ISERROR</Related>
+      </Help>
+    </Function>
+
+   <Function>
+      <Name>TYPE</Name>
+      <Type>Int</Type>
+   <Function>
+      <Name>TYPE</Name>
+      <Type>Int</Type>
    <Function>
       <Name>TYPE</Name>
       <Type>Int</Type>
