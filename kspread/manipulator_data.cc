@@ -106,8 +106,8 @@ bool AbstractDataManipulator::preProcessing ()
 }
 
 DataManipulator::DataManipulator ()
-  : m_parsing (false),
-  m_format (No_format)
+  : m_format (No_format),
+  m_parsing (false)
 {
   // default name for DataManipulator, can be changed using setName
   m_name = i18n ("Change value");

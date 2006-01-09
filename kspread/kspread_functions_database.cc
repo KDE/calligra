@@ -21,12 +21,6 @@
 
 // built-in database functions
 
-/*
-All database functions are temporarily disabled - we need to change the
-function parser to that it gives up range information. We also need a working
-flattening support.
-*/
-
 #include "functions.h"
 #include "valuecalc.h"
 #include "valueconverter.h"
@@ -120,7 +114,7 @@ int getFieldIndex (ValueCalc *calc, Value fieldName,
   int cols = database.columns ();
   for (int i = 0; i < cols; ++i)
     if (fn.lower() ==
-        calc->conv()->asString (database.element (i, 0)).asString())
+        calc->conv()->asString (database.element (i, 0)).asString().lower())
     return i;
   return -1;
 }
@@ -173,11 +167,11 @@ void DBConditions::parse (Value conds)
   {
     // first row contains column names
     int col = getFieldIndex (calc, conds.element (c, 0), db);
-    if (col <= 0) continue;  // failed - ignore the column
+    if (col < 0) continue;  // failed - ignore the column
 
     // fill in the conditions for a given column name
     for (int r = 0; r < rows; ++r) {
-      QString cnd = calc->conv()->asString (conds.element (c, r+1)).asString();
+      Value cnd = conds.element (c, r+1);
       if (cnd.isEmpty()) continue;
       int idx = r * cols + col;
       if (cond[idx]) delete cond[idx];
@@ -223,7 +217,7 @@ Value func_dsum (valVector args, ValueCalc *calc, FuncExtra *)
   Value database = args[0];
   Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
-  if (fieldIndex <= 0)
+  if (fieldIndex < 0)
     return Value::errorVALUE();
 
   DBConditions conds (calc, database, conditions);
@@ -247,7 +241,7 @@ Value func_daverage (valVector args, ValueCalc *calc, FuncExtra *)
   Value database = args[0];
   Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
-  if (fieldIndex <= 0)
+  if (fieldIndex < 0)
     return Value::errorVALUE();
 
   DBConditions conds (calc, database, conditions);
@@ -274,7 +268,7 @@ Value func_dcount (valVector args, ValueCalc *calc, FuncExtra *)
   Value database = args[0];
   Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
-  if (fieldIndex <= 0)
+  if (fieldIndex < 0)
     return Value::errorVALUE();
 
   DBConditions conds (calc, database, conditions);
@@ -298,7 +292,7 @@ Value func_dcounta (valVector args, ValueCalc *calc, FuncExtra *)
   Value database = args[0];
   Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
-  if (fieldIndex <= 0)
+  if (fieldIndex < 0)
     return Value::errorVALUE();
 
   DBConditions conds (calc, database, conditions);
@@ -322,7 +316,7 @@ Value func_dget (valVector args, ValueCalc *calc, FuncExtra *)
   Value database = args[0];
   Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
-  if (fieldIndex <= 0)
+  if (fieldIndex < 0)
     return Value::errorVALUE();
 
   DBConditions conds (calc, database, conditions);
@@ -344,7 +338,7 @@ Value func_dmax (valVector args, ValueCalc *calc, FuncExtra *)
   Value database = args[0];
   Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
-  if (fieldIndex <= 0)
+  if (fieldIndex < 0)
     return Value::errorVALUE();
 
   DBConditions conds (calc, database, conditions);
@@ -376,7 +370,7 @@ Value func_dmin (valVector args, ValueCalc *calc, FuncExtra *)
   Value database = args[0];
   Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
-  if (fieldIndex <= 0)
+  if (fieldIndex < 0)
     return Value::errorVALUE();
 
   DBConditions conds (calc, database, conditions);
@@ -408,7 +402,7 @@ Value func_dproduct (valVector args, ValueCalc *calc, FuncExtra *)
   Value database = args[0];
   Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
-  if (fieldIndex <= 0)
+  if (fieldIndex < 0)
     return Value::errorVALUE();
 
   DBConditions conds (calc, database, conditions);
@@ -450,7 +444,7 @@ Value func_dvar (valVector args, ValueCalc *calc, FuncExtra *)
   Value database = args[0];
   Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
-  if (fieldIndex <= 0)
+  if (fieldIndex < 0)
     return Value::errorVALUE();
 
   DBConditions conds (calc, database, conditions);
@@ -489,7 +483,7 @@ Value func_dvarp (valVector args, ValueCalc *calc, FuncExtra *)
   Value database = args[0];
   Value conditions = args[2];
   int fieldIndex = getFieldIndex (calc, args[1], database);
-  if (fieldIndex <= 0)
+  if (fieldIndex < 0)
     return Value::errorVALUE();
 
   DBConditions conds (calc, database, conditions);
@@ -528,7 +522,7 @@ Value func_getpivotdata (valVector args, ValueCalc *calc, FuncExtra *)
 {
   Value database = args[0];
   int fieldIndex = getFieldIndex (calc, args[1], database);
-  if (fieldIndex <= 0)
+  if (fieldIndex < 0)
     return Value::errorVALUE();
   // the row at the bottom
   int row = database.rows() - 1;

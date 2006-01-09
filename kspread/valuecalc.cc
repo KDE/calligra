@@ -250,7 +250,23 @@ Value ValueCalc::mod (const Value &a, const Value &b)
   if (bb == 0.0)
     return Value::errorDIV0();
   else
-    res = Value (fmod (aa, bb));
+  {
+    double m = fmod (aa, bb);
+    // the following adjustments are needed by OpenFormula:
+    // can't simply use fixed increases/decreases, because the implementation
+    // of fmod may differ on various platforms, and we should always return
+    // the same results ...
+    if ((bb > 0) && (aa < 0))  // result must be positive here
+      while (m < 0) m += bb;
+    if (bb < 0)  // result must be negative here, but not lower than bb
+    {
+      // bb is negative, hence the following two are correct
+      while (m < bb) m -= bb;  // same as m+=fabs(bb)
+      while (m > 0) m += bb;   // same as m-=fabs(bb)
+    }
+
+    res = Value (m);
+  }
 
   if (a.isNumber() || a.isEmpty())
     res.setFormat (format (a.format(), b.format()));
@@ -1810,8 +1826,18 @@ Value::Format ValueCalc::format (Value::Format a,
 
 // ------------------------------------------------------
 
-void ValueCalc::getCond (Condition &cond, QString text)
+void ValueCalc::getCond (Condition &cond, Value val)
 {
+  // not a string - we simply take it as a numeric value
+  // that also handles floats, logical values, date/time and such
+  if (!val.isString()) {
+    cond.comp = isEqual;
+    cond.type = numeric;
+    cond.value = converter->asFloat (val).asFloat();
+    kdDebug() << "Numeric: " << cond.value << ", Op: " << cond.comp << endl;
+    return;
+  }
+  QString text = converter->asString (val).asString();
   cond.comp = isEqual;
   text = text.stripWhiteSpace();
 

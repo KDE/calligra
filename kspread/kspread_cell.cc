@@ -67,6 +67,7 @@
 #include "kspread_value.h"
 #include "formula.h"
 #include "selection.h"
+#include "valueconverter.h"
 #include "valueformatter.h"
 #include "valueparser.h"
 
@@ -514,7 +515,7 @@ void Cell::setCellValue (const Value &v, FormatType fmtType, const QString &txt)
   if (!txt.isEmpty())
     d->strText = txt;
   else
-    d->strText = v.asString();
+    d->strText = sheet()->doc()->converter()->asString (v).asString();
   if (fmtType != No_format)
     format()->setFormatType (fmtType);
   setValue (v);

@@ -247,7 +247,7 @@ class ValueCalc {
     This method parses the condition in string text to the condition cond.
     It sets the condition's type and value.
   */
-  void getCond (Condition &cond, QString text);
+  void getCond (Condition &cond, Value val);
   
   /**  
     Returns true if value d matches the condition cond, built with getCond().
