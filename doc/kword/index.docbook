@@ -441,12 +441,12 @@ there are many possible authors (employees) and hundreds (or thousands) of docum
 information (email address, telephone numbers and physical address).</para>
 <tip><para>Every value entered in this dialog can be inserted as a
 <link linkend="variables">document variables</link>.</para></tip>
-<para>At the bottom of the dialog is a button labeled <guibutton>Load from Address Book</guibutton>. Clicking 
+<para>At the bottom of the dialog is a button labeled <guibutton>Load From Address Book</guibutton>. Clicking 
 on this button will automatically insert your information contained in the &kde; address book into this &kword; document information dialog.</para>
 <note><para>You must inform the &kde; address book which entry corresponds to your information.  </para>
 <para>To do this, open the &kde; address book, select the entry that contains your name and address.  Now select <menuchoice>
 <guimenu>Edit</guimenu><guimenuitem>Set as Personal Contact Data</guimenuitem></menuchoice>from the menubar in the &kde; address book. This only needs to be performed once.</para>
-<para>&kword; will now insert the entered information when the <guibutton>Load from Address Book</guibutton> button is clicked.</para></note>
+<para>&kword; will now insert the entered information when the <guibutton>Load From Address Book</guibutton> button is clicked.</para></note>
 <para>The second tab is labeled <guilabel>Document</guilabel>. Enter a document title, subject lines, keywords and an abstract. </para>
 <tip><para>Both the document title and the abstract can be accessed through
 <link linkend="variables">document variables</link>.</para></tip>
@@ -509,10 +509,10 @@ the desired document title.</para></listitem>
 <listitem><para>Click on the <guibutton>OK</guibutton> button.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Page Layout...</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
-<listitem><para>Click on the <guilabel>Header and Footer</guilabel> tab.</para></listitem>
+<listitem><para>Click on the <guilabel>Header &amp; Footer</guilabel> tab.</para></listitem>
 <listitem><para>Select <guilabel>Different header for even and odd pages</guilabel>.</para></listitem>
 <listitem><para>Then click <guibutton>OK</guibutton>.</para></listitem>
-<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Show Header</guimenuitem></menuchoice>
+<listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Enable/Disable Document Headers</guimenuitem></menuchoice>
 from the menubar.</para></listitem>
 <listitem><para>Move to an odd numbered page in your document, and click in the header box.</para></listitem>
 <listitem><para>Select <menuchoice><guimenu>Format</guimenu><guimenuitem>Paragraph</guimenuitem></menuchoice>
@@ -1456,7 +1456,7 @@ filenames.  By applying a file mask, &kword; will only show you the
 files which are not filtered out by the mask. (That is to say &kword;
 only shows the files that fit through the strainer).  This can be
 helpful if you have many files from many different applications. The
-file mask is incorporated in the <guilabel>File Type</guilabel> line of
+file mask is incorporated in the <guilabel>Filter:</guilabel> line of
 the save and load dialog boxes.</para>
 <para>As an example. If you use a file mask for &kword; files, the file
 mask will try to filter out all files that are not for

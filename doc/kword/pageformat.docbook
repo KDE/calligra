@@ -36,13 +36,12 @@ the size and shape of the main frame by setting the paper size and the margins. 
 from the menubar.</para>
 
 <tip>
-<para>You can also go straight to the <guimenuitem>Format
-Page</guimenuitem> options by selecting the main frame of the document and then double clicking on either of the
+<para>You can also go straight to the <guimenuitem>
+Page Layout</guimenuitem> options by selecting the main frame of the document and then double clicking on either of the
 rulers.</para>
 </tip>
 
-<para>A dialog box will appear with three tabs, labeled <guilabel>Page Size &amp; Margins</guilabel>, <guilabel>Columns</guilabel> and <guilabel>Header
-and Footer</guilabel>.</para>
+<para>A dialog box will appear with three tabs, labeled <guilabel>Page Size &amp; Margins</guilabel>, <guilabel>Columns</guilabel> and <guilabel>Header &amp; and Footer</guilabel>.</para>
 
 <para>The <guilabel>Page Size &amp; Margins</guilabel> tab is for altering
 the paper size, and changing the margins.</para>
@@ -141,7 +140,7 @@ are always on the outside of the page, or to list the title of the
 document on odd pages and the chapter number on the even pages.</para></tip>
 
 <para>In the spin box labeled <guilabel>Spacing between header and
-body</guilabel>, you can specify how much empty space should be placed
+body:</guilabel>, you can specify how much empty space should be placed
 between the bottom of the header, and the top of the main frame.</para>
 
 <para><emphasis>Footers</emphasis></para>
@@ -157,10 +156,12 @@ the even pages will use one footer, the odd
 pages use another footer.  </para>
 
 <para>In the spin box labeled <guilabel>Spacing between footer and
-body</guilabel>, you can specify how much empty space should be placed
+body:</guilabel>, you can specify how much empty space should be placed
 between the top of the footer, and the bottom of the main frame.</para>
 
-<para>The bottom spin box is labeled <guilabel>Spacing between footnote and body</guilabel>.  As the label
+<para><emphasis>Footnote/Endnote</emphasis></para>
+
+<para>The bottom spin box is labeled <guilabel>Spacing between footnote and body:</guilabel>.  As the label
 suggests, you can use this text
 box to specify the distance between the bottom edge of the main frame, and the top edge of the footnotes.  For more information on
 footnotes, see the section entitled <link linkend="endnotes-and-footnotes">footnotes</link>. </para>
@@ -186,8 +187,8 @@ size and shape of all the frames individually. </para>
 from the menubar.</para>
 
 <tip>
-<para>You can also go straight to the <guimenuitem>Format
-Page</guimenuitem> options by double clicking on either of the
+<para>You can also go straight to the <guimenuitem>Page 
+Layout</guimenuitem> options by double clicking on either of the
 rulers.</para>
 </tip>
 

@@ -113,7 +113,7 @@ inches tall. </para>
 </varlistentry>
 </variablelist>
 
-<para>The combo box labeled <guilabel>Cell Widths:</guilabel>, can be
+<para>The combo box labeled <guilabel>Cell widths:</guilabel>, can be
 set to either of two options.</para>
 
 <variablelist>
@@ -624,7 +624,7 @@ the currently selected table style is <emphasis>Header 1</emphasis>.)</para>
 <para>In the section labeled <guilabel>Adjust</guilabel> is a combo box labeled <guilabel>Framestyle</guilabel> which is used to select the desired frame style.
 If you want to add or alter a frame style, click the <guilabel>Change...</guilabel> button, and you will be taken to the
 <link linkend="framestyle-edit">Framestylist</link> to make those changes.</para>
-<para>Below that, is a combo box labeled <guilabel>Textstyle</guilabel> which is used to select the desired text style for this table style.
+<para>Below that, is a combo box labeled <guilabel>Textstyle:</guilabel> which is used to select the desired text style for this table style.
 If you want to add or alter a text style, click on the <guilabel>Change...</guilabel> button, and you will be taken directly to the 
 <link linkend="style-add-dialog">Stylelist</link> to make those changes.</para>
 

@@ -89,10 +89,10 @@ keyboard combination in it.  A second dialog will appear:</para>
 </screenshot>
 
 <para>This dialog box allows you to determine two different key combinations
-which will trigger the desired action:  <guilabel>Primary</guilabel> and <guilabel>Alternate</guilabel>.</para>
+which will trigger the desired action:  <guilabel>Primary shortcut:</guilabel> and <guilabel>Alternate shortcut:</guilabel>.</para>
 
 <sect3 id="custom-keybinding-single"><title>Defining simple keyboard shortcuts</title>
-<para>Begin by deciding if you want to specify the <guilabel>Primary</guilabel> or <guilabel>Alternate</guilabel>
+<para>Begin by deciding if you want to specify the <guilabel>Primary shortcut:</guilabel> or <guilabel>Alternate shortcut:</guilabel>
 shortcut, by placing a mark in the appropriate radiobutton.</para>
 
 <para>The <inlinemediaobject><imageobject><imagedata
@@ -110,7 +110,7 @@ to accept the changes or <guibutton>Cancel</guibutton> to cancel your changes.</
 <para>Multi-key keyboard shortcuts can be used when you run out of simple keyboard shortcuts.  </para>
 
 <para>Multi-key shortcuts are edited the same as simple keyboard shortcuts, except a mark is placed in the
-check box labeled <guilabel>Multi-key</guilabel> <emphasis>prior</emphasis> to entering the keyboard shortcut.</para>
+check box labeled <guilabel>Multi-key mode</guilabel> <emphasis>prior</emphasis> to entering the keyboard shortcut.</para>
 
 <para>You can now enter multiple keyboard characters for the keyboard shortcut.</para>
 
@@ -152,7 +152,7 @@ buttons around on the toolbar using this dialog.</para>
 <title>Adding a button to a toolbar</title>
 
 <para>To add a button to a toolbar, you move it from the
-<guilabel>Available Actions</guilabel> box to the <guilabel>Current
+<guilabel>Available actions:</guilabel> box to the <guilabel>Current
 actions:</guilabel> column.</para>
 
 <para>First select the toolbar you want to add a button to by selecting
@@ -181,7 +181,7 @@ actions:</guilabel> column.</para>
 
 <para>First select the toolbar you want to delete a button from by selecting
 the toolbar from the combo box labeled
-<guilabel>Toolbar</guilabel></para>
+<guilabel>Toolbar:</guilabel></para>
 
 <para>Select the toolbar button you want to remove the button from
 the combo box labeled <guilabel>Current actions:</guilabel>.</para>
@@ -200,7 +200,7 @@ will change.</para>
 
 <para>First select the toolbar you want to move a button on by selecting
 the toolbar from the combo box labeled
-<guilabel>Toolbar</guilabel></para>
+<guilabel>Toolbar:</guilabel></para>
 
 <para>To move a button, simply click on the button you want to move with
 the <mousebutton>left</mousebutton> mouse button.</para>
@@ -239,7 +239,7 @@ the following.</para>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Units</guilabel></term>
+<term><guilabel>Units:</guilabel></term>
 <listitem><para>Select your preferred unit of measurement.  &kword; will use these units for all measurements.  See
 <link linkend="rulers">Using Rulers</link> for more information.</para>
 </listitem>
@@ -300,7 +300,7 @@ format="PNG"/></imageobject></inlinemediaobject>).</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Preview Mode - Number of pages per row:</guilabel></term>
+<term><guilabel>Number of pages per row in preview mode:</guilabel></term>
 <listitem><para>Determines the number of pages per row in preview mode.
 This determines the size of the pages in preview mode.</para></listitem>
 </varlistentry>
@@ -328,7 +328,7 @@ values to their default values.</para>
 <sect3 id="opt-document-defaults"><title>Document defaults</title>
 <variablelist>
 <varlistentry>
-<term><guilabel>Default Column Spacing</guilabel></term>
+<term><guilabel>Default column spacing</guilabel></term>
 <listitem>
 <para>Use this to adjust the default spacing between columns.  For more information on columns see
 <link linkend="columns">Columns</link>.</para>
@@ -336,7 +336,7 @@ values to their default values.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Default font</guilabel></term>
+<term><guilabel>Default font:</guilabel></term>
 <listitem>
 <para>Click on the <guibutton>Choose...</guibutton> button, and a new dialog will appear.  Use this dialog to
 choose the default font.  This setting determines the default font used by &kword; until further formatting is done.  You can
@@ -384,7 +384,7 @@ can adjust the autosave from zero to 60 minutes.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Starting page number</guilabel></term>
+<term><guilabel>Starting page number:</guilabel></term>
 <listitem>
 <para>Use this text box to determine the starting page number.  For more information on page numbering see
 <link linkend="page-number">Page Numbering</link>.</para>
@@ -393,7 +393,7 @@ can adjust the autosave from zero to 60 minutes.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Tab Stop:</guilabel></term>
+<term><guilabel>Tab stop:</guilabel></term>
 <listitem>
 <para>Each &kword; document has a default set of tab stops.  If you add tab stops to your document, the newly added 
 tab stops override the default tabstops.  You can use this text box to define the spacing between default tab stops.</para>
@@ -414,7 +414,7 @@ When there is a mark in this check box, and you click in a protected frame of yo
 mark is removed from this check box, and you click in a protected frame, there is no cursor visible.</para></listitem>
 </varlistentry>
 
-<varlistentry>
+<!-- varlistentry>
 <term><guilabel>Direct insert cursor</guilabel></term>
 <listitem><para>  
 When there is a mark in this check box, and you can select a section of text using your mouse.  Move the mouse to a new place 
@@ -422,7 +422,7 @@ in your document and click once with the middle mouse button and a copy of the s
 in the document.</para>
 <para>When there is no mark in this checkbox, in order to copy text from one section to another, you must select the text, 
 <link linkend="local-copy">manually copy the text in to the clipboard</link>, then manually paste the text in the new location.  </para></listitem>
-</varlistentry>
+</varlistentry -->
 </variablelist>
 
 
@@ -468,7 +468,7 @@ labeled <guibutton>Spelling</guibutton>.</para>
 
 
 <varlistentry>
-<term><guilabel>Skip all UPPERCASE words</guilabel></term>
+<term><guilabel>Skip all uppercase words</guilabel></term>
 <listitem><para>If a mark is placed in this checkbox, &kword; will not check the spelling of any word which consists of all capital letters.</para>
 <tip><para>This is useful if the document you are working on uses a large number of acronyms.  If this box is left unchecked, most of those acronyms 
 will be incorrectly marked.  By placing a mark in this checkbox, &kword; will not mark the acronyms as misspelled.</para></tip></listitem>
@@ -493,7 +493,7 @@ should be ignored by the spelling program.</para>
 
 <sect4><title>Adding a word to the ignore list</title>
 <para>To add a word, type the word in the text box directly below the words <guilabel>Ignore 
-Following Words</guilabel> and click the <guibutton>Add</guibutton> button.</para>
+These Words</guilabel> and click the <guibutton>Add</guibutton> button.</para>
 </sect4>
 
 <sect4><title>Deleteing a word from the ignore list</title>
@@ -550,7 +550,7 @@ values to their default values.</para>
 <variablelist>
 
 <varlistentry>
-<term><guilabel>Undo/Redo limit</guilabel></term>
+<term><guilabel>Undo/redo limit:</guilabel></term>
 <listitem><para>Use this spin box or slider to determine how many actions &kword; keeps in its Undo buffer.  Any action that exceeds 
 this number will be forgotten.</para>
 </listitem>

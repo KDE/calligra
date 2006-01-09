@@ -54,7 +54,7 @@ entry, and place the cursor at the beginning of the entry for you to enter the d
 Type your reference information in the space provided.  </para>
 
 <para>When you have finished entering your footnote or endnote reference information, simply move your cursor over the footnote or endnote 
-number.  Click with the &RMB;.  A submenu will appear.  Select <guilabel>Go to footnote</guilabel> and &kword; will move the cursor back to the text 
+number.  Click with the &RMB;.  A submenu will appear.  Select <guilabel>Go to Footnote</guilabel> and &kword; will move the cursor back to the text 
 where the reference was made.</para>
 </sect2>
 
@@ -87,7 +87,7 @@ cursor to the appropriate footnote reference.</para></listitem>
 <indexterm><primary>footnotes</primary><secondary>change appearance</secondary></indexterm>
 
 <para>To configure the appearance of footnotes, select <menuchoice> <guimenu>Format</guimenu>
-<guimenuitem>Footnote/Endnote...</guimenuitem></menuchoice> from the menubar.  A dialog will appear.</para>
+<guimenuitem>Footnote...</guimenuitem></menuchoice> from the menubar.  A dialog will appear.</para>
 
 <screenshot>
 <mediaobject>
@@ -107,7 +107,7 @@ appear <emphasis>after</emphasis> the footnote number.</para>
 
 <sect3 id="fn-config-line">
 <title>Change the appearance of separator line</title>
-<para>To change the appearance of the separator line, click on the tab labeled <guilabel>Separator line</guilabel>.</para>
+<para>To change the appearance of the separator line, click on the tab labeled <guilabel>Separator Line</guilabel>.</para>
 <screenshot>
 <mediaobject>
 <imageobject>
@@ -117,7 +117,7 @@ appear <emphasis>after</emphasis> the footnote number.</para>
 
 <para>You can determine the alignment of the separator line by selecting <guilabel>Left</guilabel>,
 <guilabel>Centered</guilabel> or <guilabel>Right</guilabel></para>
-<para>Determine the length of the line using the spin box labeled <guilabel>Size on page</guilabel>.</para>
+<para>Determine the length of the line using the spin box labeled <guilabel>Size on page:</guilabel>.</para>
 <para>The spinbox labeled <guilabel>Width:</guilabel> is used to determine the thickness of the seperator line.</para>
 <note><para>Do not confuse this option with the <guilabel>Size on page:</guilabel> option.  The <guilabel>Width:</guilabel> is used to set the thickness of the line, not its distance across the page.</para></note>
 <para>Use the combo box labeled <guilabel>Style</guilabel> to determine what kind of line is drawn.</para>
@@ -139,7 +139,7 @@ from the menubar. This will bring up a dialog:</para>
 </mediaobject>
 </screenshot>
 
-<para>Click on the tab labeled <guilabel>Headers and Footers</guilabel>. </para>
+<para>Click on the tab labeled <guilabel>Header and Footer</guilabel>. </para>
 
 <screenshot>
 <mediaobject>

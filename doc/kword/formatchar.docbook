@@ -147,9 +147,9 @@ open this dialog.</para>
 </mediaobject>
 </screenshot>
 
-<para>The subsection labeled <guilabel>Underlining</guilabel> has two combo boxes and a <guibutton>Change Color...</guibutton> button.  
+<para>The subsection labeled <guilabel>Underlining:</guilabel> has two combo boxes and a color selector box. 
 In the left most combo box select between
-no underline (Without), Single, Simple Bold, Double or Wave underlining.  </para>
+no underline (None), Single, Simple Bold, Double or Wave underlining.  </para>
 
 <screenshot>
 <mediaobject>
@@ -160,12 +160,12 @@ no underline (Without), Single, Simple Bold, Double or Wave underlining.  </para
 </screenshot>
 
 <para>Use the center combo box to select the style of underlining (Solid line, dashed line, etc.).</para>
-<para>Use the <guibutton>Change Color...</guibutton> button to select a color for the underline using the
+<para>Use the right color selector box to select a color for the underline using the
 <link linkend="select-colors">color selection dialog box</link>.  </para>
 
-<para>The subsection labeled <guilabel>Strikethrough</guilabel> has two combo boxes.
+<para>The subsection labeled <guilabel>Strikethrough:</guilabel> has two combo boxes.
 Use the left combo box to select between
-no strikethrough (Without), Single or Double strikethrough.  Use the right combo box to select the line style.</para>
+no strikethrough (None), Single, Double ore Simple Bold strikethrough.  Use the right combo box to select the line style.</para>
 
 <screenshot>
 <mediaobject>
@@ -174,7 +174,7 @@ no strikethrough (Without), Single or Double strikethrough.  Use the right combo
 </mediaobject>
 </screenshot>
 
-<para>The checkbox labeled <guilabel>Word by Word</guilabel> determines how underlining and strikethrough are drawn.</para>
+<para>The checkbox labeled <guilabel>Word by word</guilabel> determines how underlining and strikethrough are drawn.</para>
 
 <screenshot>
 <mediaobject>
@@ -206,8 +206,8 @@ This will change the capitalization of the selected text.  Examples of each sche
 
 <para>Using the buttons labeled <guilabel>Text color:</guilabel> and <guilabel>Background color:</guilabel> you can change the color of the text or the background behind the text.</para>
 
-<para>To create the illusion of a shadow behind your text, select the color you want your shadow by clicking the button labeled <guilabel>Color</guilabel>.  Then select the distance between the shadow and 
-the text using  the spin box labeld <guilabel>Shadow &amp; Distance</guilabel>.  Finally, select the direction of your shadow by 
+<para>To create the illusion of a shadow behind your text, select the color you want your shadow by clicking the button labeled <guilabel>Shadow color:</guilabel>.  Then select the distance between the shadow and 
+the text using  the spin box labeld <guilabel>Shadow &amp; distance:</guilabel>.  Finally, select the direction of your shadow by 
 selecting one of the eight red squares.  A preview of your shadow appears at the bottom of the dialog box.</para>
 
 <para>The fourth tab labeled <guilabel>Layout</guilabel> allows you to create superscripts and subscripts.  It also lets you select automatic hyphenation on a character by character basis.</para>
@@ -286,21 +286,21 @@ from the menubar.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Title Case</guilabel></term>
+<term><guilabel>Title case</guilabel></term>
 <listitem><para>Will capitalize every word.</para>
 <para>Example: Kword Will Automatically Change Cases.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Toggle Case</guilabel></term>
+<term><guilabel>Toggle case</guilabel></term>
 <listitem><para>Converts all lowercase letters to uppercase <emphasis>and</emphasis>
 converts all uppercase letters to lowercase.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Sentence Case</guilabel></term>
+<term><guilabel>Sentence case</guilabel></term>
 <listitem><para>Capitalizes the first character after a period.</para>
 </listitem>
 </varlistentry>

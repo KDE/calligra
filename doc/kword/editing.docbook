@@ -222,8 +222,8 @@ the Undo is reversed.</para>
 
 <note>
 <para>Sometimes it is not possible for &kword; to undo an edit.  In these instances, &kword; 
-will replace the <guimenuitem>Undo</guimenuitem> function
-with <guimenuitem>No Undo Possible</guimenuitem>.</para>
+will display the <guimenuitem>Undo</guimenuitem> function gray and the function is not
+accessible.</para>
 
 <para>Othertimes, &kword; will only perform a partial undo of the previous task.
 This is because &kword; processes changes to documents differently then might
@@ -466,15 +466,15 @@ the toolbar.</para>
 </screenshot>
 
 <sect3><title>Basic Text Search</title>
-<para>The combo box labelled <guilabel>Text to Find</guilabel>,
+<para>The combo box labelled <guilabel>Text to find</guilabel>,
 provides a place for you to enter the text of your search command. (In
 the screenshot, that box is currently filled with
 <emphasis>KDE</emphasis>).</para> 
 
 <para>If you click on
-<guibutton>F</guibutton>, then &kword; will search the document until it
+<guibutton>Find</guibutton>, then &kword; will search the document until it
 finds a match to your text.  If &kword; cannot find a match, a dialog
-box will appear that says <guilabel>No match found</guilabel>.  </para>
+box will appear that says <guilabel>No matches found for "Text to find"</guilabel>.  </para>
 <tip><para>If you want to repeat a recent search, simply select the arrow in the drop-down
 box and a list of your most recent searches will appear.  Simply select your search
 from the list and click <guibutton>Find</guibutton>.</para></tip>
@@ -542,7 +542,7 @@ any searchable text for that property.  If no mark is in the check box, &kword; 
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Color:</guilabel> and <guilabel>Background Color:</guilabel></term>
+<term><guilabel>Color:</guilabel> and <guilabel>Background color:</guilabel></term>
 <listitem>
 <para>Clicking on either of these two buttons allows you to select the font color and/or background color respectively,
 you want &kword; to search
@@ -562,29 +562,29 @@ to include boldface or italicized fonts in the search text.</para>
 <varlistentry>
 <term><guilabel>Strikeout:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel> or
-<guilabel>Without</guilabel> to modify your search.</para>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel> 
+or <guilabel>Simple Bold</guilabel> to modify your search.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Underline:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel>, <guilabel>Wave</guilabel> or
-<guilabel>Without</guilabel> to modify your search.</para>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple Bold</guilabel> 
+or <guilabel>Wave</guilabel> to modify your search.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Vertical Alignment:</guilabel></term>
+<term><guilabel>Vertical alignment:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
-<guilabel>Subscript</guilabel> to determine what font alignment you want &kword; to search for.</para>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Subscript</guilabel> or
+<guilabel>Superscript</guilabel> to determine what font alignment you want &kword; to search for.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Shadow:</guilabel> and <guilabel>Word by Word:</guilabel></term>
+<term><guilabel>Shadow:</guilabel> and <guilabel>Word by word:</guilabel></term>
 <listitem>
 <para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kword;
 to include shadow text in the search text and whether to search for word by word underlining and strikethrough text.</para>
@@ -595,7 +595,7 @@ to include shadow text in the search text and whether to search for word by word
 <term><guilabel>Capitalization:</guilabel></term>
 <listitem>
 <para>You can select <guilabel>Normal</guilabel>, <guilabel>Uppercase</guilabel>, <guilabel>Lowercase</guilabel>,  or
-<guilabel>Small caps</guilabel> to determine what capitalization you want &kword; to search for.</para>
+<guilabel>Small Caps</guilabel> to determine what capitalization you want &kword; to search for.</para>
 </listitem>
 </varlistentry>
 
@@ -621,7 +621,7 @@ with a few useful options.</para>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Case Sensitive</guilabel></term>
+<term><guilabel>Case sensitive</guilabel></term>
 <listitem>
 <para>When this option is selected, &kword; will not only search for the
 string of letters, but will verify that the case of the letters is the
@@ -639,7 +639,7 @@ kde</emphasis> or <emphasis> hiddenkdeinwords</emphasis>.</para>
 <para>This option changes the direction of the search.  This can be
 useful when you only want to search for a string of text before the
 current cursor position, not after.  This option is usually used in
-conjunction with <guilabel>From Cursor</guilabel>, but if that option is
+conjunction with <guilabel>From cursor</guilabel>, but if that option is
 not specified, &kword; will start searching from the end of the document
 backwards.</para>
 </listitem>
@@ -672,13 +672,13 @@ prior to selecting the <guilabel>Find</guilabel> command.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>From Cursor</guilabel></term>
+<term><guilabel>From cursor</guilabel></term>
 <listitem>
 <para>By default, &kword; begins searching at the beginning of the
 document.  If this option is selected, &kword; begins its search from
 the current position of the cursor. The direction that &kword; searches
 is, by default forward in the document, but can be changed with the
-<guilabel>Find Backwards</guilabel> option.</para>
+<guilabel>Find backwards</guilabel> option.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -727,7 +727,7 @@ the screenshot, that box is currently filled with
 <emphasis>KDE</emphasis>)</para>
 
 <para>You can enter your replacement text in the text box labeled
-<guilabel>Replacement Text:</guilabel>. You can now click
+<guilabel>Replacement text:</guilabel>. You can now click
 <guibutton>OK</guibutton> to replace all occurrences in the document, or
 you can further refine your search.</para>
 
@@ -795,7 +795,7 @@ any searchable text for that property.  If no mark is in the check box, &kword; 
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Color:</guilabel> and <guilabel>Background Color:</guilabel></term>
+<term><guilabel>Color:</guilabel> and <guilabel>Background color:</guilabel></term>
 <listitem>
 <para>Clicking on either of these two buttons allows you to select the font color and/or background color respectively,
 you want &kword; to search
@@ -815,29 +815,29 @@ to include boldface or italicized fonts in the search text.</para>
 <varlistentry>
 <term><guilabel>Strikeout:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel> or
-<guilabel>Without</guilabel> to modify your search.</para>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel> 
+or <guilabel>Simple Bold</guilabel> to modify your search.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Underline:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel>, <guilabel>Wave</guilabel> or
-<guilabel>Without</guilabel> to modify your search.</para>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, 
+<guilabel>Simple Bold</guilabel> or <guilabel>Wave</guilabel> to modify your search.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Vertical Alignment:</guilabel></term>
+<term><guilabel>Vertical alignment:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
-<guilabel>Subscript</guilabel> to determine what font alignment you want &kword; to search for.</para>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Subrscript</guilabel> or
+<guilabel>Superscript</guilabel> to determine what font alignment you want &kword; to search for.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Shadow:</guilabel> and <guilabel>Word by Word:</guilabel></term>
+<term><guilabel>Shadow:</guilabel> and <guilabel>Word by word:</guilabel></term>
 <listitem>
 <para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kword;
 to include shadow text in the search text and whether to search for word by word underlining and strikethrough text.</para>
@@ -848,7 +848,7 @@ to include shadow text in the search text and whether to search for word by word
 <term><guilabel>Capitalization:</guilabel></term>
 <listitem>
 <para>You can select <guilabel>Normal</guilabel>, <guilabel>Uppercase</guilabel>, <guilabel>Lowercase</guilabel>,  or
-<guilabel>Small caps</guilabel> to determine what capitalization you want &kword; to search for.</para>
+<guilabel>Small Caps</guilabel> to determine what capitalization you want &kword; to search for.</para>
 </listitem>
 </varlistentry>
 
@@ -874,7 +874,7 @@ with a few useful options.</para>
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Case Sensitive</guilabel></term>
+<term><guilabel>Case sensitive</guilabel></term>
 <listitem>
 <para>When this option is selected, &kword; will not only search for the
 string of letters, but will verify that the case of the letters is the
@@ -892,7 +892,7 @@ kde</emphasis> or <emphasis> hiddenkdeinwords</emphasis>.</para>
 <para>This option changes the direction of the search.  This can be
 useful when you only want to search for a string of text before the
 current cursor position, not after.  This option is usually used in
-conjunction with <guilabel>From Cursor</guilabel>, but if that option is
+conjunction with <guilabel>From cursor</guilabel>, but if that option is
 not specified, &kword; will start searching from the end of the document
 backwards.</para>
 </listitem>
@@ -925,13 +925,13 @@ prior to selecting the <guilabel>Find</guilabel> command.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>From Cursor</guilabel></term>
+<term><guilabel>From cursor</guilabel></term>
 <listitem>
 <para>By default, &kword; begins searching at the beginning of the
 document.  If this option is selected, &kword; begins its search from
 the current position of the cursor. The direction that &kword; searches
 is, by default forward in the document, but can be changed with the
-<guilabel>Find Backwards</guilabel> option.</para>
+<guilabel>Find backwards</guilabel> option.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -947,7 +947,7 @@ is, by default forward in the document, but can be changed with the
 <para>&kword; also has the ability to replace the found text with formatted text.</para>
 
 <para>To include formatting options in your search, click the button labeled
-<guibutton>Show Formatting Options</guibutton> in the <guilabel>Replace with</guilabel> section. </para>
+<guibutton>Show Formatting Options</guibutton> in the <guilabel>Replace With</guilabel> section. </para>
 
 <para>Once <guibutton>Show Formatting Options</guibutton> has been clicked,  a new dialog will appear.</para>
 
@@ -980,7 +980,7 @@ If no mark is in the check box, &kword; does not consider that property when rep
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Color:</guilabel> and <guilabel>Background Color:</guilabel></term>
+<term><guilabel>Color:</guilabel> and <guilabel>Background color:</guilabel></term>
 <listitem>
 <para>Clicking on either of these two buttons allows you to select the font color and/or background color respectively,
 you want &kword; to use.  For more information on selecting a color, see the
@@ -999,28 +999,28 @@ to change the fonts to boldface or italicized fonts.</para>
 <varlistentry>
 <term><guilabel>Strikeout:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel> or
-<guilabel>Without</guilabel> to use for the replacement text.</para>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel> 
+or <guilabel>Simple Bold</guilabel> to use for the replacement text.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Underline:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel>, <guilabel>Wave</guilabel>,  or
-<guilabel>Without</guilabel> to use for the replacement text.</para>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, 
+<guilabel>Simple Bold</guilabel> or <guilabel>Wave</guilabel> to use for the replacement text.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Vertical Alignment:</guilabel></term>
+<term><guilabel>Vertical alignment:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
-<guilabel>Subscript</guilabel> to determine what font alignment you want &kword; to use.</para>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Subscript</guilabel> or
+<guilabel>Superscript</guilabel> to determine what font alignment you want &kword; to use.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Shadow:</guilabel> and <guilabel>Word by Word:</guilabel></term>
+<term><guilabel>Shadow:</guilabel> and <guilabel>Word by word:</guilabel></term>
 <listitem>
 <para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kword;
 to use shadow text and/or word by word underlining and strikethrough in the replacement text.</para>
@@ -1031,7 +1031,7 @@ to use shadow text and/or word by word underlining and strikethrough in the repl
 <term><guilabel>Capitalization:</guilabel></term>
 <listitem>
 <para>You can select <guilabel>Normal</guilabel>, <guilabel>Uppercase</guilabel>, <guilabel>Lowercase</guilabel>,  or
-<guilabel>Small caps</guilabel> to determine what capitalization to use for the replacement text.</para>
+<guilabel>Small Caps</guilabel> to determine what capitalization to use for the replacement text.</para>
 </listitem>
 </varlistentry>
 
@@ -1062,8 +1062,8 @@ to use shadow text and/or word by word underlining and strikethrough in the repl
 scope of this manual.  For more information see the KDE Regular Expression Manual (Available in the &kde; help center).</para></note>
 <para>Now in the <guilabel>Replace With</guilabel> section of the replace dialog, you place a mark in the check box labeled
 <guilabel>Use placeholders</guilabel>.  Click the <guibutton>Insert Placeholder</guibutton> button and select
-<guilabel>Complete text found</guilabel>.  &kword; will insert a <emphasis>\0</emphasis> in the 
-<guilabel>Replacement text</guilabel> text box.</para>
+<guilabel>Complete Match</guilabel>.  &kword; will insert a <emphasis>\0</emphasis> in the 
+<guilabel>Replacement text:</guilabel> text box.</para>
 <para>Now surround the placeholder with parentheses, so your text string is:  <emphasis>(\0)</emphasis></para>
 <para>When this is executed, whenever &kword; encounters the find text (ie. <quote>Reference 0</quote>, <quote>Reference 1</quote>,
 <quote>Reference 2</quote>, etc) it will surround the text in parenthesis (<quote>(Reference 0)</quote>, <quote>(Reference 1)</quote>,
@@ -1078,7 +1078,7 @@ search string you can imagine.</para>
 <para>Additional options in the dialog are:</para>
 <variablelist>
 <varlistentry>
-<term><guilabel>Case Sensitive</guilabel></term>
+<term><guilabel>Case sensitive</guilabel></term>
 <listitem>
 <para>When this option is selected, &kword; will not only
 search for the string of letters, but will verify that the case of the
@@ -1096,7 +1096,7 @@ hiddenkdeinwords</emphasis>.</para>
 <para>This option changes the direction of the search.  This can be
 useful when you only want to search for a string of text before the
 current cursor position, not after.  This option is usually used in
-conjunction with <guilabel>From Cursor</guilabel>, but if that option is
+conjunction with <guilabel>From cursor</guilabel>, but if that option is
 not specified, &kword; will start searching from the end of the document
 backwards.</para>
 </listitem>
@@ -1130,18 +1130,18 @@ prior to selecting the <guilabel>Find</guilabel> command.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>From Cursor</guilabel></term>
+<term><guilabel>From cursor</guilabel></term>
 <listitem>
 <para>By default, &kword; begins searching at the beginning of the
 document.  If this option is selected, &kword; begins its search from
 the current position of the cursor. The direction that &kword; searches
 is, by default forward in the document, but can be changed with the
-<guilabel>Find Backwards</guilabel> option.</para>
+<guilabel>Find backwards</guilabel> option.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Prompt on Replace</guilabel></term>
+<term><guilabel>Prompt on replace</guilabel></term>
 <listitem>
 <para>If this option is selected, &kword; will prompt the user 
 <emphasis>before</emphasis> each replacement.  This allows you to 
@@ -1198,7 +1198,7 @@ box.</para>
 
 <para>In this example, the misspelled word &kword; found, was
 <emphasis>youve</emphasis>.  The currently suggested replacement word is listed in the text box labeled
-<guilabel>Replacement</guilabel>.  In the list box labeled <guilabel>Suggestion</guilabel> is a list of words
+<guilabel>Replace with:</guilabel>.  In the list box labeled <guilabel>Suggested Words</guilabel> is a list of words
 the spelling program has determined as possible correct spellings.</para>
 
 <para>From here you have eight options:</para>
@@ -1308,7 +1308,7 @@ from the menubar you can toggle autospellchecking on and off. </para>
 <listitem><para>Simply click on the desired word with the &RMB;.  A submenu will appear.  Select
 <guimenuitem>Show Related Words</guimenuitem> from the menu and a dialog will appear.</para></listitem>
 <listitem><para>By selecting <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Show related words</guimenuitem></menuchoice>
+<guimenu>Tools</guimenu><guimenuitem>Show Related Words</guimenuitem></menuchoice>
 from the menubar</para></listitem>
 </itemizedlist>
 
@@ -1321,7 +1321,7 @@ from the menubar</para></listitem>
 <para>The word you selected from your document appears in the combo box labeled <guilabel>Search for:</guilabel>.</para>
 <para>There are three columns of alternate words:  Synonyms, More General words, More Specific Words.</para>
 <para>If you find an appropriate alternate word, simply click on the word in the list, and this word will now be listed in the text box labeled
-<guilabel>Replace with:</guilabel>.</para>
+<guilabel>Replace With:</guilabel>.</para>
 <para>To finalize the replacement click <guibutton>Replace</guibutton>.</para>
 <para>To keep your original word, click <guibutton>Cancel</guibutton>.</para>
 <para>To obtain more specific help, or for help on using the full version of Wordnet, click the <guibutton>Help</guibutton> button for help with
@@ -1377,7 +1377,7 @@ from the menubar.  </para>
 
 
 <varlistentry>
-<term><guilabel>Convert the first letter from the first word of a
+<term><guilabel>Convert first letter of a
 sentence automatically to uppercase</guilabel></term>
 <listitem>
 <para>When selected, &kword; will automatically capitalize the first
@@ -1410,7 +1410,7 @@ of text is a <glossterm linkend="defurl">URL</glossterm> and automatically creat
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Suppress Double Spaces</guilabel></term>
+<term><guilabel>Suppress double spaces</guilabel></term>
 <listitem>
 <para>When checked, &kword; will ignore the second space typed.
 This prevents users from adding double spaces between words or sentences</para>
@@ -1435,7 +1435,7 @@ words in between the two underscores.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Replace 1/2... with ½</guilabel></term>
+<term><guilabel>Replace 1/2... with ½...</guilabel></term>
 <listitem>
 <para>When selected, &kword; will automatically change 1/2, 1/3 and 3/4 to their single character equivalents.</para>
 </listitem>
@@ -1457,7 +1457,7 @@ convert that paragraph to a numbered paragraph.  All future paragraphs will be c
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Capitalize names of days</guilabel></term>
+<term><guilabel>Capitalize name of days</guilabel></term>
 <listitem>
 <para>Automatically capitalize the days of the week (Sunday, Monday, Tuesday, etc...).</para>
 </listitem>
@@ -1486,7 +1486,7 @@ to a bulleted list.  The bullet is selected with the left button below this opti
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Replace double quotes by typographical quotes</guilabel></term>
+<term><guilabel>Replace double quotes with typographical quotes</guilabel></term>
 <listitem>
 <para>When selected, this option will replace the standard keyboard double
 quotes, with typographical quotation marks.  If you want to change the
@@ -1496,7 +1496,7 @@ quotation character, click on one of the buttons. Clicking on
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Replace single quotes by typographical quotes</guilabel></term>
+<term><guilabel>Replace single quotes with typographical quotes</guilabel></term>
 <listitem>
 <para>When selected, this option will replace the standard keyboard single
 quotes, with typographical quotation marks.  If you want to change the
@@ -1522,13 +1522,13 @@ used abbreviations that you want spelled out, or abbreviations.</para>
 
 <para>&kword; uses different autocorrection strings depending on the language.  
 Set the correct language using the combo box labeled 
-<guilabel>Replacement and exceptions for language</guilabel>.</para>
+<guilabel>Replacements and exceptions for language:</guilabel>.</para>
 
 <para>The check box labeled <guilabel>Enable word replacement</guilabel> is used to 
 toggle on and off the autoreplacement features of &kword;.  If there is no mark in the check box, 
 then &kword; will not perform any autoreplacements from the list in this dialog.</para>
 
-<para>If there is a mark in the check box labeled <guilabel>Replace text with formatting</guilabel> 
+<para>If there is a mark in the check box labeled <guilabel>Replace text with format</guilabel> 
 &kword; will not only change the text when it finds a match, but it will change the formatting of the new text. 
 If there is no mark in this check box, then
 &kword; uses the same formatting options for the replaced text as it found in the search text.  For more information 
@@ -1586,7 +1586,7 @@ button.</para>
 <title>Changing the format of the autocorrection string.</title>
 <note><para>Currently, you must create the autocorrection string <emphasis>before</emphasis> you can format it.</para></note>
 <para>Once the autocorrection string has been created, simply click on it once with the &LMB;.</para>
-<para>Now click on the <guibutton>Change format</guibutton> button.  A small dialog will appear:</para>
+<para>Now click on the <guibutton>Change Format...</guibutton> button.  A small dialog will appear:</para>
 
 <screenshot>
 <mediaobject>
@@ -1602,21 +1602,21 @@ If no mark is in the check box, &kword; does not consider that property when rep
 <variablelist>
 
 <varlistentry>
-<term><guilabel>Family</guilabel></term>
+<term><guilabel>Family:</guilabel></term>
 <listitem>
 <para>Use this combo box to select the font family you want your replacement text to use.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Size</guilabel></term>
+<term><guilabel>Size:</guilabel></term>
 <listitem>
 <para>Use this spin box to set the font size you want &kword; to use for your replaced text.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Color</guilabel> and <guilabel>Background Color</guilabel></term>
+<term><guilabel>Color:</guilabel> and <guilabel>Background Color:</guilabel></term>
 <listitem>
 <para>Clicking on either of these two buttons allows you to select the font color and/or background color respectively,
 you want &kword; to use.  For more information on selecting a color, see the
@@ -1625,7 +1625,7 @@ section on <link linkend="select-colors">Selecting Colors from the Color Dialog<
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Bold</guilabel> and <guilabel>Italic</guilabel></term>
+<term><guilabel>Bold:</guilabel> and <guilabel>Italic:</guilabel></term>
 <listitem>
 <para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kword;
 to change the fonts to boldface or italicized fonts.</para>
@@ -1633,30 +1633,30 @@ to change the fonts to boldface or italicized fonts.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Strikeout</guilabel></term>
+<term><guilabel>Strikeout:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel> or
-<guilabel>Without</guilabel> to use for the replacement text.</para>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel> 
+or <guilabel>Simple Bold</guilabel> to use for the replacement text.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Underline</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel>, <guilabel>Wave</guilabel>,  or
-<guilabel>Without</guilabel> to use for the replacement text.</para>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, 
+<guilabel>Simple Bold</guilabel> or <guilabel>Wave</guilabel> to use for the replacement text.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Vertical Alignment</guilabel></term>
+<term><guilabel>Vertical alignment:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
-<guilabel>Subscript</guilabel> to determine what font alignment you want &kword; to use.</para>
+<para>You can select <guilabel>Normal</guilabel>, <guilabel>Subscript</guilabel> or
+<guilabel>Superscript</guilabel> to determine what font alignment you want &kword; to use.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Shadow:</guilabel> and <guilabel>Word by Word:</guilabel></term>
+<term><guilabel>Shadow:</guilabel> and <guilabel>Word by word:</guilabel></term>
 <listitem>
 <para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio boxes to determine whether you want &kword;
 to use shadow text and/or word by word underlining and strikethrough in the replacement text.</para>
@@ -1667,7 +1667,7 @@ to use shadow text and/or word by word underlining and strikethrough in the repl
 <term><guilabel>Capitalization:</guilabel></term>
 <listitem>
 <para>You can select <guilabel>Normal</guilabel>, <guilabel>Uppercase</guilabel>, <guilabel>Lowercase</guilabel>,  or
-<guilabel>Small caps</guilabel> to determine what capitalization to use for the replacement text.</para>
+<guilabel>Small Caps</guilabel> to determine what capitalization to use for the replacement text.</para>
 </listitem>
 </varlistentry>
 
@@ -1702,7 +1702,7 @@ that are inappropriate.  You can use the fourth tab of this dialog to define
 </screenshot>
 <para>To prevent &kword; from deciding an abbreviation or other text is
 the end of a sentence, simply enter the text fragment in the text box below
-<guilabel>Do not treat as the end of a sentence</guilabel>. Then click
+<guilabel>Do not treat as the end of a sentence:</guilabel>. Then click
 <guibutton>Add</guibutton>.</para>
 <para>As an example:  Adding <quote>Jr.</quote> to this dialog prevents</para>
 <para><quote>Robert Jones Jr. is a friend of the family.</quote></para>
@@ -1714,7 +1714,7 @@ and click on the <guibutton>Remove</guibutton> button.</para>
 text entered in these boxes will allow two capital letters in a word if it 
 is entered in this text box.</para>
 <para>Simply enter the word in the text box below
-<guilabel>Accept two uppercase letters in</guilabel>.  Then click
+<guilabel>Accept two uppercase letters in:</guilabel>.  Then click
 <guibutton>Add</guibutton>.</para>
 <para>As an example:  Adding <quote>CD</quote> to this dialog prevents</para>
 <para><quote>CD</quote></para>
@@ -1813,10 +1813,10 @@ from the list, then click this button.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Automatically add new words to suggestio  list</guilabel></term>
+<term><guilabel>Automatically add new words to suggestion list</guilabel></term>
 <listitem>
 <para>This option will add any word equal to or longer than
-the <guilabel>Characters needed</guilabel> to the list of proposed
+the <guilabel>Characters needed:</guilabel> to the list of proposed
 autocompletion words.</para>
 <para>The large listbox in the center of the dialog contains the current
 proposed list of autocompletion words.</para>
@@ -1826,18 +1826,18 @@ autocompletion when entered into this dialog.</para></note>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Show words in tootip</guilabel></term>
+<term><guilabel>Show words in tooltip</guilabel></term>
 <listitem>
 <para>If this option is enabled, a tool tip box will appear when you type the
 beginning of a word that exists in the completion list. To complete the word,
 press the key you set to accept suggestions in the <guilabel>Key to accept
-suggestion</guilabel> drop-down list.</para>
+suggestion:</guilabel> drop-down list.</para>
 </listitem>
 </varlistentry>
 
 
 <varlistentry>
-<term><guilabel>Characters needed</guilabel></term>
+<term><guilabel>Characters needed:</guilabel></term>
 <listitem>
 <para>Use this spinbox/slider combination to prevent &kword; 
 from automatically adding short words to the completion list.   You can select
@@ -1847,7 +1847,7 @@ characters set here to be added in the list.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Suggest words</guilabel></term>
+<term><guilabel>Suggest words:</guilabel></term>
 <listitem>
 <para>This spinbox/slider combination can be adjusted to allow more or less
 words into the autocompletion list.  This option is most important when
@@ -1867,7 +1867,7 @@ next word.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Key to accept suggestion</guilabel></term>
+<term><guilabel>Key to accept suggestion:</guilabel></term>
 <listitem>
 <para>Set the key you want to use when an autocompleted word is suggested to you
 and you want to accept it. You can choose

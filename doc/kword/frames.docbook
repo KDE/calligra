@@ -149,7 +149,7 @@ a member of the selected frameset.</para>
 <listitem><para>If you want this to be a new frameset, you should enter a descriptive
 name for your new frameset.  (A name which will tell you what you might
 find in that frameset).  This name should be entered in the text box
-labeled <guilabel>Name of frameset</guilabel>.</para>
+labeled <guilabel>Name of frameset:</guilabel>.</para>
 <para>This newly added frame will be the
 only frame in the frameset.</para>
 </listitem></varlistentry>
@@ -354,7 +354,7 @@ same as selecting <guilabel>Raise Frame</guilabel> from the menubar.</para></tip
 <term>Send to Back</term>
 <listitem><para>To lower a frame, select the frame by clicking once on the frame border with the &LMB;.</para>
 <para>Select <menuchoice>
-<guimenu>Frames</guimenu><guimenuitem>Send to back</guimenuitem>
+<guimenu>Frames</guimenu><guimenuitem>Send to Back</guimenuitem>
 </menuchoice> from the menubar.</para>
 <para>This will place the frame below <emphasis>all other frames</emphasis> that it overlaps.</para>
 </listitem></varlistentry>

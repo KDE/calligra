@@ -21,7 +21,7 @@ person. That person can make comments about the text and the comment will appear
 <guimenuitem>Comment...</guimenuitem>
 </menuchoice> from the menubar. This will bring up a small dialog box.</para>
 <para>Type the text of your comment in the dialog box provided. If you click on the 
-<guibutton>Add authors name</guibutton>, the text will be signed, dated and the current time will be added.</para>
+<guibutton>Add Author Name</guibutton>, the text will be signed, dated and the current time will be added.</para>
 <note><para>The authors name must be entered in the <link linkend="documentinfo">Document Information</link> 
 dialog or the name will not be included.</para></note>
 <para>When you have entered all of your text, click <guibutton>OK</guibutton> to add your comment.</para>

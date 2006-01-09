@@ -31,11 +31,11 @@ of each page.</para>
 time.</para>
 
 <para>You can toggle the headers by selecting <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Show Header</guimenuitem></menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Enable/Disable Document Headers</guimenuitem></menuchoice>
 from the menubar.</para>
 
 <para>You can toggle the footers by selecting <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Show Footer</guimenuitem></menuchoice>
+<guimenu>Format</guimenu><guimenuitem>Enable/Disable Document Footers</guimenuitem></menuchoice>
 from the menubar.</para>
 
 <para>The footers will be

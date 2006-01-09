@@ -161,7 +161,7 @@ the date format string is correct to insert the variable into the document.</par
 
 <tip><para>Once the date has been inserted into the document, it can be reformatted to a different layout
 and toggled between fixed and variable dates.  Simply click once with the &RMB; on the date.
-A small menu will appear.  Select <guilabel>Change variable to...</guilabel> and a submenu will appear.  Select your new
+A small menu will appear.  Select <guilabel>Change Variable To</guilabel> and a submenu will appear.  Select your new
 variable or new layout from the menu and the variable is immediately updated. </para></tip>
 
 </sect3>
@@ -213,7 +213,7 @@ Compare this choice to <guimenuitem>Current time (fixed)</guimenuitem></para></l
 <listitem><para>This inserts the time in the format specified in the
 &kde; Control Center.</para>
 <para>To select this option, simply make sure the upper combo box says
-<guilabel>Locale</guilabel>.  A preview of the current time
+<guilabel>Locale format</guilabel>.  A preview of the current time
 string is visible above the <guibutton>OK</guibutton> button.  If satisfied click <guibutton>OK</guibutton>.
 </para></listitem>
 </varlistentry>
@@ -298,7 +298,7 @@ the time format string is correct to insert the variable into your document.</pa
 
 <tip><para>Once the time has been inserted into the document, it can be reformatted to a different layout
 and toggled between fixed and variable times.  Simply click once with the &RMB; on the time in the document.
-A small menu will appear.  Select <guilabel>Change variable to...</guilabel> and a submenu will appear.  Select your new
+A small menu will appear.  Select <guilabel>Change Variable To</guilabel> and a submenu will appear.  Select your new
 variable or new layout from the menu and the variable is immediately updated. </para></tip>
 
 </sect3>
@@ -308,9 +308,9 @@ variable or new layout from the menu and the variable is immediately updated. </
 <indexterm><primary>insert page numbers</primary></indexterm>
 
 <para>Inserting page numbers is easy in &kword;.</para>
-<para>There are four variables that relate to page numbers:  <guilabel>Current page</guilabel>, 
-<guilabel>Next Page</guilabel>, <guilabel>Previous Page</guilabel>,
-and <guilabel>Number of Pages</guilabel></para>
+<para>There are five variables that relate to page numbers: <guilabel>Page Number</guilabel>, 
+<guilabel>Number of Pages</guilabel>,<guilabel>Section Title</guilabel><guilabel>Next Page</guilabel>, 
+and <guilabel>Previous Page</guilabel>.</para>
 <para>To insert the current page number, place the cursor where you want the page number and select
 <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
@@ -321,6 +321,11 @@ and <guilabel>Number of Pages</guilabel></para>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
 <guimenuitem>Number of Pages</guimenuitem>
 </menuchoice> from the menubar.  The total number of pages will be inserted.</para>
+<para>To insert the title of the section, place the cursor where you want the variable and select
+<menuchoice>
+<guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
+<guimenuitem>Section Title</guimenuitem>
+</menuchoice> from the menubar.  The section title will be inserted.</para>
 <para>By selecting <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
 <guimenuitem>Next Page</guimenuitem>
@@ -340,7 +345,7 @@ every page will have a page number at the appropriate place.</para></tip>
 <para>You can insert the section title anywhere in your document by selecting
 <menuchoice>
 <guimenu>Insert</guimenu><guimenuitem>Variable</guimenuitem><guimenuitem>Page</guimenuitem>
-<guimenuitem>Section title</guimenuitem>
+<guimenuitem>Section Title</guimenuitem>
 </menuchoice> from the menubar. </para>
 <para>&kword; determines the Section title by beginning a search from the top of the current page.  The first paragraph with a style of
 <emphasis>Head 1</emphasis> is the section title.  If there are no paragraphs on the current page, &kword; does the same search along 

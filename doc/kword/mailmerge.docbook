@@ -65,7 +65,7 @@ where to insert the database information.</para></listitem>
 <sect3 id="mail-merge-sql-data">
 <title>Locate the database and query the records.</title>
 <para>To begin, select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem></menuchoice> from
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
 the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -84,7 +84,7 @@ the menubar. A dialog box will appear.</para>
 </mediaobject>
 </screenshot>
 
-<para>Select <guilabel>QT-SQL source</guilabel> and click on
+<para>Select <guilabel>QT-SQL Source</guilabel> and click on
 <guibutton>OK</guibutton>.  A new dialog box will appear.<anchor id="mail-merge-login"/></para>
 
 <screenshot>
@@ -101,7 +101,7 @@ user name in the text box labeled <guilabel>Username:</guilabel>.</para>
 <para>If the database access is through a port other than the default port enter that port number in the text box labeled 
 <guilabel>Port:</guilabel>.</para>
 <tip><para>If you are going to be using this database at other times, you can click on the button labeled
-<guibutton>Keep settings</guibutton>. &kword; will ask for a descriptive name.</para>
+<guibutton>Keep settings...</guibutton>. &kword; will ask for a descriptive name.</para>
 <para>When you want to restore these settings on future sessions, simply select the descriptive name from the combo box in the 
 upper left of the dialog box.</para>
 </tip>
@@ -129,12 +129,12 @@ the password in the text box, and click <guibutton>OK</guibutton>.</para>
 <para>This dialog is designed to help you enter and test your database query.  The dialog is divided into three
 sections:  Database information, Query information and Query line.</para>
 <para>The database information section is labeled <guilabel>Information</guilabel> and consists of two combo boxes.  The
-left combo box (<guilabel>Available tables</guilabel>) gives you a list of all available tables within the current database.
+left combo box (<guilabel>Available tables:</guilabel>) gives you a list of all available tables within the current database.
 Select the desired table from the list by clicking on the table name with the &LMB;.  
 A list of all available fields from that table will appear in the right combo box.</para>
-<para>The query line is a text box located near the bottom of the dialog labeled <guilabel>Query</guilabel>.  Simply type your 
+<para>The query line is a text box located near the bottom of the dialog labeled <guilabel>Query:</guilabel>.  Simply type your 
 SQL query into this text box and click <guibutton>Execute</guibutton>.  &kword; will query the database and return the specified query
-in tabular format in the <guilabel>Query result</guilabel> box.  You can alter, or edit your query on the query line and each time you 
+in tabular format in the <guilabel>Query Result</guilabel> box.  You can alter, or edit your query on the query line and each time you 
 click <guibutton>Execute</guibutton>, the new query results will appear.</para>
 <note><para>&kword; does not limit your query strings.  They can be simple and straight forward:</para>
 <para><userinput>select * from Clients</userinput></para>
@@ -145,7 +145,7 @@ data.LastName=Clients.LastName
 </userinput></para>
 </note>
 <para>Clicking <guibutton>Setup</guibutton>, will allow you to <link linkend="mail-merge-login">log into a different database</link>.</para>
-<para>When you have the correct query in the <guilabel>Query</guilabel> text box, click <guibutton>OK</guibutton> to select that query.
+<para>When you have the correct query in the <guilabel>Query:</guilabel> text box, click <guibutton>OK</guibutton> to select that query.
 </para>
 <para>This will return you to the mail merge main dialog box.</para>
 
@@ -181,7 +181,7 @@ where to insert the database information</para></listitem>
 <sect3 id="mail-merge-kspread-data">
 <title>Selecting the file that contains the data.</title>
 <para>To begin, select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem></menuchoice> from
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
 the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -250,7 +250,7 @@ where to insert the database information</para></listitem>
 <sect3 id="mail-merge-ab-data">
 <title>Select the people you want included</title>
 <para>To begin, select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem></menuchoice> from
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
 the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -326,7 +326,7 @@ personalized documents from that data.</para>
 <sect3 id="mail-merge-internal-data">
 <title>Enter the data</title>
 <para>To begin, select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem></menuchoice> from
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
 the menubar. A dialog box will appear.</para>
 
 <screenshot>
@@ -337,7 +337,7 @@ the menubar. A dialog box will appear.</para>
 </screenshot>
 
 <para>Click on <guibutton>Create New...</guibutton>.  Another small dialog will appear.</para>
-<para>There is currently only one option in this dialog box <guilabel>Internal storage</guilabel>. Click on
+<para>There is currently only one option in this dialog box <guilabel>Internal Storage</guilabel>. Click on
 <guibutton>OK</guibutton>.  A new dialog box will appear.</para>
 
 <screenshot>
@@ -454,7 +454,7 @@ you can proceed to printing your document.</para>
 <sect4 id="mail-merge-print-preview">
 <title>Preview your documents before printing</title>
 <para>To preview your document select <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem></menuchoice> from
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem></menuchoice> from
 the menubar. A dialog box will appear.</para>
 
 <screenshot>

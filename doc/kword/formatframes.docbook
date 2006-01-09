@@ -126,9 +126,9 @@ frame set.</para></listitem>
 </varlistentry>
 </variablelist>
 
-<para>Simply make your selection in the section labeled <guilabel>If Text is too long for Frame</guilabel>.</para>
+<para>Simply make your selection in the section labeled <guilabel>If Text is Too Long for Frame</guilabel>.</para>
 
-<para>In the section entitled <guilabel>On new Page Creation</guilabel>, you have three options available.  You must select one.</para>
+<para>In the section entitled <guilabel>On New Page Creation</guilabel>, you have three options available.  You must select one.</para>
 
 <variablelist>
 <varlistentry>
@@ -137,7 +137,7 @@ frame set.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Don't create a followup frame</guilabel></term>
+<term><guilabel>Do not create a followup frame</guilabel></term>
 <listitem><para>Creates a new page, but not a new frame.</para></listitem>
 </varlistentry>
 
@@ -153,7 +153,7 @@ on any new pages.</para></tip></listitem>
 
 
 <para>If you place a mark in the check box labled <guilabel>Changes will be applied to all
-frames in the frameset</guilabel>, then any changes made in the frame properties dialog box
+frames in frameset</guilabel>, then any changes made in the frame properties dialog box
 will automatically be applied to all frames within the frameset.</para>
 
 <para>If you place a mark in the check box labeled <guilabel>Protect content</guilabel>, &kword;
@@ -216,7 +216,7 @@ or <guilabel>Longest side</guilabel>.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Text will not run around the frame</guilabel></term>
+<term><guilabel>Text will not run around this frame</guilabel></term>
 <listitem>
 <para>By selecting this option, &kword; will not wrap any
 text around the edges of this frame, but instead, will skip down below
@@ -226,7 +226,7 @@ this frame before continuing to display text in overlapping frames.</para>
 </variablelist>
 
 <para>You can also determine how close your frames appear by setting the
-<guilabel>Distance between frame and text</guilabel> in the spin boxes provided. If you place a mark in the 
+<guilabel>Distance Between Frame &amp; Text</guilabel> in the spin boxes provided. If you place a mark in the 
 checkbox labeled <guilabel>Synchronize changes</guilabel>
 &kword; will make all distances equal.</para>
 
@@ -246,10 +246,10 @@ the <guilabel>Connect Text Frames</guilabel> tab.</para>
 </screenshot>
 
 <para>This dialog gives you the option to create a new frameset for the current frame or move the selected frame to a current frameset.</para>
-<para>Select <guilabel>Select existing frameset to connect frame to</guilabel>, to add the current frame to a previously created
+<para>Select <guilabel>Select existing frameset to connect frame to:</guilabel>, to add the current frame to a previously created
 frameset.  Choose one of the
 framesets listed in the table below to specify which frameset.</para>
-<para>To create a new frameset, select <guilabel>Create a new frameset</guilabel> and type the name of the new frameset in the
+<para>To create a new frameset, select <guilabel>Create a new frameset:</guilabel> and type the name of the new frameset in the
 text box labeled <guilabel>Name of frameset</guilabel>.  &kword; will create a new frameset with the current frame
 as the only frame in the frameset (for now).</para>
 <tip><para>It is helpful to name your framesets with descriptive names.   Name the frameset with a description of the contents
@@ -276,7 +276,7 @@ where the frame goes and how large it is.</para>
 
 <para>If you put a mark in the check box labeled <guilabel>Frame is inline</guilabel>, the frame size and position will
 be determined by the location of the placeholder in the text.  For a definition of inline frames, click
-<glossterm linkend="definlineframe">here</glossterm>. Selecting this option disables the <guilabel>Position Spin boxes</guilabel>.</para>
+<glossterm linkend="definlineframe">here</glossterm>. Selecting this option disables the <guilabel>Position</guilabel> spin boxes.</para>
 
 <para>If you put a mark in the check box labeled <guilabel>Protect size and position</guilabel>, the frame size and position will
 be fixed at their current location.  You will not be able to move the frame on the page until this box is unchecked.</para>
@@ -324,11 +324,11 @@ become 1 cm in size.</para>
 <para>The right side of the dialog shows a preview of the current background.</para>
 
 <para>Begin by selecting the primary color of the background by clicking on the button labeled 
-<guibutton>Background Color:</guibutton>.  The color is selected using the
+<guibutton>Background color:</guibutton>.  The color is selected using the
 <link linkend="select-colors">Color selection dialog</link>.</para>
 
 <para>Once the color is selected, you can select the fill style from the combo box labeled
-<guilabel>Background Style</guilabel>. Fill styles can be used to create diagonal lines,or reduce the relative density of color 
+<guilabel>Background style:</guilabel>. Fill styles can be used to create diagonal lines,or reduce the relative density of color 
 applied to the background. After selecting your fill style, a sample will appear in the preview on the right. </para>
 
 <para>Click <guibutton>OK</guibutton> to accept all of your changes.</para>

@@ -79,8 +79,8 @@ the enumeration or bullet.</para>
 <para>The text box labeled <guilabel>Suffix text:</guilabel> allows the user to add text after
 the enumeration or bullet.</para>
 
-<para>For example:  If <quote>Step</quote> is typed into the <guilabel>Prefix Text:</guilabel>
-box, and <quote>-</quote> is typed into the <guilabel>Suffix Text:</guilabel> text box, the list will look like this:</para>
+<para>For example:  If <quote>Step</quote> is typed into the <guilabel>Prefix text:</guilabel>
+box, and <quote>-</quote> is typed into the <guilabel>Suffix text:</guilabel> text box, the list will look like this:</para>
 
 <informalexample><simplelist>
 <member>Step 1 - Place 1 cup of flour in a large mixing bowl.</member>
@@ -89,7 +89,7 @@ box, and <quote>-</quote> is typed into the <guilabel>Suffix Text:</guilabel> te
 </simplelist></informalexample>
 
 <para>If an enumerated list style is selected, the starting number/letter for the list can be set in the spin box
-labeled <guilabel>Start at</guilabel>.  If you have selected a bulleted list style, this box will be inactive.</para>
+labeled <guilabel>Start at:</guilabel>.  If you have selected a bulleted list style, this box will be inactive.</para>
 </sect3>
 <sect3 id="list-depth"><title>Multi-level lists</title>
 
@@ -116,14 +116,14 @@ you are adding a subsection to the list.  </para>
 
 <para>Adjust the depth setting to determine where in the list this text occurs.</para>
 <para>By adjusting the spin box labeled <guilabel>Display levels:</guilabel> you can determine if previous levels are displayed.  For example, with a list where <guilabel>Depth:</guilabel> is set to three and 
-<guilabel>Display levesl:</guilabel> is set to one might be: </para>
+<guilabel>Display levels:</guilabel> is set to one might be: </para>
  
 <informalexample><simplelist>
 <member>i. This is a step</member>
 <member>ii. This is another step</member>
 </simplelist></informalexample>
 
-<para>If you change the <guilabel>Display level</guilabel> to two, it would change to: </para>
+<para>If you change the <guilabel>Display levels:</guilabel> to two, it would change to: </para>
 
 <informalexample><simplelist>
 <member>A.i. This is a step</member>
@@ -139,7 +139,7 @@ your list will look.</para>
 
 <sect3 id="lists-custom-bullets"><title>Custom Bullets</title>
 <para>If you select <guilabel>Custom Bullet</guilabel> from the list of styles, you can click on the button labeled 
-<guilabel>Custom Character</guilabel> to choose the letter or symbol you want for your bulleted list.</para>
+<guilabel>Custom character:</guilabel> to choose the letter or symbol you want for your bulleted list.</para>
 </sect3>
 <sect3 id="lists-restart"><title>Restart new list</title>
 <para>If you select the checkbox labeled <guilabel>Restart numbering at this paragraph</guilabel> &kword; will start 

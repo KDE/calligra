@@ -340,7 +340,7 @@ information on the ability to export files to other applications, see the sectio
 <varlistentry>
 <term id="menu-template-create">
 <menuchoice>
-<guimenu>File</guimenu><guimenuitem>Create Template from
+<guimenu>File</guimenu><guimenuitem>Create Template From
 Document...</guimenuitem>
 </menuchoice>
 </term>
@@ -366,7 +366,7 @@ to guess if a dot really starts a new sentence or not. The number of
 syllables is estimated, &kword; therefore assumes that the text is
 written in English.</para>
 
-<para>The <guilabel>Flesch reading ease</guilabel> score is a number
+<para>The <guilabel>Flesch reading ease:</guilabel> score is a number
 between 0 and 100 which estimates how readable a text is. The higher
 the number, the easier the text can be read. Text with a score of
 70-80 should have fairly good readability.</para>
@@ -506,8 +506,8 @@ action="simul">&Ctrl;<keycap>Z</keycap></keycombo></shortcut>
 
 <para><action>Reverses the last action you performed.</action> Not all
 actions can be reversed.  If you are not able to Undo the last action,
-the <guimenuitem>Undo</guimenuitem> option will be replaced with
-<guimenuitem>No Undo Possible</guimenuitem>.  For a more thourough
+the <guimenuitem>Undo</guimenuitem> option will be displayed gray and is
+not accessible.  For a more thourough
 discussion of Undo/Redo, <link linkend="undo-redo">click
 here</link>.</para>
 
@@ -528,9 +528,7 @@ action="simul">&Ctrl;<keycap>&Shift;</keycap><keycap>Z</keycap></keycombo></shor
 </term>
 <listitem>
 <para><action>Reverses the last Undo performed.</action> If the Redo
-option is unavailable, the Toolbar will replace
-<guimenuitem>Redo</guimenuitem> with <guimenuitem>No Redo
-Possible</guimenuitem>. For a more thourough discussion of Undo/Redo,
+option is unavailable, the Toolbar will display this items gray. For a more thourough discussion of Undo/Redo,
 <link linkend="undo-redo">click here</link>.</para>
 <para>Typing <keycombo
 action="simul">&Ctrl;<keycap>&Shift;</keycap><keycap>Z</keycap></keycombo> 
@@ -928,7 +926,7 @@ not found on the keyboard.</action></para>
 <shortcut>
 <keycombo action="simul">&Ctrl;<keycap>Return</keycap></keycombo>
 </shortcut>
-<guimenu>Insert</guimenu><guimenuitem>Page Break/Hard Frame Break</guimenuitem>
+<guimenu>Insert</guimenu><guimenuitem>Page Break</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1347,7 +1345,7 @@ including size, headers and footers.</action> For more details, go to
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Show Header</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Enable/Disable Document Headers</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1362,7 +1360,7 @@ linkend="headers-and-footers">Headers and Footers</link>.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Format</guimenu><guimenuitem>Show Footer</guimenuitem>
+<guimenu>Format</guimenu><guimenuitem>Enable/Disable Document Footers</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1876,7 +1874,7 @@ refer to the section entitled <link linkend="variables">Document variables</link
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Tools</guimenu><guimenuitem>Setup Mail Merge...</guimenuitem>
+<guimenu>Tools</guimenu><guimenuitem>Configure Mail Merge...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -2374,7 +2372,7 @@ cross hairs left or right to change the <glossterm linkend="defhue">hue</glosste
 <para>To adjust the <glossterm linkend="defvalue">value</glossterm> of the color, use the tall, narrow box to move the black arrow.  Sliding the
 arrow up increases the color's <glossterm linkend="defvalue">value</glossterm>.  Sliding the arrow down decreases the color's
 <glossterm linkend="defvalue">value</glossterm>.</para>
-<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para></listitem>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para></listitem>
 </varlistentry>
 <varlistentry>
 <term>Hue, Saturation and Value</term>
@@ -2382,19 +2380,19 @@ arrow up increases the color's <glossterm linkend="defvalue">value</glossterm>. 
 specify the <glossterm linkend="defhue">Hue</glossterm> (Range 0-359), <glossterm linkend="defsaturation">Saturation</glossterm> (Range 0-255) 
 and <glossterm linkend="defvalue">Value</glossterm> (Range 0-255)
 respectively.</para>
-<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
 <term>Red, Green and Blue</term>
 <listitem><para>Using the three spin boxes labeled <guilabel>R</guilabel>,<guilabel>G</guilabel> and <guilabel>B</guilabel>, a user can
 specify the amount of Red, Green and Blue to be mixed to form the current color.  All three boxes can be set to any value from 0-255.</para>
-<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term>Palattes</term>
-<listitem><para>A palate is a group of related colors.  These colors are all made available for easy selection according to a meaningful
+<term>Palettes</term>
+<listitem><para>A palette is a group of related colors.  These colors are all made available for easy selection according to a meaningful
 association.</para>
 <para>To select a new palate, click on the combo box at the top of the palate selection area.  
 You will be presented with several choices:</para>
@@ -2404,7 +2402,7 @@ maintain consistency.  As each new color is selected, it is automatically added 
 color using one of the other
 color selection options, and clicking on <guibutton>Add to Custom Colors</guibutton>.  
 That color is now added to your custom color palate.</para>
-<para><guilabel>40 Colors</guilabel> - This is a list of 40 commonly used colors.  This is a good palate to choose from if some of the people
+<para><guilabel>Forty Colors</guilabel> - This is a list of 40 commonly used colors.  This is a good palate to choose from if some of the people
 viewing your document will be on machines with limited color capability.</para>
 <para><guilabel>Web Colors</guilabel> - This is a predefined palate of colors that you might find useful for designing web pages.</para>
 <para><guilabel>Royal Colors</guilabel> - This is a predefined palate of colors including numerous shades of purple and yellow.</para>
@@ -2412,7 +2410,7 @@ viewing your document will be on machines with limited color capability.</para>
 names.  The names are designed to give descriptive names to each color.  Simply select the name you want. </para>
 <para>Once you have selected a palate, you will be presented with a small square showing each color available in the palate. To 
 select a color from the palate, simply click on the square of the desired color.</para>
-<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
@@ -2421,15 +2419,15 @@ select a color from the palate, simply click on the square of the desired color.
 <para>When the eye dropper button is clicked, the cursor becomes crosshairs.  Simply place the crosshairs over any spot on the screen
 and click once.  &kword; will detect the selected color and automatically change the current color to match the selection.</para>
 <para>This is especially useful for matching color elements between previously created elements and new items.</para>
-<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para>
 </listitem></varlistentry>
 <varlistentry>
 <term>HTML code</term>
 <listitem><para>If you know the HTML color code you want to use, you can enter it into the text box labeled 
-<guilabel>HTML</guilabel>.</para>
+<guilabel>HTML:</guilabel>.</para>
 <para>For more information on HTML color codes, visit the
 <ulink url="http://hotwired.lycos.com/webmonkey/reference/color_codes/">Web monkey</ulink> color code page.</para>
-<para>The currently selected color is visible in the colored square below the <guibutton>Add to custom colors</guibutton> button.</para>
+<para>The currently selected color is visible in the colored square below the <guibutton>Add to Custom Colors</guibutton> button.</para>
 </listitem>
 </varlistentry>
 </variablelist>
@@ -2517,7 +2515,7 @@ folders should be listed before files, or mixed within the files.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Show/Hide Quick Navigation Panel</guimenuitem></term>
+<term><guimenuitem>Show/Hide Quick Access Navigation Panel</guimenuitem></term>
 <listitem>
 <para>The tall box along the left side of the dialog with a dark grey backround is the Quick Navigation Panel.  You can use this option to toggle whether it is visible or not.</para>
 <para>More detailed information about hte Quick Navigation Panel is avialable further down this page.</para>
@@ -2525,14 +2523,14 @@ folders should be listed before files, or mixed within the files.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Show/Hide Preview Panel</guimenuitem></term>
+<term><guimenuitem>Show/Hide Preview</guimenuitem></term>
 <listitem>
 <para>You can use this option to toggle whether the preview panel is visible or not.  Typically, the preview panel is left off, but it can be useful when looking for a picture to insert into a document.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guimenuitem>Seperate Folders</guimenuitem></term>
+<term><guimenuitem>Separate Folders</guimenuitem></term>
 <listitem>
 <para>Use this option to toggle between a 2 pane view of the filesystem and a one pane view of the filesystem.  
 Most people will not need to worry about this option as most people prefer the one pane view.</para>
@@ -2554,13 +2552,13 @@ Simply click with the &RMB; and a small submenu will appear.</para>
 <para><emphasis>File Name and Filters</emphasis></para>
 
 
-<para>The text box labeled <guilabel>Location</guilabel> contains the current filename <filename>Resume.kwd</filename>. This text box will contain the 
+<para>The text box labeled <guilabel>Location:</guilabel> contains the current filename <filename>Resume.kwd</filename>. This text box will contain the 
 filename of the currently selected file when loading new documents or files into
 &kword;.  When saving a file, you will enter the desired filename in this text box.</para>
 
-<para>The text box labeled <guilabel>Filter</guilabel> shows we are only looking
+<para>The text box labeled <guilabel>Filter:</guilabel> shows we are only looking
 at &kword; files.  By clicking on the combo box, you can select from several
-different file formats.  You can also select <guilabel>All supported files</guilabel> to display
+different file formats.  You can also select <guilabel>All Supported Files</guilabel> to display
 all files that are supported by &kword;.  The file types available will change depending on
 the specific task at hand.</para>
 

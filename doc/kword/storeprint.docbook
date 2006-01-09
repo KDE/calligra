@@ -126,7 +126,7 @@ dialog box is revealed.  For more details on this dialog box refer to
 <sect3 id="loading-recent-doc">
 <title>Open a Recent Document</title>
 <para>&kword; keeps track of the most recently edited documents.  You can select one of these documents by clicking on the tab labeled 
-<guilabel>Open a recent document</guilabel>. This will list the most recently edited files on the system.  Simply click on the icon of the desired file with the 
+<guilabel>Recent Documents</guilabel>. This will list the most recently edited files on the system.  Simply click on the icon of the desired file with the 
 &LMB; and click <guibutton>OK</guibutton>.</para>
 
 </sect3>
@@ -257,7 +257,7 @@ previous location.</para></important>
 <link linkend="file-dialog">Using the file selection dialog</link>.</para>
 
 <para>When you are in the folder you want to save the file in, type a filename into the
-<guilabel>Location</guilabel> box.</para>
+<guilabel>Location:</guilabel> box.</para>
 <tip><para>&kword; can create a <literal role="extension">.pdf</literal> file for you.  For instructions see 
 <link linkend="qd-pdf">How do I create a <literal role="extension">.pdf</literal> file</link>.</para></tip>
 
@@ -402,7 +402,7 @@ select the desired printer.</para>
 <para>If you want to print your output into a postscript file, to a PDF file, 
 a fax modem (to send it as a fax) or email the file as a PDF file, select
 the appropriate option from the combo box labeled <guilabel>Name</guilabel>. Once that option has been selected, enter
-the filename into the text box labled <guilabel>Output File:</guilabel>.</para>
+the filename into the text box labled <guilabel>Output file:</guilabel>.</para>
 
 <para>The line labled <guilabel>State</guilabel> tells you if your printer is currently connected and if it is printing another page. You can not change any information on this line.</para>
 
@@ -417,16 +417,16 @@ print web site at <ulink url="http://printing.kde.org">http://printing.kde.org</
 
 <para>If you want to print all pages of your document and only one copy, you can click 
 <guibutton>OK</guibutton>.  If you want to change the number of copies or only print selected
-pages, click the <guibutton>Expand</guibutton> button.</para>
+pages, click the <guibutton>Options &gt;&gt;</guibutton> button.</para>
 
-<note><para>The <guibutton>System Options...</guibutton> button allows a user to change the setup of the printers and &kde; print system.  This is also beyond the scope of this manual.  
+<note><para>The <guibutton>System Options</guibutton> button allows a user to change the setup of the printers and &kde; print system.  This is also beyond the scope of this manual.  
 If you need to make changes please refer to the &kde; print web site at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para></note>
 
 <note><para>Depending on which printing system your computer uses, you may find that you have 
 more printing options then those described below.  What is described here, is available on 
 <emphasis>most</emphasis> systems.</para></note>
 
-<para>Once you click <guibutton>Expand</guibutton>, the dialog box changes to:</para>
+<para>Once you click <guibutton>Options &gt;&gt;</guibutton>, the dialog box changes to:</para>
 
 <screenshot>
 <mediaobject>
@@ -438,12 +438,12 @@ more printing options then those described below.  What is described here, is av
 <para>Under <guilabel>Page Selection</guilabel>, you can select either
 to print the whole document (select <guilabel>All</guilabel>), print the page the cursor is
 located on (simply select <guilabel>Current</guilabel>), or print a range of pages.  If you select the
-<guilabel>Print Range</guilabel> option, enter your page range in the text box
+<guilabel>Range</guilabel> option, enter your page range in the text box
 provided. (Example:  3-13)</para>
 
-<para>In the combo box labeled <guilabel>Page Set:</guilabel> you can tell &kword; to
-print the <guilabel>Even pages</guilabel>, the <guilabel>Odd pages</guilabel> or 
-<guilabel>All pages</guilabel>.</para>
+<para>In the combo box labeled <guilabel>Page set:</guilabel> you can tell &kword; to
+print the <guilabel>Even Pages</guilabel>, the <guilabel>Odd Pages</guilabel> or 
+<guilabel>All Pages</guilabel>.</para>
 
 <para>In the box on the right labeled <guilabel>Copies:</guilabel>, you should set the number of copies
 you want printed.  You can either enter the number directly into the
@@ -460,7 +460,7 @@ then all of the copies of the second page, &etc;</para>
 (print first page first), or reverse order (print last page
 first).</para>
 
-<para>If you click on <guibutton>Collapse</guibutton>, the print dialog will
+<para>If you click on <guibutton>Options &lt;&lt;</guibutton>, the print dialog will
 compress down to the previous view.</para>
 
 <note><para>Depending on your systems setup, you may have additional options available to you.  These options are discussed at <ulink url="http://printing.kde.org">http://printing.kde.org</ulink>.</para></note>

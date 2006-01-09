@@ -43,11 +43,11 @@ in the example above).
  will not allow the user to edit or remove any predefined expressions.  You create a new group by clicking on the
  <guibutton>New</guibutton> located <emphasis>below the group list</emphasis>.  A new group will be created
  with the name <emphasis>new group</emphasis>.  You can change the name of the new group by clicking on the
- newly created group in the group list on the left, then editing the text box on the right labeled <guilabel>Group name</guilabel>.</para>
+ newly created group in the group list on the left, then editing the text box on the right labeled <guilabel>Group name:</guilabel>.</para>
  </sect3>
 <sect3 id="expression-add-rename-group"><title>Change the name of a group</title>
 <para>To change the name of a group, simply click on the group in the list on the left side of the dialog.  Type the new name in the text
-box labeled <guilabel>Group name</guilabel>.</para>
+box labeled <guilabel>Group name:</guilabel>.</para>
 </sect3>
 <sect3 id="expression-add-delete-group"><title>Delete a group</title>
 <para>To delete a group, click on the group in the list on the left side of the dialog.</para>
