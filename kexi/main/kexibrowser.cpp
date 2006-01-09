@@ -123,13 +123,13 @@ KexiBrowser::KexiBrowser(KexiMainWindow *mainWin)
 
 	m_editTextAction = new KAction(i18n("Open in &Text View"), "", 0, this, 
 		SLOT(slotEditTextObject()), this, "editText_object");
-	m_editTextAction->setToolTip(i18n("Open object in text view"));
-	m_editTextAction->setWhatsThis(i18n("Opens object selected in the list in text view"));
+	m_editTextAction->setToolTip(i18n("Open object in Text View"));
+	m_editTextAction->setWhatsThis(i18n("Opens object selected in the list in Text View"));
 	m_editTextAction->plug(m_itemPopup);
 	m_editTextAction_id = m_itemPopup->idAt(m_itemPopup->count()-1);
 	m_newObjectAction = new KAction("", "filenew", 0, this, SLOT(slotNewObject()), this, "new_object");
-	m_editTextAction->setToolTip(i18n("Open object in text view"));
-	m_editTextAction->setWhatsThis(i18n("Opens object selected in the list in text view"));
+	m_editTextAction->setToolTip(i18n("Open object in Text View"));
+	m_editTextAction->setWhatsThis(i18n("Opens object selected in the list in Text View"));
 	m_newObjectAction->plug(m_itemPopup);
 //	m_newObjectToolbarAction = new KAction("", 0, this, SLOT(slotNewObject()), this, "new_object");
 //	m_toolbar->insertSeparator();

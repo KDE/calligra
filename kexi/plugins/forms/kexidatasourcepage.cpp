@@ -60,7 +60,12 @@ KexiDataSourcePage::KexiDataSourcePage(QWidget *parent, const char *name)
 
 	//Widget's Data Source
 	QHBoxLayout *hlyr = new QHBoxLayout(vlyr);
-	m_widgetDSLabel = new QLabel(i18n("Table Field, Query Field or Expression", "Source field or expression:"), this);
+#if 0
+//! @todo unhide this when expression work
+//	m_widgetDSLabel = new QLabel(i18n("Table Field, Query Field or Expression", "Source field or expression:"), this);
+#else
+	m_widgetDSLabel = new QLabel(i18n("Table Field or Query Field", "Source field:"), this);
+#endif
 	m_widgetDSLabel->setSizePolicy(QSizePolicy::Minimum, QSizePolicy::Fixed);
 	m_widgetDSLabel->setMargin(2);
 	m_widgetDSLabel->setMinimumHeight(IconSize(KIcon::Small)+4);

@@ -75,7 +75,7 @@ void KexiFormEventHandler::setMainWidgetForEventHandling(KexiMainWindow *mainWin
 	QDict<char> tmpSources;
 	for ( ; (obj = it.current()) != 0; ++it ) {
 		QString actionName = obj->property("onClickAction").toString();
-		if(actionName.isNull())
+		if(actionName.isEmpty())
 			continue;
 
 		if (actionName.startsWith("kaction:")) {

@@ -1,7 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 2004 Cedric Pasteur <cedric.pasteur@free.fr>
    Copyright (C) 2004-2005 Jaroslaw Staniek <js@iidea.pl>
-
+[B[B
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
    License as published by the Free Software Foundation; either
@@ -608,8 +608,8 @@ WidgetPropertySet::isNameValid(const QString &name)
 	if (!KexiUtils::isIdentifier(name)) {
 		KMessageBox::sorry(KFormDesigner::FormManager::self()->activeForm()->widget(),
 			i18n("Could not rename widget. "
-			"\"%1\" is not a valid name for a widget.\n"
-			"Its name will be reverted to \"%2\"").arg(name).arg(w->name()));
+			"\"%1\" is not a valid name (identifier) for a widget.\n"
+			"Its name will be reverted to \"%2\".").arg(name).arg(w->name()));
 		d->slotPropertyChangedEnabled = false;
 		d->set["name"].resetValue();
 		d->slotPropertyChangedEnabled = true;
@@ -618,9 +618,8 @@ WidgetPropertySet::isNameValid(const QString &name)
 
 	if (KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(name)) {
 		KMessageBox::sorry( KFormDesigner::FormManager::self()->activeForm()->widget(),
-			i18n("Could not rename widget. "
-			"A widget with name \"%1\" already exists.\n"
-			"Its name will be reverted to \"%2\"").arg(name).arg(w->name()));
+			i18n("Could not rename widget. Its name will be reverted to \"%1\".\n"
+			"A widget with name \"%2\" already exists.").arg(w->name()).arg(name));
 		d->slotPropertyChangedEnabled = false;
 		d->set["name"].resetValue();
 		d->slotPropertyChangedEnabled = true;

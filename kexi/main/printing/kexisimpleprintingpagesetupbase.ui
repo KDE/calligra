@@ -74,9 +74,6 @@
                     <verstretch>0</verstretch>
                 </sizepolicy>
             </property>
-            <property name="text">
-                <string> fweg weg weg weg weg we</string>
-            </property>
         </widget>
         <widget class="KPushButton" row="5" column="5">
             <property name="name">
