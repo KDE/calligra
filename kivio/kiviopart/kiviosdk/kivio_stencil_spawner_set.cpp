@@ -291,19 +291,24 @@ QString KivioStencilSpawnerSet::readDescription(const QString& dir)
 
 KivioStencilSpawner* KivioStencilSpawnerSet::find( const QString& id)
 {
-    KivioStencilSpawner *pSpawner = m_pSpawners->first();
-    while( pSpawner )
-    {
-        // If the id matches, this is it!
-        if( pSpawner->info()->id() == id )
-        {
-            return pSpawner;
-        }
+  if(!m_pSpawners || m_pSpawners->isEmpty()) {
+    return 0;
+  }
 
-        pSpawner = m_pSpawners->next();
-    }
+  KivioStencilSpawner* pSpawner = m_pSpawners->first();
 
-    return NULL;
+  while( pSpawner )
+  {
+      // If the id matches, this is it!
+      if( pSpawner->info()->id() == id )
+      {
+          return pSpawner;
+      }
+
+      pSpawner = m_pSpawners->next();
+  }
+
+  return NULL;
 }
 
 void KivioStencilSpawnerSet::addSpawner(KivioStencilSpawner* spawner)
