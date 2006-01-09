@@ -283,6 +283,8 @@ class KIVIO_EXPORT KivioView : public KoView
 
     void showAddStencilSetDialog();
 
+    void updateRulers();
+
   protected:
     void setupActions();
     void initActions();

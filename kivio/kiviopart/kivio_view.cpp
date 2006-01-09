@@ -233,6 +233,7 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   connect(vRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
   connect(hRuler, SIGNAL(doubleClicked()), SLOT(paperLayoutDlg()));
   connect(m_pDoc, SIGNAL(unitChanged(KoUnit::Unit)), SLOT(setRulerUnit(KoUnit::Unit)));
+  connect(m_pCanvas, SIGNAL(visibleAreaChanged()), SLOT(updateRulers()));
 
   connect(vRuler, SIGNAL(addGuide(const QPoint&, bool, int)),
           &(m_pCanvas->guideLines()), SLOT(addGuide(const QPoint&, bool, int)));
@@ -2267,6 +2268,13 @@ void KivioView::showAddStencilSetDialog()
   }
 
   m_addStencilSetDialog->show();
+}
+
+void KivioView::updateRulers()
+{
+  m_pCanvas->updateScrollBars();
+  setRulerVOffset(m_vertScrollBar->value());
+  setRulerHOffset(m_horzScrollBar->value());
 }
 
 #include "kivio_view.moc"

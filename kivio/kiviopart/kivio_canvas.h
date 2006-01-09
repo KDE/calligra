@@ -58,8 +58,9 @@ class KoRect;
 #define XBORDER_HEIGHT 20
 
 class KIVIO_EXPORT KivioCanvas : public QWidget
-{ Q_OBJECT
-    friend class KivioView;
+{
+  Q_OBJECT
+  friend class KivioView;
   public:
     KivioCanvas( QWidget*, KivioView*, KivioDoc*, QScrollBar*, QScrollBar* );
     ~KivioCanvas();
