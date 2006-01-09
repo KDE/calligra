@@ -12,6 +12,7 @@ libkrossmain_la_LIBADD = \
     $(LIB_KDECORE) \
     $(LIB_KFILE) \
     $(LIB_KDEUI) \
+    $(LIB_KNEWSTUFF) \
     $(LIB_KROSS_API)
 
 METASOURCES = AUTO

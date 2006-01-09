@@ -42,6 +42,7 @@
   #include <knewstuff/provider.h>
   #include <knewstuff/engine.h>
   #include <knewstuff/downloaddialog.h>
+  #include <knewstuff/uploaddialog.h>
   #include <knewstuff/knewstuffsecure.h>
 #endif
 
@@ -288,8 +289,11 @@ void WdgScriptsManager::slotGetNewScript()
     }
 
     KNS::Engine *engine = new KNS::Engine(d->newstuff, type, this);
-    KNS::DownloadDialog *d = new KNS::DownloadDialog( engine, this );
-    d->setType(type);
+
+KNS::UploadDialog *d = new KNS::UploadDialog( engine, this );
+
+    //KNS::DownloadDialog *d = new KNS::DownloadDialog( engine, this );
+    //d->setType(type);
 
     KNS::ProviderLoader *p = new KNS::ProviderLoader(this);
     QObject::connect(p, SIGNAL(providersLoaded(Provider::List*)),
@@ -298,6 +302,9 @@ void WdgScriptsManager::slotGetNewScript()
     ///@todo make it more generic for any kind of url ...
     p->load(type, QString("http://download.kde.org/khotnewstuff/%1scripts-providers.xml").arg(appname));
     d->exec();
+
+engine->upload( "/home/snoopy/.kde/share/apps/kexi/scripts/exporthtml/data.tar.gz" );
+//d->newstuff->uploadResource(  );
 #endif
 }
 
