@@ -55,12 +55,19 @@
 
 #include "kexiquerypart.h"
 
+//! @todo remove KEXI_NO_QUERY_TOTALS later
+#define KEXI_NO_QUERY_TOTALS
+
 //! indices for table columns
 #define COLUMN_ID_COLUMN 0
 #define COLUMN_ID_TABLE 1
 #define COLUMN_ID_VISIBLE 2
-#define COLUMN_ID_TOTALS 3
-#define COLUMN_ID_CRITERIA 4
+#ifdef KEXI_NO_QUERY_TOTALS
+# define COLUMN_ID_CRITERIA 3
+#else
+# define COLUMN_ID_TOTALS 3
+# define COLUMN_ID_CRITERIA 4
+#endif
 
 /*! @internal */
 class KexiQueryDesignerGuiEditorPrivate
@@ -187,6 +194,7 @@ KexiQueryDesignerGuiEditor::initTableColumns()
 		i18n("Describes visibility for a given field or expression."));
 	d->data->addColumn(col3);
 
+#ifndef KEXI_NO_QUERY_TOTALS
 	KexiTableViewColumn *col4 = new KexiTableViewColumn("totals", KexiDB::Field::Enum, i18n("Totals"),
 		i18n("Describes a way of computing totals for a given field or expression."));
 	QValueVector<QString> totalsTypes;
@@ -198,6 +206,7 @@ KexiQueryDesignerGuiEditor::initTableColumns()
 	//todo: more like this
 	col4->field()->setEnumHints(totalsTypes);
 	d->data->addColumn(col4);
+#endif
 
 /*TODO
 f= new KexiDB::Field(i18n("Sort"), KexiDB::Field::Enum);
@@ -917,7 +926,9 @@ KexiQueryDesignerGuiEditor::createNewRow(const QString& tableName, const QString
 	(*newItem)[COLUMN_ID_COLUMN]=key;
 	(*newItem)[COLUMN_ID_TABLE]=tableName;
 	(*newItem)[COLUMN_ID_VISIBLE]=QVariant(true,1);//visible
+#ifndef KEXI_NO_QUERY_TOTALS
 	(*newItem)[COLUMN_ID_TOTALS]=QVariant(0);//totals
+#endif
 	return newItem;
 }
 
@@ -1126,7 +1137,9 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 		if (newValue.isNull()) {
 			d->data->updateRowEditBuffer(item, COLUMN_ID_TABLE, QVariant(), false/*!allowSignals*/);
 			d->data->updateRowEditBuffer(item, COLUMN_ID_VISIBLE, QVariant(false,1));//invisible
+#ifndef KEXI_NO_QUERY_TOTALS
 			d->data->updateRowEditBuffer(item, COLUMN_ID_TOTALS, QVariant());//remove totals
+#endif
 			d->data->updateRowEditBuffer(item, COLUMN_ID_CRITERIA, QVariant());//remove crit.
 			d->sets->removeCurrentPropertySet();
 		}
@@ -1198,7 +1211,9 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			}
 			d->data->updateRowEditBuffer(item, COLUMN_ID_TABLE, QVariant(tableName), false/*!allowSignals*/);
 			d->data->updateRowEditBuffer(item, COLUMN_ID_VISIBLE, QVariant(true,1));//visible
+#ifndef KEXI_NO_QUERY_TOTALS
 			d->data->updateRowEditBuffer(item, COLUMN_ID_TOTALS, QVariant(0));//totals
+#endif
 			//update properties
 			(*set)["field"].setValue(fieldName, saveOldValue);
 			if (isExpression) {
@@ -1224,7 +1239,9 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			if (!item->at(COLUMN_ID_COLUMN).toString().isEmpty())
 				d->data->updateRowEditBuffer(item, COLUMN_ID_COLUMN, QVariant(), false/*!allowSignals*/);
 			d->data->updateRowEditBuffer(item, COLUMN_ID_VISIBLE, QVariant(false,1));//invisible
+#ifndef KEXI_NO_QUERY_TOTALS
 			d->data->updateRowEditBuffer(item, COLUMN_ID_TOTALS, QVariant());//remove totals
+#endif
 			d->data->updateRowEditBuffer(item, COLUMN_ID_CRITERIA, QVariant());//remove crit.
 			d->sets->removeCurrentPropertySet();
 		}
@@ -1249,17 +1266,21 @@ void KexiQueryDesignerGuiEditor::slotBeforeCellChanged(KexiTableItem *item, int 
 			saveOldValue = false;
 			createPropertySet( d->dataTable->dataAwareObject()->currentRow(),
 				item->at(COLUMN_ID_TABLE).toString(), item->at(COLUMN_ID_COLUMN).toString(), true );
+#ifndef KEXI_NO_QUERY_TOTALS
 			d->data->updateRowEditBuffer(item, COLUMN_ID_TOTALS, QVariant(0));//totals
+#endif
 			propertySetSwitched();
 		}
 		KoProperty::Set &set = *propertySet();
 		set["visible"].setValue(newValue, saveOldValue);
 	}
+#ifndef KEXI_NO_QUERY_TOTALS
 	else if (colnum==COLUMN_ID_TOTALS) {
 		//TODO:
 		//unused yet
 		setDirty(true);
 	}
+#endif
 	else if (colnum==COLUMN_ID_CRITERIA) {//'criteria'
 //TODO: this is primitive, temporary: reuse SQL parser
 		QString operatorStr, argStr;
