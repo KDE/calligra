@@ -1502,7 +1502,7 @@ void KPrCanvas::mouseMoveEvent( QMouseEvent *e )
                         m_moveStartPoint = objectRect( false ).topLeft();
                         m_isMoving = true;
                     }
-                    moveObjectsByMouse( docPoint );
+                    moveObjectsByMouse( docPoint, e->state() & AltButton || e->state() & ControlButton );
                 } else if ( modType != MT_NONE && m_resizeObject ) {
                     if ( !m_isResizing )
                     {
@@ -2080,7 +2080,7 @@ void KPrCanvas::keyPressEvent( QKeyEvent *e )
                     // undo snapping for move by mouse
                     if ( e->state() & Qt::LeftButton )
                     {
-                        moveObjectsByMouse( m_origMousePos );
+                        moveObjectsByMouse( m_origMousePos, e->state() & AltButton || e->state() & ControlButton );
                     }
                     break;
                 }
@@ -4570,14 +4570,14 @@ void KPrCanvas::moveObjectsByKey( int x, int y )
 
     if ( move != KoPoint( 0, 0 ) )
     {
-        //kdDebug(33001) << "moveObjectsByMouse move = " << move << endl;
+        //kdDebug(33001) << "moveObjectsByKey move = " << move << endl;
         m_activePage->moveObject( m_view, move, false );
         m_view->updateObjectStatusBarItem();
     }
 }
 
 
-void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
+void KPrCanvas::moveObjectsByMouse( KoPoint &pos, bool keepXorYunchanged )
 {
     KPrDocument *doc( m_view->kPresenterDoc() );
 
@@ -4633,10 +4633,27 @@ void KPrCanvas::moveObjectsByMouse( KoPoint &pos )
     m_moveSnapDiff += diffDueToBorders;
     move += diffDueToBorders;
 
+    movedRect.moveBy( m_moveSnapDiff.x(), m_moveSnapDiff.y() );
+    if ( keepXorYunchanged )
+    {
+        KoPoint diff( m_moveStartPosMouse - movedRect.topLeft() );
+        if ( fabs( diff.x() ) > fabs( diff.y() ) )
+        {
+            m_moveSnapDiff.setY( m_moveSnapDiff.y() + m_moveStartPosMouse.y() - movedRect.y() );
+            movedRect.moveTopLeft( KoPoint( movedRect.x(), m_moveStartPosMouse.y() ) );
+            move.setY( movedRect.y() - rect.y() );
+        }
+        else
+        {
+            m_moveSnapDiff.setX( m_moveSnapDiff.x() + m_moveStartPosMouse.x() - movedRect.x() );
+            movedRect.moveTopLeft( KoPoint( m_moveStartPosMouse.x(), movedRect.y() ) );
+            move.setX( movedRect.x() - rect.x() );
+        }
+    }
+
     if ( snapToGuideLines )
     {
         // redraw guidelines (intentionally always)
-        movedRect.moveBy( m_moveSnapDiff.x(), m_moveSnapDiff.y() );
         m_gl.repaintSnapping( movedRect );
     }
 
