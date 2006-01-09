@@ -332,8 +332,10 @@ void
 Form::emitSelectionSignals()
 {
 	emit selectionChanged(selectedWidgets()->first(), false);
-	for(QWidget *w = selectedWidgets()->next(); w; w = selectedWidgets()->next())
-		emit selectionChanged(selectedWidgets()->first(), true);
+//	for(QWidget *w = selectedWidgets()->next(); w; w = selectedWidgets()->next())
+//		emit selectionChanged(selectedWidgets()->first(), true);
+	for (WidgetListIterator it(*selectedWidgets()); it.current(); ++it)
+		emit selectionChanged(it.current(), true);
 }
 
 ///////////////////////////  Various slots and signals /////////////////////
