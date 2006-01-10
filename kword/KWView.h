@@ -228,7 +228,7 @@ public:
     int tableDeleteRow(const QValueList<uint>& rows, KWTableFrameSet *table = 0);
     int tableDeleteCol(const QValueList<uint>& cols, KWTableFrameSet *table = 0);
 
-    void pasteData( QMimeSource* data );
+    void pasteData( QMimeSource* data, bool drop );
 
     KWFrameViewManager* frameViewManager() const;
 
@@ -546,7 +546,7 @@ private:  // methods
     void deleteSelectedFrames();
     void borderChanged(KoBorder::BorderType type);
     void updateZoomControls();
-    
+
 private: // variables
     KWDocument *m_doc;
 

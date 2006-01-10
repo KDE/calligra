@@ -1848,7 +1848,7 @@ void KPrTextView::paste()
         // In particular it handles charsets (in the mimetype).
         QString text = QApplication::clipboard()->text();
         if ( !text.isEmpty() )
-            textObject()->pasteText( cursor(), text, currentFormat(), true );
+            textObject()->pasteText( cursor(), text, currentFormat(), true /*removeSelected*/ );
     }
     kpTextObject()->layout();
 }
@@ -2282,7 +2282,7 @@ void KPrTextView::insertCustomVariable( const QString &name)
     KPrDocument * doc = kpTextObject()->kPresenterDocument();
     KoVariable * var = new KoCustomVariable( textDocument(), name, doc->variableFormatCollection()->format( "STRING" ),
                                 doc->getVariableCollection());
-    insertVariable( var);
+    insertVariable( var );
 }
 
 void KPrTextView::insertLink(const QString &_linkName, const QString & hrefName)
@@ -2291,20 +2291,18 @@ void KPrTextView::insertLink(const QString &_linkName, const QString & hrefName)
     KoVariable * var = new KoLinkVariable( textDocument(), _linkName, hrefName,
                                            doc->variableFormatCollection()->format( "STRING" ),
                                            doc->getVariableCollection());
-    insertVariable( var);
+    insertVariable( var );
 }
-
 
 void KPrTextView::insertComment(const QString &_comment)
 {
-    KoVariable * var = 0L;
     KPrDocument * doc = kpTextObject()->kPresenterDocument();
 
-    var = new KoNoteVariable( textDocument(),_comment, doc->variableFormatCollection()->format( "STRING" ),
-                              doc->getVariableCollection());
-    insertVariable( var, 0,false/*don't delete selected text*/);
+    KoVariable * var = new KoNoteVariable( textDocument(), _comment,
+                                           doc->variableFormatCollection()->format( "STRING" ),
+                                           doc->getVariableCollection());
+    insertVariable( var );
 }
-
 
 void KPrTextView::insertVariable( int type, int subtype )
 {
@@ -2328,12 +2326,12 @@ void KPrTextView::insertVariable( int type, int subtype )
         var = doc->getVariableCollection()->createVariable( type, subtype,  doc->variableFormatCollection(), 0L, textDocument(),doc, 0);
     if ( var )
     {
-        insertVariable( var , 0L, true,refreshCustomMenu);
+        insertVariable( var, 0, refreshCustomMenu);
         doc->recalcPageNum();
     }
 }
 
-void KPrTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, bool removeSelectedText,bool refreshCustomMenu )
+void KPrTextView::insertVariable( KoVariable *var, KoTextFormat *format, bool refreshCustomMenu )
 {
     if ( var )
     {
@@ -2346,7 +2344,9 @@ void KPrTextView::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, 
         kdDebug(33001) << "KPrTextView::insertVariable currentFormat=" << currentFormat() << endl;
 #endif
         textObject()->insert( cursor(), format, KoTextObject::customItemChar(),
-                              false, removeSelectedText, i18n("Insert Variable"),
+                              i18n("Insert Variable"),
+                              KoTextDocument::Standard,
+                              KoTextObject::DoNotRemoveSelected,
                               customItemsMap );
         if ( refreshCustomMenu && var->type() == VT_CUSTOM )
             kpTextObject()->kPresenterDocument()->refreshMenuCustomVariable();
@@ -2513,7 +2513,8 @@ void KPrTextView::dropEvent( QDropEvent * e )
         {
             QString text;
             if ( QTextDrag::decode( e, text ) )
-                textObject()->pasteText( cursor(), text, currentFormat(), false );
+                textObject()->pasteText( cursor(), text, currentFormat(),
+                                         false /*do not remove selected text*/ );
         }
         if ( addMacroCmd )
             doc->addCommand(macroCmd);

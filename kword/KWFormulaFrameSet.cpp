@@ -423,7 +423,7 @@ void KWFormulaFrameSetEdit::paste()
     formulaView->getDocument()->paste();
 }
 
-void KWFormulaFrameSetEdit::pasteData( QMimeSource* /*data*/, int /*provides*/ )
+void KWFormulaFrameSetEdit::pasteData( QMimeSource* /*data*/, int /*provides*/, bool )
 {
     paste(); // TODO use data, for DnD
 }

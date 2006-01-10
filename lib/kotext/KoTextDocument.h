@@ -51,10 +51,10 @@ class KOTEXT_EXPORT KoTextDocument : public QObject
 
 public:
     /** Identifiers for possible selections. */
-    enum SelectionIds {
+    enum SelectionId {
 	Standard = 0,
         InputMethodPreedit = 1,
-        // 2 is taken by kotextobject (HighlightSelection)
+        HighlightSelection = 2, // used to highlight during search/replace
 	Temp = 32000 // This selection must not be drawn, it's used e.g. by undo/redo to
 	// remove multiple lines with removeSelectedText()
     };

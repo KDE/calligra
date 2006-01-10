@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2001-2006 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -93,6 +93,7 @@ KoTextView::KoTextView( KoTextObject *textobj )
     afterTripleClick = FALSE;
     m_currentFormat = 0;
     m_variablePosition =-1;
+    m_overwriteMode = false;
     //updateUI( true, true );
 }
 
@@ -336,7 +337,7 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
                     {
                         // ###### BUG: with the event compression, typing "kde" and then " k", might not apply
                         // autocorrection like it does for "kde" followed by " " followed by "k". We need to insert
-                        // one character at a time...
+                        // one character at a time, or better, to tell doAutoFormat how many chars to consider...
                         insertText( text );
                         // Don't use 'p' past this point. If we replaced a selection, p could have been deleted (#48999)
                         doAutoFormat( m_cursor, m_cursor->parag(), m_cursor->index() - 1, text[ text.length() - 1 ] );
@@ -393,14 +394,22 @@ void KoTextView::handleKeyPressEvent( QKeyEvent * e, QWidget *widget, const QPoi
     textObject()->typingDone();
 }
 
+void KoTextView::setOverwriteMode( bool overwriteMode )
+{
+    m_overwriteMode = overwriteMode;
+}
+
 void KoTextView::insertText( const QString &text )
 {
-    textObject()->insert( m_cursor, m_currentFormat, text, false, true, i18n("Insert Text") );
+    int insertFlags = KoTextObject::DefaultInsertFlags;
+    if ( m_overwriteMode )
+        insertFlags |= KoTextObject::OverwriteMode;
+    textObject()->insert( m_cursor, m_currentFormat, text, i18n("Insert Text"), KoTextDocument::Standard, insertFlags );
 }
 
 void KoTextView::newParagraph()
 {
-    textObject()->insert( m_cursor, m_currentFormat, "\n", true, true, i18n("Insert Text") );
+    textObject()->insert( m_cursor, m_currentFormat, "\n", i18n("Insert Text"), KoTextDocument::Standard, KoTextObject::CheckNewLine );
 }
 
 void KoTextView::handleKeyReleaseEvent( QKeyEvent * e )
@@ -431,10 +440,9 @@ void KoTextView::handleImComposeEvent( QIMEvent * e )
     // insert preedit
     int preeditStartIdx = m_cursor->index();
     textDocument()->setSelectionStart( KoTextDocument::InputMethodPreedit, m_cursor );
-    textObject()->insert( m_cursor, m_currentFormat, e->text(), false, true, i18n("Insert Text"),
-                          CustomItemsMap(),
+    textObject()->insert( m_cursor, m_currentFormat, e->text(), i18n("Insert Text"),
                           KoTextDocument::Standard,
-                          false /* NOT REPAINT CURSOR! */);
+                          KoTextObject::DoNotRepaint/* DO NOT REPAINT CURSOR! */ );
     textDocument()->setSelectionEnd( KoTextDocument::InputMethodPreedit, m_cursor );
 
     // selection
@@ -1173,7 +1181,7 @@ void KoTextView::slotToolActivated( const KDataToolInfo & info, const QString & 
             }
             // replace selection with 'text'
             textObject()->emitNewCommand( textObject()->replaceSelectionCommand(
-                cursor(), text, KoTextDocument::Standard, i18n("Replace Word") ));
+                cursor(), text, i18n("Replace Word") ));
         }
     }
     delete tool;
@@ -1199,25 +1207,25 @@ bool KoTextView::openLink( KoLinkVariable* variable )
 void KoTextView::insertSoftHyphen()
 {
     textObject()->insert( cursor(), currentFormat(), QChar(0xad) /* see QRichText */,
-                          false /* no newline */, true, i18n("Insert Soft Hyphen") );
+                          i18n("Insert Soft Hyphen") );
 }
 
 void KoTextView::insertLineBreak()
 {
     textObject()->insert( cursor(), currentFormat(), QChar('\n'),
-                          false /* no newline */, true, i18n("Insert Line Break") );
+                          i18n("Insert Line Break") );
 }
 
 void KoTextView::insertNonbreakingSpace()
 {
     textObject()->insert( cursor(), currentFormat(), QChar(0xa0) /* see QRichText */,
-                          false /* no newline */, true, i18n("Insert Non-Breaking Space") );
+                          i18n("Insert Non-Breaking Space") );
 }
 
 void KoTextView::insertNonbreakingHyphen()
 {
     textObject()->insert( cursor(), currentFormat(), QChar(0x2013),
-                          false /* no newline */, true, i18n("Insert Non-Breaking Hyphen") );
+                          i18n("Insert Non-Breaking Hyphen") );
 }
 
 void KoTextView::insertSpecialChar(QChar _c, const QString& font)
@@ -1233,12 +1241,12 @@ void KoTextView::insertSpecialChar(QChar _c, const QString& font)
         KMacroCommand* macroCmd = new KMacroCommand( i18n("Insert Special Char") );
         macroCmd->addCommand( cmd );
         macroCmd->addCommand( textObject()->replaceSelectionCommand(
-                                  cursor(), _c, KoTextDocument::Standard, QString::null) );
+                                  cursor(), _c, QString::null) );
         textObject()->emitNewCommand( macroCmd );
     }
     else
     {
-        textObject()->insert( cursor(), newFormat, _c, false, true, i18n("Insert Special Char"));
+        textObject()->insert( cursor(), newFormat, _c, i18n("Insert Special Char"));
         delete newFormat;
     }
 }
@@ -1517,7 +1525,7 @@ void KoTextView::removeLink()
         textDocument()->setSelectionStart( KoTextDocument::Temp, &c1 );
         textDocument()->setSelectionEnd( KoTextDocument::Temp, &c2 );
         KCommand *cmd=textObject()->replaceSelectionCommand( &c1, var->value(),
-                                        KoTextDocument::Temp, i18n("Remove Link") );
+                                        i18n("Remove Link"), KoTextDocument::Temp );
         if ( cmd )
             textObject()->emitNewCommand( cmd );
     }

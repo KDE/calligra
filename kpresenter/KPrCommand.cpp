@@ -1863,9 +1863,9 @@ KoTextCursor * KPrOasisPasteTextCommand::unexecute( KoTextCursor *c )
         qWarning( "can't locate parag at %d, last parag: %d", m_lastParag, doc->lastParag()->paragId() );
         return 0;
     }
-    Q_ASSERT( lastParag->document() );
+    //Q_ASSERT( lastParag->document() );
     // Get hold of the document before deleting the parag
-    KoTextDocument* textdoc = lastParag->document();
+    //KoTextDocument* textdoc = lastParag->document();
 
     //kdDebug() << "Undoing paste: deleting from (" << firstParag->paragId() << "," << m_idx << ")"
     //          << " to (" << lastParag->paragId() << "," << m_lastIndex << ")" << endl;

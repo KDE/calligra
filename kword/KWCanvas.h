@@ -1,5 +1,7 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002-2006 David Faure <faure@kde.org>
+   Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -14,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 #ifndef KWCANVAS_H
@@ -33,6 +35,7 @@
 #include "KWVariable.h"
 #include "KWCommand.h"
 
+class KWTextFrameSetEdit;
 class KWDocument;
 class KWFrame;
 class KWFrameSet;
@@ -205,6 +208,13 @@ public:
     void applyGrid( KoPoint &p );
     void applyAspectRatio( double ratio, KoRect& insRect );
 
+    bool overwriteMode() const { return m_overwriteMode; }
+
+    // Returns the current text edit object, or 0 if
+    // - no frame is being edited
+    // - a non-text frame is being edited
+    KWTextFrameSetEdit* currentTextEdit() const;
+
 protected:
     void drawGrid( QPainter &p, const QRect& rect );
 
@@ -312,7 +322,7 @@ private:
     bool m_temporaryStatusBarTextShown; // Indicates if the temporary is shown
     double m_previousTableSize; //previous column or row size before resizing it
     KoPoint m_lastCaretPos; // position of caret when editing stopped in document coordinates
-
+    bool m_overwriteMode;
 
     // Table creation support.
     // Having this as a member variable allows to remember and reuse the last settings

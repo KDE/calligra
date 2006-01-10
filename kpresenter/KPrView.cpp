@@ -493,7 +493,7 @@ void KPrView::print( KPrinter &prt )
     QPainter painter;
     painter.begin( &prt );
     QRect rect = m_pKPresenterDoc->pageList().at( 0 )->getZoomPageRect();
-    double zoom = QMIN( double( metrics.width() ) / double( rect.width() ), 
+    double zoom = QMIN( double( metrics.width() ) / double( rect.width() ),
                         double( metrics.height() ) / double( rect.height() ) );
     double newZoom = zoom * m_pKPresenterDoc->zoomHandler()->zoom();
     kdDebug(33001) << "KPrView::print newZoom = " << newZoom << endl;
@@ -4614,7 +4614,7 @@ void KPrView::spellCheckerCorrected( const QString &old, int pos, const QString 
     cursor.setIndex( pos );
     if(!m_spell.macroCmdSpellCheck)
         m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct Misspelled Word"));
-    m_spell.macroCmdSpellCheck->addCommand(textobj->replaceSelectionCommand(&cursor, corr, KoTextObject::HighlightSelection, QString::null ));
+    m_spell.macroCmdSpellCheck->addCommand(textobj->replaceSelectionCommand(&cursor, corr, QString::null, KoTextDocument::HighlightSelection));
 }
 
 void KPrView::spellCheckerDone( const QString & )
@@ -6310,7 +6310,7 @@ void KPrView::slotCorrectWord()
         edit->selectWordUnderCursor( *(edit->cursor()) );
         m_pKPresenterDoc->addCommand(edit->textObject()->replaceSelectionCommand(
                                          edit->cursor(), act->text(),
-                                         KoTextDocument::Standard, i18n("Replace Word") ));
+                                         i18n("Replace Word"), KoTextDocument::Standard));
     }
 }
 

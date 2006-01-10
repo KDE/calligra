@@ -284,6 +284,9 @@ void KWTableFrameSet::recalcCols(unsigned int col,unsigned int row) {
     if(row >= getRows())
         row = getRows()-1;
     Cell *activeCell = cell(row,col);
+    Q_ASSERT( activeCell );
+    if ( !activeCell )
+        return;
     double difference = 0;
 
     if(activeCell->frame(0)->left() - activeCell->leftBorder() != m_colPositions[activeCell->firstColumn()]) {

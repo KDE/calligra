@@ -980,13 +980,13 @@ bool KoAutoFormat::doCompletion( KoTextCursor* textEditCursor, KoTextParag *para
             KoTextDocument * textdoc = parag->textDocument();
             if( m_completionAppendSpace && !part)
                 word+=" ";
-            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
             cursor.setIndex( start + lastword_length );
-            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+            textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
 
             macro->addCommand( txtObj->replaceSelectionCommand( textEditCursor, word,
-                                                              KoTextObject::HighlightSelection,
-                                                              i18n("Completion Word") ));
+                                                                i18n("Completion Word"),
+                                                                KoTextDocument::HighlightSelection ));
 
             if ( m_completionAppendSpace && !m_ignoreUpperCase && (m_convertUpperUpper || m_convertUpperCase) && !part)
             {
@@ -1395,16 +1395,16 @@ KCommand *KoAutoFormat::autoFormatWord( KoTextCursor* textEditCursor, KoTextPara
                 KoTextCursor cursor( parag->document() );
                 cursor.setParag( parag );
                 cursor.setIndex( start );
-                textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+                textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
                 cursor.setIndex( start + length );
-                textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+                textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
                 KCommand *cmd = 0L;
                 kdDebug()<<"it->replace() :"<<it->replace()<<endl;
                 if (!it->formatEntryContext() || !m_bAutoCorrectionWithFormat)
                 {
                     cmd = txtObj->replaceSelectionCommand( textEditCursor, it->replace(),
-                                                           KoTextObject::HighlightSelection,
-                                                           i18n("Autocorrect Word") );
+                                                           i18n("Autocorrect Word"),
+                                                           KoTextDocument::HighlightSelection );
                 }
                 else
                 {
@@ -1414,18 +1414,18 @@ KCommand *KoAutoFormat::autoFormatWord( KoTextCursor* textEditCursor, KoTextPara
                     changeTextFormat(it->formatEntryContext(), newFormat, flags );
                     KMacroCommand *macro = new KMacroCommand( i18n("Autocorrect Word with Format"));
                     KCommand *cmd2=txtObj->replaceSelectionCommand( textEditCursor, it->replace(),
-                                                                    KoTextObject::HighlightSelection,
-                                                                    i18n("Autocorrect Word") );
+                                                                    i18n("Autocorrect Word"),
+                                                                    KoTextDocument::HighlightSelection );
                     if ( cmd2 )
                         macro->addCommand(cmd2);
                     KoTextCursor cursor( parag->document() );
                     cursor.setParag( parag );
                     cursor.setIndex( start );
-                    textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+                    textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
                     cursor.setIndex( start + it->replace().length()/*+ length + 1*/ );
-                    textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+                    textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
 
-                    cmd2 =txtObj->setFormatCommand( textEditCursor, &lastFormat, newFormat, flags, false, KoTextObject::HighlightSelection );
+                    cmd2 =txtObj->setFormatCommand( textEditCursor, &lastFormat, newFormat, flags, false, KoTextDocument::HighlightSelection );
                     macro->addCommand( cmd2);
 
                     index = index - length + it->replace().length();
@@ -1462,9 +1462,9 @@ KCommand *KoAutoFormat::doTypographicQuotes( KoTextCursor* textEditCursor, KoTex
     KoTextCursor cursor( parag->document() );
     cursor.setParag( parag );
     cursor.setIndex( index );
-    textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+    textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
     cursor.setIndex( index + 1 );
-    textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+    textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
 
     // Need to determine if we want a starting or ending quote.
     // I see two solutions: either simply alternate, or depend on leading space.
@@ -1485,8 +1485,8 @@ KCommand *KoAutoFormat::doTypographicQuotes( KoTextCursor* textEditCursor, KoTex
             replacement = m_typographicSimpleQuotes.begin;
     }
     return txtObj->replaceSelectionCommand( textEditCursor, replacement,
-                              KoTextObject::HighlightSelection,
-                                            i18n("Typographic Quote") );
+                                            i18n("Typographic Quote"),
+                                            KoTextDocument::HighlightSelection );
 }
 
 KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag *parag,
@@ -1544,12 +1544,12 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
             KoTextCursor cursor( parag->document() );
             cursor.setParag( parag );
             cursor.setIndex( start );
-            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
             cursor.setIndex( start + 1 );
-            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+            textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
             cmd = txtObj->replaceSelectionCommand( textEditCursor, QString( firstChar.upper() ),
-                                      KoTextObject::HighlightSelection,
-                                      i18n("Autocorrect (capitalize first letter)") );
+                                                   i18n("Autocorrect (capitalize first letter)"),
+                                                   KoTextDocument::HighlightSelection );
             bNeedMove = true;
         }
     }
@@ -1569,12 +1569,14 @@ KCommand * KoAutoFormat::doUpperCase( KoTextCursor *textEditCursor, KoTextParag 
                 KoTextCursor cursor( parag->document() );
                 cursor.setParag( parag );
                 cursor.setIndex( start + 1 ); // After all the first letter's fine, so only change the second letter
-                textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+                textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
                 cursor.setIndex( start + 2 );
-                textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+                textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
 
                 QString replacement = word[1].lower();
-                cmd = txtObj->replaceSelectionCommand( textEditCursor, replacement,KoTextObject::HighlightSelection,i18n("Autocorrect (convert two upper case letters to one upper case and one lower case letter)") );
+                cmd = txtObj->replaceSelectionCommand( textEditCursor, replacement,
+                                                       i18n("Autocorrect"),
+                                                       KoTextDocument::HighlightSelection );
 
                 bNeedMove = true;
             }
@@ -1605,9 +1607,9 @@ KCommand * KoAutoFormat::doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTe
         KoTextCursor cursor( parag->document() );
         cursor.setParag( parag );
         cursor.setIndex( start );
-        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
         cursor.setIndex( start + length );
-        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
         QString replacement;
         if( word == QString("1/2") )
             replacement=QString("½");
@@ -1615,10 +1617,10 @@ KCommand * KoAutoFormat::doAutoReplaceNumber( KoTextCursor* textEditCursor, KoTe
             replacement=QString("¼");
         else if (word == QString("3/4") )
             replacement=QString("¾");
-        QString cmdName=i18n("Autocorrect (replace 1/2... with ")+QString("½...)");
+        QString cmdName = i18n("Autocorrect for fraction");
         KCommand *cmd =txtObj->replaceSelectionCommand( textEditCursor, replacement,
-                                                           KoTextObject::HighlightSelection,
-                                                                cmdName );
+                                                        cmdName,
+                                                        KoTextDocument::HighlightSelection );
         txtObj->emitHideCursor();
         textEditCursor->gotoRight();
         txtObj->emitShowCursor();
@@ -1715,9 +1717,9 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
         KoTextDocument * textdoc = parag->textDocument();
         cursor.setParag( parag );
         cursor.setIndex( start );
-        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
         cursor.setIndex( start + length );
-        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
         QString newWord = word;
         if(link_type==1)
             newWord = QString("mailto:") + word;
@@ -1731,7 +1733,8 @@ void KoAutoFormat::doAutoDetectUrl( KoTextCursor *textEditCursor, KoTextParag *p
         customItemsMap.insert( 0, var );
         KoTextFormat * lastFormat = parag->at( start )->format();
         int origCursorIndex = textEditCursor->index();
-        txtObj->insert( textEditCursor, lastFormat, KoTextObject::customItemChar(), false, true, i18n("Insert Variable"), customItemsMap,KoTextObject::HighlightSelection );
+        txtObj->insert( textEditCursor, lastFormat, KoTextObject::customItemChar(), i18n("Insert Variable"),
+                        KoTextDocument::HighlightSelection, KoTextObject::DefaultInsertFlags, customItemsMap );
         var->recalc();
         parag->invalidate(0);
         parag->setChanged( true );
@@ -1841,29 +1844,29 @@ KCommand * KoAutoFormat::doAutoChangeFormat( KoTextCursor *textEditCursor, KoTex
 
         cursor.setParag( parag );
         cursor.setIndex( start );
-        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
         cursor.setIndex( start + word.length() );
-        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
         macro->addCommand(txtObj->replaceSelectionCommand( textEditCursor, replacement,
-                                                           KoTextObject::HighlightSelection,
-                                                           i18n("Autocorrect Word") ));
+                                                           i18n("Autocorrect Word"),
+                                                           KoTextDocument::HighlightSelection));
 
         KoTextFormat * lastFormat = parag->at( start )->format();
         KoTextFormat * newFormat = new KoTextFormat(*lastFormat);
         cursor.setIndex( start );
-        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
         cursor.setIndex( start + word.length()-2 );
-        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
 
         if( bold)
         {
             newFormat->setBold(true);
-            macro->addCommand(txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::Bold , false,KoTextObject::HighlightSelection  ));
+            macro->addCommand(txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::Bold , false,KoTextDocument::HighlightSelection  ));
         }
         else if( underline )
         {
             newFormat->setUnderline(true);
-            macro->addCommand(txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::Underline , false,KoTextObject::HighlightSelection  ));
+            macro->addCommand(txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::Underline , false,KoTextDocument::HighlightSelection  ));
         }
         txtObj->emitHideCursor();
         textEditCursor->gotoRight();
@@ -1887,11 +1890,11 @@ KCommand *KoAutoFormat::doUseBulletStyle(KoTextCursor * /*textEditCursor*/, KoTe
         KMacroCommand *macroCmd = new KMacroCommand( i18n("Autocorrect (use bullet style)"));
         cursor.setParag( parag );
         cursor.setIndex( 0 );
-        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
         cursor.setParag( parag );
         cursor.setIndex( 2 );
-        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-        KCommand *cmd=txtObj->removeSelectedTextCommand( &cursor, KoTextObject::HighlightSelection  );
+        textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
+        KCommand *cmd=txtObj->removeSelectedTextCommand( &cursor, KoTextDocument::HighlightSelection  );
         // Adjust index
         index -= 2;
         if(cmd)
@@ -1899,10 +1902,10 @@ KCommand *KoAutoFormat::doUseBulletStyle(KoTextCursor * /*textEditCursor*/, KoTe
 
         cursor.setParag( parag );
         cursor.setIndex( 0 );
-        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
 
         cursor.setIndex( 2 );
-        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
 
 
         KoParagCounter c;
@@ -1930,7 +1933,7 @@ KCommand *KoAutoFormat::doUseBulletStyle(KoTextCursor * /*textEditCursor*/, KoTe
             c.setCustomBulletCharacter( m_bulletStyle );
         }
         c.setSuffix(QString::null);
-        cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
+        cmd=txtObj->setCounterCommand( &cursor, c ,KoTextDocument::HighlightSelection );
         if( cmd)
             macroCmd->addCommand(cmd);
         if (parag->next() )
@@ -1939,10 +1942,10 @@ KCommand *KoAutoFormat::doUseBulletStyle(KoTextCursor * /*textEditCursor*/, KoTe
               return 0L;
 
         cursor.setIndex( 0 );
-        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
         cursor.setIndex( 0 );
-        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-        cmd=txtObj->setCounterCommand( &cursor, c ,KoTextObject::HighlightSelection );
+        textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
+        cmd=txtObj->setCounterCommand( &cursor, c ,KoTextDocument::HighlightSelection );
         if(cmd)
             macroCmd->addCommand(cmd);
         return macroCmd;
@@ -1977,11 +1980,11 @@ KCommand *KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTe
             KMacroCommand *macroCmd = new KMacroCommand( i18n("Autocorrect (use number style)"));
             cursor.setParag( parag );
             cursor.setIndex( 0 );
-            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
             cursor.setParag( parag );
             cursor.setIndex( word.length()+1 );
-            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            KCommand *cmd=txtObj->removeSelectedTextCommand( &cursor, KoTextObject::HighlightSelection  );
+            textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
+            KCommand *cmd=txtObj->removeSelectedTextCommand( &cursor, KoTextDocument::HighlightSelection  );
             // Adjust index
             index -= word.length()+1;
             if(cmd)
@@ -1990,10 +1993,10 @@ KCommand *KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTe
             // Apply counter to this paragraph
             cursor.setParag( parag );
             cursor.setIndex( 0 );
-            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
 
             cursor.setIndex( 2 );
-            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+            textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
 
             KoParagCounter c;
             c.setNumbering( KoParagCounter::NUM_LIST );
@@ -2007,7 +2010,7 @@ KCommand *KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTe
             if ( c.number( parag ) != (int)val )
                 c.setRestartCounter( true );
 
-            cmd=txtObj->setCounterCommand( &cursor, c, KoTextObject::HighlightSelection );
+            cmd=txtObj->setCounterCommand( &cursor, c, KoTextDocument::HighlightSelection );
             if( cmd)
                 macroCmd->addCommand(cmd);
             // Apply counter to next paragraph too
@@ -2015,10 +2018,10 @@ KCommand *KoAutoFormat::doUseNumberStyle(KoTextCursor * /*textEditCursor*/, KoTe
             c.setRestartCounter( false );
             cursor.setParag( parag->next() );
             cursor.setIndex( 0 );
-            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
             cursor.setIndex( 0 );
-            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            cmd=txtObj->setCounterCommand( &cursor, c, KoTextObject::HighlightSelection );
+            textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
+            cmd=txtObj->setCounterCommand( &cursor, c, KoTextDocument::HighlightSelection );
             if(cmd)
                 macroCmd->addCommand(cmd);
             return macroCmd;
@@ -2045,11 +2048,11 @@ KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor
                 break;
             cursor.setParag( parag );
             cursor.setIndex( i+1 );
-            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
             cursor.setParag( parag );
             cursor.setIndex( parag->lastCharPos()+1 );
-            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "", KoTextObject::HighlightSelection, QString::null );
+            textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
+            KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "", QString::null, KoTextDocument::HighlightSelection );
 
             if(cmd)
             {
@@ -2075,11 +2078,11 @@ KCommand * KoAutoFormat::doRemoveSpaceBeginEndLine( KoTextCursor *textEditCursor
 
             cursor.setParag( parag );
             cursor.setIndex( 0 );
-            textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+            textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
             cursor.setParag( parag );
             cursor.setIndex( i );
-            textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
-            KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "", KoTextObject::HighlightSelection, QString::null );
+            textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
+            KCommand *cmd=txtObj->replaceSelectionCommand( &cursor, "", QString::null, KoTextDocument::HighlightSelection );
 
             if(cmd)
             {
@@ -2118,14 +2121,14 @@ KCommand *KoAutoFormat::doCapitalizeNameOfDays( KoTextCursor* textEditCursor, Ko
         KoTextCursor cursor( parag->document() );
         cursor.setParag( parag );
         cursor.setIndex( start );
-        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
         cursor.setIndex( start + length );
         QString replacement = replaceStr.at(0).upper() + replaceStr.right( length-1 );
-        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
         QString cmdName=i18n("Capitalize Name of Days");
         KCommand *cmd =txtObj->replaceSelectionCommand( textEditCursor, replacement,
-                                                           KoTextObject::HighlightSelection,
-                                                                cmdName );
+                                                        cmdName,
+                                                        KoTextDocument::HighlightSelection );
         txtObj->emitHideCursor();
         textEditCursor->gotoRight();
         txtObj->emitShowCursor();
@@ -2178,12 +2181,12 @@ KCommand *KoAutoFormat::doAutoSuperScript( KoTextCursor* textEditCursor, KoTextP
 
         cursor.setParag( parag );
         cursor.setIndex( start );
-        textdoc->setSelectionStart( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
         cursor.setIndex( start + word.length() -1 );
-        textdoc->setSelectionEnd( KoTextObject::HighlightSelection, &cursor );
+        textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
         newFormat->setVAlign(KoTextFormat::AlignSuperScript);
-        KCommand *cmd =txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::VAlign , false,KoTextObject::HighlightSelection  );
-        textdoc->removeSelection( KoTextObject::HighlightSelection );
+        KCommand *cmd =txtObj->setFormatCommand( textEditCursor, 0L, newFormat, KoTextFormat::VAlign , false,KoTextDocument::HighlightSelection  );
+        textdoc->removeSelection( KoTextDocument::HighlightSelection );
 
         return cmd;
     }

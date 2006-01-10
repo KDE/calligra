@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001-2005 David Faure <faure@kde.org>
+   Copyright (C) 2001-2006 David Faure <faure@kde.org>
    Copyright (C) 2005 Martin Ellis <martin.ellis@kdemail.net>
 
    This library is free software; you can redistribute it and/or
@@ -184,7 +184,7 @@ public:
     }
 };
 
-bool KoTextObject::selectionHasCustomItems( int selectionId ) const
+bool KoTextObject::selectionHasCustomItems( KoTextDocument::SelectionId selectionId ) const
 {
     KoHasCustomItemVisitor visitor;
     bool noneFound = textdoc->visitSelection( selectionId, &visitor );
@@ -395,7 +395,7 @@ void KoTextObject::newPlaceHolderCommand( const QString & name )
     emit newCommand( undoRedoInfo.placeHolderCmd );
 }
 
-void KoTextObject::storeParagUndoRedoInfo( KoTextCursor * cursor, int selectionId )
+void KoTextObject::storeParagUndoRedoInfo( KoTextCursor * cursor, KoTextDocument::SelectionId selectionId )
 {
     undoRedoInfo.clear();
     undoRedoInfo.oldParagLayouts.clear();
@@ -593,33 +593,43 @@ void KoTextObject::doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & /*c
 }
 
 void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
-                           const QString &txt, bool checkNewLine,
-                           bool removeSelected, const QString & commandName,
-                           CustomItemsMap customItemsMap, int selectionId, bool repaint )
+                           const QString &txt, const QString & commandName, KoTextDocument::SelectionId selectionId,
+                           int insertFlags, CustomItemsMap customItemsMap )
 {
     if ( protectContent() )
         return;
+    kdDebug() << k_funcinfo << insertFlags << endl;
+    const bool checkNewLine = insertFlags & CheckNewLine;
+    const bool removeSelected = ( insertFlags & DoNotRemoveSelected ) == 0;
+    const bool repaint = ( insertFlags & DoNotRepaint ) == 0;
     //kdDebug(32500) << "KoTextObject::insert txt=" << txt << endl;
     bool tinyRepaint = !checkNewLine;
     if ( repaint )
         emit hideCursor();
-    if ( textdoc->hasSelection( selectionId, true ) && removeSelected  ) {
-        if( customItemsMap.isEmpty())
+    if ( textdoc->hasSelection( selectionId, true ) && removeSelected ) {
+        kdDebug() << k_funcinfo << "removing selection " << selectionId << endl;
+        // call replaceSelectionCommand, which will call insert() back, but this time without a selection.
+        emitNewCommand(replaceSelectionCommand( cursor, txt, commandName, selectionId, insertFlags, customItemsMap ));
+        return;
+    }
+    // Now implement overwrite mode, similarly.
+    if ( insertFlags & OverwriteMode ) {
+        textdoc->setSelectionStart( KoTextDocument::Temp, cursor );
+        KoTextCursor oc = *cursor;
+        kdDebug(32500) << "overwrite: going to insert " << txt.length() << " chars; idx=" << oc.index() << endl;
+        oc.setIndex( QMIN( oc.index() + (int)txt.length(), oc.parag()->lastCharPos() + 1 ) );
+        kdDebug(32500) << "overwrite: removing from " << cursor->index() << " to " << oc.index() << endl;
+        if ( oc.index() > cursor->index() )
         {
-            emitNewCommand(replaceSelectionCommand( cursor, txt, selectionId, commandName, repaint ));
+            textdoc->setSelectionEnd( KoTextDocument::Temp, &oc );
+            int newInsertFlags = insertFlags & ~OverwriteMode;
+            newInsertFlags &= ~DoNotRemoveSelected;
+            emitNewCommand(replaceSelectionCommand( cursor, txt, commandName, KoTextDocument::Temp, newInsertFlags, customItemsMap ));
             return;
-        }
-        else
-        {
-            // TODO: it would be better to bundle it into a KMacroCommand, together with the insert
-            // Something like using newPlaceHolderCommand maybe...
-            KCommand* removeSelCmd = removeSelectedTextCommand( cursor, selectionId );
-            if (removeSelCmd)
-                emitNewCommand( removeSelCmd );
-            tinyRepaint = false;
         }
     }
     KoTextCursor c2 = *cursor;
+    // Make everything ready for undo/redo (new command, or add to current one)
     if ( !customItemsMap.isEmpty() )
         clearUndoRedoInfo();
     checkUndoRedoInfo( cursor, UndoRedoInfo::Insert );
@@ -636,7 +646,9 @@ void KoTextObject::insert( KoTextCursor * cursor, KoTextFormat * currentFormat,
     int origLine; // the line the cursor was on before the insert
     oldCursor.parag()->lineStartOfChar( oldCursor.index(), 0, &origLine );
 
-    cursor->insert( txt, checkNewLine );  // insert the text
+    // insert the text - finally!
+    cursor->insert( txt, checkNewLine );
+
     setLastFormattedParag( checkNewLine ? oldCursor.parag() : cursor->parag() );
 
     if ( !customItemsMap.isEmpty() ) {
@@ -743,14 +755,18 @@ void KoTextObject::pasteText( KoTextCursor * cursor, const QString & text, KoTex
     }
     if ( !t.isEmpty() )
     {
-        insert( cursor, currentFormat, t, true /*checkNewLine*/, removeSelected, i18n("Paste Text") );
+        int insertFlags = CheckNewLine;
+        if ( !removeSelected )
+            insertFlags |= DoNotRemoveSelected;
+        insert( cursor, currentFormat, t, i18n("Paste Text"),
+                KoTextDocument::Standard, insertFlags );
         formatMore( 2 );
         emit repaintChanged( this );
     }
 }
 
 KCommand* KoTextObject::setParagLayoutCommand( KoTextCursor * cursor, const KoParagLayout& paragLayout,
-                                               int selectionId, int paragLayoutFlags,
+                                               KoTextDocument::SelectionId selectionId, int paragLayoutFlags,
                                                int marginIndex, bool createUndoRedo )
 {
     if ( protectContent() )
@@ -795,7 +811,7 @@ KCommand* KoTextObject::setParagLayoutCommand( KoTextCursor * cursor, const KoPa
 
 
 void KoTextObject::applyStyle( KoTextCursor * cursor, const KoParagStyle * newStyle,
-                               int selectionId,
+                               KoTextDocument::SelectionId selectionId,
                                int paragLayoutFlags, int formatFlags,
                                bool createUndoRedo, bool interactive )
 {
@@ -809,7 +825,7 @@ void KoTextObject::applyStyle( KoTextCursor * cursor, const KoParagStyle * newSt
 }
 
 KCommand *KoTextObject::applyStyleCommand( KoTextCursor * cursor, const KoParagStyle * newStyle,
-                               int selectionId,
+                               KoTextDocument::SelectionId selectionId,
                                int paragLayoutFlags, int formatFlags,
                                bool createUndoRedo, bool interactive )
 {
@@ -947,7 +963,7 @@ void KoTextObject::applyStyleChange( KoStyleChangeDefMap changed )
                 cursor.setIndex( 0 );
                 //kdDebug(32500) << "KoTextObject::applyStyleChange applying to paragraph " << p << " " << p->paragId() << endl;
                 applyStyle( &cursor, it.key(),
-                            -1, // A selection we can't possibly have
+                            KoTextDocument::Temp, // A selection we can't have at this point
                             (*it).paragLayoutChanged, (*it).formatChanged,
                             false, false ); // don't create undo/redo, not interactive
             }
@@ -972,7 +988,7 @@ KCommand *KoTextObject::setFormatCommand( const KoTextFormat *format, int flags,
     return cmd;
 }
 
-KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat ** pCurrentFormat, const KoTextFormat *format, int flags, bool /*zoomFont*/, int selectionId )
+KCommand * KoTextObject::setFormatCommand( KoTextCursor * cursor, KoTextFormat ** pCurrentFormat, const KoTextFormat *format, int flags, bool /*zoomFont*/, KoTextDocument::SelectionId selectionId )
 {
     KCommand *ret = 0;
     if ( protectContent() )
@@ -1072,7 +1088,7 @@ void KoTextObject::emitNewCommand(KCommand *cmd)
         emit newCommand( cmd );
 }
 
-KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagCounter & counter, int selectionId  )
+KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagCounter & counter, KoTextDocument::SelectionId selectionId  )
 {
     if ( protectContent() )
         return 0L;
@@ -1123,7 +1139,7 @@ KCommand *KoTextObject::setCounterCommand( KoTextCursor * cursor, const KoParagC
     return new KoTextCommand( this, /*cmd, */i18n("Change List Type") );
 }
 
-KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align, int selectionId )
+KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align, KoTextDocument::SelectionId selectionId )
 {
     if ( protectContent() )
         return 0L;
@@ -1159,7 +1175,7 @@ KCommand * KoTextObject::setAlignCommand( KoTextCursor * cursor, int align, int 
     return new KoTextCommand( this, /*cmd, */i18n("Change Alignment") );
 }
 
-KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin , int selectionId ) {
+KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin , KoTextDocument::SelectionId selectionId ) {
     if ( protectContent() )
         return 0L;
 
@@ -1206,7 +1222,7 @@ KCommand * KoTextObject::setMarginCommand( KoTextCursor * cursor, QStyleSheetIte
 
 KCommand * KoTextObject::setBackgroundColorCommand( KoTextCursor * cursor,
                                                     const QColor & color,
-                                                    int selectionId ) {
+                                                    KoTextDocument::SelectionId selectionId ) {
     if ( protectContent() )
         return 0L;
 
@@ -1248,7 +1264,7 @@ KCommand * KoTextObject::setBackgroundColorCommand( KoTextCursor * cursor,
     return new KoTextCommand( this, /*cmd, */ i18n("Change Paragraph Background Color" ) );
 }
 
-KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double spacing, KoParagLayout::SpacingType _type, int selectionId )
+KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double spacing, KoParagLayout::SpacingType _type, KoTextDocument::SelectionId selectionId )
 {
     if ( protectContent() )
         return 0L;
@@ -1295,7 +1311,7 @@ KCommand * KoTextObject::setLineSpacingCommand( KoTextCursor * cursor, double sp
 }
 
 
-KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder , int selectionId )
+KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder , KoTextDocument::SelectionId selectionId )
 {
     if ( protectContent() )
         return 0L;
@@ -1364,7 +1380,7 @@ KCommand * KoTextObject::setBordersCommand( KoTextCursor * cursor, const KoBorde
     return new KoTextCommand( this, /*cmd, */i18n("Change Borders") );
 }
 
-KCommand * KoTextObject::setJoinBordersCommand( KoTextCursor * cursor, bool join, int selectionId  )
+KCommand * KoTextObject::setJoinBordersCommand( KoTextCursor * cursor, bool join, KoTextDocument::SelectionId selectionId  )
 {
   if ( protectContent() )
         return 0L;
@@ -1421,7 +1437,7 @@ KCommand * KoTextObject::setJoinBordersCommand( KoTextCursor * cursor, bool join
 }
 
 
-KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabulatorList &tabList, int selectionId  )
+KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabulatorList &tabList, KoTextDocument::SelectionId selectionId  )
 {
     if ( protectContent() )
         return 0L;
@@ -1459,7 +1475,7 @@ KCommand * KoTextObject::setTabListCommand( KoTextCursor * cursor, const KoTabul
     return new KoTextCommand( this, /*cmd, */i18n("Change Tabulator") );
 }
 
-KCommand * KoTextObject::setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId )
+KCommand * KoTextObject::setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, KoTextDocument::SelectionId selectionId )
 {
     if ( protectContent() )
         return 0L;
@@ -1504,7 +1520,7 @@ KCommand * KoTextObject::setParagDirectionCommand( KoTextCursor * cursor, QChar:
 #endif
 }
 
-void KoTextObject::removeSelectedText( KoTextCursor * cursor, int selectionId, const QString & cmdName, bool createUndoRedo )
+void KoTextObject::removeSelectedText( KoTextCursor * cursor, KoTextDocument::SelectionId selectionId, const QString & cmdName, bool createUndoRedo )
 {
     if ( protectContent() )
         return ;
@@ -1537,7 +1553,7 @@ void KoTextObject::removeSelectedText( KoTextCursor * cursor, int selectionId, c
         undoRedoInfo.clear();
 }
 
-KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int selectionId, bool repaint )
+KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, KoTextDocument::SelectionId selectionId, bool repaint )
 {
     if ( protectContent() )
         return 0L;
@@ -1574,13 +1590,18 @@ KCommand * KoTextObject::removeSelectedTextCommand( KoTextCursor * cursor, int s
 }
 
 KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QString & replacement,
-                                                 int selectionId, const QString & cmdName, bool repaint,
-                                                 bool checkNewLine )
+                                                 const QString & cmdName,
+                                                 KoTextDocument::SelectionId selectionId,
+                                                 int insertFlags,
+                                                 CustomItemsMap customItemsMap )
 {
     if ( protectContent() )
         return 0L;
+    Q_ASSERT( ( insertFlags & DoNotRemoveSelected ) == 0 ); // nonsensical
+    const bool repaint = ( insertFlags & DoNotRepaint ) == 0; // DoNotRepaint is set during search/replace
     if ( repaint )
         emit hideCursor();
+    // This could be improved to use a macro command only when there's a selection to remove.
     KMacroCommand * macroCmd = new KMacroCommand( cmdName );
 
     // Remember formatting
@@ -1595,12 +1616,12 @@ KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QS
 
     // Insert replacement
     insert( cursor, format,
-            replacement, checkNewLine, false, QString::null /* no place holder command */,
-            CustomItemsMap(), selectionId, repaint );
+            replacement, QString::null /* no place holder command */,
+            selectionId, insertFlags | DoNotRemoveSelected, customItemsMap );
 
     KoTextDocCommand * cmd = new KoTextInsertCommand( textdoc, undoRedoInfo.id, undoRedoInfo.index,
-                                                  undoRedoInfo.text.rawData(),
-                                                  CustomItemsMap(), undoRedoInfo.oldParagLayouts );
+                                                      undoRedoInfo.text.rawData(),
+                                                      CustomItemsMap(), undoRedoInfo.oldParagLayouts );
     textdoc->addCommand( cmd );
     macroCmd->addCommand( new KoTextCommand( this, /*cmd, */QString::null ) );
 
@@ -1610,7 +1631,7 @@ KCommand* KoTextObject::replaceSelectionCommand( KoTextCursor * cursor, const QS
     format->removeRef();
 
     setLastFormattedParag( c1.parag() );
-    if ( repaint ) // false during search/replace
+    if ( repaint )
     {
         formatMore( 2 );
         emit repaintChanged( this );
@@ -1627,17 +1648,17 @@ KCommand * KoTextObject::insertParagraphCommand( KoTextCursor *cursor )
 {
     if ( protectContent() )
         return 0L;
-    return replaceSelectionCommand( cursor, "\n", KoTextDocument::Standard, QString::null );
+    return replaceSelectionCommand( cursor, "\n", QString::null );
 }
 
 void KoTextObject::highlightPortion( KoTextParag * parag, int index, int length, bool repaint )
 {
     if ( !m_highlightSelectionAdded )
     {
-        textdoc->addSelection( HighlightSelection );
-        textdoc->setSelectionColor( HighlightSelection,
+        textdoc->addSelection( KoTextDocument::HighlightSelection );
+        textdoc->setSelectionColor( KoTextDocument::HighlightSelection,
                                     QApplication::palette().color( QPalette::Active, QColorGroup::Dark ) );
-        textdoc->setInvertSelectionText( HighlightSelection, true );
+        textdoc->setInvertSelectionText( KoTextDocument::HighlightSelection, true );
         m_highlightSelectionAdded = true;
     }
 
@@ -1645,9 +1666,9 @@ void KoTextObject::highlightPortion( KoTextParag * parag, int index, int length,
     KoTextCursor cursor( textdoc );
     cursor.setParag( parag );
     cursor.setIndex( index );
-    textdoc->setSelectionStart( HighlightSelection, &cursor );
+    textdoc->setSelectionStart( KoTextDocument::HighlightSelection, &cursor );
     cursor.setIndex( index + length );
-    textdoc->setSelectionEnd( HighlightSelection, &cursor );
+    textdoc->setSelectionEnd( KoTextDocument::HighlightSelection, &cursor );
     if ( repaint ) {
         parag->setChanged( true );
         emit repaintChanged( this );
@@ -1656,11 +1677,11 @@ void KoTextObject::highlightPortion( KoTextParag * parag, int index, int length,
 
 void KoTextObject::removeHighlight(bool repaint)
 {
-    if ( textdoc->hasSelection( HighlightSelection, true ) )
+    if ( textdoc->hasSelection( KoTextDocument::HighlightSelection, true ) )
     {
-        KoTextParag * oldParag = textdoc->selectionStart( HighlightSelection );
+        KoTextParag * oldParag = textdoc->selectionStart( KoTextDocument::HighlightSelection );
         oldParag->setChanged( true );
-        textdoc->removeSelection( HighlightSelection );
+        textdoc->removeSelection( KoTextDocument::HighlightSelection );
     }
     if ( repaint )
         emit repaintChanged( this );
@@ -1919,7 +1940,7 @@ KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPos
             textdoc->setSelectionEnd( KoTextDocument::Temp, &c2 );
             macroCmd->addCommand(replaceSelectionCommand(
                                      cursor, textChangedCase(repl,_type),
-                                     KoTextDocument::Temp, QString::null, false, false /*\n isn't new parag*/ ));
+                                     QString::null, KoTextDocument::Temp));
             do
             {
                 ++i;
@@ -1944,7 +1965,7 @@ KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPos
                 textdoc->setSelectionEnd( KoTextDocument::Temp, &c2 );
                 macroCmd->addCommand(replaceSelectionCommand(
                                          cursor, textChangedCase(repl,_type),
-                                         KoTextDocument::Temp, QString::null, false, false /*\n isn't new parag*/ ));
+                                         QString::null, KoTextDocument::Temp));
                 posStart=i;
                 posEnd=i;
                 curFormat = newFormat;
@@ -1964,7 +1985,7 @@ KCommand *KoTextObject::changeCaseOfTextParag( int cursorPosStart, int cursorPos
         const QString repl = text.mid( posStart, cursorPosEnd - posStart );
         macroCmd->addCommand(replaceSelectionCommand(
                                  cursor, textChangedCase(repl,_type),
-                                 KoTextDocument::Temp, QString::null, false, false /*\n isn't new parag*/ ));
+                                 QString::null, KoTextDocument::Temp));
     }
     return macroCmd;
 

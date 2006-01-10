@@ -259,7 +259,7 @@ public:
     void insertVariable( int type, int subtype = 0 );
     void insertCustomVariable( const QString &name);
     void insertLink(const QString &_linkName, const QString & hrefName);
-    void insertVariable( KoVariable *var, KoTextFormat *format =0, bool removeSelectedText=true,
+    void insertVariable( KoVariable *var, KoTextFormat *format =0,
                          bool refreshCustomMenu =false /*don't refresh variable custom menu all the time */);
 
     void terminate(bool removeSelection=true);

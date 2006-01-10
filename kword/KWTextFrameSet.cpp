@@ -3063,6 +3063,7 @@ KWTextFrameSetEdit::KWTextFrameSetEdit( KWTextFrameSet * fs, KWCanvas * canvas )
             canvas->gui()->getHorzRuler()->changeFlags(0);
     }
 
+    setOverwriteMode( canvas->overwriteMode() );
 }
 
 KWTextFrameSetEdit::~KWTextFrameSetEdit()
@@ -3095,10 +3096,10 @@ void KWTextFrameSetEdit::paste()
 {
     QMimeSource *data = QApplication::clipboard()->data();
     int provides = KWView::checkClipboard( data );
-    pasteData( data, provides );
+    pasteData( data, provides, false );
 }
 
-void KWTextFrameSetEdit::pasteData( QMimeSource* data, int provides )
+void KWTextFrameSetEdit::pasteData( QMimeSource* data, int provides, bool drop )
 {
     if ( provides & KWView::ProvidesOasis )
     {
@@ -3110,9 +3111,10 @@ void KWTextFrameSetEdit::pasteData( QMimeSource* data, int provides )
     {
         // Note: QClipboard::text() seems to do a better job than encodedData( "text/plain" )
         // In particular it handles charsets (in the mimetype).
-        QString text = QApplication::clipboard()->text();
+        const QString text = QApplication::clipboard()->text();
+        const bool removeSelected = !drop;
         if ( !text.isEmpty() )
-            textObject()->pasteText( cursor(), text, currentFormat(), true );
+            textObject()->pasteText( cursor(), text, currentFormat(), removeSelected );
     }
     else {
         kdWarning(32002) << "Unhandled case in KWTextFrameSetEdit::pasteData: provides=" << provides << endl;
@@ -3612,7 +3614,7 @@ void KWTextFrameSetEdit::dropEvent( QDropEvent * e, const QPoint & nPoint, const
         }
 
         // The cursor is already correctly positioned, all we need to do is to "paste" the dropped data.
-        view->pasteData( e );
+        view->pasteData( e, true );
     }
 }
 
@@ -3749,9 +3751,9 @@ void KWTextFrameSetEdit::insertExpression(const QString &_c)
 {
     if(textObject()->hasSelection() )
         frameSet()->kWordDocument()->addCommand(textObject()->replaceSelectionCommand(
-            cursor(), _c, KoTextDocument::Standard , i18n("Insert Expression")));
+            cursor(), _c, i18n("Insert Expression")));
     else
-       textObject()->insert( cursor(), currentFormat(), _c, false /* no newline */, true, i18n("Insert Expression") );
+       textObject()->insert( cursor(), currentFormat(), _c, i18n("Insert Expression") );
 }
 
 void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString & commandName )
@@ -3762,7 +3764,7 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
     // TODO support for multiple floating items (like multiple-page tables)
     int frameNumber = 0;
     int index = 0;
-    bool ownline = false;
+    int insertFlags = KoTextObject::DoNotRemoveSelected;
     { // the loop will start here :)
         KWAnchor * anchor = fs->createAnchor( textFrameSet()->textDocument(), frameNumber );
         if ( frameNumber == 0 && anchor->ownLine() && cursor()->index() > 0 ) // enforce start of line - currently unused
@@ -3770,14 +3772,14 @@ void KWTextFrameSetEdit::insertFloatingFrameSet( KWFrameSet * fs, const QString 
             kdDebug() << "ownline -> prepending \\n" << endl;
             placeHolders += QChar('\n');
             index++;
-            ownline = true;
+            insertFlags |= KoTextObject::CheckNewLine;
         }
         placeHolders += KoTextObject::customItemChar();
         customItemsMap.insert( index, anchor );
     }
     fs->setAnchored( textFrameSet() );
     textObject()->insert( cursor(), currentFormat(), placeHolders,
-                          ownline, false, commandName,
+                          commandName, KoTextDocument::Standard, insertFlags,
                           customItemsMap );
 }
 
@@ -3792,7 +3794,7 @@ void KWTextFrameSetEdit::insertComment(const QString &_comment)
 {
     KWDocument * doc = frameSet()->kWordDocument();
     KoVariable * var = new KoNoteVariable( textFrameSet()->textDocument(), _comment, doc->variableFormatCollection()->format( "STRING" ), doc->variableCollection() );
-    insertVariable( var, 0,false/*don't delete selected text*/ );
+    insertVariable( var );
 }
 
 
@@ -3858,10 +3860,10 @@ void KWTextFrameSetEdit::insertVariable( int type, int subtype )
     else
         var = doc->variableCollection()->createVariable( type, subtype, doc->variableFormatCollection(), 0L, textFrameSet()->textDocument(), doc, 0);
     if ( var)
-        insertVariable( var, 0L /*means currentFormat()*/, true, refreshCustomMenu);
+        insertVariable( var, 0L /*means currentFormat()*/, refreshCustomMenu);
 }
 
-void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, bool removeSelectedText, bool refreshCustomMenu )
+void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /*=0*/, bool refreshCustomMenu )
 {
     if ( var )
     {
@@ -3874,7 +3876,9 @@ void KWTextFrameSetEdit::insertVariable( KoVariable *var, KoTextFormat *format /
         kdDebug() << "KWTextFrameSetEdit::insertVariable format=" << format << endl;
 #endif
         textObject()->insert( cursor(), format, KoTextObject::customItemChar(),
-                              false, removeSelectedText, i18n("Insert Variable"),
+                              i18n("Insert Variable"),
+                              KoTextDocument::Standard,
+                              KoTextObject::DoNotRemoveSelected,
                               customItemsMap );
         frameSet()->kWordDocument()->slotRepaintChanged( frameSet() );
         if ( var->type()==VT_CUSTOM && refreshCustomMenu)

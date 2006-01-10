@@ -1334,7 +1334,7 @@ int KoTextParag::calculateLineSpacing( int line, int startChar, int lastChar ) c
         while ( line-- > 0 )
             ++it;
 
-        kdDebug(32500) << " line spacing type: " << m_layout.lineSpacingType << " value:" << m_layout.lineSpacingValue() << " line_height=" << (*it)->h << " startChar=" << startChar << " lastChar=" << lastChar << endl;
+        //kdDebug(32500) << " line spacing type: " << m_layout.lineSpacingType << " value:" << m_layout.lineSpacingValue() << " line_height=" << (*it)->h << " startChar=" << startChar << " lastChar=" << lastChar << endl;
         switch ( m_layout.lineSpacingType )
         {
         case KoParagLayout::LS_MULTIPLE:

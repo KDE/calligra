@@ -97,7 +97,7 @@ public:
     virtual void cut() {}
     virtual void paste() {}
     virtual void selectAll() {}
-    virtual void pasteData( QMimeSource* /*data*/, int /*provides*/ ) {}
+    virtual void pasteData( QMimeSource* /*data*/, int /*provides*/, bool /*drop*/ ) {}
 
 
     /// Called if the cursor tries to leave the frameset at its beginning.

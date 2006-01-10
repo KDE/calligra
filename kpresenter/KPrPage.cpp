@@ -124,6 +124,8 @@ DCOPObject* KPrPage::dcopObject()
 
 void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingContext& context, int & indexObj, int &partIndexObj,  KoXmlWriter* manifestWriter ) const
 {
+    Q_UNUSED( store );
+    Q_UNUSED( manifestWriter );
     KPrObject::KPOasisSaveContext sc( xmlWriter, context, indexObj, partIndexObj, isMasterPage() );
 
     KTempFile animationTmpFile;
@@ -141,8 +143,8 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
         //TODO tz: check if isMasterPage is needed
         if ( !isMasterPage() && it.current()->hasAnimation() )
         {
-            if ( it.current()->getEffect() != EF_NONE || 
-                 it.current()->getAppearStep() != 0 || 
+            if ( it.current()->getEffect() != EF_NONE ||
+                 it.current()->getAppearStep() != 0 ||
                  !it.current()->getAppearSoundEffectFileName().isEmpty() )
             {
                 kdDebug(33001) << "has animation" << endl;
@@ -165,8 +167,8 @@ void KPrPage::saveOasisObject( KoStore *store, KoXmlWriter &xmlWriter, KoSavingC
                     listObjectAnimation.insert( it.current()->getAppearStep(), tmp2 );
                 }
             }
-            if ( it.current()->getEffect3() != EF3_NONE || 
-                 it.current()->getDisappear() ||   
+            if ( it.current()->getEffect3() != EF3_NONE ||
+                 it.current()->getDisappear() ||
                  ! it.current()->getDisappearSoundEffectFileName().isEmpty())
             {
                 listAnimation *lstappear = new listAnimation;
@@ -304,7 +306,7 @@ void KPrPage::loadOasis(KoOasisContext & context )
     {
         if ( !styleStack.hasAttributeNS( KoXmlNS::draw, "fill" ) )
         {
-            // if non is set the fill style of the master slide is used: see OD 14.13.2 Drawing Page Style 
+            // if non is set the fill style of the master slide is used: see OD 14.13.2 Drawing Page Style
             m_useMasterBackground = true;
         }
         //FIXME: fix it in old file format

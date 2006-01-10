@@ -145,7 +145,7 @@ public:
     virtual void copy();
     virtual void cut();
     virtual void paste();
-    virtual void pasteData( QMimeSource* data, int provides );
+    virtual void pasteData( QMimeSource* data, int provides, bool drop );
     virtual void selectAll();
 
     /** Moves the cursor to the first position */

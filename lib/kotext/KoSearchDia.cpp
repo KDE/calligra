@@ -391,7 +391,10 @@ void KoFindReplace::replace( const QString &text, int matchingIndex,
     disconnect( &m_textIterator, SIGNAL( currentParagraphModified( int, int, int ) ),
                 this, SLOT( slotCurrentParagraphModified( int, int, int ) ) );
 
-    KCommand *cmd = currentTextObj->replaceSelectionCommand(&cursor, rep, KoTextObject::HighlightSelection, QString::null, repaint );
+    KCommand *cmd = currentTextObj->replaceSelectionCommand(
+        &cursor, rep, QString::null,
+        KoTextDocument::HighlightSelection,
+        repaint ? KoTextObject::DefaultInsertFlags : KoTextObject::DoNotRepaint );
 
     connect( &m_textIterator, SIGNAL( currentParagraphModified( int, int, int ) ),
              this, SLOT( slotCurrentParagraphModified( int, int, int ) ) );
@@ -473,7 +476,7 @@ void KoFindReplace::replaceWithAttribut( KoTextCursor * cursor, int index )
     }
 
 
-    KCommand *cmd = m_textIterator.currentTextObject()->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextObject::HighlightSelection );
+    KCommand *cmd = m_textIterator.currentTextObject()->setFormatCommand( cursor, &lastFormat ,newFormat,flags , false, KoTextDocument::HighlightSelection );
 
     if( cmd )
         macroCommand()->addCommand(cmd);

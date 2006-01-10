@@ -285,7 +285,7 @@ public:
      * changed during the traversal. However, to the user it does
      * not visit every grid position, it visits each cell once.
      * (in spite of the fact that it inherits from a grid-visiting
-     * iterator .
+     * iterator).
      * Only one MarkedIterator can be used at once.  See TableIterator
      */
     class MarkedIterator : public GridIter {
@@ -616,6 +616,8 @@ KWTableFrameSet::Cell*
 KWTableFrameSet::TableIterator<VisitStyle>::toFirstCell (){
         m_cell = m_table->cell(m_limit[HIGH], m_limit[LEFT]);
         Q_ASSERT(m_cell);
+        if ( !m_cell )
+            return 0;
         m_row = m_cell->firstRow();
         m_col = m_cell->firstColumn();
         return m_cell;
@@ -626,8 +628,12 @@ void
 KWTableFrameSet::TableIterator<VisitStyle>::goToCell(KWTableFrameSet::Cell *cell)
 {
         m_cell = cell;
-        m_row = m_cell->firstRow();
-        m_col = m_cell->firstColumn();
+        Q_ASSERT( m_cell );
+        if ( m_cell )
+        {
+            m_row = m_cell->firstRow();
+            m_col = m_cell->firstColumn();
+        }
 }
 
 // CHECKED specialises to first cell

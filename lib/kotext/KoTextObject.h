@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001-2005 David Faure <faure@kde.org>
+   Copyright (C) 2001-2006 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -239,30 +239,38 @@ public:
     /** return true if some text is selected */
     bool hasSelection() const { return textdoc->hasSelection( KoTextDocument::Standard, true ); }
     /** returns the selected text [without formatting] if hasSelection() */
-    QString selectedText( int selectionId = KoTextDocument::Standard ) const {
+    QString selectedText( KoTextDocument::SelectionId selectionId = KoTextDocument::Standard ) const {
         return textdoc->selectedText( selectionId );
     }
     /** returns true if the given selection has any custom item in it */
-    bool selectionHasCustomItems( int selectionId = KoTextDocument::Standard ) const;
+    bool selectionHasCustomItems( KoTextDocument::SelectionId selectionId = KoTextDocument::Standard ) const;
+
+    enum InsertFlag {
+        DefaultInsertFlags = 0,
+        CheckNewLine = 1, /// < if true, the text to be inserted is checked for '\\n' (as a paragraph delimiter)
+        OverwriteMode = 2,
+        DoNotRemoveSelected = 4, ///< whether to remove selected text before
+        DoNotRepaint = 8         ///< usually we repaint in insert(), this allows to turn it off
+    };
 
     /**
      * The main "insert" method, including undo/redo creation/update.
+     *
      * @param cursor the insertion point
      * @param currentFormat the current textformat, to apply to the inserted text
      * @param text the text to be inserted
-     * @param checkNewLine if true, @p text is checked for '\\n' (as a paragraph delimiter)
-     * @param removeSelected whether to remove selected text before - deprecated, better
-     * use replaceSelectionCommand() instead, to get a single undo/redo command
+     * @param insertFlags flags, see InsertFlag
      * @param commandName the name to give the undo/redo command if we haven't created it already
      * @param customItemsMap the map of custom items to include in the new text
-     * @param selectionId which selection to use (See KOTextDocument::SelectionIds)
+     * @param selectionId which selection to use (See KoTextDocument::SelectionId)
      * @param repaint force repaint after insert
      */
     void insert( KoTextCursor * cursor, KoTextFormat * currentFormat, const QString &text,
-                 bool checkNewLine, bool removeSelected, const QString & commandName,
-                 CustomItemsMap customItemsMap = CustomItemsMap(),
-                 int selectionId = KoTextDocument::Standard,
-                 bool repaint = true );
+                 const QString & commandName,
+                 KoTextDocument::SelectionId selectionId = KoTextDocument::Standard,
+                 int insertFlags = DefaultInsertFlags, // KDE4: TODO use QFlags
+                 CustomItemsMap customItemsMap = CustomItemsMap() );
+
     /**
      * Remove the text currently selected, including undo/redo creation/update.
      * @param cursor the caret position
@@ -270,16 +278,23 @@ public:
      * @param cmdName the name to give the undo/redo command, if we haven't created it already
      * @param createUndoRedo create an undo history entry for this removal
      */
-    void removeSelectedText( KoTextCursor * cursor, int selectionId = KoTextDocument::Standard,
+    void removeSelectedText( KoTextCursor * cursor, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard,
                              const QString & cmdName = QString::null, bool createUndoRedo=true  );
 
     KCommand * replaceSelectionCommand( KoTextCursor * cursor, const QString & replacement,
-                                        int selectionId, const QString & cmdName, bool repaint = true,
-                                        bool checkNewLine = true );
-    KCommand * removeSelectedTextCommand( KoTextCursor * cursor, int selectionId, bool repaint = true );
+                                        const QString & cmdName,
+                                        KoTextDocument::SelectionId selectionId = KoTextDocument::Standard,
+                                        int insertFlags = DefaultInsertFlags, // KDE4: TODO use QFlags
+                                        CustomItemsMap customItemsMap = CustomItemsMap() );
+    KCommand * removeSelectedTextCommand( KoTextCursor * cursor, KoTextDocument::SelectionId selectionId, bool repaint = true );
     KCommand* insertParagraphCommand( KoTextCursor * cursor );
 
-    void pasteText( KoTextCursor * cursor, const QString & text, KoTextFormat * currentFormat, bool removeSelected );
+    /**
+     * Paste plain text at the given @p cursor
+     * @param removeSelected true when pasting with the keyboard, but false when dropping text.
+     */
+    void pasteText( KoTextCursor * cursor, const QString & text, KoTextFormat * currentFormat,
+                    bool removeSelected );
     void selectAll( bool select );
 
     /** Highlighting support (for search/replace, spellchecking etc.).
@@ -293,12 +308,7 @@ public:
 
     /** Set format changes on selection or current cursor.
         Returns a command if the format was applied to a selection */
-    KCommand *setFormatCommand( KoTextCursor * cursor, KoTextFormat ** currentFormat, const KoTextFormat *format, int flags, bool zoomFont = false, int selectionId = KoTextDocument::Standard );
-
-    /** Selections ids */
-    enum SelectionIds {
-        HighlightSelection = 2 // used to highlight during search/replace
-    };
+    KCommand *setFormatCommand( KoTextCursor * cursor, KoTextFormat ** currentFormat, const KoTextFormat *format, int flags, bool zoomFont = false, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
 
     enum KeyboardAction { // keep in sync with QTextEdit
 	ActionBackspace,
@@ -311,16 +321,16 @@ public:
     void doKeyboardAction( KoTextCursor * cursor, KoTextFormat * & currentFormat, KeyboardAction action );
 
     // -- Paragraph settings --
-    KCommand * setCounterCommand( KoTextCursor * cursor, const KoParagCounter & counter, int selectionId = KoTextDocument::Standard );
-    KCommand * setAlignCommand( KoTextCursor * cursor, int align , int selectionId = KoTextDocument::Standard);
-    KCommand * setLineSpacingCommand( KoTextCursor * cursor, double spacing, KoParagLayout::SpacingType _type,int selectionId = KoTextDocument::Standard );
-    KCommand * setBordersCommand( KoTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, int selectionId = KoTextDocument::Standard );
-    KCommand * setJoinBordersCommand( KoTextCursor * cursor, bool join, int selectionId = KoTextDocument::Standard );
-    KCommand * setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin, int selectionId = KoTextDocument::Standard);
-    KCommand* setTabListCommand( KoTextCursor * cursor,const KoTabulatorList & tabList , int selectionId = KoTextDocument::Standard );
-    KCommand* setBackgroundColorCommand( KoTextCursor * cursor,const QColor & color , int selectionId = KoTextDocument::Standard );
+    KCommand * setCounterCommand( KoTextCursor * cursor, const KoParagCounter & counter, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
+    KCommand * setAlignCommand( KoTextCursor * cursor, int align , KoTextDocument::SelectionId selectionId = KoTextDocument::Standard);
+    KCommand * setLineSpacingCommand( KoTextCursor * cursor, double spacing, KoParagLayout::SpacingType _type,KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
+    KCommand * setBordersCommand( KoTextCursor * cursor, const KoBorder& leftBorder, const KoBorder& rightBorder, const KoBorder& topBorder, const KoBorder& bottomBorder, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
+    KCommand * setJoinBordersCommand( KoTextCursor * cursor, bool join, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
+    KCommand * setMarginCommand( KoTextCursor * cursor, QStyleSheetItem::Margin m, double margin, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard);
+    KCommand* setTabListCommand( KoTextCursor * cursor,const KoTabulatorList & tabList , KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
+    KCommand* setBackgroundColorCommand( KoTextCursor * cursor,const QColor & color , KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
 
-    KCommand * setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, int selectionId = KoTextDocument::Standard );
+    KCommand * setParagDirectionCommand( KoTextCursor * cursor, QChar::Direction d, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
 
     /**
      * Apply a KoParagStyle to a selection.
@@ -333,7 +343,7 @@ public:
      * @param interactive if true, the text will be reformatted/repainted to show the new style
      */
     void applyStyle( KoTextCursor * cursor, const KoParagStyle * style,
-                     int selectionId = KoTextDocument::Standard,
+                     KoTextDocument::SelectionId selectionId = KoTextDocument::Standard,
                      int paragLayoutFlags = KoParagLayout::All, int formatFlags = KoTextFormat::Format,
                      bool createUndoRedo = true, bool interactive = true );
 
@@ -343,7 +353,7 @@ public:
      * @return the command for 'apply style', or 0L if createUndoRedo is false.
      */
     KCommand* applyStyleCommand( KoTextCursor * cursor, const KoParagStyle * style,
-                     int selectionId = KoTextDocument::Standard,
+                     KoTextDocument::SelectionId selectionId = KoTextDocument::Standard,
                      int paragLayoutFlags = KoParagLayout::All, int formatFlags = KoTextFormat::Format,
                      bool createUndoRedo = true, bool interactive = true );
 
@@ -379,7 +389,7 @@ public:
 
     // common for setParagLayoutFormatCommand above and KoTextView::setParagLayoutFormatCommand
     KCommand *setParagLayoutCommand( KoTextCursor * cursor, const KoParagLayout& paragLayout,
-                                     int selectionId, int paragLayoutFlags,
+                                     KoTextDocument::SelectionId selectionId, int paragLayoutFlags,
                                      int marginIndex, bool createUndoRedo );
     /**
      * Support for changing the format in the whole textobject
@@ -518,7 +528,7 @@ public: // made public for KWTextFrameSet...
     /** This prepares undoRedoInfo for a paragraph formatting change
      * If this does too much, we could pass an enum flag to it.
      * But the main point is to avoid too much duplicated code */
-    void storeParagUndoRedoInfo( KoTextCursor * cursor, int selectionId = KoTextDocument::Standard );
+    void storeParagUndoRedoInfo( KoTextCursor * cursor, KoTextDocument::SelectionId selectionId = KoTextDocument::Standard );
     /** Copies a formatted char, <parag, position>, into undoRedoInfo.text, at position @p index. */
     void copyCharFormatting( KoTextParag *parag, int position, int index /*in text*/, bool moveCustomItems );
     void readFormats( KoTextCursor &c1, KoTextCursor &c2, bool copyParagLayouts = false, bool moveCustomItems = false );

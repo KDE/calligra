@@ -434,7 +434,9 @@ public:
     void insertVariable( int type, int subtype = 0 );
     void insertFootNote( NoteType noteType, KWFootNoteVariable::Numbering numType, const QString& manualString );
     void insertCustomVariable( const QString &name);
-    void insertVariable( KoVariable *var, KoTextFormat *format = 0 /*means currentFormat()*/,bool removeSelectedText = true, bool refreshCustomMenu = false/*don't refresh all the time custom menu*/ );
+    void insertVariable( KoVariable *var,
+                         KoTextFormat *format = 0 /*means currentFormat()*/,
+                         bool refreshCustomMenu = false/*don't refresh all the time custom menu*/ );
 
     void insertLink(const QString &_linkName, const QString & hrefName);
     void insertComment(const QString &_comment);
@@ -458,7 +460,7 @@ public:
     /// Called by KWView when using the action
     void openLink();
 
-    void pasteData( QMimeSource* data, int provides );
+    void pasteData( QMimeSource* data, int provides, bool drop );
     KCommand* pasteOasisCommand( QMimeSource* data );
 
     /**

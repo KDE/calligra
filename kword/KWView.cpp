@@ -2367,11 +2367,11 @@ void KWView::editCopy()
 void KWView::editPaste()
 {
     QMimeSource *data = QApplication::clipboard()->data();
-    pasteData( data );
+    pasteData( data, false );
 }
 
 // paste or drop
-void KWView::pasteData( QMimeSource* data )
+void KWView::pasteData( QMimeSource* data, bool drop )
 {
     int provides = checkClipboard( data );
     Q_ASSERT( provides != 0 );
@@ -2380,7 +2380,7 @@ void KWView::pasteData( QMimeSource* data )
     if ( provides & ProvidesFormula ) {
         KWFrameSetEdit * edit = m_gui->canvasWidget()->currentFrameSetEdit();
         if ( edit && edit->frameSet()->type() == FT_FORMULA ) {
-            edit->pasteData( data, ProvidesFormula );
+            edit->pasteData( data, ProvidesFormula, drop );
         }
         else {
             insertFormula( data );
@@ -2407,7 +2407,7 @@ void KWView::pasteData( QMimeSource* data )
         }
         KWTextFrameSetEdit * edit = currentTextEdit();
         if ( edit && ( ( provides & ProvidesOasis ) || ( provides & ProvidesPlainText ) ) ) {
-            edit->pasteData( data, provides );
+            edit->pasteData( data, provides, drop );
         } else if ( ( provides & ProvidesOasis ) ) {
             // Not editing a frameset? We can't paste plain text then... only entire frames.
             QCString returnedTypeMime = KoTextObject::providesOasis( data );
@@ -5572,7 +5572,7 @@ void KWView::spellCheckerCorrected( const QString &old, int pos , const QString 
     if(!m_spell.macroCmdSpellCheck)
         m_spell.macroCmdSpellCheck=new KMacroCommand(i18n("Correct Misspelled Word"));
     m_spell.macroCmdSpellCheck->addCommand(textobj->replaceSelectionCommand(
-        &cursor, corr, KoTextObject::HighlightSelection, QString::null ));
+        &cursor, corr, QString::null, KoTextDocument::HighlightSelection));
 }
 
 void KWView::spellCheckerDone( const QString & )
@@ -6622,7 +6622,7 @@ void KWView::openDocStructurePopupMenu( const QPoint &p, KWFrameSet *frameset, K
     bool hasText = (frameset->type()==FT_TEXT || frameset->type()==FT_TABLE || frameset->type()==FT_FORMULA );
 
     m_actionDocStructEdit->setEnabled( rw && hasText );
-    m_actionDocStructDelete->setEnabled( (rw && !parag && !frameset->isMainFrameset() && 
+    m_actionDocStructDelete->setEnabled( (rw && !parag && !frameset->isMainFrameset() &&
         !frameset->isFootEndNote() && !frameset->isHeaderOrFooter()) );
     m_actionDocStructSpeak->setEnabled( hasText && kttsdInstalled );
 
@@ -7405,7 +7405,7 @@ void KWView::slotCorrectWord()
     if ( edit )
     {
         edit->selectWordUnderCursor( *(edit->cursor()) );
-        m_doc->addCommand( edit->textObject()->replaceSelectionCommand( edit->cursor(), act->text(), KoTextDocument::Standard, i18n("Replace Word") ));
+        m_doc->addCommand( edit->textObject()->replaceSelectionCommand( edit->cursor(), act->text(), i18n("Replace Word") ));
     }
 }
 

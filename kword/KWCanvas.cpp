@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
    Copyright (C) 1998, 1999 Reginald Stadlbauer <reggie@kde.org>
+   Copyright (C) 2002-2006 David Faure <faure@kde.org>
    Copyright (C) 2005 Thomas Zander <zander@kde.org>
 
    This library is free software; you can redistribute it and/or
@@ -15,7 +16,7 @@
    You should have received a copy of the GNU Library General Public License
    along with this library; see the file COPYING.LIB.  If not, write to
    the Free Software Foundation, Inc., 51 Franklin Street, Fifth Floor,
- * Boston, MA 02110-1301, USA.
+   Boston, MA 02110-1301, USA.
 */
 
 
@@ -72,6 +73,7 @@ KWCanvas::KWCanvas(const QString& viewMode, QWidget *parent, KWDocument *d, KWGU
     m_mousePressed = false;
     m_imageDrag = false;
     m_frameInline = false;
+    m_overwriteMode = false;
 
     //used by insert picture dialogbox
     m_picture.pictureInline = false;
@@ -1273,7 +1275,7 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
             parag = tmp->firstParag();
         }
         // The _new_ cursor position must be visible.
-        KWTextFrameSetEdit *textedit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+        KWTextFrameSetEdit *textedit = currentTextEdit();
         if ( textedit ) {
             textedit->hideCursor();
             textedit->setCursor( parag, index );
@@ -1289,10 +1291,9 @@ void KWCanvas::editTextFrameSet( KWFrameSet * fs, KoTextParag* parag, int index 
 void KWCanvas::ensureCursorVisible()
 {
     Q_ASSERT( m_currentFrameSetEdit );
-    if ( !m_currentFrameSetEdit )
-        return;
-    KWTextFrameSetEdit *textedit = dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
-    textedit->ensureCursorVisible();
+    KWTextFrameSetEdit *textedit = currentTextEdit();
+    if ( textedit )
+        textedit->ensureCursorVisible();
 }
 
 bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
@@ -1304,7 +1305,7 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
         if ( tmp && tmp->protectContent() && !m_doc->cursorInProtectedArea() )
             return false;
 
-        KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+        KWTextFrameSetEdit *edit = currentTextEdit();
         if(edit && onlyText)
         {
             // Don't use terminateCurrentEdit here, we want to emit changed only once
@@ -1340,6 +1341,12 @@ bool KWCanvas::checkCurrentEdit( KWFrameSet * fs , bool onlyText )
             }
             else
                 m_currentFrameSetEdit = fs->createFrameSetEdit( this );
+
+            if ( m_currentFrameSetEdit ) {
+                KWTextFrameSetEdit *edit = currentTextEdit();
+                if ( edit )
+                    edit->setOverwriteMode( m_overwriteMode );
+            }
         }
         emitChanged = true;
     }
@@ -1366,6 +1373,13 @@ void KWCanvas::terminateEditing( KWFrameSet *fs )
     QPtrListIterator<KWFrame> frameIt = fs->frameIterator();
     for ( ; frameIt.current(); ++frameIt )
         m_frameViewManager->view(frameIt.current())->setSelected(false);
+}
+
+KWTextFrameSetEdit* KWCanvas::currentTextEdit() const
+{
+    if ( m_currentFrameSetEdit )
+        return dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+    return 0;
 }
 
 void KWCanvas::setMouseMode( MouseMode newMouseMode )
@@ -1520,7 +1534,7 @@ void KWCanvas::contentsDropEvent( QDropEvent *e )
         if ( m_currentFrameSetEdit )
             m_currentFrameSetEdit->dropEvent( e, normalPoint, docPoint, m_gui->getView() );
         else
-            m_gui->getView()->pasteData( e );
+            m_gui->getView()->pasteData( e, true );
     }
     m_mousePressed = false;
     m_imageDrag = false;
@@ -1796,6 +1810,13 @@ bool KWCanvas::eventFilter( QObject *o, QEvent *e )
                             repaintContents();
                     }
                 }
+                else if ( keyev->key() == Key_Insert && keyev->state() == 0 ) {
+                    m_overwriteMode = !m_overwriteMode;
+                    KWTextFrameSetEdit *edit = currentTextEdit();
+                    if ( edit )
+                        edit->setOverwriteMode( m_overwriteMode );
+                    kdDebug()<<"Insert is pressed, overwrite mode: "<< m_overwriteMode << endl;
+                }
                 else // normal key processing
                     if ( m_currentFrameSetEdit && m_mouseMode == MM_EDIT && m_doc->isReadWrite() && !m_printing )
                 {
@@ -1887,8 +1908,13 @@ void KWCanvas::updateCurrentFormat()
 void KWCanvas::printRTDebug( int info )
 {
     KWTextFrameSet * textfs = 0L;
-    if ( m_currentFrameSetEdit )
-        textfs = dynamic_cast<KWTextFrameSet *>(m_currentFrameSetEdit->currentTextEdit()->frameSet());
+    if ( m_currentFrameSetEdit ) {
+        KWTextFrameSetEdit* edit = currentTextEdit();
+        if ( edit ) {
+            textfs = dynamic_cast<KWTextFrameSet *>( edit->frameSet() );
+            Q_ASSERT( textfs );
+        }
+    }
     if ( !textfs )
         textfs = dynamic_cast<KWTextFrameSet *>(m_doc->frameSet( 0 ));
     if ( textfs )
@@ -1911,7 +1937,7 @@ int KWCanvas::currentTableRow() const
 {
     if ( !m_currentFrameSetEdit )
         return -1;
-    KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+    KWTextFrameSetEdit *edit = currentTextEdit();
     if ( !edit )
         return -1;
     KWTextFrameSet* textfs = edit->textFrameSet();
@@ -1924,7 +1950,7 @@ int KWCanvas::currentTableCol() const
 {
     if ( !m_currentFrameSetEdit )
         return -1;
-    KWTextFrameSetEdit *edit=dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+    KWTextFrameSetEdit *edit = currentTextEdit();
     if ( !edit )
         return -1;
     KWTextFrameSet* textfs = edit->textFrameSet();
@@ -1956,8 +1982,7 @@ void KWCanvas::resetStatusBarText()
 KoPoint KWCanvas::caretPos()
 {
     if (!m_currentFrameSetEdit) return KoPoint();
-    KWTextFrameSetEdit* textEdit =
-        dynamic_cast<KWTextFrameSetEdit *>(m_currentFrameSetEdit->currentTextEdit());
+    KWTextFrameSetEdit* textEdit = currentTextEdit();
     if (!textEdit) return KoPoint();
     KoTextCursor* cursor = textEdit->cursor();
     if (!cursor) return KoPoint();

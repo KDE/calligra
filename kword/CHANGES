@@ -10,6 +10,8 @@ Changes after KWord-1.4
    Implemented loading of list indentation (space-before) (#109223)
    Improved OOo compatibility when saving page breaks
    Save first page number the right way so that OOo can load it
+- Text layouting: fix for formatting of multi-frame paragraphs (#65059)
+- Overwrite mode (activated with the "Insert" key)
 
 Changes after KWord-1.4-beta1
 =============================

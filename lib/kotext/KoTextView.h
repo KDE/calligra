@@ -1,5 +1,5 @@
 /* This file is part of the KDE project
-   Copyright (C) 2001 David Faure <faure@kde.org>
+   Copyright (C) 2001-2006 David Faure <faure@kde.org>
 
    This library is free software; you can redistribute it and/or
    modify it under the terms of the GNU Library General Public
@@ -167,6 +167,7 @@ public:
 
     // return true if we "insert direct cursor" and we insert new parag
     bool placeCursor( const QPoint &pos /* in internal coordinates */, bool insertDirectCursor=false );
+    void setOverwriteMode( bool overwriteMode );
 
 public slots:
     /** Show the current settings (those for the paragraph and character under the cursor), in the GUI.
@@ -279,6 +280,7 @@ private:
     KoTextCursor *m_cursor;
     // Store the index of the variable on which we last clicked, to position m_cursor
     int m_variablePosition;
+    bool m_overwriteMode;
 
     KoTextFormat *m_currentFormat;
     QTimer *blinkTimer, *dragStartTimer;
