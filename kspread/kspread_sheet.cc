@@ -72,6 +72,7 @@
 #include "ksploadinginfo.h"
 #include "KSpreadTableIface.h"
 #include "manipulator.h"
+#include "manipulator_data.h"
 
 #include <kdebug.h>
 #include <kmdcodec.h>
@@ -1067,47 +1068,54 @@ Cell* Sheet::nonDefaultCell( int _column, int _row,
 
 void Sheet::setText( int _row, int _column, const QString& _text, bool asString )
 {
-    Cell * cell = nonDefaultCell( _column, _row );
-
-    if ( isProtected() )
-    {
-      if ( !cell->format()->notProtected( _column, _row ) )
-        NO_MODIFICATION_POSSIBLE;
-    }
-
-    if ( !doc()->undoLocked() )
-    {
-        UndoSetText *undo = new UndoSetText( doc(), this, cell->text(), _column, _row,cell->formatType() );
-        doc()->addCommand( undo );
-    }
-
-    // The cell will force a display refresh itself, so we dont have to care here.
-    cell->setCellText( _text, asString );
-    //refresh anchor
-    if(_text.at(0)=='!')
-    {
-      emit sig_updateView( this, Region(_column,_row,_column,_row) );
-    }
-}
-
-void Sheet::setArrayFormula (int _row, int _column, int rows, int cols,
-    const QString &_text)
-{
-  // check protection
-  bool nomodify = false;
-  if ( isProtected() )
-    for (int row = _row; row < _row+rows; ++row)
-      for (int col = _column; col < _column+cols; ++col) {
-        Cell * cell = nonDefaultCell (col, row);
-        if ( !cell->format()->notProtected( _column, _row ) )
-        {
-          nomodify = true;
-          break;
-        }
-      }
-  if (nomodify)
+  ProtectedCheck prot;
+  prot.setSheet (this);
+  prot.add (QPoint (_column, _row));
+  if (prot.check())
     NO_MODIFICATION_POSSIBLE;
 
+  DataManipulator *dm = new DataManipulator ();
+  dm->setSheet (this);
+  dm->setValue (_text);
+  dm->setParsing (!asString);
+  dm->add (QPoint (_column, _row));
+  dm->execute ();
+  
+  /* PRE-MANIPULATOR CODE looked like this:
+  TODO remove this after the new code works  
+  if ( !doc()->undoLocked() )
+  {
+      UndoSetText *undo = new UndoSetText( doc(), this, cell->text(), _column, _row,cell->formatType() );
+      doc()->addCommand( undo );
+  }
+
+  // The cell will force a display refresh itself, so we dont have to care here.
+  cell->setCellText( _text, asString );
+  */
+
+  //refresh anchor
+  if(_text.at(0)=='!')
+    emit sig_updateView( this, Region(_column,_row,_column,_row) );
+}
+
+void Sheet::setArrayFormula (Selection *selectionInfo, const QString &_text)
+{
+  // check protection
+  ProtectedCheck prot;
+  prot.setSheet (this);
+  prot.add (*selectionInfo);
+  if (prot.check())
+    NO_MODIFICATION_POSSIBLE;
+
+  // create and call the manipulator
+  ArrayFormulaManipulator *afm = new ArrayFormulaManipulator;
+  afm->setSheet (this);
+  afm->setText (_text);
+  afm->add (*selectionInfo);
+  afm->execute ();
+
+  /* PRE-MANIPULATOR CODE LOOKED LIKE THIS
+  TODO remove this when the above code works
   // add undo
   if ( !doc()->undoLocked() )
   {
@@ -1130,6 +1138,7 @@ void Sheet::setArrayFormula (int _row, int _column, int rows, int cols,
         cell->setCellText ("=INDEX(" + cellRef + ";" + QString::number (row+1)
             + ";" + QString::number (col+1) + ")", false);
       }
+  */
 }
 
 void Sheet::setLayoutDirtyFlag()
@@ -5444,7 +5453,7 @@ void Sheet::deleteCells(const Region& region)
     {
       if ( c->doesMergeCells() && !c->isDefault() )
         c->mergeCells( c->column(), c->row(),
-		       c->extraXCells(), c->extraYCells() );
+           c->extraXCells(), c->extraYCells() );
     }
     doc()->setModified( true );
 }
@@ -7817,8 +7826,8 @@ void Sheet::updateLocale()
   Cell* c = d->cells.firstCell();
   for( ;c; c = c->nextCell() )
   {
-      QString _text = c->text();
-      c->setDisplayText( _text );
+    QString _text = c->text();
+    c->setCellText( _text );
   }
   emit sig_updateView( this );
   //  doc()->emitEndOperation();

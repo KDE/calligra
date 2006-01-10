@@ -83,6 +83,30 @@ class DataManipulator : public AbstractDataManipulator {
     bool m_parsing : 1;
 };
 
+class ArrayFormulaManipulator : public AbstractDataManipulator {
+  public:
+    ArrayFormulaManipulator ();
+    virtual ~ArrayFormulaManipulator ();
+    void setText (const QString text) { m_text = text; };
+  protected:
+    virtual Value newValue (Element *element, int col, int row, bool *,
+        FormatType *);
+    QString cellRef, m_text;
+};
+
+
+/** class ProtectedCheck can be used to check, whether a particular
+  range is protected or not */
+class ProtectedCheck : public Region {
+  public:
+    ProtectedCheck ();
+    virtual ~ProtectedCheck ();
+    void setSheet (Sheet *sheet) { m_sheet = sheet; };
+    bool check ();
+  protected:
+    Sheet *m_sheet;
+};
+
 
 } // namespace KSpread
 

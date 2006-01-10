@@ -655,7 +655,7 @@ void Region::operator=(const Region& other)
 
 Sheet* Region::filterSheetName(QString& sRegion)
 {
-  Sheet* sheet;
+  Sheet* sheet = 0;
   int delimiterPos = sRegion.find( '!' );
   if (delimiterPos > -1)
   {
@@ -782,7 +782,7 @@ Region::Point::Point(const QString& sCell)
     {
         m_rowFixed = true;
         p++;
-	// Malformed ?
+  // Malformed ?
         if ( p == length )
         {
             kdDebug(36001) << "Point::init: p==length after $ of row" << endl;

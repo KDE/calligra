@@ -129,3 +129,69 @@ Value DataManipulator::newValue (Element *element, int col, int row,
   return data.element (colidx, rowidx);
 }
 
+ArrayFormulaManipulator::ArrayFormulaManipulator ()
+{
+  m_name = i18n ("Set array formula");
+}
+
+ArrayFormulaManipulator::~ArrayFormulaManipulator ()
+{
+}
+
+Value ArrayFormulaManipulator::newValue (Element *element, int col, int row,
+                                 bool *parsing, FormatType *)
+{
+  *parsing = true;
+  QRect range = element->rect().normalize();
+  int colidx = col - range.left();
+  int rowidx = row - range.top();
+  
+  // fill in the cells ... top-left one gets the formula, the rest gets =INDEX
+  // TODO: also fill in information about cells being a part of a range for GUI
+  if (colidx || rowidx) {
+    return (cellRef + QString::number (rowidx+1) + ";" +
+        QString::number (colidx+1) + ")");
+  } else {
+    Cell *cell = m_sheet->nonDefaultCell (col, row);
+    cellRef = "=INDEX(" + cell->name() + ";";
+    return m_text;
+  }
+}
+
+ProtectedCheck::ProtectedCheck ()
+{
+}
+
+ProtectedCheck::~ProtectedCheck ()
+{
+}
+
+bool ProtectedCheck::check ()
+{
+  if (!m_sheet->isProtected())
+    return false;
+  
+  bool prot = false;
+  Region::Iterator endOfList(cells().end());
+  for (Region::Iterator it = cells().begin(); it != endOfList; ++it)
+  {
+    Region::Element *element = *it;
+    QRect range = element->rect().normalize();
+
+    for (int col = range.left(); col <= range.right(); ++col)
+    {
+      for (int row = range.top(); row <= range.bottom(); ++row)
+      {
+        Cell *cell = m_sheet->cellAt (col, row);
+        if (!cell->format()->notProtected (col, row))
+        {
+          prot = true;
+          break;
+        }
+      }
+      if (prot) break;
+    }
+  }
+  return prot;
+}
+

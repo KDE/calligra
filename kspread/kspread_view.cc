@@ -6398,14 +6398,7 @@ void View::setText (const QString & _text, bool array)
 
   if (array) {
     // array version
-    QRect r = d->selection->selection();
-    int x = r.left();
-    int y = r.top();
-    int xl = r.right() - r.left() + 1;
-    int yl = r.bottom() - r.top() + 1;
-    doc()->emitBeginOperation( false );
-    d->activeSheet->setArrayFormula (y, x, yl, xl, _text);
-    doc()->emitEndOperation( QRect( x, y, xl, yl ) );
+    d->activeSheet->setArrayFormula (d->selection, _text);
   }
   else
   {
@@ -6413,14 +6406,11 @@ void View::setText (const QString & _text, bool array)
     int x = d->canvas->markerColumn();
     int y = d->canvas->markerRow();
 
-    doc()->emitBeginOperation( false );
     d->activeSheet->setText( y, x, _text );
+    
     Cell * cell = d->activeSheet->cellAt( x, y );
-
     if ( cell->value().isString() && !_text.isEmpty() && !_text.at(0).isDigit() && !cell->isFormula() )
       doc()->addStringCompletion( _text );
-
-    doc()->emitEndOperation( QRect( x, y, 1, 1 ) );
   }
 }
 
