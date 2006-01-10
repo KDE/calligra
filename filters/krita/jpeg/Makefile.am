@@ -1,16 +1,18 @@
+noinst_LTLIBRARIES = libkritaconverter.la
 kde_module_LTLIBRARIES = libkritajpegimport.la libkritajpegexport.la
 
-libkritajpegexport_la_LDFLAGS = $(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries) -module -avoid-version -no-undefined
-libkritajpegexport_la_LIBADD = \
-	$(KOFFICE_LIBS) \
-	$(top_builddir)/krita/libkritacommon.la \
-	-ljpeg
+libkritaconverter_la_LDFLAGS = $(all_libraries)
+libkritaconverter_la_SOURCES = kis_jpeg_converter.cc iccjpeg.c
 
-libkritajpegimport_la_LDFLAGS = $(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries) -module -avoid-version -no-undefined
-libkritajpegimport_la_LIBADD = \
-	$(KOFFICE_LIBS) \
-	$(top_builddir)/krita/libkritacommon.la \
-	-ljpeg
+libkritajpegexport_la_LDFLAGS = -avoid-version -module -no-undefined \
+	$(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries)
+libkritajpegexport_la_LIBADD = $(top_builddir)/krita/libkritacommon.la \
+	libkritaconverter.la $(KOFFICE_LIBS) -ljpeg
+
+libkritajpegimport_la_LDFLAGS = -avoid-version -module -no-undefined \
+	$(KDE_PLUGIN) $(KDE_RPATH) $(all_libraries)
+libkritajpegimport_la_LIBADD = $(top_builddir)/krita/libkritacommon.la \
+	libkritaconverter.la $(KOFFICE_LIBS) -ljpeg
 
 INCLUDES= \
 	-I$(srcdir) \
@@ -31,8 +33,8 @@ servicedir = $(kde_servicesdir)
 kdelnk_DATA = krita_jpeg.desktop
 kdelnkdir = $(kde_appsdir)/Office
 
-libkritajpegimport_la_SOURCES = kis_jpeg_import.cc kis_jpeg_converter.cc
-libkritajpegexport_la_SOURCES = kis_wdg_options_jpeg.ui kis_jpeg_export.cc kis_jpeg_converter.cc
+libkritajpegimport_la_SOURCES = kis_jpeg_import.cc
+libkritajpegexport_la_SOURCES = kis_wdg_options_jpeg.ui kis_jpeg_export.cc
 
 METASOURCES = AUTO
 

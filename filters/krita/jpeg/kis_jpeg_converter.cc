@@ -21,6 +21,10 @@
 
 #include <stdio.h>
 
+extern "C" {
+#include <iccjpeg.h>
+}
+
 #include <kapplication.h>
 #include <koDocumentInfo.h>
 
@@ -35,6 +39,11 @@
 #include <kis_group_layer.h>
 #include <kis_meta_registry.h>
 #include <kis_profile.h>
+
+#define ICC_MARKER  (JPEG_APP0 + 2) /* JPEG marker code for ICC */
+#define ICC_OVERHEAD_LEN  14    /* size of non-profile data in APP2 */
+#define MAX_BYTES_IN_MARKER  65533  /* maximum data len of a JPEG marker */
+#define MAX_DATA_BYTES_IN_MARKER  (MAX_BYTES_IN_MARKER - ICC_OVERHEAD_LEN)
 
 namespace {
     
@@ -98,6 +107,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
     }
     jpeg_stdio_src(&cinfo, fp);
     
+    setup_read_icc_profile(&cinfo);
     // read header
     jpeg_read_header(&cinfo, TRUE);
     
@@ -112,33 +122,22 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
         fclose(fp);
         return KisImageBuilder_RESULT_UNSUPPORTED_COLORSPACE;
     }
-    
-    // TODO: add support for profile in jpeg
-#if 0
-    // Read image profile
-    png_charp profile_name, profile_data;
-    int compression_type;
-    png_uint_32 proflen;
-    
-    png_get_iCCP(png_ptr, info_ptr, &profile_name, &compression_type, &profile_data, &proflen);
-#endif
+    uchar* profile_data;
+    uint profile_len;
     KisProfile* profile = 0;
-#if 0
     QByteArray profile_rawdata;
-    // XXX: Hardcoded for icc type -- is that correct for us?
-    if (QString::compare(profile_name, "icc") == 0) {
-       
-        profile_rawdata.resize(proflen);
-        memcpy(profile_rawdata.data(), profile_data, proflen);
-
-        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, (DWORD)proflen);
+    if( read_icc_profile (&cinfo, &profile_data, &profile_len))
+    {
+        profile_rawdata.resize(profile_len);
+        memcpy(profile_rawdata.data(), profile_data, profile_len);
+        cmsHPROFILE hProfile = cmsOpenProfileFromMem(profile_data, (DWORD)profile_len);
 
         if (hProfile != (cmsHPROFILE) NULL) {
-            profile = new KisProfile(hProfile, profile_rawdata);
+            profile = new KisProfile( profile_rawdata);
             Q_CHECK_PTR(profile);
+            kdDebug(41008) << "profile name: " << profile->productName() << " profile description: " << profile->productDescription() << " information sur le produit: " << profile->productInfo() << endl;
         }
     }
-#endif
 
     // Retrieve a pointer to the colorspace
     KisColorSpace* cs;
@@ -164,7 +163,7 @@ KisImageBuilder_Result KisJPEGConverter::decode(const KURL& uri)
         Q_CHECK_PTR(m_img);
         if(profile)
         {
-//             m_img -> addAnnotation( new KisAnnotation(profile_name, "", profile_rawdata) );
+            m_img -> addAnnotation( new KisAnnotation( profile->productName(), "", profile_rawdata) );
         }
     }
 
@@ -307,7 +306,6 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLaye
     jpeg_start_compress(&cinfo, TRUE);
 
     // Save annotation
-#if 0 // FIXME using iccjpeg.* for profile and marking for other annotations
     vKisAnnotationSP_it it = annotationsStart;
     while(it != annotationsEnd) {
         if (!(*it) || (*it) -> type() == QString()) {
@@ -319,16 +317,14 @@ KisImageBuilder_Result KisJPEGConverter::buildFile(const KURL& uri, KisPaintLaye
         kdDebug(41008) << "Trying to store annotation of type " << (*it) -> type() << " of size " << (*it) -> annotation() . size() << endl;
 
         if ((*it) -> type().startsWith("krita_attribute:")) { // Attribute
-            // FIXME: it should be possible to save krita_attributes in the "CHUNKs"
+            // FIXME
             kdDebug(41008) << "can't save this annotation : " << (*it) -> type() << endl;
         } else { // Profile
             char* name = new char[(*it)->type().length()+1];
-            strcpy(name, (*it)->type().ascii());
-            png_set_iCCP(png_ptr, info_ptr, name, PNG_COMPRESSION_TYPE_BASE, (char*)(*it)->annotation().data(), (*it) -> annotation() . size());
+            write_icc_profile(& cinfo, (uchar*)(*it)->annotation().data(), (*it)->annotation().size());
         }
         ++it;
     }
-#endif
 
     JSAMPROW row_pointer = new JSAMPLE[width*cinfo.input_components];
     int color_nb_bits = 8 * layer->paintDevice()->pixelSize() / layer->paintDevice()->nChannels();
