@@ -618,8 +618,9 @@ WidgetPropertySet::isNameValid(const QString &name)
 
 	if (KFormDesigner::FormManager::self()->activeForm()->objectTree()->lookup(name)) {
 		KMessageBox::sorry( KFormDesigner::FormManager::self()->activeForm()->widget(),
-			i18n("Could not rename widget. Its name will be reverted to \"%1\".\n"
-			"A widget with name \"%2\" already exists.").arg(w->name()).arg(name));
+			i18n("Could not rename widget. "
+			"A widget with the name \"%1\" already exists.\n"
+			"Its name will be reverted to \"%2\".").arg(name).arg(w->name()));
 		d->slotPropertyChangedEnabled = false;
 		d->set["name"].resetValue();
 		d->slotPropertyChangedEnabled = true;
