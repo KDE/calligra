@@ -9,7 +9,6 @@ SUBDIRS = sidewinder import
 
 METASOURCES = AUTO
 
-service_DATA = kspread_excel_export.desktop
 servicedir = $(kde_servicesdir)
 
 messages: rc.cpp
