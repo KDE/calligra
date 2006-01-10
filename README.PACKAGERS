@@ -1,6 +1,11 @@
 TODO for 1.5
 
-
+Name: Krita development
+Location: koffice/krita/core, koffice/krita/sdk, koffice/krita/kritacolor, koffice/krita/ui
+Description: These directories contain header files that are installed and can be used
+             by plugin developers to extend Krita with new tools, colorspaces, paintops
+             and more. If your distribution packaged development packages separately,
+             it may be a good idea to make a krita-dev package.
 
 
 Name: Kross
