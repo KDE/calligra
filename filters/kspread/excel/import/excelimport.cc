@@ -656,6 +656,13 @@ KoFilter::ConversionStatus ExcelImport::convert( const QCString& from, const QCS
     delete workbook;
     return KoFilter::StupidError;
   }
+  
+  if( workbook->isPasswordProtected() )
+  {
+    delete workbook;
+    return KoFilter::PasswordProtected;
+  }
+  
 kdDebug() << "Loaded workbook" << endl;
   QString root, documentInfo;
 
