@@ -18,6 +18,7 @@
  ***************************************************************************/
 
 #include "kexiappmainwindow.h"
+#include "kexiapppart.h"
 
 #include "core/keximainwindow.h"
 #include "core/kexiproject.h"
@@ -34,6 +35,13 @@ namespace Kross { namespace KexiApp {
     {
         public:
             KexiMainWindow* mainwindow;
+
+            KexiProject* project() {
+                KexiProject* project = mainwindow->project();
+                if(! project)
+                    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("No project loaded.") );
+                return project;
+            }
     };
 
 }}
@@ -46,7 +54,17 @@ KexiAppMainWindow::KexiAppMainWindow(KexiMainWindow* mainwindow)
 {
     d->mainwindow = mainwindow;
 
+    addFunction("isConnected", &KexiAppMainWindow::isConnected);
     addFunction("getConnection", &KexiAppMainWindow::getConnection);
+
+    addFunction("getPartItems", &KexiAppMainWindow::getPartItems);
+    addFunction("openPartItem", &KexiAppMainWindow::openPartItem);
+
+    //addFunction("hasObject", &KexiAppMainWindow::hasObject);
+    //addFunction("getObject", &KexiAppMainWindow::getObject);
+    //addFunction("getObjects", &KexiAppMainWindow::getObjects);
+    //addFunction("openObject", &KexiAppMainWindow::openObject);
+    //addFunction("hasObject", &KexiAppMainWindow::closeObject);
 }
 
 KexiAppMainWindow::~KexiAppMainWindow()
@@ -54,25 +72,40 @@ KexiAppMainWindow::~KexiAppMainWindow()
     delete d;
 }
 
-
 const QString KexiAppMainWindow::getClassName() const
 {
     return "Kross::KexiApp::KexiAppMainWindow";
 }
 
+Kross::Api::Object::Ptr KexiAppMainWindow::isConnected(Kross::Api::List::Ptr)
+{
+    return new Kross::Api::Variant( QVariant(d->project()->isConnected(), 0) );
+}
+
 Kross::Api::Object::Ptr KexiAppMainWindow::getConnection(Kross::Api::List::Ptr)
 {
-    KexiProject* project = d->mainwindow->project();
-    if(project) {
-        ::KexiDB::Connection* connection = project->dbConnection();
-        if(connection) {
-            Kross::Api::Module::Ptr module = Kross::Api::Manager::scriptManager()->loadModule("krosskexidb");
-            if(! module)
-                throw Kross::Api::Exception::Ptr( 
-                    new Kross::Api::Exception("Could not load \"krosskexidb\" module.") );
-            return module->get("KexiDBConnection", connection);
-        }
-    }
-    throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("No connection established.") );
+    ::KexiDB::Connection* connection = d->project()->dbConnection();
+    if(! connection)
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("No connection established.") );
+    Kross::Api::Module::Ptr module = Kross::Api::Manager::scriptManager()->loadModule("krosskexidb");
+    if(! module)
+        throw Kross::Api::Exception::Ptr( new Kross::Api::Exception("Could not load \"krosskexidb\" module.") );
+    return module->get("KexiDBConnection", connection);
+}
+
+Kross::Api::Object::Ptr KexiAppMainWindow::getPartItems(Kross::Api::List::Ptr args)
+{
+    QString mimetype = Kross::Api::Variant::toString(args->item(0));
+    if(mimetype.isNull()) return 0; // just to be sure...
+    KexiPart::ItemDict* items = d->project()->itemsForMimeType( mimetype.latin1() );
+    if(! items) return 0;
+    return new Kross::Api::ListT<Kross::KexiApp::KexiAppPartItem, ::KexiPart::Item>( *items );
+}
+
+Kross::Api::Object::Ptr KexiAppMainWindow::openPartItem(Kross::Api::List::Ptr args)
+{
+    KexiAppPartItem* partitem = Kross::Api::Object::fromObject<KexiAppPartItem>(args->item(0));
+    KexiDialogBase* dialog = partitem ? d->mainwindow->openObject( partitem->item() ) : 0;
+    return new Kross::Api::Variant( QVariant(dialog != 0, 0) );
 }
 

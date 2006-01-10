@@ -5,6 +5,7 @@ INCLUDES = -I$(top_srcdir)/kexi $(KROSS_INCLUDES) $(all_includes)
 kde_module_LTLIBRARIES = krosskexiapp.la
 
 krosskexiapp_la_SOURCES = \
+    kexiapppart.cpp \
     kexiappmainwindow.cpp \
     kexiappmodule.cpp
 

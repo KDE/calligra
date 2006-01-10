@@ -25,6 +25,7 @@
 
 #include <api/object.h>
 #include <api/variant.h>
+#include <api/list.h>
 #include <api/class.h>
 
 // Forward declarations.
@@ -62,21 +63,15 @@ namespace Kross { namespace KexiApp {
             /// Private d-pointer class.
             KexiAppMainWindowPrivate* d;
 
+            Kross::Api::Object::Ptr isConnected(Kross::Api::List::Ptr);
+
             /** \return the \a Kross::KexiDB::KexiDBConnection object that 
             belongs to the opened project or throw an exception if there 
             was no project opened (no connection established). */
             Kross::Api::Object::Ptr getConnection(Kross::Api::List::Ptr);
 
-            //Kross::Api::Object::Ptr getActions(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr hasAction(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr getAction(Kross::Api::List::Ptr);
-
-            //Kross::Api::Object::Ptr hasObject(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr getObject(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr getObjects(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr openObject(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr saveObject(Kross::Api::List::Ptr);
-            //Kross::Api::Object::Ptr closeObject(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr getPartItems(Kross::Api::List::Ptr);
+            Kross::Api::Object::Ptr openPartItem(Kross::Api::List::Ptr);
     };
 
 }}

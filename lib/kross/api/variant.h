@@ -48,7 +48,6 @@ namespace Kross { namespace Api {
              */
             Variant(const QVariant& value, const QString& name = "variant");
 
-            //Variant(uint i);
             operator bool () { return getValue().toBool(); }
             operator int () { return getValue().toInt(); }
             operator uint () { return getValue().toUInt(); }
@@ -57,6 +56,9 @@ namespace Kross { namespace Api {
             operator QString () { return getValue().toString(); }
             operator const QString () { return getValue().toString(); }
             operator const QString& () { return getValue().asString(); }
+            operator QCString () { return getValue().toCString(); }
+            operator const QCString () { return getValue().toCString(); }
+            operator const QCString& () { return getValue().asCString(); }
             operator const QVariant& () { return getValue(); }
 
             /**

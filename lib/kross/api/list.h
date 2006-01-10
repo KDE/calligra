@@ -22,6 +22,7 @@
 
 #include <qstring.h>
 #include <qvaluelist.h>
+#include <qintdict.h>
 
 #include "object.h"
 #include "value.h"
@@ -105,6 +106,16 @@ namespace Kross { namespace Api {
     {
         public:
             ListT(QValueList<TYPE> values) : List(values) {}
+
+            ListT(QIntDict<TYPE> values) : List() {
+                QIntDictIterator<TYPE> it( values );
+                TYPE *t;
+                while( (t = it.current()) != 0 ) {
+                    this->append( new OBJECT(t) );
+                    ++it;
+                }
+            }
+
             ListT(const QPtrList<TYPE> values) : List() {
                 QPtrListIterator<TYPE> it( values );
                 TYPE *t;
@@ -113,6 +124,7 @@ namespace Kross { namespace Api {
                     ++it;
                 }
             }
+
             virtual ~ListT() {}
     };
 
