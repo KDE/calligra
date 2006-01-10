@@ -127,6 +127,8 @@ ResourceDialog::ResourceDialog(Project &project, Resource &resource, QWidget *pa
     connect(dia, SIGNAL(changed()), SLOT(enableButtonOk()));
     connect(dia, SIGNAL(calculate()), SLOT(slotCalculationNeeded()));
     connect(dia->calendarList, SIGNAL(activated(int)), SLOT(slotCalendarChanged(int)));
+    connect(dia->availableFrom, SIGNAL(valueChanged(const QDateTime&)), SLOT(enableButtonOk()));
+    connect(dia->availableUntil, SIGNAL(valueChanged(const QDateTime&)), SLOT(enableButtonOk()));
 }
 
 
