@@ -3237,6 +3237,7 @@ void Canvas::closeEditor()
     deleteEditor( true ); // save changes
   }
 }
+
 void Canvas::updateChooseRect()
 {
   if( !d->chooseCell )
@@ -3643,7 +3644,7 @@ void Canvas::paintHighlightedRanges(QPainter& painter, const KoRect& /*viewRect*
 		//Convert region from sheet coordinates to canvas coordinates for use with the painter
 		//retrieveMarkerInfo(region,viewRect,positions,paintSides);
 
-  if ( !d->cellEditor->inherits("KSpread::TextEditor") )
+  if ( !d->cellEditor || !d->cellEditor->inherits("KSpread::TextEditor") )
     return;
 
   QValueList<QColor> colors = static_cast<TextEditor*>(d->cellEditor)->colors();
