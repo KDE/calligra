@@ -1006,6 +1006,10 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 	if (!querySchema.statement().isEmpty())
 		return querySchema.statement();
 
+//! @todo looking at singleTable is visually nice but a field name can conflict 
+//!       with function or variable name...
+	const bool singleTable = querySchema.tables()->count() <= 1;
+
 	QString sql;
 	sql.reserve(4096);
 //	Field::List *fields = querySchema.fields();
@@ -1018,10 +1022,10 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 				sql += QString::fromLatin1(", ");
 
 			if (f->isQueryAsterisk()) {
-				if (static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) //single-table *
+				if (!singleTable && static_cast<QueryAsterisk*>(f)->isSingleTableAsterisk()) //single-table *
 					sql += escapeIdentifier(f->table()->name(), drvEscaping) +
 					       QString::fromLatin1(".*");
-				else //all-tables *
+				else //all-tables * (or simplified table.* when there's only one table)
 					sql += QString::fromLatin1("*");
 			}
 			else {
@@ -1039,13 +1043,15 @@ QString Connection::selectStatement( KexiDB::QuerySchema& querySchema,
 					if (tableName.isEmpty())
 						tableName = f->table()->name();
 
-					sql += (escapeIdentifier(tableName, drvEscaping) + "." +
-					        escapeIdentifier(f->name(), drvEscaping));
+					if (!singleTable) {
+						sql += (escapeIdentifier(tableName, drvEscaping) + ".");
+					}
+					sql += escapeIdentifier(f->name(), drvEscaping);
 				}
 				QString aliasString = QString(querySchema.columnAlias(number));
 				if (!aliasString.isEmpty())
 					sql += (QString::fromLatin1(" AS ") + aliasString);
-//TODO: add option that allows to omit "AS" keyword
+//! @todo add option that allows to omit "AS" keyword
 			}
 		}
 	}
