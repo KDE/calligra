@@ -9,7 +9,7 @@
         <rect>
             <x>0</x>
             <y>0</y>
-            <width>222</width>
+            <width>228</width>
             <height>112</height>
         </rect>
     </property>
@@ -77,6 +77,9 @@
             <property name="maxValue">
                 <number>8784</number>
             </property>
+            <property name="minValue">
+                <number>1</number>
+            </property>
             <property name="toolTip" stdset="0">
                 <string>Number of working hours in a normal year.</string>
             </property>
@@ -87,6 +90,9 @@
             </property>
             <property name="maxValue">
                 <number>744</number>
+            </property>
+            <property name="minValue">
+                <number>1</number>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Number of working hours in a normal month.</string>
@@ -99,6 +105,9 @@
             <property name="maxValue">
                 <number>168</number>
             </property>
+            <property name="minValue">
+                <number>1</number>
+            </property>
             <property name="toolTip" stdset="0">
                 <string>Number of working hours in a normal week.</string>
             </property>
@@ -109,6 +118,9 @@
             </property>
             <property name="maxValue">
                 <number>24</number>
+            </property>
+            <property name="minValue">
+                <number>1</number>
             </property>
             <property name="toolTip" stdset="0">
                 <string>Number of working hours in a normal day.</string>
