@@ -602,11 +602,7 @@
 <layoutdefaults spacing="6" margin="11"/>
 <includehints>
     <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
-    <includehint>klineedit.h</includehint>
     <includehint>kcombobox.h</includehint>
-    <includehint>kcombobox.h</includehint>
-    <includehint>kdatewidget.h</includehint>
     <includehint>kdatewidget.h</includehint>
     <includehint>ktextedit.h</includehint>
 </includehints>
