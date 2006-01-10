@@ -54,9 +54,9 @@ AddRelationDialog::AddRelationDialog(Relation *rel, QWidget *p, QString caption,
     m_panel->relationType->setButton(rel->type());
     
     m_panel->lag->setVisibleFields(DurationWidget::Days|DurationWidget::Hours|DurationWidget::Minutes);
-    m_panel->lag->setFieldUnit(0, i18n("days"));
-    m_panel->lag->setFieldUnit(1, i18n("hours"));
-    m_panel->lag->setFieldUnit(2, i18n("minutes"));
+    m_panel->lag->setFieldUnit(0, i18n("days", "d"));
+    m_panel->lag->setFieldUnit(1, i18n("hours", "h"));
+    m_panel->lag->setFieldUnit(2, i18n("minutes", "m"));
     m_panel->lag->setValue(rel->lag());
     
     m_panel->relationType->setFocus();
