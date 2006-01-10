@@ -296,7 +296,7 @@
                             </property>
                             <property name="toolTip" stdset="0">
                                 <string>
- Use the color balance specified by the camera. If this can't be found, dcraw prints a warning and reverts to the default. </string>
+ Use the color balance specified by the camera. If this cannot be found, dcraw prints a warning and reverts to the default. </string>
                             </property>
                         </widget>
                     </grid>
