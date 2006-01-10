@@ -583,13 +583,6 @@ VTextOptionsWidget::initialize( VObject &text )
 		m_tool->visit( text );
 }
 
-void 
-VTextOptionsWidget::moveEvent ( QMoveEvent * )
-{
-	if( m_tool && isVisible() )
-		m_tool->textChanged();
-}
-
 VTextTool::VTextTool( KarbonView *view )
 		: VTool( view, "tool_text" )
 {
@@ -610,8 +603,8 @@ QString VTextTool::contextHelp()
 	QString s = "<qt><b>Text tool</b><br>";
 	s += "Click on document to place horizontal text.<br>";
 	s += "Click and drag in document to place directional text.<br>";
-	s += "Select an object and click tool to place text along a path.<br>";
-	s += "Select a text object and click the tool to change existing text.<br></qt>";
+	s += "Click on a selected path object to place text along its outline.<br>";
+	s += "Click on a selected text object to change it.<br></qt>";
 
 	return s;
 }
@@ -635,6 +628,13 @@ VTextTool::deactivate()
 }
 
 void
+VTextTool::draw( VPainter* painter )
+{
+	if( m_editedText )
+		m_editedText->draw( painter, &m_editedText->boundingBox() );
+}
+
+void
 VTextTool::drawPathCreation()
 {
 	VPainter * painter = view()->painterFactory()->editpainter();
@@ -654,16 +654,8 @@ VTextTool::drawPathCreation()
 void
 VTextTool::drawEditedText()
 {
-	if( !m_editedText )
-		return;
-
-	kdDebug(38000) << "Drawing: " << m_editedText->text() << endl;
-
-	VPainter* painter = view()->painterFactory()->editpainter();
-
-	painter->setZoomFactor( view()->zoom() );
-
-	m_editedText->draw( painter, &m_editedText->boundingBox() );
+	if( m_editedText ) 
+		view()->repaintAll( m_editedText->boundingBox() );
 }
 
 void
@@ -677,16 +669,32 @@ VTextTool::mouseButtonPress()
 void
 VTextTool::mouseButtonRelease()
 {
-	// use a default horizontal path when just clicking
-	VSubpath path( 0L );
-	path.moveTo( first() );
-	path.lineTo( KoPoint( first().x()+10, first().y() ) );
+	if( ! view() ) 
+		return;
 
-	if( createText( path ) )
+	VSelection* selection = view()->part()->document().selection();
+	VObject* selObj = selection->objects().getFirst();
+
+	// initialize dialog with single selected object
+	if( selection->objects().count() == 1 && selObj->boundingBox().contains( last() ) )
+		m_optionsWidget->initialize( *selObj );
+	else 
 	{
-		m_optionsWidget->setCaption( "Insert Text" );
-		m_optionsWidget->show();
+		// use a default horizontal path when just clicking
+		VSubpath path( 0L );
+		path.moveTo( first() );
+		path.lineTo( KoPoint( first().x()+10, first().y() ) );
+	
+		if( ! createText( path ) )
+			return;
 	}
+
+	if( dynamic_cast<VText*>( selObj ) )
+		m_optionsWidget->setCaption( "Change Text" );
+	else 
+		m_optionsWidget->setCaption( "Insert Text" );
+
+	m_optionsWidget->show();
 }
 
 void
@@ -778,7 +786,6 @@ VTextTool::createText( VSubpath &path )
 void
 VTextTool::textChanged()
 {
-
 	if( !m_editedText )
 		return;
 
@@ -838,6 +845,9 @@ VTextTool::accept()
 				  &view()->part()->document(),
 				  i18n( "Insert Text" ),
 				  newText );
+
+		delete m_editedText;
+		m_editedText = 0L;
 	}
 
 	view()->part()->addCommand( cmd, true );
@@ -925,6 +935,8 @@ VTextTool::visitVText( VText& text )
 	m_optionsWidget->setUseShadow( text.useShadow() );
 	m_optionsWidget->setShadow( text.shadowAngle(), text.shadowDistance(), text.translucentShadow() );
 	m_creating = false;
+	m_text->setState( VObject::hidden );
+	m_editedText->setState( VObject::edit );
 }
 
 VTextTool::VTextCmd::VTextCmd( VDocument* doc, const QString& name, VText* text )

@@ -132,8 +132,6 @@ public slots:
 	void initialize( VObject &text );
 
 protected:
-	void moveEvent( QMoveEvent * );
-
 	QTabWidget* m_tabWidget;
 	KFontCombo* m_fontCombo;
 	QCheckBox* m_boldCheck;
@@ -187,6 +185,8 @@ public:
 
 	virtual void visitVSubpath( VSubpath& path );
 	virtual void visitVText( VText& text );
+
+	virtual void draw( VPainter* painter );
 
 protected:
 	virtual void mouseDragShiftPressed();
