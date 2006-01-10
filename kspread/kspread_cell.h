@@ -328,11 +328,12 @@ public:
     void paintCell( const KoRect & rect, QPainter & painter,
                     View * view, const KoPoint & coordinate,
                     const QPoint & cellRef,
-        int paintBorder,
-        QPen & rightPen,
+		    int paintBorder,
+		    QPen & rightPen,
                     QPen & bottomPen,
                     QPen & leftPen,
                     QPen & topPen,
+		    QValueList<QPoint> &mergedCellsPainted,
                     bool drawCursor = true );
    
 
@@ -948,7 +949,8 @@ private:
                              bool paintBorderRight, bool paintBorderBottom,
                              bool paintBorderLeft, bool paintBorderTop,
                              QPen & rightPen, QPen & bottomPen,
-                             QPen & leftPen, QPen & topPen );
+                             QPen & leftPen, QPen & topPen,
+			     QValueList<QPoint> &mergedCellsPainted );
     void paintCellDiagonalLines( QPainter& painter, const KoRect &cellRect,
                                  const QPoint &cellRef );
 

@@ -1683,6 +1683,7 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
   int regionLeft   = paintRegion.left();
   int regionTop    = paintRegion.top();
 
+  QValueList<QPoint>  mergedCellsPainted;
   for ( int y = regionTop;
         y <= regionBottom && dblCurrentCellPos.y() <= viewRegion.bottom();
         ++y )
@@ -1787,15 +1788,17 @@ void Doc::PaintRegion(QPainter &painter, const KoRect &viewRegion,
       cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
 		       paintBordersRight, paintBordersBottom, 
 		       paintBordersLeft, paintBordersTop,
-		       rightPen, bottomPen, leftPen, topPen, false );
+		       rightPen, bottomPen, leftPen, topPen,
+		       mergedCellsPainted, false );
 
       Cell::BorderSides highlightBorder=Cell::Border_None;
       QPen highlightPen;
 #endif
 
-      cell->paintCell(viewRegion, painter, view, dblCurrentCellPos, cellRef,
-		      paintBorder,
-		      rightPen, bottomPen, leftPen, topPen, false);
+      cell->paintCell( viewRegion, painter, view, dblCurrentCellPos, cellRef,
+		       paintBorder,
+		       rightPen, bottomPen, leftPen, topPen, 
+		       mergedCellsPainted, false );
 
 
       dblCurrentCellPos.setX( dblCurrentCellPos.x() + col_lay->dblWidth() );

@@ -410,6 +410,7 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
                           + m_pSheet->rowFormat( y )->dblHeight() );
     KoRect rect( topLeft, bottomRight );
 
+    QValueList<QPoint> mergedCellsPainted;
     for ( int y = regionTop; y <= regionBottom; ++y )
     {
         row_lay = m_pSheet->rowFormat( y );
@@ -515,12 +516,14 @@ void SheetPrint::printRect( QPainter& painter, const KoPoint& topLeft,
                                KoPoint( view.width() - xpos -
                                    col_lay->dblWidth(), ypos ), QPoint( x, y ),
                                paintBorder,
-                               rightPen, bottomPen, leftPen, topPen);
+                               rightPen, bottomPen, leftPen, topPen,
+			       mergedCellsPainted);
             else
               cell->paintCell( rect, painter, NULL,
                                KoPoint( xpos, ypos ), QPoint( x, y ),
                                paintBorder,
-                               rightPen, bottomPen, leftPen, topPen);
+                               rightPen, bottomPen, leftPen, topPen,
+			       mergedCellsPainted);
 
             xpos += col_lay->dblWidth();
         }

@@ -1,5 +1,6 @@
 /* This file is part of the KDE project
 
+   Copyright 2006 Inge Wallin <inge@lysator.liu.se>
    Copyright 1999-2002,2004 Laurent Montel <montel@kde.org>
    Copyright 2002-2005 Ariya Hidayat <ariya@kde.org>
    Copyright 1999-2004 David Faure <faure@kde.org>
@@ -3445,6 +3446,7 @@ void Canvas::paintUpdates()
   kdDebug(36001) << "painting dirty cells " << endl;
 #endif
 
+  QValueList<QPoint>  mergedCellsPainted;
   for ( x = range.left(); x <= right; ++x )
   {
     for ( y = range.top(); y <= bottom; ++y )
@@ -3553,8 +3555,10 @@ void Canvas::paintUpdates()
             topPen = sheet->cellAt( x, y - 1 )->effBottomBorderPen( x, y - 1 );
         }
 
-	cell->paintCell( unzoomedRect, painter, d->view, dblCorner, QPoint( x, y), paintBorder,
-				 rightPen,bottomPen,leftPen,topPen);
+	cell->paintCell( unzoomedRect, painter, d->view, dblCorner, 
+			 QPoint( x, y), paintBorder,
+			 rightPen,bottomPen,leftPen,topPen,
+			 mergedCellsPainted);
 
 
       }
