@@ -1495,7 +1495,7 @@ bool KoDocument::openFile()
                     msg = i18n( "format is not recognized" ); break;
                 
                 case KoFilter::NotImplemented:
-                    msg = i18n( "not impelemented" ); break;
+                    msg = i18n( "not implemented" ); break;
                 
                 case KoFilter::ParsingError:
                     msg = i18n( "parsing error" ); break;
