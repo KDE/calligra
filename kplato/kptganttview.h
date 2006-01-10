@@ -88,6 +88,7 @@ signals:
     void addRelation(Node *par, Node *child);
     void modifyRelation(Relation *rel, int linkType) ;
     void addRelation(Node *par, Node *child, int linkType);
+    void itemDoubleClicked();
     
 public slots:
     void popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, int);
@@ -105,7 +106,7 @@ public slots:
 
 private slots:
     void currentItemChanged(KDGanttViewItem *);
-    void slotItemDoubleClicked(KDGanttViewItem*);
+    void slotItemDoubleClicked(QListViewItem*);
     void slotItemRenamed(KDGanttViewItem*, int, const QString&);
     
     void slotLinkItems(KDGanttViewItem* from, KDGanttViewItem* to, int linkType);

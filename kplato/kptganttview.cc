@@ -93,7 +93,8 @@ GanttView::GanttView(View *view, QWidget *parent, bool readWrite, const char* na
     m_gantt->addColumn(i18n("Work Breakdown Structure", "WBS"));
     // HACK: need changes to kdgantt
     KDGanttViewTaskItem *item = new KDGanttViewTaskItem(m_gantt);
-    item->listView()->header()->moveSection(1, 0);
+    QListView *lv = item->listView();
+    lv->header()->moveSection(1, 0);
     
     m_gantt->setScale(KDGanttView::Day);
     m_gantt->setShowLegendButton(false);
@@ -112,7 +113,8 @@ GanttView::GanttView(View *view, QWidget *parent, bool readWrite, const char* na
 
 	connect(m_gantt, SIGNAL(lvCurrentChanged(KDGanttViewItem*)), this, SLOT (currentItemChanged(KDGanttViewItem*)));
 
-	connect(m_gantt, SIGNAL(itemDoubleClicked(KDGanttViewItem*)), this, SLOT (slotItemDoubleClicked(KDGanttViewItem*)));
+    // HACK: kdgantt emits 2 signals for each *double* click, so we go direct to listview
+	connect(lv, SIGNAL(doubleClicked(QListViewItem*, const QPoint&, int)), this, SLOT (slotItemDoubleClicked(QListViewItem*)));
 
     m_taskLinks.setAutoDelete(true);
     
@@ -869,8 +871,11 @@ void GanttView::popupMenuRequested(KDGanttViewItem * item, const QPoint & pos, i
     //TODO: Other nodetypes
 }
 
-void GanttView::slotItemDoubleClicked(KDGanttViewItem* /*item*/)
-{
+void GanttView::slotItemDoubleClicked(QListViewItem* item) {
+    //kdDebug()<<k_funcinfo<<endl;
+    if (item == 0)
+        return;
+    emit itemDoubleClicked();
 }
 
 //TODO: 1) make it koffice compliant, 
