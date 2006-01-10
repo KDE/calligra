@@ -153,21 +153,23 @@ KivioView::KivioView( QWidget *_parent, const char *_name, KivioDoc* doc )
   dcop = 0;
   dcopObject(); // build it
 
-  m_pageCountSLbl = new KStatusBarLabel(i18n("%1 current page, %2 total number of pages",
-                                        "Page %1/%2").arg(0).arg(0), PAGECOUNT_TEXT);
-  addStatusBarItem(m_pageCountSLbl, 0, false);
+  if(KStatusBar* sb = statusBar()) { // No statusbar in e.g. konqueror
+    m_pageCountSLbl = new KStatusBarLabel(i18n("%1 current page, %2 total number of pages",
+                                          "Page %1/%2").arg(0).arg(0), PAGECOUNT_TEXT, sb);
+    addStatusBarItem(m_pageCountSLbl, 0, false);
 
-  m_infoSLbl = new KStatusBarLabel("", INFO_TEXT);
-  addStatusBarItem(m_infoSLbl, 10, false);
+    m_infoSLbl = new KStatusBarLabel("", INFO_TEXT, sb);
+    addStatusBarItem(m_infoSLbl, 10, false);
 
-  // Add coords to the statusbar
-  QString unit = KoUnit::unitName(m_pDoc->unit());
-  KoPoint xy(0, 0);
-  QString text = i18n("%1 x coord, %2 y coord, %3 and %4 the unit",
-                      "X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
-                      .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
-  m_coordSLbl = new KStatusBarLabel(text, MOUSEPOS_TEXT);
-  addStatusBarItem(m_coordSLbl, 0, true);
+    // Add coords to the statusbar
+    QString unit = KoUnit::unitName(m_pDoc->unit());
+    KoPoint xy(0, 0);
+    QString text = i18n("%1 x coord, %2 y coord, %3 and %4 the unit",
+                        "X: %1 %3 Y: %2 %4").arg(KGlobal::_locale->formatNumber(xy.x(), 2))
+                        .arg(KGlobal::_locale->formatNumber(xy.y(), 2)).arg(unit).arg(unit);
+    m_coordSLbl = new KStatusBarLabel(text, MOUSEPOS_TEXT, sb);
+    addStatusBarItem(m_coordSLbl, 0, true);
+  }
 
   // Handle progress information from the doc
   m_statusBarProgress = 0;

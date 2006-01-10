@@ -33,7 +33,7 @@ KivioStencilGeometryPanel::KivioStencilGeometryPanel(QWidget* parent)
   connect(m_pY, SIGNAL(valueChanged(double)), SLOT(yChange(double)));
   connect(m_pW, SIGNAL(valueChanged(double)), SLOT(wChange(double)));
   connect(m_pH, SIGNAL(valueChanged(double)), SLOT(hChange(double)));
-  connect(m_rotationSBox, SIGNAL(valueChanged(int)), SLOT(rotationChange(int)));
+//  connect(m_rotationSBox, SIGNAL(valueChanged(int)), SLOT(rotationChange(int)));
 
   grid->addWidget(lx, 0, 0);
   grid->addWidget(m_pX, 1, 0);
