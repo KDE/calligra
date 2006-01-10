@@ -2,6 +2,7 @@
 Encoding=UTF-8
 Type=Service
 Name=Kivio Image Export Filter
+Name[de]=Kivio Bild-Exportfilter
 Name[es]=Filtro de exportación a imagen de Kivio
 Name[ga]=Scagaire Easpórtála Íomhá Kivio
 Name[pt]=Filtro de Exportação de Imagem para o Kivio
