@@ -1500,6 +1500,9 @@ bool KoDocument::openFile()
                 case KoFilter::ParsingError:
                     msg = i18n( "parsing error" ); break;
                 
+                case KoFilter::PasswordProtected:
+                    msg = i18n( "document is password protected" ); break;
+                
                 case KoFilter::InternalError:
                 case KoFilter::UnexpectedEOF:
                 case KoFilter::UnexpectedOpcode:

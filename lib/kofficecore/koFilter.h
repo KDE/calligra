@@ -64,6 +64,7 @@ public:
                             EmbeddedDocError, WrongFormat, NotImplemented,
                             ParsingError, InternalError, UnexpectedEOF,
                             UnexpectedOpcode, UserCancelled, OutOfMemory,
+                            PasswordProtected,
                             JustInCaseSomeBrokenCompilerUsesLessThanAByte = 255 };
 
     virtual ~KoFilter();
