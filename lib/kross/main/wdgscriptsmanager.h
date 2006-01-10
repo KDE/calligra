@@ -43,11 +43,12 @@ class WdgScriptsManager : public WdgScriptsManagerBase
         void slotInstallScript();
         void slotUninstallScript();
         void slotExecuteScript();
-        void slotRemoveScript();
+        void slotUnloadScript();
         void slotGetNewScript();
         void slotSelectionChanged(QListViewItem*);
     private slots:
-        void fillScriptsList();
+        void slotFillScriptsList();
+        void slotResourceInstalled();
     private:
         WdgScriptsManagerPrivate* d;
         void addItem(ScriptActionCollection* collection);

@@ -89,7 +89,7 @@ class WdgScriptsManagerPrivate
 #ifdef KROSS_SUPPORT_NEWSTUFF
     ScriptNewStuff* newstuff;
 #endif
-    enum { LoadBtn = 0, InstallBtn, UninstallBtn, ExecBtn, RemoveBtn, NewStuffBtn };
+    enum { LoadBtn = 0, UnloadBtn, InstallBtn, UninstallBtn, ExecBtn, NewStuffBtn };
 };
 
 WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, const char* name, WFlags fl )
@@ -111,7 +111,7 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     //scriptsList->addColumn(i18n("Name"));
     //scriptsList->addColumn(i18n("Action"));
 
-    fillScriptsList();
+    slotFillScriptsList();
 
     connect(scriptsList, SIGNAL(selectionChanged(QListViewItem*)), this, SLOT(slotSelectionChanged(QListViewItem*)));
 
@@ -120,8 +120,15 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     toolBar->insertButton("exec", WdgScriptsManagerPrivate::ExecBtn, false, i18n("Execute"));
     toolBar->addConnection(WdgScriptsManagerPrivate::ExecBtn, SIGNAL(clicked()), this, SLOT(slotExecuteScript()));
 
+    toolBar->insertLineSeparator();
+
     toolBar->insertButton("fileopen", WdgScriptsManagerPrivate::LoadBtn, true, i18n("Load"));
     toolBar->addConnection(WdgScriptsManagerPrivate::LoadBtn, SIGNAL(clicked()), this, SLOT(slotLoadScript()));
+
+    toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::UnloadBtn, false, i18n("Unload"));
+    toolBar->addConnection(WdgScriptsManagerPrivate::UnloadBtn, SIGNAL(clicked()), this, SLOT(slotUnloadScript()));
+
+    toolBar->insertLineSeparator();
 
     toolBar->insertButton("fileimport", WdgScriptsManagerPrivate::InstallBtn, true, i18n("Install"));
     toolBar->addConnection(WdgScriptsManagerPrivate::InstallBtn, SIGNAL(clicked()), this, SLOT(slotInstallScript()));
@@ -129,16 +136,15 @@ WdgScriptsManager::WdgScriptsManager(ScriptGUIClient* scr, QWidget* parent, cons
     toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::UninstallBtn, false, i18n("Uninstall"));
     toolBar->addConnection(WdgScriptsManagerPrivate::UninstallBtn, SIGNAL(clicked()), this, SLOT(slotUninstallScript()));
 
-    toolBar->insertButton("fileclose", WdgScriptsManagerPrivate::RemoveBtn, false, i18n("Remove"));
-    toolBar->addConnection(WdgScriptsManagerPrivate::RemoveBtn, SIGNAL(clicked()), this, SLOT(slotRemoveScript()));
-
 #ifdef KROSS_SUPPORT_NEWSTUFF
+    toolBar->insertLineSeparator();
+
     toolBar->insertButton("knewstuff", WdgScriptsManagerPrivate::NewStuffBtn, true, i18n("Get More Scripts"));
     toolBar->addConnection(WdgScriptsManagerPrivate::NewStuffBtn, SIGNAL(clicked()), this, SLOT(slotGetNewScript()));
 #endif
 
     connect(scr, SIGNAL( collectionChanged(ScriptActionCollection*) ),
-            this, SLOT( fillScriptsList() ));
+            this, SLOT( slotFillScriptsList() ));
 }
 
 WdgScriptsManager::~WdgScriptsManager()
@@ -146,7 +152,7 @@ WdgScriptsManager::~WdgScriptsManager()
     delete d;
 }
 
-void WdgScriptsManager::fillScriptsList()
+void WdgScriptsManager::slotFillScriptsList()
 {
     scriptsList->clear();
 
@@ -199,13 +205,13 @@ void WdgScriptsManager::slotSelectionChanged(QListViewItem* item)
 
     toolBar->setItemEnabled(WdgScriptsManagerPrivate::ExecBtn, i && i->action());
     toolBar->setItemEnabled(WdgScriptsManagerPrivate::UninstallBtn, i && i->action() && i->collection() == installedcollection);
-    toolBar->setItemEnabled(WdgScriptsManagerPrivate::RemoveBtn, i && i->action() && i->collection() != installedcollection);
+    toolBar->setItemEnabled(WdgScriptsManagerPrivate::UnloadBtn, i && i->action() && i->collection() != installedcollection);
 }
 
 void WdgScriptsManager::slotLoadScript()
 {
     if(d->m_scripguiclient->loadScriptFile())
-        fillScriptsList();
+        slotFillScriptsList();
 }
 
 void WdgScriptsManager::slotInstallScript()
@@ -227,7 +233,7 @@ void WdgScriptsManager::slotInstallScript()
         return;
     }
 
-    fillScriptsList();
+    slotFillScriptsList();
 }
 
 void WdgScriptsManager::slotUninstallScript()
@@ -257,7 +263,7 @@ void WdgScriptsManager::slotUninstallScript()
         return;
     }
 
-    fillScriptsList();
+    slotFillScriptsList();
 }
 
 void WdgScriptsManager::slotExecuteScript()
@@ -267,12 +273,12 @@ void WdgScriptsManager::slotExecuteScript()
         item->action()->activate();
 }
 
-void WdgScriptsManager::slotRemoveScript()
+void WdgScriptsManager::slotUnloadScript()
 {
     ListItem* item = dynamic_cast<ListItem*>( scriptsList->currentItem() );
     if(item && item->action()) {
         item->collection()->detach( item->action() );
-        fillScriptsList();
+        slotFillScriptsList();
     }
 }
 
@@ -284,7 +290,7 @@ void WdgScriptsManager::slotGetNewScript()
 
     if(! d->newstuff) {
         d->newstuff = new ScriptNewStuff(d->m_scripguiclient, type, this);
-        //connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotResourceInstalled()));
+        connect(d->newstuff, SIGNAL(installFinished()), this, SLOT(slotResourceInstalled()));
     }
 
     KNS::Engine *engine = new KNS::Engine(d->newstuff, type, this);
@@ -298,6 +304,14 @@ void WdgScriptsManager::slotGetNewScript()
     p->load(type, QString("http://download.kde.org/khotnewstuff/%1scripts-providers.xml").arg(appname));
     d->exec();
 #endif
+}
+
+void WdgScriptsManager::slotResourceInstalled()
+{
+    // Delete KNewStuff's configuration entries. These entries reflect what has
+    // already been installed. As we cannot yet keep them in sync after uninstalling
+    // scripts, we deactivate the check marks entirely.
+    KGlobal::config()->deleteGroup("KNewStuffStatus");
 }
 
 }}

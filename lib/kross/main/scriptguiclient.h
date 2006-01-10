@@ -104,7 +104,7 @@ namespace Kross { namespace Api {
             /**
              * Reload the list of installed scripts.
              */
-            bool reloadInstalledScripts();
+            void reloadInstalledScripts();
 
             /**
              * Install the packagefile \p scriptpackagefile . Those

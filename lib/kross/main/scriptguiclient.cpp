@@ -121,7 +121,7 @@ bool ScriptGUIClient::removeActionCollection(const QString& name)
     return false;
 }
 
-bool ScriptGUIClient::reloadInstalledScripts()
+void ScriptGUIClient::reloadInstalledScripts()
 {
     ScriptActionCollection* installedcollection = d->collections["installedscripts"];
     if(installedcollection)
@@ -176,6 +176,7 @@ bool ScriptGUIClient::uninstallScriptPackage(const QString& scriptpackagepath)
         KMessageBox::sorry(0, i18n("Could not uninstall this script package. You may not have sufficient permissions to delete the folder \"%1\".").arg(scriptpackagepath));
         return false;
     }
+    reloadInstalledScripts();
     return true;
 }
 
