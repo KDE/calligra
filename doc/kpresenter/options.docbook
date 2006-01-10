@@ -32,15 +32,16 @@
 <para>Auto correction is a system for correcting common typing errors, converting abbreviations to their full spelling and adjusting capitalization. As you could guess from its name, this all occurs automatically, while you are editing your document.</para>
 
 <sect2 id="enabling-autocorrection">
-<title><guilabel>Enabling/Disabling Autocorrection</guilabel></title>
+<title>Enabling/Disabling Autocorrection</title>
 
-<para>To toggle autocorrection on, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem></menuchoice> from the menubar. When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>. You can determine which changes to make by configuring autocorrection, as explained below.
+<para>To toggle autocorrection on, selec^t <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Enable Autocorrection</guimenuitem></menuchoice> from the menubar. When enabled, autocorrection makes changes to your document <emphasis>as you type</emphasis>. You can determine which changes to make by configuring autocorrection, as explained below.
 </para>
 
 <para>To toggle autocorrection off, select <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Disable Autocorrection</guimenuitem></menuchoice> from the menubar. When disabled, autocorrection changes are not made. You can, however, <link linkend="manually">apply autocorrection manually</link>, using the <menuchoice><guimenu>Text</guimenu><guimenuitem>Autocorrection</guimenuitem><guimenuitem>Apply Autocorrection</guimenuitem></menuchoice> menu.
 </para>
 
-<para>To adjust the options for autocorrection, select <menuchoice><guimenu>Settings</guimenu><guimenuitem>Configure Autocorrection... </guimenuitem></menuchoice> from the menubar.</para>
+<para>To adjust the options for autocorrection, select <menuchoice><guimenu>Settings</guimenu>
+<guimenuitem>Configure Autocorrection...</guimenuitem></menuchoice> from the menubar.</para>
 
 <para>A dialog window appears to help you set your options, with four tabs: <link linkend="simple-autocorrection">Simple Autocorrection</link>, <link linkend="custom-quotes">Custom Quotes</link>, <link linkend="advanced-autocorrestion">Advanced Autocorrection</link> and <link linkend="exceptions">Exceptions</link>.</para>
 </sect2>
@@ -60,7 +61,7 @@
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Convert the first letter from the first word of a sentence automatically to uppercase</guilabel></term>
+<term><guilabel>Convert first letter of a sentence automatically to uppercase</guilabel></term>
 <listitem><para>When selected, &kpresenter; will automatically capitalize the first letter after a period. You can tell &kpresenter; when not to alter capitalization in certain instances (ie “Sr.” or “Jr.”). For more details, see the section entitled  <link linkend="exceptions">Autocorrection Exceptions</link>.</para></listitem>
 </varlistentry>
 
@@ -75,7 +76,7 @@
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Suppress Double Spaces</guilabel></term>
+<term><guilabel>Suppress double spaces</guilabel></term>
 <listitem><para>When checked, &kpresenter; will ignore the second space typed. This prevents users from adding double spaces between words or sentences</para></listitem>
 </varlistentry>
 
@@ -91,7 +92,7 @@
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Replace 1/2... with ½</guilabel></term>
+<term><guilabel>Replace 1/2... with ½...</guilabel></term>
 <listitem><para>When selected, &kpresenter; will automatically change 1/2, 1/3 and 3/4 to their single character equivalents.</para></listitem>
 </varlistentry>
 
@@ -101,12 +102,12 @@
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Replace 1st with 1^st</guilabel></term>
+<term><guilabel>Replace 1st with 1^st...</guilabel></term>
 <listitem><para>When selected, &kpresenter; will automatically change 1st to 1<superscript>st</superscript>.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Capitalize names of days</guilabel></term>
+<term><guilabel>Capitalize name of days</guilabel></term>
 <listitem><para>Automatically capitalize the days of the week (Sunday, Monday, Tuesday, etc...).</para></listitem>
 </varlistentry>
 
@@ -135,7 +136,7 @@
 
 <variablelist>
 <varlistentry>
-<term><guilabel>Replace double quotes by typographical quotes</guilabel></term>
+<term><guilabel>Replace double quotes with typographical quotes</guilabel></term>
 <listitem>
 <para>When selected, this option will replace the standard keyboard double
 quotes, with typographical quotation marks.  If you want to change the
@@ -145,7 +146,7 @@ quotation character, click on one of the buttons. Clicking on
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Replace single quotes by typographical quotes</guilabel></term>
+<term><guilabel>Replace single quotes with typographical quotes</guilabel></term>
 <listitem>
 <para>When selected, this option will replace the standard keyboard single
 quotes, with typographical quotation marks.  If you want to change the
@@ -178,13 +179,13 @@ used abbreviations that you want spelled out, or common typing errors.</para>
 
 <para>&kpresenter; uses different autocorrection strings depending on the language.  
 Set the correct language using the combo box labeled 
-<guilabel>Replacement and exceptions for language</guilabel>.</para>
+<guilabel>Replacement and exceptions for language:</guilabel>.</para>
 
 <para>The check box labeled <guilabel>Enable word replacement</guilabel> is used to 
 toggle on and off the autoreplacement features of &kpresenter;.  If there is no mark in the check box, 
 then &kpresenter; will not perform any autoreplacements from the list in this dialog.</para>
 
-<para>If there is a mark in the check box labeled <guilabel>Replace text with formatting</guilabel> 
+<para>If there is a mark in the check box labeled <guilabel>Replace text with format</guilabel> 
 &kpresenter; will not only change the text when it finds a match, but it will change the formatting of the new text. 
 If there is no mark in this check box, then
 &kpresenter; uses the same formatting options for the replaced text as it found in the search text.  For more information 
@@ -196,8 +197,8 @@ on setting the format options for replacement text, see the section on
 
 <para>To add an autocorrection string, simply type the text you want &kpresenter; to
 check for in the text box labeled
-<guilabel>Find</guilabel>, then enter the text you want &kpresenter;
-to substitute in the text box labeled <guilabel>Replace</guilabel>.</para>
+<guilabel>Find:</guilabel>, then enter the text you want &kpresenter;
+to substitute in the text box labeled <guilabel>Replace:</guilabel>.</para>
 
 
 <note><para>If you want to insert symbols or special characters not available on your
@@ -242,7 +243,7 @@ button.</para>
 <title>Changing the format of the autocorrection string</title>
 <note><para>Currently, you must create the autocorrection string <emphasis>before</emphasis> you can format it.</para></note>
 <para>Once the autocorrection string has been created, simply click on it once with the &LMB;.</para>
-<para>Now click on the <guibutton>Change format</guibutton> button.  A small dialog will appear:</para>
+<para>Now click on the <guibutton>Change Format...</guibutton> button.  A small dialog will appear:</para>
 
 <screenshot>
 <mediaobject>
@@ -272,7 +273,7 @@ If no mark is in the check box, &kpresenter; does not consider that property whe
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Color:</guilabel> and <guilabel>Background Color:</guilabel></term>
+<term><guilabel>Color:</guilabel> and <guilabel>Background color:</guilabel></term>
 <listitem>
 <para>Clicking on either of these two buttons allows you to select the font color and/or background color respectively,
 you want &kpresenter; to use.  <!--For more information on selecting a color, see the
@@ -291,28 +292,28 @@ to change the fonts to boldface or italicized fonts.</para>
 <varlistentry>
 <term><guilabel>Strikeout:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel> or
-<guilabel>Without</guilabel> to use for the replacement text.</para>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel> 
+or <guilabel>Simple Bold</guilabel> to use for the replacement text.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
 <term><guilabel>Underline:</guilabel></term>
 <listitem>
-<para>You can select <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, <guilabel>Simple bold</guilabel>, <guilabel>Wave</guilabel>,  or
-<guilabel>None</guilabel> to use for the replacement text.</para>
+<para>You can select <guilabel>None</guilabel>, <guilabel>Single</guilabel>, <guilabel>Double</guilabel>, 
+<guilabel>Simple Bold</guilabel> or <guilabel>Wave</guilabel> to use for the replacement text.</para>
 </listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Vertical Alignment:</guilabel></term>
+<term><guilabel>Vertical alignment:</guilabel></term>
 <listitem>
 <para>You can select <guilabel>Normal</guilabel>, <guilabel>Superscript</guilabel> or
 <guilabel>Subscript</guilabel> to determine what font alignment you want &kpresenter; to use.</para>
 </listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Shadow:</guilabel> and <guilabel>Word by Word:</guilabel></term>
+<term><guilabel>Shadow:</guilabel> and <guilabel>Word by word:</guilabel></term>
 <listitem>
 <para>Use these <guilabel>Yes</guilabel>/<guilabel>No</guilabel> radio buttons to determine whether you want &kpresenter;
 to use shadow text and/or word by word underlining and strikethrough in the replacement text.</para>
@@ -323,7 +324,7 @@ to use shadow text and/or word by word underlining and strikethrough in the repl
 <term><guilabel>Capitalization:</guilabel></term>
 <listitem>
 <para>You can select <guilabel>Normal</guilabel>, <guilabel>Uppercase</guilabel>, <guilabel>Lowercase</guilabel>,  or
-<guilabel>Small caps</guilabel> to determine what capitalization to use for the replacement text.</para>
+<guilabel>Small Caps</guilabel> to determine what capitalization to use for the replacement text.</para>
 </listitem>
 </varlistentry>
 
@@ -384,7 +385,7 @@ and click on the <guibutton>Remove</guibutton> button.</para>
 
 </sect2>
 <sect2 id="manually">
-<title><guilabel>Manually applying autocorrection</guilabel></title>
+<title>Manually applying autocorrection</title>
 
 <para>If autocorrection is turned off in your document, you can manually enable autocorrection.</para>
 <para>To manually apply autocorrection, first configure your options by using the
@@ -466,10 +467,10 @@ from the list, then click this button.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Automatically add new words to suggestion  list</guilabel></term>
+<term><guilabel>Automatically add new words to suggestion list</guilabel></term>
 <listitem>
 <para>This option will add any word equal to or longer than
-the <guilabel>Characters needed</guilabel> to the list of proposed
+the <guilabel>Characters needed:</guilabel> to the list of proposed
 autocompletion words.</para>
 <para>The large listbox in the center of the dialog contains the current
 proposed list of autocompletion words.</para>
@@ -484,7 +485,7 @@ autocompletion when entered into this dialog.</para></note>
 <para>If this option is enabled, a tool tip box will appear when you type the
 beginning of a word that exists in the completion list. To complete the word,
 press the key you set to accept suggestions in the <guilabel>Key to accept
-suggestion</guilabel> drop-down list.</para>
+suggestion.</guilabel> drop-down list.</para>
 </listitem>
 </varlistentry>
 
@@ -742,19 +743,19 @@ addresses often contain words run together.</para>
 
 <varlistentry>
 <term><guilabel>Print slide notes</guilabel></term>
-<listitem><para>If checked, all notes will be printed on paper. The notes will all be printed on a separate last page, from slide one to the last slide and finishing with the Master Page Note. You can see the notes for each slide using the <menuchoice><guimenu>View</guimenu><guimenuitem>Show notebar</guimenuitem></menuchoice> menu.</para></listitem>
+<listitem><para>If checked, all notes will be printed on paper. The notes will all be printed on a separate last page, from slide one to the last slide and finishing with the Master Page Note. You can see the notes for each slide using the <menuchoice><guimenu>View</guimenu><guimenuitem>Show Notebar</guimenuitem></menuchoice> menu.</para></listitem>
 </varlistentry>
 </variablelist>
 
 <variablelist>
 <title><guilabel>Grid</guilabel></title>
 <varlistentry>
-<term><guilabel>Resolution X (mm):</guilabel></term>
+<term><guilabel>Horizontal grid size:</guilabel></term>
 <listitem><para>Set the space in millimeters between two points on an horizontal line on the grid. Default is 5 millimeters.</para></listitem>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Resolution Y (mm):</guilabel></term>
+<term><guilabel>Vertical grid size:</guilabel></term>
 <listitem><para>Set the space in millimeters between two points on a vertical line on the grid. Default is 5 millimeters.</para></listitem>
 </varlistentry>
 </variablelist>
@@ -811,7 +812,7 @@ addresses often contain words run together.</para>
 </varlistentry>
 
 <varlistentry>
-<term><guilabel>Tab stop (mm):</guilabel></term>
+<term><guilabel>Tab stop:</guilabel></term>
 <listitem><para>Each &kpresenter; document has a default set of tab stops. If you add tab stops to your document, the newly added tab stops override the default tabstops. You can use this text box to define the spacing between default tab stops.
 As an example, if you enter 1.5 in this text box, and the unit of measure is in centimeters, then the first default tab stop will be located 1.5 cm to the right of the left margin of the frame. The second default tab stop will be located at 3 cm from the left margin, etc.</para></listitem>
 </varlistentry>
@@ -990,7 +991,7 @@ two names? -->
 <listitem><para>You can choose among three options in the dropdown box: Pie, Arc or Chord.</para></listitem>
 </varlistentry>
 <varlistentry>
-<term><guilabel>Start Position:</guilabel></term>
+<term><guilabel>Start position:</guilabel></term>
 <listitem><para>Set here the start position.</para></listitem>
 </varlistentry>
 <varlistentry>

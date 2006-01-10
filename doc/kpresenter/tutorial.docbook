@@ -140,7 +140,7 @@ This brings up the <guilabel>Insert Slide</guilabel> dialog.
 <mediaobject>
 <imageobject>
 <imagedata fileref="tut06.png" format="PNG"/></imageobject>
-<textobject><phrase>The <guilabel>Insert Page</guilabel>
+<textobject><phrase>The <guilabel>Insert Slide</guilabel>
 dialog</phrase></textobject>
 </mediaobject>
 </screenshot>
@@ -501,7 +501,7 @@ screen, or use the <keycap>Page Down</keycap> key.
 
 <para>
 To exit the slide show, <mousebutton>right</mousebutton> click, and then
-select the <guimenuitem>Exit presentation</guimenuitem> option from the
+select the <guimenuitem>End</guimenuitem> option from the
 popup menu.
 </para>
 

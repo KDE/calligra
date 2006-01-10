@@ -104,14 +104,14 @@ in the screenshot below: </para>
 The first few items in the popup menu have to do with the placement of
 the toolbar. You can choose any of the four sides of the &kpresenter;
 window, or have the toolbar <quote>float</quote> in a separate
-window. Choosing <guimenuitem>Flat</guimenuitem> hides the toolbar. (If
-you <mousebutton>right</mousebutton> click on the handle of a hidden
-toolbar, this item appears as <guimenuitem>Unflat</guimenuitem>
-instead.)
+window. Choosing <guimenuitem>Flat</guimenuitem> hides the toolbar.
+To unflat a hidden toolbar, &LMB; click on its handle.
+
+
 </para>
 
 <para>
-Choosing the last item in the menu, <guisubmenu>Mode</guisubmenu>, leads
+Choosing the next item in the menu, <guisubmenu>Text Position</guisubmenu>, leads
 to an additional menu which lets you control the appearance of the items
 in toolbar. This additional cascading menu is shown in the screenshot
 below:
@@ -363,7 +363,7 @@ section <xref linkend="creating-templates"/>.</para>
 <term>
 <menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Use Current Slide As Default Template</guimenuitem>
+<guimenuitem>Use Current Slide as Default Template</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -406,7 +406,7 @@ exactly as it would look if printed.</para>
 <term>
 <menuchoice>
 <guimenu>File</guimenu>
-<guimenuitem>Document Information...</guimenuitem>
+<guimenuitem>Document Information</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -710,6 +710,8 @@ so you can work on more than one slide at a time.</para>
 <varlistentry>
 <term>
 <menuchoice>
+<shortcut>
+<keycombo action="simul">&Ctrl;&Shift;<keycap>W</keycap></keycombo></shortcut>
 <guimenu>View</guimenu>
 <guimenuitem>Close All Views</guimenuitem>
 </menuchoice>
@@ -844,23 +846,23 @@ visible; if disabled, they are not.</para>
 <term>
 <menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Help Lines</guimenuitem>
+<guimenuitem>Guide Lines</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>When working in &kpresenter; you can drag a <quote>help
+<para>When working in &kpresenter; you can drag a <quote>guide
 line</quote> from either the horizontal or vertical ruler onto your
 document. This guide-line will not print or display in the finished
 presentation, it is simply to help you align objects on screen. If
-this item is enabled, these help lines will be visible. If this is
+this item is enabled, these guide lines will be visible. If this is
 disabled, they will not be visible.</para>
 
-<para>Help lines work across slides, allowing you to align objects the
+<para>Guide lines work across slides, allowing you to align objects the
 same way across multiple slides.</para>
 
-<para>Disabling (hiding) help lines does not delete them. If you have
-created help lines, and then disabled this item, enabling it again
-will retain the help lines you created.</para>
+<para>Disabling (hiding) guide lines does not delete them. If you have
+created guide lines, and then disabled this item, enabling it again
+will retain the guide lines you created.</para>
 </listitem>
 </varlistentry>
 
@@ -868,14 +870,15 @@ will retain the help lines you created.</para>
 <term>
 <menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Help Line to Front</guimenuitem>
+<guimenuitem>Add Guide Line...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
 <para>
-By default, placing objects on a slide will cover any displayed help
-lines. You can make them visible again with this menu item, and while
-it is enabled, they will not be covered up.</para>
+Opens a dialog to select the <guilabel>Orientation</guilabel>
+(<guilabel>Horizontal</guilabel> or <guilabel>Vertical</guilabel>)
+and choose a <guilabel>Position:</guilabel>
+</para>
 </listitem>
 </varlistentry>
 
@@ -883,7 +886,7 @@ it is enabled, they will not be covered up.</para>
 <term>
 <menuchoice>
 <guimenu>View</guimenu>
-<guimenuitem>Grid</guimenuitem>
+<guimenuitem>Show/Hide Grid</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -891,18 +894,6 @@ it is enabled, they will not be covered up.</para>
 representing the intersections of imaginary horizontal and vertical
 lines. You can use these dots to precisely position objects on the
 slide.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<guimenu>View</guimenu><guimenuitem>
-Grid to Front</guimenuitem></menuchoice></term>
-<listitem><para>By default, placing objects on a slide will cover the
-displayed grid. You can make it visible again with this menu item, and while
-it is enabled, it will not be covered up.
-</para>
 </listitem>
 </varlistentry>
 
@@ -930,7 +921,7 @@ of both worlds.</para>
 <listitem>
 <para>This submenu allows you to zoom in or out of the
 slide. Several predefined zoom levels are available, including
-<guimenuitem>Whole slide</guimenuitem> to scale the entire slide so as
+<guimenuitem>Whole Slide</guimenuitem> to scale the entire slide so as
 to be visible in the size window you have open, and
 <guimenuitem>Width</guimenuitem> to scale the slide so it fills the
 entire width of the window, although you may now have to scroll
@@ -1053,24 +1044,6 @@ you wish the text to appear.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<guimenu>Insert</guimenu>
-<guimenuitem>Autoform</guimenuitem>
-</menuchoice>
-</term>
-<listitem>
-
-<para>Insert a pre-drawn shape, such as an arrow or a connecting
-line.</para>
-
-<para>The Insert Autoform dialog appears with two tabs: Arrows and Connections. Click on a form then on OK. On your slide, click and drag to draw a box stretching from the top left to the lower right, where you wish the autoform to display. It will be
-inserted and automatically scaled to the size of your box.</para>
-</listitem>
-</varlistentry>
-
-<varlistentry>
-<term>
-<menuchoice>
-<shortcut><keycap>F12</keycap></shortcut>
 <guimenu>Insert</guimenu>
 <guimenuitem>Chart</guimenuitem>
 </menuchoice>
@@ -1248,7 +1221,7 @@ press the &Esc; key to cancel, or use
 </textobject>
 </mediaobject>
 </screenshot>
-<para>Left clicking on the slide will zoom in. Right clicking on the current slide will present you a menu to allow you to zoom in, to zoom out, to zoom the entire slide, the width or the height or zoom all objects which put back all objects in your view.
+<para>Left clicking on the slide will <guimenuitem>Zoom In</guimenuitem>. Right clicking on the current slide will present you a menu to allow you to <guimenuitem>Zoom In</guimenuitem>, to <guimenuitem>Zoom Out</guimenuitem>, to <guimenuitem>Zoom Entire Slide</guimenuitem>, to <guimenuitem>Zoom Slide Width</guimenuitem> or <guimenuitem>Zoom Slide Height</guimenuitem>, to <guimenuitem>Zoom Selected Objects</guimenuitem> or <guimenuitem>Zoom All Objects</guimenuitem> which put back all objects in your view.
 </para>
 <para>This action has the same effect as <menuchoice><guimenu>View</guimenu><guimenuitem>Zoom</guimenuitem>
 </menuchoice> on another form.</para>
@@ -1332,7 +1305,7 @@ vertically or horizontally.</para>
 several rectangles or circles. Arrange the individual parts where you
 want them, select one, then hold down the <keycap>Shift</keycap> key
 as you click in the others you want to group together. Click
-<guimenuitem>Group objects</guimenuitem> and from then on they act as
+<guimenuitem>Group Objects</guimenuitem> and from then on they act as
 if they are just one thing. It glues things together.</para>
 
 </listitem>
@@ -1357,7 +1330,7 @@ parts.</para>
 <term>
 <menuchoice>
 <guimenu>Format</guimenu>
-<guimenuitem>Shadow Objects</guimenuitem>
+<guimenuitem>Shadow Objects...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1398,11 +1371,12 @@ A4, US legal.</para>
 <listitem>
 
 <para>Allows you to alter the background to your presentation
-slides. Your options are <guilabel>color</guilabel>, (which lets you
+slides. Your options are <guilabel>Color/Gradient</guilabel>, (which lets you
 set either a plain color or one of many gradients)
-<guilabel>Clipart</guilabel> (which gives a dialog box to let you find
-your clipart on your hard drive) or <guilabel>picture</guilabel>,
-which again gives a dialog box to find the picture you want.</para>
+or <guilabel>Picture</guilabel>, which gives a dialog box to find the picture 
+you want. Set the <guilabel>View mode:</guilabel> for this picture
+to <guimenuitem>Scaled</guimenuitem>, <guimenuitem>Centered</guimenuitem>, 
+or <guimenuitem>Tiled</guimenuitem>.</para>
 
 <para> If you want a plain color, click in the box to select
 it. Gradients only work when you have chosen two colors. The picture
@@ -1556,7 +1530,7 @@ attributes that will be applied to selected text all at once. See Working With S
 <term>
 <menuchoice>
 <guimenu>Text</guimenu>
-<guimenuitem>Import Style...</guimenuitem>
+<guimenuitem>Import Styles...</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1594,19 +1568,17 @@ save them as a style that you may apply to other text.</para>
 <varlistentry>
 <term>
 <menuchoice>
-<shortcut>
-<keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>
-</shortcut>
 <guimenu>Text</guimenu>
 <guisubmenu>Align</guisubmenu>
 </menuchoice>
 </term>
 <listitem>
 <para><guisubmenu>Align</guisubmenu> has a submenu with several options:
-<guimenuitem>Align Left</guimenuitem>, <guimenuitem>Align
-Center</guimenuitem>, <guimenuitem>Align Right</guimenuitem>, and
-<guimenuitem>Align Block</guimenuitem> which is also commonly known as
-<quote>Justify</quote>.</para>
+<guimenuitem>Align Left</guimenuitem> (<keycombo action="simul">&Alt;<keycap>L</keycap></keycombo>), 
+<guimenuitem>Align Center</guimenuitem> (<keycombo action="simul">&Alt;<keycap>C</keycap></keycombo>), 
+<guimenuitem>Align Right</guimenuitem> (<keycombo action="simul">&Alt;<keycap>R</keycap></keycombo>), and
+<guimenuitem>Align Block</guimenuitem> (<keycombo action="simul">&Alt;<keycap>J</keycap></keycombo>) 
+which is also commonly known as <quote>Justify</quote>.</para>
 
 <para>Text is by default left-aligned.</para>
 
@@ -1684,13 +1656,13 @@ or pasted into it.</para>
 <term>
 <menuchoice>
 <guimenu>Text</guimenu>
-<guimenuitem>Insert Page Number</guimenuitem>
+<guimenuitem>Insert Slide Number</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
-<para>Insert a dynamically-updated page number. This page number will
+<para>Insert a dynamically-updated slide number. This page number will
 automatically update when slides are added or removed from your presentation to
-reflect the correct page value.</para>
+reflect the correct slide value.</para>
 </listitem>
 </varlistentry>
 
@@ -1727,7 +1699,7 @@ versa.</para>
 text that you enter for spelling errors.</para>
 
 <para>If you prefer to check spelling explicitly, rather than automatically, you
-can also force a spelling check here.</para>
+can also force a <guimenuitem>Spelling...</guimenuitem> check here.</para>
 </listitem>
 </varlistentry>
 
@@ -1745,7 +1717,7 @@ corrected as you type. For example, if you entered <userinput>Teh</userinput>,
 it would be autocorrected to <userinput>The</userinput>.</para>
 
 <para>If the autocorrection feature is not active, you can also
-force an autocorrection check here.</para>
+<guimenuitem>Apply Autocorrection</guimenuitem> check here.</para>
 </listitem>
 </varlistentry>
 
@@ -1813,6 +1785,7 @@ transition <emphasis>from</emphasis> this slide
 <varlistentry>
 <term>
 <menuchoice>
+<shortcut><keycap>F12</keycap></shortcut>
 <guimenu>Slide Show</guimenu>
 <guimenuitem>Start</guimenuitem>
 </menuchoice>
@@ -1837,9 +1810,22 @@ transition <emphasis>from</emphasis> this slide
 <varlistentry>
 <term>
 <menuchoice>
-<shortcut><keycap>Home</keycap></shortcut>
 <guimenu>Slide Show</guimenu>
-<guimenuitem>Go To Start</guimenuitem>
+<guimenuitem>Custom Slide Show...</guimenuitem>
+</menuchoice>
+</term>
+<listitem>
+<para>Opens a dialog to <guibutton>Add...</guibutton>, <guibutton>Modify...</guibutton>, 
+<guibutton>Remove</guibutton> and <guibutton>Copy</guibutton> slides and
+<guibutton>Test</guibutton> the slide show in full screen mode.</para>
+</listitem>
+</varlistentry>
+
+<varlistentry>
+<term>
+<menuchoice>
+<guimenu>Slide Show</guimenu>
+<guimenuitem>Go to Start</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
@@ -1850,7 +1836,7 @@ transition <emphasis>from</emphasis> this slide
 <varlistentry>
 <term>
 <menuchoice>
-<shortcut><keycap>Page Up</keycap></shortcut>
+<shortcut><keycap>PageUp</keycap></shortcut>
 <guimenu>Slide Show</guimenu>
 <guimenuitem>Previous Slide</guimenuitem>
 </menuchoice>
@@ -1863,7 +1849,7 @@ transition <emphasis>from</emphasis> this slide
 <varlistentry>
 <term>
 <menuchoice>
-<shortcut><keycap>Page Down</keycap></shortcut>
+<shortcut><keycap>PageDown</keycap></shortcut>
 <guimenu>Slide Show</guimenu>
 <guimenuitem>Next Slide</guimenuitem>
 </menuchoice>
@@ -1878,7 +1864,7 @@ transition <emphasis>from</emphasis> this slide
 <menuchoice>
 <shortcut><keycap>End</keycap></shortcut>
 <guimenu>Slide Show</guimenu>
-<guimenuitem>Go To End</guimenuitem>
+<guimenuitem>Go to End</guimenuitem>
 </menuchoice>
 </term>
 <listitem>
