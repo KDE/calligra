@@ -68,7 +68,7 @@ ScriptGUIClient::ScriptGUIClient(KXMLGUIClient* guiclient, QWidget* parent)
     new KAction(i18n("Execute Script File..."), 0, 0, this, SLOT(executeScriptFile()), actionCollection(), "executescriptfile");
 
     // acion to show the ScriptManagerGUI dialog.
-    new KAction(i18n("Script Manager..."), 0, 0, this, SLOT(showScriptManager()), actionCollection(), "configurescripts");
+    new KAction(i18n("Scripts Manager..."), 0, 0, this, SLOT(showScriptManager()), actionCollection(), "configurescripts");
 
     // The predefined ScriptActionCollection's this ScriptGUIClient provides.
     d->collections.replace("installedscripts",
